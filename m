@@ -1,9 +1,9 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 31 Jul 2013 10:03:38 -0300
-Subject: [Buildroot] [PATCH 2/3] package/uclibc: add execvpe() backport
+Date: Wed, 31 Jul 2013 10:03:39 -0300
+Subject: [Buildroot] [PATCH 3/3] package/uclibc: add mkostemp() backport
 In-Reply-To: <1375275819-29308-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1375275819-29308-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1375275819-29308-2-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1375275819-29308-3-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,347 +14,331 @@ Needed for modern versions of systemd and udev.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- ...07-libc-add-non-standard-execvpe-function.patch | 163 +++++++++++++++++++++
- ...11-libc-add-non-standard-execvpe-function.patch | 163 +++++++++++++++++++++
- 2 files changed, 326 insertions(+)
- create mode 100644 package/uclibc/0.9.32.1/uclibc-0007-libc-add-non-standard-execvpe-function.patch
- create mode 100644 package/uclibc/0.9.33.2/uclibc-0011-libc-add-non-standard-execvpe-function.patch
+ ...ibc-0008-libc-stdlib-add-mkostemp-helpers.patch | 155 +++++++++++++++++++++
+ ...ibc-0012-libc-stdlib-add-mkostemp-helpers.patch | 155 +++++++++++++++++++++
+ 2 files changed, 310 insertions(+)
+ create mode 100644 package/uclibc/0.9.32.1/uclibc-0008-libc-stdlib-add-mkostemp-helpers.patch
+ create mode 100644 package/uclibc/0.9.33.2/uclibc-0012-libc-stdlib-add-mkostemp-helpers.patch
 
-diff --git a/package/uclibc/0.9.32.1/uclibc-0007-libc-add-non-standard-execvpe-function.patch b/package/uclibc/0.9.32.1/uclibc-0007-libc-add-non-standard-execvpe-function.patch
+diff --git a/package/uclibc/0.9.32.1/uclibc-0008-libc-stdlib-add-mkostemp-helpers.patch b/package/uclibc/0.9.32.1/uclibc-0008-libc-stdlib-add-mkostemp-helpers.patch
 new file mode 100644
-index 0000000..8141333
+index 0000000..8002240
 --- /dev/null
-+++ b/package/uclibc/0.9.32.1/uclibc-0007-libc-add-non-standard-execvpe-function.patch
-@@ -0,0 +1,163 @@
-+From 0eb30761a26c46aaf555464114851202ae9c27bd Mon Sep 17 00:00:00 2001
-+From: Henning Heinold <heinold@inf.fu-berlin.de>
-+Date: Sat, 4 Jun 2011 21:23:15 +0200
-+Subject: [PATCH] libc: add non standard execvpe function
++++ b/package/uclibc/0.9.32.1/uclibc-0008-libc-stdlib-add-mkostemp-helpers.patch
+@@ -0,0 +1,155 @@
++From 42d1b23fc0f3748b8bf474e456d6c44aa7e563fd Mon Sep 17 00:00:00 2001
++From: Mike Frysinger <vapier@gentoo.org>
++Date: Wed, 14 Nov 2012 00:30:54 -0500
++Subject: [PATCH] libc/stdlib: add mkostemp helpers
 +
-+[Gustavo]: Drop TODO modification to make it compatible
-+Signed-off-by: Henning Heinold <heinold@inf.fu-berlin.de>
-+Signed-off-by: Bernhard Reutner-Fischer <rep.dot.nop@gmail.com>
++Some projects (like udev) are starting to use this.
++
++Imported from glibc.
++
++Signed-off-by: Mike Frysinger <vapier@gentoo.org>
 +---
-+ include/unistd.h      |  8 ++++++++
-+ libc/unistd/exec.c    | 38 +++++++++++++++++++++++++++++++++-----
-+ libc/unistd/execvpe.c |  7 +++++++
-+ 4 files changed, 52 insertions(+), 5 deletions(-)
-+ create mode 100644 libc/unistd/execvpe.c
++ include/stdlib.h         | 23 +++++++++++++++++++++++
++ libc/stdlib/Makefile.in  |  4 ++--
++ libc/stdlib/mkostemp.c   | 32 ++++++++++++++++++++++++++++++++
++ libc/stdlib/mkostemp64.c | 33 +++++++++++++++++++++++++++++++++
++ 4 files changed, 90 insertions(+), 2 deletions(-)
++ create mode 100644 libc/stdlib/mkostemp.c
++ create mode 100644 libc/stdlib/mkostemp64.c
 +
-+diff --git a/include/unistd.h b/include/unistd.h
-+index feadf93..9479554 100644
-+--- a/include/unistd.h
-++++ b/include/unistd.h
-+@@ -619,6 +619,14 @@ extern int execlp (const char *__file, const char *__arg, ...)
-+      __THROW __nonnull ((1));
-+ libc_hidden_proto(execlp)
++diff --git a/include/stdlib.h b/include/stdlib.h
++index 354fc66..79ccc55 100644
++--- a/include/stdlib.h
+++++ b/include/stdlib.h
++@@ -652,6 +652,29 @@ extern int mkstemp64 (char *__template) __nonnull ((1)) __wur;
++ extern char *mkdtemp (char *__template) __THROW __nonnull ((1)) __wur;
++ #endif
 + 
 ++#ifdef __USE_GNU
-++/* Execute FILE, searching in the `PATH' environment variable if it contains
-++   no slashes, with arguments ARGV and environment from a pointer */
-++extern int execvpe (__const char *__file, char *__const __argv[], char *__const __envp[])
-++     __THROW __nonnull ((1));
-++libc_hidden_proto(execvpe)
+++/* Generate a unique temporary file name from TEMPLATE similar to
+++   mkstemp.  But allow the caller to pass additional flags which are
+++   used in the open call to create the file..
+++
+++   This function is a possible cancellation point and therefore not
+++   marked with __THROW.  */
+++# ifndef __USE_FILE_OFFSET64
+++extern int mkostemp (char *__template, int __flags) __nonnull ((1)) __wur;
+++# else
+++#  ifdef __REDIRECT
+++extern int __REDIRECT (mkostemp, (char *__template, int __flags), mkostemp64)
+++     __nonnull ((1)) __wur;
+++#  else
+++#   define mkostemp mkostemp64
+++#  endif
+++# endif
+++# ifdef __USE_LARGEFILE64
+++extern int mkostemp64 (char *__template, int __flags) __nonnull ((1)) __wur;
+++# endif
+++
 ++#endif
 ++
 + 
-+ #if defined __USE_MISC || defined __USE_XOPEN
-+ /* Add INC to priority of the current process.  */
-+diff --git a/libc/unistd/exec.c b/libc/unistd/exec.c
-+index ba92989..8fa42e5 100644
-+--- a/libc/unistd/exec.c
-++++ b/libc/unistd/exec.c
-+@@ -32,6 +32,8 @@
-+ /**********************************************************************/
-+ #define EXEC_FUNC_COMMON 0
-+ #define EXEC_FUNC_EXECVP 1
-++#define EXEC_FUNC_EXECVPE 2
-++
-+ #if defined(__ARCH_USE_MMU__)
++ __BEGIN_NAMESPACE_STD
++ /* Execute the given line as a shell command.
++diff --git a/libc/stdlib/Makefile.in b/libc/stdlib/Makefile.in
++index 3166b8e..b92f7ce 100644
++--- a/libc/stdlib/Makefile.in
+++++ b/libc/stdlib/Makefile.in
++@@ -12,7 +12,7 @@ include $(top_srcdir)libc/stdlib/malloc-simple/Makefile.in
++ include $(top_srcdir)libc/stdlib/malloc-standard/Makefile.in
 + 
-+ /* We have an MMU, so use alloca() to grab space for buffers and arg lists. */
-+@@ -58,6 +60,7 @@
-+  *  execle(a) -> execve(-)
-+  *  execv(-)  -> execve(-)
-+  *  execvp(a) -> execve(-)
-++ *  execvpe(a) -> execve(-)
-+  */
-+ 
-+ # define EXEC_ALLOC_SIZE(VAR)      /* nothing to do */
-+@@ -219,15 +222,18 @@ libc_hidden_def(execlp)
-+ 
-+ #endif
-+ /**********************************************************************/
-+-#ifdef L_execvp
-++#if defined (L_execvp) || defined(L_execvpe)
-+ 
-+ 
-+ /* Use a default path that matches glibc behavior, since SUSv3 says
-+  * this is implementation-defined.  The default is current working dir,
-+  * /bin, and then /usr/bin. */
-+ static const char default_path[] = ":/bin:/usr/bin";
-+-
-++#if defined (L_execvp)
-+ int execvp(const char *path, char *const argv[])
-++#elif defined (L_execvpe)
-++int execvpe(const char *path, char *const argv[], char *const envp[])
-++#endif
-+ {
-+ 	char *buf = NULL;
-+ 	char *p;
-+@@ -245,7 +251,11 @@ int execvp(const char *path, char *const argv[])
-+ 	}
-+ 
-+ 	if (strchr(path, '/')) {
-++#if defined (L_execvp)
-+ 		execve(path, argv, __environ);
-++#elif defined (L_execvpe)
-++		execve(path, argv, envp);
-++#endif
-+ 		if (errno == ENOEXEC) {
-+ 			char **nargv;
-+ 			EXEC_ALLOC_SIZE(size2) /* Do NOT add a semicolon! */
-+@@ -254,11 +264,19 @@ int execvp(const char *path, char *const argv[])
-+ 			/* Need the dimension - 1.  We omit counting the trailing
-+ 			 * NULL but we actually omit the first entry. */
-+ 			for (n=0 ; argv[n] ; n++) {}
-++#if defined (L_execvp)
-+ 			nargv = (char **) EXEC_ALLOC((n+2) * sizeof(char *), size2, EXEC_FUNC_EXECVP);
-++#elif defined (L_execvpe)
-++			nargv = (char **) EXEC_ALLOC((n+2) * sizeof(char *), size2, EXEC_FUNC_EXECVPE);
-++#endif
-+ 			nargv[0] = argv[0];
-+ 			nargv[1] = (char *)path;
-+ 			memcpy(nargv+2, argv+1, n*sizeof(char *));
-++#if defined (L_execvp)
-+ 			execve("/bin/sh", nargv, __environ);
-++#elif defined (L_execvpe)
-++			execve("/bin/sh", nargv, envp);
-++#endif
-+ 			EXEC_FREE(nargv, size2);
-+ 		}
-+ 	} else {
-+@@ -277,8 +295,11 @@ int execvp(const char *path, char *const argv[])
-+ 			return -1;
-+ 		}
-+ 		len = (FILENAME_MAX - 1) - plen;
-+-
-++#if defined (L_execvp)
-+ 		buf = EXEC_ALLOC(FILENAME_MAX, size, EXEC_FUNC_EXECVP);
-++#elif defined (L_execvpe)
-++		buf = EXEC_ALLOC(FILENAME_MAX, size, EXEC_FUNC_EXECVPE);
-++#endif
-+ 		{
-+ 			int seen_small = 0;
-+ 			s0 = buf + len;
-+@@ -300,8 +321,11 @@ int execvp(const char *path, char *const argv[])
-+ 					s[plen-1] = '/';
-+ 				}
-+ 
-++#if defined (L_execvp)
-+ 				execve(s, argv, __environ);
-+-
-++#elif defined (L_execvpe)
-++				execve(s, argv, envp);
-++#endif
-+ 				seen_small = 1;
-+ 
-+ 				if (errno == ENOEXEC) {
-+@@ -325,7 +349,11 @@ int execvp(const char *path, char *const argv[])
-+ 
-+ 	return -1;
-+ }
-++#if defined (L_execvp)
-+ libc_hidden_def(execvp)
-+-
-++#elif defined (L_execvpe)
-++libc_hidden_def(execvpe)
-+ #endif
-++
-++#endif /* #if defined (L_execvp) || defined(L_execvpe) */
-+ /**********************************************************************/
-+diff --git a/libc/unistd/execvpe.c b/libc/unistd/execvpe.c
++ CSRC-y := \
++-	abort.c getenv.c mkdtemp.c realpath.c canonicalize.c mkstemp.c \
+++	abort.c getenv.c mkdtemp.c realpath.c canonicalize.c mkstemp.c mkostemp.c \
++ 	rand.c random.c random_r.c setenv.c div.c ldiv.c lldiv.c \
++ 	getpt.c drand48-iter.c jrand48.c \
++ 	jrand48_r.c lcong48.c lrand48.c lrand48_r.c mrand48.c mrand48_r.c nrand48.c \
++@@ -21,7 +21,7 @@ CSRC-y := \
++ CSRC-$(UCLIBC_HAS_ADVANCED_REALTIME) += posix_memalign.c
++ CSRC-$(UCLIBC_HAS_PTY) += grantpt.c unlockpt.c ptsname.c
++ CSRC-$(UCLIBC_HAS_ARC4RANDOM) += arc4random.c
++-CSRC-$(UCLIBC_HAS_LFS) += mkstemp64.c
+++CSRC-$(UCLIBC_HAS_LFS) += mkstemp64.c mkostemp64.c
++ CSRC-$(UCLIBC_HAS_FLOATS) += drand48.c drand48_r.c erand48.c erand48_r.c
++ CSRC-$(if $(findstring yy,$(UCLIBC_HAS_FLOATS)$(UCLIBC_SUSV3_LEGACY)),y) += \
++ 	gcvt.c
++diff --git a/libc/stdlib/mkostemp.c b/libc/stdlib/mkostemp.c
 +new file mode 100644
-+index 0000000..c3c1e43
++index 0000000..93b50fc
 +--- /dev/null
-++++ b/libc/unistd/execvpe.c
-+@@ -0,0 +1,7 @@
-++/* Copyright (C) 2011-2013 Hennning Heinold <heinold@inf.fu-berlin.de>
-++ *
-++ * Licensed under the LGPL v2.1 or later, see the file COPYING.LIB in this tarball.
-++ */
+++++ b/libc/stdlib/mkostemp.c
++@@ -0,0 +1,32 @@
+++/* Copyright (C) 1998-2012 Free Software Foundation, Inc.
+++   This file is part of the GNU C Library.
 ++
-++#define L_execvpe
-++#include "exec.c"
+++   The GNU C Library is free software; you can redistribute it and/or
+++   modify it under the terms of the GNU Lesser General Public
+++   License as published by the Free Software Foundation; either
+++   version 2.1 of the License, or (at your option) any later version.
+++
+++   The GNU C Library is distributed in the hope that it will be useful,
+++   but WITHOUT ANY WARRANTY; without even the implied warranty of
+++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+++   Lesser General Public License for more details.
+++
+++   You should have received a copy of the GNU Lesser General Public
+++   License along with the GNU C Library; if not, see
+++   <http://www.gnu.org/licenses/>.  */
+++
+++#include <stdio.h>
+++#include <stdlib.h>
+++#include "../misc/internals/tempname.h"
+++
+++/* Generate a unique temporary file name from TEMPLATE.
+++   The last six characters of TEMPLATE must be "XXXXXX";
+++   they are replaced with a string that makes the filename unique.
+++   Then open the file and return a fd. */
+++int
+++mkostemp (template, flags)
+++     char *template;
+++     int flags;
+++{
+++  return __gen_tempname (template, __GT_FILE, flags);
+++}
++diff --git a/libc/stdlib/mkostemp64.c b/libc/stdlib/mkostemp64.c
++new file mode 100644
++index 0000000..5509d8c
++--- /dev/null
+++++ b/libc/stdlib/mkostemp64.c
++@@ -0,0 +1,33 @@
+++/* Copyright (C) 2000-2012 Free Software Foundation, Inc.
+++   This file is part of the GNU C Library.
+++
+++   The GNU C Library is free software; you can redistribute it and/or
+++   modify it under the terms of the GNU Lesser General Public
+++   License as published by the Free Software Foundation; either
+++   version 2.1 of the License, or (at your option) any later version.
+++
+++   The GNU C Library is distributed in the hope that it will be useful,
+++   but WITHOUT ANY WARRANTY; without even the implied warranty of
+++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+++   Lesser General Public License for more details.
+++
+++   You should have received a copy of the GNU Lesser General Public
+++   License along with the GNU C Library; if not, see
+++   <http://www.gnu.org/licenses/>.  */
+++
+++#include <fcntl.h>
+++#include <stdio.h>
+++#include <stdlib.h>
+++#include "../misc/internals/tempname.h"
+++
+++/* Generate a unique temporary file name from TEMPLATE.
+++   The last six characters of TEMPLATE must be "XXXXXX";
+++   they are replaced with a string that makes the filename unique.
+++   Then open the file and return a fd. */
+++int
+++mkostemp64 (template, flags)
+++     char *template;
+++     int flags;
+++{
+++  return __gen_tempname (template, __GT_BIGFILE, flags | O_LARGEFILE);
+++}
 +-- 
 +1.8.1.5
 +
-diff --git a/package/uclibc/0.9.33.2/uclibc-0011-libc-add-non-standard-execvpe-function.patch b/package/uclibc/0.9.33.2/uclibc-0011-libc-add-non-standard-execvpe-function.patch
+diff --git a/package/uclibc/0.9.33.2/uclibc-0012-libc-stdlib-add-mkostemp-helpers.patch b/package/uclibc/0.9.33.2/uclibc-0012-libc-stdlib-add-mkostemp-helpers.patch
 new file mode 100644
-index 0000000..8141333
+index 0000000..8002240
 --- /dev/null
-+++ b/package/uclibc/0.9.33.2/uclibc-0011-libc-add-non-standard-execvpe-function.patch
-@@ -0,0 +1,163 @@
-+From 0eb30761a26c46aaf555464114851202ae9c27bd Mon Sep 17 00:00:00 2001
-+From: Henning Heinold <heinold@inf.fu-berlin.de>
-+Date: Sat, 4 Jun 2011 21:23:15 +0200
-+Subject: [PATCH] libc: add non standard execvpe function
++++ b/package/uclibc/0.9.33.2/uclibc-0012-libc-stdlib-add-mkostemp-helpers.patch
+@@ -0,0 +1,155 @@
++From 42d1b23fc0f3748b8bf474e456d6c44aa7e563fd Mon Sep 17 00:00:00 2001
++From: Mike Frysinger <vapier@gentoo.org>
++Date: Wed, 14 Nov 2012 00:30:54 -0500
++Subject: [PATCH] libc/stdlib: add mkostemp helpers
 +
-+[Gustavo]: Drop TODO modification to make it compatible
-+Signed-off-by: Henning Heinold <heinold@inf.fu-berlin.de>
-+Signed-off-by: Bernhard Reutner-Fischer <rep.dot.nop@gmail.com>
++Some projects (like udev) are starting to use this.
++
++Imported from glibc.
++
++Signed-off-by: Mike Frysinger <vapier@gentoo.org>
 +---
-+ include/unistd.h      |  8 ++++++++
-+ libc/unistd/exec.c    | 38 +++++++++++++++++++++++++++++++++-----
-+ libc/unistd/execvpe.c |  7 +++++++
-+ 4 files changed, 52 insertions(+), 5 deletions(-)
-+ create mode 100644 libc/unistd/execvpe.c
++ include/stdlib.h         | 23 +++++++++++++++++++++++
++ libc/stdlib/Makefile.in  |  4 ++--
++ libc/stdlib/mkostemp.c   | 32 ++++++++++++++++++++++++++++++++
++ libc/stdlib/mkostemp64.c | 33 +++++++++++++++++++++++++++++++++
++ 4 files changed, 90 insertions(+), 2 deletions(-)
++ create mode 100644 libc/stdlib/mkostemp.c
++ create mode 100644 libc/stdlib/mkostemp64.c
 +
-+diff --git a/include/unistd.h b/include/unistd.h
-+index feadf93..9479554 100644
-+--- a/include/unistd.h
-++++ b/include/unistd.h
-+@@ -619,6 +619,14 @@ extern int execlp (const char *__file, const char *__arg, ...)
-+      __THROW __nonnull ((1));
-+ libc_hidden_proto(execlp)
++diff --git a/include/stdlib.h b/include/stdlib.h
++index 354fc66..79ccc55 100644
++--- a/include/stdlib.h
+++++ b/include/stdlib.h
++@@ -652,6 +652,29 @@ extern int mkstemp64 (char *__template) __nonnull ((1)) __wur;
++ extern char *mkdtemp (char *__template) __THROW __nonnull ((1)) __wur;
++ #endif
 + 
 ++#ifdef __USE_GNU
-++/* Execute FILE, searching in the `PATH' environment variable if it contains
-++   no slashes, with arguments ARGV and environment from a pointer */
-++extern int execvpe (__const char *__file, char *__const __argv[], char *__const __envp[])
-++     __THROW __nonnull ((1));
-++libc_hidden_proto(execvpe)
+++/* Generate a unique temporary file name from TEMPLATE similar to
+++   mkstemp.  But allow the caller to pass additional flags which are
+++   used in the open call to create the file..
+++
+++   This function is a possible cancellation point and therefore not
+++   marked with __THROW.  */
+++# ifndef __USE_FILE_OFFSET64
+++extern int mkostemp (char *__template, int __flags) __nonnull ((1)) __wur;
+++# else
+++#  ifdef __REDIRECT
+++extern int __REDIRECT (mkostemp, (char *__template, int __flags), mkostemp64)
+++     __nonnull ((1)) __wur;
+++#  else
+++#   define mkostemp mkostemp64
+++#  endif
+++# endif
+++# ifdef __USE_LARGEFILE64
+++extern int mkostemp64 (char *__template, int __flags) __nonnull ((1)) __wur;
+++# endif
+++
 ++#endif
 ++
 + 
-+ #if defined __USE_MISC || defined __USE_XOPEN
-+ /* Add INC to priority of the current process.  */
-+diff --git a/libc/unistd/exec.c b/libc/unistd/exec.c
-+index ba92989..8fa42e5 100644
-+--- a/libc/unistd/exec.c
-++++ b/libc/unistd/exec.c
-+@@ -32,6 +32,8 @@
-+ /**********************************************************************/
-+ #define EXEC_FUNC_COMMON 0
-+ #define EXEC_FUNC_EXECVP 1
-++#define EXEC_FUNC_EXECVPE 2
-++
-+ #if defined(__ARCH_USE_MMU__)
++ __BEGIN_NAMESPACE_STD
++ /* Execute the given line as a shell command.
++diff --git a/libc/stdlib/Makefile.in b/libc/stdlib/Makefile.in
++index 3166b8e..b92f7ce 100644
++--- a/libc/stdlib/Makefile.in
+++++ b/libc/stdlib/Makefile.in
++@@ -12,7 +12,7 @@ include $(top_srcdir)libc/stdlib/malloc-simple/Makefile.in
++ include $(top_srcdir)libc/stdlib/malloc-standard/Makefile.in
 + 
-+ /* We have an MMU, so use alloca() to grab space for buffers and arg lists. */
-+@@ -58,6 +60,7 @@
-+  *  execle(a) -> execve(-)
-+  *  execv(-)  -> execve(-)
-+  *  execvp(a) -> execve(-)
-++ *  execvpe(a) -> execve(-)
-+  */
-+ 
-+ # define EXEC_ALLOC_SIZE(VAR)      /* nothing to do */
-+@@ -219,15 +222,18 @@ libc_hidden_def(execlp)
-+ 
-+ #endif
-+ /**********************************************************************/
-+-#ifdef L_execvp
-++#if defined (L_execvp) || defined(L_execvpe)
-+ 
-+ 
-+ /* Use a default path that matches glibc behavior, since SUSv3 says
-+  * this is implementation-defined.  The default is current working dir,
-+  * /bin, and then /usr/bin. */
-+ static const char default_path[] = ":/bin:/usr/bin";
-+-
-++#if defined (L_execvp)
-+ int execvp(const char *path, char *const argv[])
-++#elif defined (L_execvpe)
-++int execvpe(const char *path, char *const argv[], char *const envp[])
-++#endif
-+ {
-+ 	char *buf = NULL;
-+ 	char *p;
-+@@ -245,7 +251,11 @@ int execvp(const char *path, char *const argv[])
-+ 	}
-+ 
-+ 	if (strchr(path, '/')) {
-++#if defined (L_execvp)
-+ 		execve(path, argv, __environ);
-++#elif defined (L_execvpe)
-++		execve(path, argv, envp);
-++#endif
-+ 		if (errno == ENOEXEC) {
-+ 			char **nargv;
-+ 			EXEC_ALLOC_SIZE(size2) /* Do NOT add a semicolon! */
-+@@ -254,11 +264,19 @@ int execvp(const char *path, char *const argv[])
-+ 			/* Need the dimension - 1.  We omit counting the trailing
-+ 			 * NULL but we actually omit the first entry. */
-+ 			for (n=0 ; argv[n] ; n++) {}
-++#if defined (L_execvp)
-+ 			nargv = (char **) EXEC_ALLOC((n+2) * sizeof(char *), size2, EXEC_FUNC_EXECVP);
-++#elif defined (L_execvpe)
-++			nargv = (char **) EXEC_ALLOC((n+2) * sizeof(char *), size2, EXEC_FUNC_EXECVPE);
-++#endif
-+ 			nargv[0] = argv[0];
-+ 			nargv[1] = (char *)path;
-+ 			memcpy(nargv+2, argv+1, n*sizeof(char *));
-++#if defined (L_execvp)
-+ 			execve("/bin/sh", nargv, __environ);
-++#elif defined (L_execvpe)
-++			execve("/bin/sh", nargv, envp);
-++#endif
-+ 			EXEC_FREE(nargv, size2);
-+ 		}
-+ 	} else {
-+@@ -277,8 +295,11 @@ int execvp(const char *path, char *const argv[])
-+ 			return -1;
-+ 		}
-+ 		len = (FILENAME_MAX - 1) - plen;
-+-
-++#if defined (L_execvp)
-+ 		buf = EXEC_ALLOC(FILENAME_MAX, size, EXEC_FUNC_EXECVP);
-++#elif defined (L_execvpe)
-++		buf = EXEC_ALLOC(FILENAME_MAX, size, EXEC_FUNC_EXECVPE);
-++#endif
-+ 		{
-+ 			int seen_small = 0;
-+ 			s0 = buf + len;
-+@@ -300,8 +321,11 @@ int execvp(const char *path, char *const argv[])
-+ 					s[plen-1] = '/';
-+ 				}
-+ 
-++#if defined (L_execvp)
-+ 				execve(s, argv, __environ);
-+-
-++#elif defined (L_execvpe)
-++				execve(s, argv, envp);
-++#endif
-+ 				seen_small = 1;
-+ 
-+ 				if (errno == ENOEXEC) {
-+@@ -325,7 +349,11 @@ int execvp(const char *path, char *const argv[])
-+ 
-+ 	return -1;
-+ }
-++#if defined (L_execvp)
-+ libc_hidden_def(execvp)
-+-
-++#elif defined (L_execvpe)
-++libc_hidden_def(execvpe)
-+ #endif
-++
-++#endif /* #if defined (L_execvp) || defined(L_execvpe) */
-+ /**********************************************************************/
-+diff --git a/libc/unistd/execvpe.c b/libc/unistd/execvpe.c
++ CSRC-y := \
++-	abort.c getenv.c mkdtemp.c realpath.c canonicalize.c mkstemp.c \
+++	abort.c getenv.c mkdtemp.c realpath.c canonicalize.c mkstemp.c mkostemp.c \
++ 	rand.c random.c random_r.c setenv.c div.c ldiv.c lldiv.c \
++ 	getpt.c drand48-iter.c jrand48.c \
++ 	jrand48_r.c lcong48.c lrand48.c lrand48_r.c mrand48.c mrand48_r.c nrand48.c \
++@@ -21,7 +21,7 @@ CSRC-y := \
++ CSRC-$(UCLIBC_HAS_ADVANCED_REALTIME) += posix_memalign.c
++ CSRC-$(UCLIBC_HAS_PTY) += grantpt.c unlockpt.c ptsname.c
++ CSRC-$(UCLIBC_HAS_ARC4RANDOM) += arc4random.c
++-CSRC-$(UCLIBC_HAS_LFS) += mkstemp64.c
+++CSRC-$(UCLIBC_HAS_LFS) += mkstemp64.c mkostemp64.c
++ CSRC-$(UCLIBC_HAS_FLOATS) += drand48.c drand48_r.c erand48.c erand48_r.c
++ CSRC-$(if $(findstring yy,$(UCLIBC_HAS_FLOATS)$(UCLIBC_SUSV3_LEGACY)),y) += \
++ 	gcvt.c
++diff --git a/libc/stdlib/mkostemp.c b/libc/stdlib/mkostemp.c
 +new file mode 100644
-+index 0000000..c3c1e43
++index 0000000..93b50fc
 +--- /dev/null
-++++ b/libc/unistd/execvpe.c
-+@@ -0,0 +1,7 @@
-++/* Copyright (C) 2011-2013 Hennning Heinold <heinold@inf.fu-berlin.de>
-++ *
-++ * Licensed under the LGPL v2.1 or later, see the file COPYING.LIB in this tarball.
-++ */
+++++ b/libc/stdlib/mkostemp.c
++@@ -0,0 +1,32 @@
+++/* Copyright (C) 1998-2012 Free Software Foundation, Inc.
+++   This file is part of the GNU C Library.
 ++
-++#define L_execvpe
-++#include "exec.c"
+++   The GNU C Library is free software; you can redistribute it and/or
+++   modify it under the terms of the GNU Lesser General Public
+++   License as published by the Free Software Foundation; either
+++   version 2.1 of the License, or (at your option) any later version.
+++
+++   The GNU C Library is distributed in the hope that it will be useful,
+++   but WITHOUT ANY WARRANTY; without even the implied warranty of
+++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+++   Lesser General Public License for more details.
+++
+++   You should have received a copy of the GNU Lesser General Public
+++   License along with the GNU C Library; if not, see
+++   <http://www.gnu.org/licenses/>.  */
+++
+++#include <stdio.h>
+++#include <stdlib.h>
+++#include "../misc/internals/tempname.h"
+++
+++/* Generate a unique temporary file name from TEMPLATE.
+++   The last six characters of TEMPLATE must be "XXXXXX";
+++   they are replaced with a string that makes the filename unique.
+++   Then open the file and return a fd. */
+++int
+++mkostemp (template, flags)
+++     char *template;
+++     int flags;
+++{
+++  return __gen_tempname (template, __GT_FILE, flags);
+++}
++diff --git a/libc/stdlib/mkostemp64.c b/libc/stdlib/mkostemp64.c
++new file mode 100644
++index 0000000..5509d8c
++--- /dev/null
+++++ b/libc/stdlib/mkostemp64.c
++@@ -0,0 +1,33 @@
+++/* Copyright (C) 2000-2012 Free Software Foundation, Inc.
+++   This file is part of the GNU C Library.
+++
+++   The GNU C Library is free software; you can redistribute it and/or
+++   modify it under the terms of the GNU Lesser General Public
+++   License as published by the Free Software Foundation; either
+++   version 2.1 of the License, or (at your option) any later version.
+++
+++   The GNU C Library is distributed in the hope that it will be useful,
+++   but WITHOUT ANY WARRANTY; without even the implied warranty of
+++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+++   Lesser General Public License for more details.
+++
+++   You should have received a copy of the GNU Lesser General Public
+++   License along with the GNU C Library; if not, see
+++   <http://www.gnu.org/licenses/>.  */
+++
+++#include <fcntl.h>
+++#include <stdio.h>
+++#include <stdlib.h>
+++#include "../misc/internals/tempname.h"
+++
+++/* Generate a unique temporary file name from TEMPLATE.
+++   The last six characters of TEMPLATE must be "XXXXXX";
+++   they are replaced with a string that makes the filename unique.
+++   Then open the file and return a fd. */
+++int
+++mkostemp64 (template, flags)
+++     char *template;
+++     int flags;
+++{
+++  return __gen_tempname (template, __GT_BIGFILE, flags | O_LARGEFILE);
+++}
 +-- 
 +1.8.1.5
 +
