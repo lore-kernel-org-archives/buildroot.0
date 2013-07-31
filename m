@@ -1,85 +1,62 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 31 Jul 2013 19:14:59 +0200
-Subject: [Buildroot] [PATCHv2] libedit: really needs wchar support
-In-Reply-To: <1375290755-15756-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1375290755-15756-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20130731171459.GC3448@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 31 Jul 2013 19:18:25 +0200
+Subject: [Buildroot] List of pending patches: what to do?
+In-Reply-To: <20130731191415.545f7dff@skate>
+References: <20130731191415.545f7dff@skate>
+Message-ID: <20130731191825.5b7377e9@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2013-07-31 14:12 -0300, Gustavo Zacarias spake thusly:
-> wctype.h is always included, even in configure tests.
-> Fixes:
-> http://autobuild.buildroot.net/results/ed8/ed85b9d688ad8389895e3ecd7a6a18151efc328d/
-> 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+On Wed, 31 Jul 2013 19:14:15 +0200, Thomas Petazzoni wrote:
 
-> ---
->  package/libedit/Config.in  |  4 ++++
->  package/libedit/libedit.mk | 10 +++-------
->  2 files changed, 7 insertions(+), 7 deletions(-)
-> 
-> diff --git a/package/libedit/Config.in b/package/libedit/Config.in
-> index 4747a38..72b0cf1 100644
-> --- a/package/libedit/Config.in
-> +++ b/package/libedit/Config.in
-> @@ -1,5 +1,6 @@
->  config BR2_PACKAGE_LIBEDIT
->  	bool "libedit"
-> +	depends on BR2_USE_WCHAR
->  	select BR2_PACKAGE_NCURSES
->  	help
->  	  The editline library (from BSD) provides generic line editing
-> @@ -12,3 +13,6 @@ config BR2_PACKAGE_LIBEDIT
->  	  in Buildroot as it makes it much simpler than using the upstream
->  	  sources which require pmake:
->  	  http://www.thrysoee.dk/editline/
-> +
-> +comment "libedit requires a toolchain with WCHAR support"
-> +	depends on !BR2_USE_WCHAR
-> diff --git a/package/libedit/libedit.mk b/package/libedit/libedit.mk
-> index 6769fdc..0ff418a 100644
-> --- a/package/libedit/libedit.mk
-> +++ b/package/libedit/libedit.mk
-> @@ -12,6 +12,9 @@ LIBEDIT_DEPENDENCIES    = ncurses
->  # We're patching configure.ac
->  LIBEDIT_AUTORECONF      = YES
-> 
-> +# Doesn't really support !wchar, but support is disabled otherwise
-> +LIBEDIT_CONF_OPT += --enable-widec
-> +
->  # Note: libbsd required for *vis functions, but works only with a toolchain
->  # with __progname; otherwise, some features are disabled, as if libbsd was
->  # missing entirely.
-> @@ -19,11 +22,4 @@ ifeq ($(BR2_PACKAGE_LIBBSD),y)
->  LIBEDIT_DEPENDENCIES   += libbsd
->  endif
-> 
-> -# Wide-char support is not autodetected by configure, we have to help a bit.
-> -ifeq ($(BR2_TOOLCHAIN_EXTERNAL_WCHAR),y)
-> -LIBEDIT_CONF_OPT       += --enable-widec
-> -else
-> -LIBEDIT_CONF_OPT       += --disable-widec
-> -endif
-> -
->  $(eval $(autotools-package))
-> --
-> 1.8.1.5
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> http://patchwork.ozlabs.org/patch/181870 [1/9] firefox: host-python dependency needs --enable-unicodedata
+> http://patchwork.ozlabs.org/patch/181871 [2/9] firefox: valgrind dependency needs --enable-tls for debug build
+> http://patchwork.ozlabs.org/patch/181874 [3/9] firefox: sqlite dependency needs new compile-time options
+> http://patchwork.ozlabs.org/patch/181872 [4/9] firefox: installing default extensions needs host-xmlstarlet dependency
+> http://patchwork.ozlabs.org/patch/181875 [5/9] firefox: installing default extensions needs host-unzip dependency
+> http://patchwork.ozlabs.org/patch/181877 [6/9] firefox: Mozilla Web Browser
+> http://patchwork.ozlabs.org/patch/181876 [7/9] firefox: GNU gnash flash plugin needs agg dependency
+> http://patchwork.ozlabs.org/patch/181873 [8/9] firefox: GNU gnash flash plugin needs gconf dependency
+> http://patchwork.ozlabs.org/patch/181878 [9/9] firefox: GNU gnash flash, an open source Adobe Flash player & plugin
 
+I'm proposing to drop those patches. The patches are from September
+2012, and I asked Stefan Froberg in May 2013 whether he was still
+interested
+(http://lists.busybox.net/pipermail/buildroot/2013-May/071410.html),
+and I've got a private answer that said:
+
+"""
+Well, those patches were for Firefox version 11.0 so it's quite old
+already.
+
+I have a patches for Firefox 16.0 & Firefox 18.0 done but as I
+understand it Firefox is never
+going to be included in buildroot so I did not post them.
+
+And I have now also unsubscripted from mailing list so I can't post them
+even if
+someone would like to check them.
+
+So, yeah. Those patches can be wiped out.
+
+If someone from the list still want's them they can be found from
+http://binarytouch.com/patches/
+(I will put all the rest of my buildroot patches later there after I
+have completed my current project)
+"""
+
+So unless anyone objects and steps up to refresh and resubmit those
+patches, I'm proposing to mark those patches as rejected.
+
+Thanks,
+
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
