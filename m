@@ -1,57 +1,32 @@
-From: anjohn <andre.johnigk@iml.fraunhofer.de>
-Date: Wed, 31 Jul 2013 06:21:56 -0700 (PDT)
-Subject: [Buildroot] Kernel freezes after loading with qemu
-Message-ID: <1375276916286-49198.post@n4.nabble.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed, 31 Jul 2013 10:31:46 -0300
+Subject: [Buildroot] [PATCH 1/2] strongswan: security bump to version 5.0.4
+Message-ID: <1375277507-30647-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Fixes CVE-2013-2944.
 
-I just started to play around with buildroot. I managed to compile a kernel
-with the option "initial RAM linked into linux kernel" and "(tty1) Port to
-run a getty on" and I could load it with qemu and it worked. I could login
-and wander around in the ram filesystem.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/strongswan/strongswan.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-As second step I wanted to create a bootable disk image with my custom
-kernel and filesystem. I disenabled the option "initial RAM linked into
-linux kernel", enabled that I get an ext2 filesystem image and marked the
-option "install kernel image to /boot in target".
-I also configured the kernel and marked the option "second extended file
-system".
-
-I build no packages, except for nano and grub as boot loader ...
-
-then I
- - created a disk image of 32 mb with dd
- - made a primary partition on it with fdisk
- - made an ext2 filesystem on it with mkfs
- - copied the contend of my rootfs.ext2 into the filesystem
- - installed Grub that uses the boot files that were genereted by buildroot
-
-Then I booted my recently created kernel by the command "qemu -hda hdd.img".
-I could chose my kernel in the boot menu and then it started to load the
-kernel.
-
-It allways freezes after the line
-"swapper/0 (1) used greatest stack depth: 5740 bytes left"
-
-Some other strange thing is the message
-"Filesystem type is ext2fs, partition type 0x83."
-that appears right after the info that the system will boot now.
-
-I just want a bootable disk image with linux kernel and a minimal filesystem
-on a primary partition.
-
-Were is the error in my method?
-What other method would you recommend to get such an bootable disk image?
-
-Thaaaank you veeery much!!! 
-
-
-
---
-View this message in context: http://buildroot-busybox.2317881.n4.nabble.com/Kernel-freezes-after-loading-with-qemu-tp49198.html
-Sent from the Buildroot (busybox) mailing list archive at Nabble.com.
+diff --git a/package/strongswan/strongswan.mk b/package/strongswan/strongswan.mk
+index 88d6f94..b75c70d 100644
+--- a/package/strongswan/strongswan.mk
++++ b/package/strongswan/strongswan.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-STRONGSWAN_VERSION = 5.0.2
++STRONGSWAN_VERSION = 5.0.4
+ STRONGSWAN_SOURCE = strongswan-$(STRONGSWAN_VERSION).tar.bz2
+ STRONGSWAN_SITE = http://download.strongswan.org
+ STRONGSWAN_LICENSE = GPLv2+
+-- 
+1.8.1.5
