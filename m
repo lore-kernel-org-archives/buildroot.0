@@ -1,52 +1,362 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 31 Jul 2013 10:03:37 -0300
-Subject: [Buildroot] [PATCH 1/3] package/uclibc: number patches for 0.9.32.1
-Message-ID: <1375275819-29308-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Wed, 31 Jul 2013 10:03:38 -0300
+Subject: [Buildroot] [PATCH 2/3] package/uclibc: add execvpe() backport
+In-Reply-To: <1375275819-29308-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1375275819-29308-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1375275819-29308-2-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Needed for modern versions of systemd and udev.
+
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- ...atch => uclibc-0001-Fix-e500-__fe_nomask_env-use-of-__set_errno.patch} | 0
- ...ch => uclibc-0002-Fix-__libc_epoll_pwait-compile-failure-on-x86.patch} | 0
- ...> uclibc-0003-libc-sysdeps-add-__kernel_long-and-__kernel_ulong.patch} | 0
- .../{uclibc-sparc-errno-fix.patch => uclibc-0004-sparc-errno-fix.patch}   | 0
- .../uclibc/0.9.32.1/{uclibc-unshare.patch => uclibc-0005-unshare.patch}   | 0
- ...uxthreads-errno-fix.patch => uclibc-0006-linuxthreads-errno-fix.patch} | 0
- 6 files changed, 0 insertions(+), 0 deletions(-)
- rename package/uclibc/0.9.32.1/{uclibc-Fix-e500-__fe_nomask_env-use-of-__set_errno.patch => uclibc-0001-Fix-e500-__fe_nomask_env-use-of-__set_errno.patch} (100%)
- rename package/uclibc/0.9.32.1/{uclibc-Fix-__libc_epoll_pwait-compile-failure-on-x86.patch => uclibc-0002-Fix-__libc_epoll_pwait-compile-failure-on-x86.patch} (100%)
- rename package/uclibc/0.9.32.1/{uclibc-libc-sysdeps-add-__kernel_long-and-__kernel_ulong.patch => uclibc-0003-libc-sysdeps-add-__kernel_long-and-__kernel_ulong.patch} (100%)
- rename package/uclibc/0.9.32.1/{uclibc-sparc-errno-fix.patch => uclibc-0004-sparc-errno-fix.patch} (100%)
- rename package/uclibc/0.9.32.1/{uclibc-unshare.patch => uclibc-0005-unshare.patch} (100%)
- rename package/uclibc/0.9.32.1/{uclibc-linuxthreads-errno-fix.patch => uclibc-0006-linuxthreads-errno-fix.patch} (100%)
+ ...07-libc-add-non-standard-execvpe-function.patch | 163 +++++++++++++++++++++
+ ...11-libc-add-non-standard-execvpe-function.patch | 163 +++++++++++++++++++++
+ 2 files changed, 326 insertions(+)
+ create mode 100644 package/uclibc/0.9.32.1/uclibc-0007-libc-add-non-standard-execvpe-function.patch
+ create mode 100644 package/uclibc/0.9.33.2/uclibc-0011-libc-add-non-standard-execvpe-function.patch
 
-diff --git a/package/uclibc/0.9.32.1/uclibc-Fix-e500-__fe_nomask_env-use-of-__set_errno.patch b/package/uclibc/0.9.32.1/uclibc-0001-Fix-e500-__fe_nomask_env-use-of-__set_errno.patch
-similarity index 100%
-rename from package/uclibc/0.9.32.1/uclibc-Fix-e500-__fe_nomask_env-use-of-__set_errno.patch
-rename to package/uclibc/0.9.32.1/uclibc-0001-Fix-e500-__fe_nomask_env-use-of-__set_errno.patch
-diff --git a/package/uclibc/0.9.32.1/uclibc-Fix-__libc_epoll_pwait-compile-failure-on-x86.patch b/package/uclibc/0.9.32.1/uclibc-0002-Fix-__libc_epoll_pwait-compile-failure-on-x86.patch
-similarity index 100%
-rename from package/uclibc/0.9.32.1/uclibc-Fix-__libc_epoll_pwait-compile-failure-on-x86.patch
-rename to package/uclibc/0.9.32.1/uclibc-0002-Fix-__libc_epoll_pwait-compile-failure-on-x86.patch
-diff --git a/package/uclibc/0.9.32.1/uclibc-libc-sysdeps-add-__kernel_long-and-__kernel_ulong.patch b/package/uclibc/0.9.32.1/uclibc-0003-libc-sysdeps-add-__kernel_long-and-__kernel_ulong.patch
-similarity index 100%
-rename from package/uclibc/0.9.32.1/uclibc-libc-sysdeps-add-__kernel_long-and-__kernel_ulong.patch
-rename to package/uclibc/0.9.32.1/uclibc-0003-libc-sysdeps-add-__kernel_long-and-__kernel_ulong.patch
-diff --git a/package/uclibc/0.9.32.1/uclibc-sparc-errno-fix.patch b/package/uclibc/0.9.32.1/uclibc-0004-sparc-errno-fix.patch
-similarity index 100%
-rename from package/uclibc/0.9.32.1/uclibc-sparc-errno-fix.patch
-rename to package/uclibc/0.9.32.1/uclibc-0004-sparc-errno-fix.patch
-diff --git a/package/uclibc/0.9.32.1/uclibc-unshare.patch b/package/uclibc/0.9.32.1/uclibc-0005-unshare.patch
-similarity index 100%
-rename from package/uclibc/0.9.32.1/uclibc-unshare.patch
-rename to package/uclibc/0.9.32.1/uclibc-0005-unshare.patch
-diff --git a/package/uclibc/0.9.32.1/uclibc-linuxthreads-errno-fix.patch b/package/uclibc/0.9.32.1/uclibc-0006-linuxthreads-errno-fix.patch
-similarity index 100%
-rename from package/uclibc/0.9.32.1/uclibc-linuxthreads-errno-fix.patch
-rename to package/uclibc/0.9.32.1/uclibc-0006-linuxthreads-errno-fix.patch
+diff --git a/package/uclibc/0.9.32.1/uclibc-0007-libc-add-non-standard-execvpe-function.patch b/package/uclibc/0.9.32.1/uclibc-0007-libc-add-non-standard-execvpe-function.patch
+new file mode 100644
+index 0000000..8141333
+--- /dev/null
++++ b/package/uclibc/0.9.32.1/uclibc-0007-libc-add-non-standard-execvpe-function.patch
+@@ -0,0 +1,163 @@
++From 0eb30761a26c46aaf555464114851202ae9c27bd Mon Sep 17 00:00:00 2001
++From: Henning Heinold <heinold@inf.fu-berlin.de>
++Date: Sat, 4 Jun 2011 21:23:15 +0200
++Subject: [PATCH] libc: add non standard execvpe function
++
++[Gustavo]: Drop TODO modification to make it compatible
++Signed-off-by: Henning Heinold <heinold@inf.fu-berlin.de>
++Signed-off-by: Bernhard Reutner-Fischer <rep.dot.nop@gmail.com>
++---
++ include/unistd.h      |  8 ++++++++
++ libc/unistd/exec.c    | 38 +++++++++++++++++++++++++++++++++-----
++ libc/unistd/execvpe.c |  7 +++++++
++ 4 files changed, 52 insertions(+), 5 deletions(-)
++ create mode 100644 libc/unistd/execvpe.c
++
++diff --git a/include/unistd.h b/include/unistd.h
++index feadf93..9479554 100644
++--- a/include/unistd.h
+++++ b/include/unistd.h
++@@ -619,6 +619,14 @@ extern int execlp (const char *__file, const char *__arg, ...)
++      __THROW __nonnull ((1));
++ libc_hidden_proto(execlp)
++ 
+++#ifdef __USE_GNU
+++/* Execute FILE, searching in the `PATH' environment variable if it contains
+++   no slashes, with arguments ARGV and environment from a pointer */
+++extern int execvpe (__const char *__file, char *__const __argv[], char *__const __envp[])
+++     __THROW __nonnull ((1));
+++libc_hidden_proto(execvpe)
+++#endif
+++
++ 
++ #if defined __USE_MISC || defined __USE_XOPEN
++ /* Add INC to priority of the current process.  */
++diff --git a/libc/unistd/exec.c b/libc/unistd/exec.c
++index ba92989..8fa42e5 100644
++--- a/libc/unistd/exec.c
+++++ b/libc/unistd/exec.c
++@@ -32,6 +32,8 @@
++ /**********************************************************************/
++ #define EXEC_FUNC_COMMON 0
++ #define EXEC_FUNC_EXECVP 1
+++#define EXEC_FUNC_EXECVPE 2
+++
++ #if defined(__ARCH_USE_MMU__)
++ 
++ /* We have an MMU, so use alloca() to grab space for buffers and arg lists. */
++@@ -58,6 +60,7 @@
++  *  execle(a) -> execve(-)
++  *  execv(-)  -> execve(-)
++  *  execvp(a) -> execve(-)
+++ *  execvpe(a) -> execve(-)
++  */
++ 
++ # define EXEC_ALLOC_SIZE(VAR)      /* nothing to do */
++@@ -219,15 +222,18 @@ libc_hidden_def(execlp)
++ 
++ #endif
++ /**********************************************************************/
++-#ifdef L_execvp
+++#if defined (L_execvp) || defined(L_execvpe)
++ 
++ 
++ /* Use a default path that matches glibc behavior, since SUSv3 says
++  * this is implementation-defined.  The default is current working dir,
++  * /bin, and then /usr/bin. */
++ static const char default_path[] = ":/bin:/usr/bin";
++-
+++#if defined (L_execvp)
++ int execvp(const char *path, char *const argv[])
+++#elif defined (L_execvpe)
+++int execvpe(const char *path, char *const argv[], char *const envp[])
+++#endif
++ {
++ 	char *buf = NULL;
++ 	char *p;
++@@ -245,7 +251,11 @@ int execvp(const char *path, char *const argv[])
++ 	}
++ 
++ 	if (strchr(path, '/')) {
+++#if defined (L_execvp)
++ 		execve(path, argv, __environ);
+++#elif defined (L_execvpe)
+++		execve(path, argv, envp);
+++#endif
++ 		if (errno == ENOEXEC) {
++ 			char **nargv;
++ 			EXEC_ALLOC_SIZE(size2) /* Do NOT add a semicolon! */
++@@ -254,11 +264,19 @@ int execvp(const char *path, char *const argv[])
++ 			/* Need the dimension - 1.  We omit counting the trailing
++ 			 * NULL but we actually omit the first entry. */
++ 			for (n=0 ; argv[n] ; n++) {}
+++#if defined (L_execvp)
++ 			nargv = (char **) EXEC_ALLOC((n+2) * sizeof(char *), size2, EXEC_FUNC_EXECVP);
+++#elif defined (L_execvpe)
+++			nargv = (char **) EXEC_ALLOC((n+2) * sizeof(char *), size2, EXEC_FUNC_EXECVPE);
+++#endif
++ 			nargv[0] = argv[0];
++ 			nargv[1] = (char *)path;
++ 			memcpy(nargv+2, argv+1, n*sizeof(char *));
+++#if defined (L_execvp)
++ 			execve("/bin/sh", nargv, __environ);
+++#elif defined (L_execvpe)
+++			execve("/bin/sh", nargv, envp);
+++#endif
++ 			EXEC_FREE(nargv, size2);
++ 		}
++ 	} else {
++@@ -277,8 +295,11 @@ int execvp(const char *path, char *const argv[])
++ 			return -1;
++ 		}
++ 		len = (FILENAME_MAX - 1) - plen;
++-
+++#if defined (L_execvp)
++ 		buf = EXEC_ALLOC(FILENAME_MAX, size, EXEC_FUNC_EXECVP);
+++#elif defined (L_execvpe)
+++		buf = EXEC_ALLOC(FILENAME_MAX, size, EXEC_FUNC_EXECVPE);
+++#endif
++ 		{
++ 			int seen_small = 0;
++ 			s0 = buf + len;
++@@ -300,8 +321,11 @@ int execvp(const char *path, char *const argv[])
++ 					s[plen-1] = '/';
++ 				}
++ 
+++#if defined (L_execvp)
++ 				execve(s, argv, __environ);
++-
+++#elif defined (L_execvpe)
+++				execve(s, argv, envp);
+++#endif
++ 				seen_small = 1;
++ 
++ 				if (errno == ENOEXEC) {
++@@ -325,7 +349,11 @@ int execvp(const char *path, char *const argv[])
++ 
++ 	return -1;
++ }
+++#if defined (L_execvp)
++ libc_hidden_def(execvp)
++-
+++#elif defined (L_execvpe)
+++libc_hidden_def(execvpe)
++ #endif
+++
+++#endif /* #if defined (L_execvp) || defined(L_execvpe) */
++ /**********************************************************************/
++diff --git a/libc/unistd/execvpe.c b/libc/unistd/execvpe.c
++new file mode 100644
++index 0000000..c3c1e43
++--- /dev/null
+++++ b/libc/unistd/execvpe.c
++@@ -0,0 +1,7 @@
+++/* Copyright (C) 2011-2013 Hennning Heinold <heinold@inf.fu-berlin.de>
+++ *
+++ * Licensed under the LGPL v2.1 or later, see the file COPYING.LIB in this tarball.
+++ */
+++
+++#define L_execvpe
+++#include "exec.c"
++-- 
++1.8.1.5
++
+diff --git a/package/uclibc/0.9.33.2/uclibc-0011-libc-add-non-standard-execvpe-function.patch b/package/uclibc/0.9.33.2/uclibc-0011-libc-add-non-standard-execvpe-function.patch
+new file mode 100644
+index 0000000..8141333
+--- /dev/null
++++ b/package/uclibc/0.9.33.2/uclibc-0011-libc-add-non-standard-execvpe-function.patch
+@@ -0,0 +1,163 @@
++From 0eb30761a26c46aaf555464114851202ae9c27bd Mon Sep 17 00:00:00 2001
++From: Henning Heinold <heinold@inf.fu-berlin.de>
++Date: Sat, 4 Jun 2011 21:23:15 +0200
++Subject: [PATCH] libc: add non standard execvpe function
++
++[Gustavo]: Drop TODO modification to make it compatible
++Signed-off-by: Henning Heinold <heinold@inf.fu-berlin.de>
++Signed-off-by: Bernhard Reutner-Fischer <rep.dot.nop@gmail.com>
++---
++ include/unistd.h      |  8 ++++++++
++ libc/unistd/exec.c    | 38 +++++++++++++++++++++++++++++++++-----
++ libc/unistd/execvpe.c |  7 +++++++
++ 4 files changed, 52 insertions(+), 5 deletions(-)
++ create mode 100644 libc/unistd/execvpe.c
++
++diff --git a/include/unistd.h b/include/unistd.h
++index feadf93..9479554 100644
++--- a/include/unistd.h
+++++ b/include/unistd.h
++@@ -619,6 +619,14 @@ extern int execlp (const char *__file, const char *__arg, ...)
++      __THROW __nonnull ((1));
++ libc_hidden_proto(execlp)
++ 
+++#ifdef __USE_GNU
+++/* Execute FILE, searching in the `PATH' environment variable if it contains
+++   no slashes, with arguments ARGV and environment from a pointer */
+++extern int execvpe (__const char *__file, char *__const __argv[], char *__const __envp[])
+++     __THROW __nonnull ((1));
+++libc_hidden_proto(execvpe)
+++#endif
+++
++ 
++ #if defined __USE_MISC || defined __USE_XOPEN
++ /* Add INC to priority of the current process.  */
++diff --git a/libc/unistd/exec.c b/libc/unistd/exec.c
++index ba92989..8fa42e5 100644
++--- a/libc/unistd/exec.c
+++++ b/libc/unistd/exec.c
++@@ -32,6 +32,8 @@
++ /**********************************************************************/
++ #define EXEC_FUNC_COMMON 0
++ #define EXEC_FUNC_EXECVP 1
+++#define EXEC_FUNC_EXECVPE 2
+++
++ #if defined(__ARCH_USE_MMU__)
++ 
++ /* We have an MMU, so use alloca() to grab space for buffers and arg lists. */
++@@ -58,6 +60,7 @@
++  *  execle(a) -> execve(-)
++  *  execv(-)  -> execve(-)
++  *  execvp(a) -> execve(-)
+++ *  execvpe(a) -> execve(-)
++  */
++ 
++ # define EXEC_ALLOC_SIZE(VAR)      /* nothing to do */
++@@ -219,15 +222,18 @@ libc_hidden_def(execlp)
++ 
++ #endif
++ /**********************************************************************/
++-#ifdef L_execvp
+++#if defined (L_execvp) || defined(L_execvpe)
++ 
++ 
++ /* Use a default path that matches glibc behavior, since SUSv3 says
++  * this is implementation-defined.  The default is current working dir,
++  * /bin, and then /usr/bin. */
++ static const char default_path[] = ":/bin:/usr/bin";
++-
+++#if defined (L_execvp)
++ int execvp(const char *path, char *const argv[])
+++#elif defined (L_execvpe)
+++int execvpe(const char *path, char *const argv[], char *const envp[])
+++#endif
++ {
++ 	char *buf = NULL;
++ 	char *p;
++@@ -245,7 +251,11 @@ int execvp(const char *path, char *const argv[])
++ 	}
++ 
++ 	if (strchr(path, '/')) {
+++#if defined (L_execvp)
++ 		execve(path, argv, __environ);
+++#elif defined (L_execvpe)
+++		execve(path, argv, envp);
+++#endif
++ 		if (errno == ENOEXEC) {
++ 			char **nargv;
++ 			EXEC_ALLOC_SIZE(size2) /* Do NOT add a semicolon! */
++@@ -254,11 +264,19 @@ int execvp(const char *path, char *const argv[])
++ 			/* Need the dimension - 1.  We omit counting the trailing
++ 			 * NULL but we actually omit the first entry. */
++ 			for (n=0 ; argv[n] ; n++) {}
+++#if defined (L_execvp)
++ 			nargv = (char **) EXEC_ALLOC((n+2) * sizeof(char *), size2, EXEC_FUNC_EXECVP);
+++#elif defined (L_execvpe)
+++			nargv = (char **) EXEC_ALLOC((n+2) * sizeof(char *), size2, EXEC_FUNC_EXECVPE);
+++#endif
++ 			nargv[0] = argv[0];
++ 			nargv[1] = (char *)path;
++ 			memcpy(nargv+2, argv+1, n*sizeof(char *));
+++#if defined (L_execvp)
++ 			execve("/bin/sh", nargv, __environ);
+++#elif defined (L_execvpe)
+++			execve("/bin/sh", nargv, envp);
+++#endif
++ 			EXEC_FREE(nargv, size2);
++ 		}
++ 	} else {
++@@ -277,8 +295,11 @@ int execvp(const char *path, char *const argv[])
++ 			return -1;
++ 		}
++ 		len = (FILENAME_MAX - 1) - plen;
++-
+++#if defined (L_execvp)
++ 		buf = EXEC_ALLOC(FILENAME_MAX, size, EXEC_FUNC_EXECVP);
+++#elif defined (L_execvpe)
+++		buf = EXEC_ALLOC(FILENAME_MAX, size, EXEC_FUNC_EXECVPE);
+++#endif
++ 		{
++ 			int seen_small = 0;
++ 			s0 = buf + len;
++@@ -300,8 +321,11 @@ int execvp(const char *path, char *const argv[])
++ 					s[plen-1] = '/';
++ 				}
++ 
+++#if defined (L_execvp)
++ 				execve(s, argv, __environ);
++-
+++#elif defined (L_execvpe)
+++				execve(s, argv, envp);
+++#endif
++ 				seen_small = 1;
++ 
++ 				if (errno == ENOEXEC) {
++@@ -325,7 +349,11 @@ int execvp(const char *path, char *const argv[])
++ 
++ 	return -1;
++ }
+++#if defined (L_execvp)
++ libc_hidden_def(execvp)
++-
+++#elif defined (L_execvpe)
+++libc_hidden_def(execvpe)
++ #endif
+++
+++#endif /* #if defined (L_execvp) || defined(L_execvpe) */
++ /**********************************************************************/
++diff --git a/libc/unistd/execvpe.c b/libc/unistd/execvpe.c
++new file mode 100644
++index 0000000..c3c1e43
++--- /dev/null
+++++ b/libc/unistd/execvpe.c
++@@ -0,0 +1,7 @@
+++/* Copyright (C) 2011-2013 Hennning Heinold <heinold@inf.fu-berlin.de>
+++ *
+++ * Licensed under the LGPL v2.1 or later, see the file COPYING.LIB in this tarball.
+++ */
+++
+++#define L_execvpe
+++#include "exec.c"
++-- 
++1.8.1.5
++
 -- 
 1.8.1.5
