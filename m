@@ -1,59 +1,39 @@
-From: Mischa Jonker <Mischa.Jonker@synopsys.com>
-Date: Wed, 31 Jul 2013 17:26:59 +0200
-Subject: [Buildroot] [PATCH v2] libnspr: Add dependency on !BR2_arc
-Message-ID: <1375284419-2958-1-git-send-email-mjonker@synopsys.com>
+From: Nathan Ford <nford@westpond.com>
+Date: Wed, 31 Jul 2013 11:47:36 -0400
+Subject: [Buildroot] [PATCH v2] Fix building initramfs kernel with appended
+	dtb
+Message-ID: <1375285656-24907-1-git-send-email-nford@westpond.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-ARC is not supported yet in libnspr.
+The target for building the kernel with a cpio initramfs is not
+calling the append dtb commands, creating a final kernel image
+without an appended dtb. Instead it needs to call kernel make on
+the intermediate target, then call the append dtb commands
+to produce the final image as the primary kernel build target
+does.
 
-v2: Propagate to ecryptfs-utils as well
-
-Signed-off-by: Mischa Jonker <mjonker@synopsys.com>
+Signed-off-by: Nathan Ford <nford@westpond.com>
 ---
- package/ecryptfs-utils/Config.in |    1 +
- package/libnspr/Config.in        |    1 +
- package/libnss/Config.in         |    1 +
- 3 files changed, 3 insertions(+)
+ linux/linux.mk |    3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/ecryptfs-utils/Config.in b/package/ecryptfs-utils/Config.in
-index c10659a..480aedd 100644
---- a/package/ecryptfs-utils/Config.in
-+++ b/package/ecryptfs-utils/Config.in
-@@ -6,6 +6,7 @@ config BR2_PACKAGE_ECRYPTFS_UTILS
- 	depends on !BR2_avr32 && !BR2_microblaze # keyutils
- 	depends on BR2_LARGEFILE # libnss
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libnss -> libnspr
-+	depends on !BR2_arc # libnss -> libnspr
- 	help
- 	  eCryptfs is a POSIX-compliant enterprise cryptographic
- 	  filesystem for Linux. It is stacked on top of any other
-diff --git a/package/libnspr/Config.in b/package/libnspr/Config.in
-index f87b10c..ee7902b 100644
---- a/package/libnspr/Config.in
-+++ b/package/libnspr/Config.in
-@@ -2,6 +2,7 @@ config BR2_PACKAGE_LIBNSPR
- 	bool "libnspr"
- 	depends on BR2_LARGEFILE
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_arc
- 	help
- 	  NSPR is the Netscape Portable Runtime library which provides
- 	  a platform-neutral API for system level and libc like
-diff --git a/package/libnss/Config.in b/package/libnss/Config.in
-index e8eec77..b5f3a01 100644
---- a/package/libnss/Config.in
-+++ b/package/libnss/Config.in
-@@ -5,6 +5,7 @@ config BR2_PACKAGE_LIBNSS
- 	select BR2_PACKAGE_ZLIB
- 	depends on BR2_LARGEFILE
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libnspr
-+	depends on !BR2_arc # libnspr
- 	help
- 	  Network Security Services (NSS) is a set of libraries designed
- 	  to support development of security-enabled client and server
+diff --git a/linux/linux.mk b/linux/linux.mk
+index 17e9838..9d29d9d 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -311,7 +311,8 @@ endif
+ $(LINUX_DIR)/.stamp_initramfs_rebuilt: $(LINUX_DIR)/.stamp_target_installed $(LINUX_DIR)/.stamp_images_installed $(BINARIES_DIR)/rootfs.cpio
+ 	@$(call MESSAGE,"Rebuilding kernel with initramfs")
+ 	# Build the kernel.
+-	$(TARGET_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) $(LINUX_IMAGE_NAME)
++	$(TARGET_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) $(LINUX_IMAGE_TARGET)
++	$(LINUX_APPEND_DTB)
+ 	# Copy the kernel image to its final destination
+ 	cp $(LINUX_IMAGE_PATH) $(BINARIES_DIR)
+ 	# If there is a .ub file copy it to the final destination
 -- 
 1.7.9.5
