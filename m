@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 31 Jul 2013 18:16:40 +0200
-Subject: [Buildroot] [PATCH v2] package/libedit: switch to alternate URL
- for proper packaging
-In-Reply-To: <1375116257-27967-1-git-send-email-yann.morin.1998@free.fr>
-References: <1375116257-27967-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <20130731181640.55c139ad@skate>
+Date: Wed, 31 Jul 2013 18:16:55 +0200
+Subject: [Buildroot] [PATCH] package/pmake: remove
+In-Reply-To: <1375205099-7724-1-git-send-email-yann.morin.1998@free.fr>
+References: <1375205099-7724-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <20130731181655.5ba825f7@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,23 +12,16 @@ To: buildroot@busybox.net
 
 Dear Yann E. MORIN,
 
-On Mon, 29 Jul 2013 18:44:17 +0200, Yann E. MORIN wrote:
+On Tue, 30 Jul 2013 19:24:59 +0200, Yann E. MORIN wrote:
 > From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 > 
-> Upstream libedit does not have a proper homepage, and does not provide
-> any sort of packaging whatsoever. So far, we used Debian's wayback
-> machine to get a tarball of a rather oldish libedit.
+> Packaging pmake was required when we used the upstream libedit.
+> Since we have switched to using the autotools-based libedit,
+> pmake is no longer needed.
 > 
-> As Thomas pointed out, someone has been maintaining a proper autotools
-> based, up-to-date package for a while.
+> Because pmake is quite ugly, let's just drop it.
 > 
-> While Debian is stuck to 2.11 (5 years old now), we bump to 3.1 as a bonus.
-> 
-> Remove our libedit.pc, it's now bundled with the package.
-> 
-> Reported-by: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
 > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
 
 Applied, thanks.
 
