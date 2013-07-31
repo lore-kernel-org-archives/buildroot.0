@@ -1,346 +1,44 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 31 Jul 2013 10:03:39 -0300
-Subject: [Buildroot] [PATCH 3/3] package/uclibc: add mkostemp() backport
-In-Reply-To: <1375275819-29308-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1375275819-29308-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1375275819-29308-3-git-send-email-gustavo@zacarias.com.ar>
+From: Axel Lin <axel.lin@ingics.com>
+Date: Wed, 31 Jul 2013 21:05:56 +0800
+Subject: [Buildroot] [noMMU] How to generate FLAT executable for busybox?
+In-Reply-To: <CAFRkauAXEpeZu6PNDvR2TiU9D=EidiaREJCFTjCP1BqrX0Y8zA@mail.gmail.com>
+References: <1375076435.4630.2.camel@phoenix>
+ <CAFRkauAXEpeZu6PNDvR2TiU9D=EidiaREJCFTjCP1BqrX0Y8zA@mail.gmail.com>
+Message-ID: <CAFRkauBReYkcyUzaOdHk586wNm3vgP0Uaztv3vgvfvz608NidA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Needed for modern versions of systemd and udev.
+2013/7/29 Axel Lin <axel.lin@ingics.com>:
+> 2013/7/29 Axel Lin <axel.lin@ingics.com>:
+>> Hi,
+>> I have BR2_BINFMT_FLAT=y in my setting.
+>> However, the build system still generates ELF executable for busybox.
+>>
+>> $ file output/target/bin/busybox
+>> output/target/bin/busybox: setuid ELF 32-bit LSB executable, ARM, version 1 (SYSV), statically linked, stripped
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- ...ibc-0008-libc-stdlib-add-mkostemp-helpers.patch | 155 +++++++++++++++++++++
- ...ibc-0012-libc-stdlib-add-mkostemp-helpers.patch | 155 +++++++++++++++++++++
- 2 files changed, 310 insertions(+)
- create mode 100644 package/uclibc/0.9.32.1/uclibc-0008-libc-stdlib-add-mkostemp-helpers.patch
- create mode 100644 package/uclibc/0.9.33.2/uclibc-0012-libc-stdlib-add-mkostemp-helpers.patch
+Hi,
+Just try to figure out if any platform can build FLAT executable.
+So I just tested build for blackfin (BR2_bfin).
+( I don't have any customization for this blackfin build test,
+only run make menuconfig and select blackfin. Test with current git tree. )
 
-diff --git a/package/uclibc/0.9.32.1/uclibc-0008-libc-stdlib-add-mkostemp-helpers.patch b/package/uclibc/0.9.32.1/uclibc-0008-libc-stdlib-add-mkostemp-helpers.patch
-new file mode 100644
-index 0000000..8002240
---- /dev/null
-+++ b/package/uclibc/0.9.32.1/uclibc-0008-libc-stdlib-add-mkostemp-helpers.patch
-@@ -0,0 +1,155 @@
-+From 42d1b23fc0f3748b8bf474e456d6c44aa7e563fd Mon Sep 17 00:00:00 2001
-+From: Mike Frysinger <vapier@gentoo.org>
-+Date: Wed, 14 Nov 2012 00:30:54 -0500
-+Subject: [PATCH] libc/stdlib: add mkostemp helpers
-+
-+Some projects (like udev) are starting to use this.
-+
-+Imported from glibc.
-+
-+Signed-off-by: Mike Frysinger <vapier@gentoo.org>
-+---
-+ include/stdlib.h         | 23 +++++++++++++++++++++++
-+ libc/stdlib/Makefile.in  |  4 ++--
-+ libc/stdlib/mkostemp.c   | 32 ++++++++++++++++++++++++++++++++
-+ libc/stdlib/mkostemp64.c | 33 +++++++++++++++++++++++++++++++++
-+ 4 files changed, 90 insertions(+), 2 deletions(-)
-+ create mode 100644 libc/stdlib/mkostemp.c
-+ create mode 100644 libc/stdlib/mkostemp64.c
-+
-+diff --git a/include/stdlib.h b/include/stdlib.h
-+index 354fc66..79ccc55 100644
-+--- a/include/stdlib.h
-++++ b/include/stdlib.h
-+@@ -652,6 +652,29 @@ extern int mkstemp64 (char *__template) __nonnull ((1)) __wur;
-+ extern char *mkdtemp (char *__template) __THROW __nonnull ((1)) __wur;
-+ #endif
-+ 
-++#ifdef __USE_GNU
-++/* Generate a unique temporary file name from TEMPLATE similar to
-++   mkstemp.  But allow the caller to pass additional flags which are
-++   used in the open call to create the file..
-++
-++   This function is a possible cancellation point and therefore not
-++   marked with __THROW.  */
-++# ifndef __USE_FILE_OFFSET64
-++extern int mkostemp (char *__template, int __flags) __nonnull ((1)) __wur;
-++# else
-++#  ifdef __REDIRECT
-++extern int __REDIRECT (mkostemp, (char *__template, int __flags), mkostemp64)
-++     __nonnull ((1)) __wur;
-++#  else
-++#   define mkostemp mkostemp64
-++#  endif
-++# endif
-++# ifdef __USE_LARGEFILE64
-++extern int mkostemp64 (char *__template, int __flags) __nonnull ((1)) __wur;
-++# endif
-++
-++#endif
-++
-+ 
-+ __BEGIN_NAMESPACE_STD
-+ /* Execute the given line as a shell command.
-+diff --git a/libc/stdlib/Makefile.in b/libc/stdlib/Makefile.in
-+index 3166b8e..b92f7ce 100644
-+--- a/libc/stdlib/Makefile.in
-++++ b/libc/stdlib/Makefile.in
-+@@ -12,7 +12,7 @@ include $(top_srcdir)libc/stdlib/malloc-simple/Makefile.in
-+ include $(top_srcdir)libc/stdlib/malloc-standard/Makefile.in
-+ 
-+ CSRC-y := \
-+-	abort.c getenv.c mkdtemp.c realpath.c canonicalize.c mkstemp.c \
-++	abort.c getenv.c mkdtemp.c realpath.c canonicalize.c mkstemp.c mkostemp.c \
-+ 	rand.c random.c random_r.c setenv.c div.c ldiv.c lldiv.c \
-+ 	getpt.c drand48-iter.c jrand48.c \
-+ 	jrand48_r.c lcong48.c lrand48.c lrand48_r.c mrand48.c mrand48_r.c nrand48.c \
-+@@ -21,7 +21,7 @@ CSRC-y := \
-+ CSRC-$(UCLIBC_HAS_ADVANCED_REALTIME) += posix_memalign.c
-+ CSRC-$(UCLIBC_HAS_PTY) += grantpt.c unlockpt.c ptsname.c
-+ CSRC-$(UCLIBC_HAS_ARC4RANDOM) += arc4random.c
-+-CSRC-$(UCLIBC_HAS_LFS) += mkstemp64.c
-++CSRC-$(UCLIBC_HAS_LFS) += mkstemp64.c mkostemp64.c
-+ CSRC-$(UCLIBC_HAS_FLOATS) += drand48.c drand48_r.c erand48.c erand48_r.c
-+ CSRC-$(if $(findstring yy,$(UCLIBC_HAS_FLOATS)$(UCLIBC_SUSV3_LEGACY)),y) += \
-+ 	gcvt.c
-+diff --git a/libc/stdlib/mkostemp.c b/libc/stdlib/mkostemp.c
-+new file mode 100644
-+index 0000000..93b50fc
-+--- /dev/null
-++++ b/libc/stdlib/mkostemp.c
-+@@ -0,0 +1,32 @@
-++/* Copyright (C) 1998-2012 Free Software Foundation, Inc.
-++   This file is part of the GNU C Library.
-++
-++   The GNU C Library is free software; you can redistribute it and/or
-++   modify it under the terms of the GNU Lesser General Public
-++   License as published by the Free Software Foundation; either
-++   version 2.1 of the License, or (at your option) any later version.
-++
-++   The GNU C Library is distributed in the hope that it will be useful,
-++   but WITHOUT ANY WARRANTY; without even the implied warranty of
-++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-++   Lesser General Public License for more details.
-++
-++   You should have received a copy of the GNU Lesser General Public
-++   License along with the GNU C Library; if not, see
-++   <http://www.gnu.org/licenses/>.  */
-++
-++#include <stdio.h>
-++#include <stdlib.h>
-++#include "../misc/internals/tempname.h"
-++
-++/* Generate a unique temporary file name from TEMPLATE.
-++   The last six characters of TEMPLATE must be "XXXXXX";
-++   they are replaced with a string that makes the filename unique.
-++   Then open the file and return a fd. */
-++int
-++mkostemp (template, flags)
-++     char *template;
-++     int flags;
-++{
-++  return __gen_tempname (template, __GT_FILE, flags);
-++}
-+diff --git a/libc/stdlib/mkostemp64.c b/libc/stdlib/mkostemp64.c
-+new file mode 100644
-+index 0000000..5509d8c
-+--- /dev/null
-++++ b/libc/stdlib/mkostemp64.c
-+@@ -0,0 +1,33 @@
-++/* Copyright (C) 2000-2012 Free Software Foundation, Inc.
-++   This file is part of the GNU C Library.
-++
-++   The GNU C Library is free software; you can redistribute it and/or
-++   modify it under the terms of the GNU Lesser General Public
-++   License as published by the Free Software Foundation; either
-++   version 2.1 of the License, or (at your option) any later version.
-++
-++   The GNU C Library is distributed in the hope that it will be useful,
-++   but WITHOUT ANY WARRANTY; without even the implied warranty of
-++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-++   Lesser General Public License for more details.
-++
-++   You should have received a copy of the GNU Lesser General Public
-++   License along with the GNU C Library; if not, see
-++   <http://www.gnu.org/licenses/>.  */
-++
-++#include <fcntl.h>
-++#include <stdio.h>
-++#include <stdlib.h>
-++#include "../misc/internals/tempname.h"
-++
-++/* Generate a unique temporary file name from TEMPLATE.
-++   The last six characters of TEMPLATE must be "XXXXXX";
-++   they are replaced with a string that makes the filename unique.
-++   Then open the file and return a fd. */
-++int
-++mkostemp64 (template, flags)
-++     char *template;
-++     int flags;
-++{
-++  return __gen_tempname (template, __GT_BIGFILE, flags | O_LARGEFILE);
-++}
-+-- 
-+1.8.1.5
-+
-diff --git a/package/uclibc/0.9.33.2/uclibc-0012-libc-stdlib-add-mkostemp-helpers.patch b/package/uclibc/0.9.33.2/uclibc-0012-libc-stdlib-add-mkostemp-helpers.patch
-new file mode 100644
-index 0000000..8002240
---- /dev/null
-+++ b/package/uclibc/0.9.33.2/uclibc-0012-libc-stdlib-add-mkostemp-helpers.patch
-@@ -0,0 +1,155 @@
-+From 42d1b23fc0f3748b8bf474e456d6c44aa7e563fd Mon Sep 17 00:00:00 2001
-+From: Mike Frysinger <vapier@gentoo.org>
-+Date: Wed, 14 Nov 2012 00:30:54 -0500
-+Subject: [PATCH] libc/stdlib: add mkostemp helpers
-+
-+Some projects (like udev) are starting to use this.
-+
-+Imported from glibc.
-+
-+Signed-off-by: Mike Frysinger <vapier@gentoo.org>
-+---
-+ include/stdlib.h         | 23 +++++++++++++++++++++++
-+ libc/stdlib/Makefile.in  |  4 ++--
-+ libc/stdlib/mkostemp.c   | 32 ++++++++++++++++++++++++++++++++
-+ libc/stdlib/mkostemp64.c | 33 +++++++++++++++++++++++++++++++++
-+ 4 files changed, 90 insertions(+), 2 deletions(-)
-+ create mode 100644 libc/stdlib/mkostemp.c
-+ create mode 100644 libc/stdlib/mkostemp64.c
-+
-+diff --git a/include/stdlib.h b/include/stdlib.h
-+index 354fc66..79ccc55 100644
-+--- a/include/stdlib.h
-++++ b/include/stdlib.h
-+@@ -652,6 +652,29 @@ extern int mkstemp64 (char *__template) __nonnull ((1)) __wur;
-+ extern char *mkdtemp (char *__template) __THROW __nonnull ((1)) __wur;
-+ #endif
-+ 
-++#ifdef __USE_GNU
-++/* Generate a unique temporary file name from TEMPLATE similar to
-++   mkstemp.  But allow the caller to pass additional flags which are
-++   used in the open call to create the file..
-++
-++   This function is a possible cancellation point and therefore not
-++   marked with __THROW.  */
-++# ifndef __USE_FILE_OFFSET64
-++extern int mkostemp (char *__template, int __flags) __nonnull ((1)) __wur;
-++# else
-++#  ifdef __REDIRECT
-++extern int __REDIRECT (mkostemp, (char *__template, int __flags), mkostemp64)
-++     __nonnull ((1)) __wur;
-++#  else
-++#   define mkostemp mkostemp64
-++#  endif
-++# endif
-++# ifdef __USE_LARGEFILE64
-++extern int mkostemp64 (char *__template, int __flags) __nonnull ((1)) __wur;
-++# endif
-++
-++#endif
-++
-+ 
-+ __BEGIN_NAMESPACE_STD
-+ /* Execute the given line as a shell command.
-+diff --git a/libc/stdlib/Makefile.in b/libc/stdlib/Makefile.in
-+index 3166b8e..b92f7ce 100644
-+--- a/libc/stdlib/Makefile.in
-++++ b/libc/stdlib/Makefile.in
-+@@ -12,7 +12,7 @@ include $(top_srcdir)libc/stdlib/malloc-simple/Makefile.in
-+ include $(top_srcdir)libc/stdlib/malloc-standard/Makefile.in
-+ 
-+ CSRC-y := \
-+-	abort.c getenv.c mkdtemp.c realpath.c canonicalize.c mkstemp.c \
-++	abort.c getenv.c mkdtemp.c realpath.c canonicalize.c mkstemp.c mkostemp.c \
-+ 	rand.c random.c random_r.c setenv.c div.c ldiv.c lldiv.c \
-+ 	getpt.c drand48-iter.c jrand48.c \
-+ 	jrand48_r.c lcong48.c lrand48.c lrand48_r.c mrand48.c mrand48_r.c nrand48.c \
-+@@ -21,7 +21,7 @@ CSRC-y := \
-+ CSRC-$(UCLIBC_HAS_ADVANCED_REALTIME) += posix_memalign.c
-+ CSRC-$(UCLIBC_HAS_PTY) += grantpt.c unlockpt.c ptsname.c
-+ CSRC-$(UCLIBC_HAS_ARC4RANDOM) += arc4random.c
-+-CSRC-$(UCLIBC_HAS_LFS) += mkstemp64.c
-++CSRC-$(UCLIBC_HAS_LFS) += mkstemp64.c mkostemp64.c
-+ CSRC-$(UCLIBC_HAS_FLOATS) += drand48.c drand48_r.c erand48.c erand48_r.c
-+ CSRC-$(if $(findstring yy,$(UCLIBC_HAS_FLOATS)$(UCLIBC_SUSV3_LEGACY)),y) += \
-+ 	gcvt.c
-+diff --git a/libc/stdlib/mkostemp.c b/libc/stdlib/mkostemp.c
-+new file mode 100644
-+index 0000000..93b50fc
-+--- /dev/null
-++++ b/libc/stdlib/mkostemp.c
-+@@ -0,0 +1,32 @@
-++/* Copyright (C) 1998-2012 Free Software Foundation, Inc.
-++   This file is part of the GNU C Library.
-++
-++   The GNU C Library is free software; you can redistribute it and/or
-++   modify it under the terms of the GNU Lesser General Public
-++   License as published by the Free Software Foundation; either
-++   version 2.1 of the License, or (at your option) any later version.
-++
-++   The GNU C Library is distributed in the hope that it will be useful,
-++   but WITHOUT ANY WARRANTY; without even the implied warranty of
-++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-++   Lesser General Public License for more details.
-++
-++   You should have received a copy of the GNU Lesser General Public
-++   License along with the GNU C Library; if not, see
-++   <http://www.gnu.org/licenses/>.  */
-++
-++#include <stdio.h>
-++#include <stdlib.h>
-++#include "../misc/internals/tempname.h"
-++
-++/* Generate a unique temporary file name from TEMPLATE.
-++   The last six characters of TEMPLATE must be "XXXXXX";
-++   they are replaced with a string that makes the filename unique.
-++   Then open the file and return a fd. */
-++int
-++mkostemp (template, flags)
-++     char *template;
-++     int flags;
-++{
-++  return __gen_tempname (template, __GT_FILE, flags);
-++}
-+diff --git a/libc/stdlib/mkostemp64.c b/libc/stdlib/mkostemp64.c
-+new file mode 100644
-+index 0000000..5509d8c
-+--- /dev/null
-++++ b/libc/stdlib/mkostemp64.c
-+@@ -0,0 +1,33 @@
-++/* Copyright (C) 2000-2012 Free Software Foundation, Inc.
-++   This file is part of the GNU C Library.
-++
-++   The GNU C Library is free software; you can redistribute it and/or
-++   modify it under the terms of the GNU Lesser General Public
-++   License as published by the Free Software Foundation; either
-++   version 2.1 of the License, or (at your option) any later version.
-++
-++   The GNU C Library is distributed in the hope that it will be useful,
-++   but WITHOUT ANY WARRANTY; without even the implied warranty of
-++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-++   Lesser General Public License for more details.
-++
-++   You should have received a copy of the GNU Lesser General Public
-++   License along with the GNU C Library; if not, see
-++   <http://www.gnu.org/licenses/>.  */
-++
-++#include <fcntl.h>
-++#include <stdio.h>
-++#include <stdlib.h>
-++#include "../misc/internals/tempname.h"
-++
-++/* Generate a unique temporary file name from TEMPLATE.
-++   The last six characters of TEMPLATE must be "XXXXXX";
-++   they are replaced with a string that makes the filename unique.
-++   Then open the file and return a fd. */
-++int
-++mkostemp64 (template, flags)
-++     char *template;
-++     int flags;
-++{
-++  return __gen_tempname (template, __GT_BIGFILE, flags | O_LARGEFILE);
-++}
-+-- 
-+1.8.1.5
-+
--- 
-1.8.1.5
+I thought I should have a FLAT executable, however it produces ELF executable.
+$ file output/target/bin/busybox
+output/target/bin/busybox: setuid ELF 32-bit LSB executable, Analog
+Devices Blackfin, version 1 (SYSV), statically linked, stripped
+
+BTW, I found BR2_ELF2FLT is invisible for BR2_bfin.
+
+package/elf2flt/Config.in.host:
+config BR2_PACKAGE_HOST_ELF2FLT
+        bool "Enable elf2flt support?"
+        depends on BR2_arm || BR2_sh || BR2_sparc
+
+Does this mean blackfin does not need elf2flt tool?
+
+Regards,
+Axel
