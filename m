@@ -1,42 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 31 Jul 2013 17:17:45 +0200
-Subject: [Buildroot] How to login as root without password
-In-Reply-To: <CAHbR41Xzw1RsrR8ZykwvWjXyP_GKzQRWghTo0hjq2z=sPGsabQ@mail.gmail.com>
-References: <CAHbR41VH17_qSe3T92b=n61_f1a_64jVXy5rNCKaexajmWzt9g@mail.gmail.com>
- <CAAXf6LXRYRvhWwE-TnM2fnGPMp+s+eEa3oUQtwdatMPxP=vAyA@mail.gmail.com>
- <CAHbR41WGQDmkVy4TguM7KEO9hf6NpND=wQ1CiUWMgUwhWQRkiQ@mail.gmail.com>
- <CAAXf6LVa_tJZG8CQw2zUUdyOvMd7TAs5yfdtUtjKG5bcGqhdZw@mail.gmail.com>
- <CAHbR41Xzw1RsrR8ZykwvWjXyP_GKzQRWghTo0hjq2z=sPGsabQ@mail.gmail.com>
-Message-ID: <20130731171745.14ab06ab@skate>
+Date: Wed, 31 Jul 2013 17:20:50 +0200
+Subject: [Buildroot] [PATCH] libnspr: Add dependency on !BR2_arc
+In-Reply-To: <1375283672-1453-1-git-send-email-mjonker@synopsys.com>
+References: <1375283672-1453-1-git-send-email-mjonker@synopsys.com>
+Message-ID: <20130731172050.69abca4b@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear zhou qiang,
+Dear Mischa Jonker,
 
-On Wed, 31 Jul 2013 23:03:18 +0800, zhou qiang wrote:
-
-> Of course , if extract rootfs.tar as root , everything works pretty well ,
-> busybox login as root .
-> But in the server , there is no root permission .
+On Wed, 31 Jul 2013 17:14:32 +0200, Mischa Jonker wrote:
+> ARC is not supported yet in libnspr.
 > 
-> So the issue is how to login as root without "operation of extract
-> rootfs.tar as root".
+> Signed-off-by: Mischa Jonker <mjonker@synopsys.com>
+> ---
+>  package/libnspr/Config.in |    1 +
+>  package/libnss/Config.in  |    1 +
+>  2 files changed, 2 insertions(+)
+> 
+> diff --git a/package/libnspr/Config.in b/package/libnspr/Config.in
+> index f87b10c..ee7902b 100644
+> --- a/package/libnspr/Config.in
+> +++ b/package/libnspr/Config.in
+> @@ -2,6 +2,7 @@ config BR2_PACKAGE_LIBNSPR
+>  	bool "libnspr"
+>  	depends on BR2_LARGEFILE
+>  	depends on BR2_TOOLCHAIN_HAS_THREADS
+> +	depends on !BR2_arc
+>  	help
+>  	  NSPR is the Netscape Portable Runtime library which provides
+>  	  a platform-neutral API for system level and libc like
+> diff --git a/package/libnss/Config.in b/package/libnss/Config.in
+> index e8eec77..b5f3a01 100644
+> --- a/package/libnss/Config.in
+> +++ b/package/libnss/Config.in
+> @@ -5,6 +5,7 @@ config BR2_PACKAGE_LIBNSS
+>  	select BR2_PACKAGE_ZLIB
+>  	depends on BR2_LARGEFILE
+>  	depends on BR2_TOOLCHAIN_HAS_THREADS # libnspr
+> +	depends on !BR2_arc # libnspr
 
-As Thomas De Schampheleire suggested, you should write a Buildroot
-post-build script that copies your application into the root
-filesystem, and let Buildroot do the fakeroot game to finally generate
-your ready-to-use JFFS2 image.
-
-Another option is to use fakeroot manually outside of Buildroot, but
-beware that you have to execute *all* the commands manipulating the
-root filesystem under a *single* fakeroot session. Since you apparently
-don't fully understand the implications of fakeroot, I'd really suggest
-you to use a Buildroot post-build script instead.
-
-Best regards,
+This needs to be propagated to ecryptfs-utils I believe.
 
 Thomas
 -- 
