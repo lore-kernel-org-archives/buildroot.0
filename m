@@ -1,56 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 31 Jul 2013 19:04:37 +0200
-Subject: [Buildroot] [PATCH 1/1] cppcms: new package
-In-Reply-To: <1674420667.688777.1373542968823.JavaMail.root@openwide.fr>
-References: <1889525175.688461.1373542455505.JavaMail.root@openwide.fr>
- <1674420667.688777.1373542968823.JavaMail.root@openwide.fr>
-Message-ID: <20130731190437.6757ad8e@skate>
+Date: Wed, 31 Jul 2013 19:07:15 +0200
+Subject: [Buildroot] [git commit] qt5jsbackend: needs ARM v5+
+Message-ID: <20130731170723.0EF429AF57@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Nicolas M?n?gale,
+commit: http://git.buildroot.net/buildroot/commit/?id=2eac7aea23f2377c63a11d0c432ebdcaaccc40f1
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 11 Jul 2013 13:42:48 +0200 (CEST), Nicolas M?n?gale wrote:
-> Signed-off-by: Nicolas M?n?gale <nicolas.menegale@openwide.fr>
-> ---
-> v2: iconv/icu related modifications
-> The user can now choose if he want's to build cppcms using icu for having
-> advanced localization features or using iconv.
-> Also in the case that the user uses iconv, if the toolchains already integrate
-> it, iconv won't be compiled.
-> Sorry for the long time it took me to do this modification.
-> CppCMS is a C++ web framework. The cppcms.mk also copy into the host after
-> staging install two scripts needed when you compile an application using the
-> web framework (cppcms_tmpl_cc).
-> As discussed on IRC it's not worth creating an host-cppcms package for one
-> script.
-> ---
->  package/Config.in        |    1 +
->  package/cppcms/Config.in |   30 ++++++++++++++++++++++++++++++
->  package/cppcms/cppcms.mk |   24 ++++++++++++++++++++++++
->  3 files changed, 55 insertions(+)
->  create mode 100644 package/cppcms/Config.in
->  create mode 100644 package/cppcms/cppcms.mk
+Just like nodejs and other v8-based javascript engines for ARM interwork
+it needs the BLX instruction which is only available on V5+ cores.
+Fixes:
+http://autobuild.buildroot.net/results/853/853cd29bf427902b2cb82a101964a4e45714cb86/
 
-I've applied this, but I had to do a bit of tuning, because this
-package doesn't build with uClibc, as it uses <monetary.h> functions,
-that don't exist in uClibc. I've added a glibc dependency, and removed
-the wchar dependency. Notice that my attempts to build with uClibc also
-allowed to discovered that the package should have depended on thread
-support.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/qt5/qt5jsbackend/Config.in |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-Moreover, the package apparently offers optional zlib support, optional
-gcrypt support, optional OpenSSL support. It'd be good to support that
-in the future.
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+diff --git a/package/qt5/qt5jsbackend/Config.in b/package/qt5/qt5jsbackend/Config.in
+index 2f5ac1f..d9301d0 100644
+--- a/package/qt5/qt5jsbackend/Config.in
++++ b/package/qt5/qt5jsbackend/Config.in
+@@ -2,6 +2,8 @@ config BR2_PACKAGE_QT5JSBACKEND_AVAILABLE
+ 	bool
+ 	# v8 is only available on certain architectures
+ 	depends on BR2_arm || BR2_i386 || BR2_x86_64 || BR2_mipsel
++	# ARM needs BLX, so v5t+
++	depends on !(BR2_arm7tdmi || BR2_arm720t || BR2_arm920t || BR2_arm922t || BR2_fa526)
+ 	default y
+ 
+ config BR2_PACKAGE_QT5JSBACKEND
