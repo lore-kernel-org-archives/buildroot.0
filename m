@@ -1,77 +1,69 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 31 Jul 2013 13:49:07 +0200
-Subject: [Buildroot] [git commit] libassuan: new package
-Message-ID: <20130731114959.19CDC9AF51@busybox.osuosl.org>
+Date: Wed, 31 Jul 2013 13:49:53 +0200
+Subject: [Buildroot] [git commit] opkg: Add gnupg signature checking support.
+Message-ID: <20130731114959.44EEA9AF55@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=266d50245af003e316d5a74a1b0362bcc2c06be0
+commit: http://git.buildroot.net/buildroot/commit/?id=d31db334c3ad219c5a55aece8602880c7eb732ef
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-[Thomas: bump version, adjust license informations, add
---with-gpg-error-prefix option.]
+[Thomas: add ac_cv_path_GPGME_CONFIG in the configure environment to
+help opkg find libgpgme.]
 
 Signed-off-by: Philipp Claves <claves@budelmann-elektronik.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Config.in              |    1 +
- package/libassuan/Config.in    |   12 ++++++++++++
- package/libassuan/libassuan.mk |   17 +++++++++++++++++
- 3 files changed, 30 insertions(+), 0 deletions(-)
+ package/opkg/Config.in |   10 ++++++++++
+ package/opkg/opkg.mk   |   10 +++++++++-
+ 2 files changed, 19 insertions(+), 1 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index a653809..b6d6020 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -418,6 +418,7 @@ source "package/cryptodev/Config.in"
- source "package/gnutls/Config.in"
- source "package/libgcrypt/Config.in"
- source "package/libgpg-error/Config.in"
-+source "package/libassuan/Config.in"
- source "package/libmcrypt/Config.in"
- source "package/libmhash/Config.in"
- source "package/libnss/Config.in"
-diff --git a/package/libassuan/Config.in b/package/libassuan/Config.in
-new file mode 100644
-index 0000000..e97ebdc
---- /dev/null
-+++ b/package/libassuan/Config.in
-@@ -0,0 +1,12 @@
-+config BR2_PACKAGE_LIBASSUAN
-+	bool "libassuan"
-+	select BR2_PACKAGE_LIBGPG_ERROR
+diff --git a/package/opkg/Config.in b/package/opkg/Config.in
+index eb997a7..5906210 100644
+--- a/package/opkg/Config.in
++++ b/package/opkg/Config.in
+@@ -11,3 +11,13 @@ config BR2_PACKAGE_OPKG
+ 
+ 	  http://code.google.com/p/opkg/
+ 
++if BR2_PACKAGE_OPKG
++
++config BR2_PACKAGE_OPKG_GPG_SIGN
++	bool "gnupg support"
++	select BR2_PACKAGE_LIBGPGME
 +	help
-+	  Libassuan is a small library implementing the so-called
-+	  Assuan protocol.
++	  Enable opkg package signature checking support using
++	  gnupg/libgpgme.
 +
-+	  This protocol is used for IPC between most newer GnuPG
-+	  components.  Both, server and client side functions are
-+	  provided.
++endif
+diff --git a/package/opkg/opkg.mk b/package/opkg/opkg.mk
+index 9e1c623..5846433 100644
+--- a/package/opkg/opkg.mk
++++ b/package/opkg/opkg.mk
+@@ -9,7 +9,7 @@ OPKG_SOURCE = opkg-$(OPKG_VERSION).tar.gz
+ OPKG_SITE = http://opkg.googlecode.com/svn/trunk/
+ OPKG_SITE_METHOD = svn
+ OPKG_INSTALL_STAGING = YES
+-OPKG_CONF_OPT = --disable-curl --disable-gpg
++OPKG_CONF_OPT = --disable-curl
+ OPKG_AUTORECONF = YES
+ # Uses PKG_CHECK_MODULES() in configure.ac
+ OPKG_DEPENDENCIES = host-pkgconf
+@@ -19,6 +19,14 @@ define OPKG_CREATE_LOCKDIR
+ 	mkdir -p $(TARGET_DIR)/usr/lib/opkg
+ endef
+ 
++ifeq ($(BR2_PACKAGE_OPKG_GPG_SIGN),y)
++OPKG_CONF_OPT += --enable-gpg
++OPKG_CONF_ENV = ac_cv_path_GPGME_CONFIG=$(STAGING_DIR)/usr/bin/gpgme-config
++OPKG_DEPENDENCIES += libgpgme
++else
++OPKG_CONF_OPT += --disable-gpg
++endif
 +
-+	  http://www.gnupg.org/related_software/libassuan/
-diff --git a/package/libassuan/libassuan.mk b/package/libassuan/libassuan.mk
-new file mode 100644
-index 0000000..6d4f7e5
---- /dev/null
-+++ b/package/libassuan/libassuan.mk
-@@ -0,0 +1,17 @@
-+################################################################################
-+#
-+# libassuan
-+#
-+################################################################################
-+
-+LIBASSUAN_VERSION = 2.1.1
-+LIBASSUAN_SITE = ftp://ftp.gnupg.org/gcrypt/libassuan/
-+LIBASSUAN_SOURCE = libassuan-$(LIBASSUAN_VERSION).tar.bz2
-+LIBASSUAN_LICENSE = LGPLv2.1+
-+LIBASSUAN_LICENSE_FILES = COPYING.LIB
-+LIBASSUAN_INSTALL_STAGING = YES
-+LIBASSUAN_DEPENDENCIES = libgpg-error
-+LIBASSUAN_CONF_OPT = \
-+	--with-gpg-error-prefix=$(STAGING_DIR)/usr
-+
-+$(eval $(autotools-package))
+ OPKG_POST_INSTALL_TARGET_HOOKS += OPKG_CREATE_LOCKDIR
+ 
+ $(eval $(autotools-package))
