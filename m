@@ -1,61 +1,344 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 31 Jul 2013 18:03:26 +0200
-Subject: [Buildroot] [git commit] libnspr: Add dependency on !BR2_arc
-Message-ID: <20130731160445.D73E29AF57@busybox.osuosl.org>
+Date: Wed, 31 Jul 2013 18:02:22 +0200
+Subject: [Buildroot] [git commit] package/uclibc: add mkostemp() backport
+Message-ID: <20130731160445.C4A209A1A3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d1a16db85d5f3dd49ec23a3f95dac429850c6f62
+commit: http://git.buildroot.net/buildroot/commit/?id=d951e7749a9c9452adf26fd0065f5009087961ea
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-ARC is not supported yet in libnspr.
+Needed for modern versions of systemd and udev.
 
-v2: Propagate to ecryptfs-utils as well
-
-Signed-off-by: Mischa Jonker <mjonker@synopsys.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/ecryptfs-utils/Config.in |    1 +
- package/libnspr/Config.in        |    1 +
- package/libnss/Config.in         |    1 +
- 3 files changed, 3 insertions(+), 0 deletions(-)
+ ...ibc-0008-libc-stdlib-add-mkostemp-helpers.patch |  155 ++++++++++++++++++++
+ ...ibc-0012-libc-stdlib-add-mkostemp-helpers.patch |  155 ++++++++++++++++++++
+ 2 files changed, 310 insertions(+), 0 deletions(-)
 
-diff --git a/package/ecryptfs-utils/Config.in b/package/ecryptfs-utils/Config.in
-index c10659a..480aedd 100644
---- a/package/ecryptfs-utils/Config.in
-+++ b/package/ecryptfs-utils/Config.in
-@@ -6,6 +6,7 @@ config BR2_PACKAGE_ECRYPTFS_UTILS
- 	depends on !BR2_avr32 && !BR2_microblaze # keyutils
- 	depends on BR2_LARGEFILE # libnss
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libnss -> libnspr
-+	depends on !BR2_arc # libnss -> libnspr
- 	help
- 	  eCryptfs is a POSIX-compliant enterprise cryptographic
- 	  filesystem for Linux. It is stacked on top of any other
-diff --git a/package/libnspr/Config.in b/package/libnspr/Config.in
-index f87b10c..ee7902b 100644
---- a/package/libnspr/Config.in
-+++ b/package/libnspr/Config.in
-@@ -2,6 +2,7 @@ config BR2_PACKAGE_LIBNSPR
- 	bool "libnspr"
- 	depends on BR2_LARGEFILE
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_arc
- 	help
- 	  NSPR is the Netscape Portable Runtime library which provides
- 	  a platform-neutral API for system level and libc like
-diff --git a/package/libnss/Config.in b/package/libnss/Config.in
-index e8eec77..b5f3a01 100644
---- a/package/libnss/Config.in
-+++ b/package/libnss/Config.in
-@@ -5,6 +5,7 @@ config BR2_PACKAGE_LIBNSS
- 	select BR2_PACKAGE_ZLIB
- 	depends on BR2_LARGEFILE
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libnspr
-+	depends on !BR2_arc # libnspr
- 	help
- 	  Network Security Services (NSS) is a set of libraries designed
- 	  to support development of security-enabled client and server
+diff --git a/package/uclibc/0.9.32.1/uclibc-0008-libc-stdlib-add-mkostemp-helpers.patch b/package/uclibc/0.9.32.1/uclibc-0008-libc-stdlib-add-mkostemp-helpers.patch
+new file mode 100644
+index 0000000..8002240
+--- /dev/null
++++ b/package/uclibc/0.9.32.1/uclibc-0008-libc-stdlib-add-mkostemp-helpers.patch
+@@ -0,0 +1,155 @@
++From 42d1b23fc0f3748b8bf474e456d6c44aa7e563fd Mon Sep 17 00:00:00 2001
++From: Mike Frysinger <vapier@gentoo.org>
++Date: Wed, 14 Nov 2012 00:30:54 -0500
++Subject: [PATCH] libc/stdlib: add mkostemp helpers
++
++Some projects (like udev) are starting to use this.
++
++Imported from glibc.
++
++Signed-off-by: Mike Frysinger <vapier@gentoo.org>
++---
++ include/stdlib.h         | 23 +++++++++++++++++++++++
++ libc/stdlib/Makefile.in  |  4 ++--
++ libc/stdlib/mkostemp.c   | 32 ++++++++++++++++++++++++++++++++
++ libc/stdlib/mkostemp64.c | 33 +++++++++++++++++++++++++++++++++
++ 4 files changed, 90 insertions(+), 2 deletions(-)
++ create mode 100644 libc/stdlib/mkostemp.c
++ create mode 100644 libc/stdlib/mkostemp64.c
++
++diff --git a/include/stdlib.h b/include/stdlib.h
++index 354fc66..79ccc55 100644
++--- a/include/stdlib.h
+++++ b/include/stdlib.h
++@@ -652,6 +652,29 @@ extern int mkstemp64 (char *__template) __nonnull ((1)) __wur;
++ extern char *mkdtemp (char *__template) __THROW __nonnull ((1)) __wur;
++ #endif
++ 
+++#ifdef __USE_GNU
+++/* Generate a unique temporary file name from TEMPLATE similar to
+++   mkstemp.  But allow the caller to pass additional flags which are
+++   used in the open call to create the file..
+++
+++   This function is a possible cancellation point and therefore not
+++   marked with __THROW.  */
+++# ifndef __USE_FILE_OFFSET64
+++extern int mkostemp (char *__template, int __flags) __nonnull ((1)) __wur;
+++# else
+++#  ifdef __REDIRECT
+++extern int __REDIRECT (mkostemp, (char *__template, int __flags), mkostemp64)
+++     __nonnull ((1)) __wur;
+++#  else
+++#   define mkostemp mkostemp64
+++#  endif
+++# endif
+++# ifdef __USE_LARGEFILE64
+++extern int mkostemp64 (char *__template, int __flags) __nonnull ((1)) __wur;
+++# endif
+++
+++#endif
+++
++ 
++ __BEGIN_NAMESPACE_STD
++ /* Execute the given line as a shell command.
++diff --git a/libc/stdlib/Makefile.in b/libc/stdlib/Makefile.in
++index 3166b8e..b92f7ce 100644
++--- a/libc/stdlib/Makefile.in
+++++ b/libc/stdlib/Makefile.in
++@@ -12,7 +12,7 @@ include $(top_srcdir)libc/stdlib/malloc-simple/Makefile.in
++ include $(top_srcdir)libc/stdlib/malloc-standard/Makefile.in
++ 
++ CSRC-y := \
++-	abort.c getenv.c mkdtemp.c realpath.c canonicalize.c mkstemp.c \
+++	abort.c getenv.c mkdtemp.c realpath.c canonicalize.c mkstemp.c mkostemp.c \
++ 	rand.c random.c random_r.c setenv.c div.c ldiv.c lldiv.c \
++ 	getpt.c drand48-iter.c jrand48.c \
++ 	jrand48_r.c lcong48.c lrand48.c lrand48_r.c mrand48.c mrand48_r.c nrand48.c \
++@@ -21,7 +21,7 @@ CSRC-y := \
++ CSRC-$(UCLIBC_HAS_ADVANCED_REALTIME) += posix_memalign.c
++ CSRC-$(UCLIBC_HAS_PTY) += grantpt.c unlockpt.c ptsname.c
++ CSRC-$(UCLIBC_HAS_ARC4RANDOM) += arc4random.c
++-CSRC-$(UCLIBC_HAS_LFS) += mkstemp64.c
+++CSRC-$(UCLIBC_HAS_LFS) += mkstemp64.c mkostemp64.c
++ CSRC-$(UCLIBC_HAS_FLOATS) += drand48.c drand48_r.c erand48.c erand48_r.c
++ CSRC-$(if $(findstring yy,$(UCLIBC_HAS_FLOATS)$(UCLIBC_SUSV3_LEGACY)),y) += \
++ 	gcvt.c
++diff --git a/libc/stdlib/mkostemp.c b/libc/stdlib/mkostemp.c
++new file mode 100644
++index 0000000..93b50fc
++--- /dev/null
+++++ b/libc/stdlib/mkostemp.c
++@@ -0,0 +1,32 @@
+++/* Copyright (C) 1998-2012 Free Software Foundation, Inc.
+++   This file is part of the GNU C Library.
+++
+++   The GNU C Library is free software; you can redistribute it and/or
+++   modify it under the terms of the GNU Lesser General Public
+++   License as published by the Free Software Foundation; either
+++   version 2.1 of the License, or (at your option) any later version.
+++
+++   The GNU C Library is distributed in the hope that it will be useful,
+++   but WITHOUT ANY WARRANTY; without even the implied warranty of
+++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+++   Lesser General Public License for more details.
+++
+++   You should have received a copy of the GNU Lesser General Public
+++   License along with the GNU C Library; if not, see
+++   <http://www.gnu.org/licenses/>.  */
+++
+++#include <stdio.h>
+++#include <stdlib.h>
+++#include "../misc/internals/tempname.h"
+++
+++/* Generate a unique temporary file name from TEMPLATE.
+++   The last six characters of TEMPLATE must be "XXXXXX";
+++   they are replaced with a string that makes the filename unique.
+++   Then open the file and return a fd. */
+++int
+++mkostemp (template, flags)
+++     char *template;
+++     int flags;
+++{
+++  return __gen_tempname (template, __GT_FILE, flags);
+++}
++diff --git a/libc/stdlib/mkostemp64.c b/libc/stdlib/mkostemp64.c
++new file mode 100644
++index 0000000..5509d8c
++--- /dev/null
+++++ b/libc/stdlib/mkostemp64.c
++@@ -0,0 +1,33 @@
+++/* Copyright (C) 2000-2012 Free Software Foundation, Inc.
+++   This file is part of the GNU C Library.
+++
+++   The GNU C Library is free software; you can redistribute it and/or
+++   modify it under the terms of the GNU Lesser General Public
+++   License as published by the Free Software Foundation; either
+++   version 2.1 of the License, or (at your option) any later version.
+++
+++   The GNU C Library is distributed in the hope that it will be useful,
+++   but WITHOUT ANY WARRANTY; without even the implied warranty of
+++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+++   Lesser General Public License for more details.
+++
+++   You should have received a copy of the GNU Lesser General Public
+++   License along with the GNU C Library; if not, see
+++   <http://www.gnu.org/licenses/>.  */
+++
+++#include <fcntl.h>
+++#include <stdio.h>
+++#include <stdlib.h>
+++#include "../misc/internals/tempname.h"
+++
+++/* Generate a unique temporary file name from TEMPLATE.
+++   The last six characters of TEMPLATE must be "XXXXXX";
+++   they are replaced with a string that makes the filename unique.
+++   Then open the file and return a fd. */
+++int
+++mkostemp64 (template, flags)
+++     char *template;
+++     int flags;
+++{
+++  return __gen_tempname (template, __GT_BIGFILE, flags | O_LARGEFILE);
+++}
++-- 
++1.8.1.5
++
+diff --git a/package/uclibc/0.9.33.2/uclibc-0012-libc-stdlib-add-mkostemp-helpers.patch b/package/uclibc/0.9.33.2/uclibc-0012-libc-stdlib-add-mkostemp-helpers.patch
+new file mode 100644
+index 0000000..8002240
+--- /dev/null
++++ b/package/uclibc/0.9.33.2/uclibc-0012-libc-stdlib-add-mkostemp-helpers.patch
+@@ -0,0 +1,155 @@
++From 42d1b23fc0f3748b8bf474e456d6c44aa7e563fd Mon Sep 17 00:00:00 2001
++From: Mike Frysinger <vapier@gentoo.org>
++Date: Wed, 14 Nov 2012 00:30:54 -0500
++Subject: [PATCH] libc/stdlib: add mkostemp helpers
++
++Some projects (like udev) are starting to use this.
++
++Imported from glibc.
++
++Signed-off-by: Mike Frysinger <vapier@gentoo.org>
++---
++ include/stdlib.h         | 23 +++++++++++++++++++++++
++ libc/stdlib/Makefile.in  |  4 ++--
++ libc/stdlib/mkostemp.c   | 32 ++++++++++++++++++++++++++++++++
++ libc/stdlib/mkostemp64.c | 33 +++++++++++++++++++++++++++++++++
++ 4 files changed, 90 insertions(+), 2 deletions(-)
++ create mode 100644 libc/stdlib/mkostemp.c
++ create mode 100644 libc/stdlib/mkostemp64.c
++
++diff --git a/include/stdlib.h b/include/stdlib.h
++index 354fc66..79ccc55 100644
++--- a/include/stdlib.h
+++++ b/include/stdlib.h
++@@ -652,6 +652,29 @@ extern int mkstemp64 (char *__template) __nonnull ((1)) __wur;
++ extern char *mkdtemp (char *__template) __THROW __nonnull ((1)) __wur;
++ #endif
++ 
+++#ifdef __USE_GNU
+++/* Generate a unique temporary file name from TEMPLATE similar to
+++   mkstemp.  But allow the caller to pass additional flags which are
+++   used in the open call to create the file..
+++
+++   This function is a possible cancellation point and therefore not
+++   marked with __THROW.  */
+++# ifndef __USE_FILE_OFFSET64
+++extern int mkostemp (char *__template, int __flags) __nonnull ((1)) __wur;
+++# else
+++#  ifdef __REDIRECT
+++extern int __REDIRECT (mkostemp, (char *__template, int __flags), mkostemp64)
+++     __nonnull ((1)) __wur;
+++#  else
+++#   define mkostemp mkostemp64
+++#  endif
+++# endif
+++# ifdef __USE_LARGEFILE64
+++extern int mkostemp64 (char *__template, int __flags) __nonnull ((1)) __wur;
+++# endif
+++
+++#endif
+++
++ 
++ __BEGIN_NAMESPACE_STD
++ /* Execute the given line as a shell command.
++diff --git a/libc/stdlib/Makefile.in b/libc/stdlib/Makefile.in
++index 3166b8e..b92f7ce 100644
++--- a/libc/stdlib/Makefile.in
+++++ b/libc/stdlib/Makefile.in
++@@ -12,7 +12,7 @@ include $(top_srcdir)libc/stdlib/malloc-simple/Makefile.in
++ include $(top_srcdir)libc/stdlib/malloc-standard/Makefile.in
++ 
++ CSRC-y := \
++-	abort.c getenv.c mkdtemp.c realpath.c canonicalize.c mkstemp.c \
+++	abort.c getenv.c mkdtemp.c realpath.c canonicalize.c mkstemp.c mkostemp.c \
++ 	rand.c random.c random_r.c setenv.c div.c ldiv.c lldiv.c \
++ 	getpt.c drand48-iter.c jrand48.c \
++ 	jrand48_r.c lcong48.c lrand48.c lrand48_r.c mrand48.c mrand48_r.c nrand48.c \
++@@ -21,7 +21,7 @@ CSRC-y := \
++ CSRC-$(UCLIBC_HAS_ADVANCED_REALTIME) += posix_memalign.c
++ CSRC-$(UCLIBC_HAS_PTY) += grantpt.c unlockpt.c ptsname.c
++ CSRC-$(UCLIBC_HAS_ARC4RANDOM) += arc4random.c
++-CSRC-$(UCLIBC_HAS_LFS) += mkstemp64.c
+++CSRC-$(UCLIBC_HAS_LFS) += mkstemp64.c mkostemp64.c
++ CSRC-$(UCLIBC_HAS_FLOATS) += drand48.c drand48_r.c erand48.c erand48_r.c
++ CSRC-$(if $(findstring yy,$(UCLIBC_HAS_FLOATS)$(UCLIBC_SUSV3_LEGACY)),y) += \
++ 	gcvt.c
++diff --git a/libc/stdlib/mkostemp.c b/libc/stdlib/mkostemp.c
++new file mode 100644
++index 0000000..93b50fc
++--- /dev/null
+++++ b/libc/stdlib/mkostemp.c
++@@ -0,0 +1,32 @@
+++/* Copyright (C) 1998-2012 Free Software Foundation, Inc.
+++   This file is part of the GNU C Library.
+++
+++   The GNU C Library is free software; you can redistribute it and/or
+++   modify it under the terms of the GNU Lesser General Public
+++   License as published by the Free Software Foundation; either
+++   version 2.1 of the License, or (at your option) any later version.
+++
+++   The GNU C Library is distributed in the hope that it will be useful,
+++   but WITHOUT ANY WARRANTY; without even the implied warranty of
+++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+++   Lesser General Public License for more details.
+++
+++   You should have received a copy of the GNU Lesser General Public
+++   License along with the GNU C Library; if not, see
+++   <http://www.gnu.org/licenses/>.  */
+++
+++#include <stdio.h>
+++#include <stdlib.h>
+++#include "../misc/internals/tempname.h"
+++
+++/* Generate a unique temporary file name from TEMPLATE.
+++   The last six characters of TEMPLATE must be "XXXXXX";
+++   they are replaced with a string that makes the filename unique.
+++   Then open the file and return a fd. */
+++int
+++mkostemp (template, flags)
+++     char *template;
+++     int flags;
+++{
+++  return __gen_tempname (template, __GT_FILE, flags);
+++}
++diff --git a/libc/stdlib/mkostemp64.c b/libc/stdlib/mkostemp64.c
++new file mode 100644
++index 0000000..5509d8c
++--- /dev/null
+++++ b/libc/stdlib/mkostemp64.c
++@@ -0,0 +1,33 @@
+++/* Copyright (C) 2000-2012 Free Software Foundation, Inc.
+++   This file is part of the GNU C Library.
+++
+++   The GNU C Library is free software; you can redistribute it and/or
+++   modify it under the terms of the GNU Lesser General Public
+++   License as published by the Free Software Foundation; either
+++   version 2.1 of the License, or (at your option) any later version.
+++
+++   The GNU C Library is distributed in the hope that it will be useful,
+++   but WITHOUT ANY WARRANTY; without even the implied warranty of
+++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+++   Lesser General Public License for more details.
+++
+++   You should have received a copy of the GNU Lesser General Public
+++   License along with the GNU C Library; if not, see
+++   <http://www.gnu.org/licenses/>.  */
+++
+++#include <fcntl.h>
+++#include <stdio.h>
+++#include <stdlib.h>
+++#include "../misc/internals/tempname.h"
+++
+++/* Generate a unique temporary file name from TEMPLATE.
+++   The last six characters of TEMPLATE must be "XXXXXX";
+++   they are replaced with a string that makes the filename unique.
+++   Then open the file and return a fd. */
+++int
+++mkostemp64 (template, flags)
+++     char *template;
+++     int flags;
+++{
+++  return __gen_tempname (template, __GT_BIGFILE, flags | O_LARGEFILE);
+++}
++-- 
++1.8.1.5
++
