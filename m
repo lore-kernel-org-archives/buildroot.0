@@ -1,48 +1,43 @@
-From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Wed, 31 Jul 2013 08:53:15 +0200
-Subject: [Buildroot] [PATCH] toolchain/gcc: Introduce
-	BR2_ARCH_HAS_GCC_x_y_PLUS
-In-Reply-To: <20130503234844.028d28f3@skate>
-References: <1367570270-2242-1-git-send-email-mjonker@synopsys.com>
- <5183E67C.9040202@mind.be> <20130503234844.028d28f3@skate>
-Message-ID: <CAAXf6LVsXBeGKqJ=M+HHN7ZdxbpWVSM9qAZiF1eYGz0drv1vzA@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 31 Jul 2013 10:02:44 +0200
+Subject: [Buildroot] Patches to merge before -rc1 ?
+In-Reply-To: <CAEvN+1iHZ321XD7RMp4GKs6sdohsOn9y4BezrXotrW9hdpOkfA@mail.gmail.com>
+References: <20130727161633.72e96e49@skate>
+ <CAEvN+1iHZ321XD7RMp4GKs6sdohsOn9y4BezrXotrW9hdpOkfA@mail.gmail.com>
+Message-ID: <20130731100244.588ecdae@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Sam, Konrad,
+Dear Tzu-Jung Lee,
 
-On Fri, May 3, 2013 at 11:48 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Dear Arnout Vandecappelle,
->
-> On Fri, 03 May 2013 18:31:56 +0200, Arnout Vandecappelle wrote:
->
->>   I'm not very excited about the sparcleon situation. But perhaps that
->> architecture can be deprecated? It's not even in our autobuilders AFAIK.
->
-> I think we had one guy interested in the SPARC Leon support. I remember
-> proposing to remove SPARC support entirely, and one person stepped up
-> to say that he was using SPARC Leon stuff. See
-> http://lists.busybox.net/pipermail/buildroot/2010-July/036382.html.
->
-> I don't think Sam ever sent any patch related to SPARC support.
->
-> However, Konrad Eisele sent a bunch of SPARC related patches. However,
-> the last SPARC-related patches Konrad has sent have been sent on
-> November 2010. He later sent some other patches (November 2011), but
-> they were kconfig related, and were extensions to the kconfig language,
-> something we're not ready to accept if they are not part of the
-> upstream kconfig code in the Linux kernel.
->
-> I've added Sam and Konrad in Cc to see if they are still using SPARC
-> support, and whether it's worth adding a sparc sample to our
-> autobuilders.
+On Sun, 28 Jul 2013 00:32:39 +0800, Tzu-Jung Lee wrote:
 
-I'm reviving this older thread.
-Are any of you still interested in SPARC support in buildroot (see above) ?
+> I got a pending patch for review:
+> 
+>   http://patchwork.ozlabs.org/patch/252525/
+
+I merged this one.
+
+> And I've been using using the patch from Alexey Brodkin
+> <alexey.brodkin@synopsys.com>
+> It works fine for me, and perhaps you'd like to review it?
+> 
+>   http://patchwork.ozlabs.org/patch/171335/
+
+I know Yann E. Morin started reviewing it a while ago, but gave up due
+to the patch complexity and some issues that were complex to solve. But
+I'm inclined to merge it as is anyway, and fix up the issues as they
+show up. This vlc stuff has been out of tree for too long. Yann, what's
+your position on this?
 
 Thanks,
+
 Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
