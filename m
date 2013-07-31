@@ -1,23 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 31 Jul 2013 18:17:13 +0200
-Subject: [Buildroot] [PATCH] gdb: Add support for ARC-specific gdb
-In-Reply-To: <1375177033-17273-1-git-send-email-mjonker@synopsys.com>
-References: <1375177033-17273-1-git-send-email-mjonker@synopsys.com>
-Message-ID: <20130731181713.1da090ed@skate>
+Date: Wed, 31 Jul 2013 18:17:33 +0200
+Subject: [Buildroot] [PATCH v5] strongswan: new package
+In-Reply-To: <1368458122-7416-1-git-send-email-jezz@sysmic.org>
+References: <514F0E30.1060506@zacarias.com.ar>
+ <1368458122-7416-1-git-send-email-jezz@sysmic.org>
+Message-ID: <20130731181733.09974159@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Mischa Jonker,
+Dear J?r?me Pouiller,
 
-On Tue, 30 Jul 2013 11:37:13 +0200, Mischa Jonker wrote:
-> Signed-off-by: Mischa Jonker <mjonker@synopsys.com>
-> ---
->  package/gdb/Config.in.host |    2 ++
->  package/gdb/gdb.mk         |    4 ++++
->  2 files changed, 6 insertions(+)
+On Mon, 13 May 2013 17:15:22 +0200, J?r?me Pouiller wrote:
+> strongSwan is an OpenSource IPsec implementation for the
+> Linux operating system. It is based on the discontinued
+> FreeS/WAN project and the X.509 patch.
+> 
+> The focus is on:
+>      - simplicity of configuration
+>      - strong encryption and authentication methods
+>      - powerful IPsec policies supporting large and complex VPN networks
+> 
+> http://www.strongswan.org/
+> 
+> Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
 
 Applied, thanks.
 
