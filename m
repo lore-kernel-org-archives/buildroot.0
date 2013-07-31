@@ -1,50 +1,49 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 31 Jul 2013 17:04:28 +0200
-Subject: [Buildroot] [PATCH] Fix building initramfs kernel with appended
- dtb
-In-Reply-To: <1375281113-18893-1-git-send-email-nford@westpond.com>
-References: <1375281113-18893-1-git-send-email-nford@westpond.com>
-Message-ID: <20130731170428.102c93a4@skate>
+From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
+Date: Wed, 31 Jul 2013 17:11:28 +0200
+Subject: [Buildroot] How to login as root without password
+In-Reply-To: <CAHbR41Xzw1RsrR8ZykwvWjXyP_GKzQRWghTo0hjq2z=sPGsabQ@mail.gmail.com>
+References: <CAHbR41VH17_qSe3T92b=n61_f1a_64jVXy5rNCKaexajmWzt9g@mail.gmail.com>
+ <CAAXf6LXRYRvhWwE-TnM2fnGPMp+s+eEa3oUQtwdatMPxP=vAyA@mail.gmail.com>
+ <CAHbR41WGQDmkVy4TguM7KEO9hf6NpND=wQ1CiUWMgUwhWQRkiQ@mail.gmail.com>
+ <CAAXf6LVa_tJZG8CQw2zUUdyOvMd7TAs5yfdtUtjKG5bcGqhdZw@mail.gmail.com>
+ <CAHbR41Xzw1RsrR8ZykwvWjXyP_GKzQRWghTo0hjq2z=sPGsabQ@mail.gmail.com>
+Message-ID: <CAAXf6LW8nHEy_QB8ACZ69EzUrN6JRLD6GPxEvpdtSAmYGC_v2w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Nathan Ford,
+On Wed, Jul 31, 2013 at 5:03 PM, zhou qiang <zhouqiang.search@gmail.com> wrote:
+> Hi , Thomas
+>
+> We have an internal jffs2 image making process , which requires a pure
+> target from buildroot ,
+> and follow the steps as below :
+>
+> (1) extract rootfs.tar to designated target directory (rootfs) , this is
+> done by post-script .
+> (2) Adding functional script and application to rootfs .
+> (3) make a new jffs2 image
+> (4)burn this image to arm board
+>
+> Of course , if extract rootfs.tar as root , everything works pretty well ,
+> busybox login as root .
+> But in the server , there is no root permission .
+>
+> So the issue is how to login as root without "operation of extract
+> rootfs.tar as root".
+>
 
-Humm, yes, maybe, but would it be possible to get a slightly more
-verbose commit log that explains what is the problem and how you're
-fixing it?
+What is the input to step 4, an extracted directory, or just the image?
 
-Thanks!
+In general, when you want to add custom elements to the rootfs, you would do:
+a. 'make' in buildroot
+b. copy custom files to <buildroot>/output/target
+c. 'make' in buildroot again, this will create a new image
+d. burn image to board
 
-On Wed, 31 Jul 2013 10:31:53 -0400, Nathan Ford wrote:
-> 
-> Signed-off-by: Nathan Ford <nford@westpond.com>
-> ---
->  linux/linux.mk |    3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/linux/linux.mk b/linux/linux.mk
-> index 17e9838..9d29d9d 100644
-> --- a/linux/linux.mk
-> +++ b/linux/linux.mk
-> @@ -311,7 +311,8 @@ endif
->  $(LINUX_DIR)/.stamp_initramfs_rebuilt: $(LINUX_DIR)/.stamp_target_installed $(LINUX_DIR)/.stamp_images_installed $(BINARIES_DIR)/rootfs.cpio
->  	@$(call MESSAGE,"Rebuilding kernel with initramfs")
->  	# Build the kernel.
-> -	$(TARGET_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) $(LINUX_IMAGE_NAME)
-> +	$(TARGET_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) $(LINUX_IMAGE_TARGET)
-> +	$(LINUX_APPEND_DTB)
->  	# Copy the kernel image to its final destination
->  	cp $(LINUX_IMAGE_PATH) $(BINARIES_DIR)
->  	# If there is a .ub file copy it to the final destination
+Is there a reason why you do not do it this way?
 
-
-
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Best regards,
+Thomas
