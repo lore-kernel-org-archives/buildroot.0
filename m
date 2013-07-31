@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 31 Jul 2013 18:06:37 +0200
-Subject: [Buildroot] [PATCH 1/2] u-boot: remove stale patches and bump
- to 2013.07
-In-Reply-To: <1375268797-11457-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1375268797-11457-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20130731180637.33cb3037@skate>
+Date: Wed, 31 Jul 2013 18:06:50 +0200
+Subject: [Buildroot] [PATCH 1/2] strongswan: security bump to version
+ 5.0.4
+In-Reply-To: <1375277507-30647-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1375277507-30647-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20130731180650.25946a3b@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,17 +13,15 @@ To: buildroot@busybox.net
 
 Dear Gustavo Zacarias,
 
-On Wed, 31 Jul 2013 08:06:36 -0300, Gustavo Zacarias wrote:
+On Wed, 31 Jul 2013 10:31:46 -0300, Gustavo Zacarias wrote:
+> Fixes CVE-2013-2944.
+> 
 > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 > ---
->  boot/uboot/Config.in                               |   4 +-
->  ...011.12-change-kernel-address-in-dataflash.patch | 195 ---------------------
->  ...012.04-change-kernel-address-in-dataflash.patch | 195 ---------------------
->  3 files changed, 2 insertions(+), 392 deletions(-)
->  delete mode 100644 boot/uboot/uboot-2011.12/uboot-2011.12-change-kernel-address-in-dataflash.patch
->  delete mode 100644 boot/uboot/uboot-2012.04.01/uboot-2012.04-change-kernel-address-in-dataflash.patch
+>  package/strongswan/strongswan.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-Committed both patches, thanks.
+Both applied, thanks.
 
 Thomas
 -- 
