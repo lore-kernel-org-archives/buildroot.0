@@ -1,344 +1,446 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 31 Jul 2013 18:02:22 +0200
-Subject: [Buildroot] [git commit] package/uclibc: add mkostemp() backport
-Message-ID: <20130731160445.C4A209A1A3@busybox.osuosl.org>
+Date: Wed, 31 Jul 2013 18:00:26 +0200
+Subject: [Buildroot] [git commit] u-boot: remove stale patches and bump to
+	2013.07
+Message-ID: <20130731160445.9C0C49AF61@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d951e7749a9c9452adf26fd0065f5009087961ea
+commit: http://git.buildroot.net/buildroot/commit/?id=5adb0f46a26099dbbbf4d9904d391962f5de8f85
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Needed for modern versions of systemd and udev.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- ...ibc-0008-libc-stdlib-add-mkostemp-helpers.patch |  155 ++++++++++++++++++++
- ...ibc-0012-libc-stdlib-add-mkostemp-helpers.patch |  155 ++++++++++++++++++++
- 2 files changed, 310 insertions(+), 0 deletions(-)
+ boot/uboot/Config.in                               |    4 +-
+ ...011.12-change-kernel-address-in-dataflash.patch |  195 --------------------
+ ...012.04-change-kernel-address-in-dataflash.patch |  195 --------------------
+ 3 files changed, 2 insertions(+), 392 deletions(-)
 
-diff --git a/package/uclibc/0.9.32.1/uclibc-0008-libc-stdlib-add-mkostemp-helpers.patch b/package/uclibc/0.9.32.1/uclibc-0008-libc-stdlib-add-mkostemp-helpers.patch
-new file mode 100644
-index 0000000..8002240
---- /dev/null
-+++ b/package/uclibc/0.9.32.1/uclibc-0008-libc-stdlib-add-mkostemp-helpers.patch
-@@ -0,0 +1,155 @@
-+From 42d1b23fc0f3748b8bf474e456d6c44aa7e563fd Mon Sep 17 00:00:00 2001
-+From: Mike Frysinger <vapier@gentoo.org>
-+Date: Wed, 14 Nov 2012 00:30:54 -0500
-+Subject: [PATCH] libc/stdlib: add mkostemp helpers
-+
-+Some projects (like udev) are starting to use this.
-+
-+Imported from glibc.
-+
-+Signed-off-by: Mike Frysinger <vapier@gentoo.org>
-+---
-+ include/stdlib.h         | 23 +++++++++++++++++++++++
-+ libc/stdlib/Makefile.in  |  4 ++--
-+ libc/stdlib/mkostemp.c   | 32 ++++++++++++++++++++++++++++++++
-+ libc/stdlib/mkostemp64.c | 33 +++++++++++++++++++++++++++++++++
-+ 4 files changed, 90 insertions(+), 2 deletions(-)
-+ create mode 100644 libc/stdlib/mkostemp.c
-+ create mode 100644 libc/stdlib/mkostemp64.c
-+
-+diff --git a/include/stdlib.h b/include/stdlib.h
-+index 354fc66..79ccc55 100644
-+--- a/include/stdlib.h
-++++ b/include/stdlib.h
-+@@ -652,6 +652,29 @@ extern int mkstemp64 (char *__template) __nonnull ((1)) __wur;
-+ extern char *mkdtemp (char *__template) __THROW __nonnull ((1)) __wur;
-+ #endif
-+ 
-++#ifdef __USE_GNU
-++/* Generate a unique temporary file name from TEMPLATE similar to
-++   mkstemp.  But allow the caller to pass additional flags which are
-++   used in the open call to create the file..
-++
-++   This function is a possible cancellation point and therefore not
-++   marked with __THROW.  */
-++# ifndef __USE_FILE_OFFSET64
-++extern int mkostemp (char *__template, int __flags) __nonnull ((1)) __wur;
-++# else
-++#  ifdef __REDIRECT
-++extern int __REDIRECT (mkostemp, (char *__template, int __flags), mkostemp64)
-++     __nonnull ((1)) __wur;
-++#  else
-++#   define mkostemp mkostemp64
-++#  endif
-++# endif
-++# ifdef __USE_LARGEFILE64
-++extern int mkostemp64 (char *__template, int __flags) __nonnull ((1)) __wur;
-++# endif
-++
-++#endif
-++
-+ 
-+ __BEGIN_NAMESPACE_STD
-+ /* Execute the given line as a shell command.
-+diff --git a/libc/stdlib/Makefile.in b/libc/stdlib/Makefile.in
-+index 3166b8e..b92f7ce 100644
-+--- a/libc/stdlib/Makefile.in
-++++ b/libc/stdlib/Makefile.in
-+@@ -12,7 +12,7 @@ include $(top_srcdir)libc/stdlib/malloc-simple/Makefile.in
-+ include $(top_srcdir)libc/stdlib/malloc-standard/Makefile.in
-+ 
-+ CSRC-y := \
-+-	abort.c getenv.c mkdtemp.c realpath.c canonicalize.c mkstemp.c \
-++	abort.c getenv.c mkdtemp.c realpath.c canonicalize.c mkstemp.c mkostemp.c \
-+ 	rand.c random.c random_r.c setenv.c div.c ldiv.c lldiv.c \
-+ 	getpt.c drand48-iter.c jrand48.c \
-+ 	jrand48_r.c lcong48.c lrand48.c lrand48_r.c mrand48.c mrand48_r.c nrand48.c \
-+@@ -21,7 +21,7 @@ CSRC-y := \
-+ CSRC-$(UCLIBC_HAS_ADVANCED_REALTIME) += posix_memalign.c
-+ CSRC-$(UCLIBC_HAS_PTY) += grantpt.c unlockpt.c ptsname.c
-+ CSRC-$(UCLIBC_HAS_ARC4RANDOM) += arc4random.c
-+-CSRC-$(UCLIBC_HAS_LFS) += mkstemp64.c
-++CSRC-$(UCLIBC_HAS_LFS) += mkstemp64.c mkostemp64.c
-+ CSRC-$(UCLIBC_HAS_FLOATS) += drand48.c drand48_r.c erand48.c erand48_r.c
-+ CSRC-$(if $(findstring yy,$(UCLIBC_HAS_FLOATS)$(UCLIBC_SUSV3_LEGACY)),y) += \
-+ 	gcvt.c
-+diff --git a/libc/stdlib/mkostemp.c b/libc/stdlib/mkostemp.c
-+new file mode 100644
-+index 0000000..93b50fc
-+--- /dev/null
-++++ b/libc/stdlib/mkostemp.c
-+@@ -0,0 +1,32 @@
-++/* Copyright (C) 1998-2012 Free Software Foundation, Inc.
-++   This file is part of the GNU C Library.
-++
-++   The GNU C Library is free software; you can redistribute it and/or
-++   modify it under the terms of the GNU Lesser General Public
-++   License as published by the Free Software Foundation; either
-++   version 2.1 of the License, or (at your option) any later version.
-++
-++   The GNU C Library is distributed in the hope that it will be useful,
-++   but WITHOUT ANY WARRANTY; without even the implied warranty of
-++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-++   Lesser General Public License for more details.
-++
-++   You should have received a copy of the GNU Lesser General Public
-++   License along with the GNU C Library; if not, see
-++   <http://www.gnu.org/licenses/>.  */
-++
-++#include <stdio.h>
-++#include <stdlib.h>
-++#include "../misc/internals/tempname.h"
-++
-++/* Generate a unique temporary file name from TEMPLATE.
-++   The last six characters of TEMPLATE must be "XXXXXX";
-++   they are replaced with a string that makes the filename unique.
-++   Then open the file and return a fd. */
-++int
-++mkostemp (template, flags)
-++     char *template;
-++     int flags;
-++{
-++  return __gen_tempname (template, __GT_FILE, flags);
-++}
-+diff --git a/libc/stdlib/mkostemp64.c b/libc/stdlib/mkostemp64.c
-+new file mode 100644
-+index 0000000..5509d8c
-+--- /dev/null
-++++ b/libc/stdlib/mkostemp64.c
-+@@ -0,0 +1,33 @@
-++/* Copyright (C) 2000-2012 Free Software Foundation, Inc.
-++   This file is part of the GNU C Library.
-++
-++   The GNU C Library is free software; you can redistribute it and/or
-++   modify it under the terms of the GNU Lesser General Public
-++   License as published by the Free Software Foundation; either
-++   version 2.1 of the License, or (at your option) any later version.
-++
-++   The GNU C Library is distributed in the hope that it will be useful,
-++   but WITHOUT ANY WARRANTY; without even the implied warranty of
-++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-++   Lesser General Public License for more details.
-++
-++   You should have received a copy of the GNU Lesser General Public
-++   License along with the GNU C Library; if not, see
-++   <http://www.gnu.org/licenses/>.  */
-++
-++#include <fcntl.h>
-++#include <stdio.h>
-++#include <stdlib.h>
-++#include "../misc/internals/tempname.h"
-++
-++/* Generate a unique temporary file name from TEMPLATE.
-++   The last six characters of TEMPLATE must be "XXXXXX";
-++   they are replaced with a string that makes the filename unique.
-++   Then open the file and return a fd. */
-++int
-++mkostemp64 (template, flags)
-++     char *template;
-++     int flags;
-++{
-++  return __gen_tempname (template, __GT_BIGFILE, flags | O_LARGEFILE);
-++}
-+-- 
-+1.8.1.5
-+
-diff --git a/package/uclibc/0.9.33.2/uclibc-0012-libc-stdlib-add-mkostemp-helpers.patch b/package/uclibc/0.9.33.2/uclibc-0012-libc-stdlib-add-mkostemp-helpers.patch
-new file mode 100644
-index 0000000..8002240
---- /dev/null
-+++ b/package/uclibc/0.9.33.2/uclibc-0012-libc-stdlib-add-mkostemp-helpers.patch
-@@ -0,0 +1,155 @@
-+From 42d1b23fc0f3748b8bf474e456d6c44aa7e563fd Mon Sep 17 00:00:00 2001
-+From: Mike Frysinger <vapier@gentoo.org>
-+Date: Wed, 14 Nov 2012 00:30:54 -0500
-+Subject: [PATCH] libc/stdlib: add mkostemp helpers
-+
-+Some projects (like udev) are starting to use this.
-+
-+Imported from glibc.
-+
-+Signed-off-by: Mike Frysinger <vapier@gentoo.org>
-+---
-+ include/stdlib.h         | 23 +++++++++++++++++++++++
-+ libc/stdlib/Makefile.in  |  4 ++--
-+ libc/stdlib/mkostemp.c   | 32 ++++++++++++++++++++++++++++++++
-+ libc/stdlib/mkostemp64.c | 33 +++++++++++++++++++++++++++++++++
-+ 4 files changed, 90 insertions(+), 2 deletions(-)
-+ create mode 100644 libc/stdlib/mkostemp.c
-+ create mode 100644 libc/stdlib/mkostemp64.c
-+
-+diff --git a/include/stdlib.h b/include/stdlib.h
-+index 354fc66..79ccc55 100644
-+--- a/include/stdlib.h
-++++ b/include/stdlib.h
-+@@ -652,6 +652,29 @@ extern int mkstemp64 (char *__template) __nonnull ((1)) __wur;
-+ extern char *mkdtemp (char *__template) __THROW __nonnull ((1)) __wur;
-+ #endif
-+ 
-++#ifdef __USE_GNU
-++/* Generate a unique temporary file name from TEMPLATE similar to
-++   mkstemp.  But allow the caller to pass additional flags which are
-++   used in the open call to create the file..
-++
-++   This function is a possible cancellation point and therefore not
-++   marked with __THROW.  */
-++# ifndef __USE_FILE_OFFSET64
-++extern int mkostemp (char *__template, int __flags) __nonnull ((1)) __wur;
-++# else
-++#  ifdef __REDIRECT
-++extern int __REDIRECT (mkostemp, (char *__template, int __flags), mkostemp64)
-++     __nonnull ((1)) __wur;
-++#  else
-++#   define mkostemp mkostemp64
-++#  endif
-++# endif
-++# ifdef __USE_LARGEFILE64
-++extern int mkostemp64 (char *__template, int __flags) __nonnull ((1)) __wur;
-++# endif
-++
-++#endif
-++
-+ 
-+ __BEGIN_NAMESPACE_STD
-+ /* Execute the given line as a shell command.
-+diff --git a/libc/stdlib/Makefile.in b/libc/stdlib/Makefile.in
-+index 3166b8e..b92f7ce 100644
-+--- a/libc/stdlib/Makefile.in
-++++ b/libc/stdlib/Makefile.in
-+@@ -12,7 +12,7 @@ include $(top_srcdir)libc/stdlib/malloc-simple/Makefile.in
-+ include $(top_srcdir)libc/stdlib/malloc-standard/Makefile.in
-+ 
-+ CSRC-y := \
-+-	abort.c getenv.c mkdtemp.c realpath.c canonicalize.c mkstemp.c \
-++	abort.c getenv.c mkdtemp.c realpath.c canonicalize.c mkstemp.c mkostemp.c \
-+ 	rand.c random.c random_r.c setenv.c div.c ldiv.c lldiv.c \
-+ 	getpt.c drand48-iter.c jrand48.c \
-+ 	jrand48_r.c lcong48.c lrand48.c lrand48_r.c mrand48.c mrand48_r.c nrand48.c \
-+@@ -21,7 +21,7 @@ CSRC-y := \
-+ CSRC-$(UCLIBC_HAS_ADVANCED_REALTIME) += posix_memalign.c
-+ CSRC-$(UCLIBC_HAS_PTY) += grantpt.c unlockpt.c ptsname.c
-+ CSRC-$(UCLIBC_HAS_ARC4RANDOM) += arc4random.c
-+-CSRC-$(UCLIBC_HAS_LFS) += mkstemp64.c
-++CSRC-$(UCLIBC_HAS_LFS) += mkstemp64.c mkostemp64.c
-+ CSRC-$(UCLIBC_HAS_FLOATS) += drand48.c drand48_r.c erand48.c erand48_r.c
-+ CSRC-$(if $(findstring yy,$(UCLIBC_HAS_FLOATS)$(UCLIBC_SUSV3_LEGACY)),y) += \
-+ 	gcvt.c
-+diff --git a/libc/stdlib/mkostemp.c b/libc/stdlib/mkostemp.c
-+new file mode 100644
-+index 0000000..93b50fc
-+--- /dev/null
-++++ b/libc/stdlib/mkostemp.c
-+@@ -0,0 +1,32 @@
-++/* Copyright (C) 1998-2012 Free Software Foundation, Inc.
-++   This file is part of the GNU C Library.
-++
-++   The GNU C Library is free software; you can redistribute it and/or
-++   modify it under the terms of the GNU Lesser General Public
-++   License as published by the Free Software Foundation; either
-++   version 2.1 of the License, or (at your option) any later version.
-++
-++   The GNU C Library is distributed in the hope that it will be useful,
-++   but WITHOUT ANY WARRANTY; without even the implied warranty of
-++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-++   Lesser General Public License for more details.
-++
-++   You should have received a copy of the GNU Lesser General Public
-++   License along with the GNU C Library; if not, see
-++   <http://www.gnu.org/licenses/>.  */
-++
-++#include <stdio.h>
-++#include <stdlib.h>
-++#include "../misc/internals/tempname.h"
-++
-++/* Generate a unique temporary file name from TEMPLATE.
-++   The last six characters of TEMPLATE must be "XXXXXX";
-++   they are replaced with a string that makes the filename unique.
-++   Then open the file and return a fd. */
-++int
-++mkostemp (template, flags)
-++     char *template;
-++     int flags;
-++{
-++  return __gen_tempname (template, __GT_FILE, flags);
-++}
-+diff --git a/libc/stdlib/mkostemp64.c b/libc/stdlib/mkostemp64.c
-+new file mode 100644
-+index 0000000..5509d8c
-+--- /dev/null
-++++ b/libc/stdlib/mkostemp64.c
-+@@ -0,0 +1,33 @@
-++/* Copyright (C) 2000-2012 Free Software Foundation, Inc.
-++   This file is part of the GNU C Library.
-++
-++   The GNU C Library is free software; you can redistribute it and/or
-++   modify it under the terms of the GNU Lesser General Public
-++   License as published by the Free Software Foundation; either
-++   version 2.1 of the License, or (at your option) any later version.
-++
-++   The GNU C Library is distributed in the hope that it will be useful,
-++   but WITHOUT ANY WARRANTY; without even the implied warranty of
-++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-++   Lesser General Public License for more details.
-++
-++   You should have received a copy of the GNU Lesser General Public
-++   License along with the GNU C Library; if not, see
-++   <http://www.gnu.org/licenses/>.  */
-++
-++#include <fcntl.h>
-++#include <stdio.h>
-++#include <stdlib.h>
-++#include "../misc/internals/tempname.h"
-++
-++/* Generate a unique temporary file name from TEMPLATE.
-++   The last six characters of TEMPLATE must be "XXXXXX";
-++   they are replaced with a string that makes the filename unique.
-++   Then open the file and return a fd. */
-++int
-++mkostemp64 (template, flags)
-++     char *template;
-++     int flags;
-++{
-++  return __gen_tempname (template, __GT_BIGFILE, flags | O_LARGEFILE);
-++}
-+-- 
-+1.8.1.5
-+
+diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
+index 2e37856..1b98339 100644
+--- a/boot/uboot/Config.in
++++ b/boot/uboot/Config.in
+@@ -18,7 +18,7 @@ choice
+ 	  Select the specific U-Boot version you want to use
+ 
+ config BR2_TARGET_UBOOT_LATEST_VERSION
+-	bool "2013.04"
++	bool "2013.07"
+ 
+ config BR2_TARGET_UBOOT_CUSTOM_VERSION
+        bool "Custom version"
+@@ -46,7 +46,7 @@ endif
+ 
+ config BR2_TARGET_UBOOT_VERSION
+ 	string
+-	default "2013.04"	if BR2_TARGET_UBOOT_LATEST_VERSION
++	default "2013.07"	if BR2_TARGET_UBOOT_LATEST_VERSION
+ 	default $BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE if BR2_TARGET_UBOOT_CUSTOM_VERSION
+ 	default "custom"	if BR2_TARGET_UBOOT_CUSTOM_TARBALL
+ 	default $BR2_TARGET_UBOOT_CUSTOM_GIT_VERSION if BR2_TARGET_UBOOT_CUSTOM_GIT
+diff --git a/boot/uboot/uboot-2011.12/uboot-2011.12-change-kernel-address-in-dataflash.patch b/boot/uboot/uboot-2011.12/uboot-2011.12-change-kernel-address-in-dataflash.patch
+deleted file mode 100644
+index c7d9a7e..0000000
+--- a/boot/uboot/uboot-2011.12/uboot-2011.12-change-kernel-address-in-dataflash.patch
++++ /dev/null
+@@ -1,195 +0,0 @@
+-From e139cb31d32a4f39241bfd83bf622a97d08f6c9d Mon Sep 17 00:00:00 2001
+-From: Alexandre Belloni <alexandre.belloni@piout.net>
+-Date: Mon, 2 Jul 2012 04:26:58 +0000
+-Subject: [PATCH] AT91SAM9*: Change kernel address in dataflash to
+- match u-boot's size
+-
+-
+-On at91sam platforms, u-boot grew larger than the allocated size in
+-dataflash, the layout was:
+-bootstrap  0x00000000
+-ubootenv   0x00004200
+-uboot      0x00008400
+-kernel     0x00042000
+-fs         0x00252000
+-
+-u-boot with the defconfig doesn't seem to fit in 0x42000 - 0x8400 =
+-0x39C00 bytes anymore.
+-
+-Now, the layout is:
+-bootstrap  0x00000000
+-ubootenv   0x00004200
+-uboot      0x00008400
+-kernel     0x00084000
+-fs         0x00294000
+-
+-Signed-off-by: Alexandre Belloni <alexandre.belloni@piout.net>
+-Signed-off-by: Andreas Bie??mann <andreas.devel@googlemail.com>
+----
+- board/atmel/at91sam9260ek/partition.c |    6 +++---
+- board/atmel/at91sam9261ek/partition.c |    6 +++---
+- board/atmel/at91sam9263ek/partition.c |    6 +++---
+- board/atmel/at91sam9rlek/partition.c  |    6 +++---
+- include/configs/at91sam9260ek.h       |    5 +++--
+- include/configs/at91sam9261ek.h       |    5 +++--
+- include/configs/at91sam9263ek.h       |    2 +-
+- include/configs/at91sam9rlek.h        |    3 ++-
+- 8 files changed, 21 insertions(+), 18 deletions(-)
+-
+-diff --git a/board/atmel/at91sam9260ek/partition.c b/board/atmel/at91sam9260ek/partition.c
+-index 2629c67..9ec054f 100644
+---- a/board/atmel/at91sam9260ek/partition.c
+-+++ b/board/atmel/at91sam9260ek/partition.c
+-@@ -34,7 +34,7 @@ struct dataflash_addr cs[CONFIG_SYS_MAX_DATAFLASH_BANKS] = {
+- dataflash_protect_t area_list[NB_DATAFLASH_AREA] = {
+- 	{0x00000000, 0x000041FF, FLAG_PROTECT_SET,   0, "Bootstrap"},
+- 	{0x00004200, 0x000083FF, FLAG_PROTECT_CLEAR, 0, "Environment"},
+--	{0x00008400, 0x00041FFF, FLAG_PROTECT_SET,   0, "U-Boot"},
+--	{0x00042000, 0x00251FFF, FLAG_PROTECT_CLEAR, 0,	"Kernel"},
+--	{0x00252000, 0xFFFFFFFF, FLAG_PROTECT_CLEAR, 0,	"FS"},
+-+	{0x00008400, 0x00083FFF, FLAG_PROTECT_SET,   0, "U-Boot"},
+-+	{0x00084000, 0x00293FFF, FLAG_PROTECT_CLEAR, 0,	"Kernel"},
+-+	{0x00294000, 0xFFFFFFFF, FLAG_PROTECT_CLEAR, 0,	"FS"},
+- };
+-diff --git a/board/atmel/at91sam9261ek/partition.c b/board/atmel/at91sam9261ek/partition.c
+-index c739b11..51cac77 100644
+---- a/board/atmel/at91sam9261ek/partition.c
+-+++ b/board/atmel/at91sam9261ek/partition.c
+-@@ -34,7 +34,7 @@ struct dataflash_addr cs[CONFIG_SYS_MAX_DATAFLASH_BANKS] = {
+- dataflash_protect_t area_list[NB_DATAFLASH_AREA] = {
+- 	{0x00000000, 0x000041FF, FLAG_PROTECT_SET,   0, "Bootstrap"},
+- 	{0x00004200, 0x000083FF, FLAG_PROTECT_CLEAR, 0, "Environment"},
+--	{0x00008400, 0x00041FFF, FLAG_PROTECT_SET,   0, "U-Boot"},
+--	{0x00042000, 0x00251FFF, FLAG_PROTECT_CLEAR, 0,	"Kernel"},
+--	{0x00252000, 0xFFFFFFFF, FLAG_PROTECT_CLEAR, 0,	"FS"},
+-+	{0x00008400, 0x00083FFF, FLAG_PROTECT_SET,   0, "U-Boot"},
+-+	{0x00084000, 0x00293FFF, FLAG_PROTECT_CLEAR, 0,	"Kernel"},
+-+	{0x00294000, 0xFFFFFFFF, FLAG_PROTECT_CLEAR, 0,	"FS"},
+- };
+-diff --git a/board/atmel/at91sam9263ek/partition.c b/board/atmel/at91sam9263ek/partition.c
+-index 7e1d46f..d48fab7 100644
+---- a/board/atmel/at91sam9263ek/partition.c
+-+++ b/board/atmel/at91sam9263ek/partition.c
+-@@ -33,7 +33,7 @@ struct dataflash_addr cs[CONFIG_SYS_MAX_DATAFLASH_BANKS] = {
+- dataflash_protect_t area_list[NB_DATAFLASH_AREA] = {
+- 	{0x00000000, 0x000041FF, FLAG_PROTECT_SET,   0, "Bootstrap"},
+- 	{0x00004200, 0x000083FF, FLAG_PROTECT_CLEAR, 0, "Environment"},
+--	{0x00008400, 0x00041FFF, FLAG_PROTECT_SET,   0, "U-Boot"},
+--	{0x00042000, 0x00251FFF, FLAG_PROTECT_CLEAR, 0,	"Kernel"},
+--	{0x00252000, 0xFFFFFFFF, FLAG_PROTECT_CLEAR, 0,	"FS"},
+-+	{0x00008400, 0x00083FFF, FLAG_PROTECT_SET,   0, "U-Boot"},
+-+	{0x00084000, 0x00293FFF, FLAG_PROTECT_CLEAR, 0,	"Kernel"},
+-+	{0x00294000, 0xFFFFFFFF, FLAG_PROTECT_CLEAR, 0,	"FS"},
+- };
+-diff --git a/board/atmel/at91sam9rlek/partition.c b/board/atmel/at91sam9rlek/partition.c
+-index 7e1d46f..d48fab7 100644
+---- a/board/atmel/at91sam9rlek/partition.c
+-+++ b/board/atmel/at91sam9rlek/partition.c
+-@@ -33,7 +33,7 @@ struct dataflash_addr cs[CONFIG_SYS_MAX_DATAFLASH_BANKS] = {
+- dataflash_protect_t area_list[NB_DATAFLASH_AREA] = {
+- 	{0x00000000, 0x000041FF, FLAG_PROTECT_SET,   0, "Bootstrap"},
+- 	{0x00004200, 0x000083FF, FLAG_PROTECT_CLEAR, 0, "Environment"},
+--	{0x00008400, 0x00041FFF, FLAG_PROTECT_SET,   0, "U-Boot"},
+--	{0x00042000, 0x00251FFF, FLAG_PROTECT_CLEAR, 0,	"Kernel"},
+--	{0x00252000, 0xFFFFFFFF, FLAG_PROTECT_CLEAR, 0,	"FS"},
+-+	{0x00008400, 0x00083FFF, FLAG_PROTECT_SET,   0, "U-Boot"},
+-+	{0x00084000, 0x00293FFF, FLAG_PROTECT_CLEAR, 0,	"Kernel"},
+-+	{0x00294000, 0xFFFFFFFF, FLAG_PROTECT_CLEAR, 0,	"FS"},
+- };
+-diff --git a/include/configs/at91sam9260ek.h b/include/configs/at91sam9260ek.h
+-index 07b1968..ef25fa5 100644
+---- a/include/configs/at91sam9260ek.h
+-+++ b/include/configs/at91sam9260ek.h
+-@@ -187,7 +187,7 @@
+- #define CONFIG_ENV_OFFSET		0x4200
+- #define CONFIG_ENV_ADDR		(CONFIG_SYS_DATAFLASH_LOGIC_ADDR_CS0 + CONFIG_ENV_OFFSET)
+- #define CONFIG_ENV_SIZE		0x4200
+--#define CONFIG_BOOTCOMMAND	"cp.b 0xC0042000 0x22000000 0x210000; bootm"
+-+#define CONFIG_BOOTCOMMAND	"cp.b 0xC0084000 0x22000000 0x210000; bootm"
+- #define CONFIG_BOOTARGS		"console=ttyS0,115200 "			\
+- 				"root=/dev/mtdblock0 "			\
+- 				"mtdparts=atmel_nand:-(root) "		\
+-@@ -201,7 +201,7 @@
+- #define CONFIG_ENV_OFFSET		0x4200
+- #define CONFIG_ENV_ADDR		(CONFIG_SYS_DATAFLASH_LOGIC_ADDR_CS1 + CONFIG_ENV_OFFSET)
+- #define CONFIG_ENV_SIZE		0x4200
+--#define CONFIG_BOOTCOMMAND	"cp.b 0xD0042000 0x22000000 0x210000; bootm"
+-+#define CONFIG_BOOTCOMMAND	"cp.b 0xD0084000 0x22000000 0x210000; bootm"
+- #define CONFIG_BOOTARGS		"console=ttyS0,115200 "			\
+- 				"root=/dev/mtdblock0 "			\
+- 				"mtdparts=atmel_nand:-(root) "		\
+-@@ -230,6 +230,7 @@
+- #define CONFIG_SYS_PBSIZE		(CONFIG_SYS_CBSIZE + sizeof(CONFIG_SYS_PROMPT) + 16)
+- #define CONFIG_SYS_LONGHELP		1
+- #define CONFIG_CMDLINE_EDITING	1
+-+#define CONFIG_AUTO_COMPLETE
+- 
+- /*
+-  * Size of malloc() pool
+-diff --git a/include/configs/at91sam9261ek.h b/include/configs/at91sam9261ek.h
+-index 6fd0b83..014437b 100644
+---- a/include/configs/at91sam9261ek.h
+-+++ b/include/configs/at91sam9261ek.h
+-@@ -189,7 +189,7 @@
+- #define CONFIG_ENV_OFFSET	0x4200
+- #define CONFIG_ENV_ADDR		(CONFIG_SYS_DATAFLASH_LOGIC_ADDR_CS0 + CONFIG_ENV_OFFSET)
+- #define CONFIG_ENV_SIZE		0x4200
+--#define CONFIG_BOOTCOMMAND	"cp.b 0xC0042000 0x22000000 0x210000; bootm"
+-+#define CONFIG_BOOTCOMMAND	"cp.b 0xC0084000 0x22000000 0x210000; bootm"
+- #define CONFIG_BOOTARGS		"console=ttyS0,115200 "			\
+- 				"root=/dev/mtdblock0 "			\
+- 				"mtdparts=atmel_nand:-(root) "		\
+-@@ -203,7 +203,7 @@
+- #define CONFIG_ENV_OFFSET	0x4200
+- #define CONFIG_ENV_ADDR		(CONFIG_SYS_DATAFLASH_LOGIC_ADDR_CS3 + CONFIG_ENV_OFFSET)
+- #define CONFIG_ENV_SIZE		0x4200
+--#define CONFIG_BOOTCOMMAND	"cp.b 0xD0042000 0x22000000 0x210000; bootm"
+-+#define CONFIG_BOOTCOMMAND	"cp.b 0xD0084000 0x22000000 0x210000; bootm"
+- #define CONFIG_BOOTARGS		"console=ttyS0,115200 "			\
+- 				"root=/dev/mtdblock0 "			\
+- 				"mtdparts=atmel_nand:-(root) "		\
+-@@ -232,6 +232,7 @@
+- #define CONFIG_SYS_PBSIZE		(CONFIG_SYS_CBSIZE + sizeof(CONFIG_SYS_PROMPT) + 16)
+- #define CONFIG_SYS_LONGHELP
+- #define CONFIG_CMDLINE_EDITING
+-+#define CONFIG_AUTO_COMPLETE
+- 
+- /*
+-  * Size of malloc() pool
+-diff --git a/include/configs/at91sam9263ek.h b/include/configs/at91sam9263ek.h
+-index f2163f1..4309f71 100644
+---- a/include/configs/at91sam9263ek.h
+-+++ b/include/configs/at91sam9263ek.h
+-@@ -318,7 +318,7 @@
+- #define CONFIG_ENV_OFFSET		0x4200
+- #define CONFIG_ENV_ADDR		(CONFIG_SYS_DATAFLASH_LOGIC_ADDR_CS0 + CONFIG_ENV_OFFSET)
+- #define CONFIG_ENV_SIZE		0x4200
+--#define CONFIG_BOOTCOMMAND	"cp.b 0xC0042000 0x22000000 0x210000; bootm"
+-+#define CONFIG_BOOTCOMMAND	"cp.b 0xC0084000 0x22000000 0x210000; bootm"
+- #define CONFIG_BOOTARGS		"console=ttyS0,115200 " \
+- 				"root=/dev/mtdblock0 " \
+- 				"mtdparts=atmel_nand:-(root) "\
+-diff --git a/include/configs/at91sam9rlek.h b/include/configs/at91sam9rlek.h
+-index 45f8baf..c5952e9 100644
+---- a/include/configs/at91sam9rlek.h
+-+++ b/include/configs/at91sam9rlek.h
+-@@ -155,7 +155,7 @@
+- #define CONFIG_ENV_OFFSET		0x4200
+- #define CONFIG_ENV_ADDR		(CONFIG_SYS_DATAFLASH_LOGIC_ADDR_CS0 + CONFIG_ENV_OFFSET)
+- #define CONFIG_ENV_SIZE		0x4200
+--#define CONFIG_BOOTCOMMAND	"cp.b 0xC0042000 0x22000000 0x210000; bootm"
+-+#define CONFIG_BOOTCOMMAND	"cp.b 0xC0084000 0x22000000 0x210000; bootm"
+- #define CONFIG_BOOTARGS		"console=ttyS0,115200 " \
+- 				"root=/dev/mtdblock0 " \
+- 				"mtdparts=atmel_nand:-(root) "\
+-@@ -182,6 +182,7 @@
+- #define CONFIG_SYS_PBSIZE		(CONFIG_SYS_CBSIZE + sizeof(CONFIG_SYS_PROMPT) + 16)
+- #define CONFIG_SYS_LONGHELP		1
+- #define CONFIG_CMDLINE_EDITING		1
+-+#define CONFIG_AUTO_COMPLETE
+- 
+- /*
+-  * Size of malloc() pool
+--- 
+-1.7.9.5
+-
+diff --git a/boot/uboot/uboot-2012.04.01/uboot-2012.04-change-kernel-address-in-dataflash.patch b/boot/uboot/uboot-2012.04.01/uboot-2012.04-change-kernel-address-in-dataflash.patch
+deleted file mode 100644
+index c7d9a7e..0000000
+--- a/boot/uboot/uboot-2012.04.01/uboot-2012.04-change-kernel-address-in-dataflash.patch
++++ /dev/null
+@@ -1,195 +0,0 @@
+-From e139cb31d32a4f39241bfd83bf622a97d08f6c9d Mon Sep 17 00:00:00 2001
+-From: Alexandre Belloni <alexandre.belloni@piout.net>
+-Date: Mon, 2 Jul 2012 04:26:58 +0000
+-Subject: [PATCH] AT91SAM9*: Change kernel address in dataflash to
+- match u-boot's size
+-
+-
+-On at91sam platforms, u-boot grew larger than the allocated size in
+-dataflash, the layout was:
+-bootstrap  0x00000000
+-ubootenv   0x00004200
+-uboot      0x00008400
+-kernel     0x00042000
+-fs         0x00252000
+-
+-u-boot with the defconfig doesn't seem to fit in 0x42000 - 0x8400 =
+-0x39C00 bytes anymore.
+-
+-Now, the layout is:
+-bootstrap  0x00000000
+-ubootenv   0x00004200
+-uboot      0x00008400
+-kernel     0x00084000
+-fs         0x00294000
+-
+-Signed-off-by: Alexandre Belloni <alexandre.belloni@piout.net>
+-Signed-off-by: Andreas Bie??mann <andreas.devel@googlemail.com>
+----
+- board/atmel/at91sam9260ek/partition.c |    6 +++---
+- board/atmel/at91sam9261ek/partition.c |    6 +++---
+- board/atmel/at91sam9263ek/partition.c |    6 +++---
+- board/atmel/at91sam9rlek/partition.c  |    6 +++---
+- include/configs/at91sam9260ek.h       |    5 +++--
+- include/configs/at91sam9261ek.h       |    5 +++--
+- include/configs/at91sam9263ek.h       |    2 +-
+- include/configs/at91sam9rlek.h        |    3 ++-
+- 8 files changed, 21 insertions(+), 18 deletions(-)
+-
+-diff --git a/board/atmel/at91sam9260ek/partition.c b/board/atmel/at91sam9260ek/partition.c
+-index 2629c67..9ec054f 100644
+---- a/board/atmel/at91sam9260ek/partition.c
+-+++ b/board/atmel/at91sam9260ek/partition.c
+-@@ -34,7 +34,7 @@ struct dataflash_addr cs[CONFIG_SYS_MAX_DATAFLASH_BANKS] = {
+- dataflash_protect_t area_list[NB_DATAFLASH_AREA] = {
+- 	{0x00000000, 0x000041FF, FLAG_PROTECT_SET,   0, "Bootstrap"},
+- 	{0x00004200, 0x000083FF, FLAG_PROTECT_CLEAR, 0, "Environment"},
+--	{0x00008400, 0x00041FFF, FLAG_PROTECT_SET,   0, "U-Boot"},
+--	{0x00042000, 0x00251FFF, FLAG_PROTECT_CLEAR, 0,	"Kernel"},
+--	{0x00252000, 0xFFFFFFFF, FLAG_PROTECT_CLEAR, 0,	"FS"},
+-+	{0x00008400, 0x00083FFF, FLAG_PROTECT_SET,   0, "U-Boot"},
+-+	{0x00084000, 0x00293FFF, FLAG_PROTECT_CLEAR, 0,	"Kernel"},
+-+	{0x00294000, 0xFFFFFFFF, FLAG_PROTECT_CLEAR, 0,	"FS"},
+- };
+-diff --git a/board/atmel/at91sam9261ek/partition.c b/board/atmel/at91sam9261ek/partition.c
+-index c739b11..51cac77 100644
+---- a/board/atmel/at91sam9261ek/partition.c
+-+++ b/board/atmel/at91sam9261ek/partition.c
+-@@ -34,7 +34,7 @@ struct dataflash_addr cs[CONFIG_SYS_MAX_DATAFLASH_BANKS] = {
+- dataflash_protect_t area_list[NB_DATAFLASH_AREA] = {
+- 	{0x00000000, 0x000041FF, FLAG_PROTECT_SET,   0, "Bootstrap"},
+- 	{0x00004200, 0x000083FF, FLAG_PROTECT_CLEAR, 0, "Environment"},
+--	{0x00008400, 0x00041FFF, FLAG_PROTECT_SET,   0, "U-Boot"},
+--	{0x00042000, 0x00251FFF, FLAG_PROTECT_CLEAR, 0,	"Kernel"},
+--	{0x00252000, 0xFFFFFFFF, FLAG_PROTECT_CLEAR, 0,	"FS"},
+-+	{0x00008400, 0x00083FFF, FLAG_PROTECT_SET,   0, "U-Boot"},
+-+	{0x00084000, 0x00293FFF, FLAG_PROTECT_CLEAR, 0,	"Kernel"},
+-+	{0x00294000, 0xFFFFFFFF, FLAG_PROTECT_CLEAR, 0,	"FS"},
+- };
+-diff --git a/board/atmel/at91sam9263ek/partition.c b/board/atmel/at91sam9263ek/partition.c
+-index 7e1d46f..d48fab7 100644
+---- a/board/atmel/at91sam9263ek/partition.c
+-+++ b/board/atmel/at91sam9263ek/partition.c
+-@@ -33,7 +33,7 @@ struct dataflash_addr cs[CONFIG_SYS_MAX_DATAFLASH_BANKS] = {
+- dataflash_protect_t area_list[NB_DATAFLASH_AREA] = {
+- 	{0x00000000, 0x000041FF, FLAG_PROTECT_SET,   0, "Bootstrap"},
+- 	{0x00004200, 0x000083FF, FLAG_PROTECT_CLEAR, 0, "Environment"},
+--	{0x00008400, 0x00041FFF, FLAG_PROTECT_SET,   0, "U-Boot"},
+--	{0x00042000, 0x00251FFF, FLAG_PROTECT_CLEAR, 0,	"Kernel"},
+--	{0x00252000, 0xFFFFFFFF, FLAG_PROTECT_CLEAR, 0,	"FS"},
+-+	{0x00008400, 0x00083FFF, FLAG_PROTECT_SET,   0, "U-Boot"},
+-+	{0x00084000, 0x00293FFF, FLAG_PROTECT_CLEAR, 0,	"Kernel"},
+-+	{0x00294000, 0xFFFFFFFF, FLAG_PROTECT_CLEAR, 0,	"FS"},
+- };
+-diff --git a/board/atmel/at91sam9rlek/partition.c b/board/atmel/at91sam9rlek/partition.c
+-index 7e1d46f..d48fab7 100644
+---- a/board/atmel/at91sam9rlek/partition.c
+-+++ b/board/atmel/at91sam9rlek/partition.c
+-@@ -33,7 +33,7 @@ struct dataflash_addr cs[CONFIG_SYS_MAX_DATAFLASH_BANKS] = {
+- dataflash_protect_t area_list[NB_DATAFLASH_AREA] = {
+- 	{0x00000000, 0x000041FF, FLAG_PROTECT_SET,   0, "Bootstrap"},
+- 	{0x00004200, 0x000083FF, FLAG_PROTECT_CLEAR, 0, "Environment"},
+--	{0x00008400, 0x00041FFF, FLAG_PROTECT_SET,   0, "U-Boot"},
+--	{0x00042000, 0x00251FFF, FLAG_PROTECT_CLEAR, 0,	"Kernel"},
+--	{0x00252000, 0xFFFFFFFF, FLAG_PROTECT_CLEAR, 0,	"FS"},
+-+	{0x00008400, 0x00083FFF, FLAG_PROTECT_SET,   0, "U-Boot"},
+-+	{0x00084000, 0x00293FFF, FLAG_PROTECT_CLEAR, 0,	"Kernel"},
+-+	{0x00294000, 0xFFFFFFFF, FLAG_PROTECT_CLEAR, 0,	"FS"},
+- };
+-diff --git a/include/configs/at91sam9260ek.h b/include/configs/at91sam9260ek.h
+-index 07b1968..ef25fa5 100644
+---- a/include/configs/at91sam9260ek.h
+-+++ b/include/configs/at91sam9260ek.h
+-@@ -187,7 +187,7 @@
+- #define CONFIG_ENV_OFFSET		0x4200
+- #define CONFIG_ENV_ADDR		(CONFIG_SYS_DATAFLASH_LOGIC_ADDR_CS0 + CONFIG_ENV_OFFSET)
+- #define CONFIG_ENV_SIZE		0x4200
+--#define CONFIG_BOOTCOMMAND	"cp.b 0xC0042000 0x22000000 0x210000; bootm"
+-+#define CONFIG_BOOTCOMMAND	"cp.b 0xC0084000 0x22000000 0x210000; bootm"
+- #define CONFIG_BOOTARGS		"console=ttyS0,115200 "			\
+- 				"root=/dev/mtdblock0 "			\
+- 				"mtdparts=atmel_nand:-(root) "		\
+-@@ -201,7 +201,7 @@
+- #define CONFIG_ENV_OFFSET		0x4200
+- #define CONFIG_ENV_ADDR		(CONFIG_SYS_DATAFLASH_LOGIC_ADDR_CS1 + CONFIG_ENV_OFFSET)
+- #define CONFIG_ENV_SIZE		0x4200
+--#define CONFIG_BOOTCOMMAND	"cp.b 0xD0042000 0x22000000 0x210000; bootm"
+-+#define CONFIG_BOOTCOMMAND	"cp.b 0xD0084000 0x22000000 0x210000; bootm"
+- #define CONFIG_BOOTARGS		"console=ttyS0,115200 "			\
+- 				"root=/dev/mtdblock0 "			\
+- 				"mtdparts=atmel_nand:-(root) "		\
+-@@ -230,6 +230,7 @@
+- #define CONFIG_SYS_PBSIZE		(CONFIG_SYS_CBSIZE + sizeof(CONFIG_SYS_PROMPT) + 16)
+- #define CONFIG_SYS_LONGHELP		1
+- #define CONFIG_CMDLINE_EDITING	1
+-+#define CONFIG_AUTO_COMPLETE
+- 
+- /*
+-  * Size of malloc() pool
+-diff --git a/include/configs/at91sam9261ek.h b/include/configs/at91sam9261ek.h
+-index 6fd0b83..014437b 100644
+---- a/include/configs/at91sam9261ek.h
+-+++ b/include/configs/at91sam9261ek.h
+-@@ -189,7 +189,7 @@
+- #define CONFIG_ENV_OFFSET	0x4200
+- #define CONFIG_ENV_ADDR		(CONFIG_SYS_DATAFLASH_LOGIC_ADDR_CS0 + CONFIG_ENV_OFFSET)
+- #define CONFIG_ENV_SIZE		0x4200
+--#define CONFIG_BOOTCOMMAND	"cp.b 0xC0042000 0x22000000 0x210000; bootm"
+-+#define CONFIG_BOOTCOMMAND	"cp.b 0xC0084000 0x22000000 0x210000; bootm"
+- #define CONFIG_BOOTARGS		"console=ttyS0,115200 "			\
+- 				"root=/dev/mtdblock0 "			\
+- 				"mtdparts=atmel_nand:-(root) "		\
+-@@ -203,7 +203,7 @@
+- #define CONFIG_ENV_OFFSET	0x4200
+- #define CONFIG_ENV_ADDR		(CONFIG_SYS_DATAFLASH_LOGIC_ADDR_CS3 + CONFIG_ENV_OFFSET)
+- #define CONFIG_ENV_SIZE		0x4200
+--#define CONFIG_BOOTCOMMAND	"cp.b 0xD0042000 0x22000000 0x210000; bootm"
+-+#define CONFIG_BOOTCOMMAND	"cp.b 0xD0084000 0x22000000 0x210000; bootm"
+- #define CONFIG_BOOTARGS		"console=ttyS0,115200 "			\
+- 				"root=/dev/mtdblock0 "			\
+- 				"mtdparts=atmel_nand:-(root) "		\
+-@@ -232,6 +232,7 @@
+- #define CONFIG_SYS_PBSIZE		(CONFIG_SYS_CBSIZE + sizeof(CONFIG_SYS_PROMPT) + 16)
+- #define CONFIG_SYS_LONGHELP
+- #define CONFIG_CMDLINE_EDITING
+-+#define CONFIG_AUTO_COMPLETE
+- 
+- /*
+-  * Size of malloc() pool
+-diff --git a/include/configs/at91sam9263ek.h b/include/configs/at91sam9263ek.h
+-index f2163f1..4309f71 100644
+---- a/include/configs/at91sam9263ek.h
+-+++ b/include/configs/at91sam9263ek.h
+-@@ -318,7 +318,7 @@
+- #define CONFIG_ENV_OFFSET		0x4200
+- #define CONFIG_ENV_ADDR		(CONFIG_SYS_DATAFLASH_LOGIC_ADDR_CS0 + CONFIG_ENV_OFFSET)
+- #define CONFIG_ENV_SIZE		0x4200
+--#define CONFIG_BOOTCOMMAND	"cp.b 0xC0042000 0x22000000 0x210000; bootm"
+-+#define CONFIG_BOOTCOMMAND	"cp.b 0xC0084000 0x22000000 0x210000; bootm"
+- #define CONFIG_BOOTARGS		"console=ttyS0,115200 " \
+- 				"root=/dev/mtdblock0 " \
+- 				"mtdparts=atmel_nand:-(root) "\
+-diff --git a/include/configs/at91sam9rlek.h b/include/configs/at91sam9rlek.h
+-index 45f8baf..c5952e9 100644
+---- a/include/configs/at91sam9rlek.h
+-+++ b/include/configs/at91sam9rlek.h
+-@@ -155,7 +155,7 @@
+- #define CONFIG_ENV_OFFSET		0x4200
+- #define CONFIG_ENV_ADDR		(CONFIG_SYS_DATAFLASH_LOGIC_ADDR_CS0 + CONFIG_ENV_OFFSET)
+- #define CONFIG_ENV_SIZE		0x4200
+--#define CONFIG_BOOTCOMMAND	"cp.b 0xC0042000 0x22000000 0x210000; bootm"
+-+#define CONFIG_BOOTCOMMAND	"cp.b 0xC0084000 0x22000000 0x210000; bootm"
+- #define CONFIG_BOOTARGS		"console=ttyS0,115200 " \
+- 				"root=/dev/mtdblock0 " \
+- 				"mtdparts=atmel_nand:-(root) "\
+-@@ -182,6 +182,7 @@
+- #define CONFIG_SYS_PBSIZE		(CONFIG_SYS_CBSIZE + sizeof(CONFIG_SYS_PROMPT) + 16)
+- #define CONFIG_SYS_LONGHELP		1
+- #define CONFIG_CMDLINE_EDITING		1
+-+#define CONFIG_AUTO_COMPLETE
+- 
+- /*
+-  * Size of malloc() pool
+--- 
+-1.7.9.5
+-
