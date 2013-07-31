@@ -1,37 +1,35 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 31 Jul 2013 18:17:33 +0200
-Subject: [Buildroot] [PATCH v5] strongswan: new package
-In-Reply-To: <1368458122-7416-1-git-send-email-jezz@sysmic.org>
-References: <514F0E30.1060506@zacarias.com.ar>
- <1368458122-7416-1-git-send-email-jezz@sysmic.org>
-Message-ID: <20130731181733.09974159@skate>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed, 31 Jul 2013 13:27:01 -0300
+Subject: [Buildroot] [PATCH] qt5jsbackend: needs ARM v5+
+Message-ID: <1375288021-23307-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear J?r?me Pouiller,
+Just like nodejs and other v8-based javascript engines for ARM interwork
+it needs the BLX instruction which is only available on V5+ cores.
+Fixes:
+http://autobuild.buildroot.net/results/853/853cd29bf427902b2cb82a101964a4e45714cb86/
 
-On Mon, 13 May 2013 17:15:22 +0200, J?r?me Pouiller wrote:
-> strongSwan is an OpenSource IPsec implementation for the
-> Linux operating system. It is based on the discontinued
-> FreeS/WAN project and the X.509 patch.
-> 
-> The focus is on:
->      - simplicity of configuration
->      - strong encryption and authentication methods
->      - powerful IPsec policies supporting large and complex VPN networks
-> 
-> http://www.strongswan.org/
-> 
-> Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/qt5/qt5jsbackend/Config.in | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Applied, thanks.
-
-Thomas
+diff --git a/package/qt5/qt5jsbackend/Config.in b/package/qt5/qt5jsbackend/Config.in
+index 2f5ac1f..d9301d0 100644
+--- a/package/qt5/qt5jsbackend/Config.in
++++ b/package/qt5/qt5jsbackend/Config.in
+@@ -2,6 +2,8 @@ config BR2_PACKAGE_QT5JSBACKEND_AVAILABLE
+ 	bool
+ 	# v8 is only available on certain architectures
+ 	depends on BR2_arm || BR2_i386 || BR2_x86_64 || BR2_mipsel
++	# ARM needs BLX, so v5t+
++	depends on !(BR2_arm7tdmi || BR2_arm720t || BR2_arm920t || BR2_arm922t || BR2_fa526)
+ 	default y
+ 
+ config BR2_PACKAGE_QT5JSBACKEND
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+1.8.1.5
