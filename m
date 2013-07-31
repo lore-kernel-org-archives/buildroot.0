@@ -1,49 +1,44 @@
-From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Wed, 31 Jul 2013 17:11:28 +0200
-Subject: [Buildroot] How to login as root without password
-In-Reply-To: <CAHbR41Xzw1RsrR8ZykwvWjXyP_GKzQRWghTo0hjq2z=sPGsabQ@mail.gmail.com>
-References: <CAHbR41VH17_qSe3T92b=n61_f1a_64jVXy5rNCKaexajmWzt9g@mail.gmail.com>
- <CAAXf6LXRYRvhWwE-TnM2fnGPMp+s+eEa3oUQtwdatMPxP=vAyA@mail.gmail.com>
- <CAHbR41WGQDmkVy4TguM7KEO9hf6NpND=wQ1CiUWMgUwhWQRkiQ@mail.gmail.com>
- <CAAXf6LVa_tJZG8CQw2zUUdyOvMd7TAs5yfdtUtjKG5bcGqhdZw@mail.gmail.com>
- <CAHbR41Xzw1RsrR8ZykwvWjXyP_GKzQRWghTo0hjq2z=sPGsabQ@mail.gmail.com>
-Message-ID: <CAAXf6LW8nHEy_QB8ACZ69EzUrN6JRLD6GPxEvpdtSAmYGC_v2w@mail.gmail.com>
+From: Mischa Jonker <Mischa.Jonker@synopsys.com>
+Date: Wed, 31 Jul 2013 17:14:32 +0200
+Subject: [Buildroot] [PATCH] libnspr: Add dependency on !BR2_arc
+Message-ID: <1375283672-1453-1-git-send-email-mjonker@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Jul 31, 2013 at 5:03 PM, zhou qiang <zhouqiang.search@gmail.com> wrote:
-> Hi , Thomas
->
-> We have an internal jffs2 image making process , which requires a pure
-> target from buildroot ,
-> and follow the steps as below :
->
-> (1) extract rootfs.tar to designated target directory (rootfs) , this is
-> done by post-script .
-> (2) Adding functional script and application to rootfs .
-> (3) make a new jffs2 image
-> (4)burn this image to arm board
->
-> Of course , if extract rootfs.tar as root , everything works pretty well ,
-> busybox login as root .
-> But in the server , there is no root permission .
->
-> So the issue is how to login as root without "operation of extract
-> rootfs.tar as root".
->
+ARC is not supported yet in libnspr.
 
-What is the input to step 4, an extracted directory, or just the image?
+Signed-off-by: Mischa Jonker <mjonker@synopsys.com>
+---
+ package/libnspr/Config.in |    1 +
+ package/libnss/Config.in  |    1 +
+ 2 files changed, 2 insertions(+)
 
-In general, when you want to add custom elements to the rootfs, you would do:
-a. 'make' in buildroot
-b. copy custom files to <buildroot>/output/target
-c. 'make' in buildroot again, this will create a new image
-d. burn image to board
-
-Is there a reason why you do not do it this way?
-
-Best regards,
-Thomas
+diff --git a/package/libnspr/Config.in b/package/libnspr/Config.in
+index f87b10c..ee7902b 100644
+--- a/package/libnspr/Config.in
++++ b/package/libnspr/Config.in
+@@ -2,6 +2,7 @@ config BR2_PACKAGE_LIBNSPR
+ 	bool "libnspr"
+ 	depends on BR2_LARGEFILE
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_arc
+ 	help
+ 	  NSPR is the Netscape Portable Runtime library which provides
+ 	  a platform-neutral API for system level and libc like
+diff --git a/package/libnss/Config.in b/package/libnss/Config.in
+index e8eec77..b5f3a01 100644
+--- a/package/libnss/Config.in
++++ b/package/libnss/Config.in
+@@ -5,6 +5,7 @@ config BR2_PACKAGE_LIBNSS
+ 	select BR2_PACKAGE_ZLIB
+ 	depends on BR2_LARGEFILE
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libnspr
++	depends on !BR2_arc # libnspr
+ 	help
+ 	  Network Security Services (NSS) is a set of libraries designed
+ 	  to support development of security-enabled client and server
+-- 
+1.7.9.5
