@@ -1,82 +1,52 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 31 Jul 2013 14:10:34 +0200
-Subject: [Buildroot] [git commit] Revert "uClibc: Add uClibc patch to fix
-	MIPS64/n64 interpreter"
-Message-ID: <20130731121053.D709F9AF51@busybox.osuosl.org>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed, 31 Jul 2013 10:03:37 -0300
+Subject: [Buildroot] [PATCH 1/3] package/uclibc: number patches for 0.9.32.1
+Message-ID: <1375275819-29308-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=0f3a6bf8c4b4488764fe19fc9ba84834a9508d64
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-This reverts commit 1c834dd1ce5d8b6eedb36126c878dd3f9dbbdb55.
-
-This patch has been mistakenly applied, while a new version of it had
-already been merged. Thanks Gustavo for noticing.
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- toolchain/uClibc/uClibc-0.9.33.2-mips64n64.patch |   52 ----------------------
- 1 files changed, 0 insertions(+), 52 deletions(-)
+ ...atch => uclibc-0001-Fix-e500-__fe_nomask_env-use-of-__set_errno.patch} | 0
+ ...ch => uclibc-0002-Fix-__libc_epoll_pwait-compile-failure-on-x86.patch} | 0
+ ...> uclibc-0003-libc-sysdeps-add-__kernel_long-and-__kernel_ulong.patch} | 0
+ .../{uclibc-sparc-errno-fix.patch => uclibc-0004-sparc-errno-fix.patch}   | 0
+ .../uclibc/0.9.32.1/{uclibc-unshare.patch => uclibc-0005-unshare.patch}   | 0
+ ...uxthreads-errno-fix.patch => uclibc-0006-linuxthreads-errno-fix.patch} | 0
+ 6 files changed, 0 insertions(+), 0 deletions(-)
+ rename package/uclibc/0.9.32.1/{uclibc-Fix-e500-__fe_nomask_env-use-of-__set_errno.patch => uclibc-0001-Fix-e500-__fe_nomask_env-use-of-__set_errno.patch} (100%)
+ rename package/uclibc/0.9.32.1/{uclibc-Fix-__libc_epoll_pwait-compile-failure-on-x86.patch => uclibc-0002-Fix-__libc_epoll_pwait-compile-failure-on-x86.patch} (100%)
+ rename package/uclibc/0.9.32.1/{uclibc-libc-sysdeps-add-__kernel_long-and-__kernel_ulong.patch => uclibc-0003-libc-sysdeps-add-__kernel_long-and-__kernel_ulong.patch} (100%)
+ rename package/uclibc/0.9.32.1/{uclibc-sparc-errno-fix.patch => uclibc-0004-sparc-errno-fix.patch} (100%)
+ rename package/uclibc/0.9.32.1/{uclibc-unshare.patch => uclibc-0005-unshare.patch} (100%)
+ rename package/uclibc/0.9.32.1/{uclibc-linuxthreads-errno-fix.patch => uclibc-0006-linuxthreads-errno-fix.patch} (100%)
 
-diff --git a/toolchain/uClibc/uClibc-0.9.33.2-mips64n64.patch b/toolchain/uClibc/uClibc-0.9.33.2-mips64n64.patch
-deleted file mode 100644
-index 6eb3ab9..0000000
---- a/toolchain/uClibc/uClibc-0.9.33.2-mips64n64.patch
-+++ /dev/null
-@@ -1,52 +0,0 @@
--From b598215c00a1f9df5d47ce2a730399787351b782 Mon Sep 17 00:00:00 2001
--From: Markos Chandras <markos.chandras@imgtec.com>
--Date: Mon, 1 Jul 2013 09:59:40 +0100
--Subject: [PATCH uClibc] Rules.mak: MIPS64: Select correct interpreter
--
--gcc (eg 4.7.3) hardcodes the MIPS64 interpreters like this:
--(see gcc/config/linux.h and gcc/config/mips/linux64.h)
--
--o32: UCLIBC_DYNAMIC_LINKER "/lib/ld-uClibc.so.0"
--n32: UCLIBC_DYNAMIC_LINKERN32 "/lib32/ld-uClibc.so.0"
--n64: UCLIBC_DYNAMIC_LINKER64 "/lib/ld64-uClibc.so.0"
--
--The existing check for MIPS64 in uClibc is wrong because it does
--not respect the selected ABI
--
--We fix this by explicitely checking the selected ABI instead of the
--selected MIPS variant.
--
--Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
-----
-- Rules.mak | 12 ++++++++----
-- 1 file changed, 8 insertions(+), 4 deletions(-)
--
--diff --git a/Rules.mak b/Rules.mak
--index 792b794..87eb5ae 100644
----- a/Rules.mak
--+++ b/Rules.mak
--@@ -138,13 +138,17 @@ export MAJOR_VERSION MINOR_VERSION SUBLEVEL VERSION ABI_VERSION LC_ALL
-- LIBC := libc
-- SHARED_LIBNAME := $(LIBC).so.$(ABI_VERSION)
-- UBACKTRACE_DSO := libubacktrace.so.$(ABI_VERSION)
---ifneq ($(findstring  $(TARGET_ARCH) , hppa64 ia64 mips64 powerpc64 s390x sparc64 x86_64 ),)
---UCLIBC_LDSO_NAME := ld64-uClibc
---ARCH_NATIVE_BIT := 64
---else
--+
-- UCLIBC_LDSO_NAME := ld-uClibc
-- ARCH_NATIVE_BIT := 32
--+ifneq ($(findstring  $(TARGET_ARCH) , hppa64 ia64 powerpc64 s390x sparc64 x86_64 ),)
--+UCLIBC_LDSO_NAME := ld64-uClibc
--+ARCH_NATIVE_BIT := 64
--+else ifeq ($(CONFIG_MIPS_N64_ABI),y)
--+UCLIBC_LDSO_NAME := ld64-uClibc
--+ARCH_NATIVE_BIT := 64
-- endif
--+
-- UCLIBC_LDSO := $(UCLIBC_LDSO_NAME).so.$(ABI_VERSION)
-- NONSHARED_LIBNAME := uclibc_nonshared.a
-- libc := $(top_builddir)lib/$(SHARED_LIBNAME)
---- 
--1.8.2.1
--
+diff --git a/package/uclibc/0.9.32.1/uclibc-Fix-e500-__fe_nomask_env-use-of-__set_errno.patch b/package/uclibc/0.9.32.1/uclibc-0001-Fix-e500-__fe_nomask_env-use-of-__set_errno.patch
+similarity index 100%
+rename from package/uclibc/0.9.32.1/uclibc-Fix-e500-__fe_nomask_env-use-of-__set_errno.patch
+rename to package/uclibc/0.9.32.1/uclibc-0001-Fix-e500-__fe_nomask_env-use-of-__set_errno.patch
+diff --git a/package/uclibc/0.9.32.1/uclibc-Fix-__libc_epoll_pwait-compile-failure-on-x86.patch b/package/uclibc/0.9.32.1/uclibc-0002-Fix-__libc_epoll_pwait-compile-failure-on-x86.patch
+similarity index 100%
+rename from package/uclibc/0.9.32.1/uclibc-Fix-__libc_epoll_pwait-compile-failure-on-x86.patch
+rename to package/uclibc/0.9.32.1/uclibc-0002-Fix-__libc_epoll_pwait-compile-failure-on-x86.patch
+diff --git a/package/uclibc/0.9.32.1/uclibc-libc-sysdeps-add-__kernel_long-and-__kernel_ulong.patch b/package/uclibc/0.9.32.1/uclibc-0003-libc-sysdeps-add-__kernel_long-and-__kernel_ulong.patch
+similarity index 100%
+rename from package/uclibc/0.9.32.1/uclibc-libc-sysdeps-add-__kernel_long-and-__kernel_ulong.patch
+rename to package/uclibc/0.9.32.1/uclibc-0003-libc-sysdeps-add-__kernel_long-and-__kernel_ulong.patch
+diff --git a/package/uclibc/0.9.32.1/uclibc-sparc-errno-fix.patch b/package/uclibc/0.9.32.1/uclibc-0004-sparc-errno-fix.patch
+similarity index 100%
+rename from package/uclibc/0.9.32.1/uclibc-sparc-errno-fix.patch
+rename to package/uclibc/0.9.32.1/uclibc-0004-sparc-errno-fix.patch
+diff --git a/package/uclibc/0.9.32.1/uclibc-unshare.patch b/package/uclibc/0.9.32.1/uclibc-0005-unshare.patch
+similarity index 100%
+rename from package/uclibc/0.9.32.1/uclibc-unshare.patch
+rename to package/uclibc/0.9.32.1/uclibc-0005-unshare.patch
+diff --git a/package/uclibc/0.9.32.1/uclibc-linuxthreads-errno-fix.patch b/package/uclibc/0.9.32.1/uclibc-0006-linuxthreads-errno-fix.patch
+similarity index 100%
+rename from package/uclibc/0.9.32.1/uclibc-linuxthreads-errno-fix.patch
+rename to package/uclibc/0.9.32.1/uclibc-0006-linuxthreads-errno-fix.patch
+-- 
+1.8.1.5
