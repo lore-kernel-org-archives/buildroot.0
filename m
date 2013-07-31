@@ -1,48 +1,57 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 31 Jul 2013 15:11:14 +0200
-Subject: [Buildroot] [noMMU] How to generate FLAT executable for busybox?
-In-Reply-To: <CAFRkauBReYkcyUzaOdHk586wNm3vgP0Uaztv3vgvfvz608NidA@mail.gmail.com>
-References: <1375076435.4630.2.camel@phoenix>
- <CAFRkauAXEpeZu6PNDvR2TiU9D=EidiaREJCFTjCP1BqrX0Y8zA@mail.gmail.com>
- <CAFRkauBReYkcyUzaOdHk586wNm3vgP0Uaztv3vgvfvz608NidA@mail.gmail.com>
-Message-ID: <20130731151114.481b6485@skate>
+From: anjohn <andre.johnigk@iml.fraunhofer.de>
+Date: Wed, 31 Jul 2013 06:21:56 -0700 (PDT)
+Subject: [Buildroot] Kernel freezes after loading with qemu
+Message-ID: <1375276916286-49198.post@n4.nabble.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Axel Lin,
+Hi,
 
-On Wed, 31 Jul 2013 21:05:56 +0800, Axel Lin wrote:
+I just started to play around with buildroot. I managed to compile a kernel
+with the option "initial RAM linked into linux kernel" and "(tty1) Port to
+run a getty on" and I could load it with qemu and it worked. I could login
+and wander around in the ram filesystem.
 
-> Just try to figure out if any platform can build FLAT executable.
-> So I just tested build for blackfin (BR2_bfin).
-> ( I don't have any customization for this blackfin build test,
-> only run make menuconfig and select blackfin. Test with current git tree. )
-> 
-> I thought I should have a FLAT executable, however it produces ELF executable.
-> $ file output/target/bin/busybox
-> output/target/bin/busybox: setuid ELF 32-bit LSB executable, Analog
-> Devices Blackfin, version 1 (SYSV), statically linked, stripped
+As second step I wanted to create a bootable disk image with my custom
+kernel and filesystem. I disenabled the option "initial RAM linked into
+linux kernel", enabled that I get an ext2 filesystem image and marked the
+option "install kernel image to /boot in target".
+I also configured the kernel and marked the option "second extended file
+system".
 
-Yeah, that's broken.
+I build no packages, except for nano and grub as boot loader ...
 
-> BTW, I found BR2_ELF2FLT is invisible for BR2_bfin.
-> 
-> package/elf2flt/Config.in.host:
-> config BR2_PACKAGE_HOST_ELF2FLT
->         bool "Enable elf2flt support?"
->         depends on BR2_arm || BR2_sh || BR2_sparc
-> 
-> Does this mean blackfin does not need elf2flt tool?
+then I
+ - created a disk image of 32 mb with dd
+ - made a primary partition on it with fdisk
+ - made an ext2 filesystem on it with mkfs
+ - copied the contend of my rootfs.ext2 into the filesystem
+ - installed Grub that uses the boot files that were genereted by buildroot
 
-No, it means that the internal toolchain handling of FLAT binaries and
-elf2flt is broken.
+Then I booted my recently created kernel by the command "qemu -hda hdd.img".
+I could chose my kernel in the boot menu and then it started to load the
+kernel.
 
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+It allways freezes after the line
+"swapper/0 (1) used greatest stack depth: 5740 bytes left"
+
+Some other strange thing is the message
+"Filesystem type is ext2fs, partition type 0x83."
+that appears right after the info that the system will boot now.
+
+I just want a bootable disk image with linux kernel and a minimal filesystem
+on a primary partition.
+
+Were is the error in my method?
+What other method would you recommend to get such an bootable disk image?
+
+Thaaaank you veeery much!!! 
+
+
+
+--
+View this message in context: http://buildroot-busybox.2317881.n4.nabble.com/Kernel-freezes-after-loading-with-qemu-tp49198.html
+Sent from the Buildroot (busybox) mailing list archive at Nabble.com.
