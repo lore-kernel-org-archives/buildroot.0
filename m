@@ -1,27 +1,30 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 31 Jul 2013 18:06:50 +0200
-Subject: [Buildroot] [PATCH 1/2] strongswan: security bump to version
- 5.0.4
-In-Reply-To: <1375277507-30647-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1375277507-30647-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20130731180650.25946a3b@skate>
+Date: Wed, 31 Jul 2013 18:07:09 +0200
+Subject: [Buildroot] [PATCH v2] libnspr: Add dependency on !BR2_arc
+In-Reply-To: <1375284419-2958-1-git-send-email-mjonker@synopsys.com>
+References: <1375284419-2958-1-git-send-email-mjonker@synopsys.com>
+Message-ID: <20130731180709.14d06593@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+Dear Mischa Jonker,
 
-On Wed, 31 Jul 2013 10:31:46 -0300, Gustavo Zacarias wrote:
-> Fixes CVE-2013-2944.
+On Wed, 31 Jul 2013 17:26:59 +0200, Mischa Jonker wrote:
+> ARC is not supported yet in libnspr.
 > 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> v2: Propagate to ecryptfs-utils as well
+> 
+> Signed-off-by: Mischa Jonker <mjonker@synopsys.com>
 > ---
->  package/strongswan/strongswan.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  package/ecryptfs-utils/Config.in |    1 +
+>  package/libnspr/Config.in        |    1 +
+>  package/libnss/Config.in         |    1 +
+>  3 files changed, 3 insertions(+)
 
-Both applied, thanks.
+Applied, thanks.
 
 Thomas
 -- 
