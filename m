@@ -1,62 +1,78 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 31 Jul 2013 19:18:25 +0200
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed, 31 Jul 2013 14:51:57 -0300
 Subject: [Buildroot] List of pending patches: what to do?
 In-Reply-To: <20130731191415.545f7dff@skate>
 References: <20130731191415.545f7dff@skate>
-Message-ID: <20130731191825.5b7377e9@skate>
+Message-ID: <51F94EBD.7060309@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On 07/31/2013 02:14 PM, Thomas Petazzoni wrote:
 
-On Wed, 31 Jul 2013 19:14:15 +0200, Thomas Petazzoni wrote:
+> http://patchwork.ozlabs.org/patch/155498 New: add lava-test package
 
-> http://patchwork.ozlabs.org/patch/181870 [1/9] firefox: host-python dependency needs --enable-unicodedata
-> http://patchwork.ozlabs.org/patch/181871 [2/9] firefox: valgrind dependency needs --enable-tls for debug build
-> http://patchwork.ozlabs.org/patch/181874 [3/9] firefox: sqlite dependency needs new compile-time options
-> http://patchwork.ozlabs.org/patch/181872 [4/9] firefox: installing default extensions needs host-xmlstarlet dependency
-> http://patchwork.ozlabs.org/patch/181875 [5/9] firefox: installing default extensions needs host-unzip dependency
-> http://patchwork.ozlabs.org/patch/181877 [6/9] firefox: Mozilla Web Browser
-> http://patchwork.ozlabs.org/patch/181876 [7/9] firefox: GNU gnash flash plugin needs agg dependency
-> http://patchwork.ozlabs.org/patch/181873 [8/9] firefox: GNU gnash flash plugin needs gconf dependency
-> http://patchwork.ozlabs.org/patch/181878 [9/9] firefox: GNU gnash flash, an open source Adobe Flash player & plugin
+I managed to get this working with modifications and the python fixes
+(which are already in the tree).
+However from what i've seen it doesn't seem useful for anything by
+itself, it's a testing framework with the builtins being pretty
+ubuntu-specific (and requiring a ton of other deps).
+Not sure what to do about it, it's not an out-of-the-box experience, it
+requires extensive tweaking to do anything useful.
 
-I'm proposing to drop those patches. The patches are from September
-2012, and I asked Stefan Froberg in May 2013 whether he was still
-interested
-(http://lists.busybox.net/pipermail/buildroot/2013-May/071410.html),
-and I've got a private answer that said:
+> http://patchwork.ozlabs.org/patch/165542 [V2] p910nd: Add p910nd lightweight printserver
 
-"""
-Well, those patches were for Firefox version 11.0 so it's quite old
-already.
+I'll rebase and give this one a try.
 
-I have a patches for Firefox 16.0 & Firefox 18.0 done but as I
-understand it Firefox is never
-going to be included in buildroot so I did not post them.
+> http://patchwork.ozlabs.org/patch/172171 avahi: only install default.script/S05avahi-setup.sh if not present in fs skeleton
 
-And I have now also unsubscripted from mailing list so I can't post them
-even if
-someone would like to check them.
+I'm generally against initscript conditionals - after all who says it'll
+have the same sequence number or name in the skeleton?
+Post-build script IMHO.
+Otherwise a global option "don't install initscripts" might fit, however
+i've been using the script just fine for ages now.
 
-So, yeah. Those patches can be wiped out.
+> http://patchwork.ozlabs.org/patch/178526 syslinux: fix host build with newer Linux headers
 
-If someone from the list still want's them they can be found from
-http://binarytouch.com/patches/
-(I will put all the rest of my buildroot patches later there after I
-have completed my current project)
-"""
+Version bump might be fitting, it's up to 6.01 now.
 
-So unless anyone objects and steps up to refresh and resubmit those
-patches, I'm proposing to mark those patches as rejected.
+> http://patchwork.ozlabs.org/patch/185522 eaccelerator
+> http://patchwork.ozlabs.org/patch/186837 Add config for PHP eaccelerator package. Signed-off-by: Dallas Clement <dallas.a.clement@gmail.com>
 
-Thanks,
+Not really an embedded-y package, eaccelerator and similar packages like
+xcache are basically intermediate opcode caches for the php
+interpreter/files.
+Basically you set aside an X amount of RAM (in the 2-digit MiB range
+usually) for that and successive hits get a good speed boost because
+they don't need to be re-interpreted again and again.
+This is a feature included in the PHP 5.5.x release, however i doubt
+we'll be bumping soon to it, 5.4.x is a better fit for now since 5.3.x
+is getting unsupported status soon.
+Widely used for big PHP deployments with many page hits - so i'm hmm
+about it and eventually it'll go away with PHP 5.5
+And it's tied up to PHP 5.3.x so it will block a 5.4.x or 5.5.x update
+unless we use the main git branch (no release yet, upstream is somewhat
+dead).
 
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+> http://patchwork.ozlabs.org/patch/196141 uClibc: install libc.so even if BR2_PREFER_STATIC_LIB is enabled
+
+We should really "mv BR2_PREFER_STATIC_LIB BR2_STATIC_BUILD" or so as
+you've mentioned before - you either want or don't (want) a static build.
+
+> http://patchwork.ozlabs.org/patch/198127 automake version update 1.12.4
+
+for-2013.12 i'll revisit bumping automake, at the moment i'd say no, and
+since there are newer versions "deferred" or "superseeded" would be
+appropiate.
+
+> http://patchwork.ozlabs.org/patch/243442 [1/6] package infra: remove CPPFLAGS from CFLAGS
+> http://patchwork.ozlabs.org/patch/243445 [4/6] libcurl: bump to version 7.30.0
+
+These depend on the generic package cleanups and some autotools package
+audits (maybe fixes). I've deferred them already, they're on my TODO
+list and i'll send new appropiate patches when it's done, for-2013.12.
+libcurl security patches are already in the tree so there's no rush.
+
+Regards.
