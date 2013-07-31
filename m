@@ -1,32 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 31 Jul 2013 13:17:28 +0200
-Subject: [Buildroot] [PATCH 1/2] u-boot: remove stale patches and bump
- to 2013.07
-In-Reply-To: <51F8F1BA.6070307@zacarias.com.ar>
-References: <1375268797-11457-1-git-send-email-gustavo@zacarias.com.ar>
- <20130731130942.7f09310a@skate> <51F8F1BA.6070307@zacarias.com.ar>
-Message-ID: <20130731131728.321bad53@skate>
+Date: Wed, 31 Jul 2013 13:49:07 +0200
+Subject: [Buildroot] [git commit] merge assuan
+Message-ID: <20130731114959.21F209AEB9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+commit: http://git.buildroot.net/buildroot/commit/?id=fc8b560d8a6948553aa6396b8f0b784809b2df3d
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 31 Jul 2013 08:15:06 -0300, Gustavo Zacarias wrote:
-> On 07/31/2013 08:09 AM, Thomas Petazzoni wrote:
-> > Are you sure those patches got merged upstream?
-> 
-> Yes, definitely.
+---
+ package/libassuan/libassuan.mk |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-Yes, correct, as of e139cb31d32a4f39241bfd83bf622a97d08f6c9d.
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+diff --git a/package/libassuan/libassuan.mk b/package/libassuan/libassuan.mk
+index 6d4f7e5..5f5378b 100644
+--- a/package/libassuan/libassuan.mk
++++ b/package/libassuan/libassuan.mk
+@@ -7,8 +7,8 @@
+ LIBASSUAN_VERSION = 2.1.1
+ LIBASSUAN_SITE = ftp://ftp.gnupg.org/gcrypt/libassuan/
+ LIBASSUAN_SOURCE = libassuan-$(LIBASSUAN_VERSION).tar.bz2
+-LIBASSUAN_LICENSE = LGPLv2.1+
+-LIBASSUAN_LICENSE_FILES = COPYING.LIB
++LIBASSUAN_LICENSE = LGPLv2.1+ (library), GPLv3 (tests, doc)
++LIBASSUAN_LICENSE_FILES = COPYING.LIB COPYING
+ LIBASSUAN_INSTALL_STAGING = YES
+ LIBASSUAN_DEPENDENCIES = libgpg-error
+ LIBASSUAN_CONF_OPT = \
