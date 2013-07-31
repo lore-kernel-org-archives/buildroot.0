@@ -1,32 +1,39 @@
-From: Nathan Ford <nford@westpond.com>
-Date: Wed, 31 Jul 2013 10:31:53 -0400
-Subject: [Buildroot] [PATCH] Fix building initramfs kernel with appended dtb
-Message-ID: <1375281113-18893-1-git-send-email-nford@westpond.com>
+From: zhou qiang <zhouqiang.search@gmail.com>
+Date: Wed, 31 Jul 2013 23:03:18 +0800
+Subject: [Buildroot] How to login as root without password
+In-Reply-To: <CAAXf6LVa_tJZG8CQw2zUUdyOvMd7TAs5yfdtUtjKG5bcGqhdZw@mail.gmail.com>
+References: <CAHbR41VH17_qSe3T92b=n61_f1a_64jVXy5rNCKaexajmWzt9g@mail.gmail.com>
+ <CAAXf6LXRYRvhWwE-TnM2fnGPMp+s+eEa3oUQtwdatMPxP=vAyA@mail.gmail.com>
+ <CAHbR41WGQDmkVy4TguM7KEO9hf6NpND=wQ1CiUWMgUwhWQRkiQ@mail.gmail.com>
+ <CAAXf6LVa_tJZG8CQw2zUUdyOvMd7TAs5yfdtUtjKG5bcGqhdZw@mail.gmail.com>
+Message-ID: <CAHbR41Xzw1RsrR8ZykwvWjXyP_GKzQRWghTo0hjq2z=sPGsabQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hi , Thomas
 
-Signed-off-by: Nathan Ford <nford@westpond.com>
----
- linux/linux.mk |    3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+We have an internal jffs2 image making process , which requires a pure
+target from buildroot ,
+and follow the steps as below :
 
-diff --git a/linux/linux.mk b/linux/linux.mk
-index 17e9838..9d29d9d 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -311,7 +311,8 @@ endif
- $(LINUX_DIR)/.stamp_initramfs_rebuilt: $(LINUX_DIR)/.stamp_target_installed $(LINUX_DIR)/.stamp_images_installed $(BINARIES_DIR)/rootfs.cpio
- 	@$(call MESSAGE,"Rebuilding kernel with initramfs")
- 	# Build the kernel.
--	$(TARGET_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) $(LINUX_IMAGE_NAME)
-+	$(TARGET_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) $(LINUX_IMAGE_TARGET)
-+	$(LINUX_APPEND_DTB)
- 	# Copy the kernel image to its final destination
- 	cp $(LINUX_IMAGE_PATH) $(BINARIES_DIR)
- 	# If there is a .ub file copy it to the final destination
--- 
-1.7.9.5
+(1) extract rootfs.tar to designated target directory (rootfs) , this is
+done by post-script .
+(2) Adding functional script and application to rootfs .
+(3) make a new jffs2 image
+(4)burn this image to arm board
+
+Of course , if extract rootfs.tar as root , everything works pretty well ,
+busybox login as root .
+But in the server , there is no root permission .
+
+So the issue is how to login as root without "operation of extract
+rootfs.tar as root".
+
+
+Regards ,
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130731/b39c5319/attachment.html>
