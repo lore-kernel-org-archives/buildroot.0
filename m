@@ -1,30 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 31 Jul 2013 18:07:09 +0200
-Subject: [Buildroot] [PATCH v2] libnspr: Add dependency on !BR2_arc
-In-Reply-To: <1375284419-2958-1-git-send-email-mjonker@synopsys.com>
-References: <1375284419-2958-1-git-send-email-mjonker@synopsys.com>
-Message-ID: <20130731180709.14d06593@skate>
+Date: Wed, 31 Jul 2013 18:14:50 +0200
+Subject: [Buildroot] [PATCH 1/3] Add libassuan IPC library
+In-Reply-To: <1362145109-32509-1-git-send-email-claves@budelmann-elektronik.com>
+References: <20130301111856.4753d13b@skate>
+ <1362145109-32509-1-git-send-email-claves@budelmann-elektronik.com>
+Message-ID: <20130731181450.1b0ac7f3@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Mischa Jonker,
+Dear Philipp Claves,
 
-On Wed, 31 Jul 2013 17:26:59 +0200, Mischa Jonker wrote:
-> ARC is not supported yet in libnspr.
-> 
-> v2: Propagate to ecryptfs-utils as well
-> 
-> Signed-off-by: Mischa Jonker <mjonker@synopsys.com>
+On Fri,  1 Mar 2013 14:38:27 +0100, Philipp Claves wrote:
+> Signed-off-by: Philipp Claves <claves@budelmann-elektronik.com>
 > ---
->  package/ecryptfs-utils/Config.in |    1 +
->  package/libnspr/Config.in        |    1 +
->  package/libnss/Config.in         |    1 +
->  3 files changed, 3 insertions(+)
+>  package/Config.in              |  1 +
+>  package/libassuan/Config.in    | 10 ++++++++++
+>  package/libassuan/libassuan.mk | 15 +++++++++++++++
+>  3 files changed, 26 insertions(+)
+>  create mode 100644 package/libassuan/Config.in
+>  create mode 100644 package/libassuan/libassuan.mk
 
-Applied, thanks.
+I finally merged your libassuan, libgpgme and opkg signature support
+patches.
+
+Thanks for your contribution,
 
 Thomas
 -- 
