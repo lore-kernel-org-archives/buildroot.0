@@ -1,35 +1,57 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 31 Jul 2013 13:27:01 -0300
-Subject: [Buildroot] [PATCH] qt5jsbackend: needs ARM v5+
-Message-ID: <1375288021-23307-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Wed, 31 Jul 2013 13:55:57 -0300
+Subject: [Buildroot] [PATCH] libedit: really needs wchar support
+Message-ID: <1375289757-23151-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Just like nodejs and other v8-based javascript engines for ARM interwork
-it needs the BLX instruction which is only available on V5+ cores.
+wctype.h is always included, even in configure tests.
 Fixes:
-http://autobuild.buildroot.net/results/853/853cd29bf427902b2cb82a101964a4e45714cb86/
+http://autobuild.buildroot.net/results/ed8/ed85b9d688ad8389895e3ecd7a6a18151efc328d/
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/qt5/qt5jsbackend/Config.in | 2 ++
- 1 file changed, 2 insertions(+)
+ package/libedit/Config.in  | 4 ++++
+ package/libedit/libedit.mk | 7 -------
+ 2 files changed, 4 insertions(+), 7 deletions(-)
 
-diff --git a/package/qt5/qt5jsbackend/Config.in b/package/qt5/qt5jsbackend/Config.in
-index 2f5ac1f..d9301d0 100644
---- a/package/qt5/qt5jsbackend/Config.in
-+++ b/package/qt5/qt5jsbackend/Config.in
-@@ -2,6 +2,8 @@ config BR2_PACKAGE_QT5JSBACKEND_AVAILABLE
- 	bool
- 	# v8 is only available on certain architectures
- 	depends on BR2_arm || BR2_i386 || BR2_x86_64 || BR2_mipsel
-+	# ARM needs BLX, so v5t+
-+	depends on !(BR2_arm7tdmi || BR2_arm720t || BR2_arm920t || BR2_arm922t || BR2_fa526)
- 	default y
+diff --git a/package/libedit/Config.in b/package/libedit/Config.in
+index 4747a38..c8fcf40 100644
+--- a/package/libedit/Config.in
++++ b/package/libedit/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_LIBEDIT
+ 	bool "libedit"
+ 	select BR2_PACKAGE_NCURSES
++	depends on BR2_USE_WCHAR
+ 	help
+ 	  The editline library (from BSD) provides generic line editing
+ 	  and history functions. It slightly resembles GNU readline.
+@@ -12,3 +13,6 @@ config BR2_PACKAGE_LIBEDIT
+ 	  in Buildroot as it makes it much simpler than using the upstream
+ 	  sources which require pmake:
+ 	  http://www.thrysoee.dk/editline/
++
++comment "libedit requires a toolchain with WCHAR support"
++	depends on !BR2_USE_WCHAR
+diff --git a/package/libedit/libedit.mk b/package/libedit/libedit.mk
+index 6769fdc..c1e8cc7 100644
+--- a/package/libedit/libedit.mk
++++ b/package/libedit/libedit.mk
+@@ -19,11 +19,4 @@ ifeq ($(BR2_PACKAGE_LIBBSD),y)
+ LIBEDIT_DEPENDENCIES   += libbsd
+ endif
  
- config BR2_PACKAGE_QT5JSBACKEND
+-# Wide-char support is not autodetected by configure, we have to help a bit.
+-ifeq ($(BR2_TOOLCHAIN_EXTERNAL_WCHAR),y)
+-LIBEDIT_CONF_OPT       += --enable-widec
+-else
+-LIBEDIT_CONF_OPT       += --disable-widec
+-endif
+-
+ $(eval $(autotools-package))
 -- 
 1.8.1.5
