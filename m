@@ -1,32 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 31 Jul 2013 18:14:50 +0200
-Subject: [Buildroot] [PATCH 1/3] Add libassuan IPC library
-In-Reply-To: <1362145109-32509-1-git-send-email-claves@budelmann-elektronik.com>
-References: <20130301111856.4753d13b@skate>
- <1362145109-32509-1-git-send-email-claves@budelmann-elektronik.com>
-Message-ID: <20130731181450.1b0ac7f3@skate>
+Date: Wed, 31 Jul 2013 18:15:24 +0200
+Subject: [Buildroot] [PATCH] mobile-broadband-provider-info: add license
+ information
+In-Reply-To: <1366011303-30960-1-git-send-email-spdawson@gmail.com>
+References: <1366011303-30960-1-git-send-email-spdawson@gmail.com>
+Message-ID: <20130731181524.1f9a1816@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Philipp Claves,
+Dear spdawson at gmail.com,
 
-On Fri,  1 Mar 2013 14:38:27 +0100, Philipp Claves wrote:
-> Signed-off-by: Philipp Claves <claves@budelmann-elektronik.com>
+On Mon, 15 Apr 2013 08:35:03 +0100, spdawson at gmail.com wrote:
+> From: Simon Dawson <spdawson@gmail.com>
+> 
+> Signed-off-by: Simon Dawson <spdawson@gmail.com>
 > ---
->  package/Config.in              |  1 +
->  package/libassuan/Config.in    | 10 ++++++++++
->  package/libassuan/libassuan.mk | 15 +++++++++++++++
->  3 files changed, 26 insertions(+)
->  create mode 100644 package/libassuan/Config.in
->  create mode 100644 package/libassuan/libassuan.mk
+>  .../mobile_broadband_provider_info.mk                               |    3 +++
+>  1 file changed, 3 insertions(+)
 
-I finally merged your libassuan, libgpgme and opkg signature support
-patches.
-
-Thanks for your contribution,
+Applied, thanks.
 
 Thomas
 -- 
