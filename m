@@ -1,34 +1,32 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 31 Jul 2013 10:31:47 -0300
-Subject: [Buildroot] [PATCH 2/2] strongswan: scripts need charon or tools
-In-Reply-To: <1375277507-30647-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1375277507-30647-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1375277507-30647-2-git-send-email-gustavo@zacarias.com.ar>
+From: Nathan Ford <nford@westpond.com>
+Date: Wed, 31 Jul 2013 10:31:53 -0400
+Subject: [Buildroot] [PATCH] Fix building initramfs kernel with appended dtb
+Message-ID: <1375281113-18893-1-git-send-email-nford@westpond.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-http://autobuild.buildroot.net/results/007/007e75362cbe4693e36d5a7ab96c539d1f3b00fc/
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Nathan Ford <nford@westpond.com>
 ---
- package/strongswan/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+ linux/linux.mk |    3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/strongswan/Config.in b/package/strongswan/Config.in
-index 98f8da2..e8cd1c4 100644
---- a/package/strongswan/Config.in
-+++ b/package/strongswan/Config.in
-@@ -110,6 +110,7 @@ config BR2_PACKAGE_STRONGSWAN_TOOLS
- 
- config BR2_PACKAGE_STRONGSWAN_SCRIPTS
- 	bool "Enable additional utilities (found in directory scripts)"
-+	depends on BR2_PACKAGE_STRONGSWAN_CHARON || BR2_PACKAGE_STRONGSWAN_TOOLS
- 	default y
- 
- endif
+diff --git a/linux/linux.mk b/linux/linux.mk
+index 17e9838..9d29d9d 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -311,7 +311,8 @@ endif
+ $(LINUX_DIR)/.stamp_initramfs_rebuilt: $(LINUX_DIR)/.stamp_target_installed $(LINUX_DIR)/.stamp_images_installed $(BINARIES_DIR)/rootfs.cpio
+ 	@$(call MESSAGE,"Rebuilding kernel with initramfs")
+ 	# Build the kernel.
+-	$(TARGET_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) $(LINUX_IMAGE_NAME)
++	$(TARGET_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) $(LINUX_IMAGE_TARGET)
++	$(LINUX_APPEND_DTB)
+ 	# Copy the kernel image to its final destination
+ 	cp $(LINUX_IMAGE_PATH) $(BINARIES_DIR)
+ 	# If there is a .ub file copy it to the final destination
 -- 
-1.8.1.5
+1.7.9.5
