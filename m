@@ -1,32 +1,30 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 1 Aug 2013 18:09:36 +0200
-Subject: [Buildroot] [PATCH] dtb: provide option to install dtb to boot
- directory
-In-Reply-To: <1356042147-1532-1-git-send-email-bear@bears.org>
-References: <1356042147-1532-1-git-send-email-bear@bears.org>
-Message-ID: <20130801180936.46032aa0@skate>
+Date: Thu, 1 Aug 2013 18:16:26 +0200
+Subject: [Buildroot] List of pending patches: what to do?
+In-Reply-To: <20130731191415.545f7dff@skate>
+References: <20130731191415.545f7dff@skate>
+Message-ID: <20130801181626.2ae885b5@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gary Coulbourne,
+Hello,
 
-On Thu, 20 Dec 2012 17:22:27 -0500, Gary Coulbourne wrote:
-> 
-> Signed-off-by: Gary Coulbourne <bear@bears.org>
-> ---
->  linux/Config.in |    6 ++++++
->  linux/linux.mk  |    7 +++++++
->  2 files changed, 13 insertions(+)
+Thanks to all the people who participated to this thread.
 
-This patch is in fact not needed, because the existing
-BR2_LINUX_KERNEL_INSTALL_TARGET option installs both the kernel image
-and the DTBs to /boot. I've updated the BR2_LINUX_KERNEL_INSTALL_TARGET
-help text to clarify this.
+On Wed, 31 Jul 2013 19:14:15 +0200, Thomas Petazzoni wrote:
 
-Thanks!
+> We currently have 228 pending patches in our patchwork at
+> http://patchwork.ozlabs.org/project/buildroot/list/. Many patches are
+
+As of now, we're down to 198 patches. Do not hesitate to continue to
+comment on patches, or adopt some of them. Even though I'll release
+-rc1 tomorrow, I'll continue to take 'invasive' patches since I'll open
+-next immediately after -rc1 opens.
+
+Thanks,
 
 Thomas
 -- 
