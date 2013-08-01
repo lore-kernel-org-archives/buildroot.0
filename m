@@ -1,34 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 1 Aug 2013 18:00:36 +0200
-Subject: [Buildroot] [PATCHv2] linux: Fix uImage with appended DTs
- generation
-In-Reply-To: <1370611303-5054-1-git-send-email-maxime.ripard@free-electrons.com>
-References: <1370611303-5054-1-git-send-email-maxime.ripard@free-electrons.com>
-Message-ID: <20130801180036.79e8cee1@skate>
+Date: Thu, 1 Aug 2013 18:00:55 +0200
+Subject: [Buildroot] [PATCH v2] Fix building initramfs kernel with
+ appended dtb
+In-Reply-To: <1375285656-24907-1-git-send-email-nford@westpond.com>
+References: <1375285656-24907-1-git-send-email-nford@westpond.com>
+Message-ID: <20130801180055.3875450d@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Maxime Ripard,
+Dear Nathan Ford,
 
-On Fri,  7 Jun 2013 15:21:43 +0200, Maxime Ripard wrote:
-> Fixes bug #5516 - appended device tree blobs on uImage fails
+On Wed, 31 Jul 2013 11:47:36 -0400, Nathan Ford wrote:
+> The target for building the kernel with a cpio initramfs is not
+> calling the append dtb commands, creating a final kernel image
+> without an appended dtb. Instead it needs to call kernel make on
+> the intermediate target, then call the append dtb commands
+> to produce the final image as the primary kernel build target
+> does.
 > 
-> Before version 3.7 of the kernel, building the zImage and then the
-> uImage will rewrite the zImage in the process, removing the device tree
-> we just appended.
-> 
-> Use mkimage to append the device tree to the uImage and rebuild the
-> headers directly.
-> 
-> Signed-off-by: Maxime Ripard <maxime.ripard@free-electrons.com>
+> Signed-off-by: Nathan Ford <nford@westpond.com>
 > ---
->  linux/linux.mk | 21 +++++++++++----------
->  1 file changed, 11 insertions(+), 10 deletions(-)
+>  linux/linux.mk |    3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
 
-Applied, thanks.
+Applied, thanks!
 
 Thomas
 -- 
