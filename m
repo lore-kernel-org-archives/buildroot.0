@@ -1,78 +1,22 @@
-From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Thu, 01 Aug 2013 22:55:48 +0200
-Subject: [Buildroot] [PATCH 2 of 2 v2] xzcat: treat as host prerequisite and
- build if needed
-In-Reply-To: <patchbomb.1375390546@BEANTN0L019720>
-References: <patchbomb.1375390546@BEANTN0L019720>
-Message-ID: <52af7a955a6bb1781ace.1375390548@BEANTN0L019720>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu,  1 Aug 2013 21:19:10 +0000 (UTC)
+Subject: [Buildroot] [Bug 6410] omap3_beagle has uimage error load address
+	error
+In-Reply-To: <bug-6410-163@https.bugs.busybox.net/>
+References: <bug-6410-163@https.bugs.busybox.net/>
+Message-ID: <20130801211910.AB5029AF77@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-If xzcat is not present on the host system, buildroot bails out early asking
-the developer to install it (xzcat is now a DL_TOOLS_DEPENDENCY)
-Conversely, when BR2_TARGET_ROOTFS_CPIO_XZ is enabled, then host-xz is a
-build dependency, and no manual action is required from the developer.
+https://bugs.busybox.net/show_bug.cgi?id=6410
 
-Because the second approach is nicer, also build host-xz when xzcat is not
-available, using the host-prerequisite and suitable-host-pkg mechanisms,
-already used for tar.
+--- Comment #1 from Hans Stimer <hans.stimer@gmail.com> 2013-08-01 21:19:34 UTC ---
+I tried with the 2013.05 version and I get the same error.
 
-Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-
----
-v2: avoid filtering out xzcat from DL_TOOLS_DEPENDENCIES (comment ThomasP)
-
- package/pkg-generic.mk                   |   4 ++++
- support/dependencies/check-host-xzcat.mk |   7 +++++++
- support/dependencies/check-host-xzcat.sh |  14 ++++++++++++++
- 3 files changed, 25 insertions(+), 0 deletions(-)
-
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -539,7 +539,11 @@ else ifeq ($$($(2)_SITE_METHOD),hg)
- DL_TOOLS_DEPENDENCIES += hg
- endif # SITE_METHOD
- 
-+# Do not add xzcat to the list of required dependencies, as it gets
-+# built automatically if it isn't found.
-+ifneq ($(call suitable-extractor,$($(2)_SOURCE)),$(XZCAT))
- DL_TOOLS_DEPENDENCIES += $(call suitable-extractor,$($(2)_SOURCE))
-+endif
- 
- endif # $(2)_KCONFIG_VAR
- endef # inner-generic-package
-diff --git a/support/dependencies/check-host-xzcat.mk b/support/dependencies/check-host-xzcat.mk
-new file mode 100644
---- /dev/null
-+++ b/support/dependencies/check-host-xzcat.mk
-@@ -0,0 +1,7 @@
-+# XZCAT is taken from BR2_XZCAT (defaults to 'xzcat') (see Makefile)
-+# If it is not present, build our own host-xzcat
-+
-+ifeq (,$(call suitable-host-package,xzcat,$(XZCAT)))
-+  DEPENDENCIES_HOST_PREREQ += host-xz
-+  XZCAT = $(HOST_DIR)/usr/bin/xzcat
-+endif
-diff --git a/support/dependencies/check-host-xzcat.sh b/support/dependencies/check-host-xzcat.sh
-new file mode 100755
---- /dev/null
-+++ b/support/dependencies/check-host-xzcat.sh
-@@ -0,0 +1,14 @@
-+#!/bin/sh
-+
-+candidate="$1"
-+
-+xzcat=`which $candidate 2>/dev/null`
-+if [ ! -x "$xzcat" ]; then
-+	xzcat=`which xzcat 2>/dev/null`
-+	if [ ! -x "$xzcat" ]; then
-+		# echo nothing: no suitable xzcat found
-+		exit 1
-+	fi
-+fi
-+
-+echo $xzcat
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
