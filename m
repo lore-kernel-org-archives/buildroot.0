@@ -1,39 +1,75 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 1 Aug 2013 17:38:44 +0200
-Subject: [Buildroot] [git commit] Fix building initramfs kernel with
-	appended dtb
-Message-ID: <20130801155755.D709D99C90@busybox.osuosl.org>
+Date: Thu, 1 Aug 2013 17:38:41 +0200
+Subject: [Buildroot] [git commit] linux: Fix uImage with appended DTs
+	generation
+Message-ID: <20130801155755.CBC839AF8C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1ac04c321f892f6b93c0fb548b34be85f8426dc8
+commit: http://git.buildroot.net/buildroot/commit/?id=ae86a3c5331f47c4a5093a5ea8f7e53408a6ea98
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The target for building the kernel with a cpio initramfs is not
-calling the append dtb commands, creating a final kernel image
-without an appended dtb. Instead it needs to call kernel make on
-the intermediate target, then call the append dtb commands
-to produce the final image as the primary kernel build target
-does.
+Fixes bug #5516 - appended device tree blobs on uImage fails
 
-Signed-off-by: Nathan Ford <nford@westpond.com>
+Before version 3.7 of the kernel, building the zImage and then the
+uImage will rewrite the zImage in the process, removing the device tree
+we just appended.
+
+Use mkimage to append the device tree to the uImage and rebuild the
+headers directly.
+
+Signed-off-by: Maxime Ripard <maxime.ripard@free-electrons.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- linux/linux.mk |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+ linux/linux.mk |   21 +++++++++++----------
+ 1 files changed, 11 insertions(+), 10 deletions(-)
 
 diff --git a/linux/linux.mk b/linux/linux.mk
-index 780d6d5..fc379ec 100644
+index 17e9838..780d6d5 100644
 --- a/linux/linux.mk
 +++ b/linux/linux.mk
-@@ -313,6 +313,7 @@ $(LINUX_DIR)/.stamp_initramfs_rebuilt: $(LINUX_DIR)/.stamp_target_installed $(LI
- 	@$(call MESSAGE,"Rebuilding kernel with initramfs")
- 	# Build the kernel.
- 	$(TARGET_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) $(LINUX_IMAGE_NAME)
-+	$(LINUX_APPEND_DTB)
- 	# Copy the kernel image to its final destination
- 	cp $(LINUX_IMAGE_PATH) $(BINARIES_DIR)
- 	# If there is a .ub file copy it to the final destination
+@@ -106,12 +106,6 @@ ifneq ($(LINUX_KERNEL_UIMAGE_LOADADDR),)
+ LINUX_MAKE_FLAGS+=LOADADDR="$(LINUX_KERNEL_UIMAGE_LOADADDR)"
+ endif
+ 
+-ifeq ($(BR2_LINUX_KERNEL_APPENDED_DTB),y)
+-LINUX_IMAGE_TARGET=zImage
+-else
+-LINUX_IMAGE_TARGET=$(LINUX_IMAGE_NAME)
+-endif
+-
+ # Compute the arch path, since i386 and x86_64 are in arch/x86 and not
+ # in arch/$(KERNEL_ARCH). Even if the kernel creates symbolic links
+ # for bzImage, arch/i386 and arch/x86_64 do not exist when copying the
+@@ -226,9 +220,16 @@ define LINUX_APPEND_DTB
+ 	fi >> $(KERNEL_ARCH_PATH)/boot/zImage
+ endef
+ ifeq ($(BR2_LINUX_KERNEL_APPENDED_UIMAGE),y)
+-# We need to generate the uImage here after that so that the uImage is
+-# generated with the right image size.
+-LINUX_APPEND_DTB += $(sep)$(TARGET_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) uImage
++# We need to generate a new u-boot image that takes into
++# account the extra-size added by the device tree at the end
++# of the image. To do so, we first need to retrieve both load
++# address and entry point for the kernel from the already
++# generate uboot image before using mkimage -l.
++LINUX_APPEND_DTB += $(sep) MKIMAGE_ARGS=`$(HOST_DIR)/usr/bin/mkimage -l $(LINUX_IMAGE_PATH) |\
++        sed -n -e 's/Image Name:[ ]*\(.*\)/-n \1/p' -e 's/Load Address:/-a/p' -e 's/Entry Point:/-e/p'`; \
++        $(HOST_DIR)/usr/bin/mkimage -A $(KERNEL_ARCH) -O linux \
++        -T kernel -C none $${MKIMAGE_ARGS} \
++        -d $(KERNEL_ARCH_PATH)/boot/zImage $(LINUX_IMAGE_PATH);
+ endif
+ endif
+ 
+@@ -237,7 +238,7 @@ endif
+ define LINUX_BUILD_CMDS
+ 	$(if $(BR2_LINUX_KERNEL_USE_CUSTOM_DTS),
+ 		cp $(BR2_LINUX_KERNEL_CUSTOM_DTS_PATH) $(KERNEL_ARCH_PATH)/boot/dts/)
+-	$(TARGET_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) $(LINUX_IMAGE_TARGET)
++	$(TARGET_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) $(LINUX_IMAGE_NAME)
+ 	@if grep -q "CONFIG_MODULES=y" $(@D)/.config; then 	\
+ 		$(TARGET_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) modules ;	\
+ 	fi
