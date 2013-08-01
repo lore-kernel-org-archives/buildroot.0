@@ -1,132 +1,178 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 1 Aug 2013 18:23:11 +0200
-Subject: [Buildroot] List of pending patches: what to do?
-In-Reply-To: <CAHXCMMJ63sJ=m5V1c5+TqOn8TfdBop20gzDHjL85Ks1rYYU+-g@mail.gmail.com>
-References: <20130731191415.545f7dff@skate>
- <CAHXCMMJ63sJ=m5V1c5+TqOn8TfdBop20gzDHjL85Ks1rYYU+-g@mail.gmail.com>
-Message-ID: <20130801182311.6bb6e57e@skate>
+From: Charles Krinke <charles.krinke@gmail.com>
+Date: Thu, 1 Aug 2013 10:14:30 -0700
+Subject: [Buildroot] Using the new Ti-gfx with Qt5
+In-Reply-To: <20130801073520.622bf499@skate>
+References: <CALo-6+jacTWNK9aO4FFCUDAyNtSED5wy3q+hMSvFWM3Jciafdw@mail.gmail.com>
+ <20130801073520.622bf499@skate>
+Message-ID: <CALo-6+gxOM0m2fztO-Xu58Jq0mhZKgqC-2uj_M27Ooy242vfPA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Samuel Martin,
+Dear Thomas:
 
-On Thu, 1 Aug 2013 00:13:35 +0200, Samuel Martin wrote:
+Thank you for your kind words as usual as I try to understand the new
+additions to buildroot.
 
-> 2013/7/31 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>:
-> 
-> > http://patchwork.ozlabs.org/patch/243426 Fix bug with dependencies of *-rebuild and *-reconfigure
-> > http://patchwork.ozlabs.org/patch/172278 pkg-infra: limit -reconfigure and -rebuild actions
-> Both treat the same thing!
-> A "political decision" has to be made on this since it slightly
-> changes the way some BR commands work.
+I did find in "hardware handling" an enable for ti-gfx and enabled it
+along with the kernel and was able to get all the way to the
+compilation of the ti-gfx stuff until it errored in compilation.
 
-Can we have a decision on those ones?
+So, at this point, I cannot quite tell if this is a mis-configuration
+or a missing patch in the ti-gfx stuff.
 
-On my side, I kind of like the fact that 'make blabla-rebuild' both
-rebuilds the blabla package and regenerates the root filesystem. It
-avoids the need for 'make blabla-rebuild && make'. However, it's true
-that it's inconsistent with 'make blabla-dirclean', which just removes
-the build directory, and therefore requires a 'make blabla-dirclean &&
-make' if you want to completely rebuild a package from scratch.
+I did get this all working 2 months ago with some hand tweaking before
+Spenser added his patches and am circling back to test the new stuff
+to see if I can move to it.
 
-> > http://patchwork.ozlabs.org/patch/172506 [01/11] libgpg-error: add optional nls support
-> To be dropped, nobody needs it.
+I am including the .config file currently being used with the
+buildroot-20130731 test for reference. I totally understand you are
+very busy keeping all the rest of this together so I will keep
+studying in the background and look forward to any advice you can
+offer.
 
-Done.
+Charles
 
 
-> > http://patchwork.ozlabs.org/patch/200889 [04/33] igh-ethercat: disable drivers build with kernel 3.6
-> > http://patchwork.ozlabs.org/patch/200896 [05/33] imagemagick: explicitly disable c++ support if no c++ compiler available
-> > http://patchwork.ozlabs.org/patch/200909 [20/33] pkg-download.mk: add tarball check in the wget method
-> > http://patchwork.ozlabs.org/patch/204804 flite: new package
-> > http://patchwork.ozlabs.org/patch/204806 libcanfestival: new package
-> Still in my stack.
-> Postponed to the next release.
 
-Does this mean I can mark them as 'Deferred' in patchwork, trusting you
-to resubmit them later? Or should I keep them around in patchwork just
-to remind us (you and the community) that they need to be finalized and
-merged?
+make[1]: Leaving directory
+`/home/ckrinke/buildroot-20130731/output/build/linux-3.10.4'
+# Installing dtc (device tree compiler) as host tool, if selected
+if grep -q "CONFIG_DTC=y"
+/home/ckrinke/buildroot-20130731/output/build/linux-3.10.4/.config;
+then /usr/bin/install -D -m 0755
+/home/ckrinke/buildroot-20130731/output/build/linux-3.10.4/scripts/dtc/dtc
+/home/ckrinke/buildroot-20130731/output/host/usr/bin/dtc ; fi
+>>> linux 3.10.4 Installing to images directory
+cp /home/ckrinke/buildroot-20130731/output/build/linux-3.10.4/vmlinux
+/home/ckrinke/buildroot-20130731/output/images
+>>> ti-gfx 4_09_00_01 Configuring
+>>> ti-gfx 4_09_00_01 Building
+/usr/bin/make -j9 HOSTCC="/usr/bin/gcc" HOSTCFLAGS="" ARCH=arm
+INSTALL_MOD_PATH=/home/ckrinke/buildroot-20130731/output/target
+CROSS_COMPILE="
+/home/ckrinke/buildroot-20130731/output/host/usr/bin/arm-arago-linux-gnueabi-"
+DEPMOD=/home/ckrinke/buildroot-20130731/output/host/usr/sbin/depmod
+BUILD=debug TI_PLATFORM=omap3 OMAPES=3.x SUPPORT_XORG=0
+KERNELDIR=/home/ckrinke/buildroot-20130731/output/build/linux-3.10.4
+-C /home/ckrinke/buildroot-20130731/output/build/ti-gfx-4_09_00_01/GFX_Linux_KM
+all
+make[1]: Entering directory
+`/home/ckrinke/buildroot-20130731/output/build/ti-gfx-4_09_00_01/GFX_Linux_KM'
+/usr/bin/make -C
+/home/ckrinke/buildroot-20130731/output/build/linux-3.10.4 M=`pwd`
+make[2]: Entering directory
+`/home/ckrinke/buildroot-20130731/output/build/linux-3.10.4'
+  CC [M]  /home/ckrinke/buildroot-20130731/output/build/ti-gfx-4_09_00_01/GFX_Linux_KM/services4/srvkm/common/queue.o
+  LD      /home/ckrinke/buildroot-20130731/output/build/ti-gfx-4_09_00_01/GFX_Linux_KM/services4/3rdparty/bufferclass_ti/built-in.o
+  LD      /home/ckrinke/buildroot-20130731/output/build/ti-gfx-4_09_00_01/GFX_Linux_KM/services4/3rdparty/dc_omapfb3_linux/built-in.o
+  CC [M]  /home/ckrinke/buildroot-20130731/output/build/ti-gfx-4_09_00_01/GFX_Linux_KM/services4/3rdparty/dc_omapfb3_linux/omaplfb_displayclass.o
+  CC [M]  /home/ckrinke/buildroot-20130731/output/build/ti-gfx-4_09_00_01/GFX_Linux_KM/services4/srvkm/common/hash.o
+  CC [M]  /home/ckrinke/buildroot-20130731/output/build/ti-gfx-4_09_00_01/GFX_Linux_KM/services4/3rdparty/bufferclass_ti/bc_cat.o
+  CC [M]  /home/ckrinke/buildroot-20130731/output/build/ti-gfx-4_09_00_01/GFX_Linux_KM/services4/srvkm/common/perproc.o
+  CC [M]  /home/ckrinke/buildroot-20130731/output/build/ti-gfx-4_09_00_01/GFX_Linux_KM/services4/3rdparty/dc_omapfb3_linux/omaplfb_linux.o
+  CC [M]  /home/ckrinke/buildroot-20130731/output/build/ti-gfx-4_09_00_01/GFX_Linux_KM/services4/srvkm/common/mem.o
+  CC [M]  /home/ckrinke/buildroot-20130731/output/build/ti-gfx-4_09_00_01/GFX_Linux_KM/services4/srvkm/common/power.o
+  CC [M]  /home/ckrinke/buildroot-20130731/output/build/ti-gfx-4_09_00_01/GFX_Linux_KM/services4/srvkm/common/deviceclass.o
+  CC [M]  /home/ckrinke/buildroot-20130731/output/build/ti-gfx-4_09_00_01/GFX_Linux_KM/services4/srvkm/common/metrics.o
+  LD [M]  /home/ckrinke/buildroot-20130731/output/build/ti-gfx-4_09_00_01/GFX_Linux_KM/services4/3rdparty/dc_omapfb3_linux/omaplfb.o
+  LD [M]  /home/ckrinke/buildroot-20130731/output/build/ti-gfx-4_09_00_01/GFX_Linux_KM/services4/3rdparty/bufferclass_ti/bufferclass_ti.o
+  CC [M]  /home/ckrinke/buildroot-20130731/output/build/ti-gfx-4_09_00_01/GFX_Linux_KM/services4/srvkm/common/resman.o
+  CC [M]  /home/ckrinke/buildroot-20130731/output/build/ti-gfx-4_09_00_01/GFX_Linux_KM/services4/srvkm/common/buffer_manager.o
+  CC [M]  /home/ckrinke/buildroot-20130731/output/build/ti-gfx-4_09_00_01/GFX_Linux_KM/services4/srvkm/common/pvrsrv.o
+  CC [M]  /home/ckrinke/buildroot-20130731/output/build/ti-gfx-4_09_00_01/GFX_Linux_KM/services4/srvkm/common/handle.o
+  CC [M]  /home/ckrinke/buildroot-20130731/output/build/ti-gfx-4_09_00_01/GFX_Linux_KM/services4/srvkm/common/lists.o
+  CC [M]  /home/ckrinke/buildroot-20130731/output/build/ti-gfx-4_09_00_01/GFX_Linux_KM/services4/srvkm/common/ra.o
+  CC [M]  /home/ckrinke/buildroot-20130731/output/build/ti-gfx-4_09_00_01/GFX_Linux_KM/services4/srvkm/common/devicemem.o
+In file included from
+/home/ckrinke/buildroot-20130731/output/build/ti-gfx-4_09_00_01/GFX_Linux_KM/services4/srvkm/common/queue.c:75:0:
+/home/ckrinke/buildroot-20130731/output/build/ti-gfx-4_09_00_01/GFX_Linux_KM/services4/srvkm/env/linux/proc.h:84:48:
+error: expected declaration specifiers or '...' before 'read_proc_t'
+/home/ckrinke/buildroot-20130731/output/build/ti-gfx-4_09_00_01/GFX_Linux_KM/services4/srvkm/env/linux/proc.h:84:70:
+error: expected declaration specifiers or '...' before 'write_proc_t'
+/home/ckrinke/buildroot-20130731/output/build/ti-gfx-4_09_00_01/GFX_Linux_KM/services4/srvkm/env/linux/proc.h:86:58:
+error: expected declaration specifiers or '...' before 'read_proc_t'
+/home/ckrinke/buildroot-20130731/output/build/ti-gfx-4_09_00_01/GFX_Linux_KM/services4/srvkm/env/linux/proc.h:86:80:
+error: expected declaration specifiers or '...' before 'write_proc_t'
+/home/ckrinke/buildroot-20130731/output/build/ti-gfx-4_09_00_01/GFX_Linux_KM/services4/srvkm/env/linux/proc.h:110:9:
+error: expected declaration specifiers or '...' before 'write_proc_t'
+/home/ckrinke/buildroot-20130731/output/build/ti-gfx-4_09_00_01/GFX_Linux_KM/services4/srvkm/env/linux/proc.h:120:9:
+error: expected declaration specifiers or '...' before 'write_proc_t'
+make[3]: *** [/home/ckrinke/buildroot-20130731/output/build/ti-gfx-4_09_00_01/GFX_Linux_KM/services4/srvkm/c
 
-> > http://patchwork.ozlabs.org/patch/208801 [3/8] package/Makefile.in: update/fix HOST_PATH variable
-> > http://patchwork.ozlabs.org/patch/208802 [4/8] package/pkg-cmake.mk: make sure $(HOST_PATH) is in the PATH at configure time
-> Still in my stack.
-> Part of some infra cleanup.
-> Postponed to the next release.
+On 7/31/13, Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
+> Dear Charles Krinke,
+>
+> On Wed, 31 Jul 2013 13:26:20 -0700, Charles Krinke wrote:
+>> I am trying to get ti-gfx to configure with last nights build, that
+>> is, buildroot-20130731.
+>>
+>> I see enabling the kernel compile is necessary and I assume
+>> "omap2plus_defconfig" is appropriate for an AM3517EVM board.
+>>
+>> I am having trouble finding the combination of settings to get
+>> buildroot to configure OPENGL_ES and OPENGL_EGL so that ti-gfx will
+>> become operational.
+>>
+>> Would someone be willing to give me a pointer on the error of my ways,
+>> please
+>
+> A defconfig as below should work (for just ti-gfx, qt5 is not enabled) :
+>
+> BR2_arm=y
+> BR2_cortex_a8=y
+> BR2_TOOLCHAIN_EXTERNAL=y
+> BR2_TOOLCHAIN_EXTERNAL_ARAGO_ARMV7A_201109=y
+> BR2_PACKAGE_TI_GFX=y
+> BR2_LINUX_KERNEL=y
+> BR2_LINUX_KERNEL_DEFCONFIG="omap2plus_defconfig"
+>
+> The critical part for ti-gfx is that you need to have a (e)glibc
+> toolchain, not an uClibc toolchain.
+>
+> Remember that you can discover dependencies of packages by searching
+> them in menuconfig using '/', and typing the package name. This would
+> give you the following information:
+>
+> Symbol: BR2_PACKAGE_TI_GFX [=n]
+>   ? Type  : boolean
+>   ? Prompt: ti-gfx
+>   ?   Defined at package/ti-gfx/Config.in:1
+>   ?   Depends on: BR2_LINUX_KERNEL [=n] && BR2_TOOLCHAIN_USES_GLIBC [=n] &&
+> BR2_arm [=y]
+>   ?   Location:
+>   ?     -> Package Selection for the target
+>   ? (6)   -> Hardware handling
+>   ?   Selects: BR2_PACKAGE_HAS_OPENGL_EGL [=n] && BR2_PACKAGE_HAS_OPENGL_ES
+> [=n] && BR2_PACKAGE_HAS_POWERVR [=n]
+>
+> This tells you that the ti-gfx package is available only on ARM (which
+> is already selected), requires a Linux kernel to be built (not selected
+> yet) and a toolchain based on glibc (not selected yet).
+>
+> As far as Qt5 is concerned, I got it running on top of ti-gfx, but I
+> don't remember if patches were needed. I can dig through my archives if
+> you're interested.
+>
+> Best regards,
+>
+> Thomas
+> --
+> Thomas Petazzoni, Free Electrons
+> Kernel, drivers, real-time and embedded Linux
+> development, consulting, training and support.
+> http://free-electrons.com
+>
 
-Same question as above.
 
-> 
-> > http://patchwork.ozlabs.org/patch/208803 [5/8] dependencies: build a host python2 if no suitable one can be found
-> > http://patchwork.ozlabs.org/patch/208804 [6/8] scons: add host-python2-if-needed dependency
-> > http://patchwork.ozlabs.org/patch/208805 [7/8] scons: ensure $(HOST_DIR)/usr/bin is in the PATH when invoking $(SCONS)
-> > http://patchwork.ozlabs.org/patch/208806 [8/8] manual: add host python2 dependency section
-> Still in my stack.
-> Part of some infra cleanup.
-> If nobody but me cares about this, then I don't mind dropping them;
-> I'll keep them locally.
-
-Same question as above.
-
-> > http://patchwork.ozlabs.org/patch/214943 [1/1] Documentation update : add tips to build manual, add information about buildroot toolchain not being relocable and put some hints to use it, move the Beyond Buildroot section before FAQs and add content
-> > http://patchwork.ozlabs.org/patch/216485 Docu: Add LIBFOO_EXTRACT_CMDS
-> > http://patchwork.ozlabs.org/patch/232024 [1/1] manual: add patch revision and versioning section
-> Doc/manual: need review/respin/rebase imho. Can wait for the next release cycle.
-
-Documentation stuff can be merged after -rc1, so it'd be great to
-clean that up now and get it merged during the -rc cycle.
-
-> > http://patchwork.ozlabs.org/patch/230289 [v2] Enable ccache for cmake packages
-> > http://patchwork.ozlabs.org/patch/243442 [1/6] package infra: remove CPPFLAGS from CFLAGS
-> Part of some cleanup I have in my stack and I'd like to do for the next release.
-
-Same question as above (should I mark as Deferred or keep in patchwork
-as a reminder).
-
-> > http://patchwork.ozlabs.org/patch/244409 [1/1] libtirpc: requires toolchain with threads support
-> Fixes autobuilders, and is the v2 of a patch, including comments from
-> the 1st submission.
-
-Ah, yes, I didn't like the fact of adding a thread dependency to
-libtirpc, but I think I should like it. This is really a bug fix, so
-can always be merged after -rc1 is released.
-
-> > http://patchwork.ozlabs.org/patch/182233 Depend autotools targets on host-ccache when BR2_CCACHE is enabled.
-> > http://patchwork.ozlabs.org/patch/256744 tar: avoid ccache chicken and egg problem when bootstrapping tar
-> > http://patchwork.ozlabs.org/patch/257372 [1/3] infra: make possible to run 'make *-menuconfig' from a clean output dir
-> ccache chicken-egg issue that need to be carefully handled.
-> 
-> > http://patchwork.ozlabs.org/patch/257374 [2/3] crosstool-ng: remove unneed explicit ccache dependency
-> > http://patchwork.ozlabs.org/patch/257375 [3/3] sstrip: remove unneed explicit ccache dependency
-> Few more ccache cleanups after the previous issue is fixed.
-
-Discussion started with Thomas De Schampheleire today about this.
-
-> > http://patchwork.ozlabs.org/patch/257376 [1/3] qt{4, 5}: add an explicit choice to express Buildroot does not support their coexistence
-> > http://patchwork.ozlabs.org/patch/257377 [2/3] manual: add faq entry explaining why Buildroot does not support Qt{4, 5} coexistence
-> > http://patchwork.ozlabs.org/patch/257378 [3/3] opencv: bump version to 2.4.6
-> Still in my stack.
-> I will rework them during the next release cycle.
-
-Same question as above. I'm not sure a FAQ entry is a good choice,
-maybe a
-
-comment "qt5 is not available when qt4 is selected"
-	depends on BR2_PACKAGE_QT
-
-comment "qt4 is not available when qt5 is selected"
-	depend son BR2_PACKAGE_QT5
-
-is probably a better idea.
-
-Thanks!
-
-Thomas
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Charles Krinke
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: ti.config
+Type: application/octet-stream
+Size: 33894 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130801/a85cdaef/attachment-0001.obj>
