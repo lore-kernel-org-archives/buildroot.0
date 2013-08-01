@@ -1,56 +1,105 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 1 Aug 2013 16:31:25 +0200
-Subject: [Buildroot] host-gettext build failure (emacs dependency?)
-In-Reply-To: <CAAXf6LVsJ6uZbeiRPHcru+Q0J8J2+Xn5ixsTCe4LNZpOm1e67Q@mail.gmail.com>
-References: <CAAXf6LVsJ6uZbeiRPHcru+Q0J8J2+Xn5ixsTCe4LNZpOm1e67Q@mail.gmail.com>
-Message-ID: <20130801163125.142e2fce@skate>
+Date: Thu, 1 Aug 2013 17:18:00 +0200
+Subject: [Buildroot] [git commit] dropwatch: fix build failure with binutils
+	2.23.1+
+Message-ID: <20130801151900.46DA39AF7C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas De Schampheleire,
+commit: http://git.buildroot.net/buildroot/commit/?id=a8dd2241e615dd590fb1b96f816b8ad9e2f7a080
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 1 Aug 2013 15:58:06 +0200, Thomas De Schampheleire wrote:
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ ...ch-1.4-build.patch => dropwatch-01-build.patch} |    0
+ .../dropwatch/dropwatch-02-binutils-2.23.1.patch   |   74 ++++++++++++++++++++
+ 2 files changed, 74 insertions(+), 0 deletions(-)
 
-> But more generally, I wonder why host-gettext needs/uses emacs at all.
-> The target gettext already disables several things:
-> GETTEXT_CONF_OPT += \
->         --disable-libasprintf \
->         --disable-acl \
->         --disable-openmp \
->         --disable-rpath \
->         --disable-java \
->         --disable-native-java \
->         --disable-csharp \
->         --disable-relocatable \
->         --without-emacs
-> 
-> but the host-gettext seems to be full. Do we really need e.g. emacs
-> support for host-gettext? What about csharp, java, native-java?
-
-Hum:
-
-HOST_GETTEXT_CONF_OPT = \
-        --disable-libasprintf \
-        --disable-acl \
-        --disable-openmp \
-        --disable-rpath \
-        --disable-java \
-        --disable-native-java \
-        --disable-csharp \
-        --disable-relocatable \
-        --without-emacs
-
-So we also disable Emacs support and lots of other stuff.
-
-I guess you don't have 0d4133edfedd8ca641db39d3eec9dc7146c8fa4e, which
-has been merged post 2013.05.
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+diff --git a/package/dropwatch/dropwatch-1.4-build.patch b/package/dropwatch/dropwatch-01-build.patch
+similarity index 100%
+rename from package/dropwatch/dropwatch-1.4-build.patch
+rename to package/dropwatch/dropwatch-01-build.patch
+diff --git a/package/dropwatch/dropwatch-02-binutils-2.23.1.patch b/package/dropwatch/dropwatch-02-binutils-2.23.1.patch
+new file mode 100644
+index 0000000..4d43356
+--- /dev/null
++++ b/package/dropwatch/dropwatch-02-binutils-2.23.1.patch
+@@ -0,0 +1,74 @@
++libbfd from binutils 2.23.1+ requires PACKAGE* definitions from autoconf.
++Patch from https://fedorahosted.org/dropwatch/ticket/5
++Upstream status: new.
++
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++
++diff -aurd src.orig/lookup.c src/lookup.c
++--- a/src/lookup.c	2011-10-03 22:51:38.000000000 +0400
+++++ b/src/lookup.c	2013-02-18 09:13:56.683214438 +0400
++@@ -27,13 +27,13 @@
++ #include <stdlib.h>
++ #include <stdio.h>
++ #include <sys/utsname.h>
++-#include <bfd.h>
++ #include <string.h>
++ #include <unistd.h>
++ #include <sys/types.h>
++ #include <sys/stat.h>
++
++ #include "lookup.h"
+++#include <bfd.h>
++
++ extern struct lookup_methods bfd_methods;
++ extern struct lookup_methods kallsym_methods;
++diff -aurd src.orig/lookup.h src/lookup.h
++--- a/src/lookup.h	2011-10-03 22:51:38.000000000 +0400
+++++ b/src/lookup.h	2013-02-18 09:11:00.506895026 +0400
++@@ -28,6 +28,9 @@
++ #include <stdlib.h>
++ #include <asm/types.h>
++
+++// satisfy PR 14072 in bfd.h
+++#define PACKAGE 1
+++#define PACKAGE_VERSION 1
++
++ /*
++  * Initalization routine
++diff -aurd src.orig/lookup_bfd.c src/lookup_bfd.c
++--- a/src/lookup_bfd.c	2012-01-16 22:34:11.000000000 +0400
+++++ b/src/lookup_bfd.c	2013-02-18 09:14:02.472984310 +0400
++@@ -25,13 +25,13 @@
++ #include <stdlib.h>
++ #include <stdio.h>
++ #include <sys/utsname.h>
++-#include <bfd.h>
++ #include <string.h>
++ #include <unistd.h>
++ #include <sys/types.h>
++ #include <sys/stat.h>
++
++ #include "lookup.h"
+++#include <bfd.h>
++
++
++ static int lookup_bfd_init(void)
++diff -aurd src.orig/lookup_kas.c src/lookup_kas.c
++--- a/src/lookup_kas.c	2012-05-31 02:43:23.000000000 +0400
+++++ b/src/lookup_kas.c	2013-02-18 09:14:07.906101713 +0400
++@@ -25,7 +25,6 @@
++ #include <stdlib.h>
++ #include <stdio.h>
++ #include <sys/utsname.h>
++-#include <bfd.h>
++ #include <string.h>
++ #include <unistd.h>
++ #include <sys/types.h>
++@@ -33,6 +32,7 @@
++ #include <sys/queue.h>
++
++ #include "lookup.h"
+++#include <bfd.h>
++
++ struct symbol_entry {
++ 	char *sym_name;
