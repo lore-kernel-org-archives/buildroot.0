@@ -1,29 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 1 Aug 2013 18:00:13 +0200
-Subject: [Buildroot] [PATCH 1/2] dropwatch: fix build failure with
- binutils 2.23.1+
-In-Reply-To: <1375298801-18548-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1375298801-18548-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20130801180013.6e7fc454@skate>
+Date: Thu, 1 Aug 2013 18:00:36 +0200
+Subject: [Buildroot] [PATCHv2] linux: Fix uImage with appended DTs
+ generation
+In-Reply-To: <1370611303-5054-1-git-send-email-maxime.ripard@free-electrons.com>
+References: <1370611303-5054-1-git-send-email-maxime.ripard@free-electrons.com>
+Message-ID: <20130801180036.79e8cee1@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+Dear Maxime Ripard,
 
-On Wed, 31 Jul 2013 16:26:40 -0300, Gustavo Zacarias wrote:
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+On Fri,  7 Jun 2013 15:21:43 +0200, Maxime Ripard wrote:
+> Fixes bug #5516 - appended device tree blobs on uImage fails
+> 
+> Before version 3.7 of the kernel, building the zImage and then the
+> uImage will rewrite the zImage in the process, removing the device tree
+> we just appended.
+> 
+> Use mkimage to append the device tree to the uImage and rebuild the
+> headers directly.
+> 
+> Signed-off-by: Maxime Ripard <maxime.ripard@free-electrons.com>
 > ---
->  ...ch-1.4-build.patch => dropwatch-01-build.patch} |  0
->  .../dropwatch/dropwatch-02-binutils-2.23.1.patch   | 74 ++++++++++++++++++++++
->  2 files changed, 74 insertions(+)
->  rename package/dropwatch/{dropwatch-1.4-build.patch => dropwatch-01-build.patch} (100%)
->  create mode 100644 package/dropwatch/dropwatch-02-binutils-2.23.1.patch
+>  linux/linux.mk | 21 +++++++++++----------
+>  1 file changed, 11 insertions(+), 10 deletions(-)
 
-Both applied, thanks. The second patch is a bit ugly, but yes, I don't
-see how to do it otherwise.
+Applied, thanks.
 
 Thomas
 -- 
