@@ -1,159 +1,103 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Thu, 1 Aug 2013 23:30:48 +0200
-Subject: [Buildroot] List of pending patches: what to do?
-In-Reply-To: <20130801182311.6bb6e57e@skate>
-References: <20130731191415.545f7dff@skate>
- <CAHXCMMJ63sJ=m5V1c5+TqOn8TfdBop20gzDHjL85Ks1rYYU+-g@mail.gmail.com>
- <20130801182311.6bb6e57e@skate>
-Message-ID: <CAHXCMMJacpBKoSpKH8NRtDyto92ZZ6AA2bh2jFyOZx4L00cxFw@mail.gmail.com>
+From: Jason Rennie <jason.rennie@rftechnology.com.au>
+Date: Fri, 02 Aug 2013 09:49:21 +1000
+Subject: [Buildroot] Problem with an MPC8272 build
+Message-ID: <51FAF401.60702@rftechnology.com.au>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, all,
+Hi,
 
-2013/8/1 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>:
-> Dear Samuel Martin,
->
-> On Thu, 1 Aug 2013 00:13:35 +0200, Samuel Martin wrote:
->
->> 2013/7/31 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>:
->>
->> > http://patchwork.ozlabs.org/patch/243426 Fix bug with dependencies of *-rebuild and *-reconfigure
->> > http://patchwork.ozlabs.org/patch/172278 pkg-infra: limit -reconfigure and -rebuild actions
->> Both treat the same thing!
->> A "political decision" has to be made on this since it slightly
->> changes the way some BR commands work.
->
-> Can we have a decision on those ones?
->
-> On my side, I kind of like the fact that 'make blabla-rebuild' both
-> rebuilds the blabla package and regenerates the root filesystem. It
-> avoids the need for 'make blabla-rebuild && make'. However, it's true
-> that it's inconsistent with 'make blabla-dirclean', which just removes
-> the build directory, and therefore requires a 'make blabla-dirclean &&
-> make' if you want to completely rebuild a package from scratch.
+I'm trying to get buildroot to work with an MPC8272 based device that we 
+have. I've been trying for a while and using google to see if it can 
+help but i'm getting nowhere so I thought I would try going to the source.
 
-IIRC, we talked about this during some BR dev days or patchwork-day
-session, and in the end we kept statu quo.
+I think i've set up buildroot correctly and have it configured to be an 
+mpc8272ads as the kernel defconfig. I know the kernel can be built (so 
+it seems) because the device does have an old 2.6.18 kernel running on 
+it at the moment that boots successfully, using U-Boot and an older 
+version of buildroot to make the file system.
 
-I'd rather be in favor of these patches, although I barely use the
-*-re{configure,build} targets;
-anyway it's just one opinion among others.
+But now I can't get the kernel to boot at all. Or at least nothing shows 
+when it comes to booting the kernel.
 
->
->> > http://patchwork.ozlabs.org/patch/172506 [01/11] libgpg-error: add optional nls support
->> To be dropped, nobody needs it.
->
-> Done.
->
->
->> > http://patchwork.ozlabs.org/patch/200889 [04/33] igh-ethercat: disable drivers build with kernel 3.6
->> > http://patchwork.ozlabs.org/patch/200896 [05/33] imagemagick: explicitly disable c++ support if no c++ compiler available
->> > http://patchwork.ozlabs.org/patch/200909 [20/33] pkg-download.mk: add tarball check in the wget method
->> > http://patchwork.ozlabs.org/patch/204804 flite: new package
->> > http://patchwork.ozlabs.org/patch/204806 libcanfestival: new package
->> Still in my stack.
->> Postponed to the next release.
->
-> Does this mean I can mark them as 'Deferred' in patchwork, trusting you
-> to resubmit them later? Or should I keep them around in patchwork just
-> to remind us (you and the community) that they need to be finalized and
-> merged?
-Yes, I've just marked them as deferred.
+Buildroot does run successfully, and I have put the rootfs that is made 
+on the device and it does boot successfully with the older kernel (well 
+mostly, some networking stuff appears to be missing). But when I put the 
+new kernel on the device I get nothing. I've tried enabling early kernel 
+debugging but with no success (setting the CPM to the addresses 
+suggested by the old kernels output). I also don't seem to be able to 
+get U-Boot to work and I need to end up breaking out the BDI2000 anytime 
+I try to update U-Boot with the newer version as I brick the device.
 
->
->> > http://patchwork.ozlabs.org/patch/208801 [3/8] package/Makefile.in: update/fix HOST_PATH variable
->> > http://patchwork.ozlabs.org/patch/208802 [4/8] package/pkg-cmake.mk: make sure $(HOST_PATH) is in the PATH at configure time
->> Still in my stack.
->> Part of some infra cleanup.
->> Postponed to the next release.
->
-> Same question as above.
-done
+I have tried with the most basic possible build, not tweaking anything 
+and basically just doing the stock buildroot build for the MPC8272 
+through to poking and tweaking all sorts of thing.
 
->
->>
->> > http://patchwork.ozlabs.org/patch/208803 [5/8] dependencies: build a host python2 if no suitable one can be found
->> > http://patchwork.ozlabs.org/patch/208804 [6/8] scons: add host-python2-if-needed dependency
->> > http://patchwork.ozlabs.org/patch/208805 [7/8] scons: ensure $(HOST_DIR)/usr/bin is in the PATH when invoking $(SCONS)
->> > http://patchwork.ozlabs.org/patch/208806 [8/8] manual: add host python2 dependency section
->> Still in my stack.
->> Part of some infra cleanup.
->> If nobody but me cares about this, then I don't mind dropping them;
->> I'll keep them locally.
->
-> Same question as above.
-done
+Any tips? I've attached the old dmesg output if tht helps. I'm 
+hopelessly confused and been beating my head against this for a month so 
+any help would be greatly appreciated. I'm pretty much out of ideas.
 
->
->> > http://patchwork.ozlabs.org/patch/214943 [1/1] Documentation update : add tips to build manual, add information about buildroot toolchain not being relocable and put some hints to use it, move the Beyond Buildroot section before FAQs and add content
->> > http://patchwork.ozlabs.org/patch/216485 Docu: Add LIBFOO_EXTRACT_CMDS
->> > http://patchwork.ozlabs.org/patch/232024 [1/1] manual: add patch revision and versioning section
->> Doc/manual: need review/respin/rebase imho. Can wait for the next release cycle.
->
-> Documentation stuff can be merged after -rc1, so it'd be great to
-> clean that up now and get it merged during the -rc cycle.
-Yes, I'll try to look at these patches shortly.
-
->
->> > http://patchwork.ozlabs.org/patch/230289 [v2] Enable ccache for cmake packages
->> > http://patchwork.ozlabs.org/patch/243442 [1/6] package infra: remove CPPFLAGS from CFLAGS
->> Part of some cleanup I have in my stack and I'd like to do for the next release.
->
-> Same question as above (should I mark as Deferred or keep in patchwork
-> as a reminder).
-Yes, please. Thomas, could you do it, I cannot since they are not mine.
-
->
->> > http://patchwork.ozlabs.org/patch/244409 [1/1] libtirpc: requires toolchain with threads support
->> Fixes autobuilders, and is the v2 of a patch, including comments from
->> the 1st submission.
->
-> Ah, yes, I didn't like the fact of adding a thread dependency to
-> libtirpc, but I think I should like it. This is really a bug fix, so
-> can always be merged after -rc1 is released.
->
->> > http://patchwork.ozlabs.org/patch/182233 Depend autotools targets on host-ccache when BR2_CCACHE is enabled.
->> > http://patchwork.ozlabs.org/patch/256744 tar: avoid ccache chicken and egg problem when bootstrapping tar
->> > http://patchwork.ozlabs.org/patch/257372 [1/3] infra: make possible to run 'make *-menuconfig' from a clean output dir
->> ccache chicken-egg issue that need to be carefully handled.
->>
->> > http://patchwork.ozlabs.org/patch/257374 [2/3] crosstool-ng: remove unneed explicit ccache dependency
->> > http://patchwork.ozlabs.org/patch/257375 [3/3] sstrip: remove unneed explicit ccache dependency
->> Few more ccache cleanups after the previous issue is fixed.
->
-> Discussion started with Thomas De Schampheleire today about this.
-Indeed, I follow the discussion but cannot be more involved right now.
-
->
->> > http://patchwork.ozlabs.org/patch/257376 [1/3] qt{4, 5}: add an explicit choice to express Buildroot does not support their coexistence
->> > http://patchwork.ozlabs.org/patch/257377 [2/3] manual: add faq entry explaining why Buildroot does not support Qt{4, 5} coexistence
->> > http://patchwork.ozlabs.org/patch/257378 [3/3] opencv: bump version to 2.4.6
->> Still in my stack.
->> I will rework them during the next release cycle.
->
-> Same question as above.
-done
-
-> I'm not sure a FAQ entry is a good choice,
-> maybe a
->
-> comment "qt5 is not available when qt4 is selected"
->         depends on BR2_PACKAGE_QT
->
-> comment "qt4 is not available when qt5 is selected"
->         depend son BR2_PACKAGE_QT5
->
-> is probably a better idea.
-Fair enough, I'll integrate this change when I'll respin this series.
-Thx,
-
-
-Regards,
-
-
--- 
-Samuel
+Jason
+-------------- next part --------------
+Linux version 2.6.18 (dmytro at woomera) (gcc version 4.1.1) #51 PREEMPT Thu Dec 31 15:22:09 EST 2009
+Motorola PQ2 ADS PowerPC port
+On node 0 totalpages: 16384
+  DMA zone: 16384 pages, LIFO batch:3
+Built 1 zonelists.  Total pages: 16384
+Kernel command line: console=ttyCPM0,115200 root=31:02 rw rootfstype=jffs2 mtdparts=physmap-flash.0:512K(U-Boot),1024k(Linux),-(root) ip=192.168.1.201:192.168.1.165::255.255.255.0:eclipse:eth0:on panic=1
+PID hash table entries: 512 (order: 9, 2048 bytes)
+Warning: real time clock seems stuck!
+cpm_uart: console: compat mode
+Dentry cache hash table entries: 8192 (order: 3, 32768 bytes)
+Inode-cache hash table entries: 4096 (order: 2, 16384 bytes)
+Memory: 62720k available (1708k kernel code, 436k data, 92k init, 0k highmem)
+Calibrating delay loop... 175.10 BogoMIPS (lpj=87552)
+Mount-cache hash table entries: 512
+NET: Registered protocol family 16
+mpc8272ads: Init
+NET: Registered protocol family 2
+IP route cache hash table entries: 512 (order: -1, 2048 bytes)
+TCP established hash table entries: 2048 (order: 1, 8192 bytes)
+TCP bind hash table entries: 1024 (order: 0, 4096 bytes)
+TCP: Hash tables configured (established 2048 bind 1024)
+TCP reno registered
+JFFS2 version 2.2. (C) 2001-2006 Red Hat, Inc.
+fuse init (API version 7.7)
+io scheduler noop registered
+io scheduler deadline registered (default)
+Generic RTC Driver v1.07
+Software Watchdog Timer: 0.07 initialized. soft_noboot=0 soft_margin=60 sec (nowayout= 1)
+Serial: CPM driver $Revision: 0.02 $
+ttyCPM0 at MMIO 0xf0011a00 (irq = 40) is a CPM UART
+ttyCPM1 at MMIO 0xf0011a60 (irq = 43) is a CPM UART
+RAMDISK driver initialized: 16 RAM disks of 32768K size 1024 blocksize
+physmap platform flash device: 01000000 at ff000000
+physmap-flash.0: Found 1 x16 devices at 0x0 in 16-bit bank
+ Intel/Sharp Extended Query Table at 0x010A
+ Intel/Sharp Extended Query Table at 0x010A
+ Intel/Sharp Extended Query Table at 0x010A
+ Intel/Sharp Extended Query Table at 0x010A
+ Intel/Sharp Extended Query Table at 0x010A
+Using buffer write method
+cfi_cmdset_0001: Erase suspend on write enabled
+erase region 0: offset=0x0,size=0x8000,blocks=4
+erase region 1: offset=0x20000,size=0x20000,blocks=127
+3 cmdlinepart partitions found on MTD device physmap-flash.0
+Creating 3 MTD partitions on "physmap-flash.0":
+0x00000000-0x00080000 : "U-Boot"
+0x00080000-0x00180000 : "Linux"
+0x00180000-0x01000000 : "root"
+eth0: FCC ENET Version 0.3, de:ad:be:ef:12:34
+ip_tables: (C) 2000-2006 Netfilter Core Team
+TCP bic registered
+NET: Registered protocol family 1
+NET: Registered protocol family 17
+IP-Config: Complete:
+      device=eth0, addr=192.168.1.201, mask=255.255.255.0, gw=255.255.255.255,
+     host=eclipse, domain=, nis-domain=(none),
+     bootserver=192.168.1.165, rootserver=192.168.1.165, rootpath=
+VFS: Mounted root (jffs2 filesystem).
+Freeing unused kernel memory: 92k init
