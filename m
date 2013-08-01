@@ -1,40 +1,159 @@
-From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Thu, 1 Aug 2013 23:29:28 +0200
-Subject: [Buildroot] ccache dependency issues
-In-Reply-To: <20130801145426.1dc22f4f@skate>
-References: <CAAXf6LWo29hYTDoGfmoQRV4krkhy_vCy7-irvB1qas6RuGbJsw@mail.gmail.com>
- <20130801113514.495c3b0d@skate>
- <CAAXf6LVwctGqfMYiG_fLGccTS0+yubt678k1bC95H_hmkQQ3QA@mail.gmail.com>
- <20130801135731.2ba53f36@skate>
- <CAAXf6LWJPwOwVbP4VOfe2cLRLHC1Ezgk=kx2vYEpEsaMcG7bVA@mail.gmail.com>
- <20130801140706.1ec7edbc@skate>
- <CAAXf6LXXukE6yzOEC-U7vVEXq9mnkmjrG8M22=Ou00oVZ2VNJw@mail.gmail.com>
- <20130801145426.1dc22f4f@skate>
-Message-ID: <CAAXf6LV+oK3O5GqQMEs6z4F2AwaYPPssqvy8UQ7LFOY5m5jZzQ@mail.gmail.com>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Thu, 1 Aug 2013 23:30:48 +0200
+Subject: [Buildroot] List of pending patches: what to do?
+In-Reply-To: <20130801182311.6bb6e57e@skate>
+References: <20130731191415.545f7dff@skate>
+ <CAHXCMMJ63sJ=m5V1c5+TqOn8TfdBop20gzDHjL85Ks1rYYU+-g@mail.gmail.com>
+ <20130801182311.6bb6e57e@skate>
+Message-ID: <CAHXCMMJacpBKoSpKH8NRtDyto92ZZ6AA2bh2jFyOZx4L00cxFw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Aug 1, 2013 at 2:54 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Dear Thomas De Schampheleire,
->
-> On Thu, 1 Aug 2013 14:51:32 +0200, Thomas De Schampheleire wrote:
->
->> > That's why I've NAKed additional 'hacks' such as
->> > http://patchwork.ozlabs.org/patch/257372/ in the past. BTW, I think
->> > moving ccache into the dependencies will avoid the need for this patch
->> > 257372, and then we can apply http://patchwork.ozlabs.org/patch/257374/
->> > and http://patchwork.ozlabs.org/patch/257375/.
->>
->> Ok, sounds good.
->> I'll try to create a patch soon, or if you want to do it that's fine
->> by me as well.
->
-> If you can do it, that'd be great. I'd like to keep some time to merge
-> a few more things, and then do the -rc1 release after updating the
-> CHANGES file. So I won't have much time to look at this myself.
+Thomas, all,
 
-I will send a patch tomorrow morning...
+2013/8/1 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>:
+> Dear Samuel Martin,
+>
+> On Thu, 1 Aug 2013 00:13:35 +0200, Samuel Martin wrote:
+>
+>> 2013/7/31 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>:
+>>
+>> > http://patchwork.ozlabs.org/patch/243426 Fix bug with dependencies of *-rebuild and *-reconfigure
+>> > http://patchwork.ozlabs.org/patch/172278 pkg-infra: limit -reconfigure and -rebuild actions
+>> Both treat the same thing!
+>> A "political decision" has to be made on this since it slightly
+>> changes the way some BR commands work.
+>
+> Can we have a decision on those ones?
+>
+> On my side, I kind of like the fact that 'make blabla-rebuild' both
+> rebuilds the blabla package and regenerates the root filesystem. It
+> avoids the need for 'make blabla-rebuild && make'. However, it's true
+> that it's inconsistent with 'make blabla-dirclean', which just removes
+> the build directory, and therefore requires a 'make blabla-dirclean &&
+> make' if you want to completely rebuild a package from scratch.
+
+IIRC, we talked about this during some BR dev days or patchwork-day
+session, and in the end we kept statu quo.
+
+I'd rather be in favor of these patches, although I barely use the
+*-re{configure,build} targets;
+anyway it's just one opinion among others.
+
+>
+>> > http://patchwork.ozlabs.org/patch/172506 [01/11] libgpg-error: add optional nls support
+>> To be dropped, nobody needs it.
+>
+> Done.
+>
+>
+>> > http://patchwork.ozlabs.org/patch/200889 [04/33] igh-ethercat: disable drivers build with kernel 3.6
+>> > http://patchwork.ozlabs.org/patch/200896 [05/33] imagemagick: explicitly disable c++ support if no c++ compiler available
+>> > http://patchwork.ozlabs.org/patch/200909 [20/33] pkg-download.mk: add tarball check in the wget method
+>> > http://patchwork.ozlabs.org/patch/204804 flite: new package
+>> > http://patchwork.ozlabs.org/patch/204806 libcanfestival: new package
+>> Still in my stack.
+>> Postponed to the next release.
+>
+> Does this mean I can mark them as 'Deferred' in patchwork, trusting you
+> to resubmit them later? Or should I keep them around in patchwork just
+> to remind us (you and the community) that they need to be finalized and
+> merged?
+Yes, I've just marked them as deferred.
+
+>
+>> > http://patchwork.ozlabs.org/patch/208801 [3/8] package/Makefile.in: update/fix HOST_PATH variable
+>> > http://patchwork.ozlabs.org/patch/208802 [4/8] package/pkg-cmake.mk: make sure $(HOST_PATH) is in the PATH at configure time
+>> Still in my stack.
+>> Part of some infra cleanup.
+>> Postponed to the next release.
+>
+> Same question as above.
+done
+
+>
+>>
+>> > http://patchwork.ozlabs.org/patch/208803 [5/8] dependencies: build a host python2 if no suitable one can be found
+>> > http://patchwork.ozlabs.org/patch/208804 [6/8] scons: add host-python2-if-needed dependency
+>> > http://patchwork.ozlabs.org/patch/208805 [7/8] scons: ensure $(HOST_DIR)/usr/bin is in the PATH when invoking $(SCONS)
+>> > http://patchwork.ozlabs.org/patch/208806 [8/8] manual: add host python2 dependency section
+>> Still in my stack.
+>> Part of some infra cleanup.
+>> If nobody but me cares about this, then I don't mind dropping them;
+>> I'll keep them locally.
+>
+> Same question as above.
+done
+
+>
+>> > http://patchwork.ozlabs.org/patch/214943 [1/1] Documentation update : add tips to build manual, add information about buildroot toolchain not being relocable and put some hints to use it, move the Beyond Buildroot section before FAQs and add content
+>> > http://patchwork.ozlabs.org/patch/216485 Docu: Add LIBFOO_EXTRACT_CMDS
+>> > http://patchwork.ozlabs.org/patch/232024 [1/1] manual: add patch revision and versioning section
+>> Doc/manual: need review/respin/rebase imho. Can wait for the next release cycle.
+>
+> Documentation stuff can be merged after -rc1, so it'd be great to
+> clean that up now and get it merged during the -rc cycle.
+Yes, I'll try to look at these patches shortly.
+
+>
+>> > http://patchwork.ozlabs.org/patch/230289 [v2] Enable ccache for cmake packages
+>> > http://patchwork.ozlabs.org/patch/243442 [1/6] package infra: remove CPPFLAGS from CFLAGS
+>> Part of some cleanup I have in my stack and I'd like to do for the next release.
+>
+> Same question as above (should I mark as Deferred or keep in patchwork
+> as a reminder).
+Yes, please. Thomas, could you do it, I cannot since they are not mine.
+
+>
+>> > http://patchwork.ozlabs.org/patch/244409 [1/1] libtirpc: requires toolchain with threads support
+>> Fixes autobuilders, and is the v2 of a patch, including comments from
+>> the 1st submission.
+>
+> Ah, yes, I didn't like the fact of adding a thread dependency to
+> libtirpc, but I think I should like it. This is really a bug fix, so
+> can always be merged after -rc1 is released.
+>
+>> > http://patchwork.ozlabs.org/patch/182233 Depend autotools targets on host-ccache when BR2_CCACHE is enabled.
+>> > http://patchwork.ozlabs.org/patch/256744 tar: avoid ccache chicken and egg problem when bootstrapping tar
+>> > http://patchwork.ozlabs.org/patch/257372 [1/3] infra: make possible to run 'make *-menuconfig' from a clean output dir
+>> ccache chicken-egg issue that need to be carefully handled.
+>>
+>> > http://patchwork.ozlabs.org/patch/257374 [2/3] crosstool-ng: remove unneed explicit ccache dependency
+>> > http://patchwork.ozlabs.org/patch/257375 [3/3] sstrip: remove unneed explicit ccache dependency
+>> Few more ccache cleanups after the previous issue is fixed.
+>
+> Discussion started with Thomas De Schampheleire today about this.
+Indeed, I follow the discussion but cannot be more involved right now.
+
+>
+>> > http://patchwork.ozlabs.org/patch/257376 [1/3] qt{4, 5}: add an explicit choice to express Buildroot does not support their coexistence
+>> > http://patchwork.ozlabs.org/patch/257377 [2/3] manual: add faq entry explaining why Buildroot does not support Qt{4, 5} coexistence
+>> > http://patchwork.ozlabs.org/patch/257378 [3/3] opencv: bump version to 2.4.6
+>> Still in my stack.
+>> I will rework them during the next release cycle.
+>
+> Same question as above.
+done
+
+> I'm not sure a FAQ entry is a good choice,
+> maybe a
+>
+> comment "qt5 is not available when qt4 is selected"
+>         depends on BR2_PACKAGE_QT
+>
+> comment "qt4 is not available when qt5 is selected"
+>         depend son BR2_PACKAGE_QT5
+>
+> is probably a better idea.
+Fair enough, I'll integrate this change when I'll respin this series.
+Thx,
+
+
+Regards,
+
+
+-- 
+Samuel
