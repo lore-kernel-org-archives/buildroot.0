@@ -1,108 +1,98 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 1 Aug 2013 07:50:49 +0200
+Date: Thu, 1 Aug 2013 07:59:04 +0200
 Subject: [Buildroot] List of pending patches: what to do?
-In-Reply-To: <51F94EBD.7060309@zacarias.com.ar>
-References: <20130731191415.545f7dff@skate> <51F94EBD.7060309@zacarias.com.ar>
-Message-ID: <20130801075049.37b13ddd@skate>
+In-Reply-To: <CAAXf6LVc5T9=hCTwdiCz+HcfaU9wt8Ypk+9fiQm6pNX6wdxJJw@mail.gmail.com>
+References: <20130731191415.545f7dff@skate>
+ <CAAXf6LVc5T9=hCTwdiCz+HcfaU9wt8Ypk+9fiQm6pNX6wdxJJw@mail.gmail.com>
+Message-ID: <20130801075904.04598ad8@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+Dear Thomas De Schampheleire,
 
-On Wed, 31 Jul 2013 14:51:57 -0300, Gustavo Zacarias wrote:
-> On 07/31/2013 02:14 PM, Thomas Petazzoni wrote:
+On Wed, 31 Jul 2013 22:45:28 +0200, Thomas De Schampheleire wrote:
+
+> > http://patchwork.ozlabs.org/patch/188525 Question about 64Bit kernel and 32Bit applications
 > 
-> > http://patchwork.ozlabs.org/patch/155498 New: add lava-test package
+> Can be closed, that problem was fixed differently.
+
+Done.
+
+> > http://patchwork.ozlabs.org/patch/201313 Passing arguments to the linker when external toolchain is used.
 > 
-> I managed to get this working with modifications and the python fixes
-> (which are already in the tree).
-> However from what i've seen it doesn't seem useful for anything by
-> itself, it's a testing framework with the builtins being pretty
-> ubuntu-specific (and requiring a ton of other deps).
-> Not sure what to do about it, it's not an out-of-the-box experience, it
-> requires extensive tweaking to do anything useful.
+> Can also be closed for the same reason.
 
-So I'm proposing to drop this patch. There isn't much interest from the
-current Buildroot contributors, and the original submitter hasn't
-pushed the patch forward that much.
+Done.
 
-> > http://patchwork.ozlabs.org/patch/165542 [V2] p910nd: Add p910nd lightweight printserver
+> > http://patchwork.ozlabs.org/patch/207717 dtb: provide option to install dtb to boot directory
 > 
-> I'll rebase and give this one a try.
+> At first sight, this feature is already present but with a slightly
+> different implementation. Could you double-check?
 
-Good, patch delegated to you.
+Yes, I need to have a look today at several DTB/uImage/initramfs
+patches against linux.mk, I'll try to have a look at that one.
 
-> > http://patchwork.ozlabs.org/patch/172171 avahi: only install default.script/S05avahi-setup.sh if not present in fs skeleton
+> > http://patchwork.ozlabs.org/patch/231856 Install DTB as part of images install command
 > 
-> I'm generally against initscript conditionals - after all who says it'll
-> have the same sequence number or name in the skeleton?
-> Post-build script IMHO.
-> Otherwise a global option "don't install initscripts" might fit, however
-> i've been using the script just fine for ages now.
+> Seems to have been acked by several people, can be applied as-is?
 
-In fact, I realize the patch here is not a patch against Buildroot,
-it's just a diff I had done between two udhcpc scripts (the one
-installed by Avahi and the one installed by Busybox), and recently,
-through commit 0c229f70ea270069e981bfb59e3aea80b21bbcfb, Peter merged
-the two. So I'll mark this patch as rejected.
+Agreed.
 
-> > http://patchwork.ozlabs.org/patch/178526 syslinux: fix host build with newer Linux headers
+> > http://patchwork.ozlabs.org/patch/241250 toolchain/gcc: Introduce BR2_ARCH_HAS_GCC_x_y_PLUS
 > 
-> Version bump might be fitting, it's up to 6.01 now.
+> Needs to be updated to latest buildroot, but has been acked by Arnout
+> before, after two other iterations.
 
-Indeed. So let's keep this patch around as a reminder to do something
-about syslinux bump.
+I'd be inclined to post-pone that for 2013.11, but I can merge it as
+soon as -next opens.
 
-> > http://patchwork.ozlabs.org/patch/185522 eaccelerator
-> > http://patchwork.ozlabs.org/patch/186837 Add config for PHP eaccelerator package. Signed-off-by: Dallas Clement <dallas.a.clement@gmail.com>
+> > http://patchwork.ozlabs.org/patch/249635 UCLIBC_EXTRA_CFLAGS in uClibc overridden while using buildroot
+> > http://patchwork.ozlabs.org/patch/249855 UCLIBC_EXTRA_CFLAGS in uClibc overridden while using buildroot
 > 
-> Not really an embedded-y package, eaccelerator and similar packages like
-> xcache are basically intermediate opcode caches for the php
-> interpreter/files.
-> Basically you set aside an X amount of RAM (in the 2-digit MiB range
-> usually) for that and successive hits get a good speed boost because
-> they don't need to be re-interpreted again and again.
-> This is a feature included in the PHP 5.5.x release, however i doubt
-> we'll be bumping soon to it, 5.4.x is a better fit for now since 5.3.x
-> is getting unsupported status soon.
-> Widely used for big PHP deployments with many page hits - so i'm hmm
-> about it and eventually it'll go away with PHP 5.5
-> And it's tied up to PHP 5.3.x so it will block a 5.4.x or 5.5.x update
-> unless we use the main git branch (no release yet, upstream is somewhat
-> dead).
+> Former is the old one, can be closed.
 
-I marked the first as Superseded. For the second one, I replied to the
-patch submitter to see if he's still interested.
+Apparently someone marked 249635 as superseded in the mean time.
 
-> > http://patchwork.ozlabs.org/patch/196141 uClibc: install libc.so even if BR2_PREFER_STATIC_LIB is enabled
+> > http://patchwork.ozlabs.org/patch/256744 tar: avoid ccache chicken and egg problem when bootstrapping tar
 > 
-> We should really "mv BR2_PREFER_STATIC_LIB BR2_STATIC_BUILD" or so as
-> you've mentioned before - you either want or don't (want) a static build.
+> I'm going to test this.
 
-Agreed. Keeping this around for now until the static lib mess gets
-fixed. I might be tackling this for 2013.11.
+Ok.
 
-> > http://patchwork.ozlabs.org/patch/198127 automake version update 1.12.4
+> > http://patchwork.ozlabs.org/patch/260246 xzcat: treat as host prerequisite and build if needed
 > 
-> for-2013.12 i'll revisit bumping automake, at the moment i'd say no, and
-> since there are newer versions "deferred" or "superseeded" would be
-> appropiate.
+> This is one of mine, feedback would be welcome. I tested it and it works :)
 
-Shouldn't we keep it around as a reminder to do something about
-automake?
+The only part I'm not entirely happy with is:
 
-> > http://patchwork.ozlabs.org/patch/243442 [1/6] package infra: remove CPPFLAGS from CFLAGS
-> > http://patchwork.ozlabs.org/patch/243445 [4/6] libcurl: bump to version 7.30.0
-> 
-> These depend on the generic package cleanups and some autotools package
-> audits (maybe fixes). I've deferred them already, they're on my TODO
-> list and i'll send new appropiate patches when it's done, for-2013.12.
-> libcurl security patches are already in the tree so there's no rush.
+-		DL_TOOLS="$(sort $(DL_TOOLS_DEPENDENCIES))" \
++		DL_TOOLS="$(sort $(filter-out $(XZCAT),$(DL_TOOLS_DEPENDENCIES)))" \
 
-Ok, thanks!
+This looks like very special-case filtering. It sounds odd to add xzcat
+to DL_TOOLS_DEPENDENCIES to later remove it when DL_TOOLS_DEPENDENCIES
+is used. I think I'd prefer something along the lines of (but it'd be
+great if a temporary variable could be used for the $(firstword ...)
+thing) :
+
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index b8eaa98..435a1c6 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -539,7 +539,11 @@ else ifeq ($$($(2)_SITE_METHOD),hg)
+ DL_TOOLS_DEPENDENCIES += hg
+ endif # SITE_METHOD
+ 
++# Do not add xzcat to the list of required dependencies, as it gets
++# built automatically if it isn't found.
++ifneq ($(firstword $(INFLATE$(suffix $($(2)_SOURCE)))),$(XZCAT))
+ DL_TOOLS_DEPENDENCIES += $(firstword $(INFLATE$(suffix $($(2)_SOURCE))))
++endif
+ 
+ endif # $(2)_KCONFIG_VAR
+ endef # inner-generic-package
 
 Thomas
 -- 
