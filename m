@@ -1,58 +1,39 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 1 Aug 2013 09:41:19 +0200
-Subject: [Buildroot] List of pending patches: what to do?
-In-Reply-To: <CAHt8ZCMACE5Y3QTH+_o-y5CMCcPjOsOEcTYETLx0RgaHRYaMJg@mail.gmail.com>
-References: <20130731191415.545f7dff@skate>
- <CAHt8ZCMACE5Y3QTH+_o-y5CMCcPjOsOEcTYETLx0RgaHRYaMJg@mail.gmail.com>
-Message-ID: <20130801094119.521a0cbd@skate>
+From: zhou qiang <zhouqiang.search@gmail.com>
+Date: Thu, 1 Aug 2013 16:09:37 +0800
+Subject: [Buildroot] How to login as root without password
+In-Reply-To: <20130731171745.14ab06ab@skate>
+References: <CAHbR41VH17_qSe3T92b=n61_f1a_64jVXy5rNCKaexajmWzt9g@mail.gmail.com>
+ <CAAXf6LXRYRvhWwE-TnM2fnGPMp+s+eEa3oUQtwdatMPxP=vAyA@mail.gmail.com>
+ <CAHbR41WGQDmkVy4TguM7KEO9hf6NpND=wQ1CiUWMgUwhWQRkiQ@mail.gmail.com>
+ <CAAXf6LVa_tJZG8CQw2zUUdyOvMd7TAs5yfdtUtjKG5bcGqhdZw@mail.gmail.com>
+ <CAHbR41Xzw1RsrR8ZykwvWjXyP_GKzQRWghTo0hjq2z=sPGsabQ@mail.gmail.com>
+ <20130731171745.14ab06ab@skate>
+Message-ID: <CAHbR41Xpc24ABATxBOrcsWVjsdh=y+663d86WYMPWbUknRzgbg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Simon Dawson,
+Hi  ,Thomas
 
-On Thu, 1 Aug 2013 07:54:33 +0100, Simon Dawson wrote:
-> On 31 July 2013 18:14, Thomas Petazzoni
-> <thomas.petazzoni@free-electrons.com> wrote:
-> > http://patchwork.ozlabs.org/patch/165674 [RFC,1/2] Add configuration item for custom JavaScript install path
-> > http://patchwork.ozlabs.org/patch/165675 [RFC,2/2] Use JavaScript install path from configuration during package installation
-> 
-> These can be discarded now, as I have no intention of working on them further.
+Thank you for your suggestion and explanation .
 
-Thanks, done.
+Using post-script is a good choice in current situation and seems to  work
+well
+on arm board for me .
 
-> > http://patchwork.ozlabs.org/patch/213384 [RFC] Fix avr32 build using internal toolchain
-> 
-> No longer relevant, as uClibc 0.9.31 support has now been removed from
-> Buildroot. Can be discarded.
+But let Buildroot to generate final jffs2 image is not my expected way.
+ Just as explained
+before we have an internal application to generate final jffs2 image .
+ Fakeroot could not
+be used in patch script , manually inputting command sequence in fakeroot
+session  is not
+accepted in our development rule .
 
-Done.
+Anyway , I am going to use post-script and thank you very much .
 
-> > http://patchwork.ozlabs.org/patch/236409 udev: fix avr32 and microblaze build failures
-> 
-> I haven't noticed any avr32/microblaze udev autobuild failures for a
-> while... I suggest that this patch be discarded.
-
-Most likely we have upgraded the avr32 and microblaze toolchains since
-then, and that's why we're not seeing the issues anymore. I've
-discarded the patch.
-
-> > http://patchwork.ozlabs.org/patch/238366 [RFC] permit menu customization
-> 
-> This doesn't adequately solve the problem that it sets out to solve;
-> can be discarded. (Although I do think this is still an area in which
-> Buildroot could be improved.)
-
-I agree it's an area in which Buildroot could be improved. I've dropped
-the patch for now, as you suggested.
-
-Thanks for this review!
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Regards ,
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130801/e84e8c10/attachment.html>
