@@ -1,41 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 1 Aug 2013 17:39:43 +0200
-Subject: [Buildroot] [git commit] Install DTB as part of images install
-	command
-Message-ID: <20130801155755.E8FA999C90@busybox.osuosl.org>
+Date: Thu, 1 Aug 2013 17:59:49 +0200
+Subject: [Buildroot] [PATCHv2] libgpgme: handle argp-standalone
+In-Reply-To: <1375297186-25282-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1375297186-25282-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20130801175949.0e201867@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=235535405cd076b31eb9d355a0e00ba663eca705
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Gustavo Zacarias,
 
-When installing DTB to the images directory, do this as part of the image
-install commands rather than the target install commands.
+On Wed, 31 Jul 2013 15:59:46 -0300, Gustavo Zacarias wrote:
+> libgpgme has an internal implementation of argp parsing for when the
+> libc lacks such an implementation (i.e. uClibc).
+> However if it detects argp.h the internal implementation is disabled and
+> for a uClibc-based toolchain that breaks the build.
+> This happens when argp-standalone is installed since libgpgme never
+> tries to link to libargp.
+> 
+> Make it link against libargp, which also saves some target size. Fixes:
+> http://autobuild.buildroot.net/results/33c/33c5776d2b3f7fa276a27f7602eb71c4d77c7b62/
+> 
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> ---
+>  package/libgpgme/libgpgme.mk | 8 +++++++-
+>  1 file changed, 7 insertions(+), 1 deletion(-)
 
-Signed-off-by: Reuben Dowle <reuben.dowle@4rf.com.az>
-Acked-by: Maxime Ripard <maxime.ripard@free-electrons.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- linux/linux.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+Applied, thanks.
 
-diff --git a/linux/linux.mk b/linux/linux.mk
-index fc379ec..578d535 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -265,11 +265,11 @@ endef
- 
- define LINUX_INSTALL_IMAGES_CMDS
- 	cp $(LINUX_IMAGE_PATH) $(BINARIES_DIR)
-+	$(LINUX_INSTALL_DTB)
- endef
- 
- define LINUX_INSTALL_TARGET_CMDS
- 	$(LINUX_INSTALL_KERNEL_IMAGE_TO_TARGET)
--	$(LINUX_INSTALL_DTB)
- 	# Install modules and remove symbolic links pointing to build
- 	# directories, not relevant on the target
- 	@if grep -q "CONFIG_MODULES=y" $(@D)/.config; then 	\
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
