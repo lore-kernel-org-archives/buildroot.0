@@ -1,44 +1,83 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 1 Aug 2013 14:54:26 +0200
-Subject: [Buildroot] ccache dependency issues
-In-Reply-To: <CAAXf6LXXukE6yzOEC-U7vVEXq9mnkmjrG8M22=Ou00oVZ2VNJw@mail.gmail.com>
-References: <CAAXf6LWo29hYTDoGfmoQRV4krkhy_vCy7-irvB1qas6RuGbJsw@mail.gmail.com>
- <20130801113514.495c3b0d@skate>
- <CAAXf6LVwctGqfMYiG_fLGccTS0+yubt678k1bC95H_hmkQQ3QA@mail.gmail.com>
- <20130801135731.2ba53f36@skate>
- <CAAXf6LWJPwOwVbP4VOfe2cLRLHC1Ezgk=kx2vYEpEsaMcG7bVA@mail.gmail.com>
- <20130801140706.1ec7edbc@skate>
- <CAAXf6LXXukE6yzOEC-U7vVEXq9mnkmjrG8M22=Ou00oVZ2VNJw@mail.gmail.com>
-Message-ID: <20130801145426.1dc22f4f@skate>
+From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
+Date: Thu, 1 Aug 2013 15:58:06 +0200
+Subject: [Buildroot] host-gettext build failure (emacs dependency?)
+Message-ID: <CAAXf6LVsJ6uZbeiRPHcru+Q0J8J2+Xn5ixsTCe4LNZpOm1e67Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas De Schampheleire,
+Hi,
 
-On Thu, 1 Aug 2013 14:51:32 +0200, Thomas De Schampheleire wrote:
+We have seen a build failure of host-gettext, with some error in emacs
+files. The problem is that the issue does not seem to happen every
+time, not sure why.
 
-> > That's why I've NAKed additional 'hacks' such as
-> > http://patchwork.ozlabs.org/patch/257372/ in the past. BTW, I think
-> > moving ccache into the dependencies will avoid the need for this patch
-> > 257372, and then we can apply http://patchwork.ozlabs.org/patch/257374/
-> > and http://patchwork.ozlabs.org/patch/257375/.
-> 
-> Ok, sounds good.
-> I'll try to create a patch soon, or if you want to do it that's fine
-> by me as well.
+<snip>
+make[5]: Leaving directory
+`/repo/buildroot/output/build/
+host-gettext-0.18.2.1/gettext-tools/styles'
+Making all in misc
+make[5]: Entering directory
+`/repo/buildroot/output/build/host-gettext-0.18.2.1/gettext-tools/misc'
+if test -f archive.dir.tar; then \
+      inputfile=archive.dir.tar; \
+    else \
+      inputfile='.'/archive.dir.tar; \
+    fi; \
+    xz -c -5 < "$inputfile" > archive.dir.tar.xz-t && mv
+archive.dir.tar.xz-t archive.dir.tar.xz
+WARNING: Warnings can be ignored. :-)
+if test "emacs" != no; then \
+      set x; \
+      list='start-po.el po-mode.el po-compat.el'; for p in $list; do \
+        if test -f "$p"; then d=; else d="./"; fi; \
+        set x "$@" "$d$p"; shift; \
+      done; \
+      shift; \
+      abs_srcdir="/repo/buildroot/output/build/host-gettext-0.18.2.1/gettext-tools/misc"
+EMACS="emacs" /bin/sh \
+        ../../build-aux/elisp-comp "$@" || exit 1; \
+    else : ; fi
+Loading /usr/share/emacs/site-lisp/site-start.d/igrep-init.el (source)...
+Loading /usr/share/emacs/site-lisp/site-start.d/lang-coding-systems-init.el
+(source)...
+Wrong type argument: stringp, nil
+make[5]: *** [elc-stamp] Error 1
+make[5]: *** Waiting for unfinished jobs....
+make[5]: Leaving directory
+`/repo/buildroot/output/build/host-gettext-0.18.2.1/gettext-tools/misc'
+make[4]: *** [all-recursive] Error 1
+make[4]: Leaving directory
+`/repo/buildroot/output/build/host-gettext-0.18.2.1/gettext-tools'
+make[3]: *** [all] Error 2
+make[3]: Leaving directory
+`/repo/buildroot/output/build/host-gettext-0.18.2.1/gettext-tools'
+make[2]: *** [all-recursive] Error 1
+make[2]: Leaving directory `/repo/buildroot/output/build/host-gettext-0.18.2.1'
+make[1]: *** [/repo/buildroot/output/build/host-gettext-0.18.2.1/.stamp_built]
+Error 2
+make[1]: Leaving directory `/repo/buildroot'
 
-If you can do it, that'd be great. I'd like to keep some time to merge
-a few more things, and then do the -rc1 release after updating the
-CHANGES file. So I won't have much time to look at this myself.
 
-Thanks!
+If something knows more about this error, that'd be great.
 
+But more generally, I wonder why host-gettext needs/uses emacs at all.
+The target gettext already disables several things:
+GETTEXT_CONF_OPT += \
+        --disable-libasprintf \
+        --disable-acl \
+        --disable-openmp \
+        --disable-rpath \
+        --disable-java \
+        --disable-native-java \
+        --disable-csharp \
+        --disable-relocatable \
+        --without-emacs
+
+but the host-gettext seems to be full. Do we really need e.g. emacs
+support for host-gettext? What about csharp, java, native-java?
+
+Thanks,
 Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
