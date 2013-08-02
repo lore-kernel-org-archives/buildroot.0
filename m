@@ -1,72 +1,52 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Fri, 2 Aug 2013 10:54:01 +0200
-Subject: [Buildroot] [PATCH 2 of 4] host-ccache: turn into a proper
-	dependency
-In-Reply-To: <CAAXf6LXjMKUZ_Q6N9m=cU=30=3eqzUb_bEvyEHgx4+c00etXdg@mail.gmail.com>
-References: <patchbomb.1375428832@BEANTN0L019720>
- <f72fc9db6ce74195608e.1375428834@BEANTN0L019720>
- <CAHXCMM+DtuDr4OBq7e5zdj4+pQnu2uOXP9bj_COxt=hWkwre=w@mail.gmail.com>
- <CAAXf6LXjMKUZ_Q6N9m=cU=30=3eqzUb_bEvyEHgx4+c00etXdg@mail.gmail.com>
-Message-ID: <CAHXCMMKtpDR5HtSkCtWht3Rny+CVV7P5rpZU_SRRZwb2DxVV1w@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 2 Aug 2013 10:56:33 +0200
+Subject: [Buildroot] [PATCH 1 of 2 v2] infra: introduce
+ suitable-extractor helper function
+In-Reply-To: <CAAXf6LWFBKk2mebh8eVdhR1Epcauf5Lmk4CZLqgDV4Us+SX+GA@mail.gmail.com>
+References: <patchbomb.1375390546@BEANTN0L019720>
+ <b277803240198c7900d9.1375390547@BEANTN0L019720>
+ <20130802102851.388356b2@skate>
+ <CAAXf6LWFBKk2mebh8eVdhR1Epcauf5Lmk4CZLqgDV4Us+SX+GA@mail.gmail.com>
+Message-ID: <20130802105633.0deb97c3@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2013/8/2 Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>:
-> Hi Samuel,
->
-> On Fri, Aug 2, 2013 at 10:27 AM, Samuel Martin <s.martin49@gmail.com> wrote:
->> Hi Thomas (both), all,
->>
->> 2013/8/2 Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>:
->>> This patch moves the host-ccache build target from BASE_TARGETS in Makefile
->>> to an actual host prerequisite in support/dependencies. This causes
->>> host-ccache to be built as part of the dependencies, before any real package
->>> is built.
->>> Since the dependencies are built without ccache anyway, there is no need to
->>> set HOST_CCACHE_CONF_ENV anymore.
->>>
->>> Suggested-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
->>> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
->> Acked-by: Samuel Martin <s.martin49@gmail.com>
->>
->>>
->>> ---
->>>
->>>  Makefile                             |  4 ----
->>>  package/ccache/ccache.mk             |  6 ------
->>>  support/dependencies/dependencies.mk |  4 ++++
->>>  3 files changed, 4 insertions(+), 10 deletions(-)
->>>
->>>
->>> Note: this in itself works, when the dependencies are built (regular 'make'
->>> for example, or explicit 'make dependencies'). However, if we want to
->>> supersede patch http://patchwork.ozlabs.org/patch/257372/, that wants
->>> the following to work:
->>>
->>> $ make clean menuconfig
->>> $ make {barebox,busybox,ctng,linux,uclibc}-menuconfig
->>>
->>> then I think something additional is necessary. In the above flow, the
->>> dependencies target is never used, so host-ccache doesn't get a chance to
->>> build.
->> Humm... I don't think so. This patch should be enough to fix the bug #5678.
->> I mean, to run *-menuconfig, the package need to be extracted beforehand.
->> I expect the 'dependencies' target is part of dependency list of the
->> *-extract target (because of host-tar).
->> If it's done so, then it's ok tm.
->
-> I may be missing something, but I don't see a dependency of *-extract
-> on 'dependencies'.
-I didn't say it was, but how I expect it should be. ;)
+Dear Thomas De Schampheleire,
 
-> Also, I tried the scenario and it doesn't work. The compiler used to
-> do the linux-menuconfig is with ccache, and it isn't built
-> automatically, unless you specify 'dependencies' manually.
-Arf... Maybe more work is needed to fix that bug.
+On Fri, 2 Aug 2013 10:50:44 +0200, Thomas De Schampheleire wrote:
 
+> > Do you know why we need this $(firstword ...) call here? In all places
+> > in was using directly $(INFLATE$(...)), except in the package
+> > infrastructure where it was doing this firstword additional call.
+> >
+> > It was added by Peter in 2c6390a5d0c01420879e9f23bc89afb19976da4a.
+> 
+> It wasn't clear to me when I sent the patch, but I figured it didn't hurt.
+> But now I think I know: the inflate targets originate from the
+> .config, and users can add extra arguments there. In fact, the default
+> for $(ZCAT) is:
+> BR2_ZCAT="gzip -d -c"
+> 
+> To check the dependency, we only want to check for 'gzip', but to do
+> the actual inflate, we shouldn't use 'firstword'. So, the patch is
+> wrong, and I will fix it :)
 
+Ok, makes sense to me now. Indeed this makes the patch wrong :)
+
+Are you annoyed if I integrate this in -next ? I want to release -rc1
+today, and I think this kind of stuff is a little bit too sensitive to
+be merged now. From your quick feedback on those patches, I have the
+feeling that you wanted it in 2013.08, so I don't want to ruin your
+hope, but I believe it's a bit too late now. What do you think?
+
+Best regards,
+
+Thomas
 -- 
-Samuel
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
