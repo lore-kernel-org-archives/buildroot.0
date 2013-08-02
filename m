@@ -1,50 +1,51 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 2 Aug 2013 10:50:07 +0200
-Subject: [Buildroot] List of pending patches: what to do?
-In-Reply-To: <CAAXf6LXdqkH1ccdDNdUVdriKxKur3f8ZtV58AaCsQPspUxMLaw@mail.gmail.com>
-References: <20130731191415.545f7dff@skate>
- <CAHXCMMJ63sJ=m5V1c5+TqOn8TfdBop20gzDHjL85Ks1rYYU+-g@mail.gmail.com>
- <20130801182311.6bb6e57e@skate>
- <CAHXCMMJacpBKoSpKH8NRtDyto92ZZ6AA2bh2jFyOZx4L00cxFw@mail.gmail.com>
- <CAAXf6LXdqkH1ccdDNdUVdriKxKur3f8ZtV58AaCsQPspUxMLaw@mail.gmail.com>
-Message-ID: <20130802105007.6957b0da@skate>
+From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
+Date: Fri, 2 Aug 2013 10:50:44 +0200
+Subject: [Buildroot] [PATCH 1 of 2 v2] infra: introduce
+ suitable-extractor helper function
+In-Reply-To: <20130802102851.388356b2@skate>
+References: <patchbomb.1375390546@BEANTN0L019720>
+ <b277803240198c7900d9.1375390547@BEANTN0L019720>
+ <20130802102851.388356b2@skate>
+Message-ID: <CAAXf6LWFBKk2mebh8eVdhR1Epcauf5Lmk4CZLqgDV4Us+SX+GA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas De Schampheleire,
+On Fri, Aug 2, 2013 at 10:28 AM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Dear Thomas De Schampheleire,
+>
+> On Thu, 01 Aug 2013 22:55:47 +0200, Thomas De Schampheleire wrote:
+>
+>> diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
+>> --- a/package/pkg-utils.mk
+>> +++ b/package/pkg-utils.mk
+>> @@ -62,6 +62,8 @@ INFLATE.tbz2 = $(BZCAT)
+>>  INFLATE.tgz  = $(ZCAT)
+>>  INFLATE.xz   = $(XZCAT)
+>>  INFLATE.tar  = cat
+>> +# suitable-extractor(filename): returns extractor based on suffix
+>> +suitable-extractor = $(firstword $(INFLATE$(suffix $(1))))
+>
+> Do you know why we need this $(firstword ...) call here? In all places
+> in was using directly $(INFLATE$(...)), except in the package
+> infrastructure where it was doing this firstword additional call.
+>
+> It was added by Peter in 2c6390a5d0c01420879e9f23bc89afb19976da4a.
 
-On Fri, 2 Aug 2013 10:33:18 +0200, Thomas De Schampheleire wrote:
+It wasn't clear to me when I sent the patch, but I figured it didn't hurt.
+But now I think I know: the inflate targets originate from the
+.config, and users can add extra arguments there. In fact, the default
+for $(ZCAT) is:
+BR2_ZCAT="gzip -d -c"
 
-> I am currently used to -reconfigure and -rebuild to rebuild also the
-> rootfs, but I also agree it's inconsistent with the other targets. If
-> we want to be strict, then foo-reconfigure can only configure, not
-> build. And foo-rebuild can only build.
+To check the dependency, we only want to check for 'gzip', but to do
+the actual inflate, we shouldn't use 'firstword'. So, the patch is
+wrong, and I will fix it :)
 
-Yerk, that's a bit ugly. foo-reconfigure removes the configure, build
-stamp files as well as the host, staging, images and target install
-stamp files. foo-rebuild does the same, except for the configure stamp
-file.
-
-So, I would find it strange if foo-reconfigure only did the configure
-again and not the entire package build process. Same for foo-rebuild.
-
-Remember, the use case for those is someone who is actively working on
-the source code of a package (mainly when using the OVERRIDE_SRCDIR
-thing or the local site method) and wants to be able to restart the
-build of the package, just as if he was running 'make && make install'
-in his package source code.
-
-So the intention is really to have 'make foo-rebuild' do that 'make &&
-make install' for the user, for the package <foo>.
+Thanks for highlighting this!
 
 Best regards,
-
 Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
