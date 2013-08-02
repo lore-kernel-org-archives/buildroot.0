@@ -1,38 +1,31 @@
-From: Patrick Ziegler <patrick.ziegler@fh-kl.de>
-Date: Fri, 2 Aug 2013 13:11:23 +0200
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 2 Aug 2013 13:17:39 +0200
 Subject: [Buildroot] List of pending patches: what to do?
-In-Reply-To: <20130731191415.545f7dff@skate>
+In-Reply-To: <51FB93DB.9040404@fh-kl.de>
 References: <20130731191415.545f7dff@skate>
-Message-ID: <51FB93DB.9040404@fh-kl.de>
+	<51FB93DB.9040404@fh-kl.de>
+Message-ID: <20130802131739.29bca416@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Dear Patrick Ziegler,
 
-On 31.07.2013 19:14, Thomas Petazzoni wrote:
+On Fri, 2 Aug 2013 13:11:23 +0200, Patrick Ziegler wrote:
 
-> http://patchwork.ozlabs.org/patch/220720 Using external toolchain wrapper outside of buildroot
+> On 31.07.2013 19:14, Thomas Petazzoni wrote:
+> 
+> > http://patchwork.ozlabs.org/patch/220720 Using external toolchain wrapper outside of buildroot
+> 
+> Fixed with another commit (74ae7af927)
 
-Fixed with another commit (74ae7af927)
+Thanks, marked as Superseded!
 
-Patrick
-
+Thomas
 -- 
-Dipl.-Inf. (FH) Patrick Ziegler
-
-University Of Applied Sciences
-Kaiserslautern
-
-Amerikastrasse 1
-D-66482 Zweibruecken
-Germany
-
-Phone:  +49 631 3724 5526
-Mail:   patrick.ziegler at fh-kl.de
-PGP KeyID 0xB4796B8C
-
-http://www.fh-kl.de
-http://www.fh-kl.de/fachbereiche/imst/iuk-knowhow.html
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
