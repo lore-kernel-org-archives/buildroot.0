@@ -1,33 +1,38 @@
 From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Fri, 02 Aug 2013 09:33:53 +0200
-Subject: [Buildroot] [PATCH 1 of 4] dependencies: build without ccache
+Date: Fri, 02 Aug 2013 09:33:56 +0200
+Subject: [Buildroot] [PATCH 4 of 4] sstrip: remove unneed explicit ccache
+	dependency
 In-Reply-To: <patchbomb.1375428832@BEANTN0L019720>
 References: <patchbomb.1375428832@BEANTN0L019720>
-Message-ID: <a88854640580cd1738ee.1375428833@BEANTN0L019720>
+Message-ID: <488616f386aa80c0f07e.1375428836@BEANTN0L019720>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch forces the plain host compiler to be used during the building of
-dependencies, without ccache as it is not yet built.
+This ccache dependency was here to enforce the build order.
+It is not needed anymore.
 
+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
 ---
- support/dependencies/dependencies.mk |  2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+package/sstrip/sstrip.mk | 5 -----
+ 1 file changed, 5 deletions(-)
 
-diff --git a/support/dependencies/dependencies.mk b/support/dependencies/dependencies.mk
---- a/support/dependencies/dependencies.mk
-+++ b/support/dependencies/dependencies.mk
-@@ -25,6 +25,8 @@ core-dependencies:
- 		DL_TOOLS="$(sort $(DL_TOOLS_DEPENDENCIES))" \
- 		$(TOPDIR)/support/dependencies/dependencies.sh
+diff --git a/package/sstrip/sstrip.mk b/package/sstrip/sstrip.mk
+--- a/package/sstrip/sstrip.mk
++++ b/package/sstrip/sstrip.mk
+@@ -8,11 +8,6 @@ SSTRIP_SITE = svn://dev.openwrt.org/open
+ SSTRIP_VERSION = 20154
+ HOST_SSTRIP_BINARY = $(GNU_TARGET_NAME)-sstrip
  
-+dependencies: HOSTCC=$(HOSTCC_NOCCACHE)
-+dependencies: HOSTCXX=$(HOSTCXX_NOCCACHE)
- dependencies: core-dependencies $(DEPENDENCIES_HOST_PREREQ)
- 
- dependencies-source:
+-# This is a kludge to get host-ccache built before us or it fails
+-ifeq ($(BR2_CCACHE),y)
+-HOST_SSTRIP_DEPENDENCIES = host-ccache
+-endif
+-
+ define SSTRIP_BUILD_CMDS
+ 	cd $(@D) ; \
+ 	$(TARGET_CC) $(TARGET_CFLAGS) -include endian.h -include byteswap.h \
