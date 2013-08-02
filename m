@@ -1,57 +1,41 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 2 Aug 2013 15:49:59 +0200
-Subject: [Buildroot] Using the new Ti-gfx with Qt5
-In-Reply-To: <CALo-6+h4oqehKotTEC3jGLpFXtsRCHCEjrbDJxQ=tyrK0xYCig@mail.gmail.com>
-References: <CALo-6+jacTWNK9aO4FFCUDAyNtSED5wy3q+hMSvFWM3Jciafdw@mail.gmail.com>
- <20130801073520.622bf499@skate>
- <CALo-6+gxOM0m2fztO-Xu58Jq0mhZKgqC-2uj_M27Ooy242vfPA@mail.gmail.com>
- <321768C95D21724485BCE784F1BE98473EB85D97@DBDE04.ent.ti.com>
- <CALo-6+h4oqehKotTEC3jGLpFXtsRCHCEjrbDJxQ=tyrK0xYCig@mail.gmail.com>
-Message-ID: <20130802154959.0afcce05@skate>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 2 Aug 2013 18:55:33 +0200
+Subject: [Buildroot] [PATCH RFC] host-mkpasswd: new package
+In-Reply-To: <006319514f28056ea03a.1375440500@BEANTN0L019720>
+References: <006319514f28056ea03a.1375440500@BEANTN0L019720>
+Message-ID: <20130802165533.GB3349@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Charles Krinke,
+Thomas, All,
 
-On Fri, 2 Aug 2013 06:38:44 -0700, Charles Krinke wrote:
-
-> I am not on any kernel, but rather am trying to find a recipe that
-> will allow ti-gfx to successfully compile. The 3.10 kernel is merely
-> the default option when the arago toolchain is selected.
-
-No, that doesn't make any sense. Selecting the Arago toolchain does not
-select the kernel or any particular kernel version.
-
-> I think we can make progress if we had a default, known working
-> .config for buildroot for the AM3517 with Qt5 and ti-gfx with
-> *whatever* kernel TI feels comfortable with.
-
-I've used kernel 3.9.2 successfully with those ti-gfx drivers just a
-month ago.
-
-> Can someone at TI provide a default, known working .config for
-> buildroot? This is not the .config for the kernel, but rather for
-> buildroot. For the kernel, I assume TI recommends "omap2_plus".
+On 2013-08-02 12:48 +0200, Thomas De Schampheleire spake thusly:
+> Since the addition of root password setting support in buildroot, there have
+> been a few bug reports in this area ([1], [2]). In these cases, the system
+> mkpasswd did either not work, or did not provide the options we expect, like
+> -m <method>.
 > 
-> Perhaps as some other boards and variations have a readme.txt or
-> default configuration in buildroot's board directory, it might be to
-> our advantage to have such a file or files for TI's 356X and 3517
-> SOC's and their respective reference designs from LogicPD and others.
+> This patch adds a mkpasswd host package, based on the sources from whois. When
+> a non-empty root password is set, this package is used as a dependency.
+> 
+> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
-The problem we have is that the Buildroot defconfig are normally here
-to generate a minimal system, i.e just bootloader+kernel+busybox. We
-have been discussing how to include more defconfig that provide more
-features, but we haven't really reached a consensus yet on how to do
-that.
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Best regards,
+Untested, but looks OK (which is all a reviewed-by means, by all means).
 
-Thomas
+Since it's too late for -rc1 I believe, I'll test it this WE.
+
+Regards,
+Yann E. MORIN.
+
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
