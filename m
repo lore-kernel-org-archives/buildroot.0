@@ -1,46 +1,114 @@
-From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Fri, 2 Aug 2013 11:27:42 +0200
-Subject: [Buildroot] List of pending patches: what to do?
-In-Reply-To: <20130802111026.4ebc403f@skate>
-References: <20130731191415.545f7dff@skate>
- <CAHXCMMJ63sJ=m5V1c5+TqOn8TfdBop20gzDHjL85Ks1rYYU+-g@mail.gmail.com>
- <20130801182311.6bb6e57e@skate>
- <CAHXCMMJacpBKoSpKH8NRtDyto92ZZ6AA2bh2jFyOZx4L00cxFw@mail.gmail.com>
- <CAAXf6LXdqkH1ccdDNdUVdriKxKur3f8ZtV58AaCsQPspUxMLaw@mail.gmail.com>
- <20130802105007.6957b0da@skate>
- <CAAXf6LUogmYufmPM9xDf4VjiNV_N_Vg+kuXvzL2ky7Pp0dcJHw@mail.gmail.com>
- <20130802111026.4ebc403f@skate>
-Message-ID: <CAAXf6LXgg0jnTAnVu3mRU7ti+6n8LERcONWB=NpHOtvKUG38mA@mail.gmail.com>
+From: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+Date: Fri, 02 Aug 2013 12:31:06 +0200
+Subject: [Buildroot] [PATCH v3] trace-cmd : new package
+In-Reply-To: <1375430034-5257-1-git-send-email-pierre.floury@gmail.com>
+References: <1375430034-5257-1-git-send-email-pierre.floury@gmail.com>
+Message-ID: <51FB8A6A.9010105@trzebnica.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Aug 2, 2013 at 11:10 AM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Dear Thomas De Schampheleire,
->
-> On Fri, 2 Aug 2013 11:09:11 +0200, Thomas De Schampheleire wrote:
->
->> > So the intention is really to have 'make foo-rebuild' do that 'make &&
->> > make install' for the user, for the package <foo>.
->>
->> As said, I don't have a problem with the existing
->> reconfigure-does-it-all approach.
->> I may have misunderstood the objections of others: there is no
->> objection against reconfigure doing also rebuild, only that
->> reconfigure and rebuild also make the rootfs?
->
-> That's my understanding of what the objections are, yes.
+Hi Pierre,
 
-Ok, in this case I'm fine with changing the situation to handle the
-objections, so that if you want to make the rootfs, you explicitly
-have to call the 'all' target.
+> From: pierre <pierre.floury@gmail.com>
+>
+> This commit adds a new package for the trace-cmd tool.
+> This tool is a command line front end of ftrace.
+> It collects traces on your target.
+> You can analyse these traces on the target or on the host via
+> the gui "kernel shark".
+>
+> http://git.kernel.org/cgit/linux/kernel/git/rostedt/trace-cmd.git
+>
+> Signed-off-by: Pierre Floury <pierre.floury@gmail.com>
+>
+> ---
+> Change since v2 :
+> - apply change recommanded by Thomas De Schampheleire
+> - use full name in signed off
+> - use alphabetic order on Config.in
+> - respect the #80
+>
+> Change since v1 :
+> - apply change recommanded by Thomas De Schampheleire and Thomas
+> Petazzoni
+> - set good license
+> - set good license files
+> - change name in the .mk from TRACECMD to TRACE_CMD
+> - change comment on the Config.in
+> - use a tag git instread of a commit number
+> ---
+>   package/Config.in              |    1 +
+>   package/trace-cmd/Config.in    |   10 ++++++++++
+>   package/trace-cmd/trace-cmd.mk |   23 +++++++++++++++++++++++
+>   3 files changed, 34 insertions(+)
+>   create mode 100644 package/trace-cmd/Config.in
+>   create mode 100644 package/trace-cmd/trace-cmd.mk
+>
+> diff --git a/package/Config.in b/package/Config.in
+> index 7069d77..f5b14f6 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -48,6 +48,7 @@ source "package/strace/Config.in"
+>   source "package/stress/Config.in"
+>   source "package/sysprof/Config.in"
+>   source "package/tinymembench/Config.in"
+> +source "package/trace-cmd/Config.in"
+>   source "package/whetstone/Config.in"
+>   source "package/valgrind/Config.in"
+>   source "package/pv/Config.in"
+> diff --git a/package/trace-cmd/Config.in b/package/trace-cmd/Config.in
+> new file mode 100644
+> index 0000000..5b2b5e4
+> --- /dev/null
+> +++ b/package/trace-cmd/Config.in
+> @@ -0,0 +1,10 @@
+> +config BR2_PACKAGE_TRACE_CMD
+> +	bool "trace-cmd"
+> +	help
+> +	  Command line reader for ftrace
+> +	  To use this profiling tool, you should enable ftrace in your kernel
+> +	  configuration. This command collect traces on your target.
+> +	  You can analyse these traces on the target or on the host via the gui
+> +	  "kernel shark"
+> +
+> +	  http://git.kernel.org/cgit/linux/kernel/git/rostedt/trace-cmd.git
+> diff --git a/package/trace-cmd/trace-cmd.mk b/package/trace-cmd/trace-cmd.mk
+> new file mode 100644
+> index 0000000..1f81124
+> --- /dev/null
+> +++ b/package/trace-cmd/trace-cmd.mk
+> @@ -0,0 +1,23 @@
+> +#############################################################
+> +#
+> +# trace-cmd
+> +#
+> +#############################################################
+As Thomas said, please use exactly 80 # characters for this header e.g.
+############################################################################## 
 
-This 'translation table' to mimic the old behavior is still correct, right:
-foo-reconfigure --> foo-reconfigure all
-foo-rebuild     --> foo-rebuild all
 
-Best regards,
-Thomas
+Regards,
+Jerzy
+
+
+> +
+> +TRACE_CMD_VERSION = trace-cmd-v2.2.1
+> +TRACE_CMD_SITE = http://git.kernel.org/cgit/linux/kernel/git/rostedt/trace-cmd.git
+> +TRACE_CMD_SITE_METHOD = git
+> +TRACE_CMD_INSTALL_STAGING = YES
+> +TRACE_CMD_LICENSE = GPLv2 LGPLv2.1
+> +TRACE_CMD_LICENSE_FILES = COPYING COPYING.LIB
+> +define TRACE_CMD_BUILD_CMDS
+> +     $(MAKE) CC="$(TARGET_CC)" LD="$(TARGET_LD)" -C $(@D) all
+> +endef
+> +
+> +define TRACE_CMD_INSTALL_TARGET_CMDS
+> +	$(INSTALL) -D -m 0755 $(@D)/trace-cmd $(TARGET_DIR)/usr/bin
+> +	$(INSTALL) -d -m 0755 $(TARGET_DIR)/usr/lib/trace-cmd/plugins
+> +	$(INSTALL) -D -m 0755 $(@D)/plugin_*.so $(TARGET_DIR)/usr/lib/trace-cmd/plugins
+> +endef
+> +
+> +$(eval $(generic-package))
