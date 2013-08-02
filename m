@@ -1,51 +1,58 @@
-From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Fri, 2 Aug 2013 10:50:44 +0200
-Subject: [Buildroot] [PATCH 1 of 2 v2] infra: introduce
- suitable-extractor helper function
-In-Reply-To: <20130802102851.388356b2@skate>
-References: <patchbomb.1375390546@BEANTN0L019720>
- <b277803240198c7900d9.1375390547@BEANTN0L019720>
- <20130802102851.388356b2@skate>
-Message-ID: <CAAXf6LWFBKk2mebh8eVdhR1Epcauf5Lmk4CZLqgDV4Us+SX+GA@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 2 Aug 2013 10:52:42 +0200
+Subject: [Buildroot] [PATCH 2 of 4] host-ccache: turn into a proper
+	dependency
+In-Reply-To: <CAHXCMM+DtuDr4OBq7e5zdj4+pQnu2uOXP9bj_COxt=hWkwre=w@mail.gmail.com>
+References: <patchbomb.1375428832@BEANTN0L019720>
+ <f72fc9db6ce74195608e.1375428834@BEANTN0L019720>
+ <CAHXCMM+DtuDr4OBq7e5zdj4+pQnu2uOXP9bj_COxt=hWkwre=w@mail.gmail.com>
+Message-ID: <20130802105242.123b40af@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Aug 2, 2013 at 10:28 AM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Dear Thomas De Schampheleire,
->
-> On Thu, 01 Aug 2013 22:55:47 +0200, Thomas De Schampheleire wrote:
->
->> diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
->> --- a/package/pkg-utils.mk
->> +++ b/package/pkg-utils.mk
->> @@ -62,6 +62,8 @@ INFLATE.tbz2 = $(BZCAT)
->>  INFLATE.tgz  = $(ZCAT)
->>  INFLATE.xz   = $(XZCAT)
->>  INFLATE.tar  = cat
->> +# suitable-extractor(filename): returns extractor based on suffix
->> +suitable-extractor = $(firstword $(INFLATE$(suffix $(1))))
->
-> Do you know why we need this $(firstword ...) call here? In all places
-> in was using directly $(INFLATE$(...)), except in the package
-> infrastructure where it was doing this firstword additional call.
->
-> It was added by Peter in 2c6390a5d0c01420879e9f23bc89afb19976da4a.
+Dear Samuel Martin,
 
-It wasn't clear to me when I sent the patch, but I figured it didn't hurt.
-But now I think I know: the inflate targets originate from the
-.config, and users can add extra arguments there. In fact, the default
-for $(ZCAT) is:
-BR2_ZCAT="gzip -d -c"
+On Fri, 2 Aug 2013 10:27:49 +0200, Samuel Martin wrote:
 
-To check the dependency, we only want to check for 'gzip', but to do
-the actual inflate, we shouldn't use 'firstword'. So, the patch is
-wrong, and I will fix it :)
+> > Note: this in itself works, when the dependencies are built (regular 'make'
+> > for example, or explicit 'make dependencies'). However, if we want to
+> > supersede patch http://patchwork.ozlabs.org/patch/257372/, that wants
+> > the following to work:
+> >
+> > $ make clean menuconfig
+> > $ make {barebox,busybox,ctng,linux,uclibc}-menuconfig
+> >
+> > then I think something additional is necessary. In the above flow, the
+> > dependencies target is never used, so host-ccache doesn't get a chance to
+> > build.
+> Humm... I don't think so. This patch should be enough to fix the bug #5678.
+> I mean, to run *-menuconfig, the package need to be extracted beforehand.
+> I expect the 'dependencies' target is part of dependency list of the
+> *-extract target (because of host-tar).
 
-Thanks for highlighting this!
+But it's not the case as far as I can see.
 
-Best regards,
+in busybox.mk:
+
+busybox-menuconfig busybox-xconfig busybox-gconfig: busybox-patch
+
+in pkg-generic.mk
+
+$(1)-patch:             $(1)-extract $$($(2)_TARGET_PATCH)
+
+$(1)-extract:           $(1)-source \
+                        $$($(2)_TARGET_EXTRACT)
+
+$(1)-source:            $$($(2)_TARGET_SOURCE)
+
+and that's it. Nowhere it pulls 'dependencies' as far as I can see.
+
 Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
