@@ -1,52 +1,44 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 2 Aug 2013 10:56:33 +0200
-Subject: [Buildroot] [PATCH 1 of 2 v2] infra: introduce
- suitable-extractor helper function
-In-Reply-To: <CAAXf6LWFBKk2mebh8eVdhR1Epcauf5Lmk4CZLqgDV4Us+SX+GA@mail.gmail.com>
-References: <patchbomb.1375390546@BEANTN0L019720>
- <b277803240198c7900d9.1375390547@BEANTN0L019720>
- <20130802102851.388356b2@skate>
- <CAAXf6LWFBKk2mebh8eVdhR1Epcauf5Lmk4CZLqgDV4Us+SX+GA@mail.gmail.com>
-Message-ID: <20130802105633.0deb97c3@skate>
+From: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+Date: Fri,  2 Aug 2013 10:57:31 +0200
+Subject: [Buildroot] [PATCH 1/1] fix license typo
+Message-ID: <1375433851-5791-1-git-send-email-jerzy.grzegorek@trzebnica.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas De Schampheleire,
+Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+---
+ package/cppcms/cppcms.mk |    2 +-
+ package/libcec/libcec.mk |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-On Fri, 2 Aug 2013 10:50:44 +0200, Thomas De Schampheleire wrote:
-
-> > Do you know why we need this $(firstword ...) call here? In all places
-> > in was using directly $(INFLATE$(...)), except in the package
-> > infrastructure where it was doing this firstword additional call.
-> >
-> > It was added by Peter in 2c6390a5d0c01420879e9f23bc89afb19976da4a.
-> 
-> It wasn't clear to me when I sent the patch, but I figured it didn't hurt.
-> But now I think I know: the inflate targets originate from the
-> .config, and users can add extra arguments there. In fact, the default
-> for $(ZCAT) is:
-> BR2_ZCAT="gzip -d -c"
-> 
-> To check the dependency, we only want to check for 'gzip', but to do
-> the actual inflate, we shouldn't use 'firstword'. So, the patch is
-> wrong, and I will fix it :)
-
-Ok, makes sense to me now. Indeed this makes the patch wrong :)
-
-Are you annoyed if I integrate this in -next ? I want to release -rc1
-today, and I think this kind of stuff is a little bit too sensitive to
-be merged now. From your quick feedback on those patches, I have the
-feeling that you wanted it in 2013.08, so I don't want to ruin your
-hope, but I believe it's a bit too late now. What do you think?
-
-Best regards,
-
-Thomas
+diff --git a/package/cppcms/cppcms.mk b/package/cppcms/cppcms.mk
+index d2b1109..8d4a519 100644
+--- a/package/cppcms/cppcms.mk
++++ b/package/cppcms/cppcms.mk
+@@ -7,7 +7,7 @@
+ CPPCMS_VERSION = 1.0.3
+ CPPCMS_SOURCE = cppcms-$(CPPCMS_VERSION).tar.bz2
+ CPPCMS_LICENSE = LGPLv3
+-CPPCMS_LICENSE_FILE = COPYING.TXT
++CPPCMS_LICENSE_FILES = COPYING.TXT
+ CPPCMS_SITE = http://downloads.sourceforge.net/project/cppcms/cppcms/$(CPPCMS_VERSION)
+ CPPCMS_INSTALL_STAGING = YES
+ 
+diff --git a/package/libcec/libcec.mk b/package/libcec/libcec.mk
+index 49fa067..8a58e1e 100644
+--- a/package/libcec/libcec.mk
++++ b/package/libcec/libcec.mk
+@@ -7,7 +7,7 @@
+ LIBCEC_VERSION = libcec-2.1.1
+ LIBCEC_SITE = http://github.com/Pulse-Eight/libcec/tarball/$(LIBCEC_VERSION)
+ LIBCEC_LICENSE = GPLv2+
+-LIBCEC_LICENSE_FILE = COPYING
++LIBCEC_LICENSE_FILES = COPYING
+ 
+ # Autoreconf required due to being a dev tarball and not a release tarball.
+ LIBCEC_AUTORECONF = YES
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+1.7.9.5
