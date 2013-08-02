@@ -1,42 +1,53 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 2 Aug 2013 10:28:51 +0200
-Subject: [Buildroot] [PATCH 1 of 2 v2] infra: introduce
- suitable-extractor helper function
-In-Reply-To: <b277803240198c7900d9.1375390547@BEANTN0L019720>
-References: <patchbomb.1375390546@BEANTN0L019720>
- <b277803240198c7900d9.1375390547@BEANTN0L019720>
-Message-ID: <20130802102851.388356b2@skate>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri,  2 Aug 2013 08:31:00 +0000 (UTC)
+Subject: [Buildroot] [Bug 6410] omap3_beagle has uimage error load address
+	error
+In-Reply-To: <bug-6410-163@https.bugs.busybox.net/>
+References: <bug-6410-163@https.bugs.busybox.net/>
+Message-ID: <20130802083100.BC4769B001@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas De Schampheleire,
+https://bugs.busybox.net/show_bug.cgi?id=6410
 
-On Thu, 01 Aug 2013 22:55:47 +0200, Thomas De Schampheleire wrote:
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
 
-> diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
-> --- a/package/pkg-utils.mk
-> +++ b/package/pkg-utils.mk
-> @@ -62,6 +62,8 @@ INFLATE.tbz2 = $(BZCAT)
->  INFLATE.tgz  = $(ZCAT)
->  INFLATE.xz   = $(XZCAT)
->  INFLATE.tar  = cat
-> +# suitable-extractor(filename): returns extractor based on suffix
-> +suitable-extractor = $(firstword $(INFLATE$(suffix $(1))))
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|                            |WORKSFORME
 
-Do you know why we need this $(firstword ...) call here? In all places
-in was using directly $(INFLATE$(...)), except in the package
-infrastructure where it was doing this firstword additional call.
+--- Comment #2 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> 2013-08-02 08:31:23 UTC ---
+Well, BR2_TARGET_UBOOT_BOARDNAME="omap3_beagle" is a U-Boot option, while the
+build error you have is from the kernel.
 
-It was added by Peter in 2c6390a5d0c01420879e9f23bc89afb19976da4a.
+Since a few kernel versions, ARM has moved to multiplatform kernel, and the
+load address is no longer known by the kernel sources themselves, and must be
+passed as a LOADADDR environment variable when generating a kernel uImage.
 
-Ideas?
+Buildroot has support for that, in the form of the
+BR2_LINUX_KERNEL_UIMAGE_LOADADDR:
 
-Thomas
+config BR2_LINUX_KERNEL_UIMAGE_LOADADDR
+        string "load address (for 3.7+ multi-platform image)"
+        depends on BR2_arm || BR2_armeb
+        depends on BR2_LINUX_KERNEL_UIMAGE || BR2_LINUX_KERNEL_APPENDED_UIMAGE
+        help
+          If your ARM system's Linux kernel is configured with the new (3.7+)
+          multi-architecture support (CONFIG_ARCH_MULTIPLATFORM=y in your
+          kernel config), then it is necessary to specify a kernel load address
+          when building the uImage. This should be a hexadecimal string
+          beginning with 0x, for example: 0x00008000.
+
+          If unsure, let this option empty.
+
+You simply need to use this option. For your OMAP3 BeagleBoard, I suggest you
+to use 0x80008000.
+
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
