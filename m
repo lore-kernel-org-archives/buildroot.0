@@ -1,104 +1,42 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Fri, 2 Aug 2013 10:27:49 +0200
-Subject: [Buildroot] [PATCH 2 of 4] host-ccache: turn into a proper
-	dependency
-In-Reply-To: <f72fc9db6ce74195608e.1375428834@BEANTN0L019720>
-References: <patchbomb.1375428832@BEANTN0L019720>
- <f72fc9db6ce74195608e.1375428834@BEANTN0L019720>
-Message-ID: <CAHXCMM+DtuDr4OBq7e5zdj4+pQnu2uOXP9bj_COxt=hWkwre=w@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 2 Aug 2013 10:28:51 +0200
+Subject: [Buildroot] [PATCH 1 of 2 v2] infra: introduce
+ suitable-extractor helper function
+In-Reply-To: <b277803240198c7900d9.1375390547@BEANTN0L019720>
+References: <patchbomb.1375390546@BEANTN0L019720>
+ <b277803240198c7900d9.1375390547@BEANTN0L019720>
+Message-ID: <20130802102851.388356b2@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas (both), all,
+Dear Thomas De Schampheleire,
 
-2013/8/2 Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>:
-> This patch moves the host-ccache build target from BASE_TARGETS in Makefile
-> to an actual host prerequisite in support/dependencies. This causes
-> host-ccache to be built as part of the dependencies, before any real package
-> is built.
-> Since the dependencies are built without ccache anyway, there is no need to
-> set HOST_CCACHE_CONF_ENV anymore.
->
-> Suggested-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-Acked-by: Samuel Martin <s.martin49@gmail.com>
+On Thu, 01 Aug 2013 22:55:47 +0200, Thomas De Schampheleire wrote:
 
->
-> ---
->
->  Makefile                             |  4 ----
->  package/ccache/ccache.mk             |  6 ------
->  support/dependencies/dependencies.mk |  4 ++++
->  3 files changed, 4 insertions(+), 10 deletions(-)
->
->
-> Note: this in itself works, when the dependencies are built (regular 'make'
-> for example, or explicit 'make dependencies'). However, if we want to
-> supersede patch http://patchwork.ozlabs.org/patch/257372/, that wants
-> the following to work:
->
-> $ make clean menuconfig
-> $ make {barebox,busybox,ctng,linux,uclibc}-menuconfig
->
-> then I think something additional is necessary. In the above flow, the
-> dependencies target is never used, so host-ccache doesn't get a chance to
-> build.
-Humm... I don't think so. This patch should be enough to fix the bug #5678.
-I mean, to run *-menuconfig, the package need to be extracted beforehand.
-I expect the 'dependencies' target is part of dependency list of the
-*-extract target (because of host-tar).
-If it's done so, then it's ok tm.
+> diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
+> --- a/package/pkg-utils.mk
+> +++ b/package/pkg-utils.mk
+> @@ -62,6 +62,8 @@ INFLATE.tbz2 = $(BZCAT)
+>  INFLATE.tgz  = $(ZCAT)
+>  INFLATE.xz   = $(XZCAT)
+>  INFLATE.tar  = cat
+> +# suitable-extractor(filename): returns extractor based on suffix
+> +suitable-extractor = $(firstword $(INFLATE$(suffix $(1))))
 
->
-> diff --git a/Makefile b/Makefile
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -222,10 +222,6 @@ GNU_HOST_NAME:=$(shell support/gnuconfig
->  #
->  ################################################################################
->
-> -ifeq ($(BR2_CCACHE),y)
-> -BASE_TARGETS += host-ccache
-> -endif
-> -
->  ifeq ($(BR2_TOOLCHAIN_BUILDROOT),y)
->  BASE_TARGETS += toolchain-buildroot
->  else ifeq ($(BR2_TOOLCHAIN_EXTERNAL),y)
-> diff --git a/package/ccache/ccache.mk b/package/ccache/ccache.mk
-> --- a/package/ccache/ccache.mk
-> +++ b/package/ccache/ccache.mk
-> @@ -10,12 +10,6 @@ CCACHE_SOURCE  = ccache-$(CCACHE_VERSION
->  CCACHE_LICENSE = GPLv3+, others
->  CCACHE_LICENSE_FILES = LICENSE.txt GPL-3.0.txt
->
-> -# When ccache is being built for the host, ccache is not yet
-> -# available, so we have to use the special C compiler without the
-> -# cache.
-> -HOST_CCACHE_CONF_ENV = \
-> -       CC="$(HOSTCC_NOCCACHE)"
-> -
->  # Force ccache to use its internal zlib. The problem is that without
->  # this, ccache would link against the zlib of the build system, but we
->  # might build and install a different version of zlib in $(O)/host
-> diff --git a/support/dependencies/dependencies.mk b/support/dependencies/dependencies.mk
-> --- a/support/dependencies/dependencies.mk
-> +++ b/support/dependencies/dependencies.mk
-> @@ -20,6 +20,10 @@ ifeq ($(BR2_STRIP_sstrip),y)
->  DEPENDENCIES_HOST_PREREQ+=host-sstrip
->  endif
->
-> +ifeq ($(BR2_CCACHE),y)
-> +DEPENDENCIES_HOST_PREREQ += host-ccache
-> +endif
-> +
->  core-dependencies:
->         @HOSTCC="$(firstword $(HOSTCC))" MAKE="$(MAKE)" \
->                 DL_TOOLS="$(sort $(DL_TOOLS_DEPENDENCIES))" \
+Do you know why we need this $(firstword ...) call here? In all places
+in was using directly $(INFLATE$(...)), except in the package
+infrastructure where it was doing this firstword additional call.
 
-Regards,
+It was added by Peter in 2c6390a5d0c01420879e9f23bc89afb19976da4a.
 
+Ideas?
+
+Thomas
 -- 
-Samuel
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
