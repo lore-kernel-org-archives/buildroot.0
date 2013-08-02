@@ -1,63 +1,63 @@
 From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Fri, 2 Aug 2013 10:33:18 +0200
-Subject: [Buildroot] List of pending patches: what to do?
-In-Reply-To: <CAHXCMMJacpBKoSpKH8NRtDyto92ZZ6AA2bh2jFyOZx4L00cxFw@mail.gmail.com>
-References: <20130731191415.545f7dff@skate>
- <CAHXCMMJ63sJ=m5V1c5+TqOn8TfdBop20gzDHjL85Ks1rYYU+-g@mail.gmail.com>
- <20130801182311.6bb6e57e@skate>
- <CAHXCMMJacpBKoSpKH8NRtDyto92ZZ6AA2bh2jFyOZx4L00cxFw@mail.gmail.com>
-Message-ID: <CAAXf6LXdqkH1ccdDNdUVdriKxKur3f8ZtV58AaCsQPspUxMLaw@mail.gmail.com>
+Date: Fri, 2 Aug 2013 10:45:19 +0200
+Subject: [Buildroot] [PATCH 2 of 4] host-ccache: turn into a proper
+	dependency
+In-Reply-To: <CAHXCMM+DtuDr4OBq7e5zdj4+pQnu2uOXP9bj_COxt=hWkwre=w@mail.gmail.com>
+References: <patchbomb.1375428832@BEANTN0L019720>
+ <f72fc9db6ce74195608e.1375428834@BEANTN0L019720>
+ <CAHXCMM+DtuDr4OBq7e5zdj4+pQnu2uOXP9bj_COxt=hWkwre=w@mail.gmail.com>
+Message-ID: <CAAXf6LXjMKUZ_Q6N9m=cU=30=3eqzUb_bEvyEHgx4+c00etXdg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Aug 1, 2013 at 11:30 PM, Samuel Martin <s.martin49@gmail.com> wrote:
-> Thomas, all,
->
-> 2013/8/1 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>:
->> Dear Samuel Martin,
->>
->> On Thu, 1 Aug 2013 00:13:35 +0200, Samuel Martin wrote:
->>
->>> 2013/7/31 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>:
->>>
->>> > http://patchwork.ozlabs.org/patch/243426 Fix bug with dependencies of *-rebuild and *-reconfigure
->>> > http://patchwork.ozlabs.org/patch/172278 pkg-infra: limit -reconfigure and -rebuild actions
->>> Both treat the same thing!
->>> A "political decision" has to be made on this since it slightly
->>> changes the way some BR commands work.
->>
->> Can we have a decision on those ones?
->>
->> On my side, I kind of like the fact that 'make blabla-rebuild' both
->> rebuilds the blabla package and regenerates the root filesystem. It
->> avoids the need for 'make blabla-rebuild && make'. However, it's true
->> that it's inconsistent with 'make blabla-dirclean', which just removes
->> the build directory, and therefore requires a 'make blabla-dirclean &&
->> make' if you want to completely rebuild a package from scratch.
->
-> IIRC, we talked about this during some BR dev days or patchwork-day
-> session, and in the end we kept statu quo.
->
-> I'd rather be in favor of these patches, although I barely use the
-> *-re{configure,build} targets;
-> anyway it's just one opinion among others.
->
+Hi Samuel,
 
-I am currently used to -reconfigure and -rebuild to rebuild also the
-rootfs, but I also agree it's inconsistent with the other targets. If
-we want to be strict, then foo-reconfigure can only configure, not
-build. And foo-rebuild can only build.
-Hence, to get the original behavior of:
-foo-reconfigure --> foo-reconfigure all
-foo-rebuild     --> foo-rebuild all
+On Fri, Aug 2, 2013 at 10:27 AM, Samuel Martin <s.martin49@gmail.com> wrote:
+> Hi Thomas (both), all,
+>
+> 2013/8/2 Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>:
+>> This patch moves the host-ccache build target from BASE_TARGETS in Makefile
+>> to an actual host prerequisite in support/dependencies. This causes
+>> host-ccache to be built as part of the dependencies, before any real package
+>> is built.
+>> Since the dependencies are built without ccache anyway, there is no need to
+>> set HOST_CCACHE_CONF_ENV anymore.
+>>
+>> Suggested-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+>> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+> Acked-by: Samuel Martin <s.martin49@gmail.com>
+>
+>>
+>> ---
+>>
+>>  Makefile                             |  4 ----
+>>  package/ccache/ccache.mk             |  6 ------
+>>  support/dependencies/dependencies.mk |  4 ++++
+>>  3 files changed, 4 insertions(+), 10 deletions(-)
+>>
+>>
+>> Note: this in itself works, when the dependencies are built (regular 'make'
+>> for example, or explicit 'make dependencies'). However, if we want to
+>> supersede patch http://patchwork.ozlabs.org/patch/257372/, that wants
+>> the following to work:
+>>
+>> $ make clean menuconfig
+>> $ make {barebox,busybox,ctng,linux,uclibc}-menuconfig
+>>
+>> then I think something additional is necessary. In the above flow, the
+>> dependencies target is never used, so host-ccache doesn't get a chance to
+>> build.
+> Humm... I don't think so. This patch should be enough to fix the bug #5678.
+> I mean, to run *-menuconfig, the package need to be extracted beforehand.
+> I expect the 'dependencies' target is part of dependency list of the
+> *-extract target (because of host-tar).
+> If it's done so, then it's ok tm.
 
-Is that understanding correct?
-As long as we can document this properly, also in the ChangeLog, then
-I'm fine with this semantic change. Adding 'all' isn't the end of the
-world.
-
-Best regards,
-Thomas
+I may be missing something, but I don't see a dependency of *-extract
+on 'dependencies'.
+Also, I tried the scenario and it doesn't work. The compiler used to
+do the linux-menuconfig is with ccache, and it isn't built
+automatically, unless you specify 'dependencies' manually.
