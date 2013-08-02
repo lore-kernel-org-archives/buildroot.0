@@ -1,38 +1,38 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri, 02 Aug 2013 07:49:39 -0300
-Subject: [Buildroot] Problem with an MPC8272 build
-In-Reply-To: <51FAF401.60702@rftechnology.com.au>
-References: <51FAF401.60702@rftechnology.com.au>
-Message-ID: <51FB8EC3.3030309@zacarias.com.ar>
+From: Patrick Ziegler <patrick.ziegler@fh-kl.de>
+Date: Fri, 2 Aug 2013 13:11:23 +0200
+Subject: [Buildroot] List of pending patches: what to do?
+In-Reply-To: <20130731191415.545f7dff@skate>
+References: <20130731191415.545f7dff@skate>
+Message-ID: <51FB93DB.9040404@fh-kl.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 08/01/2013 08:49 PM, Jason Rennie wrote:
-> Buildroot does run successfully, and I have put the rootfs that is made
-> on the device and it does boot successfully with the older kernel (well
-> mostly, some networking stuff appears to be missing). But when I put the
-> new kernel on the device I get nothing. I've tried enabling early kernel
-> debugging but with no success (setting the CPM to the addresses
-> suggested by the old kernels output). I also don't seem to be able to
-> get U-Boot to work and I need to end up breaking out the BDI2000 anytime
-> I try to update U-Boot with the newer version as I brick the device.
-> 
-> I have tried with the most basic possible build, not tweaking anything
-> and basically just doing the stock buildroot build for the MPC8272
-> through to poking and tweaking all sorts of thing.
-> 
-> Any tips? I've attached the old dmesg output if tht helps. I'm
-> hopelessly confused and been beating my head against this for a month so
-> any help would be greatly appreciated. I'm pretty much out of ideas.
+Hi,
 
-A buildroot .config would help so we can see if there's anything that
-could go wrong.
-On the toolchain side a 603e should be the target, if that's wrong then
-anything you build might fail.
-On the kernel side are you building a 2.6.18ish kernel with a new
-buildroot or a newer kernel? An updated kernel will very likely need an
-updated DTB as well.
-Regards.
+On 31.07.2013 19:14, Thomas Petazzoni wrote:
+
+> http://patchwork.ozlabs.org/patch/220720 Using external toolchain wrapper outside of buildroot
+
+Fixed with another commit (74ae7af927)
+
+Patrick
+
+-- 
+Dipl.-Inf. (FH) Patrick Ziegler
+
+University Of Applied Sciences
+Kaiserslautern
+
+Amerikastrasse 1
+D-66482 Zweibruecken
+Germany
+
+Phone:  +49 631 3724 5526
+Mail:   patrick.ziegler at fh-kl.de
+PGP KeyID 0xB4796B8C
+
+http://www.fh-kl.de
+http://www.fh-kl.de/fachbereiche/imst/iuk-knowhow.html
