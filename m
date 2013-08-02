@@ -1,35 +1,33 @@
 From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Fri, 02 Aug 2013 09:33:55 +0200
-Subject: [Buildroot] [PATCH 3 of 4] crosstool-ng: remove unneed explicit
-	ccache dependency
+Date: Fri, 02 Aug 2013 09:33:53 +0200
+Subject: [Buildroot] [PATCH 1 of 4] dependencies: build without ccache
 In-Reply-To: <patchbomb.1375428832@BEANTN0L019720>
 References: <patchbomb.1375428832@BEANTN0L019720>
-Message-ID: <f3b0ceb71ecc58d2eef4.1375428835@BEANTN0L019720>
+Message-ID: <a88854640580cd1738ee.1375428833@BEANTN0L019720>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This ccache dependency was here to enforce build order.
-It is not needed anymore.
+This patch forces the plain host compiler to be used during the building of
+dependencies, without ccache as it is not yet built.
 
-Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
 ---
-package/crosstool-ng/crosstool-ng.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ support/dependencies/dependencies.mk |  2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/crosstool-ng/crosstool-ng.mk b/package/crosstool-ng/crosstool-ng.mk
---- a/package/crosstool-ng/crosstool-ng.mk
-+++ b/package/crosstool-ng/crosstool-ng.mk
-@@ -11,7 +11,7 @@ CROSSTOOL_NG_INSTALL_TARGET    = NO
- CROSSTOOL_NG_MAKE              = $(MAKE1)
+diff --git a/support/dependencies/dependencies.mk b/support/dependencies/dependencies.mk
+--- a/support/dependencies/dependencies.mk
++++ b/support/dependencies/dependencies.mk
+@@ -25,6 +25,8 @@ core-dependencies:
+ 		DL_TOOLS="$(sort $(DL_TOOLS_DEPENDENCIES))" \
+ 		$(TOPDIR)/support/dependencies/dependencies.sh
  
- HOST_CROSSTOOL_NG_DEPENDENCIES = \
--	$(if $(BR2_CCACHE),host-ccache) host-gawk \
-+	host-gawk \
- 	host-automake host-gperf host-bison host-flex \
- 	host-texinfo
++dependencies: HOSTCC=$(HOSTCC_NOCCACHE)
++dependencies: HOSTCXX=$(HOSTCXX_NOCCACHE)
+ dependencies: core-dependencies $(DEPENDENCIES_HOST_PREREQ)
  
+ dependencies-source:
