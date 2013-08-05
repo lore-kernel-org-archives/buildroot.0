@@ -1,34 +1,37 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon,  5 Aug 2013 13:21:13 -0300
-Subject: [Buildroot] [PATCH 3/3] gnupg: security bump to version 1.4.14
-In-Reply-To: <1375719673-548-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1375719673-548-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1375719673-548-3-git-send-email-gustavo@zacarias.com.ar>
+From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
+Date: Mon, 5 Aug 2013 18:32:31 +0200
+Subject: [Buildroot] boost autobuild failures
+Message-ID: <CAAXf6LU4xLuafp4jjhP42kTQ-Yqg+L6L0n2+1bcpMc6pxXuKug@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes CVE-2013-4242.
+Hi,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/gnupg/gnupg.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+I tried reproducing the following autobuild failure:
+x86_64 |                   boost-1.53.0 | NOK |
+http://autobuild.buildroot.net/results/0f6c2f99b05f57adb557c2ddd686b5072f5e9ecf/
 
-diff --git a/package/gnupg/gnupg.mk b/package/gnupg/gnupg.mk
-index 39088c3..f0c4b03 100644
---- a/package/gnupg/gnupg.mk
-+++ b/package/gnupg/gnupg.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GNUPG_VERSION = 1.4.13
-+GNUPG_VERSION = 1.4.14
- GNUPG_SOURCE = gnupg-$(GNUPG_VERSION).tar.bz2
- GNUPG_SITE = ftp://ftp.gnupg.org/gcrypt/gnupg
- GNUPG_LICENSE = GPLv3+
--- 
-1.8.1.5
+Because the toolchain used in that config is 64-bit, I selected a
+Sourcery toolchain for the same architecture (I'm running a 32-bit
+machine).
+
+However, boost built just fine on my machine. My .config file attached.
+
+Unfortunately, the last lines of the build log on the autobuild do not
+show the actual problem (at least I didn't spot it).
+
+Are there others with a 64-bit machine that can reproduce the problem?
+Any idea about the solution?
+
+Thanks,
+Thomas
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: .config
+Type: application/octet-stream
+Size: 44526 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130805/9e8856b0/attachment-0001.obj>
