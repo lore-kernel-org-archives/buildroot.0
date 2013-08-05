@@ -1,24 +1,28 @@
-From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Mon, 05 Aug 2013 15:32:52 +0200
-Subject: [Buildroot] [PATCH] zeromq: fix build on some compilers due to
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 5 Aug 2013 15:43:10 +0200
+Subject: [Buildroot] [git commit] zeromq: fix build on some compilers due to
 	missing newline
-Message-ID: <480a1fcd09d3f0e40732.1375709572@BEANTN0L019720>
+Message-ID: <20130805134259.6DF2B9B190@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+commit: http://git.buildroot.net/buildroot/commit/?id=f23b168cd9b3215c8e83bb64308f93dab085e054
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
 Fixes http://autobuild.buildroot.net/results/645b357d470b75baa9a93eb5be4f1dc5c8c337fa/
 
 Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/zeromq/zeromq-0001-test-collect-delay-end-of-line.patch |  15 +++++++++++++++
+ ...eromq-0001-test-collect-delay-end-of-line.patch |   15 +++++++++++++++
  1 files changed, 15 insertions(+), 0 deletions(-)
 
 diff --git a/package/zeromq/zeromq-0001-test-collect-delay-end-of-line.patch b/package/zeromq/zeromq-0001-test-collect-delay-end-of-line.patch
 new file mode 100644
+index 0000000..6a1a655
 --- /dev/null
 +++ b/package/zeromq/zeromq-0001-test-collect-delay-end-of-line.patch
 @@ -0,0 +1,15 @@
