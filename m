@@ -1,96 +1,44 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 5 Aug 2013 23:14:32 +0200
-Subject: [Buildroot] [git commit branch/next] trace-cmd: new package
-Message-ID: <20130805211503.9DAD79B173@busybox.osuosl.org>
+From: Hans Bulfone <hans@nil.at>
+Date: Tue, 6 Aug 2013 01:36:43 +0200
+Subject: [Buildroot] [PATCH 1/1] qt5multimedia: depend on gst-plugins-base
+ if selected, install libqgsttools
+Message-ID: <mailman.0.1375747702.3404.buildroot@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=07203d78c24df74a77d73b17437d37dce41d232e
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+qt5multimedia can use gstreamer, so make sure they are compiled in the
+right order.  If gstreamer is used libqgsttools is required at run time.
 
-This commit adds a new package for the trace-cmd tool.  This tool is a
-command line front end of ftrace.  It collects traces on your target.
-You can analyse these traces on the target or on the host via the gui
-"kernel shark".
-
-[Thomas: use TARGET_CONFIGURE_OPTS, define _GNU_SOURCE to get
-O_CLOEXEC definition on uClibc, add thread and largefile
-dependencies.]
-
-Signed-off-by: Pierre Floury <pierre.floury@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Hans Bulfone <hans@nil.at>
 ---
- package/Config.in              |    1 +
- package/trace-cmd/Config.in    |   16 ++++++++++++++++
- package/trace-cmd/trace-cmd.mk |   26 ++++++++++++++++++++++++++
- 3 files changed, 43 insertions(+), 0 deletions(-)
+ package/qt5/qt5multimedia/qt5multimedia.mk |    5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/package/Config.in b/package/Config.in
-index 7069d77..f5b14f6 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -48,6 +48,7 @@ source "package/strace/Config.in"
- source "package/stress/Config.in"
- source "package/sysprof/Config.in"
- source "package/tinymembench/Config.in"
-+source "package/trace-cmd/Config.in"
- source "package/whetstone/Config.in"
- source "package/valgrind/Config.in"
- source "package/pv/Config.in"
-diff --git a/package/trace-cmd/Config.in b/package/trace-cmd/Config.in
-new file mode 100644
-index 0000000..8d79304
---- /dev/null
-+++ b/package/trace-cmd/Config.in
-@@ -0,0 +1,16 @@
-+config BR2_PACKAGE_TRACE_CMD
-+	bool "trace-cmd"
-+	depends on BR2_LARGEFILE
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	help
-+	  Command line reader for ftrace.
+diff --git a/package/qt5/qt5multimedia/qt5multimedia.mk b/package/qt5/qt5multimedia/qt5multimedia.mk
+index 8f62274..ec3d5e0 100644
+--- a/package/qt5/qt5multimedia/qt5multimedia.mk
++++ b/package/qt5/qt5multimedia/qt5multimedia.mk
+@@ -21,6 +21,10 @@ QT5MULTIMEDIA_LICENSE = Commercial license
+ QT5MULTIMEDIA_REDISTRIBUTE = NO
+ endif
+ 
++ifeq ($(BR2_PACKAGE_GST_PLUGINS_BASE),y)
++QT5MULTIMEDIA_DEPENDENCIES += gst-plugins-base
++endif
 +
-+	  To use this profiling tool, you should enable ftrace in your kernel
-+	  configuration. This command collect traces on your target.
-+	  You can analyse these traces on the target or on the host via the gui
-+	  "kernel shark"
-+
-+	  http://git.kernel.org/cgit/linux/kernel/git/rostedt/trace-cmd.git
-+
-+comment "trace-cmd needs a toolchain with largefile and threads support"
-+	depends on !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/trace-cmd/trace-cmd.mk b/package/trace-cmd/trace-cmd.mk
-new file mode 100644
-index 0000000..ada0306
---- /dev/null
-+++ b/package/trace-cmd/trace-cmd.mk
-@@ -0,0 +1,26 @@
-+################################################################################
-+#
-+# trace-cmd
-+#
-+################################################################################
-+
-+TRACE_CMD_VERSION = trace-cmd-v2.2.1
-+TRACE_CMD_SITE = http://git.kernel.org/cgit/linux/kernel/git/rostedt/trace-cmd.git
-+TRACE_CMD_SITE_METHOD = git
-+TRACE_CMD_INSTALL_STAGING = YES
-+TRACE_CMD_LICENSE = GPLv2 LGPLv2.1
-+TRACE_CMD_LICENSE_FILES = COPYING COPYING.LIB
-+
-+define TRACE_CMD_BUILD_CMDS
-+	$(MAKE) $(TARGET_CONFIGURE_OPTS) \
-+		CFLAGS="$(TARGET_CFLAGS) -D_GNU_SOURCE" \
-+		-C $(@D) all
-+endef
-+
-+define TRACE_CMD_INSTALL_TARGET_CMDS
-+	$(INSTALL) -D -m 0755 $(@D)/trace-cmd $(TARGET_DIR)/usr/bin/trace-cmd
-+	$(INSTALL) -d -m 0755 $(TARGET_DIR)/usr/lib/trace-cmd/plugins
-+	$(INSTALL) -D -m 0755 $(@D)/plugin_*.so $(TARGET_DIR)/usr/lib/trace-cmd/plugins
-+endef
-+
-+$(eval $(generic-package))
+ define QT5MULTIMEDIA_CONFIGURE_CMDS
+ 	(cd $(@D); $(HOST_DIR)/usr/bin/qmake)
+ endef
+@@ -37,6 +41,7 @@ endef
+ ifeq ($(BR2_PREFER_STATIC_LIB),)
+ define QT5MULTIMEDIA_INSTALL_TARGET_LIBS
+ 	cp -dpf $(STAGING_DIR)/usr/lib/libQt5Multimedia*.so.* $(TARGET_DIR)/usr/lib
++	-cp -dpf $(STAGING_DIR)/usr/lib/libqgsttools*.so.* $(TARGET_DIR)/usr/lib
+ 	cp -dpfr $(STAGING_DIR)/usr/lib/qt/plugins/* $(TARGET_DIR)/usr/lib/qt/plugins
+ endef
+ endif
+-- 
+1.7.10.4
