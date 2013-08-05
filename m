@@ -1,41 +1,73 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 4 Aug 2013 19:54:23 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2013-08-02
-In-Reply-To: <20130803063005.737FF52C616@lolut.humanoidz.org>
-References: <20130803063005.737FF52C616@lolut.humanoidz.org>
-Message-ID: <20130804195423.5bd46023@skate>
+From: Jason Rennie <jason.rennie@rftechnology.com.au>
+Date: Mon, 05 Aug 2013 10:03:10 +1000
+Subject: [Buildroot] Problem with an MPC8272 build
+In-Reply-To: <CALo-6+hZ1-BzFd=uU-9gxazw+Z09R=rXPKY1Q0qC1x46ag8ucA@mail.gmail.com>
+References: <51FAF401.60702@rftechnology.com.au>
+ <51FB8EC3.3030309@zacarias.com.ar>
+ <CALo-6+hZ1-BzFd=uU-9gxazw+Z09R=rXPKY1Q0qC1x46ag8ucA@mail.gmail.com>
+Message-ID: <51FEEBBE.9020206@rftechnology.com.au>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Thanks for the reply Charles.
 
-On Sat,  3 Aug 2013 08:30:05 +0200 (CEST), Thomas Petazzoni wrote:
+I do know I need to use ttyCPM0/1 (made that mistake already). I agree, 
+what is wrong with the old S0?
 
->    powerpc | make: *** [/home/peko/scrat... | NOK | http://autobuild.buildroot.net/results/89da9f9127984837b0570a5c4863164f83b9e3ad/
->    powerpc | make: *** [/home/peko/scrat... | NOK | http://autobuild.buildroot.net/results/7dc6d1b91425cd50256ee5d9205a604982d09a9b/
->    powerpc | make: *** [/home/peko/scrat... | NOK | http://autobuild.buildroot.net/results/13c2514d3e05e04eabbae07a0e8687a49465bf5b/
->    powerpc | make: *** [/home/peko/scrat... | NOK | http://autobuild.buildroot.net/results/82bdccf5fb5616c27102da0af69d5a7111723021/
->    powerpc | make: *** [/home/peko/scrat... | NOK | http://autobuild.buildroot.net/results/cf1f18d2630babdfebb3f40e5c8e5f7cb27337c5/
->    powerpc | make: *** [/home/peko/scrat... | NOK | http://autobuild.buildroot.net/results/9be574c12893dfcd4d390f4f271907c470703f8d/
->    powerpc | make: *** [/home/peko/scrat... | NOK | http://autobuild.buildroot.net/results/30489e4c06e3ad5db32dedf33562b8771eb5649b/
->    powerpc | make: *** [/home/peko/scrat... | NOK | http://autobuild.buildroot.net/results/c05854de5470292a67de47ab4e50dcb65b10f94d/
->    powerpc | make: *** [/home/peko/scrat... | NOK | http://autobuild.buildroot.net/results/e8213e6d13cf82fe8c8a33a7ee7f935336a69150/
->    powerpc | make: *** [/home/peko/scrat... | NOK | http://autobuild.buildroot.net/results/9bd134930274efd68b51c04f20e08566f7bc219e/
+The kernel output I included was from the 2.6.18 build made long ago by 
+someone who has long since moved on. I figured it would be worth 
+including as a "last known good" configuration.
 
-These were caused to a failure in fakeroot, itself caused by a large
-number of SysV semaphores on gcc20, more than the allowed system limit.
-They were created by a completely different user of gcc20 and therefore
-those errors have nothing to do with Buildroot and should be ignored.
+Jason
 
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+On 3/08/2013 4:18 AM, Charles Krinke wrote:
+> Good point Gustavo. If I recall, if the dtb is wrong, one will not get
+> as far in the kernel boot process.
+>
+> In looking at the output, it looks like it is all the way to running
+> the init process. Usually when that happens in the systems I work
+> with, it is a matter of not satisfying the init process properly. Most
+> usually that is a mismatch of the name of the root console.
+>
+> For whatever reason, in recent years, all the folks making SOC designs
+> have gone away from the old, original ttyS0 and every vendor seems to
+> have a special name for their serial port, so I thought that would be
+> the most fruitful place to look.
+>
+> Charles
+>
+> On 8/2/13, Gustavo Zacarias <gustavo@zacarias.com.ar> wrote:
+>> On 08/01/2013 08:49 PM, Jason Rennie wrote:
+>>> Buildroot does run successfully, and I have put the rootfs that is made
+>>> on the device and it does boot successfully with the older kernel (well
+>>> mostly, some networking stuff appears to be missing). But when I put the
+>>> new kernel on the device I get nothing. I've tried enabling early kernel
+>>> debugging but with no success (setting the CPM to the addresses
+>>> suggested by the old kernels output). I also don't seem to be able to
+>>> get U-Boot to work and I need to end up breaking out the BDI2000 anytime
+>>> I try to update U-Boot with the newer version as I brick the device.
+>>>
+>>> I have tried with the most basic possible build, not tweaking anything
+>>> and basically just doing the stock buildroot build for the MPC8272
+>>> through to poking and tweaking all sorts of thing.
+>>>
+>>> Any tips? I've attached the old dmesg output if tht helps. I'm
+>>> hopelessly confused and been beating my head against this for a month so
+>>> any help would be greatly appreciated. I'm pretty much out of ideas.
+>> A buildroot .config would help so we can see if there's anything that
+>> could go wrong.
+>> On the toolchain side a 603e should be the target, if that's wrong then
+>> anything you build might fail.
+>> On the kernel side are you building a 2.6.18ish kernel with a new
+>> buildroot or a newer kernel? An updated kernel will very likely need an
+>> updated DTB as well.
+>> Regards.
+>> _______________________________________________
+>> buildroot mailing list
+>> buildroot at busybox.net
+>> http://lists.busybox.net/mailman/listinfo/buildroot
+>>
+>
