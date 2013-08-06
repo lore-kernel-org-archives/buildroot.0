@@ -1,51 +1,39 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Tue,  6 Aug 2013 23:36:19 +0200
-Subject: [Buildroot] [PATCH 0/5] Manual updates
-Message-ID: <1375824984-8226-1-git-send-email-s.martin49@gmail.com>
+Date: Tue,  6 Aug 2013 23:36:20 +0200
+Subject: [Buildroot] [PATCH 1/5] Docu: Add LIBFOO_EXTRACT_CMDS
+In-Reply-To: <1375824984-8226-1-git-send-email-s.martin49@gmail.com>
+References: <1375824984-8226-1-git-send-email-s.martin49@gmail.com>
+Message-ID: <1375824984-8226-2-git-send-email-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
+From: Stephan Hoffmann <sho@relinux.de>
 
-Here is a small patch series about the manual integrating the following
-patches for patchwork:
-- http://patchwork.ozlabs.org/patch/214943/
-- http://patchwork.ozlabs.org/patch/216485/
-- http://patchwork.ozlabs.org/patch/232024/
+[Samuel: add precision about non-tar archive]
+Signed-off-by: Stephan Hoffmann <sho@relinux.de>
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+---
+ docs/manual/adding-packages-generic.txt | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-I had to rework some of them to get them cleanly merged the git tree,
-the most noticeable thing is the split patch 214943.
-
-Regards,
-
-
-Samuel
-
---
-
-A.R.D (2):
-  manual: update beyond Buildroot section
-  manual: add tips to build manual
-
-Samuel Martin (1):
-  manual: minor formating fixes
-
-Stephan Hoffmann (1):
-  Docu: Add LIBFOO_EXTRACT_CMDS
-
-Vinicius Tinti (1):
-  manual: add patch revision and versioning section
-
- docs/manual/adding-packages-generic.txt |  18 +++-
- docs/manual/beyond-buildroot.txt        | 162 +++++++++++++++++++++++++++++---
- docs/manual/contribute.txt              |  66 +++++++++++++
- docs/manual/make-tips.txt               |  20 +++-
- docs/manual/using.txt                   |   3 +-
- docs/manual/working-with.txt            |   5 +
- 6 files changed, 254 insertions(+), 20 deletions(-)
-
---
+diff --git a/docs/manual/adding-packages-generic.txt b/docs/manual/adding-packages-generic.txt
+index faf70b1..a6f9565 100644
+--- a/docs/manual/adding-packages-generic.txt
++++ b/docs/manual/adding-packages-generic.txt
+@@ -358,6 +358,10 @@ LIBFOO_VERSION = 2.32
+ Now, the variables that define what should be performed at the
+ different steps of the build process.
+ 
++* +LIBFOO_EXTRACT_CMDS+ lists the actions to be performed to
++  extract the package in case no standard method applies
++  (ie. non-tar archive).
++
+ * +LIBFOO_CONFIGURE_CMDS+ lists the actions to be performed to
+   configure the package before its compilation.
+ 
+-- 
 1.8.3.4
