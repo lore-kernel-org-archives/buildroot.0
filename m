@@ -1,9 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 6 Aug 2013 19:54:02 +0200
-Subject: [Buildroot] AVR32 toolchain build failure
-In-Reply-To: <CAAXf6LUhgOkHgj=cRWnkR8tPhAAjT6BhXFvXTBvC5pHfTZ=vww@mail.gmail.com>
-References: <CAAXf6LUhgOkHgj=cRWnkR8tPhAAjT6BhXFvXTBvC5pHfTZ=vww@mail.gmail.com>
-Message-ID: <20130806195402.2f3f94e7@skate>
+Date: Tue, 6 Aug 2013 20:03:56 +0200
+Subject: [Buildroot] [git commit] eglibc: add comment explaining why we
+ pass -O2
+In-Reply-To: <CAAXf6LW9XDGwTvqhCimQ8fM7WktsFWPdMyiqgdKPuEQLyMQ6+g@mail.gmail.com>
+References: <20130806104644.616309B190@busybox.osuosl.org>
+ <CAAXf6LW9XDGwTvqhCimQ8fM7WktsFWPdMyiqgdKPuEQLyMQ6+g@mail.gmail.com>
+Message-ID: <20130806200356.3b0752fa@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,24 +14,18 @@ To: buildroot@busybox.net
 
 Dear Thomas De Schampheleire,
 
-On Mon, 5 Aug 2013 14:01:51 +0200, Thomas De Schampheleire wrote:
+On Tue, 6 Aug 2013 13:44:26 +0200, Thomas De Schampheleire wrote:
 
-> I was looking at an autobuild failure on AVR32 and tried reproducing
-> it locally. Unfortunately, the AVR32 toolchain that was configured was
-> pre-built on a 64-bit machine, which I don't have. Hence, the
-> configured toolchain was not usable.
+> >  #  2. We have to execute the configure script with bash and not sh.
+> >  #
+> > +# Note that as mentionned in
 > 
-> Then I tried building my own AVR32 toolchain with the internal
-> backend, see config attached. Unfortunately, this failed as well:
+> s/mentionned/mentioned/
 
-I just tested here on my Ubuntu 13.04 64 bits machine, with the latest
-Buildroot Git, and the atngw100_defconfig (AVR32) could build a
-toolchain properly. This toolchain however seems to have a problem as
-it is not able to link the kernel. This specific regression was, I
-think, introduced by my patches converting the internal backend to
-proper packages. I'll try to investigate this one.
+Gaah, of course, as soon as I commit myself a trivial patch, I manage
+to do stupid things in the patch...
 
-Best regards,
+Thanks for noticing,
 
 Thomas
 -- 
