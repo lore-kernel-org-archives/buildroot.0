@@ -1,19 +1,44 @@
-From: David Skok <blanco.ether@gmail.com>
-Date: Tue, 6 Aug 2013 08:07:35 -0400
-Subject: [Buildroot] Updated Patch to add OLA package
-Message-ID: <CALy4uEU6ZFcmeBhO_-Z0HF5GMou-E+a2GijNbuidvv_QA_ndww@mail.gmail.com>
+From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
+Date: Tue, 6 Aug 2013 16:40:22 +0200
+Subject: [Buildroot] AVR32 toolchain build failure
+In-Reply-To: <CAAHaz6E=FztD=1pnk8sVYj2sd98VVuiYFFg7+LYhmD9_v7gM1w@mail.gmail.com>
+References: <CAAXf6LUhgOkHgj=cRWnkR8tPhAAjT6BhXFvXTBvC5pHfTZ=vww@mail.gmail.com>
+ <CAAXf6LXpML0_kexS1=sdSc8iEZzk4-DaHbx=jXkrBa8miujM1g@mail.gmail.com>
+ <CAAHaz6E=FztD=1pnk8sVYj2sd98VVuiYFFg7+LYhmD9_v7gM1w@mail.gmail.com>
+Message-ID: <CAAXf6LWyHfM1BiOkWsTJw2i7xmtEYO9YifunQ43Ws1yDH6u0wg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas Pettazoni,
+Hi Alexander,
 
-Somehow I missed your e-mail with suggestions to my original patch
-post and was notified by Thomas De Schampheleire when I re-post my
-patch.  I attempted reply to post to your response through gmane to no
-avail so regretfully I post the new patch separate.  I address all
-your suggestions including moving package to hardware handling,
-removed option for select version, added dependencies and fixed
-indents.
+On Tue, Aug 6, 2013 at 11:27 AM, Alexander Lukichev
+<alexander.lukichev@gmail.com> wrote:
+> Hello, Thomas!
+>
+> I had the same problem but was too busy at the time to articulate it here or
+> to Thomas (Petazzoni), instead asking him if I could somehow use autobuilder
+> to test out fixes :) Thanks for posting. I do not know what is the problem
+> but I have it also.
+
+Thanks for letting me know.
+
+I found some info regarding this error here:
+http://stackoverflow.com/questions/8188849/avr-linker-error-relocation-truncated-to-fit
+
+after which I tried adding -mno-short-calls to the failing xgcc call.
+This did not change a thing however.
+
+I'm wondering if it's at all possible to compile libstdc++ for avr32.
+Following project seems to suggest it is:
+https://github.com/jsnyder/avr32-toolchain/blob/master/Makefile
+I looked through some of the options, but did not notice anything out
+of the ordinary. One thing I did see is that for the avr32-toolchain
+project, -Os is used. Could this fix the relocation truncation?
+
+Any input is welcome...
+
+Best regards,
+Thomas
