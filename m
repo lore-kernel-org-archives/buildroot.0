@@ -1,58 +1,63 @@
-From: =?iso-8859-1?Q?Pl=FCss_Tobias_TA=2EE=2E1001?= <tobias.pluess@stud.hslu.ch>
-Date: Tue, 6 Aug 2013 08:02:14 +0000
-Subject: [Buildroot] Buildroot and NOMMU
-In-Reply-To: <38F83949ED76A946BE17B6F2F98F362E0DA4F3@MX33.campus.intern>
-References: <38F83949ED76A946BE17B6F2F98F362E0DA4F3@MX33.campus.intern>
-Message-ID: <38F83949ED76A946BE17B6F2F98F362E0DA5D1@MX33.campus.intern>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue,  6 Aug 2013 10:47:24 +0200
+Subject: [Buildroot] [PATCH] cairo: add patch to fix Blackfin build failure
+Message-ID: <1375778844-28325-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi together,
+Fixes
+http://autobuild.buildroot.org/results/1b1/1b1e4ad2f00de1e0d1cc9045822751c3882c7493/build-end.log.
 
-it looks like nobody knows an answer to my question, so I'll answer myself in case anybody has once some similar problems.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/cairo/cairo-001-blackfin-build-fix.patch | 36 ++++++++++++++++++++++++
+ 1 file changed, 36 insertions(+)
+ create mode 100644 package/cairo/cairo-001-blackfin-build-fix.patch
 
-Buildroot offers an option which enables an MMU-less build. However, if this option is checked in buildroot, uClibc and BusyBox are still built with MMU on. In order to disable the MMU for BusyBox and uClibc as well, one has to
-
-make uclibc-menuconfig, as well as
-make busybox-menuconfig
-
-and disable the MMU in these individual menuconfigs. However, building BusyBox without MMU works without problems, but uClibc definitely *wants* an MMU, and I was unable to figure out some settings which allow disabling the MMU. It always produces the same warning: undefined reference to "fork". Which is very plausible, since fork() needs an MMU; the replacement would be vfork() but uClibc doesn't know that, and in the standard implementation, it looks like vfork() is missing or so. So the quintessence of this is: for ARM targets, it is - at least without modifying some code - not possible to force an NO MMU build for uClibc.
-
-But then I wonder what the NOMMU option is for, if uClibc build fails when this option is enabled? and why can one build uClibc for targets like Blackfin, which do not have an MMU as well? Could somebody clarify?
-
-Tobias.
-
-________________________________
-Von: Pl?ss Tobias TA.E.1001
-Gesendet: Sonntag, 4. August 2013 16:38
-An: buildroot at busybox.net
-Betreff: Buildroot and NOMMU
-
-Hi all,
-
-I would like to use Buildroot for my self made embedded system which uses an ARM7TDMI processor. It doesn't have an MMU. So my question is:
-
-is it sufficient to disable MMU support in the
-
-make menuconfig
-
-of Buildroot, or do I have to do
-
-make uclibc-menuconfig
-
-and
-
-make busybox-menuconfig
-
-as well and disable MMU support in each of these? Or shall I left the uClibc and Busybox settings unchanged? Because I want only a very minimalistic system for my first tests.
-
-Thanks in advance,
-
-Tobias
-
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130806/87585ffb/attachment.html>
+diff --git a/package/cairo/cairo-001-blackfin-build-fix.patch b/package/cairo/cairo-001-blackfin-build-fix.patch
+new file mode 100644
+index 0000000..94dff6b
+--- /dev/null
++++ b/package/cairo/cairo-001-blackfin-build-fix.patch
+@@ -0,0 +1,36 @@
++Fix build on platforms where __USER_LABEL_PREFIX__ is not empty
++
++On most platforms, a C language symbol and its assembly equivalent are
++identical. However, on the Blackfin architecture, this isn't the case,
++the corresponding C language symbol in assembly is prepended with a
++"_". Blackfin therefore has __USER_LABEL_PREFIX__ defined to "_".
++
++Cairo already has some code to cope with __USER_LABEL_PREFIX__, but
++this code isn't completely correct: it prepends both assembly symbols
++and C symbols with __USER_LABEL_PREFIX__, which cannot work.
++
++This patch fixes that by using the existing slim_hidden_asmname() to
++define assembly symbols, and introduce a new slim_hidden_realname()
++for C symbols.
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++
++Index: b/src/cairo-compiler-private.h
++===================================================================
++--- a/src/cairo-compiler-private.h
+++++ b/src/cairo-compiler-private.h
++@@ -93,12 +93,13 @@
++ 	__asm__ (slim_hidden_asmname (internal))
++ # define slim_hidden_def1(name, internal)				\
++   extern __typeof (name) EXT_##name __asm__(slim_hidden_asmname(name))	\
++-	__attribute__((__alias__(slim_hidden_asmname(internal))))
+++	__attribute__((__alias__(slim_hidden_realname(internal))))
++ # define slim_hidden_ulp		slim_hidden_ulp1(__USER_LABEL_PREFIX__)
++ # define slim_hidden_ulp1(x)		slim_hidden_ulp2(x)
++ # define slim_hidden_ulp2(x)		#x
++ # define slim_hidden_asmname(name)	slim_hidden_asmname1(name)
++ # define slim_hidden_asmname1(name)	slim_hidden_ulp #name
+++# define slim_hidden_realname(name)     #name
++ #else
++ # define slim_hidden_proto(name)		int _cairo_dummy_prototype(void)
++ # define slim_hidden_proto_no_warn(name)	int _cairo_dummy_prototype(void)
+-- 
+1.8.1.2
