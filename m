@@ -1,27 +1,55 @@
-From: Alexander Lukichev <alexander.lukichev@gmail.com>
-Date: Tue, 6 Aug 2013 12:39:20 +0300
-Subject: [Buildroot] AVR32 toolchain build failure
-In-Reply-To: <CAAHaz6E=FztD=1pnk8sVYj2sd98VVuiYFFg7+LYhmD9_v7gM1w@mail.gmail.com>
-References: <CAAXf6LUhgOkHgj=cRWnkR8tPhAAjT6BhXFvXTBvC5pHfTZ=vww@mail.gmail.com>
- <CAAXf6LXpML0_kexS1=sdSc8iEZzk4-DaHbx=jXkrBa8miujM1g@mail.gmail.com>
- <CAAHaz6E=FztD=1pnk8sVYj2sd98VVuiYFFg7+LYhmD9_v7gM1w@mail.gmail.com>
-Message-ID: <CAAHaz6H1Rd-0QnSzxAqDOcX31DyBsc88m_=rW88+8G2ODkj3rw@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 6 Aug 2013 12:22:46 +0200
+Subject: [Buildroot] Buildroot and NOMMU
+In-Reply-To: <38F83949ED76A946BE17B6F2F98F362E0DA60D@MX33.campus.intern>
+References: <38F83949ED76A946BE17B6F2F98F362E0DA4F3@MX33.campus.intern>
+ <38F83949ED76A946BE17B6F2F98F362E0DA5D1@MX33.campus.intern>
+ <20130806105928.41ed18f2@skate>
+ <38F83949ED76A946BE17B6F2F98F362E0DA60D@MX33.campus.intern>
+Message-ID: <20130806122246.7bf1140e@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2013/8/6 Alexander Lukichev <alexander.lukichev@gmail.com>
-> Hello, Thomas!
-<...>
+Dear Pl?ss Tobias TA.E.1001,
 
+Please keep the Buildroot list in Cc.
 
-Oops, sorry for postquoting!
+On Tue, 6 Aug 2013 09:16:51 +0000, Pl?ss Tobias TA.E.1001 wrote:
 
---
+> thank you for the information! I would like to help improve things
+> concerning this subject, if I could do any things, let me know. I'm
+> very interested in this, since I have some selfmade ARM boards where
+> it would be really interesting to run Linux on; but, as they don't
+> have an MMU, I need uClibc, BusyBox and of course Buildroot, all of
+> them with NOMMU support.
+
+Well, someone needs to look into those issues and find the solutions. I
+can certainly cook some patches, but I don't have a hardware platform
+to test things on. If you're willing to do some testing+debugging, then
+we could try to work together on this.
+
+But I'd like first to hear about the status of Gustavo's work, as I'd
+prefer to avoid duplicating his work.
+
+> When I searched the internet, I found various sites concerning
+> uCLinux on ARM, even with uCLibc. Since it is uCLinux, it must be
+> without MMU, but, however, I was not able to find *anything* about
+> where these people have the NOMMU uClibc from :-) But of course it
+> would be really nice if it was possible from within Buildroot, using
+> only standard tools and no patches, to get a NOMMU build.
+
+Most likely from uClinux-dist, which has been for a while the reference
+Linux distribution for noMMU platforms. Unfortunately, it is no longer
+that well maintained.
+
 Best regards,
-  Alexander Lukichev
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130806/3431129c/attachment.html>
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
