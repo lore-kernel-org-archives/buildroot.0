@@ -1,63 +1,62 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue,  6 Aug 2013 10:47:24 +0200
-Subject: [Buildroot] [PATCH] cairo: add patch to fix Blackfin build failure
-Message-ID: <1375778844-28325-1-git-send-email-thomas.petazzoni@free-electrons.com>
+From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
+Date: Tue, 06 Aug 2013 10:52:02 +0200
+Subject: [Buildroot] [PATCH] boost: fix 64-bit build due to ambiguous format
+	call
+Message-ID: <3cf71a9e999714d8fd63.1375779122@BEANTN0L019720>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes
-http://autobuild.buildroot.org/results/1b1/1b1e4ad2f00de1e0d1cc9045822751c3882c7493/build-end.log.
+This commit adds a patch imported from the upstream bug tracker, fixing a
+problem with boost builds failing for 64-bit, like in autobuild [1].
+Refer to [2] for the actual autobuild error.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Upstream did not yet accept this patch, because it is not portable enough
+(not OK for Windows builds) [3], but this should not withhold us from fixing
+the error in buildroot.
+
+[1] http://autobuild.buildroot.net/results/0f6c2f99b05f57adb557c2ddd686b5072f5e9ecf/
+[2] http://lists.busybox.net/pipermail/buildroot/2013-August/076222.html
+[3] https://svn.boost.org/trac/boost/ticket/6851
+
+Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+
 ---
- package/cairo/cairo-001-blackfin-build-fix.patch | 36 ++++++++++++++++++++++++
- 1 file changed, 36 insertions(+)
- create mode 100644 package/cairo/cairo-001-blackfin-build-fix.patch
 
-diff --git a/package/cairo/cairo-001-blackfin-build-fix.patch b/package/cairo/cairo-001-blackfin-build-fix.patch
+Note: this patch is reported ok in the upstream bug report, but I have been
+unable to verify this, as explained in [2].
+
+diff --git a/package/boost/boost-0001-fix-ambiguous-format-call-on-64bit-builds.patch b/package/boost/boost-0001-fix-ambiguous-format-call-on-64bit-builds.patch
 new file mode 100644
-index 0000000..94dff6b
 --- /dev/null
-+++ b/package/cairo/cairo-001-blackfin-build-fix.patch
-@@ -0,0 +1,36 @@
-+Fix build on platforms where __USER_LABEL_PREFIX__ is not empty
++++ b/package/boost/boost-0001-fix-ambiguous-format-call-on-64bit-builds.patch
+@@ -0,0 +1,27 @@
++boost: fix ambiguous format call on 64-bit builds
 +
-+On most platforms, a C language symbol and its assembly equivalent are
-+identical. However, on the Blackfin architecture, this isn't the case,
-+the corresponding C language symbol in assembly is prepended with a
-+"_". Blackfin therefore has __USER_LABEL_PREFIX__ defined to "_".
++Fixes problem:
 +
-+Cairo already has some code to cope with __USER_LABEL_PREFIX__, but
-+this code isn't completely correct: it prepends both assembly symbols
-+and C symbols with __USER_LABEL_PREFIX__, which cannot work.
++libs/locale/src/icu/formatter.cpp: In member function
++'virtual std::basic_string<_CharT, std::char_traits<_CharT>, std::allocator<_CharT> > boost::locale::impl_icu::number_format<CharType>::format(boost::int64_t, size_t&) const':
++libs/locale/src/icu/formatter.cpp:61: error: call of overloaded 'format(boost::int64_t&, icu_49::UnicodeString&)' is ambiguous
++/ec/include/unicode/numfmt.h:317: note: candidates are: icu_49::UnicodeString& icu_49::NumberFormat::format(double, icu_49::UnicodeString&) const
++/ec/include/unicode/numfmt.h:330: note:                 icu_49::UnicodeString& icu_49::NumberFormat::format(int32_t, icu_49::UnicodeString&) const
++/ec/include/unicode/numfmt.h:343: note:                 icu_49::UnicodeString& icu_49::NumberFormat::format(int64_t, icu_49::UnicodeString&) const
 +
-+This patch fixes that by using the existing slim_hidden_asmname() to
-+define assembly symbols, and introduce a new slim_hidden_realname()
-+for C symbols.
++Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
++Backported-from: https://svn.boost.org/trac/boost/ticket/6851
 +
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 +
-+Index: b/src/cairo-compiler-private.h
-+===================================================================
-+--- a/src/cairo-compiler-private.h
-++++ b/src/cairo-compiler-private.h
-+@@ -93,12 +93,13 @@
-+ 	__asm__ (slim_hidden_asmname (internal))
-+ # define slim_hidden_def1(name, internal)				\
-+   extern __typeof (name) EXT_##name __asm__(slim_hidden_asmname(name))	\
-+-	__attribute__((__alias__(slim_hidden_asmname(internal))))
-++	__attribute__((__alias__(slim_hidden_realname(internal))))
-+ # define slim_hidden_ulp		slim_hidden_ulp1(__USER_LABEL_PREFIX__)
-+ # define slim_hidden_ulp1(x)		slim_hidden_ulp2(x)
-+ # define slim_hidden_ulp2(x)		#x
-+ # define slim_hidden_asmname(name)	slim_hidden_asmname1(name)
-+ # define slim_hidden_asmname1(name)	slim_hidden_ulp #name
-++# define slim_hidden_realname(name)     #name
-+ #else
-+ # define slim_hidden_proto(name)		int _cairo_dummy_prototype(void)
-+ # define slim_hidden_proto_no_warn(name)	int _cairo_dummy_prototype(void)
--- 
-1.8.1.2
++diff -ruN boost_1_49_0.orig/libs/locale/src/icu/formatter.cpp boost_1_49_0/libs/locale/src/icu/formatter.cpp
++--- boost_1_49_0.orig/libs/locale/src/icu/formatter.cpp 2011-07-12 14:57:36.000000000 +0100
+++++ boost_1_49_0/libs/locale/src/icu/formatter.cpp      2012-05-01 14:27:54.000000000 +0100
++@@ -58,7 +58,7 @@
++             virtual string_type format(int64_t value,size_t &code_points) const
++             {
++                 icu::UnicodeString tmp;
++-                icu_fmt_->format(value,tmp);
+++                icu_fmt_->format(::int64_t(value),tmp);
++                 code_points=tmp.countChar32();
++                 return cvt_.std(tmp);
++             }
