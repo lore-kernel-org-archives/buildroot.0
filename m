@@ -1,55 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 6 Aug 2013 12:22:46 +0200
-Subject: [Buildroot] Buildroot and NOMMU
-In-Reply-To: <38F83949ED76A946BE17B6F2F98F362E0DA60D@MX33.campus.intern>
-References: <38F83949ED76A946BE17B6F2F98F362E0DA4F3@MX33.campus.intern>
- <38F83949ED76A946BE17B6F2F98F362E0DA5D1@MX33.campus.intern>
- <20130806105928.41ed18f2@skate>
- <38F83949ED76A946BE17B6F2F98F362E0DA60D@MX33.campus.intern>
-Message-ID: <20130806122246.7bf1140e@skate>
+Date: Tue, 6 Aug 2013 12:46:14 +0200
+Subject: [Buildroot] [git commit] eglibc: add comment explaining why we pass
+	-O2
+Message-ID: <20130806104644.616309B190@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Pl?ss Tobias TA.E.1001,
+commit: http://git.buildroot.net/buildroot/commit/?id=f443c8317bfadfdfdfe38a1731dcfbdba3a6d0ae
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Please keep the Buildroot list in Cc.
+While reviewing the eglibc package, Peter mentionned that it would be
+good to add a comment that explains why we explicitly build eglibc
+with -O2 instead of using the user selected optimization level. This
+commit add such a comment.
 
-On Tue, 6 Aug 2013 09:16:51 +0000, Pl?ss Tobias TA.E.1001 wrote:
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/eglibc/eglibc.mk |    3 +++
+ 1 files changed, 3 insertions(+), 0 deletions(-)
 
-> thank you for the information! I would like to help improve things
-> concerning this subject, if I could do any things, let me know. I'm
-> very interested in this, since I have some selfmade ARM boards where
-> it would be really interesting to run Linux on; but, as they don't
-> have an MMU, I need uClibc, BusyBox and of course Buildroot, all of
-> them with NOMMU support.
-
-Well, someone needs to look into those issues and find the solutions. I
-can certainly cook some patches, but I don't have a hardware platform
-to test things on. If you're willing to do some testing+debugging, then
-we could try to work together on this.
-
-But I'd like first to hear about the status of Gustavo's work, as I'd
-prefer to avoid duplicating his work.
-
-> When I searched the internet, I found various sites concerning
-> uCLinux on ARM, even with uCLibc. Since it is uCLinux, it must be
-> without MMU, but, however, I was not able to find *anything* about
-> where these people have the NOMMU uClibc from :-) But of course it
-> would be really nice if it was possible from within Buildroot, using
-> only standard tools and no patches, to get a NOMMU build.
-
-Most likely from uClinux-dist, which has been for a while the reference
-Linux distribution for noMMU platforms. Unfortunately, it is no longer
-that well maintained.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+diff --git a/package/eglibc/eglibc.mk b/package/eglibc/eglibc.mk
+index 253dabd..8873a06 100644
+--- a/package/eglibc/eglibc.mk
++++ b/package/eglibc/eglibc.mk
+@@ -36,6 +36,9 @@ endif
+ #
+ #  2. We have to execute the configure script with bash and not sh.
+ #
++# Note that as mentionned in
++# http://patches.openembedded.org/patch/38849/, eglibc must be built
++# with -O2, so we pass our own CFLAGS and CXXFLAGS below.
+ define EGLIBC_CONFIGURE_CMDS
+ 	mkdir -p $(@D)/build
+ 	# Do the configuration
