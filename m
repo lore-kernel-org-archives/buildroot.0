@@ -1,32 +1,51 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Tue,  6 Aug 2013 22:46:44 +0200
-Subject: [Buildroot] [PATCH] infra: display current task as title of the
-	term window
-Message-ID: <1375822004-22591-1-git-send-email-francois.perrad@gadz.org>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Tue,  6 Aug 2013 23:36:19 +0200
+Subject: [Buildroot] [PATCH 0/5] Manual updates
+Message-ID: <1375824984-8226-1-git-send-email-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- package/pkg-utils.mk |    3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+Hi all,
 
-diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
-index 15db096..8572cb1 100644
---- a/package/pkg-utils.mk
-+++ b/package/pkg-utils.mk
-@@ -64,7 +64,8 @@ INFLATE.xz   = $(XZCAT)
- INFLATE.tar  = cat
- 
- # MESSAGE Macro -- display a message in bold type
--MESSAGE     = echo "$(TERM_BOLD)>>> $($(PKG)_NAME) $($(PKG)_VERSION) $(1)$(TERM_RESET)"
-+MESSAGE     = echo "$(TERM_BOLD)>>> $($(PKG)_NAME) $($(PKG)_VERSION) $(1)$(TERM_RESET)" && \
-+              echo -e "\033]2;$($(PKG)_NAME) $($(PKG)_VERSION) $(1)\007"
- TERM_BOLD  := $(shell tput smso)
- TERM_RESET := $(shell tput rmso)
- 
--- 
-1.7.9.5
+Here is a small patch series about the manual integrating the following
+patches for patchwork:
+- http://patchwork.ozlabs.org/patch/214943/
+- http://patchwork.ozlabs.org/patch/216485/
+- http://patchwork.ozlabs.org/patch/232024/
+
+I had to rework some of them to get them cleanly merged the git tree,
+the most noticeable thing is the split patch 214943.
+
+Regards,
+
+
+Samuel
+
+--
+
+A.R.D (2):
+  manual: update beyond Buildroot section
+  manual: add tips to build manual
+
+Samuel Martin (1):
+  manual: minor formating fixes
+
+Stephan Hoffmann (1):
+  Docu: Add LIBFOO_EXTRACT_CMDS
+
+Vinicius Tinti (1):
+  manual: add patch revision and versioning section
+
+ docs/manual/adding-packages-generic.txt |  18 +++-
+ docs/manual/beyond-buildroot.txt        | 162 +++++++++++++++++++++++++++++---
+ docs/manual/contribute.txt              |  66 +++++++++++++
+ docs/manual/make-tips.txt               |  20 +++-
+ docs/manual/using.txt                   |   3 +-
+ docs/manual/working-with.txt            |   5 +
+ 6 files changed, 254 insertions(+), 20 deletions(-)
+
+--
+1.8.3.4
