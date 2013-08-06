@@ -1,62 +1,80 @@
 From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Tue, 06 Aug 2013 10:52:02 +0200
-Subject: [Buildroot] [PATCH] boost: fix 64-bit build due to ambiguous format
-	call
-Message-ID: <3cf71a9e999714d8fd63.1375779122@BEANTN0L019720>
+Date: Tue, 6 Aug 2013 10:52:52 +0200
+Subject: [Buildroot] boost autobuild failures
+In-Reply-To: <CAAXf6LX8VDAcqpdSR9789iaB-gddq1FszWsL08d7ievpidUaew@mail.gmail.com>
+References: <CAAXf6LU4xLuafp4jjhP42kTQ-Yqg+L6L0n2+1bcpMc6pxXuKug@mail.gmail.com>
+ <20130805224226.63f66b6a@skate>
+ <CAAXf6LX8VDAcqpdSR9789iaB-gddq1FszWsL08d7ievpidUaew@mail.gmail.com>
+Message-ID: <CAAXf6LWSa5j8zQdnoSy4jXojnZqbo4Co0YjBD0D0zWY7O1rfXw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This commit adds a patch imported from the upstream bug tracker, fixing a
-problem with boost builds failing for 64-bit, like in autobuild [1].
-Refer to [2] for the actual autobuild error.
+Hi,
 
-Upstream did not yet accept this patch, because it is not portable enough
-(not OK for Windows builds) [3], but this should not withhold us from fixing
-the error in buildroot.
+On Tue, Aug 6, 2013 at 8:52 AM, Thomas De Schampheleire
+<patrickdepinguin+buildroot@gmail.com> wrote:
+> Hi Thomas,
+>
+> On Mon, Aug 5, 2013 at 10:42 PM, Thomas Petazzoni
+> <thomas.petazzoni@free-electrons.com> wrote:
+>> Dear Thomas De Schampheleire,
+>>
+>> On Mon, 5 Aug 2013 18:32:31 +0200, Thomas De Schampheleire wrote:
+>>
+>>> I tried reproducing the following autobuild failure:
+>>> x86_64 |                   boost-1.53.0 | NOK |
+>>> http://autobuild.buildroot.net/results/0f6c2f99b05f57adb557c2ddd686b5072f5e9ecf/
+>>>
+>>> Because the toolchain used in that config is 64-bit, I selected a
+>>> Sourcery toolchain for the same architecture (I'm running a 32-bit
+>>> machine).
+>>>
+>>> However, boost built just fine on my machine. My .config file attached.
+>>>
+>>> Unfortunately, the last lines of the build log on the autobuild do not
+>>> show the actual problem (at least I didn't spot it).
+>>>
+>>> Are there others with a 64-bit machine that can reproduce the problem?
+>>> Any idea about the solution?
+>>
+>> I reproduced the issue on the autobuilder machine. The message is the
+>> following one:
+>>
+>> gcc.compile.c++ bin.v2/libs/locale/build/gcc-4.7.3/release/boost.locale.posix-off/threading-multi/icu/formatter.o
+>> libs/locale/src/icu/formatter.cpp: In member function 'virtual boost::locale::impl_icu::number_format<CharType>::string_type boost::locale::impl_icu::number_format<CharType>::format(boost::int64_t, size_t&) const':
+>> libs/locale/src/icu/formatter.cpp:61:43: error: call of overloaded 'format(boost::int64_t&, icu_51::UnicodeString&)' is ambiguous
+>> libs/locale/src/icu/formatter.cpp:61:43: note: candidates are:
+>> In file included from libs/locale/src/icu/formatter.cpp:15:0:
+>> /home/test/outputs/0f6c2f99b05f57adb557c2ddd686b5072f5e9ecf/output/host/usr/x86_64-buildroot-linux-uclibc/sysroot/usr/include/unicode/numfmt.h:320:20: note: icu_51::UnicodeString& icu_51::NumberFormat::format(double, icu_51::UnicodeString&) const
+>> /home/test/outputs/0f6c2f99b05f57adb557c2ddd686b5072f5e9ecf/output/host/usr/x86_64-buildroot-linux-uclibc/sysroot/usr/include/unicode/numfmt.h:333:20: note: icu_51::UnicodeString& icu_51::NumberFormat::format(int32_t, icu_51::UnicodeString&) const
+>> /home/test/outputs/0f6c2f99b05f57adb557c2ddd686b5072f5e9ecf/output/host/usr/x86_64-buildroot-linux-uclibc/sysroot/usr/include/unicode/numfmt.h:346:20: note: icu_51::UnicodeString& icu_51::NumberFormat::format(int64_t, icu_51::UnicodeString&) const
+>>
+>>     "/home/test/outputs/0f6c2f99b05f57adb557c2ddd686b5072f5e9ecf/output/host/usr/bin/x86_64-linux-g++"  -ftemplate-depth-128 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -pipe -Os  -O3 -finline-functions -Wno-inline -Wall -pthread -fPIC  -DBOOST_ALL_NO_LIB=1 -DBOOST_CHRONO_DYN_LINK=1 -DBOOST_LOCALE_DYN_LINK=1 -DBOOST_LOCALE_NO_POSIX_BACKEND=1 -DBOOST_LOCALE_NO_WINAPI_BACKEND=1 -DBOOST_LOCALE_WITH_ICONV=1 -DBOOST_LOCALE_WITH_ICU=1 -DBOOST_SYSTEM_DYN_LINK=1 -DBOOST_SYSTEM_NO_DEPRECATED -DBOOST_THREAD_BUILD_DLL=1 -DBOOST_THREAD_NO_LIB=1 -DBOOST_THREAD_POSIX -DBOOST_THREAD_USE_DLL=1 -DNDEBUG  -I"." -c -o "bin.v2/libs/locale/build/gcc-4.7.3/release/boost.locale.posix-off/threading-multi/icu/formatter.o" "libs/locale/src/icu/formatter.cpp"
+>>
+>> It looks similar to https://svn.boost.org/trac/boost/ticket/6851 but
+>> this link doesn't give much clue about the solution, except one patch
+>> that was apparently not official integrated. Some other people had it
+>> more recently,
+>> http://comments.gmane.org/gmane.comp.lib.cppcms.user/2125.
+>>
+>> I'm not really familiar enough with how typing works in C++ to cook a
+>> patch for this. Anyone?
+>
+> Thanks for the build log and initial research.
+> In my eyes, the proposed patch seems a suitable fix for the problem.
+> The argument that it may not work on Windows is not valid for
+> buildroot IMO. My proposal would be to test with that patch applied,
+> and see if it doesn't break something else. As I can't reproduce the
+> issue in the first place, I'm relying on you or someone else to test
+> it. Do you have some time to run that build?
+> Please let me know if you prefer me to already send an untested patch
+> against buildroot for this, this may be easier for you to integrate in
+> the test system...
 
-[1] http://autobuild.buildroot.net/results/0f6c2f99b05f57adb557c2ddd686b5072f5e9ecf/
-[2] http://lists.busybox.net/pipermail/buildroot/2013-August/076222.html
-[3] https://svn.boost.org/trac/boost/ticket/6851
+Nevermind, I sent the patch anyway...
 
-Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-
----
-
-Note: this patch is reported ok in the upstream bug report, but I have been
-unable to verify this, as explained in [2].
-
-diff --git a/package/boost/boost-0001-fix-ambiguous-format-call-on-64bit-builds.patch b/package/boost/boost-0001-fix-ambiguous-format-call-on-64bit-builds.patch
-new file mode 100644
---- /dev/null
-+++ b/package/boost/boost-0001-fix-ambiguous-format-call-on-64bit-builds.patch
-@@ -0,0 +1,27 @@
-+boost: fix ambiguous format call on 64-bit builds
-+
-+Fixes problem:
-+
-+libs/locale/src/icu/formatter.cpp: In member function
-+'virtual std::basic_string<_CharT, std::char_traits<_CharT>, std::allocator<_CharT> > boost::locale::impl_icu::number_format<CharType>::format(boost::int64_t, size_t&) const':
-+libs/locale/src/icu/formatter.cpp:61: error: call of overloaded 'format(boost::int64_t&, icu_49::UnicodeString&)' is ambiguous
-+/ec/include/unicode/numfmt.h:317: note: candidates are: icu_49::UnicodeString& icu_49::NumberFormat::format(double, icu_49::UnicodeString&) const
-+/ec/include/unicode/numfmt.h:330: note:                 icu_49::UnicodeString& icu_49::NumberFormat::format(int32_t, icu_49::UnicodeString&) const
-+/ec/include/unicode/numfmt.h:343: note:                 icu_49::UnicodeString& icu_49::NumberFormat::format(int64_t, icu_49::UnicodeString&) const
-+
-+Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-+Backported-from: https://svn.boost.org/trac/boost/ticket/6851
-+
-+
-+diff -ruN boost_1_49_0.orig/libs/locale/src/icu/formatter.cpp boost_1_49_0/libs/locale/src/icu/formatter.cpp
-+--- boost_1_49_0.orig/libs/locale/src/icu/formatter.cpp 2011-07-12 14:57:36.000000000 +0100
-++++ boost_1_49_0/libs/locale/src/icu/formatter.cpp      2012-05-01 14:27:54.000000000 +0100
-+@@ -58,7 +58,7 @@
-+             virtual string_type format(int64_t value,size_t &code_points) const
-+             {
-+                 icu::UnicodeString tmp;
-+-                icu_fmt_->format(value,tmp);
-++                icu_fmt_->format(::int64_t(value),tmp);
-+                 code_points=tmp.countChar32();
-+                 return cvt_.std(tmp);
-+             }
+Best regards,
+Thomas
