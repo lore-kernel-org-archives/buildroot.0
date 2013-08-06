@@ -1,53 +1,79 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Tue,  6 Aug 2013 23:36:23 +0200
-Subject: [Buildroot] [PATCH 4/5] manual: add tips to build manual
+Date: Tue,  6 Aug 2013 23:36:24 +0200
+Subject: [Buildroot] [PATCH 5/5] manual: minor formating fixes
 In-Reply-To: <1375824984-8226-1-git-send-email-s.martin49@gmail.com>
 References: <1375824984-8226-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <1375824984-8226-5-git-send-email-s.martin49@gmail.com>
+Message-ID: <1375824984-8226-6-git-send-email-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: "A.R.D" <contact@team-ard.com>
-
-Signed-off-by: A.R.D. <contact@team-ard.com>
 Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-
 ---
-Changes v1 -> v2 (Samuel):
-- split patch
-- rephrase commit message
-- wrap line at 70-80 chars
-- misc. typo and formating fixes
-- misc. rewordings
----
- docs/manual/make-tips.txt | 15 +++++++++++++++
- 1 file changed, 15 insertions(+)
+ docs/manual/adding-packages-generic.txt | 14 ++++++++++----
+ docs/manual/make-tips.txt               |  5 +++--
+ 2 files changed, 13 insertions(+), 6 deletions(-)
 
+diff --git a/docs/manual/adding-packages-generic.txt b/docs/manual/adding-packages-generic.txt
+index a6f9565..3545598 100644
+--- a/docs/manual/adding-packages-generic.txt
++++ b/docs/manual/adding-packages-generic.txt
+@@ -99,24 +99,30 @@ of the shell script(s) needing fixing. All these names are relative to
+ In addition, the scripts listed in +LIBFOO_CONFIG_SCRIPTS+ are removed
+ from +$(TARGET_DIR)/usr/bin+, since they are not needed on the target.
+ 
+-Example 1:
+-
++.Config script: 'divine' package
++================================
+ Package divine installs shell script '$(STAGING_DIR)/usr/bin/divine-config'.
+ 
+ So it's fixup would be:
+ 
++--------------------------------
+ DIVINE_CONFIG_SCRIPTS = divine-config
++--------------------------------
++================================
+ 
+-Example 2:
+-
++.Config script: 'imagemagick' package:
++================================
+ Package imagemagick installs the following scripts:
+ '$(STAGING_DIR)/usr/bin/{Magick,Magick++,MagickCore,MagickWand,Wand}-config'
+ 
+ So it's fixup would be:
+ 
++--------------------------------
+ IMAGEMAGICK_CONFIG_SCRIPTS = \
+    Magick-config Magick++-config \
+    MagickCore-config MagickWand-config Wand-config
++--------------------------------
++================================
+ 
+ On line 14, we specify the list of dependencies this package relies
+ on. These dependencies are listed in terms of lower-case package names,
 diff --git a/docs/manual/make-tips.txt b/docs/manual/make-tips.txt
-index b4a9c12..e1af62a 100644
+index e1af62a..870c029 100644
 --- a/docs/manual/make-tips.txt
 +++ b/docs/manual/make-tips.txt
-@@ -54,6 +54,21 @@ and target trees, the images and the toolchain):
-  $ make clean
+@@ -29,8 +29,7 @@ The result of the search shows the help message of the matching items.
+  $ make help
  --------------------
  
-+.Generating the manual:
-+
-+The present manual sources are located in the 'docs/manual' directory.
-+To generate the manual:
-+
-+---------------------------------
-+ $ make manual-clean
-+ $ make manual
-+---------------------------------
-+
-+The manual outputs will generated in 'output/docs/manual'.
-+
-+*Note* : +asciidoc+ is required to build it. There is a known issue
-+that you can't build it under Dedian Squeeze.
+-.Not all targets are always available,
+-
++Not all targets are always available,
+ some settings in the +.config+ file may hide some targets:
+ 
+ * +linux-menuconfig+ and +linux-savedefconfig+ only work when
+@@ -69,6 +68,8 @@ The manual outputs will generated in 'output/docs/manual'.
+ *Note* : +asciidoc+ is required to build it. There is a known issue
+ that you can't build it under Dedian Squeeze.
+ 
++.Reseting Buildroot for a new target:
 +
  To delete all build products as well as the configuration:
  
