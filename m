@@ -1,73 +1,58 @@
-From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Tue, 6 Aug 2013 08:52:13 +0200
-Subject: [Buildroot] boost autobuild failures
-In-Reply-To: <20130805224226.63f66b6a@skate>
-References: <CAAXf6LU4xLuafp4jjhP42kTQ-Yqg+L6L0n2+1bcpMc6pxXuKug@mail.gmail.com>
- <20130805224226.63f66b6a@skate>
-Message-ID: <CAAXf6LX8VDAcqpdSR9789iaB-gddq1FszWsL08d7ievpidUaew@mail.gmail.com>
+From: =?iso-8859-1?Q?Pl=FCss_Tobias_TA=2EE=2E1001?= <tobias.pluess@stud.hslu.ch>
+Date: Tue, 6 Aug 2013 08:02:14 +0000
+Subject: [Buildroot] Buildroot and NOMMU
+In-Reply-To: <38F83949ED76A946BE17B6F2F98F362E0DA4F3@MX33.campus.intern>
+References: <38F83949ED76A946BE17B6F2F98F362E0DA4F3@MX33.campus.intern>
+Message-ID: <38F83949ED76A946BE17B6F2F98F362E0DA5D1@MX33.campus.intern>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Hi together,
 
-On Mon, Aug 5, 2013 at 10:42 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Dear Thomas De Schampheleire,
->
-> On Mon, 5 Aug 2013 18:32:31 +0200, Thomas De Schampheleire wrote:
->
->> I tried reproducing the following autobuild failure:
->> x86_64 |                   boost-1.53.0 | NOK |
->> http://autobuild.buildroot.net/results/0f6c2f99b05f57adb557c2ddd686b5072f5e9ecf/
->>
->> Because the toolchain used in that config is 64-bit, I selected a
->> Sourcery toolchain for the same architecture (I'm running a 32-bit
->> machine).
->>
->> However, boost built just fine on my machine. My .config file attached.
->>
->> Unfortunately, the last lines of the build log on the autobuild do not
->> show the actual problem (at least I didn't spot it).
->>
->> Are there others with a 64-bit machine that can reproduce the problem?
->> Any idea about the solution?
->
-> I reproduced the issue on the autobuilder machine. The message is the
-> following one:
->
-> gcc.compile.c++ bin.v2/libs/locale/build/gcc-4.7.3/release/boost.locale.posix-off/threading-multi/icu/formatter.o
-> libs/locale/src/icu/formatter.cpp: In member function 'virtual boost::locale::impl_icu::number_format<CharType>::string_type boost::locale::impl_icu::number_format<CharType>::format(boost::int64_t, size_t&) const':
-> libs/locale/src/icu/formatter.cpp:61:43: error: call of overloaded 'format(boost::int64_t&, icu_51::UnicodeString&)' is ambiguous
-> libs/locale/src/icu/formatter.cpp:61:43: note: candidates are:
-> In file included from libs/locale/src/icu/formatter.cpp:15:0:
-> /home/test/outputs/0f6c2f99b05f57adb557c2ddd686b5072f5e9ecf/output/host/usr/x86_64-buildroot-linux-uclibc/sysroot/usr/include/unicode/numfmt.h:320:20: note: icu_51::UnicodeString& icu_51::NumberFormat::format(double, icu_51::UnicodeString&) const
-> /home/test/outputs/0f6c2f99b05f57adb557c2ddd686b5072f5e9ecf/output/host/usr/x86_64-buildroot-linux-uclibc/sysroot/usr/include/unicode/numfmt.h:333:20: note: icu_51::UnicodeString& icu_51::NumberFormat::format(int32_t, icu_51::UnicodeString&) const
-> /home/test/outputs/0f6c2f99b05f57adb557c2ddd686b5072f5e9ecf/output/host/usr/x86_64-buildroot-linux-uclibc/sysroot/usr/include/unicode/numfmt.h:346:20: note: icu_51::UnicodeString& icu_51::NumberFormat::format(int64_t, icu_51::UnicodeString&) const
->
->     "/home/test/outputs/0f6c2f99b05f57adb557c2ddd686b5072f5e9ecf/output/host/usr/bin/x86_64-linux-g++"  -ftemplate-depth-128 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -pipe -Os  -O3 -finline-functions -Wno-inline -Wall -pthread -fPIC  -DBOOST_ALL_NO_LIB=1 -DBOOST_CHRONO_DYN_LINK=1 -DBOOST_LOCALE_DYN_LINK=1 -DBOOST_LOCALE_NO_POSIX_BACKEND=1 -DBOOST_LOCALE_NO_WINAPI_BACKEND=1 -DBOOST_LOCALE_WITH_ICONV=1 -DBOOST_LOCALE_WITH_ICU=1 -DBOOST_SYSTEM_DYN_LINK=1 -DBOOST_SYSTEM_NO_DEPRECATED -DBOOST_THREAD_BUILD_DLL=1 -DBOOST_THREAD_NO_LIB=1 -DBOOST_THREAD_POSIX -DBOOST_THREAD_USE_DLL=1 -DNDEBUG  -I"." -c -o "bin.v2/libs/locale/build/gcc-4.7.3/release/boost.locale.posix-off/threading-multi/icu/formatter.o" "libs/locale/src/icu/formatter.cpp"
->
-> It looks similar to https://svn.boost.org/trac/boost/ticket/6851 but
-> this link doesn't give much clue about the solution, except one patch
-> that was apparently not official integrated. Some other people had it
-> more recently,
-> http://comments.gmane.org/gmane.comp.lib.cppcms.user/2125.
->
-> I'm not really familiar enough with how typing works in C++ to cook a
-> patch for this. Anyone?
+it looks like nobody knows an answer to my question, so I'll answer myself in case anybody has once some similar problems.
 
-Thanks for the build log and initial research.
-In my eyes, the proposed patch seems a suitable fix for the problem.
-The argument that it may not work on Windows is not valid for
-buildroot IMO. My proposal would be to test with that patch applied,
-and see if it doesn't break something else. As I can't reproduce the
-issue in the first place, I'm relying on you or someone else to test
-it. Do you have some time to run that build?
-Please let me know if you prefer me to already send an untested patch
-against buildroot for this, this may be easier for you to integrate in
-the test system...
+Buildroot offers an option which enables an MMU-less build. However, if this option is checked in buildroot, uClibc and BusyBox are still built with MMU on. In order to disable the MMU for BusyBox and uClibc as well, one has to
 
-Best regards,
-Thomas
+make uclibc-menuconfig, as well as
+make busybox-menuconfig
+
+and disable the MMU in these individual menuconfigs. However, building BusyBox without MMU works without problems, but uClibc definitely *wants* an MMU, and I was unable to figure out some settings which allow disabling the MMU. It always produces the same warning: undefined reference to "fork". Which is very plausible, since fork() needs an MMU; the replacement would be vfork() but uClibc doesn't know that, and in the standard implementation, it looks like vfork() is missing or so. So the quintessence of this is: for ARM targets, it is - at least without modifying some code - not possible to force an NO MMU build for uClibc.
+
+But then I wonder what the NOMMU option is for, if uClibc build fails when this option is enabled? and why can one build uClibc for targets like Blackfin, which do not have an MMU as well? Could somebody clarify?
+
+Tobias.
+
+________________________________
+Von: Pl?ss Tobias TA.E.1001
+Gesendet: Sonntag, 4. August 2013 16:38
+An: buildroot at busybox.net
+Betreff: Buildroot and NOMMU
+
+Hi all,
+
+I would like to use Buildroot for my self made embedded system which uses an ARM7TDMI processor. It doesn't have an MMU. So my question is:
+
+is it sufficient to disable MMU support in the
+
+make menuconfig
+
+of Buildroot, or do I have to do
+
+make uclibc-menuconfig
+
+and
+
+make busybox-menuconfig
+
+as well and disable MMU support in each of these? Or shall I left the uClibc and Busybox settings unchanged? Because I want only a very minimalistic system for my first tests.
+
+Thanks in advance,
+
+Tobias
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130806/87585ffb/attachment.html>
