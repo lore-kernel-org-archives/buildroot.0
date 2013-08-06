@@ -1,46 +1,33 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 7 Aug 2013 00:34:05 +0200
-Subject: [Buildroot] [git commit] cppcms, libcec: fix license typo
-Message-ID: <20130806223400.8645C9B175@busybox.osuosl.org>
+From: Justin Maggard <jmaggard10@gmail.com>
+Date: Tue,  6 Aug 2013 15:53:58 -0700
+Subject: [Buildroot] [PATCH] Fix ARM uclibc build with !BR2_UCLIBC_ARM_BX.
+Message-ID: <1375829638-7603-1-git-send-email-jmaggard10@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=6cabf13b2677bb760cbece8c914a6db8d0815637
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+When BR2_UCLIBC_ARM_BX is not set, UCLIBC_OPT_UNSET gets called with an extra
+argument.  Remove it.
 
-Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Justin Maggard <jmaggard10@gmail.com>
 ---
- package/cppcms/cppcms.mk |    2 +-
- package/libcec/libcec.mk |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/uclibc/uclibc.mk |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/cppcms/cppcms.mk b/package/cppcms/cppcms.mk
-index d2b1109..8d4a519 100644
---- a/package/cppcms/cppcms.mk
-+++ b/package/cppcms/cppcms.mk
-@@ -7,7 +7,7 @@
- CPPCMS_VERSION = 1.0.3
- CPPCMS_SOURCE = cppcms-$(CPPCMS_VERSION).tar.bz2
- CPPCMS_LICENSE = LGPLv3
--CPPCMS_LICENSE_FILE = COPYING.TXT
-+CPPCMS_LICENSE_FILES = COPYING.TXT
- CPPCMS_SITE = http://downloads.sourceforge.net/project/cppcms/cppcms/$(CPPCMS_VERSION)
- CPPCMS_INSTALL_STAGING = YES
+diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
+index 644c531..36a5001 100644
+--- a/package/uclibc/uclibc.mk
++++ b/package/uclibc/uclibc.mk
+@@ -85,7 +85,7 @@ define UCLIBC_ARM_BX_CONFIG
+ endef
+ else
+ define UCLIBC_ARM_BX_CONFIG
+-	$(call UCLIBC_OPT_UNSET,USE_BX,y,$(@D))
++	$(call UCLIBC_OPT_UNSET,USE_BX,$(@D))
+ endef
+ endif
  
-diff --git a/package/libcec/libcec.mk b/package/libcec/libcec.mk
-index 49fa067..8a58e1e 100644
---- a/package/libcec/libcec.mk
-+++ b/package/libcec/libcec.mk
-@@ -7,7 +7,7 @@
- LIBCEC_VERSION = libcec-2.1.1
- LIBCEC_SITE = http://github.com/Pulse-Eight/libcec/tarball/$(LIBCEC_VERSION)
- LIBCEC_LICENSE = GPLv2+
--LIBCEC_LICENSE_FILE = COPYING
-+LIBCEC_LICENSE_FILES = COPYING
- 
- # Autoreconf required due to being a dev tarball and not a release tarball.
- LIBCEC_AUTORECONF = YES
+-- 
+1.7.9.5
