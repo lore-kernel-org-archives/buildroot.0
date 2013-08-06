@@ -1,64 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 7 Aug 2013 00:33:39 +0200
-Subject: [Buildroot] [git commit] cairo: add patch to fix Blackfin build
-	failure
-Message-ID: <20130806223400.755D69B1C3@busybox.osuosl.org>
+Date: Wed, 7 Aug 2013 00:34:05 +0200
+Subject: [Buildroot] [git commit] cppcms, libcec: fix license typo
+Message-ID: <20130806223400.8645C9B175@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d372d0b6777f52cd493dc0a892593d4390536ec5
+commit: http://git.buildroot.net/buildroot/commit/?id=6cabf13b2677bb760cbece8c914a6db8d0815637
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes
-http://autobuild.buildroot.org/results/1b1/1b1e4ad2f00de1e0d1cc9045822751c3882c7493/build-end.log.
-
+Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/cairo/cairo-001-blackfin-build-fix.patch |   36 ++++++++++++++++++++++
- 1 files changed, 36 insertions(+), 0 deletions(-)
+ package/cppcms/cppcms.mk |    2 +-
+ package/libcec/libcec.mk |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/cairo/cairo-001-blackfin-build-fix.patch b/package/cairo/cairo-001-blackfin-build-fix.patch
-new file mode 100644
-index 0000000..94dff6b
---- /dev/null
-+++ b/package/cairo/cairo-001-blackfin-build-fix.patch
-@@ -0,0 +1,36 @@
-+Fix build on platforms where __USER_LABEL_PREFIX__ is not empty
-+
-+On most platforms, a C language symbol and its assembly equivalent are
-+identical. However, on the Blackfin architecture, this isn't the case,
-+the corresponding C language symbol in assembly is prepended with a
-+"_". Blackfin therefore has __USER_LABEL_PREFIX__ defined to "_".
-+
-+Cairo already has some code to cope with __USER_LABEL_PREFIX__, but
-+this code isn't completely correct: it prepends both assembly symbols
-+and C symbols with __USER_LABEL_PREFIX__, which cannot work.
-+
-+This patch fixes that by using the existing slim_hidden_asmname() to
-+define assembly symbols, and introduce a new slim_hidden_realname()
-+for C symbols.
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+
-+Index: b/src/cairo-compiler-private.h
-+===================================================================
-+--- a/src/cairo-compiler-private.h
-++++ b/src/cairo-compiler-private.h
-+@@ -93,12 +93,13 @@
-+ 	__asm__ (slim_hidden_asmname (internal))
-+ # define slim_hidden_def1(name, internal)				\
-+   extern __typeof (name) EXT_##name __asm__(slim_hidden_asmname(name))	\
-+-	__attribute__((__alias__(slim_hidden_asmname(internal))))
-++	__attribute__((__alias__(slim_hidden_realname(internal))))
-+ # define slim_hidden_ulp		slim_hidden_ulp1(__USER_LABEL_PREFIX__)
-+ # define slim_hidden_ulp1(x)		slim_hidden_ulp2(x)
-+ # define slim_hidden_ulp2(x)		#x
-+ # define slim_hidden_asmname(name)	slim_hidden_asmname1(name)
-+ # define slim_hidden_asmname1(name)	slim_hidden_ulp #name
-++# define slim_hidden_realname(name)     #name
-+ #else
-+ # define slim_hidden_proto(name)		int _cairo_dummy_prototype(void)
-+ # define slim_hidden_proto_no_warn(name)	int _cairo_dummy_prototype(void)
+diff --git a/package/cppcms/cppcms.mk b/package/cppcms/cppcms.mk
+index d2b1109..8d4a519 100644
+--- a/package/cppcms/cppcms.mk
++++ b/package/cppcms/cppcms.mk
+@@ -7,7 +7,7 @@
+ CPPCMS_VERSION = 1.0.3
+ CPPCMS_SOURCE = cppcms-$(CPPCMS_VERSION).tar.bz2
+ CPPCMS_LICENSE = LGPLv3
+-CPPCMS_LICENSE_FILE = COPYING.TXT
++CPPCMS_LICENSE_FILES = COPYING.TXT
+ CPPCMS_SITE = http://downloads.sourceforge.net/project/cppcms/cppcms/$(CPPCMS_VERSION)
+ CPPCMS_INSTALL_STAGING = YES
+ 
+diff --git a/package/libcec/libcec.mk b/package/libcec/libcec.mk
+index 49fa067..8a58e1e 100644
+--- a/package/libcec/libcec.mk
++++ b/package/libcec/libcec.mk
+@@ -7,7 +7,7 @@
+ LIBCEC_VERSION = libcec-2.1.1
+ LIBCEC_SITE = http://github.com/Pulse-Eight/libcec/tarball/$(LIBCEC_VERSION)
+ LIBCEC_LICENSE = GPLv2+
+-LIBCEC_LICENSE_FILE = COPYING
++LIBCEC_LICENSE_FILES = COPYING
+ 
+ # Autoreconf required due to being a dev tarball and not a release tarball.
+ LIBCEC_AUTORECONF = YES
