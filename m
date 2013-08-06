@@ -1,62 +1,66 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 6 Aug 2013 10:54:19 +0200
-Subject: [Buildroot] [git commit] opengl: libgles and libegl also provided
-	by gpu-viv-bin-mx6q
-Message-ID: <20130806085601.EBE5E9B1C3@busybox.osuosl.org>
+Date: Tue, 6 Aug 2013 10:59:28 +0200
+Subject: [Buildroot] Buildroot and NOMMU
+In-Reply-To: <38F83949ED76A946BE17B6F2F98F362E0DA5D1@MX33.campus.intern>
+References: <38F83949ED76A946BE17B6F2F98F362E0DA4F3@MX33.campus.intern>
+ <38F83949ED76A946BE17B6F2F98F362E0DA5D1@MX33.campus.intern>
+Message-ID: <20130806105928.41ed18f2@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d3e45e3f1f5127083fc1252b4b9ac9ca62693696
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Pl?ss Tobias,
 
-The gpu-viv-bin-mx6q package selects BR2_PACKAGE_HAS_OPENGL_EGL and
-BR2_PACKAGE_HAS_OPENGL_ES, so when it is enabled, Buildroot believes
-that OpenGL and EGL support is available.
+Sorry, I had your e-mail in my list of e-mails to reply, but failed to
+do so.
 
-However, both libgles.mk and libegl.mk do not add the dependency on
-gpu-viv-bin-mx6q, so when pulling the libgles or libegl dependencies,
-the build fails due to the absence of an OpenGL implementation. This
-commit fixes that.
+On Tue, 6 Aug 2013 08:02:14 +0000, Pl?ss Tobias TA.E.1001 wrote:
 
-Fixes the build failure at
-http://autobuild.buildroot.org/results/dbd/dbd938914883a9e205f967f7b4b4a8a7dc7be117/build-end.log.
+> Buildroot offers an option which enables an MMU-less build. However,
+> if this option is checked in buildroot, uClibc and BusyBox are still
+> built with MMU on. In order to disable the MMU for BusyBox and uClibc
+> as well, one has to
+> 
+> make uclibc-menuconfig, as well as
+> make busybox-menuconfig
+> 
+> and disable the MMU in these individual menuconfigs. However,
+> building BusyBox without MMU works without problems, but uClibc
+> definitely *wants* an MMU, and I was unable to figure out some
+> settings which allow disabling the MMU. It always produces the same
+> warning: undefined reference to "fork". Which is very plausible,
+> since fork() needs an MMU; the replacement would be vfork() but
+> uClibc doesn't know that, and in the standard implementation, it
+> looks like vfork() is missing or so. So the quintessence of this is:
+> for ARM targets, it is - at least without modifying some code - not
+> possible to force an NO MMU build for uClibc.
+> 
+> But then I wonder what the NOMMU option is for, if uClibc build fails
+> when this option is enabled? and why can one build uClibc for targets
+> like Blackfin, which do not have an MMU as well? Could somebody
+> clarify?
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/opengl/libegl/libegl.mk   |    4 ++++
- package/opengl/libgles/libgles.mk |    4 ++++
- 2 files changed, 8 insertions(+), 0 deletions(-)
+The noMMU support in Buildroot is still a work in progress, and the
+problems you pointed definitely exist and are simply due to a lack of
+work on getting noMMU better in Buildroot.
 
-diff --git a/package/opengl/libegl/libegl.mk b/package/opengl/libegl/libegl.mk
-index 97a4b85..c194b02 100644
---- a/package/opengl/libegl/libegl.mk
-+++ b/package/opengl/libegl/libegl.mk
-@@ -18,6 +18,10 @@ ifeq ($(BR2_PACKAGE_SUNXI_MALI),y)
- LIBEGL_DEPENDENCIES += sunxi-mali
- endif
- 
-+ifeq ($(BR2_PACKAGE_GPU_VIV_BIN_MX6Q),y)
-+LIBEGL_DEPENDENCIES += gpu-viv-bin-mx6q
-+endif
-+
- ifeq ($(LIBEGL_DEPENDENCIES),)
- define LIBEGL_CONFIGURE_CMDS
- 	echo "No libEGL implementation selected. Configuration error."
-diff --git a/package/opengl/libgles/libgles.mk b/package/opengl/libgles/libgles.mk
-index 2945496..ec157ac 100644
---- a/package/opengl/libgles/libgles.mk
-+++ b/package/opengl/libgles/libgles.mk
-@@ -18,6 +18,10 @@ ifeq ($(BR2_PACKAGE_SUNXI_MALI),y)
- LIBGLES_DEPENDENCIES += sunxi-mali
- endif
- 
-+ifeq ($(BR2_PACKAGE_GPU_VIV_BIN_MX6Q),y)
-+LIBGLES_DEPENDENCIES += gpu-viv-bin-mx6q
-+endif
-+
- ifeq ($(LIBGLES_DEPENDENCIES),)
- define LIBGLES_CONFIGURE_CMDS
- 	echo "No libGLES implementation selected. Configuration error."
+Until recently, Blackfin was only working using external toolchains.
+Gustavo sent some patches to make the internal toolchain backend work
+for Blackfin, but I think it still generates some ELF binaries while
+FLAT binaries would be expected. Gustavo also said he would have more
+fixes to bring ARM noMMU to a better shape, but he hasn't posted those
+patches yet.
+
+So the short answer is that yes, noMMU isn't working properly yet, and
+patches are welcome.
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
