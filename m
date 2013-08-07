@@ -1,54 +1,56 @@
 From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Wed, 7 Aug 2013 08:44:37 +0200
-Subject: [Buildroot] [PATCH] infra: display current task as title of the
- term window
-In-Reply-To: <1375822004-22591-1-git-send-email-francois.perrad@gadz.org>
-References: <1375822004-22591-1-git-send-email-francois.perrad@gadz.org>
-Message-ID: <CAAXf6LWCBh-W3nHRLtoXVy8PfbS3NpOQ7sMwicp6W+kv-OeAkg@mail.gmail.com>
+Date: Wed, 7 Aug 2013 09:05:30 +0200
+Subject: [Buildroot] AVR32 toolchain build failure
+In-Reply-To: <CAAXf6LU0oihr6qLh4KA=+fKYWEbk-iOpwvsmo7AWPSjyC7_=KA@mail.gmail.com>
+References: <CAAXf6LUhgOkHgj=cRWnkR8tPhAAjT6BhXFvXTBvC5pHfTZ=vww@mail.gmail.com>
+ <20130806195402.2f3f94e7@skate>
+ <CAAXf6LU0oihr6qLh4KA=+fKYWEbk-iOpwvsmo7AWPSjyC7_=KA@mail.gmail.com>
+Message-ID: <CAAXf6LWF=7-cP_=mTRjNK1qki-gxKx+BoR1C_1Bw9QGUUtstmA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Fran?ois,
+Hi,
 
-On Tue, Aug 6, 2013 at 10:46 PM, Francois Perrad <fperrad@gmail.com> wrote:
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-> ---
->  package/pkg-utils.mk |    3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
+On Tue, Aug 6, 2013 at 9:33 PM, Thomas De Schampheleire
+<patrickdepinguin+buildroot@gmail.com> wrote:
+> Hi Thomas,
 >
-> diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
-> index 15db096..8572cb1 100644
-> --- a/package/pkg-utils.mk
-> +++ b/package/pkg-utils.mk
-> @@ -64,7 +64,8 @@ INFLATE.xz   = $(XZCAT)
->  INFLATE.tar  = cat
+> On Tue, Aug 6, 2013 at 7:54 PM, Thomas Petazzoni
+> <thomas.petazzoni@free-electrons.com> wrote:
+>> Dear Thomas De Schampheleire,
+>>
+>> On Mon, 5 Aug 2013 14:01:51 +0200, Thomas De Schampheleire wrote:
+>>
+>>> I was looking at an autobuild failure on AVR32 and tried reproducing
+>>> it locally. Unfortunately, the AVR32 toolchain that was configured was
+>>> pre-built on a 64-bit machine, which I don't have. Hence, the
+>>> configured toolchain was not usable.
+>>>
+>>> Then I tried building my own AVR32 toolchain with the internal
+>>> backend, see config attached. Unfortunately, this failed as well:
+>>
+>> I just tested here on my Ubuntu 13.04 64 bits machine, with the latest
+>> Buildroot Git, and the atngw100_defconfig (AVR32) could build a
+>> toolchain properly. This toolchain however seems to have a problem as
+>> it is not able to link the kernel. This specific regression was, I
+>> think, introduced by my patches converting the internal backend to
+>> proper packages. I'll try to investigate this one.
 >
->  # MESSAGE Macro -- display a message in bold type
-> -MESSAGE     = echo "$(TERM_BOLD)>>> $($(PKG)_NAME) $($(PKG)_VERSION) $(1)$(TERM_RESET)"
-> +MESSAGE     = echo "$(TERM_BOLD)>>> $($(PKG)_NAME) $($(PKG)_VERSION) $(1)$(TERM_RESET)" && \
-> +              echo -e "\033]2;$($(PKG)_NAME) $($(PKG)_VERSION) $(1)\007"
->  TERM_BOLD  := $(shell tput smso)
->  TERM_RESET := $(shell tput rmso)
+> I verified the atngw100_defconfig, and the toolchain also builds fine here.
+> Comparing the configuration with my failing setup, I see that I had
+> enabled C++ support, wchar, largefile and ipv6. Presumably, it's the
+> C++ support that is the problem.
+>
+> I'll verify by enabling just that without wchar, largefile and ipv6.
 
-Although I like the idea, it does not work for me. I'm running Linux
-Mint, with a Konsole terminal. The above does nothing at all. I also
-tried manually:
+I can now confirm that the atngw100_defconfig works unchanged, but
+when I enable C++ support in the toolchain, host-gcc-final fails with
+the aforementioned error about truncated relocations.
 
-echo -ne "\033]0;something\007"
+I'm not sure how to proceed from here...
 
-but it doesn't change a thing.
-It does work in gnome-terminal. I haven't tested in other situations.
-
-Could you have a look at Konsole?
-
-I know that Gentoo has this feature for its portage package
-installation/compilation tool. When you run 'emerge', the titles are
-constantly updated with the package that is being handled, also in
-Konsole. You may be able to find out what the 'right way' is based on
-their sources.
-
-Thanks,
+Best regards,
 Thomas
