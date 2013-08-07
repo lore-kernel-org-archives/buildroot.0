@@ -1,51 +1,69 @@
-From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Wed, 7 Aug 2013 10:20:19 +0200
+From: =?ISO-8859-1?Q?Fran=E7ois_Perrad?= <francois.perrad@gadz.org>
+Date: Wed, 7 Aug 2013 10:45:52 +0200
 Subject: [Buildroot] [PATCH] infra: display current task as title of the
  term window
-In-Reply-To: <52020215.6030609@googlemail.com>
+In-Reply-To: <CAAXf6LWCBh-W3nHRLtoXVy8PfbS3NpOQ7sMwicp6W+kv-OeAkg@mail.gmail.com>
 References: <1375822004-22591-1-git-send-email-francois.perrad@gadz.org>
  <CAAXf6LWCBh-W3nHRLtoXVy8PfbS3NpOQ7sMwicp6W+kv-OeAkg@mail.gmail.com>
- <52020215.6030609@googlemail.com>
-Message-ID: <CAAXf6LVgBpK7DTySYdHTNRnstpQWg8UjQcNRvpSmcLSaSbPXEA@mail.gmail.com>
+Message-ID: <CAB0FRsssGoXoq7+Ft=Cku0jexY=c1wBf-p4XK2v=F8RyDRH8Mw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Carsten,
-
-On Wed, Aug 7, 2013 at 10:15 AM, Carsten Schoenert
-<c.schoenert@gmail.com> wrote:
-> Hello Thomas,
+2013/8/7 Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>:
+> Hi Fran?ois,
 >
-> Am 07.08.2013 08:44, schrieb Thomas De Schampheleire:
->> echo -ne "\033]0;something\007"
+> On Tue, Aug 6, 2013 at 10:46 PM, Francois Perrad <fperrad@gmail.com> wrote:
+>> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+>> ---
+>>  package/pkg-utils.mk |    3 ++-
+>>  1 file changed, 2 insertions(+), 1 deletion(-)
 >>
->> but it doesn't change a thing.
+>> diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
+>> index 15db096..8572cb1 100644
+>> --- a/package/pkg-utils.mk
+>> +++ b/package/pkg-utils.mk
+>> @@ -64,7 +64,8 @@ INFLATE.xz   = $(XZCAT)
+>>  INFLATE.tar  = cat
+>>
+>>  # MESSAGE Macro -- display a message in bold type
+>> -MESSAGE     = echo "$(TERM_BOLD)>>> $($(PKG)_NAME) $($(PKG)_VERSION) $(1)$(TERM_RESET)"
+>> +MESSAGE     = echo "$(TERM_BOLD)>>> $($(PKG)_NAME) $($(PKG)_VERSION) $(1)$(TERM_RESET)" && \
+>> +              echo -e "\033]2;$($(PKG)_NAME) $($(PKG)_VERSION) $(1)\007"
+>>  TERM_BOLD  := $(shell tput smso)
+>>  TERM_RESET := $(shell tput rmso)
 >
-> I think the quoting and controling syntax is wrong. The following string
-> works here fine in a Gnome terminal.
+> Although I like the idea, it does not work for me. I'm running Linux
+> Mint, with a Konsole terminal. The above does nothing at all. I also
+> tried manually:
 >
->> echo -ne "\033[2msomething\033[0m other text\n"
->
-> Or with a underline and in green.
->
->> echo -ne "\033[4;32msomething\033[0m other text\n"
->
-> You need to set up the starting thing with '\033["$foo-color"' and
-> finally switch at the end to the to the default back '\033[0m'
->
-> More info around colors in the Bash can be found on
-> http://www.tldp.org/HOWTO/Bash-Prompt-HOWTO/x329.html
-> But that's only for the Bash!
+> echo -ne "\033]0;something\007"
 
-The change Fran?ois is suggesting is for the terminal title window, it
-does not change anything about coloring.
-The above commands you gave do not change anything in the title bar
-for me, nor in Konsole, nor in gnome-terminal. The second command does
-show the green underlined text in both terminals, but as said the
-title bar is unchanged.
+Thomas,
 
-Best regards,
-Thomas
+at the end of the command, the initial title is restored, so try
+something like :
+$ echo -e "\033]2;Foo\007" && wait
+
+Fran?ois
+
+>
+> but it doesn't change a thing.
+> It does work in gnome-terminal. I haven't tested in other situations.
+>
+> Could you have a look at Konsole?
+>
+> I know that Gentoo has this feature for its portage package
+> installation/compilation tool. When you run 'emerge', the titles are
+> constantly updated with the package that is being handled, also in
+> Konsole. You may be able to find out what the 'right way' is based on
+> their sources.
+>
+> Thanks,
+> Thomas
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
