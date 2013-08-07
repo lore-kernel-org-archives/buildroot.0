@@ -1,34 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 7 Aug 2013 17:11:37 +0200
-Subject: [Buildroot] qt 5.02 not building
-In-Reply-To: <77698A93A9334B5FBD062F0FE17E67D4@JohanW7>
-References: <77698A93A9334B5FBD062F0FE17E67D4@JohanW7>
-Message-ID: <20130807171137.3aa6865a@skate>
+Date: Wed, 7 Aug 2013 17:20:33 +0200
+Subject: [Buildroot] AVR32 toolchain build failure
+In-Reply-To: <CAAXf6LWF=7-cP_=mTRjNK1qki-gxKx+BoR1C_1Bw9QGUUtstmA@mail.gmail.com>
+References: <CAAXf6LUhgOkHgj=cRWnkR8tPhAAjT6BhXFvXTBvC5pHfTZ=vww@mail.gmail.com>
+ <20130806195402.2f3f94e7@skate>
+ <CAAXf6LU0oihr6qLh4KA=+fKYWEbk-iOpwvsmo7AWPSjyC7_=KA@mail.gmail.com>
+ <CAAXf6LWF=7-cP_=mTRjNK1qki-gxKx+BoR1C_1Bw9QGUUtstmA@mail.gmail.com>
+Message-ID: <20130807172033.564940d1@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Sagaert Johan,
+Dear Thomas De Schampheleire,
 
-On Wed, 7 Aug 2013 16:30:40 +0200, Sagaert Johan wrote:
+On Wed, 7 Aug 2013 09:05:30 +0200, Thomas De Schampheleire wrote:
 
-> make[1]: Entering directory `/home/buildroot12git/output/build/qt5base-5.0.2/config.tests/common/sse2'
-> /home/buildroot12git/output/host/usr/bin/arm-buildroot-linux-uclibcgnueabi-g++ -c -pipe -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
-> -D_FILE_OFFSET_BITS=64 -pipe -Os --sysroot=/home/buildroot12git/output/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot -msse2 -g
-> -Wall -W -fPIE  -I../../../mkspecs/devices/linux-buildroot-g++ -I.
-> -I/home/buildroot12git/output/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/include -o sse2.o sse2.cpp
-> cc1plus: error: unrecognized command line option '-msse2'
+> I can now confirm that the atngw100_defconfig works unchanged, but
 
-Is the build *really* failing and aborting at this point? What you're
-showing here is part of the tests that Qt does to find out the
-capabilities of the compiler. Here, it tests whether it supports the
--msse2 option, which obviously isn't possible because you're building
-for ARM.
+Does the 3.10 kernel builds for you? It fails to build for me with some
+truncated relocation messages. I.e, as is, the atngw100_defconfig
+doesn't build here.
 
-So Qt will simply assume that SSE2 isn't available, and will continue
-with other configuration tests.
+> when I enable C++ support in the toolchain, host-gcc-final fails with
+> the aforementioned error about truncated relocations.
+> 
+> I'm not sure how to proceed from here...
+
+Can you try to see if the same configuration was building in the
+2013.05, to see if the problem is a consequence of the new internal
+toolchain backend or not?
+
+Thanks!
 
 Thomas
 -- 
