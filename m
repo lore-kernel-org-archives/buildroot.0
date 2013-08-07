@@ -1,39 +1,38 @@
-From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Wed, 7 Aug 2013 16:59:29 +0200
-Subject: [Buildroot] [PATCH] gcc: fix !BR2_LARGEFILE builds
-In-Reply-To: <1375875595-3155-1-git-send-email-francois.perrad@gadz.org>
-References: <1375875595-3155-1-git-send-email-francois.perrad@gadz.org>
-Message-ID: <CAAXf6LWfDiSC68rjjQohF8ZVAnLx+WR0J9XN+VtDwvY1ATVfFA@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 7 Aug 2013 17:11:37 +0200
+Subject: [Buildroot] qt 5.02 not building
+In-Reply-To: <77698A93A9334B5FBD062F0FE17E67D4@JohanW7>
+References: <77698A93A9334B5FBD062F0FE17E67D4@JohanW7>
+Message-ID: <20130807171137.3aa6865a@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Fran?ois,
+Dear Sagaert Johan,
 
-On Wed, Aug 7, 2013 at 1:39 PM, Francois Perrad <fperrad@gmail.com> wrote:
-> see http://lists.busybox.net/pipermail/buildroot/2013-August/076278.html
->
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-> ---
->  package/gcc/gcc-final/gcc-final.mk |    1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/package/gcc/gcc-final/gcc-final.mk b/package/gcc/gcc-final/gcc-final.mk
-> index 0d9d581..9f54c68 100644
-> --- a/package/gcc/gcc-final/gcc-final.mk
-> +++ b/package/gcc/gcc-final/gcc-final.mk
-> @@ -41,6 +41,7 @@ GCC_FINAL_CROSS_LANGUAGES = $(subst $(space),$(comma),$(GCC_FINAL_CROSS_LANGUAGE
->  HOST_GCC_FINAL_CONF_OPT = \
->         $(HOST_GCC_COMMON_CONF_OPT) \
->         --enable-languages=$(GCC_FINAL_CROSS_LANGUAGES) \
-> +       $(DISABLE_LARGEFILE) \
->         --with-build-time-tools=$(HOST_DIR)/usr/$(GNU_TARGET_NAME)/bin
->
->  ifeq ($(BR2_GCC_ENABLE_OPENMP),y)
+On Wed, 7 Aug 2013 16:30:40 +0200, Sagaert Johan wrote:
 
-Thanks, this seems to work fine!
+> make[1]: Entering directory `/home/buildroot12git/output/build/qt5base-5.0.2/config.tests/common/sse2'
+> /home/buildroot12git/output/host/usr/bin/arm-buildroot-linux-uclibcgnueabi-g++ -c -pipe -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
+> -D_FILE_OFFSET_BITS=64 -pipe -Os --sysroot=/home/buildroot12git/output/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot -msse2 -g
+> -Wall -W -fPIE  -I../../../mkspecs/devices/linux-buildroot-g++ -I.
+> -I/home/buildroot12git/output/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/include -o sse2.o sse2.cpp
+> cc1plus: error: unrecognized command line option '-msse2'
 
-Tested-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-[compile-tested with and without largefile support for ARM9 target]
+Is the build *really* failing and aborting at this point? What you're
+showing here is part of the tests that Qt does to find out the
+capabilities of the compiler. Here, it tests whether it supports the
+-msse2 option, which obviously isn't possible because you're building
+for ARM.
+
+So Qt will simply assume that SSE2 isn't available, and will continue
+with other configuration tests.
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
