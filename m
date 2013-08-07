@@ -1,56 +1,41 @@
-From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Wed, 7 Aug 2013 09:05:30 +0200
-Subject: [Buildroot] AVR32 toolchain build failure
-In-Reply-To: <CAAXf6LU0oihr6qLh4KA=+fKYWEbk-iOpwvsmo7AWPSjyC7_=KA@mail.gmail.com>
-References: <CAAXf6LUhgOkHgj=cRWnkR8tPhAAjT6BhXFvXTBvC5pHfTZ=vww@mail.gmail.com>
- <20130806195402.2f3f94e7@skate>
- <CAAXf6LU0oihr6qLh4KA=+fKYWEbk-iOpwvsmo7AWPSjyC7_=KA@mail.gmail.com>
-Message-ID: <CAAXf6LWF=7-cP_=mTRjNK1qki-gxKx+BoR1C_1Bw9QGUUtstmA@mail.gmail.com>
+From: Carsten Schoenert <c.schoenert@gmail.com>
+Date: Wed, 07 Aug 2013 10:15:17 +0200
+Subject: [Buildroot] [PATCH] infra: display current task as title of the
+ term window
+In-Reply-To: <CAAXf6LWCBh-W3nHRLtoXVy8PfbS3NpOQ7sMwicp6W+kv-OeAkg@mail.gmail.com>
+References: <1375822004-22591-1-git-send-email-francois.perrad@gadz.org>
+ <CAAXf6LWCBh-W3nHRLtoXVy8PfbS3NpOQ7sMwicp6W+kv-OeAkg@mail.gmail.com>
+Message-ID: <52020215.6030609@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Hello Thomas,
 
-On Tue, Aug 6, 2013 at 9:33 PM, Thomas De Schampheleire
-<patrickdepinguin+buildroot@gmail.com> wrote:
-> Hi Thomas,
->
-> On Tue, Aug 6, 2013 at 7:54 PM, Thomas Petazzoni
-> <thomas.petazzoni@free-electrons.com> wrote:
->> Dear Thomas De Schampheleire,
->>
->> On Mon, 5 Aug 2013 14:01:51 +0200, Thomas De Schampheleire wrote:
->>
->>> I was looking at an autobuild failure on AVR32 and tried reproducing
->>> it locally. Unfortunately, the AVR32 toolchain that was configured was
->>> pre-built on a 64-bit machine, which I don't have. Hence, the
->>> configured toolchain was not usable.
->>>
->>> Then I tried building my own AVR32 toolchain with the internal
->>> backend, see config attached. Unfortunately, this failed as well:
->>
->> I just tested here on my Ubuntu 13.04 64 bits machine, with the latest
->> Buildroot Git, and the atngw100_defconfig (AVR32) could build a
->> toolchain properly. This toolchain however seems to have a problem as
->> it is not able to link the kernel. This specific regression was, I
->> think, introduced by my patches converting the internal backend to
->> proper packages. I'll try to investigate this one.
->
-> I verified the atngw100_defconfig, and the toolchain also builds fine here.
-> Comparing the configuration with my failing setup, I see that I had
-> enabled C++ support, wchar, largefile and ipv6. Presumably, it's the
-> C++ support that is the problem.
->
-> I'll verify by enabling just that without wchar, largefile and ipv6.
+Am 07.08.2013 08:44, schrieb Thomas De Schampheleire:
+> echo -ne "\033]0;something\007"
+> 
+> but it doesn't change a thing.
 
-I can now confirm that the atngw100_defconfig works unchanged, but
-when I enable C++ support in the toolchain, host-gcc-final fails with
-the aforementioned error about truncated relocations.
+I think the quoting and controling syntax is wrong. The following string
+works here fine in a Gnome terminal.
 
-I'm not sure how to proceed from here...
+> echo -ne "\033[2msomething\033[0m other text\n"
 
-Best regards,
-Thomas
+Or with a underline and in green.
+
+> echo -ne "\033[4;32msomething\033[0m other text\n"
+
+You need to set up the starting thing with '\033["$foo-color"' and
+finally switch at the end to the to the default back '\033[0m'
+
+More info around colors in the Bash can be found on
+http://www.tldp.org/HOWTO/Bash-Prompt-HOWTO/x329.html
+But that's only for the Bash!
+
+Hope that helps.
+
+Regards
+Carsten
