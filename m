@@ -1,42 +1,53 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 7 Aug 2013 17:20:33 +0200
-Subject: [Buildroot] AVR32 toolchain build failure
-In-Reply-To: <CAAXf6LWF=7-cP_=mTRjNK1qki-gxKx+BoR1C_1Bw9QGUUtstmA@mail.gmail.com>
-References: <CAAXf6LUhgOkHgj=cRWnkR8tPhAAjT6BhXFvXTBvC5pHfTZ=vww@mail.gmail.com>
- <20130806195402.2f3f94e7@skate>
- <CAAXf6LU0oihr6qLh4KA=+fKYWEbk-iOpwvsmo7AWPSjyC7_=KA@mail.gmail.com>
- <CAAXf6LWF=7-cP_=mTRjNK1qki-gxKx+BoR1C_1Bw9QGUUtstmA@mail.gmail.com>
-Message-ID: <20130807172033.564940d1@skate>
+Date: Wed, 7 Aug 2013 17:49:01 +0200
+Subject: [Buildroot] [git commit] configs: lock kernel version for
+	atngw100_defconfig
+Message-ID: <20130807154846.859D89B230@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas De Schampheleire,
+commit: http://git.buildroot.net/buildroot/commit/?id=ae6130953d68406611c5459c513b0d78dfc2f40e
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 7 Aug 2013 09:05:30 +0200, Thomas De Schampheleire wrote:
+The 3.10.x kernels fail to build with the following message:
 
-> I can now confirm that the atngw100_defconfig works unchanged, but
+vsprintf.c:(.text+0x17e0): relocation truncated to fit: R_AVR32_16N_PCREL against symbol `_ctype' defined in .text section in lib/lib.a(ctype.o)
 
-Does the 3.10 kernel builds for you? It fails to build for me with some
-truncated relocation messages. I.e, as is, the atngw100_defconfig
-doesn't build here.
+While this is most likely a toolchain issue, but since AVR32 isn't a
+well-maintained architecture, there's not much we can do.
 
-> when I enable C++ support in the toolchain, host-gcc-final fails with
-> the aforementioned error about truncated relocations.
-> 
-> I'm not sure how to proceed from here...
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ configs/atngw100_defconfig |   10 +++++++++-
+ 1 files changed, 9 insertions(+), 1 deletions(-)
 
-Can you try to see if the same configuration was building in the
-2013.05, to see if the problem is a consequence of the new internal
-toolchain backend or not?
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+diff --git a/configs/atngw100_defconfig b/configs/atngw100_defconfig
+index 4a779e1..4928915 100644
+--- a/configs/atngw100_defconfig
++++ b/configs/atngw100_defconfig
+@@ -1,6 +1,10 @@
+ # Architecture
+ BR2_avr32=y
+ 
++# Lock down kernel headers version, to match the kernel version used
++# below.
++BR2_KERNEL_HEADERS_3_9=y
++
+ # Filesystems
+ BR2_TARGET_ROOTFS_JFFS2=y
+ BR2_TARGET_ROOTFS_JFFS2_FLASH_128=y
+@@ -17,6 +21,10 @@ BR2_TARGET_UBOOT_BOARDNAME="atngw100"
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2010.09"
+ 
+-# Kernel
++# Kernel. Locked to 3.9.x, because 3.10.x fails to build with
++# relocation truncated to fit: R_AVR32_16N_PCREL against symbol
++# `_ctype'
+ BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.9.11"
+ BR2_LINUX_KERNEL_DEFCONFIG="atngw100"
