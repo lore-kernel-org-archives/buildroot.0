@@ -1,34 +1,46 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 7 Aug 2013 17:50:21 +0200
-Subject: [Buildroot] [git commit] gcc: fix !BR2_LARGEFILE builds
-Message-ID: <20130807155005.E9AD89B230@busybox.osuosl.org>
+From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
+Date: Wed, 7 Aug 2013 18:01:25 +0200
+Subject: [Buildroot] AVR32 toolchain build failure
+In-Reply-To: <20130807172033.564940d1@skate>
+References: <CAAXf6LUhgOkHgj=cRWnkR8tPhAAjT6BhXFvXTBvC5pHfTZ=vww@mail.gmail.com>
+ <20130806195402.2f3f94e7@skate>
+ <CAAXf6LU0oihr6qLh4KA=+fKYWEbk-iOpwvsmo7AWPSjyC7_=KA@mail.gmail.com>
+ <CAAXf6LWF=7-cP_=mTRjNK1qki-gxKx+BoR1C_1Bw9QGUUtstmA@mail.gmail.com>
+ <20130807172033.564940d1@skate>
+Message-ID: <CAAXf6LVT144yhgAh5ce5O9FjR=osQ=qV=sod=-pDSOiqeRTvuA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7fc685c9e0c9479365ca44158c1e928e57e391a4
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Thomas,
 
-see http://lists.busybox.net/pipermail/buildroot/2013-August/076278.html
+On Wed, Aug 7, 2013 at 5:20 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Dear Thomas De Schampheleire,
+>
+> On Wed, 7 Aug 2013 09:05:30 +0200, Thomas De Schampheleire wrote:
+>
+>> I can now confirm that the atngw100_defconfig works unchanged, but
+>
+> Does the 3.10 kernel builds for you? It fails to build for me with some
+> truncated relocation messages. I.e, as is, the atngw100_defconfig
+> doesn't build here.
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-Tested-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/gcc/gcc-final/gcc-final.mk |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+What I meant was the toolchain part. I also had the kernel problems.
 
-diff --git a/package/gcc/gcc-final/gcc-final.mk b/package/gcc/gcc-final/gcc-final.mk
-index 0d9d581..9f54c68 100644
---- a/package/gcc/gcc-final/gcc-final.mk
-+++ b/package/gcc/gcc-final/gcc-final.mk
-@@ -41,6 +41,7 @@ GCC_FINAL_CROSS_LANGUAGES = $(subst $(space),$(comma),$(GCC_FINAL_CROSS_LANGUAGE
- HOST_GCC_FINAL_CONF_OPT = \
- 	$(HOST_GCC_COMMON_CONF_OPT) \
- 	--enable-languages=$(GCC_FINAL_CROSS_LANGUAGES) \
-+	$(DISABLE_LARGEFILE) \
- 	--with-build-time-tools=$(HOST_DIR)/usr/$(GNU_TARGET_NAME)/bin
- 
- ifeq ($(BR2_GCC_ENABLE_OPENMP),y)
+>
+>> when I enable C++ support in the toolchain, host-gcc-final fails with
+>> the aforementioned error about truncated relocations.
+>>
+>> I'm not sure how to proceed from here...
+>
+> Can you try to see if the same configuration was building in the
+> 2013.05, to see if the problem is a consequence of the new internal
+> toolchain backend or not?
+
+I will, and let you know the results.
+
+Best regards,
+Thomas
