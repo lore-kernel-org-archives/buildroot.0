@@ -1,42 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 7 Aug 2013 23:42:30 +0200
-Subject: [Buildroot] qt 5.02 not building
-In-Reply-To: <07AC286795CB4F4B8C7523D9ECE6109A@JohanW7>
-References: <77698A93A9334B5FBD062F0FE17E67D4@JohanW7>
- <20130807171137.3aa6865a@skate>
- <07AC286795CB4F4B8C7523D9ECE6109A@JohanW7>
-Message-ID: <20130807234230.734f072b@skate>
+Date: Thu, 8 Aug 2013 00:07:26 +0200
+Subject: [Buildroot] AVR32 toolchain build failure
+In-Reply-To: <CAAXf6LVFECrtPWQsw0HU5H+ZHjU0tYmz5SNgeKsBA_0RzkNJsQ@mail.gmail.com>
+References: <CAAXf6LUhgOkHgj=cRWnkR8tPhAAjT6BhXFvXTBvC5pHfTZ=vww@mail.gmail.com>
+ <20130806195402.2f3f94e7@skate>
+ <CAAXf6LU0oihr6qLh4KA=+fKYWEbk-iOpwvsmo7AWPSjyC7_=KA@mail.gmail.com>
+ <CAAXf6LWF=7-cP_=mTRjNK1qki-gxKx+BoR1C_1Bw9QGUUtstmA@mail.gmail.com>
+ <20130807172033.564940d1@skate>
+ <CAAXf6LVT144yhgAh5ce5O9FjR=osQ=qV=sod=-pDSOiqeRTvuA@mail.gmail.com>
+ <CAAXf6LVFECrtPWQsw0HU5H+ZHjU0tYmz5SNgeKsBA_0RzkNJsQ@mail.gmail.com>
+Message-ID: <20130808000726.66ab7194@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Sagaert Johan,
+Dear Thomas De Schampheleire,
 
-On Wed, 7 Aug 2013 19:38:37 +0200, Sagaert Johan wrote:
-> DirectFB auto-detection... ()
-> make[1]: Entering directory `/home/buildroot12git/output/build/qt5base-5.0.2/config.tests/qpa/directfb'
-> /home/buildroot12git/output/host/usr/bin/arm-buildroot-linux-uclibcgnueabi-g++ -c -pipe -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
-> -D_FILE_OFFSET_BITS=64 -pipe -Os --sysroot=/home/buildroot12git/output/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot
-> -D_REENTRANT -O2 -O3 -Wall -W -fPIE  -I../../../mkspecs/devices/linux-buildroot-g++ -I.
-> -I/home/buildroot12git/output/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/include
-> -I/home/buildroot12git/output/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/include/directfb -o directfb.o directfb.cpp
-> directfb.cpp:45:2: error: #error DirectFB headers are unclean and cannot compile
-> make[1]: *** [directfb.o] Error 1
-> make[1]: Leaving directory `/home/buildroot12git/output/build/qt5base-5.0.2/config.tests/qpa/directfb'
-> DirectFB disabled.
->  DirectFB support cannot be enabled due to functionality tests!
->  Turn on verbose messaging (-v) to ./configure to see the final report.
->  If you believe this message is in error you may use the continue
->  switch (-continue) to ./configure to continue.
-> make: *** [/home/buildroot12git/output/build/qt5base-5.0.2/.stamp_configured] Error 101
+On Wed, 7 Aug 2013 20:20:31 +0200, Thomas De Schampheleire wrote:
+> On Wed, Aug 7, 2013 at 6:01 PM, Thomas De Schampheleire
+> <patrickdepinguin+buildroot@gmail.com> wrote:
+> >
+> > On Wed, Aug 7, 2013 at 5:20 PM, Thomas Petazzoni
+> > <thomas.petazzoni@free-electrons.com> wrote:
+> >>
+> >> Can you try to see if the same configuration was building in the
+> >> 2013.05, to see if the problem is a consequence of the new internal
+> >> toolchain backend or not?
+> >
+> > I will, and let you know the results.
+> 
+> This also failed in 2013.05, and 2013.02. I can continue down the
+> line, but it seems that not many people need C++ support on AVR32? I
+> can
 
-Ok, so as you can see, the error has nothing to do with what you posted
-originally (-msse2), but it is related to DirectFB.
+I do remember that some combinations like C++ + locale support has
+always been failing on AVR32.
 
-I've already seen this error in the autobuilders, but never had the
-time to investigate. Someone needs to have a look at this one.
+I personally don't care much about AVR32. I think Simon Dawson was the
+one mainly interested in keeping the AVR32 support in Buildroot for now.
 
 Best regards,
 
