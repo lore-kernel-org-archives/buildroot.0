@@ -1,88 +1,60 @@
 From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Thu, 8 Aug 2013 22:17:51 +0200
-Subject: [Buildroot] [PATCH] libffi: Add -mno-compact-eh when compiling
- for Mips
-In-Reply-To: <1375967074-17438-1-git-send-email-jezz@sysmic.org>
-References: <1375967074-17438-1-git-send-email-jezz@sysmic.org>
-Message-ID: <CAAXf6LWPNPFD21XxZ5gMWROzUjt99KKTUPPtNmG6XmFXSwC1Kg@mail.gmail.com>
+Date: Thu, 8 Aug 2013 22:24:53 +0200
+Subject: [Buildroot] AVR32 toolchain build failure
+In-Reply-To: <CAAXf6LUqGG9O2eWfokH8VAuxa-2xDw=yKw-1vq_9VBpzotCjKA@mail.gmail.com>
+References: <CAAXf6LUhgOkHgj=cRWnkR8tPhAAjT6BhXFvXTBvC5pHfTZ=vww@mail.gmail.com>
+ <20130806195402.2f3f94e7@skate>
+ <CAAXf6LU0oihr6qLh4KA=+fKYWEbk-iOpwvsmo7AWPSjyC7_=KA@mail.gmail.com>
+ <CAAXf6LWF=7-cP_=mTRjNK1qki-gxKx+BoR1C_1Bw9QGUUtstmA@mail.gmail.com>
+ <20130807172033.564940d1@skate>
+ <CAAXf6LVT144yhgAh5ce5O9FjR=osQ=qV=sod=-pDSOiqeRTvuA@mail.gmail.com>
+ <CAAXf6LVFECrtPWQsw0HU5H+ZHjU0tYmz5SNgeKsBA_0RzkNJsQ@mail.gmail.com>
+ <20130808000726.66ab7194@skate>
+ <CAAXf6LUvZEOeF8dDrESqYKr3iiT3haQFzrH-=VnH7gDcvd+z-g@mail.gmail.com>
+ <CAHt8ZCOx1o1GPcgFZN9RYQWvGivTy5R6bWuUwX4B67qban++EA@mail.gmail.com>
+ <CAAXf6LVdx1h2qm8767UCavTqTR1q-L8Z0Kv93zqCfE8OqyYd5w@mail.gmail.com>
+ <CAHt8ZCO+G8E3EggLj8KFRHhvxiPzCFT_LwZQyniEed3Q2BfL-Q@mail.gmail.com>
+ <CAAXf6LWJTQCWH-rEppNNVy_j2SJacecaWGwXxgiW-q7JboO3=Q@mail.gmail.com>
+ <CAHt8ZCP6LiPDV+utoknppQ-O1gYtTSgSCYrpokXDUW67+W8-Ow@mail.gmail.com>
+ <CAAXf6LUqGG9O2eWfokH8VAuxa-2xDw=yKw-1vq_9VBpzotCjKA@mail.gmail.com>
+Message-ID: <CAAXf6LWVRynN+wymOO3i=ZZ=tdgAfKyEsNrxPiYju_WSN6m5fw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi J?r?me,
-
-On Thu, Aug 8, 2013 at 3:04 PM, J?r?me Pouiller <jezz@sysmic.org> wrote:
-> Fix compilation on Mips. Resolve issues detected here:
->     http://autobuild.buildroot.net/results/f0c9db496233f53c26e92294d7305aa4511ec7b3/
->     http://autobuild.buildroot.net/results/8968690c248df86b040218867f92b573721e872c/
->     http://autobuild.buildroot.net/results/a35db8e6a49d022133b486b12f6a8e40b3c95b6e/
+On Thu, Aug 8, 2013 at 10:09 PM, Thomas De Schampheleire
+<patrickdepinguin+buildroot@gmail.com> wrote:
+> Hi Simon,
 >
-> Also remove previous special case handling defined in libffi.mk.
+> On Thu, Aug 8, 2013 at 9:42 PM, Simon Dawson <spdawson@gmail.com> wrote:
+>> Hi Thomas,
+>>
+>> On 8 August 2013 18:34, Thomas De Schampheleire
+>> <patrickdepinguin+buildroot@gmail.com> wrote:
+>>> That's interesting. I've tried building the atngw100_defconfig on
+>>> 2013.05, 2013.02, and 2012.02, and none of them build successfully if
+>>> I enable C++ support (nothing else changed).
+>>> Could you send your config file for the working C++ build, then I can
+>>> try here. Either there is some build system difference, or (more
+>>> likely) there is a combination of config options that doesn't work.
+>>
+>> Oops. I had provided some misinformation, I'm afraid. I'm actually
+>> using gcc 4.6 to build the toolchain --- I had forgotten that I'd
+>> exported HOSTCC and HOSTCXX for the build.
+>>
+>> That probably explains why your builds fail...
+>>
 >
-> Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
-> ---
->  ...-002-Fix-use-of-compact-eh-frames-on-MIPS.patch |   25 ++++++++++++++++++++
->  package/libffi/libffi.mk                           |    6 -----
->  2 files changed, 25 insertions(+), 6 deletions(-)
->  create mode 100644 package/libffi/libffi-002-Fix-use-of-compact-eh-frames-on-MIPS.patch
->
-> diff --git a/package/libffi/libffi-002-Fix-use-of-compact-eh-frames-on-MIPS.patch b/package/libffi/libffi-002-Fix-use-of-compact-eh-frames-on-MIPS.patch
-> new file mode 100644
-> index 0000000..027e3d3
-> --- /dev/null
-> +++ b/package/libffi/libffi-002-Fix-use-of-compact-eh-frames-on-MIPS.patch
-> @@ -0,0 +1,25 @@
-> +Newer MIPS toolchains use a different (compact) eh_frame format.
-> +libffi don't like them, so we have to switch to the older format.
-> +
-> +This patch add -mno-compact-eh to CFLAGS when compiling for
-> +Mips and compiler support it.
-> +
-> +--- a/configure.ac     2013-08-08 14:53:11.884267155 +0200
-> ++++ b/configure.ac     2013-08-08 14:54:14.437493244 +0200
-> +@@ -430,6 +430,16 @@
-> + AM_CONDITIONAL(FFI_EXEC_TRAMPOLINE_TABLE, test x$FFI_EXEC_TRAMPOLINE_TABLE = x1)
-> + AC_SUBST(FFI_EXEC_TRAMPOLINE_TABLE)
-> +
-> ++if test x$TARGET = xMIPS; then
-> ++    save_CFLAGS="$CFLAGS"
-> ++    CFLAGS=-mno-compact-eh
-> ++    AC_MSG_CHECKING([whether CC need -mno-compact-eh])
-> ++    AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])],
-> ++                      [AC_MSG_RESULT([yes])]; [AM_CFLAGS="-mno-compact-eh"],
-> ++                      [AC_MSG_RESULT([no])])
-> ++    CFLAGS="$save_CFLAGS"
-> ++fi
-> ++
-> + if test x$TARGET = xX86_64; then
-> +     AC_CACHE_CHECK([assembler supports unwind section type],
-> +       libffi_cv_as_x86_64_unwind_section_type, [
-> diff --git a/package/libffi/libffi.mk b/package/libffi/libffi.mk
-> index 51cbbce..0ad5c84 100644
-> --- a/package/libffi/libffi.mk
-> +++ b/package/libffi/libffi.mk
-> @@ -11,12 +11,6 @@ LIBFFI_LICENSE_FILES = LICENSE
->  LIBFFI_INSTALL_STAGING = YES
->  LIBFFI_AUTORECONF = YES
->
-> -# Newer CS MIPS toolchains use a different (compact) eh_frame format
-> -# libffi don't like them, just switch to the older format
-> -ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201209)$(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201203),y)
-> -LIBFFI_CONF_ENV = CFLAGS="$(TARGET_CFLAGS) -mno-compact-eh"
-> -endif
-> -
->  # Move the headers to the usual location, and adjust the .pc file
->  # accordingly.
->  define LIBFFI_MOVE_STAGING_HEADERS
+> So you are saying that if I upgrade my host gcc (the native one) to
+> 4.6, that the cross AVR32 gcc will build successfully, and not suffer
+> from the relocation truncation messages?
+> Can you explain how this can happen, do you have more details?
 
-I tried this patch on the last autobuild you mentioned above, but it
-still fails.
-The patch is applied though. I posted the output at:
-http://pastebin.com/PpByvCER
-
-Could you have a look?
-
-Thanks,
-Thomas
+By the way, my host gcc is:
+$ gcc --version
+gcc (Ubuntu/Linaro 4.7.2-2ubuntu1) 4.7.2
+Copyright (C) 2012 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
