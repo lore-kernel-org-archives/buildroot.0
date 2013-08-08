@@ -1,54 +1,85 @@
-From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Thu, 8 Aug 2013 19:34:55 +0200
-Subject: [Buildroot] AVR32 toolchain build failure
-In-Reply-To: <CAHt8ZCO+G8E3EggLj8KFRHhvxiPzCFT_LwZQyniEed3Q2BfL-Q@mail.gmail.com>
-References: <CAAXf6LUhgOkHgj=cRWnkR8tPhAAjT6BhXFvXTBvC5pHfTZ=vww@mail.gmail.com>
- <20130806195402.2f3f94e7@skate>
- <CAAXf6LU0oihr6qLh4KA=+fKYWEbk-iOpwvsmo7AWPSjyC7_=KA@mail.gmail.com>
- <CAAXf6LWF=7-cP_=mTRjNK1qki-gxKx+BoR1C_1Bw9QGUUtstmA@mail.gmail.com>
- <20130807172033.564940d1@skate>
- <CAAXf6LVT144yhgAh5ce5O9FjR=osQ=qV=sod=-pDSOiqeRTvuA@mail.gmail.com>
- <CAAXf6LVFECrtPWQsw0HU5H+ZHjU0tYmz5SNgeKsBA_0RzkNJsQ@mail.gmail.com>
- <20130808000726.66ab7194@skate>
- <CAAXf6LUvZEOeF8dDrESqYKr3iiT3haQFzrH-=VnH7gDcvd+z-g@mail.gmail.com>
- <CAHt8ZCOx1o1GPcgFZN9RYQWvGivTy5R6bWuUwX4B67qban++EA@mail.gmail.com>
- <CAAXf6LVdx1h2qm8767UCavTqTR1q-L8Z0Kv93zqCfE8OqyYd5w@mail.gmail.com>
- <CAHt8ZCO+G8E3EggLj8KFRHhvxiPzCFT_LwZQyniEed3Q2BfL-Q@mail.gmail.com>
-Message-ID: <CAAXf6LWJTQCWH-rEppNNVy_j2SJacecaWGwXxgiW-q7JboO3=Q@mail.gmail.com>
+From: Martin Hicks <mort@bork.org>
+Date: Thu, 8 Aug 2013 13:42:21 -0400
+Subject: [Buildroot] [PATCH] Add cryptsetup package
+In-Reply-To: <1375983487-5516-1-git-send-email-mort@bork.org>
+References: <1375983487-5516-1-git-send-email-mort@bork.org>
+Message-ID: <CAJUS3X=ee62MFO-xEbLEFreNZPUh=vmwFi2HYebXG0+Die3FQQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Simon,
+Actually, ignore this for now.  I forgot to check for upstream updates
+before submitting this package.
+Sorry for the noise,
+mh
 
-On Thu, Aug 8, 2013 at 6:09 PM, Simon Dawson <spdawson@gmail.com> wrote:
-> Hi Thomas
+On Thu, Aug 8, 2013 at 1:38 PM, Martin Hicks <mort@bork.org> wrote:
+> Used for managing/creating/unlocking dm-crypt and LUKS encrypted
+> block devices.
 >
-> On 8 August 2013 09:12, Thomas De Schampheleire
-> <patrickdepinguin+buildroot@gmail.com> wrote:
->> So you are able to build a toolchain with C++ support for avr32, using
->> (a custom) buildroot? Is this a public buildroot fork that we can look
->> at? If not: do you know (or could you look up) which changes have been
->> made to make C++ support work?
+> Signed-off-by: Martin Hicks <mort@bork.org>
+> ---
+>  package/Config.in                |    1 +
+>  package/cryptsetup/Config.in     |   11 +++++++++++
+>  package/cryptsetup/cryptsetup.mk |   11 +++++++++++
+>  3 files changed, 23 insertions(+), 0 deletions(-)
+>  create mode 100644 package/cryptsetup/Config.in
+>  create mode 100644 package/cryptsetup/cryptsetup.mk
 >
-> All I've done is to branch off of the Buildroot master just prior to
-> commit 8abb5b33c1aae035cf48b1c81104b433ff884c64, which removed support
-> for uClibc 0.9.31. I've then been cherry-picking commits from master,
-> as required for my particular project.
+> diff --git a/package/Config.in b/package/Config.in
+> index 7069d77..94d10d9 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -233,6 +233,7 @@ source "package/freescale-imx/Config.in"
+>  source "package/a10disp/Config.in"
+>  source "package/acpid/Config.in"
+>  source "package/cdrkit/Config.in"
+> +source "package/cryptsetup/Config.in"
+>  source "package/dbus/Config.in"
+>  source "package/dbus-glib/Config.in"
+>  source "package/dbus-python/Config.in"
+> diff --git a/package/cryptsetup/Config.in b/package/cryptsetup/Config.in
+> new file mode 100644
+> index 0000000..9cd9ba4
+> --- /dev/null
+> +++ b/package/cryptsetup/Config.in
+> @@ -0,0 +1,11 @@
+> +config BR2_PACKAGE_CRYPTSETUP
+> +       bool "cryptsetup"
+> +       select BR2_PACKAGE_LIBGCRYPT
+> +       select BR2_PACKAGE_POPT
+> +       select BR2_PACKAGE_LVM2
+> +       select BR2_PACKAGE_E2FSPROGS
+> +       help
+> +         This tool helps manipulate dm-crypt and luks partitions for on-disk
+> +         encryption.
+> +
+> +         http://www.saout.de/misc/dm-crypt/
+> diff --git a/package/cryptsetup/cryptsetup.mk b/package/cryptsetup/cryptsetup.mk
+> new file mode 100644
+> index 0000000..9e839dd
+> --- /dev/null
+> +++ b/package/cryptsetup/cryptsetup.mk
+> @@ -0,0 +1,11 @@
+> +#
+> +# cryptsetup
+> +#
+> +CRYPTSETUP_VERSION = 1.6.1
+> +CRYPTSETUP_SOURCE = cryptsetup-$(CRYPTSETUP_VERSION).tar.bz2
+> +CRYPTSETUP_SITE = http://cryptsetup.googlecode.com/files
+> +CRYPTSETUP_CONF_ENV += LIBGCRYPT_CONFIG=$(STAGING_DIR)/usr/bin/libgcrypt-config
+> +CRYPTSETUP_DEPENDENCIES = lvm2 popt e2fsprogs libgcrypt pkg-config
+> +
+> +
+> +$(eval $(autotools-package))
+> --
+> 1.7.2.5
 >
-> I haven't made this fork publicly available. I also haven't had to
-> make any changes to get C++ support working --- it already worked for
-> me. I'm using host gcc 4.7.3; and the Buildroot-generated toolchain
-> builds host-binutils-2.18-avr32-1.0.1
 
-That's interesting. I've tried building the atngw100_defconfig on
-2013.05, 2013.02, and 2012.02, and none of them build successfully if
-I enable C++ support (nothing else changed).
-Could you send your config file for the working C++ build, then I can
-try here. Either there is some build system difference, or (more
-likely) there is a combination of config options that doesn't work.
 
-Thanks,
-Thomas
+
+-- 
+Martin Hicks P.Eng.      |         mort at bork.org
+Bork Consulting Inc.     |   +1 (613) 266-2296
