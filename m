@@ -1,7 +1,7 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 08 Aug 2013 14:57:10 -0300
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 8 Aug 2013 19:57:33 +0200
 Subject: [Buildroot] AVR32 toolchain build failure
-In-Reply-To: <CAHt8ZCNq1=PW86bwDN0Aqg969ukzR_Z-0hQE=WcDo7b+Tg-uFA@mail.gmail.com>
+In-Reply-To: <CAAXf6LWJTQCWH-rEppNNVy_j2SJacecaWGwXxgiW-q7JboO3=Q@mail.gmail.com>
 References: <CAAXf6LUhgOkHgj=cRWnkR8tPhAAjT6BhXFvXTBvC5pHfTZ=vww@mail.gmail.com>
  <20130806195402.2f3f94e7@skate>
  <CAAXf6LU0oihr6qLh4KA=+fKYWEbk-iOpwvsmo7AWPSjyC7_=KA@mail.gmail.com>
@@ -12,51 +12,36 @@ References: <CAAXf6LUhgOkHgj=cRWnkR8tPhAAjT6BhXFvXTBvC5pHfTZ=vww@mail.gmail.com>
  <20130808000726.66ab7194@skate>
  <CAAXf6LUvZEOeF8dDrESqYKr3iiT3haQFzrH-=VnH7gDcvd+z-g@mail.gmail.com>
  <CAHt8ZCOx1o1GPcgFZN9RYQWvGivTy5R6bWuUwX4B67qban++EA@mail.gmail.com>
- <20130808100303.2b0226dd@skate> <52037954.9080408@zacarias.com.ar>
- <CAHt8ZCNq1=PW86bwDN0Aqg969ukzR_Z-0hQE=WcDo7b+Tg-uFA@mail.gmail.com>
-Message-ID: <5203DBF6.7020106@zacarias.com.ar>
+ <CAAXf6LVdx1h2qm8767UCavTqTR1q-L8Z0Kv93zqCfE8OqyYd5w@mail.gmail.com>
+ <CAHt8ZCO+G8E3EggLj8KFRHhvxiPzCFT_LwZQyniEed3Q2BfL-Q@mail.gmail.com>
+ <CAAXf6LWJTQCWH-rEppNNVy_j2SJacecaWGwXxgiW-q7JboO3=Q@mail.gmail.com>
+Message-ID: <20130808195733.3ac7fd2a@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 08/08/2013 01:18 PM, Simon Dawson wrote:
+Dear Thomas De Schampheleire,
 
-> Hi Gustavo,
-> 
-> On 8 August 2013 11:56, Gustavo Zacarias <gustavo@zacarias.com.ar> wrote:
->> 1) Reinstate patches in the appropiate place since uclibc was packaged.
->> 2) Probably add various "depends on !BR2_avr32" in packages that need
->> newer syscalls (alternatively add a ton of backports for uclibc 0.9.31
->> from newer releases).
->> 3) Revert startfiles cleanup to the old manual way, adding new
->> exceptions/modes for the noMMU crowd (it wasn't handled before) - or
->> alternatively also patch the uclibc 0.9.31 makefile to make it more
->> 0.9.32/33-ish like.
-> 
-> That doesn't sound too bad. I'm happy to do this work, if appropriate.
-> Perhaps your point #2 will not be necessary in the short term...?
+On Thu, 8 Aug 2013 19:34:55 +0200, Thomas De Schampheleire wrote:
 
-There'll be some autobuilder failures if that's not done.
-#3 will surely take time too since it was a hardcoded default before the
-0.9.31 removal which made the internal blackfin toolchain never work (it
-builds now at least, as far as "work" depends on having someone testing
-things, work still remains but it's a start).
-It also affects other nommu toolchains like ARM, but it's broken for
-other reasons for now.
-New packages and bumps might break for avr32 too, we just can't hold on
-to old software being buggy and/or having security vulnerabilities just
-to keep it running on old bitrot toolchains.
+> That's interesting. I've tried building the atngw100_defconfig on
+> 2013.05, 2013.02, and 2012.02, and none of them build successfully if
+> I enable C++ support (nothing else changed).
+> Could you send your config file for the working C++ build, then I can
+> try here. Either there is some build system difference, or (more
+> likely) there is a combination of config options that doesn't work.
 
-> I understand where you're coming from here. I'm not sure we're "going
-> in circles" just yet, but appreciate that it may come to that.
+Do you have locale support enabled?
 
-If you want to volunteer continuous amounts of time into getting this
-right, then maybe, i'm not the only one deciding here.
-I can't get the toolchain to build and everything points to "install
-some odd host gcc version" which isn't quite right - things are supposed
-to work in many different normal scenarios.
-But as Thomas said if the latest kernels don't work that's somewhat of a
-bad omen.
-Regards.
+I'm pretty sure there was a combination like avr32 + C++ + locale that
+never worked, and we even had a set of "depends on" to ensure such a
+combination could never be enabled.
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
