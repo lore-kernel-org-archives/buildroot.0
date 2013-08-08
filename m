@@ -1,7 +1,7 @@
-From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Thu, 8 Aug 2013 22:24:53 +0200
+From: =?ISO-8859-1?Q?Thiago_A=2E_Corr=EAa?= <thiago.correa@gmail.com>
+Date: Thu, 8 Aug 2013 19:22:00 -0300
 Subject: [Buildroot] AVR32 toolchain build failure
-In-Reply-To: <CAAXf6LUqGG9O2eWfokH8VAuxa-2xDw=yKw-1vq_9VBpzotCjKA@mail.gmail.com>
+In-Reply-To: <CAAXf6LWVRynN+wymOO3i=ZZ=tdgAfKyEsNrxPiYju_WSN6m5fw@mail.gmail.com>
 References: <CAAXf6LUhgOkHgj=cRWnkR8tPhAAjT6BhXFvXTBvC5pHfTZ=vww@mail.gmail.com>
  <20130806195402.2f3f94e7@skate>
  <CAAXf6LU0oihr6qLh4KA=+fKYWEbk-iOpwvsmo7AWPSjyC7_=KA@mail.gmail.com>
@@ -17,44 +17,30 @@ References: <CAAXf6LUhgOkHgj=cRWnkR8tPhAAjT6BhXFvXTBvC5pHfTZ=vww@mail.gmail.com>
  <CAAXf6LWJTQCWH-rEppNNVy_j2SJacecaWGwXxgiW-q7JboO3=Q@mail.gmail.com>
  <CAHt8ZCP6LiPDV+utoknppQ-O1gYtTSgSCYrpokXDUW67+W8-Ow@mail.gmail.com>
  <CAAXf6LUqGG9O2eWfokH8VAuxa-2xDw=yKw-1vq_9VBpzotCjKA@mail.gmail.com>
-Message-ID: <CAAXf6LWVRynN+wymOO3i=ZZ=tdgAfKyEsNrxPiYju_WSN6m5fw@mail.gmail.com>
+ <CAAXf6LWVRynN+wymOO3i=ZZ=tdgAfKyEsNrxPiYju_WSN6m5fw@mail.gmail.com>
+Message-ID: <CAExDhvY3_+rd73DwkkvX0C3FfY-hg6cd_xW57Wh7fEGnWujqWg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Aug 8, 2013 at 10:09 PM, Thomas De Schampheleire
-<patrickdepinguin+buildroot@gmail.com> wrote:
-> Hi Simon,
->
-> On Thu, Aug 8, 2013 at 9:42 PM, Simon Dawson <spdawson@gmail.com> wrote:
->> Hi Thomas,
->>
->> On 8 August 2013 18:34, Thomas De Schampheleire
->> <patrickdepinguin+buildroot@gmail.com> wrote:
->>> That's interesting. I've tried building the atngw100_defconfig on
->>> 2013.05, 2013.02, and 2012.02, and none of them build successfully if
->>> I enable C++ support (nothing else changed).
->>> Could you send your config file for the working C++ build, then I can
->>> try here. Either there is some build system difference, or (more
->>> likely) there is a combination of config options that doesn't work.
->>
->> Oops. I had provided some misinformation, I'm afraid. I'm actually
->> using gcc 4.6 to build the toolchain --- I had forgotten that I'd
->> exported HOSTCC and HOSTCXX for the build.
->>
->> That probably explains why your builds fail...
->>
->
-> So you are saying that if I upgrade my host gcc (the native one) to
-> 4.6, that the cross AVR32 gcc will build successfully, and not suffer
-> from the relocation truncation messages?
-> Can you explain how this can happen, do you have more details?
+Hi,
 
-By the way, my host gcc is:
-$ gcc --version
-gcc (Ubuntu/Linaro 4.7.2-2ubuntu1) 4.7.2
-Copyright (C) 2012 Free Software Foundation, Inc.
-This is free software; see the source for copying conditions.  There is NO
-warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+On Thu, Aug 8, 2013 at 5:24 PM, Thomas De Schampheleire
+<patrickdepinguin+buildroot@gmail.com> wrote:
+>> So you are saying that if I upgrade my host gcc (the native one) to
+>> 4.6, that the cross AVR32 gcc will build successfully, and not suffer
+>
+> By the way, my host gcc is:
+> gcc (Ubuntu/Linaro 4.7.2-2ubuntu1) 4.7.2
+
+I was using AVR32 and we still have boards with it in the field. I can
+second that using a newer host gcc will not build avr32 toolchain.
+Even though I haven't built for AVR32 in a long time, I remember that
+I had to keep an old gcc on my Gentoo linux just for the AVR32
+toolchain to build. On Gentoo it's a matter of gcc-config switching if
+it's installed.
+
+Kind Regards,
+     Thiago A. Correa
