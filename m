@@ -1,36 +1,50 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 8 Aug 2013 20:01:00 +0200
-Subject: [Buildroot] [PATCH 3/5] manual: update beyond Buildroot section
-In-Reply-To: <CAHXCMMJ2iXQQyju9jdx_4sXCvpUa25O3fSWA9p8_yRPv92C7NQ@mail.gmail.com>
-References: <1375824984-8226-1-git-send-email-s.martin49@gmail.com>
- <1375824984-8226-4-git-send-email-s.martin49@gmail.com>
- <20130807113910.2358816a@skate>
- <CAKvQZ_3UxzreEtWQ3E++3xZ1o4W_Rn1gzKrYQo2CNOnQ_hZpfg@mail.gmail.com>
- <CAHXCMMJ2iXQQyju9jdx_4sXCvpUa25O3fSWA9p8_yRPv92C7NQ@mail.gmail.com>
-Message-ID: <20130808200100.6f677bf5@skate>
+From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
+Date: Thu, 8 Aug 2013 20:05:11 +0200
+Subject: [Buildroot] AVR32 toolchain build failure
+In-Reply-To: <20130808195733.3ac7fd2a@skate>
+References: <CAAXf6LUhgOkHgj=cRWnkR8tPhAAjT6BhXFvXTBvC5pHfTZ=vww@mail.gmail.com>
+ <20130806195402.2f3f94e7@skate>
+ <CAAXf6LU0oihr6qLh4KA=+fKYWEbk-iOpwvsmo7AWPSjyC7_=KA@mail.gmail.com>
+ <CAAXf6LWF=7-cP_=mTRjNK1qki-gxKx+BoR1C_1Bw9QGUUtstmA@mail.gmail.com>
+ <20130807172033.564940d1@skate>
+ <CAAXf6LVT144yhgAh5ce5O9FjR=osQ=qV=sod=-pDSOiqeRTvuA@mail.gmail.com>
+ <CAAXf6LVFECrtPWQsw0HU5H+ZHjU0tYmz5SNgeKsBA_0RzkNJsQ@mail.gmail.com>
+ <20130808000726.66ab7194@skate>
+ <CAAXf6LUvZEOeF8dDrESqYKr3iiT3haQFzrH-=VnH7gDcvd+z-g@mail.gmail.com>
+ <CAHt8ZCOx1o1GPcgFZN9RYQWvGivTy5R6bWuUwX4B67qban++EA@mail.gmail.com>
+ <CAAXf6LVdx1h2qm8767UCavTqTR1q-L8Z0Kv93zqCfE8OqyYd5w@mail.gmail.com>
+ <CAHt8ZCO+G8E3EggLj8KFRHhvxiPzCFT_LwZQyniEed3Q2BfL-Q@mail.gmail.com>
+ <CAAXf6LWJTQCWH-rEppNNVy_j2SJacecaWGwXxgiW-q7JboO3=Q@mail.gmail.com>
+ <20130808195733.3ac7fd2a@skate>
+Message-ID: <CAAXf6LV9xQfLmgF9e=1Gus43nZPzL_Z3jBjuQftP6yxrb7y=Mw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Samuel Martin,
+Hi Thomas,
 
-On Thu, 8 Aug 2013 14:36:39 +0200, Samuel Martin wrote:
-> So, its right place may not be the manual, but some extended readme
-> and/or sample
-> post-image scripts.
-> What about this?
+On Thu, Aug 8, 2013 at 7:57 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Dear Thomas De Schampheleire,
+>
+> On Thu, 8 Aug 2013 19:34:55 +0200, Thomas De Schampheleire wrote:
+>
+>> That's interesting. I've tried building the atngw100_defconfig on
+>> 2013.05, 2013.02, and 2012.02, and none of them build successfully if
+>> I enable C++ support (nothing else changed).
+>> Could you send your config file for the working C++ build, then I can
+>> try here. Either there is some build system difference, or (more
+>> likely) there is a combination of config options that doesn't work.
+>
+> Do you have locale support enabled?
+>
+> I'm pretty sure there was a combination like avr32 + C++ + locale that
+> never worked, and we even had a set of "depends on" to ensure such a
+> combination could never be enabled.
 
-I do believe it has its place into the manual, but it needs to be
-written up properly, taking into account the other use cases (booting
-on ARM/PowerPC platforms), and find a better place for this.
+No I do not have locale support enabled. I literally take the
+defconfig, and just enable C++ support.
 
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Does this scenario work for you?
