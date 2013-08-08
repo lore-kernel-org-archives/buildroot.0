@@ -1,7 +1,7 @@
 From: Simon Dawson <spdawson@gmail.com>
-Date: Thu, 8 Aug 2013 17:09:39 +0100
+Date: Thu, 8 Aug 2013 17:18:24 +0100
 Subject: [Buildroot] AVR32 toolchain build failure
-In-Reply-To: <CAAXf6LVdx1h2qm8767UCavTqTR1q-L8Z0Kv93zqCfE8OqyYd5w@mail.gmail.com>
+In-Reply-To: <52037954.9080408@zacarias.com.ar>
 References: <CAAXf6LUhgOkHgj=cRWnkR8tPhAAjT6BhXFvXTBvC5pHfTZ=vww@mail.gmail.com>
  <20130806195402.2f3f94e7@skate>
  <CAAXf6LU0oihr6qLh4KA=+fKYWEbk-iOpwvsmo7AWPSjyC7_=KA@mail.gmail.com>
@@ -12,31 +12,36 @@ References: <CAAXf6LUhgOkHgj=cRWnkR8tPhAAjT6BhXFvXTBvC5pHfTZ=vww@mail.gmail.com>
  <20130808000726.66ab7194@skate>
  <CAAXf6LUvZEOeF8dDrESqYKr3iiT3haQFzrH-=VnH7gDcvd+z-g@mail.gmail.com>
  <CAHt8ZCOx1o1GPcgFZN9RYQWvGivTy5R6bWuUwX4B67qban++EA@mail.gmail.com>
- <CAAXf6LVdx1h2qm8767UCavTqTR1q-L8Z0Kv93zqCfE8OqyYd5w@mail.gmail.com>
-Message-ID: <CAHt8ZCO+G8E3EggLj8KFRHhvxiPzCFT_LwZQyniEed3Q2BfL-Q@mail.gmail.com>
+ <20130808100303.2b0226dd@skate> <52037954.9080408@zacarias.com.ar>
+Message-ID: <CAHt8ZCNq1=PW86bwDN0Aqg969ukzR_Z-0hQE=WcDo7b+Tg-uFA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas
+Hi Gustavo,
 
-On 8 August 2013 09:12, Thomas De Schampheleire
-<patrickdepinguin+buildroot@gmail.com> wrote:
-> So you are able to build a toolchain with C++ support for avr32, using
-> (a custom) buildroot? Is this a public buildroot fork that we can look
-> at? If not: do you know (or could you look up) which changes have been
-> made to make C++ support work?
+On 8 August 2013 11:56, Gustavo Zacarias <gustavo@zacarias.com.ar> wrote:
+> 1) Reinstate patches in the appropiate place since uclibc was packaged.
+> 2) Probably add various "depends on !BR2_avr32" in packages that need
+> newer syscalls (alternatively add a ton of backports for uclibc 0.9.31
+> from newer releases).
+> 3) Revert startfiles cleanup to the old manual way, adding new
+> exceptions/modes for the noMMU crowd (it wasn't handled before) - or
+> alternatively also patch the uclibc 0.9.31 makefile to make it more
+> 0.9.32/33-ish like.
 
-All I've done is to branch off of the Buildroot master just prior to
-commit 8abb5b33c1aae035cf48b1c81104b433ff884c64, which removed support
-for uClibc 0.9.31. I've then been cherry-picking commits from master,
-as required for my particular project.
+That doesn't sound too bad. I'm happy to do this work, if appropriate.
+Perhaps your point #2 will not be necessary in the short term...?
 
-I haven't made this fork publicly available. I also haven't had to
-make any changes to get C++ support working --- it already worked for
-me. I'm using host gcc 4.7.3; and the Buildroot-generated toolchain
-builds host-binutils-2.18-avr32-1.0.1
+> In my opinion, sorry if it hurts someone, we're going in circles trying
+> to keep up with a dead architecture, because that's what it is, no
+> matter how much support some people/companies want to give for their
+> products the onus shouldn't be on us that things weren't upstreamed in a
+> proper fashion which would make things far more simple.
+
+I understand where you're coming from here. I'm not sure we're "going
+in circles" just yet, but appreciate that it may come to that.
 
 Simon.
