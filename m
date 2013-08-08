@@ -1,70 +1,75 @@
 From: Martin Hicks <mort@bork.org>
-Date: Thu,  8 Aug 2013 13:38:07 -0400
-Subject: [Buildroot] [PATCH] Add cryptsetup package
-Message-ID: <1375983487-5516-1-git-send-email-mort@bork.org>
+Date: Thu,  8 Aug 2013 13:38:54 -0400
+Subject: [Buildroot] [PATCH] Add package 'zip'
+Message-ID: <1375983534-5555-1-git-send-email-mort@bork.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Used for managing/creating/unlocking dm-crypt and LUKS encrypted
-block devices.
+A compressor/archiver for creating and modifying zipfiles.
 
 Signed-off-by: Martin Hicks <mort@bork.org>
 ---
- package/Config.in                |    1 +
- package/cryptsetup/Config.in     |   11 +++++++++++
- package/cryptsetup/cryptsetup.mk |   11 +++++++++++
- 3 files changed, 23 insertions(+), 0 deletions(-)
- create mode 100644 package/cryptsetup/Config.in
- create mode 100644 package/cryptsetup/cryptsetup.mk
+ package/Config.in     |    1 +
+ package/zip/Config.in |    6 ++++++
+ package/zip/zip.mk    |   22 ++++++++++++++++++++++
+ 3 files changed, 29 insertions(+), 0 deletions(-)
+ create mode 100644 package/zip/Config.in
+ create mode 100644 package/zip/zip.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 7069d77..94d10d9 100644
+index 7069d77..45eeb56 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -233,6 +233,7 @@ source "package/freescale-imx/Config.in"
- source "package/a10disp/Config.in"
- source "package/acpid/Config.in"
- source "package/cdrkit/Config.in"
-+source "package/cryptsetup/Config.in"
- source "package/dbus/Config.in"
- source "package/dbus-glib/Config.in"
- source "package/dbus-python/Config.in"
-diff --git a/package/cryptsetup/Config.in b/package/cryptsetup/Config.in
+@@ -14,6 +14,7 @@ source "package/infozip/Config.in"
+ source "package/lzop/Config.in"
+ source "package/lzma/Config.in"
+ source "package/xz/Config.in"
++source "package/zip/Config.in"
+ endmenu
+ 
+ menu "Debugging, profiling and benchmark"
+diff --git a/package/zip/Config.in b/package/zip/Config.in
 new file mode 100644
-index 0000000..9cd9ba4
+index 0000000..c43e37e
 --- /dev/null
-+++ b/package/cryptsetup/Config.in
-@@ -0,0 +1,11 @@
-+config BR2_PACKAGE_CRYPTSETUP
-+	bool "cryptsetup"
-+	select BR2_PACKAGE_LIBGCRYPT
-+	select BR2_PACKAGE_POPT
-+	select BR2_PACKAGE_LVM2
-+	select BR2_PACKAGE_E2FSPROGS
++++ b/package/zip/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_ZIP
++	bool "zip"
 +	help
-+	  This tool helps manipulate dm-crypt and luks partitions for on-disk
-+	  encryption.
++	  A compressor/archiver for creating and modifying zipfiles.
 +
-+	  http://www.saout.de/misc/dm-crypt/
-diff --git a/package/cryptsetup/cryptsetup.mk b/package/cryptsetup/cryptsetup.mk
++	  http://info-zip.org/
+diff --git a/package/zip/zip.mk b/package/zip/zip.mk
 new file mode 100644
-index 0000000..9e839dd
+index 0000000..d3a7288
 --- /dev/null
-+++ b/package/cryptsetup/cryptsetup.mk
-@@ -0,0 +1,11 @@
++++ b/package/zip/zip.mk
+@@ -0,0 +1,22 @@
++#############################################################
 +#
-+# cryptsetup
++# zip
 +#
-+CRYPTSETUP_VERSION = 1.6.1
-+CRYPTSETUP_SOURCE = cryptsetup-$(CRYPTSETUP_VERSION).tar.bz2
-+CRYPTSETUP_SITE = http://cryptsetup.googlecode.com/files
-+CRYPTSETUP_CONF_ENV += LIBGCRYPT_CONFIG=$(STAGING_DIR)/usr/bin/libgcrypt-config
-+CRYPTSETUP_DEPENDENCIES = lvm2 popt e2fsprogs libgcrypt pkg-config
++#############################################################
++ZIP_VERSION=30
++ZIP_SOURCE=zip$(ZIP_VERSION).tgz
++ZIP_SITE:=ftp://ftp.info-zip.org/pub/infozip/src
 +
++define ZIP_BUILD_CMDS
++	$(MAKE) -C $(@D) -f unix/Makefile generic CC="$(TARGET_CC)" CFLAGS="$(TARGET_CFLAGS)"
++endef
 +
-+$(eval $(autotools-package))
++define ZIP_INSTALL_TARGET_CMDS
++	$(INSTALL) -D -m 755 $(@D)/zip $(TARGET_DIR)/usr/bin/zip
++endef
++
++define ZIP_UNINSTALL_TARGET_CMDS
++	$(MAKE) -C $(@D) -f unix/Makefile uninstall prefix=$(TARGET_DIR)/usr
++endef
++
++$(eval $(generic-package))
 -- 
 1.7.2.5
