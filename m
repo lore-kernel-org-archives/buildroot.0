@@ -1,39 +1,54 @@
-From: =?UTF-8?Q?J=C3=A9r=C3=B4me_Pouiller?= <jezz@sysmic.org>
-Date: Thu, 08 Aug 2013 09:03:03 +0200
-Subject: [Buildroot] [PATCH 1 of 2] strongswan: needs host-pkgconf
-In-Reply-To: <a94c373a618404a0d79d.1375896856@BEANTN0L019720>
-References: <patchbomb.1375896855@BEANTN0L019720>
- <a94c373a618404a0d79d.1375896856@BEANTN0L019720>
-Message-ID: <4aec5b2650ccee1cdbc7da0d13553ed7@sysmic.org>
+From: Simon Dawson <spdawson@gmail.com>
+Date: Thu, 8 Aug 2013 08:21:14 +0100
+Subject: [Buildroot] AVR32 toolchain build failure
+In-Reply-To: <CAAXf6LUvZEOeF8dDrESqYKr3iiT3haQFzrH-=VnH7gDcvd+z-g@mail.gmail.com>
+References: <CAAXf6LUhgOkHgj=cRWnkR8tPhAAjT6BhXFvXTBvC5pHfTZ=vww@mail.gmail.com>
+ <20130806195402.2f3f94e7@skate>
+ <CAAXf6LU0oihr6qLh4KA=+fKYWEbk-iOpwvsmo7AWPSjyC7_=KA@mail.gmail.com>
+ <CAAXf6LWF=7-cP_=mTRjNK1qki-gxKx+BoR1C_1Bw9QGUUtstmA@mail.gmail.com>
+ <20130807172033.564940d1@skate>
+ <CAAXf6LVT144yhgAh5ce5O9FjR=osQ=qV=sod=-pDSOiqeRTvuA@mail.gmail.com>
+ <CAAXf6LVFECrtPWQsw0HU5H+ZHjU0tYmz5SNgeKsBA_0RzkNJsQ@mail.gmail.com>
+ <20130808000726.66ab7194@skate>
+ <CAAXf6LUvZEOeF8dDrESqYKr3iiT3haQFzrH-=VnH7gDcvd+z-g@mail.gmail.com>
+Message-ID: <CAHt8ZCOx1o1GPcgFZN9RYQWvGivTy5R6bWuUwX4B67qban++EA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2013-08-07 19:34, Thomas De Schampheleire wrote:
-> Signed-off-by: Thomas De Schampheleire 
-> <thomas.de.schampheleire@gmail.com>
->
-> diff --git a/package/strongswan/strongswan.mk 
-> b/package/strongswan/strongswan.mk
-> --- a/package/strongswan/strongswan.mk
-> +++ b/package/strongswan/strongswan.mk
-> @@ -9,6 +9,7 @@ STRONGSWAN_SOURCE = strongswan-$(STRONGS
->  STRONGSWAN_SITE = http://download.strongswan.org
->  STRONGSWAN_LICENSE = GPLv2+
->  STRONGSWAN_LICENSE_FILES = COPYING LICENSE
-> +STRONGSWAN_DEPENDENCIES = host-pkgconf
->  STRONGSWAN_CONF_OPT +=                                               
->              \
->        --enable-pkcs11=yes                                            
->              \
->        --enable-kernel-netlink=$(if $(BR2_INET_IPV6),yes,no)          
->              \
+Hi Thomas,
 
-Tested-by: J?r?me Pouiller <jezz@sysmic.org>
+On 8 August 2013 06:55, Thomas De Schampheleire
+<patrickdepinguin+buildroot@gmail.com> wrote:
+> Current buildroot cannot properly build an AVR32 toolchain with C++
+> support. This problem seems to be present for a while now. Are any of
+> you interested in such C++ support, and do you have time to look into
+> this?
 
--- 
-J?r?me Pouiller, Sysmic
-Embedded Linux specialist
-http://www.sysmic.fr
+I do currently still require C++ support on avr32. However, since
+support for uClibc 0.9.31.x was removed from Buildroot, I have had to
+build my avr32 toolchain using a custom Buildroot fork: unfortunately,
+while uClibc 0.9.33.x does build for avr32, the result is a root
+filesystem with unusably-slow runtime performance.
+
+So I'm not particularly interested in getting the avr32 toolchain ---
+as it currently exists in Buildroot --- to build with C++ support. But
+I do need the "Toolchain has C++ support" flag to be available when
+using an external avr32 toolchain.
+
+> If no-one is really interested (or does not have time), here are two
+> suggestions:
+> - we disable the C++ toolchain option for AVR32 and put a comment in kconfig
+> - we leave the C++ toolchain option but put a comment in kconfig
+
+I'm happy with either of these options, as long as it is still
+possible to mark an external avr32 toolchain as having C++ support.
+
+From my point of view, the ideal solution would be to reinstate uClibc
+0.9.31 support, and to lock the avr32 toolchain to that version of
+uClibc. But I understand that this is likely to be unacceptable to
+others.
+
+Simon.
