@@ -1,76 +1,49 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri,  9 Aug 2013 16:23:39 -0300
-Subject: [Buildroot] [PATCH 1/3] busybox: set/unset CONFIG_NOMMU
-Message-ID: <1376076221-28066-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Fri,  9 Aug 2013 16:23:40 -0300
+Subject: [Buildroot] [PATCH 2/3] uclibc: set MMU usage accordingly
+In-Reply-To: <1376076221-28066-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1376076221-28066-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1376076221-28066-2-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Set busybox .config CONFIG_NOMMU appropiately and streamline this new
-setting with the previous BUSYBOX_DISABLE_MMU_APPLETS in a single
-BUSYBOX_SET_MMU definition (since it's not just applets now).
+On architectures that lack a MMU (like blackfin) uclibc just undefined
+ARCH_HAS_MMU which disabled ARCH_USE_MMU.
+But for other architectures which may or may not have one like ARM we
+need to set this according to user choice.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/busybox/busybox.mk | 23 ++++++++++++++---------
- 1 file changed, 14 insertions(+), 9 deletions(-)
+ package/uclibc/uclibc.mk | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
 
-diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-index acc9008..ad8bdaf 100644
---- a/package/busybox/busybox.mk
-+++ b/package/busybox/busybox.mk
-@@ -75,6 +75,19 @@ define BUSYBOX_SET_MDEV
- endef
+diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
+index 36a5001..39877bb 100644
+--- a/package/uclibc/uclibc.mk
++++ b/package/uclibc/uclibc.mk
+@@ -242,6 +242,20 @@ endef
  endif
  
+ #
++# MMU
++#
++
 +ifeq ($(BR2_USE_MMU),y)
-+define BUSYBOX_SET_MMU
-+	$(call KCONFIG_DISABLE_OPT,CONFIG_NOMMU,$(BUSYBOX_BUILD_CONFIG))
++define UCLIBC_MMU_CONFIG
++	$(call UCLIBC_OPT_SET,ARCH_USE_MMU,y,$(@D))
 +endef
 +else
-+define BUSYBOX_SET_MMU
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NOMMU,$(BUSYBOX_BUILD_CONFIG))
-+	$(call KCONFIG_DISABLE_OPT,CONFIG_SWAPONOFF,$(BUSYBOX_BUILD_CONFIG))
-+	$(call KCONFIG_DISABLE_OPT,CONFIG_ASH,$(BUSYBOX_BUILD_CONFIG))
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_HUSH,$(BUSYBOX_BUILD_CONFIG))
++define UCLIBC_MMU_CONFIG
++	$(call UCLIBC_OPT_UNSET,ARCH_USE_MMU,$(@D))
 +endef
 +endif
 +
- ifeq ($(BR2_LARGEFILE),y)
- define BUSYBOX_SET_LARGEFILE
- 	$(call KCONFIG_ENABLE_OPT,CONFIG_LFS,$(BUSYBOX_BUILD_CONFIG))
-@@ -133,14 +146,6 @@ define BUSYBOX_INTERNAL_SHADOW_PASSWORDS
- endef
- endif
++#
+ # IPv6
+ #
  
--ifeq ($(BR2_USE_MMU),)
--define BUSYBOX_DISABLE_MMU_APPLETS
--	$(call KCONFIG_DISABLE_OPT,CONFIG_SWAPONOFF,$(BUSYBOX_BUILD_CONFIG))
--	$(call KCONFIG_DISABLE_OPT,CONFIG_ASH,$(BUSYBOX_BUILD_CONFIG))
--	$(call KCONFIG_ENABLE_OPT,CONFIG_HUSH,$(BUSYBOX_BUILD_CONFIG))
--endef
--endif
--
- ifeq ($(BR2_INIT_BUSYBOX),y)
- define BUSYBOX_SET_INIT
- 	$(call KCONFIG_ENABLE_OPT,CONFIG_INIT,$(BUSYBOX_BUILD_CONFIG))
-@@ -172,6 +177,7 @@ endif
- BUSYBOX_POST_EXTRACT_HOOKS += BUSYBOX_COPY_CONFIG
- 
- define BUSYBOX_CONFIGURE_CMDS
-+	$(BUSYBOX_SET_MMU)
- 	$(BUSYBOX_SET_LARGEFILE)
- 	$(BUSYBOX_SET_IPV6)
- 	$(BUSYBOX_PREFER_STATIC)
-@@ -179,7 +185,6 @@ define BUSYBOX_CONFIGURE_CMDS
- 	$(BUSYBOX_NETKITBASE)
- 	$(BUSYBOX_NETKITTELNET)
- 	$(BUSYBOX_INTERNAL_SHADOW_PASSWORDS)
--	$(BUSYBOX_DISABLE_MMU_APPLETS)
- 	$(BUSYBOX_SET_INIT)
- 	$(BUSYBOX_SET_WATCHDOG)
- 	@yes "" | $(MAKE) ARCH=$(KERNEL_ARCH) CROSS_COMPILE="$(TARGET_CROSS)" \
 -- 
 1.8.1.5
