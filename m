@@ -1,48 +1,40 @@
 From: =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= <jezz@sysmic.org>
-Date: Fri,  9 Aug 2013 11:36:57 +0200
-Subject: [Buildroot] [PATCH 1/3] ltrace: Explicit enable/disable of libunwind
+Date: Fri,  9 Aug 2013 11:36:58 +0200
+Subject: [Buildroot] [PATCH 2/3] ltrace: Fix a May be unitialized variable
 In-Reply-To: <1376041019-26688-1-git-send-email-jezz@sysmic.org>
 References: <1376041019-26688-1-git-send-email-jezz@sysmic.org>
-Message-ID: <1376041019-26688-2-git-send-email-jezz@sysmic.org>
+Message-ID: <1376041019-26688-3-git-send-email-jezz@sysmic.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-ltrace automaticaly use libunwind if detected. So depending if libunwind was
-already compiled or not, ltrcae compile differently. This patch add explicit
-dependency to libunwind if detected.
-
-In add, due to limitation of luclibc, ltrace cannot use libunwind with uclib. this patch explicitly compile without libunwind in this case.
-
-Resolve issues detected here:
-    http://autobuild.buildroot.net/results/79dae85647526cdeddae5050db0339fbc38c9ae6
-    http://autobuild.buildroot.net/results/808569f6bfac059b57eb4f1e692fbc9909e791cf
-    http://autobuild.buildroot.net/results/83d0cd13d64053869708c666e2aa533202af67f7
+Compilation may failed if rlm is not initialized and ltrace
+is compiled with -Werror.
 
 Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
 ---
- package/ltrace/ltrace.mk |    9 +++++++++
- 1 file changed, 9 insertions(+)
+ .../ltrace-fix-may-be-uninitialized-variable.patch |   11 +++++++++++
+ 1 file changed, 11 insertions(+)
+ create mode 100644 package/ltrace/ltrace-fix-may-be-uninitialized-variable.patch
 
-diff --git a/package/ltrace/ltrace.mk b/package/ltrace/ltrace.mk
-index 7b8d859..4d81121 100644
---- a/package/ltrace/ltrace.mk
-+++ b/package/ltrace/ltrace.mk
-@@ -13,4 +13,13 @@ LTRACE_CONF_OPT = --disable-werror
- LTRACE_LICENSE = GPLv2
- LTRACE_LICENSE_FILES = COPYING
- 
-+LTRACE_LIBUNWIDFLAG = --without-libunwind
-+ifeq ($(BR2_PACKAGE_LIBUNWIND),y)
-+  ifneq ($(BR2_TOOLCHAIN_USES_UCLIBC),y)
-+    LTRACE_DEPENDENCIES = libunwind
-+    LTRACE_LIBUNWIDFLAG = --with-libunwind
-+  endif
-+endif
-+LTRACE_CONF_OPT = $(LTRACE_LIBUNWIDFLAG)
-+
- $(eval $(autotools-package))
+diff --git a/package/ltrace/ltrace-fix-may-be-uninitialized-variable.patch b/package/ltrace/ltrace-fix-may-be-uninitialized-variable.patch
+new file mode 100644
+index 0000000..23ffc94
+--- /dev/null
++++ b/package/ltrace/ltrace-fix-may-be-uninitialized-variable.patch
+@@ -0,0 +1,11 @@
++--- a/sysdeps/linux-gnu/proc.c	2012-12-04 13:36:23.000000000 +0100
+++++ b/sysdeps/linux-gnu/proc.c	2013-08-09 10:14:33.576464435 +0200
++@@ -483,7 +483,7 @@
++ 	arch_addr_t addr = (arch_addr_t)(uintptr_t)dbg->r_map;
++ 
++ 	while (addr != 0) {
++-		struct lt_link_map_64 rlm;
+++		struct lt_link_map_64 rlm = { };
++ 		if (lm_fetcher(proc)(proc, addr, &rlm) < 0) {
++ 			debug(2, "Unable to read link map");
++ 			return;
 -- 
 1.7.9.5
