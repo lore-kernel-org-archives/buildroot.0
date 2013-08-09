@@ -1,130 +1,60 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Fri,  9 Aug 2013 12:16:48 +0200
-Subject: [Buildroot] [PATCH v3 3/3] manual: minor typos and formating fixes
-In-Reply-To: <1376043408-9367-1-git-send-email-s.martin49@gmail.com>
-References: <1376043408-9367-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <1376043408-9367-4-git-send-email-s.martin49@gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Fri, 9 Aug 2013 13:20:39 +0300
+Subject: [Buildroot] [PATCH 2/3] ltrace: Fix a May be unitialized
+	variable
+In-Reply-To: <1376041019-26688-3-git-send-email-jezz@sysmic.org>
+References: <1376041019-26688-1-git-send-email-jezz@sysmic.org>
+ <1376041019-26688-3-git-send-email-jezz@sysmic.org>
+Message-ID: <20130809102039.GB3703@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+Hi J?r?me,
 
----
-changes v2 -> v3:
-- fix typos (spotted by Thomas De S.)
-- more typos and formating fixes
----
- docs/manual/adding-packages-generic.txt | 16 +++++++++++-----
- docs/manual/contribute.txt              |  8 ++++----
- docs/manual/make-tips.txt               |  8 +++++---
- 3 files changed, 20 insertions(+), 12 deletions(-)
+On Fri, Aug 09, 2013 at 11:36:58AM +0200, J?r?me Pouiller wrote:
+> Compilation may failed if rlm is not initialized and ltrace
+> is compiled with -Werror.
 
-diff --git a/docs/manual/adding-packages-generic.txt b/docs/manual/adding-packages-generic.txt
-index fdca612..4e50f8f 100644
---- a/docs/manual/adding-packages-generic.txt
-+++ b/docs/manual/adding-packages-generic.txt
-@@ -99,24 +99,30 @@ of the shell script(s) needing fixing. All these names are relative to
- In addition, the scripts listed in +LIBFOO_CONFIG_SCRIPTS+ are removed
- from +$(TARGET_DIR)/usr/bin+, since they are not needed on the target.
- 
--Example 1:
--
-+.Config script: 'divine' package
-+================================
- Package divine installs shell script '$(STAGING_DIR)/usr/bin/divine-config'.
- 
--So it's fixup would be:
-+So its fixup would be:
- 
-+--------------------------------
- DIVINE_CONFIG_SCRIPTS = divine-config
-+--------------------------------
-+================================
- 
--Example 2:
--
-+.Config script: 'imagemagick' package:
-+================================
- Package imagemagick installs the following scripts:
- '$(STAGING_DIR)/usr/bin/{Magick,Magick++,MagickCore,MagickWand,Wand}-config'
- 
- So it's fixup would be:
- 
-+--------------------------------
- IMAGEMAGICK_CONFIG_SCRIPTS = \
-    Magick-config Magick++-config \
-    MagickCore-config MagickWand-config Wand-config
-+--------------------------------
-+================================
- 
- On line 14, we specify the list of dependencies this package relies
- on. These dependencies are listed in terms of lower-case package names,
-diff --git a/docs/manual/contribute.txt b/docs/manual/contribute.txt
-index 9f3b641..46a4489 100644
---- a/docs/manual/contribute.txt
-+++ b/docs/manual/contribute.txt
-@@ -27,8 +27,8 @@ _rebase_ your development branch on top of the upstream tree before
- generating the patch set. To do so, run:
- 
- ---------------------
-- $ git fetch --all --tags
-- $ git rebase origin/master
-+$ git fetch --all --tags
-+$ git rebase origin/master
- ---------------------
- 
- Here, you are ready to generate then submit your patch set.
-@@ -36,7 +36,7 @@ Here, you are ready to generate then submit your patch set.
- To generate it, run:
- 
- ---------------------
-- $ git format-patch -M -n -s -o outgoing origin/master
-+$ git format-patch -M -n -s -o outgoing origin/master
- ---------------------
- 
- This will generate patch files in the +outgoing+ subdirectory,
-@@ -48,7 +48,7 @@ before submitting them using your favorite text editor.
- Lastly, send/submit your patch set to the Buildroot mailing list:
- 
- ---------------------
-- $ git send-email --to buildroot at busybox.net outgoing/*
-+$ git send-email --to buildroot at busybox.net outgoing/*
- ---------------------
- 
- Note that +git+ should be configured to use your mail account.
-diff --git a/docs/manual/make-tips.txt b/docs/manual/make-tips.txt
-index e87bbf7..c3fd155 100644
---- a/docs/manual/make-tips.txt
-+++ b/docs/manual/make-tips.txt
-@@ -29,8 +29,7 @@ The result of the search shows the help message of the matching items.
-  $ make help
- --------------------
- 
--.Not all targets are always available,
--
-+Not all targets are always available,
- some settings in the +.config+ file may hide some targets:
- 
- * +linux-menuconfig+ and +linux-savedefconfig+ only work when
-@@ -71,12 +70,15 @@ The manual outputs will be generated in 'output/docs/manual'.
-   xref:requirement-optional[]).
- - There is a known issue that you can't build it under Debian Squeeze.
- 
-+.Reseting Buildroot for a new target:
-+
- To delete all build products as well as the configuration:
- 
- --------------------
-  $ make distclean
- --------------------
- 
--Note that if +ccache+ is enabled, running +make clean+ or +distclean+ does
-+.Notes
-+If +ccache+ is enabled, running +make clean+ or +distclean+ does
- not empty the compiler cache used by Buildroot. To delete it, refer
- to xref:ccache[].
+The right fix, in my opinion, is to disable -Werror. Otherwise, we'll have to 
+add more and more fixes like this one for each bump of the toolchain.
+
+baruch
+
+> Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
+> ---
+>  .../ltrace-fix-may-be-uninitialized-variable.patch |   11 +++++++++++
+>  1 file changed, 11 insertions(+)
+>  create mode 100644 package/ltrace/ltrace-fix-may-be-uninitialized-variable.patch
+> 
+> diff --git a/package/ltrace/ltrace-fix-may-be-uninitialized-variable.patch b/package/ltrace/ltrace-fix-may-be-uninitialized-variable.patch
+> new file mode 100644
+> index 0000000..23ffc94
+> --- /dev/null
+> +++ b/package/ltrace/ltrace-fix-may-be-uninitialized-variable.patch
+> @@ -0,0 +1,11 @@
+> +--- a/sysdeps/linux-gnu/proc.c	2012-12-04 13:36:23.000000000 +0100
+> ++++ b/sysdeps/linux-gnu/proc.c	2013-08-09 10:14:33.576464435 +0200
+> +@@ -483,7 +483,7 @@
+> + 	arch_addr_t addr = (arch_addr_t)(uintptr_t)dbg->r_map;
+> + 
+> + 	while (addr != 0) {
+> +-		struct lt_link_map_64 rlm;
+> ++		struct lt_link_map_64 rlm = { };
+> + 		if (lm_fetcher(proc)(proc, addr, &rlm) < 0) {
+> + 			debug(2, "Unable to read link map");
+> + 			return;
+> -- 
+> 1.7.9.5
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
 -- 
-1.8.3.4
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
