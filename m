@@ -1,56 +1,35 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Fri, 9 Aug 2013 13:24:42 +0300
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 9 Aug 2013 12:29:06 +0200
 Subject: [Buildroot] [PATCH 3/3] ltrace: Fix "strndup not declared"
  build failure on powerpc/uclibc
 In-Reply-To: <1376041019-26688-4-git-send-email-jezz@sysmic.org>
 References: <1376041019-26688-1-git-send-email-jezz@sysmic.org>
  <1376041019-26688-4-git-send-email-jezz@sysmic.org>
-Message-ID: <20130809102442.GD3703@tarshish>
+Message-ID: <20130809122906.052d226a@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi J?r?me,
+Dear J?r?me Pouiller,
 
-On Fri, Aug 09, 2013 at 11:36:59AM +0200, J?r?me Pouiller wrote:
+On Fri,  9 Aug 2013 11:36:59 +0200, J?r?me Pouiller wrote:
 > On some systems, strndup is declared only if _GNU_SOURCE is defined
 > 
 > Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
-> ---
->  package/ltrace/ltrace-fix-strndup-usage.patch |   15 +++++++++++++++
->  1 file changed, 15 insertions(+)
->  create mode 100644 package/ltrace/ltrace-fix-strndup-usage.patch
-> 
-> diff --git a/package/ltrace/ltrace-fix-strndup-usage.patch b/package/ltrace/ltrace-fix-strndup-usage.patch
-> new file mode 100644
-> index 0000000..ccc0e2c
-> --- /dev/null
-> +++ b/package/ltrace/ltrace-fix-strndup-usage.patch
-> @@ -0,0 +1,15 @@
-> +With some systems, strndup is declared only if __USE_GNU is defined.
 
-Please add your sign-off on this patch.
+Shouldn't this be globally defined by adding a -D_GNU_SOURCE to the
+CFLAGS at the package level?
 
-baruch
+If not, then anyway your patch needs a Signed-off-by line, and should
+be submitted upstream.
 
-> +
-> +--- a/sysdeps/linux-gnu/ppc/plt.c	2012-11-29 18:46:57.000000000 +0100
-> ++++ b/sysdeps/linux-gnu/ppc/plt.c	2013-08-09 10:30:07.452044496 +0200
-> +@@ -20,6 +20,10 @@
-> +  * 02110-1301 USA
-> +  */
-> + 
-> ++#ifndef _GNU_SOURCE
-> ++#  define _GNU_SOURCE 1
-> ++#endif
-> ++
-> + #include <gelf.h>
-> + #include <sys/ptrace.h>
-> + #include <errno.h>
+Thanks!
 
+Thomas
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
