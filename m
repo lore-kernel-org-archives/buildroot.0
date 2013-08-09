@@ -1,78 +1,69 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 10 Aug 2013 10:29:42 +0200
-Subject: [Buildroot] [git commit branch/next] busybox: set/unset CONFIG_NOMMU
-Message-ID: <20130810084312.2CD0E9B2B3@busybox.osuosl.org>
+Date: Fri, 9 Aug 2013 12:24:59 +0200
+Subject: [Buildroot] [PATCH 1/3] ltrace: Explicit enable/disable of
+ libunwind
+In-Reply-To: <1376041019-26688-2-git-send-email-jezz@sysmic.org>
+References: <1376041019-26688-1-git-send-email-jezz@sysmic.org>
+ <1376041019-26688-2-git-send-email-jezz@sysmic.org>
+Message-ID: <20130809122459.5e282d84@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=149e4f89604880c355eb8af968b78647ab47fac9
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Dear J?r?me Pouiller,
 
-Set busybox .config CONFIG_NOMMU appropiately and streamline this new
-setting with the previous BUSYBOX_DISABLE_MMU_APPLETS in a single
-BUSYBOX_SET_MMU definition (since it's not just applets now).
+On Fri,  9 Aug 2013 11:36:57 +0200, J?r?me Pouiller wrote:
+> ltrace automaticaly use libunwind if detected. So depending if libunwind was
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/busybox/busybox.mk |   23 ++++++++++++++---------
- 1 files changed, 14 insertions(+), 9 deletions(-)
+automatically uses
 
-diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-index acc9008..ad8bdaf 100644
---- a/package/busybox/busybox.mk
-+++ b/package/busybox/busybox.mk
-@@ -75,6 +75,19 @@ define BUSYBOX_SET_MDEV
- endef
- endif
- 
-+ifeq ($(BR2_USE_MMU),y)
-+define BUSYBOX_SET_MMU
-+	$(call KCONFIG_DISABLE_OPT,CONFIG_NOMMU,$(BUSYBOX_BUILD_CONFIG))
-+endef
-+else
-+define BUSYBOX_SET_MMU
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NOMMU,$(BUSYBOX_BUILD_CONFIG))
-+	$(call KCONFIG_DISABLE_OPT,CONFIG_SWAPONOFF,$(BUSYBOX_BUILD_CONFIG))
-+	$(call KCONFIG_DISABLE_OPT,CONFIG_ASH,$(BUSYBOX_BUILD_CONFIG))
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_HUSH,$(BUSYBOX_BUILD_CONFIG))
-+endef
-+endif
-+
- ifeq ($(BR2_LARGEFILE),y)
- define BUSYBOX_SET_LARGEFILE
- 	$(call KCONFIG_ENABLE_OPT,CONFIG_LFS,$(BUSYBOX_BUILD_CONFIG))
-@@ -133,14 +146,6 @@ define BUSYBOX_INTERNAL_SHADOW_PASSWORDS
- endef
- endif
- 
--ifeq ($(BR2_USE_MMU),)
--define BUSYBOX_DISABLE_MMU_APPLETS
--	$(call KCONFIG_DISABLE_OPT,CONFIG_SWAPONOFF,$(BUSYBOX_BUILD_CONFIG))
--	$(call KCONFIG_DISABLE_OPT,CONFIG_ASH,$(BUSYBOX_BUILD_CONFIG))
--	$(call KCONFIG_ENABLE_OPT,CONFIG_HUSH,$(BUSYBOX_BUILD_CONFIG))
--endef
--endif
--
- ifeq ($(BR2_INIT_BUSYBOX),y)
- define BUSYBOX_SET_INIT
- 	$(call KCONFIG_ENABLE_OPT,CONFIG_INIT,$(BUSYBOX_BUILD_CONFIG))
-@@ -172,6 +177,7 @@ endif
- BUSYBOX_POST_EXTRACT_HOOKS += BUSYBOX_COPY_CONFIG
- 
- define BUSYBOX_CONFIGURE_CMDS
-+	$(BUSYBOX_SET_MMU)
- 	$(BUSYBOX_SET_LARGEFILE)
- 	$(BUSYBOX_SET_IPV6)
- 	$(BUSYBOX_PREFER_STATIC)
-@@ -179,7 +185,6 @@ define BUSYBOX_CONFIGURE_CMDS
- 	$(BUSYBOX_NETKITBASE)
- 	$(BUSYBOX_NETKITTELNET)
- 	$(BUSYBOX_INTERNAL_SHADOW_PASSWORDS)
--	$(BUSYBOX_DISABLE_MMU_APPLETS)
- 	$(BUSYBOX_SET_INIT)
- 	$(BUSYBOX_SET_WATCHDOG)
- 	@yes "" | $(MAKE) ARCH=$(KERNEL_ARCH) CROSS_COMPILE="$(TARGET_CROSS)" \
+> already compiled or not, ltrcae compile differently. This patch add explicit
+
+ltrace compiles
+
+This patch adds an
+
+> dependency to libunwind if detected.
+> 
+> In add, due to limitation of luclibc, ltrace cannot use libunwind with uclib. this patch explicitly compile without libunwind in this case.
+
+Line should be wrapped and fixed from typos.
+
+
+> diff --git a/package/ltrace/ltrace.mk b/package/ltrace/ltrace.mk
+> index 7b8d859..4d81121 100644
+> --- a/package/ltrace/ltrace.mk
+> +++ b/package/ltrace/ltrace.mk
+> @@ -13,4 +13,13 @@ LTRACE_CONF_OPT = --disable-werror
+>  LTRACE_LICENSE = GPLv2
+>  LTRACE_LICENSE_FILES = COPYING
+>  
+> +LTRACE_LIBUNWIDFLAG = --without-libunwind
+> +ifeq ($(BR2_PACKAGE_LIBUNWIND),y)
+> +  ifneq ($(BR2_TOOLCHAIN_USES_UCLIBC),y)
+> +    LTRACE_DEPENDENCIES = libunwind
+> +    LTRACE_LIBUNWIDFLAG = --with-libunwind
+> +  endif
+> +endif
+> +LTRACE_CONF_OPT = $(LTRACE_LIBUNWIDFLAG)
+
+That's not how we typically write such things. We normally do something
+like:
+
+ifeq ($(BR2_PACKAGE_LIBUNWIND)$(BR2_TOOLCHAIN_USES_GLIBC),yy)
+LTRACE_DEPENDENCIES += libunwind
+LTRACE_CONF_OPT += --with-libunwind
+else
+LTRACE_CONF_OPT += --without-libunwind
+endif
+
+Thanks,
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
