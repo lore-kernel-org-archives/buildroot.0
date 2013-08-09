@@ -1,56 +1,54 @@
 From: Alexander Lukichev <alexander.lukichev@gmail.com>
-Date: Fri, 9 Aug 2013 07:51:04 +0300
-Subject: [Buildroot] AVR32 toolchain build failure
-In-Reply-To: <CAAXf6LWVRynN+wymOO3i=ZZ=tdgAfKyEsNrxPiYju_WSN6m5fw@mail.gmail.com>
-References: <CAAXf6LUhgOkHgj=cRWnkR8tPhAAjT6BhXFvXTBvC5pHfTZ=vww@mail.gmail.com>
- <20130806195402.2f3f94e7@skate>
- <CAAXf6LU0oihr6qLh4KA=+fKYWEbk-iOpwvsmo7AWPSjyC7_=KA@mail.gmail.com>
- <CAAXf6LWF=7-cP_=mTRjNK1qki-gxKx+BoR1C_1Bw9QGUUtstmA@mail.gmail.com>
- <20130807172033.564940d1@skate>
- <CAAXf6LVT144yhgAh5ce5O9FjR=osQ=qV=sod=-pDSOiqeRTvuA@mail.gmail.com>
- <CAAXf6LVFECrtPWQsw0HU5H+ZHjU0tYmz5SNgeKsBA_0RzkNJsQ@mail.gmail.com>
- <20130808000726.66ab7194@skate>
- <CAAXf6LUvZEOeF8dDrESqYKr3iiT3haQFzrH-=VnH7gDcvd+z-g@mail.gmail.com>
- <CAHt8ZCOx1o1GPcgFZN9RYQWvGivTy5R6bWuUwX4B67qban++EA@mail.gmail.com>
- <CAAXf6LVdx1h2qm8767UCavTqTR1q-L8Z0Kv93zqCfE8OqyYd5w@mail.gmail.com>
- <CAHt8ZCO+G8E3EggLj8KFRHhvxiPzCFT_LwZQyniEed3Q2BfL-Q@mail.gmail.com>
- <CAAXf6LWJTQCWH-rEppNNVy_j2SJacecaWGwXxgiW-q7JboO3=Q@mail.gmail.com>
- <CAHt8ZCP6LiPDV+utoknppQ-O1gYtTSgSCYrpokXDUW67+W8-Ow@mail.gmail.com>
- <CAAXf6LUqGG9O2eWfokH8VAuxa-2xDw=yKw-1vq_9VBpzotCjKA@mail.gmail.com>
- <CAAXf6LWVRynN+wymOO3i=ZZ=tdgAfKyEsNrxPiYju_WSN6m5fw@mail.gmail.com>
-Message-ID: <CAAHaz6FPnCjg7n-VWxFpHsBRx-Z35U-GWTK0nkZuGK+wBO_H0g@mail.gmail.com>
+Date: Fri,  9 Aug 2013 08:16:10 +0300
+Subject: [Buildroot] [PATCH 1/1] gcc: fix libstdc++_pic for AVR32
+Message-ID: <1376025370-9467-1-git-send-email-alexander.lukichev@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
+It is not clear why 300-libstdc++-pic.patch pre-applied to
+gcc-4.2.2-avr32-2.1.5 seems to have come from some older version
+of gcc (as early as 4.0.3). This older patch incorrectly refers to
+object files to be included in the library libstdc++_pic.a as *.o,
+while their location seems to be in .libs/*.o (see the contents at
+e.g. https://github.com/ZigFisher/Midge/blob/master/toolchain/gcc/4.0.3/300-libstdc%2B%2B-pic.patch ).
+The same patch for gcc 4.1.0 refers to the files as .libs/*.o (see
+https://github.com/ZigFisher/Midge/blob/master/toolchain/gcc/4.1.0/300-libstdc%2B%2B-pic.patch ).
+This patch corrects rules in Makefile.in.
 
-2013/8/8 Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
+Signed-off-by: Alexander Lukichev <alexander.lukichev@gmail.com>
+---
+ .../990-fix-300-libstdc++-pic.patch                  | 20 ++++++++++++++++++++
+ 1 file changed, 20 insertions(+)
+ create mode 100644 package/gcc/4.2.2-avr32-2.1.5/990-fix-300-libstdc++-pic.patch
 
-> >> That probably explains why your builds fail...
-> > So you are saying that if I upgrade my host gcc (the native one) to
-> > 4.6, that the cross AVR32 gcc will build successfully, and not suffer
-> > from the relocation truncation messages?
->
-> By the way, my host gcc is:
-> $ gcc --version
-> gcc (Ubuntu/Linaro 4.7.2-2ubuntu1) 4.7.2
->
-
-My gcc is:
-
-$ gcc --version
-gcc (GCC) 4.5.1 20100924 (Red Hat 4.5.1-4)
-Copyright (C) 2010 Free Software Foundation, Inc.
-This is free software; see the source for copying conditions.  There is NO
-warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-
-
---
-Best regards,
-  Alexander Lukichev
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130809/c955b328/attachment-0001.html>
+diff --git a/package/gcc/4.2.2-avr32-2.1.5/990-fix-300-libstdc++-pic.patch b/package/gcc/4.2.2-avr32-2.1.5/990-fix-300-libstdc++-pic.patch
+new file mode 100644
+index 0000000..a63b3ad
+--- /dev/null
++++ b/package/gcc/4.2.2-avr32-2.1.5/990-fix-300-libstdc++-pic.patch
+@@ -0,0 +1,20 @@
++libstdc++-v3: fix the effects of pre-applied 300-libstdc++-pic.patch
++
++This version of GCC comes with a number of pre-applied patches, among which is
++300-libstdc++-pic.patch that makes a PIC version of libstdc++. The resulting
++Makefile.in incorrectly refers to object files that should be insde the library.
++
++Signed-off-by: Alexander Lukichev <alexander.lukichev@gmail.com>
++
++diff -uNrp host-gcc-final-4.2.2-avr32-2.1.5.orig/libstdc++-v3/src/Makefile.in host-gcc-final-4.2.2-avr32-2.1.5/libstdc++-v3/src/Makefile.in
++--- host-gcc-final-4.2.2-avr32-2.1.5.orig/libstdc++-v3/src/Makefile.in	2008-07-04 00:18:42.000000000 +0300
+++++ host-gcc-final-4.2.2-avr32-2.1.5/libstdc++-v3/src/Makefile.in	2013-08-08 16:15:56.201258882 +0300
++@@ -804,7 +804,7 @@ install_debug:
++ 
++ install-exec-local:
++ ifeq ($(enable_shared),yes)
++-	$(AR) cru libstdc++_pic.a *.o $(top_builddir)/libsupc++/*.o
+++	$(AR) cru libstdc++_pic.a .libs/*.o $(top_builddir)/libsupc++/*.o
++ 	$(INSTALL_DATA) libstdc++_pic.a $(DESTDIR)$(toolexeclibdir)
++ endif
++ 
+-- 
+1.8.0.1
