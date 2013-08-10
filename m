@@ -1,25 +1,25 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 10 Aug 2013 21:26:42 +0200
-Subject: [Buildroot] [PATCH 1/3] busybox: set/unset CONFIG_NOMMU
-In-Reply-To: <1376076221-28066-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1376076221-28066-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20130810212642.342983bb@skate>
+Date: Sat, 10 Aug 2013 21:27:01 +0200
+Subject: [Buildroot] [PATCH] uclibc: arc: Add susv3 legacy alias bcmp
+In-Reply-To: <1375958285-7814-1-git-send-email-vgupta@synopsys.com>
+References: <1375958285-7814-1-git-send-email-vgupta@synopsys.com>
+Message-ID: <20130810212701.5f4d5cd3@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+Dear Vineet Gupta,
 
-On Fri,  9 Aug 2013 16:23:39 -0300, Gustavo Zacarias wrote:
-> Set busybox .config CONFIG_NOMMU appropiately and streamline this new
-> setting with the previous BUSYBOX_DISABLE_MMU_APPLETS in a single
-> BUSYBOX_SET_MMU definition (since it's not just applets now).
+On Thu, 8 Aug 2013 16:08:05 +0530, Vineet Gupta wrote:
+> This fixes the building of screen package for ARC
 > 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> Reported-by: Mischa Jonker <mjonker@synopsys.com>
+> Cc: Mischa Jonker <mjonker@synopsys.com>
+> Signed-off-by: Vineet Gupta <vgupta@synopsys.com>
 
-Committed your three !MMU patches, thanks.
+Committed, thanks.
 
 Thomas
 -- 
