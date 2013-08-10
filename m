@@ -1,40 +1,30 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 10 Aug 2013 21:19:50 +0200
-Subject: [Buildroot] [git commit branch/next] sstrip: remove unneed explicit
-	ccache dependency
-Message-ID: <20130810191946.4785A9B2C4@busybox.osuosl.org>
+Date: Sat, 10 Aug 2013 21:26:18 +0200
+Subject: [Buildroot] [PATCH v3 0/3] Manual updates
+In-Reply-To: <1376043408-9367-1-git-send-email-s.martin49@gmail.com>
+References: <1376043408-9367-1-git-send-email-s.martin49@gmail.com>
+Message-ID: <20130810212618.2eb0da1a@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=de5a08f5b5a8afc0d5ef68307a8fb5cbce810d16
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Dear Samuel Martin,
 
-This ccache dependency was here to enforce the build order.
-It is not needed anymore.
+On Fri,  9 Aug 2013 12:16:45 +0200, Samuel Martin wrote:
 
-Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/sstrip/sstrip.mk |    5 -----
- 1 files changed, 0 insertions(+), 5 deletions(-)
+> Here is a couple of various manual updates and fixes.
+> 
+> The noticeable change from the 2nd round is the removal of the
+> "Beyond Buildroot" additions since it needs more thoughts and work
+> about it.
 
-diff --git a/package/sstrip/sstrip.mk b/package/sstrip/sstrip.mk
-index be8c563..c79a501 100644
---- a/package/sstrip/sstrip.mk
-+++ b/package/sstrip/sstrip.mk
-@@ -8,11 +8,6 @@ SSTRIP_SITE = svn://dev.openwrt.org/openwrt/trunk/tools/sstrip
- SSTRIP_VERSION = 20154
- HOST_SSTRIP_BINARY = $(GNU_TARGET_NAME)-sstrip
- 
--# This is a kludge to get host-ccache built before us or it fails
--ifeq ($(BR2_CCACHE),y)
--HOST_SSTRIP_DEPENDENCIES = host-ccache
--endif
--
- define SSTRIP_BUILD_CMDS
- 	cd $(@D) ; \
- 	$(TARGET_CC) $(TARGET_CFLAGS) -include endian.h -include byteswap.h \
+Committed, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
