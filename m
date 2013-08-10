@@ -1,32 +1,23 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 10 Aug 2013 21:28:22 +0200
-Subject: [Buildroot] [PATCH 0 of 2] strongswan: fix some autobuild
- failures
-In-Reply-To: <patchbomb.1375896855@BEANTN0L019720>
-References: <patchbomb.1375896855@BEANTN0L019720>
-Message-ID: <20130810212822.669b3db7@skate>
+Date: Sat, 10 Aug 2013 21:28:34 +0200
+Subject: [Buildroot] [PATCH] perl-cross: bump to version 0.7.4
+In-Reply-To: <1375893731-19270-1-git-send-email-francois.perrad@gadz.org>
+References: <1375893731-19270-1-git-send-email-francois.perrad@gadz.org>
+Message-ID: <20130810212834.45693cc6@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas De Schampheleire,
+Dear Francois Perrad,
 
-On Wed, 07 Aug 2013 19:34:15 +0200, Thomas De Schampheleire wrote:
-> strongswan suffers from several autobuild failures. This series addresses
-> one of them: 'no rule to make target libtls.la'. While looking at it, I also
-> saw a missing host-pkgconf dependency, although I did not see this in any of
-> the autobuilds I checked.
+On Wed,  7 Aug 2013 18:42:11 +0200, Francois Perrad wrote:
+> since 0.7.3: install paths adjusted to match mainline perl
 > 
-> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-> 
-> ---
->  package/strongswan/strongswan-0001-force-tls-when-needed.patch |  72 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
->  package/strongswan/strongswan.mk                               |   9 +++++++++
->  2 files changed, 81 insertions(+), 0 deletions(-)
+> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 
-Committed both patches, thanks.
+Committed, thanks.
 
 Thomas
 -- 
