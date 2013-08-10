@@ -1,21 +1,23 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 10 Aug 2013 21:28:53 +0200
-Subject: [Buildroot] [PATCH] gcc: fix !BR2_LARGEFILE builds
-In-Reply-To: <1375875595-3155-1-git-send-email-francois.perrad@gadz.org>
-References: <1375875595-3155-1-git-send-email-francois.perrad@gadz.org>
-Message-ID: <20130810212853.2febc17a@skate>
+Date: Sat, 10 Aug 2013 21:29:14 +0200
+Subject: [Buildroot] [PATCH] Fix ARM uclibc build with
+ !BR2_UCLIBC_ARM_BX.
+In-Reply-To: <1375829638-7603-1-git-send-email-jmaggard10@gmail.com>
+References: <1375829638-7603-1-git-send-email-jmaggard10@gmail.com>
+Message-ID: <20130810212914.60fce023@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Francois Perrad,
+Dear Justin Maggard,
 
-On Wed,  7 Aug 2013 13:39:55 +0200, Francois Perrad wrote:
-> see http://lists.busybox.net/pipermail/buildroot/2013-August/076278.html
+On Tue,  6 Aug 2013 15:53:58 -0700, Justin Maggard wrote:
+> When BR2_UCLIBC_ARM_BX is not set, UCLIBC_OPT_UNSET gets called with an extra
+> argument.  Remove it.
 > 
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+> Signed-off-by: Justin Maggard <jmaggard10@gmail.com>
 
 Committed, thanks.
 
