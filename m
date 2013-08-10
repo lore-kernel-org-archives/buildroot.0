@@ -1,24 +1,22 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 10 Aug 2013 21:26:18 +0200
-Subject: [Buildroot] [PATCH v3 0/3] Manual updates
-In-Reply-To: <1376043408-9367-1-git-send-email-s.martin49@gmail.com>
-References: <1376043408-9367-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <20130810212618.2eb0da1a@skate>
+Date: Sat, 10 Aug 2013 21:26:28 +0200
+Subject: [Buildroot] [PATCH 1/1] udev:
+ s/BR2_TOOLCHAIN_USE_THREADS/BR2_TOOLCHAIN_HAS_THREADS/
+In-Reply-To: <1376067448-29970-1-git-send-email-spenser@gillilanding.com>
+References: <1376067448-29970-1-git-send-email-spenser@gillilanding.com>
+Message-ID: <20130810212628.7e5e9ab2@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Samuel Martin,
+Dear Spenser Gilliland,
 
-On Fri,  9 Aug 2013 12:16:45 +0200, Samuel Martin wrote:
-
-> Here is a couple of various manual updates and fixes.
+On Fri,  9 Aug 2013 11:57:28 -0500, Spenser Gilliland wrote:
+> Bug fix.
 > 
-> The noticeable change from the 2nd round is the removal of the
-> "Beyond Buildroot" additions since it needs more thoughts and work
-> about it.
+> Signed-off-by: Spenser Gilliland <spenser@gillilanding.com>
 
 Committed, thanks.
 
