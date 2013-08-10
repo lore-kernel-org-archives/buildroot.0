@@ -1,31 +1,63 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 10 Aug 2013 21:06:16 +0200
-Subject: [Buildroot] [PATCH 1/1] gcc: fix libstdc++_pic for AVR32
-In-Reply-To: <1376025370-9467-1-git-send-email-alexander.lukichev@gmail.com>
-References: <1376025370-9467-1-git-send-email-alexander.lukichev@gmail.com>
-Message-ID: <20130810210616.51dbcbf9@skate>
+Date: Sat, 10 Aug 2013 21:11:12 +0200
+Subject: [Buildroot] [git commit] toolchain-external: don't create gdb
+	symlink when building host-gdb
+Message-ID: <20130810191104.E1E7E9B2C4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Alexander Lukichev,
+commit: http://git.buildroot.net/buildroot/commit/?id=97565866e8a1da66d86d36b9cbd28fb1ffb8c2b2
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri,  9 Aug 2013 08:16:10 +0300, Alexander Lukichev wrote:
-> It is not clear why 300-libstdc++-pic.patch pre-applied to
+The external-toolchain infrastructure creates symbolic links for all
+tools in the host directory. However, when buildroot builds its own
+version of a cross debugger (BR2_PACKAGE_HOST_GDB), and the toolchain
+also provides a cross debugger, there would be two symbolic links for
+gdb in the host directory, which is confusing.
+An example use case is where the external toolchain only provides a
+64-bit gdbserver (e.g. Cavium Networks SDK) but the target is completely
+32-bit (e.g. n32 ABI). In this case, using gdbserver on target requires
+copying a bunch of 64-bit libraries to the target as well, just for gdb.
+In this case, one can let buildroot build both gdbserver as cross-gdb
+(both in 32-bit).
 
-Which 300-libstdc++-pic.patch are you referring to? I don't see anyone
-in Buildroot.
+This patch modifies the symlink creation so that no gdb (or gdbtui)
+symlink is created if buildroot is going to build a cross-gdb.
 
-Simon, Thiago, as our AVR32 people, why do you think of Alexander's
-patch? Can you give it a spin and tell me what you think?
+Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ toolchain/toolchain-external/ext-tool.mk |   10 ++++++++--
+ 1 files changed, 8 insertions(+), 2 deletions(-)
 
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+diff --git a/toolchain/toolchain-external/ext-tool.mk b/toolchain/toolchain-external/ext-tool.mk
+index a3c40c8..01be85c 100644
+--- a/toolchain/toolchain-external/ext-tool.mk
++++ b/toolchain/toolchain-external/ext-tool.mk
+@@ -531,8 +531,9 @@ ifeq ($(BR2_BFIN_INSTALL_FLAT_SHARED),y)
+ TOOLCHAIN_EXTERNAL_INSTALL += $(STAMP_DIR)/ext-toolchain-bfin-shared-flat-installed
+ endif
+ 
+-# Build toolchain wrapper for preprocessor, C and C++ compiler, and setup
+-# symlinks for everything else
++# Build toolchain wrapper for preprocessor, C and C++ compiler and setup
++# symlinks for everything else. Skip gdb symlink when we are building our
++# own gdb to prevent two gdb's in output/host/usr/bin.
+ $(HOST_DIR)/usr/bin/ext-toolchain-wrapper: $(TOOLCHAIN_EXTERNAL_INSTALL)
+ 	$(Q)$(call MESSAGE,"Building ext-toolchain wrapper")
+ 	mkdir -p $(HOST_DIR)/usr/bin; cd $(HOST_DIR)/usr/bin; \
+@@ -542,6 +543,11 @@ $(HOST_DIR)/usr/bin/ext-toolchain-wrapper: $(TOOLCHAIN_EXTERNAL_INSTALL)
+ 		*cc|*cc-*|*++|*++-*|*cpp) \
+ 			ln -sf $(@F) $$base; \
+ 			;; \
++		*gdb|*gdbtui) \
++			if test "$(BR2_PACKAGE_HOST_GDB)" != "y"; then \
++				ln -sf $$(echo $$i | sed 's%^$(HOST_DIR)%../..%') .; \
++			fi \
++			;; \
+ 		*) \
+ 			ln -sf $$(echo $$i | sed 's%^$(HOST_DIR)%../..%') .; \
+ 			;; \
