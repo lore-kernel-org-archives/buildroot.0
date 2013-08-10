@@ -1,36 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 10 Aug 2013 21:19:27 +0200
-Subject: [Buildroot] [git commit branch/next] dependencies: build without
-	ccache
-Message-ID: <20130810191946.2CA7F9B2C4@busybox.osuosl.org>
+Date: Sat, 10 Aug 2013 21:19:43 +0200
+Subject: [Buildroot] [git commit branch/next] crosstool-ng: remove unneed
+	explicit ccache dependency
+Message-ID: <20130810191946.3D61F9B2C5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=2ba1014009b4b2b2db298e8a5615c8d8e92ef641
+commit: http://git.buildroot.net/buildroot/commit/?id=f1db8f21461646b4a1ba63c0227732f569834ba3
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-This patch forces the plain host compiler to be used during the building of
-dependencies, without ccache as it is not yet built.
+This ccache dependency was here to enforce build order.
+It is not needed anymore.
 
+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- support/dependencies/dependencies.mk |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+ package/crosstool-ng/crosstool-ng.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/support/dependencies/dependencies.mk b/support/dependencies/dependencies.mk
-index a2d229c..934da40 100644
---- a/support/dependencies/dependencies.mk
-+++ b/support/dependencies/dependencies.mk
-@@ -25,6 +25,8 @@ core-dependencies:
- 		DL_TOOLS="$(sort $(DL_TOOLS_DEPENDENCIES))" \
- 		$(TOPDIR)/support/dependencies/dependencies.sh
+diff --git a/package/crosstool-ng/crosstool-ng.mk b/package/crosstool-ng/crosstool-ng.mk
+index d3ee5f8..8d98db4 100644
+--- a/package/crosstool-ng/crosstool-ng.mk
++++ b/package/crosstool-ng/crosstool-ng.mk
+@@ -11,7 +11,7 @@ CROSSTOOL_NG_INSTALL_TARGET    = NO
+ CROSSTOOL_NG_MAKE              = $(MAKE1)
  
-+dependencies: HOSTCC=$(HOSTCC_NOCCACHE)
-+dependencies: HOSTCXX=$(HOSTCXX_NOCCACHE)
- dependencies: core-dependencies $(DEPENDENCIES_HOST_PREREQ)
+ HOST_CROSSTOOL_NG_DEPENDENCIES = \
+-	$(if $(BR2_CCACHE),host-ccache) host-gawk \
++	host-gawk \
+ 	host-automake host-gperf host-bison host-flex \
+ 	host-texinfo
  
- dependencies-source:
