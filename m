@@ -1,73 +1,34 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 10 Aug 2013 10:46:23 +0200
-Subject: [Buildroot] [git commit branch/next] perl-cross: bump to version
-	0.7.4
-Message-ID: <20130810084616.516B19B2B3@busybox.osuosl.org>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Sat, 10 Aug 2013 08:12:43 -0300
+Subject: [Buildroot] [PATCH 1/3] busybox: set/unset CONFIG_NOMMU
+In-Reply-To: <CAFRkauBPLBDR+7m7WHA0wo_NkJjN4VRQp1Jzp2tL8q6hTqC+tQ@mail.gmail.com>
+References: <1376076221-28066-1-git-send-email-gustavo@zacarias.com.ar>
+ <CAFRkauBPLBDR+7m7WHA0wo_NkJjN4VRQp1Jzp2tL8q6hTqC+tQ@mail.gmail.com>
+Message-ID: <5206202B.5000603@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d1808f90378360850831eb9291ef1d799bd41c6a
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+On 08/09/2013 11:08 PM, Axel Lin wrote:
 
-since 0.7.3: install paths adjusted to match mainline perl
+> Hi Gustavo,
+> 
+> I try to build for noMMU with below patches:
+> [PATCH 1/3] busybox: set/unset CONFIG_NOMMU
+> [PATCH 2/3] uclibc: set MMU usage accordingly
+> 
+> However, I still got ELF executable:
+> $ file output/target/bin/busybox
+> output/target/bin/busybox: setuid ELF 32-bit LSB executable, ARM,
+> version 1 (SYSV), statically linked, stripped
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/cpanminus/cpanminus.mk |   12 ++++++------
- package/perl/perl.mk           |    2 +-
- 2 files changed, 7 insertions(+), 7 deletions(-)
-
-diff --git a/package/cpanminus/cpanminus.mk b/package/cpanminus/cpanminus.mk
-index 60a72ee..52921b5 100644
---- a/package/cpanminus/cpanminus.mk
-+++ b/package/cpanminus/cpanminus.mk
-@@ -11,9 +11,9 @@ CPANMINUS_DEPENDENCIES = host-qemu perl $(call qstrip,$(BR2_PACKAGE_CPANMINUS_NA
- 
- CPANMINUS_RUN_PERL = $(QEMU_USER) $(STAGING_DIR)/usr/bin/perl
- CPANMINUS_ARCHNAME = $(shell $(CPANMINUS_RUN_PERL) -MConfig -e "print Config->{archname}")
--CPANMINUS_PERL_LIB      = $(STAGING_DIR)/usr/lib/perl
--CPANMINUS_PERL_SITELIB  = $(TARGET_DIR)/usr/lib/perl
--CPANMINUS_PERL_ARCHLIB  = $(CPANMINUS_PERL_LIB)/$(CPANMINUS_ARCHNAME)
-+CPANMINUS_PERL_LIB      = $(STAGING_DIR)/usr/lib/perl5
-+CPANMINUS_PERL_SITELIB  = $(TARGET_DIR)/usr/lib/perl5/site_perl/$(PERL_VERSION)
-+CPANMINUS_PERL_ARCHLIB  = $(CPANMINUS_PERL_LIB)/$(PERL_VERSION)/$(CPANMINUS_ARCHNAME)
- CPANMINUS_PERL_SITEARCH = $(CPANMINUS_PERL_SITELIB)/$(CPANMINUS_ARCHNAME)
- CPANMINUS_PERL5LIB = $(CPANMINUS_PERL_SITEARCH):$(CPANMINUS_PERL_SITELIB):$(CPANMINUS_PERL_ARCHLIB):$(CPANMINUS_PERL_LIB)
- ifneq ($(BR2_PACKAGE_CPANMINUS_MIRROR),"")
-@@ -27,8 +27,8 @@ define CPANMINUS_INSTALL_TARGET_CMDS
- 	echo "PERL5LIB=$(CPANMINUS_PERL5LIB) $(CPANMINUS_RUN_PERL) \"\$$@\""    >>$(@D)/run_perl
- 	chmod +x $(@D)/run_perl
- 	PERL5LIB=$(CPANMINUS_PERL5LIB) \
--	PERL_MM_OPT="DESTDIR=$(CPANMINUS_PERL_SITELIB) PERL=$(@D)/run_perl PERL_LIB=$(CPANMINUS_PERL_LIB) PERL_ARCHLIB=$(CPANMINUS_PERL_ARCHLIB)" \
--	PERL_MB_OPT="--destdir $(CPANMINUS_PERL_SITELIB)" \
-+	PERL_MM_OPT="DESTDIR=$(TARGET_DIR) PERL=$(@D)/run_perl PERL_LIB=$(CPANMINUS_PERL_LIB) PERL_ARCHLIB=$(CPANMINUS_PERL_ARCHLIB)" \
-+	PERL_MB_OPT="--destdir $(TARGET_DIR)" \
- 	RUN_PERL="$(@D)/run_perl" \
- 	$(CPANMINUS_RUN_PERL) $(@D)/cpanm \
- 		--perl=$(@D)/run_perl \
-@@ -36,7 +36,7 @@ define CPANMINUS_INSTALL_TARGET_CMDS
- 		--no-man-pages \
- 		$(CPANMINUS_MIRROR) \
- 		$(call qstrip,$(BR2_PACKAGE_CPANMINUS_MODULES))
--	-find $(CPANMINUS_PERL_SITEARCH) -type f -name *.bs -exec rm -f {} \;
-+	-find $(CPANMINUS_PERL_SITELIB) -type f -name *.bs -exec rm -f {} \;
- endef
- else
- define CPANMINUS_INSTALL_TARGET_CMDS
-diff --git a/package/perl/perl.mk b/package/perl/perl.mk
-index 5afaaaf..37a38f7 100644
---- a/package/perl/perl.mk
-+++ b/package/perl/perl.mk
-@@ -12,7 +12,7 @@ PERL_LICENSE = Artistic
- PERL_LICENSE_FILES = Artistic
- PERL_INSTALL_STAGING = YES
- 
--PERL_CROSS_VERSION = 0.7.2
-+PERL_CROSS_VERSION = 0.7.4
- PERL_CROSS_BASE_VERSION = 5.$(PERL_VERSION_MAJOR).3
- PERL_CROSS_SITE    = http://download.berlios.de/perlcross
- PERL_CROSS_SOURCE  = perl-$(PERL_CROSS_BASE_VERSION)-cross-$(PERL_CROSS_VERSION).tar.gz
+Hi Axel.
+It's not ready, these are patches just to fix obvious problems.
+More will possibly follow unless unless i get pissed off by your
+continuous one bit comments.
+I already know it's still doing ELF binaries - the toolchain isn't
+configured appropiately and without hardware finding the exact way of
+doing so isn't easy (seems very likely that it'll require gcc patching).
+Thanks and regards.
