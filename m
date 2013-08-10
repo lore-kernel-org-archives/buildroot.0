@@ -1,25 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 10 Aug 2013 21:27:01 +0200
-Subject: [Buildroot] [PATCH] uclibc: arc: Add susv3 legacy alias bcmp
-In-Reply-To: <1375958285-7814-1-git-send-email-vgupta@synopsys.com>
-References: <1375958285-7814-1-git-send-email-vgupta@synopsys.com>
-Message-ID: <20130810212701.5f4d5cd3@skate>
+Date: Sat, 10 Aug 2013 21:28:02 +0200
+Subject: [Buildroot] [PATCH v2] host-mkpasswd: new package
+In-Reply-To: <5c108e45ee2998346481.1375898511@BEANTN0L019720>
+References: <5c108e45ee2998346481.1375898511@BEANTN0L019720>
+Message-ID: <20130810212802.6266df89@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Vineet Gupta,
+Dear Thomas De Schampheleire,
 
-On Thu, 8 Aug 2013 16:08:05 +0530, Vineet Gupta wrote:
-> This fixes the building of screen package for ARC
+On Wed, 07 Aug 2013 20:01:51 +0200, Thomas De Schampheleire wrote:
+> Since the addition of root password setting support in buildroot, there have
+> been a few bug reports in this area ([1], [2]). In these cases, the system
+> mkpasswd did either not work, or did not provide the options we expect, like
+> -m <method>.
 > 
-> Reported-by: Mischa Jonker <mjonker@synopsys.com>
-> Cc: Mischa Jonker <mjonker@synopsys.com>
-> Signed-off-by: Vineet Gupta <vgupta@synopsys.com>
+> This patch adds a mkpasswd host package, based on the sources from whois. When
+> a non-empty root password is set, this package is used as a dependency.
+> 
+> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
-Committed, thanks.
+Committed, thanks. I just did two minor changes:
+
+ * Put -lcrypt at the end of the compilation line, otherwise the
+   mkpasswd build was failing here.
+
+ * Change 'install' to '$(INSTALL)'
 
 Thomas
 -- 
