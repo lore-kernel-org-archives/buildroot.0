@@ -1,83 +1,114 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 10 Aug 2013 17:04:13 +0200
-Subject: [Buildroot] [git commit] arch/arm: remove OABI option
-In-Reply-To: <20130714204246.7BE0D9A49D@busybox.osuosl.org>
-References: <20130714204246.7BE0D9A49D@busybox.osuosl.org>
-Message-ID: <5206566D.9070601@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 10 Aug 2013 19:13:16 +0200
+Subject: [Buildroot] [PATCH 1/1] ola: new package
+In-Reply-To: <1375881032-23901-1-git-send-email-blanco.ether@gmail.com>
+References: <1375881032-23901-1-git-send-email-blanco.ether@gmail.com>
+Message-ID: <20130810191316.7fd6fdbe@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 14/07/13 22:09, Peter Korsgaard wrote:
-> commit: http://git.buildroot.net/buildroot/commit/?id=adf9646229fc5ede51297e2dc703926e1127aa6f
-> branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
->
-> OABI is more than legacy, it's dead.
->
-> New developments should go with EABI, since it so much better.
->>From the Debian EABI page [0] :
->    - floating point performance, with or without an FPU is very much faster
->    - mixing soft and hardfloat code is possible
->    - structure packing is not as painful as it used to be
->    - a more efficient syscall convention
->    - more compatibility with various tools
->
-> [0] http://wiki.debian.org/ArmEabiPort
->
-> [Thomas: keep the ABI choice, as we are going to introduce EABIhf later].
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
-> ---
->   arch/Config.in.arm |    7 -------
->   1 files changed, 0 insertions(+), 7 deletions(-)
->
-> diff --git a/arch/Config.in.arm b/arch/Config.in.arm
-> index 983cac4..4daa91f 100644
-> --- a/arch/Config.in.arm
-> +++ b/arch/Config.in.arm
-> @@ -72,19 +72,12 @@ choice
->   	help
->   	  Application Binary Interface to use
->
-> -	  Note:
-> -	    Using OABI is discouraged.
-> -
->   config BR2_ARM_EABI_CHOICE
->   	bool "EABI"
-> -config BR2_ARM_OABI
+Dear Dave Skok,
 
-  I think this one should have been added to Config.in.legacy. If someone 
-has an old .config with OABI enabled, the conversion to EABI shouldn't be 
-silent, I think...
+Thanks for this patch! It is not sent properly, isn't wrapped, and has
+the proper format. So I tried it, but found a few issues.
 
-  Regards,
-  Arnout
+On Wed,  7 Aug 2013 09:10:32 -0400, Dave Skok wrote:
 
-> -	bool "OABI"
-> -	depends on !BR2_GCC_VERSION_4_7_X
->   endchoice
->
->   config BR2_ARM_EABI
->   	def_bool y
-> -	depends on !BR2_ARM_OABI
->
->   config BR2_ARM_ENABLE_NEON
->   	bool "Enable NEON SIMD extension support"
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
->
+> +config BR2_PACKAGE_OLA
+> +	bool "open lighting architecture"
+> +	select BR2_PACKAGE_PROTOBUF
+> +	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
+> +	select BR2_PACKAGE_UTIL_LINUX
+> +	depends on BR2_INSTALL_LIBSTDCPP # protobuf
+> +	depends on BR2_LARGEFILE # util-linux
+> +	depends on BR2_USE_WCHAR # util-linux
 
+You should also:
 
+	depends on BR2_TOOLCHAIN_HAS_THREADS
+
+> +	help
+> +	  Open Lighting Architecture provides applications 
+> +	  with a mechanism to send and receive DMX512 & RDM 
+> +	  commands using hardware devices and DMX over IP protocols.
+> +
+> +	  http://www.opendmx.net/index.php/OLA
+> +
+> +comment "ola requires a toolchain with C++, largefile and wchar support"
+> +	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_LARGEFILE || !BR2_USE_WCHAR
+
+and change this to mention the need for thread support. Without thread
+support, OLA fails to build as it tries to include <pthread.h>.
+
+Then, the most annoying issue I had was that the very basic
+configuration of OLA (just enable OLA and leave all the sub-options to
+the default) doesn't build here:
+
+OlaServer.cpp: In member function 'void ola::OlaServer::UpdatePidStore(const ola::rdm::RootPidStore*)':
+OlaServer.cpp:467:14: error: request for member 'SetPidStore' in '*((ola::OlaServer*)this)->ola::OlaServer::m_httpd.std::auto_ptr<_Tp>::operator-><int>()', which is of non-class type 'std::auto_ptr<int>::element_type {aka int}'
+
+I'm really bad at C++, but it looks like SetPidStore() is a method that
+only exists when the HTTP server of OLA is enabled, or something like that.
+
+> --- /dev/null
+> +++ b/package/ola/ola.mk
+> @@ -0,0 +1,155 @@
+> +################################################################################
+> +#
+> +# ola
+> +#
+> +################################################################################
+> +
+> +OLA_VERSION = 0.8.30
+> +OLA_SITE = https://code.google.com/p/open-lighting/
+> +OLA_SITE_METHOD = git
+> +
+> +# autoreconf required for source pulled from git repo
+> +# as it does not track configuration
+> +OLA_AUTORECONF = YES
+> +OLA_LICENSE = LGPLv2.1+
+> +OLA_LICENSE_FILES = LICENSE COPYING.LGPLv2.1
+
+These license informations are not correct. They should be:
+
+OLA_LICENSE = LGPLv2.1+ (libola, libolacommon, Python bindings), GPLv2+ (libolaserver, olad, Python examples and tests)
+OLA_LICENSE_FILES = LICENCE GPL LGPL
+
+Also, I believe you should add:
+
+OLA_INSTALL_STAGING = YES
+
+because it installs some clients libraries to talk to the 'olad'
+daemon, and those libraries can be useful to link other programs.
+
+I could have fixed those myself, but I've stopped due to the build
+failure.
+
+Here is the minimal defconfig that I used to exhibit the build problem:
+
+BR2_arm=y
+BR2_TOOLCHAIN_EXTERNAL=y
+BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
+BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
+BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arm-full-2013.05-1.tar.bz2"
+BR2_TOOLCHAIN_EXTERNAL_LARGEFILE=y
+BR2_TOOLCHAIN_EXTERNAL_INET_IPV6=y
+BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
+# BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG is not set
+BR2_TOOLCHAIN_EXTERNAL_INET_RPC=y
+BR2_TOOLCHAIN_EXTERNAL_CXX=y
+BR2_INIT_NONE=y
+# BR2_PACKAGE_BUSYBOX is not set
+BR2_PACKAGE_OLA=y
+
+Best regards,
+
+Thomas
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
