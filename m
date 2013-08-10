@@ -1,53 +1,32 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri, 09 Aug 2013 19:34:36 -0300
-Subject: [Buildroot] AVR32 toolchain build failure
-In-Reply-To: <20130809222906.16bb49ce@skate>
-References: <CAAXf6LUhgOkHgj=cRWnkR8tPhAAjT6BhXFvXTBvC5pHfTZ=vww@mail.gmail.com>
- <20130807172033.564940d1@skate>
- <CAAXf6LVT144yhgAh5ce5O9FjR=osQ=qV=sod=-pDSOiqeRTvuA@mail.gmail.com>
- <CAAXf6LVFECrtPWQsw0HU5H+ZHjU0tYmz5SNgeKsBA_0RzkNJsQ@mail.gmail.com>
- <20130808000726.66ab7194@skate>
- <CAAXf6LUvZEOeF8dDrESqYKr3iiT3haQFzrH-=VnH7gDcvd+z-g@mail.gmail.com>
- <CAHt8ZCOx1o1GPcgFZN9RYQWvGivTy5R6bWuUwX4B67qban++EA@mail.gmail.com>
- <CAAXf6LVdx1h2qm8767UCavTqTR1q-L8Z0Kv93zqCfE8OqyYd5w@mail.gmail.com>
- <CAHt8ZCO+G8E3EggLj8KFRHhvxiPzCFT_LwZQyniEed3Q2BfL-Q@mail.gmail.com>
- <CAAXf6LWJTQCWH-rEppNNVy_j2SJacecaWGwXxgiW-q7JboO3=Q@mail.gmail.com>
- <CAHt8ZCP6LiPDV+utoknppQ-O1gYtTSgSCYrpokXDUW67+W8-Ow@mail.gmail.com>
- <CAAXf6LUqGG9O2eWfokH8VAuxa-2xDw=yKw-1vq_9VBpzotCjKA@mail.gmail.com>
- <CAHt8ZCOkiQN0RKe2xa0MyjNnyCLGodCB_ma6Agd6FF_yHof9sQ@mail.gmail.com>
- <CAAXf6LX6XCAwSXWtHPxkc7Q2+-pFeaGyuNO0k4ZRH-MdA3U5MQ@mail.gmail.com>
- <20130809222906.16bb49ce@skate>
-Message-ID: <52056E7C.4000804@zacarias.com.ar>
+From: Axel Lin <axel.lin@ingics.com>
+Date: Sat, 10 Aug 2013 10:08:01 +0800
+Subject: [Buildroot] [PATCH 1/3] busybox: set/unset CONFIG_NOMMU
+In-Reply-To: <1376076221-28066-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1376076221-28066-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <CAFRkauBPLBDR+7m7WHA0wo_NkJjN4VRQp1Jzp2tL8q6hTqC+tQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 08/09/2013 05:29 PM, Thomas Petazzoni wrote:
-> On Fri, 9 Aug 2013 13:12:51 +0200, Thomas De Schampheleire wrote:
-> 
->> I can now also confirm that setting HOSTCC and HOSTCXX explicitly to
->> gcc-4.6 and g++-4.8, is the key to getting C++ support to build for
->> AVR32.
->>
->> One approach to guard against such problems is to check this in
->> dependencies.sh/mk: if AVR32 is selected with C++ toolchain support,
->> and the host gcc is newer than 4.6 (or maybe newer-or-equal-than
->> 4.7.0; not sure where the problem was introduced), then we bail out
->> and ask the user to either disable C++ support, set their host
->> compiler to an older version, or select another architecture (kidding
->> about that last one, of course).
-> 
-> That's the only reasonable solution I believe.
+2013/8/10 Gustavo Zacarias <gustavo@zacarias.com.ar>:
+> Set busybox .config CONFIG_NOMMU appropiately and streamline this new
+> setting with the previous BUSYBOX_DISABLE_MMU_APPLETS in a single
+> BUSYBOX_SET_MMU definition (since it's not just applets now).
+>
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
-Not really, for me:
+Hi Gustavo,
 
-gcc version 4.6.3 (Gentoo 4.6.3 p1.10, pie-0.5.2)
+I try to build for noMMU with below patches:
+[PATCH 1/3] busybox: set/unset CONFIG_NOMMU
+[PATCH 2/3] uclibc: set MMU usage accordingly
 
-Fails miserably on any situation, even the most bare (non
-c++/wchar/nls/ipv6/rpc) configuration.
-If it's the USE flags (pretty default), some gentoo patches to gcc or
-what else i don't know, but i can't get past gcc-initial (this being the
-current stable on the normal architectures).
-Regards.
+However, I still got ELF executable:
+$ file output/target/bin/busybox
+output/target/bin/busybox: setuid ELF 32-bit LSB executable, ARM,
+version 1 (SYSV), statically linked, stripped
+
+Regards,
+Axel
