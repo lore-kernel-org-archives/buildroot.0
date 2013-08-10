@@ -1,30 +1,26 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 10 Aug 2013 23:43:53 +0200
-Subject: [Buildroot] [PATCH] kobs-ng: new package
-In-Reply-To: <20130804025016.D35CB5C0DE@zaphod.pbhware.com>
-References: <20130804025016.D35CB5C0DE@zaphod.pbhware.com>
-Message-ID: <20130810234353.51079c70@skate>
+Date: Sat, 10 Aug 2013 23:55:16 +0200
+Subject: [Buildroot] [PATCH] Add package 'zip'
+In-Reply-To: <1375983534-5555-1-git-send-email-mort@bork.org>
+References: <1375983534-5555-1-git-send-email-mort@bork.org>
+Message-ID: <20130810235516.66e53859@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Paul B. Henson,
+Dear Martin Hicks,
 
-On Sun, 28 Jul 2013 20:14:14 -0700, Paul B. Henson wrote:
-> Signed-off-by: Paul B. Henson <henson@acm.org>
-> ---
->  package/Config.in                             |    1 +
->  package/kobs-ng/Config.in                     |    7 +++
->  package/kobs-ng/kobs-ng-fix-mtd-defines.patch |   73 +++++++++++++++++++++++++
->  package/kobs-ng/kobs-ng.mk                    |   13 +++++
->  4 files changed, 94 insertions(+), 0 deletions(-)
->  create mode 100644 package/kobs-ng/Config.in
->  create mode 100644 package/kobs-ng/kobs-ng-fix-mtd-defines.patch
->  create mode 100644 package/kobs-ng/kobs-ng.mk
+On Thu,  8 Aug 2013 13:38:54 -0400, Martin Hicks wrote:
+> A compressor/archiver for creating and modifying zipfiles.
+> 
+> Signed-off-by: Martin Hicks <mort@bork.org>
 
-Committed to next, thanks!
+Thanks, but we already have an 'infozip' package that packages the
+exact same thing. Is there anything I'm missing?
+
+Thanks,
 
 Thomas
 -- 
