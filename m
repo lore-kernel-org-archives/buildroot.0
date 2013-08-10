@@ -1,31 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 10 Aug 2013 10:43:21 +0200
-Subject: [Buildroot] [git commit branch/next] eglibc: needs MMU
-Message-ID: <20130810084312.3A7E89A368@busybox.osuosl.org>
+Date: Sat, 10 Aug 2013 10:30:08 +0200
+Subject: [Buildroot] [git commit branch/next] uclibc: set MMU usage
+	accordingly
+Message-ID: <20130810084312.335E69A368@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=eeaf658c980d43c6a531614545334ab98d14bbe0
+commit: http://git.buildroot.net/buildroot/commit/?id=c798bec25b0f70061dcdb154708e41b962e6b74f
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+
+On architectures that lack a MMU (like blackfin) uclibc just undefined
+ARCH_HAS_MMU which disabled ARCH_USE_MMU.
+But for other architectures which may or may not have one like ARM we
+need to set this according to user choice.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- toolchain/toolchain-buildroot/Config.in |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+ package/uclibc/uclibc.mk |   14 ++++++++++++++
+ 1 files changed, 14 insertions(+), 0 deletions(-)
 
-diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
-index 396a434..7a26441 100644
---- a/toolchain/toolchain-buildroot/Config.in
-+++ b/toolchain/toolchain-buildroot/Config.in
-@@ -22,6 +22,7 @@ config BR2_TOOLCHAIN_BUILDROOT_EGLIBC
- 		   BR2_mips64 || BR2_mips64el || BR2_powerpc || \
- 		   BR2_sh     || BR2_sh64     || BR2_sparc   || \
- 		   BR2_x86_64
-+	depends on BR2_USE_MMU
- 	select BR2_TOOLCHAIN_USES_GLIBC
- 	# our eglibc.mk enables RPC support
- 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
+diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
+index 644c531..e3681c7 100644
+--- a/package/uclibc/uclibc.mk
++++ b/package/uclibc/uclibc.mk
+@@ -242,6 +242,20 @@ endef
+ endif
+ 
+ #
++# MMU
++#
++
++ifeq ($(BR2_USE_MMU),y)
++define UCLIBC_MMU_CONFIG
++	$(call UCLIBC_OPT_SET,ARCH_USE_MMU,y,$(@D))
++endef
++else
++define UCLIBC_MMU_CONFIG
++	$(call UCLIBC_OPT_UNSET,ARCH_USE_MMU,$(@D))
++endef
++endif
++
++#
+ # IPv6
+ #
+ 
