@@ -1,63 +1,66 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 10 Aug 2013 21:11:12 +0200
-Subject: [Buildroot] [git commit] toolchain-external: don't create gdb
-	symlink when building host-gdb
-Message-ID: <20130810191104.E1E7E9B2C4@busybox.osuosl.org>
+Date: Sat, 10 Aug 2013 21:11:46 +0200
+Subject: [Buildroot] [git commit] uclibc: arc: Add susv3 legacy alias bcmp
+Message-ID: <20130810191140.CD4A19B2C4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=97565866e8a1da66d86d36b9cbd28fb1ffb8c2b2
+commit: http://git.buildroot.net/buildroot/commit/?id=b40ad28a54e17333fa380cf133e7f0ffc9834a46
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The external-toolchain infrastructure creates symbolic links for all
-tools in the host directory. However, when buildroot builds its own
-version of a cross debugger (BR2_PACKAGE_HOST_GDB), and the toolchain
-also provides a cross debugger, there would be two symbolic links for
-gdb in the host directory, which is confusing.
-An example use case is where the external toolchain only provides a
-64-bit gdbserver (e.g. Cavium Networks SDK) but the target is completely
-32-bit (e.g. n32 ABI). In this case, using gdbserver on target requires
-copying a bunch of 64-bit libraries to the target as well, just for gdb.
-In this case, one can let buildroot build both gdbserver as cross-gdb
-(both in 32-bit).
+This fixes the building of screen package for ARC
 
-This patch modifies the symlink creation so that no gdb (or gdbtui)
-symlink is created if buildroot is going to build a cross-gdb.
-
-Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+Reported-by: Mischa Jonker <mjonker@synopsys.com>
+Cc: Mischa Jonker <mjonker@synopsys.com>
+Signed-off-by: Vineet Gupta <vgupta@synopsys.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- toolchain/toolchain-external/ext-tool.mk |   10 ++++++++--
- 1 files changed, 8 insertions(+), 2 deletions(-)
+ .../uclibc/0.9.33-arc/fix-susv3-legacy-bcmp.patch  |   37 ++++++++++++++++++++
+ 1 files changed, 37 insertions(+), 0 deletions(-)
 
-diff --git a/toolchain/toolchain-external/ext-tool.mk b/toolchain/toolchain-external/ext-tool.mk
-index a3c40c8..01be85c 100644
---- a/toolchain/toolchain-external/ext-tool.mk
-+++ b/toolchain/toolchain-external/ext-tool.mk
-@@ -531,8 +531,9 @@ ifeq ($(BR2_BFIN_INSTALL_FLAT_SHARED),y)
- TOOLCHAIN_EXTERNAL_INSTALL += $(STAMP_DIR)/ext-toolchain-bfin-shared-flat-installed
- endif
- 
--# Build toolchain wrapper for preprocessor, C and C++ compiler, and setup
--# symlinks for everything else
-+# Build toolchain wrapper for preprocessor, C and C++ compiler and setup
-+# symlinks for everything else. Skip gdb symlink when we are building our
-+# own gdb to prevent two gdb's in output/host/usr/bin.
- $(HOST_DIR)/usr/bin/ext-toolchain-wrapper: $(TOOLCHAIN_EXTERNAL_INSTALL)
- 	$(Q)$(call MESSAGE,"Building ext-toolchain wrapper")
- 	mkdir -p $(HOST_DIR)/usr/bin; cd $(HOST_DIR)/usr/bin; \
-@@ -542,6 +543,11 @@ $(HOST_DIR)/usr/bin/ext-toolchain-wrapper: $(TOOLCHAIN_EXTERNAL_INSTALL)
- 		*cc|*cc-*|*++|*++-*|*cpp) \
- 			ln -sf $(@F) $$base; \
- 			;; \
-+		*gdb|*gdbtui) \
-+			if test "$(BR2_PACKAGE_HOST_GDB)" != "y"; then \
-+				ln -sf $$(echo $$i | sed 's%^$(HOST_DIR)%../..%') .; \
-+			fi \
-+			;; \
- 		*) \
- 			ln -sf $$(echo $$i | sed 's%^$(HOST_DIR)%../..%') .; \
- 			;; \
+diff --git a/package/uclibc/0.9.33-arc/fix-susv3-legacy-bcmp.patch b/package/uclibc/0.9.33-arc/fix-susv3-legacy-bcmp.patch
+new file mode 100644
+index 0000000..e0884ea
+--- /dev/null
++++ b/package/uclibc/0.9.33-arc/fix-susv3-legacy-bcmp.patch
+@@ -0,0 +1,37 @@
++From 0594ba53b9b8d9a1ac409fd187e4d1ba8f2e7f2a Mon Sep 17 00:00:00 2001
++From: Vineet Gupta <vgupta@synopsys.com>
++Date: Thu, 8 Aug 2013 15:41:51 +0530
++Subject: [PATCH] ARC: SuSv3 legacy support: Add "bcmp" alias for memcmp
++
++Although uClibc provides this already as UCLIBC_SUSV3_LEGACY_MACROS,
++that however requires UCLIBC_SUSV3_LEGACY to be switched off, causing a
++bunch of other things to be not available (usleep)
++
++Signed-off-by: Vineet Gupta <vgupta@synopsys.com>
++---
++ libc/string/arc/memcmp.S | 5 +++++
++ 1 file changed, 5 insertions(+)
++
++diff --git a/libc/string/arc/memcmp.S b/libc/string/arc/memcmp.S
++index 0c7c345..cb25990 100644
++--- a/libc/string/arc/memcmp.S
+++++ b/libc/string/arc/memcmp.S
++@@ -1,6 +1,7 @@
++ /* Copyright (C) 2007 ARC International (UK) LTD */
++ 
++ #include <bits/asm.h>
+++#include <features.h>
++ 
++ #ifdef __LITTLE_ENDIAN__
++ #define WORD2 r2
++@@ -115,3 +116,7 @@ ENTRY(memcmp)
++ 	j_s.d	[blink]
++ 	mov	r0,0
++ ENDFUNC(memcmp)
+++
+++#ifdef __UCLIBC_SUSV3_LEGACY__
+++strong_alias(memcmp,bcmp)
+++#endif
++-- 
++1.8.1.2
++
