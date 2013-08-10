@@ -1,55 +1,25 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 10 Aug 2013 21:32:05 +0200
-Subject: [Buildroot] [PATCH] tar: avoid ccache chicken and egg problem
- when bootstrapping tar
-In-Reply-To: <20130703205733.GA11235@berrier.lan>
-References: <20130703205733.GA11235@berrier.lan>
-Message-ID: <20130810213205.4ad62101@skate>
+From: Simon Dawson <spdawson@gmail.com>
+Date: Sat, 10 Aug 2013 20:47:05 +0100
+Subject: [Buildroot] [PATCH 1/1] gcc: fix libstdc++_pic for AVR32
+In-Reply-To: <20130810210616.51dbcbf9@skate>
+References: <1376025370-9467-1-git-send-email-alexander.lukichev@gmail.com>
+ <20130810210616.51dbcbf9@skate>
+Message-ID: <CAHt8ZCPX1TOFRPZHVjLtt3ScTL=2vc7oYwj0u9pPd3N8mSTVsg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Wade Berrier,
+On 10 August 2013 20:06, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Simon, Thiago, as our AVR32 people, why do you think of Alexander's
+> patch? Can you give it a spin and tell me what you think?
 
-On Wed, 3 Jul 2013 14:57:35 -0600, Wade Berrier wrote:
-> Signed-off-by: Wade Berrier <wberrier@gmail.com>
-> ---
->  package/tar/tar.mk |    5 +++++
->  1 file changed, 5 insertions(+)
-> 
-> diff --git a/package/tar/tar.mk b/package/tar/tar.mk
-> index 3ffeaf0..56443a8 100644
-> --- a/package/tar/tar.mk
-> +++ b/package/tar/tar.mk
-> @@ -20,6 +20,11 @@ $(eval $(autotools-package))
->  # host-tar: use cpio.gz instead of tar.gz to prevent chicken-egg problem
->  # of needing tar to build tar.
->  HOST_TAR_SOURCE = tar-$(TAR_VERSION).cpio.gz
-> +
-> +# ccache isn't available yet when building for the host
-> +HOST_TAR_CONF_ENV = \
-> +	CC="$(HOSTCC_NOCCACHE)"
-> +
->  define HOST_TAR_EXTRACT_CMDS
->  	mkdir -p $(@D)
->  	cd $(@D) && \
+I'm not sure what specific problem this patch is meant to address.
 
-With the patch series from Thomas De Schampheleire that I have just
-committed, I think this patch is no longer necessary: all dependencies
-that are pulled by the support/dependencies/dependencies.mk code are no
-longer built through ccache, they are all built with HOSTCC_NOCCACHE.
+Alexander: are you trying to solve a build problem here? Or a target
+runtime problem? Perhaps the patch description could be expanded a
+little...?
 
-Note that the patches from Thomas have been committed in the 'next'
-branch, they will be part in the 2013.11 release of Buildroot. They
-will land in the 'master' branch of Buildroot when 2013.08 is released.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Simon
