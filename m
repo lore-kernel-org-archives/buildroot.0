@@ -1,45 +1,36 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 12 Aug 2013 10:37:46 -0300
-Subject: [Buildroot] [PATCH] readline: use normal/default install target
-Message-ID: <1376314666-26777-1-git-send-email-gustavo@zacarias.com.ar>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Mon, 12 Aug 2013 15:50:09 +0200
+Subject: [Buildroot] [PATCH] aircrack-ng: fix static build
+Message-ID: <1376315409-12258-1-git-send-email-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since the custom INSTALL_TARGET doesn't consider static builds it breaks
-horribly and there's no need with the current version since it works
-just fine with a little varnish to remove samples. Fixes:
-http://autobuild.buildroot.net/results/5a6/5a62c38ec621d49230d76981db6024035e88804a/
+When static build and sqlite3 support are enabled together,
+link flags needs to be defined in the right order.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Fixes http://autobuild.buildroot.org/results/a74/a74ced69052c1d0a91dbe32483fd0612d1bf24a
+
+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 ---
- package/readline/readline.mk | 12 ++++--------
- 1 file changed, 4 insertions(+), 8 deletions(-)
+ package/aircrack-ng/aircrack-ng.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/readline/readline.mk b/package/readline/readline.mk
-index 0c883bc..ff55199 100644
---- a/package/readline/readline.mk
-+++ b/package/readline/readline.mk
-@@ -13,14 +13,10 @@ READLINE_CONF_ENV = bash_cv_func_sigsetjmp=yes
- READLINE_LICENSE = GPLv3+
- READLINE_LICENSE_FILES = COPYING
+diff --git a/package/aircrack-ng/aircrack-ng.mk b/package/aircrack-ng/aircrack-ng.mk
+index fbefd74..00f4bac 100644
+--- a/package/aircrack-ng/aircrack-ng.mk
++++ b/package/aircrack-ng/aircrack-ng.mk
+@@ -13,7 +13,8 @@ AIRCRACK_NG_DEPENDENCIES = openssl
  
--define READLINE_INSTALL_TARGET_CMDS
--	$(MAKE1) DESTDIR=$(TARGET_DIR) -C $(@D) uninstall
--	$(MAKE1) DESTDIR=$(TARGET_DIR) -C $(@D) install-shared uninstall-doc
--	chmod 775 $(TARGET_DIR)/usr/lib/libreadline.so.$(READLINE_VERSION) \
--		$(TARGET_DIR)/usr/lib/libhistory.so.$(READLINE_VERSION)
--	$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) \
--		$(TARGET_DIR)/usr/lib/libreadline.so.$(READLINE_VERSION) \
--		$(TARGET_DIR)/usr/lib/libhistory.so.$(READLINE_VERSION)
-+define READLINE_PURGE_EXAMPLES
-+	rm -rf $(TARGET_DIR)/usr/share/readline
- endef
+ ifeq ($(BR2_PACKAGE_SQLITE),y)
+ 	AIRCRACK_NG_MAKE_OPTS = sqlite=true
+-	AIRCRACK_NG_MAKE_OPTS += LIBSQL="-lsqlite3"
++	AIRCRACK_NG_MAKE_OPTS += \
++		LIBSQL="-lsqlite3$(if $(BR2_PREFER_STATIC_LIB), -ldl -lpthread)"
  
-+READLINE_POST_INSTALL_TARGET_HOOKS += READLINE_PURGE_EXAMPLES
-+
- $(eval $(autotools-package))
+ 	AIRCRACK_NG_DEPENDENCIES += sqlite
+ else
 -- 
-1.8.1.5
+1.8.3.4
