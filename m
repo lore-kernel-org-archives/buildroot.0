@@ -1,41 +1,40 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 12 Aug 2013 14:44:29 +0000 (UTC)
-Subject: [Buildroot] [Bug 6446] New: eglibc doesn't install ldconfig to
-	target
-Message-ID: <bug-6446-163@https.bugs.busybox.net/>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon, 12 Aug 2013 14:08:33 -0300
+Subject: [Buildroot] [PATCH] libcec: needs threads
+Message-ID: <1376327313-20317-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=6446
+Fixes:
+http://autobuild.buildroot.net/results/16a/16ad8b64e68477dcd663d07c600fd1be3164df81/
 
-           Summary: eglibc doesn't install ldconfig to target
-           Product: buildroot
-           Version: 2013.05
-          Platform: PC
-        OS/Version: Linux
-            Status: NEW
-          Severity: minor
-          Priority: P5
-         Component: Other
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: bluemrp9 at gmail.com
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/libcec/Config.in | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-
-Created attachment 5030
-  --> https://bugs.busybox.net/attachment.cgi?id=5030
-install ldconfig to target
-
-I am not 100% sure this is a bug.  I noticed that when using the new
-experimental eglibc package, ldconfig does not get installed to the target. 
-Attached is a patch.  I'm also not sure if anything else needs installed as
-well (like ldd).
-
+diff --git a/package/libcec/Config.in b/package/libcec/Config.in
+index b1fa03b..7a67952 100644
+--- a/package/libcec/Config.in
++++ b/package/libcec/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_LIBCEC
+ 	bool "libcec"
+ 	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	help
+ 	  libcec allows you in combination with the right hardware to
+ 	  control your home theater devices with your TV remote
+@@ -8,5 +9,5 @@ config BR2_PACKAGE_LIBCEC
+ 
+ 	  http://libcec.pulse-eight.com
+ 
+-comment "libcec requires C++ support in toolchain"
+-	depends on !BR2_INSTALL_LIBSTDCPP
++comment "libcec requires C++ and threading support in toolchain"
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+1.8.1.5
