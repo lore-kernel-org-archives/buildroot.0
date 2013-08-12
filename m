@@ -1,117 +1,93 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 12 Aug 2013 08:12:13 +0200
-Subject: [Buildroot] [PATCH 3 of 6 v2] linux: add support for custom
- Mercurial repository
-In-Reply-To: <702ce86cc56aec78ac12.1374650580@BEANTN0L019720>
-References: <patchbomb.1374650577@BEANTN0L019720>
- <702ce86cc56aec78ac12.1374650580@BEANTN0L019720>
-Message-ID: <52087CBD.10501@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 12 Aug 2013 10:12:13 +0200
+Subject: [Buildroot] [git commit branch/next] luasec: New package
+Message-ID: <20130812081246.609CE9B2E2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 24/07/13 09:23, Thomas De Schampheleire wrote:
-[snip]
-> diff --git a/linux/Config.in b/linux/Config.in
-> --- a/linux/Config.in
-> +++ b/linux/Config.in
-> @@ -52,6 +52,12 @@ config BR2_LINUX_KERNEL_CUSTOM_GIT
->   	  This option allows Buildroot to get the Linux kernel source
->   	  code from a Git repository.
->   
-> +config BR2_LINUX_KERNEL_CUSTOM_HG
-> +	bool "Custom Mercurial repository"
-> +	help
-> +	  This option allows Buildroot to get the Linux kernel source
-> +	  code from a Mercurial repository.
-> +
->   endchoice
->   
->   config BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE
-> @@ -62,24 +68,26 @@ config BR2_LINUX_KERNEL_CUSTOM_TARBALL_L
->   	string "URL of custom kernel tarball"
->   	depends on BR2_LINUX_KERNEL_CUSTOM_TARBALL
->   
-> -config BR2_LINUX_KERNEL_CUSTOM_GIT_REPO_URL
-> -	string "URL of custom Git repository"
-> -	depends on BR2_LINUX_KERNEL_CUSTOM_GIT
-> +if BR2_LINUX_KERNEL_CUSTOM_GIT || BR2_LINUX_KERNEL_CUSTOM_HG
->   
-> -config BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION
-> -	string "Custom Git version"
-> -	depends on BR2_LINUX_KERNEL_CUSTOM_GIT
-> +config BR2_LINUX_KERNEL_CUSTOM_REPO_URL
-> +	string "URL of custom repository"
+commit: http://git.buildroot.net/buildroot/commit/?id=61cdd3c7600876d87e7b3c7e943a99bb3dfef172
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
- Given that string options can't be propagated from their legacy values, 
-and since the name of an option isn't really that important, I'd keep 
-the _GIT_ names for the mercurial options as well.
+LuaSec is a Lua binding for OpenSSL library to provide TLS/SSL
+communication.
 
- If we do rename the option symbol names, then I would make sure that it 
-is propagated:
+[Thomas: adjust header in .mk file, add missing 'mkdir -p' before
+installation, remove useless quotes.]
 
-	default BR2_LINUX_KERNEL_CUSTOM_GIT_REPO_URL if BR2_LINUX_KERNEL_CUSTOM_GIT_REPO_URL != ""
+Signed-off-by: Assaf Inbal <shmuelzon@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/Config.in        |    1 +
+ package/luasec/Config.in |    9 +++++++++
+ package/luasec/luasec.mk |   33 +++++++++++++++++++++++++++++++++
+ 3 files changed, 43 insertions(+), 0 deletions(-)
 
-+ add a comment to the .legacy file so these hacks can be removed
-eventually.
-
- Also, you have to change the symbol names in the defconfigs as well
-(there are already 10 uses of this symbol).
-
-
- Regards,
- Arnout
-
-> +
-> +config BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION
-> +	string "Custom repository version"
->   	help
-> -	  Git revision to use in the format used by git rev-parse,
-> +	  Revision to use in the typical format used by Git/Mercurial
->   	  E.G. a sha id, a tag, branch, ..
->   
-> +endif
-> +
->   config BR2_LINUX_KERNEL_VERSION
->   	string
->   	default "3.10.1" if BR2_LINUX_KERNEL_LATEST_VERSION
->   	default BR2_DEFAULT_KERNEL_HEADERS if BR2_LINUX_KERNEL_SAME_AS_HEADERS
->   	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE if BR2_LINUX_KERNEL_CUSTOM_VERSION
->   	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
-> -	default $BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION if BR2_LINUX_KERNEL_CUSTOM_GIT
-> +	default $BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION if BR2_LINUX_KERNEL_CUSTOM_HG || BR2_LINUX_KERNEL_CUSTOM_GIT
->   
->   #
->   # Patch selection
-> diff --git a/linux/linux.mk b/linux/linux.mk
-> --- a/linux/linux.mk
-> +++ b/linux/linux.mk
-> @@ -14,8 +14,11 @@ LINUX_TARBALL = $(call qstrip,$(BR2_LINU
->   LINUX_SITE = $(patsubst %/,%,$(dir $(LINUX_TARBALL)))
->   LINUX_SOURCE = $(notdir $(LINUX_TARBALL))
->   else ifeq ($(BR2_LINUX_KERNEL_CUSTOM_GIT),y)
-> -LINUX_SITE = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_GIT_REPO_URL))
-> +LINUX_SITE = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_REPO_URL))
->   LINUX_SITE_METHOD = git
-> +else ifeq ($(BR2_LINUX_KERNEL_CUSTOM_HG),y)
-> +LINUX_SITE = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_REPO_URL))
-> +LINUX_SITE_METHOD = hg
->   else
->   LINUX_SOURCE = linux-$(LINUX_VERSION).tar.xz
->   # In X.Y.Z, get X and Y. We replace dots and dashes by spaces in order
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
-
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+diff --git a/package/Config.in b/package/Config.in
+index f27ba2b..d5453fe 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -336,6 +336,7 @@ source "package/luaexpat/Config.in"
+ source "package/luaexpatutils/Config.in"
+ source "package/luafilesystem/Config.in"
+ source "package/luaposix/Config.in"
++source "package/luasec/Config.in"
+ source "package/luasocket/Config.in"
+ source "package/lua-ev/Config.in"
+ source "package/lua-msgpack-native/Config.in"
+diff --git a/package/luasec/Config.in b/package/luasec/Config.in
+new file mode 100644
+index 0000000..2d303c1
+--- /dev/null
++++ b/package/luasec/Config.in
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_LUASEC
++	bool "luasec"
++	select BR2_PACKAGE_OPENSSL
++	select BR2_PACKAGE_LUASOCKET
++	help
++	  LuaSec is a binding for OpenSSL library to provide TLS/SSL
++	  communication.
++
++	  http://www.inf.puc-rio.br/~brunoos/luasec/
+diff --git a/package/luasec/luasec.mk b/package/luasec/luasec.mk
+new file mode 100644
+index 0000000..053309f
+--- /dev/null
++++ b/package/luasec/luasec.mk
+@@ -0,0 +1,33 @@
++################################################################################
++#
++# luasec
++#
++################################################################################
++
++LUASEC_VERSION = 0.4.1
++LUASEC_SITE = http://www.inf.puc-rio.br/~brunoos/luasec/download/
++LUASEC_LICENSE = MIT
++LUASEC_LICENSE_FILES = LICENSE
++LUASEC_DEPENDENCIES = lua openssl
++
++define LUASEC_BUILD_CMDS
++	$(MAKE) -C $(@D) CC="$(TARGET_CC)" LD="$(TARGET_CC)" \
++		CFLAGS="$(TARGET_CFLAGS) -fPIC" \
++		LDFLAGS="$(TARGET_LDFLAGS) -shared" linux
++endef
++
++define LUASEC_INSTALL_TARGET_CMDS
++	mkdir -p $(TARGET_DIR)/usr/share/lua
++	mkdir -p $(TARGET_DIR)/usr/lib/lua
++	$(MAKE) -C $(@D) \
++		LUAPATH="$(TARGET_DIR)/usr/share/lua" \
++		LUACPATH="$(TARGET_DIR)/usr/lib/lua" install
++endef
++
++define LUASEC_UNINSTALL_TARGET_CMDS
++	rm -f $(TARGET_DIR)/usr/lib/lua/ssl.so
++	rm -rf $(TARGET_DIR)/usr/share/lua/ssl
++	rm -f $(TARGET_DIR)/usr/share/lua/ssl.lua
++endef
++
++$(eval $(generic-package))
