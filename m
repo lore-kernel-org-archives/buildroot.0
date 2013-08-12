@@ -1,85 +1,52 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 12 Aug 2013 23:01:32 +0200
-Subject: [Buildroot] List of pending patches: what to do?
-In-Reply-To: <CAAXf6LXdqkH1ccdDNdUVdriKxKur3f8ZtV58AaCsQPspUxMLaw@mail.gmail.com>
-References: <20130731191415.545f7dff@skate>
- <CAHXCMMJ63sJ=m5V1c5+TqOn8TfdBop20gzDHjL85Ks1rYYU+-g@mail.gmail.com>
- <20130801182311.6bb6e57e@skate>
- <CAHXCMMJacpBKoSpKH8NRtDyto92ZZ6AA2bh2jFyOZx4L00cxFw@mail.gmail.com>
- <CAAXf6LXdqkH1ccdDNdUVdriKxKur3f8ZtV58AaCsQPspUxMLaw@mail.gmail.com>
-Message-ID: <52094D2C.7080001@mind.be>
+Date: Mon, 12 Aug 2013 23:35:48 +0200
+Subject: [Buildroot] rebuild dtb?
+In-Reply-To: <CALupW3Cjyr6D_kGPVMGoX=C_0YbdmfJT8t7DREFLvki6Y1odzQ@mail.gmail.com>
+References: <CALupW3Cjyr6D_kGPVMGoX=C_0YbdmfJT8t7DREFLvki6Y1odzQ@mail.gmail.com>
+Message-ID: <52095534.2060303@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 02/08/13 10:33, Thomas De Schampheleire wrote:
-> On Thu, Aug 1, 2013 at 11:30 PM, Samuel Martin <s.martin49@gmail.com> wrote:
->> Thomas, all,
->>
->> 2013/8/1 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>:
->>> Dear Samuel Martin,
->>>
->>> On Thu, 1 Aug 2013 00:13:35 +0200, Samuel Martin wrote:
->>>
->>>> 2013/7/31 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>:
->>>>
->>>>> http://patchwork.ozlabs.org/patch/243426 Fix bug with dependencies of *-rebuild and *-reconfigure
->>>>> http://patchwork.ozlabs.org/patch/172278 pkg-infra: limit -reconfigure and -rebuild actions
->>>> Both treat the same thing!
->>>> A "political decision" has to be made on this since it slightly
->>>> changes the way some BR commands work.
->>>
->>> Can we have a decision on those ones?
->>>
->>> On my side, I kind of like the fact that 'make blabla-rebuild' both
->>> rebuilds the blabla package and regenerates the root filesystem. It
->>> avoids the need for 'make blabla-rebuild && make'. However, it's true
->>> that it's inconsistent with 'make blabla-dirclean', which just removes
->>> the build directory, and therefore requires a 'make blabla-dirclean &&
->>> make' if you want to completely rebuild a package from scratch.
->>
->> IIRC, we talked about this during some BR dev days or patchwork-day
->> session, and in the end we kept statu quo.
->>
->> I'd rather be in favor of these patches, although I barely use the
->> *-re{configure,build} targets;
-
-  I also don't use them because they're not convenient :-) I typically use
-
-make foo-clean-for-rebuild foo
-
-so for me the patch would be really convenient (except that I typically 
-use several buildroot versions in parallel so I'll forget if I can use 
-the -rebuild target or not).
-
-
->> anyway it's just one opinion among others.
->>
+On 07/08/13 01:22, Steve deRosier wrote:
+> Hi all,
 >
-> I am currently used to -reconfigure and -rebuild to rebuild also the
-> rootfs, but I also agree it's inconsistent with the other targets. If
-> we want to be strict, then foo-reconfigure can only configure, not
-> build. And foo-rebuild can only build.
-> Hence, to get the original behavior of:
-> foo-reconfigure --> foo-reconfigure all
-> foo-rebuild     --> foo-rebuild all
+> I was wondering if there was a make target similar to linux-rebuild that
+> would force a rebuild of the dtb?
 >
-> Is that understanding correct?
-> As long as we can document this properly, also in the ChangeLog, then
-> I'm fine with this semantic change. Adding 'all' isn't the end of the
-> world.
+> We're using an override to allow a live source tree of the kernel for our
+> current kernel work. I'm doing some work on the device trees and I'd
+> really like a way to just rebuild the dtb and attach it to the kernel
+> image.  Alternately I've been using linux-rebuild and can continue to do so.
+>
+> However, I've noticed an issue with linux-rebuild with re: to the device
+> tree.  I have to make a modification to a kernel source (doesn't seem to
+> matter) to get it to rebuild + cat the dtb with the kernel.  Here's what
+> I see:
+>
+> I modify the dts only, then do a `make O=<my output dir> linux-rebuild`
+> and it does rebuild the dtb, but when I load the kernel on my target, my
+> dts changes don't take effect.  It doesn't look like it cat'd the dtb
+> with the kernel and created the image properly.
+>
+> I modify the dts, and I make a trivial change to a kernel file (in this
+> case arch/arm/mach-at91/pm.c), it rebuilds the file, the dtb, and
+> successfully does the cat of the kernel + dtb to make a new image.  When
+> I deploy it on my target and test, my dts changes are evident.
+>
+> Thoughts/help?
 
-  BTW the report of the last developer meeting [1] says that we were 
-going to accept these patches.
-
+  Seems like an issue with the kernel build system, not buildroot. If the 
+.dtb is not rebuilt in the output directory 
+(output/build/linux-*/arch/arm/boot/dts), then it's a kbuild problem. If 
+the .dtb is rebuilt but buildroot doesn't append it to the image, then 
+it's a buildroot problem.
 
   Regards,
   Arnout
 
-
-[1] http://elinux.org/Buildroot:DeveloperDaysFOSDEM2013#Action_point_list
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
