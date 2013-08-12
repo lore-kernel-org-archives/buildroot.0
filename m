@@ -1,26 +1,61 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 12 Aug 2013 19:46:12 +0200
-Subject: [Buildroot] [PATCH 10/12] luasec: New package
-In-Reply-To: <1369054604-26139-10-git-send-email-shmuelzon@gmail.com>
-References: <1369054604-26139-1-git-send-email-shmuelzon@gmail.com>
- <1369054604-26139-10-git-send-email-shmuelzon@gmail.com>
-Message-ID: <20130812194612.5a41f0fd@skate>
+Date: Mon, 12 Aug 2013 20:01:08 +0200
+Subject: [Buildroot] [PATCH 1/1] ola: new package
+In-Reply-To: <CALy4uEXhixrLNKzrRVsdYqCeNer6XPB_kXKwJepH8Pnh9+M+mA@mail.gmail.com>
+References: <1375881032-23901-1-git-send-email-blanco.ether@gmail.com>
+ <20130810191316.7fd6fdbe@skate>
+ <CALy4uEXhixrLNKzrRVsdYqCeNer6XPB_kXKwJepH8Pnh9+M+mA@mail.gmail.com>
+Message-ID: <20130812200108.3e03fc40@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Assaf Inbal,
+Dear David Skok,
 
-On Mon, 20 May 2013 15:56:42 +0300, Assaf Inbal wrote:
-> LuaSec is a Lua binding for OpenSSL library to provide TLS/SSL
-> communication.
+Please always keep the Buildroot mailing list Cc'ed when continuing
+discussions that started on the list.
+
+On Mon, 12 Aug 2013 08:26:57 -0400, David Skok wrote:
+
+> I've made the changes you point out.  My apologies but I don't know
+> what you mean by "patch is not wrapped" and is (is not?) proper
+> format.
+
+What I meant is that your latest patch was perfect.
+
+Often, when people send patches with their normal e-mail client, most
+e-mail clients tend to "wrap" lines at 80 characters or so: instead of
+having very very long lines, you have lines nicely wrapped at a
+reasonable length.
+
+However, while this is very useful when exchanging text, it falls apart
+when exchanging patches, because the wrapping feature of the e-mail
+clients breaks the patches and they can no longer be applied.
+
+By using 'git send-email' (as you did), you make sure that your e-mail
+client will not interfere with how the patch is sent, and specifically
+that it doesn't get wrapped.
+
+> I use git command line outlined in buildroot manual to send
+> it.  I am new to contributing to open source and am doing my best to
+> learn compliance for contribution.  Thank you for your patience so
+> far.
 > 
-> Signed-off-by: Assaf Inbal <shmuelzon@gmail.com>
+> Regarding the compile problem.  I have worked with the maintainer
+> previously while I was testing package to correct compile issues.  I
+> also test result with success.  The external compiler I used at the
+> time was linaro 2013.01 which was option in buildroot for ARM A8 then.
+>  I will verify error with configuration you report and find a solution
+> asap.
 
-Applied, thanks, after making the change suggested by Fran?ois and a
-few other cosmetic changes.
+I must say I haven't tested with a Linaro toolchain, which is glibc
+based, and I only tested with an uClibc based toolchain. However,
+seeing the message, I don't really suspect a glibc vs. uClibc
+difference.
+
+Best regards,
 
 Thomas
 -- 
