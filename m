@@ -1,93 +1,111 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 12 Aug 2013 07:59:37 +0200
-Subject: [Buildroot] [PATCH 1 of 6 v2] Config.in.legacy: update
-	description
-In-Reply-To: <2942a6d3dd9f0f3fd864.1374650578@BEANTN0L019720>
+Date: Mon, 12 Aug 2013 08:12:13 +0200
+Subject: [Buildroot] [PATCH 3 of 6 v2] linux: add support for custom
+ Mercurial repository
+In-Reply-To: <702ce86cc56aec78ac12.1374650580@BEANTN0L019720>
 References: <patchbomb.1374650577@BEANTN0L019720>
- <2942a6d3dd9f0f3fd864.1374650578@BEANTN0L019720>
-Message-ID: <520879C9.8000000@mind.be>
+ <702ce86cc56aec78ac12.1374650580@BEANTN0L019720>
+Message-ID: <52087CBD.10501@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 24/07/13 09:22, Thomas De Schampheleire wrote:
-> The existing comments in Config.in.legacy are not entirely in-line with
-> current practice. The comments implies that BR2_LEGACY should not be set when
-> the conversion from old-to-new symbol can be done automatically using the
-> appropriate 'select' statements. However, none of the existing legacy options
-> does it this way. Moreover, I think it's intentional that the user is notified
-> of the change, so that the removal of the legacy options in later buildroot
-> versions no longer poses a problem.
->
-> Additionally, I have added an example of how to handle the renaming of a string
-> config option. Because a string option cannot 'select' something else, a wrapper
-> symbol is needed of type bool.
->
-> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+On 24/07/13 09:23, Thomas De Schampheleire wrote:
+[snip]
+> diff --git a/linux/Config.in b/linux/Config.in
+> --- a/linux/Config.in
+> +++ b/linux/Config.in
+> @@ -52,6 +52,12 @@ config BR2_LINUX_KERNEL_CUSTOM_GIT
+>   	  This option allows Buildroot to get the Linux kernel source
+>   	  code from a Git repository.
+>   
+> +config BR2_LINUX_KERNEL_CUSTOM_HG
+> +	bool "Custom Mercurial repository"
+> +	help
+> +	  This option allows Buildroot to get the Linux kernel source
+> +	  code from a Mercurial repository.
+> +
+>   endchoice
+>   
+>   config BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE
+> @@ -62,24 +68,26 @@ config BR2_LINUX_KERNEL_CUSTOM_TARBALL_L
+>   	string "URL of custom kernel tarball"
+>   	depends on BR2_LINUX_KERNEL_CUSTOM_TARBALL
+>   
+> -config BR2_LINUX_KERNEL_CUSTOM_GIT_REPO_URL
+> -	string "URL of custom Git repository"
+> -	depends on BR2_LINUX_KERNEL_CUSTOM_GIT
+> +if BR2_LINUX_KERNEL_CUSTOM_GIT || BR2_LINUX_KERNEL_CUSTOM_HG
+>   
+> -config BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION
+> -	string "Custom Git version"
+> -	depends on BR2_LINUX_KERNEL_CUSTOM_GIT
+> +config BR2_LINUX_KERNEL_CUSTOM_REPO_URL
+> +	string "URL of custom repository"
 
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ Given that string options can't be propagated from their legacy values, 
+and since the name of an option isn't really that important, I'd keep 
+the _GIT_ names for the mercurial options as well.
 
-  Note, however, that when you change a string option, it is quite 
-difficult to propagate the old value to the new symbol automatically 
-(you'd have to add a default to the new option). So renaming string 
-options should be avoided.
+ If we do rename the option symbol names, then I would make sure that it 
+is propagated:
 
-  Regards,
-  Arnout
+	default BR2_LINUX_KERNEL_CUSTOM_GIT_REPO_URL if BR2_LINUX_KERNEL_CUSTOM_GIT_REPO_URL != ""
 
->
-> ---
-> (v2): new patch in this series
->
->   Config.in.legacy |  22 +++++++++++++++++-----
->   1 files changed, 17 insertions(+), 5 deletions(-)
->
-> diff --git a/Config.in.legacy b/Config.in.legacy
-> --- a/Config.in.legacy
-> +++ b/Config.in.legacy
-> @@ -3,11 +3,10 @@
++ add a comment to the .legacy file so these hacks can be removed
+eventually.
+
+ Also, you have to change the symbol names in the defconfigs as well
+(there are already 10 uses of this symbol).
+
+
+ Regards,
+ Arnout
+
+> +
+> +config BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION
+> +	string "Custom repository version"
+>   	help
+> -	  Git revision to use in the format used by git rev-parse,
+> +	  Revision to use in the typical format used by Git/Mercurial
+>   	  E.G. a sha id, a tag, branch, ..
+>   
+> +endif
+> +
+>   config BR2_LINUX_KERNEL_VERSION
+>   	string
+>   	default "3.10.1" if BR2_LINUX_KERNEL_LATEST_VERSION
+>   	default BR2_DEFAULT_KERNEL_HEADERS if BR2_LINUX_KERNEL_SAME_AS_HEADERS
+>   	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE if BR2_LINUX_KERNEL_CUSTOM_VERSION
+>   	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
+> -	default $BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION if BR2_LINUX_KERNEL_CUSTOM_GIT
+> +	default $BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION if BR2_LINUX_KERNEL_CUSTOM_HG || BR2_LINUX_KERNEL_CUSTOM_GIT
+>   
 >   #
->   # When an existing Config.in symbol is removed, it should be added again in this
->   # file, and take appropriate action to approximate backward compatibility. If
-> -# there is an equivalent (set of) new symbols, these can just be select'ed by
-> -# the old symbol. This makes sure that running 'make oldconfig' will make things
-> -# "just work" when upgrading to a new buildroot version. If the change is too
-> -# fundamental and cannot be fixed by a simple select, then the old symbol should
-> -# select BR2_LEGACY.  If that symbol is set, the build will issue an error.
-> +# there is an equivalent (set of) new symbols, these should be select'ed by
-> +# the old symbol. This will make the transition for the user more convenient.
-> +# The old symbol should select BR2_LEGACY, so that the user is informed at
-> +# build-time about selected legacy options.
->   #
->   # When adding legacy symbols to this file, add them to the front. The oldest
->   # symbols will be removed again after about two years.
-> @@ -15,6 +14,19 @@
->   # The symbol should be copied as-is from the place where it was previously
->   # defined, but the help text should be removed or replaced with something that
->   # explains how to fix it.
-> +# If the old symbol is of type string, and the symbol has been renamed, you
-> +# should add it as a bool with another name (BR2_<foo>_WRAP), that defaults
-> +# to y if the old string is not set at its default value. For example:
-> +#     config BR2_FOO_STRING
-> +#             string "Some foo string"
-> +# would become:
-> +#     config BR2_FOO_STRING_WRAP
-> +#             bool "Foo string option has been renamed."
-> +#             default y if BR2_FOO_STRING != ""
-> +#             depends on BR2_LEGACY
-> +#             help
-> +#               <suitable help text>
-> +#
->
->   config BR2_LEGACY
->   	bool
+>   # Patch selection
+> diff --git a/linux/linux.mk b/linux/linux.mk
+> --- a/linux/linux.mk
+> +++ b/linux/linux.mk
+> @@ -14,8 +14,11 @@ LINUX_TARBALL = $(call qstrip,$(BR2_LINU
+>   LINUX_SITE = $(patsubst %/,%,$(dir $(LINUX_TARBALL)))
+>   LINUX_SOURCE = $(notdir $(LINUX_TARBALL))
+>   else ifeq ($(BR2_LINUX_KERNEL_CUSTOM_GIT),y)
+> -LINUX_SITE = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_GIT_REPO_URL))
+> +LINUX_SITE = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_REPO_URL))
+>   LINUX_SITE_METHOD = git
+> +else ifeq ($(BR2_LINUX_KERNEL_CUSTOM_HG),y)
+> +LINUX_SITE = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_REPO_URL))
+> +LINUX_SITE_METHOD = hg
+>   else
+>   LINUX_SOURCE = linux-$(LINUX_VERSION).tar.xz
+>   # In X.Y.Z, get X and Y. We replace dots and dashes by spaces in order
 > _______________________________________________
 > buildroot mailing list
 > buildroot at busybox.net
 > http://lists.busybox.net/mailman/listinfo/buildroot
->
+> 
 
 
 -- 
