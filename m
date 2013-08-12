@@ -1,44 +1,76 @@
-From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Mon, 12 Aug 2013 21:24:37 +0200
-Subject: [Buildroot] buildroot internal arm toolchain: gcc-final fails
- with supposedly large-file support
-In-Reply-To: <52090BC7.5020500@mind.be>
-References: <CAAXf6LWPA6C9EUpyqjZnjz2mtECRzoKLtwsGJrde7PHdUCUW8g@mail.gmail.com>
- <CAAXf6LVd+SMQt_H9QTCXvS485Nc+bp8AOiUTwA4OmKijR2byZg@mail.gmail.com>
- <CAHXCMM+4eOtm8mRH1Sf=QL72Sz6bss0fJQfvkFa3Qhch92bw-w@mail.gmail.com>
- <20130729133930.09abcb5b@skate>
- <CAAXf6LUib4JKaLQjzqicv3PbDhP6ZAT-ZZVFcxRNmugAgA13ZQ@mail.gmail.com>
- <52090BC7.5020500@mind.be>
-Message-ID: <CAAXf6LWiPuamB03YWL5BT9jiDEiOu+O38T5vHm0qU38Eyo6qNg@mail.gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 12 Aug 2013 21:36:49 +0200
+Subject: [Buildroot] Removing/solving gettext dependencies in libuio
+In-Reply-To: <CAAXf6LWskVXQjvLYeEBx_JJxuTujMZEq2JzqLMftXXUSaPTQHg@mail.gmail.com>
+References: <CAAXf6LWskVXQjvLYeEBx_JJxuTujMZEq2JzqLMftXXUSaPTQHg@mail.gmail.com>
+Message-ID: <52093951.7060608@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Arnout,
-
-Op 12-aug.-2013 20:45 schreef "Arnout Vandecappelle" <arnout@mind.be> het
-volgende:
+On 30/07/13 14:28, Thomas De Schampheleire wrote:
+> Hi,
 >
-> On 29/07/13 14:06, Thomas De Schampheleire wrote:
->>
->> So maybe it is build-machine related? Or depending on if some host
->> package is installed or not?
->> Would it help if I send a build log?
->> If I have time, I can try to look into it myself, but not right now...
+> I'm adding the library libuio to buildroot
+> (https://github.com/Linutronix/libuio/).
+> This library expects gettext to be present, but I want to avoid adding
+> this dependency to buildroot because it really isn't needed.
+>
+> What is the best way to solve this?
+
+  Isn't docs/manual/adding-packages-gettext.txt sufficient?
+
+
+  Regards,
+  Arnout
+
+> The first alternative is to patch the package and remove the
+> problematic code. These changes are in configure.ac, Makefile.am, the
+> patch is fairly short. This change is not acceptable upstream (I
+> guess).
+>
+> A second alternative is to change libuio to recognize --disable-nls.
+> However, I'm not sure how to do that.
+> The configure.ac file contains:
+>
+>    AM_GNU_GETTEXT([external])
+>    AM_GNU_GETTEXT_VERSION([0.17])
+>
+> This macro is provided by gettext itself, so without gettext this doesn't work.
+> I tried something like:
+>
+> AC_ARG_ENABLE([nls], AC_HELP_STRING([--disable-nls], [Do not use
+> Native Language Support]),
+>                USE_NLS=$enableval, USE_NLS=yes)
+>
+> AC_SUBST(USE_NLS)
+>
+> AS_IF([test "x$enable_nls" == xyes],
+>    AM_GNU_GETTEXT([external])
+>    AM_GNU_GETTEXT_VERSION([0.17])
+> )
+>
+> but I still get complaints about AM_GNU_GETTEXT not recognized.
+> I have tried finding good examples of implementing --disable-nls
+> without requiring gettext, but I can't find any.
 >
 >
->  I you could just start a clean build of this .config in a different O=
-directory, we can see if it is build machine related or not... What kind of
-build machine do you have?
+> Any input welcome,
+>
+> Thomas
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+>
 
-Meanwhile, Francois Perrad also noticed this issue and submitted a patch
-for it, which has been applied. Problem fixed...
-(Don't have the commit id at hand, sorry)
 
-Best regards,
-Thomas
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130812/86e49f13/attachment.html>
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
