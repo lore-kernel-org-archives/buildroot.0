@@ -1,100 +1,113 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 12 Aug 2013 08:30:06 +0200 (CEST)
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2013-08-11
-Message-ID: <20130812063006.AC13852C5F1@lolut.humanoidz.org>
+From: Alexander Lukichev <alexander.lukichev@gmail.com>
+Date: Mon, 12 Aug 2013 10:21:43 +0300
+Subject: [Buildroot] [PATCH 1/1] gcc: fix libstdc++_pic for AVR32
+In-Reply-To: <CAHt8ZCPX1TOFRPZHVjLtt3ScTL=2vc7oYwj0u9pPd3N8mSTVsg@mail.gmail.com>
+References: <1376025370-9467-1-git-send-email-alexander.lukichev@gmail.com>
+ <20130810210616.51dbcbf9@skate>
+ <CAHt8ZCPX1TOFRPZHVjLtt3ScTL=2vc7oYwj0u9pPd3N8mSTVsg@mail.gmail.com>
+Message-ID: <CAAHaz6H5BTFV5t5FUNGmM5EVNdQziSQzifFmdZbmcrgdiV4qCQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Build statistics for 2013-08-11
-===============================
+Hello,
 
-        success : 91 
-       failures : 38 
-       timeouts : 1  
-          TOTAL : 130
+  Sorry for the late reply, was on a trip on weekend.
 
-Classification of failures by reason
-====================================
+2013/8/10 Simon Dawson <spdawson@gmail.com>
+> I'm not sure what specific problem this patch is meant to address.
+> Alexander: are you trying to solve a build problem here? Or a target
+> runtime problem? Perhaps the patch description could be expanded a
+> little...?
 
-                  ltrace-0.7.2 | 5 
-media-ctl-ac40b79f002a2315f... | 2 
-               libglib2-2.36.3 | 2 
-                      bash-4.2 | 2 
-                  cppcms-1.0.3 | 1 
-                       unknown | 1 
-               libgtk2-2.24.18 | 1 
-                  zeromq-3.2.3 | 1 
-             gdk-pixbuf-2.28.1 | 1 
-                 ffmpeg-0.8.12 | 1 
-                   dbus-1.4.26 | 1 
-                 qt5base-5.0.2 | 1 
-                directfb-1.6.3 | 1 
-               aircrack-ng-1.1 | 1 
-                 netsnmp-5.7.2 | 1 
-                      icu-51.2 | 1 
-                 rt-tests-0.83 | 1 
-               libevent-2.0.14 | 1 
-               libcap-ng-0.6.6 | 1 
-        liblog4c-localtime-1.0 | 1 
-                  tstools-1_11 | 1 
-                    systemd-44 | 1 
-               ruby-1.9.3-p429 | 1 
-              strongswan-5.0.4 | 1 
-           imagemagick-6.8.6-2 | 1 
-                sdl_ttf-2.0.11 | 1 
-                  libv4l-0.8.9 | 1 
-                libtirpc-0.2.2 | 1 
-                log4cxx-0.10.0 | 1 
-                 libunwind-1.1 | 1 
-               alsa-lib-1.0.26 | 1 
-          sane-backends-1.0.22 | 1 
+  The patch I sent fixes a build problem for me, that arises during the
+final stage when libstdc++ is built:
 
-Detail of failures
-===================
+/home/alukiche/Projects/buildroot/buildroot-project/output/host/usr/avr32-buildroot-linux-uclibc/bin/ar
+cru libstdc++_pic.a *.o ../libsupc++/*.o
+/home/alukiche/Projects/buildroot/buildroot-project/output/host/usr/avr32-buildroot-linux-uclibc/bin/ar:
+*.o: No such file or directory
+make[5]: *** [install-exec-local] Error 1
+make[5]: Leaving directory
+`/home/alukiche/Projects/buildroot/buildroot-project/output/build/host-gcc-final-4.2.2-avr32-2.1.5/build/avr32-buildroot-linux-uclibc/libstdc++-v3/src'
+make[4]: *** [install-am] Error 2
+make[4]: Leaving directory
+`/home/alukiche/Projects/buildroot/buildroot-project/output/build/host-gcc-final-4.2.2-avr32-2.1.5/build/avr32-buildroot-linux-uclibc/libstdc++-v3/src'
+make[3]: *** [install-recursive] Error 1
+make[3]: Leaving directory
+`/home/alukiche/Projects/buildroot/buildroot-project/output/build/host-gcc-final-4.2.2-avr32-2.1.5/build/avr32-buildroot-linux-uclibc/libstdc++-v3'
+make[2]: *** [install-target-libstdc++-v3] Error 2
+make[2]: Leaving directory
+`/home/alukiche/Projects/buildroot/buildroot-project/output/build/host-gcc-final-4.2.2-avr32-2.1.5/build'
+make[1]: *** [install] Error 2
+make[1]: Leaving directory
+`/home/alukiche/Projects/buildroot/buildroot-project/output/build/host-gcc-final-4.2.2-avr32-2.1.5/build'
+make: ***
+[/home/alukiche/Projects/buildroot/buildroot-project/output/build/host-gcc-final-4.2.2-avr32-2.1.5/.stamp_host_installed]
+Error 2
 
-       arm |                aircrack-ng-1.1 | NOK | http://autobuild.buildroot.net/results/728c71bd946a16e48a107dc7701d3fb5f96e31a7/
-       arm |                alsa-lib-1.0.26 | NOK | http://autobuild.buildroot.net/results/14675749b981b2e1874d93e323e7cadbb5446e97/
-      i686 |                       bash-4.2 | NOK | http://autobuild.buildroot.net/results/82e33a497f5fe651e72af7c4d1a415b216f06f74/
-      i686 |                       bash-4.2 | NOK | http://autobuild.buildroot.net/results/8de3033db035f2301f3eb2c030a0fffa273ce8c5/
-    x86_64 |                   cppcms-1.0.3 | NOK | http://autobuild.buildroot.net/results/22974c549593de6a5c9bbd8db0654777e43677e7/
-    x86_64 |                    dbus-1.4.26 | NOK | http://autobuild.buildroot.net/results/0259e8d644ea28ff0da01104a9013f14969d1244/
-  mips64el |                 directfb-1.6.3 | NOK | http://autobuild.buildroot.net/results/0674c5e45938bae8fb429218b82535ce02feaa94/
-   aarch64 |                  ffmpeg-0.8.12 | NOK | http://autobuild.buildroot.net/results/2442567fb21f5cc2183787518d45f0e9369029da/
-   aarch64 |              gdk-pixbuf-2.28.1 | NOK | http://autobuild.buildroot.net/results/47389256f4fda90fcb027c0ed365b211a70cc94b/
-      bfin |                       icu-51.2 | NOK | http://autobuild.buildroot.net/results/a4c25aba785cf03472bdbf1276f96931906f54f6/
-microblaze |            imagemagick-6.8.6-2 | NOK | http://autobuild.buildroot.net/results/bd548e1981ce5786fafa60129b798b1264454de6/
-     avr32 |                libcap-ng-0.6.6 | NOK | http://autobuild.buildroot.net/results/94a06b3c7648838e5acbe412194783dd7ece1670/
-       arc |                libevent-2.0.14 | NOK | http://autobuild.buildroot.net/results/84e0c4cdb2994e777d07cc1516efd02fadc31a88/
-  mips64el |                libglib2-2.36.3 | NOK | http://autobuild.buildroot.net/results/9d513481bee33ef75066fad253ba3485a4496521/
-      bfin |                libglib2-2.36.3 | NOK | http://autobuild.buildroot.net/results/92f83ab3f8b3fa1f133eeb901ede070c56c2e06b/
-   powerpc |                libgtk2-2.24.18 | NOK | http://autobuild.buildroot.net/results/fc7d6a26e30e270f3a1e3e0e73ab3a972b3512e4/
-       arm |         liblog4c-localtime-1.0 | NOK | http://autobuild.buildroot.net/results/cbb5d20a871cfbdd9e79aae13ab052d77f27f3b1/
-       arm |                 libtirpc-0.2.2 | NOK | http://autobuild.buildroot.net/results/87826a4ad1071e4d936affd4e1daf1abf7551175/
-       arm |                  libunwind-1.1 | NOK | http://autobuild.buildroot.net/results/7ee1b01a12b40eecb39ac0bedcd61ab5d16f0b25/
-   aarch64 |                   libv4l-0.8.9 | NOK | http://autobuild.buildroot.net/results/33708d1afd52e049298f2284a2883b5bdfe39dbb/
-    xtensa |                 log4cxx-0.10.0 | NOK | http://autobuild.buildroot.net/results/ed28e4153c03e8bca6fe19a276aa07a20d1dd64d/
-   powerpc |                   ltrace-0.7.2 | NOK | http://autobuild.buildroot.net/results/11439b83c4f3b776f92cdc5cc22a7c3fae42428b/
-   powerpc |                   ltrace-0.7.2 | NOK | http://autobuild.buildroot.net/results/061ff5ec3e27a5445a0782f754d6e9f578b04b4c/
-      i686 |                   ltrace-0.7.2 | NOK | http://autobuild.buildroot.net/results/cd10ec88f4e1750862a81ce520c8a1d6573eba2f/
-   powerpc |                   ltrace-0.7.2 | NOK | http://autobuild.buildroot.net/results/e7067c8ea391ed6f4f92180e6d47f85343690c65/
-   powerpc |                   ltrace-0.7.2 | NOK | http://autobuild.buildroot.net/results/7406f8fb39f9a33d1fa3238489bdc6a21fd0507e/
-   powerpc | media-ctl-ac40b79f002a2315f... | NOK | http://autobuild.buildroot.net/results/05e2614d7189a7441c2c95a171762755786bb8a0/
-   powerpc | media-ctl-ac40b79f002a2315f... | NOK | http://autobuild.buildroot.net/results/4723c4328072f94dd94b0ff39144013b38c89236/
-    xtensa |                  netsnmp-5.7.2 | NOK | http://autobuild.buildroot.net/results/fd2ebeb070438fbd054d87653aae124197869ea3/
-      i686 |                  qt5base-5.0.2 | NOK | http://autobuild.buildroot.net/results/250ff766e660542688a54648746f7515ceb27731/
-    xtensa |                  rt-tests-0.83 | NOK | http://autobuild.buildroot.net/results/04f9c1b04179bf93bb5e0f7ee8d8e7ff9b0889f6/
-      sh4a |                ruby-1.9.3-p429 | NOK | http://autobuild.buildroot.net/results/cd2024df62b48ce1e636c1f8684b1e4c76db0abb/
-   aarch64 |           sane-backends-1.0.22 | NOK | http://autobuild.buildroot.net/results/6cdbd2a7cc8670f043232cb570cd4fdb667be4b9/
-       arm |                 sdl_ttf-2.0.11 | NOK | http://autobuild.buildroot.net/results/9a0c74cef444310decb5c3507efc9ffd1cee5630/
-   powerpc |               strongswan-5.0.4 | NOK | http://autobuild.buildroot.net/results/2c868de9e1ebcab5704029e55322ba76ba7cfcb2/
-   powerpc |                     systemd-44 | NOK | http://autobuild.buildroot.net/results/ee07b3581f3d572704177944aa48c23ce43e577e/
-  mips64el |                   tstools-1_11 | NOK | http://autobuild.buildroot.net/results/e1f4a08d9069aba1ffc4a56400bfd068fa3281ef/
-      i686 |                        unknown | TIM | http://autobuild.buildroot.net/results/01913b62669ebc061065cb66189eb9245c11d5e9/
-     avr32 |                   zeromq-3.2.3 | NOK | http://autobuild.buildroot.net/results/b745516bcd1c65e0251bd4c6a7868edb67e07938/
+  Lines in
+host-gcc-final-4.2.2-avr32-2.1.5/build/avr32-buildroot-linux-uclibc/libstdc++-v3/src/Makefile
 
+install-exec-local:
+ifeq ($(enable_shared),yes)
+    $(AR) cru libstdc++_pic.a *.o $(top_builddir)/libsupc++/*.o
+    $(INSTALL_DATA) libstdc++_pic.a $(DESTDIR)$(toolexeclibdir)
+endif
 
--- 
-http://autobuild.buildroot.net
+are triggered, failing to find object files for the library
+libstdc++_pic.a. These files are actually located in .libs/ subdirectory,
+not in the current directory (where that Makefile is located). This happens
+when I build AVR32 toolchain with C++ support. I have attached a defconfig
+that triggers the problem on my host machine.
+
+  The triggered lines come from a patch file named 300-libstdc++-pic.patch
+that has apparently been applied to GCC 4.2.2 before it was packaged into
+an archive file gcc-4.2.2-avr32-2.1.5.tar.bz2 (see .applied_patches_list
+inside this archive). Googling for it revealed that this patch has been
+used for different versions of the toolchain for AVR32 and MIPS, changing a
+little with each version to adapt to it. I have found several versions of
+this patch in a repository for Midge (a project for ADM5120 MIPS
+microcontroller):
+https://github.com/ZigFisher/Midge/tree/master/toolchain/gcc . The patch
+appears as early as 3.4.4 and alterates in reference to those object files
+between './' (in gcc 4.0.3) and '.libs/' (in gcc 3.4.4, 3.4.5, 3.4.6,
+4.1.0). I have not found a version of this patch for 4.2.2 but concluded
+that since it fails to find object files for libstdc++_pic.a in current
+directory and from version to version of gcc it alterates between './' and
+'.libs/', for 4.2.2 they must be in '.libs/'.
+
+  I have checked that object files in '.libs/' indeed contain position
+independent code (I looked at the build log, where -fPIC has been given to
+commands that compile these files; and checked randomly with 'nm <file> |
+grep _GLOBAL_OFFSET_TABLE_'). And I have build-tested several C++ packages
+with the built toolchain. I did not go as far as trying to run them: no
+AVR32 hardware at hand and I am not skilled enough to set up an AVR32
+virtual environment quickly.
+
+  Without this fix the GCC fails to build with C++ support always, at least
+on my host machine ('gcc (GCC) 4.5.1 20100924 (Red Hat 4.5.1-4)', binutils
+2.20.51.0.7-8.fc14). The fix solves the problem.
+
+  It seems strange to me that GCC 4.2.2 for AVR32 is so dependent on which
+machine it is built on: apparently not many people on this list have
+encountered the problem that I have experienced.
+
+  Thomas Petazzoni, should I send an updated version of my patch with a
+concise version of the explanation above or is it not worth it? Thanks.
+
+--
+Best regards,
+  Alexander Lukichev
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130812/3ec1dd0d/attachment-0001.html>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: defconfig
+Type: application/octet-stream
+Size: 260 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130812/3ec1dd0d/attachment-0001.obj>
