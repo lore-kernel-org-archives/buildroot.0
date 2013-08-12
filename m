@@ -1,86 +1,85 @@
-From: David Skok <blanco.ether@gmail.com>
-Date: Mon, 12 Aug 2013 14:36:19 -0400
-Subject: [Buildroot] [PATCH 1/1] ola: new package
-In-Reply-To: <20130812200108.3e03fc40@skate>
-References: <1375881032-23901-1-git-send-email-blanco.ether@gmail.com>
- <20130810191316.7fd6fdbe@skate>
- <CALy4uEXhixrLNKzrRVsdYqCeNer6XPB_kXKwJepH8Pnh9+M+mA@mail.gmail.com>
- <20130812200108.3e03fc40@skate>
-Message-ID: <CALy4uEXkhM0GFWZxnbUVBM_diEmU_jC35N6Y5zEM5GbERLq-0A@mail.gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 12 Aug 2013 17:58:43 +0200
+Subject: [Buildroot] [PATCH v2] buildroot: Add POST_RSYNC_HOOKS support
+In-Reply-To: <1375001692-12024-1-git-send-email-tjlee@ambarella.com>
+References: <CAAXf6LVM7yoWaVdKp90oYOyLbVS=OvNFMzQv2nvcXp-vUmTDww@mail.gmail.com>
+ <1375001692-12024-1-git-send-email-tjlee@ambarella.com>
+Message-ID: <52090633.8060904@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas,
+On 28/07/13 10:54, Tzu-Jung Lee wrote:
+> One of the use cases is for the 'local packages' to restore
+> the SCM info.  Some packages use this information to generate
+> version info during build time.  In this case, the local package
+> can have this hook to restore it by symbolic link for example.
+> 
+> Signed-off-by: Tzu-Jung Lee <tjlee@ambarella.com>
 
-Problem solved.  Details regarding source of problem are too
-confounding to explain.  As it happens to be Simon Newton, the source
-maintainer was about to release a new version within minutes of me
-contacting him and we (he) was able to resolve it prior to the new
-release.
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-Simon asked for and I provided him with details regarding how he can
-verify that future development compiles under buildroot as he is aware
-of and encourages Open lighting Architecture use in embedded
-environments.  Again, thank you for your patience.  I am encouraged to
-contribute more in the future where I can.
+ Although IMHO it's a bit of a hack to use it for that specific use 
+case. That use case would be better served with
 
-Dave
+rsync -au --cvs-exclude --include core $($(PKG)_RSYNC_OPTS) $(SRCDIR)/ $(@D)
+
+(note that it is possible to set FOO_RSYNC_OPTS in the override file).
+
+ Regards,
+ Arnout
+
+> ---
+> Include the comments aginst v1 from Thomas De Schampheleire:
+> 
+>    Updte manual for the new hook.
+>    Set the default hook to empty
+> 
+>   docs/manual/adding-packages-generic.txt | 1 +
+>   package/pkg-generic.mk                  | 2 ++
+>   2 files changed, 3 insertions(+)
+> 
+> diff --git a/docs/manual/adding-packages-generic.txt b/docs/manual/adding-packages-generic.txt
+> index faf70b1..2889add 100644
+> --- a/docs/manual/adding-packages-generic.txt
+> +++ b/docs/manual/adding-packages-generic.txt
+> @@ -441,6 +441,7 @@ The following hook points are available:
+>   
+>   * +LIBFOO_POST_DOWNLOAD_HOOKS+
+>   * +LIBFOO_POST_EXTRACT_HOOKS+
+> +* +LIBFOO_POST_RSYNC_HOOKS+
+>   * +LIBFOO_PRE_PATCH_HOOKS+
+>   * +LIBFOO_POST_PATCH_HOOKS+
+>   * +LIBFOO_PRE_CONFIGURE_HOOKS+
+> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+> index d9a12f2..3d3adc9 100644
+> --- a/package/pkg-generic.mk
+> +++ b/package/pkg-generic.mk
+> @@ -63,6 +63,7 @@ $(BUILD_DIR)/%/.stamp_rsynced:
+>   	@$(call MESSAGE,"Syncing from source dir $(SRCDIR)")
+>   	@test -d $(SRCDIR) || (echo "ERROR: $(SRCDIR) does not exist" ; exit 1)
+>   	rsync -au --cvs-exclude --include core $(SRCDIR)/ $(@D)
+> +	$(foreach hook,$($(PKG)_POST_RSYNC_HOOKS),$(call $(hook))$(sep))
+>   	$(Q)touch $@
+>   
+>   # Handle the SOURCE_CHECK and SHOW_EXTERNAL_DEPS cases for rsynced
+> @@ -337,6 +338,7 @@ $(2)_EXTRACT_CMDS ?= \
+>   # post-steps hooks
+>   $(2)_POST_DOWNLOAD_HOOKS        ?=
+>   $(2)_POST_EXTRACT_HOOKS         ?=
+> +$(2)_POST_RSYNC_HOOKS           ?=
+>   $(2)_PRE_PATCH_HOOKS            ?=
+>   $(2)_POST_PATCH_HOOKS           ?=
+>   $(2)_PRE_CONFIGURE_HOOKS        ?=
+> 
 
 
-
-On Mon, Aug 12, 2013 at 2:01 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Dear David Skok,
->
-> Please always keep the Buildroot mailing list Cc'ed when continuing
-> discussions that started on the list.
->
-> On Mon, 12 Aug 2013 08:26:57 -0400, David Skok wrote:
->
->> I've made the changes you point out.  My apologies but I don't know
->> what you mean by "patch is not wrapped" and is (is not?) proper
->> format.
->
-> What I meant is that your latest patch was perfect.
->
-> Often, when people send patches with their normal e-mail client, most
-> e-mail clients tend to "wrap" lines at 80 characters or so: instead of
-> having very very long lines, you have lines nicely wrapped at a
-> reasonable length.
->
-> However, while this is very useful when exchanging text, it falls apart
-> when exchanging patches, because the wrapping feature of the e-mail
-> clients breaks the patches and they can no longer be applied.
->
-> By using 'git send-email' (as you did), you make sure that your e-mail
-> client will not interfere with how the patch is sent, and specifically
-> that it doesn't get wrapped.
->
->> I use git command line outlined in buildroot manual to send
->> it.  I am new to contributing to open source and am doing my best to
->> learn compliance for contribution.  Thank you for your patience so
->> far.
->>
->> Regarding the compile problem.  I have worked with the maintainer
->> previously while I was testing package to correct compile issues.  I
->> also test result with success.  The external compiler I used at the
->> time was linaro 2013.01 which was option in buildroot for ARM A8 then.
->>  I will verify error with configuration you report and find a solution
->> asap.
->
-> I must say I haven't tested with a Linaro toolchain, which is glibc
-> based, and I only tested with an uClibc based toolchain. However,
-> seeing the message, I don't really suspect a glibc vs. uClibc
-> difference.
->
-> Best regards,
->
-> Thomas
-> --
-> Thomas Petazzoni, Free Electrons
-> Kernel, drivers, real-time and embedded Linux
-> development, consulting, training and support.
-> http://free-electrons.com
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
