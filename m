@@ -1,64 +1,71 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 12 Aug 2013 14:34:37 -0300
-Subject: [Buildroot] [PATCH] wayland: needs threads
-Message-ID: <1376328877-24327-1-git-send-email-gustavo@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 12 Aug 2013 19:42:42 +0200
+Subject: [Buildroot] [PATCH] arch/mips: Restrict n32 for Sourcery
+ CodeBench toolchains.
+In-Reply-To: <1376311394-17106-1-git-send-email-markos.chandras@imgtec.com>
+References: <1376311394-17106-1-git-send-email-markos.chandras@imgtec.com>
+Message-ID: <20130812194242.6fd25c55@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-http://autobuild.buildroot.net/results/383/383c6ac297250f87db9d03afa38d45b2c1adcb47/
+Dear Markos Chandras,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/multimedia/gst1-plugins-bad/Config.in | 1 +
- package/wayland/Config.in                     | 4 ++++
- package/weston/Config.in                      | 1 +
- 3 files changed, 6 insertions(+)
+On Mon, 12 Aug 2013 13:43:14 +0100, Markos Chandras wrote:
+> n32 is not supported in Sourcery CodeBench toolchains.
+> 
+> Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
+> ---
+> See
+> https://sourcery.mentor.com/GNUToolchain/release2477?@template=datasheet
+> --- arch/Config.in.mips | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
+> 
+> diff --git a/arch/Config.in.mips b/arch/Config.in.mips
+> index 6242bcc..a01d6bb 100644
+> --- a/arch/Config.in.mips
+> +++ b/arch/Config.in.mips
+> @@ -46,7 +46,10 @@ config BR2_MIPS_OABI32
+>  	bool "o32"
+>  config BR2_MIPS_NABI32
+>  	bool "n32"
+> -	depends on BR2_ARCH_IS_64
+> +	depends on BR2_ARCH_IS_64 && \
+> +		!BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201305 && \
+> +		!BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201209 && \
+> +		!BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201203
+>  config BR2_MIPS_NABI64
+>  	bool "n64"
+>  	depends on BR2_ARCH_IS_64
 
-diff --git a/package/multimedia/gst1-plugins-bad/Config.in b/package/multimedia/gst1-plugins-bad/Config.in
-index 878bf53..f30f2b3 100644
---- a/package/multimedia/gst1-plugins-bad/Config.in
-+++ b/package/multimedia/gst1-plugins-bad/Config.in
-@@ -355,6 +355,7 @@ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_DIRECTFB
- 
- config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_WAYLAND
- 	bool "wayland"
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # wayland
- 	select BR2_PACKAGE_WAYLAND
- 	help
- 	  Wayland Video Sink
-diff --git a/package/wayland/Config.in b/package/wayland/Config.in
-index e5d2649..591e0f0 100644
---- a/package/wayland/Config.in
-+++ b/package/wayland/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_WAYLAND
- 	bool "wayland"
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	select BR2_PACKAGE_LIBFFI
- 	select BR2_PACKAGE_EXPAT
- 	help
-@@ -8,3 +9,6 @@ config BR2_PACKAGE_WAYLAND
- 	  of the protocol.
- 
- 	  http://wayland.freedesktop.org/
-+
-+comment "wayland requires a toolchain with thread support"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/weston/Config.in b/package/weston/Config.in
-index 8871ce5..56eb135 100644
---- a/package/weston/Config.in
-+++ b/package/weston/Config.in
-@@ -11,6 +11,7 @@ config BR2_PACKAGE_WESTON
- 	select BR2_PACKAGE_JPEG
- 	select BR2_PACKAGE_MTDEV
- 	depends on BR2_PACKAGE_UDEV
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # wayland
- 	# Runtime dependency
- 	select BR2_PACKAGE_XKEYBOARD_CONFIG
- 	# Make sure at least one backend is selected
+I am not sure it's the right way of writing this: in the menuconfig,
+the ABI selection comes first, and then we have the toolchain
+selection. So it is quite likely that the user will chose the ABI
+first, and the enter the toolchain menu to make its toolchain
+configuration.
+
+With your proposal, if the user chooses n32, then goes in the toolchain
+menu and selects one of the CodeSourcery toolchain, the result would be
+a change in the ABI selection.
+
+I think I would prefer to add a depends on !BR2_MIPS_NABI32 on the
+affected toolchains (to prevent them from being selected), and then add
+something like:
+
+comment "CodeSourcery toolchains are only available for MIPS o32 and n64"
+	depends on BR2_MIPS_NABI32
+
+(of course adapt the comment to the reality)
+
+Would you mind reworking the patch in this direction?
+
+Thanks!
+
+Thomas
 -- 
-1.8.1.5
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
