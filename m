@@ -1,93 +1,68 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 12 Aug 2013 10:12:13 +0200
-Subject: [Buildroot] [git commit branch/next] luasec: New package
-Message-ID: <20130812081246.609CE9B2E2@busybox.osuosl.org>
+From: Markos Chandras <markos.chandras@gmail.com>
+Date: Mon, 12 Aug 2013 09:17:45 +0100
+Subject: [Buildroot] Dates for the next Buildroot Developers Meeting
+In-Reply-To: <20130715212511.GB12096@free.fr>
+References: <20130525222335.42f91125@skate> <87bo72qyqi.fsf@dell.be.48ers.dk>
+ <87hagan2al.fsf@dell.be.48ers.dk> <20130704104808.360f3738@skate>
+ <20130704161724.GA5374@free.fr> <20130715212511.GB12096@free.fr>
+Message-ID: <CAG2jQ8im=rfRdMw+ypL4djNuCfyCnYX6eN4P73YDWYjDo7ERdw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=61cdd3c7600876d87e7b3c7e943a99bb3dfef172
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+On 15 July 2013 22:25, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> Thomas, Peter, All,
+>
+> On 2013-07-04 18:17 +0200, Yann E. MORIN spake thusly:
+>> On 2013-07-04 10:48 +0200, Thomas Petazzoni spake thusly:
+>> > On Thu, 04 Jul 2013 10:43:14 +0200, Peter Korsgaard wrote:
+>> > >  Thomas> The next Embedded Linux Conference Europe will take place on
+>> > >  Thomas> Thursday 24th and Friday 25th of October, in Edinburgh,
+>> > >  Thomas> UK. Since LinuxCon Europe will take place at the beginning of
+>> > >  Thomas> the week (from Monday to Wednesday), I believe the best date
+>> > >  Thomas> for our meeting will be on Saturday 26th and Sunday 27th.
+>> > >
+>> > >  Peter> I'm planning on attending the gstreamer conference (22-23th), so the
+>> > >  Peter> weekend after would also fit me best.
+>> > >
+>> > >  Peter> If anyone disagrees, please let us know because I would like to book
+>> > >  Peter> flight/hotel soon.
+>> > >
+>> > > I've now booked conference/hotel/flights (21-27th). Anybody else?
+>
+> Ok, everything is under control!
+>
+> LCE: registered
+> ELCE: registered
+> Hotel: booked
+> Flight: processing
+>
+> I'll be in Edimburgh starting the 20st late in the afternoon.
+> I'll be leaving on the 28th in the morning.
+>
+> So, I'll be attending the DevDay Saturday & Sunday.
+>
+> /me is looking forward to being there! :-)
+>
+> Regards,
+> Yann E. MORIN.
+>
+> --
+> .-----------------.--------------------.------------------.--------------------.
+> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+> | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+> '------------------------------^-------^------------------^--------------------'
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-LuaSec is a Lua binding for OpenSSL library to provide TLS/SSL
-communication.
+I will also attend the Buildroot DevDays as well :)
 
-[Thomas: adjust header in .mk file, add missing 'mkdir -p' before
-installation, remove useless quotes.]
-
-Signed-off-by: Assaf Inbal <shmuelzon@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/Config.in        |    1 +
- package/luasec/Config.in |    9 +++++++++
- package/luasec/luasec.mk |   33 +++++++++++++++++++++++++++++++++
- 3 files changed, 43 insertions(+), 0 deletions(-)
-
-diff --git a/package/Config.in b/package/Config.in
-index f27ba2b..d5453fe 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -336,6 +336,7 @@ source "package/luaexpat/Config.in"
- source "package/luaexpatutils/Config.in"
- source "package/luafilesystem/Config.in"
- source "package/luaposix/Config.in"
-+source "package/luasec/Config.in"
- source "package/luasocket/Config.in"
- source "package/lua-ev/Config.in"
- source "package/lua-msgpack-native/Config.in"
-diff --git a/package/luasec/Config.in b/package/luasec/Config.in
-new file mode 100644
-index 0000000..2d303c1
---- /dev/null
-+++ b/package/luasec/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_LUASEC
-+	bool "luasec"
-+	select BR2_PACKAGE_OPENSSL
-+	select BR2_PACKAGE_LUASOCKET
-+	help
-+	  LuaSec is a binding for OpenSSL library to provide TLS/SSL
-+	  communication.
-+
-+	  http://www.inf.puc-rio.br/~brunoos/luasec/
-diff --git a/package/luasec/luasec.mk b/package/luasec/luasec.mk
-new file mode 100644
-index 0000000..053309f
---- /dev/null
-+++ b/package/luasec/luasec.mk
-@@ -0,0 +1,33 @@
-+################################################################################
-+#
-+# luasec
-+#
-+################################################################################
-+
-+LUASEC_VERSION = 0.4.1
-+LUASEC_SITE = http://www.inf.puc-rio.br/~brunoos/luasec/download/
-+LUASEC_LICENSE = MIT
-+LUASEC_LICENSE_FILES = LICENSE
-+LUASEC_DEPENDENCIES = lua openssl
-+
-+define LUASEC_BUILD_CMDS
-+	$(MAKE) -C $(@D) CC="$(TARGET_CC)" LD="$(TARGET_CC)" \
-+		CFLAGS="$(TARGET_CFLAGS) -fPIC" \
-+		LDFLAGS="$(TARGET_LDFLAGS) -shared" linux
-+endef
-+
-+define LUASEC_INSTALL_TARGET_CMDS
-+	mkdir -p $(TARGET_DIR)/usr/share/lua
-+	mkdir -p $(TARGET_DIR)/usr/lib/lua
-+	$(MAKE) -C $(@D) \
-+		LUAPATH="$(TARGET_DIR)/usr/share/lua" \
-+		LUACPATH="$(TARGET_DIR)/usr/lib/lua" install
-+endef
-+
-+define LUASEC_UNINSTALL_TARGET_CMDS
-+	rm -f $(TARGET_DIR)/usr/lib/lua/ssl.so
-+	rm -rf $(TARGET_DIR)/usr/share/lua/ssl
-+	rm -f $(TARGET_DIR)/usr/share/lua/ssl.lua
-+endef
-+
-+$(eval $(generic-package))
+-- 
+Regards,
+Markos Chandras
