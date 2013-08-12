@@ -1,33 +1,39 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 12 Aug 2013 18:22:31 +0200
-Subject: [Buildroot] buildroot internal arm toolchain: gcc-final fails
- with supposedly large-file support
-In-Reply-To: <CAAXf6LUib4JKaLQjzqicv3PbDhP6ZAT-ZZVFcxRNmugAgA13ZQ@mail.gmail.com>
-References: <CAAXf6LWPA6C9EUpyqjZnjz2mtECRzoKLtwsGJrde7PHdUCUW8g@mail.gmail.com>
- <CAAXf6LVd+SMQt_H9QTCXvS485Nc+bp8AOiUTwA4OmKijR2byZg@mail.gmail.com>
- <CAHXCMM+4eOtm8mRH1Sf=QL72Sz6bss0fJQfvkFa3Qhch92bw-w@mail.gmail.com>
- <20130729133930.09abcb5b@skate>
- <CAAXf6LUib4JKaLQjzqicv3PbDhP6ZAT-ZZVFcxRNmugAgA13ZQ@mail.gmail.com>
-Message-ID: <52090BC7.5020500@mind.be>
+Date: Mon, 12 Aug 2013 18:48:51 +0200
+Subject: [Buildroot] [PATCH v2 0/3] Fix for top-level parallel make part
+ 1
+In-Reply-To: <20130730132901.0682e15d@skate>
+References: <1374138746-23279-1-git-send-email-fabio.porcedda@gmail.com>
+ <20130718113809.663c6b58@skate>
+ <CAHkwnC8imHc+yWdkUeR6VdehBhpuux_xmKProHu7uFmmR50N8g@mail.gmail.com>
+ <20130727131828.0442e227@skate>
+ <CAHkwnC-yTeGXQnh64-Ra_TJg4ysYqAPNsNaWhA=_sgiUm5R5bw@mail.gmail.com>
+ <20130730120157.0d32a58b@skate>
+ <CAHkwnC8SV6L=4a0ain-VysEw3Z8Jg_XLLUJWH1xo6T=FVeYO6A@mail.gmail.com>
+ <20130730132901.0682e15d@skate>
+Message-ID: <520911F3.1020704@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 29/07/13 14:06, Thomas De Schampheleire wrote:
-> So maybe it is build-machine related? Or depending on if some host
-> package is installed or not?
-> Would it help if I send a build log?
-> If I have time, I can try to look into it myself, but not right now...
+On 30/07/13 13:29, Thomas Petazzoni wrote:
+> I'd really like to see top-level parallel build in Buildroot, but I
+> don't think we should do it at the expense of build reproducibility and
+> increase of users support complexity.
 
-  I you could just start a clean build of this .config in a different O= 
-directory, we can see if it is build machine related or not... What kind 
-of build machine do you have?
+  That said, I would say that any patch that improves the top-level 
+parallel build situation should be accepted, unless it really adds 
+complexity. So 1/3 would definitely be acceptable IMHO.
+
+  I also think that 2/3 and 3/3 clarify the generic infrastructure, so 
+I'd accept them as well. Only, they also changes the behaviour when you 
+touch a .stamp file, so it requires a bit more thinking.
+
 
   Regards,
   Arnout
-
 -- 
 Arnout Vandecappelle                          arnout at mind be
 Senior Embedded Software Architect            +32-16-286500
