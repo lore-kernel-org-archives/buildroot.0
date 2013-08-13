@@ -1,47 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 13 Aug 2013 10:18:27 +0200
-Subject: [Buildroot] [git commit] readline: use normal/default install target
-Message-ID: <20130813082128.9204B9B2B2@busybox.osuosl.org>
+Date: Tue, 13 Aug 2013 10:20:48 +0200
+Subject: [Buildroot] [git commit] ltrace: disable libunwind for uClibc
+	toolchains
+Message-ID: <20130813082128.AE50D9B2E2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c1a6bcece5e5832cc8897b5b600dfb958cab88f0
+commit: http://git.buildroot.net/buildroot/commit/?id=8a14dab8bdad1d819924d6039b16061fccef3df2
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Since the custom INSTALL_TARGET doesn't consider static builds it breaks
-horribly and there's no need with the current version since it works
-just fine with a little varnish to remove samples. Fixes:
-http://autobuild.buildroot.net/results/5a6/5a62c38ec621d49230d76981db6024035e88804a/
+ltrace requires that libunwind is built with backtrace() support.
+For the internal uClibc toolchain we don't enable it, and for external
+uClibc toolchains we can't know.
+It's also unavailable for static uClibc toolchains.
+So just disable libunwind support for uClibc toolchains in general.
+Fixes:
+http://autobuild.buildroot.net/results/ee0/ee037a19590fb85c64f97f78f74bcfd4d7766706/
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/readline/readline.mk |   12 ++++--------
- 1 files changed, 4 insertions(+), 8 deletions(-)
+ package/ltrace/ltrace.mk |   11 +++++++++++
+ 1 files changed, 11 insertions(+), 0 deletions(-)
 
-diff --git a/package/readline/readline.mk b/package/readline/readline.mk
-index 0c883bc..ff55199 100644
---- a/package/readline/readline.mk
-+++ b/package/readline/readline.mk
-@@ -13,14 +13,10 @@ READLINE_CONF_ENV = bash_cv_func_sigsetjmp=yes
- READLINE_LICENSE = GPLv3+
- READLINE_LICENSE_FILES = COPYING
+diff --git a/package/ltrace/ltrace.mk b/package/ltrace/ltrace.mk
+index 7b8d859..55930b8 100644
+--- a/package/ltrace/ltrace.mk
++++ b/package/ltrace/ltrace.mk
+@@ -13,4 +13,15 @@ LTRACE_CONF_OPT = --disable-werror
+ LTRACE_LICENSE = GPLv2
+ LTRACE_LICENSE_FILES = COPYING
  
--define READLINE_INSTALL_TARGET_CMDS
--	$(MAKE1) DESTDIR=$(TARGET_DIR) -C $(@D) uninstall
--	$(MAKE1) DESTDIR=$(TARGET_DIR) -C $(@D) install-shared uninstall-doc
--	chmod 775 $(TARGET_DIR)/usr/lib/libreadline.so.$(READLINE_VERSION) \
--		$(TARGET_DIR)/usr/lib/libhistory.so.$(READLINE_VERSION)
--	$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) \
--		$(TARGET_DIR)/usr/lib/libreadline.so.$(READLINE_VERSION) \
--		$(TARGET_DIR)/usr/lib/libhistory.so.$(READLINE_VERSION)
-+define READLINE_PURGE_EXAMPLES
-+	rm -rf $(TARGET_DIR)/usr/share/readline
- endef
- 
-+READLINE_POST_INSTALL_TARGET_HOOKS += READLINE_PURGE_EXAMPLES
++# ltrace can use libunwind only if libc has backtrace() support
++# We don't normally do so for uClibc and we can't know if it's external
++ifeq ($(BR2_PACKAGE_LIBUNWIND),y)
++ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),)
++LTRACE_CONF_OPT += --with-libunwind=yes
++LTRACE_DEPENDENCIES += libunwind
++else
++LTRACE_CONF_OPT += --with-libunwind=no
++endif
++endif
 +
  $(eval $(autotools-package))
