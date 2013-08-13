@@ -1,43 +1,26 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 13 Aug 2013 11:17:27 +0200
-Subject: [Buildroot] Buildroot Developers Meeting,
-	26-27th October 2013 in Edimburgh
-Message-ID: <20130813111727.0a782f2d@skate>
+Date: Tue, 13 Aug 2013 11:20:18 +0200
+Subject: [Buildroot] [Bug 6404] New: Buildroot's coreutils 'uname -p'
+ reports 'Unknown' on recent ARM kernels
+In-Reply-To: <CAANb1FjeQzEL39+P9ztOxYHHN=L=DYsBVjwAMiduWH_8j+6ZqQ@mail.gmail.com>
+References: <bug-6404-163@https.bugs.busybox.net/> <5209466E.9030305@mind.be>
+ <CAANb1FjeQzEL39+P9ztOxYHHN=L=DYsBVjwAMiduWH_8j+6ZqQ@mail.gmail.com>
+Message-ID: <20130813112018.7eecafe1@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Dear Martin Banky,
 
-It has already been announced on the list, but I wanted to make this
-more official.
+On Mon, 12 Aug 2013 17:14:37 -0700, Martin Banky wrote:
+> This is a very long running problem that goes back to at least 2005. Google
+> coreutils uname patch, to see the history of this problem. Uname will
+> porbably need a different patch to work on ARM kernels.
 
-I'm happy to announce that the upcoming Buildroot Developers Meeting
-will take place on October 26th and 27th (Saturday and Sunday) in
-Edimburgh, UK. These dates have been chosen because they immediately
-follow the week of conferences organized by the Linux Foundation, which
-includes the Embedded Linux Conference Europe scheduled on the 24th and
-25th of October, LinuxCon Europe, the Kernel Summit, and several other
-events.
-
-I've started gathering a few informations about this meeting in the
-wiki page at http://elinux.org/Buildroot:DeveloperDaysELCE2013. Please
-let me know if there are other participants interested.
-
-Note that we are currently looking for:
-
- * A meeting room in Edimburgh. If you know a company, or organization,
-   that might be willing to let us use a meeting room for the WE in
-   Edimburgh, please contact me. We just need a ~10 person meeting
-   room, with a decent internet connection and a beamer.
-
- * Sponsoring for the event. If your company is interested in
-   supporting the Buildroot project and get some visibility, let us
-   know.
-
-Thanks,
+If it's such a long-standing issue, why hasn't this never been fixed in
+upstream coreutils? Some disagreement on what the problem is?
 
 Thomas
 -- 
