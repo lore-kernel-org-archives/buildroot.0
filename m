@@ -1,56 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 13 Aug 2013 12:04:55 +0200
-Subject: [Buildroot] [git commit branch/next] package: make *-rebuild and
-	*-reconfigure only rebuild the given package
-Message-ID: <20130813100900.1EB8A9B008@busybox.osuosl.org>
+Date: Tue, 13 Aug 2013 12:11:39 +0200
+Subject: [Buildroot] [PATCH] Fix bug with dependencies of *-rebuild and
+ *-reconfigure
+In-Reply-To: <1368458741-8838-1-git-send-email-jezz@sysmic.org>
+References: <1368458741-8838-1-git-send-email-jezz@sysmic.org>
+Message-ID: <20130813121139.28a491d8@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7a1aa342357decd4e21f34d2b54d58df20d1fc0f
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Dear J?r?me Pouiller,
 
-Originally, the <pkg>-rebuild and <pkg>-reconfigure targets were meant
-to restart the build of the package from a given step (build for
-<pkg>-rebuild and configure for <pkg>-reconfigure) and then re-create
-the entire root filesystem.
+On Mon, 13 May 2013 17:25:41 +0200, J?r?me Pouiller wrote:
+> If targets $PKG-rebuild or $PKG-reconfigure are launched on a not fully built
+> directory, Buildroot finish build of all packages instead of only build asked
+> package.
+> 
+> Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
 
-However, further discussion from the community has shown that this is
-not really the desired behavior: we instead want <pkg>-rebuild and
-<pkg>-reconfigure to only take care of rebuilding the given package,
-and not the entire root filesystem.
+Applied to the next branch, after rewording the commit message. This
+patch is not fixing a bug at all, it's changing what was an intended
+behavior.
 
-People willing to rebuild this package and the root filesystem can do:
+Thanks!
 
-       make <pkg>-rebuild all
-
-[Thomas P: rewrite commit log, since it's not fixing a bug, but
-instead changing what was an intended behavior. ]
-
-Signed-off-by: J??r??me Pouiller <jezz@sysmic.org>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/pkg-generic.mk |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index b8eaa98..2e2e66f 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -435,12 +435,12 @@ endif
- 			rm -f $$($(2)_TARGET_INSTALL_IMAGES)
- 			rm -f $$($(2)_TARGET_INSTALL_HOST)
- 
--$(1)-rebuild:		$(1)-clean-for-rebuild all
-+$(1)-rebuild:		$(1)-clean-for-rebuild $(1)
- 
- $(1)-clean-for-reconfigure: $(1)-clean-for-rebuild
- 			rm -f $$($(2)_TARGET_CONFIGURE)
- 
--$(1)-reconfigure:	$(1)-clean-for-reconfigure all
-+$(1)-reconfigure:	$(1)-clean-for-reconfigure $(1)
- 
- # define the PKG variable for all targets, containing the
- # uppercase package variable prefix
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
