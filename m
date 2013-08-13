@@ -1,38 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 13 Aug 2013 10:17:57 +0200
-Subject: [Buildroot] [git commit] bash: fix static build
-Message-ID: <20130813082128.8AAE19B2B2@busybox.osuosl.org>
+Date: Tue, 13 Aug 2013 10:19:44 +0200
+Subject: [Buildroot] [git commit] libcec: needs threads
+Message-ID: <20130813082128.9E7D19B2E2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=9e0f48c83158655ae737c89df618c5c79294f682
+commit: http://git.buildroot.net/buildroot/commit/?id=4c5b04f009e8182d6bb2313a39abf75a9128ec6f
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The static build needs some trickery, so make it happen. Fixes:
-http://autobuild.buildroot.net/results/2b12868f8297a96d7abf7fcf526ca5eace73d66d/
+Fixes:
+http://autobuild.buildroot.net/results/16a/16ad8b64e68477dcd663d07c600fd1be3164df81/
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/bash/bash.mk |    5 +++++
- 1 files changed, 5 insertions(+), 0 deletions(-)
+ package/libcec/Config.in |    5 +++--
+ 1 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/bash/bash.mk b/package/bash/bash.mk
-index d51e203..efd2334 100644
---- a/package/bash/bash.mk
-+++ b/package/bash/bash.mk
-@@ -16,6 +16,11 @@ BASH_CONF_ENV +=                       \
-    bash_cv_func_sigsetjmp=present      \
-    bash_cv_printf_a_format=yes
+diff --git a/package/libcec/Config.in b/package/libcec/Config.in
+index b1fa03b..7a67952 100644
+--- a/package/libcec/Config.in
++++ b/package/libcec/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_LIBCEC
+ 	bool "libcec"
+ 	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	help
+ 	  libcec allows you in combination with the right hardware to
+ 	  control your home theater devices with your TV remote
+@@ -8,5 +9,5 @@ config BR2_PACKAGE_LIBCEC
  
-+# The static build needs some trickery
-+ifeq ($(BR2_PREFER_STATIC_LIB),y)
-+BASH_CONF_OPT += --enable-static-link --without-bash-malloc
-+endif
-+
- # Make sure we build after busybox so that /bin/sh links to bash
- ifeq ($(BR2_PACKAGE_BUSYBOX),y)
- BASH_DEPENDENCIES += busybox
+ 	  http://libcec.pulse-eight.com
+ 
+-comment "libcec requires C++ support in toolchain"
+-	depends on !BR2_INSTALL_LIBSTDCPP
++comment "libcec requires C++ and threading support in toolchain"
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
