@@ -1,36 +1,52 @@
-From: Woody Wu <narkewoody@gmail.com>
-Date: Wed, 14 Aug 2013 06:12:17 +0800
-Subject: [Buildroot] ubifs rootfs attached error
-In-Reply-To: <520A7922.2050703@gmail.com>
-References: <20130813130443.GA3676@zuhnb712> <520A36FB.80403@gmail.com>
- <20130813140840.GA5063@zuhnb712> <520A7922.2050703@gmail.com>
-Message-ID: <20130813221217.GA18527@zuhnb712>
+From: Reuben Dowle <reuben.dowle@4rf.com>
+Date: Tue, 13 Aug 2013 22:15:34 +0000
+Subject: [Buildroot] [PATCH] package: add the duma memory debugging
+ library
+In-Reply-To: <20130813225918.5f27ce9b@skate>
+References: <069B5A25F9844945B625ADE7258AC94C061E77EA@4rf-nz-orion.local.4rf.com>
+ <20130813225918.5f27ce9b@skate>
+Message-ID: <069B5A25F9844945B625ADE7258AC94C064D8477@4rf-nz-orion.local.4rf.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Aug 13, 2013 at 08:21:22PM +0200, Stefan Peter wrote:
-> On 13.08.2013 16:08, Woody Wu wrote:
-> 
-> > Stefan, thanks for the hints.  Yes, my kernel configuration disalbed the
-> > NAND ECC. I like to study on that. But, do you think this is reason why
-> > my ubifs did not get attached? Thanks.
-> 
-> Yes, definitively. I don't want to say that there are no other problems
-> in your setup, but as long as you can not read back exactly what you
-> have written to the flash, there is very little chance that UBI will work.
-> UBIFS is based upon MTD. And MTD relies on a working FLASH driver. As
-> long as one of these layers does not work properly, the topmost (UBIFS)
-> layer can not work properly, either.
-> 
+To get duma compiling I just copied the patches that crosstool-ng was using verbatim. My toolchain supports c++, so this is not of any interest to me.
 
-If so, that's really wired. Since befor trying the ubifs, the same
-kernel was actually running jffs2 as rootfs without a sign that there is
-a i/o problem. Just because the performance concerns to jffs2, I decided
-to try ubifs.
+Thanks,
+Reuben
 
-
--- 
-I can't go back to yesterday - because I was a different person then
+> -----Original Message-----
+> From: Thomas Petazzoni [mailto:thomas.petazzoni at free-electrons.com]
+> Sent: Wednesday, 14 August 2013 8:59 a.m.
+> To: Reuben Dowle
+> Cc: buildroot at busybox.net
+> Subject: Re: [Buildroot] [PATCH] package: add the duma memory debugging
+> library
+>
+> Dear Reuben Dowle,
+>
+> On Thu, 14 Feb 2013 23:05:53 +0000, Reuben Dowle wrote:
+> > Add the duma memory debugging library. This is based on an earlier
+> patch by
+> > Baruch Siach, with minor changes to build for latest buildroot
+> sources.
+> >
+> > Signed-off-by: Reuben Dowle <reuben.dowle@4rf.com>
+>
+> Applied, thanks. Note that I have dropped the no-C++ support, because
+> it wasn't building here, and I thought it wasn't worth the effort.
+>
+> If you're really interested in the no-C++ support, feel free to revive
+> this part of the patch, make it work, and resubmit it.
+>
+> Thanks!
+>
+> Thomas
+> --
+> Thomas Petazzoni, Free Electrons
+> Kernel, drivers, real-time and embedded Linux
+> development, consulting, training and support.
+> http://free-electrons.com
+The information in this email communication (inclusive of attachments) is confidential to 4RF Limited and the intended recipient(s). If you are not the intended recipient(s), please note that any use, disclosure, distribution or copying of this information or any part thereof is strictly prohibited and that the author accepts no liability for the consequences of any action taken on the basis of the information provided. If you have received this email in error, please notify the sender immediately by return email and then delete all instances of this email from your system. 4RF Limited will not accept responsibility for any consequences associated with the use of this email (including, but not limited to, damages sustained as a result of any viruses and/or any action or lack of action taken in reliance on it).
