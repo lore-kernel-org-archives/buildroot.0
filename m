@@ -1,42 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 13 Aug 2013 10:19:44 +0200
-Subject: [Buildroot] [git commit] libcec: needs threads
-Message-ID: <20130813082128.9E7D19B2E2@busybox.osuosl.org>
+Date: Tue, 13 Aug 2013 10:16:58 +0200
+Subject: [Buildroot] [git commit] opencv: gtk support doesn't work with
+	directfb
+Message-ID: <20130813082128.79EC19B2B2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=4c5b04f009e8182d6bb2313a39abf75a9128ec6f
+commit: http://git.buildroot.net/buildroot/commit/?id=4807cdf8a950fda60f32b16caf996d02a3c2273e
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
-http://autobuild.buildroot.net/results/16a/16ad8b64e68477dcd663d07c600fd1be3164df81/
+This was dropped on 4b3d949b8af240bda451b0a4e57d60153188c2e4 when
+libgkt2 was updated. Fixes:
+http://autobuild.buildroot.net/results/817/8173b7fd3d6af79a7f2c04bf36059a4429127516/
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libcec/Config.in |    5 +++--
- 1 files changed, 3 insertions(+), 2 deletions(-)
+ package/opencv/Config.in |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/libcec/Config.in b/package/libcec/Config.in
-index b1fa03b..7a67952 100644
---- a/package/libcec/Config.in
-+++ b/package/libcec/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_LIBCEC
- 	bool "libcec"
+diff --git a/package/opencv/Config.in b/package/opencv/Config.in
+index c6ec3fe..e98ba8a 100644
+--- a/package/opencv/Config.in
++++ b/package/opencv/Config.in
+@@ -150,7 +150,7 @@ comment "gstreamer support requires a toolchain with WCHAR and threading support
+ 
+ config BR2_PACKAGE_OPENCV_WITH_GTK
+ 	bool "gtk support"
+-	depends on BR2_PACKAGE_XORG7||BR2_PACKAGE_DIRECTFB
++	depends on BR2_PACKAGE_XORG7
+ 	depends on BR2_USE_WCHAR # libgtk2 -> libglib2
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libgtk2 -> libglib2
  	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	help
- 	  libcec allows you in combination with the right hardware to
- 	  control your home theater devices with your TV remote
-@@ -8,5 +9,5 @@ config BR2_PACKAGE_LIBCEC
- 
- 	  http://libcec.pulse-eight.com
- 
--comment "libcec requires C++ support in toolchain"
--	depends on !BR2_INSTALL_LIBSTDCPP
-+comment "libcec requires C++ and threading support in toolchain"
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
