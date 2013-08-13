@@ -1,46 +1,28 @@
-From: Woody Wu <narkewoody@gmail.com>
-Date: Tue, 13 Aug 2013 22:08:40 +0800
-Subject: [Buildroot] ubifs rootfs attached error
-In-Reply-To: <520A36FB.80403@gmail.com>
-References: <20130813130443.GA3676@zuhnb712>
- <520A36FB.80403@gmail.com>
-Message-ID: <20130813140840.GA5063@zuhnb712>
+From: Sagaert Johan <sagaert.johan@skynet.be>
+Date: Tue, 13 Aug 2013 17:23:27 +0200
+Subject: [Buildroot] Processor clasification
+Message-ID: <806C53D969FD42429BD6758EEA7CF891@JohanW7>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Aug 13, 2013 at 03:39:07PM +0200, Stefan Peter wrote:
-> Dear Woody Wu,
-> 
-> On 13.08.2013 15:04, Woody Wu wrote:
-> > Hi,
-> ...
-> > Firstly, below are the kernel error messages:
-> > 
-> > ------------------------------------------------------------------
-> > NAND_ECC_NONE selected by board driver. This is not recommended !!
-> 
-> Modern flash chips actually rely on specific forms of cyclic redundancy
-> checks in order to be able to correct for bit errors in NAND flash.
-> Without using the proper CRC algorithm, you can never be sure to be able
-> to read from the flash what you have written to it. Another hint at this
-> problem are the "Bad eraseblock" messages that follow.
-> 
-> Check your kernel configuration and the documentation of your target for
-> the proper ECC settings for the NAND flash.
+Hi all;
+ 
+What is the correct classification ?
+ 
+When entering uname -a , the cpu spec is specified as armv6l , so what is the relation with the selection menu 
+example CORTEX A9..
+ 
+So if i have a cpu that tells me from the datasheet it is an 'armv6te' what is then the right selection in the cpu variant menu ?
+It confuses me a bit.
+ 
 
-Stefan, thanks for the hints.  Yes, my kernel configuration disalbed the
-NAND ECC. I like to study on that. But, do you think this is reason why
-my ubifs did not get attached? Thanks.
+Regards  Johan
 
+ 
 
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-I can't go back to yesterday - because I was a different person then
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130813/53320c13/attachment.html>
