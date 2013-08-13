@@ -1,31 +1,56 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 13 Aug 2013 11:59:13 +0200
-Subject: [Buildroot] [PATCH 1/2] linux-headers: bump 3.{0, 2, 4,
- 10}.x stable versions
-In-Reply-To: <1376303058-23273-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1376303058-23273-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20130813115913.57e85ff9@skate>
+Date: Tue, 13 Aug 2013 12:04:55 +0200
+Subject: [Buildroot] [git commit branch/next] package: make *-rebuild and
+	*-reconfigure only rebuild the given package
+Message-ID: <20130813100900.1EB8A9B008@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+commit: http://git.buildroot.net/buildroot/commit/?id=7a1aa342357decd4e21f34d2b54d58df20d1fc0f
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Mon, 12 Aug 2013 07:24:17 -0300, Gustavo Zacarias wrote:
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  ...ers-headers_install-fix-__packed-in-exported-kernel-head.patch | 0
->  package/linux-headers/Config.in.host                              | 8 ++++----
->  2 files changed, 4 insertions(+), 4 deletions(-)
->  rename package/linux-headers/{3.0.88 => 3.0.90}/linux-headers-headers_install-fix-__packed-in-exported-kernel-head.patch (100%)
+Originally, the <pkg>-rebuild and <pkg>-reconfigure targets were meant
+to restart the build of the package from a given step (build for
+<pkg>-rebuild and configure for <pkg>-reconfigure) and then re-create
+the entire root filesystem.
 
-Applied both, thanks.
+However, further discussion from the community has shown that this is
+not really the desired behavior: we instead want <pkg>-rebuild and
+<pkg>-reconfigure to only take care of rebuilding the given package,
+and not the entire root filesystem.
 
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+People willing to rebuild this package and the root filesystem can do:
+
+       make <pkg>-rebuild all
+
+[Thomas P: rewrite commit log, since it's not fixing a bug, but
+instead changing what was an intended behavior. ]
+
+Signed-off-by: J??r??me Pouiller <jezz@sysmic.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/pkg-generic.mk |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index b8eaa98..2e2e66f 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -435,12 +435,12 @@ endif
+ 			rm -f $$($(2)_TARGET_INSTALL_IMAGES)
+ 			rm -f $$($(2)_TARGET_INSTALL_HOST)
+ 
+-$(1)-rebuild:		$(1)-clean-for-rebuild all
++$(1)-rebuild:		$(1)-clean-for-rebuild $(1)
+ 
+ $(1)-clean-for-reconfigure: $(1)-clean-for-rebuild
+ 			rm -f $$($(2)_TARGET_CONFIGURE)
+ 
+-$(1)-reconfigure:	$(1)-clean-for-reconfigure all
++$(1)-reconfigure:	$(1)-clean-for-reconfigure $(1)
+ 
+ # define the PKG variable for all targets, containing the
+ # uppercase package variable prefix
