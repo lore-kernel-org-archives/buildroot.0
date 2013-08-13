@@ -1,41 +1,51 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 13 Aug 2013 10:16:11 +0200
-Subject: [Buildroot] [git commit] imagemagick: fix magick++-config fixup
-	error
-Message-ID: <20130813082128.6C4929B2E2@busybox.osuosl.org>
+From: =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= <jezz@sysmic.org>
+Date: Tue, 13 Aug 2013 10:31:37 +0200
+Subject: [Buildroot] [PATCH v2] ltrace: Explicit enable/disable of libunwind
+Message-ID: <1376382697-24789-1-git-send-email-jezz@sysmic.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b339bb5641c59ad2e19aeb95c1387584c7c2aeab
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+ltrace automatically uses libunwind if detected. So depending if libunwind was
+already compiled or not, ltrace compiles differently. This patch adds explicit
+dependency to libunwind if detected.
 
-Magic++ bindings are built only with C++ and WCHAR toolchains.
-Add a WCHAR toolchain check for the magick++ config fixup.
-Looking into the future the fixup shouldn't bail on a missing file so we
-can avoid awkward kludges for packages that have many options and config
-files.
-Fixes:
-http://autobuild.buildroot.net/results/33a/33ac4b17866a64379b7bab3c0549f6e075c98dde/
+In add, due to limitation of uclibc, ltrace cannot use libunwind with uclibc.
+This patch explicitly compile without libunwind in this case.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Resolve issues detected here:
+    http://autobuild.buildroot.net/results/79dae85647526cdeddae5050db0339fbc38c9ae6
+    http://autobuild.buildroot.net/results/808569f6bfac059b57eb4f1e692fbc9909e791cf
+    http://autobuild.buildroot.net/results/83d0cd13d64053869708c666e2aa533202af67f7
+
+Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
 ---
- package/imagemagick/imagemagick.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+V2:
+ Previous version introduced an horrible bug: Usage of = instead of += on 
+ LTRACE_CONF_OPT. So, --disable-werror was no more passed to configure 
+ script. Thus, patches 2/3 and 3/3 are no more usefull. (Sorry, for the 
+ noise)
 
-diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
-index 12b9f4b..2149574 100644
---- a/package/imagemagick/imagemagick.mk
-+++ b/package/imagemagick/imagemagick.mk
-@@ -19,7 +19,7 @@ IMAGEMAGICK_AUTORECONF = YES
- IMAGEMAGICK_CONFIG_SCRIPTS = \
- 	$(addsuffix -config,Magick MagickCore MagickWand Wand)
+ package/ltrace/ltrace.mk |    7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/package/ltrace/ltrace.mk b/package/ltrace/ltrace.mk
+index 7b8d859..4174139 100644
+--- a/package/ltrace/ltrace.mk
++++ b/package/ltrace/ltrace.mk
+@@ -13,4 +13,11 @@ LTRACE_CONF_OPT = --disable-werror
+ LTRACE_LICENSE = GPLv2
+ LTRACE_LICENSE_FILES = COPYING
  
--ifeq ($(BR2_INSTALL_LIBSTDCPP),y)
-+ifeq ($(BR2_INSTALL_LIBSTDCPP)$(BR2_USE_WCHAR),yy)
- IMAGEMAGICK_CONFIG_SCRIPTS += Magick++-config
- endif
- 
++ifeq ($(BR2_PACKAGE_LIBUNWIND)$(BR2_TOOLCHAIN_USES_GLIBC),yy)
++LTRACE_DEPENDENCIES += libunwind
++LTRACE_CONF_OPT += --with-libunwind
++else
++LTRACE_CONF_OPT += --without-libunwind
++endif
++
+ $(eval $(autotools-package))
+-- 
+1.7.9.5
