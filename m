@@ -1,61 +1,37 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 13 Aug 2013 07:36:17 +0200
-Subject: [Buildroot] [PATCH] infra: display current task as title of the
- term window
-In-Reply-To: <CAAXf6LWCBh-W3nHRLtoXVy8PfbS3NpOQ7sMwicp6W+kv-OeAkg@mail.gmail.com>
-References: <1375822004-22591-1-git-send-email-francois.perrad@gadz.org>
- <CAAXf6LWCBh-W3nHRLtoXVy8PfbS3NpOQ7sMwicp6W+kv-OeAkg@mail.gmail.com>
-Message-ID: <5209C5D1.7040904@mind.be>
+Date: Tue, 13 Aug 2013 07:59:08 +0200
+Subject: [Buildroot] [PATCH 3/5] manual: update beyond Buildroot section
+In-Reply-To: <20130808200100.6f677bf5@skate>
+References: <1375824984-8226-1-git-send-email-s.martin49@gmail.com>
+ <1375824984-8226-4-git-send-email-s.martin49@gmail.com>
+ <20130807113910.2358816a@skate>
+ <CAKvQZ_3UxzreEtWQ3E++3xZ1o4W_Rn1gzKrYQo2CNOnQ_hZpfg@mail.gmail.com>
+ <CAHXCMMJ2iXQQyju9jdx_4sXCvpUa25O3fSWA9p8_yRPv92C7NQ@mail.gmail.com>
+ <20130808200100.6f677bf5@skate>
+Message-ID: <5209CB2C.4030408@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 07/08/13 08:44, Thomas De Schampheleire wrote:
-> Hi Fran?ois,
+On 08/08/13 20:01, Thomas Petazzoni wrote:
+> Dear Samuel Martin,
 >
-> On Tue, Aug 6, 2013 at 10:46 PM, Francois Perrad <fperrad@gmail.com> wrote:
->> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
->> ---
->>   package/pkg-utils.mk |    3 ++-
->>   1 file changed, 2 insertions(+), 1 deletion(-)
->>
->> diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
->> index 15db096..8572cb1 100644
->> --- a/package/pkg-utils.mk
->> +++ b/package/pkg-utils.mk
->> @@ -64,7 +64,8 @@ INFLATE.xz   = $(XZCAT)
->>   INFLATE.tar  = cat
->>
->>   # MESSAGE Macro -- display a message in bold type
->> -MESSAGE     = echo "$(TERM_BOLD)>>> $($(PKG)_NAME) $($(PKG)_VERSION) $(1)$(TERM_RESET)"
->> +MESSAGE     = echo "$(TERM_BOLD)>>> $($(PKG)_NAME) $($(PKG)_VERSION) $(1)$(TERM_RESET)" && \
->> +              echo -e "\033]2;$($(PKG)_NAME) $($(PKG)_VERSION) $(1)\007"
->>   TERM_BOLD  := $(shell tput smso)
->>   TERM_RESET := $(shell tput rmso)
+> On Thu, 8 Aug 2013 14:36:39 +0200, Samuel Martin wrote:
+>> So, its right place may not be the manual, but some extended readme
+>> and/or sample
+>> post-image scripts.
+>> What about this?
 >
-> Although I like the idea, it does not work for me. I'm running Linux
-> Mint, with a Konsole terminal. The above does nothing at all. I also
-> tried manually:
->
-> echo -ne "\033]0;something\007"
->
-> but it doesn't change a thing.
-> It does work in gnome-terminal. I haven't tested in other situations.
->
-> Could you have a look at Konsole?
->
-> I know that Gentoo has this feature for its portage package
-> installation/compilation tool. When you run 'emerge', the titles are
-> constantly updated with the package that is being handled, also in
-> Konsole. You may be able to find out what the 'right way' is based on
-> their sources.
+> I do believe it has its place into the manual, but it needs to be
+> written up properly, taking into account the other use cases (booting
+> on ARM/PowerPC platforms), and find a better place for this.
 
-  Are you sure this works for you with emerge? I RTFM'ed it and according 
-to the konsole manual, you have to add '%w' to the tab title string to 
-get the string set by the shell. Perhaps Gentoo simply sets the default 
-tab title string to something including %w.
+  However, I think the "needs to be written up properly" aspect should 
+not stop a piece of documentation to be added to the manual. Even if it 
+is not written up properly, it will be useful for some people.
+
 
   Regards,
   Arnout
