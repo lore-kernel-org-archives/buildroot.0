@@ -1,48 +1,45 @@
-From: Ralph Siemsen <ralphs@netwinder.org>
-Date: Tue, 13 Aug 2013 12:00:17 -0400
-Subject: [Buildroot] [PATCH] apply-patches.sh: detect missing patches
-Message-ID: <20130813160017.GA2590@harvey.netwinder.org>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue, 13 Aug 2013 14:21:39 -0300
+Subject: [Buildroot] Processor clasification
+In-Reply-To: <806C53D969FD42429BD6758EEA7CF891@JohanW7>
+References: <806C53D969FD42429BD6758EEA7CF891@JohanW7>
+Message-ID: <520A6B23.30801@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-apply-patches.sh: detect missing patches
+On 08/13/2013 12:23 PM, Sagaert Johan wrote:
 
-The current patch logic does not detect missing patch files,
-particularly when using a series file. If the series file
-refers to non-existent patches, a minor warning appears,
-but the build continues.
+> Hi all;
+>  
+> What is the correct classification ?
+>  
+> When entering uname -a , the cpu spec is specified as armv6l , so what
+> is the relation with the selection menu 
+> example CORTEX A9..
+>  
+> So if i have a cpu that tells me from the datasheet it is an 'armv6te'
+> what is then the right selection in the cpu variant menu ?
+> It confuses me a bit.
 
-The root cause is the "cat <patchfile> | patch ..." pipleline.
-When patchfile does not exist, the "cat" command prints a
-warning, however, the pipeline status is determined by the
-final "patch" command. And since patch has not received any
-input, it returns success.
+Hi.
+Cortex A9 & co are ARM cores (ARM920, ARM926, Cortex-A8, and so on).
+armvX (X = number) is the ISA implemented, for instance the lowest
+common these days would be armv4.
+The letters after the ISA number are options, for example T means the
+processor supports the thumb instruction set extension... say... armv4t
+(some cores support more or less stuff depending on what the vendor chose).
+The L means little-endian configuration.
+v4 ISA is basically arm 920/922 cores.
+v5 ISA is the very common arm 926 core.
+v6 ISA are the arm 11 (36/56/76) cores.
+v7 ISA are the Cortex A* cores.
+v8 ISA are the 64-bit Aarch64 cores.
+Usually looking at /proc/cpuinfo can give you some extra detail, for
+instance some Cortex A* cores support VFP math and other don't.
+http://en.wikipedia.org/wiki/List_of_ARM_microprocessor_cores is pretty
+accurate.
 
-There are two possible solutions that I can see:
-  1. set -o pipefail, then pipeline will return error from 'cat'
-  2. check for patch existence explicitly
-I've opted for 2nd choice, it seems less risky.
-
-The following patch adds the check. It also fixes the indentation
-of an adjacent line (TAB versus spaces) making it consistent.
-
-diff --git a/support/scripts/apply-patches.sh b/support/scripts/apply-patches.sh
-index 7d5856c..a3f7153 100755
---- a/support/scripts/apply-patches.sh
-+++ b/support/scripts/apply-patches.sh
-@@ -76,7 +76,11 @@ function apply_patch {
-     esac
-     echo ""
-     echo "Applying $patch using ${type}: "
--	echo $patch >> ${builddir}/.applied_patches_list
-+    if ! test -e "${path}/$patch" ; then
-+	echo "Error: missing patch file ${path}/$patch"
-+	return 1
-+    fi
-+    echo $patch >> ${builddir}/.applied_patches_list
-     ${uncomp} "${path}/$patch" | patch -g0 -p1 -E -d "${builddir}"
-     if [ $? != 0 ] ; then
-         echo "Patch failed!  Please fix ${patch}!"
+Regards.
