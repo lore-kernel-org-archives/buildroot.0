@@ -1,39 +1,58 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 13 Aug 2013 10:42:40 +0200
-Subject: [Buildroot] [PATCH v2] ltrace: Explicit enable/disable of
- libunwind
-In-Reply-To: <1376382697-24789-1-git-send-email-jezz@sysmic.org>
-References: <1376382697-24789-1-git-send-email-jezz@sysmic.org>
-Message-ID: <20130813104240.1b3a3aa2@skate>
+From: Markos Chandras <markos.chandras@imgtec.com>
+Date: Tue, 13 Aug 2013 09:45:44 +0100
+Subject: [Buildroot] [PATCH v2] toolchain-external: Restrict Sourcery
+	CodeBench toolchains for MIPS/n32
+Message-ID: <1376383544-26722-1-git-send-email-markos.chandras@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear J?r?me Pouiller,
+n32 is not supported in Sourcery CodeBench toolchains.
 
-On Tue, 13 Aug 2013 10:31:37 +0200, J?r?me Pouiller wrote:
-> ltrace automatically uses libunwind if detected. So depending if libunwind was
-> already compiled or not, ltrace compiles differently. This patch adds explicit
-> dependency to libunwind if detected.
-> 
-> In add, due to limitation of uclibc, ltrace cannot use libunwind with uclibc.
-> This patch explicitly compile without libunwind in this case.
-> 
-> Resolve issues detected here:
->     http://autobuild.buildroot.net/results/79dae85647526cdeddae5050db0339fbc38c9ae6
->     http://autobuild.buildroot.net/results/808569f6bfac059b57eb4f1e692fbc9909e791cf
->     http://autobuild.buildroot.net/results/83d0cd13d64053869708c666e2aa533202af67f7
-> 
-> Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
+Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
+---
+ toolchain/toolchain-external/Config.in | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-Argh, sorry, this was too late. In the mean time, Gustavo submitted a
-similar patch, which I committed just minutes ago.
-
-Thomas
+diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
+index 324401f..ad1f203 100644
+--- a/toolchain/toolchain-external/Config.in
++++ b/toolchain/toolchain-external/Config.in
+@@ -190,6 +190,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201305
+ 	bool "Sourcery CodeBench MIPS 2013.05"
+ 	depends on BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el
+ 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
++	depends on !BR2_MIPS_NABI32
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
+ 	select BR2_INSTALL_LIBSTDCPP
+@@ -260,6 +261,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201209
+ 	bool "Sourcery CodeBench MIPS 2012.09"
+ 	depends on BR2_mips || BR2_mipsel
+ 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
++	depends on !BR2_MIPS_NABI32
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
+ 	select BR2_INSTALL_LIBSTDCPP
+@@ -330,6 +332,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201203
+ 	bool "Sourcery CodeBench MIPS 2012.03"
+ 	depends on BR2_mips || BR2_mipsel
+ 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
++	depends on !BR2_MIPS_NABI32
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
+ 	select BR2_INSTALL_LIBSTDCPP
+@@ -396,6 +399,9 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201203
+ 	    - MIPS32 little endian soft float uclibc
+ 	      Not usable in Buildroot yet.
+ 
++comment "Sourcery CodeBench toolchains are only available for MIPS/MIPS64 o32 and n64"
++	depends on BR2_MIPS_NABI32
++
+ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201103
+ 	bool "Sourcery CodeBench PowerPC 2011.03"
+ 	depends on BR2_powerpc
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+1.8.3.2
