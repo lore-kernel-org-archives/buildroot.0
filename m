@@ -1,41 +1,59 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 13 Aug 2013 18:31:09 +0200
-Subject: [Buildroot] [PATCH 1 of 6 v2] Config.in.legacy: update
-	description
-In-Reply-To: <2942a6d3dd9f0f3fd864.1374650578@BEANTN0L019720>
-References: <patchbomb.1374650577@BEANTN0L019720>
- <2942a6d3dd9f0f3fd864.1374650578@BEANTN0L019720>
-Message-ID: <520A5F4D.70901@mind.be>
+Date: Tue, 13 Aug 2013 18:40:42 +0200
+Subject: [Buildroot] [PATCH v2] pkg-download: take some more care of
+ <PKG_>VERSION with git
+In-Reply-To: <20130813121539.58b5e801@skate>
+References: <1364931609-2459-1-git-send-email-Patrick.Boettcher@parrot.com>
+ <20130813121539.58b5e801@skate>
+Message-ID: <520A618A.7060005@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 24/07/13 09:22, Thomas De Schampheleire wrote:
-[snip]
-> +# If the old symbol is of type string, and the symbol has been renamed, you
-> +# should add it as a bool with another name (BR2_<foo>_WRAP), that defaults
-> +# to y if the old string is not set at its default value. For example:
-> +#     config BR2_FOO_STRING
-> +#             string "Some foo string"
-> +# would become:
-> +#     config BR2_FOO_STRING_WRAP
-> +#             bool "Foo string option has been renamed."
-> +#             default y if BR2_FOO_STRING != ""
-> +#             depends on BR2_LEGACY
+On 13/08/13 12:15, Thomas Petazzoni wrote:
+> Hello,
+>
+> On Tue,  2 Apr 2013 21:40:08 +0200, Patrick Boettcher wrote:
+>> This replaces the one-liner patch I made last week after a comment by
+>> Thomas De Schampheleire. (it is now a 5-liner)
+>>
+>> I added comment to explain why using HEAD is better in the current
+>> situation. I did not change the hg-part as it is different to git -
+>> after a quick read it won't work at all when VERSION is not set in a
+>> packge.
+>>
+>> Please apply if appropriate and helpful (it is for me).
+>>
+>> Patrick Boettcher (1):
+>>    pkg-download: take some more care of <PKG_>VERSION when METHOD is git
+>>
+>>   package/pkg-download.mk |    6 +++++-
+>>   1 file changed, 5 insertions(+), 1 deletion(-)
+>
+> Thomas, Arnout, Gustavo, some thoughts about this patch?
+>
+> I'm not a big fan of the fact that <pkg>_VERSION would be optional for
+> the git site method, but mandatory for the hg site method, but it's not
+> really a strong opinion.
 
-  My Ack was too hasty, this should be
-	select BR2_LEGACY
+  Considering the commit message of 3a7a0a which you just committed:
+
+"Specifying a floating tag like HEAD for a repository version is bad 
+practice, as it results in non-reproducible builds."
+
+I would say this is a bad idea. Instead, there could be a check that 
+PKG_VERSION is not empty.
+
+
+  Also, I think the patch is just wrong: if you specify a sha instead of 
+a branch or tag, then it will check out master's HEAD instead of the 
+specified sha...
 
 
   Regards,
   Arnout
-
-> +#             help
-> +#               <suitable help text>
-
-
 -- 
 Arnout Vandecappelle                          arnout at mind be
 Senior Embedded Software Architect            +32-16-286500
