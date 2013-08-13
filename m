@@ -1,59 +1,64 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 14 Aug 2013 00:32:11 +0200
-Subject: [Buildroot] [PATCH 1/1] ola: new package
-In-Reply-To: <1376330715-20047-1-git-send-email-blanco.ether@gmail.com>
-References: <1376330715-20047-1-git-send-email-blanco.ether@gmail.com>
-Message-ID: <20130814003211.0c9bdaa7@skate>
+Date: Wed, 14 Aug 2013 00:33:47 +0200
+Subject: [Buildroot] [PATCH 3/5] luajit: allow building for the host
+In-Reply-To: <1346741921-28968-3-git-send-email-francois.perrad@gadz.org>
+References: <1346741921-28968-1-git-send-email-francois.perrad@gadz.org>
+ <1346741921-28968-3-git-send-email-francois.perrad@gadz.org>
+Message-ID: <20130814003347.03a6be87@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Dave Skok,
+Dear Francois Perrad,
 
-On Mon, 12 Aug 2013 14:05:15 -0400, Dave Skok wrote:
-> Signed-off-by: Dave Skok <blanco.ether@gmail.com>
-> ---
->  package/Config.in     |   1 +
->  package/ola/Config.in | 144 +++++++++++++++++++++++++++++++++++++++++++++++
->  package/ola/ola.mk    | 153 ++++++++++++++++++++++++++++++++++++++++++++++++++
->  3 files changed, 298 insertions(+)
->  create mode 100644 package/ola/Config.in
->  create mode 100644 package/ola/ola.mk
-
-Thanks, it now builds successfully.
-
-However, I've found another issue: even if I keep most plugins
-disabled, they are still all built and installed. For example, with a
-configuration that has:
-
-# BR2_PACKAGE_OLA_PLUGIN_KARATE is not set
-
-I get the karate plugin built and installed:
-
-$ ls -1 output/target/usr/lib/olad/*karate*
-output/target/usr/lib/olad/libolakarate.so
-output/target/usr/lib/olad/libolakarate.so.0
-output/target/usr/lib/olad/libolakarate.so.0.0.0
-
-Same goes for:
-
-# BR2_PACKAGE_OLA_PLUGIN_SPI is not set
-
-$ ls -1 output/target/usr/lib/olad/*spi*
-output/target/usr/lib/olad/libolaspicore.so
-output/target/usr/lib/olad/libolaspicore.so.0
-output/target/usr/lib/olad/libolaspicore.so.0.0.0
-output/target/usr/lib/olad/libolaspi.so
-output/target/usr/lib/olad/libolaspi.so.0
-output/target/usr/lib/olad/libolaspi.so.0.0.0
-
-Is this expected?
+Why is the below patch needed? What is the usage of luajit built for
+the host?
 
 Thanks,
 
 Thomas
+
+On Tue,  4 Sep 2012 08:58:39 +0200, Francois Perrad wrote:
+> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+> ---
+>  package/luajit/luajit.mk |   10 ++++++++++
+>  1 file changed, 10 insertions(+)
+> 
+> diff --git a/package/luajit/luajit.mk b/package/luajit/luajit.mk
+> index 913bc0c..e82df64 100644
+> --- a/package/luajit/luajit.mk
+> +++ b/package/luajit/luajit.mk
+> @@ -50,6 +50,11 @@ define LUAJIT_BUILD_CMDS
+>  		-C $(@D) amalg
+>  endef
+>  
+> +define HOST_LUAJIT_BUILD_CMDS
+> +	$(MAKE) PREFIX="/usr" \
+> +		-C $(@D) amalg
+> +endef
+> +
+>  define LUAJIT_INSTALL_STAGING_CMDS
+>  	$(MAKE) PREFIX="/usr" DESTDIR="$(STAGING_DIR)" -C $(@D) install
+>  endef
+> @@ -58,8 +63,13 @@ define LUAJIT_INSTALL_TARGET_CMDS
+>  	$(MAKE) PREFIX="/usr" DESTDIR="$(TARGET_DIR)" -C $(@D) install
+>  endef
+>  
+> +define HOST_LUAJIT_INSTALL_CMDS
+> +	$(MAKE) PREFIX="/usr" DESTDIR="$(HOST_DIR)" -C $(@D) install
+> +endef
+> +
+>  define LUAJIT_CLEAN_CMDS
+>  	-$(MAKE) -C $(@D) clean
+>  endef
+>  
+>  $(eval $(generic-package))
+> +$(eval $(host-generic-package))
+
+
+
 -- 
 Thomas Petazzoni, Free Electrons
 Kernel, drivers, real-time and embedded Linux
