@@ -1,37 +1,26 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 13 Aug 2013 11:49:25 +0200
-Subject: [Buildroot] [git commit] imagemagick: fix magick++-config fixup
- error
-In-Reply-To: <20130813082128.6C4929B2E2@busybox.osuosl.org>
-References: <20130813082128.6C4929B2E2@busybox.osuosl.org>
-Message-ID: <20130813114925.07bb66a5@skate>
+Date: Tue, 13 Aug 2013 11:49:43 +0200
+Subject: [Buildroot] [PATCH] opencv: gtk support doesn't work with
+ directfb
+In-Reply-To: <1376309523-10778-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1376309523-10778-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20130813114943.4717dcda@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas Petazzoni,
+Dear Gustavo Zacarias,
 
-On Tue, 13 Aug 2013 10:16:11 +0200, Thomas Petazzoni wrote:
-> commit: http://git.buildroot.net/buildroot/commit/?id=b339bb5641c59ad2e19aeb95c1387584c7c2aeab
-> branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Mon, 12 Aug 2013 09:12:03 -0300, Gustavo Zacarias wrote:
+> This was dropped on 4b3d949b8af240bda451b0a4e57d60153188c2e4 when
+> libgkt2 was updated. Fixes:
+> http://autobuild.buildroot.net/results/817/8173b7fd3d6af79a7f2c04bf36059a4429127516/
 > 
-> Magic++ bindings are built only with C++ and WCHAR toolchains.
-> Add a WCHAR toolchain check for the magick++ config fixup.
-> Looking into the future the fixup shouldn't bail on a missing file so we
-> can avoid awkward kludges for packages that have many options and config
-> files.
-> Fixes:
-> http://autobuild.buildroot.net/results/33a/33ac4b17866a64379b7bab3c0549f6e075c98dde/
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
-Thanks, committed.
-
-However, I think I disagree on the idea that the fixup shouldn't bail
-on a missing file. Bailing out is the best way to notice that something
-is wrong, otherwise problems remain unnoticed.
-
-Best regards,
+Applied, thanks.
 
 Thomas
 -- 
