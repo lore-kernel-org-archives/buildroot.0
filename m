@@ -1,37 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 13 Aug 2013 10:16:58 +0200
-Subject: [Buildroot] [git commit] opencv: gtk support doesn't work with
-	directfb
-Message-ID: <20130813082128.79EC19B2B2@busybox.osuosl.org>
+Date: Tue, 13 Aug 2013 10:18:27 +0200
+Subject: [Buildroot] [git commit] readline: use normal/default install target
+Message-ID: <20130813082128.9204B9B2B2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=4807cdf8a950fda60f32b16caf996d02a3c2273e
+commit: http://git.buildroot.net/buildroot/commit/?id=c1a6bcece5e5832cc8897b5b600dfb958cab88f0
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This was dropped on 4b3d949b8af240bda451b0a4e57d60153188c2e4 when
-libgkt2 was updated. Fixes:
-http://autobuild.buildroot.net/results/817/8173b7fd3d6af79a7f2c04bf36059a4429127516/
+Since the custom INSTALL_TARGET doesn't consider static builds it breaks
+horribly and there's no need with the current version since it works
+just fine with a little varnish to remove samples. Fixes:
+http://autobuild.buildroot.net/results/5a6/5a62c38ec621d49230d76981db6024035e88804a/
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/opencv/Config.in |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/readline/readline.mk |   12 ++++--------
+ 1 files changed, 4 insertions(+), 8 deletions(-)
 
-diff --git a/package/opencv/Config.in b/package/opencv/Config.in
-index c6ec3fe..e98ba8a 100644
---- a/package/opencv/Config.in
-+++ b/package/opencv/Config.in
-@@ -150,7 +150,7 @@ comment "gstreamer support requires a toolchain with WCHAR and threading support
+diff --git a/package/readline/readline.mk b/package/readline/readline.mk
+index 0c883bc..ff55199 100644
+--- a/package/readline/readline.mk
++++ b/package/readline/readline.mk
+@@ -13,14 +13,10 @@ READLINE_CONF_ENV = bash_cv_func_sigsetjmp=yes
+ READLINE_LICENSE = GPLv3+
+ READLINE_LICENSE_FILES = COPYING
  
- config BR2_PACKAGE_OPENCV_WITH_GTK
- 	bool "gtk support"
--	depends on BR2_PACKAGE_XORG7||BR2_PACKAGE_DIRECTFB
-+	depends on BR2_PACKAGE_XORG7
- 	depends on BR2_USE_WCHAR # libgtk2 -> libglib2
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libgtk2 -> libglib2
- 	depends on BR2_INSTALL_LIBSTDCPP
+-define READLINE_INSTALL_TARGET_CMDS
+-	$(MAKE1) DESTDIR=$(TARGET_DIR) -C $(@D) uninstall
+-	$(MAKE1) DESTDIR=$(TARGET_DIR) -C $(@D) install-shared uninstall-doc
+-	chmod 775 $(TARGET_DIR)/usr/lib/libreadline.so.$(READLINE_VERSION) \
+-		$(TARGET_DIR)/usr/lib/libhistory.so.$(READLINE_VERSION)
+-	$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) \
+-		$(TARGET_DIR)/usr/lib/libreadline.so.$(READLINE_VERSION) \
+-		$(TARGET_DIR)/usr/lib/libhistory.so.$(READLINE_VERSION)
++define READLINE_PURGE_EXAMPLES
++	rm -rf $(TARGET_DIR)/usr/share/readline
+ endef
+ 
++READLINE_POST_INSTALL_TARGET_HOOKS += READLINE_PURGE_EXAMPLES
++
+ $(eval $(autotools-package))
