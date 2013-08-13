@@ -1,27 +1,25 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 13 Aug 2013 11:50:26 +0200
-Subject: [Buildroot] [PATCH] aircrack-ng: fix static build
-In-Reply-To: <1376315409-12258-1-git-send-email-s.martin49@gmail.com>
-References: <1376315409-12258-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <20130813115026.2cf4672a@skate>
+Date: Tue, 13 Aug 2013 11:50:46 +0200
+Subject: [Buildroot] [PATCH] libcec: needs threads
+In-Reply-To: <1376327313-20317-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1376327313-20317-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20130813115046.49ef06c6@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Samuel Martin,
+Dear Gustavo Zacarias,
 
-On Mon, 12 Aug 2013 15:50:09 +0200, Samuel Martin wrote:
-> When static build and sqlite3 support are enabled together,
-> link flags needs to be defined in the right order.
+On Mon, 12 Aug 2013 14:08:33 -0300, Gustavo Zacarias wrote:
+> Fixes:
+> http://autobuild.buildroot.net/results/16a/16ad8b64e68477dcd663d07c600fd1be3164df81/
 > 
-> Fixes http://autobuild.buildroot.org/results/a74/a74ced69052c1d0a91dbe32483fd0612d1bf24a
-> 
-> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 > ---
->  package/aircrack-ng/aircrack-ng.mk | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
+>  package/libcec/Config.in | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
 
 Applied, thanks.
 
