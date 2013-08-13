@@ -1,30 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 13 Aug 2013 11:32:16 +0200
-Subject: [Buildroot] [PATCH] toolchain-external: fix lib64 symlinks
-In-Reply-To: <CAG2jQ8iVYt=QK9s4sKKzbCsRvp=rA4_BjPSg0DnTQtOobOtn4A@mail.gmail.com>
-References: <1376340548-14050-1-git-send-email-s.martin49@gmail.com>
- <CAG2jQ8iVYt=QK9s4sKKzbCsRvp=rA4_BjPSg0DnTQtOobOtn4A@mail.gmail.com>
-Message-ID: <20130813113216.5e29331a@skate>
+Date: Tue, 13 Aug 2013 11:49:25 +0200
+Subject: [Buildroot] [git commit] imagemagick: fix magick++-config fixup
+ error
+In-Reply-To: <20130813082128.6C4929B2E2@busybox.osuosl.org>
+References: <20130813082128.6C4929B2E2@busybox.osuosl.org>
+Message-ID: <20130813114925.07bb66a5@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Markos Chandras,
+Dear Thomas Petazzoni,
 
-On Tue, 13 Aug 2013 09:37:37 +0100, Markos Chandras wrote:
-
-> Again, this should also handle the MIPS64/n32 case where lib32 is
-> needed instead of lib or lib64
+On Tue, 13 Aug 2013 10:16:11 +0200, Thomas Petazzoni wrote:
+> commit: http://git.buildroot.net/buildroot/commit/?id=b339bb5641c59ad2e19aeb95c1387584c7c2aeab
+> branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 > 
-> Thomas suggested to have new symbols like ARCH_NEEDS_LIB32 or
-> ARCH_NEEDS_LIB64 selected by architectures that need lib32->lib or
-> lib64->lib symlinks respectively.
+> Magic++ bindings are built only with C++ and WCHAR toolchains.
+> Add a WCHAR toolchain check for the magick++ config fixup.
+> Looking into the future the fixup shouldn't bail on a missing file so we
+> can avoid awkward kludges for packages that have many options and config
+> files.
+> Fixes:
+> http://autobuild.buildroot.net/results/33a/33ac4b17866a64379b7bab3c0549f6e075c98dde/
 
-Right, at least I wanted this to be explored.
+Thanks, committed.
 
-Thanks,
+However, I think I disagree on the idea that the fixup shouldn't bail
+on a missing file. Bailing out is the best way to notice that something
+is wrong, otherwise problems remain unnoticed.
+
+Best regards,
 
 Thomas
 -- 
