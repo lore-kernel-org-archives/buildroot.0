@@ -1,48 +1,66 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 13 Aug 2013 10:20:48 +0200
-Subject: [Buildroot] [git commit] ltrace: disable libunwind for uClibc
-	toolchains
-Message-ID: <20130813082128.AE50D9B2E2@busybox.osuosl.org>
+Date: Tue, 13 Aug 2013 10:20:21 +0200
+Subject: [Buildroot] [git commit] wayland: needs threads
+Message-ID: <20130813082128.A728E9B2E2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=8a14dab8bdad1d819924d6039b16061fccef3df2
+commit: http://git.buildroot.net/buildroot/commit/?id=038227a9552a402f55b559b770e2ba9c0f3e0ec7
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-ltrace requires that libunwind is built with backtrace() support.
-For the internal uClibc toolchain we don't enable it, and for external
-uClibc toolchains we can't know.
-It's also unavailable for static uClibc toolchains.
-So just disable libunwind support for uClibc toolchains in general.
 Fixes:
-http://autobuild.buildroot.net/results/ee0/ee037a19590fb85c64f97f78f74bcfd4d7766706/
+http://autobuild.buildroot.net/results/383/383c6ac297250f87db9d03afa38d45b2c1adcb47/
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/ltrace/ltrace.mk |   11 +++++++++++
- 1 files changed, 11 insertions(+), 0 deletions(-)
+ package/multimedia/gst1-plugins-bad/Config.in |    1 +
+ package/wayland/Config.in                     |    4 ++++
+ package/weston/Config.in                      |    1 +
+ 3 files changed, 6 insertions(+), 0 deletions(-)
 
-diff --git a/package/ltrace/ltrace.mk b/package/ltrace/ltrace.mk
-index 7b8d859..55930b8 100644
---- a/package/ltrace/ltrace.mk
-+++ b/package/ltrace/ltrace.mk
-@@ -13,4 +13,15 @@ LTRACE_CONF_OPT = --disable-werror
- LTRACE_LICENSE = GPLv2
- LTRACE_LICENSE_FILES = COPYING
+diff --git a/package/multimedia/gst1-plugins-bad/Config.in b/package/multimedia/gst1-plugins-bad/Config.in
+index 878bf53..f30f2b3 100644
+--- a/package/multimedia/gst1-plugins-bad/Config.in
++++ b/package/multimedia/gst1-plugins-bad/Config.in
+@@ -355,6 +355,7 @@ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_DIRECTFB
  
-+# ltrace can use libunwind only if libc has backtrace() support
-+# We don't normally do so for uClibc and we can't know if it's external
-+ifeq ($(BR2_PACKAGE_LIBUNWIND),y)
-+ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),)
-+LTRACE_CONF_OPT += --with-libunwind=yes
-+LTRACE_DEPENDENCIES += libunwind
-+else
-+LTRACE_CONF_OPT += --with-libunwind=no
-+endif
-+endif
+ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_WAYLAND
+ 	bool "wayland"
++	depends on BR2_TOOLCHAIN_HAS_THREADS # wayland
+ 	select BR2_PACKAGE_WAYLAND
+ 	help
+ 	  Wayland Video Sink
+diff --git a/package/wayland/Config.in b/package/wayland/Config.in
+index e5d2649..591e0f0 100644
+--- a/package/wayland/Config.in
++++ b/package/wayland/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_WAYLAND
+ 	bool "wayland"
++	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_PACKAGE_LIBFFI
+ 	select BR2_PACKAGE_EXPAT
+ 	help
+@@ -8,3 +9,6 @@ config BR2_PACKAGE_WAYLAND
+ 	  of the protocol.
+ 
+ 	  http://wayland.freedesktop.org/
 +
- $(eval $(autotools-package))
++comment "wayland requires a toolchain with thread support"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/weston/Config.in b/package/weston/Config.in
+index 8871ce5..56eb135 100644
+--- a/package/weston/Config.in
++++ b/package/weston/Config.in
+@@ -11,6 +11,7 @@ config BR2_PACKAGE_WESTON
+ 	select BR2_PACKAGE_JPEG
+ 	select BR2_PACKAGE_MTDEV
+ 	depends on BR2_PACKAGE_UDEV
++	depends on BR2_TOOLCHAIN_HAS_THREADS # wayland
+ 	# Runtime dependency
+ 	select BR2_PACKAGE_XKEYBOARD_CONFIG
+ 	# Make sure at least one backend is selected
