@@ -1,58 +1,115 @@
-From: Markos Chandras <markos.chandras@imgtec.com>
-Date: Tue, 13 Aug 2013 09:45:44 +0100
-Subject: [Buildroot] [PATCH v2] toolchain-external: Restrict Sourcery
-	CodeBench toolchains for MIPS/n32
-Message-ID: <1376383544-26722-1-git-send-email-markos.chandras@imgtec.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 13 Aug 2013 11:05:08 +0200
+Subject: [Buildroot] [git commit branch/next] orbit: New package
+Message-ID: <20130813090554.0C68A9B34A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-n32 is not supported in Sourcery CodeBench toolchains.
+commit: http://git.buildroot.net/buildroot/commit/?id=02e4326fe7f1912a6f12bdef54c7295f9188dd38
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
+An MVC web framework for Lua
+
+[Thomas P: add patch to fix installation procedure, and use the
+provided Makefile for installation. Remove build-time dependency on
+wsapi since there's nothing to build in 'orbit'. Remove run-time
+dependency on 'rings', since it's not clear why Orbit would depend on
+that.]
+
+Signed-off-by: Assaf Inbal <shmuelzon@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- toolchain/toolchain-external/Config.in | 6 ++++++
- 1 file changed, 6 insertions(+)
+ package/Config.in                             |    1 +
+ package/orbit/Config.in                       |   10 +++++++++
+ package/orbit/orbit-01-fix-installation.patch |   26 +++++++++++++++++++++++++
+ package/orbit/orbit.mk                        |   19 ++++++++++++++++++
+ 4 files changed, 56 insertions(+), 0 deletions(-)
 
-diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-index 324401f..ad1f203 100644
---- a/toolchain/toolchain-external/Config.in
-+++ b/toolchain/toolchain-external/Config.in
-@@ -190,6 +190,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201305
- 	bool "Sourcery CodeBench MIPS 2013.05"
- 	depends on BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el
- 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
-+	depends on !BR2_MIPS_NABI32
- 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
- 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	select BR2_INSTALL_LIBSTDCPP
-@@ -260,6 +261,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201209
- 	bool "Sourcery CodeBench MIPS 2012.09"
- 	depends on BR2_mips || BR2_mipsel
- 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
-+	depends on !BR2_MIPS_NABI32
- 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
- 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	select BR2_INSTALL_LIBSTDCPP
-@@ -330,6 +332,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201203
- 	bool "Sourcery CodeBench MIPS 2012.03"
- 	depends on BR2_mips || BR2_mipsel
- 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
-+	depends on !BR2_MIPS_NABI32
- 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
- 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	select BR2_INSTALL_LIBSTDCPP
-@@ -396,6 +399,9 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201203
- 	    - MIPS32 little endian soft float uclibc
- 	      Not usable in Buildroot yet.
- 
-+comment "Sourcery CodeBench toolchains are only available for MIPS/MIPS64 o32 and n64"
-+	depends on BR2_MIPS_NABI32
+diff --git a/package/Config.in b/package/Config.in
+index 27a0d55..4fcff65 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -341,6 +341,7 @@ source "package/luasocket/Config.in"
+ source "package/luasql/Config.in"
+ source "package/lua-ev/Config.in"
+ source "package/lua-msgpack-native/Config.in"
++source "package/orbit/Config.in"
+ source "package/rings/Config.in"
+ source "package/wsapi/Config.in"
+ source "package/xavante/Config.in"
+diff --git a/package/orbit/Config.in b/package/orbit/Config.in
+new file mode 100644
+index 0000000..556c46e
+--- /dev/null
++++ b/package/orbit/Config.in
+@@ -0,0 +1,10 @@
++config BR2_PACKAGE_ORBIT
++	bool "orbit"
++	# These are runtime dependencies
++	select BR2_PACKAGE_WSAPI
++	select BR2_PACKAGE_LUAFILESYSTEM
++	help
++	  An MVC web framework for Lua. The design is inspired by lightweight
++	  Ruby frameworks such as Camping
 +
- config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201103
- 	bool "Sourcery CodeBench PowerPC 2011.03"
- 	depends on BR2_powerpc
--- 
-1.8.3.2
++	  http://keplerproject.github.com/orbit
+diff --git a/package/orbit/orbit-01-fix-installation.patch b/package/orbit/orbit-01-fix-installation.patch
+new file mode 100644
+index 0000000..ae50ad9
+--- /dev/null
++++ b/package/orbit/orbit-01-fix-installation.patch
+@@ -0,0 +1,26 @@
++Fix installation commands
++
++The installation commands did not match the location of the source
++files within the Orbit source tree.
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++
++Index: b/Makefile
++===================================================================
++--- a/Makefile
+++++ b/Makefile
++@@ -11,12 +11,9 @@
++ 	mkdir -p $(LUA_DIR)
++ 	cp src/orbit.lua $(LUA_DIR)
++ 	mkdir -p $(LUA_DIR)/orbit
++-	cp src/model.lua $(LUA_DIR)/orbit
++-	cp src/cache.lua $(LUA_DIR)/orbit
++-	cp src/pages.lua $(LUA_DIR)/orbit
++-	cp src/ophandler.lua $(LUA_DIR)/orbit
+++	cp src/orbit/*.lua $(LUA_DIR)/orbit
++ 	mkdir -p $(BIN_DIR)
++-	cp src/orbit $(BIN_DIR)
+++	cp src/launchers/* $(BIN_DIR)
++ 	if [ -f ./wsapi/Makefile ]; then \
++ 	  cd wsapi && make install; \
++ 	fi
+diff --git a/package/orbit/orbit.mk b/package/orbit/orbit.mk
+new file mode 100644
+index 0000000..af5f0af
+--- /dev/null
++++ b/package/orbit/orbit.mk
+@@ -0,0 +1,19 @@
++################################################################################
++#
++# orbit
++#
++################################################################################
++
++ORBIT_VERSION = 2.2.0
++ORBIT_SITE = http://github.com/downloads/keplerproject/orbit
++ORBIT_LICENSE = MIT
++ORBIT_LICENSE_FILES = COPYRIGHT
++
++define ORBIT_INSTALL_TARGET_CMDS
++	$(MAKE) -C $(@D) \
++		LUA_DIR=$(TARGET_DIR)/usr/share/lua/ \
++		BIN_DIR=$(TARGET_DIR)/usr/bin \
++		install
++endef
++
++$(eval $(generic-package))
