@@ -1,77 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 13 Aug 2013 23:09:34 +0200
-Subject: [Buildroot] [git commit branch/next] lxc: new package
-Message-ID: <20130813210929.944369B349@busybox.osuosl.org>
+Date: Tue, 13 Aug 2013 23:10:49 +0200
+Subject: [Buildroot] [PATCH] lxc: new package
+In-Reply-To: <1360668086-9853-1-git-send-email-jezz@sysmic.org>
+References: <1360668086-9853-1-git-send-email-jezz@sysmic.org>
+Message-ID: <20130813231049.5f7e3b8a@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f62a006639bb4222027415bee7193061ca1c514c
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Dear J?r?me Pouiller,
 
-Linux Containers (LXC), provides the ability to group and isolate
-of a set of processes in a jail by virtualizing and accounting the
-kernel resources. It is similar to Linux-Vserver or Openvz.
+On Tue, 12 Feb 2013 12:21:26 +0100, J?r?me Pouiller wrote:
+> Linux Containers (LXC), provides the ability to group and isolate
+> of a set of processes in a jail by virtualizing and accounting the
+> kernel resources. It is similar to Linux-Vserver or Openvz.
+> 
+> Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
 
-Signed-off-by: J??r??me Pouiller <jezz@sysmic.org>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/Config.in     |    1 +
- package/lxc/Config.in |   14 ++++++++++++++
- package/lxc/lxc.mk    |   14 ++++++++++++++
- 3 files changed, 29 insertions(+), 0 deletions(-)
+Applied, thanks.
 
-diff --git a/package/Config.in b/package/Config.in
-index 2ee843e..2347229 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -903,6 +903,7 @@ source "package/cpuload/Config.in"
- source "package/htop/Config.in"
- source "package/keyutils/Config.in"
- source "package/kmod/Config.in"
-+source "package/lxc/Config.in"
- if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- source "package/module-init-tools/Config.in"
- endif
-diff --git a/package/lxc/Config.in b/package/lxc/Config.in
-new file mode 100644
-index 0000000..5e6e208
---- /dev/null
-+++ b/package/lxc/Config.in
-@@ -0,0 +1,14 @@
-+config BR2_PACKAGE_LXC
-+	bool "lxc"
-+	select BR2_PACKAGE_LIBCAP
-+	depends on BR2_INET_IPV6
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	help
-+	  Linux Containers (LXC), provides the ability to group and isolate
-+	  of a set of processes in a jail by virtualizing and accounting the
-+	  kernel resources. It is similar to Linux-Vserver or Openvz.
-+
-+	  http://lxc.sourceforge.net/
-+
-+comment "lxc requires a toolchain with IPv6 and thread support"
-+	depends on !BR2_INET_IPV6 || !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/lxc/lxc.mk b/package/lxc/lxc.mk
-new file mode 100644
-index 0000000..4e06902
---- /dev/null
-+++ b/package/lxc/lxc.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# lxc
-+#
-+################################################################################
-+
-+LXC_VERSION = 0.9.0
-+LXC_SITE = http://downloads.sourceforge.net/project/lxc/lxc/lxc-$(LXC_VERSION)
-+LXC_LICENSE = LGPLv2.1+
-+LXC_LICENSE_FILES = COPYING
-+LXC_DEPENDENCIES = libcap
-+LXC_CONF_OPT = --disable-apparmor
-+
-+$(eval $(autotools-package))
+I've bumped the version to 0.9.0 (last stable release available at this
+time), and I've added thread and IPv6 toolchain dependencies.
+
+Thanks,
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
