@@ -1,74 +1,71 @@
-From: Frank Hunleth <fhunleth@troodon-software.com>
-Date: Tue, 13 Aug 2013 20:44:56 -0400
-Subject: [Buildroot] BeagleBoneBlack Status
-In-Reply-To: <CAEBucnD__n6ebXT6_vNLoUwV4tiKKteQNM9njeAjbh-Ld6+mKg@mail.gmail.com>
-References: <CAEBucnD__n6ebXT6_vNLoUwV4tiKKteQNM9njeAjbh-Ld6+mKg@mail.gmail.com>
-Message-ID: <CA+-urNRh=T8VuSmOwCr7RmxtYWJiUp=FyC8r-eO6sjvN8LnfyQ@mail.gmail.com>
+From: Blanco <blanco.ether@gmail.com>
+Date: Tue, 13 Aug 2013 20:51:58 -0400
+Subject: [Buildroot] [PATCH 1/1] ola: new package
+In-Reply-To: <20130814003211.0c9bdaa7@skate>
+References: <1376330715-20047-1-git-send-email-blanco.ether@gmail.com>
+ <20130814003211.0c9bdaa7@skate>
+Message-ID: <30D3ECD4-98BF-4A89-A156-5A5D2A7EE1AB@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Spenser,
 
-On Tue, Aug 13, 2013 at 7:11 PM, Spenser Gilliland
-<spenser@gillilanding.com> wrote:
->
-> Hi Everyone,
->
-> I'm here with an update on the status of BBB. I have developed a
-> defconfig for the BBB.  It is the beagleblack_defconfig in my
-> github.com/Spenser309/buildroot (branch beagleblack) repo.  This takes
-> in the mega patch from RobertCNelson, adds the dtc kernel patch, my
-> linux_defconfig and builds a kernel/rfs that works on the BBB.
+Hi Thomas, 
 
-FWIW, RobertCNelson has a newer patch (bone25). I haven't tried it out
-since everything has been working well for me with an older version.
+No, plugins should not be built if not selected.  I took out autoreconfig when I switched from git repo to tarred release.  It is possible that is the cause.  I will check.
 
-Also, just so there's proper attribution for the dtc kernel patch, I
-later found out that someone figured it out with Angstrom before me.
-Here's a link to their patch:
+Dave
 
-https://github.com/beagleboard/kernel/blob/3.8/patches/build/0004-Make-single-.dtb-targets-also-with-DTC_FLAGS.patch
+On Aug 13, 2013, at 6:32 PM, Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
 
-That particular patch directory has other patches that RCN doesn't
-apply to his Debian builds (i.e. not in the mega patch), but it
-doesn't seem like the others are necessary.
-
->
-> The Beagle Bone Black faces two main issues in order to be completely
-> supported in Buildroot.
->
-> 1. The firmware (for BBB capes) must be builtin to the kernel as the
-> kernels firmware loading mechanism does not wait for the RFS to be
-> mounted.  This greatly increases the kernel size.
-
-There's only about a 20 KB difference when CONFIG_FIRMWARE_IN_KERNEL
-is defined. That doesn't seem that bad?
-
-> 2. The SGX core has no support (or at least no documentation) for
-> integrating with the TI DRM Framebuffer (supposedly will be
-> implemented in next ti-gfx release.)
-
-I also hope that this isn't a showstopper for bbb support in
-buildroot, since the bbb is quite useful without the SGX core. (and
-who knows when the next ti-gfx release will be)
-
-As I get a chance, I'll start trying out some of your changes. Thanks
-for sharing.
-
-Frank
-
->
+> Dear Dave Skok,
+> 
+> On Mon, 12 Aug 2013 14:05:15 -0400, Dave Skok wrote:
+>> Signed-off-by: Dave Skok <blanco.ether@gmail.com>
+>> ---
+>> package/Config.in     |   1 +
+>> package/ola/Config.in | 144 +++++++++++++++++++++++++++++++++++++++++++++++
+>> package/ola/ola.mk    | 153 ++++++++++++++++++++++++++++++++++++++++++++++++++
+>> 3 files changed, 298 insertions(+)
+>> create mode 100644 package/ola/Config.in
+>> create mode 100644 package/ola/ola.mk
+> 
+> Thanks, it now builds successfully.
+> 
+> However, I've found another issue: even if I keep most plugins
+> disabled, they are still all built and installed. For example, with a
+> configuration that has:
+> 
+> # BR2_PACKAGE_OLA_PLUGIN_KARATE is not set
+> 
+> I get the karate plugin built and installed:
+> 
+> $ ls -1 output/target/usr/lib/olad/*karate*
+> output/target/usr/lib/olad/libolakarate.so
+> output/target/usr/lib/olad/libolakarate.so.0
+> output/target/usr/lib/olad/libolakarate.so.0.0.0
+> 
+> Same goes for:
+> 
+> # BR2_PACKAGE_OLA_PLUGIN_SPI is not set
+> 
+> $ ls -1 output/target/usr/lib/olad/*spi*
+> output/target/usr/lib/olad/libolaspicore.so
+> output/target/usr/lib/olad/libolaspicore.so.0
+> output/target/usr/lib/olad/libolaspicore.so.0.0.0
+> output/target/usr/lib/olad/libolaspi.so
+> output/target/usr/lib/olad/libolaspi.so.0
+> output/target/usr/lib/olad/libolaspi.so.0.0.0
+> 
+> Is this expected?
+> 
 > Thanks,
-> Spenser
->
-> --
-> Spenser Gilliland
-> Computer Engineer
-> Doctoral Candidate
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
+> Thomas
+> -- 
+> Thomas Petazzoni, Free Electrons
+> Kernel, drivers, real-time and embedded Linux
+> development, consulting, training and support.
+> http://free-electrons.com
