@@ -1,324 +1,334 @@
-From: =?ISO-8859-1?Q?Fran=E7ois_Perrad?= <francois.perrad@gadz.org>
-Date: Thu, 15 Aug 2013 18:56:48 +0200
-Subject: [Buildroot] [PATCH] lua: remove shared library feature
-In-Reply-To: <20130814003652.39c4d945@skate>
-References: <1352033124-2514-1-git-send-email-arnout@mind.be>
- <20130814003652.39c4d945@skate>
-Message-ID: <CAB0FRss5gTuePkganj6UfXg0ssqQADc_rAya90znq-=6zVfDwg@mail.gmail.com>
+From: Dave Skok <blanco.ether@gmail.com>
+Date: Thu, 15 Aug 2013 13:04:28 -0400
+Subject: [Buildroot] [PATCH 1/1] ola: new package
+Message-ID: <1376586268-14586-1-git-send-email-blanco.ether@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2013/8/14 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>:
-> Fran?ois, Gustavo,
->
-> Can you look at the below patch and tell me what you think?
->
+Signed-off-by: Dave Skok <blanco.ether@gmail.com>
+---
+ package/Config.in     |   1 +
+ package/ola/Config.in | 142 ++++++++++++++++++++++++++++++++++++++++++++++++
+ package/ola/ola.mk    | 147 ++++++++++++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 290 insertions(+)
+ create mode 100644 package/ola/Config.in
+ create mode 100644 package/ola/ola.mk
 
-Seems obsolete (BR2_PACKAGE_LUA_SHARED_LIBRARY was removed).
-
-Fran?ois
-
-> Thanks,
->
-> Thomas
->
-> On Sun,  4 Nov 2012 13:45:24 +0100, Arnout Vandecappelle
-> (Essensium/Mind) wrote:
->> The shared library is a feature we added to lua, but it doesn't work
->> correctly.  Since we anyway normally don't add features to packages,
->> just remove all the support for the shared library.
->>
->> Fixes
->> http://autobuild.buildroot.net/results/3946da859a0dcab99a8db8b91fd9428d9e85bdf1/
->>
->> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
->> ---
->> Francois, Gustavo, could you review and Ack this patch please?  You're
->> more or less the lua maintainers...
->>
->> v2: Added reference to autobuild failure
->>
->>  package/lua/Config.in                         |    7 --
->>  package/lua/lua-02-shared-libs-for-lua.patch  |   49 -------------
->>  package/lua/lua-03-shared-libs-for-luac.patch |   97 -------------------------
->>  package/lua/lua.mk                            |   28 +------
->>  4 files changed, 2 insertions(+), 179 deletions(-)
->>
->> diff --git a/package/lua/Config.in b/package/lua/Config.in
->> index 76359c0..c85b6ab 100644
->> --- a/package/lua/Config.in
->> +++ b/package/lua/Config.in
->> @@ -9,13 +9,11 @@ if BR2_PACKAGE_LUA
->>
->>  config BR2_PACKAGE_LUA_COMPILER
->>       bool "lua compiler"
->> -     select BR2_PACKAGE_LUA_SHARED_LIBRARY
->>       help
->>         Install luac binary
->>
->>  config BR2_PACKAGE_LUA_INTERPRETER
->>       bool "lua interpreter"
->> -     select BR2_PACKAGE_LUA_SHARED_LIBRARY
->>       help
->>         Install lua binary
->>
->> @@ -27,9 +25,4 @@ config BR2_PACKAGE_LUA_INTERPRETER_READLINE
->>       help
->>         Enables command-line editing in the lua interpreter.
->>
->> -config BR2_PACKAGE_LUA_SHARED_LIBRARY
->> -     bool "shared library"
->> -     help
->> -       Install shared liblua.so
->> -
->>  endif
->> diff --git a/package/lua/lua-02-shared-libs-for-lua.patch b/package/lua/lua-02-shared-libs-for-lua.patch
->> deleted file mode 100644
->> index 454e660..0000000
->> --- a/package/lua/lua-02-shared-libs-for-lua.patch
->> +++ /dev/null
->> @@ -1,49 +0,0 @@
->> -Add the compilation of a shared library.
->> -Compile the lua binary with the shared library.
->> -
->> -Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
->> -
->> -Index: b/src/Makefile
->> -===================================================================
->> ---- a/src/Makefile
->> -+++ b/src/Makefile
->> -@@ -23,6 +23,7 @@
->> - PLATS= aix ansi bsd freebsd generic linux macosx mingw posix solaris
->> -
->> - LUA_A=      liblua.a
->> -+LUA_SO=     liblua.so
->> - CORE_O=     lapi.o lcode.o ldebug.o ldo.o ldump.o lfunc.o lgc.o llex.o lmem.o \
->> -     lobject.o lopcodes.o lparser.o lstate.o lstring.o ltable.o ltm.o  \
->> -     lundump.o lvm.o lzio.o
->> -@@ -36,8 +37,9 @@
->> - LUAC_O=     luac.o print.o
->> -
->> - ALL_O= $(CORE_O) $(LIB_O) $(LUA_O) $(LUAC_O)
->> --ALL_T= $(LUA_A) $(LUA_T) $(LUAC_T)
->> -+ALL_T= $(LUA_A) $(LUA_SO) $(LUA_T) $(LUAC_T)
->> - ALL_A= $(LUA_A)
->> -+ALL_SO= $(LUA_SO)
->> -
->> - default: $(PLAT)
->> -
->> -@@ -47,12 +49,18 @@
->> -
->> - a:  $(ALL_A)
->> -
->> -+so: $(ALL_SO)
->> -+
->> - $(LUA_A): $(CORE_O) $(LIB_O)
->> -     $(AR) $@ $(CORE_O) $(LIB_O)     # DLL needs all object files
->> -     $(RANLIB) $@
->> -
->> --$(LUA_T): $(LUA_O) $(LUA_A)
->> --    $(CC) -o $@ $(MYLDFLAGS) $(LUA_O) $(LUA_A) $(LIBS)
->> -+$(LUA_SO): $(CORE_O) $(LIB_O)
->> -+    $(CC) -o $@.$(PKG_VERSION) -shared -Wl,-soname="$@.$(PKG_VERSION)" $? -nostdlib -lgcc
->> -+    ln -fs $@.$(PKG_VERSION) $@
->> -+
->> -+$(LUA_T): $(LUA_O) $(LUA_SO)
->> -+    $(CC) -o $@ -L. $(MYLDFLAGS) $(LUA_O) -llua $(LIBS)
->> -
->> - $(LUAC_T): $(LUAC_O) $(LUA_A)
->> -     $(CC) -o $@ $(MYLDFLAGS) $(LUAC_O) $(LUA_A) $(LIBS)
->> diff --git a/package/lua/lua-03-shared-libs-for-luac.patch b/package/lua/lua-03-shared-libs-for-luac.patch
->> deleted file mode 100644
->> index 33f9183..0000000
->> --- a/package/lua/lua-03-shared-libs-for-luac.patch
->> +++ /dev/null
->> @@ -1,97 +0,0 @@
->> -Compile the luac binary with the shared library.
->> -Many internal functions (LUAI_FUNC) must be exported (LUA_API).
->> -
->> -Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
->> -
->> -Index: b/src/ldo.h
->> -===================================================================
->> ---- a/src/ldo.h
->> -+++ b/src/ldo.h
->> -@@ -46,7 +46,7 @@
->> - LUAI_FUNC int luaD_poscall (lua_State *L, StkId firstResult);
->> - LUAI_FUNC void luaD_reallocCI (lua_State *L, int newsize);
->> - LUAI_FUNC void luaD_reallocstack (lua_State *L, int newsize);
->> --LUAI_FUNC void luaD_growstack (lua_State *L, int n);
->> -+LUA_API void luaD_growstack (lua_State *L, int n);
->> -
->> - LUAI_FUNC void luaD_throw (lua_State *L, int errcode);
->> - LUAI_FUNC int luaD_rawrunprotected (lua_State *L, Pfunc f, void *ud);
->> -Index: b/src/lfunc.h
->> -===================================================================
->> ---- a/src/lfunc.h
->> -+++ b/src/lfunc.h
->> -@@ -18,7 +18,7 @@
->> -                          cast(int, sizeof(TValue *)*((n)-1)))
->> -
->> -
->> --LUAI_FUNC Proto *luaF_newproto (lua_State *L);
->> -+LUA_API Proto *luaF_newproto (lua_State *L);
->> - LUAI_FUNC Closure *luaF_newCclosure (lua_State *L, int nelems, Table *e);
->> - LUAI_FUNC Closure *luaF_newLclosure (lua_State *L, int nelems, Table *e);
->> - LUAI_FUNC UpVal *luaF_newupval (lua_State *L);
->> -Index: b/src/lmem.h
->> -===================================================================
->> ---- a/src/lmem.h
->> -+++ b/src/lmem.h
->> -@@ -38,9 +38,9 @@
->> -    ((v)=cast(t *, luaM_reallocv(L, v, oldn, n, sizeof(t))))
->> -
->> -
->> --LUAI_FUNC void *luaM_realloc_ (lua_State *L, void *block, size_t oldsize,
->> -+LUA_API void *luaM_realloc_ (lua_State *L, void *block, size_t oldsize,
->> -                                                           size_t size);
->> --LUAI_FUNC void *luaM_toobig (lua_State *L);
->> -+LUA_API void *luaM_toobig (lua_State *L);
->> - LUAI_FUNC void *luaM_growaux_ (lua_State *L, void *block, int *size,
->> -                                size_t size_elem, int limit,
->> -                                const char *errormsg);
->> -Index: b/src/lstring.h
->> -===================================================================
->> ---- a/src/lstring.h
->> -+++ b/src/lstring.h
->> -@@ -25,7 +25,7 @@
->> -
->> - LUAI_FUNC void luaS_resize (lua_State *L, int newsize);
->> - LUAI_FUNC Udata *luaS_newudata (lua_State *L, size_t s, Table *e);
->> --LUAI_FUNC TString *luaS_newlstr (lua_State *L, const char *str, size_t l);
->> -+LUA_API TString *luaS_newlstr (lua_State *L, const char *str, size_t l);
->> -
->> -
->> - #endif
->> -Index: b/src/lundump.h
->> -===================================================================
->> ---- a/src/lundump.h
->> -+++ b/src/lundump.h
->> -@@ -17,7 +17,7 @@
->> - LUAI_FUNC void luaU_header (char* h);
->> -
->> - /* dump one chunk; from ldump.c */
->> --LUAI_FUNC int luaU_dump (lua_State* L, const Proto* f, lua_Writer w, void* data, int strip);
->> -+LUA_API int luaU_dump (lua_State* L, const Proto* f, lua_Writer w, void* data, int strip);
->> -
->> - #ifdef luac_c
->> - /* print one chunk; from print.c */
->> -Index: b/src/Makefile
->> -===================================================================
->> ---- a/src/Makefile
->> -+++ b/src/Makefile
->> -@@ -34,7 +34,7 @@
->> - LUA_O=      lua.o
->> -
->> - LUAC_T=     luac
->> --LUAC_O=     luac.o print.o
->> -+LUAC_O=     luac.o print.o lopcodes.o
->> -
->> - ALL_O= $(CORE_O) $(LIB_O) $(LUA_O) $(LUAC_O)
->> - ALL_T= $(LUA_A) $(LUA_SO) $(LUA_T) $(LUAC_T)
->> -@@ -62,8 +62,8 @@
->> - $(LUA_T): $(LUA_O) $(LUA_SO)
->> -     $(CC) -o $@ -L. -llua $(MYLDFLAGS) $(LUA_O) $(LIBS)
->> -
->> --$(LUAC_T): $(LUAC_O) $(LUA_A)
->> --    $(CC) -o $@ $(MYLDFLAGS) $(LUAC_O) $(LUA_A) $(LIBS)
->> -+$(LUAC_T): $(LUAC_O) $(LUA_SO)
->> -+    $(CC) -o $@ -L. $(MYLDFLAGS) $(LUAC_O) -llua $(LIBS)
->> -
->> - clean:
->> -     $(RM) $(ALL_T) $(ALL_O)
->> diff --git a/package/lua/lua.mk b/package/lua/lua.mk
->> index de60c57..cc5cd34 100644
->> --- a/package/lua/lua.mk
->> +++ b/package/lua/lua.mk
->> @@ -11,9 +11,6 @@ LUA_LICENSE = MIT
->>  LUA_LICENSE_FILES = COPYRIGHT
->>
->>  LUA_CFLAGS = -Wall
->> -ifeq ($(BR2_PACKAGE_LUA_SHARED_LIBRARY),y)
->> -     LUA_CFLAGS += -fPIC
->> -endif
->>
->>  LUA_MYLIBS += -ldl
->>
->> @@ -28,7 +25,7 @@ endif
->>  # We never want to have host-readline and host-ncurses as dependencies
->>  # of host-lua.
->>  HOST_LUA_DEPENDENCIES =
->> -HOST_LUA_CFLAGS = -Wall -fPIC -DLUA_USE_DLOPEN -DLUA_USE_POSIX
->> +HOST_LUA_CFLAGS = -Wall -DLUA_USE_DLOPEN -DLUA_USE_POSIX
->>  HOST_LUA_MYLIBS = -ldl
->>
->>  define LUA_BUILD_CMDS
->> @@ -46,14 +43,6 @@ define HOST_LUA_BUILD_CMDS
->>       PKG_VERSION=$(LUA_VERSION) -C $(@D)/src all
->>  endef
->>
->> -ifeq ($(BR2_PACKAGE_LUA_SHARED_LIBRARY),y)
->> -define LUA_INSTALL_STAGING_SHARED_LIB
->> -     $(INSTALL) -m 0755 -D $(@D)/src/liblua.so.$(LUA_VERSION) \
->> -             $(STAGING_DIR)/usr/lib/liblua.so.$(LUA_VERSION)
->> -     ln -sf liblua.so.$(LUA_VERSION) $(STAGING_DIR)/usr/lib/liblua.so
->> -endef
->> -endif
->> -
->>  define LUA_INSTALL_STAGING_CMDS
->>       $(INSTALL) -m 0644 -D $(@D)/etc/lua.pc \
->>               $(STAGING_DIR)/usr/lib/pkgconfig/lua.pc
->> @@ -78,18 +67,9 @@ define LUA_INSTALL_COMPILER
->>  endef
->>  endif
->>
->> -ifeq ($(BR2_PACKAGE_LUA_SHARED_LIBRARY),y)
->>  define LUA_INSTALL_LIBRARY
->> -     $(INSTALL) -m 0755 -D $(@D)/src/liblua.so.$(LUA_VERSION) \
->> -             $(TARGET_DIR)/usr/lib/liblua.so.$(LUA_VERSION)
->> -     ln -sf liblua.so.$(LUA_VERSION) $(TARGET_DIR)/usr/lib/liblua.so
->>       $(INSTALL) -m 0644 -D $(@D)/src/liblua.a $(TARGET_DIR)/usr/lib/liblua.a
->>  endef
->> -else
->> -define LUA_INSTALL_LIBRARY
->> -     $(INSTALL) -m 0644 -D $(@D)/src/liblua.a $(TARGET_DIR)/usr/lib/liblua.a
->> -endef
->> -endif
->>
->>  ifeq ($(BR2_HAVE_DEVFILES),y)
->>  define LUA_INSTALL_DEVFILES
->> @@ -112,9 +92,6 @@ endef
->>  define HOST_LUA_INSTALL_CMDS
->>       $(INSTALL) -m 0755 -D $(@D)/src/lua $(HOST_DIR)/usr/bin/lua
->>       $(INSTALL) -m 0755 -D $(@D)/src/luac $(HOST_DIR)/usr/bin/luac
->> -     $(INSTALL) -m 0755 -D $(@D)/src/liblua.so.$(LUA_VERSION) \
->> -             $(HOST_DIR)/usr/lib/liblua.so.$(LUA_VERSION)
->> -     ln -sf liblua.so.$(LUA_VERSION) $(HOST_DIR)/usr/lib/liblua.so
->>       $(INSTALL) -m 0644 -D $(@D)/src/liblua.a $(HOST_DIR)/usr/lib/liblua.a
->>       $(INSTALL) -m 0644 -D $(@D)/etc/lua.pc \
->>               $(HOST_DIR)/usr/lib/pkgconfig/lua.pc
->> @@ -132,8 +109,7 @@ LUA_INSTALLED_FILES = \
->>       /usr/lib/pkgconfig/lua.pc \
->>       /usr/bin/lua \
->>       /usr/bin/luac \
->> -     /usr/lib/liblua.a \
->> -     /usr/lib/liblua.so*
->> +     /usr/lib/liblua.a
->>
->>  define LUA_UNINSTALL_STAGING_CMDS
->>       for i in $(LUA_INSTALLED_FILES); do \
->
->
->
-> --
-> Thomas Petazzoni, Free Electrons
-> Kernel, drivers, real-time and embedded Linux
-> development, consulting, training and support.
-> http://free-electrons.com
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+diff --git a/package/Config.in b/package/Config.in
+index 7069d77..fb52411 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -277,6 +277,7 @@ source "package/minicom/Config.in"
+ source "package/nanocom/Config.in"
+ source "package/neard/Config.in"
+ source "package/ofono/Config.in"
++source "package/ola/Config.in"
+ source "package/on2-8170-modules/Config.in"
+ source "package/open2300/Config.in"
+ source "package/openocd/Config.in"
+diff --git a/package/ola/Config.in b/package/ola/Config.in
+new file mode 100644
+index 0000000..e19dff4
+--- /dev/null
++++ b/package/ola/Config.in
+@@ -0,0 +1,142 @@
++config BR2_PACKAGE_OLA
++	bool "open lighting architecture"
++	select BR2_PACKAGE_PROTOBUF
++	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
++	select BR2_PACKAGE_UTIL_LINUX
++	depends on BR2_INSTALL_LIBSTDCPP # protobuf
++	depends on BR2_LARGEFILE # util-linux
++	depends on BR2_USE_WCHAR # util-linux
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	help
++	  Open Lighting Architecture provides applications 
++	  with a mechanism to send and receive DMX512 & RDM 
++	  commands using hardware devices and DMX over IP protocols.
++
++	  http://www.opendmx.net/index.php/OLA
++
++comment "ola requires a toolchain with C++, thread, largefile and wchar support"
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_LARGEFILE || !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
++
++if BR2_PACKAGE_OLA
++
++menu "OLA Bindings and Interface"
++
++config BR2_PACKAGE_OLA_WEB
++	bool "http interface"
++	select BR2_PACKAGE_LIBMICROHTTPD
++	help
++	  Build OLA with browser interface.
++
++config BR2_PACKAGE_OLA_PYTHON_BINDINGS
++	bool "python bindings"
++	select BR2_PACKAGE_PYTHON
++	select BR2_PACKAGE_PYTHON_PROTOBUF
++	depends on BR2_USE_MMU
++	help
++	  Build OLA with support for the Python language.
++
++config BR2_PACKAGE_OLA_SLP
++	bool "slp tools"
++	help
++	  Build OLA with slp tools.
++
++endmenu
++
++menu "Tests and Examples"
++
++config BR2_PACKAGE_OLA_EXAMPLES
++	bool "examples"
++	select BR2_PACKAGE_NCURSES
++	help
++	  Build OLA examples.
++
++comment "rdm tests require ola python bindings"
++	depends on !BR2_PACKAGE_OLA_PYTHON_BINDINGS
++
++config BR2_PACKAGE_OLA_RDM_TESTS
++	bool "rdm tests"
++	depends on BR2_PACKAGE_OLA_PYTHON_BINDINGS
++	help
++	  Build OLA RDM tests.
++
++endmenu
++
++menu "OLA Plugin selections"
++
++config BR2_PACKAGE_OLA_PLUGIN_E131
++	bool "acn E131"
++	default y
++	help
++	  Build ACN E131 plugin for OLA.
++
++config BR2_PACKAGE_OLA_PLUGIN_ARTNET
++	bool "artnet"
++	default y
++	help
++	  Build Artnet plugin for OLA.
++
++config BR2_PACKAGE_OLA_PLUGIN_OPENDMX
++	bool "DMX4Linux"
++	help
++	  Build DMX4Linux plugin for OLA.
++
++config BR2_PACKAGE_OLA_PLUGIN_DUMMY
++	bool "dummy"
++	default y
++	help
++	  Build Dummy plugin for OLA.
++
++config BR2_PACKAGE_OLA_PLUGIN_ESPNET
++	bool "espnet"
++	help
++	  Build EspNet plugin for OLA.
++
++config BR2_PACKAGE_OLA_PLUGIN_KINET
++	bool "kinet"
++	help
++	  Build KiNet plugin for OLA.
++
++config BR2_PACKAGE_OLA_PLUGIN_MILINT
++	bool "milford Instruments"
++	help
++	  Build Milford Instruments 1-463 plugin for OLA.
++
++config BR2_PACKAGE_OLA_PLUGIN_OSC
++	bool "osc"
++	select BR2_PACKAGE_LIBLO
++	help
++	  Build Open sound control plugin for OLA.
++
++config BR2_PACKAGE_OLA_PLUGIN_PATHPORT
++	bool "pathport"
++	help
++	  Build Pathport plugin for OLA.
++
++config BR2_PACKAGE_OLA_PLUGIN_SANDNET
++	bool "sandnet"
++	help
++	  Build SandNet plugin for OLA.
++
++config BR2_PACKAGE_OLA_PLUGIN_SHOWNET
++	bool "shownet"
++	help
++	  Build ShowNet plugin for OLA.
++
++comment "USB driver required for stageprofi and usbpro plugin"
++	depends on !BR2_PACKAGE_LIBFTDI && !BR2_PACKAGE_LIBUSB
++
++config BR2_PACKAGE_OLA_PLUGIN_STAGEPROFI
++	bool "stageprofi"
++	depends on BR2_PACKAGE_LIBFTDI || BR2_PACKAGE_LIBUSB 
++	help
++	  Build StageProfi plugin for OLA.
++
++config BR2_PACKAGE_OLA_PLUGIN_USBPRO
++	bool "usbpro"
++	depends on BR2_PACKAGE_LIBFTDI || BR2_PACKAGE_LIBUSB
++	help
++	  Build UsbPro plugin for OLA.
++
++endmenu
++
++endif
+diff --git a/package/ola/ola.mk b/package/ola/ola.mk
+new file mode 100644
+index 0000000..5a60252
+--- /dev/null
++++ b/package/ola/ola.mk
+@@ -0,0 +1,147 @@
++################################################################################
++#
++# ola
++#
++################################################################################
++
++OLA_VERSION = 0.8.31
++OLA_SOURCE = ola-0.8.31.tar.gz
++OLA_SITE = https://open-lighting.googlecode.com/files
++
++OLA_LICENSE = LGPLv2.1+ (libola, libolacommon, Python bindings), GPLv2+ (libolaserver, olad, Python examples and tests)
++OLA_LICENSE_FILES = LICENCE GPL LGPL
++OLA_INSTALL_STAGING = YES
++
++# util-linux provides uuid lib
++OLA_DEPENDENCIES = protobuf util-linux
++
++OLA_CONF_OPT = \
++	--disable-gcov \
++	--disable-tcmalloc \
++	--disable-unittests \
++	--disable-root-check \
++	--disable-java-libs
++
++# sets where to find python libs built for target and required by ola
++OLA_CONF_ENV = PYTHONPATH=$(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages
++OLA_MAKE_ENV = PYTHONPATH=$(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages
++
++## OLA Bindings and Interface selections
++
++ifeq ($(BR2_PACKAGE_OLA_WEB),y)
++OLA_CONF_OPT += --enable-http
++OLA_DEPENDENCIES += libmicrohttpd
++else
++OLA_CONF_OPT += --disable-http
++endif
++
++ifeq ($(BR2_PACKAGE_OLA_SLP),y)
++OLA_CONF_OPT += --enable-slp
++else
++OLA_CONF_OPT += --disable-slp
++endif
++
++ifeq ($(BR2_PACKAGE_OLA_PYTHON_BINDINGS),y)
++OLA_CONF_OPT += --enable-python-libs
++OLA_DEPENDENCIES += python python-protobuf
++else
++OLA_CONF_OPT += --disable-python-libs
++endif
++
++## OLA Examples and Tests
++
++ifeq ($(BR2_PACKAGE_OLA_EXAMPLES),y)
++OLA_CONF_OPT += --enable-examples
++OLA_DEPENDENCIES += ncurses
++else
++OLA_CONF_OPT += --disable-examples
++endif
++
++ifeq ($(BR2_PACKAGE_OLA_RDM_TESTS),y)
++OLA_CONF_OPT += --enable-rdm-tests
++else
++OLA_CONF_OPT += --disable-rdm-tests
++endif
++
++## OLA Plugin selections
++
++ifeq ($(BR2_PACKAGE_OLA_PLUGIN_E131),y)
++OLA_CONF_OPT += --enable-e131
++else
++OLA_CONF_OPT += --disable-e131
++endif
++
++ifeq ($(BR2_PACKAGE_OLA_PLUGIN_ARTNET),y)
++OLA_CONF_OPT += --enable-artnet
++else
++OLA_CONF_OPT += --disable-artnet
++endif
++
++ifeq ($(BR2_PACKAGE_OLA_PLUGIN_OPENDMX),y)
++OLA_CONF_OPT += --enable-opendmx
++else
++OLA_CONF_OPT += --disable-opendmx
++endif
++
++ifeq ($(BR2_PACKAGE_OLA_PLUGIN_DUMMY),y)
++OLA_CONF_OPT += --enable-dummy
++else
++OLA_CONF_OPT += --disable-dummy
++endif
++
++ifeq ($(BR2_PACKAGE_OLA_PLUGIN_ESPNET),y)
++OLA_CONF_OPT += --enable-espnet
++else
++OLA_CONF_OPT += --disable-espnet
++endif
++
++ifeq ($(BR2_PACKAGE_OLA_PLUGIN_KINET),y)
++OLA_CONF_OPT += --enable-kinet
++else
++OLA_CONF_OPT += --disable-kinet
++endif
++
++ifeq ($(BR2_PACKAGE_OLA_PLUGIN_OSC),y)
++OLA_CONF_OPT += --enable-osc
++OLA_DEPENDENCIES += liblo
++else
++OLA_CONF_OPT += --disable-osc
++endif
++
++ifeq ($(BR2_PACKAGE_OLA_PLUGIN_MILINT),y)
++OLA_CONF_OPT += --enable-milinst
++else
++OLA_CONF_OPT += --disable-milinst
++endif
++
++ifeq ($(BR2_PACKAGE_OLA_PLUGIN_PATHPORT),y)
++OLA_CONF_OPT += --enable-pathport
++else
++OLA_CONF_OPT += --disable-pathport
++endif
++
++ifeq ($(BR2_PACKAGE_OLA_PLUGIN_SANDNET),y)
++OLA_CONF_OPT += --enable-sandnet
++else
++OLA_CONF_OPT += --disable-sandnet
++endif
++
++ifeq ($(BR2_PACKAGE_OLA_PLUGIN_SHOWNET),y)
++OLA_CONF_OPT += --enable-shownet
++else
++OLA_CONF_OPT += --disable-shownet
++endif
++
++ifeq ($(BR2_PACKAGE_OLA_PLUGIN_STAGEPROFI),y)
++OLA_CONF_OPT += --enable-stageprofi
++else
++OLA_CONF_OPT += --disable-stageprofi
++endif
++
++ifeq ($(BR2_PACKAGE_OLA_PLUGIN_USBPRO),y)
++OLA_CONF_OPT += --enable-usbpro
++else
++OLA_CONF_OPT += --disable-usbpro
++endif
++
++$(eval $(autotools-package))
+-- 
+1.8.3.4
