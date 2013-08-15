@@ -1,32 +1,35 @@
-From: Markos Chandras <markos.chandras@imgtec.com>
-Date: Thu, 15 Aug 2013 14:39:06 +0100
-Subject: [Buildroot] [PATCH] webkit: Fix comment dependency for
-	BR2_PACKAGE_LIBGTK2
-Message-ID: <1376573946-22138-1-git-send-email-markos.chandras@imgtec.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 15 Aug 2013 15:45:38 +0200
+Subject: [Buildroot] buildroot Digest, Vol 86, Issue 78
+In-Reply-To: <BLU174-W102C9D4DB122C4A2918F2ABC450@phx.gbl>
+References: <mailman.25592.1376433448.3407.buildroot@busybox.net>
+ <BLU174-W102C9D4DB122C4A2918F2ABC450@phx.gbl>
+Message-ID: <20130815154538.07a0cfdc@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The comment should only be displayed if BR2_PACKAGE_LIBGTK2
-is not selected.
+Dear WAlnna,
 
-Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
----
- package/webkit/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On Tue, 13 Aug 2013 22:28:47 -0400, WAlnna wrote:
+> When i try to run "make menuconfig"there always have  a error: 
+> "undefined reference to symbol 'acs_map' 'acs_map' is defined in /libtinfo.so.5 so try adding it to the linker
+> command line
+> /lib64/libtinfo.so.5: could not read symbols: Invalid operation"how to solve this problem?
+> i try a lot of methods still not working
 
-diff --git a/package/webkit/Config.in b/package/webkit/Config.in
-index 92cbc62..6cce6f1 100644
---- a/package/webkit/Config.in
-+++ b/package/webkit/Config.in
-@@ -24,5 +24,5 @@ config BR2_PACKAGE_WEBKIT
- 	  http://webkit.org/
- 
- comment "webkit requires libgtk2 and a toolchain with C++, WCHAR, threading support"
--	depends on BR2_PACKAGE_LIBGTK2 || !BR2_INSTALL_LIBSTDCPP || \
-+	depends on !BR2_PACKAGE_LIBGTK2 || !BR2_INSTALL_LIBSTDCPP || \
- 		!BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
+What Linux distribution are you using, and which version?
+
+Also, if you want to interact with the community through the mailing
+list, please do not subscribe to the list using the weekly digests.
+
+Best regards,
+
+Thomas
 -- 
-1.8.3.2
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
