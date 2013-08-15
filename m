@@ -1,68 +1,48 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 16 Aug 2013 01:10:30 +0200
-Subject: [Buildroot] [PATCH] targets: move target options to their own
- sub-menu
-In-Reply-To: <1376598482-9492-1-git-send-email-yann.morin.1998@free.fr>
-References: <1376598482-9492-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <520D5FE6.2090007@mind.be>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu, 15 Aug 2013 20:56:35 -0300
+Subject: [Buildroot] [PATCH 1/3] linux-headers: bump 3.{0, 4,
+	10}.x stable versions
+Message-ID: <1376610997-25555-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 15/08/13 22:28, Yann E. MORIN wrote:
-> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
->
-> Currently, all target options lie in the top-level menu.
-> This looks a bit clumsy, since all other options are neatly
-> folded into their own sematic sub-menus each.
->
-> Move the target option into their own sub-menu too.
->
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> ---
->   arch/Config.in | 4 ++++
->   1 file changed, 4 insertions(+)
->
-> diff --git a/arch/Config.in b/arch/Config.in
-> index 0b5b218..640926a 100644
-> --- a/arch/Config.in
-> +++ b/arch/Config.in
-> @@ -1,3 +1,5 @@
-> +menu "Target options"
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ ...aders-headers_install-fix-__packed-in-exported-kernel-head.patch | 0
+ package/linux-headers/Config.in.host                                | 6 +++---
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+ rename package/linux-headers/{3.0.90 => 3.0.91}/linux-headers-headers_install-fix-__packed-in-exported-kernel-head.patch (100%)
 
-  I completely agree with the idea - especially in the xconfig, the big 
-list of architecture options is extremely annoying. However, the menu 
-title is not very clear. How about "Target architecture selection"? Or maybe
-
-Target CPU architecture
-
-   Target CPU architecture family
-
-   Target CPU architecture variant
-
-
-  Regards,
-  Arnout
-
-> +
->   config BR2_ARCH_IS_64
->   	bool
->
-> @@ -324,3 +326,5 @@ endif
->   if BR2_xtensa
->   source "arch/Config.in.xtensa"
->   endif
-> +
-> +endmenu # Target options
->
-
-
+diff --git a/package/linux-headers/3.0.90/linux-headers-headers_install-fix-__packed-in-exported-kernel-head.patch b/package/linux-headers/3.0.91/linux-headers-headers_install-fix-__packed-in-exported-kernel-head.patch
+similarity index 100%
+rename from package/linux-headers/3.0.90/linux-headers-headers_install-fix-__packed-in-exported-kernel-head.patch
+rename to package/linux-headers/3.0.91/linux-headers-headers_install-fix-__packed-in-exported-kernel-head.patch
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 7910819..8facdf0 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -72,16 +72,16 @@ config BR2_DEFAULT_KERNEL_VERSION
+ 
+ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+-	default "3.0.90"	if BR2_KERNEL_HEADERS_3_0
++	default "3.0.91"	if BR2_KERNEL_HEADERS_3_0
+ 	default "3.1.10"	if BR2_KERNEL_HEADERS_3_1
+ 	default "3.2.50"	if BR2_KERNEL_HEADERS_3_2
+ 	default "3.3.8"		if BR2_KERNEL_HEADERS_3_3
+-	default "3.4.57"	if BR2_KERNEL_HEADERS_3_4
++	default "3.4.58"	if BR2_KERNEL_HEADERS_3_4
+ 	default "3.5.7"		if BR2_KERNEL_HEADERS_3_5
+ 	default "3.6.11"	if BR2_KERNEL_HEADERS_3_6
+ 	default "3.7.10"	if BR2_KERNEL_HEADERS_3_7
+ 	default "3.8.13"	if BR2_KERNEL_HEADERS_3_8
+ 	default "3.9.11"	if BR2_KERNEL_HEADERS_3_9
+-	default "3.10.6"	if BR2_KERNEL_HEADERS_3_10
++	default "3.10.7"	if BR2_KERNEL_HEADERS_3_10
+ 	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
+ 	default $BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+1.8.1.5
