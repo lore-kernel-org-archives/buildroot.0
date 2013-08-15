@@ -1,31 +1,30 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 15 Aug 2013 15:45:38 +0200
-Subject: [Buildroot] buildroot Digest, Vol 86, Issue 78
-In-Reply-To: <BLU174-W102C9D4DB122C4A2918F2ABC450@phx.gbl>
-References: <mailman.25592.1376433448.3407.buildroot@busybox.net>
- <BLU174-W102C9D4DB122C4A2918F2ABC450@phx.gbl>
-Message-ID: <20130815154538.07a0cfdc@skate>
+Date: Thu, 15 Aug 2013 15:50:02 +0200
+Subject: [Buildroot] [Bug 6404] New: Buildroot's coreutils 'uname -p'
+ reports 'Unknown' on recent ARM kernels
+In-Reply-To: <520B784E.10807@zacarias.com.ar>
+References: <bug-6404-163@https.bugs.busybox.net/> <5209466E.9030305@mind.be>
+ <520B784E.10807@zacarias.com.ar>
+Message-ID: <20130815155002.447371ed@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear WAlnna,
+Dear Gustavo Zacarias,
 
-On Tue, 13 Aug 2013 22:28:47 -0400, WAlnna wrote:
-> When i try to run "make menuconfig"there always have  a error: 
-> "undefined reference to symbol 'acs_map' 'acs_map' is defined in /libtinfo.so.5 so try adding it to the linker
-> command line
-> /lib64/libtinfo.so.5: could not read symbols: Invalid operation"how to solve this problem?
-> i try a lot of methods still not working
+On Wed, 14 Aug 2013 09:30:06 -0300, Gustavo Zacarias wrote:
+> On 08/12/2013 05:32 PM, Arnout Vandecappelle wrote:
+> 
+> >  Seems to me that this patch should be dropped since it's a feature
+> > patch. Martin, you added it and Gustavo acked it in 2010. OK to drop it?
+> 
+> +1 it doesn't seem to be upstreamed and it's cosmetic.
 
-What Linux distribution are you using, and which version?
+I also agree, so I'll drop the patch.
 
-Also, if you want to interact with the community through the mailing
-list, please do not subscribe to the list using the weekly digests.
-
-Best regards,
+Thanks,
 
 Thomas
 -- 
