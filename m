@@ -1,61 +1,68 @@
-From: =?ISO-8859-1?Q?Fran=E7ois_Perrad?= <francois.perrad@gadz.org>
-Date: Thu, 15 Aug 2013 23:51:19 +0200
-Subject: [Buildroot] [PATCH] lua: remove shared library feature
-In-Reply-To: <20130815190702.3df811a5@skate>
-References: <1352033124-2514-1-git-send-email-arnout@mind.be>
- <20130814003652.39c4d945@skate>
- <CAB0FRss5gTuePkganj6UfXg0ssqQADc_rAya90znq-=6zVfDwg@mail.gmail.com>
- <20130815190702.3df811a5@skate>
-Message-ID: <CAB0FRstPnTTJcvsPRg4=xgMs8qvMCXafg4wvng8pTFc3VCbD-w@mail.gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Fri, 16 Aug 2013 01:10:30 +0200
+Subject: [Buildroot] [PATCH] targets: move target options to their own
+ sub-menu
+In-Reply-To: <1376598482-9492-1-git-send-email-yann.morin.1998@free.fr>
+References: <1376598482-9492-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <520D5FE6.2090007@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2013/8/15 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>:
-> Dear Fran?ois Perrad,
+On 15/08/13 22:28, Yann E. MORIN wrote:
+> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 >
-> On Thu, 15 Aug 2013 18:56:48 +0200, Fran?ois Perrad wrote:
->> 2013/8/14 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>:
->> > Fran?ois, Gustavo,
->> >
->> > Can you look at the below patch and tell me what you think?
->> >
->>
->> Seems obsolete (BR2_PACKAGE_LUA_SHARED_LIBRARY was removed).
+> Currently, all target options lie in the top-level menu.
+> This looks a bit clumsy, since all other options are neatly
+> folded into their own sematic sub-menus each.
 >
-> The option was removed because we now always build a shared library.
-> But the idea of the patch we're discussing was to remove the
-> possibility of building a shared library for Lua since this isn't
-> supported upstream, and we try to avoid having "feature" patches in
-> Buildroot.
+> Move the target option into their own sub-menu too.
 >
-> For the moment, we still have
-> package/lua/lua-02-shared-libs-for-lua.patch and
-> package/lua/lua-03-shared-libs-for-luac.patch to support building a
-> shared library for Lua.
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> ---
+>   arch/Config.in | 4 ++++
+>   1 file changed, 4 insertions(+)
+>
+> diff --git a/arch/Config.in b/arch/Config.in
+> index 0b5b218..640926a 100644
+> --- a/arch/Config.in
+> +++ b/arch/Config.in
+> @@ -1,3 +1,5 @@
+> +menu "Target options"
+
+  I completely agree with the idea - especially in the xconfig, the big 
+list of architecture options is extremely annoying. However, the menu 
+title is not very clear. How about "Target architecture selection"? Or maybe
+
+Target CPU architecture
+
+   Target CPU architecture family
+
+   Target CPU architecture variant
+
+
+  Regards,
+  Arnout
+
+> +
+>   config BR2_ARCH_IS_64
+>   	bool
+>
+> @@ -324,3 +326,5 @@ endif
+>   if BR2_xtensa
+>   source "arch/Config.in.xtensa"
+>   endif
+> +
+> +endmenu # Target options
 >
 
-Initially, these two patches were merged, and I did the split (see
-http://git.buildroot.net/buildroot/commit/package/lua?h=next&id=2c7e9c50e9bef1c494ef90411a466ad320846b96).
 
-I did this because in my point of view :
-- lua-03-shared-libs-for-luac.patch is too invasive and not really
-useful because the static version of luac is enough.
-- lua-02-shared-libs-for-lua.patch is mandatory for using native
-extensions, like LuaFileSystem, LuaSocket, ...
-
-Francois
-
-Note : lua-03-shared-libs-for-luac.patch could be removed without any
-other change.
-
-> Best regards,
->
-> Thomas
-> --
-> Thomas Petazzoni, Free Electrons
-> Kernel, drivers, real-time and embedded Linux
-> development, consulting, training and support.
-> http://free-electrons.com
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
