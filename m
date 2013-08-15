@@ -1,7 +1,9 @@
 From: Dave Skok <blanco.ether@gmail.com>
-Date: Thu, 15 Aug 2013 10:12:18 -0400
-Subject: [Buildroot] [PATCH 1/3] ola: new package
-Message-ID: <a3673089a21b539b377ec10ae2660890d2c9a5f6.1376575789.git.blanco.ether@gmail.com>
+Date: Thu, 15 Aug 2013 10:12:19 -0400
+Subject: [Buildroot] [PATCH 2/3] ola: new package
+In-Reply-To: <a3673089a21b539b377ec10ae2660890d2c9a5f6.1376575789.git.blanco.ether@gmail.com>
+References: <a3673089a21b539b377ec10ae2660890d2c9a5f6.1376575789.git.blanco.ether@gmail.com>
+Message-ID: <54858166a46ac6fec0fd301ff48d4cbbcb6b1f4e.1376575789.git.blanco.ether@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,331 +11,195 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 ---
- package/Config.in     |   1 +
- package/ola/Config.in | 144 +++++++++++++++++++++++++++++++++++++++++++++++
- package/ola/ola.mk    | 153 ++++++++++++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 298 insertions(+)
+ package/ola/Config.in | 37 +++++++++++++++++++++----------------
+ package/ola/ola.mk    | 50 ++++++++++++++++++++++++++++----------------------
+ 2 files changed, 49 insertions(+), 38 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 7069d77..fb52411 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -277,6 +277,7 @@ source "package/minicom/Config.in"
- source "package/nanocom/Config.in"
- source "package/neard/Config.in"
- source "package/ofono/Config.in"
-+source "package/ola/Config.in"
- source "package/on2-8170-modules/Config.in"
- source "package/open2300/Config.in"
- source "package/openocd/Config.in"
 diff --git a/package/ola/Config.in b/package/ola/Config.in
-new file mode 100644
-index 0000000..066fdd4
---- /dev/null
+index 066fdd4..7a43bcf 100644
+--- a/package/ola/Config.in
 +++ b/package/ola/Config.in
-@@ -0,0 +1,144 @@
-+config BR2_PACKAGE_OLA
-+	bool "open lighting architecture"
-+	select BR2_PACKAGE_PROTOBUF
-+	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
-+	select BR2_PACKAGE_UTIL_LINUX
-+	depends on BR2_INSTALL_LIBSTDCPP # protobuf
-+	depends on BR2_LARGEFILE # util-linux
-+	depends on BR2_USE_WCHAR # util-linux
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	help
-+	  Open Lighting Architecture provides applications 
-+	  with a mechanism to send and receive DMX512 & RDM 
-+	  commands using hardware devices and DMX over IP protocols.
-+
-+	  http://www.opendmx.net/index.php/OLA
-+
-+comment "ola requires a toolchain with C++, thread, largefile and wchar support"
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_LARGEFILE || !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
-+
-+if BR2_PACKAGE_OLA
-+
-+menu "OLA Bindings and Interface"
-+
-+config BR2_PACKAGE_OLA_WEB
-+	bool "http interface"
-+	select BR2_PACKAGE_LIBMICROHTTPD
-+	help
-+	  Build OLA with browser interface.
-+
-+config BR2_PACKAGE_OLA_SLP
-+	bool "slp tools"
-+	help
-+	  Build OLA with slp tools.
-+ 
-+config BR2_PACKAGE_OLA_PYTHON_BINDINGS
-+	bool "python bindings"
-+	select BR2_PACKAGE_PYTHON
-+	select BR2_PACKAGE_PYTHON_PROTOBUF
-+	depends on BR2_USE_MMU
-+	help
-+	  Build OLA with support for the Python language.
-+
-+endmenu
-+
-+menu "Tests and Examples"
-+
-+config BR2_PACKAGE_OLA_EXAMPLES
-+	bool "examples"
-+	select BR2_PACKAGE_NCURSES
-+	help
-+	  Build OLA examples.
-+
-+config BR2_PACKAGE_OLA_RDM_TESTS
-+	bool "rdm tests"
-+	depends on BR2_PACKAGE_OLA_BINDING_PYTHON
-+	help
-+	  Build OLA RDM tests.
-+
-+endmenu
-+
-+menu "OLA Plugin selections"
-+
-+config BR2_PACKAGE_OLA_PLUGIN_ARTNET
-+	bool "artnet"
-+	default y
-+	help
-+	  Build Artnet plugin for OLA.
-+
-+config BR2_PACKAGE_OLA_PLUGIN_DUMMY
-+	bool "dummy"
-+	default y
-+	help
-+	  Build Dummy plugin for OLA.
-+
+@@ -52,7 +52,7 @@ config BR2_PACKAGE_OLA_EXAMPLES
+ 
+ config BR2_PACKAGE_OLA_RDM_TESTS
+ 	bool "rdm tests"
+-	depends on BR2_PACKAGE_OLA_BINDING_PYTHON
++	depends on BR2_PACKAGE_OLA_PYTHON_BINDINGS
+ 	help
+ 	  Build OLA RDM tests.
+ 
+@@ -60,24 +60,29 @@ endmenu
+ 
+ menu "OLA Plugin selections"
+ 
 +config BR2_PACKAGE_OLA_PLUGIN_E131
 +	bool "acn E131"
 +	default y
 +	help
 +	  Build ACN E131 plugin for OLA.
 +
-+config BR2_PACKAGE_OLA_PLUGIN_ESPNET
-+	bool "espnet"
-+	help
-+	  Build EspNet plugin for OLA.
-+
-+config BR2_PACKAGE_OLA_PLUGIN_KINET
-+	bool "kinet"
-+	help
-+	  Build KiNet plugin for OLA.
-+
+ config BR2_PACKAGE_OLA_PLUGIN_ARTNET
+ 	bool "artnet"
+ 	default y
+ 	help
+ 	  Build Artnet plugin for OLA.
+ 
 +config BR2_PACKAGE_OLA_PLUGIN_OPENDMX
 +	bool "DMX4Linux"
 +	help
 +	  Build DMX4Linux plugin for OLA.
 +
-+config BR2_PACKAGE_OLA_PLUGIN_PATHPORT
-+	bool "pathport"
-+	help
-+	  Build Pathport plugin for OLA.
-+
-+config BR2_PACKAGE_OLA_PLUGIN_SANDNET
-+	bool "sandnet"
-+	help
-+	  Build SandNet plugin for OLA.
-+
-+config BR2_PACKAGE_OLA_PLUGIN_SHOWNET
-+	bool "shownet"
-+	help
-+	  Build ShowNet plugin for OLA.
-+
-+config BR2_PACKAGE_OLA_PLUGIN_KARATE
-+	bool "karate"
-+	help
-+	  Build Karate plugin for OLA.
-+
-+config BR2_PACKAGE_OLA_PLUGIN_SPI
-+	bool "spi"
-+	help
-+	  Build SPI plugin for OLA.
-+
-+comment "USB driver required for stageprofi and usbpro plugin"
-+	depends on !BR2_PACKAGE_LIBFTDI && !BR2_PACKAGE_LIBUSB
-+
-+config BR2_PACKAGE_OLA_PLUGIN_STAGEPROFI
-+	bool "stageprofi"
-+	depends on BR2_PACKAGE_LIBFTDI || BR2_PACKAGE_LIBUSB 
-+	help
-+	  Build StageProfi plugin for OLA.
-+
-+config BR2_PACKAGE_OLA_PLUGIN_USBPRO
-+	bool "usbpro"
-+	depends on BR2_PACKAGE_LIBFTDI || BR2_PACKAGE_LIBUSB
-+	help
-+	  Build UsbPro plugin for OLA.
-+
+ config BR2_PACKAGE_OLA_PLUGIN_DUMMY
+ 	bool "dummy"
+ 	default y
+ 	help
+ 	  Build Dummy plugin for OLA.
+ 
+-config BR2_PACKAGE_OLA_PLUGIN_E131
+-	bool "acn E131"
+-	default y
+-	help
+-	  Build ACN E131 plugin for OLA.
+-
+ config BR2_PACKAGE_OLA_PLUGIN_ESPNET
+ 	bool "espnet"
+ 	help
+@@ -88,10 +93,10 @@ config BR2_PACKAGE_OLA_PLUGIN_KINET
+ 	help
+ 	  Build KiNet plugin for OLA.
+ 
+-config BR2_PACKAGE_OLA_PLUGIN_OPENDMX
+-	bool "DMX4Linux"
++config BR2_PACKAGE_OLA_PLUGIN_MILINT
++	bool "milford Instruments"
+ 	help
+-	  Build DMX4Linux plugin for OLA.
++	  Build Milford Instruments 1-463 plugin for OLA.
+ 
+ config BR2_PACKAGE_OLA_PLUGIN_PATHPORT
+ 	bool "pathport"
+@@ -113,6 +118,12 @@ config BR2_PACKAGE_OLA_PLUGIN_KARATE
+ 	help
+ 	  Build Karate plugin for OLA.
+ 
 +config BR2_PACKAGE_OLA_PLUGIN_OSC
 +	bool "osc"
 +	select BR2_PACKAGE_LIBLO
 +	help
 +	  Build Open sound control plugin for OLA.
 +
-+endmenu
-+
-+endif
+ config BR2_PACKAGE_OLA_PLUGIN_SPI
+ 	bool "spi"
+ 	help
+@@ -133,12 +144,6 @@ config BR2_PACKAGE_OLA_PLUGIN_USBPRO
+ 	help
+ 	  Build UsbPro plugin for OLA.
+ 
+-config BR2_PACKAGE_OLA_PLUGIN_OSC
+-	bool "osc"
+-	select BR2_PACKAGE_LIBLO
+-	help
+-	  Build Open sound control plugin for OLA.
+-
+ endmenu
+ 
+ endif
 diff --git a/package/ola/ola.mk b/package/ola/ola.mk
-new file mode 100644
-index 0000000..0a22401
---- /dev/null
+index 0a22401..5e3f506 100644
+--- a/package/ola/ola.mk
 +++ b/package/ola/ola.mk
-@@ -0,0 +1,153 @@
-+################################################################################
-+#
-+# ola
-+#
-+################################################################################
-+
-+OLA_VERSION = 0.8.31
-+OLA_SOURCE = ola-0.8.31.tar.gz
-+OLA_SITE = https://open-lighting.googlecode.com/files
-+
-+OLA_LICENSE = LGPLv2.1+ (libola, libolacommon, Python bindings), GPLv2+ (libolaserver, olad, Python examples and tests)
-+OLA_LICENSE_FILES = LICENCE GPL LGPL
-+OLA_INSTALL_STAGING = YES
-+
-+# util-linux provides uuid lib
-+OLA_DEPENDENCIES = protobuf util-linux
-+
-+OLA_CONF_OPT = \
-+	--disable-gcov \
-+	--disable-tcmalloc \
-+	--disable-unittests \
-+	--disable-root-check \
-+	--disable-java-libs
-+
-+# sets where to find python libs built for target and required by ola
-+OLA_CONF_ENV = PYTHONPATH=$(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages
-+OLA_MAKE_ENV = PYTHONPATH=$(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages
-+
-+## OLA Bindings and Interface selections
-+
-+ifeq ($(BR2_PACKAGE_OLA_WEB),y)
-+OLA_CONF_OPT += --enable-http
-+OLA_DEPENDENCIES += libmicrohttpd
-+else
-+OLA_CONF_OPT += --disable-http
-+endif
-+
-+ifeq ($(BR2_PACKAGE_OLA_SLP),y)
-+OLA_CONF_OPT += --enable-slp
-+else
-+OLA_CONF_OPT += --disable-slp
-+endif
-+
-+ifeq ($(BR2_PACKAGE_OLA_PYTHON_BINDINGS),y)
-+OLA_CONF_OPT += --enable-python-libs
-+OLA_DEPENDENCIES += python python-protobuf
-+else
-+OLA_CONF_OPT += --disable-python-libs
-+endif
-+
-+## OLA Examples and Tests
-+
-+ifeq ($(BR2_PACKAGE_OLA_EXAMPLES),y)
-+OLA_CONF_OPT += --enable-examples
-+OLA_DEPENDENCIES += ncurses
-+else
-+OLA_CONF_OPT += --disable-examples
-+endif
-+
-+ifeq ($(BR2_PACKAGE_OLA_RDM_TESTS),y)
-+OLA_CONF_OPT += --enable-rdm-tests
-+else
-+OLA_CONF_OPT += --disable-rdm-tests
-+endif
-+
-+## OLA Plugin selections
-+
-+ifeq ($(BR2_PACKAGE_OLA_PLUGIN_ARTNET),y)
-+OLA_CONF_OPT += --enable-artnet
-+else
-+OLA_CONF_OPT += --disable-artnet
-+endif
-+
-+ifeq ($(BR2_PACKAGE_OLA_PLUGIN_DUMMY),y)
-+OLA_CONF_OPT += --enable-dummy
-+else
-+OLA_CONF_OPT += --disable-dummy
-+endif
-+
+@@ -65,22 +65,28 @@ endif
+ 
+ ## OLA Plugin selections
+ 
 +ifeq ($(BR2_PACKAGE_OLA_PLUGIN_E131),y)
 +OLA_CONF_OPT += --enable-e131
 +else
 +OLA_CONF_OPT += --disable-e131
 +endif
 +
-+ifeq ($(BR2_PACKAGE_OLA_PLUGIN_ESPNET),y)
-+OLA_CONF_OPT += --enable-espnet
-+else
-+OLA_CONF_OPT += --disable-espnet
-+endif
-+
-+ifeq ($(BR2_PACKAGE_OLA_PLUGIN_KINET),y)
-+OLA_CONF_OPT += --enable-kinet
-+else
-+OLA_CONF_OPT += --disable-kinet
-+endif
-+
+ ifeq ($(BR2_PACKAGE_OLA_PLUGIN_ARTNET),y)
+ OLA_CONF_OPT += --enable-artnet
+ else
+ OLA_CONF_OPT += --disable-artnet
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_OLA_PLUGIN_DUMMY),y)
+-OLA_CONF_OPT += --enable-dummy
 +ifeq ($(BR2_PACKAGE_OLA_PLUGIN_OPENDMX),y)
 +OLA_CONF_OPT += --enable-opendmx
-+else
+ else
+-OLA_CONF_OPT += --disable-dummy
 +OLA_CONF_OPT += --disable-opendmx
-+endif
-+
-+ifeq ($(BR2_PACKAGE_OLA_PLUGIN_PATHPORT),y)
-+OLA_CONF_OPT += --enable-pathport
-+else
-+OLA_CONF_OPT += --disable-pathport
-+endif
-+
-+ifeq ($(BR2_PACKAGE_OLA_PLUGIN_SANDNET),y)
-+OLA_CONF_OPT += --enable-sandnet
-+else
-+OLA_CONF_OPT += --disable-sandnet
-+endif
-+
-+ifeq ($(BR2_PACKAGE_OLA_PLUGIN_SHOWNET),y)
-+OLA_CONF_OPT += --enable-shownet
-+else
-+OLA_CONF_OPT += --disable-shownet
-+endif
-+
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_OLA_PLUGIN_E131),y)
+-OLA_CONF_OPT += --enable-e131
++ifeq ($(BR2_PACKAGE_OLA_PLUGIN_DUMMY),y)
++OLA_CONF_OPT += --enable-dummy
+ else
+-OLA_CONF_OPT += --disable-e131
++OLA_CONF_OPT += --disable-dummy
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_OLA_PLUGIN_ESPNET),y)
+@@ -89,16 +95,29 @@ else
+ OLA_CONF_OPT += --disable-espnet
+ endif
+ 
 +ifeq ($(BR2_PACKAGE_OLA_PLUGIN_KARATE),y)
 +OLA_CONF_OPT += --enable-karate
 +else
 +OLA_CONF_OPT += --disable-karate
 +endif
 +
-+ifeq ($(BR2_PACKAGE_OLA_PLUGIN_SPI),y)
-+OLA_CONF_OPT += --enable-spi
-+else
-+OLA_CONF_OPT += --disable-spi
-+endif
-+
-+ifeq ($(BR2_PACKAGE_OLA_PLUGIN_STAGEPROFI),y)
-+OLA_CONF_OPT += --enable-stageprofi
-+else
-+OLA_CONF_OPT += --disable-stageprofi
-+endif
-+
-+ifeq ($(BR2_PACKAGE_OLA_PLUGIN_USBPRO),y)
-+OLA_CONF_OPT += --enable-usbpro
-+else
-+OLA_CONF_OPT += --disable-usbpro
-+endif
-+
+ ifeq ($(BR2_PACKAGE_OLA_PLUGIN_KINET),y)
+ OLA_CONF_OPT += --enable-kinet
+ else
+ OLA_CONF_OPT += --disable-kinet
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_OLA_PLUGIN_OPENDMX),y)
+-OLA_CONF_OPT += --enable-opendmx
 +ifeq ($(BR2_PACKAGE_OLA_PLUGIN_OSC),y)
 +OLA_CONF_OPT += --enable-osc
 +OLA_DEPENDENCIES += liblo
-+else
+ else
+-OLA_CONF_OPT += --disable-opendmx
 +OLA_CONF_OPT += --disable-osc
 +endif
 +
-+$(eval $(autotools-package))
++ifeq ($(BR2_PACKAGE_OLA_PLUGIN_MILINT),y)
++OLA_CONF_OPT += --enable-milinst
++else
++OLA_CONF_OPT += --disable-milinst
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_OLA_PLUGIN_PATHPORT),y)
+@@ -119,12 +138,6 @@ else
+ OLA_CONF_OPT += --disable-shownet
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_OLA_PLUGIN_KARATE),y)
+-OLA_CONF_OPT += --enable-karate
+-else
+-OLA_CONF_OPT += --disable-karate
+-endif
+-
+ ifeq ($(BR2_PACKAGE_OLA_PLUGIN_SPI),y)
+ OLA_CONF_OPT += --enable-spi
+ else
+@@ -143,11 +156,4 @@ else
+ OLA_CONF_OPT += --disable-usbpro
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_OLA_PLUGIN_OSC),y)
+-OLA_CONF_OPT += --enable-osc
+-OLA_DEPENDENCIES += liblo
+-else
+-OLA_CONF_OPT += --disable-osc
+-endif
+-
+ $(eval $(autotools-package))
 -- 
 1.8.3.4
