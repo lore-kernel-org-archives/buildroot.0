@@ -1,93 +1,47 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 16 Aug 2013 08:39:04 +0200
-Subject: [Buildroot] [PATCH] targets: move target options to their own
-	sub-menu
-In-Reply-To: <CAAXf6LV8gfZUmLogOubg5j03d9HJR7-bm+cm+HDG-N6kNAiK_g@mail.gmail.com>
-References: <1376598482-9492-1-git-send-email-yann.morin.1998@free.fr>
- <520D5FE6.2090007@mind.be>
- <CAAXf6LV8gfZUmLogOubg5j03d9HJR7-bm+cm+HDG-N6kNAiK_g@mail.gmail.com>
-Message-ID: <201308160839.05082.yann.morin.1998@free.fr>
+From: Stephan Hoffmann <sho@relinux.de>
+Date: Fri, 16 Aug 2013 10:23:17 +0200
+Subject: [Buildroot] BeagleBone defconfig broken?
+Message-ID: <520DE175.1050103@relinux.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, Arnout, All,
+Hello all,
 
-On Friday 16 August 2013 08:30:43 Thomas De Schampheleire wrote:
-> On Fri, Aug 16, 2013 at 1:10 AM, Arnout Vandecappelle <arnout@mind.be> wrote:
-> > On 15/08/13 22:28, Yann E. MORIN wrote:
-> >>
-> 
-> >> diff --git a/arch/Config.in b/arch/Config.in
-> >> index 0b5b218..640926a 100644
-> >> --- a/arch/Config.in
-> >> +++ b/arch/Config.in
-> >> @@ -1,3 +1,5 @@
-> >> +menu "Target options"
-> >
-> >
-> >  I completely agree with the idea - especially in the xconfig, the big list
-> > of architecture options is extremely annoying. However, the menu title is
-> > not very clear. How about "Target architecture selection"? Or maybe
-> >
-> > Target CPU architecture
-> >
-> >   Target CPU architecture family
-> >
-> >   Target CPU architecture variant
-> >
-> 
-> Well, I think the menu provides more than just the cpu architecture
-> choice. It includes other things like ABI choice, binary format
-> selection, and floating point strategy. The name 'target options' fits
-> better for these options than anything with 'target cpu architecture'
-> in it, but I'm open for other suggestions.
+I am currently trying to get the latest buildroot to run on my
+beaglebone with little success. The last version that seem to run out of
+the box is 2012.08, where I can simply copy MLO, u-boot.img and uImage
+to the boot partition, dd rootfs.ext2 to the second partition and the
+system works.
 
-Ditto.
+The current build fails to boot, because u-boot expects the image and
+dts in /boot within the root filesystem. After putting them there with a
+post build script, u-boot starts the kernel, but the kernel fails to
+mount root:
+> [    1.509962] Waiting for root device /dev/mmcblk0p2...
+The SD partitions seem o.k.:
+> Disk /dev/sdi: 3965 MB, 3965190144 bytes
+> 255 heads, 63 sectors/track, 482 cylinders
+> Units = cylinders of 16065 * 512 = 8225280 bytes
+> Sector size (logical/physical): 512 bytes / 512 bytes
+> I/O size (minimum/optimal): 512 bytes / 512 bytes
+> Disk identifier: 0x00000000
+>
+>    Device Boot      Start         End      Blocks   Id  System
+> /dev/sdi1   *           1           9       72292    c  W95 FAT32 (LBA)
+> /dev/sdi2              10         133      996030   83  Linux
+and /dev/mmcblk0p2 sounds like the right partition.
 
-> While we're at reorganizing the top-level menu: I find the order of
-> the menus odd.
-[--SNIP--]
-> I think Bootloaders and Kernel should come earlier in the list and
-> reversed, and Host utilities should be after filesystem images.
-> My proposal is thus:
-> (Target options)
-> Build options
-> Toolchain
-> System configuration
-> Package selection for the target
-> Kernel
-> Bootloaders
-> Filesystem images
-> Host utilities
-> Legacy config options
-> 
-> What is your opinion?
+Can anybody give a hint where to look further?
 
-I would even put the kernel before the packages, and bootloaders before
-kernel. Ie. I'd use the boot-time order of things:
-    (Target options)
-    Build options
-    Toolchain
-    System configuration
-    Bootloaders
-    Kernel
-    Packages selection
-    Filesystem images
-    Host Utilities
-    Legacy config options
+Kind regards
 
-Bizzarely enough, moving bootloaders before kernel seems odd... :-/
-
-Regards,
-Yann E. MORIN.
+Stephan
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +0/33 662376056 | Software  Designer | \ / CAMPAIGN     |   ^                |
-| --==< O_o >==-- '------------.-------:  X  AGAINST      |  /e\  There is no  |
-| http://ymorin.is-a-geek.org/ | (*_*) | / \ HTML MAIL    |  """  conspiracy.  |
-'------------------------------'-------'------------------'--------------------'
+reLinux     -    Stephan Hoffmann
+Am Schmidtgrund 124    50765 K?ln
+Tel. +49.221.95595-19    Fax: -64
+www.reLinux.de     sho at reLinux.de
