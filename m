@@ -1,42 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 16 Aug 2013 13:10:12 +0200
-Subject: [Buildroot] [git commit] CHANGES: update for 2013.08-rc2
-Message-ID: <20130816111506.C25B69A60E@busybox.osuosl.org>
+Date: Fri, 16 Aug 2013 13:01:07 +0200
+Subject: [Buildroot] [git commit] linux: bump 3.10.x stable version
+Message-ID: <20130816111506.971EF9A60E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c08b78d1868989ef63cb79b6f8de77365fe87948
+commit: http://git.buildroot.net/buildroot/commit/?id=0144429863c8ebd85820cdd48f2952c3f00ada28
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- CHANGES |   16 ++++++++++++++++
- 1 files changed, 16 insertions(+), 0 deletions(-)
+ linux/Config.in |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/CHANGES b/CHANGES
-index dc1ff14..2fc965e 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -1,3 +1,19 @@
-+2013.08-rc2, Released August 16th 2013:
-+
-+	Documentation improvements.
-+
-+	External toolchains fixes.
-+
-+	Updated/fixed packages: aircrack-ng, bash, boost, cairo,
-+	cppcms, eglibc, ffmpeg, gcc, git, gnupg, imagemagick, libcec,
-+	libffi, libgcrypt, linux, linux-headers, ltrace, netatalk,
-+	opencv, opengl, readline, samba, strongswan, sunxi-cedarx,
-+	uclibc, udev, wayland, webkit, zeromq.
-+
-+	Issues resolved (http://bugs.uclibc.org):
-+
-+	#6440: typo in ffmpeg makefile
-+
- 2013.08-rc1, Released August 5th, 2013:
+diff --git a/linux/Config.in b/linux/Config.in
+index f6acddf..12e4cd8 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -21,7 +21,7 @@ choice
+ 	prompt "Kernel version"
  
- 	Architectures:
+ config BR2_LINUX_KERNEL_LATEST_VERSION
+-	bool "3.10.6"
++	bool "3.10.7"
+ 
+ config BR2_LINUX_KERNEL_SAME_AS_HEADERS
+ 	bool "Same as toolchain kernel headers"
+@@ -75,7 +75,7 @@ config BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION
+ 
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "3.10.6" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "3.10.7" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default BR2_DEFAULT_KERNEL_HEADERS if BR2_LINUX_KERNEL_SAME_AS_HEADERS
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE if BR2_LINUX_KERNEL_CUSTOM_VERSION
+ 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
