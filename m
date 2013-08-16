@@ -1,64 +1,46 @@
-From: John OSullivan <john.osullivan@cloudiumsystems.com>
-Date: Fri, 16 Aug 2013 14:12:41 +0100
-Subject: [Buildroot] Managing circular dependencies
-Message-ID: <001101ce9a82$4cc6b540$e6541fc0$@osullivan@cloudiumsystems.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Fri, 16 Aug 2013 14:14:11 -0300
+Subject: [Buildroot] [PATCH 1/2] configs/p1010rdb: bump to the latest and
+	greatest versions
+Message-ID: <1376673252-2329-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ board/freescale/p1010rdb/{linux-3.8.config => linux-3.10.config} | 0
+ configs/freescale_p1010rdb_defconfig                             | 6 +++---
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+ rename board/freescale/p1010rdb/{linux-3.8.config => linux-3.10.config} (100%)
 
- 
-
-I have some code which I have inherited and I am in the process of
-integrating into a buildroot-2012.05 based build system. The problem is that
-package (A) creates a static library, in creating this it references headers
-in package (B). Package (B) has a dependency on the static library built by
-package (A).
-
-The code I have is a bit of a mess but at the moment I just need to get it
-building within buildroot. I can think of a number of ugly hacks but I was
-wondering what approach I should take to this in buildroot. I had thought
-that the staging area in output/staging might help but I am not sure what
-its intended purpose is.
-
-In terms of the package files.
-
-I set packageA.mk to have a dependency with PACKAGEA_DEPENDENCIES =
-host-cmake packageB
-
-And also
-
-I set packageB.mk to have a dependency with PACKAGEB_DEPENDENCIES =
-host-cmake packageA
-
- 
-
-As it build package (A) I see a message Package (B) dependency dropped.
-
-I had tried a line like:
-
-#define PACKAGEA_INSTALL_STAGING_CMDS
-
-               $(INSTALL) -D -m 0755 $(@)/packagealib.a
-$(STAGING_DIR)/usr/lib/packagealib.a
-
- 
-
-But this just deposits the file in output/host/usr
-
-I had thought that if I got the necessary header files into
-output/usr/include or some such location then it might be the basis of a
-solution.
-
-Is there a particular approach I need to take here?
-
- 
-
- 
-
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130816/b1d2ab4e/attachment.html>
+diff --git a/board/freescale/p1010rdb/linux-3.8.config b/board/freescale/p1010rdb/linux-3.10.config
+similarity index 100%
+rename from board/freescale/p1010rdb/linux-3.8.config
+rename to board/freescale/p1010rdb/linux-3.10.config
+diff --git a/configs/freescale_p1010rdb_defconfig b/configs/freescale_p1010rdb_defconfig
+index 9ee541f..21554d5 100644
+--- a/configs/freescale_p1010rdb_defconfig
++++ b/configs/freescale_p1010rdb_defconfig
+@@ -15,9 +15,9 @@ BR2_KERNEL_HEADERS_3_8=y
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.8.8"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.10.7"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+-BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/freescale/p1010rdb/linux-3.8.config"
++BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/freescale/p1010rdb/linux-3.10.config"
+ BR2_LINUX_KERNEL_UIMAGE=y
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="p1010rdb"
+@@ -30,4 +30,4 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BOARDNAME="P1010RDB_NOR"
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2013.04"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2013.07"
+-- 
+1.8.1.5
