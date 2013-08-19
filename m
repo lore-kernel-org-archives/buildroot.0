@@ -1,132 +1,68 @@
-From: Markos Chandras <markos.chandras@imgtec.com>
-Date: Mon, 19 Aug 2013 16:36:49 +0100
-Subject: [Buildroot] [PATCH v2] harfbuzz: New package
-Message-ID: <1376926609-11561-1-git-send-email-markos.chandras@imgtec.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 19 Aug 2013 18:19:17 +0200
+Subject: [Buildroot] [PATCH] infra: display current task as title of the
+ term window
+In-Reply-To: <CAAXf6LWkHdg1XB77GPjVFY6k97E95AxG7ZHK3cmr6dGEM=xAfg@mail.gmail.com>
+References: <1375822004-22591-1-git-send-email-francois.perrad@gadz.org>
+ <CAAXf6LWCBh-W3nHRLtoXVy8PfbS3NpOQ7sMwicp6W+kv-OeAkg@mail.gmail.com>
+ <5209C5D1.7040904@mind.be>
+ <CAAXf6LWkHdg1XB77GPjVFY6k97E95AxG7ZHK3cmr6dGEM=xAfg@mail.gmail.com>
+Message-ID: <52124585.1050303@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-HarfBuzz is an OpenType text shaping engine
+On 18/08/13 10:21, Thomas De Schampheleire wrote:
+> On Tue, Aug 13, 2013 at 7:36 AM, Arnout Vandecappelle <arnout@mind.be> wrote:
+>> On 07/08/13 08:44, Thomas De Schampheleire wrote:
+>>>
+>
+>>> I know that Gentoo has this feature for its portage package
+>>> installation/compilation tool. When you run 'emerge', the titles are
+>>> constantly updated with the package that is being handled, also in
+>>> Konsole. You may be able to find out what the 'right way' is based on
+>>> their sources.
+>>
+>>
+>>   Are you sure this works for you with emerge? I RTFM'ed it and according to
+>> the konsole manual, you have to add '%w' to the tab title string to get the
+>> string set by the shell. Perhaps Gentoo simply sets the default tab title
+>> string to something including %w.
+>>
+>
+>
+> It does work for emerge, but it seems you are right: the default tab
+> title in Gentoo is set to %w (I didn't set it explicitly). I tried
+> Francois' patch on a non-gentoo system before (didn't work for
+> Konsole) but after explicitly setting %w in the tab title it also
+> works there. So that issue is cleared out.
+>
+> However, while testing again, I noticed an annoyance: if the build
+> process stops prematurely, for example because the build fails or the
+> user interrupts it, the last tab title remains. I would much prefer
+> that we can cleanly restore this no matter how buildroot/make stops.
 
-http://www.freedesktop.org/wiki/Software/HarfBuzz/
+  Won't that be the case regardless of whether the build fails or succeeds?
 
-Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
----
-http://lists.busybox.net/pipermail/buildroot/2013-August/076645.html
-Changes since v1:
-- Fix alphabetical order in package/Config.in
-- Rename 'LIBSTDCPP support' to 'C++ support'
----
- package/Config.in            |  1 +
- package/harfbuzz/Config.in   | 34 ++++++++++++++++++++++++++++++++++
- package/harfbuzz/harfbuzz.mk | 44 ++++++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 79 insertions(+)
- create mode 100644 package/harfbuzz/Config.in
- create mode 100644 package/harfbuzz/harfbuzz.mk
+  I think this patch is only really suitable for people who have 
+something similar in their PS1. Otherwise it will just mess up your 
+window title.
 
-diff --git a/package/Config.in b/package/Config.in
-index 7069d77..1b06755 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -130,6 +130,7 @@ endif
- source "package/fbterm/Config.in"
- source "package/fbv/Config.in"
- source "package/fb-test-app/Config.in"
-+source "package/harfbuzz/Config.in"
- source "package/imagemagick/Config.in"
- source "package/linux-fusion/Config.in"
- source "package/lite/Config.in"
-diff --git a/package/harfbuzz/Config.in b/package/harfbuzz/Config.in
-new file mode 100644
-index 0000000..1b1bad3
---- /dev/null
-+++ b/package/harfbuzz/Config.in
-@@ -0,0 +1,34 @@
-+config BR2_PACKAGE_HARFBUZZ
-+	bool "harfbuzz"
-+	help
-+	  HarfBuzz is an OpenType text shaping engine
-+
-+	  http://www.freedesktop.org/wiki/Software/HarfBuzz/
-+
-+if BR2_PACKAGE_HARFBUZZ
-+
-+config BR2_PACKAGE_HARFBUZZ_CAIRO
-+	bool "Use cairo"
-+	select BR2_PACKAGE_CAIRO
-+
-+config BR2_PACKAGE_HARFBUZZ_FREETYPE
-+	bool "Use the FreeType library"
-+	select BR2_PACKAGE_FREETYPE
-+
-+config BR2_PACKAGE_HARFBUZZ_GLIB
-+	bool "Use glib"
-+	select BR2_PACKAGE_LIBGLIB2
-+	depends on BR2_USE_WCHAR # gettext dep in libglib2
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
-+comment "glib support requires a toolchain with WCHAR and threading support."
-+	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
-+
-+config BR2_PACKAGE_HARFBUZZ_ICU
-+	bool "Use ICU"
-+	select BR2_PACKAGE_ICU
-+	depends on BR2_USE_WCHAR # icu
-+	depends on BR2_INSTALL_LIBSTDCPP # icu
-+
-+comment "icu support requires a toolchain with WCHAR and C++ support."
-+	depends on !BR2_USE_WCHAR || !BR2_INSTALL_LIBSTDCPP
-+endif
-diff --git a/package/harfbuzz/harfbuzz.mk b/package/harfbuzz/harfbuzz.mk
-new file mode 100644
-index 0000000..9aee90f
---- /dev/null
-+++ b/package/harfbuzz/harfbuzz.mk
-@@ -0,0 +1,44 @@
-+################################################################################
-+#
-+# harfbuzz
-+#
-+################################################################################
-+
-+HARFBUZZ_VERSION = 0.9.19
-+HARFBUZZ_SITE = http://www.freedesktop.org/software/harfbuzz/release/
-+HARFBUZZ_SOURCE = harfbuzz-$(HARFBUZZ_VERSION).tar.bz2
-+HARFBUZZ_LICENSE = Old-MIT ISC ICU
-+HARFBUZZ_LICENSE_FILES = COPYING src/hb-ucdn/COPYING src/hb-icu-le/COPYING
-+HARFBUZZ_INSTALL_STAGING = YES
-+
-+HARFBUZZ_CONF_OPT = --without-coretext --without-uniscribe --without-graphite2
-+
-+ifeq ($(BR2_PACKAGE_HARFBUZZ_CAIRO),y)
-+	HARFBUZZ_DEPENDENCIES += cairo
-+	HARFBUZZ_CONF_OPT += --with-cairo=yes
-+else
-+	HARFBUZZ_CONF_OPT += --with-cairo=no
-+endif
-+
-+ifeq ($(BR2_PACKAGE_HARFBUZZ_FREETYPE),y)
-+	HARFBUZZ_DEPENDENCIES += freetype
-+	HARFBUZZ_CONF_OPT += --with-freetype=yes
-+else
-+	HARFBUZZ_CONF_OPT += --with-freetype=no
-+endif
-+
-+ifeq ($(BR2_PACKAGE_HARFBUZZ_GLIB),y)
-+	HARFBUZZ_DEPENDENCIES += libglib2
-+	HARFBUZZ_CONF_OPT += --with-glib=yes
-+else
-+	HARFBUZZ_CONF_OPT += --with-glib=no
-+endif
-+
-+ifeq ($(BR2_PACKAGE_HARFBUZZ_ICU),y)
-+	HARFBUZZ_DEPENDENCIES += icu
-+	HARFBUZZ_CONF_OPT += --with-icu=yes
-+else
-+	HARFBUZZ_CONF_OPT += --with-icu=no
-+endif
-+
-+$(eval $(autotools-package))
+  Also, it should only be done if $TERM == xterm, otherwise you get 
+annoying stuff when running buildroot from a text console. And in fact, 
+the same is true of the colouring itself, so we don't get these annoying 
+escape characters in log files and continuous integration web interfaces.
+
+  Regards,
+  Arnout
+
+
 -- 
-1.8.3.2
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
