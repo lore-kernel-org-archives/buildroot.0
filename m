@@ -1,25 +1,84 @@
-From: Markos Chandras <markos.chandras@gmail.com>
-Date: Mon, 19 Aug 2013 15:50:55 +0100
-Subject: [Buildroot] [PATCH] harfbuzz: New package
-In-Reply-To: <CAAXf6LUBobO2mUnbVXjqHMBPtRO168P-C5VN5-r3eAif=jZJVA@mail.gmail.com>
-References: <1376912688-13267-1-git-send-email-markos.chandras@imgtec.com>
- <CAAXf6LUBobO2mUnbVXjqHMBPtRO168P-C5VN5-r3eAif=jZJVA@mail.gmail.com>
-Message-ID: <CAG2jQ8ihUjoe=7AdQ=+v88wHjVWN_SdHARbZaghPuAGHY0e6og@mail.gmail.com>
+From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
+Date: Mon, 19 Aug 2013 17:00:34 +0200
+Subject: [Buildroot] [RFC] Unification of package comments on wchar,
+ largefile, c++ support, thread, ... support
+Message-ID: <CAAXf6LV7wB6_RsufRWD6s7-viuYheasMHJWqDAGtu6BmPpZBdw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 19 August 2013 15:47, Thomas De Schampheleire
-<patrickdepinguin+buildroot@gmail.com> wrote:
-> Hi Markos,
->
+Hi,
 
-Hi Thomas,
+When a package needs any of wchar/largefile/C++/thread support in the
+toolchain, this is handled with a comment in Config.in shown when this
+condition is not met.
 
-Thanks for the review. The new patch should arrive soon :)
+However, the text of these comments is currently not unified, some
+examples: (grep -A1 comment package/*/Config.in)
 
--- 
-Regards,
-Markos Chandras
+package/acl/Config.in:comment "acl requires a toolchain with LARGEFILE support"
+package/acl/Config.in-  depends on !BR2_LARGEFILE
+--
+package/aircrack-ng/Config.in:comment "aircrack-ng needs a toolchain
+with largefile and threads support"
+package/aircrack-ng/Config.in-  depends on !BR2_LARGEFILE ||
+!BR2_TOOLCHAIN_HAS_THREADS
+--
+package/alsa-lib/Config.in:comment "alsa-lib needs threads support in toolchain"
+package/alsa-lib/Config.in-     depends on !BR2_TOOLCHAIN_HAS_THREADS
+--
+package/alsamixergui/Config.in:comment "alsamixergui requires a
+toolchain with C++ and threads support enabled"
+package/alsamixergui/Config.in- depends on (!BR2_INSTALL_LIBSTDCPP ||
+!BR2_TOOLCHAIN_HAS_THREADS) && BR2_PACKAGE_XORG7
+--
+package/atk/Config.in:comment "atk requires a toolchain with WCHAR support"
+package/atk/Config.in-  depends on !BR2_USE_WCHAR
+--
+package/attr/Config.in:comment "attr requires a toolchain with
+LARGEFILE support"
+package/attr/Config.in- depends on !BR2_LARGEFILE
+--
+package/audiofile/Config.in:comment "audiofile requires a toolchain
+with C++ support enabled"
+package/audiofile/Config.in-    depends on !BR2_INSTALL_LIBSTDCPP
+--
+package/avahi/Config.in:comment "avahi requires a toolchain with thread support"
+package/avahi/Config.in-        depends on !BR2_TOOLCHAIN_HAS_THREADS
+--
+package/axel/Config.in:comment "axel needs a toolchain with thread support"
+package/axel/Config.in- depends on !BR2_TOOLCHAIN_HAS_THREADS
+
+
+As you can see, in just the first few hits of my grep commands, there
+are many differences:
+
+- requires vs needs
+- LARGEFILE vs largefile (capitalization)
+- 'a toolchain with ... support' vs '... support in toolchain'
+- thread vs threads
+- '... support' vs '... support enabled'
+- 'and' vs '+' vs '&' when multiple features are needed (not shown in
+the above examples)
+
+
+I would like to agree on one common text, and adapt all packages
+accordingly. The exact wording can be discussed, the main goal is the
+unification. Here is a proposal:
+
+foo requires a toolchain with feat support
+foo requires a toolchain with featA and featB support
+foo requires a toolchain with featA, featB and featC support
+
+where the features would be written as: WCHAR, LARGEFILE, IPV6, RPC,
+C++, thread.
+
+
+What is your opinion on:
+a. the concept of this unification
+b. the wording proposed above
+
+Thanks,
+Thomas
