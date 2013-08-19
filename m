@@ -1,80 +1,38 @@
-From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Mon, 19 Aug 2013 20:49:48 +0200
-Subject: [Buildroot] [PATCH] infra: display current task as title of the
- term window
-In-Reply-To: <52124585.1050303@mind.be>
-References: <1375822004-22591-1-git-send-email-francois.perrad@gadz.org>
- <CAAXf6LWCBh-W3nHRLtoXVy8PfbS3NpOQ7sMwicp6W+kv-OeAkg@mail.gmail.com>
- <5209C5D1.7040904@mind.be>
- <CAAXf6LWkHdg1XB77GPjVFY6k97E95AxG7ZHK3cmr6dGEM=xAfg@mail.gmail.com>
- <52124585.1050303@mind.be>
-Message-ID: <CAAXf6LWzouV+VGEHJric3M3yt5zGmtg=iVmsUeKN5yk4JDE1Vw@mail.gmail.com>
+From: Spenser Gilliland <spenser@gillilanding.com>
+Date: Mon, 19 Aug 2013 16:44:30 -0500
+Subject: [Buildroot] GSoC Weekly Update
+Message-ID: <CAEBucnAk9=6HHJr0faO7wGW4xwJR5f14Le+9BXzSQw-0tVTiNA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Op 19-aug.-2013 19:09 schreef "Arnout Vandecappelle" <arnout@mind.be> het
-volgende:
->
-> On 18/08/13 10:21, Thomas De Schampheleire wrote:
->>
->> On Tue, Aug 13, 2013 at 7:36 AM, Arnout Vandecappelle <arnout@mind.be>
-wrote:
->>>
->>> On 07/08/13 08:44, Thomas De Schampheleire wrote:
->>>>
->>>>
->>
->>>> I know that Gentoo has this feature for its portage package
->>>> installation/compilation tool. When you run 'emerge', the titles are
->>>> constantly updated with the package that is being handled, also in
->>>> Konsole. You may be able to find out what the 'right way' is based on
->>>> their sources.
->>>
->>>
->>>
->>>   Are you sure this works for you with emerge? I RTFM'ed it and
-according to
->>> the konsole manual, you have to add '%w' to the tab title string to get
-the
->>> string set by the shell. Perhaps Gentoo simply sets the default tab
-title
->>> string to something including %w.
->>>
->>
->>
->> It does work for emerge, but it seems you are right: the default tab
->> title in Gentoo is set to %w (I didn't set it explicitly). I tried
->> Francois' patch on a non-gentoo system before (didn't work for
->> Konsole) but after explicitly setting %w in the tab title it also
->> works there. So that issue is cleared out.
->>
->> However, while testing again, I noticed an annoyance: if the build
->> process stops prematurely, for example because the build fails or the
->> user interrupts it, the last tab title remains. I would much prefer
->> that we can cleanly restore this no matter how buildroot/make stops.
->
->
->  Won't that be the case regardless of whether the build fails or succeeds?
+Hi,
 
-Currently it is indeed, but that could easily be fixed by adding an extra
-such print at the end.
+As some of you may be aware, I am the GSoC student for Buildroot this
+Summer. Starting this week, I will be providing weekly updates to the
+mailing list with information on my activities.
 
->
->  I think this patch is only really suitable for people who have something
-similar in their PS1. Otherwise it will just mess up your window title.
->
->  Also, it should only be done if $TERM == xterm, otherwise you get
-annoying stuff when running buildroot from a text console. And in fact, the
-same is true of the colouring itself, so we don't get these annoying escape
-characters in log files and continuous integration web interfaces.
+My main goals for last week were the integration of the glmark2
+benchmark into Buildroot.  I'm currently testing this support on many
+of the boards (rpi/beaglexm/cubieboard) and will hopefully post these
+patches this week.  To get to the glmark2 benchmark a number of
+changes were required, specfically a new package for libpng12, a bump
+in libdrm, and a bump in mesa3d.  In addition, the mesa3d support was
+partially rewritten in order to support a more granular selection of
+graphics drivers.  This will allow, future limare/freedreno
+integration, which looks very promising (especially freedreno).
 
-Agreed.
+Furthermore, this weeks goal is to get both i.MX6 based platforms up
+and running.  I currently have both a Wandboard [1] and a SABRE [2]
+for testing the imx6 packages in Buildroot.
 
-Best regards,
-Thomas
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130819/e2974fda/attachment.html>
+Thanks,
+
+Spenser
+
+-- 
+Spenser Gilliland
+Computer Engineer
+Doctoral Candidate
