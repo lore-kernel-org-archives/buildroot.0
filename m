@@ -1,67 +1,127 @@
-From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Mon, 19 Aug 2013 12:53:11 +0200
-Subject: [Buildroot] [PATCH] strongswan: fix typo in tnccs_20
-	dependencies
-In-Reply-To: <1376907843-16135-1-git-send-email-jezz@sysmic.org>
-References: <1376907843-16135-1-git-send-email-jezz@sysmic.org>
-Message-ID: <CAAXf6LWnecW0t8Nm1Bd6KBaLjFGY0Sx8FKeP5PZZAXw5QUqP0Q@mail.gmail.com>
+From: Markos Chandras <markos.chandras@imgtec.com>
+Date: Mon, 19 Aug 2013 12:44:48 +0100
+Subject: [Buildroot] [PATCH] harfbuzz: New package
+Message-ID: <1376912688-13267-1-git-send-email-markos.chandras@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi J?r?me,
+HarfBuzz is an OpenType text shaping engine
 
-On Mon, Aug 19, 2013 at 12:24 PM, J?r?me Pouiller <jezz@sysmic.org> wrote:
-> It looks like there is a typing error in dependencies of tnccs_20 in strongswan
-> configure script. Add a patch to solve it.
->
-> Resolve issues detected here:
->     http://autobuild.buildroot.net/results/b069e304c42660e7f7eba0b358f95dbaf879df64
->     http://autobuild.buildroot.net/results/7355ddbaa213f4fcfd1b6d37b25bed1aab525723
->
-> Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
-> ---
->  ...trongswan-0002-fix-dependency-to-libtnccs.patch |   26 ++++++++++++++++++++
->  1 file changed, 26 insertions(+)
->  create mode 100644 package/strongswan/strongswan-0002-fix-dependency-to-libtnccs.patch
->
-> diff --git a/package/strongswan/strongswan-0002-fix-dependency-to-libtnccs.patch b/package/strongswan/strongswan-0002-fix-dependency-to-libtnccs.patch
-> new file mode 100644
-> index 0000000..059fc42
-> --- /dev/null
-> +++ b/package/strongswan/strongswan-0002-fix-dependency-to-libtnccs.patch
-> @@ -0,0 +1,26 @@
-> +It looks like there is a typing error in dependencies of tnccs_20.
-> +
-> +Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
-> +
-> +--- a/configure        2013-08-19 12:09:33.934651935 +0200
-> ++++ b/configure        2013-08-19 11:50:34.465118187 +0200
-> +@@ -15897,7 +15897,7 @@
-> +       radius=true;
-> + fi
-> +
-> +-if test x$tnc_imc = xtrue -o x$tnc_imv = xtrue -o x$tnccs_11 = xtrue -o x$tnccs_11 = xtrue -o x$tnccs_dynamic = xtrue -o x$eap_tnc = xtrue; then
-> ++if test x$tnc_imc = xtrue -o x$tnc_imv = xtrue -o x$tnccs_11 = xtrue -o x$tnccs_20 = xtrue -o x$tnccs_dynamic = xtrue -o x$eap_tnc = xtrue; then
-> +       tnc_tnccs=true;
-> + fi
-> +
-> +--- a/configure.in     2013-08-19 12:08:41.762913778 +0200
-> ++++ b/configure.in     2013-08-19 11:50:22.222886206 +0200
-> +@@ -317,7 +317,7 @@
-> +       radius=true;
-> + fi
-> +
-> +-if test x$tnc_imc = xtrue -o x$tnc_imv = xtrue -o x$tnccs_11 = xtrue -o x$tnccs_11 = xtrue -o x$tnccs_dynamic = xtrue -o x$eap_tnc = xtrue; then
-> ++if test x$tnc_imc = xtrue -o x$tnc_imv = xtrue -o x$tnccs_11 = xtrue -o x$tnccs_20 = xtrue -o x$tnccs_dynamic = xtrue -o x$eap_tnc = xtrue; then
-> +       tnc_tnccs=true;
-> + fi
-> +
-> --
+http://www.freedesktop.org/wiki/Software/HarfBuzz/
 
-Will you also send this patch upstream?
+Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
+---
+ package/Config.in            |  1 +
+ package/harfbuzz/Config.in   | 34 ++++++++++++++++++++++++++++++++++
+ package/harfbuzz/harfbuzz.mk | 44 ++++++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 79 insertions(+)
+ create mode 100644 package/harfbuzz/Config.in
+ create mode 100644 package/harfbuzz/harfbuzz.mk
 
-Thanks,
-Thomas
+diff --git a/package/Config.in b/package/Config.in
+index 7069d77..8a87563 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -124,6 +124,7 @@ source "package/directfb-examples/Config.in"
+ source "package/divine/Config.in"
+ source "package/fbdump/Config.in"
+ source "package/fbgrab/Config.in"
++source "package/harfbuzz/Config.in"
+ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ source "package/fbset/Config.in"
+ endif
+diff --git a/package/harfbuzz/Config.in b/package/harfbuzz/Config.in
+new file mode 100644
+index 0000000..e96ff7f
+--- /dev/null
++++ b/package/harfbuzz/Config.in
+@@ -0,0 +1,34 @@
++config BR2_PACKAGE_HARFBUZZ
++	bool "harfbuzz"
++	help
++	  HarfBuzz is an OpenType text shaping engine
++
++	  http://www.freedesktop.org/wiki/Software/HarfBuzz/
++
++if BR2_PACKAGE_HARFBUZZ
++
++config BR2_PACKAGE_HARFBUZZ_CAIRO
++	bool "Use cairo"
++	select BR2_PACKAGE_CAIRO
++
++config BR2_PACKAGE_HARFBUZZ_FREETYPE
++	bool "Use the FreeType library"
++	select BR2_PACKAGE_FREETYPE
++
++config BR2_PACKAGE_HARFBUZZ_GLIB
++	bool "Use glib"
++	select BR2_PACKAGE_LIBGLIB2
++	depends on BR2_USE_WCHAR # gettext dep in libglib2
++	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
++comment "glib support requires a toolchain with WCHAR and threading support."
++	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
++
++config BR2_PACKAGE_HARFBUZZ_ICU
++	bool "Use ICU"
++	select BR2_PACKAGE_ICU
++	depends on BR2_USE_WCHAR # icu
++	depends on BR2_INSTALL_LIBSTDCPP # icu
++
++comment "icu support requires a toolchain with WCHAR and LIBSTDCPP support."
++	depends on !BR2_USE_WCHAR || !BR2_INSTALL_LIBSTDCPP
++endif
+diff --git a/package/harfbuzz/harfbuzz.mk b/package/harfbuzz/harfbuzz.mk
+new file mode 100644
+index 0000000..9aee90f
+--- /dev/null
++++ b/package/harfbuzz/harfbuzz.mk
+@@ -0,0 +1,44 @@
++################################################################################
++#
++# harfbuzz
++#
++################################################################################
++
++HARFBUZZ_VERSION = 0.9.19
++HARFBUZZ_SITE = http://www.freedesktop.org/software/harfbuzz/release/
++HARFBUZZ_SOURCE = harfbuzz-$(HARFBUZZ_VERSION).tar.bz2
++HARFBUZZ_LICENSE = Old-MIT ISC ICU
++HARFBUZZ_LICENSE_FILES = COPYING src/hb-ucdn/COPYING src/hb-icu-le/COPYING
++HARFBUZZ_INSTALL_STAGING = YES
++
++HARFBUZZ_CONF_OPT = --without-coretext --without-uniscribe --without-graphite2
++
++ifeq ($(BR2_PACKAGE_HARFBUZZ_CAIRO),y)
++	HARFBUZZ_DEPENDENCIES += cairo
++	HARFBUZZ_CONF_OPT += --with-cairo=yes
++else
++	HARFBUZZ_CONF_OPT += --with-cairo=no
++endif
++
++ifeq ($(BR2_PACKAGE_HARFBUZZ_FREETYPE),y)
++	HARFBUZZ_DEPENDENCIES += freetype
++	HARFBUZZ_CONF_OPT += --with-freetype=yes
++else
++	HARFBUZZ_CONF_OPT += --with-freetype=no
++endif
++
++ifeq ($(BR2_PACKAGE_HARFBUZZ_GLIB),y)
++	HARFBUZZ_DEPENDENCIES += libglib2
++	HARFBUZZ_CONF_OPT += --with-glib=yes
++else
++	HARFBUZZ_CONF_OPT += --with-glib=no
++endif
++
++ifeq ($(BR2_PACKAGE_HARFBUZZ_ICU),y)
++	HARFBUZZ_DEPENDENCIES += icu
++	HARFBUZZ_CONF_OPT += --with-icu=yes
++else
++	HARFBUZZ_CONF_OPT += --with-icu=no
++endif
++
++$(eval $(autotools-package))
+-- 
+1.8.3.2
