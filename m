@@ -1,38 +1,73 @@
-From: Spenser Gilliland <spenser@gillilanding.com>
-Date: Mon, 19 Aug 2013 16:44:30 -0500
-Subject: [Buildroot] GSoC Weekly Update
-Message-ID: <CAEBucnAk9=6HHJr0faO7wGW4xwJR5f14Le+9BXzSQw-0tVTiNA@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 20 Aug 2013 00:06:44 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2013-08-16
+In-Reply-To: <20130818200133.4046034b@skate>
+References: <20130817063005.A69FB52C5D6@lolut.humanoidz.org>
+ <20130818200133.4046034b@skate>
+Message-ID: <20130819220644.GA3595@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Thomas, All,
 
-As some of you may be aware, I am the GSoC student for Buildroot this
-Summer. Starting this week, I will be providing weekly updates to the
-mailing list with information on my activities.
+On 2013-08-18 20:01 +0200, Thomas Petazzoni spake thusly:
+> On Sat, 17 Aug 2013 08:30:05 +0200 (CEST), Thomas Petazzoni wrote:
+> 
+> >        arm |                   libbsd-0.4.2 | NOK | http://autobuild.buildroot.net/results/40f3be947e5d686bb4e016db1b3bf59503237e62/
+> >        arm |                   libbsd-0.4.2 | NOK | http://autobuild.buildroot.net/results/ad9d92bef3655ca279bfd6184dca0457ee6c94a0/
+> 
+> Could you have a look at those two? In commit
+> 29b071077f66de1d9a257e7c5c6983dcce1fc65d, you've added "depends on" to
+> make sure libbsd only gets built on architectures that provide a.out.h.
+> However, here, we are on ARM, and apparently, a.out.h is not available.
 
-My main goals for last week were the integration of the glmark2
-benchmark into Buildroot.  I'm currently testing this support on many
-of the boards (rpi/beaglexm/cubieboard) and will hopefully post these
-patches this week.  To get to the glmark2 benchmark a number of
-changes were required, specfically a new package for libpng12, a bump
-in libdrm, and a bump in mesa3d.  In addition, the mesa3d support was
-partially rewritten in order to support a more granular selection of
-graphics drivers.  This will allow, future limare/freedreno
-integration, which looks very promising (especially freedreno).
+This Buildroot .config uses Linux 3.10.7 for the headers.
 
-Furthermore, this weeks goal is to get both i.MX6 based platforms up
-and running.  I currently have both a Wandboard [1] and a SABRE [2]
-for testing the imx6 packages in Buildroot.
+Support for a.out on ARM has been removed in acfdd4b, but this is
+scheduled for 3.11. 3.10 still had support for a.out.
 
-Thanks,
+Currently the only archs that still have support for a.out in Linux
+are: um, m68k, x86 and alpha. Of those, only x86 is meaningfull to
+Buildroot.
 
-Spenser
+So, I think I won't even try to fix this, and simply depend on
+i386 || x86_64.
+
+As far as I am concerned, I use it in my qemu-on-target patchset, and I
+only expect to run this on x86_64 anyway.
+
+We could patch-away the single user of a.out: src/nlist.c .
+It seems it would be relatively easy to remove a.out support from
+nlist.c, since there is conditional code guarded by:
+    #ifdef  _NLIST_DO_AOUT
+    blabla
+    #endif
+
+which is defined by:
+    #if !defined(__NO_A_OUT_SUPPORT)
+    #define _NLIST_DO_AOUT
+    #endif
+
+But nothing sets __NO_A_OUT_SUPPORT.
+
+The only thing that is properly guarded by _NLIST_DO_AOUT is the
+inclusion of a.out.h, but is easy to do.
+
+So, maybe we should pass __NO_A_OUT_SUPPORT in CPPFLAGS to ./configure
+
+Is it really important that this be buildable on !x86 at all?
+
+Regards,
+Yann E. MORIN.
 
 -- 
-Spenser Gilliland
-Computer Engineer
-Doctoral Candidate
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
