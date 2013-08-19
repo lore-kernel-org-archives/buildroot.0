@@ -1,84 +1,64 @@
 From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Mon, 19 Aug 2013 17:00:34 +0200
-Subject: [Buildroot] [RFC] Unification of package comments on wchar,
- largefile, c++ support, thread, ... support
-Message-ID: <CAAXf6LV7wB6_RsufRWD6s7-viuYheasMHJWqDAGtu6BmPpZBdw@mail.gmail.com>
+Date: Mon, 19 Aug 2013 17:02:43 +0200
+Subject: [Buildroot] [PATCH] strongswan: fix typo in tnccs_20
+	dependencies
+In-Reply-To: <eb902829aa7a977f24cf33b429adb573@sysmic.org>
+References: <1376907843-16135-1-git-send-email-jezz@sysmic.org>
+ <CAAXf6LWnecW0t8Nm1Bd6KBaLjFGY0Sx8FKeP5PZZAXw5QUqP0Q@mail.gmail.com>
+ <eb902829aa7a977f24cf33b429adb573@sysmic.org>
+Message-ID: <CAAXf6LWUES5Ok23d60wt--teHUHOPV-Q_R2MY=DD7yrE+CYG6g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+On Mon, Aug 19, 2013 at 4:34 PM, J?r?me Pouiller <jezz@sysmic.org> wrote:
+> On 2013-08-19 12:53, Thomas De Schampheleire wrote:
+>>
+>> Hi J?r?me,
+>>
+>> On Mon, Aug 19, 2013 at 12:24 PM, J?r?me Pouiller <jezz@sysmic.org> wrote:
+>>>
+>>> It looks like there is a typing error in dependencies of tnccs_20 in
+>>> strongswan
+>>> configure script. Add a patch to solve it.
+>>>
+>>> Resolve issues detected here:
+>>>
+>>> http://autobuild.buildroot.net/results/b069e304c42660e7f7eba0b358f95dbaf879df64
+>>>
+>>> http://autobuild.buildroot.net/results/7355ddbaa213f4fcfd1b6d37b25bed1aab525723
+>>>
+>>> Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
+>>> ---
+>>>  ...trongswan-0002-fix-dependency-to-libtnccs.patch |   26
+>>> ++++++++++++++++++++
+>>>  1 file changed, 26 insertions(+)
+>>>  create mode 100644
+>>> package/strongswan/strongswan-0002-fix-dependency-to-libtnccs.patch
+>>>
+>>> diff --git
+>>> a/package/strongswan/strongswan-0002-fix-dependency-to-libtnccs.patch
+>>> b/package/strongswan/strongswan-0002-fix-dependency-to-libtnccs.patch
+>>> new file mode 100644
+>>> index 0000000..059fc42
+>>> --- /dev/null
+>>> +++ b/package/strongswan/strongswan-0002-fix-dependency-to-libtnccs.patch
+>
+> [...]
+>
+>>
+>> Will you also send this patch upstream?
+>
+> My mail has been rejected, and to be honest I am a little lazy to subscribe
+> their mailing
+> list just for this patch.
+>
 
-When a package needs any of wchar/largefile/C++/thread support in the
-toolchain, this is handled with a comment in Config.in shown when this
-condition is not met.
+I had the exact same problem and feeling for my strongswan patch, but
+did subscribe after all. The list seems very low volume, and once the
+patch has been handled, you can always unsubscribe...
 
-However, the text of these comments is currently not unified, some
-examples: (grep -A1 comment package/*/Config.in)
-
-package/acl/Config.in:comment "acl requires a toolchain with LARGEFILE support"
-package/acl/Config.in-  depends on !BR2_LARGEFILE
---
-package/aircrack-ng/Config.in:comment "aircrack-ng needs a toolchain
-with largefile and threads support"
-package/aircrack-ng/Config.in-  depends on !BR2_LARGEFILE ||
-!BR2_TOOLCHAIN_HAS_THREADS
---
-package/alsa-lib/Config.in:comment "alsa-lib needs threads support in toolchain"
-package/alsa-lib/Config.in-     depends on !BR2_TOOLCHAIN_HAS_THREADS
---
-package/alsamixergui/Config.in:comment "alsamixergui requires a
-toolchain with C++ and threads support enabled"
-package/alsamixergui/Config.in- depends on (!BR2_INSTALL_LIBSTDCPP ||
-!BR2_TOOLCHAIN_HAS_THREADS) && BR2_PACKAGE_XORG7
---
-package/atk/Config.in:comment "atk requires a toolchain with WCHAR support"
-package/atk/Config.in-  depends on !BR2_USE_WCHAR
---
-package/attr/Config.in:comment "attr requires a toolchain with
-LARGEFILE support"
-package/attr/Config.in- depends on !BR2_LARGEFILE
---
-package/audiofile/Config.in:comment "audiofile requires a toolchain
-with C++ support enabled"
-package/audiofile/Config.in-    depends on !BR2_INSTALL_LIBSTDCPP
---
-package/avahi/Config.in:comment "avahi requires a toolchain with thread support"
-package/avahi/Config.in-        depends on !BR2_TOOLCHAIN_HAS_THREADS
---
-package/axel/Config.in:comment "axel needs a toolchain with thread support"
-package/axel/Config.in- depends on !BR2_TOOLCHAIN_HAS_THREADS
-
-
-As you can see, in just the first few hits of my grep commands, there
-are many differences:
-
-- requires vs needs
-- LARGEFILE vs largefile (capitalization)
-- 'a toolchain with ... support' vs '... support in toolchain'
-- thread vs threads
-- '... support' vs '... support enabled'
-- 'and' vs '+' vs '&' when multiple features are needed (not shown in
-the above examples)
-
-
-I would like to agree on one common text, and adapt all packages
-accordingly. The exact wording can be discussed, the main goal is the
-unification. Here is a proposal:
-
-foo requires a toolchain with feat support
-foo requires a toolchain with featA and featB support
-foo requires a toolchain with featA, featB and featC support
-
-where the features would be written as: WCHAR, LARGEFILE, IPV6, RPC,
-C++, thread.
-
-
-What is your opinion on:
-a. the concept of this unification
-b. the wording proposed above
-
-Thanks,
+Best regards,
 Thomas
