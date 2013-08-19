@@ -1,50 +1,67 @@
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Mon, 19 Aug 2013 12:35:36 +0200
-Subject: [Buildroot] List of pending patches: what to do?
-In-Reply-To: <20130731191415.545f7dff@skate>
-References: <20130731191415.545f7dff@skate>
-Message-ID: <5211F4F8.7060800@lucaceresoli.net>
+From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
+Date: Mon, 19 Aug 2013 12:53:11 +0200
+Subject: [Buildroot] [PATCH] strongswan: fix typo in tnccs_20
+	dependencies
+In-Reply-To: <1376907843-16135-1-git-send-email-jezz@sysmic.org>
+References: <1376907843-16135-1-git-send-email-jezz@sysmic.org>
+Message-ID: <CAAXf6LWnecW0t8Nm1Bd6KBaLjFGY0Sx8FKeP5PZZAXw5QUqP0Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas,
+Hi J?r?me,
 
-Thomas Petazzoni wrote:
-> Hello,
+On Mon, Aug 19, 2013 at 12:24 PM, J?r?me Pouiller <jezz@sysmic.org> wrote:
+> It looks like there is a typing error in dependencies of tnccs_20 in strongswan
+> configure script. Add a patch to solve it.
 >
-> We currently have 228 pending patches in our patchwork at
-> http://patchwork.ozlabs.org/project/buildroot/list/. Many patches are
-> old and should be adopted to be cleaned up and resubmitted, or maybe
-> need to be rejected but after some community discussion.
+> Resolve issues detected here:
+>     http://autobuild.buildroot.net/results/b069e304c42660e7f7eba0b358f95dbaf879df64
+>     http://autobuild.buildroot.net/results/7355ddbaa213f4fcfd1b6d37b25bed1aab525723
 >
-> In order to help reducing the backlog of patches, I'm pasting below the
-> entire list of patches with their title and direct link to patchwork.
-> What I'm interested in is people replying to this e-mail and giving
-> their opinion about some of the patches (don't try to look at all of
-> them, but at least a few of them). Opinions can be: we should reject,
-> I'm interested in adopting the patch and refreshing it, the patch is
-> interesting but needs this and that to be merged, etc.
+> Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
+> ---
+>  ...trongswan-0002-fix-dependency-to-libtnccs.patch |   26 ++++++++++++++++++++
+>  1 file changed, 26 insertions(+)
+>  create mode 100644 package/strongswan/strongswan-0002-fix-dependency-to-libtnccs.patch
 >
-> Thanks for your help!
-...
-> http://patchwork.ozlabs.org/patch/230289 [v2] Enable ccache for cmake packages
+> diff --git a/package/strongswan/strongswan-0002-fix-dependency-to-libtnccs.patch b/package/strongswan/strongswan-0002-fix-dependency-to-libtnccs.patch
+> new file mode 100644
+> index 0000000..059fc42
+> --- /dev/null
+> +++ b/package/strongswan/strongswan-0002-fix-dependency-to-libtnccs.patch
+> @@ -0,0 +1,26 @@
+> +It looks like there is a typing error in dependencies of tnccs_20.
+> +
+> +Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
+> +
+> +--- a/configure        2013-08-19 12:09:33.934651935 +0200
+> ++++ b/configure        2013-08-19 11:50:34.465118187 +0200
+> +@@ -15897,7 +15897,7 @@
+> +       radius=true;
+> + fi
+> +
+> +-if test x$tnc_imc = xtrue -o x$tnc_imv = xtrue -o x$tnccs_11 = xtrue -o x$tnccs_11 = xtrue -o x$tnccs_dynamic = xtrue -o x$eap_tnc = xtrue; then
+> ++if test x$tnc_imc = xtrue -o x$tnc_imv = xtrue -o x$tnccs_11 = xtrue -o x$tnccs_20 = xtrue -o x$tnccs_dynamic = xtrue -o x$eap_tnc = xtrue; then
+> +       tnc_tnccs=true;
+> + fi
+> +
+> +--- a/configure.in     2013-08-19 12:08:41.762913778 +0200
+> ++++ b/configure.in     2013-08-19 11:50:22.222886206 +0200
+> +@@ -317,7 +317,7 @@
+> +       radius=true;
+> + fi
+> +
+> +-if test x$tnc_imc = xtrue -o x$tnc_imv = xtrue -o x$tnccs_11 = xtrue -o x$tnccs_11 = xtrue -o x$tnccs_dynamic = xtrue -o x$eap_tnc = xtrue; then
+> ++if test x$tnc_imc = xtrue -o x$tnc_imv = xtrue -o x$tnccs_11 = xtrue -o x$tnccs_20 = xtrue -o x$tnccs_dynamic = xtrue -o x$eap_tnc = xtrue; then
+> +       tnc_tnccs=true;
+> + fi
+> +
+> --
 
-This led to a fairly long discussion with Samuel, you and me on howit
-should be implemented.You suggested it should be done in the toolchain
-wrappers. Thedetails were not clear to me, but it was definitely nothing
-similar to this patch.
+Will you also send this patch upstream?
 
-So probably it should be dropped from patchwork.
-
-Note: the discussion is not fully visible in patchwork, see it here:
-http://lists.busybox.net/pipermail/buildroot/2013-March/068306.html
-
-FWIW, I'm not even using that patch. Instead I'm using the v1
-(http://lists.busybox.net/pipermail/buildroot/2013-March/068306.html)
-which added a stupid shell wrapper around TARGET_CC/_CXX. It's probably
-not very nice but it's simple and it just works.
-
-Luca
+Thanks,
+Thomas
