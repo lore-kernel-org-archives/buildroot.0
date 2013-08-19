@@ -1,117 +1,155 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 19 Aug 2013 18:33:38 +0200
-Subject: [Buildroot] [PATCH] targets: move target options to their own
- sub-menu
-In-Reply-To: <201308160839.05082.yann.morin.1998@free.fr>
-References: <1376598482-9492-1-git-send-email-yann.morin.1998@free.fr>
- <520D5FE6.2090007@mind.be>
- <CAAXf6LV8gfZUmLogOubg5j03d9HJR7-bm+cm+HDG-N6kNAiK_g@mail.gmail.com>
- <201308160839.05082.yann.morin.1998@free.fr>
-Message-ID: <521248E2.9060702@mind.be>
+From: Ivan Sergeev <vsergeev@gmail.com>
+Date: Mon, 19 Aug 2013 10:54:42 -0700
+Subject: [Buildroot] BeagleBone defconfig broken?
+In-Reply-To: <5211D49F.7080105@relinux.de>
+References: <520DE175.1050103@relinux.de>
+ <CAAMhL_RF-0KNoCpRfAK1foEcfbJRCz2y5nF3d2UF=1kBD1N-vw@mail.gmail.com>
+ <5211D49F.7080105@relinux.de>
+Message-ID: <CAAMhL_Tcf0iUr70KZ__CVpeXi8_hsv7E-5WBm9=iN4=UVDiGpg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 16/08/13 08:39, Yann E. MORIN wrote:
-> Thomas, Arnout, All,
+Hello Stephan,
+
+Maybe it'd be worth double checking that the bootargs in u-boot has the
+right rootfstype?
+The dts doesn't specify them so I'm assuming they're being passed entirely
+by u-boot.
+
+Thanks,
+~vsergeev
+Ivan Sergeev
+
+
+On Mon, Aug 19, 2013 at 1:17 AM, Stephan Hoffmann <sho@relinux.de> wrote:
+
+>  Am 18.08.2013 19:48, schrieb Ivan Sergeev:
 >
-> On Friday 16 August 2013 08:30:43 Thomas De Schampheleire wrote:
->> On Fri, Aug 16, 2013 at 1:10 AM, Arnout Vandecappelle <arnout@mind.be> wrote:
->>> On 15/08/13 22:28, Yann E. MORIN wrote:
->>>>
+> Hi Stephan,
+>
+> Hello Ivan,
+>
+> thank you for your reply.
+>
+>
+>  Does u-boot report that the device tree is loaded into memory just
+> before booting?
+>
+> Yes, that is obviously the case:
+>
+> 2857712 bytes read in 435 ms (6.3 MiB/s)
+> 10537 bytes read in 55 ms (186.5 KiB/s)
+> Booting from mmc ...
+> ## Booting kernel from Legacy Image at 80200000 ...
+>    Image Name:   Linux-3.8.11
+>    Image Type:   ARM Linux Kernel Image (uncompressed)
+>    Data Size:    2857648 Bytes = 2.7 MiB
+>    Load Address: 80008000
+>    Entry Point:  80008000
+>    Verifying Checksum ... OK
+> ## Flattened Device Tree blob at 80f80000
+>    Booting using the fdt blob at 0x80f80000
+>    Loading Kernel Image ... OK
+> OK
+>    Using Device Tree in place at 80f80000, end 80f85928
+>
+> Starting kernel ...
+>
+>
+>   It should be named /boot/am335x-bone.dtb or /boot/am335x-boneblack.dtb
+> on your rootfs partition, depending on if your BeagleBone hardware platform
+> is White or Black, for u-boot to autoload it without further assistance in
+> a uEnv.txt... The defaults are
+> in buildroot/output/build/uboot-2013.04/include/configs/am335x_evm.h.
+>
+> I tried the white one. Obviously the right files are loaded, at least the
+> sizes match:
+>
+> ls -l output/target/boot/
+> insgesamt 2804
+> -rw-rw-r-- 1 stephan users   10537 2013-08-19 09:47 am335x-bone.dtb
+> -rw-r--r-- 1 stephan users 2857712 2013-08-19 09:47 uImage
+>
+> I also verified the filenames in u-boot.
+>
+> But the kernel still fails to mount root:
+>
+> [    1.509906] Waiting for root device /dev/mmcblk0p2...
+>
+> is the last sign of life it gives.
+>
+> BTW: I changed the config by adding BR2_LINUX_KERNEL_INSTALL_TARGET=y,
+> which is obviously missing in beaglebone_defconfig.
+>
+> Any further idea?
+>
+> Kind regards
+>
+> Stephan
+>
+>
+> Thanks,
+> ~vsergeev
+> Ivan Sergeev
+>
+>
+> On Fri, Aug 16, 2013 at 1:23 AM, Stephan Hoffmann <sho@relinux.de> wrote:
+>
+>> Hello all,
 >>
->>>> diff --git a/arch/Config.in b/arch/Config.in
->>>> index 0b5b218..640926a 100644
->>>> --- a/arch/Config.in
->>>> +++ b/arch/Config.in
->>>> @@ -1,3 +1,5 @@
->>>> +menu "Target options"
->>>
->>>
->>>   I completely agree with the idea - especially in the xconfig, the big list
->>> of architecture options is extremely annoying. However, the menu title is
->>> not very clear. How about "Target architecture selection"? Or maybe
->>>
->>> Target CPU architecture
->>>
->>>    Target CPU architecture family
->>>
->>>    Target CPU architecture variant
->>>
+>> I am currently trying to get the latest buildroot to run on my
+>> beaglebone with little success. The last version that seem to run out of
+>> the box is 2012.08, where I can simply copy MLO, u-boot.img and uImage
+>> to the boot partition, dd rootfs.ext2 to the second partition and the
+>> system works.
 >>
->> Well, I think the menu provides more than just the cpu architecture
->> choice. It includes other things like ABI choice, binary format
->> selection, and floating point strategy. The name 'target options' fits
->> better for these options than anything with 'target cpu architecture'
->> in it, but I'm open for other suggestions.
->
-> Ditto.
-
-  I would say that the ABI is part of the CPU architecture - you. An ABI 
-choice only exists for compatibility with earlier or different variants 
-of the same family. The ABI is typically defined by the CPU designer.
-
-  Other choices in their are (or could be) floating point (neon/vfpv3), 
-SIMD extensions, and in the future maybe SoC. All of which I would say 
-are CPU architecture options.
-
-
->> While we're at reorganizing the top-level menu: I find the order of
->> the menus odd.
-> [--SNIP--]
->> I think Bootloaders and Kernel should come earlier in the list and
->> reversed, and Host utilities should be after filesystem images.
->> My proposal is thus:
->> (Target options)
->> Build options
->> Toolchain
->> System configuration
->> Package selection for the target
->> Kernel
->> Bootloaders
->> Filesystem images
->> Host utilities
->> Legacy config options
+>> The current build fails to boot, because u-boot expects the image and
+>> dts in /boot within the root filesystem. After putting them there with a
+>> post build script, u-boot starts the kernel, but the kernel fails to
+>> mount root:
+>> > [    1.509962] Waiting for root device /dev/mmcblk0p2...
+>> The SD partitions seem o.k.:
+>> > Disk /dev/sdi: 3965 MB, 3965190144 bytes
+>> > 255 heads, 63 sectors/track, 482 cylinders
+>> > Units = cylinders of 16065 * 512 = 8225280 bytes
+>> > Sector size (logical/physical): 512 bytes / 512 bytes
+>> > I/O size (minimum/optimal): 512 bytes / 512 bytes
+>> > Disk identifier: 0x00000000
+>> >
+>> >    Device Boot      Start         End      Blocks   Id  System
+>> > /dev/sdi1   *           1           9       72292    c  W95 FAT32 (LBA)
+>> > /dev/sdi2              10         133      996030   83  Linux
+>> and /dev/mmcblk0p2 sounds like the right partition.
 >>
->> What is your opinion?
+>> Can anybody give a hint where to look further?
+>>
+>> Kind regards
+>>
+>> Stephan
+>>
+>> --
+>> reLinux     -    Stephan Hoffmann
+>> Am Schmidtgrund 124    50765 K?ln
+>> Tel. +49.221.95595-19    Fax: -64
+>> www.reLinux.de     sho at reLinux.de
+>>
+>> _______________________________________________
+>> buildroot mailing list
+>> buildroot at busybox.net
+>> http://lists.busybox.net/mailman/listinfo/buildroot
+>>
 >
-> I would even put the kernel before the packages, and bootloaders before
-> kernel. Ie. I'd use the boot-time order of things:
->      (Target options)
->      Build options
->      Toolchain
->      System configuration
->      Bootloaders
->      Kernel
->      Packages selection
->      Filesystem images
->      Host Utilities
->      Legacy config options
 >
-> Bizzarely enough, moving bootloaders before kernel seems odd... :-/
-
-  I started to write my own preferred order and it was still different 
-:-) So I think there's simply no optimal order. That said, I certainly 
-think that the kernel should come before the packages. So I'll ack your 
-patch.
-
-
-  Regards,
-  Arnout
-
- >
 >
-> Regards,
-> Yann E. MORIN.
+> --
+> reLinux     -    Stephan Hoffmann
+> Am Schmidtgrund 124    50765 K?ln
+> Tel. +49.221.95595-19    Fax: -64www.reLinux.de     sho at reLinux.de
 >
-
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130819/d68b8c2f/attachment-0001.html>
