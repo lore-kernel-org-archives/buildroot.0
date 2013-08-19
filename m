@@ -1,200 +1,80 @@
-From: Stephan Hoffmann <sho@relinux.de>
-Date: Mon, 19 Aug 2013 20:23:52 +0200
-Subject: [Buildroot] BeagleBone defconfig broken?
-In-Reply-To: <CAAMhL_QF5r_hfuWQhC16si7_W5xmXq8ivKzDz5Wx=rVrSDNcCg@mail.gmail.com>
-References: <520DE175.1050103@relinux.de>
- <CAAMhL_RF-0KNoCpRfAK1foEcfbJRCz2y5nF3d2UF=1kBD1N-vw@mail.gmail.com>
- <5211D49F.7080105@relinux.de>
- <CAAMhL_Tcf0iUr70KZ__CVpeXi8_hsv7E-5WBm9=iN4=UVDiGpg@mail.gmail.com>
- <CAAMhL_QF5r_hfuWQhC16si7_W5xmXq8ivKzDz5Wx=rVrSDNcCg@mail.gmail.com>
-Message-ID: <521262B8.8060305@relinux.de>
+From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
+Date: Mon, 19 Aug 2013 20:49:48 +0200
+Subject: [Buildroot] [PATCH] infra: display current task as title of the
+ term window
+In-Reply-To: <52124585.1050303@mind.be>
+References: <1375822004-22591-1-git-send-email-francois.perrad@gadz.org>
+ <CAAXf6LWCBh-W3nHRLtoXVy8PfbS3NpOQ7sMwicp6W+kv-OeAkg@mail.gmail.com>
+ <5209C5D1.7040904@mind.be>
+ <CAAXf6LWkHdg1XB77GPjVFY6k97E95AxG7ZHK3cmr6dGEM=xAfg@mail.gmail.com>
+ <52124585.1050303@mind.be>
+Message-ID: <CAAXf6LWzouV+VGEHJric3M3yt5zGmtg=iVmsUeKN5yk4JDE1Vw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am 19.08.2013 19:57, schrieb Ivan Sergeev:
-> Also, are you building the kernel through buildroot, or using the
-> latest patched one here? https://github.com/beagleboard/kernel/tree/3.8
-> I would try that patched kernel a try, if you aren't using it already.
-Hello Ivan,
+Op 19-aug.-2013 19:09 schreef "Arnout Vandecappelle" <arnout@mind.be> het
+volgende:
+>
+> On 18/08/13 10:21, Thomas De Schampheleire wrote:
+>>
+>> On Tue, Aug 13, 2013 at 7:36 AM, Arnout Vandecappelle <arnout@mind.be>
+wrote:
+>>>
+>>> On 07/08/13 08:44, Thomas De Schampheleire wrote:
+>>>>
+>>>>
+>>
+>>>> I know that Gentoo has this feature for its portage package
+>>>> installation/compilation tool. When you run 'emerge', the titles are
+>>>> constantly updated with the package that is being handled, also in
+>>>> Konsole. You may be able to find out what the 'right way' is based on
+>>>> their sources.
+>>>
+>>>
+>>>
+>>>   Are you sure this works for you with emerge? I RTFM'ed it and
+according to
+>>> the konsole manual, you have to add '%w' to the tab title string to get
+the
+>>> string set by the shell. Perhaps Gentoo simply sets the default tab
+title
+>>> string to something including %w.
+>>>
+>>
+>>
+>> It does work for emerge, but it seems you are right: the default tab
+>> title in Gentoo is set to %w (I didn't set it explicitly). I tried
+>> Francois' patch on a non-gentoo system before (didn't work for
+>> Konsole) but after explicitly setting %w in the tab title it also
+>> works there. So that issue is cleared out.
+>>
+>> However, while testing again, I noticed an annoyance: if the build
+>> process stops prematurely, for example because the build fails or the
+>> user interrupts it, the last tab title remains. I would much prefer
+>> that we can cleanly restore this no matter how buildroot/make stops.
+>
+>
+>  Won't that be the case regardless of whether the build fails or succeeds?
 
-I'll check this out when I've got some time. I used the buildroot
-default config and only changed the option to copy kernel and dts to
-/boot in the root filesystem.
+Currently it is indeed, but that could easily be fixed by adding an extra
+such print at the end.
 
-So u-boot and kernel are both built by buildroot. Kernel comed from ti:
-git://git.ti.com/ti-linux-kernel/ti-linux-kernel.git and u-boot is
-version 2013.04, boardname am335x_evm.
+>
+>  I think this patch is only really suitable for people who have something
+similar in their PS1. Otherwise it will just mess up your window title.
+>
+>  Also, it should only be done if $TERM == xterm, otherwise you get
+annoying stuff when running buildroot from a text console. And in fact, the
+same is true of the colouring itself, so we don't get these annoying escape
+characters in log files and continuous integration web interfaces.
 
-> Maybe it'd be worth double checking that the bootargs in u-boot has
-> the right rootfstype?
-> The dts doesn't specify them so I'm assuming they're being passed
-> entirely by u-boot.
->
+Agreed.
 
-I checked this, but the kernel does not come to the point where it sees
-any filesystem.
-
-Regards
-
-Stephan
->
-> Thanks,
-> ~vsergeev
-> Ivan Sergeev
->
->
-> On Mon, Aug 19, 2013 at 10:54 AM, Ivan Sergeev <vsergeev@gmail.com
-> <mailto:vsergeev@gmail.com>> wrote:
->
->     Hello Stephan,
->
->     Maybe it'd be worth double checking that the bootargs in u-boot
->     has the right rootfstype?
->     The dts doesn't specify them so I'm assuming they're being passed
->     entirely by u-boot.
->
->     Thanks,
->     ~vsergeev
->     Ivan Sergeev
->
->
->     On Mon, Aug 19, 2013 at 1:17 AM, Stephan Hoffmann <sho@relinux.de
->     <mailto:sho@relinux.de>> wrote:
->
->         Am 18.08.2013 19:48, schrieb Ivan Sergeev:
->>         Hi Stephan,
->         Hello Ivan,
->
->         thank you for your reply.
->>
->>         Does u-boot report that the device tree is loaded into memory
->>         just before booting?
->         Yes, that is obviously the case:
->>         2857712 bytes read in 435 ms (6.3 MiB/s)
->>         10537 bytes read in 55 ms (186.5 KiB/s)
->>         Booting from mmc ...
->>         ## Booting kernel from Legacy Image at 80200000 ...
->>            Image Name:   Linux-3.8.11
->>            Image Type:   ARM Linux Kernel Image (uncompressed)
->>            Data Size:    2857648 Bytes = 2.7 MiB
->>            Load Address: 80008000
->>            Entry Point:  80008000
->>            Verifying Checksum ... OK
->>         ## Flattened Device Tree blob at 80f80000
->>            Booting using the fdt blob at 0x80f80000
->>            Loading Kernel Image ... OK
->>         OK
->>            Using Device Tree in place at 80f80000, end 80f85928
->>
->>         Starting kernel ...
->
->>         It should be named /boot/am335x-bone.dtb or
->>         /boot/am335x-boneblack.dtb on your rootfs partition,
->>         depending on if your BeagleBone hardware platform is White or
->>         Black, for u-boot to autoload it without further assistance
->>         in a uEnv.txt... The defaults are
->>         in buildroot/output/build/uboot-2013.04/include/configs/am335x_evm.h.
->         I tried the white one. Obviously the right files are loaded,
->         at least the sizes match:
->>         ls -l output/target/boot/
->>         insgesamt 2804
->>         -rw-rw-r-- 1 stephan users   10537 2013-08-19 09:47
->>         am335x-bone.dtb
->>         -rw-r--r-- 1 stephan users 2857712 2013-08-19 09:47 uImage
->         I also verified the filenames in u-boot.
->
->         But the kernel still fails to mount root:
->>         [    1.509906] Waiting for root device /dev/mmcblk0p2...
->         is the last sign of life it gives.
->
->         BTW: I changed the config by adding
->         BR2_LINUX_KERNEL_INSTALL_TARGET=y, which is obviously missing
->         in beaglebone_defconfig.
->
->         Any further idea?
->
->         Kind regards
->
->         Stephan
->
->>
->>         Thanks,
->>         ~vsergeev
->>         Ivan Sergeev
->>
->>
->>         On Fri, Aug 16, 2013 at 1:23 AM, Stephan Hoffmann
->>         <sho at relinux.de <mailto:sho@relinux.de>> wrote:
->>
->>             Hello all,
->>
->>             I am currently trying to get the latest buildroot to run
->>             on my
->>             beaglebone with little success. The last version that
->>             seem to run out of
->>             the box is 2012.08, where I can simply copy MLO,
->>             u-boot.img and uImage
->>             to the boot partition, dd rootfs.ext2 to the second
->>             partition and the
->>             system works.
->>
->>             The current build fails to boot, because u-boot expects
->>             the image and
->>             dts in /boot within the root filesystem. After putting
->>             them there with a
->>             post build script, u-boot starts the kernel, but the
->>             kernel fails to
->>             mount root:
->>             > [    1.509962] Waiting for root device /dev/mmcblk0p2...
->>             The SD partitions seem o.k.:
->>             > Disk /dev/sdi: 3965 MB, 3965190144 bytes
->>             > 255 heads, 63 sectors/track, 482 cylinders
->>             > Units = cylinders of 16065 * 512 = 8225280 bytes
->>             > Sector size (logical/physical): 512 bytes / 512 bytes
->>             > I/O size (minimum/optimal): 512 bytes / 512 bytes
->>             > Disk identifier: 0x00000000
->>             >
->>             >    Device Boot      Start         End      Blocks   Id
->>              System
->>             > /dev/sdi1   *           1           9       72292    c
->>              W95 FAT32 (LBA)
->>             > /dev/sdi2              10         133      996030   83
->>              Linux
->>             and /dev/mmcblk0p2 sounds like the right partition.
->>
->>             Can anybody give a hint where to look further?
->>
->>             Kind regards
->>
->>             Stephan
->>
->>             --
->>             reLinux     -    Stephan Hoffmann
->>             Am Schmidtgrund 124    50765 K?ln
->>             Tel. +49.221.95595-19 <tel:%2B49.221.95595-19>    Fax: -64
->>             www.reLinux.de <http://www.reLinux.de>     sho at reLinux.de
->>             <mailto:sho@reLinux.de>
->>
->>             _______________________________________________
->>             buildroot mailing list
->>             buildroot at busybox.net <mailto:buildroot@busybox.net>
->>             http://lists.busybox.net/mailman/listinfo/buildroot
->>
->>
->
->
->         -- 
->         reLinux     -    Stephan Hoffmann
->         Am Schmidtgrund 124    50765 K?ln
->         Tel. +49.221.95595-19 <tel:%2B49.221.95595-19>    Fax: -64
->         www.reLinux.de <http://www.reLinux.de>     sho at reLinux.de <mailto:sho@reLinux.de>
->
->
->
-
+Best regards,
+Thomas
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130819/aa6a0a22/attachment-0001.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130819/e2974fda/attachment.html>
