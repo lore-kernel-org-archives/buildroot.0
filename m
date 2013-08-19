@@ -1,52 +1,147 @@
 From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Mon, 19 Aug 2013 16:41:40 +0200
-Subject: [Buildroot] Removing/solving gettext dependencies in libuio
-In-Reply-To: <52093951.7060608@mind.be>
-References: <CAAXf6LWskVXQjvLYeEBx_JJxuTujMZEq2JzqLMftXXUSaPTQHg@mail.gmail.com>
- <52093951.7060608@mind.be>
-Message-ID: <CAAXf6LVtBaOvHGUFGmxShx1DB15R5RZ+c67Smbrq3jnmunPt9g@mail.gmail.com>
+Date: Mon, 19 Aug 2013 16:47:23 +0200
+Subject: [Buildroot] [PATCH] harfbuzz: New package
+In-Reply-To: <1376912688-13267-1-git-send-email-markos.chandras@imgtec.com>
+References: <1376912688-13267-1-git-send-email-markos.chandras@imgtec.com>
+Message-ID: <CAAXf6LUBobO2mUnbVXjqHMBPtRO168P-C5VN5-r3eAif=jZJVA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Arnout,
+Hi Markos,
 
-On Mon, Aug 12, 2013 at 9:36 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
-> On 30/07/13 14:28, Thomas De Schampheleire wrote:
->>
->> Hi,
->>
->> I'm adding the library libuio to buildroot
->> (https://github.com/Linutronix/libuio/).
->> This library expects gettext to be present, but I want to avoid adding
->> this dependency to buildroot because it really isn't needed.
->>
->> What is the best way to solve this?
+On Mon, Aug 19, 2013 at 1:44 PM, Markos Chandras
+<markos.chandras@imgtec.com> wrote:
+> HarfBuzz is an OpenType text shaping engine
 >
+> http://www.freedesktop.org/wiki/Software/HarfBuzz/
 >
->  Isn't docs/manual/adding-packages-gettext.txt sufficient?
+> Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
+> ---
+>  package/Config.in            |  1 +
+>  package/harfbuzz/Config.in   | 34 ++++++++++++++++++++++++++++++++++
+>  package/harfbuzz/harfbuzz.mk | 44 ++++++++++++++++++++++++++++++++++++++++++++
+>  3 files changed, 79 insertions(+)
+>  create mode 100644 package/harfbuzz/Config.in
+>  create mode 100644 package/harfbuzz/harfbuzz.mk
 >
+> diff --git a/package/Config.in b/package/Config.in
+> index 7069d77..8a87563 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -124,6 +124,7 @@ source "package/directfb-examples/Config.in"
+>  source "package/divine/Config.in"
+>  source "package/fbdump/Config.in"
+>  source "package/fbgrab/Config.in"
+> +source "package/harfbuzz/Config.in"
+>  if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+>  source "package/fbset/Config.in"
+>  endif
 
-I think not. That document (which I already read, but should've
-mentioned) describes two scenarios:
-1. the package needs gettext unconditionally
-2. the package needs gettext when locale support is enabled
+This should be alphabetically ordered. There are more packages
+starting with f below the 'if' statement.
 
-In the case of libuio, I'm strictly speaking in case 1 (unconditional
-need for gettext). However, I'm contesting the unconditional need. In
-reality, there is little use for that, since the only tool using it is
-lsuio, a helper tool, for which no translations are currently
-provided. The actual libuio library does not output strings through
-gettext.
+> diff --git a/package/harfbuzz/Config.in b/package/harfbuzz/Config.in
+> new file mode 100644
+> index 0000000..e96ff7f
+> --- /dev/null
+> +++ b/package/harfbuzz/Config.in
+> @@ -0,0 +1,34 @@
+> +config BR2_PACKAGE_HARFBUZZ
+> +       bool "harfbuzz"
+> +       help
+> +         HarfBuzz is an OpenType text shaping engine
+> +
+> +         http://www.freedesktop.org/wiki/Software/HarfBuzz/
+> +
+> +if BR2_PACKAGE_HARFBUZZ
+> +
+> +config BR2_PACKAGE_HARFBUZZ_CAIRO
+> +       bool "Use cairo"
+> +       select BR2_PACKAGE_CAIRO
+> +
+> +config BR2_PACKAGE_HARFBUZZ_FREETYPE
+> +       bool "Use the FreeType library"
+> +       select BR2_PACKAGE_FREETYPE
+> +
+> +config BR2_PACKAGE_HARFBUZZ_GLIB
+> +       bool "Use glib"
+> +       select BR2_PACKAGE_LIBGLIB2
+> +       depends on BR2_USE_WCHAR # gettext dep in libglib2
+> +       depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
+> +comment "glib support requires a toolchain with WCHAR and threading support."
+> +       depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
 
-To remove the dependency on gettext completely, I can either remove
-the referring lines in the package (see original mail [1]) or modify
-the package's configure script to add a switch like --disable-nls or
-similar.
+Most packages (that I've seen) talk about 'thread' support instead of threading.
 
-Thanks,
+> +
+> +config BR2_PACKAGE_HARFBUZZ_ICU
+> +       bool "Use ICU"
+> +       select BR2_PACKAGE_ICU
+> +       depends on BR2_USE_WCHAR # icu
+> +       depends on BR2_INSTALL_LIBSTDCPP # icu
+> +
+> +comment "icu support requires a toolchain with WCHAR and LIBSTDCPP support."
+> +       depends on !BR2_USE_WCHAR || !BR2_INSTALL_LIBSTDCPP
+
+
+'LIBSTDCPP support' should be called 'C++ support' here.
+
+> +endif
+> diff --git a/package/harfbuzz/harfbuzz.mk b/package/harfbuzz/harfbuzz.mk
+> new file mode 100644
+> index 0000000..9aee90f
+> --- /dev/null
+> +++ b/package/harfbuzz/harfbuzz.mk
+> @@ -0,0 +1,44 @@
+> +################################################################################
+> +#
+> +# harfbuzz
+> +#
+> +################################################################################
+> +
+> +HARFBUZZ_VERSION = 0.9.19
+> +HARFBUZZ_SITE = http://www.freedesktop.org/software/harfbuzz/release/
+> +HARFBUZZ_SOURCE = harfbuzz-$(HARFBUZZ_VERSION).tar.bz2
+> +HARFBUZZ_LICENSE = Old-MIT ISC ICU
+> +HARFBUZZ_LICENSE_FILES = COPYING src/hb-ucdn/COPYING src/hb-icu-le/COPYING
+> +HARFBUZZ_INSTALL_STAGING = YES
+> +
+> +HARFBUZZ_CONF_OPT = --without-coretext --without-uniscribe --without-graphite2
+> +
+> +ifeq ($(BR2_PACKAGE_HARFBUZZ_CAIRO),y)
+> +       HARFBUZZ_DEPENDENCIES += cairo
+> +       HARFBUZZ_CONF_OPT += --with-cairo=yes
+> +else
+> +       HARFBUZZ_CONF_OPT += --with-cairo=no
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_HARFBUZZ_FREETYPE),y)
+> +       HARFBUZZ_DEPENDENCIES += freetype
+> +       HARFBUZZ_CONF_OPT += --with-freetype=yes
+> +else
+> +       HARFBUZZ_CONF_OPT += --with-freetype=no
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_HARFBUZZ_GLIB),y)
+> +       HARFBUZZ_DEPENDENCIES += libglib2
+> +       HARFBUZZ_CONF_OPT += --with-glib=yes
+> +else
+> +       HARFBUZZ_CONF_OPT += --with-glib=no
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_HARFBUZZ_ICU),y)
+> +       HARFBUZZ_DEPENDENCIES += icu
+> +       HARFBUZZ_CONF_OPT += --with-icu=yes
+> +else
+> +       HARFBUZZ_CONF_OPT += --with-icu=no
+> +endif
+> +
+> +$(eval $(autotools-package))
+> --
+
+
+Best regards,
 Thomas
-
-[1] http://comments.gmane.org/gmane.comp.lib.uclibc.buildroot/63538
