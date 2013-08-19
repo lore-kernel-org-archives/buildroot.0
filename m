@@ -1,28 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 20 Aug 2013 00:21:14 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2013-08-16
-In-Reply-To: <20130819220644.GA3595@free.fr>
-References: <20130817063005.A69FB52C5D6@lolut.humanoidz.org>
- <20130818200133.4046034b@skate> <20130819220644.GA3595@free.fr>
-Message-ID: <20130820002114.001d3210@skate>
+Date: Tue, 20 Aug 2013 00:25:56 +0200
+Subject: [Buildroot] Removing/solving gettext dependencies in libuio
+In-Reply-To: <CAAXf6LWskVXQjvLYeEBx_JJxuTujMZEq2JzqLMftXXUSaPTQHg@mail.gmail.com>
+References: <CAAXf6LWskVXQjvLYeEBx_JJxuTujMZEq2JzqLMftXXUSaPTQHg@mail.gmail.com>
+Message-ID: <20130820002556.4d735bb3@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+Dear Thomas De Schampheleire,
 
-On Tue, 20 Aug 2013 00:06:44 +0200, Yann E. MORIN wrote:
+On Tue, 30 Jul 2013 14:28:05 +0200, Thomas De Schampheleire wrote:
 
-> Is it really important that this be buildable on !x86 at all?
+> A second alternative is to change libuio to recognize --disable-nls.
+> However, I'm not sure how to do that.
+> The configure.ac file contains:
+> 
+>   AM_GNU_GETTEXT([external])
+>   AM_GNU_GETTEXT_VERSION([0.17])
+> 
+> This macro is provided by gettext itself, so without gettext this doesn't work.
 
-No, for the time being, I believe we can restrict this to x86. If
-someone is ever interested in !x86 for libbsd or its reverse
-dependencies, this someone will have the joy of looking into this :-)
+This should only require host-gettext, which provides the .m4 file that
+contains the m4 macro to autoreconf the package. Once you upstream the
+patch, at the next release an updated 'configure' script will be part
+of lsuio tarball, and we'll be able to remove the _AUTORECONF=YES and
+therefore the dependency on host-gettext.
 
-Thanks,
+Am I missing something here?
+
+Best regards,
 
 Thomas
 -- 
