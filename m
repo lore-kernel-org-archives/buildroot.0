@@ -1,11449 +1,8575 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 13 Aug 2013 14:25:51 -0300
-Subject: [Buildroot] [PATCH] elf2flt: upgrade to latest version
-Message-ID: <1376414751-3447-1-git-send-email-gustavo@zacarias.com.ar>
+From: spdawson at gmail.com <spdawson@gmail.com>
+Date: Tue, 20 Aug 2013 12:14:01 +0100
+Subject: [Buildroot] [RFC] uclibc: reinstate support for version 0.9.31
+Message-ID: <1376997241-20991-1-git-send-email-spdawson@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Upgrade to the latest uclinux CVS snapshot, gives us blackfin support.
+From: Simon Dawson <spdawson@gmail.com>
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+This patch reinstates support for uClibc version 0.9.31, which was removed
+from Buildroot in commit 8abb5b33c1aae035cf48b1c81104b433ff884c64
+
+Signed-off-by: Simon Dawson <spdawson@gmail.com>
 ---
- package/elf2flt/Config.in.host     |    2 +-
- package/elf2flt/src/Makefile.in    |   77 +-
- package/elf2flt/src/README         |    2 +-
- package/elf2flt/src/compress.c     |  198 ++
- package/elf2flt/src/compress.h     |   44 +
- package/elf2flt/src/config.sub     |    8 +-
- package/elf2flt/src/configure      | 5934 +++++++++++++++++++++++-------------
- package/elf2flt/src/configure.in   |  112 +-
- package/elf2flt/src/elf2flt.c      |  699 ++---
- package/elf2flt/src/elf2flt.ld     |  179 --
- package/elf2flt/src/elf2flt.ld.in  |  210 ++
- package/elf2flt/src/flat.h         |    2 +
- package/elf2flt/src/flthdr.c       |  304 +-
- package/elf2flt/src/ld-elf2flt.c   |  580 ++++
- package/elf2flt/src/ld-elf2flt.in  |   38 +-
- package/elf2flt/src/maketarball.sh |   12 -
- package/elf2flt/src/stubs.c        |  129 +-
- package/elf2flt/src/stubs.h        |   75 +
- 18 files changed, 5568 insertions(+), 3037 deletions(-)
- create mode 100644 package/elf2flt/src/compress.c
- create mode 100644 package/elf2flt/src/compress.h
- delete mode 100644 package/elf2flt/src/elf2flt.ld
- create mode 100644 package/elf2flt/src/elf2flt.ld.in
- create mode 100644 package/elf2flt/src/ld-elf2flt.c
- delete mode 100755 package/elf2flt/src/maketarball.sh
- create mode 100644 package/elf2flt/src/stubs.h
+ package/connman/Config.in                          |    4 +-
+ package/libglib2/libglib2.mk                       |    2 +-
+ .../uClibc-0001-add-bsd-endian-conversions.patch   |   64 +
+ .../0.9.31.1/uClibc-0002-add-inotify-init1.patch   |   64 +
+ .../0.9.31.1/uClibc-0003-add-sock-cloexec.patch    |   43 +
+ .../0.9.31.1/uClibc-0004-export-strverscmp.patch   |   30 +
+ ...bc-0005-fix-daylight-saving-time-handling.patch |   36 +
+ .../uClibc-0006-fix-error-locale-utf-8.patch       |   17 +
+ ...Clibc-0007-fix-fcntl64-for-64-bit-targets.patch |   34 +
+ .../uClibc-0008-linuxthreads-errno-fix.patch       |   98 +
+ .../uClibc-0009-more-workarounds-GCC-PR32219.patch |   40 +
+ .../0.9.31.1/uClibc-0010-powerpc-ptrace-fix.patch  |   62 +
+ .../0.9.31.1/uClibc-0011-quad-routines.patch       | 7393 ++++++++++++++++++++
+ .../0.9.31.1/uClibc-0012-sparc-errno-fix.patch     |   11 +
+ package/uclibc/0.9.31.1/uClibc-0013-unshare.patch  |   74 +
+ .../uClibc-0014-workaround-GCC-PR32219.patch       |   57 +
+ .../uClibc-0015-startfiles-Make-targets.patch      |   60 +
+ package/uclibc/Config.in                           |    9 +-
+ package/uclibc/uClibc-0.9.31.config                |  259 +
+ 19 files changed, 8353 insertions(+), 4 deletions(-)
+ create mode 100644 package/uclibc/0.9.31.1/uClibc-0001-add-bsd-endian-conversions.patch
+ create mode 100644 package/uclibc/0.9.31.1/uClibc-0002-add-inotify-init1.patch
+ create mode 100644 package/uclibc/0.9.31.1/uClibc-0003-add-sock-cloexec.patch
+ create mode 100644 package/uclibc/0.9.31.1/uClibc-0004-export-strverscmp.patch
+ create mode 100644 package/uclibc/0.9.31.1/uClibc-0005-fix-daylight-saving-time-handling.patch
+ create mode 100644 package/uclibc/0.9.31.1/uClibc-0006-fix-error-locale-utf-8.patch
+ create mode 100644 package/uclibc/0.9.31.1/uClibc-0007-fix-fcntl64-for-64-bit-targets.patch
+ create mode 100644 package/uclibc/0.9.31.1/uClibc-0008-linuxthreads-errno-fix.patch
+ create mode 100644 package/uclibc/0.9.31.1/uClibc-0009-more-workarounds-GCC-PR32219.patch
+ create mode 100644 package/uclibc/0.9.31.1/uClibc-0010-powerpc-ptrace-fix.patch
+ create mode 100644 package/uclibc/0.9.31.1/uClibc-0011-quad-routines.patch
+ create mode 100644 package/uclibc/0.9.31.1/uClibc-0012-sparc-errno-fix.patch
+ create mode 100644 package/uclibc/0.9.31.1/uClibc-0013-unshare.patch
+ create mode 100644 package/uclibc/0.9.31.1/uClibc-0014-workaround-GCC-PR32219.patch
+ create mode 100644 package/uclibc/0.9.31.1/uClibc-0015-startfiles-Make-targets.patch
+ create mode 100644 package/uclibc/uClibc-0.9.31.config
 
-diff --git a/package/elf2flt/Config.in.host b/package/elf2flt/Config.in.host
-index 31a6c7f..dad48d8 100644
---- a/package/elf2flt/Config.in.host
-+++ b/package/elf2flt/Config.in.host
-@@ -1,6 +1,6 @@
- config BR2_PACKAGE_HOST_ELF2FLT
- 	bool "Enable elf2flt support?"
--	depends on BR2_arm || BR2_sh || BR2_sparc
-+	depends on BR2_arm || BR2_bfin || BR2_sh || BR2_sparc
+diff --git a/package/connman/Config.in b/package/connman/Config.in
+index 0853941..22f3b9f 100644
+--- a/package/connman/Config.in
++++ b/package/connman/Config.in
+@@ -4,7 +4,7 @@ config BR2_PACKAGE_CONNMAN
+ 	select BR2_PACKAGE_LIBGLIB2
+ 	select BR2_PACKAGE_IPTABLES
+ 	select BR2_PACKAGE_GNUTLS
+-	depends on !BR2_UCLIBC_VERSION_0_9_32
++	depends on !(BR2_UCLIBC_VERSION_0_9_31 || BR2_UCLIBC_VERSION_0_9_32)
+ 	depends on BR2_USE_WCHAR # libglib2 and gnutls
+ 	depends on BR2_INET_IPV6
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus, libglib2
+@@ -50,5 +50,5 @@ config BR2_PACKAGE_CONNMAN_CLIENT
+ endif # BR2_PACKAGE_CONNMAN
+ 
+ comment "connman needs a toolchain with IPv6, WCHAR, threading and resolver support"
+-	depends on BR2_UCLIBC_VERSION_0_9_32 || \
++	depends on BR2_UCLIBC_VERSION_0_9_31 || BR2_UCLIBC_VERSION_0_9_32 || \
+ 		!BR2_USE_WCHAR || !BR2_INET_IPV6 || !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
+index b07b2c6..98c9d6c 100644
+--- a/package/libglib2/libglib2.mk
++++ b/package/libglib2/libglib2.mk
+@@ -52,7 +52,7 @@ LIBGLIB2_CONF_ENV = \
+ 		gt_cv_c_wchar_t=$(if $(BR2_USE_WCHAR),yes,no)
+ 
+ # old uClibc versions don't provide qsort_r
+-ifeq ($(BR2_UCLIBC_VERSION_0_9_32)$(BR2_TOOLCHAIN_CTNG_uClibc)$(BR2_TOOLCHAIN_EXTERNAL_UCLIBC)$(BR2_TOOLCHAIN_EXTERNAL_XILINX_MICROBLAZEEL_V2)$(BR2_TOOLCHAIN_EXTERNAL_XILINX_MICROBLAZEBE_V2),y)
++ifeq ($(BR2_UCLIBC_VERSION_0_9_31)$(BR2_UCLIBC_VERSION_0_9_32)$(BR2_TOOLCHAIN_CTNG_uClibc)$(BR2_TOOLCHAIN_EXTERNAL_UCLIBC)$(BR2_TOOLCHAIN_EXTERNAL_XILINX_MICROBLAZEEL_V2)$(BR2_TOOLCHAIN_EXTERNAL_XILINX_MICROBLAZEBE_V2),y)
+ LIBGLIB2_CONF_ENV += glib_cv_have_qsort_r=no
+ else
+ LIBGLIB2_CONF_ENV += glib_cv_have_qsort_r=yes
+diff --git a/package/uclibc/0.9.31.1/uClibc-0001-add-bsd-endian-conversions.patch b/package/uclibc/0.9.31.1/uClibc-0001-add-bsd-endian-conversions.patch
+new file mode 100644
+index 0000000..652d7c9
+--- /dev/null
++++ b/package/uclibc/0.9.31.1/uClibc-0001-add-bsd-endian-conversions.patch
+@@ -0,0 +1,64 @@
++From c6d6237819037168a6923ac080e348e54615422c Mon Sep 17 00:00:00 2001
++From: Vladimir Zapolskiy <vzapolskiy@gmail.com>
++Date: Tue, 1 Jun 2010 23:22:57 +0400
++Subject: [PATCH] endian.h: add BSD convertions between big/little-endian byte order
++
++This patch adds support for convertion of values between host and
++big-/little-endian byte order.
++
++Signed-off-by: Vladimir Zapolskiy <vzapolskiy@gmail.com>
++Signed-off-by: Bernhard Reutner-Fischer <rep.dot.nop@gmail.com>
++---
++ include/endian.h |   38 ++++++++++++++++++++++++++++++++++++++
++ 1 files changed, 38 insertions(+), 0 deletions(-)
++
++diff --git a/include/endian.h b/include/endian.h
++index 2f7bce1..0ba7384 100644
++--- a/include/endian.h
+++++ b/include/endian.h
++@@ -55,4 +55,42 @@
++ # define __LONG_LONG_PAIR(HI, LO) HI, LO
++ #endif
++ 
+++
+++#ifdef __USE_BSD
+++/* Conversion interfaces.  */
+++# include <byteswap.h>
+++
+++# if __BYTE_ORDER == __LITTLE_ENDIAN
+++#  define htobe16(x) __bswap_16 (x)
+++#  define htole16(x) (x)
+++#  define be16toh(x) __bswap_16 (x)
+++#  define le16toh(x) (x)
+++
+++#  define htobe32(x) __bswap_32 (x)
+++#  define htole32(x) (x)
+++#  define be32toh(x) __bswap_32 (x)
+++#  define le32toh(x) (x)
+++
+++#  define htobe64(x) __bswap_64 (x)
+++#  define htole64(x) (x)
+++#  define be64toh(x) __bswap_64 (x)
+++#  define le64toh(x) (x)
+++# else
+++#  define htobe16(x) (x)
+++#  define htole16(x) __bswap_16 (x)
+++#  define be16toh(x) (x)
+++#  define le16toh(x) __bswap_16 (x)
+++
+++#  define htobe32(x) (x)
+++#  define htole32(x) __bswap_32 (x)
+++#  define be32toh(x) (x)
+++#  define le32toh(x) __bswap_32 (x)
+++
+++#  define htobe64(x) (x)
+++#  define htole64(x) __bswap_64 (x)
+++#  define be64toh(x) (x)
+++#  define le64toh(x) __bswap_64 (x)
+++# endif
+++#endif
+++
++ #endif	/* endian.h */
++-- 
++1.7.3.4
++
+diff --git a/package/uclibc/0.9.31.1/uClibc-0002-add-inotify-init1.patch b/package/uclibc/0.9.31.1/uClibc-0002-add-inotify-init1.patch
+new file mode 100644
+index 0000000..cbec426
+--- /dev/null
++++ b/package/uclibc/0.9.31.1/uClibc-0002-add-inotify-init1.patch
+@@ -0,0 +1,64 @@
++From a2e5630af426f85fdd8721b2820786d9bd2aa695 Mon Sep 17 00:00:00 2001
++From: Vladimir Zapolskiy <vzapolskiy@gmail.com>
++Date: Tue, 1 Jun 2010 20:02:54 +0400
++Subject: [PATCH] inotify: add inotify_init1 system call support
++
++This patch introduces support for inotify_init1 system call, found
++since Linux 2.6.27.
++
++Signed-off-by: Vladimir Zapolskiy <vzapolskiy@gmail.com>
++Signed-off-by: Khem Raj <raj.khem@gmail.com>
++---
++ libc/sysdeps/linux/common/inotify.c     |    4 ++++
++ libc/sysdeps/linux/common/sys/inotify.h |   13 +++++++++++++
++ 2 files changed, 17 insertions(+), 0 deletions(-)
++
++diff --git a/libc/sysdeps/linux/common/inotify.c b/libc/sysdeps/linux/common/inotify.c
++index e5a6120..e35f043 100644
++--- a/libc/sysdeps/linux/common/inotify.c
+++++ b/libc/sysdeps/linux/common/inotify.c
++@@ -15,6 +15,10 @@
++ _syscall0(int, inotify_init)
++ #endif
++ 
+++#ifdef __NR_inotify_init1
+++_syscall1(int, inotify_init1, int, flags)
+++#endif
+++
++ #ifdef __NR_inotify_add_watch
++ _syscall3(int, inotify_add_watch, int, fd, const char *, path, uint32_t, mask)
++ #endif
++diff --git a/libc/sysdeps/linux/common/sys/inotify.h b/libc/sysdeps/linux/common/sys/inotify.h
++index 0131db9..dc4e19d 100644
++--- a/libc/sysdeps/linux/common/sys/inotify.h
+++++ b/libc/sysdeps/linux/common/sys/inotify.h
++@@ -22,6 +22,16 @@
++ #include <stdint.h>
++ 
++ 
+++/* Flags for the parameter of inotify_init1.  */
+++enum
+++  {
+++    IN_CLOEXEC = 02000000,
+++#define IN_CLOEXEC IN_CLOEXEC
+++    IN_NONBLOCK = 04000
+++#define IN_NONBLOCK IN_NONBLOCK
+++  };
+++
+++
++ /* Structure describing an inotify event.  */
++ struct inotify_event
++ {
++@@ -79,6 +89,9 @@ __BEGIN_DECLS
++ /* Create and initialize inotify instance.  */
++ extern int inotify_init (void) __THROW;
++ 
+++/* Create and initialize inotify instance.  */
+++extern int inotify_init1 (int __flags) __THROW;
+++
++ /* Add watch of object NAME to inotify instance FD.  Notify about
++    events specified by MASK.  */
++ extern int inotify_add_watch (int __fd, const char *__name, uint32_t __mask)
++-- 
++1.7.3.4
++
+diff --git a/package/uclibc/0.9.31.1/uClibc-0003-add-sock-cloexec.patch b/package/uclibc/0.9.31.1/uClibc-0003-add-sock-cloexec.patch
+new file mode 100644
+index 0000000..a7089a9
+--- /dev/null
++++ b/package/uclibc/0.9.31.1/uClibc-0003-add-sock-cloexec.patch
+@@ -0,0 +1,43 @@
++From 83333e9c873e4eca6b2c945f7770b1f5373b0427 Mon Sep 17 00:00:00 2001
++From: Vladimir Zapolskiy <vzapolskiy@gmail.com>
++Date: Tue, 1 Jun 2010 20:02:39 +0400
++Subject: [PATCH] bits/socket.h: add SOCK_CLOEXEC and SOCK_NONBLOCK support
++
++This patch adds support for SOCK_CLOEXEC and SOCK_NONBLOCK socket
++descriptor flags, which are introduced since Linux 2.6.27
++
++Signed-off-by: Vladimir Zapolskiy <vzapolskiy@gmail.com>
++Signed-off-by: Khem Raj <raj.khem@gmail.com>
++---
++ libc/sysdeps/linux/common/bits/socket.h |   12 +++++++++++-
++ 1 files changed, 11 insertions(+), 1 deletions(-)
++
++diff --git a/libc/sysdeps/linux/common/bits/socket.h b/libc/sysdeps/linux/common/bits/socket.h
++index ac5a433..11f6e97 100644
++--- a/libc/sysdeps/linux/common/bits/socket.h
+++++ b/libc/sysdeps/linux/common/bits/socket.h
++@@ -53,10 +53,20 @@ enum __socket_type
++   SOCK_SEQPACKET = 5,		/* Sequenced, reliable, connection-based,
++ 				   datagrams of fixed maximum length.  */
++ #define SOCK_SEQPACKET SOCK_SEQPACKET
++-  SOCK_PACKET = 10		/* Linux specific way of getting packets
+++  SOCK_PACKET = 10,		/* Linux specific way of getting packets
++ 				   at the dev level.  For writing rarp and
++ 				   other similar things on the user level. */
++ #define SOCK_PACKET SOCK_PACKET
+++
+++  /* Flags to be ORed into the type parameter of socket and socketpair and
+++     used for the flags parameter of paccept.  */
+++
+++  SOCK_CLOEXEC = 02000000,	/* Atomically set close-on-exec flag for the
+++				   new descriptor(s).  */
+++#define SOCK_CLOEXEC SOCK_CLOEXEC
+++  SOCK_NONBLOCK = 04000		/* Atomically mark descriptor(s) as
+++				   non-blocking.  */
+++#define SOCK_NONBLOCK SOCK_NONBLOCK
++ };
++ 
++ /* Protocol families.  */
++-- 
++1.7.3.4
++
+diff --git a/package/uclibc/0.9.31.1/uClibc-0004-export-strverscmp.patch b/package/uclibc/0.9.31.1/uClibc-0004-export-strverscmp.patch
+new file mode 100644
+index 0000000..19bc021
+--- /dev/null
++++ b/package/uclibc/0.9.31.1/uClibc-0004-export-strverscmp.patch
+@@ -0,0 +1,30 @@
++From 139b8f0c673fed465d27f99c98568e5d5e1b9b72 Mon Sep 17 00:00:00 2001
++From: Denys Vlasenko <vda.linux@googlemail.com>
++Date: Fri, 4 Jun 2010 13:36:30 +0200
++Subject: [PATCH] strverscmp: I forgot to export it
++
++Result was:
++
++strverscmp.o:
++000000ec T __GI_strverscmp
++
++i.e. no plain "strverscmp"!
++
++Signed-off-by: Denys Vlasenko <vda.linux@googlemail.com>
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++---
++ libc/string/strverscmp.c |    1 +
++ 1 files changed, 1 insertions(+), 0 deletions(-)
++
++diff --git a/libc/string/strverscmp.c b/libc/string/strverscmp.c
++index 74ae4c6..b19e8f0 100644
++--- a/libc/string/strverscmp.c
+++++ b/libc/string/strverscmp.c
++@@ -115,3 +115,4 @@ int strverscmp (const char *s1, const char *s2)
++       return state;
++   }
++ }
+++libc_hidden_def(strverscmp)
++-- 
++1.7.3.4
++
+diff --git a/package/uclibc/0.9.31.1/uClibc-0005-fix-daylight-saving-time-handling.patch b/package/uclibc/0.9.31.1/uClibc-0005-fix-daylight-saving-time-handling.patch
+new file mode 100644
+index 0000000..5a96113
+--- /dev/null
++++ b/package/uclibc/0.9.31.1/uClibc-0005-fix-daylight-saving-time-handling.patch
+@@ -0,0 +1,36 @@
++From 47f3da1cf49377c25772bb54d07db55225bbb142 Mon Sep 17 00:00:00 2001
++From: Guillaume Bourcier <guillaumebourcier@free.fr>
++Date: Tue, 11 Oct 2011 13:45:33 +0200
++Subject: [PATCH] libc: fix daylight saving time handling
++
++The algorithm computing daylight saving time incorrectly adds a day for
++each month after January for leap years. The clock shift from/to DST can
++be delayed if the last Sunday of a transition month is exactly seven
++days before the first of the following month.
++
++This change adds a day for the February month only.
++
++Signed-off-by: Guillaume Bourcier <guillaumebourcier@free.fr>
++Signed-off-by: Richard Braun <rbraun@sceen.net>
++Signed-off-by: Carmelo Amoroso <carmelo.amoroso@st.com>
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++---
++ libc/misc/time/time.c |    2 +-
++ 1 files changed, 1 insertions(+), 1 deletions(-)
++
++diff --git a/libc/misc/time/time.c b/libc/misc/time/time.c
++index 19d68e1..8e2ebf1 100644
++--- a/libc/misc/time/time.c
+++++ b/libc/misc/time/time.c
++@@ -689,7 +689,7 @@ static int tm_isdst(register const struct tm *__restrict ptm,
++ 					++day;
++ 				}
++ 				monlen = 31 + day_cor[r->month -1] - day_cor[r->month];
++-				if (isleap && (r->month > 1)) {
+++				if (isleap && (r->month == 2)) {
++ 					++monlen;
++ 				}
++ 				/* Wweekday (0 is Sunday) of 1st of the month
++-- 
++1.7.3.4
++
+diff --git a/package/uclibc/0.9.31.1/uClibc-0006-fix-error-locale-utf-8.patch b/package/uclibc/0.9.31.1/uClibc-0006-fix-error-locale-utf-8.patch
+new file mode 100644
+index 0000000..1305add
+--- /dev/null
++++ b/package/uclibc/0.9.31.1/uClibc-0006-fix-error-locale-utf-8.patch
+@@ -0,0 +1,17 @@
++---
++ extra/locale/gen_wc8bit.c |    2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++Index: uClibc-0.9.31/extra/locale/gen_wc8bit.c
++===================================================================
++--- uClibc-0.9.31.orig/extra/locale/gen_wc8bit.c
+++++ uClibc-0.9.31/extra/locale/gen_wc8bit.c
++@@ -120,7 +120,7 @@
++ 		}
++ 
++  locale_failure:
++-		printf("could not find a UTF8 locale ... please enable en_US.UTF-8\n");
+++		fprintf(stderr, "could not find a UTF8 locale ... please enable en_US.UTF-8\n");
++ 		return EXIT_FAILURE;
++  locale_success:
++ 		pclose(fp);
+diff --git a/package/uclibc/0.9.31.1/uClibc-0007-fix-fcntl64-for-64-bit-targets.patch b/package/uclibc/0.9.31.1/uClibc-0007-fix-fcntl64-for-64-bit-targets.patch
+new file mode 100644
+index 0000000..763bfd3
+--- /dev/null
++++ b/package/uclibc/0.9.31.1/uClibc-0007-fix-fcntl64-for-64-bit-targets.patch
+@@ -0,0 +1,34 @@
++From 6f1daaaf2d94c1e6184add44eda38b0781b88cf0 Mon Sep 17 00:00:00 2001
++From: Rob Landley <rob@landley.net>
++Date: Sun, 16 May 2010 21:41:36 +0000
++Subject: Fix fcntl64 for 64 bit targets.
++
++64 bit targets often don't have a separate fcntl64() system call, because they don't need one.
++
++Signed-off-by: Rob Landley <rob@landley.net>
++Signed-off-by: Austin Foxley <austinf@cetoncorp.com>
++---
++diff --git a/include/fcntl.h b/include/fcntl.h
++index e37073f..3cfb25f 100644
++--- a/include/fcntl.h
+++++ b/include/fcntl.h
++@@ -73,7 +73,7 @@ __BEGIN_DECLS
++ 
++    This function is a cancellation point and therefore not marked with
++    __THROW.  */
++-#ifndef __USE_FILE_OFFSET64
+++#if !defined(__USE_FILE_OFFSET64) || defined(__LP64__)
++ extern int fcntl (int __fd, int __cmd, ...);
++ libc_hidden_proto(fcntl)
++ #else
++@@ -83,7 +83,7 @@ extern int __REDIRECT (fcntl, (int __fd, int __cmd, ...), fcntl64);
++ #  define fcntl fcntl64
++ # endif
++ #endif
++-#ifdef __USE_LARGEFILE64
+++#if defined(__USE_LARGEFILE64) && !defined(__LP64__)
++ extern int fcntl64 (int __fd, int __cmd, ...);
++ libc_hidden_proto(fcntl64)
++ #endif
++--
++cgit v0.8.2.1
+diff --git a/package/uclibc/0.9.31.1/uClibc-0008-linuxthreads-errno-fix.patch b/package/uclibc/0.9.31.1/uClibc-0008-linuxthreads-errno-fix.patch
+new file mode 100644
+index 0000000..c49821b
+--- /dev/null
++++ b/package/uclibc/0.9.31.1/uClibc-0008-linuxthreads-errno-fix.patch
+@@ -0,0 +1,98 @@
++From af8b2d71ce37b9d4d24ddbc755cdea68de02949a Mon Sep 17 00:00:00 2001
++From: Peter Korsgaard <jacmet@sunsite.dk>
++Date: Mon, 5 Jul 2010 14:08:17 +0200
++Subject: [PATCH] don't make __errno_location / __h_errno_location hidden
++
++Closes #2089 (https://bugs.busybox.net/show_bug.cgi?id=2089)
++
++__errno_location / __h_errno_location access has to go through the PLT
++like malloc/free, so the linuxthread variants gets used instead when
++compiling with -pthread.
++
++Based on http://github.com/mat-c/uClibc/commit/328d392c54aa5dc2b8e7f398a419087de497de2b
++
++Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
++---
++ include/netdb.h                               |    1 -
++ libc/misc/internals/__errno_location.c        |    3 ---
++ libc/misc/internals/__h_errno_location.c      |    1 -
++ libc/misc/internals/__uClibc_main.c           |    2 --
++ libc/sysdeps/linux/common/bits/errno.h        |    1 -
++ libc/sysdeps/linux/common/bits/uClibc_errno.h |    3 ---
++ 6 files changed, 0 insertions(+), 11 deletions(-)
++
++diff --git a/include/netdb.h b/include/netdb.h
++index 9d3807d..ac411ab 100644
++--- a/include/netdb.h
+++++ b/include/netdb.h
++@@ -59,7 +59,6 @@ __BEGIN_DECLS
++ 
++ /* Function to get address of global `h_errno' variable.  */
++ extern int *__h_errno_location (void) __THROW __attribute__ ((__const__));
++-libc_hidden_proto(__h_errno_location)
++ 
++ /* Macros for accessing h_errno from inside libc.  */
++ #ifdef _LIBC
++diff --git a/libc/misc/internals/__errno_location.c b/libc/misc/internals/__errno_location.c
++index 487a9c2..0620860 100644
++--- a/libc/misc/internals/__errno_location.c
+++++ b/libc/misc/internals/__errno_location.c
++@@ -11,6 +11,3 @@ int * weak_const_function __errno_location (void)
++ {
++     return &errno;
++ }
++-#ifdef IS_IN_libc /* not really need, only to keep in sync w/ libc_hidden_proto */
++-libc_hidden_weak(__errno_location)
++-#endif
++diff --git a/libc/misc/internals/__h_errno_location.c b/libc/misc/internals/__h_errno_location.c
++index 213d398..235df4e 100644
++--- a/libc/misc/internals/__h_errno_location.c
+++++ b/libc/misc/internals/__h_errno_location.c
++@@ -10,4 +10,3 @@ int * weak_const_function __h_errno_location (void)
++ {
++     return &h_errno;
++ }
++-libc_hidden_weak(__h_errno_location)
++diff --git a/libc/misc/internals/__uClibc_main.c b/libc/misc/internals/__uClibc_main.c
++index 6e520fa..f4a9ebb 100644
++--- a/libc/misc/internals/__uClibc_main.c
+++++ b/libc/misc/internals/__uClibc_main.c
++@@ -64,9 +64,7 @@ void internal_function _dl_aux_init (ElfW(auxv_t) *av);
++  * Prototypes.
++  */
++ extern int *weak_const_function __errno_location(void);
++-libc_hidden_proto(__errno_location)
++ extern int *weak_const_function __h_errno_location(void);
++-libc_hidden_proto(__h_errno_location)
++ 
++ extern void weak_function _stdio_init(void) attribute_hidden;
++ #ifdef __UCLIBC_HAS_LOCALE__
++diff --git a/libc/sysdeps/linux/common/bits/errno.h b/libc/sysdeps/linux/common/bits/errno.h
++index 0bf6354..de9688a 100644
++--- a/libc/sysdeps/linux/common/bits/errno.h
+++++ b/libc/sysdeps/linux/common/bits/errno.h
++@@ -43,7 +43,6 @@
++ # ifndef __ASSEMBLER__
++ /* Function to get address of global `errno' variable.  */
++ extern int *__errno_location (void) __THROW __attribute__ ((__const__));
++-libc_hidden_proto(__errno_location)
++ 
++ #  ifdef __UCLIBC_HAS_THREADS__
++ /* When using threads, errno is a per-thread value.  */
++diff --git a/libc/sysdeps/linux/common/bits/uClibc_errno.h b/libc/sysdeps/linux/common/bits/uClibc_errno.h
++index 9c15618..79eb7e6 100644
++--- a/libc/sysdeps/linux/common/bits/uClibc_errno.h
+++++ b/libc/sysdeps/linux/common/bits/uClibc_errno.h
++@@ -33,9 +33,6 @@ extern int *__errno_location (void) __THROW __attribute__ ((__const__))
++ ;
++ # if defined __UCLIBC_HAS_THREADS__
++ #  include <tls.h>
++-#  if defined USE___THREAD && USE___THREAD
++-libc_hidden_proto(__errno_location)
++-#  endif
++ # endif
++ 
++ #endif /* !__ASSEMBLER__ */
++-- 
++1.7.1
++
+diff --git a/package/uclibc/0.9.31.1/uClibc-0009-more-workarounds-GCC-PR32219.patch b/package/uclibc/0.9.31.1/uClibc-0009-more-workarounds-GCC-PR32219.patch
+new file mode 100644
+index 0000000..9e69532
+--- /dev/null
++++ b/package/uclibc/0.9.31.1/uClibc-0009-more-workarounds-GCC-PR32219.patch
+@@ -0,0 +1,40 @@
++From aa67771881d65373da448ad5f7a8393f3a1d9469 Mon Sep 17 00:00:00 2001
++From: =?UTF-8?q?Timo=20Ter=C3=A4s?= <timo.teras@iki.fi>
++Date: Wed, 30 Jun 2010 14:46:37 +0300
++Subject: [PATCH] more workarounds for GCC PR32219
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++Commit 2e53dd645d5348f207cec7f8595969dc566c5a55 workarounds GCC
++bug when accessing _locale_init and _stdio_init. We need the same
++fix for __errno_location and __h_errno_location otherwise we crash
++calling null with static and non-threaded builds.
++
++Signed-off-by: Timo Ter??s <timo.teras@iki.fi>
++Signed-off-by: Bernhard Reutner-Fischer <rep.dot.nop@gmail.com>
++---
++ libc/misc/internals/__uClibc_main.c |    4 ++--
++ 1 files changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/libc/misc/internals/__uClibc_main.c b/libc/misc/internals/__uClibc_main.c
++index 3f09ad2..58f6643 100644
++--- a/libc/misc/internals/__uClibc_main.c
+++++ b/libc/misc/internals/__uClibc_main.c
++@@ -447,11 +447,11 @@ void __uClibc_main(int (*main)(int, char **, char **), int argc,
++      * have resulted in errno being set nonzero, so set it to 0 before
++      * we call main.
++      */
++-    if (likely(__errno_location!=NULL))
+++    if (likely(not_null_ptr(__errno_location)))
++ 	*(__errno_location()) = 0;
++ 
++     /* Set h_errno to 0 as well */
++-    if (likely(__h_errno_location!=NULL))
+++    if (likely(not_null_ptr(__h_errno_location)))
++ 	*(__h_errno_location()) = 0;
++ 
++ #if defined HAVE_CLEANUP_JMP_BUF && defined __UCLIBC_HAS_THREADS_NATIVE__
++-- 
++1.7.1
++
+diff --git a/package/uclibc/0.9.31.1/uClibc-0010-powerpc-ptrace-fix.patch b/package/uclibc/0.9.31.1/uClibc-0010-powerpc-ptrace-fix.patch
+new file mode 100644
+index 0000000..a5cceca
+--- /dev/null
++++ b/package/uclibc/0.9.31.1/uClibc-0010-powerpc-ptrace-fix.patch
+@@ -0,0 +1,62 @@
++[PATCH] powerpc: add PTRACE_EVENT_ defines needed by ltrace
++
++Equivalent to the common version and kernel headers.
++
++Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
++---
++ libc/sysdeps/linux/powerpc/sys/ptrace.h |   41 +++++++++++++++++++++++++++++++-
++ 1 file changed, 40 insertions(+), 1 deletion(-)
++
++Index: uClibc-0.9.31/libc/sysdeps/linux/powerpc/sys/ptrace.h
++===================================================================
++--- uClibc-0.9.31.orig/libc/sysdeps/linux/powerpc/sys/ptrace.h
+++++ uClibc-0.9.31/libc/sysdeps/linux/powerpc/sys/ptrace.h
++@@ -79,8 +79,47 @@ enum __ptrace_request
++ #define PT_DETACH PTRACE_DETACH
++ 
++   /* Continue and stop at the next (return from) syscall.  */
++-  PTRACE_SYSCALL = 24
+++  PTRACE_SYSCALL = 24,
++ #define PT_SYSCALL PTRACE_SYSCALL
+++
+++  /* Set ptrace filter options.  */
+++  PTRACE_SETOPTIONS = 0x4200,
+++#define PT_SETOPTIONS PTRACE_SETOPTIONS
+++
+++  /* Get last ptrace message.  */
+++  PTRACE_GETEVENTMSG = 0x4201,
+++#define PT_GETEVENTMSG PTRACE_GETEVENTMSG
+++
+++  /* Get siginfo for process.  */
+++  PTRACE_GETSIGINFO = 0x4202,
+++#define PT_GETSIGINFO PTRACE_GETSIGINFO
+++
+++  /* Set new siginfo for process.  */
+++  PTRACE_SETSIGINFO = 0x4203
+++#define PT_SETSIGINFO PTRACE_SETSIGINFO
+++};
+++
+++
+++/* Options set using PTRACE_SETOPTIONS.  */
+++enum __ptrace_setoptions {
+++  PTRACE_O_TRACESYSGOOD	= 0x00000001,
+++  PTRACE_O_TRACEFORK	= 0x00000002,
+++  PTRACE_O_TRACEVFORK   = 0x00000004,
+++  PTRACE_O_TRACECLONE	= 0x00000008,
+++  PTRACE_O_TRACEEXEC	= 0x00000010,
+++  PTRACE_O_TRACEVFORKDONE = 0x00000020,
+++  PTRACE_O_TRACEEXIT	= 0x00000040,
+++  PTRACE_O_MASK		= 0x0000007f
+++};
+++
+++/* Wait extended result codes for the above trace options.  */
+++enum __ptrace_eventcodes {
+++  PTRACE_EVENT_FORK	= 1,
+++  PTRACE_EVENT_VFORK	= 2,
+++  PTRACE_EVENT_CLONE	= 3,
+++  PTRACE_EVENT_EXEC	= 4,
+++  PTRACE_EVENT_VFORK_DONE = 5,
+++  PTRACE_EVENT_EXIT	= 6
++ };
++ 
++ /* Perform process tracing functions.  REQUEST is one of the values
+diff --git a/package/uclibc/0.9.31.1/uClibc-0011-quad-routines.patch b/package/uclibc/0.9.31.1/uClibc-0011-quad-routines.patch
+new file mode 100644
+index 0000000..de37c30
+--- /dev/null
++++ b/package/uclibc/0.9.31.1/uClibc-0011-quad-routines.patch
+@@ -0,0 +1,7393 @@
++diff -Naur uClibc-0.9.31.ori/libc/sysdeps/linux/sparc/Makefile.arch uClibc-0.9.31/libc/sysdeps/linux/sparc/Makefile.arch
++--- uClibc-0.9.31.ori/libc/sysdeps/linux/sparc/Makefile.arch	2010-10-14 14:03:46.000000000 +0200
+++++ uClibc-0.9.31/libc/sysdeps/linux/sparc/Makefile.arch	2010-10-14 14:36:34.000000000 +0200
++@@ -5,8 +5,15 @@
++ # Licensed under the LGPL v2.1, see the file COPYING.LIB in this tarball.
++ #
++ 
++-CSRC := brk.c __syscall_error.c qp_ops.c sigaction.c
+++CSRC := brk.c __syscall_error.c sigaction.c
++ 
++ SSRC := \
++ 	__longjmp.S fork.S vfork.S clone.S setjmp.S bsd-setjmp.S bsd-_setjmp.S \
++ 	syscall.S urem.S udiv.S umul.S sdiv.S rem.S pipe.S
+++
+++CSRC += $(foreach f, \
+++	q_div.c   q_fle.c    q_mul.c   q_qtoll.c   q_stoq.c    \
+++	mp_clz_tab.c  q_dtoq.c  q_flt.c    q_neg.c   q_qtos.c    q_sub.c    \
+++	q_add.c      q_feq.c   q_fne.c    q_qtod.c  q_qtou.c    q_ulltoq.c  \
+++	q_cmp.c      q_fge.c   q_itoq.c   q_qtoull.c  q_util.c    \
+++	q_cmpe.c     q_fgt.c   q_lltoq.c  q_qtoi.c  q_sqrt.c    q_utoq.c, soft-fp/$(f))
++diff -Naur uClibc-0.9.31.ori/libc/sysdeps/linux/sparc/soft-fp/double.h uClibc-0.9.31/libc/sysdeps/linux/sparc/soft-fp/double.h
++--- uClibc-0.9.31.ori/libc/sysdeps/linux/sparc/soft-fp/double.h	1970-01-01 01:00:00.000000000 +0100
+++++ uClibc-0.9.31/libc/sysdeps/linux/sparc/soft-fp/double.h	2010-10-14 14:05:37.000000000 +0200
++@@ -0,0 +1,264 @@
+++/* Software floating-point emulation.
+++   Definitions for IEEE Double Precision
+++   Copyright (C) 1997,1998,1999,2006,2007 Free Software Foundation, Inc.
+++   This file is part of the GNU C Library.
+++   Contributed by Richard Henderson (rth at cygnus.com),
+++		  Jakub Jelinek (jj at ultra.linux.cz),
+++		  David S. Miller (davem at redhat.com) and
+++		  Peter Maydell (pmaydell at chiark.greenend.org.uk).
+++
+++   The GNU C Library is free software; you can redistribute it and/or
+++   modify it under the terms of the GNU Lesser General Public
+++   License as published by the Free Software Foundation; either
+++   version 2.1 of the License, or (at your option) any later version.
+++
+++   In addition to the permissions in the GNU Lesser General Public
+++   License, the Free Software Foundation gives you unlimited
+++   permission to link the compiled version of this file into
+++   combinations with other programs, and to distribute those
+++   combinations without any restriction coming from the use of this
+++   file.  (The Lesser General Public License restrictions do apply in
+++   other respects; for example, they cover modification of the file,
+++   and distribution when not linked into a combine executable.)
+++
+++   The GNU C Library is distributed in the hope that it will be useful,
+++   but WITHOUT ANY WARRANTY; without even the implied warranty of
+++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+++   Lesser General Public License for more details.
+++
+++   You should have received a copy of the GNU Lesser General Public
+++   License along with the GNU C Library; if not, write to the Free
+++   Software Foundation, 51 Franklin Street, Fifth Floor, Boston,
+++   MA 02110-1301, USA.  */
+++
+++#if _FP_W_TYPE_SIZE < 32
+++#error "Here's a nickel kid.  Go buy yourself a real computer."
+++#endif
+++
+++#if _FP_W_TYPE_SIZE < 64
+++#define _FP_FRACTBITS_D		(2 * _FP_W_TYPE_SIZE)
+++#else
+++#define _FP_FRACTBITS_D		_FP_W_TYPE_SIZE
+++#endif
+++
+++#define _FP_FRACBITS_D		53
+++#define _FP_FRACXBITS_D		(_FP_FRACTBITS_D - _FP_FRACBITS_D)
+++#define _FP_WFRACBITS_D		(_FP_WORKBITS + _FP_FRACBITS_D)
+++#define _FP_WFRACXBITS_D	(_FP_FRACTBITS_D - _FP_WFRACBITS_D)
+++#define _FP_EXPBITS_D		11
+++#define _FP_EXPBIAS_D		1023
+++#define _FP_EXPMAX_D		2047
+++
+++#define _FP_QNANBIT_D		\
+++	((_FP_W_TYPE)1 << (_FP_FRACBITS_D-2) % _FP_W_TYPE_SIZE)
+++#define _FP_QNANBIT_SH_D		\
+++	((_FP_W_TYPE)1 << (_FP_FRACBITS_D-2+_FP_WORKBITS) % _FP_W_TYPE_SIZE)
+++#define _FP_IMPLBIT_D		\
+++	((_FP_W_TYPE)1 << (_FP_FRACBITS_D-1) % _FP_W_TYPE_SIZE)
+++#define _FP_IMPLBIT_SH_D		\
+++	((_FP_W_TYPE)1 << (_FP_FRACBITS_D-1+_FP_WORKBITS) % _FP_W_TYPE_SIZE)
+++#define _FP_OVERFLOW_D		\
+++	((_FP_W_TYPE)1 << _FP_WFRACBITS_D % _FP_W_TYPE_SIZE)
+++
+++typedef float DFtype __attribute__((mode(DF)));
+++
+++#if _FP_W_TYPE_SIZE < 64
+++
+++union _FP_UNION_D
+++{
+++  DFtype flt;
+++  struct {
+++#if __BYTE_ORDER == __BIG_ENDIAN
+++    unsigned sign  : 1;
+++    unsigned exp   : _FP_EXPBITS_D;
+++    unsigned frac1 : _FP_FRACBITS_D - (_FP_IMPLBIT_D != 0) - _FP_W_TYPE_SIZE;
+++    unsigned frac0 : _FP_W_TYPE_SIZE;
+++#else
+++    unsigned frac0 : _FP_W_TYPE_SIZE;
+++    unsigned frac1 : _FP_FRACBITS_D - (_FP_IMPLBIT_D != 0) - _FP_W_TYPE_SIZE;
+++    unsigned exp   : _FP_EXPBITS_D;
+++    unsigned sign  : 1;
+++#endif
+++  } bits __attribute__((packed));
+++};
+++
+++#define FP_DECL_D(X)		_FP_DECL(2,X)
+++#define FP_UNPACK_RAW_D(X,val)	_FP_UNPACK_RAW_2(D,X,val)
+++#define FP_UNPACK_RAW_DP(X,val)	_FP_UNPACK_RAW_2_P(D,X,val)
+++#define FP_PACK_RAW_D(val,X)	_FP_PACK_RAW_2(D,val,X)
+++#define FP_PACK_RAW_DP(val,X)		\
+++  do {					\
+++    if (!FP_INHIBIT_RESULTS)		\
+++      _FP_PACK_RAW_2_P(D,val,X);	\
+++  } while (0)
+++
+++#define FP_UNPACK_D(X,val)		\
+++  do {					\
+++    _FP_UNPACK_RAW_2(D,X,val);		\
+++    _FP_UNPACK_CANONICAL(D,2,X);	\
+++  } while (0)
+++
+++#define FP_UNPACK_DP(X,val)		\
+++  do {					\
+++    _FP_UNPACK_RAW_2_P(D,X,val);	\
+++    _FP_UNPACK_CANONICAL(D,2,X);	\
+++  } while (0)
+++
+++#define FP_UNPACK_SEMIRAW_D(X,val)	\
+++  do {					\
+++    _FP_UNPACK_RAW_2(D,X,val);		\
+++    _FP_UNPACK_SEMIRAW(D,2,X);		\
+++  } while (0)
+++
+++#define FP_UNPACK_SEMIRAW_DP(X,val)	\
+++  do {					\
+++    _FP_UNPACK_RAW_2_P(D,X,val);	\
+++    _FP_UNPACK_SEMIRAW(D,2,X);		\
+++  } while (0)
+++
+++#define FP_PACK_D(val,X)		\
+++  do {					\
+++    _FP_PACK_CANONICAL(D,2,X);		\
+++    _FP_PACK_RAW_2(D,val,X);		\
+++  } while (0)
+++
+++#define FP_PACK_DP(val,X)		\
+++  do {					\
+++    _FP_PACK_CANONICAL(D,2,X);		\
+++    if (!FP_INHIBIT_RESULTS)		\
+++      _FP_PACK_RAW_2_P(D,val,X);	\
+++  } while (0)
+++
+++#define FP_PACK_SEMIRAW_D(val,X)	\
+++  do {					\
+++    _FP_PACK_SEMIRAW(D,2,X);		\
+++    _FP_PACK_RAW_2(D,val,X);		\
+++  } while (0)
+++
+++#define FP_PACK_SEMIRAW_DP(val,X)	\
+++  do {					\
+++    _FP_PACK_SEMIRAW(D,2,X);		\
+++    if (!FP_INHIBIT_RESULTS)		\
+++      _FP_PACK_RAW_2_P(D,val,X);	\
+++  } while (0)
+++
+++#define FP_ISSIGNAN_D(X)		_FP_ISSIGNAN(D,2,X)
+++#define FP_NEG_D(R,X)			_FP_NEG(D,2,R,X)
+++#define FP_ADD_D(R,X,Y)			_FP_ADD(D,2,R,X,Y)
+++#define FP_SUB_D(R,X,Y)			_FP_SUB(D,2,R,X,Y)
+++#define FP_MUL_D(R,X,Y)			_FP_MUL(D,2,R,X,Y)
+++#define FP_DIV_D(R,X,Y)			_FP_DIV(D,2,R,X,Y)
+++#define FP_SQRT_D(R,X)			_FP_SQRT(D,2,R,X)
+++#define _FP_SQRT_MEAT_D(R,S,T,X,Q)	_FP_SQRT_MEAT_2(R,S,T,X,Q)
+++
+++#define FP_CMP_D(r,X,Y,un)	_FP_CMP(D,2,r,X,Y,un)
+++#define FP_CMP_EQ_D(r,X,Y)	_FP_CMP_EQ(D,2,r,X,Y)
+++#define FP_CMP_UNORD_D(r,X,Y)	_FP_CMP_UNORD(D,2,r,X,Y)
+++
+++#define FP_TO_INT_D(r,X,rsz,rsg)	_FP_TO_INT(D,2,r,X,rsz,rsg)
+++#define FP_FROM_INT_D(X,r,rs,rt)	_FP_FROM_INT(D,2,X,r,rs,rt)
+++
+++#define _FP_FRAC_HIGH_D(X)	_FP_FRAC_HIGH_2(X)
+++#define _FP_FRAC_HIGH_RAW_D(X)	_FP_FRAC_HIGH_2(X)
+++
+++#else
+++
+++union _FP_UNION_D
+++{
+++  DFtype flt;
+++  struct {
+++#if __BYTE_ORDER == __BIG_ENDIAN
+++    unsigned sign   : 1;
+++    unsigned exp    : _FP_EXPBITS_D;
+++    _FP_W_TYPE frac : _FP_FRACBITS_D - (_FP_IMPLBIT_D != 0);
+++#else
+++    _FP_W_TYPE frac : _FP_FRACBITS_D - (_FP_IMPLBIT_D != 0);
+++    unsigned exp    : _FP_EXPBITS_D;
+++    unsigned sign   : 1;
+++#endif
+++  } bits __attribute__((packed));
+++};
+++
+++#define FP_DECL_D(X)		_FP_DECL(1,X)
+++#define FP_UNPACK_RAW_D(X,val)	_FP_UNPACK_RAW_1(D,X,val)
+++#define FP_UNPACK_RAW_DP(X,val)	_FP_UNPACK_RAW_1_P(D,X,val)
+++#define FP_PACK_RAW_D(val,X)	_FP_PACK_RAW_1(D,val,X)
+++#define FP_PACK_RAW_DP(val,X)		\
+++  do {					\
+++    if (!FP_INHIBIT_RESULTS)		\
+++      _FP_PACK_RAW_1_P(D,val,X);	\
+++  } while (0)
+++
+++#define FP_UNPACK_D(X,val)		\
+++  do {					\
+++    _FP_UNPACK_RAW_1(D,X,val);		\
+++    _FP_UNPACK_CANONICAL(D,1,X);	\
+++  } while (0)
+++
+++#define FP_UNPACK_DP(X,val)		\
+++  do {					\
+++    _FP_UNPACK_RAW_1_P(D,X,val);	\
+++    _FP_UNPACK_CANONICAL(D,1,X);	\
+++  } while (0)
+++
+++#define FP_UNPACK_SEMIRAW_D(X,val)	\
+++  do {					\
+++    _FP_UNPACK_RAW_2(1,X,val);		\
+++    _FP_UNPACK_SEMIRAW(D,1,X);		\
+++  } while (0)
+++
+++#define FP_UNPACK_SEMIRAW_DP(X,val)	\
+++  do {					\
+++    _FP_UNPACK_RAW_2_P(1,X,val);	\
+++    _FP_UNPACK_SEMIRAW(D,1,X);		\
+++  } while (0)
+++
+++#define FP_PACK_D(val,X)		\
+++  do {					\
+++    _FP_PACK_CANONICAL(D,1,X);		\
+++    _FP_PACK_RAW_1(D,val,X);		\
+++  } while (0)
+++
+++#define FP_PACK_DP(val,X)		\
+++  do {					\
+++    _FP_PACK_CANONICAL(D,1,X);		\
+++    if (!FP_INHIBIT_RESULTS)		\
+++      _FP_PACK_RAW_1_P(D,val,X);	\
+++  } while (0)
+++
+++#define FP_PACK_SEMIRAW_D(val,X)	\
+++  do {					\
+++    _FP_PACK_SEMIRAW(D,1,X);		\
+++    _FP_PACK_RAW_1(D,val,X);		\
+++  } while (0)
+++
+++#define FP_PACK_SEMIRAW_DP(val,X)	\
+++  do {					\
+++    _FP_PACK_SEMIRAW(D,1,X);		\
+++    if (!FP_INHIBIT_RESULTS)		\
+++      _FP_PACK_RAW_1_P(D,val,X);	\
+++  } while (0)
+++
+++#define FP_ISSIGNAN_D(X)		_FP_ISSIGNAN(D,1,X)
+++#define FP_NEG_D(R,X)			_FP_NEG(D,1,R,X)
+++#define FP_ADD_D(R,X,Y)			_FP_ADD(D,1,R,X,Y)
+++#define FP_SUB_D(R,X,Y)			_FP_SUB(D,1,R,X,Y)
+++#define FP_MUL_D(R,X,Y)			_FP_MUL(D,1,R,X,Y)
+++#define FP_DIV_D(R,X,Y)			_FP_DIV(D,1,R,X,Y)
+++#define FP_SQRT_D(R,X)			_FP_SQRT(D,1,R,X)
+++#define _FP_SQRT_MEAT_D(R,S,T,X,Q)	_FP_SQRT_MEAT_1(R,S,T,X,Q)
+++
+++/* The implementation of _FP_MUL_D and _FP_DIV_D should be chosen by
+++   the target machine.  */
+++
+++#define FP_CMP_D(r,X,Y,un)	_FP_CMP(D,1,r,X,Y,un)
+++#define FP_CMP_EQ_D(r,X,Y)	_FP_CMP_EQ(D,1,r,X,Y)
+++#define FP_CMP_UNORD_D(r,X,Y)	_FP_CMP_UNORD(D,1,r,X,Y)
+++
+++#define FP_TO_INT_D(r,X,rsz,rsg)	_FP_TO_INT(D,1,r,X,rsz,rsg)
+++#define FP_FROM_INT_D(X,r,rs,rt)	_FP_FROM_INT(D,1,X,r,rs,rt)
+++
+++#define _FP_FRAC_HIGH_D(X)	_FP_FRAC_HIGH_1(X)
+++#define _FP_FRAC_HIGH_RAW_D(X)	_FP_FRAC_HIGH_1(X)
+++
+++#endif /* W_TYPE_SIZE < 64 */
++diff -Naur uClibc-0.9.31.ori/libc/sysdeps/linux/sparc/soft-fp/extended.h uClibc-0.9.31/libc/sysdeps/linux/sparc/soft-fp/extended.h
++--- uClibc-0.9.31.ori/libc/sysdeps/linux/sparc/soft-fp/extended.h	1970-01-01 01:00:00.000000000 +0100
+++++ uClibc-0.9.31/libc/sysdeps/linux/sparc/soft-fp/extended.h	2010-10-14 14:05:37.000000000 +0200
++@@ -0,0 +1,431 @@
+++/* Software floating-point emulation.
+++   Definitions for IEEE Extended Precision.
+++   Copyright (C) 1999,2006,2007 Free Software Foundation, Inc.
+++   This file is part of the GNU C Library.
+++   Contributed by Jakub Jelinek (jj@ultra.linux.cz).
+++
+++   The GNU C Library is free software; you can redistribute it and/or
+++   modify it under the terms of the GNU Lesser General Public
+++   License as published by the Free Software Foundation; either
+++   version 2.1 of the License, or (at your option) any later version.
+++
+++   In addition to the permissions in the GNU Lesser General Public
+++   License, the Free Software Foundation gives you unlimited
+++   permission to link the compiled version of this file into
+++   combinations with other programs, and to distribute those
+++   combinations without any restriction coming from the use of this
+++   file.  (The Lesser General Public License restrictions do apply in
+++   other respects; for example, they cover modification of the file,
+++   and distribution when not linked into a combine executable.)
+++
+++   The GNU C Library is distributed in the hope that it will be useful,
+++   but WITHOUT ANY WARRANTY; without even the implied warranty of
+++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+++   Lesser General Public License for more details.
+++
+++   You should have received a copy of the GNU Lesser General Public
+++   License along with the GNU C Library; if not, write to the Free
+++   Software Foundation, 51 Franklin Street, Fifth Floor, Boston,
+++   MA 02110-1301, USA.  */
+++
+++#if _FP_W_TYPE_SIZE < 32
+++#error "Here's a nickel, kid. Go buy yourself a real computer."
+++#endif
+++
+++#if _FP_W_TYPE_SIZE < 64
+++#define _FP_FRACTBITS_E         (4*_FP_W_TYPE_SIZE)
+++#else
+++#define _FP_FRACTBITS_E		(2*_FP_W_TYPE_SIZE)
+++#endif
+++
+++#define _FP_FRACBITS_E		64
+++#define _FP_FRACXBITS_E		(_FP_FRACTBITS_E - _FP_FRACBITS_E)
+++#define _FP_WFRACBITS_E		(_FP_WORKBITS + _FP_FRACBITS_E)
+++#define _FP_WFRACXBITS_E	(_FP_FRACTBITS_E - _FP_WFRACBITS_E)
+++#define _FP_EXPBITS_E		15
+++#define _FP_EXPBIAS_E		16383
+++#define _FP_EXPMAX_E		32767
+++
+++#define _FP_QNANBIT_E		\
+++	((_FP_W_TYPE)1 << (_FP_FRACBITS_E-2) % _FP_W_TYPE_SIZE)
+++#define _FP_QNANBIT_SH_E		\
+++	((_FP_W_TYPE)1 << (_FP_FRACBITS_E-2+_FP_WORKBITS) % _FP_W_TYPE_SIZE)
+++#define _FP_IMPLBIT_E		\
+++	((_FP_W_TYPE)1 << (_FP_FRACBITS_E-1) % _FP_W_TYPE_SIZE)
+++#define _FP_IMPLBIT_SH_E		\
+++	((_FP_W_TYPE)1 << (_FP_FRACBITS_E-1+_FP_WORKBITS) % _FP_W_TYPE_SIZE)
+++#define _FP_OVERFLOW_E		\
+++	((_FP_W_TYPE)1 << (_FP_WFRACBITS_E % _FP_W_TYPE_SIZE))
+++
+++typedef float XFtype __attribute__((mode(XF)));
+++
+++#if _FP_W_TYPE_SIZE < 64
+++
+++union _FP_UNION_E
+++{
+++   XFtype flt;
+++   struct 
+++   {
+++#if __BYTE_ORDER == __BIG_ENDIAN
+++      unsigned long pad1 : _FP_W_TYPE_SIZE;
+++      unsigned long pad2 : (_FP_W_TYPE_SIZE - 1 - _FP_EXPBITS_E);
+++      unsigned long sign : 1;
+++      unsigned long exp : _FP_EXPBITS_E;
+++      unsigned long frac1 : _FP_W_TYPE_SIZE;
+++      unsigned long frac0 : _FP_W_TYPE_SIZE;
+++#else
+++      unsigned long frac0 : _FP_W_TYPE_SIZE;
+++      unsigned long frac1 : _FP_W_TYPE_SIZE;
+++      unsigned exp : _FP_EXPBITS_E;
+++      unsigned sign : 1;
+++#endif /* not bigendian */
+++   } bits __attribute__((packed));
+++};
+++
+++
+++#define FP_DECL_E(X)		_FP_DECL(4,X)
+++
+++#define FP_UNPACK_RAW_E(X, val)				\
+++  do {							\
+++    union _FP_UNION_E _flo; _flo.flt = (val);		\
+++							\
+++    X##_f[2] = 0; X##_f[3] = 0;				\
+++    X##_f[0] = _flo.bits.frac0;				\
+++    X##_f[1] = _flo.bits.frac1;				\
+++    X##_e  = _flo.bits.exp;				\
+++    X##_s  = _flo.bits.sign;				\
+++  } while (0)
+++
+++#define FP_UNPACK_RAW_EP(X, val)			\
+++  do {							\
+++    union _FP_UNION_E *_flo =				\
+++    (union _FP_UNION_E *)(val);				\
+++							\
+++    X##_f[2] = 0; X##_f[3] = 0;				\
+++    X##_f[0] = _flo->bits.frac0;			\
+++    X##_f[1] = _flo->bits.frac1;			\
+++    X##_e  = _flo->bits.exp;				\
+++    X##_s  = _flo->bits.sign;				\
+++  } while (0)
+++
+++#define FP_PACK_RAW_E(val, X)				\
+++  do {							\
+++    union _FP_UNION_E _flo;				\
+++							\
+++    if (X##_e) X##_f[1] |= _FP_IMPLBIT_E;		\
+++    else X##_f[1] &= ~(_FP_IMPLBIT_E);			\
+++    _flo.bits.frac0 = X##_f[0];				\
+++    _flo.bits.frac1 = X##_f[1];				\
+++    _flo.bits.exp   = X##_e;				\
+++    _flo.bits.sign  = X##_s;				\
+++							\
+++    (val) = _flo.flt;					\
+++  } while (0)
+++
+++#define FP_PACK_RAW_EP(val, X)				\
+++  do {							\
+++    if (!FP_INHIBIT_RESULTS)				\
+++      {							\
+++	union _FP_UNION_E *_flo =			\
+++	  (union _FP_UNION_E *)(val);			\
+++							\
+++	if (X##_e) X##_f[1] |= _FP_IMPLBIT_E;		\
+++	else X##_f[1] &= ~(_FP_IMPLBIT_E);		\
+++	_flo->bits.frac0 = X##_f[0];			\
+++	_flo->bits.frac1 = X##_f[1];			\
+++	_flo->bits.exp   = X##_e;			\
+++	_flo->bits.sign  = X##_s;			\
+++      }							\
+++  } while (0)
+++
+++#define FP_UNPACK_E(X,val)		\
+++  do {					\
+++    FP_UNPACK_RAW_E(X,val);		\
+++    _FP_UNPACK_CANONICAL(E,4,X);	\
+++  } while (0)
+++
+++#define FP_UNPACK_EP(X,val)		\
+++  do {					\
+++    FP_UNPACK_RAW_EP(X,val);		\
+++    _FP_UNPACK_CANONICAL(E,4,X);	\
+++  } while (0)
+++
+++#define FP_UNPACK_SEMIRAW_E(X,val)	\
+++  do {					\
+++    FP_UNPACK_RAW_E(X,val);		\
+++    _FP_UNPACK_SEMIRAW(E,4,X);		\
+++  } while (0)
+++
+++#define FP_UNPACK_SEMIRAW_EP(X,val)	\
+++  do {					\
+++    FP_UNPACK_RAW_EP(X,val);		\
+++    _FP_UNPACK_SEMIRAW(E,4,X);		\
+++  } while (0)
+++
+++#define FP_PACK_E(val,X)		\
+++  do {					\
+++    _FP_PACK_CANONICAL(E,4,X);		\
+++    FP_PACK_RAW_E(val,X);		\
+++  } while (0)
+++
+++#define FP_PACK_EP(val,X)		\
+++  do {					\
+++    _FP_PACK_CANONICAL(E,4,X);		\
+++    FP_PACK_RAW_EP(val,X);		\
+++  } while (0)
+++
+++#define FP_PACK_SEMIRAW_E(val,X)	\
+++  do {					\
+++    _FP_PACK_SEMIRAW(E,4,X);		\
+++    FP_PACK_RAW_E(val,X);		\
+++  } while (0)
+++
+++#define FP_PACK_SEMIRAW_EP(val,X)	\
+++  do {					\
+++    _FP_PACK_SEMIRAW(E,4,X);		\
+++    FP_PACK_RAW_EP(val,X);		\
+++  } while (0)
+++
+++#define FP_ISSIGNAN_E(X)	_FP_ISSIGNAN(E,4,X)
+++#define FP_NEG_E(R,X)		_FP_NEG(E,4,R,X)
+++#define FP_ADD_E(R,X,Y)		_FP_ADD(E,4,R,X,Y)
+++#define FP_SUB_E(R,X,Y)		_FP_SUB(E,4,R,X,Y)
+++#define FP_MUL_E(R,X,Y)		_FP_MUL(E,4,R,X,Y)
+++#define FP_DIV_E(R,X,Y)		_FP_DIV(E,4,R,X,Y)
+++#define FP_SQRT_E(R,X)		_FP_SQRT(E,4,R,X)
+++
+++/*
+++ * Square root algorithms:
+++ * We have just one right now, maybe Newton approximation
+++ * should be added for those machines where division is fast.
+++ * This has special _E version because standard _4 square
+++ * root would not work (it has to start normally with the
+++ * second word and not the first), but as we have to do it
+++ * anyway, we optimize it by doing most of the calculations
+++ * in two UWtype registers instead of four.
+++ */
+++ 
+++#define _FP_SQRT_MEAT_E(R, S, T, X, q)			\
+++  do {							\
+++    q = (_FP_W_TYPE)1 << (_FP_W_TYPE_SIZE - 1);		\
+++    _FP_FRAC_SRL_4(X, (_FP_WORKBITS));			\
+++    while (q)						\
+++      {							\
+++	T##_f[1] = S##_f[1] + q;			\
+++	if (T##_f[1] <= X##_f[1])			\
+++	  {						\
+++	    S##_f[1] = T##_f[1] + q;			\
+++	    X##_f[1] -= T##_f[1];			\
+++	    R##_f[1] += q;				\
+++	  }						\
+++	_FP_FRAC_SLL_2(X, 1);				\
+++	q >>= 1;					\
+++      }							\
+++    q = (_FP_W_TYPE)1 << (_FP_W_TYPE_SIZE - 1);		\
+++    while (q)						\
+++      {							\
+++	T##_f[0] = S##_f[0] + q;			\
+++	T##_f[1] = S##_f[1];				\
+++	if (T##_f[1] < X##_f[1] || 			\
+++	    (T##_f[1] == X##_f[1] &&			\
+++	     T##_f[0] <= X##_f[0]))			\
+++	  {						\
+++	    S##_f[0] = T##_f[0] + q;			\
+++	    S##_f[1] += (T##_f[0] > S##_f[0]);		\
+++	    _FP_FRAC_DEC_2(X, T);			\
+++	    R##_f[0] += q;				\
+++	  }						\
+++	_FP_FRAC_SLL_2(X, 1);				\
+++	q >>= 1;					\
+++      }							\
+++    _FP_FRAC_SLL_4(R, (_FP_WORKBITS));			\
+++    if (X##_f[0] | X##_f[1])				\
+++      {							\
+++	if (S##_f[1] < X##_f[1] || 			\
+++	    (S##_f[1] == X##_f[1] &&			\
+++	     S##_f[0] < X##_f[0]))			\
+++	  R##_f[0] |= _FP_WORK_ROUND;			\
+++	R##_f[0] |= _FP_WORK_STICKY;			\
+++      }							\
+++  } while (0)
+++
+++#define FP_CMP_E(r,X,Y,un)	_FP_CMP(E,4,r,X,Y,un)
+++#define FP_CMP_EQ_E(r,X,Y)	_FP_CMP_EQ(E,4,r,X,Y)
+++#define FP_CMP_UNORD_E(r,X,Y)	_FP_CMP_UNORD(E,4,r,X,Y)
+++
+++#define FP_TO_INT_E(r,X,rsz,rsg)	_FP_TO_INT(E,4,r,X,rsz,rsg)
+++#define FP_FROM_INT_E(X,r,rs,rt)	_FP_FROM_INT(E,4,X,r,rs,rt)
+++
+++#define _FP_FRAC_HIGH_E(X)	(X##_f[2])
+++#define _FP_FRAC_HIGH_RAW_E(X)	(X##_f[1])
+++
+++#else   /* not _FP_W_TYPE_SIZE < 64 */
+++union _FP_UNION_E
+++{
+++  XFtype flt;
+++  struct {
+++#if __BYTE_ORDER == __BIG_ENDIAN
+++    _FP_W_TYPE pad  : (_FP_W_TYPE_SIZE - 1 - _FP_EXPBITS_E);
+++    unsigned sign   : 1;
+++    unsigned exp    : _FP_EXPBITS_E;
+++    _FP_W_TYPE frac : _FP_W_TYPE_SIZE;
+++#else
+++    _FP_W_TYPE frac : _FP_W_TYPE_SIZE;
+++    unsigned exp    : _FP_EXPBITS_E;
+++    unsigned sign   : 1;
+++#endif
+++  } bits;
+++};
+++
+++#define FP_DECL_E(X)		_FP_DECL(2,X)
+++
+++#define FP_UNPACK_RAW_E(X, val)					\
+++  do {								\
+++    union _FP_UNION_E _flo; _flo.flt = (val);			\
+++								\
+++    X##_f0 = _flo.bits.frac;					\
+++    X##_f1 = 0;							\
+++    X##_e = _flo.bits.exp;					\
+++    X##_s = _flo.bits.sign;					\
+++  } while (0)
+++
+++#define FP_UNPACK_RAW_EP(X, val)				\
+++  do {								\
+++    union _FP_UNION_E *_flo =					\
+++      (union _FP_UNION_E *)(val);				\
+++								\
+++    X##_f0 = _flo->bits.frac;					\
+++    X##_f1 = 0;							\
+++    X##_e = _flo->bits.exp;					\
+++    X##_s = _flo->bits.sign;					\
+++  } while (0)
+++
+++#define FP_PACK_RAW_E(val, X)					\
+++  do {								\
+++    union _FP_UNION_E _flo;					\
+++								\
+++    if (X##_e) X##_f0 |= _FP_IMPLBIT_E;				\
+++    else X##_f0 &= ~(_FP_IMPLBIT_E);				\
+++    _flo.bits.frac = X##_f0;					\
+++    _flo.bits.exp  = X##_e;					\
+++    _flo.bits.sign = X##_s;					\
+++								\
+++    (val) = _flo.flt;						\
+++  } while (0)
+++
+++#define FP_PACK_RAW_EP(fs, val, X)				\
+++  do {								\
+++    if (!FP_INHIBIT_RESULTS)					\
+++      {								\
+++	union _FP_UNION_E *_flo =				\
+++	  (union _FP_UNION_E *)(val);				\
+++								\
+++	if (X##_e) X##_f0 |= _FP_IMPLBIT_E;			\
+++	else X##_f0 &= ~(_FP_IMPLBIT_E);			\
+++	_flo->bits.frac = X##_f0;				\
+++	_flo->bits.exp  = X##_e;				\
+++	_flo->bits.sign = X##_s;				\
+++      }								\
+++  } while (0)
+++
+++
+++#define FP_UNPACK_E(X,val)		\
+++  do {					\
+++    FP_UNPACK_RAW_E(X,val);		\
+++    _FP_UNPACK_CANONICAL(E,2,X);	\
+++  } while (0)
+++
+++#define FP_UNPACK_EP(X,val)		\
+++  do {					\
+++    FP_UNPACK_RAW_EP(X,val);		\
+++    _FP_UNPACK_CANONICAL(E,2,X);	\
+++  } while (0)
+++
+++#define FP_UNPACK_SEMIRAW_E(X,val)	\
+++  do {					\
+++    FP_UNPACK_RAW_E(X,val);		\
+++    _FP_UNPACK_SEMIRAW(E,2,X);		\
+++  } while (0)
+++
+++#define FP_UNPACK_SEMIRAW_EP(X,val)	\
+++  do {					\
+++    FP_UNPACK_RAW_EP(X,val);		\
+++    _FP_UNPACK_SEMIRAW(E,2,X);		\
+++  } while (0)
+++
+++#define FP_PACK_E(val,X)		\
+++  do {					\
+++    _FP_PACK_CANONICAL(E,2,X);		\
+++    FP_PACK_RAW_E(val,X);		\
+++  } while (0)
+++
+++#define FP_PACK_EP(val,X)		\
+++  do {					\
+++    _FP_PACK_CANONICAL(E,2,X);		\
+++    FP_PACK_RAW_EP(val,X);		\
+++  } while (0)
+++
+++#define FP_PACK_SEMIRAW_E(val,X)	\
+++  do {					\
+++    _FP_PACK_SEMIRAW(E,2,X);		\
+++    FP_PACK_RAW_E(val,X);		\
+++  } while (0)
+++
+++#define FP_PACK_SEMIRAW_EP(val,X)	\
+++  do {					\
+++    _FP_PACK_SEMIRAW(E,2,X);		\
+++    FP_PACK_RAW_EP(val,X);		\
+++  } while (0)
+++
+++#define FP_ISSIGNAN_E(X)	_FP_ISSIGNAN(E,2,X)
+++#define FP_NEG_E(R,X)		_FP_NEG(E,2,R,X)
+++#define FP_ADD_E(R,X,Y)		_FP_ADD(E,2,R,X,Y)
+++#define FP_SUB_E(R,X,Y)		_FP_SUB(E,2,R,X,Y)
+++#define FP_MUL_E(R,X,Y)		_FP_MUL(E,2,R,X,Y)
+++#define FP_DIV_E(R,X,Y)		_FP_DIV(E,2,R,X,Y)
+++#define FP_SQRT_E(R,X)		_FP_SQRT(E,2,R,X)
+++
+++/*
+++ * Square root algorithms:
+++ * We have just one right now, maybe Newton approximation
+++ * should be added for those machines where division is fast.
+++ * We optimize it by doing most of the calculations
+++ * in one UWtype registers instead of two, although we don't
+++ * have to.
+++ */
+++#define _FP_SQRT_MEAT_E(R, S, T, X, q)			\
+++  do {							\
+++    q = (_FP_W_TYPE)1 << (_FP_W_TYPE_SIZE - 1);		\
+++    _FP_FRAC_SRL_2(X, (_FP_WORKBITS));			\
+++    while (q)						\
+++      {							\
+++        T##_f0 = S##_f0 + q;				\
+++        if (T##_f0 <= X##_f0)				\
+++          {						\
+++            S##_f0 = T##_f0 + q;			\
+++            X##_f0 -= T##_f0;				\
+++            R##_f0 += q;				\
+++          }						\
+++        _FP_FRAC_SLL_1(X, 1);				\
+++        q >>= 1;					\
+++      }							\
+++    _FP_FRAC_SLL_2(R, (_FP_WORKBITS));			\
+++    if (X##_f0)						\
+++      {							\
+++	if (S##_f0 < X##_f0)				\
+++	  R##_f0 |= _FP_WORK_ROUND;			\
+++	R##_f0 |= _FP_WORK_STICKY;			\
+++      }							\
+++  } while (0)
+++ 
+++#define FP_CMP_E(r,X,Y,un)	_FP_CMP(E,2,r,X,Y,un)
+++#define FP_CMP_EQ_E(r,X,Y)	_FP_CMP_EQ(E,2,r,X,Y)
+++#define FP_CMP_UNORD_E(r,X,Y)	_FP_CMP_UNORD(E,2,r,X,Y)
+++
+++#define FP_TO_INT_E(r,X,rsz,rsg)	_FP_TO_INT(E,2,r,X,rsz,rsg)
+++#define FP_FROM_INT_E(X,r,rs,rt)	_FP_FROM_INT(E,2,X,r,rs,rt)
+++
+++#define _FP_FRAC_HIGH_E(X)	(X##_f1)
+++#define _FP_FRAC_HIGH_RAW_E(X)	(X##_f0)
+++
+++#endif /* not _FP_W_TYPE_SIZE < 64 */
++diff -Naur uClibc-0.9.31.ori/libc/sysdeps/linux/sparc/soft-fp/longlong.h uClibc-0.9.31/libc/sysdeps/linux/sparc/soft-fp/longlong.h
++--- uClibc-0.9.31.ori/libc/sysdeps/linux/sparc/soft-fp/longlong.h	1970-01-01 01:00:00.000000000 +0100
+++++ uClibc-0.9.31/libc/sysdeps/linux/sparc/soft-fp/longlong.h	2010-10-14 14:05:37.000000000 +0200
++@@ -0,0 +1,1461 @@
+++/* longlong.h -- definitions for mixed size 32/64 bit arithmetic.
+++   Copyright (C) 1991, 1992, 1994, 1995, 1996, 1997, 1998, 1999, 2000,
+++   2002, 2003, 2004, 2005, 2006 Free Software Foundation, Inc.
+++
+++   This file is part of the GNU C Library.
+++
+++   The GNU C Library is free software; you can redistribute it and/or
+++   modify it under the terms of the GNU Lesser General Public
+++   License as published by the Free Software Foundation; either
+++   version 2.1 of the License, or (at your option) any later version.
+++
+++   The GNU C Library is distributed in the hope that it will be useful,
+++   but WITHOUT ANY WARRANTY; without even the implied warranty of
+++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+++   Lesser General Public License for more details.
+++
+++   You should have received a copy of the GNU Lesser General Public
+++   License along with the GNU C Library; if not, write to the Free
+++   Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+++   02111-1307 USA.  */
+++
+++/* You have to define the following before including this file:
+++
+++   UWtype -- An unsigned type, default type for operations (typically a "word")
+++   UHWtype -- An unsigned type, at least half the size of UWtype.
+++   UDWtype -- An unsigned type,@least twice as large a UWtype
+++   W_TYPE_SIZE -- size in bits of UWtype
+++
+++   UQItype -- Unsigned 8 bit type.
+++   SItype, USItype -- Signed and unsigned 32 bit types.
+++   DItype, UDItype -- Signed and unsigned 64 bit types.
+++
+++   On a 32 bit machine UWtype should typically be USItype;
+++   on a 64 bit machine, UWtype should typically be UDItype.  */
+++
+++#define __BITS4 (W_TYPE_SIZE / 4)
+++#define __ll_B ((UWtype) 1 << (W_TYPE_SIZE / 2))
+++#define __ll_lowpart(t) ((UWtype) (t) & (__ll_B - 1))
+++#define __ll_highpart(t) ((UWtype) (t) >> (W_TYPE_SIZE / 2))
+++
+++#ifndef W_TYPE_SIZE
+++#define W_TYPE_SIZE	32
+++#define UWtype		USItype
+++#define UHWtype		USItype
+++#define UDWtype		UDItype
+++#endif
+++
+++extern const UQItype __clz_tab[256] attribute_hidden;
+++
+++/* Define auxiliary asm macros.
+++
+++   1) umul_ppmm(high_prod, low_prod, multiplier, multiplicand) multiplies two
+++   UWtype integers MULTIPLIER and MULTIPLICAND, and generates a two UWtype
+++   word product in HIGH_PROD and LOW_PROD.
+++
+++   2) __umulsidi3(a,b) multiplies two UWtype integers A and B, and returns a
+++   UDWtype product.  This is just a variant of umul_ppmm.
+++
+++   3) udiv_qrnnd(quotient, remainder, high_numerator, low_numerator,
+++   denominator) divides a UDWtype, composed by the UWtype integers
+++   HIGH_NUMERATOR and LOW_NUMERATOR, by DENOMINATOR and places the quotient
+++   in QUOTIENT and the remainder in REMAINDER.  HIGH_NUMERATOR must be less
+++   than DENOMINATOR for correct operation.  If, in addition, the most
+++   significant bit of DENOMINATOR must be 1, then the pre-processor symbol
+++   UDIV_NEEDS_NORMALIZATION is defined to 1.
+++
+++   4) sdiv_qrnnd(quotient, remainder, high_numerator, low_numerator,
+++   denominator).  Like udiv_qrnnd but the numbers are signed.  The quotient
+++   is rounded towards 0.
+++
+++   5) count_leading_zeros(count, x) counts the number of zero-bits from the
+++   msb to the first nonzero bit in the UWtype X.  This is the number of
+++   steps X needs to be shifted left to set the msb.  Undefined for X == 0,
+++   unless the symbol COUNT_LEADING_ZEROS_0 is defined to some value.
+++
+++   6) count_trailing_zeros(count, x) like count_leading_zeros, but counts
+++   from the least significant end.
+++
+++   7) add_ssaaaa(high_sum, low_sum, high_addend_1, low_addend_1,
+++   high_addend_2, low_addend_2) adds two UWtype integers, composed by
+++   HIGH_ADDEND_1 and LOW_ADDEND_1, and HIGH_ADDEND_2 and LOW_ADDEND_2
+++   respectively.  The result is placed in HIGH_SUM and LOW_SUM.  Overflow
+++   (i.e. carry out) is not stored anywhere, and is lost.
+++
+++   8) sub_ddmmss(high_difference, low_difference, high_minuend, low_minuend,
+++   high_subtrahend, low_subtrahend) subtracts two two-word UWtype integers,
+++   composed by HIGH_MINUEND_1 and LOW_MINUEND_1, and HIGH_SUBTRAHEND_2 and
+++   LOW_SUBTRAHEND_2 respectively.  The result is placed in HIGH_DIFFERENCE
+++   and LOW_DIFFERENCE.  Overflow (i.e. carry out) is not stored anywhere,
+++   and is lost.
+++
+++   If any of these macros are left undefined for a particular CPU,
+++   C macros are used.  */
+++
+++/* The CPUs come in alphabetical order below.
+++
+++   Please add support for more CPUs here, or improve the current support
+++   for the CPUs below!
+++   (E.g. WE32100, IBM360.)  */
+++
+++#if defined (__GNUC__) && !defined (NO_ASM)
+++
+++/* We sometimes need to clobber "cc" with gcc2, but that would not be
+++   understood by gcc1.  Use cpp to avoid major code duplication.  */
+++#if __GNUC__ < 2
+++#define __CLOBBER_CC
+++#define __AND_CLOBBER_CC
+++#else /* __GNUC__ >= 2 */
+++#define __CLOBBER_CC : "cc"
+++#define __AND_CLOBBER_CC , "cc"
+++#endif /* __GNUC__ < 2 */
+++
+++#if defined (__alpha) && W_TYPE_SIZE == 64
+++#define umul_ppmm(ph, pl, m0, m1) \
+++  do {									\
+++    UDItype __m0 = (m0), __m1 = (m1);					\
+++    (ph) = __builtin_alpha_umulh (__m0, __m1);				\
+++    (pl) = __m0 * __m1;							\
+++  } while (0)
+++#define UMUL_TIME 46
+++#ifndef LONGLONG_STANDALONE
+++#define udiv_qrnnd(q, r, n1, n0, d) \
+++  do { UDItype __r;							\
+++    (q) = __udiv_qrnnd (&__r, (n1), (n0), (d));				\
+++    (r) = __r;								\
+++  } while (0)
+++extern UDItype __udiv_qrnnd (UDItype *, UDItype, UDItype, UDItype);
+++#define UDIV_TIME 220
+++#endif /* LONGLONG_STANDALONE */
+++#ifdef __alpha_cix__
+++#define count_leading_zeros(COUNT,X)	((COUNT) = __builtin_clzl (X))
+++#define count_trailing_zeros(COUNT,X)	((COUNT) = __builtin_ctzl (X))
+++#define COUNT_LEADING_ZEROS_0 64
+++#else
+++#define count_leading_zeros(COUNT,X) \
+++  do {									\
+++    UDItype __xr = (X), __t, __a;					\
+++    __t = __builtin_alpha_cmpbge (0, __xr);				\
+++    __a = __clz_tab[__t ^ 0xff] - 1;					\
+++    __t = __builtin_alpha_extbl (__xr, __a);				\
+++    (COUNT) = 64 - (__clz_tab[__t] + __a*8);				\
+++  } while (0)
+++#define count_trailing_zeros(COUNT,X) \
+++  do {									\
+++    UDItype __xr = (X), __t, __a;					\
+++    __t = __builtin_alpha_cmpbge (0, __xr);				\
+++    __t = ~__t & -~__t;							\
+++    __a = ((__t & 0xCC) != 0) * 2;					\
+++    __a += ((__t & 0xF0) != 0) * 4;					\
+++    __a += ((__t & 0xAA) != 0);						\
+++    __t = __builtin_alpha_extbl (__xr, __a);				\
+++    __a <<= 3;								\
+++    __t &= -__t;							\
+++    __a += ((__t & 0xCC) != 0) * 2;					\
+++    __a += ((__t & 0xF0) != 0) * 4;					\
+++    __a += ((__t & 0xAA) != 0);						\
+++    (COUNT) = __a;							\
+++  } while (0)
+++#endif /* __alpha_cix__ */
+++#endif /* __alpha */
+++
+++#if defined (__arc__) && W_TYPE_SIZE == 32
+++#define add_ssaaaa(sh, sl, ah, al, bh, bl) \
+++  __asm__ ("add.f	%1, %4, %5\n\tadc	%0, %2, %3"		\
+++	   : "=r" ((USItype) (sh)),					\
+++	     "=&r" ((USItype) (sl))					\
+++	   : "%r" ((USItype) (ah)),					\
+++	     "rIJ" ((USItype) (bh)),					\
+++	     "%r" ((USItype) (al)),					\
+++	     "rIJ" ((USItype) (bl)))
+++#define sub_ddmmss(sh, sl, ah, al, bh, bl) \
+++  __asm__ ("sub.f	%1, %4, %5\n\tsbc	%0, %2, %3"		\
+++	   : "=r" ((USItype) (sh)),					\
+++	     "=&r" ((USItype) (sl))					\
+++	   : "r" ((USItype) (ah)),					\
+++	     "rIJ" ((USItype) (bh)),					\
+++	     "r" ((USItype) (al)),					\
+++	     "rIJ" ((USItype) (bl)))
+++/* Call libgcc routine.  */
+++#define umul_ppmm(w1, w0, u, v) \
+++do {									\
+++  DWunion __w;								\
+++  __w.ll = __umulsidi3 (u, v);						\
+++  w1 = __w.s.high;							\
+++  w0 = __w.s.low;							\
+++} while (0)
+++#define __umulsidi3 __umulsidi3
+++UDItype __umulsidi3 (USItype, USItype);
+++#endif
+++
+++#if defined (__arm__) && !defined (__thumb__) && W_TYPE_SIZE == 32
+++#define add_ssaaaa(sh, sl, ah, al, bh, bl) \
+++  __asm__ ("adds	%1, %4, %5\n\tadc	%0, %2, %3"		\
+++	   : "=r" ((USItype) (sh)),					\
+++	     "=&r" ((USItype) (sl))					\
+++	   : "%r" ((USItype) (ah)),					\
+++	     "rI" ((USItype) (bh)),					\
+++	     "%r" ((USItype) (al)),					\
+++	     "rI" ((USItype) (bl)) __CLOBBER_CC)
+++#define sub_ddmmss(sh, sl, ah, al, bh, bl) \
+++  __asm__ ("subs	%1, %4, %5\n\tsbc	%0, %2, %3"		\
+++	   : "=r" ((USItype) (sh)),					\
+++	     "=&r" ((USItype) (sl))					\
+++	   : "r" ((USItype) (ah)),					\
+++	     "rI" ((USItype) (bh)),					\
+++	     "r" ((USItype) (al)),					\
+++	     "rI" ((USItype) (bl)) __CLOBBER_CC)
+++#define umul_ppmm(xh, xl, a, b) \
+++{register USItype __t0, __t1, __t2;					\
+++  __asm__ ("%@ Inlined umul_ppmm\n"					\
+++	   "	mov	%2, %5, lsr #16\n"				\
+++	   "	mov	%0, %6, lsr #16\n"				\
+++	   "	bic	%3, %5, %2, lsl #16\n"				\
+++	   "	bic	%4, %6, %0, lsl #16\n"				\
+++	   "	mul	%1, %3, %4\n"					\
+++	   "	mul	%4, %2, %4\n"					\
+++	   "	mul	%3, %0, %3\n"					\
+++	   "	mul	%0, %2, %0\n"					\
+++	   "	adds	%3, %4, %3\n"					\
+++	   "	addcs	%0, %0, #65536\n"				\
+++	   "	adds	%1, %1, %3, lsl #16\n"				\
+++	   "	adc	%0, %0, %3, lsr #16"				\
+++	   : "=&r" ((USItype) (xh)),					\
+++	     "=r" ((USItype) (xl)),					\
+++	     "=&r" (__t0), "=&r" (__t1), "=r" (__t2)			\
+++	   : "r" ((USItype) (a)),					\
+++	     "r" ((USItype) (b)) __CLOBBER_CC );}
+++#define UMUL_TIME 20
+++#define UDIV_TIME 100
+++#endif /* __arm__ */
+++
+++#if defined(__arm__)
+++/* Let gcc decide how best to implement count_leading_zeros.  */
+++#define count_leading_zeros(COUNT,X)	((COUNT) = __builtin_clz (X))
+++#define COUNT_LEADING_ZEROS_0 32
+++#endif
+++
+++#if defined (__CRIS__) && __CRIS_arch_version >= 3
+++#define count_leading_zeros(COUNT, X) ((COUNT) = __builtin_clz (X))
+++#if __CRIS_arch_version >= 8
+++#define count_trailing_zeros(COUNT, X) ((COUNT) = __builtin_ctz (X))
+++#endif
+++#endif /* __CRIS__ */
+++
+++#if defined (__hppa) && W_TYPE_SIZE == 32
+++#define add_ssaaaa(sh, sl, ah, al, bh, bl) \
+++  __asm__ ("add %4,%5,%1\n\taddc %2,%3,%0"				\
+++	   : "=r" ((USItype) (sh)),					\
+++	     "=&r" ((USItype) (sl))					\
+++	   : "%rM" ((USItype) (ah)),					\
+++	     "rM" ((USItype) (bh)),					\
+++	     "%rM" ((USItype) (al)),					\
+++	     "rM" ((USItype) (bl)))
+++#define sub_ddmmss(sh, sl, ah, al, bh, bl) \
+++  __asm__ ("sub %4,%5,%1\n\tsubb %2,%3,%0"				\
+++	   : "=r" ((USItype) (sh)),					\
+++	     "=&r" ((USItype) (sl))					\
+++	   : "rM" ((USItype) (ah)),					\
+++	     "rM" ((USItype) (bh)),					\
+++	     "rM" ((USItype) (al)),					\
+++	     "rM" ((USItype) (bl)))
+++#if defined (_PA_RISC1_1)
+++#define umul_ppmm(w1, w0, u, v) \
+++  do {									\
+++    union								\
+++      {									\
+++	UDItype __f;							\
+++	struct {USItype __w1, __w0;} __w1w0;				\
+++      } __t;								\
+++    __asm__ ("xmpyu %1,%2,%0"						\
+++	     : "=x" (__t.__f)						\
+++	     : "x" ((USItype) (u)),					\
+++	       "x" ((USItype) (v)));					\
+++    (w1) = __t.__w1w0.__w1;						\
+++    (w0) = __t.__w1w0.__w0;						\
+++     } while (0)
+++#define UMUL_TIME 8
+++#else
+++#define UMUL_TIME 30
+++#endif
+++#define UDIV_TIME 40
+++#define count_leading_zeros(count, x) \
+++  do {									\
+++    USItype __tmp;							\
+++    __asm__ (								\
+++       "ldi		1,%0\n"						\
+++"	extru,=		%1,15,16,%%r0		; Bits 31..16 zero?\n"	\
+++"	extru,tr	%1,15,16,%1		; No.  Shift down, skip add.\n"\
+++"	ldo		16(%0),%0		; Yes.  Perform add.\n"	\
+++"	extru,=		%1,23,8,%%r0		; Bits 15..8 zero?\n"	\
+++"	extru,tr	%1,23,8,%1		; No.  Shift down, skip add.\n"\
+++"	ldo		8(%0),%0		; Yes.  Perform add.\n"	\
+++"	extru,=		%1,27,4,%%r0		; Bits 7..4 zero?\n"	\
+++"	extru,tr	%1,27,4,%1		; No.  Shift down, skip add.\n"\
+++"	ldo		4(%0),%0		; Yes.  Perform add.\n"	\
+++"	extru,=		%1,29,2,%%r0		; Bits 3..2 zero?\n"	\
+++"	extru,tr	%1,29,2,%1		; No.  Shift down, skip add.\n"\
+++"	ldo		2(%0),%0		; Yes.  Perform add.\n"	\
+++"	extru		%1,30,1,%1		; Extract bit 1.\n"	\
+++"	sub		%0,%1,%0		; Subtract it.\n"	\
+++	: "=r" (count), "=r" (__tmp) : "1" (x));			\
+++  } while (0)
+++#endif
+++
+++#if (defined (__i370__) || defined (__s390__) || defined (__mvs__)) && W_TYPE_SIZE == 32
+++#define smul_ppmm(xh, xl, m0, m1) \
+++  do {									\
+++    union {DItype __ll;							\
+++	   struct {USItype __h, __l;} __i;				\
+++	  } __x;							\
+++    __asm__ ("lr %N0,%1\n\tmr %0,%2"					\
+++	     : "=&r" (__x.__ll)						\
+++	     : "r" (m0), "r" (m1));					\
+++    (xh) = __x.__i.__h; (xl) = __x.__i.__l;				\
+++  } while (0)
+++#define sdiv_qrnnd(q, r, n1, n0, d) \
+++  do {									\
+++    union {DItype __ll;							\
+++	   struct {USItype __h, __l;} __i;				\
+++	  } __x;							\
+++    __x.__i.__h = n1; __x.__i.__l = n0;					\
+++    __asm__ ("dr %0,%2"							\
+++	     : "=r" (__x.__ll)						\
+++	     : "0" (__x.__ll), "r" (d));				\
+++    (q) = __x.__i.__l; (r) = __x.__i.__h;				\
+++  } while (0)
+++#endif
+++
+++#if (defined (__i386__) || defined (__i486__)) && W_TYPE_SIZE == 32
+++#define add_ssaaaa(sh, sl, ah, al, bh, bl) \
+++  __asm__ ("add{l} {%5,%1|%1,%5}\n\tadc{l} {%3,%0|%0,%3}"		\
+++	   : "=r" ((USItype) (sh)),					\
+++	     "=&r" ((USItype) (sl))					\
+++	   : "%0" ((USItype) (ah)),					\
+++	     "g" ((USItype) (bh)),					\
+++	     "%1" ((USItype) (al)),					\
+++	     "g" ((USItype) (bl)))
+++#define sub_ddmmss(sh, sl, ah, al, bh, bl) \
+++  __asm__ ("sub{l} {%5,%1|%1,%5}\n\tsbb{l} {%3,%0|%0,%3}"		\
+++	   : "=r" ((USItype) (sh)),					\
+++	     "=&r" ((USItype) (sl))					\
+++	   : "0" ((USItype) (ah)),					\
+++	     "g" ((USItype) (bh)),					\
+++	     "1" ((USItype) (al)),					\
+++	     "g" ((USItype) (bl)))
+++#define umul_ppmm(w1, w0, u, v) \
+++  __asm__ ("mul{l} %3"							\
+++	   : "=a" ((USItype) (w0)),					\
+++	     "=d" ((USItype) (w1))					\
+++	   : "%0" ((USItype) (u)),					\
+++	     "rm" ((USItype) (v)))
+++#define udiv_qrnnd(q, r, n1, n0, dv) \
+++  __asm__ ("div{l} %4"							\
+++	   : "=a" ((USItype) (q)),					\
+++	     "=d" ((USItype) (r))					\
+++	   : "0" ((USItype) (n0)),					\
+++	     "1" ((USItype) (n1)),					\
+++	     "rm" ((USItype) (dv)))
+++#define count_leading_zeros(count, x)	((count) = __builtin_clz (x))
+++#define count_trailing_zeros(count, x)	((count) = __builtin_ctz (x))
+++#define UMUL_TIME 40
+++#define UDIV_TIME 40
+++#endif /* 80x86 */
+++
+++#if (defined (__x86_64__) || defined (__i386__)) && W_TYPE_SIZE == 64
+++#define add_ssaaaa(sh, sl, ah, al, bh, bl) \
+++  __asm__ ("add{q} {%5,%1|%1,%5}\n\tadc{q} {%3,%0|%0,%3}"		\
+++	   : "=r" ((UDItype) (sh)),					\
+++	     "=&r" ((UDItype) (sl))					\
+++	   : "%0" ((UDItype) (ah)),					\
+++	     "rme" ((UDItype) (bh)),					\
+++	     "%1" ((UDItype) (al)),					\
+++	     "rme" ((UDItype) (bl)))
+++#define sub_ddmmss(sh, sl, ah, al, bh, bl) \
+++  __asm__ ("sub{q} {%5,%1|%1,%5}\n\tsbb{q} {%3,%0|%0,%3}"		\
+++	   : "=r" ((UDItype) (sh)),					\
+++	     "=&r" ((UDItype) (sl))					\
+++	   : "0" ((UDItype) (ah)),					\
+++	     "rme" ((UDItype) (bh)),					\
+++	     "1" ((UDItype) (al)),					\
+++	     "rme" ((UDItype) (bl)))
+++#define umul_ppmm(w1, w0, u, v) \
+++  __asm__ ("mul{q} %3"							\
+++	   : "=a" ((UDItype) (w0)),					\
+++	     "=d" ((UDItype) (w1))					\
+++	   : "%0" ((UDItype) (u)),					\
+++	     "rm" ((UDItype) (v)))
+++#define udiv_qrnnd(q, r, n1, n0, dv) \
+++  __asm__ ("div{q} %4"							\
+++	   : "=a" ((UDItype) (q)),					\
+++	     "=d" ((UDItype) (r))					\
+++	   : "0" ((UDItype) (n0)),					\
+++	     "1" ((UDItype) (n1)),					\
+++	     "rm" ((UDItype) (dv)))
+++#define count_leading_zeros(count, x)	((count) = __builtin_clzl (x))
+++#define count_trailing_zeros(count, x)	((count) = __builtin_ctzl (x))
+++#define UMUL_TIME 40
+++#define UDIV_TIME 40
+++#endif /* x86_64 */
+++
+++#if defined (__i960__) && W_TYPE_SIZE == 32
+++#define umul_ppmm(w1, w0, u, v) \
+++  ({union {UDItype __ll;						\
+++	   struct {USItype __l, __h;} __i;				\
+++	  } __xx;							\
+++  __asm__ ("emul	%2,%1,%0"					\
+++	   : "=d" (__xx.__ll)						\
+++	   : "%dI" ((USItype) (u)),					\
+++	     "dI" ((USItype) (v)));					\
+++  (w1) = __xx.__i.__h; (w0) = __xx.__i.__l;})
+++#define __umulsidi3(u, v) \
+++  ({UDItype __w;							\
+++    __asm__ ("emul	%2,%1,%0"					\
+++	     : "=d" (__w)						\
+++	     : "%dI" ((USItype) (u)),					\
+++	       "dI" ((USItype) (v)));					\
+++    __w; })
+++#endif /* __i960__ */
+++
+++#if defined (__M32R__) && W_TYPE_SIZE == 32
+++#define add_ssaaaa(sh, sl, ah, al, bh, bl) \
+++  /* The cmp clears the condition bit.  */ \
+++  __asm__ ("cmp %0,%0\n\taddx %1,%5\n\taddx %0,%3"			\
+++	   : "=r" ((USItype) (sh)),					\
+++	     "=&r" ((USItype) (sl))					\
+++	   : "0" ((USItype) (ah)),					\
+++	     "r" ((USItype) (bh)),					\
+++	     "1" ((USItype) (al)),					\
+++	     "r" ((USItype) (bl))					\
+++	   : "cbit")
+++#define sub_ddmmss(sh, sl, ah, al, bh, bl) \
+++  /* The cmp clears the condition bit.  */ \
+++  __asm__ ("cmp %0,%0\n\tsubx %1,%5\n\tsubx %0,%3"			\
+++	   : "=r" ((USItype) (sh)),					\
+++	     "=&r" ((USItype) (sl))					\
+++	   : "0" ((USItype) (ah)),					\
+++	     "r" ((USItype) (bh)),					\
+++	     "1" ((USItype) (al)),					\
+++	     "r" ((USItype) (bl))					\
+++	   : "cbit")
+++#endif /* __M32R__ */
+++
+++#if defined (__mc68000__) && W_TYPE_SIZE == 32
+++#define add_ssaaaa(sh, sl, ah, al, bh, bl) \
+++  __asm__ ("add%.l %5,%1\n\taddx%.l %3,%0"				\
+++	   : "=d" ((USItype) (sh)),					\
+++	     "=&d" ((USItype) (sl))					\
+++	   : "%0" ((USItype) (ah)),					\
+++	     "d" ((USItype) (bh)),					\
+++	     "%1" ((USItype) (al)),					\
+++	     "g" ((USItype) (bl)))
+++#define sub_ddmmss(sh, sl, ah, al, bh, bl) \
+++  __asm__ ("sub%.l %5,%1\n\tsubx%.l %3,%0"				\
+++	   : "=d" ((USItype) (sh)),					\
+++	     "=&d" ((USItype) (sl))					\
+++	   : "0" ((USItype) (ah)),					\
+++	     "d" ((USItype) (bh)),					\
+++	     "1" ((USItype) (al)),					\
+++	     "g" ((USItype) (bl)))
+++
+++/* The '020, '030, '040, '060 and CPU32 have 32x32->64 and 64/32->32q-32r.  */
+++#if (defined (__mc68020__) && !defined (__mc68060__))
+++#define umul_ppmm(w1, w0, u, v) \
+++  __asm__ ("mulu%.l %3,%1:%0"						\
+++	   : "=d" ((USItype) (w0)),					\
+++	     "=d" ((USItype) (w1))					\
+++	   : "%0" ((USItype) (u)),					\
+++	     "dmi" ((USItype) (v)))
+++#define UMUL_TIME 45
+++#define udiv_qrnnd(q, r, n1, n0, d) \
+++  __asm__ ("divu%.l %4,%1:%0"						\
+++	   : "=d" ((USItype) (q)),					\
+++	     "=d" ((USItype) (r))					\
+++	   : "0" ((USItype) (n0)),					\
+++	     "1" ((USItype) (n1)),					\
+++	     "dmi" ((USItype) (d)))
+++#define UDIV_TIME 90
+++#define sdiv_qrnnd(q, r, n1, n0, d) \
+++  __asm__ ("divs%.l %4,%1:%0"						\
+++	   : "=d" ((USItype) (q)),					\
+++	     "=d" ((USItype) (r))					\
+++	   : "0" ((USItype) (n0)),					\
+++	     "1" ((USItype) (n1)),					\
+++	     "dmi" ((USItype) (d)))
+++
+++#elif defined (__mcoldfire__) /* not mc68020 */
+++
+++#define umul_ppmm(xh, xl, a, b) \
+++  __asm__ ("| Inlined umul_ppmm\n"					\
+++	   "	move%.l	%2,%/d0\n"					\
+++	   "	move%.l	%3,%/d1\n"					\
+++	   "	move%.l	%/d0,%/d2\n"					\
+++	   "	swap	%/d0\n"						\
+++	   "	move%.l	%/d1,%/d3\n"					\
+++	   "	swap	%/d1\n"						\
+++	   "	move%.w	%/d2,%/d4\n"					\
+++	   "	mulu	%/d3,%/d4\n"					\
+++	   "	mulu	%/d1,%/d2\n"					\
+++	   "	mulu	%/d0,%/d3\n"					\
+++	   "	mulu	%/d0,%/d1\n"					\
+++	   "	move%.l	%/d4,%/d0\n"					\
+++	   "	clr%.w	%/d0\n"						\
+++	   "	swap	%/d0\n"						\
+++	   "	add%.l	%/d0,%/d2\n"					\
+++	   "	add%.l	%/d3,%/d2\n"					\
+++	   "	jcc	1f\n"						\
+++	   "	add%.l	%#65536,%/d1\n"					\
+++	   "1:	swap	%/d2\n"						\
+++	   "	moveq	%#0,%/d0\n"					\
+++	   "	move%.w	%/d2,%/d0\n"					\
+++	   "	move%.w	%/d4,%/d2\n"					\
+++	   "	move%.l	%/d2,%1\n"					\
+++	   "	add%.l	%/d1,%/d0\n"					\
+++	   "	move%.l	%/d0,%0"					\
+++	   : "=g" ((USItype) (xh)),					\
+++	     "=g" ((USItype) (xl))					\
+++	   : "g" ((USItype) (a)),					\
+++	     "g" ((USItype) (b))					\
+++	   : "d0", "d1", "d2", "d3", "d4")
+++#define UMUL_TIME 100
+++#define UDIV_TIME 400
+++#else /* not ColdFire */
+++/* %/ inserts REGISTER_PREFIX, %# inserts IMMEDIATE_PREFIX.  */
+++#define umul_ppmm(xh, xl, a, b) \
+++  __asm__ ("| Inlined umul_ppmm\n"					\
+++	   "	move%.l	%2,%/d0\n"					\
+++	   "	move%.l	%3,%/d1\n"					\
+++	   "	move%.l	%/d0,%/d2\n"					\
+++	   "	swap	%/d0\n"						\
+++	   "	move%.l	%/d1,%/d3\n"					\
+++	   "	swap	%/d1\n"						\
+++	   "	move%.w	%/d2,%/d4\n"					\
+++	   "	mulu	%/d3,%/d4\n"					\
+++	   "	mulu	%/d1,%/d2\n"					\
+++	   "	mulu	%/d0,%/d3\n"					\
+++	   "	mulu	%/d0,%/d1\n"					\
+++	   "	move%.l	%/d4,%/d0\n"					\
+++	   "	eor%.w	%/d0,%/d0\n"					\
+++	   "	swap	%/d0\n"						\
+++	   "	add%.l	%/d0,%/d2\n"					\
+++	   "	add%.l	%/d3,%/d2\n"					\
+++	   "	jcc	1f\n"						\
+++	   "	add%.l	%#65536,%/d1\n"					\
+++	   "1:	swap	%/d2\n"						\
+++	   "	moveq	%#0,%/d0\n"					\
+++	   "	move%.w	%/d2,%/d0\n"					\
+++	   "	move%.w	%/d4,%/d2\n"					\
+++	   "	move%.l	%/d2,%1\n"					\
+++	   "	add%.l	%/d1,%/d0\n"					\
+++	   "	move%.l	%/d0,%0"					\
+++	   : "=g" ((USItype) (xh)),					\
+++	     "=g" ((USItype) (xl))					\
+++	   : "g" ((USItype) (a)),					\
+++	     "g" ((USItype) (b))					\
+++	   : "d0", "d1", "d2", "d3", "d4")
+++#define UMUL_TIME 100
+++#define UDIV_TIME 400
+++
+++#endif /* not mc68020 */
+++
+++/* The '020, '030, '040 and '060 have bitfield insns.
+++   cpu32 disguises as a 68020, but lacks them.  */
+++#if defined (__mc68020__) && !defined (__mcpu32__)
+++#define count_leading_zeros(count, x) \
+++  __asm__ ("bfffo %1{%b2:%b2},%0"					\
+++	   : "=d" ((USItype) (count))					\
+++	   : "od" ((USItype) (x)), "n" (0))
+++/* Some ColdFire architectures have a ff1 instruction supported via
+++   __builtin_clz. */
+++#elif defined (__mcfisaaplus__) || defined (__mcfisac__)
+++#define count_leading_zeros(count,x) ((count) = __builtin_clz (x))
+++#define COUNT_LEADING_ZEROS_0 32
+++#endif
+++#endif /* mc68000 */
+++
+++#if defined (__m88000__) && W_TYPE_SIZE == 32
+++#define add_ssaaaa(sh, sl, ah, al, bh, bl) \
+++  __asm__ ("addu.co %1,%r4,%r5\n\taddu.ci %0,%r2,%r3"			\
+++	   : "=r" ((USItype) (sh)),					\
+++	     "=&r" ((USItype) (sl))					\
+++	   : "%rJ" ((USItype) (ah)),					\
+++	     "rJ" ((USItype) (bh)),					\
+++	     "%rJ" ((USItype) (al)),					\
+++	     "rJ" ((USItype) (bl)))
+++#define sub_ddmmss(sh, sl, ah, al, bh, bl) \
+++  __asm__ ("subu.co %1,%r4,%r5\n\tsubu.ci %0,%r2,%r3"			\
+++	   : "=r" ((USItype) (sh)),					\
+++	     "=&r" ((USItype) (sl))					\
+++	   : "rJ" ((USItype) (ah)),					\
+++	     "rJ" ((USItype) (bh)),					\
+++	     "rJ" ((USItype) (al)),					\
+++	     "rJ" ((USItype) (bl)))
+++#define count_leading_zeros(count, x) \
+++  do {									\
+++    USItype __cbtmp;							\
+++    __asm__ ("ff1 %0,%1"						\
+++	     : "=r" (__cbtmp)						\
+++	     : "r" ((USItype) (x)));					\
+++    (count) = __cbtmp ^ 31;						\
+++  } while (0)
+++#define COUNT_LEADING_ZEROS_0 63 /* sic */
+++#if defined (__mc88110__)
+++#define umul_ppmm(wh, wl, u, v) \
+++  do {									\
+++    union {UDItype __ll;						\
+++	   struct {USItype __h, __l;} __i;				\
+++	  } __xx;							\
+++    __asm__ ("mulu.d	%0,%1,%2"					\
+++	     : "=r" (__xx.__ll)						\
+++	     : "r" ((USItype) (u)),					\
+++	       "r" ((USItype) (v)));					\
+++    (wh) = __xx.__i.__h;						\
+++    (wl) = __xx.__i.__l;						\
+++  } while (0)
+++#define udiv_qrnnd(q, r, n1, n0, d) \
+++  ({union {UDItype __ll;						\
+++	   struct {USItype __h, __l;} __i;				\
+++	  } __xx;							\
+++  USItype __q;								\
+++  __xx.__i.__h = (n1); __xx.__i.__l = (n0);				\
+++  __asm__ ("divu.d %0,%1,%2"						\
+++	   : "=r" (__q)							\
+++	   : "r" (__xx.__ll),						\
+++	     "r" ((USItype) (d)));					\
+++  (r) = (n0) - __q * (d); (q) = __q; })
+++#define UMUL_TIME 5
+++#define UDIV_TIME 25
+++#else
+++#define UMUL_TIME 17
+++#define UDIV_TIME 150
+++#endif /* __mc88110__ */
+++#endif /* __m88000__ */
+++
+++#if defined (__mips__) && W_TYPE_SIZE == 32
+++#define umul_ppmm(w1, w0, u, v)						\
+++  do {									\
+++    UDItype __x = (UDItype) (USItype) (u) * (USItype) (v);		\
+++    (w1) = (USItype) (__x >> 32);					\
+++    (w0) = (USItype) (__x);						\
+++  } while (0)
+++#define UMUL_TIME 10
+++#define UDIV_TIME 100
+++
+++#if (__mips == 32 || __mips == 64) && ! __mips16
+++#define count_leading_zeros(COUNT,X)	((COUNT) = __builtin_clz (X))
+++#define COUNT_LEADING_ZEROS_0 32
+++#endif
+++#endif /* __mips__ */
+++
+++#if defined (__ns32000__) && W_TYPE_SIZE == 32
+++#define umul_ppmm(w1, w0, u, v) \
+++  ({union {UDItype __ll;						\
+++	   struct {USItype __l, __h;} __i;				\
+++	  } __xx;							\
+++  __asm__ ("meid %2,%0"							\
+++	   : "=g" (__xx.__ll)						\
+++	   : "%0" ((USItype) (u)),					\
+++	     "g" ((USItype) (v)));					\
+++  (w1) = __xx.__i.__h; (w0) = __xx.__i.__l;})
+++#define __umulsidi3(u, v) \
+++  ({UDItype __w;							\
+++    __asm__ ("meid %2,%0"						\
+++	     : "=g" (__w)						\
+++	     : "%0" ((USItype) (u)),					\
+++	       "g" ((USItype) (v)));					\
+++    __w; })
+++#define udiv_qrnnd(q, r, n1, n0, d) \
+++  ({union {UDItype __ll;						\
+++	   struct {USItype __l, __h;} __i;				\
+++	  } __xx;							\
+++  __xx.__i.__h = (n1); __xx.__i.__l = (n0);				\
+++  __asm__ ("deid %2,%0"							\
+++	   : "=g" (__xx.__ll)						\
+++	   : "0" (__xx.__ll),						\
+++	     "g" ((USItype) (d)));					\
+++  (r) = __xx.__i.__l; (q) = __xx.__i.__h; })
+++#define count_trailing_zeros(count,x) \
+++  do {									\
+++    __asm__ ("ffsd     %2,%0"						\
+++            : "=r" ((USItype) (count))					\
+++            : "0" ((USItype) 0),					\
+++              "r" ((USItype) (x)));					\
+++  } while (0)
+++#endif /* __ns32000__ */
+++
+++/* FIXME: We should test _IBMR2 here when we add assembly support for the
+++   system vendor compilers.
+++   FIXME: What's needed for gcc PowerPC VxWorks?  __vxworks__ is not good
+++   enough, since that hits ARM and m68k too.  */
+++#if (defined (_ARCH_PPC)	/* AIX */				\
+++     || defined (_ARCH_PWR)	/* AIX */				\
+++     || defined (_ARCH_COM)	/* AIX */				\
+++     || defined (__powerpc__)	/* gcc */				\
+++     || defined (__POWERPC__)	/* BEOS */				\
+++     || defined (__ppc__)	/* Darwin */				\
+++     || (defined (PPC) && ! defined (CPU_FAMILY)) /* gcc 2.7.x GNU&SysV */    \
+++     || (defined (PPC) && defined (CPU_FAMILY)    /* VxWorks */               \
+++         && CPU_FAMILY == PPC)                                                \
+++     ) && W_TYPE_SIZE == 32
+++#define add_ssaaaa(sh, sl, ah, al, bh, bl) \
+++  do {									\
+++    if (__builtin_constant_p (bh) && (bh) == 0)				\
+++      __asm__ ("{a%I4|add%I4c} %1,%3,%4\n\t{aze|addze} %0,%2"		\
+++	     : "=r" (sh), "=&r" (sl) : "r" (ah), "%r" (al), "rI" (bl));\
+++    else if (__builtin_constant_p (bh) && (bh) == ~(USItype) 0)		\
+++      __asm__ ("{a%I4|add%I4c} %1,%3,%4\n\t{ame|addme} %0,%2"		\
+++	     : "=r" (sh), "=&r" (sl) : "r" (ah), "%r" (al), "rI" (bl));\
+++    else								\
+++      __asm__ ("{a%I5|add%I5c} %1,%4,%5\n\t{ae|adde} %0,%2,%3"		\
+++	     : "=r" (sh), "=&r" (sl)					\
+++	     : "%r" (ah), "r" (bh), "%r" (al), "rI" (bl));		\
+++  } while (0)
+++#define sub_ddmmss(sh, sl, ah, al, bh, bl) \
+++  do {									\
+++    if (__builtin_constant_p (ah) && (ah) == 0)				\
+++      __asm__ ("{sf%I3|subf%I3c} %1,%4,%3\n\t{sfze|subfze} %0,%2"	\
+++	       : "=r" (sh), "=&r" (sl) : "r" (bh), "rI" (al), "r" (bl));\
+++    else if (__builtin_constant_p (ah) && (ah) == ~(USItype) 0)		\
+++      __asm__ ("{sf%I3|subf%I3c} %1,%4,%3\n\t{sfme|subfme} %0,%2"	\
+++	       : "=r" (sh), "=&r" (sl) : "r" (bh), "rI" (al), "r" (bl));\
+++    else if (__builtin_constant_p (bh) && (bh) == 0)			\
+++      __asm__ ("{sf%I3|subf%I3c} %1,%4,%3\n\t{ame|addme} %0,%2"		\
+++	       : "=r" (sh), "=&r" (sl) : "r" (ah), "rI" (al), "r" (bl));\
+++    else if (__builtin_constant_p (bh) && (bh) == ~(USItype) 0)		\
+++      __asm__ ("{sf%I3|subf%I3c} %1,%4,%3\n\t{aze|addze} %0,%2"		\
+++	       : "=r" (sh), "=&r" (sl) : "r" (ah), "rI" (al), "r" (bl));\
+++    else								\
+++      __asm__ ("{sf%I4|subf%I4c} %1,%5,%4\n\t{sfe|subfe} %0,%3,%2"	\
+++	       : "=r" (sh), "=&r" (sl)					\
+++	       : "r" (ah), "r" (bh), "rI" (al), "r" (bl));		\
+++  } while (0)
+++#define count_leading_zeros(count, x) \
+++  __asm__ ("{cntlz|cntlzw} %0,%1" : "=r" (count) : "r" (x))
+++#define COUNT_LEADING_ZEROS_0 32
+++#if defined (_ARCH_PPC) || defined (__powerpc__) || defined (__POWERPC__) \
+++  || defined (__ppc__)                                                    \
+++  || (defined (PPC) && ! defined (CPU_FAMILY)) /* gcc 2.7.x GNU&SysV */       \
+++  || (defined (PPC) && defined (CPU_FAMILY)    /* VxWorks */                  \
+++         && CPU_FAMILY == PPC)
+++#define umul_ppmm(ph, pl, m0, m1) \
+++  do {									\
+++    USItype __m0 = (m0), __m1 = (m1);					\
+++    __asm__ ("mulhwu %0,%1,%2" : "=r" (ph) : "%r" (m0), "r" (m1));	\
+++    (pl) = __m0 * __m1;							\
+++  } while (0)
+++#define UMUL_TIME 15
+++#define smul_ppmm(ph, pl, m0, m1) \
+++  do {									\
+++    SItype __m0 = (m0), __m1 = (m1);					\
+++    __asm__ ("mulhw %0,%1,%2" : "=r" (ph) : "%r" (m0), "r" (m1));	\
+++    (pl) = __m0 * __m1;							\
+++  } while (0)
+++#define SMUL_TIME 14
+++#define UDIV_TIME 120
+++#elif defined (_ARCH_PWR)
+++#define UMUL_TIME 8
+++#define smul_ppmm(xh, xl, m0, m1) \
+++  __asm__ ("mul %0,%2,%3" : "=r" (xh), "=q" (xl) : "r" (m0), "r" (m1))
+++#define SMUL_TIME 4
+++#define sdiv_qrnnd(q, r, nh, nl, d) \
+++  __asm__ ("div %0,%2,%4" : "=r" (q), "=q" (r) : "r" (nh), "1" (nl), "r" (d))
+++#define UDIV_TIME 100
+++#endif
+++#endif /* 32-bit POWER architecture variants.  */
+++
+++/* We should test _IBMR2 here when we add assembly support for the system
+++   vendor compilers.  */
+++#if (defined (_ARCH_PPC64) || defined (__powerpc64__)) && W_TYPE_SIZE == 64
+++#define add_ssaaaa(sh, sl, ah, al, bh, bl) \
+++  do {									\
+++    if (__builtin_constant_p (bh) && (bh) == 0)				\
+++      __asm__ ("{a%I4|add%I4c} %1,%3,%4\n\t{aze|addze} %0,%2"		\
+++	     : "=r" (sh), "=&r" (sl) : "r" (ah), "%r" (al), "rI" (bl));\
+++    else if (__builtin_constant_p (bh) && (bh) == ~(UDItype) 0)		\
+++      __asm__ ("{a%I4|add%I4c} %1,%3,%4\n\t{ame|addme} %0,%2"		\
+++	     : "=r" (sh), "=&r" (sl) : "r" (ah), "%r" (al), "rI" (bl));\
+++    else								\
+++      __asm__ ("{a%I5|add%I5c} %1,%4,%5\n\t{ae|adde} %0,%2,%3"		\
+++	     : "=r" (sh), "=&r" (sl)					\
+++	     : "%r" (ah), "r" (bh), "%r" (al), "rI" (bl));		\
+++  } while (0)
+++#define sub_ddmmss(sh, sl, ah, al, bh, bl) \
+++  do {									\
+++    if (__builtin_constant_p (ah) && (ah) == 0)				\
+++      __asm__ ("{sf%I3|subf%I3c} %1,%4,%3\n\t{sfze|subfze} %0,%2"	\
+++	       : "=r" (sh), "=&r" (sl) : "r" (bh), "rI" (al), "r" (bl));\
+++    else if (__builtin_constant_p (ah) && (ah) == ~(UDItype) 0)		\
+++      __asm__ ("{sf%I3|subf%I3c} %1,%4,%3\n\t{sfme|subfme} %0,%2"	\
+++	       : "=r" (sh), "=&r" (sl) : "r" (bh), "rI" (al), "r" (bl));\
+++    else if (__builtin_constant_p (bh) && (bh) == 0)			\
+++      __asm__ ("{sf%I3|subf%I3c} %1,%4,%3\n\t{ame|addme} %0,%2"		\
+++	       : "=r" (sh), "=&r" (sl) : "r" (ah), "rI" (al), "r" (bl));\
+++    else if (__builtin_constant_p (bh) && (bh) == ~(UDItype) 0)		\
+++      __asm__ ("{sf%I3|subf%I3c} %1,%4,%3\n\t{aze|addze} %0,%2"		\
+++	       : "=r" (sh), "=&r" (sl) : "r" (ah), "rI" (al), "r" (bl));\
+++    else								\
+++      __asm__ ("{sf%I4|subf%I4c} %1,%5,%4\n\t{sfe|subfe} %0,%3,%2"	\
+++	       : "=r" (sh), "=&r" (sl)					\
+++	       : "r" (ah), "r" (bh), "rI" (al), "r" (bl));		\
+++  } while (0)
+++#define count_leading_zeros(count, x) \
+++  __asm__ ("cntlzd %0,%1" : "=r" (count) : "r" (x))
+++#define COUNT_LEADING_ZEROS_0 64
+++#define umul_ppmm(ph, pl, m0, m1) \
+++  do {									\
+++    UDItype __m0 = (m0), __m1 = (m1);					\
+++    __asm__ ("mulhdu %0,%1,%2" : "=r" (ph) : "%r" (m0), "r" (m1));	\
+++    (pl) = __m0 * __m1;							\
+++  } while (0)
+++#define UMUL_TIME 15
+++#define smul_ppmm(ph, pl, m0, m1) \
+++  do {									\
+++    DItype __m0 = (m0), __m1 = (m1);					\
+++    __asm__ ("mulhd %0,%1,%2" : "=r" (ph) : "%r" (m0), "r" (m1));	\
+++    (pl) = __m0 * __m1;							\
+++  } while (0)
+++#define SMUL_TIME 14  /* ??? */
+++#define UDIV_TIME 120 /* ??? */
+++#endif /* 64-bit PowerPC.  */
+++
+++#if defined (__ibm032__) /* RT/ROMP */ && W_TYPE_SIZE == 32
+++#define add_ssaaaa(sh, sl, ah, al, bh, bl) \
+++  __asm__ ("a %1,%5\n\tae %0,%3"					\
+++	   : "=r" ((USItype) (sh)),					\
+++	     "=&r" ((USItype) (sl))					\
+++	   : "%0" ((USItype) (ah)),					\
+++	     "r" ((USItype) (bh)),					\
+++	     "%1" ((USItype) (al)),					\
+++	     "r" ((USItype) (bl)))
+++#define sub_ddmmss(sh, sl, ah, al, bh, bl) \
+++  __asm__ ("s %1,%5\n\tse %0,%3"					\
+++	   : "=r" ((USItype) (sh)),					\
+++	     "=&r" ((USItype) (sl))					\
+++	   : "0" ((USItype) (ah)),					\
+++	     "r" ((USItype) (bh)),					\
+++	     "1" ((USItype) (al)),					\
+++	     "r" ((USItype) (bl)))
+++#define umul_ppmm(ph, pl, m0, m1) \
+++  do {									\
+++    USItype __m0 = (m0), __m1 = (m1);					\
+++    __asm__ (								\
+++       "s	r2,r2\n"						\
+++"	mts	r10,%2\n"						\
+++"	m	r2,%3\n"						\
+++"	m	r2,%3\n"						\
+++"	m	r2,%3\n"						\
+++"	m	r2,%3\n"						\
+++"	m	r2,%3\n"						\
+++"	m	r2,%3\n"						\
+++"	m	r2,%3\n"						\
+++"	m	r2,%3\n"						\
+++"	m	r2,%3\n"						\
+++"	m	r2,%3\n"						\
+++"	m	r2,%3\n"						\
+++"	m	r2,%3\n"						\
+++"	m	r2,%3\n"						\
+++"	m	r2,%3\n"						\
+++"	m	r2,%3\n"						\
+++"	m	r2,%3\n"						\
+++"	cas	%0,r2,r0\n"						\
+++"	mfs	r10,%1"							\
+++	     : "=r" ((USItype) (ph)),					\
+++	       "=r" ((USItype) (pl))					\
+++	     : "%r" (__m0),						\
+++		"r" (__m1)						\
+++	     : "r2");							\
+++    (ph) += ((((SItype) __m0 >> 31) & __m1)				\
+++	     + (((SItype) __m1 >> 31) & __m0));				\
+++  } while (0)
+++#define UMUL_TIME 20
+++#define UDIV_TIME 200
+++#define count_leading_zeros(count, x) \
+++  do {									\
+++    if ((x) >= 0x10000)							\
+++      __asm__ ("clz	%0,%1"						\
+++	       : "=r" ((USItype) (count))				\
+++	       : "r" ((USItype) (x) >> 16));				\
+++    else								\
+++      {									\
+++	__asm__ ("clz	%0,%1"						\
+++		 : "=r" ((USItype) (count))				\
+++		 : "r" ((USItype) (x)));					\
+++	(count) += 16;							\
+++      }									\
+++  } while (0)
+++#endif
+++
+++#if defined(__sh__) && !__SHMEDIA__ && W_TYPE_SIZE == 32
+++#ifndef __sh1__
+++#define umul_ppmm(w1, w0, u, v) \
+++  __asm__ (								\
+++       "dmulu.l	%2,%3\n\tsts%M1	macl,%1\n\tsts%M0	mach,%0"	\
+++	   : "=r<" ((USItype)(w1)),					\
+++	     "=r<" ((USItype)(w0))					\
+++	   : "r" ((USItype)(u)),					\
+++	     "r" ((USItype)(v))						\
+++	   : "macl", "mach")
+++#define UMUL_TIME 5
+++#endif
+++
+++/* This is the same algorithm as __udiv_qrnnd_c.  */
+++#define UDIV_NEEDS_NORMALIZATION 1
+++
+++#define udiv_qrnnd(q, r, n1, n0, d) \
+++  do {									\
+++    extern UWtype __udiv_qrnnd_16 (UWtype, UWtype)			\
+++                        __attribute__ ((visibility ("hidden")));	\
+++    /* r0: rn r1: qn */ /* r0: n1 r4: n0 r5: d r6: d1 */ /* r2: __m */	\
+++    __asm__ (								\
+++	"mov%M4 %4,r5\n"						\
+++"	swap.w %3,r4\n"							\
+++"	swap.w r5,r6\n"							\
+++"	jsr @%5\n"							\
+++"	shll16 r6\n"							\
+++"	swap.w r4,r4\n"							\
+++"	jsr @%5\n"							\
+++"	swap.w r1,%0\n"							\
+++"	or r1,%0"							\
+++	: "=r" (q), "=&z" (r)						\
+++	: "1" (n1), "r" (n0), "rm" (d), "r" (&__udiv_qrnnd_16)		\
+++	: "r1", "r2", "r4", "r5", "r6", "pr");				\
+++  } while (0)
+++
+++#define UDIV_TIME 80
+++
+++#define sub_ddmmss(sh, sl, ah, al, bh, bl)				\
+++  __asm__ ("clrt;subc %5,%1; subc %4,%0"				\
+++	   : "=r" (sh), "=r" (sl)					\
+++	   : "0" (ah), "1" (al), "r" (bh), "r" (bl))
+++
+++#endif /* __sh__ */
+++
+++#if defined (__SH5__) && __SHMEDIA__ && W_TYPE_SIZE == 32
+++#define __umulsidi3(u,v) ((UDItype)(USItype)u*(USItype)v)
+++#define count_leading_zeros(count, x) \
+++  do									\
+++    {									\
+++      UDItype x_ = (USItype)(x);					\
+++      SItype c_;							\
+++									\
+++      __asm__ ("nsb %1, %0" : "=r" (c_) : "r" (x_));			\
+++      (count) = c_ - 31;						\
+++    }									\
+++  while (0)
+++#define COUNT_LEADING_ZEROS_0 32
+++#endif
+++
+++#if defined (__sparc__) && !defined (__arch64__) && !defined (__sparcv9) \
+++    && W_TYPE_SIZE == 32
+++#define add_ssaaaa(sh, sl, ah, al, bh, bl) \
+++  __asm__ ("addcc %r4,%5,%1\n\taddx %r2,%3,%0"				\
+++	   : "=r" ((USItype) (sh)),					\
+++	     "=&r" ((USItype) (sl))					\
+++	   : "%rJ" ((USItype) (ah)),					\
+++	     "rI" ((USItype) (bh)),					\
+++	     "%rJ" ((USItype) (al)),					\
+++	     "rI" ((USItype) (bl))					\
+++	   __CLOBBER_CC)
+++#define sub_ddmmss(sh, sl, ah, al, bh, bl) \
+++  __asm__ ("subcc %r4,%5,%1\n\tsubx %r2,%3,%0"				\
+++	   : "=r" ((USItype) (sh)),					\
+++	     "=&r" ((USItype) (sl))					\
+++	   : "rJ" ((USItype) (ah)),					\
+++	     "rI" ((USItype) (bh)),					\
+++	     "rJ" ((USItype) (al)),					\
+++	     "rI" ((USItype) (bl))					\
+++	   __CLOBBER_CC)
+++#if defined (__sparc_v8__)
+++#define umul_ppmm(w1, w0, u, v) \
+++  __asm__ ("umul %2,%3,%1;rd %%y,%0"					\
+++	   : "=r" ((USItype) (w1)),					\
+++	     "=r" ((USItype) (w0))					\
+++	   : "r" ((USItype) (u)),					\
+++	     "r" ((USItype) (v)))
+++#define udiv_qrnnd(__q, __r, __n1, __n0, __d) \
+++  __asm__ ("mov %2,%%y;nop;nop;nop;udiv %3,%4,%0;umul %0,%4,%1;sub %3,%1,%1"\
+++	   : "=&r" ((USItype) (__q)),					\
+++	     "=&r" ((USItype) (__r))					\
+++	   : "r" ((USItype) (__n1)),					\
+++	     "r" ((USItype) (__n0)),					\
+++	     "r" ((USItype) (__d)))
+++#else
+++#if defined (__sparclite__)
+++/* This has hardware multiply but not divide.  It also has two additional
+++   instructions scan (ffs from high bit) and divscc.  */
+++#define umul_ppmm(w1, w0, u, v) \
+++  __asm__ ("umul %2,%3,%1;rd %%y,%0"					\
+++	   : "=r" ((USItype) (w1)),					\
+++	     "=r" ((USItype) (w0))					\
+++	   : "r" ((USItype) (u)),					\
+++	     "r" ((USItype) (v)))
+++#define udiv_qrnnd(q, r, n1, n0, d) \
+++  __asm__ ("! Inlined udiv_qrnnd\n"					\
+++"	wr	%%g0,%2,%%y	! Not a delayed write for sparclite\n"	\
+++"	tst	%%g0\n"							\
+++"	divscc	%3,%4,%%g1\n"						\
+++"	divscc	%%g1,%4,%%g1\n"						\
+++"	divscc	%%g1,%4,%%g1\n"						\
+++"	divscc	%%g1,%4,%%g1\n"						\
+++"	divscc	%%g1,%4,%%g1\n"						\
+++"	divscc	%%g1,%4,%%g1\n"						\
+++"	divscc	%%g1,%4,%%g1\n"						\
+++"	divscc	%%g1,%4,%%g1\n"						\
+++"	divscc	%%g1,%4,%%g1\n"						\
+++"	divscc	%%g1,%4,%%g1\n"						\
+++"	divscc	%%g1,%4,%%g1\n"						\
+++"	divscc	%%g1,%4,%%g1\n"						\
+++"	divscc	%%g1,%4,%%g1\n"						\
+++"	divscc	%%g1,%4,%%g1\n"						\
+++"	divscc	%%g1,%4,%%g1\n"						\
+++"	divscc	%%g1,%4,%%g1\n"						\
+++"	divscc	%%g1,%4,%%g1\n"						\
+++"	divscc	%%g1,%4,%%g1\n"						\
+++"	divscc	%%g1,%4,%%g1\n"						\
+++"	divscc	%%g1,%4,%%g1\n"						\
+++"	divscc	%%g1,%4,%%g1\n"						\
+++"	divscc	%%g1,%4,%%g1\n"						\
+++"	divscc	%%g1,%4,%%g1\n"						\
+++"	divscc	%%g1,%4,%%g1\n"						\
+++"	divscc	%%g1,%4,%%g1\n"						\
+++"	divscc	%%g1,%4,%%g1\n"						\
+++"	divscc	%%g1,%4,%%g1\n"						\
+++"	divscc	%%g1,%4,%%g1\n"						\
+++"	divscc	%%g1,%4,%%g1\n"						\
+++"	divscc	%%g1,%4,%%g1\n"						\
+++"	divscc	%%g1,%4,%%g1\n"						\
+++"	divscc	%%g1,%4,%0\n"						\
+++"	rd	%%y,%1\n"						\
+++"	bl,a 1f\n"							\
+++"	add	%1,%4,%1\n"						\
+++"1:	! End of inline udiv_qrnnd"					\
+++	   : "=r" ((USItype) (q)),					\
+++	     "=r" ((USItype) (r))					\
+++	   : "r" ((USItype) (n1)),					\
+++	     "r" ((USItype) (n0)),					\
+++	     "rI" ((USItype) (d))					\
+++	   : "g1" __AND_CLOBBER_CC)
+++#define UDIV_TIME 37
+++#define count_leading_zeros(count, x) \
+++  do {                                                                  \
+++  __asm__ ("scan %1,1,%0"                                               \
+++           : "=r" ((USItype) (count))                                   \
+++           : "r" ((USItype) (x)));					\
+++  } while (0)
+++/* Early sparclites return 63 for an argument of 0, but they warn that future
+++   implementations might change this.  Therefore, leave COUNT_LEADING_ZEROS_0
+++   undefined.  */
+++#else
+++/* SPARC without integer multiplication and divide instructions.
+++   (i.e.@least Sun4/20,40,60,65,75,110,260,280,330,360,380,470,490) */
+++#define umul_ppmm(w1, w0, u, v) \
+++  __asm__ ("! Inlined umul_ppmm\n"					\
+++"	wr	%%g0,%2,%%y	! SPARC has 0-3 delay insn after a wr\n"\
+++"	sra	%3,31,%%o5	! Don't move this insn\n"		\
+++"	and	%2,%%o5,%%o5	! Don't move this insn\n"		\
+++"	andcc	%%g0,0,%%g1	! Don't move this insn\n"		\
+++"	mulscc	%%g1,%3,%%g1\n"						\
+++"	mulscc	%%g1,%3,%%g1\n"						\
+++"	mulscc	%%g1,%3,%%g1\n"						\
+++"	mulscc	%%g1,%3,%%g1\n"						\
+++"	mulscc	%%g1,%3,%%g1\n"						\
+++"	mulscc	%%g1,%3,%%g1\n"						\
+++"	mulscc	%%g1,%3,%%g1\n"						\
+++"	mulscc	%%g1,%3,%%g1\n"						\
+++"	mulscc	%%g1,%3,%%g1\n"						\
+++"	mulscc	%%g1,%3,%%g1\n"						\
+++"	mulscc	%%g1,%3,%%g1\n"						\
+++"	mulscc	%%g1,%3,%%g1\n"						\
+++"	mulscc	%%g1,%3,%%g1\n"						\
+++"	mulscc	%%g1,%3,%%g1\n"						\
+++"	mulscc	%%g1,%3,%%g1\n"						\
+++"	mulscc	%%g1,%3,%%g1\n"						\
+++"	mulscc	%%g1,%3,%%g1\n"						\
+++"	mulscc	%%g1,%3,%%g1\n"						\
+++"	mulscc	%%g1,%3,%%g1\n"						\
+++"	mulscc	%%g1,%3,%%g1\n"						\
+++"	mulscc	%%g1,%3,%%g1\n"						\
+++"	mulscc	%%g1,%3,%%g1\n"						\
+++"	mulscc	%%g1,%3,%%g1\n"						\
+++"	mulscc	%%g1,%3,%%g1\n"						\
+++"	mulscc	%%g1,%3,%%g1\n"						\
+++"	mulscc	%%g1,%3,%%g1\n"						\
+++"	mulscc	%%g1,%3,%%g1\n"						\
+++"	mulscc	%%g1,%3,%%g1\n"						\
+++"	mulscc	%%g1,%3,%%g1\n"						\
+++"	mulscc	%%g1,%3,%%g1\n"						\
+++"	mulscc	%%g1,%3,%%g1\n"						\
+++"	mulscc	%%g1,%3,%%g1\n"						\
+++"	mulscc	%%g1,0,%%g1\n"						\
+++"	add	%%g1,%%o5,%0\n"						\
+++"	rd	%%y,%1"							\
+++	   : "=r" ((USItype) (w1)),					\
+++	     "=r" ((USItype) (w0))					\
+++	   : "%rI" ((USItype) (u)),					\
+++	     "r" ((USItype) (v))						\
+++	   : "g1", "o5" __AND_CLOBBER_CC)
+++#define UMUL_TIME 39		/* 39 instructions */
+++/* It's quite necessary to add this much assembler for the sparc.
+++   The default udiv_qrnnd (in C) is more than 10 times slower!  */
+++#define udiv_qrnnd(__q, __r, __n1, __n0, __d) \
+++  __asm__ ("! Inlined udiv_qrnnd\n"					\
+++"	mov	32,%%g1\n"						\
+++"	subcc	%1,%2,%%g0\n"						\
+++"1:	bcs	5f\n"							\
+++"	 addxcc %0,%0,%0	! shift n1n0 and a q-bit in lsb\n"	\
+++"	sub	%1,%2,%1	! this kills msb of n\n"		\
+++"	addx	%1,%1,%1	! so this can't give carry\n"		\
+++"	subcc	%%g1,1,%%g1\n"						\
+++"2:	bne	1b\n"							\
+++"	 subcc	%1,%2,%%g0\n"						\
+++"	bcs	3f\n"							\
+++"	 addxcc %0,%0,%0	! shift n1n0 and a q-bit in lsb\n"	\
+++"	b	3f\n"							\
+++"	 sub	%1,%2,%1	! this kills msb of n\n"		\
+++"4:	sub	%1,%2,%1\n"						\
+++"5:	addxcc	%1,%1,%1\n"						\
+++"	bcc	2b\n"							\
+++"	 subcc	%%g1,1,%%g1\n"						\
+++"! Got carry from n.  Subtract next step to cancel this carry.\n"	\
+++"	bne	4b\n"							\
+++"	 addcc	%0,%0,%0	! shift n1n0 and a 0-bit in lsb\n"	\
+++"	sub	%1,%2,%1\n"						\
+++"3:	xnor	%0,0,%0\n"						\
+++"	! End of inline udiv_qrnnd"					\
+++	   : "=&r" ((USItype) (__q)),					\
+++	     "=&r" ((USItype) (__r))					\
+++	   : "r" ((USItype) (__d)),					\
+++	     "1" ((USItype) (__n1)),					\
+++	     "0" ((USItype) (__n0)) : "g1" __AND_CLOBBER_CC)
+++#define UDIV_TIME (3+7*32)	/* 7 instructions/iteration. 32 iterations.  */
+++#endif /* __sparclite__ */
+++#endif /* __sparc_v8__ */
+++#endif /* sparc32 */
+++
+++#if ((defined (__sparc__) && defined (__arch64__)) || defined (__sparcv9)) \
+++    && W_TYPE_SIZE == 64
+++#define add_ssaaaa(sh, sl, ah, al, bh, bl)				\
+++  __asm__ ("addcc %r4,%5,%1\n\t"					\
+++   	   "add %r2,%3,%0\n\t"						\
+++   	   "bcs,a,pn %%xcc, 1f\n\t"					\
+++   	   "add %0, 1, %0\n"						\
+++	   "1:"								\
+++	   : "=r" ((UDItype)(sh)),				      	\
+++	     "=&r" ((UDItype)(sl))				      	\
+++	   : "%rJ" ((UDItype)(ah)),				     	\
+++	     "rI" ((UDItype)(bh)),				      	\
+++	     "%rJ" ((UDItype)(al)),				     	\
+++	     "rI" ((UDItype)(bl))				       	\
+++	   __CLOBBER_CC)
+++
+++#define sub_ddmmss(sh, sl, ah, al, bh, bl) 				\
+++  __asm__ ("subcc %r4,%5,%1\n\t"					\
+++   	   "sub %r2,%3,%0\n\t"						\
+++   	   "bcs,a,pn %%xcc, 1f\n\t"					\
+++   	   "sub %0, 1, %0\n\t"						\
+++	   "1:"								\
+++	   : "=r" ((UDItype)(sh)),				      	\
+++	     "=&r" ((UDItype)(sl))				      	\
+++	   : "rJ" ((UDItype)(ah)),				     	\
+++	     "rI" ((UDItype)(bh)),				      	\
+++	     "rJ" ((UDItype)(al)),				     	\
+++	     "rI" ((UDItype)(bl))				       	\
+++	   __CLOBBER_CC)
+++
+++#define umul_ppmm(wh, wl, u, v)						\
+++  do {									\
+++	  UDItype tmp1, tmp2, tmp3, tmp4;				\
+++	  __asm__ __volatile__ (					\
+++		   "srl %7,0,%3\n\t"					\
+++		   "mulx %3,%6,%1\n\t"					\
+++		   "srlx %6,32,%2\n\t"					\
+++		   "mulx %2,%3,%4\n\t"					\
+++		   "sllx %4,32,%5\n\t"					\
+++		   "srl %6,0,%3\n\t"					\
+++		   "sub %1,%5,%5\n\t"					\
+++		   "srlx %5,32,%5\n\t"					\
+++		   "addcc %4,%5,%4\n\t"					\
+++		   "srlx %7,32,%5\n\t"					\
+++		   "mulx %3,%5,%3\n\t"					\
+++		   "mulx %2,%5,%5\n\t"					\
+++		   "sethi %%hi(0x80000000),%2\n\t"			\
+++		   "addcc %4,%3,%4\n\t"					\
+++		   "srlx %4,32,%4\n\t"					\
+++		   "add %2,%2,%2\n\t"					\
+++		   "movcc %%xcc,%%g0,%2\n\t"				\
+++		   "addcc %5,%4,%5\n\t"					\
+++		   "sllx %3,32,%3\n\t"					\
+++		   "add %1,%3,%1\n\t"					\
+++		   "add %5,%2,%0"					\
+++	   : "=r" ((UDItype)(wh)),					\
+++	     "=&r" ((UDItype)(wl)),					\
+++	     "=&r" (tmp1), "=&r" (tmp2), "=&r" (tmp3), "=&r" (tmp4)	\
+++	   : "r" ((UDItype)(u)),					\
+++	     "r" ((UDItype)(v))						\
+++	   __CLOBBER_CC);						\
+++  } while (0)
+++#define UMUL_TIME 96
+++#define UDIV_TIME 230
+++#endif /* sparc64 */
+++
+++#if defined (__vax__) && W_TYPE_SIZE == 32
+++#define add_ssaaaa(sh, sl, ah, al, bh, bl) \
+++  __asm__ ("addl2 %5,%1\n\tadwc %3,%0"					\
+++	   : "=g" ((USItype) (sh)),					\
+++	     "=&g" ((USItype) (sl))					\
+++	   : "%0" ((USItype) (ah)),					\
+++	     "g" ((USItype) (bh)),					\
+++	     "%1" ((USItype) (al)),					\
+++	     "g" ((USItype) (bl)))
+++#define sub_ddmmss(sh, sl, ah, al, bh, bl) \
+++  __asm__ ("subl2 %5,%1\n\tsbwc %3,%0"					\
+++	   : "=g" ((USItype) (sh)),					\
+++	     "=&g" ((USItype) (sl))					\
+++	   : "0" ((USItype) (ah)),					\
+++	     "g" ((USItype) (bh)),					\
+++	     "1" ((USItype) (al)),					\
+++	     "g" ((USItype) (bl)))
+++#define umul_ppmm(xh, xl, m0, m1) \
+++  do {									\
+++    union {								\
+++	UDItype __ll;							\
+++	struct {USItype __l, __h;} __i;					\
+++      } __xx;								\
+++    USItype __m0 = (m0), __m1 = (m1);					\
+++    __asm__ ("emul %1,%2,$0,%0"						\
+++	     : "=r" (__xx.__ll)						\
+++	     : "g" (__m0),						\
+++	       "g" (__m1));						\
+++    (xh) = __xx.__i.__h;						\
+++    (xl) = __xx.__i.__l;						\
+++    (xh) += ((((SItype) __m0 >> 31) & __m1)				\
+++	     + (((SItype) __m1 >> 31) & __m0));				\
+++  } while (0)
+++#define sdiv_qrnnd(q, r, n1, n0, d) \
+++  do {									\
+++    union {DItype __ll;							\
+++	   struct {SItype __l, __h;} __i;				\
+++	  } __xx;							\
+++    __xx.__i.__h = n1; __xx.__i.__l = n0;				\
+++    __asm__ ("ediv %3,%2,%0,%1"						\
+++	     : "=g" (q), "=g" (r)					\
+++	     : "g" (__xx.__ll), "g" (d));				\
+++  } while (0)
+++#endif /* __vax__ */
+++
+++#if defined (__xtensa__) && W_TYPE_SIZE == 32
+++/* This code is not Xtensa-configuration-specific, so rely on the compiler
+++   to expand builtin functions depending on what configuration features
+++   are available.  This avoids library calls when the operation can be
+++   performed in-line.  */
+++#define umul_ppmm(w1, w0, u, v)						\
+++  do {									\
+++    DWunion __w;							\
+++    __w.ll = __builtin_umulsidi3 (u, v);				\
+++    w1 = __w.s.high;							\
+++    w0 = __w.s.low;							\
+++  } while (0)
+++#define __umulsidi3(u, v)		__builtin_umulsidi3 (u, v)
+++#define count_leading_zeros(COUNT, X)	((COUNT) = __builtin_clz (X))
+++#define count_trailing_zeros(COUNT, X)	((COUNT) = __builtin_ctz (X))
+++#endif /* __xtensa__ */
+++
+++#if defined (__z8000__) && W_TYPE_SIZE == 16
+++#define add_ssaaaa(sh, sl, ah, al, bh, bl) \
+++  __asm__ ("add	%H1,%H5\n\tadc	%H0,%H3"				\
+++	   : "=r" ((unsigned int)(sh)),					\
+++	     "=&r" ((unsigned int)(sl))					\
+++	   : "%0" ((unsigned int)(ah)),					\
+++	     "r" ((unsigned int)(bh)),					\
+++	     "%1" ((unsigned int)(al)),					\
+++	     "rQR" ((unsigned int)(bl)))
+++#define sub_ddmmss(sh, sl, ah, al, bh, bl) \
+++  __asm__ ("sub	%H1,%H5\n\tsbc	%H0,%H3"				\
+++	   : "=r" ((unsigned int)(sh)),					\
+++	     "=&r" ((unsigned int)(sl))					\
+++	   : "0" ((unsigned int)(ah)),					\
+++	     "r" ((unsigned int)(bh)),					\
+++	     "1" ((unsigned int)(al)),					\
+++	     "rQR" ((unsigned int)(bl)))
+++#define umul_ppmm(xh, xl, m0, m1) \
+++  do {									\
+++    union {long int __ll;						\
+++	   struct {unsigned int __h, __l;} __i;				\
+++	  } __xx;							\
+++    unsigned int __m0 = (m0), __m1 = (m1);				\
+++    __asm__ ("mult	%S0,%H3"					\
+++	     : "=r" (__xx.__i.__h),					\
+++	       "=r" (__xx.__i.__l)					\
+++	     : "%1" (__m0),						\
+++	       "rQR" (__m1));						\
+++    (xh) = __xx.__i.__h; (xl) = __xx.__i.__l;				\
+++    (xh) += ((((signed int) __m0 >> 15) & __m1)				\
+++	     + (((signed int) __m1 >> 15) & __m0));			\
+++  } while (0)
+++#endif /* __z8000__ */
+++
+++#endif /* __GNUC__ */
+++
+++/* If this machine has no inline assembler, use C macros.  */
+++
+++#if !defined (add_ssaaaa)
+++#define add_ssaaaa(sh, sl, ah, al, bh, bl) \
+++  do {									\
+++    UWtype __x;								\
+++    __x = (al) + (bl);							\
+++    (sh) = (ah) + (bh) + (__x < (al));					\
+++    (sl) = __x;								\
+++  } while (0)
+++#endif
+++
+++#if !defined (sub_ddmmss)
+++#define sub_ddmmss(sh, sl, ah, al, bh, bl) \
+++  do {									\
+++    UWtype __x;								\
+++    __x = (al) - (bl);							\
+++    (sh) = (ah) - (bh) - (__x > (al));					\
+++    (sl) = __x;								\
+++  } while (0)
+++#endif
+++
+++/* If we lack umul_ppmm but have smul_ppmm, define umul_ppmm in terms of
+++   smul_ppmm.  */
+++#if !defined (umul_ppmm) && defined (smul_ppmm)
+++#define umul_ppmm(w1, w0, u, v)						\
+++  do {									\
+++    UWtype __w1;							\
+++    UWtype __xm0 = (u), __xm1 = (v);					\
+++    smul_ppmm (__w1, w0, __xm0, __xm1);					\
+++    (w1) = __w1 + (-(__xm0 >> (W_TYPE_SIZE - 1)) & __xm1)		\
+++		+ (-(__xm1 >> (W_TYPE_SIZE - 1)) & __xm0);		\
+++  } while (0)
+++#endif
+++
+++/* If we still don't have umul_ppmm, define it using plain C.  */
+++#if !defined (umul_ppmm)
+++#define umul_ppmm(w1, w0, u, v)						\
+++  do {									\
+++    UWtype __x0, __x1, __x2, __x3;					\
+++    UHWtype __ul, __vl, __uh, __vh;					\
+++									\
+++    __ul = __ll_lowpart (u);						\
+++    __uh = __ll_highpart (u);						\
+++    __vl = __ll_lowpart (v);						\
+++    __vh = __ll_highpart (v);						\
+++									\
+++    __x0 = (UWtype) __ul * __vl;					\
+++    __x1 = (UWtype) __ul * __vh;					\
+++    __x2 = (UWtype) __uh * __vl;					\
+++    __x3 = (UWtype) __uh * __vh;					\
+++									\
+++    __x1 += __ll_highpart (__x0);/* this can't give carry */		\
+++    __x1 += __x2;		/* but this indeed can */		\
+++    if (__x1 < __x2)		/* did we get it? */			\
+++      __x3 += __ll_B;		/* yes, add it in the proper pos.  */	\
+++									\
+++    (w1) = __x3 + __ll_highpart (__x1);					\
+++    (w0) = __ll_lowpart (__x1) * __ll_B + __ll_lowpart (__x0);		\
+++  } while (0)
+++#endif
+++
+++#if !defined (__umulsidi3)
+++#define __umulsidi3(u, v) \
+++  ({DWunion __w;							\
+++    umul_ppmm (__w.s.high, __w.s.low, u, v);				\
+++    __w.ll; })
+++#endif
+++
+++/* Define this unconditionally, so it can be used for debugging.  */
+++#define __udiv_qrnnd_c(q, r, n1, n0, d) \
+++  do {									\
+++    UWtype __d1, __d0, __q1, __q0;					\
+++    UWtype __r1, __r0, __m;						\
+++    __d1 = __ll_highpart (d);						\
+++    __d0 = __ll_lowpart (d);						\
+++									\
+++    __r1 = (n1) % __d1;							\
+++    __q1 = (n1) / __d1;							\
+++    __m = (UWtype) __q1 * __d0;						\
+++    __r1 = __r1 * __ll_B | __ll_highpart (n0);				\
+++    if (__r1 < __m)							\
+++      {									\
+++	__q1--, __r1 += (d);						\
+++	if (__r1 >= (d)) /* i.e. we didn't get carry when adding to __r1 */\
+++	  if (__r1 < __m)						\
+++	    __q1--, __r1 += (d);					\
+++      }									\
+++    __r1 -= __m;							\
+++									\
+++    __r0 = __r1 % __d1;							\
+++    __q0 = __r1 / __d1;							\
+++    __m = (UWtype) __q0 * __d0;						\
+++    __r0 = __r0 * __ll_B | __ll_lowpart (n0);				\
+++    if (__r0 < __m)							\
+++      {									\
+++	__q0--, __r0 += (d);						\
+++	if (__r0 >= (d))						\
+++	  if (__r0 < __m)						\
+++	    __q0--, __r0 += (d);					\
+++      }									\
+++    __r0 -= __m;							\
+++									\
+++    (q) = (UWtype) __q1 * __ll_B | __q0;				\
+++    (r) = __r0;								\
+++  } while (0)
+++
+++/* If the processor has no udiv_qrnnd but sdiv_qrnnd, go through
+++   __udiv_w_sdiv (defined in libgcc or elsewhere).  */
+++#if !defined (udiv_qrnnd) && defined (sdiv_qrnnd)
+++#define udiv_qrnnd(q, r, nh, nl, d) \
+++  do {									\
+++    USItype __r;							\
+++    (q) = __udiv_w_sdiv (&__r, nh, nl, d);				\
+++    (r) = __r;								\
+++  } while (0)
+++#endif
+++
+++/* If udiv_qrnnd was not defined for this processor, use __udiv_qrnnd_c.  */
+++#if !defined (udiv_qrnnd)
+++#define UDIV_NEEDS_NORMALIZATION 1
+++#define udiv_qrnnd __udiv_qrnnd_c
+++#endif
+++
+++#if !defined (count_leading_zeros)
+++#define count_leading_zeros(count, x) \
+++  do {									\
+++    UWtype __xr = (x);							\
+++    UWtype __a;								\
+++									\
+++    if (W_TYPE_SIZE <= 32)						\
+++      {									\
+++	__a = __xr < ((UWtype)1<<2*__BITS4)				\
+++	  ? (__xr < ((UWtype)1<<__BITS4) ? 0 : __BITS4)			\
+++	  : (__xr < ((UWtype)1<<3*__BITS4) ?  2*__BITS4 : 3*__BITS4);	\
+++      }									\
+++    else								\
+++      {									\
+++	for (__a = W_TYPE_SIZE - 8; __a > 0; __a -= 8)			\
+++	  if (((__xr >> __a) & 0xff) != 0)				\
+++	    break;							\
+++      }									\
+++									\
+++    (count) = W_TYPE_SIZE - (__clz_tab[__xr >> __a] + __a);		\
+++  } while (0)
+++#define COUNT_LEADING_ZEROS_0 W_TYPE_SIZE
+++#endif
+++
+++#if !defined (count_trailing_zeros)
+++/* Define count_trailing_zeros using count_leading_zeros.  The latter might be
+++   defined in asm, but if it is not, the C version above is good enough.  */
+++#define count_trailing_zeros(count, x) \
+++  do {									\
+++    UWtype __ctz_x = (x);						\
+++    UWtype __ctz_c;							\
+++    count_leading_zeros (__ctz_c, __ctz_x & -__ctz_x);			\
+++    (count) = W_TYPE_SIZE - 1 - __ctz_c;				\
+++  } while (0)
+++#endif
+++
+++#ifndef UDIV_NEEDS_NORMALIZATION
+++#define UDIV_NEEDS_NORMALIZATION 0
+++#endif
++diff -Naur uClibc-0.9.31.ori/libc/sysdeps/linux/sparc/soft-fp/mp_clz_tab.c uClibc-0.9.31/libc/sysdeps/linux/sparc/soft-fp/mp_clz_tab.c
++--- uClibc-0.9.31.ori/libc/sysdeps/linux/sparc/soft-fp/mp_clz_tab.c	1970-01-01 01:00:00.000000000 +0100
+++++ uClibc-0.9.31/libc/sysdeps/linux/sparc/soft-fp/mp_clz_tab.c	2010-10-14 14:05:37.000000000 +0200
++@@ -0,0 +1,37 @@
+++/* __clz_tab -- support for longlong.h
+++   Copyright (C) 1991, 1993, 1994, 1997 Free Software Foundation, Inc.
+++   This file is part of the GNU C Library.  Its master source is NOT part of
+++   the C library, however.  The master source lives in the GNU MP Library.
+++
+++   The GNU C Library is free software; you can redistribute it and/or
+++   modify it under the terms of the GNU Lesser General Public
+++   License as published by the Free Software Foundation; either
+++   version 2.1 of the License, or (at your option) any later version.
+++
+++   The GNU C Library is distributed in the hope that it will be useful,
+++   but WITHOUT ANY WARRANTY; without even the implied warranty of
+++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+++   Lesser General Public License for more details.
+++
+++   You should have received a copy of the GNU Lesser General Public
+++   License along with the GNU C Library; if not, write to the Free
+++   Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+++   02111-1307 USA.  */
+++
+++#if 0
+++#include <gmp.h>
+++#include "gmp-impl.h"
+++#endif
+++
+++const
+++unsigned char __clz_tab[] =
+++{
+++  0,1,2,2,3,3,3,3,4,4,4,4,4,4,4,4,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,
+++  6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,
+++  7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,
+++  7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,
+++  8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,
+++  8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,
+++  8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,
+++  8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,
+++};
++diff -Naur uClibc-0.9.31.ori/libc/sysdeps/linux/sparc/soft-fp/op-1.h uClibc-0.9.31/libc/sysdeps/linux/sparc/soft-fp/op-1.h
++--- uClibc-0.9.31.ori/libc/sysdeps/linux/sparc/soft-fp/op-1.h	1970-01-01 01:00:00.000000000 +0100
+++++ uClibc-0.9.31/libc/sysdeps/linux/sparc/soft-fp/op-1.h	2010-10-14 14:05:37.000000000 +0200
++@@ -0,0 +1,302 @@
+++/* Software floating-point emulation.
+++   Basic one-word fraction declaration and manipulation.
+++   Copyright (C) 1997,1998,1999,2006 Free Software Foundation, Inc.
+++   This file is part of the GNU C Library.
+++   Contributed by Richard Henderson (rth at cygnus.com),
+++		  Jakub Jelinek (jj at ultra.linux.cz),
+++		  David S. Miller (davem at redhat.com) and
+++		  Peter Maydell (pmaydell at chiark.greenend.org.uk).
+++
+++   The GNU C Library is free software; you can redistribute it and/or
+++   modify it under the terms of the GNU Lesser General Public
+++   License as published by the Free Software Foundation; either
+++   version 2.1 of the License, or (at your option) any later version.
+++
+++   In addition to the permissions in the GNU Lesser General Public
+++   License, the Free Software Foundation gives you unlimited
+++   permission to link the compiled version of this file into
+++   combinations with other programs, and to distribute those
+++   combinations without any restriction coming from the use of this
+++   file.  (The Lesser General Public License restrictions do apply in
+++   other respects; for example, they cover modification of the file,
+++   and distribution when not linked into a combine executable.)
+++
+++   The GNU C Library is distributed in the hope that it will be useful,
+++   but WITHOUT ANY WARRANTY; without even the implied warranty of
+++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+++   Lesser General Public License for more details.
+++
+++   You should have received a copy of the GNU Lesser General Public
+++   License along with the GNU C Library; if not, write to the Free
+++   Software Foundation, 51 Franklin Street, Fifth Floor, Boston,
+++   MA 02110-1301, USA.  */
+++
+++#define _FP_FRAC_DECL_1(X)	_FP_W_TYPE X##_f
+++#define _FP_FRAC_COPY_1(D,S)	(D##_f = S##_f)
+++#define _FP_FRAC_SET_1(X,I)	(X##_f = I)
+++#define _FP_FRAC_HIGH_1(X)	(X##_f)
+++#define _FP_FRAC_LOW_1(X)	(X##_f)
+++#define _FP_FRAC_WORD_1(X,w)	(X##_f)
+++
+++#define _FP_FRAC_ADDI_1(X,I)	(X##_f += I)
+++#define _FP_FRAC_SLL_1(X,N)			\
+++  do {						\
+++    if (__builtin_constant_p(N) && (N) == 1)	\
+++      X##_f += X##_f;				\
+++    else					\
+++      X##_f <<= (N);				\
+++  } while (0)
+++#define _FP_FRAC_SRL_1(X,N)	(X##_f >>= N)
+++
+++/* Right shift with sticky-lsb.  */
+++#define _FP_FRAC_SRST_1(X,S,N,sz)	__FP_FRAC_SRST_1(X##_f, S, N, sz)
+++#define _FP_FRAC_SRS_1(X,N,sz)	__FP_FRAC_SRS_1(X##_f, N, sz)
+++
+++#define __FP_FRAC_SRST_1(X,S,N,sz)			\
+++do {							\
+++  S = (__builtin_constant_p(N) && (N) == 1		\
+++       ? X & 1 : (X << (_FP_W_TYPE_SIZE - (N))) != 0);	\
+++  X = X >> (N);						\
+++} while (0)
+++
+++#define __FP_FRAC_SRS_1(X,N,sz)						\
+++   (X = (X >> (N) | (__builtin_constant_p(N) && (N) == 1		\
+++		     ? X & 1 : (X << (_FP_W_TYPE_SIZE - (N))) != 0)))
+++
+++#define _FP_FRAC_ADD_1(R,X,Y)	(R##_f = X##_f + Y##_f)
+++#define _FP_FRAC_SUB_1(R,X,Y)	(R##_f = X##_f - Y##_f)
+++#define _FP_FRAC_DEC_1(X,Y)	(X##_f -= Y##_f)
+++#define _FP_FRAC_CLZ_1(z, X)	__FP_CLZ(z, X##_f)
+++
+++/* Predicates */
+++#define _FP_FRAC_NEGP_1(X)	((_FP_WS_TYPE)X##_f < 0)
+++#define _FP_FRAC_ZEROP_1(X)	(X##_f == 0)
+++#define _FP_FRAC_OVERP_1(fs,X)	(X##_f & _FP_OVERFLOW_##fs)
+++#define _FP_FRAC_CLEAR_OVERP_1(fs,X)	(X##_f &= ~_FP_OVERFLOW_##fs)
+++#define _FP_FRAC_EQ_1(X, Y)	(X##_f == Y##_f)
+++#define _FP_FRAC_GE_1(X, Y)	(X##_f >= Y##_f)
+++#define _FP_FRAC_GT_1(X, Y)	(X##_f > Y##_f)
+++
+++#define _FP_ZEROFRAC_1		0
+++#define _FP_MINFRAC_1		1
+++#define _FP_MAXFRAC_1		(~(_FP_WS_TYPE)0)
+++
+++/*
+++ * Unpack the raw bits of a native fp value.  Do not classify or
+++ * normalize the data.
+++ */
+++
+++#define _FP_UNPACK_RAW_1(fs, X, val)				\
+++  do {								\
+++    union _FP_UNION_##fs _flo; _flo.flt = (val);		\
+++								\
+++    X##_f = _flo.bits.frac;					\
+++    X##_e = _flo.bits.exp;					\
+++    X##_s = _flo.bits.sign;					\
+++  } while (0)
+++
+++#define _FP_UNPACK_RAW_1_P(fs, X, val)				\
+++  do {								\
+++    union _FP_UNION_##fs *_flo =				\
+++      (union _FP_UNION_##fs *)(val);				\
+++								\
+++    X##_f = _flo->bits.frac;					\
+++    X##_e = _flo->bits.exp;					\
+++    X##_s = _flo->bits.sign;					\
+++  } while (0)
+++
+++/*
+++ * Repack the raw bits of a native fp value.
+++ */
+++
+++#define _FP_PACK_RAW_1(fs, val, X)				\
+++  do {								\
+++    union _FP_UNION_##fs _flo;					\
+++								\
+++    _flo.bits.frac = X##_f;					\
+++    _flo.bits.exp  = X##_e;					\
+++    _flo.bits.sign = X##_s;					\
+++								\
+++    (val) = _flo.flt;						\
+++  } while (0)
+++
+++#define _FP_PACK_RAW_1_P(fs, val, X)				\
+++  do {								\
+++    union _FP_UNION_##fs *_flo =				\
+++      (union _FP_UNION_##fs *)(val);				\
+++								\
+++    _flo->bits.frac = X##_f;					\
+++    _flo->bits.exp  = X##_e;					\
+++    _flo->bits.sign = X##_s;					\
+++  } while (0)
+++
+++
+++/*
+++ * Multiplication algorithms:
+++ */
+++
+++/* Basic.  Assuming the host word size is >= 2*FRACBITS, we can do the
+++   multiplication immediately.  */
+++
+++#define _FP_MUL_MEAT_1_imm(wfracbits, R, X, Y)				\
+++  do {									\
+++    R##_f = X##_f * Y##_f;						\
+++    /* Normalize since we know where the msb of the multiplicands	\
+++       were (bit B), we know that the msb of the of the product is	\
+++       at either 2B or 2B-1.  */					\
+++    _FP_FRAC_SRS_1(R, wfracbits-1, 2*wfracbits);			\
+++  } while (0)
+++
+++/* Given a 1W * 1W => 2W primitive, do the extended multiplication.  */
+++
+++#define _FP_MUL_MEAT_1_wide(wfracbits, R, X, Y, doit)			\
+++  do {									\
+++    _FP_W_TYPE _Z_f0, _Z_f1;						\
+++    doit(_Z_f1, _Z_f0, X##_f, Y##_f);					\
+++    /* Normalize since we know where the msb of the multiplicands	\
+++       were (bit B), we know that the msb of the of the product is	\
+++       at either 2B or 2B-1.  */					\
+++    _FP_FRAC_SRS_2(_Z, wfracbits-1, 2*wfracbits);			\
+++    R##_f = _Z_f0;							\
+++  } while (0)
+++
+++/* Finally, a simple widening multiply algorithm.  What fun!  */
+++
+++#define _FP_MUL_MEAT_1_hard(wfracbits, R, X, Y)				\
+++  do {									\
+++    _FP_W_TYPE _xh, _xl, _yh, _yl, _z_f0, _z_f1, _a_f0, _a_f1;		\
+++									\
+++    /* split the words in half */					\
+++    _xh = X##_f >> (_FP_W_TYPE_SIZE/2);					\
+++    _xl = X##_f & (((_FP_W_TYPE)1 << (_FP_W_TYPE_SIZE/2)) - 1);		\
+++    _yh = Y##_f >> (_FP_W_TYPE_SIZE/2);					\
+++    _yl = Y##_f & (((_FP_W_TYPE)1 << (_FP_W_TYPE_SIZE/2)) - 1);		\
+++									\
+++    /* multiply the pieces */						\
+++    _z_f0 = _xl * _yl;							\
+++    _a_f0 = _xh * _yl;							\
+++    _a_f1 = _xl * _yh;							\
+++    _z_f1 = _xh * _yh;							\
+++									\
+++    /* reassemble into two full words */				\
+++    if ((_a_f0 += _a_f1) < _a_f1)					\
+++      _z_f1 += (_FP_W_TYPE)1 << (_FP_W_TYPE_SIZE/2);			\
+++    _a_f1 = _a_f0 >> (_FP_W_TYPE_SIZE/2);				\
+++    _a_f0 = _a_f0 << (_FP_W_TYPE_SIZE/2);				\
+++    _FP_FRAC_ADD_2(_z, _z, _a);						\
+++									\
+++    /* normalize */							\
+++    _FP_FRAC_SRS_2(_z, wfracbits - 1, 2*wfracbits);			\
+++    R##_f = _z_f0;							\
+++  } while (0)
+++
+++
+++/*
+++ * Division algorithms:
+++ */
+++
+++/* Basic.  Assuming the host word size is >= 2*FRACBITS, we can do the
+++   division immediately.  Give this macro either _FP_DIV_HELP_imm for
+++   C primitives or _FP_DIV_HELP_ldiv for the ISO function.  Which you
+++   choose will depend on what the compiler does with divrem4.  */
+++
+++#define _FP_DIV_MEAT_1_imm(fs, R, X, Y, doit)		\
+++  do {							\
+++    _FP_W_TYPE _q, _r;					\
+++    X##_f <<= (X##_f < Y##_f				\
+++	       ? R##_e--, _FP_WFRACBITS_##fs		\
+++	       : _FP_WFRACBITS_##fs - 1);		\
+++    doit(_q, _r, X##_f, Y##_f);				\
+++    R##_f = _q | (_r != 0);				\
+++  } while (0)
+++
+++/* GCC's longlong.h defines a 2W / 1W => (1W,1W) primitive udiv_qrnnd
+++   that may be useful in this situation.  This first is for a primitive
+++   that requires normalization, the second for one that does not.  Look
+++   for UDIV_NEEDS_NORMALIZATION to tell which your machine needs.  */
+++
+++#define _FP_DIV_MEAT_1_udiv_norm(fs, R, X, Y)				\
+++  do {									\
+++    _FP_W_TYPE _nh, _nl, _q, _r, _y;					\
+++									\
+++    /* Normalize Y -- i.e. make the most significant bit set.  */	\
+++    _y = Y##_f << _FP_WFRACXBITS_##fs;					\
+++									\
+++    /* Shift X op correspondingly high, that is, up one full word.  */	\
+++    if (X##_f < Y##_f)							\
+++      {									\
+++	R##_e--;							\
+++	_nl = 0;							\
+++	_nh = X##_f;							\
+++      }									\
+++    else								\
+++      {									\
+++	_nl = X##_f << (_FP_W_TYPE_SIZE - 1);				\
+++	_nh = X##_f >> 1;						\
+++      }									\
+++    									\
+++    udiv_qrnnd(_q, _r, _nh, _nl, _y);					\
+++    R##_f = _q | (_r != 0);						\
+++  } while (0)
+++
+++#define _FP_DIV_MEAT_1_udiv(fs, R, X, Y)		\
+++  do {							\
+++    _FP_W_TYPE _nh, _nl, _q, _r;			\
+++    if (X##_f < Y##_f)					\
+++      {							\
+++	R##_e--;					\
+++	_nl = X##_f << _FP_WFRACBITS_##fs;		\
+++	_nh = X##_f >> _FP_WFRACXBITS_##fs;		\
+++      }							\
+++    else						\
+++      {							\
+++	_nl = X##_f << (_FP_WFRACBITS_##fs - 1);	\
+++	_nh = X##_f >> (_FP_WFRACXBITS_##fs + 1);	\
+++      }							\
+++    udiv_qrnnd(_q, _r, _nh, _nl, Y##_f);		\
+++    R##_f = _q | (_r != 0);				\
+++  } while (0)
+++  
+++  
+++/*
+++ * Square root algorithms:
+++ * We have just one right now, maybe Newton approximation
+++ * should be added for those machines where division is fast.
+++ */
+++ 
+++#define _FP_SQRT_MEAT_1(R, S, T, X, q)			\
+++  do {							\
+++    while (q != _FP_WORK_ROUND)				\
+++      {							\
+++        T##_f = S##_f + q;				\
+++        if (T##_f <= X##_f)				\
+++          {						\
+++            S##_f = T##_f + q;				\
+++            X##_f -= T##_f;				\
+++            R##_f += q;					\
+++          }						\
+++        _FP_FRAC_SLL_1(X, 1);				\
+++        q >>= 1;					\
+++      }							\
+++    if (X##_f)						\
+++      {							\
+++	if (S##_f < X##_f)				\
+++	  R##_f |= _FP_WORK_ROUND;			\
+++	R##_f |= _FP_WORK_STICKY;			\
+++      }							\
+++  } while (0)
+++
+++/*
+++ * Assembly/disassembly for converting to/from integral types.  
+++ * No shifting or overflow handled here.
+++ */
+++
+++#define _FP_FRAC_ASSEMBLE_1(r, X, rsize)	(r = X##_f)
+++#define _FP_FRAC_DISASSEMBLE_1(X, r, rsize)	(X##_f = r)
+++
+++
+++/*
+++ * Convert FP values between word sizes
+++ */
+++
+++#define _FP_FRAC_COPY_1_1(D, S)		(D##_f = S##_f)
++diff -Naur uClibc-0.9.31.ori/libc/sysdeps/linux/sparc/soft-fp/op-2.h uClibc-0.9.31/libc/sysdeps/linux/sparc/soft-fp/op-2.h
++--- uClibc-0.9.31.ori/libc/sysdeps/linux/sparc/soft-fp/op-2.h	1970-01-01 01:00:00.000000000 +0100
+++++ uClibc-0.9.31/libc/sysdeps/linux/sparc/soft-fp/op-2.h	2010-10-14 14:05:37.000000000 +0200
++@@ -0,0 +1,617 @@
+++/* Software floating-point emulation.
+++   Basic two-word fraction declaration and manipulation.
+++   Copyright (C) 1997,1998,1999,2006,2007 Free Software Foundation, Inc.
+++   This file is part of the GNU C Library.
+++   Contributed by Richard Henderson (rth at cygnus.com),
+++		  Jakub Jelinek (jj at ultra.linux.cz),
+++		  David S. Miller (davem at redhat.com) and
+++		  Peter Maydell (pmaydell@chiark.greenend.org.uk).
+++
+++   The GNU C Library is free software; you can redistribute it and/or
+++   modify it under the terms of the GNU Lesser General Public
+++   License as published by the Free Software Foundation; either
+++   version 2.1 of the License, or (at your option) any later version.
+++
+++   In addition to the permissions in the GNU Lesser General Public
+++   License, the Free Software Foundation gives you unlimited
+++   permission to link the compiled version of this file into
+++   combinations with other programs, and to distribute those
+++   combinations without any restriction coming from the use of this
+++   file.  (The Lesser General Public License restrictions do apply in
+++   other respects; for example, they cover modification of the file,
+++   and distribution when not linked into a combine executable.)
+++
+++   The GNU C Library is distributed in the hope that it will be useful,
+++   but WITHOUT ANY WARRANTY; without even the implied warranty of
+++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+++   Lesser General Public License for more details.
+++
+++   You should have received a copy of the GNU Lesser General Public
+++   License along with the GNU C Library; if not, write to the Free
+++   Software Foundation, 51 Franklin Street, Fifth Floor, Boston,
+++   MA 02110-1301, USA.  */
+++
+++#define _FP_FRAC_DECL_2(X)	_FP_W_TYPE X##_f0, X##_f1
+++#define _FP_FRAC_COPY_2(D,S)	(D##_f0 = S##_f0, D##_f1 = S##_f1)
+++#define _FP_FRAC_SET_2(X,I)	__FP_FRAC_SET_2(X, I)
+++#define _FP_FRAC_HIGH_2(X)	(X##_f1)
+++#define _FP_FRAC_LOW_2(X)	(X##_f0)
+++#define _FP_FRAC_WORD_2(X,w)	(X##_f##w)
+++
+++#define _FP_FRAC_SLL_2(X,N)						    \
+++(void)(((N) < _FP_W_TYPE_SIZE)						    \
+++       ? ({								    \
+++	    if (__builtin_constant_p(N) && (N) == 1)			    \
+++	      {								    \
+++		X##_f1 = X##_f1 + X##_f1 + (((_FP_WS_TYPE)(X##_f0)) < 0);   \
+++		X##_f0 += X##_f0;					    \
+++	      }								    \
+++	    else							    \
+++	      {								    \
+++		X##_f1 = X##_f1 << (N) | X##_f0 >> (_FP_W_TYPE_SIZE - (N)); \
+++		X##_f0 <<= (N);						    \
+++	      }								    \
+++	    0;								    \
+++	  })								    \
+++       : ({								    \
+++	    X##_f1 = X##_f0 << ((N) - _FP_W_TYPE_SIZE);			    \
+++	    X##_f0 = 0;							    \
+++	  }))
+++
+++
+++#define _FP_FRAC_SRL_2(X,N)						\
+++(void)(((N) < _FP_W_TYPE_SIZE)						\
+++       ? ({								\
+++	    X##_f0 = X##_f0 >> (N) | X##_f1 << (_FP_W_TYPE_SIZE - (N));	\
+++	    X##_f1 >>= (N);						\
+++	  })								\
+++       : ({								\
+++	    X##_f0 = X##_f1 >> ((N) - _FP_W_TYPE_SIZE);			\
+++	    X##_f1 = 0;							\
+++	  }))
+++
+++/* Right shift with sticky-lsb.  */
+++#define _FP_FRAC_SRST_2(X,S, N,sz)					  \
+++(void)(((N) < _FP_W_TYPE_SIZE)						  \
+++       ? ({								  \
+++	    S = (__builtin_constant_p(N) && (N) == 1			  \
+++		 ? X##_f0 & 1						  \
+++		 : (X##_f0 << (_FP_W_TYPE_SIZE - (N))) != 0);		  \
+++	    X##_f0 = (X##_f1 << (_FP_W_TYPE_SIZE - (N)) | X##_f0 >> (N)); \
+++	    X##_f1 >>= (N);						  \
+++	  })								  \
+++       : ({								  \
+++	    S = ((((N) == _FP_W_TYPE_SIZE				  \
+++		   ? 0							  \
+++		   : (X##_f1 << (2*_FP_W_TYPE_SIZE - (N))))		  \
+++		  | X##_f0) != 0);					  \
+++	    X##_f0 = (X##_f1 >> ((N) - _FP_W_TYPE_SIZE));		  \
+++	    X##_f1 = 0;							  \
+++	  }))
+++
+++#define _FP_FRAC_SRS_2(X,N,sz)						  \
+++(void)(((N) < _FP_W_TYPE_SIZE)						  \
+++       ? ({								  \
+++	    X##_f0 = (X##_f1 << (_FP_W_TYPE_SIZE - (N)) | X##_f0 >> (N) | \
+++		      (__builtin_constant_p(N) && (N) == 1		  \
+++		       ? X##_f0 & 1					  \
+++		       : (X##_f0 << (_FP_W_TYPE_SIZE - (N))) != 0));	  \
+++	    X##_f1 >>= (N);						  \
+++	  })								  \
+++       : ({								  \
+++	    X##_f0 = (X##_f1 >> ((N) - _FP_W_TYPE_SIZE) |		  \
+++		      ((((N) == _FP_W_TYPE_SIZE				  \
+++			 ? 0						  \
+++			 : (X##_f1 << (2*_FP_W_TYPE_SIZE - (N))))	  \
+++			| X##_f0) != 0));				  \
+++	    X##_f1 = 0;							  \
+++	  }))
+++
+++#define _FP_FRAC_ADDI_2(X,I)	\
+++  __FP_FRAC_ADDI_2(X##_f1, X##_f0, I)
+++
+++#define _FP_FRAC_ADD_2(R,X,Y)	\
+++  __FP_FRAC_ADD_2(R##_f1, R##_f0, X##_f1, X##_f0, Y##_f1, Y##_f0)
+++
+++#define _FP_FRAC_SUB_2(R,X,Y)	\
+++  __FP_FRAC_SUB_2(R##_f1, R##_f0, X##_f1, X##_f0, Y##_f1, Y##_f0)
+++
+++#define _FP_FRAC_DEC_2(X,Y)	\
+++  __FP_FRAC_DEC_2(X##_f1, X##_f0, Y##_f1, Y##_f0)
+++
+++#define _FP_FRAC_CLZ_2(R,X)	\
+++  do {				\
+++    if (X##_f1)			\
+++      __FP_CLZ(R,X##_f1);	\
+++    else 			\
+++    {				\
+++      __FP_CLZ(R,X##_f0);	\
+++      R += _FP_W_TYPE_SIZE;	\
+++    }				\
+++  } while(0)
+++
+++/* Predicates */
+++#define _FP_FRAC_NEGP_2(X)	((_FP_WS_TYPE)X##_f1 < 0)
+++#define _FP_FRAC_ZEROP_2(X)	((X##_f1 | X##_f0) == 0)
+++#define _FP_FRAC_OVERP_2(fs,X)	(_FP_FRAC_HIGH_##fs(X) & _FP_OVERFLOW_##fs)
+++#define _FP_FRAC_CLEAR_OVERP_2(fs,X)	(_FP_FRAC_HIGH_##fs(X) &= ~_FP_OVERFLOW_##fs)
+++#define _FP_FRAC_EQ_2(X, Y)	(X##_f1 == Y##_f1 && X##_f0 == Y##_f0)
+++#define _FP_FRAC_GT_2(X, Y)	\
+++  (X##_f1 > Y##_f1 || (X##_f1 == Y##_f1 && X##_f0 > Y##_f0))
+++#define _FP_FRAC_GE_2(X, Y)	\
+++  (X##_f1 > Y##_f1 || (X##_f1 == Y##_f1 && X##_f0 >= Y##_f0))
+++
+++#define _FP_ZEROFRAC_2		0, 0
+++#define _FP_MINFRAC_2		0, 1
+++#define _FP_MAXFRAC_2		(~(_FP_WS_TYPE)0), (~(_FP_WS_TYPE)0)
+++
+++/*
+++ * Internals 
+++ */
+++
+++#define __FP_FRAC_SET_2(X,I1,I0)	(X##_f0 = I0, X##_f1 = I1)
+++
+++#define __FP_CLZ_2(R, xh, xl)	\
+++  do {				\
+++    if (xh)			\
+++      __FP_CLZ(R,xh);		\
+++    else 			\
+++    {				\
+++      __FP_CLZ(R,xl);		\
+++      R += _FP_W_TYPE_SIZE;	\
+++    }				\
+++  } while(0)
+++
+++#if 0
+++
+++#ifndef __FP_FRAC_ADDI_2
+++#define __FP_FRAC_ADDI_2(xh, xl, i)	\
+++  (xh += ((xl += i) < i))
+++#endif
+++#ifndef __FP_FRAC_ADD_2
+++#define __FP_FRAC_ADD_2(rh, rl, xh, xl, yh, yl)	\
+++  (rh = xh + yh + ((rl = xl + yl) < xl))
+++#endif
+++#ifndef __FP_FRAC_SUB_2
+++#define __FP_FRAC_SUB_2(rh, rl, xh, xl, yh, yl)	\
+++  (rh = xh - yh - ((rl = xl - yl) > xl))
+++#endif
+++#ifndef __FP_FRAC_DEC_2
+++#define __FP_FRAC_DEC_2(xh, xl, yh, yl)	\
+++  do {					\
+++    UWtype _t = xl;			\
+++    xh -= yh + ((xl -= yl) > _t);	\
+++  } while (0)
+++#endif
+++
+++#else
+++
+++#undef __FP_FRAC_ADDI_2
+++#define __FP_FRAC_ADDI_2(xh, xl, i)	add_ssaaaa(xh, xl, xh, xl, 0, i)
+++#undef __FP_FRAC_ADD_2
+++#define __FP_FRAC_ADD_2			add_ssaaaa
+++#undef __FP_FRAC_SUB_2
+++#define __FP_FRAC_SUB_2			sub_ddmmss
+++#undef __FP_FRAC_DEC_2
+++#define __FP_FRAC_DEC_2(xh, xl, yh, yl)	sub_ddmmss(xh, xl, xh, xl, yh, yl)
+++
+++#endif
+++
+++/*
+++ * Unpack the raw bits of a native fp value.  Do not classify or
+++ * normalize the data.
+++ */
+++
+++#define _FP_UNPACK_RAW_2(fs, X, val)			\
+++  do {							\
+++    union _FP_UNION_##fs _flo; _flo.flt = (val);	\
+++							\
+++    X##_f0 = _flo.bits.frac0;				\
+++    X##_f1 = _flo.bits.frac1;				\
+++    X##_e  = _flo.bits.exp;				\
+++    X##_s  = _flo.bits.sign;				\
+++  } while (0)
+++
+++#define _FP_UNPACK_RAW_2_P(fs, X, val)			\
+++  do {							\
+++    union _FP_UNION_##fs *_flo =			\
+++      (union _FP_UNION_##fs *)(val);			\
+++							\
+++    X##_f0 = _flo->bits.frac0;				\
+++    X##_f1 = _flo->bits.frac1;				\
+++    X##_e  = _flo->bits.exp;				\
+++    X##_s  = _flo->bits.sign;				\
+++  } while (0)
+++
+++
+++/*
+++ * Repack the raw bits of a native fp value.
+++ */
+++
+++#define _FP_PACK_RAW_2(fs, val, X)			\
+++  do {							\
+++    union _FP_UNION_##fs _flo;				\
+++							\
+++    _flo.bits.frac0 = X##_f0;				\
+++    _flo.bits.frac1 = X##_f1;				\
+++    _flo.bits.exp   = X##_e;				\
+++    _flo.bits.sign  = X##_s;				\
+++							\
+++    (val) = _flo.flt;					\
+++  } while (0)
+++
+++#define _FP_PACK_RAW_2_P(fs, val, X)			\
+++  do {							\
+++    union _FP_UNION_##fs *_flo =			\
+++      (union _FP_UNION_##fs *)(val);			\
+++							\
+++    _flo->bits.frac0 = X##_f0;				\
+++    _flo->bits.frac1 = X##_f1;				\
+++    _flo->bits.exp   = X##_e;				\
+++    _flo->bits.sign  = X##_s;				\
+++  } while (0)
+++
+++
+++/*
+++ * Multiplication algorithms:
+++ */
+++
+++/* Given a 1W * 1W => 2W primitive, do the extended multiplication.  */
+++
+++#define _FP_MUL_MEAT_2_wide(wfracbits, R, X, Y, doit)			\
+++  do {									\
+++    _FP_FRAC_DECL_4(_z); _FP_FRAC_DECL_2(_b); _FP_FRAC_DECL_2(_c);	\
+++									\
+++    doit(_FP_FRAC_WORD_4(_z,1), _FP_FRAC_WORD_4(_z,0), X##_f0, Y##_f0);	\
+++    doit(_b_f1, _b_f0, X##_f0, Y##_f1);					\
+++    doit(_c_f1, _c_f0, X##_f1, Y##_f0);					\
+++    doit(_FP_FRAC_WORD_4(_z,3), _FP_FRAC_WORD_4(_z,2), X##_f1, Y##_f1);	\
+++									\
+++    __FP_FRAC_ADD_3(_FP_FRAC_WORD_4(_z,3),_FP_FRAC_WORD_4(_z,2),	\
+++		    _FP_FRAC_WORD_4(_z,1), 0, _b_f1, _b_f0,		\
+++		    _FP_FRAC_WORD_4(_z,3),_FP_FRAC_WORD_4(_z,2),	\
+++		    _FP_FRAC_WORD_4(_z,1));				\
+++    __FP_FRAC_ADD_3(_FP_FRAC_WORD_4(_z,3),_FP_FRAC_WORD_4(_z,2),	\
+++		    _FP_FRAC_WORD_4(_z,1), 0, _c_f1, _c_f0,		\
+++		    _FP_FRAC_WORD_4(_z,3),_FP_FRAC_WORD_4(_z,2),	\
+++		    _FP_FRAC_WORD_4(_z,1));				\
+++									\
+++    /* Normalize since we know where the msb of the multiplicands	\
+++       were (bit B), we know that the msb of the of the product is	\
+++       at either 2B or 2B-1.  */					\
+++    _FP_FRAC_SRS_4(_z, wfracbits-1, 2*wfracbits);			\
+++    R##_f0 = _FP_FRAC_WORD_4(_z,0);					\
+++    R##_f1 = _FP_FRAC_WORD_4(_z,1);					\
+++  } while (0)
+++
+++/* Given a 1W * 1W => 2W primitive, do the extended multiplication.
+++   Do only 3 multiplications instead of four. This one is for machines
+++   where multiplication is much more expensive than subtraction.  */
+++
+++#define _FP_MUL_MEAT_2_wide_3mul(wfracbits, R, X, Y, doit)		\
+++  do {									\
+++    _FP_FRAC_DECL_4(_z); _FP_FRAC_DECL_2(_b); _FP_FRAC_DECL_2(_c);	\
+++    _FP_W_TYPE _d;							\
+++    int _c1, _c2;							\
+++									\
+++    _b_f0 = X##_f0 + X##_f1;						\
+++    _c1 = _b_f0 < X##_f0;						\
+++    _b_f1 = Y##_f0 + Y##_f1;						\
+++    _c2 = _b_f1 < Y##_f0;						\
+++    doit(_d, _FP_FRAC_WORD_4(_z,0), X##_f0, Y##_f0);			\
+++    doit(_FP_FRAC_WORD_4(_z,2), _FP_FRAC_WORD_4(_z,1), _b_f0, _b_f1);	\
+++    doit(_c_f1, _c_f0, X##_f1, Y##_f1);					\
+++									\
+++    _b_f0 &= -_c2;							\
+++    _b_f1 &= -_c1;							\
+++    __FP_FRAC_ADD_3(_FP_FRAC_WORD_4(_z,3),_FP_FRAC_WORD_4(_z,2),	\
+++		    _FP_FRAC_WORD_4(_z,1), (_c1 & _c2), 0, _d,		\
+++		    0, _FP_FRAC_WORD_4(_z,2), _FP_FRAC_WORD_4(_z,1));	\
+++    __FP_FRAC_ADDI_2(_FP_FRAC_WORD_4(_z,3),_FP_FRAC_WORD_4(_z,2),	\
+++		     _b_f0);						\
+++    __FP_FRAC_ADDI_2(_FP_FRAC_WORD_4(_z,3),_FP_FRAC_WORD_4(_z,2),	\
+++		     _b_f1);						\
+++    __FP_FRAC_DEC_3(_FP_FRAC_WORD_4(_z,3),_FP_FRAC_WORD_4(_z,2),	\
+++		    _FP_FRAC_WORD_4(_z,1),				\
+++		    0, _d, _FP_FRAC_WORD_4(_z,0));			\
+++    __FP_FRAC_DEC_3(_FP_FRAC_WORD_4(_z,3),_FP_FRAC_WORD_4(_z,2),	\
+++		    _FP_FRAC_WORD_4(_z,1), 0, _c_f1, _c_f0);		\
+++    __FP_FRAC_ADD_2(_FP_FRAC_WORD_4(_z,3), _FP_FRAC_WORD_4(_z,2),	\
+++		    _c_f1, _c_f0,					\
+++		    _FP_FRAC_WORD_4(_z,3), _FP_FRAC_WORD_4(_z,2));	\
+++									\
+++    /* Normalize since we know where the msb of the multiplicands	\
+++       were (bit B), we know that the msb of the of the product is	\
+++       at either 2B or 2B-1.  */					\
+++    _FP_FRAC_SRS_4(_z, wfracbits-1, 2*wfracbits);			\
+++    R##_f0 = _FP_FRAC_WORD_4(_z,0);					\
+++    R##_f1 = _FP_FRAC_WORD_4(_z,1);					\
+++  } while (0)
+++
+++#define _FP_MUL_MEAT_2_gmp(wfracbits, R, X, Y)				\
+++  do {									\
+++    _FP_FRAC_DECL_4(_z);						\
+++    _FP_W_TYPE _x[2], _y[2];						\
+++    _x[0] = X##_f0; _x[1] = X##_f1;					\
+++    _y[0] = Y##_f0; _y[1] = Y##_f1;					\
+++									\
+++    mpn_mul_n(_z_f, _x, _y, 2);						\
+++									\
+++    /* Normalize since we know where the msb of the multiplicands	\
+++       were (bit B), we know that the msb of the of the product is	\
+++       at either 2B or 2B-1.  */					\
+++    _FP_FRAC_SRS_4(_z, wfracbits-1, 2*wfracbits);			\
+++    R##_f0 = _z_f[0];							\
+++    R##_f1 = _z_f[1];							\
+++  } while (0)
+++
+++/* Do@most 120x120=240 bits multiplication using double floating
+++   point multiplication.  This is useful if floating point
+++   multiplication has much bigger throughput than integer multiply.
+++   It is supposed to work for _FP_W_TYPE_SIZE 64 and wfracbits
+++   between 106 and 120 only.  
+++   Caller guarantees that X and Y has (1LLL << (wfracbits - 1)) set.
+++   SETFETZ is a macro which will disable all FPU exceptions and set rounding
+++   towards zero,  RESETFE should optionally reset it back.  */
+++
+++#define _FP_MUL_MEAT_2_120_240_double(wfracbits, R, X, Y, setfetz, resetfe)	\
+++  do {										\
+++    static const double _const[] = {						\
+++      /* 2^-24 */ 5.9604644775390625e-08,					\
+++      /* 2^-48 */ 3.5527136788005009e-15,					\
+++      /* 2^-72 */ 2.1175823681357508e-22,					\
+++      /* 2^-96 */ 1.2621774483536189e-29,					\
+++      /* 2^28 */ 2.68435456e+08,						\
+++      /* 2^4 */ 1.600000e+01,							\
+++      /* 2^-20 */ 9.5367431640625e-07,						\
+++      /* 2^-44 */ 5.6843418860808015e-14,					\
+++      /* 2^-68 */ 3.3881317890172014e-21,					\
+++      /* 2^-92 */ 2.0194839173657902e-28,					\
+++      /* 2^-116 */ 1.2037062152420224e-35};					\
+++    double _a240, _b240, _c240, _d240, _e240, _f240, 				\
+++	   _g240, _h240, _i240, _j240, _k240;					\
+++    union { double d; UDItype i; } _l240, _m240, _n240, _o240,			\
+++				   _p240, _q240, _r240, _s240;			\
+++    UDItype _t240, _u240, _v240, _w240, _x240, _y240 = 0;			\
+++										\
+++    if (wfracbits < 106 || wfracbits > 120)					\
+++      abort();									\
+++										\
+++    setfetz;									\
+++										\
+++    _e240 = (double)(long)(X##_f0 & 0xffffff);					\
+++    _j240 = (double)(long)(Y##_f0 & 0xffffff);					\
+++    _d240 = (double)(long)((X##_f0 >> 24) & 0xffffff);				\
+++    _i240 = (double)(long)((Y##_f0 >> 24) & 0xffffff);				\
+++    _c240 = (double)(long)(((X##_f1 << 16) & 0xffffff) | (X##_f0 >> 48));	\
+++    _h240 = (double)(long)(((Y##_f1 << 16) & 0xffffff) | (Y##_f0 >> 48));	\
+++    _b240 = (double)(long)((X##_f1 >> 8) & 0xffffff);				\
+++    _g240 = (double)(long)((Y##_f1 >> 8) & 0xffffff);				\
+++    _a240 = (double)(long)(X##_f1 >> 32);					\
+++    _f240 = (double)(long)(Y##_f1 >> 32);					\
+++    _e240 *= _const[3];								\
+++    _j240 *= _const[3];								\
+++    _d240 *= _const[2];								\
+++    _i240 *= _const[2];								\
+++    _c240 *= _const[1];								\
+++    _h240 *= _const[1];								\
+++    _b240 *= _const[0];								\
+++    _g240 *= _const[0];								\
+++    _s240.d =							      _e240*_j240;\
+++    _r240.d =						_d240*_j240 + _e240*_i240;\
+++    _q240.d =				  _c240*_j240 + _d240*_i240 + _e240*_h240;\
+++    _p240.d =		    _b240*_j240 + _c240*_i240 + _d240*_h240 + _e240*_g240;\
+++    _o240.d = _a240*_j240 + _b240*_i240 + _c240*_h240 + _d240*_g240 + _e240*_f240;\
+++    _n240.d = _a240*_i240 + _b240*_h240 + _c240*_g240 + _d240*_f240;		\
+++    _m240.d = _a240*_h240 + _b240*_g240 + _c240*_f240;				\
+++    _l240.d = _a240*_g240 + _b240*_f240;					\
+++    _k240 =   _a240*_f240;							\
+++    _r240.d += _s240.d;								\
+++    _q240.d += _r240.d;								\
+++    _p240.d += _q240.d;								\
+++    _o240.d += _p240.d;								\
+++    _n240.d += _o240.d;								\
+++    _m240.d += _n240.d;								\
+++    _l240.d += _m240.d;								\
+++    _k240 += _l240.d;								\
+++    _s240.d -= ((_const[10]+_s240.d)-_const[10]);				\
+++    _r240.d -= ((_const[9]+_r240.d)-_const[9]);					\
+++    _q240.d -= ((_const[8]+_q240.d)-_const[8]);					\
+++    _p240.d -= ((_const[7]+_p240.d)-_const[7]);					\
+++    _o240.d += _const[7];							\
+++    _n240.d += _const[6];							\
+++    _m240.d += _const[5];							\
+++    _l240.d += _const[4];							\
+++    if (_s240.d != 0.0) _y240 = 1;						\
+++    if (_r240.d != 0.0) _y240 = 1;						\
+++    if (_q240.d != 0.0) _y240 = 1;						\
+++    if (_p240.d != 0.0) _y240 = 1;						\
+++    _t240 = (DItype)_k240;							\
+++    _u240 = _l240.i;								\
+++    _v240 = _m240.i;								\
+++    _w240 = _n240.i;								\
+++    _x240 = _o240.i;								\
+++    R##_f1 = (_t240 << (128 - (wfracbits - 1)))					\
+++	     | ((_u240 & 0xffffff) >> ((wfracbits - 1) - 104));			\
+++    R##_f0 = ((_u240 & 0xffffff) << (168 - (wfracbits - 1)))			\
+++    	     | ((_v240 & 0xffffff) << (144 - (wfracbits - 1)))			\
+++    	     | ((_w240 & 0xffffff) << (120 - (wfracbits - 1)))			\
+++    	     | ((_x240 & 0xffffff) >> ((wfracbits - 1) - 96))			\
+++    	     | _y240;								\
+++    resetfe;									\
+++  } while (0)
+++
+++/*
+++ * Division algorithms:
+++ */
+++
+++#define _FP_DIV_MEAT_2_udiv(fs, R, X, Y)				\
+++  do {									\
+++    _FP_W_TYPE _n_f2, _n_f1, _n_f0, _r_f1, _r_f0, _m_f1, _m_f0;		\
+++    if (_FP_FRAC_GT_2(X, Y))						\
+++      {									\
+++	_n_f2 = X##_f1 >> 1;						\
+++	_n_f1 = X##_f1 << (_FP_W_TYPE_SIZE - 1) | X##_f0 >> 1;		\
+++	_n_f0 = X##_f0 << (_FP_W_TYPE_SIZE - 1);			\
+++      }									\
+++    else								\
+++      {									\
+++	R##_e--;							\
+++	_n_f2 = X##_f1;							\
+++	_n_f1 = X##_f0;							\
+++	_n_f0 = 0;							\
+++      }									\
+++									\
+++    /* Normalize, i.e. make the most significant bit of the 		\
+++       denominator set. */						\
+++    _FP_FRAC_SLL_2(Y, _FP_WFRACXBITS_##fs);				\
+++									\
+++    udiv_qrnnd(R##_f1, _r_f1, _n_f2, _n_f1, Y##_f1);			\
+++    umul_ppmm(_m_f1, _m_f0, R##_f1, Y##_f0);				\
+++    _r_f0 = _n_f0;							\
+++    if (_FP_FRAC_GT_2(_m, _r))						\
+++      {									\
+++	R##_f1--;							\
+++	_FP_FRAC_ADD_2(_r, Y, _r);					\
+++	if (_FP_FRAC_GE_2(_r, Y) && _FP_FRAC_GT_2(_m, _r))		\
+++	  {								\
+++	    R##_f1--;							\
+++	    _FP_FRAC_ADD_2(_r, Y, _r);					\
+++	  }								\
+++      }									\
+++    _FP_FRAC_DEC_2(_r, _m);						\
+++									\
+++    if (_r_f1 == Y##_f1)						\
+++      {									\
+++	/* This is a special case, not an optimization			\
+++	   (_r/Y##_f1 would not fit into UWtype).			\
+++	   As _r is guaranteed to be < Y,  R##_f0 can be either		\
+++	   (UWtype)-1 or (UWtype)-2.  But as we know what kind		\
+++	   of bits it is (sticky, guard, round),  we don't care.	\
+++	   We also don't care what the reminder is,  because the	\
+++	   guard bit will be set anyway.  -jj */			\
+++	R##_f0 = -1;							\
+++      }									\
+++    else								\
+++      {									\
+++	udiv_qrnnd(R##_f0, _r_f1, _r_f1, _r_f0, Y##_f1);		\
+++	umul_ppmm(_m_f1, _m_f0, R##_f0, Y##_f0);			\
+++	_r_f0 = 0;							\
+++	if (_FP_FRAC_GT_2(_m, _r))					\
+++	  {								\
+++	    R##_f0--;							\
+++	    _FP_FRAC_ADD_2(_r, Y, _r);					\
+++	    if (_FP_FRAC_GE_2(_r, Y) && _FP_FRAC_GT_2(_m, _r))		\
+++	      {								\
+++		R##_f0--;						\
+++		_FP_FRAC_ADD_2(_r, Y, _r);				\
+++	      }								\
+++	  }								\
+++	if (!_FP_FRAC_EQ_2(_r, _m))					\
+++	  R##_f0 |= _FP_WORK_STICKY;					\
+++      }									\
+++  } while (0)
+++
+++
+++#define _FP_DIV_MEAT_2_gmp(fs, R, X, Y)					\
+++  do {									\
+++    _FP_W_TYPE _x[4], _y[2], _z[4];					\
+++    _y[0] = Y##_f0; _y[1] = Y##_f1;					\
+++    _x[0] = _x[3] = 0;							\
+++    if (_FP_FRAC_GT_2(X, Y))						\
+++      {									\
+++	R##_e++;							\
+++	_x[1] = (X##_f0 << (_FP_WFRACBITS_##fs-1 - _FP_W_TYPE_SIZE) |	\
+++		 X##_f1 >> (_FP_W_TYPE_SIZE -				\
+++			    (_FP_WFRACBITS_##fs-1 - _FP_W_TYPE_SIZE)));	\
+++	_x[2] = X##_f1 << (_FP_WFRACBITS_##fs-1 - _FP_W_TYPE_SIZE);	\
+++      }									\
+++    else								\
+++      {									\
+++	_x[1] = (X##_f0 << (_FP_WFRACBITS_##fs - _FP_W_TYPE_SIZE) |	\
+++		 X##_f1 >> (_FP_W_TYPE_SIZE -				\
+++			    (_FP_WFRACBITS_##fs - _FP_W_TYPE_SIZE)));	\
+++	_x[2] = X##_f1 << (_FP_WFRACBITS_##fs - _FP_W_TYPE_SIZE);	\
+++      }									\
+++									\
+++    (void) mpn_divrem (_z, 0, _x, 4, _y, 2);				\
+++    R##_f1 = _z[1];							\
+++    R##_f0 = _z[0] | ((_x[0] | _x[1]) != 0);				\
+++  } while (0)
+++
+++
+++/*
+++ * Square root algorithms:
+++ * We have just one right now, maybe Newton approximation
+++ * should be added for those machines where division is fast.
+++ */
+++ 
+++#define _FP_SQRT_MEAT_2(R, S, T, X, q)			\
+++  do {							\
+++    while (q)						\
+++      {							\
+++	T##_f1 = S##_f1 + q;				\
+++	if (T##_f1 <= X##_f1)				\
+++	  {						\
+++	    S##_f1 = T##_f1 + q;			\
+++	    X##_f1 -= T##_f1;				\
+++	    R##_f1 += q;				\
+++	  }						\
+++	_FP_FRAC_SLL_2(X, 1);				\
+++	q >>= 1;					\
+++      }							\
+++    q = (_FP_W_TYPE)1 << (_FP_W_TYPE_SIZE - 1);		\
+++    while (q != _FP_WORK_ROUND)				\
+++      {							\
+++	T##_f0 = S##_f0 + q;				\
+++	T##_f1 = S##_f1;				\
+++	if (T##_f1 < X##_f1 || 				\
+++	    (T##_f1 == X##_f1 && T##_f0 <= X##_f0))	\
+++	  {						\
+++	    S##_f0 = T##_f0 + q;			\
+++	    S##_f1 += (T##_f0 > S##_f0);		\
+++	    _FP_FRAC_DEC_2(X, T);			\
+++	    R##_f0 += q;				\
+++	  }						\
+++	_FP_FRAC_SLL_2(X, 1);				\
+++	q >>= 1;					\
+++      }							\
+++    if (X##_f0 | X##_f1)				\
+++      {							\
+++	if (S##_f1 < X##_f1 || 				\
+++	    (S##_f1 == X##_f1 && S##_f0 < X##_f0))	\
+++	  R##_f0 |= _FP_WORK_ROUND;			\
+++	R##_f0 |= _FP_WORK_STICKY;			\
+++      }							\
+++  } while (0)
+++
+++
+++/*
+++ * Assembly/disassembly for converting to/from integral types.  
+++ * No shifting or overflow handled here.
+++ */
+++
+++#define _FP_FRAC_ASSEMBLE_2(r, X, rsize)	\
+++(void)((rsize <= _FP_W_TYPE_SIZE)		\
+++       ? ({ r = X##_f0; })			\
+++       : ({					\
+++	    r = X##_f1;				\
+++	    r <<= _FP_W_TYPE_SIZE;		\
+++	    r += X##_f0;			\
+++	  }))
+++
+++#define _FP_FRAC_DISASSEMBLE_2(X, r, rsize)				\
+++  do {									\
+++    X##_f0 = r;								\
+++    X##_f1 = (rsize <= _FP_W_TYPE_SIZE ? 0 : r >> _FP_W_TYPE_SIZE);	\
+++  } while (0)
+++
+++/*
+++ * Convert FP values between word sizes
+++ */
+++
+++#define _FP_FRAC_COPY_1_2(D, S)		(D##_f = S##_f0)
+++
+++#define _FP_FRAC_COPY_2_1(D, S)		((D##_f0 = S##_f), (D##_f1 = 0))
+++
+++#define _FP_FRAC_COPY_2_2(D,S)		_FP_FRAC_COPY_2(D,S)
++diff -Naur uClibc-0.9.31.ori/libc/sysdeps/linux/sparc/soft-fp/op-4.h uClibc-0.9.31/libc/sysdeps/linux/sparc/soft-fp/op-4.h
++--- uClibc-0.9.31.ori/libc/sysdeps/linux/sparc/soft-fp/op-4.h	1970-01-01 01:00:00.000000000 +0100
+++++ uClibc-0.9.31/libc/sysdeps/linux/sparc/soft-fp/op-4.h	2010-10-14 14:05:37.000000000 +0200
++@@ -0,0 +1,688 @@
+++/* Software floating-point emulation.
+++   Basic four-word fraction declaration and manipulation.
+++   Copyright (C) 1997,1998,1999,2006,2007 Free Software Foundation, Inc.
+++   This file is part of the GNU C Library.
+++   Contributed by Richard Henderson (rth at cygnus.com),
+++		  Jakub Jelinek (jj at ultra.linux.cz),
+++		  David S. Miller (davem at redhat.com) and
+++		  Peter Maydell (pmaydell at chiark.greenend.org.uk).
+++
+++   The GNU C Library is free software; you can redistribute it and/or
+++   modify it under the terms of the GNU Lesser General Public
+++   License as published by the Free Software Foundation; either
+++   version 2.1 of the License, or (at your option) any later version.
+++
+++   In addition to the permissions in the GNU Lesser General Public
+++   License, the Free Software Foundation gives you unlimited
+++   permission to link the compiled version of this file into
+++   combinations with other programs, and to distribute those
+++   combinations without any restriction coming from the use of this
+++   file.  (The Lesser General Public License restrictions do apply in
+++   other respects; for example, they cover modification of the file,
+++   and distribution when not linked into a combine executable.)
+++
+++   The GNU C Library is distributed in the hope that it will be useful,
+++   but WITHOUT ANY WARRANTY; without even the implied warranty of
+++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+++   Lesser General Public License for more details.
+++
+++   You should have received a copy of the GNU Lesser General Public
+++   License along with the GNU C Library; if not, write to the Free
+++   Software Foundation, 51 Franklin Street, Fifth Floor, Boston,
+++   MA 02110-1301, USA.  */
+++
+++#define _FP_FRAC_DECL_4(X)	_FP_W_TYPE X##_f[4]
+++#define _FP_FRAC_COPY_4(D,S)			\
+++  (D##_f[0] = S##_f[0], D##_f[1] = S##_f[1],	\
+++   D##_f[2] = S##_f[2], D##_f[3] = S##_f[3])
+++#define _FP_FRAC_SET_4(X,I)	__FP_FRAC_SET_4(X, I)
+++#define _FP_FRAC_HIGH_4(X)	(X##_f[3])
+++#define _FP_FRAC_LOW_4(X)	(X##_f[0])
+++#define _FP_FRAC_WORD_4(X,w)	(X##_f[w])
+++
+++#define _FP_FRAC_SLL_4(X,N)						\
+++  do {									\
+++    _FP_I_TYPE _up, _down, _skip, _i;					\
+++    _skip = (N) / _FP_W_TYPE_SIZE;					\
+++    _up = (N) % _FP_W_TYPE_SIZE;					\
+++    _down = _FP_W_TYPE_SIZE - _up;					\
+++    if (!_up)								\
+++      for (_i = 3; _i >= _skip; --_i)					\
+++	X##_f[_i] = X##_f[_i-_skip];					\
+++    else								\
+++      {									\
+++	for (_i = 3; _i > _skip; --_i)					\
+++	  X##_f[_i] = X##_f[_i-_skip] << _up				\
+++		      | X##_f[_i-_skip-1] >> _down;			\
+++	X##_f[_i--] = X##_f[0] << _up; 					\
+++      }									\
+++    for (; _i >= 0; --_i)						\
+++      X##_f[_i] = 0;							\
+++  } while (0)
+++
+++/* This one was broken too */
+++#define _FP_FRAC_SRL_4(X,N)						\
+++  do {									\
+++    _FP_I_TYPE _up, _down, _skip, _i;					\
+++    _skip = (N) / _FP_W_TYPE_SIZE;					\
+++    _down = (N) % _FP_W_TYPE_SIZE;					\
+++    _up = _FP_W_TYPE_SIZE - _down;					\
+++    if (!_down)								\
+++      for (_i = 0; _i <= 3-_skip; ++_i)					\
+++	X##_f[_i] = X##_f[_i+_skip];					\
+++    else								\
+++      {									\
+++	for (_i = 0; _i < 3-_skip; ++_i)				\
+++	  X##_f[_i] = X##_f[_i+_skip] >> _down				\
+++		      | X##_f[_i+_skip+1] << _up;			\
+++	X##_f[_i++] = X##_f[3] >> _down;				\
+++      }									\
+++    for (; _i < 4; ++_i)						\
+++      X##_f[_i] = 0;							\
+++  } while (0)
+++
+++
+++/* Right shift with sticky-lsb. 
+++ * What this actually means is that we do a standard right-shift,
+++ * but that if any of the bits that fall off the right hand side
+++ * were one then we always set the LSbit.
+++ */
+++#define _FP_FRAC_SRST_4(X,S,N,size)			\
+++  do {							\
+++    _FP_I_TYPE _up, _down, _skip, _i;			\
+++    _FP_W_TYPE _s;					\
+++    _skip = (N) / _FP_W_TYPE_SIZE;			\
+++    _down = (N) % _FP_W_TYPE_SIZE;			\
+++    _up = _FP_W_TYPE_SIZE - _down;			\
+++    for (_s = _i = 0; _i < _skip; ++_i)			\
+++      _s |= X##_f[_i];					\
+++    if (!_down)						\
+++      for (_i = 0; _i <= 3-_skip; ++_i)			\
+++	X##_f[_i] = X##_f[_i+_skip];			\
+++    else						\
+++      {							\
+++	_s |= X##_f[_i] << _up;				\
+++	for (_i = 0; _i < 3-_skip; ++_i)		\
+++	  X##_f[_i] = X##_f[_i+_skip] >> _down		\
+++		      | X##_f[_i+_skip+1] << _up;	\
+++	X##_f[_i++] = X##_f[3] >> _down;		\
+++      }							\
+++    for (; _i < 4; ++_i)				\
+++      X##_f[_i] = 0;					\
+++    S = (_s != 0);					\
+++  } while (0)
+++
+++#define _FP_FRAC_SRS_4(X,N,size)		\
+++  do {						\
+++    int _sticky;				\
+++    _FP_FRAC_SRST_4(X, _sticky, N, size);	\
+++    X##_f[0] |= _sticky;			\
+++  } while (0)
+++
+++#define _FP_FRAC_ADD_4(R,X,Y)						\
+++  __FP_FRAC_ADD_4(R##_f[3], R##_f[2], R##_f[1], R##_f[0],		\
+++		  X##_f[3], X##_f[2], X##_f[1], X##_f[0],		\
+++		  Y##_f[3], Y##_f[2], Y##_f[1], Y##_f[0])
+++
+++#define _FP_FRAC_SUB_4(R,X,Y)						\
+++  __FP_FRAC_SUB_4(R##_f[3], R##_f[2], R##_f[1], R##_f[0],		\
+++		  X##_f[3], X##_f[2], X##_f[1], X##_f[0],		\
+++		  Y##_f[3], Y##_f[2], Y##_f[1], Y##_f[0])
+++
+++#define _FP_FRAC_DEC_4(X,Y)						\
+++  __FP_FRAC_DEC_4(X##_f[3], X##_f[2], X##_f[1], X##_f[0],		\
+++		  Y##_f[3], Y##_f[2], Y##_f[1], Y##_f[0])
+++
+++#define _FP_FRAC_ADDI_4(X,I)						\
+++  __FP_FRAC_ADDI_4(X##_f[3], X##_f[2], X##_f[1], X##_f[0], I)
+++
+++#define _FP_ZEROFRAC_4  0,0,0,0
+++#define _FP_MINFRAC_4   0,0,0,1
+++#define _FP_MAXFRAC_4	(~(_FP_WS_TYPE)0), (~(_FP_WS_TYPE)0), (~(_FP_WS_TYPE)0), (~(_FP_WS_TYPE)0)
+++
+++#define _FP_FRAC_ZEROP_4(X)     ((X##_f[0] | X##_f[1] | X##_f[2] | X##_f[3]) == 0)
+++#define _FP_FRAC_NEGP_4(X)      ((_FP_WS_TYPE)X##_f[3] < 0)
+++#define _FP_FRAC_OVERP_4(fs,X)  (_FP_FRAC_HIGH_##fs(X) & _FP_OVERFLOW_##fs)
+++#define _FP_FRAC_CLEAR_OVERP_4(fs,X)  (_FP_FRAC_HIGH_##fs(X) &= ~_FP_OVERFLOW_##fs)
+++
+++#define _FP_FRAC_EQ_4(X,Y)				\
+++ (X##_f[0] == Y##_f[0] && X##_f[1] == Y##_f[1]		\
+++  && X##_f[2] == Y##_f[2] && X##_f[3] == Y##_f[3])
+++
+++#define _FP_FRAC_GT_4(X,Y)				\
+++ (X##_f[3] > Y##_f[3] ||				\
+++  (X##_f[3] == Y##_f[3] && (X##_f[2] > Y##_f[2] ||	\
+++   (X##_f[2] == Y##_f[2] && (X##_f[1] > Y##_f[1] ||	\
+++    (X##_f[1] == Y##_f[1] && X##_f[0] > Y##_f[0])	\
+++   ))							\
+++  ))							\
+++ )
+++
+++#define _FP_FRAC_GE_4(X,Y)				\
+++ (X##_f[3] > Y##_f[3] ||				\
+++  (X##_f[3] == Y##_f[3] && (X##_f[2] > Y##_f[2] ||	\
+++   (X##_f[2] == Y##_f[2] && (X##_f[1] > Y##_f[1] ||	\
+++    (X##_f[1] == Y##_f[1] && X##_f[0] >= Y##_f[0])	\
+++   ))							\
+++  ))							\
+++ )
+++
+++
+++#define _FP_FRAC_CLZ_4(R,X)		\
+++  do {					\
+++    if (X##_f[3])			\
+++    {					\
+++	__FP_CLZ(R,X##_f[3]);		\
+++    }					\
+++    else if (X##_f[2])			\
+++    {					\
+++	__FP_CLZ(R,X##_f[2]);		\
+++	R += _FP_W_TYPE_SIZE;		\
+++    }					\
+++    else if (X##_f[1])			\
+++    {					\
+++	__FP_CLZ(R,X##_f[1]);		\
+++	R += _FP_W_TYPE_SIZE*2;		\
+++    }					\
+++    else				\
+++    {					\
+++	__FP_CLZ(R,X##_f[0]);		\
+++	R += _FP_W_TYPE_SIZE*3;		\
+++    }					\
+++  } while(0)
+++
+++
+++#define _FP_UNPACK_RAW_4(fs, X, val)				\
+++  do {								\
+++    union _FP_UNION_##fs _flo; _flo.flt = (val);		\
+++    X##_f[0] = _flo.bits.frac0;					\
+++    X##_f[1] = _flo.bits.frac1;					\
+++    X##_f[2] = _flo.bits.frac2;					\
+++    X##_f[3] = _flo.bits.frac3;					\
+++    X##_e  = _flo.bits.exp;					\
+++    X##_s  = _flo.bits.sign;					\
+++  } while (0)
+++
+++#define _FP_UNPACK_RAW_4_P(fs, X, val)				\
+++  do {								\
+++    union _FP_UNION_##fs *_flo =				\
+++      (union _FP_UNION_##fs *)(val);				\
+++								\
+++    X##_f[0] = _flo->bits.frac0;				\
+++    X##_f[1] = _flo->bits.frac1;				\
+++    X##_f[2] = _flo->bits.frac2;				\
+++    X##_f[3] = _flo->bits.frac3;				\
+++    X##_e  = _flo->bits.exp;					\
+++    X##_s  = _flo->bits.sign;					\
+++  } while (0)
+++
+++#define _FP_PACK_RAW_4(fs, val, X)				\
+++  do {								\
+++    union _FP_UNION_##fs _flo;					\
+++    _flo.bits.frac0 = X##_f[0];					\
+++    _flo.bits.frac1 = X##_f[1];					\
+++    _flo.bits.frac2 = X##_f[2];					\
+++    _flo.bits.frac3 = X##_f[3];					\
+++    _flo.bits.exp   = X##_e;					\
+++    _flo.bits.sign  = X##_s;					\
+++    (val) = _flo.flt;				   		\
+++  } while (0)
+++
+++#define _FP_PACK_RAW_4_P(fs, val, X)				\
+++  do {								\
+++    union _FP_UNION_##fs *_flo =				\
+++      (union _FP_UNION_##fs *)(val);				\
+++								\
+++    _flo->bits.frac0 = X##_f[0];				\
+++    _flo->bits.frac1 = X##_f[1];				\
+++    _flo->bits.frac2 = X##_f[2];				\
+++    _flo->bits.frac3 = X##_f[3];				\
+++    _flo->bits.exp   = X##_e;					\
+++    _flo->bits.sign  = X##_s;					\
+++  } while (0)
+++
+++/*
+++ * Multiplication algorithms:
+++ */
+++
+++/* Given a 1W * 1W => 2W primitive, do the extended multiplication.  */
+++
+++#define _FP_MUL_MEAT_4_wide(wfracbits, R, X, Y, doit)			    \
+++  do {									    \
+++    _FP_FRAC_DECL_8(_z); _FP_FRAC_DECL_2(_b); _FP_FRAC_DECL_2(_c);	    \
+++    _FP_FRAC_DECL_2(_d); _FP_FRAC_DECL_2(_e); _FP_FRAC_DECL_2(_f);	    \
+++									    \
+++    doit(_FP_FRAC_WORD_8(_z,1), _FP_FRAC_WORD_8(_z,0), X##_f[0], Y##_f[0]); \
+++    doit(_b_f1, _b_f0, X##_f[0], Y##_f[1]);				    \
+++    doit(_c_f1, _c_f0, X##_f[1], Y##_f[0]);				    \
+++    doit(_d_f1, _d_f0, X##_f[1], Y##_f[1]);				    \
+++    doit(_e_f1, _e_f0, X##_f[0], Y##_f[2]);				    \
+++    doit(_f_f1, _f_f0, X##_f[2], Y##_f[0]);				    \
+++    __FP_FRAC_ADD_3(_FP_FRAC_WORD_8(_z,3),_FP_FRAC_WORD_8(_z,2),	    \
+++		    _FP_FRAC_WORD_8(_z,1), 0,_b_f1,_b_f0,		    \
+++		    0,0,_FP_FRAC_WORD_8(_z,1));				    \
+++    __FP_FRAC_ADD_3(_FP_FRAC_WORD_8(_z,3),_FP_FRAC_WORD_8(_z,2),	    \
+++		    _FP_FRAC_WORD_8(_z,1), 0,_c_f1,_c_f0,		    \
+++		    _FP_FRAC_WORD_8(_z,3),_FP_FRAC_WORD_8(_z,2),	    \
+++		    _FP_FRAC_WORD_8(_z,1));				    \
+++    __FP_FRAC_ADD_3(_FP_FRAC_WORD_8(_z,4),_FP_FRAC_WORD_8(_z,3),	    \
+++		    _FP_FRAC_WORD_8(_z,2), 0,_d_f1,_d_f0,		    \
+++		    0,_FP_FRAC_WORD_8(_z,3),_FP_FRAC_WORD_8(_z,2));	    \
+++    __FP_FRAC_ADD_3(_FP_FRAC_WORD_8(_z,4),_FP_FRAC_WORD_8(_z,3),	    \
+++		    _FP_FRAC_WORD_8(_z,2), 0,_e_f1,_e_f0,		    \
+++		    _FP_FRAC_WORD_8(_z,4),_FP_FRAC_WORD_8(_z,3),	    \
+++		    _FP_FRAC_WORD_8(_z,2));				    \
+++    __FP_FRAC_ADD_3(_FP_FRAC_WORD_8(_z,4),_FP_FRAC_WORD_8(_z,3),	    \
+++		    _FP_FRAC_WORD_8(_z,2), 0,_f_f1,_f_f0,		    \
+++		    _FP_FRAC_WORD_8(_z,4),_FP_FRAC_WORD_8(_z,3),	    \
+++		    _FP_FRAC_WORD_8(_z,2));				    \
+++    doit(_b_f1, _b_f0, X##_f[0], Y##_f[3]);				    \
+++    doit(_c_f1, _c_f0, X##_f[3], Y##_f[0]);				    \
+++    doit(_d_f1, _d_f0, X##_f[1], Y##_f[2]);				    \
+++    doit(_e_f1, _e_f0, X##_f[2], Y##_f[1]);				    \
+++    __FP_FRAC_ADD_3(_FP_FRAC_WORD_8(_z,5),_FP_FRAC_WORD_8(_z,4),	    \
+++		    _FP_FRAC_WORD_8(_z,3), 0,_b_f1,_b_f0,		    \
+++		    0,_FP_FRAC_WORD_8(_z,4),_FP_FRAC_WORD_8(_z,3));	    \
+++    __FP_FRAC_ADD_3(_FP_FRAC_WORD_8(_z,5),_FP_FRAC_WORD_8(_z,4),	    \
+++		    _FP_FRAC_WORD_8(_z,3), 0,_c_f1,_c_f0,		    \
+++		    _FP_FRAC_WORD_8(_z,5),_FP_FRAC_WORD_8(_z,4),	    \
+++		    _FP_FRAC_WORD_8(_z,3));				    \
+++    __FP_FRAC_ADD_3(_FP_FRAC_WORD_8(_z,5),_FP_FRAC_WORD_8(_z,4),	    \
+++		    _FP_FRAC_WORD_8(_z,3), 0,_d_f1,_d_f0,		    \
+++		    _FP_FRAC_WORD_8(_z,5),_FP_FRAC_WORD_8(_z,4),	    \
+++		    _FP_FRAC_WORD_8(_z,3));				    \
+++    __FP_FRAC_ADD_3(_FP_FRAC_WORD_8(_z,5),_FP_FRAC_WORD_8(_z,4),	    \
+++		    _FP_FRAC_WORD_8(_z,3), 0,_e_f1,_e_f0,		    \
+++		    _FP_FRAC_WORD_8(_z,5),_FP_FRAC_WORD_8(_z,4),	    \
+++		    _FP_FRAC_WORD_8(_z,3));				    \
+++    doit(_b_f1, _b_f0, X##_f[2], Y##_f[2]);				    \
+++    doit(_c_f1, _c_f0, X##_f[1], Y##_f[3]);				    \
+++    doit(_d_f1, _d_f0, X##_f[3], Y##_f[1]);				    \
+++    doit(_e_f1, _e_f0, X##_f[2], Y##_f[3]);				    \
+++    doit(_f_f1, _f_f0, X##_f[3], Y##_f[2]);				    \
+++    __FP_FRAC_ADD_3(_FP_FRAC_WORD_8(_z,6),_FP_FRAC_WORD_8(_z,5),	    \
+++		    _FP_FRAC_WORD_8(_z,4), 0,_b_f1,_b_f0,		    \
+++		    0,_FP_FRAC_WORD_8(_z,5),_FP_FRAC_WORD_8(_z,4));	    \
+++    __FP_FRAC_ADD_3(_FP_FRAC_WORD_8(_z,6),_FP_FRAC_WORD_8(_z,5),	    \
+++		    _FP_FRAC_WORD_8(_z,4), 0,_c_f1,_c_f0,		    \
+++		    _FP_FRAC_WORD_8(_z,6),_FP_FRAC_WORD_8(_z,5),	    \
+++		    _FP_FRAC_WORD_8(_z,4));				    \
+++    __FP_FRAC_ADD_3(_FP_FRAC_WORD_8(_z,6),_FP_FRAC_WORD_8(_z,5),	    \
+++		    _FP_FRAC_WORD_8(_z,4), 0,_d_f1,_d_f0,		    \
+++		    _FP_FRAC_WORD_8(_z,6),_FP_FRAC_WORD_8(_z,5),	    \
+++		    _FP_FRAC_WORD_8(_z,4));				    \
+++    __FP_FRAC_ADD_3(_FP_FRAC_WORD_8(_z,7),_FP_FRAC_WORD_8(_z,6),	    \
+++		    _FP_FRAC_WORD_8(_z,5), 0,_e_f1,_e_f0,		    \
+++		    0,_FP_FRAC_WORD_8(_z,6),_FP_FRAC_WORD_8(_z,5));	    \
+++    __FP_FRAC_ADD_3(_FP_FRAC_WORD_8(_z,7),_FP_FRAC_WORD_8(_z,6),	    \
+++		    _FP_FRAC_WORD_8(_z,5), 0,_f_f1,_f_f0,		    \
+++		    _FP_FRAC_WORD_8(_z,7),_FP_FRAC_WORD_8(_z,6),	    \
+++		    _FP_FRAC_WORD_8(_z,5));				    \
+++    doit(_b_f1, _b_f0, X##_f[3], Y##_f[3]);				    \
+++    __FP_FRAC_ADD_2(_FP_FRAC_WORD_8(_z,7),_FP_FRAC_WORD_8(_z,6),	    \
+++		    _b_f1,_b_f0,					    \
+++		    _FP_FRAC_WORD_8(_z,7),_FP_FRAC_WORD_8(_z,6));	    \
+++									    \
+++    /* Normalize since we know where the msb of the multiplicands	    \
+++       were (bit B), we know that the msb of the of the product is	    \
+++       at either 2B or 2B-1.  */					    \
+++    _FP_FRAC_SRS_8(_z, wfracbits-1, 2*wfracbits);			    \
+++    __FP_FRAC_SET_4(R, _FP_FRAC_WORD_8(_z,3), _FP_FRAC_WORD_8(_z,2),	    \
+++		    _FP_FRAC_WORD_8(_z,1), _FP_FRAC_WORD_8(_z,0));	    \
+++  } while (0)
+++
+++#define _FP_MUL_MEAT_4_gmp(wfracbits, R, X, Y)				    \
+++  do {									    \
+++    _FP_FRAC_DECL_8(_z);						    \
+++									    \
+++    mpn_mul_n(_z_f, _x_f, _y_f, 4);					    \
+++									    \
+++    /* Normalize since we know where the msb of the multiplicands	    \
+++       were (bit B), we know that the msb of the of the product is	    \
+++       at either 2B or 2B-1.  */					    \
+++    _FP_FRAC_SRS_8(_z, wfracbits-1, 2*wfracbits);	 		    \
+++    __FP_FRAC_SET_4(R, _FP_FRAC_WORD_8(_z,3), _FP_FRAC_WORD_8(_z,2),	    \
+++		    _FP_FRAC_WORD_8(_z,1), _FP_FRAC_WORD_8(_z,0));	    \
+++  } while (0)
+++
+++/*
+++ * Helper utility for _FP_DIV_MEAT_4_udiv:
+++ * pppp = m * nnn
+++ */
+++#define umul_ppppmnnn(p3,p2,p1,p0,m,n2,n1,n0)				    \
+++  do {									    \
+++    UWtype _t;								    \
+++    umul_ppmm(p1,p0,m,n0);						    \
+++    umul_ppmm(p2,_t,m,n1);						    \
+++    __FP_FRAC_ADDI_2(p2,p1,_t);						    \
+++    umul_ppmm(p3,_t,m,n2);						    \
+++    __FP_FRAC_ADDI_2(p3,p2,_t);						    \
+++  } while (0)
+++
+++/*
+++ * Division algorithms:
+++ */
+++
+++#define _FP_DIV_MEAT_4_udiv(fs, R, X, Y)				    \
+++  do {									    \
+++    int _i;								    \
+++    _FP_FRAC_DECL_4(_n); _FP_FRAC_DECL_4(_m);				    \
+++    _FP_FRAC_SET_4(_n, _FP_ZEROFRAC_4);					    \
+++    if (_FP_FRAC_GT_4(X, Y))						    \
+++      {									    \
+++	_n_f[3] = X##_f[0] << (_FP_W_TYPE_SIZE - 1);			    \
+++	_FP_FRAC_SRL_4(X, 1);						    \
+++      }									    \
+++    else								    \
+++      R##_e--;								    \
+++									    \
+++    /* Normalize, i.e. make the most significant bit of the 		    \
+++       denominator set. */						    \
+++    _FP_FRAC_SLL_4(Y, _FP_WFRACXBITS_##fs);				    \
+++									    \
+++    for (_i = 3; ; _i--)						    \
+++      {									    \
+++        if (X##_f[3] == Y##_f[3])					    \
+++          {								    \
+++            /* This is a special case, not an optimization		    \
+++               (X##_f[3]/Y##_f[3] would not fit into UWtype).		    \
+++               As X## is guaranteed to be < Y,  R##_f[_i] can be either	    \
+++               (UWtype)-1 or (UWtype)-2.  */				    \
+++            R##_f[_i] = -1;						    \
+++            if (!_i)							    \
+++	      break;							    \
+++            __FP_FRAC_SUB_4(X##_f[3], X##_f[2], X##_f[1], X##_f[0],	    \
+++			    Y##_f[2], Y##_f[1], Y##_f[0], 0,		    \
+++			    X##_f[2], X##_f[1], X##_f[0], _n_f[_i]);	    \
+++            _FP_FRAC_SUB_4(X, Y, X);					    \
+++            if (X##_f[3] > Y##_f[3])					    \
+++              {								    \
+++                R##_f[_i] = -2;						    \
+++                _FP_FRAC_ADD_4(X, Y, X);				    \
+++              }								    \
+++          }								    \
+++        else								    \
+++          {								    \
+++            udiv_qrnnd(R##_f[_i], X##_f[3], X##_f[3], X##_f[2], Y##_f[3]);  \
+++            umul_ppppmnnn(_m_f[3], _m_f[2], _m_f[1], _m_f[0],		    \
+++			  R##_f[_i], Y##_f[2], Y##_f[1], Y##_f[0]);	    \
+++            X##_f[2] = X##_f[1];					    \
+++            X##_f[1] = X##_f[0];					    \
+++            X##_f[0] = _n_f[_i];					    \
+++            if (_FP_FRAC_GT_4(_m, X))					    \
+++              {								    \
+++                R##_f[_i]--;						    \
+++                _FP_FRAC_ADD_4(X, Y, X);				    \
+++                if (_FP_FRAC_GE_4(X, Y) && _FP_FRAC_GT_4(_m, X))	    \
+++                  {							    \
+++		    R##_f[_i]--;					    \
+++		    _FP_FRAC_ADD_4(X, Y, X);				    \
+++                  }							    \
+++              }								    \
+++            _FP_FRAC_DEC_4(X, _m);					    \
+++            if (!_i)							    \
+++	      {								    \
+++		if (!_FP_FRAC_EQ_4(X, _m))				    \
+++		  R##_f[0] |= _FP_WORK_STICKY;				    \
+++		break;							    \
+++	      }								    \
+++          }								    \
+++      }									    \
+++  } while (0)
+++
+++
+++/*
+++ * Square root algorithms:
+++ * We have just one right now, maybe Newton approximation
+++ * should be added for those machines where division is fast.
+++ */
+++ 
+++#define _FP_SQRT_MEAT_4(R, S, T, X, q)				\
+++  do {								\
+++    while (q)							\
+++      {								\
+++	T##_f[3] = S##_f[3] + q;				\
+++	if (T##_f[3] <= X##_f[3])				\
+++	  {							\
+++	    S##_f[3] = T##_f[3] + q;				\
+++	    X##_f[3] -= T##_f[3];				\
+++	    R##_f[3] += q;					\
+++	  }							\
+++	_FP_FRAC_SLL_4(X, 1);					\
+++	q >>= 1;						\
+++      }								\
+++    q = (_FP_W_TYPE)1 << (_FP_W_TYPE_SIZE - 1);			\
+++    while (q)							\
+++      {								\
+++	T##_f[2] = S##_f[2] + q;				\
+++	T##_f[3] = S##_f[3];					\
+++	if (T##_f[3] < X##_f[3] || 				\
+++	    (T##_f[3] == X##_f[3] && T##_f[2] <= X##_f[2]))	\
+++	  {							\
+++	    S##_f[2] = T##_f[2] + q;				\
+++	    S##_f[3] += (T##_f[2] > S##_f[2]);			\
+++	    __FP_FRAC_DEC_2(X##_f[3], X##_f[2],			\
+++			    T##_f[3], T##_f[2]);		\
+++	    R##_f[2] += q;					\
+++	  }							\
+++	_FP_FRAC_SLL_4(X, 1);					\
+++	q >>= 1;						\
+++      }								\
+++    q = (_FP_W_TYPE)1 << (_FP_W_TYPE_SIZE - 1);			\
+++    while (q)							\
+++      {								\
+++	T##_f[1] = S##_f[1] + q;				\
+++	T##_f[2] = S##_f[2];					\
+++	T##_f[3] = S##_f[3];					\
+++	if (T##_f[3] < X##_f[3] || 				\
+++	    (T##_f[3] == X##_f[3] && (T##_f[2] < X##_f[2] ||	\
+++	     (T##_f[2] == X##_f[2] && T##_f[1] <= X##_f[1]))))	\
+++	  {							\
+++	    S##_f[1] = T##_f[1] + q;				\
+++	    S##_f[2] += (T##_f[1] > S##_f[1]);			\
+++	    S##_f[3] += (T##_f[2] > S##_f[2]);			\
+++	    __FP_FRAC_DEC_3(X##_f[3], X##_f[2], X##_f[1],	\
+++	    		    T##_f[3], T##_f[2], T##_f[1]);	\
+++	    R##_f[1] += q;					\
+++	  }							\
+++	_FP_FRAC_SLL_4(X, 1);					\
+++	q >>= 1;						\
+++      }								\
+++    q = (_FP_W_TYPE)1 << (_FP_W_TYPE_SIZE - 1);			\
+++    while (q != _FP_WORK_ROUND)					\
+++      {								\
+++	T##_f[0] = S##_f[0] + q;				\
+++	T##_f[1] = S##_f[1];					\
+++	T##_f[2] = S##_f[2];					\
+++	T##_f[3] = S##_f[3];					\
+++	if (_FP_FRAC_GE_4(X,T))					\
+++	  {							\
+++	    S##_f[0] = T##_f[0] + q;				\
+++	    S##_f[1] += (T##_f[0] > S##_f[0]);			\
+++	    S##_f[2] += (T##_f[1] > S##_f[1]);			\
+++	    S##_f[3] += (T##_f[2] > S##_f[2]);			\
+++	    _FP_FRAC_DEC_4(X, T);				\
+++	    R##_f[0] += q;					\
+++	  }							\
+++	_FP_FRAC_SLL_4(X, 1);					\
+++	q >>= 1;						\
+++      }								\
+++    if (!_FP_FRAC_ZEROP_4(X))					\
+++      {								\
+++	if (_FP_FRAC_GT_4(X,S))					\
+++	  R##_f[0] |= _FP_WORK_ROUND;				\
+++	R##_f[0] |= _FP_WORK_STICKY;				\
+++      }								\
+++  } while (0)
+++
+++
+++/*
+++ * Internals 
+++ */
+++
+++#define __FP_FRAC_SET_4(X,I3,I2,I1,I0)					\
+++  (X##_f[3] = I3, X##_f[2] = I2, X##_f[1] = I1, X##_f[0] = I0)
+++
+++#ifndef __FP_FRAC_ADD_3
+++#define __FP_FRAC_ADD_3(r2,r1,r0,x2,x1,x0,y2,y1,y0)		\
+++  do {								\
+++    _FP_W_TYPE _c1, _c2;					\
+++    r0 = x0 + y0;						\
+++    _c1 = r0 < x0;						\
+++    r1 = x1 + y1;						\
+++    _c2 = r1 < x1;						\
+++    r1 += _c1;							\
+++    _c2 |= r1 < _c1;						\
+++    r2 = x2 + y2 + _c2;						\
+++  } while (0)
+++#endif
+++
+++#ifndef __FP_FRAC_ADD_4
+++#define __FP_FRAC_ADD_4(r3,r2,r1,r0,x3,x2,x1,x0,y3,y2,y1,y0)	\
+++  do {								\
+++    _FP_W_TYPE _c1, _c2, _c3;					\
+++    r0 = x0 + y0;						\
+++    _c1 = r0 < x0;						\
+++    r1 = x1 + y1;						\
+++    _c2 = r1 < x1;						\
+++    r1 += _c1;							\
+++    _c2 |= r1 < _c1;						\
+++    r2 = x2 + y2;						\
+++    _c3 = r2 < x2;						\
+++    r2 += _c2;							\
+++    _c3 |= r2 < _c2;						\
+++    r3 = x3 + y3 + _c3;						\
+++  } while (0)
+++#endif
+++
+++#ifndef __FP_FRAC_SUB_3
+++#define __FP_FRAC_SUB_3(r2,r1,r0,x2,x1,x0,y2,y1,y0)		\
+++  do {								\
+++    _FP_W_TYPE _c1, _c2;					\
+++    r0 = x0 - y0;						\
+++    _c1 = r0 > x0;						\
+++    r1 = x1 - y1;						\
+++    _c2 = r1 > x1;						\
+++    r1 -= _c1;							\
+++    _c2 |= _c1 && (y1 == x1);					\
+++    r2 = x2 - y2 - _c2;						\
+++  } while (0)
+++#endif
+++
+++#ifndef __FP_FRAC_SUB_4
+++#define __FP_FRAC_SUB_4(r3,r2,r1,r0,x3,x2,x1,x0,y3,y2,y1,y0)	\
+++  do {								\
+++    _FP_W_TYPE _c1, _c2, _c3;					\
+++    r0 = x0 - y0;						\
+++    _c1 = r0 > x0;						\
+++    r1 = x1 - y1;						\
+++    _c2 = r1 > x1;						\
+++    r1 -= _c1;							\
+++    _c2 |= _c1 && (y1 == x1);					\
+++    r2 = x2 - y2;						\
+++    _c3 = r2 > x2;						\
+++    r2 -= _c2;							\
+++    _c3 |= _c2 && (y2 == x2);					\
+++    r3 = x3 - y3 - _c3;						\
+++  } while (0)
+++#endif
+++
+++#ifndef __FP_FRAC_DEC_3
+++#define __FP_FRAC_DEC_3(x2,x1,x0,y2,y1,y0)				\
+++  do {									\
+++    UWtype _t0, _t1, _t2;						\
+++    _t0 = x0, _t1 = x1, _t2 = x2;					\
+++    __FP_FRAC_SUB_3 (x2, x1, x0, _t2, _t1, _t0, y2, y1, y0);		\
+++  } while (0)
+++#endif
+++
+++#ifndef __FP_FRAC_DEC_4
+++#define __FP_FRAC_DEC_4(x3,x2,x1,x0,y3,y2,y1,y0)			\
+++  do {									\
+++    UWtype _t0, _t1, _t2, _t3;						\
+++    _t0 = x0, _t1 = x1, _t2 = x2, _t3 = x3;				\
+++    __FP_FRAC_SUB_4 (x3,x2,x1,x0,_t3,_t2,_t1,_t0, y3,y2,y1,y0);		\
+++  } while (0)
+++#endif
+++
+++#ifndef __FP_FRAC_ADDI_4
+++#define __FP_FRAC_ADDI_4(x3,x2,x1,x0,i)					\
+++  do {									\
+++    UWtype _t;								\
+++    _t = ((x0 += i) < i);						\
+++    x1 += _t; _t = (x1 < _t);						\
+++    x2 += _t; _t = (x2 < _t);						\
+++    x3 += _t;								\
+++  } while (0)
+++#endif
+++
+++/* Convert FP values between word sizes. This appears to be more
+++ * complicated than I'd have expected it to be, so these might be
+++ * wrong... These macros are in any case somewhat bogus because they
+++ * use information about what various FRAC_n variables look like 
+++ * internally [eg, that 2 word vars are X_f0 and x_f1]. But so do
+++ * the ones in op-2.h and op-1.h. 
+++ */
+++#define _FP_FRAC_COPY_1_4(D, S)		(D##_f = S##_f[0])
+++
+++#define _FP_FRAC_COPY_2_4(D, S)			\
+++do {						\
+++  D##_f0 = S##_f[0];				\
+++  D##_f1 = S##_f[1];				\
+++} while (0)
+++
+++/* Assembly/disassembly for converting to/from integral types.  
+++ * No shifting or overflow handled here.
+++ */
+++/* Put the FP value X into r, which is an integer of size rsize. */
+++#define _FP_FRAC_ASSEMBLE_4(r, X, rsize)				\
+++  do {									\
+++    if (rsize <= _FP_W_TYPE_SIZE)					\
+++      r = X##_f[0];							\
+++    else if (rsize <= 2*_FP_W_TYPE_SIZE)				\
+++    {									\
+++      r = X##_f[1];							\
+++      r <<= _FP_W_TYPE_SIZE;						\
+++      r += X##_f[0];							\
+++    }									\
+++    else								\
+++    {									\
+++      /* I'm feeling lazy so we deal with int == 3words (implausible)*/	\
+++      /* and int == 4words as a single case.			 */	\
+++      r = X##_f[3];							\
+++      r <<= _FP_W_TYPE_SIZE;						\
+++      r += X##_f[2];							\
+++      r <<= _FP_W_TYPE_SIZE;						\
+++      r += X##_f[1];							\
+++      r <<= _FP_W_TYPE_SIZE;						\
+++      r += X##_f[0];							\
+++    }									\
+++  } while (0)
+++
+++/* "No disassemble Number Five!" */
+++/* move an integer of size rsize into X's fractional part. We rely on
+++ * the _f[] array consisting of words of size _FP_W_TYPE_SIZE to avoid
+++ * having to mask the values we store into it.
+++ */
+++#define _FP_FRAC_DISASSEMBLE_4(X, r, rsize)				\
+++  do {									\
+++    X##_f[0] = r;							\
+++    X##_f[1] = (rsize <= _FP_W_TYPE_SIZE ? 0 : r >> _FP_W_TYPE_SIZE);	\
+++    X##_f[2] = (rsize <= 2*_FP_W_TYPE_SIZE ? 0 : r >> 2*_FP_W_TYPE_SIZE); \
+++    X##_f[3] = (rsize <= 3*_FP_W_TYPE_SIZE ? 0 : r >> 3*_FP_W_TYPE_SIZE); \
+++  } while (0);
+++
+++#define _FP_FRAC_COPY_4_1(D, S)			\
+++do {						\
+++  D##_f[0] = S##_f;				\
+++  D##_f[1] = D##_f[2] = D##_f[3] = 0;		\
+++} while (0)
+++
+++#define _FP_FRAC_COPY_4_2(D, S)			\
+++do {						\
+++  D##_f[0] = S##_f0;				\
+++  D##_f[1] = S##_f1;				\
+++  D##_f[2] = D##_f[3] = 0;			\
+++} while (0)
+++
+++#define _FP_FRAC_COPY_4_4(D,S)	_FP_FRAC_COPY_4(D,S)
++diff -Naur uClibc-0.9.31.ori/libc/sysdeps/linux/sparc/soft-fp/op-8.h uClibc-0.9.31/libc/sysdeps/linux/sparc/soft-fp/op-8.h
++--- uClibc-0.9.31.ori/libc/sysdeps/linux/sparc/soft-fp/op-8.h	1970-01-01 01:00:00.000000000 +0100
+++++ uClibc-0.9.31/libc/sysdeps/linux/sparc/soft-fp/op-8.h	2010-10-14 14:05:37.000000000 +0200
++@@ -0,0 +1,111 @@
+++/* Software floating-point emulation.
+++   Basic eight-word fraction declaration and manipulation.
+++   Copyright (C) 1997,1998,1999,2006 Free Software Foundation, Inc.
+++   This file is part of the GNU C Library.
+++   Contributed by Richard Henderson (rth at cygnus.com),
+++		  Jakub Jelinek (jj at ultra.linux.cz) and
+++		  Peter Maydell (pmaydell at chiark.greenend.org.uk).
+++
+++   The GNU C Library is free software; you can redistribute it and/or
+++   modify it under the terms of the GNU Lesser General Public
+++   License as published by the Free Software Foundation; either
+++   version 2.1 of the License, or (at your option) any later version.
+++
+++   In addition to the permissions in the GNU Lesser General Public
+++   License, the Free Software Foundation gives you unlimited
+++   permission to link the compiled version of this file into
+++   combinations with other programs, and to distribute those
+++   combinations without any restriction coming from the use of this
+++   file.  (The Lesser General Public License restrictions do apply in
+++   other respects; for example, they cover modification of the file,
+++   and distribution when not linked into a combine executable.)
+++
+++   The GNU C Library is distributed in the hope that it will be useful,
+++   but WITHOUT ANY WARRANTY; without even the implied warranty of
+++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+++   Lesser General Public License for more details.
+++
+++   You should have received a copy of the GNU Lesser General Public
+++   License along with the GNU C Library; if not, write to the Free
+++   Software Foundation, 51 Franklin Street, Fifth Floor, Boston,
+++   MA 02110-1301, USA.  */
+++
+++/* We need just a few things from here for op-4, if we ever need some
+++   other macros, they can be added. */
+++#define _FP_FRAC_DECL_8(X)	_FP_W_TYPE X##_f[8]
+++#define _FP_FRAC_HIGH_8(X)	(X##_f[7])
+++#define _FP_FRAC_LOW_8(X)	(X##_f[0])
+++#define _FP_FRAC_WORD_8(X,w)	(X##_f[w])
+++
+++#define _FP_FRAC_SLL_8(X,N)						\
+++  do {									\
+++    _FP_I_TYPE _up, _down, _skip, _i;					\
+++    _skip = (N) / _FP_W_TYPE_SIZE;					\
+++    _up = (N) % _FP_W_TYPE_SIZE;					\
+++    _down = _FP_W_TYPE_SIZE - _up;					\
+++    if (!_up)								\
+++      for (_i = 7; _i >= _skip; --_i)					\
+++	X##_f[_i] = X##_f[_i-_skip];					\
+++    else								\
+++      {									\
+++	for (_i = 7; _i > _skip; --_i)					\
+++	  X##_f[_i] = X##_f[_i-_skip] << _up				\
+++		      | X##_f[_i-_skip-1] >> _down;			\
+++	X##_f[_i--] = X##_f[0] << _up; 					\
+++      }									\
+++    for (; _i >= 0; --_i)						\
+++      X##_f[_i] = 0;							\
+++  } while (0)
+++
+++#define _FP_FRAC_SRL_8(X,N)						\
+++  do {									\
+++    _FP_I_TYPE _up, _down, _skip, _i;					\
+++    _skip = (N) / _FP_W_TYPE_SIZE;					\
+++    _down = (N) % _FP_W_TYPE_SIZE;					\
+++    _up = _FP_W_TYPE_SIZE - _down;					\
+++    if (!_down)								\
+++      for (_i = 0; _i <= 7-_skip; ++_i)					\
+++	X##_f[_i] = X##_f[_i+_skip];					\
+++    else								\
+++      {									\
+++	for (_i = 0; _i < 7-_skip; ++_i)				\
+++	  X##_f[_i] = X##_f[_i+_skip] >> _down				\
+++		      | X##_f[_i+_skip+1] << _up;			\
+++	X##_f[_i++] = X##_f[7] >> _down;				\
+++      }									\
+++    for (; _i < 8; ++_i)						\
+++      X##_f[_i] = 0;							\
+++  } while (0)
+++
+++
+++/* Right shift with sticky-lsb. 
+++ * What this actually means is that we do a standard right-shift,
+++ * but that if any of the bits that fall off the right hand side
+++ * were one then we always set the LSbit.
+++ */
+++#define _FP_FRAC_SRS_8(X,N,size)					\
+++  do {									\
+++    _FP_I_TYPE _up, _down, _skip, _i;					\
+++    _FP_W_TYPE _s;							\
+++    _skip = (N) / _FP_W_TYPE_SIZE;					\
+++    _down = (N) % _FP_W_TYPE_SIZE;					\
+++    _up = _FP_W_TYPE_SIZE - _down;					\
+++    for (_s = _i = 0; _i < _skip; ++_i)					\
+++      _s |= X##_f[_i];							\
+++    if (!_down)								\
+++      for (_i = 0; _i <= 7-_skip; ++_i)					\
+++	X##_f[_i] = X##_f[_i+_skip];					\
+++    else								\
+++      {									\
+++	_s |= X##_f[_i] << _up;						\
+++	for (_i = 0; _i < 7-_skip; ++_i)				\
+++	  X##_f[_i] = X##_f[_i+_skip] >> _down				\
+++		      | X##_f[_i+_skip+1] << _up;			\
+++	X##_f[_i++] = X##_f[7] >> _down;				\
+++      }									\
+++    for (; _i < 8; ++_i)						\
+++      X##_f[_i] = 0;							\
+++    /* don't fix the LSB until the very end when we're sure f[0] is stable */	\
+++    X##_f[0] |= (_s != 0);						\
+++  } while (0)
+++
++diff -Naur uClibc-0.9.31.ori/libc/sysdeps/linux/sparc/soft-fp/op-common.h uClibc-0.9.31/libc/sysdeps/linux/sparc/soft-fp/op-common.h
++--- uClibc-0.9.31.ori/libc/sysdeps/linux/sparc/soft-fp/op-common.h	1970-01-01 01:00:00.000000000 +0100
+++++ uClibc-0.9.31/libc/sysdeps/linux/sparc/soft-fp/op-common.h	2010-10-14 14:05:37.000000000 +0200
++@@ -0,0 +1,1359 @@
+++/* Software floating-point emulation. Common operations.
+++   Copyright (C) 1997,1998,1999,2006,2007 Free Software Foundation, Inc.
+++   This file is part of the GNU C Library.
+++   Contributed by Richard Henderson (rth at cygnus.com),
+++		  Jakub Jelinek (jj at ultra.linux.cz),
+++		  David S. Miller (davem at redhat.com) and
+++		  Peter Maydell (pmaydell@chiark.greenend.org.uk).
+++
+++   The GNU C Library is free software; you can redistribute it and/or
+++   modify it under the terms of the GNU Lesser General Public
+++   License as published by the Free Software Foundation; either
+++   version 2.1 of the License, or (at your option) any later version.
+++
+++   In addition to the permissions in the GNU Lesser General Public
+++   License, the Free Software Foundation gives you unlimited
+++   permission to link the compiled version of this file into
+++   combinations with other programs, and to distribute those
+++   combinations without any restriction coming from the use of this
+++   file.  (The Lesser General Public License restrictions do apply in
+++   other respects; for example, they cover modification of the file,
+++   and distribution when not linked into a combine executable.)
+++
+++   The GNU C Library is distributed in the hope that it will be useful,
+++   but WITHOUT ANY WARRANTY; without even the implied warranty of
+++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+++   Lesser General Public License for more details.
+++
+++   You should have received a copy of the GNU Lesser General Public
+++   License along with the GNU C Library; if not, write to the Free
+++   Software Foundation, 51 Franklin Street, Fifth Floor, Boston,
+++   MA 02110-1301, USA.  */
+++
+++#define _FP_DECL(wc, X)						\
+++  _FP_I_TYPE X##_c __attribute__((unused)), X##_s, X##_e;	\
+++  _FP_FRAC_DECL_##wc(X)
+++
+++/*
+++ * Finish truely unpacking a native fp value by classifying the kind
+++ * of fp value and normalizing both the exponent and the fraction.
+++ */
+++
+++#define _FP_UNPACK_CANONICAL(fs, wc, X)					\
+++do {									\
+++  switch (X##_e)							\
+++  {									\
+++  default:								\
+++    _FP_FRAC_HIGH_RAW_##fs(X) |= _FP_IMPLBIT_##fs;			\
+++    _FP_FRAC_SLL_##wc(X, _FP_WORKBITS);					\
+++    X##_e -= _FP_EXPBIAS_##fs;						\
+++    X##_c = FP_CLS_NORMAL;						\
+++    break;								\
+++									\
+++  case 0:								\
+++    if (_FP_FRAC_ZEROP_##wc(X))						\
+++      X##_c = FP_CLS_ZERO;						\
+++    else								\
+++      {									\
+++	/* a denormalized number */					\
+++	_FP_I_TYPE _shift;						\
+++	_FP_FRAC_CLZ_##wc(_shift, X);					\
+++	_shift -= _FP_FRACXBITS_##fs;					\
+++	_FP_FRAC_SLL_##wc(X, (_shift+_FP_WORKBITS));			\
+++	X##_e -= _FP_EXPBIAS_##fs - 1 + _shift;				\
+++	X##_c = FP_CLS_NORMAL;						\
+++	FP_SET_EXCEPTION(FP_EX_DENORM);					\
+++      }									\
+++    break;								\
+++									\
+++  case _FP_EXPMAX_##fs:							\
+++    if (_FP_FRAC_ZEROP_##wc(X))						\
+++      X##_c = FP_CLS_INF;						\
+++    else								\
+++      {									\
+++	X##_c = FP_CLS_NAN;						\
+++	/* Check for signaling NaN */					\
+++	if (!(_FP_FRAC_HIGH_RAW_##fs(X) & _FP_QNANBIT_##fs))		\
+++	  FP_SET_EXCEPTION(FP_EX_INVALID);				\
+++      }									\
+++    break;								\
+++  }									\
+++} while (0)
+++
+++/* Finish unpacking an fp value in semi-raw mode: the mantissa is
+++   shifted by _FP_WORKBITS but the implicit MSB is not inserted and
+++   other classification is not done.  */
+++#define _FP_UNPACK_SEMIRAW(fs, wc, X)	_FP_FRAC_SLL_##wc(X, _FP_WORKBITS)
+++
+++/* A semi-raw value has overflowed to infinity.  Adjust the mantissa
+++   and exponent appropriately.  */
+++#define _FP_OVERFLOW_SEMIRAW(fs, wc, X)			\
+++do {							\
+++  if (FP_ROUNDMODE == FP_RND_NEAREST			\
+++      || (FP_ROUNDMODE == FP_RND_PINF && !X##_s)	\
+++      || (FP_ROUNDMODE == FP_RND_MINF && X##_s))	\
+++    {							\
+++      X##_e = _FP_EXPMAX_##fs;				\
+++      _FP_FRAC_SET_##wc(X, _FP_ZEROFRAC_##wc);		\
+++    }							\
+++  else							\
+++    {							\
+++      X##_e = _FP_EXPMAX_##fs - 1;			\
+++      _FP_FRAC_SET_##wc(X, _FP_MAXFRAC_##wc);		\
+++    }							\
+++    FP_SET_EXCEPTION(FP_EX_INEXACT);			\
+++    FP_SET_EXCEPTION(FP_EX_OVERFLOW);			\
+++} while (0)
+++
+++/* Check for a semi-raw value being a signaling NaN and raise the
+++   invalid exception if so.  */
+++#define _FP_CHECK_SIGNAN_SEMIRAW(fs, wc, X)			\
+++do {								\
+++  if (X##_e == _FP_EXPMAX_##fs					\
+++      && !_FP_FRAC_ZEROP_##wc(X)				\
+++      && !(_FP_FRAC_HIGH_##fs(X) & _FP_QNANBIT_SH_##fs))	\
+++    FP_SET_EXCEPTION(FP_EX_INVALID);				\
+++} while (0)
+++
+++/* Choose a NaN result from an operation on two semi-raw NaN
+++   values.  */
+++#define _FP_CHOOSENAN_SEMIRAW(fs, wc, R, X, Y, OP)			\
+++do {									\
+++  /* _FP_CHOOSENAN expects raw values, so shift as required.  */	\
+++  _FP_FRAC_SRL_##wc(X, _FP_WORKBITS);					\
+++  _FP_FRAC_SRL_##wc(Y, _FP_WORKBITS);					\
+++  _FP_CHOOSENAN(fs, wc, R, X, Y, OP);					\
+++  _FP_FRAC_SLL_##wc(R, _FP_WORKBITS);					\
+++} while (0)
+++
+++/* Test whether a biased exponent is normal (not zero or maximum).  */
+++#define _FP_EXP_NORMAL(fs, wc, X)	(((X##_e + 1) & _FP_EXPMAX_##fs) > 1)
+++
+++/* Prepare to pack an fp value in semi-raw mode: the mantissa is
+++   rounded and shifted right, with the rounding possibly increasing
+++   the exponent (including changing a finite value to infinity).  */
+++#define _FP_PACK_SEMIRAW(fs, wc, X)				\
+++do {								\
+++  _FP_ROUND(wc, X);						\
+++  if (_FP_FRAC_HIGH_##fs(X)					\
+++      & (_FP_OVERFLOW_##fs >> 1))				\
+++    {								\
+++      _FP_FRAC_HIGH_##fs(X) &= ~(_FP_OVERFLOW_##fs >> 1);	\
+++      X##_e++;							\
+++      if (X##_e == _FP_EXPMAX_##fs)				\
+++	_FP_OVERFLOW_SEMIRAW(fs, wc, X);			\
+++    }								\
+++  _FP_FRAC_SRL_##wc(X, _FP_WORKBITS);				\
+++  if (!_FP_EXP_NORMAL(fs, wc, X) && !_FP_FRAC_ZEROP_##wc(X))	\
+++    {								\
+++      if (X##_e == 0)						\
+++	FP_SET_EXCEPTION(FP_EX_UNDERFLOW);			\
+++      else							\
+++	{							\
+++	  if (!_FP_KEEPNANFRACP)				\
+++	    {							\
+++	      _FP_FRAC_SET_##wc(X, _FP_NANFRAC_##fs);		\
+++	      X##_s = _FP_NANSIGN_##fs;				\
+++	    }							\
+++	  else							\
+++	    _FP_FRAC_HIGH_RAW_##fs(X) |= _FP_QNANBIT_##fs;	\
+++	}							\
+++    }								\
+++} while (0)
+++
+++/*
+++ * Before packing the bits back into the native fp result, take care
+++ * of such mundane things as rounding and overflow.  Also, for some
+++ * kinds of fp values, the original parts may not have been fully
+++ * extracted -- but that is ok, we can regenerate them now.
+++ */
+++
+++#define _FP_PACK_CANONICAL(fs, wc, X)				\
+++do {								\
+++  switch (X##_c)						\
+++  {								\
+++  case FP_CLS_NORMAL:						\
+++    X##_e += _FP_EXPBIAS_##fs;					\
+++    if (X##_e > 0)						\
+++      {								\
+++	_FP_ROUND(wc, X);					\
+++	if (_FP_FRAC_OVERP_##wc(fs, X))				\
+++	  {							\
+++	    _FP_FRAC_CLEAR_OVERP_##wc(fs, X);			\
+++	    X##_e++;						\
+++	  }							\
+++	_FP_FRAC_SRL_##wc(X, _FP_WORKBITS);			\
+++	if (X##_e >= _FP_EXPMAX_##fs)				\
+++	  {							\
+++	    /* overflow */					\
+++	    switch (FP_ROUNDMODE)				\
+++	      {							\
+++	      case FP_RND_NEAREST:				\
+++		X##_c = FP_CLS_INF;				\
+++		break;						\
+++	      case FP_RND_PINF:					\
+++		if (!X##_s) X##_c = FP_CLS_INF;			\
+++		break;						\
+++	      case FP_RND_MINF:					\
+++		if (X##_s) X##_c = FP_CLS_INF;			\
+++		break;						\
+++	      }							\
+++	    if (X##_c == FP_CLS_INF)				\
+++	      {							\
+++		/* Overflow to infinity */			\
+++		X##_e = _FP_EXPMAX_##fs;			\
+++		_FP_FRAC_SET_##wc(X, _FP_ZEROFRAC_##wc);	\
+++	      }							\
+++	    else						\
+++	      {							\
+++		/* Overflow to maximum normal */		\
+++		X##_e = _FP_EXPMAX_##fs - 1;			\
+++		_FP_FRAC_SET_##wc(X, _FP_MAXFRAC_##wc);		\
+++	      }							\
+++	    FP_SET_EXCEPTION(FP_EX_OVERFLOW);			\
+++            FP_SET_EXCEPTION(FP_EX_INEXACT);			\
+++	  }							\
+++      }								\
+++    else							\
+++      {								\
+++	/* we've got a denormalized number */			\
+++	X##_e = -X##_e + 1;					\
+++	if (X##_e <= _FP_WFRACBITS_##fs)			\
+++	  {							\
+++	    _FP_FRAC_SRS_##wc(X, X##_e, _FP_WFRACBITS_##fs);	\
+++	    _FP_ROUND(wc, X);					\
+++	    if (_FP_FRAC_HIGH_##fs(X)				\
+++		& (_FP_OVERFLOW_##fs >> 1))			\
+++	      {							\
+++	        X##_e = 1;					\
+++	        _FP_FRAC_SET_##wc(X, _FP_ZEROFRAC_##wc);	\
+++	      }							\
+++	    else						\
+++	      {							\
+++		X##_e = 0;					\
+++		_FP_FRAC_SRL_##wc(X, _FP_WORKBITS);		\
+++		FP_SET_EXCEPTION(FP_EX_UNDERFLOW);		\
+++	      }							\
+++	  }							\
+++	else							\
+++	  {							\
+++	    /* underflow to zero */				\
+++	    X##_e = 0;						\
+++	    if (!_FP_FRAC_ZEROP_##wc(X))			\
+++	      {							\
+++	        _FP_FRAC_SET_##wc(X, _FP_MINFRAC_##wc);		\
+++	        _FP_ROUND(wc, X);				\
+++	        _FP_FRAC_LOW_##wc(X) >>= (_FP_WORKBITS);	\
+++	      }							\
+++	    FP_SET_EXCEPTION(FP_EX_UNDERFLOW);			\
+++	  }							\
+++      }								\
+++    break;							\
+++								\
+++  case FP_CLS_ZERO:						\
+++    X##_e = 0;							\
+++    _FP_FRAC_SET_##wc(X, _FP_ZEROFRAC_##wc);			\
+++    break;							\
+++								\
+++  case FP_CLS_INF:						\
+++    X##_e = _FP_EXPMAX_##fs;					\
+++    _FP_FRAC_SET_##wc(X, _FP_ZEROFRAC_##wc);			\
+++    break;							\
+++								\
+++  case FP_CLS_NAN:						\
+++    X##_e = _FP_EXPMAX_##fs;					\
+++    if (!_FP_KEEPNANFRACP)					\
+++      {								\
+++	_FP_FRAC_SET_##wc(X, _FP_NANFRAC_##fs);			\
+++	X##_s = _FP_NANSIGN_##fs;				\
+++      }								\
+++    else							\
+++      _FP_FRAC_HIGH_RAW_##fs(X) |= _FP_QNANBIT_##fs;		\
+++    break;							\
+++  }								\
+++} while (0)
+++
+++/* This one accepts raw argument and not cooked,  returns
+++ * 1 if X is a signaling NaN.
+++ */
+++#define _FP_ISSIGNAN(fs, wc, X)					\
+++({								\
+++  int __ret = 0;						\
+++  if (X##_e == _FP_EXPMAX_##fs)					\
+++    {								\
+++      if (!_FP_FRAC_ZEROP_##wc(X)				\
+++	  && !(_FP_FRAC_HIGH_RAW_##fs(X) & _FP_QNANBIT_##fs))	\
+++	__ret = 1;						\
+++    }								\
+++  __ret;							\
+++})
+++
+++
+++
+++
+++
+++/* Addition on semi-raw values.  */
+++#define _FP_ADD_INTERNAL(fs, wc, R, X, Y, OP)				 \
+++do {									 \
+++  if (X##_s == Y##_s)							 \
+++    {									 \
+++      /* Addition.  */							 \
+++      R##_s = X##_s;							 \
+++      int ediff = X##_e - Y##_e;					 \
+++      if (ediff > 0)							 \
+++	{								 \
+++	  R##_e = X##_e;						 \
+++	  if (Y##_e == 0)						 \
+++	    {								 \
+++	      /* Y is zero or denormalized.  */				 \
+++	      if (_FP_FRAC_ZEROP_##wc(Y))				 \
+++		{							 \
+++		  _FP_CHECK_SIGNAN_SEMIRAW(fs, wc, X);			 \
+++		  _FP_FRAC_COPY_##wc(R, X);				 \
+++		  goto add_done;					 \
+++		}							 \
+++	      else							 \
+++		{							 \
+++		  FP_SET_EXCEPTION(FP_EX_DENORM);			 \
+++		  ediff--;						 \
+++		  if (ediff == 0)					 \
+++		    {							 \
+++		      _FP_FRAC_ADD_##wc(R, X, Y);			 \
+++		      goto add3;					 \
+++		    }							 \
+++		  if (X##_e == _FP_EXPMAX_##fs)				 \
+++		    {							 \
+++		      _FP_CHECK_SIGNAN_SEMIRAW(fs, wc, X);		 \
+++		      _FP_FRAC_COPY_##wc(R, X);				 \
+++		      goto add_done;					 \
+++		    }							 \
+++		  goto add1;						 \
+++		}							 \
+++	    }								 \
+++	  else if (X##_e == _FP_EXPMAX_##fs)				 \
+++	    {								 \
+++	      /* X is NaN or Inf, Y is normal.  */			 \
+++	      _FP_CHECK_SIGNAN_SEMIRAW(fs, wc, X);			 \
+++	      _FP_FRAC_COPY_##wc(R, X);					 \
+++	      goto add_done;						 \
+++	    }								 \
+++									 \
+++	  /* Insert implicit MSB of Y.  */				 \
+++	  _FP_FRAC_HIGH_##fs(Y) |= _FP_IMPLBIT_SH_##fs;			 \
+++									 \
+++	add1:								 \
+++	  /* Shift the mantissa of Y to the right EDIFF steps;		 \
+++	     remember to account later for the implicit MSB of X.  */	 \
+++	  if (ediff <= _FP_WFRACBITS_##fs)				 \
+++	    _FP_FRAC_SRS_##wc(Y, ediff, _FP_WFRACBITS_##fs);		 \
+++	  else if (!_FP_FRAC_ZEROP_##wc(Y))				 \
+++	    _FP_FRAC_SET_##wc(Y, _FP_MINFRAC_##wc);			 \
+++	  _FP_FRAC_ADD_##wc(R, X, Y);					 \
+++	}								 \
+++      else if (ediff < 0)						 \
+++	{								 \
+++	  ediff = -ediff;						 \
+++	  R##_e = Y##_e;						 \
+++	  if (X##_e == 0)						 \
+++	    {								 \
+++	      /* X is zero or denormalized.  */				 \
+++	      if (_FP_FRAC_ZEROP_##wc(X))				 \
+++		{							 \
+++		  _FP_CHECK_SIGNAN_SEMIRAW(fs, wc, Y);			 \
+++		  _FP_FRAC_COPY_##wc(R, Y);				 \
+++		  goto add_done;					 \
+++		}							 \
+++	      else							 \
+++		{							 \
+++		  FP_SET_EXCEPTION(FP_EX_DENORM);			 \
+++		  ediff--;						 \
+++		  if (ediff == 0)					 \
+++		    {							 \
+++		      _FP_FRAC_ADD_##wc(R, Y, X);			 \
+++		      goto add3;					 \
+++		    }							 \
+++		  if (Y##_e == _FP_EXPMAX_##fs)				 \
+++		    {							 \
+++		      _FP_CHECK_SIGNAN_SEMIRAW(fs, wc, Y);		 \
+++		      _FP_FRAC_COPY_##wc(R, Y);				 \
+++		      goto add_done;					 \
+++		    }							 \
+++		  goto add2;						 \
+++		}							 \
+++	    }								 \
+++	  else if (Y##_e == _FP_EXPMAX_##fs)				 \
+++	    {								 \
+++	      /* Y is NaN or Inf, X is normal.  */			 \
+++	      _FP_CHECK_SIGNAN_SEMIRAW(fs, wc, Y);			 \
+++	      _FP_FRAC_COPY_##wc(R, Y);					 \
+++	      goto add_done;						 \
+++	    }								 \
+++									 \
+++	  /* Insert implicit MSB of X.  */				 \
+++	  _FP_FRAC_HIGH_##fs(X) |= _FP_IMPLBIT_SH_##fs;			 \
+++									 \
+++	add2:								 \
+++	  /* Shift the mantissa of X to the right EDIFF steps;		 \
+++	     remember to account later for the implicit MSB of Y.  */	 \
+++	  if (ediff <= _FP_WFRACBITS_##fs)				 \
+++	    _FP_FRAC_SRS_##wc(X, ediff, _FP_WFRACBITS_##fs);		 \
+++	  else if (!_FP_FRAC_ZEROP_##wc(X))				 \
+++	    _FP_FRAC_SET_##wc(X, _FP_MINFRAC_##wc);			 \
+++	  _FP_FRAC_ADD_##wc(R, Y, X);					 \
+++	}								 \
+++      else								 \
+++	{								 \
+++	  /* ediff == 0.  */						 \
+++	  if (!_FP_EXP_NORMAL(fs, wc, X))				 \
+++	    {								 \
+++	      if (X##_e == 0)						 \
+++		{							 \
+++		  /* X and Y are zero or denormalized.  */		 \
+++		  R##_e = 0;						 \
+++		  if (_FP_FRAC_ZEROP_##wc(X))				 \
+++		    {							 \
+++		      if (!_FP_FRAC_ZEROP_##wc(Y))			 \
+++			FP_SET_EXCEPTION(FP_EX_DENORM);			 \
+++		      _FP_FRAC_COPY_##wc(R, Y);				 \
+++		      goto add_done;					 \
+++		    }							 \
+++		  else if (_FP_FRAC_ZEROP_##wc(Y))			 \
+++		    {							 \
+++		      FP_SET_EXCEPTION(FP_EX_DENORM);			 \
+++		      _FP_FRAC_COPY_##wc(R, X);				 \
+++		      goto add_done;					 \
+++		    }							 \
+++		  else							 \
+++		    {							 \
+++		      FP_SET_EXCEPTION(FP_EX_DENORM);			 \
+++		      _FP_FRAC_ADD_##wc(R, X, Y);			 \
+++		      if (_FP_FRAC_HIGH_##fs(R) & _FP_IMPLBIT_SH_##fs)	 \
+++			{						 \
+++			  /* Normalized result.  */			 \
+++			  _FP_FRAC_HIGH_##fs(R)				 \
+++			    &= ~(_FP_W_TYPE)_FP_IMPLBIT_SH_##fs;	 \
+++			  R##_e = 1;					 \
+++			}						 \
+++		      goto add_done;					 \
+++		    }							 \
+++		}							 \
+++	      else							 \
+++		{							 \
+++		  /* X and Y are NaN or Inf.  */			 \
+++		  _FP_CHECK_SIGNAN_SEMIRAW(fs, wc, X);			 \
+++		  _FP_CHECK_SIGNAN_SEMIRAW(fs, wc, Y);			 \
+++		  R##_e = _FP_EXPMAX_##fs;				 \
+++		  if (_FP_FRAC_ZEROP_##wc(X))				 \
+++		    _FP_FRAC_COPY_##wc(R, Y);				 \
+++		  else if (_FP_FRAC_ZEROP_##wc(Y))			 \
+++		    _FP_FRAC_COPY_##wc(R, X);				 \
+++		  else							 \
+++		    _FP_CHOOSENAN_SEMIRAW(fs, wc, R, X, Y, OP);		 \
+++		  goto add_done;					 \
+++		}							 \
+++	    }								 \
+++	  /* The exponents of X and Y, both normal, are equal.  The	 \
+++	     implicit MSBs will always add to increase the		 \
+++	     exponent.  */						 \
+++	  _FP_FRAC_ADD_##wc(R, X, Y);					 \
+++	  R##_e = X##_e + 1;						 \
+++	  _FP_FRAC_SRS_##wc(R, 1, _FP_WFRACBITS_##fs);			 \
+++	  if (R##_e == _FP_EXPMAX_##fs)					 \
+++	    /* Overflow to infinity (depending on rounding mode).  */	 \
+++	    _FP_OVERFLOW_SEMIRAW(fs, wc, R);				 \
+++	  goto add_done;						 \
+++	}								 \
+++    add3:								 \
+++      if (_FP_FRAC_HIGH_##fs(R) & _FP_IMPLBIT_SH_##fs)			 \
+++	{								 \
+++	  /* Overflow.  */						 \
+++	  _FP_FRAC_HIGH_##fs(R) &= ~(_FP_W_TYPE)_FP_IMPLBIT_SH_##fs;	 \
+++	  R##_e++;							 \
+++	  _FP_FRAC_SRS_##wc(R, 1, _FP_WFRACBITS_##fs);			 \
+++	  if (R##_e == _FP_EXPMAX_##fs)					 \
+++	    /* Overflow to infinity (depending on rounding mode).  */	 \
+++	    _FP_OVERFLOW_SEMIRAW(fs, wc, R);				 \
+++	}								 \
+++    add_done: ;								 \
+++    }									 \
+++  else									 \
+++    {									 \
+++      /* Subtraction.  */						 \
+++      int ediff = X##_e - Y##_e;					 \
+++      if (ediff > 0)							 \
+++	{								 \
+++	  R##_e = X##_e;						 \
+++	  R##_s = X##_s;						 \
+++	  if (Y##_e == 0)						 \
+++	    {								 \
+++	      /* Y is zero or denormalized.  */				 \
+++	      if (_FP_FRAC_ZEROP_##wc(Y))				 \
+++		{							 \
+++		  _FP_CHECK_SIGNAN_SEMIRAW(fs, wc, X);			 \
+++		  _FP_FRAC_COPY_##wc(R, X);				 \
+++		  goto sub_done;					 \
+++		}							 \
+++	      else							 \
+++		{							 \
+++		  FP_SET_EXCEPTION(FP_EX_DENORM);			 \
+++		  ediff--;						 \
+++		  if (ediff == 0)					 \
+++		    {							 \
+++		      _FP_FRAC_SUB_##wc(R, X, Y);			 \
+++		      goto sub3;					 \
+++		    }							 \
+++		  if (X##_e == _FP_EXPMAX_##fs)				 \
+++		    {							 \
+++		      _FP_CHECK_SIGNAN_SEMIRAW(fs, wc, X);		 \
+++		      _FP_FRAC_COPY_##wc(R, X);				 \
+++		      goto sub_done;					 \
+++		    }							 \
+++		  goto sub1;						 \
+++		}							 \
+++	    }								 \
+++	  else if (X##_e == _FP_EXPMAX_##fs)				 \
+++	    {								 \
+++	      /* X is NaN or Inf, Y is normal.  */			 \
+++	      _FP_CHECK_SIGNAN_SEMIRAW(fs, wc, X);			 \
+++	      _FP_FRAC_COPY_##wc(R, X);					 \
+++	      goto sub_done;						 \
+++	    }								 \
+++									 \
+++	  /* Insert implicit MSB of Y.  */				 \
+++	  _FP_FRAC_HIGH_##fs(Y) |= _FP_IMPLBIT_SH_##fs;			 \
+++									 \
+++	sub1:								 \
+++	  /* Shift the mantissa of Y to the right EDIFF steps;		 \
+++	     remember to account later for the implicit MSB of X.  */	 \
+++	  if (ediff <= _FP_WFRACBITS_##fs)				 \
+++	    _FP_FRAC_SRS_##wc(Y, ediff, _FP_WFRACBITS_##fs);		 \
+++	  else if (!_FP_FRAC_ZEROP_##wc(Y))				 \
+++	    _FP_FRAC_SET_##wc(Y, _FP_MINFRAC_##wc);			 \
+++	  _FP_FRAC_SUB_##wc(R, X, Y);					 \
+++	}								 \
+++      else if (ediff < 0)						 \
+++	{								 \
+++	  ediff = -ediff;						 \
+++	  R##_e = Y##_e;						 \
+++	  R##_s = Y##_s;						 \
+++	  if (X##_e == 0)						 \
+++	    {								 \
+++	      /* X is zero or denormalized.  */				 \
+++	      if (_FP_FRAC_ZEROP_##wc(X))				 \
+++		{							 \
+++		  _FP_CHECK_SIGNAN_SEMIRAW(fs, wc, Y);			 \
+++		  _FP_FRAC_COPY_##wc(R, Y);				 \
+++		  goto sub_done;					 \
+++		}							 \
+++	      else							 \
+++		{							 \
+++		  FP_SET_EXCEPTION(FP_EX_DENORM);			 \
+++		  ediff--;						 \
+++		  if (ediff == 0)					 \
+++		    {							 \
+++		      _FP_FRAC_SUB_##wc(R, Y, X);			 \
+++		      goto sub3;					 \
+++		    }							 \
+++		  if (Y##_e == _FP_EXPMAX_##fs)				 \
+++		    {							 \
+++		      _FP_CHECK_SIGNAN_SEMIRAW(fs, wc, Y);		 \
+++		      _FP_FRAC_COPY_##wc(R, Y);				 \
+++		      goto sub_done;					 \
+++		    }							 \
+++		  goto sub2;						 \
+++		}							 \
+++	    }								 \
+++	  else if (Y##_e == _FP_EXPMAX_##fs)				 \
+++	    {								 \
+++	      /* Y is NaN or Inf, X is normal.  */			 \
+++	      _FP_CHECK_SIGNAN_SEMIRAW(fs, wc, Y);			 \
+++	      _FP_FRAC_COPY_##wc(R, Y);					 \
+++	      goto sub_done;						 \
+++	    }								 \
+++									 \
+++	  /* Insert implicit MSB of X.  */				 \
+++	  _FP_FRAC_HIGH_##fs(X) |= _FP_IMPLBIT_SH_##fs;			 \
+++									 \
+++	sub2:								 \
+++	  /* Shift the mantissa of X to the right EDIFF steps;		 \
+++	     remember to account later for the implicit MSB of Y.  */	 \
+++	  if (ediff <= _FP_WFRACBITS_##fs)				 \
+++	    _FP_FRAC_SRS_##wc(X, ediff, _FP_WFRACBITS_##fs);		 \
+++	  else if (!_FP_FRAC_ZEROP_##wc(X))				 \
+++	    _FP_FRAC_SET_##wc(X, _FP_MINFRAC_##wc);			 \
+++	  _FP_FRAC_SUB_##wc(R, Y, X);					 \
+++	}								 \
+++      else								 \
+++	{								 \
+++	  /* ediff == 0.  */						 \
+++	  if (!_FP_EXP_NORMAL(fs, wc, X))				 \
+++	    {								 \
+++	      if (X##_e == 0)						 \
+++		{							 \
+++		  /* X and Y are zero or denormalized.  */		 \
+++		  R##_e = 0;						 \
+++		  if (_FP_FRAC_ZEROP_##wc(X))				 \
+++		    {							 \
+++		      _FP_FRAC_COPY_##wc(R, Y);				 \
+++		      if (_FP_FRAC_ZEROP_##wc(Y))			 \
+++			R##_s = (FP_ROUNDMODE == FP_RND_MINF);		 \
+++		      else						 \
+++			{						 \
+++			  FP_SET_EXCEPTION(FP_EX_DENORM);		 \
+++			  R##_s = Y##_s;				 \
+++			}						 \
+++		      goto sub_done;					 \
+++		    }							 \
+++		  else if (_FP_FRAC_ZEROP_##wc(Y))			 \
+++		    {							 \
+++		      FP_SET_EXCEPTION(FP_EX_DENORM);			 \
+++		      _FP_FRAC_COPY_##wc(R, X);				 \
+++		      R##_s = X##_s;					 \
+++		      goto sub_done;					 \
+++		    }							 \
+++		  else							 \
+++		    {							 \
+++		      FP_SET_EXCEPTION(FP_EX_DENORM);			 \
+++		      _FP_FRAC_SUB_##wc(R, X, Y);			 \
+++		      R##_s = X##_s;					 \
+++		      if (_FP_FRAC_HIGH_##fs(R) & _FP_IMPLBIT_SH_##fs)	 \
+++			{						 \
+++			  /* |X| < |Y|, negate result.  */		 \
+++			  _FP_FRAC_SUB_##wc(R, Y, X);			 \
+++			  R##_s = Y##_s;				 \
+++			}						 \
+++		      else if (_FP_FRAC_ZEROP_##wc(R))			 \
+++			R##_s = (FP_ROUNDMODE == FP_RND_MINF);		 \
+++		      goto sub_done;					 \
+++		    }							 \
+++		}							 \
+++	      else							 \
+++		{							 \
+++		  /* X and Y are NaN or Inf, of opposite signs.  */	 \
+++		  _FP_CHECK_SIGNAN_SEMIRAW(fs, wc, X);			 \
+++		  _FP_CHECK_SIGNAN_SEMIRAW(fs, wc, Y);			 \
+++		  R##_e = _FP_EXPMAX_##fs;				 \
+++		  if (_FP_FRAC_ZEROP_##wc(X))				 \
+++		    {							 \
+++		      if (_FP_FRAC_ZEROP_##wc(Y))			 \
+++			{						 \
+++			  /* Inf - Inf.  */				 \
+++			  R##_s = _FP_NANSIGN_##fs;			 \
+++			  _FP_FRAC_SET_##wc(R, _FP_NANFRAC_##fs);	 \
+++			  _FP_FRAC_SLL_##wc(R, _FP_WORKBITS);		 \
+++			  FP_SET_EXCEPTION(FP_EX_INVALID);		 \
+++			}						 \
+++		      else						 \
+++			{						 \
+++			  /* Inf - NaN.  */				 \
+++			  R##_s = Y##_s;				 \
+++			  _FP_FRAC_COPY_##wc(R, Y);			 \
+++			}						 \
+++		    }							 \
+++		  else							 \
+++		    {							 \
+++		      if (_FP_FRAC_ZEROP_##wc(Y))			 \
+++			{						 \
+++			  /* NaN - Inf.  */				 \
+++			  R##_s = X##_s;				 \
+++			  _FP_FRAC_COPY_##wc(R, X);			 \
+++			}						 \
+++		      else						 \
+++			{						 \
+++			  /* NaN - NaN.  */				 \
+++			  _FP_CHOOSENAN_SEMIRAW(fs, wc, R, X, Y, OP);	 \
+++			}						 \
+++		    }							 \
+++		  goto sub_done;					 \
+++		}							 \
+++	    }								 \
+++	  /* The exponents of X and Y, both normal, are equal.  The	 \
+++	     implicit MSBs cancel.  */					 \
+++	  R##_e = X##_e;						 \
+++	  _FP_FRAC_SUB_##wc(R, X, Y);					 \
+++	  R##_s = X##_s;						 \
+++	  if (_FP_FRAC_HIGH_##fs(R) & _FP_IMPLBIT_SH_##fs)		 \
+++	    {								 \
+++	      /* |X| < |Y|, negate result.  */				 \
+++	      _FP_FRAC_SUB_##wc(R, Y, X);				 \
+++	      R##_s = Y##_s;						 \
+++	    }								 \
+++	  else if (_FP_FRAC_ZEROP_##wc(R))				 \
+++	    {								 \
+++	      R##_e = 0;						 \
+++	      R##_s = (FP_ROUNDMODE == FP_RND_MINF);			 \
+++	      goto sub_done;						 \
+++	    }								 \
+++	  goto norm;							 \
+++	}								 \
+++    sub3:								 \
+++      if (_FP_FRAC_HIGH_##fs(R) & _FP_IMPLBIT_SH_##fs)			 \
+++	{								 \
+++	  int diff;							 \
+++	  /* Carry into most significant bit of larger one of X and Y,	 \
+++	     canceling it; renormalize.  */				 \
+++	  _FP_FRAC_HIGH_##fs(R) &= _FP_IMPLBIT_SH_##fs - 1;		 \
+++	norm:								 \
+++	  _FP_FRAC_CLZ_##wc(diff, R);					 \
+++	  diff -= _FP_WFRACXBITS_##fs;					 \
+++	  _FP_FRAC_SLL_##wc(R, diff);					 \
+++	  if (R##_e <= diff)						 \
+++	    {								 \
+++	      /* R is denormalized.  */					 \
+++	      diff = diff - R##_e + 1;					 \
+++	      _FP_FRAC_SRS_##wc(R, diff, _FP_WFRACBITS_##fs);		 \
+++	      R##_e = 0;						 \
+++	    }								 \
+++	  else								 \
+++	    {								 \
+++	      R##_e -= diff;						 \
+++	      _FP_FRAC_HIGH_##fs(R) &= ~(_FP_W_TYPE)_FP_IMPLBIT_SH_##fs; \
+++	    }								 \
+++	}								 \
+++    sub_done: ;								 \
+++    }									 \
+++} while (0)
+++
+++#define _FP_ADD(fs, wc, R, X, Y) _FP_ADD_INTERNAL(fs, wc, R, X, Y, '+')
+++#define _FP_SUB(fs, wc, R, X, Y)					    \
+++  do {									    \
+++    if (!(Y##_e == _FP_EXPMAX_##fs && !_FP_FRAC_ZEROP_##wc(Y))) Y##_s ^= 1; \
+++    _FP_ADD_INTERNAL(fs, wc, R, X, Y, '-');				    \
+++  } while (0)
+++
+++
+++/*
+++ * Main negation routine.  FIXME -- when we care about setting exception
+++ * bits reliably, this will not do.  We should examine all of the fp classes.
+++ */
+++
+++#define _FP_NEG(fs, wc, R, X)		\
+++  do {					\
+++    _FP_FRAC_COPY_##wc(R, X);		\
+++    R##_c = X##_c;			\
+++    R##_e = X##_e;			\
+++    R##_s = 1 ^ X##_s;			\
+++  } while (0)
+++
+++
+++/*
+++ * Main multiplication routine.  The input values should be cooked.
+++ */
+++
+++#define _FP_MUL(fs, wc, R, X, Y)			\
+++do {							\
+++  R##_s = X##_s ^ Y##_s;				\
+++  switch (_FP_CLS_COMBINE(X##_c, Y##_c))		\
+++  {							\
+++  case _FP_CLS_COMBINE(FP_CLS_NORMAL,FP_CLS_NORMAL):	\
+++    R##_c = FP_CLS_NORMAL;				\
+++    R##_e = X##_e + Y##_e + 1;				\
+++							\
+++    _FP_MUL_MEAT_##fs(R,X,Y);				\
+++							\
+++    if (_FP_FRAC_OVERP_##wc(fs, R))			\
+++      _FP_FRAC_SRS_##wc(R, 1, _FP_WFRACBITS_##fs);	\
+++    else						\
+++      R##_e--;						\
+++    break;						\
+++							\
+++  case _FP_CLS_COMBINE(FP_CLS_NAN,FP_CLS_NAN):		\
+++    _FP_CHOOSENAN(fs, wc, R, X, Y, '*');		\
+++    break;						\
+++							\
+++  case _FP_CLS_COMBINE(FP_CLS_NAN,FP_CLS_NORMAL):	\
+++  case _FP_CLS_COMBINE(FP_CLS_NAN,FP_CLS_INF):		\
+++  case _FP_CLS_COMBINE(FP_CLS_NAN,FP_CLS_ZERO):		\
+++    R##_s = X##_s;					\
+++							\
+++  case _FP_CLS_COMBINE(FP_CLS_INF,FP_CLS_INF):		\
+++  case _FP_CLS_COMBINE(FP_CLS_INF,FP_CLS_NORMAL):	\
+++  case _FP_CLS_COMBINE(FP_CLS_ZERO,FP_CLS_NORMAL):	\
+++  case _FP_CLS_COMBINE(FP_CLS_ZERO,FP_CLS_ZERO):	\
+++    _FP_FRAC_COPY_##wc(R, X);				\
+++    R##_c = X##_c;					\
+++    break;						\
+++							\
+++  case _FP_CLS_COMBINE(FP_CLS_NORMAL,FP_CLS_NAN):	\
+++  case _FP_CLS_COMBINE(FP_CLS_INF,FP_CLS_NAN):		\
+++  case _FP_CLS_COMBINE(FP_CLS_ZERO,FP_CLS_NAN):		\
+++    R##_s = Y##_s;					\
+++							\
+++  case _FP_CLS_COMBINE(FP_CLS_NORMAL,FP_CLS_INF):	\
+++  case _FP_CLS_COMBINE(FP_CLS_NORMAL,FP_CLS_ZERO):	\
+++    _FP_FRAC_COPY_##wc(R, Y);				\
+++    R##_c = Y##_c;					\
+++    break;						\
+++							\
+++  case _FP_CLS_COMBINE(FP_CLS_INF,FP_CLS_ZERO):		\
+++  case _FP_CLS_COMBINE(FP_CLS_ZERO,FP_CLS_INF):		\
+++    R##_s = _FP_NANSIGN_##fs;				\
+++    R##_c = FP_CLS_NAN;					\
+++    _FP_FRAC_SET_##wc(R, _FP_NANFRAC_##fs);		\
+++    FP_SET_EXCEPTION(FP_EX_INVALID);			\
+++    break;						\
+++							\
+++  default:						\
+++    abort();						\
+++  }							\
+++} while (0)
+++
+++
+++/*
+++ * Main division routine.  The input values should be cooked.
+++ */
+++
+++#define _FP_DIV(fs, wc, R, X, Y)			\
+++do {							\
+++  R##_s = X##_s ^ Y##_s;				\
+++  switch (_FP_CLS_COMBINE(X##_c, Y##_c))		\
+++  {							\
+++  case _FP_CLS_COMBINE(FP_CLS_NORMAL,FP_CLS_NORMAL):	\
+++    R##_c = FP_CLS_NORMAL;				\
+++    R##_e = X##_e - Y##_e;				\
+++							\
+++    _FP_DIV_MEAT_##fs(R,X,Y);				\
+++    break;						\
+++							\
+++  case _FP_CLS_COMBINE(FP_CLS_NAN,FP_CLS_NAN):		\
+++    _FP_CHOOSENAN(fs, wc, R, X, Y, '/');		\
+++    break;						\
+++							\
+++  case _FP_CLS_COMBINE(FP_CLS_NAN,FP_CLS_NORMAL):	\
+++  case _FP_CLS_COMBINE(FP_CLS_NAN,FP_CLS_INF):		\
+++  case _FP_CLS_COMBINE(FP_CLS_NAN,FP_CLS_ZERO):		\
+++    R##_s = X##_s;					\
+++    _FP_FRAC_COPY_##wc(R, X);				\
+++    R##_c = X##_c;					\
+++    break;						\
+++							\
+++  case _FP_CLS_COMBINE(FP_CLS_NORMAL,FP_CLS_NAN):	\
+++  case _FP_CLS_COMBINE(FP_CLS_INF,FP_CLS_NAN):		\
+++  case _FP_CLS_COMBINE(FP_CLS_ZERO,FP_CLS_NAN):		\
+++    R##_s = Y##_s;					\
+++    _FP_FRAC_COPY_##wc(R, Y);				\
+++    R##_c = Y##_c;					\
+++    break;						\
+++							\
+++  case _FP_CLS_COMBINE(FP_CLS_NORMAL,FP_CLS_INF):	\
+++  case _FP_CLS_COMBINE(FP_CLS_ZERO,FP_CLS_INF):		\
+++  case _FP_CLS_COMBINE(FP_CLS_ZERO,FP_CLS_NORMAL):	\
+++    R##_c = FP_CLS_ZERO;				\
+++    break;						\
+++							\
+++  case _FP_CLS_COMBINE(FP_CLS_NORMAL,FP_CLS_ZERO):	\
+++    FP_SET_EXCEPTION(FP_EX_DIVZERO);			\
+++  case _FP_CLS_COMBINE(FP_CLS_INF,FP_CLS_ZERO):		\
+++  case _FP_CLS_COMBINE(FP_CLS_INF,FP_CLS_NORMAL):	\
+++    R##_c = FP_CLS_INF;					\
+++    break;						\
+++							\
+++  case _FP_CLS_COMBINE(FP_CLS_INF,FP_CLS_INF):		\
+++  case _FP_CLS_COMBINE(FP_CLS_ZERO,FP_CLS_ZERO):	\
+++    R##_s = _FP_NANSIGN_##fs;				\
+++    R##_c = FP_CLS_NAN;					\
+++    _FP_FRAC_SET_##wc(R, _FP_NANFRAC_##fs);		\
+++    FP_SET_EXCEPTION(FP_EX_INVALID);			\
+++    break;						\
+++							\
+++  default:						\
+++    abort();						\
+++  }							\
+++} while (0)
+++
+++
+++/*
+++ * Main differential comparison routine.  The inputs should be raw not
+++ * cooked.  The return is -1,0,1 for normal values, 2 otherwise.
+++ */
+++
+++#define _FP_CMP(fs, wc, ret, X, Y, un)					\
+++  do {									\
+++    /* NANs are unordered */						\
+++    if ((X##_e == _FP_EXPMAX_##fs && !_FP_FRAC_ZEROP_##wc(X))		\
+++	|| (Y##_e == _FP_EXPMAX_##fs && !_FP_FRAC_ZEROP_##wc(Y)))	\
+++      {									\
+++	ret = un;							\
+++      }									\
+++    else								\
+++      {									\
+++	int __is_zero_x;						\
+++	int __is_zero_y;						\
+++									\
+++	__is_zero_x = (!X##_e && _FP_FRAC_ZEROP_##wc(X)) ? 1 : 0;	\
+++	__is_zero_y = (!Y##_e && _FP_FRAC_ZEROP_##wc(Y)) ? 1 : 0;	\
+++									\
+++	if (__is_zero_x && __is_zero_y)					\
+++		ret = 0;						\
+++	else if (__is_zero_x)						\
+++		ret = Y##_s ? 1 : -1;					\
+++	else if (__is_zero_y)						\
+++		ret = X##_s ? -1 : 1;					\
+++	else if (X##_s != Y##_s)					\
+++	  ret = X##_s ? -1 : 1;						\
+++	else if (X##_e > Y##_e)						\
+++	  ret = X##_s ? -1 : 1;						\
+++	else if (X##_e < Y##_e)						\
+++	  ret = X##_s ? 1 : -1;						\
+++	else if (_FP_FRAC_GT_##wc(X, Y))				\
+++	  ret = X##_s ? -1 : 1;						\
+++	else if (_FP_FRAC_GT_##wc(Y, X))				\
+++	  ret = X##_s ? 1 : -1;						\
+++	else								\
+++	  ret = 0;							\
+++      }									\
+++  } while (0)
+++
+++
+++/* Simplification for strict equality.  */
+++
+++#define _FP_CMP_EQ(fs, wc, ret, X, Y)					    \
+++  do {									    \
+++    /* NANs are unordered */						    \
+++    if ((X##_e == _FP_EXPMAX_##fs && !_FP_FRAC_ZEROP_##wc(X))		    \
+++	|| (Y##_e == _FP_EXPMAX_##fs && !_FP_FRAC_ZEROP_##wc(Y)))	    \
+++      {									    \
+++	ret = 1;							    \
+++      }									    \
+++    else								    \
+++      {									    \
+++	ret = !(X##_e == Y##_e						    \
+++		&& _FP_FRAC_EQ_##wc(X, Y)				    \
+++		&& (X##_s == Y##_s || (!X##_e && _FP_FRAC_ZEROP_##wc(X)))); \
+++      }									    \
+++  } while (0)
+++
+++/* Version to test unordered.  */
+++
+++#define _FP_CMP_UNORD(fs, wc, ret, X, Y)				\
+++  do {									\
+++    ret = ((X##_e == _FP_EXPMAX_##fs && !_FP_FRAC_ZEROP_##wc(X))	\
+++	   || (Y##_e == _FP_EXPMAX_##fs && !_FP_FRAC_ZEROP_##wc(Y)));	\
+++  } while (0)
+++
+++/*
+++ * Main square root routine.  The input value should be cooked.
+++ */
+++
+++#define _FP_SQRT(fs, wc, R, X)						\
+++do {									\
+++    _FP_FRAC_DECL_##wc(T); _FP_FRAC_DECL_##wc(S);			\
+++    _FP_W_TYPE q;							\
+++    switch (X##_c)							\
+++    {									\
+++    case FP_CLS_NAN:							\
+++	_FP_FRAC_COPY_##wc(R, X);					\
+++	R##_s = X##_s;							\
+++    	R##_c = FP_CLS_NAN;						\
+++    	break;								\
+++    case FP_CLS_INF:							\
+++    	if (X##_s)							\
+++    	  {								\
+++    	    R##_s = _FP_NANSIGN_##fs;					\
+++	    R##_c = FP_CLS_NAN; /* NAN */				\
+++	    _FP_FRAC_SET_##wc(R, _FP_NANFRAC_##fs);			\
+++	    FP_SET_EXCEPTION(FP_EX_INVALID);				\
+++    	  }								\
+++    	else								\
+++    	  {								\
+++    	    R##_s = 0;							\
+++    	    R##_c = FP_CLS_INF; /* sqrt(+inf) = +inf */			\
+++    	  }								\
+++    	break;								\
+++    case FP_CLS_ZERO:							\
+++	R##_s = X##_s;							\
+++	R##_c = FP_CLS_ZERO; /* sqrt(+-0) = +-0 */			\
+++	break;								\
+++    case FP_CLS_NORMAL:							\
+++    	R##_s = 0;							\
+++        if (X##_s)							\
+++          {								\
+++	    R##_c = FP_CLS_NAN; /* sNAN */				\
+++	    R##_s = _FP_NANSIGN_##fs;					\
+++	    _FP_FRAC_SET_##wc(R, _FP_NANFRAC_##fs);			\
+++	    FP_SET_EXCEPTION(FP_EX_INVALID);				\
+++	    break;							\
+++          }								\
+++    	R##_c = FP_CLS_NORMAL;						\
+++        if (X##_e & 1)							\
+++          _FP_FRAC_SLL_##wc(X, 1);					\
+++        R##_e = X##_e >> 1;						\
+++        _FP_FRAC_SET_##wc(S, _FP_ZEROFRAC_##wc);			\
+++        _FP_FRAC_SET_##wc(R, _FP_ZEROFRAC_##wc);			\
+++        q = _FP_OVERFLOW_##fs >> 1;					\
+++        _FP_SQRT_MEAT_##wc(R, S, T, X, q);				\
+++    }									\
+++  } while (0)
+++
+++/*
+++ * Convert from FP to integer.  Input is raw.
+++ */
+++
+++/* RSIGNED can have following values:
+++ * 0:  the number is required to be 0..(2^rsize)-1, if not, NV is set plus
+++ *     the result is either 0 or (2^rsize)-1 depending on the sign in such
+++ *     case.
+++ * 1:  the number is required to be -(2^(rsize-1))..(2^(rsize-1))-1, if not,
+++ *     NV is set plus the result is either -(2^(rsize-1)) or (2^(rsize-1))-1
+++ *     depending on the sign in such case.
+++ * -1: the number is required to be -(2^(rsize-1))..(2^rsize)-1, if not, NV is
+++ *     set plus the result is either -(2^(rsize-1)) or (2^(rsize-1))-1
+++ *     depending on the sign in such case.
+++ */
+++#define _FP_TO_INT(fs, wc, r, X, rsize, rsigned)			\
+++do {									\
+++  if (X##_e < _FP_EXPBIAS_##fs)						\
+++    {									\
+++      r = 0;								\
+++      if (X##_e == 0)							\
+++	{								\
+++	  if (!_FP_FRAC_ZEROP_##wc(X))					\
+++	    {								\
+++	      FP_SET_EXCEPTION(FP_EX_INEXACT);				\
+++	      FP_SET_EXCEPTION(FP_EX_DENORM);				\
+++	    }								\
+++	}								\
+++      else								\
+++	FP_SET_EXCEPTION(FP_EX_INEXACT);				\
+++    }									\
+++  else if (X##_e >= _FP_EXPBIAS_##fs + rsize - (rsigned > 0 || X##_s)	\
+++	   || (!rsigned && X##_s))					\
+++    {									\
+++      /* Overflow or converting to the most negative integer.  */	\
+++      if (rsigned)							\
+++	{								\
+++	  r = 1;							\
+++	  r <<= rsize - 1;						\
+++	  r -= 1 - X##_s;						\
+++	} else {							\
+++	  r = 0;							\
+++	  if (X##_s)							\
+++	    r = ~r;							\
+++	}								\
+++									\
+++      if (rsigned && X##_s && X##_e == _FP_EXPBIAS_##fs + rsize - 1)	\
+++	{								\
+++	  /* Possibly converting to most negative integer; check the	\
+++	     mantissa.  */						\
+++	  int inexact = 0;						\
+++	  (void)((_FP_FRACBITS_##fs > rsize)				\
+++		 ? ({ _FP_FRAC_SRST_##wc(X, inexact,			\
+++					 _FP_FRACBITS_##fs - rsize,	\
+++					 _FP_FRACBITS_##fs); 0; })	\
+++		 : 0);							\
+++	  if (!_FP_FRAC_ZEROP_##wc(X))					\
+++	    FP_SET_EXCEPTION(FP_EX_INVALID);				\
+++	  else if (inexact)						\
+++	    FP_SET_EXCEPTION(FP_EX_INEXACT);				\
+++	}								\
+++      else								\
+++	FP_SET_EXCEPTION(FP_EX_INVALID);				\
+++    }									\
+++  else									\
+++    {									\
+++      _FP_FRAC_HIGH_RAW_##fs(X) |= _FP_IMPLBIT_##fs;			\
+++      if (X##_e >= _FP_EXPBIAS_##fs + _FP_FRACBITS_##fs - 1)		\
+++	{								\
+++	  _FP_FRAC_ASSEMBLE_##wc(r, X, rsize);				\
+++	  r <<= X##_e - _FP_EXPBIAS_##fs - _FP_FRACBITS_##fs + 1;	\
+++	}								\
+++      else								\
+++	{								\
+++	  int inexact;							\
+++	  _FP_FRAC_SRST_##wc(X, inexact,				\
+++			    (_FP_FRACBITS_##fs + _FP_EXPBIAS_##fs - 1	\
+++			     - X##_e),					\
+++			    _FP_FRACBITS_##fs);				\
+++	  if (inexact)							\
+++	    FP_SET_EXCEPTION(FP_EX_INEXACT);				\
+++	  _FP_FRAC_ASSEMBLE_##wc(r, X, rsize);				\
+++	}								\
+++      if (rsigned && X##_s)						\
+++	r = -r;								\
+++    }									\
+++} while (0)
+++
+++/* Convert integer to fp.  Output is raw.  RTYPE is unsigned even if
+++   input is signed.  */
+++#define _FP_FROM_INT(fs, wc, X, r, rsize, rtype)			     \
+++  do {									     \
+++    if (r)								     \
+++      {									     \
+++	rtype ur_;							     \
+++									     \
+++	if ((X##_s = (r < 0)))						     \
+++	  r = -(rtype)r;						     \
+++									     \
+++	ur_ = (rtype) r;						     \
+++	(void)((rsize <= _FP_W_TYPE_SIZE)				     \
+++	       ? ({							     \
+++		    int lz_;						     \
+++		    __FP_CLZ(lz_, (_FP_W_TYPE)ur_);			     \
+++		    X##_e = _FP_EXPBIAS_##fs + _FP_W_TYPE_SIZE - 1 - lz_;    \
+++		  })							     \
+++	       : ((rsize <= 2 * _FP_W_TYPE_SIZE)			     \
+++		  ? ({							     \
+++		       int lz_;						     \
+++		       __FP_CLZ_2(lz_, (_FP_W_TYPE)(ur_ >> _FP_W_TYPE_SIZE), \
+++				  (_FP_W_TYPE)ur_);			     \
+++		       X##_e = (_FP_EXPBIAS_##fs + 2 * _FP_W_TYPE_SIZE - 1   \
+++				- lz_);					     \
+++		     })							     \
+++		  : (abort(), 0)));					     \
+++									     \
+++	if (rsize - 1 + _FP_EXPBIAS_##fs >= _FP_EXPMAX_##fs		     \
+++	    && X##_e >= _FP_EXPMAX_##fs)				     \
+++	  {								     \
+++	    /* Exponent too big; overflow to infinity.  (May also	     \
+++	       happen after rounding below.)  */			     \
+++	    _FP_OVERFLOW_SEMIRAW(fs, wc, X);				     \
+++	    goto pack_semiraw;						     \
+++	  }								     \
+++									     \
+++	if (rsize <= _FP_FRACBITS_##fs					     \
+++	    || X##_e < _FP_EXPBIAS_##fs + _FP_FRACBITS_##fs)		     \
+++	  {								     \
+++	    /* Exactly representable; shift left.  */			     \
+++	    _FP_FRAC_DISASSEMBLE_##wc(X, ur_, rsize);			     \
+++	    _FP_FRAC_SLL_##wc(X, (_FP_EXPBIAS_##fs			     \
+++				  + _FP_FRACBITS_##fs - 1 - X##_e));	     \
+++	  }								     \
+++	else								     \
+++	  {								     \
+++	    /* More bits in integer than in floating type; need to	     \
+++	       round.  */						     \
+++	    if (_FP_EXPBIAS_##fs + _FP_WFRACBITS_##fs - 1 < X##_e)	     \
+++	      ur_ = ((ur_ >> (X##_e - _FP_EXPBIAS_##fs			     \
+++			      - _FP_WFRACBITS_##fs + 1))		     \
+++		     | ((ur_ << (rsize - (X##_e - _FP_EXPBIAS_##fs	     \
+++					  - _FP_WFRACBITS_##fs + 1)))	     \
+++			!= 0));						     \
+++	    _FP_FRAC_DISASSEMBLE_##wc(X, ur_, rsize);			     \
+++	    if ((_FP_EXPBIAS_##fs + _FP_WFRACBITS_##fs - 1 - X##_e) > 0)     \
+++	      _FP_FRAC_SLL_##wc(X, (_FP_EXPBIAS_##fs			     \
+++				    + _FP_WFRACBITS_##fs - 1 - X##_e));	     \
+++	    _FP_FRAC_HIGH_##fs(X) &= ~(_FP_W_TYPE)_FP_IMPLBIT_SH_##fs;	     \
+++	  pack_semiraw:							     \
+++	    _FP_PACK_SEMIRAW(fs, wc, X);				     \
+++	  }								     \
+++      }									     \
+++    else								     \
+++      {									     \
+++	X##_s = 0;							     \
+++	X##_e = 0;							     \
+++	_FP_FRAC_SET_##wc(X, _FP_ZEROFRAC_##wc);			     \
+++      }									     \
+++  } while (0)
+++
+++
+++/* Extend from a narrower floating-point format to a wider one.  Input
+++   and output are raw.  */
+++#define FP_EXTEND(dfs,sfs,dwc,swc,D,S)					 \
+++do {									 \
+++  if (_FP_FRACBITS_##dfs < _FP_FRACBITS_##sfs				 \
+++      || (_FP_EXPMAX_##dfs - _FP_EXPBIAS_##dfs				 \
+++	  < _FP_EXPMAX_##sfs - _FP_EXPBIAS_##sfs)			 \
+++      || (_FP_EXPBIAS_##dfs < _FP_EXPBIAS_##sfs + _FP_FRACBITS_##sfs - 1 \
+++	  && _FP_EXPBIAS_##dfs != _FP_EXPBIAS_##sfs))			 \
+++    abort();								 \
+++  D##_s = S##_s;							 \
+++  _FP_FRAC_COPY_##dwc##_##swc(D, S);					 \
+++  if (_FP_EXP_NORMAL(sfs, swc, S))					 \
+++    {									 \
+++      D##_e = S##_e + _FP_EXPBIAS_##dfs - _FP_EXPBIAS_##sfs;		 \
+++      _FP_FRAC_SLL_##dwc(D, (_FP_FRACBITS_##dfs - _FP_FRACBITS_##sfs));	 \
+++    }									 \
+++  else									 \
+++    {									 \
+++      if (S##_e == 0)							 \
+++	{								 \
+++	  if (_FP_FRAC_ZEROP_##swc(S))					 \
+++	    D##_e = 0;							 \
+++	  else if (_FP_EXPBIAS_##dfs					 \
+++		   < _FP_EXPBIAS_##sfs + _FP_FRACBITS_##sfs - 1)	 \
+++	    {								 \
+++	      FP_SET_EXCEPTION(FP_EX_DENORM);				 \
+++	      _FP_FRAC_SLL_##dwc(D, (_FP_FRACBITS_##dfs			 \
+++				     - _FP_FRACBITS_##sfs));		 \
+++	      D##_e = 0;						 \
+++	    }								 \
+++	  else								 \
+++	    {								 \
+++	      int _lz;							 \
+++	      FP_SET_EXCEPTION(FP_EX_DENORM);				 \
+++	      _FP_FRAC_CLZ_##swc(_lz, S);				 \
+++	      _FP_FRAC_SLL_##dwc(D,					 \
+++				 _lz + _FP_FRACBITS_##dfs		 \
+++				 - _FP_FRACTBITS_##sfs);		 \
+++	      D##_e = (_FP_EXPBIAS_##dfs - _FP_EXPBIAS_##sfs + 1	 \
+++		       + _FP_FRACXBITS_##sfs - _lz);			 \
+++	    }								 \
+++	}								 \
+++      else								 \
+++	{								 \
+++	  D##_e = _FP_EXPMAX_##dfs;					 \
+++	  if (!_FP_FRAC_ZEROP_##swc(S))					 \
+++	    {								 \
+++	      if (!(_FP_FRAC_HIGH_RAW_##sfs(S) & _FP_QNANBIT_##sfs))	 \
+++		FP_SET_EXCEPTION(FP_EX_INVALID);			 \
+++	      _FP_FRAC_SLL_##dwc(D, (_FP_FRACBITS_##dfs			 \
+++				     - _FP_FRACBITS_##sfs));		 \
+++	    }								 \
+++	}								 \
+++    }									 \
+++} while (0)
+++
+++/* Truncate from a wider floating-point format to a narrower one.
+++   Input and output are semi-raw.  */
+++#define FP_TRUNC(dfs,sfs,dwc,swc,D,S)					     \
+++do {									     \
+++  if (_FP_FRACBITS_##sfs < _FP_FRACBITS_##dfs				     \
+++      || (_FP_EXPBIAS_##sfs < _FP_EXPBIAS_##dfs + _FP_FRACBITS_##dfs - 1     \
+++	  && _FP_EXPBIAS_##sfs != _FP_EXPBIAS_##dfs))			     \
+++    abort();								     \
+++  D##_s = S##_s;							     \
+++  if (_FP_EXP_NORMAL(sfs, swc, S))					     \
+++    {									     \
+++      D##_e = S##_e + _FP_EXPBIAS_##dfs - _FP_EXPBIAS_##sfs;		     \
+++      if (D##_e >= _FP_EXPMAX_##dfs)					     \
+++	_FP_OVERFLOW_SEMIRAW(dfs, dwc, D);				     \
+++      else								     \
+++	{								     \
+++	  if (D##_e <= 0)						     \
+++	    {								     \
+++	      if (D##_e < 1 - _FP_FRACBITS_##dfs)			     \
+++		{							     \
+++		  _FP_FRAC_SET_##swc(S, _FP_ZEROFRAC_##swc);		     \
+++		  _FP_FRAC_LOW_##swc(S) |= 1;				     \
+++		}							     \
+++	      else							     \
+++		{							     \
+++		  _FP_FRAC_HIGH_##sfs(S) |= _FP_IMPLBIT_SH_##sfs;	     \
+++		  _FP_FRAC_SRS_##swc(S, (_FP_WFRACBITS_##sfs		     \
+++					 - _FP_WFRACBITS_##dfs + 1 - D##_e), \
+++				     _FP_WFRACBITS_##sfs);		     \
+++		}							     \
+++	      D##_e = 0;						     \
+++	    }								     \
+++	  else								     \
+++	    _FP_FRAC_SRS_##swc(S, (_FP_WFRACBITS_##sfs			     \
+++				   - _FP_WFRACBITS_##dfs),		     \
+++			       _FP_WFRACBITS_##sfs);			     \
+++	  _FP_FRAC_COPY_##dwc##_##swc(D, S);				     \
+++	}								     \
+++    }									     \
+++  else									     \
+++    {									     \
+++      if (S##_e == 0)							     \
+++	{								     \
+++	  D##_e = 0;							     \
+++	  if (_FP_FRAC_ZEROP_##swc(S))					     \
+++	    _FP_FRAC_SET_##dwc(D, _FP_ZEROFRAC_##dwc);			     \
+++	  else								     \
+++	    {								     \
+++	      FP_SET_EXCEPTION(FP_EX_DENORM);				     \
+++	      if (_FP_EXPBIAS_##sfs					     \
+++		  < _FP_EXPBIAS_##dfs + _FP_FRACBITS_##dfs - 1)		     \
+++		{							     \
+++		  _FP_FRAC_SRS_##swc(S, (_FP_WFRACBITS_##sfs		     \
+++					 - _FP_WFRACBITS_##dfs),	     \
+++				     _FP_WFRACBITS_##sfs);		     \
+++		  _FP_FRAC_COPY_##dwc##_##swc(D, S);			     \
+++		}							     \
+++	      else							     \
+++		{							     \
+++		  _FP_FRAC_SET_##dwc(D, _FP_ZEROFRAC_##dwc);		     \
+++		  _FP_FRAC_LOW_##dwc(D) |= 1;				     \
+++		}							     \
+++	    }								     \
+++	}								     \
+++      else								     \
+++	{								     \
+++	  D##_e = _FP_EXPMAX_##dfs;					     \
+++	  if (_FP_FRAC_ZEROP_##swc(S))					     \
+++	    _FP_FRAC_SET_##dwc(D, _FP_ZEROFRAC_##dwc);			     \
+++	  else								     \
+++	    {								     \
+++	      _FP_CHECK_SIGNAN_SEMIRAW(sfs, swc, S);			     \
+++	      _FP_FRAC_SRL_##swc(S, (_FP_WFRACBITS_##sfs		     \
+++				     - _FP_WFRACBITS_##dfs));		     \
+++	      _FP_FRAC_COPY_##dwc##_##swc(D, S);			     \
+++	      /* Semi-raw NaN must have all workbits cleared.  */	     \
+++	      _FP_FRAC_LOW_##dwc(D)					     \
+++		&= ~(_FP_W_TYPE) ((1 << _FP_WORKBITS) - 1);		     \
+++	      _FP_FRAC_HIGH_##dfs(D) |= _FP_QNANBIT_SH_##dfs;		     \
+++	    }								     \
+++	}								     \
+++    }									     \
+++} while (0)
+++
+++/*
+++ * Helper primitives.
+++ */
+++
+++/* Count leading zeros in a word.  */
+++
+++#ifndef __FP_CLZ
+++/* GCC 3.4 and later provide the builtins for us.  */
+++#define __FP_CLZ(r, x)							      \
+++  do {									      \
+++    if (sizeof (_FP_W_TYPE) == sizeof (unsigned int))			      \
+++      r = __builtin_clz (x);						      \
+++    else if (sizeof (_FP_W_TYPE) == sizeof (unsigned long))		      \
+++      r = __builtin_clzl (x);						      \
+++    else if (sizeof (_FP_W_TYPE) == sizeof (unsigned long long))	      \
+++      r = __builtin_clzll (x);						      \
+++    else								      \
+++      abort ();								      \
+++  } while (0)
+++#endif /* ndef __FP_CLZ */
+++
+++#define _FP_DIV_HELP_imm(q, r, n, d)		\
+++  do {						\
+++    q = n / d, r = n % d;			\
+++  } while (0)
+++
+++
+++/* A restoring bit-by-bit division primitive.  */
+++
+++#define _FP_DIV_MEAT_N_loop(fs, wc, R, X, Y)				\
+++  do {									\
+++    int count = _FP_WFRACBITS_##fs;					\
+++    _FP_FRAC_DECL_##wc (u);						\
+++    _FP_FRAC_DECL_##wc (v);						\
+++    _FP_FRAC_COPY_##wc (u, X);						\
+++    _FP_FRAC_COPY_##wc (v, Y);						\
+++    _FP_FRAC_SET_##wc (R, _FP_ZEROFRAC_##wc);				\
+++    /* Normalize U and V.  */						\
+++    _FP_FRAC_SLL_##wc (u, _FP_WFRACXBITS_##fs);				\
+++    _FP_FRAC_SLL_##wc (v, _FP_WFRACXBITS_##fs);				\
+++    /* First round.  Since the operands are normalized, either the	\
+++       first or second bit will be set in the fraction.  Produce a	\
+++       normalized result by checking which and adjusting the loop	\
+++       count and exponent accordingly.  */				\
+++    if (_FP_FRAC_GE_1 (u, v))						\
+++      {									\
+++	_FP_FRAC_SUB_##wc (u, u, v);					\
+++	_FP_FRAC_LOW_##wc (R) |= 1;					\
+++	count--;							\
+++      }									\
+++    else								\
+++      R##_e--;								\
+++    /* Subsequent rounds.  */						\
+++    do {								\
+++      int msb = (_FP_WS_TYPE) _FP_FRAC_HIGH_##wc (u) < 0;		\
+++      _FP_FRAC_SLL_##wc (u, 1);						\
+++      _FP_FRAC_SLL_##wc (R, 1);						\
+++      if (msb || _FP_FRAC_GE_1 (u, v))					\
+++	{								\
+++	  _FP_FRAC_SUB_##wc (u, u, v);					\
+++	  _FP_FRAC_LOW_##wc (R) |= 1;					\
+++	}								\
+++    } while (--count > 0);						\
+++    /* If there's anything left in U, the result is inexact.  */	\
+++    _FP_FRAC_LOW_##wc (R) |= !_FP_FRAC_ZEROP_##wc (u);			\
+++  } while (0)
+++
+++#define _FP_DIV_MEAT_1_loop(fs, R, X, Y)  _FP_DIV_MEAT_N_loop (fs, 1, R, X, Y)
+++#define _FP_DIV_MEAT_2_loop(fs, R, X, Y)  _FP_DIV_MEAT_N_loop (fs, 2, R, X, Y)
+++#define _FP_DIV_MEAT_4_loop(fs, R, X, Y)  _FP_DIV_MEAT_N_loop (fs, 4, R, X, Y)
++diff -Naur uClibc-0.9.31.ori/libc/sysdeps/linux/sparc/soft-fp/q_add.c uClibc-0.9.31/libc/sysdeps/linux/sparc/soft-fp/q_add.c
++--- uClibc-0.9.31.ori/libc/sysdeps/linux/sparc/soft-fp/q_add.c	1970-01-01 01:00:00.000000000 +0100
+++++ uClibc-0.9.31/libc/sysdeps/linux/sparc/soft-fp/q_add.c	2010-10-14 14:05:37.000000000 +0200
++@@ -0,0 +1,39 @@
+++/* Software floating-point emulation.
+++   Return a + b
+++   Copyright (C) 1997,1999,2006 Free Software Foundation, Inc.
+++   This file is part of the GNU C Library.
+++   Contributed by Richard Henderson (rth at cygnus.com) and
+++		  Jakub Jelinek (jj at ultra.linux.cz).
+++
+++   The GNU C Library is free software; you can redistribute it and/or
+++   modify it under the terms of the GNU Lesser General Public
+++   License as published by the Free Software Foundation; either
+++   version 2.1 of the License, or (at your option) any later version.
+++
+++   The GNU C Library is distributed in the hope that it will be useful,
+++   but WITHOUT ANY WARRANTY; without even the implied warranty of
+++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+++   Lesser General Public License for more details.
+++
+++   You should have received a copy of the GNU Lesser General Public
+++   License along with the GNU C Library; if not, write to the Free
+++   Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+++   02111-1307 USA.  */
+++
+++#include "soft-fp.h"
+++#include "quad.h"
+++
+++long double _Q_add(const long double a, const long double b)
+++{
+++  FP_DECL_EX;
+++  FP_DECL_Q(A); FP_DECL_Q(B); FP_DECL_Q(C);
+++  long double c;
+++
+++  FP_INIT_ROUNDMODE;
+++  FP_UNPACK_SEMIRAW_Q(A, a);
+++  FP_UNPACK_SEMIRAW_Q(B, b);
+++  FP_ADD_Q(C, A, B);
+++  FP_PACK_SEMIRAW_Q(c, C);
+++  FP_HANDLE_EXCEPTIONS;
+++  return c;
+++}
++diff -Naur uClibc-0.9.31.ori/libc/sysdeps/linux/sparc/soft-fp/q_cmp.c uClibc-0.9.31/libc/sysdeps/linux/sparc/soft-fp/q_cmp.c
++--- uClibc-0.9.31.ori/libc/sysdeps/linux/sparc/soft-fp/q_cmp.c	1970-01-01 01:00:00.000000000 +0100
+++++ uClibc-0.9.31/libc/sysdeps/linux/sparc/soft-fp/q_cmp.c	2010-10-14 14:05:37.000000000 +0200
++@@ -0,0 +1,41 @@
+++/* Software floating-point emulation.
+++   Compare a and b, return float condition code.
+++   Copyright (C) 1997,1999 Free Software Foundation, Inc.
+++   This file is part of the GNU C Library.
+++   Contributed by Richard Henderson (rth at cygnus.com) and
+++		  Jakub Jelinek (jj at ultra.linux.cz).
+++
+++   The GNU C Library is free software; you can redistribute it and/or
+++   modify it under the terms of the GNU Lesser General Public
+++   License as published by the Free Software Foundation; either
+++   version 2.1 of the License, or (at your option) any later version.
+++
+++   The GNU C Library is distributed in the hope that it will be useful,
+++   but WITHOUT ANY WARRANTY; without even the implied warranty of
+++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+++   Lesser General Public License for more details.
+++
+++   You should have received a copy of the GNU Lesser General Public
+++   License along with the GNU C Library; if not, write to the Free
+++   Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+++   02111-1307 USA.  */
+++
+++#include "soft-fp.h"
+++#include "quad.h"
+++
+++int _Q_cmp(const long double a, const long double b)
+++{
+++  FP_DECL_EX;
+++  FP_DECL_Q(A); FP_DECL_Q(B);
+++  int r;
+++
+++  FP_UNPACK_RAW_Q(A, a);
+++  FP_UNPACK_RAW_Q(B, b);
+++  FP_CMP_Q(r, B, A, 3);
+++  if (r == -1) r = 2;
+++  if (r == 3 && (FP_ISSIGNAN_Q(A) || FP_ISSIGNAN_Q(B)))
+++    FP_SET_EXCEPTION(FP_EX_INVALID);
+++  FP_HANDLE_EXCEPTIONS;
+++
+++  return r;
+++}
++diff -Naur uClibc-0.9.31.ori/libc/sysdeps/linux/sparc/soft-fp/q_cmpe.c uClibc-0.9.31/libc/sysdeps/linux/sparc/soft-fp/q_cmpe.c
++--- uClibc-0.9.31.ori/libc/sysdeps/linux/sparc/soft-fp/q_cmpe.c	1970-01-01 01:00:00.000000000 +0100
+++++ uClibc-0.9.31/libc/sysdeps/linux/sparc/soft-fp/q_cmpe.c	2010-10-14 14:05:37.000000000 +0200
++@@ -0,0 +1,42 @@
+++/* Software floating-point emulation.
+++   Compare a and b, return float condition code.
+++   Signal exception (unless masked) if unordered.
+++   Copyright (C) 1997,1999 Free Software Foundation, Inc.
+++   This file is part of the GNU C Library.
+++   Contributed by Richard Henderson (rth at cygnus.com) and
+++		  Jakub Jelinek (jj at ultra.linux.cz).
+++
+++   The GNU C Library is free software; you can redistribute it and/or
+++   modify it under the terms of the GNU Lesser General Public
+++   License as published by the Free Software Foundation; either
+++   version 2.1 of the License, or (at your option) any later version.
+++
+++   The GNU C Library is distributed in the hope that it will be useful,
+++   but WITHOUT ANY WARRANTY; without even the implied warranty of
+++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+++   Lesser General Public License for more details.
+++
+++   You should have received a copy of the GNU Lesser General Public
+++   License along with the GNU C Library; if not, write to the Free
+++   Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+++   02111-1307 USA.  */
+++
+++#include "soft-fp.h"
+++#include "quad.h"
+++
+++int _Q_cmpe(const long double a, const long double b)
+++{
+++  FP_DECL_EX;
+++  FP_DECL_Q(A); FP_DECL_Q(B);
+++  int r;
+++
+++  FP_UNPACK_RAW_Q(A, a);
+++  FP_UNPACK_RAW_Q(B, b);
+++  FP_CMP_Q(r, B, A, 3);
+++  if (r == -1) r = 2;
+++  if (r == 3)
+++    FP_SET_EXCEPTION(FP_EX_INVALID);
+++  FP_HANDLE_EXCEPTIONS;
+++
+++  return r;
+++}
++diff -Naur uClibc-0.9.31.ori/libc/sysdeps/linux/sparc/soft-fp/q_div.c uClibc-0.9.31/libc/sysdeps/linux/sparc/soft-fp/q_div.c
++--- uClibc-0.9.31.ori/libc/sysdeps/linux/sparc/soft-fp/q_div.c	1970-01-01 01:00:00.000000000 +0100
+++++ uClibc-0.9.31/libc/sysdeps/linux/sparc/soft-fp/q_div.c	2010-10-14 14:05:37.000000000 +0200
++@@ -0,0 +1,39 @@
+++/* Software floating-point emulation.
+++   Return a / b
+++   Copyright (C) 1997, 1999, 2006 Free Software Foundation, Inc.
+++   This file is part of the GNU C Library.
+++   Contributed by Richard Henderson (rth at cygnus.com) and
+++		  Jakub Jelinek (jj at ultra.linux.cz).
+++
+++   The GNU C Library is free software; you can redistribute it and/or
+++   modify it under the terms of the GNU Lesser General Public
+++   License as published by the Free Software Foundation; either
+++   version 2.1 of the License, or (at your option) any later version.
+++
+++   The GNU C Library is distributed in the hope that it will be useful,
+++   but WITHOUT ANY WARRANTY; without even the implied warranty of
+++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+++   Lesser General Public License for more details.
+++
+++   You should have received a copy of the GNU Lesser General Public
+++   License along with the GNU C Library; if not, write to the Free
+++   Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+++   02111-1307 USA.  */
+++
+++#include "soft-fp.h"
+++#include "quad.h"
+++
+++long double _Q_div(const long double a, const long double b)
+++{
+++  FP_DECL_EX;
+++  FP_DECL_Q(A); FP_DECL_Q(B); FP_DECL_Q(C);
+++  long double c;
+++
+++  FP_INIT_ROUNDMODE;
+++  FP_UNPACK_Q(A, a);
+++  FP_UNPACK_Q(B, b);
+++  FP_DIV_Q(C, A, B);
+++  FP_PACK_Q(c, C);
+++  FP_HANDLE_EXCEPTIONS;
+++  return c;
+++}
++diff -Naur uClibc-0.9.31.ori/libc/sysdeps/linux/sparc/soft-fp/q_dtoq.c uClibc-0.9.31/libc/sysdeps/linux/sparc/soft-fp/q_dtoq.c
++--- uClibc-0.9.31.ori/libc/sysdeps/linux/sparc/soft-fp/q_dtoq.c	1970-01-01 01:00:00.000000000 +0100
+++++ uClibc-0.9.31/libc/sysdeps/linux/sparc/soft-fp/q_dtoq.c	2010-10-14 14:05:37.000000000 +0200
++@@ -0,0 +1,44 @@
+++/* Software floating-point emulation.
+++   Return (long double)(a)
+++   Copyright (C) 1997,1999,2006 Free Software Foundation, Inc.
+++   This file is part of the GNU C Library.
+++   Contributed by Richard Henderson (rth at cygnus.com) and
+++		  Jakub Jelinek (jj at ultra.linux.cz).
+++
+++   The GNU C Library is free software; you can redistribute it and/or
+++   modify it under the terms of the GNU Lesser General Public
+++   License as published by the Free Software Foundation; either
+++   version 2.1 of the License, or (at your option) any later version.
+++
+++   The GNU C Library is distributed in the hope that it will be useful,
+++   but WITHOUT ANY WARRANTY; without even the implied warranty of
+++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+++   Lesser General Public License for more details.
+++
+++   You should have received a copy of the GNU Lesser General Public
+++   License along with the GNU C Library; if not, write to the Free
+++   Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+++   02111-1307 USA.  */
+++
+++#include "soft-fp.h"
+++#include "double.h"
+++#include "quad.h"
+++
+++long double _Q_dtoq(const double a)
+++{
+++  FP_DECL_EX;
+++  FP_DECL_D(A);
+++  FP_DECL_Q(C);
+++  long double c;
+++
+++  FP_INIT_ROUNDMODE;
+++  FP_UNPACK_RAW_D(A, a);
+++#if (2 * _FP_W_TYPE_SIZE) < _FP_FRACBITS_Q
+++  FP_EXTEND(Q,D,4,2,C,A);
+++#else
+++  FP_EXTEND(Q,D,2,1,C,A);
+++#endif
+++  FP_PACK_RAW_Q(c, C);
+++  FP_HANDLE_EXCEPTIONS;
+++  return c;
+++}
++diff -Naur uClibc-0.9.31.ori/libc/sysdeps/linux/sparc/soft-fp/q_feq.c uClibc-0.9.31/libc/sysdeps/linux/sparc/soft-fp/q_feq.c
++--- uClibc-0.9.31.ori/libc/sysdeps/linux/sparc/soft-fp/q_feq.c	1970-01-01 01:00:00.000000000 +0100
+++++ uClibc-0.9.31/libc/sysdeps/linux/sparc/soft-fp/q_feq.c	2010-10-14 14:05:37.000000000 +0200
++@@ -0,0 +1,40 @@
+++/* Software floating-point emulation.
+++   Return 1 if a == b
+++   Copyright (C) 1997,1999 Free Software Foundation, Inc.
+++   This file is part of the GNU C Library.
+++   Contributed by Richard Henderson (rth at cygnus.com) and
+++		  Jakub Jelinek (jj@ultra.linux.cz).
+++
+++   The GNU C Library is free software; you can redistribute it and/or
+++   modify it under the terms of the GNU Lesser General Public
+++   License as published by the Free Software Foundation; either
+++   version 2.1 of the License, or (at your option) any later version.
+++
+++   The GNU C Library is distributed in the hope that it will be useful,
+++   but WITHOUT ANY WARRANTY; without even the implied warranty of
+++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+++   Lesser General Public License for more details.
+++
+++   You should have received a copy of the GNU Lesser General Public
+++   License along with the GNU C Library; if not, write to the Free
+++   Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+++   02111-1307 USA.  */
+++
+++#include "soft-fp.h"
+++#include "quad.h"
+++
+++int _Q_feq(const long double a, const long double b)
+++{
+++  FP_DECL_EX;
+++  FP_DECL_Q(A); FP_DECL_Q(B);
+++  int r;
+++
+++  FP_UNPACK_RAW_Q(A, a);
+++  FP_UNPACK_RAW_Q(B, b);
+++  FP_CMP_EQ_Q(r, A, B);
+++  if (r && (FP_ISSIGNAN_Q(A) || FP_ISSIGNAN_Q(B)))
+++    FP_SET_EXCEPTION(FP_EX_INVALID);
+++  FP_HANDLE_EXCEPTIONS;
+++
+++  return !r;
+++}
++diff -Naur uClibc-0.9.31.ori/libc/sysdeps/linux/sparc/soft-fp/q_fge.c uClibc-0.9.31/libc/sysdeps/linux/sparc/soft-fp/q_fge.c
++--- uClibc-0.9.31.ori/libc/sysdeps/linux/sparc/soft-fp/q_fge.c	1970-01-01 01:00:00.000000000 +0100
+++++ uClibc-0.9.31/libc/sysdeps/linux/sparc/soft-fp/q_fge.c	2010-10-14 14:05:37.000000000 +0200
++@@ -0,0 +1,40 @@
+++/* Software floating-point emulation.
+++   Return 1 if a >= b
+++   Copyright (C) 1997,1999 Free Software Foundation, Inc.
+++   This file is part of the GNU C Library.
+++   Contributed by Richard Henderson (rth at cygnus.com) and
+++		  Jakub Jelinek (jj at ultra.linux.cz).
+++
+++   The GNU C Library is free software; you can redistribute it and/or
+++   modify it under the terms of the GNU Lesser General Public
+++   License as published by the Free Software Foundation; either
+++   version 2.1 of the License, or (at your option) any later version.
+++
+++   The GNU C Library is distributed in the hope that it will be useful,
+++   but WITHOUT ANY WARRANTY; without even the implied warranty of
+++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+++   Lesser General Public License for more details.
+++
+++   You should have received a copy of the GNU Lesser General Public
+++   License along with the GNU C Library; if not, write to the Free
+++   Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+++   02111-1307 USA.  */
+++
+++#include "soft-fp.h"
+++#include "quad.h"
+++
+++int _Q_fge(const long double a, const long double b)
+++{
+++  FP_DECL_EX;
+++  FP_DECL_Q(A); FP_DECL_Q(B);
+++  int r;
+++
+++  FP_UNPACK_RAW_Q(A, a);
+++  FP_UNPACK_RAW_Q(B, b);
+++  FP_CMP_Q(r, B, A, 3);
+++  if (r == 3)
+++    FP_SET_EXCEPTION(FP_EX_INVALID);
+++  FP_HANDLE_EXCEPTIONS;
+++
+++  return (r <= 0);
+++}
++diff -Naur uClibc-0.9.31.ori/libc/sysdeps/linux/sparc/soft-fp/q_fgt.c uClibc-0.9.31/libc/sysdeps/linux/sparc/soft-fp/q_fgt.c
++--- uClibc-0.9.31.ori/libc/sysdeps/linux/sparc/soft-fp/q_fgt.c	1970-01-01 01:00:00.000000000 +0100
+++++ uClibc-0.9.31/libc/sysdeps/linux/sparc/soft-fp/q_fgt.c	2010-10-14 14:05:37.000000000 +0200
++@@ -0,0 +1,40 @@
+++/* Software floating-point emulation.
+++   Return 1 if a > b
+++   Copyright (C) 1997,1999 Free Software Foundation, Inc.
+++   This file is part of the GNU C Library.
+++   Contributed by Richard Henderson (rth at cygnus.com) and
+++		  Jakub Jelinek (jj at ultra.linux.cz).
+++
+++   The GNU C Library is free software; you can redistribute it and/or
+++   modify it under the terms of the GNU Lesser General Public
+++   License as published by the Free Software Foundation; either
+++   version 2.1 of the License, or (at your option) any later version.
+++
+++   The GNU C Library is distributed in the hope that it will be useful,
+++   but WITHOUT ANY WARRANTY; without even the implied warranty of
+++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+++   Lesser General Public License for more details.
+++
+++   You should have received a copy of the GNU Lesser General Public
+++   License along with the GNU C Library; if not, write to the Free
+++   Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+++   02111-1307 USA.  */
+++
+++#include "soft-fp.h"
+++#include "quad.h"
+++
+++int _Q_fgt(const long double a, const long double b)
+++{
+++  FP_DECL_EX;
+++  FP_DECL_Q(A); FP_DECL_Q(B);
+++  int r;
+++
+++  FP_UNPACK_RAW_Q(A, a);
+++  FP_UNPACK_RAW_Q(B, b);
+++  FP_CMP_Q(r, B, A, 3);
+++  if (r == 3)
+++    FP_SET_EXCEPTION(FP_EX_INVALID);
+++  FP_HANDLE_EXCEPTIONS;
+++
+++  return (r == -1);
+++}
++diff -Naur uClibc-0.9.31.ori/libc/sysdeps/linux/sparc/soft-fp/q_fle.c uClibc-0.9.31/libc/sysdeps/linux/sparc/soft-fp/q_fle.c
++--- uClibc-0.9.31.ori/libc/sysdeps/linux/sparc/soft-fp/q_fle.c	1970-01-01 01:00:00.000000000 +0100
+++++ uClibc-0.9.31/libc/sysdeps/linux/sparc/soft-fp/q_fle.c	2010-10-14 14:05:37.000000000 +0200
++@@ -0,0 +1,40 @@
+++/* Software floating-point emulation.
+++   Return 1 if a <= b
+++   Copyright (C) 1997,1999 Free Software Foundation, Inc.
+++   This file is part of the GNU C Library.
+++   Contributed by Richard Henderson (rth at cygnus.com) and
+++		  Jakub Jelinek (jj@ultra.linux.cz).
+++
+++   The GNU C Library is free software; you can redistribute it and/or
+++   modify it under the terms of the GNU Lesser General Public
+++   License as published by the Free Software Foundation; either
+++   version 2.1 of the License, or (at your option) any later version.
+++
+++   The GNU C Library is distributed in the hope that it will be useful,
+++   but WITHOUT ANY WARRANTY; without even the implied warranty of
+++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+++   Lesser General Public License for more details.
+++
+++   You should have received a copy of the GNU Lesser General Public
+++   License along with the GNU C Library; if not, write to the Free
+++   Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+++   02111-1307 USA.  */
+++
+++#include "soft-fp.h"
+++#include "quad.h"
+++
+++int _Q_fle(const long double a, const long double b)
+++{
+++  FP_DECL_EX;
+++  FP_DECL_Q(A); FP_DECL_Q(B);
+++  int r;
+++
+++  FP_UNPACK_RAW_Q(A, a);
+++  FP_UNPACK_RAW_Q(B, b);
+++  FP_CMP_Q(r, B, A, -2);
+++  if (r == -2)
+++    FP_SET_EXCEPTION(FP_EX_INVALID);
+++  FP_HANDLE_EXCEPTIONS;
+++
+++  return (r >= 0);
+++}
++diff -Naur uClibc-0.9.31.ori/libc/sysdeps/linux/sparc/soft-fp/q_flt.c uClibc-0.9.31/libc/sysdeps/linux/sparc/soft-fp/q_flt.c
++--- uClibc-0.9.31.ori/libc/sysdeps/linux/sparc/soft-fp/q_flt.c	1970-01-01 01:00:00.000000000 +0100
+++++ uClibc-0.9.31/libc/sysdeps/linux/sparc/soft-fp/q_flt.c	2010-10-14 14:05:37.000000000 +0200
++@@ -0,0 +1,40 @@
+++/* Software floating-point emulation.
+++   Return 1 if a < b
+++   Copyright (C) 1997,1999 Free Software Foundation, Inc.
+++   This file is part of the GNU C Library.
+++   Contributed by Richard Henderson (rth at cygnus.com) and
+++		  Jakub Jelinek (jj at ultra.linux.cz).
+++
+++   The GNU C Library is free software; you can redistribute it and/or
+++   modify it under the terms of the GNU Lesser General Public
+++   License as published by the Free Software Foundation; either
+++   version 2.1 of the License, or (at your option) any later version.
+++
+++   The GNU C Library is distributed in the hope that it will be useful,
+++   but WITHOUT ANY WARRANTY; without even the implied warranty of
+++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+++   Lesser General Public License for more details.
+++
+++   You should have received a copy of the GNU Lesser General Public
+++   License along with the GNU C Library; if not, write to the Free
+++   Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+++   02111-1307 USA.  */
+++
+++#include "soft-fp.h"
+++#include "quad.h"
+++
+++int _Q_flt(const long double a, const long double b)
+++{
+++  FP_DECL_EX;
+++  FP_DECL_Q(A); FP_DECL_Q(B);
+++  int r;
+++
+++  FP_UNPACK_RAW_Q(A, a);
+++  FP_UNPACK_RAW_Q(B, b);
+++  FP_CMP_Q(r, B, A, 3);
+++  if (r == 3)
+++    FP_SET_EXCEPTION(FP_EX_INVALID);
+++  FP_HANDLE_EXCEPTIONS;
+++
+++  return (r == 1);
+++}
++diff -Naur uClibc-0.9.31.ori/libc/sysdeps/linux/sparc/soft-fp/q_fne.c uClibc-0.9.31/libc/sysdeps/linux/sparc/soft-fp/q_fne.c
++--- uClibc-0.9.31.ori/libc/sysdeps/linux/sparc/soft-fp/q_fne.c	1970-01-01 01:00:00.000000000 +0100
+++++ uClibc-0.9.31/libc/sysdeps/linux/sparc/soft-fp/q_fne.c	2010-10-14 14:05:37.000000000 +0200
++@@ -0,0 +1,40 @@
+++/* Software floating-point emulation.
+++   Return 1 if a != b
+++   Copyright (C) 1997,1999 Free Software Foundation, Inc.
+++   This file is part of the GNU C Library.
+++   Contributed by Richard Henderson (rth at cygnus.com) and
+++		  Jakub Jelinek (jj at ultra.linux.cz).
+++
+++   The GNU C Library is free software; you can redistribute it and/or
+++   modify it under the terms of the GNU Lesser General Public
+++   License as published by the Free Software Foundation; either
+++   version 2.1 of the License, or (at your option) any later version.
+++
+++   The GNU C Library is distributed in the hope that it will be useful,
+++   but WITHOUT ANY WARRANTY; without even the implied warranty of
+++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+++   Lesser General Public License for more details.
+++
+++   You should have received a copy of the GNU Lesser General Public
+++   License along with the GNU C Library; if not, write to the Free
+++   Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+++   02111-1307 USA.  */
+++
+++#include "soft-fp.h"
+++#include "quad.h"
+++
+++int _Q_fne(const long double a, const long double b)
+++{
+++  FP_DECL_EX;
+++  FP_DECL_Q(A); FP_DECL_Q(B);
+++  int r;
+++
+++  FP_UNPACK_RAW_Q(A, a);
+++  FP_UNPACK_RAW_Q(B, b);
+++  FP_CMP_EQ_Q(r, A, B);
+++  if (r && (FP_ISSIGNAN_Q(A) || FP_ISSIGNAN_Q(B)))
+++    FP_SET_EXCEPTION(FP_EX_INVALID);
+++  FP_HANDLE_EXCEPTIONS;
+++
+++  return r;
+++}
++diff -Naur uClibc-0.9.31.ori/libc/sysdeps/linux/sparc/soft-fp/q_itoq.c uClibc-0.9.31/libc/sysdeps/linux/sparc/soft-fp/q_itoq.c
++--- uClibc-0.9.31.ori/libc/sysdeps/linux/sparc/soft-fp/q_itoq.c	1970-01-01 01:00:00.000000000 +0100
+++++ uClibc-0.9.31/libc/sysdeps/linux/sparc/soft-fp/q_itoq.c	2010-10-14 14:05:37.000000000 +0200
++@@ -0,0 +1,38 @@
+++/* Software floating-point emulation.
+++   Return (long double)(a)
+++   Copyright (C) 1997,1999,2006 Free Software Foundation, Inc.
+++   This file is part of the GNU C Library.
+++   Contributed by Richard Henderson (rth at cygnus.com) and
+++		  Jakub Jelinek (jj at ultra.linux.cz).
+++
+++   The GNU C Library is free software; you can redistribute it and/or
+++   modify it under the terms of the GNU Lesser General Public
+++   License as published by the Free Software Foundation; either
+++   version 2.1 of the License, or (at your option) any later version.
+++
+++   The GNU C Library is distributed in the hope that it will be useful,
+++   but WITHOUT ANY WARRANTY; without even the implied warranty of
+++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+++   Lesser General Public License for more details.
+++
+++   You should have received a copy of the GNU Lesser General Public
+++   License along with the GNU C Library; if not, write to the Free
+++   Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+++   02111-1307 USA.  */
+++
+++#include "soft-fp.h"
+++#include "quad.h"
+++
+++long double _Q_itoq(const int a)
+++{
+++  FP_DECL_EX;
+++  FP_DECL_Q(C);
+++  int b = a;
+++  long double c;
+++
+++  FP_FROM_INT_Q(C, b, 32, unsigned int);
+++  FP_PACK_RAW_Q(c, C);
+++  FP_CLEAR_EXCEPTIONS;
+++  FP_HANDLE_EXCEPTIONS;
+++  return c;
+++}
++diff -Naur uClibc-0.9.31.ori/libc/sysdeps/linux/sparc/soft-fp/q_lltoq.c uClibc-0.9.31/libc/sysdeps/linux/sparc/soft-fp/q_lltoq.c
++--- uClibc-0.9.31.ori/libc/sysdeps/linux/sparc/soft-fp/q_lltoq.c	1970-01-01 01:00:00.000000000 +0100
+++++ uClibc-0.9.31/libc/sysdeps/linux/sparc/soft-fp/q_lltoq.c	2010-10-14 14:05:37.000000000 +0200
++@@ -0,0 +1,38 @@
+++/* Software floating-point emulation.
+++   Return (long double)a
+++   Copyright (C) 1997, 1999, 2006 Free Software Foundation, Inc.
+++   This file is part of the GNU C Library.
+++   Contributed by Richard Henderson (rth at cygnus.com) and
+++		  Jakub Jelinek (jj at ultra.linux.cz).
+++
+++   The GNU C Library is free software; you can redistribute it and/or
+++   modify it under the terms of the GNU Lesser General Public
+++   License as published by the Free Software Foundation; either
+++   version 2.1 of the License, or (at your option) any later version.
+++
+++   The GNU C Library is distributed in the hope that it will be useful,
+++   but WITHOUT ANY WARRANTY; without even the implied warranty of
+++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+++   Lesser General Public License for more details.
+++
+++   You should have received a copy of the GNU Lesser General Public
+++   License along with the GNU C Library; if not, write to the Free
+++   Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+++   02111-1307 USA.  */
+++
+++#include "soft-fp.h"
+++#include "quad.h"
+++
+++long double _Q_lltoq(const long long a)
+++{
+++  FP_DECL_EX;
+++  FP_DECL_Q(C);
+++  long double c;
+++  long long b = a;
+++
+++  FP_FROM_INT_Q(C, b, 64, unsigned long long);
+++  FP_PACK_RAW_Q(c, C);
+++  FP_CLEAR_EXCEPTIONS;
+++  FP_HANDLE_EXCEPTIONS;
+++  return c;
+++}
++diff -Naur uClibc-0.9.31.ori/libc/sysdeps/linux/sparc/soft-fp/q_mul.c uClibc-0.9.31/libc/sysdeps/linux/sparc/soft-fp/q_mul.c
++--- uClibc-0.9.31.ori/libc/sysdeps/linux/sparc/soft-fp/q_mul.c	1970-01-01 01:00:00.000000000 +0100
+++++ uClibc-0.9.31/libc/sysdeps/linux/sparc/soft-fp/q_mul.c	2010-10-14 14:05:37.000000000 +0200
++@@ -0,0 +1,39 @@
+++/* Software floating-point emulation.
+++   Return a * b
+++   Copyright (C) 1997,1999 Free Software Foundation, Inc.
+++   This file is part of the GNU C Library.
+++   Contributed by Richard Henderson (rth at cygnus.com) and
+++		  Jakub Jelinek (jj at ultra.linux.cz).
+++
+++   The GNU C Library is free software; you can redistribute it and/or
+++   modify it under the terms of the GNU Lesser General Public
+++   License as published by the Free Software Foundation; either
+++   version 2.1 of the License, or (at your option) any later version.
+++
+++   The GNU C Library is distributed in the hope that it will be useful,
+++   but WITHOUT ANY WARRANTY; without even the implied warranty of
+++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+++   Lesser General Public License for more details.
+++
+++   You should have received a copy of the GNU Lesser General Public
+++   License along with the GNU C Library; if not, write to the Free
+++   Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+++   02111-1307 USA.  */
+++
+++#include "soft-fp.h"
+++#include "quad.h"
+++
+++long double _Q_mul(const long double a, const long double b)
+++{
+++  FP_DECL_EX;
+++  FP_DECL_Q(A); FP_DECL_Q(B); FP_DECL_Q(C);
+++  long double c;
+++
+++  FP_INIT_ROUNDMODE;
+++  FP_UNPACK_Q(A, a);
+++  FP_UNPACK_Q(B, b);
+++  FP_MUL_Q(C, A, B);
+++  FP_PACK_Q(c, C);
+++  FP_HANDLE_EXCEPTIONS;
+++  return c;
+++}
++diff -Naur uClibc-0.9.31.ori/libc/sysdeps/linux/sparc/soft-fp/q_neg.c uClibc-0.9.31/libc/sysdeps/linux/sparc/soft-fp/q_neg.c
++--- uClibc-0.9.31.ori/libc/sysdeps/linux/sparc/soft-fp/q_neg.c	1970-01-01 01:00:00.000000000 +0100
+++++ uClibc-0.9.31/libc/sysdeps/linux/sparc/soft-fp/q_neg.c	2010-10-14 14:05:37.000000000 +0200
++@@ -0,0 +1,47 @@
+++/* Software floating-point emulation.
+++   Return !a
+++   Copyright (C) 1997,1999 Free Software Foundation, Inc.
+++   This file is part of the GNU C Library.
+++   Contributed by Richard Henderson (rth at cygnus.com) and
+++		  Jakub Jelinek (jj at ultra.linux.cz).
+++
+++   The GNU C Library is free software; you can redistribute it and/or
+++   modify it under the terms of the GNU Lesser General Public
+++   License as published by the Free Software Foundation; either
+++   version 2.1 of the License, or (at your option) any later version.
+++
+++   The GNU C Library is distributed in the hope that it will be useful,
+++   but WITHOUT ANY WARRANTY; without even the implied warranty of
+++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+++   Lesser General Public License for more details.
+++
+++   You should have received a copy of the GNU Lesser General Public
+++   License along with the GNU C Library; if not, write to the Free
+++   Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+++   02111-1307 USA.  */
+++
+++#include "soft-fp.h"
+++#include "quad.h"
+++
+++long double _Q_neg(const long double a)
+++{
+++  FP_DECL_EX;
+++  long double c = a;
+++  
+++#if (__BYTE_ORDER == __BIG_ENDIAN)
+++  ((UWtype *)&c)[0] ^= (((UWtype)1) << (W_TYPE_SIZE - 1));
+++#elif (__BYTE_ORDER == __LITTLE_ENDIAN) && (W_TYPE_SIZE == 64)
+++  ((UWtype *)&c)[1] ^= (((UWtype)1) << (W_TYPE_SIZE - 1));
+++#elif (__BYTE_ORDER == __LITTLE_ENDIAN) && (W_TYPE_SIZE == 32)
+++  ((UWtype *)&c)[3] ^= (((UWtype)1) << (W_TYPE_SIZE - 1));
+++#else
+++  FP_DECL_Q(A); FP_DECL_Q(C);
+++
+++  FP_UNPACK_Q(A, a);
+++  FP_NEG_Q(C, A);
+++  FP_PACK_Q(c, C);
+++#endif
+++  FP_CLEAR_EXCEPTIONS;
+++  FP_HANDLE_EXCEPTIONS;
+++  return c;
+++}
++diff -Naur uClibc-0.9.31.ori/libc/sysdeps/linux/sparc/soft-fp/q_qtod.c uClibc-0.9.31/libc/sysdeps/linux/sparc/soft-fp/q_qtod.c
++--- uClibc-0.9.31.ori/libc/sysdeps/linux/sparc/soft-fp/q_qtod.c	1970-01-01 01:00:00.000000000 +0100
+++++ uClibc-0.9.31/libc/sysdeps/linux/sparc/soft-fp/q_qtod.c	2010-10-14 14:05:37.000000000 +0200
++@@ -0,0 +1,45 @@
+++/* Software floating-point emulation.
+++   Return (double)a
+++   Copyright (C) 1997,1999,2006 Free Software Foundation, Inc.
+++   This file is part of the GNU C Library.
+++   Contributed by Richard Henderson (rth at cygnus.com) and
+++		  Jakub Jelinek (jj at ultra.linux.cz).
+++
+++   The GNU C Library is free software; you can redistribute it and/or
+++   modify it under the terms of the GNU Lesser General Public
+++   License as published by the Free Software Foundation; either
+++   version 2.1 of the License, or (at your option) any later version.
+++
+++   The GNU C Library is distributed in the hope that it will be useful,
+++   but WITHOUT ANY WARRANTY; without even the implied warranty of
+++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+++   Lesser General Public License for more details.
+++
+++   You should have received a copy of the GNU Lesser General Public
+++   License along with the GNU C Library; if not, write to the Free
+++   Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+++   02111-1307 USA.  */
+++
+++#include "soft-fp.h"
+++#include "double.h"
+++#include "quad.h"
+++
+++double _Q_qtod(const long double a)
+++{
+++  FP_DECL_EX;
+++  FP_DECL_Q(A);
+++  FP_DECL_D(R);
+++  double r;
+++
+++  FP_INIT_ROUNDMODE;
+++  FP_UNPACK_SEMIRAW_Q(A, a);
+++#if (2 * _FP_W_TYPE_SIZE) < _FP_FRACBITS_Q
+++  FP_TRUNC(D,Q,2,4,R,A);
+++#else
+++  FP_TRUNC(D,Q,1,2,R,A);
+++#endif
+++  FP_PACK_SEMIRAW_D(r, R);
+++  FP_HANDLE_EXCEPTIONS;
+++
+++  return r;
+++}
++diff -Naur uClibc-0.9.31.ori/libc/sysdeps/linux/sparc/soft-fp/q_qtoi.c uClibc-0.9.31/libc/sysdeps/linux/sparc/soft-fp/q_qtoi.c
++--- uClibc-0.9.31.ori/libc/sysdeps/linux/sparc/soft-fp/q_qtoi.c	1970-01-01 01:00:00.000000000 +0100
+++++ uClibc-0.9.31/libc/sysdeps/linux/sparc/soft-fp/q_qtoi.c	2010-10-14 14:05:37.000000000 +0200
++@@ -0,0 +1,38 @@
+++/* Software floating-point emulation.
+++   Return (int)a
+++   Copyright (C) 1997,1999,2006 Free Software Foundation, Inc.
+++   This file is part of the GNU C Library.
+++   Contributed by Richard Henderson (rth at cygnus.com) and
+++		  Jakub Jelinek (jj at ultra.linux.cz).
+++
+++   The GNU C Library is free software; you can redistribute it and/or
+++   modify it under the terms of the GNU Lesser General Public
+++   License as published by the Free Software Foundation; either
+++   version 2.1 of the License, or (at your option) any later version.
+++
+++   The GNU C Library is distributed in the hope that it will be useful,
+++   but WITHOUT ANY WARRANTY; without even the implied warranty of
+++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+++   Lesser General Public License for more details.
+++
+++   You should have received a copy of the GNU Lesser General Public
+++   License along with the GNU C Library; if not, write to the Free
+++   Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+++   02111-1307 USA.  */
+++
+++#define FP_ROUNDMODE FP_RND_ZERO
+++#include "soft-fp.h"
+++#include "quad.h"
+++
+++int _Q_qtoi(const long double a)
+++{
+++  FP_DECL_EX;
+++  FP_DECL_Q(A);
+++  unsigned int r;
+++
+++  FP_UNPACK_RAW_Q(A, a);
+++  FP_TO_INT_Q(r, A, 32, 1);
+++  FP_HANDLE_EXCEPTIONS;
+++
+++  return r;
+++}
++diff -Naur uClibc-0.9.31.ori/libc/sysdeps/linux/sparc/soft-fp/q_qtoll.c uClibc-0.9.31/libc/sysdeps/linux/sparc/soft-fp/q_qtoll.c
++--- uClibc-0.9.31.ori/libc/sysdeps/linux/sparc/soft-fp/q_qtoll.c	1970-01-01 01:00:00.000000000 +0100
+++++ uClibc-0.9.31/libc/sysdeps/linux/sparc/soft-fp/q_qtoll.c	2010-10-14 14:05:37.000000000 +0200
++@@ -0,0 +1,38 @@
+++/* Software floating-point emulation.
+++   Return (long long)a
+++   Copyright (C) 1997, 1999, 2006 Free Software Foundation, Inc.
+++   This file is part of the GNU C Library.
+++   Contributed by Richard Henderson (rth at cygnus.com) and
+++		  Jakub Jelinek (jj at ultra.linux.cz).
+++
+++   The GNU C Library is free software; you can redistribute it and/or
+++   modify it under the terms of the GNU Lesser General Public
+++   License as published by the Free Software Foundation; either
+++   version 2.1 of the License, or (at your option) any later version.
+++
+++   The GNU C Library is distributed in the hope that it will be useful,
+++   but WITHOUT ANY WARRANTY; without even the implied warranty of
+++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+++   Lesser General Public License for more details.
+++
+++   You should have received a copy of the GNU Lesser General Public
+++   License along with the GNU C Library; if not, write to the Free
+++   Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+++   02111-1307 USA.  */
+++
+++#define FP_ROUNDMODE FP_RND_ZERO
+++#include "soft-fp.h"
+++#include "quad.h"
+++
+++long long _Q_qtoll(const long double a)
+++{
+++  FP_DECL_EX;
+++  FP_DECL_Q(A);
+++  unsigned long long r;
+++
+++  FP_UNPACK_RAW_Q(A, a);
+++  FP_TO_INT_Q(r, A, 64, 1);
+++  FP_HANDLE_EXCEPTIONS;
+++
+++  return r;
+++}
++diff -Naur uClibc-0.9.31.ori/libc/sysdeps/linux/sparc/soft-fp/q_qtos.c uClibc-0.9.31/libc/sysdeps/linux/sparc/soft-fp/q_qtos.c
++--- uClibc-0.9.31.ori/libc/sysdeps/linux/sparc/soft-fp/q_qtos.c	1970-01-01 01:00:00.000000000 +0100
+++++ uClibc-0.9.31/libc/sysdeps/linux/sparc/soft-fp/q_qtos.c	2010-10-14 14:05:37.000000000 +0200
++@@ -0,0 +1,45 @@
+++/* Software floating-point emulation.
+++   Return (float)a
+++   Copyright (C) 1997,1999,2006 Free Software Foundation, Inc.
+++   This file is part of the GNU C Library.
+++   Contributed by Richard Henderson (rth at cygnus.com) and
+++		  Jakub Jelinek (jj at ultra.linux.cz).
+++
+++   The GNU C Library is free software; you can redistribute it and/or
+++   modify it under the terms of the GNU Lesser General Public
+++   License as published by the Free Software Foundation; either
+++   version 2.1 of the License, or (at your option) any later version.
+++
+++   The GNU C Library is distributed in the hope that it will be useful,
+++   but WITHOUT ANY WARRANTY; without even the implied warranty of
+++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+++   Lesser General Public License for more details.
+++
+++   You should have received a copy of the GNU Lesser General Public
+++   License along with the GNU C Library; if not, write to the Free
+++   Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+++   02111-1307 USA.  */
+++
+++#include "soft-fp.h"
+++#include "single.h"
+++#include "quad.h"
+++
+++float _Q_qtos(const long double a)
+++{
+++  FP_DECL_EX;
+++  FP_DECL_Q(A);
+++  FP_DECL_S(R);
+++  float r;
+++
+++  FP_INIT_ROUNDMODE;
+++  FP_UNPACK_SEMIRAW_Q(A, a);
+++#if (2 * _FP_W_TYPE_SIZE) < _FP_FRACBITS_Q
+++  FP_TRUNC(S,Q,1,4,R,A);
+++#else
+++  FP_TRUNC(S,Q,1,2,R,A);
+++#endif
+++  FP_PACK_SEMIRAW_S(r, R);
+++  FP_HANDLE_EXCEPTIONS;
+++
+++  return r;
+++}
++diff -Naur uClibc-0.9.31.ori/libc/sysdeps/linux/sparc/soft-fp/q_qtou.c uClibc-0.9.31/libc/sysdeps/linux/sparc/soft-fp/q_qtou.c
++--- uClibc-0.9.31.ori/libc/sysdeps/linux/sparc/soft-fp/q_qtou.c	1970-01-01 01:00:00.000000000 +0100
+++++ uClibc-0.9.31/libc/sysdeps/linux/sparc/soft-fp/q_qtou.c	2010-10-14 14:05:37.000000000 +0200
++@@ -0,0 +1,38 @@
+++/* Software floating-point emulation.
+++   Return (unsigned int)a
+++   Copyright (C) 1997, 1999, 2006 Free Software Foundation, Inc.
+++   This file is part of the GNU C Library.
+++   Contributed by Richard Henderson (rth at cygnus.com) and
+++		  Jakub Jelinek (jj at ultra.linux.cz).
+++
+++   The GNU C Library is free software; you can redistribute it and/or
+++   modify it under the terms of the GNU Lesser General Public
+++   License as published by the Free Software Foundation; either
+++   version 2.1 of the License, or (at your option) any later version.
+++
+++   The GNU C Library is distributed in the hope that it will be useful,
+++   but WITHOUT ANY WARRANTY; without even the implied warranty of
+++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+++   Lesser General Public License for more details.
+++
+++   You should have received a copy of the GNU Lesser General Public
+++   License along with the GNU C Library; if not, write to the Free
+++   Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+++   02111-1307 USA.  */
+++
+++#define FP_ROUNDMODE FP_RND_ZERO
+++#include "soft-fp.h"
+++#include "quad.h"
+++
+++unsigned int _Q_qtou(const long double a)
+++{
+++  FP_DECL_EX;
+++  FP_DECL_Q(A);
+++  unsigned int r;
+++
+++  FP_UNPACK_RAW_Q(A, a);
+++  FP_TO_INT_Q(r, A, 32, -1);
+++  FP_HANDLE_EXCEPTIONS;
+++
+++  return r;
+++}
++diff -Naur uClibc-0.9.31.ori/libc/sysdeps/linux/sparc/soft-fp/q_qtoull.c uClibc-0.9.31/libc/sysdeps/linux/sparc/soft-fp/q_qtoull.c
++--- uClibc-0.9.31.ori/libc/sysdeps/linux/sparc/soft-fp/q_qtoull.c	1970-01-01 01:00:00.000000000 +0100
+++++ uClibc-0.9.31/libc/sysdeps/linux/sparc/soft-fp/q_qtoull.c	2010-10-14 14:05:37.000000000 +0200
++@@ -0,0 +1,38 @@
+++/* Software floating-point emulation.
+++   Return (unsigned long long)a
+++   Copyright (C) 1997, 1999, 2006 Free Software Foundation, Inc.
+++   This file is part of the GNU C Library.
+++   Contributed by Richard Henderson (rth at cygnus.com) and
+++		  Jakub Jelinek (jj at ultra.linux.cz).
+++
+++   The GNU C Library is free software; you can redistribute it and/or
+++   modify it under the terms of the GNU Lesser General Public
+++   License as published by the Free Software Foundation; either
+++   version 2.1 of the License, or (at your option) any later version.
+++
+++   The GNU C Library is distributed in the hope that it will be useful,
+++   but WITHOUT ANY WARRANTY; without even the implied warranty of
+++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+++   Lesser General Public License for more details.
+++
+++   You should have received a copy of the GNU Lesser General Public
+++   License along with the GNU C Library; if not, write to the Free
+++   Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+++   02111-1307 USA.  */
+++
+++#define FP_ROUNDMODE FP_RND_ZERO
+++#include "soft-fp.h"
+++#include "quad.h"
+++
+++unsigned long long _Q_qtoull(const long double a)
+++{
+++  FP_DECL_EX;
+++  FP_DECL_Q(A);
+++  unsigned long long r;
+++
+++  FP_UNPACK_RAW_Q(A, a);
+++  FP_TO_INT_Q(r, A, 64, -1);
+++  FP_HANDLE_EXCEPTIONS;
+++
+++  return r;
+++}
++diff -Naur uClibc-0.9.31.ori/libc/sysdeps/linux/sparc/soft-fp/q_sqrt.c uClibc-0.9.31/libc/sysdeps/linux/sparc/soft-fp/q_sqrt.c
++--- uClibc-0.9.31.ori/libc/sysdeps/linux/sparc/soft-fp/q_sqrt.c	1970-01-01 01:00:00.000000000 +0100
+++++ uClibc-0.9.31/libc/sysdeps/linux/sparc/soft-fp/q_sqrt.c	2010-10-14 14:05:37.000000000 +0200
++@@ -0,0 +1,39 @@
+++/* Software floating-point emulation.
+++   Return sqrtl(a)
+++   Copyright (C) 1997, 1999, 2006 Free Software Foundation, Inc.
+++   This file is part of the GNU C Library.
+++   Contributed by Richard Henderson (rth at cygnus.com) and
+++		  Jakub Jelinek (jj at ultra.linux.cz).
+++
+++   The GNU C Library is free software; you can redistribute it and/or
+++   modify it under the terms of the GNU Lesser General Public
+++   License as published by the Free Software Foundation; either
+++   version 2.1 of the License, or (at your option) any later version.
+++
+++   The GNU C Library is distributed in the hope that it will be useful,
+++   but WITHOUT ANY WARRANTY; without even the implied warranty of
+++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+++   Lesser General Public License for more details.
+++
+++   You should have received a copy of the GNU Lesser General Public
+++   License along with the GNU C Library; if not, write to the Free
+++   Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+++   02111-1307 USA.  */
+++
+++#include "soft-fp.h"
+++#include "quad.h"
+++
+++long double _Q_sqrt(const long double a)
+++{
+++  FP_DECL_EX;
+++  FP_DECL_Q(A); FP_DECL_Q(C);
+++  long double c;
+++
+++  FP_INIT_ROUNDMODE;
+++  FP_UNPACK_Q(A, a);
+++  FP_SQRT_Q(C, A);
+++  FP_PACK_Q(c, C);
+++  FP_HANDLE_EXCEPTIONS;
+++  return c;
+++}
+++strong_alias (_Q_sqrt, __ieee754_sqrtl);
++diff -Naur uClibc-0.9.31.ori/libc/sysdeps/linux/sparc/soft-fp/q_stoq.c uClibc-0.9.31/libc/sysdeps/linux/sparc/soft-fp/q_stoq.c
++--- uClibc-0.9.31.ori/libc/sysdeps/linux/sparc/soft-fp/q_stoq.c	1970-01-01 01:00:00.000000000 +0100
+++++ uClibc-0.9.31/libc/sysdeps/linux/sparc/soft-fp/q_stoq.c	2010-10-14 14:05:37.000000000 +0200
++@@ -0,0 +1,43 @@
+++/* Software floating-point emulation.
+++   c = (long double)(a)
+++   Copyright (C) 1997,1999,2006 Free Software Foundation, Inc.
+++   This file is part of the GNU C Library.
+++   Contributed by Richard Henderson (rth at cygnus.com) and
+++		  Jakub Jelinek (jj at ultra.linux.cz).
+++
+++   The GNU C Library is free software; you can redistribute it and/or
+++   modify it under the terms of the GNU Lesser General Public
+++   License as published by the Free Software Foundation; either
+++   version 2.1 of the License, or (at your option) any later version.
+++
+++   The GNU C Library is distributed in the hope that it will be useful,
+++   but WITHOUT ANY WARRANTY; without even the implied warranty of
+++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+++   Lesser General Public License for more details.
+++
+++   You should have received a copy of the GNU Lesser General Public
+++   License along with the GNU C Library; if not, write to the Free
+++   Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+++   02111-1307 USA.  */
+++
+++#include "soft-fp.h"
+++#include "single.h"
+++#include "quad.h"
+++
+++long double _Q_stoq(const float a)
+++{
+++  FP_DECL_EX;
+++  FP_DECL_S(A);
+++  FP_DECL_Q(C);
+++  long double c;
+++
+++  FP_UNPACK_RAW_S(A, a);
+++#if (2 * _FP_W_TYPE_SIZE) < _FP_FRACBITS_Q
+++  FP_EXTEND(Q,S,4,1,C,A);
+++#else
+++  FP_EXTEND(Q,S,2,1,C,A);
+++#endif
+++  FP_PACK_RAW_Q(c, C);
+++  FP_HANDLE_EXCEPTIONS;
+++  return c;
+++}
++diff -Naur uClibc-0.9.31.ori/libc/sysdeps/linux/sparc/soft-fp/q_sub.c uClibc-0.9.31/libc/sysdeps/linux/sparc/soft-fp/q_sub.c
++--- uClibc-0.9.31.ori/libc/sysdeps/linux/sparc/soft-fp/q_sub.c	1970-01-01 01:00:00.000000000 +0100
+++++ uClibc-0.9.31/libc/sysdeps/linux/sparc/soft-fp/q_sub.c	2010-10-14 14:05:37.000000000 +0200
++@@ -0,0 +1,39 @@
+++/* Software floating-point emulation.
+++   c = a - b
+++   Copyright (C) 1997,1999,2006 Free Software Foundation, Inc.
+++   This file is part of the GNU C Library.
+++   Contributed by Richard Henderson (rth at cygnus.com) and
+++		  Jakub Jelinek (jj at ultra.linux.cz).
+++
+++   The GNU C Library is free software; you can redistribute it and/or
+++   modify it under the terms of the GNU Lesser General Public
+++   License as published by the Free Software Foundation; either
+++   version 2.1 of the License, or (at your option) any later version.
+++
+++   The GNU C Library is distributed in the hope that it will be useful,
+++   but WITHOUT ANY WARRANTY; without even the implied warranty of
+++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+++   Lesser General Public License for more details.
+++
+++   You should have received a copy of the GNU Lesser General Public
+++   License along with the GNU C Library; if not, write to the Free
+++   Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+++   02111-1307 USA.  */
+++
+++#include "soft-fp.h"
+++#include "quad.h"
+++
+++long double _Q_sub(const long double a, const long double b)
+++{
+++  FP_DECL_EX;
+++  FP_DECL_Q(A); FP_DECL_Q(B); FP_DECL_Q(C);
+++  long double c;
+++
+++  FP_INIT_ROUNDMODE;
+++  FP_UNPACK_SEMIRAW_Q(A, a);
+++  FP_UNPACK_SEMIRAW_Q(B, b);
+++  FP_SUB_Q(C, A, B);
+++  FP_PACK_SEMIRAW_Q(c, C);
+++  FP_HANDLE_EXCEPTIONS;
+++  return c;
+++}
++diff -Naur uClibc-0.9.31.ori/libc/sysdeps/linux/sparc/soft-fp/q_ulltoq.c uClibc-0.9.31/libc/sysdeps/linux/sparc/soft-fp/q_ulltoq.c
++--- uClibc-0.9.31.ori/libc/sysdeps/linux/sparc/soft-fp/q_ulltoq.c	1970-01-01 01:00:00.000000000 +0100
+++++ uClibc-0.9.31/libc/sysdeps/linux/sparc/soft-fp/q_ulltoq.c	2010-10-14 14:05:37.000000000 +0200
++@@ -0,0 +1,38 @@
+++/* Software floating-point emulation.
+++   Return (long double)(a)
+++   Copyright (C) 1997, 1999, 2006 Free Software Foundation, Inc.
+++   This file is part of the GNU C Library.
+++   Contributed by Richard Henderson (rth at cygnus.com) and
+++		  Jakub Jelinek (jj at ultra.linux.cz).
+++
+++   The GNU C Library is free software; you can redistribute it and/or
+++   modify it under the terms of the GNU Lesser General Public
+++   License as published by the Free Software Foundation; either
+++   version 2.1 of the License, or (at your option) any later version.
+++
+++   The GNU C Library is distributed in the hope that it will be useful,
+++   but WITHOUT ANY WARRANTY; without even the implied warranty of
+++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+++   Lesser General Public License for more details.
+++
+++   You should have received a copy of the GNU Lesser General Public
+++   License along with the GNU C Library; if not, write to the Free
+++   Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+++   02111-1307 USA.  */
+++
+++#include "soft-fp.h"
+++#include "quad.h"
+++
+++long double _Q_ulltoq(const unsigned long long a)
+++{
+++  FP_DECL_EX;
+++  FP_DECL_Q(C);
+++  long double c;
+++  unsigned long long b = a;
+++
+++  FP_FROM_INT_Q(C, b, 64, unsigned long long);
+++  FP_PACK_RAW_Q(c, C);
+++  FP_CLEAR_EXCEPTIONS;
+++  FP_HANDLE_EXCEPTIONS;
+++  return c;
+++}
++diff -Naur uClibc-0.9.31.ori/libc/sysdeps/linux/sparc/soft-fp/q_util.c uClibc-0.9.31/libc/sysdeps/linux/sparc/soft-fp/q_util.c
++--- uClibc-0.9.31.ori/libc/sysdeps/linux/sparc/soft-fp/q_util.c	1970-01-01 01:00:00.000000000 +0100
+++++ uClibc-0.9.31/libc/sysdeps/linux/sparc/soft-fp/q_util.c	2010-10-14 14:05:37.000000000 +0200
++@@ -0,0 +1,57 @@
+++/* Software floating-point emulation.
+++   Helper routine for _Q_* routines.
+++   Simulate exceptions using double arithmetics.
+++   Copyright (C) 1999 Free Software Foundation, Inc.
+++   This file is part of the GNU C Library.
+++   Contributed by Jakub Jelinek (jj at ultra.linux.cz).
+++
+++   The GNU C Library is free software; you can redistribute it and/or
+++   modify it under the terms of the GNU Lesser General Public
+++   License as published by the Free Software Foundation; either
+++   version 2.1 of the License, or (at your option) any later version.
+++
+++   The GNU C Library is distributed in the hope that it will be useful,
+++   but WITHOUT ANY WARRANTY; without even the implied warranty of
+++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+++   Lesser General Public License for more details.
+++
+++   You should have received a copy of the GNU Lesser General Public
+++   License along with the GNU C Library; if not, write to the Free
+++   Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+++   02111-1307 USA.  */
+++
+++#include "soft-fp.h"
+++
+++unsigned long long ___Q_numbers [] = {
+++0x0000000000000000ULL, /* Zero */
+++0x0010100000000000ULL, /* Very tiny number */
+++0x0010000000000000ULL, /* Minimum normalized number */
+++0x7fef000000000000ULL, /* A huge double number */
+++};
+++
+++double ___Q_simulate_exceptions(int exceptions)
+++{
+++  double d, *p = (double *)___Q_numbers;
+++  if (exceptions & FP_EX_INVALID)
+++    d = p[0]/p[0];
+++  if (exceptions & FP_EX_OVERFLOW)
+++    {
+++      d = p[3] + p[3];
+++      exceptions &= ~FP_EX_INEXACT;
+++    }
+++  if (exceptions & FP_EX_UNDERFLOW)
+++    {
+++      if (exceptions & FP_EX_INEXACT)
+++        {
+++	  d = p[2] * p[2];
+++	  exceptions &= ~FP_EX_INEXACT;
+++	}
+++      else
+++	d = p[1] - p[2];
+++    }
+++  if (exceptions & FP_EX_DIVZERO)
+++    d = 1.0/p[0];
+++  if (exceptions & FP_EX_INEXACT)
+++    d = p[3] - p[2];
+++  return d;
+++}
++diff -Naur uClibc-0.9.31.ori/libc/sysdeps/linux/sparc/soft-fp/q_utoq.c uClibc-0.9.31/libc/sysdeps/linux/sparc/soft-fp/q_utoq.c
++--- uClibc-0.9.31.ori/libc/sysdeps/linux/sparc/soft-fp/q_utoq.c	1970-01-01 01:00:00.000000000 +0100
+++++ uClibc-0.9.31/libc/sysdeps/linux/sparc/soft-fp/q_utoq.c	2010-10-14 14:05:37.000000000 +0200
++@@ -0,0 +1,38 @@
+++/* Software floating-point emulation.
+++   c = (long double)(a)
+++   Copyright (C) 1997, 1999, 2006 Free Software Foundation, Inc.
+++   This file is part of the GNU C Library.
+++   Contributed by Richard Henderson (rth at cygnus.com) and
+++		  Jakub Jelinek (jj at ultra.linux.cz).
+++
+++   The GNU C Library is free software; you can redistribute it and/or
+++   modify it under the terms of the GNU Lesser General Public
+++   License as published by the Free Software Foundation; either
+++   version 2.1 of the License, or (at your option) any later version.
+++
+++   The GNU C Library is distributed in the hope that it will be useful,
+++   but WITHOUT ANY WARRANTY; without even the implied warranty of
+++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+++   Lesser General Public License for more details.
+++
+++   You should have received a copy of the GNU Lesser General Public
+++   License along with the GNU C Library; if not, write to the Free
+++   Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+++   02111-1307 USA.  */
+++
+++#include "soft-fp.h"
+++#include "quad.h"
+++
+++long double _Q_utoq(const unsigned int a)
+++{
+++  FP_DECL_EX;
+++  FP_DECL_Q(C);
+++  long double c;
+++  unsigned int b = a;
+++
+++  FP_FROM_INT_Q(C, b, 32, unsigned int);
+++  FP_PACK_RAW_Q(c, C);
+++  FP_CLEAR_EXCEPTIONS;
+++  FP_HANDLE_EXCEPTIONS;
+++  return c;
+++}
++diff -Naur uClibc-0.9.31.ori/libc/sysdeps/linux/sparc/soft-fp/quad.h uClibc-0.9.31/libc/sysdeps/linux/sparc/soft-fp/quad.h
++--- uClibc-0.9.31.ori/libc/sysdeps/linux/sparc/soft-fp/quad.h	1970-01-01 01:00:00.000000000 +0100
+++++ uClibc-0.9.31/libc/sysdeps/linux/sparc/soft-fp/quad.h	2010-10-14 14:05:37.000000000 +0200
++@@ -0,0 +1,271 @@
+++/* Software floating-point emulation.
+++   Definitions for IEEE Quad Precision.
+++   Copyright (C) 1997,1998,1999,2006,2007 Free Software Foundation, Inc.
+++   This file is part of the GNU C Library.
+++   Contributed by Richard Henderson (rth at cygnus.com),
+++		  Jakub Jelinek (jj at ultra.linux.cz),
+++		  David S. Miller (davem at redhat.com) and
+++		  Peter Maydell (pmaydell at chiark.greenend.org.uk).
+++
+++   The GNU C Library is free software; you can redistribute it and/or
+++   modify it under the terms of the GNU Lesser General Public
+++   License as published by the Free Software Foundation; either
+++   version 2.1 of the License, or (at your option) any later version.
+++
+++   In addition to the permissions in the GNU Lesser General Public
+++   License, the Free Software Foundation gives you unlimited
+++   permission to link the compiled version of this file into
+++   combinations with other programs, and to distribute those
+++   combinations without any restriction coming from the use of this
+++   file.  (The Lesser General Public License restrictions do apply in
+++   other respects; for example, they cover modification of the file,
+++   and distribution when not linked into a combine executable.)
+++
+++   The GNU C Library is distributed in the hope that it will be useful,
+++   but WITHOUT ANY WARRANTY; without even the implied warranty of
+++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+++   Lesser General Public License for more details.
+++
+++   You should have received a copy of the GNU Lesser General Public
+++   License along with the GNU C Library; if not, write to the Free
+++   Software Foundation, 51 Franklin Street, Fifth Floor, Boston,
+++   MA 02110-1301, USA.  */
+++
+++#if _FP_W_TYPE_SIZE < 32
+++#error "Here's a nickel, kid. Go buy yourself a real computer."
+++#endif
+++
+++#if _FP_W_TYPE_SIZE < 64
+++#define _FP_FRACTBITS_Q         (4*_FP_W_TYPE_SIZE)
+++#else
+++#define _FP_FRACTBITS_Q		(2*_FP_W_TYPE_SIZE)
+++#endif
+++
+++#define _FP_FRACBITS_Q		113
+++#define _FP_FRACXBITS_Q		(_FP_FRACTBITS_Q - _FP_FRACBITS_Q)
+++#define _FP_WFRACBITS_Q		(_FP_WORKBITS + _FP_FRACBITS_Q)
+++#define _FP_WFRACXBITS_Q	(_FP_FRACTBITS_Q - _FP_WFRACBITS_Q)
+++#define _FP_EXPBITS_Q		15
+++#define _FP_EXPBIAS_Q		16383
+++#define _FP_EXPMAX_Q		32767
+++
+++#define _FP_QNANBIT_Q		\
+++	((_FP_W_TYPE)1 << (_FP_FRACBITS_Q-2) % _FP_W_TYPE_SIZE)
+++#define _FP_QNANBIT_SH_Q		\
+++	((_FP_W_TYPE)1 << (_FP_FRACBITS_Q-2+_FP_WORKBITS) % _FP_W_TYPE_SIZE)
+++#define _FP_IMPLBIT_Q		\
+++	((_FP_W_TYPE)1 << (_FP_FRACBITS_Q-1) % _FP_W_TYPE_SIZE)
+++#define _FP_IMPLBIT_SH_Q		\
+++	((_FP_W_TYPE)1 << (_FP_FRACBITS_Q-1+_FP_WORKBITS) % _FP_W_TYPE_SIZE)
+++#define _FP_OVERFLOW_Q		\
+++	((_FP_W_TYPE)1 << (_FP_WFRACBITS_Q % _FP_W_TYPE_SIZE))
+++
+++typedef float TFtype __attribute__((mode(TF)));
+++
+++#if _FP_W_TYPE_SIZE < 64
+++
+++union _FP_UNION_Q
+++{
+++   TFtype flt;
+++   struct 
+++   {
+++#if __BYTE_ORDER == __BIG_ENDIAN
+++      unsigned sign : 1;
+++      unsigned exp : _FP_EXPBITS_Q;
+++      unsigned long frac3 : _FP_FRACBITS_Q - (_FP_IMPLBIT_Q != 0)-(_FP_W_TYPE_SIZE * 3);
+++      unsigned long frac2 : _FP_W_TYPE_SIZE;
+++      unsigned long frac1 : _FP_W_TYPE_SIZE;
+++      unsigned long frac0 : _FP_W_TYPE_SIZE;
+++#else
+++      unsigned long frac0 : _FP_W_TYPE_SIZE;
+++      unsigned long frac1 : _FP_W_TYPE_SIZE;
+++      unsigned long frac2 : _FP_W_TYPE_SIZE;
+++      unsigned long frac3 : _FP_FRACBITS_Q - (_FP_IMPLBIT_Q != 0)-(_FP_W_TYPE_SIZE * 3);
+++      unsigned exp : _FP_EXPBITS_Q;
+++      unsigned sign : 1;
+++#endif /* not bigendian */
+++   } bits __attribute__((packed));
+++};
+++
+++
+++#define FP_DECL_Q(X)		_FP_DECL(4,X)
+++#define FP_UNPACK_RAW_Q(X,val)	_FP_UNPACK_RAW_4(Q,X,val)
+++#define FP_UNPACK_RAW_QP(X,val)	_FP_UNPACK_RAW_4_P(Q,X,val)
+++#define FP_PACK_RAW_Q(val,X)	_FP_PACK_RAW_4(Q,val,X)
+++#define FP_PACK_RAW_QP(val,X)		\
+++  do {					\
+++    if (!FP_INHIBIT_RESULTS)		\
+++      _FP_PACK_RAW_4_P(Q,val,X);	\
+++  } while (0)
+++
+++#define FP_UNPACK_Q(X,val)		\
+++  do {					\
+++    _FP_UNPACK_RAW_4(Q,X,val);		\
+++    _FP_UNPACK_CANONICAL(Q,4,X);	\
+++  } while (0)
+++
+++#define FP_UNPACK_QP(X,val)		\
+++  do {					\
+++    _FP_UNPACK_RAW_4_P(Q,X,val);	\
+++    _FP_UNPACK_CANONICAL(Q,4,X);	\
+++  } while (0)
+++
+++#define FP_UNPACK_SEMIRAW_Q(X,val)	\
+++  do {					\
+++    _FP_UNPACK_RAW_4(Q,X,val);		\
+++    _FP_UNPACK_SEMIRAW(Q,4,X);		\
+++  } while (0)
+++
+++#define FP_UNPACK_SEMIRAW_QP(X,val)	\
+++  do {					\
+++    _FP_UNPACK_RAW_4_P(Q,X,val);	\
+++    _FP_UNPACK_SEMIRAW(Q,4,X);		\
+++  } while (0)
+++
+++#define FP_PACK_Q(val,X)		\
+++  do {					\
+++    _FP_PACK_CANONICAL(Q,4,X);		\
+++    _FP_PACK_RAW_4(Q,val,X);		\
+++  } while (0)
+++
+++#define FP_PACK_QP(val,X)		\
+++  do {					\
+++    _FP_PACK_CANONICAL(Q,4,X);		\
+++    if (!FP_INHIBIT_RESULTS)		\
+++      _FP_PACK_RAW_4_P(Q,val,X);	\
+++  } while (0)
+++
+++#define FP_PACK_SEMIRAW_Q(val,X)	\
+++  do {					\
+++    _FP_PACK_SEMIRAW(Q,4,X);		\
+++    _FP_PACK_RAW_4(Q,val,X);		\
+++  } while (0)
+++
+++#define FP_PACK_SEMIRAW_QP(val,X)	\
+++  do {					\
+++    _FP_PACK_SEMIRAW(Q,4,X);		\
+++    if (!FP_INHIBIT_RESULTS)		\
+++      _FP_PACK_RAW_4_P(Q,val,X);	\
+++  } while (0)
+++
+++#define FP_ISSIGNAN_Q(X)		_FP_ISSIGNAN(Q,4,X)
+++#define FP_NEG_Q(R,X)			_FP_NEG(Q,4,R,X)
+++#define FP_ADD_Q(R,X,Y)			_FP_ADD(Q,4,R,X,Y)
+++#define FP_SUB_Q(R,X,Y)			_FP_SUB(Q,4,R,X,Y)
+++#define FP_MUL_Q(R,X,Y)			_FP_MUL(Q,4,R,X,Y)
+++#define FP_DIV_Q(R,X,Y)			_FP_DIV(Q,4,R,X,Y)
+++#define FP_SQRT_Q(R,X)			_FP_SQRT(Q,4,R,X)
+++#define _FP_SQRT_MEAT_Q(R,S,T,X,Q)	_FP_SQRT_MEAT_4(R,S,T,X,Q)
+++
+++#define FP_CMP_Q(r,X,Y,un)	_FP_CMP(Q,4,r,X,Y,un)
+++#define FP_CMP_EQ_Q(r,X,Y)	_FP_CMP_EQ(Q,4,r,X,Y)
+++#define FP_CMP_UNORD_Q(r,X,Y)	_FP_CMP_UNORD(Q,4,r,X,Y)
+++
+++#define FP_TO_INT_Q(r,X,rsz,rsg)	_FP_TO_INT(Q,4,r,X,rsz,rsg)
+++#define FP_FROM_INT_Q(X,r,rs,rt)	_FP_FROM_INT(Q,4,X,r,rs,rt)
+++
+++#define _FP_FRAC_HIGH_Q(X)	_FP_FRAC_HIGH_4(X)
+++#define _FP_FRAC_HIGH_RAW_Q(X)	_FP_FRAC_HIGH_4(X)
+++
+++#else   /* not _FP_W_TYPE_SIZE < 64 */
+++union _FP_UNION_Q
+++{
+++  TFtype flt /* __attribute__((mode(TF))) */ ;
+++  struct {
+++    _FP_W_TYPE a, b;
+++  } longs;
+++  struct {
+++#if __BYTE_ORDER == __BIG_ENDIAN
+++    unsigned sign    : 1;
+++    unsigned exp     : _FP_EXPBITS_Q;
+++    _FP_W_TYPE frac1 : _FP_FRACBITS_Q - (_FP_IMPLBIT_Q != 0) - _FP_W_TYPE_SIZE;
+++    _FP_W_TYPE frac0 : _FP_W_TYPE_SIZE;
+++#else
+++    _FP_W_TYPE frac0 : _FP_W_TYPE_SIZE;
+++    _FP_W_TYPE frac1 : _FP_FRACBITS_Q - (_FP_IMPLBIT_Q != 0) - _FP_W_TYPE_SIZE;
+++    unsigned exp     : _FP_EXPBITS_Q;
+++    unsigned sign    : 1;
+++#endif
+++  } bits;
+++};
+++
+++#define FP_DECL_Q(X)		_FP_DECL(2,X)
+++#define FP_UNPACK_RAW_Q(X,val)	_FP_UNPACK_RAW_2(Q,X,val)
+++#define FP_UNPACK_RAW_QP(X,val)	_FP_UNPACK_RAW_2_P(Q,X,val)
+++#define FP_PACK_RAW_Q(val,X)	_FP_PACK_RAW_2(Q,val,X)
+++#define FP_PACK_RAW_QP(val,X)		\
+++  do {					\
+++    if (!FP_INHIBIT_RESULTS)		\
+++      _FP_PACK_RAW_2_P(Q,val,X);	\
+++  } while (0)
+++
+++#define FP_UNPACK_Q(X,val)		\
+++  do {					\
+++    _FP_UNPACK_RAW_2(Q,X,val);		\
+++    _FP_UNPACK_CANONICAL(Q,2,X);	\
+++  } while (0)
+++
+++#define FP_UNPACK_QP(X,val)		\
+++  do {					\
+++    _FP_UNPACK_RAW_2_P(Q,X,val);	\
+++    _FP_UNPACK_CANONICAL(Q,2,X);	\
+++  } while (0)
+++
+++#define FP_UNPACK_SEMIRAW_Q(X,val)	\
+++  do {					\
+++    _FP_UNPACK_RAW_2(Q,X,val);		\
+++    _FP_UNPACK_SEMIRAW(Q,2,X);		\
+++  } while (0)
+++
+++#define FP_UNPACK_SEMIRAW_QP(X,val)	\
+++  do {					\
+++    _FP_UNPACK_RAW_2_P(Q,X,val);	\
+++    _FP_UNPACK_SEMIRAW(Q,2,X);		\
+++  } while (0)
+++
+++#define FP_PACK_Q(val,X)		\
+++  do {					\
+++    _FP_PACK_CANONICAL(Q,2,X);		\
+++    _FP_PACK_RAW_2(Q,val,X);		\
+++  } while (0)
+++
+++#define FP_PACK_QP(val,X)		\
+++  do {					\
+++    _FP_PACK_CANONICAL(Q,2,X);		\
+++    if (!FP_INHIBIT_RESULTS)		\
+++      _FP_PACK_RAW_2_P(Q,val,X);	\
+++  } while (0)
+++
+++#define FP_PACK_SEMIRAW_Q(val,X)	\
+++  do {					\
+++    _FP_PACK_SEMIRAW(Q,2,X);		\
+++    _FP_PACK_RAW_2(Q,val,X);		\
+++  } while (0)
+++
+++#define FP_PACK_SEMIRAW_QP(val,X)	\
+++  do {					\
+++    _FP_PACK_SEMIRAW(Q,2,X);		\
+++    if (!FP_INHIBIT_RESULTS)		\
+++      _FP_PACK_RAW_2_P(Q,val,X);	\
+++  } while (0)
+++
+++#define FP_ISSIGNAN_Q(X)		_FP_ISSIGNAN(Q,2,X)
+++#define FP_NEG_Q(R,X)			_FP_NEG(Q,2,R,X)
+++#define FP_ADD_Q(R,X,Y)			_FP_ADD(Q,2,R,X,Y)
+++#define FP_SUB_Q(R,X,Y)			_FP_SUB(Q,2,R,X,Y)
+++#define FP_MUL_Q(R,X,Y)			_FP_MUL(Q,2,R,X,Y)
+++#define FP_DIV_Q(R,X,Y)			_FP_DIV(Q,2,R,X,Y)
+++#define FP_SQRT_Q(R,X)			_FP_SQRT(Q,2,R,X)
+++#define _FP_SQRT_MEAT_Q(R,S,T,X,Q)	_FP_SQRT_MEAT_2(R,S,T,X,Q)
+++
+++#define FP_CMP_Q(r,X,Y,un)	_FP_CMP(Q,2,r,X,Y,un)
+++#define FP_CMP_EQ_Q(r,X,Y)	_FP_CMP_EQ(Q,2,r,X,Y)
+++#define FP_CMP_UNORD_Q(r,X,Y)	_FP_CMP_UNORD(Q,2,r,X,Y)
+++
+++#define FP_TO_INT_Q(r,X,rsz,rsg)	_FP_TO_INT(Q,2,r,X,rsz,rsg)
+++#define FP_FROM_INT_Q(X,r,rs,rt)	_FP_FROM_INT(Q,2,X,r,rs,rt)
+++
+++#define _FP_FRAC_HIGH_Q(X)	_FP_FRAC_HIGH_2(X)
+++#define _FP_FRAC_HIGH_RAW_Q(X)	_FP_FRAC_HIGH_2(X)
+++
+++#endif /* not _FP_W_TYPE_SIZE < 64 */
++diff -Naur uClibc-0.9.31.ori/libc/sysdeps/linux/sparc/soft-fp/sfp-machine.h uClibc-0.9.31/libc/sysdeps/linux/sparc/soft-fp/sfp-machine.h
++--- uClibc-0.9.31.ori/libc/sysdeps/linux/sparc/soft-fp/sfp-machine.h	1970-01-01 01:00:00.000000000 +0100
+++++ uClibc-0.9.31/libc/sysdeps/linux/sparc/soft-fp/sfp-machine.h	2010-10-14 14:05:37.000000000 +0200
++@@ -0,0 +1,213 @@
+++/* Machine-dependent software floating-point definitions.
+++   Sparc userland (_Q_*) version.
+++   Copyright (C) 1997,1998,1999, 2002, 2006 Free Software Foundation, Inc.
+++   This file is part of the GNU C Library.
+++   Contributed by Richard Henderson (rth at cygnus.com),
+++		  Jakub Jelinek (jj at ultra.linux.cz) and
+++		  David S. Miller (davem@redhat.com).
+++
+++   The GNU C Library is free software; you can redistribute it and/or
+++   modify it under the terms of the GNU Lesser General Public
+++   License as published by the Free Software Foundation; either
+++   version 2.1 of the License, or (at your option) any later version.
+++
+++   The GNU C Library is distributed in the hope that it will be useful,
+++   but WITHOUT ANY WARRANTY; without even the implied warranty of
+++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+++   Lesser General Public License for more details.
+++
+++   You should have received a copy of the GNU Lesser General Public
+++   License along with the GNU C Library; if not, write to the Free
+++   Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+++   02111-1307 USA.  */
+++
+++#include <fpu_control.h>
+++#include <stdlib.h>
+++
+++#define _FP_W_TYPE_SIZE		32
+++#define _FP_W_TYPE		unsigned long
+++#define _FP_WS_TYPE		signed long
+++#define _FP_I_TYPE		long
+++
+++#define _FP_MUL_MEAT_S(R,X,Y)				\
+++  _FP_MUL_MEAT_1_wide(_FP_WFRACBITS_S,R,X,Y,umul_ppmm)
+++#define _FP_MUL_MEAT_D(R,X,Y)				\
+++  _FP_MUL_MEAT_2_wide(_FP_WFRACBITS_D,R,X,Y,umul_ppmm)
+++#define _FP_MUL_MEAT_Q(R,X,Y)				\
+++  _FP_MUL_MEAT_4_wide(_FP_WFRACBITS_Q,R,X,Y,umul_ppmm)
+++
+++#define _FP_DIV_MEAT_S(R,X,Y)	_FP_DIV_MEAT_1_udiv(S,R,X,Y)
+++#define _FP_DIV_MEAT_D(R,X,Y)	_FP_DIV_MEAT_2_udiv(D,R,X,Y)
+++#define _FP_DIV_MEAT_Q(R,X,Y)	_FP_DIV_MEAT_4_udiv(Q,R,X,Y)
+++
+++#define _FP_NANFRAC_S		((_FP_QNANBIT_S << 1) - 1)
+++#define _FP_NANFRAC_D		((_FP_QNANBIT_D << 1) - 1), -1
+++#define _FP_NANFRAC_Q		((_FP_QNANBIT_Q << 1) - 1), -1, -1, -1
+++#define _FP_NANSIGN_S		0
+++#define _FP_NANSIGN_D		0
+++#define _FP_NANSIGN_Q		0
+++
+++#define _FP_KEEPNANFRACP 1
+++
+++/* If one NaN is signaling and the other is not,
+++ * we choose that one, otherwise we choose X.
+++ */
+++/* For _Qp_* and _Q_*, this should prefer X, for
+++ * CPU instruction emulation this should prefer Y.
+++ * (see SPAMv9 B.2.2 section).
+++ */
+++#define _FP_CHOOSENAN(fs, wc, R, X, Y, OP)			\
+++  do {								\
+++    if ((_FP_FRAC_HIGH_RAW_##fs(X) & _FP_QNANBIT_##fs)		\
+++	&& !(_FP_FRAC_HIGH_RAW_##fs(Y) & _FP_QNANBIT_##fs))	\
+++      {								\
+++	R##_s = Y##_s;						\
+++	_FP_FRAC_COPY_##wc(R,Y);				\
+++      }								\
+++    else							\
+++      {								\
+++	R##_s = X##_s;						\
+++	_FP_FRAC_COPY_##wc(R,X);				\
+++      }								\
+++    R##_c = FP_CLS_NAN;						\
+++  } while (0)
+++
+++/* Some assembly to speed things up. */
+++#define __FP_FRAC_ADD_3(r2,r1,r0,x2,x1,x0,y2,y1,y0)			\
+++  __asm__ ("addcc %r7,%8,%2\n\
+++	    addxcc %r5,%6,%1\n\
+++	    addx %r3,%4,%0"						\
+++	   : "=r" ((USItype)(r2)),					\
+++	     "=&r" ((USItype)(r1)),					\
+++	     "=&r" ((USItype)(r0))					\
+++	   : "%rJ" ((USItype)(x2)),					\
+++	     "rI" ((USItype)(y2)),					\
+++	     "%rJ" ((USItype)(x1)),					\
+++	     "rI" ((USItype)(y1)),					\
+++	     "%rJ" ((USItype)(x0)),					\
+++	     "rI" ((USItype)(y0))					\
+++	   : "cc")
+++
+++#define __FP_FRAC_SUB_3(r2,r1,r0,x2,x1,x0,y2,y1,y0)			\
+++  __asm__ ("subcc %r7,%8,%2\n\
+++	    subxcc %r5,%6,%1\n\
+++	    subx %r3,%4,%0"						\
+++	   : "=r" ((USItype)(r2)),					\
+++	     "=&r" ((USItype)(r1)),					\
+++	     "=&r" ((USItype)(r0))					\
+++	   : "%rJ" ((USItype)(x2)),					\
+++	     "rI" ((USItype)(y2)),					\
+++	     "%rJ" ((USItype)(x1)),					\
+++	     "rI" ((USItype)(y1)),					\
+++	     "%rJ" ((USItype)(x0)),					\
+++	     "rI" ((USItype)(y0))					\
+++	   : "cc")
+++
+++#define __FP_FRAC_ADD_4(r3,r2,r1,r0,x3,x2,x1,x0,y3,y2,y1,y0)		\
+++  do {									\
+++    /* We need to fool gcc,  as we need to pass more than 10		\
+++       input/outputs.  */						\
+++    register USItype _t1 __asm__ ("g1"), _t2 __asm__ ("g2");		\
+++    __asm__ __volatile__ ("\
+++	    addcc %r8,%9,%1\n\
+++	    addxcc %r6,%7,%0\n\
+++	    addxcc %r4,%5,%%g2\n\
+++	    addx %r2,%3,%%g1"						\
+++	   : "=&r" ((USItype)(r1)),					\
+++	     "=&r" ((USItype)(r0))					\
+++	   : "%rJ" ((USItype)(x3)),					\
+++	     "rI" ((USItype)(y3)),					\
+++	     "%rJ" ((USItype)(x2)),					\
+++	     "rI" ((USItype)(y2)),					\
+++	     "%rJ" ((USItype)(x1)),					\
+++	     "rI" ((USItype)(y1)),					\
+++	     "%rJ" ((USItype)(x0)),					\
+++	     "rI" ((USItype)(y0))					\
+++	   : "cc", "g1", "g2");						\
+++    __asm__ __volatile__ ("" : "=r" (_t1), "=r" (_t2));			\
+++    r3 = _t1; r2 = _t2;							\
+++  } while (0)
+++
+++#define __FP_FRAC_SUB_4(r3,r2,r1,r0,x3,x2,x1,x0,y3,y2,y1,y0)		\
+++  do {									\
+++    /* We need to fool gcc,  as we need to pass more than 10		\
+++       input/outputs.  */						\
+++    register USItype _t1 __asm__ ("g1"), _t2 __asm__ ("g2");		\
+++    __asm__ __volatile__ ("\
+++	    subcc %r8,%9,%1\n\
+++	    subxcc %r6,%7,%0\n\
+++	    subxcc %r4,%5,%%g2\n\
+++	    subx %r2,%3,%%g1"						\
+++	   : "=&r" ((USItype)(r1)),					\
+++	     "=&r" ((USItype)(r0))					\
+++	   : "%rJ" ((USItype)(x3)),					\
+++	     "rI" ((USItype)(y3)),					\
+++	     "%rJ" ((USItype)(x2)),					\
+++	     "rI" ((USItype)(y2)),					\
+++	     "%rJ" ((USItype)(x1)),					\
+++	     "rI" ((USItype)(y1)),					\
+++	     "%rJ" ((USItype)(x0)),					\
+++	     "rI" ((USItype)(y0))					\
+++	   : "cc", "g1", "g2");						\
+++    __asm__ __volatile__ ("" : "=r" (_t1), "=r" (_t2));			\
+++    r3 = _t1; r2 = _t2;							\
+++  } while (0)
+++
+++#define __FP_FRAC_DEC_3(x2,x1,x0,y2,y1,y0) __FP_FRAC_SUB_3(x2,x1,x0,x2,x1,x0,y2,y1,y0)
+++
+++#define __FP_FRAC_DEC_4(x3,x2,x1,x0,y3,y2,y1,y0) __FP_FRAC_SUB_4(x3,x2,x1,x0,x3,x2,x1,x0,y3,y2,y1,y0)
+++
+++#define __FP_FRAC_ADDI_4(x3,x2,x1,x0,i)					\
+++  __asm__ ("addcc %3,%4,%3\n\
+++	    addxcc %2,%%g0,%2\n\
+++	    addxcc %1,%%g0,%1\n\
+++	    addx %0,%%g0,%0"						\
+++	   : "=&r" ((USItype)(x3)),					\
+++	     "=&r" ((USItype)(x2)),					\
+++	     "=&r" ((USItype)(x1)),					\
+++	     "=&r" ((USItype)(x0))					\
+++	   : "rI" ((USItype)(i)),					\
+++	     "0" ((USItype)(x3)),					\
+++	     "1" ((USItype)(x2)),					\
+++	     "2" ((USItype)(x1)),					\
+++	     "3" ((USItype)(x0))					\
+++	   : "cc")
+++
+++/* Obtain the current rounding mode. */
+++#ifndef FP_ROUNDMODE
+++#define FP_ROUNDMODE	((_fcw >> 30) & 0x3)
+++#endif
+++
+++/* Exception flags. */
+++#define FP_EX_INVALID		(1 << 4)
+++#define FP_EX_OVERFLOW		(1 << 3)
+++#define FP_EX_UNDERFLOW		(1 << 2)
+++#define FP_EX_DIVZERO		(1 << 1)
+++#define FP_EX_INEXACT		(1 << 0)
+++
+++#define _FP_DECL_EX	fpu_control_t _fcw
+++
+++#define FP_INIT_ROUNDMODE					\
+++do {								\
+++  _FPU_GETCW(_fcw);						\
+++} while (0)
+++
+++/* Simulate exceptions using double arithmetics. */
+++extern double ___Q_simulate_exceptions(int exc);
+++
+++#define FP_HANDLE_EXCEPTIONS					\
+++do {								\
+++  if (!_fex)							\
+++    {								\
+++      /* This is the common case, so we do it inline.		\
+++       * We need to clear cexc bits if any.			\
+++       */							\
+++      extern unsigned long long ___Q_numbers[];			\
+++      __asm__ __volatile__("\
+++      	ldd [%0], %%f30\n\
+++      	faddd %%f30, %%f30, %%f30\
+++      	" : : "r" (___Q_numbers) : "f30");			\
+++    }								\
+++  else								\
+++    ___Q_simulate_exceptions (_fex);			        \
+++} while (0)
++diff -Naur uClibc-0.9.31.ori/libc/sysdeps/linux/sparc/soft-fp/single.h uClibc-0.9.31/libc/sysdeps/linux/sparc/soft-fp/single.h
++--- uClibc-0.9.31.ori/libc/sysdeps/linux/sparc/soft-fp/single.h	1970-01-01 01:00:00.000000000 +0100
+++++ uClibc-0.9.31/libc/sysdeps/linux/sparc/soft-fp/single.h	2010-10-14 14:05:37.000000000 +0200
++@@ -0,0 +1,151 @@
+++/* Software floating-point emulation.
+++   Definitions for IEEE Single Precision.
+++   Copyright (C) 1997,1998,1999,2006 Free Software Foundation, Inc.
+++   This file is part of the GNU C Library.
+++   Contributed by Richard Henderson (rth at cygnus.com),
+++		  Jakub Jelinek (jj at ultra.linux.cz),
+++		  David S. Miller (davem at redhat.com) and
+++		  Peter Maydell (pmaydell at chiark.greenend.org.uk).
+++
+++   The GNU C Library is free software; you can redistribute it and/or
+++   modify it under the terms of the GNU Lesser General Public
+++   License as published by the Free Software Foundation; either
+++   version 2.1 of the License, or (at your option) any later version.
+++
+++   In addition to the permissions in the GNU Lesser General Public
+++   License, the Free Software Foundation gives you unlimited
+++   permission to link the compiled version of this file into
+++   combinations with other programs, and to distribute those
+++   combinations without any restriction coming from the use of this
+++   file.  (The Lesser General Public License restrictions do apply in
+++   other respects; for example, they cover modification of the file,
+++   and distribution when not linked into a combine executable.)
+++
+++   The GNU C Library is distributed in the hope that it will be useful,
+++   but WITHOUT ANY WARRANTY; without even the implied warranty of
+++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+++   Lesser General Public License for more details.
+++
+++   You should have received a copy of the GNU Lesser General Public
+++   License along with the GNU C Library; if not, write to the Free
+++   Software Foundation, 51 Franklin Street, Fifth Floor, Boston,
+++   MA 02110-1301, USA.  */
+++
+++#if _FP_W_TYPE_SIZE < 32
+++#error "Here's a nickel kid.  Go buy yourself a real computer."
+++#endif
+++
+++#define _FP_FRACTBITS_S		_FP_W_TYPE_SIZE
+++
+++#define _FP_FRACBITS_S		24
+++#define _FP_FRACXBITS_S		(_FP_FRACTBITS_S - _FP_FRACBITS_S)
+++#define _FP_WFRACBITS_S		(_FP_WORKBITS + _FP_FRACBITS_S)
+++#define _FP_WFRACXBITS_S	(_FP_FRACTBITS_S - _FP_WFRACBITS_S)
+++#define _FP_EXPBITS_S		8
+++#define _FP_EXPBIAS_S		127
+++#define _FP_EXPMAX_S		255
+++#define _FP_QNANBIT_S		((_FP_W_TYPE)1 << (_FP_FRACBITS_S-2))
+++#define _FP_QNANBIT_SH_S	((_FP_W_TYPE)1 << (_FP_FRACBITS_S-2+_FP_WORKBITS))
+++#define _FP_IMPLBIT_S		((_FP_W_TYPE)1 << (_FP_FRACBITS_S-1))
+++#define _FP_IMPLBIT_SH_S	((_FP_W_TYPE)1 << (_FP_FRACBITS_S-1+_FP_WORKBITS))
+++#define _FP_OVERFLOW_S		((_FP_W_TYPE)1 << (_FP_WFRACBITS_S))
+++
+++/* The implementation of _FP_MUL_MEAT_S and _FP_DIV_MEAT_S should be
+++   chosen by the target machine.  */
+++
+++typedef float SFtype __attribute__((mode(SF)));
+++
+++union _FP_UNION_S
+++{
+++  SFtype flt;
+++  struct {
+++#if __BYTE_ORDER == __BIG_ENDIAN
+++    unsigned sign : 1;
+++    unsigned exp  : _FP_EXPBITS_S;
+++    unsigned frac : _FP_FRACBITS_S - (_FP_IMPLBIT_S != 0);
+++#else
+++    unsigned frac : _FP_FRACBITS_S - (_FP_IMPLBIT_S != 0);
+++    unsigned exp  : _FP_EXPBITS_S;
+++    unsigned sign : 1;
+++#endif
+++  } bits __attribute__((packed));
+++};
+++
+++#define FP_DECL_S(X)		_FP_DECL(1,X)
+++#define FP_UNPACK_RAW_S(X,val)	_FP_UNPACK_RAW_1(S,X,val)
+++#define FP_UNPACK_RAW_SP(X,val)	_FP_UNPACK_RAW_1_P(S,X,val)
+++#define FP_PACK_RAW_S(val,X)	_FP_PACK_RAW_1(S,val,X)
+++#define FP_PACK_RAW_SP(val,X)		\
+++  do {					\
+++    if (!FP_INHIBIT_RESULTS)		\
+++      _FP_PACK_RAW_1_P(S,val,X);	\
+++  } while (0)
+++
+++#define FP_UNPACK_S(X,val)		\
+++  do {					\
+++    _FP_UNPACK_RAW_1(S,X,val);		\
+++    _FP_UNPACK_CANONICAL(S,1,X);	\
+++  } while (0)
+++
+++#define FP_UNPACK_SP(X,val)		\
+++  do {					\
+++    _FP_UNPACK_RAW_1_P(S,X,val);	\
+++    _FP_UNPACK_CANONICAL(S,1,X);	\
+++  } while (0)
+++
+++#define FP_UNPACK_SEMIRAW_S(X,val)	\
+++  do {					\
+++    _FP_UNPACK_RAW_1(S,X,val);		\
+++    _FP_UNPACK_SEMIRAW(S,1,X);		\
+++  } while (0)
+++
+++#define FP_UNPACK_SEMIRAW_SP(X,val)	\
+++  do {					\
+++    _FP_UNPACK_RAW_1_P(S,X,val);	\
+++    _FP_UNPACK_SEMIRAW(S,1,X);		\
+++  } while (0)
+++
+++#define FP_PACK_S(val,X)		\
+++  do {					\
+++    _FP_PACK_CANONICAL(S,1,X);		\
+++    _FP_PACK_RAW_1(S,val,X);		\
+++  } while (0)
+++
+++#define FP_PACK_SP(val,X)		\
+++  do {					\
+++    _FP_PACK_CANONICAL(S,1,X);		\
+++    if (!FP_INHIBIT_RESULTS)		\
+++      _FP_PACK_RAW_1_P(S,val,X);	\
+++  } while (0)
+++
+++#define FP_PACK_SEMIRAW_S(val,X)	\
+++  do {					\
+++    _FP_PACK_SEMIRAW(S,1,X);		\
+++    _FP_PACK_RAW_1(S,val,X);		\
+++  } while (0)
+++
+++#define FP_PACK_SEMIRAW_SP(val,X)	\
+++  do {					\
+++    _FP_PACK_SEMIRAW(S,1,X);		\
+++    if (!FP_INHIBIT_RESULTS)		\
+++      _FP_PACK_RAW_1_P(S,val,X);	\
+++  } while (0)
+++
+++#define FP_ISSIGNAN_S(X)		_FP_ISSIGNAN(S,1,X)
+++#define FP_NEG_S(R,X)			_FP_NEG(S,1,R,X)
+++#define FP_ADD_S(R,X,Y)			_FP_ADD(S,1,R,X,Y)
+++#define FP_SUB_S(R,X,Y)			_FP_SUB(S,1,R,X,Y)
+++#define FP_MUL_S(R,X,Y)			_FP_MUL(S,1,R,X,Y)
+++#define FP_DIV_S(R,X,Y)			_FP_DIV(S,1,R,X,Y)
+++#define FP_SQRT_S(R,X)			_FP_SQRT(S,1,R,X)
+++#define _FP_SQRT_MEAT_S(R,S,T,X,Q)	_FP_SQRT_MEAT_1(R,S,T,X,Q)
+++
+++#define FP_CMP_S(r,X,Y,un)	_FP_CMP(S,1,r,X,Y,un)
+++#define FP_CMP_EQ_S(r,X,Y)	_FP_CMP_EQ(S,1,r,X,Y)
+++#define FP_CMP_UNORD_S(r,X,Y)	_FP_CMP_UNORD(S,1,r,X,Y)
+++
+++#define FP_TO_INT_S(r,X,rsz,rsg)	_FP_TO_INT(S,1,r,X,rsz,rsg)
+++#define FP_FROM_INT_S(X,r,rs,rt)	_FP_FROM_INT(S,1,X,r,rs,rt)
+++
+++#define _FP_FRAC_HIGH_S(X)	_FP_FRAC_HIGH_1(X)
+++#define _FP_FRAC_HIGH_RAW_S(X)	_FP_FRAC_HIGH_1(X)
++diff -Naur uClibc-0.9.31.ori/libc/sysdeps/linux/sparc/soft-fp/soft-fp.h uClibc-0.9.31/libc/sysdeps/linux/sparc/soft-fp/soft-fp.h
++--- uClibc-0.9.31.ori/libc/sysdeps/linux/sparc/soft-fp/soft-fp.h	1970-01-01 01:00:00.000000000 +0100
+++++ uClibc-0.9.31/libc/sysdeps/linux/sparc/soft-fp/soft-fp.h	2010-10-14 14:05:37.000000000 +0200
++@@ -0,0 +1,205 @@
+++/* Software floating-point emulation.
+++   Copyright (C) 1997,1998,1999,2000,2002,2003,2005,2006,2007
+++	Free Software Foundation, Inc.
+++   This file is part of the GNU C Library.
+++   Contributed by Richard Henderson (rth at cygnus.com),
+++		  Jakub Jelinek (jj at ultra.linux.cz),
+++		  David S. Miller (davem at redhat.com) and
+++		  Peter Maydell (pmaydell@chiark.greenend.org.uk).
+++
+++   The GNU C Library is free software; you can redistribute it and/or
+++   modify it under the terms of the GNU Lesser General Public
+++   License as published by the Free Software Foundation; either
+++   version 2.1 of the License, or (at your option) any later version.
+++
+++   In addition to the permissions in the GNU Lesser General Public
+++   License, the Free Software Foundation gives you unlimited
+++   permission to link the compiled version of this file into
+++   combinations with other programs, and to distribute those
+++   combinations without any restriction coming from the use of this
+++   file.  (The Lesser General Public License restrictions do apply in
+++   other respects; for example, they cover modification of the file,
+++   and distribution when not linked into a combine executable.)
+++
+++   The GNU C Library is distributed in the hope that it will be useful,
+++   but WITHOUT ANY WARRANTY; without even the implied warranty of
+++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+++   Lesser General Public License for more details.
+++
+++   You should have received a copy of the GNU Lesser General Public
+++   License along with the GNU C Library; if not, write to the Free
+++   Software Foundation, 51 Franklin Street, Fifth Floor, Boston,
+++   MA 02110-1301, USA.  */
+++
+++#ifndef SOFT_FP_H
+++#define SOFT_FP_H
+++
+++#include "sfp-machine.h"
+++
+++/* Allow sfp-machine to have its own byte order definitions. */
+++#ifndef __BYTE_ORDER
+++#ifdef _LIBC
+++#include <endian.h>
+++#else
+++#error "endianness not defined by sfp-machine.h"
+++#endif
+++#endif
+++
+++#define _FP_WORKBITS		3
+++#define _FP_WORK_LSB		((_FP_W_TYPE)1 << 3)
+++#define _FP_WORK_ROUND		((_FP_W_TYPE)1 << 2)
+++#define _FP_WORK_GUARD		((_FP_W_TYPE)1 << 1)
+++#define _FP_WORK_STICKY		((_FP_W_TYPE)1 << 0)
+++
+++#ifndef FP_RND_NEAREST
+++# define FP_RND_NEAREST		0
+++# define FP_RND_ZERO		1
+++# define FP_RND_PINF		2
+++# define FP_RND_MINF		3
+++#endif
+++#ifndef FP_ROUNDMODE
+++# define FP_ROUNDMODE		FP_RND_NEAREST
+++#endif
+++
+++/* By default don't care about exceptions. */
+++#ifndef FP_EX_INVALID
+++#define FP_EX_INVALID		0
+++#endif
+++#ifndef FP_EX_OVERFLOW
+++#define FP_EX_OVERFLOW		0
+++#endif
+++#ifndef FP_EX_UNDERFLOW
+++#define FP_EX_UNDERFLOW		0
+++#endif
+++#ifndef FP_EX_DIVZERO
+++#define FP_EX_DIVZERO		0
+++#endif
+++#ifndef FP_EX_INEXACT
+++#define FP_EX_INEXACT		0
+++#endif
+++#ifndef FP_EX_DENORM
+++#define FP_EX_DENORM		0
+++#endif
+++
+++#ifdef _FP_DECL_EX
+++#define FP_DECL_EX					\
+++  int _fex = 0;						\
+++  _FP_DECL_EX
+++#else
+++#define FP_DECL_EX int _fex = 0
+++#endif
+++
+++#ifndef FP_INIT_ROUNDMODE
+++#define FP_INIT_ROUNDMODE do {} while (0)
+++#endif
+++
+++#ifndef FP_HANDLE_EXCEPTIONS
+++#define FP_HANDLE_EXCEPTIONS do {} while (0)
+++#endif
+++
+++#ifndef FP_INHIBIT_RESULTS
+++/* By default we write the results always.
+++ * sfp-machine may override this and e.g.
+++ * check if some exceptions are unmasked
+++ * and inhibit it in such a case.
+++ */
+++#define FP_INHIBIT_RESULTS 0
+++#endif
+++
+++#define FP_SET_EXCEPTION(ex)				\
+++  _fex |= (ex)
+++
+++#define FP_UNSET_EXCEPTION(ex)				\
+++  _fex &= ~(ex)
+++
+++#define FP_CLEAR_EXCEPTIONS				\
+++  _fex = 0
+++
+++#define _FP_ROUND_NEAREST(wc, X)			\
+++do {							\
+++    if ((_FP_FRAC_LOW_##wc(X) & 15) != _FP_WORK_ROUND)	\
+++      _FP_FRAC_ADDI_##wc(X, _FP_WORK_ROUND);		\
+++} while (0)
+++
+++#define _FP_ROUND_ZERO(wc, X)		(void)0
+++
+++#define _FP_ROUND_PINF(wc, X)				\
+++do {							\
+++    if (!X##_s && (_FP_FRAC_LOW_##wc(X) & 7))		\
+++      _FP_FRAC_ADDI_##wc(X, _FP_WORK_LSB);		\
+++} while (0)
+++
+++#define _FP_ROUND_MINF(wc, X)				\
+++do {							\
+++    if (X##_s && (_FP_FRAC_LOW_##wc(X) & 7))		\
+++      _FP_FRAC_ADDI_##wc(X, _FP_WORK_LSB);		\
+++} while (0)
+++
+++#define _FP_ROUND(wc, X)			\
+++do {						\
+++	if (_FP_FRAC_LOW_##wc(X) & 7)		\
+++	  FP_SET_EXCEPTION(FP_EX_INEXACT);	\
+++	switch (FP_ROUNDMODE)			\
+++	{					\
+++	  case FP_RND_NEAREST:			\
+++	    _FP_ROUND_NEAREST(wc,X);		\
+++	    break;				\
+++	  case FP_RND_ZERO:			\
+++	    _FP_ROUND_ZERO(wc,X);		\
+++	    break;				\
+++	  case FP_RND_PINF:			\
+++	    _FP_ROUND_PINF(wc,X);		\
+++	    break;				\
+++	  case FP_RND_MINF:			\
+++	    _FP_ROUND_MINF(wc,X);		\
+++	    break;				\
+++	}					\
+++} while (0)
+++
+++#define FP_CLS_NORMAL		0
+++#define FP_CLS_ZERO		1
+++#define FP_CLS_INF		2
+++#define FP_CLS_NAN		3
+++
+++#define _FP_CLS_COMBINE(x,y)	(((x) << 2) | (y))
+++
+++#include "op-1.h"
+++#include "op-2.h"
+++#include "op-4.h"
+++#include "op-8.h"
+++#include "op-common.h"
+++
+++/* Sigh.  Silly things longlong.h needs.  */
+++#define UWtype		_FP_W_TYPE
+++#define W_TYPE_SIZE	_FP_W_TYPE_SIZE
+++
+++typedef int QItype __attribute__((mode(QI)));
+++typedef int SItype __attribute__((mode(SI)));
+++typedef int DItype __attribute__((mode(DI)));
+++typedef unsigned int UQItype __attribute__((mode(QI)));
+++typedef unsigned int USItype __attribute__((mode(SI)));
+++typedef unsigned int UDItype __attribute__((mode(DI)));
+++#if _FP_W_TYPE_SIZE == 32
+++typedef unsigned int UHWtype __attribute__((mode(HI)));
+++#elif _FP_W_TYPE_SIZE == 64
+++typedef USItype UHWtype;
+++#endif
+++
+++#ifndef CMPtype
+++#define CMPtype		int
+++#endif
+++
+++#define SI_BITS		(__CHAR_BIT__ * (int)sizeof(SItype))
+++#define DI_BITS		(__CHAR_BIT__ * (int)sizeof(DItype))
+++
+++#ifndef umul_ppmm
+++#include "longlong.h"
+++#endif
+++
+++#ifdef _LIBC
+++#include <stdlib.h>
+++#else
+++extern void abort (void);
+++#endif
+++
+++#endif
+diff --git a/package/uclibc/0.9.31.1/uClibc-0012-sparc-errno-fix.patch b/package/uclibc/0.9.31.1/uClibc-0012-sparc-errno-fix.patch
+new file mode 100644
+index 0000000..44d06cb
+--- /dev/null
++++ b/package/uclibc/0.9.31.1/uClibc-0012-sparc-errno-fix.patch
+@@ -0,0 +1,11 @@
++--- uClibc-0.9.32.ori/libc/sysdeps/linux/sparc/pipe.S	2011-06-08 21:35:20.000000000 +0200
+++++ uClibc-0.9.32/libc/sysdeps/linux/sparc/pipe.S	2011-11-11 15:57:25.000000000 +0100
++@@ -52,7 +52,7 @@
++ 	 restore %g0,%g0,%o0
++ 
++ .Lerror:
++-	call	HIDDEN_JUMPTARGET(__errno_location)
+++	call	__errno_location
++ 	 or	%g0,EINVAL,%i0
++ 	st	%i0,[%o0]
++ 	ret
+diff --git a/package/uclibc/0.9.31.1/uClibc-0013-unshare.patch b/package/uclibc/0.9.31.1/uClibc-0013-unshare.patch
+new file mode 100644
+index 0000000..ad440d9
+--- /dev/null
++++ b/package/uclibc/0.9.31.1/uClibc-0013-unshare.patch
+@@ -0,0 +1,74 @@
++Backport of unshare() syscall.
++From uClibc git 19dd090a0f68765db87990ef8eda9bf77bb29581
++
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++
++---
++diff -Nura uClibc-0.9.31.1.orig/libc/sysdeps/linux/common/bits/sched.h uClibc-0.9.31.1/libc/sysdeps/linux/common/bits/sched.h
++--- uClibc-0.9.31.1.orig/libc/sysdeps/linux/common/bits/sched.h	2011-06-08 15:58:40.000000000 -0300
+++++ uClibc-0.9.31.1/libc/sysdeps/linux/common/bits/sched.h	2011-12-05 08:10:02.491978849 -0300
++@@ -58,7 +58,13 @@
++ 				      force CLONE_PTRACE on this clone.  */
++ # define CLONE_CHILD_SETTID 0x01000000 /* Store TID in userlevel buffer in
++ 					  the child.  */
++-# define CLONE_STOPPED	0x02000000 /* Start in stopped state.  */
+++# define CLONE_STOPPED 0x02000000 /* Start in stopped state.  */
+++# define CLONE_NEWUTS  0x04000000      /* New utsname group.  */
+++# define CLONE_NEWIPC  0x08000000      /* New ipcs.  */
+++# define CLONE_NEWUSER 0x10000000      /* New user namespace.  */
+++# define CLONE_NEWPID  0x20000000      /* New pid namespace.  */
+++# define CLONE_NEWNET  0x40000000      /* New network namespace.  */
+++# define CLONE_IO      0x80000000      /* Clone I/O context.  */
++ #endif
++ 
++ /* The official definition.  */
++@@ -74,11 +80,9 @@
++ extern int clone (int (*__fn) (void *__arg), void *__child_stack,
++ 		  int __flags, void *__arg, ...) __THROW;
++ 
++-#if 0
++ /* Unshare the specified resources.  */
++ extern int unshare (int __flags) __THROW;
++ #endif
++-#endif
++ 
++ __END_DECLS
++ 
++diff -Nura uClibc-0.9.31.1.orig/libc/sysdeps/linux/common/Makefile.in uClibc-0.9.31.1/libc/sysdeps/linux/common/Makefile.in
++--- uClibc-0.9.31.1.orig/libc/sysdeps/linux/common/Makefile.in	2011-06-08 15:58:40.000000000 -0300
+++++ uClibc-0.9.31.1/libc/sysdeps/linux/common/Makefile.in	2011-12-05 08:23:28.353757602 -0300
++@@ -31,7 +31,8 @@
++ 	remap_file_pages.c sched_getaffinity.c sched_setaffinity.c \
++ 	sendfile64.c sendfile.c setfsgid.c setfsuid.c setresuid.c \
++ 	splice.c vmsplice.c tee.c signalfd.c swapoff.c swapon.c \
++-	sync_file_range.c sysctl.c sysinfo.c timerfd.c uselib.c vhangup.c,$(CSRC))
+++	sync_file_range.c sysctl.c sysinfo.c timerfd.c unshare.c uselib.c \
+++	vhangup.c,$(CSRC))
++ endif
++ 
++ ifneq ($(UCLIBC_BSD_SPECIFIC),y)
++diff -Nura uClibc-0.9.31.1.orig/libc/sysdeps/linux/common/unshare.c uClibc-0.9.31.1/libc/sysdeps/linux/common/unshare.c
++--- uClibc-0.9.31.1.orig/libc/sysdeps/linux/common/unshare.c	1969-12-31 21:00:00.000000000 -0300
+++++ uClibc-0.9.31.1/libc/sysdeps/linux/common/unshare.c	2011-12-05 08:22:45.954453512 -0300
++@@ -0,0 +1,21 @@
+++/* vi: set sw=4 ts=4: */
+++/*
+++ * unshare() for uClibc
+++ *
+++ * Copyright (C) 2011 Henning Heinold <heinold@inf.fu-berlin.de>
+++ *
+++ * Licensed under the LGPL v2.1, see the file COPYING.LIB in this tarball.
+++ */
+++
+++#include <sys/syscall.h>
+++#include <sched.h>
+++
+++#if defined __NR_unshare && defined __UCLIBC_LINUX_SPECIFIC__
+++_syscall1(int, unshare, int, flags)
+++#else
+++int unshare(int flags) 
+++{   
+++    __set_errno(ENOSYS);
+++    return -1;
+++}
+++#endif
+diff --git a/package/uclibc/0.9.31.1/uClibc-0014-workaround-GCC-PR32219.patch b/package/uclibc/0.9.31.1/uClibc-0014-workaround-GCC-PR32219.patch
+new file mode 100644
+index 0000000..242a526
+--- /dev/null
++++ b/package/uclibc/0.9.31.1/uClibc-0014-workaround-GCC-PR32219.patch
+@@ -0,0 +1,57 @@
++From 2e53dd645d5348f207cec7f8595969dc566c5a55 Mon Sep 17 00:00:00 2001
++From: Denys Vlasenko <vda.linux@googlemail.com>
++Date: Mon, 17 May 2010 15:56:19 +0200
++Subject: [PATCH] workaround GCC PR32219
++
++we ended up calling 0
++Fixes bug #1033
++
++Signed-off-by: Denys Vlasenko <vda.linux@googlemail.com>
++Signed-off-by: Bernhard Reutner-Fischer <rep.dot.nop@gmail.com>
++---
++ libc/misc/internals/__uClibc_main.c |   15 +++++++++++++--
++ 1 files changed, 13 insertions(+), 2 deletions(-)
++
++diff --git a/libc/misc/internals/__uClibc_main.c b/libc/misc/internals/__uClibc_main.c
++index f9e1244..4ee4443 100644
++--- a/libc/misc/internals/__uClibc_main.c
+++++ b/libc/misc/internals/__uClibc_main.c
++@@ -105,6 +105,17 @@ _pthread_cleanup_pop_restore(struct _pthread_cleanup_buffer *__buffer,
++ 
++ #endif /* !SHARED */
++ 
+++/* Defeat compiler optimization which assumes function addresses are never NULL */
+++static __always_inline int not_null_ptr(const void *p)
+++{
+++	const void *q;
+++	__asm__ (""
+++		: "=r" (q) /* output */
+++		: "0" (p) /* input */
+++	);
+++	return q != 0;
+++}
+++
++ /*
++  * Prototypes.
++  */
++@@ -254,7 +265,7 @@ void __uClibc_init(void)
++ 
++ #ifdef __UCLIBC_HAS_LOCALE__
++     /* Initialize the global locale structure. */
++-    if (likely(_locale_init!=NULL))
+++    if (likely(not_null_ptr(_locale_init)))
++ 	_locale_init();
++ #endif
++ 
++@@ -264,7 +275,7 @@ void __uClibc_init(void)
++      * Thus we get a nice size savings because the stdio functions
++      * won't be pulled into the final static binary unless used.
++      */
++-    if (likely(_stdio_init != NULL))
+++    if (likely(not_null_ptr(_stdio_init)))
++ 	_stdio_init();
++ 
++ }
++-- 
++1.7.1
++
+diff --git a/package/uclibc/0.9.31.1/uClibc-0015-startfiles-Make-targets.patch b/package/uclibc/0.9.31.1/uClibc-0015-startfiles-Make-targets.patch
+new file mode 100644
+index 0000000..9a7f304
+--- /dev/null
++++ b/package/uclibc/0.9.31.1/uClibc-0015-startfiles-Make-targets.patch
+@@ -0,0 +1,60 @@
++Add startfiles and install_startfiles targets to the top-level Makefile, as
++in uClibc 0.9.32 and later.
++
++Signed-off-by: Simon Dawson <spdawson@gmail.com>
++
++diff -Nurp a/Makefile.help b/Makefile.help
++--- a/Makefile.help	2011-06-08 19:58:40.000000000 +0100
+++++ b/Makefile.help	2013-08-10 21:17:46.572104259 +0100
++@@ -14,6 +14,7 @@ help:
++ 	@echo 'Build:'
++ 	@echo '  all			- libraries and generated headers'
++ 	@echo '  pregen		- generate headers'
+++	@echo '  startfiles		- build startfiles (crt)'
++ 	@echo '  utils			- build target utilities'
++ 	@echo '			  (ldd, ldconfig, locale, iconv)'
++ 	@echo '  hostutils		- build host utilities (see utils)'
++@@ -32,6 +33,7 @@ help:
++ 	@echo '  install		- install both the runtime and the headers'
++ 	@echo '  install_runtime	- install the libraries'
++ 	@echo '  install_dev		- install all headers and static libs'
+++	@echo '  install_startfiles	- install startfiles (crt)'
++ 	@echo '  install_headers	- install headers excluding generated ones'
++ 	@echo '  install_utils		- install target utilities'
++ 	@echo '  install_hostutils	- install host utilities'
++diff -Nurp a/Makefile.in b/Makefile.in
++--- a/Makefile.in	2011-06-08 19:58:40.000000000 +0100
+++++ b/Makefile.in	2013-08-10 21:10:55.248649101 +0100
++@@ -193,6 +193,8 @@ install: install_runtime install_dev
++ 
++ RUNTIME_PREFIX_LIB_FROM_DEVEL_PREFIX_LIB=$(shell $(top_srcdir)extra/scripts/relative_path.sh $(DEVEL_PREFIX)$(MULTILIB_DIR) $(RUNTIME_PREFIX)$(MULTILIB_DIR))
++ 
+++startfiles: $(crt-y)
+++
++ $(top_builddir)extra/scripts/unifdef: |$(top_builddir)extra/scripts
++ $(top_builddir)extra/scripts/unifdef: $(top_srcdir)extra/scripts/unifdef.c
++ 	$(hcompile.u)
++@@ -301,6 +303,10 @@ else
++ 	cd $(PREFIX)$(DEVEL_PREFIX)include && $(RM) -f wchar-stub.h
++ endif
++ 
+++# Installs startfiles
+++install_startfiles: startfiles | $(PREFIX)$(DEVEL_PREFIX)$(MULTILIB_DIR)
+++	-$(INSTALL) -m 644 $(startfiles) $(PREFIX)$(DEVEL_PREFIX)$(MULTILIB_DIR)/
+++
++ # Installs development library links.
++ install_dev: install_headers install_runtime | $(PREFIX)$(DEVEL_PREFIX)$(MULTILIB_DIR)
++ 	-$(INSTALL) -m 644 $(top_builddir)lib/*.[ao] $(PREFIX)$(DEVEL_PREFIX)$(MULTILIB_DIR)/
++diff -Nurp a/Makerules b/Makerules
++--- a/Makerules	2011-06-08 19:58:40.000000000 +0100
+++++ b/Makerules	2013-08-10 21:24:21.287583111 +0100
++@@ -406,7 +406,8 @@ endif
++ CRTS_COMPAT :=
++ #endif
++ 
++-$(crt-y): $(CRTS) $(CTOR_TARGETS) $(CRTS_COMPAT) $(CRTRELOC)
+++startfiles = $(CRTS) $(CTOR_TARGETS) $(CRTS_COMPAT) $(CRTRELOC)
+++$(crt-y): $(startfiles)
++ $(CRTS) $(CTOR_TARGETS) $(CRTS_COMPAT) $(CRTRELOC): | headers
++ 
++ $(top_builddir)lib/$(NONSHARED_LIBNAME): $(libc-nonshared-y)
+diff --git a/package/uclibc/Config.in b/package/uclibc/Config.in
+index 92e04e9..6f62d39 100644
+--- a/package/uclibc/Config.in
++++ b/package/uclibc/Config.in
+@@ -8,6 +8,10 @@ choice
  	help
- 	  uCLinux uses a Binary Flat format commonly known as BFLT. It
- 	  is a relatively simple and lightweight executable format
-diff --git a/package/elf2flt/src/Makefile.in b/package/elf2flt/src/Makefile.in
-index acead9f..81e1afc 100644
---- a/package/elf2flt/src/Makefile.in
-+++ b/package/elf2flt/src/Makefile.in
-@@ -10,33 +10,41 @@ includedir = @includedir@
- CC = @CC@
- CPU = @target_cpu@
- TARGET = @target_alias@
-+SYMBOL_PREFIX = @SYMBOL_PREFIX@
- CFLAGS = @CFLAGS@
--INCLUDES = @bfd_include_dir@ @binutils_include_dir@
--CPPFLAGS = @CPPFLAGS@
-+INCLUDES = -I$(srcdir) @bfd_include_dir@ @binutils_include_dir@ @zlib_include_dir@
-+CPPFLAGS = @CPPFLAGS@ $(DEFS) $(INCLUDES)
- LDFLAGS = @LDFLAGS@
--LIBS = @LIBS@
-+LDLIBS = @LIBS@
- INSTALL = @INSTALL@
--DEFS = @DEFS@ -DTARGET_$(CPU)
-+DEFS = @DEFS@ \
-+	-DTARGET_$(CPU) \
-+	-DTARGET_CPU=\"$(CPU)\" \
-+	-DSYMBOL_PREFIX=\"$(SYMBOL_PREFIX)\" \
-+	-DBINUTILS_LDSCRIPTDIR=\"@binutils_ldscript_dir@\" \
-+	-DTARGET_ALIAS=\"$(TARGET)\" \
-+	-DNO_GOT_CHECK=@got_check@ \
-+	-DUSE_EMIT_RELOCS=@emit_relocs@ \
-+	-DEMIT_CTOR_DTOR=@emit_ctor_dtor@ \
-+	-DALWAYS_RELOC_TEXT=@always_reloc_text@
- EXEEXT = @EXEEXT@
- OBJEXT = @OBJEXT@
+ 	  Select the version of uClibc you wish to use.
  
- HOST = @host_alias@
- 
- ifneq (,$(findstring mingw32,$(HOST)))
--   LIBS := $(LIBS) -lws2_32
-+   LDLIBS += -lws2_32
- endif
- 
- # force link order under cygwin to avoid getopts / libiberty clash
- ifneq ($(strip $(shell gcc -v 2>&1 | grep "cygwin")),)
--   LIBS := -lcygwin $(LIBS)
-+   LDLIBS := -lcygwin $(LDLIBS)
- endif
- 
--CCFLAGS = $(CFLAGS) $(DEFS) $(INCLUDES)
--
- LDFILE= elf2flt.ld
- ifeq ($(strip $(CPU)),e1)
--SRC_LDFILE= $(CPU)-elf2flt.ld
--else
-+SRC_LDFILE= $(srcdir)/$(CPU)-elf2flt.ld
-+else 
- SRC_LDFILE= elf2flt.ld
- endif
- 
-@@ -44,20 +52,43 @@ target_bindir = $(prefix)/$(TARGET)/bin
- target_libdir = $(prefix)/$(TARGET)/lib
- 
- 
--PROG_ELF2FLT = elf2flt$(EXEEXT)
--PROG_FLTHDR = flthdr$(EXEEXT)
--PROGS = $(PROG_ELF2FLT) $(PROG_FLTHDR)
-+PROG_ELF2FLT       = elf2flt$(EXEEXT)
-+PROG_FLTHDR        = flthdr$(EXEEXT)
-+PROG_LD_ELF2FLT_C  = ld-elf2flt$(EXEEXT)
-+PROG_LD_ELF2FLT_SH = ld-elf2flt.sh
++	config BR2_UCLIBC_VERSION_0_9_31
++		bool "uClibc 0.9.31.x"
++		depends on !BR2_xtensa
 +
-+ifeq (@use_ld_elf2flt_binary@,yes)
-+PROG_LD_ELF2FLT    = $(PROG_LD_ELF2FLT_C)
-+else
-+PROG_LD_ELF2FLT    = $(PROG_LD_ELF2FLT_SH)
-+endif
-+
-+PROGS = $(PROG_ELF2FLT) $(PROG_FLTHDR) $(PROG_LD_ELF2FLT_C) $(PROG_LD_ELF2FLT_SH)
+ 	config BR2_UCLIBC_VERSION_0_9_32
+ 		bool "uClibc 0.9.32.x"
+ 		depends on !(BR2_arc || BR2_avr32 || BR2_sh || BR2_xtensa)
+@@ -34,6 +38,7 @@ config BR2_USE_UCLIBC_SNAPSHOT
  
- all: $(PROGS)
+ config BR2_UCLIBC_VERSION_STRING
+ 	string
++	default 0.9.31.1	if BR2_UCLIBC_VERSION_0_9_31
+ 	default 0.9.32.1	if BR2_UCLIBC_VERSION_0_9_32
+ 	default 0.9.33.2	if BR2_UCLIBC_VERSION_0_9_33
+ 	default 0.9.33-arc	if BR2_UCLIBC_VERSION_0_9_33_ARC
+@@ -41,6 +46,7 @@ config BR2_UCLIBC_VERSION_STRING
  
--$(PROG_ELF2FLT): elf2flt.c stubs.c Makefile
--	$(CC) $(CCFLAGS) $(LDFLAGS) -o $@ $(srcdir)/elf2flt.c $(srcdir)/stubs.c $(LIBS)
-+# We need to declare the link explicitly because make only provides
-+# implicit rules when EXEEXT is set to nothing
-+link = $(CC) $(CFLAGS) $(LDFLAGS) -o $@ $^ $(LDLIBS)
+ config BR2_UCLIBC_CONFIG
+ 	string "uClibc configuration file to use?"
++	default "package/uclibc/uClibc-0.9.31.config" if BR2_UCLIBC_VERSION_0_9_31
+ 	default "package/uclibc/uClibc-0.9.32.config" if BR2_UCLIBC_VERSION_0_9_32
+ 	default "package/uclibc/uClibc-0.9.33.config" if BR2_UCLIBC_VERSION_0_9_33
+ 	default "package/uclibc/uClibc-snapshot.config" if BR2_UCLIBC_VERSION_0_9_33_ARC
+@@ -90,7 +96,7 @@ config BR2_TOOLCHAIN_BUILDROOT_LOCALE
  
--$(PROG_FLTHDR): flthdr.c Makefile
--	$(CC) $(CCFLAGS) $(LDFLAGS) -o $@ $(srcdir)/flthdr.c $(LIBS)
-+$(PROG_ELF2FLT): elf2flt.o compress.o stubs.o
-+	$(link)
-+
-+$(PROG_FLTHDR): flthdr.o compress.o stubs.o
-+	$(link)
-+
-+ld-elf2flt$(EXEEXT): ld-elf2flt.o stubs.o
-+	$(link)
-+
-+ld-elf2flt.sh: $(srcdir)/ld-elf2flt.in
-+	./config.status $@
-+	chmod 755 $@
-+
-+Makefile: $(srcdir)/Makefile.in
-+	./config.status $@
- 
- clean:
--	-rm -f $(PROGS) *.$(OBJEXT)
-+	-rm -f $(PROGS) *.$(OBJEXT) .deps
- 
- distclean: clean
- 	-rm -f Makefile config.log config.status config.cache ld-elf2flt
-@@ -74,8 +105,10 @@ install:
- 		mv $(bindir)/$(TARGET)-ld$(EXEEXT) $(bindir)/$(TARGET)-ld.real$(EXEEXT)
- 	[ -f $(target_bindir)/ld.real$(EXEEXT) ] || \
- 		mv $(target_bindir)/ld$(EXEEXT) $(target_bindir)/ld.real$(EXEEXT)
--	$(INSTALL) -m 755 ld-elf2flt $(bindir)/$(TARGET)-ld
--	$(INSTALL) -m 755 ld-elf2flt $(target_bindir)/ld
--	$(INSTALL) -m 644 $(srcdir)/$(SRC_LDFILE) $(target_libdir)/$(LDFILE)
--
-+	$(INSTALL) -m 755 $(PROG_LD_ELF2FLT) $(bindir)/$(TARGET)-ld$(EXEEXT)
-+	$(INSTALL) -m 755 $(PROG_LD_ELF2FLT) $(target_bindir)/ld$(EXEEXT)
-+	$(INSTALL) -m 644 $(SRC_LDFILE) $(target_libdir)/$(LDFILE)
- 
-+sinclude .deps
-+.deps:
-+	$(CC) -MM $(CPPFLAGS) $(srcdir)/*.c > .deps
-diff --git a/package/elf2flt/src/README b/package/elf2flt/src/README
-index 6e8a687..592d07a 100644
---- a/package/elf2flt/src/README
-+++ b/package/elf2flt/src/README
-@@ -11,7 +11,7 @@ LICENSE.TXT for more details.
- 
- Elf2flt with PIC, ZFLAT and full reloc support. Currently supported
- targets include: m68k/ColdFire, ARM, Sparc, NEC v850, MicroBlaze, 
--h8300 and SuperH.
-+h8300, SuperH, and Blackfin.
- 
- COMPILING:
- 
-diff --git a/package/elf2flt/src/compress.c b/package/elf2flt/src/compress.c
+ choice
+ 	prompt "Thread library implementation"
+-	default BR2_PTHREADS_NATIVE if !(BR2_avr32 || BR2_xtensa)
++	default BR2_PTHREADS_NATIVE if (!BR2_UCLIBC_VERSION_0_9_31) && !(BR2_avr32 || BR2_xtensa)
+ 	default BR2_PTHREADS_OLD
+ 	help
+ 	  Use this option to select the thread library implementation
+@@ -115,6 +121,7 @@ choice
+ 	config BR2_PTHREADS_NATIVE
+ 		bool "Native POSIX Threading (NPTL)"
+ 		select BR2_TOOLCHAIN_HAS_THREADS
++		depends on !BR2_UCLIBC_VERSION_0_9_31
+ 		depends on !BR2_arc
+ 		depends on !BR2_avr32
+ 		depends on !BR2_bfin
+diff --git a/package/uclibc/uClibc-0.9.31.config b/package/uclibc/uClibc-0.9.31.config
 new file mode 100644
-index 0000000..144c96f
+index 0000000..e990178
 --- /dev/null
-+++ b/package/elf2flt/src/compress.c
-@@ -0,0 +1,198 @@
-+/*
-+ * Helper functions to handle compression via zlib
-+ *
-+ * Copyright (C) 2007-2008 Julian Brown
-+ * Copyright (C) 2008 Mike Frysinger
-+ *
-+ * Licensed under the GPL-2 or later.
-+ */
-+
-+#include <assert.h>
-+#include <stdio.h>
-+#include <stdlib.h>
-+
-+#include <zlib.h>
-+#include "compress.h"
-+#include "stubs.h"
-+
-+/* Open an (uncompressed) file as a stream.  Return 0 on success, 1 on
-+   error.
-+   NOTE: The MODE argument must remain valid for the lifetime of the stream,
-+   because it is referred to by reopen_stream_compressed() if it is called.
-+   String constants work fine.  */
-+
-+int
-+fopen_stream_u(stream *fp, const char *path, const char *mode)
-+{
-+	fp->u.filep = fopen(path, mode);
-+	fp->type = (fp->u.filep) ? UNCOMPRESSED : INVALID;
-+	fp->mode = mode;
-+	return (fp->u.filep) ? 0 : 1;
-+}
-+
-+/* Read from stream.  Return number of elements read.  */
-+
-+size_t
-+fread_stream(void *ptr, size_t size, size_t nmemb, stream *str)
-+{
-+	size_t read;
-+
-+	switch (str->type) {
-+		case UNCOMPRESSED:
-+		read = fread(ptr, size, nmemb, str->u.filep);
-+		break;
-+
-+		case COMPRESSED:
-+		read = gzread(str->u.gzfilep, ptr, size * nmemb) / size;
-+		break;
-+
-+		default:
-+		abort();
-+	}
-+
-+	return read;
-+}
-+
-+/* Write to stream.  Return number of elements written.  */
-+
-+size_t
-+fwrite_stream(const void *ptr, size_t size, size_t nmemb, stream *str)
-+{
-+	size_t written;
-+
-+	switch (str->type) {
-+		case UNCOMPRESSED:
-+		written = fwrite(ptr, size, nmemb, str->u.filep);
-+		break;
-+
-+		case COMPRESSED:
-+		written = gzwrite(str->u.gzfilep, ptr, size * nmemb) / size;
-+		break;
-+
-+		default:
-+		abort();
-+	}
-+
-+	return written;
-+}
-+
-+/* Close stream.  */
-+
-+int
-+fclose_stream(stream *str)
-+{
-+	switch (str->type) {
-+		case UNCOMPRESSED:
-+		return fclose(str->u.filep);
-+
-+		case COMPRESSED:
-+		return gzclose(str->u.gzfilep);
-+
-+		default:
-+		abort();
-+	}
-+
-+	return 0;
-+}
-+
-+int
-+ferror_stream(stream *str)
-+{
-+	switch (str->type) {
-+		case UNCOMPRESSED:
-+		return ferror(str->u.filep);
-+
-+		case COMPRESSED:
-+		{
-+			const char *err;
-+			int errno;
-+
-+			err = gzerror(str->u.gzfilep, &errno);
-+			if (errno == Z_OK || errno == Z_STREAM_END)
-+				return 0;
-+			else if (errno == Z_ERRNO)
-+				return 1;
-+			else {
-+				fprintf(stderr, "%s\n", err);
-+				return 1;
-+			}
-+		}
-+		break;
-+
-+		default:
-+		abort();
-+	}
-+
-+	return 0;
-+}
-+
-+int
-+fseek_stream(stream *str, long offset, int whence)
-+{
-+	switch (str->type) {
-+		case UNCOMPRESSED:
-+		return fseek(str->u.filep, offset, whence);
-+
-+		case COMPRESSED:
-+		return gzseek(str->u.gzfilep, offset, whence);
-+
-+		default:
-+		abort();
-+	}
-+}
-+
-+/* Reopen a stream at the current file position.  */
-+
-+void
-+reopen_stream_compressed(stream *str)
-+{
-+	int fd;
-+	long offset, roffset;
-+
-+	/* Already a compressed stream, return immediately  */
-+	if (str->type == COMPRESSED)
-+		return;
-+
-+	if (str->type == INVALID)
-+		abort();
-+
-+	fd = fileno(str->u.filep);
-+	/* Get current (buffered) file position.  */
-+	offset = ftell(str->u.filep);
-+
-+	/* Make sure there's nothing left in buffers.  */
-+	fflush(str->u.filep);
-+
-+	/* Reposition underlying FD.  (Might be unnecessary?)  */
-+	roffset = lseek(fd, offset, SEEK_SET);
-+
-+	assert(roffset == offset);
-+
-+	/* Reopen as compressed stream.  */
-+	str->u.gzfilep = gzdopen(fd, str->mode);
-+	gzsetparams(str->u.gzfilep, 9, Z_DEFAULT_STRATEGY);
-+	str->type = COMPRESSED;
-+}
-+
-+void
-+transfer(stream *ifp, stream *ofp, int count)
-+{
-+	char cmd[1024];
-+	int n, num;
-+
-+	while (count == -1 || count > 0) {
-+		if (count == -1 || count > sizeof(cmd))
-+			num = sizeof(cmd);
-+		else
-+			num = count;
-+		n = fread_stream(cmd, 1, num, ifp);
-+		if (n == 0)
-+			break;
-+		if (fwrite_stream(cmd, n, 1, ofp) != 1)
-+			fatal_perror("Write failed :-(\n");
-+		if (count != -1)
-+			count -= n;
-+	}
-+	if (count > 0)
-+		fatal("Failed to transfer %d bytes\n", count);
-+}
-diff --git a/package/elf2flt/src/compress.h b/package/elf2flt/src/compress.h
-new file mode 100644
-index 0000000..d4b90e1
---- /dev/null
-+++ b/package/elf2flt/src/compress.h
-@@ -0,0 +1,44 @@
-+/*
-+ * Helper functions to handle compression via zlib
-+ *
-+ * Copyright (C) 2007-2008 Julian Brown
-+ * Copyright (C) 2008 Mike Frysinger
-+ *
-+ * Licensed under the GPL-2 or later.
-+ */
-+
-+#ifndef __ELF2FLT_COMPRESS_H__
-+#define __ELF2FLT_COMPRESS_H__
-+
-+#include <zlib.h>
-+
-+typedef enum
-+{
-+  INVALID,
-+  UNCOMPRESSED,
-+  COMPRESSED
-+} stream_type;
-+
-+/* Tagged union holding either a regular FILE* handle or a zlib gzFile
-+   handle.  */
-+typedef struct
-+{
-+  stream_type type;
-+  const char *mode;
-+  union
-+    {
-+      FILE *filep;
-+      gzFile gzfilep;
-+    } u;
-+} stream;
-+
-+int fopen_stream_u(stream *fp, const char *path, const char *mode);
-+size_t fread_stream(void *ptr, size_t size, size_t nmemb, stream *str);
-+size_t fwrite_stream(const void *ptr, size_t size, size_t nmemb, stream *str);
-+int fclose_stream(stream *str);
-+int ferror_stream(stream *str);
-+int fseek_stream(stream *str, long offset, int whence);
-+void reopen_stream_compressed(stream *str);
-+void transfer(stream *ifp, stream *ofp, int count);
-+
-+#endif
-diff --git a/package/elf2flt/src/config.sub b/package/elf2flt/src/config.sub
-index 2072457..4279c84 100755
---- a/package/elf2flt/src/config.sub
-+++ b/package/elf2flt/src/config.sub
-@@ -262,7 +262,7 @@ case $basic_machine in
- 	| pdp10 | pdp11 | pj | pjl \
- 	| powerpc | powerpc64 | powerpc64le | powerpcle | ppcbe \
- 	| pyramid \
--	| sh | sh[1234] | sh[24]a | sh[24]aeb | sh[23]e | sh[34]eb | sheb | shbe | shle | sh[1234]le | sh3ele \
-+	| sh | sh[1234] | sh[23]e | sh[34]eb | shbe | shle | sh[1234]le | sh3ele \
- 	| sh64 | sh64le \
- 	| sparc | sparc64 | sparc64b | sparc86x | sparclet | sparclite \
- 	| sparcv8 | sparcv9 | sparcv9b \
-@@ -342,8 +342,8 @@ case $basic_machine in
- 	| powerpc-* | powerpc64-* | powerpc64le-* | powerpcle-* | ppcbe-* \
- 	| pyramid-* \
- 	| romp-* | rs6000-* \
--	| sh-* | sh[1234]-* | sh[24]a-* | sh[24]aeb-* | sh[23]e-* | sh[34]eb-* \
--	| sheb-* | shbe-* | shle-* | sh[1234]le-* | sh3ele-* | sh64-* | sh64le-* \
-+	| sh-* | sh[1234]-* | sh[23]e-* | sh[34]eb-* | shbe-* \
-+	| shle-* | sh[1234]le-* | sh3ele-* | sh64-* | sh64le-* \
- 	| sparc-* | sparc64-* | sparc64b-* | sparc86x-* | sparclet-* \
- 	| sparclite-* \
- 	| sparcv8-* | sparcv9-* | sparcv9b-* | strongarm-* | sv1-* | sx?-* \
-@@ -1097,7 +1097,7 @@ case $basic_machine in
- 	we32k)
- 		basic_machine=we32k-att
- 		;;
--	sh | sh[1234] | sh[24]a | sh[24]aeb | sh[23]e | sh[34]eb | sheb | shbe | shle | sh[1234]le | sh3ele)
-+	sh3 | sh4 | sh[34]eb | sh[1234]le | sh[23]ele)
- 		basic_machine=sh-unknown
- 		;;
- 	sh64)
-diff --git a/package/elf2flt/src/configure b/package/elf2flt/src/configure
-index d672662..2dcbc48 100755
---- a/package/elf2flt/src/configure
-+++ b/package/elf2flt/src/configure
-@@ -1,25 +1,82 @@
- #! /bin/sh
- # Guess values for system-dependent variables and create Makefiles.
--# Generated by GNU Autoconf 2.59.
-+# Generated by GNU Autoconf 2.63.
- #
--# Copyright (C) 2003 Free Software Foundation, Inc.
-+# Copyright (C) 1992, 1993, 1994, 1995, 1996, 1998, 1999, 2000, 2001,
-+# 2002, 2003, 2004, 2005, 2006, 2007, 2008 Free Software Foundation, Inc.
- # This configure script is free software; the Free Software Foundation
- # gives unlimited permission to copy, distribute and modify it.
- ## --------------------- ##
- ## M4sh Initialization.  ##
- ## --------------------- ##
- 
--# Be Bourne compatible
-+# Be more Bourne compatible
-+DUALCASE=1; export DUALCASE # for MKS sh
- if test -n "${ZSH_VERSION+set}" && (emulate sh) >/dev/null 2>&1; then
-   emulate sh
-   NULLCMD=:
--  # Zsh 3.x and 4.x performs word splitting on ${1+"$@"}, which
-+  # Pre-4.2 versions of Zsh do word splitting on ${1+"$@"}, which
-   # is contrary to our usage.  Disable this feature.
-   alias -g '${1+"$@"}'='"$@"'
--elif test -n "${BASH_VERSION+set}" && (set -o posix) >/dev/null 2>&1; then
--  set -o posix
-+  setopt NO_GLOB_SUBST
-+else
-+  case `(set -o) 2>/dev/null` in
-+  *posix*) set -o posix ;;
-+esac
-+
-+fi
-+
-+
-+
-+
-+# PATH needs CR
-+# Avoid depending upon Character Ranges.
-+as_cr_letters='abcdefghijklmnopqrstuvwxyz'
-+as_cr_LETTERS='ABCDEFGHIJKLMNOPQRSTUVWXYZ'
-+as_cr_Letters=$as_cr_letters$as_cr_LETTERS
-+as_cr_digits='0123456789'
-+as_cr_alnum=$as_cr_Letters$as_cr_digits
-+
-+as_nl='
-+'
-+export as_nl
-+# Printing a long string crashes Solaris 7 /usr/bin/printf.
-+as_echo='\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\'
-+as_echo=$as_echo$as_echo$as_echo$as_echo$as_echo
-+as_echo=$as_echo$as_echo$as_echo$as_echo$as_echo$as_echo
-+if (test "X`printf %s $as_echo`" = "X$as_echo") 2>/dev/null; then
-+  as_echo='printf %s\n'
-+  as_echo_n='printf %s'
-+else
-+  if test "X`(/usr/ucb/echo -n -n $as_echo) 2>/dev/null`" = "X-n $as_echo"; then
-+    as_echo_body='eval /usr/ucb/echo -n "$1$as_nl"'
-+    as_echo_n='/usr/ucb/echo -n'
-+  else
-+    as_echo_body='eval expr "X$1" : "X\\(.*\\)"'
-+    as_echo_n_body='eval
-+      arg=$1;
-+      case $arg in
-+      *"$as_nl"*)
-+	expr "X$arg" : "X\\(.*\\)$as_nl";
-+	arg=`expr "X$arg" : ".*$as_nl\\(.*\\)"`;;
-+      esac;
-+      expr "X$arg" : "X\\(.*\\)" | tr -d "$as_nl"
-+    '
-+    export as_echo_n_body
-+    as_echo_n='sh -c $as_echo_n_body as_echo'
-+  fi
-+  export as_echo_body
-+  as_echo='sh -c $as_echo_body as_echo'
-+fi
-+
-+# The user is always right.
-+if test "${PATH_SEPARATOR+set}" != set; then
-+  PATH_SEPARATOR=:
-+  (PATH='/bin;/bin'; FPATH=$PATH; sh -c :) >/dev/null 2>&1 && {
-+    (PATH='/bin:/bin'; FPATH=$PATH; sh -c :) >/dev/null 2>&1 ||
-+      PATH_SEPARATOR=';'
-+  }
- fi
--DUALCASE=1; export DUALCASE # for MKS sh
- 
- # Support unset when possible.
- if ( (MAIL=60; unset MAIL) || exit) >/dev/null 2>&1; then
-@@ -29,33 +86,60 @@ else
- fi
- 
- 
-+# IFS
-+# We need space, tab and new line, in precisely that order.  Quoting is
-+# there to prevent editors from complaining about space-tab.
-+# (If _AS_PATH_WALK were called with IFS unset, it would disable word
-+# splitting by setting IFS to empty value.)
-+IFS=" ""	$as_nl"
-+
-+# Find who we are.  Look in the path if we contain no directory separator.
-+case $0 in
-+  *[\\/]* ) as_myself=$0 ;;
-+  *) as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
-+for as_dir in $PATH
-+do
-+  IFS=$as_save_IFS
-+  test -z "$as_dir" && as_dir=.
-+  test -r "$as_dir/$0" && as_myself=$as_dir/$0 && break
-+done
-+IFS=$as_save_IFS
-+
-+     ;;
-+esac
-+# We did not find ourselves, most probably we were run as `sh COMMAND'
-+# in which case we are not to be found in the path.
-+if test "x$as_myself" = x; then
-+  as_myself=$0
-+fi
-+if test ! -f "$as_myself"; then
-+  $as_echo "$as_myself: error: cannot find myself; rerun with an absolute file name" >&2
-+  { (exit 1); exit 1; }
-+fi
-+
- # Work around bugs in pre-3.0 UWIN ksh.
--$as_unset ENV MAIL MAILPATH
-+for as_var in ENV MAIL MAILPATH
-+do ($as_unset $as_var) >/dev/null 2>&1 && $as_unset $as_var
-+done
- PS1='$ '
- PS2='> '
- PS4='+ '
- 
- # NLS nuisances.
--for as_var in \
--  LANG LANGUAGE LC_ADDRESS LC_ALL LC_COLLATE LC_CTYPE LC_IDENTIFICATION \
--  LC_MEASUREMENT LC_MESSAGES LC_MONETARY LC_NAME LC_NUMERIC LC_PAPER \
--  LC_TELEPHONE LC_TIME
--do
--  if (set +x; test -z "`(eval $as_var=C; export $as_var) 2>&1`"); then
--    eval $as_var=C; export $as_var
--  else
--    $as_unset $as_var
--  fi
--done
-+LC_ALL=C
-+export LC_ALL
-+LANGUAGE=C
-+export LANGUAGE
- 
- # Required to use basename.
--if expr a : '\(a\)' >/dev/null 2>&1; then
-+if expr a : '\(a\)' >/dev/null 2>&1 &&
-+   test "X`expr 00001 : '.*\(...\)'`" = X001; then
-   as_expr=expr
- else
-   as_expr=false
- fi
- 
--if (basename /) >/dev/null 2>&1 && test "X`basename / 2>&1`" = "X/"; then
-+if (basename -- /) >/dev/null 2>&1 && test "X`basename -- / 2>&1`" = "X/"; then
-   as_basename=basename
- else
-   as_basename=false
-@@ -63,157 +147,391 @@ fi
- 
- 
- # Name of the executable.
--as_me=`$as_basename "$0" ||
-+as_me=`$as_basename -- "$0" ||
- $as_expr X/"$0" : '.*/\([^/][^/]*\)/*$' \| \
- 	 X"$0" : 'X\(//\)$' \| \
--	 X"$0" : 'X\(/\)$' \| \
--	 .     : '\(.\)' 2>/dev/null ||
--echo X/"$0" |
--    sed '/^.*\/\([^/][^/]*\)\/*$/{ s//\1/; q; }
--  	  /^X\/\(\/\/\)$/{ s//\1/; q; }
--  	  /^X\/\(\/\).*/{ s//\1/; q; }
--  	  s/.*/./; q'`
-+	 X"$0" : 'X\(/\)' \| . 2>/dev/null ||
-+$as_echo X/"$0" |
-+    sed '/^.*\/\([^/][^/]*\)\/*$/{
-+	    s//\1/
-+	    q
-+	  }
-+	  /^X\/\(\/\/\)$/{
-+	    s//\1/
-+	    q
-+	  }
-+	  /^X\/\(\/\).*/{
-+	    s//\1/
-+	    q
-+	  }
-+	  s/.*/./; q'`
- 
-+# CDPATH.
-+$as_unset CDPATH
- 
--# PATH needs CR, and LINENO needs CR and PATH.
--# Avoid depending upon Character Ranges.
--as_cr_letters='abcdefghijklmnopqrstuvwxyz'
--as_cr_LETTERS='ABCDEFGHIJKLMNOPQRSTUVWXYZ'
--as_cr_Letters=$as_cr_letters$as_cr_LETTERS
--as_cr_digits='0123456789'
--as_cr_alnum=$as_cr_Letters$as_cr_digits
- 
--# The user is always right.
--if test "${PATH_SEPARATOR+set}" != set; then
--  echo "#! /bin/sh" >conf$$.sh
--  echo  "exit 0"   >>conf$$.sh
--  chmod +x conf$$.sh
--  if (PATH="/nonexistent;."; conf$$.sh) >/dev/null 2>&1; then
--    PATH_SEPARATOR=';'
--  else
--    PATH_SEPARATOR=:
--  fi
--  rm -f conf$$.sh
-+if test "x$CONFIG_SHELL" = x; then
-+  if (eval ":") 2>/dev/null; then
-+  as_have_required=yes
-+else
-+  as_have_required=no
- fi
- 
-+  if test $as_have_required = yes &&	 (eval ":
-+(as_func_return () {
-+  (exit \$1)
-+}
-+as_func_success () {
-+  as_func_return 0
-+}
-+as_func_failure () {
-+  as_func_return 1
-+}
-+as_func_ret_success () {
-+  return 0
-+}
-+as_func_ret_failure () {
-+  return 1
-+}
- 
--  as_lineno_1=$LINENO
--  as_lineno_2=$LINENO
--  as_lineno_3=`(expr $as_lineno_1 + 1) 2>/dev/null`
--  test "x$as_lineno_1" != "x$as_lineno_2" &&
--  test "x$as_lineno_3"  = "x$as_lineno_2"  || {
--  # Find who we are.  Look in the path if we contain no path at all
--  # relative or not.
--  case $0 in
--    *[\\/]* ) as_myself=$0 ;;
--    *) as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
--for as_dir in $PATH
--do
--  IFS=$as_save_IFS
--  test -z "$as_dir" && as_dir=.
--  test -r "$as_dir/$0" && as_myself=$as_dir/$0 && break
--done
-+exitcode=0
-+if as_func_success; then
-+  :
-+else
-+  exitcode=1
-+  echo as_func_success failed.
-+fi
- 
--       ;;
--  esac
--  # We did not find ourselves, most probably we were run as `sh COMMAND'
--  # in which case we are not to be found in the path.
--  if test "x$as_myself" = x; then
--    as_myself=$0
--  fi
--  if test ! -f "$as_myself"; then
--    { echo "$as_me: error: cannot find myself; rerun with an absolute path" >&2
--   { (exit 1); exit 1; }; }
--  fi
--  case $CONFIG_SHELL in
--  '')
-+if as_func_failure; then
-+  exitcode=1
-+  echo as_func_failure succeeded.
-+fi
-+
-+if as_func_ret_success; then
-+  :
-+else
-+  exitcode=1
-+  echo as_func_ret_success failed.
-+fi
-+
-+if as_func_ret_failure; then
-+  exitcode=1
-+  echo as_func_ret_failure succeeded.
-+fi
-+
-+if ( set x; as_func_ret_success y && test x = \"\$1\" ); then
-+  :
-+else
-+  exitcode=1
-+  echo positional parameters were not saved.
-+fi
-+
-+test \$exitcode = 0) || { (exit 1); exit 1; }
-+
-+(
-+  as_lineno_1=\$LINENO
-+  as_lineno_2=\$LINENO
-+  test \"x\$as_lineno_1\" != \"x\$as_lineno_2\" &&
-+  test \"x\`expr \$as_lineno_1 + 1\`\" = \"x\$as_lineno_2\") || { (exit 1); exit 1; }
-+") 2> /dev/null; then
-+  :
-+else
-+  as_candidate_shells=
-     as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
- for as_dir in /bin$PATH_SEPARATOR/usr/bin$PATH_SEPARATOR$PATH
- do
-   IFS=$as_save_IFS
-   test -z "$as_dir" && as_dir=.
--  for as_base in sh bash ksh sh5; do
--	 case $as_dir in
-+  case $as_dir in
- 	 /*)
--	   if ("$as_dir/$as_base" -c '
-+	   for as_base in sh bash ksh sh5; do
-+	     as_candidate_shells="$as_candidate_shells $as_dir/$as_base"
-+	   done;;
-+       esac
-+done
-+IFS=$as_save_IFS
-+
-+
-+      for as_shell in $as_candidate_shells $SHELL; do
-+	 # Try only shells that exist, to save several forks.
-+	 if { test -f "$as_shell" || test -f "$as_shell.exe"; } &&
-+		{ ("$as_shell") 2> /dev/null <<\_ASEOF
-+if test -n "${ZSH_VERSION+set}" && (emulate sh) >/dev/null 2>&1; then
-+  emulate sh
-+  NULLCMD=:
-+  # Pre-4.2 versions of Zsh do word splitting on ${1+"$@"}, which
-+  # is contrary to our usage.  Disable this feature.
-+  alias -g '${1+"$@"}'='"$@"'
-+  setopt NO_GLOB_SUBST
-+else
-+  case `(set -o) 2>/dev/null` in
-+  *posix*) set -o posix ;;
-+esac
-+
-+fi
-+
-+
-+:
-+_ASEOF
-+}; then
-+  CONFIG_SHELL=$as_shell
-+	       as_have_required=yes
-+	       if { "$as_shell" 2> /dev/null <<\_ASEOF
-+if test -n "${ZSH_VERSION+set}" && (emulate sh) >/dev/null 2>&1; then
-+  emulate sh
-+  NULLCMD=:
-+  # Pre-4.2 versions of Zsh do word splitting on ${1+"$@"}, which
-+  # is contrary to our usage.  Disable this feature.
-+  alias -g '${1+"$@"}'='"$@"'
-+  setopt NO_GLOB_SUBST
-+else
-+  case `(set -o) 2>/dev/null` in
-+  *posix*) set -o posix ;;
-+esac
-+
-+fi
-+
-+
-+:
-+(as_func_return () {
-+  (exit $1)
-+}
-+as_func_success () {
-+  as_func_return 0
-+}
-+as_func_failure () {
-+  as_func_return 1
-+}
-+as_func_ret_success () {
-+  return 0
-+}
-+as_func_ret_failure () {
-+  return 1
-+}
-+
-+exitcode=0
-+if as_func_success; then
-+  :
-+else
-+  exitcode=1
-+  echo as_func_success failed.
-+fi
-+
-+if as_func_failure; then
-+  exitcode=1
-+  echo as_func_failure succeeded.
-+fi
-+
-+if as_func_ret_success; then
-+  :
-+else
-+  exitcode=1
-+  echo as_func_ret_success failed.
-+fi
-+
-+if as_func_ret_failure; then
-+  exitcode=1
-+  echo as_func_ret_failure succeeded.
-+fi
-+
-+if ( set x; as_func_ret_success y && test x = "$1" ); then
-+  :
-+else
-+  exitcode=1
-+  echo positional parameters were not saved.
-+fi
-+
-+test $exitcode = 0) || { (exit 1); exit 1; }
-+
-+(
-   as_lineno_1=$LINENO
-   as_lineno_2=$LINENO
--  as_lineno_3=`(expr $as_lineno_1 + 1) 2>/dev/null`
-   test "x$as_lineno_1" != "x$as_lineno_2" &&
--  test "x$as_lineno_3"  = "x$as_lineno_2" ') 2>/dev/null; then
--	     $as_unset BASH_ENV || test "${BASH_ENV+set}" != set || { BASH_ENV=; export BASH_ENV; }
--	     $as_unset ENV || test "${ENV+set}" != set || { ENV=; export ENV; }
--	     CONFIG_SHELL=$as_dir/$as_base
--	     export CONFIG_SHELL
--	     exec "$CONFIG_SHELL" "$0" ${1+"$@"}
--	   fi;;
--	 esac
--       done
--done
--;;
--  esac
-+  test "x`expr $as_lineno_1 + 1`" = "x$as_lineno_2") || { (exit 1); exit 1; }
-+
-+_ASEOF
-+}; then
-+  break
-+fi
-+
-+fi
-+
-+      done
-+
-+      if test "x$CONFIG_SHELL" != x; then
-+  for as_var in BASH_ENV ENV
-+	do ($as_unset $as_var) >/dev/null 2>&1 && $as_unset $as_var
-+	done
-+	export CONFIG_SHELL
-+	exec "$CONFIG_SHELL" "$as_myself" ${1+"$@"}
-+fi
-+
-+
-+    if test $as_have_required = no; then
-+  echo This script requires a shell more modern than all the
-+      echo shells that I found on your system.  Please install a
-+      echo modern shell, or manually run the script under such a
-+      echo shell if you do have one.
-+      { (exit 1); exit 1; }
-+fi
-+
-+
-+fi
-+
-+fi
-+
-+
-+
-+(eval "as_func_return () {
-+  (exit \$1)
-+}
-+as_func_success () {
-+  as_func_return 0
-+}
-+as_func_failure () {
-+  as_func_return 1
-+}
-+as_func_ret_success () {
-+  return 0
-+}
-+as_func_ret_failure () {
-+  return 1
-+}
-+
-+exitcode=0
-+if as_func_success; then
-+  :
-+else
-+  exitcode=1
-+  echo as_func_success failed.
-+fi
-+
-+if as_func_failure; then
-+  exitcode=1
-+  echo as_func_failure succeeded.
-+fi
-+
-+if as_func_ret_success; then
-+  :
-+else
-+  exitcode=1
-+  echo as_func_ret_success failed.
-+fi
-+
-+if as_func_ret_failure; then
-+  exitcode=1
-+  echo as_func_ret_failure succeeded.
-+fi
-+
-+if ( set x; as_func_ret_success y && test x = \"\$1\" ); then
-+  :
-+else
-+  exitcode=1
-+  echo positional parameters were not saved.
-+fi
-+
-+test \$exitcode = 0") || {
-+  echo No shell found that supports shell functions.
-+  echo Please tell bug-autoconf at gnu.org about your system,
-+  echo including any error possibly output before this message.
-+  echo This can help us improve future autoconf versions.
-+  echo Configuration will now proceed without shell functions.
-+}
-+
-+
-+
-+  as_lineno_1=$LINENO
-+  as_lineno_2=$LINENO
-+  test "x$as_lineno_1" != "x$as_lineno_2" &&
-+  test "x`expr $as_lineno_1 + 1`" = "x$as_lineno_2" || {
- 
-   # Create $as_me.lineno as a copy of $as_myself, but with $LINENO
-   # uniformly replaced by the line number.  The first 'sed' inserts a
--  # line-number line before each line; the second 'sed' does the real
--  # work.  The second script uses 'N' to pair each line-number line
--  # with the numbered line, and appends trailing '-' during
--  # substitution so that $LINENO is not a special case at line end.
-+  # line-number line after each line using $LINENO; the second 'sed'
-+  # does the real work.  The second script uses 'N' to pair each
-+  # line-number line with the line containing $LINENO, and appends
-+  # trailing '-' during substitution so that $LINENO is not a special
-+  # case at line end.
-   # (Raja R Harinath suggested sed '=', and Paul Eggert wrote the
--  # second 'sed' script.  Blame Lee E. McMahon for sed's syntax.  :-)
--  sed '=' <$as_myself |
-+  # scripts with optimization help from Paolo Bonzini.  Blame Lee
-+  # E. McMahon (1931-1989) for sed's syntax.  :-)
-+  sed -n '
-+    p
-+    /[$]LINENO/=
-+  ' <$as_myself |
-     sed '
-+      s/[$]LINENO.*/&-/
-+      t lineno
-+      b
-+      :lineno
-       N
--      s,$,-,
--      : loop
--      s,^\(['$as_cr_digits']*\)\(.*\)[$]LINENO\([^'$as_cr_alnum'_]\),\1\2\1\3,
-+      :loop
-+      s/[$]LINENO\([^'$as_cr_alnum'_].*\n\)\(.*\)/\2\1\2/
-       t loop
--      s,-$,,
--      s,^['$as_cr_digits']*\n,,
-+      s/-\n.*//
-     ' >$as_me.lineno &&
--  chmod +x $as_me.lineno ||
--    { echo "$as_me: error: cannot create $as_me.lineno; rerun with a POSIX shell" >&2
-+  chmod +x "$as_me.lineno" ||
-+    { $as_echo "$as_me: error: cannot create $as_me.lineno; rerun with a POSIX shell" >&2
-    { (exit 1); exit 1; }; }
- 
-   # Don't try to exec as it changes $[0], causing all sort of problems
-   # (the dirname of $[0] is not the place where we might find the
--  # original and so on.  Autoconf is especially sensible to this).
--  . ./$as_me.lineno
-+  # original and so on.  Autoconf is especially sensitive to this).
-+  . "./$as_me.lineno"
-   # Exit status is that of the last command.
-   exit
- }
- 
- 
--case `echo "testing\c"; echo 1,2,3`,`echo -n testing; echo 1,2,3` in
--  *c*,-n*) ECHO_N= ECHO_C='
--' ECHO_T='	' ;;
--  *c*,*  ) ECHO_N=-n ECHO_C= ECHO_T= ;;
--  *)       ECHO_N= ECHO_C='\c' ECHO_T= ;;
--esac
-+if (as_dir=`dirname -- /` && test "X$as_dir" = X/) >/dev/null 2>&1; then
-+  as_dirname=dirname
-+else
-+  as_dirname=false
-+fi
- 
--if expr a : '\(a\)' >/dev/null 2>&1; then
-+ECHO_C= ECHO_N= ECHO_T=
-+case `echo -n x` in
-+-n*)
-+  case `echo 'x\c'` in
-+  *c*) ECHO_T='	';;	# ECHO_T is single tab character.
-+  *)   ECHO_C='\c';;
-+  esac;;
-+*)
-+  ECHO_N='-n';;
-+esac
-+if expr a : '\(a\)' >/dev/null 2>&1 &&
-+   test "X`expr 00001 : '.*\(...\)'`" = X001; then
-   as_expr=expr
- else
-   as_expr=false
- fi
- 
- rm -f conf$$ conf$$.exe conf$$.file
--echo >conf$$.file
--if ln -s conf$$.file conf$$ 2>/dev/null; then
--  # We could just check for DJGPP; but this test a) works b) is more generic
--  # and c) will remain valid once DJGPP supports symlinks (DJGPP 2.04).
--  if test -f conf$$.exe; then
--    # Don't use ln at all; we don't have any links
--    as_ln_s='cp -p'
--  else
-+if test -d conf$$.dir; then
-+  rm -f conf$$.dir/conf$$.file
-+else
-+  rm -f conf$$.dir
-+  mkdir conf$$.dir 2>/dev/null
-+fi
-+if (echo >conf$$.file) 2>/dev/null; then
-+  if ln -s conf$$.file conf$$ 2>/dev/null; then
-     as_ln_s='ln -s'
-+    # ... but there are two gotchas:
-+    # 1) On MSYS, both `ln -s file dir' and `ln file dir' fail.
-+    # 2) DJGPP < 2.04 has no symlinks; `ln -s' creates a wrapper executable.
-+    # In both cases, we have to default to `cp -p'.
-+    ln -s conf$$.file conf$$.dir 2>/dev/null && test ! -f conf$$.exe ||
-+      as_ln_s='cp -p'
-+  elif ln conf$$.file conf$$ 2>/dev/null; then
-+    as_ln_s=ln
-+  else
-+    as_ln_s='cp -p'
-   fi
--elif ln conf$$.file conf$$ 2>/dev/null; then
--  as_ln_s=ln
- else
-   as_ln_s='cp -p'
- fi
--rm -f conf$$ conf$$.exe conf$$.file
-+rm -f conf$$ conf$$.exe conf$$.dir/conf$$.file conf$$.file
-+rmdir conf$$.dir 2>/dev/null
- 
- if mkdir -p . 2>/dev/null; then
-   as_mkdir_p=:
-@@ -222,7 +540,28 @@ else
-   as_mkdir_p=false
- fi
- 
--as_executable_p="test -f"
-+if test -x / >/dev/null 2>&1; then
-+  as_test_x='test -x'
-+else
-+  if ls -dL / >/dev/null 2>&1; then
-+    as_ls_L_option=L
-+  else
-+    as_ls_L_option=
-+  fi
-+  as_test_x='
-+    eval sh -c '\''
-+      if test -d "$1"; then
-+	test -d "$1/.";
-+      else
-+	case $1 in
-+	-*)set "./$1";;
-+	esac;
-+	case `ls -ld'$as_ls_L_option' "$1" 2>/dev/null` in
-+	???[sx]*):;;*)false;;esac;fi
-+    '\'' sh
-+  '
-+fi
-+as_executable_p=$as_test_x
- 
- # Sed expression to map a string onto a valid CPP name.
- as_tr_cpp="eval sed 'y%*$as_cr_letters%P$as_cr_LETTERS%;s%[^_$as_cr_alnum]%_%g'"
-@@ -231,39 +570,27 @@ as_tr_cpp="eval sed 'y%*$as_cr_letters%P$as_cr_LETTERS%;s%[^_$as_cr_alnum]%_%g'"
- as_tr_sh="eval sed 'y%*+%pp%;s%[^_$as_cr_alnum]%_%g'"
- 
- 
--# IFS
--# We need space, tab and new line, in precisely that order.
--as_nl='
--'
--IFS=" 	$as_nl"
--
--# CDPATH.
--$as_unset CDPATH
- 
-+exec 7<&0 </dev/null 6>&1
- 
- # Name of the host.
- # hostname on some systems (SVR3.2, Linux) returns a bogus exit status,
- # so uname gets run too.
- ac_hostname=`(hostname || uname -n) 2>/dev/null | sed 1q`
- 
--exec 6>&1
--
- #
- # Initializations.
- #
- ac_default_prefix=/usr/local
-+ac_clean_files=
- ac_config_libobj_dir=.
-+LIBOBJS=
- cross_compiling=no
- subdirs=
- MFLAGS=
- MAKEFLAGS=
- SHELL=${CONFIG_SHELL-/bin/sh}
- 
--# Maximum number of lines to put in a shell here document.
--# This variable seems obsolete.  It should probably be removed, and
--# only ac_max_sed_lines should be used.
--: ${ac_max_here_lines=38}
--
- # Identity of this package.
- PACKAGE_NAME=
- PACKAGE_TARNAME=
-@@ -275,46 +602,145 @@ ac_unique_file="elf2flt.c"
- # Factoring default headers for most tests.
- ac_includes_default="\
- #include <stdio.h>
--#if HAVE_SYS_TYPES_H
-+#ifdef HAVE_SYS_TYPES_H
- # include <sys/types.h>
- #endif
--#if HAVE_SYS_STAT_H
-+#ifdef HAVE_SYS_STAT_H
- # include <sys/stat.h>
- #endif
--#if STDC_HEADERS
-+#ifdef STDC_HEADERS
- # include <stdlib.h>
- # include <stddef.h>
- #else
--# if HAVE_STDLIB_H
-+# ifdef HAVE_STDLIB_H
- #  include <stdlib.h>
- # endif
- #endif
--#if HAVE_STRING_H
--# if !STDC_HEADERS && HAVE_MEMORY_H
-+#ifdef HAVE_STRING_H
-+# if !defined STDC_HEADERS && defined HAVE_MEMORY_H
- #  include <memory.h>
- # endif
- # include <string.h>
- #endif
--#if HAVE_STRINGS_H
-+#ifdef HAVE_STRINGS_H
- # include <strings.h>
- #endif
--#if HAVE_INTTYPES_H
-+#ifdef HAVE_INTTYPES_H
- # include <inttypes.h>
--#else
--# if HAVE_STDINT_H
--#  include <stdint.h>
--# endif
- #endif
--#if HAVE_UNISTD_H
-+#ifdef HAVE_STDINT_H
-+# include <stdint.h>
-+#endif
-+#ifdef HAVE_UNISTD_H
- # include <unistd.h>
- #endif"
- 
--ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS build build_cpu build_vendor build_os host host_cpu host_vendor host_os target target_cpu target_vendor target_os CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA CPP EGREP bfd_include_dir binutils_include_dir binutils_ldscript_dir got_check emit_relocs LIBOBJS LTLIBOBJS'
-+ac_subst_vars='LTLIBOBJS
-+LIBOBJS
-+SYMBOL_PREFIX
-+always_reloc_text
-+emit_ctor_dtor
-+emit_relocs
-+got_check
-+use_ld_elf2flt_binary
-+binutils_ldscript_dir
-+zlib_include_dir
-+binutils_include_dir
-+bfd_include_dir
-+INSTALL_DATA
-+INSTALL_SCRIPT
-+INSTALL_PROGRAM
-+EGREP
-+GREP
-+CPP
-+OBJEXT
-+EXEEXT
-+ac_ct_CC
-+CPPFLAGS
-+LDFLAGS
-+CFLAGS
-+CC
-+target_os
-+target_vendor
-+target_cpu
-+target
-+host_os
-+host_vendor
-+host_cpu
-+host
-+build_os
-+build_vendor
-+build_cpu
-+build
-+target_alias
-+host_alias
-+build_alias
-+LIBS
-+ECHO_T
-+ECHO_N
-+ECHO_C
-+DEFS
-+mandir
-+localedir
-+libdir
-+psdir
-+pdfdir
-+dvidir
-+htmldir
-+infodir
-+docdir
-+oldincludedir
-+includedir
-+localstatedir
-+sharedstatedir
-+sysconfdir
-+datadir
-+datarootdir
-+libexecdir
-+sbindir
-+bindir
-+program_transform_name
-+prefix
-+exec_prefix
-+PACKAGE_BUGREPORT
-+PACKAGE_STRING
-+PACKAGE_VERSION
-+PACKAGE_TARNAME
-+PACKAGE_NAME
-+PATH_SEPARATOR
-+SHELL'
- ac_subst_files=''
-+ac_user_opts='
-+enable_option_checking
-+with_zlib_prefix
-+with_libbfd
-+with_libiberty
-+with_bfd_include_dir
-+with_binutils_include_dir
-+with_binutils_ldscript_dir
-+with_binutils_build_dir
-+enable_ld_elf2flt_binary
-+enable_got_check
-+enable_emit_relocs
-+enable_emit_ctor_dtor
-+enable_always_reloc_text
-+'
-+      ac_precious_vars='build_alias
-+host_alias
-+target_alias
-+CC
-+CFLAGS
-+LDFLAGS
-+LIBS
-+CPPFLAGS
-+CPP'
-+
- 
- # Initialize some variables set by options.
- ac_init_help=
- ac_init_version=false
-+ac_unrecognized_opts=
-+ac_unrecognized_sep=
- # The variables have the same names as the options, with
- # dashes changed to underlines.
- cache_file=/dev/null
-@@ -337,34 +763,48 @@ x_libraries=NONE
- # and all the variables that are supposed to be based on exec_prefix
- # by default will actually change.
- # Use braces instead of parens because sh, perl, etc. also accept them.
-+# (The list follows the same order as the GNU Coding Standards.)
- bindir='${exec_prefix}/bin'
- sbindir='${exec_prefix}/sbin'
- libexecdir='${exec_prefix}/libexec'
--datadir='${prefix}/share'
-+datarootdir='${prefix}/share'
-+datadir='${datarootdir}'
- sysconfdir='${prefix}/etc'
- sharedstatedir='${prefix}/com'
- localstatedir='${prefix}/var'
--libdir='${exec_prefix}/lib'
- includedir='${prefix}/include'
- oldincludedir='/usr/include'
--infodir='${prefix}/info'
--mandir='${prefix}/man'
-+docdir='${datarootdir}/doc/${PACKAGE}'
-+infodir='${datarootdir}/info'
-+htmldir='${docdir}'
-+dvidir='${docdir}'
-+pdfdir='${docdir}'
-+psdir='${docdir}'
-+libdir='${exec_prefix}/lib'
-+localedir='${datarootdir}/locale'
-+mandir='${datarootdir}/man'
- 
- ac_prev=
-+ac_dashdash=
- for ac_option
- do
-   # If the previous option needs an argument, assign it.
-   if test -n "$ac_prev"; then
--    eval "$ac_prev=\$ac_option"
-+    eval $ac_prev=\$ac_option
-     ac_prev=
-     continue
-   fi
- 
--  ac_optarg=`expr "x$ac_option" : 'x[^=]*=\(.*\)'`
-+  case $ac_option in
-+  *=*)	ac_optarg=`expr "X$ac_option" : '[^=]*=\(.*\)'` ;;
-+  *)	ac_optarg=yes ;;
-+  esac
- 
-   # Accept the important Cygnus configure options, so we can diagnose typos.
- 
--  case $ac_option in
-+  case $ac_dashdash$ac_option in
-+  --)
-+    ac_dashdash=yes ;;
- 
-   -bindir | --bindir | --bindi | --bind | --bin | --bi)
-     ac_prev=bindir ;;
-@@ -386,33 +826,61 @@ do
-   --config-cache | -C)
-     cache_file=config.cache ;;
- 
--  -datadir | --datadir | --datadi | --datad | --data | --dat | --da)
-+  -datadir | --datadir | --datadi | --datad)
-     ac_prev=datadir ;;
--  -datadir=* | --datadir=* | --datadi=* | --datad=* | --data=* | --dat=* \
--  | --da=*)
-+  -datadir=* | --datadir=* | --datadi=* | --datad=*)
-     datadir=$ac_optarg ;;
- 
-+  -datarootdir | --datarootdir | --datarootdi | --datarootd | --dataroot \
-+  | --dataroo | --dataro | --datar)
-+    ac_prev=datarootdir ;;
-+  -datarootdir=* | --datarootdir=* | --datarootdi=* | --datarootd=* \
-+  | --dataroot=* | --dataroo=* | --dataro=* | --datar=*)
-+    datarootdir=$ac_optarg ;;
-+
-   -disable-* | --disable-*)
--    ac_feature=`expr "x$ac_option" : 'x-*disable-\(.*\)'`
-+    ac_useropt=`expr "x$ac_option" : 'x-*disable-\(.*\)'`
-     # Reject names that are not valid shell variable names.
--    expr "x$ac_feature" : ".*[^-_$as_cr_alnum]" >/dev/null &&
--      { echo "$as_me: error: invalid feature name: $ac_feature" >&2
-+    expr "x$ac_useropt" : ".*[^-+._$as_cr_alnum]" >/dev/null &&
-+      { $as_echo "$as_me: error: invalid feature name: $ac_useropt" >&2
-    { (exit 1); exit 1; }; }
--    ac_feature=`echo $ac_feature | sed 's/-/_/g'`
--    eval "enable_$ac_feature=no" ;;
-+    ac_useropt_orig=$ac_useropt
-+    ac_useropt=`$as_echo "$ac_useropt" | sed 's/[-+.]/_/g'`
-+    case $ac_user_opts in
-+      *"
-+"enable_$ac_useropt"
-+"*) ;;
-+      *) ac_unrecognized_opts="$ac_unrecognized_opts$ac_unrecognized_sep--disable-$ac_useropt_orig"
-+	 ac_unrecognized_sep=', ';;
-+    esac
-+    eval enable_$ac_useropt=no ;;
-+
-+  -docdir | --docdir | --docdi | --doc | --do)
-+    ac_prev=docdir ;;
-+  -docdir=* | --docdir=* | --docdi=* | --doc=* | --do=*)
-+    docdir=$ac_optarg ;;
-+
-+  -dvidir | --dvidir | --dvidi | --dvid | --dvi | --dv)
-+    ac_prev=dvidir ;;
-+  -dvidir=* | --dvidir=* | --dvidi=* | --dvid=* | --dvi=* | --dv=*)
-+    dvidir=$ac_optarg ;;
- 
-   -enable-* | --enable-*)
--    ac_feature=`expr "x$ac_option" : 'x-*enable-\([^=]*\)'`
-+    ac_useropt=`expr "x$ac_option" : 'x-*enable-\([^=]*\)'`
-     # Reject names that are not valid shell variable names.
--    expr "x$ac_feature" : ".*[^-_$as_cr_alnum]" >/dev/null &&
--      { echo "$as_me: error: invalid feature name: $ac_feature" >&2
-+    expr "x$ac_useropt" : ".*[^-+._$as_cr_alnum]" >/dev/null &&
-+      { $as_echo "$as_me: error: invalid feature name: $ac_useropt" >&2
-    { (exit 1); exit 1; }; }
--    ac_feature=`echo $ac_feature | sed 's/-/_/g'`
--    case $ac_option in
--      *=*) ac_optarg=`echo "$ac_optarg" | sed "s/'/'\\\\\\\\''/g"`;;
--      *) ac_optarg=yes ;;
-+    ac_useropt_orig=$ac_useropt
-+    ac_useropt=`$as_echo "$ac_useropt" | sed 's/[-+.]/_/g'`
-+    case $ac_user_opts in
-+      *"
-+"enable_$ac_useropt"
-+"*) ;;
-+      *) ac_unrecognized_opts="$ac_unrecognized_opts$ac_unrecognized_sep--enable-$ac_useropt_orig"
-+	 ac_unrecognized_sep=', ';;
-     esac
--    eval "enable_$ac_feature='$ac_optarg'" ;;
-+    eval enable_$ac_useropt=\$ac_optarg ;;
- 
-   -exec-prefix | --exec_prefix | --exec-prefix | --exec-prefi \
-   | --exec-pref | --exec-pre | --exec-pr | --exec-p | --exec- \
-@@ -439,6 +907,12 @@ do
-   -host=* | --host=* | --hos=* | --ho=*)
-     host_alias=$ac_optarg ;;
- 
-+  -htmldir | --htmldir | --htmldi | --htmld | --html | --htm | --ht)
-+    ac_prev=htmldir ;;
-+  -htmldir=* | --htmldir=* | --htmldi=* | --htmld=* | --html=* | --htm=* \
-+  | --ht=*)
-+    htmldir=$ac_optarg ;;
-+
-   -includedir | --includedir | --includedi | --included | --include \
-   | --includ | --inclu | --incl | --inc)
-     ac_prev=includedir ;;
-@@ -463,13 +937,16 @@ do
-   | --libexe=* | --libex=* | --libe=*)
-     libexecdir=$ac_optarg ;;
- 
-+  -localedir | --localedir | --localedi | --localed | --locale)
-+    ac_prev=localedir ;;
-+  -localedir=* | --localedir=* | --localedi=* | --localed=* | --locale=*)
-+    localedir=$ac_optarg ;;
-+
-   -localstatedir | --localstatedir | --localstatedi | --localstated \
--  | --localstate | --localstat | --localsta | --localst \
--  | --locals | --local | --loca | --loc | --lo)
-+  | --localstate | --localstat | --localsta | --localst | --locals)
-     ac_prev=localstatedir ;;
-   -localstatedir=* | --localstatedir=* | --localstatedi=* | --localstated=* \
--  | --localstate=* | --localstat=* | --localsta=* | --localst=* \
--  | --locals=* | --local=* | --loca=* | --loc=* | --lo=*)
-+  | --localstate=* | --localstat=* | --localsta=* | --localst=* | --locals=*)
-     localstatedir=$ac_optarg ;;
- 
-   -mandir | --mandir | --mandi | --mand | --man | --ma | --m)
-@@ -534,6 +1011,16 @@ do
-   | --progr-tra=* | --program-tr=* | --program-t=*)
-     program_transform_name=$ac_optarg ;;
- 
-+  -pdfdir | --pdfdir | --pdfdi | --pdfd | --pdf | --pd)
-+    ac_prev=pdfdir ;;
-+  -pdfdir=* | --pdfdir=* | --pdfdi=* | --pdfd=* | --pdf=* | --pd=*)
-+    pdfdir=$ac_optarg ;;
-+
-+  -psdir | --psdir | --psdi | --psd | --ps)
-+    ac_prev=psdir ;;
-+  -psdir=* | --psdir=* | --psdi=* | --psd=* | --ps=*)
-+    psdir=$ac_optarg ;;
-+
-   -q | -quiet | --quiet | --quie | --qui | --qu | --q \
-   | -silent | --silent | --silen | --sile | --sil)
-     silent=yes ;;
-@@ -584,26 +1071,38 @@ do
-     ac_init_version=: ;;
- 
-   -with-* | --with-*)
--    ac_package=`expr "x$ac_option" : 'x-*with-\([^=]*\)'`
-+    ac_useropt=`expr "x$ac_option" : 'x-*with-\([^=]*\)'`
-     # Reject names that are not valid shell variable names.
--    expr "x$ac_package" : ".*[^-_$as_cr_alnum]" >/dev/null &&
--      { echo "$as_me: error: invalid package name: $ac_package" >&2
-+    expr "x$ac_useropt" : ".*[^-+._$as_cr_alnum]" >/dev/null &&
-+      { $as_echo "$as_me: error: invalid package name: $ac_useropt" >&2
-    { (exit 1); exit 1; }; }
--    ac_package=`echo $ac_package| sed 's/-/_/g'`
--    case $ac_option in
--      *=*) ac_optarg=`echo "$ac_optarg" | sed "s/'/'\\\\\\\\''/g"`;;
--      *) ac_optarg=yes ;;
-+    ac_useropt_orig=$ac_useropt
-+    ac_useropt=`$as_echo "$ac_useropt" | sed 's/[-+.]/_/g'`
-+    case $ac_user_opts in
-+      *"
-+"with_$ac_useropt"
-+"*) ;;
-+      *) ac_unrecognized_opts="$ac_unrecognized_opts$ac_unrecognized_sep--with-$ac_useropt_orig"
-+	 ac_unrecognized_sep=', ';;
-     esac
--    eval "with_$ac_package='$ac_optarg'" ;;
-+    eval with_$ac_useropt=\$ac_optarg ;;
- 
-   -without-* | --without-*)
--    ac_package=`expr "x$ac_option" : 'x-*without-\(.*\)'`
-+    ac_useropt=`expr "x$ac_option" : 'x-*without-\(.*\)'`
-     # Reject names that are not valid shell variable names.
--    expr "x$ac_package" : ".*[^-_$as_cr_alnum]" >/dev/null &&
--      { echo "$as_me: error: invalid package name: $ac_package" >&2
-+    expr "x$ac_useropt" : ".*[^-+._$as_cr_alnum]" >/dev/null &&
-+      { $as_echo "$as_me: error: invalid package name: $ac_useropt" >&2
-    { (exit 1); exit 1; }; }
--    ac_package=`echo $ac_package | sed 's/-/_/g'`
--    eval "with_$ac_package=no" ;;
-+    ac_useropt_orig=$ac_useropt
-+    ac_useropt=`$as_echo "$ac_useropt" | sed 's/[-+.]/_/g'`
-+    case $ac_user_opts in
-+      *"
-+"with_$ac_useropt"
-+"*) ;;
-+      *) ac_unrecognized_opts="$ac_unrecognized_opts$ac_unrecognized_sep--without-$ac_useropt_orig"
-+	 ac_unrecognized_sep=', ';;
-+    esac
-+    eval with_$ac_useropt=no ;;
- 
-   --x)
-     # Obsolete; use --with-x.
-@@ -623,7 +1122,7 @@ do
-   | --x-librar=* | --x-libra=* | --x-libr=* | --x-lib=* | --x-li=* | --x-l=*)
-     x_libraries=$ac_optarg ;;
- 
--  -*) { echo "$as_me: error: unrecognized option: $ac_option
-+  -*) { $as_echo "$as_me: error: unrecognized option: $ac_option
- Try \`$0 --help' for more information." >&2
-    { (exit 1); exit 1; }; }
-     ;;
-@@ -632,17 +1131,16 @@ Try \`$0 --help' for more information." >&2
-     ac_envvar=`expr "x$ac_option" : 'x\([^=]*\)='`
-     # Reject names that are not valid shell variable names.
-     expr "x$ac_envvar" : ".*[^_$as_cr_alnum]" >/dev/null &&
--      { echo "$as_me: error: invalid variable name: $ac_envvar" >&2
-+      { $as_echo "$as_me: error: invalid variable name: $ac_envvar" >&2
-    { (exit 1); exit 1; }; }
--    ac_optarg=`echo "$ac_optarg" | sed "s/'/'\\\\\\\\''/g"`
--    eval "$ac_envvar='$ac_optarg'"
-+    eval $ac_envvar=\$ac_optarg
-     export $ac_envvar ;;
- 
-   *)
-     # FIXME: should be removed in autoconf 3.0.
--    echo "$as_me: WARNING: you should use --build, --host, --target" >&2
-+    $as_echo "$as_me: WARNING: you should use --build, --host, --target" >&2
-     expr "x$ac_option" : ".*[^-._$as_cr_alnum]" >/dev/null &&
--      echo "$as_me: WARNING: invalid host type: $ac_option" >&2
-+      $as_echo "$as_me: WARNING: invalid host type: $ac_option" >&2
-     : ${build_alias=$ac_option} ${host_alias=$ac_option} ${target_alias=$ac_option}
-     ;;
- 
-@@ -651,31 +1149,39 @@ done
- 
- if test -n "$ac_prev"; then
-   ac_option=--`echo $ac_prev | sed 's/_/-/g'`
--  { echo "$as_me: error: missing argument to $ac_option" >&2
-+  { $as_echo "$as_me: error: missing argument to $ac_option" >&2
-    { (exit 1); exit 1; }; }
- fi
- 
--# Be sure to have absolute paths.
--for ac_var in exec_prefix prefix
--do
--  eval ac_val=$`echo $ac_var`
--  case $ac_val in
--    [\\/$]* | ?:[\\/]* | NONE | '' ) ;;
--    *)  { echo "$as_me: error: expected an absolute directory name for --$ac_var: $ac_val" >&2
--   { (exit 1); exit 1; }; };;
-+if test -n "$ac_unrecognized_opts"; then
-+  case $enable_option_checking in
-+    no) ;;
-+    fatal) { $as_echo "$as_me: error: unrecognized options: $ac_unrecognized_opts" >&2
-+   { (exit 1); exit 1; }; } ;;
-+    *)     $as_echo "$as_me: WARNING: unrecognized options: $ac_unrecognized_opts" >&2 ;;
-   esac
--done
-+fi
- 
--# Be sure to have absolute paths.
--for ac_var in bindir sbindir libexecdir datadir sysconfdir sharedstatedir \
--	      localstatedir libdir includedir oldincludedir infodir mandir
-+# Check all directory arguments for consistency.
-+for ac_var in	exec_prefix prefix bindir sbindir libexecdir datarootdir \
-+		datadir sysconfdir sharedstatedir localstatedir includedir \
-+		oldincludedir docdir infodir htmldir dvidir pdfdir psdir \
-+		libdir localedir mandir
- do
--  eval ac_val=$`echo $ac_var`
-+  eval ac_val=\$$ac_var
-+  # Remove trailing slashes.
-   case $ac_val in
--    [\\/$]* | ?:[\\/]* ) ;;
--    *)  { echo "$as_me: error: expected an absolute directory name for --$ac_var: $ac_val" >&2
--   { (exit 1); exit 1; }; };;
-+    */ )
-+      ac_val=`expr "X$ac_val" : 'X\(.*[^/]\)' \| "X$ac_val" : 'X\(.*\)'`
-+      eval $ac_var=\$ac_val;;
-+  esac
-+  # Be sure to have absolute directory names.
-+  case $ac_val in
-+    [\\/$]* | ?:[\\/]* )  continue;;
-+    NONE | '' ) case $ac_var in *prefix ) continue;; esac;;
-   esac
-+  { $as_echo "$as_me: error: expected an absolute directory name for --$ac_var: $ac_val" >&2
-+   { (exit 1); exit 1; }; }
- done
- 
- # There might be people who depend on the old broken behavior: `$host'
-@@ -689,7 +1195,7 @@ target=$target_alias
- if test "x$host_alias" != x; then
-   if test "x$build_alias" = x; then
-     cross_compiling=maybe
--    echo "$as_me: WARNING: If you wanted to set the --build type, don't use --host.
-+    $as_echo "$as_me: WARNING: If you wanted to set the --build type, don't use --host.
-     If a cross compiler is detected then cross compile mode will be used." >&2
-   elif test "x$build_alias" != "x$host_alias"; then
-     cross_compiling=yes
-@@ -702,74 +1208,76 @@ test -n "$host_alias" && ac_tool_prefix=$host_alias-
- test "$silent" = yes && exec 6>/dev/null
- 
- 
-+ac_pwd=`pwd` && test -n "$ac_pwd" &&
-+ac_ls_di=`ls -di .` &&
-+ac_pwd_ls_di=`cd "$ac_pwd" && ls -di .` ||
-+  { $as_echo "$as_me: error: working directory cannot be determined" >&2
-+   { (exit 1); exit 1; }; }
-+test "X$ac_ls_di" = "X$ac_pwd_ls_di" ||
-+  { $as_echo "$as_me: error: pwd does not report name of working directory" >&2
-+   { (exit 1); exit 1; }; }
-+
-+
- # Find the source files, if location was not specified.
- if test -z "$srcdir"; then
-   ac_srcdir_defaulted=yes
--  # Try the directory containing this script, then its parent.
--  ac_confdir=`(dirname "$0") 2>/dev/null ||
--$as_expr X"$0" : 'X\(.*[^/]\)//*[^/][^/]*/*$' \| \
--	 X"$0" : 'X\(//\)[^/]' \| \
--	 X"$0" : 'X\(//\)$' \| \
--	 X"$0" : 'X\(/\)' \| \
--	 .     : '\(.\)' 2>/dev/null ||
--echo X"$0" |
--    sed '/^X\(.*[^/]\)\/\/*[^/][^/]*\/*$/{ s//\1/; q; }
--  	  /^X\(\/\/\)[^/].*/{ s//\1/; q; }
--  	  /^X\(\/\/\)$/{ s//\1/; q; }
--  	  /^X\(\/\).*/{ s//\1/; q; }
--  	  s/.*/./; q'`
-+  # Try the directory containing this script, then the parent directory.
-+  ac_confdir=`$as_dirname -- "$as_myself" ||
-+$as_expr X"$as_myself" : 'X\(.*[^/]\)//*[^/][^/]*/*$' \| \
-+	 X"$as_myself" : 'X\(//\)[^/]' \| \
-+	 X"$as_myself" : 'X\(//\)$' \| \
-+	 X"$as_myself" : 'X\(/\)' \| . 2>/dev/null ||
-+$as_echo X"$as_myself" |
-+    sed '/^X\(.*[^/]\)\/\/*[^/][^/]*\/*$/{
-+	    s//\1/
-+	    q
-+	  }
-+	  /^X\(\/\/\)[^/].*/{
-+	    s//\1/
-+	    q
-+	  }
-+	  /^X\(\/\/\)$/{
-+	    s//\1/
-+	    q
-+	  }
-+	  /^X\(\/\).*/{
-+	    s//\1/
-+	    q
-+	  }
-+	  s/.*/./; q'`
-   srcdir=$ac_confdir
--  if test ! -r $srcdir/$ac_unique_file; then
-+  if test ! -r "$srcdir/$ac_unique_file"; then
-     srcdir=..
-   fi
- else
-   ac_srcdir_defaulted=no
- fi
--if test ! -r $srcdir/$ac_unique_file; then
--  if test "$ac_srcdir_defaulted" = yes; then
--    { echo "$as_me: error: cannot find sources ($ac_unique_file) in $ac_confdir or .." >&2
--   { (exit 1); exit 1; }; }
--  else
--    { echo "$as_me: error: cannot find sources ($ac_unique_file) in $srcdir" >&2
-+if test ! -r "$srcdir/$ac_unique_file"; then
-+  test "$ac_srcdir_defaulted" = yes && srcdir="$ac_confdir or .."
-+  { $as_echo "$as_me: error: cannot find sources ($ac_unique_file) in $srcdir" >&2
-    { (exit 1); exit 1; }; }
--  fi
- fi
--(cd $srcdir && test -r ./$ac_unique_file) 2>/dev/null ||
--  { echo "$as_me: error: sources are in $srcdir, but \`cd $srcdir' does not work" >&2
-+ac_msg="sources are in $srcdir, but \`cd $srcdir' does not work"
-+ac_abs_confdir=`(
-+	cd "$srcdir" && test -r "./$ac_unique_file" || { $as_echo "$as_me: error: $ac_msg" >&2
-    { (exit 1); exit 1; }; }
--srcdir=`echo "$srcdir" | sed 's%\([^\\/]\)[\\/]*$%\1%'`
--ac_env_build_alias_set=${build_alias+set}
--ac_env_build_alias_value=$build_alias
--ac_cv_env_build_alias_set=${build_alias+set}
--ac_cv_env_build_alias_value=$build_alias
--ac_env_host_alias_set=${host_alias+set}
--ac_env_host_alias_value=$host_alias
--ac_cv_env_host_alias_set=${host_alias+set}
--ac_cv_env_host_alias_value=$host_alias
--ac_env_target_alias_set=${target_alias+set}
--ac_env_target_alias_value=$target_alias
--ac_cv_env_target_alias_set=${target_alias+set}
--ac_cv_env_target_alias_value=$target_alias
--ac_env_CC_set=${CC+set}
--ac_env_CC_value=$CC
--ac_cv_env_CC_set=${CC+set}
--ac_cv_env_CC_value=$CC
--ac_env_CFLAGS_set=${CFLAGS+set}
--ac_env_CFLAGS_value=$CFLAGS
--ac_cv_env_CFLAGS_set=${CFLAGS+set}
--ac_cv_env_CFLAGS_value=$CFLAGS
--ac_env_LDFLAGS_set=${LDFLAGS+set}
--ac_env_LDFLAGS_value=$LDFLAGS
--ac_cv_env_LDFLAGS_set=${LDFLAGS+set}
--ac_cv_env_LDFLAGS_value=$LDFLAGS
--ac_env_CPPFLAGS_set=${CPPFLAGS+set}
--ac_env_CPPFLAGS_value=$CPPFLAGS
--ac_cv_env_CPPFLAGS_set=${CPPFLAGS+set}
--ac_cv_env_CPPFLAGS_value=$CPPFLAGS
--ac_env_CPP_set=${CPP+set}
--ac_env_CPP_value=$CPP
--ac_cv_env_CPP_set=${CPP+set}
--ac_cv_env_CPP_value=$CPP
-+	pwd)`
-+# When building in place, set srcdir=.
-+if test "$ac_abs_confdir" = "$ac_pwd"; then
-+  srcdir=.
-+fi
-+# Remove unnecessary trailing slashes from srcdir.
-+# Double slashes in file names in object file debugging info
-+# mess up M-x gdb in Emacs.
-+case $srcdir in
-+*/) srcdir=`expr "X$srcdir" : 'X\(.*[^/]\)' \| "X$srcdir" : 'X\(.*\)'`;;
-+esac
-+for ac_var in $ac_precious_vars; do
-+  eval ac_env_${ac_var}_set=\${${ac_var}+set}
-+  eval ac_env_${ac_var}_value=\$${ac_var}
-+  eval ac_cv_env_${ac_var}_set=\${${ac_var}+set}
-+  eval ac_cv_env_${ac_var}_value=\$${ac_var}
-+done
- 
- #
- # Report the --help message.
-@@ -798,14 +1306,11 @@ Configuration:
-   -n, --no-create         do not create output files
-       --srcdir=DIR        find the sources in DIR [configure dir or \`..']
- 
--_ACEOF
--
--  cat <<_ACEOF
- Installation directories:
-   --prefix=PREFIX         install architecture-independent files in PREFIX
--			  [$ac_default_prefix]
-+                          [$ac_default_prefix]
-   --exec-prefix=EPREFIX   install architecture-dependent files in EPREFIX
--			  [PREFIX]
-+                          [PREFIX]
- 
- By default, \`make install' will install all the files in
- \`$ac_default_prefix/bin', \`$ac_default_prefix/lib' etc.  You can specify
-@@ -815,18 +1320,25 @@ for instance \`--prefix=\$HOME'.
- For better control, use the options below.
- 
- Fine tuning of the installation directories:
--  --bindir=DIR           user executables [EPREFIX/bin]
--  --sbindir=DIR          system admin executables [EPREFIX/sbin]
--  --libexecdir=DIR       program executables [EPREFIX/libexec]
--  --datadir=DIR          read-only architecture-independent data [PREFIX/share]
--  --sysconfdir=DIR       read-only single-machine data [PREFIX/etc]
--  --sharedstatedir=DIR   modifiable architecture-independent data [PREFIX/com]
--  --localstatedir=DIR    modifiable single-machine data [PREFIX/var]
--  --libdir=DIR           object code libraries [EPREFIX/lib]
--  --includedir=DIR       C header files [PREFIX/include]
--  --oldincludedir=DIR    C header files for non-gcc [/usr/include]
--  --infodir=DIR          info documentation [PREFIX/info]
--  --mandir=DIR           man documentation [PREFIX/man]
-+  --bindir=DIR            user executables [EPREFIX/bin]
-+  --sbindir=DIR           system admin executables [EPREFIX/sbin]
-+  --libexecdir=DIR        program executables [EPREFIX/libexec]
-+  --sysconfdir=DIR        read-only single-machine data [PREFIX/etc]
-+  --sharedstatedir=DIR    modifiable architecture-independent data [PREFIX/com]
-+  --localstatedir=DIR     modifiable single-machine data [PREFIX/var]
-+  --libdir=DIR            object code libraries [EPREFIX/lib]
-+  --includedir=DIR        C header files [PREFIX/include]
-+  --oldincludedir=DIR     C header files for non-gcc [/usr/include]
-+  --datarootdir=DIR       read-only arch.-independent data root [PREFIX/share]
-+  --datadir=DIR           read-only architecture-independent data [DATAROOTDIR]
-+  --infodir=DIR           info documentation [DATAROOTDIR/info]
-+  --localedir=DIR         locale-dependent data [DATAROOTDIR/locale]
-+  --mandir=DIR            man documentation [DATAROOTDIR/man]
-+  --docdir=DIR            documentation root [DATAROOTDIR/doc/PACKAGE]
-+  --htmldir=DIR           html documentation [DOCDIR]
-+  --dvidir=DIR            dvi documentation [DOCDIR]
-+  --pdfdir=DIR            pdf documentation [DOCDIR]
-+  --psdir=DIR             ps documentation [DOCDIR]
- _ACEOF
- 
-   cat <<\_ACEOF
-@@ -843,145 +1355,130 @@ if test -n "$ac_init_help"; then
-   cat <<\_ACEOF
- 
- Optional Features:
-+  --disable-option-checking  ignore unrecognized --enable/--with options
-   --disable-FEATURE       do not include FEATURE (same as --enable-FEATURE=no)
-   --enable-FEATURE[=ARG]  include FEATURE [ARG=yes]
-- --disable-got-check - disable check for GOT (needed on H8)
-- --disable-emit-relocs - don't use the --emit-relocs (-q) linker option
-+  --disable-ld-elf2flt-binary
-+                          use ld-elf2flt shell script
-+  --disable-got-check     disable check for GOT (needed on H8)
-+  --disable-emit-relocs   don't use the --emit-relocs (-q) linker option
-+  --enable-emit-ctor-dtor manually create ctor/dtor list
-+  --enable-always-reloc-text
-+                          always process text relocs ignoring pic/got (needed
-+                          on Blackfin)
- 
- Optional Packages:
-   --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
-   --without-PACKAGE       do not use PACKAGE (same as --with-PACKAGE=no)
-- --with-libbfd=<file>  path to libbfd.a library to use
-- --with-libiberty=<file>  path to libiberty.a library to use
-- --with-bfd-include-dir=<dir>  include path for correct bfd.h
-- --with-binutils-include-dir=<dir>  include path for binutils headers
-- --with-binutils-ldscript-dir=<dir>  path to install elf2flt.ld
-+  --with-zlib-prefix=<dir>
-+                          path to installed zlib
-+  --with-libbfd=<file>    path to libbfd.a library to use
-+  --with-libiberty=<file> path to libiberty.a library to use
-+  --with-bfd-include-dir=<dir>
-+                          include path for correct bfd.h
-+  --with-binutils-include-dir=<dir>
-+                          include path for binutils headers
-+  --with-binutils-ldscript-dir=<dir>
-+                          path to install elf2flt.ld
-+  --with-binutils-build-dir=<dir>
-+                          path to compiled binutils tree
- 
- Some influential environment variables:
-   CC          C compiler command
-   CFLAGS      C compiler flags
-   LDFLAGS     linker flags, e.g. -L<lib dir> if you have libraries in a
-               nonstandard directory <lib dir>
--  CPPFLAGS    C/C++ preprocessor flags, e.g. -I<include dir> if you have
--              headers in a nonstandard directory <include dir>
-+  LIBS        libraries to pass to the linker, e.g. -l<library>
-+  CPPFLAGS    C/C++/Objective C preprocessor flags, e.g. -I<include dir> if
-+              you have headers in a nonstandard directory <include dir>
-   CPP         C preprocessor
- 
- Use these variables to override the choices made by `configure' or to help
- it to find libraries and programs with nonstandard names/locations.
- 
- _ACEOF
-+ac_status=$?
- fi
- 
- if test "$ac_init_help" = "recursive"; then
-   # If there are subdirs, report their specific --help.
--  ac_popdir=`pwd`
-   for ac_dir in : $ac_subdirs_all; do test "x$ac_dir" = x: && continue
--    test -d $ac_dir || continue
-+    test -d "$ac_dir" ||
-+      { cd "$srcdir" && ac_pwd=`pwd` && srcdir=. && test -d "$ac_dir"; } ||
-+      continue
-     ac_builddir=.
- 
--if test "$ac_dir" != .; then
--  ac_dir_suffix=/`echo "$ac_dir" | sed 's,^\.[\\/],,'`
--  # A "../" for each directory in $ac_dir_suffix.
--  ac_top_builddir=`echo "$ac_dir_suffix" | sed 's,/[^\\/]*,../,g'`
--else
--  ac_dir_suffix= ac_top_builddir=
--fi
-+case "$ac_dir" in
-+.) ac_dir_suffix= ac_top_builddir_sub=. ac_top_build_prefix= ;;
-+*)
-+  ac_dir_suffix=/`$as_echo "$ac_dir" | sed 's|^\.[\\/]||'`
-+  # A ".." for each directory in $ac_dir_suffix.
-+  ac_top_builddir_sub=`$as_echo "$ac_dir_suffix" | sed 's|/[^\\/]*|/..|g;s|/||'`
-+  case $ac_top_builddir_sub in
-+  "") ac_top_builddir_sub=. ac_top_build_prefix= ;;
-+  *)  ac_top_build_prefix=$ac_top_builddir_sub/ ;;
-+  esac ;;
-+esac
-+ac_abs_top_builddir=$ac_pwd
-+ac_abs_builddir=$ac_pwd$ac_dir_suffix
-+# for backward compatibility:
-+ac_top_builddir=$ac_top_build_prefix
- 
- case $srcdir in
--  .)  # No --srcdir option.  We are building in place.
-+  .)  # We are building in place.
-     ac_srcdir=.
--    if test -z "$ac_top_builddir"; then
--       ac_top_srcdir=.
--    else
--       ac_top_srcdir=`echo $ac_top_builddir | sed 's,/$,,'`
--    fi ;;
--  [\\/]* | ?:[\\/]* )  # Absolute path.
-+    ac_top_srcdir=$ac_top_builddir_sub
-+    ac_abs_top_srcdir=$ac_pwd ;;
-+  [\\/]* | ?:[\\/]* )  # Absolute name.
-     ac_srcdir=$srcdir$ac_dir_suffix;
--    ac_top_srcdir=$srcdir ;;
--  *) # Relative path.
--    ac_srcdir=$ac_top_builddir$srcdir$ac_dir_suffix
--    ac_top_srcdir=$ac_top_builddir$srcdir ;;
--esac
--
--# Do not use `cd foo && pwd` to compute absolute paths, because
--# the directories may not exist.
--case `pwd` in
--.) ac_abs_builddir="$ac_dir";;
--*)
--  case "$ac_dir" in
--  .) ac_abs_builddir=`pwd`;;
--  [\\/]* | ?:[\\/]* ) ac_abs_builddir="$ac_dir";;
--  *) ac_abs_builddir=`pwd`/"$ac_dir";;
--  esac;;
--esac
--case $ac_abs_builddir in
--.) ac_abs_top_builddir=${ac_top_builddir}.;;
--*)
--  case ${ac_top_builddir}. in
--  .) ac_abs_top_builddir=$ac_abs_builddir;;
--  [\\/]* | ?:[\\/]* ) ac_abs_top_builddir=${ac_top_builddir}.;;
--  *) ac_abs_top_builddir=$ac_abs_builddir/${ac_top_builddir}.;;
--  esac;;
--esac
--case $ac_abs_builddir in
--.) ac_abs_srcdir=$ac_srcdir;;
--*)
--  case $ac_srcdir in
--  .) ac_abs_srcdir=$ac_abs_builddir;;
--  [\\/]* | ?:[\\/]* ) ac_abs_srcdir=$ac_srcdir;;
--  *) ac_abs_srcdir=$ac_abs_builddir/$ac_srcdir;;
--  esac;;
--esac
--case $ac_abs_builddir in
--.) ac_abs_top_srcdir=$ac_top_srcdir;;
--*)
--  case $ac_top_srcdir in
--  .) ac_abs_top_srcdir=$ac_abs_builddir;;
--  [\\/]* | ?:[\\/]* ) ac_abs_top_srcdir=$ac_top_srcdir;;
--  *) ac_abs_top_srcdir=$ac_abs_builddir/$ac_top_srcdir;;
--  esac;;
-+    ac_top_srcdir=$srcdir
-+    ac_abs_top_srcdir=$srcdir ;;
-+  *) # Relative name.
-+    ac_srcdir=$ac_top_build_prefix$srcdir$ac_dir_suffix
-+    ac_top_srcdir=$ac_top_build_prefix$srcdir
-+    ac_abs_top_srcdir=$ac_pwd/$srcdir ;;
- esac
--
--    cd $ac_dir
--    # Check for guested configure; otherwise get Cygnus style configure.
--    if test -f $ac_srcdir/configure.gnu; then
--      echo
--      $SHELL $ac_srcdir/configure.gnu  --help=recursive
--    elif test -f $ac_srcdir/configure; then
--      echo
--      $SHELL $ac_srcdir/configure  --help=recursive
--    elif test -f $ac_srcdir/configure.ac ||
--	   test -f $ac_srcdir/configure.in; then
--      echo
--      $ac_configure --help
-+ac_abs_srcdir=$ac_abs_top_srcdir$ac_dir_suffix
-+
-+    cd "$ac_dir" || { ac_status=$?; continue; }
-+    # Check for guested configure.
-+    if test -f "$ac_srcdir/configure.gnu"; then
-+      echo &&
-+      $SHELL "$ac_srcdir/configure.gnu" --help=recursive
-+    elif test -f "$ac_srcdir/configure"; then
-+      echo &&
-+      $SHELL "$ac_srcdir/configure" --help=recursive
-     else
--      echo "$as_me: WARNING: no configuration information is in $ac_dir" >&2
--    fi
--    cd $ac_popdir
-+      $as_echo "$as_me: WARNING: no configuration information is in $ac_dir" >&2
-+    fi || ac_status=$?
-+    cd "$ac_pwd" || { ac_status=$?; break; }
-   done
- fi
- 
--test -n "$ac_init_help" && exit 0
-+test -n "$ac_init_help" && exit $ac_status
- if $ac_init_version; then
-   cat <<\_ACEOF
-+configure
-+generated by GNU Autoconf 2.63
- 
--Copyright (C) 2003 Free Software Foundation, Inc.
-+Copyright (C) 1992, 1993, 1994, 1995, 1996, 1998, 1999, 2000, 2001,
-+2002, 2003, 2004, 2005, 2006, 2007, 2008 Free Software Foundation, Inc.
- This configure script is free software; the Free Software Foundation
- gives unlimited permission to copy, distribute and modify it.
- _ACEOF
--  exit 0
-+  exit
- fi
--exec 5>config.log
--cat >&5 <<_ACEOF
-+cat >config.log <<_ACEOF
- This file contains any messages produced by compilers while
- running configure, to aid debugging if configure makes a mistake.
- 
- It was created by $as_me, which was
--generated by GNU Autoconf 2.59.  Invocation command line was
-+generated by GNU Autoconf 2.63.  Invocation command line was
- 
-   $ $0 $@
- 
- _ACEOF
-+exec 5>>config.log
- {
- cat <<_ASUNAME
- ## --------- ##
-@@ -1000,7 +1497,7 @@ uname -v = `(uname -v) 2>/dev/null || echo unknown`
- /bin/arch              = `(/bin/arch) 2>/dev/null              || echo unknown`
- /usr/bin/arch -k       = `(/usr/bin/arch -k) 2>/dev/null       || echo unknown`
- /usr/convex/getsysinfo = `(/usr/convex/getsysinfo) 2>/dev/null || echo unknown`
--hostinfo               = `(hostinfo) 2>/dev/null               || echo unknown`
-+/usr/bin/hostinfo      = `(/usr/bin/hostinfo) 2>/dev/null      || echo unknown`
- /bin/machine           = `(/bin/machine) 2>/dev/null           || echo unknown`
- /usr/bin/oslevel       = `(/usr/bin/oslevel) 2>/dev/null       || echo unknown`
- /bin/universe          = `(/bin/universe) 2>/dev/null          || echo unknown`
-@@ -1012,8 +1509,9 @@ for as_dir in $PATH
- do
-   IFS=$as_save_IFS
-   test -z "$as_dir" && as_dir=.
--  echo "PATH: $as_dir"
-+  $as_echo "PATH: $as_dir"
- done
-+IFS=$as_save_IFS
- 
- } >&5
- 
-@@ -1035,7 +1533,6 @@ _ACEOF
- ac_configure_args=
- ac_configure_args0=
- ac_configure_args1=
--ac_sep=
- ac_must_keep_next=false
- for ac_pass in 1 2
- do
-@@ -1046,8 +1543,8 @@ do
-     -q | -quiet | --quiet | --quie | --qui | --qu | --q \
-     | -silent | --silent | --silen | --sile | --sil)
-       continue ;;
--    *" "*|*"	"*|*[\[\]\~\#\$\^\&\*\(\)\{\}\\\|\;\<\>\?\"\']*)
--      ac_arg=`echo "$ac_arg" | sed "s/'/'\\\\\\\\''/g"` ;;
-+    *\'*)
-+      ac_arg=`$as_echo "$ac_arg" | sed "s/'/'\\\\\\\\''/g"` ;;
-     esac
-     case $ac_pass in
-     1) ac_configure_args0="$ac_configure_args0 '$ac_arg'" ;;
-@@ -1068,9 +1565,7 @@ do
- 	  -* ) ac_must_keep_next=true ;;
- 	esac
-       fi
--      ac_configure_args="$ac_configure_args$ac_sep'$ac_arg'"
--      # Get rid of the leading space.
--      ac_sep=" "
-+      ac_configure_args="$ac_configure_args '$ac_arg'"
-       ;;
-     esac
-   done
-@@ -1081,8 +1576,8 @@ $as_unset ac_configure_args1 || test "${ac_configure_args1+set}" != set || { ac_
- # When interrupted or exit'd, cleanup temporary files, and complete
- # config.log.  We remove comments because anyway the quotes in there
- # would cause problems or look ugly.
--# WARNING: Be sure not to use single quotes in there, as some shells,
--# such as our DU 5.0 friend, will then `close' the trap.
-+# WARNING: Use '\'' to represent an apostrophe within the trap.
-+# WARNING: Do not start the trap code with a newline, due to a FreeBSD 4.0 bug.
- trap 'exit_status=$?
-   # Save into config.log some information that might help in debugging.
-   {
-@@ -1095,20 +1590,35 @@ trap 'exit_status=$?
- _ASBOX
-     echo
-     # The following way of writing the cache mishandles newlines in values,
--{
-+(
-+  for ac_var in `(set) 2>&1 | sed -n '\''s/^\([a-zA-Z_][a-zA-Z0-9_]*\)=.*/\1/p'\''`; do
-+    eval ac_val=\$$ac_var
-+    case $ac_val in #(
-+    *${as_nl}*)
-+      case $ac_var in #(
-+      *_cv_*) { $as_echo "$as_me:$LINENO: WARNING: cache variable $ac_var contains a newline" >&5
-+$as_echo "$as_me: WARNING: cache variable $ac_var contains a newline" >&2;} ;;
-+      esac
-+      case $ac_var in #(
-+      _ | IFS | as_nl) ;; #(
-+      BASH_ARGV | BASH_SOURCE) eval $ac_var= ;; #(
-+      *) $as_unset $ac_var ;;
-+      esac ;;
-+    esac
-+  done
-   (set) 2>&1 |
--    case `(ac_space='"'"' '"'"'; set | grep ac_space) 2>&1` in
--    *ac_space=\ *)
-+    case $as_nl`(ac_space='\'' '\''; set) 2>&1` in #(
-+    *${as_nl}ac_space=\ *)
-       sed -n \
--	"s/'"'"'/'"'"'\\\\'"'"''"'"'/g;
--	  s/^\\([_$as_cr_alnum]*_cv_[_$as_cr_alnum]*\\)=\\(.*\\)/\\1='"'"'\\2'"'"'/p"
--      ;;
-+	"s/'\''/'\''\\\\'\'''\''/g;
-+	  s/^\\([_$as_cr_alnum]*_cv_[_$as_cr_alnum]*\\)=\\(.*\\)/\\1='\''\\2'\''/p"
-+      ;; #(
-     *)
--      sed -n \
--	"s/^\\([_$as_cr_alnum]*_cv_[_$as_cr_alnum]*\\)=\\(.*\\)/\\1=\\2/p"
-+      sed -n "/^[_$as_cr_alnum]*_cv_[_$as_cr_alnum]*=/p"
-       ;;
--    esac;
--}
-+    esac |
-+    sort
-+)
-     echo
- 
-     cat <<\_ASBOX
-@@ -1119,22 +1629,28 @@ _ASBOX
-     echo
-     for ac_var in $ac_subst_vars
-     do
--      eval ac_val=$`echo $ac_var`
--      echo "$ac_var='"'"'$ac_val'"'"'"
-+      eval ac_val=\$$ac_var
-+      case $ac_val in
-+      *\'\''*) ac_val=`$as_echo "$ac_val" | sed "s/'\''/'\''\\\\\\\\'\'''\''/g"`;;
-+      esac
-+      $as_echo "$ac_var='\''$ac_val'\''"
-     done | sort
-     echo
- 
-     if test -n "$ac_subst_files"; then
-       cat <<\_ASBOX
--## ------------- ##
--## Output files. ##
--## ------------- ##
-+## ------------------- ##
-+## File substitutions. ##
-+## ------------------- ##
- _ASBOX
-       echo
-       for ac_var in $ac_subst_files
-       do
--	eval ac_val=$`echo $ac_var`
--	echo "$ac_var='"'"'$ac_val'"'"'"
-+	eval ac_val=\$$ac_var
-+	case $ac_val in
-+	*\'\''*) ac_val=`$as_echo "$ac_val" | sed "s/'\''/'\''\\\\\\\\'\'''\''/g"`;;
-+	esac
-+	$as_echo "$ac_var='\''$ac_val'\''"
-       done | sort
-       echo
-     fi
-@@ -1146,26 +1662,24 @@ _ASBOX
- ## ----------- ##
- _ASBOX
-       echo
--      sed "/^$/d" confdefs.h | sort
-+      cat confdefs.h
-       echo
-     fi
-     test "$ac_signal" != 0 &&
--      echo "$as_me: caught signal $ac_signal"
--    echo "$as_me: exit $exit_status"
-+      $as_echo "$as_me: caught signal $ac_signal"
-+    $as_echo "$as_me: exit $exit_status"
-   } >&5
--  rm -f core *.core &&
--  rm -rf conftest* confdefs* conf$$* $ac_clean_files &&
-+  rm -f core *.core core.conftest.* &&
-+    rm -f -r conftest* confdefs* conf$$* $ac_clean_files &&
-     exit $exit_status
--     ' 0
-+' 0
- for ac_signal in 1 2 13 15; do
-   trap 'ac_signal='$ac_signal'; { (exit 1); exit 1; }' $ac_signal
- done
- ac_signal=0
- 
- # confdefs.h avoids OS command line length limits that DEFS can exceed.
--rm -rf conftest* confdefs.h
--# AIX cpp loses on an empty file, so make sure it contains at least a newline.
--echo >confdefs.h
-+rm -f -r conftest* confdefs.h
- 
- # Predefined preprocessor variables.
- 
-@@ -1195,18 +1709,24 @@ _ACEOF
- 
- 
- # Let the site file select an alternate cache file if it wants to.
--# Prefer explicitly selected file to automatically selected ones.
--if test -z "$CONFIG_SITE"; then
--  if test "x$prefix" != xNONE; then
--    CONFIG_SITE="$prefix/share/config.site $prefix/etc/config.site"
--  else
--    CONFIG_SITE="$ac_default_prefix/share/config.site $ac_default_prefix/etc/config.site"
--  fi
-+# Prefer an explicitly selected file to automatically selected ones.
-+ac_site_file1=NONE
-+ac_site_file2=NONE
-+if test -n "$CONFIG_SITE"; then
-+  ac_site_file1=$CONFIG_SITE
-+elif test "x$prefix" != xNONE; then
-+  ac_site_file1=$prefix/share/config.site
-+  ac_site_file2=$prefix/etc/config.site
-+else
-+  ac_site_file1=$ac_default_prefix/share/config.site
-+  ac_site_file2=$ac_default_prefix/etc/config.site
- fi
--for ac_site_file in $CONFIG_SITE; do
-+for ac_site_file in "$ac_site_file1" "$ac_site_file2"
-+do
-+  test "x$ac_site_file" = xNONE && continue
-   if test -r "$ac_site_file"; then
--    { echo "$as_me:$LINENO: loading site script $ac_site_file" >&5
--echo "$as_me: loading site script $ac_site_file" >&6;}
-+    { $as_echo "$as_me:$LINENO: loading site script $ac_site_file" >&5
-+$as_echo "$as_me: loading site script $ac_site_file" >&6;}
-     sed 's/^/| /' "$ac_site_file" >&5
-     . "$ac_site_file"
-   fi
-@@ -1216,54 +1736,61 @@ if test -r "$cache_file"; then
-   # Some versions of bash will fail to source /dev/null (special
-   # files actually), so we avoid doing that.
-   if test -f "$cache_file"; then
--    { echo "$as_me:$LINENO: loading cache $cache_file" >&5
--echo "$as_me: loading cache $cache_file" >&6;}
-+    { $as_echo "$as_me:$LINENO: loading cache $cache_file" >&5
-+$as_echo "$as_me: loading cache $cache_file" >&6;}
-     case $cache_file in
--      [\\/]* | ?:[\\/]* ) . $cache_file;;
--      *)                      . ./$cache_file;;
-+      [\\/]* | ?:[\\/]* ) . "$cache_file";;
-+      *)                      . "./$cache_file";;
-     esac
-   fi
- else
--  { echo "$as_me:$LINENO: creating cache $cache_file" >&5
--echo "$as_me: creating cache $cache_file" >&6;}
-+  { $as_echo "$as_me:$LINENO: creating cache $cache_file" >&5
-+$as_echo "$as_me: creating cache $cache_file" >&6;}
-   >$cache_file
- fi
- 
- # Check that the precious variables saved in the cache have kept the same
- # value.
- ac_cache_corrupted=false
--for ac_var in `(set) 2>&1 |
--	       sed -n 's/^ac_env_\([a-zA-Z_0-9]*\)_set=.*/\1/p'`; do
-+for ac_var in $ac_precious_vars; do
-   eval ac_old_set=\$ac_cv_env_${ac_var}_set
-   eval ac_new_set=\$ac_env_${ac_var}_set
--  eval ac_old_val="\$ac_cv_env_${ac_var}_value"
--  eval ac_new_val="\$ac_env_${ac_var}_value"
-+  eval ac_old_val=\$ac_cv_env_${ac_var}_value
-+  eval ac_new_val=\$ac_env_${ac_var}_value
-   case $ac_old_set,$ac_new_set in
-     set,)
--      { echo "$as_me:$LINENO: error: \`$ac_var' was set to \`$ac_old_val' in the previous run" >&5
--echo "$as_me: error: \`$ac_var' was set to \`$ac_old_val' in the previous run" >&2;}
-+      { $as_echo "$as_me:$LINENO: error: \`$ac_var' was set to \`$ac_old_val' in the previous run" >&5
-+$as_echo "$as_me: error: \`$ac_var' was set to \`$ac_old_val' in the previous run" >&2;}
-       ac_cache_corrupted=: ;;
-     ,set)
--      { echo "$as_me:$LINENO: error: \`$ac_var' was not set in the previous run" >&5
--echo "$as_me: error: \`$ac_var' was not set in the previous run" >&2;}
-+      { $as_echo "$as_me:$LINENO: error: \`$ac_var' was not set in the previous run" >&5
-+$as_echo "$as_me: error: \`$ac_var' was not set in the previous run" >&2;}
-       ac_cache_corrupted=: ;;
-     ,);;
-     *)
-       if test "x$ac_old_val" != "x$ac_new_val"; then
--	{ echo "$as_me:$LINENO: error: \`$ac_var' has changed since the previous run:" >&5
--echo "$as_me: error: \`$ac_var' has changed since the previous run:" >&2;}
--	{ echo "$as_me:$LINENO:   former value:  $ac_old_val" >&5
--echo "$as_me:   former value:  $ac_old_val" >&2;}
--	{ echo "$as_me:$LINENO:   current value: $ac_new_val" >&5
--echo "$as_me:   current value: $ac_new_val" >&2;}
--	ac_cache_corrupted=:
-+	# differences in whitespace do not lead to failure.
-+	ac_old_val_w=`echo x $ac_old_val`
-+	ac_new_val_w=`echo x $ac_new_val`
-+	if test "$ac_old_val_w" != "$ac_new_val_w"; then
-+	  { $as_echo "$as_me:$LINENO: error: \`$ac_var' has changed since the previous run:" >&5
-+$as_echo "$as_me: error: \`$ac_var' has changed since the previous run:" >&2;}
-+	  ac_cache_corrupted=:
-+	else
-+	  { $as_echo "$as_me:$LINENO: warning: ignoring whitespace changes in \`$ac_var' since the previous run:" >&5
-+$as_echo "$as_me: warning: ignoring whitespace changes in \`$ac_var' since the previous run:" >&2;}
-+	  eval $ac_var=\$ac_old_val
-+	fi
-+	{ $as_echo "$as_me:$LINENO:   former value:  \`$ac_old_val'" >&5
-+$as_echo "$as_me:   former value:  \`$ac_old_val'" >&2;}
-+	{ $as_echo "$as_me:$LINENO:   current value: \`$ac_new_val'" >&5
-+$as_echo "$as_me:   current value: \`$ac_new_val'" >&2;}
-       fi;;
-   esac
-   # Pass precious variables to config.status.
-   if test "$ac_new_set" = set; then
-     case $ac_new_val in
--    *" "*|*"	"*|*[\[\]\~\#\$\^\&\*\(\)\{\}\\\|\;\<\>\?\"\']*)
--      ac_arg=$ac_var=`echo "$ac_new_val" | sed "s/'/'\\\\\\\\''/g"` ;;
-+    *\'*) ac_arg=$ac_var=`$as_echo "$ac_new_val" | sed "s/'/'\\\\\\\\''/g"` ;;
-     *) ac_arg=$ac_var=$ac_new_val ;;
-     esac
-     case " $ac_configure_args " in
-@@ -1273,18 +1800,15 @@ echo "$as_me:   current value: $ac_new_val" >&2;}
-   fi
- done
- if $ac_cache_corrupted; then
--  { echo "$as_me:$LINENO: error: changes in the environment can compromise the build" >&5
--echo "$as_me: error: changes in the environment can compromise the build" >&2;}
--  { { echo "$as_me:$LINENO: error: run \`make distclean' and/or \`rm $cache_file' and start over" >&5
--echo "$as_me: error: run \`make distclean' and/or \`rm $cache_file' and start over" >&2;}
-+  { $as_echo "$as_me:$LINENO: error: in \`$ac_pwd':" >&5
-+$as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
-+  { $as_echo "$as_me:$LINENO: error: changes in the environment can compromise the build" >&5
-+$as_echo "$as_me: error: changes in the environment can compromise the build" >&2;}
-+  { { $as_echo "$as_me:$LINENO: error: run \`make distclean' and/or \`rm $cache_file' and start over" >&5
-+$as_echo "$as_me: error: run \`make distclean' and/or \`rm $cache_file' and start over" >&2;}
-    { (exit 1); exit 1; }; }
- fi
- 
--ac_ext=c
--ac_cpp='$CPP $CPPFLAGS'
--ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
--ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
--ac_compiler_gnu=$ac_cv_c_compiler_gnu
- 
- 
- 
-@@ -1301,177 +1825,295 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
- 
- 
- 
-+ac_ext=c
-+ac_cpp='$CPP $CPPFLAGS'
-+ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
-+ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
-+ac_compiler_gnu=$ac_cv_c_compiler_gnu
-+
-+
-+
- 
-+# Check whether --with-zlib-prefix was given.
-+if test "${with_zlib_prefix+set}" = set; then
-+  withval=$with_zlib_prefix;  ac_zlib_prefix=$withval
-+else
-+   ac_zlib_prefix=NONE
- 
-+fi
- 
- 
- 
--# Check whether --with-libbfd or --without-libbfd was given.
-+# Check whether --with-libbfd was given.
- if test "${with_libbfd+set}" = set; then
--  withval="$with_libbfd"
--   ac_libbfd=$withval
-+  withval=$with_libbfd;  ac_libbfd=$withval
- else
-    ac_libbfd=NONE
- 
--fi;
-+fi
-+
- 
- 
--# Check whether --with-libiberty or --without-libiberty was given.
-+# Check whether --with-libiberty was given.
- if test "${with_libiberty+set}" = set; then
--  withval="$with_libiberty"
--   ac_libiberty=$withval
-+  withval=$with_libiberty;  ac_libiberty=$withval
- else
-    ac_libiberty=NONE
- 
--fi;
-+fi
-+
- 
- 
--# Check whether --with-bfd-include-dir or --without-bfd-include-dir was given.
-+# Check whether --with-bfd-include-dir was given.
- if test "${with_bfd_include_dir+set}" = set; then
--  withval="$with_bfd_include_dir"
--   ac_bfd_include_dir=$withval
-+  withval=$with_bfd_include_dir;  ac_bfd_include_dir=$withval
- else
-    ac_bfd_include_dir=NONE
- 
--fi;
-+fi
-+
- 
- 
--# Check whether --with-binutils-include-dir or --without-binutils-include-dir was given.
-+# Check whether --with-binutils-include-dir was given.
- if test "${with_binutils_include_dir+set}" = set; then
--  withval="$with_binutils_include_dir"
--   ac_binutils_include_dir=$withval
-+  withval=$with_binutils_include_dir;  ac_binutils_include_dir=$withval
- else
-    ac_binutils_include_dir=NONE
- 
--fi;
-+fi
-+
- 
- 
--# Check whether --with-binutils-ldscript-dir or --without-binutils-ldscript-dir was given.
-+# Check whether --with-binutils-ldscript-dir was given.
- if test "${with_binutils_ldscript_dir+set}" = set; then
--  withval="$with_binutils_ldscript_dir"
--   ac_binutils_ldscript_dir=$withval
-+  withval=$with_binutils_ldscript_dir;  ac_binutils_ldscript_dir=$withval
- else
-    ac_binutils_ldscript_dir=NONE
- 
--fi;
-+fi
-+
-+
-+
-+# Check whether --with-binutils-build-dir was given.
-+if test "${with_binutils_build_dir+set}" = set; then
-+  withval=$with_binutils_build_dir;  ac_binutils_build_dir=$withval
-+else
-+   ac_binutils_build_dir=NONE
-+
-+fi
-+
-+
-+# Check whether --enable-ld-elf2flt-binary was given.
-+if test "${enable_ld_elf2flt_binary+set}" = set; then
-+  enableval=$enable_ld_elf2flt_binary;  use_ld_elf2flt_binary=$enableval
-+else
-+   use_ld_elf2flt_binary=yes
-+
-+fi
-+
-+
-+var_yn_to_10() {
-+	if eval test \"\$$1\" = yes ; then
-+		eval $1=1
-+	else
-+		eval $1=0
-+	fi
-+}
- 
--# Check whether --enable-got-check or --disable-got-check was given.
-+# Check whether --enable-got-check was given.
- if test "${enable_got_check+set}" = set; then
--  enableval="$enable_got_check"
--   got_check=$enableval
-+  enableval=$enable_got_check;  got_check=$enableval
- else
-    got_check=yes
- 
--fi;
-+fi
-+
-+var_yn_to_10 got_check
- 
--# Check whether --enable-emit_relocs or --disable-emit_relocs was given.
-+# Check whether --enable-emit-relocs was given.
- if test "${enable_emit_relocs+set}" = set; then
--  enableval="$enable_emit_relocs"
--   emit_relocs=$enableval
-+  enableval=$enable_emit_relocs;  emit_relocs=$enableval
- else
-    emit_relocs=yes
- 
--fi;
-+fi
-+
-+var_yn_to_10 emit_relocs
-+
-+# Check whether --enable-emit-ctor-dtor was given.
-+if test "${enable_emit_ctor_dtor+set}" = set; then
-+  enableval=$enable_emit_ctor_dtor;  emit_ctor_dtor=$enableval
-+else
-+   emit_ctor_dtor=no
-+
-+fi
-+
-+var_yn_to_10 emit_ctor_dtor
-+
-+# Check whether --enable-always-reloc-text was given.
-+if test "${enable_always_reloc_text+set}" = set; then
-+  enableval=$enable_always_reloc_text;  always_reloc_text=$enableval
-+else
-+
-+	case $target in
-+		bfin*) always_reloc_text=yes;;
-+		*)     always_reloc_text=no;;
-+	esac
-+
-+
-+fi
-+
-+var_yn_to_10 always_reloc_text
- 
- ac_aux_dir=
--for ac_dir in $srcdir $srcdir/.. $srcdir/../..; do
--  if test -f $ac_dir/install-sh; then
-+for ac_dir in "$srcdir" "$srcdir/.." "$srcdir/../.."; do
-+  if test -f "$ac_dir/install-sh"; then
-     ac_aux_dir=$ac_dir
-     ac_install_sh="$ac_aux_dir/install-sh -c"
-     break
--  elif test -f $ac_dir/install.sh; then
-+  elif test -f "$ac_dir/install.sh"; then
-     ac_aux_dir=$ac_dir
-     ac_install_sh="$ac_aux_dir/install.sh -c"
-     break
--  elif test -f $ac_dir/shtool; then
-+  elif test -f "$ac_dir/shtool"; then
-     ac_aux_dir=$ac_dir
-     ac_install_sh="$ac_aux_dir/shtool install -c"
-     break
-   fi
- done
- if test -z "$ac_aux_dir"; then
--  { { echo "$as_me:$LINENO: error: cannot find install-sh or install.sh in $srcdir $srcdir/.. $srcdir/../.." >&5
--echo "$as_me: error: cannot find install-sh or install.sh in $srcdir $srcdir/.. $srcdir/../.." >&2;}
-+  { { $as_echo "$as_me:$LINENO: error: cannot find install-sh or install.sh in \"$srcdir\" \"$srcdir/..\" \"$srcdir/../..\"" >&5
-+$as_echo "$as_me: error: cannot find install-sh or install.sh in \"$srcdir\" \"$srcdir/..\" \"$srcdir/../..\"" >&2;}
-    { (exit 1); exit 1; }; }
- fi
--ac_config_guess="$SHELL $ac_aux_dir/config.guess"
--ac_config_sub="$SHELL $ac_aux_dir/config.sub"
--ac_configure="$SHELL $ac_aux_dir/configure" # This should be Cygnus configure.
-+
-+# These three variables are undocumented and unsupported,
-+# and are intended to be withdrawn in a future Autoconf release.
-+# They can cause serious problems if a builder's source tree is in a directory
-+# whose full name contains unusual characters.
-+ac_config_guess="$SHELL $ac_aux_dir/config.guess"  # Please don't use this var.
-+ac_config_sub="$SHELL $ac_aux_dir/config.sub"  # Please don't use this var.
-+ac_configure="$SHELL $ac_aux_dir/configure"  # Please don't use this var.
-+
- 
- # Make sure we can run config.sub.
--$ac_config_sub sun4 >/dev/null 2>&1 ||
--  { { echo "$as_me:$LINENO: error: cannot run $ac_config_sub" >&5
--echo "$as_me: error: cannot run $ac_config_sub" >&2;}
-+$SHELL "$ac_aux_dir/config.sub" sun4 >/dev/null 2>&1 ||
-+  { { $as_echo "$as_me:$LINENO: error: cannot run $SHELL $ac_aux_dir/config.sub" >&5
-+$as_echo "$as_me: error: cannot run $SHELL $ac_aux_dir/config.sub" >&2;}
-    { (exit 1); exit 1; }; }
- 
--echo "$as_me:$LINENO: checking build system type" >&5
--echo $ECHO_N "checking build system type... $ECHO_C" >&6
-+{ $as_echo "$as_me:$LINENO: checking build system type" >&5
-+$as_echo_n "checking build system type... " >&6; }
- if test "${ac_cv_build+set}" = set; then
--  echo $ECHO_N "(cached) $ECHO_C" >&6
--else
--  ac_cv_build_alias=$build_alias
--test -z "$ac_cv_build_alias" &&
--  ac_cv_build_alias=`$ac_config_guess`
--test -z "$ac_cv_build_alias" &&
--  { { echo "$as_me:$LINENO: error: cannot guess build type; you must specify one" >&5
--echo "$as_me: error: cannot guess build type; you must specify one" >&2;}
-+  $as_echo_n "(cached) " >&6
-+else
-+  ac_build_alias=$build_alias
-+test "x$ac_build_alias" = x &&
-+  ac_build_alias=`$SHELL "$ac_aux_dir/config.guess"`
-+test "x$ac_build_alias" = x &&
-+  { { $as_echo "$as_me:$LINENO: error: cannot guess build type; you must specify one" >&5
-+$as_echo "$as_me: error: cannot guess build type; you must specify one" >&2;}
-    { (exit 1); exit 1; }; }
--ac_cv_build=`$ac_config_sub $ac_cv_build_alias` ||
--  { { echo "$as_me:$LINENO: error: $ac_config_sub $ac_cv_build_alias failed" >&5
--echo "$as_me: error: $ac_config_sub $ac_cv_build_alias failed" >&2;}
-+ac_cv_build=`$SHELL "$ac_aux_dir/config.sub" $ac_build_alias` ||
-+  { { $as_echo "$as_me:$LINENO: error: $SHELL $ac_aux_dir/config.sub $ac_build_alias failed" >&5
-+$as_echo "$as_me: error: $SHELL $ac_aux_dir/config.sub $ac_build_alias failed" >&2;}
-    { (exit 1); exit 1; }; }
- 
- fi
--echo "$as_me:$LINENO: result: $ac_cv_build" >&5
--echo "${ECHO_T}$ac_cv_build" >&6
-+{ $as_echo "$as_me:$LINENO: result: $ac_cv_build" >&5
-+$as_echo "$ac_cv_build" >&6; }
-+case $ac_cv_build in
-+*-*-*) ;;
-+*) { { $as_echo "$as_me:$LINENO: error: invalid value of canonical build" >&5
-+$as_echo "$as_me: error: invalid value of canonical build" >&2;}
-+   { (exit 1); exit 1; }; };;
-+esac
- build=$ac_cv_build
--build_cpu=`echo $ac_cv_build | sed 's/^\([^-]*\)-\([^-]*\)-\(.*\)$/\1/'`
--build_vendor=`echo $ac_cv_build | sed 's/^\([^-]*\)-\([^-]*\)-\(.*\)$/\2/'`
--build_os=`echo $ac_cv_build | sed 's/^\([^-]*\)-\([^-]*\)-\(.*\)$/\3/'`
--
--
--echo "$as_me:$LINENO: checking host system type" >&5
--echo $ECHO_N "checking host system type... $ECHO_C" >&6
-+ac_save_IFS=$IFS; IFS='-'
-+set x $ac_cv_build
-+shift
-+build_cpu=$1
-+build_vendor=$2
-+shift; shift
-+# Remember, the first character of IFS is used to create $*,
-+# except with old shells:
-+build_os=$*
-+IFS=$ac_save_IFS
-+case $build_os in *\ *) build_os=`echo "$build_os" | sed 's/ /-/g'`;; esac
-+
-+
-+{ $as_echo "$as_me:$LINENO: checking host system type" >&5
-+$as_echo_n "checking host system type... " >&6; }
- if test "${ac_cv_host+set}" = set; then
--  echo $ECHO_N "(cached) $ECHO_C" >&6
--else
--  ac_cv_host_alias=$host_alias
--test -z "$ac_cv_host_alias" &&
--  ac_cv_host_alias=$ac_cv_build_alias
--ac_cv_host=`$ac_config_sub $ac_cv_host_alias` ||
--  { { echo "$as_me:$LINENO: error: $ac_config_sub $ac_cv_host_alias failed" >&5
--echo "$as_me: error: $ac_config_sub $ac_cv_host_alias failed" >&2;}
-+  $as_echo_n "(cached) " >&6
-+else
-+  if test "x$host_alias" = x; then
-+  ac_cv_host=$ac_cv_build
-+else
-+  ac_cv_host=`$SHELL "$ac_aux_dir/config.sub" $host_alias` ||
-+    { { $as_echo "$as_me:$LINENO: error: $SHELL $ac_aux_dir/config.sub $host_alias failed" >&5
-+$as_echo "$as_me: error: $SHELL $ac_aux_dir/config.sub $host_alias failed" >&2;}
-    { (exit 1); exit 1; }; }
-+fi
- 
- fi
--echo "$as_me:$LINENO: result: $ac_cv_host" >&5
--echo "${ECHO_T}$ac_cv_host" >&6
-+{ $as_echo "$as_me:$LINENO: result: $ac_cv_host" >&5
-+$as_echo "$ac_cv_host" >&6; }
-+case $ac_cv_host in
-+*-*-*) ;;
-+*) { { $as_echo "$as_me:$LINENO: error: invalid value of canonical host" >&5
-+$as_echo "$as_me: error: invalid value of canonical host" >&2;}
-+   { (exit 1); exit 1; }; };;
-+esac
- host=$ac_cv_host
--host_cpu=`echo $ac_cv_host | sed 's/^\([^-]*\)-\([^-]*\)-\(.*\)$/\1/'`
--host_vendor=`echo $ac_cv_host | sed 's/^\([^-]*\)-\([^-]*\)-\(.*\)$/\2/'`
--host_os=`echo $ac_cv_host | sed 's/^\([^-]*\)-\([^-]*\)-\(.*\)$/\3/'`
--
--
--echo "$as_me:$LINENO: checking target system type" >&5
--echo $ECHO_N "checking target system type... $ECHO_C" >&6
-+ac_save_IFS=$IFS; IFS='-'
-+set x $ac_cv_host
-+shift
-+host_cpu=$1
-+host_vendor=$2
-+shift; shift
-+# Remember, the first character of IFS is used to create $*,
-+# except with old shells:
-+host_os=$*
-+IFS=$ac_save_IFS
-+case $host_os in *\ *) host_os=`echo "$host_os" | sed 's/ /-/g'`;; esac
-+
-+
-+{ $as_echo "$as_me:$LINENO: checking target system type" >&5
-+$as_echo_n "checking target system type... " >&6; }
- if test "${ac_cv_target+set}" = set; then
--  echo $ECHO_N "(cached) $ECHO_C" >&6
--else
--  ac_cv_target_alias=$target_alias
--test "x$ac_cv_target_alias" = "x" &&
--  ac_cv_target_alias=$ac_cv_host_alias
--ac_cv_target=`$ac_config_sub $ac_cv_target_alias` ||
--  { { echo "$as_me:$LINENO: error: $ac_config_sub $ac_cv_target_alias failed" >&5
--echo "$as_me: error: $ac_config_sub $ac_cv_target_alias failed" >&2;}
-+  $as_echo_n "(cached) " >&6
-+else
-+  if test "x$target_alias" = x; then
-+  ac_cv_target=$ac_cv_host
-+else
-+  ac_cv_target=`$SHELL "$ac_aux_dir/config.sub" $target_alias` ||
-+    { { $as_echo "$as_me:$LINENO: error: $SHELL $ac_aux_dir/config.sub $target_alias failed" >&5
-+$as_echo "$as_me: error: $SHELL $ac_aux_dir/config.sub $target_alias failed" >&2;}
-    { (exit 1); exit 1; }; }
-+fi
- 
- fi
--echo "$as_me:$LINENO: result: $ac_cv_target" >&5
--echo "${ECHO_T}$ac_cv_target" >&6
-+{ $as_echo "$as_me:$LINENO: result: $ac_cv_target" >&5
-+$as_echo "$ac_cv_target" >&6; }
-+case $ac_cv_target in
-+*-*-*) ;;
-+*) { { $as_echo "$as_me:$LINENO: error: invalid value of canonical target" >&5
-+$as_echo "$as_me: error: invalid value of canonical target" >&2;}
-+   { (exit 1); exit 1; }; };;
-+esac
- target=$ac_cv_target
--target_cpu=`echo $ac_cv_target | sed 's/^\([^-]*\)-\([^-]*\)-\(.*\)$/\1/'`
--target_vendor=`echo $ac_cv_target | sed 's/^\([^-]*\)-\([^-]*\)-\(.*\)$/\2/'`
--target_os=`echo $ac_cv_target | sed 's/^\([^-]*\)-\([^-]*\)-\(.*\)$/\3/'`
-+ac_save_IFS=$IFS; IFS='-'
-+set x $ac_cv_target
-+shift
-+target_cpu=$1
-+target_vendor=$2
-+shift; shift
-+# Remember, the first character of IFS is used to create $*,
-+# except with old shells:
-+target_os=$*
-+IFS=$ac_save_IFS
-+case $target_os in *\ *) target_os=`echo "$target_os" | sed 's/ /-/g'`;; esac
- 
- 
- # The aliases save the names the user supplied, while $host etc.
-@@ -1489,10 +2131,10 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
- if test -n "$ac_tool_prefix"; then
-   # Extract the first word of "${ac_tool_prefix}gcc", so it can be a program name with args.
- set dummy ${ac_tool_prefix}gcc; ac_word=$2
--echo "$as_me:$LINENO: checking for $ac_word" >&5
--echo $ECHO_N "checking for $ac_word... $ECHO_C" >&6
-+{ $as_echo "$as_me:$LINENO: checking for $ac_word" >&5
-+$as_echo_n "checking for $ac_word... " >&6; }
- if test "${ac_cv_prog_CC+set}" = set; then
--  echo $ECHO_N "(cached) $ECHO_C" >&6
-+  $as_echo_n "(cached) " >&6
- else
-   if test -n "$CC"; then
-   ac_cv_prog_CC="$CC" # Let the user override the test.
-@@ -1503,34 +2145,36 @@ do
-   IFS=$as_save_IFS
-   test -z "$as_dir" && as_dir=.
-   for ac_exec_ext in '' $ac_executable_extensions; do
--  if $as_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
-+  if { test -f "$as_dir/$ac_word$ac_exec_ext" && $as_test_x "$as_dir/$ac_word$ac_exec_ext"; }; then
-     ac_cv_prog_CC="${ac_tool_prefix}gcc"
--    echo "$as_me:$LINENO: found $as_dir/$ac_word$ac_exec_ext" >&5
-+    $as_echo "$as_me:$LINENO: found $as_dir/$ac_word$ac_exec_ext" >&5
-     break 2
-   fi
- done
- done
-+IFS=$as_save_IFS
- 
- fi
- fi
- CC=$ac_cv_prog_CC
- if test -n "$CC"; then
--  echo "$as_me:$LINENO: result: $CC" >&5
--echo "${ECHO_T}$CC" >&6
-+  { $as_echo "$as_me:$LINENO: result: $CC" >&5
-+$as_echo "$CC" >&6; }
- else
--  echo "$as_me:$LINENO: result: no" >&5
--echo "${ECHO_T}no" >&6
-+  { $as_echo "$as_me:$LINENO: result: no" >&5
-+$as_echo "no" >&6; }
- fi
- 
-+
- fi
- if test -z "$ac_cv_prog_CC"; then
-   ac_ct_CC=$CC
-   # Extract the first word of "gcc", so it can be a program name with args.
- set dummy gcc; ac_word=$2
--echo "$as_me:$LINENO: checking for $ac_word" >&5
--echo $ECHO_N "checking for $ac_word... $ECHO_C" >&6
-+{ $as_echo "$as_me:$LINENO: checking for $ac_word" >&5
-+$as_echo_n "checking for $ac_word... " >&6; }
- if test "${ac_cv_prog_ac_ct_CC+set}" = set; then
--  echo $ECHO_N "(cached) $ECHO_C" >&6
-+  $as_echo_n "(cached) " >&6
- else
-   if test -n "$ac_ct_CC"; then
-   ac_cv_prog_ac_ct_CC="$ac_ct_CC" # Let the user override the test.
-@@ -1541,38 +2185,49 @@ do
-   IFS=$as_save_IFS
-   test -z "$as_dir" && as_dir=.
-   for ac_exec_ext in '' $ac_executable_extensions; do
--  if $as_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
-+  if { test -f "$as_dir/$ac_word$ac_exec_ext" && $as_test_x "$as_dir/$ac_word$ac_exec_ext"; }; then
-     ac_cv_prog_ac_ct_CC="gcc"
--    echo "$as_me:$LINENO: found $as_dir/$ac_word$ac_exec_ext" >&5
-+    $as_echo "$as_me:$LINENO: found $as_dir/$ac_word$ac_exec_ext" >&5
-     break 2
-   fi
- done
- done
-+IFS=$as_save_IFS
- 
- fi
- fi
- ac_ct_CC=$ac_cv_prog_ac_ct_CC
- if test -n "$ac_ct_CC"; then
--  echo "$as_me:$LINENO: result: $ac_ct_CC" >&5
--echo "${ECHO_T}$ac_ct_CC" >&6
-+  { $as_echo "$as_me:$LINENO: result: $ac_ct_CC" >&5
-+$as_echo "$ac_ct_CC" >&6; }
- else
--  echo "$as_me:$LINENO: result: no" >&5
--echo "${ECHO_T}no" >&6
-+  { $as_echo "$as_me:$LINENO: result: no" >&5
-+$as_echo "no" >&6; }
- fi
- 
--  CC=$ac_ct_CC
-+  if test "x$ac_ct_CC" = x; then
-+    CC=""
-+  else
-+    case $cross_compiling:$ac_tool_warned in
-+yes:)
-+{ $as_echo "$as_me:$LINENO: WARNING: using cross tools not prefixed with host triplet" >&5
-+$as_echo "$as_me: WARNING: using cross tools not prefixed with host triplet" >&2;}
-+ac_tool_warned=yes ;;
-+esac
-+    CC=$ac_ct_CC
-+  fi
- else
-   CC="$ac_cv_prog_CC"
- fi
- 
- if test -z "$CC"; then
--  if test -n "$ac_tool_prefix"; then
--  # Extract the first word of "${ac_tool_prefix}cc", so it can be a program name with args.
-+          if test -n "$ac_tool_prefix"; then
-+    # Extract the first word of "${ac_tool_prefix}cc", so it can be a program name with args.
- set dummy ${ac_tool_prefix}cc; ac_word=$2
--echo "$as_me:$LINENO: checking for $ac_word" >&5
--echo $ECHO_N "checking for $ac_word... $ECHO_C" >&6
-+{ $as_echo "$as_me:$LINENO: checking for $ac_word" >&5
-+$as_echo_n "checking for $ac_word... " >&6; }
- if test "${ac_cv_prog_CC+set}" = set; then
--  echo $ECHO_N "(cached) $ECHO_C" >&6
-+  $as_echo_n "(cached) " >&6
- else
-   if test -n "$CC"; then
-   ac_cv_prog_CC="$CC" # Let the user override the test.
-@@ -1583,76 +2238,36 @@ do
-   IFS=$as_save_IFS
-   test -z "$as_dir" && as_dir=.
-   for ac_exec_ext in '' $ac_executable_extensions; do
--  if $as_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
-+  if { test -f "$as_dir/$ac_word$ac_exec_ext" && $as_test_x "$as_dir/$ac_word$ac_exec_ext"; }; then
-     ac_cv_prog_CC="${ac_tool_prefix}cc"
--    echo "$as_me:$LINENO: found $as_dir/$ac_word$ac_exec_ext" >&5
-+    $as_echo "$as_me:$LINENO: found $as_dir/$ac_word$ac_exec_ext" >&5
-     break 2
-   fi
- done
- done
-+IFS=$as_save_IFS
- 
- fi
- fi
- CC=$ac_cv_prog_CC
- if test -n "$CC"; then
--  echo "$as_me:$LINENO: result: $CC" >&5
--echo "${ECHO_T}$CC" >&6
--else
--  echo "$as_me:$LINENO: result: no" >&5
--echo "${ECHO_T}no" >&6
--fi
--
--fi
--if test -z "$ac_cv_prog_CC"; then
--  ac_ct_CC=$CC
--  # Extract the first word of "cc", so it can be a program name with args.
--set dummy cc; ac_word=$2
--echo "$as_me:$LINENO: checking for $ac_word" >&5
--echo $ECHO_N "checking for $ac_word... $ECHO_C" >&6
--if test "${ac_cv_prog_ac_ct_CC+set}" = set; then
--  echo $ECHO_N "(cached) $ECHO_C" >&6
--else
--  if test -n "$ac_ct_CC"; then
--  ac_cv_prog_ac_ct_CC="$ac_ct_CC" # Let the user override the test.
--else
--as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
--for as_dir in $PATH
--do
--  IFS=$as_save_IFS
--  test -z "$as_dir" && as_dir=.
--  for ac_exec_ext in '' $ac_executable_extensions; do
--  if $as_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
--    ac_cv_prog_ac_ct_CC="cc"
--    echo "$as_me:$LINENO: found $as_dir/$ac_word$ac_exec_ext" >&5
--    break 2
--  fi
--done
--done
--
--fi
--fi
--ac_ct_CC=$ac_cv_prog_ac_ct_CC
--if test -n "$ac_ct_CC"; then
--  echo "$as_me:$LINENO: result: $ac_ct_CC" >&5
--echo "${ECHO_T}$ac_ct_CC" >&6
-+  { $as_echo "$as_me:$LINENO: result: $CC" >&5
-+$as_echo "$CC" >&6; }
- else
--  echo "$as_me:$LINENO: result: no" >&5
--echo "${ECHO_T}no" >&6
-+  { $as_echo "$as_me:$LINENO: result: no" >&5
-+$as_echo "no" >&6; }
- fi
- 
--  CC=$ac_ct_CC
--else
--  CC="$ac_cv_prog_CC"
--fi
- 
-+  fi
- fi
- if test -z "$CC"; then
-   # Extract the first word of "cc", so it can be a program name with args.
- set dummy cc; ac_word=$2
--echo "$as_me:$LINENO: checking for $ac_word" >&5
--echo $ECHO_N "checking for $ac_word... $ECHO_C" >&6
-+{ $as_echo "$as_me:$LINENO: checking for $ac_word" >&5
-+$as_echo_n "checking for $ac_word... " >&6; }
- if test "${ac_cv_prog_CC+set}" = set; then
--  echo $ECHO_N "(cached) $ECHO_C" >&6
-+  $as_echo_n "(cached) " >&6
- else
-   if test -n "$CC"; then
-   ac_cv_prog_CC="$CC" # Let the user override the test.
-@@ -1664,17 +2279,18 @@ do
-   IFS=$as_save_IFS
-   test -z "$as_dir" && as_dir=.
-   for ac_exec_ext in '' $ac_executable_extensions; do
--  if $as_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
-+  if { test -f "$as_dir/$ac_word$ac_exec_ext" && $as_test_x "$as_dir/$ac_word$ac_exec_ext"; }; then
-     if test "$as_dir/$ac_word$ac_exec_ext" = "/usr/ucb/cc"; then
-        ac_prog_rejected=yes
-        continue
-      fi
-     ac_cv_prog_CC="cc"
--    echo "$as_me:$LINENO: found $as_dir/$ac_word$ac_exec_ext" >&5
-+    $as_echo "$as_me:$LINENO: found $as_dir/$ac_word$ac_exec_ext" >&5
-     break 2
-   fi
- done
- done
-+IFS=$as_save_IFS
- 
- if test $ac_prog_rejected = yes; then
-   # We found a bogon in the path, so make sure we never use it.
-@@ -1692,24 +2308,25 @@ fi
- fi
- CC=$ac_cv_prog_CC
- if test -n "$CC"; then
--  echo "$as_me:$LINENO: result: $CC" >&5
--echo "${ECHO_T}$CC" >&6
-+  { $as_echo "$as_me:$LINENO: result: $CC" >&5
-+$as_echo "$CC" >&6; }
- else
--  echo "$as_me:$LINENO: result: no" >&5
--echo "${ECHO_T}no" >&6
-+  { $as_echo "$as_me:$LINENO: result: no" >&5
-+$as_echo "no" >&6; }
- fi
- 
-+
- fi
- if test -z "$CC"; then
-   if test -n "$ac_tool_prefix"; then
--  for ac_prog in cl
-+  for ac_prog in cl.exe
-   do
-     # Extract the first word of "$ac_tool_prefix$ac_prog", so it can be a program name with args.
- set dummy $ac_tool_prefix$ac_prog; ac_word=$2
--echo "$as_me:$LINENO: checking for $ac_word" >&5
--echo $ECHO_N "checking for $ac_word... $ECHO_C" >&6
-+{ $as_echo "$as_me:$LINENO: checking for $ac_word" >&5
-+$as_echo_n "checking for $ac_word... " >&6; }
- if test "${ac_cv_prog_CC+set}" = set; then
--  echo $ECHO_N "(cached) $ECHO_C" >&6
-+  $as_echo_n "(cached) " >&6
- else
-   if test -n "$CC"; then
-   ac_cv_prog_CC="$CC" # Let the user override the test.
-@@ -1720,38 +2337,40 @@ do
-   IFS=$as_save_IFS
-   test -z "$as_dir" && as_dir=.
-   for ac_exec_ext in '' $ac_executable_extensions; do
--  if $as_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
-+  if { test -f "$as_dir/$ac_word$ac_exec_ext" && $as_test_x "$as_dir/$ac_word$ac_exec_ext"; }; then
-     ac_cv_prog_CC="$ac_tool_prefix$ac_prog"
--    echo "$as_me:$LINENO: found $as_dir/$ac_word$ac_exec_ext" >&5
-+    $as_echo "$as_me:$LINENO: found $as_dir/$ac_word$ac_exec_ext" >&5
-     break 2
-   fi
- done
- done
-+IFS=$as_save_IFS
- 
- fi
- fi
- CC=$ac_cv_prog_CC
- if test -n "$CC"; then
--  echo "$as_me:$LINENO: result: $CC" >&5
--echo "${ECHO_T}$CC" >&6
-+  { $as_echo "$as_me:$LINENO: result: $CC" >&5
-+$as_echo "$CC" >&6; }
- else
--  echo "$as_me:$LINENO: result: no" >&5
--echo "${ECHO_T}no" >&6
-+  { $as_echo "$as_me:$LINENO: result: no" >&5
-+$as_echo "no" >&6; }
- fi
- 
-+
-     test -n "$CC" && break
-   done
- fi
- if test -z "$CC"; then
-   ac_ct_CC=$CC
--  for ac_prog in cl
-+  for ac_prog in cl.exe
- do
-   # Extract the first word of "$ac_prog", so it can be a program name with args.
- set dummy $ac_prog; ac_word=$2
--echo "$as_me:$LINENO: checking for $ac_word" >&5
--echo $ECHO_N "checking for $ac_word... $ECHO_C" >&6
-+{ $as_echo "$as_me:$LINENO: checking for $ac_word" >&5
-+$as_echo_n "checking for $ac_word... " >&6; }
- if test "${ac_cv_prog_ac_ct_CC+set}" = set; then
--  echo $ECHO_N "(cached) $ECHO_C" >&6
-+  $as_echo_n "(cached) " >&6
- else
-   if test -n "$ac_ct_CC"; then
-   ac_cv_prog_ac_ct_CC="$ac_ct_CC" # Let the user override the test.
-@@ -1762,58 +2381,90 @@ do
-   IFS=$as_save_IFS
-   test -z "$as_dir" && as_dir=.
-   for ac_exec_ext in '' $ac_executable_extensions; do
--  if $as_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
-+  if { test -f "$as_dir/$ac_word$ac_exec_ext" && $as_test_x "$as_dir/$ac_word$ac_exec_ext"; }; then
-     ac_cv_prog_ac_ct_CC="$ac_prog"
--    echo "$as_me:$LINENO: found $as_dir/$ac_word$ac_exec_ext" >&5
-+    $as_echo "$as_me:$LINENO: found $as_dir/$ac_word$ac_exec_ext" >&5
-     break 2
-   fi
- done
- done
-+IFS=$as_save_IFS
- 
- fi
- fi
- ac_ct_CC=$ac_cv_prog_ac_ct_CC
- if test -n "$ac_ct_CC"; then
--  echo "$as_me:$LINENO: result: $ac_ct_CC" >&5
--echo "${ECHO_T}$ac_ct_CC" >&6
-+  { $as_echo "$as_me:$LINENO: result: $ac_ct_CC" >&5
-+$as_echo "$ac_ct_CC" >&6; }
- else
--  echo "$as_me:$LINENO: result: no" >&5
--echo "${ECHO_T}no" >&6
-+  { $as_echo "$as_me:$LINENO: result: no" >&5
-+$as_echo "no" >&6; }
- fi
- 
-+
-   test -n "$ac_ct_CC" && break
- done
- 
--  CC=$ac_ct_CC
-+  if test "x$ac_ct_CC" = x; then
-+    CC=""
-+  else
-+    case $cross_compiling:$ac_tool_warned in
-+yes:)
-+{ $as_echo "$as_me:$LINENO: WARNING: using cross tools not prefixed with host triplet" >&5
-+$as_echo "$as_me: WARNING: using cross tools not prefixed with host triplet" >&2;}
-+ac_tool_warned=yes ;;
-+esac
-+    CC=$ac_ct_CC
-+  fi
- fi
- 
- fi
- 
- 
--test -z "$CC" && { { echo "$as_me:$LINENO: error: no acceptable C compiler found in \$PATH
-+test -z "$CC" && { { $as_echo "$as_me:$LINENO: error: in \`$ac_pwd':" >&5
-+$as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
-+{ { $as_echo "$as_me:$LINENO: error: no acceptable C compiler found in \$PATH
- See \`config.log' for more details." >&5
--echo "$as_me: error: no acceptable C compiler found in \$PATH
-+$as_echo "$as_me: error: no acceptable C compiler found in \$PATH
- See \`config.log' for more details." >&2;}
--   { (exit 1); exit 1; }; }
-+   { (exit 1); exit 1; }; }; }
- 
- # Provide some information about the compiler.
--echo "$as_me:$LINENO:" \
--     "checking for C compiler version" >&5
--ac_compiler=`set X $ac_compile; echo $2`
--{ (eval echo "$as_me:$LINENO: \"$ac_compiler --version </dev/null >&5\"") >&5
--  (eval $ac_compiler --version </dev/null >&5) 2>&5
-+$as_echo "$as_me:$LINENO: checking for C compiler version" >&5
-+set X $ac_compile
-+ac_compiler=$2
-+{ (ac_try="$ac_compiler --version >&5"
-+case "(($ac_try" in
-+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
-+  *) ac_try_echo=$ac_try;;
-+esac
-+eval ac_try_echo="\"\$as_me:$LINENO: $ac_try_echo\""
-+$as_echo "$ac_try_echo") >&5
-+  (eval "$ac_compiler --version >&5") 2>&5
-   ac_status=$?
--  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-+  $as_echo "$as_me:$LINENO: \$? = $ac_status" >&5
-   (exit $ac_status); }
--{ (eval echo "$as_me:$LINENO: \"$ac_compiler -v </dev/null >&5\"") >&5
--  (eval $ac_compiler -v </dev/null >&5) 2>&5
-+{ (ac_try="$ac_compiler -v >&5"
-+case "(($ac_try" in
-+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
-+  *) ac_try_echo=$ac_try;;
-+esac
-+eval ac_try_echo="\"\$as_me:$LINENO: $ac_try_echo\""
-+$as_echo "$ac_try_echo") >&5
-+  (eval "$ac_compiler -v >&5") 2>&5
-   ac_status=$?
--  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-+  $as_echo "$as_me:$LINENO: \$? = $ac_status" >&5
-   (exit $ac_status); }
--{ (eval echo "$as_me:$LINENO: \"$ac_compiler -V </dev/null >&5\"") >&5
--  (eval $ac_compiler -V </dev/null >&5) 2>&5
-+{ (ac_try="$ac_compiler -V >&5"
-+case "(($ac_try" in
-+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
-+  *) ac_try_echo=$ac_try;;
-+esac
-+eval ac_try_echo="\"\$as_me:$LINENO: $ac_try_echo\""
-+$as_echo "$ac_try_echo") >&5
-+  (eval "$ac_compiler -V >&5") 2>&5
-   ac_status=$?
--  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-+  $as_echo "$as_me:$LINENO: \$? = $ac_status" >&5
-   (exit $ac_status); }
- 
- cat >conftest.$ac_ext <<_ACEOF
-@@ -1832,111 +2483,150 @@ main ()
- }
- _ACEOF
- ac_clean_files_save=$ac_clean_files
--ac_clean_files="$ac_clean_files a.out a.exe b.out"
-+ac_clean_files="$ac_clean_files a.out a.out.dSYM a.exe b.out"
- # Try to create an executable without -o first, disregard a.out.
- # It will help us diagnose broken compilers, and finding out an intuition
- # of exeext.
--echo "$as_me:$LINENO: checking for C compiler default output file name" >&5
--echo $ECHO_N "checking for C compiler default output file name... $ECHO_C" >&6
--ac_link_default=`echo "$ac_link" | sed 's/ -o *conftest[^ ]*//'`
--if { (eval echo "$as_me:$LINENO: \"$ac_link_default\"") >&5
--  (eval $ac_link_default) 2>&5
-+{ $as_echo "$as_me:$LINENO: checking for C compiler default output file name" >&5
-+$as_echo_n "checking for C compiler default output file name... " >&6; }
-+ac_link_default=`$as_echo "$ac_link" | sed 's/ -o *conftest[^ ]*//'`
-+
-+# The possible output files:
-+ac_files="a.out conftest.exe conftest a.exe a_out.exe b.out conftest.*"
-+
-+ac_rmfiles=
-+for ac_file in $ac_files
-+do
-+  case $ac_file in
-+    *.$ac_ext | *.xcoff | *.tds | *.d | *.pdb | *.xSYM | *.bb | *.bbg | *.map | *.inf | *.dSYM | *.o | *.obj ) ;;
-+    * ) ac_rmfiles="$ac_rmfiles $ac_file";;
-+  esac
-+done
-+rm -f $ac_rmfiles
-+
-+if { (ac_try="$ac_link_default"
-+case "(($ac_try" in
-+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
-+  *) ac_try_echo=$ac_try;;
-+esac
-+eval ac_try_echo="\"\$as_me:$LINENO: $ac_try_echo\""
-+$as_echo "$ac_try_echo") >&5
-+  (eval "$ac_link_default") 2>&5
-   ac_status=$?
--  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-+  $as_echo "$as_me:$LINENO: \$? = $ac_status" >&5
-   (exit $ac_status); }; then
--  # Find the output, starting from the most likely.  This scheme is
--# not robust to junk in `.', hence go to wildcards (a.*) only as a last
--# resort.
--
--# Be careful to initialize this variable, since it used to be cached.
--# Otherwise an old cache value of `no' led to `EXEEXT = no' in a Makefile.
--ac_cv_exeext=
--# b.out is created by i960 compilers.
--for ac_file in a_out.exe a.exe conftest.exe a.out conftest a.* conftest.* b.out
-+  # Autoconf-2.13 could set the ac_cv_exeext variable to `no'.
-+# So ignore a value of `no', otherwise this would lead to `EXEEXT = no'
-+# in a Makefile.  We should not override ac_cv_exeext if it was cached,
-+# so that the user can short-circuit this test for compilers unknown to
-+# Autoconf.
-+for ac_file in $ac_files ''
- do
-   test -f "$ac_file" || continue
-   case $ac_file in
--    *.$ac_ext | *.xcoff | *.tds | *.d | *.pdb | *.xSYM | *.bb | *.bbg | *.o | *.obj )
--	;;
--    conftest.$ac_ext )
--	# This is the source file.
-+    *.$ac_ext | *.xcoff | *.tds | *.d | *.pdb | *.xSYM | *.bb | *.bbg | *.map | *.inf | *.dSYM | *.o | *.obj )
- 	;;
-     [ab].out )
- 	# We found the default executable, but exeext='' is most
- 	# certainly right.
- 	break;;
-     *.* )
--	ac_cv_exeext=`expr "$ac_file" : '[^.]*\(\..*\)'`
--	# FIXME: I believe we export ac_cv_exeext for Libtool,
--	# but it would be cool to find out if it's true.  Does anybody
--	# maintain Libtool? --akim.
--	export ac_cv_exeext
-+        if test "${ac_cv_exeext+set}" = set && test "$ac_cv_exeext" != no;
-+	then :; else
-+	   ac_cv_exeext=`expr "$ac_file" : '[^.]*\(\..*\)'`
-+	fi
-+	# We set ac_cv_exeext here because the later test for it is not
-+	# safe: cross compilers may not add the suffix if given an `-o'
-+	# argument, so we may need to know it at that point already.
-+	# Even if this section looks crufty: it has the advantage of
-+	# actually working.
- 	break;;
-     * )
- 	break;;
-   esac
- done
-+test "$ac_cv_exeext" = no && ac_cv_exeext=
-+
- else
--  echo "$as_me: failed program was:" >&5
-+  ac_file=''
-+fi
-+
-+{ $as_echo "$as_me:$LINENO: result: $ac_file" >&5
-+$as_echo "$ac_file" >&6; }
-+if test -z "$ac_file"; then
-+  $as_echo "$as_me: failed program was:" >&5
- sed 's/^/| /' conftest.$ac_ext >&5
- 
--{ { echo "$as_me:$LINENO: error: C compiler cannot create executables
-+{ { $as_echo "$as_me:$LINENO: error: in \`$ac_pwd':" >&5
-+$as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
-+{ { $as_echo "$as_me:$LINENO: error: C compiler cannot create executables
- See \`config.log' for more details." >&5
--echo "$as_me: error: C compiler cannot create executables
-+$as_echo "$as_me: error: C compiler cannot create executables
- See \`config.log' for more details." >&2;}
--   { (exit 77); exit 77; }; }
-+   { (exit 77); exit 77; }; }; }
- fi
- 
- ac_exeext=$ac_cv_exeext
--echo "$as_me:$LINENO: result: $ac_file" >&5
--echo "${ECHO_T}$ac_file" >&6
- 
--# Check the compiler produces executables we can run.  If not, either
-+# Check that the compiler produces executables we can run.  If not, either
- # the compiler is broken, or we cross compile.
--echo "$as_me:$LINENO: checking whether the C compiler works" >&5
--echo $ECHO_N "checking whether the C compiler works... $ECHO_C" >&6
-+{ $as_echo "$as_me:$LINENO: checking whether the C compiler works" >&5
-+$as_echo_n "checking whether the C compiler works... " >&6; }
- # FIXME: These cross compiler hacks should be removed for Autoconf 3.0
- # If not cross compiling, check that we can run a simple program.
- if test "$cross_compiling" != yes; then
-   if { ac_try='./$ac_file'
--  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
--  (eval $ac_try) 2>&5
-+  { (case "(($ac_try" in
-+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
-+  *) ac_try_echo=$ac_try;;
-+esac
-+eval ac_try_echo="\"\$as_me:$LINENO: $ac_try_echo\""
-+$as_echo "$ac_try_echo") >&5
-+  (eval "$ac_try") 2>&5
-   ac_status=$?
--  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-+  $as_echo "$as_me:$LINENO: \$? = $ac_status" >&5
-   (exit $ac_status); }; }; then
-     cross_compiling=no
-   else
-     if test "$cross_compiling" = maybe; then
- 	cross_compiling=yes
-     else
--	{ { echo "$as_me:$LINENO: error: cannot run C compiled programs.
-+	{ { $as_echo "$as_me:$LINENO: error: in \`$ac_pwd':" >&5
-+$as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
-+{ { $as_echo "$as_me:$LINENO: error: cannot run C compiled programs.
- If you meant to cross compile, use \`--host'.
- See \`config.log' for more details." >&5
--echo "$as_me: error: cannot run C compiled programs.
-+$as_echo "$as_me: error: cannot run C compiled programs.
- If you meant to cross compile, use \`--host'.
- See \`config.log' for more details." >&2;}
--   { (exit 1); exit 1; }; }
-+   { (exit 1); exit 1; }; }; }
-     fi
-   fi
- fi
--echo "$as_me:$LINENO: result: yes" >&5
--echo "${ECHO_T}yes" >&6
-+{ $as_echo "$as_me:$LINENO: result: yes" >&5
-+$as_echo "yes" >&6; }
- 
--rm -f a.out a.exe conftest$ac_cv_exeext b.out
-+rm -f -r a.out a.out.dSYM a.exe conftest$ac_cv_exeext b.out
- ac_clean_files=$ac_clean_files_save
--# Check the compiler produces executables we can run.  If not, either
-+# Check that the compiler produces executables we can run.  If not, either
- # the compiler is broken, or we cross compile.
--echo "$as_me:$LINENO: checking whether we are cross compiling" >&5
--echo $ECHO_N "checking whether we are cross compiling... $ECHO_C" >&6
--echo "$as_me:$LINENO: result: $cross_compiling" >&5
--echo "${ECHO_T}$cross_compiling" >&6
--
--echo "$as_me:$LINENO: checking for suffix of executables" >&5
--echo $ECHO_N "checking for suffix of executables... $ECHO_C" >&6
--if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
--  (eval $ac_link) 2>&5
-+{ $as_echo "$as_me:$LINENO: checking whether we are cross compiling" >&5
-+$as_echo_n "checking whether we are cross compiling... " >&6; }
-+{ $as_echo "$as_me:$LINENO: result: $cross_compiling" >&5
-+$as_echo "$cross_compiling" >&6; }
-+
-+{ $as_echo "$as_me:$LINENO: checking for suffix of executables" >&5
-+$as_echo_n "checking for suffix of executables... " >&6; }
-+if { (ac_try="$ac_link"
-+case "(($ac_try" in
-+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
-+  *) ac_try_echo=$ac_try;;
-+esac
-+eval ac_try_echo="\"\$as_me:$LINENO: $ac_try_echo\""
-+$as_echo "$ac_try_echo") >&5
-+  (eval "$ac_link") 2>&5
-   ac_status=$?
--  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-+  $as_echo "$as_me:$LINENO: \$? = $ac_status" >&5
-   (exit $ac_status); }; then
-   # If both `conftest.exe' and `conftest' are `present' (well, observable)
- # catch `conftest.exe'.  For instance with Cygwin, `ls conftest' will
-@@ -1945,32 +2635,33 @@ if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
- for ac_file in conftest.exe conftest conftest.*; do
-   test -f "$ac_file" || continue
-   case $ac_file in
--    *.$ac_ext | *.xcoff | *.tds | *.d | *.pdb | *.xSYM | *.bb | *.bbg | *.o | *.obj ) ;;
-+    *.$ac_ext | *.xcoff | *.tds | *.d | *.pdb | *.xSYM | *.bb | *.bbg | *.map | *.inf | *.dSYM | *.o | *.obj ) ;;
-     *.* ) ac_cv_exeext=`expr "$ac_file" : '[^.]*\(\..*\)'`
--	  export ac_cv_exeext
- 	  break;;
-     * ) break;;
-   esac
- done
- else
--  { { echo "$as_me:$LINENO: error: cannot compute suffix of executables: cannot compile and link
-+  { { $as_echo "$as_me:$LINENO: error: in \`$ac_pwd':" >&5
-+$as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
-+{ { $as_echo "$as_me:$LINENO: error: cannot compute suffix of executables: cannot compile and link
- See \`config.log' for more details." >&5
--echo "$as_me: error: cannot compute suffix of executables: cannot compile and link
-+$as_echo "$as_me: error: cannot compute suffix of executables: cannot compile and link
- See \`config.log' for more details." >&2;}
--   { (exit 1); exit 1; }; }
-+   { (exit 1); exit 1; }; }; }
- fi
- 
- rm -f conftest$ac_cv_exeext
--echo "$as_me:$LINENO: result: $ac_cv_exeext" >&5
--echo "${ECHO_T}$ac_cv_exeext" >&6
-+{ $as_echo "$as_me:$LINENO: result: $ac_cv_exeext" >&5
-+$as_echo "$ac_cv_exeext" >&6; }
- 
- rm -f conftest.$ac_ext
- EXEEXT=$ac_cv_exeext
- ac_exeext=$EXEEXT
--echo "$as_me:$LINENO: checking for suffix of object files" >&5
--echo $ECHO_N "checking for suffix of object files... $ECHO_C" >&6
-+{ $as_echo "$as_me:$LINENO: checking for suffix of object files" >&5
-+$as_echo_n "checking for suffix of object files... " >&6; }
- if test "${ac_cv_objext+set}" = set; then
--  echo $ECHO_N "(cached) $ECHO_C" >&6
-+  $as_echo_n "(cached) " >&6
- else
-   cat >conftest.$ac_ext <<_ACEOF
- /* confdefs.h.  */
-@@ -1988,39 +2679,48 @@ main ()
- }
- _ACEOF
- rm -f conftest.o conftest.obj
--if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
--  (eval $ac_compile) 2>&5
-+if { (ac_try="$ac_compile"
-+case "(($ac_try" in
-+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
-+  *) ac_try_echo=$ac_try;;
-+esac
-+eval ac_try_echo="\"\$as_me:$LINENO: $ac_try_echo\""
-+$as_echo "$ac_try_echo") >&5
-+  (eval "$ac_compile") 2>&5
-   ac_status=$?
--  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-+  $as_echo "$as_me:$LINENO: \$? = $ac_status" >&5
-   (exit $ac_status); }; then
--  for ac_file in `(ls conftest.o conftest.obj; ls conftest.*) 2>/dev/null`; do
-+  for ac_file in conftest.o conftest.obj conftest.*; do
-+  test -f "$ac_file" || continue;
-   case $ac_file in
--    *.$ac_ext | *.xcoff | *.tds | *.d | *.pdb | *.xSYM | *.bb | *.bbg ) ;;
-+    *.$ac_ext | *.xcoff | *.tds | *.d | *.pdb | *.xSYM | *.bb | *.bbg | *.map | *.inf | *.dSYM ) ;;
-     *) ac_cv_objext=`expr "$ac_file" : '.*\.\(.*\)'`
-        break;;
-   esac
- done
- else
--  echo "$as_me: failed program was:" >&5
-+  $as_echo "$as_me: failed program was:" >&5
- sed 's/^/| /' conftest.$ac_ext >&5
- 
--{ { echo "$as_me:$LINENO: error: cannot compute suffix of object files: cannot compile
-+{ { $as_echo "$as_me:$LINENO: error: in \`$ac_pwd':" >&5
-+$as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
-+{ { $as_echo "$as_me:$LINENO: error: cannot compute suffix of object files: cannot compile
- See \`config.log' for more details." >&5
--echo "$as_me: error: cannot compute suffix of object files: cannot compile
-+$as_echo "$as_me: error: cannot compute suffix of object files: cannot compile
- See \`config.log' for more details." >&2;}
--   { (exit 1); exit 1; }; }
-+   { (exit 1); exit 1; }; }; }
- fi
- 
- rm -f conftest.$ac_cv_objext conftest.$ac_ext
- fi
--echo "$as_me:$LINENO: result: $ac_cv_objext" >&5
--echo "${ECHO_T}$ac_cv_objext" >&6
-+{ $as_echo "$as_me:$LINENO: result: $ac_cv_objext" >&5
-+$as_echo "$ac_cv_objext" >&6; }
- OBJEXT=$ac_cv_objext
- ac_objext=$OBJEXT
--echo "$as_me:$LINENO: checking whether we are using the GNU C compiler" >&5
--echo $ECHO_N "checking whether we are using the GNU C compiler... $ECHO_C" >&6
-+{ $as_echo "$as_me:$LINENO: checking whether we are using the GNU C compiler" >&5
-+$as_echo_n "checking whether we are using the GNU C compiler... " >&6; }
- if test "${ac_cv_c_compiler_gnu+set}" = set; then
--  echo $ECHO_N "(cached) $ECHO_C" >&6
-+  $as_echo_n "(cached) " >&6
- else
-   cat >conftest.$ac_ext <<_ACEOF
- /* confdefs.h.  */
-@@ -2041,50 +2741,54 @@ main ()
- }
- _ACEOF
- rm -f conftest.$ac_objext
--if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
--  (eval $ac_compile) 2>conftest.er1
-+if { (ac_try="$ac_compile"
-+case "(($ac_try" in
-+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
-+  *) ac_try_echo=$ac_try;;
-+esac
-+eval ac_try_echo="\"\$as_me:$LINENO: $ac_try_echo\""
-+$as_echo "$ac_try_echo") >&5
-+  (eval "$ac_compile") 2>conftest.er1
-   ac_status=$?
-   grep -v '^ *+' conftest.er1 >conftest.err
-   rm -f conftest.er1
-   cat conftest.err >&5
--  echo "$as_me:$LINENO: \$? = $ac_status" >&5
--  (exit $ac_status); } &&
--	 { ac_try='test -z "$ac_c_werror_flag"
--			 || test ! -s conftest.err'
--  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
--  (eval $ac_try) 2>&5
--  ac_status=$?
--  echo "$as_me:$LINENO: \$? = $ac_status" >&5
--  (exit $ac_status); }; } &&
--	 { ac_try='test -s conftest.$ac_objext'
--  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
--  (eval $ac_try) 2>&5
--  ac_status=$?
--  echo "$as_me:$LINENO: \$? = $ac_status" >&5
--  (exit $ac_status); }; }; then
-+  $as_echo "$as_me:$LINENO: \$? = $ac_status" >&5
-+  (exit $ac_status); } && {
-+	 test -z "$ac_c_werror_flag" ||
-+	 test ! -s conftest.err
-+       } && test -s conftest.$ac_objext; then
-   ac_compiler_gnu=yes
- else
--  echo "$as_me: failed program was:" >&5
-+  $as_echo "$as_me: failed program was:" >&5
- sed 's/^/| /' conftest.$ac_ext >&5
- 
--ac_compiler_gnu=no
-+	ac_compiler_gnu=no
- fi
--rm -f conftest.err conftest.$ac_objext conftest.$ac_ext
-+
-+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
- ac_cv_c_compiler_gnu=$ac_compiler_gnu
- 
- fi
--echo "$as_me:$LINENO: result: $ac_cv_c_compiler_gnu" >&5
--echo "${ECHO_T}$ac_cv_c_compiler_gnu" >&6
--GCC=`test $ac_compiler_gnu = yes && echo yes`
-+{ $as_echo "$as_me:$LINENO: result: $ac_cv_c_compiler_gnu" >&5
-+$as_echo "$ac_cv_c_compiler_gnu" >&6; }
-+if test $ac_compiler_gnu = yes; then
-+  GCC=yes
-+else
-+  GCC=
-+fi
- ac_test_CFLAGS=${CFLAGS+set}
- ac_save_CFLAGS=$CFLAGS
--CFLAGS="-g"
--echo "$as_me:$LINENO: checking whether $CC accepts -g" >&5
--echo $ECHO_N "checking whether $CC accepts -g... $ECHO_C" >&6
-+{ $as_echo "$as_me:$LINENO: checking whether $CC accepts -g" >&5
-+$as_echo_n "checking whether $CC accepts -g... " >&6; }
- if test "${ac_cv_prog_cc_g+set}" = set; then
--  echo $ECHO_N "(cached) $ECHO_C" >&6
-+  $as_echo_n "(cached) " >&6
- else
--  cat >conftest.$ac_ext <<_ACEOF
-+  ac_save_c_werror_flag=$ac_c_werror_flag
-+   ac_c_werror_flag=yes
-+   ac_cv_prog_cc_g=no
-+   CFLAGS="-g"
-+   cat >conftest.$ac_ext <<_ACEOF
- /* confdefs.h.  */
- _ACEOF
- cat confdefs.h >>conftest.$ac_ext
-@@ -2100,38 +2804,121 @@ main ()
- }
- _ACEOF
- rm -f conftest.$ac_objext
--if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
--  (eval $ac_compile) 2>conftest.er1
-+if { (ac_try="$ac_compile"
-+case "(($ac_try" in
-+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
-+  *) ac_try_echo=$ac_try;;
-+esac
-+eval ac_try_echo="\"\$as_me:$LINENO: $ac_try_echo\""
-+$as_echo "$ac_try_echo") >&5
-+  (eval "$ac_compile") 2>conftest.er1
-   ac_status=$?
-   grep -v '^ *+' conftest.er1 >conftest.err
-   rm -f conftest.er1
-   cat conftest.err >&5
--  echo "$as_me:$LINENO: \$? = $ac_status" >&5
--  (exit $ac_status); } &&
--	 { ac_try='test -z "$ac_c_werror_flag"
--			 || test ! -s conftest.err'
--  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
--  (eval $ac_try) 2>&5
-+  $as_echo "$as_me:$LINENO: \$? = $ac_status" >&5
-+  (exit $ac_status); } && {
-+	 test -z "$ac_c_werror_flag" ||
-+	 test ! -s conftest.err
-+       } && test -s conftest.$ac_objext; then
-+  ac_cv_prog_cc_g=yes
-+else
-+  $as_echo "$as_me: failed program was:" >&5
-+sed 's/^/| /' conftest.$ac_ext >&5
-+
-+	CFLAGS=""
-+      cat >conftest.$ac_ext <<_ACEOF
-+/* confdefs.h.  */
-+_ACEOF
-+cat confdefs.h >>conftest.$ac_ext
-+cat >>conftest.$ac_ext <<_ACEOF
-+/* end confdefs.h.  */
-+
-+int
-+main ()
-+{
-+
-+  ;
-+  return 0;
-+}
-+_ACEOF
-+rm -f conftest.$ac_objext
-+if { (ac_try="$ac_compile"
-+case "(($ac_try" in
-+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
-+  *) ac_try_echo=$ac_try;;
-+esac
-+eval ac_try_echo="\"\$as_me:$LINENO: $ac_try_echo\""
-+$as_echo "$ac_try_echo") >&5
-+  (eval "$ac_compile") 2>conftest.er1
-   ac_status=$?
--  echo "$as_me:$LINENO: \$? = $ac_status" >&5
--  (exit $ac_status); }; } &&
--	 { ac_try='test -s conftest.$ac_objext'
--  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
--  (eval $ac_try) 2>&5
-+  grep -v '^ *+' conftest.er1 >conftest.err
-+  rm -f conftest.er1
-+  cat conftest.err >&5
-+  $as_echo "$as_me:$LINENO: \$? = $ac_status" >&5
-+  (exit $ac_status); } && {
-+	 test -z "$ac_c_werror_flag" ||
-+	 test ! -s conftest.err
-+       } && test -s conftest.$ac_objext; then
-+  :
-+else
-+  $as_echo "$as_me: failed program was:" >&5
-+sed 's/^/| /' conftest.$ac_ext >&5
-+
-+	ac_c_werror_flag=$ac_save_c_werror_flag
-+	 CFLAGS="-g"
-+	 cat >conftest.$ac_ext <<_ACEOF
-+/* confdefs.h.  */
-+_ACEOF
-+cat confdefs.h >>conftest.$ac_ext
-+cat >>conftest.$ac_ext <<_ACEOF
-+/* end confdefs.h.  */
-+
-+int
-+main ()
-+{
-+
-+  ;
-+  return 0;
-+}
-+_ACEOF
-+rm -f conftest.$ac_objext
-+if { (ac_try="$ac_compile"
-+case "(($ac_try" in
-+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
-+  *) ac_try_echo=$ac_try;;
-+esac
-+eval ac_try_echo="\"\$as_me:$LINENO: $ac_try_echo\""
-+$as_echo "$ac_try_echo") >&5
-+  (eval "$ac_compile") 2>conftest.er1
-   ac_status=$?
--  echo "$as_me:$LINENO: \$? = $ac_status" >&5
--  (exit $ac_status); }; }; then
-+  grep -v '^ *+' conftest.er1 >conftest.err
-+  rm -f conftest.er1
-+  cat conftest.err >&5
-+  $as_echo "$as_me:$LINENO: \$? = $ac_status" >&5
-+  (exit $ac_status); } && {
-+	 test -z "$ac_c_werror_flag" ||
-+	 test ! -s conftest.err
-+       } && test -s conftest.$ac_objext; then
-   ac_cv_prog_cc_g=yes
- else
--  echo "$as_me: failed program was:" >&5
-+  $as_echo "$as_me: failed program was:" >&5
- sed 's/^/| /' conftest.$ac_ext >&5
- 
--ac_cv_prog_cc_g=no
-+
- fi
--rm -f conftest.err conftest.$ac_objext conftest.$ac_ext
-+
-+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-+fi
-+
-+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-+fi
-+
-+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-+   ac_c_werror_flag=$ac_save_c_werror_flag
- fi
--echo "$as_me:$LINENO: result: $ac_cv_prog_cc_g" >&5
--echo "${ECHO_T}$ac_cv_prog_cc_g" >&6
-+{ $as_echo "$as_me:$LINENO: result: $ac_cv_prog_cc_g" >&5
-+$as_echo "$ac_cv_prog_cc_g" >&6; }
- if test "$ac_test_CFLAGS" = set; then
-   CFLAGS=$ac_save_CFLAGS
- elif test $ac_cv_prog_cc_g = yes; then
-@@ -2147,12 +2934,12 @@ else
-     CFLAGS=
-   fi
- fi
--echo "$as_me:$LINENO: checking for $CC option to accept ANSI C" >&5
--echo $ECHO_N "checking for $CC option to accept ANSI C... $ECHO_C" >&6
--if test "${ac_cv_prog_cc_stdc+set}" = set; then
--  echo $ECHO_N "(cached) $ECHO_C" >&6
-+{ $as_echo "$as_me:$LINENO: checking for $CC option to accept ISO C89" >&5
-+$as_echo_n "checking for $CC option to accept ISO C89... " >&6; }
-+if test "${ac_cv_prog_cc_c89+set}" = set; then
-+  $as_echo_n "(cached) " >&6
- else
--  ac_cv_prog_cc_stdc=no
-+  ac_cv_prog_cc_c89=no
- ac_save_CC=$CC
- cat >conftest.$ac_ext <<_ACEOF
- /* confdefs.h.  */
-@@ -2186,12 +2973,17 @@ static char *f (char * (*g) (char **, int), char **p, ...)
- /* OSF 4.0 Compaq cc is some sort of almost-ANSI by default.  It has
-    function prototypes and stuff, but not '\xHH' hex character constants.
-    These don't provoke an error unfortunately, instead are silently treated
--   as 'x'.  The following induces an error, until -std1 is added to get
-+   as 'x'.  The following induces an error, until -std is added to get
-    proper ANSI mode.  Curiously '\x00'!='x' always comes out true, for an
-    array size@least.  It's necessary to write '\x00'==0 to get something
--   that's true only with -std1.  */
-+   that's true only with -std.  */
- int osf4_cc_array ['\x00' == 0 ? 1 : -1];
- 
-+/* IBM C 6 for AIX is almost-ANSI by default, but it replaces macro parameters
-+   inside strings and character constants.  */
-+#define FOO(x) 'x'
-+int xlc6_cc_array[FOO(a) == 'x' ? 1 : -1];
-+
- int test (int i, double x);
- struct s1 {int (*f) (int a);};
- struct s2 {int (*f) (double a);};
-@@ -2206,210 +2998,915 @@ return f (e, argv, 0) != argv[0]  ||  f (e, argv, 1) != argv[1];
-   return 0;
- }
- _ACEOF
--# Don't try gcc -ansi; that turns off useful extensions and
--# breaks some systems' header files.
--# AIX			-qlanglvl=ansi
--# Ultrix and OSF/1	-std1
--# HP-UX 10.20 and later	-Ae
--# HP-UX older versions	-Aa -D_HPUX_SOURCE
--# SVR4			-Xc -D__EXTENSIONS__
--for ac_arg in "" -qlanglvl=ansi -std1 -Ae "-Aa -D_HPUX_SOURCE" "-Xc -D__EXTENSIONS__"
-+for ac_arg in '' -qlanglvl=extc89 -qlanglvl=ansi -std \
-+	-Ae "-Aa -D_HPUX_SOURCE" "-Xc -D__EXTENSIONS__"
- do
-   CC="$ac_save_CC $ac_arg"
-   rm -f conftest.$ac_objext
--if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
--  (eval $ac_compile) 2>conftest.er1
-+if { (ac_try="$ac_compile"
-+case "(($ac_try" in
-+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
-+  *) ac_try_echo=$ac_try;;
-+esac
-+eval ac_try_echo="\"\$as_me:$LINENO: $ac_try_echo\""
-+$as_echo "$ac_try_echo") >&5
-+  (eval "$ac_compile") 2>conftest.er1
-   ac_status=$?
-   grep -v '^ *+' conftest.er1 >conftest.err
-   rm -f conftest.er1
-   cat conftest.err >&5
--  echo "$as_me:$LINENO: \$? = $ac_status" >&5
--  (exit $ac_status); } &&
--	 { ac_try='test -z "$ac_c_werror_flag"
--			 || test ! -s conftest.err'
--  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
--  (eval $ac_try) 2>&5
--  ac_status=$?
--  echo "$as_me:$LINENO: \$? = $ac_status" >&5
--  (exit $ac_status); }; } &&
--	 { ac_try='test -s conftest.$ac_objext'
--  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
--  (eval $ac_try) 2>&5
--  ac_status=$?
--  echo "$as_me:$LINENO: \$? = $ac_status" >&5
--  (exit $ac_status); }; }; then
--  ac_cv_prog_cc_stdc=$ac_arg
--break
-+  $as_echo "$as_me:$LINENO: \$? = $ac_status" >&5
-+  (exit $ac_status); } && {
-+	 test -z "$ac_c_werror_flag" ||
-+	 test ! -s conftest.err
-+       } && test -s conftest.$ac_objext; then
-+  ac_cv_prog_cc_c89=$ac_arg
- else
--  echo "$as_me: failed program was:" >&5
-+  $as_echo "$as_me: failed program was:" >&5
- sed 's/^/| /' conftest.$ac_ext >&5
- 
-+
- fi
--rm -f conftest.err conftest.$ac_objext
-+
-+rm -f core conftest.err conftest.$ac_objext
-+  test "x$ac_cv_prog_cc_c89" != "xno" && break
- done
--rm -f conftest.$ac_ext conftest.$ac_objext
-+rm -f conftest.$ac_ext
- CC=$ac_save_CC
- 
- fi
--
--case "x$ac_cv_prog_cc_stdc" in
--  x|xno)
--    echo "$as_me:$LINENO: result: none needed" >&5
--echo "${ECHO_T}none needed" >&6 ;;
-+# AC_CACHE_VAL
-+case "x$ac_cv_prog_cc_c89" in
-+  x)
-+    { $as_echo "$as_me:$LINENO: result: none needed" >&5
-+$as_echo "none needed" >&6; } ;;
-+  xno)
-+    { $as_echo "$as_me:$LINENO: result: unsupported" >&5
-+$as_echo "unsupported" >&6; } ;;
-   *)
--    echo "$as_me:$LINENO: result: $ac_cv_prog_cc_stdc" >&5
--echo "${ECHO_T}$ac_cv_prog_cc_stdc" >&6
--    CC="$CC $ac_cv_prog_cc_stdc" ;;
-+    CC="$CC $ac_cv_prog_cc_c89"
-+    { $as_echo "$as_me:$LINENO: result: $ac_cv_prog_cc_c89" >&5
-+$as_echo "$ac_cv_prog_cc_c89" >&6; } ;;
- esac
- 
--# Some people use a C++ compiler to compile C.  Since we use `exit',
--# in C++ we need to declare it.  In case someone uses the same compiler
--# for both compiling C and C++ we need to have the C++ compiler decide
--# the declaration of exit, since it's the most demanding environment.
--cat >conftest.$ac_ext <<_ACEOF
--#ifndef __cplusplus
--  choke me
-+
-+ac_ext=c
-+ac_cpp='$CPP $CPPFLAGS'
-+ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
-+ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
-+ac_compiler_gnu=$ac_cv_c_compiler_gnu
-+
-+
-+ac_ext=c
-+ac_cpp='$CPP $CPPFLAGS'
-+ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
-+ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
-+ac_compiler_gnu=$ac_cv_c_compiler_gnu
-+{ $as_echo "$as_me:$LINENO: checking how to run the C preprocessor" >&5
-+$as_echo_n "checking how to run the C preprocessor... " >&6; }
-+# On Suns, sometimes $CPP names a directory.
-+if test -n "$CPP" && test -d "$CPP"; then
-+  CPP=
-+fi
-+if test -z "$CPP"; then
-+  if test "${ac_cv_prog_CPP+set}" = set; then
-+  $as_echo_n "(cached) " >&6
-+else
-+      # Double quotes because CPP needs to be expanded
-+    for CPP in "$CC -E" "$CC -E -traditional-cpp" "/lib/cpp"
-+    do
-+      ac_preproc_ok=false
-+for ac_c_preproc_warn_flag in '' yes
-+do
-+  # Use a header file that comes with gcc, so configuring glibc
-+  # with a fresh cross-compiler works.
-+  # Prefer <limits.h> to <assert.h> if __STDC__ is defined, since
-+  # <limits.h> exists even on freestanding compilers.
-+  # On the NeXT, cc -E runs the code through the compiler's parser,
-+  # not just through cpp. "Syntax error" is here to catch this case.
-+  cat >conftest.$ac_ext <<_ACEOF
-+/* confdefs.h.  */
-+_ACEOF
-+cat confdefs.h >>conftest.$ac_ext
-+cat >>conftest.$ac_ext <<_ACEOF
-+/* end confdefs.h.  */
-+#ifdef __STDC__
-+# include <limits.h>
-+#else
-+# include <assert.h>
- #endif
-+		     Syntax error
- _ACEOF
--rm -f conftest.$ac_objext
--if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
--  (eval $ac_compile) 2>conftest.er1
-+if { (ac_try="$ac_cpp conftest.$ac_ext"
-+case "(($ac_try" in
-+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
-+  *) ac_try_echo=$ac_try;;
-+esac
-+eval ac_try_echo="\"\$as_me:$LINENO: $ac_try_echo\""
-+$as_echo "$ac_try_echo") >&5
-+  (eval "$ac_cpp conftest.$ac_ext") 2>conftest.er1
-   ac_status=$?
-   grep -v '^ *+' conftest.er1 >conftest.err
-   rm -f conftest.er1
-   cat conftest.err >&5
--  echo "$as_me:$LINENO: \$? = $ac_status" >&5
--  (exit $ac_status); } &&
--	 { ac_try='test -z "$ac_c_werror_flag"
--			 || test ! -s conftest.err'
--  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
--  (eval $ac_try) 2>&5
-+  $as_echo "$as_me:$LINENO: \$? = $ac_status" >&5
-+  (exit $ac_status); } >/dev/null && {
-+	 test -z "$ac_c_preproc_warn_flag$ac_c_werror_flag" ||
-+	 test ! -s conftest.err
-+       }; then
-+  :
-+else
-+  $as_echo "$as_me: failed program was:" >&5
-+sed 's/^/| /' conftest.$ac_ext >&5
-+
-+  # Broken: fails on valid input.
-+continue
-+fi
-+
-+rm -f conftest.err conftest.$ac_ext
-+
-+  # OK, works on sane cases.  Now check whether nonexistent headers
-+  # can be detected and how.
-+  cat >conftest.$ac_ext <<_ACEOF
-+/* confdefs.h.  */
-+_ACEOF
-+cat confdefs.h >>conftest.$ac_ext
-+cat >>conftest.$ac_ext <<_ACEOF
-+/* end confdefs.h.  */
-+#include <ac_nonexistent.h>
-+_ACEOF
-+if { (ac_try="$ac_cpp conftest.$ac_ext"
-+case "(($ac_try" in
-+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
-+  *) ac_try_echo=$ac_try;;
-+esac
-+eval ac_try_echo="\"\$as_me:$LINENO: $ac_try_echo\""
-+$as_echo "$ac_try_echo") >&5
-+  (eval "$ac_cpp conftest.$ac_ext") 2>conftest.er1
-   ac_status=$?
--  echo "$as_me:$LINENO: \$? = $ac_status" >&5
--  (exit $ac_status); }; } &&
--	 { ac_try='test -s conftest.$ac_objext'
--  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
--  (eval $ac_try) 2>&5
-+  grep -v '^ *+' conftest.er1 >conftest.err
-+  rm -f conftest.er1
-+  cat conftest.err >&5
-+  $as_echo "$as_me:$LINENO: \$? = $ac_status" >&5
-+  (exit $ac_status); } >/dev/null && {
-+	 test -z "$ac_c_preproc_warn_flag$ac_c_werror_flag" ||
-+	 test ! -s conftest.err
-+       }; then
-+  # Broken: success on invalid input.
-+continue
-+else
-+  $as_echo "$as_me: failed program was:" >&5
-+sed 's/^/| /' conftest.$ac_ext >&5
-+
-+  # Passes both tests.
-+ac_preproc_ok=:
-+break
-+fi
-+
-+rm -f conftest.err conftest.$ac_ext
-+
-+done
-+# Because of `break', _AC_PREPROC_IFELSE's cleaning code was skipped.
-+rm -f conftest.err conftest.$ac_ext
-+if $ac_preproc_ok; then
-+  break
-+fi
-+
-+    done
-+    ac_cv_prog_CPP=$CPP
-+
-+fi
-+  CPP=$ac_cv_prog_CPP
-+else
-+  ac_cv_prog_CPP=$CPP
-+fi
-+{ $as_echo "$as_me:$LINENO: result: $CPP" >&5
-+$as_echo "$CPP" >&6; }
-+ac_preproc_ok=false
-+for ac_c_preproc_warn_flag in '' yes
-+do
-+  # Use a header file that comes with gcc, so configuring glibc
-+  # with a fresh cross-compiler works.
-+  # Prefer <limits.h> to <assert.h> if __STDC__ is defined, since
-+  # <limits.h> exists even on freestanding compilers.
-+  # On the NeXT, cc -E runs the code through the compiler's parser,
-+  # not just through cpp. "Syntax error" is here to catch this case.
-+  cat >conftest.$ac_ext <<_ACEOF
-+/* confdefs.h.  */
-+_ACEOF
-+cat confdefs.h >>conftest.$ac_ext
-+cat >>conftest.$ac_ext <<_ACEOF
-+/* end confdefs.h.  */
-+#ifdef __STDC__
-+# include <limits.h>
-+#else
-+# include <assert.h>
-+#endif
-+		     Syntax error
-+_ACEOF
-+if { (ac_try="$ac_cpp conftest.$ac_ext"
-+case "(($ac_try" in
-+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
-+  *) ac_try_echo=$ac_try;;
-+esac
-+eval ac_try_echo="\"\$as_me:$LINENO: $ac_try_echo\""
-+$as_echo "$ac_try_echo") >&5
-+  (eval "$ac_cpp conftest.$ac_ext") 2>conftest.er1
-   ac_status=$?
--  echo "$as_me:$LINENO: \$? = $ac_status" >&5
--  (exit $ac_status); }; }; then
--  for ac_declaration in \
--   '' \
--   'extern "C" void std::exit (int) throw (); using std::exit;' \
--   'extern "C" void std::exit (int); using std::exit;' \
--   'extern "C" void exit (int) throw ();' \
--   'extern "C" void exit (int);' \
--   'void exit (int);'
-+  grep -v '^ *+' conftest.er1 >conftest.err
-+  rm -f conftest.er1
-+  cat conftest.err >&5
-+  $as_echo "$as_me:$LINENO: \$? = $ac_status" >&5
-+  (exit $ac_status); } >/dev/null && {
-+	 test -z "$ac_c_preproc_warn_flag$ac_c_werror_flag" ||
-+	 test ! -s conftest.err
-+       }; then
-+  :
-+else
-+  $as_echo "$as_me: failed program was:" >&5
-+sed 's/^/| /' conftest.$ac_ext >&5
-+
-+  # Broken: fails on valid input.
-+continue
-+fi
-+
-+rm -f conftest.err conftest.$ac_ext
-+
-+  # OK, works on sane cases.  Now check whether nonexistent headers
-+  # can be detected and how.
-+  cat >conftest.$ac_ext <<_ACEOF
-+/* confdefs.h.  */
-+_ACEOF
-+cat confdefs.h >>conftest.$ac_ext
-+cat >>conftest.$ac_ext <<_ACEOF
-+/* end confdefs.h.  */
-+#include <ac_nonexistent.h>
-+_ACEOF
-+if { (ac_try="$ac_cpp conftest.$ac_ext"
-+case "(($ac_try" in
-+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
-+  *) ac_try_echo=$ac_try;;
-+esac
-+eval ac_try_echo="\"\$as_me:$LINENO: $ac_try_echo\""
-+$as_echo "$ac_try_echo") >&5
-+  (eval "$ac_cpp conftest.$ac_ext") 2>conftest.er1
-+  ac_status=$?
-+  grep -v '^ *+' conftest.er1 >conftest.err
-+  rm -f conftest.er1
-+  cat conftest.err >&5
-+  $as_echo "$as_me:$LINENO: \$? = $ac_status" >&5
-+  (exit $ac_status); } >/dev/null && {
-+	 test -z "$ac_c_preproc_warn_flag$ac_c_werror_flag" ||
-+	 test ! -s conftest.err
-+       }; then
-+  # Broken: success on invalid input.
-+continue
-+else
-+  $as_echo "$as_me: failed program was:" >&5
-+sed 's/^/| /' conftest.$ac_ext >&5
-+
-+  # Passes both tests.
-+ac_preproc_ok=:
-+break
-+fi
-+
-+rm -f conftest.err conftest.$ac_ext
-+
-+done
-+# Because of `break', _AC_PREPROC_IFELSE's cleaning code was skipped.
-+rm -f conftest.err conftest.$ac_ext
-+if $ac_preproc_ok; then
-+  :
-+else
-+  { { $as_echo "$as_me:$LINENO: error: in \`$ac_pwd':" >&5
-+$as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
-+{ { $as_echo "$as_me:$LINENO: error: C preprocessor \"$CPP\" fails sanity check
-+See \`config.log' for more details." >&5
-+$as_echo "$as_me: error: C preprocessor \"$CPP\" fails sanity check
-+See \`config.log' for more details." >&2;}
-+   { (exit 1); exit 1; }; }; }
-+fi
-+
-+ac_ext=c
-+ac_cpp='$CPP $CPPFLAGS'
-+ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
-+ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
-+ac_compiler_gnu=$ac_cv_c_compiler_gnu
-+
-+
-+{ $as_echo "$as_me:$LINENO: checking for grep that handles long lines and -e" >&5
-+$as_echo_n "checking for grep that handles long lines and -e... " >&6; }
-+if test "${ac_cv_path_GREP+set}" = set; then
-+  $as_echo_n "(cached) " >&6
-+else
-+  if test -z "$GREP"; then
-+  ac_path_GREP_found=false
-+  # Loop through the user's path and test for each of PROGNAME-LIST
-+  as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
-+for as_dir in $PATH$PATH_SEPARATOR/usr/xpg4/bin
- do
-+  IFS=$as_save_IFS
-+  test -z "$as_dir" && as_dir=.
-+  for ac_prog in grep ggrep; do
-+    for ac_exec_ext in '' $ac_executable_extensions; do
-+      ac_path_GREP="$as_dir/$ac_prog$ac_exec_ext"
-+      { test -f "$ac_path_GREP" && $as_test_x "$ac_path_GREP"; } || continue
-+# Check for GNU ac_path_GREP and select it if it is found.
-+  # Check for GNU $ac_path_GREP
-+case `"$ac_path_GREP" --version 2>&1` in
-+*GNU*)
-+  ac_cv_path_GREP="$ac_path_GREP" ac_path_GREP_found=:;;
-+*)
-+  ac_count=0
-+  $as_echo_n 0123456789 >"conftest.in"
-+  while :
-+  do
-+    cat "conftest.in" "conftest.in" >"conftest.tmp"
-+    mv "conftest.tmp" "conftest.in"
-+    cp "conftest.in" "conftest.nl"
-+    $as_echo 'GREP' >> "conftest.nl"
-+    "$ac_path_GREP" -e 'GREP$' -e '-(cannot match)-' < "conftest.nl" >"conftest.out" 2>/dev/null || break
-+    diff "conftest.out" "conftest.nl" >/dev/null 2>&1 || break
-+    ac_count=`expr $ac_count + 1`
-+    if test $ac_count -gt ${ac_path_GREP_max-0}; then
-+      # Best one so far, save it but keep looking for a better one
-+      ac_cv_path_GREP="$ac_path_GREP"
-+      ac_path_GREP_max=$ac_count
-+    fi
-+    # 10*(2^10) chars as input seems more than enough
-+    test $ac_count -gt 10 && break
-+  done
-+  rm -f conftest.in conftest.tmp conftest.nl conftest.out;;
-+esac
-+
-+      $ac_path_GREP_found && break 3
-+    done
-+  done
-+done
-+IFS=$as_save_IFS
-+  if test -z "$ac_cv_path_GREP"; then
-+    { { $as_echo "$as_me:$LINENO: error: no acceptable grep could be found in $PATH$PATH_SEPARATOR/usr/xpg4/bin" >&5
-+$as_echo "$as_me: error: no acceptable grep could be found in $PATH$PATH_SEPARATOR/usr/xpg4/bin" >&2;}
-+   { (exit 1); exit 1; }; }
-+  fi
-+else
-+  ac_cv_path_GREP=$GREP
-+fi
-+
-+fi
-+{ $as_echo "$as_me:$LINENO: result: $ac_cv_path_GREP" >&5
-+$as_echo "$ac_cv_path_GREP" >&6; }
-+ GREP="$ac_cv_path_GREP"
-+
-+
-+{ $as_echo "$as_me:$LINENO: checking for egrep" >&5
-+$as_echo_n "checking for egrep... " >&6; }
-+if test "${ac_cv_path_EGREP+set}" = set; then
-+  $as_echo_n "(cached) " >&6
-+else
-+  if echo a | $GREP -E '(a|b)' >/dev/null 2>&1
-+   then ac_cv_path_EGREP="$GREP -E"
-+   else
-+     if test -z "$EGREP"; then
-+  ac_path_EGREP_found=false
-+  # Loop through the user's path and test for each of PROGNAME-LIST
-+  as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
-+for as_dir in $PATH$PATH_SEPARATOR/usr/xpg4/bin
-+do
-+  IFS=$as_save_IFS
-+  test -z "$as_dir" && as_dir=.
-+  for ac_prog in egrep; do
-+    for ac_exec_ext in '' $ac_executable_extensions; do
-+      ac_path_EGREP="$as_dir/$ac_prog$ac_exec_ext"
-+      { test -f "$ac_path_EGREP" && $as_test_x "$ac_path_EGREP"; } || continue
-+# Check for GNU ac_path_EGREP and select it if it is found.
-+  # Check for GNU $ac_path_EGREP
-+case `"$ac_path_EGREP" --version 2>&1` in
-+*GNU*)
-+  ac_cv_path_EGREP="$ac_path_EGREP" ac_path_EGREP_found=:;;
-+*)
-+  ac_count=0
-+  $as_echo_n 0123456789 >"conftest.in"
-+  while :
-+  do
-+    cat "conftest.in" "conftest.in" >"conftest.tmp"
-+    mv "conftest.tmp" "conftest.in"
-+    cp "conftest.in" "conftest.nl"
-+    $as_echo 'EGREP' >> "conftest.nl"
-+    "$ac_path_EGREP" 'EGREP$' < "conftest.nl" >"conftest.out" 2>/dev/null || break
-+    diff "conftest.out" "conftest.nl" >/dev/null 2>&1 || break
-+    ac_count=`expr $ac_count + 1`
-+    if test $ac_count -gt ${ac_path_EGREP_max-0}; then
-+      # Best one so far, save it but keep looking for a better one
-+      ac_cv_path_EGREP="$ac_path_EGREP"
-+      ac_path_EGREP_max=$ac_count
-+    fi
-+    # 10*(2^10) chars as input seems more than enough
-+    test $ac_count -gt 10 && break
-+  done
-+  rm -f conftest.in conftest.tmp conftest.nl conftest.out;;
-+esac
-+
-+      $ac_path_EGREP_found && break 3
-+    done
-+  done
-+done
-+IFS=$as_save_IFS
-+  if test -z "$ac_cv_path_EGREP"; then
-+    { { $as_echo "$as_me:$LINENO: error: no acceptable egrep could be found in $PATH$PATH_SEPARATOR/usr/xpg4/bin" >&5
-+$as_echo "$as_me: error: no acceptable egrep could be found in $PATH$PATH_SEPARATOR/usr/xpg4/bin" >&2;}
-+   { (exit 1); exit 1; }; }
-+  fi
-+else
-+  ac_cv_path_EGREP=$EGREP
-+fi
-+
-+   fi
-+fi
-+{ $as_echo "$as_me:$LINENO: result: $ac_cv_path_EGREP" >&5
-+$as_echo "$ac_cv_path_EGREP" >&6; }
-+ EGREP="$ac_cv_path_EGREP"
-+
-+
-+{ $as_echo "$as_me:$LINENO: checking for ANSI C header files" >&5
-+$as_echo_n "checking for ANSI C header files... " >&6; }
-+if test "${ac_cv_header_stdc+set}" = set; then
-+  $as_echo_n "(cached) " >&6
-+else
-   cat >conftest.$ac_ext <<_ACEOF
- /* confdefs.h.  */
- _ACEOF
- cat confdefs.h >>conftest.$ac_ext
- cat >>conftest.$ac_ext <<_ACEOF
- /* end confdefs.h.  */
--$ac_declaration
- #include <stdlib.h>
-+#include <stdarg.h>
-+#include <string.h>
-+#include <float.h>
-+
- int
- main ()
- {
--exit (42);
-+
-   ;
-   return 0;
- }
- _ACEOF
- rm -f conftest.$ac_objext
--if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
--  (eval $ac_compile) 2>conftest.er1
-+if { (ac_try="$ac_compile"
-+case "(($ac_try" in
-+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
-+  *) ac_try_echo=$ac_try;;
-+esac
-+eval ac_try_echo="\"\$as_me:$LINENO: $ac_try_echo\""
-+$as_echo "$ac_try_echo") >&5
-+  (eval "$ac_compile") 2>conftest.er1
-   ac_status=$?
-   grep -v '^ *+' conftest.er1 >conftest.err
-   rm -f conftest.er1
-   cat conftest.err >&5
--  echo "$as_me:$LINENO: \$? = $ac_status" >&5
--  (exit $ac_status); } &&
--	 { ac_try='test -z "$ac_c_werror_flag"
--			 || test ! -s conftest.err'
--  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
--  (eval $ac_try) 2>&5
-+  $as_echo "$as_me:$LINENO: \$? = $ac_status" >&5
-+  (exit $ac_status); } && {
-+	 test -z "$ac_c_werror_flag" ||
-+	 test ! -s conftest.err
-+       } && test -s conftest.$ac_objext; then
-+  ac_cv_header_stdc=yes
-+else
-+  $as_echo "$as_me: failed program was:" >&5
-+sed 's/^/| /' conftest.$ac_ext >&5
-+
-+	ac_cv_header_stdc=no
-+fi
-+
-+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-+
-+if test $ac_cv_header_stdc = yes; then
-+  # SunOS 4.x string.h does not declare mem*, contrary to ANSI.
-+  cat >conftest.$ac_ext <<_ACEOF
-+/* confdefs.h.  */
-+_ACEOF
-+cat confdefs.h >>conftest.$ac_ext
-+cat >>conftest.$ac_ext <<_ACEOF
-+/* end confdefs.h.  */
-+#include <string.h>
-+
-+_ACEOF
-+if (eval "$ac_cpp conftest.$ac_ext") 2>&5 |
-+  $EGREP "memchr" >/dev/null 2>&1; then
-+  :
-+else
-+  ac_cv_header_stdc=no
-+fi
-+rm -f conftest*
-+
-+fi
-+
-+if test $ac_cv_header_stdc = yes; then
-+  # ISC 2.0.2 stdlib.h does not declare free, contrary to ANSI.
-+  cat >conftest.$ac_ext <<_ACEOF
-+/* confdefs.h.  */
-+_ACEOF
-+cat confdefs.h >>conftest.$ac_ext
-+cat >>conftest.$ac_ext <<_ACEOF
-+/* end confdefs.h.  */
-+#include <stdlib.h>
-+
-+_ACEOF
-+if (eval "$ac_cpp conftest.$ac_ext") 2>&5 |
-+  $EGREP "free" >/dev/null 2>&1; then
-+  :
-+else
-+  ac_cv_header_stdc=no
-+fi
-+rm -f conftest*
-+
-+fi
-+
-+if test $ac_cv_header_stdc = yes; then
-+  # /bin/cc in Irix-4.0.5 gets non-ANSI ctype macros unless using -ansi.
-+  if test "$cross_compiling" = yes; then
-+  :
-+else
-+  cat >conftest.$ac_ext <<_ACEOF
-+/* confdefs.h.  */
-+_ACEOF
-+cat confdefs.h >>conftest.$ac_ext
-+cat >>conftest.$ac_ext <<_ACEOF
-+/* end confdefs.h.  */
-+#include <ctype.h>
-+#include <stdlib.h>
-+#if ((' ' & 0x0FF) == 0x020)
-+# define ISLOWER(c) ('a' <= (c) && (c) <= 'z')
-+# define TOUPPER(c) (ISLOWER(c) ? 'A' + ((c) - 'a') : (c))
-+#else
-+# define ISLOWER(c) \
-+		   (('a' <= (c) && (c) <= 'i') \
-+		     || ('j' <= (c) && (c) <= 'r') \
-+		     || ('s' <= (c) && (c) <= 'z'))
-+# define TOUPPER(c) (ISLOWER(c) ? ((c) | 0x40) : (c))
-+#endif
-+
-+#define XOR(e, f) (((e) && !(f)) || (!(e) && (f)))
-+int
-+main ()
-+{
-+  int i;
-+  for (i = 0; i < 256; i++)
-+    if (XOR (islower (i), ISLOWER (i))
-+	|| toupper (i) != TOUPPER (i))
-+      return 2;
-+  return 0;
-+}
-+_ACEOF
-+rm -f conftest$ac_exeext
-+if { (ac_try="$ac_link"
-+case "(($ac_try" in
-+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
-+  *) ac_try_echo=$ac_try;;
-+esac
-+eval ac_try_echo="\"\$as_me:$LINENO: $ac_try_echo\""
-+$as_echo "$ac_try_echo") >&5
-+  (eval "$ac_link") 2>&5
-   ac_status=$?
--  echo "$as_me:$LINENO: \$? = $ac_status" >&5
--  (exit $ac_status); }; } &&
--	 { ac_try='test -s conftest.$ac_objext'
--  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
--  (eval $ac_try) 2>&5
-+  $as_echo "$as_me:$LINENO: \$? = $ac_status" >&5
-+  (exit $ac_status); } && { ac_try='./conftest$ac_exeext'
-+  { (case "(($ac_try" in
-+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
-+  *) ac_try_echo=$ac_try;;
-+esac
-+eval ac_try_echo="\"\$as_me:$LINENO: $ac_try_echo\""
-+$as_echo "$ac_try_echo") >&5
-+  (eval "$ac_try") 2>&5
-   ac_status=$?
--  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-+  $as_echo "$as_me:$LINENO: \$? = $ac_status" >&5
-   (exit $ac_status); }; }; then
-   :
- else
--  echo "$as_me: failed program was:" >&5
-+  $as_echo "$as_me: program exited with status $ac_status" >&5
-+$as_echo "$as_me: failed program was:" >&5
- sed 's/^/| /' conftest.$ac_ext >&5
- 
--continue
--fi
--rm -f conftest.err conftest.$ac_objext conftest.$ac_ext
-+( exit $ac_status )
-+ac_cv_header_stdc=no
-+fi
-+rm -rf conftest.dSYM
-+rm -f core *.core core.conftest.* gmon.out bb.out conftest$ac_exeext conftest.$ac_objext conftest.$ac_ext
-+fi
-+
-+
-+fi
-+fi
-+{ $as_echo "$as_me:$LINENO: result: $ac_cv_header_stdc" >&5
-+$as_echo "$ac_cv_header_stdc" >&6; }
-+if test $ac_cv_header_stdc = yes; then
-+
-+cat >>confdefs.h <<\_ACEOF
-+#define STDC_HEADERS 1
-+_ACEOF
-+
-+fi
-+
-+# On IRIX 5.3, sys/types and inttypes.h are conflicting.
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+for ac_header in sys/types.h sys/stat.h stdlib.h string.h memory.h strings.h \
-+		  inttypes.h stdint.h unistd.h
-+do
-+as_ac_Header=`$as_echo "ac_cv_header_$ac_header" | $as_tr_sh`
-+{ $as_echo "$as_me:$LINENO: checking for $ac_header" >&5
-+$as_echo_n "checking for $ac_header... " >&6; }
-+if { as_var=$as_ac_Header; eval "test \"\${$as_var+set}\" = set"; }; then
-+  $as_echo_n "(cached) " >&6
-+else
-+  cat >conftest.$ac_ext <<_ACEOF
-+/* confdefs.h.  */
-+_ACEOF
-+cat confdefs.h >>conftest.$ac_ext
-+cat >>conftest.$ac_ext <<_ACEOF
-+/* end confdefs.h.  */
-+$ac_includes_default
-+
-+#include <$ac_header>
-+_ACEOF
-+rm -f conftest.$ac_objext
-+if { (ac_try="$ac_compile"
-+case "(($ac_try" in
-+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
-+  *) ac_try_echo=$ac_try;;
-+esac
-+eval ac_try_echo="\"\$as_me:$LINENO: $ac_try_echo\""
-+$as_echo "$ac_try_echo") >&5
-+  (eval "$ac_compile") 2>conftest.er1
-+  ac_status=$?
-+  grep -v '^ *+' conftest.er1 >conftest.err
-+  rm -f conftest.er1
-+  cat conftest.err >&5
-+  $as_echo "$as_me:$LINENO: \$? = $ac_status" >&5
-+  (exit $ac_status); } && {
-+	 test -z "$ac_c_werror_flag" ||
-+	 test ! -s conftest.err
-+       } && test -s conftest.$ac_objext; then
-+  eval "$as_ac_Header=yes"
-+else
-+  $as_echo "$as_me: failed program was:" >&5
-+sed 's/^/| /' conftest.$ac_ext >&5
-+
-+	eval "$as_ac_Header=no"
-+fi
-+
-+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-+fi
-+ac_res=`eval 'as_val=${'$as_ac_Header'}
-+		 $as_echo "$as_val"'`
-+	       { $as_echo "$as_me:$LINENO: result: $ac_res" >&5
-+$as_echo "$ac_res" >&6; }
-+as_val=`eval 'as_val=${'$as_ac_Header'}
-+		 $as_echo "$as_val"'`
-+   if test "x$as_val" = x""yes; then
-+  cat >>confdefs.h <<_ACEOF
-+#define `$as_echo "HAVE_$ac_header" | $as_tr_cpp` 1
-+_ACEOF
-+
-+fi
-+
-+done
-+
-+
-+
-+  if test "${ac_cv_header_minix_config_h+set}" = set; then
-+  { $as_echo "$as_me:$LINENO: checking for minix/config.h" >&5
-+$as_echo_n "checking for minix/config.h... " >&6; }
-+if test "${ac_cv_header_minix_config_h+set}" = set; then
-+  $as_echo_n "(cached) " >&6
-+fi
-+{ $as_echo "$as_me:$LINENO: result: $ac_cv_header_minix_config_h" >&5
-+$as_echo "$ac_cv_header_minix_config_h" >&6; }
-+else
-+  # Is the header compilable?
-+{ $as_echo "$as_me:$LINENO: checking minix/config.h usability" >&5
-+$as_echo_n "checking minix/config.h usability... " >&6; }
-+cat >conftest.$ac_ext <<_ACEOF
-+/* confdefs.h.  */
-+_ACEOF
-+cat confdefs.h >>conftest.$ac_ext
-+cat >>conftest.$ac_ext <<_ACEOF
-+/* end confdefs.h.  */
-+$ac_includes_default
-+#include <minix/config.h>
-+_ACEOF
-+rm -f conftest.$ac_objext
-+if { (ac_try="$ac_compile"
-+case "(($ac_try" in
-+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
-+  *) ac_try_echo=$ac_try;;
-+esac
-+eval ac_try_echo="\"\$as_me:$LINENO: $ac_try_echo\""
-+$as_echo "$ac_try_echo") >&5
-+  (eval "$ac_compile") 2>conftest.er1
-+  ac_status=$?
-+  grep -v '^ *+' conftest.er1 >conftest.err
-+  rm -f conftest.er1
-+  cat conftest.err >&5
-+  $as_echo "$as_me:$LINENO: \$? = $ac_status" >&5
-+  (exit $ac_status); } && {
-+	 test -z "$ac_c_werror_flag" ||
-+	 test ! -s conftest.err
-+       } && test -s conftest.$ac_objext; then
-+  ac_header_compiler=yes
-+else
-+  $as_echo "$as_me: failed program was:" >&5
-+sed 's/^/| /' conftest.$ac_ext >&5
-+
-+	ac_header_compiler=no
-+fi
-+
-+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-+{ $as_echo "$as_me:$LINENO: result: $ac_header_compiler" >&5
-+$as_echo "$ac_header_compiler" >&6; }
-+
-+# Is the header present?
-+{ $as_echo "$as_me:$LINENO: checking minix/config.h presence" >&5
-+$as_echo_n "checking minix/config.h presence... " >&6; }
-+cat >conftest.$ac_ext <<_ACEOF
-+/* confdefs.h.  */
-+_ACEOF
-+cat confdefs.h >>conftest.$ac_ext
-+cat >>conftest.$ac_ext <<_ACEOF
-+/* end confdefs.h.  */
-+#include <minix/config.h>
-+_ACEOF
-+if { (ac_try="$ac_cpp conftest.$ac_ext"
-+case "(($ac_try" in
-+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
-+  *) ac_try_echo=$ac_try;;
-+esac
-+eval ac_try_echo="\"\$as_me:$LINENO: $ac_try_echo\""
-+$as_echo "$ac_try_echo") >&5
-+  (eval "$ac_cpp conftest.$ac_ext") 2>conftest.er1
-+  ac_status=$?
-+  grep -v '^ *+' conftest.er1 >conftest.err
-+  rm -f conftest.er1
-+  cat conftest.err >&5
-+  $as_echo "$as_me:$LINENO: \$? = $ac_status" >&5
-+  (exit $ac_status); } >/dev/null && {
-+	 test -z "$ac_c_preproc_warn_flag$ac_c_werror_flag" ||
-+	 test ! -s conftest.err
-+       }; then
-+  ac_header_preproc=yes
-+else
-+  $as_echo "$as_me: failed program was:" >&5
-+sed 's/^/| /' conftest.$ac_ext >&5
-+
-+  ac_header_preproc=no
-+fi
-+
-+rm -f conftest.err conftest.$ac_ext
-+{ $as_echo "$as_me:$LINENO: result: $ac_header_preproc" >&5
-+$as_echo "$ac_header_preproc" >&6; }
-+
-+# So?  What about this header?
-+case $ac_header_compiler:$ac_header_preproc:$ac_c_preproc_warn_flag in
-+  yes:no: )
-+    { $as_echo "$as_me:$LINENO: WARNING: minix/config.h: accepted by the compiler, rejected by the preprocessor!" >&5
-+$as_echo "$as_me: WARNING: minix/config.h: accepted by the compiler, rejected by the preprocessor!" >&2;}
-+    { $as_echo "$as_me:$LINENO: WARNING: minix/config.h: proceeding with the compiler's result" >&5
-+$as_echo "$as_me: WARNING: minix/config.h: proceeding with the compiler's result" >&2;}
-+    ac_header_preproc=yes
-+    ;;
-+  no:yes:* )
-+    { $as_echo "$as_me:$LINENO: WARNING: minix/config.h: present but cannot be compiled" >&5
-+$as_echo "$as_me: WARNING: minix/config.h: present but cannot be compiled" >&2;}
-+    { $as_echo "$as_me:$LINENO: WARNING: minix/config.h:     check for missing prerequisite headers?" >&5
-+$as_echo "$as_me: WARNING: minix/config.h:     check for missing prerequisite headers?" >&2;}
-+    { $as_echo "$as_me:$LINENO: WARNING: minix/config.h: see the Autoconf documentation" >&5
-+$as_echo "$as_me: WARNING: minix/config.h: see the Autoconf documentation" >&2;}
-+    { $as_echo "$as_me:$LINENO: WARNING: minix/config.h:     section \"Present But Cannot Be Compiled\"" >&5
-+$as_echo "$as_me: WARNING: minix/config.h:     section \"Present But Cannot Be Compiled\"" >&2;}
-+    { $as_echo "$as_me:$LINENO: WARNING: minix/config.h: proceeding with the preprocessor's result" >&5
-+$as_echo "$as_me: WARNING: minix/config.h: proceeding with the preprocessor's result" >&2;}
-+    { $as_echo "$as_me:$LINENO: WARNING: minix/config.h: in the future, the compiler will take precedence" >&5
-+$as_echo "$as_me: WARNING: minix/config.h: in the future, the compiler will take precedence" >&2;}
-+
-+    ;;
-+esac
-+{ $as_echo "$as_me:$LINENO: checking for minix/config.h" >&5
-+$as_echo_n "checking for minix/config.h... " >&6; }
-+if test "${ac_cv_header_minix_config_h+set}" = set; then
-+  $as_echo_n "(cached) " >&6
-+else
-+  ac_cv_header_minix_config_h=$ac_header_preproc
-+fi
-+{ $as_echo "$as_me:$LINENO: result: $ac_cv_header_minix_config_h" >&5
-+$as_echo "$ac_cv_header_minix_config_h" >&6; }
-+
-+fi
-+if test "x$ac_cv_header_minix_config_h" = x""yes; then
-+  MINIX=yes
-+else
-+  MINIX=
-+fi
-+
-+
-+  if test "$MINIX" = yes; then
-+
-+cat >>confdefs.h <<\_ACEOF
-+#define _POSIX_SOURCE 1
-+_ACEOF
-+
-+
-+cat >>confdefs.h <<\_ACEOF
-+#define _POSIX_1_SOURCE 2
-+_ACEOF
-+
-+
-+cat >>confdefs.h <<\_ACEOF
-+#define _MINIX 1
-+_ACEOF
-+
-+  fi
-+
-+
-+
-+  { $as_echo "$as_me:$LINENO: checking whether it is safe to define __EXTENSIONS__" >&5
-+$as_echo_n "checking whether it is safe to define __EXTENSIONS__... " >&6; }
-+if test "${ac_cv_safe_to_define___extensions__+set}" = set; then
-+  $as_echo_n "(cached) " >&6
-+else
-   cat >conftest.$ac_ext <<_ACEOF
- /* confdefs.h.  */
- _ACEOF
- cat confdefs.h >>conftest.$ac_ext
- cat >>conftest.$ac_ext <<_ACEOF
- /* end confdefs.h.  */
--$ac_declaration
-+
-+#	  define __EXTENSIONS__ 1
-+	  $ac_includes_default
- int
- main ()
- {
--exit (42);
-+
-   ;
-   return 0;
- }
- _ACEOF
- rm -f conftest.$ac_objext
--if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
--  (eval $ac_compile) 2>conftest.er1
-+if { (ac_try="$ac_compile"
-+case "(($ac_try" in
-+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
-+  *) ac_try_echo=$ac_try;;
-+esac
-+eval ac_try_echo="\"\$as_me:$LINENO: $ac_try_echo\""
-+$as_echo "$ac_try_echo") >&5
-+  (eval "$ac_compile") 2>conftest.er1
-   ac_status=$?
-   grep -v '^ *+' conftest.er1 >conftest.err
-   rm -f conftest.er1
-   cat conftest.err >&5
--  echo "$as_me:$LINENO: \$? = $ac_status" >&5
--  (exit $ac_status); } &&
--	 { ac_try='test -z "$ac_c_werror_flag"
--			 || test ! -s conftest.err'
--  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
--  (eval $ac_try) 2>&5
--  ac_status=$?
--  echo "$as_me:$LINENO: \$? = $ac_status" >&5
--  (exit $ac_status); }; } &&
--	 { ac_try='test -s conftest.$ac_objext'
--  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
--  (eval $ac_try) 2>&5
--  ac_status=$?
--  echo "$as_me:$LINENO: \$? = $ac_status" >&5
--  (exit $ac_status); }; }; then
--  break
-+  $as_echo "$as_me:$LINENO: \$? = $ac_status" >&5
-+  (exit $ac_status); } && {
-+	 test -z "$ac_c_werror_flag" ||
-+	 test ! -s conftest.err
-+       } && test -s conftest.$ac_objext; then
-+  ac_cv_safe_to_define___extensions__=yes
- else
--  echo "$as_me: failed program was:" >&5
-+  $as_echo "$as_me: failed program was:" >&5
- sed 's/^/| /' conftest.$ac_ext >&5
- 
-+	ac_cv_safe_to_define___extensions__=no
- fi
--rm -f conftest.err conftest.$ac_objext conftest.$ac_ext
--done
--rm -f conftest*
--if test -n "$ac_declaration"; then
--  echo '#ifdef __cplusplus' >>confdefs.h
--  echo $ac_declaration      >>confdefs.h
--  echo '#endif'             >>confdefs.h
-+
-+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
- fi
-+{ $as_echo "$as_me:$LINENO: result: $ac_cv_safe_to_define___extensions__" >&5
-+$as_echo "$ac_cv_safe_to_define___extensions__" >&6; }
-+  test $ac_cv_safe_to_define___extensions__ = yes &&
-+    cat >>confdefs.h <<\_ACEOF
-+#define __EXTENSIONS__ 1
-+_ACEOF
- 
--else
--  echo "$as_me: failed program was:" >&5
--sed 's/^/| /' conftest.$ac_ext >&5
-+  cat >>confdefs.h <<\_ACEOF
-+#define _ALL_SOURCE 1
-+_ACEOF
-+
-+  cat >>confdefs.h <<\_ACEOF
-+#define _GNU_SOURCE 1
-+_ACEOF
-+
-+  cat >>confdefs.h <<\_ACEOF
-+#define _POSIX_PTHREAD_SEMANTICS 1
-+_ACEOF
-+
-+  cat >>confdefs.h <<\_ACEOF
-+#define _TANDEM_SOURCE 1
-+_ACEOF
- 
--fi
--rm -f conftest.err conftest.$ac_objext conftest.$ac_ext
--ac_ext=c
--ac_cpp='$CPP $CPPFLAGS'
--ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
--ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
--ac_compiler_gnu=$ac_cv_c_compiler_gnu
- 
- # Find a good install program.  We prefer a C program (faster),
- # so one script is as good as another.  But avoid the broken or
-@@ -2424,11 +3921,12 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
- # SVR4 /usr/ucb/install, which tries to use the nonexistent group "staff"
- # OS/2's system install, which has a completely different semantic
- # ./install, which can be erroneously created by make from ./install.sh.
--echo "$as_me:$LINENO: checking for a BSD-compatible install" >&5
--echo $ECHO_N "checking for a BSD-compatible install... $ECHO_C" >&6
-+# Reject install programs that cannot install multiple files.
-+{ $as_echo "$as_me:$LINENO: checking for a BSD-compatible install" >&5
-+$as_echo_n "checking for a BSD-compatible install... " >&6; }
- if test -z "$INSTALL"; then
- if test "${ac_cv_path_install+set}" = set; then
--  echo $ECHO_N "(cached) $ECHO_C" >&6
-+  $as_echo_n "(cached) " >&6
- else
-   as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
- for as_dir in $PATH
-@@ -2447,7 +3945,7 @@ case $as_dir/ in
-     # by default.
-     for ac_prog in ginstall scoinst install; do
-       for ac_exec_ext in '' $ac_executable_extensions; do
--	if $as_executable_p "$as_dir/$ac_prog$ac_exec_ext"; then
-+	if { test -f "$as_dir/$ac_prog$ac_exec_ext" && $as_test_x "$as_dir/$ac_prog$ac_exec_ext"; }; then
- 	  if test $ac_prog = install &&
- 	    grep dspmsg "$as_dir/$ac_prog$ac_exec_ext" >/dev/null 2>&1; then
- 	    # AIX install.  It has an incompatible calling convention.
-@@ -2457,30 +3955,43 @@ case $as_dir/ in
- 	    # program-specific install script used by HP pwplus--don't use.
- 	    :
- 	  else
--	    ac_cv_path_install="$as_dir/$ac_prog$ac_exec_ext -c"
--	    break 3
-+	    rm -rf conftest.one conftest.two conftest.dir
-+	    echo one > conftest.one
-+	    echo two > conftest.two
-+	    mkdir conftest.dir
-+	    if "$as_dir/$ac_prog$ac_exec_ext" -c conftest.one conftest.two "`pwd`/conftest.dir" &&
-+	      test -s conftest.one && test -s conftest.two &&
-+	      test -s conftest.dir/conftest.one &&
-+	      test -s conftest.dir/conftest.two
-+	    then
-+	      ac_cv_path_install="$as_dir/$ac_prog$ac_exec_ext -c"
-+	      break 3
-+	    fi
- 	  fi
- 	fi
-       done
-     done
-     ;;
- esac
-+
- done
-+IFS=$as_save_IFS
- 
-+rm -rf conftest.one conftest.two conftest.dir
- 
- fi
-   if test "${ac_cv_path_install+set}" = set; then
-     INSTALL=$ac_cv_path_install
-   else
--    # As a last resort, use the slow shell script.  We don't cache a
--    # path for INSTALL within a source directory, because that will
-+    # As a last resort, use the slow shell script.  Don't cache a
-+    # value for INSTALL within a source directory, because that will
-     # break other packages using the cache if that directory is
--    # removed, or if the path is relative.
-+    # removed, or if the value is a relative name.
-     INSTALL=$ac_install_sh
-   fi
- fi
--echo "$as_me:$LINENO: result: $INSTALL" >&5
--echo "${ECHO_T}$INSTALL" >&6
-+{ $as_echo "$as_me:$LINENO: result: $INSTALL" >&5
-+$as_echo "$INSTALL" >&6; }
- 
- # Use test -z because SunOS4 sh mishandles braces in ${var-val}.
- # It thinks the first close brace ends the variable substitution.
-@@ -2491,13 +4002,19 @@ test -z "$INSTALL_SCRIPT" && INSTALL_SCRIPT='${INSTALL}'
- test -z "$INSTALL_DATA" && INSTALL_DATA='${INSTALL} -m 644'
- 
- 
--if test "$ac_libiberty" = "NONE"; then
-+if test "$ac_binutils_build_dir" != "NONE"; then
-+  test "$ac_libbfd"               = "NONE" && ac_libbfd="$ac_binutils_build_dir/bfd/libbfd.a"
-+  test "$ac_libiberty"            = "NONE" && ac_libiberty="$ac_binutils_build_dir/libiberty/libiberty.a"
-+  test "$ac_bfd_include_dir"      = "NONE" && ac_bfd_include_dir="$ac_binutils_build_dir/bfd"
-+  test "$ac_binutils_include_dir" = "NONE" && ac_binutils_include_dir="$ac_binutils_build_dir/include"
-+fi
- 
-+if test "$ac_libiberty" = "NONE"; then
- 
--echo "$as_me:$LINENO: checking for objalloc_create in -liberty" >&5
--echo $ECHO_N "checking for objalloc_create in -liberty... $ECHO_C" >&6
-+{ $as_echo "$as_me:$LINENO: checking for objalloc_create in -liberty" >&5
-+$as_echo_n "checking for objalloc_create in -liberty... " >&6; }
- if test "${ac_cv_lib_iberty_objalloc_create+set}" = set; then
--  echo $ECHO_N "(cached) $ECHO_C" >&6
-+  $as_echo_n "(cached) " >&6
- else
-   ac_check_lib_save_LIBS=$LIBS
- LIBS="-liberty  $LIBS"
-@@ -2508,57 +4025,58 @@ cat confdefs.h >>conftest.$ac_ext
- cat >>conftest.$ac_ext <<_ACEOF
- /* end confdefs.h.  */
- 
--/* Override any gcc2 internal prototype to avoid an error.  */
-+/* Override any GCC internal prototype to avoid an error.
-+   Use char because int might match the return type of a GCC
-+   builtin and then its argument prototype would still apply.  */
- #ifdef __cplusplus
- extern "C"
- #endif
--/* We use char because int might match the return type of a gcc2
--   builtin and then its argument prototype would still apply.  */
- char objalloc_create ();
- int
- main ()
- {
--objalloc_create ();
-+return objalloc_create ();
-   ;
-   return 0;
- }
- _ACEOF
- rm -f conftest.$ac_objext conftest$ac_exeext
--if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
--  (eval $ac_link) 2>conftest.er1
-+if { (ac_try="$ac_link"
-+case "(($ac_try" in
-+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
-+  *) ac_try_echo=$ac_try;;
-+esac
-+eval ac_try_echo="\"\$as_me:$LINENO: $ac_try_echo\""
-+$as_echo "$ac_try_echo") >&5
-+  (eval "$ac_link") 2>conftest.er1
-   ac_status=$?
-   grep -v '^ *+' conftest.er1 >conftest.err
-   rm -f conftest.er1
-   cat conftest.err >&5
--  echo "$as_me:$LINENO: \$? = $ac_status" >&5
--  (exit $ac_status); } &&
--	 { ac_try='test -z "$ac_c_werror_flag"
--			 || test ! -s conftest.err'
--  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
--  (eval $ac_try) 2>&5
--  ac_status=$?
--  echo "$as_me:$LINENO: \$? = $ac_status" >&5
--  (exit $ac_status); }; } &&
--	 { ac_try='test -s conftest$ac_exeext'
--  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
--  (eval $ac_try) 2>&5
--  ac_status=$?
--  echo "$as_me:$LINENO: \$? = $ac_status" >&5
--  (exit $ac_status); }; }; then
-+  $as_echo "$as_me:$LINENO: \$? = $ac_status" >&5
-+  (exit $ac_status); } && {
-+	 test -z "$ac_c_werror_flag" ||
-+	 test ! -s conftest.err
-+       } && test -s conftest$ac_exeext && {
-+	 test "$cross_compiling" = yes ||
-+	 $as_test_x conftest$ac_exeext
-+       }; then
-   ac_cv_lib_iberty_objalloc_create=yes
- else
--  echo "$as_me: failed program was:" >&5
-+  $as_echo "$as_me: failed program was:" >&5
- sed 's/^/| /' conftest.$ac_ext >&5
- 
--ac_cv_lib_iberty_objalloc_create=no
-+	ac_cv_lib_iberty_objalloc_create=no
- fi
--rm -f conftest.err conftest.$ac_objext \
-+
-+rm -rf conftest.dSYM
-+rm -f core conftest.err conftest.$ac_objext conftest_ipa8_conftest.oo \
-       conftest$ac_exeext conftest.$ac_ext
- LIBS=$ac_check_lib_save_LIBS
- fi
--echo "$as_me:$LINENO: result: $ac_cv_lib_iberty_objalloc_create" >&5
--echo "${ECHO_T}$ac_cv_lib_iberty_objalloc_create" >&6
--if test $ac_cv_lib_iberty_objalloc_create = yes; then
-+{ $as_echo "$as_me:$LINENO: result: $ac_cv_lib_iberty_objalloc_create" >&5
-+$as_echo "$ac_cv_lib_iberty_objalloc_create" >&6; }
-+if test "x$ac_cv_lib_iberty_objalloc_create" = x""yes; then
-   cat >>confdefs.h <<_ACEOF
- #define HAVE_LIBIBERTY 1
- _ACEOF
-@@ -2573,10 +4091,10 @@ else
- fi
- if test "$ac_libbfd" = "NONE"; then
- 
--echo "$as_me:$LINENO: checking for bfd_openr in -lbfd" >&5
--echo $ECHO_N "checking for bfd_openr in -lbfd... $ECHO_C" >&6
-+{ $as_echo "$as_me:$LINENO: checking for bfd_openr in -lbfd" >&5
-+$as_echo_n "checking for bfd_openr in -lbfd... " >&6; }
- if test "${ac_cv_lib_bfd_bfd_openr+set}" = set; then
--  echo $ECHO_N "(cached) $ECHO_C" >&6
-+  $as_echo_n "(cached) " >&6
- else
-   ac_check_lib_save_LIBS=$LIBS
- LIBS="-lbfd  $LIBS"
-@@ -2587,57 +4105,58 @@ cat confdefs.h >>conftest.$ac_ext
- cat >>conftest.$ac_ext <<_ACEOF
- /* end confdefs.h.  */
- 
--/* Override any gcc2 internal prototype to avoid an error.  */
-+/* Override any GCC internal prototype to avoid an error.
-+   Use char because int might match the return type of a GCC
-+   builtin and then its argument prototype would still apply.  */
- #ifdef __cplusplus
- extern "C"
- #endif
--/* We use char because int might match the return type of a gcc2
--   builtin and then its argument prototype would still apply.  */
- char bfd_openr ();
- int
- main ()
- {
--bfd_openr ();
-+return bfd_openr ();
-   ;
-   return 0;
- }
- _ACEOF
- rm -f conftest.$ac_objext conftest$ac_exeext
--if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
--  (eval $ac_link) 2>conftest.er1
-+if { (ac_try="$ac_link"
-+case "(($ac_try" in
-+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
-+  *) ac_try_echo=$ac_try;;
-+esac
-+eval ac_try_echo="\"\$as_me:$LINENO: $ac_try_echo\""
-+$as_echo "$ac_try_echo") >&5
-+  (eval "$ac_link") 2>conftest.er1
-   ac_status=$?
-   grep -v '^ *+' conftest.er1 >conftest.err
-   rm -f conftest.er1
-   cat conftest.err >&5
--  echo "$as_me:$LINENO: \$? = $ac_status" >&5
--  (exit $ac_status); } &&
--	 { ac_try='test -z "$ac_c_werror_flag"
--			 || test ! -s conftest.err'
--  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
--  (eval $ac_try) 2>&5
--  ac_status=$?
--  echo "$as_me:$LINENO: \$? = $ac_status" >&5
--  (exit $ac_status); }; } &&
--	 { ac_try='test -s conftest$ac_exeext'
--  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
--  (eval $ac_try) 2>&5
--  ac_status=$?
--  echo "$as_me:$LINENO: \$? = $ac_status" >&5
--  (exit $ac_status); }; }; then
-+  $as_echo "$as_me:$LINENO: \$? = $ac_status" >&5
-+  (exit $ac_status); } && {
-+	 test -z "$ac_c_werror_flag" ||
-+	 test ! -s conftest.err
-+       } && test -s conftest$ac_exeext && {
-+	 test "$cross_compiling" = yes ||
-+	 $as_test_x conftest$ac_exeext
-+       }; then
-   ac_cv_lib_bfd_bfd_openr=yes
- else
--  echo "$as_me: failed program was:" >&5
-+  $as_echo "$as_me: failed program was:" >&5
- sed 's/^/| /' conftest.$ac_ext >&5
- 
--ac_cv_lib_bfd_bfd_openr=no
-+	ac_cv_lib_bfd_bfd_openr=no
- fi
--rm -f conftest.err conftest.$ac_objext \
-+
-+rm -rf conftest.dSYM
-+rm -f core conftest.err conftest.$ac_objext conftest_ipa8_conftest.oo \
-       conftest$ac_exeext conftest.$ac_ext
- LIBS=$ac_check_lib_save_LIBS
- fi
--echo "$as_me:$LINENO: result: $ac_cv_lib_bfd_bfd_openr" >&5
--echo "${ECHO_T}$ac_cv_lib_bfd_bfd_openr" >&6
--if test $ac_cv_lib_bfd_bfd_openr = yes; then
-+{ $as_echo "$as_me:$LINENO: result: $ac_cv_lib_bfd_bfd_openr" >&5
-+$as_echo "$ac_cv_lib_bfd_bfd_openr" >&6; }
-+if test "x$ac_cv_lib_bfd_bfd_openr" = x""yes; then
-   cat >>confdefs.h <<_ACEOF
- #define HAVE_LIBBFD 1
- _ACEOF
-@@ -2650,325 +4169,236 @@ fi
- else
-   LIBS="$ac_libbfd $LIBS"
- fi
-+if test "$ac_zlib_prefix" = "NONE"; then
- 
--bfd_include_dir=
--if test "$ac_bfd_include_dir" != "NONE"; then
--  bfd_include_dir="-I$ac_bfd_include_dir"
--fi
--
--binutils_include_dir=
--if test "$ac_binutils_include_dir" != "NONE"; then
--  binutils_include_dir="-I$ac_binutils_include_dir"
--fi
--
--binutils_ldscript_dir=
--if test "$ac_binutils_ldscript_dir" = "NONE"; then
--  ac_binutils_ldscript_dir="\${TOOLDIR}/../${target_alias}/lib"
--fi
--binutils_ldscript_dir="$ac_binutils_ldscript_dir"
--
--if test "$ac_libbfd" = "NONE" -o "$ac_libiberty" = "NONE" ; then
--	{ { echo "$as_me:$LINENO: error:
--
--You need to specify the location of the libfd.a and libiberty.a
--host libraries from the binutils package.
--
--Run configure again specifying these options:
--
--  ./configure --target=<ARCH> --with-bfd-include-dir=<dir> --with-libbfd=<libbfd.a> --with-libiberty=<libiberty.a>
--" >&5
--echo "$as_me: error:
--
--You need to specify the location of the libfd.a and libiberty.a
--host libraries from the binutils package.
--
--Run configure again specifying these options:
--
--  ./configure --target=<ARCH> --with-bfd-include-dir=<dir> --with-libbfd=<libbfd.a> --with-libiberty=<libiberty.a>
--" >&2;}
--   { (exit 1); exit 1; }; }
--fi
--
--if test "$ac_bfd_include_dir" = "NONE" ; then
--	{ { echo "$as_me:$LINENO: error:
--
--You need to specify the location of the bfd.h header from a
--configured/compiled version of the binutils package for your target.
--Without this your elf2flt may crash as it will try to use the
--systems bfd.h which may be from a different binutils package.
--
--Run configure again specifying these options:
--
--  ./configure --target=<ARCH> --with-bfd-include-dir=<dir> --with-libbfd=<libbfd.a> --with-libiberty=<libiberty.a>
--" >&5
--echo "$as_me: error:
--
--You need to specify the location of the bfd.h header from a
--configured/compiled version of the binutils package for your target.
--Without this your elf2flt may crash as it will try to use the
--systems bfd.h which may be from a different binutils package.
--
--Run configure again specifying these options:
--
--  ./configure --target=<ARCH> --with-bfd-include-dir=<dir> --with-libbfd=<libbfd.a> --with-libiberty=<libiberty.a>
--" >&2;}
--   { (exit 1); exit 1; }; }
--fi
--
--ac_ext=c
--ac_cpp='$CPP $CPPFLAGS'
--ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
--ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
--ac_compiler_gnu=$ac_cv_c_compiler_gnu
--echo "$as_me:$LINENO: checking how to run the C preprocessor" >&5
--echo $ECHO_N "checking how to run the C preprocessor... $ECHO_C" >&6
--# On Suns, sometimes $CPP names a directory.
--if test -n "$CPP" && test -d "$CPP"; then
--  CPP=
--fi
--if test -z "$CPP"; then
--  if test "${ac_cv_prog_CPP+set}" = set; then
--  echo $ECHO_N "(cached) $ECHO_C" >&6
-+{ $as_echo "$as_me:$LINENO: checking for deflate in -lz" >&5
-+$as_echo_n "checking for deflate in -lz... " >&6; }
-+if test "${ac_cv_lib_z_deflate+set}" = set; then
-+  $as_echo_n "(cached) " >&6
- else
--      # Double quotes because CPP needs to be expanded
--    for CPP in "$CC -E" "$CC -E -traditional-cpp" "/lib/cpp"
--    do
--      ac_preproc_ok=false
--for ac_c_preproc_warn_flag in '' yes
--do
--  # Use a header file that comes with gcc, so configuring glibc
--  # with a fresh cross-compiler works.
--  # Prefer <limits.h> to <assert.h> if __STDC__ is defined, since
--  # <limits.h> exists even on freestanding compilers.
--  # On the NeXT, cc -E runs the code through the compiler's parser,
--  # not just through cpp. "Syntax error" is here to catch this case.
--  cat >conftest.$ac_ext <<_ACEOF
-+  ac_check_lib_save_LIBS=$LIBS
-+LIBS="-lz  $LIBS"
-+cat >conftest.$ac_ext <<_ACEOF
- /* confdefs.h.  */
- _ACEOF
- cat confdefs.h >>conftest.$ac_ext
- cat >>conftest.$ac_ext <<_ACEOF
- /* end confdefs.h.  */
--#ifdef __STDC__
--# include <limits.h>
--#else
--# include <assert.h>
-+
-+/* Override any GCC internal prototype to avoid an error.
-+   Use char because int might match the return type of a GCC
-+   builtin and then its argument prototype would still apply.  */
-+#ifdef __cplusplus
-+extern "C"
- #endif
--		     Syntax error
-+char deflate ();
-+int
-+main ()
-+{
-+return deflate ();
-+  ;
-+  return 0;
-+}
- _ACEOF
--if { (eval echo "$as_me:$LINENO: \"$ac_cpp conftest.$ac_ext\"") >&5
--  (eval $ac_cpp conftest.$ac_ext) 2>conftest.er1
-+rm -f conftest.$ac_objext conftest$ac_exeext
-+if { (ac_try="$ac_link"
-+case "(($ac_try" in
-+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
-+  *) ac_try_echo=$ac_try;;
-+esac
-+eval ac_try_echo="\"\$as_me:$LINENO: $ac_try_echo\""
-+$as_echo "$ac_try_echo") >&5
-+  (eval "$ac_link") 2>conftest.er1
-   ac_status=$?
-   grep -v '^ *+' conftest.er1 >conftest.err
-   rm -f conftest.er1
-   cat conftest.err >&5
--  echo "$as_me:$LINENO: \$? = $ac_status" >&5
--  (exit $ac_status); } >/dev/null; then
--  if test -s conftest.err; then
--    ac_cpp_err=$ac_c_preproc_warn_flag
--    ac_cpp_err=$ac_cpp_err$ac_c_werror_flag
--  else
--    ac_cpp_err=
--  fi
--else
--  ac_cpp_err=yes
--fi
--if test -z "$ac_cpp_err"; then
--  :
-+  $as_echo "$as_me:$LINENO: \$? = $ac_status" >&5
-+  (exit $ac_status); } && {
-+	 test -z "$ac_c_werror_flag" ||
-+	 test ! -s conftest.err
-+       } && test -s conftest$ac_exeext && {
-+	 test "$cross_compiling" = yes ||
-+	 $as_test_x conftest$ac_exeext
-+       }; then
-+  ac_cv_lib_z_deflate=yes
- else
--  echo "$as_me: failed program was:" >&5
-+  $as_echo "$as_me: failed program was:" >&5
- sed 's/^/| /' conftest.$ac_ext >&5
- 
--  # Broken: fails on valid input.
--continue
-+	ac_cv_lib_z_deflate=no
- fi
--rm -f conftest.err conftest.$ac_ext
- 
--  # OK, works on sane cases.  Now check whether non-existent headers
--  # can be detected and how.
--  cat >conftest.$ac_ext <<_ACEOF
--/* confdefs.h.  */
--_ACEOF
--cat confdefs.h >>conftest.$ac_ext
--cat >>conftest.$ac_ext <<_ACEOF
--/* end confdefs.h.  */
--#include <ac_nonexistent.h>
-+rm -rf conftest.dSYM
-+rm -f core conftest.err conftest.$ac_objext conftest_ipa8_conftest.oo \
-+      conftest$ac_exeext conftest.$ac_ext
-+LIBS=$ac_check_lib_save_LIBS
-+fi
-+{ $as_echo "$as_me:$LINENO: result: $ac_cv_lib_z_deflate" >&5
-+$as_echo "$ac_cv_lib_z_deflate" >&6; }
-+if test "x$ac_cv_lib_z_deflate" = x""yes; then
-+  cat >>confdefs.h <<_ACEOF
-+#define HAVE_LIBZ 1
- _ACEOF
--if { (eval echo "$as_me:$LINENO: \"$ac_cpp conftest.$ac_ext\"") >&5
--  (eval $ac_cpp conftest.$ac_ext) 2>conftest.er1
--  ac_status=$?
--  grep -v '^ *+' conftest.er1 >conftest.err
--  rm -f conftest.er1
--  cat conftest.err >&5
--  echo "$as_me:$LINENO: \$? = $ac_status" >&5
--  (exit $ac_status); } >/dev/null; then
--  if test -s conftest.err; then
--    ac_cpp_err=$ac_c_preproc_warn_flag
--    ac_cpp_err=$ac_cpp_err$ac_c_werror_flag
--  else
--    ac_cpp_err=
--  fi
--else
--  ac_cpp_err=yes
-+
-+  LIBS="-lz $LIBS"
-+
- fi
--if test -z "$ac_cpp_err"; then
--  # Broken: success on invalid input.
--continue
--else
--  echo "$as_me: failed program was:" >&5
--sed 's/^/| /' conftest.$ac_ext >&5
- 
--  # Passes both tests.
--ac_preproc_ok=:
--break
-+else
-+  LIBS="-L$ac_zlib_prefix/lib -lz $LIBS"
- fi
--rm -f conftest.err conftest.$ac_ext
- 
--done
--# Because of `break', _AC_PREPROC_IFELSE's cleaning code was skipped.
--rm -f conftest.err conftest.$ac_ext
--if $ac_preproc_ok; then
--  break
-+bfd_include_dir=
-+if test "$ac_bfd_include_dir" != "NONE"; then
-+  bfd_include_dir="-I$ac_bfd_include_dir"
- fi
- 
--    done
--    ac_cv_prog_CPP=$CPP
-+binutils_include_dir=
-+if test "$ac_binutils_include_dir" != "NONE"; then
-+  binutils_include_dir="-I$ac_binutils_include_dir"
-+fi
- 
-+zlib_include_dir=
-+if test "$ac_zlib_prefix" != "NONE"; then
-+  zlib_include_dir="-I$ac_zlib_prefix/include"
- fi
--  CPP=$ac_cv_prog_CPP
--else
--  ac_cv_prog_CPP=$CPP
-+
-+binutils_ldscript_dir=
-+if test "$ac_binutils_ldscript_dir" = "NONE"; then
-+  ac_binutils_ldscript_dir="\${TOOLDIR}/../${target_alias}/lib"
- fi
--echo "$as_me:$LINENO: result: $CPP" >&5
--echo "${ECHO_T}$CPP" >&6
--ac_preproc_ok=false
--for ac_c_preproc_warn_flag in '' yes
--do
--  # Use a header file that comes with gcc, so configuring glibc
--  # with a fresh cross-compiler works.
--  # Prefer <limits.h> to <assert.h> if __STDC__ is defined, since
--  # <limits.h> exists even on freestanding compilers.
--  # On the NeXT, cc -E runs the code through the compiler's parser,
--  # not just through cpp. "Syntax error" is here to catch this case.
--  cat >conftest.$ac_ext <<_ACEOF
--/* confdefs.h.  */
--_ACEOF
--cat confdefs.h >>conftest.$ac_ext
--cat >>conftest.$ac_ext <<_ACEOF
--/* end confdefs.h.  */
--#ifdef __STDC__
--# include <limits.h>
--#else
--# include <assert.h>
--#endif
--		     Syntax error
--_ACEOF
--if { (eval echo "$as_me:$LINENO: \"$ac_cpp conftest.$ac_ext\"") >&5
--  (eval $ac_cpp conftest.$ac_ext) 2>conftest.er1
--  ac_status=$?
--  grep -v '^ *+' conftest.er1 >conftest.err
--  rm -f conftest.er1
--  cat conftest.err >&5
--  echo "$as_me:$LINENO: \$? = $ac_status" >&5
--  (exit $ac_status); } >/dev/null; then
--  if test -s conftest.err; then
--    ac_cpp_err=$ac_c_preproc_warn_flag
--    ac_cpp_err=$ac_cpp_err$ac_c_werror_flag
--  else
--    ac_cpp_err=
--  fi
--else
--  ac_cpp_err=yes
-+binutils_ldscript_dir="$ac_binutils_ldscript_dir"
-+
-+if test "$ac_libbfd" = "NONE" -o "$ac_libiberty" = "NONE" ; then
-+	{ { $as_echo "$as_me:$LINENO: error:
-+
-+You need to specify the location of the libfd.a and libiberty.a
-+host libraries from the binutils package.
-+
-+Run configure again specifying these options:
-+
-+  ./configure --target=<ARCH> --with-bfd-include-dir=<dir> --with-libbfd=<libbfd.a> --with-libiberty=<libiberty.a>
-+" >&5
-+$as_echo "$as_me: error:
-+
-+You need to specify the location of the libfd.a and libiberty.a
-+host libraries from the binutils package.
-+
-+Run configure again specifying these options:
-+
-+  ./configure --target=<ARCH> --with-bfd-include-dir=<dir> --with-libbfd=<libbfd.a> --with-libiberty=<libiberty.a>
-+" >&2;}
-+   { (exit 1); exit 1; }; }
- fi
--if test -z "$ac_cpp_err"; then
--  :
--else
--  echo "$as_me: failed program was:" >&5
--sed 's/^/| /' conftest.$ac_ext >&5
- 
--  # Broken: fails on valid input.
--continue
-+if test "$ac_bfd_include_dir" = "NONE" ; then
-+	{ { $as_echo "$as_me:$LINENO: error:
-+
-+You need to specify the location of the bfd.h header from a
-+configured/compiled version of the binutils package for your target.
-+Without this your elf2flt may crash as it will try to use the
-+systems bfd.h which may be from a different binutils package.
-+
-+Run configure again specifying these options:
-+
-+  ./configure --target=<ARCH> --with-bfd-include-dir=<dir> --with-libbfd=<libbfd.a> --with-libiberty=<libiberty.a>
-+" >&5
-+$as_echo "$as_me: error:
-+
-+You need to specify the location of the bfd.h header from a
-+configured/compiled version of the binutils package for your target.
-+Without this your elf2flt may crash as it will try to use the
-+systems bfd.h which may be from a different binutils package.
-+
-+Run configure again specifying these options:
-+
-+  ./configure --target=<ARCH> --with-bfd-include-dir=<dir> --with-libbfd=<libbfd.a> --with-libiberty=<libiberty.a>
-+" >&2;}
-+   { (exit 1); exit 1; }; }
- fi
--rm -f conftest.err conftest.$ac_ext
- 
--  # OK, works on sane cases.  Now check whether non-existent headers
--  # can be detected and how.
--  cat >conftest.$ac_ext <<_ACEOF
-+SYMBOL_PREFIX=
-+case $target in
-+	h8300|bfin*)
-+		SYMBOL_PREFIX=_
-+		;;
-+esac
-+
-+{ $as_echo "$as_me:$LINENO: checking for malloc in -lc" >&5
-+$as_echo_n "checking for malloc in -lc... " >&6; }
-+if test "${ac_cv_lib_c_malloc+set}" = set; then
-+  $as_echo_n "(cached) " >&6
-+else
-+  ac_check_lib_save_LIBS=$LIBS
-+LIBS="-lc  $LIBS"
-+cat >conftest.$ac_ext <<_ACEOF
- /* confdefs.h.  */
- _ACEOF
- cat confdefs.h >>conftest.$ac_ext
- cat >>conftest.$ac_ext <<_ACEOF
- /* end confdefs.h.  */
--#include <ac_nonexistent.h>
-+
-+/* Override any GCC internal prototype to avoid an error.
-+   Use char because int might match the return type of a GCC
-+   builtin and then its argument prototype would still apply.  */
-+#ifdef __cplusplus
-+extern "C"
-+#endif
-+char malloc ();
-+int
-+main ()
-+{
-+return malloc ();
-+  ;
-+  return 0;
-+}
- _ACEOF
--if { (eval echo "$as_me:$LINENO: \"$ac_cpp conftest.$ac_ext\"") >&5
--  (eval $ac_cpp conftest.$ac_ext) 2>conftest.er1
-+rm -f conftest.$ac_objext conftest$ac_exeext
-+if { (ac_try="$ac_link"
-+case "(($ac_try" in
-+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
-+  *) ac_try_echo=$ac_try;;
-+esac
-+eval ac_try_echo="\"\$as_me:$LINENO: $ac_try_echo\""
-+$as_echo "$ac_try_echo") >&5
-+  (eval "$ac_link") 2>conftest.er1
-   ac_status=$?
-   grep -v '^ *+' conftest.er1 >conftest.err
-   rm -f conftest.er1
-   cat conftest.err >&5
--  echo "$as_me:$LINENO: \$? = $ac_status" >&5
--  (exit $ac_status); } >/dev/null; then
--  if test -s conftest.err; then
--    ac_cpp_err=$ac_c_preproc_warn_flag
--    ac_cpp_err=$ac_cpp_err$ac_c_werror_flag
--  else
--    ac_cpp_err=
--  fi
--else
--  ac_cpp_err=yes
--fi
--if test -z "$ac_cpp_err"; then
--  # Broken: success on invalid input.
--continue
-+  $as_echo "$as_me:$LINENO: \$? = $ac_status" >&5
-+  (exit $ac_status); } && {
-+	 test -z "$ac_c_werror_flag" ||
-+	 test ! -s conftest.err
-+       } && test -s conftest$ac_exeext && {
-+	 test "$cross_compiling" = yes ||
-+	 $as_test_x conftest$ac_exeext
-+       }; then
-+  ac_cv_lib_c_malloc=yes
- else
--  echo "$as_me: failed program was:" >&5
-+  $as_echo "$as_me: failed program was:" >&5
- sed 's/^/| /' conftest.$ac_ext >&5
- 
--  # Passes both tests.
--ac_preproc_ok=:
--break
-+	ac_cv_lib_c_malloc=no
- fi
--rm -f conftest.err conftest.$ac_ext
- 
--done
--# Because of `break', _AC_PREPROC_IFELSE's cleaning code was skipped.
--rm -f conftest.err conftest.$ac_ext
--if $ac_preproc_ok; then
--  :
--else
--  { { echo "$as_me:$LINENO: error: C preprocessor \"$CPP\" fails sanity check
--See \`config.log' for more details." >&5
--echo "$as_me: error: C preprocessor \"$CPP\" fails sanity check
--See \`config.log' for more details." >&2;}
--   { (exit 1); exit 1; }; }
-+rm -rf conftest.dSYM
-+rm -f core conftest.err conftest.$ac_objext conftest_ipa8_conftest.oo \
-+      conftest$ac_exeext conftest.$ac_ext
-+LIBS=$ac_check_lib_save_LIBS
- fi
--
--ac_ext=c
--ac_cpp='$CPP $CPPFLAGS'
--ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
--ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
--ac_compiler_gnu=$ac_cv_c_compiler_gnu
--
--
--echo "$as_me:$LINENO: checking for egrep" >&5
--echo $ECHO_N "checking for egrep... $ECHO_C" >&6
--if test "${ac_cv_prog_egrep+set}" = set; then
--  echo $ECHO_N "(cached) $ECHO_C" >&6
--else
--  if echo a | (grep -E '(a|b)') >/dev/null 2>&1
--    then ac_cv_prog_egrep='grep -E'
--    else ac_cv_prog_egrep='egrep'
--    fi
-+{ $as_echo "$as_me:$LINENO: result: $ac_cv_lib_c_malloc" >&5
-+$as_echo "$ac_cv_lib_c_malloc" >&6; }
-+if test "x$ac_cv_lib_c_malloc" = x""yes; then
-+  LIBS="-lc $LIBS"
- fi
--echo "$as_me:$LINENO: result: $ac_cv_prog_egrep" >&5
--echo "${ECHO_T}$ac_cv_prog_egrep" >&6
-- EGREP=$ac_cv_prog_egrep
- 
- 
--echo "$as_me:$LINENO: checking for ANSI C header files" >&5
--echo $ECHO_N "checking for ANSI C header files... $ECHO_C" >&6
-+{ $as_echo "$as_me:$LINENO: checking for ANSI C header files" >&5
-+$as_echo_n "checking for ANSI C header files... " >&6; }
- if test "${ac_cv_header_stdc+set}" = set; then
--  echo $ECHO_N "(cached) $ECHO_C" >&6
-+  $as_echo_n "(cached) " >&6
- else
-   cat >conftest.$ac_ext <<_ACEOF
- /* confdefs.h.  */
-@@ -2990,35 +4420,32 @@ main ()
- }
- _ACEOF
- rm -f conftest.$ac_objext
--if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
--  (eval $ac_compile) 2>conftest.er1
-+if { (ac_try="$ac_compile"
-+case "(($ac_try" in
-+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
-+  *) ac_try_echo=$ac_try;;
-+esac
-+eval ac_try_echo="\"\$as_me:$LINENO: $ac_try_echo\""
-+$as_echo "$ac_try_echo") >&5
-+  (eval "$ac_compile") 2>conftest.er1
-   ac_status=$?
-   grep -v '^ *+' conftest.er1 >conftest.err
-   rm -f conftest.er1
-   cat conftest.err >&5
--  echo "$as_me:$LINENO: \$? = $ac_status" >&5
--  (exit $ac_status); } &&
--	 { ac_try='test -z "$ac_c_werror_flag"
--			 || test ! -s conftest.err'
--  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
--  (eval $ac_try) 2>&5
--  ac_status=$?
--  echo "$as_me:$LINENO: \$? = $ac_status" >&5
--  (exit $ac_status); }; } &&
--	 { ac_try='test -s conftest.$ac_objext'
--  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
--  (eval $ac_try) 2>&5
--  ac_status=$?
--  echo "$as_me:$LINENO: \$? = $ac_status" >&5
--  (exit $ac_status); }; }; then
-+  $as_echo "$as_me:$LINENO: \$? = $ac_status" >&5
-+  (exit $ac_status); } && {
-+	 test -z "$ac_c_werror_flag" ||
-+	 test ! -s conftest.err
-+       } && test -s conftest.$ac_objext; then
-   ac_cv_header_stdc=yes
- else
--  echo "$as_me: failed program was:" >&5
-+  $as_echo "$as_me: failed program was:" >&5
- sed 's/^/| /' conftest.$ac_ext >&5
- 
--ac_cv_header_stdc=no
-+	ac_cv_header_stdc=no
- fi
--rm -f conftest.err conftest.$ac_objext conftest.$ac_ext
-+
-+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
- 
- if test $ac_cv_header_stdc = yes; then
-   # SunOS 4.x string.h does not declare mem*, contrary to ANSI.
-@@ -3074,6 +4501,7 @@ cat confdefs.h >>conftest.$ac_ext
- cat >>conftest.$ac_ext <<_ACEOF
- /* end confdefs.h.  */
- #include <ctype.h>
-+#include <stdlib.h>
- #if ((' ' & 0x0FF) == 0x020)
- # define ISLOWER(c) ('a' <= (c) && (c) <= 'z')
- # define TOUPPER(c) (ISLOWER(c) ? 'A' + ((c) - 'a') : (c))
-@@ -3093,36 +4521,50 @@ main ()
-   for (i = 0; i < 256; i++)
-     if (XOR (islower (i), ISLOWER (i))
- 	|| toupper (i) != TOUPPER (i))
--      exit(2);
--  exit (0);
-+      return 2;
-+  return 0;
- }
- _ACEOF
- rm -f conftest$ac_exeext
--if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
--  (eval $ac_link) 2>&5
-+if { (ac_try="$ac_link"
-+case "(($ac_try" in
-+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
-+  *) ac_try_echo=$ac_try;;
-+esac
-+eval ac_try_echo="\"\$as_me:$LINENO: $ac_try_echo\""
-+$as_echo "$ac_try_echo") >&5
-+  (eval "$ac_link") 2>&5
-   ac_status=$?
--  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-+  $as_echo "$as_me:$LINENO: \$? = $ac_status" >&5
-   (exit $ac_status); } && { ac_try='./conftest$ac_exeext'
--  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
--  (eval $ac_try) 2>&5
-+  { (case "(($ac_try" in
-+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
-+  *) ac_try_echo=$ac_try;;
-+esac
-+eval ac_try_echo="\"\$as_me:$LINENO: $ac_try_echo\""
-+$as_echo "$ac_try_echo") >&5
-+  (eval "$ac_try") 2>&5
-   ac_status=$?
--  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-+  $as_echo "$as_me:$LINENO: \$? = $ac_status" >&5
-   (exit $ac_status); }; }; then
-   :
- else
--  echo "$as_me: program exited with status $ac_status" >&5
--echo "$as_me: failed program was:" >&5
-+  $as_echo "$as_me: program exited with status $ac_status" >&5
-+$as_echo "$as_me: failed program was:" >&5
- sed 's/^/| /' conftest.$ac_ext >&5
- 
- ( exit $ac_status )
- ac_cv_header_stdc=no
- fi
--rm -f core *.core gmon.out bb.out conftest$ac_exeext conftest.$ac_objext conftest.$ac_ext
-+rm -rf conftest.dSYM
-+rm -f core *.core core.conftest.* gmon.out bb.out conftest$ac_exeext conftest.$ac_objext conftest.$ac_ext
- fi
-+
-+
- fi
- fi
--echo "$as_me:$LINENO: result: $ac_cv_header_stdc" >&5
--echo "${ECHO_T}$ac_cv_header_stdc" >&6
-+{ $as_echo "$as_me:$LINENO: result: $ac_cv_header_stdc" >&5
-+$as_echo "$ac_cv_header_stdc" >&6; }
- if test $ac_cv_header_stdc = yes; then
- 
- cat >>confdefs.h <<\_ACEOF
-@@ -3131,96 +4573,26 @@ _ACEOF
- 
- fi
- 
--# On IRIX 5.3, sys/types and inttypes.h are conflicting.
--
--
--
--
--
--
--
--
--
--for ac_header in sys/types.h sys/stat.h stdlib.h string.h memory.h strings.h \
--		  inttypes.h stdint.h unistd.h
--do
--as_ac_Header=`echo "ac_cv_header_$ac_header" | $as_tr_sh`
--echo "$as_me:$LINENO: checking for $ac_header" >&5
--echo $ECHO_N "checking for $ac_header... $ECHO_C" >&6
--if eval "test \"\${$as_ac_Header+set}\" = set"; then
--  echo $ECHO_N "(cached) $ECHO_C" >&6
--else
--  cat >conftest.$ac_ext <<_ACEOF
--/* confdefs.h.  */
--_ACEOF
--cat confdefs.h >>conftest.$ac_ext
--cat >>conftest.$ac_ext <<_ACEOF
--/* end confdefs.h.  */
--$ac_includes_default
--
--#include <$ac_header>
--_ACEOF
--rm -f conftest.$ac_objext
--if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
--  (eval $ac_compile) 2>conftest.er1
--  ac_status=$?
--  grep -v '^ *+' conftest.er1 >conftest.err
--  rm -f conftest.er1
--  cat conftest.err >&5
--  echo "$as_me:$LINENO: \$? = $ac_status" >&5
--  (exit $ac_status); } &&
--	 { ac_try='test -z "$ac_c_werror_flag"
--			 || test ! -s conftest.err'
--  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
--  (eval $ac_try) 2>&5
--  ac_status=$?
--  echo "$as_me:$LINENO: \$? = $ac_status" >&5
--  (exit $ac_status); }; } &&
--	 { ac_try='test -s conftest.$ac_objext'
--  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
--  (eval $ac_try) 2>&5
--  ac_status=$?
--  echo "$as_me:$LINENO: \$? = $ac_status" >&5
--  (exit $ac_status); }; }; then
--  eval "$as_ac_Header=yes"
--else
--  echo "$as_me: failed program was:" >&5
--sed 's/^/| /' conftest.$ac_ext >&5
--
--eval "$as_ac_Header=no"
--fi
--rm -f conftest.err conftest.$ac_objext conftest.$ac_ext
--fi
--echo "$as_me:$LINENO: result: `eval echo '${'$as_ac_Header'}'`" >&5
--echo "${ECHO_T}`eval echo '${'$as_ac_Header'}'`" >&6
--if test `eval echo '${'$as_ac_Header'}'` = yes; then
--  cat >>confdefs.h <<_ACEOF
--#define `echo "HAVE_$ac_header" | $as_tr_cpp` 1
--_ACEOF
--
--fi
--
--done
--
--
- 
- 
- 
- for ac_header in fcntl.h unistd.h bfd.h
- do
--as_ac_Header=`echo "ac_cv_header_$ac_header" | $as_tr_sh`
--if eval "test \"\${$as_ac_Header+set}\" = set"; then
--  echo "$as_me:$LINENO: checking for $ac_header" >&5
--echo $ECHO_N "checking for $ac_header... $ECHO_C" >&6
--if eval "test \"\${$as_ac_Header+set}\" = set"; then
--  echo $ECHO_N "(cached) $ECHO_C" >&6
--fi
--echo "$as_me:$LINENO: result: `eval echo '${'$as_ac_Header'}'`" >&5
--echo "${ECHO_T}`eval echo '${'$as_ac_Header'}'`" >&6
-+as_ac_Header=`$as_echo "ac_cv_header_$ac_header" | $as_tr_sh`
-+if { as_var=$as_ac_Header; eval "test \"\${$as_var+set}\" = set"; }; then
-+  { $as_echo "$as_me:$LINENO: checking for $ac_header" >&5
-+$as_echo_n "checking for $ac_header... " >&6; }
-+if { as_var=$as_ac_Header; eval "test \"\${$as_var+set}\" = set"; }; then
-+  $as_echo_n "(cached) " >&6
-+fi
-+ac_res=`eval 'as_val=${'$as_ac_Header'}
-+		 $as_echo "$as_val"'`
-+	       { $as_echo "$as_me:$LINENO: result: $ac_res" >&5
-+$as_echo "$ac_res" >&6; }
- else
-   # Is the header compilable?
--echo "$as_me:$LINENO: checking $ac_header usability" >&5
--echo $ECHO_N "checking $ac_header usability... $ECHO_C" >&6
-+{ $as_echo "$as_me:$LINENO: checking $ac_header usability" >&5
-+$as_echo_n "checking $ac_header usability... " >&6; }
- cat >conftest.$ac_ext <<_ACEOF
- /* confdefs.h.  */
- _ACEOF
-@@ -3231,41 +4603,38 @@ $ac_includes_default
- #include <$ac_header>
- _ACEOF
- rm -f conftest.$ac_objext
--if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
--  (eval $ac_compile) 2>conftest.er1
-+if { (ac_try="$ac_compile"
-+case "(($ac_try" in
-+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
-+  *) ac_try_echo=$ac_try;;
-+esac
-+eval ac_try_echo="\"\$as_me:$LINENO: $ac_try_echo\""
-+$as_echo "$ac_try_echo") >&5
-+  (eval "$ac_compile") 2>conftest.er1
-   ac_status=$?
-   grep -v '^ *+' conftest.er1 >conftest.err
-   rm -f conftest.er1
-   cat conftest.err >&5
--  echo "$as_me:$LINENO: \$? = $ac_status" >&5
--  (exit $ac_status); } &&
--	 { ac_try='test -z "$ac_c_werror_flag"
--			 || test ! -s conftest.err'
--  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
--  (eval $ac_try) 2>&5
--  ac_status=$?
--  echo "$as_me:$LINENO: \$? = $ac_status" >&5
--  (exit $ac_status); }; } &&
--	 { ac_try='test -s conftest.$ac_objext'
--  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
--  (eval $ac_try) 2>&5
--  ac_status=$?
--  echo "$as_me:$LINENO: \$? = $ac_status" >&5
--  (exit $ac_status); }; }; then
-+  $as_echo "$as_me:$LINENO: \$? = $ac_status" >&5
-+  (exit $ac_status); } && {
-+	 test -z "$ac_c_werror_flag" ||
-+	 test ! -s conftest.err
-+       } && test -s conftest.$ac_objext; then
-   ac_header_compiler=yes
- else
--  echo "$as_me: failed program was:" >&5
-+  $as_echo "$as_me: failed program was:" >&5
- sed 's/^/| /' conftest.$ac_ext >&5
- 
--ac_header_compiler=no
-+	ac_header_compiler=no
- fi
--rm -f conftest.err conftest.$ac_objext conftest.$ac_ext
--echo "$as_me:$LINENO: result: $ac_header_compiler" >&5
--echo "${ECHO_T}$ac_header_compiler" >&6
-+
-+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-+{ $as_echo "$as_me:$LINENO: result: $ac_header_compiler" >&5
-+$as_echo "$ac_header_compiler" >&6; }
- 
- # Is the header present?
--echo "$as_me:$LINENO: checking $ac_header presence" >&5
--echo $ECHO_N "checking $ac_header presence... $ECHO_C" >&6
-+{ $as_echo "$as_me:$LINENO: checking $ac_header presence" >&5
-+$as_echo_n "checking $ac_header presence... " >&6; }
- cat >conftest.$ac_ext <<_ACEOF
- /* confdefs.h.  */
- _ACEOF
-@@ -3274,81 +4643,78 @@ cat >>conftest.$ac_ext <<_ACEOF
- /* end confdefs.h.  */
- #include <$ac_header>
- _ACEOF
--if { (eval echo "$as_me:$LINENO: \"$ac_cpp conftest.$ac_ext\"") >&5
--  (eval $ac_cpp conftest.$ac_ext) 2>conftest.er1
-+if { (ac_try="$ac_cpp conftest.$ac_ext"
-+case "(($ac_try" in
-+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
-+  *) ac_try_echo=$ac_try;;
-+esac
-+eval ac_try_echo="\"\$as_me:$LINENO: $ac_try_echo\""
-+$as_echo "$ac_try_echo") >&5
-+  (eval "$ac_cpp conftest.$ac_ext") 2>conftest.er1
-   ac_status=$?
-   grep -v '^ *+' conftest.er1 >conftest.err
-   rm -f conftest.er1
-   cat conftest.err >&5
--  echo "$as_me:$LINENO: \$? = $ac_status" >&5
--  (exit $ac_status); } >/dev/null; then
--  if test -s conftest.err; then
--    ac_cpp_err=$ac_c_preproc_warn_flag
--    ac_cpp_err=$ac_cpp_err$ac_c_werror_flag
--  else
--    ac_cpp_err=
--  fi
--else
--  ac_cpp_err=yes
--fi
--if test -z "$ac_cpp_err"; then
-+  $as_echo "$as_me:$LINENO: \$? = $ac_status" >&5
-+  (exit $ac_status); } >/dev/null && {
-+	 test -z "$ac_c_preproc_warn_flag$ac_c_werror_flag" ||
-+	 test ! -s conftest.err
-+       }; then
-   ac_header_preproc=yes
- else
--  echo "$as_me: failed program was:" >&5
-+  $as_echo "$as_me: failed program was:" >&5
- sed 's/^/| /' conftest.$ac_ext >&5
- 
-   ac_header_preproc=no
- fi
-+
- rm -f conftest.err conftest.$ac_ext
--echo "$as_me:$LINENO: result: $ac_header_preproc" >&5
--echo "${ECHO_T}$ac_header_preproc" >&6
-+{ $as_echo "$as_me:$LINENO: result: $ac_header_preproc" >&5
-+$as_echo "$ac_header_preproc" >&6; }
- 
- # So?  What about this header?
- case $ac_header_compiler:$ac_header_preproc:$ac_c_preproc_warn_flag in
-   yes:no: )
--    { echo "$as_me:$LINENO: WARNING: $ac_header: accepted by the compiler, rejected by the preprocessor!" >&5
--echo "$as_me: WARNING: $ac_header: accepted by the compiler, rejected by the preprocessor!" >&2;}
--    { echo "$as_me:$LINENO: WARNING: $ac_header: proceeding with the compiler's result" >&5
--echo "$as_me: WARNING: $ac_header: proceeding with the compiler's result" >&2;}
-+    { $as_echo "$as_me:$LINENO: WARNING: $ac_header: accepted by the compiler, rejected by the preprocessor!" >&5
-+$as_echo "$as_me: WARNING: $ac_header: accepted by the compiler, rejected by the preprocessor!" >&2;}
-+    { $as_echo "$as_me:$LINENO: WARNING: $ac_header: proceeding with the compiler's result" >&5
-+$as_echo "$as_me: WARNING: $ac_header: proceeding with the compiler's result" >&2;}
-     ac_header_preproc=yes
-     ;;
-   no:yes:* )
--    { echo "$as_me:$LINENO: WARNING: $ac_header: present but cannot be compiled" >&5
--echo "$as_me: WARNING: $ac_header: present but cannot be compiled" >&2;}
--    { echo "$as_me:$LINENO: WARNING: $ac_header:     check for missing prerequisite headers?" >&5
--echo "$as_me: WARNING: $ac_header:     check for missing prerequisite headers?" >&2;}
--    { echo "$as_me:$LINENO: WARNING: $ac_header: see the Autoconf documentation" >&5
--echo "$as_me: WARNING: $ac_header: see the Autoconf documentation" >&2;}
--    { echo "$as_me:$LINENO: WARNING: $ac_header:     section \"Present But Cannot Be Compiled\"" >&5
--echo "$as_me: WARNING: $ac_header:     section \"Present But Cannot Be Compiled\"" >&2;}
--    { echo "$as_me:$LINENO: WARNING: $ac_header: proceeding with the preprocessor's result" >&5
--echo "$as_me: WARNING: $ac_header: proceeding with the preprocessor's result" >&2;}
--    { echo "$as_me:$LINENO: WARNING: $ac_header: in the future, the compiler will take precedence" >&5
--echo "$as_me: WARNING: $ac_header: in the future, the compiler will take precedence" >&2;}
--    (
--      cat <<\_ASBOX
--## ------------------------------------------ ##
--## Report this to the AC_PACKAGE_NAME lists.  ##
--## ------------------------------------------ ##
--_ASBOX
--    ) |
--      sed "s/^/$as_me: WARNING:     /" >&2
-+    { $as_echo "$as_me:$LINENO: WARNING: $ac_header: present but cannot be compiled" >&5
-+$as_echo "$as_me: WARNING: $ac_header: present but cannot be compiled" >&2;}
-+    { $as_echo "$as_me:$LINENO: WARNING: $ac_header:     check for missing prerequisite headers?" >&5
-+$as_echo "$as_me: WARNING: $ac_header:     check for missing prerequisite headers?" >&2;}
-+    { $as_echo "$as_me:$LINENO: WARNING: $ac_header: see the Autoconf documentation" >&5
-+$as_echo "$as_me: WARNING: $ac_header: see the Autoconf documentation" >&2;}
-+    { $as_echo "$as_me:$LINENO: WARNING: $ac_header:     section \"Present But Cannot Be Compiled\"" >&5
-+$as_echo "$as_me: WARNING: $ac_header:     section \"Present But Cannot Be Compiled\"" >&2;}
-+    { $as_echo "$as_me:$LINENO: WARNING: $ac_header: proceeding with the preprocessor's result" >&5
-+$as_echo "$as_me: WARNING: $ac_header: proceeding with the preprocessor's result" >&2;}
-+    { $as_echo "$as_me:$LINENO: WARNING: $ac_header: in the future, the compiler will take precedence" >&5
-+$as_echo "$as_me: WARNING: $ac_header: in the future, the compiler will take precedence" >&2;}
-+
-     ;;
- esac
--echo "$as_me:$LINENO: checking for $ac_header" >&5
--echo $ECHO_N "checking for $ac_header... $ECHO_C" >&6
--if eval "test \"\${$as_ac_Header+set}\" = set"; then
--  echo $ECHO_N "(cached) $ECHO_C" >&6
-+{ $as_echo "$as_me:$LINENO: checking for $ac_header" >&5
-+$as_echo_n "checking for $ac_header... " >&6; }
-+if { as_var=$as_ac_Header; eval "test \"\${$as_var+set}\" = set"; }; then
-+  $as_echo_n "(cached) " >&6
- else
-   eval "$as_ac_Header=\$ac_header_preproc"
- fi
--echo "$as_me:$LINENO: result: `eval echo '${'$as_ac_Header'}'`" >&5
--echo "${ECHO_T}`eval echo '${'$as_ac_Header'}'`" >&6
-+ac_res=`eval 'as_val=${'$as_ac_Header'}
-+		 $as_echo "$as_val"'`
-+	       { $as_echo "$as_me:$LINENO: result: $ac_res" >&5
-+$as_echo "$ac_res" >&6; }
- 
- fi
--if test `eval echo '${'$as_ac_Header'}'` = yes; then
-+as_val=`eval 'as_val=${'$as_ac_Header'}
-+		 $as_echo "$as_val"'`
-+   if test "x$as_val" = x""yes; then
-   cat >>confdefs.h <<_ACEOF
--#define `echo "HAVE_$ac_header" | $as_tr_cpp` 1
-+#define `$as_echo "HAVE_$ac_header" | $as_tr_cpp` 1
- _ACEOF
- 
- fi
-@@ -3356,10 +4722,10 @@ fi
- done
- 
- 
--echo "$as_me:$LINENO: checking for an ANSI C-conforming const" >&5
--echo $ECHO_N "checking for an ANSI C-conforming const... $ECHO_C" >&6
-+{ $as_echo "$as_me:$LINENO: checking for an ANSI C-conforming const" >&5
-+$as_echo_n "checking for an ANSI C-conforming const... " >&6; }
- if test "${ac_cv_c_const+set}" = set; then
--  echo $ECHO_N "(cached) $ECHO_C" >&6
-+  $as_echo_n "(cached) " >&6
- else
-   cat >conftest.$ac_ext <<_ACEOF
- /* confdefs.h.  */
-@@ -3375,10 +4741,10 @@ main ()
- #ifndef __cplusplus
-   /* Ultrix mips cc rejects this.  */
-   typedef int charset[2];
--  const charset x;
-+  const charset cs;
-   /* SunOS 4.1.1 cc rejects this.  */
--  char const *const *ccp;
--  char **p;
-+  char const *const *pcpcc;
-+  char **ppc;
-   /* NEC SVR4.0.2 mips cc rejects this.  */
-   struct point {int x, y;};
-   static struct point const zero = {0,0};
-@@ -3387,16 +4753,17 @@ main ()
-      an arm of an if-expression whose if-part is not a constant
-      expression */
-   const char *g = "string";
--  ccp = &g + (g ? g-g : 0);
-+  pcpcc = &g + (g ? g-g : 0);
-   /* HPUX 7.0 cc rejects these. */
--  ++ccp;
--  p = (char**) ccp;
--  ccp = (char const *const *) p;
-+  ++pcpcc;
-+  ppc = (char**) pcpcc;
-+  pcpcc = (char const *const *) ppc;
-   { /* SCO 3.2v4 cc rejects this.  */
-     char *t;
-     char const *s = 0 ? (char *) 0 : (char const *) 0;
- 
-     *t++ = 0;
-+    if (s) return 0;
-   }
-   { /* Someone thinks the Sun supposedly-ANSI compiler will reject this.  */
-     int x[] = {25, 17};
-@@ -3415,7 +4782,9 @@ main ()
-   }
-   { /* ULTRIX-32 V3.1 (Rev 9) vcc rejects this */
-     const int foo = 10;
-+    if (!foo) return 0;
-   }
-+  return !cs[0] && !zero.x;
- #endif
- 
-   ;
-@@ -3423,42 +4792,39 @@ main ()
- }
- _ACEOF
- rm -f conftest.$ac_objext
--if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
--  (eval $ac_compile) 2>conftest.er1
-+if { (ac_try="$ac_compile"
-+case "(($ac_try" in
-+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
-+  *) ac_try_echo=$ac_try;;
-+esac
-+eval ac_try_echo="\"\$as_me:$LINENO: $ac_try_echo\""
-+$as_echo "$ac_try_echo") >&5
-+  (eval "$ac_compile") 2>conftest.er1
-   ac_status=$?
-   grep -v '^ *+' conftest.er1 >conftest.err
-   rm -f conftest.er1
-   cat conftest.err >&5
--  echo "$as_me:$LINENO: \$? = $ac_status" >&5
--  (exit $ac_status); } &&
--	 { ac_try='test -z "$ac_c_werror_flag"
--			 || test ! -s conftest.err'
--  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
--  (eval $ac_try) 2>&5
--  ac_status=$?
--  echo "$as_me:$LINENO: \$? = $ac_status" >&5
--  (exit $ac_status); }; } &&
--	 { ac_try='test -s conftest.$ac_objext'
--  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
--  (eval $ac_try) 2>&5
--  ac_status=$?
--  echo "$as_me:$LINENO: \$? = $ac_status" >&5
--  (exit $ac_status); }; }; then
-+  $as_echo "$as_me:$LINENO: \$? = $ac_status" >&5
-+  (exit $ac_status); } && {
-+	 test -z "$ac_c_werror_flag" ||
-+	 test ! -s conftest.err
-+       } && test -s conftest.$ac_objext; then
-   ac_cv_c_const=yes
- else
--  echo "$as_me: failed program was:" >&5
-+  $as_echo "$as_me: failed program was:" >&5
- sed 's/^/| /' conftest.$ac_ext >&5
- 
--ac_cv_c_const=no
-+	ac_cv_c_const=no
- fi
--rm -f conftest.err conftest.$ac_objext conftest.$ac_ext
-+
-+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
- fi
--echo "$as_me:$LINENO: result: $ac_cv_c_const" >&5
--echo "${ECHO_T}$ac_cv_c_const" >&6
-+{ $as_echo "$as_me:$LINENO: result: $ac_cv_c_const" >&5
-+$as_echo "$ac_cv_c_const" >&6; }
- if test $ac_cv_c_const = no; then
- 
- cat >>confdefs.h <<\_ACEOF
--#define const
-+#define const /**/
- _ACEOF
- 
- fi
-@@ -3467,11 +4833,11 @@ fi
- 
- for ac_func in vprintf
- do
--as_ac_var=`echo "ac_cv_func_$ac_func" | $as_tr_sh`
--echo "$as_me:$LINENO: checking for $ac_func" >&5
--echo $ECHO_N "checking for $ac_func... $ECHO_C" >&6
--if eval "test \"\${$as_ac_var+set}\" = set"; then
--  echo $ECHO_N "(cached) $ECHO_C" >&6
-+as_ac_var=`$as_echo "ac_cv_func_$ac_func" | $as_tr_sh`
-+{ $as_echo "$as_me:$LINENO: checking for $ac_func" >&5
-+$as_echo_n "checking for $ac_func... " >&6; }
-+if { as_var=$as_ac_var; eval "test \"\${$as_var+set}\" = set"; }; then
-+  $as_echo_n "(cached) " >&6
- else
-   cat >conftest.$ac_ext <<_ACEOF
- /* confdefs.h.  */
-@@ -3496,77 +4862,76 @@ cat >>conftest.$ac_ext <<_ACEOF
- 
- #undef $ac_func
- 
--/* Override any gcc2 internal prototype to avoid an error.  */
-+/* Override any GCC internal prototype to avoid an error.
-+   Use char because int might match the return type of a GCC
-+   builtin and then its argument prototype would still apply.  */
- #ifdef __cplusplus
- extern "C"
--{
- #endif
--/* We use char because int might match the return type of a gcc2
--   builtin and then its argument prototype would still apply.  */
- char $ac_func ();
- /* The GNU C library defines this for functions which it implements
-     to always fail with ENOSYS.  Some functions are actually named
-     something starting with __ and the normal name is an alias.  */
--#if defined (__stub_$ac_func) || defined (__stub___$ac_func)
-+#if defined __stub_$ac_func || defined __stub___$ac_func
- choke me
--#else
--char (*f) () = $ac_func;
--#endif
--#ifdef __cplusplus
--}
- #endif
- 
- int
- main ()
- {
--return f != $ac_func;
-+return $ac_func ();
-   ;
-   return 0;
- }
- _ACEOF
- rm -f conftest.$ac_objext conftest$ac_exeext
--if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
--  (eval $ac_link) 2>conftest.er1
-+if { (ac_try="$ac_link"
-+case "(($ac_try" in
-+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
-+  *) ac_try_echo=$ac_try;;
-+esac
-+eval ac_try_echo="\"\$as_me:$LINENO: $ac_try_echo\""
-+$as_echo "$ac_try_echo") >&5
-+  (eval "$ac_link") 2>conftest.er1
-   ac_status=$?
-   grep -v '^ *+' conftest.er1 >conftest.err
-   rm -f conftest.er1
-   cat conftest.err >&5
--  echo "$as_me:$LINENO: \$? = $ac_status" >&5
--  (exit $ac_status); } &&
--	 { ac_try='test -z "$ac_c_werror_flag"
--			 || test ! -s conftest.err'
--  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
--  (eval $ac_try) 2>&5
--  ac_status=$?
--  echo "$as_me:$LINENO: \$? = $ac_status" >&5
--  (exit $ac_status); }; } &&
--	 { ac_try='test -s conftest$ac_exeext'
--  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
--  (eval $ac_try) 2>&5
--  ac_status=$?
--  echo "$as_me:$LINENO: \$? = $ac_status" >&5
--  (exit $ac_status); }; }; then
-+  $as_echo "$as_me:$LINENO: \$? = $ac_status" >&5
-+  (exit $ac_status); } && {
-+	 test -z "$ac_c_werror_flag" ||
-+	 test ! -s conftest.err
-+       } && test -s conftest$ac_exeext && {
-+	 test "$cross_compiling" = yes ||
-+	 $as_test_x conftest$ac_exeext
-+       }; then
-   eval "$as_ac_var=yes"
- else
--  echo "$as_me: failed program was:" >&5
-+  $as_echo "$as_me: failed program was:" >&5
- sed 's/^/| /' conftest.$ac_ext >&5
- 
--eval "$as_ac_var=no"
-+	eval "$as_ac_var=no"
- fi
--rm -f conftest.err conftest.$ac_objext \
-+
-+rm -rf conftest.dSYM
-+rm -f core conftest.err conftest.$ac_objext conftest_ipa8_conftest.oo \
-       conftest$ac_exeext conftest.$ac_ext
- fi
--echo "$as_me:$LINENO: result: `eval echo '${'$as_ac_var'}'`" >&5
--echo "${ECHO_T}`eval echo '${'$as_ac_var'}'`" >&6
--if test `eval echo '${'$as_ac_var'}'` = yes; then
-+ac_res=`eval 'as_val=${'$as_ac_var'}
-+		 $as_echo "$as_val"'`
-+	       { $as_echo "$as_me:$LINENO: result: $ac_res" >&5
-+$as_echo "$ac_res" >&6; }
-+as_val=`eval 'as_val=${'$as_ac_var'}
-+		 $as_echo "$as_val"'`
-+   if test "x$as_val" = x""yes; then
-   cat >>confdefs.h <<_ACEOF
--#define `echo "HAVE_$ac_func" | $as_tr_cpp` 1
-+#define `$as_echo "HAVE_$ac_func" | $as_tr_cpp` 1
- _ACEOF
- 
--echo "$as_me:$LINENO: checking for _doprnt" >&5
--echo $ECHO_N "checking for _doprnt... $ECHO_C" >&6
-+{ $as_echo "$as_me:$LINENO: checking for _doprnt" >&5
-+$as_echo_n "checking for _doprnt... " >&6; }
- if test "${ac_cv_func__doprnt+set}" = set; then
--  echo $ECHO_N "(cached) $ECHO_C" >&6
-+  $as_echo_n "(cached) " >&6
- else
-   cat >conftest.$ac_ext <<_ACEOF
- /* confdefs.h.  */
-@@ -3591,69 +4956,64 @@ cat >>conftest.$ac_ext <<_ACEOF
- 
- #undef _doprnt
- 
--/* Override any gcc2 internal prototype to avoid an error.  */
-+/* Override any GCC internal prototype to avoid an error.
-+   Use char because int might match the return type of a GCC
-+   builtin and then its argument prototype would still apply.  */
- #ifdef __cplusplus
- extern "C"
--{
- #endif
--/* We use char because int might match the return type of a gcc2
--   builtin and then its argument prototype would still apply.  */
- char _doprnt ();
- /* The GNU C library defines this for functions which it implements
-     to always fail with ENOSYS.  Some functions are actually named
-     something starting with __ and the normal name is an alias.  */
--#if defined (__stub__doprnt) || defined (__stub____doprnt)
-+#if defined __stub__doprnt || defined __stub____doprnt
- choke me
--#else
--char (*f) () = _doprnt;
--#endif
--#ifdef __cplusplus
--}
- #endif
- 
- int
- main ()
- {
--return f != _doprnt;
-+return _doprnt ();
-   ;
-   return 0;
- }
- _ACEOF
- rm -f conftest.$ac_objext conftest$ac_exeext
--if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
--  (eval $ac_link) 2>conftest.er1
-+if { (ac_try="$ac_link"
-+case "(($ac_try" in
-+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
-+  *) ac_try_echo=$ac_try;;
-+esac
-+eval ac_try_echo="\"\$as_me:$LINENO: $ac_try_echo\""
-+$as_echo "$ac_try_echo") >&5
-+  (eval "$ac_link") 2>conftest.er1
-   ac_status=$?
-   grep -v '^ *+' conftest.er1 >conftest.err
-   rm -f conftest.er1
-   cat conftest.err >&5
--  echo "$as_me:$LINENO: \$? = $ac_status" >&5
--  (exit $ac_status); } &&
--	 { ac_try='test -z "$ac_c_werror_flag"
--			 || test ! -s conftest.err'
--  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
--  (eval $ac_try) 2>&5
--  ac_status=$?
--  echo "$as_me:$LINENO: \$? = $ac_status" >&5
--  (exit $ac_status); }; } &&
--	 { ac_try='test -s conftest$ac_exeext'
--  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
--  (eval $ac_try) 2>&5
--  ac_status=$?
--  echo "$as_me:$LINENO: \$? = $ac_status" >&5
--  (exit $ac_status); }; }; then
-+  $as_echo "$as_me:$LINENO: \$? = $ac_status" >&5
-+  (exit $ac_status); } && {
-+	 test -z "$ac_c_werror_flag" ||
-+	 test ! -s conftest.err
-+       } && test -s conftest$ac_exeext && {
-+	 test "$cross_compiling" = yes ||
-+	 $as_test_x conftest$ac_exeext
-+       }; then
-   ac_cv_func__doprnt=yes
- else
--  echo "$as_me: failed program was:" >&5
-+  $as_echo "$as_me: failed program was:" >&5
- sed 's/^/| /' conftest.$ac_ext >&5
- 
--ac_cv_func__doprnt=no
-+	ac_cv_func__doprnt=no
- fi
--rm -f conftest.err conftest.$ac_objext \
-+
-+rm -rf conftest.dSYM
-+rm -f core conftest.err conftest.$ac_objext conftest_ipa8_conftest.oo \
-       conftest$ac_exeext conftest.$ac_ext
- fi
--echo "$as_me:$LINENO: result: $ac_cv_func__doprnt" >&5
--echo "${ECHO_T}$ac_cv_func__doprnt" >&6
--if test $ac_cv_func__doprnt = yes; then
-+{ $as_echo "$as_me:$LINENO: result: $ac_cv_func__doprnt" >&5
-+$as_echo "$ac_cv_func__doprnt" >&6; }
-+if test "x$ac_cv_func__doprnt" = x""yes; then
- 
- cat >>confdefs.h <<\_ACEOF
- #define HAVE_DOPRNT 1
-@@ -3667,13 +5027,21 @@ done
- 
- 
- 
--for ac_func in dcgettext
-+
-+
-+
-+for ac_func in  \
-+	dcgettext \
-+	getline \
-+	libintl_dgettext \
-+	strsignal \
-+
- do
--as_ac_var=`echo "ac_cv_func_$ac_func" | $as_tr_sh`
--echo "$as_me:$LINENO: checking for $ac_func" >&5
--echo $ECHO_N "checking for $ac_func... $ECHO_C" >&6
--if eval "test \"\${$as_ac_var+set}\" = set"; then
--  echo $ECHO_N "(cached) $ECHO_C" >&6
-+as_ac_var=`$as_echo "ac_cv_func_$ac_func" | $as_tr_sh`
-+{ $as_echo "$as_me:$LINENO: checking for $ac_func" >&5
-+$as_echo_n "checking for $ac_func... " >&6; }
-+if { as_var=$as_ac_var; eval "test \"\${$as_var+set}\" = set"; }; then
-+  $as_echo_n "(cached) " >&6
- else
-   cat >conftest.$ac_ext <<_ACEOF
- /* confdefs.h.  */
-@@ -3698,77 +5066,78 @@ cat >>conftest.$ac_ext <<_ACEOF
- 
- #undef $ac_func
- 
--/* Override any gcc2 internal prototype to avoid an error.  */
-+/* Override any GCC internal prototype to avoid an error.
-+   Use char because int might match the return type of a GCC
-+   builtin and then its argument prototype would still apply.  */
- #ifdef __cplusplus
- extern "C"
--{
- #endif
--/* We use char because int might match the return type of a gcc2
--   builtin and then its argument prototype would still apply.  */
- char $ac_func ();
- /* The GNU C library defines this for functions which it implements
-     to always fail with ENOSYS.  Some functions are actually named
-     something starting with __ and the normal name is an alias.  */
--#if defined (__stub_$ac_func) || defined (__stub___$ac_func)
-+#if defined __stub_$ac_func || defined __stub___$ac_func
- choke me
--#else
--char (*f) () = $ac_func;
--#endif
--#ifdef __cplusplus
--}
- #endif
- 
- int
- main ()
- {
--return f != $ac_func;
-+return $ac_func ();
-   ;
-   return 0;
- }
- _ACEOF
- rm -f conftest.$ac_objext conftest$ac_exeext
--if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
--  (eval $ac_link) 2>conftest.er1
-+if { (ac_try="$ac_link"
-+case "(($ac_try" in
-+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
-+  *) ac_try_echo=$ac_try;;
-+esac
-+eval ac_try_echo="\"\$as_me:$LINENO: $ac_try_echo\""
-+$as_echo "$ac_try_echo") >&5
-+  (eval "$ac_link") 2>conftest.er1
-   ac_status=$?
-   grep -v '^ *+' conftest.er1 >conftest.err
-   rm -f conftest.er1
-   cat conftest.err >&5
--  echo "$as_me:$LINENO: \$? = $ac_status" >&5
--  (exit $ac_status); } &&
--	 { ac_try='test -z "$ac_c_werror_flag"
--			 || test ! -s conftest.err'
--  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
--  (eval $ac_try) 2>&5
--  ac_status=$?
--  echo "$as_me:$LINENO: \$? = $ac_status" >&5
--  (exit $ac_status); }; } &&
--	 { ac_try='test -s conftest$ac_exeext'
--  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
--  (eval $ac_try) 2>&5
--  ac_status=$?
--  echo "$as_me:$LINENO: \$? = $ac_status" >&5
--  (exit $ac_status); }; }; then
-+  $as_echo "$as_me:$LINENO: \$? = $ac_status" >&5
-+  (exit $ac_status); } && {
-+	 test -z "$ac_c_werror_flag" ||
-+	 test ! -s conftest.err
-+       } && test -s conftest$ac_exeext && {
-+	 test "$cross_compiling" = yes ||
-+	 $as_test_x conftest$ac_exeext
-+       }; then
-   eval "$as_ac_var=yes"
- else
--  echo "$as_me: failed program was:" >&5
-+  $as_echo "$as_me: failed program was:" >&5
- sed 's/^/| /' conftest.$ac_ext >&5
- 
--eval "$as_ac_var=no"
-+	eval "$as_ac_var=no"
- fi
--rm -f conftest.err conftest.$ac_objext \
-+
-+rm -rf conftest.dSYM
-+rm -f core conftest.err conftest.$ac_objext conftest_ipa8_conftest.oo \
-       conftest$ac_exeext conftest.$ac_ext
- fi
--echo "$as_me:$LINENO: result: `eval echo '${'$as_ac_var'}'`" >&5
--echo "${ECHO_T}`eval echo '${'$as_ac_var'}'`" >&6
--if test `eval echo '${'$as_ac_var'}'` = yes; then
-+ac_res=`eval 'as_val=${'$as_ac_var'}
-+		 $as_echo "$as_val"'`
-+	       { $as_echo "$as_me:$LINENO: result: $ac_res" >&5
-+$as_echo "$ac_res" >&6; }
-+as_val=`eval 'as_val=${'$as_ac_var'}
-+		 $as_echo "$as_val"'`
-+   if test "x$as_val" = x""yes; then
-   cat >>confdefs.h <<_ACEOF
--#define `echo "HAVE_$ac_func" | $as_tr_cpp` 1
-+#define `$as_echo "HAVE_$ac_func" | $as_tr_cpp` 1
- _ACEOF
- 
- fi
- done
- 
- 
-+test "$GCC" = yes && CFLAGS="-Wall $CFLAGS"
-+
- 
- 
- 
-@@ -3780,7 +5149,13 @@ done
- 
- 
- 
--                    ac_config_files="$ac_config_files Makefile ld-elf2flt"
-+
-+
-+
-+
-+
-+ac_config_files="$ac_config_files ld-elf2flt.sh:ld-elf2flt.in Makefile elf2flt.ld"
-+
- cat >confcache <<\_ACEOF
- # This file is a shell script that caches the results of configure
- # tests run on this system so they can be shared between configure
-@@ -3799,39 +5174,59 @@ _ACEOF
- 
- # The following way of writing the cache mishandles newlines in values,
- # but we know of no workaround that is simple, portable, and efficient.
--# So, don't put newlines in cache variables' values.
-+# So, we kill variables containing newlines.
- # Ultrix sh set writes to stderr and can't be redirected directly,
- # and sets the high bit in the cache file unless we assign to the vars.
--{
-+(
-+  for ac_var in `(set) 2>&1 | sed -n 's/^\([a-zA-Z_][a-zA-Z0-9_]*\)=.*/\1/p'`; do
-+    eval ac_val=\$$ac_var
-+    case $ac_val in #(
-+    *${as_nl}*)
-+      case $ac_var in #(
-+      *_cv_*) { $as_echo "$as_me:$LINENO: WARNING: cache variable $ac_var contains a newline" >&5
-+$as_echo "$as_me: WARNING: cache variable $ac_var contains a newline" >&2;} ;;
-+      esac
-+      case $ac_var in #(
-+      _ | IFS | as_nl) ;; #(
-+      BASH_ARGV | BASH_SOURCE) eval $ac_var= ;; #(
-+      *) $as_unset $ac_var ;;
-+      esac ;;
-+    esac
-+  done
-+
-   (set) 2>&1 |
--    case `(ac_space=' '; set | grep ac_space) 2>&1` in
--    *ac_space=\ *)
-+    case $as_nl`(ac_space=' '; set) 2>&1` in #(
-+    *${as_nl}ac_space=\ *)
-       # `set' does not quote correctly, so add quotes (double-quote
-       # substitution turns \\\\ into \\, and sed turns \\ into \).
-       sed -n \
- 	"s/'/'\\\\''/g;
- 	  s/^\\([_$as_cr_alnum]*_cv_[_$as_cr_alnum]*\\)=\\(.*\\)/\\1='\\2'/p"
--      ;;
-+      ;; #(
-     *)
-       # `set' quotes correctly as required by POSIX, so do not add quotes.
--      sed -n \
--	"s/^\\([_$as_cr_alnum]*_cv_[_$as_cr_alnum]*\\)=\\(.*\\)/\\1=\\2/p"
-+      sed -n "/^[_$as_cr_alnum]*_cv_[_$as_cr_alnum]*=/p"
-       ;;
--    esac;
--} |
-+    esac |
-+    sort
-+) |
-   sed '
-+     /^ac_cv_env_/b end
-      t clear
--     : clear
-+     :clear
-      s/^\([^=]*\)=\(.*[{}].*\)$/test "${\1+set}" = set || &/
-      t end
--     /^ac_cv_env/!s/^\([^=]*\)=\(.*\)$/\1=${\1=\2}/
--     : end' >>confcache
--if diff $cache_file confcache >/dev/null 2>&1; then :; else
--  if test -w $cache_file; then
--    test "x$cache_file" != "x/dev/null" && echo "updating cache $cache_file"
-+     s/^\([^=]*\)=\(.*\)$/\1=${\1=\2}/
-+     :end' >>confcache
-+if diff "$cache_file" confcache >/dev/null 2>&1; then :; else
-+  if test -w "$cache_file"; then
-+    test "x$cache_file" != "x/dev/null" &&
-+      { $as_echo "$as_me:$LINENO: updating cache $cache_file" >&5
-+$as_echo "$as_me: updating cache $cache_file" >&6;}
-     cat confcache >$cache_file
-   else
--    echo "not updating unwritable cache $cache_file"
-+    { $as_echo "$as_me:$LINENO: not updating unwritable cache $cache_file" >&5
-+$as_echo "$as_me: not updating unwritable cache $cache_file" >&6;}
-   fi
- fi
- rm -f confcache
-@@ -3840,63 +5235,54 @@ test "x$prefix" = xNONE && prefix=$ac_default_prefix
- # Let make expand exec_prefix.
- test "x$exec_prefix" = xNONE && exec_prefix='${prefix}'
- 
--# VPATH may cause trouble with some makes, so we remove $(srcdir),
--# ${srcdir} and @srcdir@ from VPATH if srcdir is ".", strip leading and
--# trailing colons and then remove the whole line if VPATH becomes empty
--# (actually we leave an empty line to preserve line numbers).
--if test "x$srcdir" = x.; then
--  ac_vpsub='/^[	 ]*VPATH[	 ]*=/{
--s/:*\$(srcdir):*/:/;
--s/:*\${srcdir}:*/:/;
--s/:*@srcdir@:*/:/;
--s/^\([^=]*=[	 ]*\):*/\1/;
--s/:*$//;
--s/^[^=]*=[	 ]*$//;
--}'
--fi
--
- # Transform confdefs.h into DEFS.
- # Protect against shell expansion while executing Makefile rules.
- # Protect against Makefile macro expansion.
- #
- # If the first sed substitution is executed (which looks for macros that
--# take arguments), then we branch to the quote section.  Otherwise,
-+# take arguments), then branch to the quote section.  Otherwise,
- # look for a macro that doesn't take arguments.
--cat >confdef2opt.sed <<\_ACEOF
-+ac_script='
-+:mline
-+/\\$/{
-+ N
-+ s,\\\n,,
-+ b mline
-+}
- t clear
--: clear
--s,^[	 ]*#[	 ]*define[	 ][	 ]*\([^	 (][^	 (]*([^)]*)\)[	 ]*\(.*\),-D\1=\2,g
-+:clear
-+s/^[	 ]*#[	 ]*define[	 ][	 ]*\([^	 (][^	 (]*([^)]*)\)[	 ]*\(.*\)/-D\1=\2/g
- t quote
--s,^[	 ]*#[	 ]*define[	 ][	 ]*\([^	 ][^	 ]*\)[	 ]*\(.*\),-D\1=\2,g
-+s/^[	 ]*#[	 ]*define[	 ][	 ]*\([^	 ][^	 ]*\)[	 ]*\(.*\)/-D\1=\2/g
- t quote
--d
--: quote
--s,[	 `~#$^&*(){}\\|;'"<>?],\\&,g
--s,\[,\\&,g
--s,\],\\&,g
--s,\$,$$,g
--p
--_ACEOF
--# We use echo to avoid assuming a particular line-breaking character.
--# The extra dot is to prevent the shell from consuming trailing
--# line-breaks from the sub-command output.  A line-break within
--# single-quotes doesn't work because, if this script is created in a
--# platform that uses two characters for line-breaks (e.g., DOS), tr
--# would break.
--ac_LF_and_DOT=`echo; echo .`
--DEFS=`sed -n -f confdef2opt.sed confdefs.h | tr "$ac_LF_and_DOT" ' .'`
--rm -f confdef2opt.sed
-+b any
-+:quote
-+s/[	 `~#$^&*(){}\\|;'\''"<>?]/\\&/g
-+s/\[/\\&/g
-+s/\]/\\&/g
-+s/\$/$$/g
-+H
-+:any
-+${
-+	g
-+	s/^\n//
-+	s/\n/ /g
-+	p
-+}
-+'
-+DEFS=`sed -n "$ac_script" confdefs.h`
- 
- 
- ac_libobjs=
- ac_ltlibobjs=
- for ac_i in : $LIBOBJS; do test "x$ac_i" = x: && continue
-   # 1. Remove the extension, and $U if already installed.
--  ac_i=`echo "$ac_i" |
--	 sed 's/\$U\././;s/\.o$//;s/\.obj$//'`
--  # 2. Add them.
--  ac_libobjs="$ac_libobjs $ac_i\$U.$ac_objext"
--  ac_ltlibobjs="$ac_ltlibobjs $ac_i"'$U.lo'
-+  ac_script='s/\$U\././;s/\.o$//;s/\.obj$//'
-+  ac_i=`$as_echo "$ac_i" | sed "$ac_script"`
-+  # 2. Prepend LIBOBJDIR.  When used with automake>=1.10 LIBOBJDIR
-+  #    will be set to the directory where LIBOBJS objects are built.
-+  ac_libobjs="$ac_libobjs \${LIBOBJDIR}$ac_i\$U.$ac_objext"
-+  ac_ltlibobjs="$ac_ltlibobjs \${LIBOBJDIR}$ac_i"'$U.lo'
- done
- LIBOBJS=$ac_libobjs
- 
-@@ -3905,11 +5291,12 @@ LTLIBOBJS=$ac_ltlibobjs
- 
- 
- : ${CONFIG_STATUS=./config.status}
-+ac_write_fail=0
- ac_clean_files_save=$ac_clean_files
- ac_clean_files="$ac_clean_files $CONFIG_STATUS"
--{ echo "$as_me:$LINENO: creating $CONFIG_STATUS" >&5
--echo "$as_me: creating $CONFIG_STATUS" >&6;}
--cat >$CONFIG_STATUS <<_ACEOF
-+{ $as_echo "$as_me:$LINENO: creating $CONFIG_STATUS" >&5
-+$as_echo "$as_me: creating $CONFIG_STATUS" >&6;}
-+cat >$CONFIG_STATUS <<_ACEOF || ac_write_fail=1
- #! $SHELL
- # Generated by $as_me.
- # Run this file to recreate the current configuration.
-@@ -3922,22 +5309,78 @@ ac_cs_silent=false
- SHELL=\${CONFIG_SHELL-$SHELL}
- _ACEOF
- 
--cat >>$CONFIG_STATUS <<\_ACEOF
-+cat >>$CONFIG_STATUS <<\_ACEOF || ac_write_fail=1
- ## --------------------- ##
- ## M4sh Initialization.  ##
- ## --------------------- ##
- 
--# Be Bourne compatible
--if test -n "${ZSH_VERSION+set}" && (emulate sh) >/dev/null 2>&1; then
--  emulate sh
--  NULLCMD=:
--  # Zsh 3.x and 4.x performs word splitting on ${1+"$@"}, which
--  # is contrary to our usage.  Disable this feature.
--  alias -g '${1+"$@"}'='"$@"'
--elif test -n "${BASH_VERSION+set}" && (set -o posix) >/dev/null 2>&1; then
--  set -o posix
-+# Be more Bourne compatible
-+DUALCASE=1; export DUALCASE # for MKS sh
-+if test -n "${ZSH_VERSION+set}" && (emulate sh) >/dev/null 2>&1; then
-+  emulate sh
-+  NULLCMD=:
-+  # Pre-4.2 versions of Zsh do word splitting on ${1+"$@"}, which
-+  # is contrary to our usage.  Disable this feature.
-+  alias -g '${1+"$@"}'='"$@"'
-+  setopt NO_GLOB_SUBST
-+else
-+  case `(set -o) 2>/dev/null` in
-+  *posix*) set -o posix ;;
-+esac
-+
-+fi
-+
-+
-+
-+
-+# PATH needs CR
-+# Avoid depending upon Character Ranges.
-+as_cr_letters='abcdefghijklmnopqrstuvwxyz'
-+as_cr_LETTERS='ABCDEFGHIJKLMNOPQRSTUVWXYZ'
-+as_cr_Letters=$as_cr_letters$as_cr_LETTERS
-+as_cr_digits='0123456789'
-+as_cr_alnum=$as_cr_Letters$as_cr_digits
-+
-+as_nl='
-+'
-+export as_nl
-+# Printing a long string crashes Solaris 7 /usr/bin/printf.
-+as_echo='\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\'
-+as_echo=$as_echo$as_echo$as_echo$as_echo$as_echo
-+as_echo=$as_echo$as_echo$as_echo$as_echo$as_echo$as_echo
-+if (test "X`printf %s $as_echo`" = "X$as_echo") 2>/dev/null; then
-+  as_echo='printf %s\n'
-+  as_echo_n='printf %s'
-+else
-+  if test "X`(/usr/ucb/echo -n -n $as_echo) 2>/dev/null`" = "X-n $as_echo"; then
-+    as_echo_body='eval /usr/ucb/echo -n "$1$as_nl"'
-+    as_echo_n='/usr/ucb/echo -n'
-+  else
-+    as_echo_body='eval expr "X$1" : "X\\(.*\\)"'
-+    as_echo_n_body='eval
-+      arg=$1;
-+      case $arg in
-+      *"$as_nl"*)
-+	expr "X$arg" : "X\\(.*\\)$as_nl";
-+	arg=`expr "X$arg" : ".*$as_nl\\(.*\\)"`;;
-+      esac;
-+      expr "X$arg" : "X\\(.*\\)" | tr -d "$as_nl"
-+    '
-+    export as_echo_n_body
-+    as_echo_n='sh -c $as_echo_n_body as_echo'
-+  fi
-+  export as_echo_body
-+  as_echo='sh -c $as_echo_body as_echo'
-+fi
-+
-+# The user is always right.
-+if test "${PATH_SEPARATOR+set}" != set; then
-+  PATH_SEPARATOR=:
-+  (PATH='/bin;/bin'; FPATH=$PATH; sh -c :) >/dev/null 2>&1 && {
-+    (PATH='/bin:/bin'; FPATH=$PATH; sh -c :) >/dev/null 2>&1 ||
-+      PATH_SEPARATOR=';'
-+  }
- fi
--DUALCASE=1; export DUALCASE # for MKS sh
- 
- # Support unset when possible.
- if ( (MAIL=60; unset MAIL) || exit) >/dev/null 2>&1; then
-@@ -3947,33 +5390,60 @@ else
- fi
- 
- 
-+# IFS
-+# We need space, tab and new line, in precisely that order.  Quoting is
-+# there to prevent editors from complaining about space-tab.
-+# (If _AS_PATH_WALK were called with IFS unset, it would disable word
-+# splitting by setting IFS to empty value.)
-+IFS=" ""	$as_nl"
-+
-+# Find who we are.  Look in the path if we contain no directory separator.
-+case $0 in
-+  *[\\/]* ) as_myself=$0 ;;
-+  *) as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
-+for as_dir in $PATH
-+do
-+  IFS=$as_save_IFS
-+  test -z "$as_dir" && as_dir=.
-+  test -r "$as_dir/$0" && as_myself=$as_dir/$0 && break
-+done
-+IFS=$as_save_IFS
-+
-+     ;;
-+esac
-+# We did not find ourselves, most probably we were run as `sh COMMAND'
-+# in which case we are not to be found in the path.
-+if test "x$as_myself" = x; then
-+  as_myself=$0
-+fi
-+if test ! -f "$as_myself"; then
-+  $as_echo "$as_myself: error: cannot find myself; rerun with an absolute file name" >&2
-+  { (exit 1); exit 1; }
-+fi
-+
- # Work around bugs in pre-3.0 UWIN ksh.
--$as_unset ENV MAIL MAILPATH
-+for as_var in ENV MAIL MAILPATH
-+do ($as_unset $as_var) >/dev/null 2>&1 && $as_unset $as_var
-+done
- PS1='$ '
- PS2='> '
- PS4='+ '
- 
- # NLS nuisances.
--for as_var in \
--  LANG LANGUAGE LC_ADDRESS LC_ALL LC_COLLATE LC_CTYPE LC_IDENTIFICATION \
--  LC_MEASUREMENT LC_MESSAGES LC_MONETARY LC_NAME LC_NUMERIC LC_PAPER \
--  LC_TELEPHONE LC_TIME
--do
--  if (set +x; test -z "`(eval $as_var=C; export $as_var) 2>&1`"); then
--    eval $as_var=C; export $as_var
--  else
--    $as_unset $as_var
--  fi
--done
-+LC_ALL=C
-+export LC_ALL
-+LANGUAGE=C
-+export LANGUAGE
- 
- # Required to use basename.
--if expr a : '\(a\)' >/dev/null 2>&1; then
-+if expr a : '\(a\)' >/dev/null 2>&1 &&
-+   test "X`expr 00001 : '.*\(...\)'`" = X001; then
-   as_expr=expr
- else
-   as_expr=false
- fi
- 
--if (basename /) >/dev/null 2>&1 && test "X`basename / 2>&1`" = "X/"; then
-+if (basename -- /) >/dev/null 2>&1 && test "X`basename -- / 2>&1`" = "X/"; then
-   as_basename=basename
- else
-   as_basename=false
-@@ -3981,159 +5451,122 @@ fi
- 
- 
- # Name of the executable.
--as_me=`$as_basename "$0" ||
-+as_me=`$as_basename -- "$0" ||
- $as_expr X/"$0" : '.*/\([^/][^/]*\)/*$' \| \
- 	 X"$0" : 'X\(//\)$' \| \
--	 X"$0" : 'X\(/\)$' \| \
--	 .     : '\(.\)' 2>/dev/null ||
--echo X/"$0" |
--    sed '/^.*\/\([^/][^/]*\)\/*$/{ s//\1/; q; }
--  	  /^X\/\(\/\/\)$/{ s//\1/; q; }
--  	  /^X\/\(\/\).*/{ s//\1/; q; }
--  	  s/.*/./; q'`
--
--
--# PATH needs CR, and LINENO needs CR and PATH.
--# Avoid depending upon Character Ranges.
--as_cr_letters='abcdefghijklmnopqrstuvwxyz'
--as_cr_LETTERS='ABCDEFGHIJKLMNOPQRSTUVWXYZ'
--as_cr_Letters=$as_cr_letters$as_cr_LETTERS
--as_cr_digits='0123456789'
--as_cr_alnum=$as_cr_Letters$as_cr_digits
-+	 X"$0" : 'X\(/\)' \| . 2>/dev/null ||
-+$as_echo X/"$0" |
-+    sed '/^.*\/\([^/][^/]*\)\/*$/{
-+	    s//\1/
-+	    q
-+	  }
-+	  /^X\/\(\/\/\)$/{
-+	    s//\1/
-+	    q
-+	  }
-+	  /^X\/\(\/\).*/{
-+	    s//\1/
-+	    q
-+	  }
-+	  s/.*/./; q'`
- 
--# The user is always right.
--if test "${PATH_SEPARATOR+set}" != set; then
--  echo "#! /bin/sh" >conf$$.sh
--  echo  "exit 0"   >>conf$$.sh
--  chmod +x conf$$.sh
--  if (PATH="/nonexistent;."; conf$$.sh) >/dev/null 2>&1; then
--    PATH_SEPARATOR=';'
--  else
--    PATH_SEPARATOR=:
--  fi
--  rm -f conf$$.sh
--fi
-+# CDPATH.
-+$as_unset CDPATH
- 
- 
--  as_lineno_1=$LINENO
--  as_lineno_2=$LINENO
--  as_lineno_3=`(expr $as_lineno_1 + 1) 2>/dev/null`
--  test "x$as_lineno_1" != "x$as_lineno_2" &&
--  test "x$as_lineno_3"  = "x$as_lineno_2"  || {
--  # Find who we are.  Look in the path if we contain no path at all
--  # relative or not.
--  case $0 in
--    *[\\/]* ) as_myself=$0 ;;
--    *) as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
--for as_dir in $PATH
--do
--  IFS=$as_save_IFS
--  test -z "$as_dir" && as_dir=.
--  test -r "$as_dir/$0" && as_myself=$as_dir/$0 && break
--done
- 
--       ;;
--  esac
--  # We did not find ourselves, most probably we were run as `sh COMMAND'
--  # in which case we are not to be found in the path.
--  if test "x$as_myself" = x; then
--    as_myself=$0
--  fi
--  if test ! -f "$as_myself"; then
--    { { echo "$as_me:$LINENO: error: cannot find myself; rerun with an absolute path" >&5
--echo "$as_me: error: cannot find myself; rerun with an absolute path" >&2;}
--   { (exit 1); exit 1; }; }
--  fi
--  case $CONFIG_SHELL in
--  '')
--    as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
--for as_dir in /bin$PATH_SEPARATOR/usr/bin$PATH_SEPARATOR$PATH
--do
--  IFS=$as_save_IFS
--  test -z "$as_dir" && as_dir=.
--  for as_base in sh bash ksh sh5; do
--	 case $as_dir in
--	 /*)
--	   if ("$as_dir/$as_base" -c '
-   as_lineno_1=$LINENO
-   as_lineno_2=$LINENO
--  as_lineno_3=`(expr $as_lineno_1 + 1) 2>/dev/null`
-   test "x$as_lineno_1" != "x$as_lineno_2" &&
--  test "x$as_lineno_3"  = "x$as_lineno_2" ') 2>/dev/null; then
--	     $as_unset BASH_ENV || test "${BASH_ENV+set}" != set || { BASH_ENV=; export BASH_ENV; }
--	     $as_unset ENV || test "${ENV+set}" != set || { ENV=; export ENV; }
--	     CONFIG_SHELL=$as_dir/$as_base
--	     export CONFIG_SHELL
--	     exec "$CONFIG_SHELL" "$0" ${1+"$@"}
--	   fi;;
--	 esac
--       done
--done
--;;
--  esac
-+  test "x`expr $as_lineno_1 + 1`" = "x$as_lineno_2" || {
- 
-   # Create $as_me.lineno as a copy of $as_myself, but with $LINENO
-   # uniformly replaced by the line number.  The first 'sed' inserts a
--  # line-number line before each line; the second 'sed' does the real
--  # work.  The second script uses 'N' to pair each line-number line
--  # with the numbered line, and appends trailing '-' during
--  # substitution so that $LINENO is not a special case at line end.
-+  # line-number line after each line using $LINENO; the second 'sed'
-+  # does the real work.  The second script uses 'N' to pair each
-+  # line-number line with the line containing $LINENO, and appends
-+  # trailing '-' during substitution so that $LINENO is not a special
-+  # case at line end.
-   # (Raja R Harinath suggested sed '=', and Paul Eggert wrote the
--  # second 'sed' script.  Blame Lee E. McMahon for sed's syntax.  :-)
--  sed '=' <$as_myself |
-+  # scripts with optimization help from Paolo Bonzini.  Blame Lee
-+  # E. McMahon (1931-1989) for sed's syntax.  :-)
-+  sed -n '
-+    p
-+    /[$]LINENO/=
-+  ' <$as_myself |
-     sed '
-+      s/[$]LINENO.*/&-/
-+      t lineno
-+      b
-+      :lineno
-       N
--      s,$,-,
--      : loop
--      s,^\(['$as_cr_digits']*\)\(.*\)[$]LINENO\([^'$as_cr_alnum'_]\),\1\2\1\3,
-+      :loop
-+      s/[$]LINENO\([^'$as_cr_alnum'_].*\n\)\(.*\)/\2\1\2/
-       t loop
--      s,-$,,
--      s,^['$as_cr_digits']*\n,,
-+      s/-\n.*//
-     ' >$as_me.lineno &&
--  chmod +x $as_me.lineno ||
--    { { echo "$as_me:$LINENO: error: cannot create $as_me.lineno; rerun with a POSIX shell" >&5
--echo "$as_me: error: cannot create $as_me.lineno; rerun with a POSIX shell" >&2;}
-+  chmod +x "$as_me.lineno" ||
-+    { $as_echo "$as_me: error: cannot create $as_me.lineno; rerun with a POSIX shell" >&2
-    { (exit 1); exit 1; }; }
- 
-   # Don't try to exec as it changes $[0], causing all sort of problems
-   # (the dirname of $[0] is not the place where we might find the
--  # original and so on.  Autoconf is especially sensible to this).
--  . ./$as_me.lineno
-+  # original and so on.  Autoconf is especially sensitive to this).
-+  . "./$as_me.lineno"
-   # Exit status is that of the last command.
-   exit
- }
- 
- 
--case `echo "testing\c"; echo 1,2,3`,`echo -n testing; echo 1,2,3` in
--  *c*,-n*) ECHO_N= ECHO_C='
--' ECHO_T='	' ;;
--  *c*,*  ) ECHO_N=-n ECHO_C= ECHO_T= ;;
--  *)       ECHO_N= ECHO_C='\c' ECHO_T= ;;
--esac
-+if (as_dir=`dirname -- /` && test "X$as_dir" = X/) >/dev/null 2>&1; then
-+  as_dirname=dirname
-+else
-+  as_dirname=false
-+fi
- 
--if expr a : '\(a\)' >/dev/null 2>&1; then
-+ECHO_C= ECHO_N= ECHO_T=
-+case `echo -n x` in
-+-n*)
-+  case `echo 'x\c'` in
-+  *c*) ECHO_T='	';;	# ECHO_T is single tab character.
-+  *)   ECHO_C='\c';;
-+  esac;;
-+*)
-+  ECHO_N='-n';;
-+esac
-+if expr a : '\(a\)' >/dev/null 2>&1 &&
-+   test "X`expr 00001 : '.*\(...\)'`" = X001; then
-   as_expr=expr
- else
-   as_expr=false
- fi
- 
- rm -f conf$$ conf$$.exe conf$$.file
--echo >conf$$.file
--if ln -s conf$$.file conf$$ 2>/dev/null; then
--  # We could just check for DJGPP; but this test a) works b) is more generic
--  # and c) will remain valid once DJGPP supports symlinks (DJGPP 2.04).
--  if test -f conf$$.exe; then
--    # Don't use ln at all; we don't have any links
--    as_ln_s='cp -p'
--  else
-+if test -d conf$$.dir; then
-+  rm -f conf$$.dir/conf$$.file
-+else
-+  rm -f conf$$.dir
-+  mkdir conf$$.dir 2>/dev/null
-+fi
-+if (echo >conf$$.file) 2>/dev/null; then
-+  if ln -s conf$$.file conf$$ 2>/dev/null; then
-     as_ln_s='ln -s'
-+    # ... but there are two gotchas:
-+    # 1) On MSYS, both `ln -s file dir' and `ln file dir' fail.
-+    # 2) DJGPP < 2.04 has no symlinks; `ln -s' creates a wrapper executable.
-+    # In both cases, we have to default to `cp -p'.
-+    ln -s conf$$.file conf$$.dir 2>/dev/null && test ! -f conf$$.exe ||
-+      as_ln_s='cp -p'
-+  elif ln conf$$.file conf$$ 2>/dev/null; then
-+    as_ln_s=ln
-+  else
-+    as_ln_s='cp -p'
-   fi
--elif ln conf$$.file conf$$ 2>/dev/null; then
--  as_ln_s=ln
- else
-   as_ln_s='cp -p'
- fi
--rm -f conf$$ conf$$.exe conf$$.file
-+rm -f conf$$ conf$$.exe conf$$.dir/conf$$.file conf$$.file
-+rmdir conf$$.dir 2>/dev/null
- 
- if mkdir -p . 2>/dev/null; then
-   as_mkdir_p=:
-@@ -4142,7 +5575,28 @@ else
-   as_mkdir_p=false
- fi
- 
--as_executable_p="test -f"
-+if test -x / >/dev/null 2>&1; then
-+  as_test_x='test -x'
-+else
-+  if ls -dL / >/dev/null 2>&1; then
-+    as_ls_L_option=L
-+  else
-+    as_ls_L_option=
-+  fi
-+  as_test_x='
-+    eval sh -c '\''
-+      if test -d "$1"; then
-+	test -d "$1/.";
-+      else
-+	case $1 in
-+	-*)set "./$1";;
-+	esac;
-+	case `ls -ld'$as_ls_L_option' "$1" 2>/dev/null` in
-+	???[sx]*):;;*)false;;esac;fi
-+    '\'' sh
-+  '
-+fi
-+as_executable_p=$as_test_x
- 
- # Sed expression to map a string onto a valid CPP name.
- as_tr_cpp="eval sed 'y%*$as_cr_letters%P$as_cr_LETTERS%;s%[^_$as_cr_alnum]%_%g'"
-@@ -4151,31 +5605,14 @@ as_tr_cpp="eval sed 'y%*$as_cr_letters%P$as_cr_LETTERS%;s%[^_$as_cr_alnum]%_%g'"
- as_tr_sh="eval sed 'y%*+%pp%;s%[^_$as_cr_alnum]%_%g'"
- 
- 
--# IFS
--# We need space, tab and new line, in precisely that order.
--as_nl='
--'
--IFS=" 	$as_nl"
--
--# CDPATH.
--$as_unset CDPATH
--
- exec 6>&1
- 
--# Open the log real soon, to keep \$[0] and so on meaningful, and to
-+# Save the log message, to keep $[0] and so on meaningful, and to
- # report actual input values of CONFIG_FILES etc. instead of their
--# values after options handling.  Logging --version etc. is OK.
--exec 5>>config.log
--{
--  echo
--  sed 'h;s/./-/g;s/^.../## /;s/...$/ ##/;p;x;p;x' <<_ASBOX
--## Running $as_me. ##
--_ASBOX
--} >&5
--cat >&5 <<_CSEOF
--
-+# values after options handling.
-+ac_log="
- This file was extended by $as_me, which was
--generated by GNU Autoconf 2.59.  Invocation command line was
-+generated by GNU Autoconf 2.63.  Invocation command line was
- 
-   CONFIG_FILES    = $CONFIG_FILES
-   CONFIG_HEADERS  = $CONFIG_HEADERS
-@@ -4183,125 +5620,107 @@ generated by GNU Autoconf 2.59.  Invocation command line was
-   CONFIG_COMMANDS = $CONFIG_COMMANDS
-   $ $0 $@
- 
--_CSEOF
--echo "on `(hostname || uname -n) 2>/dev/null | sed 1q`" >&5
--echo >&5
-+on `(hostname || uname -n) 2>/dev/null | sed 1q`
-+"
-+
- _ACEOF
- 
--# Files that config.status was made for.
--if test -n "$ac_config_files"; then
--  echo "config_files=\"$ac_config_files\"" >>$CONFIG_STATUS
--fi
-+case $ac_config_files in *"
-+"*) set x $ac_config_files; shift; ac_config_files=$*;;
-+esac
- 
--if test -n "$ac_config_headers"; then
--  echo "config_headers=\"$ac_config_headers\"" >>$CONFIG_STATUS
--fi
- 
--if test -n "$ac_config_links"; then
--  echo "config_links=\"$ac_config_links\"" >>$CONFIG_STATUS
--fi
- 
--if test -n "$ac_config_commands"; then
--  echo "config_commands=\"$ac_config_commands\"" >>$CONFIG_STATUS
--fi
-+cat >>$CONFIG_STATUS <<_ACEOF || ac_write_fail=1
-+# Files that config.status was made for.
-+config_files="$ac_config_files"
- 
--cat >>$CONFIG_STATUS <<\_ACEOF
-+_ACEOF
- 
-+cat >>$CONFIG_STATUS <<\_ACEOF || ac_write_fail=1
- ac_cs_usage="\
- \`$as_me' instantiates files from templates according to the
- current configuration.
- 
--Usage: $0 [OPTIONS] [FILE]...
-+Usage: $0 [OPTION]... [FILE]...
- 
-   -h, --help       print this help, then exit
--  -V, --version    print version number, then exit
--  -q, --quiet      do not print progress messages
-+  -V, --version    print version number and configuration settings, then exit
-+  -q, --quiet, --silent
-+                   do not print progress messages
-   -d, --debug      don't remove temporary files
-       --recheck    update $as_me by reconfiguring in the same conditions
--  --file=FILE[:TEMPLATE]
--		   instantiate the configuration file FILE
-+      --file=FILE[:TEMPLATE]
-+                   instantiate the configuration file FILE
- 
- Configuration files:
- $config_files
- 
- Report bugs to <bug-autoconf@gnu.org>."
--_ACEOF
- 
--cat >>$CONFIG_STATUS <<_ACEOF
-+_ACEOF
-+cat >>$CONFIG_STATUS <<_ACEOF || ac_write_fail=1
- ac_cs_version="\\
- config.status
--configured by $0, generated by GNU Autoconf 2.59,
--  with options \\"`echo "$ac_configure_args" | sed 's/[\\""\`\$]/\\\\&/g'`\\"
-+configured by $0, generated by GNU Autoconf 2.63,
-+  with options \\"`$as_echo "$ac_configure_args" | sed 's/^ //; s/[\\""\`\$]/\\\\&/g'`\\"
- 
--Copyright (C) 2003 Free Software Foundation, Inc.
-+Copyright (C) 2008 Free Software Foundation, Inc.
- This config.status script is free software; the Free Software Foundation
- gives unlimited permission to copy, distribute and modify it."
--srcdir=$srcdir
--INSTALL="$INSTALL"
-+
-+ac_pwd='$ac_pwd'
-+srcdir='$srcdir'
-+INSTALL='$INSTALL'
-+test -n "\$AWK" || AWK=awk
- _ACEOF
- 
--cat >>$CONFIG_STATUS <<\_ACEOF
--# If no file are specified by the user, then we need to provide default
--# value.  By we need to know if files were specified by the user.
-+cat >>$CONFIG_STATUS <<\_ACEOF || ac_write_fail=1
-+# The default lists apply if the user does not specify any file.
- ac_need_defaults=:
- while test $# != 0
- do
-   case $1 in
-   --*=*)
--    ac_option=`expr "x$1" : 'x\([^=]*\)='`
--    ac_optarg=`expr "x$1" : 'x[^=]*=\(.*\)'`
-+    ac_option=`expr "X$1" : 'X\([^=]*\)='`
-+    ac_optarg=`expr "X$1" : 'X[^=]*=\(.*\)'`
-     ac_shift=:
-     ;;
--  -*)
-+  *)
-     ac_option=$1
-     ac_optarg=$2
-     ac_shift=shift
-     ;;
--  *) # This is not an option, so the user has probably given explicit
--     # arguments.
--     ac_option=$1
--     ac_need_defaults=false;;
-   esac
- 
-   case $ac_option in
-   # Handling of the options.
--_ACEOF
--cat >>$CONFIG_STATUS <<\_ACEOF
-   -recheck | --recheck | --rechec | --reche | --rech | --rec | --re | --r)
-     ac_cs_recheck=: ;;
--  --version | --vers* | -V )
--    echo "$ac_cs_version"; exit 0 ;;
--  --he | --h)
--    # Conflict between --help and --header
--    { { echo "$as_me:$LINENO: error: ambiguous option: $1
--Try \`$0 --help' for more information." >&5
--echo "$as_me: error: ambiguous option: $1
--Try \`$0 --help' for more information." >&2;}
--   { (exit 1); exit 1; }; };;
--  --help | --hel | -h )
--    echo "$ac_cs_usage"; exit 0 ;;
--  --debug | --d* | -d )
-+  --version | --versio | --versi | --vers | --ver | --ve | --v | -V )
-+    $as_echo "$ac_cs_version"; exit ;;
-+  --debug | --debu | --deb | --de | --d | -d )
-     debug=: ;;
-   --file | --fil | --fi | --f )
-     $ac_shift
--    CONFIG_FILES="$CONFIG_FILES $ac_optarg"
--    ac_need_defaults=false;;
--  --header | --heade | --head | --hea )
--    $ac_shift
--    CONFIG_HEADERS="$CONFIG_HEADERS $ac_optarg"
-+    case $ac_optarg in
-+    *\'*) ac_optarg=`$as_echo "$ac_optarg" | sed "s/'/'\\\\\\\\''/g"` ;;
-+    esac
-+    CONFIG_FILES="$CONFIG_FILES '$ac_optarg'"
-     ac_need_defaults=false;;
-+  --he | --h |  --help | --hel | -h )
-+    $as_echo "$ac_cs_usage"; exit ;;
-   -q | -quiet | --quiet | --quie | --qui | --qu | --q \
-   | -silent | --silent | --silen | --sile | --sil | --si | --s)
-     ac_cs_silent=: ;;
- 
-   # This is an error.
--  -*) { { echo "$as_me:$LINENO: error: unrecognized option: $1
--Try \`$0 --help' for more information." >&5
--echo "$as_me: error: unrecognized option: $1
--Try \`$0 --help' for more information." >&2;}
-+  -*) { $as_echo "$as_me: error: unrecognized option: $1
-+Try \`$0 --help' for more information." >&2
-    { (exit 1); exit 1; }; } ;;
- 
--  *) ac_config_targets="$ac_config_targets $1" ;;
-+  *) ac_config_targets="$ac_config_targets $1"
-+     ac_need_defaults=false ;;
- 
-   esac
-   shift
-@@ -4315,31 +5734,48 @@ if $ac_cs_silent; then
- fi
- 
- _ACEOF
--cat >>$CONFIG_STATUS <<_ACEOF
-+cat >>$CONFIG_STATUS <<_ACEOF || ac_write_fail=1
- if \$ac_cs_recheck; then
--  echo "running $SHELL $0 " $ac_configure_args \$ac_configure_extra_args " --no-create --no-recursion" >&6
--  exec $SHELL $0 $ac_configure_args \$ac_configure_extra_args --no-create --no-recursion
-+  set X '$SHELL' '$0' $ac_configure_args \$ac_configure_extra_args --no-create --no-recursion
-+  shift
-+  \$as_echo "running CONFIG_SHELL=$SHELL \$*" >&6
-+  CONFIG_SHELL='$SHELL'
-+  export CONFIG_SHELL
-+  exec "\$@"
- fi
- 
- _ACEOF
-+cat >>$CONFIG_STATUS <<\_ACEOF || ac_write_fail=1
-+exec 5>>config.log
-+{
-+  echo
-+  sed 'h;s/./-/g;s/^.../## /;s/...$/ ##/;p;x;p;x' <<_ASBOX
-+## Running $as_me. ##
-+_ASBOX
-+  $as_echo "$ac_log"
-+} >&5
- 
-+_ACEOF
-+cat >>$CONFIG_STATUS <<_ACEOF || ac_write_fail=1
-+_ACEOF
- 
-+cat >>$CONFIG_STATUS <<\_ACEOF || ac_write_fail=1
- 
--
--
--cat >>$CONFIG_STATUS <<\_ACEOF
-+# Handling of arguments.
- for ac_config_target in $ac_config_targets
- do
--  case "$ac_config_target" in
--  # Handling of arguments.
--  "Makefile" ) CONFIG_FILES="$CONFIG_FILES Makefile" ;;
--  "ld-elf2flt" ) CONFIG_FILES="$CONFIG_FILES ld-elf2flt" ;;
--  *) { { echo "$as_me:$LINENO: error: invalid argument: $ac_config_target" >&5
--echo "$as_me: error: invalid argument: $ac_config_target" >&2;}
-+  case $ac_config_target in
-+    "ld-elf2flt.sh") CONFIG_FILES="$CONFIG_FILES ld-elf2flt.sh:ld-elf2flt.in" ;;
-+    "Makefile") CONFIG_FILES="$CONFIG_FILES Makefile" ;;
-+    "elf2flt.ld") CONFIG_FILES="$CONFIG_FILES elf2flt.ld" ;;
-+
-+  *) { { $as_echo "$as_me:$LINENO: error: invalid argument: $ac_config_target" >&5
-+$as_echo "$as_me: error: invalid argument: $ac_config_target" >&2;}
-    { (exit 1); exit 1; }; };;
-   esac
- done
- 
-+
- # If the user did not use the arguments to specify the items to instantiate,
- # then the envvar interface is used.  Set only those that are not.
- # We use the long form for the default assignment because of an extremely
-@@ -4349,351 +5785,469 @@ if $ac_need_defaults; then
- fi
- 
- # Have a temporary directory for convenience.  Make it in the build tree
--# simply because there is no reason to put it here, and in addition,
-+# simply because there is no reason against having it here, and in addition,
- # creating and moving files from /tmp can sometimes cause problems.
--# Create a temporary directory, and hook for its removal unless debugging.
-+# Hook for its removal unless debugging.
-+# Note that there is a small window in which the directory will not be cleaned:
-+# after its creation but before its name has been assigned to `$tmp'.
- $debug ||
- {
--  trap 'exit_status=$?; rm -rf $tmp && exit $exit_status' 0
-+  tmp=
-+  trap 'exit_status=$?
-+  { test -z "$tmp" || test ! -d "$tmp" || rm -fr "$tmp"; } && exit $exit_status
-+' 0
-   trap '{ (exit 1); exit 1; }' 1 2 13 15
- }
--
- # Create a (secure) tmp directory for tmp files.
- 
- {
--  tmp=`(umask 077 && mktemp -d -q "./confstatXXXXXX") 2>/dev/null` &&
-+  tmp=`(umask 077 && mktemp -d "./confXXXXXX") 2>/dev/null` &&
-   test -n "$tmp" && test -d "$tmp"
- }  ||
- {
--  tmp=./confstat$$-$RANDOM
--  (umask 077 && mkdir $tmp)
-+  tmp=./conf$$-$RANDOM
-+  (umask 077 && mkdir "$tmp")
- } ||
- {
--   echo "$me: cannot create a temporary directory in ." >&2
-+   $as_echo "$as_me: cannot create a temporary directory in ." >&2
-    { (exit 1); exit 1; }
- }
- 
-+# Set up the scripts for CONFIG_FILES section.
-+# No need to generate them if there are no CONFIG_FILES.
-+# This happens for instance with `./config.status config.h'.
-+if test -n "$CONFIG_FILES"; then
-+
-+
-+ac_cr=''
-+ac_cs_awk_cr=`$AWK 'BEGIN { print "a\rb" }' </dev/null 2>/dev/null`
-+if test "$ac_cs_awk_cr" = "a${ac_cr}b"; then
-+  ac_cs_awk_cr='\\r'
-+else
-+  ac_cs_awk_cr=$ac_cr
-+fi
-+
-+echo 'BEGIN {' >"$tmp/subs1.awk" &&
- _ACEOF
- 
--cat >>$CONFIG_STATUS <<_ACEOF
- 
--#
--# CONFIG_FILES section.
--#
-+{
-+  echo "cat >conf$$subs.awk <<_ACEOF" &&
-+  echo "$ac_subst_vars" | sed 's/.*/&!$&$ac_delim/' &&
-+  echo "_ACEOF"
-+} >conf$$subs.sh ||
-+  { { $as_echo "$as_me:$LINENO: error: could not make $CONFIG_STATUS" >&5
-+$as_echo "$as_me: error: could not make $CONFIG_STATUS" >&2;}
-+   { (exit 1); exit 1; }; }
-+ac_delim_num=`echo "$ac_subst_vars" | grep -c '$'`
-+ac_delim='%!_!# '
-+for ac_last_try in false false false false false :; do
-+  . ./conf$$subs.sh ||
-+    { { $as_echo "$as_me:$LINENO: error: could not make $CONFIG_STATUS" >&5
-+$as_echo "$as_me: error: could not make $CONFIG_STATUS" >&2;}
-+   { (exit 1); exit 1; }; }
- 
--# No need to generate the scripts if there are no CONFIG_FILES.
--# This happens for instance when ./config.status config.h
--if test -n "\$CONFIG_FILES"; then
--  # Protect against being on the right side of a sed subst in config.status.
--  sed 's/,@/@@/; s/@,/@@/; s/,;t t\$/@;t t/; /@;t t\$/s/[\\\\&,]/\\\\&/g;
--   s/@@/,@/; s/@@/@,/; s/@;t t\$/,;t t/' >\$tmp/subs.sed <<\\CEOF
--s, at SHELL@,$SHELL,;t t
--s, at PATH_SEPARATOR@,$PATH_SEPARATOR,;t t
--s, at PACKAGE_NAME@,$PACKAGE_NAME,;t t
--s, at PACKAGE_TARNAME@,$PACKAGE_TARNAME,;t t
--s, at PACKAGE_VERSION@,$PACKAGE_VERSION,;t t
--s, at PACKAGE_STRING@,$PACKAGE_STRING,;t t
--s, at PACKAGE_BUGREPORT@,$PACKAGE_BUGREPORT,;t t
--s, at exec_prefix@,$exec_prefix,;t t
--s, at prefix@,$prefix,;t t
--s, at program_transform_name@,$program_transform_name,;t t
--s, at bindir@,$bindir,;t t
--s, at sbindir@,$sbindir,;t t
--s, at libexecdir@,$libexecdir,;t t
--s, at datadir@,$datadir,;t t
--s, at sysconfdir@,$sysconfdir,;t t
--s, at sharedstatedir@,$sharedstatedir,;t t
--s, at localstatedir@,$localstatedir,;t t
--s, at libdir@,$libdir,;t t
--s, at includedir@,$includedir,;t t
--s, at oldincludedir@,$oldincludedir,;t t
--s, at infodir@,$infodir,;t t
--s, at mandir@,$mandir,;t t
--s, at build_alias@,$build_alias,;t t
--s, at host_alias@,$host_alias,;t t
--s, at target_alias@,$target_alias,;t t
--s, at DEFS@,$DEFS,;t t
--s, at ECHO_C@,$ECHO_C,;t t
--s, at ECHO_N@,$ECHO_N,;t t
--s, at ECHO_T@,$ECHO_T,;t t
--s, at LIBS@,$LIBS,;t t
--s, at build@,$build,;t t
--s, at build_cpu@,$build_cpu,;t t
--s, at build_vendor@,$build_vendor,;t t
--s, at build_os@,$build_os,;t t
--s, at host@,$host,;t t
--s, at host_cpu@,$host_cpu,;t t
--s, at host_vendor@,$host_vendor,;t t
--s, at host_os@,$host_os,;t t
--s, at target@,$target,;t t
--s, at target_cpu@,$target_cpu,;t t
--s, at target_vendor@,$target_vendor,;t t
--s, at target_os@,$target_os,;t t
--s, at CC@,$CC,;t t
--s, at CFLAGS@,$CFLAGS,;t t
--s, at LDFLAGS@,$LDFLAGS,;t t
--s, at CPPFLAGS@,$CPPFLAGS,;t t
--s, at ac_ct_CC@,$ac_ct_CC,;t t
--s, at EXEEXT@,$EXEEXT,;t t
--s, at OBJEXT@,$OBJEXT,;t t
--s, at INSTALL_PROGRAM@,$INSTALL_PROGRAM,;t t
--s, at INSTALL_SCRIPT@,$INSTALL_SCRIPT,;t t
--s, at INSTALL_DATA@,$INSTALL_DATA,;t t
--s, at CPP@,$CPP,;t t
--s, at EGREP@,$EGREP,;t t
--s, at bfd_include_dir@,$bfd_include_dir,;t t
--s, at binutils_include_dir@,$binutils_include_dir,;t t
--s, at binutils_ldscript_dir@,$binutils_ldscript_dir,;t t
--s, at got_check@,$got_check,;t t
--s, at emit_relocs@,$emit_relocs,;t t
--s, at LIBOBJS@,$LIBOBJS,;t t
--s,@LTLIBOBJS@,$LTLIBOBJS,;t t
--CEOF
-+  ac_delim_n=`sed -n "s/.*$ac_delim\$/X/p" conf$$subs.awk | grep -c X`
-+  if test $ac_delim_n = $ac_delim_num; then
-+    break
-+  elif $ac_last_try; then
-+    { { $as_echo "$as_me:$LINENO: error: could not make $CONFIG_STATUS" >&5
-+$as_echo "$as_me: error: could not make $CONFIG_STATUS" >&2;}
-+   { (exit 1); exit 1; }; }
-+  else
-+    ac_delim="$ac_delim!$ac_delim _$ac_delim!! "
-+  fi
-+done
-+rm -f conf$$subs.sh
- 
-+cat >>$CONFIG_STATUS <<_ACEOF || ac_write_fail=1
-+cat >>"\$tmp/subs1.awk" <<\\_ACAWK &&
- _ACEOF
-+sed -n '
-+h
-+s/^/S["/; s/!.*/"]=/
-+p
-+g
-+s/^[^!]*!//
-+:repl
-+t repl
-+s/'"$ac_delim"'$//
-+t delim
-+:nl
-+h
-+s/\(.\{148\}\).*/\1/
-+t more1
-+s/["\\]/\\&/g; s/^/"/; s/$/\\n"\\/
-+p
-+n
-+b repl
-+:more1
-+s/["\\]/\\&/g; s/^/"/; s/$/"\\/
-+p
-+g
-+s/.\{148\}//
-+t nl
-+:delim
-+h
-+s/\(.\{148\}\).*/\1/
-+t more2
-+s/["\\]/\\&/g; s/^/"/; s/$/"/
-+p
-+b
-+:more2
-+s/["\\]/\\&/g; s/^/"/; s/$/"\\/
-+p
-+g
-+s/.\{148\}//
-+t delim
-+' <conf$$subs.awk | sed '
-+/^[^""]/{
-+  N
-+  s/\n//
-+}
-+' >>$CONFIG_STATUS || ac_write_fail=1
-+rm -f conf$$subs.awk
-+cat >>$CONFIG_STATUS <<_ACEOF || ac_write_fail=1
-+_ACAWK
-+cat >>"\$tmp/subs1.awk" <<_ACAWK &&
-+  for (key in S) S_is_set[key] = 1
-+  FS = ""
- 
--  cat >>$CONFIG_STATUS <<\_ACEOF
--  # Split the substitutions into bite-sized pieces for seds with
--  # small command number limits, like on Digital OSF/1 and HP-UX.
--  ac_max_sed_lines=48
--  ac_sed_frag=1 # Number of current file.
--  ac_beg=1 # First line for current file.
--  ac_end=$ac_max_sed_lines # Line after last line for current file.
--  ac_more_lines=:
--  ac_sed_cmds=
--  while $ac_more_lines; do
--    if test $ac_beg -gt 1; then
--      sed "1,${ac_beg}d; ${ac_end}q" $tmp/subs.sed >$tmp/subs.frag
--    else
--      sed "${ac_end}q" $tmp/subs.sed >$tmp/subs.frag
--    fi
--    if test ! -s $tmp/subs.frag; then
--      ac_more_lines=false
--    else
--      # The purpose of the label and of the branching condition is to
--      # speed up the sed processing (if there are no `@' at all, there
--      # is no need to browse any of the substitutions).
--      # These are the two extra sed commands mentioned above.
--      (echo ':t
--  /@[a-zA-Z_][a-zA-Z_0-9]*@/!b' && cat $tmp/subs.frag) >$tmp/subs-$ac_sed_frag.sed
--      if test -z "$ac_sed_cmds"; then
--	ac_sed_cmds="sed -f $tmp/subs-$ac_sed_frag.sed"
--      else
--	ac_sed_cmds="$ac_sed_cmds | sed -f $tmp/subs-$ac_sed_frag.sed"
--      fi
--      ac_sed_frag=`expr $ac_sed_frag + 1`
--      ac_beg=$ac_end
--      ac_end=`expr $ac_end + $ac_max_sed_lines`
--    fi
--  done
--  if test -z "$ac_sed_cmds"; then
--    ac_sed_cmds=cat
--  fi
--fi # test -n "$CONFIG_FILES"
-+}
-+{
-+  line = $ 0
-+  nfields = split(line, field, "@")
-+  substed = 0
-+  len = length(field[1])
-+  for (i = 2; i < nfields; i++) {
-+    key = field[i]
-+    keylen = length(key)
-+    if (S_is_set[key]) {
-+      value = S[key]
-+      line = substr(line, 1, len) "" value "" substr(line, len + keylen + 3)
-+      len += length(value) + length(field[++i])
-+      substed = 1
-+    } else
-+      len += 1 + keylen
-+  }
-+
-+  print line
-+}
- 
-+_ACAWK
- _ACEOF
--cat >>$CONFIG_STATUS <<\_ACEOF
--for ac_file in : $CONFIG_FILES; do test "x$ac_file" = x: && continue
--  # Support "outfile[:infile[:infile...]]", defaulting infile="outfile.in".
--  case $ac_file in
--  - | *:- | *:-:* ) # input from stdin
--	cat >$tmp/stdin
--	ac_file_in=`echo "$ac_file" | sed 's,[^:]*:,,'`
--	ac_file=`echo "$ac_file" | sed 's,:.*,,'` ;;
--  *:* ) ac_file_in=`echo "$ac_file" | sed 's,[^:]*:,,'`
--	ac_file=`echo "$ac_file" | sed 's,:.*,,'` ;;
--  * )   ac_file_in=$ac_file.in ;;
-+cat >>$CONFIG_STATUS <<\_ACEOF || ac_write_fail=1
-+if sed "s/$ac_cr//" < /dev/null > /dev/null 2>&1; then
-+  sed "s/$ac_cr\$//; s/$ac_cr/$ac_cs_awk_cr/g"
-+else
-+  cat
-+fi < "$tmp/subs1.awk" > "$tmp/subs.awk" \
-+  || { { $as_echo "$as_me:$LINENO: error: could not setup config files machinery" >&5
-+$as_echo "$as_me: error: could not setup config files machinery" >&2;}
-+   { (exit 1); exit 1; }; }
-+_ACEOF
-+
-+# VPATH may cause trouble with some makes, so we remove $(srcdir),
-+# ${srcdir} and @srcdir@ from VPATH if srcdir is ".", strip leading and
-+# trailing colons and then remove the whole line if VPATH becomes empty
-+# (actually we leave an empty line to preserve line numbers).
-+if test "x$srcdir" = x.; then
-+  ac_vpsub='/^[	 ]*VPATH[	 ]*=/{
-+s/:*\$(srcdir):*/:/
-+s/:*\${srcdir}:*/:/
-+s/:*@srcdir@:*/:/
-+s/^\([^=]*=[	 ]*\):*/\1/
-+s/:*$//
-+s/^[^=]*=[	 ]*$//
-+}'
-+fi
-+
-+cat >>$CONFIG_STATUS <<\_ACEOF || ac_write_fail=1
-+fi # test -n "$CONFIG_FILES"
-+
-+
-+eval set X "  :F $CONFIG_FILES      "
-+shift
-+for ac_tag
-+do
-+  case $ac_tag in
-+  :[FHLC]) ac_mode=$ac_tag; continue;;
-+  esac
-+  case $ac_mode$ac_tag in
-+  :[FHL]*:*);;
-+  :L* | :C*:*) { { $as_echo "$as_me:$LINENO: error: invalid tag $ac_tag" >&5
-+$as_echo "$as_me: error: invalid tag $ac_tag" >&2;}
-+   { (exit 1); exit 1; }; };;
-+  :[FH]-) ac_tag=-:-;;
-+  :[FH]*) ac_tag=$ac_tag:$ac_tag.in;;
-+  esac
-+  ac_save_IFS=$IFS
-+  IFS=:
-+  set x $ac_tag
-+  IFS=$ac_save_IFS
-+  shift
-+  ac_file=$1
-+  shift
-+
-+  case $ac_mode in
-+  :L) ac_source=$1;;
-+  :[FH])
-+    ac_file_inputs=
-+    for ac_f
-+    do
-+      case $ac_f in
-+      -) ac_f="$tmp/stdin";;
-+      *) # Look for the file first in the build tree, then in the source tree
-+	 # (if the path is not absolute).  The absolute path cannot be DOS-style,
-+	 # because $ac_f cannot contain `:'.
-+	 test -f "$ac_f" ||
-+	   case $ac_f in
-+	   [\\/$]*) false;;
-+	   *) test -f "$srcdir/$ac_f" && ac_f="$srcdir/$ac_f";;
-+	   esac ||
-+	   { { $as_echo "$as_me:$LINENO: error: cannot find input file: $ac_f" >&5
-+$as_echo "$as_me: error: cannot find input file: $ac_f" >&2;}
-+   { (exit 1); exit 1; }; };;
-+      esac
-+      case $ac_f in *\'*) ac_f=`$as_echo "$ac_f" | sed "s/'/'\\\\\\\\''/g"`;; esac
-+      ac_file_inputs="$ac_file_inputs '$ac_f'"
-+    done
-+
-+    # Let's still pretend it is `configure' which instantiates (i.e., don't
-+    # use $as_me), people would be surprised to read:
-+    #    /* config.h.  Generated by config.status.  */
-+    configure_input='Generated from '`
-+	  $as_echo "$*" | sed 's|^[^:]*/||;s|:[^:]*/|, |g'
-+	`' by configure.'
-+    if test x"$ac_file" != x-; then
-+      configure_input="$ac_file.  $configure_input"
-+      { $as_echo "$as_me:$LINENO: creating $ac_file" >&5
-+$as_echo "$as_me: creating $ac_file" >&6;}
-+    fi
-+    # Neutralize special characters interpreted by sed in replacement strings.
-+    case $configure_input in #(
-+    *\&* | *\|* | *\\* )
-+       ac_sed_conf_input=`$as_echo "$configure_input" |
-+       sed 's/[\\\\&|]/\\\\&/g'`;; #(
-+    *) ac_sed_conf_input=$configure_input;;
-+    esac
-+
-+    case $ac_tag in
-+    *:-:* | *:-) cat >"$tmp/stdin" \
-+      || { { $as_echo "$as_me:$LINENO: error: could not create $ac_file" >&5
-+$as_echo "$as_me: error: could not create $ac_file" >&2;}
-+   { (exit 1); exit 1; }; } ;;
-+    esac
-+    ;;
-   esac
- 
--  # Compute @srcdir@, @top_srcdir@, and @INSTALL@ for subdirectories.
--  ac_dir=`(dirname "$ac_file") 2>/dev/null ||
-+  ac_dir=`$as_dirname -- "$ac_file" ||
- $as_expr X"$ac_file" : 'X\(.*[^/]\)//*[^/][^/]*/*$' \| \
- 	 X"$ac_file" : 'X\(//\)[^/]' \| \
- 	 X"$ac_file" : 'X\(//\)$' \| \
--	 X"$ac_file" : 'X\(/\)' \| \
--	 .     : '\(.\)' 2>/dev/null ||
--echo X"$ac_file" |
--    sed '/^X\(.*[^/]\)\/\/*[^/][^/]*\/*$/{ s//\1/; q; }
--  	  /^X\(\/\/\)[^/].*/{ s//\1/; q; }
--  	  /^X\(\/\/\)$/{ s//\1/; q; }
--  	  /^X\(\/\).*/{ s//\1/; q; }
--  	  s/.*/./; q'`
--  { if $as_mkdir_p; then
--    mkdir -p "$ac_dir"
--  else
--    as_dir="$ac_dir"
-+	 X"$ac_file" : 'X\(/\)' \| . 2>/dev/null ||
-+$as_echo X"$ac_file" |
-+    sed '/^X\(.*[^/]\)\/\/*[^/][^/]*\/*$/{
-+	    s//\1/
-+	    q
-+	  }
-+	  /^X\(\/\/\)[^/].*/{
-+	    s//\1/
-+	    q
-+	  }
-+	  /^X\(\/\/\)$/{
-+	    s//\1/
-+	    q
-+	  }
-+	  /^X\(\/\).*/{
-+	    s//\1/
-+	    q
-+	  }
-+	  s/.*/./; q'`
-+  { as_dir="$ac_dir"
-+  case $as_dir in #(
-+  -*) as_dir=./$as_dir;;
-+  esac
-+  test -d "$as_dir" || { $as_mkdir_p && mkdir -p "$as_dir"; } || {
-     as_dirs=
--    while test ! -d "$as_dir"; do
--      as_dirs="$as_dir $as_dirs"
--      as_dir=`(dirname "$as_dir") 2>/dev/null ||
-+    while :; do
-+      case $as_dir in #(
-+      *\'*) as_qdir=`$as_echo "$as_dir" | sed "s/'/'\\\\\\\\''/g"`;; #'(
-+      *) as_qdir=$as_dir;;
-+      esac
-+      as_dirs="'$as_qdir' $as_dirs"
-+      as_dir=`$as_dirname -- "$as_dir" ||
- $as_expr X"$as_dir" : 'X\(.*[^/]\)//*[^/][^/]*/*$' \| \
- 	 X"$as_dir" : 'X\(//\)[^/]' \| \
- 	 X"$as_dir" : 'X\(//\)$' \| \
--	 X"$as_dir" : 'X\(/\)' \| \
--	 .     : '\(.\)' 2>/dev/null ||
--echo X"$as_dir" |
--    sed '/^X\(.*[^/]\)\/\/*[^/][^/]*\/*$/{ s//\1/; q; }
--  	  /^X\(\/\/\)[^/].*/{ s//\1/; q; }
--  	  /^X\(\/\/\)$/{ s//\1/; q; }
--  	  /^X\(\/\).*/{ s//\1/; q; }
--  	  s/.*/./; q'`
-+	 X"$as_dir" : 'X\(/\)' \| . 2>/dev/null ||
-+$as_echo X"$as_dir" |
-+    sed '/^X\(.*[^/]\)\/\/*[^/][^/]*\/*$/{
-+	    s//\1/
-+	    q
-+	  }
-+	  /^X\(\/\/\)[^/].*/{
-+	    s//\1/
-+	    q
-+	  }
-+	  /^X\(\/\/\)$/{
-+	    s//\1/
-+	    q
-+	  }
-+	  /^X\(\/\).*/{
-+	    s//\1/
-+	    q
-+	  }
-+	  s/.*/./; q'`
-+      test -d "$as_dir" && break
-     done
--    test ! -n "$as_dirs" || mkdir $as_dirs
--  fi || { { echo "$as_me:$LINENO: error: cannot create directory \"$ac_dir\"" >&5
--echo "$as_me: error: cannot create directory \"$ac_dir\"" >&2;}
-+    test -z "$as_dirs" || eval "mkdir $as_dirs"
-+  } || test -d "$as_dir" || { { $as_echo "$as_me:$LINENO: error: cannot create directory $as_dir" >&5
-+$as_echo "$as_me: error: cannot create directory $as_dir" >&2;}
-    { (exit 1); exit 1; }; }; }
--
-   ac_builddir=.
- 
--if test "$ac_dir" != .; then
--  ac_dir_suffix=/`echo "$ac_dir" | sed 's,^\.[\\/],,'`
--  # A "../" for each directory in $ac_dir_suffix.
--  ac_top_builddir=`echo "$ac_dir_suffix" | sed 's,/[^\\/]*,../,g'`
--else
--  ac_dir_suffix= ac_top_builddir=
--fi
-+case "$ac_dir" in
-+.) ac_dir_suffix= ac_top_builddir_sub=. ac_top_build_prefix= ;;
-+*)
-+  ac_dir_suffix=/`$as_echo "$ac_dir" | sed 's|^\.[\\/]||'`
-+  # A ".." for each directory in $ac_dir_suffix.
-+  ac_top_builddir_sub=`$as_echo "$ac_dir_suffix" | sed 's|/[^\\/]*|/..|g;s|/||'`
-+  case $ac_top_builddir_sub in
-+  "") ac_top_builddir_sub=. ac_top_build_prefix= ;;
-+  *)  ac_top_build_prefix=$ac_top_builddir_sub/ ;;
-+  esac ;;
-+esac
-+ac_abs_top_builddir=$ac_pwd
-+ac_abs_builddir=$ac_pwd$ac_dir_suffix
-+# for backward compatibility:
-+ac_top_builddir=$ac_top_build_prefix
- 
- case $srcdir in
--  .)  # No --srcdir option.  We are building in place.
-+  .)  # We are building in place.
-     ac_srcdir=.
--    if test -z "$ac_top_builddir"; then
--       ac_top_srcdir=.
--    else
--       ac_top_srcdir=`echo $ac_top_builddir | sed 's,/$,,'`
--    fi ;;
--  [\\/]* | ?:[\\/]* )  # Absolute path.
-+    ac_top_srcdir=$ac_top_builddir_sub
-+    ac_abs_top_srcdir=$ac_pwd ;;
-+  [\\/]* | ?:[\\/]* )  # Absolute name.
-     ac_srcdir=$srcdir$ac_dir_suffix;
--    ac_top_srcdir=$srcdir ;;
--  *) # Relative path.
--    ac_srcdir=$ac_top_builddir$srcdir$ac_dir_suffix
--    ac_top_srcdir=$ac_top_builddir$srcdir ;;
-+    ac_top_srcdir=$srcdir
-+    ac_abs_top_srcdir=$srcdir ;;
-+  *) # Relative name.
-+    ac_srcdir=$ac_top_build_prefix$srcdir$ac_dir_suffix
-+    ac_top_srcdir=$ac_top_build_prefix$srcdir
-+    ac_abs_top_srcdir=$ac_pwd/$srcdir ;;
- esac
-+ac_abs_srcdir=$ac_abs_top_srcdir$ac_dir_suffix
- 
--# Do not use `cd foo && pwd` to compute absolute paths, because
--# the directories may not exist.
--case `pwd` in
--.) ac_abs_builddir="$ac_dir";;
--*)
--  case "$ac_dir" in
--  .) ac_abs_builddir=`pwd`;;
--  [\\/]* | ?:[\\/]* ) ac_abs_builddir="$ac_dir";;
--  *) ac_abs_builddir=`pwd`/"$ac_dir";;
--  esac;;
--esac
--case $ac_abs_builddir in
--.) ac_abs_top_builddir=${ac_top_builddir}.;;
--*)
--  case ${ac_top_builddir}. in
--  .) ac_abs_top_builddir=$ac_abs_builddir;;
--  [\\/]* | ?:[\\/]* ) ac_abs_top_builddir=${ac_top_builddir}.;;
--  *) ac_abs_top_builddir=$ac_abs_builddir/${ac_top_builddir}.;;
--  esac;;
--esac
--case $ac_abs_builddir in
--.) ac_abs_srcdir=$ac_srcdir;;
--*)
--  case $ac_srcdir in
--  .) ac_abs_srcdir=$ac_abs_builddir;;
--  [\\/]* | ?:[\\/]* ) ac_abs_srcdir=$ac_srcdir;;
--  *) ac_abs_srcdir=$ac_abs_builddir/$ac_srcdir;;
--  esac;;
--esac
--case $ac_abs_builddir in
--.) ac_abs_top_srcdir=$ac_top_srcdir;;
--*)
--  case $ac_top_srcdir in
--  .) ac_abs_top_srcdir=$ac_abs_builddir;;
--  [\\/]* | ?:[\\/]* ) ac_abs_top_srcdir=$ac_top_srcdir;;
--  *) ac_abs_top_srcdir=$ac_abs_builddir/$ac_top_srcdir;;
--  esac;;
--esac
- 
-+  case $ac_mode in
-+  :F)
-+  #
-+  # CONFIG_FILE
-+  #
- 
-   case $INSTALL in
-   [\\/$]* | ?:[\\/]* ) ac_INSTALL=$INSTALL ;;
--  *) ac_INSTALL=$ac_top_builddir$INSTALL ;;
-+  *) ac_INSTALL=$ac_top_build_prefix$INSTALL ;;
-   esac
-+_ACEOF
- 
--  if test x"$ac_file" != x-; then
--    { echo "$as_me:$LINENO: creating $ac_file" >&5
--echo "$as_me: creating $ac_file" >&6;}
--    rm -f "$ac_file"
--  fi
--  # Let's still pretend it is `configure' which instantiates (i.e., don't
--  # use $as_me), people would be surprised to read:
--  #    /* config.h.  Generated by config.status.  */
--  if test x"$ac_file" = x-; then
--    configure_input=
--  else
--    configure_input="$ac_file.  "
--  fi
--  configure_input=$configure_input"Generated from `echo $ac_file_in |
--				     sed 's,.*/,,'` by configure."
--
--  # First look for the input files in the build tree, otherwise in the
--  # src tree.
--  ac_file_inputs=`IFS=:
--    for f in $ac_file_in; do
--      case $f in
--      -) echo $tmp/stdin ;;
--      [\\/$]*)
--	 # Absolute (can't be DOS-style, as IFS=:)
--	 test -f "$f" || { { echo "$as_me:$LINENO: error: cannot find input file: $f" >&5
--echo "$as_me: error: cannot find input file: $f" >&2;}
--   { (exit 1); exit 1; }; }
--	 echo "$f";;
--      *) # Relative
--	 if test -f "$f"; then
--	   # Build tree
--	   echo "$f"
--	 elif test -f "$srcdir/$f"; then
--	   # Source tree
--	   echo "$srcdir/$f"
--	 else
--	   # /dev/null tree
--	   { { echo "$as_me:$LINENO: error: cannot find input file: $f" >&5
--echo "$as_me: error: cannot find input file: $f" >&2;}
--   { (exit 1); exit 1; }; }
--	 fi;;
--      esac
--    done` || { (exit 1); exit 1; }
-+cat >>$CONFIG_STATUS <<\_ACEOF || ac_write_fail=1
-+# If the template does not know about datarootdir, expand it.
-+# FIXME: This hack should be removed a few years after 2.60.
-+ac_datarootdir_hack=; ac_datarootdir_seen=
-+
-+ac_sed_dataroot='
-+/datarootdir/ {
-+  p
-+  q
-+}
-+/@datadir@/p
-+/@docdir@/p
-+/@infodir@/p
-+/@localedir@/p
-+/@mandir@/p
-+'
-+case `eval "sed -n \"\$ac_sed_dataroot\" $ac_file_inputs"` in
-+*datarootdir*) ac_datarootdir_seen=yes;;
-+*@datadir@*|*@docdir@*|*@infodir@*|*@localedir@*|*@mandir@*)
-+  { $as_echo "$as_me:$LINENO: WARNING: $ac_file_inputs seems to ignore the --datarootdir setting" >&5
-+$as_echo "$as_me: WARNING: $ac_file_inputs seems to ignore the --datarootdir setting" >&2;}
-+_ACEOF
-+cat >>$CONFIG_STATUS <<_ACEOF || ac_write_fail=1
-+  ac_datarootdir_hack='
-+  s&@datadir@&$datadir&g
-+  s&@docdir@&$docdir&g
-+  s&@infodir@&$infodir&g
-+  s&@localedir@&$localedir&g
-+  s&@mandir@&$mandir&g
-+    s&\\\${datarootdir}&$datarootdir&g' ;;
-+esac
- _ACEOF
--cat >>$CONFIG_STATUS <<_ACEOF
--  sed "$ac_vpsub
-+
-+# Neutralize VPATH when `$srcdir' = `.'.
-+# Shell code in configure.ac might set extrasub.
-+# FIXME: do we really want to maintain this feature?
-+cat >>$CONFIG_STATUS <<_ACEOF || ac_write_fail=1
-+ac_sed_extra="$ac_vpsub
- $extrasub
- _ACEOF
--cat >>$CONFIG_STATUS <<\_ACEOF
-+cat >>$CONFIG_STATUS <<\_ACEOF || ac_write_fail=1
- :t
- /@[a-zA-Z_][a-zA-Z_0-9]*@/!b
--s, at configure_input@,$configure_input,;t t
--s, at srcdir@,$ac_srcdir,;t t
--s, at abs_srcdir@,$ac_abs_srcdir,;t t
--s, at top_srcdir@,$ac_top_srcdir,;t t
--s, at abs_top_srcdir@,$ac_abs_top_srcdir,;t t
--s, at builddir@,$ac_builddir,;t t
--s, at abs_builddir@,$ac_abs_builddir,;t t
--s, at top_builddir@,$ac_top_builddir,;t t
--s, at abs_top_builddir@,$ac_abs_top_builddir,;t t
--s,@INSTALL@,$ac_INSTALL,;t t
--" $ac_file_inputs | (eval "$ac_sed_cmds") >$tmp/out
--  rm -f $tmp/stdin
--  if test x"$ac_file" != x-; then
--    mv $tmp/out $ac_file
--  else
--    cat $tmp/out
--    rm -f $tmp/out
--  fi
-+s|@configure_input@|$ac_sed_conf_input|;t t
-+s&@top_builddir@&$ac_top_builddir_sub&;t t
-+s&@top_build_prefix@&$ac_top_build_prefix&;t t
-+s&@srcdir@&$ac_srcdir&;t t
-+s&@abs_srcdir@&$ac_abs_srcdir&;t t
-+s&@top_srcdir@&$ac_top_srcdir&;t t
-+s&@abs_top_srcdir@&$ac_abs_top_srcdir&;t t
-+s&@builddir@&$ac_builddir&;t t
-+s&@abs_builddir@&$ac_abs_builddir&;t t
-+s&@abs_top_builddir@&$ac_abs_top_builddir&;t t
-+s&@INSTALL@&$ac_INSTALL&;t t
-+$ac_datarootdir_hack
-+"
-+eval sed \"\$ac_sed_extra\" "$ac_file_inputs" | $AWK -f "$tmp/subs.awk" >$tmp/out \
-+  || { { $as_echo "$as_me:$LINENO: error: could not create $ac_file" >&5
-+$as_echo "$as_me: error: could not create $ac_file" >&2;}
-+   { (exit 1); exit 1; }; }
- 
--done
--_ACEOF
-+test -z "$ac_datarootdir_hack$ac_datarootdir_seen" &&
-+  { ac_out=`sed -n '/\${datarootdir}/p' "$tmp/out"`; test -n "$ac_out"; } &&
-+  { ac_out=`sed -n '/^[	 ]*datarootdir[	 ]*:*=/p' "$tmp/out"`; test -z "$ac_out"; } &&
-+  { $as_echo "$as_me:$LINENO: WARNING: $ac_file contains a reference to the variable \`datarootdir'
-+which seems to be undefined.  Please make sure it is defined." >&5
-+$as_echo "$as_me: WARNING: $ac_file contains a reference to the variable \`datarootdir'
-+which seems to be undefined.  Please make sure it is defined." >&2;}
-+
-+  rm -f "$tmp/stdin"
-+  case $ac_file in
-+  -) cat "$tmp/out" && rm -f "$tmp/out";;
-+  *) rm -f "$ac_file" && mv "$tmp/out" "$ac_file";;
-+  esac \
-+  || { { $as_echo "$as_me:$LINENO: error: could not create $ac_file" >&5
-+$as_echo "$as_me: error: could not create $ac_file" >&2;}
-+   { (exit 1); exit 1; }; }
-+ ;;
-+
-+
-+
-+  esac
-+
-+done # for ac_tag
- 
--cat >>$CONFIG_STATUS <<\_ACEOF
- 
- { (exit 0); exit 0; }
- _ACEOF
- chmod +x $CONFIG_STATUS
- ac_clean_files=$ac_clean_files_save
- 
-+test $ac_write_fail = 0 ||
-+  { { $as_echo "$as_me:$LINENO: error: write failure creating $CONFIG_STATUS" >&5
-+$as_echo "$as_me: error: write failure creating $CONFIG_STATUS" >&2;}
-+   { (exit 1); exit 1; }; }
-+
- 
- # configure is writing to config.log, and then calls config.status.
- # config.status does its own redirection, appending to config.log.
-@@ -4715,5 +6269,9 @@ if test "$no_create" != yes; then
-   # would make configure fail if this is the last instruction.
-   $ac_cs_success || { (exit 1); exit 1; }
- fi
-+if test -n "$ac_unrecognized_opts" && test "$enable_option_checking" != no; then
-+  { $as_echo "$as_me:$LINENO: WARNING: unrecognized options: $ac_unrecognized_opts" >&5
-+$as_echo "$as_me: WARNING: unrecognized options: $ac_unrecognized_opts" >&2;}
-+fi
- 
- 
-diff --git a/package/elf2flt/src/configure.in b/package/elf2flt/src/configure.in
-index 73443c6..951eb32 100644
---- a/package/elf2flt/src/configure.in
-+++ b/package/elf2flt/src/configure.in
-@@ -1,55 +1,111 @@
- dnl Process this file with autoconf to produce a configure script.
- AC_INIT(elf2flt.c)
- 
-+AC_ARG_WITH(zlib-prefix,
-+	AS_HELP_STRING([--with-zlib-prefix=<dir>], [path to installed zlib]),
-+	[ ac_zlib_prefix=$withval ],
-+	[ ac_zlib_prefix=NONE ]
-+)
-+
- AC_ARG_WITH(libbfd,
--	[ --with-libbfd=<file>  path to libbfd.a library to use ],
-+	AS_HELP_STRING([--with-libbfd=<file>], [path to libbfd.a library to use]),
- 	[ ac_libbfd=$withval ],
- 	[ ac_libbfd=NONE ]
- )
- 
- AC_ARG_WITH(libiberty,
--	[ --with-libiberty=<file>  path to libiberty.a library to use ],
-+	AS_HELP_STRING([--with-libiberty=<file>], [path to libiberty.a library to use]),
- 	[ ac_libiberty=$withval ],
- 	[ ac_libiberty=NONE ]
- )
- 
- AC_ARG_WITH(bfd-include-dir,
--	[ --with-bfd-include-dir=<dir>  include path for correct bfd.h ],
-+	AS_HELP_STRING([--with-bfd-include-dir=<dir>], [include path for correct bfd.h]),
- 	[ ac_bfd_include_dir=$withval ],
- 	[ ac_bfd_include_dir=NONE ]
- )
- 
- AC_ARG_WITH(binutils-include-dir,
--	[ --with-binutils-include-dir=<dir>  include path for binutils headers ],
-+	AS_HELP_STRING([--with-binutils-include-dir=<dir>], [include path for binutils headers]),
- 	[ ac_binutils_include_dir=$withval ],
- 	[ ac_binutils_include_dir=NONE ]
- )
- 
- AC_ARG_WITH(binutils-ldscript-dir,
--	[ --with-binutils-ldscript-dir=<dir>  path to install elf2flt.ld ],
-+	AS_HELP_STRING([--with-binutils-ldscript-dir=<dir>], [path to install elf2flt.ld]),
- 	[ ac_binutils_ldscript_dir=$withval ],
- 	[ ac_binutils_ldscript_dir=NONE ]
- )
- 
-+AC_ARG_WITH(binutils-build-dir,
-+	AS_HELP_STRING([--with-binutils-build-dir=<dir>], [path to compiled binutils tree]),
-+	[ ac_binutils_build_dir=$withval ],
-+	[ ac_binutils_build_dir=NONE ]
-+)
-+
-+AC_ARG_ENABLE(ld-elf2flt-binary,
-+	AS_HELP_STRING([--disable-ld-elf2flt-binary], [use ld-elf2flt shell script]),
-+	[ use_ld_elf2flt_binary=$enableval ],
-+	[ use_ld_elf2flt_binary=yes ]
-+)
-+
-+dnl convert a yes/no variable to 1/0 for C code
-+var_yn_to_10() {
-+	if eval test \"\$$1\" = yes ; then
-+		eval $1=1
-+	else
-+		eval $1=0
-+	fi
-+}
-+
- AC_ARG_ENABLE(got-check,
--	[ --disable-got-check - disable check for GOT (needed on H8) ],
-+	AS_HELP_STRING([--disable-got-check], [disable check for GOT (needed on H8)]),
- 	[ got_check=$enableval ],
- 	[ got_check=yes ]
- )
-+var_yn_to_10 got_check
- 
--AC_ARG_ENABLE(emit_relocs,
--	[ --disable-emit-relocs - don't use the --emit-relocs (-q) linker option ],
-+AC_ARG_ENABLE(emit-relocs,
-+	AS_HELP_STRING([--disable-emit-relocs], [don't use the --emit-relocs (-q) linker option]),
- 	[ emit_relocs=$enableval ],
- 	[ emit_relocs=yes ]
- )
-+var_yn_to_10 emit_relocs
-+
-+AC_ARG_ENABLE(emit-ctor-dtor,
-+	AS_HELP_STRING([--enable-emit-ctor-dtor], [manually create ctor/dtor list]),
-+	[ emit_ctor_dtor=$enableval ],
-+	[ emit_ctor_dtor=no ]
-+)
-+var_yn_to_10 emit_ctor_dtor
-+
-+AC_ARG_ENABLE(always-reloc-text,
-+	AS_HELP_STRING([--enable-always-reloc-text], [always process text relocs ignoring pic/got (needed on Blackfin)]),
-+	[ always_reloc_text=$enableval ],
-+	[
-+	case $target in
-+		bfin*) always_reloc_text=yes;;
-+		*)     always_reloc_text=no;;
-+	esac
-+	]
-+)
-+var_yn_to_10 always_reloc_text
- 
- AC_CANONICAL_HOST
- AC_CANONICAL_TARGET
- 
- dnl Checks for programs.
- AC_PROG_CC
-+AC_USE_SYSTEM_EXTENSIONS
- AC_PROG_INSTALL
- 
-+if test "$ac_binutils_build_dir" != "NONE"; then
-+  test "$ac_libbfd"               = "NONE" && ac_libbfd="$ac_binutils_build_dir/bfd/libbfd.a"
-+  test "$ac_libiberty"            = "NONE" && ac_libiberty="$ac_binutils_build_dir/libiberty/libiberty.a"
-+  test "$ac_bfd_include_dir"      = "NONE" && ac_bfd_include_dir="$ac_binutils_build_dir/bfd"
-+  test "$ac_binutils_include_dir" = "NONE" && ac_binutils_include_dir="$ac_binutils_build_dir/include"
-+fi
-+
- dnl Checks for libraries.
- if test "$ac_libiberty" = "NONE"; then
-   AC_CHECK_LIB(iberty, objalloc_create)
-@@ -63,6 +119,11 @@ if test "$ac_libbfd" = "NONE"; then
- else
-   LIBS="$ac_libbfd $LIBS"
- fi
-+if test "$ac_zlib_prefix" = "NONE"; then
-+  AC_CHECK_LIB(z, deflate)
-+else
-+  LIBS="-L$ac_zlib_prefix/lib -lz $LIBS"
-+fi
- 
- bfd_include_dir=
- if test "$ac_bfd_include_dir" != "NONE"; then
-@@ -74,6 +135,11 @@ if test "$ac_binutils_include_dir" != "NONE"; then
-   binutils_include_dir="-I$ac_binutils_include_dir"
- fi
- 
-+zlib_include_dir=
-+if test "$ac_zlib_prefix" != "NONE"; then
-+  zlib_include_dir="-I$ac_zlib_prefix/include"
-+fi
-+
- binutils_ldscript_dir=
- if test "$ac_binutils_ldscript_dir" = "NONE"; then
-   ac_binutils_ldscript_dir="\${TOOLDIR}/../${target_alias}/lib"
-@@ -106,6 +172,20 @@ Run configure again specifying these options:
- ])
- fi
- 
-+SYMBOL_PREFIX=
-+case $target in
-+	h8300|bfin*)
-+		SYMBOL_PREFIX=_
-+		;;
-+esac
-+
-+dnl Make sure we resolve system symbols before libiberty/libbfd ones.
-+dnl Otherwise, things like getopt get screwed up because the system headers
-+dnl redirect some functions to the system symbols, but other local symbols
-+dnl come from libiberty/libbfd.
-+dnl int getopt(int, char * const [], const char *) __asm("_" "getopt" "$UNIX2003");
-+AC_CHECK_LIB(c, malloc, LIBS="-lc $LIBS")
-+
- dnl Checks for header files.
- AC_HEADER_STDC
- AC_CHECK_HEADERS(fcntl.h unistd.h bfd.h)
-@@ -116,7 +196,14 @@ AC_C_CONST
- dnl Checks for library functions.
- AC_FUNC_VPRINTF
- 
--AC_CHECK_FUNCS(dcgettext)
-+AC_CHECK_FUNCS([ \
-+	dcgettext \
-+	getline \
-+	libintl_dgettext \
-+	strsignal \
-+])
-+
-+test "$GCC" = yes && CFLAGS="-Wall $CFLAGS"
- 
- dnl Subsitute values
- AC_SUBST(target)
-@@ -126,9 +213,14 @@ AC_SUBST(target_os)
- AC_SUBST(target_vendor)
- AC_SUBST(bfd_include_dir)
- AC_SUBST(binutils_include_dir)
-+AC_SUBST(zlib_include_dir)
- AC_SUBST(binutils_ldscript_dir)
-+AC_SUBST(use_ld_elf2flt_binary)
- AC_SUBST(got_check)
- AC_SUBST(emit_relocs)
-+AC_SUBST(emit_ctor_dtor)
-+AC_SUBST(always_reloc_text)
-+AC_SUBST(SYMBOL_PREFIX)
- 
--AC_OUTPUT(Makefile ld-elf2flt)
-+AC_OUTPUT(ld-elf2flt.sh:ld-elf2flt.in Makefile elf2flt.ld)
- 
-diff --git a/package/elf2flt/src/elf2flt.c b/package/elf2flt/src/elf2flt.c
-index 65a116c..2fea9b5 100644
---- a/package/elf2flt/src/elf2flt.c
-+++ b/package/elf2flt/src/elf2flt.c
-@@ -44,16 +44,13 @@
- #include <unistd.h>   /* Userland prototypes of the Unix std system calls    */
- #include <fcntl.h>    /* Flag value for file handling functions              */
- #include <time.h>
--#ifndef WIN32
--#include <netinet/in.h> /* Consts and structs defined by the internet system */
--#define	BINARY_FILE_OPTS
--#else
--#include <winsock2.h>
--#define	BINARY_FILE_OPTS "b"
--#endif
- 
- /* from $(INSTALLDIR)/include       */
- #include <bfd.h>      /* Main header file for the BFD library                */
-+#include <libiberty.h>
-+
-+#include "stubs.h"
-+const char *elf2flt_progname;
- 
- #if defined(TARGET_h8300)
- #include <elf/h8.h>      /* TARGET_* ELF support for the BFD library            */
-@@ -61,18 +58,24 @@
- #include "cygwin-elf.h"	/* Cygwin uses a local copy */
- #elif defined(TARGET_microblaze)
- #include <elf/microblaze.h>	/* TARGET_* ELF support for the BFD library */
--#elif defined(TARGET_bfin)
--#include "elf/bfin.h"
- #else
- #include <elf.h>      /* TARGET_* ELF support for the BFD library            */
- #endif
- 
-+/* Always include Blackfin-specific defines in addition to common ELF stuff
-+ * above as the common elf headers often do not have our relocs.
-+ */
-+#if defined(TARGET_bfin) && !defined(R_BFIN_RIMM16)
-+#include "elf/bfin.h"
-+#endif
-+
- #if defined(__MINGW32__)
- #include <getopt.h>
- #endif
- 
- /* from uClinux-x.x.x/include/linux */
- #include "flat.h"     /* Binary flat header description                      */
-+#include "compress.h"
- 
- #ifdef TARGET_e1
- #include <e1.h>
-@@ -100,13 +103,6 @@
- #define ARCH    "e1-coff"
- #elif defined(TARGET_bfin)
- #define ARCH	"bfin"
--#define FLAT_RELOC_TYPE_TEXT 0
--#define FLAT_RELOC_TYPE_DATA 1
--#define FLAT_RELOC_TYPE_BSS 2
--#define FLAT_RELOC_TYPE_STACK 3
--#define FLAT_RELOC_PART_LO 0
--#define FLAT_RELOC_PART_HI 1
--#define PCREL24_MAGIC_OFFSET -1
- #elif defined(TARGET_nios)
- #define ARCH	"nios"
- #elif defined(TARGET_nios2)
-@@ -142,7 +138,7 @@ int verbose = 0;      /* extra output when running */
- int pic_with_got = 0; /* do elf/got processing with PIC code */
- int load_to_ram = 0;  /* instruct loader to allocate everything into RAM */
- int ktrace = 0;       /* instruct loader output kernel trace on load */
--int compress = 0;     /* 1 = compress everything, 2 = compress data only */
-+int docompress = 0;   /* 1 = compress everything, 2 = compress data only */
- int use_resolved = 0; /* If true, get the value of symbol references from */
- 		      /* the program contents, not from the relocation table. */
- 		      /* In this case, the input ELF file must be already */
-@@ -150,80 +146,14 @@ int use_resolved = 0; /* If true, get the value of symbol references from */
- 		      /* versions of GNU ld will give you a fully resolved */
- 		      /* output file with relocation entries).  */
- 
--const char *progname, *filename;
--int lineno;
--
--int nerrors = 0;
--int nwarnings = 0;
--
--static char where[200];
--
--enum {
--  /* Use exactly one of these: */
--  E_NOFILE = 0,         /* "progname: " */
--  E_FILE = 1,           /* "filename: " */
--  E_FILELINE = 2,       /* "filename:lineno: " */
--  E_FILEWHERE = 3,      /* "filename:%s: " -- set %s with ewhere() */
--          
--  /* Add in any of these with |': */
--  E_WARNING = 0x10,
--  E_PERROR = 0x20
--};
--                  
--void ewhere (const char *format, ...);
--void einfo (int type, const char *format, ...);
--                  
--
--void
--ewhere (const char *format, ...) {
--  va_list args;
--  va_start (args, format);
--  vsprintf (where, format, args);
--  va_end (args);
--}
--
--
--void
--einfo (int type, const char *format, ...) {
--  va_list args;
--
--  switch (type & 0x0f) {
--  case E_NOFILE:
--    fprintf (stderr, "%s: ", progname);
--    break;
--  case E_FILE:
--    fprintf (stderr, "%s: ", filename);
--    break;
--  case E_FILELINE:
--    ewhere ("%d", lineno);
--    /* fall-through */
--  case E_FILEWHERE:
--    fprintf (stderr, "%s:%s: ", filename, where);
--    break;
--  }
--
--  if (type & E_WARNING) {
--    fprintf (stderr, "warning: ");
--    nwarnings++;
--  } else {
--    nerrors++;
--  }
--
--  va_start (args, format);
--  vfprintf (stderr, format, args);
--  va_end (args);
--
--  if (type & E_PERROR)
--    perror ("");
--  else
--    fprintf (stderr, "\n");
--}
--
-+/* Set if the text section contains any relocations.  If it does, we must
-+   set the load_to_ram flag.  */
-+int text_has_relocs = 0;
- 
- asymbol**
- get_symbols (bfd *abfd, long *num)
- {
--  long storage_needed;
-+  int32_t storage_needed;
-   asymbol **symbol_table;
-   long number_of_symbols;
-   
-@@ -235,7 +165,7 @@ get_symbols (bfd *abfd, long *num)
-   if (storage_needed == 0)
-     return NULL;
- 
--  symbol_table = (asymbol **) malloc (storage_needed);
-+  symbol_table = xmalloc (storage_needed);
- 
-   number_of_symbols = bfd_canonicalize_symtab (abfd, symbol_table);
-   
-@@ -279,6 +209,7 @@ get_symbol_offset(char *name, asection *sec, asymbol **symbol_table, long number
- 
- 
- 
-+#ifdef TARGET_nios2
- long
- get_gp_value(asymbol **symbol_table, long number_of_symbols)
- {
-@@ -289,14 +220,15 @@ get_gp_value(asymbol **symbol_table, long number_of_symbols)
-   }
-   return -1;
- }
-- 
-+#endif
- 
- 
--long
--add_com_to_bss(asymbol **symbol_table, long number_of_symbols, long bss_len)
-+
-+int32_t
-+add_com_to_bss(asymbol **symbol_table, int32_t number_of_symbols, int32_t bss_len)
- {
--  long i, comsize;
--  long offset;
-+  int32_t i, comsize;
-+  int32_t offset;
- 
-   comsize = 0;
-   for (i=0; i<number_of_symbols; i++) {
-@@ -331,60 +263,61 @@ weak_und_symbol(const char *reloc_section_name,
- }
- 
- static int
--bfin_set_reloc (uint32_t *reloc, 
--		const char *reloc_section_name, 
-+bfin_set_reloc (uint32_t *reloc,
-+		const char *reloc_section_name,
- 		const char *sym_name,
- 		struct bfd_symbol *symbol,
--		int sp, int hilo, int32_t offset)
-+		int sp, int32_t offset)
- {
--    unsigned int type;
-+    unsigned int type = 0;
-     uint32_t val;
- 
--    if (strstr (reloc_section_name, "text"))
--	type = FLAT_RELOC_TYPE_TEXT;
--    else if (strstr (reloc_section_name, "data"))
--	type = FLAT_RELOC_TYPE_DATA;
--    else if (strstr (reloc_section_name, "bss"))
--	type = FLAT_RELOC_TYPE_BSS;
--    else if (strstr (reloc_section_name, "stack"))
--	type = FLAT_RELOC_TYPE_STACK;
--    else if (symbol->flags & BSF_WEAK){
--	/* weak symbol support ... if a weak symbol is undefined at the
--	   end of a final link, it should return 0 rather than error
--	   We will assume text section for the moment.
--	*/
--	type = FLAT_RELOC_TYPE_TEXT;
--    } else if (strstr (reloc_section_name, "*ABS*")){
--	/* (A data section initialization of something in the shared libc's text section
--	   does not resolve - i.e. a global pointer to function initialized with
--	   a libc function).
--	   The text section here is appropriate as the section information
--	   of the shared library is lost. The loader will do some calcs.
--	*/
--	type = FLAT_RELOC_TYPE_TEXT;
--    } else {
--	printf ("Unknown Type - relocation for %s in bad section - %s\n", sym_name, reloc_section_name);
--	return 1;
-+    if (strstr (reloc_section_name, "stack")) {
-+	    if (verbose)
-+		    printf ("Stack-relative reloc, offset %08lx\n", offset);
-+	    /* This must be a stack_start reloc for stack checking.  */
-+	    type = 1;
-     }
--
--    val = (offset & ((1 << 26) - 1)) << 6;
--    val |= (sp & (1 << 3) - 1) << 3;
--    val |= (hilo & 1) << 2;
--    val |= (type & (1 << 2) - 1);
-+    val = (offset & ((1 << 26) - 1));
-+    val |= (sp & (1 << 3) - 1) << 26;
-+    val |= type << 29;
-     *reloc = val;
-     return 0;
- }
--#endif
- 
-+static bfd *compare_relocs_bfd;
-+
-+static int
-+compare_relocs (const void *pa, const void *pb)
-+{
-+	const arelent *const *a = pa, *const *b = pb;
-+	const arelent *ra = *a, *rb = *b;
-+	unsigned long va, vb;
-+	uint32_t a_vma, b_vma;
-+
-+	if (!ra->sym_ptr_ptr || !*ra->sym_ptr_ptr)
-+		return -1;
-+	else if (!rb->sym_ptr_ptr || !*rb->sym_ptr_ptr)
-+		return 1;
-+
-+	a_vma = bfd_section_vma(compare_relocs_bfd,
-+				(*(ra->sym_ptr_ptr))->section);
-+	b_vma = bfd_section_vma(compare_relocs_bfd,
-+				(*(rb->sym_ptr_ptr))->section);
-+	va = (*(ra->sym_ptr_ptr))->value + a_vma + ra->addend;
-+	vb = (*(rb->sym_ptr_ptr))->value + b_vma + rb->addend;
-+	return va - vb;
-+}
-+#endif
- 
- uint32_t *
- output_relocs (
-   bfd *abs_bfd,
-   asymbol **symbols,
-   int number_of_symbols,
--  unsigned long *n_relocs,
--  unsigned char *text, int text_len, unsigned long text_vma,
--  unsigned char *data, int data_len, unsigned long data_vma,
-+  uint32_t *n_relocs,
-+  unsigned char *text, int text_len, uint32_t text_vma,
-+  unsigned char *data, int data_len, uint32_t data_vma,
-   bfd *rel_bfd)
- {
-   uint32_t		*flat_relocs;
-@@ -394,7 +327,7 @@ output_relocs (
-   unsigned char		*sectionp;
-   unsigned long		pflags;
-   char			addstr[16];
--  long			sym_addr, sym_vma, section_vma;
-+  uint32_t		sym_addr, sym_vma, section_vma;
-   int			relsize, relcount;
-   int			flat_reloc_count;
-   int			sym_reloc_size, rc;
-@@ -402,6 +335,9 @@ output_relocs (
-   int			bad_relocs = 0;
-   asymbol		**symb;
-   long			nsymb;
-+#ifdef TARGET_bfin
-+  unsigned long		persistent_data = 0;
-+#endif
-   
- #if 0
-   printf("%s(%d): output_relocs(abs_bfd=%d,synbols=0x%x,number_of_symbols=%d"
-@@ -426,19 +362,17 @@ dump_symbols(symbols, number_of_symbols);
-    * terminator even though the relocatable one doesn't have the GOT!
-    */
-   if (pic_with_got && !use_resolved) {
--    unsigned long *lp = (unsigned long *)data;
-+    uint32_t *lp = (uint32_t *)data;
-     /* Should call ntohl(*lp) here but is isn't going to matter */
-     while (*lp != 0xffffffff) lp++;
-     got_size = ((unsigned char *)lp) - data;
-     if (verbose)
- 	    printf("GOT table contains %d entries (%d bytes)\n",
--			    got_size/sizeof(unsigned long), got_size);
-+			    got_size/sizeof(uint32_t), got_size);
- #ifdef TARGET_m68k
--    if (got_size > GOT_LIMIT) {
--	    fprintf(stderr, "GOT too large: %d bytes (limit = %d bytes)\n",
--			    got_size, GOT_LIMIT);
--	    exit(1);
--    }
-+    if (got_size > GOT_LIMIT)
-+	    fatal("GOT too large: %d bytes (limit = %d bytes)",
-+			got_size, GOT_LIMIT);
- #endif
-   }
- 
-@@ -462,7 +396,7 @@ dump_symbols(symbols, number_of_symbols);
- 	 *	Only relocate things in the data sections if we are PIC/GOT.
- 	 *	otherwise do text as well
- 	 */
--	if (!pic_with_got && (a->flags & SEC_CODE))
-+	if ((!pic_with_got || ALWAYS_RELOC_TEXT) && (a->flags & SEC_CODE))
- 		sectionp = text + (a->vma - text_vma);
- 	else if (a->flags & SEC_DATA)
- 		sectionp = data + (a->vma - data_vma);
-@@ -492,7 +426,8 @@ dump_symbols(symbols, number_of_symbols);
- 	}
- 
- 	symb = get_symbols(rel_bfd, &nsymb);
--	relpp = (arelent **) xmalloc(relsize);
-+	relpp = xmalloc(relsize);
-+
- 	relcount = bfd_canonicalize_reloc(rel_bfd, r, relpp, symb);
- 	if (relcount <= 0) {
- 		if (verbose)
-@@ -500,6 +435,10 @@ dump_symbols(symbols, number_of_symbols);
- 			__FILE__, __LINE__, r->name);
- 		continue;
- 	} else {
-+#ifdef TARGET_bfin
-+		compare_relocs_bfd = abs_bfd;
-+		qsort (relpp, relcount, sizeof *relpp, compare_relocs);
-+#endif
- 		for (p = relpp; (relcount && (*p != NULL)); p++, relcount--) {
- 			unsigned char *r_mem;
- 			int relocation_needed = 0;
-@@ -513,6 +452,7 @@ dump_symbols(symbols, number_of_symbols);
- 			{
- 			case R_MICROBLAZE_NONE:
- 			case R_MICROBLAZE_64_NONE:
-+			case R_MICROBLAZE_32_PCREL_LO:
- 				continue;
- 			}
- #endif /* TARGET_microblaze */
-@@ -598,7 +538,7 @@ dump_symbols(symbols, number_of_symbols);
- 			 *	Fixup offset in the actual section.
- 			 */
- 			addstr[0] = 0;
--#ifndef TARGET_e1
-+#if !defined TARGET_e1 && !defined TARGET_bfin
-   			if ((sym_addr = get_symbol_offset((char *) sym_name,
- 			    sym_section, symbols, number_of_symbols)) == -1) {
- 				sym_addr = 0;
-@@ -701,6 +641,10 @@ dump_symbols(symbols, number_of_symbols);
- 				case R_ARM_REL32:
- 				case R_ARM_THM_PC11:
- 				case R_ARM_THM_PC22:
-+				case R_ARM_PC24:
-+				case R_ARM_PLT32:
-+				case R_ARM_GOTPC:
-+				case R_ARM_GOT32:
- 					relocation_needed = 0;
- 					break;
- 				default:
-@@ -718,6 +662,61 @@ dump_symbols(symbols, number_of_symbols);
- 					continue;
- 				default:
- 					goto bad_resolved_reloc;
-+#elif defined TARGET_bfin
-+				case R_BFIN_RIMM16:
-+				case R_BFIN_LUIMM16:
-+				case R_BFIN_HUIMM16:
-+				    sym_vma = bfd_section_vma(abs_bfd, sym_section);
-+				    sym_addr += sym_vma + q->addend;
-+
-+				    if (weak_und_symbol(sym_section->name, (*(q->sym_ptr_ptr))))
-+					continue;
-+				    if (q->howto->type == R_BFIN_RIMM16 && (0xFFFF0000 & sym_addr)) {
-+					fprintf (stderr, "Relocation overflow for rN = %s\n",sym_name);
-+					bad_relocs++;
-+				    }
-+				    if ((0xFFFF0000 & sym_addr) != persistent_data) {
-+				    flat_relocs = (uint32_t *)
-+					(realloc (flat_relocs, (flat_reloc_count + 1) * sizeof (uint32_t)));
-+					    if (verbose)
-+						    printf ("New persistent data for %08lx\n", sym_addr);
-+					    persistent_data = 0xFFFF0000 & sym_addr;
-+					    flat_relocs[flat_reloc_count++]
-+						    = (sym_addr >> 16) | (3 << 26);
-+				    }
-+
-+				    flat_relocs = (uint32_t *)
-+					(realloc (flat_relocs, (flat_reloc_count + 1) * sizeof (uint32_t)));
-+				    if (bfin_set_reloc (flat_relocs + flat_reloc_count,
-+							sym_section->name, sym_name,
-+							(*(q->sym_ptr_ptr)),
-+							q->howto->type == R_BFIN_HUIMM16 ? 1 : 0,
-+							section_vma + q->address))
-+					bad_relocs++;
-+				    if (a->flags & SEC_CODE)
-+					text_has_relocs = 1;
-+				    flat_reloc_count++;
-+				    break;
-+
-+				case R_BFIN_BYTE4_DATA:
-+				    sym_vma = bfd_section_vma(abs_bfd, sym_section);
-+				    sym_addr += sym_vma + q->addend;
-+
-+				    if (weak_und_symbol (sym_section->name, (*(q->sym_ptr_ptr))))
-+					continue;
-+
-+				    flat_relocs = (uint32_t *)
-+					(realloc (flat_relocs, (flat_reloc_count + 1) * sizeof (uint32_t)));
-+				    if (bfin_set_reloc (flat_relocs + flat_reloc_count,
-+							sym_section->name, sym_name,
-+							(*(q->sym_ptr_ptr)),
-+							2, section_vma + q->address))
-+					bad_relocs++;
-+				    if (a->flags & SEC_CODE)
-+					text_has_relocs = 1;
-+
-+				    flat_reloc_count++;
-+				    break;
- #else
- 				default:
- 					/* The default is to assume that the
-@@ -792,7 +791,7 @@ dump_symbols(symbols, number_of_symbols);
- 							sym_vma, (*(q->sym_ptr_ptr))->value,
- 							q->address, sym_addr,
- 							(*p)->howto->rightshift,
--							*(unsigned long *)r_mem);
-+							*(uint32_t *)r_mem);
- 					sym_vma = bfd_section_vma(abs_bfd, sym_section);
- 					sym_addr += sym_vma + q->addend;
- 					break;
-@@ -809,7 +808,7 @@ dump_symbols(symbols, number_of_symbols);
- 							sym_vma, (*(q->sym_ptr_ptr))->value,
- 							q->address, sym_addr,
- 							(*p)->howto->rightshift,
--							*(unsigned long *)r_mem);
-+							*(uint32_t *)r_mem);
- 				case R_ARM_PC24:
- 					sym_vma = 0;
- 					sym_addr = (sym_addr-q->address)>>(*p)->howto->rightshift;
-@@ -900,15 +899,11 @@ dump_symbols(symbols, number_of_symbols);
- 		   the relocation symbol. */
- 				{
- 					unsigned char *p = r_mem;
--					unsigned long offset;
- 					pflags=0x80000000;
- 
- 					/* work out the relocation */
- 					sym_vma = bfd_section_vma(abs_bfd, sym_section);
--					/* grab any offset from the text */
--					offset = (p[2]<<24) + (p[3] << 16) + (p[6] << 8) + (p[7]);
--					/* Update the address */
--					sym_addr += offset + sym_vma + q->addend;
-+					sym_addr += sym_vma + q->addend;
- 					/* Write relocated pointer back */
- 					p[2] = (sym_addr >> 24) & 0xff;
- 					p[3] = (sym_addr >> 16) & 0xff;
-@@ -940,36 +935,21 @@ dump_symbols(symbols, number_of_symbols);
- 				case R_MICROBLAZE_32:
- 				{	
- 					unsigned char *p = r_mem;
--					unsigned long offset;
- 
--					/* grab any offset from the text */
--					offset = (p[0]<<24) + (p[1] << 16) + (p[2] << 8) + (p[3]);
- 					sym_vma = bfd_section_vma(abs_bfd, sym_section);
--					/* This is a horrible kludge.  For some
--					   reason, *sometimes* the offset is in
--					   both addend and the code.  Detect
--					   it, and cancel the effect.  Otherwise
--					   the offset gets added twice - ouch.
--					   There should be a better test
--					   for this condition, based on the
--					   BFD data structures */
--					if(offset==q->addend)
--						offset=0;
--
--					sym_addr += offset + sym_vma + q->addend;
-+					sym_addr += sym_vma + q->addend;
- 					relocation_needed = 1;
- 					break;
- 				}
- 				case R_MICROBLAZE_64_PCREL:
- 					sym_vma = 0;
--					//sym_addr = (*(q->sym_ptr_ptr))->value;
- 					sym_addr += sym_vma + q->addend;
- 					sym_addr -= (q->address + 4);
- 					sym_addr = htonl(sym_addr);
- 					/* insert 16 MSB */
--					* ((unsigned short *) (r_mem+2)) |= (sym_addr) & 0xFFFF;
-+					* ((unsigned short *) (r_mem+2)) = (sym_addr) & 0xFFFF;
- 					/* then 16 LSB */
--					* ((unsigned short *) (r_mem+6)) |= (sym_addr >> 16) & 0xFFFF;
-+					* ((unsigned short *) (r_mem+6)) = (sym_addr >> 16) & 0xFFFF;
- 					/* We've done all the work, so continue
- 					   to next reloc instead of break */
- 					continue;
-@@ -1149,7 +1129,7 @@ NIOS2_RELOC_ERR:
- 					sym_addr = (((*(q->sym_ptr_ptr))->value-
- 						q->address) >> 2) & 0x3fffffff;
- 					sym_addr |= (
--						ntohl(*(unsigned long *)r_mem)
-+						ntohl(*(uint32_t *)r_mem)
- 						& 0xc0000000
- 						);
- 					break;
-@@ -1159,7 +1139,7 @@ NIOS2_RELOC_ERR:
- 					sym_vma = bfd_section_vma(abs_bfd, sym_section);
- 					sym_addr += sym_vma + q->addend;
- 					sym_addr |= (
--						htonl(*(unsigned long *)r_mem)
-+						htonl(*(uint32_t *)r_mem)
- 						& 0xffc00000
- 						);
- 					break;
-@@ -1170,118 +1150,12 @@ NIOS2_RELOC_ERR:
- 					sym_addr += sym_vma + q->addend;
- 					sym_addr &= 0x000003ff;
- 					sym_addr |= (
--						htonl(*(unsigned long *)r_mem)
-+						htonl(*(uint32_t *)r_mem)
- 						& 0xfffffc00
- 						);
- 					break;
- #endif /* TARGET_sparc */
- 
--#ifdef TARGET_bfin
--				case R_pcrel12_jump:
--				case R_pcrel12_jump_s:
--				case R_pcrel24:
--				case R_pcrel24_jump_l:
--				case R_pcrel24_jump_x:
--				case R_pcrel24_call_x:
--				case R_pcrel10:
--				case R_pcrel11:
--				case R_pcrel5m2:
--				  sym_addr += q->addend;// get the symbol addr
--				  sym_vma = bfd_section_vma(abs_bfd, sym_section);
--				  sym_addr -= q->address; // make it PC relative 
--				  // implicitly assumes code section and symbol section are same
--				  break;
--				case R_got:
--				    /* Ignore these.  */
--				    break;
--
--				case R_rimm16:
--				    sym_addr += q->addend;
--				    if(weak_und_symbol(sym_section->name, (*(q->sym_ptr_ptr))))
--					continue;
--				    if(0xFFFF0000 & sym_addr){
--					fprintf (stderr, "Relocation overflow for rN = %s\n",sym_name);
--					bad_relocs++;
--				    }
--				    flat_relocs = (uint32_t *)
--					(realloc (flat_relocs, (flat_reloc_count + 1) * sizeof (uint32_t)));
--				    if (bfin_set_reloc (flat_relocs + flat_reloc_count, 
--							sym_section->name, sym_name,
--							(*(q->sym_ptr_ptr)),
--							0, FLAT_RELOC_PART_LO, 
--							section_vma + q->address))
--					bad_relocs++;
--				    flat_reloc_count++;
--				    break;
--				    
--				case R_luimm16:
--				case R_huimm16:
--				{
--				    unsigned int sp;
--				    unsigned int reloc_count_incr;
--				    unsigned int hi_lo;
--
--				    if (q->howto->type == R_luimm16)
--					hi_lo = FLAT_RELOC_PART_LO;
--				    else
--					hi_lo = FLAT_RELOC_PART_HI;
--				
--				    sym_addr += q->addend;
--
--				    flat_relocs = (uint32_t *)
--					(realloc (flat_relocs, (flat_reloc_count + 2) * sizeof (uint32_t)));
--				    reloc_count_incr = 1;
--				    if (weak_und_symbol (sym_section->name, (*(q->sym_ptr_ptr))))
--					continue;
--				    if (0xFFFF0000 & sym_addr) {
--					/* value is > 16 bits - use an extra field */
--					/* see if we have already output that symbol */
--					/* reloc may be addend from symbol and       */
--					/* we can only store 16 bit offsets	     */
--					sp = 1;
--					if ((*(q->sym_ptr_ptr))->udata.i == 0
--					    || flat_relocs[(*(q->sym_ptr_ptr))->udata.i] != sym_addr
--					    || ((*(q->sym_ptr_ptr))->udata.i & 0xFFFF0000))
--					{
--					    reloc_count_incr = 2;
--					    flat_relocs[flat_reloc_count + 1] = sym_addr;
--					    (*(q->sym_ptr_ptr))->udata.i = flat_reloc_count + 1;
--					    sym_addr = 0; // indication to loader to read next
--					} else{
--					    sym_addr = (*(q->sym_ptr_ptr))->udata.i;
--					}
--				    } else {
--					sp = 0;
--				    }
--
--				    if (bfin_set_reloc (flat_relocs + flat_reloc_count, 
--							sym_section->name, sym_name,
--							(*(q->sym_ptr_ptr)),
--							sp, hi_lo,
--							section_vma + q->address))
--					bad_relocs++;
--				    flat_reloc_count += reloc_count_incr;
--				    break;
--				}
--				case R_byte4_data:
--				    sym_addr += q->addend;
--
--				    if (weak_und_symbol (sym_section->name, *q->sym_ptr_ptr))
--					continue;
--
--				    flat_relocs = (uint32_t *)
--					(realloc (flat_relocs, (flat_reloc_count + 1) * sizeof (uint32_t)));
--				    if (bfin_set_reloc (flat_relocs + flat_reloc_count, 
--							sym_section->name, sym_name,
--							(*(q->sym_ptr_ptr)),
--							2, FLAT_RELOC_PART_LO, 
--							section_vma + q->address))
--					bad_relocs++;
--
--				    flat_reloc_count++;
--				    break;
--
--#endif //TARGET_bfin
- 
- #ifdef TARGET_sh
- 				case R_SH_DIR32:
-@@ -1490,9 +1364,9 @@ DIS29_RELOCATION:
- #if defined(TARGET_arm)
- 				union {
- 					unsigned char c[4];
--					unsigned long l;
-+					uint32_t l;
- 				} tmp;
--				long hl;
-+				int32_t hl;
- 				int i0, i1, i2, i3;
- 
- 				/*
-@@ -1510,7 +1384,7 @@ DIS29_RELOCATION:
- 					i3 = 0;
- 				}
- 
--				tmp.l = *(unsigned long *)r_mem;
-+				tmp.l = *(uint32_t *)r_mem;
- 				hl = tmp.c[i0] | (tmp.c[i1] << 8) | (tmp.c[i2] << 16);
- 				if (use_resolved ||
- 					(((*p)->howto->type != R_ARM_PC24) &&
-@@ -1528,51 +1402,9 @@ DIS29_RELOCATION:
- 					((*p)->howto->type != R_ARM_PLT32)))
- 					tmp.c[i3] = (hl >> 24) & 0xff;
- 				if ((*p)->howto->type == R_ARM_ABS32)
--					*(unsigned long *)r_mem = htonl(hl);
-+					*(uint32_t *)r_mem = htonl(hl);
- 				else
--					*(unsigned long *)r_mem = tmp.l;
--
--#elif defined(TARGET_bfin)
--				if ((*p)->howto->type == R_pcrel24
--				    || (*p)->howto->type == R_pcrel24_jump_l
--				    || (*p)->howto->type == R_pcrel24_jump_x
--				    || (*p)->howto->type == R_pcrel24_call_x)
--				{
--				    sym_addr += 2*-1*PCREL24_MAGIC_OFFSET;
--				    *((unsigned short *)(sectionp + q->address) + 1 + PCREL24_MAGIC_OFFSET)
--					= (sym_addr >> 1) & 0xffff;
--				    *((unsigned short *)(sectionp + q->address) + PCREL24_MAGIC_OFFSET)
--					= (0xff00 & *((unsigned short *) (sectionp + q->address) + PCREL24_MAGIC_OFFSET)
--					   | ((sym_addr >> 17) & 0xff));
--				} else if ((*p)->howto->type == R_byte4_data) {
--				    *((uint32_t *)(sectionp + q->address)) = sym_addr;
--				} else if ((*p)->howto->type == R_pcrel12_jump
--					   || (*p)->howto->type == R_pcrel12_jump_s) {
--				    *((unsigned short *)(sectionp + q->address))
--					= (0xf000 & *((unsigned short *)(sectionp + q->address))
--					   | ((sym_addr >> 1) & 0xfff));
--				} else if ((*p)->howto->type == R_pcrel10) {
--				    *((unsigned short *)(sectionp + q->address))
--					= (~0x3ff & *((unsigned short *)(sectionp + q->address))
--					   | ((sym_addr >> 1) & 0x3ff));
--				} else if ((*p)->howto->type == R_rimm16
--					   || (*p)->howto->type == R_huimm16
--					   || (*p)->howto->type == R_luimm16) {
--				    /* for l and h we set the lower 16 bits which is only when it will be used */
--				    *((unsigned short *) (sectionp + q->address)) = (unsigned short) sym_addr;
--				} else if ((*p)->howto->type == R_pcrel5m2) {
--				    *((unsigned short *)(sectionp + q->address))
--					= (0xfff0 & *((unsigned short *)(sectionp + q->address))
--					   | ((sym_addr >> 1) & 0xf));
--				} else if ((*p)->howto->type == R_pcrel11){
--				    *((unsigned short *)(sectionp + q->address))
--					= (0xfc00 & *((unsigned short *)(sectionp + q->address))
--					   | ((sym_addr >> 1) & 0x3ff));
--				} else if (0xE0 <= (*p)->howto->type && 0xF3 >= (*p)->howto->type) {
--				    //arith relocs dont generate a real relocation
--				} else {
--				    printf("Blackfin relocation fail for reloc type: 0x%x\n", (*p)->howto->type);
--				}
-+					*(uint32_t *)r_mem = tmp.l;
- #elif defined(TARGET_e1)
- #define OPCODE_SIZE 2           /* Add 2 bytes, counting the opcode size*/
- 				switch ((*p)->howto->type) {
-@@ -1599,7 +1431,17 @@ DIS29_RELOCATION:
- 						exit(0);
- 				break;
- 				}
--#else /* ! TARGET_arm && ! TARGET_e1 */
-+#elif defined TARGET_bfin
-+				if ((*p)->howto->type == R_BFIN_RIMM16
-+				    || (*p)->howto->type == R_BFIN_HUIMM16
-+				    || (*p)->howto->type == R_BFIN_LUIMM16)
-+				{
-+					/* for l and h we set the lower 16 bits which is only when it will be used */
-+					bfd_putl16 (sym_addr, sectionp + q->address);
-+				} else if ((*p)->howto->type == R_BFIN_BYTE4_DATA) {
-+					bfd_putl32 (sym_addr, sectionp + q->address);
-+				}
-+#else /* ! TARGET_arm && ! TARGET_e1 && ! TARGET_bfin */
- 
- 				switch (q->howto->type) {
- #ifdef TARGET_v850
-@@ -1652,19 +1494,6 @@ DIS29_RELOCATION:
- #endif /* !TARGET_arm */
- 			}
- 
--#ifdef TARGET_bfin
--			else {
--			    if ((*p)->howto->type == R_rimm16
--				|| (*p)->howto->type == R_huimm16
--				|| (*p)->howto->type == R_luimm16)
--			    {
--				/* for l and h we set the lower 16 bits which is only when it will be used */
--				*((unsigned short *) (sectionp + q->address)) = (unsigned short) sym_addr;
--			    } else if ((*p)->howto->type == R_byte4_data) {
--				*((uint32_t *)(sectionp + q->address)) = sym_addr;
--			    }
--			}
--#endif
- 			if (verbose)
- 				printf("  RELOC[%d]: offset=0x%x symbol=%s%s "
- 					"section=%s size=%d "
-@@ -1713,7 +1542,7 @@ DIS29_RELOCATION:
- 				}
- #endif
- 				flat_reloc_count++;
--#endif
-+#endif //TARGET_bfin
- 				relocation_needed = 0;
- 				pflags = 0;
- 			}
-@@ -1741,10 +1570,8 @@ printf("%s(%d): symbol name=%s address=0x%x section=%s -> RELOC=0x%x\n",
- 
- 
- 
--static char * program;
--
- static void usage(void)
--{  
-+{
-     fprintf(stderr, "Usage: %s [vrzd] [-p <abs-pic-file>] [-s stack-size] "
- 	"[-o <output-file>] <elf-file>\n\n"
- 	"       -v              : verbose operation\n"
-@@ -1759,14 +1586,14 @@ static void usage(void)
- 	"       -p abs-pic-file : GOT/PIC processing with files\n"
- 	"       -s stacksize    : set application stack size\n"
- 	"       -o output-file  : output file name\n\n",
--	program);
-+	elf2flt_progname);
- 	fprintf(stderr, "Compiled for " ARCH " architecture\n\n");
-     exit(2);
- }
- 
- 
- /* Write NUM zeroes to STREAM.  */
--static void write_zeroes (unsigned long num, FILE *stream)
-+static void write_zeroes (unsigned long num, stream *stream)
- {
-   char zeroes[1024];
-   if (num > 0) {
-@@ -1774,11 +1601,11 @@ static void write_zeroes (unsigned long num, FILE *stream)
-        work for stdio output files.  */
-     memset(zeroes, 0x00, 1024);
-     while (num > sizeof(zeroes)) {
--      fwrite(zeroes, sizeof(zeroes), 1, stream);
-+      fwrite_stream(zeroes, sizeof(zeroes), 1, stream);
-       num -= sizeof(zeroes);
-     }
-     if (num > 0)
--      fwrite(zeroes, num, 1, stream);
-+      fwrite_stream(zeroes, num, 1, stream);
-   }
- }
- 
-@@ -1793,44 +1620,39 @@ int main(int argc, char *argv[])
-   int opt;
-   int i;
-   int stack;
--  char  cmd[1024];
--  FILE *gf = NULL;
-+  stream gf;
- 
-   asymbol **symbol_table;
-   long number_of_symbols;
- 
--  unsigned long data_len = 0;
--  unsigned long bss_len = 0;
--  unsigned long text_len = 0;
--  unsigned long reloc_len;
-+  uint32_t data_len = 0;
-+  uint32_t bss_len = 0;
-+  uint32_t text_len = 0;
-+  uint32_t reloc_len;
- 
--  unsigned long data_vma = ~0;
--  unsigned long bss_vma = ~0;
--  unsigned long text_vma = ~0;
-+  uint32_t data_vma = ~0;
-+  uint32_t bss_vma = ~0;
-+  uint32_t text_vma = ~0;
- 
--  unsigned long text_offs;
-+  uint32_t text_offs;
- 
-   void *text;
-   void *data;
-   uint32_t *reloc;
--  
--  struct flat_hdr hdr;
- 
--  int gf_is_pipe = 0;
-+  struct flat_hdr hdr;
- 
--  program = argv[0];
--  progname = argv[0];
-+  elf2flt_progname = argv[0];
-+  xmalloc_set_program_name(elf2flt_progname);
- 
-   if (argc < 2)
-   	usage();
--  
--  if (sizeof(hdr) != 64) {
--    fprintf(stderr,
-+
-+  if (sizeof(hdr) != 64)
-+    fatal(
- 	    "Potential flat header incompatibility detected\n"
--	    "header size should be 64 but is %d\n",
-+	    "header size should be 64 but is %d",
- 	    sizeof(hdr));
--    exit(64);
--  }
- 
- #ifndef TARGET_e1
-   stack = 4096;
-@@ -1850,10 +1672,10 @@ int main(int argc, char *argv[])
-       ktrace++;
-       break;
-     case 'z':
--      compress = 1;
-+      docompress = 1;
-       break;
-     case 'd':
--      compress = 2;
-+      docompress = 2;
-       break;
-     case 'p':
-       pfile = optarg;
-@@ -1865,7 +1687,10 @@ int main(int argc, char *argv[])
-       use_resolved = 1;
-       break;
-     case 's':
--      stack = atoi(optarg);
-+      if (sscanf(optarg, "%i", &stack) != 1) {
-+        fprintf(stderr, "%s invalid stack size %s\n", argv[0], optarg);
-+        usage();
-+      }
-       break;
-     case 'R':
-       rel_file = optarg;
-@@ -1884,7 +1709,7 @@ int main(int argc, char *argv[])
-   if (!load_to_ram && !pfile)
-     load_to_ram = 1;
- 
--  filename = fname = argv[argc-1];
-+  fname = argv[argc-1];
- 
-   if (pfile) {
-     pic_with_got = 1;
-@@ -1895,49 +1720,36 @@ int main(int argc, char *argv[])
-   if (! rel_file)
-     rel_file = fname;
- 
--  if (!(rel_bfd = bfd_openr(rel_file, 0))) {
--    fprintf(stderr, "Can't open %s\n", rel_file);
--    exit(1);
--  }
-+  if (!(rel_bfd = bfd_openr(rel_file, 0)))
-+    fatal_perror("Can't open '%s'", rel_file);
- 
--  if (bfd_check_format (rel_bfd, bfd_object) == 0) {
--    fprintf(stderr, "File is not an object file\n");
--    exit(2);
--  }
-+  if (bfd_check_format (rel_bfd, bfd_object) == 0)
-+    fatal("File is not an object file");
- 
-   if (abs_file == rel_file)
-     abs_bfd = rel_bfd; /* one file does all */
-   else {
--    if (!(abs_bfd = bfd_openr(abs_file, 0))) {
--      fprintf(stderr, "Can't open %s\n", abs_file);
--      exit(1);
--    }
-+    if (!(abs_bfd = bfd_openr(abs_file, 0)))
-+      fatal_perror("Can't open '%s'", abs_file);
- 
--    if (bfd_check_format (abs_bfd, bfd_object) == 0) {
--      fprintf(stderr, "File is not an object file\n");
--      exit(2);
--    }
-+    if (bfd_check_format (abs_bfd, bfd_object) == 0)
-+      fatal("File is not an object file");
-   }
- 
--  if (! (bfd_get_file_flags(rel_bfd) & HAS_RELOC)) {
--    fprintf (stderr, "%s: Input file contains no relocation info\n", rel_file);
--    exit (2);
--  }
-+  if (! (bfd_get_file_flags(rel_bfd) & HAS_RELOC))
-+    fatal("%s: Input file contains no relocation info", rel_file);
- 
--  if (use_resolved && !(bfd_get_file_flags(abs_bfd) & EXEC_P)) {
-+  if (use_resolved && !(bfd_get_file_flags(abs_bfd) & EXEC_P))
-     /* `Absolute' file is not absolute, so neither are address
-        contained therein.  */
--    fprintf (stderr,
--	     "%s: `-a' option specified with non-fully-resolved input file\n",
-+    fatal("%s: `-a' option specified with non-fully-resolved input file",
- 	     bfd_get_filename (abs_bfd));
--    exit (2);
--  }
- 
-   symbol_table = get_symbols(abs_bfd, &number_of_symbols);
- 
-   /* Group output sections into text, data, and bss, and calc their sizes.  */
-   for (s = abs_bfd->sections; s != NULL; s = s->next) {
--    unsigned long *vma, *len;
-+    uint32_t *vma, *len;
-     bfd_size_type sec_size;
-     bfd_vma sec_vma;
- 
-@@ -1966,12 +1778,10 @@ int main(int argc, char *argv[])
-       *len = sec_vma + sec_size - *vma;
-   }
- 
--  if (text_len == 0) {
--    fprintf (stderr, "%s: no .text section", abs_file);
--    exit (2);
--  }
-+  if (text_len == 0)
-+    fatal("%s: no .text section", abs_file);
- 
--  text = malloc(text_len);
-+  text = xmalloc(text_len);
- 
-   if (verbose)
-     printf("TEXT -> vma=0x%x len=0x%x\n", text_vma, text_len);
-@@ -1983,15 +1793,12 @@ int main(int argc, char *argv[])
- 				   text + (s->vma - text_vma), 0,
- 				   bfd_section_size(abs_bfd, s)))
-       {
--	fprintf(stderr, "read error section %s\n", s->name);
--	exit(2);
-+	fatal("read error section %s", s->name);
-       }
- 
--  if (data_len == 0) {
--    fprintf (stderr, "%s: no .data section", abs_file);
--    exit (2);
--  }
--  data = malloc(data_len);
-+  if (data_len == 0)
-+    fatal("%s: no .data section", abs_file);
-+  data = xmalloc(data_len);
- 
-   if (verbose)
-     printf("DATA -> vma=0x%x len=0x%x\n", data_vma, data_len);
-@@ -2014,10 +1821,12 @@ int main(int argc, char *argv[])
- 				   data + (s->vma - data_vma), 0,
- 				   bfd_section_size(abs_bfd, s)))
-       {
--	fprintf(stderr, "read error section %s\n", s->name);
--	exit(2);
-+	fatal("read error section %s", s->name);
-       }
- 
-+  if (bss_vma == ~0)
-+    bss_vma = data_vma + data_len;
-+
-   /* Put common symbols in bss.  */
-   bss_len += add_com_to_bss(symbol_table, number_of_symbols, bss_len);
- 
-@@ -2036,11 +1845,11 @@ int main(int argc, char *argv[])
-     data_len = bss_vma - data_vma;
-   }
- 
--  reloc = output_relocs(abs_bfd, symbol_table, number_of_symbols, &reloc_len,
--			text, text_len, text_vma, data, data_len, data_vma,
--			rel_bfd);
-+  reloc = (uint32_t *)
-+    output_relocs(abs_bfd, symbol_table, number_of_symbols, &reloc_len,
-+		  text, text_len, text_vma, data, data_len, data_vma, rel_bfd);
- 
--  if (reloc == NULL)
-+  if (reloc == NULL && verbose)
-     printf("No relocations in code!\n");
- 
-   text_offs = real_address_bits(text_vma);
-@@ -2056,12 +1865,12 @@ int main(int argc, char *argv[])
-   hdr.reloc_start = htonl(sizeof(hdr) + text_offs + text_len +data_len);
-   hdr.reloc_count = htonl(reloc_len);
-   hdr.flags       = htonl(0
--	  | (load_to_ram ? FLAT_FLAG_RAM : 0)
-+	  | (load_to_ram || text_has_relocs ? FLAT_FLAG_RAM : 0)
- 	  | (ktrace ? FLAT_FLAG_KTRACE : 0)
- 	  | (pic_with_got ? FLAT_FLAG_GOTPIC : 0)
--	  | (compress ? (compress == 2 ? FLAT_FLAG_GZDATA : FLAT_FLAG_GZIP) : 0)
-+	  | (docompress ? (docompress == 2 ? FLAT_FLAG_GZDATA : FLAT_FLAG_GZIP) : 0)
- 	  );
--  hdr.build_date = htonl((unsigned long)time(NULL));
-+  hdr.build_date = htonl((uint32_t)time(NULL));
-   memset(hdr.filler, 0x00, sizeof(hdr.filler));
- 
-   for (i=0; i<reloc_len; i++) reloc[i] = htonl(reloc[i]);
-@@ -2075,67 +1884,41 @@ int main(int argc, char *argv[])
-   }
-   
-   if (!ofile) {
--    ofile = malloc(strlen(fname) + 5 + 1); /* 5 to add suffix */
-+    ofile = xmalloc(strlen(fname) + 5 + 1); /* 5 to add suffix */
-     strcpy(ofile, fname);
-     strcat(ofile, ".bflt");
-   }
- 
--  if ((fd = open (ofile, O_WRONLY|O_BINARY|O_CREAT|O_TRUNC, 0744)) < 0) {
--    fprintf (stderr, "Can't open output file %s\n", ofile);
--    exit(4);
--  }
-+  if ((fd = open (ofile, O_WRONLY|O_BINARY|O_CREAT|O_TRUNC, 0744)) < 0)
-+    fatal_perror("Can't open output file %s", ofile);
- 
-   write(fd, &hdr, sizeof(hdr));
-   close(fd);
- 
--  /*
--   * get the compression command ready
--   */
--  sprintf(cmd, "gzip -f -9 >> %s", ofile);
--
--#define	START_COMPRESSOR do { \
--		if (gf) \
--			if (gf_is_pipe) \
--				pclose(gf); \
--			else \
--				fclose(gf); \
--		if (!(gf = popen(cmd, "w" BINARY_FILE_OPTS))) { \
--			fprintf(stderr, "Can't run cmd %s\n", cmd); \
--			exit(4); \
--		} \
--		gf_is_pipe = 1; \
--	} while (0)
--
--  gf = fopen(ofile, "ab");	/* Add 'b' to support non-posix (ie windows) */
--  if (!gf) {
--  	fprintf(stderr, "Can't open file %s for writing\n", ofile); \
--	exit(4);
--  }
-+  if (fopen_stream_u(&gf, ofile, "a" BINARY_FILE_OPTS))
-+    fatal_perror("Can't open file %s for writing", ofile);
- 
--  if (compress == 1)
--  	START_COMPRESSOR;
-+  if (docompress == 1)
-+    reopen_stream_compressed(&gf);
- 
-   /* Fill in any hole at the beginning of the text segment.  */
-   if (verbose)
--	  printf("ZERO before text len=0x%x\n", text_offs);
--  write_zeroes(text_offs, gf);
-+    printf("ZERO before text len=0x%x\n", text_offs);
-+  write_zeroes(text_offs, &gf);
- 
-   /* Write the text segment.  */
--  fwrite(text, text_len, 1, gf);
-+  fwrite_stream(text, text_len, 1, &gf);
- 
--  if (compress == 2)
--  	START_COMPRESSOR;
-+  if (docompress == 2)
-+    reopen_stream_compressed(&gf);
- 
-   /* Write the data segment.  */
--  fwrite(data, data_len, 1, gf);
-+  fwrite_stream(data, data_len, 1, &gf);
- 
-   if (reloc)
--    fwrite(reloc, reloc_len * 4, 1, gf);
-+    fwrite_stream(reloc, reloc_len * 4, 1, &gf);
- 
--  if(gf_is_pipe)
--    pclose(gf);
--  else
--  fclose(gf);
-+  fclose_stream(&gf);
- 
-   exit(0);
- }
-diff --git a/package/elf2flt/src/elf2flt.ld b/package/elf2flt/src/elf2flt.ld
-deleted file mode 100644
-index cd4e652..0000000
---- a/package/elf2flt/src/elf2flt.ld
-+++ /dev/null
-@@ -1,179 +0,0 @@
--
--ENTRY (_start)
--
--MEMORY {
--	flatmem : ORIGIN = 0x0, LENGTH = 0xfffffff
--}
--
--SECTIONS {
--
--	.text 0x0 : {
--		. = . + 4;
--		. = ALIGN(0x4) ;
--		_stext = . ;
--		*(.text)
--		*(.text.*)
--		*(.gnu.warning)
--		*(.stub)
--		*(.gnu.linkonce.t*)
--		*(.glue_7t)
--		*(.glue_7)
--		*(.jcr)
--		*(.init)
--		*(.fini)
--
--W_RODAT		*(.rodata)
--W_RODAT		*(.rodata1)
--W_RODAT		*(.rodata.*)
--W_RODAT		*(.gnu.linkonce.r*)
--
--		/* This is special code area at the end of the normal
--		   text section.  It contains a small lookup table at
--		   the start followed by the code pointed to by entries
--		   in the lookup table.  */
--		. = ALIGN (4) ;
--		PROVIDE(__ctbp = .);
--		*(.call_table_data)
--		*(.call_table_text)
--
--		. = ALIGN(0x20) ;
--		_etext = . ;
--	} > flatmem
--
--	.data : {
--		. = ALIGN(0x4) ;
--		_sdata = . ;
--		__data_start = . ;
--		data_start = . ;
--		*(.got.plt)
--		*(.got)
--		FILL(0) ;
--		. = ALIGN(0x20) ; 
--		LONG(-1)
--		. = ALIGN(0x20) ; 
--R_RODAT		*(.rodata)
--R_RODAT		*(.rodata1)
--R_RODAT		*(.rodata.*)
--R_RODAT		*(.gnu.linkonce.r*)
--		*(.data)
--		*(.data1)
--		*(.data.*)
--		*(.gnu.linkonce.d*)
--		*(.data1)
--		*(.eh_frame)
--		*(.gcc_except_table)
--
--		/* Microblaze has .sdata and .sbss (small bss).  They must
--		   be contiguous, so please don't move any of this. JW */
--		_ssrw = . ;			
--		*(.sdata) 
--		*(.sdata.*)
--		*(.sbss)			/* Don't move this! */
--		_essrw = . ;
--
--		_ssrw_size = _essrw - _ssrw;
--		PROVIDE(_SDA_BASE_ = _ssrw + (_ssrw_size / 2));
--
--		*(.gnu.linkonce.s.*)
--		*(__libc_atexit)
--		*(__libc_subinit)
--		*(__libc_subfreeres)
--		*(.note.ABI-tag)
--
--		/* microblaze-specific read-only small data area
--		   and associated locating symbols */
--		_ssro = . ;
--		*(.sdata2)
--		_essro = . ;
--		_ssro_size = _essro - _ssro;
--		PROVIDE(_SDA2_BASE_ = _ssro + (_ssro_size / 2));
--
--		. = ALIGN(4) ;
--		__CTOR_LIST__ = .;
--		LONG((__CTOR_END__ - __CTOR_LIST__) / 4 - 2)
--SINGLE_LINK:	/* gcc uses crtbegin.o to find the start of
--SINGLE_LINK:	   the constructors, so we make sure it is
--SINGLE_LINK:	   first.  Because this is a wildcard, it
--SINGLE_LINK:	   doesn't matter if the user does not
--SINGLE_LINK:	   actually link against crtbegin.o; the
--SINGLE_LINK:	   linker won't look for a file to match a
--SINGLE_LINK:	   wildcard.  The wildcard also means that it
--SINGLE_LINK:	   doesn't matter which directory crtbegin.o
--SINGLE_LINK:	   is in.  */
--SINGLE_LINK:	KEEP (*crtbegin*.o(.ctors))
--SINGLE_LINK:	/* We don't want to include the .ctor section from
--SINGLE_LINK:	   from the crtend.o file until after the sorted ctors.
--SINGLE_LINK:	   The .ctor section from the crtend file contains the
--SINGLE_LINK:	   end of ctors marker and it must be last */
--SINGLE_LINK:	KEEP (*(EXCLUDE_FILE (*crtend*.o ) .ctors))
--SINGLE_LINK:	KEEP (*(SORT(.ctors.*)))
--		KEEP (*(.ctors))
--		LONG(0)
--		__CTOR_END__ = .;
--		__DTOR_LIST__ = .;
--		LONG((__DTOR_END__ - __DTOR_LIST__) / 4 - 2)
--SINGLE_LINK:	KEEP (*crtbegin*.o(.dtors))
--SINGLE_LINK:	KEEP (*(EXCLUDE_FILE (*crtend*.o ) .dtors))
--SINGLE_LINK:	KEEP (*(SORT(.dtors.*)))
--		KEEP (*(.dtors))
--		LONG(0)
--		__DTOR_END__ = .;
--
--		PROVIDE (__preinit_array_start = .);
--		KEEP (*(.preinit_array))
--		PROVIDE (__preinit_array_end = .);
--
--		PROVIDE (__init_array_start = .);
--		KEEP (*(SORT(.init_array.*)))
--		KEEP (*(.init_array))
--		PROVIDE (__init_array_end = .);
--
--		PROVIDE (__fini_array_start = .);
--		KEEP (*(.fini_array))
--		KEEP (*(SORT(.fini_array.*)))
--		PROVIDE (__fini_array_end = .);
--
--		. = ALIGN(0x10) ; 
--		_edata = . ;
--	} > flatmem
--
--	.bss : {
--		. = ALIGN(0x4) ;
--		_sbss = ALIGN(0x4) ;
--		__bss_start = . ;
--		*(.dynsbss)
--		*(.sbss)
--		*(.sbss.*)
--		*(.scommon)
--		*(.dynbss)
--		*(.bss)
--		*(.bss.*)
--		*(.bss*)
--		*(.gnu.linkonce.b*)
--		*(COMMON)
--		. = ALIGN(0x10) ;
--		_ebss = . ;
--		_end = . ;
--		end = . ;
--	} > flatmem
--
--	.stack : {
--		. = ALIGN(0x4);
--		__stack_start = .;
--	}
--
--	.junk 0 : { *(.rel*) *(.rela*) }
--	/* Stabs debugging sections.    */
--	.stab 0 : { *(.stab) }
--	.stabstr 0 : { *(.stabstr) }
--	.stab.excl 0 : { *(.stab.excl) }
--	.stab.exclstr 0 : { *(.stab.exclstr) }
--	.stab.index 0 : { *(.stab.index) }
--	.stab.indexstr 0 : { *(.stab.indexstr) }
--	.comment 0 : { *(.comment) }
--	.debug_abbrev 0 : { *(.debug_abbrev) }
--	.debug_info 0 : { *(.debug_info) }
--	.debug_line 0 : { *(.debug_line) }
--	.debug_pubnames 0 : { *(.debug_pubnames) }
--	.debug_aranges 0 : { *(.debug_aranges) }
--}
-diff --git a/package/elf2flt/src/elf2flt.ld.in b/package/elf2flt/src/elf2flt.ld.in
-new file mode 100644
-index 0000000..5353413
---- /dev/null
-+++ b/package/elf2flt/src/elf2flt.ld.in
-@@ -0,0 +1,210 @@
-+
-+ENTRY (@SYMBOL_PREFIX at _start)
-+
-+MEMORY {
-+	flatmem : ORIGIN = 0x0, LENGTH = 0xfffffff
-+}
-+
-+PHDRS {
-+	text PT_LOAD ;
-+	data PT_LOAD ;
-+}
-+
-+SECTIONS {
-+
-+	.text 0x0 : {
-+		. = . + 4;
-+		. = ALIGN(0x4) ;
-+		@SYMBOL_PREFIX at _stext = . ;
-+		*(.text)
-+		*(.text.*)
-+		*(.gnu.warning)
-+		*(.stub)
-+		*(.gnu.linkonce.t*)
-+		*(.glue_7t)
-+		*(.glue_7)
-+		*(.jcr)
-+		KEEP (*(.init))
-+		KEEP (*(.fini))
-+
-+W_RODAT		*(.rodata)
-+W_RODAT		*(.rodata1)
-+W_RODAT		*(.rodata.*)
-+W_RODAT		*(.gnu.linkonce.r*)
-+
-+		/* This is special code area at the end of the normal
-+		   text section.  It contains a small lookup table at
-+		   the start followed by the code pointed to by entries
-+		   in the lookup table.  */
-+		. = ALIGN (4) ;
-+		PROVIDE(@SYMBOL_PREFIX at __ctbp = .);
-+		*(.call_table_data)
-+		*(.call_table_text)
-+
-+		. = ALIGN(0x20) ;
-+		@SYMBOL_PREFIX at _etext = . ;
-+	} > flatmem :text
-+
-+	.data : {
-+		. = ALIGN(0x4) ;
-+		@SYMBOL_PREFIX at _sdata = . ;
-+		@SYMBOL_PREFIX at __data_start = . ;
-+		@SYMBOL_PREFIX at data_start = . ;
-+		*(.got.plt)
-+		*(.got)
-+		FILL(0) ;
-+		. = ALIGN(0x20) ;
-+		LONG(-1)
-+		. = ALIGN(0x20) ;
-+R_RODAT		*(.rodata)
-+R_RODAT		*(.rodata1)
-+R_RODAT		*(.rodata.*)
-+R_RODAT		*(.gnu.linkonce.r*)
-+		*(.data)
-+		*(.data1)
-+		*(.data.*)
-+		*(.gnu.linkonce.d*)
-+
-+		/* Microblaze has .sdata and .sbss (small bss).  They must
-+		   be contiguous, so please don't move any of this. JW */
-+		@SYMBOL_PREFIX at _ssrw = . ;
-+		*(.sdata)
-+		*(.sdata.*)
-+		*(.sbss)			/* Don't move this! */
-+		*(.gnu.linkonce.sb*)
-+		@SYMBOL_PREFIX at _essrw = . ;
-+
-+		@SYMBOL_PREFIX at _ssrw_size = @SYMBOL_PREFIX at _essrw - @SYMBOL_PREFIX at _ssrw;
-+		PROVIDE(@SYMBOL_PREFIX at _SDA_BASE_ = @SYMBOL_PREFIX at _ssrw + (@SYMBOL_PREFIX at _ssrw_size / 2));
-+
-+		*(.gnu.linkonce.s.*)
-+		*(__libc_atexit)
-+		*(__libc_subinit)
-+		*(__libc_subfreeres)
-+
-+		/* microblaze-specific read-only small data area
-+		   and associated locating symbols */
-+		@SYMBOL_PREFIX at _ssro = . ;
-+		*(.sdata2)
-+		@SYMBOL_PREFIX at _essro = . ;
-+		@SYMBOL_PREFIX at _ssro_size = @SYMBOL_PREFIX at _essro - @SYMBOL_PREFIX at _ssro;
-+		PROVIDE(@SYMBOL_PREFIX at _SDA2_BASE_ = @SYMBOL_PREFIX at _ssro + (@SYMBOL_PREFIX at _ssro_size / 2));
-+
-+		. = ALIGN(4) ;
-+TOR:		@SYMBOL_PREFIX at __CTOR_LIST__ = .;
-+TOR:		LONG((@SYMBOL_PREFIX at __CTOR_END__ - @SYMBOL_PREFIX at __CTOR_LIST__) / 4 - 2)
-+SINGLE_LINK:	/* gcc uses crtbegin.o to find the start of
-+SINGLE_LINK:	   the constructors, so we make sure it is
-+SINGLE_LINK:	   first.  Because this is a wildcard, it
-+SINGLE_LINK:	   doesn't matter if the user does not
-+SINGLE_LINK:	   actually link against crtbegin.o; the
-+SINGLE_LINK:	   linker won't look for a file to match a
-+SINGLE_LINK:	   wildcard.  The wildcard also means that it
-+SINGLE_LINK:	   doesn't matter which directory crtbegin.o
-+SINGLE_LINK:	   is in.  */
-+SINGLE_LINK:	KEEP (*crtbegin*.o(.ctors))
-+SINGLE_LINK:	/* We don't want to include the .ctor section from
-+SINGLE_LINK:	   from the crtend.o file until after the sorted ctors.
-+SINGLE_LINK:	   The .ctor section from the crtend file contains the
-+SINGLE_LINK:	   end of ctors marker and it must be last */
-+SINGLE_LINK:	KEEP (*(EXCLUDE_FILE (*crtend*.o ) .ctors))
-+SINGLE_LINK:	KEEP (*(SORT(.ctors.*)))
-+		KEEP (*(.ctors))
-+TOR:		LONG(0)
-+TOR:		@SYMBOL_PREFIX at __CTOR_END__ = .;
-+TOR:		@SYMBOL_PREFIX at __DTOR_LIST__ = .;
-+TOR:		LONG((@SYMBOL_PREFIX at __DTOR_END__ - @SYMBOL_PREFIX at __DTOR_LIST__) / 4 - 2)
-+SINGLE_LINK:	KEEP (*crtbegin*.o(.dtors))
-+SINGLE_LINK:	KEEP (*(EXCLUDE_FILE (*crtend*.o ) .dtors))
-+SINGLE_LINK:	KEEP (*(SORT(.dtors.*)))
-+		KEEP (*(.dtors))
-+TOR:		LONG(0)
-+TOR:		@SYMBOL_PREFIX at __DTOR_END__ = .;
-+
-+		PROVIDE (@SYMBOL_PREFIX at __preinit_array_start = .);
-+		KEEP (*(.preinit_array))
-+		PROVIDE (@SYMBOL_PREFIX at __preinit_array_end = .);
-+
-+		PROVIDE (@SYMBOL_PREFIX at __init_array_start = .);
-+		KEEP (*(SORT(.init_array.*)))
-+		KEEP (*(.init_array))
-+		PROVIDE (@SYMBOL_PREFIX at __init_array_end = .);
-+
-+		PROVIDE (@SYMBOL_PREFIX at __fini_array_start = .);
-+		KEEP (*(.fini_array))
-+		KEEP (*(SORT(.fini_array.*)))
-+		PROVIDE (@SYMBOL_PREFIX at __fini_array_end = .);
-+	} > flatmem :data
-+
-+	.note.ABI-tag : { *(.note.ABI-tag) } > flatmem
-+	.eh_frame_hdr : { *(.eh_frame_hdr) } > flatmem
-+	.eh_frame : { KEEP(*(.eh_frame)) } > flatmem
-+	.gcc_except_table : {
-+		KEEP(*(.gcc_except_table))
-+		KEEP(*(.gcc_except_table.*))
-+	} >flatmem
-+
-+	. = ALIGN(0x10) ;
-+	@SYMBOL_PREFIX at _edata = . ;
-+
-+	.bss : {
-+		. = ALIGN(0x4) ;
-+		@SYMBOL_PREFIX at _sbss = ALIGN(0x4) ;
-+		@SYMBOL_PREFIX at __bss_start = . ;
-+		*(.dynsbss)
-+		*(.sbss)
-+		*(.sbss.*)
-+		*(.scommon)
-+		*(.dynbss)
-+		*(.bss)
-+		*(.bss.*)
-+		*(.bss*)
-+		*(.gnu.linkonce.b*)
-+		*(COMMON)
-+		. = ALIGN(0x10) ;
-+		@SYMBOL_PREFIX at _ebss = . ;
-+		@SYMBOL_PREFIX at _end = . ;
-+		@SYMBOL_PREFIX at end = . ;
-+	} > flatmem
-+
-+	.stack : {
-+		. = ALIGN(0x4);
-+		@SYMBOL_PREFIX at _stack_start = .;
-+	} > flatmem
-+
-+	.junk 0 : { *(.rel*) *(.rela*) }
-+	/DISCARD/ : { *(.note.GNU-stack) }
-+	/* Stabs debugging sections.    */
-+	.stab 0 : { *(.stab) }
-+	.stabstr 0 : { *(.stabstr) }
-+	.stab.excl 0 : { *(.stab.excl) }
-+	.stab.exclstr 0 : { *(.stab.exclstr) }
-+	.stab.index 0 : { *(.stab.index) }
-+	.stab.indexstr 0 : { *(.stab.indexstr) }
-+	.comment 0 : { *(.comment) }
-+	/* DWARF debug sections.
-+	   Symbols in the DWARF debugging sections are relative to the beginning
-+	   of the section so we begin them at 0.  */
-+	/* DWARF 1 */
-+	.debug          0 : { *(.debug) }
-+	.line           0 : { *(.line) }
-+	/* GNU DWARF 1 extensions */
-+	.debug_srcinfo  0 : { *(.debug_srcinfo) }
-+	.debug_sfnames  0 : { *(.debug_sfnames) }
-+	/* DWARF 1.1 and DWARF 2 */
-+	.debug_aranges  0 : { *(.debug_aranges) }
-+	.debug_pubnames 0 : { *(.debug_pubnames) }
-+	/* DWARF 2 */
-+	.debug_info     0 : { *(.debug_info .gnu.linkonce.wi.*) }
-+	.debug_abbrev   0 : { *(.debug_abbrev) }
-+	.debug_line     0 : { *(.debug_line) }
-+	.debug_frame    0 : { *(.debug_frame) }
-+	.debug_str      0 : { *(.debug_str) }
-+	.debug_loc      0 : { *(.debug_loc) }
-+	.debug_macinfo  0 : { *(.debug_macinfo) }
-+	/* SGI/MIPS DWARF 2 extensions */
-+	.debug_weaknames 0 : { *(.debug_weaknames) }
-+	.debug_funcnames 0 : { *(.debug_funcnames) }
-+	.debug_typenames 0 : { *(.debug_typenames) }
-+	.debug_varnames  0 : { *(.debug_varnames) }
-+}
-diff --git a/package/elf2flt/src/flat.h b/package/elf2flt/src/flat.h
-index 3cc502d..2fef529 100644
---- a/package/elf2flt/src/flat.h
-+++ b/package/elf2flt/src/flat.h
-@@ -17,6 +17,7 @@
- #include <linux/types.h>
- #include <asm/flat.h>
- #endif
-+#include <stdint.h>
- 
- #define	FLAT_VERSION			0x00000004L
- 
-@@ -59,6 +60,7 @@ struct flat_hdr {
- #define FLAT_FLAG_GZIP   0x0004 /* all but the header is compressed */
- #define FLAT_FLAG_GZDATA 0x0008 /* only data/relocs are compressed (for XIP) */
- #define FLAT_FLAG_KTRACE 0x0010 /* output useful kernel trace for debugging */
-+#define FLAT_FLAG_L1STK  0x0020 /* use a 4k stack in L1 scratch memory.  */
- 
- #ifdef __KERNEL__ /* so systems without linux headers can compile the apps */
- /*
-diff --git a/package/elf2flt/src/flthdr.c b/package/elf2flt/src/flthdr.c
-index 967d640..dfc9107 100644
---- a/package/elf2flt/src/flthdr.c
-+++ b/package/elf2flt/src/flthdr.c
-@@ -15,15 +15,14 @@
- #include <time.h>
- #include <stdlib.h>   /* exit() */
- #include <string.h>   /* strcat(), strcpy() */
-+#include <inttypes.h>
-+#include <assert.h>
- 
--/* macros for conversion between host and (internet) network byte order */
--#ifndef WIN32
--#include <netinet/in.h> /* Consts and structs defined by the internet system */
--#define	BINARY_FILE_OPTS
--#else
--#include <winsock2.h>
--#define	BINARY_FILE_OPTS "b"
--#endif
-+#include "compress.h"
-+#include <libiberty.h>
-+
-+#include "stubs.h"
-+const char *elf2flt_progname;
- 
- /* from uClinux-x.x.x/include/linux */
- #include "flat.h"     /* Binary flat header description                      */
-@@ -35,68 +34,44 @@
- 
- #endif
- 
--/****************************************************************************/
--
--char *program_name;
--
--static char cmd[1024];
--static int print = 0, compress = 0, ramload = 0, stacksize = 0, ktrace = 0;
--static int short_format = 0;
-+#if defined TARGET_bfin
-+# define flat_get_relocate_addr(addr) (addr & 0x03ffffff)
-+#else
-+# define flat_get_relocate_addr(addr) (addr)
-+#endif
- 
- /****************************************************************************/
- 
--void
--transferr(FILE *ifp, FILE *ofp, int count)
--{
--	int n, num;
-+static int print = 0, print_relocs = 0, docompress = 0, ramload = 0,
-+           stacksize = 0, ktrace = 0, l1stack = 0;
- 
--	while (count == -1 || count > 0) {
--		if (count == -1 || count > sizeof(cmd))
--			num = sizeof(cmd);
--		else
--			num = count;
--		n = fread(cmd, 1, num, ifp);
--		if (n == 0)
--			break;
--		if (fwrite(cmd, n, 1, ofp) != 1) {
--			fprintf(stderr, "Write failed :-(\n");
--			exit(1);
--		}
--		if (count != -1)
--			count -= n;
--	}
--	if (count > 0) {
--		fprintf(stderr, "Failed to transferr %d bytes\n", count);
--		exit(1);
--	}
--}
--	
- /****************************************************************************/
- 
- void
- process_file(char *ifile, char *ofile)
- {
- 	int old_flags, old_stack, new_flags, new_stack;
--	FILE *ifp, *ofp;
--	int ofp_is_pipe = 0;
-+	stream ifp, ofp;
- 	struct flat_hdr old_hdr, new_hdr;
--	char tfile[256];
--	char tfile2[256];
-+	char *tfile, tmpbuf[256];
-+	int input_error, output_error;
- 
--	*tfile = *tfile2 = '\0';
-+	*tmpbuf = '\0';
- 
--	if ((ifp = fopen(ifile, "r" BINARY_FILE_OPTS)) == NULL) {
-+	if (fopen_stream_u(&ifp, ifile, "r" BINARY_FILE_OPTS)) {
- 		fprintf(stderr, "Cannot open %s\n", ifile);
- 		return;
- 	}
- 
--	if (fread(&old_hdr, sizeof(old_hdr), 1, ifp) != 1) {
-+	if (fread_stream(&old_hdr, sizeof(old_hdr), 1, &ifp) != 1) {
- 		fprintf(stderr, "Cannot read header of %s\n", ifile);
-+		fclose_stream(&ifp);
- 		return;
- 	}
- 
- 	if (strncmp(old_hdr.magic, "bFLT", 4) != 0) {
- 		fprintf(stderr, "Cannot read header of %s\n", ifile);
-+		fclose_stream(&ifp);
- 		return;
- 	}
- 
-@@ -104,13 +79,13 @@ process_file(char *ifile, char *ofile)
- 	new_stack = old_stack = ntohl(old_hdr.stack_size);
- 	new_hdr = old_hdr;
- 
--	if (compress == 1) {
-+	if (docompress == 1) {
- 		new_flags |= FLAT_FLAG_GZIP;
- 		new_flags &= ~FLAT_FLAG_GZDATA;
--	} else if (compress == 2) {
-+	} else if (docompress == 2) {
- 		new_flags |= FLAT_FLAG_GZDATA;
- 		new_flags &= ~FLAT_FLAG_GZIP;
--	} else if (compress < 0)
-+	} else if (docompress < 0)
- 		new_flags &= ~(FLAT_FLAG_GZIP|FLAT_FLAG_GZDATA);
- 	
- 	if (ramload > 0)
-@@ -123,11 +98,17 @@ process_file(char *ifile, char *ofile)
- 	else if (ktrace < 0)
- 		new_flags &= ~FLAT_FLAG_KTRACE;
- 	
-+	if (l1stack > 0)
-+		new_flags |= FLAT_FLAG_L1STK;
-+	else if (l1stack < 0)
-+		new_flags &= ~FLAT_FLAG_L1STK;
-+
- 	if (stacksize)
- 		new_stack = stacksize;
- 
- 	if (print == 1) {
- 		time_t t;
-+		uint32_t reloc_count, reloc_start;
- 
- 		printf("%s\n", ifile);
- 		printf("    Magic:        %4.4s\n", old_hdr.magic);
-@@ -139,8 +120,10 @@ process_file(char *ifile, char *ofile)
- 		printf("    Data End:     0x%x\n",  ntohl(old_hdr.data_end));
- 		printf("    BSS End:      0x%x\n",  ntohl(old_hdr.bss_end));
- 		printf("    Stack Size:   0x%x\n",  ntohl(old_hdr.stack_size));
--		printf("    Reloc Start:  0x%x\n",  ntohl(old_hdr.reloc_start));
--		printf("    Reloc Count:  0x%x\n",  ntohl(old_hdr.reloc_count));
-+		reloc_start = ntohl(old_hdr.reloc_start);
-+		printf("    Reloc Start:  0x%x\n",  reloc_start);
-+		reloc_count = ntohl(old_hdr.reloc_count);
-+		printf("    Reloc Count:  0x%x\n",  reloc_count);
- 		printf("    Flags:        0x%x ( ",  ntohl(old_hdr.flags));
- 		if (old_flags) {
- 			if (old_flags & FLAT_FLAG_RAM)
-@@ -153,8 +136,45 @@ process_file(char *ifile, char *ofile)
- 				printf("Gzip-Data-Compressed ");
- 			if (old_flags & FLAT_FLAG_KTRACE)
- 				printf("Kernel-Traced-Load ");
-+			if (old_flags & FLAT_FLAG_L1STK)
-+				printf("L1-Scratch-Stack ");
- 			printf(")\n");
- 		}
-+
-+		if (print_relocs) {
-+			uint32_t *relocs = xcalloc(reloc_count, sizeof(uint32_t));
-+			uint32_t i;
-+			unsigned long r;
-+
-+			printf("    Relocs:\n");
-+			printf("    #\treloc      (  address )\tdata\n");
-+
-+			if (old_flags & FLAT_FLAG_GZIP)
-+				reopen_stream_compressed(&ifp);
-+			if (fseek_stream(&ifp, reloc_start, SEEK_SET)) {
-+				fprintf(stderr, "Cannot seek to relocs of %s\n", ifile);
-+				fclose_stream(&ifp);
-+				return;
-+			}
-+			if (fread_stream(relocs, sizeof(uint32_t), reloc_count, &ifp) == -1) {
-+				fprintf(stderr, "Cannot read relocs of %s\n", ifile);
-+				fclose_stream(&ifp);
-+				return;
-+			}
-+
-+			for (i = 0; i < reloc_count; ++i) {
-+				uint32_t raddr, addr;
-+				r = ntohl(relocs[i]);
-+				raddr = flat_get_relocate_addr(r);
-+				printf("    %u\t0x%08lx (0x%08"PRIx32")\t", i, r, raddr);
-+				fseek_stream(&ifp, sizeof(old_hdr) + raddr, SEEK_SET);
-+				fread_stream(&addr, sizeof(addr), 1, &ifp);
-+				printf("%"PRIx32"\n", addr);
-+			}
-+
-+			/* reset file position for below */
-+			fseek_stream(&ifp, sizeof(old_hdr), SEEK_SET);
-+		}
- 	} else if (print > 1) {
- 		static int first = 1;
- 		unsigned int text, data, bss, stk, rel, tot;
-@@ -164,13 +184,13 @@ process_file(char *ifile, char *ofile)
- 			printf("-----------------------------------------------------------\n");
- 			first = 0;
- 		}
--		*tfile = '\0';
--		strcat(tfile, (old_flags & FLAT_FLAG_KTRACE) ? "k" : "");
--		strcat(tfile, (old_flags & FLAT_FLAG_RAM) ? "r" : "");
--		strcat(tfile, (old_flags & FLAT_FLAG_GOTPIC) ? "p" : "");
--		strcat(tfile, (old_flags & FLAT_FLAG_GZIP) ? "z" :
-+		*tmpbuf = '\0';
-+		strcat(tmpbuf, (old_flags & FLAT_FLAG_KTRACE) ? "k" : "");
-+		strcat(tmpbuf, (old_flags & FLAT_FLAG_RAM) ? "r" : "");
-+		strcat(tmpbuf, (old_flags & FLAT_FLAG_GOTPIC) ? "p" : "");
-+		strcat(tmpbuf, (old_flags & FLAT_FLAG_GZIP) ? "z" :
- 					((old_flags & FLAT_FLAG_GZDATA) ? "d" : ""));
--		printf("-%-3.3s ", tfile);
-+		printf("-%-3.3s ", tmpbuf);
- 		printf("%3d ", ntohl(old_hdr.rev));
- 		printf("%6d ", text=ntohl(old_hdr.data_start)-sizeof(struct flat_hdr));
- 		printf("%6d ", data=ntohl(old_hdr.data_end)-ntohl(old_hdr.data_start));
-@@ -200,112 +220,79 @@ process_file(char *ifile, char *ofile)
- 	}
- 
- 	/* if there is nothing else to do, leave */
--	if (new_flags == old_flags && new_stack == old_stack)
-+	if (new_flags == old_flags && new_stack == old_stack) {
-+		fclose_stream(&ifp);
- 		return;
--	
-+	}
-+
- 	new_hdr.flags = htonl(new_flags);
- 	new_hdr.stack_size = htonl(new_stack);
- 
--	strcpy(tfile, "/tmp/flatXXXXXX");
--	mkstemp(tfile);
--	if ((ofp = fopen(tfile, "w" BINARY_FILE_OPTS)) == NULL) {
--		fprintf(stderr, "Failed to open %s for writing\n", tfile);
-+	tfile = make_temp_file("flthdr");
-+
-+	if (fopen_stream_u(&ofp, tfile, "w" BINARY_FILE_OPTS)) {
- 		unlink(tfile);
--		unlink(tfile2);
--		exit(1);
-+		fatal("Failed to open %s for writing\n", tfile);
- 	}
- 
--	if (fwrite(&new_hdr, sizeof(new_hdr), 1, ofp) != 1) {
--		fprintf(stderr, "Failed to write to  %s\n", tfile);
-+	/* Copy header (always uncompressed).  */
-+	if (fwrite_stream(&new_hdr, sizeof(new_hdr), 1, &ofp) != 1) {
- 		unlink(tfile);
--		unlink(tfile2);
--		exit(1);
-+		fatal("Failed to write to  %s\n", tfile);
- 	}
- 
--	/*
--	 * get ourselves a fully uncompressed copy of the text/data/relocs
--	 * so that we can manipulate it more easily
--	 */
--	if (old_flags & (FLAT_FLAG_GZIP|FLAT_FLAG_GZDATA)) {
--		FILE *tfp;
--
--		strcpy(tfile2, "/tmp/flat2XXXXXX");
--		mkstemp(tfile2);
--		
--		if (old_flags & FLAT_FLAG_GZDATA) {
--			tfp = fopen(tfile2, "w" BINARY_FILE_OPTS);
--			if (!tfp) {
--				fprintf(stderr, "Failed to open %s for writing\n", tfile2);
--				exit(1);
--			}
--			transferr(ifp, tfp, ntohl(old_hdr.data_start) -
--					sizeof(struct flat_hdr));
--			fclose(tfp);
--		}
--
--		sprintf(cmd, "gunzip >> %s", tfile2);
--		tfp = popen(cmd, "w" BINARY_FILE_OPTS);
--		if(!tfp) {
--			perror("popen");
--			exit(1);
--		}
--		transferr(ifp, tfp, -1);
--		pclose(tfp);
--
--		fclose(ifp);
--		ifp = fopen(tfile2, "r" BINARY_FILE_OPTS);
--		if (!ifp) {
--			fprintf(stderr, "Failed to open %s for reading\n", tfile2);
--			unlink(tfile);
--			unlink(tfile2);
--			exit(1);
--		}
--	}
-+	/* Whole input file (including text) is compressed: start decompressing
-+	   now.  */
-+	if (old_flags & FLAT_FLAG_GZIP)
-+		reopen_stream_compressed(&ifp);
- 
-+	/* Likewise, output file is compressed. Start compressing now.  */
- 	if (new_flags & FLAT_FLAG_GZIP) {
- 		printf("zflat %s --> %s\n", ifile, ofile);
--		fclose(ofp);
--		sprintf(cmd, "gzip -9 -f >> %s", tfile);
--		ofp = popen(cmd, "w" BINARY_FILE_OPTS);
--		ofp_is_pipe = 1;
--	} else if (new_flags & FLAT_FLAG_GZDATA) {
--		printf("zflat-data %s --> %s\n", ifile, ofile);
--		transferr(ifp, ofp, ntohl(new_hdr.data_start) -
--				sizeof(struct flat_hdr));
--		fclose(ofp);
--		sprintf(cmd, "gzip -9 -f >> %s", tfile);
--		ofp = popen(cmd, "w" BINARY_FILE_OPTS);
--		ofp_is_pipe = 1;
-+		reopen_stream_compressed(&ofp);
- 	}
- 
--	if (!ofp) { /* can only happen if using gzip/gunzip */
--		fprintf(stderr, "Can't run cmd %s\n", cmd);
--		unlink(tfile);
--		unlink(tfile2);
--		exit(1);
-+	transfer(&ifp, &ofp,
-+		  ntohl(old_hdr.data_start) - sizeof(struct flat_hdr));
-+
-+	/* Only data and relocs were compressed in input.  Start decompressing
-+	   from here.  */
-+	if (old_flags & FLAT_FLAG_GZDATA)
-+		reopen_stream_compressed(&ifp);
-+
-+	/* Only data/relocs to be compressed in output.  Start compressing
-+	   from here.  */
-+	if (new_flags & FLAT_FLAG_GZDATA) {
-+		printf("zflat-data %s --> %s\n", ifile, ofile);
-+		reopen_stream_compressed(&ofp);
- 	}
- 
--	transferr(ifp, ofp, -1);
--	
--	if (ferror(ifp) || ferror(ofp)) {
--		fprintf(stderr, "Error on file pointer%s%s\n",
--				ferror(ifp) ? " input" : "", ferror(ofp) ? " output" : "");
-+	transfer(&ifp, &ofp, -1);
-+
-+	input_error = ferror_stream(&ifp);
-+	output_error = ferror_stream(&ofp);
-+
-+	if (input_error || output_error) {
- 		unlink(tfile);
--		unlink(tfile2);
--		exit(1);
-+		fatal("Error on file pointer%s%s\n",
-+				input_error ? " input" : "",
-+				output_error ? " output" : "");
- 	}
- 
--	fclose(ifp);
--	if (ofp_is_pipe)
--		pclose(ofp);
--	else
--		fclose(ofp);
-+	fclose_stream(&ifp);
-+	fclose_stream(&ofp);
-+
-+	/* Copy temporary file to output location.  */
-+	fopen_stream_u(&ifp, tfile, "r" BINARY_FILE_OPTS);
-+	fopen_stream_u(&ofp, ofile, "w" BINARY_FILE_OPTS);
-+
-+	transfer(&ifp, &ofp, -1);
-+
-+	fclose_stream(&ifp);
-+	fclose_stream(&ofp);
- 
--	/* cheat a little here to preserve file permissions */
--	sprintf(cmd, "cp %s %s", tfile, ofile);
--	system(cmd);
- 	unlink(tfile);
--	unlink(tfile2);
-+	free(tfile);
- }
- 
- /****************************************************************************/
-@@ -315,9 +302,10 @@ usage(char *s)
- {
- 	if (s)
- 		fprintf(stderr, "%s\n", s);
--	fprintf(stderr, "usage: %s [options] flat-file\n", program_name);
-+	fprintf(stderr, "usage: %s [options] flat-file\n", elf2flt_progname);
- 	fprintf(stderr, "       Allows you to change an existing flat file\n\n");
- 	fprintf(stderr, "       -p      : print current settings\n");
-+	fprintf(stderr, "       -P      : print relocations\n");
- 	fprintf(stderr, "       -z      : compressed flat file\n");
- 	fprintf(stderr, "       -d      : compressed data-only flat file\n");
- 	fprintf(stderr, "       -Z      : un-compressed flat file\n");
-@@ -325,6 +313,8 @@ usage(char *s)
- 	fprintf(stderr, "       -R      : do not RAM load\n");
- 	fprintf(stderr, "       -k      : kernel traced load (for debug)\n");
- 	fprintf(stderr, "       -K      : normal non-kernel traced load\n");
-+	fprintf(stderr, "       -u      : place stack in L1 scratchpad memory\n");
-+	fprintf(stderr, "       -U      : place stack in normal SDRAM memory\n");
- 	fprintf(stderr, "       -s size : stack size\n");
- 	fprintf(stderr, "       -o file : output-file\n"
- 	                "                 (default is to modify input file)\n");
-@@ -336,27 +326,35 @@ usage(char *s)
- int
- main(int argc, char *argv[])
- {
--	int c;
-+	int c, noargs;
- 	char *ofile = NULL, *ifile;
- 
--	program_name = argv[0];
-+	elf2flt_progname = argv[0];
- 
--	while ((c = getopt(argc, argv, "pdzZrRkKs:o:")) != EOF) {
-+	noargs = 1;
-+	while ((c = getopt(argc, argv, "pPdzZrRuUkKs:o:")) != EOF) {
- 		switch (c) {
- 		case 'p': print = 1;                break;
--		case 'z': compress = 1;             break;
--		case 'd': compress = 2;             break;
--		case 'Z': compress = -1;            break;
-+		case 'P': print_relocs = 1;         break;
-+		case 'z': docompress = 1;           break;
-+		case 'd': docompress = 2;           break;
-+		case 'Z': docompress = -1;          break;
- 		case 'r': ramload = 1;              break;
- 		case 'R': ramload = -1;             break;
- 		case 'k': ktrace = 1;               break;
- 		case 'K': ktrace = -1;              break;
--		case 's': stacksize = atoi(optarg); break;
-+		case 'u': l1stack = 1;              break;
-+		case 'U': l1stack = -1;             break;
- 		case 'o': ofile = optarg;           break;
-+		case 's':
-+			if (sscanf(optarg, "%i", &stacksize) != 1)
-+				usage("invalid stack size");
-+			break;
- 		default:
- 			usage("invalid option");
- 			break;
- 		}
-+		noargs = 0;
- 	}
- 
- 	if (optind >= argc)
-@@ -364,10 +362,10 @@ main(int argc, char *argv[])
- 
- 	if (ofile && argc - optind > 1)
- 		usage("-o can only be used with a single file");
--	
--	if (!print && !compress && !ramload && !stacksize) /* no args == print */
-+
-+	if (!print && noargs) /* no args == print */
- 		print = argc - optind; /* greater than 1 is short format */
--	
-+
- 	for (c = optind; c < argc; c++) {
- 		ifile = argv[c];
- 		if (!ofile)
-diff --git a/package/elf2flt/src/ld-elf2flt.c b/package/elf2flt/src/ld-elf2flt.c
-new file mode 100644
-index 0000000..b8b02fd
---- /dev/null
-+++ b/package/elf2flt/src/ld-elf2flt.c
-@@ -0,0 +1,580 @@
-+/*
-+ * Wrapper for the real linker and the elf2flt converter.  This was
-+ * originally a simple shell script, but that doesn't work on a
-+ * Windows host without cygwin.
-+ * The proper long term solution is to add FLT as a BFD output format.
-+ *
-+ * Converted from ld-elf2flt.in by Nathan Sidwell, nathan at codesourcery.com.
-+ * Updated to latest elf2flt code by Mike Frysinger, vapier at gentoo.org.
-+ *
-+ * This is Free Software, under the GNU General Public License V2 or greater.
-+ *
-+ * Copyright (C) 2006, CodeSourcery Inc.
-+ * Copyright (C) 2009, Analog Devices, Inc.
-+ * Copyright (C) 2002-2003 David McCullough <davidm@snapgear.com>
-+ * Copyright (C) 2000, Lineo. <davidm@lineo.com>
-+ */
-+
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <stdarg.h>
-+#include <string.h>
-+#include <sys/types.h>
-+#include <sys/stat.h>
-+#include <unistd.h>
-+#include <errno.h>
-+#include <libiberty.h>
-+#include <filenames.h>
-+
-+#include "stubs.h"
-+const char *elf2flt_progname;
-+
-+static int flag_verbose = 0, flag_final = 1, have_elf2flt_options = 0,
-+	flag_move_data = 0, want_shared = 0;
-+static const char *shared_lib_id = NULL;
-+static const char *output_file = "a.out";
-+static const char *linker_script = NULL;
-+static const char *emulation = NULL;
-+static const char *tmp_file = NULL;
-+static const char *output_gdb = NULL;
-+static const char *output_elf = NULL;
-+static const char *output_flt = NULL;
-+static options_t search_dirs, all_options, other_options, flt_options;
-+
-+static const char *linker = NULL;
-+static const char *elf2flt = NULL;
-+static const char *nm = NULL;
-+static const char *objdump = NULL;
-+static const char *objcopy = NULL;
-+static const char *ldscriptpath = BINUTILS_LDSCRIPTDIR;
-+
-+/* A list of sed commands */
-+typedef struct {
-+	options_t *pattern;      /* '^' for start of line match, everything else verbatim */
-+	options_t *replacement;  /* Delete line, if NULL */
-+} sed_commands_t;
-+
-+/* Initialize a sed structure */
-+#define init_sed(DST) ( \
-+	(DST)->pattern = xmalloc(sizeof(*(DST)->pattern)), \
-+	(DST)->replacement = xmalloc(sizeof(*(DST)->replacement)), \
-+	init_options((DST)->pattern), \
-+	init_options((DST)->replacement) \
-+)
-+#define free_sed(DST) (free((DST)->pattern), free((DST)->replacement))
-+
-+/* Append a slot for a new sed command.  */
-+static void append_sed(sed_commands_t *dst, const char *pattern,
-+		       const char *replacement)
-+{
-+	debug1("adding pattern '%s' with replacement '%s'\n",
-+		pattern, replacement);
-+	append_option(dst->pattern, pattern);
-+	append_option(dst->replacement, replacement);
-+}
-+
-+/* Execute an external program COMMAND.  Write its stdout to OUTPUT,
-+   unless that is NULL.  Pass the trailing NULL terminated list of
-+   options, followed by all those in OPTIONS, if that is non-NULL.
-+   Order of options is important here as we may run on systems that
-+   do not allow options after non-options (i.e. many BSDs).  So the
-+   final command line will look like:
-+   <command> [options] [... va args ...]
-+   This is because [options] will (should?) never contain non-options,
-+   while non-options will always be passed via the [va args].
-+ */
-+static int
-+execute(const char *command, const char *output, const options_t *options, ...)
-+{
-+	struct pex_obj *pex;
-+	const char *errmsg;
-+	int err;
-+	int status;
-+	va_list args;
-+	const char *opt;
-+	options_t opts;
-+
-+	debug("command=%s\n", command);
-+
-+	init_options(&opts);
-+	append_option(&opts, command);
-+	if (options)
-+		append_options(&opts, options);
-+	va_start(args, options);
-+	while ((opt = va_arg(args, const char *)))
-+		append_option(&opts, opt);
-+	va_end(args);
-+	append_option(&opts, NULL);
-+
-+	fflush(stdout);
-+	fflush(stderr);
-+
-+	pex = pex_init(0, elf2flt_progname, NULL);
-+	if (pex == NULL)
-+		fatal_perror("pex_init failed");
-+
-+	if (flag_verbose) {
-+		unsigned ix;
-+
-+		fprintf(stderr, "Invoking:");
-+		for (ix = 0; ix != opts.num - 1; ix++)
-+			fprintf(stderr, " '%s'", opts.options[ix]);
-+		if (output)
-+			fprintf(stderr, " > '%s'", output);
-+		fprintf(stderr, "\n");
-+	}
-+
-+	errmsg = pex_run(pex, PEX_LAST | PEX_SEARCH, command,
-+		(char *const *)opts.options, output, NULL, &err);
-+	if (errmsg != NULL) {
-+		if (err != 0) {
-+			errno = err;
-+			fatal_perror(errmsg);
-+		} else
-+			fatal(errmsg);
-+	}
-+
-+	if (!pex_get_status(pex, 1, &status))
-+		fatal_perror("can't get program status");
-+	pex_free(pex);
-+
-+	if (status) {
-+		if (WIFSIGNALED(status)) {
-+			int sig = WTERMSIG(status);
-+
-+			fatal("%s terminated with signal %d [%s]%s",
-+			      command, sig, strsignal(sig),
-+			      WCOREDUMP(status) ? ", core dumped" : "");
-+		}
-+
-+		if (WIFEXITED(status))
-+			return WEXITSTATUS(status);
-+	}
-+	return 0;
-+}
-+/* Auto NULL terminate */
-+#define execute(...) execute(__VA_ARGS__, NULL)
-+
-+/* Apply the sed commands in SED to file NAME_IN producing file NAME_OUT */
-+static void
-+do_sed(const sed_commands_t *sed, const char *name_in, const char *name_out)
-+{
-+	FILE *in, *out;
-+	size_t alloc = 0;
-+	char *line = NULL;
-+	ssize_t len;
-+	const char *pattern, *replacement;
-+	int ix;
-+
-+	if (flag_verbose) {
-+		fprintf(stderr, "emulating: sed \\\n");
-+		for (ix = 0; ix != sed->pattern->num; ix++) {
-+			pattern = sed->pattern->options[ix];
-+			replacement = sed->replacement->options[ix];
-+			if (replacement)
-+				fprintf(stderr, "\t-e 's/%s/%s/' \\\n", pattern, replacement);
-+			else
-+				fprintf(stderr, "\t-e '/%s/d' \\\n", pattern);
-+		}
-+		fprintf(stderr, "\t%s > %s\n", name_in, name_out);
-+	}
-+
-+	in = xfopen(name_in, "r");
-+	out = xfopen(name_out, "w");
-+
-+	while ((len = getline(&line, &alloc, in)) > 0) {
-+		debug2("len=%2zi line=%s", len, line);
-+
-+		for (ix = 0; ix != sed->pattern->num; ix++) {
-+			const char *ptr;
-+			int bol;
-+			size_t pat_len;
-+
-+			pattern = sed->pattern->options[ix];
-+			replacement = sed->replacement->options[ix];
-+			ptr = line;
-+			bol = pattern[0] == '^';
-+
-+			pattern += bol;
-+			pat_len = strlen(pattern);
-+
-+			if (!bol) {
-+				do {
-+					ptr = strchr(ptr, pattern[0]);
-+					if (!ptr) ;
-+					else if (!strncmp(ptr, pattern, pat_len))
-+						goto found;
-+					else
-+						ptr++;
-+				}
-+				while (ptr);
-+			} else if (!strncmp(ptr, pattern, pat_len)) {
-+ found:
-+				if (replacement) {
-+					debug2(" [modified]\n");
-+					fwrite(line, 1, ptr - line, out);
-+					fwrite(replacement, 1, strlen(replacement), out);
-+					fwrite(ptr + pat_len, 1,
-+					       len - pat_len - (ptr - line),
-+					       out);
-+				} else
-+					debug2("   {dropped}\n");
-+				goto next_line;
-+			}
-+		}
-+
-+		debug2("(untouched)\n");
-+		fwrite(line, 1, len, out);
-+ next_line:
-+		;
-+	}
-+	fclose(in);
-+	if (fclose(out))
-+		fatal_perror("error writing temporary script '%s'", name_out);
-+	free(line);
-+}
-+
-+/* Generate the flt binary along with any other necessary pieces.  */
-+#define exec_or_ret(...) \
-+	do { \
-+		int status = execute(__VA_ARGS__); \
-+		if (status) return status; \
-+	} while (0)
-+static int do_final_link(void)
-+{
-+	sed_commands_t sed;
-+	struct stat buf;
-+	const char *script;
-+	const char *rel_output;
-+	int have_got = 0;
-+	FILE *in;
-+	char *line = NULL;
-+	size_t alloc = 0;
-+	ssize_t len;
-+
-+	init_sed(&sed);
-+
-+	if (flag_move_data) {
-+		FILE *in;
-+
-+		/* See if the .rodata section contains any relocations.  */
-+		if (!output_flt)
-+			output_flt = make_temp_file(NULL);
-+		exec_or_ret(linker, NULL, &other_options, "-r", "-d", "-o", output_flt);
-+		exec_or_ret(objdump, tmp_file, NULL, "-h", output_flt);
-+
-+		in = xfopen(tmp_file, "r");
-+		while ((len = getline(&line, &alloc, in)) > 0) {
-+			const char *ptr = line;
-+
-+			while (1) {
-+				ptr = strchr(ptr, '.');
-+				if (!ptr)
-+					break;
-+				if (streqn(ptr, ".rodata")) {
-+					getline(&line, &alloc, in);
-+					ptr = line;
-+					while (1) {
-+						ptr = strchr(ptr, 'R');
-+						if (!ptr)
-+							break;
-+						if (streqn(ptr, "RELOC")) {
-+							flag_move_data = 0;
-+							fprintf(stderr, "warning: .rodata section contains relocations");
-+							break;
-+						} else
-+							ptr++;
-+					}
-+					break;
-+				} else
-+					ptr++;
-+			}
-+		}
-+		fclose(in);
-+	}
-+	append_sed(&sed, "^R_RODAT", flag_move_data ? NULL : "");
-+	append_sed(&sed, "^W_RODAT", flag_move_data ? "" : NULL);
-+	append_sed(&sed, "^SINGLE_LINK:", USE_EMIT_RELOCS ? "" : NULL);
-+	append_sed(&sed, "^TOR:", EMIT_CTOR_DTOR ? "" : NULL);
-+
-+	if (shared_lib_id) {
-+		const char *got_offset;
-+		int adj, id = strtol(shared_lib_id, NULL, 0);
-+		char buf[30];
-+
-+		/* Replace addresses using the shared object id.   */
-+		sprintf(buf, "%.2X", id);
-+		append_sed(&sed, "ORIGIN = 0x0,", concat("ORIGIN = 0x", buf, "000000,", NULL));
-+		append_sed(&sed, ".text 0x0 :", concat(".text 0x0", buf, "000000 :", NULL));
-+		if (id)
-+			append_sed(&sed, "ENTRY (" SYMBOL_PREFIX "_start)", "ENTRY (lib_main)");
-+
-+		/* Provide the symbol specifying the library's data segment
-+		   pointer offset.  */
-+		adj = 4;
-+		if (streq(TARGET_CPU, "h8300"))
-+			got_offset = "__current_shared_library_er5_offset_";
-+		else if (streq(TARGET_CPU, "bfin"))
-+			got_offset = "_current_shared_library_p5_offset_", adj = 1;
-+		else
-+			got_offset = "_current_shared_library_a5_offset_";
-+		append_option(&other_options, "-defsym");
-+		sprintf(buf, "%d", id * -adj - adj);
-+		append_option(&other_options, concat(got_offset, "=", buf, NULL));
-+	}
-+
-+	/* Locate the default linker script, if we don't have one provided. */
-+	if (!linker_script)
-+		linker_script = concat(ldscriptpath, "/elf2flt.ld", NULL);
-+
-+	/* Try and locate the linker script.  */
-+	script = linker_script;
-+	if (stat(script, &buf) || !S_ISREG(buf.st_mode)) {
-+		script = concat(ldscriptpath, "/", linker_script, NULL);
-+		if (stat(script, &buf) || !S_ISREG(buf.st_mode)) {
-+			script = concat(ldscriptpath, "/ldscripts/", linker_script, NULL);
-+			if (stat(script, &buf) || !S_ISREG(buf.st_mode))
-+				script = NULL;
-+		}
-+	}
-+	/* And process it if we can -- if we can't find it, the user must
-+	   know what they are doing.  */
-+	if (script) {
-+		do_sed(&sed, linker_script, tmp_file);
-+		linker_script = tmp_file;
-+	}
-+	free_sed(&sed);
-+
-+	if (USE_EMIT_RELOCS) {
-+
-+		exec_or_ret(linker, NULL, &other_options,
-+			"-T", linker_script, "-q", "-o", output_gdb, emulation);
-+
-+		append_option(&flt_options, "-a");
-+		rel_output = output_gdb;
-+
-+	} else if (NO_GOT_CHECK) {
-+
-+		output_elf = make_temp_file(NULL);
-+
-+		exec_or_ret(linker, NULL, &other_options,
-+			"-T", linker_script, "-Ur", "-d", "-o", output_elf, emulation);
-+		exec_or_ret(linker, NULL, &other_options,
-+			"-T", linker_script, "-o", output_gdb, emulation);
-+
-+		rel_output = output_elf;
-+
-+	} else {
-+
-+		output_flt = make_temp_file(NULL);
-+		exec_or_ret(linker, NULL, &other_options,
-+			"-r", "-d", "-o", output_flt, emulation);
-+
-+		output_elf = make_temp_file(NULL);
-+		exec_or_ret(linker, NULL, &search_dirs,
-+			"-T", linker_script, "-Ur", "-o", output_elf, output_flt, emulation);
-+
-+		exec_or_ret(linker, NULL, &search_dirs,
-+			"-T", linker_script, "-o", output_gdb, output_flt, emulation);
-+
-+		rel_output = output_elf;
-+
-+	}
-+
-+	if (shared_lib_id && strtol(shared_lib_id, NULL, 0) != 0)
-+		exec_or_ret(objcopy, NULL, NULL, "--localize-hidden", "--weaken", output_gdb);
-+
-+	exec_or_ret(nm, tmp_file, NULL, "-p", output_gdb);
-+	in = xfopen(tmp_file, "r");
-+	while ((len = getline(&line, &alloc, in)) > 0) {
-+		const char *ptr = strchr(line, '_');
-+		if (ptr && streqn(ptr, "_GLOBAL_OFFSET_TABLE")) {
-+			have_got = 1;
-+			break;
-+		}
-+	}
-+	fclose(in);
-+	if (have_got)
-+		exec_or_ret(elf2flt, NULL, &flt_options,
-+			"-o", output_file, "-p", output_gdb, rel_output);
-+	else
-+		exec_or_ret(elf2flt, NULL, &flt_options,
-+			"-o", output_file, "-r", rel_output);
-+
-+	return 0;
-+}
-+
-+/* parse all the arguments provided to us */
-+static void parse_args(int argc, char **argv)
-+{
-+	char *fltflags;
-+	int argno;
-+
-+	for (argno = 1; argno < argc; argno++) {
-+		char const *arg = argv[argno];
-+		int to_all = argno;
-+
-+		if (streq(arg, "-elf2flt")) {
-+			have_elf2flt_options = 1;
-+			to_all++;
-+		} else if (streqn(arg, "-elf2flt=")) {
-+			have_elf2flt_options = 1;
-+			append_option_str(&flt_options, &arg[9], "\t ");
-+			to_all++;
-+		} else if (streq(arg, "-move-rodata")) {
-+			flag_move_data = 1;
-+		} else if (streq(arg, "-shared-lib-id")) {
-+			shared_lib_id = argv[++argno];
-+		} else if (streq(arg, "-shared") || streq(arg, "-G")) {
-+			want_shared = 1;
-+		} else if (streqn(arg, "-o")) {
-+			output_file = arg[2] ? &arg[2] : argv[++argno];
-+		} else if (streqn(arg, "-T")) {
-+			linker_script = arg[2] ? &arg[2] : argv[++argno];
-+		} else if (streq(arg, "-c")) {
-+			linker_script = argv[++argno];
-+		} else if (streqn(arg, "-L")) {
-+			const char *merged =
-+				(arg[2] ? arg : concat("-L", argv[++argno], NULL));
-+			append_option(&other_options, merged);
-+			append_option(&search_dirs, merged);
-+		} else if (streq(arg, "-EB")) {
-+			append_option(&other_options, arg);
-+			append_option(&search_dirs, arg);
-+		} else if (streq(arg, "-relax")) {
-+			;
-+		} else if (streq(arg, "-s") || streq(arg, "--strip-all") ||
-+		           streq(arg, "-S") || streq(arg, "--strip-debug")) {
-+			/* Ignore these strip options for links involving elf2flt.
-+			   The final flat output will be stripped by definition, and we
-+			   don't want to strip the .gdb helper file.  The strip options
-+			   are also incompatible with -r and --emit-relocs.  */
-+			;
-+		} else if (streq(arg, "-r") || streq(arg, "-Ur")) {
-+			flag_final = 0;
-+			append_option(&other_options, arg);
-+		} else if (streq(arg, "--verbose")) {
-+			flag_verbose = 1;
-+			append_option(&other_options, arg);
-+		} else if (streqn(arg, "-m")) {
-+			emulation = arg[2] ? arg : concat("-m", argv[++argno], NULL);
-+		} else
-+			append_option(&other_options, arg);
-+
-+		while (to_all <= argno)
-+			append_option(&all_options, argv[to_all++]);
-+	}
-+
-+	fltflags = getenv("FLTFLAGS");
-+	if (fltflags)
-+		append_option_str(&flt_options, fltflags, "\t ");
-+}
-+
-+int main(int argc, char *argv[])
-+{
-+	const char *argv0 = argv[0];
-+	const char *argv0_dir = make_relative_prefix(argv0, "/", "/");
-+	char *tooldir = argv0_dir;
-+	char *bindir = argv0_dir;
-+	char *tmp;
-+	struct stat buf;
-+	const char *have_exe = NULL;
-+	int status;
-+
-+#ifdef __WIN32
-+	/* Remove the .exe extension, if it's there.  */
-+	size_t len = strlen(argv0);
-+	if (len > 4 && streq(&argv0[len - 4], ".exe")) {
-+		have_exe = ".exe";
-+		len -= 4;
-+		argv0 = tmp = xstrdup(argv0);
-+		tmp[len] = 0;
-+		argv[0][len] = '\0';
-+	}
-+#endif
-+	elf2flt_progname = lbasename(argv0);
-+
-+	/* The standard binutils tool layout has:
-+
-+	   bin/<TARGET_ALIAS>-foo
-+	   lib/
-+	   <TARGET_ALIAS>/bin/foo
-+	   <TARGET_ALIAS>/lib
-+
-+	   It's <TARGET_ALIAS>/ that we want here: files in lib/ are for
-+	   the host while those in <TARGET_ALIAS>/lib are for the target.
-+	   Make bindir point to the bin dir for bin/<TARGET_ALIAS>-foo.
-+	   Make tooldir point to the bin dir for <TARGET_ALIAS>/bin/foo.  */
-+	if (streqn(elf2flt_progname, TARGET_ALIAS)) {
-+		tmp = concat(argv0_dir, "../" TARGET_ALIAS "/bin", NULL);
-+		if (stat(tmp, &buf) == 0 && S_ISDIR(buf.st_mode)) {
-+			tooldir = concat(tmp, "/", NULL);
-+		}
-+	} else {
-+		tmp = concat(argv0_dir, "../../bin", NULL);
-+		if (stat(tmp, &buf) == 0 && S_ISDIR(buf.st_mode)) {
-+			bindir = concat(tmp, "/", NULL);
-+		}
-+	}
-+
-+	/* Typically ld-elf2flt is invoked as `ld` which means error
-+	 * messages from it will look like "ld: " which is completely
-+	 * confusing.  So append an identifier to keep things clear.
-+	 */
-+	elf2flt_progname = concat(elf2flt_progname, " (ld-elf2flt)", NULL);
-+
-+	xmalloc_set_program_name(elf2flt_progname);
-+
-+	linker = concat(tooldir, "ld.real", have_exe, NULL);
-+	elf2flt = concat(tooldir, "elf2flt", have_exe, NULL);
-+	nm = concat(tooldir, "nm", have_exe, NULL);
-+	objdump = concat(bindir, TARGET_ALIAS "-objdump", have_exe, NULL);
-+	objcopy = concat(bindir, TARGET_ALIAS "-objcopy", have_exe, NULL);
-+
-+	if (stat(ldscriptpath, &buf) || !S_ISDIR(buf.st_mode))
-+		ldscriptpath = concat(tooldir, "../lib", NULL);
-+
-+	parse_args(argc, argv);
-+
-+	if (flag_verbose) {
-+		fprintf(stderr, "argv[0]      = '%s'\n", argv[0]);
-+		fprintf(stderr, "bindir       = '%s'\n", bindir);
-+		fprintf(stderr, "tooldir      = '%s'\n", tooldir);
-+		fprintf(stderr, "linker       = '%s'\n", linker);
-+		fprintf(stderr, "elf2flt      = '%s'\n", elf2flt);
-+		fprintf(stderr, "nm           = '%s'\n", nm);
-+		fprintf(stderr, "objdump      = '%s'\n", objdump);
-+		fprintf(stderr, "objcopy      = '%s'\n", objcopy);
-+		fprintf(stderr, "ldscriptpath = '%s'\n", ldscriptpath);
-+	}
-+
-+	/* Pass off to regular linker, if there's nothing elf2flt-like */
-+	if (!have_elf2flt_options)
-+		return execute(linker, NULL, &all_options);
-+
-+	/* Pass off to regular linker, minus the elf2flt options, if it's
-+	   not the final link.  */
-+	if (!flag_final)
-+		return execute(linker, NULL, &other_options, "-o", output_file);
-+
-+	if (want_shared && !shared_lib_id)
-+		fatal("-shared used without passing a shared library ID");
-+
-+	/* Otherwise link & convert to flt.  */
-+	output_gdb = concat(output_file, ".gdb", NULL);
-+	tmp_file = make_temp_file(NULL);
-+	status = do_final_link();
-+	if (!flag_verbose) {
-+		unlink(tmp_file);
-+		unlink(output_flt);
-+		unlink(output_elf);
-+	} else {
-+		fprintf(stderr,
-+			"leaving elf2flt temp files behind:\n"
-+			"tmp_file   = %s\n"
-+			"output_flt = %s\n"
-+			"output_elf = %s\n",
-+			tmp_file, output_flt, output_elf);
-+	}
-+	return status;
-+}
-diff --git a/package/elf2flt/src/ld-elf2flt.in b/package/elf2flt/src/ld-elf2flt.in
-index b876636..fd1faed 100644
---- a/package/elf2flt/src/ld-elf2flt.in
-+++ b/package/elf2flt/src/ld-elf2flt.in
-@@ -22,6 +22,7 @@ OBJDUMP="`expr $OBJCOPY : '\(.*\)objcopy'`objdump"
- LDSCRIPTPATH="@binutils_ldscript_dir@"	# and the scripts
- SHARED_ID=""
- NEWLDSCRIPT=""
-+WANT_SHARED=""
- 
- # check TOOLDIR from prefix/bin/ or prefix/target-alias/bin/
- [ -d "${LDSCRIPTPATH}" ] || LDSCRIPTPATH="${TOOLDIR}/../lib"
-@@ -52,9 +53,13 @@ then
- 
- 		-move-rodata)
- 		          MOVDAT="y";;                 # Put rodata in ROM if possible
--			 
-+		-s|-S|--strip-all|--strip-debug)
-+		          ;;                           # Ignore strip flags
-+
- 		-shared-lib-id)
- 		          shift; SHARED_ID="$1";;      # Shared library ID
-+		-shared|-G)
-+		          WANT_SHARED="y";;            # Shared library
- 
- 		-o)       shift; OFILE="$1";;          # the final outfile
- 		-o*)      OFILE="`expr \"$1\" : '-o\(.*\)'`";;
-@@ -77,7 +82,8 @@ then
- 		          ARG1="$ARG1 $1"
- 				  ;;
- 
--		-v)       ARG1="$ARG1 $1"
-+		-v|--verbose)
-+				  ARG1="$ARG1 $1"
- 				  VERBOSE="y"
- 				  ;;
- 
-@@ -90,11 +96,20 @@ then
- 		shift
- 	done
- 
-+	if [ "$WANT_SHARED" = "y" ]
-+	then
-+		if [ -z "$SHARED_ID" ]
-+		then
-+			echo "-shared used without passing a shared library ID"
-+			exit 1
-+		fi
-+	fi
- 	if [ "$FINAL" = "yes" ]
- 	then
- 		[ "$VERBOSE" = "y" ] && set -x
- 		ARG1="$ARG1 $FINAL_ONLY"
- 		NEWLDSCRIPT=`mktemp /tmp/flt-XXXXXX`
-+		trap 'rm -f "$NEWLDSCRIPT"' EXIT
- 		SEDOP=" -e s/^R_RODAT// -e /^W_RODAT/d"
- 		OBJCOPYOP=""
- 		if [ "$MOVDAT" ]
-@@ -121,23 +136,31 @@ then
- 			then
- 				# Non application modules enter via main not _start
- 				#    SEDOP="$SEDOP -e 's/ENTRY (_start)/ENTRY (main)/'"
--				SEDOP="$SEDOP -e s/\\(ENTRY.\\)(_start)/\1(lib_main)/"
-+				SEDOP="$SEDOP -e s/\\(ENTRY.\\)(@SYMBOL_PREFIX at _start)/\1(lib_main)/"
- 				OBJCOPYOP="--localize-hidden --weaken"
- 			fi
- 
- 			# Provide the magic parameter that defines the library data segment pointer offset
-+			GOT_ADJ=4
- 			case "@target_cpu@" in
-+			    bfin)  GOT_OFFSET="_current_shared_library_p5_offset_" GOT_ADJ=1;;
- 			    h8300) GOT_OFFSET="__current_shared_library_er5_offset_";;
- 			    *)     GOT_OFFSET="_current_shared_library_a5_offset_";;
- 			esac
--			ARG1="$ARG1 -defsym $GOT_OFFSET=`expr ${SHARED_ID} '*' -4 - 4`"
-+			ARG1="$ARG1 -defsym $GOT_OFFSET=`expr ${SHARED_ID} '*' -${GOT_ADJ} - ${GOT_ADJ}`"
- 		fi
--		if [ "@emit_relocs@" = "yes" ]
-+		if [ "@emit_relocs@" = "1" ]
- 		then
- 			SEDOP="$SEDOP -e s/^SINGLE_LINK://"
- 		else
- 			SEDOP="$SEDOP -e /^SINGLE_LINK:/d"
- 		fi
-+		if [ "@emit_ctor_dtor@" = "1" ]
-+		then
-+			SEDOP="$SEDOP -e s/^TOR://"
-+		else
-+			SEDOP="$SEDOP -e /^TOR:/d"
-+		fi
- 		
- 		# provide a default linker script, we usually need one
- 		[ -z "$LDSCRIPT" ] && LDSCRIPT="${LDSCRIPTPATH}/elf2flt.ld"
-@@ -155,13 +178,13 @@ then
- 			LDSCRIPT="$NEWLDSCRIPT"
- 		fi
- 
--		if [ "@emit_relocs@" = "yes" ]
-+		if [ "@emit_relocs@" = "1" ]
- 		then
- 		 $LINKER $EMUL $SDIRS -T $LDSCRIPT -q -o "$OFILE.gdb" $ARG1             ||exit $?
- 		 RFILE="$OFILE.gdb"
- 		 FLTFLAGS="$FLTFLAGS -a"
- 		else
--		 if [ "@got_check@" = "no" ]
-+		 if [ "@got_check@" = "0" ]
- 		 then
- 		  $LINKER $EMUL $SDIRS -T $LDSCRIPT -Ur -d -o "$OFILE.elf" $ARG1         ||exit $?
- 		  $LINKER $EMUL $SDIRS -T $LDSCRIPT -o "$OFILE.gdb" $ARG1                ||exit $?
-@@ -205,7 +228,6 @@ then
- 		 fi
- 		fi
- 		[ "$RFILE" = "$OFILE.gdb" ] || rm -f "$RFILE"  # not needed for any reason
--		rm -f "$NEWLDSCRIPT"
- 		exit 0
- 	fi
- 
-diff --git a/package/elf2flt/src/maketarball.sh b/package/elf2flt/src/maketarball.sh
-deleted file mode 100755
-index 1014860..0000000
---- a/package/elf2flt/src/maketarball.sh
-+++ /dev/null
-@@ -1,12 +0,0 @@
--#!/bin/bash
--
--cvs_stamp=$(cut -d/ -f4 CVS/Entries | sort | tail -n 1)
--stamp=$(date +%Y%m%d --date="${cvs_stamp}")
--
--p="elf2flt-${stamp}"
--rm -f elf2flt-*.tar.bz2
--mkdir ../${p}
--cp -r * ../${p}/ || exit 1
--tar jcf ${p}.tar.bz2 --exclude .svn -C .. ${p}
--rm -r ../${p} || exit 1
--du -b ${p}.tar.bz2
-diff --git a/package/elf2flt/src/stubs.c b/package/elf2flt/src/stubs.c
-index fb14d63..696ed3b 100644
---- a/package/elf2flt/src/stubs.c
-+++ b/package/elf2flt/src/stubs.c
-@@ -1,6 +1,133 @@
-+#include <errno.h>
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <string.h>
-+#include <unistd.h>
-+
-+#include "libiberty.h"
-+
-+#include "stubs.h"
-+
- #ifndef HAVE_DCGETTEXT
--const char *dcgettext (const char *domain, const char *msg, int category)
-+const char *dcgettext(const char *domain, const char *msg, int category)
- {
-   return msg;
- }
- #endif /* !HAVE_DCGETTEXT */
-+
-+#ifndef HAVE_LIBINTL_DGETTEXT
-+const char *libintl_dgettext(const char *domain, const char *msg)
-+{
-+  return msg;
-+}
-+#endif /* !HAVE_LIBINTL_DGETTEXT */
-+
-+#ifndef HAVE_GETLINE
-+/* Read a line from IN.  LINE points to a malloc'd buffer that is extended as
-+   necessary.  ALLOC points to the allocated length of LINE.  Returns
-+   the length of the string read (including any trailing \n) */
-+
-+ssize_t getline(char **line, size_t *alloc, FILE *in)
-+{
-+	size_t len = 0;
-+
-+	if (!*alloc) {
-+		*alloc = 200;
-+		*line = xmalloc(*alloc);
-+	}
-+
-+	while (1) {
-+		if (!fgets(*line + len, *alloc - len, in))
-+			return 0;
-+		len += strlen(*line + len);
-+		if (len && (*line)[len - 1] == '\n')
-+			return len;
-+
-+		*alloc *= 2;
-+		*line = xrealloc(*line, *alloc);
-+	}
-+}
-+#endif
-+
-+/* fatal error & exit */
-+void fatal(const char *format, ...)
-+{
-+	va_list args;
-+
-+	va_start(args, format);
-+	fprintf(stderr, "%s: ", elf2flt_progname);
-+	vfprintf(stderr, format, args);
-+	fprintf(stderr, "\n");
-+	va_end(args);
-+	exit(1);
-+}
-+
-+/* fatal error, perror & exit */
-+void fatal_perror(const char *format, ...)
-+{
-+	int e = errno;
-+	va_list args;
-+
-+	va_start(args, format);
-+	fprintf(stderr, "%s: ", elf2flt_progname);
-+	vfprintf(stderr, format, args);
-+	fprintf(stderr, ": %s\n", strerror(e));
-+	va_end(args);
-+	exit(1);
-+}
-+
-+/* open a file or fail */
-+FILE *xfopen(const char *path, const char *mode)
-+{
-+	FILE *ret = fopen(path, mode);
-+	if (!ret)
-+		fatal_perror("Unable to open '%s'", path);
-+	return ret;
-+}
-+
-+/* Append a string SRC to an options array DST */
-+void append_option(options_t *dst, const char *src)
-+{
-+	if (dst->alloc == dst->num) {
-+		size_t a = (dst->num + 2) * 2;
-+		void *o = xmalloc(sizeof(*dst->options) * a);
-+
-+		memcpy(o, dst->options, sizeof(*dst->options) * dst->num);
-+		free(dst->options);
-+		dst->options = o;
-+		dst->alloc = a;
-+	}
-+
-+	dst->options[dst->num] = src;
-+	dst->num++;
-+}
-+
-+/* Split and append a string SRC to an options array DST */
-+void append_option_str(options_t *dst, const char *src, const char *delim)
-+{
-+	char *tok_src = xstrdup(src);
-+	char *tok = strtok(tok_src, delim);
-+	while (tok) {
-+		append_option(dst, tok);
-+		tok = strtok(NULL, delim);
-+	}
-+	/* don't free tok_src since options_t now points to it */
-+}
-+
-+/* Append an options array SRC to another options array DST */
-+void append_options(options_t *dst, const options_t *src)
-+{
-+	if (dst->alloc < dst->num + src->num) {
-+		size_t a = (dst->num + src->num + 2) * 2;
-+		void *o = xmalloc(sizeof(*dst->options) * a);
-+
-+		memcpy(o, dst->options, sizeof(*dst->options) * dst->num);
-+		free(dst->options);
-+		dst->options = o;
-+		dst->alloc = a;
-+	}
-+
-+	memcpy(&dst->options[dst->num], &src->options[0],
-+		sizeof(*dst->options) * src->num);
-+	dst->num += src->num;
-+}
-diff --git a/package/elf2flt/src/stubs.h b/package/elf2flt/src/stubs.h
-new file mode 100644
-index 0000000..615cab5
---- /dev/null
-+++ b/package/elf2flt/src/stubs.h
-@@ -0,0 +1,75 @@
-+/* macros for conversion between host and (internet) network byte order */
-+#ifndef WIN32
-+# include <netinet/in.h> /* Consts and structs defined by the internet system */
-+# define BINARY_FILE_OPTS
-+#else
-+# include <winsock2.h>
-+# define BINARY_FILE_OPTS "b"
-+#endif
-+
-+#ifndef __WIN32
-+# include <sys/wait.h>
-+#endif
-+#ifndef WIFSIGNALED
-+# define WIFSIGNALED(S) (((S) & 0xff) != 0 && ((S) & 0xff) != 0x7f)
-+#endif
-+#ifndef WTERMSIG
-+# define WTERMSIG(S) ((S) & 0x7f)
-+#endif
-+#ifndef WIFEXITED
-+# define WIFEXITED(S) (((S) & 0xff) == 0)
-+#endif
-+#ifndef WEXITSTATUS
-+# define WEXITSTATUS(S) (((S) & 0xff00) >> 8)
-+#endif
-+#ifndef WCOREDUMP
-+# define WCOREDUMP(S) ((S) & WCOREFLG)
-+#endif
-+#ifndef WCOREFLG
-+# define WCOREFLG 0200
-+#endif
-+#ifndef HAVE_STRSIGNAL
-+# define strsignal(sig) "SIG???"
-+#endif
-+
-+#define streq(str1, str2) (strcmp(str1, str2) == 0)
-+#define streqn(str1, str2) (strncmp(str1, str2, strlen(str2)) == 0)
-+
-+#ifndef DEBUG
-+# define DEBUG -1
-+#endif
-+#define _debug(lvl, fmt, args...) \
-+	do { \
-+		if (lvl <= DEBUG) { \
-+			fprintf(stderr, "%s:%i: " fmt, __func__, __LINE__ , ## args); \
-+			fflush(stderr); \
-+		} \
-+	} while (0)
-+#define debug2(...) _debug(2, __VA_ARGS__)
-+#define debug1(...) _debug(1, __VA_ARGS__)
-+#define debug0(...) _debug(0, __VA_ARGS__)
-+#define debug(...)  debug0(__VA_ARGS__)
-+
-+#ifndef HAVE_GETLINE
-+ssize_t getline(char **line, size_t *alloc, FILE *in);
-+#endif
-+
-+extern const char *elf2flt_progname;
-+
-+void fatal(const char *, ...);
-+void fatal_perror(const char *, ...);
-+
-+FILE *xfopen(const char *path, const char *mode);
-+
-+/* Structure to hold a list of options */
-+typedef struct
-+{
-+  const char **options;
-+  size_t num;
-+  size_t alloc;
-+} options_t;
-+/* Initialize an options structure */
-+#define init_options(DST) ((DST)->options = NULL, (DST)->num = (DST)->alloc = 0)
-+void append_options(options_t *dst, const options_t *src);
-+void append_option(options_t *dst, const char *src);
-+void append_option_str(options_t *dst, const char *src, const char *delim);
++++ b/package/uclibc/uClibc-0.9.31.config
+@@ -0,0 +1,259 @@
++#
++# Automatically generated make config: don't edit
++# Version: 0.9.31
++# Sun Apr  4 10:43:39 2010
++#
++# TARGET_alpha is not set
++# TARGET_arm is not set
++# TARGET_avr32 is not set
++# TARGET_bfin is not set
++# TARGET_cris is not set
++# TARGET_e1 is not set
++# TARGET_frv is not set
++# TARGET_h8300 is not set
++# TARGET_hppa is not set
++# TARGET_i386 is not set
++# TARGET_i960 is not set
++# TARGET_ia64 is not set
++# TARGET_m68k is not set
++# TARGET_microblaze is not set
++# TARGET_mips is not set
++# TARGET_nios is not set
++# TARGET_nios2 is not set
++# TARGET_powerpc is not set
++# TARGET_sh is not set
++# TARGET_sh64 is not set
++# TARGET_sparc is not set
++# TARGET_v850 is not set
++# TARGET_vax is not set
++# TARGET_x86_64 is not set
++# TARGET_xtensa is not set
++
++#
++# Target Architecture Features and Options
++#
++TARGET_ARCH="none"
++FORCE_OPTIONS_FOR_ARCH=y
++# ARCH_LITTLE_ENDIAN is not set
++# ARCH_BIG_ENDIAN is not set
++# ARCH_WANTS_LITTLE_ENDIAN is not set
++# ARCH_WANTS_BIG_ENDIAN is not set
++TARGET_SUBARCH=""
++
++#
++# Using Little Endian
++#
++ARCH_HAS_MMU=y
++ARCH_USE_MMU=y
++UCLIBC_HAS_FLOATS=y
++UCLIBC_HAS_FPU=y
++DO_C99_MATH=y
++# DO_XSI_MATH is not set
++# UCLIBC_HAS_FENV is not set
++UCLIBC_HAS_LONG_DOUBLE_MATH=y
++KERNEL_HEADERS="/usr/src/linux/include"
++HAVE_DOT_CONFIG=y
++
++#
++# General Library Settings
++#
++# HAVE_NO_PIC is not set
++DOPIC=y
++# ARCH_HAS_NO_SHARED is not set
++# ARCH_HAS_NO_LDSO is not set
++HAVE_SHARED=y
++# FORCE_SHAREABLE_TEXT_SEGMENTS is not set
++LDSO_LDD_SUPPORT=y
++# LDSO_CACHE_SUPPORT is not set
++# LDSO_PRELOAD_FILE_SUPPORT is not set
++# UCLIBC_STATIC_LDCONFIG is not set
++LDSO_RUNPATH=y
++LDSO_SEARCH_INTERP_PATH=y
++UCLIBC_CTOR_DTOR=y
++# LDSO_GNU_HASH_SUPPORT is not set
++# HAS_NO_THREADS is not set
++LINUXTHREADS_OLD=y
++# LINUXTHREADS_NEW is not set
++UCLIBC_HAS_THREADS=y
++# PTHREADS_DEBUG_SUPPORT is not set
++UCLIBC_HAS_SYSLOG=y
++UCLIBC_HAS_LFS=y
++# MALLOC is not set
++# MALLOC_SIMPLE is not set
++MALLOC_STANDARD=y
++MALLOC_GLIBC_COMPAT=y
++UCLIBC_DYNAMIC_ATEXIT=y
++# COMPAT_ATEXIT is not set
++UCLIBC_SUSV3_LEGACY=y
++# UCLIBC_SUSV3_LEGACY_MACROS is not set
++UCLIBC_SUSV4_LEGACY=y
++# UCLIBC_HAS_STUBS is not set
++UCLIBC_HAS_SHADOW=y
++UCLIBC_HAS_PROGRAM_INVOCATION_NAME=y
++UCLIBC_HAS___PROGNAME=y
++UCLIBC_HAS_PTY=y
++ASSUME_DEVPTS=y
++UNIX98PTY_ONLY=y
++UCLIBC_HAS_GETPT=y
++UCLIBC_HAS_LIBUTIL=y
++UCLIBC_HAS_TM_EXTENSIONS=y
++UCLIBC_HAS_TZ_CACHING=y
++UCLIBC_HAS_TZ_FILE=y
++UCLIBC_HAS_TZ_FILE_READ_MANY=y
++UCLIBC_TZ_FILE_PATH="/etc/TZ"
++
++#
++# Advanced Library Settings
++#
++UCLIBC_PWD_BUFFER_SIZE=256
++UCLIBC_GRP_BUFFER_SIZE=256
++
++#
++# Support various families of functions
++#
++UCLIBC_LINUX_MODULE_24=y
++UCLIBC_LINUX_SPECIFIC=y
++UCLIBC_HAS_GNU_ERROR=y
++UCLIBC_BSD_SPECIFIC=y
++UCLIBC_HAS_BSD_ERR=y
++# UCLIBC_HAS_OBSOLETE_BSD_SIGNAL is not set
++# UCLIBC_HAS_OBSOLETE_SYSV_SIGNAL is not set
++# UCLIBC_NTP_LEGACY is not set
++UCLIBC_SV4_DEPRECATED=y
++UCLIBC_HAS_REALTIME=y
++UCLIBC_HAS_ADVANCED_REALTIME=y
++UCLIBC_HAS_EPOLL=y
++UCLIBC_HAS_XATTR=y
++UCLIBC_HAS_PROFILING=y
++UCLIBC_HAS_CRYPT_IMPL=y
++UCLIBC_HAS_CRYPT=y
++UCLIBC_HAS_NETWORK_SUPPORT=y
++UCLIBC_HAS_SOCKET=y
++UCLIBC_HAS_IPV4=y
++# UCLIBC_HAS_IPV6 is not set
++# UCLIBC_HAS_RPC is not set
++# UCLIBC_HAS_FULL_RPC is not set
++# UCLIBC_HAS_REENTRANT_RPC is not set
++UCLIBC_USE_NETLINK=y
++UCLIBC_SUPPORT_AI_ADDRCONFIG=y
++# UCLIBC_HAS_BSD_RES_CLOSE is not set
++UCLIBC_HAS_COMPAT_RES_STATE=y
++# UCLIBC_HAS_EXTRA_COMPAT_RES_STATE is not set
++UCLIBC_HAS_LIBRESOLV_STUB=y
++UCLIBC_HAS_LIBNSL_STUB=y
++
++#
++# String and Stdio Support
++#
++# UCLIBC_HAS_STRING_GENERIC_OPT is not set
++UCLIBC_HAS_STRING_ARCH_OPT=y
++UCLIBC_HAS_CTYPE_TABLES=y
++UCLIBC_HAS_CTYPE_SIGNED=y
++# UCLIBC_HAS_CTYPE_UNSAFE is not set
++UCLIBC_HAS_CTYPE_CHECKED=y
++# UCLIBC_HAS_CTYPE_ENFORCED is not set
++# UCLIBC_HAS_WCHAR is not set
++# UCLIBC_HAS_LOCALE is not set
++UCLIBC_HAS_HEXADECIMAL_FLOATS=y
++UCLIBC_HAS_GLIBC_CUSTOM_PRINTF=y
++# USE_OLD_VFPRINTF is not set
++UCLIBC_PRINTF_SCANF_POSITIONAL_ARGS=9
++UCLIBC_HAS_SCANF_GLIBC_A_FLAG=y
++# UCLIBC_HAS_STDIO_BUFSIZ_NONE is not set
++# UCLIBC_HAS_STDIO_BUFSIZ_256 is not set
++# UCLIBC_HAS_STDIO_BUFSIZ_512 is not set
++# UCLIBC_HAS_STDIO_BUFSIZ_1024 is not set
++# UCLIBC_HAS_STDIO_BUFSIZ_2048 is not set
++UCLIBC_HAS_STDIO_BUFSIZ_4096=y
++# UCLIBC_HAS_STDIO_BUFSIZ_8192 is not set
++UCLIBC_HAS_STDIO_BUILTIN_BUFFER_NONE=y
++# UCLIBC_HAS_STDIO_BUILTIN_BUFFER_4 is not set
++# UCLIBC_HAS_STDIO_BUILTIN_BUFFER_8 is not set
++# UCLIBC_HAS_STDIO_SHUTDOWN_ON_ABORT is not set
++# UCLIBC_HAS_STDIO_GETC_MACRO is not set
++# UCLIBC_HAS_STDIO_PUTC_MACRO is not set
++UCLIBC_HAS_STDIO_AUTO_RW_TRANSITION=y
++# UCLIBC_HAS_FOPEN_LARGEFILE_MODE is not set
++UCLIBC_HAS_FOPEN_EXCLUSIVE_MODE=y
++UCLIBC_HAS_GLIBC_CUSTOM_STREAMS=y
++UCLIBC_HAS_PRINTF_M_SPEC=y
++UCLIBC_HAS_ERRNO_MESSAGES=y
++# UCLIBC_HAS_SYS_ERRLIST is not set
++UCLIBC_HAS_SIGNUM_MESSAGES=y
++# UCLIBC_HAS_SYS_SIGLIST is not set
++UCLIBC_HAS_GNU_GETOPT=y
++# UCLIBC_HAS_GNU_GETSUBOPT is not set
++
++#
++# Big and Tall
++#
++UCLIBC_HAS_REGEX=y
++# UCLIBC_HAS_REGEX_OLD is not set
++UCLIBC_HAS_FNMATCH=y
++# UCLIBC_HAS_FNMATCH_OLD is not set
++# UCLIBC_HAS_WORDEXP is not set
++UCLIBC_HAS_NFTW=y
++UCLIBC_HAS_FTW=y
++UCLIBC_HAS_GLOB=y
++UCLIBC_HAS_GNU_GLOB=y
++
++#
++# Library Installation Options
++#
++RUNTIME_PREFIX="/"
++DEVEL_PREFIX="/usr/"
++MULTILIB_DIR="lib"
++HARDWIRED_ABSPATH=y
++
++#
++# Security options
++#
++# UCLIBC_BUILD_PIE is not set
++# UCLIBC_HAS_ARC4RANDOM is not set
++# HAVE_NO_SSP is not set
++UCLIBC_HAS_SSP=y
++# UCLIBC_HAS_SSP_COMPAT is not set
++# SSP_QUICK_CANARY is not set
++PROPOLICE_BLOCK_ABRT=y
++# PROPOLICE_BLOCK_SEGV is not set
++# UCLIBC_BUILD_SSP is not set
++UCLIBC_BUILD_RELRO=y
++UCLIBC_BUILD_NOW=y
++UCLIBC_BUILD_NOEXECSTACK=y
++
++#
++# uClibc development/debugging options
++#
++CROSS_COMPILER_PREFIX=""
++UCLIBC_EXTRA_CFLAGS=""
++# DODEBUG is not set
++# DODEBUG_PT is not set
++DOSTRIP=y
++# DOASSERTS is not set
++# SUPPORT_LD_DEBUG is not set
++# SUPPORT_LD_DEBUG_EARLY is not set
++# UCLIBC_MALLOC_DEBUGGING is not set
++WARNINGS="-Wall"
++# EXTRA_WARNINGS is not set
++# DOMULTI is not set
++# UCLIBC_MJN3_ONLY is not set
++
++USE_BX=y
++# CONFIG_GENERIC_ARM is not set
++# CONFIG_ARM610 is not set
++# CONFIG_ARM710 is not set
++# CONFIG_ARM7TDMI is not set
++# CONFIG_ARM720T is not set
++# CONFIG_ARM920T is not set
++# CONFIG_ARM922T is not set
++# CONFIG_ARM926T is not set
++# CONFIG_ARM10T is not set
++# CONFIG_ARM1136JF_S is not set
++# CONFIG_ARM1176JZ_S is not set
++# CONFIG_ARM1176JZF_S is not set
++# CONFIG_ARM_CORTEX_M3 is not set
++# CONFIG_ARM_CORTEX_M1 is not set
++# CONFIG_ARM_SA110 is not set
++# CONFIG_ARM_SA1100 is not set
++# CONFIG_ARM_XSCALE is not set
++# CONFIG_ARM_IWMMXT is not set
 -- 
-1.8.1.5
+1.8.1.2
