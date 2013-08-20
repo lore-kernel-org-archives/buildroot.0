@@ -1,46 +1,61 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 20 Aug 2013 13:03:03 +0200
-Subject: [Buildroot] [PATCH 4/5] Makefile: do not try to strip inexisting
-	file when stripping libpthread
+Date: Tue, 20 Aug 2013 13:03:04 +0200
+Subject: [Buildroot] [PATCH 5/5] kmod: does not support static builds
 In-Reply-To: <1376996584-4462-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1376996584-4462-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1376996584-4462-5-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1376996584-4462-6-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-libpthread.so has a special stripping condition to preserve parts of
-it that are needed for debugging. However, due to the usage of 'xargs'
-instead of 'xargs -r', the strip command is executed regardless of
-whether a libpthread.so file is found or not. This leads to a big
-error message being displayed in static-only builds, because strip is
-executed without a file argument. Thanks to the '|| true', the build
-continues, but still shows a big error message in the middle, which is
-not nice.
-
-By using 'xargs -r', we avoid the strip command from being executed
-when 'find' doesn't find any match. We also remove the '|| true' to
-catch other real errors.
+Since kmod 14, the support for building a static library has been
+removed completely from kmod. Therefore, we mark kmod as
+!BR2_PREFER_STATIC_LIB, as well as all its reverse dependencies, which
+includes the option to use the "udev" /dev management method.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- Makefile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/kmod/Config.in | 1 +
+ package/udev/Config.in | 1 +
+ system/Config.in       | 1 +
+ 3 files changed, 3 insertions(+)
 
-diff --git a/Makefile b/Makefile
-index 5d40126..9201f27 100644
---- a/Makefile
-+++ b/Makefile
-@@ -485,7 +485,7 @@ endif
- # I set a breakpoint"
- ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
- 	find $(TARGET_DIR)/lib -type f -name 'libpthread*.so*' | \
--		xargs $(STRIPCMD) $(STRIP_STRIP_DEBUG) || true
-+		xargs -r $(STRIPCMD) $(STRIP_STRIP_DEBUG)
- endif
+diff --git a/package/kmod/Config.in b/package/kmod/Config.in
+index 4965237..bd44316 100644
+--- a/package/kmod/Config.in
++++ b/package/kmod/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_KMOD
+ 	bool "kmod"
++	depends on !BR2_PREFER_STATIC_LIB
+ 	help
+ 	  handle kernel modules
  
- 	mkdir -p $(TARGET_DIR)/etc
+diff --git a/package/udev/Config.in b/package/udev/Config.in
+index dd5ad7b..d4d97c1 100644
+--- a/package/udev/Config.in
++++ b/package/udev/Config.in
+@@ -3,6 +3,7 @@ config BR2_PACKAGE_UDEV
+ 	depends on BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_UDEV
+ 	depends on BR2_LARGEFILE # util-linux
+ 	depends on BR2_USE_WCHAR # util-linux
++	depends on !BR2_PREFER_STATIC_LIB # kmod
+ 	select BR2_PACKAGE_UTIL_LINUX
+ 	select BR2_PACKAGE_UTIL_LINUX_LIBBLKID
+ 	select BR2_PACKAGE_KMOD
+diff --git a/system/Config.in b/system/Config.in
+index d41f184..55195e0 100644
+--- a/system/Config.in
++++ b/system/Config.in
+@@ -84,6 +84,7 @@ config BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_UDEV
+ 	bool "Dynamic using udev"
+ 	depends on BR2_LARGEFILE # udev
+ 	depends on BR2_USE_WCHAR # udev
++	depends on !BR2_PREFER_STATIC_LIB # udev -> kmod
+ 	select BR2_PACKAGE_UDEV
+ 
+ comment "udev requires a toolchain with LARGEFILE + WCHAR support"
 -- 
 1.8.1.2
