@@ -1,54 +1,51 @@
-From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Tue, 20 Aug 2013 14:14:23 +0200
-Subject: [Buildroot] [PATCH v2 0/3] Fix for top-level parallel make part
-	1
-In-Reply-To: <520911F3.1020704@mind.be>
-References: <1374138746-23279-1-git-send-email-fabio.porcedda@gmail.com>
- <20130718113809.663c6b58@skate>
- <CAHkwnC8imHc+yWdkUeR6VdehBhpuux_xmKProHu7uFmmR50N8g@mail.gmail.com>
- <20130727131828.0442e227@skate>
- <CAHkwnC-yTeGXQnh64-Ra_TJg4ysYqAPNsNaWhA=_sgiUm5R5bw@mail.gmail.com>
- <20130730120157.0d32a58b@skate>
- <CAHkwnC8SV6L=4a0ain-VysEw3Z8Jg_XLLUJWH1xo6T=FVeYO6A@mail.gmail.com>
- <20130730132901.0682e15d@skate> <520911F3.1020704@mind.be>
-Message-ID: <CAHkwnC83NuBakitgdOF44XOJPKueSfb5gYWeHbpSWJKJqCkKkg@mail.gmail.com>
+From: Markos Chandras <markos.chandras@imgtec.com>
+Date: Tue, 20 Aug 2013 15:25:39 +0100
+Subject: [Buildroot] [PATCH] python-setuptools: Add patch to prevent
+	detecting the host installation
+Message-ID: <1377008739-12484-1-git-send-email-markos.chandras@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Aug 12, 2013 at 6:48 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
-> On 30/07/13 13:29, Thomas Petazzoni wrote:
->>
->> I'd really like to see top-level parallel build in Buildroot, but I
->> don't think we should do it at the expense of build reproducibility and
->> increase of users support complexity.
->
->
->  That said, I would say that any patch that improves the top-level parallel
-> build situation should be accepted, unless it really adds complexity. So 1/3
-> would definitely be acceptable IMHO.
->
->  I also think that 2/3 and 3/3 clarify the generic infrastructure, so I'd
-> accept them as well. Only, they also changes the behaviour when you touch a
-> .stamp file, so it requires a bit more thinking.
->
->
+Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
+---
+ ...etuptools-do-not-detect-installed-version.patch | 26 ++++++++++++++++++++++
+ 1 file changed, 26 insertions(+)
+ create mode 100644 package/python-setuptools/python-setuptools-do-not-detect-installed-version.patch
 
-Hi Arnout,
-thanks for reviewing.
-
-I obviously approve the idea of accepting patches that improve
-top-level parallel make and does not add complexity, such as these
-patches.
-
-You are right that 2/3 and 3/3 change the behaviour when you touch
-.stamp file, but i think that the touching of .stamp file for the
--extract and -patch targets does not happen using buildroot targets,
-the touching of those .stamp files can happen only manually, so IMHO
-it's not a real problem.
-
-Best regards
+diff --git a/package/python-setuptools/python-setuptools-do-not-detect-installed-version.patch b/package/python-setuptools/python-setuptools-do-not-detect-installed-version.patch
+new file mode 100644
+index 0000000..ebc8830
+--- /dev/null
++++ b/package/python-setuptools/python-setuptools-do-not-detect-installed-version.patch
+@@ -0,0 +1,26 @@
++Prevent build system from detecting an existing installation.
++Fixes the following problem when python-setuptools is installed
++on the host:
++
++Setuptools installation detected at /usr/lib64/python2.7/site-packages
++Renaming /usr/lib64/python2.7/site-packages/setuptools-0.9.8-py2.7.egg-info to
++/usr/lib64/python2.7/site-packages/setuptools-0.9.8-py2.7.egg-info.OLD.1377005697.88
++OSError: [Errno 13] Permission denied
++
++Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
++
++Index: python-setuptools-0.6.36/setup.py
++===================================================================
++--- python-setuptools-0.6.36.orig/setup.py
+++++ python-setuptools-0.6.36/setup.py
++@@ -129,10 +129,6 @@ def _being_installed():
++         return False
++     return  'install' in sys.argv[1:] or _easy_install_marker()
++ 
++-if _being_installed():
++-    from distribute_setup import _before_install
++-    _before_install()
++-
++ # return contents of reStructureText file with linked issue references
++ def _linkified(rst_path):
++     bitroot = 'http://bitbucket.org/tarek/distribute'
 -- 
-Fabio Porcedda
+1.8.3.2
