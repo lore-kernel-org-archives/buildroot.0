@@ -1,51 +1,60 @@
-From: Markos Chandras <markos.chandras@imgtec.com>
-Date: Tue, 20 Aug 2013 15:25:39 +0100
-Subject: [Buildroot] [PATCH] python-setuptools: Add patch to prevent
-	detecting the host installation
-Message-ID: <1377008739-12484-1-git-send-email-markos.chandras@imgtec.com>
+From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
+Date: Tue, 20 Aug 2013 17:08:37 +0200
+Subject: [Buildroot] [PATCH v2] <pkg>-rsync: support user custom cmds
+In-Reply-To: <CAAXf6LVDWo5RhPaH9DHGrmfwBuDGhs9G8W7p=XHKvsGeEM4OcQ@mail.gmail.com>
+References: <CAAXf6LXQWBEF2uM4e5MQg-QooTMwHmgZ99HT6PDH1DHNDDM-Gw@mail.gmail.com>
+ <1375007963-15935-1-git-send-email-tjlee@ambarella.com>
+ <20130728150334.6a8a862c@skate>
+ <CAAXf6LXvJjA_Wxm=OMCBKYZKudveUj=J-fpU7SeXgCxoH3MQhA@mail.gmail.com>
+ <CAAXf6LWwD6fkDpANcYnKT+ShQoBPJKpjJm-1K70DYjs+5eWqEA@mail.gmail.com>
+ <CAEvN+1iY-77EV8Ao9zNhm94H0JKbOQNv10iQRqMLMnot28PJAQ@mail.gmail.com>
+ <CAAXf6LVDWo5RhPaH9DHGrmfwBuDGhs9G8W7p=XHKvsGeEM4OcQ@mail.gmail.com>
+Message-ID: <CAAXf6LVYEkcdUvf6+Whht0gX_XSQe1nNp_FPBg3g06diR9fPCQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
----
- ...etuptools-do-not-detect-installed-version.patch | 26 ++++++++++++++++++++++
- 1 file changed, 26 insertions(+)
- create mode 100644 package/python-setuptools/python-setuptools-do-not-detect-installed-version.patch
+On Wed, Aug 7, 2013 at 9:59 PM, Thomas De Schampheleire
+<patrickdepinguin+buildroot@gmail.com> wrote:
+> Hi all,
+>
+>>
+>>>> Here are three suggestions:
+>>>> - follow the proposed patch, keeping the default as it is and
+>>>> providing a way to overrule it per package.
+>>>> - simplifying the default exclusion list to .svn, .git, .hg and .bzr
+>>>> (but this wouldn't cover the use case of Tzu-Jung Lee)
+>>>> - make the exclusion list a global config option, defaulting to e.g.
+>>>> .svn, .git, .hg, .bzr and maybe others, but changeable by the user.
+>>>> - add a config option 'don't exclude version control files when rsyncing'
+>>>> and don't provide further flexibility.
+>>
+>> I'm okay with the default setting being either exclusive or conservative.
+>> As long as the HOOKS will be provided, and the default can be OVERRIDEN.
+>> For example, if the default fetch step is reverted to 'cp -r', I can
+>> still override it for
+>> the large local projects to save the sync time.
+>
+> I don't think we should now consider the remote possibility of
+> changing the default fetch step to something else. When ever that
+> happens, we can discuss exceptions or hooks for that.
+>
+> Rather I think we should focus on the current situation which has some
+> limitations. In my eyes, there are two independent selections:
+> 1. does the user want rsync to copy binary files (like .o, .so etc.)
+> 2. does the user want rsync to copy version control files (like .git,
+> .svn, etc.)
+>
+> We could make things simple and allow no choice for 1 (always copy
+> binary files).
+> The second item could be a global config option, which is relatively
+> simple and would cover most use cases IMO. It would not cover the case
+> where package A does want version control files, and package B does
+> not, I'm not sure if we need to consider this...
+>
+> What are the opinions of other buildroot contributors?
 
-diff --git a/package/python-setuptools/python-setuptools-do-not-detect-installed-version.patch b/package/python-setuptools/python-setuptools-do-not-detect-installed-version.patch
-new file mode 100644
-index 0000000..ebc8830
---- /dev/null
-+++ b/package/python-setuptools/python-setuptools-do-not-detect-installed-version.patch
-@@ -0,0 +1,26 @@
-+Prevent build system from detecting an existing installation.
-+Fixes the following problem when python-setuptools is installed
-+on the host:
-+
-+Setuptools installation detected at /usr/lib64/python2.7/site-packages
-+Renaming /usr/lib64/python2.7/site-packages/setuptools-0.9.8-py2.7.egg-info to
-+/usr/lib64/python2.7/site-packages/setuptools-0.9.8-py2.7.egg-info.OLD.1377005697.88
-+OSError: [Errno 13] Permission denied
-+
-+Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
-+
-+Index: python-setuptools-0.6.36/setup.py
-+===================================================================
-+--- python-setuptools-0.6.36.orig/setup.py
-++++ python-setuptools-0.6.36/setup.py
-+@@ -129,10 +129,6 @@ def _being_installed():
-+         return False
-+     return  'install' in sys.argv[1:] or _easy_install_marker()
-+ 
-+-if _being_installed():
-+-    from distribute_setup import _before_install
-+-    _before_install()
-+-
-+ # return contents of reStructureText file with linked issue references
-+ def _linkified(rst_path):
-+     bitroot = 'http://bitbucket.org/tarek/distribute'
--- 
-1.8.3.2
+
+ping?
