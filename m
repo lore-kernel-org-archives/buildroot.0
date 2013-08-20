@@ -1,87 +1,54 @@
-From: Ezequiel Garcia <ezequiel.garcia@free-electrons.com>
-Date: Tue, 20 Aug 2013 08:59:06 -0300
-Subject: [Buildroot] [PATCH 2/2] toolchain-external: Add Sourcery CodeBench
-	for Nios-II
-In-Reply-To: <1376999946-3314-1-git-send-email-ezequiel.garcia@free-electrons.com>
-References: <1376999946-3314-1-git-send-email-ezequiel.garcia@free-electrons.com>
-Message-ID: <1376999946-3314-2-git-send-email-ezequiel.garcia@free-electrons.com>
+From: Fabio Porcedda <fabio.porcedda@gmail.com>
+Date: Tue, 20 Aug 2013 14:14:23 +0200
+Subject: [Buildroot] [PATCH v2 0/3] Fix for top-level parallel make part
+	1
+In-Reply-To: <520911F3.1020704@mind.be>
+References: <1374138746-23279-1-git-send-email-fabio.porcedda@gmail.com>
+ <20130718113809.663c6b58@skate>
+ <CAHkwnC8imHc+yWdkUeR6VdehBhpuux_xmKProHu7uFmmR50N8g@mail.gmail.com>
+ <20130727131828.0442e227@skate>
+ <CAHkwnC-yTeGXQnh64-Ra_TJg4ysYqAPNsNaWhA=_sgiUm5R5bw@mail.gmail.com>
+ <20130730120157.0d32a58b@skate>
+ <CAHkwnC8SV6L=4a0ain-VysEw3Z8Jg_XLLUJWH1xo6T=FVeYO6A@mail.gmail.com>
+ <20130730132901.0682e15d@skate> <520911F3.1020704@mind.be>
+Message-ID: <CAHkwnC83NuBakitgdOF44XOJPKueSfb5gYWeHbpSWJKJqCkKkg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+On Mon, Aug 12, 2013 at 6:48 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
+> On 30/07/13 13:29, Thomas Petazzoni wrote:
+>>
+>> I'd really like to see top-level parallel build in Buildroot, but I
+>> don't think we should do it at the expense of build reproducibility and
+>> increase of users support complexity.
+>
+>
+>  That said, I would say that any patch that improves the top-level parallel
+> build situation should be accepted, unless it really adds complexity. So 1/3
+> would definitely be acceptable IMHO.
+>
+>  I also think that 2/3 and 3/3 clarify the generic infrastructure, so I'd
+> accept them as well. Only, they also changes the behaviour when you touch a
+> .stamp file, so it requires a bit more thinking.
+>
+>
 
-This commit adds the pre-built Sourcery CodeBench toolchains
-currently available for the Nios-II architecture.
+Hi Arnout,
+thanks for reviewing.
 
-Signed-off-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
----
- toolchain/toolchain-external/Config.in   | 26 ++++++++++++++++++++++++++
- toolchain/toolchain-external/ext-tool.mk |  6 ++++++
- 2 files changed, 32 insertions(+)
+I obviously approve the idea of accepting patches that improve
+top-level parallel make and does not add complexity, such as these
+patches.
 
-diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-index ad1f203..9c0ffb1 100644
---- a/toolchain/toolchain-external/Config.in
-+++ b/toolchain/toolchain-external/Config.in
-@@ -402,6 +402,30 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201203
- comment "Sourcery CodeBench toolchains are only available for MIPS/MIPS64 o32 and n64"
- 	depends on BR2_MIPS_NABI32
- 
-+config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201305_12
-+	bool "Sourcery CodeBench Nios-II 2013.05-12"
-+	depends on BR2_nios2
-+	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
-+	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
-+	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
-+	select BR2_INSTALL_LIBSTDCPP
-+	select BR2_HOSTARCH_NEEDS_IA32_LIBS
-+	help
-+	  Sourcery CodeBench toolchain for the Nios-II architecture,
-+	  from Mentor Graphics.
-+
-+config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201305_43
-+	bool "Sourcery CodeBench Nios-II 2013.05-43"
-+	depends on BR2_nios2
-+	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
-+	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
-+	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
-+	select BR2_INSTALL_LIBSTDCPP
-+	select BR2_HOSTARCH_NEEDS_IA32_LIBS
-+	help
-+	  Sourcery CodeBench toolchain for the Nios-II architecture,
-+	  from Mentor Graphics.
-+
- config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201103
- 	bool "Sourcery CodeBench PowerPC 2011.03"
- 	depends on BR2_powerpc
-@@ -818,6 +842,8 @@ config BR2_TOOLCHAIN_EXTERNAL_PREFIX
- 	default "mips-linux-gnu"         if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201203
- 	default "mips-linux-gnu"         if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201209
- 	default "mips-linux-gnu"         if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201305
-+	default "nios2-linux-gnu"        if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201305_43
-+	default "nios2-linux-gnu"        if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201305_12
- 	default "powerpc-linux-gnu"      if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201009
- 	default "powerpc-linux-gnu"      if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201103
- 	default "sh-linux-gnu"           if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH201103
-diff --git a/toolchain/toolchain-external/ext-tool.mk b/toolchain/toolchain-external/ext-tool.mk
-index 01be85c..1d7b2f4 100644
---- a/toolchain/toolchain-external/ext-tool.mk
-+++ b/toolchain/toolchain-external/ext-tool.mk
-@@ -247,6 +247,12 @@ TOOLCHAIN_EXTERNAL_SOURCE = mips-2012.09-99-mips-linux-gnu-i686-pc-linux-gnu.tar
- else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201305),y)
- TOOLCHAIN_EXTERNAL_SITE = http://sourcery.mentor.com/public/gnu_toolchain/mips-linux-gnu/
- TOOLCHAIN_EXTERNAL_SOURCE = mips-2013.05-36-mips-linux-gnu-i686-pc-linux-gnu.tar.bz2
-+else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201305_12),y)
-+TOOLCHAIN_EXTERNAL_SITE = http://sourcery.mentor.com/public/gnu_toolchain/nios2-linux-gnu/
-+TOOLCHAIN_EXTERNAL_SOURCE = sourceryg++-2013.05-12-nios2-linux-gnu-i686-pc-linux-gnu.tar.bz2
-+else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201305_43),y)
-+TOOLCHAIN_EXTERNAL_SITE = http://sourcery.mentor.com/public/gnu_toolchain/nios2-linux-gnu/
-+TOOLCHAIN_EXTERNAL_SOURCE = sourceryg++-2013.05-43-nios2-linux-gnu-i686-pc-linux-gnu.tar.bz2
- else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201009),y)
- TOOLCHAIN_EXTERNAL_SITE = http://sourcery.mentor.com/public/gnu_toolchain/powerpc-linux-gnu/
- TOOLCHAIN_EXTERNAL_SOURCE = freescale-2010.09-55-powerpc-linux-gnu-i686-pc-linux-gnu.tar.bz2
+You are right that 2/3 and 3/3 change the behaviour when you touch
+.stamp file, but i think that the touching of .stamp file for the
+-extract and -patch targets does not happen using buildroot targets,
+the touching of those .stamp files can happen only manually, so IMHO
+it's not a real problem.
+
+Best regards
 -- 
-1.8.1.5
+Fabio Porcedda
