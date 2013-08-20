@@ -1,99 +1,59 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 21 Aug 2013 00:29:13 +0200
-Subject: [Buildroot] [RFC] Unification of package comments on wchar,
- largefile, c++ support, thread, ... support
-In-Reply-To: <CAAXf6LV7wB6_RsufRWD6s7-viuYheasMHJWqDAGtu6BmPpZBdw@mail.gmail.com>
-References: <CAAXf6LV7wB6_RsufRWD6s7-viuYheasMHJWqDAGtu6BmPpZBdw@mail.gmail.com>
-Message-ID: <5213EDB9.9090704@mind.be>
+Date: Wed, 21 Aug 2013 00:32:15 +0200
+Subject: [Buildroot] [PATCH] infra: display current task as title of the
+ term window
+In-Reply-To: <CAAXf6LWzouV+VGEHJric3M3yt5zGmtg=iVmsUeKN5yk4JDE1Vw@mail.gmail.com>
+References: <1375822004-22591-1-git-send-email-francois.perrad@gadz.org>
+ <CAAXf6LWCBh-W3nHRLtoXVy8PfbS3NpOQ7sMwicp6W+kv-OeAkg@mail.gmail.com>
+ <5209C5D1.7040904@mind.be>
+ <CAAXf6LWkHdg1XB77GPjVFY6k97E95AxG7ZHK3cmr6dGEM=xAfg@mail.gmail.com>
+ <52124585.1050303@mind.be>
+ <CAAXf6LWzouV+VGEHJric3M3yt5zGmtg=iVmsUeKN5yk4JDE1Vw@mail.gmail.com>
+Message-ID: <5213EE6F.7040006@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 19/08/13 17:00, Thomas De Schampheleire wrote:
-> Hi,
+On 19/08/13 20:49, Thomas De Schampheleire wrote:
+[snip]
+>  >> However, while testing again, I noticed an annoyance: if the build
+>  >> process stops prematurely, for example because the build fails or the
+>  >> user interrupts it, the last tab title remains. I would much prefer
+>  >> that we can cleanly restore this no matter how buildroot/make stops.
+>  >
+>  >
+>  >  Won't that be the case regardless of whether the build fails or succeeds?
 >
-> When a package needs any of wchar/largefile/C++/thread support in the
-> toolchain, this is handled with a comment in Config.in shown when this
-> condition is not met.
->
-> However, the text of these comments is currently not unified, some
-> examples: (grep -A1 comment package/*/Config.in)
->
-> package/acl/Config.in:comment "acl requires a toolchain with LARGEFILE support"
-> package/acl/Config.in-  depends on !BR2_LARGEFILE
-> --
-> package/aircrack-ng/Config.in:comment "aircrack-ng needs a toolchain
-> with largefile and threads support"
-> package/aircrack-ng/Config.in-  depends on !BR2_LARGEFILE ||
-> !BR2_TOOLCHAIN_HAS_THREADS
-> --
-> package/alsa-lib/Config.in:comment "alsa-lib needs threads support in toolchain"
-> package/alsa-lib/Config.in-     depends on !BR2_TOOLCHAIN_HAS_THREADS
-> --
-> package/alsamixergui/Config.in:comment "alsamixergui requires a
-> toolchain with C++ and threads support enabled"
-> package/alsamixergui/Config.in- depends on (!BR2_INSTALL_LIBSTDCPP ||
-> !BR2_TOOLCHAIN_HAS_THREADS) && BR2_PACKAGE_XORG7
-> --
-> package/atk/Config.in:comment "atk requires a toolchain with WCHAR support"
-> package/atk/Config.in-  depends on !BR2_USE_WCHAR
-> --
-> package/attr/Config.in:comment "attr requires a toolchain with
-> LARGEFILE support"
-> package/attr/Config.in- depends on !BR2_LARGEFILE
-> --
-> package/audiofile/Config.in:comment "audiofile requires a toolchain
-> with C++ support enabled"
-> package/audiofile/Config.in-    depends on !BR2_INSTALL_LIBSTDCPP
-> --
-> package/avahi/Config.in:comment "avahi requires a toolchain with thread support"
-> package/avahi/Config.in-        depends on !BR2_TOOLCHAIN_HAS_THREADS
-> --
-> package/axel/Config.in:comment "axel needs a toolchain with thread support"
-> package/axel/Config.in- depends on !BR2_TOOLCHAIN_HAS_THREADS
->
->
-> As you can see, in just the first few hits of my grep commands, there
-> are many differences:
->
-> - requires vs needs
-> - LARGEFILE vs largefile (capitalization)
-> - 'a toolchain with ... support' vs '... support in toolchain'
-> - thread vs threads
-> - '... support' vs '... support enabled'
-> - 'and' vs '+' vs '&' when multiple features are needed (not shown in
-> the above examples)
->
->
-> I would like to agree on one common text, and adapt all packages
-> accordingly. The exact wording can be discussed, the main goal is the
-> unification. Here is a proposal:
->
-> foo requires a toolchain with feat support
-> foo requires a toolchain with featA and featB support
-> foo requires a toolchain with featA, featB and featC support
->
-> where the features would be written as: WCHAR, LARGEFILE, IPV6, RPC,
-> C++, thread.
->
->
-> What is your opinion on:
-> a. the concept of this unification
-> b. the wording proposed above
+> Currently it is indeed, but that could easily be fixed by adding an extra
+> such print at the end.
 
-  Yes and yes.
-
-  One problem: it has to fit 70 characters.
-
-libfoobarfrobniz requies a toolchain with WCHAR, LARGEFILE, IPV6 and C++ 
-support
-
-doesn't fit... But I guess we can make an exception for these rare occasions.
+  A print of what? An empty string? Then your window won't have a title 
+anymore... There is no way to save the previous window title, so I really 
+think that if PS1 doesn't set the window title, then buildroot shouldn't 
+either.
 
   Regards,
   Arnout
+
+
+>
+>  >
+>  >  I think this patch is only really suitable for people who have
+> something similar in their PS1. Otherwise it will just mess up your
+> window title.
+>  >
+>  >  Also, it should only be done if $TERM == xterm, otherwise you get
+> annoying stuff when running buildroot from a text console. And in fact,
+> the same is true of the colouring itself, so we don't get these annoying
+> escape characters in log files and continuous integration web interfaces.
+>
+> Agreed.
+>
+> Best regards,
+> Thomas
+>
 
 
 -- 
