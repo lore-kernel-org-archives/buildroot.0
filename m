@@ -1,49 +1,57 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 20 Aug 2013 00:35:33 +0200
-Subject: [Buildroot] [PATCH] package/libbsd: further reduce the set of
-	supported archs
-Message-ID: <1376951733-31803-1-git-send-email-yann.morin.1998@free.fr>
+From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
+Date: Tue, 20 Aug 2013 07:00:39 +0200
+Subject: [Buildroot] Removing/solving gettext dependencies in libuio
+In-Reply-To: <20130820002556.4d735bb3@skate>
+References: <CAAXf6LWskVXQjvLYeEBx_JJxuTujMZEq2JzqLMftXXUSaPTQHg@mail.gmail.com>
+ <20130820002556.4d735bb3@skate>
+Message-ID: <CAAXf6LXTU-ABLkcHYJfy9fSRdgGrWr3f37Udno-vpCbqA-kY-Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Op 20-aug.-2013 00:26 schreef "Thomas Petazzoni" <
+thomas.petazzoni@free-electrons.com> het volgende:
+>
+> Dear Thomas De Schampheleire,
+>
+> On Tue, 30 Jul 2013 14:28:05 +0200, Thomas De Schampheleire wrote:
+>
+> > A second alternative is to change libuio to recognize --disable-nls.
+> > However, I'm not sure how to do that.
+> > The configure.ac file contains:
+> >
+> >   AM_GNU_GETTEXT([external])
+> >   AM_GNU_GETTEXT_VERSION([0.17])
+> >
+> > This macro is provided by gettext itself, so without gettext this
+doesn't work.
+>
+> This should only require host-gettext, which provides the .m4 file that
+> contains the m4 macro to autoreconf the package. Once you upstream the
+> patch, at the next release an updated 'configure' script will be part
+> of lsuio tarball, and we'll be able to remove the _AUTORECONF=YES and
+> therefore the dependency on host-gettext.
+>
+> Am I missing something here?
+>
 
-Support for a,out on ARM will be dropped in Linux 3.11 (and is already
-missing in the -rc).
+Can you elaborate a bit?
 
-m68k is marked BROKEN in Buildroot, so it is never ever tested.
+With 'patch', do you mean the proposal of adding --disable-nls as I sent in
+my first mail ? Come to think of it, does that even make sense? Isn't that
+flag normally provided by gettext itself?
 
-The x86 familly is the only one left with support for a.out, now.
+Regardless, how will upstreaming that patch remove the dependency on
+gettext? Who will provide a definition for AM_GNU_GETTEXT?
 
-Reported-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/libbsd/Config.in | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+(I think I now understand part of the confusion: libuio comes from git,
+there are no packaged tarballs with a preboiled configure script. Hence,
+autoreconf is always necessary.)
 
-diff --git a/package/libbsd/Config.in b/package/libbsd/Config.in
-index 1fa9497..bae5700 100644
---- a/package/libbsd/Config.in
-+++ b/package/libbsd/Config.in
-@@ -2,7 +2,7 @@ config BR2_PACKAGE_LIBBSD
- 	bool "libbsd"
- 	# libbsd requires a.out.h, which is only available for those
- 	# architectures: arm, m68k, x86 (and alpha, but we don't care.)
--	depends on ( BR2_arm || BR2_armeb || BR2_m68k || BR2_i386 || BR2_x86_64 )
-+	depends on ( BR2_i386 || BR2_x86_64 )
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	help
- 	  This library provides useful functions commonly found on BSD
-@@ -14,5 +14,5 @@ config BR2_PACKAGE_LIBBSD
- 	  http://libbsd.freedesktop.org/
- 
- comment "libbsd requires a toolchain with thread support"
--	depends on ( BR2_arm || BR2_armeb || BR2_m68k || BR2_i386 || BR2_x86_64 )
-+	depends on ( BR2_i386 || BR2_x86_64 )
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS
--- 
-1.8.1.2
+Thanks,
+Thomas
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130820/1dfb9027/attachment.html>
