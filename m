@@ -1,71 +1,86 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 20 Aug 2013 19:35:18 +0200
-Subject: [Buildroot] [PATCH v2 0/3] Fix for top-level parallel make part
- 1
-In-Reply-To: <CAHkwnC83NuBakitgdOF44XOJPKueSfb5gYWeHbpSWJKJqCkKkg@mail.gmail.com>
-References: <1374138746-23279-1-git-send-email-fabio.porcedda@gmail.com>
- <20130718113809.663c6b58@skate>
- <CAHkwnC8imHc+yWdkUeR6VdehBhpuux_xmKProHu7uFmmR50N8g@mail.gmail.com>
- <20130727131828.0442e227@skate>
- <CAHkwnC-yTeGXQnh64-Ra_TJg4ysYqAPNsNaWhA=_sgiUm5R5bw@mail.gmail.com>
- <20130730120157.0d32a58b@skate>
- <CAHkwnC8SV6L=4a0ain-VysEw3Z8Jg_XLLUJWH1xo6T=FVeYO6A@mail.gmail.com>
- <20130730132901.0682e15d@skate> <520911F3.1020704@mind.be>
- <CAHkwnC83NuBakitgdOF44XOJPKueSfb5gYWeHbpSWJKJqCkKkg@mail.gmail.com>
-Message-ID: <5213A8D6.3080802@mind.be>
+From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
+Date: Tue, 20 Aug 2013 23:13:46 +0200
+Subject: [Buildroot] [PATCH 1/2] nios2: Add new architecture
+In-Reply-To: <1376999946-3314-1-git-send-email-ezequiel.garcia@free-electrons.com>
+References: <1376999946-3314-1-git-send-email-ezequiel.garcia@free-electrons.com>
+Message-ID: <CAAXf6LX3FuBgtbBfu972pRxuzdRU9DkDf1no7Tq0=AJoi4WQUA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 20/08/13 14:14, Fabio Porcedda wrote:
-> On Mon, Aug 12, 2013 at 6:48 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
->> On 30/07/13 13:29, Thomas Petazzoni wrote:
->>>
->>> I'd really like to see top-level parallel build in Buildroot, but I
->>> don't think we should do it at the expense of build reproducibility and
->>> increase of users support complexity.
->>
->>
->>   That said, I would say that any patch that improves the top-level parallel
->> build situation should be accepted, unless it really adds complexity. So 1/3
->> would definitely be acceptable IMHO.
->>
->>   I also think that 2/3 and 3/3 clarify the generic infrastructure, so I'd
->> accept them as well. Only, they also changes the behaviour when you touch a
->> .stamp file, so it requires a bit more thinking.
->>
->>
+Op 20-aug.-2013 14:07 schreef "Ezequiel Garcia" <
+ezequiel.garcia@free-electrons.com> het volgende:
 >
-> Hi Arnout,
-> thanks for reviewing.
+> From: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
 >
-> I obviously approve the idea of accepting patches that improve
-> top-level parallel make and does not add complexity, such as these
-> patches.
+> This commit adds very basic support to build for the Nios II
+> architecture. Toolchain support is still missing and instead
+> we need to use an external custom toolchain.
 >
-> You are right that 2/3 and 3/3 change the behaviour when you touch
-> .stamp file, but i think that the touching of .stamp file for the
-> -extract and -patch targets does not happen using buildroot targets,
-> the touching of those .stamp files can happen only manually, so IMHO
-> it's not a real problem.
+> Notice that this architecture had been previously removed in
+> Buildroot 2010.05-rc1 release (as explained in the CHANGES file)
+> and this commit adds it back.
+>
+> Signed-off-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+> ---
+>  arch/Config.in       | 11 +++++++++++
+>  arch/Config.in.nios2 |  5 +++++
+>  2 files changed, 16 insertions(+)
+>  create mode 100644 arch/Config.in.nios2
+>
+> diff --git a/arch/Config.in b/arch/Config.in
+> index 0b5b218..2495110 100644
+> --- a/arch/Config.in
+> +++ b/arch/Config.in
+> @@ -124,6 +124,13 @@ config BR2_mips64el
+>           http://www.mips.com/
+>           http://en.wikipedia.org/wiki/MIPS_Technologies
+>
+> +config BR2_nios2
+> +       bool "Nios II"
+> +       help
+> +         Nios II is a soft core processor from Altera Coporation.
 
-  Ah that's right, the order changed a while ago and now the -depends 
-come after -patch. It used to be different though.
+This should probably be Corporation.
 
-  So I guess that 2/3 and 3/3 should be acceptable as well. After a bit 
-of testing and a formal Ack, of course.
-
-  Regards,
-  Arnout
-
-
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+> +         http://www.altera.com/
+> +         http://en.wikipedia.org/wiki/Nios_II
+> +
+>  config BR2_powerpc
+>         bool "PowerPC"
+>         help
+> @@ -305,6 +312,10 @@ if BR2_mips || BR2_mips64 || BR2_mipsel ||
+BR2_mips64el
+>  source "arch/Config.in.mips"
+>  endif
+>
+> +if BR2_nios2
+> +source "arch/Config.in.nios2"
+> +endif
+> +
+>  if BR2_powerpc
+>  source "arch/Config.in.powerpc"
+>  endif
+> diff --git a/arch/Config.in.nios2 b/arch/Config.in.nios2
+> new file mode 100644
+> index 0000000..ed63898
+> --- /dev/null
+> +++ b/arch/Config.in.nios2
+> @@ -0,0 +1,5 @@
+> +config BR2_ARCH
+> +       default "nios2"
+> +
+> +config BR2_ENDIAN
+> +       default "LITTLE"
+> --
+> 1.8.1.5
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130820/58c1b9a3/attachment.html>
