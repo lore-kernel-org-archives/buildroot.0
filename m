@@ -1,45 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 20 Aug 2013 13:03:02 +0200
-Subject: [Buildroot] [PATCH 3/5] Makefile: test before search for kernel
-	modules
-In-Reply-To: <1376996584-4462-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1376996584-4462-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1376996584-4462-4-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Tue, 20 Aug 2013 13:05:40 +0200
+Subject: [Buildroot] [PATCH 1/3] kmod: allow to build a host variant
+In-Reply-To: <1376996742-4638-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1376996742-4638-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1376996742-4638-2-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The 'find $(TARGET_DIR)/lib/modules' used to find and strip kernel
-modules fails when no kernel modules have been installed. While the
-'|| true' prevents the entire build from failing, there are still some
-error messages displayed, which is not nice.
-
-Instead, test if the directory exists before doing the find. We also
-remove the '|| true' in order to really abort the build if a
-problematic error occurs.
+Since module-init-tools is deprecated, we now want to use kmod instead
+for the installation of modules during the kernel build process. In
+order to do this, we need to be able to build a host variant of kmod,
+which is want this patch allows to do.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- Makefile | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ package/kmod/kmod.mk | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-diff --git a/Makefile b/Makefile
-index 794d217..5d40126 100644
---- a/Makefile
-+++ b/Makefile
-@@ -476,8 +476,9 @@ ifeq ($(BR2_PACKAGE_PYTHON_PYC_ONLY),y)
- 	find $(TARGET_DIR)/usr/lib/ -name '*.py' -print0 | xargs -0 rm -f
+diff --git a/package/kmod/kmod.mk b/package/kmod/kmod.mk
+index 72a24af..8951a56 100644
+--- a/package/kmod/kmod.mk
++++ b/package/kmod/kmod.mk
+@@ -53,4 +53,13 @@ else
+ KMOD_CONF_OPT += --disable-tools
  endif
- 	$(STRIP_FIND_CMD) | xargs $(STRIPCMD) 2>/dev/null || true
--	find $(TARGET_DIR)/lib/modules -type f -name '*.ko' | \
--		xargs -r $(KSTRIPCMD) || true
-+	test -d $(TARGET_DIR)/lib/modules && \
-+		find $(TARGET_DIR)/lib/modules -type f -name '*.ko' | \
-+		xargs -r $(KSTRIPCMD)
  
- # See http://sourceware.org/gdb/wiki/FAQ, "GDB does not see any threads
- # besides the one in which crash occurred; or SIGTRAP kills my program when
++define HOST_KMOD_INSTALL_TOOLS
++	mkdir -p $(HOST_DIR)/sbin/
++	for i in depmod insmod lsmod modinfo modprobe rmmod; \
++	do ln -sf ../usr/bin/kmod $(HOST_DIR)/sbin/$$i; done
++endef
++
++HOST_KMOD_POST_INSTALL_HOOKS += HOST_KMOD_INSTALL_TOOLS
++
+ $(eval $(autotools-package))
++$(eval $(host-autotools-package))
 -- 
 1.8.1.2
