@@ -1,87 +1,71 @@
-From: Tzu-Jung Lee <roylee17@gmail.com>
-Date: Wed, 21 Aug 2013 02:14:55 +0800
-Subject: [Buildroot] [PATCH v2] <pkg>-rsync: support user custom cmds
-In-Reply-To: <CAAXf6LVYEkcdUvf6+Whht0gX_XSQe1nNp_FPBg3g06diR9fPCQ@mail.gmail.com>
-References: <CAAXf6LXQWBEF2uM4e5MQg-QooTMwHmgZ99HT6PDH1DHNDDM-Gw@mail.gmail.com>
- <1375007963-15935-1-git-send-email-tjlee@ambarella.com>
- <20130728150334.6a8a862c@skate>
- <CAAXf6LXvJjA_Wxm=OMCBKYZKudveUj=J-fpU7SeXgCxoH3MQhA@mail.gmail.com>
- <CAAXf6LWwD6fkDpANcYnKT+ShQoBPJKpjJm-1K70DYjs+5eWqEA@mail.gmail.com>
- <CAEvN+1iY-77EV8Ao9zNhm94H0JKbOQNv10iQRqMLMnot28PJAQ@mail.gmail.com>
- <CAAXf6LVDWo5RhPaH9DHGrmfwBuDGhs9G8W7p=XHKvsGeEM4OcQ@mail.gmail.com>
- <CAAXf6LVYEkcdUvf6+Whht0gX_XSQe1nNp_FPBg3g06diR9fPCQ@mail.gmail.com>
-Message-ID: <CAEvN+1hA4T0B_azTQMhpX=o-k2yac4fy7a7r4u=WyROYZrQU8w@mail.gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 20 Aug 2013 19:35:18 +0200
+Subject: [Buildroot] [PATCH v2 0/3] Fix for top-level parallel make part
+ 1
+In-Reply-To: <CAHkwnC83NuBakitgdOF44XOJPKueSfb5gYWeHbpSWJKJqCkKkg@mail.gmail.com>
+References: <1374138746-23279-1-git-send-email-fabio.porcedda@gmail.com>
+ <20130718113809.663c6b58@skate>
+ <CAHkwnC8imHc+yWdkUeR6VdehBhpuux_xmKProHu7uFmmR50N8g@mail.gmail.com>
+ <20130727131828.0442e227@skate>
+ <CAHkwnC-yTeGXQnh64-Ra_TJg4ysYqAPNsNaWhA=_sgiUm5R5bw@mail.gmail.com>
+ <20130730120157.0d32a58b@skate>
+ <CAHkwnC8SV6L=4a0ain-VysEw3Z8Jg_XLLUJWH1xo6T=FVeYO6A@mail.gmail.com>
+ <20130730132901.0682e15d@skate> <520911F3.1020704@mind.be>
+ <CAHkwnC83NuBakitgdOF44XOJPKueSfb5gYWeHbpSWJKJqCkKkg@mail.gmail.com>
+Message-ID: <5213A8D6.3080802@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Aug 20, 2013 at 11:08 PM, Thomas De Schampheleire
-<patrickdepinguin+buildroot@gmail.com> wrote:
-> On Wed, Aug 7, 2013 at 9:59 PM, Thomas De Schampheleire
-> <patrickdepinguin+buildroot@gmail.com> wrote:
->> Hi all,
->>
+On 20/08/13 14:14, Fabio Porcedda wrote:
+> On Mon, Aug 12, 2013 at 6:48 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
+>> On 30/07/13 13:29, Thomas Petazzoni wrote:
 >>>
->>>>> Here are three suggestions:
->>>>> - follow the proposed patch, keeping the default as it is and
->>>>> providing a way to overrule it per package.
->>>>> - simplifying the default exclusion list to .svn, .git, .hg and .bzr
->>>>> (but this wouldn't cover the use case of Tzu-Jung Lee)
->>>>> - make the exclusion list a global config option, defaulting to e.g.
->>>>> .svn, .git, .hg, .bzr and maybe others, but changeable by the user.
->>>>> - add a config option 'don't exclude version control files when rsyncing'
->>>>> and don't provide further flexibility.
->>>
->>> I'm okay with the default setting being either exclusive or conservative.
->>> As long as the HOOKS will be provided, and the default can be OVERRIDEN.
->>> For example, if the default fetch step is reverted to 'cp -r', I can
->>> still override it for
->>> the large local projects to save the sync time.
+>>> I'd really like to see top-level parallel build in Buildroot, but I
+>>> don't think we should do it at the expense of build reproducibility and
+>>> increase of users support complexity.
 >>
->> I don't think we should now consider the remote possibility of
->> changing the default fetch step to something else. When ever that
->> happens, we can discuss exceptions or hooks for that.
 >>
->> Rather I think we should focus on the current situation which has some
->> limitations. In my eyes, there are two independent selections:
->> 1. does the user want rsync to copy binary files (like .o, .so etc.)
->> 2. does the user want rsync to copy version control files (like .git,
->> .svn, etc.)
+>>   That said, I would say that any patch that improves the top-level parallel
+>> build situation should be accepted, unless it really adds complexity. So 1/3
+>> would definitely be acceptable IMHO.
 >>
->> We could make things simple and allow no choice for 1 (always copy
->> binary files).
->> The second item could be a global config option, which is relatively
->> simple and would cover most use cases IMO. It would not cover the case
->> where package A does want version control files, and package B does
->> not, I'm not sure if we need to consider this...
+>>   I also think that 2/3 and 3/3 clarify the generic infrastructure, so I'd
+>> accept them as well. Only, they also changes the behaviour when you touch a
+>> .stamp file, so it requires a bit more thinking.
 >>
->> What are the opinions of other buildroot contributors?
+>>
 >
+> Hi Arnout,
+> thanks for reviewing.
 >
-> ping?
+> I obviously approve the idea of accepting patches that improve
+> top-level parallel make and does not add complexity, such as these
+> patches.
+>
+> You are right that 2/3 and 3/3 change the behaviour when you touch
+> .stamp file, but i think that the touching of .stamp file for the
+> -extract and -patch targets does not happen using buildroot targets,
+> the touching of those .stamp files can happen only manually, so IMHO
+> it's not a real problem.
 
-If we don't allow any configurability, the default behavior must copy
-everything,
-since we don't know which files user would like to include or exclude,
+  Ah that's right, the order changed a while ago and now the -depends 
+come after -patch. It used to be different though.
 
-If we're considering efficiency for some cases, especially those have giant VCS
-database such as linux kernel, I think the combination of the two
-patches proposed
-already simple enough. They don't really add that much of complexity, I think.
+  So I guess that 2/3 and 3/3 should be acceptable as well. After a bit 
+of testing and a formal Ack, of course.
 
- 1. Support customized RSYNC (this patch)
- 2. Allow each package add their post-rsync hook if they need.
-
-We can change the default RSYNC command back to plain rsync. or 'cp'.
-If an user is in favor of current behavior, which exclude VCS database,
-he can customize his RSYNC command to the one we are using now.
-
-And for those packages that do require VCS to be presented in the
-build directory,
-The 2nd patch allows it to add a post-rsync-hook, which 'link' the VCS directory
-from the source dir to the build dir.
+  Regards,
+  Arnout
 
 
-Roy
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
