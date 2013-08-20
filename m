@@ -1,61 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 20 Aug 2013 13:03:04 +0200
-Subject: [Buildroot] [PATCH 5/5] kmod: does not support static builds
-In-Reply-To: <1376996584-4462-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1376996584-4462-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1376996584-4462-6-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Tue, 20 Aug 2013 13:05:39 +0200
+Subject: [Buildroot] [PATCH 0/3] Replace module-init-tools by kmod
+Message-ID: <1376996742-4638-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since kmod 14, the support for building a static library has been
-removed completely from kmod. Therefore, we mark kmod as
-!BR2_PREFER_STATIC_LIB, as well as all its reverse dependencies, which
-includes the option to use the "udev" /dev management method.
+Hello,
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/kmod/Config.in | 1 +
- package/udev/Config.in | 1 +
- system/Config.in       | 1 +
- 3 files changed, 3 insertions(+)
+Here is a set of three patches that replace module-init-tools by kmod,
+since module-init-tools has been deprecated upstream.
 
-diff --git a/package/kmod/Config.in b/package/kmod/Config.in
-index 4965237..bd44316 100644
---- a/package/kmod/Config.in
-+++ b/package/kmod/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_KMOD
- 	bool "kmod"
-+	depends on !BR2_PREFER_STATIC_LIB
- 	help
- 	  handle kernel modules
- 
-diff --git a/package/udev/Config.in b/package/udev/Config.in
-index dd5ad7b..d4d97c1 100644
---- a/package/udev/Config.in
-+++ b/package/udev/Config.in
-@@ -3,6 +3,7 @@ config BR2_PACKAGE_UDEV
- 	depends on BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_UDEV
- 	depends on BR2_LARGEFILE # util-linux
- 	depends on BR2_USE_WCHAR # util-linux
-+	depends on !BR2_PREFER_STATIC_LIB # kmod
- 	select BR2_PACKAGE_UTIL_LINUX
- 	select BR2_PACKAGE_UTIL_LINUX_LIBBLKID
- 	select BR2_PACKAGE_KMOD
-diff --git a/system/Config.in b/system/Config.in
-index d41f184..55195e0 100644
---- a/system/Config.in
-+++ b/system/Config.in
-@@ -84,6 +84,7 @@ config BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_UDEV
- 	bool "Dynamic using udev"
- 	depends on BR2_LARGEFILE # udev
- 	depends on BR2_USE_WCHAR # udev
-+	depends on !BR2_PREFER_STATIC_LIB # udev -> kmod
- 	select BR2_PACKAGE_UDEV
- 
- comment "udev requires a toolchain with LARGEFILE + WCHAR support"
+kmod is already packaged, but we had a host variant (in patch 1) so
+that the Linux kernel build logic can use it (patch 2), and finally we
+remove the module-init-tools package and add the corresponding
+Config.in.legacy entries (patch 3).
+
+This is intended for 2013.11.
+
+Thomas
+
+Thomas Petazzoni (3):
+  kmod: allow to build a host variant
+  linux: use kmod instead of module-init-tools
+  module-init-tools: remove package
+
+ Config.in.legacy                                   | 11 +++++
+ linux/linux.mk                                     |  2 +-
+ package/Config.in                                  |  3 --
+ package/kmod/kmod.mk                               |  9 +++++
+ package/module-init-tools/Config.in                |  9 -----
+ ...nit-tools-3.15-add-manpages-config-option.patch | 47 ----------------------
+ package/module-init-tools/module-init-tools.mk     | 28 -------------
+ 7 files changed, 21 insertions(+), 88 deletions(-)
+ delete mode 100644 package/module-init-tools/Config.in
+ delete mode 100644 package/module-init-tools/module-init-tools-3.15-add-manpages-config-option.patch
+ delete mode 100644 package/module-init-tools/module-init-tools.mk
+
 -- 
 1.8.1.2
