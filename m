@@ -1,60 +1,57 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 21 Aug 2013 21:24:19 +0200
-Subject: [Buildroot] [PATCH v2 2/3] package: fix generic extract target
- for top-level parallel make
-In-Reply-To: <1374138746-23279-3-git-send-email-fabio.porcedda@gmail.com>
-References: <1374138746-23279-1-git-send-email-fabio.porcedda@gmail.com>
- <1374138746-23279-3-git-send-email-fabio.porcedda@gmail.com>
-Message-ID: <521513E3.8080401@mind.be>
+Date: Wed, 21 Aug 2013 21:33:44 +0200
+Subject: [Buildroot] [PATCH 4/5] Makefile: do not try to strip
+ inexisting file when stripping libpthread
+In-Reply-To: <1376996584-4462-5-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1376996584-4462-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1376996584-4462-5-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <52151618.7070900@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 18/07/13 11:12, Fabio Porcedda wrote:
-> To be able to use top-level parallel make we must don't depend in a rule
-> on the order of evaluation of the prerequisites, so instead of reling on
-> the left to right ordering of evaluation of the prerequisites add
-> an explicit rule to describe the dependencies.
+On 20/08/13 13:03, Thomas Petazzoni wrote:
+> libpthread.so has a special stripping condition to preserve parts of
+> it that are needed for debugging. However, due to the usage of 'xargs'
+> instead of 'xargs -r', the strip command is executed regardless of
+> whether a libpthread.so file is found or not. This leads to a big
+> error message being displayed in static-only builds, because strip is
+> executed without a file argument. Thanks to the '|| true', the build
+> continues, but still shows a big error message in the middle, which is
+> not nice.
 >
-> Add a rule to specify that the $(2)_TARGET_EXTRACT target depends
-> on $(2)_TARGET_SOURCE target.
+> By using 'xargs -r', we avoid the strip command from being executed
+> when 'find' doesn't find any match. We also remove the '|| true' to
+> catch other real errors.
 >
-> Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+
+  I'd find it more natural to use the -exec option of find, but this 
+patch solves a real problem so
+
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+
 > ---
->   package/pkg-generic.mk | 4 ++--
->   1 file changed, 2 insertions(+), 2 deletions(-)
+>   Makefile | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
 >
-> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-> index 668f011..f29ea99 100644
-> --- a/package/pkg-generic.mk
-> +++ b/package/pkg-generic.mk
-> @@ -391,8 +391,8 @@ $(1)-configure:		$(1)-patch $(1)-depends \
+> diff --git a/Makefile b/Makefile
+> index 5d40126..9201f27 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -485,7 +485,7 @@ endif
+>   # I set a breakpoint"
+>   ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
+>   	find $(TARGET_DIR)/lib -type f -name 'libpthread*.so*' | \
+> -		xargs $(STRIPCMD) $(STRIP_STRIP_DEBUG) || true
+> +		xargs -r $(STRIPCMD) $(STRIP_STRIP_DEBUG)
+>   endif
 >
->   $(1)-patch:		$(1)-extract $$($(2)_TARGET_PATCH)
->
-> -$(1)-extract:		$(1)-source \
-> -			$$($(2)_TARGET_EXTRACT)
-> +$$($(2)_TARGET_EXTRACT):	$$($(2)_TARGET_SOURCE)
-> +$(1)-extract:			$$($(2)_TARGET_EXTRACT)
->
->   $(1)-depends:		$$($(2)_DEPENDENCIES)
->
+>   	mkdir -p $(TARGET_DIR)/etc
 >
 
-  On second observation, I don't really like this change, because it 
-makes the extract and patch parts asymmetrical with the others. I would 
-prefer one patch that changes it for all the targets. But then, the 
-behaviour does change, because rebuilding one package will also trigger a 
-rebuild of the packages that depend on it. Which may be a good thing, of 
-course...
-
-  Also, I think it would be nicer / clearer to put these dependencies in 
-the %-rules at the top of the file, rather than specifying them per package.
-
-  Regards,
-  Arnout
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
