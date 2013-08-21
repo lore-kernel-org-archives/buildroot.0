@@ -1,51 +1,78 @@
-From: Danomi Manchego <danomimanchego123@gmail.com>
-Date: Wed, 21 Aug 2013 09:39:42 -0400
-Subject: [Buildroot] [PATCH] openssh: fix tab/spacing in init script
-In-Reply-To: <CAAXf6LUO9M-Nghy8ZVMS7L0y2J+=3G6kw1eJKnMUhWOt9wGg4Q@mail.gmail.com>
-References: <1377047460-1937-1-git-send-email-danomimanchego123@gmail.com>
- <CAAXf6LUO9M-Nghy8ZVMS7L0y2J+=3G6kw1eJKnMUhWOt9wGg4Q@mail.gmail.com>
-Message-ID: <CANxTyt5Q_NG1mzdq4vZJq7dYMjmbbRoAViJ-qi4qhy4LgjYZ0g@mail.gmail.com>
+From: =?ISO-8859-1?Q?Ezequiel_Garc=EDa?= <ezequiel@vanguardiasur.com.ar>
+Date: Wed, 21 Aug 2013 10:32:25 -0300
+Subject: [Buildroot] [PATCH 2/2] toolchain-external: Add Sourcery
+ CodeBench for Nios-II
+In-Reply-To: <52145B05.4080405@mind.be>
+References: <1376999946-3314-1-git-send-email-ezequiel.garcia@free-electrons.com>
+ <1376999946-3314-2-git-send-email-ezequiel.garcia@free-electrons.com>
+ <52145B05.4080405@mind.be>
+Message-ID: <CAAEAJfBVeUKtYDwHF5=QXN6NVtPQm0c_u60qRDFbs7cUKKrbeg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Aug 20, 2013 at 11:39 PM, Thomas De Schampheleire <
-patrickdepinguin@gmail.com> wrote:
+Hi Arnout,
 
-> I haven't checked if there are such problems, but have you considered
-> checking all init scripts for the same type of problems and fixing them in
-> this same patch?
+On 21 August 2013 03:15, Arnout Vandecappelle <arnout@mind.be> wrote:
+> On 08/20/13 13:59, Ezequiel Garcia wrote:
+>>
+>> From: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+>>
+>> This commit adds the pre-built Sourcery CodeBench toolchains
+>> currently available for the Nios-II architecture.
+>>
+>> Signed-off-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+>> ---
+>>   toolchain/toolchain-external/Config.in   | 26 ++++++++++++++++++++++++++
+>>   toolchain/toolchain-external/ext-tool.mk |  6 ++++++
+>>   2 files changed, 32 insertions(+)
+>>
+>> diff --git a/toolchain/toolchain-external/Config.in
+>> b/toolchain/toolchain-external/Config.in
+>> index ad1f203..9c0ffb1 100644
+>> --- a/toolchain/toolchain-external/Config.in
+>> +++ b/toolchain/toolchain-external/Config.in
+>> @@ -402,6 +402,30 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201203
+>>   comment "Sourcery CodeBench toolchains are only available for
+>> MIPS/MIPS64 o32 and n64"
+>>         depends on BR2_MIPS_NABI32
+>>
+>> +config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201305_12
+>> +       bool "Sourcery CodeBench Nios-II 2013.05-12"
+>> +       depends on BR2_nios2
+>> +       depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
+>> +       select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+>> +       select BR2_TOOLCHAIN_HAS_NATIVE_RPC
+>> +       select BR2_INSTALL_LIBSTDCPP
+>> +       select BR2_HOSTARCH_NEEDS_IA32_LIBS
+>> +       help
+>> +         Sourcery CodeBench toolchain for the Nios-II architecture,
+>> +         from Mentor Graphics.
+>
+>
+>  The help text should say which gcc and glibc version are included.
+>
 >
 
-Thomas,
+Yes, I was aware of that. I tried to find such information, but couldn't :-(
 
-I looked through the other init scripts.  There's some variation, mostly in:
+Any idea how do I get that information from the toolchain itself?
 
-* Tabs vs spacing.
-* Where spaces are used instead of tabs, sometimes two spaces are used per
-level, other times four.
-* Indentation of start/stop under the case "$1"  /  esac clause.
-    * Some of the start/stop begin in the first column, aligned with 'case'.
-    * Some of them have two spaces, followed by actions offset with a tabs.
-    * Some of them have two spaces, followed by actions offset with a
-sapces.
-    * Some are offset with tab, followed by actions offset with two tabs.
+>> +
+>> +config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201305_43
+>> +       bool "Sourcery CodeBench Nios-II 2013.05-43"
+>
+>
+>  Why do you want to support two patchlevels of the same base version?
+>
 
-So I took the approach of leaving that part alone, and just fixing the
-lines that were offset by a mix of spaces and tabs, since that seemed
-clearly bad.
+Not sure, actually. Just added all the options currently available.
 
-I'd be willing to go through all of them and make them uniform, if
-recommended guidelines can be stated with regards to the above variations.
- Tabs are tempting only because it's a single character in text files that
-go in the target - otherwise, I'm normally in the tabs-are-evil camp, since
-thing which start out with tabs tend get modified with spaces over time,
-and because editor rendering of tab width can vary.  So I'd be willing to
-go either way.
+Do you think is silly? Should I leave the latest one alone?
 
-Danomi -
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130821/374eb0f9/attachment.html>
+Thanks,
+-- 
+Ezequiel Garc?a, VanguardiaSur
+www.vanguardiasur.com.ar
