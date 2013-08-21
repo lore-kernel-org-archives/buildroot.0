@@ -1,58 +1,173 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 21 Aug 2013 23:09:08 +0200
-Subject: [Buildroot] syslog output to serial console
-In-Reply-To: <CAJpxd044gjJfXpwbMfC_3VAUU26-DgD+Sex4fACjWGszR2MjPg@mail.gmail.com>
-References: <CAJpxd044gjJfXpwbMfC_3VAUU26-DgD+Sex4fACjWGszR2MjPg@mail.gmail.com>
-Message-ID: <52152C74.4080904@mind.be>
+Date: Wed, 21 Aug 2013 23:18:13 +0200
+Subject: [Buildroot] [PATCH v2] harfbuzz: New package
+In-Reply-To: <1376926609-11561-1-git-send-email-markos.chandras@imgtec.com>
+References: <1376926609-11561-1-git-send-email-markos.chandras@imgtec.com>
+Message-ID: <52152E95.2080206@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 21/08/13 22:22, Bryce Schober wrote:
-> I realize that this is a bit off-topic...
+On 19/08/13 17:36, Markos Chandras wrote:
+> HarfBuzz is an OpenType text shaping engine
 >
-> I've configured my target for boot-loader & linux boot serial console
-> output, but now I'd really like to redirect the rest of what gets into
-> syslog to the serial console as well. Is there a way to do that with
-> busybox syslog?
+> http://www.freedesktop.org/wiki/Software/HarfBuzz/
 >
-> The primary use-case here is for seeing the output results / errors from
-> my set of /etc/init.d scripts, so if it's not feasible to get this
-> re-direction up and running early in the boot process, it wouldn't be
-> worth it.
+> Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
+> ---
+> http://lists.busybox.net/pipermail/buildroot/2013-August/076645.html
+> Changes since v1:
+> - Fix alphabetical order in package/Config.in
+> - Rename 'LIBSTDCPP support' to 'C++ support'
+> ---
+>   package/Config.in            |  1 +
+>   package/harfbuzz/Config.in   | 34 ++++++++++++++++++++++++++++++++++
+>   package/harfbuzz/harfbuzz.mk | 44 ++++++++++++++++++++++++++++++++++++++++++++
+>   3 files changed, 79 insertions(+)
+>   create mode 100644 package/harfbuzz/Config.in
+>   create mode 100644 package/harfbuzz/harfbuzz.mk
+>
+> diff --git a/package/Config.in b/package/Config.in
+> index 7069d77..1b06755 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -130,6 +130,7 @@ endif
+>   source "package/fbterm/Config.in"
+>   source "package/fbv/Config.in"
+>   source "package/fb-test-app/Config.in"
+> +source "package/harfbuzz/Config.in"
+>   source "package/imagemagick/Config.in"
+>   source "package/linux-fusion/Config.in"
+>   source "package/lite/Config.in"
+> diff --git a/package/harfbuzz/Config.in b/package/harfbuzz/Config.in
+> new file mode 100644
+> index 0000000..1b1bad3
+> --- /dev/null
+> +++ b/package/harfbuzz/Config.in
+> @@ -0,0 +1,34 @@
+> +config BR2_PACKAGE_HARFBUZZ
+> +	bool "harfbuzz"
+> +	help
+> +	  HarfBuzz is an OpenType text shaping engine
+> +
+> +	  http://www.freedesktop.org/wiki/Software/HarfBuzz/
+> +
+> +if BR2_PACKAGE_HARFBUZZ
+> +
+> +config BR2_PACKAGE_HARFBUZZ_CAIRO
+> +	bool "Use cairo"
+> +	select BR2_PACKAGE_CAIRO
 
-  Actually, the output of init scripts should already go to the console. 
-When the kernel mounts the rootfs and calls init, it sends its stdout and 
-stderr to /dev/console. If your rootfs is an initramfs, however, the 
-kernel doesn't automount the devtmpfs so /dev/console doesn't exist when 
-/init is executed. We solve this with the script in fs/cpio/init. If this 
-is the problem, you'll see that the kernel reports something like "Unable 
-to find initial console".
+  We normally don't add options like this, but instead use automatic 
+selection (see below).
 
-  The only thing captured by syslog are the messages going to /dev/log, 
-which are sent out by some daemons. If you want this output to go to 
-/dev/console as well, you can add something like
+  You may want to add some help text to say that it can make use of 
+cairo, freetype, glib2 and icu if these packages are selected.
 
-::respawn:/usr/bin/tail -50 -F /var/log/messages
+> +
+> +config BR2_PACKAGE_HARFBUZZ_FREETYPE
+> +	bool "Use the FreeType library"
+> +	select BR2_PACKAGE_FREETYPE
+> +
+> +config BR2_PACKAGE_HARFBUZZ_GLIB
+> +	bool "Use glib"
+> +	select BR2_PACKAGE_LIBGLIB2
+> +	depends on BR2_USE_WCHAR # gettext dep in libglib2
+> +	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
+> +comment "glib support requires a toolchain with WCHAR and threading support."
+> +	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
+> +
+> +config BR2_PACKAGE_HARFBUZZ_ICU
+> +	bool "Use ICU"
+> +	select BR2_PACKAGE_ICU
+> +	depends on BR2_USE_WCHAR # icu
+> +	depends on BR2_INSTALL_LIBSTDCPP # icu
+> +
+> +comment "icu support requires a toolchain with WCHAR and C++ support."
+> +	depends on !BR2_USE_WCHAR || !BR2_INSTALL_LIBSTDCPP
+> +endif
+> diff --git a/package/harfbuzz/harfbuzz.mk b/package/harfbuzz/harfbuzz.mk
+> new file mode 100644
+> index 0000000..9aee90f
+> --- /dev/null
+> +++ b/package/harfbuzz/harfbuzz.mk
+> @@ -0,0 +1,44 @@
+> +################################################################################
+> +#
+> +# harfbuzz
+> +#
+> +################################################################################
+> +
+> +HARFBUZZ_VERSION = 0.9.19
+> +HARFBUZZ_SITE = http://www.freedesktop.org/software/harfbuzz/release/
+> +HARFBUZZ_SOURCE = harfbuzz-$(HARFBUZZ_VERSION).tar.bz2
+> +HARFBUZZ_LICENSE = Old-MIT ISC ICU
 
-to /etc/inittab.
+  What is Old-MIT?
+
+  We still haven't had the final word on how the LICENSE string should be 
+formatted, but I think it is something like this:
+
+  MIT, ISC (ucdn library), ICU License (icu support library)
+
+  Luca, can you confirm?
+
+> +HARFBUZZ_LICENSE_FILES = COPYING src/hb-ucdn/COPYING src/hb-icu-le/COPYING
+> +HARFBUZZ_INSTALL_STAGING = YES
+> +
+> +HARFBUZZ_CONF_OPT = --without-coretext --without-uniscribe --without-graphite2
+> +
+> +ifeq ($(BR2_PACKAGE_HARFBUZZ_CAIRO),y)
+
+  To make it an automatic dependency, replace this condition with
+
+ifeq ($(BR2_PACKAGE_CAIRO),y)
+
+  Same for the stuff below.
+
+> +	HARFBUZZ_DEPENDENCIES += cairo
+> +	HARFBUZZ_CONF_OPT += --with-cairo=yes
+> +else
+> +	HARFBUZZ_CONF_OPT += --with-cairo=no
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_HARFBUZZ_FREETYPE),y)
+> +	HARFBUZZ_DEPENDENCIES += freetype
+> +	HARFBUZZ_CONF_OPT += --with-freetype=yes
+
+  Does harfbuzz use pkg-config for freetype? If not, you'll need
+
+--with-freetype-config="$(STAGING_DIR)/usr/bin/freetype-config"
+
+> +else
+> +	HARFBUZZ_CONF_OPT += --with-freetype=no
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_HARFBUZZ_GLIB),y)
+> +	HARFBUZZ_DEPENDENCIES += libglib2
+> +	HARFBUZZ_CONF_OPT += --with-glib=yes
+> +else
+> +	HARFBUZZ_CONF_OPT += --with-glib=no
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_HARFBUZZ_ICU),y)
+> +	HARFBUZZ_DEPENDENCIES += icu
+> +	HARFBUZZ_CONF_OPT += --with-icu=yes
+
+  icu also has a custom config script so check if you need to pass it.
 
 
   Regards,
   Arnout
 
->
-> Thanks for any advice or pointers you can offer...
-> <><  <><  <><
-> Bryce Schober
->
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+
+> +else
+> +	HARFBUZZ_CONF_OPT += --with-icu=no
+> +endif
+> +
+> +$(eval $(autotools-package))
 >
 
 
