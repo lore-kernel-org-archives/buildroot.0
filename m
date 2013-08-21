@@ -1,41 +1,25 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 21 Aug 2013 23:52:05 +0200
-Subject: [Buildroot] [PATCH] toolchain: add support for glibc
-In-Reply-To: <1376847393-12397-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1376847393-12397-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <52153685.6010407@mind.be>
+From: Danomi Manchego <danomimanchego123@gmail.com>
+Date: Wed, 21 Aug 2013 18:52:46 -0400
+Subject: [Buildroot] syslog output to serial console
+In-Reply-To: <CAJpxd044gjJfXpwbMfC_3VAUU26-DgD+Sex4fACjWGszR2MjPg@mail.gmail.com>
+References: <CAJpxd044gjJfXpwbMfC_3VAUU26-DgD+Sex4fACjWGszR2MjPg@mail.gmail.com>
+Message-ID: <CANxTyt4NH=v26_dHGByTijLvxorD1OTqhDt-2wE45KtvSRj2uA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 18/08/13 19:36, Thomas Petazzoni wrote:
-> +config BR2_TOOLCHAIN_BUILDROOT_GLIBC
-> +	bool "glibc (experimental)"
-> +	depends on BR2_arm    || BR2_armeb    || BR2_aarch64 || \
-> +		   BR2_i386   || BR2_mips     || BR2_mipsel  || \
-> +		   BR2_mips64 || BR2_mips64el || BR2_powerpc || \
-> +		   BR2_sh     || BR2_sh64     || BR2_sparc   || \
-> +		   BR2_x86_64
+On Wed, Aug 21, 2013 at 4:22 PM, Bryce Schober <bryce.schober@gmail.com>wrote:
 
-  I though, let's try this patch with some exotic architecture, and guess 
-what:
+> I'd really like to redirect the rest of what gets into syslog to the
+> serial console as well. Is there a way to do that with busybox syslog?
+>
 
- >>> glibc 2.18 Configuring
-...
-checking sysdep dirs... configure: error: The sh64 is not supported.
+If you are using "logger" to to send stuff to syslog, then you can add a -s
+(or --stderr) to send the messages to both syslog and stderr.
 
-
-  Continuing with sparc...
-
-  Regards,
-  Arnout
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+Danomi -
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130821/34cf7617/attachment.html>
