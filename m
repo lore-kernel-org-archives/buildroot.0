@@ -1,62 +1,58 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 21 Aug 2013 22:51:49 +0200
-Subject: [Buildroot] [PATCH 3/3] module-init-tools: remove package
-In-Reply-To: <1376996742-4638-4-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1376996742-4638-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1376996742-4638-4-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <52152865.9030307@mind.be>
+Date: Wed, 21 Aug 2013 23:09:08 +0200
+Subject: [Buildroot] syslog output to serial console
+In-Reply-To: <CAJpxd044gjJfXpwbMfC_3VAUU26-DgD+Sex4fACjWGszR2MjPg@mail.gmail.com>
+References: <CAJpxd044gjJfXpwbMfC_3VAUU26-DgD+Sex4fACjWGszR2MjPg@mail.gmail.com>
+Message-ID: <52152C74.4080904@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 20/08/13 13:05, Thomas Petazzoni wrote:
-> This commit removes the module-init-tools package and adds the
-> relevant Config.in.legacy entries to ease the migration for users.
+On 21/08/13 22:22, Bryce Schober wrote:
+> I realize that this is a bit off-topic...
 >
-> Signed-off-by: Thomas Petazzoni<thomas.petazzoni@free-electrons.com>
-> ---
->   Config.in.legacy                                   | 11 +++++
->   package/Config.in                                  |  3 --
->   package/module-init-tools/Config.in                |  9 -----
->   ...nit-tools-3.15-add-manpages-config-option.patch | 47 ----------------------
->   package/module-init-tools/module-init-tools.mk     | 28 -------------
->   5 files changed, 11 insertions(+), 87 deletions(-)
->   delete mode 100644 package/module-init-tools/Config.in
->   delete mode 100644 package/module-init-tools/module-init-tools-3.15-add-manpages-config-option.patch
->   delete mode 100644 package/module-init-tools/module-init-tools.mk
+> I've configured my target for boot-loader & linux boot serial console
+> output, but now I'd really like to redirect the rest of what gets into
+> syslog to the serial console as well. Is there a way to do that with
+> busybox syslog?
 >
-> diff --git a/Config.in.legacy b/Config.in.legacy
-> index 763f16c..ac6f088 100644
-> --- a/Config.in.legacy
-> +++ b/Config.in.legacy
-> @@ -45,6 +45,17 @@ comment "build, or run, in unpredictable ways.               "
->   endif
->
->   ###############################################################################
-> +comment "Legacy options removed in 2013.11"
-> +
-> +config BR2_PACKAGE_MODULE_INIT_TOOLS
-> +	bool "module-init-tools replaced by kmod"
-> +	select BR2_PACKAGE_KMOD
-> +	select BR2_PACKAGE_KMOD_TOOLS
+> The primary use-case here is for seeing the output results / errors from
+> my set of /etc/init.d scripts, so if it's not feasible to get this
+> re-direction up and running early in the boot process, it wouldn't be
+> worth it.
 
-  Up to now, we've always selected BR2_LEGACY even if it is just a symbol 
-rename.
+  Actually, the output of init scripts should already go to the console. 
+When the kernel mounts the rootfs and calls init, it sends its stdout and 
+stderr to /dev/console. If your rootfs is an initramfs, however, the 
+kernel doesn't automount the devtmpfs so /dev/console doesn't exist when 
+/init is executed. We solve this with the script in fs/cpio/init. If this 
+is the problem, you'll see that the kernel reports something like "Unable 
+to find initial console".
 
-> +	help
-> +	  The 'module-init-tools' package has been removed, since it
-> +	  has been depracated upstream and replaced by 'kmod'.
+  The only thing captured by syslog are the messages going to /dev/log, 
+which are sent out by some daemons. If you want this output to go to 
+/dev/console as well, you can add something like
 
-  deprecated
+::respawn:/usr/bin/tail -50 -F /var/log/messages
+
+to /etc/inittab.
+
 
   Regards,
   Arnout
 
-> +
-> +###############################################################################
->   comment "Legacy options removed in 2013.08"
+>
+> Thanks for any advice or pointers you can offer...
+> <><  <><  <><
+> Bryce Schober
+>
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 >
 
 
