@@ -1,9 +1,9 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 21 Aug 2013 23:45:06 +0200
+Date: Wed, 21 Aug 2013 23:52:05 +0200
 Subject: [Buildroot] [PATCH] toolchain: add support for glibc
 In-Reply-To: <1376847393-12397-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1376847393-12397-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <521534E2.7020606@mind.be>
+Message-ID: <52153685.6010407@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,37 +11,26 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 On 18/08/13 19:36, Thomas Petazzoni wrote:
-> The support for eglibc 2.17 was added to the internal toolchain
-> backend for 2013.08. This commit now adds glibc 2.18 support to the
-> internal toolchain backend. The building procedure is very similar to
-> the one of eglibc, with a few differences, but the two are kept
-> separate for now.
+> +config BR2_TOOLCHAIN_BUILDROOT_GLIBC
+> +	bool "glibc (experimental)"
+> +	depends on BR2_arm    || BR2_armeb    || BR2_aarch64 || \
+> +		   BR2_i386   || BR2_mips     || BR2_mipsel  || \
+> +		   BR2_mips64 || BR2_mips64el || BR2_powerpc || \
+> +		   BR2_sh     || BR2_sh64     || BR2_sparc   || \
+> +		   BR2_x86_64
 
-  I'm not sure if that's a good idea... Will merging them later be easier?
+  I though, let's try this patch with some exotic architecture, and guess 
+what:
 
-[snip]
-> +define GLIBC_CONFIGURE_CMDS
-> +	mkdir -p $(@D)/build
-> +	# Do the configuration
-> +	(cd $(@D)/build; \
-> +		$(TARGET_CONFIGURE_OPTS) \
-> +		CFLAGS="-O2 $(GLIBC_EXTRA_CFLAGS)" CPPFLAGS="" \
+ >>> glibc 2.18 Configuring
+...
+checking sysdep dirs... configure: error: The sh64 is not supported.
 
-  The -O2 was required for eglibc. Why do we have it here as well?
 
-[snip]
-> +ifeq ($(BR2_PACKAGE_GDB_SERVER),y)
-> +GLIBC_LIBS_LIB += libthread_db.so
-> +endif
-
-  Shouldn't this lib be installed as well for a gdb without gdbserver? 
-I.e., shouldn't the condition be ifeq ($(BR2_PACKAGE_GDB),y)?
-
-[snip]
+  Continuing with sparc...
 
   Regards,
   Arnout
-
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
