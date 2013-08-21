@@ -1,40 +1,61 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 21 Aug 2013 21:27:28 +0200
-Subject: [Buildroot] [PATCH 2/2] toolchain-external: Add Sourcery
- CodeBench for Nios-II
-In-Reply-To: <CAAEAJfBsymVg-zZuJuHFSXCmdhV6X2-VXk74YC8tvwbEQ8TVwg@mail.gmail.com>
-References: <1376999946-3314-1-git-send-email-ezequiel.garcia@free-electrons.com>
- <1376999946-3314-2-git-send-email-ezequiel.garcia@free-electrons.com>
- <52145B05.4080405@mind.be>
- <CAAEAJfBVeUKtYDwHF5=QXN6NVtPQm0c_u60qRDFbs7cUKKrbeg@mail.gmail.com>
- <5214F192.50800@mind.be>
- <CAAEAJfBsymVg-zZuJuHFSXCmdhV6X2-VXk74YC8tvwbEQ8TVwg@mail.gmail.com>
-Message-ID: <521514A0.9060303@mind.be>
+Date: Wed, 21 Aug 2013 21:24:19 +0200
+Subject: [Buildroot] [PATCH v2 2/3] package: fix generic extract target
+ for top-level parallel make
+In-Reply-To: <1374138746-23279-3-git-send-email-fabio.porcedda@gmail.com>
+References: <1374138746-23279-1-git-send-email-fabio.porcedda@gmail.com>
+ <1374138746-23279-3-git-send-email-fabio.porcedda@gmail.com>
+Message-ID: <521513E3.8080401@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 21/08/13 21:23, Ezequiel Garc?a wrote:
-[snip]
-> Speaking of toolchains. Any recomendations on how to *choose* a toolchain?
+On 18/07/13 11:12, Fabio Porcedda wrote:
+> To be able to use top-level parallel make we must don't depend in a rule
+> on the order of evaluation of the prerequisites, so instead of reling on
+> the left to right ordering of evaluation of the prerequisites add
+> an explicit rule to describe the dependencies.
 >
-> Should I safely use Sourcery?
-> Should I prefer Buildroot internal (when we add support for it)?
-> Which should be the rationale behind such decision? (aside from the
-> fact the buildroot toolchain allows to be tuned)
+> Add a rule to specify that the $(2)_TARGET_EXTRACT target depends
+> on $(2)_TARGET_SOURCE target.
+>
+> Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+> ---
+>   package/pkg-generic.mk | 4 ++--
+>   1 file changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+> index 668f011..f29ea99 100644
+> --- a/package/pkg-generic.mk
+> +++ b/package/pkg-generic.mk
+> @@ -391,8 +391,8 @@ $(1)-configure:		$(1)-patch $(1)-depends \
+>
+>   $(1)-patch:		$(1)-extract $$($(2)_TARGET_PATCH)
+>
+> -$(1)-extract:		$(1)-source \
+> -			$$($(2)_TARGET_EXTRACT)
+> +$$($(2)_TARGET_EXTRACT):	$$($(2)_TARGET_SOURCE)
+> +$(1)-extract:			$$($(2)_TARGET_EXTRACT)
+>
+>   $(1)-depends:		$$($(2)_DEPENDENCIES)
+>
+>
 
-  External toolchain has the advantage that you don't have to spend time 
-(about an hour) on building it.
+  On second observation, I don't really like this change, because it 
+makes the extract and patch parts asymmetrical with the others. I would 
+prefer one patch that changes it for all the targets. But then, the 
+behaviour does change, because rebuilding one package will also trigger a 
+rebuild of the packages that depend on it. Which may be a good thing, of 
+course...
 
-  Internal toolchain has the advantage that it is configurable, and can 
-be uClibc based and therefore smaller. The difference between uClibc and 
-glibc is in the order of 1MB, so it only really makes sense when you want 
-a really small rootfs.
+  Also, I think it would be nicer / clearer to put these dependencies in 
+the %-rules at the top of the file, rather than specifying them per package.
 
   Regards,
   Arnout
+
 -- 
 Arnout Vandecappelle                          arnout at mind be
 Senior Embedded Software Architect            +32-16-286500
