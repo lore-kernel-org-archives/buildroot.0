@@ -1,37 +1,40 @@
-From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Wed, 21 Aug 2013 05:55:41 +0200
-Subject: [Buildroot] [PATCH] openssh: fix tab/spacing in init script
-In-Reply-To: <1377047460-1937-1-git-send-email-danomimanchego123@gmail.com>
-References: <1377047460-1937-1-git-send-email-danomimanchego123@gmail.com>
-Message-ID: <CAAXf6LWFbdiJdncZcsZBqO25RAi9s5biqMTuUKK9d7LO-thCag@mail.gmail.com>
+From: Alexander Lukichev <alexander.lukichev@gmail.com>
+Date: Wed, 21 Aug 2013 08:28:59 +0300
+Subject: [Buildroot] [RFC] Unification of package comments on wchar,
+ largefile, c++ support, thread, ... support
+In-Reply-To: <CAAXf6LV7wB6_RsufRWD6s7-viuYheasMHJWqDAGtu6BmPpZBdw@mail.gmail.com>
+References: <CAAXf6LV7wB6_RsufRWD6s7-viuYheasMHJWqDAGtu6BmPpZBdw@mail.gmail.com>
+Message-ID: <CAAHaz6E16CcRV1gpvFA3KvPfvf78JjqywVJFZxCgs5YOCAeF2g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Danomi,
+Hi Thomas,
 
-Op 21-aug.-2013 03:11 schreef "Danomi Manchego" <danomimanchego123@gmail.com>
-het volgende:
+2013/8/19 Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
+
+> I would like to agree on one common text, and adapt all packages
+> accordingly. The exact wording can be discussed, the main goal is the
+> unification. Here is a proposal:
 >
-> Several of the lines in S50sshd script have a strange mix of spaces
-> and tabs, that at least do not look consistent with neighboring lines.
-> This patch makes the spacing consistent, and also strips the trailing
-> spaces.
+> <...>
+> What is your opinion on:
+> a. the concept of this unification
+> b. the wording proposed above
 >
-> Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
-> ---
 
-I haven't checked if there are such problems, but have you considered
-checking all init scripts for the same type of problems and fixing them in
-this same patch?
+I also wondered at the free wording in all the multitude of packages. And
+your proposal is a good try to solve the problem. As Arnout has pointed
+out, it would also be nice to minimize the comment length, so
+  - "needs" looks better than "requires";
+  - "support" might well be dropped;
+  - "thread" might be changed to "THREADS" if "support" is dropped.
 
-A rough way of finding these scripts is:
-find -name "S*"
-
-Thanks,
-Thomas
+--
+Best regards,
+  Alexander Lukichev
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130821/dd0323a0/attachment.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130821/1624dc42/attachment.html>
