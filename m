@@ -1,119 +1,93 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 21 Aug 2013 08:09:28 +0200
-Subject: [Buildroot] [PATCH v2] <pkg>-rsync: support user custom cmds
-In-Reply-To: <CAEvN+1hA4T0B_azTQMhpX=o-k2yac4fy7a7r4u=WyROYZrQU8w@mail.gmail.com>
-References: <CAAXf6LXQWBEF2uM4e5MQg-QooTMwHmgZ99HT6PDH1DHNDDM-Gw@mail.gmail.com>
- <1375007963-15935-1-git-send-email-tjlee@ambarella.com>
- <20130728150334.6a8a862c@skate>
- <CAAXf6LXvJjA_Wxm=OMCBKYZKudveUj=J-fpU7SeXgCxoH3MQhA@mail.gmail.com>
- <CAAXf6LWwD6fkDpANcYnKT+ShQoBPJKpjJm-1K70DYjs+5eWqEA@mail.gmail.com>
- <CAEvN+1iY-77EV8Ao9zNhm94H0JKbOQNv10iQRqMLMnot28PJAQ@mail.gmail.com>
- <CAAXf6LVDWo5RhPaH9DHGrmfwBuDGhs9G8W7p=XHKvsGeEM4OcQ@mail.gmail.com>
- <CAAXf6LVYEkcdUvf6+Whht0gX_XSQe1nNp_FPBg3g06diR9fPCQ@mail.gmail.com>
- <CAEvN+1hA4T0B_azTQMhpX=o-k2yac4fy7a7r4u=WyROYZrQU8w@mail.gmail.com>
-Message-ID: <52145998.5090300@mind.be>
+Date: Wed, 21 Aug 2013 07:40:24 +0200
+Subject: [Buildroot] [PATCH 3 of 6 v2] linux: add support for custom
+ Mercurial repository
+In-Reply-To: <CAAXf6LUzLZEDkh0oUj4wsCc3Rf=+D3Y-6AtHMA4C-4mJpELatQ@mail.gmail.com>
+References: <patchbomb.1374650577@BEANTN0L019720>
+ <702ce86cc56aec78ac12.1374650580@BEANTN0L019720> <52087CBD.10501@mind.be>
+ <20130813110914.00c661dc@skate> <520A5F15.5040801@mind.be>
+ <CAAXf6LUpUAfNBCqVHS9rPuRJbe+oTxXa1BAbmR1Vh1bE1VP0TQ@mail.gmail.com>
+ <CAAXf6LXa0KLriu70G1ZYyJyymDWJ8h=6GapRvCjLserL_PtNtA@mail.gmail.com>
+ <52124252.4030209@mind.be>
+ <CAAXf6LUzLZEDkh0oUj4wsCc3Rf=+D3Y-6AtHMA4C-4mJpELatQ@mail.gmail.com>
+Message-ID: <521452C8.3000707@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 08/20/13 20:14, Tzu-Jung Lee wrote:
-> On Tue, Aug 20, 2013 at 11:08 PM, Thomas De Schampheleire
-> <patrickdepinguin+buildroot@gmail.com> wrote:
->> On Wed, Aug 7, 2013 at 9:59 PM, Thomas De Schampheleire
->> <patrickdepinguin+buildroot@gmail.com> wrote:
->>> Hi all,
->>>
->>>>
->>>>>> Here are three suggestions:
->>>>>> - follow the proposed patch, keeping the default as it is and
->>>>>> providing a way to overrule it per package.
->>>>>> - simplifying the default exclusion list to .svn, .git, .hg and .bzr
->>>>>> (but this wouldn't cover the use case of Tzu-Jung Lee)
->>>>>> - make the exclusion list a global config option, defaulting to e.g.
->>>>>> .svn, .git, .hg, .bzr and maybe others, but changeable by the user.
->>>>>> - add a config option 'don't exclude version control files when rsyncing'
->>>>>> and don't provide further flexibility.
->>>>
->>>> I'm okay with the default setting being either exclusive or conservative.
->>>> As long as the HOOKS will be provided, and the default can be OVERRIDEN.
->>>> For example, if the default fetch step is reverted to 'cp -r', I can
->>>> still override it for
->>>> the large local projects to save the sync time.
->>>
->>> I don't think we should now consider the remote possibility of
->>> changing the default fetch step to something else. When ever that
->>> happens, we can discuss exceptions or hooks for that.
->>>
->>> Rather I think we should focus on the current situation which has some
->>> limitations. In my eyes, there are two independent selections:
->>> 1. does the user want rsync to copy binary files (like .o, .so etc.)
->>> 2. does the user want rsync to copy version control files (like .git,
->>> .svn, etc.)
->>>
->>> We could make things simple and allow no choice for 1 (always copy
->>> binary files).
->>> The second item could be a global config option, which is relatively
->>> simple and would cover most use cases IMO. It would not cover the case
->>> where package A does want version control files, and package B does
->>> not, I'm not sure if we need to consider this...
->>>
->>> What are the opinions of other buildroot contributors?
->>
->>
->> ping?
+On 08/20/13 10:36, Thomas De Schampheleire wrote:
+> To come back on the question: should we try and propagate the options
+> from old to new string options or not.
+> The original patch did not do that, the user was responsible for
+> making the change.
+> Arnout responded that he'd like to make it 'just work' for the user,
+> and advocated automatic propagation.
+> I originally agreed to this reasoning, but am now reconsidering.
+> To implement the automatic propagation of string values, we'd have:
 >
-> If we don't allow any configurability, the default behavior must copy
-> everything,
-> since we don't know which files user would like to include or exclude,
-
-  Agreed - *if* we don't allow configurability.
-
-
-> If we're considering efficiency for some cases, especially those have giant VCS
-> database such as linux kernel, I think the combination of the two
-> patches proposed
-> already simple enough. They don't really add that much of complexity, I think.
+> config FOO_NEW_STRING (in linux/Config.in)
+>          default FOO_OLD_STRING if FOO_OLD_STRING != ""
 >
->   1. Support customized RSYNC (this patch)
+> config FOO_OLD_STRING (in Config.in.legacy)
+>
+> However, the behavior of this combination is odd: if you start from an
+> old config, update to the newer buildroot, and run make menuconfig,
+> you get the legacy warnings (as expected). In the Kernel menu, the new
+> strings are correctly showing the original values (this is the
+> automatic propagation). In the Legacy menu, the original values are
+> shown too. Everything seems fine up to this point, but there are two
+> scenarios now:
+> 1. to clear the legacy messages, you have to empty the original string
+> in the legacy menu. If you do that, however, the new string in the
+> Kernel menu will also be cleared! If you now save your config, the
+> original string is gone everywhere.
+> 2. if you first save the config (legacy warnings still intact), then
+> reopen menuconfig and clear the legacy warnings, the automatic
+> propagation holds, and now the Kernel menu still contains the original
+> values.
+ >
+ > This behavior is very confusing and annoying, IMO. A typical user
+ > would perform scenario 1, not knowing about the mentioned problem.
 
-  Like Thomas, I really don't see the point of being able to choose cp 
-instead of rsync.
+
+  I agree that it is confusing and annoying. However, this is the same 
+behaviour as for boolean options. So if we accept this argument, then 
+also the automatic propagation for boolean options should be removed.
+
+  So maybe we could make the options with automatic propagation not 
+select BR2_LEGACY. If it is indeed just a symbol rename, then the user 
+doesn't need to be made aware of it, I guess. The disadvantage is that 
+the old options will still appear in saved defconfigs, but that's a minor 
+thing according to me.
+
+  Another option is warn the user in the comments at the top of 
+Config.in.legacy that they should save and re-run menuconfig.
 
 
->   2. Allow each package add their post-rsync hook if they need.
 
-  Adding the VCS stuff in a post-rsync-hook is really hackish.
+> An additional advantage of not automatic propagating, is that there is
+> just one place that deals with legacy options: Config.in.legacy. To
+> remove support for all legacy options, we could just delete that one
+> file and be done with it. However, to automatically propagate string
+> options, we also have to change additional files (linux/Config.in in
+> this example), which is less clean.
 
-  Instead, I think the rsync command should use $($(PKG)_RSYNC_OPTS), 
-which allows the user to specify additional --include options in the 
-override.mk file. The documentation of the override.mk file should also 
-be updated to explain this possibility.
+  But I don't think that's a big deal. Config.in.legacy can contain some 
+text to point to the other place where the symbol has to be removed.
 
+
+> Both arguments lead me to advocating not automatically propagating
+> legacy string options.
+
+  If that is the case, then simple renames of config symbols should still 
+be avoided, I think. We want it to be really easy for people to upgrade 
+buildroot, so they shouldn't be exposed to the whole legacy stuff unless 
+really needed.
 
   Regards,
   Arnout
-
-> We can change the default RSYNC command back to plain rsync. or 'cp'.
- >
-> If an user is in favor of current behavior, which exclude VCS database,
-> he can customize his RSYNC command to the one we are using now.
->
-> And for those packages that do require VCS to be presented in the
-> build directory,
-> The 2nd patch allows it to add a post-rsync-hook, which 'link' the VCS directory
-> from the source dir to the build dir.
->
->
-> Roy
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
->
->
-
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
