@@ -1,36 +1,69 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Wed, 21 Aug 2013 22:49:40 +0200
-Subject: [Buildroot] [PATCH] linux-fusion: bump version to 9.0.2
-Message-ID: <1377118180-28514-1-git-send-email-arnout@mind.be>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 21 Aug 2013 22:51:49 +0200
+Subject: [Buildroot] [PATCH 3/3] module-init-tools: remove package
+In-Reply-To: <1376996742-4638-4-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1376996742-4638-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1376996742-4638-4-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <52152865.9030307@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes build with recent kernels.
+On 20/08/13 13:05, Thomas Petazzoni wrote:
+> This commit removes the module-init-tools package and adds the
+> relevant Config.in.legacy entries to ease the migration for users.
+>
+> Signed-off-by: Thomas Petazzoni<thomas.petazzoni@free-electrons.com>
+> ---
+>   Config.in.legacy                                   | 11 +++++
+>   package/Config.in                                  |  3 --
+>   package/module-init-tools/Config.in                |  9 -----
+>   ...nit-tools-3.15-add-manpages-config-option.patch | 47 ----------------------
+>   package/module-init-tools/module-init-tools.mk     | 28 -------------
+>   5 files changed, 11 insertions(+), 87 deletions(-)
+>   delete mode 100644 package/module-init-tools/Config.in
+>   delete mode 100644 package/module-init-tools/module-init-tools-3.15-add-manpages-config-option.patch
+>   delete mode 100644 package/module-init-tools/module-init-tools.mk
+>
+> diff --git a/Config.in.legacy b/Config.in.legacy
+> index 763f16c..ac6f088 100644
+> --- a/Config.in.legacy
+> +++ b/Config.in.legacy
+> @@ -45,6 +45,17 @@ comment "build, or run, in unpredictable ways.               "
+>   endif
+>
+>   ###############################################################################
+> +comment "Legacy options removed in 2013.11"
+> +
+> +config BR2_PACKAGE_MODULE_INIT_TOOLS
+> +	bool "module-init-tools replaced by kmod"
+> +	select BR2_PACKAGE_KMOD
+> +	select BR2_PACKAGE_KMOD_TOOLS
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
-For 2013.08
+  Up to now, we've always selected BR2_LEGACY even if it is just a symbol 
+rename.
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- package/linux-fusion/linux-fusion.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> +	help
+> +	  The 'module-init-tools' package has been removed, since it
+> +	  has been depracated upstream and replaced by 'kmod'.
 
-diff --git a/package/linux-fusion/linux-fusion.mk b/package/linux-fusion/linux-fusion.mk
-index ff31934..6f3d50a 100644
---- a/package/linux-fusion/linux-fusion.mk
-+++ b/package/linux-fusion/linux-fusion.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LINUX_FUSION_VERSION = 9.0.0
-+LINUX_FUSION_VERSION = 9.0.2
- LINUX_FUSION_SOURCE = linux-fusion-$(LINUX_FUSION_VERSION).tar.gz
- LINUX_FUSION_SITE = http://directfb.org/downloads/Core/linux-fusion
- LINUX_FUSION_INSTALL_STAGING = YES
+  deprecated
+
+  Regards,
+  Arnout
+
+> +
+> +###############################################################################
+>   comment "Legacy options removed in 2013.08"
+>
+
+
 -- 
-1.8.4.rc3
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
