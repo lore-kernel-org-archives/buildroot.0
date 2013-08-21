@@ -1,93 +1,101 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 21 Aug 2013 07:40:24 +0200
-Subject: [Buildroot] [PATCH 3 of 6 v2] linux: add support for custom
- Mercurial repository
-In-Reply-To: <CAAXf6LUzLZEDkh0oUj4wsCc3Rf=+D3Y-6AtHMA4C-4mJpELatQ@mail.gmail.com>
-References: <patchbomb.1374650577@BEANTN0L019720>
- <702ce86cc56aec78ac12.1374650580@BEANTN0L019720> <52087CBD.10501@mind.be>
- <20130813110914.00c661dc@skate> <520A5F15.5040801@mind.be>
- <CAAXf6LUpUAfNBCqVHS9rPuRJbe+oTxXa1BAbmR1Vh1bE1VP0TQ@mail.gmail.com>
- <CAAXf6LXa0KLriu70G1ZYyJyymDWJ8h=6GapRvCjLserL_PtNtA@mail.gmail.com>
- <52124252.4030209@mind.be>
- <CAAXf6LUzLZEDkh0oUj4wsCc3Rf=+D3Y-6AtHMA4C-4mJpELatQ@mail.gmail.com>
-Message-ID: <521452C8.3000707@mind.be>
+Date: Wed, 21 Aug 2013 08:15:33 +0200
+Subject: [Buildroot] [PATCH 2/2] toolchain-external: Add Sourcery
+ CodeBench for Nios-II
+In-Reply-To: <1376999946-3314-2-git-send-email-ezequiel.garcia@free-electrons.com>
+References: <1376999946-3314-1-git-send-email-ezequiel.garcia@free-electrons.com>
+ <1376999946-3314-2-git-send-email-ezequiel.garcia@free-electrons.com>
+Message-ID: <52145B05.4080405@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 08/20/13 10:36, Thomas De Schampheleire wrote:
-> To come back on the question: should we try and propagate the options
-> from old to new string options or not.
-> The original patch did not do that, the user was responsible for
-> making the change.
-> Arnout responded that he'd like to make it 'just work' for the user,
-> and advocated automatic propagation.
-> I originally agreed to this reasoning, but am now reconsidering.
-> To implement the automatic propagation of string values, we'd have:
+On 08/20/13 13:59, Ezequiel Garcia wrote:
+> From: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
 >
-> config FOO_NEW_STRING (in linux/Config.in)
->          default FOO_OLD_STRING if FOO_OLD_STRING != ""
+> This commit adds the pre-built Sourcery CodeBench toolchains
+> currently available for the Nios-II architecture.
 >
-> config FOO_OLD_STRING (in Config.in.legacy)
+> Signed-off-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+> ---
+>   toolchain/toolchain-external/Config.in   | 26 ++++++++++++++++++++++++++
+>   toolchain/toolchain-external/ext-tool.mk |  6 ++++++
+>   2 files changed, 32 insertions(+)
 >
-> However, the behavior of this combination is odd: if you start from an
-> old config, update to the newer buildroot, and run make menuconfig,
-> you get the legacy warnings (as expected). In the Kernel menu, the new
-> strings are correctly showing the original values (this is the
-> automatic propagation). In the Legacy menu, the original values are
-> shown too. Everything seems fine up to this point, but there are two
-> scenarios now:
-> 1. to clear the legacy messages, you have to empty the original string
-> in the legacy menu. If you do that, however, the new string in the
-> Kernel menu will also be cleared! If you now save your config, the
-> original string is gone everywhere.
-> 2. if you first save the config (legacy warnings still intact), then
-> reopen menuconfig and clear the legacy warnings, the automatic
-> propagation holds, and now the Kernel menu still contains the original
-> values.
- >
- > This behavior is very confusing and annoying, IMO. A typical user
- > would perform scenario 1, not knowing about the mentioned problem.
+> diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
+> index ad1f203..9c0ffb1 100644
+> --- a/toolchain/toolchain-external/Config.in
+> +++ b/toolchain/toolchain-external/Config.in
+> @@ -402,6 +402,30 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201203
+>   comment "Sourcery CodeBench toolchains are only available for MIPS/MIPS64 o32 and n64"
+>   	depends on BR2_MIPS_NABI32
+>
+> +config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201305_12
+> +	bool "Sourcery CodeBench Nios-II 2013.05-12"
+> +	depends on BR2_nios2
+> +	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
+> +	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+> +	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
+> +	select BR2_INSTALL_LIBSTDCPP
+> +	select BR2_HOSTARCH_NEEDS_IA32_LIBS
+> +	help
+> +	  Sourcery CodeBench toolchain for the Nios-II architecture,
+> +	  from Mentor Graphics.
 
+  The help text should say which gcc and glibc version are included.
 
-  I agree that it is confusing and annoying. However, this is the same 
-behaviour as for boolean options. So if we accept this argument, then 
-also the automatic propagation for boolean options should be removed.
+> +
+> +config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201305_43
+> +	bool "Sourcery CodeBench Nios-II 2013.05-43"
 
-  So maybe we could make the options with automatic propagation not 
-select BR2_LEGACY. If it is indeed just a symbol rename, then the user 
-doesn't need to be made aware of it, I guess. The disadvantage is that 
-the old options will still appear in saved defconfigs, but that's a minor 
-thing according to me.
-
-  Another option is warn the user in the comments at the top of 
-Config.in.legacy that they should save and re-run menuconfig.
-
-
-
-> An additional advantage of not automatic propagating, is that there is
-> just one place that deals with legacy options: Config.in.legacy. To
-> remove support for all legacy options, we could just delete that one
-> file and be done with it. However, to automatically propagate string
-> options, we also have to change additional files (linux/Config.in in
-> this example), which is less clean.
-
-  But I don't think that's a big deal. Config.in.legacy can contain some 
-text to point to the other place where the symbol has to be removed.
-
-
-> Both arguments lead me to advocating not automatically propagating
-> legacy string options.
-
-  If that is the case, then simple renames of config symbols should still 
-be avoided, I think. We want it to be really easy for people to upgrade 
-buildroot, so they shouldn't be exposed to the whole legacy stuff unless 
-really needed.
+  Why do you want to support two patchlevels of the same base version?
 
   Regards,
   Arnout
+
+> +	depends on BR2_nios2
+> +	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
+> +	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+> +	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
+> +	select BR2_INSTALL_LIBSTDCPP
+> +	select BR2_HOSTARCH_NEEDS_IA32_LIBS
+> +	help
+> +	  Sourcery CodeBench toolchain for the Nios-II architecture,
+> +	  from Mentor Graphics.
+> +
+>   config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201103
+>   	bool "Sourcery CodeBench PowerPC 2011.03"
+>   	depends on BR2_powerpc
+> @@ -818,6 +842,8 @@ config BR2_TOOLCHAIN_EXTERNAL_PREFIX
+>   	default "mips-linux-gnu"         if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201203
+>   	default "mips-linux-gnu"         if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201209
+>   	default "mips-linux-gnu"         if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201305
+> +	default "nios2-linux-gnu"        if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201305_43
+> +	default "nios2-linux-gnu"        if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201305_12
+>   	default "powerpc-linux-gnu"      if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201009
+>   	default "powerpc-linux-gnu"      if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201103
+>   	default "sh-linux-gnu"           if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH201103
+> diff --git a/toolchain/toolchain-external/ext-tool.mk b/toolchain/toolchain-external/ext-tool.mk
+> index 01be85c..1d7b2f4 100644
+> --- a/toolchain/toolchain-external/ext-tool.mk
+> +++ b/toolchain/toolchain-external/ext-tool.mk
+> @@ -247,6 +247,12 @@ TOOLCHAIN_EXTERNAL_SOURCE = mips-2012.09-99-mips-linux-gnu-i686-pc-linux-gnu.tar
+>   else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201305),y)
+>   TOOLCHAIN_EXTERNAL_SITE = http://sourcery.mentor.com/public/gnu_toolchain/mips-linux-gnu/
+>   TOOLCHAIN_EXTERNAL_SOURCE = mips-2013.05-36-mips-linux-gnu-i686-pc-linux-gnu.tar.bz2
+> +else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201305_12),y)
+> +TOOLCHAIN_EXTERNAL_SITE = http://sourcery.mentor.com/public/gnu_toolchain/nios2-linux-gnu/
+> +TOOLCHAIN_EXTERNAL_SOURCE = sourceryg++-2013.05-12-nios2-linux-gnu-i686-pc-linux-gnu.tar.bz2
+> +else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201305_43),y)
+> +TOOLCHAIN_EXTERNAL_SITE = http://sourcery.mentor.com/public/gnu_toolchain/nios2-linux-gnu/
+> +TOOLCHAIN_EXTERNAL_SOURCE = sourceryg++-2013.05-43-nios2-linux-gnu-i686-pc-linux-gnu.tar.bz2
+>   else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201009),y)
+>   TOOLCHAIN_EXTERNAL_SITE = http://sourcery.mentor.com/public/gnu_toolchain/powerpc-linux-gnu/
+>   TOOLCHAIN_EXTERNAL_SOURCE = freescale-2010.09-55-powerpc-linux-gnu-i686-pc-linux-gnu.tar.bz2
+>
+
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
