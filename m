@@ -1,27 +1,24 @@
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Wed, 21 Aug 2013 09:08:55 +0200
-Subject: [Buildroot] [PATCH 3/5] Makefile: test before search for kernel
- modules
-In-Reply-To: <1376996584-4462-4-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1376996584-4462-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1376996584-4462-4-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <52146787.1050501@lucaceresoli.net>
+From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
+Date: Wed, 21 Aug 2013 09:20:21 +0200
+Subject: [Buildroot] [PATCH] strongswan: fix typo in tnccs_20
+	dependencies
+In-Reply-To: <1376907843-16135-1-git-send-email-jezz@sysmic.org>
+References: <1376907843-16135-1-git-send-email-jezz@sysmic.org>
+Message-ID: <CAAXf6LX28aUt1WxOPYOozAVnvMH5acxWWuQy6EKY7X6BadtOAA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas Petazzoni wrote:
-> The 'find $(TARGET_DIR)/lib/modules' used to find and strip kernel
-> modules fails when no kernel modules have been installed. While the
-> '|| true' prevents the entire build from failing, there are still some
-> error messages displayed, which is not nice.
+On Mon, Aug 19, 2013 at 12:24 PM, J?r?me Pouiller <jezz@sysmic.org> wrote:
+> It looks like there is a typing error in dependencies of tnccs_20 in strongswan
+> configure script. Add a patch to solve it.
 >
-> Instead, test if the directory exists before doing the find. We also
-> remove the '|| true' in order to really abort the build if a
-> problematic error occurs.
+> Resolve issues detected here:
+>     http://autobuild.buildroot.net/results/b069e304c42660e7f7eba0b358f95dbaf879df64
+>     http://autobuild.buildroot.net/results/7355ddbaa213f4fcfd1b6d37b25bed1aab525723
 >
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
 
-Acked-by: Luca Ceresoli <luca@lucaceresoli.net>
+Tested-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
