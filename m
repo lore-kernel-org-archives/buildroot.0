@@ -1,58 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 22 Aug 2013 23:01:32 +0200
-Subject: [Buildroot] [PATCH] pulseaudio: fix NEON usage
-Message-ID: <1377205292-25021-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Thu, 22 Aug 2013 23:02:28 +0200
+Subject: [Buildroot] [git commit] package/libbsd: further reduce the set of
+	supported archs
+Message-ID: <20130822210238.B91CB9B52F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The NEON intrinsics used by Pulseaudio are only available in either
--mfloat-abi=softfp or -mfloat-abi=hard, not in
--mfloat-abi=soft. Therefore having NEON support in the processor is
-not sufficient, we also should *not* be using soft-float.
+commit: http://git.buildroot.net/buildroot/commit/?id=f01809d2b73d596c15d99a6188a4ee713da8a49b
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Moreover, looking at BR2_ARM_ENABLE_NEON to know if the processor has
-NEON support is incorrect. This option is only here to allow the user
-to tell whether the processor has NEON support or not, for the ARM
-cores that only have optional NEON support. Instead, the
-BR2_ARM_CPU_HAS_NEON option really indicates whether NEON is available
-or not (it is either set automatically by the ARM cores that always
-have NEON support, or when BR2_ARM_ENABLE_NEON is enabled by the user
-to confirm that his ARM processor has NEON support).
+Support for a,out on ARM will be dropped in Linux 3.11 (and is already
+missing in the -rc).
 
-This fixes build failures such as
-http://autobuild.buildroot.org/results/675/675c96059be348b594cc92980bef391126931c83/build-end.log
+m68k is marked BROKEN in Buildroot, so it is never ever tested.
 
+The x86 familly is the only one left with support for a.out, now.
+
+Reported-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/multimedia/pulseaudio/pulseaudio.mk | 13 ++++++++++++-
- 1 file changed, 12 insertions(+), 1 deletion(-)
+ package/libbsd/Config.in |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/multimedia/pulseaudio/pulseaudio.mk b/package/multimedia/pulseaudio/pulseaudio.mk
-index 910e4a7..ad28ca6 100644
---- a/package/multimedia/pulseaudio/pulseaudio.mk
-+++ b/package/multimedia/pulseaudio/pulseaudio.mk
-@@ -55,7 +55,18 @@ endef
- PULSEAUDIO_POST_PATCH_HOOKS += PULSEAUDIO_FORCE_CC
- endif
+diff --git a/package/libbsd/Config.in b/package/libbsd/Config.in
+index 1fa9497..bae5700 100644
+--- a/package/libbsd/Config.in
++++ b/package/libbsd/Config.in
+@@ -2,7 +2,7 @@ config BR2_PACKAGE_LIBBSD
+ 	bool "libbsd"
+ 	# libbsd requires a.out.h, which is only available for those
+ 	# architectures: arm, m68k, x86 (and alpha, but we don't care.)
+-	depends on ( BR2_arm || BR2_armeb || BR2_m68k || BR2_i386 || BR2_x86_64 )
++	depends on ( BR2_i386 || BR2_x86_64 )
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	help
+ 	  This library provides useful functions commonly found on BSD
+@@ -14,5 +14,5 @@ config BR2_PACKAGE_LIBBSD
+ 	  http://libbsd.freedesktop.org/
  
--PULSEAUDIO_CONF_OPT += $(if $(BR2_ARM_ENABLE_NEON),--enable-neon-opt=yes,--enable-neon-opt=no)
-+ifeq ($(BR2_ARM_SOFT_FLOAT),)
-+ifeq ($(BR2_ARM_CPU_HAS_NEON),y)
-+PULSEAUDIO_USE_NEON = y
-+endif
-+endif
-+
-+ifeq ($(PULSEAUDIO_USE_NEON),y)
-+PULSEAUDIO_CONF_OPT += --enable-neon-opt=yes
-+else
-+PULSEAUDIO_CONF_OPT += --enable-neon-opt=no
-+endif
-+
- # pulseaudio alsa backend needs pcm/mixer apis
- ifneq ($(BR2_PACKAGE_ALSA_LIB_PCM)$(BR2_PACKAGE_ALSA_LIB_MIXER),yy)
- PULSEAUDIO_CONF_OPT += --disable-alsa
--- 
-1.8.1.2
+ comment "libbsd requires a toolchain with thread support"
+-	depends on ( BR2_arm || BR2_armeb || BR2_m68k || BR2_i386 || BR2_x86_64 )
++	depends on ( BR2_i386 || BR2_x86_64 )
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS
