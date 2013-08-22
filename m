@@ -1,67 +1,99 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 22 Aug 2013 22:29:53 +0200
-Subject: [Buildroot] [PATCH] toolchain-external: fix lib64 symlinks
-In-Reply-To: <CAG2jQ8iVYt=QK9s4sKKzbCsRvp=rA4_BjPSg0DnTQtOobOtn4A@mail.gmail.com>
-References: <1376340548-14050-1-git-send-email-s.martin49@gmail.com>
- <CAG2jQ8iVYt=QK9s4sKKzbCsRvp=rA4_BjPSg0DnTQtOobOtn4A@mail.gmail.com>
-Message-ID: <521674C1.7090304@mind.be>
+From: Markos Chandras <markos.chandras@gmail.com>
+Date: Thu, 22 Aug 2013 21:33:08 +0100
+Subject: [Buildroot] [PATCH] python-setuptools: Add patch to prevent
+ detecting the host installation
+In-Reply-To: <5215F4F6.4030701@zacarias.com.ar>
+References: <1377008739-12484-1-git-send-email-markos.chandras@imgtec.com>
+ <521527EC.8000307@mind.be>
+ <CAGm1_kvOgqynT=gJcxQW=xr_MQeiL8QuxiKAi88QrKADwQY1EQ@mail.gmail.com>
+ <CAGm1_ktgXAkpBOQJ4JspAfWKirqQg2SdKOvYH9+on2wKKgHOFw@mail.gmail.com>
+ <5215D75E.5080301@mind.be>
+ <CAGm1_ksuhkORZYRNw1HPixOjBzRmk3MWgHp_yztMtHsYEyRrLw@mail.gmail.com>
+ <5215F201.6090308@zacarias.com.ar> <5215F336.8050106@mind.be>
+ <5215F4F6.4030701@zacarias.com.ar>
+Message-ID: <CAG2jQ8g7nmyF3zJAPvN_nYtBHg2FR_r4Ba7Jt=Ny10Xfkwn1kQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 13/08/13 10:37, Markos Chandras wrote:
-> Hi Samuel,
+On 22 August 2013 12:24, Gustavo Zacarias <gustavo@zacarias.com.ar> wrote:
+> On 08/22/2013 08:17 AM, Arnout Vandecappelle wrote:
 >
->> ---
+>>  Markos's patch, or a yet-to-be-created patch that adds $(TARGET_DIR) to
+>> the PYTHONPATH instead of passing the system's pythonpath?
+>
+> That's possible too, testing required :)
+>
+>>  Actually I didn't realize the PYTHONPATH setting for the host variant
+>> was redundant :-)  I was only talking about the target.
+>
+> PYTHONPATH for the target is required because it's sometimes hardcoded
+> in installed packages unfortunately - i don't recall the exact
+> combination that triggered it at the moment, or it may have been some
+> additional python package that i used for testing and never sent
+> (useless, not interesting) when fixing the shebang and other details.
+>
+>>  But I guess that is a separate patch.
 >>
->> This patch needs heavy testing, especially with external non-CodeSourcery
->> toolchains, and maybe with the old CodeSourcery ones.
->>
->> Once again, it raises the question, does 64-bit toolchain need 32-bit
->> stuff?
+>>  Anyway I'm not sure if the target variant is that relevant, because it
+>> will not be able to install anything that requires compilation...
 >
-> It does for MIPS/n32. n32 is a 32bit ABI for MIPS64, so a lib32->lib
-> symlink is required.
+> Yes, something for someone to up their buildroot cred :)
+> I'm unsure if we want to encourage the target setuptools, there are
+> packages that'll install fine, and as you say the compiler ones will
+> fail miserably.
+> I'd keep it to avoid unnecessary noise and complaints with a big fat
+> warning that it's not the buildroot way and it's just for convenience
+> (and to forget about the target toolchain!).
+> Regards.
 >
->> ---
->>   Makefile                                 |  4 ++--
->>   toolchain/helpers.mk                     | 23 ++++++++++++++++++-----
->>   toolchain/toolchain-external/ext-tool.mk |  1 -
->>   3 files changed, 20 insertions(+), 8 deletions(-)
->>
->> diff --git a/Makefile b/Makefile
->> index fcfc0be..756d4b1 100644
->> --- a/Makefile
->> +++ b/Makefile
->> @@ -424,8 +424,8 @@ $(BUILD_DIR) $(HOST_DIR) $(BINARIES_DIR) $(STAMP_DIR) $(LEGAL_INFO_DIR) $(REDIST
->>
->>   $(STAGING_DIR):
->>          @mkdir -p $(STAGING_DIR)/bin
->> -       @mkdir -p $(STAGING_DIR)/lib
->> -       @mkdir -p $(STAGING_DIR)/usr/lib
->> +       @mkdir -p $(STAGING_DIR)/lib$(if $(BR2_ARCH_IS_64),64)
->> +       @mkdir -p $(STAGING_DIR)/usr/lib$(if $(BR2_ARCH_IS_64),64)
->
-> Again, this should also handle the MIPS64/n32 case where lib32 is
-> needed instead of lib or lib64
->
-> Thomas suggested to have new symbols like ARCH_NEEDS_LIB32 or
-> ARCH_NEEDS_LIB64 selected by architectures that need lib32->lib or
-> lib64->lib symlinks respectively.
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-  Can't we just unconditionally make lib64->lib or lib32->lib symlinks? 
-Or does MIPS64/n32 need both lib32 and lib64?
+Hi,
 
-  Regards,
-  Arnout
+The following patch works for me
 
+--- a/package/python-setuptools/python-setuptools.mk
++++ b/package/python-setuptools/python-setuptools.mk
+@@ -20,19 +20,18 @@ endef
+
+ define PYTHON_SETUPTOOLS_BUILD_CMDS
+        (cd $(@D); \
+-       PYTHONPATH="/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages" \
++       PYTHONPATH="$(TARGET_DIR))/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages"
+\
+        $(HOST_DIR)/usr/bin/python setup.py build)
+ endef
+
+ define HOST_PYTHON_SETUPTOOLS_INSTALL_CMDS
+        (cd $(@D); \
+-       PYTHONPATH="$(HOST_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages"
+\
+        $(HOST_DIR)/usr/bin/python setup.py install --prefix=$(HOST_DIR)/usr)
+ endef
+
+ define PYTHON_SETUPTOOLS_INSTALL_TARGET_CMDS
+        (cd $(@D); \
+-       PYTHONPATH="/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages" \
++       PYTHONPATH="$(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages"
+\
+        $(HOST_DIR)/usr/bin/python setup.py install
+--executable=/usr/bin/python \
+        --single-version-externally-managed --root=/ --prefix=$(TARGET_DIR)/usr)
+
+
+Host variant is installed in
+output/host/usr/lib/python2.7/site-packages/distribute-0.6.36-py2.7.egg
+and target variant in output/target/usr/lib/python2.7/site-packages/setuptools
+
+What do you think? I think the 'target variant' of setuptools can be
+removed in a subsequent patch if necessary.
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+Regards,
+Markos Chandras
