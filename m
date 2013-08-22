@@ -1,42 +1,38 @@
-From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Thu, 22 Aug 2013 13:01:49 +0200
-Subject: [Buildroot] [PATCH] getty: add the ability to pass options to
-	getty
-In-Reply-To: <CADwac6ACU8jFSNXLOQ-dZCiucoVCSYKiT_7jAKtpLvNvwEYneQ@mail.gmail.com>
-References: <1377148355-21125-1-git-send-email-shmuelzon@gmail.com>
- <5215A979.2020708@mind.be>
- <CADwac6ACU8jFSNXLOQ-dZCiucoVCSYKiT_7jAKtpLvNvwEYneQ@mail.gmail.com>
-Message-ID: <CAAXf6LX5HVHAT9aONNuKJP++vG0uFi6R5xap6D64Znm4noUDAw@mail.gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu, 22 Aug 2013 08:12:01 -0300
+Subject: [Buildroot] [PATCH] python-setuptools: Add patch to prevent
+ detecting the host installation
+In-Reply-To: <CAGm1_ksuhkORZYRNw1HPixOjBzRmk3MWgHp_yztMtHsYEyRrLw@mail.gmail.com>
+References: <1377008739-12484-1-git-send-email-markos.chandras@imgtec.com>
+ <521527EC.8000307@mind.be>
+ <CAGm1_kvOgqynT=gJcxQW=xr_MQeiL8QuxiKAi88QrKADwQY1EQ@mail.gmail.com>
+ <CAGm1_ktgXAkpBOQJ4JspAfWKirqQg2SdKOvYH9+on2wKKgHOFw@mail.gmail.com>
+ <5215D75E.5080301@mind.be>
+ <CAGm1_ksuhkORZYRNw1HPixOjBzRmk3MWgHp_yztMtHsYEyRrLw@mail.gmail.com>
+Message-ID: <5215F201.6090308@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Assaf,
+On 08/22/2013 07:36 AM, Yegor Yefremov wrote:
 
-On Thu, Aug 22, 2013 at 9:28 AM, Assaf Inbal <shmuelzon@gmail.com> wrote:
-> Hey,
->
->>  Don't copy the incorrect coding style :-) Use = instead of := and put
->> spaces around it.
->
->
-> Just out of curiosity, why would you rather I use =? Is it because that
-> macro won't always be evaluated, or is there something else I'm missing?
+I'll answer on the last mail to make it simpler, otherwise it would be a
+lot of different mails :)
+Basically there's two issues going on here.
 
-Technically, in this case, both := and = are fine, and both produce
-the same result because the right-hand side is fixed and does not
-reference any other make variable.
-The more unusual := is thus not really needed, and therefore it has
-become buildroot policy to use the simple = in all cases, with spaces
-as delimiter. This is also visually the most attractive.
+First, Markos's patch is still necessary.
+On a gentoo build host which is also a desktop and where setuptools
+installed is "a common thing" thing fails no matter what is done without it.
 
->
-> BTW - Would you like me to submit an updated patch?
+Second, what Arnout said is valid too, but it's correctness rather than
+a fix. python-netifaces doesn't need python-setuptools so that can be
+dropped from DEPENDENCIES and Config.in, and PYTHONPATH in
+HOST_PYTHON_SETUPTOOLS_INSTALL_CMDS is in fact redundant.
+However if someone wants to concoct a patch for python-setuptools
+there's an additional nag for the target variant - it should
+depend/select BR2_PACKAGE_PYTHON_SSL since pypi forces https these days
+otherwise it'll be a terrible experience.
 
-Yes please. Review the comments provided and send an updated patch
-marked as 'PATCH v2'.
-
-Best regards,
-Thomas
+Regards.
