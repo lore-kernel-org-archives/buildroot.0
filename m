@@ -1,140 +1,113 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 22 Aug 2013 20:03:35 +0200
-Subject: [Buildroot] [PATCH 3/5] manual: update beyond Buildroot section
-In-Reply-To: <CAHXCMMLz6y46OSor3NPthHqpBwbuGJ1asGd3aVw1StEXYiN1Fw@mail.gmail.com>
-References: <1375824984-8226-1-git-send-email-s.martin49@gmail.com>
- <1375824984-8226-4-git-send-email-s.martin49@gmail.com>
- <20130807113910.2358816a@skate>
- <CAKvQZ_3UxzreEtWQ3E++3xZ1o4W_Rn1gzKrYQo2CNOnQ_hZpfg@mail.gmail.com>
- <CAHXCMMJ2iXQQyju9jdx_4sXCvpUa25O3fSWA9p8_yRPv92C7NQ@mail.gmail.com>
- <20130808200100.6f677bf5@skate> <5209CB2C.4030408@mind.be>
- <CAHXCMMLz6y46OSor3NPthHqpBwbuGJ1asGd3aVw1StEXYiN1Fw@mail.gmail.com>
-Message-ID: <52165277.30109@mind.be>
+Date: Thu, 22 Aug 2013 17:59:04 +0200
+Subject: [Buildroot] [PATCH v2 2/3] package: fix generic extract target
+ for top-level parallel make
+In-Reply-To: <CAHkwnC_6k4tY_KRudG7yWp1gOi5WZnYKDwWv2gh_xBtCQhJesQ@mail.gmail.com>
+References: <1374138746-23279-1-git-send-email-fabio.porcedda@gmail.com>
+ <1374138746-23279-3-git-send-email-fabio.porcedda@gmail.com>
+ <521513E3.8080401@mind.be>
+ <CAHkwnC_6k4tY_KRudG7yWp1gOi5WZnYKDwWv2gh_xBtCQhJesQ@mail.gmail.com>
+Message-ID: <52163548.2020108@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 15/08/13 21:01, Samuel Martin wrote:
-> All,
+On 22/08/13 09:44, Fabio Porcedda wrote:
+> On Wed, Aug 21, 2013 at 9:24 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
+>> On 18/07/13 11:12, Fabio Porcedda wrote:
+>>>
+[snip]
+>>>
+>>>    $(1)-patch:           $(1)-extract $$($(2)_TARGET_PATCH)
+>>>
+>>> -$(1)-extract:          $(1)-source \
+>>> -                       $$($(2)_TARGET_EXTRACT)
+>>> +$$($(2)_TARGET_EXTRACT):       $$($(2)_TARGET_SOURCE)
+>>> +$(1)-extract:                  $$($(2)_TARGET_EXTRACT)
+>>>
+>>>    $(1)-depends:         $$($(2)_DEPENDENCIES)
+>>>
+>>>
+>>
+>>   On second observation, I don't really like this change, because it makes
+>> the extract and patch parts asymmetrical with the others. I would prefer one
+>> patch that changes it for all the targets. But then, the behaviour does
+>> change, because rebuilding one package will also trigger a rebuild of the
+>> packages that depend on it. Which may be a good thing, of course...
 >
-> 2013/8/13 Arnout Vandecappelle <arnout at mind.be <mailto:arnout@mind.be>>
->  >
->  > On 08/08/13 20:01, Thomas Petazzoni wrote:
->  >>
->  >> Dear Samuel Martin,
->  >>
->  >> On Thu, 8 Aug 2013 14:36:39 +0200, Samuel Martin wrote:
->  >>>
->  >>> So, its right place may not be the manual, but some extended readme
->  >>> and/or sample
->  >>> post-image scripts.
->  >>> What about this?
->  >>
->  >>
->  >> I do believe it has its place into the manual, but it needs to be
->  >> written up properly, taking into account the other use cases (booting
->  >> on ARM/PowerPC platforms), and find a better place for this.
->  >
->  >
->  >  However, I think the "needs to be written up properly" aspect should
-> not stop a piece of documentation to be added to the manual. Even if it
-> is not written up properly, it will be useful for some people.
->
-> Right.
->
-> To move forward on this, I'd like to have people's opinion about a couple
-> of questions:
-> 1- what is the best place in the manual for such a section?
->    - between the current chapters 3 - "Working with Buildroot" - and 4 -
-> the FAQ/troubleshooting;
->    - or in the "Beyond Buildroot" chapter
->    - or in appendices
->    - somewhere else
+> Do you mean a single patch that changes all the targets? IMHO the
+> patch becomes too complex, but if is the preferred way i'm fine with
+> that.
 
-  I think 'Beyond buildroot' is the proper place. Only, that chapter 
-should be called "Deploying the buildroot images". The introductory text 
-you added looks really good. It is just missing the following at the end:
-
-For some of the off-the-shelf boards that buildroot supports, you can 
-find a specific explanation in a readme file in the _board_ directory.
-
-> 2- should we put the "network boot" in another section, rather than just
-> aside the disk image creation? (so, split the main addition of the patch
-> in 2 clearly distinguished section/chapter?)
-
-  No, looks like the right place to me. It is a way of deploying the 
-kernel/rootfs to the target.
-
-> 3- should we add a chapter focus on booting the image?
-
-  I think that is part of using/deploying the images, so it is the same 
-chapter. Also there is usually a tight relation between how the image is 
-installed and how it is booted.
-
-> 4- where should the VM disk image creation section belong to?
-
-  Same chapter.
-
-> 5- how do you think the manual should be organized about these topics
-> (which are: "booting images", "generating disk image for device or vm")?
-> what should be the perimeter these sections?
->
->
->
-> Eventually, I think the manual needs something right after the chapters 3
-> - "Working with Buildroot" - dealing with booting the image (title
-> suggestion is more than welcome).
-> This chapter could include:
-> - generic things about deployment on the actual hardware (rougthly:
-> "refer to the readme in the board directory of the vendor instructions");
-
-  Exactly :-)
-
-> - booting the qemu images;
-> - boot over nfs (as a way to speed up the development process);
-> - and redirect to the "Beyond Buildroot" chapter for less common ways
-> (chroot, etc).
-
-  I don't see why that shouldn't be in the same chapter.
+  Yes. I estimate it will modify about 50 lines, so I don't see a problem.
 
 >
-> The "Beyond Buildroot" chapter could talk about:
-> - chroot/binfmt/etc;
-> - generating disk image for specific device (e.g. a disk image for a RPi,
-> containing several partitions, and so on. IIRC, Yann quickly talked about
-> it months ago, maybe he could fill some gaps in the doc or provide sample
-> scripts...);
+> To be able to change the others targets i need to add stamp file for
+> every target inside $$($(2)_DEPENDENCIES,
+> i need to do that because a file cannot depends on a non existing file.
 
-  I think if it is really for a specific device, then it belongs in the 
-board/ directory.
+  That's not true. Take the following Makefile:
 
-> - generating disk image for a VM (like Willy already wrote it down).
+----------------
+%.source:
+	touch $@
 
-  Except for binfmt, I think all of this fits in the deployment chapter.
+%.extract: %.source
+	touch $@
 
+%.config: %.extract
+	touch $@
+
+%.build: %.config
+	touch $@
+
+X_DEPS = y z
+
+x.config: $(X_DEPS)
+x: x.build
+
+Y_DEPS = z
+
+y.config: $(Y_DEPS)
+y: y.build
+
+z.config: $(Z_DEPS)
+z: z.build
+
+.PRECIOUS: %.source %.extract
+----------------
+
+  Type 'make x', and all the build, config, extract, source files will be 
+touched in the right order.
+
+  The .PRECIOUS line may not be needed in practice, I added it here 
+because there are no explicit rules involving *.source and *.extract, 
+therefore these files will be deleted after a successful build.
+
+
+> If there is any chance that such modification is going to be accepted
+> i restart to work on the second part.
 >
-> In this view, I don't know yet to what section/chapter PXE boot belongs
-> to because it's something rather x86-oriented to me...
+>>   Also, I think it would be nicer / clearer to put these dependencies in the
+>> %-rules at the top of the file, rather than specifying them per package.
+>
+> Do you mean to put together all those rules between the %-rules
+> section and inner-generic-package function?
+> or to scatter them in the %-rules section?
 
-  PXE itself is, but after that it's exactly the same as a tftp/nfs boot. 
-PXE just adds the step of getting the actual bootloader to the device. So 
-maybe it could be rewritten to focus more on the tftp aspect, and just 
-mention the three references for more PXE information.
-
+  No, I mean to do it like the example above: use the % rules to specify 
+the dependencies between the stamp files, rather than an explicit rule 
+for each package.
 
   Regards,
   Arnout
 
-> Opinions, comments, suggestions, critics?
-> TIA for your inputs.
+
 >
+> Best regards
 >
-> Regards,
->
-> --
-> Samuel
 
 
 -- 
