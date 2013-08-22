@@ -1,69 +1,69 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 23 Aug 2013 01:24:05 +0200
-Subject: [Buildroot] [PATCH] python-setuptools: Add missing
- $(TARGET_DIR) to PYTHONPATH.
-In-Reply-To: <1377204777-8904-1-git-send-email-markos.chandras@imgtec.com>
-References: <1377204777-8904-1-git-send-email-markos.chandras@imgtec.com>
-Message-ID: <52169D95.9030701@mind.be>
+Date: Fri, 23 Aug 2013 01:26:58 +0200
+Subject: [Buildroot] [PATCH] toolchain: add support for glibc
+In-Reply-To: <20130822232633.7ba9b14d@skate>
+References: <1376847393-12397-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <521534E2.7020606@mind.be> <20130822232633.7ba9b14d@skate>
+Message-ID: <52169E42.2040904@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 22/08/13 22:52, Markos Chandras wrote:
-> The $(TARGET_DIR) variable is required when building
-> python-setuptools for the target otherwise the build system detects
-> the host installation which leads to permission error problems
-> like these:
+On 22/08/13 23:26, Thomas Petazzoni wrote:
+> Dear Arnout Vandecappelle,
 >
-> Setuptools installation detected at /usr/lib64/python2.7/site-packages
-> Renaming /usr/lib64/python2.7/site-packages/setuptools-0.9.8-py2.7.egg-info to
-> /usr/lib64/python2.7/site-packages/setuptools-0.9.8-py2.7.egg-info.OLD.1377005697.88
-> OSError: [Errno 13] Permission denied
+> On Wed, 21 Aug 2013 23:45:06 +0200, Arnout Vandecappelle wrote:
+>> On 18/08/13 19:36, Thomas Petazzoni wrote:
+>>> The support for eglibc 2.17 was added to the internal toolchain
+>>> backend for 2013.08. This commit now adds glibc 2.18 support to the
+>>> internal toolchain backend. The building procedure is very similar to
+>>> the one of eglibc, with a few differences, but the two are kept
+>>> separate for now.
+>>
+>>    I'm not sure if that's a good idea... Will merging them later be easier?
 >
-> Moreover, remove the PYTHONPATH variable for host variant since it's
-> not needed.
+> I don't know for sure, but the package aren't that complex, so I don't
+> think merging would be very difficult.
 >
-> Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
-> ---
->   package/python-setuptools/python-setuptools.mk | 5 ++---
->   1 file changed, 2 insertions(+), 3 deletions(-)
->
-> diff --git a/package/python-setuptools/python-setuptools.mk b/package/python-setuptools/python-setuptools.mk
-> index cd5ee4d..3044b4d 100644
-> --- a/package/python-setuptools/python-setuptools.mk
-> +++ b/package/python-setuptools/python-setuptools.mk
-> @@ -20,19 +20,18 @@ endef
->
->   define PYTHON_SETUPTOOLS_BUILD_CMDS
->   	(cd $(@D); \
-> -	PYTHONPATH="/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages" \
-> +	PYTHONPATH="$(TARGET_DIR))/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages" \
+> If I had to merge them, where should I put the common code?
 
-  Double ) there...
+  I was thinking to have just one glibc package, with a choice to select 
+eglibc or glibc.
+
+>
+>> [snip]
+>>> +define GLIBC_CONFIGURE_CMDS
+>>> +	mkdir -p $(@D)/build
+>>> +	# Do the configuration
+>>> +	(cd $(@D)/build; \
+>>> +		$(TARGET_CONFIGURE_OPTS) \
+>>> +		CFLAGS="-O2 $(GLIBC_EXTRA_CFLAGS)" CPPFLAGS="" \
+>>
+>>    The -O2 was required for eglibc. Why do we have it here as well?
+>
+> I believe yes. At least, Crosstool-NG does it, AFAIK. The glibc and
+> eglibc code base are very very similar, so it wouldn't surprise me that
+> the same 'constraint' applies on both.
+>
+>> [snip]
+>>> +ifeq ($(BR2_PACKAGE_GDB_SERVER),y)
+>>> +GLIBC_LIBS_LIB += libthread_db.so
+>>> +endif
+>>
+>>    Shouldn't this lib be installed as well for a gdb without gdbserver?
+>> I.e., shouldn't the condition be ifeq ($(BR2_PACKAGE_GDB),y)?
+>
+> That's a good question, I don't know. At the moment, the ct-ng backend,
+> the external backend and the eglibc .mk file all copy libthread_db.so
+> when gdbserver is enabled.
+
+  To be tested but it'd surprise me if gdb didn't need it.
 
 
   Regards,
   Arnout
-
->   	$(HOST_DIR)/usr/bin/python setup.py build)
->   endef
->
->   define HOST_PYTHON_SETUPTOOLS_INSTALL_CMDS
->   	(cd $(@D); \
-> -	PYTHONPATH="$(HOST_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages" \
->   	$(HOST_DIR)/usr/bin/python setup.py install --prefix=$(HOST_DIR)/usr)
->   endef
->
->   define PYTHON_SETUPTOOLS_INSTALL_TARGET_CMDS
->   	(cd $(@D); \
-> -	PYTHONPATH="/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages" \
-> +	PYTHONPATH="$(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages" \
->   	$(HOST_DIR)/usr/bin/python setup.py install --executable=/usr/bin/python \
->   	--single-version-externally-managed --root=/ --prefix=$(TARGET_DIR)/usr)
->   endef
->
 
 
 -- 
