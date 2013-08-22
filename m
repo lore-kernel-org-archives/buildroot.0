@@ -1,57 +1,58 @@
-From: Markos Chandras <markos.chandras@imgtec.com>
-Date: Thu, 22 Aug 2013 21:52:57 +0100
-Subject: [Buildroot] [PATCH] python-setuptools: Add missing $(TARGET_DIR) to
-	PYTHONPATH.
-Message-ID: <1377204777-8904-1-git-send-email-markos.chandras@imgtec.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 22 Aug 2013 23:01:32 +0200
+Subject: [Buildroot] [PATCH] pulseaudio: fix NEON usage
+Message-ID: <1377205292-25021-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The $(TARGET_DIR) variable is required when building
-python-setuptools for the target otherwise the build system detects
-the host installation which leads to permission error problems
-like these:
+The NEON intrinsics used by Pulseaudio are only available in either
+-mfloat-abi=softfp or -mfloat-abi=hard, not in
+-mfloat-abi=soft. Therefore having NEON support in the processor is
+not sufficient, we also should *not* be using soft-float.
 
-Setuptools installation detected at /usr/lib64/python2.7/site-packages
-Renaming /usr/lib64/python2.7/site-packages/setuptools-0.9.8-py2.7.egg-info to
-/usr/lib64/python2.7/site-packages/setuptools-0.9.8-py2.7.egg-info.OLD.1377005697.88
-OSError: [Errno 13] Permission denied
+Moreover, looking at BR2_ARM_ENABLE_NEON to know if the processor has
+NEON support is incorrect. This option is only here to allow the user
+to tell whether the processor has NEON support or not, for the ARM
+cores that only have optional NEON support. Instead, the
+BR2_ARM_CPU_HAS_NEON option really indicates whether NEON is available
+or not (it is either set automatically by the ARM cores that always
+have NEON support, or when BR2_ARM_ENABLE_NEON is enabled by the user
+to confirm that his ARM processor has NEON support).
 
-Moreover, remove the PYTHONPATH variable for host variant since it's
-not needed.
+This fixes build failures such as
+http://autobuild.buildroot.org/results/675/675c96059be348b594cc92980bef391126931c83/build-end.log
 
-Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/python-setuptools/python-setuptools.mk | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ package/multimedia/pulseaudio/pulseaudio.mk | 13 ++++++++++++-
+ 1 file changed, 12 insertions(+), 1 deletion(-)
 
-diff --git a/package/python-setuptools/python-setuptools.mk b/package/python-setuptools/python-setuptools.mk
-index cd5ee4d..3044b4d 100644
---- a/package/python-setuptools/python-setuptools.mk
-+++ b/package/python-setuptools/python-setuptools.mk
-@@ -20,19 +20,18 @@ endef
+diff --git a/package/multimedia/pulseaudio/pulseaudio.mk b/package/multimedia/pulseaudio/pulseaudio.mk
+index 910e4a7..ad28ca6 100644
+--- a/package/multimedia/pulseaudio/pulseaudio.mk
++++ b/package/multimedia/pulseaudio/pulseaudio.mk
+@@ -55,7 +55,18 @@ endef
+ PULSEAUDIO_POST_PATCH_HOOKS += PULSEAUDIO_FORCE_CC
+ endif
  
- define PYTHON_SETUPTOOLS_BUILD_CMDS
- 	(cd $(@D); \
--	PYTHONPATH="/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages" \
-+	PYTHONPATH="$(TARGET_DIR))/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages" \
- 	$(HOST_DIR)/usr/bin/python setup.py build)
- endef
- 
- define HOST_PYTHON_SETUPTOOLS_INSTALL_CMDS
- 	(cd $(@D); \
--	PYTHONPATH="$(HOST_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages" \
- 	$(HOST_DIR)/usr/bin/python setup.py install --prefix=$(HOST_DIR)/usr)
- endef
- 
- define PYTHON_SETUPTOOLS_INSTALL_TARGET_CMDS
- 	(cd $(@D); \
--	PYTHONPATH="/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages" \
-+	PYTHONPATH="$(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages" \
- 	$(HOST_DIR)/usr/bin/python setup.py install --executable=/usr/bin/python \
- 	--single-version-externally-managed --root=/ --prefix=$(TARGET_DIR)/usr)
- endef
+-PULSEAUDIO_CONF_OPT += $(if $(BR2_ARM_ENABLE_NEON),--enable-neon-opt=yes,--enable-neon-opt=no)
++ifeq ($(BR2_ARM_SOFT_FLOAT),)
++ifeq ($(BR2_ARM_CPU_HAS_NEON),y)
++PULSEAUDIO_USE_NEON = y
++endif
++endif
++
++ifeq ($(PULSEAUDIO_USE_NEON),y)
++PULSEAUDIO_CONF_OPT += --enable-neon-opt=yes
++else
++PULSEAUDIO_CONF_OPT += --enable-neon-opt=no
++endif
++
+ # pulseaudio alsa backend needs pcm/mixer apis
+ ifneq ($(BR2_PACKAGE_ALSA_LIB_PCM)$(BR2_PACKAGE_ALSA_LIB_MIXER),yy)
+ PULSEAUDIO_CONF_OPT += --disable-alsa
 -- 
-1.8.3.2
+1.8.1.2
