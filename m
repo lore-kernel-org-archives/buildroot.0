@@ -1,50 +1,46 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 22 Aug 2013 18:06:36 +0200
-Subject: [Buildroot] [PATCH] getty: add the ability to pass options to
- getty
-In-Reply-To: <CAAXf6LUHMReVczEir1yXai13-jHm_zBkXQN=T-OvNdWL_BTy2Q@mail.gmail.com>
-References: <1377148355-21125-1-git-send-email-shmuelzon@gmail.com>
- <CAAXf6LUHMReVczEir1yXai13-jHm_zBkXQN=T-OvNdWL_BTy2Q@mail.gmail.com>
-Message-ID: <5216370C.5030804@mind.be>
+Date: Thu, 22 Aug 2013 18:11:37 +0200
+Subject: [Buildroot] [PATCH] openssh: fix tab/spacing in init script
+In-Reply-To: <CAAXf6LXSo5Z56BO611E1iv5WUzvtzH+0Ocvr6LD3vSanmrLHkw@mail.gmail.com>
+References: <1377047460-1937-1-git-send-email-danomimanchego123@gmail.com>
+ <CAAXf6LUO9M-Nghy8ZVMS7L0y2J+=3G6kw1eJKnMUhWOt9wGg4Q@mail.gmail.com>
+ <CANxTyt5Q_NG1mzdq4vZJq7dYMjmbbRoAViJ-qi4qhy4LgjYZ0g@mail.gmail.com>
+ <CAAXf6LXSo5Z56BO611E1iv5WUzvtzH+0Ocvr6LD3vSanmrLHkw@mail.gmail.com>
+Message-ID: <52163839.5060204@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 22/08/13 12:58, Thomas De Schampheleire wrote:
-> There are now a number of getty-related config options in
-> system/Config.in, but without any structure.
-> When the getty port is empty, no action is taken.
-> What about introducing a new bool option to determine if a getty needs
-> to be started, with suboptions for port, baudrate, term, and
-> user-configurable options?
-> Something like:
+On 22/08/13 15:59, Thomas De Schampheleire wrote:
+>> >I'd be willing to go through all of them and make them uniform, if
+>> >recommended guidelines can be stated with regards to the above variations.
+>> >Tabs are tempting only because it's a single character in text files that go
+>> >in the target - otherwise, I'm normally in the tabs-are-evil camp, since
+>> >thing which start out with tabs tend get modified with spaces over time, and
+>> >because editor rendering of tab width can vary.  So I'd be willing to go
+>> >either way.
+> Thanks for checking. Seems there was more variance than I expected.
 >
-> config BR2_TARGET_GENERIC_GETTY
->          bool "Run a getty (login prompt) after boot"
->
-> config BR2_TARGET_GENERIC_GETTY_PORT
->          bool "tty port"
->          depends on BR2_TARGET_GENERIC_GETTY
->
-> choice
->          prompt "baudrate"
->          depends on BR2_TARGET_GENERIC_GETTY
->
-> [baudrate options]
-> endchoice
->
-> config BR2_TARGET_GENERIC_GETTY_TERM
->          bool "TERM environment variable"
->          depends on BR2_TARGET_GENERIC_GETTY
->
-> config BR2_TARGET_GENERIC_GETTY_OPTIONS
->          string "other options to pass to getty"
->          depends on BR2_TARGET_GENERIC_GETTY
+> I'm not sure what to do here. Unless such init scripts have been
+> copied from elsewhere (in which making cosmetic changes may be
+> undesirable), I'm ok with having them changed according to a given
+> guideline.
 
-  Sounds like a good plan. Except that the sub-options should be wrapped 
-in a if...endif construct instead of repeating 'depends on'.
+  If it is copied from elsewhere then it probably shouldn't be in 
+buildroot, but just copied from elsewhere.
+
+
+> Before trying to establish such a guideline, what does the community
+> think about this?
+> If there is no consensus in changing, then no need for a guideline.
+
+  I guess that's a judgement call for Peter to make.
+
+  Note that we also have this kind of whitespace inconsistencies in e.g. 
+support/scripts.
+
 
   Regards,
   Arnout
