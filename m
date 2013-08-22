@@ -1,43 +1,39 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Thu, 22 Aug 2013 07:44:15 +0200
-Subject: [Buildroot] [PATCH] apply-patches: run patch in batch mode
-Message-ID: <1377150255-4940-1-git-send-email-arnout@mind.be>
+Date: Thu, 22 Aug 2013 07:43:58 +0200
+Subject: [Buildroot] [PATCH] generatelocales: fix 'cut' invocation
+In-Reply-To: <20130822022639.GA6009@zuhnb712.ap.bm.net>
+References: <20130822022639.GA6009@zuhnb712.ap.bm.net>
+Message-ID: <1377150238-3467-1-git-send-email-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-If the file to be patched is missing, then `patch' will interactively
-ask for a file to be patched. This is annoying in e.g. the autobuilders
-because they have to wait for a timeout instead of failing.
-
-Giving the '-t' (dry-run) option to patch fixes this: it will skip the
-missing file, and return a non-zero exit code. So the build cleanly
-fails.
+'cut' needs to be invoked with the -s option to make sure it doesn't
+print anything when the delimiter isn't found. This is particularly
+important for the charmap detection, because UTF-8 is appended if
+the charmap is empty. But without -s, it will never be empty.
 
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
-I actually discovered this during my allyesconfig night build, where I
-use make -k.
+ Makefile | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- support/scripts/apply-patches.sh | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/support/scripts/apply-patches.sh b/support/scripts/apply-patches.sh
-index 2995ea9..e9c6869 100755
---- a/support/scripts/apply-patches.sh
-+++ b/support/scripts/apply-patches.sh
-@@ -80,7 +80,7 @@ function apply_patch {
-     echo ""
-     echo "Applying $patch using ${type}: "
- 	echo $patch >> ${builddir}/.applied_patches_list
--    ${uncomp} "${path}/$patch" | patch -g0 -p1 -E -d "${builddir}"
-+    ${uncomp} "${path}/$patch" | patch -g0 -p1 -E -d "${builddir}" -t
-     if [ $? != 0 ] ; then
-         echo "Patch failed!  Please fix ${patch}!"
- 	exit 1
+diff --git a/Makefile b/Makefile
+index 794d217..6018d63 100644
+--- a/Makefile
++++ b/Makefile
+@@ -543,8 +543,8 @@ ifneq ($(GENERATE_LOCALE),)
+ target-generatelocales: host-localedef
+ 	$(Q)mkdir -p $(TARGET_DIR)/usr/lib/locale/
+ 	$(Q)for locale in $(GENERATE_LOCALE) ; do \
+-		inputfile=`echo $${locale} | cut -f1 -d'.'` ; \
+-		charmap=`echo $${locale} | cut -f2 -d'.'` ; \
++		inputfile=`echo $${locale} | cut -f1 -d'.' -s` ; \
++		charmap=`echo $${locale} | cut -f2 -d'.' -s` ; \
+ 		if test -z "$${charmap}" ; then \
+ 			charmap="UTF-8" ; \
+ 		fi ; \
 -- 
 1.8.4.rc3
