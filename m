@@ -1,186 +1,62 @@
-From: Markos Chandras <markos.chandras@gmail.com>
-Date: Thu, 22 Aug 2013 09:52:44 +0100
-Subject: [Buildroot] [PATCH v2] harfbuzz: New package
-In-Reply-To: <52152E95.2080206@mind.be>
-References: <1376926609-11561-1-git-send-email-markos.chandras@imgtec.com>
- <52152E95.2080206@mind.be>
-Message-ID: <CAG2jQ8jOn3KqbbO3vs=EJO6uB5P0+TiTeyiiPBexJ4wyE1j-aQ@mail.gmail.com>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Thu, 22 Aug 2013 11:07:10 +0200
+Subject: [Buildroot] [PATCH] python-setuptools: Add patch to prevent
+ detecting the host installation
+In-Reply-To: <CAGm1_kvOgqynT=gJcxQW=xr_MQeiL8QuxiKAi88QrKADwQY1EQ@mail.gmail.com>
+References: <1377008739-12484-1-git-send-email-markos.chandras@imgtec.com>
+ <521527EC.8000307@mind.be>
+ <CAGm1_kvOgqynT=gJcxQW=xr_MQeiL8QuxiKAi88QrKADwQY1EQ@mail.gmail.com>
+Message-ID: <CAGm1_ktgXAkpBOQJ4JspAfWKirqQg2SdKOvYH9+on2wKKgHOFw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 21 August 2013 22:18, Arnout Vandecappelle <arnout@mind.be> wrote:
-> On 19/08/13 17:36, Markos Chandras wrote:
+On Thu, Aug 22, 2013 at 10:19 AM, Yegor Yefremov
+<yegorslists@googlemail.com> wrote:
+> On Wed, Aug 21, 2013 at 10:49 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
+>> On 20/08/13 16:25, Markos Chandras wrote:
+>>> Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
+>>> ---
+>>>   ...etuptools-do-not-detect-installed-version.patch | 26 ++++++++++++++++++++++
+>>>   1 file changed, 26 insertions(+)
+>>>   create mode 100644 package/python-setuptools/python-setuptools-do-not-detect-installed-version.patch
+>>>
+>>> diff --git a/package/python-setuptools/python-setuptools-do-not-detect-installed-version.patch b/package/python-setuptools/python-setuptools-do-not-detect-installed-version.patch
+>>> new file mode 100644
+>>> index 0000000..ebc8830
+>>> --- /dev/null
+>>> +++ b/package/python-setuptools/python-setuptools-do-not-detect-installed-version.patch
+>>> @@ -0,0 +1,26 @@
+>>> +Prevent build system from detecting an existing installation.
+>>> +Fixes the following problem when python-setuptools is installed
+>>> +on the host:
+>>> +
+>>> +Setuptools installation detected at /usr/lib64/python2.7/site-packages
+>>> +Renaming /usr/lib64/python2.7/site-packages/setuptools-0.9.8-py2.7.egg-info to
+>>> +/usr/lib64/python2.7/site-packages/setuptools-0.9.8-py2.7.egg-info.OLD.1377005697.88
+>>> +OSError: [Errno 13] Permission denied
 >>
->> HarfBuzz is an OpenType text shaping engine
+>>  This happens because setuptools is called with:
 >>
->> http://www.freedesktop.org/wiki/Software/HarfBuzz/
+>>         PYTHONPATH="/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages"
 >>
->> Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
->> ---
->> http://lists.busybox.net/pipermail/buildroot/2013-August/076645.html
->> Changes since v1:
->> - Fix alphabetical order in package/Config.in
->> - Rename 'LIBSTDCPP support' to 'C++ support'
->> ---
->>   package/Config.in            |  1 +
->>   package/harfbuzz/Config.in   | 34 ++++++++++++++++++++++++++++++++++
->>   package/harfbuzz/harfbuzz.mk | 44
->> ++++++++++++++++++++++++++++++++++++++++++++
->>   3 files changed, 79 insertions(+)
->>   create mode 100644 package/harfbuzz/Config.in
->>   create mode 100644 package/harfbuzz/harfbuzz.mk
+>>  Yegor, Gustavo, any idea why this is called with a python path pointing
+>> to the host? Maybe this isn't needed anymore? A quick grep in the source
+>> doesn't indicate an obvious place where PYTHONPATH would be relevant
+>> during install itself.
 >>
->> diff --git a/package/Config.in b/package/Config.in
->> index 7069d77..1b06755 100644
->> --- a/package/Config.in
->> +++ b/package/Config.in
->> @@ -130,6 +130,7 @@ endif
->>   source "package/fbterm/Config.in"
->>   source "package/fbv/Config.in"
->>   source "package/fb-test-app/Config.in"
->> +source "package/harfbuzz/Config.in"
->>   source "package/imagemagick/Config.in"
->>   source "package/linux-fusion/Config.in"
->>   source "package/lite/Config.in"
->> diff --git a/package/harfbuzz/Config.in b/package/harfbuzz/Config.in
->> new file mode 100644
->> index 0000000..1b1bad3
->> --- /dev/null
->> +++ b/package/harfbuzz/Config.in
->> @@ -0,0 +1,34 @@
->> +config BR2_PACKAGE_HARFBUZZ
->> +       bool "harfbuzz"
->> +       help
->> +         HarfBuzz is an OpenType text shaping engine
->> +
->> +         http://www.freedesktop.org/wiki/Software/HarfBuzz/
->> +
->> +if BR2_PACKAGE_HARFBUZZ
->> +
->> +config BR2_PACKAGE_HARFBUZZ_CAIRO
->> +       bool "Use cairo"
->> +       select BR2_PACKAGE_CAIRO
+>>  I've just tried removing the PYTHONPATH override and it built OK, but I
+>> haven't tested if a package installed with setuptools actually works.
+>> Well, actually, host-setuptools _doesn't_ have that strange
+>> PYTHONPATH override and that is of course the only one used within
+>> buildroot itself...
 >
->
->  We normally don't add options like this, but instead use automatic
-> selection (see below).
->
->  You may want to add some help text to say that it can make use of cairo,
-> freetype, glib2 and icu if these packages are selected.
->
->
->> +
->> +config BR2_PACKAGE_HARFBUZZ_FREETYPE
->> +       bool "Use the FreeType library"
->> +       select BR2_PACKAGE_FREETYPE
->> +
->> +config BR2_PACKAGE_HARFBUZZ_GLIB
->> +       bool "Use glib"
->> +       select BR2_PACKAGE_LIBGLIB2
->> +       depends on BR2_USE_WCHAR # gettext dep in libglib2
->> +       depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
->> +comment "glib support requires a toolchain with WCHAR and threading
->> support."
->> +       depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
->> +
->> +config BR2_PACKAGE_HARFBUZZ_ICU
->> +       bool "Use ICU"
->> +       select BR2_PACKAGE_ICU
->> +       depends on BR2_USE_WCHAR # icu
->> +       depends on BR2_INSTALL_LIBSTDCPP # icu
->> +
->> +comment "icu support requires a toolchain with WCHAR and C++ support."
->> +       depends on !BR2_USE_WCHAR || !BR2_INSTALL_LIBSTDCPP
->> +endif
->> diff --git a/package/harfbuzz/harfbuzz.mk b/package/harfbuzz/harfbuzz.mk
->> new file mode 100644
->> index 0000000..9aee90f
->> --- /dev/null
->> +++ b/package/harfbuzz/harfbuzz.mk
->> @@ -0,0 +1,44 @@
->>
->> +################################################################################
->> +#
->> +# harfbuzz
->> +#
->>
->> +################################################################################
->> +
->> +HARFBUZZ_VERSION = 0.9.19
->> +HARFBUZZ_SITE = http://www.freedesktop.org/software/harfbuzz/release/
->> +HARFBUZZ_SOURCE = harfbuzz-$(HARFBUZZ_VERSION).tar.bz2
->> +HARFBUZZ_LICENSE = Old-MIT ISC ICU
->
->
->  What is Old-MIT?
->
->  We still haven't had the final word on how the LICENSE string should be
-> formatted, but I think it is something like this:
->
->  MIT, ISC (ucdn library), ICU License (icu support library)
->
->  Luca, can you confirm?
->
->
->> +HARFBUZZ_LICENSE_FILES = COPYING src/hb-ucdn/COPYING
->> src/hb-icu-le/COPYING
->> +HARFBUZZ_INSTALL_STAGING = YES
->> +
->> +HARFBUZZ_CONF_OPT = --without-coretext --without-uniscribe
->> --without-graphite2
->> +
->> +ifeq ($(BR2_PACKAGE_HARFBUZZ_CAIRO),y)
->
->
->  To make it an automatic dependency, replace this condition with
->
-> ifeq ($(BR2_PACKAGE_CAIRO),y)
->
->  Same for the stuff below.
->
->
->> +       HARFBUZZ_DEPENDENCIES += cairo
->> +       HARFBUZZ_CONF_OPT += --with-cairo=yes
->> +else
->> +       HARFBUZZ_CONF_OPT += --with-cairo=no
->> +endif
->> +
->> +ifeq ($(BR2_PACKAGE_HARFBUZZ_FREETYPE),y)
->> +       HARFBUZZ_DEPENDENCIES += freetype
->> +       HARFBUZZ_CONF_OPT += --with-freetype=yes
->
->
->  Does harfbuzz use pkg-config for freetype? If not, you'll need
->
-> --with-freetype-config="$(STAGING_DIR)/usr/bin/freetype-config"
->
->
->> +else
->> +       HARFBUZZ_CONF_OPT += --with-freetype=no
->> +endif
->> +
->> +ifeq ($(BR2_PACKAGE_HARFBUZZ_GLIB),y)
->> +       HARFBUZZ_DEPENDENCIES += libglib2
->> +       HARFBUZZ_CONF_OPT += --with-glib=yes
->> +else
->> +       HARFBUZZ_CONF_OPT += --with-glib=no
->> +endif
->> +
->> +ifeq ($(BR2_PACKAGE_HARFBUZZ_ICU),y)
->> +       HARFBUZZ_DEPENDENCIES += icu
->> +       HARFBUZZ_CONF_OPT += --with-icu=yes
->
->
->  icu also has a custom config script so check if you need to pass it.
->
+> I'll look into it. But I need some time.
 
-Hi Arnout,
+The only package, that relies on setuptools is netifaces. I've applied
+the patch, rebuilt BR and everything seems to be OK. I can use
+netifaces, when I start the new image.
 
-Thanks I will submit a new patch then.
-
--- 
-Regards,
-Markos Chandras
+Yegor
