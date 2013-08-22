@@ -1,31 +1,55 @@
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Thu, 22 Aug 2013 10:09:28 +0200
-Subject: [Buildroot] [PATCH] apply-patches: run patch in batch mode
-In-Reply-To: <1377150255-4940-1-git-send-email-arnout@mind.be>
-References: <1377150255-4940-1-git-send-email-arnout@mind.be>
-Message-ID: <5215C738.2070707@lucaceresoli.net>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Thu, 22 Aug 2013 10:19:51 +0200
+Subject: [Buildroot] [PATCH] python-setuptools: Add patch to prevent
+ detecting the host installation
+In-Reply-To: <521527EC.8000307@mind.be>
+References: <1377008739-12484-1-git-send-email-markos.chandras@imgtec.com>
+ <521527EC.8000307@mind.be>
+Message-ID: <CAGm1_kvOgqynT=gJcxQW=xr_MQeiL8QuxiKAi88QrKADwQY1EQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout Vandecappelle (Essensium/Mind) wrote:
-> If the file to be patched is missing, then `patch' will interactively
-> ask for a file to be patched. This is annoying in e.g. the autobuilders
-> because they have to wait for a timeout instead of failing.
+On Wed, Aug 21, 2013 at 10:49 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
+> On 20/08/13 16:25, Markos Chandras wrote:
+>> Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
+>> ---
+>>   ...etuptools-do-not-detect-installed-version.patch | 26 ++++++++++++++++++++++
+>>   1 file changed, 26 insertions(+)
+>>   create mode 100644 package/python-setuptools/python-setuptools-do-not-detect-installed-version.patch
+>>
+>> diff --git a/package/python-setuptools/python-setuptools-do-not-detect-installed-version.patch b/package/python-setuptools/python-setuptools-do-not-detect-installed-version.patch
+>> new file mode 100644
+>> index 0000000..ebc8830
+>> --- /dev/null
+>> +++ b/package/python-setuptools/python-setuptools-do-not-detect-installed-version.patch
+>> @@ -0,0 +1,26 @@
+>> +Prevent build system from detecting an existing installation.
+>> +Fixes the following problem when python-setuptools is installed
+>> +on the host:
+>> +
+>> +Setuptools installation detected at /usr/lib64/python2.7/site-packages
+>> +Renaming /usr/lib64/python2.7/site-packages/setuptools-0.9.8-py2.7.egg-info to
+>> +/usr/lib64/python2.7/site-packages/setuptools-0.9.8-py2.7.egg-info.OLD.1377005697.88
+>> +OSError: [Errno 13] Permission denied
 >
-> Giving the '-t' (dry-run) option to patch fixes this: it will skip the
-
-"dry-run"? Of course not. :)
-s/dry-run/batch mode/
-
-> missing file, and return a non-zero exit code. So the build cleanly
-> fails.
+>  This happens because setuptools is called with:
 >
-> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+>         PYTHONPATH="/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages"
+>
+>  Yegor, Gustavo, any idea why this is called with a python path pointing
+> to the host? Maybe this isn't needed anymore? A quick grep in the source
+> doesn't indicate an obvious place where PYTHONPATH would be relevant
+> during install itself.
+>
+>  I've just tried removing the PYTHONPATH override and it built OK, but I
+> haven't tested if a package installed with setuptools actually works.
+> Well, actually, host-setuptools _doesn't_ have that strange
+> PYTHONPATH override and that is of course the only one used within
+> buildroot itself...
 
-With that fixed:
-Acked-by: Luca Ceresoli <luca@lucaceresoli.net>
+I'll look into it. But I need some time.
 
-Luca
+Yegor
