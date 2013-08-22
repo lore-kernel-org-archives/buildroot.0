@@ -1,49 +1,141 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 22 Aug 2013 18:11:37 +0200
-Subject: [Buildroot] [PATCH] openssh: fix tab/spacing in init script
-In-Reply-To: <CAAXf6LXSo5Z56BO611E1iv5WUzvtzH+0Ocvr6LD3vSanmrLHkw@mail.gmail.com>
-References: <1377047460-1937-1-git-send-email-danomimanchego123@gmail.com>
- <CAAXf6LUO9M-Nghy8ZVMS7L0y2J+=3G6kw1eJKnMUhWOt9wGg4Q@mail.gmail.com>
- <CANxTyt5Q_NG1mzdq4vZJq7dYMjmbbRoAViJ-qi4qhy4LgjYZ0g@mail.gmail.com>
- <CAAXf6LXSo5Z56BO611E1iv5WUzvtzH+0Ocvr6LD3vSanmrLHkw@mail.gmail.com>
-Message-ID: <52163839.5060204@mind.be>
+Date: Thu, 22 Aug 2013 20:03:35 +0200
+Subject: [Buildroot] [PATCH 3/5] manual: update beyond Buildroot section
+In-Reply-To: <CAHXCMMLz6y46OSor3NPthHqpBwbuGJ1asGd3aVw1StEXYiN1Fw@mail.gmail.com>
+References: <1375824984-8226-1-git-send-email-s.martin49@gmail.com>
+ <1375824984-8226-4-git-send-email-s.martin49@gmail.com>
+ <20130807113910.2358816a@skate>
+ <CAKvQZ_3UxzreEtWQ3E++3xZ1o4W_Rn1gzKrYQo2CNOnQ_hZpfg@mail.gmail.com>
+ <CAHXCMMJ2iXQQyju9jdx_4sXCvpUa25O3fSWA9p8_yRPv92C7NQ@mail.gmail.com>
+ <20130808200100.6f677bf5@skate> <5209CB2C.4030408@mind.be>
+ <CAHXCMMLz6y46OSor3NPthHqpBwbuGJ1asGd3aVw1StEXYiN1Fw@mail.gmail.com>
+Message-ID: <52165277.30109@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 22/08/13 15:59, Thomas De Schampheleire wrote:
->> >I'd be willing to go through all of them and make them uniform, if
->> >recommended guidelines can be stated with regards to the above variations.
->> >Tabs are tempting only because it's a single character in text files that go
->> >in the target - otherwise, I'm normally in the tabs-are-evil camp, since
->> >thing which start out with tabs tend get modified with spaces over time, and
->> >because editor rendering of tab width can vary.  So I'd be willing to go
->> >either way.
-> Thanks for checking. Seems there was more variance than I expected.
+On 15/08/13 21:01, Samuel Martin wrote:
+> All,
 >
-> I'm not sure what to do here. Unless such init scripts have been
-> copied from elsewhere (in which making cosmetic changes may be
-> undesirable), I'm ok with having them changed according to a given
-> guideline.
+> 2013/8/13 Arnout Vandecappelle <arnout at mind.be <mailto:arnout@mind.be>>
+>  >
+>  > On 08/08/13 20:01, Thomas Petazzoni wrote:
+>  >>
+>  >> Dear Samuel Martin,
+>  >>
+>  >> On Thu, 8 Aug 2013 14:36:39 +0200, Samuel Martin wrote:
+>  >>>
+>  >>> So, its right place may not be the manual, but some extended readme
+>  >>> and/or sample
+>  >>> post-image scripts.
+>  >>> What about this?
+>  >>
+>  >>
+>  >> I do believe it has its place into the manual, but it needs to be
+>  >> written up properly, taking into account the other use cases (booting
+>  >> on ARM/PowerPC platforms), and find a better place for this.
+>  >
+>  >
+>  >  However, I think the "needs to be written up properly" aspect should
+> not stop a piece of documentation to be added to the manual. Even if it
+> is not written up properly, it will be useful for some people.
+>
+> Right.
+>
+> To move forward on this, I'd like to have people's opinion about a couple
+> of questions:
+> 1- what is the best place in the manual for such a section?
+>    - between the current chapters 3 - "Working with Buildroot" - and 4 -
+> the FAQ/troubleshooting;
+>    - or in the "Beyond Buildroot" chapter
+>    - or in appendices
+>    - somewhere else
 
-  If it is copied from elsewhere then it probably shouldn't be in 
-buildroot, but just copied from elsewhere.
+  I think 'Beyond buildroot' is the proper place. Only, that chapter 
+should be called "Deploying the buildroot images". The introductory text 
+you added looks really good. It is just missing the following at the end:
 
+For some of the off-the-shelf boards that buildroot supports, you can 
+find a specific explanation in a readme file in the _board_ directory.
 
-> Before trying to establish such a guideline, what does the community
-> think about this?
-> If there is no consensus in changing, then no need for a guideline.
+> 2- should we put the "network boot" in another section, rather than just
+> aside the disk image creation? (so, split the main addition of the patch
+> in 2 clearly distinguished section/chapter?)
 
-  I guess that's a judgement call for Peter to make.
+  No, looks like the right place to me. It is a way of deploying the 
+kernel/rootfs to the target.
 
-  Note that we also have this kind of whitespace inconsistencies in e.g. 
-support/scripts.
+> 3- should we add a chapter focus on booting the image?
+
+  I think that is part of using/deploying the images, so it is the same 
+chapter. Also there is usually a tight relation between how the image is 
+installed and how it is booted.
+
+> 4- where should the VM disk image creation section belong to?
+
+  Same chapter.
+
+> 5- how do you think the manual should be organized about these topics
+> (which are: "booting images", "generating disk image for device or vm")?
+> what should be the perimeter these sections?
+>
+>
+>
+> Eventually, I think the manual needs something right after the chapters 3
+> - "Working with Buildroot" - dealing with booting the image (title
+> suggestion is more than welcome).
+> This chapter could include:
+> - generic things about deployment on the actual hardware (rougthly:
+> "refer to the readme in the board directory of the vendor instructions");
+
+  Exactly :-)
+
+> - booting the qemu images;
+> - boot over nfs (as a way to speed up the development process);
+> - and redirect to the "Beyond Buildroot" chapter for less common ways
+> (chroot, etc).
+
+  I don't see why that shouldn't be in the same chapter.
+
+>
+> The "Beyond Buildroot" chapter could talk about:
+> - chroot/binfmt/etc;
+> - generating disk image for specific device (e.g. a disk image for a RPi,
+> containing several partitions, and so on. IIRC, Yann quickly talked about
+> it months ago, maybe he could fill some gaps in the doc or provide sample
+> scripts...);
+
+  I think if it is really for a specific device, then it belongs in the 
+board/ directory.
+
+> - generating disk image for a VM (like Willy already wrote it down).
+
+  Except for binfmt, I think all of this fits in the deployment chapter.
+
+>
+> In this view, I don't know yet to what section/chapter PXE boot belongs
+> to because it's something rather x86-oriented to me...
+
+  PXE itself is, but after that it's exactly the same as a tftp/nfs boot. 
+PXE just adds the step of getting the actual bootloader to the device. So 
+maybe it could be rewritten to focus more on the tftp aspect, and just 
+mention the three references for more PXE information.
 
 
   Regards,
   Arnout
+
+> Opinions, comments, suggestions, critics?
+> TIA for your inputs.
+>
+>
+> Regards,
+>
+> --
+> Samuel
+
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
