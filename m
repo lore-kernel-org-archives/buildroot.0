@@ -1,62 +1,113 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 22 Aug 2013 23:26:33 +0200
-Subject: [Buildroot] [PATCH] toolchain: add support for glibc
-In-Reply-To: <521534E2.7020606@mind.be>
-References: <1376847393-12397-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <521534E2.7020606@mind.be>
-Message-ID: <20130822232633.7ba9b14d@skate>
+From: Markos Chandras <markos.chandras@imgtec.com>
+Date: Thu, 22 Aug 2013 22:32:44 +0100
+Subject: [Buildroot] [PATCH v3] harfbuzz: New package
+Message-ID: <1377207164-10433-1-git-send-email-markos.chandras@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Arnout Vandecappelle,
+HarfBuzz is an OpenType text shaping engine
 
-On Wed, 21 Aug 2013 23:45:06 +0200, Arnout Vandecappelle wrote:
-> On 18/08/13 19:36, Thomas Petazzoni wrote:
-> > The support for eglibc 2.17 was added to the internal toolchain
-> > backend for 2013.08. This commit now adds glibc 2.18 support to the
-> > internal toolchain backend. The building procedure is very similar to
-> > the one of eglibc, with a few differences, but the two are kept
-> > separate for now.
-> 
->   I'm not sure if that's a good idea... Will merging them later be easier?
+http://www.freedesktop.org/wiki/Software/HarfBuzz/
 
-I don't know for sure, but the package aren't that complex, so I don't
-think merging would be very difficult.
+Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
+---
+Changes since v2:
+- Drop BR2_PACKAGE_HARFBUZZ_* symbols. We enable/disable
+these options if the respective packages are selected.
+- Fix license name for each component.
+Suggested by Arnout Vandecappelle
+http://lists.busybox.net/pipermail/buildroot/2013-August/076728.html
 
-If I had to merge them, where should I put the common code?
+Changes since v1:
+- Fix alphabetical order in package/Config.in
+- Rename 'LIBSTDCPP support' to 'C++ support'
+---
+ package/Config.in            |  1 +
+ package/harfbuzz/Config.in   |  9 +++++++++
+ package/harfbuzz/harfbuzz.mk | 44 ++++++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 54 insertions(+)
+ create mode 100644 package/harfbuzz/Config.in
+ create mode 100644 package/harfbuzz/harfbuzz.mk
 
-> [snip]
-> > +define GLIBC_CONFIGURE_CMDS
-> > +	mkdir -p $(@D)/build
-> > +	# Do the configuration
-> > +	(cd $(@D)/build; \
-> > +		$(TARGET_CONFIGURE_OPTS) \
-> > +		CFLAGS="-O2 $(GLIBC_EXTRA_CFLAGS)" CPPFLAGS="" \
-> 
->   The -O2 was required for eglibc. Why do we have it here as well?
-
-I believe yes. At least, Crosstool-NG does it, AFAIK. The glibc and
-eglibc code base are very very similar, so it wouldn't surprise me that
-the same 'constraint' applies on both.
-
-> [snip]
-> > +ifeq ($(BR2_PACKAGE_GDB_SERVER),y)
-> > +GLIBC_LIBS_LIB += libthread_db.so
-> > +endif
-> 
->   Shouldn't this lib be installed as well for a gdb without gdbserver? 
-> I.e., shouldn't the condition be ifeq ($(BR2_PACKAGE_GDB),y)?
-
-That's a good question, I don't know. At the moment, the ct-ng backend,
-the external backend and the eglibc .mk file all copy libthread_db.so
-when gdbserver is enabled.
-
-Thomas
+diff --git a/package/Config.in b/package/Config.in
+index 7069d77..1b06755 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -130,6 +130,7 @@ endif
+ source "package/fbterm/Config.in"
+ source "package/fbv/Config.in"
+ source "package/fb-test-app/Config.in"
++source "package/harfbuzz/Config.in"
+ source "package/imagemagick/Config.in"
+ source "package/linux-fusion/Config.in"
+ source "package/lite/Config.in"
+diff --git a/package/harfbuzz/Config.in b/package/harfbuzz/Config.in
+new file mode 100644
+index 0000000..fb5fc8f
+--- /dev/null
++++ b/package/harfbuzz/Config.in
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_HARFBUZZ
++	bool "harfbuzz"
++	help
++	  HarfBuzz is an OpenType text shaping engine
++
++	  http://www.freedesktop.org/wiki/Software/HarfBuzz/
++
++	  Harfbuzz can make optional use of cairo, freetype,
++	  glib2 and icu packages if they are selected.
+diff --git a/package/harfbuzz/harfbuzz.mk b/package/harfbuzz/harfbuzz.mk
+new file mode 100644
+index 0000000..00651fd
+--- /dev/null
++++ b/package/harfbuzz/harfbuzz.mk
+@@ -0,0 +1,44 @@
++################################################################################
++#
++# harfbuzz
++#
++################################################################################
++
++HARFBUZZ_VERSION = 0.9.19
++HARFBUZZ_SITE = http://www.freedesktop.org/software/harfbuzz/release/
++HARFBUZZ_SOURCE = harfbuzz-$(HARFBUZZ_VERSION).tar.bz2
++HARFBUZZ_LICENSE = MIT, ISC (ucdn library), ICU License (icu support library)
++HARFBUZZ_LICENSE_FILES = COPYING src/hb-ucdn/COPYING src/hb-icu-le/COPYING
++HARFBUZZ_INSTALL_STAGING = YES
++
++HARFBUZZ_CONF_OPT = --without-coretext --without-uniscribe --without-graphite2
++
++ifeq ($(BR2_PACKAGE_CAIRO),y)
++	HARFBUZZ_DEPENDENCIES += cairo
++	HARFBUZZ_CONF_OPT += --with-cairo=yes
++else
++	HARFBUZZ_CONF_OPT += --with-cairo=no
++endif
++
++ifeq ($(BR2_PACKAGE_FREETYPE),y)
++	HARFBUZZ_DEPENDENCIES += freetype
++	HARFBUZZ_CONF_OPT += --with-freetype=yes
++else
++	HARFBUZZ_CONF_OPT += --with-freetype=no
++endif
++
++ifeq ($(BR2_PACKAGE_LIBGLIB2),y)
++	HARFBUZZ_DEPENDENCIES += libglib2
++	HARFBUZZ_CONF_OPT += --with-glib=yes
++else
++	HARFBUZZ_CONF_OPT += --with-glib=no
++endif
++
++ifeq ($(BR2_PACKAGE_ICU),y)
++	HARFBUZZ_DEPENDENCIES += icu
++	HARFBUZZ_CONF_OPT += --with-icu=yes
++else
++	HARFBUZZ_CONF_OPT += --with-icu=no
++endif
++
++$(eval $(autotools-package))
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+1.8.3.2
