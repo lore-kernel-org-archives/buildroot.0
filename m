@@ -1,36 +1,139 @@
-From: Jenkins, Lee (ISS Houston) <Lee.Jenkins@hp.com>
-Date: Thu, 22 Aug 2013 20:11:52 +0000
-Subject: [Buildroot] debugging inittab
-Message-ID: <2DD0B9C711CDFC45A3A266C78966CE7F451F39A0@G4W3291.americas.hpqcorp.net>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 22 Aug 2013 22:26:24 +0200
+Subject: [Buildroot] [PATCH v2] libsecret: New package
+In-Reply-To: <1376567256-13213-1-git-send-email-markos.chandras@imgtec.com>
+References: <1376567256-13213-1-git-send-email-markos.chandras@imgtec.com>
+Message-ID: <521673F0.8090209@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello. I am debugging a boot problem for a few hours. I'm clearly in over my head and I could use some insight.
+On 15/08/13 13:47, Markos Chandras wrote:
+> libsecret is a library for storing and retrieving passwords
+> and other secrets. It communicates with the "Secret Service"
+> using DBus. gnome-keyring and ksecretservice are both
+> implementations of a Secret Service.
 
-For debugging purposes, I am booting from a kernel and rootfs on an nfs share of my dev machine. The console is ttyS0.
+  I'm surprised it doesn't require dbus if it uses dbus for communicating 
+with the secret service...
 
-The kernel boots and rootfs is mounted and the scripts in /etc/init.d are executed. The kernel messages and startup script messages appear on the tty.
+>
+> libsecret replaces libgnome-keyring.
+>
+> https://wiki.gnome.org/Libsecret
+>
+> Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
+> ---
+> Changes since v1:
+> - depend on USE_WCHAR and TOOLCHAIN_HAS_THREADS which are required by libglib2
+> http://lists.busybox.net/pipermail/buildroot/2013-August/076565.html
+> ---
+>   package/Config.in              |  1 +
+>   package/libsecret/Config.in    | 25 +++++++++++++++++++++++++
+>   package/libsecret/libsecret.mk | 24 ++++++++++++++++++++++++
+>   3 files changed, 50 insertions(+)
+>   create mode 100644 package/libsecret/Config.in
+>   create mode 100644 package/libsecret/libsecret.mk
+>
+> diff --git a/package/Config.in b/package/Config.in
+> index 7069d77..93e280d 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -423,6 +423,7 @@ source "package/libassuan/Config.in"
+>   source "package/libmcrypt/Config.in"
+>   source "package/libmhash/Config.in"
+>   source "package/libnss/Config.in"
+> +source "package/libsecret/Config.in"
+>   source "package/libsha1/Config.in"
+>   source "package/nettle/Config.in"
+>   source "package/openssl/Config.in"
+> diff --git a/package/libsecret/Config.in b/package/libsecret/Config.in
+> new file mode 100644
+> index 0000000..aecd0f3
+> --- /dev/null
+> +++ b/package/libsecret/Config.in
+> @@ -0,0 +1,25 @@
+> +config BR2_PACKAGE_LIBSECRET
+> +	bool "libsecret"
+> +	select BR2_PACKAGE_LIBGLIB2
+> +	depends on BR2_USE_WCHAR # gettext dep in libglib2
+> +	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
+> +	help
+> +	  libsecret is a library for storing and retrieving passwords and other
+> +	  secrets. It communicates with the "Secret Service" using DBus.
+> +	  gnome-keyring and ksecretservice are both implementations of a Secret
+> +	  Service.
+> +
+> +	  https://wiki.gnome.org/Libsecret
+> +
+> +comment "libsecret requires a toolchain with WCHAR and threading support."
+> +	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
+> +
+> +if BR2_PACKAGE_LIBSECRET
+> +
+> +config BR2_PACKAGE_LIBSECRET_CRYPTO
+> +	bool "Enable gcrypt and transport encryption"
+> +	select BR2_PACKAGE_LIBGCRYPT
 
-The problem is that right after the init.d scripts this message appears: "can't open /dev/ttyS0: Permission denied". This message is repeated in an infinite loop.
+  Does the gcrypt support make a major difference for library size or 
+compilation time? Otherwise, we usually include it automatically if 
+libgcrypt is selected. I personally like to mention this in the help text 
+in that case, i.e. something like
 
-If I boot with the kernel argument "init=/bin/sh" then the init is bypassed and the system boots OK. So the problem is definitely in the init.
+Select BR2_PACKAGE_LIBGCRYPT to enable transport encryption.
 
-I'm new to debugging init-time and I cannot even figure out who is printing this message.
 
-The error message sounds like a permissions problem, so I added a hack script /etc/init.d/S99chmod, which does chmod 777 /dev/ttyS0 and then ls to show the result. The chmod works but the error still occurs.
+  But basically looks good to me. Untested though.
 
-Then I thought maybe getty was having trouble opening ttyS0, so I wrote a "wrapper" script called getty.shell to print a debug message and then modified the entry in inittab like this:
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-# Put a getty on the serial port
-ttyS0::respawn:/sbin/getty.shell -L ttyS0 115200 vt100 # GENERIC_SERIAL
 
-It doesn't look like the wrapper script is ever called because the debug message never appears.
+  Regards,
+  Arnout
 
-So, any ideas? What happens between /etc/init.d and /sbin/getty?
+> +	help
+> +	  Enable gcrypt and transport encryption
+> +
+> +endif
+> diff --git a/package/libsecret/libsecret.mk b/package/libsecret/libsecret.mk
+> new file mode 100644
+> index 0000000..32bcc17
+> --- /dev/null
+> +++ b/package/libsecret/libsecret.mk
+> @@ -0,0 +1,24 @@
+> +################################################################################
+> +#
+> +# libsecret
+> +#
+> +################################################################################
+> +
+> +LIBSECRET_VERSION = 0.15
+> +LIBSECRET_SITE = http://ftp.gnome.org/pub/GNOME/sources/libsecret/$(LIBSECRET_VERSION)
+> +LIBSECRET_SOURCE = libsecret-$(LIBSECRET_VERSION).tar.xz
+> +LIBSECRET_LICENSE = LGPLv2.1+
+> +LIBSECRET_LICENSE_FILES = COPYING
+> +LIBSECRET_INSTALL_STAGING = YES
+> +
+> +LIBSECRET_DEPENDENCIES = libglib2
+> +LIBSECRET_CONF_OPT = --disable-manpages --disable-strict --disable-coverage --enable-vala=no
+> +
+> +ifeq ($(BR2_PACKAGE_LIBSECRET_CRYPTO),y)
+> +	LIBSECRET_DEPENDENCIES += libgcrypt
+> +	LIBSECRET_CONF_OPT += --enable-gcrypt
+> +else
+> +	LIBSECRET_CONF_OPT += --disable-gcrypt
+> +endif
+> +
+> +$(eval $(autotools-package))
+>
 
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130822/428adbc4/attachment.html>
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
