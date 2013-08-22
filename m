@@ -1,57 +1,62 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 22 Aug 2013 23:06:52 +0200
-Subject: [Buildroot] [git commit] gcc: fix libstdc++_pic for AVR32
-Message-ID: <20130822210649.0D3F69B52F@busybox.osuosl.org>
+Date: Thu, 22 Aug 2013 23:26:33 +0200
+Subject: [Buildroot] [PATCH] toolchain: add support for glibc
+In-Reply-To: <521534E2.7020606@mind.be>
+References: <1376847393-12397-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <521534E2.7020606@mind.be>
+Message-ID: <20130822232633.7ba9b14d@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=24c5dbcef21d61bc4482587eb8821159f69b245d
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Arnout Vandecappelle,
 
-It is not clear why 300-libstdc++-pic.patch pre-applied to
-gcc-4.2.2-avr32-2.1.5 seems to have come from some older version
-of gcc (as early as 4.0.3). This older patch incorrectly refers to
-object files to be included in the library libstdc++_pic.a as *.o,
-while their location seems to be in .libs/*.o (see the contents at
-e.g. https://github.com/ZigFisher/Midge/blob/master/toolchain/gcc/4.0.3/300-libstdc%2B%2B-pic.patch ).
-The same patch for gcc 4.1.0 refers to the files as .libs/*.o (see
-https://github.com/ZigFisher/Midge/blob/master/toolchain/gcc/4.1.0/300-libstdc%2B%2B-pic.patch ).
-This patch corrects rules in Makefile.in.
+On Wed, 21 Aug 2013 23:45:06 +0200, Arnout Vandecappelle wrote:
+> On 18/08/13 19:36, Thomas Petazzoni wrote:
+> > The support for eglibc 2.17 was added to the internal toolchain
+> > backend for 2013.08. This commit now adds glibc 2.18 support to the
+> > internal toolchain backend. The building procedure is very similar to
+> > the one of eglibc, with a few differences, but the two are kept
+> > separate for now.
+> 
+>   I'm not sure if that's a good idea... Will merging them later be easier?
 
-Signed-off-by: Alexander Lukichev <alexander.lukichev@gmail.com>
-Acked-by: Simon Dawson <spdawson@gmail.com>
-Tested-by: Simon Dawson <spdawson@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- .../990-fix-300-libstdc++-pic.patch                |   20 ++++++++++++++++++++
- 1 files changed, 20 insertions(+), 0 deletions(-)
+I don't know for sure, but the package aren't that complex, so I don't
+think merging would be very difficult.
 
-diff --git a/package/gcc/4.2.2-avr32-2.1.5/990-fix-300-libstdc++-pic.patch b/package/gcc/4.2.2-avr32-2.1.5/990-fix-300-libstdc++-pic.patch
-new file mode 100644
-index 0000000..a63b3ad
---- /dev/null
-+++ b/package/gcc/4.2.2-avr32-2.1.5/990-fix-300-libstdc++-pic.patch
-@@ -0,0 +1,20 @@
-+libstdc++-v3: fix the effects of pre-applied 300-libstdc++-pic.patch
-+
-+This version of GCC comes with a number of pre-applied patches, among which is
-+300-libstdc++-pic.patch that makes a PIC version of libstdc++. The resulting
-+Makefile.in incorrectly refers to object files that should be insde the library.
-+
-+Signed-off-by: Alexander Lukichev <alexander.lukichev@gmail.com>
-+
-+diff -uNrp host-gcc-final-4.2.2-avr32-2.1.5.orig/libstdc++-v3/src/Makefile.in host-gcc-final-4.2.2-avr32-2.1.5/libstdc++-v3/src/Makefile.in
-+--- host-gcc-final-4.2.2-avr32-2.1.5.orig/libstdc++-v3/src/Makefile.in	2008-07-04 00:18:42.000000000 +0300
-++++ host-gcc-final-4.2.2-avr32-2.1.5/libstdc++-v3/src/Makefile.in	2013-08-08 16:15:56.201258882 +0300
-+@@ -804,7 +804,7 @@ install_debug:
-+ 
-+ install-exec-local:
-+ ifeq ($(enable_shared),yes)
-+-	$(AR) cru libstdc++_pic.a *.o $(top_builddir)/libsupc++/*.o
-++	$(AR) cru libstdc++_pic.a .libs/*.o $(top_builddir)/libsupc++/*.o
-+ 	$(INSTALL_DATA) libstdc++_pic.a $(DESTDIR)$(toolexeclibdir)
-+ endif
-+ 
+If I had to merge them, where should I put the common code?
+
+> [snip]
+> > +define GLIBC_CONFIGURE_CMDS
+> > +	mkdir -p $(@D)/build
+> > +	# Do the configuration
+> > +	(cd $(@D)/build; \
+> > +		$(TARGET_CONFIGURE_OPTS) \
+> > +		CFLAGS="-O2 $(GLIBC_EXTRA_CFLAGS)" CPPFLAGS="" \
+> 
+>   The -O2 was required for eglibc. Why do we have it here as well?
+
+I believe yes. At least, Crosstool-NG does it, AFAIK. The glibc and
+eglibc code base are very very similar, so it wouldn't surprise me that
+the same 'constraint' applies on both.
+
+> [snip]
+> > +ifeq ($(BR2_PACKAGE_GDB_SERVER),y)
+> > +GLIBC_LIBS_LIB += libthread_db.so
+> > +endif
+> 
+>   Shouldn't this lib be installed as well for a gdb without gdbserver? 
+> I.e., shouldn't the condition be ifeq ($(BR2_PACKAGE_GDB),y)?
+
+That's a good question, I don't know. At the moment, the ct-ng backend,
+the external backend and the eglibc .mk file all copy libthread_db.so
+when gdbserver is enabled.
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
