@@ -1,51 +1,36 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 22 Aug 2013 21:42:18 +0200
-Subject: [Buildroot] [PATCH] toolchain: add support for glibc
-In-Reply-To: <52153685.6010407@mind.be>
-References: <1376847393-12397-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <52153685.6010407@mind.be>
-Message-ID: <5216699A.8090800@mind.be>
+From: Jenkins, Lee (ISS Houston) <Lee.Jenkins@hp.com>
+Date: Thu, 22 Aug 2013 20:11:52 +0000
+Subject: [Buildroot] debugging inittab
+Message-ID: <2DD0B9C711CDFC45A3A266C78966CE7F451F39A0@G4W3291.americas.hpqcorp.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 21/08/13 23:52, Arnout Vandecappelle wrote:
-> On 18/08/13 19:36, Thomas Petazzoni wrote:
->> +config BR2_TOOLCHAIN_BUILDROOT_GLIBC
->> +    bool "glibc (experimental)"
->> +    depends on BR2_arm    || BR2_armeb    || BR2_aarch64 || \
->> +           BR2_i386   || BR2_mips     || BR2_mipsel  || \
->> +           BR2_mips64 || BR2_mips64el || BR2_powerpc || \
->> +           BR2_sh     || BR2_sh64     || BR2_sparc   || \
->> +           BR2_x86_64
->
->   I though, let's try this patch with some exotic architecture, and guess
-> what:
->
->  >>> glibc 2.18 Configuring
-> ...
-> checking sysdep dirs... configure: error: The sh64 is not supported.
->
->
->   Continuing with sparc...
+Hello. I am debugging a boot problem for a few hours. I'm clearly in over my head and I could use some insight.
 
-  sparc wouldn't even build gcc-initial, so I continued with powerpc and 
-that at least worked :-)  Given that the two comments I had were minor, 
-you can add my
+For debugging purposes, I am booting from a kernel and rootfs on an nfs share of my dev machine. The console is ttyS0.
 
-Tested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+The kernel boots and rootfs is mounted and the scripts in /etc/init.d are executed. The kernel messages and startup script messages appear on the tty.
 
+The problem is that right after the init.d scripts this message appears: "can't open /dev/ttyS0: Permission denied". This message is repeated in an infinite loop.
 
-  Regards,
-  Arnout
+If I boot with the kernel argument "init=/bin/sh" then the init is bypassed and the system boots OK. So the problem is definitely in the init.
 
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+I'm new to debugging init-time and I cannot even figure out who is printing this message.
+
+The error message sounds like a permissions problem, so I added a hack script /etc/init.d/S99chmod, which does chmod 777 /dev/ttyS0 and then ls to show the result. The chmod works but the error still occurs.
+
+Then I thought maybe getty was having trouble opening ttyS0, so I wrote a "wrapper" script called getty.shell to print a debug message and then modified the entry in inittab like this:
+
+# Put a getty on the serial port
+ttyS0::respawn:/sbin/getty.shell -L ttyS0 115200 vt100 # GENERIC_SERIAL
+
+It doesn't look like the wrapper script is ever called because the debug message never appears.
+
+So, any ideas? What happens between /etc/init.d and /sbin/getty?
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130822/428adbc4/attachment.html>
