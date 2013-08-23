@@ -1,22 +1,23 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri, 23 Aug 2013 10:18:26 -0300
-Subject: [Buildroot] [PATCH] linux-fusion: bump version to 9.0.2
-In-Reply-To: <1377118180-28514-1-git-send-email-arnout@mind.be>
-References: <1377118180-28514-1-git-send-email-arnout@mind.be>
-Message-ID: <52176122.6020104@zacarias.com.ar>
+Date: Fri, 23 Aug 2013 10:28:36 -0300
+Subject: [Buildroot] [PATCH 2/5] acl: add patch to fix static
+	installation
+In-Reply-To: <1376996584-4462-3-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1376996584-4462-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1376996584-4462-3-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <52176384.8090401@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 08/21/2013 05:49 PM, Arnout Vandecappelle (Essensium/Mind) wrote:
+On 08/20/2013 08:03 AM, Thomas Petazzoni wrote:
 
-> Fixes build with recent kernels.
+> Just like 'attr', 'acl' doesn't use automake to control the
+> build/installation of its components, and the static-only installation
+> process was not installing libacl.a. We add a patch that fixes this.
 > 
-> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-Tested-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Acked-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-
-(Built-tested, 9.0.0 indeed fails, 9.0.2 builds)
