@@ -1,31 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 23 Aug 2013 06:59:36 +0200
-Subject: [Buildroot] [PATCH 1/1] gcc: fix libstdc++_pic for AVR32
-In-Reply-To: <1376025370-9467-1-git-send-email-alexander.lukichev@gmail.com>
-References: <1376025370-9467-1-git-send-email-alexander.lukichev@gmail.com>
-Message-ID: <20130823065936.18a7d3e0@skate>
+Date: Fri, 23 Aug 2013 07:01:13 +0200
+Subject: [Buildroot] [PATCH] python-setuptools: Add missing
+ $(TARGET_DIR) to PYTHONPATH.
+In-Reply-To: <1377204777-8904-1-git-send-email-markos.chandras@imgtec.com>
+References: <1377204777-8904-1-git-send-email-markos.chandras@imgtec.com>
+Message-ID: <20130823070113.122e718f@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Alexander Lukichev,
+Gustavo,
 
-On Fri,  9 Aug 2013 08:16:10 +0300, Alexander Lukichev wrote:
-> It is not clear why 300-libstdc++-pic.patch pre-applied to
-> gcc-4.2.2-avr32-2.1.5 seems to have come from some older version
-> of gcc (as early as 4.0.3). This older patch incorrectly refers to
-> object files to be included in the library libstdc++_pic.a as *.o,
-> while their location seems to be in .libs/*.o (see the contents at
-> e.g. https://github.com/ZigFisher/Midge/blob/master/toolchain/gcc/4.0.3/300-libstdc%2B%2B-pic.patch ).
-> The same patch for gcc 4.1.0 refers to the files as .libs/*.o (see
-> https://github.com/ZigFisher/Midge/blob/master/toolchain/gcc/4.1.0/300-libstdc%2B%2B-pic.patch ).
-> This patch corrects rules in Makefile.in.
+On Thu, 22 Aug 2013 21:52:57 +0100, Markos Chandras wrote:
+> The $(TARGET_DIR) variable is required when building
+> python-setuptools for the target otherwise the build system detects
+> the host installation which leads to permission error problems
+> like these:
 > 
-> Signed-off-by: Alexander Lukichev <alexander.lukichev@gmail.com>
+> Setuptools installation detected at /usr/lib64/python2.7/site-packages
+> Renaming /usr/lib64/python2.7/site-packages/setuptools-0.9.8-py2.7.egg-info to
+> /usr/lib64/python2.7/site-packages/setuptools-0.9.8-py2.7.egg-info.OLD.1377005697.88
+> OSError: [Errno 13] Permission denied
+> 
+> Moreover, remove the PYTHONPATH variable for host variant since it's
+> not needed.
+> 
+> Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
 
-Applied, thanks.
+Would you mind testing/acking this patch? You've been doing quite some
+Python stuff, so I'd appreciate to have your input on this.
+
+Thanks!
 
 Thomas
 -- 
