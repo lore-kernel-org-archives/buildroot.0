@@ -1,11 +1,11 @@
 From: Sagaert Johan <sagaert.johan@skynet.be>
-Date: Fri, 23 Aug 2013 16:50:12 +0200
+Date: Fri, 23 Aug 2013 17:46:12 +0200
 Subject: [Buildroot] Problem with Qt when using commit libglib2: Bump
 	libglib2 to 2.36.1 ( no touchscreen )
 In-Reply-To: <20130823131819.6035af8e@skate>
 References: <16F215BDBD9D49C49E858122318082E4@JohanW7>
  <20130823131819.6035af8e@skate>
-Message-ID: <7C318BF756CF414E91C74C93340742D5@JohanW7>
+Message-ID: <15B69DCB75BB4B719CD6459453D68CDF@JohanW7>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,34 +15,17 @@ To: buildroot@busybox.net
  
 Hi
 
-I used QT_CONFIGURE_OPTS += -no-glib and this seems to fix the problem, but it breaks phonon. See below
-So I had to disable Phonon first.
-It might be needed to add glib as dependency for phonon in the config menu.
+Using the latest glib version does not solve it.(did not expect it would.)
+I guess the solution to solve this is does not seem to be trivial.
+(libglib2 is an annoying one,since many other packages depend on it.)
 
-Creating qmake. Please wait...
-make[1]: Entering directory `/home/buildroot12git/output/build/qt-4.8.5/qmake'
-make[1]: Leaving directory `/home/buildroot12git/output/build/qt-4.8.5/qmake'
+So this leaves me with 2 options: revert libglib2 and libsoup or live without phonon.
 
-You have asked to use pkg-config and are cross-compiling.
-Please make sure you have a correctly set-up pkg-config
-environment!
-
-Phonon support cannot be enabled due to functionality tests!
- Turn on verbose messaging (-v) to ./configure to see the final report.
- If you believe this message is in error you may use the continue
- switch (-continue) to ./configure to continue.
-make: *** [/home/buildroot12git/output/build/qt-4.8.5/.stamp_configured] Error 101
-
-
-
-I will bump glib2 to the latest version to see if this solves anything...
-Building it now ....
-
-Regards Johan
+Regards ,Johan
 
 
 -----Oorspronkelijk bericht-----
-Van: Thomas Petazzoni [mailto:thomas.petazzoni at free-electrons.com] 
+Van: buildroot-bounces at busybox.net [mailto:buildroot-bounces at busybox.net] Namens Thomas Petazzoni
 Verzonden: vrijdag 23 augustus 2013 13:18
 Aan: Sagaert Johan
 CC: buildroot at busybox.net
@@ -79,3 +62,7 @@ Thomas
 Thomas Petazzoni, Free Electrons
 Kernel, drivers, real-time and embedded Linux development, consulting, training and support.
 http://free-electrons.com
+_______________________________________________
+buildroot mailing list
+buildroot at busybox.net
+http://lists.busybox.net/mailman/listinfo/buildroot
