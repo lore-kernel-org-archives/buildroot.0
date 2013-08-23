@@ -1,59 +1,69 @@
-From: =?ISO-8859-1?Q?Thiago_A=2E_Corr=EAa?= <thiago.correa@gmail.com>
-Date: Fri, 23 Aug 2013 00:28:56 -0300
-Subject: [Buildroot] Change in Qt5 download URLs
-In-Reply-To: <20130818195614.2b509547@skate>
-References: <20130818195614.2b509547@skate>
-Message-ID: <CAExDhva8BJPU_KwAXz67w58hd61_c0nQDj6QKEsOLhZuPgYKyQ@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 23 Aug 2013 06:48:45 +0200
+Subject: [Buildroot] [PATCH] toolchain: add support for glibc
+In-Reply-To: <52169E42.2040904@mind.be>
+References: <1376847393-12397-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <521534E2.7020606@mind.be> <20130822232633.7ba9b14d@skate>
+ <52169E42.2040904@mind.be>
+Message-ID: <20130823064845.2ec4800d@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Dear Arnout Vandecappelle,
 
-      Don't know if your message caught the attention of the ppl
-responsible in the interest mailing list, so I would suggest resending
-it to releasing at qt-project.org and development at qt-project.org, which
-are more suited.
+On Fri, 23 Aug 2013 01:26:58 +0200, Arnout Vandecappelle wrote:
 
-      See: http://lists.qt-project.org/pipermail/development/2013-August/012694.html
+> > I don't know for sure, but the package aren't that complex, so I don't
+> > think merging would be very difficult.
+> >
+> > If I had to merge them, where should I put the common code?
+> 
+>   I was thinking to have just one glibc package, with a choice to select 
+> eglibc or glibc.
 
-Kind Regards,
-     Thiago A. Correa
+Well, I still would like the libc selection to be uClibc/glibc/eglibc
+in the choice in toolchain/toolchain-buildroot/Config.in. But I guess I
+can probably make BR2_TOOLCHAIN_BUILDROOT_LIBC be equal to "glibc" in
+both the glibc and eglibc case, which would be sufficient to make the
+toolchain building logic use the "glibc" and "glibc-configure" targets
+for both the eglibc and glibc selections.
 
-On Sun, Aug 18, 2013 at 2:56 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Hello,
->
-> The download URLs for the Qt5 submodules tarballs have recently
-> changed, which is quite annoying for embedded Linux build systems.
->
-> But what's even more annoying is that the new organization of files
-> adopted in http://download.qt-project.org/ seems to imply that the most
-> recent version of Qt is available in
-> http://download.qt-project.org/official_releases/qt/, and then, once a
-> newer Qt release is shipped, the older one gets moved to
-> http://download.qt-project.org/archive/qt/.
->
-> This is really annoying for embedded Linux build systems: they have
-> recipes to help people cross-compile many libraries/applications to
-> create an embedded Linux system, and therefore they contain the URL of
-> upstream tarballs of source code. Moving tarballs around after a
-> release has been made breaks the recipes of all those build systems.
->
-> Would it be possible for the Qt project to adopt a file organization
-> that does not move tarballs once a release has been made?
->
-> Thanks!
->
-> Thomas
-> --
-> Thomas Petazzoni, Free Electrons
-> Kernel, drivers, real-time and embedded Linux
-> development, consulting, training and support.
-> http://free-electrons.com
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Want me to rework the patch in this direction?
+
+Note that later on, if we support several versions of glibc and eglibc,
+then package/glibc/Config.in would look like:
+
+if BR2_TOOLCHAIN_BUILDROOT_EGLIBC
+
+	... versions of eglibc ...
+
+endif
+
+if BR2_TOOLCHAIN_BUILDROOT_GLIBC
+
+	... versions of glibc ...
+
+endif
+
+> >>    Shouldn't this lib be installed as well for a gdb without gdbserver?
+> >> I.e., shouldn't the condition be ifeq ($(BR2_PACKAGE_GDB),y)?
+> >
+> > That's a good question, I don't know. At the moment, the ct-ng backend,
+> > the external backend and the eglibc .mk file all copy libthread_db.so
+> > when gdbserver is enabled.
+> 
+>   To be tested but it'd surprise me if gdb didn't need it.
+
+I agree, it would have to be tested.
+
+Thanks for your feedback,
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
