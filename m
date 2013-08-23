@@ -1,35 +1,43 @@
-From: Markos Chandras <markos.chandras@gmail.com>
-Date: Fri, 23 Aug 2013 11:47:04 +0100
-Subject: [Buildroot] [PATCH v3] toolchain-external: fix lib64 symlinks
-In-Reply-To: <1377212375-22871-1-git-send-email-arnout@mind.be>
-References: <1376340548-14050-1-git-send-email-s.martin49@gmail.com>
- <1377212375-22871-1-git-send-email-arnout@mind.be>
-Message-ID: <CAG2jQ8idH=m7z07HjC=QQudQ_gnhp-TT1WtGkhPn6Lxy+Swk9w@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 23 Aug 2013 13:14:41 +0200
+Subject: [Buildroot] [PATCH v2 2/3] package: fix generic extract target
+ for top-level parallel make
+In-Reply-To: <CAHkwnC9tn=zA=WWxneiZeGCCxQ=b_Dfk-o_PBaf_AGBHeJWewg@mail.gmail.com>
+References: <1374138746-23279-1-git-send-email-fabio.porcedda@gmail.com>
+ <1374138746-23279-3-git-send-email-fabio.porcedda@gmail.com>
+ <521513E3.8080401@mind.be> <20130823093642.3ff0e2bb@skate>
+ <CAHkwnC9tn=zA=WWxneiZeGCCxQ=b_Dfk-o_PBaf_AGBHeJWewg@mail.gmail.com>
+Message-ID: <20130823131441.313e63fa@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Arnout,
+Dear Fabio Porcedda,
 
-On 22 August 2013 23:59, Arnout Vandecappelle (Essensium/Mind)
-<arnout@mind.be> wrote:
-> --
->
-> Fixes http://autobuild.buildroot.net/results/23fb6b1479d2b5906b72c9437b06ab4700ff246d/
->
-> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> ---
-> Tested with a couple of 32-bit and 64-bit MIPS Sourcery toolchains, and with
-> the x86_64 Sourcery toolchain. Should still be tested with a MIPS64/n32
-> toolchain, and with Linaro.
+On Fri, 23 Aug 2013 10:00:33 +0200, Fabio Porcedda wrote:
 
-Seems lib32->lib is created for MIPS64/n32 which was all it was needed
-for MIPS64/n32 to work
-properly. Thanks for the patch.
+> > When I did some experiments on top-level parallel build some years ago,
+> > it is also one of the problem I had seen. Today, if you decide to
+> > rebuild "libfoo", it rebuilds libfoo only and that's it. If libfoo is
+> > used by something else, it's your responsibility to rebuild this
+> > something else. Of course, this is all possible because the chain of
+> > dependencies uses virtual targets and not stamp files.
+> 
+> For this problem there is a simple solution, to use a
+> "order-only-prerequisites", because
+> a target is not rebuild if is older than a "order-only-prerequisites".
+> 
+> http://www.gnu.org/software/make/manual/html_node/Prerequisite-Types.html#Prerequisite-Types
 
+Ah, yes, indeed!
+
+Thanks,
+
+Thomas
 -- 
-Regards,
-Markos Chandras
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
