@@ -1,45 +1,57 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 23 Aug 2013 20:42:40 +0200
-Subject: [Buildroot] [git commit] Makefile: test before search for kernel
-	modules
-Message-ID: <20130823184231.3C9199B547@busybox.osuosl.org>
+Date: Fri, 23 Aug 2013 20:40:16 +0200
+Subject: [Buildroot] [PATCH] package/Makefile.in: fix ABI name for EABIhf
+	targets
+Message-ID: <1377283216-31225-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=fde2605765fd99565ebcde48c5411a69646c2cce
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+The current code to set ABI on ARM does the following:
 
-The 'find $(TARGET_DIR)/lib/modules' used to find and strip kernel
-modules fails when no kernel modules have been installed. While the
-'|| true' prevents the entire build from failing, there are still some
-error messages displayed, which is not nice.
+ifeq ($(BR2_arm)$(BR2_armeb),y)
+... set ABI without 'hf' suffix ...
+else ifeq ($(BR2_ARM_EABIHF),y)
+... set ABI with 'hf' suffix ...
+endif
 
-Instead, test if the directory exists before doing the find. We also
-remove the '|| true' in order to really abort the build if a
-problematic error occurs.
+But since $(BR2_arm)$(BR2_armeb) will always be 'y' in the cases where
+BR2_ARM_EABIHF is 'y', it means that the 'else' part of the condition
+will never be used.
+
+Fix this by appending 'hf' to the ABI variable when BR2_ARM_EABIHF is
+selected.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Acked-by: Luca Ceresoli <luca@lucaceresoli.net>
 ---
- Makefile |    5 +++--
- 1 files changed, 3 insertions(+), 2 deletions(-)
+I wondering how the EABIhf stuff could have worked. Is this something
+I mismerged when rebasing my patch series? Anyway, if my analysis is
+correct, it's certainly something that should be part of 2013.08.
+---
+ package/Makefile.in | 8 +++-----
+ 1 file changed, 3 insertions(+), 5 deletions(-)
 
-diff --git a/Makefile b/Makefile
-index 6018d63..9f0164e 100644
---- a/Makefile
-+++ b/Makefile
-@@ -476,8 +476,9 @@ ifeq ($(BR2_PACKAGE_PYTHON_PYC_ONLY),y)
- 	find $(TARGET_DIR)/usr/lib/ -name '*.py' -print0 | xargs -0 rm -f
+diff --git a/package/Makefile.in b/package/Makefile.in
+index e753d6b..e93d3ba 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -46,12 +46,10 @@ ABI=gnueabi
+ else
+ ABI=eabi
  endif
- 	$(STRIP_FIND_CMD) | xargs $(STRIPCMD) 2>/dev/null || true
--	find $(TARGET_DIR)/lib/modules -type f -name '*.ko' | \
--		xargs -r $(KSTRIPCMD) || true
-+	test -d $(TARGET_DIR)/lib/modules && \
-+		find $(TARGET_DIR)/lib/modules -type f -name '*.ko' | \
-+		xargs -r $(KSTRIPCMD)
+-else ifeq ($(BR2_ARM_EABIHF),y)
+-ifeq ($(LIBC),uclibc)
+-ABI=gnueabihf
+-else
+-ABI=eabihf
+ endif
++
++ifeq ($(BR2_ARM_EABIHF),y)
++ABI:=$(ABI)hf
+ endif
  
- # See http://sourceware.org/gdb/wiki/FAQ, "GDB does not see any threads
- # besides the one in which crash occurred; or SIGTRAP kills my program when
+ # For FSL PowerPC there's SPE
+-- 
+1.8.1.2
