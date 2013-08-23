@@ -1,23 +1,33 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri, 23 Aug 2013 10:28:35 -0300
-Subject: [Buildroot] [PATCH 1/5] attr: add patch to fix static
-	installation
-In-Reply-To: <1376996584-4462-2-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1376996584-4462-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1376996584-4462-2-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <52176383.80809@zacarias.com.ar>
+Date: Fri, 23 Aug 2013 11:02:24 -0300
+Subject: [Buildroot] [PATCH] openssl: don't build tests
+Message-ID: <1377266544-28293-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 08/20/2013 08:03 AM, Thomas Petazzoni wrote:
+These require shared libraries and we save a tiny amount of build time.
+Fixes:
+http://autobuild.buildroot.net/results/88e/88e5e07e94e49879907186ff35ce66944f867ec2/
 
-> When attr is built static-only, it forgets to install its libattr.a
-> file, which leads to the build failure of packages such as 'acl' that
-> rely on attr.
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/openssl/openssl.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-Acked-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+diff --git a/package/openssl/openssl.mk b/package/openssl/openssl.mk
+index a0e103b..4b8b0a4 100644
+--- a/package/openssl/openssl.mk
++++ b/package/openssl/openssl.mk
+@@ -85,6 +85,7 @@ define OPENSSL_CONFIGURE_CMDS
+ 	)
+ 	$(SED) "s:-march=[-a-z0-9] ::" -e "s:-mcpu=[-a-z0-9] ::g" $(@D)/Makefile
+ 	$(SED) "s:-O[0-9]:$(OPENSSL_CFLAGS):" $(@D)/Makefile
++	$(SED) "s: build_tests::" $(@D)/Makefile
+ endef
+ 
+ define HOST_OPENSSL_BUILD_CMDS
+-- 
+1.8.1.5
