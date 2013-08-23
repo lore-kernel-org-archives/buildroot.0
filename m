@@ -1,82 +1,59 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 23 Aug 2013 01:36:22 +0200
-Subject: [Buildroot] debugging inittab
-In-Reply-To: <2DD0B9C711CDFC45A3A266C78966CE7F451F39A0@G4W3291.americas.hpqcorp.net>
-References: <2DD0B9C711CDFC45A3A266C78966CE7F451F39A0@G4W3291.americas.hpqcorp.net>
-Message-ID: <5216A076.5030409@mind.be>
+From: =?ISO-8859-1?Q?Thiago_A=2E_Corr=EAa?= <thiago.correa@gmail.com>
+Date: Fri, 23 Aug 2013 00:28:56 -0300
+Subject: [Buildroot] Change in Qt5 download URLs
+In-Reply-To: <20130818195614.2b509547@skate>
+References: <20130818195614.2b509547@skate>
+Message-ID: <CAExDhva8BJPU_KwAXz67w58hd61_c0nQDj6QKEsOLhZuPgYKyQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 22/08/13 22:11, Jenkins, Lee (ISS Houston) wrote:
-> Hello. I am debugging a boot problem for a few hours. I?m clearly in over
-> my head and I could use some insight.
->
-> For debugging purposes, I am booting from a kernel and rootfs on an nfs
-> share of my dev machine. The console is ttyS0.
+Hi Thomas,
 
-  The nfs-share is an extracted output/images/rootfs.tar, right? You're 
-not using the target directory?
+      Don't know if your message caught the attention of the ppl
+responsible in the interest mailing list, so I would suggest resending
+it to releasing at qt-project.org and development at qt-project.org, which
+are more suited.
 
-  Is busybox setuid root? Is the nfs not exported with rootsquash and such?
+      See: http://lists.qt-project.org/pipermail/development/2013-August/012694.html
 
+Kind Regards,
+     Thiago A. Correa
 
-> The kernel boots and rootfs is mounted and the scripts in /etc/init.d are
-> executed. The kernel messages and startup script messages appear on the tty.
+On Sun, Aug 18, 2013 at 2:56 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Hello,
 >
-> The problem is that right after the init.d scripts this message appears:
-> ?can?t open /dev/ttyS0: Permission denied?. This message is repeated in
-> an infinite loop.
+> The download URLs for the Qt5 submodules tarballs have recently
+> changed, which is quite annoying for embedded Linux build systems.
 >
-> If I boot with the kernel argument ?init=/bin/sh? then the init is
-> bypassed and the system boots OK. So the problem is definitely in the init.
+> But what's even more annoying is that the new organization of files
+> adopted in http://download.qt-project.org/ seems to imply that the most
+> recent version of Qt is available in
+> http://download.qt-project.org/official_releases/qt/, and then, once a
+> newer Qt release is shipped, the older one gets moved to
+> http://download.qt-project.org/archive/qt/.
 >
-> I?m new to debugging init-time and I cannot even figure out who is
-> printing this message.
+> This is really annoying for embedded Linux build systems: they have
+> recipes to help people cross-compile many libraries/applications to
+> create an embedded Linux system, and therefore they contain the URL of
+> upstream tarballs of source code. Moving tarballs around after a
+> release has been made breaks the recipes of all those build systems.
 >
-> The error message sounds like a permissions problem, so I added a hack
-> script /etc/init.d/S99chmod, which does chmod 777 /dev/ttyS0 and then ls
-> to show the result. The chmod works but the error still occurs.
+> Would it be possible for the Qt project to adopt a file organization
+> that does not move tarballs once a release has been made?
 >
-> Then I thought maybe getty was having trouble opening ttyS0, so I wrote a
-> ?wrapper? script called getty.shell to print a debug message and then
-> modified the entry in inittab like this:
+> Thanks!
 >
-> # Put a getty on the serial port
->
-> ttyS0::respawn:/sbin/getty.shell -L ttyS0 115200 vt100 # GENERIC_SERIAL
->
-> It doesn?t look like the wrapper script is ever called because the debug
-> message never appears.
->
-> So, any ideas? What happens between /etc/init.d and /sbin/getty?
-
-  The ttyS0 at the beginning of the line instructs (busybox) init to send 
-the stderr/stdout of the process that is started to /dev/ttyS0. But the 
-process is never started, because init cannot open /dev/ttyS0.
-
-  You can try removing that, just start the line with ::
-
-
-  Regards,
-  Arnout
-
->
->
->
+> Thomas
+> --
+> Thomas Petazzoni, Free Electrons
+> Kernel, drivers, real-time and embedded Linux
+> development, consulting, training and support.
+> http://free-electrons.com
 > _______________________________________________
 > buildroot mailing list
 > buildroot at busybox.net
 > http://lists.busybox.net/mailman/listinfo/buildroot
->
-
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
