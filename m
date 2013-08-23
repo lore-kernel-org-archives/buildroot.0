@@ -1,55 +1,35 @@
-From: Markos Chandras <markos.chandras@imgtec.com>
-Date: Fri, 23 Aug 2013 18:26:34 +0100
-Subject: [Buildroot] [PATCH] minidlna: Fix automagic dependency to libiconv
-Message-ID: <1377278794-16469-1-git-send-email-markos.chandras@imgtec.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 23 Aug 2013 20:41:54 +0200
+Subject: [Buildroot] [git commit] openssl: don't build tests
+Message-ID: <20130823184141.8205D9B547@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-minidlna will detect and use the libiconv library if
-the package is selected. In that case, we need to link
-against -liconv.
+commit: http://git.buildroot.net/buildroot/commit/?id=467b8d1f694531d77f1c3ce808a424cb8bd0cffe
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes the following linking problem:
+These require shared libraries and we save a tiny amount of build time.
+Fixes:
+http://autobuild.buildroot.net/results/88e/88e5e07e94e49879907186ff35ce66944f867ec2/
 
-taguitils/tagutils.o: In function `do_iconv.constprop.6':
-tagutils.c:(.text+0x4d5c): undefined reference to `libiconv_open'
-tagutils.c:(.text+0x4da0): undefined reference to `libiconv'
-tagutils.c:(.text+0x4e08): undefined reference to `libiconv_close'
-
-Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/minidlna/minidlna.mk | 11 ++++++++++-
- 1 file changed, 10 insertions(+), 1 deletion(-)
+ package/openssl/openssl.mk |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-diff --git a/package/minidlna/minidlna.mk b/package/minidlna/minidlna.mk
-index 10e3b33..e1a56ef 100644
---- a/package/minidlna/minidlna.mk
-+++ b/package/minidlna/minidlna.mk
-@@ -19,12 +19,21 @@ MINIDLNA_CFLAGS=$(TARGET_CFLAGS) \
- 	-I"$(STAGING_DIR)/usr/include/libavcodec" \
- 	-I"$(STAGING_DIR)/usr/include/libavformat"
+diff --git a/package/openssl/openssl.mk b/package/openssl/openssl.mk
+index a0e103b..4b8b0a4 100644
+--- a/package/openssl/openssl.mk
++++ b/package/openssl/openssl.mk
+@@ -85,6 +85,7 @@ define OPENSSL_CONFIGURE_CMDS
+ 	)
+ 	$(SED) "s:-march=[-a-z0-9] ::" -e "s:-mcpu=[-a-z0-9] ::g" $(@D)/Makefile
+ 	$(SED) "s:-O[0-9]:$(OPENSSL_CFLAGS):" $(@D)/Makefile
++	$(SED) "s: build_tests::" $(@D)/Makefile
+ endef
  
-+MINIDLNA_COMMON_LIBS=-lpthread -lexif -ljpeg -lsqlite3 -lavformat -lavutil -lavcodec -lid3tag -lFLAC -logg -lvorbis
-+
- ifeq ($(BR2_PACKAGE_GETTEXT),y)
- MINIDLNA_DEPENDENCIES += gettext
- # we need to link with libintl
--MINIDLNA_MAKE_OPTS += LIBS='-lpthread -lexif -ljpeg -lsqlite3 -lavformat -lavutil -lavcodec -lid3tag -lFLAC -logg -lvorbis -lintl'
-+MINIDLNA_COMMON_LIBS += -lintl
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBICONV),y)
-+MINIDLNA_DEPENDENCIES += libiconv
-+MINIDLNA_COMMON_LIBS += -liconv
- endif
- 
-+MINIDLNA_MAKE_OPTS += LIBS='$(MINIDLNA_COMMON_LIBS)'
-+
- define MINIDLNA_BUILD_CMDS
- 	PREFIX=$(STAGING_DIR)/usr \
- 		$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) \
--- 
-1.8.3.2
+ define HOST_OPENSSL_BUILD_CMDS
