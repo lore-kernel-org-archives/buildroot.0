@@ -1,7 +1,7 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 24 Aug 2013 13:01:54 +0200
+Date: Sat, 24 Aug 2013 13:07:40 +0200
 Subject: [Buildroot] [PATCH 0/3] Subversion package and related patches
-Message-ID: <1377342117-11780-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1377342463-17543-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
