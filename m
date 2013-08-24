@@ -1,92 +1,96 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 24 Aug 2013 13:07:43 +0200
-Subject: [Buildroot] [PATCH 3/3] subversion: new package
-In-Reply-To: <1377342463-17543-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1377342463-17543-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1377342463-17543-4-git-send-email-thomas.petazzoni@free-electrons.com>
+From: Spenser Gilliland <spenser@gillilanding.com>
+Date: Sat, 24 Aug 2013 14:41:56 -0500
+Subject: [Buildroot] [PATCH 1/6] libdrm: bump and add experimental ARM
+	framebuffer support
+In-Reply-To: <1377373321-29732-1-git-send-email-spenser@gillilanding.com>
+References: <1377373321-29732-1-git-send-email-spenser@gillilanding.com>
+Message-ID: <1377373321-29732-2-git-send-email-spenser@gillilanding.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Rico Bachmann <bachmann@tofwerk.com>
+The newer versions of libdrm have substantially fewer dependencies as drm is
+moving to be a subsystem for both wayland and Xorg.
 
-[Thomas: added license informations, fixed dependencies, and several
-cleanups.]
-
-Signed-off-by: Rico Bachmann <bachmann@tofwerk.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Spenser Gilliland <spenser@gillilanding.com>
 ---
- package/Config.in                |  1 +
- package/subversion/Config.in     | 11 +++++++++++
- package/subversion/subversion.mk | 28 ++++++++++++++++++++++++++++
- 3 files changed, 40 insertions(+)
- create mode 100644 package/subversion/Config.in
- create mode 100644 package/subversion/subversion.mk
+ package/libdrm/Config.in | 14 +++-----------
+ package/libdrm/libdrm.mk | 24 +++++++++---------------
+ 2 files changed, 12 insertions(+), 26 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 2347229..1ac26f7 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -97,6 +97,7 @@ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- source "package/sed/Config.in"
+diff --git a/package/libdrm/Config.in b/package/libdrm/Config.in
+index 8bf676b..f976ef1 100644
+--- a/package/libdrm/Config.in
++++ b/package/libdrm/Config.in
+@@ -1,18 +1,10 @@
+ config BR2_PACKAGE_LIBDRM
+ 	bool "libdrm"
++	select BR2_PACKAGE_XLIB_LIBPTHREAD_STUBS
++	select BR2_PACKAGE_LIBATOMIC_OPS
++	select BR2_PACKAGE_XLIB_LIBPCIACCESS if BR2_i386 || BR2_x86_64
+ 	depends on BR2_PACKAGE_XORG7
+ 	depends on BR2_LARGEFILE
+-	select BR2_PACKAGE_XPROTO_GLPROTO
+-	select BR2_PACKAGE_XPROTO_XF86VIDMODEPROTO
+-	select BR2_PACKAGE_XLIB_LIBXXF86VM
+-	select BR2_PACKAGE_XLIB_LIBXMU
+-	select BR2_PACKAGE_XLIB_LIBPCIACCESS
+-	select BR2_PACKAGE_XPROTO_DRI2PROTO
+-	select BR2_PACKAGE_XLIB_LIBPTHREAD_STUBS
+-	# libatomic_ops is only available on a subset of the supported
+-	# architectures, and we make the assumption that the intel
+-	# driver can only be used on x86 and x86_64 machines.
+-	select BR2_PACKAGE_LIBATOMIC_OPS if (BR2_PACKAGE_XDRIVER_XF86_VIDEO_INTEL && (BR2_i386 || BR2_x86_64))
+ 	help
+ 	  Direct Rendering Manager
+ 
+diff --git a/package/libdrm/libdrm.mk b/package/libdrm/libdrm.mk
+index d3d2b2d..8388e68 100644
+--- a/package/libdrm/libdrm.mk
++++ b/package/libdrm/libdrm.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBDRM_VERSION = 2.4.38
++LIBDRM_VERSION = 2.4.46
+ LIBDRM_SOURCE = libdrm-$(LIBDRM_VERSION).tar.bz2
+ LIBDRM_SITE = http://dri.freedesktop.org/libdrm/
+ LIBDRM_LICENSE = MIT
+@@ -12,24 +12,18 @@ LIBDRM_LICENSE = MIT
+ LIBDRM_INSTALL_STAGING = YES
+ 
+ LIBDRM_DEPENDENCIES = \
+-	xproto_glproto \
+-	xproto_xf86vidmodeproto \
+-	xlib_libXxf86vm \
+-	xlib_libXmu \
+-	xlib_libpciaccess \
+-	xproto_dri2proto \
+ 	xlib_libpthread-stubs \
+ 	host-pkgconf
+ 
+-ifeq ($(BR2_PACKAGE_XDRIVER_XF86_VIDEO_INTEL),y)
+-LIBDRM_CONF_OPT += --enable-intel
+-LIBDRM_DEPENDENCIES += libatomic_ops
+-else
+-LIBDRM_CONF_OPT += --disable-intel
+-endif
++LIBDRM_CONF_OPT = \
++	--disable-cairo-tests \
++	--disable-manpages
+ 
+-ifneq ($(BR2_PACKAGE_XDRIVER_XF86_VIDEO_ATI),y)
+-LIBDRM_CONF_OPT += --disable-radeon
++ifeq ($(BR2_arm),y)
++LIBDRM_CONF_OPT += \
++	--enable-omap-experimental-api \
++	--enable-exynos-experimental-api \
++	--enable-freedreno-experimental-api
  endif
- source "package/sstrip/Config.in"
-+source "package/subversion/Config.in"
- if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- source "package/tar/Config.in"
- endif
-diff --git a/package/subversion/Config.in b/package/subversion/Config.in
-new file mode 100644
-index 0000000..0704ef5
---- /dev/null
-+++ b/package/subversion/Config.in
-@@ -0,0 +1,11 @@
-+config BR2_PACKAGE_SUBVERSION
-+	bool "subversion"
-+	select BR2_PACKAGE_APR_UTIL
-+	# apr really needs shared library support
-+	depends on !BR2_PREFER_STATIC_LIB
-+	select BR2_PACKAGE_NEON
-+	select BR2_PACKAGE_NEON_EXPAT if !BR2_PACKAGE_NEON_LIBXML2
-+	help
-+	  Subversion is an open source version control system
-+
-+	  http://subversion.apache.org/
-diff --git a/package/subversion/subversion.mk b/package/subversion/subversion.mk
-new file mode 100644
-index 0000000..de4db7c
---- /dev/null
-+++ b/package/subversion/subversion.mk
-@@ -0,0 +1,28 @@
-+################################################################################
-+#
-+# subversion
-+#
-+################################################################################
-+
-+SUBVERSION_VERSION = 1.7.9
-+SUBVERSION_SITE = http://archive.apache.org/dist/subversion
-+SUBVERSION_LICENSE = Apache 2.0
-+SUBVERSION_LICENSE_FILES = LICENSE
-+
-+SUBVERSION_DEPENDENCIES = apr apr-util expat neon zlib
-+SUBVERSION_CONF_OPT = \
-+	--with-expat=$(STAGING_DIR)/usr/include:$(STAGING_DIR)/usr/lib: \
-+	--with-apr=$(STAGING_DIR)/usr \
-+	--with-apr-util=$(STAGING_DIR)/usr \
-+	--with-zlib=$(STAGING_DIR)/usr \
-+	--with-neon=$(STAGING_DIR)/usr \
-+	--without-gssapi \
-+	--without-serf \
-+	--without-apxs \
-+	--without-berkeyley-db \
-+	--without-sasl \
-+	--without-gnome-keyring \
-+	--without-ssl \
-+	--without-libmagic
-+
-+$(eval $(autotools-package))
+ 
+ ifeq ($(BR2_PACKAGE_UDEV),y)
 -- 
 1.8.1.2
