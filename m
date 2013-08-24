@@ -1,334 +1,110 @@
 From: Spenser Gilliland <spenser@gillilanding.com>
-Date: Sat, 24 Aug 2013 14:42:01 -0500
-Subject: [Buildroot] [PATCH 6/6] glmark2: new package
+Date: Sat, 24 Aug 2013 14:41:58 -0500
+Subject: [Buildroot] [PATCH 3/6] sunxi-cedarx: bump to newer version,
+	use armel2 binaries, add demo
 In-Reply-To: <1377373321-29732-1-git-send-email-spenser@gillilanding.com>
 References: <1377373321-29732-1-git-send-email-spenser@gillilanding.com>
-Message-ID: <1377373321-29732-7-git-send-email-spenser@gillilanding.com>
+Message-ID: <1377373321-29732-4-git-send-email-spenser@gillilanding.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+
 Signed-off-by: Spenser Gilliland <spenser@gillilanding.com>
 ---
- package/Config.in                                  |   1 +
- package/glmark2/Config.in                          |  49 ++++++++++
- package/glmark2/glmark2-add-mali-support.patch     | 102 +++++++++++++++++++++
- package/glmark2/glmark2-fix-add-GLchar.patch       |  17 ++++
- .../glmark2-gl-to-glesv2-on-drm-flavor.patch       |  25 +++++
- package/glmark2/glmark2.mk                         |  70 ++++++++++++++
- 6 files changed, 264 insertions(+)
- create mode 100644 package/glmark2/Config.in
- create mode 100644 package/glmark2/glmark2-add-mali-support.patch
- create mode 100644 package/glmark2/glmark2-fix-add-GLchar.patch
- create mode 100644 package/glmark2/glmark2-gl-to-glesv2-on-drm-flavor.patch
- create mode 100644 package/glmark2/glmark2.mk
+ package/sunxi-cedarx/Config.in       | 10 ++++++++++
+ package/sunxi-cedarx/sunxi-cedarx.mk | 26 ++++++++++++++++++++++----
+ 2 files changed, 32 insertions(+), 4 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 2b8bef0..ebe8cb4 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -24,6 +24,7 @@ source "package/dstat/Config.in"
- source "package/dmalloc/Config.in"
- source "package/dropwatch/Config.in"
- source "package/gdb/Config.in"
-+source "package/glmark2/Config.in"
- source "package/iozone/Config.in"
- source "package/kexec/Config.in"
- source "package/latencytop/Config.in"
-diff --git a/package/glmark2/Config.in b/package/glmark2/Config.in
-new file mode 100644
-index 0000000..47ed221
---- /dev/null
-+++ b/package/glmark2/Config.in
-@@ -0,0 +1,49 @@
-+config BR2_PACKAGE_GLMARK2
-+	bool "glmark2"
-+	depends on BR2_PACKAGE_MESA3D
-+	depends on BR2_PACKAGE_MESA3D_GBM
-+	depends on BR2_LARGEFILE
-+	depends on BR2_PACKAGE_HAS_OPENGL || \
-+		(BR2_PACKAGE_HAS_OPENGL_EGL && BR2_PACKAGE_HAS_OPENGL_ES)
-+	select BR2_PACKAGE_JPEG
-+	select BR2_PACKAGE_LIBPNG12
-+	select BR2_PACKAGE_XLIB_LIBPCIACCESS if BR2_i386 || BR2_x86_64 # libdrm
-+	select BR2_PACKAGE_XLIB_LIBPTHREAD_STUBS # libdrm
+diff --git a/package/sunxi-cedarx/Config.in b/package/sunxi-cedarx/Config.in
+index b280db0..aa520b5 100644
+--- a/package/sunxi-cedarx/Config.in
++++ b/package/sunxi-cedarx/Config.in
+@@ -10,5 +10,15 @@ config BR2_PACKAGE_SUNXI_CEDARX
+ 	  http://github.com/linux-sunxi/cedarx-libs
+ 	  http://linux-sunxi.org/CedarX
+ 
++if BR2_PACKAGE_SUNXI_CEDARX
++
++config BR2_PACKAGE_SUNXI_CEDARX_DEMO
++	bool "install enc_dec_test demo"
 +	help
-+	  glmark2 is a benchmark for OpenGL (ES) 2.0. It uses only the subset of the
-+	  OpenGL 2.0 API that is compatible with OpenGL ES 2.0.
-+
-+if BR2_PACKAGE_GLMARK2
-+
-+config BR2_PACKAGE_GLMARK2_X11
-+	bool "X11"
-+	depends on BR2_PACKAGE_XSERVER_XORG_SERVER
-+	help
-+	 Use X11 window for display.
-+
-+config BR2_PACKAGE_GLMARK2_EGL
-+	bool "EGL"
-+	default y
-+	depends on BR2_PACKAGE_HAS_OPENGL_EGL
-+	help
-+	  Use EGL window for display.
-+
-+config BR2_PACKAGE_GLMARK2_OPENGL
-+	bool "Install Desktop OpenGL 2.0 Version"
-+	default y
-+	depends on BR2_PACKAGE_HAS_OPENGL
-+	help
-+	  Enable desktop OpenGL version.
-+
-+config BR2_PACKAGE_GLMARK2_OPENGL_ES
-+	bool "Install OpenGL ES 2.0 Version"
-+	default y
-+	depends on BR2_PACKAGE_HAS_OPENGL_ES
-+	help
-+	  Enable OpenGL ES 2.0 Version.
++	  Install a test program which verifies the functionality of the CedarX
++	  libraries
 +
 +endif
 +
-+comment "glmark2 requires an OpenGL implementation and many X libraries"
-+	depends on !BR2_PACKAGE_HAS_OPENGL_EGL || !BR2_PACKAGE_HAS_OPENGL_ES \
-+		|| !BR2_PACKAGE_XORG7
-diff --git a/package/glmark2/glmark2-add-mali-support.patch b/package/glmark2/glmark2-add-mali-support.patch
-new file mode 100644
-index 0000000..c37c88c
---- /dev/null
-+++ b/package/glmark2/glmark2-add-mali-support.patch
-@@ -0,0 +1,102 @@
-+Mali uses a slightly different windowing structure than most
-+implementations add support through this patch.
-+
-+Signed-off-by: Spenser Gilliland <spenser@gillilanding.com>
-+---
-+Index: glmark2-279/src/gl-state-egl.cpp
-+===================================================================
-+--- glmark2-279.orig/src/gl-state-egl.cpp	2013-08-21 14:49:38.953803965 -0500
-++++ glmark2-279/src/gl-state-egl.cpp	2013-08-21 14:59:42.389814979 -0500
-+@@ -414,9 +414,12 @@
-+ {
-+     if (egl_display_)
-+         return true;
-+-
-++#ifdef HAS_MALI
-++    egl_display_ = eglGetDisplay(EGL_DEFAULT_DISPLAY);
-++#else
-+     egl_display_ = eglGetDisplay(native_display_);
-+-    if (!egl_display_) {
-++#endif
-++    if (egl_display_ == EGL_NO_DISPLAY) {
-+         Log::error("eglGetDisplay() failed with error: 0x%x\n", eglGetError());
-+         return false;
-+     }
-+Index: glmark2-279/src/native-state-fbdev.cpp
-+===================================================================
-+--- glmark2-279.orig/src/native-state-fbdev.cpp	2013-08-19 17:36:32.000000000 -0500
-++++ glmark2-279/src/native-state-fbdev.cpp	2013-08-21 14:59:58.629815276 -0500
-+@@ -31,7 +31,9 @@
-+ #include <unistd.h>
-+ #include <sys/ioctl.h>
-+ #include <linux/fb.h>
-+-
-++#if HAS_MALI
-++#include <EGL/egl.h>
-++#endif
-+ #ifdef ANDROID
-+ #define FBDEV_DEV "/dev/graphics/fb"
-+ #else
-+@@ -79,7 +81,13 @@
-+ NativeStateFBDEV::window(WindowProperties& properties)
-+ {
-+     properties = winprops;
-++#ifdef HAS_MALI
-++    native_window.height = winprops.height;
-++    native_window.width = winprops.width;
-++    return reinterpret_cast<void*>(&native_window);
-++#else
-+     return NULL;
-++#endif
-+ }
-+ 
-+ void
-+Index: glmark2-279/src/native-state-fbdev.h
-+===================================================================
-+--- glmark2-279.orig/src/native-state-fbdev.h	2013-08-19 17:36:32.000000000 -0500
-++++ glmark2-279/src/native-state-fbdev.h	2013-08-21 15:00:14.345815563 -0500
-+@@ -30,6 +30,10 @@
-+ #include <csignal>
-+ #include <cstring>
-+ 
-++#ifdef HAS_MALI
-++#include <EGL/egl.h>
-++#endif
-++
-+ class NativeStateFBDEV : public NativeState
-+ {
-+ public:
-+@@ -50,7 +54,9 @@
-+     static volatile std::sig_atomic_t should_quit_;
-+     int fd;
-+     WindowProperties winprops;
-+-
-++#ifdef HAS_MALI
-++    struct mali_native_window native_window;
-++#endif
-+     bool init();
-+     void cleanup();
-+ };
-+Index: glmark2-279/wscript
-+===================================================================
-+--- glmark2-279.orig/wscript	2013-08-19 17:36:32.000000000 -0500
-++++ glmark2-279/wscript	2013-08-21 15:00:24.245815743 -0500
-+@@ -46,7 +46,8 @@
-+                    dest = 'flavors',
-+                    help = "a list of flavors to build (%s, all)" % FLAVORS_STR)
-+     opt.parser.set_default('flavors', [])
-+-
-++    opt.add_option('--for-mali', action='store_true', dest = 'mali',
-++                   default = False, help='enable ARM Mali GPU support')
-+     opt.add_option('--no-debug', action='store_false', dest = 'debug',
-+                    default = True, help='disable compiler debug information')
-+     opt.add_option('--no-opt', action='store_false', dest = 'opt',
-+@@ -132,6 +133,8 @@
-+         ctx.env.prepend_value('CXXFLAGS', '-O2')
-+     if Options.options.debug:
-+         ctx.env.prepend_value('CXXFLAGS', '-g')
-++    if Options.options.mali:
-++        ctx.env.append_unique('DEFINES','HAS_MALI=1')
-+ 
-+     ctx.env.HAVE_EXTRAS = False
-+     if Options.options.extras_path is not None:
-diff --git a/package/glmark2/glmark2-fix-add-GLchar.patch b/package/glmark2/glmark2-fix-add-GLchar.patch
-new file mode 100644
-index 0000000..15653de
---- /dev/null
-+++ b/package/glmark2/glmark2-fix-add-GLchar.patch
-@@ -0,0 +1,17 @@
-+Bug fix in program.cc.  There is no such type as GLchar.
-+
-+Signed-off-by: Spenser Gilliland <spenser@gillilanding.com>
-+---
-+Index: glmark2-2012.12/src/libmatrix/program.cc
-+===================================================================
-+--- glmark2-2012.12.orig/src/libmatrix/program.cc	2012-12-18 13:45:45.000000000 -0600
-++++ glmark2-2012.12/src/libmatrix/program.cc	2013-08-13 20:08:27.005724911 -0500
-+@@ -17,6 +17,8 @@
-+ #include "gl-if.h"
-+ #include "program.h"
-+ 
-++typedef char GLchar;
-++
-+ using std::string;
-+ using LibMatrix::mat4;
-+ using LibMatrix::mat3;
-diff --git a/package/glmark2/glmark2-gl-to-glesv2-on-drm-flavor.patch b/package/glmark2/glmark2-gl-to-glesv2-on-drm-flavor.patch
-new file mode 100644
-index 0000000..5f838cc
---- /dev/null
-+++ b/package/glmark2/glmark2-gl-to-glesv2-on-drm-flavor.patch
-@@ -0,0 +1,25 @@
-+Bug in build script requires full opengl when only opengl es is actually
-+required.
-+
-+Signed-off-by: Spenser Gilliland <spenser@gillilanding.com>
-+---
-+Index: glmark2-279/src/wscript_build
-+===================================================================
-+--- glmark2-279.orig/src/wscript_build	2013-08-19 17:36:32.000000000 -0500
-++++ glmark2-279/src/wscript_build	2013-08-20 10:31:39.364629078 -0500
-+@@ -23,11 +23,12 @@
-+   'x11-gl' : ['x11', 'gl', 'matrix-gl'],
-+   'x11-glesv2' : ['x11', 'egl', 'glesv2', 'matrix-glesv2'],
-+   'drm-gl' : ['drm', 'gbm', 'egl', 'gl', 'matrix-gl'],
-+-  'drm-glesv2' : ['drm', 'gbm', 'egl', 'glesv2', 'matrix-gl'],
-++  'drm-glesv2' : ['drm', 'gbm', 'egl', 'glesv2', 'matrix-glesv2'],
-+   'mir-gl' : ['mirclient', 'egl', 'gl', 'matrix-gl'],
-+-  'mir-glesv2' : ['mirclient', 'egl', 'glesv2', 'matrix-gl'],
-++  'mir-glesv2' : ['mirclient', 'egl', 'glesv2', 'matrix-glesv2'],
-+   'wayland-gl' : ['wayland-client', 'wayland-egl', 'egl', 'gl', 'matrix-gl'],
-+-  'wayland-glesv2' : ['wayland-client', 'wayland-egl', 'egl', 'glesv2', 'matrix-gl'],
-++  'wayland-glesv2' : ['wayland-client', 'wayland-egl', 'egl', 'glesv2',
-++  'matrix-glesv2'],
-+   'fbdev-glesv2' : ['egl', 'glesv2', 'matrix-glesv2']
-+ }
-+ flavor_defines = {
-diff --git a/package/glmark2/glmark2.mk b/package/glmark2/glmark2.mk
-new file mode 100644
-index 0000000..47b464b
---- /dev/null
-+++ b/package/glmark2/glmark2.mk
-@@ -0,0 +1,70 @@
-+################################################################################
-+#
-+# glmark2
-+#
-+################################################################################
-+
-+GLMARK2_VERSION = 279
-+GLMARK2_SITE = http://bazaar.launchpad.net/~laanwj/glmark2/fbdev
-+GLMARK2_SITE_METHOD = bzr
-+GLMARK2_SOURCE = glmark2-$(GLMARK2_VERSION).tar.gz
-+GLMARK2_LICENSE = GPLv3+ SGIv1
-+GLMARK2_LICENSE_FILES = COPYING COPYING.SGI
-+
-+GLMARK2_DEPENDENCIES = jpeg libpng12 mesa3d host-python host-pkgconf
-+
-+GLMARK2_CONF_OPTS = --prefix=/usr/
-+
-+ifeq ($(BR2_PACKAGE_GLMARK2_X11)$(BR2_PACKAGE_GLMARK2_OPENGL_ES),yy)
-+GLMARK2_DEPENDENCIES += libegl libgles
-+GLMARK2_FLAVORS += x11-glesv2
+ comment "sunxi-cedarx requires an eglibc/glibc based toolchain"
+ 	depends on !BR2_TOOLCHAIN_USES_GLIBC && BR2_arm
+diff --git a/package/sunxi-cedarx/sunxi-cedarx.mk b/package/sunxi-cedarx/sunxi-cedarx.mk
+index 07c85d4..bc8ee32 100644
+--- a/package/sunxi-cedarx/sunxi-cedarx.mk
++++ b/package/sunxi-cedarx/sunxi-cedarx.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SUNXI_CEDARX_VERSION = 74923e55fc
++SUNXI_CEDARX_VERSION = 74c3e9052
+ SUNXI_CEDARX_SITE = http://github.com/linux-sunxi/cedarx-libs/tarball/$(SUNXI_CEDARX_VERSION)
+ 
+ SUNXI_CEDARX_INSTALL_STAGING = YES
+@@ -14,7 +14,12 @@ SUNXI_CEDARX_CONFIGURE_OPTS = \
+ 
+ ifeq ($(BR2_ARM_EABIHF),y)
+ SUNXI_CEDARX_BIN_DIR = $(@D)/libcedarv/linux-armhf
+-# libavheap.so is only available on EABIHF
++SUNXI_CEDARX_SAMPLE_LOC = $(SUNXI_CEDARX_BIN_DIR)/sample/ve
++else
++SUNXI_CEDARX_BIN_DIR = $(@D)/libcedarv/linux-armel2
++SUNXI_CEDARX_SAMPLE_LOC = $(SUNXI_CEDARX_BIN_DIR)/sample/output/ve
 +endif
 +
-+ifeq ($(BR2_PACKAGE_GLMARK2_X11)$(BR2_PACKAGE_GLMARK2_OPENGL),yy)
-+GLMARK2_DEPENDENCIES += libgl
-+GLMARK2_FLAVORS += x11-gl
-+endif
+ define SUNXI_CEDARX_BUILD_AVHEAP
+ 	$(TARGET_CC) $(TARGET_CFLAGS) \
+ 		-c $(SUNXI_CEDARX_BIN_DIR)/adapter/avheap/avheap.c \
+@@ -25,18 +30,30 @@ define SUNXI_CEDARX_BUILD_AVHEAP
+ 		-o $(SUNXI_CEDARX_BIN_DIR)/adapter/avheap/libavheap.so \
+ 		$(SUNXI_CEDARX_BIN_DIR)/adapter/avheap/avheap.o
+ endef
 +
-+ifeq ($(BR2_PACKAGE_GLMARK2_EGL)$(BR2_PACKAGE_GLMARK2_OPENGL_ES),yy)
-+GLMARK2_DEPENDENCIES += libdrm libegl libgles
-+GLMARK2_FLAVORS += drm-glesv2 fbdev-glesv2
-+endif
+ define SUNXI_CEDARX_INSTALL_AVHEAP
+ 	$(INSTALL) -D -m 755 $(SUNXI_CEDARX_BIN_DIR)/adapter/avheap/libavheap.so \
+ 		$(1)/usr/lib/libavheap.so
+ endef
+-else
+-SUNXI_CEDARX_BIN_DIR = $(@D)/libcedarv/linux-armel
 +
-+ifeq ($(BR2_PACKAGE_GLMARK2_EGL)$(BR2_PACKAGE_GLMARK2_OPENGL),yy)
-+GLMARK2_DEPENDENCIES += libdrm libgl
-+GLMARK2_FLAVORS += drm-gl
-+endif
++ifeq ($(BR2_PACKAGE_SUNXI_CEDARX_DEMO),y)
 +
-+ifeq ($(BR2_PACKAGE_WAYLAND)$(BR2_PACKAGE_GLMARK2_OPENGL_ES),yy)
-+GLMARK2_DEPENDENCIES += wayland libegl libgles
-+GLMARK2_FLAVORS += wayland-glesv2
-+endif
-+
-+ifeq ($(BR2_PACKAGE_WAYLAND)$(BR2_PACKAGE_GLMARK2_OPENGL),yy)
-+GLMARK2_DEPENDENCIES += wayland libgl
-+GLMARK2_FLAVORS += wayland-gl
-+endif
-+
-+ifeq ($(BR2_PACKAGE_SUNXI_MALI),y)
-+GLMARK2_CONF_OPTS += --for-mali
-+endif
-+
-+null :=
-+space := $(null) #
-+comma := ,
-+
-+GLMARK2_CONF_OPTS += --with-flavors=$(subst $(space),$(comma),$(GLMARK2_FLAVORS))
-+
-+define GLMARK2_CONFIGURE_CMDS
-+cd $(@D) && $(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) ./waf configure $(GLMARK2_CONF_OPTS)
++define SUNXI_CEDARX_BUILD_DEMO
++	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(SUNXI_CEDARX_BIN_DIR)/sample
 +endef
 +
-+define GLMARK2_BUILD_CMDS
-+cd $(@D) && $(TARGET_MAKE_ENV) ./waf
++define SUNXI_CEDARX_INSTALL_DEMO
++	$(INSTALL) -D -m 755 $(SUNXI_CEDARX_SAMPLE_LOC) \
++		$(TARGET_DIR)/usr/bin/ve
 +endef
 +
-+define GLMARK2_INSTALL_TARGET_CMDS
-+cd $(@D) && $(TARGET_MAKE_ENV) ./waf install --destdir=$(TARGET_DIR)
-+endef
-+
-+$(eval $(generic-package))
+ endif
+ 
+ define SUNXI_CEDARX_BUILD_CMDS
+ 	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(SUNXI_CEDARX_BIN_DIR) \
+ 		$(SUNXI_CEDARX_CONFIGURE_OPTS)
+ 	$(SUNXI_CEDARX_BUILD_AVHEAP)
++	$(SUNXI_CEDARX_BUILD_DEMO)
+ endef
+ 
+ define SUNXI_CEDARX_INSTALL_STAGING_CMDS
+@@ -54,6 +71,7 @@ define SUNXI_CEDARX_INSTALL_TARGET_CMDS
+ 	$(INSTALL) -D -m 755 $(SUNXI_CEDARX_BIN_DIR)/libvecore/libvecore.so \
+ 		$(TARGET_DIR)/usr/lib/libvecore.so
+ 	$(call SUNXI_CEDARX_INSTALL_AVHEAP, $(TARGET_DIR))
++	$(SUNXI_CEDARX_INSTALL_DEMO)
+ endef
+ 
+ $(eval $(generic-package))
 -- 
 1.8.1.2
