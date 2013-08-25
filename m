@@ -1,41 +1,22 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 26 Aug 2013 00:34:45 +0200
-Subject: [Buildroot] [git commit] Makefile: fix kernel modules test
-Message-ID: <20130825224049.710959B568@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 26 Aug 2013 00:47:57 +0200
+Subject: [Buildroot] [PATCH v2] cjson: bump to version 58
+In-Reply-To: <1377468387-2288-1-git-send-email-danomimanchego123@gmail.com>
+ (Danomi Manchego's message of "Sun, 25 Aug 2013 18:06:27 -0400")
+References: <1377468387-2288-1-git-send-email-danomimanchego123@gmail.com>
+Message-ID: <87bo4ll74y.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f627ebeb79930e00b25eb376554ff2b68cd077c5
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Danomi" == Danomi Manchego <danomimanchego123@gmail.com> writes:
 
-Commit fde2605765f (Makefile: test before search for kernel modules)
-changed the way we strip kernel modules, but it fails when modules aren't
-available (as test -d returns with a non zero exit code).
+ Danomi> Also: update download site, and add new license file.
+ Danomi> Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
 
-Fix it by including the test -d call in a proper shell conditional.
+Committed to next, thanks.
 
-Reported-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- Makefile |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/Makefile b/Makefile
-index 9f0164e..ca7b039 100644
---- a/Makefile
-+++ b/Makefile
-@@ -476,9 +476,9 @@ ifeq ($(BR2_PACKAGE_PYTHON_PYC_ONLY),y)
- 	find $(TARGET_DIR)/usr/lib/ -name '*.py' -print0 | xargs -0 rm -f
- endif
- 	$(STRIP_FIND_CMD) | xargs $(STRIPCMD) 2>/dev/null || true
--	test -d $(TARGET_DIR)/lib/modules && \
-+	if test -d $(TARGET_DIR)/lib/modules; then \
- 		find $(TARGET_DIR)/lib/modules -type f -name '*.ko' | \
--		xargs -r $(KSTRIPCMD)
-+		xargs -r $(KSTRIPCMD); fi
- 
- # See http://sourceware.org/gdb/wiki/FAQ, "GDB does not see any threads
- # besides the one in which crash occurred; or SIGTRAP kills my program when
+-- 
+Bye, Peter Korsgaard
