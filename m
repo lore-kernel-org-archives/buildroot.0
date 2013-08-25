@@ -1,7 +1,9 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun, 25 Aug 2013 05:25:23 +0000 (UTC)
-Subject: [Buildroot] [Bug 6464] New: dbus-daemon-launch-helper needs setuid
-Message-ID: <bug-6464-163@https.bugs.busybox.net/>
+Date: Sun, 25 Aug 2013 05:26:00 +0000 (UTC)
+Subject: [Buildroot] [Bug 6464] dbus-daemon-launch-helper needs setuid
+In-Reply-To: <bug-6464-163@https.bugs.busybox.net/>
+References: <bug-6464-163@https.bugs.busybox.net/>
+Message-ID: <20130825052600.BAFFD9B541@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,23 +12,10 @@ To: buildroot@busybox.net
 
 https://bugs.busybox.net/show_bug.cgi?id=6464
 
-           Summary: dbus-daemon-launch-helper needs setuid
-           Product: buildroot
-           Version: 2013.05
-          Platform: PC
-        OS/Version: Linux
-            Status: NEW
-          Severity: minor
-          Priority: P5
-         Component: Other
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: bluemrp9 at gmail.com
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
-
-
-dbus complains about dbus-daemon-launch-helper not being setuid from the
-default install.
+--- Comment #1 from Ryan Coe <bluemrp9@gmail.com> 2013-08-25 05:26:23 UTC ---
+Created attachment 5048
+  --> https://bugs.busybox.net/attachment.cgi?id=5048
+dbus: dbus-daemon-launch-helper needs setuid
 
 -- 
 Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
