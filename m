@@ -1,120 +1,62 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 27 Aug 2013 18:57:37 +0200
-Subject: [Buildroot] [PATCH 1/1] ola: new package
-In-Reply-To: <1377525737-14420-1-git-send-email-blanco.ether@gmail.com>
-References: <1377525737-14420-1-git-send-email-blanco.ether@gmail.com>
-Message-ID: <521CDA81.1070908@mind.be>
+Date: Tue, 27 Aug 2013 19:03:55 +0200
+Subject: [Buildroot] make clean behavior
+In-Reply-To: <20130827104112.0c916be5@skate>
+References: <CAAXf6LVsXF29Z9cZCSmZqMX8zVms0ANfgo33tHf8NiU57LY8QQ@mail.gmail.com>
+ <20130827104112.0c916be5@skate>
+Message-ID: <521CDBFB.7080107@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 08/26/13 16:02, Dave Skok wrote:
-> Signed-off-by: Dave Skok <blanco.ether@gmail.com>
-
-  Two very small fixes:
-
-> ---
->   package/Config.in     |   1 +
->   package/ola/Config.in | 136 ++++++++++++++++++++++++++++++++++++++++++++++
->   package/ola/ola.mk    | 146 ++++++++++++++++++++++++++++++++++++++++++++++++++
->   3 files changed, 283 insertions(+)
->   create mode 100644 package/ola/Config.in
->   create mode 100644 package/ola/ola.mk
+On 08/27/13 10:41, Thomas Petazzoni wrote:
+> Dear Thomas De Schampheleire,
 >
-> diff --git a/package/Config.in b/package/Config.in
-> index 7069d77..fb52411 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -277,6 +277,7 @@ source "package/minicom/Config.in"
->   source "package/nanocom/Config.in"
->   source "package/neard/Config.in"
->   source "package/ofono/Config.in"
-> +source "package/ola/Config.in"
->   source "package/on2-8170-modules/Config.in"
->   source "package/open2300/Config.in"
->   source "package/openocd/Config.in"
-> diff --git a/package/ola/Config.in b/package/ola/Config.in
-> new file mode 100644
-> index 0000000..050f29b
-> --- /dev/null
-> +++ b/package/ola/Config.in
-> @@ -0,0 +1,136 @@
-> +config BR2_PACKAGE_OLA
-> +	bool "ola (open lighting architecture)"
-> +	select BR2_PACKAGE_PROTOBUF
-> +	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
-> +	select BR2_PACKAGE_UTIL_LINUX
-> +	depends on BR2_INSTALL_LIBSTDCPP # protobuf
-> +	depends on BR2_LARGEFILE # util-linux
-> +	depends on BR2_USE_WCHAR # util-linux
-> +	depends on BR2_TOOLCHAIN_HAS_THREADS
-> +	help
-> +	  Open Lighting Architecture provides applications
-> +	  with a mechanism to send and receive DMX512 & RDM
-> +	  commands using hardware devices and DMX over IP protocols.
-> +
-> +	  http://www.opendmx.net/index.php/OLA
-> +
-> +comment "ola requires a toolchain with C++, thread, largefile and wchar support"
-> +	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_LARGEFILE || !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
+> On Tue, 27 Aug 2013 10:19:02 +0200, Thomas De Schampheleire wrote:
+>
+>> Is it intentional that 'make clean' is different depending on having a
+>> .config file?
+>>
+>> With .config there is a full clean:
+>>
+>> rm -rf buildroot/output/host/usr/powerpc-buildroot-linux-gnu/sysroot
+>> buildroot/output/target buildroot/output/images buildroot/output/host
+>> buildroot/output/stamps buildroot/output/build
+>> buildroot/output/toolchain buildroot/output/staging
+>> buildroot/output/legal-info
+>>
+>>
+>> but if you remove .config (and thus symbol BR2_HAVE_DOT_CONFIG) you
+>> only have a partial clean:
+>>
+>> rm -rf /repo/tdescham/reborn/buildroot-ppc/output/build
+>> /repo/tdescham/reborn/buildroot-ppc/output/staging
+>>
+>>
+>> Suppose you accidentally removed your .config, then you cannot easily
+>> get a clean buildroot env anymore. The behavior is caused due to the
+>> definition of variables like TARGET_DIR being inside a 'ifeq
+>> ($(BR2_HAVE_DOT_CONFIG),y)' statement.
+>>
+>> I would propose to make sure that 'clean' works in all cases, by
+>> moving the relevant variable definitions outside this if statement.
+>
+> This has also annoyed me a few times, and I don't quite see why 'make
+> clean' should have a different behavior between the has .config case
+> and the !has .config case.
 
-  This comment should go either above the BR2_PACKAGE_OLA config, or else 
-at the end of the file. Otherwise the sub-menus will not be indented.
+  Unfortunately, $(HOST_DIR) and therefore $(STAGING_DIR) (which is 
+actually stupid to remove since it is under $(HOST_DIR) depend on 
+BR2_HOST_DIR, so you'll need to take special action in the case when 
+there is no .config.
 
-> +
-> +if BR2_PACKAGE_OLA
-> +
-> +menu "bindings and interface"
-> +
-> +config BR2_PACKAGE_OLA_WEB
-> +	bool "http interface"
-> +	select BR2_PACKAGE_LIBMICROHTTPD
-> +	help
-> +	  Build OLA with browser interface.
-> +
-> +config BR2_PACKAGE_OLA_PYTHON_BINDINGS
-> +	bool "python bindings"
-> +	select BR2_PACKAGE_PYTHON
-> +	select BR2_PACKAGE_PYTHON_PROTOBUF
-> +	depends on BR2_USE_MMU
-> +	help
-> +	  Build OLA with support for the Python language.
-> +
-> +config BR2_PACKAGE_OLA_SLP
-> +	bool "slp tools"
-> +	help
-> +	  Build OLA with slp tools.
-> +
-> +endmenu
-> +
-> +menu "tests and examples"
-> +
-> +config BR2_PACKAGE_OLA_EXAMPLES
-> +	bool "examples"
-> +	select BR2_PACKAGE_NCURSES
-> +	help
-> +	  Build OLA examples.
-> +
-> +config BR2_PACKAGE_OLA_RDM_TESTS
-> +	bool "rdm tests"
-> +	select BR2_PACKAGE_OLA_PYTHON_BINDINGS
-> +	select BR2_PACKAGE_PYTHON
-> +	select BR2_PACKAGE_PYTHON_PROTOBUF
-
-  These two are already selected by BR2_PACKAGE_OLA_PYTHON_BINDINGS.
+  But otherwise I agree.
 
   Regards,
   Arnout
 
-> +	depends on BR2_USE_MMU
-> +	help
-> +	  Build OLA RDM tests.
-> +
-> +endmenu
-
-[snip]
 
 
 -- 
