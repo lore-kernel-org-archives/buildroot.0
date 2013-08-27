@@ -1,47 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 27 Aug 2013 19:28:32 +0200
-Subject: [Buildroot] [PATCHv2 2/4] kmod: allow to build a host variant
+Date: Tue, 27 Aug 2013 19:28:33 +0200
+Subject: [Buildroot] [PATCHv2 3/4] linux: use kmod instead of
+	module-init-tools
 In-Reply-To: <1377624514-10510-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1377624514-10510-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1377624514-10510-3-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1377624514-10510-4-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since module-init-tools is deprecated, we now want to use kmod instead
-for the installation of modules during the kernel build process. In
-order to do this, we need to be able to build a host variant of kmod,
-which is want this patch allows to do.
-
-Note that only the depmod tool is installed on the host, since that's
-the only one likely to be used on the host in a cross-compilation
-context.
-
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/kmod/kmod.mk | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+ linux/linux.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/kmod/kmod.mk b/package/kmod/kmod.mk
-index 71a2632..4445fa8 100644
---- a/package/kmod/kmod.mk
-+++ b/package/kmod/kmod.mk
-@@ -54,4 +54,14 @@ else
- KMOD_CONF_OPT += --disable-tools
- endif
+diff --git a/linux/linux.mk b/linux/linux.mk
+index 578d535..025fd51 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -35,7 +35,7 @@ endif
+ LINUX_PATCHES = $(call qstrip,$(BR2_LINUX_KERNEL_PATCH))
  
-+# We only install depmod, since that's the only tool used for the
-+# host.
-+define HOST_KMOD_INSTALL_TOOLS
-+	mkdir -p $(HOST_DIR)/sbin/
-+	ln -sf ../usr/bin/kmod $(HOST_DIR)/sbin/depmod
-+endef
-+
-+HOST_KMOD_POST_INSTALL_HOOKS += HOST_KMOD_INSTALL_TOOLS
-+
- $(eval $(autotools-package))
-+$(eval $(host-autotools-package))
+ LINUX_INSTALL_IMAGES = YES
+-LINUX_DEPENDENCIES  += host-module-init-tools host-lzop
++LINUX_DEPENDENCIES  += host-kmod host-lzop
+ 
+ ifeq ($(BR2_LINUX_KERNEL_UBOOT_IMAGE),y)
+ 	LINUX_DEPENDENCIES += host-uboot-tools
 -- 
 1.8.1.2
