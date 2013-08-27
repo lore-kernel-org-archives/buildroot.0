@@ -1,22 +1,24 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 27 Aug 2013 22:34:30 +0200
-Subject: [Buildroot] [PATCH] linux-fusion: bump version to 9.0.2
-In-Reply-To: <1377118180-28514-1-git-send-email-arnout@mind.be> (Arnout
- Vandecappelle's message of "Wed, 21 Aug 2013 22:49:40 +0200")
-References: <1377118180-28514-1-git-send-email-arnout@mind.be>
-Message-ID: <8761uqkh49.fsf@dell.be.48ers.dk>
+Date: Tue, 27 Aug 2013 22:40:51 +0200
+Subject: [Buildroot] [PATCH] openssh: fix tab/spacing in init script
+In-Reply-To: <1377047460-1937-1-git-send-email-danomimanchego123@gmail.com>
+ (Danomi Manchego's message of "Tue, 20 Aug 2013 21:11:00 -0400")
+References: <1377047460-1937-1-git-send-email-danomimanchego123@gmail.com>
+Message-ID: <871u5ekgto.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
+>>>>> "Danomi" == Danomi Manchego <danomimanchego123@gmail.com> writes:
 
- Arnout> Fixes build with recent kernels.
- Arnout> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
- Arnout> ---
- Arnout> For 2013.08
+ Danomi> Several of the lines in S50sshd script have a strange mix of spaces
+ Danomi> and tabs, that at least do not look consistent with neighboring lines.
+ Danomi> This patch makes the spacing consistent, and also strips the trailing
+ Danomi> spaces.
+
+ Danomi> Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
 
 Committed, thanks.
 
