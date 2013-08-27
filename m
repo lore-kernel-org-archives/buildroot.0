@@ -1,34 +1,59 @@
-From: clshotwe at rockwellcollins.com <clshotwe@rockwellcollins.com>
-Date: Tue, 27 Aug 2013 11:20:25 -0500
-Subject: [Buildroot] SELinux Buildroot Additions
-Message-ID: <OFC105562B.76AF62E8-ON86257BD4.005985FE-86257BD4.0059C2DD@rockwellcollins.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 27 Aug 2013 18:48:28 +0200
+Subject: [Buildroot] [PATCH 5/5] kmod: does not support static builds
+In-Reply-To: <52151C54.9010606@mind.be>
+References: <1376996584-4462-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1376996584-4462-6-git-send-email-thomas.petazzoni@free-electrons.com>
+ <52151C54.9010606@mind.be>
+Message-ID: <20130827184828.7a7685b1@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I would like to get some feedback on adding SELinux support to Buildroot. 
-This would involve adding several packages, modifying the .mk files for 
-several packages to include SELinux support, and adding generic defconfigs 
-to use as examples.  I would like to have defconfigs for QEMU targets 
-(x86, ARM, PPC) along with a Pandaboard and another couple hardware 
-targets.  The package selection for a functional SELinux system is a 
-little complex so the example defconfigs would be nice to use as examples.
+Dear Arnout Vandecappelle,
 
-Would this be a welcomed addition to Buildroot?  I would like to submit a 
-set of patches to first add the new packages, then modify existing 
-packages, and then add in the example defconfigs one at a time.  Is this 
-the best approach to take?
+(Resending with Buildroot list in Cc)
 
-Thanks,
-Clayton
+On Wed, 21 Aug 2013 22:00:20 +0200, Arnout Vandecappelle wrote:
+> On 20/08/13 13:03, Thomas Petazzoni wrote:
+> > Since kmod 14, the support for building a static library has been
+> > removed completely from kmod. Therefore, we mark kmod as
+> > !BR2_PREFER_STATIC_LIB, as well as all its reverse dependencies, which
+> > includes the option to use the "udev" /dev management method.
+> >
+> > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> 
+>   I don't think that patches that fix PREFER_STATIC builds are important 
+> enough to still include in 2013.08.
 
-Clayton Shotwell
-Software Engineer 
-clshotwe at rockwellcollins.com
-www.rockwellcollins.com 
+I agree.
 
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130827/997c18ef/attachment.html>
+> > diff --git a/package/kmod/Config.in b/package/kmod/Config.in
+> > index 4965237..bd44316 100644
+> > --- a/package/kmod/Config.in
+> > +++ b/package/kmod/Config.in
+> > @@ -1,5 +1,6 @@
+> >   config BR2_PACKAGE_KMOD
+> >   	bool "kmod"
+> > +	depends on !BR2_PREFER_STATIC_LIB
+> >   	help
+> >   	  handle kernel modules
+> 
+>   Shouldn't you also remove the
+> 
+> KMOD_CONF_OPT = --disable-static --enable-shared
+> 
+> ?
+
+No because the default is --enable-static --enable-shared, and the
+configure script of kmod bails out with an error when --enable-static
+is passed.
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
