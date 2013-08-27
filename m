@@ -1,45 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 27 Aug 2013 19:28:30 +0200
-Subject: [Buildroot] [PATCHv2 0/4] Use kmod instead of module-init-tools
-Message-ID: <1377624514-10510-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Tue, 27 Aug 2013 19:28:31 +0200
+Subject: [Buildroot] [PATCHv2 1/4] kmod: indent properly the
+	KMOD_INSTALL_TOOLS macro
+In-Reply-To: <1377624514-10510-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1377624514-10510-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1377624514-10510-2-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+The KMOD_INSTALL_TOOLS macro uses a non-conventional indentation. This
+commit fixes this.
 
-Here is a v2 of this patch set. Changes since the v1 are:
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/kmod/kmod.mk | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
- * Add a patch (first patch in the series) to properly indent the
-   existing KMOD_INSTALL_TOOLS macro.
-
- * Adjust the newly introduced host variant of kmod to only install a
-   symlink for depmod, since it's the only tool that will ever be used
-   in a cross-compilation context. Suggested by Arnout.
-
-Thanks,
-
-Thomas
-
-Thomas Petazzoni (4):
-  kmod: indent properly the KMOD_INSTALL_TOOLS macro
-  kmod: allow to build a host variant
-  linux: use kmod instead of module-init-tools
-  module-init-tools: remove package
-
- Config.in.legacy                                   | 11 +++++
- linux/linux.mk                                     |  2 +-
- package/Config.in                                  |  3 --
- package/kmod/kmod.mk                               | 15 ++++++-
- package/module-init-tools/Config.in                |  9 -----
- ...nit-tools-3.15-add-manpages-config-option.patch | 47 ----------------------
- package/module-init-tools/module-init-tools.mk     | 28 -------------
- 7 files changed, 25 insertions(+), 90 deletions(-)
- delete mode 100644 package/module-init-tools/Config.in
- delete mode 100644 package/module-init-tools/module-init-tools-3.15-add-manpages-config-option.patch
- delete mode 100644 package/module-init-tools/module-init-tools.mk
-
+diff --git a/package/kmod/kmod.mk b/package/kmod/kmod.mk
+index 72a24af..71a2632 100644
+--- a/package/kmod/kmod.mk
++++ b/package/kmod/kmod.mk
+@@ -44,8 +44,9 @@ KMOD_DEPENDENCIES += \
+ 	$(if $(BR2_PACKAGE_MODULE_INIT_TOOLS),module-init-tools)
+ 
+ define KMOD_INSTALL_TOOLS
+-	for i in depmod insmod lsmod modinfo modprobe rmmod; \
+-	do ln -sf ../usr/bin/kmod $(TARGET_DIR)/sbin/$$i; done
++	for i in depmod insmod lsmod modinfo modprobe rmmod; do \
++		ln -sf ../usr/bin/kmod $(TARGET_DIR)/sbin/$$i; \
++	done
+ endef
+ 
+ KMOD_POST_INSTALL_TARGET_HOOKS += KMOD_INSTALL_TOOLS
 -- 
 1.8.1.2
