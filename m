@@ -1,73 +1,65 @@
-From: Thomas Davis <sunsetbrew@sunsetbrew.com>
-Date: Tue, 27 Aug 2013 15:28:49 -0400
-Subject: [Buildroot] [1/1] civetweb: new package
-In-Reply-To: <20130827211557.1416d328@skate>
-References: <CAG3-AMrakjHihP-_Zr7E4zX=BSs7Ym+Fc8HSVDbQbt11t4K0sQ@mail.gmail.com>
- <20130827203958.2de34c38@skate>
- <CAG3-AMpi1X5xKO08bE+pfp5Or5qeYWbLiKt33aWBTpqVC4ToTg@mail.gmail.com>
- <20130827211557.1416d328@skate>
-Message-ID: <CAG3-AMq4Y-+gVWQ_062FjeLh_=HxuvXDqRzCdWEEjOP+WUCBuQ@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 27 Aug 2013 22:08:19 +0200
+Subject: [Buildroot] SELinux Buildroot Additions
+In-Reply-To: <OF965741C3.D223706B-ON86257BD4.0066A1F9-86257BD4.00680C50@rockwellcollins.com>
+References: <OFC105562B.76AF62E8-ON86257BD4.005985FE-86257BD4.0059C2DD@rockwellcollins.com>
+ <20130827190459.1eb3e4d9@skate>
+ <OF340CA870.4409C997-ON86257BD4.005E13D7-86257BD4.0061A29C@rockwellcollins.com>
+ <20130827202505.22f5ee46@skate>
+ <OF965741C3.D223706B-ON86257BD4.0066A1F9-86257BD4.00680C50@rockwellcollins.com>
+Message-ID: <20130827220819.6ea4fcae@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thanks once again for the reply and the detailed examination.  I will
-see about having a non large file option in the civetweb build and
-test that separately before continuing.    I will also add the comment
-about LUA and sqlite3 not coming from buildroot and move the document
-directory as well.
+Clayton,
 
-Thanks,
-Thomas Davis
+On Tue, 27 Aug 2013 13:56:28 -0500, clshotwe at rockwellcollins.com wrote:
 
-On Tue, Aug 27, 2013 at 3:15 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Dear Thomas Davis,
->
-> On Tue, 27 Aug 2013 14:54:28 -0400, Thomas Davis wrote:
->> I will make the suggested changes and retest and re-submit.  To answer
->> outstanding questions.
->>
->> 1. BR2_LARGEFILE is required by SQLITE3 which is a dependency in the
->> LUA support.
->
-> Ok. This is something you could potentially address by passing
-> -DSQLITE_DISABLE_LFS to the Sqlite build when !BR2_LARGEFILE. See
-> package/sqlite/sqlite.mk in Buildroot. But ok, it's not mandatory to
-> support this use case for civetweb.
->
-> So, what I'd like to see is something like:
->
-> config BR2_PACKAGE_CIVETWEB_LUA_SUPPORT
->         bool "lua support"
->         # required by the bundled sqlite code
->         depends on BR2_LARGEFILE
->         comment
->           Enable Lua support in Civetweb. Note that this will use a
->           version of Lua and Sqlite bundled within the Civetweb
->           sources, and not the packages from Buildroot.
->
-> comment "lua support requires largefile support in toolchain"
->         depends on !BR2_LARGEFILE
->
->> 2. DOCUMENT_ROOT is the path from with-in the chroot to the documents
->> folder.  This is a value written into a configuration file, not an
->> actual directory something gets placed in.  Normally it would have
->> been automatically determined by PREFIX, but in the fake root
->> situation it has to overridden so it works correctly inside the
->> chroot.  It is not an install path itself.
->
-> Right, discovered this after having a deeper look at civetweb. Then
-> please set it to /var/www, which is what we do for other web servers in
-> Buildroot.
->
-> Thanks!
->
-> Thomas
-> --
-> Thomas Petazzoni, Free Electrons
-> Kernel, drivers, real-time and embedded Linux
-> development, consulting, training and support.
-> http://free-electrons.com
+> > Can you expand on what is the huge issue between Busybox and the
+> > SELinux Refpolicy? The fact that the Refpolicy doesn't include a policy
+> > for Busybox? If so, isn't it possible to contribute a policy that would
+> > be suitable for usage with Busybox? A quick Google search returns
+> > http://code.google.com/p/sebusybox/.
+> 
+> Since Busybox is one executable that runs a bunch of different commands, 
+> there is an issue with the SELinux type transitions happening correctly. 
+> Programs, including init, end up running in an incorrect context and break 
+> SELinux rules. A policy could probably be created to let Busybox do what 
+> it needs to do but then that opens up the issue of having one application 
+> do everything. A lot of potential security vulnerabilities can be blocked 
+> by having a bunch of different applications that cannot all be compromised 
+> at once.  It would be really easy to use busybox if it was possible to 
+> build separate executables for security critical applications but I don't 
+> think that feature is available yet.
+
+This is actually possible, with the option CONFIG_FEATURE_INDIVIDUAL of
+Busybox. It creates a libbusybox shared library, and then creates one
+small (~6 KB) binary for each busybox program. This way, each program
+is really separate, even though the program code is really within
+libbusybox.
+
+Wouldn't this make SELinux handling easier? If yes, then I believe we
+could certainly decide to build and install Busybox this way when
+SELinux support is enabled.
+
+However, it seems like this Busybox feature installs those binary
+programs in a directory called 0_lib/ in the source directory, and
+"make install" keeps installing symbolic links. Well, I guess this is
+probably something we can improve/fix.
+
+> The packages that I will be adding are all from Tresys (
+> http://userspace.selinuxproject.org/trac/).  I looked into the sebusybox 
+> stuff a while ago but it looks like no one has done any development on it 
+> in a while. 
+
+Ok.
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
