@@ -1,22 +1,34 @@
-From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Tue, 27 Aug 2013 22:12:34 +0200
-Subject: [Buildroot] [1/1] civetweb: new package
-In-Reply-To: <20130827162934.3f2a4333@skate>
-References: <CAG3-AMr2_Aj+Xv0A13fWawcDTUToCnt72LWyzwTLVKK+4m+++w@mail.gmail.com>
- <CAAXf6LX52MBd8Lrp4eho=Vkdo=QVyZ4=aytMJu3dY6w0EwoJkA@mail.gmail.com>
- <20130827162934.3f2a4333@skate>
-Message-ID: <CAAXf6LW74acJ9cPL9j3+phrD9KDOspu9Hda-bKmEBXdkNu8zMw@mail.gmail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 27 Aug 2013 22:30:46 +0200
+Subject: [Buildroot] [PATCH] apply-patches: run patch in batch mode
+In-Reply-To: <1377194533-22501-1-git-send-email-arnout@mind.be> (Arnout
+ Vandecappelle's message of "Thu, 22 Aug 2013 20:02:13 +0200")
+References: <5215C738.2070707@lucaceresoli.net>
+ <1377194533-22501-1-git-send-email-arnout@mind.be>
+Message-ID: <87eh9ekhah.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Aug 27, 2013 at 4:29 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Thomas, Thomas,
->
+>>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
 
-Three cheers for the concept of surnames!
+ Arnout> If the file to be patched is missing, then `patch' will interactively
+ Arnout> ask for a file to be patched. This is annoying in e.g. the autobuilders
+ Arnout> because they have to wait for a timeout instead of failing.
 
-Thomas
+ Arnout> Giving the '-t' (batch mode) option to patch fixes this: it will skip the
+ Arnout> missing file, and return a non-zero exit code. So the build cleanly
+ Arnout> fails.
+
+ Arnout> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ Arnout> Acked-by: Luca Ceresoli <luca@lucaceresoli.net>
+ Arnout> ---
+ Arnout> I actually discovered this during my allyesconfig night build, where I
+ Arnout> use make -k.
+
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
