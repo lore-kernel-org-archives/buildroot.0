@@ -1,36 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 27 Aug 2013 22:50:53 +0200
+Date: Tue, 27 Aug 2013 22:51:29 +0200
 Subject: [Buildroot] [1/1] civetweb: new package
-In-Reply-To: <CAG3-AMq4Y-+gVWQ_062FjeLh_=HxuvXDqRzCdWEEjOP+WUCBuQ@mail.gmail.com>
-References: <CAG3-AMrakjHihP-_Zr7E4zX=BSs7Ym+Fc8HSVDbQbt11t4K0sQ@mail.gmail.com>
- <20130827203958.2de34c38@skate>
- <CAG3-AMpi1X5xKO08bE+pfp5Or5qeYWbLiKt33aWBTpqVC4ToTg@mail.gmail.com>
- <20130827211557.1416d328@skate>
- <CAG3-AMq4Y-+gVWQ_062FjeLh_=HxuvXDqRzCdWEEjOP+WUCBuQ@mail.gmail.com>
-Message-ID: <20130827225053.45a6b76d@skate>
+In-Reply-To: <CAAXf6LW74acJ9cPL9j3+phrD9KDOspu9Hda-bKmEBXdkNu8zMw@mail.gmail.com>
+References: <CAG3-AMr2_Aj+Xv0A13fWawcDTUToCnt72LWyzwTLVKK+4m+++w@mail.gmail.com>
+ <CAAXf6LX52MBd8Lrp4eho=Vkdo=QVyZ4=aytMJu3dY6w0EwoJkA@mail.gmail.com>
+ <20130827162934.3f2a4333@skate>
+ <CAAXf6LW74acJ9cPL9j3+phrD9KDOspu9Hda-bKmEBXdkNu8zMw@mail.gmail.com>
+Message-ID: <20130827225129.05beb185@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas Davis,
+Thomas, Thomas,
 
-On Tue, 27 Aug 2013 15:28:49 -0400, Thomas Davis wrote:
-> Thanks once again for the reply and the detailed examination.  I will
-> see about having a non large file option in the civetweb build and
-> test that separately before continuing.    I will also add the comment
-> about LUA and sqlite3 not coming from buildroot and move the document
-> directory as well.
+On Tue, 27 Aug 2013 22:12:34 +0200, Thomas De Schampheleire wrote:
+> On Tue, Aug 27, 2013 at 4:29 PM, Thomas Petazzoni
+> <thomas.petazzoni@free-electrons.com> wrote:
+> > Thomas, Thomas,
+> >
+> 
+> Three cheers for the concept of surnames!
+> 
+> Thomas
 
-As I said, support non-large file builds is really not mandatory. You
-can submit your package without supporting non-large file builds for
-the moment, and if you're interested, you can send later a followup
-patch to make this possible. But we have plenty of packages that don't
-support non-large file builds in Buildroot, so it's not really a
-problem to have another one.
-
-Thanks,
+Yeah, sounded like a fun start of e-mail for something signed:
 
 Thomas
 -- 
