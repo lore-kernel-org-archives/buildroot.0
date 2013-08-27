@@ -1,31 +1,31 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 27 Aug 2013 20:44:30 +0200
-Subject: [Buildroot] [git commit branch/next] gstreamer1: bump version
-Message-ID: <20130827192802.D8A6F9B5AD@busybox.osuosl.org>
+Date: Tue, 27 Aug 2013 21:12:09 +0200
+Subject: [Buildroot] [git commit branch/next] gst1-plugins-bad: bump version
+Message-ID: <20130827192802.E8B809A592@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=2e77c837381f4c4a5952e573be3fafd855c68017
+commit: http://git.buildroot.net/buildroot/commit/?id=f930018dbbcbf02fc099d5a5df3f12fc2cbcf56d
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/multimedia/gstreamer1/gstreamer1.mk |    2 +-
+ .../gst1-plugins-bad/gst1-plugins-bad.mk           |    2 +-
  1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/multimedia/gstreamer1/gstreamer1.mk b/package/multimedia/gstreamer1/gstreamer1.mk
-index d3db119..c9808a7 100644
---- a/package/multimedia/gstreamer1/gstreamer1.mk
-+++ b/package/multimedia/gstreamer1/gstreamer1.mk
+diff --git a/package/multimedia/gst1-plugins-bad/gst1-plugins-bad.mk b/package/multimedia/gst1-plugins-bad/gst1-plugins-bad.mk
+index 732cddf..362aed6 100644
+--- a/package/multimedia/gst1-plugins-bad/gst1-plugins-bad.mk
++++ b/package/multimedia/gst1-plugins-bad/gst1-plugins-bad.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GSTREAMER1_VERSION = 1.0.8
-+GSTREAMER1_VERSION = 1.0.9
- GSTREAMER1_SOURCE = gstreamer-$(GSTREAMER1_VERSION).tar.xz
- GSTREAMER1_SITE = http://gstreamer.freedesktop.org/src/gstreamer
- GSTREAMER1_INSTALL_STAGING = YES
+-GST1_PLUGINS_BAD_VERSION = 1.0.8
++GST1_PLUGINS_BAD_VERSION = 1.0.9
+ GST1_PLUGINS_BAD_SOURCE = gst-plugins-bad-$(GST1_PLUGINS_BAD_VERSION).tar.xz
+ GST1_PLUGINS_BAD_SITE = http://gstreamer.freedesktop.org/src/gst-plugins-bad
+ GST1_PLUGINS_BAD_LICENSE_FILES = COPYING COPYING.LIB
