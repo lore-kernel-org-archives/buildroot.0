@@ -1,65 +1,125 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 27 Aug 2013 08:01:15 +0200
-Subject: [Buildroot] [PATCH v2 2/3] package: fix generic extract target
- for top-level parallel make
-In-Reply-To: <CAHkwnC9CqFDM=mb7zaA7VDydfGKe=mjGT9ZzkP3obUgzd02mMA@mail.gmail.com>
-References: <1374138746-23279-1-git-send-email-fabio.porcedda@gmail.com>
- <1374138746-23279-3-git-send-email-fabio.porcedda@gmail.com>
- <521513E3.8080401@mind.be>
- <CAHkwnC_6k4tY_KRudG7yWp1gOi5WZnYKDwWv2gh_xBtCQhJesQ@mail.gmail.com>
- <52163548.2020108@mind.be>
- <CAHkwnC9CqFDM=mb7zaA7VDydfGKe=mjGT9ZzkP3obUgzd02mMA@mail.gmail.com>
-Message-ID: <521C40AB.2000107@mind.be>
+Date: Tue, 27 Aug 2013 08:17:33 +0200
+Subject: [Buildroot] [PATCH 1/3] neon: replace 'choice' for XML library
+ with two options
+In-Reply-To: <1377342463-17543-2-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1377342463-17543-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1377342463-17543-2-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <521C447D.4020207@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 08/26/13 10:29, Fabio Porcedda wrote:
-> On Thu, Aug 22, 2013 at 5:59 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
->> On 22/08/13 09:44, Fabio Porcedda wrote:
-[snip]
->>> To be able to change the others targets i need to add stamp file for
->>> every target inside $$($(2)_DEPENDENCIES,
->>> i need to do that because a file cannot depends on a non existing file.
->>
->>
->>   That's not true. Take the following Makefile:
->>
->> ----------------
->> %.source:
->>          touch $@
->>
->> %.extract: %.source
->>          touch $@
->>
->> %.config: %.extract
->>          touch $@
->>
->> %.build: %.config
->>          touch $@
->>
->> X_DEPS = y z
->>
->> x.config: $(X_DEPS)
+On 08/24/13 13:07, Thomas Petazzoni wrote:
+> The NEON library can either be compiled without XML support, with XML
+> support provided by Expat, or with XML support provided by
+> libxml2. Until now, to represent this, a Kconfig 'choice..endchoice'
+> was used. Unfortunately, another package cannot 'select' one of the
+> possible choices. So for example, a package such as 'rpm', or the
+> to-be-added 'subversion' package could not select their dependencies,
+> they had to do a 'depends on !BR2_PACKAGE_NEON_NOXML', which is not
+> how Buildroot handles library dependencies in general.
 >
-> The problem with this solution is that the "x.config" target is
-> reevaluated every time because it does not depends on a virtual
-> target, the only solution that i found is to add a stamp file for
-> every dependencies.
-> Using virtual target as dependency is fine only with virtual targets.
+> So, this commit replaces the 'choice...endchoice' block with simply
+> two configuration options that are mutually exclusive. The option
+> names are not changed, so no Config.in.legacy addition is needed.
+>
+> The rpm package is updated accordingly.
+>
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> ---
+>   package/neon/Config.in | 27 +++++++--------------------
+>   package/rpm/Config.in  |  7 ++-----
+>   2 files changed, 9 insertions(+), 25 deletions(-)
+>
+> diff --git a/package/neon/Config.in b/package/neon/Config.in
+> index f972dbb..3f18665 100644
+> --- a/package/neon/Config.in
+> +++ b/package/neon/Config.in
+> @@ -19,30 +19,17 @@ config BR2_PACKAGE_NEON_SSL
+>   	help
+>   	  build with SSL support
+>
+> -choice
+> -	prompt "XML Support"
+> -	depends on BR2_PACKAGE_NEON
+> -	help
+> -	  Select which XML library to use...
+> -	  none       do not build with XML support
+> -	  expat      use expat
+> -	  libxml2    use libxml2
+> -
+> -config BR2_PACKAGE_NEON_NOXML
+> -	bool "none"
+> -	help
+> -	  none       do not build with XML support
+> -
+>   config BR2_PACKAGE_NEON_EXPAT
+> -	bool "expat"
+> +	bool "XML support with expat"
+>   	select BR2_PACKAGE_EXPAT
+> +	depends on BR2_PACKAGE_NEON
 
-  Ah yes, you're right.
+  Can you use "if ... endif" instead of depends on?
 
-  However, using the order-only rule that you mentioned in reply to 
-Thomas solves the problem. So
+> +	depends on !BR2_PACKAGE_NEON_LIBXML2
+>   	help
+> -	  expat      use expat, a library for parsing XML.
+> +	  Enable XML support in neon, using the Expat XML library.
+>
+>   config BR2_PACKAGE_NEON_LIBXML2
+> -	bool "libxml2"
+> +	bool "XML support with libxml2"
+>   	select BR2_PACKAGE_LIBXML2
+> +	depends on BR2_PACKAGE_NEON
+>   	help
+> -	  libxml2    use libxml2, a library to read, modify and
+> -	             write XML and HTML files.
+> -endchoice
+> +	  Enable XML support in neon, using the libxml2 XML library.
+> diff --git a/package/rpm/Config.in b/package/rpm/Config.in
+> index 14072c9..8faca95 100644
+> --- a/package/rpm/Config.in
+> +++ b/package/rpm/Config.in
+> @@ -1,17 +1,14 @@
+>   comment "rpm requires a toolchain with thread support"
+>   	depends on !BR2_TOOLCHAIN_HAS_THREADS
+>
+> -comment "rpm requires libneon with SSL, XML and ZLIB support"
+> -	depends on !BR2_PACKAGE_NEON || BR2_PACKAGE_NEON_NOXML && BR2_TOOLCHAIN_HAS_THREADS
+> -
+>   config BR2_PACKAGE_RPM
+>   	bool "rpm"
+>   	depends on BR2_TOOLCHAIN_HAS_THREADS # beecrypt
+>   	select BR2_PACKAGE_BEECRYPT
+>   	select BR2_PACKAGE_POPT
+>   	select BR2_PACKAGE_OPENSSL
+> -	depends on BR2_PACKAGE_NEON
+> -	depends on !BR2_PACKAGE_NEON_NOXML
+> +	select BR2_PACKAGE_NEON
+> +	select BR2_PACKAGE_NEON_EXPAT if !BR2_PACKAGE_NEON_LIBXML2
 
-x.config: | $(X_DEPS)
+  Maybe it's cleaner to add a hidden symbol to neon:
+
+config BR2_PACKAGE_NEON_XML
+	bool
+	select BR2_PACKAGE_NEON_EXPAT if !BR2_PACKAGE_NEON_LIBXML2
+
+  Then in rpm, you only need to select BR2_PACKAGE_NEON_XML
+
+  (Since we're going to reuse this pattern in other places as well, I 
+think it's important to do it right).
 
 
   Regards,
   Arnout
+
+>   	select BR2_PACKAGE_NEON_ZLIB
+>   	select BR2_PACKAGE_NEON_SSL
+>   	help
+>
 
 
 -- 
