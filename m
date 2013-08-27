@@ -1,49 +1,43 @@
-From: Thomas Davis <sunsetbrew@sunsetbrew.com>
-Date: Tue, 27 Aug 2013 10:56:21 -0400
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 27 Aug 2013 17:43:35 +0200
 Subject: [Buildroot] [1/1] civetweb: new package
-In-Reply-To: <20130827162934.3f2a4333@skate>
+In-Reply-To: <CAG3-AMraW=os9fWHuukfn_poxQvwPGJ7OGshb3y66TYdCgSVFA@mail.gmail.com>
 References: <CAG3-AMr2_Aj+Xv0A13fWawcDTUToCnt72LWyzwTLVKK+4m+++w@mail.gmail.com>
  <CAAXf6LX52MBd8Lrp4eho=Vkdo=QVyZ4=aytMJu3dY6w0EwoJkA@mail.gmail.com>
  <20130827162934.3f2a4333@skate>
-Message-ID: <CAG3-AMqbp49OstNw2KfC-cB3bmBUD_8=F2=Tbbae+tAiMiPGnQ@mail.gmail.com>
+ <CAG3-AMraW=os9fWHuukfn_poxQvwPGJ7OGshb3y66TYdCgSVFA@mail.gmail.com>
+Message-ID: <20130827174335.6d4435b4@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thank you so much for the quick review!
+Dear Thomas Davis,
 
->What is the reason for this uclibc check?
+Please don't reply to me directly, always keep the list in Cc for
+Buildroot related discussions that started on the list.
 
-I noticed that there were several alternatives for pthreads in uclibc and
-the only one that not compatible is BR2_PTHREADS_NONE.  I was afraid of
-additional variants may occur in the future and I am basically only
-excluding the one option.  Further, if it is possible to exclude uclibc, it
-would not be compatible either.  If you feel it is overkill I can simply it.
+On Tue, 27 Aug 2013 11:39:17 -0400, Thomas Davis wrote:
 
-> Could you explain why you added this comment?
-Civetweb is MIT and the MIT license does not prevent it from being included
-in GPL code while the inverse is not true. If I put GPL code in Civetweb,
-it compromises the MIT license and currently a copy of these files are in
-the repository, at least until included with buildroot.  If dual licensing
-the file is the best way, I can do that, or if preferred I can remove the
-statement altogether.
+> I tried git send-mail twice before and it did not make it to the list.  I
+> am guessing there is some spam guard in place that is preventing it because
+> I received the cc'ed copies just fine.  Have you seen this before?
 
-> In general we use the format
-> ifeq ($(BR2_FOO),y)
+Are you sure the From: address that was shown when using 'git
+send-email' is really the address with which you've subscribed to the
+list? I strongly suspect something like that, many other contributors
+are using git send-email with the Buildroot mailing list without any
+problem.
 
-No problem, i can fix that
+Can you try to 'git send-email' me your patch, so that I can see if
+something obvious prevents your e-mail from reaching the list?
 
->  \ No newline at end of file
+Best regards,
 
-will fix that too
-
-Please advise on the uclib check and the license header and I will submit a
-new patch.
-
-Thank you,
-Thomas Davis
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130827/66790200/attachment-0001.html>
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
