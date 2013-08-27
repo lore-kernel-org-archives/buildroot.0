@@ -1,82 +1,110 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 27 Aug 2013 19:10:27 +0200
-Subject: [Buildroot] [PATCH 1/1] libffi: minor corrections in post
- install hooks
-In-Reply-To: <1541068056.5590214.1377606409099.JavaMail.root@openwide.fr>
-References: <1541068056.5590214.1377606409099.JavaMail.root@openwide.fr>
-Message-ID: <20130827191027.3add3cc2@skate>
+Date: Tue, 27 Aug 2013 19:08:04 +0200
+Subject: [Buildroot] [PATCHv2 2/3] neon: replace 'choice' for XML library
+	with two options
+In-Reply-To: <1377623285-3359-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1377623285-3359-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1377623285-3359-3-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Nicolas M?n?gale,
+The NEON library can either be compiled without XML support, with XML
+support provided by Expat, or with XML support provided by
+libxml2. Until now, to represent this, a Kconfig 'choice..endchoice'
+was used. Unfortunately, another package cannot 'select' one of the
+possible choices. So for example, a package such as 'rpm', or the
+to-be-added 'subversion' package could not select their dependencies,
+they had to do a 'depends on !BR2_PACKAGE_NEON_NOXML', which is not
+how Buildroot handles library dependencies in general.
 
-This looks good, but:
+So, this commit replaces the 'choice...endchoice' block with simply
+two configuration options that are mutually exclusive. The option
+names are not changed, so no Config.in.legacy addition is needed.
 
- * Your patch subject should have mentioned it's the second version.
-   See --subject-prefix when generating/sending your patches.
+An hidden option BR2_PACKAGE_NEON_XML is provided, so that packages
+that need XML support in NEON but don't care whether it's provided by
+Expat or libxml2 can simply select BR2_PACKAGE_NEON_XML.
 
- * The commit log could be a little bit more verbose on what the commit
-   is doing. Basically, all the details you wrote after the "---"
-   should in this case be part of the commit log itself. What is after
-   the "---" marker are changelog informations, i.e things that changed
-   between revisions of the patches. The real description of what the
-   patch is doing should be part of the commit log.
+The rpm package is updated accordingly.
 
-Thanks,
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/neon/Config.in | 28 ++++++++++------------------
+ package/rpm/Config.in  |  7 ++-----
+ 2 files changed, 12 insertions(+), 23 deletions(-)
 
-Thomas
-
-On Tue, 27 Aug 2013 14:26:49 +0200 (CEST), Nicolas M?n?gale wrote:
-> Signed-off-by: Nicolas M?n?gale <nicolas.menegale@openwide.fr>
-> ---
-> v1: second commit
-> In order to be sure that we just deal with the includes related with
-> the actual package described into libffi.mk it is better to explicitly
-> specify the version of the libffi we deal with into the post install
-> hook.
-> As dev files are deprecated in target rootfs target post install
-> hook was also deleted.
-> ---
->  package/libffi/libffi.mk |   11 +----------
->  1 file changed, 1 insertion(+), 10 deletions(-)
-> 
-> diff --git a/package/libffi/libffi.mk b/package/libffi/libffi.mk
-> index 0ad5c84..8c84924 100644
-> --- a/package/libffi/libffi.mk
-> +++ b/package/libffi/libffi.mk
-> @@ -14,7 +14,7 @@ LIBFFI_AUTORECONF = YES
->  # Move the headers to the usual location, and adjust the .pc file
->  # accordingly.
->  define LIBFFI_MOVE_STAGING_HEADERS
-> -	mv $(STAGING_DIR)/usr/lib/libffi-*/include/*.h $(STAGING_DIR)/usr/include/
-> +	mv $(STAGING_DIR)/usr/lib/libffi-$(LIBFFI_VERSION)/include/*.h $(STAGING_DIR)/usr/include/
->  	$(SED) '/^includedir.*/d' -e '/^Cflags:.*/d' \
->  		$(STAGING_DIR)/usr/lib/pkgconfig/libffi.pc
->  	rm -rf $(TARGET_DIR)/usr/lib/libffi-*
-> @@ -22,15 +22,6 @@ endef
->  
->  LIBFFI_POST_INSTALL_STAGING_HOOKS += LIBFFI_MOVE_STAGING_HEADERS
->  
-> -# Similar for target headers
-> -define LIBFFI_MOVE_TARGET_HEADERS
-> -	install -d $(TARGET_DIR)/usr/include/
-> -	mv $(TARGET_DIR)/usr/lib/libffi-*/include/*.h $(TARGET_DIR)/usr/include/
-> -	rm -rf $(TARGET_DIR)/usr/lib/libffi-*
-> -endef
-> -
-> -LIBFFI_POST_INSTALL_TARGET_HOOKS += LIBFFI_MOVE_TARGET_HEADERS
-> -
->  HOST_LIBFFI_AUTORECONF = YES
->  
->  $(eval $(autotools-package))
-
-
-
+diff --git a/package/neon/Config.in b/package/neon/Config.in
+index 54b51c8..e76278c 100644
+--- a/package/neon/Config.in
++++ b/package/neon/Config.in
+@@ -19,31 +19,23 @@ config BR2_PACKAGE_NEON_SSL
+ 	help
+ 	  build with SSL support
+ 
+-choice
+-	prompt "XML Support"
+-	help
+-	  Select which XML library to use...
+-	  none       do not build with XML support
+-	  expat      use expat
+-	  libxml2    use libxml2
+-
+-config BR2_PACKAGE_NEON_NOXML
+-	bool "none"
+-	help
+-	  none       do not build with XML support
++# This is an hidden symbol other packages can select to ensure that
++# Neon has XML support, either provided by Expat or libxml2.
++config BR2_PACKAGE_NEON_XML
++	bool
++	select BR2_PACKAGE_NEON_EXPAT if !BR2_PACKAGE_NEON_LIBXML2
+ 
+ config BR2_PACKAGE_NEON_EXPAT
+-	bool "expat"
++	bool "XML support with expat"
+ 	select BR2_PACKAGE_EXPAT
++	depends on !BR2_PACKAGE_NEON_LIBXML2
+ 	help
+-	  expat      use expat, a library for parsing XML.
++	  Enable XML support in neon, using the Expat XML library.
+ 
+ config BR2_PACKAGE_NEON_LIBXML2
+-	bool "libxml2"
++	bool "XML support with libxml2"
+ 	select BR2_PACKAGE_LIBXML2
+ 	help
+-	  libxml2    use libxml2, a library to read, modify and
+-	             write XML and HTML files.
+-endchoice
++	  Enable XML support in neon, using the libxml2 XML library.
+ 
+ endif
+diff --git a/package/rpm/Config.in b/package/rpm/Config.in
+index 14072c9..63e5367 100644
+--- a/package/rpm/Config.in
++++ b/package/rpm/Config.in
+@@ -1,17 +1,14 @@
+ comment "rpm requires a toolchain with thread support"
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS
+ 
+-comment "rpm requires libneon with SSL, XML and ZLIB support"
+-	depends on !BR2_PACKAGE_NEON || BR2_PACKAGE_NEON_NOXML && BR2_TOOLCHAIN_HAS_THREADS
+-
+ config BR2_PACKAGE_RPM
+ 	bool "rpm"
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # beecrypt
+ 	select BR2_PACKAGE_BEECRYPT
+ 	select BR2_PACKAGE_POPT
+ 	select BR2_PACKAGE_OPENSSL
+-	depends on BR2_PACKAGE_NEON
+-	depends on !BR2_PACKAGE_NEON_NOXML
++	select BR2_PACKAGE_NEON
++	select BR2_PACKAGE_NEON_XML
+ 	select BR2_PACKAGE_NEON_ZLIB
+ 	select BR2_PACKAGE_NEON_SSL
+ 	help
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+1.8.1.2
