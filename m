@@ -1,34 +1,33 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 27 Aug 2013 22:30:46 +0200
-Subject: [Buildroot] [PATCH] apply-patches: run patch in batch mode
-In-Reply-To: <1377194533-22501-1-git-send-email-arnout@mind.be> (Arnout
- Vandecappelle's message of "Thu, 22 Aug 2013 20:02:13 +0200")
-References: <5215C738.2070707@lucaceresoli.net>
- <1377194533-22501-1-git-send-email-arnout@mind.be>
-Message-ID: <87eh9ekhah.fsf@dell.be.48ers.dk>
+Date: Tue, 27 Aug 2013 22:33:46 +0200
+Subject: [Buildroot] [PATCH] python-setuptools: Add missing
+	$(TARGET_DIR) to PYTHONPATH.
+In-Reply-To: <1377204777-8904-1-git-send-email-markos.chandras@imgtec.com>
+ (Markos Chandras's message of "Thu, 22 Aug 2013 21:52:57 +0100")
+References: <1377204777-8904-1-git-send-email-markos.chandras@imgtec.com>
+Message-ID: <87a9k2kh5h.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
+>>>>> "Markos" == Markos Chandras <markos.chandras@imgtec.com> writes:
 
- Arnout> If the file to be patched is missing, then `patch' will interactively
- Arnout> ask for a file to be patched. This is annoying in e.g. the autobuilders
- Arnout> because they have to wait for a timeout instead of failing.
+ Markos> The $(TARGET_DIR) variable is required when building
+ Markos> python-setuptools for the target otherwise the build system detects
+ Markos> the host installation which leads to permission error problems
+ Markos> like these:
 
- Arnout> Giving the '-t' (batch mode) option to patch fixes this: it will skip the
- Arnout> missing file, and return a non-zero exit code. So the build cleanly
- Arnout> fails.
+ Markos> Setuptools installation detected at /usr/lib64/python2.7/site-packages
+ Markos> Renaming /usr/lib64/python2.7/site-packages/setuptools-0.9.8-py2.7.egg-info to
+ Markos> /usr/lib64/python2.7/site-packages/setuptools-0.9.8-py2.7.egg-info.OLD.1377005697.88
+ Markos> OSError: [Errno 13] Permission denied
 
- Arnout> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
- Arnout> Acked-by: Luca Ceresoli <luca@lucaceresoli.net>
- Arnout> ---
- Arnout> I actually discovered this during my allyesconfig night build, where I
- Arnout> use make -k.
+ Markos> Moreover, remove the PYTHONPATH variable for host variant since it's
+ Markos> not needed.
 
-Committed, thanks.
+Committed, thanks (with the double '))' fixed).
 
 -- 
 Bye, Peter Korsgaard
