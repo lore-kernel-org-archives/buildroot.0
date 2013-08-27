@@ -1,82 +1,61 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 27 Aug 2013 22:34:47 +0200
-Subject: [Buildroot] [git commit] openssh: fix tab/spacing in init script
-Message-ID: <20130827210259.D68CC9B3E6@busybox.osuosl.org>
+Date: Tue, 27 Aug 2013 22:32:55 +0200
+Subject: [Buildroot] [git commit] python-setuptools: Add missing
+	$(TARGET_DIR) to PYTHONPATH
+Message-ID: <20130827210259.BB1A89B3E6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=0be2fe9a8c07d1f58ca9eb288cb75aaae40550cd
+commit: http://git.buildroot.net/buildroot/commit/?id=0b363ba5f389b3744937658f40f1e796e5447db3
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Several of the lines in S50sshd script have a strange mix of spaces
-and tabs, that at least do not look consistent with neighboring lines.
-This patch makes the spacing consistent, and also strips the trailing
-spaces.
+The $(TARGET_DIR) variable is required when building
+python-setuptools for the target otherwise the build system detects
+the host installation which leads to permission error problems
+like these:
 
-Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
+Setuptools installation detected at /usr/lib64/python2.7/site-packages
+Renaming /usr/lib64/python2.7/site-packages/setuptools-0.9.8-py2.7.egg-info to
+/usr/lib64/python2.7/site-packages/setuptools-0.9.8-py2.7.egg-info.OLD.1377005697.88
+OSError: [Errno 13] Permission denied
+
+Moreover, remove the PYTHONPATH variable for host variant since it's
+not needed.
+
+Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
+Tested-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Acked-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/openssh/S50sshd |   20 ++++++++++----------
- 1 files changed, 10 insertions(+), 10 deletions(-)
+ package/python-setuptools/python-setuptools.mk |    5 ++---
+ 1 files changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/package/openssh/S50sshd b/package/openssh/S50sshd
-index 89f1b9a..b65b3c8 100644
---- a/package/openssh/S50sshd
-+++ b/package/openssh/S50sshd
-@@ -23,7 +23,7 @@ if [ ! -f /etc/ssh_host_dsa_key ] ; then
- 	echo Generating DSA Key...
- 	echo THIS CAN TAKE A MINUTE OR TWO DEPENDING ON YOUR PROCESSOR!
- 	echo
--        /usr/bin/ssh-keygen -t dsa -f /etc/ssh_host_dsa_key -C '' -N ''
-+	/usr/bin/ssh-keygen -t dsa -f /etc/ssh_host_dsa_key -C '' -N ''
- fi
+diff --git a/package/python-setuptools/python-setuptools.mk b/package/python-setuptools/python-setuptools.mk
+index cd5ee4d..73c819f 100644
+--- a/package/python-setuptools/python-setuptools.mk
++++ b/package/python-setuptools/python-setuptools.mk
+@@ -20,19 +20,18 @@ endef
  
- # Check for the SSH2 ECDSA key
-@@ -33,35 +33,35 @@ if [ ! -f /etc/ssh_host_ecdsa_key ]; then
- 	echo
- 	/usr/bin/ssh-keygen -t ecdsa -f /etc/ssh_host_ecdsa_key -C '' -N ''
- fi
--                
-+
- umask 077
+ define PYTHON_SETUPTOOLS_BUILD_CMDS
+ 	(cd $(@D); \
+-	PYTHONPATH="/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages" \
++	PYTHONPATH="$(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages" \
+ 	$(HOST_DIR)/usr/bin/python setup.py build)
+ endef
  
- start() {
-- 	echo -n "Starting sshd: "
-+	echo -n "Starting sshd: "
- 	/usr/sbin/sshd
- 	touch /var/lock/sshd
- 	echo "OK"
--}	
-+}
- stop() {
- 	echo -n "Stopping sshd: "
--        killall	sshd 
-+	killall sshd
- 	rm -f /var/lock/sshd
--	echo "OK" 
-+	echo "OK"
- }
- restart() {
- 	stop
- 	start
--}	
-+}
+ define HOST_PYTHON_SETUPTOOLS_INSTALL_CMDS
+ 	(cd $(@D); \
+-	PYTHONPATH="$(HOST_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages" \
+ 	$(HOST_DIR)/usr/bin/python setup.py install --prefix=$(HOST_DIR)/usr)
+ endef
  
- case "$1" in
-   start)
--  	start
-+	start
- 	;;
-   stop)
--  	stop
-+	stop
- 	;;
-   restart|reload)
--  	restart
-+	restart
- 	;;
-   *)
- 	echo "Usage: $0 {start|stop|restart}"
+ define PYTHON_SETUPTOOLS_INSTALL_TARGET_CMDS
+ 	(cd $(@D); \
+-	PYTHONPATH="/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages" \
++	PYTHONPATH="$(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages" \
+ 	$(HOST_DIR)/usr/bin/python setup.py install --executable=/usr/bin/python \
+ 	--single-version-externally-managed --root=/ --prefix=$(TARGET_DIR)/usr)
+ endef
