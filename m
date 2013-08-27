@@ -1,76 +1,107 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 27 Aug 2013 22:09:54 +0200
-Subject: [Buildroot] [PATCH v3] harfbuzz: New package
-In-Reply-To: <1377207164-10433-1-git-send-email-markos.chandras@imgtec.com>
- (Markos Chandras's message of "Thu, 22 Aug 2013 22:32:44 +0100")
-References: <1377207164-10433-1-git-send-email-markos.chandras@imgtec.com>
-Message-ID: <87ioyqki99.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Tue, 27 Aug 2013 22:10:08 +0200
+Subject: [Buildroot] [git commit branch/next] harfbuzz: New package
+Message-ID: <20130827201018.168529B594@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Markos" == Markos Chandras <markos.chandras@imgtec.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=941f60086d16ebcea062f723240be6667fdbb0a0
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
- Markos> HarfBuzz is an OpenType text shaping engine
- Markos> http://www.freedesktop.org/wiki/Software/HarfBuzz/
+HarfBuzz is an OpenType text shaping engine
 
- Markos> Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
- Markos> ---
- Markos> Changes since v2:
- Markos> - Drop BR2_PACKAGE_HARFBUZZ_* symbols. We enable/disable
- Markos> these options if the respective packages are selected.
- Markos> - Fix license name for each component.
- Markos> Suggested by Arnout Vandecappelle
- Markos> http://lists.busybox.net/pipermail/buildroot/2013-August/076728.html
+http://www.freedesktop.org/wiki/Software/HarfBuzz/
 
- Markos> Changes since v1:
- Markos> - Fix alphabetical order in package/Config.in
- Markos> - Rename 'LIBSTDCPP support' to 'C++ support'
- Markos> ---
- Markos>  package/Config.in            |  1 +
- Markos>  package/harfbuzz/Config.in   |  9 +++++++++
- Markos>  package/harfbuzz/harfbuzz.mk | 44 ++++++++++++++++++++++++++++++++++++++++++++
- Markos>  3 files changed, 54 insertions(+)
- Markos>  create mode 100644 package/harfbuzz/Config.in
- Markos>  create mode 100644 package/harfbuzz/harfbuzz.mk
+[Peter: Move to libraries/graphics, needs C++ support]
+Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/Config.in            |    1 +
+ package/harfbuzz/Config.in   |   13 ++++++++++++
+ package/harfbuzz/harfbuzz.mk |   44 ++++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 58 insertions(+), 0 deletions(-)
 
- Markos> diff --git a/package/Config.in b/package/Config.in
- Markos> index 7069d77..1b06755 100644
- Markos> --- a/package/Config.in
- Markos> +++ b/package/Config.in
- Markos> @@ -130,6 +130,7 @@ endif
- Markos>  source "package/fbterm/Config.in"
- Markos>  source "package/fbv/Config.in"
- Markos>  source "package/fb-test-app/Config.in"
- Markos> +source "package/harfbuzz/Config.in"
-
-I think it makes more sense to put it under Libraries->Graphics like
-E.G. freetype.
-
- Markos>  source "package/imagemagick/Config.in"
- Markos>  source "package/linux-fusion/Config.in"
- Markos>  source "package/lite/Config.in"
- Markos> diff --git a/package/harfbuzz/Config.in b/package/harfbuzz/Config.in
- Markos> new file mode 100644
- Markos> index 0000000..fb5fc8f
- Markos> --- /dev/null
- Markos> +++ b/package/harfbuzz/Config.in
- Markos> @@ -0,0 +1,9 @@
- Markos> +config BR2_PACKAGE_HARFBUZZ
- Markos> +	bool "harfbuzz"
- Markos> +	help
- Markos> +	  HarfBuzz is an OpenType text shaping engine
- Markos> +
- Markos> +	  http://www.freedesktop.org/wiki/Software/HarfBuzz/
- Markos> +
- Markos> +	  Harfbuzz can make optional use of cairo, freetype,
- Markos> +	  glib2 and icu packages if they are selected.
-
-It is written in C++, so it need to depend on BR2_INSTALL_LIBSTDCPP
-
-Committed to next with these changes, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/Config.in b/package/Config.in
+index 2347229..f7b0360 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -465,6 +465,7 @@ source "package/gd/Config.in"
+ source "package/giblib/Config.in"
+ source "package/gtk2-engines/Config.in"
+ source "package/gtk2-themes/Config.in"
++source "package/harfbuzz/Config.in"
+ source "package/imlib2/Config.in"
+ source "package/jpeg/Config.in"
+ source "package/lcms2/Config.in"
+diff --git a/package/harfbuzz/Config.in b/package/harfbuzz/Config.in
+new file mode 100644
+index 0000000..88e4740
+--- /dev/null
++++ b/package/harfbuzz/Config.in
+@@ -0,0 +1,13 @@
++config BR2_PACKAGE_HARFBUZZ
++	bool "harfbuzz"
++	depends on BR2_INSTALL_LIBSTDCPP
++	help
++	  HarfBuzz is an OpenType text shaping engine
++
++	  http://www.freedesktop.org/wiki/Software/HarfBuzz/
++
++	  Harfbuzz can make optional use of cairo, freetype,
++	  glib2 and icu packages if they are selected.
++
++comment "harfbuzz requires a toolchain with C++ support"
++	depends on !BR2_INSTALL_LIBSTDCPP
+diff --git a/package/harfbuzz/harfbuzz.mk b/package/harfbuzz/harfbuzz.mk
+new file mode 100644
+index 0000000..00651fd
+--- /dev/null
++++ b/package/harfbuzz/harfbuzz.mk
+@@ -0,0 +1,44 @@
++################################################################################
++#
++# harfbuzz
++#
++################################################################################
++
++HARFBUZZ_VERSION = 0.9.19
++HARFBUZZ_SITE = http://www.freedesktop.org/software/harfbuzz/release/
++HARFBUZZ_SOURCE = harfbuzz-$(HARFBUZZ_VERSION).tar.bz2
++HARFBUZZ_LICENSE = MIT, ISC (ucdn library), ICU License (icu support library)
++HARFBUZZ_LICENSE_FILES = COPYING src/hb-ucdn/COPYING src/hb-icu-le/COPYING
++HARFBUZZ_INSTALL_STAGING = YES
++
++HARFBUZZ_CONF_OPT = --without-coretext --without-uniscribe --without-graphite2
++
++ifeq ($(BR2_PACKAGE_CAIRO),y)
++	HARFBUZZ_DEPENDENCIES += cairo
++	HARFBUZZ_CONF_OPT += --with-cairo=yes
++else
++	HARFBUZZ_CONF_OPT += --with-cairo=no
++endif
++
++ifeq ($(BR2_PACKAGE_FREETYPE),y)
++	HARFBUZZ_DEPENDENCIES += freetype
++	HARFBUZZ_CONF_OPT += --with-freetype=yes
++else
++	HARFBUZZ_CONF_OPT += --with-freetype=no
++endif
++
++ifeq ($(BR2_PACKAGE_LIBGLIB2),y)
++	HARFBUZZ_DEPENDENCIES += libglib2
++	HARFBUZZ_CONF_OPT += --with-glib=yes
++else
++	HARFBUZZ_CONF_OPT += --with-glib=no
++endif
++
++ifeq ($(BR2_PACKAGE_ICU),y)
++	HARFBUZZ_DEPENDENCIES += icu
++	HARFBUZZ_CONF_OPT += --with-icu=yes
++else
++	HARFBUZZ_CONF_OPT += --with-icu=no
++endif
++
++$(eval $(autotools-package))
