@@ -1,65 +1,47 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 27 Aug 2013 09:39:47 +0200
-Subject: [Buildroot] [PATCH 2/6] sunxi-mali: bug fixes for pc and init
- script
-In-Reply-To: <1377373321-29732-3-git-send-email-spenser@gillilanding.com>
-References: <1377373321-29732-1-git-send-email-spenser@gillilanding.com>
- <1377373321-29732-3-git-send-email-spenser@gillilanding.com>
-Message-ID: <20130827093947.4b56f28d@skate>
+From: Simon Dawson <spdawson@gmail.com>
+Date: Tue, 27 Aug 2013 08:41:16 +0100
+Subject: [Buildroot] [RFC] uclibc: reinstate support for version 0.9.31
+In-Reply-To: <20130826163209.71188312@skate>
+References: <1376997241-20991-1-git-send-email-spdawson@gmail.com>
+ <20130826163209.71188312@skate>
+Message-ID: <CAHt8ZCN7zEKhx3znac2=1Nha2z1Gi6vK9MrihVC2Dc=80OU_Wg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Spenser Gilliland,
+Thanks for the feedback Thomas.
 
-On Sat, 24 Aug 2013 14:41:57 -0500, Spenser Gilliland wrote:
-> fix bad escape sequences in init script and add correct lib for pc file.
-> 
-> Signed-off-by: Spenser Gilliland <spenser@gillilanding.com>
-> ---
->  package/sunxi-mali/S80mali   | 2 +-
->  package/sunxi-mali/glesv2.pc | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/sunxi-mali/S80mali b/package/sunxi-mali/S80mali
-> index 6f51cc4..ecfbab9 100644
-> --- a/package/sunxi-mali/S80mali
-> +++ b/package/sunxi-mali/S80mali
-> @@ -5,7 +5,7 @@ install_driver() {
->  	OPTS=$2
->  
->  	modprobe $DRIVER $OPTS
-> -	maj=$(awk "$$2==\"${DRIVER}\" { print $$1; }" /proc/devices)
-> +	maj=$(awk "\$2==\"${DRIVER}\" { print \$1; }" /proc/devices)
->  
->  	rm -f /dev/${DRIVER}
->  
-> diff --git a/package/sunxi-mali/glesv2.pc b/package/sunxi-mali/glesv2.pc
-> index 4e112ee..9273678 100644
-> --- a/package/sunxi-mali/glesv2.pc
-> +++ b/package/sunxi-mali/glesv2.pc
-> @@ -7,6 +7,6 @@ Name: glesv2
->  Description: ARM Mali implementation of OpenGL ESv2
->  Version: 2.0
->  Requires:
-> -Libs: -L${libdir} -lGLESv2 -lGLES_CM -lUMP
-> +Libs: -L${libdir} -lGLESv2 -lGLESv1_CM -lUMP
->  Cflags: -I${includedir}/GLES2
->  
+On 26 August 2013 15:32, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> You said:
+>
+> ""unfortunately,
+> while uClibc 0.9.33.x does build for avr32, the result is a root
+> filesystem with unusably-slow runtime performance.
+> ""
+>
+> Then maybe we should make 0.9.31 the only possible uClibc version for
+> AVR32 ?
 
-I haven't tested this, but it looks ok.
+Yes, I think that would be a good idea. Should that be done in a separate patch?
 
-Reviewed-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+>> diff --git a/package/connman/Config.in b/package/connman/Config.in
+>> index 0853941..22f3b9f 100644
+>> --- a/package/connman/Config.in
+>> +++ b/package/connman/Config.in
+>> @@ -4,7 +4,7 @@ config BR2_PACKAGE_CONNMAN
+>>       select BR2_PACKAGE_LIBGLIB2
+>>       select BR2_PACKAGE_IPTABLES
+>>       select BR2_PACKAGE_GNUTLS
+>> -     depends on !BR2_UCLIBC_VERSION_0_9_32
+>> +     depends on !(BR2_UCLIBC_VERSION_0_9_31 || BR2_UCLIBC_VERSION_0_9_32)
+>
+> Maybe it was inotify that was missing, but I see you've backported the
+> inotify support in 0.9.31. Or it was something else than inotify?
 
-Peter: I believe we can apply this one for 2013.08.
+I don't quite follow your meaning here... Are you referring to the
+connman package specifically?
 
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Simon.
