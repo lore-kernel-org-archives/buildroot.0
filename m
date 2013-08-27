@@ -1,35 +1,38 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 27 Aug 2013 22:51:29 +0200
-Subject: [Buildroot] [1/1] civetweb: new package
-In-Reply-To: <CAAXf6LW74acJ9cPL9j3+phrD9KDOspu9Hda-bKmEBXdkNu8zMw@mail.gmail.com>
-References: <CAG3-AMr2_Aj+Xv0A13fWawcDTUToCnt72LWyzwTLVKK+4m+++w@mail.gmail.com>
- <CAAXf6LX52MBd8Lrp4eho=Vkdo=QVyZ4=aytMJu3dY6w0EwoJkA@mail.gmail.com>
- <20130827162934.3f2a4333@skate>
- <CAAXf6LW74acJ9cPL9j3+phrD9KDOspu9Hda-bKmEBXdkNu8zMw@mail.gmail.com>
-Message-ID: <20130827225129.05beb185@skate>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 27 Aug 2013 22:59:36 +0200
+Subject: [Buildroot] [PATCH] pulseaudio: fix NEON usage
+In-Reply-To: <1377205292-25021-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Thu, 22 Aug 2013 23:01:32 +0200")
+References: <1377205292-25021-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <87k3j6j1dz.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, Thomas,
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-On Tue, 27 Aug 2013 22:12:34 +0200, Thomas De Schampheleire wrote:
-> On Tue, Aug 27, 2013 at 4:29 PM, Thomas Petazzoni
-> <thomas.petazzoni@free-electrons.com> wrote:
-> > Thomas, Thomas,
-> >
-> 
-> Three cheers for the concept of surnames!
-> 
-> Thomas
+ Thomas> The NEON intrinsics used by Pulseaudio are only available in either
+ Thomas> -mfloat-abi=softfp or -mfloat-abi=hard, not in
+ Thomas> -mfloat-abi=soft. Therefore having NEON support in the processor is
+ Thomas> not sufficient, we also should *not* be using soft-float.
 
-Yeah, sounded like a fun start of e-mail for something signed:
+ Thomas> Moreover, looking at BR2_ARM_ENABLE_NEON to know if the processor has
+ Thomas> NEON support is incorrect. This option is only here to allow the user
+ Thomas> to tell whether the processor has NEON support or not, for the ARM
+ Thomas> cores that only have optional NEON support. Instead, the
+ Thomas> BR2_ARM_CPU_HAS_NEON option really indicates whether NEON is available
+ Thomas> or not (it is either set automatically by the ARM cores that always
+ Thomas> have NEON support, or when BR2_ARM_ENABLE_NEON is enabled by the user
+ Thomas> to confirm that his ARM processor has NEON support).
 
-Thomas
+ Thomas> This fixes build failures such as
+ Thomas> http://autobuild.buildroot.org/results/675/675c96059be348b594cc92980bef391126931c83/build-end.log
+
+ Thomas> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+
+Committed, thanks.
+
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Bye, Peter Korsgaard
