@@ -1,66 +1,55 @@
-From: hacklinux <pipiliu_wangk@hotmail.com>
-Date: Tue, 27 Aug 2013 08:32:58 +0000
-Subject: [Buildroot] wanna compile busybox and uclib with self modified
- code, please help
-In-Reply-To: <521C5ABF.4000301@relinux.de>
-References: <BAY167-W75F3A55D10B8CCC0F96A74944A0@phx.gbl>,
- <521C5ABF.4000301@relinux.de>
-Message-ID: <BAY167-W23A3ABEDF04D72F595092D944A0@phx.gbl>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 27 Aug 2013 10:41:12 +0200
+Subject: [Buildroot] make clean behavior
+In-Reply-To: <CAAXf6LVsXF29Z9cZCSmZqMX8zVms0ANfgo33tHf8NiU57LY8QQ@mail.gmail.com>
+References: <CAAXf6LVsXF29Z9cZCSmZqMX8zVms0ANfgo33tHf8NiU57LY8QQ@mail.gmail.com>
+Message-ID: <20130827104112.0c916be5@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-i see two more parameters should be given somewhere in the buildroot project, however where should i put these two paremeters, please give me some advice, thx.MYPKG_SITE = /opt/software/something-special/
-MYPKG_SITE_METHOD = local
+Dear Thomas De Schampheleire,
 
+On Tue, 27 Aug 2013 10:19:02 +0200, Thomas De Schampheleire wrote:
 
-> Date: Tue, 27 Aug 2013 09:52:31 +0200
-> From: sho at relinux.de
-> To: buildroot at busybox.net
-> Subject: Re: [Buildroot] wanna compile busybox and uclib with self modified code, please help
+> Is it intentional that 'make clean' is different depending on having a
+> .config file?
 > 
-> Am 27.08.2013 09:42, schrieb hacklinux:
-> > Hi thomas,
-> >
-> > i have a question concerning buildroot compiling wanna u help . the gz
-> > pacakge version which i used is buildroot-2012.11.1.tar.gz, i know how
-> > to build kernel, busybox, initrd following guildlines posted on web
-> > that puts all sort of items under dl directory and just make it.
-> > however, i wanna compile the busybox and uclib with some modification
-> > made by myself, i made several attemps but all failed, can u give me
-> > some advice on how to do this, wanna hear from u, sincely thank u indeed .
-> Hello William,
+> With .config there is a full clean:
 > 
-> you might want to look at
-> http://free-electrons.com/blog/buildroot-2011-11/ , especially the
-> source directory override mechanism.
-> 
-> Regards
-> 
-> Stephan
-> >
-> > william wang
-> >
-> >
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot at busybox.net
-> > http://lists.busybox.net/mailman/listinfo/buildroot
+> rm -rf buildroot/output/host/usr/powerpc-buildroot-linux-gnu/sysroot
+> buildroot/output/target buildroot/output/images buildroot/output/host
+> buildroot/output/stamps buildroot/output/build
+> buildroot/output/toolchain buildroot/output/staging
+> buildroot/output/legal-info
 > 
 > 
-> -- 
-> reLinux     -    Stephan Hoffmann
-> Am Schmidtgrund 124    50765 K?ln
-> Tel. +49.221.95595-19    Fax: -64
-> www.reLinux.de     sho at reLinux.de
+> but if you remove .config (and thus symbol BR2_HAVE_DOT_CONFIG) you
+> only have a partial clean:
 > 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
- 		 	   		  
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130827/db3a293a/attachment.html>
+> rm -rf /repo/tdescham/reborn/buildroot-ppc/output/build
+> /repo/tdescham/reborn/buildroot-ppc/output/staging
+> 
+> 
+> Suppose you accidentally removed your .config, then you cannot easily
+> get a clean buildroot env anymore. The behavior is caused due to the
+> definition of variables like TARGET_DIR being inside a 'ifeq
+> ($(BR2_HAVE_DOT_CONFIG),y)' statement.
+> 
+> I would propose to make sure that 'clean' works in all cases, by
+> moving the relevant variable definitions outside this if statement.
+
+This has also annoyed me a few times, and I don't quite see why 'make
+clean' should have a different behavior between the has .config case
+and the !has .config case.
+
+So, I agree with your proposal.
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
