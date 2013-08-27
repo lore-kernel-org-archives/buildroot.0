@@ -1,33 +1,24 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 27 Aug 2013 22:33:46 +0200
-Subject: [Buildroot] [PATCH] python-setuptools: Add missing
-	$(TARGET_DIR) to PYTHONPATH.
-In-Reply-To: <1377204777-8904-1-git-send-email-markos.chandras@imgtec.com>
- (Markos Chandras's message of "Thu, 22 Aug 2013 21:52:57 +0100")
-References: <1377204777-8904-1-git-send-email-markos.chandras@imgtec.com>
-Message-ID: <87a9k2kh5h.fsf@dell.be.48ers.dk>
+Date: Tue, 27 Aug 2013 22:34:30 +0200
+Subject: [Buildroot] [PATCH] linux-fusion: bump version to 9.0.2
+In-Reply-To: <1377118180-28514-1-git-send-email-arnout@mind.be> (Arnout
+ Vandecappelle's message of "Wed, 21 Aug 2013 22:49:40 +0200")
+References: <1377118180-28514-1-git-send-email-arnout@mind.be>
+Message-ID: <8761uqkh49.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Markos" == Markos Chandras <markos.chandras@imgtec.com> writes:
+>>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
 
- Markos> The $(TARGET_DIR) variable is required when building
- Markos> python-setuptools for the target otherwise the build system detects
- Markos> the host installation which leads to permission error problems
- Markos> like these:
+ Arnout> Fixes build with recent kernels.
+ Arnout> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ Arnout> ---
+ Arnout> For 2013.08
 
- Markos> Setuptools installation detected at /usr/lib64/python2.7/site-packages
- Markos> Renaming /usr/lib64/python2.7/site-packages/setuptools-0.9.8-py2.7.egg-info to
- Markos> /usr/lib64/python2.7/site-packages/setuptools-0.9.8-py2.7.egg-info.OLD.1377005697.88
- Markos> OSError: [Errno 13] Permission denied
-
- Markos> Moreover, remove the PYTHONPATH variable for host variant since it's
- Markos> not needed.
-
-Committed, thanks (with the double '))' fixed).
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
