@@ -1,59 +1,72 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 27 Aug 2013 10:02:09 +0200
-Subject: [Buildroot] [RFC] uclibc: reinstate support for version 0.9.31
-In-Reply-To: <CAHt8ZCN7zEKhx3znac2=1Nha2z1Gi6vK9MrihVC2Dc=80OU_Wg@mail.gmail.com>
-References: <1376997241-20991-1-git-send-email-spdawson@gmail.com>
- <20130826163209.71188312@skate>
- <CAHt8ZCN7zEKhx3znac2=1Nha2z1Gi6vK9MrihVC2Dc=80OU_Wg@mail.gmail.com>
-Message-ID: <20130827100209.4759e82f@skate>
+From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
+Date: Tue, 27 Aug 2013 10:02:46 +0200
+Subject: [Buildroot] Searching for some advice
+In-Reply-To: <CALo-6+ijsQKnSsHOecR6P5juBBucDx6aogoPkLuXWrQ+yJHvBg@mail.gmail.com>
+References: <CALo-6+ijsQKnSsHOecR6P5juBBucDx6aogoPkLuXWrQ+yJHvBg@mail.gmail.com>
+Message-ID: <CAAXf6LXvd6wYTNc1szcU+4NLpbVRdkbJk_yijpWe-_=QUCHASw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Simon Dawson,
+Hi Charles,
 
-On Tue, 27 Aug 2013 08:41:16 +0100, Simon Dawson wrote:
+[this doesn't really have anything to do with buildroot, but anyway...]
 
-> On 26 August 2013 15:32, Thomas Petazzoni
-> <thomas.petazzoni@free-electrons.com> wrote:
-> > You said:
-> >
-> > ""unfortunately,
-> > while uClibc 0.9.33.x does build for avr32, the result is a root
-> > filesystem with unusably-slow runtime performance.
-> > ""
-> >
-> > Then maybe we should make 0.9.31 the only possible uClibc version for
-> > AVR32 ?
-> 
-> Yes, I think that would be a good idea. Should that be done in a separate patch?
+On Tue, Aug 27, 2013 at 12:21 AM, Charles Krinke
+<charles.krinke@gmail.com> wrote:
+> Its my turn to be a noob today.
+>
+> I have a powerpc design using the mpc832x_rdb that is currently
+> 2.6.35.12 and I am trying to test compile 2.6.39 and am hung up in a
+> freeze right after the dtb is loaded.
+>
+> I am searching for an opinion or two on:
+>
+> a) What are the things most likely to cause a freeze after loading dtb
+> between a 2.6.35.12 kernel and 2.6.39 where the dtb has not changed
+> and
 
-Probably yes, but it's not a strong opinion.
+From your explanation I take it that you compared the device trees in
+the linux kernel source tree (arch/powerpc/boot/dts/mpc832x_rdb.dts)
+between both kernel versions, correct?
 
-> >> diff --git a/package/connman/Config.in b/package/connman/Config.in
-> >> index 0853941..22f3b9f 100644
-> >> --- a/package/connman/Config.in
-> >> +++ b/package/connman/Config.in
-> >> @@ -4,7 +4,7 @@ config BR2_PACKAGE_CONNMAN
-> >>       select BR2_PACKAGE_LIBGLIB2
-> >>       select BR2_PACKAGE_IPTABLES
-> >>       select BR2_PACKAGE_GNUTLS
-> >> -     depends on !BR2_UCLIBC_VERSION_0_9_32
-> >> +     depends on !(BR2_UCLIBC_VERSION_0_9_31 || BR2_UCLIBC_VERSION_0_9_32)
-> >
-> > Maybe it was inotify that was missing, but I see you've backported the
-> > inotify support in 0.9.31. Or it was something else than inotify?
-> 
-> I don't quite follow your meaning here... Are you referring to the
-> connman package specifically?
+When you say 'freeze' what exactly do you mean? Did you get any output
+at all from the kernel? Any output afterwards? Are you sure the kernel
+is actually frozen, or maybe there is just no serial output?
+You could try to manipulate a LED (or other device) from some points
+in the kernel, to get some proof whether the kernel actually stopped
+completely or there is a serial output problem.
 
-Yes, I was referring to the connman package specifically.
+How are you booting? How is the device tree passed? Are you sure the
+device tree is actually present from the location the kernel tries to
+load it from?
 
+Did you verify the kernel configuration? If you compare your original
+config with the one from the new kernel: does everything look OK? Did
+you effectively run 'make oldconfig' from the kernel sources to
+migrate the config?
+I recently also tried updating kernels, and noticed that if you just
+give the new kernel to buildroot, it will do some automatic
+application of the old config to the new kernel, without actually
+launching oldconfig. I didn't double check this (my memory may be bad)
+but the end result was anyway that some things were misconfigured.
+
+>
+> b) Is there any way to debug the kernel when it freezes after loading
+> the dtb other then admire it when it freezes.
+
+If you have access to a JTAG probe that would obviously help, because
+you could then step through the kernel.
+Alternatively, you could consider kdb or kgdb, but I haven't used them
+before and I don't know how early they are setup during boot. Very
+likely they are not yet available if the freeze is already during
+device tree loading...
+
+If there is any serial output before loading the device tree, you
+could dig in the kernel and add printk statements to zoom in on the
+problem.
+
+Best regards,
 Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
