@@ -1,32 +1,127 @@
-From: Jenkins, Lee (ISS Houston) <Lee.Jenkins@hp.com>
-Date: Tue, 27 Aug 2013 22:38:23 +0000
-Subject: [Buildroot] debugging inittab
-In-Reply-To: <5216A076.5030409@mind.be>
-References: <2DD0B9C711CDFC45A3A266C78966CE7F451F39A0@G4W3291.americas.hpqcorp.net>
- <5216A076.5030409@mind.be>
-Message-ID: <2DD0B9C711CDFC45A3A266C78966CE7F451F8F81@G4W3291.americas.hpqcorp.net>
+From: Thomas Davis <sunsetbrew@sunsetbrew.com>
+Date: Tue, 27 Aug 2013 19:26:03 -0400
+Subject: [Buildroot] [PATCHv3 1/1] civetweb: new package
+In-Reply-To: <1377645963-1953-1-git-send-email-sunsetbrew@sunsetbrew.com>
+References: <1377645963-1953-1-git-send-email-sunsetbrew@sunsetbrew.com>
+Message-ID: <1377645963-1953-2-git-send-email-sunsetbrew@sunsetbrew.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
------Original Message-----
-From: Arnout Vandecappelle [mailto:arnout at mind.be] 
-Sent: Thursday, August 22, 2013 6:36 PM
-To: Jenkins, Lee (ISS Houston)
-Cc: buildroot at busybox.net
-Subject: Re: [Buildroot] debugging inittab
-Importance: Low
 
-> On 22/08/13 22:11, Jenkins, Lee (ISS Houston) wrote:
-> > Hello. I am debugging a boot problem for a few hours. I'm clearly in 
-> > over my head and I could use some insight.
-> >
-> > For debugging purposes, I am booting from a kernel and rootfs on an 
-> > nfs share of my dev machine. The console is ttyS0.
->
->   The nfs-share is an extracted output/images/rootfs.tar, right? You're not using the target directory?
->
+Signed-off-by: Thomas Davis <sunsetbrew@sunsetbrew.com>
+---
+ package/Config.in            |    1 +
+ package/civetweb/Config.in   |   26 ++++++++++++++++++++
+ package/civetweb/civetweb.mk |   53 ++++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 80 insertions(+), 0 deletions(-)
+ create mode 100644 package/civetweb/Config.in
+ create mode 100644 package/civetweb/civetweb.mk
 
-That was the problem. Thanks!
+diff --git a/package/Config.in b/package/Config.in
+index 7069d77..25433b6 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -719,6 +719,7 @@ source "package/bridge-utils/Config.in"
+ source "package/bwm-ng/Config.in"
+ source "package/can-utils/Config.in"
+ source "package/chrony/Config.in"
++source "package/civetweb/Config.in"
+ source "package/connman/Config.in"
+ source "package/crda/Config.in"
+ source "package/ctorrent/Config.in"
+diff --git a/package/civetweb/Config.in b/package/civetweb/Config.in
+new file mode 100644
+index 0000000..8ca587b
+--- /dev/null
++++ b/package/civetweb/Config.in
+@@ -0,0 +1,26 @@
++config BR2_PACKAGE_CIVETWEB
++	bool "civetweb"
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	help
++	  Full featured embedded web server with LUA support.
++	  
++	  https://sourceforge.net/projects/civetweb
++
++if BR2_PACKAGE_CIVETWEB
++
++config BR2_CIVETWEB_WITH_LUA
++	bool "enable LUA support"
++	# required by the bundled sqlite and lua code
++	depends on BR2_LARGEFILE
++	help
++	  Enable Lua support in Civetweb. Note that this will use a
++	  version of Lua and Sqlite bundled within the Civetweb
++	  sources, and not the packages from Buildroot.
++
++comment "lua support requires largefile support in toolchain"
++	depends on !BR2_LARGEFILE
++
++endif
++
++comment "civetweb requires a toolchain with PTHREAD support"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/civetweb/civetweb.mk b/package/civetweb/civetweb.mk
+new file mode 100644
+index 0000000..17b02fb
+--- /dev/null
++++ b/package/civetweb/civetweb.mk
+@@ -0,0 +1,53 @@
++################################################################################
++#
++# civetweb
++#
++################################################################################
++
++CIVETWEB_VERSION = 1.3
++CIVETWEB_SOURCE = civetweb-$(CIVETWEB_VERSION).tar.gz
++CIVETWEB_SITE = http://github.com/sunsetbrew/civetweb/tarball/v$(CIVETWEB_VERSION)
++CIVETWEB_LICENSE = MIT
++CIVETWEB_LICENSE_FILES = LICENSE.md
++
++CIVETWEB_COPT = $(TARGET_CFLAGS) -DHAVE_POSIX_FALLOCATE=0
++CIVETWEB_CONF_OPT = TARGET_OS=LINUX
++CIVETWEB_LDFLAGS = $(TARGET_LDFLAGS)
++CIVETWEB_HTMLDIR = /var/www
++
++ifneq ($(BR2_LARGEFILE),y)
++	CIVETWEB_COPT += -DSQLITE_DISABLE_LFS
++endif
++
++ifeq ($(BR2_INET_IPV6),y)
++	CIVETWEB_CONF_OPT += WITH_IPV6=1
++endif
++
++ifeq ($(BR2_CIVETWEB_WITH_LUA),y)
++	CIVETWEB_CONF_OPT += WITH_LUA=1
++endif
++
++ifeq ($(BR2_PACKAGE_OPENSSL),y)
++	CIVETWEB_COPT += -DNO_SSL_DL -lcrypt -lssl
++	CIVETWEB_DEPENDENCIES += openssl
++else
++	CIVETWEB_COPT += -DNO_SSL
++endif
++
++define CIVETWEB_BUILD_CMDS
++	$(MAKE) CC="$(TARGET_CC)" -C $(@D) build \
++		$(CIVETWEB_CONF_OPT) \
++		COPT="$(CIVETWEB_COPT)"
++endef
++
++define CIVETWEB_INSTALL_TARGET_CMDS
++	$(MAKE) CC="$(TARGET_CC)" -C $(@D) install \
++		DOCUMENT_ROOT="$(CIVETWEB_HTMLDIR)" \
++		HTMLDIR="$(TARGET_DIR)$(CIVETWEB_HTMLDIR)" \
++		PREFIX="$(TARGET_DIR)/usr/local" \
++		$(CIVETWEB_CONF_OPT) \
++		COPT='$(CIVETWEB_COPT)'
++endef
++
++$(eval $(generic-package))
++
+-- 
+1.7.8.3
