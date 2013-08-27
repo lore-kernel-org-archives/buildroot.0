@@ -1,55 +1,54 @@
-From: Nicolas =?utf-8?B?TcOpbsOpZ2FsZQ==?= <nicolas.menegale@openwide.fr>
-Date: Tue, 27 Aug 2013 14:26:49 +0200 (CEST)
-Subject: [Buildroot] [PATCH 1/1] libffi: minor corrections in post install
-	hooks
-Message-ID: <1541068056.5590214.1377606409099.JavaMail.root@openwide.fr>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 27 Aug 2013 14:27:59 +0200
+Subject: [Buildroot] [PATCH v2 1/2] getty: Create specific getty config
+ + cleanups
+In-Reply-To: <CAAXf6LV4mAJ77obaOx_7O9Dk_=a9oFGrW8QcFoAzdAKThAqjLA@mail.gmail.com>
+References: <1377429219-25140-1-git-send-email-shmuelzon@gmail.com>
+ <CAAXf6LV4mAJ77obaOx_7O9Dk_=a9oFGrW8QcFoAzdAKThAqjLA@mail.gmail.com>
+Message-ID: <521C9B4F.4000300@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Nicolas M?n?gale <nicolas.menegale@openwide.fr>
----
-v1: second commit
-In order to be sure that we just deal with the includes related with
-the actual package described into libffi.mk it is better to explicitly
-specify the version of the libffi we deal with into the post install
-hook.
-As dev files are deprecated in target rootfs target post install
-hook was also deleted.
----
- package/libffi/libffi.mk |   11 +----------
- 1 file changed, 1 insertion(+), 10 deletions(-)
+On 08/27/13 12:33, Thomas De Schampheleire wrote:
+>> >+TARGET_GENERIC_HOSTNAME = $(call qstrip,$(BR2_TARGET_GENERIC_HOSTNAME))
+>> >+TARGET_GENERIC_ISSUE = $(call qstrip,$(BR2_TARGET_GENERIC_ISSUE))
+>> >+TARGET_GENERIC_ROOT_PASSWD = $(call qstrip,$(BR2_TARGET_GENERIC_ROOT_PASSWD))
+>> >+TARGET_GENERIC_PASSWD_METHOD = $(call qstrip,$(BR2_TARGET_GENERIC_PASSWD_METHOD))
+>> >+TARGET_GENERIC_GETTY_PORT = $(call qstrip,$(BR2_TARGET_GENERIC_GETTY_PORT))
+>> >+TARGET_GENERIC_GETTY_BAUDRATE = $(call qstrip,$(BR2_TARGET_GENERIC_GETTY_BAUDRATE))
+>> >+TARGET_GENERIC_GETTY_TERM = $(call qstrip,$(BR2_TARGET_GENERIC_GETTY_TERM))
+>> >+TARGET_GENERIC_GETTY_OPTIONS = $(call qstrip,$(BR2_TARGET_GENERIC_GETTY_OPTIONS))
+> Although in general = is favored over := in buildroot, I'm now
+> wondering if this is the right choice here: variable
+> TARGET_GENERIC_GETTY_PORT is used several times in .mk. If = is used,
+> the qstrip expansion is done each time, while := will do it once.
 
-diff --git a/package/libffi/libffi.mk b/package/libffi/libffi.mk
-index 0ad5c84..8c84924 100644
---- a/package/libffi/libffi.mk
-+++ b/package/libffi/libffi.mk
-@@ -14,7 +14,7 @@ LIBFFI_AUTORECONF = YES
- # Move the headers to the usual location, and adjust the .pc file
- # accordingly.
- define LIBFFI_MOVE_STAGING_HEADERS
--	mv $(STAGING_DIR)/usr/lib/libffi-*/include/*.h $(STAGING_DIR)/usr/include/
-+	mv $(STAGING_DIR)/usr/lib/libffi-$(LIBFFI_VERSION)/include/*.h $(STAGING_DIR)/usr/include/
- 	$(SED) '/^includedir.*/d' -e '/^Cflags:.*/d' \
- 		$(STAGING_DIR)/usr/lib/pkgconfig/libffi.pc
- 	rm -rf $(TARGET_DIR)/usr/lib/libffi-*
-@@ -22,15 +22,6 @@ endef
- 
- LIBFFI_POST_INSTALL_STAGING_HOOKS += LIBFFI_MOVE_STAGING_HEADERS
- 
--# Similar for target headers
--define LIBFFI_MOVE_TARGET_HEADERS
--	install -d $(TARGET_DIR)/usr/include/
--	mv $(TARGET_DIR)/usr/lib/libffi-*/include/*.h $(TARGET_DIR)/usr/include/
--	rm -rf $(TARGET_DIR)/usr/lib/libffi-*
--endef
--
--LIBFFI_POST_INSTALL_TARGET_HOOKS += LIBFFI_MOVE_TARGET_HEADERS
--
- HOST_LIBFFI_AUTORECONF = YES
- 
- $(eval $(autotools-package))
+  Remember that := will expand once, even if it is never used. So using = 
+is sometimes even more efficient.
+
+
+> Arnout: isn't this ($(call), $(shell), ...) a case where we should
+> rather use := iso = ?
+
+  For $(shell), yes (on condition that it is _always_ evaluated). But the 
+overhead of $(call) isn't very high. These variables are used a couple of 
+times, but every time it is within a separate sub-shell - the overhead of 
+starting that sub-shell is way higher than the overhead of running a $(call).
+
+  So no, this is not a case where := would be more appropriate. It's not 
+even a case where := is necessarily faster.
+
+  Regards,
+  Arnout
+
+
 -- 
-1.7.9.5
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
