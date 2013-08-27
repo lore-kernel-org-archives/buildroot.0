@@ -1,65 +1,76 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 27 Aug 2013 22:08:19 +0200
-Subject: [Buildroot] SELinux Buildroot Additions
-In-Reply-To: <OF965741C3.D223706B-ON86257BD4.0066A1F9-86257BD4.00680C50@rockwellcollins.com>
-References: <OFC105562B.76AF62E8-ON86257BD4.005985FE-86257BD4.0059C2DD@rockwellcollins.com>
- <20130827190459.1eb3e4d9@skate>
- <OF340CA870.4409C997-ON86257BD4.005E13D7-86257BD4.0061A29C@rockwellcollins.com>
- <20130827202505.22f5ee46@skate>
- <OF965741C3.D223706B-ON86257BD4.0066A1F9-86257BD4.00680C50@rockwellcollins.com>
-Message-ID: <20130827220819.6ea4fcae@skate>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 27 Aug 2013 22:09:54 +0200
+Subject: [Buildroot] [PATCH v3] harfbuzz: New package
+In-Reply-To: <1377207164-10433-1-git-send-email-markos.chandras@imgtec.com>
+ (Markos Chandras's message of "Thu, 22 Aug 2013 22:32:44 +0100")
+References: <1377207164-10433-1-git-send-email-markos.chandras@imgtec.com>
+Message-ID: <87ioyqki99.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Clayton,
+>>>>> "Markos" == Markos Chandras <markos.chandras@imgtec.com> writes:
 
-On Tue, 27 Aug 2013 13:56:28 -0500, clshotwe at rockwellcollins.com wrote:
+ Markos> HarfBuzz is an OpenType text shaping engine
+ Markos> http://www.freedesktop.org/wiki/Software/HarfBuzz/
 
-> > Can you expand on what is the huge issue between Busybox and the
-> > SELinux Refpolicy? The fact that the Refpolicy doesn't include a policy
-> > for Busybox? If so, isn't it possible to contribute a policy that would
-> > be suitable for usage with Busybox? A quick Google search returns
-> > http://code.google.com/p/sebusybox/.
-> 
-> Since Busybox is one executable that runs a bunch of different commands, 
-> there is an issue with the SELinux type transitions happening correctly. 
-> Programs, including init, end up running in an incorrect context and break 
-> SELinux rules. A policy could probably be created to let Busybox do what 
-> it needs to do but then that opens up the issue of having one application 
-> do everything. A lot of potential security vulnerabilities can be blocked 
-> by having a bunch of different applications that cannot all be compromised 
-> at once.  It would be really easy to use busybox if it was possible to 
-> build separate executables for security critical applications but I don't 
-> think that feature is available yet.
+ Markos> Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
+ Markos> ---
+ Markos> Changes since v2:
+ Markos> - Drop BR2_PACKAGE_HARFBUZZ_* symbols. We enable/disable
+ Markos> these options if the respective packages are selected.
+ Markos> - Fix license name for each component.
+ Markos> Suggested by Arnout Vandecappelle
+ Markos> http://lists.busybox.net/pipermail/buildroot/2013-August/076728.html
 
-This is actually possible, with the option CONFIG_FEATURE_INDIVIDUAL of
-Busybox. It creates a libbusybox shared library, and then creates one
-small (~6 KB) binary for each busybox program. This way, each program
-is really separate, even though the program code is really within
-libbusybox.
+ Markos> Changes since v1:
+ Markos> - Fix alphabetical order in package/Config.in
+ Markos> - Rename 'LIBSTDCPP support' to 'C++ support'
+ Markos> ---
+ Markos>  package/Config.in            |  1 +
+ Markos>  package/harfbuzz/Config.in   |  9 +++++++++
+ Markos>  package/harfbuzz/harfbuzz.mk | 44 ++++++++++++++++++++++++++++++++++++++++++++
+ Markos>  3 files changed, 54 insertions(+)
+ Markos>  create mode 100644 package/harfbuzz/Config.in
+ Markos>  create mode 100644 package/harfbuzz/harfbuzz.mk
 
-Wouldn't this make SELinux handling easier? If yes, then I believe we
-could certainly decide to build and install Busybox this way when
-SELinux support is enabled.
+ Markos> diff --git a/package/Config.in b/package/Config.in
+ Markos> index 7069d77..1b06755 100644
+ Markos> --- a/package/Config.in
+ Markos> +++ b/package/Config.in
+ Markos> @@ -130,6 +130,7 @@ endif
+ Markos>  source "package/fbterm/Config.in"
+ Markos>  source "package/fbv/Config.in"
+ Markos>  source "package/fb-test-app/Config.in"
+ Markos> +source "package/harfbuzz/Config.in"
 
-However, it seems like this Busybox feature installs those binary
-programs in a directory called 0_lib/ in the source directory, and
-"make install" keeps installing symbolic links. Well, I guess this is
-probably something we can improve/fix.
+I think it makes more sense to put it under Libraries->Graphics like
+E.G. freetype.
 
-> The packages that I will be adding are all from Tresys (
-> http://userspace.selinuxproject.org/trac/).  I looked into the sebusybox 
-> stuff a while ago but it looks like no one has done any development on it 
-> in a while. 
+ Markos>  source "package/imagemagick/Config.in"
+ Markos>  source "package/linux-fusion/Config.in"
+ Markos>  source "package/lite/Config.in"
+ Markos> diff --git a/package/harfbuzz/Config.in b/package/harfbuzz/Config.in
+ Markos> new file mode 100644
+ Markos> index 0000000..fb5fc8f
+ Markos> --- /dev/null
+ Markos> +++ b/package/harfbuzz/Config.in
+ Markos> @@ -0,0 +1,9 @@
+ Markos> +config BR2_PACKAGE_HARFBUZZ
+ Markos> +	bool "harfbuzz"
+ Markos> +	help
+ Markos> +	  HarfBuzz is an OpenType text shaping engine
+ Markos> +
+ Markos> +	  http://www.freedesktop.org/wiki/Software/HarfBuzz/
+ Markos> +
+ Markos> +	  Harfbuzz can make optional use of cairo, freetype,
+ Markos> +	  glib2 and icu packages if they are selected.
 
-Ok.
+It is written in C++, so it need to depend on BR2_INSTALL_LIBSTDCPP
 
-Thomas
+Committed to next with these changes, thanks.
+
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Bye, Peter Korsgaard
