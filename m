@@ -1,195 +1,126 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 28 Aug 2013 08:35:22 +0200
-Subject: [Buildroot] [PATCH 03/12] toolchain-internal: skip gcc-intermediate
-	when possible
-In-Reply-To: <1377671731-28656-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1377671731-28656-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1377671731-28656-4-git-send-email-thomas.petazzoni@free-electrons.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 27 Aug 2013 18:57:37 +0200
+Subject: [Buildroot] [PATCH 1/1] ola: new package
+In-Reply-To: <1377525737-14420-1-git-send-email-blanco.ether@gmail.com>
+References: <1377525737-14420-1-git-send-email-blanco.ether@gmail.com>
+Message-ID: <521CDA81.1070908@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When NPTL support was introduced, gcc required a three stages build
-process. Since gcc 4.7, this is no longer necessary, and it is
-possible to get back to a two stages build process. This patch takes
-advantage of this, by doing a two stages build process when possible.
+On 08/26/13 16:02, Dave Skok wrote:
+> Signed-off-by: Dave Skok <blanco.ether@gmail.com>
 
-We introduce a few hidden kconfig options:
+  Two very small fixes:
 
- * BR2_GCC_VERSION_NEEDS_THREE_STAGE_BUILD, which is set by the gcc
-   Config.in logic to indicate that the compiler might need a three
-   stages build. Currently, all versions prior to 4.7.x are selecting
-   this kconfig option.
+> ---
+>   package/Config.in     |   1 +
+>   package/ola/Config.in | 136 ++++++++++++++++++++++++++++++++++++++++++++++
+>   package/ola/ola.mk    | 146 ++++++++++++++++++++++++++++++++++++++++++++++++++
+>   3 files changed, 283 insertions(+)
+>   create mode 100644 package/ola/Config.in
+>   create mode 100644 package/ola/ola.mk
+>
+> diff --git a/package/Config.in b/package/Config.in
+> index 7069d77..fb52411 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -277,6 +277,7 @@ source "package/minicom/Config.in"
+>   source "package/nanocom/Config.in"
+>   source "package/neard/Config.in"
+>   source "package/ofono/Config.in"
+> +source "package/ola/Config.in"
+>   source "package/on2-8170-modules/Config.in"
+>   source "package/open2300/Config.in"
+>   source "package/openocd/Config.in"
+> diff --git a/package/ola/Config.in b/package/ola/Config.in
+> new file mode 100644
+> index 0000000..050f29b
+> --- /dev/null
+> +++ b/package/ola/Config.in
+> @@ -0,0 +1,136 @@
+> +config BR2_PACKAGE_OLA
+> +	bool "ola (open lighting architecture)"
+> +	select BR2_PACKAGE_PROTOBUF
+> +	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
+> +	select BR2_PACKAGE_UTIL_LINUX
+> +	depends on BR2_INSTALL_LIBSTDCPP # protobuf
+> +	depends on BR2_LARGEFILE # util-linux
+> +	depends on BR2_USE_WCHAR # util-linux
+> +	depends on BR2_TOOLCHAIN_HAS_THREADS
+> +	help
+> +	  Open Lighting Architecture provides applications
+> +	  with a mechanism to send and receive DMX512 & RDM
+> +	  commands using hardware devices and DMX over IP protocols.
+> +
+> +	  http://www.opendmx.net/index.php/OLA
+> +
+> +comment "ola requires a toolchain with C++, thread, largefile and wchar support"
+> +	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_LARGEFILE || !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
 
- * BR2_TOOLCHAIN_LIBC_NEEDS_THREE_STAGE_BUILD, which indicates whether
-   the C library might need a three stages build. This is the case for
-   eglibc, and uClibc when NPTL is enabled.
+  This comment should go either above the BR2_PACKAGE_OLA config, or else 
+at the end of the file. Otherwise the sub-menus will not be indented.
 
- * BR2_TOOLCHAIN_NEEDS_THREE_STAGE_BUILD finally is enabled when both
-   of the previous options are enabled. It indicates that a three
-   stages build is actually needed.
+> +
+> +if BR2_PACKAGE_OLA
+> +
+> +menu "bindings and interface"
+> +
+> +config BR2_PACKAGE_OLA_WEB
+> +	bool "http interface"
+> +	select BR2_PACKAGE_LIBMICROHTTPD
+> +	help
+> +	  Build OLA with browser interface.
+> +
+> +config BR2_PACKAGE_OLA_PYTHON_BINDINGS
+> +	bool "python bindings"
+> +	select BR2_PACKAGE_PYTHON
+> +	select BR2_PACKAGE_PYTHON_PROTOBUF
+> +	depends on BR2_USE_MMU
+> +	help
+> +	  Build OLA with support for the Python language.
+> +
+> +config BR2_PACKAGE_OLA_SLP
+> +	bool "slp tools"
+> +	help
+> +	  Build OLA with slp tools.
+> +
+> +endmenu
+> +
+> +menu "tests and examples"
+> +
+> +config BR2_PACKAGE_OLA_EXAMPLES
+> +	bool "examples"
+> +	select BR2_PACKAGE_NCURSES
+> +	help
+> +	  Build OLA examples.
+> +
+> +config BR2_PACKAGE_OLA_RDM_TESTS
+> +	bool "rdm tests"
+> +	select BR2_PACKAGE_OLA_PYTHON_BINDINGS
+> +	select BR2_PACKAGE_PYTHON
+> +	select BR2_PACKAGE_PYTHON_PROTOBUF
 
-In addition to those options, the uClibc/gcc build logic is changed to
-take use only a two stages build process when possible.
+  These two are already selected by BR2_PACKAGE_OLA_PYTHON_BINDINGS.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/eglibc/eglibc.mk               |  5 +++--
- package/gcc/Config.in.host             | 11 +++++++++++
- package/gcc/gcc-initial/gcc-initial.mk |  8 ++++++++
- package/uclibc/Config.in               |  1 +
- package/uclibc/uclibc.mk               |  5 +++--
- toolchain/Config.in                    |  9 +++++++++
- 6 files changed, 35 insertions(+), 4 deletions(-)
+  Regards,
+  Arnout
 
-diff --git a/package/eglibc/eglibc.mk b/package/eglibc/eglibc.mk
-index fe12299..0ed908d 100644
---- a/package/eglibc/eglibc.mk
-+++ b/package/eglibc/eglibc.mk
-@@ -14,8 +14,9 @@ EGLIBC_LICENSE_FILES = libc/COPYING libc/COPYING.LIB libc/LICENSES
- # cross-compiler and the kernel headers
- EGLIBC_DEPENDENCIES = host-gcc-initial linux-headers host-gawk
- 
--# Before eglibc is built, we must have the second stage cross-compiler
--eglibc-build: host-gcc-intermediate
-+# Before eglibc is built, we must have the second stage
-+# cross-compiler, for some gcc versions
-+eglibc-build: $(if $(BR2_TOOLCHAIN_NEEDS_THREE_STAGE_BUILD),host-gcc-intermediate)
- 
- EGLIBC_SUBDIR = build
- 
-diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
-index a6acaa2..7e6df2d 100644
---- a/package/gcc/Config.in.host
-+++ b/package/gcc/Config.in.host
-@@ -3,6 +3,12 @@ comment "GCC Options"
- config BR2_GCC_NEEDS_MPC
- 	bool
- 
-+# Until gcc 4.7, a three stage build process was needed when using
-+# NPTL. This hidden option tells whether gcc is a version that
-+# requires this three stage build process.
-+config BR2_GCC_VERSION_NEEDS_THREE_STAGE_BUILD
-+	bool
-+
- choice
- 	prompt "GCC compiler Version"
- 	default BR2_GCC_VERSION_4_4_X if BR2_sparc_sparchfleon || BR2_sparc_sparchfleonv8 || BR2_sparc_sparcsfleon || BR2_sparc_sparcsfleonv8
-@@ -16,11 +22,13 @@ choice
- 	config BR2_GCC_VERSION_4_2_2_AVR32_2_1_5
- 		depends on BR2_avr32
- 		bool "gcc 4.2.2-avr32-2.1.5"
-+		select BR2_GCC_VERSION_NEEDS_THREE_STAGE_BUILD
- 
- 	config BR2_GCC_VERSION_4_3_X
- 		depends on !BR2_arc && !BR2_avr32 && !BR2_sparc_sparchfleon && !BR2_sparc_sparchfleonv8 && !BR2_sparc_sparcsfleon && !BR2_sparc_sparcsfleonv8 && !BR2_cortex_a5 && !BR2_cortex_a7 && !BR2_cortex_a8 && !BR2_cortex_a9 && !BR2_cortex_a15 && !BR2_x86_atom && !BR2_powerpc_e300c2 && !BR2_powerpc_e300c3 && !BR2_powerpc_e500mc && !BR2_powerpc_464 && !BR2_powerpc_464fp && !BR2_powerpc_476 && !BR2_powerpc_476fp && !BR2_fa526 && !BR2_pj4
- 		depends on !BR2_ARM_EABIHF
- 		bool "gcc 4.3.x"
-+		select BR2_GCC_VERSION_NEEDS_THREE_STAGE_BUILD
- 
- 	config BR2_GCC_VERSION_4_4_X
- 		depends on !BR2_arc && !BR2_avr32 && !BR2_cortex_a5 && !BR2_cortex_a7 && !BR2_cortex_a15 && !BR2_x86_atom && !BR2_powerpc_476 && !BR2_powerpc_476fp && !BR2_fa526 && !BR2_pj4
-@@ -29,6 +37,7 @@ choice
- 		depends on !BR2_ARM_EABIHF
- 		# VFPv4 support appeared in gcc 4.5
- 		depends on !BR2_ARM_FPU_VFPV4 && !BR2_ARM_FPU_VFPV4D16
-+		select BR2_GCC_VERSION_NEEDS_THREE_STAGE_BUILD
- 
- 	config BR2_GCC_VERSION_4_5_X
- 		depends on !BR2_arc && !BR2_avr32 && !BR2_cortex_a7 && !BR2_cortex_a15 && !BR2_sparc_sparchfleon && !BR2_sparc_sparchfleonv8 && !BR2_sparc_sparcsfleon && !BR2_sparc_sparcsfleonv8 && !BR2_fa526 && !BR2_pj4
-@@ -36,11 +45,13 @@ choice
- 		# ARM EABIhf support appeared in gcc 4.6
- 		depends on !BR2_ARM_EABIHF
- 		bool "gcc 4.5.x"
-+		select BR2_GCC_VERSION_NEEDS_THREE_STAGE_BUILD
- 
- 	config BR2_GCC_VERSION_4_6_X
- 		depends on !BR2_arc && !BR2_avr32 && !BR2_bfin && !BR2_cortex_a7 && !BR2_sparc_sparchfleon && !BR2_sparc_sparchfleonv8 && !BR2_sparc_sparcsfleon && !BR2_sparc_sparcsfleonv8 && !BR2_pj4
- 		select BR2_GCC_NEEDS_MPC
- 		bool "gcc 4.6.x"
-+		select BR2_GCC_VERSION_NEEDS_THREE_STAGE_BUILD
- 
- 	config BR2_GCC_VERSION_4_7_X
- 		depends on !BR2_arc && !BR2_avr32 && !BR2_bfin && !BR2_sparc_sparchfleon && !BR2_sparc_sparchfleonv8 && !BR2_sparc_sparcsfleon && !BR2_sparc_sparcsfleonv8 && !BR2_pj4
-diff --git a/package/gcc/gcc-initial/gcc-initial.mk b/package/gcc/gcc-initial/gcc-initial.mk
-index e468419..c3ab1ce 100644
---- a/package/gcc/gcc-initial/gcc-initial.mk
-+++ b/package/gcc/gcc-initial/gcc-initial.mk
-@@ -29,6 +29,7 @@ HOST_GCC_INITIAL_CONF_OPT = \
- 	--enable-languages=c \
- 	--disable-shared \
- 	--without-headers \
-+	--disable-threads \
- 	--with-newlib \
- 	--disable-largefile \
- 	--disable-nls \
-@@ -37,4 +38,11 @@ HOST_GCC_INITIAL_CONF_OPT = \
- HOST_GCC_INITIAL_MAKE_OPT = all-gcc
- HOST_GCC_INITIAL_INSTALL_OPT = install-gcc
- 
-+ifeq ($(BR2_TOOLCHAIN_NEEDS_THREE_STAGE_BUILD),)
-+ifeq ($(BR2_GCC_SUPPORTS_FINEGRAINEDMTUNE),y)
-+HOST_GCC_INITIAL_MAKE_OPT += all-target-libgcc
-+HOST_GCC_INITIAL_INSTALL_OPT += install-target-libgcc
-+endif
-+endif
-+
- $(eval $(host-autotools-package))
-diff --git a/package/uclibc/Config.in b/package/uclibc/Config.in
-index 92e04e9..037ca01 100644
---- a/package/uclibc/Config.in
-+++ b/package/uclibc/Config.in
-@@ -115,6 +115,7 @@ choice
- 	config BR2_PTHREADS_NATIVE
- 		bool "Native POSIX Threading (NPTL)"
- 		select BR2_TOOLCHAIN_HAS_THREADS
-+		select BR2_TOOLCHAIN_LIBC_NEEDS_THREE_STAGE_BUILD
- 		depends on !BR2_arc
- 		depends on !BR2_avr32
- 		depends on !BR2_bfin
-diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
-index 36a5001..cf9e5da 100644
---- a/package/uclibc/uclibc.mk
-+++ b/package/uclibc/uclibc.mk
-@@ -22,8 +22,9 @@ UCLIBC_INSTALL_STAGING = YES
- # cross-compiler and the kernel headers
- UCLIBC_DEPENDENCIES = host-gcc-initial linux-headers
- 
--# Before uClibc is built, we must have the second stage cross-compiler
--uclibc-build: host-gcc-intermediate
-+# Before uClibc is built, we must have the second stage
-+# cross-compiler, for some gcc versions, and when NPTL is used.
-+uclibc-build: $(if $(BR2_TOOLCHAIN_NEEDS_THREE_STAGE_BUILD),host-gcc-intermediate)
- 
- # specifying UCLIBC_CONFIG_FILE on the command-line overrides the .config
- # setting.
-diff --git a/toolchain/Config.in b/toolchain/Config.in
-index 53d2573..64cdf81 100644
---- a/toolchain/Config.in
-+++ b/toolchain/Config.in
-@@ -1,5 +1,13 @@
- menu "Toolchain"
- 
-+config BR2_TOOLCHAIN_NEEDS_THREE_STAGE_BUILD
-+	bool
-+	default y if BR2_TOOLCHAIN_LIBC_NEEDS_THREE_STAGE_BUILD && \
-+		BR2_GCC_VERSION_NEEDS_THREE_STAGE_BUILD
-+
-+config BR2_TOOLCHAIN_LIBC_NEEDS_THREE_STAGE_BUILD
-+	bool
-+
- # Should be selected for glibc or eglibc
- config BR2_TOOLCHAIN_USES_GLIBC
- 	bool
-@@ -10,6 +18,7 @@ config BR2_TOOLCHAIN_USES_GLIBC
- 	select BR2_TOOLCHAIN_HAS_THREADS
- 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
- 	select BR2_TOOLCHAIN_HAS_SHADOW_PASSWORDS
-+	select BR2_TOOLCHAIN_LIBC_NEEDS_THREE_STAGE_BUILD
- 
- config BR2_TOOLCHAIN_USES_UCLIBC
- 	bool
+> +	depends on BR2_USE_MMU
+> +	help
+> +	  Build OLA RDM tests.
+> +
+> +endmenu
+
+[snip]
+
+
 -- 
-1.8.1.2
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
