@@ -1,167 +1,135 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 27 Aug 2013 19:28:34 +0200
-Subject: [Buildroot] [PATCHv2 4/4] module-init-tools: remove package
-In-Reply-To: <1377624514-10510-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1377624514-10510-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1377624514-10510-5-git-send-email-thomas.petazzoni@free-electrons.com>
+From: clshotwe at rockwellcollins.com <clshotwe@rockwellcollins.com>
+Date: Tue, 27 Aug 2013 12:46:25 -0500
+Subject: [Buildroot] SELinux Buildroot Additions
+In-Reply-To: <20130827190459.1eb3e4d9@skate>
+References: <OFC105562B.76AF62E8-ON86257BD4.005985FE-86257BD4.0059C2DD@rockwellcollins.com>
+ <20130827190459.1eb3e4d9@skate>
+Message-ID: <OF340CA870.4409C997-ON86257BD4.005E13D7-86257BD4.0061A29C@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This commit removes the module-init-tools package and adds the
-relevant Config.in.legacy entries to ease the migration for users.
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote on 08/27/2013 
+12:04:59 PM:
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- Config.in.legacy                                   | 11 +++++
- package/Config.in                                  |  3 --
- package/module-init-tools/Config.in                |  9 -----
- ...nit-tools-3.15-add-manpages-config-option.patch | 47 ----------------------
- package/module-init-tools/module-init-tools.mk     | 28 -------------
- 5 files changed, 11 insertions(+), 87 deletions(-)
- delete mode 100644 package/module-init-tools/Config.in
- delete mode 100644 package/module-init-tools/module-init-tools-3.15-add-manpages-config-option.patch
- delete mode 100644 package/module-init-tools/module-init-tools.mk
+> From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> To: clshotwe at rockwellcollins.com
+> Cc: buildroot at busybox.net
+> Date: 08/27/2013 12:05 PM
+> Subject: Re: [Buildroot] SELinux Buildroot Additions
+> 
+> Hello Clayton,
+> 
+> On Tue, 27 Aug 2013 11:20:25 -0500, clshotwe at rockwellcollins.com wrote:
+> 
+> > I would like to get some feedback on adding SELinux support to 
+Buildroot. 
+> > This would involve adding several packages, modifying the .mk files 
+for 
+> > several packages to include SELinux support, and adding generic 
+defconfigs 
+> > to use as examples.  I would like to have defconfigs for QEMU targets 
+> > (x86, ARM, PPC) along with a Pandaboard and another couple hardware 
+> > targets.  The package selection for a functional SELinux system is a 
+> > little complex so the example defconfigs would be nice to use as 
+examples.
+> > 
+> > Would this be a welcomed addition to Buildroot?  I would like to 
+submit a 
+> > set of patches to first add the new packages, then modify existing 
+> > packages, and then add in the example defconfigs one at a time.  Is 
+this 
+> > the best approach to take?
+> 
+> Having SELinux support in Buildroot would definitely be interesting,
+> especially if you're using it for some projects!
+> 
+> Adding several packages is obviously fine. I guess you've already find
+> the relevant documentation on how to add new packages to Buildroot.
+> 
+> Modifying existing .mk files of other packages to enable SELinux
+> support is also perfectly fine. We'll have to see if we need a global
+> knob to enable/disable SELinux, or if a per-package configuration is
+> needed, or if the fact that a given package is enabled or disabled is a
+> good enough indication of whether the user wants SELinux support. I
+> guess we'll have to discuss this once we see your patches.
+> 
+> The defconfig part is probably the most problematic one. Until now, our
+> policy about defconfigs is that they should just build the minimal set
+> of things for a particular hardware platform to build: toolchain,
+> kernel, bootloader, and minimal rootfs with Busybox. We've refrained
+> from including other features in our defconfigs, because the definition
+> of what a good configuration is for a particular platform is very
+> use-case and user-dependent. Someone will want Qt, someone else will
+> want X.org. Someone will want Busybox, someone else will want the
+> full-featured Bash and Coreutils. Someone will want udev, someone else
+> will want mdev. Someone will want Busybox init, someone else will want
+> systemd. How to make a good choice, without having a proliferation of
+> highly specific choices, is difficult.
+> 
+> Regarding SELinux and defconfigs, I see three options moving forward:
+> 
+>  *) We've been discussing some time ago the need to have some kind of
+>     "demos" defconfig, mainly as part of the work done by Spenser
+>     Gilliland on ARM OpenGL support in Buildroot. Those would be a
+>     separate set of defconfig, clearly identified as "this demonstrates
+>     some particular feature, on some particular platform, just for the
+>     sake of demonstrating this feature". We however haven't decided
+>     where to store those configurations, how to handle them compared to
+>     the regular defconfigs, etc.
+> 
+>  *) Make the SELinux configuration in menuconfig simple enough that a
+>     demonstration defconfig is not needed. You're mentioning that the
+>     configuration to get a working SELinux system is a little bit
+>     complex, and that's why a demo defconfig is needed. Maybe there's
+>     something we can do here to make this SELinux configuration so
+>     simple that a demo defconfig will no longer be needed?
+> 
+>  *) Add some details in the Buildroot manual on how to use SELinux.
+>     Generally speaking, the manual could contain more details on how to
+>     use a particular Buildroot package or feature. SELinux could be one
+>     of them.
+> 
+> Of course, none of those options are mutually exclusive!
+> 
+> So, I believe we can get started with the first two steps, get an
+> understanding of the configuration complexity, and see what is the best
+> course of action for the last step.
+> 
+> What do you think about this?
+> 
+Thomas,
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 763f16c..ac6f088 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -45,6 +45,17 @@ comment "build, or run, in unpredictable ways.               "
- endif
- 
- ###############################################################################
-+comment "Legacy options removed in 2013.11"
-+
-+config BR2_PACKAGE_MODULE_INIT_TOOLS
-+	bool "module-init-tools replaced by kmod"
-+	select BR2_PACKAGE_KMOD
-+	select BR2_PACKAGE_KMOD_TOOLS
-+	help
-+	  The 'module-init-tools' package has been removed, since it
-+	  has been depracated upstream and replaced by 'kmod'.
-+
-+###############################################################################
- comment "Legacy options removed in 2013.08"
- 
- config BR2_ARM_OABI
-diff --git a/package/Config.in b/package/Config.in
-index 7069d77..4ef8430 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -896,9 +896,6 @@ source "package/cpuload/Config.in"
- source "package/htop/Config.in"
- source "package/keyutils/Config.in"
- source "package/kmod/Config.in"
--if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
--source "package/module-init-tools/Config.in"
--endif
- source "package/monit/Config.in"
- source "package/ncdu/Config.in"
- source "package/numactl/Config.in"
-diff --git a/package/module-init-tools/Config.in b/package/module-init-tools/Config.in
-deleted file mode 100644
-index 77e3bce..0000000
---- a/package/module-init-tools/Config.in
-+++ /dev/null
-@@ -1,9 +0,0 @@
--config BR2_PACKAGE_MODULE_INIT_TOOLS
--	bool "module-init-tools"
--	help
--	  The module-init-tools package contains a set of programs for
--	  loading, inserting, and removing kernel modules for Linux
--	  (versions 2.5.48 and above). It serves the same function that
--	  the "modutils" package serves for Linux 2.4.
--
--	  http://www.kernel.org/pub/linux/utils/kernel/module-init-tools/
-diff --git a/package/module-init-tools/module-init-tools-3.15-add-manpages-config-option.patch b/package/module-init-tools/module-init-tools-3.15-add-manpages-config-option.patch
-deleted file mode 100644
-index 28f51de..0000000
---- a/package/module-init-tools/module-init-tools-3.15-add-manpages-config-option.patch
-+++ /dev/null
-@@ -1,47 +0,0 @@
--Disable manual pages generation when docbook2man is not available.
--
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-----
-- Makefile.am  |    7 ++++++-
-- configure.ac |    7 +++----
-- 2 files changed, 9 insertions(+), 5 deletions(-)
--
--Index: module-init-tools-3.11/Makefile.am
--===================================================================
----- module-init-tools-3.11.orig/Makefile.am
--+++ module-init-tools-3.11/Makefile.am
--@@ -39,7 +39,12 @@
-- MAN5 = modprobe.conf.5 modules.dep.5 depmod.conf.5 modprobe.d.5
-- MAN8 = depmod.8 insmod.8 lsmod.8 rmmod.8 modprobe.8 modinfo.8
-- SGML = $(addprefix doc/,  $(MAN5:%.5=%.sgml) $(MAN8:%.8=%.sgml))
---dist_man_MANS = $(MAN5) $(MAN8)
--+
--+if HAVE_DOCBOOKTOMAN
--+MANPAGES  = $(MAN5) $(MAN8)
--+endif
--+dist_man_MANS = $(MANPAGES)
--+
-- # If they haven't overridden mandir, fix it (never /man!)
-- mandir =$(shell if [ @mandir@ = $(prefix)/man ]; then if [ $(prefix) = / ]; then echo /usr/share/man; else echo $(prefix)/share/man; fi; else echo @mandir@; fi)
-- 
--Index: module-init-tools-3.11/configure.ac
--===================================================================
----- module-init-tools-3.11.orig/configure.ac
--+++ module-init-tools-3.11/configure.ac
--@@ -29,13 +29,12 @@
-- AC_PROG_CC
-- AC_PROG_RANLIB
-- 
---AC_CHECK_PROGS(DOCBOOKTOMAN, docbook-to-man docbook2man, [no],)
---if test x"$DOCBOOKTOMAN" = xno
--+AC_CHECK_PROGS(DOCBOOKTOMAN, docbook-to-man docbook2man)
--+if test x"$DOCBOOKTOMAN" = x
-- then
-- 	AC_MSG_WARN([docbook2man not found])
---	# fail with a meaningfull error if $DOCBOOKTOMAN called by the makefile
---	DOCBOOKTOMAN=docbook2man
-- fi
--+AM_CONDITIONAL([HAVE_DOCBOOKTOMAN], [test "x$DOCBOOKTOMAN" != "x"])
--  
-- # Delay adding the zlib_flags until after AC_PROG_CC, so we can distinguish
-- # between a broken cc and a working cc but missing libz.a.
-diff --git a/package/module-init-tools/module-init-tools.mk b/package/module-init-tools/module-init-tools.mk
-deleted file mode 100644
-index 88abec4..0000000
---- a/package/module-init-tools/module-init-tools.mk
-+++ /dev/null
-@@ -1,28 +0,0 @@
--################################################################################
--#
--# module-init-tools
--#
--################################################################################
--
--MODULE_INIT_TOOLS_VERSION = 3.15
--MODULE_INIT_TOOLS_SOURCE = module-init-tools-$(MODULE_INIT_TOOLS_VERSION).tar.bz2
--MODULE_INIT_TOOLS_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/kernel/module-init-tools/
--MODULE_INIT_TOOLS_LICENSE = GPLv2+
--MODULE_INIT_TOOLS_LICENSE_FILES = COPYING
--
--MODULE_INIT_TOOLS_CONF_ENV = ac_cv_prog_DOCBOOKTOMAN=''
--MODULE_INIT_TOOLS_CONF_OPT = \
--	--disable-static-utils \
--	--disable-builddir \
--	--program-transform-name=''
--
--# module-init-tools-3.15-add-manpages-config-option.patch is modifying
--# configure.ac and Makefile.am
--MODULE_INIT_TOOLS_AUTORECONF = YES
--HOST_MODULE_INIT_TOOLS_AUTORECONF = YES
--HOST_MODULE_INIT_TOOLS_CONF_ENV = ac_cv_prog_DOCBOOKTOMAN=''
--HOST_MODULE_INIT_TOOLS_CONF_OPT = --disable-static-utils
--
--$(eval $(autotools-package))
--$(eval $(host-autotools-package))
--
--- 
-1.8.1.2
+We have a multiple platforms that we will be validating this on 
+including ARM, x86, and PPC. I should be able to start pushing out
+patches for the packages within the week.
+
+As for the defconfig issue, being able to pull down a reference config 
+and some skeleton changes to implement a specific feature would be very 
+nice to have. It may be possible to do QEMU targets for each architecture 
+but I will have to look into that further. 
+
+The single SELinux flag will be more problematic.  There are a lot of 
+package dependencies that will be hard to configure without making the 
+menuconfig very confusing. Also, there is a huge issue with using Busybox 
+and the base SELinux Refpolicy put out by Tresys that cause applications 
+to not run in the correct SELinux context.
+
+For now, the documentation route, in the Buildroot manual, may be the best 
+
+way to go. I'll just table this for now until I get the patches pushed 
+out.
+
+Thanks,
+Clayton
+
+Clayton Shotwell
+Software Engineer
+clshotwe at rockwellcollins.com
+www.rockwellcollins.com 
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130827/6c388be8/attachment.html>
