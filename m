@@ -1,148 +1,66 @@
-From: Thomas Davis <sunsetbrew@sunsetbrew.com>
-Date: Tue, 27 Aug 2013 13:57:01 -0400
-Subject: [Buildroot] [1/1] civetweb: new package
-Message-ID: <CAG3-AMrakjHihP-_Zr7E4zX=BSs7Ym+Fc8HSVDbQbt11t4K0sQ@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 27 Aug 2013 20:25:05 +0200
+Subject: [Buildroot] SELinux Buildroot Additions
+In-Reply-To: <OF340CA870.4409C997-ON86257BD4.005E13D7-86257BD4.0061A29C@rockwellcollins.com>
+References: <OFC105562B.76AF62E8-ON86257BD4.005985FE-86257BD4.0059C2DD@rockwellcollins.com>
+ <20130827190459.1eb3e4d9@skate>
+ <OF340CA870.4409C997-ON86257BD4.005E13D7-86257BD4.0061A29C@rockwellcollins.com>
+Message-ID: <20130827202505.22f5ee46@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Submission attempt #2 with recommended changes.
+Clayton,
 
-1. Change make file ifdef's to ifeq.
-2. Copyright lines removed to prevent confusion.
-3. Put end of line in make file.
-4. Submitted with git mail if it works, otherwise in plain text
-5. Rebased, rebuilt and retested with buildroot.
+On Tue, 27 Aug 2013 12:46:25 -0500, clshotwe at rockwellcollins.com wrote:
 
-The explaination of BR2_TOOLCHAIN_BUILDROOT_UCLIBC check in
-Config.in was answered in a previous post.  If that will
-always be included, I can remove the check.
+> We have a multiple platforms that we will be validating this on 
+> including ARM, x86, and PPC. I should be able to start pushing out
+> patches for the packages within the week.
 
-BTW:  git --send-mail is not working for me.  But I made sure this
-mail is in plain-text mode.
+Nice!
+
+> As for the defconfig issue, being able to pull down a reference config 
+> and some skeleton changes to implement a specific feature would be very 
+> nice to have. It may be possible to do QEMU targets for each architecture 
+> but I will have to look into that further. 
+
+I agree that having "demo" configurations would be useful. It's just
+that it's not the purpose of the defconfigs we have today.
+
+> The single SELinux flag will be more problematic.  There are a lot of 
+> package dependencies that will be hard to configure without making the 
+> menuconfig very confusing. Also, there is a huge issue with using Busybox 
+> and the base SELinux Refpolicy put out by Tresys that cause applications 
+> to not run in the correct SELinux context.
+
+For other readers, the SELinux Refpolicy is apparently what is
+available at http://oss.tresys.com/projects/refpolicy.
+
+Can you expand on what is the huge issue between Busybox and the
+SELinux Refpolicy? The fact that the Refpolicy doesn't include a policy
+for Busybox? If so, isn't it possible to contribute a policy that would
+be suitable for usage with Busybox? A quick Google search returns
+http://code.google.com/p/sebusybox/.
+
+Anyway, using Busybox on the target system is not necessarily mandatory
+when using Buildroot, you can also chose to use the coreutils instead,
+even though it's true that Busybox is our primary target for the base
+of the system.
+
+> For now, the documentation route, in the Buildroot manual, may be the best 
+> way to go. I'll just table this for now until I get the patches pushed 
+> out.
+
+Right, sounds good!
 
 Thanks,
+
 Thomas
-
-Signed-off-by: Thomas Davis <sunsetbrew@sunsetbrew.com>
----
- package/Config.in            |    1 +
- package/civetweb/Config.in   |   34 +++++++++++++++++++++++++++++++
- package/civetweb/civetweb.mk |   45 ++++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 80 insertions(+), 0 deletions(-)
- create mode 100644 package/civetweb/Config.in
- create mode 100644 package/civetweb/civetweb.mk
-
-diff --git a/package/Config.in b/package/Config.in
-index 7069d77..25433b6 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -719,6 +719,7 @@ source "package/bridge-utils/Config.in"
- source "package/bwm-ng/Config.in"
- source "package/can-utils/Config.in"
- source "package/chrony/Config.in"
-+source "package/civetweb/Config.in"
- source "package/connman/Config.in"
- source "package/crda/Config.in"
- source "package/ctorrent/Config.in"
-diff --git a/package/civetweb/Config.in b/package/civetweb/Config.in
-new file mode 100644
-index 0000000..5285b09
---- /dev/null
-+++ b/package/civetweb/Config.in
-@@ -0,0 +1,34 @@
-+config BR2_PACKAGE_CIVETWEB
-+       bool "civetweb"
-+       depends on BR2_TOOLCHAIN_BUILDROOT_UCLIBC && !BR2_PTHREADS_NONE
-+       help
-+         Full featured embedded web server with LUA support.
-+
-+         https://sourceforge.net/projects/civetweb
-+
-+if BR2_PACKAGE_CIVETWEB
-+
-+       config BR2_CIVETWEB_WITH_IPV6
-+               bool "enable IPV6 support"
-+               depends on BR2_INET_IPV6
-+
-+       config BR2_CIVETWEB_WITH_LUA
-+               bool "enable LUA support"
-+               depends on BR2_LARGEFILE # util-linux
-+
-+       config BR2_CIVETWEB_WITH_SSL
-+               bool "enable SSL support"
-+               depends on BR2_PACKAGE_OPENSSL
-+
-+       comment "civetweb IPV6 support requires IPV6"
-+               depends on !BR2_INET_IPV6
-+
-+       comment "civetweb LUA support requires large file support"
-+               depends on !BR2_LARGEFILE
-+
-+       comment "civetweb SSL support requires OpenSSL"
-+               depends on !BR2_PACKAGE_OPENSSL
-+endif
-+
-+comment "civetweb requires a toolchain with PTHREAD support"
-+       depends on !BR2_TOOLCHAIN_BUILDROOT_UCLIBC || BR2_PTHREADS_NONE
-diff --git a/package/civetweb/civetweb.mk b/package/civetweb/civetweb.mk
-new file mode 100644
-index 0000000..db14b2b
---- /dev/null
-+++ b/package/civetweb/civetweb.mk
-@@ -0,0 +1,45 @@
-+################################################################################
-+#
-+# civetweb
-+#
-+################################################################################
-+
-+CIVETWEB_VERSION = 1.2
-+CIVETWEB_SOURCE = civetweb-$(CIVETWEB_VERSION).tar.gz
-+CIVETWEB_SITE =
-http://github.com/sunsetbrew/civetweb/tarball/v$(CIVETWEB_VERSION)
-+CIVETWEB_LICENSE = MIT
-+CIVETWEB_LICENSE_FILES = LICENSE.md
-+
-+CIVETWEB_COPT = $(TARGET_CFLAGS)
-+CIVETWEB_MOPT = TARGET_OS=LINUX
-+CIVETWEB_LDFLAGS = $(TARGET_LDFLAGS)
-+
-+ifeq (BR2_PACKAGE_UTIL_LINUX_FALLOCATE,y)
-+       CIVETWEB_COPT += -DHAVE_POSIX_FALLOCATE=0
-+endif
-+
-+ifeq (BR2_CIVETWEB_WITH_IPV6,y)
-+       CIVETWEB_MOPT += WITH_IPV6=1
-+endif
-+
-+ifeq (BR2_CIVETWEB_WITH_LUA,y)
-+       CIVETWEB_MOPT += WITH_LUA=1
-+endif
-+
-+ifeq (BR2_CIVETWEB_WITH_SSL,y)
-+       CIVETWEB_COPT += -DNO_SSL_DL -lcrypt -lssl
-+       CIVETWEB_DEPENDENCIES += openssl
-+else
-+       CIVETWEB_COPT += -DNO_SSL
-+endif
-+
-+define CIVETWEB_BUILD_CMDS
-+       $(MAKE) CC="$(TARGET_CC)" -C $(@D) all $(CIVETWEB_MOPT)
-COPT="$(CIVETWEB_COPT)"
-+endef
-+
-+define CIVETWEB_INSTALL_TARGET_CMDS
-+       $(MAKE) CC="$(TARGET_CC)" -C $(@D) install
-DOCUMENT_ROOT=/usr/local/share/doc/civetweb
-PREFIX="$(TARGET_DIR)/usr/local" $(CIVETWEB_MOPT)
-COPT='$(CIVETWEB_COPT)'
-+endef
-+
-+$(eval $(generic-package))
-+
-
---
-1.7.8.3
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
