@@ -1,42 +1,41 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 27 Aug 2013 10:18:57 +0200
-Subject: [Buildroot] [RFC] uclibc: reinstate support for version 0.9.31
-In-Reply-To: <CAHt8ZCMTy5nmpgMLwMVRt+z8W_-g02cLe=GHyUN0+8wp1ODNiQ@mail.gmail.com>
-References: <1376997241-20991-1-git-send-email-spdawson@gmail.com>
- <20130826163209.71188312@skate>
- <CAHt8ZCN7zEKhx3znac2=1Nha2z1Gi6vK9MrihVC2Dc=80OU_Wg@mail.gmail.com>
- <20130827100209.4759e82f@skate>
- <CAHt8ZCMTy5nmpgMLwMVRt+z8W_-g02cLe=GHyUN0+8wp1ODNiQ@mail.gmail.com>
-Message-ID: <20130827101857.1df66dc5@skate>
+From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
+Date: Tue, 27 Aug 2013 10:19:02 +0200
+Subject: [Buildroot] make clean behavior
+Message-ID: <CAAXf6LVsXF29Z9cZCSmZqMX8zVms0ANfgo33tHf8NiU57LY8QQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Simon Dawson,
+Hi,
 
-On Tue, 27 Aug 2013 09:16:55 +0100, Simon Dawson wrote:
-> On 27 August 2013 09:02, Thomas Petazzoni
-> <thomas.petazzoni@free-electrons.com> wrote:
-> >> > Maybe it was inotify that was missing, but I see you've backported the
-> >> > inotify support in 0.9.31. Or it was something else than inotify?
-> >>
-> >> I don't quite follow your meaning here... Are you referring to the
-> >> connman package specifically?
-> >
-> > Yes, I was referring to the connman package specifically.
-> 
-> Commit 96b109ad2a4ea0a4575526f0d0353d916b5122dd made connman
-> unavailable for uClibc 0.9.31 and 0.9.32, due to missing resolver
-> support in those versions. So this restriction does still need to be
-> in place, unfortunately.
+Is it intentional that 'make clean' is different depending on having a
+.config file?
 
-Oh, ok, thanks!
+With .config there is a full clean:
 
+rm -rf buildroot/output/host/usr/powerpc-buildroot-linux-gnu/sysroot
+buildroot/output/target buildroot/output/images buildroot/output/host
+buildroot/output/stamps buildroot/output/build
+buildroot/output/toolchain buildroot/output/staging
+buildroot/output/legal-info
+
+
+but if you remove .config (and thus symbol BR2_HAVE_DOT_CONFIG) you
+only have a partial clean:
+
+rm -rf /repo/tdescham/reborn/buildroot-ppc/output/build
+/repo/tdescham/reborn/buildroot-ppc/output/staging
+
+
+Suppose you accidentally removed your .config, then you cannot easily
+get a clean buildroot env anymore. The behavior is caused due to the
+definition of variables like TARGET_DIR being inside a 'ifeq
+($(BR2_HAVE_DOT_CONFIG),y)' statement.
+
+I would propose to make sure that 'clean' works in all cases, by
+moving the relevant variable definitions outside this if statement.
+
+Best regards,
 Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
