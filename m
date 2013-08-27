@@ -1,31 +1,73 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 27 Aug 2013 21:12:09 +0200
-Subject: [Buildroot] [git commit branch/next] gst1-plugins-base: bump version
-Message-ID: <20130827192802.C6AB09A592@busybox.osuosl.org>
+From: Thomas Davis <sunsetbrew@sunsetbrew.com>
+Date: Tue, 27 Aug 2013 15:28:49 -0400
+Subject: [Buildroot] [1/1] civetweb: new package
+In-Reply-To: <20130827211557.1416d328@skate>
+References: <CAG3-AMrakjHihP-_Zr7E4zX=BSs7Ym+Fc8HSVDbQbt11t4K0sQ@mail.gmail.com>
+ <20130827203958.2de34c38@skate>
+ <CAG3-AMpi1X5xKO08bE+pfp5Or5qeYWbLiKt33aWBTpqVC4ToTg@mail.gmail.com>
+ <20130827211557.1416d328@skate>
+Message-ID: <CAG3-AMq4Y-+gVWQ_062FjeLh_=HxuvXDqRzCdWEEjOP+WUCBuQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1b7b56d2a15768f05828575d6b47ed99f594fb0f
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Thanks once again for the reply and the detailed examination.  I will
+see about having a non large file option in the civetweb build and
+test that separately before continuing.    I will also add the comment
+about LUA and sqlite3 not coming from buildroot and move the document
+directory as well.
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- .../gst1-plugins-base/gst1-plugins-base.mk         |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+Thanks,
+Thomas Davis
 
-diff --git a/package/multimedia/gst1-plugins-base/gst1-plugins-base.mk b/package/multimedia/gst1-plugins-base/gst1-plugins-base.mk
-index 1e32867..4a9e234 100644
---- a/package/multimedia/gst1-plugins-base/gst1-plugins-base.mk
-+++ b/package/multimedia/gst1-plugins-base/gst1-plugins-base.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GST1_PLUGINS_BASE_VERSION = 1.0.8
-+GST1_PLUGINS_BASE_VERSION = 1.0.9
- GST1_PLUGINS_BASE_SOURCE = gst-plugins-base-$(GST1_PLUGINS_BASE_VERSION).tar.xz
- GST1_PLUGINS_BASE_SITE = http://gstreamer.freedesktop.org/src/gst-plugins-base
- GST1_PLUGINS_BASE_INSTALL_STAGING = YES
+On Tue, Aug 27, 2013 at 3:15 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Dear Thomas Davis,
+>
+> On Tue, 27 Aug 2013 14:54:28 -0400, Thomas Davis wrote:
+>> I will make the suggested changes and retest and re-submit.  To answer
+>> outstanding questions.
+>>
+>> 1. BR2_LARGEFILE is required by SQLITE3 which is a dependency in the
+>> LUA support.
+>
+> Ok. This is something you could potentially address by passing
+> -DSQLITE_DISABLE_LFS to the Sqlite build when !BR2_LARGEFILE. See
+> package/sqlite/sqlite.mk in Buildroot. But ok, it's not mandatory to
+> support this use case for civetweb.
+>
+> So, what I'd like to see is something like:
+>
+> config BR2_PACKAGE_CIVETWEB_LUA_SUPPORT
+>         bool "lua support"
+>         # required by the bundled sqlite code
+>         depends on BR2_LARGEFILE
+>         comment
+>           Enable Lua support in Civetweb. Note that this will use a
+>           version of Lua and Sqlite bundled within the Civetweb
+>           sources, and not the packages from Buildroot.
+>
+> comment "lua support requires largefile support in toolchain"
+>         depends on !BR2_LARGEFILE
+>
+>> 2. DOCUMENT_ROOT is the path from with-in the chroot to the documents
+>> folder.  This is a value written into a configuration file, not an
+>> actual directory something gets placed in.  Normally it would have
+>> been automatically determined by PREFIX, but in the fake root
+>> situation it has to overridden so it works correctly inside the
+>> chroot.  It is not an install path itself.
+>
+> Right, discovered this after having a deeper look at civetweb. Then
+> please set it to /var/www, which is what we do for other web servers in
+> Buildroot.
+>
+> Thanks!
+>
+> Thomas
+> --
+> Thomas Petazzoni, Free Electrons
+> Kernel, drivers, real-time and embedded Linux
+> development, consulting, training and support.
+> http://free-electrons.com
