@@ -1,93 +1,110 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 31 Aug 2013 21:34:01 -0000
-Subject: [Buildroot] [git commit] luasec: New package
-Message-ID: <20130831213337.2362C9B5D8@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Wed, 28 Aug 2013 00:23:49 +0200
+Subject: [Buildroot] [git commit] neon: replace 'choice' for XML library
+	with two options
+Message-ID: <20130831213337.BFFDC9B591@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=61cdd3c7600876d87e7b3c7e943a99bb3dfef172
+commit: http://git.buildroot.net/buildroot/commit/?id=9169810a9bd97c99d8b7a0e8aadabdcca3883e99
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-LuaSec is a Lua binding for OpenSSL library to provide TLS/SSL
-communication.
+The NEON library can either be compiled without XML support, with XML
+support provided by Expat, or with XML support provided by
+libxml2. Until now, to represent this, a Kconfig 'choice..endchoice'
+was used. Unfortunately, another package cannot 'select' one of the
+possible choices. So for example, a package such as 'rpm', or the
+to-be-added 'subversion' package could not select their dependencies,
+they had to do a 'depends on !BR2_PACKAGE_NEON_NOXML', which is not
+how Buildroot handles library dependencies in general.
 
-[Thomas: adjust header in .mk file, add missing 'mkdir -p' before
-installation, remove useless quotes.]
+So, this commit replaces the 'choice...endchoice' block with simply
+two configuration options that are mutually exclusive. The option
+names are not changed, so no Config.in.legacy addition is needed.
 
-Signed-off-by: Assaf Inbal <shmuelzon@gmail.com>
+An hidden option BR2_PACKAGE_NEON_XML is provided, so that packages
+that need XML support in NEON but don't care whether it's provided by
+Expat or libxml2 can simply select BR2_PACKAGE_NEON_XML.
+
+The rpm package is updated accordingly.
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/Config.in        |    1 +
- package/luasec/Config.in |    9 +++++++++
- package/luasec/luasec.mk |   33 +++++++++++++++++++++++++++++++++
- 3 files changed, 43 insertions(+), 0 deletions(-)
+ package/neon/Config.in |   28 ++++++++++------------------
+ package/rpm/Config.in  |    7 ++-----
+ 2 files changed, 12 insertions(+), 23 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index f27ba2b..d5453fe 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -336,6 +336,7 @@ source "package/luaexpat/Config.in"
- source "package/luaexpatutils/Config.in"
- source "package/luafilesystem/Config.in"
- source "package/luaposix/Config.in"
-+source "package/luasec/Config.in"
- source "package/luasocket/Config.in"
- source "package/lua-ev/Config.in"
- source "package/lua-msgpack-native/Config.in"
-diff --git a/package/luasec/Config.in b/package/luasec/Config.in
-new file mode 100644
-index 0000000..2d303c1
---- /dev/null
-+++ b/package/luasec/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_LUASEC
-+	bool "luasec"
-+	select BR2_PACKAGE_OPENSSL
-+	select BR2_PACKAGE_LUASOCKET
-+	help
-+	  LuaSec is a binding for OpenSSL library to provide TLS/SSL
-+	  communication.
-+
-+	  http://www.inf.puc-rio.br/~brunoos/luasec/
-diff --git a/package/luasec/luasec.mk b/package/luasec/luasec.mk
-new file mode 100644
-index 0000000..053309f
---- /dev/null
-+++ b/package/luasec/luasec.mk
-@@ -0,0 +1,33 @@
-+################################################################################
-+#
-+# luasec
-+#
-+################################################################################
-+
-+LUASEC_VERSION = 0.4.1
-+LUASEC_SITE = http://www.inf.puc-rio.br/~brunoos/luasec/download/
-+LUASEC_LICENSE = MIT
-+LUASEC_LICENSE_FILES = LICENSE
-+LUASEC_DEPENDENCIES = lua openssl
-+
-+define LUASEC_BUILD_CMDS
-+	$(MAKE) -C $(@D) CC="$(TARGET_CC)" LD="$(TARGET_CC)" \
-+		CFLAGS="$(TARGET_CFLAGS) -fPIC" \
-+		LDFLAGS="$(TARGET_LDFLAGS) -shared" linux
-+endef
-+
-+define LUASEC_INSTALL_TARGET_CMDS
-+	mkdir -p $(TARGET_DIR)/usr/share/lua
-+	mkdir -p $(TARGET_DIR)/usr/lib/lua
-+	$(MAKE) -C $(@D) \
-+		LUAPATH="$(TARGET_DIR)/usr/share/lua" \
-+		LUACPATH="$(TARGET_DIR)/usr/lib/lua" install
-+endef
-+
-+define LUASEC_UNINSTALL_TARGET_CMDS
-+	rm -f $(TARGET_DIR)/usr/lib/lua/ssl.so
-+	rm -rf $(TARGET_DIR)/usr/share/lua/ssl
-+	rm -f $(TARGET_DIR)/usr/share/lua/ssl.lua
-+endef
-+
-+$(eval $(generic-package))
+diff --git a/package/neon/Config.in b/package/neon/Config.in
+index 54b51c8..e76278c 100644
+--- a/package/neon/Config.in
++++ b/package/neon/Config.in
+@@ -19,31 +19,23 @@ config BR2_PACKAGE_NEON_SSL
+ 	help
+ 	  build with SSL support
+ 
+-choice
+-	prompt "XML Support"
+-	help
+-	  Select which XML library to use...
+-	  none       do not build with XML support
+-	  expat      use expat
+-	  libxml2    use libxml2
+-
+-config BR2_PACKAGE_NEON_NOXML
+-	bool "none"
+-	help
+-	  none       do not build with XML support
++# This is an hidden symbol other packages can select to ensure that
++# Neon has XML support, either provided by Expat or libxml2.
++config BR2_PACKAGE_NEON_XML
++	bool
++	select BR2_PACKAGE_NEON_EXPAT if !BR2_PACKAGE_NEON_LIBXML2
+ 
+ config BR2_PACKAGE_NEON_EXPAT
+-	bool "expat"
++	bool "XML support with expat"
+ 	select BR2_PACKAGE_EXPAT
++	depends on !BR2_PACKAGE_NEON_LIBXML2
+ 	help
+-	  expat      use expat, a library for parsing XML.
++	  Enable XML support in neon, using the Expat XML library.
+ 
+ config BR2_PACKAGE_NEON_LIBXML2
+-	bool "libxml2"
++	bool "XML support with libxml2"
+ 	select BR2_PACKAGE_LIBXML2
+ 	help
+-	  libxml2    use libxml2, a library to read, modify and
+-	             write XML and HTML files.
+-endchoice
++	  Enable XML support in neon, using the libxml2 XML library.
+ 
+ endif
+diff --git a/package/rpm/Config.in b/package/rpm/Config.in
+index 14072c9..63e5367 100644
+--- a/package/rpm/Config.in
++++ b/package/rpm/Config.in
+@@ -1,17 +1,14 @@
+ comment "rpm requires a toolchain with thread support"
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS
+ 
+-comment "rpm requires libneon with SSL, XML and ZLIB support"
+-	depends on !BR2_PACKAGE_NEON || BR2_PACKAGE_NEON_NOXML && BR2_TOOLCHAIN_HAS_THREADS
+-
+ config BR2_PACKAGE_RPM
+ 	bool "rpm"
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # beecrypt
+ 	select BR2_PACKAGE_BEECRYPT
+ 	select BR2_PACKAGE_POPT
+ 	select BR2_PACKAGE_OPENSSL
+-	depends on BR2_PACKAGE_NEON
+-	depends on !BR2_PACKAGE_NEON_NOXML
++	select BR2_PACKAGE_NEON
++	select BR2_PACKAGE_NEON_XML
+ 	select BR2_PACKAGE_NEON_ZLIB
+ 	select BR2_PACKAGE_NEON_SSL
+ 	help
