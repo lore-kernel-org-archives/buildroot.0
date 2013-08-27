@@ -1,18 +1,33 @@
 From: Thomas Davis <sunsetbrew@sunsetbrew.com>
-Date: Tue, 27 Aug 2013 19:26:03 -0400
-Subject: [Buildroot] [PATCHv3 1/1] civetweb: new package
-In-Reply-To: <1377645963-1953-1-git-send-email-sunsetbrew@sunsetbrew.com>
-References: <1377645963-1953-1-git-send-email-sunsetbrew@sunsetbrew.com>
-Message-ID: <1377645963-1953-2-git-send-email-sunsetbrew@sunsetbrew.com>
+Date: Tue, 27 Aug 2013 19:26:02 -0400
+Subject: [Buildroot] [PATCHv3 0/1] civetweb: new package
+Message-ID: <1377645963-1953-1-git-send-email-sunsetbrew@sunsetbrew.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Submission #3 with recommended changes.
 
-Signed-off-by: Thomas Davis <sunsetbrew@sunsetbrew.com>
----
+1. Changed make file ifdef's to ifeq correctly.
+2. Made openssl and ipv6 support automatic. 
+3. Moved html directory to /var/www
+4. Fixed formatting and code convention issues.
+5. largefile support is required by LUA AND Sqlite3.  I was able
+   to work this out for Sqlite3, but LUA less trivial.
+6. posix_fallocate() has not been present in any of my test builds, and
+   I cannot seem to find out how to enable it.  However, I did find
+   several projects that automatically disable use of the function
+   via patches.  I effectly did the same using a define HAVE_POSIX_FALLOCATE=0.
+7. Simplified configuration options.
+
+Thank you,
+Thomas Davis
+
+Thomas Davis (1):
+  civetweb: new package
+
  package/Config.in            |    1 +
  package/civetweb/Config.in   |   26 ++++++++++++++++++++
  package/civetweb/civetweb.mk |   53 ++++++++++++++++++++++++++++++++++++++++++
@@ -20,108 +35,5 @@ Signed-off-by: Thomas Davis <sunsetbrew@sunsetbrew.com>
  create mode 100644 package/civetweb/Config.in
  create mode 100644 package/civetweb/civetweb.mk
 
-diff --git a/package/Config.in b/package/Config.in
-index 7069d77..25433b6 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -719,6 +719,7 @@ source "package/bridge-utils/Config.in"
- source "package/bwm-ng/Config.in"
- source "package/can-utils/Config.in"
- source "package/chrony/Config.in"
-+source "package/civetweb/Config.in"
- source "package/connman/Config.in"
- source "package/crda/Config.in"
- source "package/ctorrent/Config.in"
-diff --git a/package/civetweb/Config.in b/package/civetweb/Config.in
-new file mode 100644
-index 0000000..8ca587b
---- /dev/null
-+++ b/package/civetweb/Config.in
-@@ -0,0 +1,26 @@
-+config BR2_PACKAGE_CIVETWEB
-+	bool "civetweb"
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	help
-+	  Full featured embedded web server with LUA support.
-+	  
-+	  https://sourceforge.net/projects/civetweb
-+
-+if BR2_PACKAGE_CIVETWEB
-+
-+config BR2_CIVETWEB_WITH_LUA
-+	bool "enable LUA support"
-+	# required by the bundled sqlite and lua code
-+	depends on BR2_LARGEFILE
-+	help
-+	  Enable Lua support in Civetweb. Note that this will use a
-+	  version of Lua and Sqlite bundled within the Civetweb
-+	  sources, and not the packages from Buildroot.
-+
-+comment "lua support requires largefile support in toolchain"
-+	depends on !BR2_LARGEFILE
-+
-+endif
-+
-+comment "civetweb requires a toolchain with PTHREAD support"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/civetweb/civetweb.mk b/package/civetweb/civetweb.mk
-new file mode 100644
-index 0000000..17b02fb
---- /dev/null
-+++ b/package/civetweb/civetweb.mk
-@@ -0,0 +1,53 @@
-+################################################################################
-+#
-+# civetweb
-+#
-+################################################################################
-+
-+CIVETWEB_VERSION = 1.3
-+CIVETWEB_SOURCE = civetweb-$(CIVETWEB_VERSION).tar.gz
-+CIVETWEB_SITE = http://github.com/sunsetbrew/civetweb/tarball/v$(CIVETWEB_VERSION)
-+CIVETWEB_LICENSE = MIT
-+CIVETWEB_LICENSE_FILES = LICENSE.md
-+
-+CIVETWEB_COPT = $(TARGET_CFLAGS) -DHAVE_POSIX_FALLOCATE=0
-+CIVETWEB_CONF_OPT = TARGET_OS=LINUX
-+CIVETWEB_LDFLAGS = $(TARGET_LDFLAGS)
-+CIVETWEB_HTMLDIR = /var/www
-+
-+ifneq ($(BR2_LARGEFILE),y)
-+	CIVETWEB_COPT += -DSQLITE_DISABLE_LFS
-+endif
-+
-+ifeq ($(BR2_INET_IPV6),y)
-+	CIVETWEB_CONF_OPT += WITH_IPV6=1
-+endif
-+
-+ifeq ($(BR2_CIVETWEB_WITH_LUA),y)
-+	CIVETWEB_CONF_OPT += WITH_LUA=1
-+endif
-+
-+ifeq ($(BR2_PACKAGE_OPENSSL),y)
-+	CIVETWEB_COPT += -DNO_SSL_DL -lcrypt -lssl
-+	CIVETWEB_DEPENDENCIES += openssl
-+else
-+	CIVETWEB_COPT += -DNO_SSL
-+endif
-+
-+define CIVETWEB_BUILD_CMDS
-+	$(MAKE) CC="$(TARGET_CC)" -C $(@D) build \
-+		$(CIVETWEB_CONF_OPT) \
-+		COPT="$(CIVETWEB_COPT)"
-+endef
-+
-+define CIVETWEB_INSTALL_TARGET_CMDS
-+	$(MAKE) CC="$(TARGET_CC)" -C $(@D) install \
-+		DOCUMENT_ROOT="$(CIVETWEB_HTMLDIR)" \
-+		HTMLDIR="$(TARGET_DIR)$(CIVETWEB_HTMLDIR)" \
-+		PREFIX="$(TARGET_DIR)/usr/local" \
-+		$(CIVETWEB_CONF_OPT) \
-+		COPT='$(CIVETWEB_COPT)'
-+endef
-+
-+$(eval $(generic-package))
-+
 -- 
 1.7.8.3
