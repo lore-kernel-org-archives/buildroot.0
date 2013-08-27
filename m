@@ -1,31 +1,37 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 27 Aug 2013 20:56:35 +0200
-Subject: [Buildroot] Patches to apply
-Message-ID: <20130827205635.29ab49e0@skate>
+From: Spenser Gilliland <spenser@gillilanding.com>
+Date: Tue, 27 Aug 2013 13:56:55 -0500
+Subject: [Buildroot] [PATCH 4/6] mesa3d: reorganize, modularize,
+ and bump to version 9.1.6
+In-Reply-To: <521B9010.4000004@mind.be>
+References: <1377373321-29732-1-git-send-email-spenser@gillilanding.com>
+ <1377373321-29732-5-git-send-email-spenser@gillilanding.com>
+ <521B9010.4000004@mind.be>
+Message-ID: <CAEBucnDpSFo3z4RUXxmhRS+tfg=yuQS0bx3aM+pA_FS81=Wi=A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Peter,
+Spelling mistakes are fixed.
+>
+>  Hi Spenser,
+>
+>  I think this patch should be split up into two or three patches:
+>
+> - Move out of X tree
+>
+> - Modularize
+>
+> - Bump
 
-Can you apply the following patches:
-
- http://patchwork.ozlabs.org/patch/269130/
- http://patchwork.ozlabs.org/patch/269193/ (after fixing the double parenthesis)
- http://patchwork.ozlabs.org/patch/268903/
- http://patchwork.ozlabs.org/patch/268660/
- http://patchwork.ozlabs.org/patch/267715/
- http://patchwork.ozlabs.org/patch/267716/
- http://patchwork.ozlabs.org/patch/269510/ (probably for 2013.08)
- http://patchwork.ozlabs.org/patch/269196/
+No problem.  I will change this to three patches and resubmit.
 
 Thanks,
+Spenser
 
-Thomas
+
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Spenser Gilliland
+Computer Engineer
+Doctoral Candidate
