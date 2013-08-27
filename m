@@ -1,47 +1,57 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 27 Aug 2013 22:41:35 +0200
-Subject: [Buildroot] [git commit] configs/p1010rdb: bump to the latest and
-	greatest versions
-Message-ID: <20130827210259.DE5BF9B3E6@busybox.osuosl.org>
+From: James Potts <bg@pottsylvania.com>
+Date: Tue, 27 Aug 2013 21:21:53 +0000 (UTC)
+Subject: [Buildroot] Kernel download problem.
+References: <25A17A429F5A404F8323F087DD6980C4@JohanW7>
+ <20130614194141.24ed6dee@skate>
+Message-ID: <loom.20130827T231336-119@post.gmane.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=be1a44df5a615e4fbb335582e620ebebe430a7e9
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Thomas Petazzoni <thomas.petazzoni@...> writes:
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- .../{linux-3.8.config => linux-3.10.config}        |    0
- configs/freescale_p1010rdb_defconfig               |    6 +++---
- 2 files changed, 3 insertions(+), 3 deletions(-)
+> On Fri, 14 Jun 2013 12:02:44 +0200, Sagaert Johan wrote:
+> 
+> > There seems to be a problem with the downloading of a kernel when a 
+longterm release is selected.
+> > 
+> > Buildroot tries 
+> > 
+> > http://www.kernel.org/pub//linux/kernel/v2.6/linux-2.6.34.14.tar.xz 
+> > 
+> > While the real kernel is at 
+> > https://www.kernel.org/pub/linux/kernel/v2.6/longterm/v2.6.34/linux-
+2.6.34.14.tar.xz
+> > 
+> > So maybe it should be copied to the buildroot sources mirror.
+> 
+> Could you show which Buildroot configuration exhibits the problem? From
+> a quick look, the only way for Buildroot to be told to use 2.6.34.14 is
+> by specifying a custom kernel version. And in this case, it's the user
+> responsibility to make sure the URL is correct. Why would we keep
+> 2.6.34.14 in our mirror specifically and not the myriad of other kernel
+> versions that the user may select?
 
-diff --git a/board/freescale/p1010rdb/linux-3.8.config b/board/freescale/p1010rdb/linux-3.10.config
-similarity index 100%
-rename from board/freescale/p1010rdb/linux-3.8.config
-rename to board/freescale/p1010rdb/linux-3.10.config
-diff --git a/configs/freescale_p1010rdb_defconfig b/configs/freescale_p1010rdb_defconfig
-index 9ee541f..21554d5 100644
---- a/configs/freescale_p1010rdb_defconfig
-+++ b/configs/freescale_p1010rdb_defconfig
-@@ -15,9 +15,9 @@ BR2_KERNEL_HEADERS_3_8=y
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.8.8"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.10.7"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
--BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/freescale/p1010rdb/linux-3.8.config"
-+BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/freescale/p1010rdb/linux-3.10.config"
- BR2_LINUX_KERNEL_UIMAGE=y
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="p1010rdb"
-@@ -30,4 +30,4 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BOARDNAME="P1010RDB_NOR"
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2013.04"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2013.07"
+Sorry to respond to an older post, but I just ran into the same problem.  
+The issue here is how you specify the kernel.  When not using the default 
+version, we have the option of "Custom version" or "Custom tarball."  When 
+you choose "Custom version" it asks you to fill in the version number, and 
+it builds the URL for downloading from kernel.org.  But this only works for 
+non-longterm kernels.
+
+I.e, if I choose "Custom version" and specify "2.6.34.6" as the version, 
+everything works as expected.  But if I choose "2.6.34.12" as the version, 
+buildroot breaks, because it doesn't build the correct URL.
+
+Mind you, this is due to silliness on the part of the kernel.org maintainers 
+IMO, for splitting different kernel sub-versions into different directories.
+
+Regardless, buildroot currently doesn't do what's expected, since you can't 
+just type in a kernel version and expect it to work.  It would be nice if it 
+either (a) knew where to find the various "longterm" kernels, or (b) gave a 
+warning that you might need to locate the kernel, and specify the URL under 
+the "Custom tarball" option.
+
+-Jim
