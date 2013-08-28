@@ -1,42 +1,77 @@
-From: Markos Chandras <markos.chandras@gmail.com>
-Date: Wed, 28 Aug 2013 12:45:58 +0100
-Subject: [Buildroot] Analysis of build failures
-In-Reply-To: <20130828090812.43a7f849@skate>
-References: <20130828063005.74A7952C1BE@lolut.humanoidz.org>
- <20130828090812.43a7f849@skate>
-Message-ID: <CAG2jQ8iVzb4P=6fZ5sdbBW7JkCCRhGALU-RjJcUJ_JxC8seTBQ@mail.gmail.com>
+From: Markos Chandras <markos.chandras@imgtec.com>
+Date: Wed, 28 Aug 2013 14:09:51 +0100
+Subject: [Buildroot] [PATCH] directfb: Add patch to use 'gcc' for linking
+	objects
+Message-ID: <1377695391-11965-1-git-send-email-markos.chandras@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Fixes
+http://autobuild.buildroot.net/results/fab819eee4002a9c392c48c1ebaca5c5b6555567/
 
-On 28 August 2013 08:08, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
->
->>   mips64el |                 directfb-1.6.3 | NOK | http://autobuild.buildroot.net/results/fab819eee4002a9c392c48c1ebaca5c5b6555567/
->
-> (cd .libs/libdirectfb_dummy.a.tmp && /home/test/test/2/output/host/usr/bin/mips64el-unknown-linux-gnu-ar x ../../.libs/libdirectfb_dummy.a)
-> /home/test/test/2/output/host/usr/bin/mips64el-unknown-linux-gnu-ld -o libdirectfb_dummy.o -r .libs/libdirectfb_dummy.a.tmp/*.o
-> /home/test/test/2/output/host/usr/bin/mips64el-unknown-linux-gnu-ld: .libs/libdirectfb_dummy.a.tmp/dummy.o: ABI is incompatible with that of the selected emulation
-> /home/test/test/2/output/host/usr/bin/mips64el-unknown-linux-gnu-ld: failed to merge target specific data of file .libs/libdirectfb_dummy.a.tmp/dummy.o
-> /home/test/test/2/output/host/usr/bin/mips64el-unknown-linux-gnu-ld: Attempt to do relocatable link with elf64-tradlittlemips input and elf32-ntradlittlemips output
-> /home/test/test/2/output/host/usr/bin/mips64el-unknown-linux-gnu-ld: final link failed: File in wrong format
->
-> Still the same problem of mixing MIPS ABIs, because DirectFB is calling
-> "ld" directly and not "gcc" to do the link.
->
-> I had proposed a solution in
-> http://lists.busybox.net/pipermail/buildroot/2013-June/073399.html and
-> http://lists.busybox.net/pipermail/buildroot/2013-June/073400.html, but
-> Markos Chandras said that the upstream package should rather be fixed
-> to use gcc instead of ld for linking. So I guess we should fix DirectFB here.
->
+Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
+---
+ package/directfb/directfb-use-gcc-link.patch | 35 ++++++++++++++++++++++++++++
+ package/directfb/directfb.mk                 |  2 ++
+ 2 files changed, 37 insertions(+)
+ create mode 100644 package/directfb/directfb-use-gcc-link.patch
 
-I will work on this and fix it properly. I will also submit a patch upstream.
-
+diff --git a/package/directfb/directfb-use-gcc-link.patch b/package/directfb/directfb-use-gcc-link.patch
+new file mode 100644
+index 0000000..ec6c0ea
+--- /dev/null
++++ b/package/directfb/directfb-use-gcc-link.patch
+@@ -0,0 +1,35 @@
++Add patch to use 'gcc' instead of 'ld' for linking
++
++The patch has been sent upstream but it has not been merged yet
++
++Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
++
++From 176ce06b40897a357fe76a558af517197325f188 Mon Sep 17 00:00:00 2001
++From: Markos Chandras <markos.chandras@imgtec.com>
++Date: Wed, 28 Aug 2013 10:56:32 +0100
++Subject: [PATCH] rules/libobject.make: Use gcc for linking
++
++Invoking 'ld' directly may miss some necessary linker flags which
++are usually passed by gcc. Therefore, use gcc for linking.
++
++Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
++---
++ rules/libobject.make | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/rules/libobject.make b/rules/libobject.make
++index bc670da..2cba658 100644
++--- a/rules/libobject.make
+++++ b/rules/libobject.make
++@@ -3,7 +3,7 @@
++ 	if test -d $<.tmp; then rmdir $<.tmp; fi
++ 	mkdir $<.tmp
++ 	(cd $<.tmp && $(AR) x ../../$<)
++-	$(LD) -o $@ -r $<.tmp/*.o
+++	$(CC) -nostdlib -o $@ -r $<.tmp/*.o
++ 	rm -f $<.tmp/*.o && rmdir $<.tmp
++ 
++ .PHONY: $(LTLIBRARIES:%.la=.libs/%.a)
++-- 
++1.8.3.2
++
+diff --git a/package/directfb/directfb.mk b/package/directfb/directfb.mk
+index c065eef..1d83a0b 100644
+--- a/package/directfb/directfb.mk
++++ b/package/directfb/directfb.mk
+@@ -11,6 +11,8 @@ DIRECTFB_SOURCE = DirectFB-$(DIRECTFB_VERSION).tar.gz
+ DIRECTFB_LICENSE = LGPLv2.1+
+ DIRECTFB_LICENSE_FILES = COPYING
+ DIRECTFB_INSTALL_STAGING = YES
++DIRECTFB_AUTORECONF = YES
++
+ DIRECTFB_CONF_OPT = \
+ 	--localstatedir=/var \
+ 	--disable-explicit-deps \
 -- 
-Regards,
-Markos Chandras
+1.8.3.2
