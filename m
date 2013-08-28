@@ -1,94 +1,28 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 28 Aug 2013 22:16:55 +0200
-Subject: [Buildroot] [PATCH] toolchain: add support for glibc
-In-Reply-To: <20130823064845.2ec4800d@skate>
-References: <1376847393-12397-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <521534E2.7020606@mind.be> <20130822232633.7ba9b14d@skate>
- <52169E42.2040904@mind.be> <20130823064845.2ec4800d@skate>
-Message-ID: <521E5AB7.1050702@mind.be>
+Date: Wed, 28 Aug 2013 23:09:50 +0200
+Subject: [Buildroot] Analysis of build failures
+In-Reply-To: <20130828090812.43a7f849@skate>
+References: <20130828063005.74A7952C1BE@lolut.humanoidz.org>
+ <20130828090812.43a7f849@skate>
+Message-ID: <521E671E.7090501@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-  Hi Thomas,
-
-  While testing your patch again, I discovered that "make source" doesn't 
-fetch the glibc source (same for eglibc) because BR2_PACKAGE_EGLIBC is 
-not y. This would be nice to fix still in 2013.08.
-
-On 08/23/13 06:48, Thomas Petazzoni wrote:
-> Dear Arnout Vandecappelle,
+On 08/28/13 09:08, Thomas Petazzoni wrote:
+>>      x86_64 |                       gpsd-3.9 | NOK |http://autobuild.buildroot.net/results/d58be37b9b18b37eab4acec9a6bbe28863ef4d22/
+> scons: *** [gpsd] Implicit dependency `/home/test/test/2/output/host/usr/x86_64-buildroot-linux-gnu/sysroot/usr/lib/libm.so' not found, needed by target `gpsd'.
 >
-> On Fri, 23 Aug 2013 01:26:58 +0200, Arnout Vandecappelle wrote:
->
->>> I don't know for sure, but the package aren't that complex, so I don't
->>> think merging would be very difficult.
->>>
->>> If I had to merge them, where should I put the common code?
->>
->>    I was thinking to have just one glibc package, with a choice to select
->> eglibc or glibc.
->
-> Well, I still would like the libc selection to be uClibc/glibc/eglibc
-> in the choice in toolchain/toolchain-buildroot/Config.in.
+> Not sure what's happening here. Surely if -lm was missing, we would be
+> seeing more build failures of gpsd, no?
 
-  Good point.
-
-> But I guess I
-> can probably make BR2_TOOLCHAIN_BUILDROOT_LIBC be equal to "glibc" in
-> both the glibc and eglibc case, which would be sufficient to make the
-> toolchain building logic use the "glibc" and "glibc-configure" targets
-> for both the eglibc and glibc selections.
-
-  You could also choose to keep eglibc.mk and make glibc the derivative. 
-Or would that be strange?
-
->
-> Want me to rework the patch in this direction?
-
-  Would be nice, but as you say, merging later wouldn't be so difficult. 
-Except of course that by that time they may have diverged more.
-
-
-> Note that later on, if we support several versions of glibc and eglibc,
-> then package/glibc/Config.in would look like:
->
-> if BR2_TOOLCHAIN_BUILDROOT_EGLIBC
->
-> 	... versions of eglibc ...
->
-> endif
->
-> if BR2_TOOLCHAIN_BUILDROOT_GLIBC
->
-> 	... versions of glibc ...
->
-> endif
-
-  Nothing wrong with that, right?
-
+  This one should be fixed by 5628776c4a4d29d0715633ea463b64cc19e19c5a.
 
 
   Regards,
   Arnout
-
->>>>     Shouldn't this lib be installed as well for a gdb without gdbserver?
->>>> I.e., shouldn't the condition be ifeq ($(BR2_PACKAGE_GDB),y)?
->>>
->>> That's a good question, I don't know. At the moment, the ct-ng backend,
->>> the external backend and the eglibc .mk file all copy libthread_db.so
->>> when gdbserver is enabled.
->>
->>    To be tested but it'd surprise me if gdb didn't need it.
->
-> I agree, it would have to be tested.
->
-> Thanks for your feedback,
->
-> Thomas
->
 
 
 -- 
