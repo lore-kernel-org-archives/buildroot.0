@@ -1,49 +1,42 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 28 Aug 2013 13:44:55 +0200
-Subject: [Buildroot] [git commit] sunxi-mali: bug fixes for pc and init
-	script
-Message-ID: <20130828121316.3C1159B5D2@busybox.osuosl.org>
+From: Markos Chandras <markos.chandras@gmail.com>
+Date: Wed, 28 Aug 2013 12:45:58 +0100
+Subject: [Buildroot] Analysis of build failures
+In-Reply-To: <20130828090812.43a7f849@skate>
+References: <20130828063005.74A7952C1BE@lolut.humanoidz.org>
+ <20130828090812.43a7f849@skate>
+Message-ID: <CAG2jQ8iVzb4P=6fZ5sdbBW7JkCCRhGALU-RjJcUJ_JxC8seTBQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3e1f853211fe0c0da4d7c07b587b0f7cb2909fea
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Thomas,
 
-fix bad escape sequences in init script and add correct lib for pc file.
+On 28 August 2013 08:08, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+>
+>>   mips64el |                 directfb-1.6.3 | NOK | http://autobuild.buildroot.net/results/fab819eee4002a9c392c48c1ebaca5c5b6555567/
+>
+> (cd .libs/libdirectfb_dummy.a.tmp && /home/test/test/2/output/host/usr/bin/mips64el-unknown-linux-gnu-ar x ../../.libs/libdirectfb_dummy.a)
+> /home/test/test/2/output/host/usr/bin/mips64el-unknown-linux-gnu-ld -o libdirectfb_dummy.o -r .libs/libdirectfb_dummy.a.tmp/*.o
+> /home/test/test/2/output/host/usr/bin/mips64el-unknown-linux-gnu-ld: .libs/libdirectfb_dummy.a.tmp/dummy.o: ABI is incompatible with that of the selected emulation
+> /home/test/test/2/output/host/usr/bin/mips64el-unknown-linux-gnu-ld: failed to merge target specific data of file .libs/libdirectfb_dummy.a.tmp/dummy.o
+> /home/test/test/2/output/host/usr/bin/mips64el-unknown-linux-gnu-ld: Attempt to do relocatable link with elf64-tradlittlemips input and elf32-ntradlittlemips output
+> /home/test/test/2/output/host/usr/bin/mips64el-unknown-linux-gnu-ld: final link failed: File in wrong format
+>
+> Still the same problem of mixing MIPS ABIs, because DirectFB is calling
+> "ld" directly and not "gcc" to do the link.
+>
+> I had proposed a solution in
+> http://lists.busybox.net/pipermail/buildroot/2013-June/073399.html and
+> http://lists.busybox.net/pipermail/buildroot/2013-June/073400.html, but
+> Markos Chandras said that the upstream package should rather be fixed
+> to use gcc instead of ld for linking. So I guess we should fix DirectFB here.
+>
 
-Signed-off-by: Spenser Gilliland <spenser@gillilanding.com>
-Reviewed-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/sunxi-mali/S80mali   |    2 +-
- package/sunxi-mali/glesv2.pc |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+I will work on this and fix it properly. I will also submit a patch upstream.
 
-diff --git a/package/sunxi-mali/S80mali b/package/sunxi-mali/S80mali
-index 6f51cc4..ecfbab9 100644
---- a/package/sunxi-mali/S80mali
-+++ b/package/sunxi-mali/S80mali
-@@ -5,7 +5,7 @@ install_driver() {
- 	OPTS=$2
- 
- 	modprobe $DRIVER $OPTS
--	maj=$(awk "$$2==\"${DRIVER}\" { print $$1; }" /proc/devices)
-+	maj=$(awk "\$2==\"${DRIVER}\" { print \$1; }" /proc/devices)
- 
- 	rm -f /dev/${DRIVER}
- 
-diff --git a/package/sunxi-mali/glesv2.pc b/package/sunxi-mali/glesv2.pc
-index 4e112ee..9273678 100644
---- a/package/sunxi-mali/glesv2.pc
-+++ b/package/sunxi-mali/glesv2.pc
-@@ -7,6 +7,6 @@ Name: glesv2
- Description: ARM Mali implementation of OpenGL ESv2
- Version: 2.0
- Requires:
--Libs: -L${libdir} -lGLESv2 -lGLES_CM -lUMP
-+Libs: -L${libdir} -lGLESv2 -lGLESv1_CM -lUMP
- Cflags: -I${includedir}/GLES2
- 
+-- 
+Regards,
+Markos Chandras
