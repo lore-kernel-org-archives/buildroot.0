@@ -1,10 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 28 Aug 2013 23:09:50 +0200
+Date: Wed, 28 Aug 2013 23:29:22 +0200
 Subject: [Buildroot] Analysis of build failures
 In-Reply-To: <20130828090812.43a7f849@skate>
 References: <20130828063005.74A7952C1BE@lolut.humanoidz.org>
  <20130828090812.43a7f849@skate>
-Message-ID: <521E671E.7090501@mind.be>
+Message-ID: <521E6BB2.4070907@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,14 +12,22 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 On 08/28/13 09:08, Thomas Petazzoni wrote:
->>      x86_64 |                       gpsd-3.9 | NOK |http://autobuild.buildroot.net/results/d58be37b9b18b37eab4acec9a6bbe28863ef4d22/
-> scons: *** [gpsd] Implicit dependency `/home/test/test/2/output/host/usr/x86_64-buildroot-linux-gnu/sysroot/usr/lib/libm.so' not found, needed by target `gpsd'.
+>>        i686 |                       bash-4.2 | NOK |http://autobuild.buildroot.net/results/b85caa22ddc13bdaaac25b9016fe902ade5027de/
+> ./mksyntax -o syntax.c
+> make[1]: execvp: ./mksyntax: Permission denied
+> ./mksignames lsignames.h
 >
-> Not sure what's happening here. Surely if -lm was missing, we would be
-> seeing more build failures of gpsd, no?
+> Strange. Missing executable permissions on this program? Why does it
+> happen only rarely?
 
-  This one should be fixed by 5628776c4a4d29d0715633ea463b64cc19e19c5a.
+  Parallel build problem. mksyntax is built twice, and is sometimes 
+executed while it is being rebuilt. I can't immediately see the problem 
+in the Makefile.in, though.
 
+  Non-parallel build takes about the twice the time of the configure 
+step, so I guess that's the easiest way out.
+
+  Patch follows.
 
   Regards,
   Arnout
