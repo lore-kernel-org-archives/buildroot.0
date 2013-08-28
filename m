@@ -1,203 +1,263 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 28 Aug 2013 08:35:29 +0200
-Subject: [Buildroot] [PATCH 10/12] toolchain: refactor Stack Smashing
-	Protection support
+Date: Wed, 28 Aug 2013 08:35:31 +0200
+Subject: [Buildroot] [PATCH 12/12] toolchain: improve mudflap support
 In-Reply-To: <1377671731-28656-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1377671731-28656-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1377671731-28656-11-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1377671731-28656-13-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This commit refactors how Stack Smashing Protection support is handled
-in Buildroot:
+The mudflap library is only useful if one uses the -fmudflap gcc
+option, to do more checks on pointers/arrays, which is typically not
+the case.
 
- *) It turns the BR2_TOOLCHAIN_BUILDROOT_USE_SSP option into an option
-    that only enables the SSP support in uClibc, when using the internal
-    toolchain backend.
+This commit:
 
- *) It adds an hidden BR2_TOOLCHAIN_HAS_SSP option that gets enabled
-    when the toolchain has SSP support. Here we have the usual dance:
-    glibc/eglibc in internal/external backend always select this
-    option, in the case of uClibc/internal, it gets selected when
-    BR2_TOOLCHAIN_BUILDROOT_USE_SSP is enabled, in the case of
-    uClibc/external, there is a new configuration option that the user
-    must select (or not) depending on whether the toolchain has SSP
-    support.
+ * Adds an option to enable/disable mudflap support at the gcc
+   level. By default, it is disabled, which saves a little bit of
+   build time.
 
- *) It adds a new options BR2_ENABLE_SSP in the "Build options" menu,
-    to enable the usage of SSP support, by adding
-    -fstack-protector-all to the CFLAGS.
+ * Adds a way for the external toolchain backend to tell whether
+   mudflap is supported or not by the external toolchain.
+
+ * Adds a global BR2_TOOLCHAIN_HAS_MUDFLAP hidden option, that
+   indicates whether the toolchain (internal or external) supports
+   mudflap.
+
+ * Adds a global BR2_ENABLE_MUDFLAP in "Build options" that allows the
+   user to build all packages with mudflap support. It depends on
+   BR2_TOOLCHAIN_HAS_MUDFLAP.
+
+WARNING WARNING: this currently doesn't result into a working system,
+even with just Busybox. Busybox init crashes with "/sbin/init: symbol
+lookup error: /lib/libmudflapth.so.0: undefined symbol:
+main". According to
+http://gcc.gnu.org/ml/gcc-help/2008-03/msg00165.html it is caused by
+-Wl,--gc-sections (which is used by Busybox), but even after removing
+it, it still doesn't work. I don't personaly have much interest in
+mudflap support, so as I couldn't get it to work easily, my suggestion
+would be to drop support for it entirely, unless someone steps up to
+fix this issue.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- Config.in                                 | 17 +++++++++++++++++
- package/Makefile.in                       |  2 +-
- package/psmisc/psmisc.mk                  |  2 +-
- package/uclibc/Config.in                  | 10 ++++++++++
- toolchain/Config.in                       |  1 +
- toolchain/helpers.mk                      |  3 ++-
- toolchain/toolchain-buildroot/Config.in.2 |  9 ---------
- toolchain/toolchain-common.in             |  3 +++
- toolchain/toolchain-external/Config.in    |  9 +++++++++
- 9 files changed, 44 insertions(+), 12 deletions(-)
+ Config.in                                | 20 ++++++++++++++++++++
+ package/Makefile.in                      | 12 ++++++++++++
+ package/gcc/Config.in.host               | 13 +++++++++++++
+ package/gcc/gcc-final/gcc-final.mk       |  8 ++++++++
+ package/gcc/gcc.mk                       |  6 ++++++
+ toolchain/helpers.mk                     | 12 ++++++++++++
+ toolchain/toolchain-common.in            |  3 +++
+ toolchain/toolchain-external/Config.in   |  9 +++++++++
+ toolchain/toolchain-external/ext-tool.mk | 11 +++++++++++
+ 9 files changed, 94 insertions(+)
 
 diff --git a/Config.in b/Config.in
-index 78dea3b..590c013 100644
+index 590c013..2ffdfc5 100644
 --- a/Config.in
 +++ b/Config.in
-@@ -398,6 +398,23 @@ config BR2_OPTIMIZE_S
+@@ -415,6 +415,26 @@ config BR2_ENABLE_SSP
+ comment "enabling Stack Smashing Protection requires support in the toolchain"
+ 	depends on !BR2_TOOLCHAIN_HAS_SSP
  
- endchoice
- 
-+config BR2_ENABLE_SSP
-+	bool "build code with Stack Smashing Protection"
-+	depends on BR2_TOOLCHAIN_HAS_SSP
++config BR2_ENABLE_MUDFLAP
++	bool "build code with Mudflap pointer debugging"
++	depends on BR2_TOOLCHAIN_HAS_MUDFLAP
 +	help
-+	  Enable stack smashing protection support using GCCs
-+	  -fstack-protector-all option.
++	   Instrument all risky pointer/array dereferencing
++	   operations, some standard library string/heap functions,
++	   and some other associated constructs with range/validity
++	   tests.  Modules so instrumented should be immune to buffer
++	   overflows, invalid heap use, and some other classes of
++	   C/C++ programming errors.
 +
-+	  See http://www.linuxfromscratch.org/hints/downloads/files/ssp.txt
-+          for details.
++	   See http://gcc.gnu.org/wiki/Mudflap_Pointer_Debugging for
++	   more details.
 +
-+	  Note that this requires the toolchain to have SSP
-+	  support. This is always the case for glibc and eglibc
-+	  toolchain, but is optional in uClibc toolchains.
++	   Note that this requires the toolchain to have Mudflap
++	   support.
 +
-+comment "enabling Stack Smashing Protection requires support in the toolchain"
-+	depends on !BR2_TOOLCHAIN_HAS_SSP
++comment "enabling Mudflap pointer debugging requires support in the toolchain"
++	depends on !BR2_TOOLCHAIN_HAS_MUDFLAP
 +
  config BR2_PREFER_STATIC_LIB
  	bool "prefer static libraries"
  	help
 diff --git a/package/Makefile.in b/package/Makefile.in
-index 0b1c33a..3eaa2b2 100644
+index 3eaa2b2..194da11 100644
 --- a/package/Makefile.in
 +++ b/package/Makefile.in
-@@ -129,7 +129,7 @@ TARGET_CFLAGS += -msep-data
- TARGET_CXXFLAGS += -msep-data
- endif
- 
--ifeq ($(BR2_TOOLCHAIN_BUILDROOT_USE_SSP),y)
-+ifeq ($(BR2_ENABLE_SSP),y)
- TARGET_CFLAGS += -fstack-protector-all
+@@ -134,6 +134,18 @@ TARGET_CFLAGS += -fstack-protector-all
  TARGET_CXXFLAGS += -fstack-protector-all
  endif
-diff --git a/package/psmisc/psmisc.mk b/package/psmisc/psmisc.mk
-index 1340ee6..61faeab 100644
---- a/package/psmisc/psmisc.mk
-+++ b/package/psmisc/psmisc.mk
-@@ -10,7 +10,7 @@ PSMISC_LICENSE = GPLv2
- PSMISC_LICENSE_FILES = COPYING
- PSMISC_DEPENDENCIES = ncurses $(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext)
  
--ifneq ($(BR2_TOOLCHAIN_BUILDROOT_USE_SSP),y)
-+ifneq ($(BR2_ENABLE_SSP),y)
- # Don't force -fstack-protector
- PSMISC_CONF_OPT = --disable-harden-flags
- endif
-diff --git a/package/uclibc/Config.in b/package/uclibc/Config.in
-index 037ca01..eeb3b83 100644
---- a/package/uclibc/Config.in
-+++ b/package/uclibc/Config.in
-@@ -130,6 +130,16 @@ config BR2_PTHREAD_DEBUG
++ifeq ($(BR2_ENABLE_MUDFLAP),y)
++ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
++TARGET_CFLAGS += -fmudflapth
++TARGET_CXXFLAGS += fmudflapth
++TARGET_LDFLAGS += -fmudflapth -ldl -lpthread -lmudflapth
++else
++TARGET_CFLAGS += -fmudflap
++TARGET_CXXFLAGS += -fmudflap
++TARGET_LDFLAGS += -fmudflap -ldl -lmudflap
++endif
++endif
++
+ ifeq ($(BR2_TOOLCHAIN_BUILDROOT)$(BR2_TOOLCHAIN_CTNG),y)
+ TARGET_CROSS=$(HOST_DIR)/usr/bin/$(GNU_TARGET_NAME)-
+ else
+diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
+index 111da3b..ac9c5dd 100644
+--- a/package/gcc/Config.in.host
++++ b/package/gcc/Config.in.host
+@@ -155,3 +155,16 @@ config BR2_GCC_ENABLE_OPENMP
+ 	depends on !BR2_PTHREADS_NONE && !BR2_avr32 && !BR2_arc
  	help
- 	  Build the thread library with debugging enabled.
- 
-+config BR2_TOOLCHAIN_BUILDROOT_USE_SSP
-+	bool "Enable stack protection support"
-+	select BR2_TOOLCHAIN_HAS_SSP
+ 	  Enable OpenMP support for the compiler
++
++config BR2_GCC_ENABLE_LIBMUDFLAP
++	bool "Enable libmudflap support"
++	select BR2_TOOLCHAIN_HAS_MUDFLAP
 +	help
-+	  Enable stack smashing protection support using GCCs
-+	  -fstack-protector-all option in uClibc.
++	  libmudflap is a gcc library used for the mudflap pointer
++	  debugging functionality. It is only needed if you intend to
++	  use the -fmudflap gcc flag.
 +
-+	  See http://www.linuxfromscratch.org/hints/downloads/files/ssp.txt
-+	  for details.
++	  See http://gcc.gnu.org/wiki/Mudflap_Pointer_Debugging and
++	  the help of the gcc -fmudflap option for more details.
 +
- config BR2_UCLIBC_INSTALL_UTILS
- 	bool "Compile and install uClibc utilities"
- 	depends on !BR2_bfin
-diff --git a/toolchain/Config.in b/toolchain/Config.in
-index 64cdf81..da9cd68 100644
---- a/toolchain/Config.in
-+++ b/toolchain/Config.in
-@@ -18,6 +18,7 @@ config BR2_TOOLCHAIN_USES_GLIBC
- 	select BR2_TOOLCHAIN_HAS_THREADS
- 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
- 	select BR2_TOOLCHAIN_HAS_SHADOW_PASSWORDS
-+	select BR2_TOOLCHAIN_HAS_SSP
- 	select BR2_TOOLCHAIN_LIBC_NEEDS_THREE_STAGE_BUILD
++	  If you're unsure, leave this option disabled.
+diff --git a/package/gcc/gcc-final/gcc-final.mk b/package/gcc/gcc-final/gcc-final.mk
+index 3ead53b..c153299 100644
+--- a/package/gcc/gcc-final/gcc-final.mk
++++ b/package/gcc/gcc-final/gcc-final.mk
+@@ -130,6 +130,14 @@ ifeq ($(BR2_INSTALL_OBJC),y)
+ HOST_GCC_FINAL_USR_LIBS += libobjc
+ endif
  
- config BR2_TOOLCHAIN_USES_UCLIBC
++ifeq ($(BR2_GCC_ENABLE_LIBMUDFLAP),y)
++ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
++HOST_GCC_FINAL_USR_LIBS += libmudflapth
++else
++HOST_GCC_FINAL_USR_LIBS += libmudflap
++endif
++endif
++
+ ifneq ($(HOST_GCC_FINAL_USR_LIBS),)
+ define HOST_GCC_FINAL_INSTALL_USR_LIBS
+ 	mkdir -p $(TARGET_DIR)/usr/lib
+diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
+index 20d6d14..7630299 100644
+--- a/package/gcc/gcc.mk
++++ b/package/gcc/gcc.mk
+@@ -119,6 +119,12 @@ else
+ HOST_GCC_COMMON_CONF_OPT += --disable-tls
+ endif
+ 
++ifeq ($(BR2_GCC_ENABLE_LIBMUDFLAP),y)
++HOST_GCC_COMMON_CONF_OPT += --enable-libmudflap
++else
++HOST_GCC_COMMON_CONF_OPT += --disable-libmudflap
++endif
++
+ ifeq ($(BR2_PTHREADS_NONE),y)
+ HOST_GCC_COMMON_CONF_OPT += \
+ 	--disable-threads \
 diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
-index 4c988a5..262c052 100644
+index 262c052..e8da6dc 100644
 --- a/toolchain/helpers.mk
 +++ b/toolchain/helpers.mk
-@@ -269,7 +269,8 @@ check_uclibc = \
- 	$(call check_uclibc_feature,__UCLIBC_HAS_LOCALE__,BR2_ENABLE_LOCALE,$${UCLIBC_CONFIG_FILE},Locale support) ;\
- 	$(call check_uclibc_feature,__UCLIBC_HAS_WCHAR__,BR2_USE_WCHAR,$${UCLIBC_CONFIG_FILE},Wide char support) ;\
- 	$(call check_uclibc_feature,__UCLIBC_HAS_THREADS__,BR2_TOOLCHAIN_HAS_THREADS,$${UCLIBC_CONFIG_FILE},Thread support) ;\
--	$(call check_uclibc_feature,__PTHREADS_DEBUG_SUPPORT__,BR2_TOOLCHAIN_HAS_THREADS_DEBUG,$${UCLIBC_CONFIG_FILE},Thread debugging support)
-+	$(call check_uclibc_feature,__PTHREADS_DEBUG_SUPPORT__,BR2_TOOLCHAIN_HAS_THREADS_DEBUG,$${UCLIBC_CONFIG_FILE},Thread debugging support) ;\
-+	$(call check_uclibc_feature,__UCLIBC_HAS_SSP__,BR2_TOOLCHAIN_HAS_SSP,$${UCLIBC_CONFIG_FILE},Stack Smashing Protection support)
+@@ -315,6 +315,18 @@ check_cplusplus = \
+ 	fi
  
  #
- # Check that the Buildroot configuration of the ABI matches the
-diff --git a/toolchain/toolchain-buildroot/Config.in.2 b/toolchain/toolchain-buildroot/Config.in.2
-index 1371c31..df26079 100644
---- a/toolchain/toolchain-buildroot/Config.in.2
-+++ b/toolchain/toolchain-buildroot/Config.in.2
-@@ -4,15 +4,6 @@ if BR2_TOOLCHAIN_BUILDROOT
- 
- comment "Toolchain Options"
- 
--config BR2_TOOLCHAIN_BUILDROOT_USE_SSP
--	bool "Enable stack protection support"
--	help
--	  Enable stack smashing protection support using GCCs
--	  -fstack-protector-all option.
--
--	  See http://www.linuxfromscratch.org/hints/downloads/files/ssp.txt
--	  for details.
--
- source "package/elf2flt/Config.in.host"
- 
- endif
++# Check that the external toolchain has mudflap support
++#
++# $1: cross-gcc path
++#
++check_mudflap = \
++	__CROSS_CC=$(strip $1) ; \
++	if ! test -f `$${__CROSS_CC} -print-file-name=libmudflap.a` ; then \
++		echo "Mudflap support is selected but is not available in external toolchain" ; \
++		exit 1 ; \
++	fi
++
++#
+ # Check that the cross-compiler given in the configuration exists
+ #
+ # $1: cross-gcc path
 diff --git a/toolchain/toolchain-common.in b/toolchain/toolchain-common.in
-index dc3bd2a..1085fb3 100644
+index 1085fb3..03eab7f 100644
 --- a/toolchain/toolchain-common.in
 +++ b/toolchain/toolchain-common.in
-@@ -32,6 +32,9 @@ config BR2_TOOLCHAIN_HAS_THREADS_DEBUG
- config BR2_TOOLCHAIN_HAS_SHADOW_PASSWORDS
+@@ -35,6 +35,9 @@ config BR2_TOOLCHAIN_HAS_SHADOW_PASSWORDS
+ config BR2_TOOLCHAIN_HAS_SSP
  	bool
  
-+config BR2_TOOLCHAIN_HAS_SSP
++config BR2_TOOLCHAIN_HAS_MUDFLAP
 +	bool
 +
  config BR2_ENABLE_LOCALE_PURGE
  	bool "Purge unwanted locales"
  	help
 diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-index ad1f203..11edc98 100644
+index 11edc98..ddba707 100644
 --- a/toolchain/toolchain-external/Config.in
 +++ b/toolchain/toolchain-external/Config.in
-@@ -921,6 +921,15 @@ config BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG
- 	  debugging support. If you don't know, leave the default
- 	  value, Buildroot will tell you if it's correct or not.
+@@ -13,6 +13,7 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_06
+ 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	select BR2_HOSTARCH_NEEDS_IA32_LIBS
++	select BR2_TOOLCHAIN_HAS_MUDFLAP
+ 	help
+ 	  Linaro toolchain for the ARM architecture. It uses Linaro
+ 	  GCC 2013.06 (based on gcc 4.8), Linaro GDB 2013.06 (based on
+@@ -949,6 +950,14 @@ config BR2_TOOLCHAIN_EXTERNAL_CXX
+ 	  support. If you don't know, leave the default value,
+ 	  Buildroot will tell you if it's correct or not.
  
-+config BR2_TOOLCHAIN_EXTERNAL_HAS_SSP
-+	bool "Toolchain has SSP support?"
-+	select BR2_TOOLCHAIN_HAS_SSP
++config BR2_TOOLCHAIN_EXTERNAL_MUDFLAP
++	bool "Toolchain has mudflap support?"
++	select BR2_TOOLCHAIN_HAS_MUDFLAP
 +	help
-+	  Selection this option if your external toolchain has Stack
-+	  Smashing Protection support enabled. If you don't know,
-+	  leave the default value, Buildroot will tell you if it's
-+	  correct or not.
++	  Select this option if your external toolchain has mudflap
++	  support. If you don't know, leave the default value,
++	  Buildroot will tell you if it's correct or not.
 +
- endif # BR2_TOOLCHAIN_EXTERNAL_CUSTOM_UCLIBC
+ config BR2_TOOLCHAIN_EXTRA_EXTERNAL_LIBS
+ 	string "Extra toolchain libraries to be copied to target"
+ 	help
+diff --git a/toolchain/toolchain-external/ext-tool.mk b/toolchain/toolchain-external/ext-tool.mk
+index 01be85c..fa2419f 100644
+--- a/toolchain/toolchain-external/ext-tool.mk
++++ b/toolchain/toolchain-external/ext-tool.mk
+@@ -55,6 +55,14 @@ ifeq ($(BR2_TOOLCHAIN_EXTERNAL_GLIBC),y)
+ LIB_EXTERNAL_LIBS+=libnss_files.so libnss_dns.so
+ endif
  
- config BR2_TOOLCHAIN_EXTERNAL_INET_RPC
++ifeq ($(BR2_ENABLE_MUDFLAP),y)
++ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
++LIB_EXTERNAL_LIBS+=libmudflapth.so
++else
++LIB_EXTERNAL_LIBS+=libmudflap.so
++endif
++endif
++
+ ifeq ($(BR2_INSTALL_LIBSTDCPP),y)
+ USR_LIB_EXTERNAL_LIBS+=libstdc++.so
+ endif
+@@ -376,6 +384,9 @@ $(STAMP_DIR)/ext-toolchain-checked: $(TOOLCHAIN_EXTERNAL_DEPENDENCIES)
+ 	if test "$(BR2_INSTALL_LIBSTDCPP)" = "y" ; then \
+ 		$(call check_cplusplus,$(TOOLCHAIN_EXTERNAL_CXX)) ; \
+ 	fi ; \
++	if test "$(BR2_TOOLCHAIN_EXTERNAL_MUDFLAP)" = "y" ; then \
++		$(call check_mudflap,$(TOOLCHAIN_EXTERNAL_CC)) ; \
++	fi ; \
+ 	if test "$(BR2_TOOLCHAIN_EXTERNAL_UCLIBC)" = "y" ; then \
+ 		$(call check_uclibc,$${SYSROOT_DIR}) ; \
+ 	else \
 -- 
 1.8.1.2
