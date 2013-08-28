@@ -1,43 +1,42 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 28 Aug 2013 16:17:45 +0200
-Subject: [Buildroot] [PATCH] gcc-final: Drop obsolete code for handling
-	lib64
-In-Reply-To: <1377687378-19688-1-git-send-email-markos.chandras@imgtec.com>
- (Markos Chandras's message of "Wed, 28 Aug 2013 11:56:18 +0100")
-References: <1377687378-19688-1-git-send-email-markos.chandras@imgtec.com>
-Message-ID: <87txi9hpbq.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Wed, 28 Aug 2013 16:20:12 +0200
+Subject: [Buildroot] [git commit] redis: fix build with ccache enabled
+Message-ID: <20130828142015.4255F9B5D0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Markos" == Markos Chandras <markos.chandras@imgtec.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=e5088380d3aa475fe2457fc12a47353dd66c4c19
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Markos> Since 5628776c4a4d29d0715633ea463b64cc19e19c5a
- Markos> "toolchain-external: fix lib64 symlinks"
+Some parts of redis fail to build when ccache is enabled, due to one of our
+own patches. The construct
+    make CC=$(CC) target1 target2
+would result in
+    make CC=ccache <tuple>-gcc target1 target2
 
- Markos> lib64 is a symlink to lib so there is no reason to copy the libraries
- Markos> to lib64 anymore. This fixes multiple building problems
- Markos> for buildroot toolchains:
+and here <tuple>-gcc would be treated as a target and the compiler used
+would be just 'ccache'.
 
- Markos> [...]
- Markos> mv: 'output/host/usr/mips64-buildroot-linux-uclibc/sysroot/lib64/libuClibc-0.9.33.2.so'
- Markos> and 'output/host/usr/mips64-buildroot-linux-uclibc/sysroot/lib/libuClibc-0.9.33.2.so'
- Markos> are the same file
- Markos> mv: 'output/host/usr/mips64-buildroot-linux-uclibc/sysroot/lib64/libutil-0.9.33.2.so'
- Markos> and 'output/host/usr/mips64-buildroot-linux-uclibc/sysroot/lib/libutil-0.9.33.2.so'
- Markos> are the same file
- Markos> mv: 'output/host/usr/mips64-buildroot-linux-uclibc/sysroot/lib64/libutil.so.0'
- Markos> and 'output/host/usr/mips64-buildroot-linux-uclibc/sysroot/lib/libutil.so.0'
- Markos> are the same file
- Markos> rmdir: failed to remove
- Markos> 'output/host/usr/mips64-buildroot-linux-uclibc/sysroot/lib64': Not a directory
- Markos> [...]
+Reported-by: Johan Sagaert <sagaert.johan@skynet.be>
+Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/redis/redis-001-uclibc.patch |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
- Markos> Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
-
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/redis/redis-001-uclibc.patch b/package/redis/redis-001-uclibc.patch
+index 8762ca2..01657d0 100644
+--- a/package/redis/redis-001-uclibc.patch
++++ b/package/redis/redis-001-uclibc.patch
+@@ -39,7 +39,7 @@ diff -ur old/src/Makefile new/src/Makefile
+  	echo PREV_FINAL_CFLAGS=$(FINAL_CFLAGS) >> .make-settings
+  	echo PREV_FINAL_LDFLAGS=$(FINAL_LDFLAGS) >> .make-settings
+ -	-(cd ../deps && $(MAKE) $(DEPENDENCY_TARGETS))
+-+	-(cd ../deps && $(MAKE) CC=$(CC) $(DEPENDENCY_TARGETS))
+++	-(cd ../deps && $(MAKE) CC="$(CC)" $(DEPENDENCY_TARGETS))
+  
+  .PHONY: persist-settings
+  
