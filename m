@@ -1,41 +1,45 @@
 From: =?ISO-8859-1?Q?Ezequiel_Garc=EDa?= <ezequiel@vanguardiasur.com.ar>
-Date: Wed, 28 Aug 2013 13:24:10 -0300
-Subject: [Buildroot] [PATCH v2 2/2] toolchain-external: Add Sourcery
- CodeBench for Nios-II
-In-Reply-To: <20130828181539.74d30a31@skate>
+Date: Wed, 28 Aug 2013 13:30:58 -0300
+Subject: [Buildroot] [PATCH v2 0/2] Introducing Nios-II architecture
+In-Reply-To: <20130828181818.2efd6bf5@skate>
 References: <1377115128-29749-1-git-send-email-ezequiel.garcia@free-electrons.com>
- <1377115128-29749-3-git-send-email-ezequiel.garcia@free-electrons.com>
- <20130828181539.74d30a31@skate>
-Message-ID: <CAAEAJfDkj=c7Z7Npwi4KO98aFE+kEzMCR_3qxkfiMc94_8JL_A@mail.gmail.com>
+ <20130828181818.2efd6bf5@skate>
+Message-ID: <CAAEAJfBUUm5vefFKOctxYQdLxD3NS=pbVt=knQsoKcjqdZ-Vtw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 28 August 2013 13:15, Thomas Petazzoni
+On 28 August 2013 13:18, Thomas Petazzoni
 <thomas.petazzoni@free-electrons.com> wrote:
->
 > Dear Ezequiel Garcia,
 >
-> On Wed, 21 Aug 2013 16:58:48 -0300, Ezequiel Garcia wrote:
-> > From: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-> >
-> > This commit adds the pre-built Sourcery CodeBench toolchains
-> > currently available for the Nios-II architecture.
-> >
-> > Signed-off-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+> On Wed, 21 Aug 2013 16:58:46 -0300, Ezequiel Garcia wrote:
+>> From: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+>>
+>> This is the second version of the series adding basic support for
+>> Altera's Nios-II architecture.
+>> Only basic support added so far, but more patches will hopefully follow.
 >
-> I have a comment below, but I guess it can easily be fixed by Peter
-> when committing, unless Ezequiel wants to send an updated version to
-> fix it. Once it is fixed, this patch has my:
+> Nice!
 >
-> Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Once this series is committed, I'll add NIOS-II to the autobuilders.
+> Are you willing to look at the resulting package build failures?
 >
 
-Yes, I'll fix and re-send.
+Sure. However, not all of them will be easy to fix, I'm afraid.
 
-Thanks,
+I'm currently *trying* to port strace, which is probably one of the most
+important package lacks we currently have.
+
+> What's nice is that the toolchain is modern: gcc 4.7, glibc 2.17,
+> binutils 2.23. Hopefully, this will mean that the number of issues
+> should not be too huge.
+>
+
+Indeed. I'm trying to follow the toolchain mainline process so
+I hope we'll be able to support the internal toolchain soon!
 -- 
 Ezequiel Garc?a, VanguardiaSur
 www.vanguardiasur.com.ar
