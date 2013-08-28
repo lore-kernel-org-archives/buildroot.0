@@ -1,31 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 28 Aug 2013 08:37:51 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2013-08-27
-In-Reply-To: <20130828063005.74A7952C1BE@lolut.humanoidz.org>
-References: <20130828063005.74A7952C1BE@lolut.humanoidz.org>
-Message-ID: <20130828083751.3fdd9462@skate>
+Date: Wed, 28 Aug 2013 08:35:21 +0200
+Subject: [Buildroot] [PATCH 02/12] eglibc: libstdc++ is not part of the C
+	library
+In-Reply-To: <1377671731-28656-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1377671731-28656-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1377671731-28656-3-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter,
+For some reason, the eglibc.mk file was trying to install libstdc++.so
+from eglibc to the target. But the C++ standard library is provided by
+GCC, not by the C library.
 
-On Wed, 28 Aug 2013 08:30:05 +0200 (CEST), Thomas Petazzoni wrote:
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/eglibc/eglibc.mk | 7 -------
+ 1 file changed, 7 deletions(-)
 
->        arm |                  qt5base-5.0.2 | NOK | http://autobuild.buildroot.net/results/d268003b0a3402dde930a72ab467ee393b2ebe64/
-
-I believe this one should be fixed by the patch that Spenser has posted
-at http://patchwork.ozlabs.org/patch/269662/. It should probably be
-applied to 2013.08.
-
-Thanks,
-
-Thomas
+diff --git a/package/eglibc/eglibc.mk b/package/eglibc/eglibc.mk
+index 8873a06..fe12299 100644
+--- a/package/eglibc/eglibc.mk
++++ b/package/eglibc/eglibc.mk
+@@ -89,17 +89,10 @@ ifeq ($(BR2_PACKAGE_GDB_SERVER),y)
+ EGLIBC_LIBS_LIB += libthread_db.so
+ endif
+ 
+-ifeq ($(BR2_INSTALL_LIBSTDCPP),y)
+-EGLIBC_LIBS_USR_LIB += libstdc++.so
+-endif
+-
+ define EGLIBC_INSTALL_TARGET_CMDS
+ 	for libs in $(EGLIBC_LIBS_LIB); do \
+ 		$(call copy_toolchain_lib_root,$(STAGING_DIR)/,,lib,$$libs,/lib) ; \
+ 	done
+-	for libs in $(EGLIBC_LIBS_USR_LIB); do \
+-		$(call copy_toolchain_lib_root,$(STAGING_DIR)/,,lib,$$libs,/usr/lib) ; \
+-	done
+ endef
+ 
+ $(eval $(autotools-package))
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+1.8.1.2
