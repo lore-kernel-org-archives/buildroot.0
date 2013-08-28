@@ -1,74 +1,59 @@
-From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Wed, 28 Aug 2013 10:26:37 +0200
-Subject: [Buildroot] [PATCH v2 2/3] package: fix generic extract target
- for top-level parallel make
-In-Reply-To: <521C40AB.2000107@mind.be>
-References: <1374138746-23279-1-git-send-email-fabio.porcedda@gmail.com>
- <1374138746-23279-3-git-send-email-fabio.porcedda@gmail.com>
- <521513E3.8080401@mind.be>
- <CAHkwnC_6k4tY_KRudG7yWp1gOi5WZnYKDwWv2gh_xBtCQhJesQ@mail.gmail.com>
- <52163548.2020108@mind.be>
- <CAHkwnC9CqFDM=mb7zaA7VDydfGKe=mjGT9ZzkP3obUgzd02mMA@mail.gmail.com>
- <521C40AB.2000107@mind.be>
-Message-ID: <CAHkwnC-Fxf1hQMO-=PEcAyyRk56=Ncf2+t-xVv_DAkB8fZMYdw@mail.gmail.com>
+From: Nicolas =?utf-8?B?TcOpbsOpZ2FsZQ==?= <nicolas.menegale@openwide.fr>
+Date: Wed, 28 Aug 2013 11:48:59 +0200 (CEST)
+Subject: [Buildroot] [PATCH v2 1/1] libffi: minor corrections in post
+	install hooks
+Message-ID: <1493594999.5624151.1377683339178.JavaMail.root@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Aug 27, 2013 at 8:01 AM, Arnout Vandecappelle <arnout@mind.be> wrote:
-> On 08/26/13 10:29, Fabio Porcedda wrote:
->>
->> On Thu, Aug 22, 2013 at 5:59 PM, Arnout Vandecappelle <arnout@mind.be>
->> wrote:
->>>
->>> On 22/08/13 09:44, Fabio Porcedda wrote:
->
-> [snip]
->
->>>> To be able to change the others targets i need to add stamp file for
->>>> every target inside $$($(2)_DEPENDENCIES,
->>>> i need to do that because a file cannot depends on a non existing file.
->>>
->>>
->>>
->>>   That's not true. Take the following Makefile:
->>>
->>> ----------------
->>> %.source:
->>>          touch $@
->>>
->>> %.extract: %.source
->>>          touch $@
->>>
->>> %.config: %.extract
->>>          touch $@
->>>
->>> %.build: %.config
->>>          touch $@
->>>
->>> X_DEPS = y z
->>>
->>> x.config: $(X_DEPS)
->>
->>
->> The problem with this solution is that the "x.config" target is
->> reevaluated every time because it does not depends on a virtual
->> target, the only solution that i found is to add a stamp file for
->> every dependencies.
->> Using virtual target as dependency is fine only with virtual targets.
->
->
->  Ah yes, you're right.
->
->  However, using the order-only rule that you mentioned in reply to Thomas
-> solves the problem. So
->
-> x.config: | $(X_DEPS)
+In order to be sure that we just deal with the includes related with
+the actual package described into libffi.mk it is better to explicitly
+specify the version of the libffi we deal with into the post install
+hook.
+As dev files are deprecated in target rootfs target post install
+hook was also deleted.
 
-That's great, I didn't know that.
-I'm working on the v3.
+Signed-off-by: Nicolas M?n?gale <nicolas.menegale@openwide.fr>
+---
+v2: third commit
+Commit log was clarified.
+Also the post install target hook was removed due to the reason
+explained in the current commit log.
+---
+ package/libffi/libffi.mk |   11 +----------
+ 1 file changed, 1 insertion(+), 10 deletions(-)
 
-Regards
-Fabio Porcedda
+diff --git a/package/libffi/libffi.mk b/package/libffi/libffi.mk
+index 0ad5c84..8c84924 100644
+--- a/package/libffi/libffi.mk
++++ b/package/libffi/libffi.mk
+@@ -14,7 +14,7 @@ LIBFFI_AUTORECONF = YES
+ # Move the headers to the usual location, and adjust the .pc file
+ # accordingly.
+ define LIBFFI_MOVE_STAGING_HEADERS
+-	mv $(STAGING_DIR)/usr/lib/libffi-*/include/*.h $(STAGING_DIR)/usr/include/
++	mv $(STAGING_DIR)/usr/lib/libffi-$(LIBFFI_VERSION)/include/*.h $(STAGING_DIR)/usr/include/
+ 	$(SED) '/^includedir.*/d' -e '/^Cflags:.*/d' \
+ 		$(STAGING_DIR)/usr/lib/pkgconfig/libffi.pc
+ 	rm -rf $(TARGET_DIR)/usr/lib/libffi-*
+@@ -22,15 +22,6 @@ endef
+ 
+ LIBFFI_POST_INSTALL_STAGING_HOOKS += LIBFFI_MOVE_STAGING_HEADERS
+ 
+-# Similar for target headers
+-define LIBFFI_MOVE_TARGET_HEADERS
+-	install -d $(TARGET_DIR)/usr/include/
+-	mv $(TARGET_DIR)/usr/lib/libffi-*/include/*.h $(TARGET_DIR)/usr/include/
+-	rm -rf $(TARGET_DIR)/usr/lib/libffi-*
+-endef
+-
+-LIBFFI_POST_INSTALL_TARGET_HOOKS += LIBFFI_MOVE_TARGET_HEADERS
+-
+ HOST_LIBFFI_AUTORECONF = YES
+ 
+ $(eval $(autotools-package))
+-- 
+1.7.9.5
