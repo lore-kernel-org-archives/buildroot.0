@@ -1,75 +1,75 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 28 Aug 2013 08:35:19 +0200
-Subject: [Buildroot] [PATCH 00/12] Toolchain updates
-Message-ID: <1377671731-28656-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Wed, 28 Aug 2013 08:35:24 +0200
+Subject: [Buildroot] [PATCH 05/12] gcc: fix Objective-C support
+In-Reply-To: <1377671731-28656-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1377671731-28656-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1377671731-28656-6-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+This commit fixes the Objective-C support in the gcc package by making
+sure that the runtime Objective-C library is properly installed to the
+target.
 
-Here is a set of updates/improvements to the internal toolchain
-backend (with some impacts on the external toolchain one). Mainly it:
+It also takes this opportunity to slightly reword the Config.in option
+help text to have a more meaningful explanation.
 
- * Allows to build the toolchain with only two passes of gcc build as
-   opposed to three. Of course, this is only possible in the
-   appropriate situations. This patch had already been posted
-   previously to the list, and was rebased on top of current master.
+Finally, it fixes the gcc-final.mk code to use the correct
+BR2_INSTALL_OBJC option rather than the non-existing
+BR2_GCC_CROSS_OBJC option, to decide whether Objective-C support
+should be enabled or not in the cross-compiler.
 
- * Fixes Fortran and Objective-C support, moves the C++ option close
-   to the one for Fortran and Objective-C.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/gcc/Config.in.host         | 6 ++++--
+ package/gcc/gcc-final/gcc-final.mk | 6 +++++-
+ 2 files changed, 9 insertions(+), 3 deletions(-)
 
- * Adds support for glibc, in addition to eglibc. Note that as
-   suggested by Arnout, I'm proposing a single package to handle both
-   libraries.
-
- * Refactors the Stack Smashing Protection support.
-
- * Refactors the Mudflap support. Note however that I didn't manage to
-   get a Busybox system with mudflap enabled to boot. I am personaly
-   not that much interested in mudflap support, so unless someone
-   steps up to look at the issue, I think I'll propose to remove
-   Mudflap support entirely.
-
- * Makes a small number of related cleanups.
-
-Thomas Petazzoni (12):
-  package/Makefile.in: fix incorrect comment
-  eglibc: libstdc++ is not part of the C library
-  toolchain-internal: skip gcc-intermediate when possible
-  gcc: fix Fortran support
-  gcc: fix Objective-C support
-  gcc: move C++ support option next to Fortran/Objective-C
-  toolchain: add support for glibc
-  gcc/gcc-final: use the common HOST_GCC_CONFIGURE_SYMLINK macro
-  gcc: force symlink creation
-  toolchain: refactor Stack Smashing Protection support
-  toolchain: move elf2flt option inclusion to
-    toolchain-buildroot/Config.in
-  toolchain: improve mudflap support
-
- Config.in                                    | 37 +++++++++++++++
- package/Makefile.in                          | 17 +++++--
- package/gcc/Config.in.host                   | 53 ++++++++++++++++++---
- package/gcc/gcc-final/gcc-final.mk           | 31 ++++++++----
- package/gcc/gcc-initial/gcc-initial.mk       |  8 ++++
- package/gcc/gcc.mk                           |  8 +++-
- package/{eglibc/eglibc.mk => glibc/glibc.mk} | 70 ++++++++++++++++------------
- package/psmisc/psmisc.mk                     |  2 +-
- package/uclibc/Config.in                     | 11 +++++
- package/uclibc/uclibc.mk                     |  5 +-
- toolchain/Config.in                          | 11 ++++-
- toolchain/helpers.mk                         | 15 +++++-
- toolchain/toolchain-buildroot/Config.in      | 25 +++++++++-
- toolchain/toolchain-buildroot/Config.in.2    | 31 ------------
- toolchain/toolchain-common.in                |  6 +++
- toolchain/toolchain-external/Config.in       | 18 +++++++
- toolchain/toolchain-external/ext-tool.mk     | 11 +++++
- 17 files changed, 270 insertions(+), 89 deletions(-)
- rename package/{eglibc/eglibc.mk => glibc/glibc.mk} (58%)
- delete mode 100644 toolchain/toolchain-buildroot/Config.in.2
-
+diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
+index b440ee2..a7dbbb6 100644
+--- a/package/gcc/Config.in.host
++++ b/package/gcc/Config.in.host
+@@ -113,10 +113,12 @@ config BR2_EXTRA_GCC_CONFIG_OPTIONS
+ 	  initial, gcc intermediate and gcc final passes.
+ 
+ config BR2_INSTALL_OBJC
+-	bool "Build/install Objective-C compiler and runtime?"
++	bool "Enable Objective-C support"
+ 	depends on !BR2_avr32
+ 	help
+-	  Build/install Objective-C compiler and runtime?
++	  Enable the support for the Objective-C language in the
++	  cross-compiler, and install the Objective-C runtime to the
++	  target.
+ 
+ config BR2_INSTALL_FORTRAN
+ 	bool "Enable Fortran support"
+diff --git a/package/gcc/gcc-final/gcc-final.mk b/package/gcc/gcc-final/gcc-final.mk
+index b5e35b0..02c4007 100644
+--- a/package/gcc/gcc-final/gcc-final.mk
++++ b/package/gcc/gcc-final/gcc-final.mk
+@@ -35,7 +35,7 @@ HOST_GCC_FINAL_PRE_CONFIGURE_HOOKS += HOST_GCC_FINAL_CONFIGURE_SYMLINK
+ GCC_FINAL_CROSS_LANGUAGES-y = c
+ GCC_FINAL_CROSS_LANGUAGES-$(BR2_INSTALL_LIBSTDCPP) += c++
+ GCC_FINAL_CROSS_LANGUAGES-$(BR2_INSTALL_FORTRAN) += fortran
+-GCC_FINAL_CROSS_LANGUAGES-$(BR2_GCC_CROSS_OBJC)    += objc
++GCC_FINAL_CROSS_LANGUAGES-$(BR2_INSTALL_OBJC)    += objc
+ GCC_FINAL_CROSS_LANGUAGES = $(subst $(space),$(comma),$(GCC_FINAL_CROSS_LANGUAGES-y))
+ 
+ HOST_GCC_FINAL_CONF_OPT = \
+@@ -131,6 +131,10 @@ ifeq ($(BR2_INSTALL_FORTRAN),y)
+ HOST_GCC_FINAL_USR_LIBS += libgfortran
+ endif
+ 
++ifeq ($(BR2_INSTALL_OBJC),y)
++HOST_GCC_FINAL_USR_LIBS += libobjc
++endif
++
+ ifneq ($(HOST_GCC_FINAL_USR_LIBS),)
+ define HOST_GCC_FINAL_INSTALL_USR_LIBS
+ 	mkdir -p $(TARGET_DIR)/usr/lib
 -- 
 1.8.1.2
