@@ -1,27 +1,22 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 29 Aug 2013 00:00:25 +0200
-Subject: [Buildroot] [PATCH] kmod: fix build failure on gcc < 4.6 caused
-	by _Static_assert()
-In-Reply-To: <1377706232-26988-1-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Wed, 28 Aug 2013 18:10:32 +0200")
-References: <1377706232-26988-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <87d2oxh3wm.fsf@dell.be.48ers.dk>
+From: Ryan Wilkins <ryan@deadfrog.net>
+Date: Wed, 28 Aug 2013 19:22:47 -0400
+Subject: [Buildroot] MesaLib
+Message-ID: <A3285828-B3A0-4875-98F8-96A2BF7DD889@deadfrog.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+I'm using buildroot 2013.08-rc2 and ran across an error on compile where MesaLib-7.10.3 can't be found.  Looking at the sources.buildroot.net server, 7.10.1 exists but not 7.10.3.  Output is below.
 
- Thomas> This commit introduces a patch to kmod that ensures _Static_assert()
- Thomas> is only used if available. The patch has been submitted upstream.
+--2013-08-28 17:15:25--  http://sources.buildroot.net//MesaLib-7.10.3.tar.gz
+Resolving sources.buildroot.net (sources.buildroot.net)... 176.9.16.109  
+Connecting to sources.buildroot.net (sources.buildroot.net)|176.9.16.109|:80... connected.
+HTTP request sent, awaiting response... 404 Not Found
+2013-08-28 17:15:25 ERROR 404: Not Found.
 
- Thomas> Fixes:
 
- Thomas>   http://autobuild.buildroot.net/results/9daf0f46642020591731e20d3bf9041ff6259846/
+Should 7.10.3 be in the repository or is the buildroot source wrong?
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+Ryan Wilkins
