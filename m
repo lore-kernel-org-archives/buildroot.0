@@ -1,58 +1,74 @@
-From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Wed, 28 Aug 2013 10:02:12 +0200
-Subject: [Buildroot] autobuild statistics graph
-In-Reply-To: <20130828094824.5f917f48@skate>
-References: <CAAXf6LW8axKFZpiQFjmqWcFXTEqaHoD3uX=hk5ZSQbmz_7BabA@mail.gmail.com>
- <20130828091036.1a91b786@skate>
- <CAAXf6LWFMtmDpFvZODkd3N_Wsk-VwNP-QVkquRhn3B2aiOjCqg@mail.gmail.com>
- <20130828094824.5f917f48@skate>
-Message-ID: <CAAXf6LWz7_RYds7Zr7kdQHvhYXtNO1WEP+RX+0TTthfZURvi+Q@mail.gmail.com>
+From: Fabio Porcedda <fabio.porcedda@gmail.com>
+Date: Wed, 28 Aug 2013 10:26:37 +0200
+Subject: [Buildroot] [PATCH v2 2/3] package: fix generic extract target
+ for top-level parallel make
+In-Reply-To: <521C40AB.2000107@mind.be>
+References: <1374138746-23279-1-git-send-email-fabio.porcedda@gmail.com>
+ <1374138746-23279-3-git-send-email-fabio.porcedda@gmail.com>
+ <521513E3.8080401@mind.be>
+ <CAHkwnC_6k4tY_KRudG7yWp1gOi5WZnYKDwWv2gh_xBtCQhJesQ@mail.gmail.com>
+ <52163548.2020108@mind.be>
+ <CAHkwnC9CqFDM=mb7zaA7VDydfGKe=mjGT9ZzkP3obUgzd02mMA@mail.gmail.com>
+ <521C40AB.2000107@mind.be>
+Message-ID: <CAHkwnC-Fxf1hQMO-=PEcAyyRk56=Ncf2+t-xVv_DAkB8fZMYdw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
-
-On Wed, Aug 28, 2013 at 9:48 AM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Dear Thomas De Schampheleire,
->
-> On Wed, 28 Aug 2013 09:42:45 +0200, Thomas De Schampheleire wrote:
->
->> > Sounds sane. How would you compute what the reference is? Look at the
->> > build results of the last 30 days (i.e the ones that appear on the
->> > plot) ?
+On Tue, Aug 27, 2013 at 8:01 AM, Arnout Vandecappelle <arnout@mind.be> wrote:
+> On 08/26/13 10:29, Fabio Porcedda wrote:
 >>
->> I was actually thinking of using the current calculated percentages.
->> So say on day 1 there are 100 builds, with 70 successful, and on day 2
->> there have been 50 builds with 25 successful, then I would plot 70%
->> for the first day and 50% for the second.
+>> On Thu, Aug 22, 2013 at 5:59 PM, Arnout Vandecappelle <arnout@mind.be>
+>> wrote:
+>>>
+>>> On 22/08/13 09:44, Fabio Porcedda wrote:
 >
-> Ah right, makes sense. The percentages are in fact already shown in the
-> table above.
+> [snip]
 >
->> Given the variation in the configurations that are being built, a
->> rising success line from one day to the next cannot be interpreted as
->> an absolute reduction of bugs (could have been 'chance' because the
->> bad configurations weren't built on the second day) but if you look at
->> the trend it should tell us something.
+>>>> To be able to change the others targets i need to add stamp file for
+>>>> every target inside $$($(2)_DEPENDENCIES,
+>>>> i need to do that because a file cannot depends on a non existing file.
+>>>
+>>>
+>>>
+>>>   That's not true. Take the following Makefile:
+>>>
+>>> ----------------
+>>> %.source:
+>>>          touch $@
+>>>
+>>> %.extract: %.source
+>>>          touch $@
+>>>
+>>> %.config: %.extract
+>>>          touch $@
+>>>
+>>> %.build: %.config
+>>>          touch $@
+>>>
+>>> X_DEPS = y z
+>>>
+>>> x.config: $(X_DEPS)
+>>
+>>
+>> The problem with this solution is that the "x.config" target is
+>> reevaluated every time because it does not depends on a virtual
+>> target, the only solution that i found is to add a stamp file for
+>> every dependencies.
+>> Using virtual target as dependency is fine only with virtual targets.
 >
-> Right.
 >
->> Here is some untested code that I think should do the trick (I don't
->> have a PHP environment at hand here):
+>  Ah yes, you're right.
 >
-> Your patch is now live at http://autobuild.buildroot.org/stats.php and
-> it seems to work. If you confirm, then I'll commit and push your patch,
-> with you as the author.
+>  However, using the order-only rule that you mentioned in reply to Thomas
+> solves the problem. So
+>
+> x.config: | $(X_DEPS)
 
-That looks good, yes, thanks for testing so quickly.
-One consideration: although the table doesn't have to be larger, the
-30 days for the graph is somewhat limited. If we want to see a trend,
-then I think a few months can be more interesting. So what about
-changing the SQL query to, say, 180 days (6 months) ?
+That's great, I didn't know that.
+I'm working on the v3.
 
-Best regards,
-Thomas
+Regards
+Fabio Porcedda
