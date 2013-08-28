@@ -1,55 +1,26 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 28 Aug 2013 09:10:36 +0200
-Subject: [Buildroot] autobuild statistics graph
-In-Reply-To: <CAAXf6LW8axKFZpiQFjmqWcFXTEqaHoD3uX=hk5ZSQbmz_7BabA@mail.gmail.com>
-References: <CAAXf6LW8axKFZpiQFjmqWcFXTEqaHoD3uX=hk5ZSQbmz_7BabA@mail.gmail.com>
-Message-ID: <20130828091036.1a91b786@skate>
+From: Will Newton <will.newton@gmail.com>
+Date: Wed, 28 Aug 2013 08:17:55 +0100
+Subject: [Buildroot] Analysis of build failures
+In-Reply-To: <20130828090812.43a7f849@skate>
+References: <20130828063005.74A7952C1BE@lolut.humanoidz.org>
+ <20130828090812.43a7f849@skate>
+Message-ID: <CAFbHwiTxij5iGz2d2+Ua3L6nc4rbB97Fno+Vum=_4nunNER+qA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas De Schampheleire,
+On Wed, Aug 28, 2013 at 8:08 AM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
 
-On Wed, 28 Aug 2013 08:46:50 +0200, Thomas De Schampheleire wrote:
+Hi Thomas,
 
-> The autobuild statistics shows a graph with the number of
-> failed/successful/total builds at:
-> http://autobuild.buildroot.org/stats.php
-> 
-> However, given that the total number of builds executed each day is
-> varying, it is difficult to visually draw conclusions from the graph.
+>>    aarch64 |                    cups-1.3.11 | NOK | http://autobuild.buildroot.net/results/6c179dca4455e4cb651f9b6bce1b2604366431f4/
+>
+> {standard input}: Assembler messages:
+> {standard input}:7522: Error: immediate value out of range 0 to 255 at operand 2 -- `movi v14.8b,-1'
+>
+> Seems like a deeply AArch64 problem, should be reported to the AArch64 people at Linaro.
 
-Yeah, now you realize that I was sleeping during all those statistics
-courses at the university :)
-
-> I would like to propose adding another graph (or replacing the current
-> one) that plots the percentages of successful/failed builds. Hence,
-> the reference will always be 100%, and a 'success' line going up means
-> improvement.
-> In fact, in this case it makes little sense to plot both the success
-> and failure lines, so we can choose either one.
-> 
-> What do you think?
-
-Sounds sane. How would you compute what the reference is? Look at the
-build results of the last 30 days (i.e the ones that appear on the
-plot) ?
-
-> Is this difficult to realize?
-> If you give me some source code of how the graph is generated, I'm
-> willing to look into this.
-
-The code that generates the graph is available at
-http://git.buildroot.net/buildroot-test/tree/web/graph.php. Warning:
-ugly PHP code inside!
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+That's a known issue that should be fixed in the most recent release.
