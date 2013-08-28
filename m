@@ -1,50 +1,31 @@
-From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Wed, 28 Aug 2013 08:36:17 +0200
-Subject: [Buildroot] [PATCH v2 1/2] getty: Create specific getty config
-	+ cleanups
-In-Reply-To: <CADwac6BfHWKP_HWd_3g6t8MqtSW4zTcpYbChpbPh0O3q-N4=Jg@mail.gmail.com>
-References: <1377429219-25140-1-git-send-email-shmuelzon@gmail.com>
- <CAAXf6LV4mAJ77obaOx_7O9Dk_=a9oFGrW8QcFoAzdAKThAqjLA@mail.gmail.com>
- <CADwac6BfHWKP_HWd_3g6t8MqtSW4zTcpYbChpbPh0O3q-N4=Jg@mail.gmail.com>
-Message-ID: <CAAXf6LWkdfhGBsKvPpReEec2OXKdLgZbwSRwhCopqb06U6bKhA@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 28 Aug 2013 08:37:51 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2013-08-27
+In-Reply-To: <20130828063005.74A7952C1BE@lolut.humanoidz.org>
+References: <20130828063005.74A7952C1BE@lolut.humanoidz.org>
+Message-ID: <20130828083751.3fdd9462@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Assaf,
+Peter,
 
-On Wed, Aug 28, 2013 at 6:41 AM, Assaf Inbal <shmuelzon@gmail.com> wrote:
-> Hey Thomas,
->
->> The text of the suboptions to the new getty top-level option are still
->> somewhat chaotic:
->> [*] Run a getty (login prompt) after boot
->> (ttyS0) Port to run a getty (login prompt) on
->> Baudrate to use (115200)  --->
->> (vt100) Value to assign the TERM environment variable
->> ()    other options to pass to getty
->>
->>
->> My proposal is to simplify the suboptions:
->> [*] Run a getty (login prompt) after boot
->> (ttyS0) tty port
->> baudrate (115200)  --->
->> (vt100) TERM environment variable
->> ()    other options to pass to getty
->
->
-> Would you like to me submit another version of the patch with your wording,
-> or will you do this yourself when applying the patch?
+On Wed, 28 Aug 2013 08:30:05 +0200 (CEST), Thomas Petazzoni wrote:
 
-I'm just a 'regular' developer like you, I cannot apply the patch to
-the buildroot repo. Only the maintainer Peter Korsgaard can do that
-(or recently the maintainer-ad-interim Thomas Petazzoni)
-I think it is best if you submit a new version, to minimize the work
-he has to do.
+>        arm |                  qt5base-5.0.2 | NOK | http://autobuild.buildroot.net/results/d268003b0a3402dde930a72ab467ee393b2ebe64/
 
-Thanks again for your contributions.
+I believe this one should be fixed by the patch that Spenser has posted
+at http://patchwork.ozlabs.org/patch/269662/. It should probably be
+applied to 2013.08.
 
-Best regards,
+Thanks,
+
 Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
