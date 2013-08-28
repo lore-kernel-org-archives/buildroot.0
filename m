@@ -1,26 +1,58 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 28 Aug 2013 16:23:00 +0200
-Subject: [Buildroot] [PATCH] config: reorder top-level menu
-In-Reply-To: <1376771737-11552-1-git-send-email-yann.morin.1998@free.fr> (Yann
- E. MORIN's message of "Sat, 17 Aug 2013 22:35:37 +0200")
-References: <1376771737-11552-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <87li3lhp2z.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Wed, 28 Aug 2013 16:21:34 +0200
+Subject: [Buildroot] [git commit] config: reorder top-level menu
+Message-ID: <20130828142246.948CC9B5D0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=244038576b4d45363b328f437b772afc4cfbf9b2
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Yann> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
- Yann> Reorder the entries in the top-menu, in a more significant order.
+Reorder the entries in the top-menu, in a more significant order.
 
- Yann> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
- Yann> Cc: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
- Yann> Cc: Arnout Vandecappelle <arnout@mind.be>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
+Cc: Arnout Vandecappelle <arnout@mind.be>
+Acked-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ Config.in         |    6 +++---
+ package/Config.in |    2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/Config.in b/Config.in
+index 78dea3b..cb246a4 100644
+--- a/Config.in
++++ b/Config.in
+@@ -450,14 +450,14 @@ source "toolchain/Config.in"
+ 
+ source "system/Config.in"
+ 
+-source "package/Config.in"
++source "linux/Config.in"
+ 
+-source "package/Config.in.host"
++source "package/Config.in"
+ 
+ source "fs/Config.in"
+ 
+ source "boot/Config.in"
+ 
+-source "linux/Config.in"
++source "package/Config.in.host"
+ 
+ source "Config.in.legacy"
+diff --git a/package/Config.in b/package/Config.in
+index 7069d77..97cd7da 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1,4 +1,4 @@
+-menu "Package Selection for the target"
++menu "Target packages"
+ 
+ source "package/busybox/Config.in"
+ 
