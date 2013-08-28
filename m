@@ -1,45 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 28 Aug 2013 13:18:59 +0200
-Subject: [Buildroot] [PATCH] gcc-final: Drop obsolete code for handling
- lib64
-In-Reply-To: <1377687378-19688-1-git-send-email-markos.chandras@imgtec.com>
-References: <1377687378-19688-1-git-send-email-markos.chandras@imgtec.com>
-Message-ID: <20130828131859.7bbd1fd6@skate>
+Date: Wed, 28 Aug 2013 13:19:34 +0200
+Subject: [Buildroot] Analysis of build failures
+In-Reply-To: <CAFbHwiTxij5iGz2d2+Ua3L6nc4rbB97Fno+Vum=_4nunNER+qA@mail.gmail.com>
+References: <20130828063005.74A7952C1BE@lolut.humanoidz.org>
+ <20130828090812.43a7f849@skate>
+ <CAFbHwiTxij5iGz2d2+Ua3L6nc4rbB97Fno+Vum=_4nunNER+qA@mail.gmail.com>
+Message-ID: <20130828131934.3f107060@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Markos Chandras,
+Dear Will Newton,
 
-On Wed, 28 Aug 2013 11:56:18 +0100, Markos Chandras wrote:
-> Since 5628776c4a4d29d0715633ea463b64cc19e19c5a
-> "toolchain-external: fix lib64 symlinks"
+On Wed, 28 Aug 2013 08:17:55 +0100, Will Newton wrote:
+> On Wed, Aug 28, 2013 at 8:08 AM, Thomas Petazzoni
+> <thomas.petazzoni@free-electrons.com> wrote:
 > 
-> lib64 is a symlink to lib so there is no reason to copy the libraries
-> to lib64 anymore. This fixes multiple building problems
-> for buildroot toolchains:
+> Hi Thomas,
 > 
-> [...]
-> mv: 'output/host/usr/mips64-buildroot-linux-uclibc/sysroot/lib64/libuClibc-0.9.33.2.so'
-> and 'output/host/usr/mips64-buildroot-linux-uclibc/sysroot/lib/libuClibc-0.9.33.2.so'
-> are the same file
-> mv: 'output/host/usr/mips64-buildroot-linux-uclibc/sysroot/lib64/libutil-0.9.33.2.so'
-> and 'output/host/usr/mips64-buildroot-linux-uclibc/sysroot/lib/libutil-0.9.33.2.so'
-> are the same file
-> mv: 'output/host/usr/mips64-buildroot-linux-uclibc/sysroot/lib64/libutil.so.0'
-> and 'output/host/usr/mips64-buildroot-linux-uclibc/sysroot/lib/libutil.so.0'
-> are the same file
-> rmdir: failed to remove
-> 'output/host/usr/mips64-buildroot-linux-uclibc/sysroot/lib64': Not a directory
-> [...]
+> >>    aarch64 |                    cups-1.3.11 | NOK | http://autobuild.buildroot.net/results/6c179dca4455e4cb651f9b6bce1b2604366431f4/
+> >
+> > {standard input}: Assembler messages:
+> > {standard input}:7522: Error: immediate value out of range 0 to 255 at operand 2 -- `movi v14.8b,-1'
+> >
+> > Seems like a deeply AArch64 problem, should be reported to the AArch64 people at Linaro.
 > 
-> Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
+> That's a known issue that should be fixed in the most recent release.
 
-Reviewed-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Great, thanks, I'll bump the Linaro toolchains soon.
 
-Thanks.
+Thomas
 -- 
 Thomas Petazzoni, Free Electrons
 Kernel, drivers, real-time and embedded Linux
