@@ -1,38 +1,31 @@
-From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Thu, 29 Aug 2013 14:59:24 +0200
-Subject: [Buildroot] [PATCH 9 of 9 v3] linux: mention 3.x.y kernels in
- 'custom version' help
-In-Reply-To: <patchbomb.1377781155@argentina>
-References: <patchbomb.1377781155@argentina>
-Message-ID: <65bfbf783e58e116820d.1377781164@argentina>
+From: Sagaert Johan <sagaert.johan@skynet.be>
+Date: Thu, 29 Aug 2013 15:13:15 +0200
+Subject: [Buildroot] [PATCH 1/1] mysql_client : bump version to 5.1.70
+Message-ID: <1377781995-30128-1-git-send-email-sagaert.johan@skynet.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-(also fix grammatical error versions -> version)
 
-Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-
+Signed-off-by: Sagaert Johan <sagaert.johan@skynet.be>
 ---
-v3: no changes
-(v2): new patch in series, although only loosely related.
+ package/mysql_client/mysql_client.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- linux/Config.in |  4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/linux/Config.in b/linux/Config.in
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -37,8 +37,8 @@ config BR2_LINUX_KERNEL_SAME_AS_HEADERS
- config BR2_LINUX_KERNEL_CUSTOM_VERSION
- 	bool "Custom version"
- 	help
--	  This option allows to use a specific 2.6.x or 2.6.x.y
--	  official versions, as available on kernel.org
-+	  This option allows to use a specific official version from
-+	  kernel.org, like 2.6.x, 2.6.x.y, 3.x.y, ...
+diff --git a/package/mysql_client/mysql_client.mk b/package/mysql_client/mysql_client.mk
+index 00c72b7..fe24ae7 100644
+--- a/package/mysql_client/mysql_client.mk
++++ b/package/mysql_client/mysql_client.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- config BR2_LINUX_KERNEL_CUSTOM_TARBALL
- 	bool "Custom tarball"
+-MYSQL_CLIENT_VERSION = 5.1.67
++MYSQL_CLIENT_VERSION = 5.1.70
+ MYSQL_CLIENT_SOURCE = mysql-$(MYSQL_CLIENT_VERSION).tar.gz
+ MYSQL_CLIENT_SITE = http://downloads.skysql.com/archives/mysql-5.1
+ MYSQL_CLIENT_INSTALL_STAGING = YES
+-- 
+1.8.3.2
