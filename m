@@ -1,48 +1,27 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 29 Aug 2013 23:58:13 +0200
-Subject: [Buildroot] [git commit] linux-headers: bump 3.{0, 4,
-	10}.x stable versions
-Message-ID: <20130829221536.1EB069B5EC@busybox.osuosl.org>
+From: =?ISO-8859-1?Q?Ezequiel_Garc=EDa?= <ezequiel@vanguardiasur.com.ar>
+Date: Thu, 29 Aug 2013 19:12:14 -0300
+Subject: [Buildroot] [PATCH v3 0/2] Introducing Nios-II architecture
+In-Reply-To: <1377814241-10526-1-git-send-email-ezequiel.garcia@free-electrons.com>
+References: <1377814241-10526-1-git-send-email-ezequiel.garcia@free-electrons.com>
+Message-ID: <CAAEAJfB2bTcTceStgYCWeb9-1fn3bbGaG+oFSjo4QbYr5sVpgw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=51a087fde3b77ff632e76395d3406596a4cf2b9f
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 29 August 2013 19:10, Ezequiel Garcia
+<ezequiel.garcia@free-electrons.com> wrote:
+[...]
+>
+> Changes from v1:
+>
+>   * Removed toolchain patchlevel information from config names,
+>     as noted by Thomas.
+>
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- ...tall-fix-__packed-in-exported-kernel-head.patch |    0
- package/linux-headers/Config.in.host               |    6 +++---
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Of course, I meant "Changes from v2" up there...
 
-diff --git a/package/linux-headers/3.0.91/linux-headers-headers_install-fix-__packed-in-exported-kernel-head.patch b/package/linux-headers/3.0.94/linux-headers-headers_install-fix-__packed-in-exported-kernel-head.patch
-similarity index 100%
-rename from package/linux-headers/3.0.91/linux-headers-headers_install-fix-__packed-in-exported-kernel-head.patch
-rename to package/linux-headers/3.0.94/linux-headers-headers_install-fix-__packed-in-exported-kernel-head.patch
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 8facdf0..ef76733 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -72,16 +72,16 @@ config BR2_DEFAULT_KERNEL_VERSION
- 
- config BR2_DEFAULT_KERNEL_HEADERS
- 	string
--	default "3.0.91"	if BR2_KERNEL_HEADERS_3_0
-+	default "3.0.94"	if BR2_KERNEL_HEADERS_3_0
- 	default "3.1.10"	if BR2_KERNEL_HEADERS_3_1
- 	default "3.2.50"	if BR2_KERNEL_HEADERS_3_2
- 	default "3.3.8"		if BR2_KERNEL_HEADERS_3_3
--	default "3.4.58"	if BR2_KERNEL_HEADERS_3_4
-+	default "3.4.60"	if BR2_KERNEL_HEADERS_3_4
- 	default "3.5.7"		if BR2_KERNEL_HEADERS_3_5
- 	default "3.6.11"	if BR2_KERNEL_HEADERS_3_6
- 	default "3.7.10"	if BR2_KERNEL_HEADERS_3_7
- 	default "3.8.13"	if BR2_KERNEL_HEADERS_3_8
- 	default "3.9.11"	if BR2_KERNEL_HEADERS_3_9
--	default "3.10.7"	if BR2_KERNEL_HEADERS_3_10
-+	default "3.10.10"	if BR2_KERNEL_HEADERS_3_10
- 	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
- 	default $BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+-- 
+Ezequiel Garc?a, VanguardiaSur
+www.vanguardiasur.com.ar
