@@ -1,44 +1,25 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 29 Aug 2013 10:45:01 +0200
-Subject: [Buildroot] debugging inittab
-In-Reply-To: <521EFA97.1010908@mind.be> (Arnout Vandecappelle's message of
- "Thu, 29 Aug 2013 09:39:03 +0200")
-References: <2DD0B9C711CDFC45A3A266C78966CE7F451F39A0@G4W3291.americas.hpqcorp.net>
- <5216A076.5030409@mind.be>
- <2DD0B9C711CDFC45A3A266C78966CE7F451F8F81@G4W3291.americas.hpqcorp.net>
- <521ED985.9050705@mind.be> <878uzlgdk3.fsf@dell.be.48ers.dk>
- <521EFA97.1010908@mind.be>
-Message-ID: <874na8homq.fsf@dell.be.48ers.dk>
+From: hacklinux <pipiliu_wangk@hotmail.com>
+Date: Thu, 29 Aug 2013 08:46:41 +0000
+Subject: [Buildroot] wanna compile busybox and uclib with self modified
+ code, please help
+In-Reply-To: <BAY167-W75821A694A0D0A49BAA27394340@phx.gbl>
+References: <BAY167-W75F3A55D10B8CCC0F96A74944A0@phx.gbl>,
+ <521C5ABF.4000301@relinux.de>, <BAY167-W23A3ABEDF04D72F595092D944A0@phx.gbl>,
+ <521C70CE.4060101@relinux.de>, <BAY167-W54738C29151963CCC2605944B0@phx.gbl>,
+ <521EDAF9.1080609@mind.be>, <20130829101214.61597274@skate>,
+ <BAY167-W75821A694A0D0A49BAA27394340@phx.gbl>
+Message-ID: <BAY167-W508F354AD6BA40A3C5456E94340@phx.gbl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
 
- Arnout> On 08/29/13 09:29, Peter Korsgaard wrote:
- >>>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
- >> 
- >> >> That was the problem. Thanks!
- >> 
- Arnout> Right. Maybe we should just rename target/ to
- Arnout> THIS_IS_NOT_YOUR_ROOT_FILESYSTEM instead of just creating the
- Arnout> file. The latter is obviously not enough.
- >> 
- Arnout> What was the reason we didn't do that in the first place?
- >> 
- >> People didn't seem to like it when I suggested it.
- >> 
- >> It would mean a change of behaviour, so perhaps we need to add a target
- >> symlink like we did for staging?
 
- Arnout>  That pretty much defeats the purpose, doesn't it?
 
-Well, yes - More or less. How do we educate people who are now doing
-minor tweaks to output/target and rerunning make to test rootfs changes
-(E.G. before they put them under configuration with the overlay
-support) to use the new location?
 
--- 
-Bye, Peter Korsgaard
+ 		 	   		  
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130829/ed344cd4/attachment.html>
