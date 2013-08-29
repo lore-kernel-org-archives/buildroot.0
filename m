@@ -1,83 +1,87 @@
-From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Thu, 29 Aug 2013 09:40:41 +0200
-Subject: [Buildroot] autobuild statistics graph
-In-Reply-To: <CAAXf6LWz7_RYds7Zr7kdQHvhYXtNO1WEP+RX+0TTthfZURvi+Q@mail.gmail.com>
-References: <CAAXf6LW8axKFZpiQFjmqWcFXTEqaHoD3uX=hk5ZSQbmz_7BabA@mail.gmail.com>
- <20130828091036.1a91b786@skate>
- <CAAXf6LWFMtmDpFvZODkd3N_Wsk-VwNP-QVkquRhn3B2aiOjCqg@mail.gmail.com>
- <20130828094824.5f917f48@skate>
- <CAAXf6LWz7_RYds7Zr7kdQHvhYXtNO1WEP+RX+0TTthfZURvi+Q@mail.gmail.com>
-Message-ID: <CAAXf6LVPQVzQpfCdeVrm2yNzEad8j2GS9pnna7YiKVnhTb=MQg@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 29 Aug 2013 09:38:09 +0200
+Subject: [Buildroot] [PATCH] toolchain: add support for glibc
+In-Reply-To: <521E5AB7.1050702@mind.be>
+References: <1376847393-12397-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <521534E2.7020606@mind.be> <20130822232633.7ba9b14d@skate>
+ <52169E42.2040904@mind.be> <20130823064845.2ec4800d@skate>
+ <521E5AB7.1050702@mind.be>
+Message-ID: <20130829093809.75fe7e76@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Dear Arnout Vandecappelle,
 
-On Wed, Aug 28, 2013 at 10:02 AM, Thomas De Schampheleire
-<patrickdepinguin+buildroot@gmail.com> wrote:
-> Hi Thomas,
->
-> On Wed, Aug 28, 2013 at 9:48 AM, Thomas Petazzoni
-> <thomas.petazzoni@free-electrons.com> wrote:
->> Dear Thomas De Schampheleire,
->>
->> On Wed, 28 Aug 2013 09:42:45 +0200, Thomas De Schampheleire wrote:
->>
->>> > Sounds sane. How would you compute what the reference is? Look at the
->>> > build results of the last 30 days (i.e the ones that appear on the
->>> > plot) ?
->>>
->>> I was actually thinking of using the current calculated percentages.
->>> So say on day 1 there are 100 builds, with 70 successful, and on day 2
->>> there have been 50 builds with 25 successful, then I would plot 70%
->>> for the first day and 50% for the second.
->>
->> Ah right, makes sense. The percentages are in fact already shown in the
->> table above.
->>
->>> Given the variation in the configurations that are being built, a
->>> rising success line from one day to the next cannot be interpreted as
->>> an absolute reduction of bugs (could have been 'chance' because the
->>> bad configurations weren't built on the second day) but if you look at
->>> the trend it should tell us something.
->>
->> Right.
->>
->>> Here is some untested code that I think should do the trick (I don't
->>> have a PHP environment at hand here):
->>
->> Your patch is now live at http://autobuild.buildroot.org/stats.php and
->> it seems to work. If you confirm, then I'll commit and push your patch,
->> with you as the author.
->
-> That looks good, yes, thanks for testing so quickly.
-> One consideration: although the table doesn't have to be larger, the
-> 30 days for the graph is somewhat limited. If we want to see a trend,
-> then I think a few months can be more interesting. So what about
-> changing the SQL query to, say, 180 days (6 months) ?
+On Wed, 28 Aug 2013 22:16:55 +0200, Arnout Vandecappelle wrote:
 
-It seems you already made this change, thanks.
+>   While testing your patch again, I discovered that "make source" doesn't 
+> fetch the glibc source (same for eglibc) because BR2_PACKAGE_EGLIBC is 
+> not y. This would be nice to fix still in 2013.08.
 
-The x axis is now a bit crowded, below untested patch should make it a
-bit more readable, could you check?
+Generally, 'make source' is unfortunately a bit broken with the new
+internal toolchain backend based on packages. One of the reason is that
+the 'make source' thing only works for one recursion level of
+dependencies on host packages. I've started working on fixing that, but
+it was more complex than I thought (or alternatively I was too stupid
+to see that there was a simple solution).
 
-diff --git a/web/graph.php b/web/graph.php
-index 7ac37d8..5585ee5 100644
---- a/web/graph.php
-+++ b/web/graph.php
-@@ -50,7 +50,7 @@
-$myPicture->setFontProperties(array("FontName"=>"../externals/pchart/fonts/verda
- /* Define the boundaries of the graph area */
- $myPicture->setGraphArea(70,50,650,400);
+> > But I guess I
+> > can probably make BR2_TOOLCHAIN_BUILDROOT_LIBC be equal to "glibc" in
+> > both the glibc and eglibc case, which would be sufficient to make the
+> > toolchain building logic use the "glibc" and "glibc-configure" targets
+> > for both the eglibc and glibc selections.
+> 
+>   You could also choose to keep eglibc.mk and make glibc the derivative. 
+> Or would that be strange?
 
--$myPicture->drawScale(array("LabelRotation" => 90));
-+$myPicture->drawScale(array("LabelRotation" => 90, "LabelSkip" => 10));
+Have you seen my new patch set:
 
- $myPicture->drawLegend(20,20,array("Style"=>LEGEND_NOBORDER,"Mode"=>LEGEND_HORIZONTAL));
+Subject: [Buildroot] [PATCH 00/12] Toolchain updates
+Date: Wed, 28 Aug 2013 08:35:19 +0200
 
+It already incorporates a single 'glibc' package that handles both
+glibc and eglibc, as per your suggestion. See PATCH 07/12 of this
+series.
 
-Best regards,
+I renamed the package to 'glibc' because with the new activity in
+glibc, it is expected that eglibc will more or less disappear in the
+coming months/years. People are talking on how to merge back into glibc
+the changes that were kept separate in eglibc, etc.
+
+> > Want me to rework the patch in this direction?
+> 
+>   Would be nice, but as you say, merging later wouldn't be so difficult. 
+> Except of course that by that time they may have diverged more.
+
+It's already done, see above.
+
+> > Note that later on, if we support several versions of glibc and eglibc,
+> > then package/glibc/Config.in would look like:
+> >
+> > if BR2_TOOLCHAIN_BUILDROOT_EGLIBC
+> >
+> > 	... versions of eglibc ...
+> >
+> > endif
+> >
+> > if BR2_TOOLCHAIN_BUILDROOT_GLIBC
+> >
+> > 	... versions of glibc ...
+> >
+> > endif
+> 
+>   Nothing wrong with that, right?
+
+No, nothing wrong at all :)
+
+Thanks!
+
 Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
