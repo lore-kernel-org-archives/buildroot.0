@@ -1,31 +1,31 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 31 Aug 2013 21:34:04 -0000
-Subject: [Buildroot] [git commit] eglibc: needs MMU
-Message-ID: <20130831213336.C46E59B591@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Thu, 29 Aug 2013 23:11:05 +0200
+Subject: [Buildroot] [git commit] gst1-plugins-base: bump version
+Message-ID: <20130831213337.D9ED79B591@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=eeaf658c980d43c6a531614545334ab98d14bbe0
+commit: http://git.buildroot.net/buildroot/commit/?id=f62c9f2c1bd3859665b2a85e2b1720572b04931f
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- toolchain/toolchain-buildroot/Config.in |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+ .../gst1-plugins-base/gst1-plugins-base.mk         |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
-index 396a434..7a26441 100644
---- a/toolchain/toolchain-buildroot/Config.in
-+++ b/toolchain/toolchain-buildroot/Config.in
-@@ -22,6 +22,7 @@ config BR2_TOOLCHAIN_BUILDROOT_EGLIBC
- 		   BR2_mips64 || BR2_mips64el || BR2_powerpc || \
- 		   BR2_sh     || BR2_sh64     || BR2_sparc   || \
- 		   BR2_x86_64
-+	depends on BR2_USE_MMU
- 	select BR2_TOOLCHAIN_USES_GLIBC
- 	# our eglibc.mk enables RPC support
- 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
+diff --git a/package/multimedia/gst1-plugins-base/gst1-plugins-base.mk b/package/multimedia/gst1-plugins-base/gst1-plugins-base.mk
+index 4a9e234..d3aebda 100644
+--- a/package/multimedia/gst1-plugins-base/gst1-plugins-base.mk
++++ b/package/multimedia/gst1-plugins-base/gst1-plugins-base.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GST1_PLUGINS_BASE_VERSION = 1.0.9
++GST1_PLUGINS_BASE_VERSION = 1.0.10
+ GST1_PLUGINS_BASE_SOURCE = gst-plugins-base-$(GST1_PLUGINS_BASE_VERSION).tar.xz
+ GST1_PLUGINS_BASE_SITE = http://gstreamer.freedesktop.org/src/gst-plugins-base
+ GST1_PLUGINS_BASE_INSTALL_STAGING = YES
