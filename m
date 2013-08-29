@@ -1,38 +1,31 @@
 From: Ryan Barnett <rjbarnet@rockwellcollins.com>
-Date: Thu, 29 Aug 2013 17:32:24 -0500
-Subject: [Buildroot] [PATCH v2 0/2] Add support for libssh2 in buildroot
-Message-ID: <1377815546-3125-1-git-send-email-rjbarnet@rockwellcollins.com>
+Date: Thu, 29 Aug 2013 17:41:07 -0500
+Subject: [Buildroot] [PATCH v2 0/1] Update libcurl to version 7.32.0
+Message-ID: <1377816068-3368-1-git-send-email-rjbarnet@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Adding support for libssh2 to buildroot to allow for its use with libcurl. 
-By having libcurl use libssh2, features like SCP and SFTP become possible 
-when using libcurl.
+These patches update the version of libcurl to version 7.32.0 and remove
+the static library and documentation from being installed on the target.
 
-For more detailed information about options enabled with libssh2 in libcurl
-see the following website: http://curl.haxx.se/docs/features.html
+NOTE: these patches depend on my previously submitted patches for libssh2
 
-Change from v1 -> v2:
-  * All the following changes were noted by Arnout Vandecappelle
-  * updated commit comments for libssh2
-  * removed details from libssh2/Config.in
-  * added libssh2 to select libgcrypt by default
-  * fixed up configuration options libssh2 in libssh.mk
-  * removed removal of documentation and static libraries since the
-    target finalize step takes care of this
-  * added check for zlib dependancy (myself)
+Changes from v1->v2:
+  * removal of the patch for removing of man and static lib from target 
+    (suggested by Arnout Vandecappelle)
+  * no longer depends on my patch for libssh2
 
-Ryan Barnett (2):
-  libssh2: add support for new package libssh2
-  libcurl: add support for compiling with libssh2
+Ryan Barnett (1):
+  libcurl: up revision to 7.32.0
 
- package/Config.in          |    1 +
- package/libcurl/libcurl.mk |    8 ++++++++
- package/libssh2/Config.in  |   11 +++++++++++
- package/libssh2/libssh2.mk |   32 ++++++++++++++++++++++++++++++++
- 4 files changed, 52 insertions(+), 0 deletions(-)
- create mode 100644 package/libssh2/Config.in
- create mode 100644 package/libssh2/libssh2.mk
+ package/libcurl/libcurl-01-CVE-2013-0249.patch |   65 ------------------------
+ package/libcurl/libcurl-02-CVE-2013-1944.patch |   57 ---------------------
+ package/libcurl/libcurl-03-CVE-2013-2174.patch |   38 --------------
+ package/libcurl/libcurl.mk                     |    4 +-
+ 4 files changed, 2 insertions(+), 162 deletions(-)
+ delete mode 100644 package/libcurl/libcurl-01-CVE-2013-0249.patch
+ delete mode 100644 package/libcurl/libcurl-02-CVE-2013-1944.patch
+ delete mode 100644 package/libcurl/libcurl-03-CVE-2013-2174.patch
