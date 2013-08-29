@@ -1,27 +1,32 @@
-From: =?ISO-8859-1?Q?Ezequiel_Garc=EDa?= <ezequiel@vanguardiasur.com.ar>
-Date: Thu, 29 Aug 2013 19:12:14 -0300
-Subject: [Buildroot] [PATCH v3 0/2] Introducing Nios-II architecture
-In-Reply-To: <1377814241-10526-1-git-send-email-ezequiel.garcia@free-electrons.com>
-References: <1377814241-10526-1-git-send-email-ezequiel.garcia@free-electrons.com>
-Message-ID: <CAAEAJfB2bTcTceStgYCWeb9-1fn3bbGaG+oFSjo4QbYr5sVpgw@mail.gmail.com>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Fri, 30 Aug 2013 00:29:27 +0200
+Subject: [Buildroot] [git commit] gen-manual-lists.py: fixup after 2440385
+	(config: reorder top-level menu)
+Message-ID: <20130829222947.138AF9B614@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 29 August 2013 19:10, Ezequiel Garcia
-<ezequiel.garcia@free-electrons.com> wrote:
-[...]
->
-> Changes from v1:
->
->   * Removed toolchain patchlevel information from config names,
->     as noted by Thomas.
->
+commit: http://git.buildroot.net/buildroot/commit/?id=13d917aaffadc991360992c86031f2da67e07553
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Of course, I meant "Changes from v2" up there...
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ support/scripts/gen-manual-lists.py |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
--- 
-Ezequiel Garc?a, VanguardiaSur
-www.vanguardiasur.com.ar
+diff --git a/support/scripts/gen-manual-lists.py b/support/scripts/gen-manual-lists.py
+index ae1d4ff..3568843 100755
+--- a/support/scripts/gen-manual-lists.py
++++ b/support/scripts/gen-manual-lists.py
+@@ -185,7 +185,7 @@ class Buildroot:
+     list_info = {
+         'target-packages': {
+             'filename': "package-list",
+-            'root_menu': "Package Selection for the target",
++            'root_menu': "Target packages",
+             'filter': "_is_package",
+             'sorted': True,
+             'sub_menu': True,
