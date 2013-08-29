@@ -1,37 +1,54 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 29 Aug 2013 15:30:33 +0200
-Subject: [Buildroot] MesaLib
-In-Reply-To: <20130829102659.6240bcb9@skate> (Thomas Petazzoni's message of
- "Thu, 29 Aug 2013 10:26:59 +0200")
-References: <A3285828-B3A0-4875-98F8-96A2BF7DD889@deadfrog.net>
- <20130829102659.6240bcb9@skate>
-Message-ID: <87mwo0fwue.fsf@dell.be.48ers.dk>
+From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
+Date: Thu, 29 Aug 2013 17:12:14 +0200
+Subject: [Buildroot] Analysis of build failures
+In-Reply-To: <e8f643690cf9b327505bc17c83d08441@sysmic.org>
+References: <20130828063005.74A7952C1BE@lolut.humanoidz.org>
+ <20130828090812.43a7f849@skate>
+ <e8f643690cf9b327505bc17c83d08441@sysmic.org>
+Message-ID: <CAAXf6LVr5La-XtqhEt+d8CjPoxojnjxOFnL0NKkOsumH_mQsLQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+Hi J?r?me,
 
- >> Should 7.10.3 be in the repository or is the buildroot source wrong?
+On Thu, Aug 29, 2013 at 3:17 PM, J?r?me Pouiller <jezz@sysmic.org> wrote:
+> Hi Thomas,
+>
+> On 2013-08-28 09:08, Thomas Petazzoni wrote:
+> [...]
+>
+>>>     x86_64 |               strongswan-5.0.4 | NOK |
+>>> http://autobuild.buildroot.net/results/a637f916962b6136dd6dd4f4b9ff4e1cab568ef3/
+>>
+>>
+>> utils/backtrace.c:23:23: fatal error: execinfo.h: No such file or
+>> directory
+>>
+>> uClibc doesn't have execinfo.h by default. Proper testing should be
+>> added in strongswan code. J?r?me, can you have a look at this?
+>
+>
+> I track down this error for some time but I can't reproduce it.
+>
+> There is a test in ./configure that disable inclusion of execinfo.h if
+> backtrace()
+> is not found. When re-run autobuilder configuration, this check is correctly
+> executed and execinfo.h is not included.
+>
+> Is anyone else can reproduce it?
 
- Thomas> The sources.buildroot.net mirror is updated only when a Buildroot
- Thomas> release is made. The last stable release is currently 2013.05, which
- Thomas> was using MesaLib 7.10.1, which explains why it is available from our
- Thomas> mirror.
+I also cannot reproduce it. In my test build HAVE_BACKTRACE is set to
+1 in config.h, and in the configure output I see:
 
- Thomas> The bump to 7.10.3 was done by commit
- Thomas> 53cea4462c67a6707bf8dad83fa928262e44fce9 in June 2013, i.e after the
- Thomas> 2013.05 release. Since the 2013.08 release hasn't been made yet, I
- Thomas> believe Peter has not updated the Buildroot mirror, and therefore it
- Thomas> doesn't contain for the moment all the new versions of the tarballs
- Thomas> that have been upgraded since 2013.05.
+checking for library containing backtrace... none required
+checking for backtrace... yes
 
-Actually I update it once a week (wednesdays), but it seems like
-allyespackageconfig doesn't pick up the modular X11 parts (E.G. mesa).
 
-I've now added them manually.
+Thomas, can you save the strongswan build output somewhere, or check
+the output of the above checks and the value of HAVE_BACKTRACE ?
 
--- 
-Bye, Peter Korsgaard
+Thanks,
+Thomas
