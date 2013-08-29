@@ -1,31 +1,28 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 29 Aug 2013 23:11:34 +0200
-Subject: [Buildroot] [git commit branch/next] gst1-plugins-good: bump version
-Message-ID: <20130829211313.1836B99834@busybox.osuosl.org>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu, 29 Aug 2013 21:31:59 +0000 (UTC)
+Subject: [Buildroot] [Bug 6464] dbus-daemon-launch-helper needs setuid
+In-Reply-To: <bug-6464-163@https.bugs.busybox.net/>
+References: <bug-6464-163@https.bugs.busybox.net/>
+Message-ID: <20130829213159.829089B5EB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=4fd56accaed3ec94c82401777bc639356f3d154e
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+https://bugs.busybox.net/show_bug.cgi?id=6464
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- .../gst1-plugins-good/gst1-plugins-good.mk         |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+Peter Korsgaard <jacmet@uclibc.org> changed:
 
-diff --git a/package/multimedia/gst1-plugins-good/gst1-plugins-good.mk b/package/multimedia/gst1-plugins-good/gst1-plugins-good.mk
-index 4455d65..29b8983 100644
---- a/package/multimedia/gst1-plugins-good/gst1-plugins-good.mk
-+++ b/package/multimedia/gst1-plugins-good/gst1-plugins-good.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GST1_PLUGINS_GOOD_VERSION = 1.0.9
-+GST1_PLUGINS_GOOD_VERSION = 1.0.10
- GST1_PLUGINS_GOOD_SOURCE = gst-plugins-good-$(GST1_PLUGINS_GOOD_VERSION).tar.xz
- GST1_PLUGINS_GOOD_SITE = http://gstreamer.freedesktop.org/src/gst-plugins-good
- GST1_PLUGINS_GOOD_LICENSE_FILES = COPYING
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|                            |FIXED
+
+--- Comment #2 from Peter Korsgaard <jacmet@uclibc.org> 2013-08-29 21:32:22 UTC ---
+Fixed in git (aab3a0ba792f), thanks
+
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
