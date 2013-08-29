@@ -1,69 +1,63 @@
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Thu, 29 Aug 2013 10:46:50 +0200
-Subject: [Buildroot] MesaLib
-In-Reply-To: <20130829102659.6240bcb9@skate>
-References: <A3285828-B3A0-4875-98F8-96A2BF7DD889@deadfrog.net>
- <20130829102659.6240bcb9@skate>
-Message-ID: <521F0A7A.5010906@lucaceresoli.net>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 29 Aug 2013 10:50:47 +0200
+Subject: [Buildroot] wanna compile busybox and uclib with self modified
+ code, please help
+In-Reply-To: <BAY167-W75821A694A0D0A49BAA27394340@phx.gbl>
+References: <BAY167-W75F3A55D10B8CCC0F96A74944A0@phx.gbl>
+ <521C5ABF.4000301@relinux.de>
+ <BAY167-W23A3ABEDF04D72F595092D944A0@phx.gbl>
+ <521C70CE.4060101@relinux.de>
+ <BAY167-W54738C29151963CCC2605944B0@phx.gbl>
+ <521EDAF9.1080609@mind.be> <20130829101214.61597274@skate>
+ <BAY167-W75821A694A0D0A49BAA27394340@phx.gbl>
+Message-ID: <20130829105047.6fa8f30c@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, Ryan,
+Dear hacklinux,
 
-Thomas Petazzoni wrote:
-> Dear Ryan Wilkins,
->
-> On Wed, 28 Aug 2013 19:22:47 -0400, Ryan Wilkins wrote:
->
->> I'm using buildroot 2013.08-rc2 and ran across an error on compile where MesaLib-7.10.3 can't be found.  Looking at the sources.buildroot.net server, 7.10.1 exists but not 7.10.3.  Output is below.
->>
->> --2013-08-28 17:15:25--  http://sources.buildroot.net//MesaLib-7.10.3.tar.gz
->> Resolving sources.buildroot.net (sources.buildroot.net)... 176.9.16.109
->> Connecting to sources.buildroot.net (sources.buildroot.net)|176.9.16.109|:80... connected.
->> HTTP request sent, awaiting response... 404 Not Found
->> 2013-08-28 17:15:25 ERROR 404: Not Found.
->>
->> Should 7.10.3 be in the repository or is the buildroot source wrong?
-> The sources.buildroot.net mirror is updated only when a Buildroot
-> release is made. The last stable release is currently 2013.05, which
-> was using MesaLib 7.10.1, which explains why it is available from our
-> mirror.
+Please do not reply to me directly, keep the Buildroot mailing list in
+Cc.
 
-Indeed not:
+On Thu, 29 Aug 2013 08:42:26 +0000, hacklinux wrote:
+> > Also, note that both linux-headers and uclibc became real packages
+> > *after* the 2013.05 release. So if anyone is using 2013.05 or earlier,
+> > those aren't packages, and the override source directory feature cannot
+> > be used.
+> 
+> it seems right to me, i tried the override source feature in my environment and failed to compile from the given source. for the before 2013.05 version, is there any way to solve the problem, please help.
 
-$ git show 2013.05:package/x11r7/mesa3d/mesa3d.mk | grep VERSION
-MESA3D_VERSION = 7.10.3
-MESA3D_SOURCE = MesaLib-$(MESA3D_VERSION).tar.gz
-MESA3D_SITE = ftp://ftp.freedesktop.org/pub/mesa/$(MESA3D_VERSION)
-$
+It depends for which package you want to use the override source
+directory feature.
 
-But the sources on ftp.freedesktop.org have been moved from pub/mesa/7.10.3/
-topub/mesa/old_versions/7.x/7.10.3/, apparently around Aug 12th, 2013.
-This is unfortunately a recurring bad habit.:(
+That said, the override source directory feature is just an additional
+"help". You can also make your source modifications separately, create
+some patches, and import those patches in Buildroot once you're done
+doing your changes. For components that are simple to build outside of
+Buildroot (like Busybox), it's probably the easiest option.
 
-Has anybody here ever asked the freedesktop guys to refrain from moving
-files around?
+> there is another problem confusing me that i wanna compile linux2.4 version with buildroot. i put 2.4.tar.gz under dl directory and made changes through menuconfig, however, all that failed. so i wonder if buildroot suppoprt linux2.4
+> version?
 
-> The bump to 7.10.3 was done by commit
-> 53cea4462c67a6707bf8dad83fa928262e44fce9 in June 2013, i.e after the
-> 2013.05 release. Since the 2013.08 release hasn't been made yet, I
-> believe Peter has not updated the Buildroot mirror, and therefore it
-> doesn't contain for the moment all the new versions of the tarballs
-> that have been upgraded since 2013.05.
+We do not support Linux 2.4. Linux 2.6 itself is almost 10 years old.
+If you're still stuck at Linux 2.4, I believe that the absence of
+Buildroot support for it will be the smallest of your problem. A lot of
+userspace libraries and components will most likely use new system
+calls or Linux kernel features that were not available in Linux 2.4, so
+you would also have to use very old userspace components.
 
-Apparently this was not done for 2013.05, or it didn't work for mesa3d.
-Peter, any idea? Otherwise, can you force the download now to fix this?
+> a personal question concerning linux kernel please help, i tried to joining the linux kernel mailing list through hotmail, however the mailing system cann't recongnize the applying mailing, i personlly figure out it should be something wroong with my email format, the mail i used is hotmail, is there anything wrong with my application?
 
-Anyway, 7.10.3 that is a pretty old release (~2 years old), there are 
-many more
-recent ones. Ryan, you may try to bump version. Releases since 8.0 are 
-in the
-"standard" download directory at ftp.freedesktop.org.
+I have no idea. Maybe because your e-mails are all base64 encoded
+instead of being plain text e-mails? Or something else. I don't use
+hotmail, so I have no idea, sorry.
 
-Or, for a quick workaround, you may just change the URL in
-package/x11r7/mesa3d/mesa3d.mk.
-
-Luca
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
