@@ -1,70 +1,27 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Thu, 29 Aug 2013 21:56:16 +0200
-Subject: [Buildroot] [PATCH] dvb-apps: Fix generate-keynames.sh script for
-	cross-compilation
-Message-ID: <1377806176-5963-1-git-send-email-arnout@mind.be>
+From: Ryan Barnett <rjbarnet@rockwellcollins.com>
+Date: Thu, 29 Aug 2013 15:07:11 -0500
+Subject: [Buildroot] [PATCH 0/2] Update libcurl to version 7.32.0
+Message-ID: <1377806833-31991-1-git-send-email-rjbarnet@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- .../dvb-apps-0001-Fix-generate-keynames.patch      | 30 ++++++++++++++++++++++
- package/dvb-apps/dvb-apps.mk                       |  3 ++-
- 2 files changed, 32 insertions(+), 1 deletion(-)
- create mode 100644 package/dvb-apps/dvb-apps-0001-Fix-generate-keynames.patch
+These patches update the version of libcurl to version 7.32.0 and remove
+the static library and documentation from being installed on the target.
 
-diff --git a/package/dvb-apps/dvb-apps-0001-Fix-generate-keynames.patch b/package/dvb-apps/dvb-apps-0001-Fix-generate-keynames.patch
-new file mode 100644
-index 0000000..498607d
---- /dev/null
-+++ b/package/dvb-apps/dvb-apps-0001-Fix-generate-keynames.patch
-@@ -0,0 +1,30 @@
-+Fix generate-keynames.sh script for cross-compilation
-+
-+generate-keynames.sh reads /usr/include/linux to find the keyname
-+symbols. However, when cross-compiling, the include path points
-+somewhere else. Allow the user to pass CROSS_ROOT to point to the
-+root of the cross-compilation environment.
-+
-+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-+---
-+diff -rup dvb-apps-83c746462ccb.orig/util/av7110_loadkeys/generate-keynames.sh dvb-apps-83c746462ccb/util/av7110_loadkeys/generate-keynames.sh
-+--- dvb-apps-83c746462ccb.orig/util/av7110_loadkeys/generate-keynames.sh	2012-12-06 10:38:07.000000000 +0100
-++++ dvb-apps-83c746462ccb/util/av7110_loadkeys/generate-keynames.sh	2013-08-29 21:47:09.717991439 +0200
-+@@ -18,7 +18,7 @@ echo "};" >> $1
-+ echo >> $1
-+ echo >> $1
-+ echo "static struct input_key_name key_name [] = {" >> $1
-+-for x in $(cat /usr/include/linux/input.h input_fake.h | \
-++for x in $(cat ${CROSS_ROOT}/usr/include/linux/input.h input_fake.h | \
-+            egrep "#define[ \t]+KEY_" | grep -v KEY_MAX | \
-+            cut -f 1 | cut -f 2 -d " " | sort -u) ; do
-+     echo "        { \"$(echo $x | cut -b 5-)\", $x }," >> $1
-+@@ -26,7 +26,7 @@ done
-+ echo "};" >> $1
-+ echo >> $1
-+ echo "static struct input_key_name btn_name [] = {" >> $1
-+-for x in $(cat /usr/include/linux/input.h input_fake.h | \
-++for x in $(cat ${CROSS_ROOT}/usr/include/linux/input.h input_fake.h | \
-+            egrep "#define[ \t]+BTN_" | \
-+            cut -f 1 | cut -f 2 -d " " | sort -u) ; do
-+      echo "        { \"$(echo $x | cut -b 5-)\", $x }," >> $1
-diff --git a/package/dvb-apps/dvb-apps.mk b/package/dvb-apps/dvb-apps.mk
-index 1e50aa4..8cf6a79 100644
---- a/package/dvb-apps/dvb-apps.mk
-+++ b/package/dvb-apps/dvb-apps.mk
-@@ -34,7 +34,8 @@ endif
- DVB_APPS_INSTALL_STAGING = YES
- 
- define DVB_APPS_BUILD_CMDS
--	$(TARGET_CONFIGURE_OPTS) LDFLAGS="$(DVB_APPS_LDFLAGS)" $(MAKE) -C $(@D) V=1
-+	$(TARGET_CONFIGURE_OPTS) LDFLAGS="$(DVB_APPS_LDFLAGS)" \
-+		$(MAKE) -C $(@D) CROSS_ROOT=$(STAGING_DIR) V=1
- endef
- 
- define DVB_APPS_INSTALL_STAGING_CMDS
--- 
-1.8.4.rc3
+NOTE: these patches depend on my previously submitted patches for libssh2
+
+Ryan Barnett (2):
+  libcurl: up revision to 7.32.0
+  libcurl: remove man and static lib from target
+
+ package/libcurl/libcurl-01-CVE-2013-0249.patch |   65 ------------------------
+ package/libcurl/libcurl-02-CVE-2013-1944.patch |   57 ---------------------
+ package/libcurl/libcurl-03-CVE-2013-2174.patch |   38 --------------
+ package/libcurl/libcurl.mk                     |   24 ++++++++-
+ 4 files changed, 22 insertions(+), 162 deletions(-)
+ delete mode 100644 package/libcurl/libcurl-01-CVE-2013-0249.patch
+ delete mode 100644 package/libcurl/libcurl-02-CVE-2013-1944.patch
+ delete mode 100644 package/libcurl/libcurl-03-CVE-2013-2174.patch
