@@ -1,12 +1,12 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 29 Aug 2013 10:31:26 +0200
-Subject: [Buildroot] debugging inittab
-In-Reply-To: <521ED985.9050705@mind.be>
-References: <2DD0B9C711CDFC45A3A266C78966CE7F451F39A0@G4W3291.americas.hpqcorp.net>
- <5216A076.5030409@mind.be>
- <2DD0B9C711CDFC45A3A266C78966CE7F451F8F81@G4W3291.americas.hpqcorp.net>
- <521ED985.9050705@mind.be>
-Message-ID: <20130829103126.7bcbf18a@skate>
+Date: Thu, 29 Aug 2013 10:34:19 +0200
+Subject: [Buildroot] [PATCH 10/12] toolchain: refactor Stack Smashing
+ Protection support
+In-Reply-To: <521EE62A.9000805@mind.be>
+References: <1377671731-28656-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1377671731-28656-11-git-send-email-thomas.petazzoni@free-electrons.com>
+ <521EE62A.9000805@mind.be>
+Message-ID: <20130829103419.1ed476b9@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,28 +15,31 @@ To: buildroot@busybox.net
 
 Dear Arnout Vandecappelle,
 
-On Thu, 29 Aug 2013 07:17:57 +0200, Arnout Vandecappelle wrote:
-
-> > That was the problem. Thanks!
+On Thu, 29 Aug 2013 08:11:54 +0200, Arnout Vandecappelle wrote:
+> On 08/28/13 08:35, Thomas Petazzoni wrote:
+> [snip]
+> > diff --git a/package/psmisc/psmisc.mk b/package/psmisc/psmisc.mk
+> > index 1340ee6..61faeab 100644
+> > --- a/package/psmisc/psmisc.mk
+> > +++ b/package/psmisc/psmisc.mk
+> > @@ -10,7 +10,7 @@ PSMISC_LICENSE = GPLv2
+> >   PSMISC_LICENSE_FILES = COPYING
+> >   PSMISC_DEPENDENCIES = ncurses $(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext)
+> >
+> > -ifneq ($(BR2_TOOLCHAIN_BUILDROOT_USE_SSP),y)
+> > +ifneq ($(BR2_ENABLE_SSP),y)
+> >   # Don't force -fstack-protector
+> >   PSMISC_CONF_OPT = --disable-harden-flags
+> >   endif
 > 
->   Right. Maybe we should just rename target/ to 
-> THIS_IS_NOT_YOUR_ROOT_FILESYSTEM instead of just creating the file. The 
-> latter is obviously not enough.
+>   If psmisc normally uses -fstack-protector, then I wouldn't disable that 
+> just because the user hasn't chosen to enable the option globally.
 > 
->   What was the reason we didn't do that in the first place?
+>   In other words, I'd put
+> 
+> ifneq ($(BR2_TOOLCHAIN_HAS_SSP),y)
 
-I personally find it a bit ugly. Moreover, having a file allows to add
-contents to explain *why* it is not the root filesystem, while a
-directory cannot contain an explanation :)
-
-Since we've added the THIS_IS_NOT_YOUR_ROOT_FILESYSTEM file, this is
-the *first* time we have a new report of people using output/target
-directly for NFS mounting. At this point, with a file with such a name,
-and the contents of the file explaining how to do NFS mounting, I think
-there's not much else we can do except pointing users at this file
-which documents why what they are doing cannot work.
-
-Best regards,
+Sure, why not.
 
 Thomas
 -- 
