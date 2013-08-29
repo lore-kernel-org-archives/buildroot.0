@@ -1,41 +1,40 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 29 Aug 2013 23:22:08 +0200
-Subject: [Buildroot] [git commit] CHANGES: update with recent changes
-Message-ID: <20130829221536.0913B9B5C7@busybox.osuosl.org>
+Date: Thu, 29 Aug 2013 23:59:33 +0200
+Subject: [Buildroot] [git commit] linux: bump 3.10.x stable version
+Message-ID: <20130829221536.25D439B5A9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=13ce6ddf5980819abdab21d6824a3e1c908872e8
+commit: http://git.buildroot.net/buildroot/commit/?id=27df440b62042601a02071dac83f312d4692f03d
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- CHANGES |   15 +++++++++++++++
- 1 files changed, 15 insertions(+), 0 deletions(-)
+ linux/Config.in |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/CHANGES b/CHANGES
-index 2fc965e..8c7c23a 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -1,3 +1,18 @@
-+2013.08, Not yet released:
-+
-+	Fixes all over the tree.
-+
-+	External toolchain lib32/lib64 handling, ABI name for EABIhf,
-+	misc fixes for generatelocales, apply-patches and module
-+	stripping.
-+
-+	Top level menu names reordered and renamed for clarity.
-+
-+	Updated/fixed packages: acl, attr, bash, directfb, dvb-apps,
-+	kexec, kmod, libbsd, linux-fusion, mesa3d, minidlna, openssh,
-+	openssl, pulseaudio, python-setuptools, qt5, qt5webkit, redis,
-+	strongswan, sunxi-mali
-+
- 2013.08-rc2, Released August 16th 2013:
+diff --git a/linux/Config.in b/linux/Config.in
+index 12e4cd8..49c4b5c 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -21,7 +21,7 @@ choice
+ 	prompt "Kernel version"
  
- 	Documentation improvements.
+ config BR2_LINUX_KERNEL_LATEST_VERSION
+-	bool "3.10.7"
++	bool "3.10.10"
+ 
+ config BR2_LINUX_KERNEL_SAME_AS_HEADERS
+ 	bool "Same as toolchain kernel headers"
+@@ -75,7 +75,7 @@ config BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION
+ 
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "3.10.7" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "3.10.10" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default BR2_DEFAULT_KERNEL_HEADERS if BR2_LINUX_KERNEL_SAME_AS_HEADERS
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE if BR2_LINUX_KERNEL_CUSTOM_VERSION
+ 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
