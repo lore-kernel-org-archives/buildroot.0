@@ -1,61 +1,42 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 29 Aug 2013 21:05:53 +0200
-Subject: [Buildroot] feature or pebkac
-In-Reply-To: <20130829111708.c603e5bf976541d3abd3a43a@lavabit.com>
-References: <20130829111708.c603e5bf976541d3abd3a43a@lavabit.com>
-Message-ID: <521F9B91.7040903@mind.be>
+From: Ryan Barnett <rjbarnet@rockwellcollins.com>
+Date: Thu, 29 Aug 2013 14:27:03 -0500
+Subject: [Buildroot] [PATCH 2/2] libcurl: add support for compiling with
+	libssh2
+In-Reply-To: <1377804423-31230-1-git-send-email-rjbarnet@rockwellcollins.com>
+References: <1377804423-31230-1-git-send-email-rjbarnet@rockwellcollins.com>
+Message-ID: <1377804423-31230-3-git-send-email-rjbarnet@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 08/29/13 20:17, rh wrote:
-> I have found that changing the url for a custom kernel tar ball does not
-> trigger a rebuild when running make.  I have removed linux-custom dir
-> and then make fetches the new tar ball and rebuilds.
+Adding configuration options that if libssh2 is selected, compile libcurl
+with --with-ssh config flag.
 
-  That's right. Buildroot doesn't try to be perfect for rebuilds when the 
-configuration changes - but if it is simple to fix, patches are welcome!
+Signed-off-by: Ryan Barnett <rjbarnet@rockwellcollins.com>
+---
+ package/libcurl/libcurl.mk |    8 ++++++++
+ 1 files changed, 8 insertions(+), 0 deletions(-)
 
-
-> I have found that when I specify a kernel git repo that I get the whole
-> repo.
-
-  If you specify a tag, then it should do a shallow clone.
-
-
-> But I don't need all that and I now use --single-branch argument
-> to git clone followed by git archive to create a tar ball.
-
-  That's a great idea! However, this option is only available since git 
-1.7.10 and I think that many production environments still have older git 
-versions.
-
-> I do this for repos
-> that have no snapshot or tar ball. I thought that this feature might exist
-> but I couldn't find it.  Maybe I can edit some config manually?
-
-  There's no config for that, it's part of the core infrastructure.
-
-
-  Regards,
-  Arnout
-
->
-> Would it be a useful feature for others if it's not there now?
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
->
-
-
+diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
+index 56f13ba..fd15478 100644
+--- a/package/libcurl/libcurl.mk
++++ b/package/libcurl/libcurl.mk
+@@ -34,6 +34,14 @@ else
+ LIBCURL_CONF_OPT += --without-ssl
+ endif
+ 
++# Configure curl to support libssh2
++ifeq ($(BR2_PACKAGE_LIBSSH2),y)
++LIBCURL_DEPENDENCIES += libssh2
++LIBCURL_CONF_OPT += --with-libssh2
++else
++LIBCURL_CONF_OPT += --without-libssh2
++endif
++
+ define LIBCURL_FIX_DOT_PC
+ 	printf 'Requires: openssl\n' >>$(@D)/libcurl.pc.in
+ endef
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+1.7.1
