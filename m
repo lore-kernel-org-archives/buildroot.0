@@ -1,31 +1,31 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 29 Aug 2013 23:12:48 +0200
-Subject: [Buildroot] [git commit branch/next] gst1-plugins-ugly: bump version
-Message-ID: <20130829211313.2BB939B5D6@busybox.osuosl.org>
+Date: Thu, 29 Aug 2013 23:11:05 +0200
+Subject: [Buildroot] [git commit branch/next] gst1-plugins-base: bump version
+Message-ID: <20130829211313.0AACC99834@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=90fb70b4c37ad3a3178b51c7941881aa8dfd8fa6
+commit: http://git.buildroot.net/buildroot/commit/?id=f62c9f2c1bd3859665b2a85e2b1720572b04931f
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- .../gst1-plugins-ugly/gst1-plugins-ugly.mk         |    2 +-
+ .../gst1-plugins-base/gst1-plugins-base.mk         |    2 +-
  1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/multimedia/gst1-plugins-ugly/gst1-plugins-ugly.mk b/package/multimedia/gst1-plugins-ugly/gst1-plugins-ugly.mk
-index 493ee71..e666d61 100644
---- a/package/multimedia/gst1-plugins-ugly/gst1-plugins-ugly.mk
-+++ b/package/multimedia/gst1-plugins-ugly/gst1-plugins-ugly.mk
+diff --git a/package/multimedia/gst1-plugins-base/gst1-plugins-base.mk b/package/multimedia/gst1-plugins-base/gst1-plugins-base.mk
+index 4a9e234..d3aebda 100644
+--- a/package/multimedia/gst1-plugins-base/gst1-plugins-base.mk
++++ b/package/multimedia/gst1-plugins-base/gst1-plugins-base.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GST1_PLUGINS_UGLY_VERSION = 1.0.9
-+GST1_PLUGINS_UGLY_VERSION = 1.0.10
- GST1_PLUGINS_UGLY_SOURCE = gst-plugins-ugly-$(GST1_PLUGINS_UGLY_VERSION).tar.xz
- GST1_PLUGINS_UGLY_SITE = http://gstreamer.freedesktop.org/src/gst-plugins-ugly
- GST1_PLUGINS_UGLY_LICENSE_FILES = COPYING
+-GST1_PLUGINS_BASE_VERSION = 1.0.9
++GST1_PLUGINS_BASE_VERSION = 1.0.10
+ GST1_PLUGINS_BASE_SOURCE = gst-plugins-base-$(GST1_PLUGINS_BASE_VERSION).tar.xz
+ GST1_PLUGINS_BASE_SITE = http://gstreamer.freedesktop.org/src/gst-plugins-base
+ GST1_PLUGINS_BASE_INSTALL_STAGING = YES
