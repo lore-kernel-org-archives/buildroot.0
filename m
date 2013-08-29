@@ -1,23 +1,23 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 29 Aug 2013 23:00:13 +0200
-Subject: [Buildroot] [PATCH] dvb-apps: Fix generate-keynames.sh script
-	for cross-compilation
-In-Reply-To: <1377806176-5963-1-git-send-email-arnout@mind.be> (Arnout
- Vandecappelle's message of "Thu, 29 Aug 2013 21:56:16 +0200")
-References: <1377806176-5963-1-git-send-email-arnout@mind.be>
-Message-ID: <87eh9cfc0y.fsf@dell.be.48ers.dk>
+Date: Thu, 29 Aug 2013 23:08:36 +0200
+Subject: [Buildroot] [PATCH] directfb: Add patch to use 'gcc' for
+	linking objects
+In-Reply-To: <1377695391-11965-1-git-send-email-markos.chandras@imgtec.com>
+ (Markos Chandras's message of "Wed, 28 Aug 2013 14:09:51 +0100")
+References: <1377695391-11965-1-git-send-email-markos.chandras@imgtec.com>
+Message-ID: <87a9k0fbmz.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
+>>>>> "Markos" == Markos Chandras <markos.chandras@imgtec.com> writes:
 
- Arnout> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
- Arnout> ---
- Arnout>  .../dvb-apps-0001-Fix-generate-keynames.patch      | 30 ++++++++++++++++++++++
- Arnout>  package/dvb-apps/dvb-apps.mk                       |  3 ++-
+ Markos> Fixes
+ Markos> http://autobuild.buildroot.net/results/fab819eee4002a9c392c48c1ebaca5c5b6555567/
+
+ Markos> Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
 
 Committed, thanks.
 
