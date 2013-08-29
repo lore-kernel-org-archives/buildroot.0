@@ -1,143 +1,99 @@
 From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Thu, 29 Aug 2013 14:59:20 +0200
-Subject: [Buildroot] [PATCH 5 of 9 v3] linux: add support for custom
-	Mercurial repository
+Date: Thu, 29 Aug 2013 14:59:22 +0200
+Subject: [Buildroot] [PATCH 7 of 9 v3] linux/uboot: line-up
+ repository-related configuration options
 In-Reply-To: <patchbomb.1377781155@argentina>
 References: <patchbomb.1377781155@argentina>
-Message-ID: <831643fc3c7d8bbf5239.1377781160@argentina>
+Message-ID: <dfae098cd0c4ab5f3e81.1377781162@argentina>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Although the configuration options for custom repository locations and
+versions are very similar between the linux and uboot packages, there are
+some minor differences. This patch lines up both packages.
+
 Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
 ---
-v3:
-    - add automatic propagation of old->new values (comment Arnout)
-    - fix legacy entries
-v2: add Config.in.legacy entries (comment Peter)
+v3: update after changes in previous patches
+v2:
+- remove 'HEAD/tip' defaults for repository version (comment Peter)
+- replace if/config/endif with config/depends for uboot tarball
+- move repo url/version settings before unrelated 'custom patch dir'
 
- Config.in.legacy |  33 +++++++++++++++++++++++++++++++++
- linux/Config.in  |  32 +++++++++++++++++++++++---------
- linux/linux.mk   |   5 ++++-
- 3 files changed, 60 insertions(+), 10 deletions(-)
+Note: one remaining difference is that there are help texts in linux for
+options BR2_LINUX_KERNEL_CUSTOM_GIT and BR2_LINUX_KERNEL_CUSTOM_HG. I
+didn't add them to uboot because it seems a bit redundant, but if you
+prefer we can line this up as well (either add help texts to uboot or
+remove them from linux).
 
-diff --git a/Config.in.legacy b/Config.in.legacy
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -94,6 +94,39 @@ comment "-------------------------------
+ boot/uboot/Config.in |  32 ++++++++++++++++----------------
+ linux/Config.in      |   2 +-
+ 2 files changed, 17 insertions(+), 17 deletions(-)
+
+diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
+--- a/boot/uboot/Config.in
++++ b/boot/uboot/Config.in
+@@ -40,10 +40,24 @@ config BR2_TARGET_UBOOT_CUSTOM_VERSION_V
+ 	string "U-Boot version"
+ 	depends on BR2_TARGET_UBOOT_CUSTOM_VERSION
+ 
+-if BR2_TARGET_UBOOT_CUSTOM_TARBALL
+-
+ config BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION
+ 	string "URL of custom U-Boot tarball"
++	depends on BR2_TARGET_UBOOT_CUSTOM_TARBALL
++
++if BR2_TARGET_UBOOT_CUSTOM_GIT || BR2_TARGET_UBOOT_CUSTOM_HG
++
++config BR2_TARGET_UBOOT_CUSTOM_REPO_URL
++	string "URL of custom repository"
++	default BR2_TARGET_UBOOT_CUSTOM_GIT_REPO_URL \
++		if BR2_TARGET_UBOOT_CUSTOM_GIT_REPO_URL != ""  # legacy
++
++config BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION
++	string "Custom repository version"
++	default BR2_TARGET_UBOOT_CUSTOM_GIT_VERSION \
++		if BR2_TARGET_UBOOT_CUSTOM_GIT_VERSION != ""  # legacy
++	help
++	  Revision to use in the typical format used by Git/Mercurial
++	  E.G. a sha id, a tag, branch, ..
+ 
  endif
  
- ###############################################################################
-+comment "Legacy options removed in 2013.11"
-+
-+config BR2_LINUX_KERNEL_CUSTOM_GIT_REPO_URL
-+	string "linux: the git repository URL option has been renamed"
-+	help
-+	  The option BR2_LINUX_KERNEL_CUSTOM_GIT_REPO_URL has
-+	  been renamed to
-+	  BR2_LINUX_KERNEL_CUSTOM_REPO_URL.
-+
-+config BR2_LINUX_KERNEL_CUSTOM_GIT_REPO_URL_WRAP
-+	bool
-+	default y if BR2_LINUX_KERNEL_CUSTOM_GIT_REPO_URL != ""
-+	select BR2_LEGACY
-+
-+# Note: BR2_LINUX_KERNEL_CUSTOM_GIT_REPO_URL is still referenced from
-+# linux/Config.in
-+
-+config BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION
-+	string "linux: the git repository version option has been renamed"
-+	help
-+	  The option BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION has
-+	  been renamed to
-+	  BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION.
-+
-+config BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION_WRAP
-+	bool
-+	default y if BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION != ""
-+	select BR2_LEGACY
-+
-+# Note: BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION is still referenced from
-+# linux/Config.in
-+
-+###############################################################################
- comment "Legacy options removed in 2013.08"
+@@ -65,20 +79,6 @@ config BR2_TARGET_UBOOT_CUSTOM_PATCH_DIR
  
- config BR2_ARM_OABI
+ 	  Most users may leave this empty
+ 
+-if BR2_TARGET_UBOOT_CUSTOM_GIT || BR2_TARGET_UBOOT_CUSTOM_HG
+-
+-config BR2_TARGET_UBOOT_CUSTOM_REPO_URL
+-	string "URL of custom repository"
+-	default BR2_TARGET_UBOOT_CUSTOM_GIT_REPO_URL \
+-		if BR2_TARGET_UBOOT_CUSTOM_GIT_REPO_URL != ""  # legacy
+-
+-config BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION
+-	string "Custom repository version"
+-	default BR2_TARGET_UBOOT_CUSTOM_GIT_VERSION \
+-		if BR2_TARGET_UBOOT_CUSTOM_GIT_VERSION != ""  # legacy
+-
+-endif
+-
+ choice
+ 	prompt "U-Boot binary format"
+ 	default BR2_TARGET_UBOOT_FORMAT_BIN
 diff --git a/linux/Config.in b/linux/Config.in
 --- a/linux/Config.in
 +++ b/linux/Config.in
-@@ -52,6 +52,12 @@ config BR2_LINUX_KERNEL_CUSTOM_GIT
+@@ -47,7 +47,7 @@ config BR2_LINUX_KERNEL_CUSTOM_TARBALL
+ 	  specific kernel source tarball
+ 
+ config BR2_LINUX_KERNEL_CUSTOM_GIT
+-	bool "Custom Git tree"
++	bool "Custom Git repository"
+ 	help
  	  This option allows Buildroot to get the Linux kernel source
  	  code from a Git repository.
- 
-+config BR2_LINUX_KERNEL_CUSTOM_HG
-+	bool "Custom Mercurial repository"
-+	help
-+	  This option allows Buildroot to get the Linux kernel source
-+	  code from a Mercurial repository.
-+
- endchoice
- 
- config BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE
-@@ -62,24 +68,32 @@ config BR2_LINUX_KERNEL_CUSTOM_TARBALL_L
- 	string "URL of custom kernel tarball"
- 	depends on BR2_LINUX_KERNEL_CUSTOM_TARBALL
- 
--config BR2_LINUX_KERNEL_CUSTOM_GIT_REPO_URL
--	string "URL of custom Git repository"
--	depends on BR2_LINUX_KERNEL_CUSTOM_GIT
-+if BR2_LINUX_KERNEL_CUSTOM_GIT || BR2_LINUX_KERNEL_CUSTOM_HG
- 
--config BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION
--	string "Custom Git version"
--	depends on BR2_LINUX_KERNEL_CUSTOM_GIT
-+config BR2_LINUX_KERNEL_CUSTOM_REPO_URL
-+	string "URL of custom repository"
-+	default BR2_LINUX_KERNEL_CUSTOM_GIT_REPO_URL \
-+		if BR2_LINUX_KERNEL_CUSTOM_GIT_REPO_URL != ""  # legacy
-+
-+config BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION
-+	string "Custom repository version"
-+	default BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION \
-+		if BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION != ""  # legacy
- 	help
--	  Git revision to use in the format used by git rev-parse,
-+	  Revision to use in the typical format used by Git/Mercurial
- 	  E.G. a sha id, a tag, branch, ..
- 
-+endif
-+
- config BR2_LINUX_KERNEL_VERSION
- 	string
- 	default "3.10.7" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default BR2_DEFAULT_KERNEL_HEADERS if BR2_LINUX_KERNEL_SAME_AS_HEADERS
--	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE if BR2_LINUX_KERNEL_CUSTOM_VERSION
-+	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
-+		if BR2_LINUX_KERNEL_CUSTOM_VERSION
- 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
--	default BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION if BR2_LINUX_KERNEL_CUSTOM_GIT
-+	default BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION \
-+		if BR2_LINUX_KERNEL_CUSTOM_GIT || BR2_LINUX_KERNEL_CUSTOM_HG
- 
- #
- # Patch selection
-diff --git a/linux/linux.mk b/linux/linux.mk
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -14,8 +14,11 @@ LINUX_TARBALL = $(call qstrip,$(BR2_LINU
- LINUX_SITE = $(patsubst %/,%,$(dir $(LINUX_TARBALL)))
- LINUX_SOURCE = $(notdir $(LINUX_TARBALL))
- else ifeq ($(BR2_LINUX_KERNEL_CUSTOM_GIT),y)
--LINUX_SITE = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_GIT_REPO_URL))
-+LINUX_SITE = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_REPO_URL))
- LINUX_SITE_METHOD = git
-+else ifeq ($(BR2_LINUX_KERNEL_CUSTOM_HG),y)
-+LINUX_SITE = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_REPO_URL))
-+LINUX_SITE_METHOD = hg
- else
- LINUX_SOURCE = linux-$(LINUX_VERSION).tar.xz
- # In X.Y.Z, get X and Y. We replace dots and dashes by spaces in order
