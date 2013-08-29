@@ -1,71 +1,78 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 29 Aug 2013 22:56:35 +0200
-Subject: [Buildroot] [git commit] dvb-apps: Fix generate-keynames.sh script
-	for cross-compilation
-Message-ID: <20130829211311.BB5699B5E4@busybox.osuosl.org>
+Date: Thu, 29 Aug 2013 22:57:03 +0200
+Subject: [Buildroot] [git commit] directfb: Add patch to use 'gcc' for
+	linking objects
+Message-ID: <20130829211311.CF07599834@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=04fe6b134417c30cad90c663a870ed68b7dfc8ce
+commit: http://git.buildroot.net/buildroot/commit/?id=7e9264956bb5693bc49274ee0b42ffb4c869e23f
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Fixes
+http://autobuild.buildroot.net/results/fab819eee4002a9c392c48c1ebaca5c5b6555567/
+
+Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- .../dvb-apps-0001-Fix-generate-keynames.patch      |   30 ++++++++++++++++++++
- package/dvb-apps/dvb-apps.mk                       |    3 +-
- 2 files changed, 32 insertions(+), 1 deletions(-)
+ package/directfb/directfb-use-gcc-link.patch |   35 ++++++++++++++++++++++++++
+ package/directfb/directfb.mk                 |    2 +
+ 2 files changed, 37 insertions(+), 0 deletions(-)
 
-diff --git a/package/dvb-apps/dvb-apps-0001-Fix-generate-keynames.patch b/package/dvb-apps/dvb-apps-0001-Fix-generate-keynames.patch
+diff --git a/package/directfb/directfb-use-gcc-link.patch b/package/directfb/directfb-use-gcc-link.patch
 new file mode 100644
-index 0000000..498607d
+index 0000000..ec6c0ea
 --- /dev/null
-+++ b/package/dvb-apps/dvb-apps-0001-Fix-generate-keynames.patch
-@@ -0,0 +1,30 @@
-+Fix generate-keynames.sh script for cross-compilation
++++ b/package/directfb/directfb-use-gcc-link.patch
+@@ -0,0 +1,35 @@
++Add patch to use 'gcc' instead of 'ld' for linking
 +
-+generate-keynames.sh reads /usr/include/linux to find the keyname
-+symbols. However, when cross-compiling, the include path points
-+somewhere else. Allow the user to pass CROSS_ROOT to point to the
-+root of the cross-compilation environment.
++The patch has been sent upstream but it has not been merged yet
 +
-+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
++Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
++
++From 176ce06b40897a357fe76a558af517197325f188 Mon Sep 17 00:00:00 2001
++From: Markos Chandras <markos.chandras@imgtec.com>
++Date: Wed, 28 Aug 2013 10:56:32 +0100
++Subject: [PATCH] rules/libobject.make: Use gcc for linking
++
++Invoking 'ld' directly may miss some necessary linker flags which
++are usually passed by gcc. Therefore, use gcc for linking.
++
++Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
 +---
-+diff -rup dvb-apps-83c746462ccb.orig/util/av7110_loadkeys/generate-keynames.sh dvb-apps-83c746462ccb/util/av7110_loadkeys/generate-keynames.sh
-+--- dvb-apps-83c746462ccb.orig/util/av7110_loadkeys/generate-keynames.sh	2012-12-06 10:38:07.000000000 +0100
-++++ dvb-apps-83c746462ccb/util/av7110_loadkeys/generate-keynames.sh	2013-08-29 21:47:09.717991439 +0200
-+@@ -18,7 +18,7 @@ echo "};" >> $1
-+ echo >> $1
-+ echo >> $1
-+ echo "static struct input_key_name key_name [] = {" >> $1
-+-for x in $(cat /usr/include/linux/input.h input_fake.h | \
-++for x in $(cat ${CROSS_ROOT}/usr/include/linux/input.h input_fake.h | \
-+            egrep "#define[ \t]+KEY_" | grep -v KEY_MAX | \
-+            cut -f 1 | cut -f 2 -d " " | sort -u) ; do
-+     echo "        { \"$(echo $x | cut -b 5-)\", $x }," >> $1
-+@@ -26,7 +26,7 @@ done
-+ echo "};" >> $1
-+ echo >> $1
-+ echo "static struct input_key_name btn_name [] = {" >> $1
-+-for x in $(cat /usr/include/linux/input.h input_fake.h | \
-++for x in $(cat ${CROSS_ROOT}/usr/include/linux/input.h input_fake.h | \
-+            egrep "#define[ \t]+BTN_" | \
-+            cut -f 1 | cut -f 2 -d " " | sort -u) ; do
-+      echo "        { \"$(echo $x | cut -b 5-)\", $x }," >> $1
-diff --git a/package/dvb-apps/dvb-apps.mk b/package/dvb-apps/dvb-apps.mk
-index 1e50aa4..8cf6a79 100644
---- a/package/dvb-apps/dvb-apps.mk
-+++ b/package/dvb-apps/dvb-apps.mk
-@@ -34,7 +34,8 @@ endif
- DVB_APPS_INSTALL_STAGING = YES
- 
- define DVB_APPS_BUILD_CMDS
--	$(TARGET_CONFIGURE_OPTS) LDFLAGS="$(DVB_APPS_LDFLAGS)" $(MAKE) -C $(@D) V=1
-+	$(TARGET_CONFIGURE_OPTS) LDFLAGS="$(DVB_APPS_LDFLAGS)" \
-+		$(MAKE) -C $(@D) CROSS_ROOT=$(STAGING_DIR) V=1
- endef
- 
- define DVB_APPS_INSTALL_STAGING_CMDS
++ rules/libobject.make | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/rules/libobject.make b/rules/libobject.make
++index bc670da..2cba658 100644
++--- a/rules/libobject.make
+++++ b/rules/libobject.make
++@@ -3,7 +3,7 @@
++ 	if test -d $<.tmp; then rmdir $<.tmp; fi
++ 	mkdir $<.tmp
++ 	(cd $<.tmp && $(AR) x ../../$<)
++-	$(LD) -o $@ -r $<.tmp/*.o
+++	$(CC) -nostdlib -o $@ -r $<.tmp/*.o
++ 	rm -f $<.tmp/*.o && rmdir $<.tmp
++ 
++ .PHONY: $(LTLIBRARIES:%.la=.libs/%.a)
++-- 
++1.8.3.2
++
+diff --git a/package/directfb/directfb.mk b/package/directfb/directfb.mk
+index c065eef..1d83a0b 100644
+--- a/package/directfb/directfb.mk
++++ b/package/directfb/directfb.mk
+@@ -11,6 +11,8 @@ DIRECTFB_SOURCE = DirectFB-$(DIRECTFB_VERSION).tar.gz
+ DIRECTFB_LICENSE = LGPLv2.1+
+ DIRECTFB_LICENSE_FILES = COPYING
+ DIRECTFB_INSTALL_STAGING = YES
++DIRECTFB_AUTORECONF = YES
++
+ DIRECTFB_CONF_OPT = \
+ 	--localstatedir=/var \
+ 	--disable-explicit-deps \
