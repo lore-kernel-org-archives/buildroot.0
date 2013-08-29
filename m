@@ -1,57 +1,102 @@
 From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Thu, 29 Aug 2013 14:59:15 +0200
-Subject: [Buildroot] [PATCH 0 of 9 v3] linux/uboot: add support for custom
- Mercurial repositories
-Message-ID: <patchbomb.1377781155@argentina>
+Date: Thu, 29 Aug 2013 14:59:16 +0200
+Subject: [Buildroot] [PATCH 1 of 9 v3] Config.in.legacy: update description
+	for developers
+In-Reply-To: <patchbomb.1377781155@argentina>
+References: <patchbomb.1377781155@argentina>
+Message-ID: <30166143137061989737.1377781156@argentina>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
-
-This series adds support for custom Mercurial repositories in uboot and linux
-packages.
-After the second version of this series, there has been some discussion between
-Arnout and myself regarding the automatic propagation of old values into the new
-symbols. In this version, the automatic propagation is taken into account.
-
-Additionally, there are some extra patches:
-- update comments in Config.in.legacy, both for the user as developer
-- updated defconfigs after renaming of config options
-- remove redundant $ signs in Config.in files
+The existing comments in Config.in.legacy are not entirely in-line with
+current practice. The comments implies that BR2_LEGACY should not be set when
+the conversion from old-to-new symbol can be done automatically using the
+appropriate 'select' statements. However, none of the existing legacy options
+does it this way. Moreover, I think it's intentional that the user is notified
+of the change, so that the removal of the legacy options in later buildroot
+versions no longer poses a problem.
+Additionally, the comments now describe how to handle string options.
 
 Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
 ---
-Note: as I didn't expect this to be applied still in 2013.08, I updated
-Config.in.legacy to already add a 2013.11 comment. However, this series
-currently does not cleanly apply on next, because one patch was already applied
-on master but not in next, and also because the version of some packages
-(barebox and linux) are different between both branches, causing conflicts.
-I would apply this after next has been merged into master. The remaining
-conflicts should only be the versions of barebox and linux, but I'm willing to
-send a new version after rebasing. In the mean time, review can already happen.
+v3:
+    - reorganize description
+    - update string description for automatic propagation
+    - extend string example
+    - 'depends on BR2_LEGACY' --> 'select BR2_LEGACY' (spotted by Arnout)
+(v2): new patch in this series
 
+ Config.in.legacy |  50 +++++++++++++++++++++++++++++++++++++++++++-------
+ 1 files changed, 43 insertions(+), 7 deletions(-)
 
- Config.in.legacy                       |  134 +++++++++++++++++++++++++++++++--
- boot/barebox/Config.in                 |    4 +-
- boot/uboot/Config.in                   |   37 +++++---
- boot/uboot/uboot.mk                    |    5 +-
- configs/arm_foundationv8_defconfig     |    4 +-
- configs/beaglebone_defconfig           |    4 +-
- configs/calao_snowball_defconfig       |    4 +-
- configs/cubieboard_defconfig           |    8 +-
- configs/ea3250_defconfig               |    8 +-
- configs/fdi3250_defconfig              |    8 +-
- configs/gnublin_defconfig              |    8 +-
- configs/mx53loco_defconfig             |    8 +-
- configs/phy3250_defconfig              |    8 +-
- configs/rpi_defconfig                  |    4 +-
- fs/jffs2/Config.in                     |    4 +-
- linux/Config.in                        |   38 ++++++---
- linux/linux.mk                         |    5 +-
- package/uclibc/Config.in               |    2 +-
- toolchain/toolchain-external/Config.in |    2 +-
- 19 files changed, 218 insertions(+), 77 deletions(-)
+diff --git a/Config.in.legacy b/Config.in.legacy
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -1,13 +1,9 @@
+ #
+ # Config.in.legacy - support for backward compatibility
+ #
+-# When an existing Config.in symbol is removed, it should be added again in this
+-# file, and take appropriate action to approximate backward compatibility. If
+-# there is an equivalent (set of) new symbols, these can just be select'ed by
+-# the old symbol. This makes sure that running 'make oldconfig' will make things
+-# "just work" when upgrading to a new buildroot version. If the change is too
+-# fundamental and cannot be fixed by a simple select, then the old symbol should
+-# select BR2_LEGACY.  If that symbol is set, the build will issue an error.
++# When an existing Config.in symbol is removed, it should be added again in
++# this file, and take appropriate action to approximate backward compatibility.
++# This will make the transition for the user more convenient.
+ #
+ # When adding legacy symbols to this file, add them to the front. The oldest
+ # symbols will be removed again after about two years.
+@@ -15,6 +11,46 @@
+ # The symbol should be copied as-is from the place where it was previously
+ # defined, but the help text should be removed or replaced with something that
+ # explains how to fix it.
++#
++# For bool options, the old symbol should select BR2_LEGACY, so that the user
++# is informed at build-time about selected legacy options.
++# If there is an equivalent (set of) new symbols, these should be select'ed by
++# the old symbol for backwards compatibility.
++#
++# For string options, it is not possible to directly select another symbol. In
++# this case, a hidden wrap bool option has to be added, that defaults to y if
++# the old string is not set at its default value. The wrap symbol should select
++# BR2_LEGACY.
++# If the original symbol has been renamed, the new symbol should use the value
++# of the old symbol as default. This requires a change outside of
++# Config.in.legacy, and this should be clearly marked as such below, so that
++# removal of legacy options also include the removal of these external
++# references.
++#
++# [Example: renaming a string option from FOO to BAR]
++# original symbol:
++#     config BR2_FOO_STRING
++#             string "Some foo string"
++#
++# becomes:
++#     config BR2_BAR_STRING
++#             string "Some bar string"
++#             default BR2_FOO_STRING if BR2_FOO_STRING != ""  # legacy
++#
++# and in Config.in.legacy:
++#     config BR2_FOO_STRING
++#             string "The foo string has been renamed"
++#             help
++#               <suitable help text>
++#
++#     config BR2_FOO_STRING_WRAP
++#             bool
++#             default y if BR2_FOO_STRING != ""
++#             select BR2_LEGACY
++#
++#     # Note: BR2_FOO_STRING is still referenced from package/foo/Config.in
++#
++# [End of example]
+ 
+ config BR2_LEGACY
+ 	bool
