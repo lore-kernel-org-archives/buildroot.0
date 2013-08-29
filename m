@@ -1,65 +1,55 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 29 Aug 2013 07:24:09 +0200
-Subject: [Buildroot] wanna compile busybox and uclib with self modified
- code, please help
-In-Reply-To: <BAY167-W54738C29151963CCC2605944B0@phx.gbl>
-References: <BAY167-W75F3A55D10B8CCC0F96A74944A0@phx.gbl>,
- <521C5ABF.4000301@relinux.de>
- <BAY167-W23A3ABEDF04D72F595092D944A0@phx.gbl>,
- <521C70CE.4060101@relinux.de> <BAY167-W54738C29151963CCC2605944B0@phx.gbl>
-Message-ID: <521EDAF9.1080609@mind.be>
+Date: Thu, 29 Aug 2013 07:35:24 +0200
+Subject: [Buildroot] [PATCH 6/6] glmark2: new package
+In-Reply-To: <CAEBucnCyw7VBjmP1nMwQ1qC1jgcn3=m93B1SY6frdqWuTdW=QA@mail.gmail.com>
+References: <1377373321-29732-1-git-send-email-spenser@gillilanding.com>
+ <1377373321-29732-7-git-send-email-spenser@gillilanding.com>
+ <521B93DB.8010401@mind.be>
+ <CAEBucnCyw7VBjmP1nMwQ1qC1jgcn3=m93B1SY6frdqWuTdW=QA@mail.gmail.com>
+Message-ID: <521EDD9C.6040408@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 08/28/13 04:36, hacklinux wrote:
-> according to the guidelines i made attempt as follow:
+On 08/27/13 21:01, Spenser Gilliland wrote:
+> Arnout,
 >
-> /home/wangk/buildroot-2012.11.1 is where buildroote preject locate in
-> server machine, under this directory a local.mk was created the snapshot
-> of the project is as follow:
+> Thanks for the review.  I appreciate your suggestions.
 >
-> [root at buildroot-2012.11.1]# ls
-> arch   boot     config         Config.in         configs  dl    fs
-> local.mk  Makefile.legacy  package  system
-> board  CHANGES  config_custom  Config.in.legacy  COPYING  docs  linux
-> Makefile  output           support  toolchain
->
-> and then variable LINUX_OVERRIDE_SRCDIR = /home/wangk/linux-2.6.39 was
-> aslo added in the local.mk file. after this i made menuconfig and in
-> /Build options -> location of a package override file i gave the location
-> where local.mk locate and  the value is as follow:
->
-> ($(TOPDIR)/local.mk) location of a package override file
->
-> however, when i tried to rebuild the project an error was posted
-> concerning linux kenel  that is :
->
-> [root at buildroot-2012.11.1]# make
-> --2013-08-28 11:25:08--
-> http://www.kernel.org/pub//linux/kernel/v2.6//linux-2.6.39.tar.bz2
-> Resolving www.kernel.org... failed: No address associated with hostname.
-> wget: unable to resolve host address ?.ww.kernel.org?
-> --2013-08-28 11:25:08--  http://sources.buildroot.net//linux-2.6.39.tar.bz2
-> Resolving sources.buildroot.net... failed: No address associated with
-> hostname.
-> wget: unable to resolve host address ?.ources.buildroot.net?
-> make: *** [/home/wangk/buildroot-2012.11.1/dl/linux-2.6.39.tar.bz2] Error 1
-> [root at buildroot-2012.11.1]#
->
-> very confused about this, is there anything wrong with i  configure?
+> On Mon, Aug 26, 2013 at 12:43 PM, Arnout Vandecappelle<arnout@mind.be>  wrote:
+>> >On 08/24/13 21:42, Spenser Gilliland wrote:
+>>> >>
+>>> >>Signed-off-by: Spenser Gilliland<spenser@gillilanding.com>
+>>> >>---
+>>> >>   package/Config.in                                  |   1 +
+>>> >>   package/glmark2/Config.in                          |  49 ++++++++++
+>>> >>   package/glmark2/glmark2-add-mali-support.patch     | 102
+>>> >>+++++++++++++++++++++
+>>> >>   package/glmark2/glmark2-fix-add-GLchar.patch       |  17 ++++
+>>> >>   .../glmark2-gl-to-glesv2-on-drm-flavor.patch       |  25 +++++
+>>> >>   package/glmark2/glmark2.mk                         |  70 ++++++++++++++
+>>> >>   6 files changed, 264 insertions(+)
+>>> >>   create mode 100644 package/glmark2/Config.in
+>>> >>   create mode 100644 package/glmark2/glmark2-add-mali-support.patch
+>>> >>   create mode 100644 package/glmark2/glmark2-fix-add-GLchar.patch
+>>> >>   create mode 100644
+>>> >>package/glmark2/glmark2-gl-to-glesv2-on-drm-flavor.patch
+>> >
+>> >
+>> >  Have these patches been sent upstream?
+> Not yet.  I was planning to wait until these patches were committed
+> before submitting them upstream.
 
-  Perhaps you are using an internal toolchain? In that case buildroot 
-also needs to install kernel headers (as part of the toolchain), and this 
-is handled separately. So you should also add this to you local.mk:
-
-LINUX_HEADERS_OVERRIDE_SRCDIR = /home/wangk/linux-2.6.39
-
+  It's a better idea to send them right away. The buildroot people are 
+not ideally placed to review those patches, so you may get more useful 
+feedback from upstream. Also, if upstream is fast enough to review the 
+patches, you can still make modifications to the patch included in buildroot.
 
   Regards,
   Arnout
+
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
