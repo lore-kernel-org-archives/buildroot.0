@@ -1,27 +1,33 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 29 Aug 2013 08:24:18 -0300
-Subject: [Buildroot] [PATCH 12/12] toolchain: improve mudflap support
-In-Reply-To: <20130829095623.75c46268@skate>
-References: <1377671731-28656-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1377671731-28656-13-git-send-email-thomas.petazzoni@free-electrons.com>
- <521EE7C3.3050003@mind.be> <20130829095623.75c46268@skate>
-Message-ID: <521F2F62.5050403@zacarias.com.ar>
+From: Ryan Wilkins <ryan@deadfrog.net>
+Date: Thu, 29 Aug 2013 08:00:38 -0400
+Subject: [Buildroot] [PATCH] mesa3d: fix download URL
+In-Reply-To: <87vc2og5v1.fsf@dell.be.48ers.dk>
+References: <1377768573-7488-1-git-send-email-luca@lucaceresoli.net>
+ <87vc2og5v1.fsf@dell.be.48ers.dk>
+Message-ID: <C0514FD6-1391-497C-BC22-726002668784@deadfrog.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 08/29/2013 04:56 AM, Thomas Petazzoni wrote:
 
->>   I would drop the option to enable -fmudflap globally, but keep the 
->> option to build mudflap support in the internal toolchain. As you wrote 
->> in another mail, mudflap is a debugging tool and not really a hardening 
->> tool like SSP.
+On Aug 29, 2013, at 6:15 AM, Peter Korsgaard <jacmet@uclibc.org> wrote:
+
+>>>>>> "Luca" == Luca Ceresoli <luca@lucaceresoli.net> writes:
 > 
-> I also agree with this. Gustavo, are you fine with this?
+> Luca> The MesaLib 7.10.3 tarball has been moved on ftp.freedesktop.org
+> Luca> from pub/mesa/7.10.3/ to pub/mesa/old_versions/7.x/7.10.3/.  A
+> Luca> bump to a newer release is only coming after Buildroot 2013.08,
+> Luca> so for now let us just change URL to let the download work
+> Luca> properly.
+> 
+> Luca> Reported-by: Ryan Wilkins <ryan@deadfrog.net>
+> Luca> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+> 
+> Committed, thanks.
+> 
 
-+1 we really don't want to make a Kconfig option out of each possible
-compiler flag and, well, busybox doesn't behave with it which many
-targets will use.
-Regards.
+Gives new meaning to sleeping off problems.  I just woke up and it's done.  Thanks guys!
+
+Ryan Wilkins
