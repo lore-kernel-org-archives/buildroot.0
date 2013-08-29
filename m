@@ -1,33 +1,37 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 29 Aug 2013 09:29:32 +0200
-Subject: [Buildroot] debugging inittab
-In-Reply-To: <521ED985.9050705@mind.be> (Arnout Vandecappelle's message of
- "Thu, 29 Aug 2013 07:17:57 +0200")
-References: <2DD0B9C711CDFC45A3A266C78966CE7F451F39A0@G4W3291.americas.hpqcorp.net>
- <5216A076.5030409@mind.be>
- <2DD0B9C711CDFC45A3A266C78966CE7F451F8F81@G4W3291.americas.hpqcorp.net>
- <521ED985.9050705@mind.be>
-Message-ID: <878uzlgdk3.fsf@dell.be.48ers.dk>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu, 29 Aug 2013 07:32:34 +0000 (UTC)
+Subject: [Buildroot] [Bug 3397] New Package: cryptsetup
+In-Reply-To: <bug-3397-163@https.bugs.busybox.net/>
+References: <bug-3397-163@https.bugs.busybox.net/>
+Message-ID: <20130829073234.0B0F79B5DF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+https://bugs.busybox.net/show_bug.cgi?id=3397
 
- >> That was the problem. Thanks!
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
 
- Arnout>  Right. Maybe we should just rename target/ to
- Arnout> THIS_IS_NOT_YOUR_ROOT_FILESYSTEM instead of just creating the
- Arnout> file. The latter is obviously not enough.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|                            |FIXED
 
- Arnout>  What was the reason we didn't do that in the first place?
+--- Comment #4 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> 2013-08-29 07:32:57 UTC ---
+A cryptsetup package has been committed as of
+http://git.buildroot.net/buildroot/commit/?h=next&id=21028166a5a9d09063eec916e4ad60c964cff27d.
+At the time of this writing, this commit is part of the 'next' branch, which
+will be merged into the 'master' branch after the 2013.08 release is done.
 
-People didn't seem to like it when I suggested it.
-
-It would mean a change of behaviour, so perhaps we need to add a target
-symlink like we did for staging?
+If you want to use it today, test the 'next' branch, or wait a few more days
+for the 2013.08 release to happen, at which point you'll find the package in
+the normal 'master' branch. If you only use stable releases of Buildroot,
+you'll have to wait until the 2013.11 release, which will incorporate this new
+package.
 
 -- 
-Bye, Peter Korsgaard
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
