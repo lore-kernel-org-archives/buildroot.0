@@ -1,42 +1,38 @@
 From: Ryan Barnett <rjbarnet@rockwellcollins.com>
-Date: Thu, 29 Aug 2013 17:32:26 -0500
-Subject: [Buildroot] [PATCH v2 2/2] libcurl: add support for compiling with
-	libssh2
-In-Reply-To: <1377815546-3125-1-git-send-email-rjbarnet@rockwellcollins.com>
-References: <1377815546-3125-1-git-send-email-rjbarnet@rockwellcollins.com>
-Message-ID: <1377815546-3125-3-git-send-email-rjbarnet@rockwellcollins.com>
+Date: Thu, 29 Aug 2013 17:32:24 -0500
+Subject: [Buildroot] [PATCH v2 0/2] Add support for libssh2 in buildroot
+Message-ID: <1377815546-3125-1-git-send-email-rjbarnet@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Adding configuration options that if libssh2 is selected, compile libcurl
-with --with-ssh config flag.
+Adding support for libssh2 to buildroot to allow for its use with libcurl. 
+By having libcurl use libssh2, features like SCP and SFTP become possible 
+when using libcurl.
 
-Signed-off-by: Ryan Barnett <rjbarnet@rockwellcollins.com>
----
+For more detailed information about options enabled with libssh2 in libcurl
+see the following website: http://curl.haxx.se/docs/features.html
+
+Change from v1 -> v2:
+  * All the following changes were noted by Arnout Vandecappelle
+  * updated commit comments for libssh2
+  * removed details from libssh2/Config.in
+  * added libssh2 to select libgcrypt by default
+  * fixed up configuration options libssh2 in libssh.mk
+  * removed removal of documentation and static libraries since the
+    target finalize step takes care of this
+  * added check for zlib dependancy (myself)
+
+Ryan Barnett (2):
+  libssh2: add support for new package libssh2
+  libcurl: add support for compiling with libssh2
+
+ package/Config.in          |    1 +
  package/libcurl/libcurl.mk |    8 ++++++++
- 1 files changed, 8 insertions(+), 0 deletions(-)
-
-diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
-index 56f13ba..fd15478 100644
---- a/package/libcurl/libcurl.mk
-+++ b/package/libcurl/libcurl.mk
-@@ -34,6 +34,14 @@ else
- LIBCURL_CONF_OPT += --without-ssl
- endif
- 
-+# Configure curl to support libssh2
-+ifeq ($(BR2_PACKAGE_LIBSSH2),y)
-+LIBCURL_DEPENDENCIES += libssh2
-+LIBCURL_CONF_OPT += --with-libssh2
-+else
-+LIBCURL_CONF_OPT += --without-libssh2
-+endif
-+
- define LIBCURL_FIX_DOT_PC
- 	printf 'Requires: openssl\n' >>$(@D)/libcurl.pc.in
- endef
--- 
-1.7.1
+ package/libssh2/Config.in  |   11 +++++++++++
+ package/libssh2/libssh2.mk |   32 ++++++++++++++++++++++++++++++++
+ 4 files changed, 52 insertions(+), 0 deletions(-)
+ create mode 100644 package/libssh2/Config.in
+ create mode 100644 package/libssh2/libssh2.mk
