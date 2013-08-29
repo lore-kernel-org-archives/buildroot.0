@@ -1,31 +1,31 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 29 Aug 2013 23:10:30 +0200
-Subject: [Buildroot] [git commit branch/next] gstreamer1: bump version
-Message-ID: <20130829211312.F05D29B5D6@busybox.osuosl.org>
+Date: Thu, 29 Aug 2013 23:12:48 +0200
+Subject: [Buildroot] [git commit branch/next] gst1-plugins-ugly: bump version
+Message-ID: <20130829211313.2BB939B5D6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1a074ba117938e17430a58ac57798c2f3ba05149
+commit: http://git.buildroot.net/buildroot/commit/?id=90fb70b4c37ad3a3178b51c7941881aa8dfd8fa6
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/multimedia/gstreamer1/gstreamer1.mk |    2 +-
+ .../gst1-plugins-ugly/gst1-plugins-ugly.mk         |    2 +-
  1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/multimedia/gstreamer1/gstreamer1.mk b/package/multimedia/gstreamer1/gstreamer1.mk
-index c9808a7..79b2b56 100644
---- a/package/multimedia/gstreamer1/gstreamer1.mk
-+++ b/package/multimedia/gstreamer1/gstreamer1.mk
+diff --git a/package/multimedia/gst1-plugins-ugly/gst1-plugins-ugly.mk b/package/multimedia/gst1-plugins-ugly/gst1-plugins-ugly.mk
+index 493ee71..e666d61 100644
+--- a/package/multimedia/gst1-plugins-ugly/gst1-plugins-ugly.mk
++++ b/package/multimedia/gst1-plugins-ugly/gst1-plugins-ugly.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GSTREAMER1_VERSION = 1.0.9
-+GSTREAMER1_VERSION = 1.0.10
- GSTREAMER1_SOURCE = gstreamer-$(GSTREAMER1_VERSION).tar.xz
- GSTREAMER1_SITE = http://gstreamer.freedesktop.org/src/gstreamer
- GSTREAMER1_INSTALL_STAGING = YES
+-GST1_PLUGINS_UGLY_VERSION = 1.0.9
++GST1_PLUGINS_UGLY_VERSION = 1.0.10
+ GST1_PLUGINS_UGLY_SOURCE = gst-plugins-ugly-$(GST1_PLUGINS_UGLY_VERSION).tar.xz
+ GST1_PLUGINS_UGLY_SITE = http://gstreamer.freedesktop.org/src/gst-plugins-ugly
+ GST1_PLUGINS_UGLY_LICENSE_FILES = COPYING
