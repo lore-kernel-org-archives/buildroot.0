@@ -1,31 +1,31 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 29 Aug 2013 23:11:05 +0200
-Subject: [Buildroot] [git commit branch/next] gst1-plugins-base: bump version
-Message-ID: <20130829211313.0AACC99834@busybox.osuosl.org>
+Date: Thu, 29 Aug 2013 23:12:22 +0200
+Subject: [Buildroot] [git commit branch/next] gst1-pugins-bad: bump version
+Message-ID: <20130829211313.228099B5D6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f62c9f2c1bd3859665b2a85e2b1720572b04931f
+commit: http://git.buildroot.net/buildroot/commit/?id=c946b4f4ce2dca1f77dc90e77c1de0232df01c43
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- .../gst1-plugins-base/gst1-plugins-base.mk         |    2 +-
+ .../gst1-plugins-bad/gst1-plugins-bad.mk           |    2 +-
  1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/multimedia/gst1-plugins-base/gst1-plugins-base.mk b/package/multimedia/gst1-plugins-base/gst1-plugins-base.mk
-index 4a9e234..d3aebda 100644
---- a/package/multimedia/gst1-plugins-base/gst1-plugins-base.mk
-+++ b/package/multimedia/gst1-plugins-base/gst1-plugins-base.mk
+diff --git a/package/multimedia/gst1-plugins-bad/gst1-plugins-bad.mk b/package/multimedia/gst1-plugins-bad/gst1-plugins-bad.mk
+index 362aed6..385522e 100644
+--- a/package/multimedia/gst1-plugins-bad/gst1-plugins-bad.mk
++++ b/package/multimedia/gst1-plugins-bad/gst1-plugins-bad.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GST1_PLUGINS_BASE_VERSION = 1.0.9
-+GST1_PLUGINS_BASE_VERSION = 1.0.10
- GST1_PLUGINS_BASE_SOURCE = gst-plugins-base-$(GST1_PLUGINS_BASE_VERSION).tar.xz
- GST1_PLUGINS_BASE_SITE = http://gstreamer.freedesktop.org/src/gst-plugins-base
- GST1_PLUGINS_BASE_INSTALL_STAGING = YES
+-GST1_PLUGINS_BAD_VERSION = 1.0.9
++GST1_PLUGINS_BAD_VERSION = 1.0.10
+ GST1_PLUGINS_BAD_SOURCE = gst-plugins-bad-$(GST1_PLUGINS_BAD_VERSION).tar.xz
+ GST1_PLUGINS_BAD_SITE = http://gstreamer.freedesktop.org/src/gst-plugins-bad
+ GST1_PLUGINS_BAD_LICENSE_FILES = COPYING COPYING.LIB
