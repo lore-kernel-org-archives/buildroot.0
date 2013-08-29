@@ -1,38 +1,28 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 29 Aug 2013 12:14:01 +0200
-Subject: [Buildroot] debugging inittab
-In-Reply-To: <20130829103126.7bcbf18a@skate> (Thomas Petazzoni's message of
- "Thu, 29 Aug 2013 10:31:26 +0200")
-References: <2DD0B9C711CDFC45A3A266C78966CE7F451F39A0@G4W3291.americas.hpqcorp.net>
- <5216A076.5030409@mind.be>
- <2DD0B9C711CDFC45A3A266C78966CE7F451F8F81@G4W3291.americas.hpqcorp.net>
- <521ED985.9050705@mind.be> <20130829103126.7bcbf18a@skate>
-Message-ID: <87zjs0g5xy.fsf@dell.be.48ers.dk>
+Date: Thu, 29 Aug 2013 12:15:46 +0200
+Subject: [Buildroot] [PATCH] mesa3d: fix download URL
+In-Reply-To: <1377768573-7488-1-git-send-email-luca@lucaceresoli.net> (Luca
+ Ceresoli's message of "Thu, 29 Aug 2013 11:29:33 +0200")
+References: <1377768573-7488-1-git-send-email-luca@lucaceresoli.net>
+Message-ID: <87vc2og5v1.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+>>>>> "Luca" == Luca Ceresoli <luca@lucaceresoli.net> writes:
 
-Hi,
+ Luca> The MesaLib 7.10.3 tarball has been moved on ftp.freedesktop.org
+ Luca> from pub/mesa/7.10.3/ to pub/mesa/old_versions/7.x/7.10.3/.  A
+ Luca> bump to a newer release is only coming after Buildroot 2013.08,
+ Luca> so for now let us just change URL to let the download work
+ Luca> properly.
 
- >> What was the reason we didn't do that in the first place?
+ Luca> Reported-by: Ryan Wilkins <ryan@deadfrog.net>
+ Luca> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
 
- Thomas> I personally find it a bit ugly. Moreover, having a file allows
- Thomas> to add contents to explain *why* it is not the root filesystem,
- Thomas> while a directory cannot contain an explanation :)
-
- Thomas> Since we've added the THIS_IS_NOT_YOUR_ROOT_FILESYSTEM file,
- Thomas> this is the *first* time we have a new report of people using
- Thomas> output/target directly for NFS mounting. At this point, with a
- Thomas> file with such a name, and the contents of the file explaining
- Thomas> how to do NFS mounting, I think there's not much else we can do
- Thomas> except pointing users at this file which documents why what
- Thomas> they are doing cannot work.
-
-True. Let's keep it like it is.
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
