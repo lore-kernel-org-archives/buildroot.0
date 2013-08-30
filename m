@@ -1,60 +1,53 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 30 Aug 2013 09:47:32 +0200
-Subject: [Buildroot] autobuild statistics graph
-In-Reply-To: <521F6FCD.3020500@mind.be>
-References: <CAAXf6LW8axKFZpiQFjmqWcFXTEqaHoD3uX=hk5ZSQbmz_7BabA@mail.gmail.com>
- <20130828091036.1a91b786@skate>
- <CAAXf6LWFMtmDpFvZODkd3N_Wsk-VwNP-QVkquRhn3B2aiOjCqg@mail.gmail.com>
- <20130828094824.5f917f48@skate>
- <CAAXf6LWz7_RYds7Zr7kdQHvhYXtNO1WEP+RX+0TTthfZURvi+Q@mail.gmail.com>
- <CAAXf6LVPQVzQpfCdeVrm2yNzEad8j2GS9pnna7YiKVnhTb=MQg@mail.gmail.com>
- <20130829101513.60e3eb48@skate>
- <CAAXf6LUW_=aWd9MUncyoPKSnVruL3RkEqDzN5-AgvSiH5VQS5g@mail.gmail.com>
- <521F6FCD.3020500@mind.be>
-Message-ID: <20130830094732.0ebb841f@skate>
+From: Gwyll Gwyllin <gwyll@gwyll.eu>
+Date: Fri, 30 Aug 2013 09:43:58 +0200
+Subject: [Buildroot] host-icu No rule to make target
+Message-ID: <2ACF8D649627456A8677BE38BC2E4484@tux.local>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Arnout Vandecappelle,
+Hello List,
 
-On Thu, 29 Aug 2013 17:59:09 +0200, Arnout Vandecappelle wrote:
+i?m new to buildroot (and i am a hungarian guy, so forgive me for my bad english).
+I?m trying to compile an embedded system for a bluechip device (mips architecture)
 
-> > Yes, I also considered that having the releases indicated in the graph
-> > would be interesting. In fact, if we'd have these big moments shown in
-> > the graph, the actual dates wouldn't really matter anymore and could
-> > be hidden completely IMO.
-> >
-> > If you still have the info about when some of the big changes (like
-> > new toolchain etc.) was done, we can definitely put that alongside the
-> > release milestones.
-> >
-> > How to best store the milestones (in the database or in the graph.php
-> > file itself), I'm not sure. They'll probably need to be manually
-> > updated, but that could be done both in the database as in graph.php.
-> > How to show these milestones in the graph is also not entirely clear.
-> > I can't find a way to pass some custom x values to  pChart. One
-> > solution is to manipulate the date array from php before passing it to
-> > pChart. This way, if we have a map between date (as it appears in the
-> > database) and event, we can replace the dates by the events, and make
-> > all other strings empty. This should give the desired result I think.
-> 
->   Ideally the horizontal axis should be based on git commit IDs instead 
-> of build date, and the labels could be the tags.  And you could manually 
-> add tags to the clone from which the commit IDs are extracted to indicate 
-> those interesting points where toolchains are added etc. But that would 
-> be a bit too much effort I guess :-)
+If i set the TARGET environment variable to ?mipsel-unknown-linux-uclibc (as the documentation says), the compile process stops at host-icu-4.8.1.1 with the message:
+make[2]: *** No rule to make target `mipsel-unknown-linux-uclibc?, needed by `all-local?. Stop.
 
-Hum, yeah, I don't mind spending a bit of time on writing/maintaining a
-few tools around QA for Buildroot, but I'd like to also keep some time
-for real Buildroot development, and not be completely full with stupid
-PHP development tasks :-)
+Everything compiles well before host-icu.
 
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+The source came with a script which sets up the environment as following:
+export PROJECT=bctre1
+export PRJROOT=/embedded/projects/${PROJECT}
+export ARCH=mips
+export TARGET=mipsel-unknown-linux-uclibc
+export TOOLSDIR=/embedded/toolchains/${PROJECT}
+export PATH=${TOOLSDIR}/bin:${PATH}
+export CROSS_COMPILE=${TARGET}-
+export _MIPS_SZPTR=32
+
+The host-icu compiles only if i unset the TARGET variable. In that case, the compile stops at iproute with this error:
+
+/bin/sh: xtables: command not found
+/embedded/projects/bctre1/buildroot/output/host/usr/bin/mipsel-buildroot-linux-uclibc-gcc -Wl,-export-dynamic  tc.o tc_qdisc.o tc_class.o tc_filter.o tc_util.o tc_monitor.o m_police.o m_estimator.o m_action.o m_ematch.o emp_ematch.yacc.o emp_ematch.lex.o q_fifo.o q_sfq.o q_red.o q_prio.o q_tbf.o q_cbq.o q_rr.o q_multiq.o q_netem.o q_choke.o q_sfb.o f_rsvp.o f_u32.o f_route.o f_fw.o f_basic.o f_flow.o f_cgroup.o q_dsmark.o q_gred.o f_tcindex.o q_ingress.o q_hfsc.o q_htb.o q_drr.o q_qfq.o m_gact.o m_mirred.o m_nat.o m_pedit.o m_skbedit.o m_csum.o p_ip.o p_icmp.o p_tcp.o p_udp.o em_nbyte.o em_cmp.o em_u32.o em_canid.o em_meta.o q_mqprio.o q_codel.o q_fq_codel.o em_ipset.o tc_core.o tc_red.o tc_cbq.o tc_estimator.o tc_stab.o  ../lib/libnetlink.a ../lib/libutil.a -L. -ltc -lm -ldl -o tc
+/embedded/projects/bctre1/buildroot/output/host/usr/lib/gcc/mipsel-buildroot-linux-uclibc/4.8.0/../../../../mipsel-buildroot-linux-uclibc/bin/ld: cannot find -ltc
+collect2: error: ld returned 1 exit status
+make[2]: *** [tc] Error 1
+make[2]: *** Waiting for unfinished jobs....
+rm emp_ematch.lex.c
+make[2]: Leaving directory `/embedded/projects/bctre1/buildroot/output/build/iproute2-3.7.0/tc'
+make[1]: *** [all] Error 2
+make[1]: Leaving directory `/embedded/projects/bctre1/buildroot/output/build/iproute2-3.7.0'
+make: *** [/embedded/projects/bctre1/buildroot/output/build/iproute2-3.7.0/.stamp_built] Error 2
+
+Could anyone give me some advice how to compile buildroot with the mips target?
+
+My compiler system is a XEN DomU Debian Lenny.
+
+Regards,
+Gwyll
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130830/c2b51e39/attachment.html>
