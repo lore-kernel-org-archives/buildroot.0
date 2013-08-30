@@ -1,13 +1,17 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 30 Aug 2013 09:46:02 +0200
-Subject: [Buildroot] [PATCH] toolchain: add support for glibc
-In-Reply-To: <521F6E9C.6070703@mind.be>
-References: <1376847393-12397-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <521534E2.7020606@mind.be> <20130822232633.7ba9b14d@skate>
- <52169E42.2040904@mind.be> <20130823064845.2ec4800d@skate>
- <521E5AB7.1050702@mind.be> <20130829093809.75fe7e76@skate>
- <521F6E9C.6070703@mind.be>
-Message-ID: <20130830094602.6b06926e@skate>
+Date: Fri, 30 Aug 2013 09:47:32 +0200
+Subject: [Buildroot] autobuild statistics graph
+In-Reply-To: <521F6FCD.3020500@mind.be>
+References: <CAAXf6LW8axKFZpiQFjmqWcFXTEqaHoD3uX=hk5ZSQbmz_7BabA@mail.gmail.com>
+ <20130828091036.1a91b786@skate>
+ <CAAXf6LWFMtmDpFvZODkd3N_Wsk-VwNP-QVkquRhn3B2aiOjCqg@mail.gmail.com>
+ <20130828094824.5f917f48@skate>
+ <CAAXf6LWz7_RYds7Zr7kdQHvhYXtNO1WEP+RX+0TTthfZURvi+Q@mail.gmail.com>
+ <CAAXf6LVPQVzQpfCdeVrm2yNzEad8j2GS9pnna7YiKVnhTb=MQg@mail.gmail.com>
+ <20130829101513.60e3eb48@skate>
+ <CAAXf6LUW_=aWd9MUncyoPKSnVruL3RkEqDzN5-AgvSiH5VQS5g@mail.gmail.com>
+ <521F6FCD.3020500@mind.be>
+Message-ID: <20130830094732.0ebb841f@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,38 +20,37 @@ To: buildroot@busybox.net
 
 Dear Arnout Vandecappelle,
 
-On Thu, 29 Aug 2013 17:54:04 +0200, Arnout Vandecappelle wrote:
+On Thu, 29 Aug 2013 17:59:09 +0200, Arnout Vandecappelle wrote:
 
-> > Generally, 'make source' is unfortunately a bit broken with the new
-> > internal toolchain backend based on packages. One of the reason is that
-> > the 'make source' thing only works for one recursion level of
-> > dependencies on host packages. I've started working on fixing that, but
-> > it was more complex than I thought (or alternatively I was too stupid
-> > to see that there was a simple solution).
-> 
->   Probably requires an pkg-generic change, like:
-> 
-> $(2)-all-source: $(2)-source $(suffix -source,$($(2)_DEPENDENCIES))
-
-Hum, right. I'll try to find some time to investigate that.
-
-> >>> But I guess I
-> >>> can probably make BR2_TOOLCHAIN_BUILDROOT_LIBC be equal to "glibc" in
-> >>> both the glibc and eglibc case, which would be sufficient to make the
-> >>> toolchain building logic use the "glibc" and "glibc-configure" targets
-> >>> for both the eglibc and glibc selections.
-> >>
-> >>    You could also choose to keep eglibc.mk and make glibc the derivative.
-> >> Or would that be strange?
+> > Yes, I also considered that having the releases indicated in the graph
+> > would be interesting. In fact, if we'd have these big moments shown in
+> > the graph, the actual dates wouldn't really matter anymore and could
+> > be hidden completely IMO.
 > >
-> > Have you seen my new patch set:
+> > If you still have the info about when some of the big changes (like
+> > new toolchain etc.) was done, we can definitely put that alongside the
+> > release milestones.
+> >
+> > How to best store the milestones (in the database or in the graph.php
+> > file itself), I'm not sure. They'll probably need to be manually
+> > updated, but that could be done both in the database as in graph.php.
+> > How to show these milestones in the graph is also not entirely clear.
+> > I can't find a way to pass some custom x values to  pChart. One
+> > solution is to manipulate the date array from php before passing it to
+> > pChart. This way, if we have a map between date (as it appears in the
+> > database) and event, we can replace the dates by the events, and make
+> > all other strings empty. This should give the desired result I think.
 > 
->   Sorry, I thought I had checked before sending but obviously my search 
-> wasn't good enough.
+>   Ideally the horizontal axis should be based on git commit IDs instead 
+> of build date, and the labels could be the tags.  And you could manually 
+> add tags to the clone from which the commit IDs are extracted to indicate 
+> those interesting points where toolchains are added etc. But that would 
+> be a bit too much effort I guess :-)
 
-No problem. I guess you'll continue the review over here :)
-
-Thanks!
+Hum, yeah, I don't mind spending a bit of time on writing/maintaining a
+few tools around QA for Buildroot, but I'd like to also keep some time
+for real Buildroot development, and not be completely full with stupid
+PHP development tasks :-)
 
 Thomas
 -- 
