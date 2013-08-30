@@ -1,53 +1,57 @@
-From: Gwyll Gwyllin <gwyll@gwyll.eu>
-Date: Fri, 30 Aug 2013 09:43:58 +0200
-Subject: [Buildroot] host-icu No rule to make target
-Message-ID: <2ACF8D649627456A8677BE38BC2E4484@tux.local>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 30 Aug 2013 09:58:31 +0200
+Subject: [Buildroot] feature or pebkac
+In-Reply-To: <521F9B91.7040903@mind.be>
+References: <20130829111708.c603e5bf976541d3abd3a43a@lavabit.com>
+ <521F9B91.7040903@mind.be>
+Message-ID: <20130830095831.12c3c743@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello List,
+Dear Arnout Vandecappelle,
 
-i?m new to buildroot (and i am a hungarian guy, so forgive me for my bad english).
-I?m trying to compile an embedded system for a bluechip device (mips architecture)
+On Thu, 29 Aug 2013 21:05:53 +0200, Arnout Vandecappelle wrote:
+> On 08/29/13 20:17, rh wrote:
+> > I have found that changing the url for a custom kernel tar ball does not
+> > trigger a rebuild when running make.  I have removed linux-custom dir
+> > and then make fetches the new tar ball and rebuilds.
+> 
+>   That's right. Buildroot doesn't try to be perfect for rebuilds when the 
+> configuration changes - but if it is simple to fix, patches are welcome!
 
-If i set the TARGET environment variable to ?mipsel-unknown-linux-uclibc (as the documentation says), the compile process stops at host-icu-4.8.1.1 with the message:
-make[2]: *** No rule to make target `mipsel-unknown-linux-uclibc?, needed by `all-local?. Stop.
+As Thomas De Schampheleire later explained, the problem is that for
+custom tarballs, we can't easily find a directory name that's unique
+for each tarball, except by having a name that is a complete
+translation of the tarball URL, such as:
 
-Everything compiles well before host-icu.
+output/build/linux-http-www.company.com-pub-linux-3.10-board-foo.tar.gz/
 
-The source came with a script which sets up the environment as following:
-export PROJECT=bctre1
-export PRJROOT=/embedded/projects/${PROJECT}
-export ARCH=mips
-export TARGET=mipsel-unknown-linux-uclibc
-export TOOLSDIR=/embedded/toolchains/${PROJECT}
-export PATH=${TOOLSDIR}/bin:${PATH}
-export CROSS_COMPILE=${TARGET}-
-export _MIPS_SZPTR=32
+That's more or less what Thomas DS proposed, and I wasn't too happy
+with it due to the horrible directory name. Another option would be to
+hash the tarball location and do:
 
-The host-icu compiles only if i unset the TARGET variable. In that case, the compile stops at iproute with this error:
+output/build/linux-${hash}/
 
-/bin/sh: xtables: command not found
-/embedded/projects/bctre1/buildroot/output/host/usr/bin/mipsel-buildroot-linux-uclibc-gcc -Wl,-export-dynamic  tc.o tc_qdisc.o tc_class.o tc_filter.o tc_util.o tc_monitor.o m_police.o m_estimator.o m_action.o m_ematch.o emp_ematch.yacc.o emp_ematch.lex.o q_fifo.o q_sfq.o q_red.o q_prio.o q_tbf.o q_cbq.o q_rr.o q_multiq.o q_netem.o q_choke.o q_sfb.o f_rsvp.o f_u32.o f_route.o f_fw.o f_basic.o f_flow.o f_cgroup.o q_dsmark.o q_gred.o f_tcindex.o q_ingress.o q_hfsc.o q_htb.o q_drr.o q_qfq.o m_gact.o m_mirred.o m_nat.o m_pedit.o m_skbedit.o m_csum.o p_ip.o p_icmp.o p_tcp.o p_udp.o em_nbyte.o em_cmp.o em_u32.o em_canid.o em_meta.o q_mqprio.o q_codel.o q_fq_codel.o em_ipset.o tc_core.o tc_red.o tc_cbq.o tc_estimator.o tc_stab.o  ../lib/libnetlink.a ../lib/libutil.a -L. -ltc -lm -ldl -o tc
-/embedded/projects/bctre1/buildroot/output/host/usr/lib/gcc/mipsel-buildroot-linux-uclibc/4.8.0/../../../../mipsel-buildroot-linux-uclibc/bin/ld: cannot find -ltc
-collect2: error: ld returned 1 exit status
-make[2]: *** [tc] Error 1
-make[2]: *** Waiting for unfinished jobs....
-rm emp_ematch.lex.c
-make[2]: Leaving directory `/embedded/projects/bctre1/buildroot/output/build/iproute2-3.7.0/tc'
-make[1]: *** [all] Error 2
-make[1]: Leaving directory `/embedded/projects/bctre1/buildroot/output/build/iproute2-3.7.0'
-make: *** [/embedded/projects/bctre1/buildroot/output/build/iproute2-3.7.0/.stamp_built] Error 2
+but then it's difficult for the user to map which linux-<foo> directory
+corresponds to which version he has built.
 
-Could anyone give me some advice how to compile buildroot with the mips target?
+> > But I don't need all that and I now use --single-branch argument
+> > to git clone followed by git archive to create a tar ball.
+> 
+>   That's a great idea! However, this option is only available since git 
+> 1.7.10 and I think that many production environments still have older git 
+> versions.
 
-My compiler system is a XEN DomU Debian Lenny.
+Can't we do like what we do for shallow clones? Try if --single-branch
+is supported and works, and if so, all right, if not, fall back to the
+normal way?
 
-Regards,
-Gwyll
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130830/c2b51e39/attachment.html>
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
