@@ -1,35 +1,45 @@
-From: Sagaert Johan <sagaert.johan@skynet.be>
-Date: Fri, 30 Aug 2013 13:49:08 +0200
-Subject: [Buildroot] make uclibc-menuconfig fails when running for the first
-	time if the ccache is enabled.
-Message-ID: <8F9480037AD0403582DFEFB03EAE30DC@JohanW7>
+From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
+Date: Fri, 30 Aug 2013 13:59:37 +0200
+Subject: [Buildroot] Build reproducibility
+In-Reply-To: <1377851505-23498-1-git-send-email-jezz@sysmic.org>
+References: <1377851505-23498-1-git-send-email-jezz@sysmic.org>
+Message-ID: <CAAXf6LVmyWojaBTfpTpZsNcXr+bCSkFMT__iYQjTAvO9ryEqnw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- 
- Hi
+Op 30-aug.-2013 10:32 schreef "J?r?me Pouiller" <jezz@sysmic.org> het
+volgende:
+>
+> Hello,
+>
+> I noticed a problem with reproducibility of build. If I list targets
+> (using make show-targets) on Fedora and on Ubuntu, targets are on
+> sorted on same orders. Indeed, result of $(wildcard *.mk) are not
+> the same on these systems.
+>
+> It seems Make does not sort anymore result of wildcard since 3.82:
+> http://comments.gmane.org/gmane.comp.gnu.make.bugs/4260.
+>
+> Following patch should fix problem.
 
-make distclean
-make anything_defconfig
+In one of the previous buildroot developer days we discussed this. IIRC,
+the conclusion was that this change in order shouldn't matter, because all
+dependencies should be expressed in make. Hence, the end result should be
+the same, even though build order was not.
 
-make uclibc-menuconfig
-Fails if the ccache is enabled in the config file.
+Have you come across a scenario where there actually was a problem?
 
-  MKDIR include/config
-make[2]: /home/buildroot12git/output/host/usr/bin/arm-buildroot-linux-uclibcgnueabi-gcc: Command not found
-make[2]: /home/buildroot12git/output/host/usr/bin/arm-buildroot-linux-uclibcgnueabi-gcc: Command not found
-make[2]: /home/buildroot12git/output/host/usr/bin/arm-buildroot-linux-uclibcgnueabi-gcc: Command not found
-  HOSTCC-o extra/config/conf.o
-/bin/sh: /home/buildroot12git/output/host/usr/bin/ccache: No such file or directory
-make[2]: *** [../../extra/config/conf.o] Error 127
-make[1]: *** [extra/config/conf] Error 2
-make[1]: Leaving directory `/home/buildroot12git/output/build/uclibc-0.9.33.2'
-make: *** [/home/buildroot12git/output/build/uclibc-0.9.33.2/.stamp_patched] Error 2
+Best regards,
+Thomas
 
-
-
-
-Sagaert Johan
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130830/1296e9e7/attachment.html>
