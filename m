@@ -1,27 +1,42 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri, 30 Aug 2013 13:35:19 +0000 (UTC)
-Subject: [Buildroot] [Bug 6482] Add c-ares
-In-Reply-To: <bug-6482-163@https.bugs.busybox.net/>
-References: <bug-6482-163@https.bugs.busybox.net/>
-Message-ID: <20130830133519.C4FCA9B636@busybox.osuosl.org>
+From: Ryan Barnett <rjbarnet@rockwellcollins.com>
+Date: Fri, 30 Aug 2013 09:09:43 -0500
+Subject: [Buildroot] [PATCH v3 0/2] Add support for libssh2 in buildroot
+Message-ID: <1377871785-4964-1-git-send-email-rjbarnet@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=6482
+Adding support for libssh2 to buildroot to allow for its use with libcurl. 
+By having libcurl use libssh2, features like SCP and SFTP become possible 
+when using libcurl.
 
---- Comment #3 from Gennady Proskurin <gpr@mail.ru> 2013-08-30 13:35:37 UTC ---
-(In reply to comment #2)
-> Would you mind posting this new package has a patch to the Buildroot mailing
-> list? We generally prefer patches to be submitted to the mailing list, to ease
-> the review process. Thanks!
+For more detailed information about options enabled with libssh2 in libcurl
+see the following website: http://curl.haxx.se/docs/features.html
 
-done
-http://lists.busybox.net/pipermail/buildroot/2013-August/077202.html
+Change from v2 -> v3:
+  * Use else when selecting configure and dependancy options with using
+    libgcrypt or openssl (suggested by Baruch Siach)
 
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Change from v1 -> v2:
+  * All the following changes were noted by Arnout Vandecappelle
+  * updated commit comments for libssh2
+  * removed details from libssh2/Config.in
+  * added libssh2 to select libgcrypt by default
+  * fixed up configuration options libssh2 in libssh.mk
+  * removed removal of documentation and static libraries since the
+    target finalize step takes care of this
+  * added check for zlib dependancy (myself)
+
+Ryan Barnett (2):
+  libssh2: add package
+  libcurl: add support for compiling with libssh2
+
+ package/Config.in          |    1 +
+ package/libcurl/libcurl.mk |    8 ++++++++
+ package/libssh2/Config.in  |   11 +++++++++++
+ package/libssh2/libssh2.mk |   32 ++++++++++++++++++++++++++++++++
+ 4 files changed, 52 insertions(+), 0 deletions(-)
+ create mode 100644 package/libssh2/Config.in
+ create mode 100644 package/libssh2/libssh2.mk
