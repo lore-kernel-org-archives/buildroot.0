@@ -1,166 +1,99 @@
-From: Michael Rommel <rommel@layer-7.net>
-Date: Fri, 30 Aug 2013 23:58:44 +0200
-Subject: [Buildroot] [PATCH 1/1] pyzmq: new package
-Message-ID: <1377899924-1866-1-git-send-email-rommel@layer-7.net>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Fri, 30 Aug 2013 18:58:43 -0300
+Subject: [Buildroot] [PATCH] collectd: bump to version 5.4.0
+Message-ID: <1377899923-26257-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
-
-as promised, here is the separate patch for pyzmq.
-
-  Michael.
-
-PS: I noticed, that I missed in the previous e-mail to change the Config.in and remove the pyzmq line from it. Do I need to re-submit the patch for knock?
-
-
-
-
-The python language bindings for zeromq.
-
-Please note that the reason for the hardcoded version number in the
-python-pyzmq package is due to the following dilemma:
-- the setup.py script tries to compile a test C program and runs it, to
-  retrieve a version string
-- if the cross compiler links it together, the result cannot be run on
-  the host, due to different architectures
-- if the host compiler would compile/link it, it would not link with the
-  library version inside buildroot but with the library from the host
-
-Signed-off-by: Michael Rommel <rommel@layer-7.net>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/Config.in                |    1 +
- package/python-pyzmq/Config.in   |   13 ++++++++++
- package/python-pyzmq/pyzmq.mk    |   50 ++++++++++++++++++++++++++++++++++++++
- package/python-pyzmq/pyzmq.patch |   28 +++++++++++++++++++++
- 4 files changed, 92 insertions(+)
- create mode 100644 package/python-pyzmq/Config.in
- create mode 100644 package/python-pyzmq/pyzmq.mk
- create mode 100644 package/python-pyzmq/pyzmq.patch
+ package/collectd/Config.in   | 11 +++++++++++
+ package/collectd/collectd.mk | 13 ++++++++-----
+ 2 files changed, 19 insertions(+), 5 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 97cd7da..0289fd1 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -363,6 +363,7 @@ source "package/python-protobuf/Config.in"
- source "package/python-pygame/Config.in"
- source "package/python-pyparsing/Config.in"
- source "package/python-pyro/Config.in"
-+source "package/python-pyzmq/Config.in"
- source "package/python-serial/Config.in"
- source "package/python-setuptools/Config.in"
- source "package/python-thrift/Config.in"
-diff --git a/package/python-pyzmq/Config.in b/package/python-pyzmq/Config.in
-new file mode 100644
-index 0000000..d9791c1
---- /dev/null
-+++ b/package/python-pyzmq/Config.in
-@@ -0,0 +1,13 @@
-+config BR2_PACKAGE_PYZMQ
-+	bool "pyzmq"
-+	select BR2_PACKAGE_ZEROMQ
-+        select BR2_PACKAGE_PYTHON
-+	depends on BR2_USE_WCHAR
-+	depends on BR2_USE_MMU
+diff --git a/package/collectd/Config.in b/package/collectd/Config.in
+index a1d50a4..43571e3 100644
+--- a/package/collectd/Config.in
++++ b/package/collectd/Config.in
+@@ -105,6 +105,11 @@ config BR2_PACKAGE_COLLECTD_BIND
+ 	help
+ 	  Collects BIND DNS statistics.
+ 
++config BR2_PACKAGE_COLLECTD_CGROUPS
++	bool "cgroups"
 +	help
-+	  This package contains the python language binding for zeromq.
-+	  Due to issues with cross-compiling this package is hardcoded
-+	  to ZeroMQ version 3.2.3
++	  Collects CGroups CPU usage accounting.
 +
-+	  See also: http://zeromq.org/bindings:python
+ config BR2_PACKAGE_COLLECTD_CONNTRACK
+ 	bool "conntrack"
+ 	help
+@@ -276,6 +281,11 @@ config BR2_PACKAGE_COLLECTD_SERIAL
+ 	help
+ 	  Collects the traffic on serial interfaces.
+ 
++config BR2_PACKAGE_COLLECTD_STATSD
++	bool "StatsD"
++	help
++	  StatsD network protocol to allow clients to report "events".
 +
-diff --git a/package/python-pyzmq/pyzmq.mk b/package/python-pyzmq/pyzmq.mk
-new file mode 100644
-index 0000000..a7efcad
---- /dev/null
-+++ b/package/python-pyzmq/pyzmq.mk
-@@ -0,0 +1,50 @@
-+##########################################
-+#
-+# pyzmq
-+#
-+##########################################
-+
-+PYZMQ_VERSION = 13.0.2
-+PYZMQ_ZMQ_VERSION = 3.2.3
-+PYZMQ_SOURCE = pyzmq-$(PYZMQ_VERSION).tar.gz
-+PYZMQ_SITE = https://pypi.python.org/packages/source/p/pyzmq/
-+PYZMQ_LICENSE = LGPLv3 BSD-3c
-+PYZMQ_LICENSE_FILES = COPYING.LESSER COPYING.BSD
-+PYZMQ_INSTALL_TARGET = YES
-+
-+define PYZMQ_POST_PATCH_FIXUP
-+        (cd $(@D); \
-+		cat buildutils/detect.py | \
-+		sed -e "s/##PYZMQ_ZMQ_VERSION##/$(PYZMQ_ZMQ_VERSION)/" \
-+		  >buildutils/detect.py.new; \
-+		cp buildutils/detect.py.new buildutils/detect.py)
-+endef
-+
-+PYZMQ_POST_PATCH_HOOKS += PYZMQ_POST_PATCH_FIXUP
-+
-+define PYZMQ_CONFIGURE_CMDS
-+        (cd $(@D); CC="$(TARGET_CC)" CFLAGS="$(TARGET_CFLAGS)" \
-+                LDSHARED="$(TARGET_CROSS)gcc -shared" \
-+                CROSS_COMPILING=yes \
-+                _python_sysroot=$(STAGING_DIR) \
-+                _python_srcdir=$(BUILD_DIR)/python$(PYTHON_VERSION) \
-+                _python_prefix=/usr \
-+                _python_exec_prefix=/usr \
-+                $(HOST_DIR)/usr/bin/python setup.py configure \
-+		--zmq=$(@D)/../../staging/usr)
-+endef
-+
-+define PYZMQ_INSTALL_TARGET_CMDS
-+        (cd $(@D); CC="$(TARGET_CC)" CFLAGS="$(TARGET_CFLAGS)" \
-+                LDSHARED="$(TARGET_CROSS)gcc -shared" \
-+                CROSS_COMPILING=yes \
-+                _python_sysroot=$(STAGING_DIR) \
-+                _python_srcdir=$(BUILD_DIR)/python$(PYTHON_VERSION) \
-+                _python_prefix=/usr \
-+                _python_exec_prefix=/usr \
-+                $(HOST_DIR)/usr/bin/python setup.py install \
-+		--prefix=$(TARGET_DIR)/usr)
-+endef
-+
-+$(eval $(generic-package))
-+
-diff --git a/package/python-pyzmq/pyzmq.patch b/package/python-pyzmq/pyzmq.patch
-new file mode 100644
-index 0000000..c660457
---- /dev/null
-+++ b/package/python-pyzmq/pyzmq.patch
-@@ -0,0 +1,28 @@
-+--- pyzmq-13.0.2/buildutils/detect.py.orig	2013-08-10 00:49:28.242557978 +0200
-++++ pyzmq-13.0.2/buildutils/detect.py	2013-08-10 00:44:35.197572704 +0200
-+@@ -118,15 +118,17 @@ def detect_zmq(basedir, compiler=None, *
-+             
-+     efile = test_compilation(cfile, compiler=compiler, **compiler_attrs)
-+     
-+-    result = Popen(efile, stdout=PIPE, stderr=PIPE)
-+-    so, se = result.communicate()
-++    # result = Popen(efile, stdout=PIPE, stderr=PIPE)
-++    # so, se = result.communicate()
-+     # for py3k:
-+-    so = so.decode()
-+-    se = se.decode()
-+-    if result.returncode:
-+-        msg = "Error running version detection script:\n%s\n%s" % (so,se)
-+-        logging.error(msg)
-+-        raise IOError(msg)
-++    #so = so.decode()
-++    #se = se.decode()
-++    #if result.returncode:
-++    #    msg = "Error running version detection script:\n%s\n%s" % (so,se)
-++    #    logging.error(msg)
-++    #    raise IOError(msg)
-++
-++    so = "vers: ##PYZMQ_ZMQ_VERSION##"
-+ 
-+     handlers = {'vers':  lambda val: tuple(int(v) for v in val.split('.'))}
-+ 
+ config BR2_PACKAGE_COLLECTD_SNMP
+ 	bool "snmp"
+ 	select BR2_PACKAGE_NETSNMP
+@@ -420,3 +430,4 @@ endif
+ 
+ comment "collectd needs a toolchain with IPv6 and thread support"
+         depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INET_IPV6
++	depends on BR2_USE_MMU
+diff --git a/package/collectd/collectd.mk b/package/collectd/collectd.mk
+index bead4d4..55a388c 100644
+--- a/package/collectd/collectd.mk
++++ b/package/collectd/collectd.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-COLLECTD_VERSION = 5.3.1
++COLLECTD_VERSION = 5.4.0
+ COLLECTD_SITE = http://collectd.org/files
+ COLLECTD_MAKE_OPT = LDFLAGS="$(TARGET_LDFLAGS) -lm"
+ COLLECTD_CONF_ENV = ac_cv_lib_yajl_yajl_alloc=yes
+@@ -13,13 +13,14 @@ COLLECTD_LICENSE = GPLv2 LGPLv2.1
+ COLLECTD_LICENSE_FILES = COPYING
+ 
+ # These require unmet dependencies, are fringe, pointless or deprecated
+-COLLECTD_PLUGINS_DISABLE = amqp apple_sensors ascent dbi email \
+-		gmond hddtemp ipmi ipvs java libvirt lpar madwifi mbmon \
++COLLECTD_PLUGINS_DISABLE = amqp apple_sensors aquaero ascent dbi email \
++		gmond hddtemp ipmi ipvs java libvirt lpar lvm madwifi mbmon \
+ 		memcachec modbus multimeter netapp netlink nginx \
+ 		notify_desktop notify_email numa nut onewire oracle perl pf \
+ 		pinba postgresql powerdns python redis routeros rrdcached \
+-		sensors tape target_v5upgrade teamspeak2 ted tokyotyrant \
+-		uuid varnish vserver write_mongodb write_redis xmms zfs_arc
++		sensors sigrok tape target_v5upgrade teamspeak2 ted \
++		tokyotyrant uuid varnish vserver write_mongodb write_redis \
++		xmms zfs_arc
+ 
+ COLLECTD_CONF_OPT += --with-nan-emulation --with-fp-layout=nothing \
+ 	--localstatedir=/var --with-perl-bindings=no \
+@@ -29,6 +30,7 @@ COLLECTD_CONF_OPT += --with-nan-emulation --with-fp-layout=nothing \
+ 	$(if $(BR2_PACKAGE_COLLECTD_APCUPS),--enable-apcups,--disable-apcups) \
+ 	$(if $(BR2_PACKAGE_COLLECTD_BATTERY),--enable-battery,--disable-battery) \
+ 	$(if $(BR2_PACKAGE_COLLECTD_BIND),--enable-bind,--disable-bind) \
++	$(if $(BR2_PACKAGE_COLLECTD_CGROUPS),--enable-cgroups,--disable-cgroups) \
+ 	$(if $(BR2_PACKAGE_COLLECTD_CONNTRACK),--enable-conntrack,--disable-conntrack) \
+ 	$(if $(BR2_PACKAGE_COLLECTD_CONTEXTSWITCH),--enable-contextswitch,--disable-contextswitch) \
+ 	$(if $(BR2_PACKAGE_COLLECTD_CPU),--enable-cpu,--disable-cpu) \
+@@ -73,6 +75,7 @@ COLLECTD_CONF_OPT += --with-nan-emulation --with-fp-layout=nothing \
+ 	$(if $(BR2_PACKAGE_COLLECTD_RRDTOOL),--enable-rrdtool,--disable-rrdtool) \
+ 	$(if $(BR2_PACKAGE_COLLECTD_SCALE),--enable-target_scale,--disable-target_scale) \
+ 	$(if $(BR2_PACKAGE_COLLECTD_SERIAL),--enable-serial,--disable-serial) \
++	$(if $(BR2_PACKAGE_COLLECTD_STATSD),--enable-statsd,--disable-statsd) \
+ 	$(if $(BR2_PACKAGE_COLLECTD_SET),--enable-target_set,--disable-target_set) \
+ 	$(if $(BR2_PACKAGE_COLLECTD_SNMP),--enable-snmp,--disable-snmp) \
+ 	$(if $(BR2_PACKAGE_COLLECTD_SWAP),--enable-swap,--disable-swap) \
 -- 
-1.7.9.5
+1.8.1.5
