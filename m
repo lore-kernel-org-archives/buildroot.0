@@ -1,9 +1,9 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri, 30 Aug 2013 18:57:19 -0300
-Subject: [Buildroot] [PATCH 3/5] iproute2: bump to version 3.10.0
+Date: Fri, 30 Aug 2013 18:57:20 -0300
+Subject: [Buildroot] [PATCH 4/5] iptables: bump to version 1.4.20
 In-Reply-To: <1377899841-26206-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1377899841-26206-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1377899841-26206-3-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1377899841-26206-4-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,155 +12,108 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/iproute2/iproute2-optional-ipv6.patch | 57 ++++++++++++---------------
- package/iproute2/iproute2.mk                  |  4 +-
- 2 files changed, 28 insertions(+), 33 deletions(-)
+ package/iptables/iptables-01-fix-static-link.patch | 67 ++++++++++++++++++++++
+ package/iptables/iptables.mk                       |  8 ++-
+ 2 files changed, 72 insertions(+), 3 deletions(-)
+ create mode 100644 package/iptables/iptables-01-fix-static-link.patch
 
-diff --git a/package/iproute2/iproute2-optional-ipv6.patch b/package/iproute2/iproute2-optional-ipv6.patch
-index ef22c22..c51f695 100644
---- a/package/iproute2/iproute2-optional-ipv6.patch
-+++ b/package/iproute2/iproute2-optional-ipv6.patch
-@@ -3,21 +3,17 @@
- Disable IPv6 support code when building with uClibc configured without IPv6
- support.
- 
-+[Gustavo: update for iproute2 3.10.0]
- Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
-----
-- ip/ip6tunnel.c |    6 ++++++
-- ip/ipprefix.c  |    8 ++++++++
-- ip/iptunnel.c  |    6 ++++++
-- 3 files changed, 20 insertions(+)
-+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
- 
--Index: iproute2-2.6.37-orig/ip/ip6tunnel.c
--===================================================================
----- iproute2-2.6.37-orig.orig/ip/ip6tunnel.c
--+++ iproute2-2.6.37-orig/ip/ip6tunnel.c
-+diff -Nura iproute2-3.10.0.orig/ip/ip6tunnel.c iproute2-3.10.0/ip/ip6tunnel.c
-+--- iproute2-3.10.0.orig/ip/ip6tunnel.c	2013-08-14 09:17:56.538089916 -0300
-++++ iproute2-3.10.0/ip/ip6tunnel.c	2013-08-14 09:18:02.952298534 -0300
- @@ -20,6 +20,10 @@
-   *	Masahide NAKAMURA @USAGI
-   */
-- 
+diff --git a/package/iptables/iptables-01-fix-static-link.patch b/package/iptables/iptables-01-fix-static-link.patch
+new file mode 100644
+index 0000000..d4bcfa6
+--- /dev/null
++++ b/package/iptables/iptables-01-fix-static-link.patch
+@@ -0,0 +1,67 @@
++From 76e230e41947576efb96e86e605bb84015cdb287 Mon Sep 17 00:00:00 2001
++From: Jan Engelhardt <jengelh@inai.de>
++Date: Tue, 13 Aug 2013 19:02:06 +0000
++Subject: iptables: link against libnetfilter_conntrack
 +
- +#include <features.h>
- +#if defined(__UCLIBC__) && !defined (__UCLIBC_HAS_IPV6__)
- +#else
-@@ -25,36 +21,36 @@ Index: iproute2-2.6.37-orig/ip/ip6tunnel.c
-  #include <stdio.h>
-  #include <string.h>
-  #include <stdlib.h>
--@@ -410,3 +414,5 @@ int do_ip6tunnel(int argc, char **argv)
-+@@ -425,3 +429,5 @@
-  	fprintf(stderr, "Command \"%s\" is unknown, try \"ip -f inet6 tunnel help\".\n", *argv);
-  	exit(-1);
-  }
- +
- +#endif /* no ipv6 */
--Index: iproute2-2.6.37-orig/ip/ipprefix.c
--===================================================================
----- iproute2-2.6.37-orig.orig/ip/ipprefix.c
--+++ iproute2-2.6.37-orig/ip/ipprefix.c
--@@ -22,11 +22,17 @@
--  * Authors:
-+diff -Nura iproute2-3.10.0.orig/ip/ipprefix.c iproute2-3.10.0/ip/ipprefix.c
-+--- iproute2-3.10.0.orig/ip/ipprefix.c	2013-08-14 09:17:56.539089949 -0300
-++++ iproute2-3.10.0/ip/ipprefix.c	2013-08-14 09:19:29.065099291 -0300
-+@@ -23,11 +23,18 @@
-   *	Masahide NAKAMURA @USAGI
-   */
++Linking currently fails in --enable-static case:
 +
- +#include <features.h>
- +#if defined(__UCLIBC__) && !defined (__UCLIBC_HAS_IPV6__)
- +#define NO_IPV6
- +#endif
-- 
-++
-  #include <stdio.h>
-  #include <stdlib.h>
-  #include <string.h>
-+ #include <sys/socket.h>
- +#ifndef NO_IPV6
-  #include <netinet/icmp6.h>
- +#endif
++../extensions/libext.a(libxt_connlabel.o): In function `connlabel_get_name':
++iptables/extensions/libxt_connlabel.c:57: undefined reference to `nfct_labelmap_get_name'
++[..]
++It's libxtables.la(libxt_connlabel.o) using libnetfilter_conntrack.
 +
-  #include "utils.h"
-- 
-- /* prefix flags; see kernel's net/ipv6/addrconf.c and include/net/if_inet6.h */
--@@ -62,10 +68,12 @@ int print_prefix(const struct sockaddr_n
-- 		fprintf(stderr, "wrong family %d\n", prefix->prefix_family);
-+ #include "ip_common.h"
-+@@ -65,10 +72,12 @@
-+ 		fprintf(stderr, "incorrect protocol family: %d\n", prefix->prefix_family);
-  		return 0;
-  	}
- +#ifdef ND_OPT_PREFIX_INFORMATION
-@@ -63,13 +59,12 @@ Index: iproute2-2.6.37-orig/ip/ipprefix.c
-  		return 0;
-  	}
- +#endif
-- 
++If libnetfilter_conntrack is not found, @libnetfilter_conntrack_CFLAGS@
++and @libnetfilter_conntrack_LIBS@ (and their ${} ones) should be empty,
++therefore producing no harm to include unconditionally.
 +
-  	parse_rtattr(tb, RTA_MAX, RTM_RTA(prefix), len);
-- 
--Index: iproute2-2.6.37-orig/ip/iptunnel.c
--===================================================================
----- iproute2-2.6.37-orig.orig/ip/iptunnel.c
--+++ iproute2-2.6.37-orig/ip/iptunnel.c
-+
-+diff -Nura iproute2-3.10.0.orig/ip/iptunnel.c iproute2-3.10.0/ip/iptunnel.c
-+--- iproute2-3.10.0.orig/ip/iptunnel.c	2013-08-14 09:17:56.538089916 -0300
-++++ iproute2-3.10.0/ip/iptunnel.c	2013-08-14 09:18:02.953298566 -0300
- @@ -9,6 +9,10 @@
-   * Authors:	Alexey Kuznetsov, <kuznet@ms2.inr.ac.ru>
-   *
-@@ -78,10 +73,10 @@ Index: iproute2-2.6.37-orig/ip/iptunnel.c
- +#if defined(__UCLIBC__) && !defined (__UCLIBC_HAS_IPV6__)
- +#define NO_IPV6
- +#endif
-- 
-+
-  #include <stdio.h>
-  #include <stdlib.h>
--@@ -601,8 +605,10 @@ int do_iptunnel(int argc, char **argv)
-+@@ -634,8 +638,10 @@
-  	 * protocol-independent because of unarranged structure between
-  	 * IPv4 and IPv6.
-  	 */
-@@ -90,5 +85,5 @@ Index: iproute2-2.6.37-orig/ip/iptunnel.c
-  		return do_ip6tunnel(argc, argv);
- +#endif
-  	default:
-- 		fprintf(stderr, "Unsupported family:%d\n", preferred_family);
-+ 		fprintf(stderr, "Unsupported protocol family: %d\n", preferred_family);
-  		exit(-1);
-diff --git a/package/iproute2/iproute2.mk b/package/iproute2/iproute2.mk
-index cbbbc56..a3eff3b 100644
---- a/package/iproute2/iproute2.mk
-+++ b/package/iproute2/iproute2.mk
-@@ -4,12 +4,11 @@
++Reported-and-tested-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++Signed-off-by: Florian Westphal <fw@strlen.de>
++---
++diff --git a/extensions/GNUmakefile.in b/extensions/GNUmakefile.in
++index 14e7c57..780e715 100644
++--- a/extensions/GNUmakefile.in
+++++ b/extensions/GNUmakefile.in
++@@ -21,7 +21,7 @@ regular_CPPFLAGS   = @regular_CPPFLAGS@
++ kinclude_CPPFLAGS  = @kinclude_CPPFLAGS@
++ 
++ AM_CFLAGS       = ${regular_CFLAGS}
++-AM_CPPFLAGS     = ${regular_CPPFLAGS} -I${top_builddir}/include -I${top_builddir} -I${top_srcdir}/include ${kinclude_CPPFLAGS}
+++AM_CPPFLAGS     = ${regular_CPPFLAGS} -I${top_builddir}/include -I${top_builddir} -I${top_srcdir}/include ${kinclude_CPPFLAGS} @libnetfilter_conntrack_CFLAGS@
++ AM_DEPFLAGS     = -Wp,-MMD,$(@D)/.$(@F).d,-MT,$@
++ AM_LDFLAGS      = @noundef_LDFLAGS@
++ 
++@@ -93,7 +93,7 @@ lib%.so: lib%.oo
++ 	${AM_VERBOSE_CCLD} ${CCLD} ${AM_LDFLAGS} -shared ${LDFLAGS} -o $@ $< -L../libxtables/.libs -lxtables ${$*_LIBADD};
++ 
++ lib%.oo: ${srcdir}/lib%.c
++-	${AM_VERBOSE_CC} ${CC} ${AM_CPPFLAGS} ${AM_DEPFLAGS} ${AM_CFLAGS} -D_INIT=lib$*_init -DPIC -fPIC ${CFLAGS} ${$*_CFLAGADD} -o $@ -c $<;
+++	${AM_VERBOSE_CC} ${CC} ${AM_CPPFLAGS} ${AM_DEPFLAGS} ${AM_CFLAGS} -D_INIT=lib$*_init -DPIC -fPIC ${CFLAGS} -o $@ -c $<;
++ 
++ libxt_NOTRACK.so: libxt_CT.so
++ 	ln -fs $< $@
++@@ -103,9 +103,7 @@ libxt_state.so: libxt_conntrack.so
++ # Need the LIBADDs in iptables/Makefile.am too for libxtables_la_LIBADD
++ xt_RATEEST_LIBADD   = -lm
++ xt_statistic_LIBADD = -lm
++- at HAVE_LIBNETFILTER_CONNTRACK_TRUE@xt_connlabel_LIBADD = @libnetfilter_conntrack_LIBS@
++-
++-@HAVE_LIBNETFILTER_CONNTRACK_TRUE@xt_connlabel_CFLAGADD = @libnetfilter_conntrack_CFLAGS@
+++xt_connlabel_LIBADD = @libnetfilter_conntrack_LIBS@
++ 
++ #
++ #	Static bits
++diff --git a/libxtables/Makefile.am b/libxtables/Makefile.am
++index c5795fe..4267cb5 100644
++--- a/libxtables/Makefile.am
+++++ b/libxtables/Makefile.am
++@@ -10,7 +10,7 @@ libxtables_la_LIBADD  =
++ if ENABLE_STATIC
++ # With --enable-static, shipped extensions are linked into the main executable,
++ # so we need all the LIBADDs here too
++-libxtables_la_LIBADD += -lm
+++libxtables_la_LIBADD += -lm ${libnetfilter_conntrack_LIBS}
++ endif
++ if ENABLE_SHARED
++ libxtables_la_CFLAGS  = ${AM_CFLAGS}
++--
++cgit v0.9.2
+diff --git a/package/iptables/iptables.mk b/package/iptables/iptables.mk
+index f548cb9..13ad0ca 100644
+--- a/package/iptables/iptables.mk
++++ b/package/iptables/iptables.mk
+@@ -4,15 +4,17 @@
  #
  ################################################################################
  
--IPROUTE2_VERSION = 3.7.0
-+IPROUTE2_VERSION = 3.10.0
- IPROUTE2_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/net/iproute2
- IPROUTE2_TARGET_SBINS = ctstat genl ifstat ip lnstat nstat routef routel rtacct rtmon rtpr rtstat ss tc
- IPROUTE2_LICENSE = GPLv2
- IPROUTE2_LICENSE_FILES = COPYING
+-IPTABLES_VERSION = 1.4.19.1
++IPTABLES_VERSION = 1.4.20
+ IPTABLES_SOURCE = iptables-$(IPTABLES_VERSION).tar.bz2
+ IPTABLES_SITE = http://ftp.netfilter.org/pub/iptables
+ IPTABLES_INSTALL_STAGING = YES
+-IPTABLES_DEPENDENCIES = host-pkgconf
++IPTABLES_DEPENDENCIES = host-pkgconf \
++	$(if $(BR2_PACKAGE_LIBNETFILTER_CONNTRACK),libnetfilter_conntrack)
+ IPTABLES_LICENSE = GPLv2
+ IPTABLES_LICENSE_FILES = COPYING
 -
- IPROUTE2_DEPENDENCIES += host-bison host-flex
+ IPTABLES_CONF_OPT = --libexecdir=/usr/lib --with-kernel=$(STAGING_DIR)/usr
++# Because of iptables-01-fix-static-link.patch
++IPTABLES_AUTORECONF = YES
  
- # If both iproute2 and busybox are selected, make certain we win
-@@ -38,6 +37,7 @@ define IPROUTE2_CONFIGURE_CMDS
- 	cd $(@D) && $(TARGET_CONFIGURE_OPTS) ./configure
- 	# arpd needs berkeleydb
- 	$(SED) "/^TARGETS=/s: arpd : :" $(IPROUTE2_DIR)/misc/Makefile
-+	$(SED) 's/-Werror//' $(IPROUTE2_DIR)/Makefile
- 	echo "IPT_LIB_DIR:=/usr/lib/xtables" >>$(IPROUTE2_DIR)/Config
- 	$(IPROUTE2_WITH_IPTABLES)
- endef
+ define IPTABLES_TARGET_SYMLINK_CREATE
+ 	ln -sf xtables-multi $(TARGET_DIR)/usr/sbin/iptables
 -- 
 1.8.1.5
