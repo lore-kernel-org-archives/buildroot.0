@@ -1,46 +1,57 @@
-From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Fri, 30 Aug 2013 09:35:51 +0200
-Subject: [Buildroot] feature or pebkac
-In-Reply-To: <20130829153937.f53bdce09f0a855807dd0a5d@lavabit.com>
-References: <20130829111708.c603e5bf976541d3abd3a43a@lavabit.com>
- <521F9B91.7040903@mind.be>
- <CAAXf6LUg_9ch_A5ZrjZH7nJB2d_4g1BhcK_QhmDKV+dNVpX20g@mail.gmail.com>
- <20130829153937.f53bdce09f0a855807dd0a5d@lavabit.com>
-Message-ID: <CAAXf6LXqhnWP2kz=3fnEDEhfr=HvVqZCUK-OEh-0X00e=n2BMQ@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 30 Aug 2013 09:46:02 +0200
+Subject: [Buildroot] [PATCH] toolchain: add support for glibc
+In-Reply-To: <521F6E9C.6070703@mind.be>
+References: <1376847393-12397-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <521534E2.7020606@mind.be> <20130822232633.7ba9b14d@skate>
+ <52169E42.2040904@mind.be> <20130823064845.2ec4800d@skate>
+ <521E5AB7.1050702@mind.be> <20130829093809.75fe7e76@skate>
+ <521F6E9C.6070703@mind.be>
+Message-ID: <20130830094602.6b06926e@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Aug 30, 2013 at 12:39 AM, rh <richard_hubbe11@lavabit.com> wrote:
-> On Thu, 29 Aug 2013 22:25:55 +0200
-> Thomas De Schampheleire <patrickdepinguin
-> +buildroot at gmail.com> wrote:
->
->>
->> I once proposed a patch for this particular case:
->> http://buildroot-busybox.2317881.n4.nabble.com/PATCH-v2-linux-custom-tarball-automatically-detect-a-change-in-tarball-configuration-td11414.html
->> but unfortunately it never got accepted. One of the remarks was that
->> the build directory name is odd in the sense that it contains the name
->> of the tarball. But it fixes the problem perfectly, we are using it
->> all the time.
->>
->> If there is interest in this, I can resubmit the patch.
->
->
-> Ok I read that patch.  Can we use sym links? If so I propose that
-> we untar and use the tar ball name but then remove and create links
-> pointing to the new directory. This way linux-custom is always there
-> as a sym link and any dependencies on linux-custom are fulfilled.
+Dear Arnout Vandecappelle,
 
-Which dependencies on linux-custom are you talking about?
-Inside buildroot, all references to the linux directory happen through
-the variable LINUX_DIR, which will always be correct. Scripts outside
-of buildroot may try to access the fixed 'linux-custom', but this
-behavior is broken anyway because the board developer could choose to
-switch to a vanilla kernel later on which would cause another
-directory name too.
+On Thu, 29 Aug 2013 17:54:04 +0200, Arnout Vandecappelle wrote:
 
-Thanks,
+> > Generally, 'make source' is unfortunately a bit broken with the new
+> > internal toolchain backend based on packages. One of the reason is that
+> > the 'make source' thing only works for one recursion level of
+> > dependencies on host packages. I've started working on fixing that, but
+> > it was more complex than I thought (or alternatively I was too stupid
+> > to see that there was a simple solution).
+> 
+>   Probably requires an pkg-generic change, like:
+> 
+> $(2)-all-source: $(2)-source $(suffix -source,$($(2)_DEPENDENCIES))
+
+Hum, right. I'll try to find some time to investigate that.
+
+> >>> But I guess I
+> >>> can probably make BR2_TOOLCHAIN_BUILDROOT_LIBC be equal to "glibc" in
+> >>> both the glibc and eglibc case, which would be sufficient to make the
+> >>> toolchain building logic use the "glibc" and "glibc-configure" targets
+> >>> for both the eglibc and glibc selections.
+> >>
+> >>    You could also choose to keep eglibc.mk and make glibc the derivative.
+> >> Or would that be strange?
+> >
+> > Have you seen my new patch set:
+> 
+>   Sorry, I thought I had checked before sending but obviously my search 
+> wasn't good enough.
+
+No problem. I guess you'll continue the review over here :)
+
+Thanks!
+
 Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
