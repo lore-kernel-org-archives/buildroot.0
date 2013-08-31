@@ -1,72 +1,78 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 31 Aug 2013 21:34:01 -0000
-Subject: [Buildroot] [git commit] perl-cross: bump to version 0.7.4
-Message-ID: <20130831213336.CBA499B5D8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] busybox: set/unset CONFIG_NOMMU
+Message-ID: <20130831213336.AFEB29B591@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d1808f90378360850831eb9291ef1d799bd41c6a
+commit: http://git.buildroot.net/buildroot/commit/?id=149e4f89604880c355eb8af968b78647ab47fac9
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-since 0.7.3: install paths adjusted to match mainline perl
+Set busybox .config CONFIG_NOMMU appropiately and streamline this new
+setting with the previous BUSYBOX_DISABLE_MMU_APPLETS in a single
+BUSYBOX_SET_MMU definition (since it's not just applets now).
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/cpanminus/cpanminus.mk |   12 ++++++------
- package/perl/perl.mk           |    2 +-
- 2 files changed, 7 insertions(+), 7 deletions(-)
+ package/busybox/busybox.mk |   23 ++++++++++++++---------
+ 1 files changed, 14 insertions(+), 9 deletions(-)
 
-diff --git a/package/cpanminus/cpanminus.mk b/package/cpanminus/cpanminus.mk
-index 60a72ee..52921b5 100644
---- a/package/cpanminus/cpanminus.mk
-+++ b/package/cpanminus/cpanminus.mk
-@@ -11,9 +11,9 @@ CPANMINUS_DEPENDENCIES = host-qemu perl $(call qstrip,$(BR2_PACKAGE_CPANMINUS_NA
- 
- CPANMINUS_RUN_PERL = $(QEMU_USER) $(STAGING_DIR)/usr/bin/perl
- CPANMINUS_ARCHNAME = $(shell $(CPANMINUS_RUN_PERL) -MConfig -e "print Config->{archname}")
--CPANMINUS_PERL_LIB      = $(STAGING_DIR)/usr/lib/perl
--CPANMINUS_PERL_SITELIB  = $(TARGET_DIR)/usr/lib/perl
--CPANMINUS_PERL_ARCHLIB  = $(CPANMINUS_PERL_LIB)/$(CPANMINUS_ARCHNAME)
-+CPANMINUS_PERL_LIB      = $(STAGING_DIR)/usr/lib/perl5
-+CPANMINUS_PERL_SITELIB  = $(TARGET_DIR)/usr/lib/perl5/site_perl/$(PERL_VERSION)
-+CPANMINUS_PERL_ARCHLIB  = $(CPANMINUS_PERL_LIB)/$(PERL_VERSION)/$(CPANMINUS_ARCHNAME)
- CPANMINUS_PERL_SITEARCH = $(CPANMINUS_PERL_SITELIB)/$(CPANMINUS_ARCHNAME)
- CPANMINUS_PERL5LIB = $(CPANMINUS_PERL_SITEARCH):$(CPANMINUS_PERL_SITELIB):$(CPANMINUS_PERL_ARCHLIB):$(CPANMINUS_PERL_LIB)
- ifneq ($(BR2_PACKAGE_CPANMINUS_MIRROR),"")
-@@ -27,8 +27,8 @@ define CPANMINUS_INSTALL_TARGET_CMDS
- 	echo "PERL5LIB=$(CPANMINUS_PERL5LIB) $(CPANMINUS_RUN_PERL) \"\$$@\""    >>$(@D)/run_perl
- 	chmod +x $(@D)/run_perl
- 	PERL5LIB=$(CPANMINUS_PERL5LIB) \
--	PERL_MM_OPT="DESTDIR=$(CPANMINUS_PERL_SITELIB) PERL=$(@D)/run_perl PERL_LIB=$(CPANMINUS_PERL_LIB) PERL_ARCHLIB=$(CPANMINUS_PERL_ARCHLIB)" \
--	PERL_MB_OPT="--destdir $(CPANMINUS_PERL_SITELIB)" \
-+	PERL_MM_OPT="DESTDIR=$(TARGET_DIR) PERL=$(@D)/run_perl PERL_LIB=$(CPANMINUS_PERL_LIB) PERL_ARCHLIB=$(CPANMINUS_PERL_ARCHLIB)" \
-+	PERL_MB_OPT="--destdir $(TARGET_DIR)" \
- 	RUN_PERL="$(@D)/run_perl" \
- 	$(CPANMINUS_RUN_PERL) $(@D)/cpanm \
- 		--perl=$(@D)/run_perl \
-@@ -36,7 +36,7 @@ define CPANMINUS_INSTALL_TARGET_CMDS
- 		--no-man-pages \
- 		$(CPANMINUS_MIRROR) \
- 		$(call qstrip,$(BR2_PACKAGE_CPANMINUS_MODULES))
--	-find $(CPANMINUS_PERL_SITEARCH) -type f -name *.bs -exec rm -f {} \;
-+	-find $(CPANMINUS_PERL_SITELIB) -type f -name *.bs -exec rm -f {} \;
+diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
+index acc9008..ad8bdaf 100644
+--- a/package/busybox/busybox.mk
++++ b/package/busybox/busybox.mk
+@@ -75,6 +75,19 @@ define BUSYBOX_SET_MDEV
  endef
- else
- define CPANMINUS_INSTALL_TARGET_CMDS
-diff --git a/package/perl/perl.mk b/package/perl/perl.mk
-index 5afaaaf..37a38f7 100644
---- a/package/perl/perl.mk
-+++ b/package/perl/perl.mk
-@@ -12,7 +12,7 @@ PERL_LICENSE = Artistic
- PERL_LICENSE_FILES = Artistic
- PERL_INSTALL_STAGING = YES
+ endif
  
--PERL_CROSS_VERSION = 0.7.2
-+PERL_CROSS_VERSION = 0.7.4
- PERL_CROSS_BASE_VERSION = 5.$(PERL_VERSION_MAJOR).3
- PERL_CROSS_SITE    = http://download.berlios.de/perlcross
- PERL_CROSS_SOURCE  = perl-$(PERL_CROSS_BASE_VERSION)-cross-$(PERL_CROSS_VERSION).tar.gz
++ifeq ($(BR2_USE_MMU),y)
++define BUSYBOX_SET_MMU
++	$(call KCONFIG_DISABLE_OPT,CONFIG_NOMMU,$(BUSYBOX_BUILD_CONFIG))
++endef
++else
++define BUSYBOX_SET_MMU
++	$(call KCONFIG_ENABLE_OPT,CONFIG_NOMMU,$(BUSYBOX_BUILD_CONFIG))
++	$(call KCONFIG_DISABLE_OPT,CONFIG_SWAPONOFF,$(BUSYBOX_BUILD_CONFIG))
++	$(call KCONFIG_DISABLE_OPT,CONFIG_ASH,$(BUSYBOX_BUILD_CONFIG))
++	$(call KCONFIG_ENABLE_OPT,CONFIG_HUSH,$(BUSYBOX_BUILD_CONFIG))
++endef
++endif
++
+ ifeq ($(BR2_LARGEFILE),y)
+ define BUSYBOX_SET_LARGEFILE
+ 	$(call KCONFIG_ENABLE_OPT,CONFIG_LFS,$(BUSYBOX_BUILD_CONFIG))
+@@ -133,14 +146,6 @@ define BUSYBOX_INTERNAL_SHADOW_PASSWORDS
+ endef
+ endif
+ 
+-ifeq ($(BR2_USE_MMU),)
+-define BUSYBOX_DISABLE_MMU_APPLETS
+-	$(call KCONFIG_DISABLE_OPT,CONFIG_SWAPONOFF,$(BUSYBOX_BUILD_CONFIG))
+-	$(call KCONFIG_DISABLE_OPT,CONFIG_ASH,$(BUSYBOX_BUILD_CONFIG))
+-	$(call KCONFIG_ENABLE_OPT,CONFIG_HUSH,$(BUSYBOX_BUILD_CONFIG))
+-endef
+-endif
+-
+ ifeq ($(BR2_INIT_BUSYBOX),y)
+ define BUSYBOX_SET_INIT
+ 	$(call KCONFIG_ENABLE_OPT,CONFIG_INIT,$(BUSYBOX_BUILD_CONFIG))
+@@ -172,6 +177,7 @@ endif
+ BUSYBOX_POST_EXTRACT_HOOKS += BUSYBOX_COPY_CONFIG
+ 
+ define BUSYBOX_CONFIGURE_CMDS
++	$(BUSYBOX_SET_MMU)
+ 	$(BUSYBOX_SET_LARGEFILE)
+ 	$(BUSYBOX_SET_IPV6)
+ 	$(BUSYBOX_PREFER_STATIC)
+@@ -179,7 +185,6 @@ define BUSYBOX_CONFIGURE_CMDS
+ 	$(BUSYBOX_NETKITBASE)
+ 	$(BUSYBOX_NETKITTELNET)
+ 	$(BUSYBOX_INTERNAL_SHADOW_PASSWORDS)
+-	$(BUSYBOX_DISABLE_MMU_APPLETS)
+ 	$(BUSYBOX_SET_INIT)
+ 	$(BUSYBOX_SET_WATCHDOG)
+ 	@yes "" | $(MAKE) ARCH=$(KERNEL_ARCH) CROSS_COMPILE="$(TARGET_CROSS)" \
