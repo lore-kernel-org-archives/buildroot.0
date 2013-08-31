@@ -1,127 +1,101 @@
-From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Sat, 31 Aug 2013 10:56:27 +0200
-Subject: [Buildroot] [PATCH 1/1] knock: new package
-In-Reply-To: <1377899236-1659-1-git-send-email-rommel@layer-7.net>
-References: <1377899236-1659-1-git-send-email-rommel@layer-7.net>
-Message-ID: <CAAXf6LX8KRdDebMEABq8sWYs507tDZDVuOSWXAYr8sza-w49Xg@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 31 Aug 2013 13:46:54 +0200
+Subject: [Buildroot] [PATCH 1/1] systemd: bumped to version 206
+In-Reply-To: <221109548.81879318.1377880694250.JavaMail.root@zimbra32-e6.priv.proxad.net>
+References: <20130830163635.39ccd4cd@skate>
+ <221109548.81879318.1377880694250.JavaMail.root@zimbra32-e6.priv.proxad.net>
+Message-ID: <20130831134654.661a11a6@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Michael,
+Eric,
 
-Op 30-aug.-2013 23:47 schreef "Michael Rommel" <rommel@layer-7.net>
-het volgende:
->
-> Hi,
->
-> sorry for the last post, where I combined two separate packages in one
-> submission. I now moved them to different branches, cleaned up the 72
-> char line break as suggested in the other replies to submissions and
-> this hopefully is more in line with what you expect. Altered title as
-> well. The pyzmq package will follow shortly.
->
-> Cheers,
->
->   Michael.
+On Fri, 30 Aug 2013 18:38:14 +0200 (CEST), eric.le.bihan.dev at free.fr
+wrote:
+> > However, now that udev is part of systemd, some of this needs to
+> > change. What is your plan regarding that?
+> 
+> Oops! I missed this part! I've just found out I had two copies of 
+> libudev.so on my target (/lib/libudev.so.0.13.1
+> and /usr/lib/libudev.so.1.3.7).
 
-Thanks for splitting up the patch, that is indeed how it should be.
+Right. You have the old standalone udev, and the udev built in with
+systemd.
 
-Note that anything from the start of your patch mail until the three
-dashes ---, will end up in the commit message, so it should not
-contain the above comments. You can put such comments below the three
-dashes.
->
->
-> A port knocking implementation with daemon and user application.
->
-> Signed-off-by: Michael Rommel <rommel@layer-7.net>
-> ---
->  package/Config.in       |    2 ++
->  package/knock/Config.in |   13 +++++++++++++
->  package/knock/knock.mk  |   15 +++++++++++++++
->  3 files changed, 30 insertions(+)
->  create mode 100644 package/knock/Config.in
->  create mode 100644 package/knock/knock.mk
->
-> diff --git a/package/Config.in b/package/Config.in
-> index 97cd7da..2f636b6 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -363,6 +363,7 @@ source "package/python-protobuf/Config.in"
->  source "package/python-pygame/Config.in"
->  source "package/python-pyparsing/Config.in"
->  source "package/python-pyro/Config.in"
-> +source "package/python-pyzmq/Config.in"
->  source "package/python-serial/Config.in"
->  source "package/python-setuptools/Config.in"
->  source "package/python-thrift/Config.in"
-> @@ -754,6 +755,7 @@ source "package/ipset/Config.in"
->  source "package/iptables/Config.in"
->  source "package/iw/Config.in"
->  source "package/kismet/Config.in"
-> +source "package/knock/Config.in"
->  source "package/lighttpd/Config.in"
->  source "package/linknx/Config.in"
->  source "package/links/Config.in"
-> diff --git a/package/knock/Config.in b/package/knock/Config.in
-> new file mode 100644
-> index 0000000..f02ecc0
-> --- /dev/null
-> +++ b/package/knock/Config.in
-> @@ -0,0 +1,13 @@
-> +config BR2_PACKAGE_KNOCK
-> +       bool "knock"
-> +       select BR2_PACKAGE_LIBPCAP
-> +       help
-> +         A port knocking implementation.
-> +         Provides a daemon and a user application. Port knocking can be
-> +         used to run an arbitrary application, once the daemon detects
-> +         a predefined sequence of incoming TCP/UDP packets on a network
-> +         interface. This can be used, e.g. to open up ports in a
-> +         firewall.
-> +
-> +         See also: http://www.zeroflux.org/projects/knock
+> > May I suggest you to go through the thread at
+> > http://lists.busybox.net/pipermail/buildroot/2013-March/068130.html,
+> > which contains a large discussion about systemd/udev that started
+> > the last time a contributor posted an updated to the systemd
+> > package.
+> 
+> Thanks for pointing it out to me. Yocto project gets around this
+> problem thanks to its packaging system (the 'udev' feature is
+> provided by either udev-182 or systemd-206 recipe). Enabling udev
+> only if systemd is the selected init system seems to be the easiest
+> solution, but would it not restrict the user?
+> 
+> I'll see if I can make the udev package depends on systemd and only
+> grab the interesting pieces.
 
-The 'See also: ' should be removed here, just leave the URL.
+I believe we have several options:
 
+ (1) No longer allow the usage of 'udev' without systemd. This is I
+     believe what would match the best the upstream decision of making
+     udev and systemd more and more integrated together. This would
+     mean remove the separate 'udev' package, and turn the 'udev' /dev
+     management method into a 'udev+systemd' management method, which
+     would force the "init method" to be systemd. This is probably the
+     easiest solution, but I guess some users might be disappointed:
+     they might be using udev for some reason, but still may not want
+     all the systemd/dbus stuff. That said, using udev without systemd
+     seems to go against the choices of the upstream systemd project.
 
-> +
-> diff --git a/package/knock/knock.mk b/package/knock/knock.mk
-> new file mode 100644
-> index 0000000..4483e8f
-> --- /dev/null
-> +++ b/package/knock/knock.mk
-> @@ -0,0 +1,15 @@
-> +##########################################
-> +#
-> +# knock
-> +#
-> +##########################################
+ (2) Continue to use an old standalone udev, but ensure that the choice
+     of udev and systemd are mutually exclusive. This is not very
+     satisfying since the old udev we have is no longer maintained, so
+     it does not look like a solution that is very future-proof.
 
-These # lines should be 80 characters wide.
+ (3) Package one of more recent 'udev' versions that have been
+     extracted from systemd sources, as a separate 'udev' package that
+     would be mutually exclusive with systemd. It's a bit like (2) but
+     with a more recent udev version. However, it's unclear how those
+     forked versions of udev will be maintained over time.
 
+ (4) See if it's possible to make the systemd package only provide
+     udev. I think it is possible to install only udev, but as far as I
+     remember, D-Bus was still required at build time, unless you did
+     some tricks.
 
-> +
-> +KNOCK_VERSION=7666f2e86e18d482eaad5fe1fea46d87d80b0555
-> +KNOCK_SITE=https://github.com/jvinet/knock/tarball/master
-> +KNOCK_LICENSE = GPLv2
-> +KNOCK_LICENSE_FILES = COPYING
-> +KNOCK_AUTORECONF = YES
-> +KNOCK_INSTALL_TARGET_OPT = DESTDIR=$(TARGET_DIR) install-sbinPROGRAMS
+To be honest, as I'm not really using udev myself, choice (1) seems to
+have my preference. If udev users are not happy with the fact that they
+must now use systemd, then they should work that out with upstream (and
+I wish them good luck!).
 
-Any particular reason why the standard 'install' rule doesn't work?
+What do you think about this?
 
+> BTW, a great feature of Buildroot is to provide means to build images
+> for a wide range of embedded devices: from small ones with limited
+> resources (where Busybox init + mdev is a perfect combination) to
+> beefy ones (which could handle systemd + udev).
 
-> +
-> +$(eval $(autotools-package))
-> +
+Right.
 
-This last empty line can be removed.
+> I initially updated Systemd because I wanted to see if it could be
+> usable on embedded devices. I am looking for an init system with
+> supervision capabilities and successfully used Buildroot with runit
+> an s6. Both are more suitable (system-journald consumes too much
+> memory for my purpose).
 
+runit ? s6 ? What are these ?
 
-Best regards,
+Thanks,
 
 Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
