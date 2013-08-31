@@ -1,31 +1,31 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 29 Aug 2013 23:11:34 +0200
-Subject: [Buildroot] [git commit] gst1-plugins-good: bump version
-Message-ID: <20130831213337.E2F3D9B591@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 31 Aug 2013 21:34:04 -0000
+Subject: [Buildroot] [git commit] eglibc: needs MMU
+Message-ID: <20130831213336.C46E59B591@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=4fd56accaed3ec94c82401777bc639356f3d154e
+commit: http://git.buildroot.net/buildroot/commit/?id=eeaf658c980d43c6a531614545334ab98d14bbe0
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../gst1-plugins-good/gst1-plugins-good.mk         |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ toolchain/toolchain-buildroot/Config.in |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-diff --git a/package/multimedia/gst1-plugins-good/gst1-plugins-good.mk b/package/multimedia/gst1-plugins-good/gst1-plugins-good.mk
-index 4455d65..29b8983 100644
---- a/package/multimedia/gst1-plugins-good/gst1-plugins-good.mk
-+++ b/package/multimedia/gst1-plugins-good/gst1-plugins-good.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GST1_PLUGINS_GOOD_VERSION = 1.0.9
-+GST1_PLUGINS_GOOD_VERSION = 1.0.10
- GST1_PLUGINS_GOOD_SOURCE = gst-plugins-good-$(GST1_PLUGINS_GOOD_VERSION).tar.xz
- GST1_PLUGINS_GOOD_SITE = http://gstreamer.freedesktop.org/src/gst-plugins-good
- GST1_PLUGINS_GOOD_LICENSE_FILES = COPYING
+diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
+index 396a434..7a26441 100644
+--- a/toolchain/toolchain-buildroot/Config.in
++++ b/toolchain/toolchain-buildroot/Config.in
+@@ -22,6 +22,7 @@ config BR2_TOOLCHAIN_BUILDROOT_EGLIBC
+ 		   BR2_mips64 || BR2_mips64el || BR2_powerpc || \
+ 		   BR2_sh     || BR2_sh64     || BR2_sparc   || \
+ 		   BR2_x86_64
++	depends on BR2_USE_MMU
+ 	select BR2_TOOLCHAIN_USES_GLIBC
+ 	# our eglibc.mk enables RPC support
+ 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
