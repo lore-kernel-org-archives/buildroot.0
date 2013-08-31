@@ -1,150 +1,133 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 31 Aug 2013 21:34:03 -0000
-Subject: [Buildroot] [git commit] kobs-ng: new package
-Message-ID: <20130831213337.112379B5D8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] lua: remove built dependencies
+Message-ID: <20130831213337.59A5F9B591@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b6fb2f5018fe0ae9bba275991efc502236422924
+commit: http://git.buildroot.net/buildroot/commit/?id=96a1cf3838634737c60fc1d9c0e6577fee992175
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-[Thomas: change license to GPLv2+, slightly reword Config.in
-description, add a BR2_arm dependency.]
+runtime dependencies are handled in Config.in
 
-Signed-off-by: Paul B. Henson <henson@acm.org>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Config.in                             |    1 +
- package/kobs-ng/Config.in                     |    9 +++
- package/kobs-ng/kobs-ng-fix-mtd-defines.patch |   73 +++++++++++++++++++++++++
- package/kobs-ng/kobs-ng.mk                    |   13 +++++
- 4 files changed, 96 insertions(+), 0 deletions(-)
+ package/cgilua/Config.in     |    1 +
+ package/cgilua/cgilua.mk     |    1 -
+ package/copas/Config.in      |    1 +
+ package/copas/copas.mk       |    1 -
+ package/coxpcall/coxpcall.mk |    1 -
+ package/wsapi/Config.in      |    1 +
+ package/wsapi/wsapi.mk       |    1 -
+ package/xavante/Config.in    |    1 +
+ package/xavante/xavante.mk   |    1 -
+ 9 files changed, 4 insertions(+), 5 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index f5b14f6..7199a36 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -208,6 +208,7 @@ source "package/f2fs-tools/Config.in"
- source "package/flashbench/Config.in"
- source "package/genext2fs/Config.in"
- source "package/genromfs/Config.in"
-+source "package/kobs-ng/Config.in"
- source "package/makedevs/Config.in"
- source "package/mtd/Config.in"
- source "package/nfs-utils/Config.in"
-diff --git a/package/kobs-ng/Config.in b/package/kobs-ng/Config.in
-new file mode 100644
-index 0000000..1f6b2d1
---- /dev/null
-+++ b/package/kobs-ng/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_KOBS_NG
-+	bool "kobs-ng"
-+	depends on BR2_arm
-+	help
-+	  The kobs-ng tool is used for writing images to NAND on i.MX
-+	  platforms.
-+
-+	  This utility is provided by Freescale as-is and doesn't have an
-+	  upstream.
-diff --git a/package/kobs-ng/kobs-ng-fix-mtd-defines.patch b/package/kobs-ng/kobs-ng-fix-mtd-defines.patch
-new file mode 100644
-index 0000000..39d7474
---- /dev/null
-+++ b/package/kobs-ng/kobs-ng-fix-mtd-defines.patch
-@@ -0,0 +1,73 @@
-+Newer kernel headers renamed mtd mode defines and no longer support
-+MEMSETOOBSEL. Allow code to work with both older and newer kernel
-+versions.
-+
-+Signed-off-by: Paul B. Henson <henson@acm.org>
-+
-+diff -u -r kobs-ng-3.0.35-4.0.0-orig/src/mtd.c kobs-ng-3.0.35-4.0.0/src/mtd.c
-+--- kobs-ng-3.0.35-4.0.0-orig/src/mtd.c	2012-12-17 22:37:40.000000000 -0800
-++++ kobs-ng-3.0.35-4.0.0/src/mtd.c	2013-07-28 19:39:59.000000000 -0700
-+@@ -852,8 +852,11 @@
-+ 		mp = &md->part[i];
-+ 
-+ 		if (mp->fd != -1) {
-++/* Newer kernels dropped MEMSETOOBSEL */
-++#ifdef MEMSETOOBSEL
-+ 			(void)ioctl(mp->fd, MEMSETOOBSEL,
-+ 					&mp->old_oobinfo);
-++#endif
-+ 			close(mp->fd);
-+ 		}
-+ 
-+@@ -896,6 +899,8 @@
-+ 				continue;
-+ 			}
-+ 
-++/* Newer kernels dropped MEMSETOOBSEL */
-++#ifdef MEMSETOOBSEL
-+ 			if (r == -ENOTTY) {
-+ 				r = ioctl(mp->fd, MEMSETOOBSEL, &mp->old_oobinfo);
-+ 				if (r != 0) {
-+@@ -904,6 +909,7 @@
-+ 				}
-+ 				mp->oobinfochanged = 0;
-+ 			}
-++#endif
-+ 		} else {
-+ 			r = ioctl(mp->fd, MTDFILEMODE, (void *)MTD_MODE_RAW);
-+ 			if (r != 0 && r != -ENOTTY) {
-+@@ -911,6 +917,8 @@
-+ 				continue;
-+ 			}
-+ 
-++/* Newer kernels dropped MEMSETOOBSEL */
-++#ifdef MEMSETOOBSEL
-+ 			if (r == -ENOTTY) {
-+ 				r = ioctl(mp->fd, MEMSETOOBSEL, &none_oobinfo);
-+ 				if (r != 0) {
-+@@ -920,6 +928,7 @@
-+ 				mp->oobinfochanged = 1;
-+ 			} else
-+ 				mp->oobinfochanged = 2;
-++#endif
-+ 		}
-+ 
-+ 		mp->ecc = ecc;
-+diff -u -r kobs-ng-3.0.35-4.0.0-orig/src/mtd.h kobs-ng-3.0.35-4.0.0/src/mtd.h
-+--- kobs-ng-3.0.35-4.0.0-orig/src/mtd.h	2012-12-17 22:37:40.000000000 -0800
-++++ kobs-ng-3.0.35-4.0.0/src/mtd.h	2013-07-28 19:33:57.000000000 -0700
-+@@ -31,6 +31,14 @@
-+ #include "BootControlBlocks.h"
-+ #include "rom_nand_hamming_code_ecc.h"
-+ 
-++// Newer kernel headers renamed define
-++#ifndef MTD_MODE_NORMAL
-++#define MTD_MODE_NORMAL MTD_FILE_MODE_NORMAL
-++#endif
-++#ifndef MTD_MODE_RAW
-++#define MTD_MODE_RAW MTD_FILE_MODE_RAW
-++#endif
-++
-+ //------------------------------------------------------------------------------
-+ // Re-definitions of true and false, because the standard ones aren't good
-+ // enough?
-diff --git a/package/kobs-ng/kobs-ng.mk b/package/kobs-ng/kobs-ng.mk
-new file mode 100644
-index 0000000..f7e65e7
---- /dev/null
-+++ b/package/kobs-ng/kobs-ng.mk
-@@ -0,0 +1,13 @@
-+################################################################################
-+#
-+# kobs-ng
-+#
-+################################################################################
-+
-+# kobs-ng versions have never made much sense :(
-+KOBS_NG_VERSION = 3.0.35-4.0.0
-+KOBS_NG_SITE = http://repository.timesys.com/buildsources/k/kobs-ng/kobs-ng-$(KOBS_NG_VERSION)/
-+KOBS_NG_LICENSE = GPLv2+
-+KOBS_NG_LICENSE_FILES = COPYING
-+
-+$(eval $(autotools-package))
+diff --git a/package/cgilua/Config.in b/package/cgilua/Config.in
+index 01928f0..d1e7fbf 100644
+--- a/package/cgilua/Config.in
++++ b/package/cgilua/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_CGILUA
+ 	bool "cgilua"
++	# Runtime dependency only
+ 	select BR2_PACKAGE_LUAFILESYSTEM
+ 	help
+ 	  CGILua is a tool for creating dynamic HTML pages
+diff --git a/package/cgilua/cgilua.mk b/package/cgilua/cgilua.mk
+index a9c8874..e327fed 100644
+--- a/package/cgilua/cgilua.mk
++++ b/package/cgilua/cgilua.mk
+@@ -6,7 +6,6 @@
+ 
+ CGILUA_VERSION = 5.1.4
+ CGILUA_SITE = http://github.com/downloads/keplerproject/cgilua
+-CGILUA_DEPENDENCIES = luafilesystem
+ CGILUA_LICENSE = MIT
+ 
+ define CGILUA_INSTALL_TARGET_CMDS
+diff --git a/package/copas/Config.in b/package/copas/Config.in
+index 9969c8f..21dd0eb 100644
+--- a/package/copas/Config.in
++++ b/package/copas/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_COPAS
+ 	bool "copas"
++	# Runtime dependency only
+ 	select BR2_PACKAGE_COXPCALL
+ 	select BR2_PACKAGE_LUASOCKET
+ 	help
+diff --git a/package/copas/copas.mk b/package/copas/copas.mk
+index 347b575..e100f49 100644
+--- a/package/copas/copas.mk
++++ b/package/copas/copas.mk
+@@ -6,7 +6,6 @@
+ 
+ COPAS_VERSION = 1.1.6
+ COPAS_SITE = http://github.com/downloads/keplerproject/copas
+-COPAS_DEPENDENCIES = lua coxpcall luasocket
+ COPAS_LICENSE = MIT
+ 
+ define COPAS_INSTALL_TARGET_CMDS
+diff --git a/package/coxpcall/coxpcall.mk b/package/coxpcall/coxpcall.mk
+index c3e4a7f..275dcde 100644
+--- a/package/coxpcall/coxpcall.mk
++++ b/package/coxpcall/coxpcall.mk
+@@ -6,7 +6,6 @@
+ 
+ COXPCALL_VERSION = 1.13.0
+ COXPCALL_SITE = http://luaforge.net/frs/download.php/3406
+-COXPCALL_DEPENDENCIES = lua
+ COXPCALL_LICENSE = MIT
+ 
+ define COXPCALL_INSTALL_TARGET_CMDS
+diff --git a/package/wsapi/Config.in b/package/wsapi/Config.in
+index 3621648..348a040 100644
+--- a/package/wsapi/Config.in
++++ b/package/wsapi/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_WSAPI
+ 	bool "wsapi"
++	# Runtime dependency only
+ 	select BR2_PACKAGE_COXPCALL
+ 	select BR2_PACKAGE_LUAFILESYSTEM
+ 	select BR2_PACKAGE_RINGS
+diff --git a/package/wsapi/wsapi.mk b/package/wsapi/wsapi.mk
+index 4a64b94..c70502b 100644
+--- a/package/wsapi/wsapi.mk
++++ b/package/wsapi/wsapi.mk
+@@ -6,7 +6,6 @@
+ 
+ WSAPI_VERSION = 1.5
+ WSAPI_SITE = http://github.com/downloads/keplerproject/wsapi
+-WSAPI_DEPENDENCIES = coxpcall luafilesystem rings
+ WSAPI_LICENSE = MIT
+ 
+ define WSAPI_INSTALL_TARGET_CMDS
+diff --git a/package/xavante/Config.in b/package/xavante/Config.in
+index db34d66..be8e6d9 100644
+--- a/package/xavante/Config.in
++++ b/package/xavante/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_XAVANTE
+ 	bool "xavante"
++	# Runtime dependency only
+ 	select BR2_PACKAGE_CGILUA
+ 	select BR2_PACKAGE_COPAS
+ 	select BR2_PACKAGE_COXPCALL
+diff --git a/package/xavante/xavante.mk b/package/xavante/xavante.mk
+index 7c7fdde..dd2a707 100644
+--- a/package/xavante/xavante.mk
++++ b/package/xavante/xavante.mk
+@@ -6,7 +6,6 @@
+ 
+ XAVANTE_VERSION = 2.2.1
+ XAVANTE_SITE = http://github.com/downloads/keplerproject/xavante
+-XAVANTE_DEPENDENCIES = cgilua copas coxpcall lua luafilesystem luasocket wsapi
+ XAVANTE_LICENSE = MIT
+ 
+ define XAVANTE_INSTALL_TARGET_CMDS
