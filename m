@@ -1,30 +1,22 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 01 Sep 2013 21:37:53 +0200
-Subject: [Buildroot] [PATCH] neon: disable webdav when no XML support is
-	available
-In-Reply-To: <1378043691-28892-1-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Sun, 1 Sep 2013 15:54:51 +0200")
-References: <1378043691-28892-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <87k3j0coz2.fsf@dell.be.48ers.dk>
+Date: Sun, 01 Sep 2013 21:45:13 +0200
+Subject: [Buildroot] [PATCH 1/5] libnetfilter_conntrack: bump to version
+	1.0.4
+In-Reply-To: <1377899841-26206-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Fri, 30 Aug 2013 18:57:17 -0300")
+References: <1377899841-26206-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87bo4ccomu.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
- Thomas> Since 9169810a9bd97c99d8b7a0e8aadabdcca3883e99 ("neon: replace
- Thomas> 'choice' for XML library with two options") the option
- Thomas> BR2_PACKAGE_NEON_NOXML no longer exists. However, it was not taken
- Thomas> into account properly within neon.mk, as this option was still used to
- Thomas> disable webdav support when no XML library has been selected.
+ Gustavo> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
- Thomas> Fixes:
-
- Thomas>   http://autobuild.buildroot.org/results/7ed/7ed657570d83b28389dd8c01ffdd895d2e8d145f/
-
-Ups, committed - Thanks.
+Committed series, thanks.
 
 -- 
 Bye, Peter Korsgaard
