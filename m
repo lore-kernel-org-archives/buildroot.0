@@ -1,152 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 1 Sep 2013 09:24:02 +0200
-Subject: [Buildroot] [PATCH 1/1] systemd: bumped to version 206
-In-Reply-To: <52224CA8.4050204@free.fr>
-References: <20130830163635.39ccd4cd@skate>
- <221109548.81879318.1377880694250.JavaMail.root@zimbra32-e6.priv.proxad.net>
- <20130831134654.661a11a6@skate> <52224CA8.4050204@free.fr>
-Message-ID: <20130901092402.33c56d9f@skate>
+Date: Sun, 1 Sep 2013 10:51:44 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2013-08-31
+In-Reply-To: <20130901063004.C2A1252C5D6@lolut.humanoidz.org>
+References: <20130901063004.C2A1252C5D6@lolut.humanoidz.org>
+Message-ID: <20130901105144.418ea59a@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Eric Le Bihan,
+Peter,
 
-On Sat, 31 Aug 2013 22:06:00 +0200, Eric Le Bihan wrote:
-> Le 31/08/2013 13:46, Thomas Petazzoni a ?crit :
-> 
-> > I believe we have several options:
-> > 
-> >  (1) No longer allow the usage of 'udev' without systemd. This is I
-> >      believe what would match the best the upstream decision of making
-> >      udev and systemd more and more integrated together. This would
-> >      mean remove the separate 'udev' package, and turn the 'udev' /dev
-> >      management method into a 'udev+systemd' management method, which
-> >      would force the "init method" to be systemd. This is probably the
-> >      easiest solution, but I guess some users might be disappointed:
-> >      they might be using udev for some reason, but still may not want
-> >      all the systemd/dbus stuff. That said, using udev without systemd
-> >      seems to go against the choices of the upstream systemd project.
-> 
-> This is my first option.
+On Sun,  1 Sep 2013 08:30:04 +0200 (CEST), Thomas Petazzoni wrote:
 
-Right.
+>            |               buildroot-config | NOK | http://autobuild.buildroot.net/results/8d0b022fd3620b48a57a1c3ebbd0b0b1aaec0a9f/
+>            |               buildroot-config | NOK | http://autobuild.buildroot.net/results/e49b4364c126627d856b8fe85812fcdfc0fd4396/
+>            |               buildroot-config | NOK | http://autobuild.buildroot.net/results/aebdb1889009a6404c96b6e58e960b5cb71386e7/
+>            |               buildroot-config | NOK | http://autobuild.buildroot.net/results/aeee6639ae89ef0c9577411b957847b7c777c752/
+>            |               buildroot-config | NOK | http://autobuild.buildroot.net/results/5cb123f7e790cb23017ede0f376a51f18f89846a/
+>            |               buildroot-config | NOK | http://autobuild.buildroot.net/results/dcc36afb91646d675eb166173161a8a3e9b9f04a/
+>            |               buildroot-config | NOK | http://autobuild.buildroot.net/results/237057381357c3f3a4978379eb3cae4b45943369/
+>            |               buildroot-config | NOK | http://autobuild.buildroot.net/results/edb68cb907378e69f5304c7aae6776e11d39b7bf/
+>            |               buildroot-config | NOK | http://autobuild.buildroot.net/results/697e2fbb78710e04c058c7af13464ab8f4debc18/
+>            |               buildroot-config | NOK | http://autobuild.buildroot.net/results/e04c02b2b82fa9d437ef90e772570f7bf6731164/
+>            |               buildroot-config | NOK | http://autobuild.buildroot.net/results/4d6ad5e0bc76b7d1b16eafd7b67e48178bff16ee/
+>            |               buildroot-config | NOK | http://autobuild.buildroot.net/results/3263aded05b1a58693460cb76553ee1cb757b4df/
+>            |               buildroot-config | NOK | http://autobuild.buildroot.net/results/ec927d0742c98b12b4ce07cb224524808bca9737/
+>            |               buildroot-config | NOK | http://autobuild.buildroot.net/results/9b96fe64a9c4140eda5b81dbe25b8e85b528651a/
+>            |               buildroot-config | NOK | http://autobuild.buildroot.net/results/25bc93449014964aadfe9ddfce22b79befa758ba/
+>            |               buildroot-config | NOK | http://autobuild.buildroot.net/results/fb5fd7531b911ea2e2651c38e26921d6249a7d6f/
+>            |               buildroot-config | NOK | http://autobuild.buildroot.net/results/89e81e675b97e06d3728d07681fe9d9cdb54f04b/
+>            |               buildroot-config | NOK | http://autobuild.buildroot.net/results/968a73eb989c8c9b9416d6a5c2a9241f12b0b53f/
+>            |               buildroot-config | NOK | http://autobuild.buildroot.net/results/d816a4386aa7256c936c692cd883dfa66c405680/
+>            |               buildroot-config | NOK | http://autobuild.buildroot.net/results/3e8b96d9140813e4ae3b1dc06551a5a9d1ad34c6/
 
-> >  (2) Continue to use an old standalone udev, but ensure that the choice
-> >      of udev and systemd are mutually exclusive. This is not very
-> >      satisfying since the old udev we have is no longer maintained, so
-> >      it does not look like a solution that is very future-proof.
-> 
-> This is a no-go.
+These are all "No space left on device" issues on gcc110 it seems.
+Peter, can you have a look at what's going on?
 
-Agreed.
-
-> >  (3) Package one of more recent 'udev' versions that have been
-> >      extracted from systemd sources, as a separate 'udev' package that
-> >      would be mutually exclusive with systemd. It's a bit like (2) but
-> >      with a more recent udev version. However, it's unclear how those
-> >      forked versions of udev will be maintained over time.
-> 
-> Currently, we have two contestants:
-> 
->  1) The developers of Linux From Scratch extracted the udev code from
-> systemd source tree:
-> http://www.linuxfromscratch.org/lfs/view/development/chapter06/udev.html. This
-> does not look very maintainable, so I will not bet on it.
-> 
->  2) The developers of Gentoo forked udev:
-> https://github.com/gentoo/eudev. They want eudev to be system
-> initialization neutral, so we might expect it not to diverge too much
-> from upstream. And it will live as long as Gentoo lives (or moves to mdev!).
-
-This second fork indeed seems like a good option. In the past
-discussion, one issue that popped up is whether the 'libudev' and other
-tools/libraries provided by eudev on one side and the udev of systemd
-on the other side will remain API compatible over time. As you know,
-udev is not a standalone program, it also provides a library that is
-used by more and more applications/other libraries to get informations
-about the hardware available in the system.
-
-Ideally, the APIs will remain compatible, so in Buildroot, we can
-create a 'udev' or 'libudev' virtual package, which packages needing
-the libudev library can depend on, and which will be implemented either
-by eudev or systemd.
-
-> >  (4) See if it's possible to make the systemd package only provide
-> >      udev. I think it is possible to install only udev, but as far as I
-> >      remember, D-Bus was still required at build time, unless you did
-> >      some tricks.
-> 
-> In the systemd source tree there is only one Makefile to compile the
-> cathedral. A while ago, a patch was posted on hotplug mailing list to
-> compile only udev (http://www.spinics.net/lists/hotplug/msg05503.html).
-> This does not look very maintainable. So compiling the cathedral and
-> copying the files seems a better choice to me.
-
-The only issue being that compiling the cathedral requires dbus, even
-if you don't need it in the end if you're only interested in udev and
-not the full systemd thing. That said, it's maybe something that can be
-tweaked later on by only compiling the relevant subdirectories in
-systemd sources and faking a few things to make it believe that dbus is
-available. We can look at this later on.
-
-> > To be honest, as I'm not really using udev myself, choice (1) seems to
-> > have my preference. If udev users are not happy with the fact that they
-> > must now use systemd, then they should work that out with upstream (and
-> > I wish them good luck!).
-> > 
-> > What do you think about this?
-> 
-> I would also go with choice (1). But out of curiosity, I'll try to
-> package eudev and implement choice (4) and see what comes out.
-
-Excellent. I'm definitely looking forward to seeing your patches about
-this.
-
-> > runit ? s6 ? What are these ?
-> 
-> Runit and s6 are Unix init systems with service supervision. They
-> implement the same features as Systemd, but with less *cough*
-> freedesktop bloat. They both derive from daemontools from D.J. Berstein
-> (http://cr.yp.to/daemontools.html).
-> 
-> Service supervision is very handy in embedded devices that have to be
-> remotely administrated (like ADSL residential gateways, Femtocells, or
-> smart meters).
-> 
-> These systems also offer a cleaner way of defining services (I
-> personally think that the unit file concept is the killer feature of
-> systemd)
-> 
-> The creator of s6 (http://skarnet.org/software/s6/) has a lengthy
-> explanation about the history and benefits of these tools.
-> 
-> Runit can be used as a replacement to systemd in Arch Linux
-> (https://github.com/chneukirchen/ignite). It is also available in
-> Busybox! But I prefer the original implementation.
-> 
-> I've deployed products running s6, without any issues. But I lean
-> towards runit because:
-> 
->  - s6 depends on a set of libraries that follow the /package
-> (slashpackage) hierarchy (http://cr.yp.to/slashpackage.html). You have
-> to twist your brain a little bit to wrap around this concept when mixed
-> with a traditional LSB. I've got a patch set to build these using an old
-> Buildroot. I'll update them and post them if someone is interested.
->  - it is a one-man-army project.
-> 
-> Runit keeps the things simple and is also available in Debian.
-> 
-> Both do fit in embedded devices. I'll try to evaluate OpenRC one day.
-
-Wow, thanks a lot for those details. Looks really interesting indeed.
-In this area, I had heard in the past of PCD (Process Control Daemon),
-http://www.rt-embedded.com/blog/pcd-process-control-daemon/, but I
-never had the opportunity to test it.
-
-Best regards,
+Thanks!
 
 Thomas
 -- 
