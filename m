@@ -1,41 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun,  1 Sep 2013 15:54:51 +0200
-Subject: [Buildroot] [PATCH] neon: disable webdav when no XML support is
-	available
-Message-ID: <1378043691-28892-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Sun,  1 Sep 2013 16:01:43 +0200
+Subject: [Buildroot] [PATCH] orbit: fix ORBIT_LICENSE_FILES
+Message-ID: <1378044103-29830-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since 9169810a9bd97c99d8b7a0e8aadabdcca3883e99 ("neon: replace
-'choice' for XML library with two options") the option
-BR2_PACKAGE_NEON_NOXML no longer exists. However, it was not taken
-into account properly within neon.mk, as this option was still used to
-disable webdav support when no XML library has been selected.
-
 Fixes:
 
-  http://autobuild.buildroot.org/results/7ed/7ed657570d83b28389dd8c01ffdd895d2e8d145f/
+  http://autobuild.buildroot.org/results/33e/33e4e65301679e46cd80a1a123f45647376e60ce/
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/neon/neon.mk | 2 +-
+ package/orbit/orbit.mk | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/neon/neon.mk b/package/neon/neon.mk
-index 1915e6c..2edc6b2 100644
---- a/package/neon/neon.mk
-+++ b/package/neon/neon.mk
-@@ -42,7 +42,7 @@ else
- NEON_CONF_OPT += --with-libxml2=no
- endif
+diff --git a/package/orbit/orbit.mk b/package/orbit/orbit.mk
+index af5f0af..ba1142f 100644
+--- a/package/orbit/orbit.mk
++++ b/package/orbit/orbit.mk
+@@ -7,7 +7,7 @@
+ ORBIT_VERSION = 2.2.0
+ ORBIT_SITE = http://github.com/downloads/keplerproject/orbit
+ ORBIT_LICENSE = MIT
+-ORBIT_LICENSE_FILES = COPYRIGHT
++ORBIT_LICENSE_FILES = doc/us/license.md
  
--ifeq ($(BR2_PACKAGE_NEON_NOXML),y)
-+ifeq ($(BR2_PACKAGE_NEON_EXPAT)$(BR2_PACKAGE_NEON_LIBXML2),)
- # webdav needs xml support
- NEON_CONF_OPT += --disable-webdav
- endif
+ define ORBIT_INSTALL_TARGET_CMDS
+ 	$(MAKE) -C $(@D) \
 -- 
 1.8.1.2
