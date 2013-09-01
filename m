@@ -1,32 +1,33 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 1 Sep 2013 21:43:48 +0200
-Subject: [Buildroot] [git commit] conntrack-tools: bump to version 1.4.2
-Message-ID: <20130901194715.89B688A6B2@busybox.osuosl.org>
+Date: Sun, 1 Sep 2013 21:43:43 +0200
+Subject: [Buildroot] [git commit] libnetfilter_conntrack: bump to version
+	1.0.4
+Message-ID: <20130901194715.8245E9B666@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=75cada461f1569eca6321ef56afe3c2b1f7db8e5
+commit: http://git.buildroot.net/buildroot/commit/?id=a9806cfa304d1ed200b6d0750001b80446813a2c
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/conntrack-tools/conntrack-tools.mk |    2 +-
+ .../libnetfilter-conntrack.mk                      |    2 +-
  1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/conntrack-tools/conntrack-tools.mk b/package/conntrack-tools/conntrack-tools.mk
-index 614bbd1..eb7654e 100644
---- a/package/conntrack-tools/conntrack-tools.mk
-+++ b/package/conntrack-tools/conntrack-tools.mk
+diff --git a/package/libnetfilter_conntrack/libnetfilter-conntrack.mk b/package/libnetfilter_conntrack/libnetfilter-conntrack.mk
+index 41b0640..1db30a1 100644
+--- a/package/libnetfilter_conntrack/libnetfilter-conntrack.mk
++++ b/package/libnetfilter_conntrack/libnetfilter-conntrack.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--CONNTRACK_TOOLS_VERSION = 1.4.1
-+CONNTRACK_TOOLS_VERSION = 1.4.2
- CONNTRACK_TOOLS_SOURCE = conntrack-tools-$(CONNTRACK_TOOLS_VERSION).tar.bz2
- CONNTRACK_TOOLS_SITE = http://www.netfilter.org/projects/conntrack-tools/files
- CONNTRACK_TOOLS_DEPENDENCIES = host-pkgconf \
+-LIBNETFILTER_CONNTRACK_VERSION = 1.0.3
++LIBNETFILTER_CONNTRACK_VERSION = 1.0.4
+ LIBNETFILTER_CONNTRACK_SOURCE = libnetfilter_conntrack-$(LIBNETFILTER_CONNTRACK_VERSION).tar.bz2
+ LIBNETFILTER_CONNTRACK_SITE = http://www.netfilter.org/projects/libnetfilter_conntrack/files
+ LIBNETFILTER_CONNTRACK_INSTALL_STAGING = YES
