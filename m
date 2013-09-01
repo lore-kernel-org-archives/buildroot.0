@@ -1,159 +1,152 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 1 Sep 2013 09:11:36 +0200
-Subject: [Buildroot] [PATCH 1/1] pyzmq: new package
-In-Reply-To: <CAAXf6LW3tKUR7hcYRef2h73XS18tCjPX4P84RPgDdeyz7NLSEQ@mail.gmail.com>
-References: <1377899924-1866-1-git-send-email-rommel@layer-7.net>
- <CAAXf6LW3tKUR7hcYRef2h73XS18tCjPX4P84RPgDdeyz7NLSEQ@mail.gmail.com>
-Message-ID: <20130901091136.4d7e34e9@skate>
+Date: Sun, 1 Sep 2013 09:24:02 +0200
+Subject: [Buildroot] [PATCH 1/1] systemd: bumped to version 206
+In-Reply-To: <52224CA8.4050204@free.fr>
+References: <20130830163635.39ccd4cd@skate>
+ <221109548.81879318.1377880694250.JavaMail.root@zimbra32-e6.priv.proxad.net>
+ <20130831134654.661a11a6@skate> <52224CA8.4050204@free.fr>
+Message-ID: <20130901092402.33c56d9f@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Michael, Thomas,
+Dear Eric Le Bihan,
 
-A few comments below.
-
-On Sat, 31 Aug 2013 10:55:23 +0200, Thomas De Schampheleire wrote:
-
-> > Please note that the reason for the hardcoded version number in the
-> > python-pyzmq package is due to the following dilemma:
-> > - the setup.py script tries to compile a test C program and runs it, to
-> >   retrieve a version string
-> > - if the cross compiler links it together, the result cannot be run on
-> >   the host, due to different architectures
-> > - if the host compiler would compile/link it, it would not link with the
-> >   library version inside buildroot but with the library from the host
-
-I believe such explanations fall inside the .mk file itself, so that
-people looking at your code later can understand this 'bizarre' aspect
-of your package.
-
-> > +       depends on BR2_USE_WCHAR
-> > +       depends on BR2_USE_MMU
+On Sat, 31 Aug 2013 22:06:00 +0200, Eric Le Bihan wrote:
+> Le 31/08/2013 13:46, Thomas Petazzoni a ?crit :
 > 
-> For this type of dependencies, we generally add a comment in case the
-> dependencies are not met, warning the user about this. Have a look at
-> some other packages to get an idea.
-
-That's true for the WCHAR dependency, but not for the MMU dependency.
-So the comment should be:
-
-comment "pyzmq requires wchar support in toolchain"
-	depends on !BR2_USE_WCHAR
-
-> > +       help
-> > +         This package contains the python language binding for zeromq.
-> > +         Due to issues with cross-compiling this package is hardcoded
-> > +         to ZeroMQ version 3.2.3
-
-I wouldn't mention the version of ZeroMQ here, as it will most likely
-not be updated when ZeroMQ is upgraded in Buildroot.
-
-> > +         See also: http://zeromq.org/bindings:python
-
-No need for 'See also:', just put the upstream URL.
-
-> > diff --git a/package/python-pyzmq/pyzmq.mk b/package/python-pyzmq/pyzmq.mk
-> > new file mode 100644
-> > index 0000000..a7efcad
-> > --- /dev/null
-> > +++ b/package/python-pyzmq/pyzmq.mk
-> > @@ -0,0 +1,50 @@
-> > +##########################################
-> > +#
-> > +# pyzmq
-> > +#
-> > +##########################################
-
-80 '#' should be used.
-
-> > +PYZMQ_VERSION = 13.0.2
-> > +PYZMQ_ZMQ_VERSION = 3.2.3
+> > I believe we have several options:
+> > 
+> >  (1) No longer allow the usage of 'udev' without systemd. This is I
+> >      believe what would match the best the upstream decision of making
+> >      udev and systemd more and more integrated together. This would
+> >      mean remove the separate 'udev' package, and turn the 'udev' /dev
+> >      management method into a 'udev+systemd' management method, which
+> >      would force the "init method" to be systemd. This is probably the
+> >      easiest solution, but I guess some users might be disappointed:
+> >      they might be using udev for some reason, but still may not want
+> >      all the systemd/dbus stuff. That said, using udev without systemd
+> >      seems to go against the choices of the upstream systemd project.
 > 
-> I haven't thought about better ways to do this, so I'll take it as a
-> given that you need to have a fixed version.
-> But have you considered using $(ZEROMQ_VERSION) instead of the
-> hardcoded 3.2.3. This way, pyzmq will not have to be updated when the
-> zeromq version is bumped.
+> This is my first option.
 
-I agree.
+Right.
 
+> >  (2) Continue to use an old standalone udev, but ensure that the choice
+> >      of udev and systemd are mutually exclusive. This is not very
+> >      satisfying since the old udev we have is no longer maintained, so
+> >      it does not look like a solution that is very future-proof.
 > 
-> > +PYZMQ_SOURCE = pyzmq-$(PYZMQ_VERSION).tar.gz
+> This is a no-go.
+
+Agreed.
+
+> >  (3) Package one of more recent 'udev' versions that have been
+> >      extracted from systemd sources, as a separate 'udev' package that
+> >      would be mutually exclusive with systemd. It's a bit like (2) but
+> >      with a more recent udev version. However, it's unclear how those
+> >      forked versions of udev will be maintained over time.
 > 
-> This format is the default value for FOO_SOURCE, so this line can be ommitted.
+> Currently, we have two contestants:
 > 
-> > +PYZMQ_SITE = https://pypi.python.org/packages/source/p/pyzmq/
-> > +PYZMQ_LICENSE = LGPLv3 BSD-3c
-> > +PYZMQ_LICENSE_FILES = COPYING.LESSER COPYING.BSD
-
-Check whether it's really LGPLv3 or LGPLv3+ (i.e, whether it's LGPL
-version 3 only, or LGPL version 3 or later).
-
-> > +PYZMQ_INSTALL_TARGET = YES
+>  1) The developers of Linux From Scratch extracted the udev code from
+> systemd source tree:
+> http://www.linuxfromscratch.org/lfs/view/development/chapter06/udev.html. This
+> does not look very maintainable, so I will not bet on it.
 > 
-> FOO_INSTALL_TARGET = YES is the default, so line can be ommitted.
+>  2) The developers of Gentoo forked udev:
+> https://github.com/gentoo/eudev. They want eudev to be system
+> initialization neutral, so we might expect it not to diverge too much
+> from upstream. And it will live as long as Gentoo lives (or moves to mdev!).
+
+This second fork indeed seems like a good option. In the past
+discussion, one issue that popped up is whether the 'libudev' and other
+tools/libraries provided by eudev on one side and the udev of systemd
+on the other side will remain API compatible over time. As you know,
+udev is not a standalone program, it also provides a library that is
+used by more and more applications/other libraries to get informations
+about the hardware available in the system.
+
+Ideally, the APIs will remain compatible, so in Buildroot, we can
+create a 'udev' or 'libudev' virtual package, which packages needing
+the libudev library can depend on, and which will be implemented either
+by eudev or systemd.
+
+> >  (4) See if it's possible to make the systemd package only provide
+> >      udev. I think it is possible to install only udev, but as far as I
+> >      remember, D-Bus was still required at build time, unless you did
+> >      some tricks.
 > 
+> In the systemd source tree there is only one Makefile to compile the
+> cathedral. A while ago, a patch was posted on hotplug mailing list to
+> compile only udev (http://www.spinics.net/lists/hotplug/msg05503.html).
+> This does not look very maintainable. So compiling the cathedral and
+> copying the files seems a better choice to me.
+
+The only issue being that compiling the cathedral requires dbus, even
+if you don't need it in the end if you're only interested in udev and
+not the full systemd thing. That said, it's maybe something that can be
+tweaked later on by only compiling the relevant subdirectories in
+systemd sources and faking a few things to make it believe that dbus is
+available. We can look at this later on.
+
+> > To be honest, as I'm not really using udev myself, choice (1) seems to
+> > have my preference. If udev users are not happy with the fact that they
+> > must now use systemd, then they should work that out with upstream (and
+> > I wish them good luck!).
+> > 
+> > What do you think about this?
 > 
-> > +
-> > +define PYZMQ_POST_PATCH_FIXUP
-> > +        (cd $(@D); \
-> > +               cat buildutils/detect.py | \
-> > +               sed -e "s/##PYZMQ_ZMQ_VERSION##/$(PYZMQ_ZMQ_VERSION)/" \
-> > +                 >buildutils/detect.py.new; \
-> > +               cp buildutils/detect.py.new buildutils/detect.py)
+> I would also go with choice (1). But out of curiosity, I'll try to
+> package eudev and implement choice (4) and see what comes out.
 
-I think you should use $(SED) to do an in-place replacement. See for
-example what package/dmalloc/dmalloc.mk is doing. Something like:
+Excellent. I'm definitely looking forward to seeing your patches about
+this.
 
-	$(SED) 's/##PYZMQ_ZMQ_VERSION##/$(PYZMQ_ZMQ_VERSION)/' 	$(@D)/buildutils/detect.py
-
-> > +endef
-> > +
-> > +PYZMQ_POST_PATCH_HOOKS += PYZMQ_POST_PATCH_FIXUP
-> > +
-> > +define PYZMQ_CONFIGURE_CMDS
-> > +        (cd $(@D); CC="$(TARGET_CC)" CFLAGS="$(TARGET_CFLAGS)" \
-> > +                LDSHARED="$(TARGET_CROSS)gcc -shared" \
-
-LDSHARED="$(TARGET_CC) -shared" would be preferable I believe.
-
-> > +                CROSS_COMPILING=yes \
-> > +                _python_sysroot=$(STAGING_DIR) \
-> > +                _python_srcdir=$(BUILD_DIR)/python$(PYTHON_VERSION) \
-> > +                _python_prefix=/usr \
-> > +                _python_exec_prefix=/usr \
-> > +                $(HOST_DIR)/usr/bin/python setup.py configure \
-> > +               --zmq=$(@D)/../../staging/usr)
-
-No, this should be --zmq=$(STAGING_DIR)/usr
-
-> > +endef
+> > runit ? s6 ? What are these ?
 > 
-> Python and zeromq will already have to be installed before pyzmq is
-> built, so you will have to add a line like:
-> PYZMQ_DEPENDENCIES = python zeromq
+> Runit and s6 are Unix init systems with service supervision. They
+> implement the same features as Systemd, but with less *cough*
+> freedesktop bloat. They both derive from daemontools from D.J. Berstein
+> (http://cr.yp.to/daemontools.html).
 > 
-> > +
-> > +define PYZMQ_INSTALL_TARGET_CMDS
-> > +        (cd $(@D); CC="$(TARGET_CC)" CFLAGS="$(TARGET_CFLAGS)" \
-> > +                LDSHARED="$(TARGET_CROSS)gcc -shared" \
-> > +                CROSS_COMPILING=yes \
-> > +                _python_sysroot=$(STAGING_DIR) \
-> > +                _python_srcdir=$(BUILD_DIR)/python$(PYTHON_VERSION) \
-> > +                _python_prefix=/usr \
-> > +                _python_exec_prefix=/usr \
-> > +                $(HOST_DIR)/usr/bin/python setup.py install \
-> > +               --prefix=$(TARGET_DIR)/usr)
+> Service supervision is very handy in embedded devices that have to be
+> remotely administrated (like ADSL residential gateways, Femtocells, or
+> smart meters).
+> 
+> These systems also offer a cleaner way of defining services (I
+> personally think that the unit file concept is the killer feature of
+> systemd)
+> 
+> The creator of s6 (http://skarnet.org/software/s6/) has a lengthy
+> explanation about the history and benefits of these tools.
+> 
+> Runit can be used as a replacement to systemd in Arch Linux
+> (https://github.com/chneukirchen/ignite). It is also available in
+> Busybox! But I prefer the original implementation.
+> 
+> I've deployed products running s6, without any issues. But I lean
+> towards runit because:
+> 
+>  - s6 depends on a set of libraries that follow the /package
+> (slashpackage) hierarchy (http://cr.yp.to/slashpackage.html). You have
+> to twist your brain a little bit to wrap around this concept when mixed
+> with a traditional LSB. I've got a patch set to build these using an old
+> Buildroot. I'll update them and post them if someone is interested.
+>  - it is a one-man-army project.
+> 
+> Runit keeps the things simple and is also available in Debian.
+> 
+> Both do fit in embedded devices. I'll try to evaluate OpenRC one day.
 
-This prefix looks wrong. The prefix should normally always be '/usr'.
+Wow, thanks a lot for those details. Looks really interesting indeed.
+In this area, I had heard in the past of PCD (Process Control Daemon),
+http://www.rt-embedded.com/blog/pcd-process-control-daemon/, but I
+never had the opportunity to test it.
 
-You also have lots of duplicated variables between the CONFIGURE_CMDS
-and INSTALL_TARGET_CMDS, it'd be great to factorize them.
-
-Thanks!
+Best regards,
 
 Thomas
 -- 
