@@ -1,101 +1,73 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 1 Sep 2013 21:12:32 +0200
-Subject: [Buildroot] [git commit] collectd: bump to version 5.4.0
-Message-ID: <20130901194715.647DE9B6B0@busybox.osuosl.org>
+Date: Sun, 1 Sep 2013 21:03:13 +0200
+Subject: [Buildroot] [git commit] netatalk: bump to version 3.0.5
+Message-ID: <20130901194715.172DB9B6AF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=8b55597d7e00078ef4cfb2d825b60acefd762264
+commit: http://git.buildroot.net/buildroot/commit/?id=c22889cd67b647c15d55e46b273f1ebfb2d596b8
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Make it use external instead of bundled libevent - it's better for size
+reasons (avoiding possible duplication) and security reasons (easier to
+upgrade one global library than possibly two or more, and generally
+upstream would probably be more responsive to those).
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/collectd/Config.in   |   11 +++++++++++
- package/collectd/collectd.mk |   13 ++++++++-----
- 2 files changed, 19 insertions(+), 5 deletions(-)
+ package/netatalk/Config.in   |    1 +
+ package/netatalk/netatalk.mk |   13 ++++++++-----
+ 2 files changed, 9 insertions(+), 5 deletions(-)
 
-diff --git a/package/collectd/Config.in b/package/collectd/Config.in
-index a1d50a4..43571e3 100644
---- a/package/collectd/Config.in
-+++ b/package/collectd/Config.in
-@@ -105,6 +105,11 @@ config BR2_PACKAGE_COLLECTD_BIND
+diff --git a/package/netatalk/Config.in b/package/netatalk/Config.in
+index e3deaef..5c676e9 100644
+--- a/package/netatalk/Config.in
++++ b/package/netatalk/Config.in
+@@ -3,6 +3,7 @@ config BR2_PACKAGE_NETATALK
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_PACKAGE_BERKELEYDB
+ 	select BR2_PACKAGE_OPENSSL
++	select BR2_PACKAGE_LIBEVENT
+ 	select BR2_PACKAGE_LIBGCRYPT
+ 	select BR2_PACKAGE_LIBGPG_ERROR
  	help
- 	  Collects BIND DNS statistics.
- 
-+config BR2_PACKAGE_COLLECTD_CGROUPS
-+	bool "cgroups"
-+	help
-+	  Collects CGroups CPU usage accounting.
-+
- config BR2_PACKAGE_COLLECTD_CONNTRACK
- 	bool "conntrack"
- 	help
-@@ -276,6 +281,11 @@ config BR2_PACKAGE_COLLECTD_SERIAL
- 	help
- 	  Collects the traffic on serial interfaces.
- 
-+config BR2_PACKAGE_COLLECTD_STATSD
-+	bool "StatsD"
-+	help
-+	  StatsD network protocol to allow clients to report "events".
-+
- config BR2_PACKAGE_COLLECTD_SNMP
- 	bool "snmp"
- 	select BR2_PACKAGE_NETSNMP
-@@ -420,3 +430,4 @@ endif
- 
- comment "collectd needs a toolchain with IPv6 and thread support"
-         depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INET_IPV6
-+	depends on BR2_USE_MMU
-diff --git a/package/collectd/collectd.mk b/package/collectd/collectd.mk
-index bead4d4..55a388c 100644
---- a/package/collectd/collectd.mk
-+++ b/package/collectd/collectd.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/netatalk/netatalk.mk b/package/netatalk/netatalk.mk
+index 684e790..37115ec 100644
+--- a/package/netatalk/netatalk.mk
++++ b/package/netatalk/netatalk.mk
+@@ -4,15 +4,17 @@
  #
  ################################################################################
  
--COLLECTD_VERSION = 5.3.1
-+COLLECTD_VERSION = 5.4.0
- COLLECTD_SITE = http://collectd.org/files
- COLLECTD_MAKE_OPT = LDFLAGS="$(TARGET_LDFLAGS) -lm"
- COLLECTD_CONF_ENV = ac_cv_lib_yajl_yajl_alloc=yes
-@@ -13,13 +13,14 @@ COLLECTD_LICENSE = GPLv2 LGPLv2.1
- COLLECTD_LICENSE_FILES = COPYING
+-NETATALK_VERSION = 3.0
++NETATALK_VERSION = 3.0.5
+ NETATALK_SITE = http://downloads.sourceforge.net/project/netatalk/netatalk/$(NETATALK_VERSION)
+ NETATALK_SOURCE = netatalk-$(NETATALK_VERSION).tar.bz2
+-
+ NETATALK_AUTORECONF = YES
+ NETATALK_CONFIG_SCRIPTS = netatalk-config
++NETATALK_DEPENDENCIES = host-pkgconf openssl berkeleydb libgcrypt libgpg-error \
++	libevent
  
- # These require unmet dependencies, are fringe, pointless or deprecated
--COLLECTD_PLUGINS_DISABLE = amqp apple_sensors ascent dbi email \
--		gmond hddtemp ipmi ipvs java libvirt lpar madwifi mbmon \
-+COLLECTD_PLUGINS_DISABLE = amqp apple_sensors aquaero ascent dbi email \
-+		gmond hddtemp ipmi ipvs java libvirt lpar lvm madwifi mbmon \
- 		memcachec modbus multimeter netapp netlink nginx \
- 		notify_desktop notify_email numa nut onewire oracle perl pf \
- 		pinba postgresql powerdns python redis routeros rrdcached \
--		sensors tape target_v5upgrade teamspeak2 ted tokyotyrant \
--		uuid varnish vserver write_mongodb write_redis xmms zfs_arc
-+		sensors sigrok tape target_v5upgrade teamspeak2 ted \
-+		tokyotyrant uuid varnish vserver write_mongodb write_redis \
-+		xmms zfs_arc
+-NETATALK_DEPENDENCIES = host-pkgconf openssl berkeleydb libgcrypt libgpg-error
+-NETATALK_CONF_ENV += CC="$(TARGET_CC) -std=gnu99"
++# Don't run ldconfig!
++NETATALK_CONF_ENV += CC="$(TARGET_CC) -std=gnu99" \
++	ac_cv_path_NETA_LDCONFIG=""
+ NETATALK_CONF_OPT += --with-cnid-cdb-backend \
+ 	--with-bdb=$(STAGING_DIR)/usr \
+ 	--disable-zeroconf \
+@@ -21,7 +23,8 @@ NETATALK_CONF_OPT += --with-cnid-cdb-backend \
+ 	--with-shadow \
+ 	--disable-shell-check \
+ 	--without-kerberos \
+-	--without-pam
++	--without-pam \
++	--with-libevent=no
  
- COLLECTD_CONF_OPT += --with-nan-emulation --with-fp-layout=nothing \
- 	--localstatedir=/var --with-perl-bindings=no \
-@@ -29,6 +30,7 @@ COLLECTD_CONF_OPT += --with-nan-emulation --with-fp-layout=nothing \
- 	$(if $(BR2_PACKAGE_COLLECTD_APCUPS),--enable-apcups,--disable-apcups) \
- 	$(if $(BR2_PACKAGE_COLLECTD_BATTERY),--enable-battery,--disable-battery) \
- 	$(if $(BR2_PACKAGE_COLLECTD_BIND),--enable-bind,--disable-bind) \
-+	$(if $(BR2_PACKAGE_COLLECTD_CGROUPS),--enable-cgroups,--disable-cgroups) \
- 	$(if $(BR2_PACKAGE_COLLECTD_CONNTRACK),--enable-conntrack,--disable-conntrack) \
- 	$(if $(BR2_PACKAGE_COLLECTD_CONTEXTSWITCH),--enable-contextswitch,--disable-contextswitch) \
- 	$(if $(BR2_PACKAGE_COLLECTD_CPU),--enable-cpu,--disable-cpu) \
-@@ -73,6 +75,7 @@ COLLECTD_CONF_OPT += --with-nan-emulation --with-fp-layout=nothing \
- 	$(if $(BR2_PACKAGE_COLLECTD_RRDTOOL),--enable-rrdtool,--disable-rrdtool) \
- 	$(if $(BR2_PACKAGE_COLLECTD_SCALE),--enable-target_scale,--disable-target_scale) \
- 	$(if $(BR2_PACKAGE_COLLECTD_SERIAL),--enable-serial,--disable-serial) \
-+	$(if $(BR2_PACKAGE_COLLECTD_STATSD),--enable-statsd,--disable-statsd) \
- 	$(if $(BR2_PACKAGE_COLLECTD_SET),--enable-target_set,--disable-target_set) \
- 	$(if $(BR2_PACKAGE_COLLECTD_SNMP),--enable-snmp,--disable-snmp) \
- 	$(if $(BR2_PACKAGE_COLLECTD_SWAP),--enable-swap,--disable-swap) \
+ ifeq ($(BR2_PACKAGE_CUPS),y)
+ 	NETATALK_DEPENDENCIES += cups
