@@ -1,29 +1,41 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 01 Sep 2013 12:21:26 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
-	2013-08-31
-In-Reply-To: <20130901105144.418ea59a@skate> (Thomas Petazzoni's message of
- "Sun, 1 Sep 2013 10:51:44 +0200")
-References: <20130901063004.C2A1252C5D6@lolut.humanoidz.org>
- <20130901105144.418ea59a@skate>
-Message-ID: <8761uketax.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun,  1 Sep 2013 15:54:51 +0200
+Subject: [Buildroot] [PATCH] neon: disable webdav when no XML support is
+	available
+Message-ID: <1378043691-28892-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+Since 9169810a9bd97c99d8b7a0e8aadabdcca3883e99 ("neon: replace
+'choice' for XML library with two options") the option
+BR2_PACKAGE_NEON_NOXML no longer exists. However, it was not taken
+into account properly within neon.mk, as this option was still used to
+disable webdav support when no XML library has been selected.
 
- Thomas> Peter,
- Thomas> On Sun,  1 Sep 2013 08:30:04 +0200 (CEST), Thomas Petazzoni wrote:
+Fixes:
 
- >> |               buildroot-config | NOK | http://autobuild.buildroot.net/results/3e8b96d9140813e4ae3b1dc06551a5a9d1ad34c6/
+  http://autobuild.buildroot.org/results/7ed/7ed657570d83b28389dd8c01ffdd895d2e8d145f/
 
- Thomas> These are all "No space left on device" issues on gcc110 it seems.
- Thomas> Peter, can you have a look at what's going on?
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/neon/neon.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thanks for the heads up. I've cleaned it up a bit, so it should be fine again.
-
+diff --git a/package/neon/neon.mk b/package/neon/neon.mk
+index 1915e6c..2edc6b2 100644
+--- a/package/neon/neon.mk
++++ b/package/neon/neon.mk
+@@ -42,7 +42,7 @@ else
+ NEON_CONF_OPT += --with-libxml2=no
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_NEON_NOXML),y)
++ifeq ($(BR2_PACKAGE_NEON_EXPAT)$(BR2_PACKAGE_NEON_LIBXML2),)
+ # webdav needs xml support
+ NEON_CONF_OPT += --disable-webdav
+ endif
 -- 
-Bye, Peter Korsgaard
+1.8.1.2
