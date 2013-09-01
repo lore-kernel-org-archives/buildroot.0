@@ -1,209 +1,172 @@
 From: Michael Rommel <rommel@layer-7.net>
-Date: Sun,  1 Sep 2013 23:33:35 +0200
-Subject: [Buildroot] [PATCH 2/3] aiccu: new package
+Date: Sun,  1 Sep 2013 23:33:36 +0200
+Subject: [Buildroot] [PATCH 3/3] python-pyzmq: new package
 In-Reply-To: <1378071216-19697-1-git-send-email-rommel@layer-7.net>
 References: <1378071216-19697-1-git-send-email-rommel@layer-7.net>
-Message-ID: <1378071216-19697-2-git-send-email-rommel@layer-7.net>
+Message-ID: <1378071216-19697-3-git-send-email-rommel@layer-7.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Automatic IPv6 Connectivity Configuration Utility for users of a
-IPv6 tunnel broker, developed by sixxs.net
+The python language bindings for ZeroMQ.
 
 Signed-off-by: Michael Rommel <rommel@layer-7.net>
 ---
  package/Config.in                                  |    1 +
- package/aiccu/Config.in                            |   24 +++++
- .../aiccu/aiccu-0001-gnutls-and-uclibc-fixes.patch |  104 ++++++++++++++++++++
- package/aiccu/aiccu.mk                             |   25 +++++
- 4 files changed, 154 insertions(+)
- create mode 100644 package/aiccu/Config.in
- create mode 100644 package/aiccu/aiccu-0001-gnutls-and-uclibc-fixes.patch
- create mode 100644 package/aiccu/aiccu.mk
+ package/python-pyzmq/Config.in                     |   31 ++++++++++++++
+ ...e-buildroot-zmq-version-instead-of-detect.patch |   43 ++++++++++++++++++++
+ package/python-pyzmq/python-pyzmq.mk               |   43 ++++++++++++++++++++
+ 4 files changed, 118 insertions(+)
+ create mode 100644 package/python-pyzmq/Config.in
+ create mode 100644 package/python-pyzmq/python-pyzmq-0001-use-buildroot-zmq-version-instead-of-detect.patch
+ create mode 100644 package/python-pyzmq/python-pyzmq.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index fd98da0..ed7a509 100644
+index ed7a509..d5e3b52 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -714,6 +714,7 @@ source "package/sound-theme-freedesktop/Config.in"
- endmenu
- 
- menu "Networking applications"
-+source "package/aiccu/Config.in"
- source "package/aircrack-ng/Config.in"
- source "package/argus/Config.in"
- source "package/arptables/Config.in"
-diff --git a/package/aiccu/Config.in b/package/aiccu/Config.in
+@@ -371,6 +371,7 @@ source "package/python-protobuf/Config.in"
+ source "package/python-pygame/Config.in"
+ source "package/python-pyparsing/Config.in"
+ source "package/python-pyro/Config.in"
++source "package/python-pyzmq/Config.in"
+ source "package/python-serial/Config.in"
+ source "package/python-setuptools/Config.in"
+ source "package/python-thrift/Config.in"
+diff --git a/package/python-pyzmq/Config.in b/package/python-pyzmq/Config.in
 new file mode 100644
-index 0000000..008ada7
+index 0000000..350f995
 --- /dev/null
-+++ b/package/aiccu/Config.in
-@@ -0,0 +1,24 @@
-+config BR2_PACKAGE_AICCU
-+	bool "aiccu"
-+	depends on BR2_INET_IPV6
-+	depends on BR2_USE_WCHAR
-+	select BR2_PACKAGE_GNUTLS
++++ b/package/python-pyzmq/Config.in
+@@ -0,0 +1,31 @@
++config BR2_PACKAGE_PYTHON_PYZMQ
++	bool "pyzmq"
++	depends on BR2_INSTALL_LIBSTDCPP # zeromq
++	depends on BR2_INET_IPV6 # zeromq
++	depends on BR2_TOOLCHAIN_HAS_THREADS # zeromq
++	depends on BR2_LARGEFILE # zeromq
++	depends on BR2_USE_WCHAR # zeromq
++	select BR2_PACKAGE_ZEROMQ
++	select BR2_PACKAGE_PYTHON_HASHLIB
 +	help
-+	  SixXS Automatic IPv6 Connectivity Client Utility
++	  This package contains the python language binding for zeromq.
++	  Due to issues with cross-compiling this package is hardcoded
++	  to the ZeroMQ version of this buildroot; the ZeroMQ version 
++	  must be at least v3.2.2
 +
-+	  AICCU (Automatic IPv6 Connectivity Client Utility) makes it
-+	  easy for users to get IPv6 connectivity. After having
-+	  requested an account, tunnel and optionally a subnet, AICCU
-+	  can be used to automatically configure the tunnel. AICCU
-+	  supports TIC (Tunnel Information & Control protocol), which it
-+	  uses for retrieving the tunnel configuration information,
-+	  AYIYA, which allows tunnels to be created even behind
-+	  firewalls and NAT's.
++	  http://zeromq.org/bindings:python
 +
-+	  http://www.sixxs.net/tools/aiccu/
++comment "pyzmq requires a toolchain with C++ support enabled"
++	depends on !BR2_INSTALL_LIBSTDCPP
 +
-+comment "aiccu requires a toolchain with IPv6 support"
++comment "pyzmq requires a toolchain with IPv6 support"
 +	depends on !BR2_INET_IPV6
 +
-+comment "aiccu requires a toolchain with WCHAR support"
++comment "pyzmq requires a toolchain with thread support"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS
++
++comment "pyzmq requires a toolchain with LARGEFILE support"
++	depends on !BR2_LARGEFILE
++
++comment "pyzmq requires a toolchain with WCHAR support"
 +	depends on !BR2_USE_WCHAR
-diff --git a/package/aiccu/aiccu-0001-gnutls-and-uclibc-fixes.patch b/package/aiccu/aiccu-0001-gnutls-and-uclibc-fixes.patch
+diff --git a/package/python-pyzmq/python-pyzmq-0001-use-buildroot-zmq-version-instead-of-detect.patch b/package/python-pyzmq/python-pyzmq-0001-use-buildroot-zmq-version-instead-of-detect.patch
 new file mode 100644
-index 0000000..d316f8f
+index 0000000..75a72c4
 --- /dev/null
-+++ b/package/aiccu/aiccu-0001-gnutls-and-uclibc-fixes.patch
-@@ -0,0 +1,104 @@
-+aiccu.h, common.c, common.h: fixes for deprecated GNUTLS functions and types
-+resolver.c: fixes for selection of wrong resolver function under uclibc
++++ b/package/python-pyzmq/python-pyzmq-0001-use-buildroot-zmq-version-instead-of-detect.patch
+@@ -0,0 +1,43 @@
++detect.py: fix the ZMQ version check to the ZMQ version of the buildroot
++
++The setup.py script tries to compile a test C program and runs it, to
++retrieve a version string for the installed ZMQ library, but if the cross
++compiler links it together, the result cannot be run on the host, due to
++different architectures and libraries.
++
++And if the host compiler would compile/link it, it would not link with the
++library version inside buildroot but with the library from the host, possibly returning a wrong version number.
++
++Instead of trying to run the compiled test program to get the version
++dynamically, return the version of the buildroot environment.
 +
 +Signed-off-by: Michael Rommel <rommel@layer-7.net>
 +
-+diff -purN aiccu_20070115.orig/common/aiccu.h aiccu_20070115/common/aiccu.h
-+--- aiccu_20070115.orig/common/aiccu.h	2007-01-15 13:01:43.000000000 +0100
-++++ aiccu_20070115/common/aiccu.h	2013-08-31 23:50:53.651936146 +0200
-+@@ -111,7 +111,7 @@ struct AICCU_conf
-+ #endif
++--- pyzmq-13.0.2/buildutils/detect.py.orig	2013-08-10 00:49:28.242557978 +0200
+++++ pyzmq-13.0.2/buildutils/detect.py	2013-08-10 00:44:35.197572704 +0200
++@@ -118,15 +118,17 @@ def detect_zmq(basedir, compiler=None, *
++             
++     efile = test_compilation(cfile, compiler=compiler, **compiler_attrs)
++     
++-    result = Popen(efile, stdout=PIPE, stderr=PIPE)
++-    so, se = result.communicate()
+++    # result = Popen(efile, stdout=PIPE, stderr=PIPE)
+++    # so, se = result.communicate()
++     # for py3k:
++-    so = so.decode()
++-    se = se.decode()
++-    if result.returncode:
++-        msg = "Error running version detection script:\n%s\n%s" % (so,se)
++-        logging.error(msg)
++-        raise IOError(msg)
+++    #so = so.decode()
+++    #se = se.decode()
+++    #if result.returncode:
+++    #    msg = "Error running version detection script:\n%s\n%s" % (so,se)
+++    #    logging.error(msg)
+++    #    raise IOError(msg)
+++
+++    so = "vers: ##ZEROMQ_VERSION##"
 + 
-+ #ifdef AICCU_GNUTLS
-+-	gnutls_certificate_credentials	tls_cred;	/* GNUTLS credentials */
-++	gnutls_certificate_credentials_t tls_cred;	/* GNUTLS credentials */
-+ #endif
++     handlers = {'vers':  lambda val: tuple(int(v) for v in val.split('.'))}
 + 
-+ 	bool		daemonize;		/* Daemonize? */
-+diff -purN aiccu_20070115.orig/common/common.c aiccu_20070115/common/common.c
-+--- aiccu_20070115.orig/common/common.c	2006-12-21 15:08:50.000000000 +0100
-++++ aiccu_20070115/common/common.c	2013-09-01 01:21:36.031396740 +0200
-+@@ -271,9 +271,8 @@ TLSSOCKET sock_alloc(void);
-+ TLSSOCKET sock_alloc(void)
-+ {
-+ #ifdef AICCU_GNUTLS
-+-	/* Allow connections to servers that have OpenPGP keys as well */
-+-	const int	cert_type_priority[3] = { GNUTLS_CRT_X509, GNUTLS_CRT_OPENPGP, 0 };
-+ 	int		ret;
-++	const char	*err;
-+ #endif /* AICCU_GNUTLS*/
-+ 
-+ 	TLSSOCKET	sock;	
-+@@ -297,11 +296,16 @@ TLSSOCKET sock_alloc(void)
-+ 	}
-+ 
-+ 	/* Use default priorities */
-+-	gnutls_set_default_priority(sock->session);
-+-	/* XXX: Return value is not documented in GNUTLS documentation! */
-+-
-+-	gnutls_certificate_type_set_priority(sock->session, cert_type_priority);
-+-	/* XXX: Return value is not documented in GNUTLS documentation! */
-++	ret = gnutls_priority_set_direct(sock->session, "NORMAL", &err); 
-++	if (ret < 0)
-++	{
-++		if (ret == GNUTLS_E_INVALID_REQUEST)
-++		{
-++			dolog( LOG_ERR, "TLS set priority failed, syntax error at: %s\n", err);
-++		}
-++		free(sock);
-++		return NULL;
-++	}
-+ 
-+ 	/* Configure the x509 credentials for the current session */
-+ 	gnutls_credentials_set(sock->session, GNUTLS_CRD_CERTIFICATE, g_aiccu->tls_cred);
-+@@ -474,7 +478,7 @@ bool sock_gotls(TLSSOCKET sock)
-+ 	}
-+ 
-+ 	/* Set the transport */
-+-	gnutls_transport_set_ptr(sock->session, (gnutls_transport_ptr)sock->socket);
-++	gnutls_transport_set_ptr(sock->session, (gnutls_transport_ptr_t) sock->socket);
-+ 
-+ 	/* Perform the TLS handshake */
-+ 	ret = gnutls_handshake(sock->session);
-+diff -purN aiccu_20070115.orig/common/common.h aiccu_20070115/common/common.h
-+--- aiccu_20070115.orig/common/common.h	2007-01-11 15:50:51.000000000 +0100
-++++ aiccu_20070115/common/common.h	2013-08-31 23:26:13.683659455 +0200
-+@@ -381,7 +381,7 @@ struct tlssocket
-+ 	SOCKET			socket;
-+ #ifdef AICCU_GNUTLS
-+ 	bool			tls_active;	/* TLS active? */
-+-	gnutls_session		session;	/* The GnuTLS sesision */
-++	gnutls_session_t	session;	/* The GnuTLS sesision */
-+ #endif
-+ };
-+ 
-+diff -purN aiccu_20070115.orig/common/resolver.c aiccu_20070115/common/resolver.c
-+--- aiccu_20070115.orig/common/resolver.c	2006-07-23 16:55:14.000000000 +0200
-++++ aiccu_20070115/common/resolver.c	2013-08-31 23:44:31.574866862 +0200
-+@@ -26,7 +26,7 @@
-+ 
-+ int getrrs(const char *label, int rrtype, void gotrec(unsigned int num, int type, const char *record))
-+ {
-+-#ifdef _LINUX
-++#if defined(_LINUX) && !defined(__UCLIBC__)
-+ 	struct __res_state	res;
-+ #endif
-+ 	unsigned char		answer[8192];
-+@@ -38,7 +38,7 @@ int getrrs(const char *label, int rrtype
-+ 	uint16_t		type = 0, class = 0;
-+ 	uint32_t		ttl = 0;
-+ 
-+-#ifdef _LINUX
-++#if defined(_LINUX) && !defined(__UCLIBC__)
-+ 	memset(&res, 0, sizeof(res));
-+ 	res.options = RES_DEBUG;
-+ 	res_ninit(&res);
-+@@ -47,7 +47,7 @@ int getrrs(const char *label, int rrtype
-+ #endif
-+ 
-+ 	memset(answer, 0, sizeof(answer));
-+-#ifdef _LINUX
-++#if defined(_LINUX) && !defined(__UCLIBC__)
-+ 	ret = res_nquery(&res, label, C_IN, rrtype, answer, sizeof(answer));
-+ #else
-+ 	ret = res_query(label, C_IN, rrtype, answer, sizeof(answer));
-diff --git a/package/aiccu/aiccu.mk b/package/aiccu/aiccu.mk
+diff --git a/package/python-pyzmq/python-pyzmq.mk b/package/python-pyzmq/python-pyzmq.mk
 new file mode 100644
-index 0000000..da3cc3b
+index 0000000..9061f84
 --- /dev/null
-+++ b/package/aiccu/aiccu.mk
-@@ -0,0 +1,25 @@
++++ b/package/python-pyzmq/python-pyzmq.mk
+@@ -0,0 +1,43 @@
 +################################################################################
 +#
-+# aiccu
++# pyzmq
 +#
 +################################################################################
 +
-+AICCU_VERSION = 20070115
-+AICCU_SOURCE = aiccu_$(AICCU_VERSION).tar.gz
-+AICCU_SITE = http://www.sixxs.net/archive/sixxs/aiccu/unix/
-+AICCU_LICENSE = SixXS License, concise redistribution license
-+AICCU_LICENSE_FILES = doc/LICENSE
-+AICCU_DEPENDENCIES = gnutls
++PYTHON_PYZMQ_VERSION = 13.1.0
++PYTHON_PYZMQ_SOURCE = pyzmq-$(PYTHON_PYZMQ_VERSION).tar.gz
++PYTHON_PYZMQ_SITE = https://pypi.python.org/packages/source/p/pyzmq/
++PYTHON_PYZMQ_LICENSE = LGPLv3+ BSD-3c Apache License Version 2.0 
++# Apache license only online: http://www.apache.org/licenses/LICENSE-2.0
++PYTHON_PYZMQ_LICENSE_FILES = COPYING.LESSER COPYING.BSD
++PYTHON_PYZMQ_DEPENDENCIES = zeromq python
 +
-+define AICCU_BUILD_CMDS
-+	$(MAKE) CC="$(TARGET_CC)" LD="$(TARGET_LD)" -C $(@D) all
++define PYTHON_PYZMQ_POST_PATCH_FIXUP
++	$(SED) 's/##ZEROMQ_VERSION##/$(ZEROMQ_VERSION)/' \
++		$(@D)/buildutils/detect.py
 +endef
 +
-+define AICCU_INSTALL_TARGET_CMDS
-+	$(INSTALL) -D -m 0755 $(@D)/unix-console/aiccu $(TARGET_DIR)/usr/sbin
-+	$(INSTALL) -D -m 0644 $(@D)/doc/aiccu.conf $(TARGET_DIR)/etc
-+	$(INSTALL) -D -m 0755 $(@D)/doc/aiccu.init \
-+		$(TARGET_DIR)/usr/sbin/S90aiccu
++PYTHON_PYZMQ_POST_PATCH_HOOKS += PYTHON_PYZMQ_POST_PATCH_FIXUP
++
++PYTHON_PYZMQ_PARAMS = CC="$(TARGET_CC)" \
++		CFLAGS="$(TARGET_CFLAGS)" \
++		LDSHARED="$(TARGET_CC) -shared" \
++		CROSS_COMPILING=yes \
++		_python_sysroot=$(STAGING_DIR) \
++		_python_srcdir=$(BUILD_DIR)/python$(PYTHON_VERSION) \
++		_python_prefix=/usr \
++		_python_exec_prefix=/usr
++
++define PYTHON_PYZMQ_CONFIGURE_CMDS
++	(cd $(@D); $(PYTHON_PYZMQ_PARAMS) \
++		$(HOST_DIR)/usr/bin/python setup.py configure \
++		--zmq=$(STAGING_DIR)/usr)
++endef
++
++define PYTHON_PYZMQ_INSTALL_TARGET_CMDS
++	(cd $(@D); $(PYTHON_PYZMQ_PARAMS) \
++		$(HOST_DIR)/usr/bin/python setup.py install \
++		--prefix=$(TARGET_DIR)/usr)
 +endef
 +
 +$(eval $(generic-package))
