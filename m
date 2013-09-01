@@ -1,33 +1,29 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 1 Sep 2013 21:43:43 +0200
-Subject: [Buildroot] [git commit] libnetfilter_conntrack: bump to version
-	1.0.4
-Message-ID: <20130901194715.8245E9B666@busybox.osuosl.org>
+Date: Sun, 1 Sep 2013 21:15:24 +0200
+Subject: [Buildroot] [git commit] collectd: Config.in: fix space/tab mixup
+Message-ID: <20130901194715.5CEF69B6B1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a9806cfa304d1ed200b6d0750001b80446813a2c
+commit: http://git.buildroot.net/buildroot/commit/?id=c82ca4fec6a26356d5424feecf65a077c297d171
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- .../libnetfilter-conntrack.mk                      |    2 +-
+ package/collectd/Config.in |    2 +-
  1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/libnetfilter_conntrack/libnetfilter-conntrack.mk b/package/libnetfilter_conntrack/libnetfilter-conntrack.mk
-index 41b0640..1db30a1 100644
---- a/package/libnetfilter_conntrack/libnetfilter-conntrack.mk
-+++ b/package/libnetfilter_conntrack/libnetfilter-conntrack.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/collectd/Config.in b/package/collectd/Config.in
+index 43571e3..4957115 100644
+--- a/package/collectd/Config.in
++++ b/package/collectd/Config.in
+@@ -429,5 +429,5 @@ endmenu
+ endif
  
--LIBNETFILTER_CONNTRACK_VERSION = 1.0.3
-+LIBNETFILTER_CONNTRACK_VERSION = 1.0.4
- LIBNETFILTER_CONNTRACK_SOURCE = libnetfilter_conntrack-$(LIBNETFILTER_CONNTRACK_VERSION).tar.bz2
- LIBNETFILTER_CONNTRACK_SITE = http://www.netfilter.org/projects/libnetfilter_conntrack/files
- LIBNETFILTER_CONNTRACK_INSTALL_STAGING = YES
+ comment "collectd needs a toolchain with IPv6 and thread support"
+-        depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INET_IPV6
++	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INET_IPV6
+ 	depends on BR2_USE_MMU
