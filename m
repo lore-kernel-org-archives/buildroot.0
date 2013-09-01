@@ -1,7 +1,7 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sun,  1 Sep 2013 16:54:37 -0300
-Subject: [Buildroot] [PATCH] libfuse: bump to version 2.9.3
-Message-ID: <1378065277-3056-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Sun,  1 Sep 2013 16:55:01 -0300
+Subject: [Buildroot] [PATCH] libmicrohttpd: bump to version 0.9.29
+Message-ID: <1378065301-3103-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,21 +10,21 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/libfuse/libfuse.mk | 2 +-
+ package/libmicrohttpd/libmicrohttpd.mk | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/libfuse/libfuse.mk b/package/libfuse/libfuse.mk
-index 84ca922..92203ef 100644
---- a/package/libfuse/libfuse.mk
-+++ b/package/libfuse/libfuse.mk
+diff --git a/package/libmicrohttpd/libmicrohttpd.mk b/package/libmicrohttpd/libmicrohttpd.mk
+index e29e956..31ef7fe 100644
+--- a/package/libmicrohttpd/libmicrohttpd.mk
++++ b/package/libmicrohttpd/libmicrohttpd.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBFUSE_VERSION = 2.9.2
-+LIBFUSE_VERSION = 2.9.3
- LIBFUSE_SOURCE = fuse-$(LIBFUSE_VERSION).tar.gz
- LIBFUSE_SITE = http://downloads.sourceforge.net/project/fuse/fuse-2.X/$(LIBFUSE_VERSION)
- LIBFUSE_LICENSE = GPLv2 LGPLv2.1
+-LIBMICROHTTPD_VERSION = 0.9.27
++LIBMICROHTTPD_VERSION = 0.9.29
+ LIBMICROHTTPD_SITE = $(BR2_GNU_MIRROR)/libmicrohttpd
+ LIBMICROHTTPD_LICENSE_FILES = COPYING
+ LIBMICROHTTPD_INSTALL_STAGING = YES
 -- 
 1.8.1.5
