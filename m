@@ -1,21 +1,32 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 01 Sep 2013 22:36:55 +0200
-Subject: [Buildroot] [PATCH] gnutls: bump to version 3.2.4
-In-Reply-To: <1378065320-3276-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Sun, 1 Sep 2013 16:55:20 -0300")
-References: <1378065320-3276-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87txi4b7o8.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Sun, 1 Sep 2013 22:36:13 +0200
+Subject: [Buildroot] [git commit] libfuse: bump to version 2.9.3
+Message-ID: <20130901203652.0AC919B6AF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=fa2174d3a388be2e0b01574ebdc9fa88347aec7f
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Gustavo> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/libfuse/libfuse.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/libfuse/libfuse.mk b/package/libfuse/libfuse.mk
+index 84ca922..92203ef 100644
+--- a/package/libfuse/libfuse.mk
++++ b/package/libfuse/libfuse.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBFUSE_VERSION = 2.9.2
++LIBFUSE_VERSION = 2.9.3
+ LIBFUSE_SOURCE = fuse-$(LIBFUSE_VERSION).tar.gz
+ LIBFUSE_SITE = http://downloads.sourceforge.net/project/fuse/fuse-2.X/$(LIBFUSE_VERSION)
+ LIBFUSE_LICENSE = GPLv2 LGPLv2.1
