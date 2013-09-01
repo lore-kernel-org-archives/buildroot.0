@@ -1,22 +1,27 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 01 Sep 2013 21:45:13 +0200
-Subject: [Buildroot] [PATCH 1/5] libnetfilter_conntrack: bump to version
-	1.0.4
-In-Reply-To: <1377899841-26206-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Fri, 30 Aug 2013 18:57:17 -0300")
-References: <1377899841-26206-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87bo4ccomu.fsf@dell.be.48ers.dk>
+Date: Sun, 01 Sep 2013 21:47:04 +0200
+Subject: [Buildroot] impressive
+In-Reply-To: <CAG3-AMpnQ6GOnaWMB2BnJT-mKT5MmcS8pPtfysdq8PKxSh7Row@mail.gmail.com>
+ (Thomas Davis's message of "Sat, 31 Aug 2013 18:45:07 -0400")
+References: <CAG3-AMpnQ6GOnaWMB2BnJT-mKT5MmcS8pPtfysdq8PKxSh7Row@mail.gmail.com>
+Message-ID: <877gf0cojr.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+>>>>> "Thomas" == Thomas Davis <sunsetbrew@sunsetbrew.com> writes:
 
- Gustavo> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Hi,
 
-Committed series, thanks.
+ Thomas> I have to say that I find this project really impressive.  The
+ Thomas> most impressive thing is how well all of this activity is
+ Thomas> managed.  A big hat tip out to you good folks working hard to
+ Thomas> keep this project moving forward.
+
+Thanks for the kind words. It is always nice to hear that our work is
+appreciated!
 
 -- 
 Bye, Peter Korsgaard
