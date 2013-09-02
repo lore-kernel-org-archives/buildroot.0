@@ -1,10 +1,7 @@
-From: Michael Rommel <rommel@layer-7.net>
-Date: Mon, 02 Sep 2013 09:34:17 +0200
-Subject: [Buildroot] [PATCH 1/1] pyzmq: new package
-In-Reply-To: <52242ABB.9060701@mind.be>
-References: <1377899924-1866-1-git-send-email-rommel@layer-7.net>
- <52242ABB.9060701@mind.be>
-Message-ID: <3d980b9a4dc588d5be5163847a0fd457@imap.tschaeche.com>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Mon,  2 Sep 2013 10:18:49 +0200
+Subject: [Buildroot] [PATCH 1/2] perl: dump to version 5.18.1
+Message-ID: <1378109930-4204-1-git-send-email-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,41 +9,52 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+---
+ package/cpanminus/cpanminus.mk |    4 ++--
+ package/perl/perl.mk           |    8 ++++----
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-Hi Arnout,
-
-I'll test that again today in the evening. IIRC "make savedefconfig"
-complained
-about a cyclic dependency, but I need to check that again. Thanks for
-pointing
-that out!
-
-  Michael.
-
-On Mon, 02 Sep 2013 08:05:47 +0200, Arnout Vandecappelle
-<arnout@mind.be> wrote:
-> On 08/30/13 23:58, Michael Rommel wrote:
-> [snip]
->> diff --git a/package/python-pyzmq/Config.in b/package/python-pyzmq/Config.in
->> new file mode 100644
->> index 0000000..d9791c1
->> --- /dev/null
->> +++ b/package/python-pyzmq/Config.in
->> @@ -0,0 +1,13 @@
->> +config BR2_PACKAGE_PYZMQ
->> +	bool "pyzmq"
->> +	select BR2_PACKAGE_ZEROMQ
->> +        select BR2_PACKAGE_PYTHON
-> 
->  For python packages, we use a 'depends on' here rather than a select.
-> 
-> 
->  Regards,
->  Arnout
-> 
->> +	depends on BR2_USE_WCHAR
->> +	depends on BR2_USE_MMU
-> [snip]
-
+diff --git a/package/cpanminus/cpanminus.mk b/package/cpanminus/cpanminus.mk
+index 52921b5..b315388 100644
+--- a/package/cpanminus/cpanminus.mk
++++ b/package/cpanminus/cpanminus.mk
+@@ -11,9 +11,9 @@ CPANMINUS_DEPENDENCIES = host-qemu perl $(call qstrip,$(BR2_PACKAGE_CPANMINUS_NA
+ 
+ CPANMINUS_RUN_PERL = $(QEMU_USER) $(STAGING_DIR)/usr/bin/perl
+ CPANMINUS_ARCHNAME = $(shell $(CPANMINUS_RUN_PERL) -MConfig -e "print Config->{archname}")
+-CPANMINUS_PERL_LIB      = $(STAGING_DIR)/usr/lib/perl5
++CPANMINUS_PERL_LIB      = $(STAGING_DIR)/usr/lib/perl5/$(PERL_VERSION)
+ CPANMINUS_PERL_SITELIB  = $(TARGET_DIR)/usr/lib/perl5/site_perl/$(PERL_VERSION)
+-CPANMINUS_PERL_ARCHLIB  = $(CPANMINUS_PERL_LIB)/$(PERL_VERSION)/$(CPANMINUS_ARCHNAME)
++CPANMINUS_PERL_ARCHLIB  = $(CPANMINUS_PERL_LIB)/$(CPANMINUS_ARCHNAME)
+ CPANMINUS_PERL_SITEARCH = $(CPANMINUS_PERL_SITELIB)/$(CPANMINUS_ARCHNAME)
+ CPANMINUS_PERL5LIB = $(CPANMINUS_PERL_SITEARCH):$(CPANMINUS_PERL_SITELIB):$(CPANMINUS_PERL_ARCHLIB):$(CPANMINUS_PERL_LIB)
+ ifneq ($(BR2_PACKAGE_CPANMINUS_MIRROR),"")
+diff --git a/package/perl/perl.mk b/package/perl/perl.mk
+index 37a38f7..25314f0 100644
+--- a/package/perl/perl.mk
++++ b/package/perl/perl.mk
+@@ -4,16 +4,16 @@
+ #
+ ################################################################################
+ 
+-PERL_VERSION_MAJOR = 16
+-PERL_VERSION = 5.$(PERL_VERSION_MAJOR).3
++PERL_VERSION_MAJOR = 18
++PERL_VERSION = 5.$(PERL_VERSION_MAJOR).1
+ PERL_SITE = http://www.cpan.org/src/5.0
+ PERL_SOURCE = perl-$(PERL_VERSION).tar.bz2
+ PERL_LICENSE = Artistic
+ PERL_LICENSE_FILES = Artistic
+ PERL_INSTALL_STAGING = YES
+ 
+-PERL_CROSS_VERSION = 0.7.4
+-PERL_CROSS_BASE_VERSION = 5.$(PERL_VERSION_MAJOR).3
++PERL_CROSS_VERSION = 0.8
++PERL_CROSS_BASE_VERSION = 5.$(PERL_VERSION_MAJOR).0
+ PERL_CROSS_SITE    = http://download.berlios.de/perlcross
+ PERL_CROSS_SOURCE  = perl-$(PERL_CROSS_BASE_VERSION)-cross-$(PERL_CROSS_VERSION).tar.gz
+ PERL_CROSS_OLD_POD = perl$(subst .,,$(PERL_CROSS_BASE_VERSION))delta.pod
 -- 
-Michael Rommel, Erlangen, Germany
+1.7.9.5
