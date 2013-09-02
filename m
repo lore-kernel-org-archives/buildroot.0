@@ -1,31 +1,35 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 2 Sep 2013 23:04:05 +0200
-Subject: [Buildroot] [PATCH 9 of 9 v4] linux: mention 3.x.y kernels in
- 'custom version' help
-In-Reply-To: <f46382b15981b2489c2d.1378152478@argentina>
-References: <patchbomb.1378152469@argentina>
- <f46382b15981b2489c2d.1378152478@argentina>
-Message-ID: <20130902230405.1bf85242@skate>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Mon, 2 Sep 2013 23:13:59 +0200
+Subject: [Buildroot] [PATCH 4/5] Makefile: do not try to strip
+ inexisting file when stripping libpthread
+In-Reply-To: <1376996584-4462-5-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1376996584-4462-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1376996584-4462-5-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <CACXmVib_mJ-TmT22kuPoFHg-pH366Ew-dYDA2zeHHhPp93iuLg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas De Schampheleire,
+On Tue, Aug 20, 2013 at 1:03 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> libpthread.so has a special stripping condition to preserve parts of
+> it that are needed for debugging. However, due to the usage of 'xargs'
+> instead of 'xargs -r', the strip command is executed regardless of
+> whether a libpthread.so file is found or not. This leads to a big
+> error message being displayed in static-only builds, because strip is
+> executed without a file argument. Thanks to the '|| true', the build
+> continues, but still shows a big error message in the middle, which is
+> not nice.
+>
+> By using 'xargs -r', we avoid the strip command from being executed
+> when 'find' doesn't find any match. We also remove the '|| true' to
+> catch other real errors.
+>
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-On Mon, 02 Sep 2013 22:07:58 +0200, Thomas De Schampheleire wrote:
-> (also fix grammatical error versions -> version)
-> 
-> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+Committed, thanks.
 
-Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-
-Peter, I believe this one can be committed now.
-
-Thomas
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Bye, Peter Korsgaard
