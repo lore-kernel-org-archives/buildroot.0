@@ -1,40 +1,55 @@
-From: Markos Chandras <markos.chandras@gmail.com>
-Date: Mon, 2 Sep 2013 17:20:54 +0100
-Subject: [Buildroot] [PATCH v3] libsecret: New package
-In-Reply-To: <20130902135250.377682d6@skate>
-References: <1377685417-5813-1-git-send-email-markos.chandras@imgtec.com>
- <CAG2jQ8j2SmMtG1o4e4xhcDyScU-Gz_61Ri-oUOOyaVN6jJ6r5A@mail.gmail.com>
- <20130902135250.377682d6@skate>
-Message-ID: <CAG2jQ8iGHL47ix0Cv4wE0MeLo6EhXajhfBSCxg4W_V2p5ETbpA@mail.gmail.com>
+From: Gwyll Gwyllin <gwyll@gwyll.eu>
+Date: Mon, 2 Sep 2013 19:45:45 +0200
+Subject: [Buildroot] host-icu No rule to make target
+In-Reply-To: <522428DB.20700@mind.be>
+References: <2ACF8D649627456A8677BE38BC2E4484@tux.local>
+ <522428DB.20700@mind.be>
+Message-ID: <4FDC073976954A55AAB1E76C952F364F@tux.local>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2 September 2013 12:52, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Dear Markos Chandras,
->
-> On Mon, 2 Sep 2013 12:36:04 +0100, Markos Chandras wrote:
->
->> Ping? :) This package is needed for newer webkits which I intend to
->> submit a patch for it when libsecret package
->> is committed.
->
-> You can always submit series of patches that include both libsecret and
-> the webkit bump, for example.
+Hello Arnout,
 
-Hi Thomas,
+thank you for your time.
+Mean while i was removed the whole buildroot and i've started a fresh
+compile from a different source.
+I can not tell the version of this package, but it looks much better. It has
+only small errors like couldn't find source package at the given URL ... a
+symlink already exists ... etc.
 
-Well yeah, but webkit is a bit messy so I was hoping to do it in a
-clean patchset without including other dependencies in it :)
+I try this.
 
->
-> But anyway, this package looks good. Peter, can you commit this?
+Thanks,
+Gwyll
 
-Thanks!
+----- Eredeti ?zenet ----- 
+From: Arnout Vandecappelle
+Sent: Monday, September 02, 2013 7:57 AM
+To: Gwyll Gwyllin
+Cc: buildroot at busybox.net
+Subject: Re: [Buildroot] host-icu No rule to make target
 
--- 
-Regards,
-Markos Chandras
+
+  That seems to be a bug in the ICU build system: in
+source/stubdata/Makefile the TARGET variable is only assigned to in the
+ENABLE_STATIC, so in the other case it inherits from the environment.
+
+>  In that case,
+> the compile stops at iproute with this error:
+> /bin/sh: xtables: command not found
+
+  Somehow your iproute2 configure failed to find PKG_CONFIG. It seems
+that buildroot is missing a dependency on host-pkgconf, but it is anyway
+only used for tc which should only be built if iptables is selected and
+iptables has a dependency on host-pkgconf.
+
+  Can you check in output/build/iproute2-3.7.0/Configure what is the
+value of PKG_CONFIG and of TC_CONFIG_XT? And can you check if
+BR2_PACKAGE_IPTABLES is enabled in your buildroot config?
+
+
+  Regards,
+  Arnout
