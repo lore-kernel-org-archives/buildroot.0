@@ -1,94 +1,59 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 2 Sep 2013 22:42:52 +0200
-Subject: [Buildroot] [git commit] libsecret: New package
-Message-ID: <20130902213321.DC3329B6B0@busybox.osuosl.org>
+Date: Mon, 2 Sep 2013 22:59:00 +0200
+Subject: [Buildroot] [git commit] kmod: allow to build a host variant
+Message-ID: <20130902213322.08A619B6B0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=6492fb02423c091c1c2227a13dfa7e6ee4ba3e1e
+commit: http://git.buildroot.net/buildroot/commit/?id=00deac473c8ecba6d611b9ffbfaa55645036be46
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-libsecret is a library for storing and retrieving passwords
-and other secrets. It communicates with the "Secret Service"
-using DBus. gnome-keyring and ksecretservice are both
-implementations of a Secret Service.
+Since module-init-tools is deprecated, we now want to use kmod instead
+for the installation of modules during the kernel build process. In
+order to do this, we need to be able to build a host variant of kmod,
+which is want this patch allows to do.
 
-libsecret replaces libgnome-keyring.
+Note that only the depmod tool is installed on the host, since that's
+the only one likely to be used on the host in a cross-compilation
+context.
 
-https://wiki.gnome.org/Libsecret
-
-[Peter: also needs host-intltool]
-Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
+[Peter: needs AUTORECONF for the host as well. Fix comment while we're at it]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/Config.in              |    1 +
- package/libsecret/Config.in    |   15 +++++++++++++++
- package/libsecret/libsecret.mk |   24 ++++++++++++++++++++++++
- 3 files changed, 40 insertions(+), 0 deletions(-)
+ package/kmod/kmod.mk |   13 ++++++++++++-
+ 1 files changed, 12 insertions(+), 1 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 6306947..9b8bc70 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -431,6 +431,7 @@ source "package/libassuan/Config.in"
- source "package/libmcrypt/Config.in"
- source "package/libmhash/Config.in"
- source "package/libnss/Config.in"
-+source "package/libsecret/Config.in"
- source "package/libsha1/Config.in"
- source "package/nettle/Config.in"
- source "package/openssl/Config.in"
-diff --git a/package/libsecret/Config.in b/package/libsecret/Config.in
-new file mode 100644
-index 0000000..a15f995
---- /dev/null
-+++ b/package/libsecret/Config.in
-@@ -0,0 +1,15 @@
-+config BR2_PACKAGE_LIBSECRET
-+	bool "libsecret"
-+	select BR2_PACKAGE_LIBGLIB2
-+	depends on BR2_USE_WCHAR # gettext dep in libglib2
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
-+	help
-+	  libsecret is a library for storing and retrieving passwords and other
-+	  secrets. It communicates with the "Secret Service" using DBus.
-+	  gnome-keyring and ksecretservice are both implementations of a Secret
-+	  Service.
+diff --git a/package/kmod/kmod.mk b/package/kmod/kmod.mk
+index 06d8dc5..649415f 100644
+--- a/package/kmod/kmod.mk
++++ b/package/kmod/kmod.mk
+@@ -10,8 +10,9 @@ KMOD_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/kernel/kmod/
+ KMOD_INSTALL_STAGING = YES
+ KMOD_DEPENDENCIES = host-pkgconf
+ 
+-# Some patches are touching configure.in
++# Some patches are touching configure.ac
+ KMOD_AUTORECONF = YES
++HOST_KMOD_AUTORECONF = YES
+ 
+ # license info for libkmod only, conditionally add more below
+ KMOD_LICENSE = LGPLv2.1+
+@@ -57,4 +58,14 @@ else
+ KMOD_CONF_OPT += --disable-tools
+ endif
+ 
++# We only install depmod, since that's the only tool used for the
++# host.
++define HOST_KMOD_INSTALL_TOOLS
++	mkdir -p $(HOST_DIR)/sbin/
++	ln -sf ../usr/bin/kmod $(HOST_DIR)/sbin/depmod
++endef
 +
-+	  https://wiki.gnome.org/Libsecret
++HOST_KMOD_POST_INSTALL_HOOKS += HOST_KMOD_INSTALL_TOOLS
 +
-+comment "libsecret requires a toolchain with WCHAR and threading support."
-+	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/libsecret/libsecret.mk b/package/libsecret/libsecret.mk
-new file mode 100644
-index 0000000..e445ea6
---- /dev/null
-+++ b/package/libsecret/libsecret.mk
-@@ -0,0 +1,24 @@
-+################################################################################
-+#
-+# libsecret
-+#
-+################################################################################
-+
-+LIBSECRET_VERSION = 0.15
-+LIBSECRET_SITE = http://ftp.gnome.org/pub/GNOME/sources/libsecret/$(LIBSECRET_VERSION)
-+LIBSECRET_SOURCE = libsecret-$(LIBSECRET_VERSION).tar.xz
-+LIBSECRET_LICENSE = LGPLv2.1+
-+LIBSECRET_LICENSE_FILES = COPYING
-+LIBSECRET_INSTALL_STAGING = YES
-+
-+LIBSECRET_DEPENDENCIES = libglib2 host-intltool
-+LIBSECRET_CONF_OPT = --disable-manpages --disable-strict --disable-coverage --enable-vala=no
-+
-+ifeq ($(BR2_PACKAGE_LIBGCRYPT),y)
-+	LIBSECRET_DEPENDENCIES += libgcrypt
-+	LIBSECRET_CONF_OPT += --enable-gcrypt
-+else
-+	LIBSECRET_CONF_OPT += --disable-gcrypt
-+endif
-+
-+$(eval $(autotools-package))
+ $(eval $(autotools-package))
++$(eval $(host-autotools-package))
