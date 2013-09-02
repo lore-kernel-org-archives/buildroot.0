@@ -1,100 +1,231 @@
 From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Mon, 02 Sep 2013 22:07:56 +0200
-Subject: [Buildroot] [PATCH 7 of 9 v4] linux/uboot: line-up
- repository-related configuration options
+Date: Mon, 02 Sep 2013 22:07:57 +0200
+Subject: [Buildroot] [PATCH 8 of 9 v4] defconfigs: update after rename of
+ custom git repo/version options
 In-Reply-To: <patchbomb.1378152469@argentina>
 References: <patchbomb.1378152469@argentina>
-Message-ID: <c84935cb9450d64acb6a.1378152476@argentina>
+Message-ID: <47fcf0e281a6bd9a3f94.1378152477@argentina>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Although the configuration options for custom repository locations and
-versions are very similar between the linux and uboot packages, there are
-some minor differences. This patch lines up both packages.
-
 Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
 ---
 v4: no changes
-v3: update after changes in previous patches
-v2:
-- remove 'HEAD/tip' defaults for repository version (comment Peter)
-- replace if/config/endif with config/depends for uboot tarball
-- move repo url/version settings before unrelated 'custom patch dir'
+(v3): new patch in this series (comment Arnout)
 
-Note: one remaining difference is that there are help texts in linux for
-options BR2_LINUX_KERNEL_CUSTOM_GIT and BR2_LINUX_KERNEL_CUSTOM_HG. I
-didn't add them to uboot because it seems a bit redundant, but if you
-prefer we can line this up as well (either add help texts to uboot or
-remove them from linux).
+ configs/arm_foundationv8_defconfig |  4 ++--
+ configs/beaglebone_defconfig       |  4 ++--
+ configs/calao_snowball_defconfig   |  4 ++--
+ configs/cubieboard_defconfig       |  8 ++++----
+ configs/ea3250_defconfig           |  8 ++++----
+ configs/fdi3250_defconfig          |  8 ++++----
+ configs/gnublin_defconfig          |  8 ++++----
+ configs/mx53loco_defconfig         |  8 ++++----
+ configs/phy3250_defconfig          |  8 ++++----
+ configs/rpi_defconfig              |  4 ++--
+ 10 files changed, 32 insertions(+), 32 deletions(-)
 
- boot/uboot/Config.in |  32 ++++++++++++++++----------------
- linux/Config.in      |   2 +-
- 2 files changed, 17 insertions(+), 17 deletions(-)
-
-diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
---- a/boot/uboot/Config.in
-+++ b/boot/uboot/Config.in
-@@ -40,10 +40,24 @@ config BR2_TARGET_UBOOT_CUSTOM_VERSION_V
- 	string "U-Boot version"
- 	depends on BR2_TARGET_UBOOT_CUSTOM_VERSION
+diff --git a/configs/arm_foundationv8_defconfig b/configs/arm_foundationv8_defconfig
+--- a/configs/arm_foundationv8_defconfig
++++ b/configs/arm_foundationv8_defconfig
+@@ -8,8 +8,8 @@ BR2_TARGET_BOOT_WRAPPER_AARCH64_DTS="vex
+ BR2_TARGET_BOOT_WRAPPER_AARCH64_BOOTARGS="root=/dev/vda consolelog=9 console=ttyAMA0 rw"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_GIT=y
+-BR2_LINUX_KERNEL_CUSTOM_GIT_REPO_URL="git://git.linaro.org/kernel/linaro-aarch64.git"
+-BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION="7181edd0539e195f78adedbb6c3878f9f1e0c4bb"
++BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://git.linaro.org/kernel/linaro-aarch64.git"
++BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="7181edd0539e195f78adedbb6c3878f9f1e0c4bb"
+ BR2_LINUX_KERNEL_DEFCONFIG="vexpress"
+ BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y
+ BR2_LINUX_KERNEL_IMAGE_TARGET_NAME="Image"
+diff --git a/configs/beaglebone_defconfig b/configs/beaglebone_defconfig
+--- a/configs/beaglebone_defconfig
++++ b/configs/beaglebone_defconfig
+@@ -30,8 +30,8 @@ BR2_TARGET_UBOOT_SPL_NAME="MLO"
+ # kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_GIT=y
+-BR2_LINUX_KERNEL_CUSTOM_GIT_REPO_URL="git://git.ti.com/ti-linux-kernel/ti-linux-kernel.git"
+-BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION="935f6c2f82056d538b528272e2bdbb5c08d69a58"
++BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://git.ti.com/ti-linux-kernel/ti-linux-kernel.git"
++BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="935f6c2f82056d538b528272e2bdbb5c08d69a58"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/beaglebone/linux-3.8.config"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+diff --git a/configs/calao_snowball_defconfig b/configs/calao_snowball_defconfig
+--- a/configs/calao_snowball_defconfig
++++ b/configs/calao_snowball_defconfig
+@@ -16,8 +16,8 @@ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BOARDNAME="snowball"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_GIT=y
+-BR2_LINUX_KERNEL_CUSTOM_GIT_REPO_URL="https://github.com/igloocommunity/igloo-kernel"
+-BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION="stable-linux-ux500-3.4"
++BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/igloocommunity/igloo-kernel"
++BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="stable-linux-ux500-3.4"
+ BR2_LINUX_KERNEL_PATCH="board/calao/snowball/"
+ BR2_LINUX_KERNEL_DEFCONFIG="u8500"
+ BR2_LINUX_KERNEL_INSTALL_TARGET=y
+diff --git a/configs/cubieboard_defconfig b/configs/cubieboard_defconfig
+--- a/configs/cubieboard_defconfig
++++ b/configs/cubieboard_defconfig
+@@ -22,8 +22,8 @@ BR2_KERNEL_HEADERS_3_4=y
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_GIT=y
+-BR2_LINUX_KERNEL_CUSTOM_GIT_REPO_URL="https://github.com/linux-sunxi/linux-sunxi.git"
+-BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION="274a66a7bfcbaabb88d63e4eba161965383cc416"
++BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/linux-sunxi/linux-sunxi.git"
++BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="274a66a7bfcbaabb88d63e4eba161965383cc416"
+ BR2_LINUX_KERNEL_VERSION="sunxi-3.4"
+ BR2_LINUX_KERNEL_DEFCONFIG="sun4i"
  
--if BR2_TARGET_UBOOT_CUSTOM_TARBALL
--
- config BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION
- 	string "URL of custom U-Boot tarball"
-+	depends on BR2_TARGET_UBOOT_CUSTOM_TARBALL
-+
-+if BR2_TARGET_UBOOT_CUSTOM_GIT || BR2_TARGET_UBOOT_CUSTOM_HG
-+
-+config BR2_TARGET_UBOOT_CUSTOM_REPO_URL
-+	string "URL of custom repository"
-+	default BR2_TARGET_UBOOT_CUSTOM_GIT_REPO_URL \
-+		if BR2_TARGET_UBOOT_CUSTOM_GIT_REPO_URL != ""  # legacy
-+
-+config BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION
-+	string "Custom repository version"
-+	default BR2_TARGET_UBOOT_CUSTOM_GIT_VERSION \
-+		if BR2_TARGET_UBOOT_CUSTOM_GIT_VERSION != ""  # legacy
-+	help
-+	  Revision to use in the typical format used by Git/Mercurial
-+	  E.G. a sha id, a tag, branch, ..
+@@ -32,8 +32,8 @@ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BOARDNAME="cubieboard"
+ BR2_TARGET_UBOOT_CUSTOM_GIT=y
+ BR2_TARGET_UBOOT_VERSION="sunxi"
+-BR2_TARGET_UBOOT_CUSTOM_GIT_REPO_URL="https://github.com/linux-sunxi/u-boot-sunxi.git"
+-BR2_TARGET_UBOOT_CUSTOM_GIT_VERSION="1a8ac55429f7f8cc9f100c1cf2dc0195cf81e76f"
++BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/linux-sunxi/u-boot-sunxi.git"
++BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="1a8ac55429f7f8cc9f100c1cf2dc0195cf81e76f"
+ BR2_TARGET_UBOOT_FORMAT_BIN=y
+ BR2_TARGET_UBOOT_SPL=y
+ BR2_TARGET_UBOOT_SPL_NAME="spl/sunxi-spl.bin"
+diff --git a/configs/ea3250_defconfig b/configs/ea3250_defconfig
+--- a/configs/ea3250_defconfig
++++ b/configs/ea3250_defconfig
+@@ -27,8 +27,8 @@ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BOARDNAME="ea3250"
+ BR2_TARGET_UBOOT_CUSTOM_GIT=y
+ BR2_TARGET_UBOOT_VERSION="master"
+-BR2_TARGET_UBOOT_CUSTOM_GIT_REPO_URL="git://git.lpclinux.com/uboot-2009.03-lpc32xx"
+-BR2_TARGET_UBOOT_CUSTOM_GIT_VERSION="master"
++BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://git.lpclinux.com/uboot-2009.03-lpc32xx"
++BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="master"
+ BR2_TARGET_UBOOT_FORMAT_BIN=y
+ BR2_TARGET_LPC32XXCDL=y
+ BR2_TARGET_LPC32XXCDL_BOARDNAME="ea3250"
+@@ -39,8 +39,8 @@ BR2_TARGET_LPC32XXCDL_BOARDNAME="ea3250"
+ #
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_GIT=y
+-BR2_LINUX_KERNEL_CUSTOM_GIT_REPO_URL="git://git.lpclinux.com/linux-2.6.34-lpc32xx"
+-BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION="master"
++BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://git.lpclinux.com/linux-2.6.34-lpc32xx"
++BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="master"
+ BR2_LINUX_KERNEL_VERSION="master"
+ BR2_LINUX_KERNEL_PATCH=""
+ BR2_LINUX_KERNEL_USE_DEFCONFIG=y
+diff --git a/configs/fdi3250_defconfig b/configs/fdi3250_defconfig
+--- a/configs/fdi3250_defconfig
++++ b/configs/fdi3250_defconfig
+@@ -27,8 +27,8 @@ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BOARDNAME="fdi3250"
+ BR2_TARGET_UBOOT_CUSTOM_GIT=y
+ BR2_TARGET_UBOOT_VERSION="master"
+-BR2_TARGET_UBOOT_CUSTOM_GIT_REPO_URL="git://git.lpclinux.com/uboot-2009.03-lpc32xx"
+-BR2_TARGET_UBOOT_CUSTOM_GIT_VERSION="master"
++BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://git.lpclinux.com/uboot-2009.03-lpc32xx"
++BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="master"
+ BR2_TARGET_UBOOT_FORMAT_BIN=y
+ BR2_TARGET_LPC32XXCDL=y
+ BR2_TARGET_LPC32XXCDL_BOARDNAME="fdi3250"
+@@ -39,8 +39,8 @@ BR2_TARGET_LPC32XXCDL_BOARDNAME="fdi3250
+ #
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_GIT=y
+-BR2_LINUX_KERNEL_CUSTOM_GIT_REPO_URL="git://git.lpclinux.com/linux-2.6.34-lpc32xx"
+-BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION="master"
++BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://git.lpclinux.com/linux-2.6.34-lpc32xx"
++BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="master"
+ BR2_LINUX_KERNEL_VERSION="master"
+ BR2_LINUX_KERNEL_PATCH=""
+ BR2_LINUX_KERNEL_USE_DEFCONFIG=y
+diff --git a/configs/gnublin_defconfig b/configs/gnublin_defconfig
+--- a/configs/gnublin_defconfig
++++ b/configs/gnublin_defconfig
+@@ -15,13 +15,13 @@ BR2_TARGET_ROOTFS_EXT2_BLOCKS=475000
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BOARDNAME="GNUBLIN"
+ BR2_TARGET_UBOOT_CUSTOM_GIT=y
+-BR2_TARGET_UBOOT_CUSTOM_GIT_REPO_URL="git://gitorious.org/u-boot-gnublin-support/u-boot-gnublin-support.git"
+-BR2_TARGET_UBOOT_CUSTOM_GIT_VERSION="2009.11_gnublin_support_v2"
++BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://gitorious.org/u-boot-gnublin-support/u-boot-gnublin-support.git"
++BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="2009.11_gnublin_support_v2"
  
- endif
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_GIT=y
+-BR2_LINUX_KERNEL_CUSTOM_GIT_REPO_URL="git://gitorious.org/linux-3-7-gnublin/linux-3-7-gnublin.git"
+-BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION="v3.7-gnublin-2"
++BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://gitorious.org/linux-3-7-gnublin/linux-3-7-gnublin.git"
++BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="v3.7-gnublin-2"
+ BR2_LINUX_KERNEL_DEFCONFIG="gnublin"
+ BR2_LINUX_KERNEL_INSTALL_TARGET=y
+diff --git a/configs/mx53loco_defconfig b/configs/mx53loco_defconfig
+--- a/configs/mx53loco_defconfig
++++ b/configs/mx53loco_defconfig
+@@ -8,8 +8,8 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BOARDNAME="mx53_loco"
+ BR2_TARGET_UBOOT_CUSTOM_GIT=y
+-BR2_TARGET_UBOOT_CUSTOM_GIT_REPO_URL="git://git.freescale.com/imx/uboot-imx.git"
+-BR2_TARGET_UBOOT_CUSTOM_GIT_VERSION="rel_imx_2.6.35_11.09.01"
++BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://git.freescale.com/imx/uboot-imx.git"
++BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_2.6.35_11.09.01"
  
-@@ -65,20 +79,6 @@ config BR2_TARGET_UBOOT_CUSTOM_PATCH_DIR
+ # filesystem
+ BR2_TARGET_ROOTFS_EXT2=y
+@@ -17,6 +17,6 @@ BR2_TARGET_ROOTFS_EXT2=y
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_GIT=y
+-BR2_LINUX_KERNEL_CUSTOM_GIT_REPO_URL="git://git.freescale.com/imx/linux-2.6-imx.git"
+-BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION="rel_imx_2.6.35_11.09.01"
++BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://git.freescale.com/imx/linux-2.6-imx.git"
++BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_2.6.35_11.09.01"
+ BR2_LINUX_KERNEL_DEFCONFIG="imx5"
+diff --git a/configs/phy3250_defconfig b/configs/phy3250_defconfig
+--- a/configs/phy3250_defconfig
++++ b/configs/phy3250_defconfig
+@@ -27,8 +27,8 @@ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BOARDNAME="phy3250"
+ BR2_TARGET_UBOOT_CUSTOM_GIT=y
+ BR2_TARGET_UBOOT_VERSION="master"
+-BR2_TARGET_UBOOT_CUSTOM_GIT_REPO_URL="git://git.lpclinux.com/uboot-2009.03-lpc32xx"
+-BR2_TARGET_UBOOT_CUSTOM_GIT_VERSION="master"
++BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://git.lpclinux.com/uboot-2009.03-lpc32xx"
++BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="master"
+ BR2_TARGET_UBOOT_FORMAT_BIN=y
+ BR2_TARGET_LPC32XXCDL=y
+ BR2_TARGET_LPC32XXCDL_BOARDNAME="phy3250"
+@@ -39,8 +39,8 @@ BR2_TARGET_LPC32XXCDL_BOARDNAME="phy3250
+ #
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_GIT=y
+-BR2_LINUX_KERNEL_CUSTOM_GIT_REPO_URL="git://git.lpclinux.com/linux-2.6.34-lpc32xx"
+-BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION="master"
++BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://git.lpclinux.com/linux-2.6.34-lpc32xx"
++BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="master"
+ BR2_LINUX_KERNEL_VERSION="master"
+ BR2_LINUX_KERNEL_PATCH=""
+ BR2_LINUX_KERNEL_USE_DEFCONFIG=y
+diff --git a/configs/rpi_defconfig b/configs/rpi_defconfig
+--- a/configs/rpi_defconfig
++++ b/configs/rpi_defconfig
+@@ -16,8 +16,8 @@ BR2_DEFAULT_KERNEL_VERSION="3.6.11"
  
- 	  Most users may leave this empty
- 
--if BR2_TARGET_UBOOT_CUSTOM_GIT || BR2_TARGET_UBOOT_CUSTOM_HG
--
--config BR2_TARGET_UBOOT_CUSTOM_REPO_URL
--	string "URL of custom repository"
--	default BR2_TARGET_UBOOT_CUSTOM_GIT_REPO_URL \
--		if BR2_TARGET_UBOOT_CUSTOM_GIT_REPO_URL != ""  # legacy
--
--config BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION
--	string "Custom repository version"
--	default BR2_TARGET_UBOOT_CUSTOM_GIT_VERSION \
--		if BR2_TARGET_UBOOT_CUSTOM_GIT_VERSION != ""  # legacy
--
--endif
--
- choice
- 	prompt "U-Boot binary format"
- 	default BR2_TARGET_UBOOT_FORMAT_BIN
-diff --git a/linux/Config.in b/linux/Config.in
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -47,7 +47,7 @@ config BR2_LINUX_KERNEL_CUSTOM_TARBALL
- 	  specific kernel source tarball
- 
- config BR2_LINUX_KERNEL_CUSTOM_GIT
--	bool "Custom Git tree"
-+	bool "Custom Git repository"
- 	help
- 	  This option allows Buildroot to get the Linux kernel source
- 	  code from a Git repository.
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_GIT=y
+-BR2_LINUX_KERNEL_CUSTOM_GIT_REPO_URL="git://github.com/raspberrypi/linux.git"
+-BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION="0006326"
++BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://github.com/raspberrypi/linux.git"
++BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="0006326"
+ BR2_LINUX_KERNEL_USE_DEFCONFIG=y
+ BR2_LINUX_KERNEL_DEFCONFIG="bcmrpi"
+ BR2_LINUX_KERNEL_ZIMAGE=y
