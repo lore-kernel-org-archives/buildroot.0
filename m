@@ -1,91 +1,79 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon,  2 Sep 2013 18:06:26 +0200
-Subject: [Buildroot] [PATCHv2 00/14] Toolchain updates and improvements
-Message-ID: <1378138000-12739-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Mon,  2 Sep 2013 18:06:30 +0200
+Subject: [Buildroot] [PATCHv2 04/14] gcc: fix Fortran support
+In-Reply-To: <1378138000-12739-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1378138000-12739-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1378138000-12739-5-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+This commit fixes the Fortran support in the gcc package by making
+sure that the runtime Fortran library is properly installed to the
+target.
 
-Here is a set of updates/improvements to the internal toolchain
-backend (with some impacts on the external toolchain one). Mainly it:
+It also takes this opportunity to slightly reword the Config.in option
+help text, to no longer mention gcc < 4.2 since they are no longer
+supported in Buildroot, and to have a more meaningful explanation.
 
- * Allows to build the toolchain with only two passes of gcc build as
-   opposed to three. Of course, this is only possible in the
-   appropriate situations. This patch had already been posted
-   previously to the list, and was rebased on top of current master.
+Finally, it fixes the gcc-final.mk code to use the correct
+BR2_INSTALL_FORTRAN option rather than the non-existing
+BR2_GCC_CROSS_FORTRAN option, to decide whether Fortran support should
+be enabled or not in the cross-compiler.
 
- * Fixes Fortran and Objective-C support, moves the C++ option close
-   to the one for Fortran and Objective-C.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/gcc/Config.in.host         | 8 ++++----
+ package/gcc/gcc-final/gcc-final.mk | 6 +++++-
+ 2 files changed, 9 insertions(+), 5 deletions(-)
 
- * Adds support for glibc, in addition to eglibc. Note that as
-   suggested by Arnout, I'm proposing a single package to handle both
-   libraries.
-
- * Refactors the Stack Smashing Protection support.
-
- * Refactors the Mudflap support in the internal toolchain backend, by
-   providing a Config.in option to enable it. It is now disabled by
-   default.
-
- * Update the Linaro ARM and AArchr64 toolchains.
-
- * Makes a small number of related cleanups.
-
-Changes since v1:
-
- * Use psmisc --disable-harden-flags only when BR2_TOOLCHAIN_HAS_SSP
-   is false, as suggested by Arnout.
-
- * Simplify the mudflap stuff by only providing an option in the
-   internal gcc backend to enable or disable it. We no longer provide
-   a global "Build options" to add -fmudflap when building all
-   packages as it is too complicated and probably not that useful.
-
- * Add updates to Linaro toolchains.
-
-Thomas
-
-Thomas Petazzoni (14):
-  package/Makefile.in: fix incorrect comment
-  eglibc: libstdc++ is not part of the C library
-  toolchain-internal: skip gcc-intermediate when possible
-  gcc: fix Fortran support
-  gcc: fix Objective-C support
-  gcc: move C++ support option next to Fortran/Objective-C
-  toolchain: add support for glibc
-  gcc/gcc-final: use the common HOST_GCC_CONFIGURE_SYMLINK macro
-  gcc: force symlink creation
-  toolchain: refactor Stack Smashing Protection support
-  toolchain: move elf2flt option inclusion to
-    toolchain-buildroot/Config.in
-  gcc: provide option to enable mudflap support
-  toolchain: update Linaro ARM external toolchains
-  toolchain: update Linaro AArch64 external toolchains
-
- Config.in                                    | 17 +++++++
- package/Makefile.in                          |  5 +-
- package/gcc/Config.in.host                   | 55 ++++++++++++++++++---
- package/gcc/gcc-final/gcc-final.mk           | 31 ++++++++----
- package/gcc/gcc-initial/gcc-initial.mk       |  8 ++++
- package/gcc/gcc.mk                           | 26 ++++------
- package/{eglibc/eglibc.mk => glibc/glibc.mk} | 70 +++++++++++++++------------
- package/psmisc/psmisc.mk                     |  4 +-
- package/uclibc/Config.in                     | 11 +++++
- package/uclibc/uclibc.mk                     |  5 +-
- toolchain/Config.in                          | 11 ++++-
- toolchain/helpers.mk                         |  3 +-
- toolchain/toolchain-buildroot/Config.in      | 25 +++++++++-
- toolchain/toolchain-buildroot/Config.in.2    | 31 ------------
- toolchain/toolchain-common.in                |  3 ++
- toolchain/toolchain-external/Config.in       | 72 ++++++++++++++++------------
- toolchain/toolchain-external/ext-tool.mk     | 24 +++++-----
- 17 files changed, 252 insertions(+), 149 deletions(-)
- rename package/{eglibc/eglibc.mk => glibc/glibc.mk} (58%)
- delete mode 100644 toolchain/toolchain-buildroot/Config.in.2
-
+diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
+index 7e6df2d..b440ee2 100644
+--- a/package/gcc/Config.in.host
++++ b/package/gcc/Config.in.host
+@@ -119,13 +119,13 @@ config BR2_INSTALL_OBJC
+ 	  Build/install Objective-C compiler and runtime?
+ 
+ config BR2_INSTALL_FORTRAN
+-	bool "Build/install Fortran compiler and runtime?"
++	bool "Enable Fortran support"
+ 	depends on !BR2_avr32
+ 	select BR2_PACKAGE_LIBMPFR
+ 	help
+-	  Build/install Fortran compiler and runtime?
+-	  Note that it is highly recommended NOT to use gfortran
+-	  from gcc older than 4.2.0
++	  Enable the support for the Fortran language in the
++	  cross-compiler, and install the Fortran runtime to the
++	  target.
+ 
+ config BR2_GCC_ENABLE_TLS
+ 	bool "Enable compiler tls support" if BR2_TOOLCHAIN_BUILDROOT_UCLIBC
+diff --git a/package/gcc/gcc-final/gcc-final.mk b/package/gcc/gcc-final/gcc-final.mk
+index b62dfe2..15adadd 100644
+--- a/package/gcc/gcc-final/gcc-final.mk
++++ b/package/gcc/gcc-final/gcc-final.mk
+@@ -34,7 +34,7 @@ HOST_GCC_FINAL_PRE_CONFIGURE_HOOKS += HOST_GCC_FINAL_CONFIGURE_SYMLINK
+ # Languages supported by the cross-compiler
+ GCC_FINAL_CROSS_LANGUAGES-y = c
+ GCC_FINAL_CROSS_LANGUAGES-$(BR2_INSTALL_LIBSTDCPP) += c++
+-GCC_FINAL_CROSS_LANGUAGES-$(BR2_GCC_CROSS_FORTRAN) += fortran
++GCC_FINAL_CROSS_LANGUAGES-$(BR2_INSTALL_FORTRAN) += fortran
+ GCC_FINAL_CROSS_LANGUAGES-$(BR2_GCC_CROSS_OBJC)    += objc
+ GCC_FINAL_CROSS_LANGUAGES = $(subst $(space),$(comma),$(GCC_FINAL_CROSS_LANGUAGES-y))
+ 
+@@ -113,6 +113,10 @@ ifeq ($(BR2_GCC_ENABLE_OPENMP),y)
+ HOST_GCC_FINAL_USR_LIBS += libgomp
+ endif
+ 
++ifeq ($(BR2_INSTALL_FORTRAN),y)
++HOST_GCC_FINAL_USR_LIBS += libgfortran
++endif
++
+ ifneq ($(HOST_GCC_FINAL_USR_LIBS),)
+ define HOST_GCC_FINAL_INSTALL_USR_LIBS
+ 	mkdir -p $(TARGET_DIR)/usr/lib
 -- 
 1.8.1.2
