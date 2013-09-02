@@ -1,75 +1,111 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 2 Sep 2013 10:53:37 +0200
-Subject: [Buildroot] Build reproducibility
-In-Reply-To: <CAAXf6LVPfKZP+3k1AfXek28Y6bgVwxbJ4iPYRq6nihry=egaig@mail.gmail.com>
-References: <1377851505-23498-1-git-send-email-jezz@sysmic.org>
- <CAAXf6LVmyWojaBTfpTpZsNcXr+bCSkFMT__iYQjTAvO9ryEqnw@mail.gmail.com>
- <2d076e17ea7c855166044994876e2add@sysmic.org>
- <20130830145254.1e5a1f53@skate>
- <CAAXf6LVPfKZP+3k1AfXek28Y6bgVwxbJ4iPYRq6nihry=egaig@mail.gmail.com>
-Message-ID: <20130902105337.7dedb880@skate>
+Date: Mon, 2 Sep 2013 10:57:10 +0200
+Subject: [Buildroot] [PATCH 2/3] aiccu: new package
+In-Reply-To: <1378071216-19697-2-git-send-email-rommel@layer-7.net>
+References: <1378071216-19697-1-git-send-email-rommel@layer-7.net>
+ <1378071216-19697-2-git-send-email-rommel@layer-7.net>
+Message-ID: <20130902105710.1d665e8f@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas De Schampheleire,
+Dear Michael Rommel,
 
-On Mon, 2 Sep 2013 10:44:17 +0200, Thomas De Schampheleire wrote:
+Thanks a lot for your continuous effort with those patches. I now see
+that you managed to use 'git rebase -i' and generate a very nice patch
+series!
 
-> > I agree with this. Thomas, I'm not sure that what you say what a
-> > conclusion of a developer day. I believe we always said that it is
-> > hardly possible to guarantee that a package .mk file will contain *all*
-> > the possible dependencies of the package. Whenever someone bumps a
-> > package, we rarely look in detail at whether the software has gained
-> > some optional dependencies, and make sure they are handled in the
-> > corresponding package .mk file.
-> >
-> > Having the packages always built in the same order guarantees that, in
-> > the absence of expressed dependencies, the build result will be
-> > reproducible.
-> 
-> I may be wrong about the conclusion.
-> Regardless: it's true that it's hard to guarantee that all
-> dependencies are expressed properly in the .mk files. However, by
-> 'fixing' the wildcard behavior into a sorted one such as with previous
-> versions of make, we just hide the problem. We will never notice that
-> some dependencies are missing, as long as the dependency comes before
-> the dependant (or whichever word) in alphabetical order.
-> With the random behavior of wildcards in newer versions of make, we
-> would still see issues in autobuilds, and get the opportunity to fix
-> them. It may take time, and may be a never-ending story as packages
-> are bumped and new packages are added, but at least there can be
-> improvement.
-> So, my viewpoint is to keep the current behavior and instead focus on
-> fixing any missing dependency when we spot it.
+On Sun,  1 Sep 2013 23:33:35 +0200, Michael Rommel wrote:
 
-I obviously disagree, because in the mean time, our users are having
-non-reproducible builds. An user within a company uses Buildroot to
-create a system, adds some packages, creates a configuration for his
-project. Then he passes this Buildroot to another colleague: the
-date/times of the various Buildroot files will be different, maybe
-affecting the order in which the wildcards are resolved by make 3.82.
-This colleague will attempt the build, and maybe get a failure, or a
-different build result than the first colleague who has created the 
-Buildroot configuration. This is really damaging for Buildroot's
-reputation and the user experience. We clearly to not want this to
-happen.
+> diff --git a/package/aiccu/Config.in b/package/aiccu/Config.in
+> new file mode 100644
+> index 0000000..008ada7
+> --- /dev/null
+> +++ b/package/aiccu/Config.in
+> @@ -0,0 +1,24 @@
+> +config BR2_PACKAGE_AICCU
+> +	bool "aiccu"
+> +	depends on BR2_INET_IPV6
+> +	depends on BR2_USE_WCHAR
+> +	select BR2_PACKAGE_GNUTLS
+> +	help
+> +	  SixXS Automatic IPv6 Connectivity Client Utility
+> +
+> +	  AICCU (Automatic IPv6 Connectivity Client Utility) makes it
+> +	  easy for users to get IPv6 connectivity. After having
+> +	  requested an account, tunnel and optionally a subnet, AICCU
+> +	  can be used to automatically configure the tunnel. AICCU
+> +	  supports TIC (Tunnel Information & Control protocol), which it
+> +	  uses for retrieving the tunnel configuration information,
+> +	  AYIYA, which allows tunnels to be created even behind
+> +	  firewalls and NAT's.
+> +
+> +	  http://www.sixxs.net/tools/aiccu/
+> +
+> +comment "aiccu requires a toolchain with IPv6 support"
+> +	depends on !BR2_INET_IPV6
+> +
+> +comment "aiccu requires a toolchain with WCHAR support"
+> +	depends on !BR2_USE_WCHAR
 
-Of course, if within the Buildroot project we are interested in fixing
-such missing dependencies, then we can find a way of adding randomness
-into the build order in our autobuilders. But clearly, we do want to
-expose this randomness to our users.
+We generally have only one comment for both. See examples in other
+packages.
 
-In fact, I had already thought about adding such randomness in the
-autobuilders. But I've refrained from doing so because it also means
-that the builds that the autobuilders are doing cannot be reproduced.
-So when you'll get an autobuilder failure that you can't reproduce
-locally, you'll never know if it's due to the random order of package
-building, or due to some difference in the build environment.
+> diff --git a/package/aiccu/aiccu.mk b/package/aiccu/aiccu.mk
+> new file mode 100644
+> index 0000000..da3cc3b
+> --- /dev/null
+> +++ b/package/aiccu/aiccu.mk
+> @@ -0,0 +1,25 @@
+> +################################################################################
+> +#
+> +# aiccu
+> +#
+> +################################################################################
+> +
+> +AICCU_VERSION = 20070115
+> +AICCU_SOURCE = aiccu_$(AICCU_VERSION).tar.gz
+> +AICCU_SITE = http://www.sixxs.net/archive/sixxs/aiccu/unix/
+> +AICCU_LICENSE = SixXS License, concise redistribution license
+> +AICCU_LICENSE_FILES = doc/LICENSE
+> +AICCU_DEPENDENCIES = gnutls
+> +
+> +define AICCU_BUILD_CMDS
+> +	$(MAKE) CC="$(TARGET_CC)" LD="$(TARGET_LD)" -C $(@D) all
 
-Best regards,
+You could use:
+
+	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) all
+
+TARGET_CONFIGURE_OPTS contains the definitions of CC, LD, CFLAGS,
+LDFLAGS, and more.
+
+> +define AICCU_INSTALL_TARGET_CMDS
+> +	$(INSTALL) -D -m 0755 $(@D)/unix-console/aiccu $(TARGET_DIR)/usr/sbin
+> +	$(INSTALL) -D -m 0644 $(@D)/doc/aiccu.conf $(TARGET_DIR)/etc
+> +	$(INSTALL) -D -m 0755 $(@D)/doc/aiccu.init \
+> +		$(TARGET_DIR)/usr/sbin/S90aiccu
+> +endef
+
+Either use 'make install' as Thomas suggested, or if it's really not
+possible, you need to make the second argument the complete filename,
+not only the destination directory.
+
+Moreover, the init script must be installed in /etc/init.d, not
+in /usr/sbin. And finally, it should not be installed manually, but
+instead should use the INIT_SYSV mechanism. See the Buildroot manual,
+which states:
+
+  LIBFOO_INSTALL_INIT_SYSV and LIBFOO_INSTALL_INIT_SYSTEMD list the
+  actions to install init scripts either for the systemV-like init
+  systems (busybox, sysvinit, etc.) or for the systemd units. These
+  commands will be run only when the relevant init system is installed
+  (i.e. if systemd is selected as the init system in the configuration,
+  only LIBFOO_INSTALL_INIT_SYSTEMD will be run). 
+
+Thanks!
 
 Thomas
 -- 
