@@ -1,35 +1,48 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 2 Sep 2013 23:13:59 +0200
-Subject: [Buildroot] [PATCH 4/5] Makefile: do not try to strip
- inexisting file when stripping libpthread
-In-Reply-To: <1376996584-4462-5-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1376996584-4462-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1376996584-4462-5-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <CACXmVib_mJ-TmT22kuPoFHg-pH366Ew-dYDA2zeHHhPp93iuLg@mail.gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 02 Sep 2013 17:55:07 +0200
+Subject: [Buildroot] [PATCH 3/3] python-pyzmq: new package
+In-Reply-To: <CAAXf6LW=8rf6ScMS0t95f2cDWT4sLxYnMZAnzCYoEQzPVtkKGA@mail.gmail.com>
+References: <1378071216-19697-1-git-send-email-rommel@layer-7.net>
+ <1378071216-19697-3-git-send-email-rommel@layer-7.net>
+ <CAAXf6LW=8rf6ScMS0t95f2cDWT4sLxYnMZAnzCYoEQzPVtkKGA@mail.gmail.com>
+Message-ID: <5224B4DB.6060903@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Aug 20, 2013 at 1:03 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> libpthread.so has a special stripping condition to preserve parts of
-> it that are needed for debugging. However, due to the usage of 'xargs'
-> instead of 'xargs -r', the strip command is executed regardless of
-> whether a libpthread.so file is found or not. This leads to a big
-> error message being displayed in static-only builds, because strip is
-> executed without a file argument. Thanks to the '|| true', the build
-> continues, but still shows a big error message in the middle, which is
-> not nice.
+On 09/02/13 10:24, Thomas De Schampheleire wrote:
+[snip]
+>  > +define PYTHON_PYZMQ_INSTALL_TARGET_CMDS
+>  > +       (cd $(@D); $(PYTHON_PYZMQ_PARAMS) \
+>  > +               $(HOST_DIR)/usr/bin/python setup.py install \
+>  > +               --prefix=$(TARGET_DIR)/usr)
+>  > +endef
 >
-> By using 'xargs -r', we avoid the strip command from being executed
-> when 'find' doesn't find any match. We also remove the '|| true' to
-> catch other real errors.
->
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Since you're using $(HOST_DIR)/usr/bin/python here, there is a dependency
+> on host-python which is not explicitly expressed. Since python itself
+> already depends on host-python (see package/python/python.mk
+> <http://python.mk>), the dependency is implicitly satisfied.
+> I check and there are some python packages that do explicitly depend on
+> host-python, while others do not. It seems there is no clear strategy for
+> this yet. Ideally, these things should be lined up. My view would be to
+> add the explicit dependency, if the .mk file explicitly references the
+> host python binary, but this may not be the view of others.
 
-Committed, thanks.
+  I agree that dependencies that are specific to the package itself 
+should be explicit, even if they are also implicit. Not just for things 
+explicitly mentioned in the .mk file, but also e.g. for packages that are 
+checked for in the configure script.
+
+
+  Regards,
+  Arnout
 
 -- 
-Bye, Peter Korsgaard
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
