@@ -1,34 +1,28 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 2 Sep 2013 22:46:58 +0200
-Subject: [Buildroot] [PATCH] legacy: marked BR2_PACKAGE_GCC_TARGET and
- BR2_HAVE_DEVFILES as removed
-In-Reply-To: <87eh979cv7.fsf@dell.be.48ers.dk>
-References: <1377835739-2249-1-git-send-email-s.martin49@gmail.com>
- <20130830093340.6b6e521a@skate> <87eh979cv7.fsf@dell.be.48ers.dk>
-Message-ID: <20130902224658.3c311a56@skate>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 02 Sep 2013 22:49:58 +0200
+Subject: [Buildroot] [PATCH v2 1/1] libffi: minor corrections in post
+	install hooks
+In-Reply-To: <1493594999.5624151.1377683339178.JavaMail.root@openwide.fr>
+ ("Nicolas =?utf-8?B?TcOpbsOpZ2FsZSIncw==?= message of "Wed, 28 Aug 2013
+ 11:48:59 +0200 (CEST)")
+References: <1493594999.5624151.1377683339178.JavaMail.root@openwide.fr>
+Message-ID: <871u579ceh.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Peter Korsgaard,
+>>>>> "Nicolas" == Nicolas M?n?gale <nicolas.menegale@openwide.fr> writes:
 
-On Mon, 02 Sep 2013 22:39:56 +0200, Peter Korsgaard wrote:
+ Nicolas> In order to be sure that we just deal with the includes related with
+ Nicolas> the actual package described into libffi.mk it is better to explicitly
+ Nicolas> specify the version of the libffi we deal with into the post install
+ Nicolas> hook.
+ Nicolas> As dev files are deprecated in target rootfs target post install
+ Nicolas> hook was also deleted.
 
-> It seems like we're having enough fixes for a bugfix release (neon,
-> ti-gfx and this), so I will most likely release a .1 by next weekend.
+Committed, thanks.
 
-Neon? The recent Neon fix I posted was fixing a patch that has been
-merged into master after 2013.08 was tagged.
-
-Other than that, I agree that there is enough fixes to do a 2013.08.1.
-
-Thanks!
-
-Thomas
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Bye, Peter Korsgaard
