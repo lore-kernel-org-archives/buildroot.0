@@ -1,96 +1,232 @@
 From: Michael Rommel <rommel@layer-7.net>
-Date: Tue, 3 Sep 2013 01:49:17 +0200
-Subject: [Buildroot] [PATCH 2/3] aiccu: new package
-In-Reply-To: <20130902105710.1d665e8f@skate>
-References: <1378071216-19697-1-git-send-email-rommel@layer-7.net>
- <1378071216-19697-2-git-send-email-rommel@layer-7.net>
- <20130902105710.1d665e8f@skate>
-Message-ID: <01465AC6-0A1C-4437-BFC2-2DF81EAF5A00@layer-7.net>
+Date: Tue,  3 Sep 2013 01:49:48 +0200
+Subject: [Buildroot] [PATCH 1/1] aiccu: new package
+Message-ID: <1378165788-7386-1-git-send-email-rommel@layer-7.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear all,
+Automatic IPv6 Connectivity Configuration Utility for users of a
+IPv6 tunnel broker, developed by sixxs.net
 
-On Sep 2, 2013, at 10:57 , Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
+Signed-off-by: Michael Rommel <rommel@layer-7.net>
+---
+ package/Config.in                                  |    1 +
+ package/aiccu/Config.in                            |   21 ++++
+ .../aiccu/aiccu-0001-gnutls-and-uclibc-fixes.patch |  104 ++++++++++++++++++++
+ .../aiccu-0002-install-correct-init-script.patch   |   17 ++++
+ package/aiccu/aiccu.mk                             |   26 +++++
+ 5 files changed, 169 insertions(+)
+ create mode 100644 package/aiccu/Config.in
+ create mode 100644 package/aiccu/aiccu-0001-gnutls-and-uclibc-fixes.patch
+ create mode 100644 package/aiccu/aiccu-0002-install-correct-init-script.patch
+ create mode 100644 package/aiccu/aiccu.mk
 
->> +AICCU_LICENSE_FILES = doc/LICENSE
->> +AICCU_DEPENDENCIES = gnutls
->> +
->> +define AICCU_BUILD_CMDS
->> +	$(MAKE) CC="$(TARGET_CC)" LD="$(TARGET_LD)" -C $(@D) all
-> 
-> You could use:
-> 
-> 	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) all
-> 
-> TARGET_CONFIGURE_OPTS contains the definitions of CC, LD, CFLAGS,
-> LDFLAGS, and more.
-
-I tried this, but it aborted with a lot of errors. I couldn't find the description for this
-in the manual - where should I look about these variables, it seems there are
-a lot more, e.g. $(SED) that might be handy...
-
-
->> +define AICCU_INSTALL_TARGET_CMDS
->> +	$(INSTALL) -D -m 0755 $(@D)/unix-console/aiccu $(TARGET_DIR)/usr/sbin
->> +	$(INSTALL) -D -m 0644 $(@D)/doc/aiccu.conf $(TARGET_DIR)/etc
->> +	$(INSTALL) -D -m 0755 $(@D)/doc/aiccu.init \
->> +		$(TARGET_DIR)/usr/sbin/S90aiccu
->> +endef
-> 
-> Either use 'make install' as Thomas suggested, or if it's really not
-> possible, you need to make the second argument the complete filename,
-> not only the destination directory.
-
-I have now changed that in the latest submission. But I am not sure it is an 
-improvement. I had to patch the Makefile, so that the correct, working 
-version of the init script gets installed and had to manually correct the 
-permissions in the .mk file. All in all, that makes the whole patch a lot 
-larger.
-
-
-> Moreover, the init script must be installed in /etc/init.d, not
-> in /usr/sbin.
-
-Yes, of course, my mistake!
-
-> And finally, it should not be installed manually, but
-> instead should use the INIT_SYSV mechanism. See the Buildroot manual,
-> which states:
-> 
->  LIBFOO_INSTALL_INIT_SYSV and LIBFOO_INSTALL_INIT_SYSTEMD list the
->  actions to install init scripts either for the systemV-like init
->  systems (busybox, sysvinit, etc.) or for the systemd units. These
->  commands will be run only when the relevant init system is installed
->  (i.e. if systemd is selected as the init system in the configuration,
->  only LIBFOO_INSTALL_INIT_SYSTEMD will be run). 
-
-Actually I do not understand this well enough and the manual is 
-not very explicit.
-
-Now, either I shall use the "make install" approach, then I get what
-the makefile does, which is "aiccu" in "/etc/init.d".
-
-Or I can do it explicitly, which would then be more like:
-
-+define AICCU_INSTALL_INIT_SYSV
-+	$(INSTALL) -D -m 0755 $(@D)/doc/aiccu.init \
-+		$(TARGET_DIR)/etc/init.d/S90aiccu
+diff --git a/package/Config.in b/package/Config.in
+index 1be41bb..d5e3b52 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -715,6 +715,7 @@ source "package/sound-theme-freedesktop/Config.in"
+ endmenu
+ 
+ menu "Networking applications"
++source "package/aiccu/Config.in"
+ source "package/aircrack-ng/Config.in"
+ source "package/argus/Config.in"
+ source "package/arptables/Config.in"
+diff --git a/package/aiccu/Config.in b/package/aiccu/Config.in
+new file mode 100644
+index 0000000..1c6f554
+--- /dev/null
++++ b/package/aiccu/Config.in
+@@ -0,0 +1,21 @@
++config BR2_PACKAGE_AICCU
++	bool "aiccu"
++	depends on BR2_INET_IPV6
++	depends on BR2_USE_WCHAR
++	select BR2_PACKAGE_GNUTLS
++	help
++	  SixXS Automatic IPv6 Connectivity Client Utility
++
++	  AICCU (Automatic IPv6 Connectivity Client Utility) makes it
++	  easy for users to get IPv6 connectivity. After having
++	  requested an account, tunnel and optionally a subnet, AICCU
++	  can be used to automatically configure the tunnel. AICCU
++	  supports TIC (Tunnel Information & Control protocol), which it
++	  uses for retrieving the tunnel configuration information,
++	  AYIYA, which allows tunnels to be created even behind
++	  firewalls and NAT's.
++
++	  http://www.sixxs.net/tools/aiccu/
++
++comment "aiccu requires a toolchain with IPv6 and WCHAR support"
++	depends on !(BR2_INET_IPV6 && BR2_USE_WCHAR)
+diff --git a/package/aiccu/aiccu-0001-gnutls-and-uclibc-fixes.patch b/package/aiccu/aiccu-0001-gnutls-and-uclibc-fixes.patch
+new file mode 100644
+index 0000000..d316f8f
+--- /dev/null
++++ b/package/aiccu/aiccu-0001-gnutls-and-uclibc-fixes.patch
+@@ -0,0 +1,104 @@
++aiccu.h, common.c, common.h: fixes for deprecated GNUTLS functions and types
++resolver.c: fixes for selection of wrong resolver function under uclibc
++
++Signed-off-by: Michael Rommel <rommel@layer-7.net>
++
++diff -purN aiccu_20070115.orig/common/aiccu.h aiccu_20070115/common/aiccu.h
++--- aiccu_20070115.orig/common/aiccu.h	2007-01-15 13:01:43.000000000 +0100
+++++ aiccu_20070115/common/aiccu.h	2013-08-31 23:50:53.651936146 +0200
++@@ -111,7 +111,7 @@ struct AICCU_conf
++ #endif
++ 
++ #ifdef AICCU_GNUTLS
++-	gnutls_certificate_credentials	tls_cred;	/* GNUTLS credentials */
+++	gnutls_certificate_credentials_t tls_cred;	/* GNUTLS credentials */
++ #endif
++ 
++ 	bool		daemonize;		/* Daemonize? */
++diff -purN aiccu_20070115.orig/common/common.c aiccu_20070115/common/common.c
++--- aiccu_20070115.orig/common/common.c	2006-12-21 15:08:50.000000000 +0100
+++++ aiccu_20070115/common/common.c	2013-09-01 01:21:36.031396740 +0200
++@@ -271,9 +271,8 @@ TLSSOCKET sock_alloc(void);
++ TLSSOCKET sock_alloc(void)
++ {
++ #ifdef AICCU_GNUTLS
++-	/* Allow connections to servers that have OpenPGP keys as well */
++-	const int	cert_type_priority[3] = { GNUTLS_CRT_X509, GNUTLS_CRT_OPENPGP, 0 };
++ 	int		ret;
+++	const char	*err;
++ #endif /* AICCU_GNUTLS*/
++ 
++ 	TLSSOCKET	sock;	
++@@ -297,11 +296,16 @@ TLSSOCKET sock_alloc(void)
++ 	}
++ 
++ 	/* Use default priorities */
++-	gnutls_set_default_priority(sock->session);
++-	/* XXX: Return value is not documented in GNUTLS documentation! */
++-
++-	gnutls_certificate_type_set_priority(sock->session, cert_type_priority);
++-	/* XXX: Return value is not documented in GNUTLS documentation! */
+++	ret = gnutls_priority_set_direct(sock->session, "NORMAL", &err); 
+++	if (ret < 0)
+++	{
+++		if (ret == GNUTLS_E_INVALID_REQUEST)
+++		{
+++			dolog( LOG_ERR, "TLS set priority failed, syntax error at: %s\n", err);
+++		}
+++		free(sock);
+++		return NULL;
+++	}
++ 
++ 	/* Configure the x509 credentials for the current session */
++ 	gnutls_credentials_set(sock->session, GNUTLS_CRD_CERTIFICATE, g_aiccu->tls_cred);
++@@ -474,7 +478,7 @@ bool sock_gotls(TLSSOCKET sock)
++ 	}
++ 
++ 	/* Set the transport */
++-	gnutls_transport_set_ptr(sock->session, (gnutls_transport_ptr)sock->socket);
+++	gnutls_transport_set_ptr(sock->session, (gnutls_transport_ptr_t) sock->socket);
++ 
++ 	/* Perform the TLS handshake */
++ 	ret = gnutls_handshake(sock->session);
++diff -purN aiccu_20070115.orig/common/common.h aiccu_20070115/common/common.h
++--- aiccu_20070115.orig/common/common.h	2007-01-11 15:50:51.000000000 +0100
+++++ aiccu_20070115/common/common.h	2013-08-31 23:26:13.683659455 +0200
++@@ -381,7 +381,7 @@ struct tlssocket
++ 	SOCKET			socket;
++ #ifdef AICCU_GNUTLS
++ 	bool			tls_active;	/* TLS active? */
++-	gnutls_session		session;	/* The GnuTLS sesision */
+++	gnutls_session_t	session;	/* The GnuTLS sesision */
++ #endif
++ };
++ 
++diff -purN aiccu_20070115.orig/common/resolver.c aiccu_20070115/common/resolver.c
++--- aiccu_20070115.orig/common/resolver.c	2006-07-23 16:55:14.000000000 +0200
+++++ aiccu_20070115/common/resolver.c	2013-08-31 23:44:31.574866862 +0200
++@@ -26,7 +26,7 @@
++ 
++ int getrrs(const char *label, int rrtype, void gotrec(unsigned int num, int type, const char *record))
++ {
++-#ifdef _LINUX
+++#if defined(_LINUX) && !defined(__UCLIBC__)
++ 	struct __res_state	res;
++ #endif
++ 	unsigned char		answer[8192];
++@@ -38,7 +38,7 @@ int getrrs(const char *label, int rrtype
++ 	uint16_t		type = 0, class = 0;
++ 	uint32_t		ttl = 0;
++ 
++-#ifdef _LINUX
+++#if defined(_LINUX) && !defined(__UCLIBC__)
++ 	memset(&res, 0, sizeof(res));
++ 	res.options = RES_DEBUG;
++ 	res_ninit(&res);
++@@ -47,7 +47,7 @@ int getrrs(const char *label, int rrtype
++ #endif
++ 
++ 	memset(answer, 0, sizeof(answer));
++-#ifdef _LINUX
+++#if defined(_LINUX) && !defined(__UCLIBC__)
++ 	ret = res_nquery(&res, label, C_IN, rrtype, answer, sizeof(answer));
++ #else
++ 	ret = res_query(label, C_IN, rrtype, answer, sizeof(answer));
+diff --git a/package/aiccu/aiccu-0002-install-correct-init-script.patch b/package/aiccu/aiccu-0002-install-correct-init-script.patch
+new file mode 100644
+index 0000000..15e9268
+--- /dev/null
++++ b/package/aiccu/aiccu-0002-install-correct-init-script.patch
+@@ -0,0 +1,17 @@
++Makefile: remove hardcoded .debian part from install command, debian
++	  version does not work under buildroot
++
++Signed-off-by: Michael Rommel <rommel@layer-7.net>
++
++diff -purN aiccu_20070115.orig/Makefile aiccu_20070115/Makefile
++--- aiccu_20070115.orig/Makefile	2007-01-11 01:29:33.000000000 +0100
+++++ aiccu_20070115/Makefile	2013-09-03 00:47:06.153662575 +0200
++@@ -86,7 +86,7 @@ ifeq ($(shell echo "A${RPM_BUILD_ROOT}")
++ 	@cp doc/HOWTO  ${DESTDIR}${dirdoc}
++ 	@echo "Installing Debian-style init.d"
++ 	@mkdir -p ${DESTDIR}${diretc}init.d
++-	@cp doc/${PROJECT}.init.debian ${DESTDIR}${diretc}init.d/${PROJECT}
+++	@cp doc/${PROJECT}.init ${DESTDIR}${diretc}init.d/${PROJECT}
++ else
++ 	@echo "Installing Redhat-style init.d"
++ 	@mkdir -p ${DESTDIR}${diretc}init.d
+diff --git a/package/aiccu/aiccu.mk b/package/aiccu/aiccu.mk
+new file mode 100644
+index 0000000..0eb605b
+--- /dev/null
++++ b/package/aiccu/aiccu.mk
+@@ -0,0 +1,26 @@
++################################################################################
++#
++# aiccu
++#
++################################################################################
++
++AICCU_VERSION = 20070115
++AICCU_SOURCE = aiccu_$(AICCU_VERSION).tar.gz
++AICCU_SITE = http://www.sixxs.net/archive/sixxs/aiccu/unix/
++AICCU_LICENSE = SixXS License, concise redistribution license
++AICCU_LICENSE_FILES = doc/LICENSE
++AICCU_DEPENDENCIES = gnutls
++
++define AICCU_BUILD_CMDS
++	$(MAKE) CC="$(TARGET_CC)" LD="$(TARGET_LD)" -C $(@D) all
 +endef
-
-The Makefile does not support any other sensible targets, than
-all and install. So I might be back to the original approach (of
-course with the wrong dir corrected).
-
-I'll send the submission and you can have a look what it looks
-like now, after I incorporated your suggestions!
-
-Thanks,
-
-  Michael.
-
++
++define AICCU_INSTALL_TARGET_CMDS
++	$(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) install
++endef
++
++define AICCU_PERMISSIONS
++	/etc/init.d/aiccu  f  4755  0  0  -  -  -  -  -
++endef
++
++$(eval $(generic-package))
 -- 
-Michael Rommel, Erlangen, Germany
+1.7.9.5
