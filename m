@@ -1,61 +1,164 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 2 Sep 2013 21:49:16 +0200
-Subject: [Buildroot] [git commit] perl: bump to version 5.18.1
-Message-ID: <20130902213321.A5CD09B6CD@busybox.osuosl.org>
+Date: Mon, 2 Sep 2013 22:59:27 +0200
+Subject: [Buildroot] [git commit] module-init-tools: remove package
+Message-ID: <20130902213322.196C99B6B0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f8a9126dedacbbd528ecd57329935ef8ea021af0
+commit: http://git.buildroot.net/buildroot/commit/?id=94c72087f386cbb11bbb9011849508628503f316
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+This commit removes the module-init-tools package and adds the
+relevant Config.in.legacy entries to ease the migration for users.
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/cpanminus/cpanminus.mk |    4 ++--
- package/perl/perl.mk           |    8 ++++----
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ Config.in.legacy                                   |   11 +++++
+ package/Config.in                                  |    3 -
+ package/module-init-tools/Config.in                |    9 ----
+ ...nit-tools-3.15-add-manpages-config-option.patch |   47 --------------------
+ package/module-init-tools/module-init-tools.mk     |   28 ------------
+ 5 files changed, 11 insertions(+), 87 deletions(-)
 
-diff --git a/package/cpanminus/cpanminus.mk b/package/cpanminus/cpanminus.mk
-index 52921b5..b315388 100644
---- a/package/cpanminus/cpanminus.mk
-+++ b/package/cpanminus/cpanminus.mk
-@@ -11,9 +11,9 @@ CPANMINUS_DEPENDENCIES = host-qemu perl $(call qstrip,$(BR2_PACKAGE_CPANMINUS_NA
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 30a44c6..4f30b2b 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -45,6 +45,17 @@ comment "build, or run, in unpredictable ways.               "
+ endif
  
- CPANMINUS_RUN_PERL = $(QEMU_USER) $(STAGING_DIR)/usr/bin/perl
- CPANMINUS_ARCHNAME = $(shell $(CPANMINUS_RUN_PERL) -MConfig -e "print Config->{archname}")
--CPANMINUS_PERL_LIB      = $(STAGING_DIR)/usr/lib/perl5
-+CPANMINUS_PERL_LIB      = $(STAGING_DIR)/usr/lib/perl5/$(PERL_VERSION)
- CPANMINUS_PERL_SITELIB  = $(TARGET_DIR)/usr/lib/perl5/site_perl/$(PERL_VERSION)
--CPANMINUS_PERL_ARCHLIB  = $(CPANMINUS_PERL_LIB)/$(PERL_VERSION)/$(CPANMINUS_ARCHNAME)
-+CPANMINUS_PERL_ARCHLIB  = $(CPANMINUS_PERL_LIB)/$(CPANMINUS_ARCHNAME)
- CPANMINUS_PERL_SITEARCH = $(CPANMINUS_PERL_SITELIB)/$(CPANMINUS_ARCHNAME)
- CPANMINUS_PERL5LIB = $(CPANMINUS_PERL_SITEARCH):$(CPANMINUS_PERL_SITELIB):$(CPANMINUS_PERL_ARCHLIB):$(CPANMINUS_PERL_LIB)
- ifneq ($(BR2_PACKAGE_CPANMINUS_MIRROR),"")
-diff --git a/package/perl/perl.mk b/package/perl/perl.mk
-index 37a38f7..25314f0 100644
---- a/package/perl/perl.mk
-+++ b/package/perl/perl.mk
-@@ -4,16 +4,16 @@
- #
- ################################################################################
+ ###############################################################################
++comment "Legacy options removed in 2013.11"
++
++config BR2_PACKAGE_MODULE_INIT_TOOLS
++	bool "module-init-tools replaced by kmod"
++	select BR2_PACKAGE_KMOD
++	select BR2_PACKAGE_KMOD_TOOLS
++	help
++	  The 'module-init-tools' package has been removed, since it
++	  has been depracated upstream and replaced by 'kmod'.
++
++###############################################################################
+ comment "Legacy options removed in 2013.08"
  
--PERL_VERSION_MAJOR = 16
--PERL_VERSION = 5.$(PERL_VERSION_MAJOR).3
-+PERL_VERSION_MAJOR = 18
-+PERL_VERSION = 5.$(PERL_VERSION_MAJOR).1
- PERL_SITE = http://www.cpan.org/src/5.0
- PERL_SOURCE = perl-$(PERL_VERSION).tar.bz2
- PERL_LICENSE = Artistic
- PERL_LICENSE_FILES = Artistic
- PERL_INSTALL_STAGING = YES
- 
--PERL_CROSS_VERSION = 0.7.4
--PERL_CROSS_BASE_VERSION = 5.$(PERL_VERSION_MAJOR).3
-+PERL_CROSS_VERSION = 0.8
-+PERL_CROSS_BASE_VERSION = 5.$(PERL_VERSION_MAJOR).0
- PERL_CROSS_SITE    = http://download.berlios.de/perlcross
- PERL_CROSS_SOURCE  = perl-$(PERL_CROSS_BASE_VERSION)-cross-$(PERL_CROSS_VERSION).tar.gz
- PERL_CROSS_OLD_POD = perl$(subst .,,$(PERL_CROSS_BASE_VERSION))delta.pod
+ config BR2_ARM_OABI
+diff --git a/package/Config.in b/package/Config.in
+index 9b8bc70..a94cb62 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -907,9 +907,6 @@ source "package/htop/Config.in"
+ source "package/keyutils/Config.in"
+ source "package/kmod/Config.in"
+ source "package/lxc/Config.in"
+-if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+-source "package/module-init-tools/Config.in"
+-endif
+ source "package/monit/Config.in"
+ source "package/ncdu/Config.in"
+ source "package/numactl/Config.in"
+diff --git a/package/module-init-tools/Config.in b/package/module-init-tools/Config.in
+deleted file mode 100644
+index 77e3bce..0000000
+--- a/package/module-init-tools/Config.in
++++ /dev/null
+@@ -1,9 +0,0 @@
+-config BR2_PACKAGE_MODULE_INIT_TOOLS
+-	bool "module-init-tools"
+-	help
+-	  The module-init-tools package contains a set of programs for
+-	  loading, inserting, and removing kernel modules for Linux
+-	  (versions 2.5.48 and above). It serves the same function that
+-	  the "modutils" package serves for Linux 2.4.
+-
+-	  http://www.kernel.org/pub/linux/utils/kernel/module-init-tools/
+diff --git a/package/module-init-tools/module-init-tools-3.15-add-manpages-config-option.patch b/package/module-init-tools/module-init-tools-3.15-add-manpages-config-option.patch
+deleted file mode 100644
+index 28f51de..0000000
+--- a/package/module-init-tools/module-init-tools-3.15-add-manpages-config-option.patch
++++ /dev/null
+@@ -1,47 +0,0 @@
+-Disable manual pages generation when docbook2man is not available.
+-
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+----
+- Makefile.am  |    7 ++++++-
+- configure.ac |    7 +++----
+- 2 files changed, 9 insertions(+), 5 deletions(-)
+-
+-Index: module-init-tools-3.11/Makefile.am
+-===================================================================
+---- module-init-tools-3.11.orig/Makefile.am
+-+++ module-init-tools-3.11/Makefile.am
+-@@ -39,7 +39,12 @@
+- MAN5 = modprobe.conf.5 modules.dep.5 depmod.conf.5 modprobe.d.5
+- MAN8 = depmod.8 insmod.8 lsmod.8 rmmod.8 modprobe.8 modinfo.8
+- SGML = $(addprefix doc/,  $(MAN5:%.5=%.sgml) $(MAN8:%.8=%.sgml))
+--dist_man_MANS = $(MAN5) $(MAN8)
+-+
+-+if HAVE_DOCBOOKTOMAN
+-+MANPAGES  = $(MAN5) $(MAN8)
+-+endif
+-+dist_man_MANS = $(MANPAGES)
+-+
+- # If they haven't overridden mandir, fix it (never /man!)
+- mandir =$(shell if [ @mandir@ = $(prefix)/man ]; then if [ $(prefix) = / ]; then echo /usr/share/man; else echo $(prefix)/share/man; fi; else echo @mandir@; fi)
+- 
+-Index: module-init-tools-3.11/configure.ac
+-===================================================================
+---- module-init-tools-3.11.orig/configure.ac
+-+++ module-init-tools-3.11/configure.ac
+-@@ -29,13 +29,12 @@
+- AC_PROG_CC
+- AC_PROG_RANLIB
+- 
+--AC_CHECK_PROGS(DOCBOOKTOMAN, docbook-to-man docbook2man, [no],)
+--if test x"$DOCBOOKTOMAN" = xno
+-+AC_CHECK_PROGS(DOCBOOKTOMAN, docbook-to-man docbook2man)
+-+if test x"$DOCBOOKTOMAN" = x
+- then
+- 	AC_MSG_WARN([docbook2man not found])
+--	# fail with a meaningfull error if $DOCBOOKTOMAN called by the makefile
+--	DOCBOOKTOMAN=docbook2man
+- fi
+-+AM_CONDITIONAL([HAVE_DOCBOOKTOMAN], [test "x$DOCBOOKTOMAN" != "x"])
+-  
+- # Delay adding the zlib_flags until after AC_PROG_CC, so we can distinguish
+- # between a broken cc and a working cc but missing libz.a.
+diff --git a/package/module-init-tools/module-init-tools.mk b/package/module-init-tools/module-init-tools.mk
+deleted file mode 100644
+index 88abec4..0000000
+--- a/package/module-init-tools/module-init-tools.mk
++++ /dev/null
+@@ -1,28 +0,0 @@
+-################################################################################
+-#
+-# module-init-tools
+-#
+-################################################################################
+-
+-MODULE_INIT_TOOLS_VERSION = 3.15
+-MODULE_INIT_TOOLS_SOURCE = module-init-tools-$(MODULE_INIT_TOOLS_VERSION).tar.bz2
+-MODULE_INIT_TOOLS_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/kernel/module-init-tools/
+-MODULE_INIT_TOOLS_LICENSE = GPLv2+
+-MODULE_INIT_TOOLS_LICENSE_FILES = COPYING
+-
+-MODULE_INIT_TOOLS_CONF_ENV = ac_cv_prog_DOCBOOKTOMAN=''
+-MODULE_INIT_TOOLS_CONF_OPT = \
+-	--disable-static-utils \
+-	--disable-builddir \
+-	--program-transform-name=''
+-
+-# module-init-tools-3.15-add-manpages-config-option.patch is modifying
+-# configure.ac and Makefile.am
+-MODULE_INIT_TOOLS_AUTORECONF = YES
+-HOST_MODULE_INIT_TOOLS_AUTORECONF = YES
+-HOST_MODULE_INIT_TOOLS_CONF_ENV = ac_cv_prog_DOCBOOKTOMAN=''
+-HOST_MODULE_INIT_TOOLS_CONF_OPT = --disable-static-utils
+-
+-$(eval $(autotools-package))
+-$(eval $(host-autotools-package))
+-
