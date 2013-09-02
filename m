@@ -1,36 +1,40 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 2 Sep 2013 17:39:44 +0200
-Subject: [Buildroot] [git commit] ti-gfx.mk: correct typo
-Message-ID: <20130902154223.79F739B6CB@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 2 Sep 2013 17:58:46 +0200
+Subject: [Buildroot] Patches to apply
+Message-ID: <20130902175846.56bd2bcd@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=4ee8047024d7edf4500eda57327d793c3f55bdd6
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello Peter,
 
-There is a simple typo in package/ti-gfx/ti-gfx.mk, which the
-following patch corrects.
+Like last time, here is a list of patches I believe you can apply now:
 
-Signed-off-by: Martin Creutziger <buildroot@martin.creutziger.net>
-Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/ti-gfx/ti-gfx.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ http://patchwork.ozlabs.org/patch/270971/
+ http://patchwork.ozlabs.org/patch/270972/
+ http://patchwork.ozlabs.org/patch/270991/
+ http://patchwork.ozlabs.org/patch/271729/
+ http://patchwork.ozlabs.org/patch/271730/
+ http://patchwork.ozlabs.org/patch/271091/ (this one should really have
+ been part of 2013.08)
+ http://patchwork.ozlabs.org/patch/270824/
+ http://patchwork.ozlabs.org/patch/270552/
+ http://patchwork.ozlabs.org/patch/270428/
+ http://patchwork.ozlabs.org/patch/270422/
+ http://patchwork.ozlabs.org/patch/270164/
+ http://patchwork.ozlabs.org/patch/270165/
+ http://patchwork.ozlabs.org/patch/270166/
+ http://patchwork.ozlabs.org/patch/270167/
+ http://patchwork.ozlabs.org/patch/268486/
+ http://patchwork.ozlabs.org/patch/268487/
 
-diff --git a/package/ti-gfx/ti-gfx.mk b/package/ti-gfx/ti-gfx.mk
-index 44a3c1d..a94f00d 100644
---- a/package/ti-gfx/ti-gfx.mk
-+++ b/package/ti-gfx/ti-gfx.mk
-@@ -29,7 +29,7 @@ TI_GFX_OMAPES = 5.x
- TI_GFX_PLATFORM = omap3630
- endif
- ifeq ($(BR2_PACKAGE_TI_GFX_ES6),y)
--TI_GFX_OMPAES = 6.x
-+TI_GFX_OMAPES = 6.x
- TI_GFX_PLATFORM = ti81xx
- endif
- ifeq ($(BR2_PACKAGE_TI_GFX_ES8),y)
+Thanks,
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
