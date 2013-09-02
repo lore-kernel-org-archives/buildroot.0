@@ -1,39 +1,29 @@
-From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Mon, 02 Sep 2013 22:07:58 +0200
-Subject: [Buildroot] [PATCH 9 of 9 v4] linux: mention 3.x.y kernels in
- 'custom version' help
-In-Reply-To: <patchbomb.1378152469@argentina>
-References: <patchbomb.1378152469@argentina>
-Message-ID: <f46382b15981b2489c2d.1378152478@argentina>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 02 Sep 2013 22:36:27 +0200
+Subject: [Buildroot] [PATCH v3 1/2] nios2: Add new architecture
+In-Reply-To: <1377814241-10526-2-git-send-email-ezequiel.garcia@free-electrons.com>
+ (Ezequiel Garcia's message of "Thu, 29 Aug 2013 19:10:40 -0300")
+References: <1377814241-10526-1-git-send-email-ezequiel.garcia@free-electrons.com>
+ <1377814241-10526-2-git-send-email-ezequiel.garcia@free-electrons.com>
+Message-ID: <878uzfarlg.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-(also fix grammatical error versions -> version)
+>>>>> "Ezequiel" == Ezequiel Garcia <ezequiel.garcia@free-electrons.com> writes:
 
-Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+ Ezequiel> From: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+ Ezequiel> This commit adds very basic support to build for the Nios II
+ Ezequiel> architecture. Toolchain support is still missing and instead
+ Ezequiel> we need to use an external custom toolchain.
 
----
-v4: no changes
-v3: no changes
-(v2): new patch in series, although only loosely related.
+ Ezequiel> Notice that this architecture had been previously removed in
+ Ezequiel> Buildroot 2010.05-rc1 release (as explained in the CHANGES file)
+ Ezequiel> and this commit adds it back.
 
- linux/Config.in |  4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+Committed, thanks.
 
-diff --git a/linux/Config.in b/linux/Config.in
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -37,8 +37,8 @@ config BR2_LINUX_KERNEL_SAME_AS_HEADERS
- config BR2_LINUX_KERNEL_CUSTOM_VERSION
- 	bool "Custom version"
- 	help
--	  This option allows to use a specific 2.6.x or 2.6.x.y
--	  official versions, as available on kernel.org
-+	  This option allows to use a specific official version from
-+	  kernel.org, like 2.6.x, 2.6.x.y, 3.x.y, ...
- 
- config BR2_LINUX_KERNEL_CUSTOM_TARBALL
- 	bool "Custom tarball"
+-- 
+Bye, Peter Korsgaard
