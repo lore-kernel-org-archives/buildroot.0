@@ -1,47 +1,54 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 2 Sep 2013 22:55:14 +0200
-Subject: [Buildroot] [PATCH 2 of 9 v4] Config.in.legacy: update
- description for users
-In-Reply-To: <ac4d080274a06689e8d4.1378152471@argentina>
-References: <patchbomb.1378152469@argentina>
- <ac4d080274a06689e8d4.1378152471@argentina>
-Message-ID: <20130902225514.7d9323cc@skate>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 02 Sep 2013 22:58:04 +0200
+Subject: [Buildroot] [PATCHv2 2/4] kmod: allow to build a host variant
+In-Reply-To: <1377624514-10510-3-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Tue, 27 Aug 2013 19:28:32 +0200")
+References: <1377624514-10510-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1377624514-10510-3-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <87fvtn7xgj.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas De Schampheleire,
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-On Mon, 02 Sep 2013 22:07:51 +0200, Thomas De Schampheleire wrote:
+ Thomas> Since module-init-tools is deprecated, we now want to use kmod instead
+ Thomas> for the installation of modules during the kernel build process. In
+ Thomas> order to do this, we need to be able to build a host variant of kmod,
+ Thomas> which is want this patch allows to do.
 
->  if BR2_LEGACY
->  comment "Your old configuration uses legacy options that no  "
-> -comment "longer exist in buildroot.                          "
-> -comment "Please look at the options which have been selected "
-> -comment "and read their help text.                           "
-> -comment "As long as these options stay selected, the build   "
-> +comment "longer exist in buildroot, as indicated in the menu "
-> +comment "below. As long as these options stay selected, or in"
-> +comment "case of string options are non-empty, the build     "
->  comment "will fail.                                          "
-> +comment "*                                                   "
-> +comment "Where possible, an automatic conversion from old to "
-> +comment "new symbols has been performed. Before making any   "
-> +comment "change in this legacy menu, make sure to exit the   "
-> +comment "configuration editor a first time and save the      "
-> +comment "configuration. Otherwise, the automatic conversion  "
-> +comment "of symbols will be lost.                            "
+ Thomas> Note that only the depmod tool is installed on the host, since that's
+ Thomas> the only one likely to be used on the host in a cross-compilation
+ Thomas> context.
 
-This really seems ugly for users, no? I know it's been discussed, but
-can you summarize why this should be done by our users?
+ Thomas> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ Thomas> ---
+ Thomas>  package/kmod/kmod.mk | 10 ++++++++++
+ Thomas>  1 file changed, 10 insertions(+)
 
-Thanks!
+ Thomas> diff --git a/package/kmod/kmod.mk b/package/kmod/kmod.mk
+ Thomas> index 71a2632..4445fa8 100644
+ Thomas> --- a/package/kmod/kmod.mk
+ Thomas> +++ b/package/kmod/kmod.mk
+ Thomas> @@ -54,4 +54,14 @@ else
+ Thomas>  KMOD_CONF_OPT += --disable-tools
+ Thomas>  endif
+ 
+ Thomas> +# We only install depmod, since that's the only tool used for the
+ Thomas> +# host.
+ Thomas> +define HOST_KMOD_INSTALL_TOOLS
+ Thomas> +	mkdir -p $(HOST_DIR)/sbin/
+ Thomas> +	ln -sf ../usr/bin/kmod $(HOST_DIR)/sbin/depmod
+ Thomas> +endef
+ Thomas> +
+ Thomas> +HOST_KMOD_POST_INSTALL_HOOKS += HOST_KMOD_INSTALL_TOOLS
+ Thomas> +
 
-Thomas
+We also need to set HOST_KMOD_AUTORECONF = YES because of the
+configure.ac patch (arguably we should default HOST_<pkg>_AUTORECONF =
+<pkg>_AUTORECONF).
+
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Bye, Peter Korsgaard
