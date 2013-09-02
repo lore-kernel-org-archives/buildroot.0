@@ -1,66 +1,118 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 2 Sep 2013 12:43:59 +0200
-Subject: [Buildroot] [git commit] libmicrohttpd: disable spdy support
-Message-ID: <20130902104447.453849B6C8@busybox.osuosl.org>
+From: Markos Chandras <markos.chandras@gmail.com>
+Date: Mon, 2 Sep 2013 12:36:04 +0100
+Subject: [Buildroot] [PATCH v3] libsecret: New package
+In-Reply-To: <1377685417-5813-1-git-send-email-markos.chandras@imgtec.com>
+References: <1377685417-5813-1-git-send-email-markos.chandras@imgtec.com>
+Message-ID: <CAG2jQ8j2SmMtG1o4e4xhcDyScU-Gz_61Ri-oUOOyaVN6jJ6r5A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=37dfcbabb9d64a453f8d248f6a2e9708728484da
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 28 August 2013 11:23, Markos Chandras <markos.chandras@imgtec.com> wrote:
+> libsecret is a library for storing and retrieving passwords
+> and other secrets. It communicates with the "Secret Service"
+> using DBus. gnome-keyring and ksecretservice are both
+> implementations of a Secret Service.
+>
+> libsecret replaces libgnome-keyring.
+>
+> https://wiki.gnome.org/Libsecret
+>
+> Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
+> ---
+> Changes since v2:
+> - Drop BR2_PACKAGE_LIBSECRET_CRYPTO and enable encryption if
+> libgcrypt is selected
+>
+> Changes since v1:
+> - depend on USE_WCHAR and TOOLCHAIN_HAS_THREADS which are required by libglib2
+> http://lists.busybox.net/pipermail/buildroot/2013-August/076565.html
+> ---
+>  package/Config.in              |  1 +
+>  package/libsecret/Config.in    | 15 +++++++++++++++
+>  package/libsecret/libsecret.mk | 24 ++++++++++++++++++++++++
+>  3 files changed, 40 insertions(+)
+>  create mode 100644 package/libsecret/Config.in
+>  create mode 100644 package/libsecret/libsecret.mk
+>
+> diff --git a/package/Config.in b/package/Config.in
+> index 7069d77..93e280d 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -423,6 +423,7 @@ source "package/libassuan/Config.in"
+>  source "package/libmcrypt/Config.in"
+>  source "package/libmhash/Config.in"
+>  source "package/libnss/Config.in"
+> +source "package/libsecret/Config.in"
+>  source "package/libsha1/Config.in"
+>  source "package/nettle/Config.in"
+>  source "package/openssl/Config.in"
+> diff --git a/package/libsecret/Config.in b/package/libsecret/Config.in
+> new file mode 100644
+> index 0000000..a15f995
+> --- /dev/null
+> +++ b/package/libsecret/Config.in
+> @@ -0,0 +1,15 @@
+> +config BR2_PACKAGE_LIBSECRET
+> +       bool "libsecret"
+> +       select BR2_PACKAGE_LIBGLIB2
+> +       depends on BR2_USE_WCHAR # gettext dep in libglib2
+> +       depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
+> +       help
+> +         libsecret is a library for storing and retrieving passwords and other
+> +         secrets. It communicates with the "Secret Service" using DBus.
+> +         gnome-keyring and ksecretservice are both implementations of a Secret
+> +         Service.
+> +
+> +         https://wiki.gnome.org/Libsecret
+> +
+> +comment "libsecret requires a toolchain with WCHAR and threading support."
+> +       depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
+> diff --git a/package/libsecret/libsecret.mk b/package/libsecret/libsecret.mk
+> new file mode 100644
+> index 0000000..ebdfe11
+> --- /dev/null
+> +++ b/package/libsecret/libsecret.mk
+> @@ -0,0 +1,24 @@
+> +################################################################################
+> +#
+> +# libsecret
+> +#
+> +################################################################################
+> +
+> +LIBSECRET_VERSION = 0.15
+> +LIBSECRET_SITE = http://ftp.gnome.org/pub/GNOME/sources/libsecret/$(LIBSECRET_VERSION)
+> +LIBSECRET_SOURCE = libsecret-$(LIBSECRET_VERSION).tar.xz
+> +LIBSECRET_LICENSE = LGPLv2.1+
+> +LIBSECRET_LICENSE_FILES = COPYING
+> +LIBSECRET_INSTALL_STAGING = YES
+> +
+> +LIBSECRET_DEPENDENCIES = libglib2
+> +LIBSECRET_CONF_OPT = --disable-manpages --disable-strict --disable-coverage --enable-vala=no
+> +
+> +ifeq ($(BR2_PACKAGE_LIBGCRYPT),y)
+> +       LIBSECRET_DEPENDENCIES += libgcrypt
+> +       LIBSECRET_CONF_OPT += --enable-gcrypt
+> +else
+> +       LIBSECRET_CONF_OPT += --disable-gcrypt
+> +endif
+> +
+> +$(eval $(autotools-package))
+> --
+> 1.8.3.2
+>
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-It requires OpenSSL and IPv6 support and it should probably be an
-option since SSL support uses GnuTLS thus making a huge target
-footprint with 2 SSL/TLS libraries for full support.
-But most of all it's considered experimental.
-Fixes:
-http://autobuild.buildroot.net/results/836/836c39c11cecbcf9399675ba3ab01202417b9642/
+Ping? :) This package is needed for newer webkits which I intend to
+submit a patch for it when libsecret package
+is committed.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- .../libmicrohttpd-01-openssl-conditional.patch     |   20 ++++++++++++++++++++
- package/libmicrohttpd/libmicrohttpd.mk             |    2 ++
- 2 files changed, 22 insertions(+), 0 deletions(-)
-
-diff --git a/package/libmicrohttpd/libmicrohttpd-01-openssl-conditional.patch b/package/libmicrohttpd/libmicrohttpd-01-openssl-conditional.patch
-new file mode 100644
-index 0000000..37d5e1e
---- /dev/null
-+++ b/package/libmicrohttpd/libmicrohttpd-01-openssl-conditional.patch
-@@ -0,0 +1,20 @@
-+Subject: [PATCH] Fix configure failure for --disable-spdy
-+
-+The @HAVE_OPENSSL@ conditional is used in src/Makefile.in so when SPDY
-+support is forcibly disabled the AM_CONDITIONAL is never executed, causing
-+configure to bail out.
-+
-+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+
-+diff -Nura libmicrohttpd-0.9.29.orig/configure.ac libmicrohttpd-0.9.29/configure.ac
-+--- libmicrohttpd-0.9.29.orig/configure.ac	2013-09-02 06:17:44.660620584 -0300
-++++ libmicrohttpd-0.9.29/configure.ac	2013-09-02 06:36:44.598189751 -0300
-+@@ -341,6 +341,8 @@
-+                    enable_spdy="yes"], 
-+                    [AM_CONDITIONAL(HAVE_OPENSSL, false)
-+                    enable_spdy="no"])
-++else
-++ AM_CONDITIONAL(HAVE_OPENSSL, false)
-+ fi
-+ 
-+ if test "$enable_spdy" = "yes"
-diff --git a/package/libmicrohttpd/libmicrohttpd.mk b/package/libmicrohttpd/libmicrohttpd.mk
-index 31ef7fe..d0501ee 100644
---- a/package/libmicrohttpd/libmicrohttpd.mk
-+++ b/package/libmicrohttpd/libmicrohttpd.mk
-@@ -8,6 +8,8 @@ LIBMICROHTTPD_VERSION = 0.9.29
- LIBMICROHTTPD_SITE = $(BR2_GNU_MIRROR)/libmicrohttpd
- LIBMICROHTTPD_LICENSE_FILES = COPYING
- LIBMICROHTTPD_INSTALL_STAGING = YES
-+LIBMICROHTTPD_CONF_OPT = --disable-spdy
-+LIBMICROHTTPD_AUTORECONF = YES
- 
- ifeq ($(BR2_PACKAGE_LIBMICROHTTPD_SSL),y)
- LIBMICROHTTPD_LICENSE = LGPLv2.1+
+-- 
+Regards,
+Markos Chandras
