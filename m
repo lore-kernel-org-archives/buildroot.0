@@ -1,39 +1,47 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 2 Sep 2013 22:45:06 +0200
-Subject: [Buildroot] [git commit] kmod: indent properly the
-	KMOD_INSTALL_TOOLS macro
-Message-ID: <20130902213321.F1A259B6B0@busybox.osuosl.org>
+Date: Mon, 2 Sep 2013 23:06:19 +0200
+Subject: [Buildroot] [git commit] Makefile: do not try to strip inexisting
+	file when stripping libpthread
+Message-ID: <20130902213322.278579B6B0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=528d15721b5e47f7aa8bdff588996c6a747e328a
+commit: http://git.buildroot.net/buildroot/commit/?id=52e7073a58409ac09b79865a3ae4332cf01edb58
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The KMOD_INSTALL_TOOLS macro uses a non-conventional indentation. This
-commit fixes this.
+libpthread.so has a special stripping condition to preserve parts of
+it that are needed for debugging. However, due to the usage of 'xargs'
+instead of 'xargs -r', the strip command is executed regardless of
+whether a libpthread.so file is found or not. This leads to a big
+error message being displayed in static-only builds, because strip is
+executed without a file argument. Thanks to the '|| true', the build
+continues, but still shows a big error message in the middle, which is
+not nice.
+
+By using 'xargs -r', we avoid the strip command from being executed
+when 'find' doesn't find any match. We also remove the '|| true' to
+catch other real errors.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/kmod/kmod.mk |    5 +++--
- 1 files changed, 3 insertions(+), 2 deletions(-)
+ Makefile |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/kmod/kmod.mk b/package/kmod/kmod.mk
-index aa197dd..06d8dc5 100644
---- a/package/kmod/kmod.mk
-+++ b/package/kmod/kmod.mk
-@@ -47,8 +47,9 @@ KMOD_DEPENDENCIES += \
- 	$(if $(BR2_PACKAGE_MODULE_INIT_TOOLS),module-init-tools)
+diff --git a/Makefile b/Makefile
+index 3b5d921..09faeba 100644
+--- a/Makefile
++++ b/Makefile
+@@ -494,7 +494,7 @@ endif
+ # I set a breakpoint"
+ ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
+ 	find $(TARGET_DIR)/lib -type f -name 'libpthread*.so*' | \
+-		xargs $(STRIPCMD) $(STRIP_STRIP_DEBUG) || true
++		xargs -r $(STRIPCMD) $(STRIP_STRIP_DEBUG)
+ endif
  
- define KMOD_INSTALL_TOOLS
--	for i in depmod insmod lsmod modinfo modprobe rmmod; \
--	do ln -sf ../usr/bin/kmod $(TARGET_DIR)/sbin/$$i; done
-+	for i in depmod insmod lsmod modinfo modprobe rmmod; do \
-+		ln -sf ../usr/bin/kmod $(TARGET_DIR)/sbin/$$i; \
-+	done
- endef
- 
- KMOD_POST_INSTALL_TARGET_HOOKS += KMOD_INSTALL_TOOLS
+ 	mkdir -p $(TARGET_DIR)/etc
