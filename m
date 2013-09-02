@@ -1,7 +1,9 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Mon,  2 Sep 2013 10:18:49 +0200
-Subject: [Buildroot] [PATCH 1/2] perl: dump to version 5.18.1
-Message-ID: <1378109930-4204-1-git-send-email-francois.perrad@gadz.org>
+Date: Mon,  2 Sep 2013 10:18:50 +0200
+Subject: [Buildroot] [PATCH 2/2] qemu: bump to version 1.6.0
+In-Reply-To: <1378109930-4204-1-git-send-email-francois.perrad@gadz.org>
+References: <1378109930-4204-1-git-send-email-francois.perrad@gadz.org>
+Message-ID: <1378109930-4204-2-git-send-email-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,50 +13,21 @@ To: buildroot@busybox.net
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/cpanminus/cpanminus.mk |    4 ++--
- package/perl/perl.mk           |    8 ++++----
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ package/qemu/qemu.mk |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/cpanminus/cpanminus.mk b/package/cpanminus/cpanminus.mk
-index 52921b5..b315388 100644
---- a/package/cpanminus/cpanminus.mk
-+++ b/package/cpanminus/cpanminus.mk
-@@ -11,9 +11,9 @@ CPANMINUS_DEPENDENCIES = host-qemu perl $(call qstrip,$(BR2_PACKAGE_CPANMINUS_NA
- 
- CPANMINUS_RUN_PERL = $(QEMU_USER) $(STAGING_DIR)/usr/bin/perl
- CPANMINUS_ARCHNAME = $(shell $(CPANMINUS_RUN_PERL) -MConfig -e "print Config->{archname}")
--CPANMINUS_PERL_LIB      = $(STAGING_DIR)/usr/lib/perl5
-+CPANMINUS_PERL_LIB      = $(STAGING_DIR)/usr/lib/perl5/$(PERL_VERSION)
- CPANMINUS_PERL_SITELIB  = $(TARGET_DIR)/usr/lib/perl5/site_perl/$(PERL_VERSION)
--CPANMINUS_PERL_ARCHLIB  = $(CPANMINUS_PERL_LIB)/$(PERL_VERSION)/$(CPANMINUS_ARCHNAME)
-+CPANMINUS_PERL_ARCHLIB  = $(CPANMINUS_PERL_LIB)/$(CPANMINUS_ARCHNAME)
- CPANMINUS_PERL_SITEARCH = $(CPANMINUS_PERL_SITELIB)/$(CPANMINUS_ARCHNAME)
- CPANMINUS_PERL5LIB = $(CPANMINUS_PERL_SITEARCH):$(CPANMINUS_PERL_SITELIB):$(CPANMINUS_PERL_ARCHLIB):$(CPANMINUS_PERL_LIB)
- ifneq ($(BR2_PACKAGE_CPANMINUS_MIRROR),"")
-diff --git a/package/perl/perl.mk b/package/perl/perl.mk
-index 37a38f7..25314f0 100644
---- a/package/perl/perl.mk
-+++ b/package/perl/perl.mk
-@@ -4,16 +4,16 @@
+diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
+index f177fd5..a89bf7d 100644
+--- a/package/qemu/qemu.mk
++++ b/package/qemu/qemu.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PERL_VERSION_MAJOR = 16
--PERL_VERSION = 5.$(PERL_VERSION_MAJOR).3
-+PERL_VERSION_MAJOR = 18
-+PERL_VERSION = 5.$(PERL_VERSION_MAJOR).1
- PERL_SITE = http://www.cpan.org/src/5.0
- PERL_SOURCE = perl-$(PERL_VERSION).tar.bz2
- PERL_LICENSE = Artistic
- PERL_LICENSE_FILES = Artistic
- PERL_INSTALL_STAGING = YES
- 
--PERL_CROSS_VERSION = 0.7.4
--PERL_CROSS_BASE_VERSION = 5.$(PERL_VERSION_MAJOR).3
-+PERL_CROSS_VERSION = 0.8
-+PERL_CROSS_BASE_VERSION = 5.$(PERL_VERSION_MAJOR).0
- PERL_CROSS_SITE    = http://download.berlios.de/perlcross
- PERL_CROSS_SOURCE  = perl-$(PERL_CROSS_BASE_VERSION)-cross-$(PERL_CROSS_VERSION).tar.gz
- PERL_CROSS_OLD_POD = perl$(subst .,,$(PERL_CROSS_BASE_VERSION))delta.pod
+-QEMU_VERSION = 1.3.1
++QEMU_VERSION = 1.6.0
+ QEMU_SOURCE = qemu-$(QEMU_VERSION).tar.bz2
+ QEMU_SITE = http://wiki.qemu.org/download
+ QEMU_LICENSE = GPLv2 LGPLv2.1 MIT BSD-3c BSD-2c Others/BSD-1c
 -- 
 1.7.9.5
