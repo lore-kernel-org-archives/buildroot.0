@@ -1,23 +1,19 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 02 Sep 2013 22:37:01 +0200
-Subject: [Buildroot] [PATCH v2 1/1] libcurl: up revision to 7.32.0
-In-Reply-To: <1377816068-3368-2-git-send-email-rjbarnet@rockwellcollins.com>
- (Ryan Barnett's message of "Thu, 29 Aug 2013 17:41:08 -0500")
-References: <1377816068-3368-1-git-send-email-rjbarnet@rockwellcollins.com>
- <1377816068-3368-2-git-send-email-rjbarnet@rockwellcollins.com>
-Message-ID: <87zjrv9d02.fsf@dell.be.48ers.dk>
+Date: Mon, 02 Sep 2013 22:37:28 +0200
+Subject: [Buildroot] [PATCH 1/2] perl: dump to version 5.18.1
+In-Reply-To: <1378109930-4204-1-git-send-email-francois.perrad@gadz.org>
+ (Francois Perrad's message of "Mon, 2 Sep 2013 10:18:49 +0200")
+References: <1378109930-4204-1-git-send-email-francois.perrad@gadz.org>
+Message-ID: <87vc2j9czb.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Ryan" == Ryan Barnett <rjbarnet@rockwellcollins.com> writes:
+>>>>> "Francois" == Francois Perrad <fperrad@gmail.com> writes:
 
- Ryan> Updating revision of libcurl to version 7.32.0
- Ryan> Signed-off-by: Ryan Barnett <rjbarnet@rockwellcollins.com>
-
-Committed, thanks.
+Committed with s/dump/bump/, thanks.
 
 -- 
 Bye, Peter Korsgaard
