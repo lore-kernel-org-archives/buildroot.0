@@ -1,36 +1,47 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 02 Sep 2013 08:05:47 +0200
-Subject: [Buildroot] [PATCH 1/1] pyzmq: new package
-In-Reply-To: <1377899924-1866-1-git-send-email-rommel@layer-7.net>
-References: <1377899924-1866-1-git-send-email-rommel@layer-7.net>
-Message-ID: <52242ABB.9060701@mind.be>
+Date: Mon, 02 Sep 2013 08:18:30 +0200
+Subject: [Buildroot] [PATCH 1/1] systemd: bumped to version 206
+In-Reply-To: <1377873128-19195-1-git-send-email-eric.le.bihan.dev@free.fr>
+References: <1377873128-19195-1-git-send-email-eric.le.bihan.dev@free.fr>
+Message-ID: <52242DB6.5040609@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 08/30/13 23:58, Michael Rommel wrote:
+On 08/30/13 16:32, eric.le.bihan.dev at free.fr wrote:
 [snip]
-> diff --git a/package/python-pyzmq/Config.in b/package/python-pyzmq/Config.in
-> new file mode 100644
-> index 0000000..d9791c1
-> --- /dev/null
-> +++ b/package/python-pyzmq/Config.in
-> @@ -0,0 +1,13 @@
-> +config BR2_PACKAGE_PYZMQ
-> +	bool "pyzmq"
-> +	select BR2_PACKAGE_ZEROMQ
-> +        select BR2_PACKAGE_PYTHON
+>   SYSTEMD_CONF_OPT += \
+> -	--with-distro=other \
+> +	--localstatedir=/var \
+> +	--enable-static=no \
+> +	--disable-manpages \
+>   	--disable-selinux \
+>   	--disable-pam \
+>   	--disable-libcryptsetup \
+> -	--disable-gtk \
+> -	--disable-plymouth \
+> -	--with-rootdir=/ \
+>   	--with-dbuspolicydir=/etc/dbus-1/system.d \
+>   	--with-dbussessionservicedir=/usr/share/dbus-1/services \
+>   	--with-dbussystemservicedir=/usr/share/dbus-1/system-services \
+>   	--with-dbusinterfacedir=/usr/share/dbus-1/interfaces \
+> -	--with-udevrulesdir=/etc/udev/rules.d \
+> -	--with-sysvinit-path=/etc/init.d/  \
 
-  For python packages, we use a 'depends on' here rather than a select.
-
+  Are these two really not needed anymore?
 
   Regards,
   Arnout
 
-> +	depends on BR2_USE_WCHAR
-> +	depends on BR2_USE_MMU
+> -	--without-sysvrcd-path \
+> -	--enable-split-usr
+> +	--enable-split-usr \
+> +	--enable-introspection=no \
+> +	--disable-efi \
+> +	--disable-myhostname \
+> +	--without-python
 [snip]
 
 -- 
