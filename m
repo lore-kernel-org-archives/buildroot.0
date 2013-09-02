@@ -1,19 +1,21 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 02 Sep 2013 22:38:01 +0200
-Subject: [Buildroot] [PATCH 1/1] mysql_client : bump version to 5.1.70
-In-Reply-To: <1377781995-30128-1-git-send-email-sagaert.johan@skynet.be>
- (Sagaert Johan's message of "Thu, 29 Aug 2013 15:13:15 +0200")
-References: <1377781995-30128-1-git-send-email-sagaert.johan@skynet.be>
-Message-ID: <87mwnv9cye.fsf@dell.be.48ers.dk>
+Date: Mon, 02 Sep 2013 22:38:25 +0200
+Subject: [Buildroot] [PATCH] legacy: marked BR2_PACKAGE_GCC_TARGET and
+	BR2_HAVE_DEVFILES as removed
+In-Reply-To: <1377835739-2249-1-git-send-email-s.martin49@gmail.com> (Samuel
+ Martin's message of "Fri, 30 Aug 2013 06:08:59 +0200")
+References: <1377835739-2249-1-git-send-email-s.martin49@gmail.com>
+Message-ID: <87ioyj9cxq.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Sagaert" == Sagaert Johan <sagaert.johan@skynet.be> writes:
+>>>>> "Samuel" == Samuel Martin <s.martin49@gmail.com> writes:
 
- Sagaert> Signed-off-by: Sagaert Johan <sagaert.johan@skynet.be>
+ Samuel> These 2 symbols were removed when the gcc has been converted to the
+ Samuel> Buildroot package infrastructures.
 
 Committed, thanks.
 
