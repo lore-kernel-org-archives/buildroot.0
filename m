@@ -1,32 +1,96 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 03 Sep 2013 00:46:01 +0200
-Subject: [Buildroot] [PATCHv2 2/4] kmod: allow to build a host variant
-In-Reply-To: <20130902234844.5e078d47@skate> (Thomas Petazzoni's message of
- "Mon, 2 Sep 2013 23:48:44 +0200")
-References: <1377624514-10510-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1377624514-10510-3-git-send-email-thomas.petazzoni@free-electrons.com>
- <87fvtn7xgj.fsf@dell.be.48ers.dk> <20130902234844.5e078d47@skate>
-Message-ID: <87zjru7sgm.fsf@dell.be.48ers.dk>
+From: Michael Rommel <rommel@layer-7.net>
+Date: Tue, 3 Sep 2013 01:49:17 +0200
+Subject: [Buildroot] [PATCH 2/3] aiccu: new package
+In-Reply-To: <20130902105710.1d665e8f@skate>
+References: <1378071216-19697-1-git-send-email-rommel@layer-7.net>
+ <1378071216-19697-2-git-send-email-rommel@layer-7.net>
+ <20130902105710.1d665e8f@skate>
+Message-ID: <01465AC6-0A1C-4437-BFC2-2DF81EAF5A00@layer-7.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+Dear all,
 
- >> We also need to set HOST_KMOD_AUTORECONF = YES because of the
- >> configure.ac patch (arguably we should default HOST_<pkg>_AUTORECONF =
- >> <pkg>_AUTORECONF).
+On Sep 2, 2013, at 10:57 , Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
 
- Thomas> Ah, yes, right. I didn't see the problem since the configure.ac patch
- Thomas> is only to support gcc < 4.6.x on the host, which wasn't my case. But
- Thomas> certainly useful in general indeed.
+>> +AICCU_LICENSE_FILES = doc/LICENSE
+>> +AICCU_DEPENDENCIES = gnutls
+>> +
+>> +define AICCU_BUILD_CMDS
+>> +	$(MAKE) CC="$(TARGET_CC)" LD="$(TARGET_LD)" -C $(@D) all
+> 
+> You could use:
+> 
+> 	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) all
+> 
+> TARGET_CONFIGURE_OPTS contains the definitions of CC, LD, CFLAGS,
+> LDFLAGS, and more.
 
-Not only that, but if you don't have (the right version of) autotools on
-your build host it also fails.
+I tried this, but it aborted with a lot of errors. I couldn't find the description for this
+in the manual - where should I look about these variables, it seems there are
+a lot more, e.g. $(SED) that might be handy...
 
-Anyway, fixed.
+
+>> +define AICCU_INSTALL_TARGET_CMDS
+>> +	$(INSTALL) -D -m 0755 $(@D)/unix-console/aiccu $(TARGET_DIR)/usr/sbin
+>> +	$(INSTALL) -D -m 0644 $(@D)/doc/aiccu.conf $(TARGET_DIR)/etc
+>> +	$(INSTALL) -D -m 0755 $(@D)/doc/aiccu.init \
+>> +		$(TARGET_DIR)/usr/sbin/S90aiccu
+>> +endef
+> 
+> Either use 'make install' as Thomas suggested, or if it's really not
+> possible, you need to make the second argument the complete filename,
+> not only the destination directory.
+
+I have now changed that in the latest submission. But I am not sure it is an 
+improvement. I had to patch the Makefile, so that the correct, working 
+version of the init script gets installed and had to manually correct the 
+permissions in the .mk file. All in all, that makes the whole patch a lot 
+larger.
+
+
+> Moreover, the init script must be installed in /etc/init.d, not
+> in /usr/sbin.
+
+Yes, of course, my mistake!
+
+> And finally, it should not be installed manually, but
+> instead should use the INIT_SYSV mechanism. See the Buildroot manual,
+> which states:
+> 
+>  LIBFOO_INSTALL_INIT_SYSV and LIBFOO_INSTALL_INIT_SYSTEMD list the
+>  actions to install init scripts either for the systemV-like init
+>  systems (busybox, sysvinit, etc.) or for the systemd units. These
+>  commands will be run only when the relevant init system is installed
+>  (i.e. if systemd is selected as the init system in the configuration,
+>  only LIBFOO_INSTALL_INIT_SYSTEMD will be run). 
+
+Actually I do not understand this well enough and the manual is 
+not very explicit.
+
+Now, either I shall use the "make install" approach, then I get what
+the makefile does, which is "aiccu" in "/etc/init.d".
+
+Or I can do it explicitly, which would then be more like:
+
++define AICCU_INSTALL_INIT_SYSV
++	$(INSTALL) -D -m 0755 $(@D)/doc/aiccu.init \
++		$(TARGET_DIR)/etc/init.d/S90aiccu
++endef
+
+The Makefile does not support any other sensible targets, than
+all and install. So I might be back to the original approach (of
+course with the wrong dir corrected).
+
+I'll send the submission and you can have a look what it looks
+like now, after I incorporated your suggestions!
+
+Thanks,
+
+  Michael.
 
 -- 
-Bye, Peter Korsgaard
+Michael Rommel, Erlangen, Germany
