@@ -1,49 +1,56 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 3 Sep 2013 21:16:40 +0200
-Subject: [Buildroot] [PATCH 1/1] netplug: properly install init.d script.
-In-Reply-To: <1378228974-3369-1-git-send-email-psanford@nearbuysystems.com>
-References: <1378228974-3369-1-git-send-email-psanford@nearbuysystems.com>
-Message-ID: <20130903211640.14902850@skate>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 03 Sep 2013 23:30:28 +0200
+Subject: [Buildroot] [PATCH 3/3] python-pyzmq: new package
+In-Reply-To: <9DACF022-3037-49C2-ACB9-7187991A4EFA@layer-7.net>
+References: <1378071216-19697-1-git-send-email-rommel@layer-7.net>
+ <1378071216-19697-3-git-send-email-rommel@layer-7.net>
+ <CAAXf6LW=8rf6ScMS0t95f2cDWT4sLxYnMZAnzCYoEQzPVtkKGA@mail.gmail.com>
+ <5224B4DB.6060903@mind.be> <9DACF022-3037-49C2-ACB9-7187991A4EFA@layer-7.net>
+Message-ID: <522654F4.1090606@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Peter Sanford,
+On 09/03/13 20:04, Michael Rommel wrote:
+> On Sep 2, 2013, at 17:55 , Arnout Vandecappelle <arnout@mind.be> wrote:
+>> On 09/02/13 10:24, Thomas De Schampheleire wrote:
+>
+> Hi Arnout and Thomas,
+>
+> I incorporated all your suggestions here and some additional changes I saw myself:
+>   - added host-python dependency
+>   - removed mentioning of minimum zeromq version needed
+>   - combined comments for dependencies on IPv6 and WCHAR
+>   - fixed naming of the patch hook
+>   - used $(PYTHON_DIR) - although for the heck of me I could not find out, where this is defined :-(
 
-On Tue,  3 Sep 2013 10:22:54 -0700, Peter Sanford wrote:
-> Looks like this was lost in 20d4792e.
-> 
-> Signed-off-by: Peter Sanford <psanford@nearbuysystems.com>
-> ---
->  package/netplug/netplug.mk |    7 +++++++
->  1 file changed, 7 insertions(+)
-> 
-> diff --git a/package/netplug/netplug.mk b/package/netplug/netplug.mk
-> index fbc7a2d..36bd3f7 100644
-> --- a/package/netplug/netplug.mk
-> +++ b/package/netplug/netplug.mk
-> @@ -16,6 +16,13 @@ define NETPLUG_INSTALL_TARGET_CMDS
->  	$(MAKE) DESTDIR=$(TARGET_DIR) -C $(@D) install
->  endef
->  
-> +define NETPLUG_INSTALL_INITSCRIPT
-> +	$(INSTALL) -m 0755 -D package/netplug/S29netplug \
-> +		$(TARGET_DIR)/etc/init.d/S29netplug
-> +endef
-> +
-> +NETPLUG_POST_INSTALL_TARGET_HOOKS += NETPLUG_INSTALL_INITSCRIPT
+  This variable is defined as part of the $(pkg-generic) infrastructure.
 
-Looks good, but it should use NETPLUG_INSTALL_INIT_SYSV instead. See
-the Buildroot manual for details,
-http://buildroot.org/downloads/manual/manual.html.
+  You can use 'make printvars | grep ^PYTHON_DIR=' to get the expansion. 
+Hm, looks like this feature isn't mentioned in the manual...
 
-Thanks!
 
-Thomas
+  Regards,
+  Arnout
+
+
+>   - changed depends on PYTHON from select (actually, I got it wrong, using the select gave the cyclic dependency :-()
+>   - named the package, bool and filenames consistently python-pyzmq
+>
+> Patch will come in some minutes.
+>
+> Cheers,
+>
+>     Michael.
+>
+
+
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
