@@ -1,44 +1,46 @@
-From: Martin Creutziger <buildroot@martin.creutziger.net>
-Date: Tue, 03 Sep 2013 11:21:31 +0200
-Subject: [Buildroot] [PATCH 1/1] ti-gfx.mk typo corrected
-In-Reply-To: <87d2orb57s.fsf@dell.be.48ers.dk>
-References: <5224AC58.6050001@martin.creutziger.net>
- <87d2orb57s.fsf@dell.be.48ers.dk>
-Message-ID: <5225AA1B.3070307@martin.creutziger.net>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 03 Sep 2013 11:31:40 +0200
+Subject: [Buildroot] [PATCH v2] Fix build reproducibility in Make 3.82
+In-Reply-To: <1378197941-30752-1-git-send-email-jezz@sysmic.org>
+References: <52257E0D.3000100@mind.be>
+ <1378197941-30752-1-git-send-email-jezz@sysmic.org>
+Message-ID: <5225AC7C.3010205@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter Korsgaard wrote:
->>>>>> "Martin" == Martin Creutziger <buildroot@martin.creutziger.net> writes:
+On 09/03/13 10:45, J?r?me Pouiller wrote:
+> Make 3.82 do not sort anymore result of wildcards (see
+> http://comments.gmane.org/gmane.comp.gnu.make.bugs/4260). This may break
+> build reproducibility.
 >
->   Martin> There is a simple typo in package/ti-gfx/ti-gfx.mk, which the
->   Martin> following patch corrects:
+> This patch sort results of wildcards to ensure reproducibility.
 >
->   Martin> Signed-off-by: Martin Creutziger <buildroot@martin.creutziger.net>
->   Martin> ---
->   Martin> Index: package/ti-gfx/ti-gfx.mk
->   Martin> ===================================================================
->   Martin> --- package/ti-gfx/ti-gfx.mk	(revision 14043)
->   Martin> +++ package/ti-gfx/ti-gfx.mk	(working copy)
->
-> Committed, thanks.
->
-> In the future, please consider creating the patch using git so it can be
-> directly committed with git am (or atleast add one more directory level,
-> as git am expects patch -p1 format).
->
+> Signed-off-by: J?r?me Pouiller<jezz@sysmic.org>
 
-Hello Peter,
+  You forgot
 
-as this was my first patch here on the mailing list, I already expected 
-that I won't get it 100% right ;)
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-I created it directly out of our SVN repository, but thanks for the 
-pointers about the expected format - I'll try to get closer to it next 
-time. :)
+:-)
 
-BR,
-Martin
+> ---
+>   V2:
+>      Add forgotten file support/dependencies/dependencies.mk. Even if it
+>      does not make difference for the build result, I prefer to be
+>      consistent.
+
+  I agree!
+
+  Regards,
+  Arnout
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
