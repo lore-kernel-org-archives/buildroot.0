@@ -1,32 +1,38 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 3 Sep 2013 16:37:31 +0200
-Subject: [Buildroot] [git commit] mpd: bump to version 0.17.5
-Message-ID: <20130903144123.0BCAC9A2C8@busybox.osuosl.org>
+Date: Tue, 3 Sep 2013 16:38:22 +0200
+Subject: [Buildroot] [git commit] libsecret: specify where libgcrypt lives
+Message-ID: <20130903144123.1570E9B6DB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=102e6c72f7212c581cdd1bd81e04b85fc7c904b2
+commit: http://git.buildroot.net/buildroot/commit/?id=c19bf136bdfcf943f2443c45e4452fba060d19d8
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+When libgcrypt support is enabled the configure script will try to
+find libgcrypt-config in the PATH. If the host distribution has it then
+brokeness ensues. Fixes:
+http://autobuild.buildroot.net/results/eca/eca10b8360354e7e51406f7ac942d343987bde5e/
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/multimedia/mpd/mpd.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/libsecret/libsecret.mk |    3 ++-
+ 1 files changed, 2 insertions(+), 1 deletions(-)
 
-diff --git a/package/multimedia/mpd/mpd.mk b/package/multimedia/mpd/mpd.mk
-index 4424b7e..95e18f7 100644
---- a/package/multimedia/mpd/mpd.mk
-+++ b/package/multimedia/mpd/mpd.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/libsecret/libsecret.mk b/package/libsecret/libsecret.mk
+index e445ea6..a0f39f8 100644
+--- a/package/libsecret/libsecret.mk
++++ b/package/libsecret/libsecret.mk
+@@ -16,7 +16,8 @@ LIBSECRET_CONF_OPT = --disable-manpages --disable-strict --disable-coverage --en
  
--MPD_VERSION = 0.17.4
-+MPD_VERSION = 0.17.5
- MPD_SITE = http://www.musicpd.org/download/mpd/stable
- MPD_DEPENDENCIES = host-pkgconf libglib2
- MPD_LICENSE = GPLv2
+ ifeq ($(BR2_PACKAGE_LIBGCRYPT),y)
+ 	LIBSECRET_DEPENDENCIES += libgcrypt
+-	LIBSECRET_CONF_OPT += --enable-gcrypt
++	LIBSECRET_CONF_OPT += --enable-gcrypt \
++		--with-libgcrypt-prefix=$(STAGING_DIR)/usr
+ else
+ 	LIBSECRET_CONF_OPT += --disable-gcrypt
+ endif
