@@ -1,30 +1,39 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue,  3 Sep 2013 08:14:23 -0300
-Subject: [Buildroot] [PATCH] mpd: bump to version 0.17.5
-Message-ID: <1378206863-31159-1-git-send-email-gustavo@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 3 Sep 2013 13:31:45 +0200
+Subject: [Buildroot] GTK+ for framebuffer?
+In-Reply-To: <20130903100905.GA324@zuhnb712.ap.bm.net>
+References: <20130903100905.GA324@zuhnb712.ap.bm.net>
+Message-ID: <20130903133145.370bb2d4@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/multimedia/mpd/mpd.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Dear Woody Wu,
 
-diff --git a/package/multimedia/mpd/mpd.mk b/package/multimedia/mpd/mpd.mk
-index 4424b7e..95e18f7 100644
---- a/package/multimedia/mpd/mpd.mk
-+++ b/package/multimedia/mpd/mpd.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MPD_VERSION = 0.17.4
-+MPD_VERSION = 0.17.5
- MPD_SITE = http://www.musicpd.org/download/mpd/stable
- MPD_DEPENDENCIES = host-pkgconf libglib2
- MPD_LICENSE = GPLv2
+On Tue, 3 Sep 2013 18:09:06 +0800, Woody Wu wrote:
+
+> It seems buildroot already has GTK.  Does it can build GTK+ for running
+> on framebuffer (a.k.a, gtkfb)?
+
+There used to be a DirectFB backend in Gtk, but it was always broken,
+because nobody was maintaining it (in Gtk upstream). It was causing too
+many problems in Buildroot to keep the support for such a broken
+feature, so we removed it. People interested in running Gtk on DirectFB
+should work with upstream to fix the issues and get the corresponding
+patches merged.
+
+These days, if you want to run Gtk, you should run X.org (which can run
+on top of the framebuffer), or maybe you can explore Wayland (but I
+guess it'll require Gtk 3.x, while we only have Gtk 2.x in Buildroot
+for the moment).
+
+Best regards,
+
+Thomas
 -- 
-1.8.1.5
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
