@@ -1,37 +1,51 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 03 Sep 2013 17:06:17 +0200
-Subject: [Buildroot] [PATCH 2 of 9 v4] Config.in.legacy: update
-	description for users
-In-Reply-To: <20130903135209.3b1ea8f5@skate> (Thomas Petazzoni's message of
- "Tue, 3 Sep 2013 13:52:09 +0200")
-References: <patchbomb.1378152469@argentina>
- <ac4d080274a06689e8d4.1378152471@argentina>
- <20130902225514.7d9323cc@skate> <52257EA4.9030001@mind.be>
- <20130903091818.616d6665@skate>
- <CAAXf6LWNRK1fZMQfMU5w52NzgyG+HL1VbXPU1o5FuFQ+eNBFEA@mail.gmail.com>
- <20130903135209.3b1ea8f5@skate>
-Message-ID: <87ob8a54ie.fsf@dell.be.48ers.dk>
+From: Axel Lin <axel.lin@ingics.com>
+Date: Wed, 04 Sep 2013 00:20:50 +0800
+Subject: [Buildroot] Why elf2flt is built *after* busybox
+Message-ID: <1378225250.11000.4.camel@phoenix>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+Hi,
+Just enable elf2flt and start build.
+From the build log I found the build system build busybox before elf2flt.
+Is this normal?
+I thought elf2flt needs to be ready before building other packages?
 
+Below shows my package build order:
 
- Thomas> So far, the only problem I see with this are related to minimal
- Thomas> defconfigs. In the case (1) above, the minimal defconfig will continue
- Thomas> to contain the name of the legacy option, and not the name of the new
- Thomas> option, since the new option is selected by the legacy option. This is
- Thomas> annoying since it means minimal defconfigs are not progressively
- Thomas> updated to use the new option name. And this probably makes my entire
- Thomas> proposal moot.
+$ grep "_installed" mylog 
+touch /opt/test/buildroot/buildroot/output/build/host-binutils-2.21.1/.stamp_host_installed
+touch /opt/test/buildroot/buildroot/output/build/host-m4-1.4.16/.stamp_host_installed
+touch /opt/test/buildroot/buildroot/output/build/host-gmp-5.1.2/.stamp_host_installed
+touch /opt/test/buildroot/buildroot/output/build/host-mpfr-3.1.2/.stamp_host_installed
+touch /opt/test/buildroot/buildroot/output/build/host-libtool-2.4.2/.stamp_host_installed
+touch /opt/test/buildroot/buildroot/output/build/host-autoconf-2.69/.stamp_host_installed
+touch /opt/test/buildroot/buildroot/output/build/host-automake-1.11.6/.stamp_host_installed
+touch /opt/test/buildroot/buildroot/output/build/host-mpc-1.0.1/.stamp_host_installed
+touch /opt/test/buildroot/buildroot/output/build/host-gcc-initial-4.5.4/.stamp_host_installed
+touch /opt/test/buildroot/buildroot/output/build/linux-headers-3.10.10/.stamp_staging_installed
+touch /opt/test/buildroot/buildroot/output/build/linux-headers-3.10.10/.stamp_target_installed
+touch /opt/test/buildroot/buildroot/output/build/host-gcc-intermediate-4.5.4/.stamp_host_installed
+touch /opt/test/buildroot/buildroot/output/build/uclibc-0.9.33.2/.stamp_staging_installed
+touch /opt/test/buildroot/buildroot/output/build/uclibc-0.9.33.2/.stamp_target_installed
+touch /opt/test/buildroot/buildroot/output/build/host-gcc-final-4.5.4/.stamp_host_installed
+touch /opt/test/buildroot/buildroot/output/build/busybox-1.21.1/.stamp_target_installed
+touch /opt/test/buildroot/buildroot/output/build/host-pkgconf-0.8.9/.stamp_host_installed
+touch /opt/test/buildroot/buildroot/output/build/host-e2fsprogs-1.42.8/.stamp_host_installed
+touch /opt/test/buildroot/buildroot/output/build/host-zlib-1.2.8/.stamp_host_installed
+touch /opt/test/buildroot/buildroot/output/build/host-elf2flt-cvs/.stamp_host_installed
+touch /opt/test/buildroot/buildroot/output/build/host-genext2fs-1.4.1/.stamp_host_installed
+touch /opt/test/buildroot/buildroot/output/build/host-fakeroot-1.18.2/.stamp_host_installed
+touch /opt/test/buildroot/buildroot/output/build/host-makedevs-undefined/.stamp_host_installed
 
-Damn, yes :/
+Just not sure if it is related to the message shows in the end of
+output/build/busybox-1.21.1/busybox_unstripped.out:
+(looks like ld does not recognize -elf2flt )
 
-So people really do need to explictly change to the new option / restart
-make menuconfig.
+/opt/test/buildroot/buildroot/output/host/usr/lib/gcc/arm-buildroot-uclinux-uclibcgnueabi/4.5.4/../../../../arm-buildroot-uclinux-uclibcgnueabi/bin/ld: warning: cannot find entry symbol lf2flt=-s65535; defaulting to 00000000000080ac
 
--- 
-Bye, Peter Korsgaard
+Regards,
+Axel
