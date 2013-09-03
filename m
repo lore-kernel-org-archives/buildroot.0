@@ -1,67 +1,43 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 3 Sep 2013 23:45:03 +0200
-Subject: [Buildroot] [git commit] pcre: fix C++ static build problem
-Message-ID: <20130903222437.463779B6DC@busybox.osuosl.org>
+Date: Wed, 4 Sep 2013 00:16:50 +0200
+Subject: [Buildroot] [git commit] netplug: properly install init.d script.
+Message-ID: <20130903222437.518A29AF97@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e2b3d5909d909970c85cbc339e17dbfe09cb3197
+commit: http://git.buildroot.net/buildroot/commit/?id=2e20d072ae2ceef8d5b54022616c8f6bcd194e7f
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-PCRE C++ unit tests fails to build properly for static scenarios since
-it's not taken account for properly in the build system.
-Just disable them, they're never installed to the target.
-Fixes:
-http://autobuild.buildroot.net/results/970/97027b981659502ff12c345c3caef4933cddb354/
+Looks like this was lost in 20d4792e.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+[Peter: use _INSTALL_INIT_SYSV, explicitly delete script on uninstall]
+Signed-off-by: Peter Sanford <psanford@nearbuysystems.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- ...cre-no-compat.patch => pcre-01-no-compat.patch} |    0
- package/pcre/pcre-02-no-cpp-tests.patch            |   31 ++++++++++++++++++++
- 2 files changed, 31 insertions(+), 0 deletions(-)
+ package/netplug/netplug.mk |    7 ++++++-
+ 1 files changed, 6 insertions(+), 1 deletions(-)
 
-diff --git a/package/pcre/pcre-no-compat.patch b/package/pcre/pcre-01-no-compat.patch
-similarity index 100%
-rename from package/pcre/pcre-no-compat.patch
-rename to package/pcre/pcre-01-no-compat.patch
-diff --git a/package/pcre/pcre-02-no-cpp-tests.patch b/package/pcre/pcre-02-no-cpp-tests.patch
-new file mode 100644
-index 0000000..0255028
---- /dev/null
-+++ b/package/pcre/pcre-02-no-cpp-tests.patch
-@@ -0,0 +1,31 @@
-+Disable PCRE C++ unit tests, they fail to build on static scenarios
-+and they're not installed.
+diff --git a/package/netplug/netplug.mk b/package/netplug/netplug.mk
+index fbc7a2d..fdb1937 100644
+--- a/package/netplug/netplug.mk
++++ b/package/netplug/netplug.mk
+@@ -16,10 +16,15 @@ define NETPLUG_INSTALL_TARGET_CMDS
+ 	$(MAKE) DESTDIR=$(TARGET_DIR) -C $(@D) install
+ endef
+ 
++define NETPLUG_INSTALL_INIT_SYSV
++	$(INSTALL) -m 0755 -D package/netplug/S29netplug \
++		$(TARGET_DIR)/etc/init.d/S29netplug
++endef
 +
-+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+
-+diff -Nura pcre-8.33.orig/Makefile.in pcre-8.33/Makefile.in
-+--- pcre-8.33.orig/Makefile.in	2013-05-28 06:09:27.000000000 -0300
-++++ pcre-8.33/Makefile.in	2013-09-03 11:28:28.398198832 -0300
-+@@ -123,12 +123,6 @@
-+ @WITH_PCRE8_TRUE at am__append_20 = libpcreposix.la
-+ @WITH_GCOV_TRUE@@WITH_PCRE8_TRUE at am__append_21 = $(GCOV_CFLAGS)
-+ @WITH_PCRE_CPP_TRUE at am__append_22 = libpcrecpp.la
-+- at WITH_PCRE_CPP_TRUE@am__append_23 = pcrecpp_unittest \
-+- at WITH_PCRE_CPP_TRUE@	pcre_scanner_unittest \
-+- at WITH_PCRE_CPP_TRUE@	pcre_stringpiece_unittest
-+- at WITH_PCRE_CPP_TRUE@am__append_24 = pcrecpp_unittest \
-+- at WITH_PCRE_CPP_TRUE@	pcre_scanner_unittest \
-+- at WITH_PCRE_CPP_TRUE@	pcre_stringpiece_unittest
-+ @WITH_GCOV_TRUE@@WITH_PCRE_CPP_TRUE at am__append_25 = $(GCOV_CXXFLAGS)
-+ @WITH_GCOV_TRUE@@WITH_PCRE_CPP_TRUE at am__append_26 = $(GCOV_LIBS)
-+ @WITH_GCOV_TRUE@@WITH_PCRE_CPP_TRUE at am__append_27 = $(GCOV_LIBS)
-+@@ -360,9 +354,6 @@
-+ @WITH_PCRE8_TRUE at am__EXEEXT_1 = pcregrep$(EXEEXT)
-+ @WITH_REBUILD_CHARTABLES_TRUE at am__EXEEXT_2 = dftables$(EXEEXT)
-+ @WITH_JIT_TRUE at am__EXEEXT_3 = pcre_jit_test$(EXEEXT)
-+- at WITH_PCRE_CPP_TRUE@am__EXEEXT_4 = pcrecpp_unittest$(EXEEXT) \
-+- at WITH_PCRE_CPP_TRUE@	pcre_scanner_unittest$(EXEEXT) \
-+- at WITH_PCRE_CPP_TRUE@	pcre_stringpiece_unittest$(EXEEXT)
-+ PROGRAMS = $(bin_PROGRAMS) $(noinst_PROGRAMS)
-+ am__dftables_SOURCES_DIST = dftables.c
-+ @WITH_REBUILD_CHARTABLES_TRUE at am_dftables_OBJECTS =  \
+ define NETPLUG_UNINSTALL_TARGET_CMDS
+ 	rm -f $(TARGET_DIR)/sbin/netplugd
+ 	rm -rf $(TARGET_DIR)/etc/netplug*
+-	rm -f $(TARGET_DIR)/etc/init.d/S*netplug
++	rm -f $(TARGET_DIR)/etc/init.d/S29netplug
+ endef
+ 
+ define NETPLUG_CLEAN_CMDS
