@@ -1,38 +1,43 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 3 Sep 2013 16:38:22 +0200
-Subject: [Buildroot] [git commit] libsecret: specify where libgcrypt lives
-Message-ID: <20130903144123.1570E9B6DB@busybox.osuosl.org>
+Date: Tue, 3 Sep 2013 16:39:29 +0200
+Subject: [Buildroot] [git commit] libcec: needs wchar
+Message-ID: <20130903144123.1CCD09A2C8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c19bf136bdfcf943f2443c45e4452fba060d19d8
+commit: http://git.buildroot.net/buildroot/commit/?id=3d2001f2871a85891e216fbc9ad894f5c671c1c1
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-When libgcrypt support is enabled the configure script will try to
-find libgcrypt-config in the PATH. If the host distribution has it then
-brokeness ensues. Fixes:
-http://autobuild.buildroot.net/results/eca/eca10b8360354e7e51406f7ac942d343987bde5e/
+Fixes:
+http://autobuild.buildroot.net/results/dae/dae6ec4f75b2aeb793b88567f48d94b07a6a59da/
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/libsecret/libsecret.mk |    3 ++-
- 1 files changed, 2 insertions(+), 1 deletions(-)
+ package/libcec/Config.in |    6 ++++--
+ 1 files changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/package/libsecret/libsecret.mk b/package/libsecret/libsecret.mk
-index e445ea6..a0f39f8 100644
---- a/package/libsecret/libsecret.mk
-+++ b/package/libsecret/libsecret.mk
-@@ -16,7 +16,8 @@ LIBSECRET_CONF_OPT = --disable-manpages --disable-strict --disable-coverage --en
+diff --git a/package/libcec/Config.in b/package/libcec/Config.in
+index 7a67952..256c6d6 100644
+--- a/package/libcec/Config.in
++++ b/package/libcec/Config.in
+@@ -2,6 +2,7 @@ config BR2_PACKAGE_LIBCEC
+ 	bool "libcec"
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_USE_WCHAR
+ 	help
+ 	  libcec allows you in combination with the right hardware to
+ 	  control your home theater devices with your TV remote
+@@ -9,5 +10,6 @@ config BR2_PACKAGE_LIBCEC
  
- ifeq ($(BR2_PACKAGE_LIBGCRYPT),y)
- 	LIBSECRET_DEPENDENCIES += libgcrypt
--	LIBSECRET_CONF_OPT += --enable-gcrypt
-+	LIBSECRET_CONF_OPT += --enable-gcrypt \
-+		--with-libgcrypt-prefix=$(STAGING_DIR)/usr
- else
- 	LIBSECRET_CONF_OPT += --disable-gcrypt
- endif
+ 	  http://libcec.pulse-eight.com
+ 
+-comment "libcec requires C++ and threading support in toolchain"
+-	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
++comment "libcec requires C++, WCHAR and threading support in toolchain"
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
++		!BR2_USE_WCHAR
