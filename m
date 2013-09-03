@@ -1,41 +1,49 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue,  3 Sep 2013 15:41:55 -0300
-Subject: [Buildroot] [PATCH 2/2] linux: switch to 3.11.x series
-In-Reply-To: <1378233715-7812-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1378233715-7812-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1378233715-7812-2-git-send-email-gustavo@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 3 Sep 2013 21:16:40 +0200
+Subject: [Buildroot] [PATCH 1/1] netplug: properly install init.d script.
+In-Reply-To: <1378228974-3369-1-git-send-email-psanford@nearbuysystems.com>
+References: <1378228974-3369-1-git-send-email-psanford@nearbuysystems.com>
+Message-ID: <20130903211640.14902850@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- linux/Config.in | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Dear Peter Sanford,
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 49c4b5c..7864f65 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -21,7 +21,7 @@ choice
- 	prompt "Kernel version"
- 
- config BR2_LINUX_KERNEL_LATEST_VERSION
--	bool "3.10.10"
-+	bool "3.11"
- 
- config BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	bool "Same as toolchain kernel headers"
-@@ -75,7 +75,7 @@ config BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION
- 
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "3.10.10" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "3.11" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default BR2_DEFAULT_KERNEL_HEADERS if BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE if BR2_LINUX_KERNEL_CUSTOM_VERSION
- 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
+On Tue,  3 Sep 2013 10:22:54 -0700, Peter Sanford wrote:
+> Looks like this was lost in 20d4792e.
+> 
+> Signed-off-by: Peter Sanford <psanford@nearbuysystems.com>
+> ---
+>  package/netplug/netplug.mk |    7 +++++++
+>  1 file changed, 7 insertions(+)
+> 
+> diff --git a/package/netplug/netplug.mk b/package/netplug/netplug.mk
+> index fbc7a2d..36bd3f7 100644
+> --- a/package/netplug/netplug.mk
+> +++ b/package/netplug/netplug.mk
+> @@ -16,6 +16,13 @@ define NETPLUG_INSTALL_TARGET_CMDS
+>  	$(MAKE) DESTDIR=$(TARGET_DIR) -C $(@D) install
+>  endef
+>  
+> +define NETPLUG_INSTALL_INITSCRIPT
+> +	$(INSTALL) -m 0755 -D package/netplug/S29netplug \
+> +		$(TARGET_DIR)/etc/init.d/S29netplug
+> +endef
+> +
+> +NETPLUG_POST_INSTALL_TARGET_HOOKS += NETPLUG_INSTALL_INITSCRIPT
+
+Looks good, but it should use NETPLUG_INSTALL_INIT_SYSV instead. See
+the Buildroot manual for details,
+http://buildroot.org/downloads/manual/manual.html.
+
+Thanks!
+
+Thomas
 -- 
-1.8.1.5
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
