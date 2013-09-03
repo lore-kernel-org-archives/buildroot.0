@@ -1,43 +1,64 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 3 Sep 2013 16:39:29 +0200
-Subject: [Buildroot] [git commit] libcec: needs wchar
-Message-ID: <20130903144123.1CCD09A2C8@busybox.osuosl.org>
+Date: Tue, 3 Sep 2013 16:37:12 +0200
+Subject: [Buildroot] [git commit] libmicrohttpd: bump to version 0.9.30
+Message-ID: <20130903144123.07F219B6DC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3d2001f2871a85891e216fbc9ad894f5c671c1c1
+commit: http://git.buildroot.net/buildroot/commit/?id=b189f2d327abfb2aafa4bb8bcf5a7a605b7381f7
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Fixes:
-http://autobuild.buildroot.net/results/dae/dae6ec4f75b2aeb793b88567f48d94b07a6a59da/
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/libcec/Config.in |    6 ++++--
- 1 files changed, 4 insertions(+), 2 deletions(-)
+ .../libmicrohttpd-01-openssl-conditional.patch     |   20 --------------------
+ package/libmicrohttpd/libmicrohttpd.mk             |    3 +--
+ 2 files changed, 1 insertions(+), 22 deletions(-)
 
-diff --git a/package/libcec/Config.in b/package/libcec/Config.in
-index 7a67952..256c6d6 100644
---- a/package/libcec/Config.in
-+++ b/package/libcec/Config.in
-@@ -2,6 +2,7 @@ config BR2_PACKAGE_LIBCEC
- 	bool "libcec"
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_USE_WCHAR
- 	help
- 	  libcec allows you in combination with the right hardware to
- 	  control your home theater devices with your TV remote
-@@ -9,5 +10,6 @@ config BR2_PACKAGE_LIBCEC
+diff --git a/package/libmicrohttpd/libmicrohttpd-01-openssl-conditional.patch b/package/libmicrohttpd/libmicrohttpd-01-openssl-conditional.patch
+deleted file mode 100644
+index 37d5e1e..0000000
+--- a/package/libmicrohttpd/libmicrohttpd-01-openssl-conditional.patch
++++ /dev/null
+@@ -1,20 +0,0 @@
+-Subject: [PATCH] Fix configure failure for --disable-spdy
+-
+-The @HAVE_OPENSSL@ conditional is used in src/Makefile.in so when SPDY
+-support is forcibly disabled the AM_CONDITIONAL is never executed, causing
+-configure to bail out.
+-
+-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+-
+-diff -Nura libmicrohttpd-0.9.29.orig/configure.ac libmicrohttpd-0.9.29/configure.ac
+---- libmicrohttpd-0.9.29.orig/configure.ac	2013-09-02 06:17:44.660620584 -0300
+-+++ libmicrohttpd-0.9.29/configure.ac	2013-09-02 06:36:44.598189751 -0300
+-@@ -341,6 +341,8 @@
+-                    enable_spdy="yes"], 
+-                    [AM_CONDITIONAL(HAVE_OPENSSL, false)
+-                    enable_spdy="no"])
+-+else
+-+ AM_CONDITIONAL(HAVE_OPENSSL, false)
+- fi
+- 
+- if test "$enable_spdy" = "yes"
+diff --git a/package/libmicrohttpd/libmicrohttpd.mk b/package/libmicrohttpd/libmicrohttpd.mk
+index d0501ee..48dace7 100644
+--- a/package/libmicrohttpd/libmicrohttpd.mk
++++ b/package/libmicrohttpd/libmicrohttpd.mk
+@@ -4,12 +4,11 @@
+ #
+ ################################################################################
  
- 	  http://libcec.pulse-eight.com
+-LIBMICROHTTPD_VERSION = 0.9.29
++LIBMICROHTTPD_VERSION = 0.9.30
+ LIBMICROHTTPD_SITE = $(BR2_GNU_MIRROR)/libmicrohttpd
+ LIBMICROHTTPD_LICENSE_FILES = COPYING
+ LIBMICROHTTPD_INSTALL_STAGING = YES
+ LIBMICROHTTPD_CONF_OPT = --disable-spdy
+-LIBMICROHTTPD_AUTORECONF = YES
  
--comment "libcec requires C++ and threading support in toolchain"
--	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
-+comment "libcec requires C++, WCHAR and threading support in toolchain"
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
-+		!BR2_USE_WCHAR
+ ifeq ($(BR2_PACKAGE_LIBMICROHTTPD_SSL),y)
+ LIBMICROHTTPD_LICENSE = LGPLv2.1+
