@@ -1,37 +1,37 @@
-From: Peter Sanford <psanford@nearbuysystems.com>
-Date: Tue,  3 Sep 2013 10:22:54 -0700
-Subject: [Buildroot] [PATCH 1/1] netplug: properly install init.d script.
-Message-ID: <1378228974-3369-1-git-send-email-psanford@nearbuysystems.com>
+From: Michael Rommel <rommel@layer-7.net>
+Date: Tue, 3 Sep 2013 20:04:47 +0200
+Subject: [Buildroot] [PATCH 3/3] python-pyzmq: new package
+In-Reply-To: <5224B4DB.6060903@mind.be>
+References: <1378071216-19697-1-git-send-email-rommel@layer-7.net>
+ <1378071216-19697-3-git-send-email-rommel@layer-7.net>
+ <CAAXf6LW=8rf6ScMS0t95f2cDWT4sLxYnMZAnzCYoEQzPVtkKGA@mail.gmail.com>
+ <5224B4DB.6060903@mind.be>
+Message-ID: <9DACF022-3037-49C2-ACB9-7187991A4EFA@layer-7.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Looks like this was lost in 20d4792e.
+On Sep 2, 2013, at 17:55 , Arnout Vandecappelle <arnout@mind.be> wrote:
+> On 09/02/13 10:24, Thomas De Schampheleire wrote:
 
-Signed-off-by: Peter Sanford <psanford@nearbuysystems.com>
----
- package/netplug/netplug.mk |    7 +++++++
- 1 file changed, 7 insertions(+)
+Hi Arnout and Thomas,
 
-diff --git a/package/netplug/netplug.mk b/package/netplug/netplug.mk
-index fbc7a2d..36bd3f7 100644
---- a/package/netplug/netplug.mk
-+++ b/package/netplug/netplug.mk
-@@ -16,6 +16,13 @@ define NETPLUG_INSTALL_TARGET_CMDS
- 	$(MAKE) DESTDIR=$(TARGET_DIR) -C $(@D) install
- endef
+I incorporated all your suggestions here and some additional changes I saw myself:
+ - added host-python dependency
+ - removed mentioning of minimum zeromq version needed
+ - combined comments for dependencies on IPv6 and WCHAR
+ - fixed naming of the patch hook
+ - used $(PYTHON_DIR) - although for the heck of me I could not find out, where this is defined :-(
+ - changed depends on PYTHON from select (actually, I got it wrong, using the select gave the cyclic dependency :-()
+ - named the package, bool and filenames consistently python-pyzmq
  
-+define NETPLUG_INSTALL_INITSCRIPT
-+	$(INSTALL) -m 0755 -D package/netplug/S29netplug \
-+		$(TARGET_DIR)/etc/init.d/S29netplug
-+endef
-+
-+NETPLUG_POST_INSTALL_TARGET_HOOKS += NETPLUG_INSTALL_INITSCRIPT
-+
- define NETPLUG_UNINSTALL_TARGET_CMDS
- 	rm -f $(TARGET_DIR)/sbin/netplugd
- 	rm -rf $(TARGET_DIR)/etc/netplug*
+Patch will come in some minutes.
+
+Cheers,
+
+   Michael.
+
 -- 
-1.7.9.5
+Michael Rommel, Erlangen, Germany
