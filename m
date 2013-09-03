@@ -1,41 +1,37 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 3 Sep 2013 19:34:17 +0200
-Subject: [Buildroot] Why elf2flt is built *after* busybox
-In-Reply-To: <1378225250.11000.4.camel@phoenix>
-References: <1378225250.11000.4.camel@phoenix>
-Message-ID: <20130903193417.1a092fd5@skate>
+From: Peter Sanford <psanford@nearbuysystems.com>
+Date: Tue,  3 Sep 2013 10:22:54 -0700
+Subject: [Buildroot] [PATCH 1/1] netplug: properly install init.d script.
+Message-ID: <1378228974-3369-1-git-send-email-psanford@nearbuysystems.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Axel Lin,
+Looks like this was lost in 20d4792e.
 
-On Wed, 04 Sep 2013 00:20:50 +0800, Axel Lin wrote:
+Signed-off-by: Peter Sanford <psanford@nearbuysystems.com>
+---
+ package/netplug/netplug.mk |    7 +++++++
+ 1 file changed, 7 insertions(+)
 
-> Just enable elf2flt and start build.
-> From the build log I found the build system build busybox before
-> elf2flt. Is this normal?
-> I thought elf2flt needs to be ready before building other packages?
-
-Because elf2flt support is broken and someone needs to fix it. You've
-already sent several e-mails about this. Gustavo Zacarias is working on
-improving the elf2flt, but on a spare time basis, so it's progressing
-as time and motivation permits.
-
-Sorry to be a bit rude, but if you want things to move forward faster,
-either send patches to fix the problems and get the thing working, or
-hire someone to do this work for you. I'm sure ARM noMMU support in
-Buildroot will improve, because there are more and more Cortex-M
-systems that are capable of running Linux, but it's not something that
-is currently well supported in Buildroot.
-
-Best regards,
-
-Thomas
+diff --git a/package/netplug/netplug.mk b/package/netplug/netplug.mk
+index fbc7a2d..36bd3f7 100644
+--- a/package/netplug/netplug.mk
++++ b/package/netplug/netplug.mk
+@@ -16,6 +16,13 @@ define NETPLUG_INSTALL_TARGET_CMDS
+ 	$(MAKE) DESTDIR=$(TARGET_DIR) -C $(@D) install
+ endef
+ 
++define NETPLUG_INSTALL_INITSCRIPT
++	$(INSTALL) -m 0755 -D package/netplug/S29netplug \
++		$(TARGET_DIR)/etc/init.d/S29netplug
++endef
++
++NETPLUG_POST_INSTALL_TARGET_HOOKS += NETPLUG_INSTALL_INITSCRIPT
++
+ define NETPLUG_UNINSTALL_TARGET_CMDS
+ 	rm -f $(TARGET_DIR)/sbin/netplugd
+ 	rm -rf $(TARGET_DIR)/etc/netplug*
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+1.7.9.5
