@@ -1,43 +1,64 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue,  3 Sep 2013 10:51:35 -0300
-Subject: [Buildroot] [PATCH] libcec: needs wchar
-In-Reply-To: <buildroot@busybox.net>
-References: <buildroot@busybox.net>
-Message-ID: <1378216295-6264-1-git-send-email-gustavo@zacarias.com.ar>
+From: Markos Chandras <markos.chandras@gmail.com>
+Date: Tue, 3 Sep 2013 14:59:45 +0100
+Subject: [Buildroot] [pull request] webkit: Version bump to 1.11.5
+Message-ID: <CAG2jQ8gLL4NdmHcFA=ELMbFfHY1oGPGaXkvSaPk66sesh-0+6w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-http://autobuild.buildroot.net/results/dae/dae6ec4f75b2aeb793b88567f48d94b07a6a59da/
+Hi,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/libcec/Config.in | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+The following pull request bumps webkit to 1.11.5. A few upstream
+patches are necessary to
+make it work properly. It also restores the build on MIPS which is
+currently (1.9.6 and 1.11.5)
+broken due to missing assembly functions. The following patches have been
+applied:
 
-diff --git a/package/libcec/Config.in b/package/libcec/Config.in
-index 7a67952..256c6d6 100644
---- a/package/libcec/Config.in
-+++ b/package/libcec/Config.in
-@@ -2,6 +2,7 @@ config BR2_PACKAGE_LIBCEC
- 	bool "libcec"
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_USE_WCHAR
- 	help
- 	  libcec allows you in combination with the right hardware to
- 	  control your home theater devices with your TV remote
-@@ -9,5 +10,6 @@ config BR2_PACKAGE_LIBCEC
- 
- 	  http://libcec.pulse-eight.com
- 
--comment "libcec requires C++ and threading support in toolchain"
--	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
-+comment "libcec requires C++, WCHAR and threading support in toolchain"
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
-+		!BR2_USE_WCHAR
+- upstream fix for 32-bit autotools
+- upstream fix for conditional gstreamer build of gtklauncher
+- upstream fix for detecting the latest harfbuzz
+- Update existing patch for disabling docs
+- Update existing patch for execinfo_h
+- upstream patch for the MIPS DFG support. This fixes
+compilation problems on MIPS.
+
+The patch was tested with MIPS32r2, x86_64 and ARM cortex-a9 configurations.
+
+The following changes since commit b7c0041c31754a5679eb0a3e4bcf41f80d473ae2:
+
+  kmod: does not support static builds (2013-09-02 23:22:14 +0200)
+
+are available in the git repository at:
+
+  https://github.com/hwoarang/buildroot.git webkit
+
+for you to fetch changes up to 26a8323eeed2a3cea5b53917565d4a23d7aa0889:
+
+  webkit: Version bump to 1.11.5 (2013-09-03 13:19:32 +0100)
+
+----------------------------------------------------------------
+Markos Chandras (1):
+      webkit: Version bump to 1.11.5
+
+ package/webkit/Config.in                                   |   13 +-
+ package/webkit/webkit-build-fix-for-32-bit-autotools.patch |   34 +++
+ package/webkit/webkit-build-fix-for-gtklauncher.patch      |   51 ++++
+ package/webkit/webkit-detect-harfbuzz-icu.patch            |   28 +++
+ package/webkit/webkit-disable-docrebase.patch              |   13 +-
+ package/webkit/webkit-execinfo_h.patch                     |   20 +-
+ package/webkit/webkit-mips-dfg.patch                       | 1490
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ package/webkit/webkit.mk                                   |   18 +-
+ 8 files changed, 1637 insertions(+), 30 deletions(-)
+ create mode 100644 package/webkit/webkit-build-fix-for-32-bit-autotools.patch
+ create mode 100644 package/webkit/webkit-build-fix-for-gtklauncher.patch
+ create mode 100644 package/webkit/webkit-detect-harfbuzz-icu.patch
+ create mode 100644 package/webkit/webkit-mips-dfg.patch
+
+
 -- 
-1.8.1.5
+Regards,
+Markos Chandras
