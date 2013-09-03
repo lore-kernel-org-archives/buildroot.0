@@ -1,95 +1,183 @@
-From: =?UTF-8?Q?J=C3=A9r=C3=B4me_Pouiller?= <jezz@sysmic.org>
-Date: Tue, 03 Sep 2013 10:15:55 +0200
-Subject: [Buildroot] Build reproducibility
-In-Reply-To: <87r4d6775s.fsf@dell.be.48ers.dk>
-References: <1377851505-23498-1-git-send-email-jezz@sysmic.org>
- <CAAXf6LVmyWojaBTfpTpZsNcXr+bCSkFMT__iYQjTAvO9ryEqnw@mail.gmail.com>
- <2d076e17ea7c855166044994876e2add@sysmic.org>
- <20130830145254.1e5a1f53@skate>
- <CAAXf6LVPfKZP+3k1AfXek28Y6bgVwxbJ4iPYRq6nihry=egaig@mail.gmail.com>
- <5224B8C9.7060609@mind.be> <87r4d6775s.fsf@dell.be.48ers.dk>
-Message-ID: <e9a540ee2cb82c94c8fa139d228bcde0@sysmic.org>
+From: =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= <jezz@sysmic.org>
+Date: Tue,  3 Sep 2013 10:45:41 +0200
+Subject: [Buildroot] [PATCH v2] Fix build reproducibility in Make 3.82
+In-Reply-To: <52257E0D.3000100@mind.be>
+References: <52257E0D.3000100@mind.be>
+Message-ID: <1378197941-30752-1-git-send-email-jezz@sysmic.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2013-09-03 08:26, Peter Korsgaard wrote:
->>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
->
-> Hi,
->
->  Arnout>  What is much more likely to happen is that there is some 
-> optional
->  Arnout> dependency in the package's configure or build system that 
-> is not
->  Arnout> expressed in Config.in or pkg.mk. Most reviewers do not run 
-> a
->  Arnout> configure --help', and even then it is easy to miss 
-> something. Since
->  Arnout> the dependency is optional, the build will not fail either 
-> way. Only,
->  Arnout> when user A builds it, TLS support is included, but when 
-> user B builds
->  Arnout> it, it is not... That's the kind of lack of reproducability 
-> we really
->  Arnout> need to avoid.
->
-> Indeed.
->
->  Arnout>  Note that doing more randomized build order in the 
-> autobuilder also
->  Arnout> will not capture the latter scenario. You would have to 
-> compare the
->  Arnout> build result - but binary differences are likely because of 
-> changing
->  Arnout> timestamps or changing optimizations depending on memory 
-> randomness.
->
-> Exactly. I don't have any good ideas about how to detect this 
-> (besides
-> building all packages in clean staging dirs, E.G. only populated with
-> its explicit dependencies like afaik OE lite can do, but that would
-> require quite some work), anyone?
+Make 3.82 do not sort anymore result of wildcards (see
+http://comments.gmane.org/gmane.comp.gnu.make.bugs/4260). This may break
+build reproducibility.
 
-I may have an idea to detect cases where a package has a non declared 
-dependency.
+This patch sort results of wildcards to ensure reproducibility.
 
-Inotify may help us to know which files are accessed during build of 
-one package.
-Especially, we can know which files in staging/ are accessed. If we 
-knew which
-package own which file under staging and we may find what are 
-dependencies
-of a package
+Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
+---
+ V2:
+    Add forgotten file support/dependencies/dependencies.mk. Even if it
+    does not make difference for the build result, I prefer to be 
+    consistent.
 
-I already made a system to monitor which files are installed by each
-package 
-(http://comments.gmane.org/gmane.comp.lib.uclibc.buildroot/53094). It
-may be adapted to detect owner of staging/ files
+ Makefile                               |    2 +-
+ boot/common.mk                         |    2 +-
+ docs/manual/manual.mk                  |    2 +-
+ fs/common.mk                           |    2 +-
+ linux/linux.mk                         |    2 +-
+ package/efl/efl.mk                     |    2 +-
+ package/freescale-imx/freescale-imx.mk |    2 +-
+ package/gcc/gcc.mk                     |    2 +-
+ package/gtk2-themes/gtk2-themes.mk     |    2 +-
+ package/matchbox/matchbox.mk           |    2 +-
+ package/opengl/opengl.mk               |    2 +-
+ package/qt5/qt5.mk                     |    2 +-
+ package/x11r7/x11r7.mk                 |    2 +-
+ support/dependencies/dependencies.mk   |    2 +-
+ 14 files changed, 14 insertions(+), 14 deletions(-)
 
-So, process would be:
-
-   make allyespackageconfig
-   make        # And monitor which package create which file in staging/
-   for PKG in $PACKAGES[@]; do
-      make $PKG-dirclean
-      make $PKG # And monitor which files are accessed in staging/
-      # process result to get $PKG dependencies
-   done
-
-It would not fix automatically the problem, but an autobuilder may send
-notifications. Inotify instrumentation may stay in a separate patch or 
-branch
-to not be intrusive in Buildroot.
-
-Do you think it would be useful?
-
-(I will not have enough time to implement this until end of October, at
-least)
-
+diff --git a/Makefile b/Makefile
+index 09faeba..f547af5 100644
+--- a/Makefile
++++ b/Makefile
+@@ -333,7 +333,7 @@ ifneq ($(PACKAGE_OVERRIDE_FILE),)
+ -include $(PACKAGE_OVERRIDE_FILE)
+ endif
+ 
+-include package/*/*.mk
++include $(sort $(wildcard package/*/*.mk))
+ 
+ include boot/common.mk
+ include linux/linux.mk
+diff --git a/boot/common.mk b/boot/common.mk
+index b315fe8..3021e51 100644
+--- a/boot/common.mk
++++ b/boot/common.mk
+@@ -1 +1 @@
+-include boot/*/*.mk
++include $(sort $(wildcard boot/*/*.mk))
+diff --git a/docs/manual/manual.mk b/docs/manual/manual.mk
+index 4906bc8..bcbedad 100644
+--- a/docs/manual/manual.mk
++++ b/docs/manual/manual.mk
+@@ -53,5 +53,5 @@ $(1)-clean:
+ .PHONY: $(1) $(1)-clean manual-update-lists
+ endef
+ 
+-MANUAL_SOURCES = $(wildcard docs/manual/*.txt) $(wildcard docs/images/*)
++MANUAL_SOURCES = $(sort $(wildcard docs/manual/*.txt) $(wildcard docs/images/*))
+ $(eval $(call GENDOC,manual))
+diff --git a/fs/common.mk b/fs/common.mk
+index 36da2dd..4dab7ea 100644
+--- a/fs/common.mk
++++ b/fs/common.mk
+@@ -94,4 +94,4 @@ define ROOTFS_TARGET
+ $(call ROOTFS_TARGET_INTERNAL,$(1),$(call UPPERCASE,$(1)))
+ endef
+ 
+-include fs/*/*.mk
++include $(sort $(wildcard fs/*/*.mk))
+diff --git a/linux/linux.mk b/linux/linux.mk
+index 025fd51..8508a54 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -281,7 +281,7 @@ define LINUX_INSTALL_TARGET_CMDS
+ 	$(LINUX_INSTALL_HOST_TOOLS)
+ endef
+ 
+-include linux/linux-ext-*.mk
++include $(sort $(wildcard linux/linux-ext-*.mk))
+ 
+ $(eval $(generic-package))
+ 
+diff --git a/package/efl/efl.mk b/package/efl/efl.mk
+index f284c93..1de68cf 100644
+--- a/package/efl/efl.mk
++++ b/package/efl/efl.mk
+@@ -1,3 +1,3 @@
+ EFL_VERSION = 1.7.7
+ 
+-include package/efl/*/*.mk
++include $(sort $(wildcard package/efl/*/*.mk))
+diff --git a/package/freescale-imx/freescale-imx.mk b/package/freescale-imx/freescale-imx.mk
+index 9f63ce3..c8f99b6 100644
+--- a/package/freescale-imx/freescale-imx.mk
++++ b/package/freescale-imx/freescale-imx.mk
+@@ -9,5 +9,5 @@ FREESCALE_IMX_VERSION = 1.1.0
+ # No official download site from freescale, just this mirror
+ FREESCALE_IMX_MIRROR_SITE   = http://download.ossystems.com.br/bsp/freescale/source
+ 
+-include package/freescale-imx/*/*.mk
++include $(sort $(wildcard package/freescale-imx/*/*.mk))
+ 
+diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
+index cd6efed..66af425 100644
+--- a/package/gcc/gcc.mk
++++ b/package/gcc/gcc.mk
+@@ -215,4 +215,4 @@ HOST_GCC_COMMON_CONF_OPT += \
+ 	--with-long-double-128
+ endif
+ 
+-include package/gcc/*/*.mk
++include $(sort $(wildcard package/gcc/*/*.mk))
+diff --git a/package/gtk2-themes/gtk2-themes.mk b/package/gtk2-themes/gtk2-themes.mk
+index 6f31c6d..fc66698 100644
+--- a/package/gtk2-themes/gtk2-themes.mk
++++ b/package/gtk2-themes/gtk2-themes.mk
+@@ -1 +1 @@
+-include package/gtk2-themes/*/*.mk
++include $(sort $(wildcard package/gtk2-themes/*/*.mk))
+diff --git a/package/matchbox/matchbox.mk b/package/matchbox/matchbox.mk
+index abda915..fff4add 100644
+--- a/package/matchbox/matchbox.mk
++++ b/package/matchbox/matchbox.mk
+@@ -1,4 +1,4 @@
+ ifeq ($(BR2_PACKAGE_MATCHBOX),y)
+-include package/matchbox/*/*.mk
++include $(sort $(wildcard package/matchbox/*/*.mk))
+ TARGETS+=matchbox-lib matchbox-wm
+ endif
+diff --git a/package/opengl/opengl.mk b/package/opengl/opengl.mk
+index 68df3b1..abf96d5 100644
+--- a/package/opengl/opengl.mk
++++ b/package/opengl/opengl.mk
+@@ -1 +1 @@
+-include package/opengl/*/*.mk
++include $(sort $(wildcard package/opengl/*/*.mk))
+diff --git a/package/qt5/qt5.mk b/package/qt5/qt5.mk
+index 9e71c83..fce0ca3 100644
+--- a/package/qt5/qt5.mk
++++ b/package/qt5/qt5.mk
+@@ -1,6 +1,6 @@
+ QT5_VERSION = 5.0.2
+ QT5_SITE = http://download.qt-project.org/archive/qt/5.0/$(QT5_VERSION)/submodules/
+-include package/qt5/*/*.mk
++include $(sort $(wildcard package/qt5/*/*.mk))
+ 
+ define QT5_LA_PRL_FILES_FIXUP
+ 	for i in $$(find $(STAGING_DIR)/usr/lib* -name "libQt5*.la"); do \
+diff --git a/package/x11r7/x11r7.mk b/package/x11r7/x11r7.mk
+index ea0363f..85ecbc5 100644
+--- a/package/x11r7/x11r7.mk
++++ b/package/x11r7/x11r7.mk
+@@ -1 +1 @@
+-include package/x11r7/*/*.mk
++include $(sort $(wildcard package/x11r7/*/*.mk))
+diff --git a/support/dependencies/dependencies.mk b/support/dependencies/dependencies.mk
+index 4a220e0..149b8e5 100644
+--- a/support/dependencies/dependencies.mk
++++ b/support/dependencies/dependencies.mk
+@@ -14,7 +14,7 @@ DEPENDENCIES_HOST_PREREQ :=
+ define suitable-host-package
+ $(shell support/dependencies/check-host-$(1).sh $(2))
+ endef
+--include support/dependencies/check-host-*.mk
++-include $(sort $(wildcard support/dependencies/check-host-*.mk))
+ 
+ ifeq ($(BR2_STRIP_sstrip),y)
+ DEPENDENCIES_HOST_PREREQ+=host-sstrip
 -- 
-J?r?me Pouiller, Sysmic
-Embedded Linux specialist
-http://www.sysmic.fr
+1.7.9.5
