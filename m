@@ -1,57 +1,38 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue,  3 Sep 2013 10:36:45 -0300
-Subject: [Buildroot] [PATCHv2] libusb: build fix for flat binaries
-Message-ID: <1378215405-17885-1-git-send-email-gustavo@zacarias.com.ar>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Tue, 3 Sep 2013 15:28:56 +0200
+Subject: [Buildroot] [git commit] gcc: re-disable info documentation
+Message-ID: <20130903134743.7E6E89B6D9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-http://autobuild.buildroot.net/results/4d1/4d1b9c6132e7836bc2ecab4b1483b80d2e042dcd/
+commit: http://git.buildroot.net/buildroot/commit/?id=09b74417e3de932cdb5a1ab97101434bed9cc989
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+The documentation of older GCC versions (E.G. 4.3.x) contain constructs
+that are no longer accepted by recent (5.x) versions of makeinfo, breaking
+the build.
+
+The documentation isn't really needed, and takes up extra space/build time,
+so work around it by disabling documentation, like we had before the
+conversion of the toolchain to the package infrastructure.
+
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/libusb/libusb-01-uclinux.patch | 30 ++++++++++++++++++++++++++++++
- 1 file changed, 30 insertions(+)
- create mode 100644 package/libusb/libusb-01-uclinux.patch
+ package/gcc/gcc.mk |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-diff --git a/package/libusb/libusb-01-uclinux.patch b/package/libusb/libusb-01-uclinux.patch
-new file mode 100644
-index 0000000..cbf48a7
---- /dev/null
-+++ b/package/libusb/libusb-01-uclinux.patch
-@@ -0,0 +1,30 @@
-+*-uclinux* is valid in the tuple for linux, it's used for flat binaries
-+for example.
-+Patch both configure* for consistency and to avoid an unnecessary autoreconf.
-+
-+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+
-+diff -Nura libusb-1.0.9.orig/configure libusb-1.0.9/configure
-+--- libusb-1.0.9.orig/configure	2013-09-03 10:13:52.212301259 -0300
-++++ libusb-1.0.9/configure	2013-09-03 10:19:08.443669386 -0300
-+@@ -11093,7 +11093,7 @@
-+ { $as_echo "$as_me:${as_lineno-$LINENO}: checking operating system" >&5
-+ $as_echo_n "checking operating system... " >&6; }
-+ case $host in
-+-*-linux*)
-++*-linux* | *-uclinux*)
-+ 	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: Linux" >&5
-+ $as_echo "Linux" >&6; }
-+ 	backend="linux"
-+diff -Nura libusb-1.0.9.orig/configure.ac libusb-1.0.9/configure.ac
-+--- libusb-1.0.9.orig/configure.ac	2013-09-03 10:13:52.212301259 -0300
-++++ libusb-1.0.9/configure.ac	2013-09-03 10:19:00.573411346 -0300
-+@@ -46,7 +46,7 @@
-+ 
-+ AC_MSG_CHECKING([operating system])
-+ case $host in
-+-*-linux*)
-++*-linux* | *-uclinux*)
-+ 	AC_MSG_RESULT([Linux])
-+ 	backend="linux"
-+ 	;;
--- 
-1.8.1.5
+diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
+index cd6efed..782217f 100644
+--- a/package/gcc/gcc.mk
++++ b/package/gcc/gcc.mk
+@@ -97,6 +97,7 @@ HOST_GCC_COMMON_CONF_OPT = \
+ 	--disable-multilib \
+ 	--with-gmp=$(HOST_DIR)/usr \
+ 	--with-mpfr=$(HOST_DIR)/usr \
++	MAKEINFO=missing
+ 
+ # http://gcc.gnu.org/bugzilla/show_bug.cgi?id=43810
+ # Workaround until it's fixed in 4.5.4 or later
