@@ -1,43 +1,41 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 4 Sep 2013 00:16:50 +0200
-Subject: [Buildroot] [git commit] netplug: properly install init.d script.
-Message-ID: <20130903222437.518A29AF97@busybox.osuosl.org>
+Date: Wed, 4 Sep 2013 00:24:22 +0200
+Subject: [Buildroot] [git commit] linux: switch to 3.11.x series
+Message-ID: <20130903222437.7E6989AF97@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=2e20d072ae2ceef8d5b54022616c8f6bcd194e7f
+commit: http://git.buildroot.net/buildroot/commit/?id=dfb0fe48793a3cfdf3877083fecbd9e1b56b69c6
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Looks like this was lost in 20d4792e.
-
-[Peter: use _INSTALL_INIT_SYSV, explicitly delete script on uninstall]
-Signed-off-by: Peter Sanford <psanford@nearbuysystems.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/netplug/netplug.mk |    7 ++++++-
- 1 files changed, 6 insertions(+), 1 deletions(-)
+ linux/Config.in |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/netplug/netplug.mk b/package/netplug/netplug.mk
-index fbc7a2d..fdb1937 100644
---- a/package/netplug/netplug.mk
-+++ b/package/netplug/netplug.mk
-@@ -16,10 +16,15 @@ define NETPLUG_INSTALL_TARGET_CMDS
- 	$(MAKE) DESTDIR=$(TARGET_DIR) -C $(@D) install
- endef
+diff --git a/linux/Config.in b/linux/Config.in
+index 49c4b5c..7864f65 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -21,7 +21,7 @@ choice
+ 	prompt "Kernel version"
  
-+define NETPLUG_INSTALL_INIT_SYSV
-+	$(INSTALL) -m 0755 -D package/netplug/S29netplug \
-+		$(TARGET_DIR)/etc/init.d/S29netplug
-+endef
-+
- define NETPLUG_UNINSTALL_TARGET_CMDS
- 	rm -f $(TARGET_DIR)/sbin/netplugd
- 	rm -rf $(TARGET_DIR)/etc/netplug*
--	rm -f $(TARGET_DIR)/etc/init.d/S*netplug
-+	rm -f $(TARGET_DIR)/etc/init.d/S29netplug
- endef
+ config BR2_LINUX_KERNEL_LATEST_VERSION
+-	bool "3.10.10"
++	bool "3.11"
  
- define NETPLUG_CLEAN_CMDS
+ config BR2_LINUX_KERNEL_SAME_AS_HEADERS
+ 	bool "Same as toolchain kernel headers"
+@@ -75,7 +75,7 @@ config BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION
+ 
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "3.10.10" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "3.11" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default BR2_DEFAULT_KERNEL_HEADERS if BR2_LINUX_KERNEL_SAME_AS_HEADERS
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE if BR2_LINUX_KERNEL_CUSTOM_VERSION
+ 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
