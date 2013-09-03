@@ -1,93 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 3 Sep 2013 19:13:06 +0200
-Subject: [Buildroot] Build reproducibility
-In-Reply-To: <CAAXf6LUdJgRVK-BJJdJeH9QyutP_daHktchXMkTQ8M=R3U95mw@mail.gmail.com>
-References: <1377851505-23498-1-git-send-email-jezz@sysmic.org>
- <CAAXf6LVmyWojaBTfpTpZsNcXr+bCSkFMT__iYQjTAvO9ryEqnw@mail.gmail.com>
- <2d076e17ea7c855166044994876e2add@sysmic.org>
- <20130830145254.1e5a1f53@skate>
- <CAAXf6LVPfKZP+3k1AfXek28Y6bgVwxbJ4iPYRq6nihry=egaig@mail.gmail.com>
- <20130902105337.7dedb880@skate>
- <CAAXf6LUdJgRVK-BJJdJeH9QyutP_daHktchXMkTQ8M=R3U95mw@mail.gmail.com>
-Message-ID: <20130903191306.601a2be0@skate>
+Date: Tue, 3 Sep 2013 19:34:17 +0200
+Subject: [Buildroot] Why elf2flt is built *after* busybox
+In-Reply-To: <1378225250.11000.4.camel@phoenix>
+References: <1378225250.11000.4.camel@phoenix>
+Message-ID: <20130903193417.1a092fd5@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas De Schampheleire,
+Dear Axel Lin,
 
-On Mon, 2 Sep 2013 15:18:09 +0200, Thomas De Schampheleire wrote:
-> > Of course, if within the Buildroot project we are interested in
-> > fixing such missing dependencies, then we can find a way of adding
-> > randomness into the build order in our autobuilders. But clearly,
-> > we do want to expose this randomness to our users.
-> 
-> I think indeed we should try to set the dependencies right some way
-> or another.
-> 
-> If we assume that a package does not have any configurable options
-> that would change its dependencies, a simple way to check if all
-> dependencies are properly expressed is through:
-> make clean toolchain foo
+On Wed, 04 Sep 2013 00:20:50 +0800, Axel Lin wrote:
 
-This is already done by the autobuilders. Thanks to the randomness of
-the configuration, if a package fails to express a mandatory
-dependency, sooner or later the autobuilders will generate a
-configuration that has the package enabled but not one of its unknown
-dependencies. The autobuilders have triggered such cases very quickly
-in the past when a new package was added, so I'm pretty confident we
-have good coverage on this one.
+> Just enable elf2flt and start build.
+> From the build log I found the build system build busybox before
+> elf2flt. Is this normal?
+> I thought elf2flt needs to be ready before building other packages?
 
-However, I think this suggestion misses the point of the current
-discussion: we are talking about *optional* dependencies, i.e
-functionality of a given package that are enabled if OpenSSL is
-available, or disabled if OpenSSL is not available. Those optional
-dependencies cannot be checked/discovered by a build such as "make
-clean toolchain foo".
+Because elf2flt support is broken and someone needs to fix it. You've
+already sent several e-mails about this. Gustavo Zacarias is working on
+improving the elf2flt, but on a spare time basis, so it's progressing
+as time and motivation permits.
 
-> Also, it's not necessary that each package gets build every night:
-> once the dependencies are correct, they will stay correct until a
-> version bump. This means we can spread out the execution of this type
-> of tests over time, interleaving them with the already existing
-> autobuilds with random configurations.
-
-As stated above, for the mandatory dependencies, the autobuilders are
-already finding them very quickly. Introduce a new package that lacks a
-mandatory dependency expressed in its .mk file, and you'll see it very
-quickly in the autobuilders.
-
-> The make targets of buildroot itself are executed sequentially.
-> Suppose that we keep a list of all targets executed, something like:
-> python-source
-> python-extract
-> python-patch
-> python-configure
-> python-build
-> python-install-target
-> pyfoo-source
-> pyfoo-extract
-> pyfoo-build
-> ...
-> 
-> To reproduce a build, we can explicitly pass this list on the make
-> command-line, roughly like:
-> cat <target-list> | xargs make clean toolchain
-
-Could be doable.
-
-I've lost track. Are we talking about all of this to use "include
-package/*/*.mk" in make 3.82 which doesn't guarantee sorting, or to be
-able to do top-level parallel build?
-
-Seeing how simple it is to get make 3.82 to behave like make 3.81 by
-sorting the "include package/*/*.mk" inclusions, I don't think it's
-worth doing anything but the fix that J?r?me has suggested.
-
-Only the top-level parallel build would be a good enough to worry about
-reproducibility of more complicated builds (and therefore the need to
-list in which order the targets were built).
+Sorry to be a bit rude, but if you want things to move forward faster,
+either send patches to fix the problems and get the thing working, or
+hire someone to do this work for you. I'm sure ARM noMMU support in
+Buildroot will improve, because there are more and more Cortex-M
+systems that are capable of running Linux, but it's not something that
+is currently well supported in Buildroot.
 
 Best regards,
 
