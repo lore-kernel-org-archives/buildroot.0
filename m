@@ -1,39 +1,35 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 4 Sep 2013 10:51:01 +0200
-Subject: [Buildroot] [PATCH] dependencies: Add host prerequisite for
- elf2flt
-In-Reply-To: <1378282615.12336.1.camel@phoenix>
-References: <1378282615.12336.1.camel@phoenix>
-Message-ID: <20130904105101.1662e059@skate>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Wed, 4 Sep 2013 10:54:20 +0200
+Subject: [Buildroot] [git commit] kmod: explicitly define host-kmod
+	dependencies
+Message-ID: <20130904085538.563E59B6B0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Axel Lin,
+commit: http://git.buildroot.net/buildroot/commit/?id=fac638d2ff0877b44720e72b0ace522280822982
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 04 Sep 2013 16:16:55 +0800, Axel Lin wrote:
-> This ensures elf2flt will be built when BR2_PACKAGE_HOST_ELF2FLT=y before
-> building other packages.
-> 
-> Signed-off-by: Axel Lin <axel.lin@ingics.com>
-> ---
-> I don't have a blackfin platform, only test build this for blackfin.
-> Without this patch, the first time build will result in ELF binary because
-> busybox is built before elf2flt.
-> With this path, the result looks good, it produces BFLT executable for busybox.
+So we don't end up pulling in host-busybox (which doesn't exist) if
+KMOD_TOOLS is enabled.
 
-I don't think host-elf2flt should be added at this level of dependency.
-If I understand correctly elf2flt, it interfaces with the linker, so I
-believe making elf2flt a dependency of binutils would probably make a
-bit more sense.
+Reported-by: Sagaert Johan <sagaert.johan@skynet.be>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/kmod/kmod.mk |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+diff --git a/package/kmod/kmod.mk b/package/kmod/kmod.mk
+index 9ac7731..169fca3 100644
+--- a/package/kmod/kmod.mk
++++ b/package/kmod/kmod.mk
+@@ -9,6 +9,7 @@ KMOD_SOURCE = kmod-$(KMOD_VERSION).tar.xz
+ KMOD_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/kernel/kmod/
+ KMOD_INSTALL_STAGING = YES
+ KMOD_DEPENDENCIES = host-pkgconf
++HOST_KMOD_DEPENDENCIES = host-pkgconf
+ 
+ # Some patches are touching configure.ac
+ KMOD_AUTORECONF = YES
