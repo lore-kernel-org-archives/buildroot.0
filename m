@@ -1,44 +1,99 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 4 Sep 2013 13:19:00 +0200
-Subject: [Buildroot] [PATCH] dependencies: Add host prerequisite for
- elf2flt
-In-Reply-To: <52270CBA.1000603@zacarias.com.ar>
-References: <1378282615.12336.1.camel@phoenix> <20130904105101.1662e059@skate>
- <52270CBA.1000603@zacarias.com.ar>
-Message-ID: <20130904131900.7225d262@skate>
+From: Ruud Commandeur <RCommandeur@clb.nl>
+Date: Wed, 4 Sep 2013 13:26:49 +0200
+Subject: [Buildroot] SVN process started at make
+References: <15AE5A936F5E3A42A9144E66875A0A8934DB3B@server1-derijp.CLB-Benelux.lokaal><87sixm558s.fsf@dell.be.48ers.dk>
+ <52260E11.4090103@mind.be><15AE5A936F5E3A42A9144E66875A0A8934DB3E@server1-derijp.CLB-Benelux.lokaal><20130904100754.297bb0d6@skate><15AE5A936F5E3A42A9144E66875A0A8934DB3F@server1-derijp.CLB-Benelux.lokaal>
+ <87zjrt3q34.fsf@dell.be.48ers.dk>
+Message-ID: <15AE5A936F5E3A42A9144E66875A0A8934DB43@server1-derijp.CLB-Benelux.lokaal>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+Hi Peter,
 
-On Wed, 04 Sep 2013 07:34:34 -0300, Gustavo Zacarias wrote:
-> On 09/04/2013 05:51 AM, Thomas Petazzoni wrote:
-> > I don't think host-elf2flt should be added at this level of dependency.
-> > If I understand correctly elf2flt, it interfaces with the linker, so I
-> > believe making elf2flt a dependency of binutils would probably make a
-> > bit more sense.
+I'm only seeing this now, because I installed the subversion package
+yesterday. The project has been under svn control from the beginning
+with SmartSvn, which has it's own svn built-in. But now the
+setlocalversion script can finally do it's intended job.
+
+The change from Mike Frysinger will certainly solve this problem, since
+the "svn status" part is skipped. 
+
+Regards,
+
+Ruud
+ 
+
+> -----Oorspronkelijk bericht-----
+> Van: Peter Korsgaard [mailto:jacmet at gmail.com] Namens Peter Korsgaard
+> Verzonden: woensdag 4 september 2013 11:15
+> Aan: Ruud Commandeur
+> CC: Thomas Petazzoni; Arnout Vandecappelle; Peter Korsgaard; 
+> buildroot at uclibc.org
+> Onderwerp: Re: SVN process started at make
 > 
-> It's already done correctly in the dependency deparment...
+> >>>>> "Ruud" == Ruud Commandeur <RCommandeur@clb.nl> writes:
 > 
-> HOST_ELF2FLT_DEPENDENCIES = host-binutils host-zlib
-
-What I was suggesting is that host-elf2flt should have been a
-dependency of host-binutils. But that's obviously wrong, since elf2flt
-requires the libbfd library I suspect.
-
-> The problem is it's never pulled in when it's necessary - before the
-> real packages start building, so adding it up as a gcc dep when
-> BR2_BINFMT_FLAT=y would be appropiate.
-
-Indeed. If it's not needed during the gcc build, one solution is to add
-its as a dependency in host-gcc-final.
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+>  Ruud> Dear Thomas,
+>  Ruud> Well, I did take a quick look at this file, but could 
+> have seen this
+>  Ruud> myself indeed :-)
+> 
+>  Ruud> So it runs an "svn info" and "svn status". This last 
+> command can take
+>  Ruud> quite some time for a large repository, so this 
+> explains the delay.
+> 
+> Ok, I'm afraid there's not much to do about svn being crap :/
+> 
+> How come you are only seeing this now? We've been calling
+> setlocalversion since 2010. Did you recently upgrade your svn version?
+> 
+> Looking at the kernel history (where setlocalversion comes 
+> from), I see
+> a commit from Mike Frysinger where the svn status step is 
+> skipped as it
+> was deemed too slow, so perhaps we should just resync our
+> setlocalversion script with the kernel:
+> 
+> Author: Mike Frysinger <vapier.adi@gmail.com>
+> Date:   Thu Feb 5 16:13:32 2009 +0800
+> 
+>     kbuild,setlocalversion: shorten the make time when using svn
+>     
+>     Don't bother doing `svn st` as it takes a retarded amount 
+> of time when
+>     the source is cold
+>     
+>     Signed-off-by: Mike Frysinger <vapier.adi@gmail.com>
+>     Signed-off-by: Bryan Wu <cooloney@kernel.org>
+>     Signed-off-by: Sam Ravnborg <sam@ravnborg.org>
+> 
+> diff --git a/scripts/setlocalversion b/scripts/setlocalversion
+> index f6946cf..f1c4b35 100755
+> --- a/scripts/setlocalversion
+> +++ b/scripts/setlocalversion
+> @@ -58,14 +58,7 @@ fi
+>  # Check for svn and a svn repo.
+>  if rev=`svn info 2>/dev/null | grep '^Last Changed Rev'`; then
+>         rev=`echo $rev | awk '{print $NF}'`
+> -       changes=`svn status 2>/dev/null | grep '^[AMD]' | wc -l`
+> -
+> -       # Are there uncommitted changes?
+> -       if [ $changes != 0 ]; then
+> -               printf -- '-svn%s%s' "$rev" -dirty
+> -       else
+> -               printf -- '-svn%s' "$rev"
+> -       fi
+> +       printf -- '-svn%s' "$rev"
+>  
+>         # All done with svn
+>         exit
+> 
+> I'll do that now.
+> 
+> -- 
+> Bye, Peter Korsgaard
+> 
