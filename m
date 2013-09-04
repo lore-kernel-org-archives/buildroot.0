@@ -1,59 +1,39 @@
-From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Wed, 4 Sep 2013 10:33:14 +0200
-Subject: [Buildroot] [PATCH 2 of 9 v4] Config.in.legacy: update
- description for users
-In-Reply-To: <52261367.8040905@mind.be>
-References: <patchbomb.1378152469@argentina>
- <ac4d080274a06689e8d4.1378152471@argentina>
- <20130902225514.7d9323cc@skate> <52257EA4.9030001@mind.be>
- <20130903091818.616d6665@skate>
- <CAAXf6LWNRK1fZMQfMU5w52NzgyG+HL1VbXPU1o5FuFQ+eNBFEA@mail.gmail.com>
- <20130903135209.3b1ea8f5@skate> <87ob8a54ie.fsf@dell.be.48ers.dk>
- <52261367.8040905@mind.be>
-Message-ID: <CAAXf6LX1QTw3DgSG5uWGOvFgmgsmmn2a6_cvwHp5p_cgF6RXpg@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 4 Sep 2013 10:51:01 +0200
+Subject: [Buildroot] [PATCH] dependencies: Add host prerequisite for
+ elf2flt
+In-Reply-To: <1378282615.12336.1.camel@phoenix>
+References: <1378282615.12336.1.camel@phoenix>
+Message-ID: <20130904105101.1662e059@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Arnout,
+Dear Axel Lin,
 
-On Tue, Sep 3, 2013 at 6:50 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
-> On 09/03/13 17:06, Peter Korsgaard wrote:
->>>>>>>
->>>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
->>>>>>> writes:
->>
->>
->>
->>   Thomas> So far, the only problem I see with this are related to minimal
->>   Thomas> defconfigs. In the case (1) above, the minimal defconfig will
->> continue
->>   Thomas> to contain the name of the legacy option, and not the name of
->> the new
->>   Thomas> option, since the new option is selected by the legacy option.
->> This is
->>   Thomas> annoying since it means minimal defconfigs are not progressively
->>   Thomas> updated to use the new option name. And this probably makes my
->> entire
->>   Thomas> proposal moot.
->>
->> Damn, yes :/
->>
->> So people really do need to explictly change to the new option / restart
->> make menuconfig.
->
->
->  I never tried it, but a workaround could be to run olddefconfig before any
-> interactive config (menuconfig, nconfig, xconfig, qconfig). olddefconfig
-> should be equivalent to saving immediately.
+On Wed, 04 Sep 2013 16:16:55 +0800, Axel Lin wrote:
+> This ensures elf2flt will be built when BR2_PACKAGE_HOST_ELF2FLT=y before
+> building other packages.
+> 
+> Signed-off-by: Axel Lin <axel.lin@ingics.com>
+> ---
+> I don't have a blackfin platform, only test build this for blackfin.
+> Without this patch, the first time build will result in ELF binary because
+> busybox is built before elf2flt.
+> With this path, the result looks good, it produces BFLT executable for busybox.
 
-I tried it manually (not yet integrated in a Makefile) and it works as expected.
-However, a disadvantage is that any new symbol will no longer be
-marked as NEW in the interactive config. So the trade-off would be
-between loosing this NEW marker, and requiring the user to do an
-intermediate save.
+I don't think host-elf2flt should be added at this level of dependency.
+If I understand correctly elf2flt, it interfaces with the linker, so I
+believe making elf2flt a dependency of binutils would probably make a
+bit more sense.
 
 Best regards,
+
 Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
