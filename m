@@ -1,152 +1,54 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 04 Sep 2013 22:17:46 +0200
-Subject: [Buildroot] [PATCH 1/1] Eigen: new package
-In-Reply-To: <1378322721-27028-1-git-send-email-mlweber1@rockwellcollins.com>
-References: <1378322721-27028-1-git-send-email-mlweber1@rockwellcollins.com>
-Message-ID: <5227956A.2080407@mind.be>
+Date: Wed, 04 Sep 2013 22:27:45 +0200
+Subject: [Buildroot] [git commit] kmod: disable manpages for host-kmod
+In-Reply-To: <87mwns4a78.fsf@dell.be.48ers.dk>
+References: <20130904103707.9F2B29B6EB@busybox.osuosl.org>
+ <b95086f02b4d393fa6f90f388a0f20d3@www.sysmic.org>
+ <20130904181903.165c5cd4@skate> <87mwns4a78.fsf@dell.be.48ers.dk>
+Message-ID: <522797C1.7040002@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-  Hi Matt,
-
-  Thanks for your patch. I have a few small comments below. Care to fix 
-and resubmit?
-
-On 09/04/13 21:25, Matt Weber wrote:
-> Target packages -> Libraries -> Other -> Eigen
+On 09/04/13 22:13, Peter Korsgaard wrote:
+>>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 >
-> Eigen - a C++ template library for linear algebra
-
-  We don't usually put any commit message if it's a simple new package. 
-However, I really like how you put the menu tree in your commit message. 
- From the patch, it is not visible to which menu it is added, so that 
-really helps.
-
+>   Thomas> Dear J?r?me Pouiller,
+>   Thomas> On Wed, 04 Sep 2013 17:50:47 +0200, J?r?me Pouiller wrote:
 >
-> Signed-off-by: Matt Weber <mlweber1@rockwellcollins.com>
-> ---
->   package/Config.in       |    1 +
->   package/eigen/Config.in |   16 ++++++++++++++++
->   package/eigen/eigen.mk  |   24 ++++++++++++++++++++++++
->   3 files changed, 41 insertions(+), 0 deletions(-)
->   create mode 100644 package/eigen/Config.in
->   create mode 100644 package/eigen/eigen.mk
+>   >> >  ifneq ($(BR2_HAVE_DOCUMENTATION),y)
+>   >> >  KMOD_CONF_OPT += --disable-manpages
+>   >> >  endif
+>   >> What happens when BR2_HAVE_DOCUMENTATION is enabled? I think same
+>   >> problem happens.
+>   >>
+>   >> We should add a dependency to host-libxslt and I think we can pass
+>   >> variable XSLTPROC= to ./configure to use a specific location of
+>   >> xsltproc.
 >
-> diff --git a/package/Config.in b/package/Config.in
-> index a94cb62..6fe9e14 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -617,6 +617,7 @@ source "package/libcofi/Config.in"
->   source "package/classpath/Config.in"
->   source "package/cppcms/Config.in"
->   source "package/elfutils/Config.in"
-> +source "package/eigen/Config.in"
+>   Thomas> Yes, we normally should. But nobody seems to be testing or using
+>   Thomas> BR2_HAVE_DOCUMENTATION. I would personally be in favor of just getting
+>   Thomas> rid of BR2_HAVE_DOCUMENTATION. Who needs the documentation to be
+>   Thomas> installed on the target?
+>
+> I'm also starting to think so. With Buildroot focused on cross
+> compilation (and the development on target stuff gone), I don't see much
+> use for documentation on the target either.
 
-  In my alphabet, eigen comes before elfutils :-)
+  Well, if you have a less space-constrained system it's kind of 
+convenient to be able to pull up a man page for some tool that you're 
+less familiar with and that is not installed on your host (not that I can 
+think of an example :-). However, in its current incarnation, including 
+documentation adds a huge amount of bloat. Taking one random output I 
+find 105MB in the target dir and 40MB of various bits of documentation in 
+the staging dir.
 
->   source "package/fftw/Config.in"
->   source "package/libargtable2/Config.in"
->   source "package/argp-standalone/Config.in"
-> diff --git a/package/eigen/Config.in b/package/eigen/Config.in
-> new file mode 100644
-> index 0000000..ee68bc8
-> --- /dev/null
-> +++ b/package/eigen/Config.in
-> @@ -0,0 +1,16 @@
-> +config BR2_PACKAGE_EIGEN
-> +	bool "eigen"
-> +	help
-> +	  Eigen is a C++ template library for linear algebra: vectors,
-> +	  matrices, and related algorithms. It is versatile, fast, elegant
-> +	  and works on many platforms (OS/Compilers).
-> +
-> +	  Eigen doesn't have any dependencies other than the C++ standard library.
-> +	  The CMake build system is used to build the documentation, unit-tests,
-> +	  and to automate installation. If you just want to use Eigen, you can
-> +	  use the header files right away. There is no binary library to link
-> +	  to and no configured header file. Eigen is a pure template library
-> +	  defined in the headers.
-
-  Minor nit: this could be rephrased a little to have only the 
-buildroot-relevant part, i.e.: "This package only installs header files 
-to the include path. If you just want to use Eigen, you can use the 
-header files right away. There is no binary to link to. Eigen is a pure 
-template library defined in the headers."
-
-> +
-> +	  http://eigen.tuxfamily.org/
-> +
-> diff --git a/package/eigen/eigen.mk b/package/eigen/eigen.mk
-> new file mode 100644
-> index 0000000..2580f0b
-> --- /dev/null
-> +++ b/package/eigen/eigen.mk
-> @@ -0,0 +1,24 @@
-> +#############################################################
-> +#
-> +# Eigen - a C++ template library for linear algebra
-> +#
-> +#############################################################
-> +EIGEN_VERSION = 3.2.0
-> +EIGEN_VERSION_HASH = ffa86ffb5570
-> +EIGEN_SITE    = http://bitbucket.org/eigen/eigen/get/$(EIGEN_VERSION).tar.bz2
-> +EIGEN_SOURCE  = eigen-eigen-$(EIGEN_VERSION_HASH).tar.bz2
-
-  There is something fishy about this.
-http://bitbucket.org/eigen/eigen/get/3.2.0.tar.bz2/eigen-eigen-ffa86ffb5570.tar.bz2 
-
-fails for me. I think you mean:
-
-EIGEN_SITE    = http://bitbucket.org/eigen/eigen/get
-EIGEN_SOURCE  = $(EIGEN_VERSION).tar.bz2
-
-
-> +EIGEN_LICENSE = MPL2
-
-  Should be:
-
-EIGEN_LICENSE = MPL2, BSD-3c, LGPLv2.1
-
-  There is also the Minpack license but for me that's close enough to 
-BSD-3c to be covered by it. And there are some pieces LGPLv2.1+, but 
-since other pieces are strictly LGPLv2.1 I think we don't have to specify 
-the +.
-
-> +EIGEN_LICENSE_FILES = COPYING*
-
-  I'm afraid you have to specify all files explicitly.
-
-> +EIGEN_INSTALL_STAGING = YES
-
-  You may also want EIGEN_INSTALL_TARGET = NO.
-
-> +
-> +# This package only consists of headers that need to be
-> +# copied over to the sysroot for compile time use
-> +define EIGEN_INSTALL_STAGING_CMDS
-> +	cp -af $(@D)/Eigen $(STAGING_DIR)/usr/include/
-
-  I would first do a $(RM) -r $(STAGING_DIR)/usr/include/Eigen
-and remove the -f from cp. That makes it more idempotent.
-
-> +endef
-> +
-> +define EIGEN_UNINSTALL_STAGING_CMDS
-> +	rm -rf $(STAGING_DIR)/usr/include/Eigen
-> +endef
-
-  Uninstall commands are no longer needed.
-
+  Bottom line: yes, BR2_HAVE_DOCUMENTATION can be killed.
 
   Regards,
   Arnout
-
-> +
-> +$(eval $(generic-package))
->
 
 
 -- 
