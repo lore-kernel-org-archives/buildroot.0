@@ -1,9 +1,9 @@
 From: Clayton Shotwell <clshotwe@rockwellcollins.com>
-Date: Wed, 4 Sep 2013 18:09:41 -0500
-Subject: [Buildroot] [PATCH 02/17] libselinux: new package
+Date: Wed, 4 Sep 2013 18:09:42 -0500
+Subject: [Buildroot] [PATCH 03/17] ustr: new package
 In-Reply-To: <1378336196-27403-1-git-send-email-clshotwe@rockwellcollins.com>
 References: <1378336196-27403-1-git-send-email-clshotwe@rockwellcollins.com>
-Message-ID: <1378336196-27403-3-git-send-email-clshotwe@rockwellcollins.com>
+Message-ID: <1378336196-27403-4-git-send-email-clshotwe@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,182 +13,218 @@ To: buildroot@busybox.net
 
 Signed-off-by: Clayton Shotwell <clshotwe@rockwellcollins.com>
 ---
- package/Config.in                |    1 +
- package/libselinux/Config.in     |   22 +++++++
- package/libselinux/libselinux.mk |  128 ++++++++++++++++++++++++++++++++++++++
- 3 files changed, 151 insertions(+), 0 deletions(-)
- create mode 100644 package/libselinux/Config.in
- create mode 100644 package/libselinux/libselinux.mk
+ package/Config.in                                  |    1 +
+ package/ustr/Config.in                             |    6 +
+ .../ustr-1.0.4-crossCompileModifications.patch     |  104 ++++++++++++++++++++
+ package/ustr/ustr.mk                               |   68 +++++++++++++
+ 4 files changed, 179 insertions(+), 0 deletions(-)
+ create mode 100644 package/ustr/Config.in
+ create mode 100644 package/ustr/ustr-1.0.4-crossCompileModifications.patch
+ create mode 100644 package/ustr/ustr.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 21f7271..bf68827 100644
+index bf68827..fa70e84 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -898,6 +898,7 @@ endmenu
- 
- menu "Security"
- source "package/libsepol/Config.in"
-+source "package/libselinux/Config.in"
+@@ -677,6 +677,7 @@ source "package/pcre/Config.in"
+ source "package/popt/Config.in"
+ source "package/readline/Config.in"
+ source "package/slang/Config.in"
++source "package/ustr/Config.in"
  endmenu
  
- menu "System tools"
-diff --git a/package/libselinux/Config.in b/package/libselinux/Config.in
+ menu "JSON/XML"
+diff --git a/package/ustr/Config.in b/package/ustr/Config.in
 new file mode 100644
-index 0000000..4f3be64
+index 0000000..62db57d
 --- /dev/null
-+++ b/package/libselinux/Config.in
-@@ -0,0 +1,22 @@
-+config BR2_PACKAGE_LIBSELINUX
-+	bool "libselinux"
-+	depends on BR2_LINUX_KERNEL
++++ b/package/ustr/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_USTR
++	bool "ustr"
 +	help
-+	  libselinux is the runtime SELinux library that provides interfaces 
-+	  (e.g. library functions for the SELinux kernel APIs like getcon(), 
-+	  other support functions like getseuserbyname()) to SELinux-aware 
-+	  applications. libselinux may use the shared libsepol to manipulate 
-+	  the binary policy if necessary (e.g. to downgrade the policy format 
-+	  to an older version supported by the kernel) when loading policy.
++	  A small, safe string library.
 +	  
-+	  http://selinuxproject.org/page/Main_Page
-+
-+if BR2_PACKAGE_LIBSELINUX
-+
-+config BR2_PACKAGE_LIBSELINUX_PYTHON_BINDINGS
-+	select BR2_PACKAGE_PYTHON
-+	bool "python bindings"
-+	help
-+	  enable building python bindings
-+
-+endif
-diff --git a/package/libselinux/libselinux.mk b/package/libselinux/libselinux.mk
++	  http://www.and.org/ustr/
+diff --git a/package/ustr/ustr-1.0.4-crossCompileModifications.patch b/package/ustr/ustr-1.0.4-crossCompileModifications.patch
 new file mode 100644
-index 0000000..ed90186
+index 0000000..aad9b81
 --- /dev/null
-+++ b/package/libselinux/libselinux.mk
-@@ -0,0 +1,128 @@
-+################################################################################
++++ b/package/ustr/ustr-1.0.4-crossCompileModifications.patch
+@@ -0,0 +1,104 @@
++diff -urN a/ustr-compiler.h b/ustr-compiler.h
++--- a/ustr-compiler.h	2008-02-15 14:12:28.000000000 -0600
+++++ b/ustr-compiler.h	2012-06-15 11:04:55.000000000 -0500
++@@ -13,10 +13,10 @@
++ 
++ /* We assume this is enough,
++  * C99 specifies that va_copy() exists and is a macro */
++-#ifdef va_copy
+++#if defined va_copy
++ # define USTR_CONF_HAVE_VA_COPY 1
++ # define USTR__VA_COPY(x, y)   va_copy(x, y)
++-#elif __va_copy
+++#elif defined __va_copy
++ # define USTR_CONF_HAVE_VA_COPY 1
++ # define USTR__VA_COPY(x, y) __va_copy(x, y)
++ #else
++--- a/Makefile	2008-03-05 21:38:00.000000000 -0600
+++++ b/Makefile	2013-07-11 08:42:42.630440683 -0500
++@@ -8,8 +8,8 @@
++ VERS_ESONAME =1
++ VERS_ESO     =$(VERS_ESONAME).0.4
++ 
++-DESTDIR =
++-prefix=/usr
+++DESTDIR ?= 
+++prefix ?= /usr
++ datadir=$(prefix)/share
++ libdir=$(prefix)/lib
++ libexecdir=$(prefix)/libexec
++@@ -18,7 +18,7 @@
++ SHRDIR=$(datadir)/ustr-$(VERS_FULL)
++ DOCSHRDIR=$(datadir)/doc/ustr-devel-$(VERS_FULL)
++ EXAMDIR=$(SHRDIR)/examples
++-mandir=$(datadir)/doc/man
+++mandir=$(datadir)/man
++ MBINDIR=$(libexecdir)/ustr-$(VERS_FULL)
++ 
++ ###############################################################################
++@@ -28,12 +28,12 @@
++ ###############################################################################
++ HIDE=@
++ 
++-CC = cc
++-AR = ar
++-RANLIB = ranlib
++-LDCONFIG = /sbin/ldconfig
+++CC ?= cc
+++AR ?= ar
+++RANLIB ?= ranlib
++ 
++-CFLAGS  = -O2 -g
+++CFLAGS ?= -O2 -g
+++LDFLAGS ?= 
++ 
++ # Debug versions...
++ WARNS = -W -Wall -Wundef -Wshadow -Wpointer-arith -Wbad-function-cast -Wcast-align -Wwrite-strings -Waggregate-return -Wstrict-prototypes -Wmissing-prototypes -Wmissing-declarations -Wnested-externs -Wno-format-zero-length -Wformat-nonliteral -Wformat-security # -Wfloat-equal -- no floats
++@@ -398,7 +398,6 @@
++ 		ln -s $(DBG_LIB_SHARED) $(DESTDIR)$(libdir)/$(DBG_LIB_SHARED_NAME)
++ 		-rm -f $(DESTDIR)$(libdir)/$(DBG_LIB_SHAREDEV)
++ 		ln -s $(DBG_LIB_SHARED_NAME) $(DESTDIR)$(libdir)/$(DBG_LIB_SHAREDEV)
++-		$(LDCONFIG) -n $(DESTDIR)$(libdir)
++ 		install -pm 644 -t $(DESTDIR)$(includedir) $(SRC_HDRS)
++ 		install -pm 644 -t $(DESTDIR)$(SHRDIR) $(SRC_SRCS)
++ 		install -pm 644 -t $(DESTDIR)$(SHRDIR) $(XSRC_SRCS)
++@@ -414,8 +413,7 @@
++ 
++ install-multilib-linux: install autoconf_64b ustr-import-multilib
++ 		install -d $(DESTDIR)$(MBINDIR)
++-		$(HIDE)mlib=`./autoconf_64b`; \
++-                   if test "x$$mlib" = "x1"; then mlib=64; else mlib=32; fi; \
+++		$(HIDE))if test "`echo "__SIZEOF_SIZE_T__" | $(CC) -E -x c - | tail -n 1`" = 8; then mlib=64; else mlib=32; fi; \
++                    mv -f $(DESTDIR)$(includedir)/ustr-conf-debug.h \
++                          $(DESTDIR)$(includedir)/ustr-conf-debug-$$mlib.h; \
++                    mv -f $(DESTDIR)$(includedir)/ustr-conf.h \
++@@ -451,7 +449,8 @@
++ 
++ ustr-import: ustr-import.in autoconf_64b autoconf_vsnprintf
++ 		$(HIDE)echo Creating $@
++-		$(HIDE)sz64=`./autoconf_64b`; vsnp=`./autoconf_vsnprintf`; \
+++		$(HIDE)if test "`echo "__SIZEOF_SIZE_T__" | $(CC) -E -x c - | tail -n 1`" = 8; then sz64=1; else sz64=0; fi; \
+++		if test "`./autoconf_vsnprintf`" = 0; then vsnp=0; else vsnp=1; fi; \
++ 		sed -e 's, at INCLUDEDIR@,$(includedir),g' -e 's, at SHRDIR@,$(SHRDIR),g' -e 's, at VERS@,$(VERS),g'  -e 's, at VERS_FULL@,$(VERS_FULL),g' -e "s, at HAVE_64bit_SIZE_MAX@,$$sz64,g" -e "s, at HAVE_RETARDED_VSNPRINTF@,$$vsnp,g" < $< > $@
++ 		$(HIDE)chmod 755 $@
++ 
++@@ -485,7 +484,8 @@
++ ustr-conf.h: ustr-conf.h.in autoconf_64b autoconf_vsnprintf
++ 		$(HIDE)echo Creating $@
++ 		$(HIDE)have_stdint_h=0; dbg1=0; dbg2=0; \
++-                sz64=`./autoconf_64b`; vsnp=`./autoconf_vsnprintf`; \
+++                if test "`echo "__SIZEOF_SIZE_T__" | $(CC) -E -x c - | tail -n 1`" = 8; then sz64=1; else sz64=0; fi; \
+++                if test "`./autoconf_vsnprintf`" = 0; then vsnp=0; else vsnp=1; fi; \
++                 if test -f "/usr/include/stdint.h"; then have_stdint_h=1; fi; \
++                 if test -f "$(prefix)/include/stdint.h"; then have_stdint_h=1; fi; \
++                 if test -f "$(includedir)/stdint.h"; then have_stdint_h=1; fi; \
++@@ -494,7 +494,8 @@
++ ustr-conf-debug.h: ustr-conf.h.in autoconf_64b autoconf_vsnprintf
++ 		$(HIDE)echo Creating $@
++ 		$(HIDE)have_stdint_h=0; dbg1=1; dbg2=1; \
++-                sz64=`./autoconf_64b`; vsnp=`./autoconf_vsnprintf`; \
+++                if test "`echo "__SIZEOF_SIZE_T__" | $(CC) -E -x c - | tail -n 1`" = 8; then sz64=1; else sz64=0; fi; \
+++                if test "`./autoconf_vsnprintf`" = 0; then vsnp=0; else vsnp=1; fi; \
++                 if test -f "/usr/include/stdint.h"; then have_stdint_h=1; fi; \
++                 if test -f "$(prefix)/include/stdint.h"; then have_stdint_h=1; fi; \
++                 if test -f "$(includedir)/stdint.h"; then have_stdint_h=1; fi; \
+diff --git a/package/ustr/ustr.mk b/package/ustr/ustr.mk
+new file mode 100644
+index 0000000..46b8bb4
+--- /dev/null
++++ b/package/ustr/ustr.mk
+@@ -0,0 +1,68 @@
++#############################################################
 +#
-+# libselinux
++# ustr
 +#
-+################################################################################
-+LIBSELINUX_VERSION = 2.1.13
-+LIBSELINUX_SOURCE = libselinux-$(LIBSELINUX_VERSION).tar.gz
-+LIBSELINUX_SITE = http://userspace.selinuxproject.org/releases/20130423/
-+LIBSELINUX_LICENSE = PublicDomain
-+LIBSELINUX_LICENSE_FILES = LICENSE
++#############################################################
++USTR_VERSION = 1.0.4
++USTR_SOURCE = ustr-$(USTR_VERSION).tar.bz2
++USTR_SITE = http://www.and.org/ustr/$(USTR_VERSION)/
++USTR_LICENSE = BSD-2c MIT LGPLv2+
++USTR_LICENSE_FILES = LICENCE LICENSE_BSD LICENSE_LGPL LICENSE_MIT
 +
 +##############################
 +# Target Section
 +##############################
-+LIBSELINUX_DEPENDENCIES = libsepol pcre
++USTR_INSTALL_STAGING = YES
++USTR_INSTALL_TARGET = YES
 +
-+LIBSELINUX_INSTALL_STAGING = YES
-+LIBSELINUX_INSTALL_TARGET = YES
++USTR_MAKE_CMDS = $(TARGET_CONFIGURE_OPTS)
 +
-+LIBSELINUX_MAKE_CMDS = $(TARGET_CONFIGURE_OPTS) LDFLAGS="$(TARGET_LDFLAGS) -lpcre -lpthread"
-+
-+ifeq ($(BR2_PACKAGE_LIBSELINUX_PYTHON_BINDINGS),y)
-+
-+LIBSELINUX_DEPENDENCIES += python host-swig host-python
-+LIBSELINUX_MAKE_CMDS += PYINC="-I$(STAGING_DIR)/usr/include/python$(PYTHON_VERSION_MAJOR)/" \
-+	PYTHONLIBDIR="-L$(STAGING_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/" \
-+	PYLIBVER="python$(PYTHON_VERSION_MAJOR)" \
-+	SWIG_LIB="$(HOST_DIR)/usr/share/swig/$(SWIG_VERSION)/"
-+
-+define LIBSELINUX_PYTHON_BUILD_CMDS
-+	$(MAKE) -C $(@D) $(LIBSELINUX_MAKE_CMDS) DESTDIR=$(STAGING_DIR) swigify
-+	$(MAKE) -C $(@D) $(LIBSELINUX_MAKE_CMDS) DESTDIR=$(STAGING_DIR) pywrap
++define USTR_BUILD_CMDS
++	$(MAKE) -C $(@D) all $(USTR_MAKE_CMDS) DESTDIR=$(STAGING_DIR)
++	$(MAKE) -C $(@D) all-shared $(USTR_MAKE_CMDS) DESTDIR=$(STAGING_DIR)
 +endef
 +
-+define LIBSELINUX_PYTHON_INSTALL_STAGING_CMDS
-+	$(MAKE) -C $(@D) install-pywrap $(LIBSELINUX_MAKE_CMDS) DESTDIR=$(STAGING_DIR)
++define USTR_INSTALL_STAGING_CMDS
++	$(MAKE) -C $(@D) install $(USTR_MAKE_CMDS) DESTDIR=$(STAGING_DIR)
 +endef
 +
-+define LIBSELINUX_PYTHON_INSTALL_TARGET_CMDS
-+	$(MAKE) -C $(@D) install-pywrap $(LIBSELINUX_MAKE_CMDS) DESTDIR=$(TARGET_DIR)
++define USTR_INSTALL_TARGET_CMDS
++	$(MAKE) -C $(@D) install $(USTR_MAKE_CMDS) DESTDIR=$(TARGET_DIR)
 +endef
 +
-+define LIBSELINUX_PYTHON_UNINSTALL_STAGING_CMDS
-+	rm -rf $(STAGING_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages/selinux
-+endef
-+
-+define LIBSELINUX_PYTHON_UNINSTALL_TARGET_CMDS
-+	rm -rf $(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages/selinux
-+endef
-+
-+endif
-+
-+define LIBSELINUX_BUILD_CMDS
-+	$(MAKE) -C $(@D) $(LIBSELINUX_MAKE_CMDS) DESTDIR=$(STAGING_DIR) all
-+	$(LIBSELINUX_PYTHON_BUILD_CMDS)
-+endef
-+
-+define LIBSELINUX_INSTALL_STAGING_CMDS
-+	$(MAKE) -C $(@D) install $(LIBSELINUX_MAKE_CMDS) DESTDIR=$(STAGING_DIR)
-+	$(LIBSELINUX_PYTHON_INSTALL_STAGING_CMDS)
-+endef
-+
-+define LIBSELINUX_INSTALL_TARGET_CMDS
-+	$(MAKE) -C $(@D) install $(LIBSELINUX_MAKE_CMDS) DESTDIR=$(TARGET_DIR)
-+	$(LIBSELINUX_PYTHON_INSTALL_TARGET_CMDS)
-+endef
-+
-+define LIBSELINUX_CLEAN_CMDS
++define USTR_CLEAN_CMDS
 +	$(MAKE) -C $(@D) clean
 +endef
 +
-+LIBSELINUX_SBIN_FILES = avcstat compute_av compute_create compute_member \
-+	compute_relabel compute_user getconlist getdefaultcon getenforce \
-+	getfilecon getpidcon getsebool getseuser matchpathcon policyvers \
-+	sefcontext_compile selinux_check_securetty_context selinuxenabled \
-+	selinuxexeccon setenforce setfilecon togglesebool
-+
-+define LIBSELINUX_UNINSTALL_STAGING_CMDS
-+	rm -rf $(addprefix $(STAGING_DIR), /usr/include/selinux \
-+		$(addprefix /usr/sbin/, $(LIBSELINUX_SBIN_FILES)) \
-+		/usr/lib/pkgconfig/libselinux* /usr/lib/libselinux* /lib/libselinux*)
-+	rm -f $(addprefix $(STAGING_DIR)/usr/man/man3/,$(notdir $(wildcard $(@D)/man/man3/*.3)))
-+	rm -f $(addprefix $(STAGING_DIR)/usr/man/man5/,$(notdir $(wildcard $(@D)/man/man5/*.5)))
-+	rm -f $(addprefix $(STAGING_DIR)/usr/man/man8/,$(notdir $(wildcard $(@D)/man/man8/*.8)))
-+	$(LIBSELINUX_PYTHON_UNINSTALL_STAGING_CMDS)
++define USTR_UNINSTALL_STAGING_CMDS
++	rm -rf $(addprefix $(TARGET_DIR),/usr/lib/libustr* /usr/lib/pkgconfig/ustr* \
++		/usr/bin/ustr* /usr/include/ustr* /usr/include/ \
++		/usr/share/doc/ustr-$(USTR_VERSION) /usr/share/ustr-$(USTR_VERSION) \
++		/usr/share/man/man1/ustr* /usr/share/man/man3/ustr*)
 +endef
 +
-+define LIBSELINUX_UNINSTALL_TARGET_CMDS
-+	rm -rf $(addprefix $(TARGET_DIR), /usr/include/selinux \
-+		$(addprefix /usr/sbin/, $(LIBSELINUX_SBIN_FILES)) \
-+		/usr/lib/pkgconfig/libselinux* /usr/lib/libselinux* /lib/libselinux*)
-+	$(LIBSELINUX_PYTHON_UNINSTALL_TARGET_CMDS)
++define USTR_UNINSTALL_TARGET_CMDS
++	rm -rf $(addprefix $(TARGET_DIR),/usr/lib/libustr* /usr/lib/pkgconfig/ustr* \
++		/usr/bin/ustr* /usr/include/ustr*)
 +endef
 +
 +##############################
 +# Host Section
 +##############################
-+HOST_LIBSELINUX_DEPENDENCIES = host-python host-libsepol host-swig host-pcre
++HOST_USTR_MAKE_CMDS = $(HOST_CONFIGURE_OPTS)
 +
-+HOST_LIBSELINUX_MAKE_CMDS = $(HOST_CONFIGURE_OPTS) LDFLAGS="$(HOST_LDFLAGS) -lpcre -lpthread"\
-+	PYINC="-I$(HOST_DIR)/usr/include/python$(PYTHON_VERSION_MAJOR)/" \
-+	PYTHONLIBDIR="-L$(HOST_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/" \
-+	PYLIBVER="python$(PYTHON_VERSION_MAJOR)" \
-+	SWIG_LIB="$(HOST_DIR)/usr/share/swig/$(SWIG_VERSION)/" \
-+
-+define HOST_LIBSELINUX_BUILD_CMDS
-+	$(MAKE) -C $(@D) $(HOST_LIBSELINUX_MAKE_CMDS) DESTDIR=$(HOST_DIR) all
-+	$(MAKE) -C $(@D) $(HOST_LIBSELINUX_MAKE_CMDS) DESTDIR=$(HOST_DIR) swigify
-+	$(MAKE) -C $(@D) $(HOST_LIBSELINUX_MAKE_CMDS) DESTDIR=$(HOST_DIR) pywrap
++define HOST_USTR_BUILD_CMDS
++	$(MAKE) -C $(@D) all $(HOST_USTR_MAKE_CMDS) DESTDIR=$(HOST_DIR)
++	$(MAKE) -C $(@D) all-shared $(HOST_USTR_MAKE_CMDS) DESTDIR=$(HOST_DIR)
 +endef
 +
-+define HOST_LIBSELINUX_INSTALL_CMDS
-+	$(MAKE) -C $(@D) install install-pywrap $(HOST_LIBSELINUX_MAKE_CMDS) DESTDIR=$(HOST_DIR)
-+	mv $(HOST_DIR)/lib/libselinux.so.1 $(HOST_DIR)/usr/lib
-+	(cd $(HOST_DIR)/usr/lib; rm -f libselinux.so; ln -s libselinux.so.1 libselinux.so)
-+	rmdir $(HOST_DIR)/lib
-+	(if -f $(HOST_DIR)/sbin/matchpathcon; then \
-+		mv $(HOST_DIR)/sbin/matchpathcon $(HOST_DIR)/usr/sbin/; \
-+		rmdir $(HOST_DIR)/sbin; \
-+	fi)
++define HOST_USTR_INSTALL_CMDS
++	$(MAKE) -C $(@D) install $(HOST_USTR_MAKE_CMDS) DESTDIR=$(HOST_DIR)
 +endef
 +
-+define HOST_LIBSELINUX_CLEAN_CMDS
++define HOST_USTR_CLEAN_CMDS
 +	$(MAKE) -C $(@D) clean
 +endef
 +
