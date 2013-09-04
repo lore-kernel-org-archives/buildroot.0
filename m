@@ -1,9 +1,9 @@
 From: Clayton Shotwell <clshotwe@rockwellcollins.com>
-Date: Wed, 4 Sep 2013 18:09:46 -0500
-Subject: [Buildroot] [PATCH 07/17] setools: new package
+Date: Wed, 4 Sep 2013 18:09:52 -0500
+Subject: [Buildroot] [PATCH 13/17] audit: new package
 In-Reply-To: <1378336196-27403-1-git-send-email-clshotwe@rockwellcollins.com>
 References: <1378336196-27403-1-git-send-email-clshotwe@rockwellcollins.com>
-Message-ID: <1378336196-27403-8-git-send-email-clshotwe@rockwellcollins.com>
+Message-ID: <1378336196-27403-14-git-send-email-clshotwe@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,1290 +14,1737 @@ To: buildroot@busybox.net
 Signed-off-by: Clayton Shotwell <clshotwe@rockwellcollins.com>
 ---
  package/Config.in                                  |    1 +
- package/setools/Config.in                          |   22 +
- .../setools/setools-0001-cross_compile_fixes.patch |  116 +++
- .../setools-0002-swig_typedef_python_fixes.patch   | 1010 ++++++++++++++++++++
- package/setools/setools.mk                         |   91 ++
- 5 files changed, 1240 insertions(+), 0 deletions(-)
- create mode 100644 package/setools/Config.in
- create mode 100644 package/setools/setools-0001-cross_compile_fixes.patch
- create mode 100644 package/setools/setools-0002-swig_typedef_python_fixes.patch
- create mode 100644 package/setools/setools.mk
+ package/audit/Config.in                            |   26 +
+ package/audit/S14auditd                            |  172 +++
+ ...audit-2.3.1-crossCompileHeaderCreationFix.patch | 1388 ++++++++++++++++++++
+ package/audit/audit-2.3.1-remove-zos-plugin.patch  |   31 +
+ package/audit/audit.mk                             |   61 +
+ 6 files changed, 1679 insertions(+), 0 deletions(-)
+ create mode 100644 package/audit/Config.in
+ create mode 100755 package/audit/S14auditd
+ create mode 100644 package/audit/audit-2.3.1-crossCompileHeaderCreationFix.patch
+ create mode 100644 package/audit/audit-2.3.1-remove-zos-plugin.patch
+ create mode 100644 package/audit/audit.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index ca38111..9e59b90 100644
+index 560e38e..a032e5e 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -903,6 +903,7 @@ source "package/libsepol/Config.in"
- source "package/libselinux/Config.in"
- source "package/libsemanage/Config.in"
- source "package/sepolgen/Config.in"
-+source "package/setools/Config.in"
- endmenu
- 
+@@ -913,6 +913,7 @@ endmenu
  menu "System tools"
-diff --git a/package/setools/Config.in b/package/setools/Config.in
+ source "package/acl/Config.in"
+ source "package/attr/Config.in"
++source "package/audit/Config.in"
+ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ source "package/bootutils/Config.in"
+ endif
+diff --git a/package/audit/Config.in b/package/audit/Config.in
 new file mode 100644
-index 0000000..649216d
+index 0000000..8c7b318
 --- /dev/null
-+++ b/package/setools/Config.in
-@@ -0,0 +1,22 @@
-+config BR2_PACKAGE_SETOOLS
-+	bool "setools"
++++ b/package/audit/Config.in
+@@ -0,0 +1,26 @@
++config BR2_PACKAGE_AUDIT
++	bool "audit"
 +	help
-+	  SETools is an open source project designed to facilitate SELinux policy 
-+	  analysis. The primary tools are:
-+	      
-+	      apol - analyze a SELinux policy.
-+	      seaudit - analyze audit messages from SELinux.
-+	      seaudit-report - generate highly-customized audit log reports.
-+	      sechecker - command line tool for performing modular checks on an SELinux policy.
-+	      sediff - semantic policy difference tool for SELinux.
-+	      secmds - command-line tools to analyze and search SELinux policy. 
++	  The audit package contains the user space utilities for
++	  storing and searching the audit records generate by
++	  the audit subsystem in the Linux 2.6 kernel
++	  
++	  Note: The z/OS remote plugin is disabled in this package
++	  
++	  http://people.redhat.com/sgrubb/audit/
 +
-+if BR2_PACKAGE_SETOOLS
++if BR2_PACKAGE_AUDIT
 +
-+config BR2_PACKAGE_SETOOLS_PYTHON_BINDINGS
-+	bool "python bindings"
++config BR2_PACKAGE_AUDIT_PYTHON_BINDINGS
 +	select BR2_PACKAGE_PYTHON
++	bool "python bindings"
 +	help
 +	  enable building python bindings
 +
++config BR2_PACKAGE_AUDIT_LIBCAP_NG
++	select BR2_PACKAGE_LIBCAP_NG
++	bool "libcap-ng support"
++	help
++	  Add Libcap-ng support
++
 +endif
-diff --git a/package/setools/setools-0001-cross_compile_fixes.patch b/package/setools/setools-0001-cross_compile_fixes.patch
-new file mode 100644
-index 0000000..d9eca46
+diff --git a/package/audit/S14auditd b/package/audit/S14auditd
+new file mode 100755
+index 0000000..74a6249
 --- /dev/null
-+++ b/package/setools/setools-0001-cross_compile_fixes.patch
-@@ -0,0 +1,116 @@
++++ b/package/audit/S14auditd
+@@ -0,0 +1,172 @@
++#!/bin/bash
++#
++# auditd        This starts and stops auditd
++#
++# description: This starts the Linux Auditing System Daemon, \
++#              which collects security related events in a dedicated \
++#              audit log. If this daemon is turned off, audit events \
++#              will be sent to syslog.
++#
++# processname: /sbin/auditd
++# config: /etc/sysconfig/auditd
++# config: /etc/audit/auditd.conf
++# pidfile: /var/run/auditd.pid
++#
++# Return values according to LSB for all commands but status:
++# 0 - success
++# 1 - generic or unspecified error
++# 3 - unimplemented feature (e.g. "reload")
++# 4 - insufficient privilege
++# 5 - program is not installed
++# 6 - program is not configured
++# 7 - program is not running
++#
++prog="auditd"
++
++# Check that we are root ... so non-root users stop here
++test $EUID=0  ||  exit 4
++
++# Check config
++test -f /etc/sysconfig/auditd && . /etc/sysconfig/auditd
++
++RETVAL=0
++LOCK=/var/lock/subsys/auditd
++
++start(){
++   echo -n "Initializing $prog: "
++
++   if [ ! -e $LOCK ]; then
++      test -x /sbin/auditd  || exit 5
++      test -f /etc/audit/auditd.conf  || exit 6
++   
++      # Create dir to store log files in if one doesn't exist
++      test -d /var/log/audit || mkdir -p /var/log/audit && /sbin/restorecon /var/log/audit
++   
++      # Run audit daemon executable
++      $prog
++      RETVAL=$?
++      if test $RETVAL = 0 ; then
++         test -d /var/lock/subsys || mkdir -p /var/lock/subsys
++         touch $LOCK
++         # Load the default rules
++         test -f /etc/audit/audit.rules && /sbin/auditctl -R /etc/audit/audit.rules >/dev/null
++         echo "OK"
++      else
++         echo "FAILED: auditd failed to start"
++      fi
++   else
++      echo "FAILED: auditd already started, stop first"
++      RETVAL=1
++   fi
++   return $RETVAL
++}
++
++stop(){
++   echo -n "Uninitializing $prog: "
++   if [ -e $LOCK ]; then
++      killall -TERM $prog
++      RETVAL=$?
++      if [ $RETVAL ]; then
++         rm -f $LOCK
++         # Remove watches so shutdown works cleanly
++         if test x"$AUDITD_CLEAN_STOP" != "x" ; then
++            if test "`echo $AUDITD_CLEAN_STOP | tr 'NO' 'no'`" != "no"
++            then
++               /sbin/auditctl -D >/dev/null
++            fi
++         fi
++         if test x"$AUDITD_STOP_DISABLE" != "x" ; then
++            if test "`echo $AUDITD_STOP_DISABLE | tr 'NO' 'no'`" != "no"
++            then
++               /sbin/auditctl -e 0 >/dev/null
++            fi
++         fi
++         echo "OK"
++      else
++         echo "FAILED: auditd not stopped"
++      fi
++   else
++      echo "FAILED: auditd not started"
++      RETVAL=1
++   fi
++   return $RETVAL
++}
++
++reload(){
++   echo -n "Reloading auditd configuration: "
++   if [ -e $LOCK ]; then
++      test -f /etc/audit/auditd.conf  || exit 6
++      echo -n "Reloading configuration: " 
++      killall -HUP $prog
++      RETVAL=$?
++      if [ $RETVAL ]; then
++         echo "OK"
++      else
++         echo "FAILED"
++      fi
++   else
++      echo "FAILED: auditd not started"
++      RETVAL=1
++   fi
++   return $RETVAL
++}
++
++rotate(){
++   echo -n "Rotating auditd logs: "  
++   if [ -e $LOCK ]; then
++      killall -USR1 $prog
++      RETVAL=$?
++      if [ $RETVAL ]; then
++         echo "OK"
++      else
++         echo "FAILED"
++      fi
++   else
++      echo "FAILED: auditd not started"
++      RETVAL=1
++   fi
++   return $RETVAL
++}
++
++restart(){
++   test -f /etc/audit/auditd.conf  || exit 6
++   stop
++   start
++   return $RETVAL
++}
++
++condrestart(){
++   [ -e $LOCK ] && restart
++   return 0
++}
++
++# See how we were called.
++case "$1" in
++   start)
++      start
++      ;;
++   stop)
++      stop
++      ;;
++   restart)
++      restart
++      ;;
++   reload)
++      reload
++      ;;
++   rotate)
++      rotate
++      ;;
++   resume)
++      resume
++      ;;
++   condrestart)
++      condrestart
++      ;;
++   *)
++      echo "Usage: $0 {start|stop|restart|condrestart|reload|rotate}"
++      RETVAL=3
++      ;;
++esac
++
++exit $RETVAL
+diff --git a/package/audit/audit-2.3.1-crossCompileHeaderCreationFix.patch b/package/audit/audit-2.3.1-crossCompileHeaderCreationFix.patch
+new file mode 100644
+index 0000000..7e3b6ed
+--- /dev/null
++++ b/package/audit/audit-2.3.1-crossCompileHeaderCreationFix.patch
+@@ -0,0 +1,1388 @@
 +diff -urN a/configure.ac b/configure.ac
-+--- a/configure.ac	2013-01-16 10:36:24.000000000 -0600
-++++ b/configure.ac	2013-07-12 08:22:10.380255248 -0500
-+@@ -448,8 +448,9 @@
-+               sepol_srcdir="")
-+ if test "x${sepol_srcdir}" = "x"; then
-+    sepol_srcdir=${sepol_devel_libdir}
-+-   AC_CHECK_FILE([${sepol_srcdir}/libsepol.a],,
-+-      AC_MSG_ERROR([make sure libsepol-static is installed]))
-++   if test ! -f ${sepol_srcdir}/libsepol.a; then
-++      AC_MSG_ERROR([could not find precompiled libsepol.a])
-++   fi
++--- a/configure.ac	2013-07-29 16:37:01.000000000 -0500
+++++ b/configure.ac	2013-08-21 13:29:55.760585744 -0500
++@@ -51,6 +51,8 @@
++ AC_PROG_CC
++ AC_PROG_INSTALL
++ AC_PROG_AWK
+++AM_PATH_PYTHON(2.7)
+++AC_PYTHON_MODULE(pyparsing, 1)
++ 
++ echo .
++ echo Checking for header files
++@@ -89,8 +91,7 @@
++ 	AC_MSG_RESULT(no)
 + else
-+    AC_MSG_CHECKING([for compatible sepol source tree])
-+    sepol_version=${sepol_srcdir}/VERSION
-+@@ -484,8 +485,9 @@
-+    AC_CHECK_HEADER([sepol/policydb/policydb.h], , AC_MSG_ERROR([could not find sepol source tree]))
-+    CFLAGS="${sepol_src_save_CFLAGS}"
-+    CPPFLAGS="${sepol_src_save_CPPFLAGS}"
-+-   AC_CHECK_FILE([${sepol_srcdir}/libsepol.a],,
-+-      AC_MSG_ERROR([could not find precompiled libsepol.a]))
-++   if test ! -f ${sepol_srcdir}/libsepol.a; then
-++      AC_MSG_ERROR([could not find precompiled libsepol.a])
-++   fi
-+    sepol_devel_incdir="${sepol_srcdir}/../include"
-+ fi
-+ SELINUX_CFLAGS="-I${sepol_devel_incdir} -I${selinux_devel_incdir}"
-+@@ -578,12 +580,13 @@
-+                          [AC_LANG_SOURCE([
-+ #include <sepol/policydb/expand.h>
-+ int main () {
-+-  return expand_module_avrules(NULL, NULL, NULL, NULL, NULL, 0, 0);
-++  return expand_module_avrules(NULL, NULL, NULL, NULL, NULL, 0, 0, 0, 0);
-+ }])],
-+                          AC_MSG_RESULT([yes]),
-+                          AC_MSG_ERROR([this version of libsepol is incompatible with SETools]))
-+     fi
-+     sepol_new_expand_boolmap="yes"
-++    sepol_new_user_role_mapping="yes"
++ AC_MSG_RESULT(testing)
++-AM_PATH_PYTHON
++-if test -f /usr/include/python${am_cv_python_version}/Python.h ; then
+++if test x$ax_python_header != x ; then
++ 	python_found="yes"
++ 	AC_MSG_NOTICE(Python bindings will be built)
 + else
-+     sepol_new_expand_boolmap="no"
-+ fi
-+@@ -607,7 +610,8 @@
-+     exit(EXIT_FAILURE);
-+ }])],
-+     sepol_policy_version_max=`cat conftest.data`,
-+-    AC_MSG_FAILURE([could not determine maximum libsepol policy version]))
-++    AC_MSG_FAILURE([could not determine maximum libsepol policy version]),
-++    sepol_policy_version_max="26")
-+ AC_DEFINE_UNQUOTED(SEPOL_POLICY_VERSION_MAX, ${sepol_policy_version_max}, [maximum policy version supported by libsepol])
-+ CFLAGS="${sepol_save_CFLAGS}"
-+ CPPFLAGS="${sepol_save_CPPFLAGS}"
-+@@ -631,7 +635,7 @@
-+     changequote([,])dnl
-+     selinux_save_CFLAGS="${CFLAGS}"
-+     CFLAGS="${SELINUX_CFLAGS} ${SELINUX_LIB_FLAG} -lselinux -lsepol ${CFLAGS}"
-+-    gcc ${CFLAGS} -o conftest conftest.c >&5
-++    ${CC} ${CFLAGS} -o conftest conftest.c >&5
-+     selinux_policy_dir=`./conftest`
-+     AC_MSG_RESULT(${selinux_policy_dir})
-+     CFLAGS="${selinux_save_CFLAGS}"
-+diff -urN a/libqpol/src/policy_define.c b/libqpol/src/policy_define.c
-+--- a/libqpol/src/policy_define.c	2013-01-16 10:36:24.000000000 -0600
-++++ b/libqpol/src/policy_define.c	2013-07-12 08:22:10.380255248 -0500
-+@@ -2135,7 +2135,7 @@
-+ #ifdef HAVE_SEPOL_ROLE_ATTRS
-+ 	if (role_set_expand(&roles, &e_roles, policydbp, NULL, NULL))
-+ #elif HAVE_SEPOL_USER_ROLE_MAPPING
-+-	if (role_set_expand(&roles, &e_roles, policydbp, NULL))
-++	if (role_set_expand(&roles, &e_roles, policydbp, NULL, NULL))
-+ #else
-+ 	if (role_set_expand(&roles, &e_roles, policydbp))
-+ #endif
-+diff -urN a/m4/ac_python_devel.m4 b/m4/ac_python_devel.m4
-+--- a/m4/ac_python_devel.m4	2013-01-16 10:36:22.000000000 -0600
-++++ b/m4/ac_python_devel.m4	2013-07-12 08:22:10.380255248 -0500
-+@@ -234,7 +234,7 @@
-+ 	AC_MSG_CHECKING([consistency of all components of python development environment])
-+ 	AC_LANG_PUSH([C])
-+ 	# save current global flags
-+-	LIBS="$ac_save_LIBS $PYTHON_LDFLAGS"
-++	LIBS="$ac_save_LIBS $PYTHON_EXTRA_LIBS $PYTHON_LDFLAGS"
-+ 	CPPFLAGS="$ac_save_CPPFLAGS $PYTHON_CPPFLAGS"
-+ 	AC_TRY_LINK([
-+ 		#include <Python.h>
-+diff -urN a/python/setools/Makefile.am b/python/setools/Makefile.am
-+--- a/python/setools/Makefile.am	2013-01-16 10:36:22.000000000 -0600
-++++ b/python/setools/Makefile.am	2013-07-12 08:22:19.200251011 -0500
-+@@ -22,13 +22,13 @@
-+ python-build: sesearch.c seinfo.c
-+ 	@mkdir -p setools
-+ 	@cp __init__.py setools
-+-	LIBS="$(QPOL_LIB_FLAG) $(APOL_LIB_FLAG)" INCLUDES="$(QPOL_CFLAGS) $(APOL_CFLAGS)" $(PYTHON) setup.py build
-++	LIBS="$(QPOL_LIB_FLAG) $(APOL_LIB_FLAG)" LIBDIRS="$(PYTHON_LDFLAGS)" INCLUDES="$(PYTHON_CPPFLAGS) $(QPOL_CFLAGS) $(APOL_CFLAGS)" CC="$(CC)" CFLAGS="$(CFLAGS)" LDSHARED="$(CC) -shared" LDFLAGS="$(LDFLAGS)" $(PYTHON) setup.py build_ext
++diff -urN /dev/null b/m4/ax_python_module.m4
++--- /dev/null	2013-06-19 11:25:31.230442052 -0500
+++++ b/m4/ax_python_module.m4	2013-08-21 12:43:56.829882655 -0500
++@@ -0,0 +1,49 @@
+++# ===========================================================================
+++#     http://www.gnu.org/software/autoconf-archive/ax_python_module.html
+++# ===========================================================================
+++#
+++# SYNOPSIS
+++#
+++#   AX_PYTHON_MODULE(modname[, fatal])
+++#
+++# DESCRIPTION
+++#
+++#   Checks for Python module.
+++#
+++#   If fatal is non-empty then absence of a module will trigger an error.
+++#
+++# LICENSE
+++#
+++#   Copyright (c) 2008 Andrew Collier
+++#
+++#   Copying and distribution of this file, with or without modification, are
+++#   permitted in any medium without royalty provided the copyright notice
+++#   and this notice are preserved. This file is offered as-is, without any
+++#   warranty.
+++
+++#serial 6
+++
+++AU_ALIAS([AC_PYTHON_MODULE], [AX_PYTHON_MODULE])
+++AC_DEFUN([AX_PYTHON_MODULE],[
+++    if test -z $PYTHON;
+++    then
+++        PYTHON="python"
+++    fi
+++    PYTHON_NAME=`basename $PYTHON`
+++    AC_MSG_CHECKING($PYTHON_NAME module: $1)
+++	$PYTHON -c "import $1" 2>/dev/null
+++	if test $? -eq 0;
+++	then
+++		AC_MSG_RESULT(yes)
+++		eval AS_TR_CPP(HAVE_PYMOD_$1)=yes
+++	else
+++		AC_MSG_RESULT(no)
+++		eval AS_TR_CPP(HAVE_PYMOD_$1)=no
+++		#
+++		if test -n "$2"
+++		then
+++			AC_MSG_ERROR(failed to find required module $1)
+++			exit 1
+++		fi
+++	fi
+++])
++diff -urN a/auparse/Makefile.am b/auparse/Makefile.am
++--- a/auparse/Makefile.am	2013-07-29 16:37:01.000000000 -0500
+++++ b/auparse/Makefile.am	2013-08-19 14:37:31.230510790 -0500
++@@ -52,8 +52,8 @@
++ 	rlimittabs.h recvtabs.h schedtabs.h seccomptabs.h \
++ 	seektabs.h shm_modetabs.h signaltabs.h sockoptnametabs.h \
++ 	socktabs.h sockleveltabs.h socktypetabs.h \
++-	tcpoptnametabs.h typetabs.h umounttabs.h
++-noinst_PROGRAMS = gen_accesstabs_h gen_captabs_h gen_clock_h \
+++	tcpoptnametabs.h typetabs.h umounttabs.h \
+++	gen_accesstabs_h gen_captabs_h gen_clock_h \
++ 	gen_clone-flagtabs_h \
++ 	gen_epoll_ctls_h gen_famtabs_h \
++ 	gen_fcntl-cmdtabs_h gen_flagtabs_h \
++@@ -69,187 +69,184 @@
++ 	gen_socktypetabs_h gen_tcpoptnametabs_h gen_typetabs_h \
++ 	gen_umounttabs_h
 + 
-+ install-exec-hook:
-+-	$(PYTHON) setup.py install `test -n "$(DESTDIR)" && echo --root $(DESTDIR)`
-++	$(PYTHON) setup.py install `test -n "$(DESTDIR)" && echo --prefix=$(DESTDIR)/usr`
++-gen_accesstabs_h_SOURCES = ../lib/gen_tables.c ../lib/gen_tables.h accesstab.h
++-gen_accesstabs_h_CFLAGS = $(AM_CFLAGS) '-DTABLE_H="accesstab.h"'
+++gen_accesstabs_h: ../lib/gen_tables.c ../lib/gen_tables.h accesstab.h
+++	$(CC) $(INCLUDES) $(AM_CFLAGS) $(CFLAGS) -DTABLE_H=\"accesstab.h\" -E -o $@ ../lib/gen_tables.c
++ accesstabs.h: gen_accesstabs_h Makefile
++-	./gen_accesstabs_h --i2s-transtab access > $@
+++	$(PYTHON) ../lib/gen_tables.py --i2s-transtab access gen_accesstabs_h $@
 + 
-+ uninstall-hook: 
-+-	$(PYTHON) setup.py uninstall `test -n "$(DESTDIR)" && echo --root $(DESTDIR)`
-++	$(PYTHON) setup.py uninstall `test -n "$(DESTDIR)" && echo --prefix=$(DESTDIR)/usr`
++-gen_captabs_h_SOURCES = ../lib/gen_tables.c ../lib/gen_tables.h captab.h
++-gen_captabs_h_CFLAGS = $(AM_CFLAGS) '-DTABLE_H="captab.h"'
+++gen_captabs_h: ../lib/gen_tables.c ../lib/gen_tables.h captab.h
+++	$(CC) $(INCLUDES) $(AM_CFLAGS) $(CFLAGS) -DTABLE_H=\"captab.h\" -E -o $@ ../lib/gen_tables.c
++ captabs.h: gen_captabs_h Makefile
++-	./gen_captabs_h --i2s cap > $@
+++	$(PYTHON) ../lib/gen_tables.py --i2s cap gen_captabs_h $@
 + 
-+ clean-local:
-+ 	$(PYTHON) setup.py clean -a 
-+--- a/python/setools/setup.py	2013-01-16 10:36:22.000000000 -0600
-++++ b/python/setools/setup.py	2013-09-04 09:17:48.452916991 -0500
-+@@ -8,7 +8,7 @@
-+ try:
-+     inc=os.getenv("INCLUDES").split(" ")    
-+     INCLUDES=map(lambda x: x[2:], inc)
-+-    LIBDIRS=map(lambda x: "/".join(x.split("/")[:-1]), os.getenv("LIBS").split())
-++    LIBDIRS=map(lambda x: "/".join(x.split("/")[:-1]), os.getenv("LIBS").split()) + map(lambda x: x[2:], os.getenv("LIBDIRS").split())
-+ except:
-+     INCLUDES=""
-+     LIBDIRS=""
-diff --git a/package/setools/setools-0002-swig_typedef_python_fixes.patch b/package/setools/setools-0002-swig_typedef_python_fixes.patch
++-gen_clock_h_SOURCES = ../lib/gen_tables.c ../lib/gen_tables.h clocktab.h
++-gen_clock_h_CFLAGS = $(AM_CFLAGS) '-DTABLE_H="clocktab.h"'
+++gen_clock_h: ../lib/gen_tables.c ../lib/gen_tables.h clocktab.h
+++	$(CC) $(INCLUDES) $(AM_CFLAGS) $(CFLAGS) -DTABLE_H=\"clocktab.h\" -E -o $@ ../lib/gen_tables.c
++ clocktabs.h: gen_clock_h Makefile
++-	./gen_clock_h --i2s clock > $@
+++	$(PYTHON) ../lib/gen_tables.py --i2s clock gen_clock_h $@
++ 
++-gen_clone_flagtabs_h_SOURCES = ../lib/gen_tables.c ../lib/gen_tables.h \
++-	clone-flagtab.h
++-gen_clone_flagtabs_h_CFLAGS = $(AM_CFLAGS) '-DTABLE_H="clone-flagtab.h"'
+++gen_clone-flagtabs_h: ../lib/gen_tables.c ../lib/gen_tables.h clone-flagtab.h
+++	$(CC) $(INCLUDES) $(AM_CFLAGS) $(CFLAGS) -DTABLE_H=\"clone-flagtab.h\" -E -o $@ ../lib/gen_tables.c
++ clone-flagtabs.h: gen_clone-flagtabs_h Makefile
++-	./gen_clone-flagtabs_h --i2s-transtab clone_flag > $@
+++	$(PYTHON) ../lib/gen_tables.py --i2s-transtab clone_flag gen_clone-flagtabs_h $@
++ 
++-gen_epoll_ctls_h_SOURCES = ../lib/gen_tables.c ../lib/gen_tables.h epoll_ctl.h
++-gen_epoll_ctls_h_CFLAGS = $(AM_CFLAGS) '-DTABLE_H="epoll_ctl.h"'
+++gen_epoll_ctls_h: ../lib/gen_tables.c ../lib/gen_tables.h epoll_ctl.h
+++	$(CC) $(INCLUDES) $(AM_CFLAGS) $(CFLAGS) -DTABLE_H=\"epoll_ctl.h\" -E -o $@ ../lib/gen_tables.c
++ epoll_ctls.h: gen_epoll_ctls_h Makefile
++-	./gen_epoll_ctls_h --i2s epoll_ctl > $@
+++	$(PYTHON) ../lib/gen_tables.py --i2s epoll_ctl gen_epoll_ctls_h $@
++ 
++-gen_famtabs_h_SOURCES = ../lib/gen_tables.c ../lib/gen_tables.h famtab.h
++-gen_famtabs_h_CFLAGS = $(AM_CFLAGS) '-DTABLE_H="famtab.h"'
+++gen_famtabs_h: ../lib/gen_tables.c ../lib/gen_tables.h famtab.h
+++	$(CC) $(INCLUDES) $(AM_CFLAGS) $(CFLAGS) -DTABLE_H=\"famtab.h\" -E -o $@ ../lib/gen_tables.c
++ famtabs.h: gen_famtabs_h Makefile
++-	./gen_famtabs_h --i2s fam > $@
+++	$(PYTHON) ../lib/gen_tables.py --i2s fam gen_famtabs_h $@
++ 
++-gen_flagtabs_h_SOURCES = ../lib/gen_tables.c ../lib/gen_tables.h flagtab.h
++ # ../auparse/ is used to avoid using ../lib/flagtab.h
++-gen_flagtabs_h_CFLAGS = $(AM_CFLAGS) '-DTABLE_H="../auparse/flagtab.h"'
+++gen_flagtabs_h: ../lib/gen_tables.c ../lib/gen_tables.h ../auparse/flagtab.h
+++	$(CC) $(INCLUDES) $(AM_CFLAGS) $(CFLAGS) -DTABLE_H=\"../auparse/flagtab.h\" -E -o $@ ../lib/gen_tables.c
++ flagtabs.h: gen_flagtabs_h Makefile
++-	./gen_flagtabs_h --i2s-transtab flag > $@
+++	$(PYTHON) ../lib/gen_tables.py --i2s-transtab flag gen_flagtabs_h $@
++ 
++-gen_fcntl_cmdtabs_h_SOURCES = ../lib/gen_tables.c ../lib/gen_tables.h \
++-	fcntl-cmdtab.h
++-gen_fcntl_cmdtabs_h_CFLAGS = $(AM_CFLAGS) '-DTABLE_H="fcntl-cmdtab.h"'
+++gen_fcntl-cmdtabs_h: ../lib/gen_tables.c ../lib/gen_tables.h fcntl-cmdtab.h
+++	$(CC) $(INCLUDES) $(AM_CFLAGS) $(CFLAGS) -DTABLE_H=\"fcntl-cmdtab.h\" -E -o $@ ../lib/gen_tables.c
++ fcntl-cmdtabs.h: gen_fcntl-cmdtabs_h Makefile
++-	./gen_fcntl-cmdtabs_h --i2s fcntl > $@
+++	$(PYTHON) ../lib/gen_tables.py --i2s fcntl gen_fcntl-cmdtabs_h $@
++ 
++-gen_icmptypetabs_h_SOURCES = ../lib/gen_tables.c ../lib/gen_tables.h icmptypetab.h
++-gen_icmptypetabs_h_CFLAGS = $(AM_CFLAGS) '-DTABLE_H="icmptypetab.h"'
+++gen_icmptypetabs_h: ../lib/gen_tables.c ../lib/gen_tables.h icmptypetab.h
+++	$(CC) $(INCLUDES) $(AM_CFLAGS) $(CFLAGS) -DTABLE_H=\"icmptypetab.h\" -E -o $@ ../lib/gen_tables.c
++ icmptypetabs.h: gen_icmptypetabs_h Makefile
++-	./gen_icmptypetabs_h --i2s icmptype > $@
+++	$(PYTHON) ../lib/gen_tables.py --i2s icmptype gen_icmptypetabs_h $@
++ 
++-gen_ipctabs_h_SOURCES = ../lib/gen_tables.c ../lib/gen_tables.h ipctab.h
++-gen_ipctabs_h_CFLAGS = $(AM_CFLAGS) '-DTABLE_H="ipctab.h"'
+++gen_ipctabs_h: ../lib/gen_tables.c ../lib/gen_tables.h ipctab.h
+++	$(CC) $(INCLUDES) $(AM_CFLAGS) $(CFLAGS) -DTABLE_H=\"ipctab.h\" -E -o $@ ../lib/gen_tables.c
++ ipctabs.h: gen_ipctabs_h Makefile
++-	./gen_ipctabs_h --i2s ipc > $@
+++	$(PYTHON) ../lib/gen_tables.py --i2s ipc gen_ipctabs_h $@
++ 
++-gen_ipccmdtabs_h_SOURCES = ../lib/gen_tables.c ../lib/gen_tables.h ipccmdtab.h
++-gen_ipccmdtabs_h_CFLAGS = $(AM_CFLAGS) '-DTABLE_H="ipccmdtab.h"'
+++gen_ipccmdtabs_h: ../lib/gen_tables.c ../lib/gen_tables.h ipccmdtab.h
+++	$(CC) $(INCLUDES) $(AM_CFLAGS) $(CFLAGS) -DTABLE_H=\"ipccmdtab.h\" -E -o $@ ../lib/gen_tables.c
++ ipccmdtabs.h: gen_ipccmdtabs_h Makefile
++-	./gen_ipccmdtabs_h --i2s-transtab ipccmd > $@
+++	$(PYTHON) ../lib/gen_tables.py --i2s-transtab ipccmd gen_ipccmdtabs_h $@
++ 
++-gen_ipoptnametabs_h_SOURCES = ../lib/gen_tables.c ../lib/gen_tables.h ipoptnametab.h
++-gen_ipoptnametabs_h_CFLAGS = $(AM_CFLAGS) '-DTABLE_H="ipoptnametab.h"'
+++gen_ipoptnametabs_h: ../lib/gen_tables.c ../lib/gen_tables.h ipoptnametab.h
+++	$(CC) $(INCLUDES) $(AM_CFLAGS) $(CFLAGS) -DTABLE_H=\"ipoptnametab.h\" -E -o $@ ../lib/gen_tables.c
++ ipoptnametabs.h: gen_ipoptnametabs_h Makefile
++-	./gen_ipoptnametabs_h --i2s ipoptname > $@
+++	$(PYTHON) ../lib/gen_tables.py --i2s ipoptname gen_ipoptnametabs_h $@
++ 
++-gen_ip6optnametabs_h_SOURCES = ../lib/gen_tables.c ../lib/gen_tables.h ip6optnametab.h
++-gen_ip6optnametabs_h_CFLAGS = $(AM_CFLAGS) '-DTABLE_H="ip6optnametab.h"'
+++gen_ip6optnametabs_h: ../lib/gen_tables.c ../lib/gen_tables.h ip6optnametab.h
+++	$(CC) $(INCLUDES) $(AM_CFLAGS) $(CFLAGS) -DTABLE_H=\"ip6optnametab.h\" -E -o $@ ../lib/gen_tables.c
++ ip6optnametabs.h: gen_ip6optnametabs_h Makefile
++-	./gen_ip6optnametabs_h --i2s ip6optname > $@
+++	$(PYTHON) ../lib/gen_tables.py --i2s ip6optname gen_ip6optnametabs_h $@
++ 
++-gen_mmaptabs_h_SOURCES = ../lib/gen_tables.c ../lib/gen_tables.h mmaptab.h
++-gen_mmaptabs_h_CFLAGS = $(AM_CFLAGS) '-DTABLE_H="mmaptab.h"'
+++gen_mmaptabs_h: ../lib/gen_tables.c ../lib/gen_tables.h mmaptab.h
+++	$(CC) $(INCLUDES) $(AM_CFLAGS) $(CFLAGS) -DTABLE_H=\"mmaptab.h\" -E -o $@ ../lib/gen_tables.c
++ mmaptabs.h: gen_mmaptabs_h Makefile
++-	./gen_mmaptabs_h --i2s-transtab mmap > $@
+++	$(PYTHON) ../lib/gen_tables.py --i2s-transtab mmap gen_mmaptabs_h $@
++ 
++-gen_mounttabs_h_SOURCES = ../lib/gen_tables.c ../lib/gen_tables.h mounttab.h
++-gen_mounttabs_h_CFLAGS = $(AM_CFLAGS) '-DTABLE_H="mounttab.h"'
+++gen_mounttabs_h: ../lib/gen_tables.c ../lib/gen_tables.h mounttab.h
+++	$(CC) $(INCLUDES) $(AM_CFLAGS) $(CFLAGS) -DTABLE_H=\"mounttab.h\" -E -o $@ ../lib/gen_tables.c
++ mounttabs.h: gen_mounttabs_h Makefile
++-	./gen_mounttabs_h --i2s-transtab mount > $@
+++	$(PYTHON) ../lib/gen_tables.py --i2s-transtab mount gen_mounttabs_h $@
++ 
++-gen_nfprototabs_h_SOURCES = ../lib/gen_tables.c ../lib/gen_tables.h nfprototab.h
++-gen_nfprototabs_h_CFLAGS = $(AM_CFLAGS) '-DTABLE_H="nfprototab.h"'
+++gen_nfprototabs_h: ../lib/gen_tables.c ../lib/gen_tables.h nfprototab.h
+++	$(CC) $(INCLUDES) $(AM_CFLAGS) $(CFLAGS) -DTABLE_H=\"nfprototab.h\" -E -o $@ ../lib/gen_tables.c
++ nfprototabs.h: gen_nfprototabs_h Makefile
++-	./gen_nfprototabs_h --i2s nfproto > $@
+++	$(PYTHON) ../lib/gen_tables.py --i2s nfproto gen_nfprototabs_h $@
++ 
++-gen_open_flagtabs_h_SOURCES = ../lib/gen_tables.c ../lib/gen_tables.h \
++-	open-flagtab.h
++-gen_open_flagtabs_h_CFLAGS = $(AM_CFLAGS) '-DTABLE_H="open-flagtab.h"'
+++gen_open-flagtabs_h: ../lib/gen_tables.c ../lib/gen_tables.h open-flagtab.h
+++	$(CC) $(INCLUDES) $(AM_CFLAGS) $(CFLAGS) -DTABLE_H=\"open-flagtab.h\" -E -o $@ ../lib/gen_tables.c
++ open-flagtabs.h: gen_open-flagtabs_h Makefile
++-	./gen_open-flagtabs_h --i2s-transtab open_flag > $@
+++	$(PYTHON) ../lib/gen_tables.py --i2s-transtab open_flag gen_open-flagtabs_h $@
++ 
++-gen_persontabs_h_SOURCES = ../lib/gen_tables.c ../lib/gen_tables.h persontab.h
++-gen_persontabs_h_CFLAGS = $(AM_CFLAGS) '-DTABLE_H="persontab.h"'
+++gen_persontabs_h: ../lib/gen_tables.c ../lib/gen_tables.h persontab.h
+++	$(CC) $(INCLUDES) $(AM_CFLAGS) $(CFLAGS) -DTABLE_H=\"persontab.h\" -E -o $@ ../lib/gen_tables.c
++ persontabs.h: gen_persontabs_h Makefile
++-	./gen_persontabs_h --i2s person > $@
+++	$(PYTHON) ../lib/gen_tables.py --i2s person gen_persontabs_h $@
++ 
++-gen_ptracetabs_h_SOURCES = ../lib/gen_tables.c ../lib/gen_tables.h ptracetab.h
++-gen_ptracetabs_h_CFLAGS = $(AM_CFLAGS) '-DTABLE_H="ptracetab.h"'
+++gen_ptracetabs_h: ../lib/gen_tables.c ../lib/gen_tables.h ptracetab.h
+++	$(CC) $(INCLUDES) $(AM_CFLAGS) $(CFLAGS) -DTABLE_H=\"ptracetab.h\" -E -o $@ ../lib/gen_tables.c
++ ptracetabs.h: gen_ptracetabs_h Makefile
++-	./gen_ptracetabs_h --i2s ptrace > $@
+++	$(PYTHON) ../lib/gen_tables.py --i2s ptrace gen_ptracetabs_h $@
++ 
++-gen_prctl_opttabs_h_SOURCES = ../lib/gen_tables.c ../lib/gen_tables.h prctl-opt-tab.h
++-gen_prctl_opttabs_h_CFLAGS = $(AM_CFLAGS) '-DTABLE_H="prctl-opt-tab.h"'
+++gen_prctl_opttabs_h: ../lib/gen_tables.c ../lib/gen_tables.h prctl-opt-tab.h
+++	$(CC) $(INCLUDES) $(AM_CFLAGS) $(CFLAGS) -DTABLE_H=\"prctl-opt-tab.h\" -E -o $@ ../lib/gen_tables.c
++ prctl_opttabs.h: gen_prctl_opttabs_h Makefile
++-	./gen_prctl_opttabs_h --i2s prctl_opt > $@
+++	$(PYTHON) ../lib/gen_tables.py --i2s prctl_opt gen_prctl_opttabs_h $@
++ 
++-gen_pktoptnametabs_h_SOURCES = ../lib/gen_tables.c ../lib/gen_tables.h pktoptnametab.h
++-gen_pktoptnametabs_h_CFLAGS = $(AM_CFLAGS) '-DTABLE_H="pktoptnametab.h"'
+++gen_pktoptnametabs_h: ../lib/gen_tables.c ../lib/gen_tables.h pktoptnametab.h
+++	$(CC) $(INCLUDES) $(AM_CFLAGS) $(CFLAGS) -DTABLE_H=\"pktoptnametab.h\" -E -o $@ ../lib/gen_tables.c
++ pktoptnametabs.h: gen_pktoptnametabs_h Makefile
++-	./gen_pktoptnametabs_h --i2s pktoptname > $@
+++	$(PYTHON) ../lib/gen_tables.py --i2s pktoptname gen_pktoptnametabs_h $@
++ 
++-gen_prottabs_h_SOURCES = ../lib/gen_tables.c ../lib/gen_tables.h prottab.h
++-gen_prottabs_h_CFLAGS = $(AM_CFLAGS) '-DTABLE_H="prottab.h"'
+++gen_prottabs_h: ../lib/gen_tables.c ../lib/gen_tables.h prottab.h
+++	$(CC) $(INCLUDES) $(AM_CFLAGS) $(CFLAGS) -DTABLE_H=\"prottab.h\" -E -o $@ ../lib/gen_tables.c
++ prottabs.h: gen_prottabs_h Makefile
++-	./gen_prottabs_h --i2s-transtab prot > $@
+++	$(PYTHON) ../lib/gen_tables.py --i2s-transtab prot gen_prottabs_h $@
++ 
++-gen_recvtabs_h_SOURCES = ../lib/gen_tables.c ../lib/gen_tables.h recvtab.h
++-gen_recvtabs_h_CFLAGS = $(AM_CFLAGS) '-DTABLE_H="recvtab.h"'
+++gen_recvtabs_h: ../lib/gen_tables.c ../lib/gen_tables.h recvtab.h
+++	$(CC) $(INCLUDES) $(AM_CFLAGS) $(CFLAGS) -DTABLE_H=\"recvtab.h\" -E -o $@ ../lib/gen_tables.c
++ recvtabs.h: gen_recvtabs_h Makefile
++-	./gen_recvtabs_h --i2s-transtab recv > $@
+++	$(PYTHON) ../lib/gen_tables.py --i2s-transtab recv gen_recvtabs_h $@
++ 
++-gen_rlimit_h_SOURCES = ../lib/gen_tables.c ../lib/gen_tables.h rlimittab.h
++-gen_rlimit_h_CFLAGS = $(AM_CFLAGS) '-DTABLE_H="rlimittab.h"'
+++gen_rlimit_h: ../lib/gen_tables.c ../lib/gen_tables.h rlimittab.h
+++	$(CC) $(INCLUDES) $(AM_CFLAGS) $(CFLAGS) -DTABLE_H=\"rlimittab.h\" -E -o $@ ../lib/gen_tables.c
++ rlimittabs.h: gen_rlimit_h Makefile
++-	./gen_rlimit_h --i2s rlimit > $@
+++	$(PYTHON) ../lib/gen_tables.py --i2s rlimit gen_rlimit_h $@
++ 
++-gen_schedtabs_h_SOURCES = ../lib/gen_tables.c ../lib/gen_tables.h schedtab.h
++-gen_schedtabs_h_CFLAGS = $(AM_CFLAGS) '-DTABLE_H="schedtab.h"'
+++gen_schedtabs_h: ../lib/gen_tables.c ../lib/gen_tables.h schedtab.h
+++	$(CC) $(INCLUDES) $(AM_CFLAGS) $(CFLAGS) -DTABLE_H=\"schedtab.h\" -E -o $@ ../lib/gen_tables.c
++ schedtabs.h: gen_schedtabs_h Makefile
++-	./gen_schedtabs_h --i2s sched > $@
+++	$(PYTHON) ../lib/gen_tables.py --i2s sched gen_schedtabs_h $@
++ 
++-gen_seccomptabs_h_SOURCES = ../lib/gen_tables.c ../lib/gen_tables.h seccomptab.h
++-gen_seccomptabs_h_CFLAGS = $(AM_CFLAGS) '-DTABLE_H="seccomptab.h"'
+++gen_seccomptabs_h: ../lib/gen_tables.c ../lib/gen_tables.h seccomptab.h
+++	$(CC) $(INCLUDES) $(AM_CFLAGS) $(CFLAGS) -DTABLE_H=\"seccomptab.h\" -E -o $@ ../lib/gen_tables.c
++ seccomptabs.h: gen_seccomptabs_h Makefile
++-	./gen_seccomptabs_h --i2s seccomp > $@
+++	$(PYTHON) ../lib/gen_tables.py --i2s seccomp gen_seccomptabs_h $@
++ 
++-gen_seektabs_h_SOURCES = ../lib/gen_tables.c ../lib/gen_tables.h seektab.h
++-gen_seektabs_h_CFLAGS = $(AM_CFLAGS) '-DTABLE_H="seektab.h"'
+++gen_seektabs_h: ../lib/gen_tables.c ../lib/gen_tables.h seektab.h
+++	$(CC) $(INCLUDES) $(AM_CFLAGS) $(CFLAGS) -DTABLE_H=\"seektab.h\" -E -o $@ ../lib/gen_tables.c
++ seektabs.h: gen_seektabs_h Makefile
++-	./gen_seektabs_h --i2s seek > $@
+++	$(PYTHON) ../lib/gen_tables.py --i2s seek gen_seektabs_h $@
++ 
++-gen_shm_modetabs_h_SOURCES = ../lib/gen_tables.c ../lib/gen_tables.h shm_modetab.h
++-gen_shm_modetabs_h_CFLAGS = $(AM_CFLAGS) '-DTABLE_H="shm_modetab.h"'
+++gen_shm_modetabs_h: ../lib/gen_tables.c ../lib/gen_tables.h shm_modetab.h
+++	$(CC) $(INCLUDES) $(AM_CFLAGS) $(CFLAGS) -DTABLE_H=\"shm_modetab.h\" -E -o $@ ../lib/gen_tables.c
++ shm_modetabs.h: gen_shm_modetabs_h Makefile
++-	./gen_shm_modetabs_h --i2s-transtab shm_mode > $@
+++	$(PYTHON) ../lib/gen_tables.py --i2s-transtab shm_mode gen_shm_modetabs_h $@
++ 
++-gen_signals_h_SOURCES = ../lib/gen_tables.c ../lib/gen_tables.h signaltab.h
++-gen_signals_h_CFLAGS = $(AM_CFLAGS) '-DTABLE_H="signaltab.h"'
+++gen_signals_h: ../lib/gen_tables.c ../lib/gen_tables.h signaltab.h
+++	$(CC) $(INCLUDES) $(AM_CFLAGS) $(CFLAGS) -DTABLE_H=\"signaltab.h\" -E -o $@ ../lib/gen_tables.c
++ signaltabs.h: gen_signals_h Makefile
++-	./gen_signals_h --i2s signal > $@
+++	$(PYTHON) ../lib/gen_tables.py --i2s signal gen_signals_h $@
++ 
++-gen_sockleveltabs_h_SOURCES = ../lib/gen_tables.c ../lib/gen_tables.h sockleveltab.h
++-gen_sockleveltabs_h_CFLAGS = $(AM_CFLAGS) '-DTABLE_H="sockleveltab.h"'
+++gen_sockleveltabs_h: ../lib/gen_tables.c ../lib/gen_tables.h sockleveltab.h
+++	$(CC) $(INCLUDES) $(AM_CFLAGS) $(CFLAGS) -DTABLE_H=\"sockleveltab.h\" -E -o $@ ../lib/gen_tables.c
++ sockleveltabs.h: gen_sockleveltabs_h Makefile
++-	./gen_sockleveltabs_h --i2s socklevel > $@
+++	$(PYTHON) ../lib/gen_tables.py --i2s socklevel gen_sockleveltabs_h $@
++ 
++-gen_sockoptnametabs_h_SOURCES = ../lib/gen_tables.c ../lib/gen_tables.h sockoptnametab.h
++-gen_sockoptnametabs_h_CFLAGS = $(AM_CFLAGS) '-DTABLE_H="sockoptnametab.h"'
+++gen_sockoptnametabs_h: ../lib/gen_tables.c ../lib/gen_tables.h sockoptnametab.h
+++	$(CC) $(INCLUDES) $(AM_CFLAGS) $(CFLAGS) -DTABLE_H=\"sockoptnametab.h\" -E -o $@ ../lib/gen_tables.c
++ sockoptnametabs.h: gen_sockoptnametabs_h Makefile
++-	./gen_sockoptnametabs_h --i2s sockoptname > $@
+++	$(PYTHON) ../lib/gen_tables.py --i2s sockoptname gen_sockoptnametabs_h $@
++ 
++-gen_socktabs_h_SOURCES = ../lib/gen_tables.c ../lib/gen_tables.h socktab.h
++-gen_socktabs_h_CFLAGS = $(AM_CFLAGS) '-DTABLE_H="socktab.h"'
+++gen_socktabs_h: ../lib/gen_tables.c ../lib/gen_tables.h socktab.h
+++	$(CC) $(INCLUDES) $(AM_CFLAGS) $(CFLAGS) -DTABLE_H=\"socktab.h\" -E -o $@ ../lib/gen_tables.c
++ socktabs.h: gen_socktabs_h Makefile
++-	./gen_socktabs_h --i2s sock > $@
+++	$(PYTHON) ../lib/gen_tables.py --i2s sock gen_socktabs_h $@
++ 
++-gen_socktypetabs_h_SOURCES = ../lib/gen_tables.c ../lib/gen_tables.h socktypetab.h
++-gen_socktypetabs_h_CFLAGS = $(AM_CFLAGS) '-DTABLE_H="socktypetab.h"'
+++gen_socktypetabs_h: ../lib/gen_tables.c ../lib/gen_tables.h socktypetab.h
+++	$(CC) $(INCLUDES) $(AM_CFLAGS) $(CFLAGS) -DTABLE_H=\"socktypetab.h\" -E -o $@ ../lib/gen_tables.c
++ socktypetabs.h: gen_socktypetabs_h Makefile
++-	./gen_socktypetabs_h --i2s sock_type > $@
+++	$(PYTHON) ../lib/gen_tables.py --i2s sock_type gen_socktypetabs_h $@
++ 
++-gen_tcpoptnametabs_h_SOURCES = ../lib/gen_tables.c ../lib/gen_tables.h tcpoptnametab.h
++-gen_tcpoptnametabs_h_CFLAGS = $(AM_CFLAGS) '-DTABLE_H="tcpoptnametab.h"'
+++gen_tcpoptnametabs_h: ../lib/gen_tables.c ../lib/gen_tables.h tcpoptnametab.h
+++	$(CC) $(INCLUDES) $(AM_CFLAGS) $(CFLAGS) -DTABLE_H=\"tcpoptnametab.h\" -E -o $@ ../lib/gen_tables.c
++ tcpoptnametabs.h: gen_tcpoptnametabs_h Makefile
++-	./gen_tcpoptnametabs_h --i2s tcpoptname > $@
+++	$(PYTHON) ../lib/gen_tables.py --i2s tcpoptname gen_tcpoptnametabs_h $@
++ 
++-gen_typetabs_h_SOURCES = ../lib/gen_tables.c ../lib/gen_tables.h typetab.h
++-gen_typetabs_h_CFLAGS = $(AM_CFLAGS) '-DTABLE_H="typetab.h"'
+++gen_typetabs_h: ../lib/gen_tables.c ../lib/gen_tables.h typetab.h
+++	$(CC) $(INCLUDES) $(AM_CFLAGS) $(CFLAGS) -DTABLE_H=\"typetab.h\" -E -o $@ ../lib/gen_tables.c
++ typetabs.h: gen_typetabs_h Makefile
++-	./gen_typetabs_h --s2i type > $@
+++	$(PYTHON) ../lib/gen_tables.py --s2i type gen_typetabs_h $@
++ 
++-gen_umounttabs_h_SOURCES = ../lib/gen_tables.c ../lib/gen_tables.h umounttab.h
++-gen_umounttabs_h_CFLAGS = $(AM_CFLAGS) '-DTABLE_H="umounttab.h"'
+++gen_umounttabs_h: ../lib/gen_tables.c ../lib/gen_tables.h umounttab.h
+++	$(CC) $(INCLUDES) $(AM_CFLAGS) $(CFLAGS) -DTABLE_H=\"umounttab.h\" -E -o $@ ../lib/gen_tables.c
++ umounttabs.h: gen_umounttabs_h Makefile
++-	./gen_umounttabs_h --i2s-transtab umount > $@
+++	$(PYTHON) ../lib/gen_tables.py --i2s-transtab umount gen_umounttabs_h $@
++ 
++diff -urN a/lib/gen_tables.c b/lib/gen_tables.c
++--- a/lib/gen_tables.c	2013-07-29 16:37:01.000000000 -0500
+++++ b/lib/gen_tables.c	2013-08-19 10:09:03.060041420 -0500
++@@ -54,19 +54,6 @@
++ #define SHMGET          23
++ #define SHMCTL          24
++ 
++-
++-/* The ratio of table size to number of non-empty elements allowed for a
++-   "direct" s2i table; if the ratio would be bigger, bsearch tables are used
++-   instead.
++-
++-   2 looks like a lot at a first glance, but the bsearch tables need twice as
++-   much space per element, so with the ratio equal to 2 the direct table uses
++-   no more memory and is faster. */
++-#define DIRECT_THRESHOLD 2
++-
++-/* Allow more than one string defined for a single integer value */
++-static bool allow_duplicate_ints; /* = false; */
++-
++ struct value {
++ 	int val;
++ 	const char *s;
++@@ -83,335 +70,11 @@
++ 
++ #define NUM_VALUES (sizeof(values) / sizeof(*values))
++ 
++-/* Compare two "struct value" members by name. */
++-static int
++-cmp_value_strings(const void *xa, const void *xb)
++-{
++-	const struct value *a, *b;
++-
++-	a = xa;
++-	b = xb;
++-	return strcmp(a->s, b->s);
++-}
++-
++-/* Compare two "struct value" members by value. */
++-static int
++-cmp_value_vals(const void *xa, const void *xb)
++-{
++-	const struct value *a, *b;
++-
++-	a = xa;
++-	b = xb;
++-	if (a->val > b->val)
++-		return 1;
++-	if (a->val < b->val)
++-		return -1;
++-	/* Preserve the original order if there is an ambiguity, to always use
++-	   the first specified value. */
++-	if (a->orig_index > b->orig_index)
++-		return 1;
++-	if (a->orig_index < b->orig_index)
++-		return -1;
++-	return 0;
++-}
++-
++-/* Compare two "struct value" members by orig_index. */
++-static int
++-cmp_value_orig_index(const void *xa, const void *xb)
++-{
++-	const struct value *a, *b;
++-
++-	a = xa;
++-	b = xb;
++-	if (a->orig_index > b->orig_index)
++-		return 1;
++-	if (a->orig_index < b->orig_index)
++-		return -1;
++-	return 0;
++-}
++-
++-/* Output the string table, initialize values[*]->s_offset. */
++-static void
++-output_strings(const char *prefix)
++-{
++-	size_t i, offset;
++-
++-	offset = 0;
++-	for (i = 0; i < NUM_VALUES; i++) {
++-		values[i].s_offset = offset;
++-		offset += strlen(values[i].s) + 1;
++-	}
++-	printf("static const char %s_strings[] = \"", prefix);
++-	assert(NUM_VALUES > 0);
++-	for (i = 0; i < NUM_VALUES; i++) {
++-		const char *c;
++-
++-		if (i != 0 && i % 10 == 0)
++-			fputs("\"\n"
++-			      "\t\"", stdout);
++-		for (c = values[i].s; *c != '\0'; c++) {
++-			assert(*c != '"' && *c != '\\'
++-			       && isprint((unsigned char)*c));
++-			putc(*c, stdout);
++-		}
++-		if (i != NUM_VALUES - 1)
++-			fputs("\\0", stdout);
++-	}
++-	fputs("\";\n", stdout);
++-}
++-
++-/* Output the string to integer mapping code.
++-   Assume strings are all uppsercase or all lowercase if specified by
++-   parameters; in that case, make the search case-insensitive.
++-   values must be sorted by strings. */
++-static void
++-output_s2i(const char *prefix, bool uppercase, bool lowercase)
++-{
++-	size_t i;
++-
++-	for (i = 0; i < NUM_VALUES - 1; i++) {
++-		assert(strcmp(values[i].s, values[i + 1].s) <= 0);
++-		if (strcmp(values[i].s, values[i + 1].s) == 0) {
++-			fprintf(stderr, "Duplicate value `%s': %d, %d\n",
++-				values[i].s, values[i].val, values[i + 1].val);
++-			abort();
++-		}
++-	}
++-	printf("static const unsigned %s_s2i_s[] = {", prefix);
++-	for (i = 0; i < NUM_VALUES; i++) {
++-		if (i % 10 == 0)
++-			fputs("\n\t", stdout);
++-		assert(values[i].s_offset <= UINT_MAX);
++-		printf("%zu,", values[i].s_offset);
++-	}
++-	printf("\n"
++-	       "};\n"
++-	       "static const int %s_s2i_i[] = {", prefix);
++-	for (i = 0; i < NUM_VALUES; i++) {
++-		if (i % 10 == 0)
++-			fputs("\n\t", stdout);
++-		printf("%d,", values[i].val);
++-	}
++-	fputs("\n"
++-	      "};\n", stdout);
++-	assert(!(uppercase && lowercase));
++-	if (uppercase) {
++-		for (i = 0; i < NUM_VALUES; i++) {
++-			const char *c;
++-
++-			for (c = values[i].s; *c != '\0'; c++)
++-				assert(isascii((unsigned char)*c)
++-				       && !GT_ISLOWER(*c));
++-		}
++-	} else if (lowercase) {
++-		for (i = 0; i < NUM_VALUES; i++) {
++-			const char *c;
++-
++-			for (c = values[i].s; *c != '\0'; c++)
++-				assert(isascii((unsigned char)*c)
++-				       && !GT_ISUPPER(*c));
++-		}
++-	}
++-	if (uppercase || lowercase) {
++-		printf("static int %s_s2i(const char *s, int *value) {\n"
++-		       "\tsize_t len, i;\n"
++-		       "\tlen = strlen(s);\n"
++-		       "\t{ char copy[len + 1];\n"
++-		       "\tfor (i = 0; i < len; i++) {\n"
++-		       "\t\tchar c = s[i];\n", prefix);
++-		if (uppercase)
++-			fputs("\t\tcopy[i] = GT_ISLOWER(c) ? c - 'a' + 'A' "
++-							  ": c;\n", stdout);
++-		else
++-			fputs("\t\tcopy[i] = GT_ISUPPER(c) ? c - 'A' + 'a' "
++-							  ": c;\n", stdout);
++-		printf("\t}\n"
++-		       "\tcopy[i] = 0;\n"
++-		       "\treturn s2i__(%s_strings, %s_s2i_s, %s_s2i_i, %zu, "
++-				      "copy, value);\n"
++-		       "\t}\n"
++-		       "}\n", prefix, prefix, prefix, NUM_VALUES);
++-	} else
++-		printf("static int %s_s2i(const char *s, int *value) {\n"
++-		       "\treturn s2i__(%s_strings, %s_s2i_s, %s_s2i_i, %zu, s, "
++-				      "value);\n"
++-		       "}\n", prefix, prefix, prefix, prefix, NUM_VALUES);
++-}
++-
++-/* Output the string to integer mapping table.
++-   values must be sorted by strings. */
++-static void
++-output_i2s(const char *prefix)
++-{
++-	struct value *unique_values;
++-	int min_val, max_val;
++-	size_t i, n;
++-
++-	assert(NUM_VALUES > 0);
++-	for (i = 0; i < NUM_VALUES - 1; i++) {
++-		assert(values[i].val <= values[i + 1].val);
++-		if (!allow_duplicate_ints
++-		    && values[i].val == values[i + 1].val) {
++-			fprintf(stderr, "Duplicate value %d: `%s', `%s'\n",
++-				values[i].val, values[i].s, values[i + 1].s);
++-			abort();
++-		}
++-	}
++-
++-	unique_values = malloc(NUM_VALUES * sizeof(*unique_values));
++-	assert(unique_values != NULL);
++-	n = 0;
++-	for (i = 0; i < NUM_VALUES; i++) {
++-		if (n == 0 || unique_values[n - 1].val != values[i].val) {
++-			unique_values[n] = values[i];
++-			n++;
++-		}
++-	}
++-
++-	min_val = unique_values[0].val;
++-	max_val = unique_values[n - 1].val;
++-	if (((double)max_val - (double)min_val) / n <= DIRECT_THRESHOLD) {
++-		int next_index;
++-
++-		printf("static const unsigned %s_i2s_direct[] = {", prefix);
++-		next_index = min_val;
++-		i = 0;
++-		for (;;) {
++-			if ((next_index - min_val) % 10 == 0)
++-				fputs("\n\t", stdout);
++-			while (unique_values[i].val < next_index)
++-				/* This can happen if (allow_duplicate_ints) */
++-				i++;
++-			if (unique_values[i].val == next_index) {
++-				assert(unique_values[i].s_offset <= UINT_MAX);
++-				printf("%zu,", unique_values[i].s_offset);
++-			} else
++-				fputs("-1u,", stdout);
++-			if (next_index == max_val)
++-				/* Done like this to avoid integer overflow */
++-				break;
++-			next_index++;
++-		}
++-		printf("\n"
++-		       "};\n"
++-		       "static const char *%s_i2s(int v) {\n"
++-		       "\treturn i2s_direct__(%s_strings, %s_i2s_direct, %d, "
++-					     "%d, v);\n"
++-		       "}\n", prefix, prefix, prefix, min_val, max_val);
++-	} else {
++-		printf("static const int %s_i2s_i[] = {", prefix);
++-		for (i = 0; i < n; i++) {
++-			if (i % 10 == 0)
++-				fputs("\n\t", stdout);
++-			printf("%d,", unique_values[i].val);
++-		}
++-		printf("\n"
++-		       "};\n"
++-		       "static const unsigned %s_i2s_s[] = {", prefix);
++-		for (i = 0; i < n; i++) {
++-			if (i % 10 == 0)
++-				fputs("\n\t", stdout);
++-			assert(unique_values[i].s_offset <= UINT_MAX);
++-			printf("%zu,", unique_values[i].s_offset);
++-		}
++-		printf("\n"
++-		       "};\n"
++-		       "static const char *%s_i2s(int v) {\n"
++-		       "\treturn i2s_bsearch__(%s_strings, %s_i2s_i, %s_i2s_s, "
++-			      "%zu, v);\n"
++-		       "}\n", prefix, prefix, prefix, prefix, n);
++-	}
++-	free(unique_values);
++-}
++-
++-/* Output the string to integer mapping table as a transtab[].
++-   values must be sorted in the desired order. */
++-static void
++-output_i2s_transtab(const char *prefix)
++-{
++-	size_t i;
++-	char *uc_prefix;
++-
++-	printf("static const struct transtab %s_table[] = {", prefix);
++-	for (i = 0; i < NUM_VALUES; i++) {
++-		if (i % 10 == 0)
++-			fputs("\n\t", stdout);
++-		printf("{%d,%zu},", values[i].val, values[i].s_offset);
++-	}
++-	uc_prefix = strdup(prefix);
++-	assert(uc_prefix != NULL);
++-	for (i = 0; uc_prefix[i] != '\0'; i++)
++-		uc_prefix[i] = toupper((unsigned char)uc_prefix[i]);
++-	printf("\n"
++-	       "};\n"
++-	       "#define %s_NUM_ENTRIES "
++-	       "(sizeof(%s_table) / sizeof(*%s_table))\n", uc_prefix, prefix,
++-	       prefix);
++-	free(uc_prefix);
++-}
++-
++ int
++ main(int argc, char **argv)
++ {
++-	bool gen_i2s, gen_i2s_transtab, gen_s2i, uppercase, lowercase;
++-	char *prefix;
++-	size_t i;
++-
++ 	/* This is required by gen_tables.h */
++ 	assert(NUM_VALUES <= (SSIZE_MAX / 2 + 1));
++ 
++-	/* To make sure GT_ISUPPER and GT_ISLOWER work. */
++-	assert('Z' == 'A' + 25 && 'z' == 'a' + 25);
++-	gen_i2s = false;
++-	gen_i2s_transtab = false;
++-	gen_s2i = false;
++-	uppercase = false;
++-	lowercase = false;
++-	prefix = NULL;
++-	assert (argc > 1);
++-	for (i = 1; i < (size_t)argc; i++) {
++-		if (strcmp(argv[i], "--i2s") == 0)
++-			gen_i2s = true;
++-		else if (strcmp(argv[i], "--i2s-transtab") == 0)
++-			gen_i2s_transtab = true;
++-		else if (strcmp(argv[i], "--s2i") == 0)
++-			gen_s2i = true;
++-		else if (strcmp(argv[i], "--uppercase") == 0)
++-			uppercase = true;
++-		else if (strcmp(argv[i], "--lowercase") == 0)
++-			lowercase = true;
++-		else if (strcmp(argv[i], "--duplicate-ints") == 0)
++-			allow_duplicate_ints = true;
++-		else {
++-			assert(*argv[i] != '-');
++-			assert(prefix == NULL);
++-			prefix = argv[i];
++-		}
++-	}
++-	assert(prefix != NULL);
++-	assert(!(uppercase && lowercase));
++-
++-	printf("/* This is a generated file, see Makefile.am for its "
++-	       "inputs. */\n");
++-	for (i = 0; i < NUM_VALUES; i++)
++-		values[i].orig_index = i;
++-	qsort(values, NUM_VALUES, sizeof(*values), cmp_value_strings);
++-	/* FIXME? if (gen_s2i), sort the strings in some other order
++-	   (e.g. "first 4 nodes in BFS of the bsearch tree first") to use the
++-	   cache better. */
++-	/* FIXME? If the only thing generated is a transtab, keep the strings
++-	   in the original order to use the cache better. */
++-	output_strings(prefix);
++-	if (gen_s2i)
++-		output_s2i(prefix, uppercase, lowercase);
++-	if (gen_i2s) {
++-		qsort(values, NUM_VALUES, sizeof(*values), cmp_value_vals);
++-		output_i2s(prefix);
++-	}
++-	if (gen_i2s_transtab) {
++-		qsort(values, NUM_VALUES, sizeof(*values),
++-		      cmp_value_orig_index);
++-		output_i2s_transtab(prefix);
++-	}
++ 	return EXIT_SUCCESS;
++ }
++diff -urN /dev/null b/lib/gen_tables.py
++--- /dev/null	2013-06-19 11:25:31.230442052 -0500
+++++ b/lib/gen_tables.py	2013-08-19 14:27:55.639872141 -0500
++@@ -0,0 +1,458 @@
+++#!/usr/bin/python
+++################################################################################
+++# Copyright 2013, Rockwell Collins.  All rights reserved.
+++# 
+++# This library is free software; you can redistribute it and/or
+++# modify it under the terms of the GNU Lesser General Public
+++# License as published by the Free Software Foundation; either
+++# version 2.1 of the License, or (at your option) any later version.
+++# 
+++# This library is distributed in the hope that it will be useful,
+++# but WITHOUT ANY WARRANTY; without even the implied warranty of
+++# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+++# Lesser General Public License for more details.
+++# 
+++# You should have received a copy of the GNU Lesser General Public
+++# License along with this library; if not, write to the Free Software
+++# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+++# 
+++# Authors:
+++#      Clayton Shotwell <clshotwe@rockwellcollins.com>
+++#
+++# Description:
+++#      Generator of lookup tables to replace the gen_tables.c method developed
+++#      Miloslav Trmac <mitr@redhat.com> to make audit package cross compilable.
+++#      The logic in this script mimics the logic in gen_tables.c before the last
+++#      modification.
+++#
+++# Usage: gen_tables.py [-h] [--i2s] [--i2s-transtab] [--s2i]
+++#                             [--uppercase | --lowercase] [--duplicate-ints]
+++#                             prefix header source output
+++#
+++#        Generate tables header files.
+++#
+++#        positional arguments:
+++#          prefix            The prefix of the output file to use
+++#          header            The header file to parse table values from
+++#          source            The source of the preprocessor from the compiler
+++#          output            The output header file
+++#
+++#        optional arguments:
+++#          -h, --help        show this help message and exit
+++#          --i2s             Generate i2s tables
+++#          --i2s-transtab    Generate transtab tables
+++#          --s2i             Generate s2i tables
+++#          --uppercase       All characters are uppercase
+++#          --lowercase       All characters are lowercase
+++#          --duplicate-ints  Allow duplicate integers
+++
+++import argparse
+++import ctypes
+++import os
+++import re
+++import sys
+++from operator import attrgetter
+++from pyparsing import Group, Word, Suppress, alphas, alphanums, nums, cppStyleComment, \
+++		Optional, ZeroOrMore
+++
+++# Number of entries to print per line
+++NUM_ENTIRES_IN_LINE = 10
+++
+++# Global table entries variable that is used everywhere
+++ENTRIES = []
+++
+++# The ratio of table size to number of non-empty elements allowed for a
+++# "direct" s2i table; if the ratio would be bigger, bsearch tables are used
+++# instead.
+++# 
+++# 2 looks like a lot at a first glance, but the bsearch tables need twice as
+++# much space per element, so with the ratio equal to 2 the direct table uses
+++# no more memory and is faster.
+++DIRECT_THRESHOLD = 2
+++
+++# Set to True to enable some debug output
+++DEBUG = False
+++
+++class Entry:
+++	def __init__(self, new_s, val):
+++		self.st = new_s
+++		self.val = val
+++		self.offset = 0
+++		self.orig_index = 0
+++	
+++	def set_position(self, offset):
+++		self.offset = offset
+++	
+++	def set_orig_index(self, orig_index):
+++		self.orig_index = orig_index
+++	
+++	def get_str(self):
+++		return self.st
+++	
+++	def __repr__(self):
+++		return "<Entry st=%s val=%s>" % (self.st, self.val)
+++	
+++	def __str__(self):
+++		return "Entry of st=%s, val=%s, offset=%d, orig_index=%d" % \
+++				(self.st, self.val, self.offset, self.orig_index)
+++
+++def output_strings(prefix, outfile):
+++	try:
+++		# Calculate the position each entry will be in the string
+++		index = 0
+++		for i in range(len(ENTRIES)):
+++			ENTRIES[i].set_position(index)
+++			# Increment the index by the length of the name plus 1 for the null
+++			# character at the end.
+++			index += len(ENTRIES[i].get_str()) + 1
+++		# Write out the strings
+++		outfile.write("static const char %s_strings[] = \"" % prefix)
+++		for i in range(len(ENTRIES)):
+++			if (i != 0) and (i % NUM_ENTIRES_IN_LINE == 0):
+++				outfile.write('"\n\t"')
+++			outfile.write(ENTRIES[i].get_str())
+++			if (i != (len(ENTRIES) - 1)):
+++				outfile.write('\\0')
+++		outfile.write('";\n')
+++	except:
+++		# If an error is found, raise the exception so the main function can close
+++		# and delete the outfile
+++		exc_type, exc_obj, exc_tb = sys.exc_info()
+++		fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+++		print("Unexpected error in output_strings:", exc_type, fname, exc_tb.tb_lineno)
+++		raise
+++
+++def output_s2i(prefix, outfile, uppercase, lowercase):
+++	try:
+++		# Check for duplicate values
+++		for i in range(len(ENTRIES) - 1):
+++			assert (ENTRIES[i].get_str() <= ENTRIES[i + 1].get_str()), "Entries not in the correct order"
+++			if (ENTRIES[i].get_str() == ENTRIES[i + 1].get_str()):
+++				print("Duplicate value %s: %d, %d" % \
+++						(ENTRIES[i].get_str(), ENTRIES[i].val, ENTRIES[i + 1].val))
+++				raise
+++		
+++		# Write out the index to value index values
+++		outfile.write("static const unsigned %s_s2i_s[] = {" % prefix)
+++		for i in range(len(ENTRIES)):
+++			if (i % NUM_ENTIRES_IN_LINE == 0):
+++				outfile.write('\n\t')
+++			outfile.write("%i," % ENTRIES[i].offset)
+++		outfile.write('\n};\n')
+++		
+++		# Write out the string to value actual values
+++		outfile.write("static const int %s_s2i_i[] = {" % prefix)
+++		for i in range(len(ENTRIES)):
+++			if (i % NUM_ENTIRES_IN_LINE == 0):
+++				outfile.write('\n\t')
+++			outfile.write("%i," % ENTRIES[i].val)
+++		outfile.write('\n};\n')
+++		
+++		# Verify the strings are all uppercase or lowercase depending on the arguments
+++		# passed in
+++		if uppercase:
+++			for i in range(len(ENTRIES)):
+++				assert (all(ord(c) < 128 for c in ENTRIES[i].get_str()) and \
+++						ENTRIES[i].get_str().isupper()), "String %s is not uppercase" % ENTRIES[i].get_str()
+++		if lowercase:
+++			for i in range(len(ENTRIES)):
+++				assert (all(ord(c) < 128 for c in ENTRIES[i].get_str()) and \
+++						ENTRIES[i].get_str().islower()), "String %s is not lowercase" % ENTRIES[i].get_str()
+++		if uppercase or lowercase:
+++			outfile.write("static int %s_s2i(const char *s, int *value) {\n" \
+++					"\tsize_t len, i;\n" \
+++					"\tlen = strlen(s);\n" \
+++					"\t{ char copy[len + 1];\n" \
+++					"\tfor (i = 0; i < len; i++) {\n" \
+++					"\t\tchar c = s[i];\n" % prefix)
+++			if uppercase:
+++				outfile.write("\t\tcopy[i] = GT_ISLOWER(c) ? c - 'a' + 'A' : c;\n")
+++			else:
+++				outfile.write("\t\tcopy[i] = GT_ISUPPER(c) ? c - 'A' + 'a' : c;\n")
+++			outfile.write("\t}\n" \
+++					"\tcopy[i] = 0;\n" \
+++					"\treturn s2i__(%s_strings, %s_s2i_s, %s_s2i_i, %d, copy, value);\n" \
+++					"\t}\n" \
+++					"}\n" % (prefix, prefix, prefix, len(ENTRIES)))
+++		else:
+++			outfile.write("static int %s_s2i(const char *s, int *value) {\n" \
+++					"\treturn s2i__(%s_strings, %s_s2i_s, %s_s2i_i, %d, s, value);\n" \
+++					"}\n" % (prefix, prefix, prefix, prefix, len(ENTRIES)))
+++	except:
+++		# If an error is found, raise the exception so the main function can close
+++		# and delete the outfile
+++		exc_type, exc_obj, exc_tb = sys.exc_info()
+++		fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+++		print("Unexpected error in output_s2i:", exc_type, fname, exc_tb.tb_lineno)
+++		raise
+++
+++def output_i2s(prefix, outfile, allow_duplicate_ints):
+++	try:
+++		# Check for duplicate values
+++		for i in range(len(ENTRIES) - 1):
+++			assert (ENTRIES[i].val <= ENTRIES[i + 1].val), "Entries not in the correct order"
+++			if (not allow_duplicate_ints) and (ENTRIES[i].val == ENTRIES[i + 1].val):
+++				print("Duplicate value %d: %s, %s" % (ENTRIES[i].val, ENTRIES[i].get_str(), \
+++						ENTRIES[i + 1].get_str()))
+++				raise
+++		
+++		# Find all of the unique values
+++		unique_entries = []
+++		for i in range(len(ENTRIES)):
+++			# If the unique_entries is empty or the last unique_entries entry is different from the 
+++			# entry being compared, append the entry
+++			if (len(unique_entries) == 0) or (unique_entries[-1].val != ENTRIES[i].val):
+++				unique_entries.append(ENTRIES[i])
+++		
+++		# Determine which mapping to use based on the treshold
+++		max_val = unique_entries[-1].val
+++		min_val = unique_entries[0].val
+++		if ((float(max_val - min_val)/len(unique_entries)) <= DIRECT_THRESHOLD):
+++			outfile.write("static const unsigned %s_i2s_direct[] = {" % prefix)
+++			next_index = min_val
+++			i = 0
+++			while True:
+++				if (((next_index - min_val) % 10) == 0):
+++					outfile.write("\n\t")
+++				while (unique_entries[i].val < next_index):
+++					# This can happen if (allow_duplicate_ints)
+++					i += 1
+++				if (unique_entries[i].val == next_index):
+++					assert(unique_entries[i].offset <= sys.maxint)
+++					outfile.write("%i," % unique_entries[i].offset)
+++				else:
+++					outfile.write("-1u,")
+++				if (next_index == max_val):
+++					break
+++				next_index += 1
+++			outfile.write("\n};\nstatic const char *%s_i2s(int v) {\n" \
+++					"\treturn i2s_direct__(%s_strings, %s_i2s_direct, %d, %d, v);\n" \
+++					"}\n" % (prefix, prefix, prefix, min_val, max_val))
+++		else:
+++			outfile.write("static const int %s_i2s_i[] = {" % prefix)
+++			for i in range(len(unique_entries)):
+++				if (i % 10 == 0):
+++					outfile.write("\n\t")
+++				outfile.write("%i," % unique_entries[i].val)
+++			outfile.write("\n};\nstatic const unsigned %s_i2s_s[] = {" % prefix)
+++			for i in range(len(unique_entries)):
+++				if (i % 10 == 0):
+++					outfile.write("\n\t")
+++				assert(unique_entries[i].offset <= sys.maxint)
+++				outfile.write("%i," % unique_entries[i].offset)
+++			outfile.write("\n };\n static const char *%s_i2s(int v) {\n" \
+++					"\treturn i2s_bsearch__(%s_strings, %s_i2s_i, %s_i2s_s, %u, v);\n" \
+++					"}\n" % (prefix, prefix, prefix, prefix, len(unique_entries)))
+++	except:
+++		# If an error is found, raise the exception so the main function can close
+++		# and delete the outfile
+++		exc_type, exc_obj, exc_tb = sys.exc_info()
+++		fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+++		print("Unexpected error in output_i2s:", exc_type, fname, exc_tb.tb_lineno)
+++		raise
+++
+++def output_i2s_transtab(prefix, outfile):
+++	"""
+++		Output the string to integer mapping table as a transtab[].
+++		values must be sorted in the desired order. 
+++	"""
+++	try:
+++		outfile.write("static const struct transtab %s_table[] = {" % prefix)
+++		for i in range(len(ENTRIES)):
+++			if (i % NUM_ENTIRES_IN_LINE == 0):
+++				outfile.write('\n\t')
+++			outfile.write("{%i,%u}," % (ENTRIES[i].val, ENTRIES[i].offset))
+++		outfile.write("\n};\n#define %s_NUM_ENTRIES (sizeof(%s_table) / sizeof(*%s_table))\n" % \
+++				(prefix.upper(), prefix, prefix))
+++	except:
+++		# If an error is found, raise the exception so the main function can close
+++		# and delete the outfile
+++		exc_type, exc_obj, exc_tb = sys.exc_info()
+++		fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+++		print("Unexpected error in output_i2s_transtab:", exc_type, fname, exc_tb.tb_lineno)
+++		raise
+++
+++def lookup_enum(look_str, buf):
+++	try:
+++		# Pull all of the enums out of the preprocessor output out only once
+++		# to help speed up all of the lookups
+++		if not hasattr(lookup_enum, "enums"):
+++			if DEBUG:
+++				print("Pulling out the enums from the preprocessor output")
+++			# Regex pattern to parse out the enums from the preprocessor output
+++			enum_regex = "enum.*?{(?P<s>.*?)}"
+++			lookup_enum.enums = re.findall(enum_regex, buf, flags=(re.M | re.S))
+++		
+++		# find which enum contains the string we are looking for
+++		for i in range(len(lookup_enum.enums)):
+++			if look_str in lookup_enum.enums[i]:
+++				# Determine the value of the variable in the enum
+++				enum_string = "enum preproc { " + lookup_enum.enums[i] + " }"
+++				enum_string = "".join([line.strip() for line in enum_string])
+++				if DEBUG:
+++					print("Found %s in %s" % (look_str, enum_string))
+++				
+++				identifier = Word(alphas, alphanums+'_')
+++				opt_value = Word(nums, nums+'x+<>/*')
+++				
+++				enum_value = Group(identifier('name') + Optional(Suppress('=') + opt_value('value')))
+++				enum_list = Group(enum_value + ZeroOrMore(Suppress(',') + enum_value))
+++				enum = Suppress('enum') + identifier('enum') + Suppress('{') + enum_list('list') + \
+++						Suppress('}')
+++				enum.ignore(cppStyleComment)
+++				
+++				for item, start, stop in enum.scanString(enum_string):
+++					temp = 0
+++					for entry in item.list:
+++						if DEBUG:
+++							print("Checking %s against %s" % (look_str, entry.name))
+++						if entry.name == look_str:
+++							if entry.value != '':
+++								# Need to call eval becuase some enums have math in them
+++								try:
+++									value = eval(entry.value)
+++								except:
+++									print("Found invalid value %s" % entry.value)
+++							else:
+++								value = temp
+++							if DEBUG:
+++								print("Matched the enum name to value %d" % value)
+++							return value
+++						temp += 1
+++	except:
+++		exc_type, exc_obj, exc_tb = sys.exc_info()
+++		fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+++		print("Unexpected error in output_i2s_transtab:", exc_type, fname, exc_tb.tb_lineno)
+++	print("Unable to find enum value")
+++	return None
+++
+++def evaluate_string(eval_str, buf):
+++	if DEBUG:
+++		print("Evaluating string %s" % eval_str)
+++	
+++	# Regex expression for pulling apart the values in the preprocessor output
+++	eval_regex = "(?P<val>\w+)"
+++	# Since the string can be anything, it must be parsed into individual parts
+++	# and evaluated separately to find any enum values
+++	matches = re.findall(eval_regex, eval_str)
+++	if len(matches) <= 0:
+++		print("Could not find any matches")
+++	
+++	local_s = eval_str
+++	value = None
+++	i = 0
+++	for i in range(len(matches)):
+++		try:
+++			# If the current item is abled to evaled, there is nothing to do
+++			val = eval(matches[i])
+++		except:
+++			try:
+++				# Need to check to see if the last character is a "U" and remove it
+++				# if this does not except, a valid number was found
+++				if matches[i][-1] == 'U':
+++					val = eval(matches[i][:-1])
+++					local_s = local_s.replace(matches[i], "%d" % val)
+++				else:
+++					# Need to do a enum look up for anything that doesnt translate into a number
+++					val = lookup_enum(matches[i], buf)
+++					if val is not None:
+++						local_s = local_s.replace(matches[i], "%d" % val)
+++			except:
+++				# This case will be hit if the "U" removal fails
+++				val = lookup_enum(matches[i], buf)
+++				if val is not None:
+++					local_s = local_s.replace(matches[i], "%d" % val)
+++	try:
+++		# This will fail if all of the enums were not found rather
+++		# than handling the failues in the above steps
+++		# Also, need to convert to a signed 32 bit int for the output value
+++		value = ctypes.c_int32(eval(local_s)).value
+++		if DEBUG:
+++			print("Found value %d for %s" % (value, matches[i]))
+++	except:
+++		print("Could not parse string %s" % local_s)
+++	
+++	# Verify the mess above resulted in a number being found
+++	if value is None:
+++		print("Failed to find value for %s" % eval_str)
+++		raise
+++	return value
+++	
+++def remove_output(outfile):
+++	path = outfile.name
+++	outfile.close()
+++	os.remove(path)
+++	sys.exit(1)
+++
+++def main():
+++	
+++	# Setup the argument parser and parse the arguments given
+++	parser = argparse.ArgumentParser(description='Generate tables header files.')
+++	parser.add_argument('--i2s', dest='gen_i2s', action='store_true', 
+++			help='Generate i2s tables')
+++	parser.add_argument('--i2s-transtab', dest='gen_i2s_transtab', action='store_true', 
+++			help='Generate transtab tables')
+++	parser.add_argument('--s2i', dest='gen_s2i', action='store_true', 
+++			help='Generate s2i tables')
+++	# Make sure uppercase and lowercase are mutually exclusive
+++	group = parser.add_mutually_exclusive_group()
+++	group.add_argument('--uppercase', dest='uppercase', action='store_true', 
+++			help='All characters are uppercase')
+++	group.add_argument('--lowercase', dest='lowercase', action='store_true', 
+++			help='All characters are lowercase')
+++	parser.add_argument('--duplicate-ints', dest='allow_duplicate_ints', action='store_true', 
+++			help='Allow duplicate integers')
+++	parser.add_argument('prefix', help='The prefix of the output file to use')
+++	parser.add_argument('source', type=argparse.FileType('r'), 
+++			help='The source of the preprocessor from the compiler')
+++	parser.add_argument('output', type=argparse.FileType('w'), 
+++			help='The output header file')
+++	args = parser.parse_args()
+++	
+++	# Regex pattern to parse out the macro and string from the _S calls
+++	source_regex = "{ \((?P<val>.*?)\), \(\"(?P<s>\S+)\"\), 0, 0 }"
+++	
+++	# First parse the header file for all of the preprocessor source that need to
+++	# be looked up
+++	buf = args.source.read()
+++	matches = re.findall(source_regex, buf, flags=re.MULTILINE)
+++	
+++	# Check to make sure we have matches
+++	if (len(matches) <= 0):
+++		print("Failed to find valid source")
+++		remove_output(args.output)
+++		sys.exit(1)
+++	
+++	try:
+++		# Create all of the entry structures
+++		global ENTRIES
+++		for i in range(len(matches)):
+++			ENTRIES.append(Entry(matches[i][1], evaluate_string(matches[i][0], buf)))
+++			ENTRIES[i].set_orig_index(i)
+++			if DEBUG:
+++				print(ENTRIES[i])
+++		
+++		# Sort the entries alphabetically
+++		ENTRIES = sorted(ENTRIES, key=attrgetter('st'))
+++		# Print out the output header
+++		args.output.write("/* This is a generated file, see Makefile.am for its inputs. */\n")
+++		output_strings(args.prefix, args.output)
+++		if args.gen_s2i:
+++			output_s2i(args.prefix, args.output, args.uppercase, args.lowercase)
+++		if args.gen_i2s:
+++			ENTRIES = sorted(ENTRIES, key=attrgetter('val'))
+++			output_i2s(args.prefix, args.output, args.allow_duplicate_ints)
+++		if args.gen_i2s_transtab:
+++			ENTRIES = sorted(ENTRIES, key=attrgetter('orig_index'))
+++			output_i2s_transtab(args.prefix, args.output)
+++	except:
+++		# On an error, close and remove the file before returning an error
+++		print("Failed to write the output file correctly")
+++		exc_type, exc_obj, exc_tb = sys.exc_info()
+++		fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+++		print("Unexpected error:", exc_type, fname, exc_tb.tb_lineno)
+++		remove_output(args.output)
+++		sys.exit(1)
+++
+++if __name__ == '__main__':
+++	main()
++diff -urN a/lib/Makefile.am b/lib/Makefile.am
++--- a/lib/Makefile.am	2013-07-29 16:37:01.000000000 -0500
+++++ b/lib/Makefile.am	2013-08-19 14:39:58.280509378 -0500
++@@ -40,119 +40,109 @@
++ BUILT_SOURCES = actiontabs.h errtabs.h fieldtabs.h flagtabs.h \
++ 	ftypetabs.h i386_tables.h ia64_tables.h machinetabs.h \
++ 	msg_typetabs.h optabs.h ppc_tables.h s390_tables.h \
++-	s390x_tables.h x86_64_tables.h
++-if USE_ALPHA
++-BUILT_SOURCES += alpha_tables.h
++-endif
++-if USE_ARMEB
++-BUILT_SOURCES += armeb_tables.h
++-endif
++-if USE_AARCH64
++-BUILT_SOURCES += aarch64_tables.h
++-endif
++-noinst_PROGRAMS = gen_actiontabs_h gen_errtabs_h gen_fieldtabs_h \
+++	s390x_tables.h x86_64_tables.h \
+++	gen_actiontabs_h gen_errtabs_h gen_fieldtabs_h \
++ 	gen_flagtabs_h gen_ftypetabs_h gen_i386_tables_h \
++ 	gen_ia64_tables_h gen_machinetabs_h gen_msg_typetabs_h \
++ 	gen_optabs_h gen_ppc_tables_h gen_s390_tables_h \
++-	gen_s390x_tables_h gen_x86_64_tables_h
+++	gen_s390x_tables_h gen_x86_64_tables_h 
++ if USE_ALPHA
++-noinst_PROGRAMS += gen_alpha_tables_h
+++BUILT_SOURCES += alpha_tables.h gen_alpha_tables_h
++ endif
++ if USE_ARMEB
++-noinst_PROGRAMS += gen_armeb_tables_h
+++BUILT_SOURCES += armeb_tables.h gen_armeb_tables_h
++ endif
++ if USE_AARCH64
++-noinst_PROGRAMS += gen_aarch64_tables_h
+++BUILT_SOURCES += aarch64_tables.h gen_aarch64_tables_h
++ endif
++-gen_actiontabs_h_SOURCES = gen_tables.c gen_tables.h actiontab.h
++-gen_actiontabs_h_CFLAGS = $(AM_CFLAGS) '-DTABLE_H="actiontab.h"'
+++
+++gen_actiontabs_h: gen_tables.c gen_tables.h actiontab.h
+++	$(CC) $(INCLUDES) $(AM_CFLAGS) $(CFLAGS) -DTABLE_H=\"actiontab.h\" -E -o $@ gen_tables.c
++ actiontabs.h: gen_actiontabs_h Makefile
++-	./gen_actiontabs_h --lowercase --i2s --s2i action > $@
+++	$(PYTHON) gen_tables.py --lowercase --i2s --s2i action gen_actiontabs_h $@
++ 
++ if USE_ALPHA
++-gen_alpha_tables_h_SOURCES = gen_tables.c gen_tables.h alpha_table.h
++-gen_alpha_tables_h_CFLAGS = $(AM_CFLAGS) '-DTABLE_H="alpha_table.h"'
+++gen_alpha_tables_h: gen_tables.c gen_tables.h alpha_table.h
+++	$(CC) $(INCLUDES) $(AM_CFLAGS) $(CFLAGS) -DTABLE_H=\"alpha_table.h\" -E -o $@ gen_tables.c
++ alpha_tables.h: gen_alpha_tables_h Makefile
++-	./gen_alpha_tables_h --lowercase --i2s --s2i alpha_syscall > $@
+++	$(PYTHON) gen_tables.py --lowercase --i2s --s2i alpha_syscall gen_alpha_tables_h $@
++ endif
++ 
++ if USE_ARMEB
++-gen_armeb_tables_h_SOURCES = gen_tables.c gen_tables.h armeb_table.h
++-gen_armeb_tables_h_CFLAGS = $(AM_CFLAGS) '-DTABLE_H="armeb_table.h"'
++-armeb_tables.h: gen_armeb_tables_h Makefile
++-	./gen_armeb_tables_h --lowercase --i2s --s2i armeb_syscall > $@
+++gen_armeb_tables_h: gen_tables.c gen_tables.h armeb_table.h
+++	$(CC) $(INCLUDES) $(AM_CFLAGS) $(CFLAGS) -DTABLE_H=\"armeb_table.h\" -E -o $@ gen_tables.c
+++armeb_tables.h: gen_armeb_tables_h Makefile
+++	$(PYTHON) gen_tables.py --lowercase --i2s --s2i armeb_syscall gen_armeb_tables_h $@
++ endif
++ 
++ if USE_AARCH64
++-gen_aarch64_tables_h_SOURCES = gen_tables.c gen_tables.h aarch64_table.h
++-gen_aarch64_tables_h_CFLAGS = $(AM_CFLAGS) '-DTABLE_H="aarch64_table.h"'
+++gen_aarch64_tables_h: gen_tables.c gen_tables.h aarch64_table.h
+++	$(CC) $(INCLUDES) $(AM_CFLAGS) $(CFLAGS) -DTABLE_H=\"aarch64_table.h\" -E -o $@ gen_tables.c
++ aarch64_tables.h: gen_aarch64_tables_h Makefile
++-	./gen_aarch64_tables_h --lowercase --i2s --s2i aarch64_syscall > $@
+++	$(PYTHON) gen_tables.py --lowercase --i2s --s2i aarch64_syscall gen_aarch64_tables_h $@
++ endif
++ 
++-gen_errtabs_h_SOURCES = gen_tables.c gen_tables.h errtab.h
++-gen_errtabs_h_CFLAGS = $(AM_CFLAGS) '-DTABLE_H="errtab.h"'
+++gen_errtabs_h: gen_tables.c gen_tables.h errtab.h
+++	$(CC) $(INCLUDES) $(AM_CFLAGS) $(CFLAGS) -DTABLE_H=\"errtab.h\" -E -o $@ gen_tables.c
++ errtabs.h: gen_errtabs_h Makefile
++-	./gen_errtabs_h --duplicate-ints --uppercase --i2s --s2i err > $@
+++	$(PYTHON) gen_tables.py --duplicate-ints --uppercase --i2s --s2i err gen_errtabs_h $@
++ 
++-gen_fieldtabs_h_SOURCES = gen_tables.c gen_tables.h fieldtab.h
++-gen_fieldtabs_h_CFLAGS = $(AM_CFLAGS) '-DTABLE_H="fieldtab.h"'
+++gen_fieldtabs_h: gen_tables.c gen_tables.h fieldtab.h
+++	$(CC) $(INCLUDES) $(AM_CFLAGS) $(CFLAGS) -DTABLE_H=\"fieldtab.h\" -E -o $@ gen_tables.c
++ fieldtabs.h: gen_fieldtabs_h Makefile
++-	./gen_fieldtabs_h --duplicate-ints --lowercase --i2s --s2i field > $@
+++	$(PYTHON) gen_tables.py --duplicate-ints --lowercase --i2s --s2i field gen_fieldtabs_h $@
++ 
++-gen_flagtabs_h_SOURCES = gen_tables.c gen_tables.h flagtab.h
++-gen_flagtabs_h_CFLAGS = $(AM_CFLAGS) '-DTABLE_H="flagtab.h"'
+++gen_flagtabs_h: gen_tables.c gen_tables.h flagtab.h
+++	$(CC) $(INCLUDES) $(AM_CFLAGS) $(CFLAGS) -DTABLE_H=\"flagtab.h\" -E -o $@ gen_tables.c
++ flagtabs.h: gen_flagtabs_h Makefile
++-	./gen_flagtabs_h --lowercase --i2s --s2i flag > $@
+++	$(PYTHON) gen_tables.py --lowercase --i2s --s2i flag gen_flagtabs_h $@
++ 
++-gen_ftypetabs_h_SOURCES = gen_tables.c gen_tables.h ftypetab.h
++-gen_ftypetabs_h_CFLAGS = $(AM_CFLAGS) '-DTABLE_H="ftypetab.h"'
+++gen_ftypetabs_h: gen_tables.c gen_tables.h ftypetab.h
+++	$(CC) $(INCLUDES) $(AM_CFLAGS) $(CFLAGS) -DTABLE_H=\"ftypetab.h\" -E -o $@ gen_tables.c
++ ftypetabs.h: gen_ftypetabs_h Makefile
++-	./gen_ftypetabs_h --lowercase --i2s --s2i ftype > $@
+++	$(PYTHON) gen_tables.py --lowercase --i2s --s2i ftype gen_ftypetabs_h $@
++ 
++-gen_i386_tables_h_SOURCES = gen_tables.c gen_tables.h i386_table.h
++-gen_i386_tables_h_CFLAGS = $(AM_CFLAGS) '-DTABLE_H="i386_table.h"'
+++gen_i386_tables_h: gen_tables.c gen_tables.h i386_table.h
+++	$(CC) $(INCLUDES) $(AM_CFLAGS) $(CFLAGS) -DTABLE_H=\"i386_table.h\" -E -o $@ gen_tables.c
++ i386_tables.h: gen_i386_tables_h Makefile
++-	./gen_i386_tables_h --duplicate-ints --lowercase --i2s --s2i \
++-		i386_syscall > $@
+++	$(PYTHON) gen_tables.py --duplicate-ints --lowercase --i2s --s2i i386_syscall gen_i386_tables_h $@
++ 
++-gen_ia64_tables_h_SOURCES = gen_tables.c gen_tables.h ia64_table.h
++-gen_ia64_tables_h_CFLAGS = $(AM_CFLAGS) '-DTABLE_H="ia64_table.h"'
+++gen_ia64_tables_h: gen_tables.c gen_tables.h ia64_table.h
+++	$(CC) $(INCLUDES) $(AM_CFLAGS) $(CFLAGS) -DTABLE_H=\"ia64_table.h\" -E -o $@ gen_tables.c
++ ia64_tables.h: gen_ia64_tables_h Makefile
++-	./gen_ia64_tables_h --lowercase --i2s --s2i ia64_syscall > $@
+++	$(PYTHON) gen_tables.py --lowercase --i2s --s2i ia64_syscall gen_ia64_tables_h $@
++ 
++-gen_machinetabs_h_SOURCES = gen_tables.c gen_tables.h machinetab.h
++-gen_machinetabs_h_CFLAGS = $(AM_CFLAGS) '-DTABLE_H="machinetab.h"'
+++gen_machinetabs_h: gen_tables.c gen_tables.h machinetab.h
+++	$(CC) $(INCLUDES) $(AM_CFLAGS) $(CFLAGS) -DTABLE_H=\"machinetab.h\" -E -o $@ gen_tables.c
++ machinetabs.h: gen_machinetabs_h Makefile
++-	./gen_machinetabs_h --duplicate-ints --lowercase --i2s --s2i machine \
++-		> $@
+++	$(PYTHON) gen_tables.py --duplicate-ints --lowercase --i2s --s2i machine gen_machinetabs_h $@
++ 
++-gen_msg_typetabs_h_SOURCES = gen_tables.c gen_tables.h msg_typetab.h
++-gen_msg_typetabs_h_CFLAGS = $(AM_CFLAGS) '-DTABLE_H="msg_typetab.h"'
+++gen_msg_typetabs_h: gen_tables.c gen_tables.h msg_typetab.h
+++	$(CC) $(INCLUDES) $(AM_CFLAGS) $(CFLAGS) -DTABLE_H=\"msg_typetab.h\" -E -o $@ gen_tables.c
++ msg_typetabs.h: gen_msg_typetabs_h Makefile
++-	./gen_msg_typetabs_h --uppercase --i2s --s2i msg_type > $@
+++	$(PYTHON) gen_tables.py --uppercase --i2s --s2i msg_type gen_msg_typetabs_h $@
++ 
++-gen_optabs_h_SOURCES = gen_tables.c gen_tables.h optab.h
++-gen_optabs_h_CFLAGS = $(AM_CFLAGS) '-DTABLE_H="optab.h"'
+++gen_optabs_h: gen_tables.c gen_tables.h optab.h
+++	$(CC) $(INCLUDES) $(AM_CFLAGS) $(CFLAGS) -DTABLE_H=\"optab.h\" -E -o $@ gen_tables.c
++ optabs.h: gen_optabs_h Makefile
++-	./gen_optabs_h --i2s op > $@
+++	$(PYTHON) gen_tables.py --i2s op gen_optabs_h $@
++ 
++-gen_ppc_tables_h_SOURCES = gen_tables.c gen_tables.h ppc_table.h
++-gen_ppc_tables_h_CFLAGS = $(AM_CFLAGS) '-DTABLE_H="ppc_table.h"'
+++gen_ppc_tables_h: gen_tables.c gen_tables.h ppc_table.h
+++	$(CC) $(INCLUDES) $(AM_CFLAGS) $(CFLAGS) -DTABLE_H=\"ppc_table.h\" -E -o $@ gen_tables.c
++ ppc_tables.h: gen_ppc_tables_h Makefile
++-	./gen_ppc_tables_h --lowercase --i2s --s2i ppc_syscall > $@
+++	$(PYTHON) gen_tables.py --lowercase --i2s --s2i ppc_syscall gen_ppc_tables_h $@
++ 
++-gen_s390_tables_h_SOURCES = gen_tables.c gen_tables.h s390_table.h
++-gen_s390_tables_h_CFLAGS = $(AM_CFLAGS) '-DTABLE_H="s390_table.h"'
+++gen_s390_tables_h: gen_tables.c gen_tables.h s390_table.h
+++	$(CC) $(INCLUDES) $(AM_CFLAGS) $(CFLAGS) -DTABLE_H=\"s390_table.h\" -E -o $@ gen_tables.c
++ s390_tables.h: gen_s390_tables_h Makefile
++-	./gen_s390_tables_h --lowercase --i2s --s2i s390_syscall > $@
+++	$(PYTHON) gen_tables.py --lowercase --i2s --s2i s390_syscall gen_s390_tables_h $@
++ 
++-gen_s390x_tables_h_SOURCES = gen_tables.c gen_tables.h s390x_table.h
++-gen_s390x_tables_h_CFLAGS = $(AM_CFLAGS) '-DTABLE_H="s390x_table.h"'
+++gen_s390x_tables_h: gen_tables.c gen_tables.h s390x_table.h
+++	$(CC) $(INCLUDES) $(AM_CFLAGS) $(CFLAGS) -DTABLE_H=\"s390x_table.h\" -E -o $@ gen_tables.c
++ s390x_tables.h: gen_s390x_tables_h Makefile
++-	./gen_s390x_tables_h --lowercase --i2s --s2i s390x_syscall > $@
+++	$(PYTHON) gen_tables.py --lowercase --i2s --s2i s390x_syscall gen_s390x_tables_h $@
++ 
++-gen_x86_64_tables_h_SOURCES = gen_tables.c gen_tables.h x86_64_table.h
++-gen_x86_64_tables_h_CFLAGS = $(AM_CFLAGS) '-DTABLE_H="x86_64_table.h"'
+++gen_x86_64_tables_h: gen_tables.c gen_tables.h x86_64_table.h
+++	$(CC) $(INCLUDES) $(AM_CFLAGS) $(CFLAGS) -DTABLE_H=\"x86_64_table.h\" -E -o $@ gen_tables.c
++ x86_64_tables.h: gen_x86_64_tables_h Makefile
++-	./gen_x86_64_tables_h --lowercase --i2s --s2i x86_64_syscall > $@
+++	$(PYTHON) gen_tables.py --lowercase --i2s --s2i x86_64_syscall gen_x86_64_tables_h $@
+diff --git a/package/audit/audit-2.3.1-remove-zos-plugin.patch b/package/audit/audit-2.3.1-remove-zos-plugin.patch
 new file mode 100644
-index 0000000..fbe721a
+index 0000000..6c07402
 --- /dev/null
-+++ b/package/setools/setools-0002-swig_typedef_python_fixes.patch
-@@ -0,0 +1,1010 @@
-+--- a/libapol/swig/apol.i	2010-04-23 11:22:08.000000000 -0500
-++++ b/libapol/swig/apol.i	2012-08-29 08:04:29.000000000 -0500
-+@@ -232,7 +232,7 @@
-+ %newobject wrap_apol_str_to_internal_ip(char*);
-+ %rename(apol_str_to_internal_ip) wrap_apol_str_to_internal_ip;
-+ %inline %{
-+-	typedef struct apol_ip {
-++	typedef struct {
-+ 		uint32_t ip[4];
-+ 		int proto;
-+ 	} apol_ip_t;
-+@@ -301,7 +301,7 @@
-+ %inline %{
-+ 	typedef struct apol_string_vector apol_string_vector_t;
-+ %}
-+-typedef struct apol_vector {} apol_vector_t;
-++typedef struct {} apol_vector_t;
-+ %extend apol_vector_t {
-+ 	apol_vector_t() {
-+ 		return apol_vector_create(NULL);
-+@@ -377,7 +377,7 @@
-+ 		return apol_vector_compare(a, b, NULL, NULL, &idx);
-+ 	}
-+ %}
-+-typedef struct apol_string_vector {} apol_string_vector_t;
-++typedef struct {} apol_string_vector_t;
-+ %extend apol_string_vector_t {
-+ 	apol_string_vector_t() {
-+ 		return (apol_string_vector_t*)apol_vector_create(free);
-+@@ -460,7 +460,7 @@
-+ 	APOL_POLICY_PATH_TYPE_MONOLITHIC = 0,
-+ 	APOL_POLICY_PATH_TYPE_MODULAR
-+ } apol_policy_path_type_e;
-+-typedef struct apol_policy_path {} apol_policy_path_t;
-++typedef struct {} apol_policy_path_t;
-+ %extend apol_policy_path_t {
-+ 	apol_policy_path_t(apol_policy_path_type_e type, char * primary, apol_string_vector_t *modules = NULL) {
-+ 		apol_policy_path_t *p;
-+@@ -540,7 +540,7 @@
-+ int apol_file_is_policy_path_list(const char *filename);
-+ 
-+ /* apol policy */
-+-typedef struct apol_policy {} apol_policy_t;
-++typedef struct {} apol_policy_t;
-+ #define APOL_PERMMAP_MAX_WEIGHT 10
-+ #define APOL_PERMMAP_MIN_WEIGHT 1
-+ #define APOL_PERMMAP_UNMAPPED	0x00
-+@@ -650,7 +650,7 @@
-+ };
-+ 
-+ /* apol type query */
-+-typedef struct apol_type_query {} apol_type_query_t;
-++typedef struct {} apol_type_query_t;
-+ %extend apol_type_query_t {
-+ 	apol_type_query_t() {
-+ 		apol_type_query_t *tq;
-+@@ -692,7 +692,7 @@
-+ };
-+ 
-+ /* apol attribute query */
-+-typedef struct apol_attr_query {} apol_attr_query_t;
-++typedef struct {} apol_attr_query_t;
-+ %extend apol_attr_query_t {
-+ 	apol_attr_query_t() {
-+ 		apol_attr_query_t *aq;
-+@@ -734,7 +734,7 @@
-+ };
-+ 
-+ /* apol role query */
-+-typedef struct apol_role_query {} apol_role_query_t;
-++typedef struct {} apol_role_query_t;
-+ %extend apol_role_query_t {
-+ 	apol_role_query_t() {
-+ 		apol_role_query_t *rq;
-+@@ -786,7 +786,7 @@
-+ int apol_role_has_type(apol_policy_t * p, qpol_role_t * r, qpol_type_t * t);
-+ 
-+ /* apol class query */
-+-typedef struct apol_class_query {} apol_class_query_t;
-++typedef struct {} apol_class_query_t;
-+ %extend apol_class_query_t {
-+ 	apol_class_query_t() {
-+ 		apol_class_query_t *cq;
-+@@ -837,7 +837,7 @@
-+ };
-+ 
-+ /* apol common query */
-+-typedef struct apol_common_query {} apol_common_query_t;
-++typedef struct {} apol_common_query_t;
-+ %extend apol_common_query_t {
-+ 	apol_common_query_t() {
-+ 		apol_common_query_t *cq;
-+@@ -879,7 +879,7 @@
-+ };
-+ 
-+ /* apol perm query */
-+-typedef struct apol_perm_query {} apol_perm_query_t;
-++typedef struct {} apol_perm_query_t;
-+ %extend apol_perm_query_t {
-+ 	apol_perm_query_t() {
-+ 		apol_perm_query_t *pq;
-+@@ -921,7 +921,7 @@
-+ };
-+ 
-+ /* apol bool query */
-+-typedef struct apol_bool_query {} apol_bool_query_t;
-++typedef struct {} apol_bool_query_t;
-+ %extend apol_bool_query_t {
-+ 	apol_bool_query_t() {
-+ 		apol_bool_query_t *bq;
-+@@ -963,7 +963,7 @@
-+ };
-+ 
-+ /* apol mls level */
-+-typedef struct apol_mls_level {} apol_mls_level_t;
-++typedef struct {} apol_mls_level_t;
-+ %extend apol_mls_level_t {
-+ 	apol_mls_level_t() {
-+ 		apol_mls_level_t *aml;
-+@@ -1122,11 +1122,11 @@
-+ %typemap(in) apol_mls_level_t *lvl {
-+ 	void *x = NULL;
-+ 	Py_IncRef($input);
-+-	SWIG_ConvertPtr($input, &x,SWIGTYPE_p_apol_mls_level, 0 |  0 );
-++	SWIG_ConvertPtr($input, &x,SWIGTYPE_p_apol_mls_level_t, 0 |  0 );
-+ 	$1 = (apol_mls_level_t*)x;
-+ }
-+ #endif
-+-typedef struct apol_mls_range {} apol_mls_range_t;
-++typedef struct {} apol_mls_range_t;
-+ %extend apol_mls_range_t {
-+ 	apol_mls_range_t() {
-+ 		apol_mls_range_t *amr;
-+@@ -1276,7 +1276,7 @@
-+ %}
-+ 
-+ /* apol level query */
-+-typedef struct apol_level_query {} apol_level_query_t;
-++typedef struct {} apol_level_query_t;
-+ %extend apol_level_query_t {
-+ 	apol_level_query_t() {
-+ 		apol_level_query_t * alq;
-+@@ -1327,7 +1327,7 @@
-+ };
-+ 
-+ /* apol cat query */
-+-typedef struct apol_cat_query {} apol_cat_query_t;
-++typedef struct {} apol_cat_query_t;
-+ %extend apol_cat_query_t {
-+ 	apol_cat_query_t() {
-+ 		apol_cat_query_t * acq;
-+@@ -1373,11 +1373,11 @@
-+ %typemap(in) apol_mls_range_t *rng {
-+ 	void *x = NULL;
-+ 	Py_IncRef($input);
-+-	SWIG_ConvertPtr($input, &x,SWIGTYPE_p_apol_mls_range, 0 |  0 );
-++	SWIG_ConvertPtr($input, &x,SWIGTYPE_p_apol_mls_range_t, 0 |  0 );
-+ 	$1 = (apol_mls_range_t*)x;
-+ }
-+ #endif
-+-typedef struct apol_user_query {} apol_user_query_t;
-++typedef struct {} apol_user_query_t;
-+ %extend apol_user_query_t {
-+ 	apol_user_query_t() {
-+ 		apol_user_query_t *auq;
-+@@ -1446,7 +1446,7 @@
-+ };
-+ 
-+ /* apol context */
-+-typedef struct apol_context {} apol_context_t;
-++typedef struct {} apol_context_t;
-+ %extend apol_context_t {
-+ 	apol_context_t() {
-+ 		apol_context_t *ctx;
-+@@ -1581,7 +1581,7 @@
-+ int apol_context_compare(apol_policy_t * p, apol_context_t * target, apol_context_t * search, unsigned int range_compare_type);
-+ 
-+ /* apol constraint query */
-+-typedef struct apol_constraint_query {} apol_constraint_query_t;
-++typedef struct {} apol_constraint_query_t;
-+ %extend apol_constraint_query_t {
-+ 	apol_constraint_query_t() {
-+ 		apol_constraint_query_t *acq;
-+@@ -1632,7 +1632,7 @@
-+ };
-+ 
-+ /* apol validatetrans query */
-+-typedef struct apol_validatetrans_query {} apol_validatetrans_query_t;
-++typedef struct {} apol_validatetrans_query_t;
-+ %extend apol_validatetrans_query_t {
-+ 	apol_validatetrans_query_t() {
-+ 		apol_validatetrans_query_t *avq;
-+@@ -1678,11 +1678,11 @@
-+ %typemap(in) apol_context_t *ctx {
-+ 	void *x = NULL;
-+ 	Py_IncRef($input);
-+-	SWIG_ConvertPtr($input, &x,SWIGTYPE_p_apol_context, 0 |  0 );
-++	SWIG_ConvertPtr($input, &x,SWIGTYPE_p_apol_context_t, 0 |  0 );
-+ 	$1 = (apol_context_t*)x;
-+ }
-+ #endif
-+-typedef struct apol_genfscon_query {} apol_genfscon_query_t;
-++typedef struct {} apol_genfscon_query_t;
-+ %extend apol_genfscon_query_t {
-+ 	apol_genfscon_query_t() {
-+ 		apol_genfscon_query_t *agq;
-+@@ -1744,7 +1744,7 @@
-+ char *apol_genfscon_render(apol_policy_t * p, qpol_genfscon_t * genfscon);
-+ 
-+ /* apol fs_use query */
-+-typedef struct apol_fs_use_query {} apol_fs_use_query_t;
-++typedef struct {} apol_fs_use_query_t;
-+ %extend apol_fs_use_query_t {
-+ 	apol_fs_use_query_t() {
-+ 		apol_fs_use_query_t *afq;
-+@@ -1797,7 +1797,7 @@
-+ char *apol_fs_use_render(apol_policy_t * p, qpol_fs_use_t * fsuse);
-+ 
-+ /* apol initial sid query */
-+-typedef struct apol_isid_query {} apol_isid_query_t;
-++typedef struct {} apol_isid_query_t;
-+ %extend apol_isid_query_t {
-+ 	apol_isid_query_t() {
-+ 		apol_isid_query_t *aiq;
-+@@ -1839,7 +1839,7 @@
-+ };
-+ 
-+ /* apol portcon query */
-+-typedef struct apol_portcon_query {} apol_portcon_query_t;
-++typedef struct {} apol_portcon_query_t;
-+ %extend apol_portcon_query_t {
-+ 	apol_portcon_query_t() {
-+ 		apol_portcon_query_t *apq;
-+@@ -1883,7 +1883,7 @@
-+ char *apol_portcon_render(apol_policy_t * p, qpol_portcon_t * portcon);
-+ 
-+ /* apol netifcon query */
-+-typedef struct apol_netifcon_query {} apol_netifcon_query_t;
-++typedef struct {} apol_netifcon_query_t;
-+ %extend apol_netifcon_query_t {
-+ 	apol_netifcon_query_t() {
-+ 		apol_netifcon_query_t *anq;
-+@@ -1930,7 +1930,7 @@
-+ char *apol_netifcon_render(apol_policy_t * p, qpol_netifcon_t * netifcon);
-+ 
-+ /* apol nodecon query */
-+-typedef struct apol_nodecon_query {} apol_nodecon_query_t;
-++typedef struct {} apol_nodecon_query_t;
-+ %extend apol_nodecon_query_t {
-+ 	apol_nodecon_query_t() {
-+ 		apol_nodecon_query_t *anq;
-+@@ -2010,7 +2010,7 @@
-+ char *apol_nodecon_render(apol_policy_t * p, qpol_nodecon_t * nodecon);
-+ 
-+ /* apol avrule query */
-+-typedef struct apol_avrule_query {} apol_avrule_query_t;
-++typedef struct {} apol_avrule_query_t;
-+ %extend apol_avrule_query_t {
-+ 	apol_avrule_query_t() {
-+ 		apol_avrule_query_t *avq;
-+@@ -2161,7 +2161,7 @@
-+ %}
-+ 
-+ /* apol terule query */
-+-typedef struct apol_terule_query {} apol_terule_query_t;
-++typedef struct {} apol_terule_query_t;
-+ %extend apol_terule_query_t {
-+ 	apol_terule_query_t() {
-+ 		apol_terule_query_t *atq;
-+@@ -2285,7 +2285,7 @@
-+ apol_vector_t *apol_terule_list_to_syn_terules(apol_policy_t * p, apol_vector_t * rules);
-+ 
-+ /* apol cond rule query */
-+-typedef struct apol_cond_query {} apol_cond_query_t;
-++typedef struct {} apol_cond_query_t;
-+ %extend apol_cond_query_t {
-+ 	apol_cond_query_t() {
-+ 		apol_cond_query_t *acq;
-+@@ -2329,7 +2329,7 @@
-+ char *apol_cond_expr_render(apol_policy_t * p, qpol_cond_t * cond);
-+ 
-+ /* apol role allow query */
-+-typedef struct apol_role_allow_query {} apol_role_allow_query_t;
-++typedef struct {} apol_role_allow_query_t;
-+ %extend apol_role_allow_query_t {
-+ 	apol_role_allow_query_t() {
-+ 		apol_role_allow_query_t *arq;
-+@@ -2385,7 +2385,7 @@
-+ char *apol_role_allow_render(apol_policy_t * policy, qpol_role_allow_t * rule);
-+ 
-+ /* apol role transition rule query */
-+-typedef struct apol_role_trans_query {} apol_role_trans_query_t;
-++typedef struct {} apol_role_trans_query_t;
-+ %extend apol_role_trans_query_t {
-+ 	apol_role_trans_query_t() {
-+ 		apol_role_trans_query_t *arq;
-+@@ -2450,7 +2450,7 @@
-+ char *apol_role_trans_render(apol_policy_t * policy, qpol_role_trans_t * rule);
-+ 
-+ /* apol range transition rule query */
-+-typedef struct apol_range_trans_query {} apol_range_trans_query_t;
-++typedef struct {} apol_range_trans_query_t;
-+ %extend apol_range_trans_query_t {
-+ 	apol_range_trans_query_t() {
-+ 		apol_range_trans_query_t *arq;
-+@@ -2529,7 +2529,7 @@
-+ #define APOL_DOMAIN_TRANS_SEARCH_VALID		0x01
-+ #define APOL_DOMAIN_TRANS_SEARCH_INVALID	0x02
-+ #define APOL_DOMAIN_TRANS_SEARCH_BOTH		(APOL_DOMAIN_TRANS_SEARCH_VALID|APOL_DOMAIN_TRANS_SEARCH_INVALID)
-+-typedef struct apol_domain_trans_analysis {} apol_domain_trans_analysis_t;
-++typedef struct {} apol_domain_trans_analysis_t;
-+ %extend apol_domain_trans_analysis_t {
-+ 	apol_domain_trans_analysis_t() {
-+ 		apol_domain_trans_analysis_t *dta;
-+@@ -2620,7 +2620,7 @@
-+ 		return v;
-+ 	};
-+ };
-+-typedef struct apol_domain_trans_result {} apol_domain_trans_result_t;
-++typedef struct {} apol_domain_trans_result_t;
-+ %extend apol_domain_trans_result_t {
-+ 	apol_domain_trans_result_t(apol_domain_trans_result_t *in) {
-+ 		apol_domain_trans_result_t *dtr;
-+@@ -2703,7 +2703,7 @@
-+ 		*in = NULL;
-+ 	}
-+ %}
-+-typedef struct apol_infoflow {} apol_infoflow_t;
-++typedef struct {} apol_infoflow_t;
-+ %extend apol_infoflow_t {
-+ 	apol_infoflow_t() {
-+ 		BEGIN_EXCEPTION
-+@@ -2728,7 +2728,7 @@
-+ 		return v;
-+ 	};
-+ };
-+-typedef struct apol_infoflow_analysis {} apol_infoflow_analysis_t;
-++typedef struct {} apol_infoflow_analysis_t;
-+ %extend apol_infoflow_analysis_t {
-+ 	apol_infoflow_analysis_t() {
-+ 		apol_infoflow_analysis_t *aia;
-+@@ -2821,7 +2821,7 @@
-+ 		return;
-+ 	};
-+ };
-+-typedef struct apol_infoflow_graph {} apol_infoflow_graph_t;
-++typedef struct {} apol_infoflow_graph_t;
-+ %extend apol_infoflow_graph_t {
-+ 	apol_infoflow_graph_t() {
-+ 		BEGIN_EXCEPTION
-+@@ -2865,7 +2865,7 @@
-+ 		return retval;
-+ 	};
-+ };
-+-typedef struct apol_infoflow_result {} apol_infoflow_result_t;
-++typedef struct {} apol_infoflow_result_t;
-+ %extend apol_infoflow_result_t {
-+ 	apol_infoflow_result_t() {
-+ 		BEGIN_EXCEPTION
-+@@ -2899,7 +2899,7 @@
-+ 		return (apol_infoflow_result_t*)x;
-+ 	};
-+ %}
-+-typedef struct apol_infoflow_step {} apol_infoflow_step_t;
-++typedef struct {} apol_infoflow_step_t;
-+ %extend apol_infoflow_step_t {
-+ 	apol_infoflow_step_t() {
-+ 		BEGIN_EXCEPTION
-+@@ -2936,7 +2936,7 @@
-+ #define APOL_RELABEL_DIR_FROM    0x02
-+ #define APOL_RELABEL_DIR_BOTH    (APOL_RELABEL_DIR_TO|APOL_RELABEL_DIR_FROM)
-+ #define APOL_RELABEL_DIR_SUBJECT 0x04
-+-typedef struct apol_relabel_analysis {} apol_relabel_analysis_t;
-++typedef struct {} apol_relabel_analysis_t;
-+ %extend apol_relabel_analysis_t {
-+ 	apol_relabel_analysis_t() {
-+ 		apol_relabel_analysis_t *ara;
-+@@ -3009,7 +3009,7 @@
-+ 		return;
-+ 	};
-+ };
-+-typedef struct apol_relabel_result {} apol_relabel_result_t;
-++typedef struct {} apol_relabel_result_t;
-+ %extend apol_relabel_result_t {
-+ 	apol_relabel_result_t() {
-+ 		BEGIN_EXCEPTION
-+@@ -3040,7 +3040,7 @@
-+ 		return (apol_relabel_result_t*)x;
-+ 	};
-+ %}
-+-typedef struct apol_relabel_result_pair {} apol_relabel_result_pair_t;
-++typedef struct {} apol_relabel_result_pair_t;
-+ %extend apol_relabel_result_pair_t {
-+ 	apol_relabel_result_pair_t() {
-+ 		BEGIN_EXCEPTION
-+@@ -3082,7 +3082,7 @@
-+ #define APOL_TYPES_RELATION_DIRECT_FLOW 0x1000
-+ #define APOL_TYPES_RELATION_TRANS_FLOW_AB 0x4000
-+ #define APOL_TYPES_RELATION_TRANS_FLOW_BA 0x8000
-+-typedef struct apol_types_relation_analysis {} apol_types_relation_analysis_t;
-++typedef struct {} apol_types_relation_analysis_t;
-+ %extend apol_types_relation_analysis_t {
-+ 	apol_types_relation_analysis_t() {
-+ 		apol_types_relation_analysis_t *atr;
-+@@ -3137,7 +3137,7 @@
-+ 		return;
-+ 	};
-+ };
-+-typedef struct apol_types_relation_result {} apol_types_relation_result_t;
-++typedef struct {} apol_types_relation_result_t;
-+ %extend apol_types_relation_result_t {
-+ 	apol_types_relation_result_t() {
-+ 		BEGIN_EXCEPTION
-+@@ -3192,7 +3192,7 @@
-+ 		return apol_types_relation_result_get_domainsBA(self);
-+ 	};
-+ };
-+-typedef struct apol_types_relation_access {} apol_types_relation_access_t;
-++typedef struct {} apol_types_relation_access_t;
-+ %extend apol_types_relation_access_t {
-+ 	apol_types_relation_access_t() {
-+ 		BEGIN_EXCEPTION
-+--- a/libqpol/swig/qpol.i	2010-04-30 11:23:28.000000000 -0500
-++++ b/libqpol/swig/qpol.i	2012-08-29 07:52:17.000000000 -0500
-+@@ -226,7 +226,7 @@
-+ #define QPOL_MODULE_UNKNOWN 0
-+ #define QPOL_MODULE_BASE    1
-+ #define QPOL_MODULE_OTHER   2
-+-typedef struct qpol_module {} qpol_module_t;
-++typedef struct {} qpol_module_t;
-+ %extend qpol_module_t {
-+ 	qpol_module_t(const char *path) {
-+ 		qpol_module_t *m;
-+@@ -310,7 +310,7 @@
-+ #define QPOL_POLICY_OPTION_NO_NEVERALLOWS 0x00000001
-+ #define QPOL_POLICY_OPTION_NO_RULES       0x00000002
-+ #define QPOL_POLICY_OPTION_MATCH_SYSTEM   0x00000004
-+-typedef struct qpol_policy {} qpol_policy_t;
-++typedef struct {} qpol_policy_t;
-+ typedef void (*qpol_callback_fn_t) (void *varg, struct qpol_policy * policy, int level, const char *fmt, va_list va_args);
-+ #define QPOL_POLICY_UNKNOWN       -1
-+ #define QPOL_POLICY_KERNEL_SOURCE  0
-+@@ -684,7 +684,7 @@
-+ };
-+ 
-+ /* qpol iterator */
-+-typedef struct qpol_iterator {} qpol_iterator_t;
-++typedef struct {} qpol_iterator_t;
-+ %extend qpol_iterator_t {
-+ 	/* user never directly creates, but SWIG expects a constructor */
-+ 	qpol_iterator_t() {
-+@@ -734,7 +734,7 @@
-+ };
-+ 
-+ /* qpol type */
-+-typedef struct qpol_type {} qpol_type_t;
-++typedef struct {} qpol_type_t;
-+ %extend qpol_type_t {
-+ 	qpol_type_t(qpol_policy_t *p, const char *name) {
-+ 		BEGIN_EXCEPTION
-+@@ -849,7 +849,7 @@
-+ %}
-+ 
-+ /* qpol role */
-+-typedef struct qpol_role {} qpol_role_t;
-++typedef struct {} qpol_role_t;
-+ %extend qpol_role_t {
-+ 	qpol_role_t(qpol_policy_t *p, const char *name) {
-+ 		const qpol_role_t *r;
-+@@ -917,7 +917,7 @@
-+ %}
-+ 
-+ /* qpol level */
-+-typedef struct qpol_level {} qpol_level_t;
-++typedef struct {} qpol_level_t;
-+ %extend qpol_level_t {
-+ 	qpol_level_t(qpol_policy_t *p, const char *name) {
-+ 		const qpol_level_t *l;
-+@@ -995,7 +995,7 @@
-+ %}
-+ 
-+ /* qpol cat */
-+-typedef struct qpol_cat {} qpol_cat_t;
-++typedef struct {} qpol_cat_t;
-+ %extend qpol_cat_t {
-+ 	qpol_cat_t(qpol_policy_t *p, const char *name) {
-+ 		const qpol_cat_t *c;
-+@@ -1062,7 +1062,7 @@
-+ %}
-+ 
-+ /* qpol mls range */
-+-typedef struct qpol_mls_range {} qpol_mls_range_t;
-++typedef struct {} qpol_mls_range_t;
-+ %extend qpol_mls_range_t {
-+ 	qpol_mls_range_t() {
-+ 		BEGIN_EXCEPTION
-+@@ -1103,7 +1103,7 @@
-+ %}
-+ 
-+ /* qpol mls level */
-+-typedef struct qpol_mls_level {} qpol_mls_level_t;
-++typedef struct {} qpol_mls_level_t;
-+ %extend qpol_mls_level_t {
-+ 	qpol_mls_level_t() {
-+ 		BEGIN_EXCEPTION
-+@@ -1145,7 +1145,7 @@
-+ %}
-+ 
-+ /* qpol user */
-+-typedef struct qpol_user {} qpol_user_t;
-++typedef struct {} qpol_user_t;
-+ %extend qpol_user_t {
-+ 	qpol_user_t(qpol_policy_t *p, const char *name) {
-+ 		const qpol_user_t *u;
-+@@ -1221,7 +1221,7 @@
-+ %}
-+ 
-+ /* qpol bool */
-+-typedef struct qpol_bool {} qpol_bool_t;
-++typedef struct {} qpol_bool_t;
-+ %extend qpol_bool_t {
-+ 	qpol_bool_t(qpol_policy_t *p, const char *name) {
-+ 		qpol_bool_t *b;
-+@@ -1293,7 +1293,7 @@
-+ %}
-+ 
-+ /* qpol context */
-+-typedef struct qpol_context {} qpol_context_t;
-++typedef struct {} qpol_context_t;
-+ %extend qpol_context_t {
-+ 	qpol_context_t() {
-+ 		BEGIN_EXCEPTION
-+@@ -1354,7 +1354,7 @@
-+ %}
-+ 
-+ /* qpol class */
-+-typedef struct qpol_class {} qpol_class_t;
-++typedef struct {} qpol_class_t;
-+ %extend qpol_class_t {
-+ 	qpol_class_t(qpol_policy_t *p, const char *name) {
-+ 		const qpol_class_t *c;
-+@@ -1441,7 +1441,7 @@
-+ %}
-+ 
-+ /* qpol common */
-+-typedef struct qpol_common {} qpol_common_t;
-++typedef struct {} qpol_common_t;
-+ %extend qpol_common_t {
-+ 	qpol_common_t(qpol_policy_t *p, const char *name) {
-+ 		const qpol_common_t *c;
-+@@ -1514,7 +1514,7 @@
-+ #define QPOL_FS_USE_NONE  5U
-+ #define QPOL_FS_USE_PSID  6U
-+ #endif
-+-typedef struct qpol_fs_use {} qpol_fs_use_t;
-++typedef struct {} qpol_fs_use_t;
-+ %extend qpol_fs_use_t {
-+ 	qpol_fs_use_t(qpol_policy_t *p, const char *name) {
-+ 		const qpol_fs_use_t *f;
-+@@ -1592,7 +1592,7 @@
-+ #define QPOL_CLASS_LNK_FILE   9U
-+ #define QPOL_CLASS_SOCK_FILE 12U
-+ #endif
-+-typedef struct qpol_genfscon {} qpol_genfscon_t;
-++typedef struct {} qpol_genfscon_t;
-+ %extend qpol_genfscon_t {
-+ 	qpol_genfscon_t(qpol_policy_t *p, const char *name, const char *path) {
-+ 		qpol_genfscon_t *g;
-+@@ -1655,7 +1655,7 @@
-+ %}
-+ 
-+ /* qpol isid */
-+-typedef struct qpol_isid {} qpol_isid_t;
-++typedef struct {} qpol_isid_t;
-+ %extend qpol_isid_t {
-+ 	qpol_isid_t(qpol_policy_t *p, const char *name) {
-+ 		const qpol_isid_t *i;
-+@@ -1699,7 +1699,7 @@
-+ %}
-+ 
-+ /* qpol netifcon */
-+-typedef struct qpol_netifcon {} qpol_netifcon_t;
-++typedef struct {} qpol_netifcon_t;
-+ %extend qpol_netifcon_t {
-+ 	qpol_netifcon_t(qpol_policy_t *p, const char *name) {
-+ 		const qpol_netifcon_t *n;
-+@@ -1755,7 +1755,7 @@
-+ /* qpol nodecon */
-+ #define QPOL_IPV4 0
-+ #define QPOL_IPV6 1
-+-typedef struct qpol_nodecon {} qpol_nodecon_t;
-++typedef struct {} qpol_nodecon_t;
-+ %extend qpol_nodecon_t {
-+ 	qpol_nodecon_t(qpol_policy_t *p, int addr[4], int mask[4], int protocol) {
-+ 		uint32_t a[4], m[4];
-+@@ -1828,7 +1828,7 @@
-+ /* from netinet/in.h */
-+ #define IPPROTO_TCP 6
-+ #define IPPROTO_UDP 17
-+-typedef struct qpol_portcon {} qpol_portcon_t;
-++typedef struct {} qpol_portcon_t;
-+ %extend qpol_portcon_t {
-+ 	qpol_portcon_t(qpol_policy_t *p, uint16_t low, uint16_t high, uint8_t protocol) {
-+ 		const qpol_portcon_t *qp;
-+@@ -1892,7 +1892,7 @@
-+ %}
-+ 
-+ /* qpol constraint */
-+-typedef struct qpol_constraint {} qpol_constraint_t;
-++typedef struct {} qpol_constraint_t;
-+ %extend qpol_constraint_t {
-+ 	qpol_constraint_t() {
-+ 		BEGIN_EXCEPTION
-+@@ -1944,7 +1944,7 @@
-+ %}
-+ 
-+ /* qpol validatetrans */
-+-typedef struct qpol_validatetrans {} qpol_validatetrans_t;
-++typedef struct {} qpol_validatetrans_t;
-+ %extend qpol_validatetrans_t {
-+ 	qpol_validatetrans_t() {
-+ 		BEGIN_EXCEPTION
-+@@ -2009,7 +2009,7 @@
-+ #define QPOL_CEXPR_OP_DOM    3
-+ #define QPOL_CEXPR_OP_DOMBY  4
-+ #define QPOL_CEXPR_OP_INCOMP 5
-+-typedef struct qpol_constraint_expr_node {} qpol_constraint_expr_node_t;
-++typedef struct {} qpol_constraint_expr_node_t;
-+ %extend qpol_constraint_expr_node_t {
-+ 	qpol_constraint_expr_node_t() {
-+ 		BEGIN_EXCEPTION
-+@@ -2071,7 +2071,7 @@
-+ %}
-+ 
-+ /* qpol role allow */
-+-typedef struct qpol_role_allow {} qpol_role_allow_t;
-++typedef struct {} qpol_role_allow_t;
-+ %extend qpol_role_allow_t {
-+ 	qpol_role_allow_t() {
-+ 		BEGIN_EXCEPTION
-+@@ -2112,7 +2112,7 @@
-+ %}
-+ 
-+ /* qpol role trans */
-+-typedef struct qpol_role_trans {} qpol_role_trans_t;
-++typedef struct {} qpol_role_trans_t;
-+ %extend qpol_role_trans_t {
-+ 	qpol_role_trans_t() {
-+ 		BEGIN_EXCEPTION
-+@@ -2163,7 +2163,7 @@
-+ %}
-+ 
-+ /* qpol range trans */
-+-typedef struct qpol_range_trans {} qpol_range_trans_t;
-++typedef struct {} qpol_range_trans_t;
-+ %extend qpol_range_trans_t {
-+ 	qpol_range_trans_t() {
-+ 		BEGIN_EXCEPTION
-+@@ -2226,7 +2226,7 @@
-+ #define QPOL_RULE_NEVERALLOW  128
-+ #define QPOL_RULE_AUDITALLOW    2
-+ #define QPOL_RULE_DONTAUDIT     4
-+-typedef struct qpol_avrule {} qpol_avrule_t;
-++typedef struct {} qpol_avrule_t;
-+ %extend qpol_avrule_t {
-+ 	qpol_avrule_t() {
-+ 		BEGIN_EXCEPTION
-+@@ -2346,7 +2346,7 @@
-+ #define QPOL_RULE_TYPE_TRANS   16
-+ #define QPOL_RULE_TYPE_CHANGE  64
-+ #define QPOL_RULE_TYPE_MEMBER  32
-+-typedef struct qpol_terule {} qpol_terule_t;
-++typedef struct {} qpol_terule_t;
-+ %extend qpol_terule_t {
-+ 	qpol_terule_t() {
-+ 		BEGIN_EXCEPTION
-+@@ -2462,7 +2462,7 @@
-+ %}
-+ 
-+ /* qpol conditional */
-+-typedef struct qpol_cond {} qpol_cond_t;
-++typedef struct {} qpol_cond_t;
-+ %extend qpol_cond_t {
-+ 	qpol_cond_t() {
-+ 		BEGIN_EXCEPTION
-+@@ -2555,7 +2555,7 @@
-+ #define QPOL_COND_EXPR_XOR  5      /* bool ^ bool */
-+ #define QPOL_COND_EXPR_EQ   6      /* bool == bool */
-+ #define QPOL_COND_EXPR_NEQ  7      /* bool != bool */
-+-typedef struct qpol_cond_expr_node {} qpol_cond_expr_node_t;
-++typedef struct {} qpol_cond_expr_node_t;
-+ %extend qpol_cond_expr_node_t {
-+ 	qpol_cond_expr_node_t() {
-+ 		BEGIN_EXCEPTION
-+@@ -2600,7 +2600,7 @@
-+ %}
-+ 
-+ /* qpol type set */
-+-typedef struct qpol_type_set {} qpol_type_set_t;
-++typedef struct {} qpol_type_set_t;
-+ %extend qpol_type_set_t {
-+ 	qpol_type_set_t() {
-+ 		BEGIN_EXCEPTION
-+@@ -2663,7 +2663,7 @@
-+ %}
-+ 
-+ /* qpol syn av rule */
-+-typedef struct qpol_syn_avrule {} qpol_syn_avrule_t;
-++typedef struct {} qpol_syn_avrule_t;
-+ %extend qpol_syn_avrule_t {
-+ 	qpol_syn_avrule_t() {
-+ 		BEGIN_EXCEPTION
-+@@ -2776,7 +2776,7 @@
-+ %}
-+ 
-+ /* qpol syn te rule */
-+-typedef struct qpol_syn_terule {} qpol_syn_terule_t;
-++typedef struct {} qpol_syn_terule_t;
-+ %extend qpol_syn_terule_t {
-+ 	qpol_syn_terule_t() {
-+ 		BEGIN_EXCEPTION
-+--- a/libpoldiff/swig/poldiff.i	2007-10-31 16:03:33.000000000 -0500
-++++ b/libpoldiff/swig/poldiff.i	2012-08-29 08:08:02.000000000 -0500
-+@@ -258,7 +258,7 @@
-+ 
-+ /* for handling the get_stats function */
-+ %{
-+-	typedef struct poldiff_stats {
-++	typedef struct {
-+ 		size_t stats[5];
-+ 	} poldiff_stats_t;
-+ 	poldiff_stats_t *poldiff_stats_create() {
-+@@ -271,7 +271,7 @@
-+ 		*x = NULL;
-+ 	}
-+ %}
-+-typedef struct poldiff_stats {} poldiff_stats_t;
-++typedef struct {} poldiff_stats_t;
-+ %extend poldiff_stats_t {
-+ 	poldiff_stats_t() {
-+ 		poldiff_stats_t *s;
-+@@ -336,17 +336,17 @@
-+ %typemap(in) apol_policy_t *op {
-+ 	void *x = NULL;
-+ 	Py_IncRef($input);
-+-	SWIG_ConvertPtr($input, &x,SWIGTYPE_p_apol_policy, 0 |  0 );
-++	SWIG_ConvertPtr($input, &x,SWIGTYPE_p_apol_policy_t, 0 |  0 );
-+ 	$1 = (apol_policy_t*)x;
-+ }
-+ %typemap(in) apol_policy_t *mp {
-+ 	void *x = NULL;
-+ 	Py_IncRef($input);
-+-	SWIG_ConvertPtr($input, &x,SWIGTYPE_p_apol_policy, 0 |  0 );
-++	SWIG_ConvertPtr($input, &x,SWIGTYPE_p_apol_policy_t, 0 |  0 );
-+ 	$1 = (apol_policy_t*)x;
-+ }
-+ #endif
-+-typedef struct poldiff {} poldiff_t;
-++typedef struct {} poldiff_t;
-+ %extend poldiff_t {
-+ 	poldiff_t(apol_policy_t *op, apol_policy_t *mp) {
-+ 		poldiff_t *p;
-+@@ -476,7 +476,7 @@
-+ };
-+ 
-+ /* attribute diff */
-+-typedef struct poldiff_attrib {} poldiff_attrib_t;
-++typedef struct {} poldiff_attrib_t;
-+ %extend poldiff_attrib_t {
-+    poldiff_attrib_t () {
-+       BEGIN_EXCEPTION
-+@@ -521,7 +521,7 @@
-+ %}
-+ 
-+ /* av rule diff */
-+-typedef struct poldiff_avrule {} poldiff_avrule_t;
-++typedef struct {} poldiff_avrule_t;
-+ %extend poldiff_avrule_t {
-+    poldiff_avrule_t() {
-+       BEGIN_EXCEPTION
-+@@ -629,7 +629,7 @@
-+ %}
-+ 
-+ /* boolean diff */
-+-typedef struct poldiff_bool {} poldiff_bool_t;
-++typedef struct {} poldiff_bool_t;
-+ %extend poldiff_bool_t {
-+ 	poldiff_bool_t() {
-+       BEGIN_EXCEPTION
-+@@ -668,7 +668,7 @@
-+ %}
-+ 
-+ /* category diff */
-+-typedef struct poldiff_cat {} poldiff_cat_t;
-++typedef struct {} poldiff_cat_t;
-+ %extend poldiff_cat_t {
-+ 	poldiff_cat_t() {
-+       BEGIN_EXCEPTION
-+@@ -707,7 +707,7 @@
-+ %}
-+ 
-+ /* class diff */
-+-typedef struct poldiff_class {} poldiff_class_t;
-++typedef struct {} poldiff_class_t;
-+ %extend poldiff_class_t {
-+ 	poldiff_class_t() {
-+       BEGIN_EXCEPTION
-+@@ -752,7 +752,7 @@
-+ %}
-+ 
-+ /* common diff */
-+-typedef struct poldiff_common {} poldiff_common_t;
-++typedef struct {} poldiff_common_t;
-+ %extend poldiff_common_t {
-+ 	poldiff_common_t() {
-+       BEGIN_EXCEPTION
-+@@ -797,7 +797,7 @@
-+ %}
-+ 
-+ /* level diff */
-+-typedef struct poldiff_level {} poldiff_level_t;
-++typedef struct {} poldiff_level_t;
-+ %extend poldiff_level_t {
-+ 	poldiff_level_t() {
-+       BEGIN_EXCEPTION
-+@@ -857,7 +857,7 @@
-+ %}
-+ 
-+ /* range diff */
-+-typedef struct poldiff_range {} poldiff_range_t;
-++typedef struct {} poldiff_range_t;
-+ %extend poldiff_range_t {
-+ 	poldiff_range_t() {
-+       BEGIN_EXCEPTION
-+@@ -908,7 +908,7 @@
-+ %}
-+ 
-+ /* range_transition rule diff */
-+-typedef struct poldiff_range_trans {} poldiff_range_trans_t;
-++typedef struct {} poldiff_range_trans_t;
-+ %extend poldiff_range_trans_t {
-+ 	poldiff_range_trans_t() {
-+       BEGIN_EXCEPTION
-+@@ -956,7 +956,7 @@
-+ %}
-+ 
-+ /* role allow rule diff */
-+-typedef struct poldiff_role_allow {} poldiff_role_allow_t;
-++typedef struct {} poldiff_role_allow_t;
-+ %extend poldiff_role_allow_t {
-+ 	poldiff_role_allow_t() {
-+       BEGIN_EXCEPTION
-+@@ -1004,7 +1004,7 @@
-+ %}
-+ 
-+ /* role_transition rule diff */
-+-typedef struct poldiff_role_trans {} poldiff_role_trans_t;
-++typedef struct {} poldiff_role_trans_t;
-+ %extend poldiff_role_trans_t {
-+ 	poldiff_role_trans_t() {
-+       BEGIN_EXCEPTION
-+@@ -1052,7 +1052,7 @@
-+ %}
-+ 
-+ /* role diff */
-+-typedef struct poldiff_role {} poldiff_role_t;
-++typedef struct {} poldiff_role_t;
-+ %extend poldiff_role_t {
-+ 	poldiff_role_t() {
-+       BEGIN_EXCEPTION
-+@@ -1097,7 +1097,7 @@
-+ %}
-+ 
-+ /* te rule diff */
-+-typedef struct poldiff_terule {} poldiff_terule_t;
-++typedef struct {} poldiff_terule_t;
-+ %extend poldiff_terule_t {
-+ 	poldiff_terule_t() {
-+       BEGIN_EXCEPTION
-+@@ -1178,7 +1178,7 @@
-+ %}
-+ 
-+ /* type diff */
-+-typedef struct poldiff_type {} poldiff_type_t;
-++typedef struct {} poldiff_type_t;
-+ %extend poldiff_type_t {
-+ 	poldiff_type_t() {
-+       BEGIN_EXCEPTION
-+@@ -1223,7 +1223,7 @@
-+ %}
-+ 
-+ /* user diff */
-+-typedef struct poldiff_user {} poldiff_user_t;
-++typedef struct {} poldiff_user_t;
-+ %extend poldiff_user_t {
-+ 	poldiff_user_t() {
-+       BEGIN_EXCEPTION
-+@@ -1280,7 +1280,7 @@
-+ %}
-+ 
-+ /* type remap */
-+-typedef struct poldiff_type_remap_entry {} poldiff_type_remap_entry_t;
-++typedef struct {} poldiff_type_remap_entry_t;
-+ %extend poldiff_type_remap_entry_t {
-+ 	poldiff_type_remap_entry_t() {
-+       BEGIN_EXCEPTION
-+--- a/libseaudit/swig/seaudit.i	2007-10-31 16:03:33.000000000 -0500
-++++ b/libseaudit/swig/seaudit.i	2012-08-29 08:11:39.000000000 -0500
-+@@ -240,7 +240,7 @@
-+ %{
-+ 	typedef struct tm tm_t;
-+ %}
-+-typedef struct tm {
-++typedef struct {
-+ 	int tm_sec;   /* seconds */
-+ 	int tm_min;   /* minutes */
-+ 	int tm_hour;  /* hours */
-+@@ -278,7 +278,7 @@
-+ 	SEAUDIT_LOG_TYPE_SYSLOG,
-+ 	SEAUDIT_LOG_TYPE_AUDITD
-+ } seaudit_log_type_e;
-+-typedef struct seaudit_log {} seaudit_log_t;
-++typedef struct {} seaudit_log_t;
-+ %extend seaudit_log_t {
-+ 	seaudit_log_t() {
-+ 		seaudit_log_t *slog;
-+@@ -355,7 +355,7 @@
-+ 	SEAUDIT_MESSAGE_TYPE_AVC,
-+ 	SEAUDIT_MESSAGE_TYPE_LOAD
-+ } seaudit_message_type_e;
-+-typedef struct seaudit_message {} seaudit_message_t;
-++typedef struct {} seaudit_message_t;
-+ %extend seaudit_message_t {
-+ 	seaudit_message_t() {
-+ 		BEGIN_EXCEPTION
-+@@ -427,7 +427,7 @@
-+ %}
-+ 
-+ /* seaudit load message */
-+-typedef struct seaudit_load_message {} seaudit_load_message_t;
-++typedef struct {} seaudit_load_message_t;
-+ %extend seaudit_load_message_t {
-+ 	seaudit_load_message_t() {
-+ 		BEGIN_EXCEPTION
-+@@ -448,7 +448,7 @@
-+ %}
-+ 
-+ /* seaudit bool message */
-+-typedef struct seaudit_bool_message {} seaudit_bool_message_t;
-++typedef struct {} seaudit_bool_message_t;
-+ %extend seaudit_bool_message_t {
-+ 	seaudit_bool_message_t(void *msg) {
-+ 		BEGIN_EXCEPTION
-+@@ -475,7 +475,7 @@
-+ 	SEAUDIT_AVC_DENIED,
-+ 	SEAUDIT_AVC_GRANTED
-+ } seaudit_avc_message_type_e;
-+-typedef struct seaudit_avc_message {} seaudit_avc_message_t;
-++typedef struct {} seaudit_avc_message_t;
-+ %extend seaudit_avc_message_t {
-+ 	seaudit_avc_message_t() {
-+ 		BEGIN_EXCEPTION
-+@@ -606,7 +606,7 @@
-+ 	SEAUDIT_FILTER_DATE_MATCH_AFTER,
-+ 	SEAUDIT_FILTER_DATE_MATCH_BETWEEN
-+ } seaudit_filter_date_match_e;
-+-typedef struct seaudit_filter {} seaudit_filter_t;
-++typedef struct {} seaudit_filter_t;
-+ %extend seaudit_filter_t {
-+ 	seaudit_filter_t(char *name = NULL) {
-+ 		seaudit_filter_t *sf = NULL;
-+@@ -1012,7 +1012,7 @@
-+ %}
-+ 
-+ /* seaudit sort */
-+-typedef struct seaudit_sort {} seaudit_sort_t;
-++typedef struct {} seaudit_sort_t;
-+ %extend seaudit_sort_t {
-+ 	seaudit_sort_t() {
-+ 		BEGIN_EXCEPTION
-+@@ -1101,17 +1101,17 @@
-+ %typemap(in) seaudit_filter_t *filter {
-+ 	void *x = NULL;
-+ 	Py_IncRef($input);
-+-	SWIG_ConvertPtr($input, &x,SWIGTYPE_p_seaudit_filter, 0 |  0 );
-++	SWIG_ConvertPtr($input, &x,SWIGTYPE_p_seaudit_filter_t, 0 |  0 );
-+ 	$1 = (seaudit_filter_t*)x;
-+ }
-+ %typemap(in) seaudit_sort_t *ssort {
-+ 	void *x = NULL;
-+ 	Py_IncRef($input);
-+-	SWIG_ConvertPtr($input, &x,SWIGTYPE_p_seaudit_sort, 0 |  0 );
-++	SWIG_ConvertPtr($input, &x,SWIGTYPE_p_seaudit_sort_t, 0 |  0 );
-+ 	$1 = (seaudit_sort_t*)x;
-+ }
-+ #endif
-+-typedef struct seaudit_model {} seaudit_model_t;
-++typedef struct {} seaudit_model_t;
-+ %extend seaudit_model_t {
-+ 	seaudit_model_t(char *name = NULL, seaudit_log_t *slog = NULL) {
-+ 		seaudit_model_t *smod;
-+@@ -1309,7 +1309,7 @@
-+ 	SEAUDIT_REPORT_FORMAT_TEXT,
-+ 	SEAUDIT_REPORT_FORMAT_HTML
-+ } seaudit_report_format_e;
-+-typedef struct seaudit_report {} seaudit_report_t;
-++typedef struct {} seaudit_report_t;
-+ %extend seaudit_report_t {
-+ 	seaudit_report_t(seaudit_model_t *m) {
-+ 		seaudit_report_t *sr;
-diff --git a/package/setools/setools.mk b/package/setools/setools.mk
++++ b/package/audit/audit-2.3.1-remove-zos-plugin.patch
+@@ -0,0 +1,31 @@
++--- a/audisp/plugins/Makefile.am	2012-08-28 10:33:03.582396601 -0500
+++++ b/audisp/plugins/Makefile.am	2012-08-28 10:33:14.162399662 -0500
++@@ -22,7 +22,7 @@
++ 
++ CONFIG_CLEAN_FILES = *.loT *.rej *.orig
++ 
++-SUBDIRS = builtins zos-remote remote
+++SUBDIRS = builtins remote
++ #SUBDIRS = builtins zos-remote
++ if HAVE_PRELUDE
++ SUBDIRS += prelude
++--- a/audisp/plugins/Makefile.in	2012-08-28 10:33:03.592380390 -0500
+++++ b/audisp/plugins/Makefile.in	2012-08-28 10:35:38.482397668 -0500
++@@ -84,7 +84,7 @@
++ 	distdir
++ ETAGS = etags
++ CTAGS = ctags
++-DIST_SUBDIRS = builtins zos-remote remote prelude
+++DIST_SUBDIRS = builtins remote prelude
++ DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
++ am__relativize = \
++   dir0=`pwd`; \
++@@ -242,7 +242,7 @@
++ top_builddir = @top_builddir@
++ top_srcdir = @top_srcdir@
++ CONFIG_CLEAN_FILES = *.loT *.rej *.orig
++-SUBDIRS = builtins zos-remote remote $(am__append_1)
+++SUBDIRS = builtins remote $(am__append_1)
++ all: all-recursive
++ 
++ .SUFFIXES:
+diff --git a/package/audit/audit.mk b/package/audit/audit.mk
 new file mode 100644
-index 0000000..faa519f
+index 0000000..08f3100
 --- /dev/null
-+++ b/package/setools/setools.mk
-@@ -0,0 +1,91 @@
++++ b/package/audit/audit.mk
+@@ -0,0 +1,61 @@
 +#############################################################
 +#
-+# setools
++# audit
 +#
 +#############################################################
-+SETOOLS_VERSION = 3.3.8
-+SETOOLS_SOURCE = setools-$(SETOOLS_VERSION).tar.bz2
-+SETOOLS_SITE = http://oss.tresys.com/projects/setools/chrome/site/dists/setools-$(SETOOLS_VERSION)/
 +
-+##############################
-+# Target Section
-+##############################
-+SETOOLS_DEPENDENCIES = libselinux libsepol sqlite libxml2 bzip2
++AUDIT_VERSION:=2.3.2
++AUDIT_SOURCE:=audit-$(AUDIT_VERSION).tar.gz
++AUDIT_SITE:=http://people.redhat.com/sgrubb/audit/
++AUDIT_DEPENDENCIES = host-python-pyparsing
++AUDIT_LICENSE       = GPLv2
++AUDIT_LICENSE_FILES = COPYING
 +
-+SETOOLS_INSTALL_STAGING = YES
-+SETOOLS_INSTALL_TARGET = YES
++AUDIT_INSTALL_STAGING = YES
++AUDIT_INSTALL_TARGET = YES
 +
-+SETOOLS_AUTORECONF = YES
-+SETOOLS_AUTORECONF_OPT = -i -s
++AUDIT_AUTORECONF = YES
++AUDIT_AUTORECONF_OPT = -i -s -I m4
 +
-+# Notes: Need "disable-selinux-check" so the configure does not check to see if host has
-+#        selinux enabled.
-+SETOOLS_CONF_OPT = \
-+	--disable-debug \
-+	--disable-gui \
-+	--disable-bwidget-check \
-+	--disable-selinux-check \
-+	--disable-swig-java \
-+	--disable-swig-python \
-+	--disable-swig-tcl \
-+	--with-sepol-devel="$(STAGING_DIR)/usr" \
-+	--with-selinux-devel="$(STAGING_DIR)/usr" \
++# Audit will be looking for applications to be in the root
++# /sbin folder rather than in /usr/sbin folder
++AUDIT_CONF_OPT += --sbindir=/sbin
 +
-+ifeq ($(BR2_PACKAGE_SETOOLS_PYTHON_BINDINGS),y)
-+	SETOOLS_DEPENDENCIES += python host-python host-swig 
-+	SETOOLS_CONF_ENV += am_cv_pathless_PYTHON=python \
-+		ac_cv_path_PYTHON=$(HOST_DIR)/usr/bin/python \
-+		am_cv_python_version=$(PYTHON_VERSION) \
-+		am_cv_python_platform=linux2 \
-+		am_cv_python_pythondir=$(STAGING_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages \
-+		am_cv_python_pyexecdir=$(STAGING_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages \
-+		am_cv_python_includes=-I$(STAGING_DIR)/usr/include/python$(PYTHON_VERSION_MAJOR)
-+	SETOOLS_CONF_OPT += \
-+		--enable-swig-python \
-+		PYTHON_CPPFLAGS="-I$(STAGING_DIR)/usr/include/python$(PYTHON_VERSION_MAJOR)" \
-+		PYTHON_LDFLAGS="-L$(STAGING_DIR)/usr/lib/" \
-+		PYTHON_SITE_PKG="$(STAGING_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages" \
-+		PYTHON_EXTRA_LIBS="-lpthread -ldl -lutil -lpython$(PYTHON_VERSION_MAJOR)"
++ifeq ($(BR2_PACKAGE_AUDIT_PYTHON_BINDINGS),y)
++	AUDIT_DEPENDENCIES += python
++	AUDIT_CONF_OPT += --with-python=yes
++else
++	AUDIT_CONF_OPT += --with-python=no
 +endif
 +
-+##############################
-+# Host Section
-+##############################
-+HOST_SETOOLS_DEPENDENCIES = host-libselinux host-libsepol host-sqlite host-libxml2 host-bzip2
-+
-+HOST_SETOOLS_AUTORECONF = YES
-+HOST_SETOOLS_AUTORECONF_OPT = -i -s
-+
-+# Notes: Need "disable-selinux-check" so the configure does not check to see if host has
-+#        selinux enabled.
-+HOST_SETOOLS_CONF_OPT = \
-+	--disable-debug \
-+	--disable-gui \
-+	--disable-bwidget-check \
-+	--disable-selinux-check \
-+	--disable-swig-java \
-+	--disable-swig-python \
-+	--disable-swig-tcl \
-+	--with-sepol-devel="$(HOST_DIR)/usr" \
-+	--with-selinux-devel="$(HOST_DIR)/usr" \
-+
-+ifeq ($(BR2_PACKAGE_SETOOLS_PYTHON_BINDINGS),y)
-+	HOST_SETOOLS_DEPENDENCIES += host-python host-swig 
-+	HOST_SETOOLS_CONF_ENV += \
-+		am_cv_pathless_PYTHON=python \
-+		ac_cv_path_PYTHON=$(HOST_DIR)/usr/bin/python \
-+		am_cv_python_version=$(PYTHON_VERSION) \
-+		am_cv_python_platform=linux2 \
-+		am_cv_python_pythondir=$(HOST_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages \
-+		am_cv_python_pyexecdir=$(HOST_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages \
-+		am_cv_python_includes=-I$(HOST_DIR)/usr/include/python$(PYTHON_VERSION_MAJOR)
-+	HOST_SETOOLS_CONF_OPT += \
-+		--enable-swig-python \
-+		PYTHON_CPPFLAGS="-I$(HOST_DIR)/usr/include/python$(PYTHON_VERSION_MAJOR)" \
-+		PYTHON_LDFLAGS="-L$(HOST_DIR)/usr/lib/" \
-+		PYTHON_SITE_PKG="$(HOST_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages" \
-+		PYTHON_EXTRA_LIBS="-lpthread -ldl -lutil -lpython$(PYTHON_VERSION_MAJOR)"
++ifeq ($(BR2_PACKAGE_AUDIT_LIBCAP_NG),y)
++	AUDIT_DEPENDENCIES += libcap-ng
++	AUDIT_CONF_OPT += --with-libcap-ng=yes
++else
++	AUDIT_CONF_OPT += --with-libcap-ng=no
 +endif
++
++ifeq ($(BR2_armeb),y)
++	AUDIT_CONF_OPT += --with-armeb
++endif
++ifeq ($(BR2_arm),y)
++	AUDIT_CONF_OPT += --with-armeb
++endif
++ifeq ($(BR2_aarch64),y)
++	AUDIT_CONF_OPT += --with-aarch64
++endif
++
++ifeq ($(BR2_PREFER_STATIC_LIB),y)
++	AUDIT_CONF_OPT += --enable-shared=no
++else
++	AUDIT_CONF_OPT += --enable-static=no
++endif
++
++define AUDIT_REPLACE_STARTUP_SCRIPT
++	$(INSTALL) -m 755 package/audit/S14auditd $(TARGET_DIR)/etc/init.d/
++	rm -rf $(TARGET_DIR)/etc/rc.d/
++endef
++
++AUDIT_POST_INSTALL_TARGET_HOOKS += AUDIT_REPLACE_STARTUP_SCRIPT
 +
 +$(eval $(autotools-package))
-+$(eval $(host-autotools-package))
 -- 
 1.7.1
