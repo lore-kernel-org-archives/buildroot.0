@@ -1,21 +1,72 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 05 Sep 2013 00:17:42 +0200
-Subject: [Buildroot] [PATCH 1/1] cppcms: bump to version 1.0.4
-In-Reply-To: <1378205725-30571-1-git-send-email-jerzy.grzegorek@trzebnica.net>
- (Jerzy Grzegorek's message of "Tue, 3 Sep 2013 12:55:25 +0200")
-References: <1378205725-30571-1-git-send-email-jerzy.grzegorek@trzebnica.net>
-Message-ID: <87a9js44ft.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Wed, 4 Sep 2013 23:50:08 +0200
+Subject: [Buildroot] [git commit] libcurl: extend package support
+Message-ID: <20130904221730.C5F029B5F1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Jerzy" == Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=9834bf533e51ac60300ea57842bcc82a327a942e
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Jerzy> Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+Add support for gnutls, nss and polarssl backends.
+Add support for libidn and zlib.
 
-Committed, thanks.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/libcurl/libcurl.mk |   23 ++++++++++++++++++-----
+ 1 files changed, 18 insertions(+), 5 deletions(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
+index d5012b6..71f19f1 100644
+--- a/package/libcurl/libcurl.mk
++++ b/package/libcurl/libcurl.mk
+@@ -7,6 +7,9 @@
+ LIBCURL_VERSION = 7.32.0
+ LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.bz2
+ LIBCURL_SITE = http://curl.haxx.se/download
++LIBCURL_DEPENDENCIES = host-pkgconf \
++	$(if $(BR2_PACKAGE_ZLIB),zlib) \
++	$(if $(BR2_PACKAGE_LIBIDN),libidn)
+ LIBCURL_LICENSE = ICS
+ LIBCURL_LICENSE_FILES = COPYING
+ LIBCURL_INSTALL_STAGING = YES
+@@ -15,8 +18,8 @@ LIBCURL_INSTALL_STAGING = YES
+ # on non-MMU platforms. Moreover, this authentication method is
+ # probably almost never used. See
+ # http://curl.haxx.se/docs/manpage.html#--ntlm.
+-LIBCURL_CONF_OPT = --disable-verbose --disable-manual \
+-	--enable-hidden-symbols --disable-ntlm-wb
++LIBCURL_CONF_OPT = --disable-verbose --disable-manual --disable-ntlm-wb \
++	--enable-hidden-symbols --with-random=/dev/urandom
+ LIBCURL_CONFIG_SCRIPTS = curl-config
+ 
+ ifeq ($(BR2_PACKAGE_OPENSSL),y)
+@@ -27,11 +30,21 @@ LIBCURL_CONF_ENV += ac_cv_lib_crypto_CRYPTO_lock=yes
+ # Fix it by setting LD_LIBRARY_PATH to something sensible so those libs
+ # are found first.
+ LIBCURL_CONF_ENV += LD_LIBRARY_PATH=$$LD_LIBRARY_PATH:/lib:/usr/lib
+-LIBCURL_CONF_OPT += --with-ssl \
+-	--with-random=/dev/urandom \
++LIBCURL_CONF_OPT += --with-ssl=$(STAGING_DIR)/usr \
+ 	--with-ca-path=/etc/ssl/certs
++else ifeq ($(BR2_PACKAGE_GNUTLS),y)
++LIBCURL_CONF_OPT += --with-gnutls=$(STAGING_DIR)/usr
++LIBCURL_DEPENDENCIES += gnutls
++else ifeq ($(BR2_PACKAGE_POLARSSL),y)
++LIBCURL_CONF_OPT += --with-polarssl=$(STAGING_DIR)/usr
++LIBCURL_DEPENDENCIES += polarssl
++else ifeq ($(BR2_PACKAGE_LIBNSS),y)
++LIBCURL_CONF_OPT += --with-nss=$(STAGING_DIR)/usr
++LIBCURL_CONF_ENV += CPPFLAGS="$(TARGET_CPPFLAGS) `$(PKG_CONFIG_HOST_BINARY) nspr nss --cflags`"
++LIBCURL_DEPENDENCIES += libnss
+ else
+-LIBCURL_CONF_OPT += --without-ssl
++LIBCURL_CONF_OPT += --without-ssl --without-gnutls \
++	--without-polarssl --without-nss
+ endif
+ 
+ define LIBCURL_FIX_DOT_PC
