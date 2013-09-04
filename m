@@ -1,9 +1,9 @@
 From: Clayton Shotwell <clshotwe@rockwellcollins.com>
-Date: Wed, 4 Sep 2013 18:09:48 -0500
-Subject: [Buildroot] [PATCH 09/17] policycoreutils: new package
+Date: Wed, 4 Sep 2013 18:09:46 -0500
+Subject: [Buildroot] [PATCH 07/17] setools: new package
 In-Reply-To: <1378336196-27403-1-git-send-email-clshotwe@rockwellcollins.com>
 References: <1378336196-27403-1-git-send-email-clshotwe@rockwellcollins.com>
-Message-ID: <1378336196-27403-10-git-send-email-clshotwe@rockwellcollins.com>
+Message-ID: <1378336196-27403-8-git-send-email-clshotwe@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,728 +14,1290 @@ To: buildroot@busybox.net
 Signed-off-by: Clayton Shotwell <clshotwe@rockwellcollins.com>
 ---
  package/Config.in                                  |    1 +
- package/policycoreutils/Config.in                  |   64 ++++
- package/policycoreutils/S15restorecond             |   85 +++++
- .../policycoreutils-crossCompileFixes.patch        |  328 ++++++++++++++++++++
- package/policycoreutils/policycoreutils.mk         |  200 ++++++++++++
- 5 files changed, 678 insertions(+), 0 deletions(-)
- create mode 100644 package/policycoreutils/Config.in
- create mode 100755 package/policycoreutils/S15restorecond
- create mode 100644 package/policycoreutils/policycoreutils-crossCompileFixes.patch
- create mode 100644 package/policycoreutils/policycoreutils.mk
+ package/setools/Config.in                          |   22 +
+ .../setools/setools-0001-cross_compile_fixes.patch |  116 +++
+ .../setools-0002-swig_typedef_python_fixes.patch   | 1010 ++++++++++++++++++++
+ package/setools/setools.mk                         |   91 ++
+ 5 files changed, 1240 insertions(+), 0 deletions(-)
+ create mode 100644 package/setools/Config.in
+ create mode 100644 package/setools/setools-0001-cross_compile_fixes.patch
+ create mode 100644 package/setools/setools-0002-swig_typedef_python_fixes.patch
+ create mode 100644 package/setools/setools.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 72e1fde..2400f15 100644
+index ca38111..9e59b90 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -903,6 +903,7 @@ source "package/checkpolicy/Config.in"
- source "package/libsepol/Config.in"
+@@ -903,6 +903,7 @@ source "package/libsepol/Config.in"
  source "package/libselinux/Config.in"
  source "package/libsemanage/Config.in"
-+source "package/policycoreutils/Config.in"
  source "package/sepolgen/Config.in"
- source "package/setools/Config.in"
++source "package/setools/Config.in"
  endmenu
-diff --git a/package/policycoreutils/Config.in b/package/policycoreutils/Config.in
+ 
+ menu "System tools"
+diff --git a/package/setools/Config.in b/package/setools/Config.in
 new file mode 100644
-index 0000000..9df86b8
+index 0000000..649216d
 --- /dev/null
-+++ b/package/policycoreutils/Config.in
-@@ -0,0 +1,64 @@
-+config BR2_PACKAGE_POLICYCOREUTILS
-+	bool "policycoreutils"
++++ b/package/setools/Config.in
+@@ -0,0 +1,22 @@
++config BR2_PACKAGE_SETOOLS
++	bool "setools"
 +	help
-+	  Policycoreutils is a collection of policy utilities (originally 
-+	  the "core" set of utilities needed to use SELinux, although it 
-+	  has grown a bit over time), which have different dependencies. 
-+	  sestatus, secon, run_init, and newrole only use libselinux. 
-+	  load_policy and setfiles only use libselinux and libsepol. 
-+	  semodule and semanage use libsemanage (and thus bring in 
-+	  dependencies on libsepol and libselinux as well). setsebool 
-+	  uses libselinux to make non-persistent boolean changes (via 
-+	  the kernel interface) and uses libsemanage to make persistent 
-+	  boolean changes. 
-+	  
-+	  The base package will install the following utilities:
-+	      load_policy
-+	      newrole
-+	      restorecond
-+	      run_init
-+	      secon
-+	      semodule
-+	      semodule_deps
-+	      semodule_expand
-+	      semodule_link
-+	      semodule_package
-+	      sepolgen-ifgen
-+	      sestatus
-+	      setfiles
-+	      setsebool
++	  SETools is an open source project designed to facilitate SELinux policy 
++	  analysis. The primary tools are:
 +	      
-+	  http://selinuxproject.org/page/Main_Page
++	      apol - analyze a SELinux policy.
++	      seaudit - analyze audit messages from SELinux.
++	      seaudit-report - generate highly-customized audit log reports.
++	      sechecker - command line tool for performing modular checks on an SELinux policy.
++	      sediff - semantic policy difference tool for SELinux.
++	      secmds - command-line tools to analyze and search SELinux policy. 
 +
-+if BR2_PACKAGE_POLICYCOREUTILS
++if BR2_PACKAGE_SETOOLS
 +
-+config BR2_PACKAGE_POLICYCOREUTILS_POLICY_DEBUGGING
-+	bool "Policy Debugging Utilities"
-+	select BR2_PACKAGE_LIBSELINUX_PYTHON_BINDINGS
-+	select BR2_PACKAGE_SEPOLGEN
++config BR2_PACKAGE_SETOOLS_PYTHON_BINDINGS
++	bool "python bindings"
++	select BR2_PACKAGE_PYTHON
 +	help
-+	  Enable policy debugging packages to be built.  These are being included
-+	  separately because of dependencies.
-+	      audit2allow
-+	      audit2why
-+	      semanage
-+	      sepolicy
-+	      scripts
-+
-+config BR2_PACKAGE_POLICYCOREUTILS_RESTORECOND
-+	bool "restorecond Utility"
-+	help
-+	  Enable restorecond to be built
-+
-+config BR2_PACKAGE_POLICYCOREUTILS_MCSTRANS
-+	bool "mcstrans Utility"
-+	help
-+	  Enable mcstrans to be built
-+
-+config BR2_PACKAGE_POLICYCOREUTILS_SANDBOX
-+	bool "sandbox Utility"
-+	select BR2_PACKAGE_POLICYCOREUTILS_POLICY_DEBUGGING
-+	help
-+	  Enable sandbox to be built
++	  enable building python bindings
 +
 +endif
-diff --git a/package/policycoreutils/S15restorecond b/package/policycoreutils/S15restorecond
-new file mode 100755
-index 0000000..e408281
---- /dev/null
-+++ b/package/policycoreutils/S15restorecond
-@@ -0,0 +1,85 @@
-+#!/bin/sh
-+#
-+# restorecond:		Daemon used to maintain path file context
-+#
-+# description:	restorecond uses inotify to look for creation of new files \
-+# listed in the /etc/selinux/restorecond.conf file, and restores the \
-+# correct security context.
-+#
-+# processname: /usr/sbin/restorecond
-+# config: /etc/selinux/restorecond.conf 
-+# pidfile: /var/run/restorecond.pid
-+#
-+# Return values according to LSB for all commands but status:
-+# 0 - success
-+# 1 - generic or unspecified error
-+# 2 - invalid or excess argument(s)
-+# 3 - unimplemented feature (e.g. "reload")
-+# 4 - insufficient privilege
-+# 5 - program is not installed
-+# 6 - program is not configured
-+# 7 - program is not running
-+
-+PATH=/sbin:/bin:/usr/bin:/usr/sbin
-+
-+[ -x /usr/sbin/selinuxenabled ] && /usr/sbin/selinuxenabled || exit 7
-+
-+# Check that we are root ... so non-root users stop here
-+test $EUID = 0  || exit 4
-+
-+test -x /usr/sbin/restorecond  || exit 5
-+test -f /etc/selinux/restorecond.conf  || exit 6
-+
-+RETVAL=0
-+
-+start() 
-+{
-+	echo -n $"Starting restorecond: "
-+	unset HOME MAIL USER USERNAME
-+	/usr/sbin/restorecond 
-+	RETVAL=$?
-+	touch /var/lock/subsys/restorecond
-+	echo
-+	return $RETVAL
-+}
-+
-+stop() 
-+{
-+	echo -n $"Shutting down restorecond: "
-+	killproc restorecond
-+	RETVAL=$?
-+	rm -f  /var/lock/subsys/restorecond
-+	echo
-+	return $RETVAL
-+}
-+
-+restart() 
-+{
-+	stop
-+	start
-+}
-+
-+# See how we were called.
-+case "$1" in
-+  start)
-+	start
-+	;;
-+  stop)
-+	stop
-+	;;
-+  status)
-+	status restorecond
-+	RETVAL=$?
-+	;;
-+  force-reload|restart|reload)
-+	restart
-+	;;
-+  condrestart)
-+	[ -e /var/lock/subsys/restorecond ] && restart || :
-+	;;
-+  *)
-+	echo $"Usage: $0 {start|stop|restart|force-reload|status|condrestart}"
-+	RETVAL=3
-+esac
-+
-+exit $RETVAL
-diff --git a/package/policycoreutils/policycoreutils-crossCompileFixes.patch b/package/policycoreutils/policycoreutils-crossCompileFixes.patch
+diff --git a/package/setools/setools-0001-cross_compile_fixes.patch b/package/setools/setools-0001-cross_compile_fixes.patch
 new file mode 100644
-index 0000000..9502069
+index 0000000..d9eca46
 --- /dev/null
-+++ b/package/policycoreutils/policycoreutils-crossCompileFixes.patch
-@@ -0,0 +1,328 @@
-+diff -urN a/audit2allow/Makefile b/audit2allow/Makefile
-+--- a/audit2allow/Makefile	2013-02-05 19:43:22.000000000 -0600
-++++ b/audit2allow/Makefile	2013-08-23 09:16:21.282917254 -0500
-+@@ -3,7 +3,7 @@
-+ BINDIR ?= $(PREFIX)/bin
-+ LIBDIR ?= $(PREFIX)/lib
-+ MANDIR ?= $(PREFIX)/share/man
-+-LOCALEDIR ?= /usr/share/locale
-++LOCALEDIR ?= $(DESTDIR)/usr/share/locale
-+ 
-+ all: ;
-+ 
-+diff -urN a/load_policy/Makefile b/load_policy/Makefile
-+--- a/load_policy/Makefile	2013-02-05 19:43:22.000000000 -0600
-++++ b/load_policy/Makefile	2013-08-23 09:16:21.282917254 -0500
-+@@ -3,7 +3,7 @@
-+ SBINDIR ?= $(DESTDIR)/sbin
-+ USRSBINDIR ?= $(PREFIX)/sbin
-+ MANDIR ?= $(PREFIX)/share/man
-+-LOCALEDIR ?= /usr/share/locale
-++LOCALEDIR ?= $(DESTDIR)/usr/share/locale
-+ 
-+ CFLAGS ?= -Werror -Wall -W
-+ override CFLAGS += $(LDFLAGS) -I$(PREFIX)/include -DUSE_NLS -DLOCALEDIR="\"$(LOCALEDIR)\"" -DPACKAGE="\"policycoreutils\""
-+diff -urN a/Makefile b/Makefile
-+--- a/Makefile	2013-02-05 19:43:22.000000000 -0600
-++++ b/Makefile	2013-08-23 09:16:21.292985286 -0500
-+@@ -1,8 +1,8 @@
-+ SUBDIRS = sepolicy setfiles semanage load_policy newrole run_init sandbox secon audit2allow audit2why sestatus semodule_package semodule semodule_link semodule_expand semodule_deps sepolgen-ifgen setsebool scripts po man gui
-+ 
-+-INOTIFYH = $(shell ls /usr/include/sys/inotify.h 2>/dev/null)
-++INOTIFYH = $(shell ls $(DESTDIR)/usr/include/sys/inotify.h 2>/dev/null)
-+ 
-+-ifeq (${INOTIFYH}, /usr/include/sys/inotify.h)
-++ifeq (${INOTIFYH}, $(DESTDIR)/usr/include/sys/inotify.h)
-+ 	SUBDIRS += restorecond
-+ endif
-+ 
-+diff -urN a/mcstrans/src/Makefile b/mcstrans/src/Makefile
-+--- a/mcstrans/src/Makefile	2013-02-05 19:43:22.000000000 -0600
-++++ b/mcstrans/src/Makefile	2013-08-23 09:41:18.782916946 -0500
-+@@ -1,22 +1,8 @@
-+-ARCH = $(shell uname -i)
-+-ifeq "$(ARCH)" "x86_64"
-+-	# In case of 64 bit system, use these lines
-+-	LIBDIR=/usr/lib64
-+-else 
-+-ifeq "$(ARCH)" "i686"
-+-	# In case of 32 bit system, use these lines
-+-	LIBDIR=/usr/lib
-+-else
-+-ifeq "$(ARCH)" "i386"
-+-	# In case of 32 bit system, use these lines
-+-	LIBDIR=/usr/lib
-+-endif
-+-endif
-+-endif
-+ # Installation directories.
-+ PREFIX  ?= $(DESTDIR)/usr
-+-SBINDIR ?= $(DESTDIR)/sbin
-+-INITDIR ?= $(DESTDIR)/etc/rc.d/init.d
-++LIBDIR  ?= $(PREFIX)/lib
-++SBINDIR ?= $(PREFIX)/sbin
-++INITDIR ?= $(DESTDIR)/etc/init.d
-+ 
-+ PROG_SRC=mcstrans.c  mcscolor.c  mcstransd.c  mls_level.c
-+ PROG_OBJS= $(patsubst %.c,%.o,$(PROG_SRC))
-+@@ -40,5 +26,5 @@
-+ 	install -m 755 $(INITSCRIPT).init $(INITDIR)/$(INITSCRIPT)
-+ 
-+ clean: 
-+-	-rm -f $(OBJS) $(LOBJS) $(TARGET) $(PROG) $(PROG_OBJS) *~ \#*
-++	-rm -f $(PROG) $(PROG_OBJS) *.o *~ \#*
-+ 
-+diff -urN a/mcstrans/utils/Makefile b/mcstrans/utils/Makefile
-+--- a/mcstrans/utils/Makefile	2013-02-05 19:43:22.000000000 -0600
-++++ b/mcstrans/utils/Makefile	2013-08-23 09:16:21.292985286 -0500
-+@@ -1,24 +1,8 @@
-+ # Installation directories.
-+ PREFIX ?= $(DESTDIR)/usr
-++LIBDIR  ?= $(PREFIX)/lib
-+ BINDIR ?= $(PREFIX)/sbin
-+ 
-+-ARCH = $(shell uname -i)
-+-ifeq "$(ARCH)" "x86_64"
-+-        # In case of 64 bit system, use these lines
-+-        LIBDIR=/usr/lib64
-+-else
-+-ifeq "$(ARCH)" "i686"
-+-        # In case of 32 bit system, use these lines
-+-        LIBDIR=/usr/lib
-+-else
-+-ifeq "$(ARCH)" "i386"
-+-        # In case of 32 bit system, use these lines
-+-        LIBDIR=/usr/lib
-+-endif
-+-endif
-+-endif
-+-
-+-
-+ CFLAGS ?= -Wall
-+ override CFLAGS += -I../src -D_GNU_SOURCE
-+ LDLIBS += -L../src ../src/mcstrans.o ../src/mls_level.o -lselinux -lpcre $(LIBDIR)/libsepol.a
-+diff -urN a/newrole/Makefile b/newrole/Makefile
-+--- a/newrole/Makefile	2013-02-05 19:43:22.000000000 -0600
-++++ b/newrole/Makefile	2013-08-23 09:16:21.292985286 -0500
-+@@ -3,9 +3,9 @@
-+ BINDIR ?= $(PREFIX)/bin
-+ MANDIR ?= $(PREFIX)/share/man
-+ ETCDIR ?= $(DESTDIR)/etc
-+-LOCALEDIR = /usr/share/locale
-+-PAMH = $(shell ls /usr/include/security/pam_appl.h 2>/dev/null)
-+-AUDITH = $(shell ls /usr/include/libaudit.h 2>/dev/null)
-++LOCALEDIR = $(DESTDIR)/usr/share/locale
-++PAMH = $(shell ls $(DESTDIR)/usr/include/security/pam_appl.h 2>/dev/null)
-++AUDITH = $(shell ls $(DESTDIR)/usr/include/libaudit.h 2>/dev/null)
-+ # Enable capabilities to permit newrole to generate audit records.
-+ # This will make newrole a setuid root program.
-+ # The capabilities used are: CAP_AUDIT_WRITE.
-+@@ -24,7 +24,7 @@
-+ EXTRA_OBJS =
-+ override CFLAGS += -DVERSION=\"$(VERSION)\" $(LDFLAGS) -I$(PREFIX)/include -DUSE_NLS -DLOCALEDIR="\"$(LOCALEDIR)\"" -DPACKAGE="\"policycoreutils\""
-+ LDLIBS += -lselinux -L$(PREFIX)/lib
-+-ifeq ($(PAMH), /usr/include/security/pam_appl.h)
-++ifeq ($(PAMH), $(DESTDIR)/usr/include/security/pam_appl.h)
-+ 	override CFLAGS += -DUSE_PAM
-+ 	EXTRA_OBJS += hashtab.o
-+ 	LDLIBS += -lpam -lpam_misc
-+@@ -32,7 +32,7 @@
-+ 	override CFLAGS += -D_XOPEN_SOURCE=500
-+ 	LDLIBS += -lcrypt
-+ endif
-+-ifeq ($(AUDITH), /usr/include/libaudit.h)
-++ifeq ($(AUDITH), $(DESTDIR)/usr/include/libaudit.h)
-+ 	override CFLAGS += -DUSE_AUDIT
-+ 	LDLIBS += -laudit
-+ endif
-+@@ -66,7 +66,7 @@
-+ 	test -d $(MANDIR)/man1 || install -m 755 -d $(MANDIR)/man1
-+ 	install -m $(MODE) newrole $(BINDIR)
-+ 	install -m 644 newrole.1 $(MANDIR)/man1/
-+-ifeq ($(PAMH), /usr/include/security/pam_appl.h)
-++ifeq ($(PAMH), $(DESTDIR)/usr/include/security/pam_appl.h)
-+ 	test -d $(ETCDIR)/pam.d || install -m 755 -d $(ETCDIR)/pam.d
-+ ifeq ($(LSPP_PRIV),y)
-+ 	install -m 644 newrole-lspp.pamd $(ETCDIR)/pam.d/newrole
-+diff -urN a/restorecond/Makefile b/restorecond/Makefile
-+--- a/restorecond/Makefile	2013-02-05 19:43:22.000000000 -0600
-++++ b/restorecond/Makefile	2013-08-23 09:16:21.292985286 -0500
-+@@ -2,24 +2,29 @@
-+ PREFIX ?= $(DESTDIR)/usr
-+ SBINDIR ?= $(PREFIX)/sbin
-+ LIBDIR ?= $(PREFIX)/lib
-+-MANDIR = $(PREFIX)/share/man
-++MANDIR ?= $(PREFIX)/share/man
-+ AUTOSTARTDIR = $(DESTDIR)/etc/xdg/autostart
-+ DBUSSERVICEDIR = $(DESTDIR)/usr/share/dbus-1/services
-+ 
-+ autostart_DATA = sealertauto.desktop
-+-INITDIR = $(DESTDIR)/etc/rc.d/init.d
-++INITDIR = $(DESTDIR)/etc/init.d
-+ SELINUXDIR = $(DESTDIR)/etc/selinux
-+ 
-+-DBUSFLAGS = -DHAVE_DBUS -I/usr/include/dbus-1.0 -I/usr/lib64/dbus-1.0/include -I/usr/lib/dbus-1.0/include
-++DBUSFLAGS = -DHAVE_DBUS -I$(PREFIX)/include/dbus-1.0 -I$(PREFIX)/lib64/dbus-1.0/include \
-++		-I$(PREFIX)/lib/dbus-1.0/include
-+ DBUSLIB = -ldbus-glib-1 -ldbus-1
-+ 
-+ CFLAGS ?= -g -Werror -Wall -W
-+-override CFLAGS += -I$(PREFIX)/include $(DBUSFLAGS) -I/usr/include/glib-2.0 -I/usr/lib64/glib-2.0/include -I/usr/lib/glib-2.0/include
-++override CFLAGS += -I$(PREFIX)/include $(DBUSFLAGS) -I$(PREFIX)/include/glib-2.0 \
-++		-I$(PREFIX)/lib64/glib-2.0/include -I$(PREFIX)/lib/glib-2.0/include
-+ 
-+ LDLIBS += -lselinux $(DBUSLIB) -lglib-2.0 -L$(LIBDIR)
-+ 
-+ all: restorecond
-+ 
-++%.o: %.c
-++	$(CC) $(CFLAGS) -c -o $@ $<
-++
-+ restorecond.o utmpwatcher.o stringslist.o user.o watch.o: restorecond.h
-+ 
-+ restorecond:  ../setfiles/restore.o restorecond.o utmpwatcher.o stringslist.o user.o watch.o
-+diff -urN a/run_init/Makefile b/run_init/Makefile
-+--- a/run_init/Makefile	2013-02-05 19:43:22.000000000 -0600
-++++ b/run_init/Makefile	2013-08-23 09:16:21.292985286 -0500
-+@@ -4,21 +4,21 @@
-+ SBINDIR ?= $(PREFIX)/sbin
-+ MANDIR ?= $(PREFIX)/share/man
-+ ETCDIR ?= $(DESTDIR)/etc
-+-LOCALEDIR ?= /usr/share/locale
-+-PAMH = $(shell ls /usr/include/security/pam_appl.h 2>/dev/null)
-+-AUDITH = $(shell ls /usr/include/libaudit.h 2>/dev/null)
-++LOCALEDIR ?= $(DESTDIR)/usr/share/locale
-++PAMH = $(shell ls $(DESTDIR)/usr/include/security/pam_appl.h 2>/dev/null)
-++AUDITH = $(shell ls $(DESTDIR)/usr/include/libaudit.h 2>/dev/null)
-+ 
-+ CFLAGS ?= -Werror -Wall -W
-+ override CFLAGS += -I$(PREFIX)/include -DUSE_NLS -DLOCALEDIR="\"$(LOCALEDIR)\"" -DPACKAGE="\"policycoreutils\""
-+ LDLIBS += -lselinux -L$(PREFIX)/lib
-+-ifeq ($(PAMH), /usr/include/security/pam_appl.h)
-++ifeq ($(PAMH), $(DESTDIR)/usr/include/security/pam_appl.h)
-+ 	override CFLAGS += -DUSE_PAM
-+ 	LDLIBS += -lpam -lpam_misc
++++ b/package/setools/setools-0001-cross_compile_fixes.patch
+@@ -0,0 +1,116 @@
++diff -urN a/configure.ac b/configure.ac
++--- a/configure.ac	2013-01-16 10:36:24.000000000 -0600
+++++ b/configure.ac	2013-07-12 08:22:10.380255248 -0500
++@@ -448,8 +448,9 @@
++               sepol_srcdir="")
++ if test "x${sepol_srcdir}" = "x"; then
++    sepol_srcdir=${sepol_devel_libdir}
++-   AC_CHECK_FILE([${sepol_srcdir}/libsepol.a],,
++-      AC_MSG_ERROR([make sure libsepol-static is installed]))
+++   if test ! -f ${sepol_srcdir}/libsepol.a; then
+++      AC_MSG_ERROR([could not find precompiled libsepol.a])
+++   fi
 + else
-+ 	override CFLAGS += -D_XOPEN_SOURCE=500
-+ 	LDLIBS += -lcrypt
-+ endif
-+-ifeq ($(AUDITH), /usr/include/libaudit.h)
-++ifeq ($(AUDITH), $(DESTDIR)/usr/include/libaudit.h)
-+ 	override CFLAGS += -DUSE_AUDIT
-+ 	LDLIBS += -laudit
-+ endif
-+@@ -38,7 +38,7 @@
-+ 	install -m 755 open_init_pty $(SBINDIR)
-+ 	install -m 644 run_init.8 $(MANDIR)/man8/
-+ 	install -m 644 open_init_pty.8 $(MANDIR)/man8/
-+-ifeq ($(PAMH), /usr/include/security/pam_appl.h)
-++ifeq ($(PAMH), $(DESTDIR)/usr/include/security/pam_appl.h)
-+ 	install -m 644 run_init.pamd $(ETCDIR)/pam.d/run_init
-+ endif
++    AC_MSG_CHECKING([for compatible sepol source tree])
++    sepol_version=${sepol_srcdir}/VERSION
++@@ -484,8 +485,9 @@
++    AC_CHECK_HEADER([sepol/policydb/policydb.h], , AC_MSG_ERROR([could not find sepol source tree]))
++    CFLAGS="${sepol_src_save_CFLAGS}"
++    CPPFLAGS="${sepol_src_save_CPPFLAGS}"
++-   AC_CHECK_FILE([${sepol_srcdir}/libsepol.a],,
++-      AC_MSG_ERROR([could not find precompiled libsepol.a]))
+++   if test ! -f ${sepol_srcdir}/libsepol.a; then
+++      AC_MSG_ERROR([could not find precompiled libsepol.a])
+++   fi
++    sepol_devel_incdir="${sepol_srcdir}/../include"
++ fi
++ SELINUX_CFLAGS="-I${sepol_devel_incdir} -I${selinux_devel_incdir}"
++@@ -578,12 +580,13 @@
++                          [AC_LANG_SOURCE([
++ #include <sepol/policydb/expand.h>
++ int main () {
++-  return expand_module_avrules(NULL, NULL, NULL, NULL, NULL, 0, 0);
+++  return expand_module_avrules(NULL, NULL, NULL, NULL, NULL, 0, 0, 0, 0);
++ }])],
++                          AC_MSG_RESULT([yes]),
++                          AC_MSG_ERROR([this version of libsepol is incompatible with SETools]))
++     fi
++     sepol_new_expand_boolmap="yes"
+++    sepol_new_user_role_mapping="yes"
++ else
++     sepol_new_expand_boolmap="no"
++ fi
++@@ -607,7 +610,8 @@
++     exit(EXIT_FAILURE);
++ }])],
++     sepol_policy_version_max=`cat conftest.data`,
++-    AC_MSG_FAILURE([could not determine maximum libsepol policy version]))
+++    AC_MSG_FAILURE([could not determine maximum libsepol policy version]),
+++    sepol_policy_version_max="26")
++ AC_DEFINE_UNQUOTED(SEPOL_POLICY_VERSION_MAX, ${sepol_policy_version_max}, [maximum policy version supported by libsepol])
++ CFLAGS="${sepol_save_CFLAGS}"
++ CPPFLAGS="${sepol_save_CPPFLAGS}"
++@@ -631,7 +635,7 @@
++     changequote([,])dnl
++     selinux_save_CFLAGS="${CFLAGS}"
++     CFLAGS="${SELINUX_CFLAGS} ${SELINUX_LIB_FLAG} -lselinux -lsepol ${CFLAGS}"
++-    gcc ${CFLAGS} -o conftest conftest.c >&5
+++    ${CC} ${CFLAGS} -o conftest conftest.c >&5
++     selinux_policy_dir=`./conftest`
++     AC_MSG_RESULT(${selinux_policy_dir})
++     CFLAGS="${selinux_save_CFLAGS}"
++diff -urN a/libqpol/src/policy_define.c b/libqpol/src/policy_define.c
++--- a/libqpol/src/policy_define.c	2013-01-16 10:36:24.000000000 -0600
+++++ b/libqpol/src/policy_define.c	2013-07-12 08:22:10.380255248 -0500
++@@ -2135,7 +2135,7 @@
++ #ifdef HAVE_SEPOL_ROLE_ATTRS
++ 	if (role_set_expand(&roles, &e_roles, policydbp, NULL, NULL))
++ #elif HAVE_SEPOL_USER_ROLE_MAPPING
++-	if (role_set_expand(&roles, &e_roles, policydbp, NULL))
+++	if (role_set_expand(&roles, &e_roles, policydbp, NULL, NULL))
++ #else
++ 	if (role_set_expand(&roles, &e_roles, policydbp))
++ #endif
++diff -urN a/m4/ac_python_devel.m4 b/m4/ac_python_devel.m4
++--- a/m4/ac_python_devel.m4	2013-01-16 10:36:22.000000000 -0600
+++++ b/m4/ac_python_devel.m4	2013-07-12 08:22:10.380255248 -0500
++@@ -234,7 +234,7 @@
++ 	AC_MSG_CHECKING([consistency of all components of python development environment])
++ 	AC_LANG_PUSH([C])
++ 	# save current global flags
++-	LIBS="$ac_save_LIBS $PYTHON_LDFLAGS"
+++	LIBS="$ac_save_LIBS $PYTHON_EXTRA_LIBS $PYTHON_LDFLAGS"
++ 	CPPFLAGS="$ac_save_CPPFLAGS $PYTHON_CPPFLAGS"
++ 	AC_TRY_LINK([
++ 		#include <Python.h>
++diff -urN a/python/setools/Makefile.am b/python/setools/Makefile.am
++--- a/python/setools/Makefile.am	2013-01-16 10:36:22.000000000 -0600
+++++ b/python/setools/Makefile.am	2013-07-12 08:22:19.200251011 -0500
++@@ -22,13 +22,13 @@
++ python-build: sesearch.c seinfo.c
++ 	@mkdir -p setools
++ 	@cp __init__.py setools
++-	LIBS="$(QPOL_LIB_FLAG) $(APOL_LIB_FLAG)" INCLUDES="$(QPOL_CFLAGS) $(APOL_CFLAGS)" $(PYTHON) setup.py build
+++	LIBS="$(QPOL_LIB_FLAG) $(APOL_LIB_FLAG)" LIBDIRS="$(PYTHON_LDFLAGS)" INCLUDES="$(PYTHON_CPPFLAGS) $(QPOL_CFLAGS) $(APOL_CFLAGS)" CC="$(CC)" CFLAGS="$(CFLAGS)" LDSHARED="$(CC) -shared" LDFLAGS="$(LDFLAGS)" $(PYTHON) setup.py build_ext
 + 
-+diff -urN a/semodule/Makefile b/semodule/Makefile
-+--- a/semodule/Makefile	2013-02-05 19:43:22.000000000 -0600
-++++ b/semodule/Makefile	2013-08-23 09:16:21.302924109 -0500
-+@@ -2,7 +2,7 @@
-+ PREFIX ?= $(DESTDIR)/usr
-+ INCLUDEDIR ?= $(PREFIX)/include
-+ SBINDIR ?= $(PREFIX)/sbin
-+-MANDIR = $(PREFIX)/share/man
-++MANDIR ?= $(PREFIX)/share/man
-+ LIBDIR ?= $(PREFIX)/lib
-+ 
-+ CFLAGS ?= -Werror -Wall -W
-+diff -urN a/sepolicy/Makefile b/sepolicy/Makefile
-+--- a/sepolicy/Makefile	2013-02-05 19:43:22.000000000 -0600
-++++ b/sepolicy/Makefile	2013-08-23 09:16:21.302924109 -0500
-+@@ -5,25 +5,32 @@
-+ BINDIR ?= $(PREFIX)/bin
-+ SBINDIR ?= $(PREFIX)/sbin
-+ MANDIR ?= $(PREFIX)/share/man
-+-LOCALEDIR ?= /usr/share/locale
-++LOCALEDIR ?= $(DESTDIR)/usr/share/locale
-+ PYTHON ?= /usr/bin/python
-+ BASHCOMPLETIONDIR ?= $(DESTDIR)/etc/bash_completion.d/
-+ SHAREDIR ?= $(PREFIX)/share/sandbox
-+-override CFLAGS = $(LDFLAGS) -I$(PREFIX)/include -DPACKAGE="policycoreutils" -Wall -Werror -Wextra -W  -DSHARED -shared
-++override CFLAGS += $(LDFLAGS) -I$(PREFIX)/include -DPACKAGE="policycoreutils" -Wall -Werror -Wextra -W  -DSHARED -shared
-+ 
-+ BASHCOMPLETIONS=sepolicy-bash-completion.sh 
-+ 
-++PYTHON_ARGS = LDSHARED="$(CC) -shared" \
-++		CROSS_COMPILING=yes              \
-++		_python_sysroot=$(DESTDIR)       \
-++		_python_srcdir=$(PYTHON_SRC)     \
-++		_python_prefix=/usr              \
-++		_python_exec_prefix=/usr
-++
-+ all: python-build
-+ 
-+ python-build: info.c search.c common.h policy.h policy.c
-+-	$(PYTHON) setup.py build
-++	$(PYTHON_ARGS) $(PYTHON) setup.py build
-+ 
-+ clean:
-+ 	$(PYTHON) setup.py clean
-+ 	-rm -rf build *~ \#* *pyc .#*
-+ 
-+ install:
++ install-exec-hook:
 +-	$(PYTHON) setup.py install `test -n "$(DESTDIR)" && echo --root $(DESTDIR)`
-++	$(PYTHON_ARGS) $(PYTHON) setup.py install --prefix=$(PREFIX)
-+ 	[ -d $(BINDIR) ] || mkdir -p $(BINDIR)
-+ 	install -m 755 sepolicy.py $(BINDIR)/sepolicy
-+ 	-mkdir -p $(MANDIR)/man8
-+diff -urN a/sestatus/Makefile b/sestatus/Makefile
-+--- a/sestatus/Makefile	2013-02-05 19:43:22.000000000 -0600
-++++ b/sestatus/Makefile	2013-08-23 09:16:21.302924109 -0500
-+@@ -1,11 +1,11 @@
-+ # Installation directories.
-+ PREFIX ?= $(DESTDIR)/usr
-+ SBINDIR ?= $(PREFIX)/sbin
-+-MANDIR = $(PREFIX)/share/man
-++MANDIR ?= $(PREFIX)/share/man
-+ ETCDIR ?= $(DESTDIR)/etc
-+ LIBDIR ?= $(PREFIX)/lib
+++	$(PYTHON) setup.py install `test -n "$(DESTDIR)" && echo --prefix=$(DESTDIR)/usr`
 + 
-+-CFLAGS = -Werror -Wall -W
-++CFLAGS ?= -Werror -Wall -W
-+ override CFLAGS += -I$(PREFIX)/include -D_FILE_OFFSET_BITS=64
-+ LDLIBS = -lselinux -L$(LIBDIR)
++ uninstall-hook: 
++-	$(PYTHON) setup.py uninstall `test -n "$(DESTDIR)" && echo --root $(DESTDIR)`
+++	$(PYTHON) setup.py uninstall `test -n "$(DESTDIR)" && echo --prefix=$(DESTDIR)/usr`
 + 
-+diff -urN a/setfiles/Makefile b/setfiles/Makefile
-+--- a/setfiles/Makefile	2013-02-05 19:43:22.000000000 -0600
-++++ b/setfiles/Makefile	2013-08-23 09:16:21.302924109 -0500
-+@@ -1,24 +1,27 @@
-+ # Installation directories.
-+ PREFIX ?= $(DESTDIR)/usr
-+ SBINDIR ?= $(DESTDIR)/sbin
-+-MANDIR = $(PREFIX)/share/man
-++MANDIR ?= $(PREFIX)/share/man
-+ LIBDIR ?= $(PREFIX)/lib
-+-AUDITH = $(shell ls /usr/include/libaudit.h 2>/dev/null)
-++AUDITH = $(shell ls $(DESTDIR)/usr/include/libaudit.h 2>/dev/null)
-+ 
-+-PROGRESS_STEP=$(shell grep "^\#define STAR_COUNT" restore.h | awk -S '{ print $$3 }')
-+-ABORT_ON_ERRORS=$(shell grep "^\#define ABORT_ON_ERRORS" setfiles.c | awk -S '{ print $$3 }')
-++PROGRESS_STEP=$(shell grep "^\#define STAR_COUNT" restore.h | awk '{ print $$3 }')
-++ABORT_ON_ERRORS=$(shell grep "^\#define ABORT_ON_ERRORS" setfiles.c | awk '{ print $$3 }')
-+ 
-+-CFLAGS = -g -Werror -Wall -W
-++CFLAGS ?= -g -Werror -Wall -W
-+ override CFLAGS += -I$(PREFIX)/include
-+ LDLIBS = -lselinux -lsepol -L$(LIBDIR)
-+ 
-+-ifeq ($(AUDITH), /usr/include/libaudit.h)
-++ifeq ($(AUDITH), $(DESTDIR)/usr/include/libaudit.h)
-+ 	override CFLAGS += -DUSE_AUDIT
-+ 	LDLIBS += -laudit
-+ endif
-+ 
-+ all: setfiles restorecon man
-+ 
-++%.o: %.c
-++	$(CC) $(CFLAGS) -c -o $@ $<
-++
-+ setfiles:  setfiles.o restore.o
-+ 
-+ restorecon: setfiles
-diff --git a/package/policycoreutils/policycoreutils.mk b/package/policycoreutils/policycoreutils.mk
++ clean-local:
++ 	$(PYTHON) setup.py clean -a 
++--- a/python/setools/setup.py	2013-01-16 10:36:22.000000000 -0600
+++++ b/python/setools/setup.py	2013-09-04 09:17:48.452916991 -0500
++@@ -8,7 +8,7 @@
++ try:
++     inc=os.getenv("INCLUDES").split(" ")    
++     INCLUDES=map(lambda x: x[2:], inc)
++-    LIBDIRS=map(lambda x: "/".join(x.split("/")[:-1]), os.getenv("LIBS").split())
+++    LIBDIRS=map(lambda x: "/".join(x.split("/")[:-1]), os.getenv("LIBS").split()) + map(lambda x: x[2:], os.getenv("LIBDIRS").split())
++ except:
++     INCLUDES=""
++     LIBDIRS=""
+diff --git a/package/setools/setools-0002-swig_typedef_python_fixes.patch b/package/setools/setools-0002-swig_typedef_python_fixes.patch
 new file mode 100644
-index 0000000..7311b5a
+index 0000000..fbe721a
 --- /dev/null
-+++ b/package/policycoreutils/policycoreutils.mk
-@@ -0,0 +1,200 @@
++++ b/package/setools/setools-0002-swig_typedef_python_fixes.patch
+@@ -0,0 +1,1010 @@
++--- a/libapol/swig/apol.i	2010-04-23 11:22:08.000000000 -0500
+++++ b/libapol/swig/apol.i	2012-08-29 08:04:29.000000000 -0500
++@@ -232,7 +232,7 @@
++ %newobject wrap_apol_str_to_internal_ip(char*);
++ %rename(apol_str_to_internal_ip) wrap_apol_str_to_internal_ip;
++ %inline %{
++-	typedef struct apol_ip {
+++	typedef struct {
++ 		uint32_t ip[4];
++ 		int proto;
++ 	} apol_ip_t;
++@@ -301,7 +301,7 @@
++ %inline %{
++ 	typedef struct apol_string_vector apol_string_vector_t;
++ %}
++-typedef struct apol_vector {} apol_vector_t;
+++typedef struct {} apol_vector_t;
++ %extend apol_vector_t {
++ 	apol_vector_t() {
++ 		return apol_vector_create(NULL);
++@@ -377,7 +377,7 @@
++ 		return apol_vector_compare(a, b, NULL, NULL, &idx);
++ 	}
++ %}
++-typedef struct apol_string_vector {} apol_string_vector_t;
+++typedef struct {} apol_string_vector_t;
++ %extend apol_string_vector_t {
++ 	apol_string_vector_t() {
++ 		return (apol_string_vector_t*)apol_vector_create(free);
++@@ -460,7 +460,7 @@
++ 	APOL_POLICY_PATH_TYPE_MONOLITHIC = 0,
++ 	APOL_POLICY_PATH_TYPE_MODULAR
++ } apol_policy_path_type_e;
++-typedef struct apol_policy_path {} apol_policy_path_t;
+++typedef struct {} apol_policy_path_t;
++ %extend apol_policy_path_t {
++ 	apol_policy_path_t(apol_policy_path_type_e type, char * primary, apol_string_vector_t *modules = NULL) {
++ 		apol_policy_path_t *p;
++@@ -540,7 +540,7 @@
++ int apol_file_is_policy_path_list(const char *filename);
++ 
++ /* apol policy */
++-typedef struct apol_policy {} apol_policy_t;
+++typedef struct {} apol_policy_t;
++ #define APOL_PERMMAP_MAX_WEIGHT 10
++ #define APOL_PERMMAP_MIN_WEIGHT 1
++ #define APOL_PERMMAP_UNMAPPED	0x00
++@@ -650,7 +650,7 @@
++ };
++ 
++ /* apol type query */
++-typedef struct apol_type_query {} apol_type_query_t;
+++typedef struct {} apol_type_query_t;
++ %extend apol_type_query_t {
++ 	apol_type_query_t() {
++ 		apol_type_query_t *tq;
++@@ -692,7 +692,7 @@
++ };
++ 
++ /* apol attribute query */
++-typedef struct apol_attr_query {} apol_attr_query_t;
+++typedef struct {} apol_attr_query_t;
++ %extend apol_attr_query_t {
++ 	apol_attr_query_t() {
++ 		apol_attr_query_t *aq;
++@@ -734,7 +734,7 @@
++ };
++ 
++ /* apol role query */
++-typedef struct apol_role_query {} apol_role_query_t;
+++typedef struct {} apol_role_query_t;
++ %extend apol_role_query_t {
++ 	apol_role_query_t() {
++ 		apol_role_query_t *rq;
++@@ -786,7 +786,7 @@
++ int apol_role_has_type(apol_policy_t * p, qpol_role_t * r, qpol_type_t * t);
++ 
++ /* apol class query */
++-typedef struct apol_class_query {} apol_class_query_t;
+++typedef struct {} apol_class_query_t;
++ %extend apol_class_query_t {
++ 	apol_class_query_t() {
++ 		apol_class_query_t *cq;
++@@ -837,7 +837,7 @@
++ };
++ 
++ /* apol common query */
++-typedef struct apol_common_query {} apol_common_query_t;
+++typedef struct {} apol_common_query_t;
++ %extend apol_common_query_t {
++ 	apol_common_query_t() {
++ 		apol_common_query_t *cq;
++@@ -879,7 +879,7 @@
++ };
++ 
++ /* apol perm query */
++-typedef struct apol_perm_query {} apol_perm_query_t;
+++typedef struct {} apol_perm_query_t;
++ %extend apol_perm_query_t {
++ 	apol_perm_query_t() {
++ 		apol_perm_query_t *pq;
++@@ -921,7 +921,7 @@
++ };
++ 
++ /* apol bool query */
++-typedef struct apol_bool_query {} apol_bool_query_t;
+++typedef struct {} apol_bool_query_t;
++ %extend apol_bool_query_t {
++ 	apol_bool_query_t() {
++ 		apol_bool_query_t *bq;
++@@ -963,7 +963,7 @@
++ };
++ 
++ /* apol mls level */
++-typedef struct apol_mls_level {} apol_mls_level_t;
+++typedef struct {} apol_mls_level_t;
++ %extend apol_mls_level_t {
++ 	apol_mls_level_t() {
++ 		apol_mls_level_t *aml;
++@@ -1122,11 +1122,11 @@
++ %typemap(in) apol_mls_level_t *lvl {
++ 	void *x = NULL;
++ 	Py_IncRef($input);
++-	SWIG_ConvertPtr($input, &x,SWIGTYPE_p_apol_mls_level, 0 |  0 );
+++	SWIG_ConvertPtr($input, &x,SWIGTYPE_p_apol_mls_level_t, 0 |  0 );
++ 	$1 = (apol_mls_level_t*)x;
++ }
++ #endif
++-typedef struct apol_mls_range {} apol_mls_range_t;
+++typedef struct {} apol_mls_range_t;
++ %extend apol_mls_range_t {
++ 	apol_mls_range_t() {
++ 		apol_mls_range_t *amr;
++@@ -1276,7 +1276,7 @@
++ %}
++ 
++ /* apol level query */
++-typedef struct apol_level_query {} apol_level_query_t;
+++typedef struct {} apol_level_query_t;
++ %extend apol_level_query_t {
++ 	apol_level_query_t() {
++ 		apol_level_query_t * alq;
++@@ -1327,7 +1327,7 @@
++ };
++ 
++ /* apol cat query */
++-typedef struct apol_cat_query {} apol_cat_query_t;
+++typedef struct {} apol_cat_query_t;
++ %extend apol_cat_query_t {
++ 	apol_cat_query_t() {
++ 		apol_cat_query_t * acq;
++@@ -1373,11 +1373,11 @@
++ %typemap(in) apol_mls_range_t *rng {
++ 	void *x = NULL;
++ 	Py_IncRef($input);
++-	SWIG_ConvertPtr($input, &x,SWIGTYPE_p_apol_mls_range, 0 |  0 );
+++	SWIG_ConvertPtr($input, &x,SWIGTYPE_p_apol_mls_range_t, 0 |  0 );
++ 	$1 = (apol_mls_range_t*)x;
++ }
++ #endif
++-typedef struct apol_user_query {} apol_user_query_t;
+++typedef struct {} apol_user_query_t;
++ %extend apol_user_query_t {
++ 	apol_user_query_t() {
++ 		apol_user_query_t *auq;
++@@ -1446,7 +1446,7 @@
++ };
++ 
++ /* apol context */
++-typedef struct apol_context {} apol_context_t;
+++typedef struct {} apol_context_t;
++ %extend apol_context_t {
++ 	apol_context_t() {
++ 		apol_context_t *ctx;
++@@ -1581,7 +1581,7 @@
++ int apol_context_compare(apol_policy_t * p, apol_context_t * target, apol_context_t * search, unsigned int range_compare_type);
++ 
++ /* apol constraint query */
++-typedef struct apol_constraint_query {} apol_constraint_query_t;
+++typedef struct {} apol_constraint_query_t;
++ %extend apol_constraint_query_t {
++ 	apol_constraint_query_t() {
++ 		apol_constraint_query_t *acq;
++@@ -1632,7 +1632,7 @@
++ };
++ 
++ /* apol validatetrans query */
++-typedef struct apol_validatetrans_query {} apol_validatetrans_query_t;
+++typedef struct {} apol_validatetrans_query_t;
++ %extend apol_validatetrans_query_t {
++ 	apol_validatetrans_query_t() {
++ 		apol_validatetrans_query_t *avq;
++@@ -1678,11 +1678,11 @@
++ %typemap(in) apol_context_t *ctx {
++ 	void *x = NULL;
++ 	Py_IncRef($input);
++-	SWIG_ConvertPtr($input, &x,SWIGTYPE_p_apol_context, 0 |  0 );
+++	SWIG_ConvertPtr($input, &x,SWIGTYPE_p_apol_context_t, 0 |  0 );
++ 	$1 = (apol_context_t*)x;
++ }
++ #endif
++-typedef struct apol_genfscon_query {} apol_genfscon_query_t;
+++typedef struct {} apol_genfscon_query_t;
++ %extend apol_genfscon_query_t {
++ 	apol_genfscon_query_t() {
++ 		apol_genfscon_query_t *agq;
++@@ -1744,7 +1744,7 @@
++ char *apol_genfscon_render(apol_policy_t * p, qpol_genfscon_t * genfscon);
++ 
++ /* apol fs_use query */
++-typedef struct apol_fs_use_query {} apol_fs_use_query_t;
+++typedef struct {} apol_fs_use_query_t;
++ %extend apol_fs_use_query_t {
++ 	apol_fs_use_query_t() {
++ 		apol_fs_use_query_t *afq;
++@@ -1797,7 +1797,7 @@
++ char *apol_fs_use_render(apol_policy_t * p, qpol_fs_use_t * fsuse);
++ 
++ /* apol initial sid query */
++-typedef struct apol_isid_query {} apol_isid_query_t;
+++typedef struct {} apol_isid_query_t;
++ %extend apol_isid_query_t {
++ 	apol_isid_query_t() {
++ 		apol_isid_query_t *aiq;
++@@ -1839,7 +1839,7 @@
++ };
++ 
++ /* apol portcon query */
++-typedef struct apol_portcon_query {} apol_portcon_query_t;
+++typedef struct {} apol_portcon_query_t;
++ %extend apol_portcon_query_t {
++ 	apol_portcon_query_t() {
++ 		apol_portcon_query_t *apq;
++@@ -1883,7 +1883,7 @@
++ char *apol_portcon_render(apol_policy_t * p, qpol_portcon_t * portcon);
++ 
++ /* apol netifcon query */
++-typedef struct apol_netifcon_query {} apol_netifcon_query_t;
+++typedef struct {} apol_netifcon_query_t;
++ %extend apol_netifcon_query_t {
++ 	apol_netifcon_query_t() {
++ 		apol_netifcon_query_t *anq;
++@@ -1930,7 +1930,7 @@
++ char *apol_netifcon_render(apol_policy_t * p, qpol_netifcon_t * netifcon);
++ 
++ /* apol nodecon query */
++-typedef struct apol_nodecon_query {} apol_nodecon_query_t;
+++typedef struct {} apol_nodecon_query_t;
++ %extend apol_nodecon_query_t {
++ 	apol_nodecon_query_t() {
++ 		apol_nodecon_query_t *anq;
++@@ -2010,7 +2010,7 @@
++ char *apol_nodecon_render(apol_policy_t * p, qpol_nodecon_t * nodecon);
++ 
++ /* apol avrule query */
++-typedef struct apol_avrule_query {} apol_avrule_query_t;
+++typedef struct {} apol_avrule_query_t;
++ %extend apol_avrule_query_t {
++ 	apol_avrule_query_t() {
++ 		apol_avrule_query_t *avq;
++@@ -2161,7 +2161,7 @@
++ %}
++ 
++ /* apol terule query */
++-typedef struct apol_terule_query {} apol_terule_query_t;
+++typedef struct {} apol_terule_query_t;
++ %extend apol_terule_query_t {
++ 	apol_terule_query_t() {
++ 		apol_terule_query_t *atq;
++@@ -2285,7 +2285,7 @@
++ apol_vector_t *apol_terule_list_to_syn_terules(apol_policy_t * p, apol_vector_t * rules);
++ 
++ /* apol cond rule query */
++-typedef struct apol_cond_query {} apol_cond_query_t;
+++typedef struct {} apol_cond_query_t;
++ %extend apol_cond_query_t {
++ 	apol_cond_query_t() {
++ 		apol_cond_query_t *acq;
++@@ -2329,7 +2329,7 @@
++ char *apol_cond_expr_render(apol_policy_t * p, qpol_cond_t * cond);
++ 
++ /* apol role allow query */
++-typedef struct apol_role_allow_query {} apol_role_allow_query_t;
+++typedef struct {} apol_role_allow_query_t;
++ %extend apol_role_allow_query_t {
++ 	apol_role_allow_query_t() {
++ 		apol_role_allow_query_t *arq;
++@@ -2385,7 +2385,7 @@
++ char *apol_role_allow_render(apol_policy_t * policy, qpol_role_allow_t * rule);
++ 
++ /* apol role transition rule query */
++-typedef struct apol_role_trans_query {} apol_role_trans_query_t;
+++typedef struct {} apol_role_trans_query_t;
++ %extend apol_role_trans_query_t {
++ 	apol_role_trans_query_t() {
++ 		apol_role_trans_query_t *arq;
++@@ -2450,7 +2450,7 @@
++ char *apol_role_trans_render(apol_policy_t * policy, qpol_role_trans_t * rule);
++ 
++ /* apol range transition rule query */
++-typedef struct apol_range_trans_query {} apol_range_trans_query_t;
+++typedef struct {} apol_range_trans_query_t;
++ %extend apol_range_trans_query_t {
++ 	apol_range_trans_query_t() {
++ 		apol_range_trans_query_t *arq;
++@@ -2529,7 +2529,7 @@
++ #define APOL_DOMAIN_TRANS_SEARCH_VALID		0x01
++ #define APOL_DOMAIN_TRANS_SEARCH_INVALID	0x02
++ #define APOL_DOMAIN_TRANS_SEARCH_BOTH		(APOL_DOMAIN_TRANS_SEARCH_VALID|APOL_DOMAIN_TRANS_SEARCH_INVALID)
++-typedef struct apol_domain_trans_analysis {} apol_domain_trans_analysis_t;
+++typedef struct {} apol_domain_trans_analysis_t;
++ %extend apol_domain_trans_analysis_t {
++ 	apol_domain_trans_analysis_t() {
++ 		apol_domain_trans_analysis_t *dta;
++@@ -2620,7 +2620,7 @@
++ 		return v;
++ 	};
++ };
++-typedef struct apol_domain_trans_result {} apol_domain_trans_result_t;
+++typedef struct {} apol_domain_trans_result_t;
++ %extend apol_domain_trans_result_t {
++ 	apol_domain_trans_result_t(apol_domain_trans_result_t *in) {
++ 		apol_domain_trans_result_t *dtr;
++@@ -2703,7 +2703,7 @@
++ 		*in = NULL;
++ 	}
++ %}
++-typedef struct apol_infoflow {} apol_infoflow_t;
+++typedef struct {} apol_infoflow_t;
++ %extend apol_infoflow_t {
++ 	apol_infoflow_t() {
++ 		BEGIN_EXCEPTION
++@@ -2728,7 +2728,7 @@
++ 		return v;
++ 	};
++ };
++-typedef struct apol_infoflow_analysis {} apol_infoflow_analysis_t;
+++typedef struct {} apol_infoflow_analysis_t;
++ %extend apol_infoflow_analysis_t {
++ 	apol_infoflow_analysis_t() {
++ 		apol_infoflow_analysis_t *aia;
++@@ -2821,7 +2821,7 @@
++ 		return;
++ 	};
++ };
++-typedef struct apol_infoflow_graph {} apol_infoflow_graph_t;
+++typedef struct {} apol_infoflow_graph_t;
++ %extend apol_infoflow_graph_t {
++ 	apol_infoflow_graph_t() {
++ 		BEGIN_EXCEPTION
++@@ -2865,7 +2865,7 @@
++ 		return retval;
++ 	};
++ };
++-typedef struct apol_infoflow_result {} apol_infoflow_result_t;
+++typedef struct {} apol_infoflow_result_t;
++ %extend apol_infoflow_result_t {
++ 	apol_infoflow_result_t() {
++ 		BEGIN_EXCEPTION
++@@ -2899,7 +2899,7 @@
++ 		return (apol_infoflow_result_t*)x;
++ 	};
++ %}
++-typedef struct apol_infoflow_step {} apol_infoflow_step_t;
+++typedef struct {} apol_infoflow_step_t;
++ %extend apol_infoflow_step_t {
++ 	apol_infoflow_step_t() {
++ 		BEGIN_EXCEPTION
++@@ -2936,7 +2936,7 @@
++ #define APOL_RELABEL_DIR_FROM    0x02
++ #define APOL_RELABEL_DIR_BOTH    (APOL_RELABEL_DIR_TO|APOL_RELABEL_DIR_FROM)
++ #define APOL_RELABEL_DIR_SUBJECT 0x04
++-typedef struct apol_relabel_analysis {} apol_relabel_analysis_t;
+++typedef struct {} apol_relabel_analysis_t;
++ %extend apol_relabel_analysis_t {
++ 	apol_relabel_analysis_t() {
++ 		apol_relabel_analysis_t *ara;
++@@ -3009,7 +3009,7 @@
++ 		return;
++ 	};
++ };
++-typedef struct apol_relabel_result {} apol_relabel_result_t;
+++typedef struct {} apol_relabel_result_t;
++ %extend apol_relabel_result_t {
++ 	apol_relabel_result_t() {
++ 		BEGIN_EXCEPTION
++@@ -3040,7 +3040,7 @@
++ 		return (apol_relabel_result_t*)x;
++ 	};
++ %}
++-typedef struct apol_relabel_result_pair {} apol_relabel_result_pair_t;
+++typedef struct {} apol_relabel_result_pair_t;
++ %extend apol_relabel_result_pair_t {
++ 	apol_relabel_result_pair_t() {
++ 		BEGIN_EXCEPTION
++@@ -3082,7 +3082,7 @@
++ #define APOL_TYPES_RELATION_DIRECT_FLOW 0x1000
++ #define APOL_TYPES_RELATION_TRANS_FLOW_AB 0x4000
++ #define APOL_TYPES_RELATION_TRANS_FLOW_BA 0x8000
++-typedef struct apol_types_relation_analysis {} apol_types_relation_analysis_t;
+++typedef struct {} apol_types_relation_analysis_t;
++ %extend apol_types_relation_analysis_t {
++ 	apol_types_relation_analysis_t() {
++ 		apol_types_relation_analysis_t *atr;
++@@ -3137,7 +3137,7 @@
++ 		return;
++ 	};
++ };
++-typedef struct apol_types_relation_result {} apol_types_relation_result_t;
+++typedef struct {} apol_types_relation_result_t;
++ %extend apol_types_relation_result_t {
++ 	apol_types_relation_result_t() {
++ 		BEGIN_EXCEPTION
++@@ -3192,7 +3192,7 @@
++ 		return apol_types_relation_result_get_domainsBA(self);
++ 	};
++ };
++-typedef struct apol_types_relation_access {} apol_types_relation_access_t;
+++typedef struct {} apol_types_relation_access_t;
++ %extend apol_types_relation_access_t {
++ 	apol_types_relation_access_t() {
++ 		BEGIN_EXCEPTION
++--- a/libqpol/swig/qpol.i	2010-04-30 11:23:28.000000000 -0500
+++++ b/libqpol/swig/qpol.i	2012-08-29 07:52:17.000000000 -0500
++@@ -226,7 +226,7 @@
++ #define QPOL_MODULE_UNKNOWN 0
++ #define QPOL_MODULE_BASE    1
++ #define QPOL_MODULE_OTHER   2
++-typedef struct qpol_module {} qpol_module_t;
+++typedef struct {} qpol_module_t;
++ %extend qpol_module_t {
++ 	qpol_module_t(const char *path) {
++ 		qpol_module_t *m;
++@@ -310,7 +310,7 @@
++ #define QPOL_POLICY_OPTION_NO_NEVERALLOWS 0x00000001
++ #define QPOL_POLICY_OPTION_NO_RULES       0x00000002
++ #define QPOL_POLICY_OPTION_MATCH_SYSTEM   0x00000004
++-typedef struct qpol_policy {} qpol_policy_t;
+++typedef struct {} qpol_policy_t;
++ typedef void (*qpol_callback_fn_t) (void *varg, struct qpol_policy * policy, int level, const char *fmt, va_list va_args);
++ #define QPOL_POLICY_UNKNOWN       -1
++ #define QPOL_POLICY_KERNEL_SOURCE  0
++@@ -684,7 +684,7 @@
++ };
++ 
++ /* qpol iterator */
++-typedef struct qpol_iterator {} qpol_iterator_t;
+++typedef struct {} qpol_iterator_t;
++ %extend qpol_iterator_t {
++ 	/* user never directly creates, but SWIG expects a constructor */
++ 	qpol_iterator_t() {
++@@ -734,7 +734,7 @@
++ };
++ 
++ /* qpol type */
++-typedef struct qpol_type {} qpol_type_t;
+++typedef struct {} qpol_type_t;
++ %extend qpol_type_t {
++ 	qpol_type_t(qpol_policy_t *p, const char *name) {
++ 		BEGIN_EXCEPTION
++@@ -849,7 +849,7 @@
++ %}
++ 
++ /* qpol role */
++-typedef struct qpol_role {} qpol_role_t;
+++typedef struct {} qpol_role_t;
++ %extend qpol_role_t {
++ 	qpol_role_t(qpol_policy_t *p, const char *name) {
++ 		const qpol_role_t *r;
++@@ -917,7 +917,7 @@
++ %}
++ 
++ /* qpol level */
++-typedef struct qpol_level {} qpol_level_t;
+++typedef struct {} qpol_level_t;
++ %extend qpol_level_t {
++ 	qpol_level_t(qpol_policy_t *p, const char *name) {
++ 		const qpol_level_t *l;
++@@ -995,7 +995,7 @@
++ %}
++ 
++ /* qpol cat */
++-typedef struct qpol_cat {} qpol_cat_t;
+++typedef struct {} qpol_cat_t;
++ %extend qpol_cat_t {
++ 	qpol_cat_t(qpol_policy_t *p, const char *name) {
++ 		const qpol_cat_t *c;
++@@ -1062,7 +1062,7 @@
++ %}
++ 
++ /* qpol mls range */
++-typedef struct qpol_mls_range {} qpol_mls_range_t;
+++typedef struct {} qpol_mls_range_t;
++ %extend qpol_mls_range_t {
++ 	qpol_mls_range_t() {
++ 		BEGIN_EXCEPTION
++@@ -1103,7 +1103,7 @@
++ %}
++ 
++ /* qpol mls level */
++-typedef struct qpol_mls_level {} qpol_mls_level_t;
+++typedef struct {} qpol_mls_level_t;
++ %extend qpol_mls_level_t {
++ 	qpol_mls_level_t() {
++ 		BEGIN_EXCEPTION
++@@ -1145,7 +1145,7 @@
++ %}
++ 
++ /* qpol user */
++-typedef struct qpol_user {} qpol_user_t;
+++typedef struct {} qpol_user_t;
++ %extend qpol_user_t {
++ 	qpol_user_t(qpol_policy_t *p, const char *name) {
++ 		const qpol_user_t *u;
++@@ -1221,7 +1221,7 @@
++ %}
++ 
++ /* qpol bool */
++-typedef struct qpol_bool {} qpol_bool_t;
+++typedef struct {} qpol_bool_t;
++ %extend qpol_bool_t {
++ 	qpol_bool_t(qpol_policy_t *p, const char *name) {
++ 		qpol_bool_t *b;
++@@ -1293,7 +1293,7 @@
++ %}
++ 
++ /* qpol context */
++-typedef struct qpol_context {} qpol_context_t;
+++typedef struct {} qpol_context_t;
++ %extend qpol_context_t {
++ 	qpol_context_t() {
++ 		BEGIN_EXCEPTION
++@@ -1354,7 +1354,7 @@
++ %}
++ 
++ /* qpol class */
++-typedef struct qpol_class {} qpol_class_t;
+++typedef struct {} qpol_class_t;
++ %extend qpol_class_t {
++ 	qpol_class_t(qpol_policy_t *p, const char *name) {
++ 		const qpol_class_t *c;
++@@ -1441,7 +1441,7 @@
++ %}
++ 
++ /* qpol common */
++-typedef struct qpol_common {} qpol_common_t;
+++typedef struct {} qpol_common_t;
++ %extend qpol_common_t {
++ 	qpol_common_t(qpol_policy_t *p, const char *name) {
++ 		const qpol_common_t *c;
++@@ -1514,7 +1514,7 @@
++ #define QPOL_FS_USE_NONE  5U
++ #define QPOL_FS_USE_PSID  6U
++ #endif
++-typedef struct qpol_fs_use {} qpol_fs_use_t;
+++typedef struct {} qpol_fs_use_t;
++ %extend qpol_fs_use_t {
++ 	qpol_fs_use_t(qpol_policy_t *p, const char *name) {
++ 		const qpol_fs_use_t *f;
++@@ -1592,7 +1592,7 @@
++ #define QPOL_CLASS_LNK_FILE   9U
++ #define QPOL_CLASS_SOCK_FILE 12U
++ #endif
++-typedef struct qpol_genfscon {} qpol_genfscon_t;
+++typedef struct {} qpol_genfscon_t;
++ %extend qpol_genfscon_t {
++ 	qpol_genfscon_t(qpol_policy_t *p, const char *name, const char *path) {
++ 		qpol_genfscon_t *g;
++@@ -1655,7 +1655,7 @@
++ %}
++ 
++ /* qpol isid */
++-typedef struct qpol_isid {} qpol_isid_t;
+++typedef struct {} qpol_isid_t;
++ %extend qpol_isid_t {
++ 	qpol_isid_t(qpol_policy_t *p, const char *name) {
++ 		const qpol_isid_t *i;
++@@ -1699,7 +1699,7 @@
++ %}
++ 
++ /* qpol netifcon */
++-typedef struct qpol_netifcon {} qpol_netifcon_t;
+++typedef struct {} qpol_netifcon_t;
++ %extend qpol_netifcon_t {
++ 	qpol_netifcon_t(qpol_policy_t *p, const char *name) {
++ 		const qpol_netifcon_t *n;
++@@ -1755,7 +1755,7 @@
++ /* qpol nodecon */
++ #define QPOL_IPV4 0
++ #define QPOL_IPV6 1
++-typedef struct qpol_nodecon {} qpol_nodecon_t;
+++typedef struct {} qpol_nodecon_t;
++ %extend qpol_nodecon_t {
++ 	qpol_nodecon_t(qpol_policy_t *p, int addr[4], int mask[4], int protocol) {
++ 		uint32_t a[4], m[4];
++@@ -1828,7 +1828,7 @@
++ /* from netinet/in.h */
++ #define IPPROTO_TCP 6
++ #define IPPROTO_UDP 17
++-typedef struct qpol_portcon {} qpol_portcon_t;
+++typedef struct {} qpol_portcon_t;
++ %extend qpol_portcon_t {
++ 	qpol_portcon_t(qpol_policy_t *p, uint16_t low, uint16_t high, uint8_t protocol) {
++ 		const qpol_portcon_t *qp;
++@@ -1892,7 +1892,7 @@
++ %}
++ 
++ /* qpol constraint */
++-typedef struct qpol_constraint {} qpol_constraint_t;
+++typedef struct {} qpol_constraint_t;
++ %extend qpol_constraint_t {
++ 	qpol_constraint_t() {
++ 		BEGIN_EXCEPTION
++@@ -1944,7 +1944,7 @@
++ %}
++ 
++ /* qpol validatetrans */
++-typedef struct qpol_validatetrans {} qpol_validatetrans_t;
+++typedef struct {} qpol_validatetrans_t;
++ %extend qpol_validatetrans_t {
++ 	qpol_validatetrans_t() {
++ 		BEGIN_EXCEPTION
++@@ -2009,7 +2009,7 @@
++ #define QPOL_CEXPR_OP_DOM    3
++ #define QPOL_CEXPR_OP_DOMBY  4
++ #define QPOL_CEXPR_OP_INCOMP 5
++-typedef struct qpol_constraint_expr_node {} qpol_constraint_expr_node_t;
+++typedef struct {} qpol_constraint_expr_node_t;
++ %extend qpol_constraint_expr_node_t {
++ 	qpol_constraint_expr_node_t() {
++ 		BEGIN_EXCEPTION
++@@ -2071,7 +2071,7 @@
++ %}
++ 
++ /* qpol role allow */
++-typedef struct qpol_role_allow {} qpol_role_allow_t;
+++typedef struct {} qpol_role_allow_t;
++ %extend qpol_role_allow_t {
++ 	qpol_role_allow_t() {
++ 		BEGIN_EXCEPTION
++@@ -2112,7 +2112,7 @@
++ %}
++ 
++ /* qpol role trans */
++-typedef struct qpol_role_trans {} qpol_role_trans_t;
+++typedef struct {} qpol_role_trans_t;
++ %extend qpol_role_trans_t {
++ 	qpol_role_trans_t() {
++ 		BEGIN_EXCEPTION
++@@ -2163,7 +2163,7 @@
++ %}
++ 
++ /* qpol range trans */
++-typedef struct qpol_range_trans {} qpol_range_trans_t;
+++typedef struct {} qpol_range_trans_t;
++ %extend qpol_range_trans_t {
++ 	qpol_range_trans_t() {
++ 		BEGIN_EXCEPTION
++@@ -2226,7 +2226,7 @@
++ #define QPOL_RULE_NEVERALLOW  128
++ #define QPOL_RULE_AUDITALLOW    2
++ #define QPOL_RULE_DONTAUDIT     4
++-typedef struct qpol_avrule {} qpol_avrule_t;
+++typedef struct {} qpol_avrule_t;
++ %extend qpol_avrule_t {
++ 	qpol_avrule_t() {
++ 		BEGIN_EXCEPTION
++@@ -2346,7 +2346,7 @@
++ #define QPOL_RULE_TYPE_TRANS   16
++ #define QPOL_RULE_TYPE_CHANGE  64
++ #define QPOL_RULE_TYPE_MEMBER  32
++-typedef struct qpol_terule {} qpol_terule_t;
+++typedef struct {} qpol_terule_t;
++ %extend qpol_terule_t {
++ 	qpol_terule_t() {
++ 		BEGIN_EXCEPTION
++@@ -2462,7 +2462,7 @@
++ %}
++ 
++ /* qpol conditional */
++-typedef struct qpol_cond {} qpol_cond_t;
+++typedef struct {} qpol_cond_t;
++ %extend qpol_cond_t {
++ 	qpol_cond_t() {
++ 		BEGIN_EXCEPTION
++@@ -2555,7 +2555,7 @@
++ #define QPOL_COND_EXPR_XOR  5      /* bool ^ bool */
++ #define QPOL_COND_EXPR_EQ   6      /* bool == bool */
++ #define QPOL_COND_EXPR_NEQ  7      /* bool != bool */
++-typedef struct qpol_cond_expr_node {} qpol_cond_expr_node_t;
+++typedef struct {} qpol_cond_expr_node_t;
++ %extend qpol_cond_expr_node_t {
++ 	qpol_cond_expr_node_t() {
++ 		BEGIN_EXCEPTION
++@@ -2600,7 +2600,7 @@
++ %}
++ 
++ /* qpol type set */
++-typedef struct qpol_type_set {} qpol_type_set_t;
+++typedef struct {} qpol_type_set_t;
++ %extend qpol_type_set_t {
++ 	qpol_type_set_t() {
++ 		BEGIN_EXCEPTION
++@@ -2663,7 +2663,7 @@
++ %}
++ 
++ /* qpol syn av rule */
++-typedef struct qpol_syn_avrule {} qpol_syn_avrule_t;
+++typedef struct {} qpol_syn_avrule_t;
++ %extend qpol_syn_avrule_t {
++ 	qpol_syn_avrule_t() {
++ 		BEGIN_EXCEPTION
++@@ -2776,7 +2776,7 @@
++ %}
++ 
++ /* qpol syn te rule */
++-typedef struct qpol_syn_terule {} qpol_syn_terule_t;
+++typedef struct {} qpol_syn_terule_t;
++ %extend qpol_syn_terule_t {
++ 	qpol_syn_terule_t() {
++ 		BEGIN_EXCEPTION
++--- a/libpoldiff/swig/poldiff.i	2007-10-31 16:03:33.000000000 -0500
+++++ b/libpoldiff/swig/poldiff.i	2012-08-29 08:08:02.000000000 -0500
++@@ -258,7 +258,7 @@
++ 
++ /* for handling the get_stats function */
++ %{
++-	typedef struct poldiff_stats {
+++	typedef struct {
++ 		size_t stats[5];
++ 	} poldiff_stats_t;
++ 	poldiff_stats_t *poldiff_stats_create() {
++@@ -271,7 +271,7 @@
++ 		*x = NULL;
++ 	}
++ %}
++-typedef struct poldiff_stats {} poldiff_stats_t;
+++typedef struct {} poldiff_stats_t;
++ %extend poldiff_stats_t {
++ 	poldiff_stats_t() {
++ 		poldiff_stats_t *s;
++@@ -336,17 +336,17 @@
++ %typemap(in) apol_policy_t *op {
++ 	void *x = NULL;
++ 	Py_IncRef($input);
++-	SWIG_ConvertPtr($input, &x,SWIGTYPE_p_apol_policy, 0 |  0 );
+++	SWIG_ConvertPtr($input, &x,SWIGTYPE_p_apol_policy_t, 0 |  0 );
++ 	$1 = (apol_policy_t*)x;
++ }
++ %typemap(in) apol_policy_t *mp {
++ 	void *x = NULL;
++ 	Py_IncRef($input);
++-	SWIG_ConvertPtr($input, &x,SWIGTYPE_p_apol_policy, 0 |  0 );
+++	SWIG_ConvertPtr($input, &x,SWIGTYPE_p_apol_policy_t, 0 |  0 );
++ 	$1 = (apol_policy_t*)x;
++ }
++ #endif
++-typedef struct poldiff {} poldiff_t;
+++typedef struct {} poldiff_t;
++ %extend poldiff_t {
++ 	poldiff_t(apol_policy_t *op, apol_policy_t *mp) {
++ 		poldiff_t *p;
++@@ -476,7 +476,7 @@
++ };
++ 
++ /* attribute diff */
++-typedef struct poldiff_attrib {} poldiff_attrib_t;
+++typedef struct {} poldiff_attrib_t;
++ %extend poldiff_attrib_t {
++    poldiff_attrib_t () {
++       BEGIN_EXCEPTION
++@@ -521,7 +521,7 @@
++ %}
++ 
++ /* av rule diff */
++-typedef struct poldiff_avrule {} poldiff_avrule_t;
+++typedef struct {} poldiff_avrule_t;
++ %extend poldiff_avrule_t {
++    poldiff_avrule_t() {
++       BEGIN_EXCEPTION
++@@ -629,7 +629,7 @@
++ %}
++ 
++ /* boolean diff */
++-typedef struct poldiff_bool {} poldiff_bool_t;
+++typedef struct {} poldiff_bool_t;
++ %extend poldiff_bool_t {
++ 	poldiff_bool_t() {
++       BEGIN_EXCEPTION
++@@ -668,7 +668,7 @@
++ %}
++ 
++ /* category diff */
++-typedef struct poldiff_cat {} poldiff_cat_t;
+++typedef struct {} poldiff_cat_t;
++ %extend poldiff_cat_t {
++ 	poldiff_cat_t() {
++       BEGIN_EXCEPTION
++@@ -707,7 +707,7 @@
++ %}
++ 
++ /* class diff */
++-typedef struct poldiff_class {} poldiff_class_t;
+++typedef struct {} poldiff_class_t;
++ %extend poldiff_class_t {
++ 	poldiff_class_t() {
++       BEGIN_EXCEPTION
++@@ -752,7 +752,7 @@
++ %}
++ 
++ /* common diff */
++-typedef struct poldiff_common {} poldiff_common_t;
+++typedef struct {} poldiff_common_t;
++ %extend poldiff_common_t {
++ 	poldiff_common_t() {
++       BEGIN_EXCEPTION
++@@ -797,7 +797,7 @@
++ %}
++ 
++ /* level diff */
++-typedef struct poldiff_level {} poldiff_level_t;
+++typedef struct {} poldiff_level_t;
++ %extend poldiff_level_t {
++ 	poldiff_level_t() {
++       BEGIN_EXCEPTION
++@@ -857,7 +857,7 @@
++ %}
++ 
++ /* range diff */
++-typedef struct poldiff_range {} poldiff_range_t;
+++typedef struct {} poldiff_range_t;
++ %extend poldiff_range_t {
++ 	poldiff_range_t() {
++       BEGIN_EXCEPTION
++@@ -908,7 +908,7 @@
++ %}
++ 
++ /* range_transition rule diff */
++-typedef struct poldiff_range_trans {} poldiff_range_trans_t;
+++typedef struct {} poldiff_range_trans_t;
++ %extend poldiff_range_trans_t {
++ 	poldiff_range_trans_t() {
++       BEGIN_EXCEPTION
++@@ -956,7 +956,7 @@
++ %}
++ 
++ /* role allow rule diff */
++-typedef struct poldiff_role_allow {} poldiff_role_allow_t;
+++typedef struct {} poldiff_role_allow_t;
++ %extend poldiff_role_allow_t {
++ 	poldiff_role_allow_t() {
++       BEGIN_EXCEPTION
++@@ -1004,7 +1004,7 @@
++ %}
++ 
++ /* role_transition rule diff */
++-typedef struct poldiff_role_trans {} poldiff_role_trans_t;
+++typedef struct {} poldiff_role_trans_t;
++ %extend poldiff_role_trans_t {
++ 	poldiff_role_trans_t() {
++       BEGIN_EXCEPTION
++@@ -1052,7 +1052,7 @@
++ %}
++ 
++ /* role diff */
++-typedef struct poldiff_role {} poldiff_role_t;
+++typedef struct {} poldiff_role_t;
++ %extend poldiff_role_t {
++ 	poldiff_role_t() {
++       BEGIN_EXCEPTION
++@@ -1097,7 +1097,7 @@
++ %}
++ 
++ /* te rule diff */
++-typedef struct poldiff_terule {} poldiff_terule_t;
+++typedef struct {} poldiff_terule_t;
++ %extend poldiff_terule_t {
++ 	poldiff_terule_t() {
++       BEGIN_EXCEPTION
++@@ -1178,7 +1178,7 @@
++ %}
++ 
++ /* type diff */
++-typedef struct poldiff_type {} poldiff_type_t;
+++typedef struct {} poldiff_type_t;
++ %extend poldiff_type_t {
++ 	poldiff_type_t() {
++       BEGIN_EXCEPTION
++@@ -1223,7 +1223,7 @@
++ %}
++ 
++ /* user diff */
++-typedef struct poldiff_user {} poldiff_user_t;
+++typedef struct {} poldiff_user_t;
++ %extend poldiff_user_t {
++ 	poldiff_user_t() {
++       BEGIN_EXCEPTION
++@@ -1280,7 +1280,7 @@
++ %}
++ 
++ /* type remap */
++-typedef struct poldiff_type_remap_entry {} poldiff_type_remap_entry_t;
+++typedef struct {} poldiff_type_remap_entry_t;
++ %extend poldiff_type_remap_entry_t {
++ 	poldiff_type_remap_entry_t() {
++       BEGIN_EXCEPTION
++--- a/libseaudit/swig/seaudit.i	2007-10-31 16:03:33.000000000 -0500
+++++ b/libseaudit/swig/seaudit.i	2012-08-29 08:11:39.000000000 -0500
++@@ -240,7 +240,7 @@
++ %{
++ 	typedef struct tm tm_t;
++ %}
++-typedef struct tm {
+++typedef struct {
++ 	int tm_sec;   /* seconds */
++ 	int tm_min;   /* minutes */
++ 	int tm_hour;  /* hours */
++@@ -278,7 +278,7 @@
++ 	SEAUDIT_LOG_TYPE_SYSLOG,
++ 	SEAUDIT_LOG_TYPE_AUDITD
++ } seaudit_log_type_e;
++-typedef struct seaudit_log {} seaudit_log_t;
+++typedef struct {} seaudit_log_t;
++ %extend seaudit_log_t {
++ 	seaudit_log_t() {
++ 		seaudit_log_t *slog;
++@@ -355,7 +355,7 @@
++ 	SEAUDIT_MESSAGE_TYPE_AVC,
++ 	SEAUDIT_MESSAGE_TYPE_LOAD
++ } seaudit_message_type_e;
++-typedef struct seaudit_message {} seaudit_message_t;
+++typedef struct {} seaudit_message_t;
++ %extend seaudit_message_t {
++ 	seaudit_message_t() {
++ 		BEGIN_EXCEPTION
++@@ -427,7 +427,7 @@
++ %}
++ 
++ /* seaudit load message */
++-typedef struct seaudit_load_message {} seaudit_load_message_t;
+++typedef struct {} seaudit_load_message_t;
++ %extend seaudit_load_message_t {
++ 	seaudit_load_message_t() {
++ 		BEGIN_EXCEPTION
++@@ -448,7 +448,7 @@
++ %}
++ 
++ /* seaudit bool message */
++-typedef struct seaudit_bool_message {} seaudit_bool_message_t;
+++typedef struct {} seaudit_bool_message_t;
++ %extend seaudit_bool_message_t {
++ 	seaudit_bool_message_t(void *msg) {
++ 		BEGIN_EXCEPTION
++@@ -475,7 +475,7 @@
++ 	SEAUDIT_AVC_DENIED,
++ 	SEAUDIT_AVC_GRANTED
++ } seaudit_avc_message_type_e;
++-typedef struct seaudit_avc_message {} seaudit_avc_message_t;
+++typedef struct {} seaudit_avc_message_t;
++ %extend seaudit_avc_message_t {
++ 	seaudit_avc_message_t() {
++ 		BEGIN_EXCEPTION
++@@ -606,7 +606,7 @@
++ 	SEAUDIT_FILTER_DATE_MATCH_AFTER,
++ 	SEAUDIT_FILTER_DATE_MATCH_BETWEEN
++ } seaudit_filter_date_match_e;
++-typedef struct seaudit_filter {} seaudit_filter_t;
+++typedef struct {} seaudit_filter_t;
++ %extend seaudit_filter_t {
++ 	seaudit_filter_t(char *name = NULL) {
++ 		seaudit_filter_t *sf = NULL;
++@@ -1012,7 +1012,7 @@
++ %}
++ 
++ /* seaudit sort */
++-typedef struct seaudit_sort {} seaudit_sort_t;
+++typedef struct {} seaudit_sort_t;
++ %extend seaudit_sort_t {
++ 	seaudit_sort_t() {
++ 		BEGIN_EXCEPTION
++@@ -1101,17 +1101,17 @@
++ %typemap(in) seaudit_filter_t *filter {
++ 	void *x = NULL;
++ 	Py_IncRef($input);
++-	SWIG_ConvertPtr($input, &x,SWIGTYPE_p_seaudit_filter, 0 |  0 );
+++	SWIG_ConvertPtr($input, &x,SWIGTYPE_p_seaudit_filter_t, 0 |  0 );
++ 	$1 = (seaudit_filter_t*)x;
++ }
++ %typemap(in) seaudit_sort_t *ssort {
++ 	void *x = NULL;
++ 	Py_IncRef($input);
++-	SWIG_ConvertPtr($input, &x,SWIGTYPE_p_seaudit_sort, 0 |  0 );
+++	SWIG_ConvertPtr($input, &x,SWIGTYPE_p_seaudit_sort_t, 0 |  0 );
++ 	$1 = (seaudit_sort_t*)x;
++ }
++ #endif
++-typedef struct seaudit_model {} seaudit_model_t;
+++typedef struct {} seaudit_model_t;
++ %extend seaudit_model_t {
++ 	seaudit_model_t(char *name = NULL, seaudit_log_t *slog = NULL) {
++ 		seaudit_model_t *smod;
++@@ -1309,7 +1309,7 @@
++ 	SEAUDIT_REPORT_FORMAT_TEXT,
++ 	SEAUDIT_REPORT_FORMAT_HTML
++ } seaudit_report_format_e;
++-typedef struct seaudit_report {} seaudit_report_t;
+++typedef struct {} seaudit_report_t;
++ %extend seaudit_report_t {
++ 	seaudit_report_t(seaudit_model_t *m) {
++ 		seaudit_report_t *sr;
+diff --git a/package/setools/setools.mk b/package/setools/setools.mk
+new file mode 100644
+index 0000000..faa519f
+--- /dev/null
++++ b/package/setools/setools.mk
+@@ -0,0 +1,91 @@
 +#############################################################
 +#
-+# policycoreutils
++# setools
 +#
 +#############################################################
-+POLICYCOREUTILS_VERSION = 2.1.14
-+POLICYCOREUTILS_SOURCE = policycoreutils-$(POLICYCOREUTILS_VERSION).tar.gz
-+POLICYCOREUTILS_SITE = http://userspace.selinuxproject.org/releases/20130423/
-+POLICYCOREUTILS_LICENSE = GPLv2
-+POLICYCOREUTILS_LICENSE_FILES = COPYING
++SETOOLS_VERSION = 3.3.8
++SETOOLS_SOURCE = setools-$(SETOOLS_VERSION).tar.bz2
++SETOOLS_SITE = http://oss.tresys.com/projects/setools/chrome/site/dists/setools-$(SETOOLS_VERSION)/
 +
 +##############################
 +# Target Section
 +##############################
-+POLICYCOREUTILS_DEPENDENCIES = libsemanage libcap-ng dbus-glib libglib2 linux-pam audit
-+# Both audit and linux-pam are required by the LSPP_PRIV=y option below
++SETOOLS_DEPENDENCIES = libselinux libsepol sqlite libxml2 bzip2
 +
-+POLICYCOREUTILS_INSTALL_STAGING = NO
-+POLICYCOREUTILS_INSTALL_TARGET = YES
++SETOOLS_INSTALL_STAGING = YES
++SETOOLS_INSTALL_TARGET = YES
 +
-+define POLICYCOREUTILS_INSTALL_TARGET_PAM_CONFS
-+	$(INSTALL) -D -m 0644 $(@D)/newrole/newrole-lspp.pamd $(TARGET_DIR)/etc/pam.d/newrole
-+	$(INSTALL) -D -m 0644 $(@D)/run_init/run_init.pamd $(TARGET_DIR)/etc/pam.d/run_init
-+endef
++SETOOLS_AUTORECONF = YES
++SETOOLS_AUTORECONF_OPT = -i -s
 +
-+#
-+# Policy Debugging build commands
-+#
-+ifeq ($(BR2_PACKAGE_POLICYCOREUTILS_POLICY_DEBUGGING),y)
++# Notes: Need "disable-selinux-check" so the configure does not check to see if host has
++#        selinux enabled.
++SETOOLS_CONF_OPT = \
++	--disable-debug \
++	--disable-gui \
++	--disable-bwidget-check \
++	--disable-selinux-check \
++	--disable-swig-java \
++	--disable-swig-python \
++	--disable-swig-tcl \
++	--with-sepol-devel="$(STAGING_DIR)/usr" \
++	--with-selinux-devel="$(STAGING_DIR)/usr" \
 +
-+POLICYCOREUTILS_DEPENDENCIES += python host-python sepolgen setools
-+
-+POLICYCOREUTILS_DEBUGGING_MAKE_CMDS = $(TARGET_CONFIGURE_OPTS) \
-+	PYTHON="$(HOST_DIR)/usr/bin/python" \
-+	PYLIBVER="python$(PYTHON_VERSION_MAJOR)" \
-+	PYTHON_SRC="$(BUILD_DIR)/python$(PYTHON_VERSION)"
-+
-+define POLICYCOREUTILS_DEBUGGING_BUILD_CMDS
-+	$(MAKE) -C $(@D)/audit2allow    $(POLICYCOREUTILS_DEBUGGING_MAKE_CMDS) DESTDIR="$(STAGING_DIR)" all
-+	$(MAKE) -C $(@D)/audit2why      $(POLICYCOREUTILS_DEBUGGING_MAKE_CMDS) DESTDIR="$(STAGING_DIR)" all
-+	$(MAKE) -C $(@D)/scripts        $(POLICYCOREUTILS_DEBUGGING_MAKE_CMDS) DESTDIR="$(STAGING_DIR)" all
-+	$(MAKE) -C $(@D)/semanage       $(POLICYCOREUTILS_DEBUGGING_MAKE_CMDS) DESTDIR="$(STAGING_DIR)" all
-+	$(MAKE) -C $(@D)/sepolicy       $(POLICYCOREUTILS_DEBUGGING_MAKE_CMDS) DESTDIR="$(STAGING_DIR)" all
-+endef
-+
-+define POLICYCOREUTILS_DEBUGGING_INSTALL_TARGET_CMDS
-+	$(MAKE) -C $(@D)/audit2allow    $(POLICYCOREUTILS_DEBUGGING_MAKE_CMDS) DESTDIR="$(TARGET_DIR)" install
-+	$(MAKE) -C $(@D)/audit2why      $(POLICYCOREUTILS_DEBUGGING_MAKE_CMDS) DESTDIR="$(TARGET_DIR)" install
-+	$(MAKE) -C $(@D)/scripts        $(POLICYCOREUTILS_DEBUGGING_MAKE_CMDS) DESTDIR="$(TARGET_DIR)" install
-+	$(MAKE) -C $(@D)/semanage       $(POLICYCOREUTILS_DEBUGGING_MAKE_CMDS) DESTDIR="$(TARGET_DIR)" install
-+	$(MAKE) -C $(@D)/sepolicy       $(POLICYCOREUTILS_DEBUGGING_MAKE_CMDS) DESTDIR="$(TARGET_DIR)" install
-+endef
++ifeq ($(BR2_PACKAGE_SETOOLS_PYTHON_BINDINGS),y)
++	SETOOLS_DEPENDENCIES += python host-python host-swig 
++	SETOOLS_CONF_ENV += am_cv_pathless_PYTHON=python \
++		ac_cv_path_PYTHON=$(HOST_DIR)/usr/bin/python \
++		am_cv_python_version=$(PYTHON_VERSION) \
++		am_cv_python_platform=linux2 \
++		am_cv_python_pythondir=$(STAGING_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages \
++		am_cv_python_pyexecdir=$(STAGING_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages \
++		am_cv_python_includes=-I$(STAGING_DIR)/usr/include/python$(PYTHON_VERSION_MAJOR)
++	SETOOLS_CONF_OPT += \
++		--enable-swig-python \
++		PYTHON_CPPFLAGS="-I$(STAGING_DIR)/usr/include/python$(PYTHON_VERSION_MAJOR)" \
++		PYTHON_LDFLAGS="-L$(STAGING_DIR)/usr/lib/" \
++		PYTHON_SITE_PKG="$(STAGING_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages" \
++		PYTHON_EXTRA_LIBS="-lpthread -ldl -lutil -lpython$(PYTHON_VERSION_MAJOR)"
 +endif
-+
-+#
-+# restorecond build commands
-+#
-+ifeq ($(BR2_PACKAGE_POLICYCOREUTILS_RESTORECOND),y)
-+
-+POLICYCOREUTILS_RESTORECOND_MAKE_CMDS = $(TARGET_CONFIGURE_OPTS)
-+
-+define POLICYCOREUTILS_RESTORECOND_BUILD_CMDS
-+	$(MAKE) -C $(@D)/restorecond $(POLICYCOREUTILS_RESTORECOND_MAKE_CMDS) DESTDIR="$(STAGING_DIR)" all
-+endef
-+
-+define POLICYCOREUTILS_RESTORECOND_INSTALL_TARGET_CMDS
-+	$(MAKE) -C $(@D)/restorecond $(POLICYCOREUTILS_RESTORECOND_MAKE_CMDS) DESTDIR="$(TARGET_DIR)" install
-+	rm $(TARGET_DIR)/etc/init.d/restorecond
-+	$(INSTALL) -m 0755 package/policycoreutils/S15restorecond $(TARGET_DIR)/etc/init.d/
-+endef
-+endif
-+
-+#
-+# mctrans build commands
-+#
-+ifeq ($(BR2_PACKAGE_POLICYCOREUTILS_MCSTRANS),y)
-+
-+POLICYCOREUTILS_DEPENDENCIES += pcre libcap
-+
-+POLICYCOREUTILS_MCSTRANS_MAKE_CMDS = $(TARGET_CONFIGURE_OPTS)
-+
-+define POLICYCOREUTILS_MCSTRANS_BUILD_CMDS
-+	$(MAKE) -C $(@D)/mcstrans $(POLICYCOREUTILS_MCSTRANS_MAKE_CMDS) DESTDIR="$(STAGING_DIR)" all
-+endef
-+
-+define POLICYCOREUTILS_MCSTRANS_INSTALL_TARGET_CMDS
-+	$(MAKE) -C $(@D)/mcstrans $(POLICYCOREUTILS_MCSTRANS_MAKE_CMDS) DESTDIR="$(TARGET_DIR)" install
-+endef
-+endif
-+
-+#
-+# sandbox build commands
-+#
-+ifeq ($(BR2_PACKAGE_POLICYCOREUTILS_SANDBOX),y)
-+
-+POLICYCOREUTILS_DEPENDENCIES += libcgroup
-+
-+POLICYCOREUTILS_SANDBOX_MAKE_CMDS = $(TARGET_CONFIGURE_OPTS)
-+
-+define POLICYCOREUTILS_SANDBOX_BUILD_CMDS
-+	$(MAKE) -C $(@D)/sandbox $(POLICYCOREUTILS_SANDBOX_MAKE_CMDS) DESTDIR="$(STAGING_DIR)" all
-+endef
-+
-+define POLICYCOREUTILS_SANDBOX_INSTALL_TARGET_CMDS
-+	$(MAKE) -C $(@D)/sandbox $(POLICYCOREUTILS_SANDBOX_MAKE_CMDS) DESTDIR="$(TARGET_DIR)" install
-+endef
-+endif
-+
-+# Undefining _FILE_OFFSET_BITS here because of a "bug" with glibc fts.h large file support.
-+# see https://bugzilla.redhat.com/show_bug.cgi?id=574992 for more information
-+POLICYCOREUTILS_MAKE_CMDS = $(TARGET_CONFIGURE_OPTS) CFLAGS+="-U_FILE_OFFSET_BITS" LSPP_PRIV=y
-+
-+BaseApps = load_policy newrole restorecond run_init secon semodule semodule_deps semodule_expand \
-+	semodule_link semodule_package sestatus setfiles setsebool
-+
-+define POLICYCOREUTILS_BUILD_CMDS
-+	$(MAKE) -C $(@D)/load_policy      $(POLICYCOREUTILS_MAKE_CMDS) DESTDIR="$(STAGING_DIR)" all
-+	$(MAKE) -C $(@D)/newrole          $(POLICYCOREUTILS_MAKE_CMDS) DESTDIR="$(STAGING_DIR)" all
-+	$(MAKE) -C $(@D)/restorecond      $(POLICYCOREUTILS_MAKE_CMDS) DESTDIR="$(STAGING_DIR)" all
-+	$(MAKE) -C $(@D)/run_init         $(POLICYCOREUTILS_MAKE_CMDS) DESTDIR="$(STAGING_DIR)" all
-+	$(MAKE) -C $(@D)/secon            $(POLICYCOREUTILS_MAKE_CMDS) DESTDIR="$(STAGING_DIR)" all
-+	$(MAKE) -C $(@D)/semodule         $(POLICYCOREUTILS_MAKE_CMDS) DESTDIR="$(STAGING_DIR)" all
-+	$(MAKE) -C $(@D)/semodule_deps    $(POLICYCOREUTILS_MAKE_CMDS) DESTDIR="$(STAGING_DIR)" all
-+	$(MAKE) -C $(@D)/semodule_expand  $(POLICYCOREUTILS_MAKE_CMDS) DESTDIR="$(STAGING_DIR)" all
-+	$(MAKE) -C $(@D)/semodule_link    $(POLICYCOREUTILS_MAKE_CMDS) DESTDIR="$(STAGING_DIR)" all
-+	$(MAKE) -C $(@D)/semodule_package $(POLICYCOREUTILS_MAKE_CMDS) DESTDIR="$(STAGING_DIR)" all
-+	$(MAKE) -C $(@D)/sepolgen-ifgen   $(POLICYCOREUTILS_MAKE_CMDS) DESTDIR="$(STAGING_DIR)" all
-+	$(MAKE) -C $(@D)/sestatus         $(POLICYCOREUTILS_MAKE_CMDS) DESTDIR="$(STAGING_DIR)" all
-+	$(MAKE) -C $(@D)/setfiles         $(POLICYCOREUTILS_MAKE_CMDS) DESTDIR="$(STAGING_DIR)" all
-+	$(MAKE) -C $(@D)/setsebool        $(POLICYCOREUTILS_MAKE_CMDS) DESTDIR="$(STAGING_DIR)" all
-+	$(POLICYCOREUTILS_DEBUGGING_BUILD_CMDS)
-+	$(POLICYCOREUTILS_RESTORECOND_BUILD_CMDS)
-+	$(POLICYCOREUTILS_MCSTRANS_BUILD_CMDS)
-+	$(POLICYCOREUTILS_SANDBOX_BUILD_CMDS)
-+endef
-+
-+define POLICYCOREUTILS_INSTALL_TARGET_CMDS
-+	$(MAKE) -C $(@D)/load_policy      DESTDIR="$(TARGET_DIR)" install
-+	$(MAKE) -C $(@D)/newrole          DESTDIR="$(TARGET_DIR)" install
-+	$(MAKE) -C $(@D)/restorecond      DESTDIR="$(TARGET_DIR)" install
-+	$(MAKE) -C $(@D)/run_init         DESTDIR="$(TARGET_DIR)" install
-+	$(MAKE) -C $(@D)/secon            DESTDIR="$(TARGET_DIR)" install
-+	$(MAKE) -C $(@D)/semodule         DESTDIR="$(TARGET_DIR)" install
-+	$(MAKE) -C $(@D)/semodule_deps    DESTDIR="$(TARGET_DIR)" install
-+	$(MAKE) -C $(@D)/semodule_expand  DESTDIR="$(TARGET_DIR)" install
-+	$(MAKE) -C $(@D)/semodule_link    DESTDIR="$(TARGET_DIR)" install
-+	$(MAKE) -C $(@D)/semodule_package DESTDIR="$(TARGET_DIR)" install
-+	$(MAKE) -C $(@D)/sepolgen-ifgen   DESTDIR="$(TARGET_DIR)" install
-+	$(MAKE) -C $(@D)/sestatus         DESTDIR="$(TARGET_DIR)" install
-+	$(MAKE) -C $(@D)/setfiles         DESTDIR="$(TARGET_DIR)" install
-+	$(MAKE) -C $(@D)/setsebool        DESTDIR="$(TARGET_DIR)" install
-+	$(POLICYCOREUTILS_INSTALL_TARGET_PAM_CONFS)
-+	$(POLICYCOREUTILS_DEBUGGING_INSTALL_TARGET_CMDS)
-+	$(POLICYCOREUTILS_RESTORECOND_INSTALL_TARGET_CMDS)
-+	$(POLICYCOREUTILS_MCSTRANS_INSTALL_TARGET_CMDS)
-+	$(POLICYCOREUTILS_SANDBOX_INSTALL_TARGET_CMDS)
-+endef
-+
-+define POLICYCOREUTILS_CLEAN_CMDS
-+	$(MAKE) -C $(@D) clean DESTDIR=$(STAGING_DIR)
-+	$(MAKE) -C $(@D)/mcstrans clean DESTDIR=$(STAGING_DIR)
-+	$(MAKE) -C $(@D)/restorecond clean DESTDIR=$(STAGING_DIR)
-+endef
 +
 +##############################
 +# Host Section
 +##############################
-+HOST_POLICYCOREUTILS_DEPENDENCIES = host-libsemanage
++HOST_SETOOLS_DEPENDENCIES = host-libselinux host-libsepol host-sqlite host-libxml2 host-bzip2
 +
-+# Undefining _FILE_OFFSET_BITS here because of a "bug" with glibc fts.h large file support.
-+# see https://bugzilla.redhat.com/show_bug.cgi?id=574992 for more information
-+HOST_POLICYCOREUTILS_MAKE_CMDS = $(HOST_CONFIGURE_OPTS) CFLAGS+="-U_FILE_OFFSET_BITS" LSPP_PRIV=y
++HOST_SETOOLS_AUTORECONF = YES
++HOST_SETOOLS_AUTORECONF_OPT = -i -s
 +
-+# Note: We are only building the programs required by the refpolicy build
-+define HOST_POLICYCOREUTILS_BUILD_CMDS
-+	$(MAKE) -C $(@D)/semodule $(HOST_POLICYCOREUTILS_MAKE_CMDS) DESTDIR=$(HOST_DIR)
-+	$(MAKE) -C $(@D)/semodule_package $(HOST_POLICYCOREUTILS_MAKE_CMDS) DESTDIR=$(HOST_DIR)
-+	$(MAKE) -C $(@D)/semodule_link $(HOST_POLICYCOREUTILS_MAKE_CMDS) DESTDIR=$(HOST_DIR)
-+	$(MAKE) -C $(@D)/semodule_expand $(HOST_POLICYCOREUTILS_MAKE_CMDS) DESTDIR=$(HOST_DIR)
-+	$(MAKE) -C $(@D)/semodule_deps $(HOST_POLICYCOREUTILS_MAKE_CMDS) DESTDIR=$(HOST_DIR)
-+	$(MAKE) -C $(@D)/load_policy $(HOST_POLICYCOREUTILS_MAKE_CMDS) DESTDIR=$(HOST_DIR)
-+	$(MAKE) -C $(@D)/setfiles $(HOST_POLICYCOREUTILS_MAKE_CMDS) DESTDIR=$(HOST_DIR)
-+endef
++# Notes: Need "disable-selinux-check" so the configure does not check to see if host has
++#        selinux enabled.
++HOST_SETOOLS_CONF_OPT = \
++	--disable-debug \
++	--disable-gui \
++	--disable-bwidget-check \
++	--disable-selinux-check \
++	--disable-swig-java \
++	--disable-swig-python \
++	--disable-swig-tcl \
++	--with-sepol-devel="$(HOST_DIR)/usr" \
++	--with-selinux-devel="$(HOST_DIR)/usr" \
 +
-+define HOST_POLICYCOREUTILS_INSTALL_CMDS
-+	$(MAKE) -C $(@D)/semodule install $(HOST_POLICYCOREUTILS_MAKE_CMDS) DESTDIR=$(HOST_DIR)
-+	$(MAKE) -C $(@D)/semodule_package install $(HOST_POLICYCOREUTILS_MAKE_CMDS) DESTDIR=$(HOST_DIR)
-+	$(MAKE) -C $(@D)/semodule_link install $(HOST_POLICYCOREUTILS_MAKE_CMDS) DESTDIR=$(HOST_DIR)
-+	$(MAKE) -C $(@D)/semodule_expand install $(HOST_POLICYCOREUTILS_MAKE_CMDS) DESTDIR=$(HOST_DIR)
-+	$(MAKE) -C $(@D)/semodule_deps install $(HOST_POLICYCOREUTILS_MAKE_CMDS) DESTDIR=$(HOST_DIR)
-+	$(MAKE) -C $(@D)/load_policy install $(HOST_POLICYCOREUTILS_MAKE_CMDS) DESTDIR=$(HOST_DIR)
-+	$(MAKE) -C $(@D)/setfiles install $(HOST_POLICYCOREUTILS_MAKE_CMDS) DESTDIR=$(HOST_DIR)
-+endef
++ifeq ($(BR2_PACKAGE_SETOOLS_PYTHON_BINDINGS),y)
++	HOST_SETOOLS_DEPENDENCIES += host-python host-swig 
++	HOST_SETOOLS_CONF_ENV += \
++		am_cv_pathless_PYTHON=python \
++		ac_cv_path_PYTHON=$(HOST_DIR)/usr/bin/python \
++		am_cv_python_version=$(PYTHON_VERSION) \
++		am_cv_python_platform=linux2 \
++		am_cv_python_pythondir=$(HOST_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages \
++		am_cv_python_pyexecdir=$(HOST_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages \
++		am_cv_python_includes=-I$(HOST_DIR)/usr/include/python$(PYTHON_VERSION_MAJOR)
++	HOST_SETOOLS_CONF_OPT += \
++		--enable-swig-python \
++		PYTHON_CPPFLAGS="-I$(HOST_DIR)/usr/include/python$(PYTHON_VERSION_MAJOR)" \
++		PYTHON_LDFLAGS="-L$(HOST_DIR)/usr/lib/" \
++		PYTHON_SITE_PKG="$(HOST_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages" \
++		PYTHON_EXTRA_LIBS="-lpthread -ldl -lutil -lpython$(PYTHON_VERSION_MAJOR)"
++endif
 +
-+define HOST_POLICYCOREUTILS_CLEAN_CMDS
-+	$(MAKE) -C $(@D) clean DESTDIR=$(HOST_DIR)
-+endef
-+
-+$(eval $(generic-package))
-+$(eval $(host-generic-package))
++$(eval $(autotools-package))
++$(eval $(host-autotools-package))
 -- 
 1.7.1
