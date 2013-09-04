@@ -1,41 +1,48 @@
 From: Axel Lin <axel.lin@ingics.com>
-Date: Wed, 04 Sep 2013 10:43:18 +0800
-Subject: [Buildroot] [PATCH 1/2] package/Makefile.in: Fix dependency for
- selecting uclinux as TARGET_OS
-Message-ID: <1378262598.32360.5.camel@phoenix>
+Date: Wed, 04 Sep 2013 10:44:27 +0800
+Subject: [Buildroot] [PATCH 2/2] arch/Config.in: Allow ARM to select
+	BR2_BINFMT_FLAT
+In-Reply-To: <1378262598.32360.5.camel@phoenix>
+References: <1378262598.32360.5.camel@phoenix>
+Message-ID: <1378262667.32360.6.camel@phoenix>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Current setting only allows blackfin to select uclinux as TARGET_OS.
-However, some noMMU ARM platforms that using FLAT binary format also need to
-select uclinux as TARGET_OS. Fix the dependency.
+Some noMMU ARM platforms need to select BR2_BINFMT_FLAT.
+Most ARM platforms have MMU, thus set default to BR2_BINFMT_ELF for ARM.
 
 Signed-off-by: Axel Lin <axel.lin@ingics.com>
 ---
-I need this change to allow testing build for ARM noMMU.
-Maybe worth to upstream.
+ arch/Config.in | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-Axel
- package/Makefile.in | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/Makefile.in b/package/Makefile.in
-index 91ae1b9..6aa6266 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -23,8 +23,8 @@ MAKE:=$(HOSTMAKE) -j$(PARALLEL_JOBS)
- # Compute GNU_TARGET_NAME
- GNU_TARGET_NAME=$(ARCH)-buildroot-$(TARGET_OS)-$(LIBC)$(ABI)
+diff --git a/arch/Config.in b/arch/Config.in
+index 14899ca..31c23ec 100644
+--- a/arch/Config.in
++++ b/arch/Config.in
+@@ -223,8 +223,9 @@ config BR2_GCC_TARGET_MODE
+ # Set up target binary format
+ choice
+ 	prompt "Target Binary Format"
+-	depends on BR2_bfin || BR2_m68k
+-	default BR2_BINFMT_FDPIC
++	depends on BR2_arm || BR2_bfin || BR2_m68k
++	default BR2_BINFMT_ELF if BR2_arm
++	default BR2_BINFMT_FDPIC if (BR2_bfin || BR2_m68k)
  
--# Blackfin FLAT needs uclinux
--ifeq ($(BR2_bfin)$(BR2_BINFMT_FLAT),yy)
-+# FLAT binary format needs uclinux
-+ifeq ($(BR2_BINFMT_FLAT),y)
- TARGET_OS=uclinux
- else
- TARGET_OS=linux
+ config BR2_BINFMT_ELF
+ 	bool "ELF"
+@@ -245,7 +246,7 @@ config BR2_BINFMT_FDPIC
+ 
+ config BR2_BINFMT_FLAT
+ 	bool "FLAT"
+-	depends on BR2_bfin || BR2_m68k
++	depends on BR2_arm || BR2_bfin || BR2_m68k
+ 	select BR2_PREFER_STATIC_LIB
+ 	help
+ 	  FLAT binary is a relatively simple and lightweight executable format
 -- 
 1.8.1.2
