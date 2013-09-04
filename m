@@ -1,54 +1,71 @@
-From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Wed, 4 Sep 2013 08:50:10 +0200
-Subject: [Buildroot] Why elf2flt is built *after* busybox
-In-Reply-To: <CAFRkauChAKfxHt7Z5GwJ3pvpk5iEB9m=+5FuhckGWUQ6SR_4ZQ@mail.gmail.com>
-References: <1378225250.11000.4.camel@phoenix> <20130903193417.1a092fd5@skate>
- <CAFRkauBmG1T5UHKaA5tRvGqPFw2eABrPrPSKeO4L-CCOTyfu=Q@mail.gmail.com>
- <CAFRkauChAKfxHt7Z5GwJ3pvpk5iEB9m=+5FuhckGWUQ6SR_4ZQ@mail.gmail.com>
-Message-ID: <CAAXf6LUtV63ZX69jnXe6+HCvODre9ctbRoySNisRk72btcXdOA@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 4 Sep 2013 09:35:10 +0200
+Subject: [Buildroot] GTK+ for framebuffer?
+In-Reply-To: <20130904024019.GA875@zuhnb712.ap.bm.net>
+References: <20130903100905.GA324@zuhnb712.ap.bm.net>
+ <20130903133145.370bb2d4@skate>
+ <20130904024019.GA875@zuhnb712.ap.bm.net>
+Message-ID: <20130904093510.031f559b@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Axel,
+Dear Woody Wu,
 
-Op 4-sep.-2013 04:04 schreef "Axel Lin" <axel.lin@ingics.com> het volgende:
->
-> > This time my question is: Is it normal elf2flt is built *after* busybox?
-> > (This looks like a new founding to me)
-> > I know elf2ft is broken.
-> > I'm just not sure if the build order is one of the root cause to make
-> > elf2flt broken.
-> > I ask the question because I'm not familiar with buiildroot now, I even
-> > don't know how to specify package build order.
-> > (In this case, move elf2flt build ealier than busybox.)
-> > So I expect someone can answer the question on mailing list.
-> Hi,
-> I test build for blackfin with BR2_PACKAGE_HOST_ELF2FLT=y.
-> The first time build result in a ELF 32-bit LSB executable.
-> (I think it is because busybox is built *before* elf2flt.)
-> However, I build busybox again with "make busybox-rebuild" and
-> then I got a BFLT executable.
-> So now I do think the build order for elf2flt does matter.
+On Wed, 4 Sep 2013 10:40:19 +0800, Woody Wu wrote:
 
-The build order of packages is in general to be considered random. However,
-if some packages need to be built before others, this should be expressed
-in the FOO_DEPENDENCIES variable. If FOO_DEPENDENCIES = bar, then package
-bar will be built before package FOO.
+> Even I cannot find libgtk (neither 2.x or 3.x) in buildroot.  I
+> enabled a lot of options which looks like related to gtk, then I got
+> libraries like glib, pango, atk, etc., but just no gtk.  Where is the
+> option to enable it? I think I looked through all the options :(
 
-Some packages need to be built before _all_ other packages, they are global
-dependencies. For this, there is the support/dependencies infrastructure.
+Hint: in menuconfig, hit '/', and then search for LIBGTK2. This will
+show you where the option for Gtk is located, what are its
+dependencies, and which of its dependencies are not satisfied at the
+moment.
 
-Some packages are also built before the real target packages as part of the
-toolchain building/extracting.
+Here is what I have here:
 
-Possibly, elf2flt can be added to the last category, or to the
-support/dependencies one.
+Symbol: BR2_PACKAGE_LIBGTK2 [=n]
+Type  : boolean
+Prompt: libgtk2
+  Defined at package/libgtk2/Config.in:1
+  Depends on: BR2_PACKAGE_XORG7 [=n] && BR2_USE_WCHAR [=y] && BR2_TOOLCHAIN_HAS_THREADS [=y] && BR2_INSTALL_LIBSTDCPP [=y]
+  Location:
+    -> Target packages
+       -> Libraries
+ (2)      -> Graphics
+
+This tells you that libgtk2 package is currently not selected ([=n] on
+the first line). This tells you the libgtk2 package is located in
+Target packages -> Libraries -> Graphics. And more importantly, the
+line "Depends on:" gives you the list of dependencies. In the example
+above, there are four dependencies: the last three dependencies (wchar,
+threads and C++) are satisfied. However, the first dependency,
+BR2_PACKAGE_XORG7 is not satisfied (see the [=n]).
+
+So to be able to enable Gtk, you need to enable X.org.
+
+> BTW: in your opinion, GtkFB and gtk on TinyX, which one is faster?
+
+I have no idea as I haven't benchmarked. However, I'm not sure why you
+keep talking about GtkFB: the DirectFB for Gtk is no longer maintained,
+so it cannot be used. Your only reasonable option today for Gtk 2.x is
+with X.org.
+
+A while ago, I remember switching a project from Gtk/DirectFB (at the
+time it was more or less working) to Gtk/X.org because it ended up
+working better. I don't quite remember if it was a font rendering
+problem, or a performance problem, but clearly, Gtk/X.org fixed the
+problem.
 
 Best regards,
+
 Thomas
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130904/78618709/attachment.html>
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
