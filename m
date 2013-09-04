@@ -1,41 +1,41 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 4 Sep 2013 13:34:45 +0200
-Subject: [Buildroot] [PATCH] dependencies: Add host prerequisite for
- elf2flt
-In-Reply-To: <52271915.6050702@zacarias.com.ar>
-References: <1378282615.12336.1.camel@phoenix> <20130904105101.1662e059@skate>
- <52270CBA.1000603@zacarias.com.ar> <20130904131900.7225d262@skate>
- <52271915.6050702@zacarias.com.ar>
-Message-ID: <20130904133445.0af91136@skate>
+From: Matthieu <matthieu.personnaz@wanadoo.fr>
+Date: Wed, 4 Sep 2013 04:38:43 -0700 (PDT)
+Subject: [Buildroot] Unable to boot via initrd
+In-Reply-To: <20130904095003.05160a45@skate>
+References: <1378148801760-50517.post@n4.nabble.com> <52260A30.309@mind.be>
+ <1378248110591-50638.post@n4.nabble.com> <20130904095003.05160a45@skate>
+Message-ID: <1378294723839-50675.post@n4.nabble.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+Dear Thomas and  Arnout,
 
-On Wed, 04 Sep 2013 08:27:17 -0300, Gustavo Zacarias wrote:
+first I want to thank you for your understanding. I come back to the linux
+world after 10 years and I feel rusted.
 
-> > Indeed. If it's not needed during the gcc build, one solution is to add
-> > its as a dependency in host-gcc-final.
-> 
-> It's needed for some uClibc combination, link-flat.so which uses elf2flt
-> pulls in libgcc according to uclibc/Makerules (used in
-> uclibc/libc/Makefile.in).
-> I think it's safer to pull it in for gcc-intermediate or even gcc-initial.
+So:
 
-gcc-intermediate is going to be skipped in some situations after my
-patch "[PATCHv2 03/14] toolchain-internal: skip gcc-intermediate when
-possible" is merged.
+1) in the root of the filesystem there is a symlink to /sbin/init.
 
-So, as a dependency of gcc-initial seems like a better choice.
+2) I noticed the solution 2 of my first post do not work:
+BR2_TARGET_ROOTFS_CPIO=y and BR2_TARGET_ROOTFS_INITRAMFS disabled. When I
+run:
 
-Thanks,
+kvm -kernel output/images/bzImage -initrd output/images/rootfs.cpio.bz2
 
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+I obtain:  VFS: Cannot open root device "(null)" .... error -6 ... 
+
+is there a solution?
+
+regards
+
+Matthieu
+
+
+
+--
+View this message in context: http://buildroot-busybox.2317881.n4.nabble.com/Unable-to-boot-via-initrd-tp50517p50675.html
+Sent from the Buildroot (busybox) mailing list archive at Nabble.com.
