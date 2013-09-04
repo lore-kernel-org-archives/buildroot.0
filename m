@@ -1,32 +1,48 @@
-From: Axel Lin <axel.lin@ingics.com>
-Date: Wed, 4 Sep 2013 10:04:22 +0800
-Subject: [Buildroot] Why elf2flt is built *after* busybox
-In-Reply-To: <CAFRkauBmG1T5UHKaA5tRvGqPFw2eABrPrPSKeO4L-CCOTyfu=Q@mail.gmail.com>
-References: <1378225250.11000.4.camel@phoenix> <20130903193417.1a092fd5@skate>
- <CAFRkauBmG1T5UHKaA5tRvGqPFw2eABrPrPSKeO4L-CCOTyfu=Q@mail.gmail.com>
-Message-ID: <CAFRkauChAKfxHt7Z5GwJ3pvpk5iEB9m=+5FuhckGWUQ6SR_4ZQ@mail.gmail.com>
+From: Woody Wu <narkewoody@gmail.com>
+Date: Wed, 4 Sep 2013 10:40:19 +0800
+Subject: [Buildroot] GTK+ for framebuffer?
+In-Reply-To: <20130903133145.370bb2d4@skate>
+References: <20130903100905.GA324@zuhnb712.ap.bm.net>
+ <20130903133145.370bb2d4@skate>
+Message-ID: <20130904024019.GA875@zuhnb712.ap.bm.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> This time my question is: Is it normal elf2flt is built *after* busybox?
-> (This looks like a new founding to me)
-> I know elf2ft is broken.
-> I'm just not sure if the build order is one of the root cause to make
-> elf2flt broken.
-> I ask the question because I'm not familiar with buiildroot now, I even
-> don't know how to specify package build order.
-> (In this case, move elf2flt build ealier than busybox.)
-> So I expect someone can answer the question on mailing list.
-Hi,
-I test build for blackfin with BR2_PACKAGE_HOST_ELF2FLT=y.
-The first time build result in a ELF 32-bit LSB executable.
-(I think it is because busybox is built *before* elf2flt.)
-However, I build busybox again with "make busybox-rebuild" and
-then I got a BFLT executable.
-So now I do think the build order for elf2flt does matter.
+On Tue, Sep 03, 2013 at 01:31:45PM +0200, Thomas Petazzoni wrote:
+> Dear Woody Wu,
+> 
+> On Tue, 3 Sep 2013 18:09:06 +0800, Woody Wu wrote:
+> 
+> > It seems buildroot already has GTK.  Does it can build GTK+ for running
+> > on framebuffer (a.k.a, gtkfb)?
+> 
+> There used to be a DirectFB backend in Gtk, but it was always broken,
+> because nobody was maintaining it (in Gtk upstream). It was causing too
+> many problems in Buildroot to keep the support for such a broken
+> feature, so we removed it. People interested in running Gtk on DirectFB
+> should work with upstream to fix the issues and get the corresponding
+> patches merged.
+> 
+> These days, if you want to run Gtk, you should run X.org (which can run
+> on top of the framebuffer), or maybe you can explore Wayland (but I
+> guess it'll require Gtk 3.x, while we only have Gtk 2.x in Buildroot
+> for the moment).
+> 
+> Best regards,
+> 
+> Thomas
 
-Regards,
-Axel
+Hi, Thomas
+
+Even I cannot find libgtk (neither 2.x or 3.x) in buildroot.  I enabled
+a lot of options which looks like related to gtk, then I got libraries
+like glib, pango, atk, etc., but just no gtk.  Where is the option to
+enable it? I think I looked through all the options :(
+
+BTW: in your opinion, GtkFB and gtk on TinyX, which one is faster?
+
+-- 
+I can't go back to yesterday - because I was a different person then
