@@ -1,9 +1,10 @@
 From: Clayton Shotwell <clshotwe@rockwellcollins.com>
-Date: Wed, 4 Sep 2013 18:09:54 -0500
-Subject: [Buildroot] [PATCH 15/17] pcre: Add host build support
+Date: Wed, 4 Sep 2013 18:09:55 -0500
+Subject: [Buildroot] [PATCH 16/17] bzip2: Add host build shared library
+	installation
 In-Reply-To: <1378336196-27403-1-git-send-email-clshotwe@rockwellcollins.com>
 References: <1378336196-27403-1-git-send-email-clshotwe@rockwellcollins.com>
-Message-ID: <1378336196-27403-16-git-send-email-clshotwe@rockwellcollins.com>
+Message-ID: <1378336196-27403-17-git-send-email-clshotwe@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,17 +14,21 @@ To: buildroot@busybox.net
 
 Signed-off-by: Clayton Shotwell <clshotwe@rockwellcollins.com>
 ---
- package/pcre/pcre.mk |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+ package/bzip2/bzip2.mk |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/pcre/pcre.mk b/package/pcre/pcre.mk
-index bf86a3d..1b59dbc 100644
---- a/package/pcre/pcre.mk
-+++ b/package/pcre/pcre.mk
-@@ -21,3 +21,4 @@ PCRE_CONF_OPT += $(if $(BR2_PACKAGE_PCRE_16),--enable-pcre16,--disable-pcre16)
- PCRE_CONF_OPT += $(if $(BR2_PACKAGE_PCRE_32),--enable-pcre32,--disable-pcre32)
+diff --git a/package/bzip2/bzip2.mk b/package/bzip2/bzip2.mk
+index 45d5108..5876837 100644
+--- a/package/bzip2/bzip2.mk
++++ b/package/bzip2/bzip2.mk
+@@ -71,6 +71,8 @@ endef
+ define HOST_BZIP2_INSTALL_CMDS
+ 	$(HOST_MAKE_ENV) \
+ 		$(MAKE) PREFIX=$(HOST_DIR)/usr -C $(@D) install
++	$(HOST_MAKE_ENV) $(MAKE) \
++		-f Makefile-libbz2_so PREFIX=$(HOST_DIR)/usr -C $(@D) install
+ endef
  
- $(eval $(autotools-package))
-+$(eval $(host-autotools-package))
+ $(eval $(generic-package))
 -- 
 1.7.1
