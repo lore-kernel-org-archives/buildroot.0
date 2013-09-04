@@ -1,36 +1,39 @@
-From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Wed, 4 Sep 2013 14:16:02 +0200
-Subject: [Buildroot] [PATCH] dependencies: Add host prerequisite for
-	elf2flt
-In-Reply-To: <5227241B.7030508@zacarias.com.ar>
-References: <1378282615.12336.1.camel@phoenix> <20130904105101.1662e059@skate>
- <52270CBA.1000603@zacarias.com.ar> <20130904131900.7225d262@skate>
- <52271915.6050702@zacarias.com.ar> <20130904133445.0af91136@skate>
- <CAAXf6LW+C8GpD8vh4D3xQKNHggYOXmbG8xSRBttuYt8+usCnoA@mail.gmail.com>
- <5227241B.7030508@zacarias.com.ar>
-Message-ID: <CAAXf6LXmw7TF_9UmfxTLunR+x-mQB2uM9R-UAJg8Er+bZAizfw@mail.gmail.com>
+From: Mischa Jonker <Mischa.Jonker@synopsys.com>
+Date: Wed,  4 Sep 2013 14:36:27 +0200
+Subject: [Buildroot] [PATCH] perf: Add host-bison, host-flex dependencies
+Message-ID: <1378298187-5058-1-git-send-email-mjonker@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Op 4-sep.-2013 14:14 schreef "Gustavo Zacarias" <gustavo@zacarias.com.ar>
-het volgende:
->
-> On 09/04/2013 09:13 AM, Thomas De Schampheleire wrote:
->
-> > I know little about this flat format, but isn't it possible to use an
-> > external toolchain and still want flat binaries?
->
-> Yes, an example is the blackfin external toolchain.
-> elf2flt is shipped with said toolchains so it's not related if that's
-> your concern.
+Signed-off-by: Mischa Jonker <mjonker@synopsys.com>
+---
+ package/perf/perf.mk |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Ok thanks. That was indeed my concern...
-
-Best regards,
-Thomas
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130904/9f831d7a/attachment.html>
+diff --git a/package/perf/perf.mk b/package/perf/perf.mk
+index 7787c78..004541e 100644
+--- a/package/perf/perf.mk
++++ b/package/perf/perf.mk
+@@ -8,7 +8,7 @@
+ PERF_SOURCE =
+ PERF_VERSION = $(call qstrip,$(BR2_LINUX_KERNEL_VERSION))
+ 
+-PERF_DEPENDENCIES = linux
++PERF_DEPENDENCIES = linux host-flex host-bison
+ 
+ PERF_MAKE_FLAGS = \
+ 	$(LINUX_MAKE_FLAGS) \
+@@ -40,7 +40,7 @@ define PERF_BUILD_CMDS
+ 			exit 1 ; \
+ 		fi \
+ 	fi
+-	$(MAKE) -C $(LINUX_DIR)/tools/perf \
++	$(HOST_MAKE_ENV) $(MAKE) -C $(LINUX_DIR)/tools/perf \
+ 		$(PERF_MAKE_FLAGS) O=$(@D)
+ endef
+ 
+-- 
+1.7.9.5
