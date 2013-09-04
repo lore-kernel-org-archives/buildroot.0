@@ -1,65 +1,66 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 4 Sep 2013 09:35:10 +0200
-Subject: [Buildroot] GTK+ for framebuffer?
-In-Reply-To: <20130904024019.GA875@zuhnb712.ap.bm.net>
-References: <20130903100905.GA324@zuhnb712.ap.bm.net>
- <20130903133145.370bb2d4@skate>
- <20130904024019.GA875@zuhnb712.ap.bm.net>
-Message-ID: <20130904093510.031f559b@skate>
+Date: Wed, 4 Sep 2013 09:48:37 +0200
+Subject: [Buildroot] Why elf2flt is built *after* busybox
+In-Reply-To: <CAFRkauBmG1T5UHKaA5tRvGqPFw2eABrPrPSKeO4L-CCOTyfu=Q@mail.gmail.com>
+References: <1378225250.11000.4.camel@phoenix> <20130903193417.1a092fd5@skate>
+ <CAFRkauBmG1T5UHKaA5tRvGqPFw2eABrPrPSKeO4L-CCOTyfu=Q@mail.gmail.com>
+Message-ID: <20130904094837.2d7f219d@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Woody Wu,
+Dear Axel Lin,
 
-On Wed, 4 Sep 2013 10:40:19 +0800, Woody Wu wrote:
+On Wed, 4 Sep 2013 07:57:12 +0800, Axel Lin wrote:
 
-> Even I cannot find libgtk (neither 2.x or 3.x) in buildroot.  I
-> enabled a lot of options which looks like related to gtk, then I got
-> libraries like glib, pango, atk, etc., but just no gtk.  Where is the
-> option to enable it? I think I looked through all the options :(
+> >> Just enable elf2flt and start build.
+> >> From the build log I found the build system build busybox before
+> >> elf2flt. Is this normal?
+> >> I thought elf2flt needs to be ready before building other packages?
+> >
+> > Because elf2flt support is broken and someone needs to fix it.
+> > You've already sent several e-mails about this. Gustavo Zacarias is
+> > working on improving the elf2flt, but on a spare time basis, so
+> > it's progressing as time and motivation permits.
+> >
+> > Sorry to be a bit rude, but if you want things to move forward
+> > faster, either send patches to fix the problems and get the thing
+> > working, or hire someone to do this work for you. I'm sure ARM
+> > noMMU support in Buildroot will improve, because there are more and
+> > more Cortex-M systems that are capable of running Linux, but it's
+> > not something that is currently well supported in Buildroot.
+> 
+> Hi Thomas,
+> 
+> I think you totally missed my point.
+> I ask the question because I try to figure out the issue I found.
+> I ask the question because I'm leaning using buildroot.
+> It's good to know someone is working on this issue, however I didn't
+> mean to push someone to work for me. That is not my intention.
 
-Hint: in menuconfig, hit '/', and then search for LIBGTK2. This will
-show you where the option for Gtk is located, what are its
-dependencies, and which of its dependencies are not satisfied at the
-moment.
+The thing is that you've been posting constantly error reports about
+the elf2flt support, while we have kept telling you from the beginning
+that it is not well supported by Buildroot today. So keeping sending
+error reports is kind of useless: at this point, someone needs to look
+at the problem and fix it. I know Gustavo has started working on this,
+but I believe ARM noMMU support is not his priority. If it has a higher
+priority for someone else, then that someone else should work on it and
+fix the issues. Constantly posting error reports will not make the
+thing progress faster.
 
-Here is what I have here:
+> This time my question is: Is it normal elf2flt is built *after*
+> busybox? (This looks like a new founding to me)
 
-Symbol: BR2_PACKAGE_LIBGTK2 [=n]
-Type  : boolean
-Prompt: libgtk2
-  Defined at package/libgtk2/Config.in:1
-  Depends on: BR2_PACKAGE_XORG7 [=n] && BR2_USE_WCHAR [=y] && BR2_TOOLCHAIN_HAS_THREADS [=y] && BR2_INSTALL_LIBSTDCPP [=y]
-  Location:
-    -> Target packages
-       -> Libraries
- (2)      -> Graphics
+No, this is not normal.
 
-This tells you that libgtk2 package is currently not selected ([=n] on
-the first line). This tells you the libgtk2 package is located in
-Target packages -> Libraries -> Graphics. And more importantly, the
-line "Depends on:" gives you the list of dependencies. In the example
-above, there are four dependencies: the last three dependencies (wchar,
-threads and C++) are satisfied. However, the first dependency,
-BR2_PACKAGE_XORG7 is not satisfied (see the [=n]).
+> I ask the question because I'm not familiar with buiildroot now, I
+> even don't know how to specify package build order.
 
-So to be able to enable Gtk, you need to enable X.org.
-
-> BTW: in your opinion, GtkFB and gtk on TinyX, which one is faster?
-
-I have no idea as I haven't benchmarked. However, I'm not sure why you
-keep talking about GtkFB: the DirectFB for Gtk is no longer maintained,
-so it cannot be used. Your only reasonable option today for Gtk 2.x is
-with X.org.
-
-A while ago, I remember switching a project from Gtk/DirectFB (at the
-time it was more or less working) to Gtk/X.org because it ended up
-working better. I don't quite remember if it was a font rendering
-problem, or a performance problem, but clearly, Gtk/X.org fixed the
-problem.
+By putting the relevant dependency name in <pkg>_DEPENDENCIES, as
+explained in the Buildroot documentation,
+http://buildroot.org/downloads/manual/manual.html.
 
 Best regards,
 
