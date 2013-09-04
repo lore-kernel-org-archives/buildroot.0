@@ -1,30 +1,40 @@
-From: Matthieu <matthieu.personnaz@wanadoo.fr>
-Date: Wed, 4 Sep 2013 04:53:00 -0700 (PDT)
-Subject: [Buildroot] Unable to boot via initrd
-In-Reply-To: <1378294723839-50675.post@n4.nabble.com>
-References: <1378148801760-50517.post@n4.nabble.com> <52260A30.309@mind.be>
- <1378248110591-50638.post@n4.nabble.com> <20130904095003.05160a45@skate>
- <1378294723839-50675.post@n4.nabble.com>
-Message-ID: <1378295580067-50677.post@n4.nabble.com>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Wed, 04 Sep 2013 13:55:29 +0200
+Subject: [Buildroot] [git commit] libevas: async image preload support
+	needs threads support in toolchain
+In-Reply-To: <20130904133410.2f17a22f@skate> (Thomas Petazzoni's message of
+ "Wed, 4 Sep 2013 13:34:10 +0200")
+References: <20130904113143.AE4BC9B6EA@busybox.osuosl.org>
+ <20130904133410.2f17a22f@skate>
+Message-ID: <87r4d44x8u.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I am sorry, I have just test the solution 2) and it works now. Maybe I was
-not clean enough by doing not a systematic rebuild ("make clean").
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-All is fine.
+ Thomas> Dear Peter Korsgaard,
+ Thomas> On Wed, 4 Sep 2013 13:31:19 +0200, Peter Korsgaard wrote:
 
-Thanks
+ >> +# async image preload support needs threads support in toolchain
+ >> +ifneq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
 
-regards
+ Thomas> Maybe using positive logic would have been better, no?
 
-Matthieu
+ Thomas> ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),)
+ Thomas> ...
+ Thomas> endif
 
+Perhaps. I don't really feel strongly about it, and we do have quite a
+mix today:
 
+git grep 'ifneq.*,y)' package | wc -l
+164
 
---
-View this message in context: http://buildroot-busybox.2317881.n4.nabble.com/Unable-to-boot-via-initrd-tp50517p50677.html
-Sent from the Buildroot (busybox) mailing list archive at Nabble.com.
+git grep 'ifeq.*,)' package/|wc -l
+85
+
+-- 
+Bye, Peter Korsgaard
