@@ -1,102 +1,89 @@
-From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Wed, 4 Sep 2013 21:07:54 +0200
-Subject: [Buildroot] [PATCH 2 of 9 v4] Config.in.legacy: update
- description for users
-In-Reply-To: <52275B02.7020106@mind.be>
-References: <patchbomb.1378152469@argentina>
- <ac4d080274a06689e8d4.1378152471@argentina>
- <20130902225514.7d9323cc@skate> <52257EA4.9030001@mind.be>
- <20130903091818.616d6665@skate>
- <CAAXf6LWNRK1fZMQfMU5w52NzgyG+HL1VbXPU1o5FuFQ+eNBFEA@mail.gmail.com>
- <20130903135209.3b1ea8f5@skate> <87ob8a54ie.fsf@dell.be.48ers.dk>
- <52261367.8040905@mind.be>
- <CAAXf6LX1QTw3DgSG5uWGOvFgmgsmmn2a6_cvwHp5p_cgF6RXpg@mail.gmail.com>
- <52275B02.7020106@mind.be>
-Message-ID: <CAAXf6LX87oaYh3a63=ZS2QAHpC32TRH5bTqGoKMSPsTWm2qoEQ@mail.gmail.com>
+From: Matt Weber <mlweber1@rockwellcollins.com>
+Date: Wed, 4 Sep 2013 14:25:21 -0500
+Subject: [Buildroot] [PATCH 1/1] Eigen: new package
+Message-ID: <1378322721-27028-1-git-send-email-mlweber1@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Op 4-sep.-2013 20:35 schreef "Arnout Vandecappelle" <arnout@mind.be> het
-volgende:
->
-> On 09/04/13 10:33, Thomas De Schampheleire wrote:
->>
->> Hi Arnout,
->>
->> On Tue, Sep 3, 2013 at 6:50 PM, Arnout Vandecappelle <arnout@mind.be>
-wrote:
->>>
->>> On 09/03/13 17:06, Peter Korsgaard wrote:
->>>>>>>>>
->>>>>>>>>
->>>>>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
->>>>>>>>> writes:
->>>>
->>>>
->>>>
->>>>
->>>>    Thomas> So far, the only problem I see with this are related to
-minimal
->>>>    Thomas> defconfigs. In the case (1) above, the minimal defconfig
-will
->>>> continue
->>>>    Thomas> to contain the name of the legacy option, and not the name
-of
->>>> the new
->>>>    Thomas> option, since the new option is selected by the legacy
-option.
->>>> This is
->>>>    Thomas> annoying since it means minimal defconfigs are not
-progressively
->>>>    Thomas> updated to use the new option name. And this probably makes
-my
->>>> entire
->>>>    Thomas> proposal moot.
->>>>
->>>> Damn, yes :/
->>>>
->>>> So people really do need to explictly change to the new option /
-restart
->>>> make menuconfig.
->>>
->>>
->>>
->>>   I never tried it, but a workaround could be to run olddefconfig
-before any
->>> interactive config (menuconfig, nconfig, xconfig, qconfig). olddefconfig
->>> should be equivalent to saving immediately.
->>
->>
->> I tried it manually (not yet integrated in a Makefile) and it works as
-expected.
->> However, a disadvantage is that any new symbol will no longer be
->> marked as NEW in the interactive config. So the trade-off would be
->> between loosing this NEW marker, and requiring the user to do an
->> intermediate save.
->
->
->  If the user does an intermediate save, the NEW marker will also be
-gone...
+Target packages -> Libraries -> Other -> Eigen
 
-Yes, but before that save he does see the markers...
+Eigen - a C++ template library for linear algebra
 
->
->  But at least, this is only for a user that has legacy stuff, not for all
-those innocent people out there that just do a 'make menuconfig' after 'git
-pull'.
+Signed-off-by: Matt Weber <mlweber1@rockwellcollins.com>
+---
+ package/Config.in       |    1 +
+ package/eigen/Config.in |   16 ++++++++++++++++
+ package/eigen/eigen.mk  |   24 ++++++++++++++++++++++++
+ 3 files changed, 41 insertions(+), 0 deletions(-)
+ create mode 100644 package/eigen/Config.in
+ create mode 100644 package/eigen/eigen.mk
 
-Right.
-
-To proceed with this, I think the community should decide which alternative
-we prefer, knowing that each one has its pros and cons...
-
-Looking forward to everyone's input...
-
-Best regards,
-Thomas
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130904/5990fb74/attachment-0001.html>
+diff --git a/package/Config.in b/package/Config.in
+index a94cb62..6fe9e14 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -617,6 +617,7 @@ source "package/libcofi/Config.in"
+ source "package/classpath/Config.in"
+ source "package/cppcms/Config.in"
+ source "package/elfutils/Config.in"
++source "package/eigen/Config.in"
+ source "package/fftw/Config.in"
+ source "package/libargtable2/Config.in"
+ source "package/argp-standalone/Config.in"
+diff --git a/package/eigen/Config.in b/package/eigen/Config.in
+new file mode 100644
+index 0000000..ee68bc8
+--- /dev/null
++++ b/package/eigen/Config.in
+@@ -0,0 +1,16 @@
++config BR2_PACKAGE_EIGEN
++	bool "eigen"
++	help
++	  Eigen is a C++ template library for linear algebra: vectors, 
++	  matrices, and related algorithms. It is versatile, fast, elegant 
++	  and works on many platforms (OS/Compilers).
++
++	  Eigen doesn't have any dependencies other than the C++ standard library. 
++	  The CMake build system is used to build the documentation, unit-tests, 
++	  and to automate installation. If you just want to use Eigen, you can 
++	  use the header files right away. There is no binary library to link 
++	  to and no configured header file. Eigen is a pure template library 
++	  defined in the headers. 
++
++	  http://eigen.tuxfamily.org/
++
+diff --git a/package/eigen/eigen.mk b/package/eigen/eigen.mk
+new file mode 100644
+index 0000000..2580f0b
+--- /dev/null
++++ b/package/eigen/eigen.mk
+@@ -0,0 +1,24 @@
++#############################################################
++#
++# Eigen - a C++ template library for linear algebra
++#
++#############################################################
++EIGEN_VERSION = 3.2.0
++EIGEN_VERSION_HASH = ffa86ffb5570
++EIGEN_SITE    = http://bitbucket.org/eigen/eigen/get/$(EIGEN_VERSION).tar.bz2
++EIGEN_SOURCE  = eigen-eigen-$(EIGEN_VERSION_HASH).tar.bz2
++EIGEN_LICENSE = MPL2
++EIGEN_LICENSE_FILES = COPYING*
++EIGEN_INSTALL_STAGING = YES
++
++# This package only consists of headers that need to be
++# copied over to the sysroot for compile time use
++define EIGEN_INSTALL_STAGING_CMDS
++	cp -af $(@D)/Eigen $(STAGING_DIR)/usr/include/
++endef
++
++define EIGEN_UNINSTALL_STAGING_CMDS
++	rm -rf $(STAGING_DIR)/usr/include/Eigen
++endef
++
++$(eval $(generic-package))
+-- 
+1.7.1
