@@ -1,109 +1,69 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 04 Sep 2013 18:38:26 +0200
-Subject: [Buildroot] [PATCH 1/1] aiccu: new package
-In-Reply-To: <1378165788-7386-1-git-send-email-rommel@layer-7.net>
-References: <1378165788-7386-1-git-send-email-rommel@layer-7.net>
-Message-ID: <52276202.6010508@mind.be>
+Date: Wed, 04 Sep 2013 18:08:34 +0200
+Subject: [Buildroot] [PATCH 2 of 9 v4] Config.in.legacy: update
+ description for users
+In-Reply-To: <CAAXf6LX1QTw3DgSG5uWGOvFgmgsmmn2a6_cvwHp5p_cgF6RXpg@mail.gmail.com>
+References: <patchbomb.1378152469@argentina>
+ <ac4d080274a06689e8d4.1378152471@argentina> <20130902225514.7d9323cc@skate>
+ <52257EA4.9030001@mind.be> <20130903091818.616d6665@skate>
+ <CAAXf6LWNRK1fZMQfMU5w52NzgyG+HL1VbXPU1o5FuFQ+eNBFEA@mail.gmail.com>
+ <20130903135209.3b1ea8f5@skate> <87ob8a54ie.fsf@dell.be.48ers.dk>
+ <52261367.8040905@mind.be>
+ <CAAXf6LX1QTw3DgSG5uWGOvFgmgsmmn2a6_cvwHp5p_cgF6RXpg@mail.gmail.com>
+Message-ID: <52275B02.7020106@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 09/03/13 01:49, Michael Rommel wrote:
-> Automatic IPv6 Connectivity Configuration Utility for users of a
-> IPv6 tunnel broker, developed by sixxs.net
+On 09/04/13 10:33, Thomas De Schampheleire wrote:
+> Hi Arnout,
 >
-> Signed-off-by: Michael Rommel <rommel@layer-7.net>
-> ---
->   package/Config.in                                  |    1 +
->   package/aiccu/Config.in                            |   21 ++++
->   .../aiccu/aiccu-0001-gnutls-and-uclibc-fixes.patch |  104 ++++++++++++++++++++
->   .../aiccu-0002-install-correct-init-script.patch   |   17 ++++
->   package/aiccu/aiccu.mk                             |   26 +++++
->   5 files changed, 169 insertions(+)
->   create mode 100644 package/aiccu/Config.in
->   create mode 100644 package/aiccu/aiccu-0001-gnutls-and-uclibc-fixes.patch
+> On Tue, Sep 3, 2013 at 6:50 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
+>> On 09/03/13 17:06, Peter Korsgaard wrote:
+>>>>>>>>
+>>>>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+>>>>>>>> writes:
+>>>
+>>>
+>>>
+>>>    Thomas> So far, the only problem I see with this are related to minimal
+>>>    Thomas> defconfigs. In the case (1) above, the minimal defconfig will
+>>> continue
+>>>    Thomas> to contain the name of the legacy option, and not the name of
+>>> the new
+>>>    Thomas> option, since the new option is selected by the legacy option.
+>>> This is
+>>>    Thomas> annoying since it means minimal defconfigs are not progressively
+>>>    Thomas> updated to use the new option name. And this probably makes my
+>>> entire
+>>>    Thomas> proposal moot.
+>>>
+>>> Damn, yes :/
+>>>
+>>> So people really do need to explictly change to the new option / restart
+>>> make menuconfig.
+>>
+>>
+>>   I never tried it, but a workaround could be to run olddefconfig before any
+>> interactive config (menuconfig, nconfig, xconfig, qconfig). olddefconfig
+>> should be equivalent to saving immediately.
+>
+> I tried it manually (not yet integrated in a Makefile) and it works as expected.
+> However, a disadvantage is that any new symbol will no longer be
+> marked as NEW in the interactive config. So the trade-off would be
+> between loosing this NEW marker, and requiring the user to do an
+> intermediate save.
 
-  Did you upstream this patch?
+  If the user does an intermediate save, the NEW marker will also be gone...
 
->   create mode 100644 package/aiccu/aiccu-0002-install-correct-init-script.patch
-[snip]
-> diff --git a/package/aiccu/aiccu-0002-install-correct-init-script.patch b/package/aiccu/aiccu-0002-install-correct-init-script.patch
-> new file mode 100644
-> index 0000000..15e9268
-> --- /dev/null
-> +++ b/package/aiccu/aiccu-0002-install-correct-init-script.patch
-> @@ -0,0 +1,17 @@
-> +Makefile: remove hardcoded .debian part from install command, debian
-> +	  version does not work under buildroot
-> +
-> +Signed-off-by: Michael Rommel <rommel@layer-7.net>
-> +
-> +diff -purN aiccu_20070115.orig/Makefile aiccu_20070115/Makefile
-> +--- aiccu_20070115.orig/Makefile	2007-01-11 01:29:33.000000000 +0100
-> ++++ aiccu_20070115/Makefile	2013-09-03 00:47:06.153662575 +0200
-> +@@ -86,7 +86,7 @@ ifeq ($(shell echo "A${RPM_BUILD_ROOT}")
-> + 	@cp doc/HOWTO  ${DESTDIR}${dirdoc}
-> + 	@echo "Installing Debian-style init.d"
-> + 	@mkdir -p ${DESTDIR}${diretc}init.d
-> +-	@cp doc/${PROJECT}.init.debian ${DESTDIR}${diretc}init.d/${PROJECT}
-> ++	@cp doc/${PROJECT}.init ${DESTDIR}${diretc}init.d/${PROJECT}
-
-  The init script should be called Sxxaiccu (replace xx by an appropriate 
-number). And you can do the required chmod here as well. Or better yet, 
-use 'install -D -m 0755' (which removes the need for mkdir as well).
-
-  However, I propose to instead install it manually from the .mk file 
-(using the _INSTALL_INIT_SYSV variable) and to remove the incorrect init 
-script in a post-install hook. Maybe there's even a target to install 
-just the interesting bits and skip the howto and init scripts?
-
-> + else
-> + 	@echo "Installing Redhat-style init.d"
-> + 	@mkdir -p ${DESTDIR}${diretc}init.d
-> diff --git a/package/aiccu/aiccu.mk b/package/aiccu/aiccu.mk
-> new file mode 100644
-> index 0000000..0eb605b
-> --- /dev/null
-> +++ b/package/aiccu/aiccu.mk
-> @@ -0,0 +1,26 @@
-> +################################################################################
-> +#
-> +# aiccu
-> +#
-> +################################################################################
-> +
-> +AICCU_VERSION = 20070115
-
-  Ouch, that's old...
-
-> +AICCU_SOURCE = aiccu_$(AICCU_VERSION).tar.gz
-> +AICCU_SITE = http://www.sixxs.net/archive/sixxs/aiccu/unix/
-> +AICCU_LICENSE = SixXS License, concise redistribution license
-> +AICCU_LICENSE_FILES = doc/LICENSE
-> +AICCU_DEPENDENCIES = gnutls
-> +
-> +define AICCU_BUILD_CMDS
-> +	$(MAKE) CC="$(TARGET_CC)" LD="$(TARGET_LD)" -C $(@D) all
-> +endef
-> +
-> +define AICCU_INSTALL_TARGET_CMDS
-> +	$(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) install
-> +endef
-> +
-> +define AICCU_PERMISSIONS
-> +	/etc/init.d/aiccu  f  4755  0  0  -  -  -  -  -
-
-  Does it really have to be setuid? That is very weird for an init script.
+  But at least, this is only for a user that has legacy stuff, not for 
+all those innocent people out there that just do a 'make menuconfig' 
+after 'git pull'.
 
   Regards,
   Arnout
-
-> +endef
-> +
-> +$(eval $(generic-package))
->
 
 
 -- 
