@@ -1,42 +1,131 @@
-From: =?UTF-8?Q?J=C3=A9r=C3=B4me_Pouiller?= <jezz@sysmic.org>
-Date: Wed, 04 Sep 2013 17:50:47 +0200
-Subject: [Buildroot] [git commit] kmod: disable manpages for host-kmod
-In-Reply-To: <20130904103707.9F2B29B6EB@busybox.osuosl.org>
-References: <20130904103707.9F2B29B6EB@busybox.osuosl.org>
-Message-ID: <b95086f02b4d393fa6f90f388a0f20d3@www.sysmic.org>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed,  4 Sep 2013 12:53:42 -0300
+Subject: [Buildroot] [PATCH 1/2] downloads: add basic CVS support
+Message-ID: <1378310023-6405-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter,
+The support is for pserver mode anonymous CVS.
+source-check is based on login since many servers don't support or have
+ls/rls disabled.
 
-On 2013-09-04 12:36, Peter Korsgaard wrote:
-[...]
-> diff --git a/package/kmod/kmod.mk b/package/kmod/kmod.mk
-> index 169fca3..a1ad7d6 100644
-> --- a/package/kmod/kmod.mk
-> +++ b/package/kmod/kmod.mk
-> @@ -23,6 +23,9 @@ KMOD_LICENSE_FILES = libkmod/COPYING
->  # 
-> https://git.kernel.org/cgit/utils/kernel/kmod/kmod.git/commit/?id=b7016153ec8
->  KMOD_CONF_OPT = --disable-static --enable-shared
->
-> +# manpages not installed to host and needs xsltproc
-> +HOST_KMOD_CONF_OPT = --disable-manpages
-> +
->  ifneq ($(BR2_HAVE_DOCUMENTATION),y)
->  KMOD_CONF_OPT += --disable-manpages
->  endif
-What happens when BR2_HAVE_DOCUMENTATION is enabled? I think same 
-problem happens.
+Usage is pretty straightforward.
+PKG_SITE defines the site hostname and remote directory.
+The module is defined by the bare package name.
+Version is date based.
 
-We should add a dependency to host-libxslt and I think we can pass 
-variable XSLTPROC= to ./configure to use a specific location of 
-xsltproc.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ Config.in               |  4 ++++
+ package/pkg-download.mk | 37 ++++++++++++++++++++++++++++---------
+ package/pkg-generic.mk  |  2 ++
+ 3 files changed, 34 insertions(+), 9 deletions(-)
 
+diff --git a/Config.in b/Config.in
+index cb246a4..33b3070 100644
+--- a/Config.in
++++ b/Config.in
+@@ -42,6 +42,10 @@ config BR2_GIT
+ 	string "Git command"
+ 	default "git"
+ 
++config BR2_CVS
++	string "Cvs command"
++	default "cvs"
++
+ config BR2_LOCALFILES
+ 	string "Local files retrieval command"
+ 	default "cp"
+diff --git a/package/pkg-download.mk b/package/pkg-download.mk
+index 97c9226..07e7c54 100644
+--- a/package/pkg-download.mk
++++ b/package/pkg-download.mk
+@@ -10,6 +10,7 @@
+ # Download method commands
+ WGET := $(call qstrip,$(BR2_WGET)) $(QUIET)
+ SVN := $(call qstrip,$(BR2_SVN))
++CVS := $(call qstrip,$(BR2_CVS))
+ BZR := $(call qstrip,$(BR2_BZR))
+ GIT := $(call qstrip,$(BR2_GIT))
+ HG := $(call qstrip,$(BR2_HG)) $(QUIET)
+@@ -55,21 +56,21 @@ notdomain=$(patsubst $(call domain,$(1),$(2))$(call domainseparator,$(2))%,%,$(c
+ domainseparator=$(if $(1),$(1),/)
+ 
+ ################################################################################
+-# The DOWNLOAD_{GIT,SVN,BZR,HG,LOCALFILES} helpers are in charge of getting a
+-# working copy of the source repository for their corresponding SCM,
++# The DOWNLOAD_{GIT,SVN,BZR,HG,CVS,LOCALFILES} helpers are in charge of getting
++# a working copy of the source repository for their corresponding SCM,
+ # checking out the requested version / commit / tag, and create an
+ # archive out of it. DOWNLOAD_SCP uses scp to obtain a remote file with
+ # ssh authentication. DOWNLOAD_WGET is the normal wget-based download
+ # mechanism.
+ #
+-# The SOURCE_CHECK_{GIT,SVN,BZR,HG,WGET,LOCALFILES,SCP} helpers are in charge of
+-# simply checking that the source is available for download. This can be used
+-# to make sure one will be able to get all the sources needed for
+-# one's build configuration.
++# The SOURCE_CHECK_{GIT,SVN,BZR,HG,WGET,CVS,LOCALFILES,SCP} helpers are
++# in charge of simply checking that the source is available for download.
++# This can be used to make sure one will be able to get all the sources needed
++# for one's build configuration.
+ #
+-# The SHOW_EXTERNAL_DEPS_{GIT,SVN,BZR,HG,WGET,LOCALFILES,SCP} helpers simply
+-# output to the console the names of the files that will be downloaded, or path
+-# and revision of the source repositories, producing a list of all the
++# The SHOW_EXTERNAL_DEPS_{GIT,SVN,BZR,HG,WGET,CVS,LOCALFILES,SCP} helpers
++# simply output to the console the names of the files that will be downloaded,
++# or path and revision of the source repositories, producing a list of all the
+ # "external dependencies" of a given build configuration.
+ ################################################################################
+ 
+@@ -119,6 +120,23 @@ define SHOW_EXTERNAL_DEPS_BZR
+ 	echo $($(PKG)_SOURCE)
+ endef
+ 
++define DOWNLOAD_CVS
++	test -e $(DL_DIR)/$($(PKG)_SOURCE) || \
++	(pushd $(DL_DIR) > /dev/null && \
++	$(CVS) -z3 -d:pserver:anonymous@$(call stripurischeme,$(call qstrip,$($(PKG)_SITE))) co -d $($(PKG)_BASE_NAME) -r :$($(PKG)_DL_VERSION) -P $($(PKG)_RAWNAME) && \
++	$(TAR) czf $($(PKG)_SOURCE) $($(PKG)_BASE_NAME)/ && \
++	rm -rf $($(PKG)_DL_DIR) && \
++	popd > /dev/null)
++endef
++
++# Not all CVS servers support ls/rls, use login to see if we can connect
++define SOURCE_CHECK_CVS
++	$(CVS) -d:pserver:anonymous:@$(call stripurischeme,$(call qstrip,$($(PKG)_SITE))) login
++endef
++
++define SHOW_EXTERNAL_DEPS_CVS
++	echo $($(PKG)_SOURCE)
++endef
+ 
+ define DOWNLOAD_SVN
+ 	test -e $(DL_DIR)/$($(PKG)_SOURCE) || \
+@@ -244,6 +262,7 @@ define DOWNLOAD_INNER
+ 		case "$$scheme" in \
+ 			git) $($(DL_MODE)_GIT) && exit ;; \
+ 			svn) $($(DL_MODE)_SVN) && exit ;; \
++			cvs) $($(DL_MODE)_CVS) && exit ;; \
+ 			bzr) $($(DL_MODE)_BZR) && exit ;; \
+ 			file) $($(DL_MODE)_LOCALFILES) && exit ;; \
+ 			scp) $($(DL_MODE)_SCP) && exit ;; \
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 2e2e66f..7ae166f 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -537,6 +537,8 @@ else ifeq ($$($(2)_SITE_METHOD),scp)
+ DL_TOOLS_DEPENDENCIES += scp ssh
+ else ifeq ($$($(2)_SITE_METHOD),hg)
+ DL_TOOLS_DEPENDENCIES += hg
++else ifeq ($$($(2)_SITE_METHOD),cvs)
++DL_TOOLS_DEPENDENCIES += cvs
+ endif # SITE_METHOD
+ 
+ DL_TOOLS_DEPENDENCIES += $(firstword $(INFLATE$(suffix $($(2)_SOURCE))))
 -- 
-J?r?me Pouiller, Sysmic
-Embedded Linux specialist
-http://www.sysmic.fr
+1.8.1.5
