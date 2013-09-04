@@ -1,52 +1,56 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 04 Sep 2013 13:41:44 -0300
-Subject: [Buildroot] [PATCH 1/2] downloads: add basic CVS support
-In-Reply-To: <20130904182446.22d09a4a@skate>
-References: <1378310023-6405-1-git-send-email-gustavo@zacarias.com.ar>
- <20130904182446.22d09a4a@skate>
-Message-ID: <522762C8.5090104@zacarias.com.ar>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 04 Sep 2013 18:21:09 +0200
+Subject: [Buildroot] [PATCH] perf: Add host-bison, host-flex dependencies
+In-Reply-To: <1378298187-5058-1-git-send-email-mjonker@synopsys.com>
+References: <1378298187-5058-1-git-send-email-mjonker@synopsys.com>
+Message-ID: <52275DF5.6030101@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 09/04/2013 01:24 PM, Thomas Petazzoni wrote:
+On 09/04/13 14:36, Mischa Jonker wrote:
+> Signed-off-by: Mischa Jonker <mjonker@synopsys.com>
+> ---
+>   package/perf/perf.mk |    4 ++--
+>   1 file changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/package/perf/perf.mk b/package/perf/perf.mk
+> index 7787c78..004541e 100644
+> --- a/package/perf/perf.mk
+> +++ b/package/perf/perf.mk
+> @@ -8,7 +8,7 @@
+>   PERF_SOURCE =
+>   PERF_VERSION = $(call qstrip,$(BR2_LINUX_KERNEL_VERSION))
+>
+> -PERF_DEPENDENCIES = linux
+> +PERF_DEPENDENCIES = linux host-flex host-bison
+>
+>   PERF_MAKE_FLAGS = \
+>   	$(LINUX_MAKE_FLAGS) \
+> @@ -40,7 +40,7 @@ define PERF_BUILD_CMDS
+>   			exit 1 ; \
+>   		fi \
+>   	fi
+> -	$(MAKE) -C $(LINUX_DIR)/tools/perf \
+> +	$(HOST_MAKE_ENV) $(MAKE) -C $(LINUX_DIR)/tools/perf \
 
->> The support is for pserver mode anonymous CVS.
->> source-check is based on login since many servers don't support or have
->> ls/rls disabled.
->>
->> Usage is pretty straightforward.
->> PKG_SITE defines the site hostname and remote directory.
->> The module is defined by the bare package name.
->> Version is date based.
-> 
-> Those details should probably go into an update of
-> docs/manual/adding-packages-generic.txt, which documents all the source
-> methods.
+  TARGET_MAKE_ENV seems more appropriate...
 
-Yes, that'll follow once the method is accepted as proposed, docs aren't
-easy to modify if there's substantial change.
+  Regards,
+  Arnout
 
-> Not related to your change, but interesting to see that LOCALFILES is a
-> SCM :)
+>   		$(PERF_MAKE_FLAGS) O=$(@D)
+>   endef
+>
+>
 
-Well, if someone wants RCS that might be syntactically correct, not for
-now though ;)
 
-> Maybe we could replace this with SOURCE_CHECK_*
-
-> and similar here :-)
-
-Sure, i can follow up with the docs patchset.
-
-> This line is quite long. Split it maybe?
-
-True, DOWNLOAD_GIT also exceeds the 80 column "standard", and so do
-other parts so don't blame me :)
-I also do on SOURCE_CHECK_CVS but that's hardly splittable in a
-coherent/useful way, and cvs is very picky with parameter order to
-rephrase it.
-
-Regards.
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
