@@ -1,28 +1,33 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 04 Sep 2013 07:34:34 -0300
-Subject: [Buildroot] [PATCH] dependencies: Add host prerequisite for
-	elf2flt
-In-Reply-To: <20130904105101.1662e059@skate>
-References: <1378282615.12336.1.camel@phoenix> <20130904105101.1662e059@skate>
-Message-ID: <52270CBA.1000603@zacarias.com.ar>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Wed, 4 Sep 2013 12:36:09 +0200
+Subject: [Buildroot] [git commit] kmod: disable manpages for host-kmod
+Message-ID: <20130904103707.9F2B29B6EB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 09/04/2013 05:51 AM, Thomas Petazzoni wrote:
-> I don't think host-elf2flt should be added at this level of dependency.
-> If I understand correctly elf2flt, it interfaces with the linker, so I
-> believe making elf2flt a dependency of binutils would probably make a
-> bit more sense.
+commit: http://git.buildroot.net/buildroot/commit/?id=24058f10a70812de695f6bf8be3f66f0abcc179c
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-It's already done correctly in the dependency deparment...
+The manpages are not installed to HOST_DIR anyway, and it errors out if
+xsltproc isn't available on the host.
+---
+ package/kmod/kmod.mk |    3 +++
+ 1 files changed, 3 insertions(+), 0 deletions(-)
 
-HOST_ELF2FLT_DEPENDENCIES = host-binutils host-zlib
-
-The problem is it's never pulled in when it's necessary - before the
-real packages start building, so adding it up as a gcc dep when
-BR2_BINFMT_FLAT=y would be appropiate.
-
-Regards.
+diff --git a/package/kmod/kmod.mk b/package/kmod/kmod.mk
+index 169fca3..a1ad7d6 100644
+--- a/package/kmod/kmod.mk
++++ b/package/kmod/kmod.mk
+@@ -23,6 +23,9 @@ KMOD_LICENSE_FILES = libkmod/COPYING
+ # https://git.kernel.org/cgit/utils/kernel/kmod/kmod.git/commit/?id=b7016153ec8
+ KMOD_CONF_OPT = --disable-static --enable-shared
+ 
++# manpages not installed to host and needs xsltproc
++HOST_KMOD_CONF_OPT = --disable-manpages
++
+ ifneq ($(BR2_HAVE_DOCUMENTATION),y)
+ KMOD_CONF_OPT += --disable-manpages
+ endif
