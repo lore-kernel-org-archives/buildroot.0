@@ -1,89 +1,41 @@
-From: Matt Weber <mlweber1@rockwellcollins.com>
-Date: Wed, 4 Sep 2013 14:25:21 -0500
-Subject: [Buildroot] [PATCH 1/1] Eigen: new package
-Message-ID: <1378322721-27028-1-git-send-email-mlweber1@rockwellcollins.com>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Wed, 04 Sep 2013 22:13:15 +0200
+Subject: [Buildroot] [git commit] kmod: disable manpages for host-kmod
+In-Reply-To: <20130904181903.165c5cd4@skate> (Thomas Petazzoni's message of
+ "Wed, 4 Sep 2013 18:19:03 +0200")
+References: <20130904103707.9F2B29B6EB@busybox.osuosl.org>
+ <b95086f02b4d393fa6f90f388a0f20d3@www.sysmic.org>
+ <20130904181903.165c5cd4@skate>
+Message-ID: <87mwns4a78.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Target packages -> Libraries -> Other -> Eigen
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-Eigen - a C++ template library for linear algebra
+ Thomas> Dear J?r?me Pouiller,
+ Thomas> On Wed, 04 Sep 2013 17:50:47 +0200, J?r?me Pouiller wrote:
 
-Signed-off-by: Matt Weber <mlweber1@rockwellcollins.com>
----
- package/Config.in       |    1 +
- package/eigen/Config.in |   16 ++++++++++++++++
- package/eigen/eigen.mk  |   24 ++++++++++++++++++++++++
- 3 files changed, 41 insertions(+), 0 deletions(-)
- create mode 100644 package/eigen/Config.in
- create mode 100644 package/eigen/eigen.mk
+ >> >  ifneq ($(BR2_HAVE_DOCUMENTATION),y)
+ >> >  KMOD_CONF_OPT += --disable-manpages
+ >> >  endif
+ >> What happens when BR2_HAVE_DOCUMENTATION is enabled? I think same 
+ >> problem happens.
+ >> 
+ >> We should add a dependency to host-libxslt and I think we can pass 
+ >> variable XSLTPROC= to ./configure to use a specific location of 
+ >> xsltproc.
 
-diff --git a/package/Config.in b/package/Config.in
-index a94cb62..6fe9e14 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -617,6 +617,7 @@ source "package/libcofi/Config.in"
- source "package/classpath/Config.in"
- source "package/cppcms/Config.in"
- source "package/elfutils/Config.in"
-+source "package/eigen/Config.in"
- source "package/fftw/Config.in"
- source "package/libargtable2/Config.in"
- source "package/argp-standalone/Config.in"
-diff --git a/package/eigen/Config.in b/package/eigen/Config.in
-new file mode 100644
-index 0000000..ee68bc8
---- /dev/null
-+++ b/package/eigen/Config.in
-@@ -0,0 +1,16 @@
-+config BR2_PACKAGE_EIGEN
-+	bool "eigen"
-+	help
-+	  Eigen is a C++ template library for linear algebra: vectors, 
-+	  matrices, and related algorithms. It is versatile, fast, elegant 
-+	  and works on many platforms (OS/Compilers).
-+
-+	  Eigen doesn't have any dependencies other than the C++ standard library. 
-+	  The CMake build system is used to build the documentation, unit-tests, 
-+	  and to automate installation. If you just want to use Eigen, you can 
-+	  use the header files right away. There is no binary library to link 
-+	  to and no configured header file. Eigen is a pure template library 
-+	  defined in the headers. 
-+
-+	  http://eigen.tuxfamily.org/
-+
-diff --git a/package/eigen/eigen.mk b/package/eigen/eigen.mk
-new file mode 100644
-index 0000000..2580f0b
---- /dev/null
-+++ b/package/eigen/eigen.mk
-@@ -0,0 +1,24 @@
-+#############################################################
-+#
-+# Eigen - a C++ template library for linear algebra
-+#
-+#############################################################
-+EIGEN_VERSION = 3.2.0
-+EIGEN_VERSION_HASH = ffa86ffb5570
-+EIGEN_SITE    = http://bitbucket.org/eigen/eigen/get/$(EIGEN_VERSION).tar.bz2
-+EIGEN_SOURCE  = eigen-eigen-$(EIGEN_VERSION_HASH).tar.bz2
-+EIGEN_LICENSE = MPL2
-+EIGEN_LICENSE_FILES = COPYING*
-+EIGEN_INSTALL_STAGING = YES
-+
-+# This package only consists of headers that need to be
-+# copied over to the sysroot for compile time use
-+define EIGEN_INSTALL_STAGING_CMDS
-+	cp -af $(@D)/Eigen $(STAGING_DIR)/usr/include/
-+endef
-+
-+define EIGEN_UNINSTALL_STAGING_CMDS
-+	rm -rf $(STAGING_DIR)/usr/include/Eigen
-+endef
-+
-+$(eval $(generic-package))
+ Thomas> Yes, we normally should. But nobody seems to be testing or using
+ Thomas> BR2_HAVE_DOCUMENTATION. I would personally be in favor of just getting
+ Thomas> rid of BR2_HAVE_DOCUMENTATION. Who needs the documentation to be
+ Thomas> installed on the target?
+
+I'm also starting to think so. With Buildroot focused on cross
+compilation (and the development on target stuff gone), I don't see much
+use for documentation on the target either.
+
 -- 
-1.7.1
+Bye, Peter Korsgaard
