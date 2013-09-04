@@ -1,46 +1,42 @@
-From: Axel Lin <axel.lin@ingics.com>
-Date: Wed, 04 Sep 2013 23:18:35 +0800
-Subject: [Buildroot] [PATCH] gcc-initial: Add host-elf2flt dependency when
- BR2_PACKAGE_HOST_ELF2FLT=y
-Message-ID: <1378307915.5313.1.camel@phoenix>
+From: =?UTF-8?Q?J=C3=A9r=C3=B4me_Pouiller?= <jezz@sysmic.org>
+Date: Wed, 04 Sep 2013 17:50:47 +0200
+Subject: [Buildroot] [git commit] kmod: disable manpages for host-kmod
+In-Reply-To: <20130904103707.9F2B29B6EB@busybox.osuosl.org>
+References: <20130904103707.9F2B29B6EB@busybox.osuosl.org>
+Message-ID: <b95086f02b4d393fa6f90f388a0f20d3@www.sysmic.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-It's needed for some uClibc combination, link-flat.so which uses elf2flt
-pulls in libgcc according to uclibc/Makerules (used in uclibc/libc/Makefile.in).
-Thus pull it in for gcc-initial.
+Hi Peter,
 
-This also ensures elf2flt is ready when BR2_PACKAGE_HOST_ELF2FLT=y before
-building other packages.
+On 2013-09-04 12:36, Peter Korsgaard wrote:
+[...]
+> diff --git a/package/kmod/kmod.mk b/package/kmod/kmod.mk
+> index 169fca3..a1ad7d6 100644
+> --- a/package/kmod/kmod.mk
+> +++ b/package/kmod/kmod.mk
+> @@ -23,6 +23,9 @@ KMOD_LICENSE_FILES = libkmod/COPYING
+>  # 
+> https://git.kernel.org/cgit/utils/kernel/kmod/kmod.git/commit/?id=b7016153ec8
+>  KMOD_CONF_OPT = --disable-static --enable-shared
+>
+> +# manpages not installed to host and needs xsltproc
+> +HOST_KMOD_CONF_OPT = --disable-manpages
+> +
+>  ifneq ($(BR2_HAVE_DOCUMENTATION),y)
+>  KMOD_CONF_OPT += --disable-manpages
+>  endif
+What happens when BR2_HAVE_DOCUMENTATION is enabled? I think same 
+problem happens.
 
-Signed-off-by: Axel Lin <axel.lin@ingics.com>
----
-This change is based on Gustavo's comment.
-Test build for blackfin looks OK.
+We should add a dependency to host-libxslt and I think we can pass 
+variable XSLTPROC= to ./configure to use a specific location of 
+xsltproc.
 
-This patch replaces my previous patch
-"dependencies: Add host prerequisite for elf2flt".
-
- package/gcc/gcc-initial/gcc-initial.mk | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/package/gcc/gcc-initial/gcc-initial.mk b/package/gcc/gcc-initial/gcc-initial.mk
-index 0eb492f..6b85983 100644
---- a/package/gcc/gcc-initial/gcc-initial.mk
-+++ b/package/gcc/gcc-initial/gcc-initial.mk
-@@ -10,6 +10,10 @@ GCC_INITIAL_SOURCE  = $(GCC_SOURCE)
- 
- HOST_GCC_INITIAL_DEPENDENCIES = $(HOST_GCC_COMMON_DEPENDENCIES)
- 
-+ifeq ($(BR2_PACKAGE_HOST_ELF2FLT),y)
-+HOST_GCC_INITIAL_DEPENDENCIES += host-elf2flt
-+endif
-+
- HOST_GCC_INITIAL_EXTRACT_CMDS = $(HOST_GCC_EXTRACT_CMDS)
- 
- ifneq ($(call qstrip, $(BR2_XTENSA_CORE_NAME)),)
 -- 
-1.8.1.2
+J?r?me Pouiller, Sysmic
+Embedded Linux specialist
+http://www.sysmic.fr
