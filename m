@@ -1,36 +1,28 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 04 Sep 2013 12:02:49 +0200
-Subject: [Buildroot] SVN process started at make
-In-Reply-To: <87zjrt3q34.fsf@dell.be.48ers.dk> (Peter Korsgaard's message of
- "Wed, 04 Sep 2013 11:15:27 +0200")
-References: <15AE5A936F5E3A42A9144E66875A0A8934DB3B@server1-derijp.CLB-Benelux.lokaal>
- <87sixm558s.fsf@dell.be.48ers.dk> <52260E11.4090103@mind.be>
- <15AE5A936F5E3A42A9144E66875A0A8934DB3E@server1-derijp.CLB-Benelux.lokaal>
- <20130904100754.297bb0d6@skate>
- <15AE5A936F5E3A42A9144E66875A0A8934DB3F@server1-derijp.CLB-Benelux.lokaal>
- <87zjrt3q34.fsf@dell.be.48ers.dk>
-Message-ID: <87vc2g52gm.fsf@dell.be.48ers.dk>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed, 04 Sep 2013 07:34:34 -0300
+Subject: [Buildroot] [PATCH] dependencies: Add host prerequisite for
+	elf2flt
+In-Reply-To: <20130904105101.1662e059@skate>
+References: <1378282615.12336.1.camel@phoenix> <20130904105101.1662e059@skate>
+Message-ID: <52270CBA.1000603@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Ruud" == Ruud Commandeur <RCommandeur@clb.nl> writes:
+On 09/04/2013 05:51 AM, Thomas Petazzoni wrote:
+> I don't think host-elf2flt should be added at this level of dependency.
+> If I understand correctly elf2flt, it interfaces with the linker, so I
+> believe making elf2flt a dependency of binutils would probably make a
+> bit more sense.
 
- Peter> Ok, I'm afraid there's not much to do about svn being crap :/
+It's already done correctly in the dependency deparment...
 
- Peter> How come you are only seeing this now? We've been calling
- Peter> setlocalversion since 2010. Did you recently upgrade your svn version?
+HOST_ELF2FLT_DEPENDENCIES = host-binutils host-zlib
 
- Peter> Looking at the kernel history (where setlocalversion comes from), I see
- Peter> a commit from Mike Frysinger where the svn status step is skipped as it
- Peter> was deemed too slow, so perhaps we should just resync our
- Peter> setlocalversion script with the kernel:
+The problem is it's never pulled in when it's necessary - before the
+real packages start building, so adding it up as a gcc dep when
+BR2_BINFMT_FLAT=y would be appropiate.
 
- Peter> I'll do that now.
-
-It is now in git. Could you give it a test please?
-
--- 
-Bye, Peter Korsgaard
+Regards.
