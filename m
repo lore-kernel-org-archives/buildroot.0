@@ -1,27 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 4 Sep 2013 09:50:03 +0200
-Subject: [Buildroot] Unable to boot via initrd
-In-Reply-To: <1378248110591-50638.post@n4.nabble.com>
-References: <1378148801760-50517.post@n4.nabble.com> <52260A30.309@mind.be>
- <1378248110591-50638.post@n4.nabble.com>
-Message-ID: <20130904095003.05160a45@skate>
+Date: Wed, 4 Sep 2013 09:54:35 +0200
+Subject: [Buildroot] PowerPC Build Problem
+In-Reply-To: <52268480.1000606@rftechnology.com.au>
+References: <52268480.1000606@rftechnology.com.au>
+Message-ID: <20130904095435.2c1c78fc@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Matthieu,
+Dear Jason Rennie,
 
-On Tue, 3 Sep 2013 15:41:50 -0700 (PDT), Matthieu wrote:
+On Wed, 04 Sep 2013 10:53:20 +1000, Jason Rennie wrote:
 
-> I have checked also if the /root directory contains an init file. I
-> do not find the init file.
+> I apologise if the question is inappropriate for this list but I know 
+> everyone here is knowledgeable and you were very helpful last time
+> when I was having problems getting things to start and it turned out
+> to be an issue with the device tree.
+> 
+> I'm using buildroot to build for an APC8272ADS chip with Intel/Sharp 
+> Memory chips on board. That build of the kernel does appear to work 
+> correctly the relevant portion is
 
-I know it might have been confusing, but Arnout said the "root
-directory", not the "/root directory". The root directory is the root
-of the filesystem, i.e what becomes "/" on the target system, or what
-is output/target/ in the Buildroot output directory.
+[...]
+
+> But when I try building it with the latest buildroot (2013.08) and I 
+> configure the kernel (3.10.10) I get one of two things. If I don't 
+> include specific settings to physmap then I get a kernel panic when
+> it can't mount the root filesystem as follows
+
+From what you're telling us, it really looks like a kernel problem
+(either a configuration one, or a real problem in the kernel code).
+Since you're able to use a recent version of the kernel (3.10), it
+means that you can easily benefit from support from the kernel
+community. I would therefore recommend you to get in touch with the
+PowerPC kernel developers doing the support for this board/SoC and
+asking the question there.
 
 Best regards,
 
