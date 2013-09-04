@@ -1,9 +1,9 @@
 From: Clayton Shotwell <clshotwe@rockwellcollins.com>
-Date: Wed, 4 Sep 2013 18:09:40 -0500
-Subject: [Buildroot] [PATCH 01/17] libsepol: new package
+Date: Wed, 4 Sep 2013 18:09:41 -0500
+Subject: [Buildroot] [PATCH 02/17] libselinux: new package
 In-Reply-To: <1378336196-27403-1-git-send-email-clshotwe@rockwellcollins.com>
 References: <1378336196-27403-1-git-send-email-clshotwe@rockwellcollins.com>
-Message-ID: <1378336196-27403-2-git-send-email-clshotwe@rockwellcollins.com>
+Message-ID: <1378336196-27403-3-git-send-email-clshotwe@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,111 +13,182 @@ To: buildroot@busybox.net
 
 Signed-off-by: Clayton Shotwell <clshotwe@rockwellcollins.com>
 ---
- package/Config.in            |    4 ++
- package/libsepol/Config.in   |    7 ++++
- package/libsepol/libsepol.mk |   69 ++++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 80 insertions(+), 0 deletions(-)
- create mode 100644 package/libsepol/Config.in
- create mode 100644 package/libsepol/libsepol.mk
+ package/Config.in                |    1 +
+ package/libselinux/Config.in     |   22 +++++++
+ package/libselinux/libselinux.mk |  128 ++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 151 insertions(+), 0 deletions(-)
+ create mode 100644 package/libselinux/Config.in
+ create mode 100644 package/libselinux/libselinux.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index a94cb62..21f7271 100644
+index 21f7271..bf68827 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -896,6 +896,10 @@ endif
- source "package/xmlstarlet/Config.in"
+@@ -898,6 +898,7 @@ endmenu
+ 
+ menu "Security"
+ source "package/libsepol/Config.in"
++source "package/libselinux/Config.in"
  endmenu
  
-+menu "Security"
-+source "package/libsepol/Config.in"
-+endmenu
-+
  menu "System tools"
- source "package/acl/Config.in"
- source "package/attr/Config.in"
-diff --git a/package/libsepol/Config.in b/package/libsepol/Config.in
+diff --git a/package/libselinux/Config.in b/package/libselinux/Config.in
 new file mode 100644
-index 0000000..feb7f39
+index 0000000..4f3be64
 --- /dev/null
-+++ b/package/libsepol/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_LIBSEPOL
-+	bool "libsepol"
++++ b/package/libselinux/Config.in
+@@ -0,0 +1,22 @@
++config BR2_PACKAGE_LIBSELINUX
++	bool "libselinux"
++	depends on BR2_LINUX_KERNEL
 +	help
-+	  Libsepol is the binary policy manipulation library. It doesn't 
-+	  depend upon or use any of the other SELinux components.
++	  libselinux is the runtime SELinux library that provides interfaces 
++	  (e.g. library functions for the SELinux kernel APIs like getcon(), 
++	  other support functions like getseuserbyname()) to SELinux-aware 
++	  applications. libselinux may use the shared libsepol to manipulate 
++	  the binary policy if necessary (e.g. to downgrade the policy format 
++	  to an older version supported by the kernel) when loading policy.
 +	  
 +	  http://selinuxproject.org/page/Main_Page
-diff --git a/package/libsepol/libsepol.mk b/package/libsepol/libsepol.mk
++
++if BR2_PACKAGE_LIBSELINUX
++
++config BR2_PACKAGE_LIBSELINUX_PYTHON_BINDINGS
++	select BR2_PACKAGE_PYTHON
++	bool "python bindings"
++	help
++	  enable building python bindings
++
++endif
+diff --git a/package/libselinux/libselinux.mk b/package/libselinux/libselinux.mk
 new file mode 100644
-index 0000000..59ca4bb
+index 0000000..ed90186
 --- /dev/null
-+++ b/package/libsepol/libsepol.mk
-@@ -0,0 +1,69 @@
-+#############################################################
++++ b/package/libselinux/libselinux.mk
+@@ -0,0 +1,128 @@
++################################################################################
 +#
-+# libsepol
++# libselinux
 +#
-+#############################################################
-+LIBSEPOL_VERSION = 2.1.9
-+LIBSEPOL_SOURCE = libsepol-$(LIBSEPOL_VERSION).tar.gz
-+LIBSEPOL_SITE = http://userspace.selinuxproject.org/releases/20130423/
-+LIBSEPOL_LICENSE = LGPLv2.1
-+LIBSEPOL_LICENSE_FILES = COPYING
++################################################################################
++LIBSELINUX_VERSION = 2.1.13
++LIBSELINUX_SOURCE = libselinux-$(LIBSELINUX_VERSION).tar.gz
++LIBSELINUX_SITE = http://userspace.selinuxproject.org/releases/20130423/
++LIBSELINUX_LICENSE = PublicDomain
++LIBSELINUX_LICENSE_FILES = LICENSE
 +
 +##############################
 +# Target Section
 +##############################
-+LIBSEPOL_INSTALL_STAGING = YES
-+LIBSEPOL_INSTALL_TARGET = YES
++LIBSELINUX_DEPENDENCIES = libsepol pcre
 +
-+LIBSEPOL_MAKE_CMDS = $(TARGET_CONFIGURE_OPTS)
++LIBSELINUX_INSTALL_STAGING = YES
++LIBSELINUX_INSTALL_TARGET = YES
 +
-+define LIBSEPOL_BUILD_CMDS
-+	$(MAKE) -C $(@D) $(LIBSEPOL_MAKE_CMDS) DESTDIR=$(STAGING_DIR)
++LIBSELINUX_MAKE_CMDS = $(TARGET_CONFIGURE_OPTS) LDFLAGS="$(TARGET_LDFLAGS) -lpcre -lpthread"
++
++ifeq ($(BR2_PACKAGE_LIBSELINUX_PYTHON_BINDINGS),y)
++
++LIBSELINUX_DEPENDENCIES += python host-swig host-python
++LIBSELINUX_MAKE_CMDS += PYINC="-I$(STAGING_DIR)/usr/include/python$(PYTHON_VERSION_MAJOR)/" \
++	PYTHONLIBDIR="-L$(STAGING_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/" \
++	PYLIBVER="python$(PYTHON_VERSION_MAJOR)" \
++	SWIG_LIB="$(HOST_DIR)/usr/share/swig/$(SWIG_VERSION)/"
++
++define LIBSELINUX_PYTHON_BUILD_CMDS
++	$(MAKE) -C $(@D) $(LIBSELINUX_MAKE_CMDS) DESTDIR=$(STAGING_DIR) swigify
++	$(MAKE) -C $(@D) $(LIBSELINUX_MAKE_CMDS) DESTDIR=$(STAGING_DIR) pywrap
 +endef
 +
-+define LIBSEPOL_INSTALL_STAGING_CMDS
-+	$(MAKE) -C $(@D) install $(LIBSEPOL_MAKE_CMDS) DESTDIR=$(STAGING_DIR)
++define LIBSELINUX_PYTHON_INSTALL_STAGING_CMDS
++	$(MAKE) -C $(@D) install-pywrap $(LIBSELINUX_MAKE_CMDS) DESTDIR=$(STAGING_DIR)
 +endef
 +
-+define LIBSEPOL_INSTALL_TARGET_CMDS
-+	$(MAKE) -C $(@D) install $(LIBSEPOL_MAKE_CMDS) DESTDIR=$(TARGET_DIR)
++define LIBSELINUX_PYTHON_INSTALL_TARGET_CMDS
++	$(MAKE) -C $(@D) install-pywrap $(LIBSELINUX_MAKE_CMDS) DESTDIR=$(TARGET_DIR)
 +endef
 +
-+define LIBSEPOL_CLEAN_CMDS
++define LIBSELINUX_PYTHON_UNINSTALL_STAGING_CMDS
++	rm -rf $(STAGING_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages/selinux
++endef
++
++define LIBSELINUX_PYTHON_UNINSTALL_TARGET_CMDS
++	rm -rf $(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages/selinux
++endef
++
++endif
++
++define LIBSELINUX_BUILD_CMDS
++	$(MAKE) -C $(@D) $(LIBSELINUX_MAKE_CMDS) DESTDIR=$(STAGING_DIR) all
++	$(LIBSELINUX_PYTHON_BUILD_CMDS)
++endef
++
++define LIBSELINUX_INSTALL_STAGING_CMDS
++	$(MAKE) -C $(@D) install $(LIBSELINUX_MAKE_CMDS) DESTDIR=$(STAGING_DIR)
++	$(LIBSELINUX_PYTHON_INSTALL_STAGING_CMDS)
++endef
++
++define LIBSELINUX_INSTALL_TARGET_CMDS
++	$(MAKE) -C $(@D) install $(LIBSELINUX_MAKE_CMDS) DESTDIR=$(TARGET_DIR)
++	$(LIBSELINUX_PYTHON_INSTALL_TARGET_CMDS)
++endef
++
++define LIBSELINUX_CLEAN_CMDS
 +	$(MAKE) -C $(@D) clean
 +endef
 +
-+define LIBSEPOL_UNINSTALL_STAGING_CMDS
-+	rm -rf $(addprefix $(STAGING_DIR),/usr/include/sepol /usr/bin/chkcon \
-+		/usr/lib/pkgconfig/libsepol* /lib/libsepol* /usr/lib/libsepol*)
++LIBSELINUX_SBIN_FILES = avcstat compute_av compute_create compute_member \
++	compute_relabel compute_user getconlist getdefaultcon getenforce \
++	getfilecon getpidcon getsebool getseuser matchpathcon policyvers \
++	sefcontext_compile selinux_check_securetty_context selinuxenabled \
++	selinuxexeccon setenforce setfilecon togglesebool
++
++define LIBSELINUX_UNINSTALL_STAGING_CMDS
++	rm -rf $(addprefix $(STAGING_DIR), /usr/include/selinux \
++		$(addprefix /usr/sbin/, $(LIBSELINUX_SBIN_FILES)) \
++		/usr/lib/pkgconfig/libselinux* /usr/lib/libselinux* /lib/libselinux*)
 +	rm -f $(addprefix $(STAGING_DIR)/usr/man/man3/,$(notdir $(wildcard $(@D)/man/man3/*.3)))
-+	rm -f $(addprefix $(STAGING_DIR)/usr/man/man3/,$(notdir $(wildcard $(@D)/man/man8/*.8)))
++	rm -f $(addprefix $(STAGING_DIR)/usr/man/man5/,$(notdir $(wildcard $(@D)/man/man5/*.5)))
++	rm -f $(addprefix $(STAGING_DIR)/usr/man/man8/,$(notdir $(wildcard $(@D)/man/man8/*.8)))
++	$(LIBSELINUX_PYTHON_UNINSTALL_STAGING_CMDS)
 +endef
 +
-+define LIBSEPOL_UNINSTALL_TARGET_CMDS
-+	rm -rf $(addprefix $(TARGET_DIR),/usr/bin/chkcon /usr/lib/pkgconfig/libsepol* \
-+		/lib/libsepol* /usr/lib/libsepol*)
++define LIBSELINUX_UNINSTALL_TARGET_CMDS
++	rm -rf $(addprefix $(TARGET_DIR), /usr/include/selinux \
++		$(addprefix /usr/sbin/, $(LIBSELINUX_SBIN_FILES)) \
++		/usr/lib/pkgconfig/libselinux* /usr/lib/libselinux* /lib/libselinux*)
++	$(LIBSELINUX_PYTHON_UNINSTALL_TARGET_CMDS)
 +endef
 +
 +##############################
 +# Host Section
 +##############################
-+HOST_LIBSEPOL_MAKE_CMDS = $(HOST_CONFIGURE_OPTS)
++HOST_LIBSELINUX_DEPENDENCIES = host-python host-libsepol host-swig host-pcre
 +
-+define HOST_LIBSEPOL_BUILD_CMDS
-+	$(MAKE) -C $(@D) $(HOST_LIBSEPOL_MAKE_CMDS) DESTDIR=$(HOST_DIR)
++HOST_LIBSELINUX_MAKE_CMDS = $(HOST_CONFIGURE_OPTS) LDFLAGS="$(HOST_LDFLAGS) -lpcre -lpthread"\
++	PYINC="-I$(HOST_DIR)/usr/include/python$(PYTHON_VERSION_MAJOR)/" \
++	PYTHONLIBDIR="-L$(HOST_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/" \
++	PYLIBVER="python$(PYTHON_VERSION_MAJOR)" \
++	SWIG_LIB="$(HOST_DIR)/usr/share/swig/$(SWIG_VERSION)/" \
++
++define HOST_LIBSELINUX_BUILD_CMDS
++	$(MAKE) -C $(@D) $(HOST_LIBSELINUX_MAKE_CMDS) DESTDIR=$(HOST_DIR) all
++	$(MAKE) -C $(@D) $(HOST_LIBSELINUX_MAKE_CMDS) DESTDIR=$(HOST_DIR) swigify
++	$(MAKE) -C $(@D) $(HOST_LIBSELINUX_MAKE_CMDS) DESTDIR=$(HOST_DIR) pywrap
 +endef
 +
-+define HOST_LIBSEPOL_INSTALL_CMDS
-+	$(MAKE) -C $(@D) install $(HOST_LIBSEPOL_MAKE_CMDS) DESTDIR=$(HOST_DIR)
-+	mv $(HOST_DIR)/lib/libsepol.so.1 $(HOST_DIR)/usr/lib
-+	(cd $(HOST_DIR)/usr/lib; rm -f libsepol.so; ln -s libsepol.so.1 libsepol.so)
-+	-rmdir $(HOST_DIR)/lib
++define HOST_LIBSELINUX_INSTALL_CMDS
++	$(MAKE) -C $(@D) install install-pywrap $(HOST_LIBSELINUX_MAKE_CMDS) DESTDIR=$(HOST_DIR)
++	mv $(HOST_DIR)/lib/libselinux.so.1 $(HOST_DIR)/usr/lib
++	(cd $(HOST_DIR)/usr/lib; rm -f libselinux.so; ln -s libselinux.so.1 libselinux.so)
++	rmdir $(HOST_DIR)/lib
++	(if -f $(HOST_DIR)/sbin/matchpathcon; then \
++		mv $(HOST_DIR)/sbin/matchpathcon $(HOST_DIR)/usr/sbin/; \
++		rmdir $(HOST_DIR)/sbin; \
++	fi)
 +endef
 +
-+define HOST_LIBSEPOL_CLEAN_CMDS
++define HOST_LIBSELINUX_CLEAN_CMDS
 +	$(MAKE) -C $(@D) clean
 +endef
 +
