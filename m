@@ -1,43 +1,32 @@
 From: Axel Lin <axel.lin@ingics.com>
-Date: Wed, 04 Sep 2013 09:47:49 +0800
-Subject: [Buildroot] [PATCH] elf2flt: Allow enabling elf2flt support for
-	blackfin
-Message-ID: <1378259269.32360.1.camel@phoenix>
+Date: Wed, 4 Sep 2013 10:04:22 +0800
+Subject: [Buildroot] Why elf2flt is built *after* busybox
+In-Reply-To: <CAFRkauBmG1T5UHKaA5tRvGqPFw2eABrPrPSKeO4L-CCOTyfu=Q@mail.gmail.com>
+References: <1378225250.11000.4.camel@phoenix> <20130903193417.1a092fd5@skate>
+ <CAFRkauBmG1T5UHKaA5tRvGqPFw2eABrPrPSKeO4L-CCOTyfu=Q@mail.gmail.com>
+Message-ID: <CAFRkauChAKfxHt7Z5GwJ3pvpk5iEB9m=+5FuhckGWUQ6SR_4ZQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This allows using toolchain-buildroot to build BFLT executable for blackfin.
+> This time my question is: Is it normal elf2flt is built *after* busybox?
+> (This looks like a new founding to me)
+> I know elf2ft is broken.
+> I'm just not sure if the build order is one of the root cause to make
+> elf2flt broken.
+> I ask the question because I'm not familiar with buiildroot now, I even
+> don't know how to specify package build order.
+> (In this case, move elf2flt build ealier than busybox.)
+> So I expect someone can answer the question on mailing list.
+Hi,
+I test build for blackfin with BR2_PACKAGE_HOST_ELF2FLT=y.
+The first time build result in a ELF 32-bit LSB executable.
+(I think it is because busybox is built *before* elf2flt.)
+However, I build busybox again with "make busybox-rebuild" and
+then I got a BFLT executable.
+So now I do think the build order for elf2flt does matter.
 
-Signed-off-by: Axel Lin <axel.lin@ingics.com>
----
-build with elf2flt disabled:
-# BR2_PACKAGE_HOST_ELF2FLT is not set
-$ file output/target/bin/busybox
-output/target/bin/busybox: ELF 32-bit LSB executable, Analog Devices Blackfin, version 1 (SYSV), statically linked, not stripped
-
-build with elf2flt enabled:
-BR2_PACKAGE_HOST_ELF2FLT=y
-$ file output/target/bin/busybox 
-output/target/bin/busybox: BFLT executable - version 4 ram
-
-
- package/elf2flt/Config.in.host | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/package/elf2flt/Config.in.host b/package/elf2flt/Config.in.host
-index 31a6c7f..dad48d8 100644
---- a/package/elf2flt/Config.in.host
-+++ b/package/elf2flt/Config.in.host
-@@ -1,6 +1,6 @@
- config BR2_PACKAGE_HOST_ELF2FLT
- 	bool "Enable elf2flt support?"
--	depends on BR2_arm || BR2_sh || BR2_sparc
-+	depends on BR2_arm || BR2_bfin || BR2_sh || BR2_sparc
- 	help
- 	  uCLinux uses a Binary Flat format commonly known as BFLT. It
- 	  is a relatively simple and lightweight executable format
--- 
-1.8.1.2
+Regards,
+Axel
