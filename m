@@ -1,40 +1,59 @@
-From: Woody Wu <narkewoody@gmail.com>
-Date: Thu, 5 Sep 2013 17:11:26 +0800
-Subject: [Buildroot] libgtk2 build error (2013.08)
-Message-ID: <20130905091126.GC15735@zuhnb712.ap.bm.net>
+From: Markos Chandras <markos.chandras@gmail.com>
+Date: Thu, 5 Sep 2013 10:15:56 +0100
+Subject: [Buildroot] [pull request] webkit: Version bump to 1.11.5
+In-Reply-To: <20130905110143.55467e66@skate>
+References: <CAG2jQ8gLL4NdmHcFA=ELMbFfHY1oGPGaXkvSaPk66sesh-0+6w@mail.gmail.com>
+ <5227648E.7030304@mind.be> <20130905100121.4546cd3d@skate>
+ <CAG2jQ8g2SYnbc5eqvhMnw-5=qQXj4K2q_aW4r70MRExdYjmpjw@mail.gmail.com>
+ <20130905110143.55467e66@skate>
+Message-ID: <CAG2jQ8ixCL2XKNGD1hMb3SkhmuPmppHCnVAWqMsyJH=Gh=yV1A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi, list
+Hi Thomas,
 
-With 2013.08 buildroot, it can failed in building libgtk2. It seems it
-failed in the stage of building gtk tutorials.
+On 5 September 2013 10:01, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Dear Markos Chandras,
+>
+> On Thu, 5 Sep 2013 09:48:32 +0100, Markos Chandras wrote:
+>
+>> > A 1490 line patch is not so huge, I believe it should make it on the
+>> > list, and if not, Peter will validate it manually. I agree that the
+>> > overall patch should be sent to the list for review.
+>>
+>> Well, it's an upstream patch, so i don't think there is much to review
+>> there but I can send it to the list anyway.
+>
+> It's not much to review this upstream patch, but rather the overall
+> changes in webkit.mk and so on.
 
----
-make[4]: Entering directory `/home/woody/src/buildroot-2013.08/output/build/libgtk2-2.24.18/docs/tutorial'
-if test -w .; then \
-  (cd .; \
-   db2html gtk-tut.sgml; \
-   test -d html && rm -r html; \
-   mv gtk-tut html; \
-   mkdir html/images; \
-   cp images/*.png html/images); \
-fi
-Using catalogs: /etc/sgml/catalog
-Using stylesheet: /usr/share/sgml/docbook/utils-0.6.14/docbook-utils.dsl#html
-Working on: /home/woody/src/buildroot-2013.08/output/build/libgtk2-2.24.18/docs/tutorial/gtk-tut.sgml
-mv: cannot stat 'gtk-tut': No such file or directory
-mkdir: cannot create directory 'html/images': No such file or directory
-cp: target 'html/images' is not a directory
-make[4]: *** [html] Error 1
----
+Oh sorry I thought you were referring just to the MIPS patch.
 
-I remembered the samething not happened in 2013.05. And, I started my
-buildroot 2013.08 from a 2013.05 config file (make defconfig), is that a
-problem?
+>
+>> >>   Is there a reason why you cannot download the upstream patches with
+>> >> WEBKIT_PATCH ?
+>> >
+>> > When it's possible, it's indeed a good idea.
+>>
+>> Unfortunately, I can't (or I don't think I can) use that. I had to
+>> tweak the upstream patches a bit,
+>> for example delete the changes in the ChangeLog files since they don't apply.
+>> For other patches, I had to merge 2-3 upstream patches into a single
+>> one in order to fix the problem completely instead of providing
+>> separate patches with 1-2 line fixes.
+>
+> Ok. Since the patches are upstream, that's fine, since it means they
+> will be removed at some point in the future.
+>
+> Thanks,
+>
+
+Yes that's true.  I will send the patch to the list.
 
 -- 
-I can't go back to yesterday - because I was a different person then
+Regards,
+Markos Chandras
