@@ -1,172 +1,62 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 5 Sep 2013 09:44:46 +0200
-Subject: [Buildroot] [PATCH 01/17] libsepol: new package
-In-Reply-To: <1378336196-27403-2-git-send-email-clshotwe@rockwellcollins.com>
-References: <1378336196-27403-1-git-send-email-clshotwe@rockwellcollins.com>
- <1378336196-27403-2-git-send-email-clshotwe@rockwellcollins.com>
-Message-ID: <20130905094446.3f139253@skate>
+From: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+Date: Thu, 05 Sep 2013 09:50:49 +0200
+Subject: [Buildroot] [PATCH v2 1/1] Change package tarball compression
+ to xz whenever possible
+In-Reply-To: <CAAXf6LUo1hd7FdPQ-UurVAO7EAat1HcWQT5=AVF-OpSYrGX56Q@mail.gmail.com>
+References: <1375000629-19254-1-git-send-email-jerzy.grzegorek@trzebnica.net>
+ <1375000629-19254-2-git-send-email-jerzy.grzegorek@trzebnica.net>
+ <CAAXf6LUFnJff9asJy1JXp3dJOq8jFi78TbDpmZDWdMu3tYBq=Q@mail.gmail.com>
+ <51F64468.8080902@trzebnica.net>
+ <CAAXf6LVPX7SU6RsHTN_Eg8g3hRxvRT7=dDP-FO_fFo+CfznmQw@mail.gmail.com>
+ <CAAXf6LUo1hd7FdPQ-UurVAO7EAat1HcWQT5=AVF-OpSYrGX56Q@mail.gmail.com>
+Message-ID: <522837D9.3000806@trzebnica.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Clayton Shotwell,
+W dniu 05.09.2013 09:20, Thomas De Schampheleire pisze:
+> Hi,
+>
+> On Mon, Jul 29, 2013 at 2:13 PM, Thomas De Schampheleire
+> <patrickdepinguin+buildroot@gmail.com> wrote:
+>> On Mon, Jul 29, 2013 at 12:31 PM, Jerzy Grzegorek
+>> <jerzy.grzegorek@trzebnica.net> wrote:
+>>> You are right that if we will change the default assignment
+>>> of FOO_SOURCE from .tar.gz to .tar.xz it would require
+>>>
+>>> changing those packages that do not explicitly set
+>>> FOO_SOURCE, and removing the explicit .tar.xz
+>>> SOURCE lines that have been added in this and prior patches.
+>>> Lets assume that now we have x .tar.gz packages that do not
+>>> explicitly set FOO_SOURCE, and y .tar.xz packages.
+>>> In this case it would require changing x+y packages.
+>>> Lets assume that after some time z packages will have been changed from
+>>> .tar.gz to .tar.xz. Then it would require changing (x-z)+(y+z) = x+y
+>>> packages. So, IMHO it doesn't matter when we will (eventually)
+>>> change the default assignment. Right?
+>>>
+>> Well, if we assume that there will be more *new* packages in .tar.xz
+>> than in .tar.gz, y will increase, and the work to be done later will
+>> increase. The sooner .tar.xz becomes the default, the less new
+>> packages have to be changed afterwards.
+>>
+>> But, the difference may not be large enough, so we could also wait
+>> until there are much more .xz packages...
+>>
+>
+> As far as I'm concerned, the above patch is fine for now.
+> I'm not sure if some rebasing is needed because some versions might
+> have changed, though. Maybe something you could check and resend?
+>
+> Thanks,
+> Thomas
 
-On Wed, 4 Sep 2013 18:09:40 -0500, Clayton Shotwell wrote:
+Hi Thomas,
 
-> +menu "Security"
-> +source "package/libsepol/Config.in"
-> +endmenu
+Thanks for your feedback.
+Yes, I suppose that some rebasing will be needed, so I'll check and resend.
 
-You're introducing this new menu directly under "Target packages",
-while this package (and a few of the others you're adding) are
-libraries, so they should be under "Target packages -> Libraries".
-
-I have nothing against adding both "Target packages -> Security" and
-"Target packages -> Libraries -> Security", but that would require a
-quick look at the existing packages that would also fit in those new
-categories.
-
->  menu "System tools"
->  source "package/acl/Config.in"
->  source "package/attr/Config.in"
-> diff --git a/package/libsepol/Config.in b/package/libsepol/Config.in
-> new file mode 100644
-> index 0000000..feb7f39
-> --- /dev/null
-> +++ b/package/libsepol/Config.in
-> @@ -0,0 +1,7 @@
-> +config BR2_PACKAGE_LIBSEPOL
-> +	bool "libsepol"
-> +	help
-> +	  Libsepol is the binary policy manipulation library. It doesn't 
-> +	  depend upon or use any of the other SELinux components.
-> +	  
-> +	  http://selinuxproject.org/page/Main_Page
-> diff --git a/package/libsepol/libsepol.mk b/package/libsepol/libsepol.mk
-> new file mode 100644
-> index 0000000..59ca4bb
-> --- /dev/null
-> +++ b/package/libsepol/libsepol.mk
-> @@ -0,0 +1,69 @@
-> +#############################################################
-> +#
-> +# libsepol
-> +#
-> +#############################################################
-
-Nitpick: those ### lines should have 80 dashes, and there should be one
-empty line between this header and the first variables.
-
-> +LIBSEPOL_VERSION = 2.1.9
-> +LIBSEPOL_SOURCE = libsepol-$(LIBSEPOL_VERSION).tar.gz
-
-This last line is not needed, since it's the default.
-
-> +LIBSEPOL_SITE = http://userspace.selinuxproject.org/releases/20130423/
-> +LIBSEPOL_LICENSE = LGPLv2.1
-
-Is it really LGPLv2.1 or LGPLv2.1+ ? It's never said in the COPYING
-file, you'd have to look at the copyright headers without the source
-code.
-
-> +LIBSEPOL_LICENSE_FILES = COPYING
-> +
-> +##############################
-> +# Target Section
-> +##############################
-
-We generally don't put such delimiters.
-
-> +LIBSEPOL_INSTALL_STAGING = YES
-> +LIBSEPOL_INSTALL_TARGET = YES
-
-This last line is not needed since it's the default.
-
-> +LIBSEPOL_MAKE_CMDS = $(TARGET_CONFIGURE_OPTS)
-
-I believe this definition is useless, just use directly
-$(TARGET_CONFIGURE_OPTS) where appropriate.
-
-> +
-> +define LIBSEPOL_BUILD_CMDS
-> +	$(MAKE) -C $(@D) $(LIBSEPOL_MAKE_CMDS) DESTDIR=$(STAGING_DIR)
-
-DESTDIR is most likely not needed in the build step.
-
-> +endef
-> +
-> +define LIBSEPOL_INSTALL_STAGING_CMDS
-> +	$(MAKE) -C $(@D) install $(LIBSEPOL_MAKE_CMDS) DESTDIR=$(STAGING_DIR)
-> +endef
-> +
-> +define LIBSEPOL_INSTALL_TARGET_CMDS
-> +	$(MAKE) -C $(@D) install $(LIBSEPOL_MAKE_CMDS) DESTDIR=$(TARGET_DIR)
-> +endef
-> +
-> +define LIBSEPOL_CLEAN_CMDS
-> +	$(MAKE) -C $(@D) clean
-> +endef
-> +
-> +define LIBSEPOL_UNINSTALL_STAGING_CMDS
-> +	rm -rf $(addprefix $(STAGING_DIR),/usr/include/sepol /usr/bin/chkcon \
-> +		/usr/lib/pkgconfig/libsepol* /lib/libsepol* /usr/lib/libsepol*)
-> +	rm -f $(addprefix $(STAGING_DIR)/usr/man/man3/,$(notdir $(wildcard $(@D)/man/man3/*.3)))
-> +	rm -f $(addprefix $(STAGING_DIR)/usr/man/man3/,$(notdir $(wildcard $(@D)/man/man8/*.8)))
-> +endef
-> +
-> +define LIBSEPOL_UNINSTALL_TARGET_CMDS
-> +	rm -rf $(addprefix $(TARGET_DIR),/usr/bin/chkcon /usr/lib/pkgconfig/libsepol* \
-> +		/lib/libsepol* /usr/lib/libsepol*)
-> +endef
-
-Don't bother implementing the uninstall commands, we are phasing them
-out.
-
-> +
-> +##############################
-> +# Host Section
-> +##############################
-
-Header unneeded.
-
-> +HOST_LIBSEPOL_MAKE_CMDS = $(HOST_CONFIGURE_OPTS)
-
-Just use $(HOST_CONFIGURE_OPTS) where needed.
-
-> +
-> +define HOST_LIBSEPOL_BUILD_CMDS
-> +	$(MAKE) -C $(@D) $(HOST_LIBSEPOL_MAKE_CMDS) DESTDIR=$(HOST_DIR)
-
-DESTDIR generally not needed in the build step.
-
-> +endef
-> +
-> +define HOST_LIBSEPOL_INSTALL_CMDS
-> +	$(MAKE) -C $(@D) install $(HOST_LIBSEPOL_MAKE_CMDS) DESTDIR=$(HOST_DIR)
-> +	mv $(HOST_DIR)/lib/libsepol.so.1 $(HOST_DIR)/usr/lib
-> +	(cd $(HOST_DIR)/usr/lib; rm -f libsepol.so; ln -s libsepol.so.1 libsepol.so)
-> +	-rmdir $(HOST_DIR)/lib
-
-So I guess the problem here is that the library gets installed in /lib
-while you wanted it in /usr/lib. It's not very pretty but maybe you can
-cheat by passing DESTDIR=$(HOST_DIR)/usr.
-
-> +endef
-> +
-> +define HOST_LIBSEPOL_CLEAN_CMDS
-> +	$(MAKE) -C $(@D) clean
-> +endef
-> +
-> +$(eval $(generic-package))
-> +$(eval $(host-generic-package))
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Regards,
+Jerzy
