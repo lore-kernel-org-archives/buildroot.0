@@ -1,37 +1,38 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 5 Sep 2013 10:04:59 +0200
-Subject: [Buildroot] [PATCH] apply-patches.sh: detect missing patches
-In-Reply-To: <CAAXf6LV9HPWdzqV_F5zQ+aABtVxZGRRkhDszF2Qx8vyXMb+PhA@mail.gmail.com>
-References: <20130813160017.GA2590@harvey.netwinder.org>
- <CAAXf6LXBHm7nG__780PqUaO+v9+4j2KON7UO0dw4Ej2qC3=XGg@mail.gmail.com>
- <CAAXf6LV9HPWdzqV_F5zQ+aABtVxZGRRkhDszF2Qx8vyXMb+PhA@mail.gmail.com>
-Message-ID: <20130905100459.13173009@skate>
+From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
+Date: Thu, 5 Sep 2013 10:06:56 +0200
+Subject: [Buildroot] [PATCH] trivial: remove odd references to
+	'buildroot2'
+In-Reply-To: <20130905093405.206e144a@skate>
+References: <ed18f0f200351fcbb737.1378365135@argentina>
+ <20130905093405.206e144a@skate>
+Message-ID: <CAAXf6LWmPRwXz0LRgo2VcR8w0xbVF+Hzp-jTy_g2k4BJ_RkYEQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas De Schampheleire,
+On Thu, Sep 5, 2013 at 9:34 AM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Dear Thomas De Schampheleire,
+>
+> On Thu, 05 Sep 2013 09:12:15 +0200, Thomas De Schampheleire wrote:
+>> In the past there may have been a very good reason to refer to 'buildroot2', but
+>> these days it's just odd.
+>>
+>> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+>
+> Definitely-acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+>
 
-On Thu, 5 Sep 2013 09:03:33 +0200, Thomas De Schampheleire wrote:
+Thanks!
 
-> > Although I agree with the concept of checking for existence, I'm not
-> > sure about the action to take.
-> > Earlier in apply-patches.sh, if a patch is in an unsupported format,
-> > it is simply skipped (and a message printed). I think the action in
-> > that case should line up with the nonexisting patch case, so either
-> > give a warning and continue, or an error and stop.
-> 
-> Any input from others?
+> Next step is obviously to rename all config options from BR2_ to BR_ :-)
+>
 
-My general feeling is that when something goes wrong or looks wrong, we
-should abort with an error, and not try to continue with something
-more-or-less broken/incorrect.
+Funny that you bring this up, I hadn't even made the connection!
+So, does kconfig have any limit on the number of items allowed in the
+legacy menu? :-D
 
+Best regards,
 Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
