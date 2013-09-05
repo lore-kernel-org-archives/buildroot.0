@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 5 Sep 2013 09:51:29 +0200
-Subject: [Buildroot] [PATCH 02/17] libselinux: new package
-In-Reply-To: <1378336196-27403-3-git-send-email-clshotwe@rockwellcollins.com>
+Date: Thu, 5 Sep 2013 09:57:49 +0200
+Subject: [Buildroot] [PATCH 03/17] ustr: new package
+In-Reply-To: <1378336196-27403-4-git-send-email-clshotwe@rockwellcollins.com>
 References: <1378336196-27403-1-git-send-email-clshotwe@rockwellcollins.com>
- <1378336196-27403-3-git-send-email-clshotwe@rockwellcollins.com>
-Message-ID: <20130905095129.7396d46c@skate>
+ <1378336196-27403-4-git-send-email-clshotwe@rockwellcollins.com>
+Message-ID: <20130905095749.25465b8e@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,83 +13,42 @@ To: buildroot@busybox.net
 
 Dear Clayton Shotwell,
 
-On Wed, 4 Sep 2013 18:09:41 -0500, Clayton Shotwell wrote:
+On Wed, 4 Sep 2013 18:09:42 -0500, Clayton Shotwell wrote:
 
->  menu "Security"
->  source "package/libsepol/Config.in"
-> +source "package/libselinux/Config.in"
->  endmenu
+> diff --git a/package/ustr/ustr-1.0.4-crossCompileModifications.patch b/package/ustr/ustr-1.0.4-crossCompileModifications.patch
 
-Same comment as previous package: libselinux is a library, so it should
-be under Target packages -> Libraries.
+Patch names should not contain the version number, but instead a number
+that allows patches to be applied in the right order. See
+http://buildroot.org/downloads/manual/manual.html#patch-policy.
 
->  
->  menu "System tools"
-> diff --git a/package/libselinux/Config.in b/package/libselinux/Config.in
+Also, while it is not written anywhere explicitly, the patch filename
+should be all in lower case.
+
 > new file mode 100644
-> index 0000000..4f3be64
-> --- /dev/null
-> +++ b/package/libselinux/Config.in
-> @@ -0,0 +1,22 @@
-> +config BR2_PACKAGE_LIBSELINUX
-> +	bool "libselinux"
-> +	depends on BR2_LINUX_KERNEL
+> index 0000000..aad9b81
 
-Hum, can you clarify why a dependency on the kernel is needed here?
+The patch should contain a description + Signed-off-by line. See
+http://buildroot.org/downloads/manual/manual.html#_format_and_licensing_of_the_package_patches.
 
-> +	help
-> +	  libselinux is the runtime SELinux library that provides interfaces 
-> +	  (e.g. library functions for the SELinux kernel APIs like getcon(), 
-> +	  other support functions like getseuserbyname()) to SELinux-aware 
-> +	  applications. libselinux may use the shared libsepol to manipulate 
-> +	  the binary policy if necessary (e.g. to downgrade the policy format 
-> +	  to an older version supported by the kernel) when loading policy.
-> +	  
-> +	  http://selinuxproject.org/page/Main_Page
-> +
-> +if BR2_PACKAGE_LIBSELINUX
-> +
-> +config BR2_PACKAGE_LIBSELINUX_PYTHON_BINDINGS
-> +	select BR2_PACKAGE_PYTHON
-
-Here I am not sure whether we should have:
-
- (1) An option that selects BR2_PACKAGE_PYTHON (as you did)
-
- (2) An option that depends on BR2_PACKAGE_PYTHON
-
- (3) No option at all, and have the package automatically enable Python
-     bindings when BR2_PACKAGE_PYTHON is enabled.
-
-What do the others think?
-
-> +	bool "python bindings"
-> +	help
-> +	  enable building python bindings
-> +
-> +endif
-> diff --git a/package/libselinux/libselinux.mk b/package/libselinux/libselinux.mk
+> diff --git a/package/ustr/ustr.mk b/package/ustr/ustr.mk
 > new file mode 100644
-> index 0000000..ed90186
+> index 0000000..46b8bb4
 > --- /dev/null
-> +++ b/package/libselinux/libselinux.mk
-> @@ -0,0 +1,128 @@
-> +################################################################################
+> +++ b/package/ustr/ustr.mk
+> @@ -0,0 +1,68 @@
+> +#############################################################
 > +#
-> +# libselinux
+> +# ustr
 > +#
-> +################################################################################
+> +#############################################################
 
-One empty line between header and variables.
+80 dashes, one empty line between header and variables.
 
-> +LIBSELINUX_VERSION = 2.1.13
-> +LIBSELINUX_SOURCE = libselinux-$(LIBSELINUX_VERSION).tar.gz
-
-This line is not needed, that's the default value.
-
-> +LIBSELINUX_SITE = http://userspace.selinuxproject.org/releases/20130423/
-> +LIBSELINUX_LICENSE = PublicDomain
-> +LIBSELINUX_LICENSE_FILES = LICENSE
+> +USTR_VERSION = 1.0.4
+> +USTR_SOURCE = ustr-$(USTR_VERSION).tar.bz2
+> +USTR_SITE = http://www.and.org/ustr/$(USTR_VERSION)/
+> +USTR_LICENSE = BSD-2c MIT LGPLv2+
+> +USTR_LICENSE_FILES = LICENCE LICENSE_BSD LICENSE_LGPL LICENSE_MIT
 > +
 > +##############################
 > +# Target Section
@@ -97,151 +56,73 @@ This line is not needed, that's the default value.
 
 Comment not needed.
 
-> +LIBSELINUX_DEPENDENCIES = libsepol pcre
+> +USTR_INSTALL_STAGING = YES
+> +USTR_INSTALL_TARGET = YES
 
-Then you should select BR2_PACKAGE_LIBSEPOL and BR2_PACKAGE_PCRE in
-your Config.in file.
-
-> +
-> +LIBSELINUX_INSTALL_STAGING = YES
-> +LIBSELINUX_INSTALL_TARGET = YES
-
-This last line is not needed, that's the default.
+Last line not needed.
 
 > +
-> +LIBSELINUX_MAKE_CMDS = $(TARGET_CONFIGURE_OPTS) LDFLAGS="$(TARGET_LDFLAGS) -lpcre -lpthread"
+> +USTR_MAKE_CMDS = $(TARGET_CONFIGURE_OPTS)
 
-This could use a little bit of wrapping:
+Use $(TARGET_CONFIGURE_OPTS) directly.
 
-LIBSELINUX_MAKE_CMDS = \
-	$(TARGET_CONFIGURE_OPTS) \
-	LDFLAGS="$(TARGET_LDFLAGS) -lpcre -lpthread"
-
-BTW, I'm not sure _MAKE_CMDS is really the appropriate suffix, maybe
-_MAKE_OPTS ?
-
-> +ifeq ($(BR2_PACKAGE_LIBSELINUX_PYTHON_BINDINGS),y)
 > +
-> +LIBSELINUX_DEPENDENCIES += python host-swig host-python
-> +LIBSELINUX_MAKE_CMDS += PYINC="-I$(STAGING_DIR)/usr/include/python$(PYTHON_VERSION_MAJOR)/" \
-> +	PYTHONLIBDIR="-L$(STAGING_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/" \
-> +	PYLIBVER="python$(PYTHON_VERSION_MAJOR)" \
-> +	SWIG_LIB="$(HOST_DIR)/usr/share/swig/$(SWIG_VERSION)/"
-> +
-> +define LIBSELINUX_PYTHON_BUILD_CMDS
-> +	$(MAKE) -C $(@D) $(LIBSELINUX_MAKE_CMDS) DESTDIR=$(STAGING_DIR) swigify
-> +	$(MAKE) -C $(@D) $(LIBSELINUX_MAKE_CMDS) DESTDIR=$(STAGING_DIR) pywrap
+> +define USTR_BUILD_CMDS
+> +	$(MAKE) -C $(@D) all $(USTR_MAKE_CMDS) DESTDIR=$(STAGING_DIR)
+> +	$(MAKE) -C $(@D) all-shared $(USTR_MAKE_CMDS) DESTDIR=$(STAGING_DIR)
 
-DESTDIR really needed at build time ?
+DESTDIR typically not needed when building. Also, you can probably
+combine this in one line:
+
+	$(MAKE) -C $(@D) \
+		$(USTR_MAKE_CMDS) all all-shared
+
+However, there's one thing we've forgotten: we try to support static
+library builds in Buildroot, when BR2_PREFER_STATIC_LIB is enabled. So
+when it's possible, it'd be great if the packages could behave nicely
+when BR2_PREFER_STATIC_LIB=y (by disabling the build of shared
+libraries). If it's not possible or too complicated, we can add a
+depends on !BR2_PREFER_STATIC_LIB.
 
 > +endef
 > +
-> +define LIBSELINUX_PYTHON_INSTALL_STAGING_CMDS
-> +	$(MAKE) -C $(@D) install-pywrap $(LIBSELINUX_MAKE_CMDS) DESTDIR=$(STAGING_DIR)
+> +define USTR_INSTALL_STAGING_CMDS
+> +	$(MAKE) -C $(@D) install $(USTR_MAKE_CMDS) DESTDIR=$(STAGING_DIR)
 > +endef
 > +
-> +define LIBSELINUX_PYTHON_INSTALL_TARGET_CMDS
-> +	$(MAKE) -C $(@D) install-pywrap $(LIBSELINUX_MAKE_CMDS) DESTDIR=$(TARGET_DIR)
+> +define USTR_INSTALL_TARGET_CMDS
+> +	$(MAKE) -C $(@D) install $(USTR_MAKE_CMDS) DESTDIR=$(TARGET_DIR)
 > +endef
 > +
-> +define LIBSELINUX_PYTHON_UNINSTALL_STAGING_CMDS
-> +	rm -rf $(STAGING_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages/selinux
-> +endef
-> +
-> +define LIBSELINUX_PYTHON_UNINSTALL_TARGET_CMDS
-> +	rm -rf $(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages/selinux
-> +endef
-
-You can get rid of install commands.
-
-> +
-> +endif
-> +
-> +define LIBSELINUX_BUILD_CMDS
-> +	$(MAKE) -C $(@D) $(LIBSELINUX_MAKE_CMDS) DESTDIR=$(STAGING_DIR) all
-
-DESTDIR unneeded at build time.
-
-> +	$(LIBSELINUX_PYTHON_BUILD_CMDS)
-> +endef
-> +
-> +define LIBSELINUX_INSTALL_STAGING_CMDS
-> +	$(MAKE) -C $(@D) install $(LIBSELINUX_MAKE_CMDS) DESTDIR=$(STAGING_DIR)
-> +	$(LIBSELINUX_PYTHON_INSTALL_STAGING_CMDS)
-> +endef
-> +
-> +define LIBSELINUX_INSTALL_TARGET_CMDS
-> +	$(MAKE) -C $(@D) install $(LIBSELINUX_MAKE_CMDS) DESTDIR=$(TARGET_DIR)
-> +	$(LIBSELINUX_PYTHON_INSTALL_TARGET_CMDS)
-> +endef
-> +
-> +define LIBSELINUX_CLEAN_CMDS
+> +define USTR_CLEAN_CMDS
 > +	$(MAKE) -C $(@D) clean
 > +endef
 > +
-> +LIBSELINUX_SBIN_FILES = avcstat compute_av compute_create compute_member \
-> +	compute_relabel compute_user getconlist getdefaultcon getenforce \
-> +	getfilecon getpidcon getsebool getseuser matchpathcon policyvers \
-> +	sefcontext_compile selinux_check_securetty_context selinuxenabled \
-> +	selinuxexeccon setenforce setfilecon togglesebool
-> +
-> +define LIBSELINUX_UNINSTALL_STAGING_CMDS
-> +	rm -rf $(addprefix $(STAGING_DIR), /usr/include/selinux \
-> +		$(addprefix /usr/sbin/, $(LIBSELINUX_SBIN_FILES)) \
-> +		/usr/lib/pkgconfig/libselinux* /usr/lib/libselinux* /lib/libselinux*)
-> +	rm -f $(addprefix $(STAGING_DIR)/usr/man/man3/,$(notdir $(wildcard $(@D)/man/man3/*.3)))
-> +	rm -f $(addprefix $(STAGING_DIR)/usr/man/man5/,$(notdir $(wildcard $(@D)/man/man5/*.5)))
-> +	rm -f $(addprefix $(STAGING_DIR)/usr/man/man8/,$(notdir $(wildcard $(@D)/man/man8/*.8)))
-> +	$(LIBSELINUX_PYTHON_UNINSTALL_STAGING_CMDS)
+> +define USTR_UNINSTALL_STAGING_CMDS
+> +	rm -rf $(addprefix $(TARGET_DIR),/usr/lib/libustr* /usr/lib/pkgconfig/ustr* \
+> +		/usr/bin/ustr* /usr/include/ustr* /usr/include/ \
+> +		/usr/share/doc/ustr-$(USTR_VERSION) /usr/share/ustr-$(USTR_VERSION) \
+> +		/usr/share/man/man1/ustr* /usr/share/man/man3/ustr*)
 > +endef
 > +
-> +define LIBSELINUX_UNINSTALL_TARGET_CMDS
-> +	rm -rf $(addprefix $(TARGET_DIR), /usr/include/selinux \
-> +		$(addprefix /usr/sbin/, $(LIBSELINUX_SBIN_FILES)) \
-> +		/usr/lib/pkgconfig/libselinux* /usr/lib/libselinux* /lib/libselinux*)
-> +	$(LIBSELINUX_PYTHON_UNINSTALL_TARGET_CMDS)
+> +define USTR_UNINSTALL_TARGET_CMDS
+> +	rm -rf $(addprefix $(TARGET_DIR),/usr/lib/libustr* /usr/lib/pkgconfig/ustr* \
+> +		/usr/bin/ustr* /usr/include/ustr*)
 > +endef
 
-Yeah, just drop the uninstall commands.
+Drop the uninstall comands.
 
 > +##############################
 > +# Host Section
 > +##############################
-
-Drop this header.
-
-> +HOST_LIBSELINUX_DEPENDENCIES = host-python host-libsepol host-swig host-pcre
-
-So for the host variant, the Python bindings are always enabled? Is
-there a reason for that?
-
+> +HOST_USTR_MAKE_CMDS = $(HOST_CONFIGURE_OPTS)
 > +
-> +HOST_LIBSELINUX_MAKE_CMDS = $(HOST_CONFIGURE_OPTS) LDFLAGS="$(HOST_LDFLAGS) -lpcre -lpthread"\
-> +	PYINC="-I$(HOST_DIR)/usr/include/python$(PYTHON_VERSION_MAJOR)/" \
-> +	PYTHONLIBDIR="-L$(HOST_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/" \
-> +	PYLIBVER="python$(PYTHON_VERSION_MAJOR)" \
-> +	SWIG_LIB="$(HOST_DIR)/usr/share/swig/$(SWIG_VERSION)/" \
-> +
-> +define HOST_LIBSELINUX_BUILD_CMDS
-> +	$(MAKE) -C $(@D) $(HOST_LIBSELINUX_MAKE_CMDS) DESTDIR=$(HOST_DIR) all
-> +	$(MAKE) -C $(@D) $(HOST_LIBSELINUX_MAKE_CMDS) DESTDIR=$(HOST_DIR) swigify
-> +	$(MAKE) -C $(@D) $(HOST_LIBSELINUX_MAKE_CMDS) DESTDIR=$(HOST_DIR) pywrap
-
-DESTDIR usually not needed at build time.
-
+> +define HOST_USTR_BUILD_CMDS
+> +	$(MAKE) -C $(@D) all $(HOST_USTR_MAKE_CMDS) DESTDIR=$(HOST_DIR)
+> +	$(MAKE) -C $(@D) all-shared $(HOST_USTR_MAKE_CMDS) DESTDIR=$(HOST_DIR)
 > +endef
-> +
-> +define HOST_LIBSELINUX_INSTALL_CMDS
-> +	$(MAKE) -C $(@D) install install-pywrap $(HOST_LIBSELINUX_MAKE_CMDS) DESTDIR=$(HOST_DIR)
-> +	mv $(HOST_DIR)/lib/libselinux.so.1 $(HOST_DIR)/usr/lib
-> +	(cd $(HOST_DIR)/usr/lib; rm -f libselinux.so; ln -s libselinux.so.1 libselinux.so)
-> +	rmdir $(HOST_DIR)/lib
-> +	(if -f $(HOST_DIR)/sbin/matchpathcon; then \
-> +		mv $(HOST_DIR)/sbin/matchpathcon $(HOST_DIR)/usr/sbin/; \
-> +		rmdir $(HOST_DIR)/sbin; \
-> +	fi)
 
-Same suggestion as above: what if you pass DESTDIR=$(HOST_DIR)/usr ?
+Same comments as above, for everything :)
 
 Thanks!
 
