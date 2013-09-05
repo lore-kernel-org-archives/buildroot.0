@@ -1,49 +1,48 @@
-From: Woody Wu <narkewoody@gmail.com>
-Date: Thu, 5 Sep 2013 16:19:19 +0800
-Subject: [Buildroot] GTK+ for framebuffer?
-In-Reply-To: <20130905091054.51fd4ce0@skate>
-References: <20130903100905.GA324@zuhnb712.ap.bm.net>
- <20130903133145.370bb2d4@skate>
- <20130904024019.GA875@zuhnb712.ap.bm.net>
- <20130904093510.031f559b@skate>
- <20130905060235.GA15735@zuhnb712.ap.bm.net>
- <20130905091054.51fd4ce0@skate>
-Message-ID: <20130905081919.GB15735@zuhnb712.ap.bm.net>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 5 Sep 2013 10:28:36 +0200
+Subject: [Buildroot] More patches to apply
+In-Reply-To: <CAAXf6LXw9gPrdwG+g81XH15V3MXe4HBj5timyVQPPS3k2p43ow@mail.gmail.com>
+References: <CAAXf6LXw9gPrdwG+g81XH15V3MXe4HBj5timyVQPPS3k2p43ow@mail.gmail.com>
+Message-ID: <20130905102836.11cc9d4d@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Sep 05, 2013 at 09:10:54AM +0200, Thomas Petazzoni wrote:
-> Dear Woody Wu,
-> 
-> On Thu, 5 Sep 2013 14:02:35 +0800, Woody Wu wrote:
-> 
-> > Many thanks for your information.  Now I feel more clear that I should
-> > go Gtk/X.org.  On the other side, I have no experience on running x.org
-> > on an embeded system. What things in buildroot I should enable to build
-> > a minimal system that can at lest run the gtk demons on TinyX? My
-> > display is just framebuffer. I understand, the question may sounds a
-> > little stupid.  Looking forward for your help.
-> 
-> I believe to get things started enable BR2_PACKAGE_XORG7, enable
-> BR2_PACKAGE_XSERVER_XORG_SERVER, keep the KDrive/Tiny-X server type,
-> and enable BR2_PACKAGE_XSERVER_XORG_SERVER_KDRIVE_EVDEV.
-> 
-> Then, you will have Xfbdev on your target, which is the X server. It
-> has a bunch of options that allows you to specify which evdev device to
-> use as a mouse and as a keyboard, if you have such input devices on
-> your system.
-> 
+Dear Thomas De Schampheleire,
 
-Okay! I will try :-)
+On Thu, 5 Sep 2013 10:04:46 +0200, Thomas De Schampheleire wrote:
 
-> -- 
-> Thomas Petazzoni, Free Electrons
-> Kernel, drivers, real-time and embedded Linux
-> development, consulting, training and support.
-> http://free-electrons.com
+> I think following patches can be applied now:
+> 
+> http://patchwork.ozlabs.org/patch/272175/
+> (build reprod. in make 3.82: I think there is consensus on the part
+> the patch addresses; how we will continue to check for missing
+> dependencies is not yet clear but this does not block the patch from
+> being applied)
+> 
+> http://patchwork.ozlabs.org/patch/264231/
+> http://patchwork.ozlabs.org/patch/264232/
+> suitable-extractor + host-xzcat
+> 
+> http://patchwork.ozlabs.org/patch/243427/
+> plain URL in FOO_PATCH
+> 
+> http://patchwork.ozlabs.org/patch/272711/
+> flex and bison dependencies in perf
 
+Agreed for all of those patches.
+
+> Following patches in patchwork are superseded:
+> http://patchwork.ozlabs.org/patch/271170/
+> http://patchwork.ozlabs.org/patch/272589/
+
+Marked as such, thanks!
+
+Thomas
 -- 
-I can't go back to yesterday - because I was a different person then
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
