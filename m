@@ -1,44 +1,40 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 5 Sep 2013 09:10:54 +0200
-Subject: [Buildroot] GTK+ for framebuffer?
-In-Reply-To: <20130905060235.GA15735@zuhnb712.ap.bm.net>
-References: <20130903100905.GA324@zuhnb712.ap.bm.net>
- <20130903133145.370bb2d4@skate>
- <20130904024019.GA875@zuhnb712.ap.bm.net>
- <20130904093510.031f559b@skate>
- <20130905060235.GA15735@zuhnb712.ap.bm.net>
-Message-ID: <20130905091054.51fd4ce0@skate>
+From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
+Date: Thu, 05 Sep 2013 09:12:15 +0200
+Subject: [Buildroot] [PATCH] trivial: remove odd references to 'buildroot2'
+Message-ID: <ed18f0f200351fcbb737.1378365135@argentina>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Woody Wu,
+In the past there may have been a very good reason to refer to 'buildroot2', but
+these days it's just odd.
 
-On Thu, 5 Sep 2013 14:02:35 +0800, Woody Wu wrote:
+Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
-> Many thanks for your information.  Now I feel more clear that I should
-> go Gtk/X.org.  On the other side, I have no experience on running x.org
-> on an embeded system. What things in buildroot I should enable to build
-> a minimal system that can at lest run the gtk demons on TinyX? My
-> display is just framebuffer. I understand, the question may sounds a
-> little stupid.  Looking forward for your help.
+---
 
-I believe to get things started enable BR2_PACKAGE_XORG7, enable
-BR2_PACKAGE_XSERVER_XORG_SERVER, keep the KDrive/Tiny-X server type,
-and enable BR2_PACKAGE_XSERVER_XORG_SERVER_KDRIVE_EVDEV.
-
-Then, you will have Xfbdev on your target, which is the X server. It
-has a bunch of options that allows you to specify which evdev device to
-use as a mouse and as a keyboard, if you have such input devices on
-your system.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+diff --git a/Makefile b/Makefile
+--- a/Makefile
++++ b/Makefile
+@@ -1,4 +1,4 @@
+-# Makefile for buildroot2
++# Makefile for buildroot
+ #
+ # Copyright (C) 1999-2005 by Erik Andersen <andersen@codepoet.org>
+ # Copyright (C) 2006-2013 by the Buildroot developers <buildroot@uclibc.org>
+diff --git a/support/kconfig/README.buildroot2 b/support/kconfig/README.buildroot
+rename from support/kconfig/README.buildroot2
+rename to support/kconfig/README.buildroot
+--- a/support/kconfig/README.buildroot2
++++ b/support/kconfig/README.buildroot
+@@ -4,7 +4,7 @@ to suit Buildroot.
+ To update:
+ 	cp -r /usr/src/linux/scripts/kconfig support/kconfig.new
+ 	cd support/config.new
+-	cp -a ../kconfig/patches ../kconfig/README.buildroot2 .
++	cp -a ../kconfig/patches ../kconfig/README.buildroot .
+ 	quilt push -a
+ 	# Fix any conflict
+ 	cd ..
