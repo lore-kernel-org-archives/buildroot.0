@@ -1,55 +1,40 @@
 From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Thu, 5 Sep 2013 09:20:57 +0200
-Subject: [Buildroot] [PATCH v2 1/1] Change package tarball compression
- to xz whenever possible
-In-Reply-To: <CAAXf6LVPX7SU6RsHTN_Eg8g3hRxvRT7=dDP-FO_fFo+CfznmQw@mail.gmail.com>
-References: <1375000629-19254-1-git-send-email-jerzy.grzegorek@trzebnica.net>
- <1375000629-19254-2-git-send-email-jerzy.grzegorek@trzebnica.net>
- <CAAXf6LUFnJff9asJy1JXp3dJOq8jFi78TbDpmZDWdMu3tYBq=Q@mail.gmail.com>
- <51F64468.8080902@trzebnica.net>
- <CAAXf6LVPX7SU6RsHTN_Eg8g3hRxvRT7=dDP-FO_fFo+CfznmQw@mail.gmail.com>
-Message-ID: <CAAXf6LUo1hd7FdPQ-UurVAO7EAat1HcWQT5=AVF-OpSYrGX56Q@mail.gmail.com>
+Date: Thu, 5 Sep 2013 09:24:05 +0200
+Subject: [Buildroot] [PATCH] system: only set the root password if it's
+ not empty
+In-Reply-To: <20130728150626.5b57ffae@skate>
+References: <20130702085224.GA25620@berrier.lan>
+ <20130702173111.GA3221@free.fr> <20130703044618.GA4406@berrier.lan>
+ <CAAXf6LVNOFmX9HXAMEJH=mbRkgmhfAxqqiL8e+Qkrsw_jxU9Eg@mail.gmail.com>
+ <20130728150626.5b57ffae@skate>
+Message-ID: <CAAXf6LXS-Lf--tTUfwcQVRS4KRi8xhYsQeTwxW8uWmM2NDOG7w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Hi Wade,
 
-On Mon, Jul 29, 2013 at 2:13 PM, Thomas De Schampheleire
-<patrickdepinguin+buildroot@gmail.com> wrote:
-> On Mon, Jul 29, 2013 at 12:31 PM, Jerzy Grzegorek
-> <jerzy.grzegorek@trzebnica.net> wrote:
-
->> You are right that if we will change the default assignment
->> of FOO_SOURCE from .tar.gz to .tar.xz it would require
->>
->> changing those packages that do not explicitly set
->> FOO_SOURCE, and removing the explicit .tar.xz
->> SOURCE lines that have been added in this and prior patches.
->> Lets assume that now we have x .tar.gz packages that do not
->> explicitly set FOO_SOURCE, and y .tar.xz packages.
->> In this case it would require changing x+y packages.
->> Lets assume that after some time z packages will have been changed from
->> .tar.gz to .tar.xz. Then it would require changing (x-z)+(y+z) = x+y
->> packages. So, IMHO it doesn't matter when we will (eventually)
->> change the default assignment. Right?
->>
+On Sun, Jul 28, 2013 at 3:06 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Dear Thomas De Schampheleire,
 >
-> Well, if we assume that there will be more *new* packages in .tar.xz
-> than in .tar.gz, y will increase, and the work to be done later will
-> increase. The sooner .tar.xz becomes the default, the less new
-> packages have to be changed afterwards.
+> On Sun, 28 Jul 2013 10:40:15 +0200, Thomas De Schampheleire wrote:
 >
-> But, the difference may not be large enough, so we could also wait
-> until there are much more .xz packages...
+>> Should we create a separate host-mkpasswd package based on the whois
+>> sources? (https://github.com/rfc1036/whois)
+>> Or should we add the whois package, and depend on that?
+>> To me, the former seems more appropriate...
+>
+> If we can make a very simple host-mkpasswd package like we have the
+> host-makedevs package (with the source code included in
+> package/<dir>/), I think it would be good.
 >
 
+Since a host-mkpasswd package has been merged now, which should fix
+problems on some Redhat and Slackware machines, and given the comments
+given by Yann, do you agree to drop this patch?
 
-As far as I'm concerned, the above patch is fine for now.
-I'm not sure if some rebasing is needed because some versions might
-have changed, though. Maybe something you could check and resend?
-
-Thanks,
+Best regards,
 Thomas
