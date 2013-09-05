@@ -1,62 +1,253 @@
-From: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
-Date: Thu, 05 Sep 2013 09:50:49 +0200
-Subject: [Buildroot] [PATCH v2 1/1] Change package tarball compression
- to xz whenever possible
-In-Reply-To: <CAAXf6LUo1hd7FdPQ-UurVAO7EAat1HcWQT5=AVF-OpSYrGX56Q@mail.gmail.com>
-References: <1375000629-19254-1-git-send-email-jerzy.grzegorek@trzebnica.net>
- <1375000629-19254-2-git-send-email-jerzy.grzegorek@trzebnica.net>
- <CAAXf6LUFnJff9asJy1JXp3dJOq8jFi78TbDpmZDWdMu3tYBq=Q@mail.gmail.com>
- <51F64468.8080902@trzebnica.net>
- <CAAXf6LVPX7SU6RsHTN_Eg8g3hRxvRT7=dDP-FO_fFo+CfznmQw@mail.gmail.com>
- <CAAXf6LUo1hd7FdPQ-UurVAO7EAat1HcWQT5=AVF-OpSYrGX56Q@mail.gmail.com>
-Message-ID: <522837D9.3000806@trzebnica.net>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 5 Sep 2013 09:51:29 +0200
+Subject: [Buildroot] [PATCH 02/17] libselinux: new package
+In-Reply-To: <1378336196-27403-3-git-send-email-clshotwe@rockwellcollins.com>
+References: <1378336196-27403-1-git-send-email-clshotwe@rockwellcollins.com>
+ <1378336196-27403-3-git-send-email-clshotwe@rockwellcollins.com>
+Message-ID: <20130905095129.7396d46c@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-W dniu 05.09.2013 09:20, Thomas De Schampheleire pisze:
-> Hi,
->
-> On Mon, Jul 29, 2013 at 2:13 PM, Thomas De Schampheleire
-> <patrickdepinguin+buildroot@gmail.com> wrote:
->> On Mon, Jul 29, 2013 at 12:31 PM, Jerzy Grzegorek
->> <jerzy.grzegorek@trzebnica.net> wrote:
->>> You are right that if we will change the default assignment
->>> of FOO_SOURCE from .tar.gz to .tar.xz it would require
->>>
->>> changing those packages that do not explicitly set
->>> FOO_SOURCE, and removing the explicit .tar.xz
->>> SOURCE lines that have been added in this and prior patches.
->>> Lets assume that now we have x .tar.gz packages that do not
->>> explicitly set FOO_SOURCE, and y .tar.xz packages.
->>> In this case it would require changing x+y packages.
->>> Lets assume that after some time z packages will have been changed from
->>> .tar.gz to .tar.xz. Then it would require changing (x-z)+(y+z) = x+y
->>> packages. So, IMHO it doesn't matter when we will (eventually)
->>> change the default assignment. Right?
->>>
->> Well, if we assume that there will be more *new* packages in .tar.xz
->> than in .tar.gz, y will increase, and the work to be done later will
->> increase. The sooner .tar.xz becomes the default, the less new
->> packages have to be changed afterwards.
->>
->> But, the difference may not be large enough, so we could also wait
->> until there are much more .xz packages...
->>
->
-> As far as I'm concerned, the above patch is fine for now.
-> I'm not sure if some rebasing is needed because some versions might
-> have changed, though. Maybe something you could check and resend?
->
-> Thanks,
-> Thomas
+Dear Clayton Shotwell,
 
-Hi Thomas,
+On Wed, 4 Sep 2013 18:09:41 -0500, Clayton Shotwell wrote:
 
-Thanks for your feedback.
-Yes, I suppose that some rebasing will be needed, so I'll check and resend.
+>  menu "Security"
+>  source "package/libsepol/Config.in"
+> +source "package/libselinux/Config.in"
+>  endmenu
 
-Regards,
-Jerzy
+Same comment as previous package: libselinux is a library, so it should
+be under Target packages -> Libraries.
+
+>  
+>  menu "System tools"
+> diff --git a/package/libselinux/Config.in b/package/libselinux/Config.in
+> new file mode 100644
+> index 0000000..4f3be64
+> --- /dev/null
+> +++ b/package/libselinux/Config.in
+> @@ -0,0 +1,22 @@
+> +config BR2_PACKAGE_LIBSELINUX
+> +	bool "libselinux"
+> +	depends on BR2_LINUX_KERNEL
+
+Hum, can you clarify why a dependency on the kernel is needed here?
+
+> +	help
+> +	  libselinux is the runtime SELinux library that provides interfaces 
+> +	  (e.g. library functions for the SELinux kernel APIs like getcon(), 
+> +	  other support functions like getseuserbyname()) to SELinux-aware 
+> +	  applications. libselinux may use the shared libsepol to manipulate 
+> +	  the binary policy if necessary (e.g. to downgrade the policy format 
+> +	  to an older version supported by the kernel) when loading policy.
+> +	  
+> +	  http://selinuxproject.org/page/Main_Page
+> +
+> +if BR2_PACKAGE_LIBSELINUX
+> +
+> +config BR2_PACKAGE_LIBSELINUX_PYTHON_BINDINGS
+> +	select BR2_PACKAGE_PYTHON
+
+Here I am not sure whether we should have:
+
+ (1) An option that selects BR2_PACKAGE_PYTHON (as you did)
+
+ (2) An option that depends on BR2_PACKAGE_PYTHON
+
+ (3) No option at all, and have the package automatically enable Python
+     bindings when BR2_PACKAGE_PYTHON is enabled.
+
+What do the others think?
+
+> +	bool "python bindings"
+> +	help
+> +	  enable building python bindings
+> +
+> +endif
+> diff --git a/package/libselinux/libselinux.mk b/package/libselinux/libselinux.mk
+> new file mode 100644
+> index 0000000..ed90186
+> --- /dev/null
+> +++ b/package/libselinux/libselinux.mk
+> @@ -0,0 +1,128 @@
+> +################################################################################
+> +#
+> +# libselinux
+> +#
+> +################################################################################
+
+One empty line between header and variables.
+
+> +LIBSELINUX_VERSION = 2.1.13
+> +LIBSELINUX_SOURCE = libselinux-$(LIBSELINUX_VERSION).tar.gz
+
+This line is not needed, that's the default value.
+
+> +LIBSELINUX_SITE = http://userspace.selinuxproject.org/releases/20130423/
+> +LIBSELINUX_LICENSE = PublicDomain
+> +LIBSELINUX_LICENSE_FILES = LICENSE
+> +
+> +##############################
+> +# Target Section
+> +##############################
+
+Comment not needed.
+
+> +LIBSELINUX_DEPENDENCIES = libsepol pcre
+
+Then you should select BR2_PACKAGE_LIBSEPOL and BR2_PACKAGE_PCRE in
+your Config.in file.
+
+> +
+> +LIBSELINUX_INSTALL_STAGING = YES
+> +LIBSELINUX_INSTALL_TARGET = YES
+
+This last line is not needed, that's the default.
+
+> +
+> +LIBSELINUX_MAKE_CMDS = $(TARGET_CONFIGURE_OPTS) LDFLAGS="$(TARGET_LDFLAGS) -lpcre -lpthread"
+
+This could use a little bit of wrapping:
+
+LIBSELINUX_MAKE_CMDS = \
+	$(TARGET_CONFIGURE_OPTS) \
+	LDFLAGS="$(TARGET_LDFLAGS) -lpcre -lpthread"
+
+BTW, I'm not sure _MAKE_CMDS is really the appropriate suffix, maybe
+_MAKE_OPTS ?
+
+> +ifeq ($(BR2_PACKAGE_LIBSELINUX_PYTHON_BINDINGS),y)
+> +
+> +LIBSELINUX_DEPENDENCIES += python host-swig host-python
+> +LIBSELINUX_MAKE_CMDS += PYINC="-I$(STAGING_DIR)/usr/include/python$(PYTHON_VERSION_MAJOR)/" \
+> +	PYTHONLIBDIR="-L$(STAGING_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/" \
+> +	PYLIBVER="python$(PYTHON_VERSION_MAJOR)" \
+> +	SWIG_LIB="$(HOST_DIR)/usr/share/swig/$(SWIG_VERSION)/"
+> +
+> +define LIBSELINUX_PYTHON_BUILD_CMDS
+> +	$(MAKE) -C $(@D) $(LIBSELINUX_MAKE_CMDS) DESTDIR=$(STAGING_DIR) swigify
+> +	$(MAKE) -C $(@D) $(LIBSELINUX_MAKE_CMDS) DESTDIR=$(STAGING_DIR) pywrap
+
+DESTDIR really needed at build time ?
+
+> +endef
+> +
+> +define LIBSELINUX_PYTHON_INSTALL_STAGING_CMDS
+> +	$(MAKE) -C $(@D) install-pywrap $(LIBSELINUX_MAKE_CMDS) DESTDIR=$(STAGING_DIR)
+> +endef
+> +
+> +define LIBSELINUX_PYTHON_INSTALL_TARGET_CMDS
+> +	$(MAKE) -C $(@D) install-pywrap $(LIBSELINUX_MAKE_CMDS) DESTDIR=$(TARGET_DIR)
+> +endef
+> +
+> +define LIBSELINUX_PYTHON_UNINSTALL_STAGING_CMDS
+> +	rm -rf $(STAGING_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages/selinux
+> +endef
+> +
+> +define LIBSELINUX_PYTHON_UNINSTALL_TARGET_CMDS
+> +	rm -rf $(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages/selinux
+> +endef
+
+You can get rid of install commands.
+
+> +
+> +endif
+> +
+> +define LIBSELINUX_BUILD_CMDS
+> +	$(MAKE) -C $(@D) $(LIBSELINUX_MAKE_CMDS) DESTDIR=$(STAGING_DIR) all
+
+DESTDIR unneeded at build time.
+
+> +	$(LIBSELINUX_PYTHON_BUILD_CMDS)
+> +endef
+> +
+> +define LIBSELINUX_INSTALL_STAGING_CMDS
+> +	$(MAKE) -C $(@D) install $(LIBSELINUX_MAKE_CMDS) DESTDIR=$(STAGING_DIR)
+> +	$(LIBSELINUX_PYTHON_INSTALL_STAGING_CMDS)
+> +endef
+> +
+> +define LIBSELINUX_INSTALL_TARGET_CMDS
+> +	$(MAKE) -C $(@D) install $(LIBSELINUX_MAKE_CMDS) DESTDIR=$(TARGET_DIR)
+> +	$(LIBSELINUX_PYTHON_INSTALL_TARGET_CMDS)
+> +endef
+> +
+> +define LIBSELINUX_CLEAN_CMDS
+> +	$(MAKE) -C $(@D) clean
+> +endef
+> +
+> +LIBSELINUX_SBIN_FILES = avcstat compute_av compute_create compute_member \
+> +	compute_relabel compute_user getconlist getdefaultcon getenforce \
+> +	getfilecon getpidcon getsebool getseuser matchpathcon policyvers \
+> +	sefcontext_compile selinux_check_securetty_context selinuxenabled \
+> +	selinuxexeccon setenforce setfilecon togglesebool
+> +
+> +define LIBSELINUX_UNINSTALL_STAGING_CMDS
+> +	rm -rf $(addprefix $(STAGING_DIR), /usr/include/selinux \
+> +		$(addprefix /usr/sbin/, $(LIBSELINUX_SBIN_FILES)) \
+> +		/usr/lib/pkgconfig/libselinux* /usr/lib/libselinux* /lib/libselinux*)
+> +	rm -f $(addprefix $(STAGING_DIR)/usr/man/man3/,$(notdir $(wildcard $(@D)/man/man3/*.3)))
+> +	rm -f $(addprefix $(STAGING_DIR)/usr/man/man5/,$(notdir $(wildcard $(@D)/man/man5/*.5)))
+> +	rm -f $(addprefix $(STAGING_DIR)/usr/man/man8/,$(notdir $(wildcard $(@D)/man/man8/*.8)))
+> +	$(LIBSELINUX_PYTHON_UNINSTALL_STAGING_CMDS)
+> +endef
+> +
+> +define LIBSELINUX_UNINSTALL_TARGET_CMDS
+> +	rm -rf $(addprefix $(TARGET_DIR), /usr/include/selinux \
+> +		$(addprefix /usr/sbin/, $(LIBSELINUX_SBIN_FILES)) \
+> +		/usr/lib/pkgconfig/libselinux* /usr/lib/libselinux* /lib/libselinux*)
+> +	$(LIBSELINUX_PYTHON_UNINSTALL_TARGET_CMDS)
+> +endef
+
+Yeah, just drop the uninstall commands.
+
+> +##############################
+> +# Host Section
+> +##############################
+
+Drop this header.
+
+> +HOST_LIBSELINUX_DEPENDENCIES = host-python host-libsepol host-swig host-pcre
+
+So for the host variant, the Python bindings are always enabled? Is
+there a reason for that?
+
+> +
+> +HOST_LIBSELINUX_MAKE_CMDS = $(HOST_CONFIGURE_OPTS) LDFLAGS="$(HOST_LDFLAGS) -lpcre -lpthread"\
+> +	PYINC="-I$(HOST_DIR)/usr/include/python$(PYTHON_VERSION_MAJOR)/" \
+> +	PYTHONLIBDIR="-L$(HOST_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/" \
+> +	PYLIBVER="python$(PYTHON_VERSION_MAJOR)" \
+> +	SWIG_LIB="$(HOST_DIR)/usr/share/swig/$(SWIG_VERSION)/" \
+> +
+> +define HOST_LIBSELINUX_BUILD_CMDS
+> +	$(MAKE) -C $(@D) $(HOST_LIBSELINUX_MAKE_CMDS) DESTDIR=$(HOST_DIR) all
+> +	$(MAKE) -C $(@D) $(HOST_LIBSELINUX_MAKE_CMDS) DESTDIR=$(HOST_DIR) swigify
+> +	$(MAKE) -C $(@D) $(HOST_LIBSELINUX_MAKE_CMDS) DESTDIR=$(HOST_DIR) pywrap
+
+DESTDIR usually not needed at build time.
+
+> +endef
+> +
+> +define HOST_LIBSELINUX_INSTALL_CMDS
+> +	$(MAKE) -C $(@D) install install-pywrap $(HOST_LIBSELINUX_MAKE_CMDS) DESTDIR=$(HOST_DIR)
+> +	mv $(HOST_DIR)/lib/libselinux.so.1 $(HOST_DIR)/usr/lib
+> +	(cd $(HOST_DIR)/usr/lib; rm -f libselinux.so; ln -s libselinux.so.1 libselinux.so)
+> +	rmdir $(HOST_DIR)/lib
+> +	(if -f $(HOST_DIR)/sbin/matchpathcon; then \
+> +		mv $(HOST_DIR)/sbin/matchpathcon $(HOST_DIR)/usr/sbin/; \
+> +		rmdir $(HOST_DIR)/sbin; \
+> +	fi)
+
+Same suggestion as above: what if you pass DESTDIR=$(HOST_DIR)/usr ?
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
