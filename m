@@ -1,40 +1,45 @@
-From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Thu, 5 Sep 2013 09:24:05 +0200
-Subject: [Buildroot] [PATCH] system: only set the root password if it's
- not empty
-In-Reply-To: <20130728150626.5b57ffae@skate>
-References: <20130702085224.GA25620@berrier.lan>
- <20130702173111.GA3221@free.fr> <20130703044618.GA4406@berrier.lan>
- <CAAXf6LVNOFmX9HXAMEJH=mbRkgmhfAxqqiL8e+Qkrsw_jxU9Eg@mail.gmail.com>
- <20130728150626.5b57ffae@skate>
-Message-ID: <CAAXf6LXS-Lf--tTUfwcQVRS4KRi8xhYsQeTwxW8uWmM2NDOG7w@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 5 Sep 2013 09:33:15 +0200
+Subject: [Buildroot] [PATCH 1/1] util-linux: bump version to 2.23
+In-Reply-To: <1378337198-29945-1-git-send-email-rjbarnet@rockwellcollins.com>
+References: <1378337198-29945-1-git-send-email-rjbarnet@rockwellcollins.com>
+Message-ID: <20130905093315.64d800a2@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Wade,
+Dear Ryan Barnett,
 
-On Sun, Jul 28, 2013 at 3:06 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Dear Thomas De Schampheleire,
->
-> On Sun, 28 Jul 2013 10:40:15 +0200, Thomas De Schampheleire wrote:
->
->> Should we create a separate host-mkpasswd package based on the whois
->> sources? (https://github.com/rfc1036/whois)
->> Or should we add the whois package, and depend on that?
->> To me, the former seems more appropriate...
->
-> If we can make a very simple host-mkpasswd package like we have the
-> host-makedevs package (with the source code included in
-> package/<dir>/), I think it would be good.
->
+On Wed, 4 Sep 2013 18:26:38 -0500, Ryan Barnett wrote:
+> 
+> Signed-off-by: Ryan Barnett <rjbarnet@rockwellcollins.com>
+> ---
+>  .../util-linux-001-sscanf-no-ms-as.patch           |  186 +++++++++++---------
+>  .../util-linux-002-add-missing-rpmatch.patch       |   51 ------
+>  ...l-linux-003-program-invocation-short-name.patch |   29 ++--
+>  .../util-linux/util-linux-004-xtensa-support.patch |   16 --
+>  package/util-linux/util-linux.mk                   |    2 +-
+>  5 files changed, 117 insertions(+), 167 deletions(-)
+>  delete mode 100644 package/util-linux/util-linux-002-add-missing-rpmatch.patch
+>  delete mode 100644 package/util-linux/util-linux-004-xtensa-support.patch
 
-Since a host-mkpasswd package has been merged now, which should fix
-problems on some Redhat and Slackware machines, and given the comments
-given by Yann, do you agree to drop this patch?
+Thanks for this update (and the one of linux-pam). Generally, when a
+bump is not completely mechanical (i.e just bumping the version field),
+I like to see a bit more explanations about what was done on the
+patches (which ones were removed, for what reason, which ones were
+updated, which ones were added), etc.
 
-Best regards,
+Same for changes in the package itself, for example in the linux-pam
+package you've added a host-pkgconf dependency, it's worth mentioning
+that in the commit log to help reviewers understand why that was done.
+
+Thanks a lot!
+
 Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
