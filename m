@@ -1,10 +1,10 @@
-From: rjbarnet at rockwellcollins.com <rjbarnet@rockwellcollins.com>
-Date: Thu, 5 Sep 2013 08:05:19 -0500
-Subject: [Buildroot] [PATCH 1/1] util-linux: bump version to 2.23
-In-Reply-To: <20130905093315.64d800a2@skate>
-References: <1378337198-29945-1-git-send-email-rjbarnet@rockwellcollins.com>
- <20130905093315.64d800a2@skate>
-Message-ID: <OFE5AEB96A.295E7BD5-ON86257BDD.00471B54-86257BDD.0047E652@rockwellcollins.com>
+From: clshotwe at rockwellcollins.com <clshotwe@rockwellcollins.com>
+Date: Thu, 5 Sep 2013 08:18:51 -0500
+Subject: [Buildroot] [PATCH 02/17] libselinux: new package
+In-Reply-To: <20130905095129.7396d46c@skate>
+References: <1378336196-27403-1-git-send-email-clshotwe@rockwellcollins.com>	<1378336196-27403-3-git-send-email-clshotwe@rockwellcollins.com>
+ <20130905095129.7396d46c@skate>
+Message-ID: <OF77692896.95B79E1F-ON86257BDD.00474F46-86257BDD.004923B8@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,84 +13,77 @@ To: buildroot@busybox.net
 
 Thomas,
 
-I will keep that in mind in the future. However, it looks like Peter 
-already committed the linux-pam patch I submitted so I'll just resubmit 
-the util-linux patch.
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote on 09/05/2013 
+02:51:29 AM:
 
-FYI - regarding the linux-pam package patch -there is a dependancy on 
-host-pkgconf in linux-pam that wasn't previously caught. I was just trying 
-to build linux-pam package by itself and the build was failing during the 
-configure step because a "PKG_CHECK_MODULES" was not being expanded during 
-the autoreconf step.
+> >  menu "Security"
+> >  source "package/libsepol/Config.in"
+> > +source "package/libselinux/Config.in"
+> >  endmenu
+> 
+> Same comment as previous package: libselinux is a library, so it should
+> be under Target packages -> Libraries.
+
+Agree
+
+> > +config BR2_PACKAGE_LIBSELINUX
+> > +   bool "libselinux"
+> > +   depends on BR2_LINUX_KERNEL
+> 
+> Hum, can you clarify why a dependency on the kernel is needed here?
+
+Probably shouldn't be an explicit one, though SELinux will not work 
+outside of Linux.  I will go ahead and remove this dependency.
+
+> > +config BR2_PACKAGE_LIBSELINUX_PYTHON_BINDINGS
+> > +   select BR2_PACKAGE_PYTHON
+> 
+> Here I am not sure whether we should have:
+> 
+>  (1) An option that selects BR2_PACKAGE_PYTHON (as you did)
+> 
+>  (2) An option that depends on BR2_PACKAGE_PYTHON
+> 
+>  (3) No option at all, and have the package automatically enable Python
+>      bindings when BR2_PACKAGE_PYTHON is enabled.
+> 
+> What do the others think?
+
+I added this option because the policycoreutils package contains utilities 
+that rely on the python bindings from the libselinux and sepolgen 
+packages.  What I can do is remove the option and have the bindings for 
+libselinux and sepolgen depend on BR2_PACKAGE_PYTHON. I can then change 
+policycoreutils select BR2_PACKAGE_PYTHON which would enable the other 
+two.  This would also allow the bindings to be generated any time Python 
+support is enabled.
+ 
+> Then you should select BR2_PACKAGE_LIBSEPOL and BR2_PACKAGE_PCRE in
+> your Config.in file.
+
+Can do.
+
+> > +HOST_LIBSELINUX_DEPENDENCIES = host-python host-libsepol host-
+> swig host-pcre
+> 
+> So for the host variant, the Python bindings are always enabled? Is
+> there a reason for that?
+
+This was just a easier way than checking to see if host python is being 
+installed.  Should I break this out and if so, what should I check to see 
+if the host version is being installed?
+
+The same DESTDIR comments from my previous email apply to this package 
+also.  I will pull the generic changes into all of my patches and resubmit 
+them if that works for you.
 
 Thanks,
--Ryan
+Clayton
 
-
-
-Ryan J Barnett / Software Engineer / Platform SW 
-MS 137-157, 855 35th St NE, Cedar Rapids, IA, 52498-3161, US
-Phone: 319-263-3880 / VPN: 263-3880 
-rjbarnet at rockwellcollins.com
+Clayton Shotwell
+Software Engineer
+clshotwe at rockwellcollins.com
 www.rockwellcollins.com 
-
-
-
-
-From:   Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-To:     Ryan Barnett <rjbarnet@rockwellcollins.com>
-Cc:     buildroot at busybox.net
-Date:   09/05/2013 02:34 AM
-Subject:        Re: [Buildroot] [PATCH 1/1] util-linux: bump version to 
-2.23
-
-
-
-Dear Ryan Barnett,
-
-On Wed, 4 Sep 2013 18:26:38 -0500, Ryan Barnett wrote:
-> 
-> Signed-off-by: Ryan Barnett <rjbarnet@rockwellcollins.com>
-> ---
->  .../util-linux-001-sscanf-no-ms-as.patch           |  186 
-+++++++++++---------
->  .../util-linux-002-add-missing-rpmatch.patch       |   51 ------
->  ...l-linux-003-program-invocation-short-name.patch |   29 ++--
->  .../util-linux/util-linux-004-xtensa-support.patch |   16 --
->  package/util-linux/util-linux.mk                   |    2 +-
->  5 files changed, 117 insertions(+), 167 deletions(-)
->  delete mode 100644 
-package/util-linux/util-linux-002-add-missing-rpmatch.patch
->  delete mode 100644 
-package/util-linux/util-linux-004-xtensa-support.patch
-
-Thanks for this update (and the one of linux-pam). Generally, when a
-bump is not completely mechanical (i.e just bumping the version field),
-I like to see a bit more explanations about what was done on the
-patches (which ones were removed, for what reason, which ones were
-updated, which ones were added), etc.
-
-Same for changes in the package itself, for example in the linux-pam
-package you've added a host-pkgconf dependency, it's worth mentioning
-that in the commit log to help reviewers understand why that was done.
-
-Thanks a lot!
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
-
 
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130905/788c7970/attachment.html>
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: not available
-Type: image/gif
-Size: 2004 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130905/788c7970/attachment.gif>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130905/15910dc8/attachment-0001.html>
