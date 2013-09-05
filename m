@@ -1,48 +1,36 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 5 Sep 2013 10:28:36 +0200
-Subject: [Buildroot] More patches to apply
-In-Reply-To: <CAAXf6LXw9gPrdwG+g81XH15V3MXe4HBj5timyVQPPS3k2p43ow@mail.gmail.com>
-References: <CAAXf6LXw9gPrdwG+g81XH15V3MXe4HBj5timyVQPPS3k2p43ow@mail.gmail.com>
-Message-ID: <20130905102836.11cc9d4d@skate>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Thu, 05 Sep 2013 10:35:38 +0200
+Subject: [Buildroot] [PATCH] apply-patches.sh: detect missing patches
+In-Reply-To: <20130905100459.13173009@skate>
+References: <20130813160017.GA2590@harvey.netwinder.org>
+ <CAAXf6LXBHm7nG__780PqUaO+v9+4j2KON7UO0dw4Ej2qC3=XGg@mail.gmail.com>
+ <CAAXf6LV9HPWdzqV_F5zQ+aABtVxZGRRkhDszF2Qx8vyXMb+PhA@mail.gmail.com>
+ <20130905100459.13173009@skate>
+Message-ID: <5228425A.7090502@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas De Schampheleire,
+Thomas Petazzoni wrote:
+> Dear Thomas De Schampheleire,
+>
+> On Thu, 5 Sep 2013 09:03:33 +0200, Thomas De Schampheleire wrote:
+>
+>>> Although I agree with the concept of checking for existence, I'm not
+>>> sure about the action to take.
+>>> Earlier in apply-patches.sh, if a patch is in an unsupported format,
+>>> it is simply skipped (and a message printed). I think the action in
+>>> that case should line up with the nonexisting patch case, so either
+>>> give a warning and continue, or an error and stop.
+>> Any input from others?
+> My general feeling is that when something goes wrong or looks wrong, we
+> should abort with an error, and not try to continue with something
+> more-or-less broken/incorrect.
 
-On Thu, 5 Sep 2013 10:04:46 +0200, Thomas De Schampheleire wrote:
+I agree. Who reads a million lines of build outputwhen make exits returning
+zero? Definitely BR should stop and shout out loud about missing or
+incorrect patches.
 
-> I think following patches can be applied now:
-> 
-> http://patchwork.ozlabs.org/patch/272175/
-> (build reprod. in make 3.82: I think there is consensus on the part
-> the patch addresses; how we will continue to check for missing
-> dependencies is not yet clear but this does not block the patch from
-> being applied)
-> 
-> http://patchwork.ozlabs.org/patch/264231/
-> http://patchwork.ozlabs.org/patch/264232/
-> suitable-extractor + host-xzcat
-> 
-> http://patchwork.ozlabs.org/patch/243427/
-> plain URL in FOO_PATCH
-> 
-> http://patchwork.ozlabs.org/patch/272711/
-> flex and bison dependencies in perf
-
-Agreed for all of those patches.
-
-> Following patches in patchwork are superseded:
-> http://patchwork.ozlabs.org/patch/271170/
-> http://patchwork.ozlabs.org/patch/272589/
-
-Marked as such, thanks!
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Luca
