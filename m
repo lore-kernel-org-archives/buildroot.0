@@ -1,213 +1,131 @@
-From: Michael Rommel <rommel@layer-7.net>
-Date: Thu,  5 Sep 2013 23:56:53 +0200
-Subject: [Buildroot] [PATCH 1/1] aiccu: new package
-Message-ID: <1378418213-22160-1-git-send-email-rommel@layer-7.net>
+From: Matt Weber <mlweber1@rockwellcollins.com>
+Date: Thu, 5 Sep 2013 17:03:04 -0500
+Subject: [Buildroot] [PATCH 1/1] omniorb: new package
+Message-ID: <1378418584-21899-1-git-send-email-mlweber1@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Automatic IPv6 Connectivity Configuration Utility for users of a
-IPv6 tunnel broker, developed by sixxs.net
+Target packages -> Libraries -> Networking -> OmniOrb
 
-Signed-off-by: Michael Rommel <rommel@layer-7.net>
+Signed-off-by: Matt Weber <mlweber1@rockwellcollins.com>
 ---
- package/Config.in                                  |    1 +
- package/aiccu/Config.in                            |   21 ++++
- .../aiccu/aiccu-0001-gnutls-and-uclibc-fixes.patch |  104 ++++++++++++++++++++
- package/aiccu/aiccu.mk                             |   32 ++++++
- 4 files changed, 158 insertions(+)
- create mode 100644 package/aiccu/Config.in
- create mode 100644 package/aiccu/aiccu-0001-gnutls-and-uclibc-fixes.patch
- create mode 100644 package/aiccu/aiccu.mk
+ package/Config.in          |    1 +
+ package/omniorb/Config.in  |   16 ++++++++++
+ package/omniorb/omniorb.mk |   68 ++++++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 85 insertions(+), 0 deletions(-)
+ create mode 100644 package/omniorb/Config.in
+ create mode 100644 package/omniorb/omniorb.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 4e3469f..5e71e9a 100644
+index a94cb62..b4cc869 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -716,6 +716,7 @@ source "package/sound-theme-freedesktop/Config.in"
- endmenu
- 
- menu "Networking applications"
-+source "package/aiccu/Config.in"
- source "package/aircrack-ng/Config.in"
- source "package/argus/Config.in"
- source "package/arptables/Config.in"
-diff --git a/package/aiccu/Config.in b/package/aiccu/Config.in
+@@ -600,6 +600,7 @@ source "package/libupnp/Config.in"
+ source "package/libvncserver/Config.in"
+ source "package/libwebsockets/Config.in"
+ source "package/nss-mdns/Config.in"
++source "package/omniorb/Config.in"
+ source "package/openpgm/Config.in"
+ source "package/ortp/Config.in"
+ source "package/slirp/Config.in"
+diff --git a/package/omniorb/Config.in b/package/omniorb/Config.in
 new file mode 100644
-index 0000000..1c6f554
+index 0000000..4c8c3fc
 --- /dev/null
-+++ b/package/aiccu/Config.in
-@@ -0,0 +1,21 @@
-+config BR2_PACKAGE_AICCU
-+	bool "aiccu"
-+	depends on BR2_INET_IPV6
-+	depends on BR2_USE_WCHAR
-+	select BR2_PACKAGE_GNUTLS
++++ b/package/omniorb/Config.in
+@@ -0,0 +1,16 @@
++config BR2_PACKAGE_OMNIORB
++	bool "omniorb"
 +	help
-+	  SixXS Automatic IPv6 Connectivity Client Utility
++          omniORB is a robust high performance CORBA ORB for C++ and Python. 
++          omniORB is largely CORBA 2.6 compliant. omniORB is one of only three ORBs 
++          to have been awarded the Open Group's Open Brand for CORBA. This means that 
++          omniORB has been tested and certified CORBA compliant, to version 2.1 of the 
++          CORBA specification. You can find out more about the branding program at 
++          the Open Group.
 +
-+	  AICCU (Automatic IPv6 Connectivity Client Utility) makes it
-+	  easy for users to get IPv6 connectivity. After having
-+	  requested an account, tunnel and optionally a subnet, AICCU
-+	  can be used to automatically configure the tunnel. AICCU
-+	  supports TIC (Tunnel Information & Control protocol), which it
-+	  uses for retrieving the tunnel configuration information,
-+	  AYIYA, which allows tunnels to be created even behind
-+	  firewalls and NAT's.
-+
-+	  http://www.sixxs.net/tools/aiccu/
-+
-+comment "aiccu requires a toolchain with IPv6 and WCHAR support"
-+	depends on !(BR2_INET_IPV6 && BR2_USE_WCHAR)
-diff --git a/package/aiccu/aiccu-0001-gnutls-and-uclibc-fixes.patch b/package/aiccu/aiccu-0001-gnutls-and-uclibc-fixes.patch
++config BR2_OMNIORB_EXTRA_CONFIG_OPTIONS
++	string "Additional omniorb configuration options"
++	depends on BR2_PACKAGE_OMNIORB
++	default ""
++	help
++	  Any additional configure options you may want to include.
+diff --git a/package/omniorb/omniorb.mk b/package/omniorb/omniorb.mk
 new file mode 100644
-index 0000000..d316f8f
+index 0000000..ed2a7e7
 --- /dev/null
-+++ b/package/aiccu/aiccu-0001-gnutls-and-uclibc-fixes.patch
-@@ -0,0 +1,104 @@
-+aiccu.h, common.c, common.h: fixes for deprecated GNUTLS functions and types
-+resolver.c: fixes for selection of wrong resolver function under uclibc
-+
-+Signed-off-by: Michael Rommel <rommel@layer-7.net>
-+
-+diff -purN aiccu_20070115.orig/common/aiccu.h aiccu_20070115/common/aiccu.h
-+--- aiccu_20070115.orig/common/aiccu.h	2007-01-15 13:01:43.000000000 +0100
-++++ aiccu_20070115/common/aiccu.h	2013-08-31 23:50:53.651936146 +0200
-+@@ -111,7 +111,7 @@ struct AICCU_conf
-+ #endif
-+ 
-+ #ifdef AICCU_GNUTLS
-+-	gnutls_certificate_credentials	tls_cred;	/* GNUTLS credentials */
-++	gnutls_certificate_credentials_t tls_cred;	/* GNUTLS credentials */
-+ #endif
-+ 
-+ 	bool		daemonize;		/* Daemonize? */
-+diff -purN aiccu_20070115.orig/common/common.c aiccu_20070115/common/common.c
-+--- aiccu_20070115.orig/common/common.c	2006-12-21 15:08:50.000000000 +0100
-++++ aiccu_20070115/common/common.c	2013-09-01 01:21:36.031396740 +0200
-+@@ -271,9 +271,8 @@ TLSSOCKET sock_alloc(void);
-+ TLSSOCKET sock_alloc(void)
-+ {
-+ #ifdef AICCU_GNUTLS
-+-	/* Allow connections to servers that have OpenPGP keys as well */
-+-	const int	cert_type_priority[3] = { GNUTLS_CRT_X509, GNUTLS_CRT_OPENPGP, 0 };
-+ 	int		ret;
-++	const char	*err;
-+ #endif /* AICCU_GNUTLS*/
-+ 
-+ 	TLSSOCKET	sock;	
-+@@ -297,11 +296,16 @@ TLSSOCKET sock_alloc(void)
-+ 	}
-+ 
-+ 	/* Use default priorities */
-+-	gnutls_set_default_priority(sock->session);
-+-	/* XXX: Return value is not documented in GNUTLS documentation! */
-+-
-+-	gnutls_certificate_type_set_priority(sock->session, cert_type_priority);
-+-	/* XXX: Return value is not documented in GNUTLS documentation! */
-++	ret = gnutls_priority_set_direct(sock->session, "NORMAL", &err); 
-++	if (ret < 0)
-++	{
-++		if (ret == GNUTLS_E_INVALID_REQUEST)
-++		{
-++			dolog( LOG_ERR, "TLS set priority failed, syntax error at: %s\n", err);
-++		}
-++		free(sock);
-++		return NULL;
-++	}
-+ 
-+ 	/* Configure the x509 credentials for the current session */
-+ 	gnutls_credentials_set(sock->session, GNUTLS_CRD_CERTIFICATE, g_aiccu->tls_cred);
-+@@ -474,7 +478,7 @@ bool sock_gotls(TLSSOCKET sock)
-+ 	}
-+ 
-+ 	/* Set the transport */
-+-	gnutls_transport_set_ptr(sock->session, (gnutls_transport_ptr)sock->socket);
-++	gnutls_transport_set_ptr(sock->session, (gnutls_transport_ptr_t) sock->socket);
-+ 
-+ 	/* Perform the TLS handshake */
-+ 	ret = gnutls_handshake(sock->session);
-+diff -purN aiccu_20070115.orig/common/common.h aiccu_20070115/common/common.h
-+--- aiccu_20070115.orig/common/common.h	2007-01-11 15:50:51.000000000 +0100
-++++ aiccu_20070115/common/common.h	2013-08-31 23:26:13.683659455 +0200
-+@@ -381,7 +381,7 @@ struct tlssocket
-+ 	SOCKET			socket;
-+ #ifdef AICCU_GNUTLS
-+ 	bool			tls_active;	/* TLS active? */
-+-	gnutls_session		session;	/* The GnuTLS sesision */
-++	gnutls_session_t	session;	/* The GnuTLS sesision */
-+ #endif
-+ };
-+ 
-+diff -purN aiccu_20070115.orig/common/resolver.c aiccu_20070115/common/resolver.c
-+--- aiccu_20070115.orig/common/resolver.c	2006-07-23 16:55:14.000000000 +0200
-++++ aiccu_20070115/common/resolver.c	2013-08-31 23:44:31.574866862 +0200
-+@@ -26,7 +26,7 @@
-+ 
-+ int getrrs(const char *label, int rrtype, void gotrec(unsigned int num, int type, const char *record))
-+ {
-+-#ifdef _LINUX
-++#if defined(_LINUX) && !defined(__UCLIBC__)
-+ 	struct __res_state	res;
-+ #endif
-+ 	unsigned char		answer[8192];
-+@@ -38,7 +38,7 @@ int getrrs(const char *label, int rrtype
-+ 	uint16_t		type = 0, class = 0;
-+ 	uint32_t		ttl = 0;
-+ 
-+-#ifdef _LINUX
-++#if defined(_LINUX) && !defined(__UCLIBC__)
-+ 	memset(&res, 0, sizeof(res));
-+ 	res.options = RES_DEBUG;
-+ 	res_ninit(&res);
-+@@ -47,7 +47,7 @@ int getrrs(const char *label, int rrtype
-+ #endif
-+ 
-+ 	memset(answer, 0, sizeof(answer));
-+-#ifdef _LINUX
-++#if defined(_LINUX) && !defined(__UCLIBC__)
-+ 	ret = res_nquery(&res, label, C_IN, rrtype, answer, sizeof(answer));
-+ #else
-+ 	ret = res_query(label, C_IN, rrtype, answer, sizeof(answer));
-diff --git a/package/aiccu/aiccu.mk b/package/aiccu/aiccu.mk
-new file mode 100644
-index 0000000..05f4ba0
---- /dev/null
-+++ b/package/aiccu/aiccu.mk
-@@ -0,0 +1,32 @@
++++ b/package/omniorb/omniorb.mk
+@@ -0,0 +1,68 @@
 +################################################################################
 +#
-+# aiccu
++# omniorb 
 +#
 +################################################################################
 +
-+AICCU_VERSION = 20070115
-+AICCU_SOURCE = aiccu_$(AICCU_VERSION).tar.gz
-+AICCU_SITE = http://www.sixxs.net/archive/sixxs/aiccu/unix/
-+AICCU_LICENSE = SixXS License, concise redistribution license
-+AICCU_LICENSE_FILES = doc/LICENSE
-+AICCU_DEPENDENCIES = gnutls
++OMNIORB_VERSION = 4.1.6
++OMNIORB_SITE = http://downloads.sourceforge.net/project/omniorb/omniORB/omniORB-${OMNIORB_VERSION}
++OMNIORB_SOURCE = omniORB-${OMNIORB_VERSION}.tar.bz2
++OMNIORB_INSTALL_STAGING = YES
++OMNIORB_INSTALL_TARGET = YES
++OMNIORB_DEPENDENCIES = python 
++OMNIORB_LICENSE = GPL2 LGPLv2.1
++OMNIORB_LICENSE_FILES = COPYING COPYING.LIB
 +
-+define AICCU_BUILD_CMDS
-+	$(MAKE) CC="$(TARGET_CC)" LD="$(TARGET_LD)" -C $(@D) all
++OMNIORB_EXTRA_CONFIG_OPTIONS = $(call qstrip,$(BR2_OMNIORB_EXTRA_CONFIG_OPTIONS))
++
++OMNIORB_CONF_OPT = $(OMNIORB_EXTRA_CONFIG_OPTIONS)
++
++# The following is a space-separated list of files that need to have directory fixups
++OMNIORB_FIXUP_FILES = ${STAGING_DIR}/usr/bin/omniidl
++
++define OMNIORB_INSTALL_STAGING_CMDS
++	echo "Installing to staging dir: $(STAGING_DIR)"
++	$(TARGET_MAKE_ENV) $($(PKG)_MAKE_ENV) $($(PKG)_MAKE) $($(PKG)_INSTALL_STAGING_OPT) -C $($(PKG)_SRCDIR)
++	for i in $(OMNIORB_FIXUP_FILES); do \
++	$(SED) "s:$(HOST_DIR)/usr:/usr:g" $$i; \
++	done
 +endef
 +
-+define AICCU_INSTALL_TARGET_CMDS
-+	$(INSTALL) -D -m 0755 $(@D)/unix-console/aiccu \
-+		$(TARGET_DIR)/usr/sbin/aiccu
-+	[ -f $(TARGET_DIR)/etc/aiccu.conf ] || \
-+		$(INSTALL) -D -m 0644 $(@D)/doc/aiccu.conf \
-+		$(TARGET_DIR)/etc/aiccu.conf
++define OMNIORB_INSTALL_TARGET_CMDS
++	$(TARGET_MAKE_ENV) $($(PKG)_MAKE_ENV) $($(PKG)_MAKE) $($(PKG)_INSTALL_TARGET_OPT) -C $($(PKG)_SRCDIR)
 +endef
 +
-+define AICCU_INSTALL_INIT_SYSV
-+	[ -f $(TARGET_DIR)/etc/init.d/S50aiccu ] || \
-+		$(INSTALL) -D -m 0755 $(@D)/doc/aiccu.init \
-+		$(TARGET_DIR)/etc/init.d/S50aiccu
++# OMNIORB has some host tools integrated into it's build.  We first build those, then use
++# the host IDL2CPP/depend tools to generate code for the target compilation
++define OMNIORB_BUILD_CMDS
++	${HOST_MAKE_ENV} ${MAKE} CXX=${HOSTCXX} CC=${HOSTCC} -C $($(PKG)_SRCDIR)src/tool/omkdepend
++	cp $($(PKG)_SRCDIR)src/tool/omkdepend/omkdepend $($(PKG)_SRCDIR)/bin
++	${HOST_MAKE_ENV} ${MAKE} CXX=${HOSTCXX} CC=${HOSTCC} -C $($(PKG)_SRCDIR)src/tool/omniidl/cxx/cccp
++	${HOST_MAKE_ENV} ${MAKE} CXX=${HOSTCXX} CC=${HOSTCC} -C $($(PKG)_SRCDIR)src/tool/omniidl/cxx
++	${TARGET_MAKE_ENV} ${MAKE} -C $($(PKG)_SRCDIR)
 +endef
 +
-+$(eval $(generic-package))
++define OMNIORB_CLEAN_CMDS
++	${HOST_MAKE_ENV} ${MAKE} CXX=${HOSTCXX} CC=${HOSTCC} -C $($(PKG)_SRCDIR)src/tool/omkdepend clean
++	$(RM) $($(PKG)_SRCDIR)/bin/omkdepend
++	${HOST_MAKE_ENV} ${MAKE} CXX=${HOSTCXX} CC=${HOSTCC} -C $($(PKG)_SRCDIR)src/tool/omniidl/cxx/cccp clean
++	${HOST_MAKE_ENV} ${MAKE} CXX=${HOSTCXX} CC=${HOSTCC} -C $($(PKG)_SRCDIR)src/tool/omniidl/cxx clean
++	${TARGET_MAKE_ENV} ${MAKE} -C $($(PKG)_SRCDIR) clean
++endef
++
++define OMNIORB_UNINSTALL_STAGING_CMDS
++	$(RM) -r ${STAGING_DIR}/usr/include/omniORB4 ${STAGING_DIR}/usr/include/omnithread
++	$(RM) ${STAGING_DIR}/usr/include/omniconfig.h ${STAGING_DIR}/usr/include/omnithread.h
++	$(RM) ${STAGING_DIR}/usr/lib/libomni*
++	$(RM) ${STAGING_DIR}/usr/bin/omni* ${STAGING_DIR}/usr/bin/omkdepend
++endef
++
++define OMNIORB_UNINSTALL_TARGET_CMDS
++	$(RM) -r ${TARGET_DIR}/usr/include/omniORB4 ${TARGET_DIR}/usr/include/omnithread
++	$(RM) ${TARGET_DIR}/usr/include/omniconfig.h ${TARGET_DIR}/usr/include/omnithread.h
++	$(RM) ${TARGET_DIR}/usr/lib/libomni*
++	$(RM) ${TARGET_DIR}/usr/bin/omni* ${TARGET_DIR}/usr/bin/omkdepend
++endef
++
++$(eval $(autotools-package))
++
 -- 
-1.7.9.5
+1.7.1
