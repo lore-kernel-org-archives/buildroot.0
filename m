@@ -1,25 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 5 Sep 2013 09:59:36 +0200
-Subject: [Buildroot] [PATCHv2] perf: Add host-bison,
- host-flex dependencies
-In-Reply-To: <1378321330-16521-1-git-send-email-mjonker@synopsys.com>
-References: <1378321330-16521-1-git-send-email-mjonker@synopsys.com>
-Message-ID: <20130905095936.03a26338@skate>
+Date: Thu, 5 Sep 2013 10:01:21 +0200
+Subject: [Buildroot] [pull request] webkit: Version bump to 1.11.5
+In-Reply-To: <5227648E.7030304@mind.be>
+References: <CAG2jQ8gLL4NdmHcFA=ELMbFfHY1oGPGaXkvSaPk66sesh-0+6w@mail.gmail.com>
+ <5227648E.7030304@mind.be>
+Message-ID: <20130905100121.4546cd3d@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Mischa Jonker,
+Dear Arnout Vandecappelle,
 
-On Wed,  4 Sep 2013 21:02:10 +0200, Mischa Jonker wrote:
-> Signed-off-by: Mischa Jonker <mjonker@synopsys.com>
-> ---
->  package/perf/perf.mk |    6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
+On Wed, 04 Sep 2013 18:49:18 +0200, Arnout Vandecappelle wrote:
 
-Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> >   package/webkit/webkit-mips-dfg.patch                       | 1490
+> > ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+> >   package/webkit/webkit.mk                                   |   18 +-
+> 
+>   Hi Markos,
+> 
+>   Any chance to manually remove the huge patch so that you can post this 
+> on the list? Otherwise, there's not much chance for a review...
+
+A 1490 line patch is not so huge, I believe it should make it on the
+list, and if not, Peter will validate it manually. I agree that the
+overall patch should be sent to the list for review.
+
+>   Is there a reason why you cannot download the upstream patches with 
+> WEBKIT_PATCH ?
+
+When it's possible, it's indeed a good idea.
+
+Best regards,
+
+Thomas
 -- 
 Thomas Petazzoni, Free Electrons
 Kernel, drivers, real-time and embedded Linux
