@@ -1,59 +1,43 @@
-From: Markos Chandras <markos.chandras@gmail.com>
-Date: Thu, 5 Sep 2013 10:15:56 +0100
-Subject: [Buildroot] [pull request] webkit: Version bump to 1.11.5
-In-Reply-To: <20130905110143.55467e66@skate>
-References: <CAG2jQ8gLL4NdmHcFA=ELMbFfHY1oGPGaXkvSaPk66sesh-0+6w@mail.gmail.com>
- <5227648E.7030304@mind.be> <20130905100121.4546cd3d@skate>
- <CAG2jQ8g2SYnbc5eqvhMnw-5=qQXj4K2q_aW4r70MRExdYjmpjw@mail.gmail.com>
- <20130905110143.55467e66@skate>
-Message-ID: <CAG2jQ8ixCL2XKNGD1hMb3SkhmuPmppHCnVAWqMsyJH=Gh=yV1A@mail.gmail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 05 Sep 2013 11:25:53 +0200
+Subject: [Buildroot] git http access broken ?
+In-Reply-To: <CAHTvVMcwEyh-DA2BFfFqB5NdKyuZrqFsH_KOqaxxCgpyxXES_w@mail.gmail.com>
+ (Nicolas Aguirre's message of "Thu, 5 Sep 2013 10:14:42 +0200")
+References: <CAHTvVMcwEyh-DA2BFfFqB5NdKyuZrqFsH_KOqaxxCgpyxXES_w@mail.gmail.com>
+Message-ID: <871u534o2m.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+>>>>> "Nicolas" == Nicolas Aguirre <aguirre.nicolas@gmail.com> writes:
 
-On 5 September 2013 10:01, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Dear Markos Chandras,
->
-> On Thu, 5 Sep 2013 09:48:32 +0100, Markos Chandras wrote:
->
->> > A 1490 line patch is not so huge, I believe it should make it on the
->> > list, and if not, Peter will validate it manually. I agree that the
->> > overall patch should be sent to the list for review.
->>
->> Well, it's an upstream patch, so i don't think there is much to review
->> there but I can send it to the list anyway.
->
-> It's not much to review this upstream patch, but rather the overall
-> changes in webkit.mk and so on.
+ Nicolas> Hi,
+ Nicolas> I'm using the git http protocol to update my buildroot tree as i'm
+ Nicolas> behind a proxy, with address found on your website :
+ Nicolas> http://buildroot.uclibc.org/git.html
 
-Oh sorry I thought you were referring just to the MIPS patch.
+ Nicolas> but since a few days, it seems broken when i try to update.
 
->
->> >>   Is there a reason why you cannot download the upstream patches with
->> >> WEBKIT_PATCH ?
->> >
->> > When it's possible, it's indeed a good idea.
->>
->> Unfortunately, I can't (or I don't think I can) use that. I had to
->> tweak the upstream patches a bit,
->> for example delete the changes in the ChangeLog files since they don't apply.
->> For other patches, I had to merge 2-3 upstream patches into a single
->> one in order to fix the problem completely instead of providing
->> separate patches with 1-2 line fixes.
->
-> Ok. Since the patches are upstream, that's fine, since it means they
-> will be removed at some point in the future.
->
-> Thanks,
->
+ Nicolas> I do something wrong ?
 
-Yes that's true.  I will send the patch to the list.
+What exactly happens when you try? It works here:
+
+time git clone -v http://git.buildroot.net/git/buildroot.git
+Cloning into 'buildroot'...
+5.96s user 2.16s system 5% cpu 2:35.53 total
+
+Notice that it is a lot slower than native git:// access:
+
+time git clone -v git://git.buildroot.net/buildroot
+Cloning into 'buildroot'...
+remote: Counting objects: 111019, done.
+remote: Compressing objects: 100% (41701/41701), done.
+remote: Total 111019 (delta 75790), reused 102807 (delta 68750)
+Receiving objects: 100% (111019/111019), 31.63 MiB | 1.61 MiB/s, done.
+Resolving deltas: 100% (75790/75790), done.
+3.03s user 0.83s system 9% cpu 41.150 total
 
 -- 
-Regards,
-Markos Chandras
+Bye, Peter Korsgaard
