@@ -1,10 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 5 Sep 2013 23:44:14 +0200
-Subject: [Buildroot] [PATCH 1/2] package/Makefile.in: Fix dependency for
- selecting uclinux as TARGET_OS
-In-Reply-To: <1378262598.32360.5.camel@phoenix>
+Date: Thu, 5 Sep 2013 23:48:41 +0200
+Subject: [Buildroot] [PATCH 2/2] arch/Config.in: Allow ARM to select
+ BR2_BINFMT_FLAT
+In-Reply-To: <1378262667.32360.6.camel@phoenix>
 References: <1378262598.32360.5.camel@phoenix>
-Message-ID: <20130905234414.45a8106a@skate>
+ <1378262667.32360.6.camel@phoenix>
+Message-ID: <20130905234841.3bbfe0d4@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,29 +14,48 @@ To: buildroot@busybox.net
 
 Dear Axel Lin,
 
-On Wed, 04 Sep 2013 10:43:18 +0800, Axel Lin wrote:
-> Current setting only allows blackfin to select uclinux as TARGET_OS.
-> However, some noMMU ARM platforms that using FLAT binary format also need to
-> select uclinux as TARGET_OS. Fix the dependency.
+On Wed, 04 Sep 2013 10:44:27 +0800, Axel Lin wrote:
 
-Are you sure uclinux as TARGET_OS is the right selection for ARM? The
-release notes of gcc 4.7, at http://gcc.gnu.org/gcc-4.7/changes.html,
-indicate:
+> diff --git a/arch/Config.in b/arch/Config.in
+> index 14899ca..31c23ec 100644
+> --- a/arch/Config.in
+> +++ b/arch/Config.in
+> @@ -223,8 +223,9 @@ config BR2_GCC_TARGET_MODE
+>  # Set up target binary format
+>  choice
+>  	prompt "Target Binary Format"
+> -	depends on BR2_bfin || BR2_m68k
+> -	default BR2_BINFMT_FDPIC
+> +	depends on BR2_arm || BR2_bfin || BR2_m68k
+> +	default BR2_BINFMT_ELF if BR2_arm
+> +	default BR2_BINFMT_FDPIC if (BR2_bfin || BR2_m68k)
 
-""
-The obsolete ports with alternatives are:
+I know it was broken before, but FDPIC isn't supported on BR2_m68k, so
+I guess we should have something like:
 
-    arm*-*-rtems (use arm*-*-rtemseabi)
-    arm*-*-linux-gnu (use arm*-*-linux-gnueabi)
-    arm*-*-elf (use arm*-*-eabi)
-    arm*-*-uclinux* (use arm*-*-uclinux*eabi)
-""
+	prompt "Target Binary Format"
+	depends on BR2_arm || BR2_m68k || BR2_bfin
+	default BR2_BINFMT_ELF if BR2_arm
+	default BR2_BINFMT_FDPIC if BR2_bfin
+	default BR2_BINFMT_FLAT if BR2_m68k
 
-So it looks like the arm-<something>-uclinux* tuple should not be used,
-if I understand this correctly. Do you have more details about why
-arm-<something>-uclinux* should be used?
+But I'm wondering if we shouldn't go further than that, and make
+BR2_BINFMT_FLAT available only for non-MMU ARMs. Something like:
 
-Thanks!
+	prompt "Target Binary Format"
+	depends on BR2_arm7tmdi || BR2_arm_cortex_m3 ||	BR2_arm_cortex_m4 || BR2_m68k || BR2_bfin
+	default BR2_BINFMT_FLAT if BR2_arm7tmdi || BR2_arm_cortex_m3 ||	BR2_arm_cortex_m4 || BR2_m68k
+	default BR2_BINFMT_FDPIC if BR2_bfin
+
+or something like this. This way, users of MMU-capable ARM variants
+wouldn't be confused by the availability of FLAT and ELF as binary
+formats. Of course, BR2_BINFMT_ELF should gain some !BR2_arm7tmdi
+&& !BR2_arm_cortex_m3 && !BR2_arm_cortex_m4 dependencies, or maybe even
+a !BR2_USE_MMU dependency. I think there's quite some room for
+improvement around the definition of which CPU has an MMU or not, and
+which architectures support which binary formats.
+
+Best regards,
 
 Thomas
 -- 
