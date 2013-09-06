@@ -1,39 +1,90 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 06 Sep 2013 22:53:53 +0200
-Subject: [Buildroot] [git commit] uclibc: add upstream 0.9.33 fixes
-In-Reply-To: <20130906163551.571faf5c@skate> (Thomas Petazzoni's message of
- "Fri, 6 Sep 2013 16:35:51 +0200")
-References: <20130906133535.2BD969A98A@busybox.osuosl.org>
- <20130906163551.571faf5c@skate>
-Message-ID: <87ppsl1xjy.fsf@dell.be.48ers.dk>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Fri, 06 Sep 2013 23:36:18 +0200
+Subject: [Buildroot] [PATCH] trivial: correct capitalization of Lua in
+	Config.in files
+Message-ID: <37b9a5e957cd96df84ea.1378503378@argentina>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+The Lua website says:
+"Like most names, it should be written in lower case with an initial capital,
+that is, "Lua". Please do not write it as "LUA", which is both ugly and
+confusing, because then it becomes an acronym with different meanings for
+different people."
+http://www.lua.org/about.html
 
-Hi,
+So, let's honor this request in buildroot.
 
- >> Drop uclibc-0002-Add-definition-of-MSG_WAITFORONE-and-MSG_CMSG_CMSG_CLOEXE.patch
- >> as that is a subset of uclibc-0035-socket.h-pull-socket_type.h-from-eglibc.patch
+Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
- Thomas> Shouldn't we switch to using the git version of uClibc instead of
- Thomas> carrying 40+ patches? The uClibc project seems to have issues getting
- Thomas> releases out, maybe we should just use their git version, and bump it
- Thomas> from time to time when appropriate?
+---
+ package/Config.in         |  2 +-
+ package/dnsmasq/Config.in |  2 +-
+ package/haserl/Config.in  |  4 ++--
+ package/lua/Config.in     |  4 ++--
+ 4 files changed, 6 insertions(+), 6 deletions(-)
 
-Yes, Perhaps. When I started this, I only thought I would add 2-3
-patches to fix the eventfd issue - but looking closer, the other patches
-seemed worthwhile as well.
-
-We do carry a few patches that aren't (yet?) part of upstream git on the
-0.9.33 branch, so it wouldn't get rid of all patches (but most). Another
-potential issue is that git almost becomes a hard buildroot dependency,
-but that's probably not a big problem.
-
-What do others say?
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/Config.in b/package/Config.in
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -326,7 +326,7 @@ source "package/jimtcl/Config.in"
+ source "package/lua/Config.in"
+ source "package/luajit/Config.in"
+ if BR2_PACKAGE_LUA || BR2_PACKAGE_LUAJIT
+-menu "LUA libraries/modules"
++menu "Lua libraries/modules"
+ source "package/cgilua/Config.in"
+ source "package/copas/Config.in"
+ source "package/coxpcall/Config.in"
+diff --git a/package/dnsmasq/Config.in b/package/dnsmasq/Config.in
+--- a/package/dnsmasq/Config.in
++++ b/package/dnsmasq/Config.in
+@@ -33,7 +33,7 @@ config BR2_PACKAGE_DNSMASQ_LUA
+ 	bool "Lua scripting support"
+ 	select BR2_PACKAGE_LUA
+ 	help
+-	  Enable lua scripting for dnsmasq
++	  Enable Lua scripting for dnsmasq
+ 
+ config BR2_PACKAGE_DNSMASQ_CONNTRACK
+ 	bool "conntrack marking support"
+diff --git a/package/haserl/Config.in b/package/haserl/Config.in
+--- a/package/haserl/Config.in
++++ b/package/haserl/Config.in
+@@ -9,12 +9,12 @@ config BR2_PACKAGE_HASERL
+ 	  http://haserl.sourceforge.net/
+ 
+ config BR2_PACKAGE_HASERL_WITH_LUA
+-	bool "lua support"
++	bool "Lua support"
+ 	depends on BR2_PACKAGE_HASERL
+ 	depends on BR2_PACKAGE_HASERL_VERSION_0_9_X
+ 	select BR2_PACKAGE_LUA
+ 	help
+-	  Enable LUA support for haserl
++	  Enable Lua support for haserl
+ 
+ choice
+ 	prompt "Haserl version"
+diff --git a/package/lua/Config.in b/package/lua/Config.in
+--- a/package/lua/Config.in
++++ b/package/lua/Config.in
+@@ -21,13 +21,13 @@ config BR2_PACKAGE_LUA_INTERPRETER_READL
+ 	select BR2_PACKAGE_READLINE
+ 	select BR2_PACKAGE_NCURSES
+ 	help
+-	  Enables command-line editing in the lua interpreter.
++	  Enables command-line editing in the Lua interpreter.
+ 
+ config BR2_PACKAGE_LUA_INTERPRETER_LINENOISE
+ 	bool "linenoise support"
+ 	select BR2_PACKAGE_LINENOISE
+ 	help
+-	  Enables command-line editing in the lua interpreter.
++	  Enables command-line editing in the Lua interpreter.
+ 
+ endchoice
+ 
