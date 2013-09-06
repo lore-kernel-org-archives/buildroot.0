@@ -1,68 +1,45 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Fri, 6 Sep 2013 16:34:07 +0200
-Subject: [Buildroot] [RFC] Unification of package comments on wchar,
- largefile, c++ support, thread, ... support
-In-Reply-To: <20130906142807.44427db7@skate>
-References: <CAAXf6LV7wB6_RsufRWD6s7-viuYheasMHJWqDAGtu6BmPpZBdw@mail.gmail.com>
- <CAAHaz6E16CcRV1gpvFA3KvPfvf78JjqywVJFZxCgs5YOCAeF2g@mail.gmail.com>
- <CAAXf6LWyOHWDxPHkwga4mCy3UaCu93XEvAaXBpRz86wrQyPfnw@mail.gmail.com>
- <20130906142807.44427db7@skate>
-Message-ID: <CAAXf6LU0aHEC3KH_5ZUN+ffXGAiDanfX+Qj2RZG5bruzPjtJkQ@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 6 Sep 2013 16:35:51 +0200
+Subject: [Buildroot] [git commit] uclibc: add upstream 0.9.33 fixes
+In-Reply-To: <20130906133535.2BD969A98A@busybox.osuosl.org>
+References: <20130906133535.2BD969A98A@busybox.osuosl.org>
+Message-ID: <20130906163551.571faf5c@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Dear Peter Korsgaard,
 
-On Fri, Sep 6, 2013 at 2:28 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Dear Thomas De Schampheleire,
->
-> On Fri, 6 Sep 2013 12:37:05 +0200, Thomas De Schampheleire wrote:
->
->> My question to the community: do we agree on the wording above (foo
->> needs a toolchain w/ XXX, YYY)?
->> If yes, then I will proceed to making the changes.
->
-> Do we really want to use all uppercase, even for things like thread
-> support?
->
-> We have the choice between:
->
->  (1) All lower-case
->
->  comment "directfb needs a toolchain w/ ipv6, rpc, thread, wchar"
->
->  (2) Lower-case, except when it doesn't make sense (acronyms)
->
->  comment "directfb needs a toolchain w/ IPv6, RPC, thread, wchar"
->
->  (3) All upper-case
->
->  comment "directfb needs a toolchain w/ IPv6, RPC, THREAD, WCHAR"
+On Fri, 6 Sep 2013 15:28:51 +0200, Peter Korsgaard wrote:
+> commit: http://git.buildroot.net/buildroot/commit/?id=055f1c02d35068d0b089f3b29ffdd4fb2717bb5c
+> branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+> 
+> Upstream has a large number of patches lined up for the next 0.9.33.x bugfix
+> release;
+> 
+> http://git.uclibc.org/uClibc/log/?h=0.9.33
+> 
+> Add them here, as atleast some of them are quite critical (E.G. the eventfd
+> issue gets triggered by recent glib versions).
+> 
+> I've skipped the microblaze and xtensa fixes as we don't currently support
+> those with 0.9.33.2.
+> 
+> Drop uclibc-0002-Add-definition-of-MSG_WAITFORONE-and-MSG_CMSG_CMSG_CLOEXE.patch
+> as that is a subset of uclibc-0035-socket.h-pull-socket_type.h-from-eglibc.patch
 
-All options are fine for me. I think the most important thing is that
-the user can map the comment onto the necessary configuration options
-in the toolchain menu.
-The second one is most balanced, I'm slightly leaning towards that.
-
->
-> Also, the other question is which features do we mention. IPv6, RPC,
-> largefile, wchar, C++ and thread have always been there. However, the
-> need for dynamic library hasn't been always but in the comments, but
-> you were suggesting to include it. Also, what about MMU dependency ?
-
-I'm not suggesting we should. I saw at least one package that did
-mention dynamic library support (sshfs), so I think we should line up:
-either mention it when needed (!PREFER_STATIC_LIB) or not mention it
-anywhere (and thus change sshfs).
-For MMU the same: I'm open for either one, as long as we have a clear
-strategy and follow that for all packages.
-
-If you ask my opinion, I would also mention the need for dynamic
-library and MMU, but it's not a strong opinion.
+Shouldn't we switch to using the git version of uClibc instead of
+carrying 40+ patches? The uClibc project seems to have issues getting
+releases out, maybe we should just use their git version, and bump it
+from time to time when appropriate?
 
 Best regards,
+
 Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
