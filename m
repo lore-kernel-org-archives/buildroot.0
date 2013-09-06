@@ -1,45 +1,53 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 6 Sep 2013 16:35:51 +0200
-Subject: [Buildroot] [git commit] uclibc: add upstream 0.9.33 fixes
-In-Reply-To: <20130906133535.2BD969A98A@busybox.osuosl.org>
-References: <20130906133535.2BD969A98A@busybox.osuosl.org>
-Message-ID: <20130906163551.571faf5c@skate>
+From: Michael Rommel <rommel@layer-7.net>
+Date: Fri, 6 Sep 2013 16:38:33 +0200
+Subject: [Buildroot] [RFC] Unification of package comments on wchar,
+	largefile, c++ support, thread, ... support
+In-Reply-To: <CAAXf6LU0aHEC3KH_5ZUN+ffXGAiDanfX+Qj2RZG5bruzPjtJkQ@mail.gmail.com>
+References: <CAAXf6LV7wB6_RsufRWD6s7-viuYheasMHJWqDAGtu6BmPpZBdw@mail.gmail.com>
+ <CAAHaz6E16CcRV1gpvFA3KvPfvf78JjqywVJFZxCgs5YOCAeF2g@mail.gmail.com>
+ <CAAXf6LWyOHWDxPHkwga4mCy3UaCu93XEvAaXBpRz86wrQyPfnw@mail.gmail.com>
+ <20130906142807.44427db7@skate>
+ <CAAXf6LU0aHEC3KH_5ZUN+ffXGAiDanfX+Qj2RZG5bruzPjtJkQ@mail.gmail.com>
+Message-ID: <4E721931-1126-44EF-A60C-EFB02FDBAEA6@layer-7.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Peter Korsgaard,
+Hi all,
 
-On Fri, 6 Sep 2013 15:28:51 +0200, Peter Korsgaard wrote:
-> commit: http://git.buildroot.net/buildroot/commit/?id=055f1c02d35068d0b089f3b29ffdd4fb2717bb5c
-> branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-> 
-> Upstream has a large number of patches lined up for the next 0.9.33.x bugfix
-> release;
-> 
-> http://git.uclibc.org/uClibc/log/?h=0.9.33
-> 
-> Add them here, as atleast some of them are quite critical (E.G. the eventfd
-> issue gets triggered by recent glib versions).
-> 
-> I've skipped the microblaze and xtensa fixes as we don't currently support
-> those with 0.9.33.2.
-> 
-> Drop uclibc-0002-Add-definition-of-MSG_WAITFORONE-and-MSG_CMSG_CMSG_CLOEXE.patch
-> as that is a subset of uclibc-0035-socket.h-pull-socket_type.h-from-eglibc.patch
+On Sep 6, 2013, at 16:34 , Thomas De Schampheleire <patrickdepinguin@gmail.com> wrote:
 
-Shouldn't we switch to using the git version of uClibc instead of
-carrying 40+ patches? The uClibc project seems to have issues getting
-releases out, maybe we should just use their git version, and bump it
-from time to time when appropriate?
+>> We have the choice between:
+>> 
+>> (1) All lower-case
+>> 
+>> comment "directfb needs a toolchain w/ ipv6, rpc, thread, wchar"
+>> 
+>> (2) Lower-case, except when it doesn't make sense (acronyms)
+>> 
+>> comment "directfb needs a toolchain w/ IPv6, RPC, thread, wchar"
+>> 
+>> (3) All upper-case
+>> 
+>> comment "directfb needs a toolchain w/ IPv6, RPC, THREAD, WCHAR"
+> 
+> All options are fine for me. I think the most important thing is that
+> the user can map the comment onto the necessary configuration options
+> in the toolchain menu.
+> The second one is most balanced, I'm slightly leaning towards that.
 
-Best regards,
 
-Thomas
+I would like to have guidance for long package names, too, because I ran into the limit
+for python-pyzmq which alone takes up considerable space and I needed three comments
+to accommodate all...
+
+  Michael.
+
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Michael Rommel, Erlangen, Germany
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130906/95e61ffa/attachment.html>
