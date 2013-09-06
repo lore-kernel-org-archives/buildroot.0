@@ -1,67 +1,47 @@
-From: Ryan Barnett <rjbarnet@rockwellcollins.com>
-Date: Fri, 6 Sep 2013 07:37:20 -0500
-Subject: [Buildroot] [RFCv1 00/11] Convert toolchain backends to
- packages to fix source/external-deps/legal-info
-In-Reply-To: <CAHkwnC_8gMrxTO_e8y2qg=NSZV6Bb2Wb+0kP9sEHphKXJuw1NQ@mail.gmail.com>
-References: <1378416469-17708-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <CAHkwnC_8gMrxTO_e8y2qg=NSZV6Bb2Wb+0kP9sEHphKXJuw1NQ@mail.gmail.com>
-Message-ID: <OFC0E14F93.6E00FFAE-ON86257BDE.0044B2B1-86257BDE.00455616@rockwellcollins.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 6 Sep 2013 14:58:21 +0200
+Subject: [Buildroot] Two or three stages gcc build?
+In-Reply-To: <9C6FE6D2-322A-41E7-8B82-C623B5C1F754@gmail.com>
+References: <20130705233831.12030038@skate>
+ <9C6FE6D2-322A-41E7-8B82-C623B5C1F754@gmail.com>
+Message-ID: <20130906145821.4ce0ab13@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> From: Fabio Porcedda <fabio.porcedda@gmail.com>
+Dear Khem Raj,
+
+On Thu, 5 Sep 2013 10:31:46 -0700, Khem Raj wrote:
+
+> I am late in reply but here it is.
+
+No problem. Thanks for your reply.
+
+
+> > In fe9a576e8d27460468dfe5eac90aad49ab26a8d3 (gcc-cross-intermediate,
+> > gcc-crosssdk-intermediate: Remove) you completely remove the
+> > intermediate recipes, so I assume they are really no longer needed,
+> > even by the uClibc build, since I believe OE-core also supports uClibc
+> > builds (thanks to your work).
 > 
-> On Thu, Sep 5, 2013 at 11:27 PM, Thomas Petazzoni
-> <thomas.petazzoni@free-electrons.com> wrote:
-> > Hello,
-> 
-> Hi Thomas,
-> 
-> > <snip>
-> >
-> > In the long term, I'm thinking of:
-> >
-> >  (1) Making 'toolchain' a dependency of all target packages, because
-> >      it's really what it is.
-> 
-> About that i've already sent a patch "package: add toolchain
-> dependency to inner-generic-package:
-> http://patchwork.ozlabs.org/patch/237887/
-> 
-> I will rebase and send the patch after i sent the v3 for the top-level
-> parallel make.
-> 
+> thats correct. See the code around where limits.h is installed by gcc initial
+> uclibc was less of an issue, glibc was more until last year when a lot of cleanup
+> was done especially where build time dependency on libgcc_s and libgcc_eh was averted
+> in cross gcc and buildroot you can do the same like i have done for OE I can help out
 
-I would really like to see this because one of my biggest 'annoyances' 
-with buildroot is that if do a "make clean" and then "make <package>",
-the toolchain doesn't copy over automatically. I use this sequence of 
-commands to test that I have my dependancies correct when adding new
-packages or just testing a specific package that it builds correctly.
+In the mean time, I've experimented a bit and actually implemented it.
+The patch hasn't been merged yet in Buildroot, but it has been posted:
+http://lists.busybox.net/pipermail/buildroot/2013-September/077344.html.
 
-Again this is just annoyance with a simple workaround but it is good 
-to see that I'm not the only person with this annoyance. Thanks Fabio
-for attempting to fix this.
+Don't hesitate to have a look and tell me what you think.
 
+Thanks!
 
-
-
-
-Ryan J Barnett / Software Engineer / Platform SW 
-MS 137-157, 855 35th St NE, Cedar Rapids, IA, 52498-3161, US
-Phone: 319-263-3880 / VPN: 263-3880 
-rjbarnet at rockwellcollins.com
-www.rockwellcollins.com 
-
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130906/06e170d0/attachment.html>
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: not available
-Type: image/gif
-Size: 2004 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130906/06e170d0/attachment.gif>
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
