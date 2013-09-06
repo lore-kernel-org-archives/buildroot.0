@@ -1,49 +1,35 @@
-From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Fri, 6 Sep 2013 10:50:41 +0200
+From: =?UTF-8?Q?J=C3=A9r=C3=B4me_Pouiller?= <jezz@sysmic.org>
+Date: Fri, 06 Sep 2013 10:57:43 +0200
 Subject: [Buildroot] [RFCv1 00/11] Convert toolchain backends to
  packages to fix source/external-deps/legal-info
-In-Reply-To: <20130906103847.662e1463@skate>
+In-Reply-To: <1378416469-17708-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1378416469-17708-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <CAHkwnC_8gMrxTO_e8y2qg=NSZV6Bb2Wb+0kP9sEHphKXJuw1NQ@mail.gmail.com>
- <20130906103847.662e1463@skate>
-Message-ID: <CAHkwnC-qgmEeu7vYS_Gv3jSX0wg6mznVikRo6eur1xpywTsTEw@mail.gmail.com>
+Message-ID: <a732406fe5a58630caddfdf3453ff06e@sysmic.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Sep 6, 2013 at 10:38 AM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Dear Fabio Porcedda,
+On 2013-09-05 23:27, Thomas Petazzoni wrote:
+> Hello,
 >
-> On Fri, 6 Sep 2013 10:28:32 +0200, Fabio Porcedda wrote:
+> The final goal of this patch set is to get 'make source' and 'make
+> external-deps' to behave properly after the conversion of the 
+> internal
+> toolchain backend to the package infrastructure.
+
+Great!
+
+> To do so, the idea of this patch is to:
 >
->> > In the long term, I'm thinking of:
->> >
->> >  (1) Making 'toolchain' a dependency of all target packages, because
->> >      it's really what it is.
->>
->> About that i've already sent a patch "package: add toolchain
->> dependency to inner-generic-package:
->> http://patchwork.ozlabs.org/patch/237887/
->>
->> I will rebase and send the patch after i sent the v3 for the top-level
->> parallel make.
->
-> Seems right, but it should remove "toolchain" from being pulled in the
-> main Makefile. If all target packages already depend on it, there's no
-> longer a reason to have "toolchain" be a special case target handled by
-> the main Makefile (unless I'm missing something).
+>  (1) Create a 'toolchain' virtual package, which will depend on the
+>      particular toolchain backend depending on the configuration.
+Is it too early to move toolchain/ to package/? Or there is a reason
+to keep toolchain/ out of package/?
 
-You are right i will try to do that, if i remember correctly removing
-the toolchain depency in the main makefile give some building issue,
-maybe some non-package stuff still depends on it or at least on a part
-of it like "prepare dirs dependencies".
 
-Maybe the correct solution is to have as dependency a "base" target
-without pulling the whole toolchain.
-
-Best regards
 -- 
-Fabio Porcedda
+J?r?me Pouiller, Sysmic
+Embedded Linux specialist
+http://www.sysmic.fr
