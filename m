@@ -1,74 +1,51 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Fri, 6 Sep 2013 12:37:05 +0200
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 6 Sep 2013 14:28:07 +0200
 Subject: [Buildroot] [RFC] Unification of package comments on wchar,
  largefile, c++ support, thread, ... support
-In-Reply-To: <CAAHaz6E16CcRV1gpvFA3KvPfvf78JjqywVJFZxCgs5YOCAeF2g@mail.gmail.com>
+In-Reply-To: <CAAXf6LWyOHWDxPHkwga4mCy3UaCu93XEvAaXBpRz86wrQyPfnw@mail.gmail.com>
 References: <CAAXf6LV7wB6_RsufRWD6s7-viuYheasMHJWqDAGtu6BmPpZBdw@mail.gmail.com>
  <CAAHaz6E16CcRV1gpvFA3KvPfvf78JjqywVJFZxCgs5YOCAeF2g@mail.gmail.com>
-Message-ID: <CAAXf6LWyOHWDxPHkwga4mCy3UaCu93XEvAaXBpRz86wrQyPfnw@mail.gmail.com>
+ <CAAXf6LWyOHWDxPHkwga4mCy3UaCu93XEvAaXBpRz86wrQyPfnw@mail.gmail.com>
+Message-ID: <20130906142807.44427db7@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-All,
+Dear Thomas De Schampheleire,
 
-On Wed, Aug 21, 2013 at 7:28 AM, Alexander Lukichev
-<alexander.lukichev@gmail.com> wrote:
-> Hi Thomas,
->
-> 2013/8/19 Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
->>
->> I would like to agree on one common text, and adapt all packages
->> accordingly. The exact wording can be discussed, the main goal is the
->> unification. Here is a proposal:
->>
->> <...>
->>
->> What is your opinion on:
->> a. the concept of this unification
->> b. the wording proposed above
->
->
-> I also wondered at the free wording in all the multitude of packages. And
-> your proposal is a good try to solve the problem. As Arnout has pointed out,
-> it would also be nice to minimize the comment length, so
->   - "needs" looks better than "requires";
->   - "support" might well be dropped;
->   - "thread" might be changed to "THREADS" if "support" is dropped.
->
+On Fri, 6 Sep 2013 12:37:05 +0200, Thomas De Schampheleire wrote:
 
-I wasn't aware that the 70-character limit is pretty hard, since there
-is no horizontal scrolling in menuconfig?
+> My question to the community: do we agree on the wording above (foo
+> needs a toolchain w/ XXX, YYY)?
+> If yes, then I will proceed to making the changes.
 
-Based on the input of Alexander, here is an alternate, shorter, proposal:
+Do we really want to use all uppercase, even for things like thread
+support?
 
-foo needs a toolchain w/ feat
-foo needs a toolchain w/ featA, featB
-foo needs a toolchain w/ featA, featB, featC
+We have the choice between:
 
-where the features would be written as: WCHAR, LARGEFILE, IPV6, RPC,
-C++, THREADS.
+ (1) All lower-case
 
-The base length of ' needs a toolchain w/ ' is 22 characters.
-With the worst case combination of all features (I hope I didn't
-forget any), it is:
-' needs a toolchain w/ WCHAR, LARGEFILE, IPV6, RPC, C++, THREADS'
-which is 63 characters. So this leaves 7 characters for the package
-name, which is not a lot.
-(note: I also found a package sshfs that checks for static library, so
-the string even becomes a bit longer).
+ comment "directfb needs a toolchain w/ ipv6, rpc, thread, wchar"
 
-However, few packages need all of these features, and therefore I
-think that most of them will fit into the 70-chars limit. In the
-exceptional case that goes beyond 70 characters, we could still split
-the comment over 2 lines.
-Besides, who uses 80-char terminals nowadays anyway ;-)
+ (2) Lower-case, except when it doesn't make sense (acronyms)
 
-My question to the community: do we agree on the wording above (foo
-needs a toolchain w/ XXX, YYY)?
-If yes, then I will proceed to making the changes.
+ comment "directfb needs a toolchain w/ IPv6, RPC, thread, wchar"
 
-Thanks for your input,
+ (3) All upper-case
+
+ comment "directfb needs a toolchain w/ IPv6, RPC, THREAD, WCHAR"
+
+Also, the other question is which features do we mention. IPv6, RPC,
+largefile, wchar, C++ and thread have always been there. However, the
+need for dynamic library hasn't been always but in the comments, but
+you were suggesting to include it. Also, what about MMU dependency ?
+
 Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
