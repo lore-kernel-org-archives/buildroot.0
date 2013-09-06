@@ -1,54 +1,77 @@
-From: Axel Lin <axel.lin@ingics.com>
-Date: Fri, 6 Sep 2013 10:21:55 +0800
-Subject: [Buildroot] [PATCH 1/2] package/Makefile.in: Fix dependency for
- selecting uclinux as TARGET_OS
-In-Reply-To: <20130905234414.45a8106a@skate>
-References: <1378262598.32360.5.camel@phoenix> <20130905234414.45a8106a@skate>
-Message-ID: <CAFRkauDiWLMrTHn6coC-D+Dpfmdr0MGKNznHy758bvzRf0n8rg@mail.gmail.com>
+From: Spenser Gilliland <spenser@gillilanding.com>
+Date: Thu,  5 Sep 2013 23:25:14 -0500
+Subject: [Buildroot] [PATCH v2 0/7] glmark2 and Mesa updates
+Message-ID: <1378441521-10050-1-git-send-email-spenser@gillilanding.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2013/9/6 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>:
-> Dear Axel Lin,
->
-> On Wed, 04 Sep 2013 10:43:18 +0800, Axel Lin wrote:
->> Current setting only allows blackfin to select uclinux as TARGET_OS.
->> However, some noMMU ARM platforms that using FLAT binary format also need to
->> select uclinux as TARGET_OS. Fix the dependency.
->
-> Are you sure uclinux as TARGET_OS is the right selection for ARM? The
-> release notes of gcc 4.7, at http://gcc.gnu.org/gcc-4.7/changes.html,
-> indicate:
->
-> ""
-> The obsolete ports with alternatives are:
->
->     arm*-*-rtems (use arm*-*-rtemseabi)
->     arm*-*-linux-gnu (use arm*-*-linux-gnueabi)
->     arm*-*-elf (use arm*-*-eabi)
->     arm*-*-uclinux* (use arm*-*-uclinux*eabi)
-> ""
->
-> So it looks like the arm-<something>-uclinux* tuple should not be used,
-> if I understand this correctly. Do you have more details about why
-> arm-<something>-uclinux* should be used?
+This patch series adds the glmark2 and mesa3d-demos with supporing updates to
+the mesa3d, and libdrm stack.
 
-Somehow, I thought noMMU ARM platforms that using FLAT binary format needs to
-select uclinux as TARGET_OS.
-But since you mentioned the release notes of gcc 4.7, I'm not 100% sure.
+v1->v2:
+  - updates based on review.
+  - add mesa3d-demos
 
-I check my build, the result is I have arm-buildroot-uclinux-uclibcgnueabi-gcc.
-And the build log shows it checks target system type as:
-checking target system type... arm-buildroot-uclinux-uclibcgnueabi
+Spenser Gilliland (7):
+  libdrm: bump and add experimental ARM framebuffer support
+  sunxi-cedarx: bump to newer version, use armel2 binaries, add demo
+  mesa3d: pull out from x11
+  mesa3d: modularize and bump to version 9.1.6
+  libpng12: new package
+  glmark2: new package
+  mesa3d-demos: new package
 
-Does buildroot automatically convert arm*-*-uclinux* to arm*-*-uclinux*eabi?
+ package/Config.in                                  |   4 +
+ package/glmark2/Config.in                          |  16 +
+ package/glmark2/glmark2-add-mali-support.patch     | 102 ++++++
+ package/glmark2/glmark2-fix-add-GLchar.patch       |  17 +
+ .../glmark2-gl-to-glesv2-on-drm-flavor.patch       |  25 ++
+ package/glmark2/glmark2.mk                         |  69 ++++
+ package/libdrm/Config.in                           |  68 +++-
+ package/libdrm/libdrm.mk                           |  53 +++-
+ package/libpng12/Config.in                         |   9 +
+ package/libpng12/libpng12.mk                       |  18 ++
+ package/mesa3d-demos/Config.in                     |   8 +
+ .../mesa3d-demos/mesa3d-demos-optional-gl.patch    | 348 +++++++++++++++++++++
+ package/mesa3d-demos/mesa3d-demos.mk               |  63 ++++
+ package/mesa3d/Config.in                           | 180 +++++++++++
+ package/mesa3d/mesa3d-cross-glsl-compiler.patch    |  41 +++
+ package/mesa3d/mesa3d-gbm-without-dri.patch        |  30 ++
+ package/mesa3d/mesa3d.mk                           | 123 ++++++++
+ package/opengl/Config.in                           |   3 +
+ package/opengl/libegl/libegl.mk                    |   4 +
+ package/opengl/libgl/libgl.mk                      |  20 ++
+ package/opengl/libgles/libgles.mk                  |   4 +
+ package/opengl/libopenvg/libopenvg.mk              |   4 +
+ package/sunxi-cedarx/Config.in                     |  10 +
+ package/sunxi-cedarx/sunxi-cedarx.mk               |  26 +-
+ package/x11r7/Config.in                            |   1 -
+ package/x11r7/mesa3d/Config.in                     |  15 -
+ package/x11r7/mesa3d/mesa3d-uclibc-locale.patch    |  56 ----
+ package/x11r7/mesa3d/mesa3d.mk                     |  40 ---
+ .../xserver_xorg-server/xserver_xorg-server.mk     |   4 +-
+ 29 files changed, 1222 insertions(+), 139 deletions(-)
+ create mode 100644 package/glmark2/Config.in
+ create mode 100644 package/glmark2/glmark2-add-mali-support.patch
+ create mode 100644 package/glmark2/glmark2-fix-add-GLchar.patch
+ create mode 100644 package/glmark2/glmark2-gl-to-glesv2-on-drm-flavor.patch
+ create mode 100644 package/glmark2/glmark2.mk
+ create mode 100644 package/libpng12/Config.in
+ create mode 100644 package/libpng12/libpng12.mk
+ create mode 100644 package/mesa3d-demos/Config.in
+ create mode 100644 package/mesa3d-demos/mesa3d-demos-optional-gl.patch
+ create mode 100644 package/mesa3d-demos/mesa3d-demos.mk
+ create mode 100644 package/mesa3d/Config.in
+ create mode 100644 package/mesa3d/mesa3d-cross-glsl-compiler.patch
+ create mode 100644 package/mesa3d/mesa3d-gbm-without-dri.patch
+ create mode 100644 package/mesa3d/mesa3d.mk
+ create mode 100644 package/opengl/libgl/libgl.mk
+ delete mode 100644 package/x11r7/mesa3d/Config.in
+ delete mode 100644 package/x11r7/mesa3d/mesa3d-uclibc-locale.patch
+ delete mode 100644 package/x11r7/mesa3d/mesa3d.mk
 
-I also check host-gcc-final-4.5.4/gcc/config.gcc and libgcc/config.host.
-Looks like it also expects arm*-*-uclinux* for ARM ucLinux and arm*-*-linux* for
-ARM GNU/Linux with ELF.
-
-Thanks for the review,
-Axel
+-- 
+1.8.1.2
