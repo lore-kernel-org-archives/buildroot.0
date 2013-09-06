@@ -1,9 +1,9 @@
 From: Ryan Barnett <rjbarnet@rockwellcollins.com>
-Date: Thu, 5 Sep 2013 20:04:22 -0500
-Subject: [Buildroot] [PATCH 08/10] coreutils: add support for SELinux
+Date: Thu, 5 Sep 2013 20:04:23 -0500
+Subject: [Buildroot] [PATCH 09/10] dbus: add support for SELinux
 In-Reply-To: <1378429464-12546-1-git-send-email-rjbarnet@rockwellcollins.com>
 References: <1378429464-12546-1-git-send-email-rjbarnet@rockwellcollins.com>
-Message-ID: <1378429464-12546-9-git-send-email-rjbarnet@rockwellcollins.com>
+Message-ID: <1378429464-12546-10-git-send-email-rjbarnet@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,34 +13,36 @@ To: buildroot@busybox.net
 
 Signed-off-by: Ryan Barnett <rjbarnet@rockwellcollins.com>
 ---
- package/coreutils/coreutils.mk |    8 ++++++++
- 1 files changed, 8 insertions(+), 0 deletions(-)
+ package/dbus/dbus.mk |   10 +++++++++-
+ 1 files changed, 9 insertions(+), 1 deletions(-)
 
-diff --git a/package/coreutils/coreutils.mk b/package/coreutils/coreutils.mk
-index 17c81f7..9c18d85 100644
---- a/package/coreutils/coreutils.mk
-+++ b/package/coreutils/coreutils.mk
-@@ -16,6 +16,13 @@ ifeq ($(BR2_PACKAGE_BUSYBOX),y)
- COREUTILS_DEPENDENCIES = busybox
+diff --git a/package/dbus/dbus.mk b/package/dbus/dbus.mk
+index d50f630..228b98e 100644
+--- a/package/dbus/dbus.mk
++++ b/package/dbus/dbus.mk
+@@ -21,7 +21,6 @@ DBUS_CONF_OPT = --with-dbus-user=dbus \
+ 		--disable-tests \
+ 		--disable-asserts \
+ 		--enable-abstract-sockets \
+-		--disable-selinux \
+ 		--disable-xml-docs \
+ 		--disable-doxygen-docs \
+ 		--disable-static \
+@@ -54,6 +53,15 @@ ifeq ($(BR2_PACKAGE_SYSTEMD),y)
+ DBUS_CONF_OPT += --with-systemdsystemunitdir=/lib/systemd/system
  endif
  
++# SELinux support relies on audit support so enable both 
++# of them if libselinux has been selected.
 +ifeq ($(BR2_PACKAGE_LIBSELINUX),y)
-+COREUTILS_DEPENDENCIES += libselinux
-+COREUTILS_CONF_OPT += --with-selinux
++DBUS_CONF_OPT += --enable-selinux --enable-libaudit
++DBUS_DEPENDENCIES += libselinux audit
 +else
-+COREUTILS_CONF_OPT += --without-selinux
++DBUS_CONF_OPT += --disable-selinux --disable-libaudit
 +endif
 +
- COREUTILS_BIN_PROGS = cat chgrp chmod chown cp date dd df dir echo false hostname \
- 	ln ls mkdir mknod mv pwd rm rmdir vdir sleep stty sync touch true \
- 	uname join
-@@ -59,6 +66,7 @@ COREUTILS_CONF_OPT = --disable-rpath \
- 		--disable-dependency-tracking \
- 		--enable-install-program=hostname
- 
-+
- define COREUTILS_TOUCH_UNAME_C
- 	# ensure uname.c file's timestamp does not change,
- 	# so help2man does not run
+ # fix rebuild (dbus makefile errors out if /var/lib/dbus is a symlink)
+ define DBUS_REMOVE_VAR_LIB_DBUS
+ 	rm -rf $(TARGET_DIR)/var/lib/dbus
 -- 
 1.7.1
