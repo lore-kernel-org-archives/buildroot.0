@@ -1,125 +1,149 @@
-From: Ryan Barnett <rjbarnet@rockwellcollins.com>
-Date: Fri, 6 Sep 2013 13:45:14 -0500
-Subject: [Buildroot] [RFC] New feature to handle a custom board folder
-Message-ID: <OF9A959FD8.FE78AE85-ON86257BDE.00666A59-86257BDE.00670505@rockwellcollins.com>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Fri, 6 Sep 2013 22:25:17 +0200
+Subject: [Buildroot] [PATCH v3 1/2] getty: Create specific getty config
+	+ cleanups
+In-Reply-To: <1378481208-955-2-git-send-email-shmuelzon@gmail.com>
+References: <1378481208-955-1-git-send-email-shmuelzon@gmail.com>
+ <1378481208-955-2-git-send-email-shmuelzon@gmail.com>
+Message-ID: <CAAXf6LXHdWWjD6N1g1yeLt=W70BAJBOp_QTnJHkw6jRThgRu3Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-All,
+Hi Assaf,
 
-I would like to introduce a new concept I've got for how the board
-folder is brought into buildroot. I propose adding a feature to
-buildroot to treat the board folder as a package. In treating the board
-folder as a package, it would allow a board folder to be downloaded
-using currently supported methods of packages (HG/Git/SVN/archives from
-websites). It would be placed as an archive in the DL_DIR and extracted
-to BUILD_DIR/board. I will go into more detail further down about the
-structure.
+Thanks for resending...
 
-The motivation for this feature is that most of the customization done
-to buildroot in order to support  a project (board) is usually
-contained to a board folder. However, in many work environments in
-which buildroot is used, GIT isn't a preferred version control method
-(mine included) so being able to track mainline of buildroot is very
-difficult.
+On Fri, Sep 6, 2013 at 5:26 PM, Assaf Inbal <shmuelzon@gmail.com> wrote:
+> This commit introduces a specific BR2_TARGET_GENERIC_GETTY configuration flag.
+> This eliminates the need for checking if BR2_TARGET_GENERIC_GETTY_PORT is an
+> empty string or not. It also allows hiding various getty options when getty
+> isn't enabled.
+>
+> Signed-off-by: Assaf Inbal <shmuelzon@gmail.com>
+> ---
+>  system/Config.in |   17 ++++++++++++-----
+>  system/system.mk |   27 ++++++++++++++-------------
+>  2 files changed, 26 insertions(+), 18 deletions(-)
+>
+> diff --git a/system/Config.in b/system/Config.in
+> index 401285b..92dc7dd 100644
+> --- a/system/Config.in
+> +++ b/system/Config.in
+> @@ -198,15 +198,20 @@ config BR2_TARGET_GENERIC_ROOT_PASSWD
+>           in the build log! Avoid using a valuable password if either the
+>           .config file or the build log may be distributed!
+>
+> +config BR2_TARGET_GENERIC_GETTY
+> +       bool "Run a getty (login prompt) after boot"
+> +       default y
+> +
+> +if BR2_TARGET_GENERIC_GETTY
+> +menu "getty options"
+>  config BR2_TARGET_GENERIC_GETTY_PORT
+> -       string "Port to run a getty (login prompt) on"
+> +       string "TTY port"
+>         default "ttyS0"
+>         help
+> -         Specify a port to run a getty (login prompt) on.
+> -         Set to the empty string to not run a getty.
+> +         Specify a port to run a getty on.
+>
+>  choice
+> -       prompt "Baudrate to use"
+> +       prompt "Baudrate"
+>         default BR2_TARGET_GENERIC_GETTY_BAUDRATE_115200
+>         help
+>           Select a baudrate to use.
+> @@ -235,10 +240,12 @@ config BR2_TARGET_GENERIC_GETTY_BAUDRATE
+>         default "115200"        if BR2_TARGET_GENERIC_GETTY_BAUDRATE_115200
+>
+>  config BR2_TARGET_GENERIC_GETTY_TERM
+> -       string "Value to assign the TERM environment variable"
+> +       string "TERM environment variable"
+>         default "vt100"
+>         help
+>           Specify a TERM type.
+> +endmenu
+> +endif
+>
+>  config BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW
+>         bool "remount root filesystem read-write during boot"
+> diff --git a/system/system.mk b/system/system.mk
+> index b4ddc3e..c9e7cf7 100644
+> --- a/system/system.mk
+> +++ b/system/system.mk
+> @@ -1,14 +1,15 @@
+> -TARGET_GENERIC_HOSTNAME := $(call qstrip,$(BR2_TARGET_GENERIC_HOSTNAME))
+> -TARGET_GENERIC_ISSUE := $(call qstrip,$(BR2_TARGET_GENERIC_ISSUE))
+> -TARGET_GENERIC_ROOT_PASSWD := $(call qstrip,$(BR2_TARGET_GENERIC_ROOT_PASSWD))
+> -TARGET_GENERIC_PASSWD_METHOD := $(call qstrip,$(BR2_TARGET_GENERIC_PASSWD_METHOD))
+> -TARGET_GENERIC_GETTY := $(call qstrip,$(BR2_TARGET_GENERIC_GETTY_PORT))
+> -TARGET_GENERIC_GETTY_BAUDRATE := $(call qstrip,$(BR2_TARGET_GENERIC_GETTY_BAUDRATE))
+> -TARGET_GENERIC_GETTY_TERM := $(call qstrip,$(BR2_TARGET_GENERIC_GETTY_TERM))
+> +TARGET_GENERIC_HOSTNAME = $(call qstrip,$(BR2_TARGET_GENERIC_HOSTNAME))
+> +TARGET_GENERIC_ISSUE = $(call qstrip,$(BR2_TARGET_GENERIC_ISSUE))
+> +TARGET_GENERIC_ROOT_PASSWD = $(call qstrip,$(BR2_TARGET_GENERIC_ROOT_PASSWD))
+> +TARGET_GENERIC_PASSWD_METHOD = $(call qstrip,$(BR2_TARGET_GENERIC_PASSWD_METHOD))
+> +TARGET_GENERIC_GETTY_PORT = $(call qstrip,$(BR2_TARGET_GENERIC_GETTY_PORT))
+> +TARGET_GENERIC_GETTY_BAUDRATE = $(call qstrip,$(BR2_TARGET_GENERIC_GETTY_BAUDRATE))
+> +TARGET_GENERIC_GETTY_TERM = $(call qstrip,$(BR2_TARGET_GENERIC_GETTY_TERM))
+> +TARGET_GENERIC_GETTY_OPTIONS = $(call qstrip,$(BR2_TARGET_GENERIC_GETTY_OPTIONS))
 
-NOTE: I haven't attempted to implement this yet as this an idea that 
-is still in its infancies. 
+Ai, I didn't spot this in the previous versions, but this last line
+should be in the next patch that introduces the _OPTIONS option...
 
-Theory
----------
-In theory the custom board folder structure would work as follows:
+With that changed, you can add:
+Acked-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
-1. User specifies the custom board folder in menuconfig
-    a. Initial though would to place it as follows in menuconfig
+>
+>  target-generic-securetty:
+> -       grep -q '^$(TARGET_GENERIC_GETTY)$$' $(TARGET_DIR)/etc/securetty || \
+> -               echo '$(TARGET_GENERIC_GETTY)' >> $(TARGET_DIR)/etc/securetty
+> +       grep -q '^$(TARGET_GENERIC_GETTY_PORT)$$' $(TARGET_DIR)/etc/securetty || \
+> +               echo '$(TARGET_GENERIC_GETTY_PORT)' >> $(TARGET_DIR)/etc/securetty
+>
+>  target-generic-hostname:
+>         mkdir -p $(TARGET_DIR)/etc
+> @@ -29,13 +30,13 @@ target-root-passwd:
+>         $(SED) "s,^root:[^:]*:,root:$$TARGET_GENERIC_ROOT_PASSWD_HASH:," $(TARGET_DIR)/etc/shadow
+>
+>  target-generic-getty-busybox:
+> -       $(SED) '/# GENERIC_SERIAL$$/s~^.*#~$(TARGET_GENERIC_GETTY)::respawn:/sbin/getty -L $(TARGET_GENERIC_GETTY) $(TARGET_GENERIC_GETTY_BAUDRATE) $(TARGET_GENERIC_GETTY_TERM) #~' \
+> +       $(SED) '/# GENERIC_SERIAL$$/s~^.*#~$(TARGET_GENERIC_GETTY_PORT)::respawn:/sbin/getty -L $(TARGET_GENERIC_GETTY_PORT) $(TARGET_GENERIC_GETTY_BAUDRATE) $(TARGET_GENERIC_GETTY_TERM) #~' \
+>                 $(TARGET_DIR)/etc/inittab
+>
+>  # In sysvinit inittab, the "id" must not be longer than 4 bytes, so we
+>  # skip the "tty" part and keep only the remaining.
+>  target-generic-getty-sysvinit:
+> -       $(SED) '/# GENERIC_SERIAL$$/s~^.*#~$(shell echo $(TARGET_GENERIC_GETTY) | tail -c+4)::respawn:/sbin/getty -L $(TARGET_GENERIC_GETTY) $(TARGET_GENERIC_GETTY_BAUDRATE) $(TARGET_GENERIC_GETTY_TERM) #~' \
+> +       $(SED) '/# GENERIC_SERIAL$$/s~^.*#~$(shell echo $(TARGET_GENERIC_GETTY_PORT) | tail -c+4)::respawn:/sbin/getty -L $(TARGET_GENERIC_GETTY_PORT) $(TARGET_GENERIC_GETTY_BAUDRATE) $(TARGET_GENERIC_GETTY_TERM) #~' \
+>                 $(TARGET_DIR)/etc/inittab
+>
+>  # Find commented line, if any, and remove leading '#'s
+> @@ -46,7 +47,7 @@ target-generic-do-remount-rw:
+>  target-generic-dont-remount-rw:
+>         $(SED) '/^[^#].*# REMOUNT_ROOTFS_RW$$/s~^~#~' $(TARGET_DIR)/etc/inittab
+>
+> -ifneq ($(TARGET_GENERIC_GETTY),)
+> +ifeq ($(BR2_TARGET_GENERIC_GETTY),y)
+>  TARGETS += target-generic-securetty
+>  endif
+>
+> @@ -61,7 +62,7 @@ endif
+>  ifeq ($(BR2_ROOTFS_SKELETON_DEFAULT),y)
+>  TARGETS += target-root-passwd
+>
+> -ifneq ($(TARGET_GENERIC_GETTY),)
+> +ifeq ($(BR2_TARGET_GENERIC_GETTY),y)
+>  TARGETS += target-generic-getty-$(if $(BR2_PACKAGE_SYSVINIT),sysvinit,busybox)
+>  endif
+>
+> --
+> 1.7.9.5
+>
 
-Target Options 
- > Target Board Folder Type 
-     > No Custom Board Folder (default)
-     > External Custom Board Folder
- > Target Board Folder Site Method
-     > Git
-     > HG
-     > SVN
-     > List goes on...
- > Board folder contains custom applications
-     COMMENTARY: This feature allows the use for downloading and building
-     a company's custom applications that need to place in the release.
- > (Future Option) Check folder out using method above
-     COMMENTARY: This feature would be useful during development of 
-     board folder to allow the actual checkout board folder to the 
-BUILD_DIR
-     to allow for modifications tha easily pushed back.
-
-Target Packages
- > Text editor and viewers
- > Custom board applications
-    > App A
-    > App B
- 
-    COMMENTARY: the custom board applications would only appear when 
-    "Board folder contains custom applications" is enabled. The 
-application 
-    list from custom board applications would be sourced an applications 
-folder
-    within the custom board folder. These apps wouldn't display until the 
-board
-    folder is actually extract. 
- 
-    One issue I see with this is how the makefile structure would handle 
-    building without the board folder checked out and the make rules for 
-these 
-    packages being defined.
-
-2. Board folder structure would be as follows:
-
-> BUILD_DIR
-   > board (new)
-      > kernel-patches
-      > local-skeleton
-      > packages (this would be the board specific packages)
-      > uboot-patches
-      > config files
-   > build
-   > host
-   > target
-
-3. User says "make board-folder" and the custom board folder is extracted
-
-4. The user can say "make menuconfig" and their board customization will 
-   appear and would be available for selection.
-
-5. User say "make" and buildroot builds them their system
-
-Summary
---------
-With adding this feature to buildroot, it will help companies/users easily 
-
-bring in their customization into buildroot with just using a defconfig.
-
-Please provide me with feedback in if this idea is feasible/be useful. I'm 
-
-also very open suggestions to help make this a reality.
-
-
-
-
-Ryan J Barnett / Software Engineer / Platform SW 
-MS 137-157, 855 35th St NE, Cedar Rapids, IA, 52498-3161, US
-Phone: 319-263-3880 / VPN: 263-3880 
-rjbarnet at rockwellcollins.com
-www.rockwellcollins.com 
-
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130906/73d37c78/attachment.html>
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: not available
-Type: image/gif
-Size: 2004 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130906/73d37c78/attachment.gif>
+Best regards,
+Thomas
