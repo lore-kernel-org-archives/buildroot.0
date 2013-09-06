@@ -1,63 +1,43 @@
-From: Ryan Barnett <rjbarnet@rockwellcollins.com>
-Date: Thu, 5 Sep 2013 20:04:24 -0500
-Subject: [Buildroot] [PATCH 10/10] busybox: add support for SELinux
-In-Reply-To: <1378429464-12546-1-git-send-email-rjbarnet@rockwellcollins.com>
-References: <1378429464-12546-1-git-send-email-rjbarnet@rockwellcollins.com>
-Message-ID: <1378429464-12546-11-git-send-email-rjbarnet@rockwellcollins.com>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Fri, 6 Sep 2013 03:08:10 +0200
+Subject: [Buildroot] [PATCH 2/2] arch/Config.in: Allow ARM to select
+	BR2_BINFMT_FLAT
+In-Reply-To: <20130905234841.3bbfe0d4@skate>
+References: <1378262598.32360.5.camel@phoenix>
+ <1378262667.32360.6.camel@phoenix> <20130905234841.3bbfe0d4@skate>
+Message-ID: <CAAXf6LVLhC7LiuXTcSY+Rmyy_jt6ec37cU4S_4a=j=CpUs1qbA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Adding support to build libselinux before busybox if libselinux is selected.
-Busybox needs the headers to compile correctly if SELinux support is enabled
-in the busybox configuration.
+Op 5-sep.-2013 23:48 schreef "Thomas Petazzoni" <
+thomas.petazzoni@free-electrons.com> het volgende:
 
-Adding patch to fix issue with busybox not properly pulling in libraries.
+> But I'm wondering if we shouldn't go further than that, and make
+> BR2_BINFMT_FLAT available only for non-MMU ARMs. Something like:
+>
+>         prompt "Target Binary Format"
+>         depends on BR2_arm7tmdi || BR2_arm_cortex_m3 || BR2_arm_cortex_m4
+|| BR2_m68k || BR2_bfin
+>         default BR2_BINFMT_FLAT if BR2_arm7tmdi || BR2_arm_cortex_m3 ||
+BR2_arm_cortex_m4 || BR2_m68k
+>         default BR2_BINFMT_FDPIC if BR2_bfin
+>
+> or something like this. This way, users of MMU-capable ARM variants
+> wouldn't be confused by the availability of FLAT and ELF as binary
+> formats. Of course, BR2_BINFMT_ELF should gain some !BR2_arm7tmdi
+> && !BR2_arm_cortex_m3 && !BR2_arm_cortex_m4 dependencies, or maybe even
+> a !BR2_USE_MMU dependency. I think there's quite some room for
+> improvement around the definition of which CPU has an MMU or not, and
+> which architectures support which binary formats.
 
-Signed-off-by: Ryan Barnett <rjbarnet@rockwellcollins.com>
----
- .../busybox/1.21.1/busybox-1.21.1-pkg-config.patch |   13 +++++++++++++
- package/busybox/busybox.mk                         |    6 ++++++
- 2 files changed, 19 insertions(+), 0 deletions(-)
- create mode 100644 package/busybox/1.21.1/busybox-1.21.1-pkg-config.patch
+Don't we/shouldn't we have something like ARCH_HAS_MMU and/or
+ARCH_SUPPORTS_FLAT_BINARY?
 
-diff --git a/package/busybox/1.21.1/busybox-1.21.1-pkg-config.patch b/package/busybox/1.21.1/busybox-1.21.1-pkg-config.patch
-new file mode 100644
-index 0000000..79b8681
---- /dev/null
-+++ b/package/busybox/1.21.1/busybox-1.21.1-pkg-config.patch
-@@ -0,0 +1,13 @@
-+# Need to have the pkg-config only spit out the libs and not the lib path
-+# also when checking for the SELinux libraries.
-+--- a/Makefile.flags	2013-05-11 18:30:43.000000000 -0500
-++++ b/Makefile.flags	2013-08-27 09:40:05.082917005 -0500
-+@@ -81,7 +81,7 @@
-+ # Usage: $(eval $(call pkg_check_modules,VARIABLE-PREFIX,MODULES))
-+ define pkg_check_modules
-+ $(1)_CFLAGS := $(shell $(PKG_CONFIG) $(PKG_CONFIG_FLAGS) --cflags $(2))
-+-$(1)_LIBS := $(shell $(PKG_CONFIG) $(PKG_CONFIG_FLAGS) --libs $(2))
-++$(1)_LIBS := $(shell $(PKG_CONFIG) $(PKG_CONFIG_FLAGS) --libs-only-l $(2))
-+ endef
-+ 
-+ ifeq ($(CONFIG_BUILD_LIBBUSYBOX),y)
-diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-index ad8bdaf..fd24ffd 100644
---- a/package/busybox/busybox.mk
-+++ b/package/busybox/busybox.mk
-@@ -31,6 +31,12 @@ BUSYBOX_CFLAGS += -I$(STAGING_DIR)/usr/include/tirpc/
- BUSYBOX_CFLAGS_busybox += -ltirpc
- endif
- 
-+# For SELinux, enable the SELinux flag CONFIG_SELINUX
-+# in the busybox config
-+ifeq ($(BR2_PACKAGE_LIBSELINUX),y)
-+BUSYBOX_DEPENDENCIES += libselinux
-+endif
-+
- BUSYBOX_BUILD_CONFIG = $(BUSYBOX_DIR)/.config
- # Allows the build system to tweak CFLAGS
- BUSYBOX_MAKE_ENV = \
--- 
-1.7.1
+Best regards,
+Thomas
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130906/22703a2b/attachment.html>
