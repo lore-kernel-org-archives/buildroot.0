@@ -1,48 +1,63 @@
 From: Ryan Barnett <rjbarnet@rockwellcollins.com>
-Date: Thu, 5 Sep 2013 20:04:23 -0500
-Subject: [Buildroot] [PATCH 09/10] dbus: add support for SELinux
+Date: Thu, 5 Sep 2013 20:04:24 -0500
+Subject: [Buildroot] [PATCH 10/10] busybox: add support for SELinux
 In-Reply-To: <1378429464-12546-1-git-send-email-rjbarnet@rockwellcollins.com>
 References: <1378429464-12546-1-git-send-email-rjbarnet@rockwellcollins.com>
-Message-ID: <1378429464-12546-10-git-send-email-rjbarnet@rockwellcollins.com>
+Message-ID: <1378429464-12546-11-git-send-email-rjbarnet@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Adding support to build libselinux before busybox if libselinux is selected.
+Busybox needs the headers to compile correctly if SELinux support is enabled
+in the busybox configuration.
+
+Adding patch to fix issue with busybox not properly pulling in libraries.
 
 Signed-off-by: Ryan Barnett <rjbarnet@rockwellcollins.com>
 ---
- package/dbus/dbus.mk |   10 +++++++++-
- 1 files changed, 9 insertions(+), 1 deletions(-)
+ .../busybox/1.21.1/busybox-1.21.1-pkg-config.patch |   13 +++++++++++++
+ package/busybox/busybox.mk                         |    6 ++++++
+ 2 files changed, 19 insertions(+), 0 deletions(-)
+ create mode 100644 package/busybox/1.21.1/busybox-1.21.1-pkg-config.patch
 
-diff --git a/package/dbus/dbus.mk b/package/dbus/dbus.mk
-index d50f630..228b98e 100644
---- a/package/dbus/dbus.mk
-+++ b/package/dbus/dbus.mk
-@@ -21,7 +21,6 @@ DBUS_CONF_OPT = --with-dbus-user=dbus \
- 		--disable-tests \
- 		--disable-asserts \
- 		--enable-abstract-sockets \
--		--disable-selinux \
- 		--disable-xml-docs \
- 		--disable-doxygen-docs \
- 		--disable-static \
-@@ -54,6 +53,15 @@ ifeq ($(BR2_PACKAGE_SYSTEMD),y)
- DBUS_CONF_OPT += --with-systemdsystemunitdir=/lib/systemd/system
+diff --git a/package/busybox/1.21.1/busybox-1.21.1-pkg-config.patch b/package/busybox/1.21.1/busybox-1.21.1-pkg-config.patch
+new file mode 100644
+index 0000000..79b8681
+--- /dev/null
++++ b/package/busybox/1.21.1/busybox-1.21.1-pkg-config.patch
+@@ -0,0 +1,13 @@
++# Need to have the pkg-config only spit out the libs and not the lib path
++# also when checking for the SELinux libraries.
++--- a/Makefile.flags	2013-05-11 18:30:43.000000000 -0500
+++++ b/Makefile.flags	2013-08-27 09:40:05.082917005 -0500
++@@ -81,7 +81,7 @@
++ # Usage: $(eval $(call pkg_check_modules,VARIABLE-PREFIX,MODULES))
++ define pkg_check_modules
++ $(1)_CFLAGS := $(shell $(PKG_CONFIG) $(PKG_CONFIG_FLAGS) --cflags $(2))
++-$(1)_LIBS := $(shell $(PKG_CONFIG) $(PKG_CONFIG_FLAGS) --libs $(2))
+++$(1)_LIBS := $(shell $(PKG_CONFIG) $(PKG_CONFIG_FLAGS) --libs-only-l $(2))
++ endef
++ 
++ ifeq ($(CONFIG_BUILD_LIBBUSYBOX),y)
+diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
+index ad8bdaf..fd24ffd 100644
+--- a/package/busybox/busybox.mk
++++ b/package/busybox/busybox.mk
+@@ -31,6 +31,12 @@ BUSYBOX_CFLAGS += -I$(STAGING_DIR)/usr/include/tirpc/
+ BUSYBOX_CFLAGS_busybox += -ltirpc
  endif
  
-+# SELinux support relies on audit support so enable both 
-+# of them if libselinux has been selected.
++# For SELinux, enable the SELinux flag CONFIG_SELINUX
++# in the busybox config
 +ifeq ($(BR2_PACKAGE_LIBSELINUX),y)
-+DBUS_CONF_OPT += --enable-selinux --enable-libaudit
-+DBUS_DEPENDENCIES += libselinux audit
-+else
-+DBUS_CONF_OPT += --disable-selinux --disable-libaudit
++BUSYBOX_DEPENDENCIES += libselinux
 +endif
 +
- # fix rebuild (dbus makefile errors out if /var/lib/dbus is a symlink)
- define DBUS_REMOVE_VAR_LIB_DBUS
- 	rm -rf $(TARGET_DIR)/var/lib/dbus
+ BUSYBOX_BUILD_CONFIG = $(BUSYBOX_DIR)/.config
+ # Allows the build system to tweak CFLAGS
+ BUSYBOX_MAKE_ENV = \
 -- 
 1.7.1
