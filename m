@@ -1,47 +1,61 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 6 Sep 2013 14:58:21 +0200
-Subject: [Buildroot] Two or three stages gcc build?
-In-Reply-To: <9C6FE6D2-322A-41E7-8B82-C623B5C1F754@gmail.com>
-References: <20130705233831.12030038@skate>
- <9C6FE6D2-322A-41E7-8B82-C623B5C1F754@gmail.com>
-Message-ID: <20130906145821.4ce0ab13@skate>
+From: Axel Lin <axel.lin@ingics.com>
+Date: Fri, 06 Sep 2013 21:02:37 +0800
+Subject: [Buildroot] [PATCH RFC] uclibc: Don't build shared library if
+	!HAVE_SHARED
+Message-ID: <1378472557.19947.1.camel@phoenix>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Khem Raj,
+Current setting unconditionally build shared library.
+This result in build error when HAVE_SHARED is not set.
+Fix it to build shared library only when HAVE_SHARED=y.
 
-On Thu, 5 Sep 2013 10:31:46 -0700, Khem Raj wrote:
+Signed-off-by: Axel Lin <axel.lin@ingics.com>
+---
+I was thinking to unset HAVE_SHARED if BR2_PREFER_STATIC_LIB=y.
+So I can avoid the "grep" in UCLIBC_BUILD_SHARED_LIBS.
 
-> I am late in reply but here it is.
+However, I feel that when BR2_PREFER_STATIC_LIB is not set, it does not means
+HAVE_SHARED is always true.
+Comments?
 
-No problem. Thanks for your reply.
+ package/uclibc/uclibc.mk | 14 ++++++++++----
+ 1 file changed, 10 insertions(+), 4 deletions(-)
 
-
-> > In fe9a576e8d27460468dfe5eac90aad49ab26a8d3 (gcc-cross-intermediate,
-> > gcc-crosssdk-intermediate: Remove) you completely remove the
-> > intermediate recipes, so I assume they are really no longer needed,
-> > even by the uClibc build, since I believe OE-core also supports uClibc
-> > builds (thanks to your work).
-> 
-> thats correct. See the code around where limits.h is installed by gcc initial
-> uclibc was less of an issue, glibc was more until last year when a lot of cleanup
-> was done especially where build time dependency on libgcc_s and libgcc_eh was averted
-> in cross gcc and buildroot you can do the same like i have done for OE I can help out
-
-In the mean time, I've experimented a bit and actually implemented it.
-The patch hasn't been merged yet in Buildroot, but it has been posted:
-http://lists.busybox.net/pipermail/buildroot/2013-September/077344.html.
-
-Don't hesitate to have a look and tell me what you think.
-
-Thanks!
-
-Thomas
+diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
+index a25bfee..85bf10c 100644
+--- a/package/uclibc/uclibc.mk
++++ b/package/uclibc/uclibc.mk
+@@ -458,6 +458,15 @@ endef
+ 
+ UCLIBC_POST_PATCH_HOOKS += UCLIBC_SETUP_DOT_CONFIG
+ 
++define UCLIBC_BUILD_SHARED_LIBS
++	if grep -q HAVE_SHARED=y $(@D)/.config; then \
++		$(TARGET_CROSS)gcc -nostdlib -nostartfiles -shared \
++			-x c /dev/null -o $(STAGING_DIR)/usr/lib/libc.so; \
++		$(TARGET_CROSS)gcc -nostdlib -nostartfiles -shared \
++			-x c /dev/null -o $(STAGING_DIR)/usr/lib/libm.so; \
++	fi
++endef
++
+ define UCLIBC_CONFIGURE_CMDS
+ 	$(MAKE1) -C $(UCLIBC_DIR) \
+ 		$(UCLIBC_MAKE_FLAGS) \
+@@ -466,10 +475,7 @@ define UCLIBC_CONFIGURE_CMDS
+ 		RUNTIME_PREFIX=$(STAGING_DIR) \
+ 		headers startfiles \
+ 		install_headers install_startfiles
+-	$(TARGET_CROSS)gcc -nostdlib \
+-		-nostartfiles -shared -x c /dev/null -o $(STAGING_DIR)/usr/lib/libc.so
+-	$(TARGET_CROSS)gcc -nostdlib \
+-		-nostartfiles -shared -x c /dev/null -o $(STAGING_DIR)/usr/lib/libm.so
++	$(UCLIBC_BUILD_SHARED_LIBS)
+ endef
+ 
+ ifeq ($(BR2_UCLIBC_INSTALL_TEST_SUITE),y)
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+1.8.1.2
