@@ -1,68 +1,108 @@
 From: Ryan Barnett <rjbarnet@rockwellcollins.com>
-Date: Fri, 6 Sep 2013 13:07:44 -0500
-Subject: [Buildroot] [PATCH 00/17] SELinux Buildroot Additions
-In-Reply-To: <20130906194903.28c020ba@skate>
-References: <1378336196-27403-1-git-send-email-clshotwe@rockwellcollins.com>
- <20130906194903.28c020ba@skate>
-Message-ID: <OF299770B9.9F574639-ON86257BDE.00636F06-86257BDE.006395D0@rockwellcollins.com>
+Date: Fri, 6 Sep 2013 13:45:14 -0500
+Subject: [Buildroot] [RFC] New feature to handle a custom board folder
+Message-ID: <OF9A959FD8.FE78AE85-ON86257BDE.00666A59-86257BDE.00670505@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas,
+All,
 
-Clayton and I have been going back and forth on how best to do this, as 
-the next set of patch that we want to release provides information on 
-SELinux.
-You had provided feedback to Clayton on options for providing this 
-information
-and I think it was agreed upon that the manual will be the best place for 
-this. 
-Is this correct?
+I would like to introduce a new concept I've got for how the board
+folder is brought into buildroot. I propose adding a feature to
+buildroot to treat the board folder as a package. In treating the board
+folder as a package, it would allow a board folder to be downloaded
+using currently supported methods of packages (HG/Git/SVN/archives from
+websites). It would be placed as an archive in the DL_DIR and extracted
+to BUILD_DIR/board. I will go into more detail further down about the
+structure.
 
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote on 09/06/2013 
-12:49:03 PM:
+The motivation for this feature is that most of the customization done
+to buildroot in order to support  a project (board) is usually
+contained to a board folder. However, in many work environments in
+which buildroot is used, GIT isn't a preferred version control method
+(mine included) so being able to track mainline of buildroot is very
+difficult.
 
+NOTE: I haven't attempted to implement this yet as this an idea that 
+is still in its infancies. 
+
+Theory
+---------
+In theory the custom board folder structure would work as follows:
+
+1. User specifies the custom board folder in menuconfig
+    a. Initial though would to place it as follows in menuconfig
+
+Target Options 
+ > Target Board Folder Type 
+     > No Custom Board Folder (default)
+     > External Custom Board Folder
+ > Target Board Folder Site Method
+     > Git
+     > HG
+     > SVN
+     > List goes on...
+ > Board folder contains custom applications
+     COMMENTARY: This feature allows the use for downloading and building
+     a company's custom applications that need to place in the release.
+ > (Future Option) Check folder out using method above
+     COMMENTARY: This feature would be useful during development of 
+     board folder to allow the actual checkout board folder to the 
+BUILD_DIR
+     to allow for modifications tha easily pushed back.
+
+Target Packages
+ > Text editor and viewers
+ > Custom board applications
+    > App A
+    > App B
  
-> Dear Clayton Shotwell,
-> 
-> On Wed, 4 Sep 2013 18:09:39 -0500, Clayton Shotwell wrote:
-> > Submitting an initial patch set to add SELinux support to Buildroot.
-> > This patch set adds packages required for an SELinux system along with
-> > the packages needed to build them.
-> 
-> Thanks Clayton for these patches. They are definitely interesting, but
-> as you've seen they are also quite big and therefore will take a bit of
-> time to review and get merged.
-> 
-> In order to ease the review process, would it be possible to get a
-> short introduction to SELinux, and especially what tools are needed on
-> the host, what tools are needed on the target? I'm especially
-> interested in understanding why/if we need all this Python stuff on the
-> target.
+    COMMENTARY: the custom board applications would only appear when 
+    "Board folder contains custom applications" is enabled. The 
+application 
+    list from custom board applications would be sourced an applications 
+folder
+    within the custom board folder. These apps wouldn't display until the 
+board
+    folder is actually extract. 
+ 
+    One issue I see with this is how the makefile structure would handle 
+    building without the board folder checked out and the make rules for 
+these 
+    packages being defined.
 
-I believe the best way to answer to questions above about is add to the 
-manual.
-As this way that we won't have to necessarily duplicate work (and 
-motivates us
-to create the documentation). So hopefully by the middle of the week next 
-week
-we can submit some documentation.
+2. Board folder structure would be as follows:
 
-Where would you like this documentation placed? Also how does one go about 
-adding
-to the manual (I can't seem to find anything in the manual)? Or do we want 
-to place
-this information on the buildroot wiki?
+> BUILD_DIR
+   > board (new)
+      > kernel-patches
+      > local-skeleton
+      > packages (this would be the board specific packages)
+      > uboot-patches
+      > config files
+   > build
+   > host
+   > target
 
-> 
-> So essentially, having an overview of the patch series would be nice:
-> what the various packages are doing (you can skip the basic stuff like
-> ustr), and how they "interact" with each other.
-> 
-> Thanks a lot again for this contribution!
+3. User says "make board-folder" and the custom board folder is extracted
+
+4. The user can say "make menuconfig" and their board customization will 
+   appear and would be available for selection.
+
+5. User say "make" and buildroot builds them their system
+
+Summary
+--------
+With adding this feature to buildroot, it will help companies/users easily 
+
+bring in their customization into buildroot with just using a defconfig.
+
+Please provide me with feedback in if this idea is feasible/be useful. I'm 
+
+also very open suggestions to help make this a reality.
 
 
 
@@ -73,14 +113,13 @@ Phone: 319-263-3880 / VPN: 263-3880
 rjbarnet at rockwellcollins.com
 www.rockwellcollins.com 
 
-
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130906/6b51d6f2/attachment-0001.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130906/73d37c78/attachment.html>
 -------------- next part --------------
 A non-text attachment was scrubbed...
 Name: not available
 Type: image/gif
 Size: 2004 bytes
 Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130906/6b51d6f2/attachment-0001.gif>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130906/73d37c78/attachment.gif>
