@@ -1,41 +1,32 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 6 Sep 2013 11:39:01 +0200
-Subject: [Buildroot] [PATCH 1/2] toolchain/wrapper: add option to print
- one argument per line
-In-Reply-To: <CAAXf6LURRgiWOgSmUmoBgj1aRKn9XubBJ_ZBkpG8t0f5Ua9NTw@mail.gmail.com>
-References: <1378405466-9991-1-git-send-email-yann.morin.1998@free.fr>
- <CAAXf6LURRgiWOgSmUmoBgj1aRKn9XubBJ_ZBkpG8t0f5Ua9NTw@mail.gmail.com>
-Message-ID: <20130906093901.GC3271@free.fr>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Fri, 06 Sep 2013 07:08:16 -0300
+Subject: [Buildroot] [PATCH 2/2] arch/Config.in: Allow ARM to select
+	BR2_BINFMT_FLAT
+In-Reply-To: <20130906082537.08818fba@skate>
+References: <1378262598.32360.5.camel@phoenix>
+ <1378262667.32360.6.camel@phoenix> <20130905234841.3bbfe0d4@skate>
+ <CAAXf6LVLhC7LiuXTcSY+Rmyy_jt6ec37cU4S_4a=j=CpUs1qbA@mail.gmail.com>
+ <20130906082537.08818fba@skate>
+Message-ID: <5229A990.7080906@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+On 09/06/2013 03:25 AM, Thomas Petazzoni wrote:
 
-On 2013-09-05 20:51 +0200, Thomas De Schampheleire spake thusly:
-> On Thu, Sep 5, 2013 at 8:24 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> > From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> > +When using an external toolchain, Buildroot generates a wrapper program, that
-> > +passes the appropriate options (accordingly to the configuration) to the
+> On Fri, 6 Sep 2013 03:08:10 +0200, Thomas De Schampheleire wrote:
 > 
-> This should be 'according to ...'
-> The word accordingly is used in a sentence like: 'Buildroot reads the
-> configuration options and calls the external toolchain programs
-> accordingly'.
+>> Don't we/shouldn't we have something like ARCH_HAS_MMU and/or
+>> ARCH_SUPPORTS_FLAT_BINARY?
+> 
+> Yes, we should probably have something like this (and ditto for other
+> binary formats: ELF, FDPIC and so on).
 
-Yeah, yeah, right. :-) Will fix.
-
-Thank you!
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+On a side note, remember that HAS_MMU doesn't mean it's using it - from
+what i've read you can use MMU-bearing processors to test uclinux
+MMU-less scenarios (dunno if it can be done with every SOC out there,
+probably depends on the linux support for each one, at least a couple of
+Atmel ones were used this way for testing and/or masochism).
+Regards.
