@@ -1,39 +1,54 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 6 Sep 2013 11:05:10 +0200
-Subject: [Buildroot] [RFCv1 00/11] Convert toolchain backends to
- packages to fix source/external-deps/legal-info
-In-Reply-To: <a732406fe5a58630caddfdf3453ff06e@sysmic.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 6 Sep 2013 11:35:39 +0200
+Subject: [Buildroot] [RFCv1 02/11] toolchain-crosstool-ng: remove support
+In-Reply-To: <1378416469-17708-3-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1378416469-17708-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <a732406fe5a58630caddfdf3453ff06e@sysmic.org>
-Message-ID: <20130906110510.2890328f@skate>
+ <1378416469-17708-3-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20130906093539.GB3271@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear J?r?me Pouiller,
+Thomas, All,
 
-On Fri, 06 Sep 2013 10:57:43 +0200, J?r?me Pouiller wrote:
+On 2013-09-05 23:27 +0200, Thomas Petazzoni spake thusly:
+> In order to avoid the work of converting the toolchain-crosstool-ng
+> logic to the package infrastructure, we remove it from Buildroot,
+> since it has been deprecated since quite some time.
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> ---
+> If we consider it too early to get rid of the Crosstool-NG backend
+> entirely, then it can of course be converted to the package
+> infrastructure, with quite a bit of effort (which we wanted to avoid
+> for now).
 
-> > To do so, the idea of this patch is to:
-> >
-> >  (1) Create a 'toolchain' virtual package, which will depend on the
-> >      particular toolchain backend depending on the configuration.
-> Is it too early to move toolchain/ to package/? Or there is a reason
-> to keep toolchain/ out of package/?
+I don't care we remove it.
 
-Well, we do have packages outside of package/, such as the kernel and
-bootloaders. I believe it makes sense to keep the toolchain backends in
-toolchain/. Besides, the toolchain-buildroot/ package is really just an
-indirection for host-gcc-final. Only the toolchain-external/ package
-really contains some real stuff.
+One of the blocking points that users were concerned about was to be
+able to generate glibc/eglibc-based toolchains directly from within
+Buildroot, hence some chimed in to keep the crosstool-NG backend.
 
-Best regards,
+Now that Buildroot can buid glibc/eglibc-based toolchain with its
+internal backend, I see no reason to keep the crosstool-Ng backend at
+all. So:
 
-Thomas
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+As I said in a recently-posted patch (changes the manual to state the
+crosstool-NG backend was deprecated), people that really want to use
+crosstool-Ng can still do so outside of Buildroot, and use that
+toolchain as an external toolchain.
+
+Regards,
+Yann E. MORIN.
+
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
