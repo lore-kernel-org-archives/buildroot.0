@@ -1,102 +1,57 @@
-From: Axel Lin <axel.lin@ingics.com>
-Date: Fri, 6 Sep 2013 15:14:34 +0800
-Subject: [Buildroot] [PATCH 1/2] package/Makefile.in: Fix dependency for
- selecting uclinux as TARGET_OS
-In-Reply-To: <20130906082632.5cc5c87b@skate>
-References: <1378262598.32360.5.camel@phoenix> <20130905234414.45a8106a@skate>
- <CAFRkauDiWLMrTHn6coC-D+Dpfmdr0MGKNznHy758bvzRf0n8rg@mail.gmail.com>
- <20130906082632.5cc5c87b@skate>
-Message-ID: <CAFRkauDpZ72haGM99rv0Fxk7Fs2eY=x5YQRi7L3GAG=CQb7juw@mail.gmail.com>
+From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
+Date: Fri, 6 Sep 2013 10:18:43 +0200
+Subject: [Buildroot] [PATCH v2 1/2] getty: Create specific getty config
+	+ cleanups
+In-Reply-To: <CADwac6BXiyNCCSgLCuXbWuqh1LtL2P+3jjMeB1HFUUNw-NxfUg@mail.gmail.com>
+References: <1377429219-25140-1-git-send-email-shmuelzon@gmail.com>
+ <CAAXf6LV4mAJ77obaOx_7O9Dk_=a9oFGrW8QcFoAzdAKThAqjLA@mail.gmail.com>
+ <CADwac6BfHWKP_HWd_3g6t8MqtSW4zTcpYbChpbPh0O3q-N4=Jg@mail.gmail.com>
+ <CAAXf6LWkdfhGBsKvPpReEec2OXKdLgZbwSRwhCopqb06U6bKhA@mail.gmail.com>
+ <CADwac6A7kn8sXLiQERrmk4iUbtob8oVqeTMcSYTd8rJW3d9wZg@mail.gmail.com>
+ <CAAXf6LXGoMTiAQNqQ9UZCSzizZG+=tw_o5X4xBgmSQBJUG4cYg@mail.gmail.com>
+ <CADwac6BXiyNCCSgLCuXbWuqh1LtL2P+3jjMeB1HFUUNw-NxfUg@mail.gmail.com>
+Message-ID: <CAAXf6LXxx=RABEh52D7AaO2Ob2cYyUXN-why9-d+Z8=aqFfzpQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2013/9/6 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>:
-> Dear Axel Lin,
+On Fri, Sep 6, 2013 at 8:59 AM, Assaf Inbal <shmuelzon@gmail.com> wrote:
+> Hey,
 >
-> On Fri, 6 Sep 2013 10:21:55 +0800, Axel Lin wrote:
+>> I haven't seen a new version yet. When you have some time, could you
+>> do it? I think the patch series is a nice improvement so I don't want
+>> to loose this...
 >
->> > So it looks like the arm-<something>-uclinux* tuple should not be used,
->> > if I understand this correctly. Do you have more details about why
->> > arm-<something>-uclinux* should be used?
->>
->> Somehow, I thought noMMU ARM platforms that using FLAT binary format needs to
->> select uclinux as TARGET_OS.
->> But since you mentioned the release notes of gcc 4.7, I'm not 100% sure.
->
-> I am not sure either.
->
->> I check my build, the result is I have arm-buildroot-uclinux-uclibcgnueabi-gcc.
->> And the build log shows it checks target system type as:
->> checking target system type... arm-buildroot-uclinux-uclibcgnueabi
->>
->> Does buildroot automatically convert arm*-*-uclinux* to arm*-*-uclinux*eabi?
->>
->> I also check host-gcc-final-4.5.4/gcc/config.gcc and libgcc/config.host.
->> Looks like it also expects arm*-*-uclinux* for ARM ucLinux and arm*-*-linux* for
->> ARM GNU/Linux with ELF.
->
-> Can you check in more recent gcc versions such as 4.7 or 4.8 ? Looking
-> at the most recent versions is important to see what is the current
-> tuple accepted for this situation.
+> Sorry, got caught up by my actual day job :)
+> Two quick questions:
+> - Would it be better to create a sub menu called "getty options"? I
+> think that otherwise it would be clear what these options refer to. It
+> would also clean up the main "system" menu.
 
-Hi Thomas,
-In host-gcc-final-4.8.1/gcc/config.gcc:
+We don't usually have real submenus in buildroot, but I don't have a
+very strong opinion on this.
 
-# Unsupported targets list.  Do not put an entry in this list unless
-# it would otherwise be caught by a more permissive pattern.  The list
-# should be in alphabetical order.
-case ${target} in
- # Avoid special cases that are not obsolete
-   arm*-*-*eabi*                        \
- )
-        ;;
-   arm*-wince-pe*                       \
- | arm*-*-ecos-elf                      \
- | arm*-*-elf                           \
- | arm*-*-freebsd*                      \
- | arm*-*-linux*                        \
- | arm*-*-uclinux*                      \
- | i[34567]86-go32-*                    \
- | i[34567]86-*-go32*                   \
- | m68k-*-uclinuxoldabi*                \
- | mips64orion*-*-rtems*                \
- | pdp11-*-bsd                          \
- | sparc-hal-solaris2*                  \
- | thumb-*-*                            \
- | *-*-freebsd[12] | *-*-freebsd[12].*  \
- | *-*-freebsd*aout*                    \
- | *-*-linux*aout*                      \
- | *-*-linux*coff*                      \
- | *-*-linux*libc1*                     \
- | *-*-linux*oldld*                     \
- | *-*-rtemsaout*                       \
- | *-*-rtemscoff*                       \
- | *-*-solaris2                         \
- | *-*-solaris2.[0-8]                   \
- | *-*-solaris2.[0-8].*                 \
- | *-*-sysv*                            \
- | vax-*-vms*                           \
- )
-        echo "*** Configuration ${target} not supported" 1>&2
-        exit 1
-        ;;
-esac
+> - In order to avoid the new thread that started with the 2nd version
+> of the patch, how should I configure git send-email to reply to this
+> thread? I altered the "reply-to" field but that didn't seem to work.
 
-The first case shows
-case ${target} in
- # Avoid special cases that are not obsolete
-   arm*-*-*eabi*                        \
- )
-        ;;
+There are different opinions in the buildroot community regarding the
+desirability of such in-reply-to patches. I'm personally not an
+opponent of it, for the following reasons:
 
-Although I have no idea which part of buildroot system converts
-arm*-*-uclinux* to arm*-*-uclinux*eabi.
-The build result shows arm-buildroot-uclinux-uclibcgnueabi which matches
-the first case.
-So I think it's ok to set TARGET_OS=uclinux.
+1. from the list of e-mails (in gmail for example) it is unclear if
+the new reply is just a comment on the current version of the patch,
+or if it is a new version. You really have to check the reply.
 
-Regards,
-Axel
+2. it doesn't work well for patch series: the first patch would indeed
+be a reply to the previous thread, but all other patches would not.
+This makes it very annoying to read all patches in a series.
+
+Therefore, I always send new versions as new standalone e-mails, with
+a marker vX to indicate the version. Several other buildroot
+contributors do the same.
+
+Best regards,
+Thomas
