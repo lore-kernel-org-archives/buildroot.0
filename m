@@ -1,10 +1,10 @@
 From: Spenser Gilliland <spenser@gillilanding.com>
-Date: Thu,  5 Sep 2013 23:25:16 -0500
-Subject: [Buildroot] [PATCH v2 2/7] sunxi-cedarx: bump to newer version,
-	use armel2 binaries, add demo
+Date: Thu,  5 Sep 2013 23:25:15 -0500
+Subject: [Buildroot] [PATCH v2 1/7] libdrm: bump and add experimental ARM
+	framebuffer support
 In-Reply-To: <1378441521-10050-1-git-send-email-spenser@gillilanding.com>
 References: <1378441521-10050-1-git-send-email-spenser@gillilanding.com>
-Message-ID: <1378441521-10050-3-git-send-email-spenser@gillilanding.com>
+Message-ID: <1378441521-10050-2-git-send-email-spenser@gillilanding.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,97 +14,175 @@ To: buildroot@busybox.net
 
 Signed-off-by: Spenser Gilliland <spenser@gillilanding.com>
 ---
- package/sunxi-cedarx/Config.in       | 10 ++++++++++
- package/sunxi-cedarx/sunxi-cedarx.mk | 26 ++++++++++++++++++++++----
- 2 files changed, 32 insertions(+), 4 deletions(-)
+ package/libdrm/Config.in | 68 ++++++++++++++++++++++++++++++++++++++++--------
+ package/libdrm/libdrm.mk | 53 ++++++++++++++++++++++++++++++-------
+ 2 files changed, 100 insertions(+), 21 deletions(-)
 
-diff --git a/package/sunxi-cedarx/Config.in b/package/sunxi-cedarx/Config.in
-index b280db0..aa520b5 100644
---- a/package/sunxi-cedarx/Config.in
-+++ b/package/sunxi-cedarx/Config.in
-@@ -10,5 +10,15 @@ config BR2_PACKAGE_SUNXI_CEDARX
- 	  http://github.com/linux-sunxi/cedarx-libs
- 	  http://linux-sunxi.org/CedarX
+diff --git a/package/libdrm/Config.in b/package/libdrm/Config.in
+index 8bf676b..533e985 100644
+--- a/package/libdrm/Config.in
++++ b/package/libdrm/Config.in
+@@ -1,22 +1,68 @@
+ config BR2_PACKAGE_LIBDRM
+ 	bool "libdrm"
++	select BR2_PACKAGE_XLIB_LIBPTHREAD_STUBS
+ 	depends on BR2_PACKAGE_XORG7
+ 	depends on BR2_LARGEFILE
+-	select BR2_PACKAGE_XPROTO_GLPROTO
+-	select BR2_PACKAGE_XPROTO_XF86VIDMODEPROTO
+-	select BR2_PACKAGE_XLIB_LIBXXF86VM
+-	select BR2_PACKAGE_XLIB_LIBXMU
+-	select BR2_PACKAGE_XLIB_LIBPCIACCESS
+-	select BR2_PACKAGE_XPROTO_DRI2PROTO
+-	select BR2_PACKAGE_XLIB_LIBPTHREAD_STUBS
+-	# libatomic_ops is only available on a subset of the supported
+-	# architectures, and we make the assumption that the intel
+-	# driver can only be used on x86 and x86_64 machines.
+-	select BR2_PACKAGE_LIBATOMIC_OPS if (BR2_PACKAGE_XDRIVER_XF86_VIDEO_INTEL && (BR2_i386 || BR2_x86_64))
+ 	help
+ 	  Direct Rendering Manager
  
-+if BR2_PACKAGE_SUNXI_CEDARX
+ 	  http://dri.freedesktop.org/libdrm/
+ 
++if BR2_PACKAGE_LIBDRM
 +
-+config BR2_PACKAGE_SUNXI_CEDARX_DEMO
-+	bool "install enc_dec_test demo"
++menu "DRM Drivers"
++
++config BR2_PACKAGE_LIBDRM_INTEL
++	bool "intel"
++	select BR2_PACKAGE_LIBATOMIC_OPS
++	select BR2_PACKAGE_XLIB_LIBPCIACCESS
++	depends on BR2_i386 || BR2_x86_64
 +	help
-+	  Install a test program which verifies the functionality of the CedarX
-+	  libraries
++	  installs intel graphics driver
++
++config BR2_PACKAGE_LIBDRM_RADEON
++	bool "radeon"
++	select BR2_PACKAGE_LIBATOMIC_OPS
++	select BR2_PACKAGE_XLIB_LIBPCIACCESS
++	depends on BR2_i386 || BR2_x86_64
++	help
++	  install AMD/ATI graphics driver
++
++config BR2_PACKAGE_LIBDRM_NOUVEAU
++	bool "nouveau"
++	select BR2_PACKAGE_XLIB_LIBPCIACCESS
++	depends on BR2_i386 || BR2_x86_64
++	help
++	  install Nvidia graphics driver
++
++config BR2_PACKAGE_LIBDRM_VMWGFX
++	bool "vmwgfx"
++	select BR2_PACKAGE_XLIB_LIBPCIACCESS
++	depends on BR2_i386 || BR2_x86_64
++	help
++	  installs Vmware graphics driver
++
++config BR2_PACKAGE_LIBDRM_OMAP
++	bool "omap (experimental)"
++	depends on BR2_arm
++	help
++	  install the TI OMAP driver using an experimental API.
++
++config BR2_PACKAGE_LIBDRM_EXYNOS
++	bool "exynos (experimental)"
++	depends on BR2_arm
++	help
++	  installs Samsung Exynos driver using an experimental API.
++
++config BR2_PACKAGE_LIBDRM_FREEDRENO
++	bool "freedreno (experimental)"
++	depends on BR2_arm
++	help
++	  install Qualcomm Snapdragon driver using an experimental API.
++
++endmenu
 +
 +endif
 +
- comment "sunxi-cedarx requires an eglibc/glibc based toolchain"
- 	depends on !BR2_TOOLCHAIN_USES_GLIBC && BR2_arm
-diff --git a/package/sunxi-cedarx/sunxi-cedarx.mk b/package/sunxi-cedarx/sunxi-cedarx.mk
-index 07c85d4..bc8ee32 100644
---- a/package/sunxi-cedarx/sunxi-cedarx.mk
-+++ b/package/sunxi-cedarx/sunxi-cedarx.mk
+ comment "libdrm requires a toolchain with LARGEFILE support"
+ 	depends on BR2_PACKAGE_XORG7 && !BR2_LARGEFILE
+diff --git a/package/libdrm/libdrm.mk b/package/libdrm/libdrm.mk
+index d3d2b2d..697cd2f 100644
+--- a/package/libdrm/libdrm.mk
++++ b/package/libdrm/libdrm.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--SUNXI_CEDARX_VERSION = 74923e55fc
-+SUNXI_CEDARX_VERSION = 74c3e9052
- SUNXI_CEDARX_SITE = http://github.com/linux-sunxi/cedarx-libs/tarball/$(SUNXI_CEDARX_VERSION)
+-LIBDRM_VERSION = 2.4.38
++LIBDRM_VERSION = 2.4.46
+ LIBDRM_SOURCE = libdrm-$(LIBDRM_VERSION).tar.bz2
+ LIBDRM_SITE = http://dri.freedesktop.org/libdrm/
+ LIBDRM_LICENSE = MIT
+@@ -12,26 +12,59 @@ LIBDRM_LICENSE = MIT
+ LIBDRM_INSTALL_STAGING = YES
  
- SUNXI_CEDARX_INSTALL_STAGING = YES
-@@ -14,7 +14,12 @@ SUNXI_CEDARX_CONFIGURE_OPTS = \
+ LIBDRM_DEPENDENCIES = \
+-	xproto_glproto \
+-	xproto_xf86vidmodeproto \
+-	xlib_libXxf86vm \
+-	xlib_libXmu \
+-	xlib_libpciaccess \
+-	xproto_dri2proto \
+ 	xlib_libpthread-stubs \
+ 	host-pkgconf
  
- ifeq ($(BR2_ARM_EABIHF),y)
- SUNXI_CEDARX_BIN_DIR = $(@D)/libcedarv/linux-armhf
--# libavheap.so is only available on EABIHF
-+SUNXI_CEDARX_SAMPLE_LOC = $(SUNXI_CEDARX_BIN_DIR)/sample/ve
-+else
-+SUNXI_CEDARX_BIN_DIR = $(@D)/libcedarv/linux-armel2
-+SUNXI_CEDARX_SAMPLE_LOC = $(SUNXI_CEDARX_BIN_DIR)/sample/output/ve
-+endif
+-ifeq ($(BR2_PACKAGE_XDRIVER_XF86_VIDEO_INTEL),y)
++LIBDRM_CONF_OPT = \
++	--disable-cairo-tests \
++	--disable-manpages
 +
- define SUNXI_CEDARX_BUILD_AVHEAP
- 	$(TARGET_CC) $(TARGET_CFLAGS) \
- 		-c $(SUNXI_CEDARX_BIN_DIR)/adapter/avheap/avheap.c \
-@@ -25,18 +30,30 @@ define SUNXI_CEDARX_BUILD_AVHEAP
- 		-o $(SUNXI_CEDARX_BIN_DIR)/adapter/avheap/libavheap.so \
- 		$(SUNXI_CEDARX_BIN_DIR)/adapter/avheap/avheap.o
- endef
-+
- define SUNXI_CEDARX_INSTALL_AVHEAP
- 	$(INSTALL) -D -m 755 $(SUNXI_CEDARX_BIN_DIR)/adapter/avheap/libavheap.so \
- 		$(1)/usr/lib/libavheap.so
- endef
--else
--SUNXI_CEDARX_BIN_DIR = $(@D)/libcedarv/linux-armel
-+
-+ifeq ($(BR2_PACKAGE_SUNXI_CEDARX_DEMO),y)
-+
-+define SUNXI_CEDARX_BUILD_DEMO
-+	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(SUNXI_CEDARX_BIN_DIR)/sample
-+endef
-+
-+define SUNXI_CEDARX_INSTALL_DEMO
-+	$(INSTALL) -D -m 755 $(SUNXI_CEDARX_SAMPLE_LOC) \
-+		$(TARGET_DIR)/usr/bin/ve
-+endef
-+
++ifeq ($(BR2_PACKAGE_LIBDRM_INTEL),y)
+ LIBDRM_CONF_OPT += --enable-intel
+-LIBDRM_DEPENDENCIES += libatomic_ops
++LIBDRM_DEPENDENCIES += libatomic_ops xlib_libpciaccess
+ else
+ LIBDRM_CONF_OPT += --disable-intel
  endif
  
- define SUNXI_CEDARX_BUILD_CMDS
- 	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(SUNXI_CEDARX_BIN_DIR) \
- 		$(SUNXI_CEDARX_CONFIGURE_OPTS)
- 	$(SUNXI_CEDARX_BUILD_AVHEAP)
-+	$(SUNXI_CEDARX_BUILD_DEMO)
- endef
+-ifneq ($(BR2_PACKAGE_XDRIVER_XF86_VIDEO_ATI),y)
++ifeq ($(BR2_PACKAGE_LIBDRM_RADEON),y)
++LIBDRM_CONF_OPT += --enable-radeon
++LIBDRM_DEPENDENCIES += xlib_libpciaccess
++else
+ LIBDRM_CONF_OPT += --disable-radeon
+ endif
  
- define SUNXI_CEDARX_INSTALL_STAGING_CMDS
-@@ -54,6 +71,7 @@ define SUNXI_CEDARX_INSTALL_TARGET_CMDS
- 	$(INSTALL) -D -m 755 $(SUNXI_CEDARX_BIN_DIR)/libvecore/libvecore.so \
- 		$(TARGET_DIR)/usr/lib/libvecore.so
- 	$(call SUNXI_CEDARX_INSTALL_AVHEAP, $(TARGET_DIR))
-+	$(SUNXI_CEDARX_INSTALL_DEMO)
- endef
- 
- $(eval $(generic-package))
++ifeq ($(BR2_PACKAGE_LIBDRM_NOUVEAU),y)
++LIBDRM_CONF_OPT += --enable-nouveau
++LIBDRM_DEPENDENCIES += xlib_libpciaccess
++else
++LIBDRM_CONF_OPT += --disable-nouveau
++endif
++
++ifeq ($(BR2_PACKAGE_LIBDRM_VMWGFX),y)
++LIBDRM_CONF_OPT += --enable-vmwgfx
++LIBDRM_DEPENDENCIES += xlib_libpciaccess
++else
++LIBDRM_CONF_OPT += --enable-vmwgfx
++endif
++
++ifeq ($(BR2_PACKAGE_LIBDRM_OMAP),y)
++LIBDRM_CONF_OPT += --enable-omap-experimental-api
++else
++LIBDRM_CONF_OPT += --disable-omap-experimental-api
++endif
++
++ifeq ($(BR2_PACKAGE_LIBDRM_EXYNOS),y)
++LIBDRM_CONF_OPT += --enable-exynos-experimental-api
++else
++LIBDRM_CONF_OPT += --disable-exynos-experimental-api
++endif
++
++ifeq ($(BR2_PACKAGE_LIBDRM_FREEDRENO),y)
++LIBDRM_CONF_OPT += --enable-freedreno-experimental-api
++else
++LIBDRM_CONF_OPT += --disable-freedreno-experimental-api
++endif
++
+ ifeq ($(BR2_PACKAGE_UDEV),y)
+ LIBDRM_CONF_OPT += --enable-udev
+ LIBDRM_DEPENDENCIES += udev
 -- 
 1.8.1.2
