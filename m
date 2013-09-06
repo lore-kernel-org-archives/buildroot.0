@@ -1,46 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 6 Sep 2013 08:26:32 +0200
-Subject: [Buildroot] [PATCH 1/2] package/Makefile.in: Fix dependency for
- selecting uclinux as TARGET_OS
-In-Reply-To: <CAFRkauDiWLMrTHn6coC-D+Dpfmdr0MGKNznHy758bvzRf0n8rg@mail.gmail.com>
-References: <1378262598.32360.5.camel@phoenix> <20130905234414.45a8106a@skate>
- <CAFRkauDiWLMrTHn6coC-D+Dpfmdr0MGKNznHy758bvzRf0n8rg@mail.gmail.com>
-Message-ID: <20130906082632.5cc5c87b@skate>
+Date: Fri, 6 Sep 2013 08:28:27 +0200
+Subject: [Buildroot] [PATCH 01/17] libsepol: new package
+In-Reply-To: <5228B55E.2090505@mind.be>
+References: <1378336196-27403-1-git-send-email-clshotwe@rockwellcollins.com>
+ <1378336196-27403-2-git-send-email-clshotwe@rockwellcollins.com>
+ <20130905094446.3f139253@skate>
+ <OF7340EC06.079EF0FB-ON86257BDD.00464188-86257BDD.004745F1@rockwellcollins.com>
+ <5228B55E.2090505@mind.be>
+Message-ID: <20130906082827.5b05c498@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Axel Lin,
+Dear Arnout Vandecappelle,
 
-On Fri, 6 Sep 2013 10:21:55 +0800, Axel Lin wrote:
+On Thu, 05 Sep 2013 18:46:22 +0200, Arnout Vandecappelle wrote:
 
-> > So it looks like the arm-<something>-uclinux* tuple should not be used,
-> > if I understand this correctly. Do you have more details about why
-> > arm-<something>-uclinux* should be used?
+>   I don't think it's really necessary to do this move just because it 
+> looks nicer. I think it's better to stay with upstream. Although this 
+> would be the first package to install anything in $(HOST_DIR)/lib, we 
+> anyway already have
 > 
-> Somehow, I thought noMMU ARM platforms that using FLAT binary format needs to
-> select uclinux as TARGET_OS.
-> But since you mentioned the release notes of gcc 4.7, I'm not 100% sure.
-
-I am not sure either.
-
-> I check my build, the result is I have arm-buildroot-uclinux-uclibcgnueabi-gcc.
-> And the build log shows it checks target system type as:
-> checking target system type... arm-buildroot-uclinux-uclibcgnueabi
+> HOST_LDFLAGS  += -L$(HOST_DIR)/lib ...
 > 
-> Does buildroot automatically convert arm*-*-uclinux* to arm*-*-uclinux*eabi?
-> 
-> I also check host-gcc-final-4.5.4/gcc/config.gcc and libgcc/config.host.
-> Looks like it also expects arm*-*-uclinux* for ARM ucLinux and arm*-*-linux* for
-> ARM GNU/Linux with ELF.
+>   We don't have an rpath for it, though, so maybe that should be added.
 
-Can you check in more recent gcc versions such as 4.7 or 4.8 ? Looking
-at the most recent versions is important to see what is the current
-tuple accepted for this situation.
+Yes, that's the other option. I don't have a strong feeling about this.
 
-Thanks,
+At some point, I was thinking of proposing to remove $(HOST_DIR)/usr
+and have everything under $(HOST_DIR)/ directly. The advantage is that
+the binaries of the toolchain would be directly under $(HOST_DIR)/bin,
+which would mean creating a tarball of $(HOST_DIR) would create a
+toolchain that is more similar to other cross-compilation toolchains
+you can find around (Linaro, CodeSourcery, etc.).
 
 Thomas
 -- 
