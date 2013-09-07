@@ -1,12 +1,12 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 07 Sep 2013 08:09:54 +0200
-Subject: [Buildroot] [PATCH 1 of 2 v3] infra: introduce
-	suitable-extractor helper function
-In-Reply-To: <bb19f03cbc968ff3c2a4.1375434314@BEANTN0L019720> (Thomas De
- Schampheleire's message of "Fri, 02 Aug 2013 11:05:14 +0200")
+Date: Sat, 07 Sep 2013 08:11:00 +0200
+Subject: [Buildroot] [PATCH 2 of 2 v3] xzcat: treat as host prerequisite
+	and build if needed
+In-Reply-To: <a7969409ab53a2fc00c4.1375434315@BEANTN0L019720> (Thomas De
+ Schampheleire's message of "Fri, 02 Aug 2013 11:05:15 +0200")
 References: <patchbomb.1375434313@BEANTN0L019720>
- <bb19f03cbc968ff3c2a4.1375434314@BEANTN0L019720>
-Message-ID: <87a9jp17t9.fsf@dell.be.48ers.dk>
+ <a7969409ab53a2fc00c4.1375434315@BEANTN0L019720>
+Message-ID: <8761ud17rf.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,16 +15,20 @@ To: buildroot@busybox.net
 
 >>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> writes:
 
- Thomas> In order to simplify determining the right extractor tool for a given
- Thomas> file type, this patch introduces a make function 'suitable-extractor'.
- Thomas> Its usage is $(call suitable-extractor,filename), and it returns the
- Thomas> path to the suitable extractor.
+ Thomas> If xzcat is not present on the host system, buildroot bails out early asking
+ Thomas> the developer to install it (xzcat is now a DL_TOOLS_DEPENDENCY)
+ Thomas> Conversely, when BR2_TARGET_ROOTFS_CPIO_XZ is enabled, then host-xz is a
+ Thomas> build dependency, and no manual action is required from the developer.
+
+ Thomas> Because the second approach is nicer, also build host-xz when xzcat is not
+ Thomas> available, using the host-prerequisite and suitable-host-pkg mechanisms,
+ Thomas> already used for tar.
 
  Thomas> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
  Thomas> ---
- Thomas> v3: Correct $(firstword) usage
- Thomas> (v2): new patch in series
+ Thomas> v3: update after $(firstword) change
+ Thomas> v2: avoid filtering out xzcat from DL_TOOLS_DEPENDENCIES (comment ThomasP)
 
 Committed, thanks.
 
