@@ -1,34 +1,37 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 07 Sep 2013 08:06:53 +0200
-Subject: [Buildroot] [PATCH v2] Fix build reproducibility in Make 3.82
-In-Reply-To: <1378197941-30752-1-git-send-email-jezz@sysmic.org>
- (=?utf-8?B?IkrDqXLDtG1l?=
- Pouiller"'s message of "Tue, 3 Sep 2013 10:45:41 +0200")
-References: <52257E0D.3000100@mind.be>
- <1378197941-30752-1-git-send-email-jezz@sysmic.org>
-Message-ID: <87li3917ya.fsf@dell.be.48ers.dk>
+From: Axel Lin <axel.lin@ingics.com>
+Date: Sat, 07 Sep 2013 14:07:23 +0800
+Subject: [Buildroot] [PATCH] vsftpd: Fix dependency for needs mmu
+Message-ID: <1378534043.18257.3.camel@phoenix>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "J?r?me" == J?r?me Pouiller <jezz@sysmic.org> writes:
+Commit 2eb995759 "vsftpd: needs mmu" adds "depends on BR2_TOOLCHAIN_HAS_THREADS".
 
- J?r?me> Make 3.82 do not sort anymore result of wildcards (see
- J?r?me> http://comments.gmane.org/gmane.comp.gnu.make.bugs/4260). This may break
- J?r?me> build reproducibility.
+The build error is:
+sysutil.c:(.text+0x37ac): undefined reference to `fork'
 
- J?r?me> This patch sort results of wildcards to ensure reproducibility.
+Thus it should depend on BR2_USE_MMU rather than BR2_TOOLCHAIN_HAS_THREADS.
 
- J?r?me> Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
- J?r?me> ---
- J?r?me>  V2:
- J?r?me>     Add forgotten file support/dependencies/dependencies.mk. Even if it
- J?r?me>     does not make difference for the build result, I prefer to be 
- J?r?me>     consistent.
+Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Axel Lin <axel.lin@ingics.com>
+---
+ package/vsftpd/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Committed, thanks.
-
+diff --git a/package/vsftpd/Config.in b/package/vsftpd/Config.in
+index 3d4cff1..54ef7bd 100644
+--- a/package/vsftpd/Config.in
++++ b/package/vsftpd/Config.in
+@@ -1,6 +1,6 @@
+ config BR2_PACKAGE_VSFTPD
+ 	bool "vsftpd"
+-	depends on BR2_TOOLCHAIN_HAS_THREADS # fork()
++	depends on BR2_USE_MMU # fork()
+ 	help
+ 	  vsftpd is an ftp daemon written with security in mind.
+ 	  http://vsftpd.beasts.org/
 -- 
-Bye, Peter Korsgaard
+1.8.1.2
