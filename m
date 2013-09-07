@@ -1,47 +1,84 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 7 Sep 2013 13:49:09 +0200
-Subject: [Buildroot] Two or three stages gcc build?
-In-Reply-To: <CAL4-wQrTouutDaj2zCVmCQH4+XpEJMR05_goC2KrcF2HgXotiA@mail.gmail.com>
-References: <20130705233831.12030038@skate>
- <9C6FE6D2-322A-41E7-8B82-C623B5C1F754@gmail.com>
- <20130906145821.4ce0ab13@skate>
- <EEBE54E3-BD6F-4BB5-88C4-CB3B51CC1FCC@gmail.com>
- <20130907111552.0d646140@skate>
- <CAL4-wQrTouutDaj2zCVmCQH4+XpEJMR05_goC2KrcF2HgXotiA@mail.gmail.com>
-Message-ID: <20130907134909.1619d80c@skate>
+From: Olivier Schonken <olivier.schonken@gmail.com>
+Date: Sat, 7 Sep 2013 18:52:06 +0200
+Subject: [Buildroot] [PATCH 1/1] systemd: bumped to version 206
+In-Reply-To: <20130902150405.GB6918@pc-eric>
+References: <CALdGskLJPNgZ+iRokvubyE0FdG=miQHTHsdC56q84pQGcZE7Zw@mail.gmail.com>
+ <20130902150405.GB6918@pc-eric>
+Message-ID: <CALdGskLxtMn7uZi1OvXKBS_MMjoCCfnp0ZZNDipDfUESA3Q0-A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Martin Guy,
+Hi Eric
 
-On Sat, 7 Sep 2013 13:45:45 +0200, Martin Guy wrote:
-> On 07/09/2013, Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
-> > We do need to support building gcc 4.2.x, because that's the only
-> > version for which thee AVR32 architecture is supported.
-> 
->  A few months ago I incorporated and improved the new AVR32 support
-> for gcc 4.3 and 4.4. Since AVR's dirty patches also affect code
-> generation on other non-AVR32 processors, I chose to do the
-> development outside the main branch but the results, a fork of ct-ng,
-> are visible at https://spaces.atmel.com/gf/project/ct-ng/
+Attached is the systemd build log for failure with AUTORECONF enabled for
+systemd.
 
-Yes, I have seen that (maybe you announced it already on the ct-ng
-mailing list). I personally don't care enough about AVR32 to spend some
-time integrating this in Buildroot, but I've Cc'ed Simon Dawson who
-might be interested.
+I first tried to apply your patch to buildroot 2013.08.  Only when I
+comment out 'SYSTEMD_AUTORECONF = YES' and not apply
+'systemd-0005-core-fixed-ms-sscanf-modifier-not-being-available-in.patch'
+do I get it to build successfully.
 
-That said, even gcc 4.4 is relatively "old" by these days standards, so
-I am not sure it would make a huge difference compared to keeping the
-existing gcc 4.2.
+patch
+'systemd-0005-core-fixed-ms-sscanf-modifier-not-being-available-in.patch'
+causes below error because of configure.ac being updated by patch.
+/home/olivier/Buildroot-test/output/build/systemd-206/build-aux/missing:
+line 81: aclocal-1.13: command not found
+WARNING: 'aclocal-1.13' is missing on your system.
+         You should only need it if you modified 'acinclude.m4' or
+         'configure.ac' or m4 files included by 'configure.ac'.
+         The 'aclocal' program is part of the GNU Automake package:
+         <http://www.gnu.org/software/automake>
+         It also requires GNU Autoconf, GNU m4 and Perl in order to run:
+         <http://www.gnu.org/software/autoconf>
+         <http://www.gnu.org/software/m4/>
+         <http://www.perl.org/>
+make[1]: *** [aclocal.m4] Error 127
 
-Best regards,
+Regards
+Olivier Schonken
 
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+
+On Mon, Sep 2, 2013 at 5:04 PM, Eric Le Bihan <eric.le.bihan.dev@free.fr>wrote:
+
+> On Sun, Sep 01, 2013 at 06:54:48PM +0200, Olivier Schonken wrote:
+> > I have started to test building the new version(Using Codesourcery for
+> > ARM).  One thing I noticed is that with the SYSTEMD_AUTORECONF=YES,
+> > autotools complains about undefined macro AM_PATH_LIBGCRYPT if libgcrypt
+> or
+> > libgcrypt-devel is not present on the build system.  Not sure how to go
+> > about pleasing autotools without the additional system dependency.  Maybe
+> > someone on the buildroot mailing list will know...?
+>
+> I removed libgcrypt11-dev from my development machine and built an image
+> for
+> QEMU arm-versatile using Code Sourcery 2013.05, but I have not seen this
+> issue.
+> Can you send me a log file of the build with the error?
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130907/305dfcdc/attachment-0001.html>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: systemd-206.log
+Type: application/octet-stream
+Size: 1006 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130907/305dfcdc/attachment-0003.obj>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: master-config
+Type: application/octet-stream
+Size: 30789 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130907/305dfcdc/attachment-0004.obj>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: 2013.08-config
+Type: application/octet-stream
+Size: 30306 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130907/305dfcdc/attachment-0005.obj>
