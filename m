@@ -1,37 +1,32 @@
-From: Axel Lin <axel.lin@ingics.com>
-Date: Sat, 07 Sep 2013 14:07:23 +0800
-Subject: [Buildroot] [PATCH] vsftpd: Fix dependency for needs mmu
-Message-ID: <1378534043.18257.3.camel@phoenix>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sat, 07 Sep 2013 08:09:54 +0200
+Subject: [Buildroot] [PATCH 1 of 2 v3] infra: introduce
+	suitable-extractor helper function
+In-Reply-To: <bb19f03cbc968ff3c2a4.1375434314@BEANTN0L019720> (Thomas De
+ Schampheleire's message of "Fri, 02 Aug 2013 11:05:14 +0200")
+References: <patchbomb.1375434313@BEANTN0L019720>
+ <bb19f03cbc968ff3c2a4.1375434314@BEANTN0L019720>
+Message-ID: <87a9jp17t9.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Commit 2eb995759 "vsftpd: needs mmu" adds "depends on BR2_TOOLCHAIN_HAS_THREADS".
+>>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> writes:
 
-The build error is:
-sysutil.c:(.text+0x37ac): undefined reference to `fork'
+ Thomas> In order to simplify determining the right extractor tool for a given
+ Thomas> file type, this patch introduces a make function 'suitable-extractor'.
+ Thomas> Its usage is $(call suitable-extractor,filename), and it returns the
+ Thomas> path to the suitable extractor.
 
-Thus it should depend on BR2_USE_MMU rather than BR2_TOOLCHAIN_HAS_THREADS.
+ Thomas> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
-Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Axel Lin <axel.lin@ingics.com>
----
- package/vsftpd/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ Thomas> ---
+ Thomas> v3: Correct $(firstword) usage
+ Thomas> (v2): new patch in series
 
-diff --git a/package/vsftpd/Config.in b/package/vsftpd/Config.in
-index 3d4cff1..54ef7bd 100644
---- a/package/vsftpd/Config.in
-+++ b/package/vsftpd/Config.in
-@@ -1,6 +1,6 @@
- config BR2_PACKAGE_VSFTPD
- 	bool "vsftpd"
--	depends on BR2_TOOLCHAIN_HAS_THREADS # fork()
-+	depends on BR2_USE_MMU # fork()
- 	help
- 	  vsftpd is an ftp daemon written with security in mind.
- 	  http://vsftpd.beasts.org/
+Committed, thanks.
+
 -- 
-1.8.1.2
+Bye, Peter Korsgaard
