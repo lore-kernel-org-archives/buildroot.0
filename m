@@ -1,42 +1,79 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 7 Sep 2013 11:15:52 +0200
-Subject: [Buildroot] Two or three stages gcc build?
-In-Reply-To: <EEBE54E3-BD6F-4BB5-88C4-CB3B51CC1FCC@gmail.com>
-References: <20130705233831.12030038@skate>
- <9C6FE6D2-322A-41E7-8B82-C623B5C1F754@gmail.com>
- <20130906145821.4ce0ab13@skate>
- <EEBE54E3-BD6F-4BB5-88C4-CB3B51CC1FCC@gmail.com>
-Message-ID: <20130907111552.0d646140@skate>
+Date: Sat, 7 Sep 2013 12:44:31 +0200
+Subject: [Buildroot] [PATCH 00/17] SELinux Buildroot Additions
+In-Reply-To: <OF299770B9.9F574639-ON86257BDE.00636F06-86257BDE.006395D0@rockwellcollins.com>
+References: <1378336196-27403-1-git-send-email-clshotwe@rockwellcollins.com>
+ <20130906194903.28c020ba@skate>
+ <OF299770B9.9F574639-ON86257BDE.00636F06-86257BDE.006395D0@rockwellcollins.com>
+Message-ID: <20130907124431.25571c66@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Khem Raj,
+Dear Ryan Barnett,
 
-On Fri, 6 Sep 2013 09:59:34 -0700, Khem Raj wrote:
+On Fri, 6 Sep 2013 13:07:44 -0500, Ryan Barnett wrote:
 
-> > In the mean time, I've experimented a bit and actually implemented it.
-> > The patch hasn't been merged yet in Buildroot, but it has been posted:
-> > http://lists.busybox.net/pipermail/buildroot/2013-September/077344.html.
-> > 
-> > Don't hesitate to have a look and tell me what you think.
+> Clayton and I have been going back and forth on how best to do this, as 
+> the next set of patch that we want to release provides information on 
+> SELinux.
+> You had provided feedback to Clayton on options for providing this 
+> information
+> and I think it was agreed upon that the manual will be the best place for 
+> this. 
+> Is this correct?
+
+This is correct.
+
+> > In order to ease the review process, would it be possible to get a
+> > short introduction to SELinux, and especially what tools are needed on
+> > the host, what tools are needed on the target? I'm especially
+> > interested in understanding why/if we need all this Python stuff on the
+> > target.
 > 
-> OK. The patch looks ok to me. one thing
-> 
-> Do you need to support multiple toolchains ? and how far do you want to go back ? I would much rather not
-> have THREE_STAGE_BUILD options at all.
+> I believe the best way to answer to questions above about is add to the 
+> manual.
+> As this way that we won't have to necessarily duplicate work (and 
+> motivates us
+> to create the documentation). So hopefully by the middle of the week next 
+> week
+> we can submit some documentation.
 
-We do need to support building gcc 4.2.x, because that's the only
-version for which thee AVR32 architecture is supported. I'm hoping that
-in a year or two we can drop AVR32 support (the architecture has been
-deprecated by Atmel), and therefore simplify a few things, but for now,
-I believe we need to be able to support older gcc versions than 4.7/4.8.
+That would be good. However, I am not sure the questions I am asking
+here match exactly what should be in the documentation. In the
+documentation, we should explain how a Buildroot user can enable
+SELinux support and make use of it on the target. While my questions
+certainly overlap some of this, I believe we also need a few more
+details of the internals to roughly understand what the different
+packages are doing.
 
-Thanks for having a look at the patch!
+> Where would you like this documentation placed? Also how does one go about 
+> adding
+> to the manual (I can't seem to find anything in the manual)? Or do we want 
+> to place
+> this information on the buildroot wiki?
 
-Best regards,
+I believe the manual is a better place than the Buildroot Wiki. For
+now, we've usually stored this kind of additional informations in the
+"Details on Buildroot configuration" section. So something like:
+
+diff --git a/docs/manual/configure.txt b/docs/manual/configure.txt
+index 56b0469..0fc66c9 100644
+--- a/docs/manual/configure.txt
++++ b/docs/manual/configure.txt
+@@ -430,3 +430,8 @@ can be chosen from +System configuration+, +Init system+:
+ The solution recommended by Buildroot developers is to use the
+ *Busybox init* as it is sufficient for most embedded
+ systems. *systemd* can be used for more complex situations.
++
++SELinux support
++~~~~~~~~~~~~~~~
++
++Here put some details about the SELinux support.
+
+Thanks,
 
 Thomas
 -- 
