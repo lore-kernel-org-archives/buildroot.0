@@ -1,30 +1,28 @@
-From: Romain Naour <romain.naour@openwide.fr>
-Date: Sat, 07 Sep 2013 01:25:18 +0200
-Subject: [Buildroot] [PATCH 1/1] syslinux: bump to version 4.07
-Message-ID: <522A645E.9080803@openwide.fr>
+From: Axel Lin <axel.lin@ingics.com>
+Date: Sat, 07 Sep 2013 10:45:20 +0800
+Subject: [Buildroot] [PATCH] netplug: needs mmu
+Message-ID: <1378521920.14639.2.camel@phoenix>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+Signed-off-by: Axel Lin <axel.lin@ingics.com>
 ---
- boot/syslinux/syslinux.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/netplug/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/boot/syslinux/syslinux.mk b/boot/syslinux/syslinux.mk
-index 1b0ef4e..b6b804e 100644
---- a/boot/syslinux/syslinux.mk
-+++ b/boot/syslinux/syslinux.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
-
--SYSLINUX_VERSION = 4.06
-+SYSLINUX_VERSION = 4.07
- SYSLINUX_SOURCE  = syslinux-$(SYSLINUX_VERSION).tar.bz2
- SYSLINUX_SITE    = $(BR2_KERNEL_MIRROR)/linux/utils/boot/syslinux/4.xx/
-
+diff --git a/package/netplug/Config.in b/package/netplug/Config.in
+index 5c9bca6..593c08a 100644
+--- a/package/netplug/Config.in
++++ b/package/netplug/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_NETPLUG
+ 	bool "netplug"
++	depends on BR2_USE_MMU # fork()
+ 	help
+ 	  A Linux daemon that manages network interfaces in
+ 	  response to network cables being plugged in and out.
 -- 
-1.8.4
+1.8.1.2
