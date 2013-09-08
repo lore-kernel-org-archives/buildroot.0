@@ -1,56 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 8 Sep 2013 18:46:15 +0200
-Subject: [Buildroot] [PATCH 10/10] busybox: add support for SELinux
-In-Reply-To: <1378429464-12546-11-git-send-email-rjbarnet@rockwellcollins.com>
-References: <1378429464-12546-1-git-send-email-rjbarnet@rockwellcollins.com>
- <1378429464-12546-11-git-send-email-rjbarnet@rockwellcollins.com>
-Message-ID: <20130908184615.541943eb@skate>
+Date: Sun, 8 Sep 2013 18:51:14 +0200
+Subject: [Buildroot] [PATCH v2 1/7] libdrm: bump and add experimental
+ ARM framebuffer support
+In-Reply-To: <1378441521-10050-2-git-send-email-spenser@gillilanding.com>
+References: <1378441521-10050-1-git-send-email-spenser@gillilanding.com>
+ <1378441521-10050-2-git-send-email-spenser@gillilanding.com>
+Message-ID: <20130908185114.3cc3269e@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Ryan Barnett,
+Dear Spenser Gilliland,
 
-On Thu, 5 Sep 2013 20:04:24 -0500, Ryan Barnett wrote:
+On Thu,  5 Sep 2013 23:25:15 -0500, Spenser Gilliland wrote:
+> 
+> Signed-off-by: Spenser Gilliland <spenser@gillilanding.com>
+> ---
+>  package/libdrm/Config.in | 68 ++++++++++++++++++++++++++++++++++++++++--------
+>  package/libdrm/libdrm.mk | 53 ++++++++++++++++++++++++++++++-------
+>  2 files changed, 100 insertions(+), 21 deletions(-)
 
-> diff --git a/package/busybox/1.21.1/busybox-1.21.1-pkg-config.patch b/package/busybox/1.21.1/busybox-1.21.1-pkg-config.patch
-> new file mode 100644
-> index 0000000..79b8681
-> --- /dev/null
-> +++ b/package/busybox/1.21.1/busybox-1.21.1-pkg-config.patch
-> @@ -0,0 +1,13 @@
-> +# Need to have the pkg-config only spit out the libs and not the lib path
-> +# also when checking for the SELinux libraries.
+I continue to believe your commit logs could be a little bit more
+verbose, but other than that:
 
-Please follow the style at
-http://buildroot.org/downloads/manual/manual.html#_format_and_licensing_of_the_package_patches
-to format a patch description and Signed-off-by.
+Reviewed-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-However, it is unclear to me why this change is needed. Which library
-paths returned by pkg-config are causing problems?
+Also, the xlib_libpthread-stubs package could probably be moved outside
+of the BR2_PACKAGE_XORG7 condition, but this can be done later on.
 
-Also, host-pkgconf is not part of the Busybox dependencies, so it looks
-wrong for Busybox to use it without declaring it as a dependency. That
-said, for the normal Busybox build, I don't think we want Busybox to
-depend on host-pkgconf. After reading the Busybox source code, it is
-apparently only used when SELinux support is requested, so just add
-host-pkgconf to the busybox dependencies when SELinux support is
-enabled.
-
-> +# For SELinux, enable the SELinux flag CONFIG_SELINUX
-> +# in the busybox config
-> +ifeq ($(BR2_PACKAGE_LIBSELINUX),y)
-> +BUSYBOX_DEPENDENCIES += libselinux
-
-i.e here.
-
-> +endif
-
-Also, shouldn't you be enabling SELinux support in Busybox here, i.e
-setting CONFIG_SELINUX=y in the Busybox configuration? See the usage of
-the KCONFIG_ENABLE_OPT and KCONFIG_DISABLE_OPT in busybox.mk.
+Finally, a question that remains is on what platforms did you test
+this? I.e which DRM driver did you enable to get Mesa3D providing the
+relevant libraries needed to run the glmark2 benchmark on your boards?
 
 Thanks,
 
