@@ -1,40 +1,73 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 8 Sep 2013 19:31:13 +0200
-Subject: [Buildroot] [RFCv1 01/11] Makefile: make $(BUILD_DIR)/.root
- rule idempotent
-In-Reply-To: <CANxTyt5T+GUhU4EuDChEvfPze-9uCAb8mMNy-X-2Jn=fmMi9rg@mail.gmail.com>
-References: <1378416469-17708-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1378416469-17708-2-git-send-email-thomas.petazzoni@free-electrons.com>
- <CANxTyt4-UNps4mw2KRMbg9TGjj03e5eL5vczCJORuE4as4HwQg@mail.gmail.com>
- <20130908153034.10b46fdf@skate>
- <CANxTyt5T+GUhU4EuDChEvfPze-9uCAb8mMNy-X-2Jn=fmMi9rg@mail.gmail.com>
-Message-ID: <20130908193113.67a7c635@skate>
+From: Danomi Manchego <danomimanchego123@gmail.com>
+Date: Sun, 8 Sep 2013 13:36:33 -0400
+Subject: [Buildroot] [PATCH] Makefile: make skeleton rsync options
+	consistent
+In-Reply-To: <1367464526-3028-1-git-send-email-danomimanchego123@gmail.com>
+References: <1367464526-3028-1-git-send-email-danomimanchego123@gmail.com>
+Message-ID: <CANxTyt5hY7vb-E=7+ivs+Wp3+dDsUmytZzjK54wNAz_B2GKhrg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Danomi Manchego,
+Ping?
 
-On Sun, 8 Sep 2013 12:59:23 -0400, Danomi Manchego wrote:
+The patch still applies, with no fuzz but some shifted lines. The
+problem described
+still exists, and is still fixed by the patch.
 
->  "ln -sf" is not sufficient for a symlink to a directory - you need "ln
-> -snf" - the -n treats the directory symlink as a file, which prevents this
-> very problem.
+Danomi -
 
-Aah, good!
 
-> Using the "ln -snf" lets you drop the if statements, so it seems desirable.
+On Wed, May 1, 2013 at 11:15 PM, Danomi Manchego <
+danomimanchego123@gmail.com> wrote:
 
-Right, makes sense. I'll fix this up for the next iteration of the
-patch series.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+> Initially, a "cp" was used for the one-time target skeleton
+> installation, and an "rsync" was used for the every-time overlay
+> skeleton installations.  Then, the target skeleton install was
+> changed to also use rsync (1cd3f992fb3659aacbb0cdd3ed64347a37569891).
+> Now there are two rsyncs, but with different filter specs, which
+> seems odd.
+>
+> This patch adds --excludes to both invocations of rsync to make them
+> consistent, and removes the -u option from the initial target skeleton
+> installation.
+>
+> Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
+> ---
+>  Makefile |    6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
+>
+> diff --git a/Makefile b/Makefile
+> index 97804ff..5b690f0 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -429,7 +429,9 @@ endif
+>
+>  $(BUILD_DIR)/.root:
+>         mkdir -p $(TARGET_DIR)
+> -       rsync -au --exclude=.empty --exclude=CVS --exclude=.svn
+> --exclude='*~' \
+> +       rsync -a \
+> +               --exclude .empty --exclude .svn --exclude .git \
+> +               --exclude .hg --exclude=CVS --exclude '*~' \
+>                 $(TARGET_SKELETON)/ $(TARGET_DIR)/
+>         cp support/misc/target-dir-warning.txt $(TARGET_DIR_WARNING_FILE)
+>         touch $@
+> @@ -505,7 +507,7 @@ endif
+>                 $(call MESSAGE,"Copying overlay $(d)"); \
+>                 rsync -a \
+>                         --exclude .empty --exclude .svn --exclude .git \
+> -                       --exclude .hg --exclude '*~' \
+> +                       --exclude .hg --exclude=CVS --exclude '*~' \
+>                         $(d)/ $(TARGET_DIR)$(sep))
+>
+>         @$(foreach s, $(call qstrip,$(BR2_ROOTFS_POST_BUILD_SCRIPT)), \
+> --
+> 1.7.9.5
+>
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130908/cbe8659b/attachment.html>
