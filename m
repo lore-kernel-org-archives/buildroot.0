@@ -1,60 +1,76 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 08 Sep 2013 21:52:39 +0200
-Subject: [Buildroot] [PATCH v3 1/2] libssh2: add package
-In-Reply-To: <1377871785-4964-2-git-send-email-rjbarnet@rockwellcollins.com>
- (Ryan Barnett's message of "Fri, 30 Aug 2013 09:09:44 -0500")
-References: <1377871785-4964-1-git-send-email-rjbarnet@rockwellcollins.com>
- <1377871785-4964-2-git-send-email-rjbarnet@rockwellcollins.com>
-Message-ID: <87zjrnxf94.fsf@dell.be.48ers.dk>
+Date: Sun, 08 Sep 2013 22:11:14 +0200
+Subject: [Buildroot] [PATCH 1/1] util-linux: enable sfdisk in configs
+In-Reply-To: <1376591640-3698-1-git-send-email-vsergeev@kumunetworks.com>
+ (Ivan Sergeev's message of "Thu, 15 Aug 2013 11:34:00 -0700")
+References: <1376591640-3698-1-git-send-email-vsergeev@kumunetworks.com>
+Message-ID: <87mwnnxee5.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Ryan" == Ryan Barnett <rjbarnet@rockwellcollins.com> writes:
+>>>>> "Ivan" == Ivan Sergeev <vsergeev@kumunetworks.com> writes:
 
- Ryan> Signed-off-by: Ryan Barnett <rjbarnet@rockwellcollins.com>
- Ryan> ---
+ Ivan> Signed-off-by: Ivan Sergeev <vsergeev@kumunetworks.com>
+ Ivan> ---
+ Ivan>  package/util-linux/Config.in     | 5 +++++
+ Ivan>  package/util-linux/util-linux.mk | 1 +
+ Ivan>  2 files changed, 6 insertions(+)
 
- Ryan> Change from v2 -> v3:
- Ryan>   * Use else when selecting configure and dependancy options with using
- Ryan>     libgcrypt or openssl (suggested by Baruch Siach)
+ Ivan> diff --git a/package/util-linux/Config.in b/package/util-linux/Config.in
+ Ivan> index e63814f..605e297 100644
+ Ivan> --- a/package/util-linux/Config.in
+ Ivan> +++ b/package/util-linux/Config.in
+ Ivan> @@ -135,6 +135,11 @@ config BR2_PACKAGE_UTIL_LINUX_SCHEDUTILS
+ Ivan>  	help
+ Ivan>  	  Scheduling utilities (chrt, ionice, taskset)
+ 
+ Ivan> +config BR2_PACKAGE_UTIL_LINUX_SFDISK
+ Ivan> +	bool "sfdisk"
+ Ivan> +	help
+ Ivan> +	  Partition table manipulator for Linux
+ Ivan> +
+ Ivan>  config BR2_PACKAGE_UTIL_LINUX_SWITCH_ROOT
+ Ivan>  	bool "switch_root"
+ Ivan>  	help
+ Ivan> diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
+ Ivan> index c6c8467..64112ba 100644
+ Ivan> --- a/package/util-linux/util-linux.mk
+ Ivan> +++ b/package/util-linux/util-linux.mk
+ Ivan> @@ -68,6 +68,7 @@ UTIL_LINUX_CONF_OPT += \
+ Ivan>  	$(if $(BR2_PACKAGE_UTIL_LINUX_RENAME),--enable-rename,--disable-rename) \
+ Ivan>  	$(if $(BR2_PACKAGE_UTIL_LINUX_RESET),--enable-reset,--disable-reset) \
+ Ivan>  	$(if $(BR2_PACKAGE_UTIL_LINUX_SCHEDUTILS),--enable-schedutils,--disable-schedutils) \
+ Ivan> +	$(if $(BR2_PACKAGE_UTIL_LINUX_SFDISK),--enable-sfdisk,--disable-sfdisk) \
 
-Committed with minor tweaks (see below) - Thanks.
+Ehh, I don't see any --enable-sfdisk / --disable-sfdisk configure
+options?
 
- Ryan> diff --git a/package/libssh2/Config.in b/package/libssh2/Config.in
- Ryan> new file mode 100644
- Ryan> index 0000000..1fb89ff
- Ryan> --- /dev/null
- Ryan> +++ b/package/libssh2/Config.in
- Ryan> @@ -0,0 +1,11 @@
- Ryan> +config BR2_PACKAGE_LIBSSH2
- Ryan> +	bool "libssh2"
- Ryan> +	select BR2_PACKAGE_LIBGCRYPT if !BR2_PACKAGE_OPENSSL
- Ryan> +	help
- Ryan> +	  libssh2 is a client-side C library implementing the SSH2 protocol 
- Ryan> +	  as defined by Internet Drafts: SECSH-TRANS(22), SECSH-USERAUTH(25), 
- Ryan> +	  SECSH-CONNECTION(23), SECSH-ARCH(20), SECSH-FILEXFER(06)*, 
- Ryan> +	  SECSH-DHGEX(04), and SECSH-NUMBERS(10)
+ ./configure --help|grep -B2 sfdisk
+  --enable-static-programs=LIST
+                          link static the programs in LIST (comma-separated,
+                          supported for losetup, mount, umount, fdisk, sfdisk,
 
-Trailing spaces.
+Looking at fdisks/Makemodule.am I see sfdisk is always built (except for
+on SPARC):
 
- Ryan> +
- Ryan> +	  http://www.libssh2.org/
- Ryan> +
+if !ARCH_SPARC
 
-You shouldn't have an empty line after the URL.
+sbin_PROGRAMS += sfdisk
+dist_man_MANS += fdisks/sfdisk.8
+sfdisk_SOURCES = \
+        fdisks/partname.c \
+        fdisks/sfdisk.c \
+        fdisks/common.h
+sfdisk_LDADD = $(LDADD) libcommon.la
 
- Ryan> diff --git a/package/libssh2/libssh2.mk b/package/libssh2/libssh2.mk
- Ryan> new file mode 100644
- Ryan> index 0000000..af93d61
- Ryan> --- /dev/null
- Ryan> +++ b/package/libssh2/libssh2.mk
- Ryan> @@ -0,0 +1,32 @@
- Ryan> +#############################################################
+..
 
-The '####' lines should be 80 chars long.
+Before this patch we always built & installed sfdisk if
+BR2_PACKAGE_UTIL_LINUX_BINARIES was enabled, and this patch doesn't
+change anything.
 
 -- 
 Bye, Peter Korsgaard
