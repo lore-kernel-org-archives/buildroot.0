@@ -1,37 +1,64 @@
-From: Michael Rommel <rommel@layer-7.net>
-Date: Sun, 8 Sep 2013 20:28:33 +0200
-Subject: [Buildroot] [PATCH 1/1] aiccu: new package
-In-Reply-To: <CAAXf6LUEqQKuSz2oCyJHcM-=BeY3e-hjPa0fKk7=F8m=E8Es+g@mail.gmail.com>
-References: <1378418213-22160-1-git-send-email-rommel@layer-7.net>
- <CAAXf6LXZnoX6u1fUD_2HX108_-6JnWaBFowV-yzLxsaeDOfFJA@mail.gmail.com>
- <150C0AB5-B4C6-4379-9FEE-9819278AAF69@layer-7.net>
- <CAAXf6LWetaF-1wTWvhad-gKFc0CwLrqTKjgM_F9Seou+Pm=UWg@mail.gmail.com>
- <E86404F6-302E-4A10-9828-19607F8DC0AD@layer-7.net>
- <CAAXf6LUEqQKuSz2oCyJHcM-=BeY3e-hjPa0fKk7=F8m=E8Es+g@mail.gmail.com>
-Message-ID: <259F47B1-05A5-4383-9D2C-D807B148BDBE@layer-7.net>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 8 Sep 2013 20:30:51 +0200
+Subject: [Buildroot] [PATCH v2 4/7] mesa3d: modularize and bump to
+ version 9.1.6
+In-Reply-To: <1378441521-10050-5-git-send-email-spenser@gillilanding.com>
+References: <1378441521-10050-1-git-send-email-spenser@gillilanding.com>
+ <1378441521-10050-5-git-send-email-spenser@gillilanding.com>
+Message-ID: <20130908203051.63b7055d@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Dear Spenser Gilliland,
 
-thanks for your help!
-
-On Sep 8, 2013, at 19:46 , Thomas De Schampheleire <patrickdepinguin@gmail.com> wrote:
-
+On Thu,  5 Sep 2013 23:25:18 -0500, Spenser Gilliland wrote:
 > 
-> Here are some questions to try understand the problem:
-> - how long have you been subscribed to the buildroot mailing list, and
-> have you ever received mails from the list (when you weren't directly
-> in copy)?
+> Signed-off-by: Spenser Gilliland <spenser@gillilanding.com>
+> ---
+>  package/mesa3d/Config.in                           | 177 ++++++++++++++++++++-
+>  package/mesa3d/mesa3d-cross-glsl-compiler.patch    |  41 +++++
+>  package/mesa3d/mesa3d-gbm-without-dri.patch        |  30 ++++
+>  package/mesa3d/mesa3d-uclibc-locale.patch          |  56 -------
+>  package/mesa3d/mesa3d.mk                           | 115 +++++++++++--
+>  package/opengl/Config.in                           |   3 +
+>  package/opengl/libegl/libegl.mk                    |   4 +
+>  package/opengl/libgl/libgl.mk                      |  20 +++
+>  package/opengl/libgles/libgles.mk                  |   4 +
+>  package/opengl/libopenvg/libopenvg.mk              |   4 +
+>  .../xserver_xorg-server/xserver_xorg-server.mk     |   4 +-
+>  11 files changed, 378 insertions(+), 80 deletions(-)
+>  create mode 100644 package/mesa3d/mesa3d-cross-glsl-compiler.patch
+>  create mode 100644 package/mesa3d/mesa3d-gbm-without-dri.patch
+>  delete mode 100644 package/mesa3d/mesa3d-uclibc-locale.patch
+>  create mode 100644 package/opengl/libgl/libgl.mk
 
+I'm far from being able to understand all the internal details of
+Mesa3D, what GBM is and so on, but from a Buildroot packaging
+perspective, it looks good to me, so:
 
-June: 1001 messages,
-July: 1539 messages
-August: 1177 messages
-September: 482 messages
+Reviewed-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-My procmail log file says:
-root at ns1:/export/users/rommel# tail -350 ~rommel/mail/procmail/procmail.log |grep buildroot-bounces
+However, see my comments on PATCH 3/7 saying that maybe moving mesa3d
+outside of package/x11r7/ isn't really a good idea for the moment.
+
+Another comment below.
+
+>  	depends on BR2_INSTALL_LIBSTDCPP
+> +	depends on BR2_LARGEFILE
+
+This would require a comment saying that mesa3d is not available due to
+toolchain missing C++ and largefile support. This comment is missing
+today for C++ support, but it'd be good to add it. Can be done as a
+followup patch, though.
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
