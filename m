@@ -1,11 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 8 Sep 2013 18:29:00 +0200
-Subject: [Buildroot] [PATCH 02/10] sysvinit: install new cmds and fix
- inittab
-In-Reply-To: <1378429464-12546-3-git-send-email-rjbarnet@rockwellcollins.com>
+Date: Sun, 8 Sep 2013 18:31:07 +0200
+Subject: [Buildroot] [PATCH 03/10] sysvinit: add patch for libcrypt
+In-Reply-To: <1378429464-12546-4-git-send-email-rjbarnet@rockwellcollins.com>
 References: <1378429464-12546-1-git-send-email-rjbarnet@rockwellcollins.com>
- <1378429464-12546-3-git-send-email-rjbarnet@rockwellcollins.com>
-Message-ID: <20130908182900.662f7689@skate>
+ <1378429464-12546-4-git-send-email-rjbarnet@rockwellcollins.com>
+Message-ID: <20130908183107.57a40dd8@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,33 +13,62 @@ To: buildroot@busybox.net
 
 Dear Ryan Barnett,
 
-On Thu, 5 Sep 2013 20:04:16 -0500, Ryan Barnett wrote:
+On Thu, 5 Sep 2013 20:04:17 -0500, Ryan Barnett wrote:
+> Adding a patch to sysvinit to correcctly add libcrypt as a build
+> dependancy of sysvinit.
 
+I believe this commit log should carry a bit more details as to what it
+is fixing compared to what commit
+f5e3178197ff17b9f4a4c2ecb6d32b72a38a1246 did.
+
+
+
+> 
+> Signed-off-by: Ryan Barnett <rjbarnet@rockwellcollins.com>
+> ---
+>  .../sysvinit-0001-libcrypt_check_fix.patch         |   13 +++++++++++++
+>  package/sysvinit/sysvinit.mk                       |    2 +-
+>  2 files changed, 14 insertions(+), 1 deletions(-)
+>  create mode 100644 package/sysvinit/sysvinit-0001-libcrypt_check_fix.patch
+> 
+> diff --git a/package/sysvinit/sysvinit-0001-libcrypt_check_fix.patch b/package/sysvinit/sysvinit-0001-libcrypt_check_fix.patch
+> new file mode 100644
+> index 0000000..f6f54e5
+> --- /dev/null
+> +++ b/package/sysvinit/sysvinit-0001-libcrypt_check_fix.patch
+
+All patches should have a description + Signed-off-by. See
+http://buildroot.org/downloads/manual/manual.html#_format_and_licensing_of_the_package_patches.
+
+> @@ -0,0 +1,13 @@
+> +--- a/src/Makefile	2010-04-11 04:30:27.000000000 -0500
+> ++++ b/src/Makefile	2012-09-05 12:44:45.000000000 -0500
+> +@@ -78,8 +78,8 @@
+> + endif
+> + 
+> + # Additional libs for GNU libc.
+> +-ifneq ($(wildcard /usr/lib*/libcrypt.a),)
+> +-  SULOGINLIBS	+= -lcrypt
+> ++ifneq ($(LCRYPT),)
+> ++  SULOGINLIBS	+= $(LCRYPT)
+> + endif
+> + 
+> + all:		$(BIN) $(SBIN) $(USRBIN)
 > diff --git a/package/sysvinit/sysvinit.mk b/package/sysvinit/sysvinit.mk
-> index 65cbf17..c6b75a0 100644
+> index c6b75a0..7678bce 100644
 > --- a/package/sysvinit/sysvinit.mk
 > +++ b/package/sysvinit/sysvinit.mk
-> @@ -41,12 +41,16 @@ define SYSVINIT_INSTALL_TARGET_CMDS
->  	# Override Busybox's inittab with an inittab compatible with
->  	# sysvinit
->  	install -D -m 0644 package/sysvinit/inittab $(TARGET_DIR)/etc/inittab
-> +	ln -sf /sbin/halt $(TARGET_DIR)/sbin/reboot
-> +	ln -sf /sbin/halt $(TARGET_DIR)/sbin/poweroff
+> @@ -31,7 +31,7 @@ SYSVINIT_POST_PATCH_HOOKS = SYSVINIT_DEBIAN_PATCHES
+>  define SYSVINIT_BUILD_CMDS
+>  	# Force sysvinit to link against libcrypt as it otherwise
+>  	# use an incorrect test to see if it's available
+> -	$(MAKE) $(TARGET_CONFIGURE_OPTS) SULOGINLIBS="-lcrypt" -C $(@D)/src
+> +	$(MAKE) $(TARGET_CONFIGURE_OPTS) LCRYPT="-lcrypt" -C $(@D)/src
 >  endef
 >  
->  define SYSVINIT_UNINSTALL_TARGET_CMDS
->  	for x in halt init shutdown; do \
->  		rm -f $(TARGET_DIR)/sbin/$$x || exit 1; \
->  	done
-> +	rm -f $(TARGET_DIR)/sbin/reboot || exit 1
-> +	rm -f $(TARGET_DIR)/sbin/poweroff || exit 1
+>  define SYSVINIT_INSTALL_TARGET_CMDS
 
-Why aren't you adding these to the previous loop?
-
-(Not a big deal, as we don't care much about uninstall commands, but
-still.)
-
-Best regards,
+Thanks,
 
 Thomas
 -- 
