@@ -1,72 +1,85 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Sun, 8 Sep 2013 14:06:03 +0200
-Subject: [Buildroot] [RFCv1 01/11] Makefile: make $(BUILD_DIR)/.root
-	rule idempotent
-In-Reply-To: <1378416469-17708-2-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1378416469-17708-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1378416469-17708-2-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <CAAXf6LVbiVcBk4NR+imk=RUjVicuga5gARDmc1u-cDvf=a+v=w@mail.gmail.com>
+From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
+Date: Sun, 8 Sep 2013 14:07:45 +0200
+Subject: [Buildroot] [PATCH 1/3] knock: new package
+In-Reply-To: <1378071216-19697-1-git-send-email-rommel@layer-7.net>
+References: <1378071216-19697-1-git-send-email-rommel@layer-7.net>
+Message-ID: <CAAXf6LV4ikU3hr7vLTKAHzHFsSDv1bXK+wRaoMjyoj9xHiQcKg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Hi Michael,
 
-On Thu, Sep 5, 2013 at 11:27 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> The $(BUILD_DIR)/.root rule is executed as part of the 'dirs'
-> target. The 'dirs' target is re-executed at every execution of 'make
-> external-deps', and make external-deps explicitly tells make to ignore
-> targets that have already been made (through the -B option). This
-> means that the $(BUILD_DIR)/.root rule has to be idempotant, which was
-> not the case this the introduction of the lib32/lib64 symbolic
-> link.
+On Sun, Sep 1, 2013 at 11:33 PM, Michael Rommel <rommel@layer-7.net> wrote:
+> A port knocking implementation with daemon and user application.
 >
-> Running 'make external-deps' three times in a row was sufficient to
-> trigger an error due to symbolic links being incorrectly created. This
-> patch fixes that.
->
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Signed-off-by: Michael Rommel <rommel@layer-7.net>
 > ---
-> This should probably be taken for 2013.08.1 as a fix of 'make
-> external-deps'.
-> ---
->  Makefile | 10 +++++++---
->  1 file changed, 7 insertions(+), 3 deletions(-)
+>  package/Config.in       |    1 +
+>  package/knock/Config.in |   13 +++++++++++++
+>  package/knock/knock.mk  |   13 +++++++++++++
+>  3 files changed, 27 insertions(+)
+>  create mode 100644 package/knock/Config.in
+>  create mode 100644 package/knock/knock.mk
 >
-> diff --git a/Makefile b/Makefile
-> index 09faeba..93fc6ea 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -447,9 +447,13 @@ $(BUILD_DIR)/.root:
->                 --exclude .hg --exclude=CVS --exclude '*~' \
->                 $(TARGET_SKELETON)/ $(TARGET_DIR)/
->         cp support/misc/target-dir-warning.txt $(TARGET_DIR_WARNING_FILE)
-> -       @ln -s lib $(TARGET_DIR)/$(LIB_SYMLINK)
-> -       @mkdir -p $(TARGET_DIR)/usr
-> -       @ln -s lib $(TARGET_DIR)/usr/$(LIB_SYMLINK)
-> +       $(Q)if [ ! -L $(TARGET_DIR)/$(LIB_SYMLINK) ]; then \
-> +               ln -s lib $(TARGET_DIR)/$(LIB_SYMLINK) ; \
-> +       fi
-> +       $(Q)mkdir -p $(TARGET_DIR)/usr
-> +       $(Q)if [ ! -L $(TARGET_DIR)/usr/$(LIB_SYMLINK) ]; then \
-> +               ln -s lib $(TARGET_DIR)/usr/$(LIB_SYMLINK) ; \
-> +       fi
->         touch $@
->
->  $(TARGET_DIR): $(BUILD_DIR)/.root
-> --
+> diff --git a/package/Config.in b/package/Config.in
+> index 6306947..fd98da0 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -763,6 +763,7 @@ source "package/ipset/Config.in"
+>  source "package/iptables/Config.in"
+>  source "package/iw/Config.in"
+>  source "package/kismet/Config.in"
+> +source "package/knock/Config.in"
+>  source "package/lighttpd/Config.in"
+>  source "package/linknx/Config.in"
+>  source "package/links/Config.in"
+> diff --git a/package/knock/Config.in b/package/knock/Config.in
+> new file mode 100644
+> index 0000000..8d80274
+> --- /dev/null
+> +++ b/package/knock/Config.in
+> @@ -0,0 +1,13 @@
+> +config BR2_PACKAGE_KNOCK
+> +       bool "knock"
+> +       select BR2_PACKAGE_LIBPCAP
+> +       help
+> +         A port knocking implementation.
+> +         Provides a daemon and a user application. Port knocking can be
+> +         used to run an arbitrary application, once the daemon detects
+> +         a predefined sequence of incoming TCP/UDP packets on a network
+> +         interface. This can be used, e.g. to open up ports in a
+> +         firewall.
+> +
+> +         http://www.zeroflux.org/projects/knock
+> +
+> diff --git a/package/knock/knock.mk b/package/knock/knock.mk
+> new file mode 100644
+> index 0000000..85dfe62
+> --- /dev/null
+> +++ b/package/knock/knock.mk
+> @@ -0,0 +1,13 @@
+> +################################################################################
+> +#
+> +# knock
+> +#
+> +################################################################################
+> +
+> +KNOCK_VERSION = 7666f2e86e
+> +KNOCK_SITE = https://github.com/jvinet/knock/tarball/master
+> +KNOCK_LICENSE = GPLv2+
+> +KNOCK_LICENSE_FILES = COPYING
+> +KNOCK_AUTORECONF = YES
+> +
+> +$(eval $(autotools-package))
 
+The Config.in file mentions a dependency on libpcap, but this is not
+properly expressed in the .mk file.
+You need:
+KNOCK_DEPENDENCIES = libpcap
+Without this, the compilation on a clean system fails.
 
-Acked-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-
-
-Thomas, there is a patch in patchwork that renames the
-$(BUILD_DIR)/.root stamp file, by J?r?me.
-Although it is not directly related to the above, could you have a look at it?
-http://patchwork.ozlabs.org/patch/265680/
-
-Thanks,
+Best regards,
 Thomas
