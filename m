@@ -1,74 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 8 Sep 2013 15:30:34 +0200
-Subject: [Buildroot] [RFCv1 01/11] Makefile: make $(BUILD_DIR)/.root
- rule idempotent
-In-Reply-To: <CANxTyt4-UNps4mw2KRMbg9TGjj03e5eL5vczCJORuE4as4HwQg@mail.gmail.com>
-References: <1378416469-17708-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1378416469-17708-2-git-send-email-thomas.petazzoni@free-electrons.com>
- <CANxTyt4-UNps4mw2KRMbg9TGjj03e5eL5vczCJORuE4as4HwQg@mail.gmail.com>
-Message-ID: <20130908153034.10b46fdf@skate>
+Date: Sun, 8 Sep 2013 15:57:36 +0200
+Subject: [Buildroot] autobuild statistics graph
+In-Reply-To: <CAAXf6LVPQVzQpfCdeVrm2yNzEad8j2GS9pnna7YiKVnhTb=MQg@mail.gmail.com>
+References: <CAAXf6LW8axKFZpiQFjmqWcFXTEqaHoD3uX=hk5ZSQbmz_7BabA@mail.gmail.com>
+ <20130828091036.1a91b786@skate>
+ <CAAXf6LWFMtmDpFvZODkd3N_Wsk-VwNP-QVkquRhn3B2aiOjCqg@mail.gmail.com>
+ <20130828094824.5f917f48@skate>
+ <CAAXf6LWz7_RYds7Zr7kdQHvhYXtNO1WEP+RX+0TTthfZURvi+Q@mail.gmail.com>
+ <CAAXf6LVPQVzQpfCdeVrm2yNzEad8j2GS9pnna7YiKVnhTb=MQg@mail.gmail.com>
+Message-ID: <20130908155736.30d50baf@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Danomi Manchego,
+Dear Thomas De Schampheleire,
 
-On Sun, 8 Sep 2013 09:13:30 -0400, Danomi Manchego wrote:
+On Thu, 29 Aug 2013 09:40:41 +0200, Thomas De Schampheleire wrote:
 
-> > $(TARGET_DIR_WARNING_FILE)
-> > -       @ln -s lib $(TARGET_DIR)/$(LIB_SYMLINK)
-> > -       @mkdir -p $(TARGET_DIR)/usr
-> > -       @ln -s lib $(TARGET_DIR)/usr/$(LIB_SYMLINK)
-> > +       $(Q)if [ ! -L $(TARGET_DIR)/$(LIB_SYMLINK) ]; then \
-> > +               ln -s lib $(TARGET_DIR)/$(LIB_SYMLINK) ; \
-> > +       fi
-> > +       $(Q)mkdir -p $(TARGET_DIR)/usr
-> > +       $(Q)if [ ! -L $(TARGET_DIR)/usr/$(LIB_SYMLINK) ]; then \
-> > +               ln -s lib $(TARGET_DIR)/usr/$(LIB_SYMLINK) ; \
-> > +       fi
-> >         touch $@
-> >
-> >  $(TARGET_DIR): $(BUILD_DIR)/.root
-> 
-> 
-> Wouldn't just changing the "ln -s" to "ln -snf" be sufficient?  After
-> all, that's what is being done to make $(STAGING_DIR):
+> -$myPicture->drawScale(array("LabelRotation" => 90));
+> +$myPicture->drawScale(array("LabelRotation" => 90, "LabelSkip" =>
+> 10));
 
-I think, when I tried it, it wasn't working: at the second invocation,
-it creates a symbolic link *within* the lib directory. Example:
+Thanks, this works, I've committed this and deployed on autobuild.b.o.
 
-thomas at skate:/tmp$ mkdir target
-thomas at skate:/tmp$ cd target/
-thomas at skate:/tmp/target$ ls
-thomas at skate:/tmp/target$ mkdir lib
-thomas at skate:/tmp/target$ ls lib/
+See
+http://git.buildroot.net/buildroot-test/commit/?id=51317ea5ce4ea0244744ff284ecfb98a2743520d.
 
-# lib/ is empty
-
-thomas at skate:/tmp/target$ ln -sf lib lib32
-thomas at skate:/tmp/target$ ls -l
-total 0
-drwxrwxr-x 2 thomas thomas 40 sept.  8 15:27 lib
-lrwxrwxrwx 1 thomas thomas  3 sept.  8 15:28 lib32 -> lib
-thomas at skate:/tmp/target$ ls lib/
-
-# we have the symbolic link, lib/ is still empty. Now we will create
-# the symbolic link again
-
-thomas at skate:/tmp/target$ ln -sf lib lib32
-thomas at skate:/tmp/target$ ls -l
-total 0
-drwxrwxr-x 2 thomas thomas 60 sept.  8 15:28 lib
-lrwxrwxrwx 1 thomas thomas  3 sept.  8 15:28 lib32 -> lib
-thomas at skate:/tmp/target$ ls -l lib/
-total 0
-lrwxrwxrwx 1 thomas thomas 3 sept.  8 15:28 lib -> lib
-
-# A stale symbolic link was created in lib/
-
-Best regards,
+Thanks!
 
 Thomas
 -- 
