@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 8 Sep 2013 18:36:52 +0200
-Subject: [Buildroot] [PATCH 08/10] coreutils: add support for SELinux
-In-Reply-To: <1378429464-12546-9-git-send-email-rjbarnet@rockwellcollins.com>
+Date: Sun, 8 Sep 2013 18:40:43 +0200
+Subject: [Buildroot] [PATCH 09/10] dbus: add support for SELinux
+In-Reply-To: <1378429464-12546-10-git-send-email-rjbarnet@rockwellcollins.com>
 References: <1378429464-12546-1-git-send-email-rjbarnet@rockwellcollins.com>
- <1378429464-12546-9-git-send-email-rjbarnet@rockwellcollins.com>
-Message-ID: <20130908183652.78178804@skate>
+ <1378429464-12546-10-git-send-email-rjbarnet@rockwellcollins.com>
+Message-ID: <20130908184043.6cef2092@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,40 +13,42 @@ To: buildroot@busybox.net
 
 Dear Ryan Barnett,
 
-On Thu, 5 Sep 2013 20:04:22 -0500, Ryan Barnett wrote:
-> 
-> Signed-off-by: Ryan Barnett <rjbarnet@rockwellcollins.com>
-> ---
->  package/coreutils/coreutils.mk |    8 ++++++++
->  1 files changed, 8 insertions(+), 0 deletions(-)
-> 
-> diff --git a/package/coreutils/coreutils.mk b/package/coreutils/coreutils.mk
-> index 17c81f7..9c18d85 100644
-> --- a/package/coreutils/coreutils.mk
-> +++ b/package/coreutils/coreutils.mk
-> @@ -16,6 +16,13 @@ ifeq ($(BR2_PACKAGE_BUSYBOX),y)
->  COREUTILS_DEPENDENCIES = busybox
->  endif
->  
+On Thu, 5 Sep 2013 20:04:23 -0500, Ryan Barnett wrote:
+
+> +# SELinux support relies on audit support so enable both 
+> +# of them if libselinux has been selected.
 > +ifeq ($(BR2_PACKAGE_LIBSELINUX),y)
-> +COREUTILS_DEPENDENCIES += libselinux
-> +COREUTILS_CONF_OPT += --with-selinux
-> +else
-> +COREUTILS_CONF_OPT += --without-selinux
-> +endif
-> +
->  COREUTILS_BIN_PROGS = cat chgrp chmod chown cp date dd df dir echo false hostname \
->  	ln ls mkdir mknod mv pwd rm rmdir vdir sleep stty sync touch true \
->  	uname join
-> @@ -59,6 +66,7 @@ COREUTILS_CONF_OPT = --disable-rpath \
->  		--disable-dependency-tracking \
->  		--enable-install-program=hostname
->  
-> +
+> +DBUS_CONF_OPT += --enable-selinux --enable-libaudit
+> +DBUS_DEPENDENCIES += libselinux audit
 
-Nitpick: unneeded change.
+This doesn't look good: it's not because libselinux is enabled in the
+configuration that audit is also enabled.
 
-Other than that, looks good.
+So your options are:
+
+ * Only enable SELinux support in DBus when both libselinux and audit
+   are enabled:
+
+ifeq ($(BR2_PACKAGE_LIBSELINUX)$(BR2_PACKAGE_AUDIT),y)
+DBUS_CONF_OPT += --enable-selinux --enable-libaudit
+DBUS_DEPENDENCIES += libselinux audit
+else
+...
+
+   This is the easiest, but it kind of "diverges" from the other
+   packages, where enabling the 'libselinux' package was sufficient to
+   get SELinux support.
+
+ * Ensure audit is selected when libselinux is available. This could be
+   done by adding the following line to dbus/Config.in:
+
+select BR2_PACKAGE_AUDIT if BR2_PACKAGE_LIBSELINUX
+
+   if you add this, then you can keep your dbus.mk change as it is,
+   since having BR2_PACKAGE_LIBSELINUX enabled guarantees us that
+   BR2_PACKAGE_AUDIT is also enabled.
+
+Best regards,
 
 Thomas
 -- 
