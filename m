@@ -1,80 +1,132 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun,  8 Sep 2013 15:15:26 +0200
-Subject: [Buildroot] [PATCH 0/3] Support for out-of-tree Buildroot
-	customization
-Message-ID: <1378646129-4167-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Sun,  8 Sep 2013 15:15:27 +0200
+Subject: [Buildroot] [PATCH 1/3] Makefile: factorize *config dependencies
+In-Reply-To: <1378646129-4167-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1378646129-4167-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1378646129-4167-2-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+All of the *config targets have common dependencies. Currently, the
+only common dependency is the 'outputmakefile' target, but as we are
+going to add one more, it makes sense to factorize these common
+dependencies under the COMMON_CONFIG_DEPS variable.
 
-Following the e-mail from Ryan Barnett entitled "[RFC] New feature to
-handle a custom board folder", I finally took a bit of time to
-implement how I think the support for externally stored Buildroot
-customization should be done.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ Makefile | 37 ++++++++++++++++++++-----------------
+ 1 file changed, 20 insertions(+), 17 deletions(-)
 
-I really think the approach of having board-related configuration
-options within Buildroot is wrong: it is the Buildroot configuration
-as a whole that defines what the configuration of the user system is:
-a combination of a kernel, a root filesystem with various packages, a
-selection of a root filesystem image format, some system configuration
-tuning, a bootloader, etc.
-
-In Ryan e-mail, I believe the most important thing is the wish to
-store the board-specific details outside of the Buildroot tree. In
-fact, this is already possible: nothing prevents anyone from using
-$(TOPDIR)/../company/kernel.config as the kernel configuration file
-for example, where $(TOPDIR)/../company/ is outside of the Buildroot
-tree, and versioned in a completely different way.
-
-However, it seems like this possibility is not 'visible' enough, and
-admittedly only usable for some Buildroot configuration elements,
-while an user may also be interested in storing Buildroot package
-recipes and Buildroot deconfig files outside of the main Buildroot
-tree.
-
-So, this patch set adds the BR2_EXTERNAL mechanism. It is very
-lightweight, and doesn't change anything to the Buildroot overall
-logic. Basically, BR2_EXTERNAL is an environment variable that one can
-point to a directory that will contain Buildroot customizations. It is
-then usable for three things:
-
- * It is available as $(BR2_EXTERNAL) within all of the Buildroot
-   configuration options, to define the location of the kernel
-   configuration file, the root filesystem overlay, etc.
-
- * It allows to store package recipes in $(BR2_EXTERNAL)/package/,
-   exactly like the package/ directory of Buildroot. Buildroot will
-   automatically include $(BR2_EXTERNAL)/Config.in under the top-level
-   menu 'Target packages' menu, and will include
-   $(BR2_EXTERNAL)/external.mk at the makefile level. So by adding a
-   simple $(BR2_EXTERNAL)/Config.in and $(BR2_EXTERNAL)/external.mk,
-   one can store package recipes outside Buildroot. See the manual
-   update (PATCH 3) for details.
-
- * It allows to store defconfigs in $(BR2_EXTERNAL)/configs/. They
-   appear automatically in 'make help' and can be loaded like any
-   other defconfig using 'make <something>_defconfig'.
-
-Best regards,
-
-Thomas
-
-Thomas Petazzoni (3):
-  Makefile: factorize *config dependencies
-  Add support for BR2_EXTERNAL
-  docs/manual: add explanations about BR2_EXTERNAL
-
- Config.in                            |   6 +-
- Makefile                             |  64 +++++++++++++-------
- docs/manual/customize-outside-br.txt | 110 +++++++++++++++++++++++++++++++++++
- docs/manual/customize.txt            |   2 +
- docs/manual/manual.mk                |   2 +-
- 5 files changed, 161 insertions(+), 23 deletions(-)
- create mode 100644 docs/manual/customize-outside-br.txt
-
+diff --git a/Makefile b/Makefile
+index 0d7476a..fc55b87 100644
+--- a/Makefile
++++ b/Makefile
+@@ -633,43 +633,46 @@ COMMON_CONFIG_ENV = \
+ 	KCONFIG_TRISTATE=$(BUILD_DIR)/buildroot-config/tristate.config \
+ 	BUILDROOT_CONFIG=$(BUILDROOT_CONFIG)
+ 
+-xconfig: $(BUILD_DIR)/buildroot-config/qconf outputmakefile
++COMMON_CONFIG_DEPS = \
++	outputmakefile
++
++xconfig: $(BUILD_DIR)/buildroot-config/qconf $(COMMON_CONFIG_DEPS)
+ 	@mkdir -p $(BUILD_DIR)/buildroot-config
+ 	@$(COMMON_CONFIG_ENV) $< $(CONFIG_CONFIG_IN)
+ 
+-gconfig: $(BUILD_DIR)/buildroot-config/gconf outputmakefile
++gconfig: $(BUILD_DIR)/buildroot-config/gconf $(COMMON_CONFIG_DEPS)
+ 	@mkdir -p $(BUILD_DIR)/buildroot-config
+ 	@$(COMMON_CONFIG_ENV) srctree=$(TOPDIR) $< $(CONFIG_CONFIG_IN)
+ 
+-menuconfig: $(BUILD_DIR)/buildroot-config/mconf outputmakefile
++menuconfig: $(BUILD_DIR)/buildroot-config/mconf $(COMMON_CONFIG_DEPS)
+ 	@mkdir -p $(BUILD_DIR)/buildroot-config
+ 	@$(COMMON_CONFIG_ENV) $< $(CONFIG_CONFIG_IN)
+ 
+-nconfig: $(BUILD_DIR)/buildroot-config/nconf outputmakefile
++nconfig: $(BUILD_DIR)/buildroot-config/nconf $(COMMON_CONFIG_DEPS)
+ 	@mkdir -p $(BUILD_DIR)/buildroot-config
+ 	@$(COMMON_CONFIG_ENV) $< $(CONFIG_CONFIG_IN)
+ 
+-config: $(BUILD_DIR)/buildroot-config/conf outputmakefile
++config: $(BUILD_DIR)/buildroot-config/conf $(COMMON_CONFIG_DEPS)
+ 	@mkdir -p $(BUILD_DIR)/buildroot-config
+ 	@$(COMMON_CONFIG_ENV) $< $(CONFIG_CONFIG_IN)
+ 
+-oldconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
++oldconfig: $(BUILD_DIR)/buildroot-config/conf $(COMMON_CONFIG_DEPS)
+ 	mkdir -p $(BUILD_DIR)/buildroot-config
+ 	@$(COMMON_CONFIG_ENV) $< --oldconfig $(CONFIG_CONFIG_IN)
+ 
+-randconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
++randconfig: $(BUILD_DIR)/buildroot-config/conf $(COMMON_CONFIG_DEPS)
+ 	@mkdir -p $(BUILD_DIR)/buildroot-config
+ 	@$(COMMON_CONFIG_ENV) $< --randconfig $(CONFIG_CONFIG_IN)
+ 
+-allyesconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
++allyesconfig: $(BUILD_DIR)/buildroot-config/conf $(COMMON_CONFIG_DEPS)
+ 	@mkdir -p $(BUILD_DIR)/buildroot-config
+ 	@$(COMMON_CONFIG_ENV) $< --allyesconfig $(CONFIG_CONFIG_IN)
+ 
+-allnoconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
++allnoconfig: $(BUILD_DIR)/buildroot-config/conf $(COMMON_CONFIG_DEPS)
+ 	@mkdir -p $(BUILD_DIR)/buildroot-config
+ 	@$(COMMON_CONFIG_ENV) $< --allnoconfig $(CONFIG_CONFIG_IN)
+ 
+-randpackageconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
++randpackageconfig: $(BUILD_DIR)/buildroot-config/conf $(COMMON_CONFIG_DEPS)
+ 	@mkdir -p $(BUILD_DIR)/buildroot-config
+ 	@grep -v BR2_PACKAGE_ $(BUILDROOT_CONFIG) > $(CONFIG_DIR)/.config.nopkg
+ 	@grep '^config BR2_PACKAGE_' Config.in.legacy | \
+@@ -680,7 +683,7 @@ randpackageconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
+ 		$< --randconfig $(CONFIG_CONFIG_IN)
+ 	@rm -f $(CONFIG_DIR)/.config.nopkg
+ 
+-allyespackageconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
++allyespackageconfig: $(BUILD_DIR)/buildroot-config/conf $(COMMON_CONFIG_DEPS)
+ 	@mkdir -p $(BUILD_DIR)/buildroot-config
+ 	@grep -v BR2_PACKAGE_ $(BUILDROOT_CONFIG) > $(CONFIG_DIR)/.config.nopkg
+ 	@grep '^config BR2_PACKAGE_' Config.in.legacy | \
+@@ -691,7 +694,7 @@ allyespackageconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
+ 		$< --allyesconfig $(CONFIG_CONFIG_IN)
+ 	@rm -f $(CONFIG_DIR)/.config.nopkg
+ 
+-allnopackageconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
++allnopackageconfig: $(BUILD_DIR)/buildroot-config/conf $(COMMON_CONFIG_DEPS)
+ 	@mkdir -p $(BUILD_DIR)/buildroot-config
+ 	@grep -v BR2_PACKAGE_ $(BUILDROOT_CONFIG) > $(CONFIG_DIR)/.config.nopkg
+ 	@$(COMMON_CONFIG_ENV) \
+@@ -699,23 +702,23 @@ allnopackageconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
+ 		$< --allnoconfig $(CONFIG_CONFIG_IN)
+ 	@rm -f $(CONFIG_DIR)/.config.nopkg
+ 
+-silentoldconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
++silentoldconfig: $(BUILD_DIR)/buildroot-config/conf $(COMMON_CONFIG_DEPS)
+ 	@mkdir -p $(BUILD_DIR)/buildroot-config
+ 	$(COMMON_CONFIG_ENV) $< --silentoldconfig $(CONFIG_CONFIG_IN)
+ 
+-olddefconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
++olddefconfig: $(BUILD_DIR)/buildroot-config/conf $(COMMON_CONFIG_DEPS)
+ 	@mkdir -p $(BUILD_DIR)/buildroot-config
+ 	$(COMMON_CONFIG_ENV) $< --olddefconfig $(CONFIG_CONFIG_IN)
+ 
+-defconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
++defconfig: $(BUILD_DIR)/buildroot-config/conf $(COMMON_CONFIG_DEPS)
+ 	@mkdir -p $(BUILD_DIR)/buildroot-config
+ 	@$(COMMON_CONFIG_ENV) $< --defconfig$(if $(DEFCONFIG),=$(DEFCONFIG)) $(CONFIG_CONFIG_IN)
+ 
+-%_defconfig: $(BUILD_DIR)/buildroot-config/conf $(TOPDIR)/configs/%_defconfig outputmakefile
++%_defconfig: $(BUILD_DIR)/buildroot-config/conf $(TOPDIR)/configs/%_defconfig $(COMMON_CONFIG_DEPS)
+ 	@mkdir -p $(BUILD_DIR)/buildroot-config
+ 	@$(COMMON_CONFIG_ENV) $< --defconfig=$(TOPDIR)/configs/$@ $(CONFIG_CONFIG_IN)
+ 
+-savedefconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
++savedefconfig: $(BUILD_DIR)/buildroot-config/conf $(COMMON_CONFIG_DEPS)
+ 	@mkdir -p $(BUILD_DIR)/buildroot-config
+ 	@$(COMMON_CONFIG_ENV) $< \
+ 		--savedefconfig=$(if $(DEFCONFIG),$(DEFCONFIG),$(CONFIG_DIR)/defconfig) \
 -- 
 1.8.1.2
