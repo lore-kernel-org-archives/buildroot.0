@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 8 Sep 2013 18:40:43 +0200
-Subject: [Buildroot] [PATCH 09/10] dbus: add support for SELinux
-In-Reply-To: <1378429464-12546-10-git-send-email-rjbarnet@rockwellcollins.com>
+Date: Sun, 8 Sep 2013 18:46:15 +0200
+Subject: [Buildroot] [PATCH 10/10] busybox: add support for SELinux
+In-Reply-To: <1378429464-12546-11-git-send-email-rjbarnet@rockwellcollins.com>
 References: <1378429464-12546-1-git-send-email-rjbarnet@rockwellcollins.com>
- <1378429464-12546-10-git-send-email-rjbarnet@rockwellcollins.com>
-Message-ID: <20130908184043.6cef2092@skate>
+ <1378429464-12546-11-git-send-email-rjbarnet@rockwellcollins.com>
+Message-ID: <20130908184615.541943eb@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,42 +13,46 @@ To: buildroot@busybox.net
 
 Dear Ryan Barnett,
 
-On Thu, 5 Sep 2013 20:04:23 -0500, Ryan Barnett wrote:
+On Thu, 5 Sep 2013 20:04:24 -0500, Ryan Barnett wrote:
 
-> +# SELinux support relies on audit support so enable both 
-> +# of them if libselinux has been selected.
+> diff --git a/package/busybox/1.21.1/busybox-1.21.1-pkg-config.patch b/package/busybox/1.21.1/busybox-1.21.1-pkg-config.patch
+> new file mode 100644
+> index 0000000..79b8681
+> --- /dev/null
+> +++ b/package/busybox/1.21.1/busybox-1.21.1-pkg-config.patch
+> @@ -0,0 +1,13 @@
+> +# Need to have the pkg-config only spit out the libs and not the lib path
+> +# also when checking for the SELinux libraries.
+
+Please follow the style at
+http://buildroot.org/downloads/manual/manual.html#_format_and_licensing_of_the_package_patches
+to format a patch description and Signed-off-by.
+
+However, it is unclear to me why this change is needed. Which library
+paths returned by pkg-config are causing problems?
+
+Also, host-pkgconf is not part of the Busybox dependencies, so it looks
+wrong for Busybox to use it without declaring it as a dependency. That
+said, for the normal Busybox build, I don't think we want Busybox to
+depend on host-pkgconf. After reading the Busybox source code, it is
+apparently only used when SELinux support is requested, so just add
+host-pkgconf to the busybox dependencies when SELinux support is
+enabled.
+
+> +# For SELinux, enable the SELinux flag CONFIG_SELINUX
+> +# in the busybox config
 > +ifeq ($(BR2_PACKAGE_LIBSELINUX),y)
-> +DBUS_CONF_OPT += --enable-selinux --enable-libaudit
-> +DBUS_DEPENDENCIES += libselinux audit
+> +BUSYBOX_DEPENDENCIES += libselinux
 
-This doesn't look good: it's not because libselinux is enabled in the
-configuration that audit is also enabled.
+i.e here.
 
-So your options are:
+> +endif
 
- * Only enable SELinux support in DBus when both libselinux and audit
-   are enabled:
+Also, shouldn't you be enabling SELinux support in Busybox here, i.e
+setting CONFIG_SELINUX=y in the Busybox configuration? See the usage of
+the KCONFIG_ENABLE_OPT and KCONFIG_DISABLE_OPT in busybox.mk.
 
-ifeq ($(BR2_PACKAGE_LIBSELINUX)$(BR2_PACKAGE_AUDIT),y)
-DBUS_CONF_OPT += --enable-selinux --enable-libaudit
-DBUS_DEPENDENCIES += libselinux audit
-else
-...
-
-   This is the easiest, but it kind of "diverges" from the other
-   packages, where enabling the 'libselinux' package was sufficient to
-   get SELinux support.
-
- * Ensure audit is selected when libselinux is available. This could be
-   done by adding the following line to dbus/Config.in:
-
-select BR2_PACKAGE_AUDIT if BR2_PACKAGE_LIBSELINUX
-
-   if you add this, then you can keep your dbus.mk change as it is,
-   since having BR2_PACKAGE_LIBSELINUX enabled guarantees us that
-   BR2_PACKAGE_AUDIT is also enabled.
-
-Best regards,
+Thanks,
 
 Thomas
 -- 
