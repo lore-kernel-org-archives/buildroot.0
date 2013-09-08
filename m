@@ -1,11 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 8 Sep 2013 18:59:52 +0200
-Subject: [Buildroot] [PATCH v2 2/7] sunxi-cedarx: bump to newer version,
- use armel2 binaries, add demo
-In-Reply-To: <1378441521-10050-3-git-send-email-spenser@gillilanding.com>
+Date: Sun, 8 Sep 2013 19:02:31 +0200
+Subject: [Buildroot] [PATCH v2 3/7] mesa3d: pull out from x11
+In-Reply-To: <1378441521-10050-4-git-send-email-spenser@gillilanding.com>
 References: <1378441521-10050-1-git-send-email-spenser@gillilanding.com>
- <1378441521-10050-3-git-send-email-spenser@gillilanding.com>
-Message-ID: <20130908185952.03236a0d@skate>
+ <1378441521-10050-4-git-send-email-spenser@gillilanding.com>
+Message-ID: <20130908190231.70e667fa@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,36 +13,26 @@ To: buildroot@busybox.net
 
 Dear Spenser Gilliland,
 
-It'd be great if your patches were split in a slightly more
-fine-grained fashion. I.e this patch should have been three patches,
-for the three different things you mention in the patch title.
+On Thu,  5 Sep 2013 23:25:17 -0500, Spenser Gilliland wrote:
+> 
+> Signed-off-by: Spenser Gilliland <spenser@gillilanding.com>
+> ---
 
-On Thu,  5 Sep 2013 23:25:16 -0500, Spenser Gilliland wrote:
->  SUNXI_CEDARX_INSTALL_STAGING = YES
-> @@ -14,7 +14,12 @@ SUNXI_CEDARX_CONFIGURE_OPTS = \
->  
->  ifeq ($(BR2_ARM_EABIHF),y)
->  SUNXI_CEDARX_BIN_DIR = $(@D)/libcedarv/linux-armhf
-> -# libavheap.so is only available on EABIHF
-> +SUNXI_CEDARX_SAMPLE_LOC = $(SUNXI_CEDARX_BIN_DIR)/sample/ve
-> +else
-> +SUNXI_CEDARX_BIN_DIR = $(@D)/libcedarv/linux-armel2
-> +SUNXI_CEDARX_SAMPLE_LOC = $(SUNXI_CEDARX_BIN_DIR)/sample/output/ve
-> +endif
+In your patch 4/7, mesa3d still has a 'depends on BR2_PACKAGE_XORG7',
+so to me, it makes little sense to move it out of the package/x11r7/
+directory.
 
-I was confused by this for a while, but now I understand: since you've
-bumped the version, the libavheap.so library is now available for
-non-EABIhf toolchains.
+I believe we first need to make the libdrm package selectable without
+BR2_PACKAGE_XORG7 (which as explained in my review of patch 1/7,
+requires moving the pthread-stubs package outside of the
+BR2_PACKAGE_XORG7 condition), then we can make mesa3d selectable
+without BR2_PACKAGE_XORG7.
 
-BTW, silly from the cedarx people that the sample binary is not in the
-same location between EABIhf and EABI.
+Bottom-line: I believe it's too early to move mesa3d outside of
+package/x11r7/. Let's keep it in there for now, merge your current
+patches, and work on that as a followup step.
 
-Also, what is the difference between the linux-armel2 and linux-armel
-directories in the CedarX stuff?
-
-So, essentially, patch looks good to me.
-
-Reviewed-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Thanks!
 
 Thomas
 -- 
