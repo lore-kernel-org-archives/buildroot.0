@@ -1,9 +1,9 @@
-From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Sun, 8 Sep 2013 14:07:45 +0200
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Sun, 8 Sep 2013 14:08:56 +0200
 Subject: [Buildroot] [PATCH 1/3] knock: new package
 In-Reply-To: <1378071216-19697-1-git-send-email-rommel@layer-7.net>
 References: <1378071216-19697-1-git-send-email-rommel@layer-7.net>
-Message-ID: <CAAXf6LV4ikU3hr7vLTKAHzHFsSDv1bXK+wRaoMjyoj9xHiQcKg@mail.gmail.com>
+Message-ID: <CAAXf6LXW8GfZzPAHkFjP_coASZ8CPNPNNc6=KjWrek94Ndn_cw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -74,6 +74,7 @@ On Sun, Sep 1, 2013 at 11:33 PM, Michael Rommel <rommel@layer-7.net> wrote:
 > +KNOCK_AUTORECONF = YES
 > +
 > +$(eval $(autotools-package))
+> --
 
 The Config.in file mentions a dependency on libpcap, but this is not
 properly expressed in the .mk file.
