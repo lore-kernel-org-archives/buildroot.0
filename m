@@ -1,24 +1,22 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 08 Sep 2013 21:43:27 +0200
-Subject: [Buildroot] [PATCH] Remove multimedia subdirectory
-In-Reply-To: <1377853557-26832-1-git-send-email-jezz@sysmic.org>
- (=?utf-8?B?IkrDqXLDtG1l?=
- Pouiller"'s message of "Fri, 30 Aug 2013 11:05:57 +0200")
-References: <1377853557-26832-1-git-send-email-jezz@sysmic.org>
-Message-ID: <874n9vyu8w.fsf@dell.be.48ers.dk>
+Date: Sun, 08 Sep 2013 21:53:36 +0200
+Subject: [Buildroot] [PATCH v3 2/2] libcurl: add support for compiling
+	with libssh2
+In-Reply-To: <1377871785-4964-3-git-send-email-rjbarnet@rockwellcollins.com>
+ (Ryan Barnett's message of "Fri, 30 Aug 2013 09:09:45 -0500")
+References: <1377871785-4964-1-git-send-email-rjbarnet@rockwellcollins.com>
+ <1377871785-4964-3-git-send-email-rjbarnet@rockwellcollins.com>
+Message-ID: <87vc2bxf7j.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "J?r?me" == J?r?me Pouiller <jezz@sysmic.org> writes:
+>>>>> "Ryan" == Ryan Barnett <rjbarnet@rockwellcollins.com> writes:
 
- J?r?me> Unless it was a group of sub-packages, packages was never regrouped by
- J?r?me> category. multimedia/ was an exception to this rule.
-
- J?r?me> This patch move packages/multimedia/ sub-directories to packages/. It
- J?r?me> keeps two subdirectories for gstream 0.10 and gstreamer 1.X.
+ Ryan> Adding configuration options that if libssh2 is selected, compile libcurl
+ Ryan> with --with-ssh config flag.
 
 Committed, thanks.
 
