@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 8 Sep 2013 19:02:31 +0200
-Subject: [Buildroot] [PATCH v2 3/7] mesa3d: pull out from x11
-In-Reply-To: <1378441521-10050-4-git-send-email-spenser@gillilanding.com>
+Date: Sun, 8 Sep 2013 19:04:57 +0200
+Subject: [Buildroot] [PATCH v2 5/7] libpng12: new package
+In-Reply-To: <1378441521-10050-6-git-send-email-spenser@gillilanding.com>
 References: <1378441521-10050-1-git-send-email-spenser@gillilanding.com>
- <1378441521-10050-4-git-send-email-spenser@gillilanding.com>
-Message-ID: <20130908190231.70e667fa@skate>
+ <1378441521-10050-6-git-send-email-spenser@gillilanding.com>
+Message-ID: <20130908190457.6406d70d@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,26 +13,56 @@ To: buildroot@busybox.net
 
 Dear Spenser Gilliland,
 
-On Thu,  5 Sep 2013 23:25:17 -0500, Spenser Gilliland wrote:
-> 
-> Signed-off-by: Spenser Gilliland <spenser@gillilanding.com>
-> ---
+On Thu,  5 Sep 2013 23:25:19 -0500, Spenser Gilliland wrote:
 
-In your patch 4/7, mesa3d still has a 'depends on BR2_PACKAGE_XORG7',
-so to me, it makes little sense to move it out of the package/x11r7/
-directory.
+> +config BR2_PACKAGE_LIBPNG12
+> +	bool "libpng"
 
-I believe we first need to make the libdrm package selectable without
-BR2_PACKAGE_XORG7 (which as explained in my review of patch 1/7,
-requires moving the pthread-stubs package outside of the
-BR2_PACKAGE_XORG7 condition), then we can make mesa3d selectable
-without BR2_PACKAGE_XORG7.
+Maybe:
 
-Bottom-line: I believe it's too early to move mesa3d outside of
-package/x11r7/. Let's keep it in there for now, merge your current
-patches, and work on that as a followup step.
+	bool "libpng12"
 
-Thanks!
+> +	select BR2_PACKAGE_ZLIB
+> +	help
+> +	  Library for handling PNG (Portable Network Graphics)
+> +	  images. This installs the 1.2.x series.  Different versions of
+> +	  libpng have different APIs.
+> +
+> +	  http://www.libpng.org/
+> diff --git a/package/libpng12/libpng12.mk b/package/libpng12/libpng12.mk
+> new file mode 100644
+> index 0000000..39094f2
+> --- /dev/null
+> +++ b/package/libpng12/libpng12.mk
+> @@ -0,0 +1,18 @@
+> +################################################################################
+> +#
+> +# libpng12
+> +#
+> +################################################################################
+> +
+> +LIBPNG12_VERSION = 1.2.50
+> +LIBPNG12_SERIES = 12
+> +LIBPNG12_SOURCE = libpng-$(LIBPNG12_VERSION).tar.bz2
+> +LIBPNG12_SITE = http://downloads.sourceforge.net/project/libpng/libpng$(LIBPNG12_SERIES)/$(LIBPNG12_VERSION)
+> +LIBPNG12_LICENSE = libpng license
+> +LIBPNG12_LICENSE_FILES = LICENSE
+> +LIBPNG12_INSTALL_STAGING = YES
+> +LIBPNG12_DEPENDENCIES = host-pkgconf zlib
+> +LIBPNG12_CONFIG_SCRIPTS = libpng$(LIBPNG12_SERIES)-config libpng-config
+
+This last one annoys me a bit: if both libpng and libpng12 install
+libpng-config, it means that another package that runs libpng-config to
+find out where libpng is and how to link against it will either be
+linked against the modern libpng or the older libpng12 depending on
+which one was installed.
+
+Since libpng12 is only installed for compatibility reasons with some
+packages, I would therefore suggest that we do not install
+libpng-config in libpng12.mk (and ensure that nothing installed by
+libpng12 can conflict with the real libpng installation).
+
+Thoughts?
 
 Thomas
 -- 
