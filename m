@@ -1,55 +1,44 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 09 Sep 2013 23:38:44 +0200
-Subject: [Buildroot] [RFCv1 01/11] Makefile: make $(BUILD_DIR)/.root
-	rule idempotent
-In-Reply-To: <1378416469-17708-2-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Thu, 5 Sep 2013 23:27:39 +0200")
-References: <1378416469-17708-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1378416469-17708-2-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <8761u9wu8r.fsf@dell.be.48ers.dk>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon,  9 Sep 2013 23:46:44 +0200
+Subject: [Buildroot] [PATCH 1/2] package/mpd: fix files path after
+	package/{multimedia => } move
+In-Reply-To: <1378763205-6180-1-git-send-email-yann.morin.1998@free.fr>
+References: <1378763205-6180-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <1378763205-6180-2-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
- Thomas> The $(BUILD_DIR)/.root rule is executed as part of the 'dirs'
- Thomas> target. The 'dirs' target is re-executed at every execution of 'make
- Thomas> external-deps', and make external-deps explicitly tells make to ignore
- Thomas> targets that have already been made (through the -B option). This
- Thomas> means that the $(BUILD_DIR)/.root rule has to be idempotant, which was
- Thomas> not the case this the introduction of the lib32/lib64 symbolic
- Thomas> link.
+Cset adf6511 moved packages from package/multimedia/ to package/
+but forgot to change the paths of files referenced in the .mk files.
 
- Thomas> Running 'make external-deps' three times in a row was sufficient to
- Thomas> trigger an error due to symbolic links being incorrectly created. This
- Thomas> patch fixes that.
+Fix mpd's config file and startup script.
 
- Thomas> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
- Thomas> ---
- Thomas> This should probably be taken for 2013.08.1 as a fix of 'make
- Thomas> external-deps'.
- Thomas> ---
- Thomas>  Makefile | 10 +++++++---
- Thomas>  1 file changed, 7 insertions(+), 3 deletions(-)
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+---
+ package/mpd/mpd.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
- Thomas> diff --git a/Makefile b/Makefile
- Thomas> index 09faeba..93fc6ea 100644
- Thomas> --- a/Makefile
- Thomas> +++ b/Makefile
- Thomas> @@ -447,9 +447,13 @@ $(BUILD_DIR)/.root:
- Thomas>  		--exclude .hg --exclude=CVS --exclude '*~' \
- Thomas>  		$(TARGET_SKELETON)/ $(TARGET_DIR)/
- Thomas>  	cp support/misc/target-dir-warning.txt $(TARGET_DIR_WARNING_FILE)
- Thomas> -	@ln -s lib $(TARGET_DIR)/$(LIB_SYMLINK)
- Thomas> -	@mkdir -p $(TARGET_DIR)/usr
- Thomas> -	@ln -s lib $(TARGET_DIR)/usr/$(LIB_SYMLINK)
- Thomas> +	$(Q)if [ ! -L $(TARGET_DIR)/$(LIB_SYMLINK) ]; then \
- Thomas> +		ln -s lib $(TARGET_DIR)/$(LIB_SYMLINK) ; \
-
-Can't you just do ln -sf like we do elsewhere?
-
+diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
+index edcd945..737be41 100644
+--- a/package/mpd/mpd.mk
++++ b/package/mpd/mpd.mk
+@@ -129,10 +129,10 @@ endif
+ 
+ define MPD_INSTALL_EXTRA_FILES
+ 	@if [ ! -f $(TARGET_DIR)/etc/mpd.conf ]; then \
+-		$(INSTALL) -D package/multimedia/mpd/mpd.conf \
++		$(INSTALL) -D package/mpd/mpd.conf \
+ 			$(TARGET_DIR)/etc/mpd.conf; \
+ 	fi
+-	$(INSTALL) -m 0755 -D package/multimedia/mpd/S95mpd \
++	$(INSTALL) -m 0755 -D package/mpd/S95mpd \
+ 		$(TARGET_DIR)/etc/init.d/S95mpd
+ endef
+ 
 -- 
-Bye, Peter Korsgaard
+1.8.1.2
