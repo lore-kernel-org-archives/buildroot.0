@@ -1,23 +1,46 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 09 Sep 2013 23:29:44 +0200
-Subject: [Buildroot] [PATCH] Config.in: Rename BR2_ELF2FLT to
-	BR2_PACKAGE_HOST_ELF2FLT
-In-Reply-To: <1378201193.10215.0.camel@phoenix> (Axel Lin's message of "Tue,
- 03 Sep 2013 17:39:53 +0800")
-References: <1378201193.10215.0.camel@phoenix>
-Message-ID: <87a9jlwunr.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Mon, 9 Sep 2013 23:32:08 +0200
+Subject: [Buildroot] [git commit] Config.in: Fixup after BR2_ELF2FLT got
+	renamed to BR2_PACKAGE_HOST_ELF2FLT
+Message-ID: <20130909213604.26A289A530@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Axel" == Axel Lin <axel.lin@ingics.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=9f2bf30e1e3fd02230cae39dbfeba423adedbb25
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Axel> The BR2_ELF2FLT option has been renamed to BR2_PACKAGE_HOST_ELF2FLT, thus use
- Axel> the new name to fix dependency.
+The BR2_ELF2FLT option has been renamed to BR2_PACKAGE_HOST_ELF2FLT, thus
+use the new name to fix dependency.
 
-Committed, thanks.
+Signed-off-by: Axel Lin <axel.lin@ingics.com>
+Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ Config.in |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/Config.in b/Config.in
+index cb246a4..65c29b4 100644
+--- a/Config.in
++++ b/Config.in
+@@ -286,7 +286,7 @@ choice
+ 
+ config BR2_STRIP_strip
+ 	bool "strip"
+-	depends on !BR2_ELF2FLT
++	depends on !BR2_PACKAGE_HOST_ELF2FLT
+ 	help
+ 	  Binaries and libraries in the target filesystem will be
+ 	  stripped using the normal 'strip' command. This allows to
+@@ -297,7 +297,7 @@ config BR2_STRIP_strip
+ config BR2_STRIP_sstrip
+ 	bool "sstrip"
+ 	select BR2_PACKAGE_SSTRIP_HOST
+-	depends on !BR2_ELF2FLT
++	depends on !BR2_PACKAGE_HOST_ELF2FLT
+ 	help
+ 	  Binaries and libraries in the target filesystem will be
+ 	  stripped using the 'sstrip' command, which strips a little
