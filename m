@@ -1,30 +1,39 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 09 Sep 2013 11:33:48 +0200
-Subject: [Buildroot] [PATCH] webkit: Version bump to 1.11.5
-In-Reply-To: <1378381022-9752-1-git-send-email-markos.chandras@imgtec.com>
- (Markos Chandras's message of "Thu, 5 Sep 2013 12:37:02 +0100")
-References: <1378381022-9752-1-git-send-email-markos.chandras@imgtec.com>
-Message-ID: <871u4yxrsz.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Mon, 9 Sep 2013 11:27:55 +0200
+Subject: [Buildroot] [git commit] webkit: fix staging install
+Message-ID: <20130909094042.75F379A1A6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Markos" == Markos Chandras <markos.chandras@imgtec.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=33a9d34ff375ec0c0389c9af6bc499a8dd7ccbc9
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Markos> Also apply the following patches:
- Markos> - upstream fix for 32-bit autotools
- Markos> - upstream fix for conditional gstreamer build of gtklauncher
- Markos> - upstream fix for detecting the latest harfbuzz
- Markos> - Update existing patch for disabling docs
- Markos> - Update existing patch for execinfo_h
- Markos> - upstream patch for the MIPS DFG support. This fixes
- Markos> compilation problems on MIPS.
+Parallel 'make install' seems to deadlock here (make 3.81). Work around it
+by disabling parallel make for the install step.
 
- Markos> Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
+We only disable parallel make for the install step, as the build step works
+with parallel make, and webkit is a huge package, so build time goes up
+significantly with make -j1.
 
-Committed, thanks.
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/webkit/webkit.mk |    3 +++
+ 1 files changed, 3 insertions(+), 0 deletions(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/webkit/webkit.mk b/package/webkit/webkit.mk
+index 99a90b9..eb1547b 100644
+--- a/package/webkit/webkit.mk
++++ b/package/webkit/webkit.mk
+@@ -15,6 +15,9 @@ WEBKIT_DEPENDENCIES = host-ruby host-flex host-bison host-gperf enchant harfbuzz
+ WEBKIT_AUTORECONF = YES
+ WEBKIT_AUTORECONF_OPT = -I $(@D)/Source/autotools
+ 
++# parallel make install deadlocks with make 3.81
++WEBKIT_INSTALL_STAGING_OPT = -j1 DESTDIR=$(STAGING_DIR) install
++
+ # Does not build and it's disabled by default
+ # in newer releases
+ define DISABLE_INDEXED_DATABASE
