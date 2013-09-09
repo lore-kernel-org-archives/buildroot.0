@@ -1,31 +1,30 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 8 Sep 2013 23:58:05 +0200
-Subject: [Buildroot] [git commit] opus-tools: bump version
-Message-ID: <20130909094042.6B14F9A13D@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 09 Sep 2013 11:43:01 +0200
+Subject: [Buildroot] [PATCH 1/1] util-linux: fix build failure with
+	older systems
+In-Reply-To: <1378414503-4841-1-git-send-email-rjbarnet@rockwellcollins.com>
+ (Ryan Barnett's message of "Thu, 5 Sep 2013 15:55:03 -0500")
+References: <1378414503-4841-1-git-send-email-rjbarnet@rockwellcollins.com>
+Message-ID: <87wqmqwct6.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=0175dce8bce9528bf7600e43158cfcf7e9b18331
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Ryan" == Ryan Barnett <rjbarnet@rockwellcollins.com> writes:
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/opus-tools/opus-tools.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ Ryan> Adding patch util-linux-002-support-older-machines.patch to fix issues
+ Ryan> when building for older systems.
 
-diff --git a/package/opus-tools/opus-tools.mk b/package/opus-tools/opus-tools.mk
-index 66bd9f0..bb11a19 100644
---- a/package/opus-tools/opus-tools.mk
-+++ b/package/opus-tools/opus-tools.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--OPUS_TOOLS_VERSION = 0.1.6
-+OPUS_TOOLS_VERSION = 0.1.7
- OPUS_TOOLS_SITE = http://downloads.xiph.org/releases/opus
- OPUS_TOOLS_CONF_OPT = --disable-oggtest --disable-opustest
- OPUS_TOOLS_DEPENDENCIES = opus libogg host-pkgconf
+ Ryan> Making all util-linux patches apply cleanly (fuzz fixes)
+
+ Ryan> Fixes http://autobuild.buildroot.org/results/349/349d6ff938b093623618669a1acb390aa2a5fafe
+ Ryan> Fixes http://autobuild.buildroot.org/results/57e/57e2c612c46b9e3b5f7bb213fcb3825b23fb7fc7
+
+ Ryan> Signed-off-by: Ryan Barnett <rjbarnet@rockwellcollins.com>
+
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
