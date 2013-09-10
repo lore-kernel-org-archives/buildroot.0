@@ -1,45 +1,66 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 10 Sep 2013 16:26:16 -0300
-Subject: [Buildroot] [PATCH 07/11] ulogd: needs mmu and shared objects
+Date: Tue, 10 Sep 2013 16:26:17 -0300
+Subject: [Buildroot] [PATCH 08/11] libnetfilter_cthelper: add patch for
+	uclinux tuple
 In-Reply-To: <1378841180-23467-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1378841180-23467-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1378841180-23467-7-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1378841180-23467-8-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The plugin infrastructure is based on shared objects so it won't build
-for static-only scenarios.
-And the daemon uses fork() so MMU is required.
-
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/ulogd/Config.in | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+ .../libnetfilter-cthelper-01-uclinux.patch         | 26 ++++++++++++++++++++++
+ .../libnetfilter_cthelper/libnetfilter-cthelper.mk |  1 +
+ 2 files changed, 27 insertions(+)
+ create mode 100644 package/libnetfilter_cthelper/libnetfilter-cthelper-01-uclinux.patch
 
-diff --git a/package/ulogd/Config.in b/package/ulogd/Config.in
-index 7dc4f11..a524056 100644
---- a/package/ulogd/Config.in
-+++ b/package/ulogd/Config.in
-@@ -2,6 +2,8 @@ config BR2_PACKAGE_ULOGD
- 	bool "ulogd"
- 	depends on BR2_INET_IPV6
- 	depends on BR2_LARGEFILE
-+	depends on !BR2_PREFER_STATIC_LIB
-+	depends on BR2_USE_MMU
- 	select BR2_PACKAGE_LIBMNL
- 	select BR2_PACKAGE_LIBNETFILTER_ACCT
- 	select BR2_PACKAGE_LIBNETFILTER_CONNTRACK
-@@ -12,5 +14,6 @@ config BR2_PACKAGE_ULOGD
+diff --git a/package/libnetfilter_cthelper/libnetfilter-cthelper-01-uclinux.patch b/package/libnetfilter_cthelper/libnetfilter-cthelper-01-uclinux.patch
+new file mode 100644
+index 0000000..7a6ca70
+--- /dev/null
++++ b/package/libnetfilter_cthelper/libnetfilter-cthelper-01-uclinux.patch
+@@ -0,0 +1,26 @@
++From d028334281b218209412ec6e1dba56ca96320bd9 Mon Sep 17 00:00:00 2001
++From: Gustavo Zacarias <gustavo@zacarias.com.ar>
++Date: Tue, 10 Sep 2013 16:08:29 -0300
++Subject: [PATCH] configure: uclinux is also linux
++
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++---
++ configure.ac | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/configure.ac b/configure.ac
++index d52b1ce..9389b70 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -22,7 +22,7 @@ AC_DISABLE_STATIC
++ LT_INIT
++ CHECK_GCC_FVISIBILITY
++ case "$host" in
++-*-*-linux*) ;;
+++*-*-linux* | *-*-uclinux*) ;;
++ *) AC_MSG_ERROR([Linux only, dude!]);;
++ esac
++ 
++-- 
++1.8.1.5
++
+diff --git a/package/libnetfilter_cthelper/libnetfilter-cthelper.mk b/package/libnetfilter_cthelper/libnetfilter-cthelper.mk
+index 11f7e69..f3e892b 100644
+--- a/package/libnetfilter_cthelper/libnetfilter-cthelper.mk
++++ b/package/libnetfilter_cthelper/libnetfilter-cthelper.mk
+@@ -9,6 +9,7 @@ LIBNETFILTER_CTHELPER_SOURCE = libnetfilter_cthelper-$(LIBNETFILTER_CTHELPER_VER
+ LIBNETFILTER_CTHELPER_SITE = http://www.netfilter.org/projects/libnetfilter_cthelper/files
+ LIBNETFILTER_CTHELPER_INSTALL_STAGING = YES
+ LIBNETFILTER_CTHELPER_DEPENDENCIES = host-pkgconf libmnl
++LIBNETFILTER_CTHELPER_AUTORECONF = YES
+ LIBNETFILTER_CTHELPER_LICENSE = GPLv2
+ LIBNETFILTER_CTHELPER_LICENSE_FILES = COPYING
  
- 	  http://www.netfilter.org/projects/ulogd/
- 
--comment "ulogd requires a toolchain with IPV6 and LARGEFILE support"
--	depends on !BR2_INET_IPV6 || !BR2_LARGEFILE
-+comment "ulogd requires a toolchain with IPV6, LARGEFILE and dynamic library support"
-+	depends on !BR2_INET_IPV6 || !BR2_LARGEFILE || BR2_PREFER_STATIC_LIB
-+	depends on BR2_USE_MMU
 -- 
 1.8.1.5
