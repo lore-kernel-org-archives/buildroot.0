@@ -1,45 +1,55 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 10 Sep 2013 09:23:33 +0200
-Subject: [Buildroot] [RFCv1 01/11] Makefile: make $(BUILD_DIR)/.root
-	rule idempotent
-In-Reply-To: <8761u9wu8r.fsf@dell.be.48ers.dk>
-References: <1378416469-17708-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1378416469-17708-2-git-send-email-thomas.petazzoni@free-electrons.com>
- <8761u9wu8r.fsf@dell.be.48ers.dk>
-Message-ID: <20130910092333.5a11799f@skate>
+From: Fabio Porcedda <fabio.porcedda@gmail.com>
+Date: Tue, 10 Sep 2013 09:46:01 +0200
+Subject: [Buildroot] [PATCH v3 0/3] Fix for top-level parallel make part 1
+Message-ID: <1378799164-28645-1-git-send-email-fabio.porcedda@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Peter Korsgaard,
+Hi all,
+this is the first patch set for fixing top-level parallel make in buildroot,
+the common problem scattered in buildroot's top-level makefile is that in the
+rules it relies on the order of evaluation of the prerequisites,
+to be able to use top-level parallel make instead of reling on the left to
+right ordering of evaluation of the prerequisites we must add an explicit
+rule to describe the dependencies.
 
-On Mon, 09 Sep 2013 23:38:44 +0200, Peter Korsgaard wrote:
+With this patch set the package building seems to work fine with top-level
+parallel make, example:
 
->  Thomas> diff --git a/Makefile b/Makefile
->  Thomas> index 09faeba..93fc6ea 100644
->  Thomas> --- a/Makefile
->  Thomas> +++ b/Makefile
->  Thomas> @@ -447,9 +447,13 @@ $(BUILD_DIR)/.root:
->  Thomas>  		--exclude .hg --exclude=CVS --exclude '*~' \
->  Thomas>  		$(TARGET_SKELETON)/ $(TARGET_DIR)/
->  Thomas>  	cp support/misc/target-dir-warning.txt $(TARGET_DIR_WARNING_FILE)
->  Thomas> -	@ln -s lib $(TARGET_DIR)/$(LIB_SYMLINK)
->  Thomas> -	@mkdir -p $(TARGET_DIR)/usr
->  Thomas> -	@ln -s lib $(TARGET_DIR)/usr/$(LIB_SYMLINK)
->  Thomas> +	$(Q)if [ ! -L $(TARGET_DIR)/$(LIB_SYMLINK) ]; then \
->  Thomas> +		ln -s lib $(TARGET_DIR)/$(LIB_SYMLINK) ; \
-> 
-> Can't you just do ln -sf like we do elsewhere?
+	make clean toolchain
+	make BR2_JLEVEL= -j<n> <package-name list> 
 
-ln -sf no, but ln -snf yes. I'll fix up the patch and resend.
+Before to try that you have to remove the ".NOTPARALLEL" line in the top-level Makefile.
 
-Thanks,
+The part that remain to fix for top-level parallel make is the toolchain
+building and targets after building all the packages.
 
-Thomas
+Best regards
+Fabio Porcedda
+
+v3:
+ - add back the patch "package: add toolchain dependency to
+    inner-generic-package" because now is working fine.
+ - add Acked-by: Arnout Vandecappelle to the first patch.
+ - reworked the second patch following Arnout suggestions.
+v2:
+ - remove patch "package: add toolchain dependency to inner-generic-package"
+   because was not working fine against recent toolchain changes.
+
+Fabio Porcedda (3):
+  package/Makefile.in: add a way to don't force jobs in sub-make
+  pkg-generic: fix rules for top-level parallel make
+  package: add toolchain dependency to inner-generic-package
+
+ Makefile                 |  2 +-
+ package/Makefile.in      |  2 +-
+ package/pkg-autotools.mk |  3 ++-
+ package/pkg-generic.mk   | 51 ++++++++++++++++++++++++------------------------
+ package/uclibc/uclibc.mk |  2 +-
+ 5 files changed, 31 insertions(+), 29 deletions(-)
+
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+1.8.4
