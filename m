@@ -1,49 +1,24 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Tue, 10 Sep 2013 21:40:09 +0200
-Subject: [Buildroot] backtrace() depth
-In-Reply-To: <522F708E.2070004@gmx.net>
-References: <522F708E.2070004@gmx.net>
-Message-ID: <CAHXCMMLoHUQSjzgPpubAXvYGFw=dmWDPShVKBsOx3KWLPCmUtA@mail.gmail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 10 Sep 2013 21:50:47 +0200
+Subject: [Buildroot] [PATCH] opus-tools: disable flac when it is not
+	selected
+In-Reply-To: <1378836465-25626-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Tue, 10 Sep 2013 15:07:45 -0300")
+References: <1378836465-25626-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <8761u8v4ko.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter,
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
+ Gustavo> opus-tools expects flac since the 0.1.7 bump unless otherwise told so.
+ Gustavo> Disable it when it's not selected. Fixes:
+ Gustavo> http://autobuild.buildroot.net/results/c8c/c8c1a682336c150ee401f76b173944611b96bd4e/
 
-2013/9/10 Peter K?mmel <syntheticpp@gmx.net>
-
-> I've a question about the depth of a backtrace.
->
-> I've configured uClibc/Buildroot to build libubacktrace-0.9.33.2.so
-> via the standard Buildroot menuconfigs:
-> Buildroot 2013.02, GCC 4.7.2 by Buildroot, uClibc-0.9.33
->
-> When I call backtrace() on a segfault, I only see the function
-> where the segfault is produced, and not much more (only /lib/libc.so.0,
-> and two more addresses). The function name could be demanded correctly,
-> so I assume the compiler flags are ok (-rdynamic).
->
-> The segfault is not in the main thread
-> (overall 4 threads, /lib/libpthread-0.9.33.2.so)
-> And the bt looks equal for debug and release builds.
->
-> A build with crosstool-ng and eglibc produces the same bad backtrace.
->
-> Is there a way to get a more complete backtrace?
->
-
-Is the strip command set to none (under the "Build options" menu)?
-if not, then you should certainly added the binaries you are debgging to the
-BR2_STRIP_EXCLUDE_FILES or  BR2_STRIP_EXCLUDE_DIRS lists.
-
-
-Regards,
+Committed, thanks.
 
 -- 
-Samuel
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130910/22183164/attachment.html>
+Bye, Peter Korsgaard
