@@ -1,31 +1,63 @@
-From: =?ISO-8859-1?Q?Peter_K=FCmmel?= <syntheticpp@gmx.net>
-Date: Tue, 10 Sep 2013 21:18:38 +0200
-Subject: [Buildroot] backtrace()  depth
-Message-ID: <522F708E.2070004@gmx.net>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue, 10 Sep 2013 16:26:10 -0300
+Subject: [Buildroot] [PATCH 01/11] libmnl: add patch for uclinux tuple
+Message-ID: <1378841180-23467-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I've a question about the depth of a backtrace.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/libmnl/libmnl-01-uclinux.patch | 26 ++++++++++++++++++++++++++
+ package/libmnl/libmnl.mk               |  1 +
+ 2 files changed, 27 insertions(+)
+ create mode 100644 package/libmnl/libmnl-01-uclinux.patch
 
-I've configured uClibc/Buildroot to build libubacktrace-0.9.33.2.so
-via the standard Buildroot menuconfigs:
-Buildroot 2013.02, GCC 4.7.2 by Buildroot, uClibc-0.9.33
-
-When I call backtrace() on a segfault, I only see the function
-where the segfault is produced, and not much more (only /lib/libc.so.0,
-and two more addresses). The function name could be demanded correctly,
-so I assume the compiler flags are ok (-rdynamic).
-
-The segfault is not in the main thread
-(overall 4 threads, /lib/libpthread-0.9.33.2.so)
-And the bt looks equal for debug and release builds.
-
-A build with crosstool-ng and eglibc produces the same bad backtrace.
-
-Is there a way to get a more complete backtrace?
-
-Many thanks,
-Peter
+diff --git a/package/libmnl/libmnl-01-uclinux.patch b/package/libmnl/libmnl-01-uclinux.patch
+new file mode 100644
+index 0000000..e8f97c6
+--- /dev/null
++++ b/package/libmnl/libmnl-01-uclinux.patch
+@@ -0,0 +1,26 @@
++From ae2acfa7d287e3ffc0bb66091059b86f62775bd5 Mon Sep 17 00:00:00 2001
++From: Gustavo Zacarias <gustavo@zacarias.com.ar>
++Date: Tue, 10 Sep 2013 15:24:47 -0300
++Subject: [PATCH] configure: uclinux is also linux
++
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++---
++ configure.ac | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/configure.ac b/configure.ac
++index dcd3cf8..313a015 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -17,7 +17,7 @@ AC_DISABLE_STATIC
++ LT_INIT
++ CHECK_GCC_FVISIBILITY
++ case "$host" in
++-*-*-linux*) ;;
+++*-*-linux* | *-*-uclinux*) ;;
++ *) AC_MSG_ERROR([Linux only, dude!]);;
++ esac
++ 
++-- 
++1.8.1.5
++
+diff --git a/package/libmnl/libmnl.mk b/package/libmnl/libmnl.mk
+index c60c60c..b16c534 100644
+--- a/package/libmnl/libmnl.mk
++++ b/package/libmnl/libmnl.mk
+@@ -8,6 +8,7 @@ LIBMNL_VERSION = 1.0.3
+ LIBMNL_SOURCE = libmnl-$(LIBMNL_VERSION).tar.bz2
+ LIBMNL_SITE = http://netfilter.org/projects/libmnl/files
+ LIBMNL_INSTALL_STAGING = YES
++LIBMNL_AUTORECONF = YES
+ LIBMNL_LICENSE = LGPLv2.1+
+ LIBMNL_LICENSE_FILES = COPYING
+ 
+-- 
+1.8.1.5
