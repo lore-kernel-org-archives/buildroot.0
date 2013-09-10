@@ -1,39 +1,36 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 10 Sep 2013 21:52:36 +0200
-Subject: [Buildroot] [git commit] libunwind: needs threads
-Message-ID: <20130910200702.C26389B6A9@busybox.osuosl.org>
+Date: Tue, 10 Sep 2013 21:56:35 +0200
+Subject: [Buildroot] [git commit] linux: fix depmod location after move to
+	host-kmod
+Message-ID: <20130910200702.D0160834B4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d9b89e8a43b9c92653d62dedc1bea8d37a4112a9
+commit: http://git.buildroot.net/buildroot/commit/?id=cc34519201278a4737fb12b551fce98740383ff5
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
-http://autobuild.buildroot.net/results/39a/39a32d323252e3d986fd9290108db7a496d429d9/
+The host-kmod version of depmod gets installed into HOST_DIR/sbin, so
+adjust the path we use to refer to it in linux.mk
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Reported-by: Ryan Coe <bluemrp9@gmail.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/libunwind/Config.in |    4 ++++
- 1 files changed, 4 insertions(+), 0 deletions(-)
+ linux/linux.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/libunwind/Config.in b/package/libunwind/Config.in
-index 4f130f0..110ea90 100644
---- a/package/libunwind/Config.in
-+++ b/package/libunwind/Config.in
-@@ -1,8 +1,12 @@
- config BR2_PACKAGE_LIBUNWIND
- 	bool "libunwind"
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_arm || BR2_armeb || BR2_mips || BR2_mipsel || BR2_mips64 || \
- 		BR2_mips64el || BR2_powerpc || BR2_sh || BR2_sh64 || BR2_i386 || BR2_x86_64
- 	help
- 	  C API to determine the call-chain of a program.
+diff --git a/linux/linux.mk b/linux/linux.mk
+index 8508a54..649d06b 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -47,7 +47,7 @@ LINUX_MAKE_FLAGS = \
+ 	ARCH=$(KERNEL_ARCH) \
+ 	INSTALL_MOD_PATH=$(TARGET_DIR) \
+ 	CROSS_COMPILE="$(CCACHE) $(TARGET_CROSS)" \
+-	DEPMOD=$(HOST_DIR)/usr/sbin/depmod
++	DEPMOD=$(HOST_DIR)/sbin/depmod
  
- 	  http://www.nongnu.org/libunwind/index.html
-+
-+comment "libunwind requires a toolchain with thread support"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS
+ # Get the real Linux version, which tells us where kernel modules are
+ # going to be installed in the target filesystem.
