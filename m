@@ -1,41 +1,34 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 10 Sep 2013 22:06:15 +0200
-Subject: [Buildroot] [git commit] barebox: bump to version 2013.09.0
-Message-ID: <20130910200702.E3123834B4@busybox.osuosl.org>
+Date: Tue, 10 Sep 2013 09:23:25 +0200
+Subject: [Buildroot] [git commit] erlang: install to staging
+Message-ID: <20130910200702.75DB59B6AA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=68dd967221a2f2d761957e3aaa3c05daf4a77843
+commit: http://git.buildroot.net/buildroot/commit/?id=fef61fb4681add1f57c3ea6295c7d4f7ec973998
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+This is required to build custom port drivers/NIFs or code that
+uses erl_interface.
+
+Signed-off-by: Hans Bulfone <hans@nil.at>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- boot/barebox/Config.in |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ package/erlang/erlang.mk |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-diff --git a/boot/barebox/Config.in b/boot/barebox/Config.in
-index 04929ea..1bbbe06 100644
---- a/boot/barebox/Config.in
-+++ b/boot/barebox/Config.in
-@@ -12,7 +12,7 @@ choice
- 	  Select the specific Barebox version you want to use
+diff --git a/package/erlang/erlang.mk b/package/erlang/erlang.mk
+index 9f47b84..89104c9 100644
+--- a/package/erlang/erlang.mk
++++ b/package/erlang/erlang.mk
+@@ -12,6 +12,7 @@ HOST_ERLANG_DEPENDENCIES =
  
- config BR2_TARGET_BAREBOX_LATEST_VERSION
--	bool "2013.08.0"
-+	bool "2013.09.0"
+ ERLANG_LICENSE = EPL
+ ERLANG_LICENSE_FILES = EPLICENCE
++ERLANG_INSTALL_STAGING = YES
  
- config BR2_TARGET_BAREBOX_CUSTOM_VERSION
- 	bool "Custom version"
-@@ -40,7 +40,7 @@ endif
- 
- config BR2_TARGET_BAREBOX_VERSION
- 	string
--	default "2013.08.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
-+	default "2013.09.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
- 	default $BR2_TARGET_BAREBOX_CUSTOM_VERSION_VALUE if BR2_TARGET_BAREBOX_CUSTOM_VERSION
- 	default "custom"	if BR2_TARGET_BAREBOX_CUSTOM_TARBALL
- 	default $BR2_TARGET_BAREBOX_CUSTOM_GIT_VERSION if BR2_TARGET_BAREBOX_CUSTOM_GIT
+ # The configure checks for these functions fail incorrectly
+ ERLANG_CONF_ENV = ac_cv_func_isnan=yes ac_cv_func_isinf=yes
