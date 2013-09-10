@@ -1,10 +1,10 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 10 Sep 2013 16:26:17 -0300
-Subject: [Buildroot] [PATCH 08/11] libnetfilter_cthelper: add patch for
+Date: Tue, 10 Sep 2013 16:26:18 -0300
+Subject: [Buildroot] [PATCH 09/11] libnetfilter_cttimeout: add patch for
 	uclinux tuple
 In-Reply-To: <1378841180-23467-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1378841180-23467-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1378841180-23467-8-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1378841180-23467-9-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,20 +13,20 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- .../libnetfilter-cthelper-01-uclinux.patch         | 26 ++++++++++++++++++++++
- .../libnetfilter_cthelper/libnetfilter-cthelper.mk |  1 +
+ .../libnetfilter-cttimeout-01-uclinux.patch        | 26 ++++++++++++++++++++++
+ .../libnetfilter-cttimeout.mk                      |  1 +
  2 files changed, 27 insertions(+)
- create mode 100644 package/libnetfilter_cthelper/libnetfilter-cthelper-01-uclinux.patch
+ create mode 100644 package/libnetfilter_cttimeout/libnetfilter-cttimeout-01-uclinux.patch
 
-diff --git a/package/libnetfilter_cthelper/libnetfilter-cthelper-01-uclinux.patch b/package/libnetfilter_cthelper/libnetfilter-cthelper-01-uclinux.patch
+diff --git a/package/libnetfilter_cttimeout/libnetfilter-cttimeout-01-uclinux.patch b/package/libnetfilter_cttimeout/libnetfilter-cttimeout-01-uclinux.patch
 new file mode 100644
-index 0000000..7a6ca70
+index 0000000..5d462d8
 --- /dev/null
-+++ b/package/libnetfilter_cthelper/libnetfilter-cthelper-01-uclinux.patch
++++ b/package/libnetfilter_cttimeout/libnetfilter-cttimeout-01-uclinux.patch
 @@ -0,0 +1,26 @@
-+From d028334281b218209412ec6e1dba56ca96320bd9 Mon Sep 17 00:00:00 2001
++From d8d2ec14bc192f998afae2b71c69248e73518ddf Mon Sep 17 00:00:00 2001
 +From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+Date: Tue, 10 Sep 2013 16:08:29 -0300
++Date: Tue, 10 Sep 2013 16:09:14 -0300
 +Subject: [PATCH] configure: uclinux is also linux
 +
 +Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
@@ -35,7 +35,7 @@ index 0000000..7a6ca70
 + 1 file changed, 1 insertion(+), 1 deletion(-)
 +
 +diff --git a/configure.ac b/configure.ac
-+index d52b1ce..9389b70 100644
++index d79e941..aeb6ad0 100644
 +--- a/configure.ac
 ++++ b/configure.ac
 +@@ -22,7 +22,7 @@ AC_DISABLE_STATIC
@@ -50,17 +50,17 @@ index 0000000..7a6ca70
 +-- 
 +1.8.1.5
 +
-diff --git a/package/libnetfilter_cthelper/libnetfilter-cthelper.mk b/package/libnetfilter_cthelper/libnetfilter-cthelper.mk
-index 11f7e69..f3e892b 100644
---- a/package/libnetfilter_cthelper/libnetfilter-cthelper.mk
-+++ b/package/libnetfilter_cthelper/libnetfilter-cthelper.mk
-@@ -9,6 +9,7 @@ LIBNETFILTER_CTHELPER_SOURCE = libnetfilter_cthelper-$(LIBNETFILTER_CTHELPER_VER
- LIBNETFILTER_CTHELPER_SITE = http://www.netfilter.org/projects/libnetfilter_cthelper/files
- LIBNETFILTER_CTHELPER_INSTALL_STAGING = YES
- LIBNETFILTER_CTHELPER_DEPENDENCIES = host-pkgconf libmnl
-+LIBNETFILTER_CTHELPER_AUTORECONF = YES
- LIBNETFILTER_CTHELPER_LICENSE = GPLv2
- LIBNETFILTER_CTHELPER_LICENSE_FILES = COPYING
+diff --git a/package/libnetfilter_cttimeout/libnetfilter-cttimeout.mk b/package/libnetfilter_cttimeout/libnetfilter-cttimeout.mk
+index d751c3b..c1f1016 100644
+--- a/package/libnetfilter_cttimeout/libnetfilter-cttimeout.mk
++++ b/package/libnetfilter_cttimeout/libnetfilter-cttimeout.mk
+@@ -9,6 +9,7 @@ LIBNETFILTER_CTTIMEOUT_SOURCE = libnetfilter_cttimeout-$(LIBNETFILTER_CTTIMEOUT_
+ LIBNETFILTER_CTTIMEOUT_SITE = http://www.netfilter.org/projects/libnetfilter_cttimeout/files
+ LIBNETFILTER_CTTIMEOUT_INSTALL_STAGING = YES
+ LIBNETFILTER_CTTIMEOUT_DEPENDENCIES = host-pkgconf libmnl
++LIBNETFILTER_CTTIMEOUT_AUTORECONF = YES
+ LIBNETFILTER_CTTIMEOUT_LICENSE = GPLv2
+ LIBNETFILTER_CTTIMEOUT_LICENSE_FILES = COPYING
  
 -- 
 1.8.1.5
