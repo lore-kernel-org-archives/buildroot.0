@@ -1,39 +1,41 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 10 Sep 2013 21:49:25 +0200
-Subject: [Buildroot] [git commit] opus-tools: disable flac when it is not
-	selected
-Message-ID: <20130910200702.82D09834B4@busybox.osuosl.org>
+Date: Tue, 10 Sep 2013 22:06:15 +0200
+Subject: [Buildroot] [git commit] barebox: bump to version 2013.09.0
+Message-ID: <20130910200702.E3123834B4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=685e50f5171eea2ad560523ff31d38ff6e3c0376
+commit: http://git.buildroot.net/buildroot/commit/?id=68dd967221a2f2d761957e3aaa3c05daf4a77843
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-opus-tools expects flac since the 0.1.7 bump unless otherwise told so.
-Disable it when it's not selected. Fixes:
-http://autobuild.buildroot.net/results/c8c/c8c1a682336c150ee401f76b173944611b96bd4e/
-
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/opus-tools/opus-tools.mk |    6 ++++++
- 1 files changed, 6 insertions(+), 0 deletions(-)
+ boot/barebox/Config.in |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/opus-tools/opus-tools.mk b/package/opus-tools/opus-tools.mk
-index bb11a19..f4dee74 100644
---- a/package/opus-tools/opus-tools.mk
-+++ b/package/opus-tools/opus-tools.mk
-@@ -19,4 +19,10 @@ else
- OPUS_TOOLS_CONF_OPT += --disable-sse
- endif
+diff --git a/boot/barebox/Config.in b/boot/barebox/Config.in
+index 04929ea..1bbbe06 100644
+--- a/boot/barebox/Config.in
++++ b/boot/barebox/Config.in
+@@ -12,7 +12,7 @@ choice
+ 	  Select the specific Barebox version you want to use
  
-+ifeq ($(BR2_PACKAGE_FLAC),y)
-+OPUS_TOOLS_DEPENDENCIES += flac
-+else
-+OPUS_TOOLS_CONF_OPT += --without-flac
-+endif
-+
- $(eval $(autotools-package))
+ config BR2_TARGET_BAREBOX_LATEST_VERSION
+-	bool "2013.08.0"
++	bool "2013.09.0"
+ 
+ config BR2_TARGET_BAREBOX_CUSTOM_VERSION
+ 	bool "Custom version"
+@@ -40,7 +40,7 @@ endif
+ 
+ config BR2_TARGET_BAREBOX_VERSION
+ 	string
+-	default "2013.08.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
++	default "2013.09.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
+ 	default $BR2_TARGET_BAREBOX_CUSTOM_VERSION_VALUE if BR2_TARGET_BAREBOX_CUSTOM_VERSION
+ 	default "custom"	if BR2_TARGET_BAREBOX_CUSTOM_TARBALL
+ 	default $BR2_TARGET_BAREBOX_CUSTOM_GIT_VERSION if BR2_TARGET_BAREBOX_CUSTOM_GIT
