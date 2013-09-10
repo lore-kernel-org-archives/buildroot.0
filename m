@@ -1,32 +1,50 @@
-From: Ryan Coe <bluemrp9@gmail.com>
-Date: Tue, 10 Sep 2013 14:58:35 -0700
-Subject: [Buildroot] [PATCH 1/1] linux: update depmod path for install to
-	target
-Message-ID: <1378850315-22371-1-git-send-email-bluemrp9@gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue, 10 Sep 2013 19:06:39 -0300
+Subject: [Buildroot] [PATCH] linux-headers: bump 3.{0, 2, 4,
+	10}.x stable versions
+Message-ID: <1378850799-29479-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-
-Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- linux/linux.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ ...ers-headers_install-fix-__packed-in-exported-kernel-head.patch | 0
+ package/linux-headers/Config.in.host                              | 8 ++++----
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+ rename package/linux-headers/{3.0.94 => 3.0.95}/linux-headers-headers_install-fix-__packed-in-exported-kernel-head.patch (100%)
 
-diff --git a/linux/linux.mk b/linux/linux.mk
-index 649d06b..1650143 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -274,7 +274,7 @@ define LINUX_INSTALL_TARGET_CMDS
- 	# directories, not relevant on the target
- 	@if grep -q "CONFIG_MODULES=y" $(@D)/.config; then 	\
- 		$(TARGET_MAKE_ENV) $(MAKE1) $(LINUX_MAKE_FLAGS) -C $(@D) 		\
--			DEPMOD="$(HOST_DIR)/usr/sbin/depmod" modules_install ;		\
-+			DEPMOD="$(HOST_DIR)/sbin/depmod" modules_install ;		\
- 		rm -f $(TARGET_DIR)/lib/modules/$(LINUX_VERSION_PROBED)/build ;		\
- 		rm -f $(TARGET_DIR)/lib/modules/$(LINUX_VERSION_PROBED)/source ;	\
- 	fi
+diff --git a/package/linux-headers/3.0.94/linux-headers-headers_install-fix-__packed-in-exported-kernel-head.patch b/package/linux-headers/3.0.95/linux-headers-headers_install-fix-__packed-in-exported-kernel-head.patch
+similarity index 100%
+rename from package/linux-headers/3.0.94/linux-headers-headers_install-fix-__packed-in-exported-kernel-head.patch
+rename to package/linux-headers/3.0.95/linux-headers-headers_install-fix-__packed-in-exported-kernel-head.patch
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index f05111b..3dc0b9d 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -76,17 +76,17 @@ config BR2_DEFAULT_KERNEL_VERSION
+ 
+ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+-	default "3.0.94"	if BR2_KERNEL_HEADERS_3_0
++	default "3.0.95"	if BR2_KERNEL_HEADERS_3_0
+ 	default "3.1.10"	if BR2_KERNEL_HEADERS_3_1
+-	default "3.2.50"	if BR2_KERNEL_HEADERS_3_2
++	default "3.2.51"	if BR2_KERNEL_HEADERS_3_2
+ 	default "3.3.8"		if BR2_KERNEL_HEADERS_3_3
+-	default "3.4.60"	if BR2_KERNEL_HEADERS_3_4
++	default "3.4.61"	if BR2_KERNEL_HEADERS_3_4
+ 	default "3.5.7"		if BR2_KERNEL_HEADERS_3_5
+ 	default "3.6.11"	if BR2_KERNEL_HEADERS_3_6
+ 	default "3.7.10"	if BR2_KERNEL_HEADERS_3_7
+ 	default "3.8.13"	if BR2_KERNEL_HEADERS_3_8
+ 	default "3.9.11"	if BR2_KERNEL_HEADERS_3_9
+-	default "3.10.10"	if BR2_KERNEL_HEADERS_3_10
++	default "3.10.11"	if BR2_KERNEL_HEADERS_3_10
+ 	default "3.11"		if BR2_KERNEL_HEADERS_3_11
+ 	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
+ 	default $BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
 -- 
-1.8.1.2
+1.8.1.5
