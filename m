@@ -1,35 +1,32 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 10 Sep 2013 22:58:53 +0200
-Subject: [Buildroot] [PATCH 1/3] knock: new package
-In-Reply-To: <CAAXf6LWfhUhQ2pRwaFh6szZ=51WfPPJNB2AVwzoodV0w4XT4DQ@mail.gmail.com>
-References: <1378071216-19697-1-git-send-email-rommel@layer-7.net>
- <CAAXf6LXW8GfZzPAHkFjP_coASZ8CPNPNNc6=KjWrek94Ndn_cw@mail.gmail.com>
- <E9670545-EE12-445D-A15C-C0C3E4A4116A@layer-7.net>
- <1DD66D3B-6E8F-41C4-859E-A36677BA0A6B@layer-7.net>
- <CAAXf6LWfhUhQ2pRwaFh6szZ=51WfPPJNB2AVwzoodV0w4XT4DQ@mail.gmail.com>
-Message-ID: <522F880D.1090904@mind.be>
+From: Ryan Coe <bluemrp9@gmail.com>
+Date: Tue, 10 Sep 2013 14:58:35 -0700
+Subject: [Buildroot] [PATCH 1/1] linux: update depmod path for install to
+	target
+Message-ID: <1378850315-22371-1-git-send-email-bluemrp9@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 08/09/13 16:32, Thomas De Schampheleire wrote:
-> Another tip: for these type of dependency problems, you could also use
-> an external toolchain, like the Sourcery ones, to get much quicker
-> results. With such external toolchains, it also becomes very easy to
-> test some other architectures like powerpc, arm, ...
 
-  And you can also use the toolchains used by the autobuilders, to test 
-with uClibc-based toolchains.
+Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
+---
+ linux/linux.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-  Regards,
-  Arnout
-
+diff --git a/linux/linux.mk b/linux/linux.mk
+index 649d06b..1650143 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -274,7 +274,7 @@ define LINUX_INSTALL_TARGET_CMDS
+ 	# directories, not relevant on the target
+ 	@if grep -q "CONFIG_MODULES=y" $(@D)/.config; then 	\
+ 		$(TARGET_MAKE_ENV) $(MAKE1) $(LINUX_MAKE_FLAGS) -C $(@D) 		\
+-			DEPMOD="$(HOST_DIR)/usr/sbin/depmod" modules_install ;		\
++			DEPMOD="$(HOST_DIR)/sbin/depmod" modules_install ;		\
+ 		rm -f $(TARGET_DIR)/lib/modules/$(LINUX_VERSION_PROBED)/build ;		\
+ 		rm -f $(TARGET_DIR)/lib/modules/$(LINUX_VERSION_PROBED)/source ;	\
+ 	fi
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+1.8.1.2
