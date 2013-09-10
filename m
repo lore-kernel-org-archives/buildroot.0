@@ -1,10 +1,9 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 10 Sep 2013 16:26:12 -0300
-Subject: [Buildroot] [PATCH 03/11] libnetfilter_acct: add patch for uclinux
-	tuple
+Date: Tue, 10 Sep 2013 16:26:13 -0300
+Subject: [Buildroot] [PATCH 04/11] libnfnetlink: add patch for uclinux tuple
 In-Reply-To: <1378841180-23467-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1378841180-23467-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1378841180-23467-3-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1378841180-23467-4-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,20 +12,20 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- .../libnetfilter-acct-01-uclinux.patch             | 26 ++++++++++++++++++++++
- package/libnetfilter_acct/libnetfilter-acct.mk     |  1 +
+ package/libnfnetlink/libnfnetlink-01-uclinux.patch | 26 ++++++++++++++++++++++
+ package/libnfnetlink/libnfnetlink.mk               |  1 +
  2 files changed, 27 insertions(+)
- create mode 100644 package/libnetfilter_acct/libnetfilter-acct-01-uclinux.patch
+ create mode 100644 package/libnfnetlink/libnfnetlink-01-uclinux.patch
 
-diff --git a/package/libnetfilter_acct/libnetfilter-acct-01-uclinux.patch b/package/libnetfilter_acct/libnetfilter-acct-01-uclinux.patch
+diff --git a/package/libnfnetlink/libnfnetlink-01-uclinux.patch b/package/libnfnetlink/libnfnetlink-01-uclinux.patch
 new file mode 100644
-index 0000000..070f02c
+index 0000000..b152012
 --- /dev/null
-+++ b/package/libnetfilter_acct/libnetfilter-acct-01-uclinux.patch
++++ b/package/libnfnetlink/libnfnetlink-01-uclinux.patch
 @@ -0,0 +1,26 @@
-+From bfcaf00a8c972e2c10412d917f08626eb05079c7 Mon Sep 17 00:00:00 2001
++From 8e5a9d8f32c9646d01d8c84e979892dfd28a7f7c Mon Sep 17 00:00:00 2001
 +From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+Date: Tue, 10 Sep 2013 15:32:03 -0300
++Date: Tue, 10 Sep 2013 15:35:22 -0300
 +Subject: [PATCH] configure: uclinux is also linux
 +
 +Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
@@ -35,13 +34,13 @@ index 0000000..070f02c
 + 1 file changed, 1 insertion(+), 1 deletion(-)
 +
 +diff --git a/configure.ac b/configure.ac
-+index ad1bef8..24a7bb9 100644
++index 0926a1c..b979772 100644
 +--- a/configure.ac
 ++++ b/configure.ac
-+@@ -22,7 +22,7 @@ AC_DISABLE_STATIC
-+ LT_INIT
-+ CHECK_GCC_FVISIBILITY
-+ case "$host" in
++@@ -18,7 +18,7 @@ AC_DISABLE_STATIC
++ AM_PROG_LIBTOOL
++ 
++ case "$host" in 
 +-*-*-linux*) ;;
 ++*-*-linux* | *-*-uclinux*) ;;
 + *) AC_MSG_ERROR([Linux only, dude!]);;
@@ -50,17 +49,17 @@ index 0000000..070f02c
 +-- 
 +1.8.1.5
 +
-diff --git a/package/libnetfilter_acct/libnetfilter-acct.mk b/package/libnetfilter_acct/libnetfilter-acct.mk
-index c89c5ed..615d46e 100644
---- a/package/libnetfilter_acct/libnetfilter-acct.mk
-+++ b/package/libnetfilter_acct/libnetfilter-acct.mk
-@@ -9,6 +9,7 @@ LIBNETFILTER_ACCT_SOURCE = libnetfilter_acct-$(LIBNETFILTER_ACCT_VERSION).tar.bz
- LIBNETFILTER_ACCT_SITE = http://www.netfilter.org/projects/libnetfilter_acct/files
- LIBNETFILTER_ACCT_INSTALL_STAGING = YES
- LIBNETFILTER_ACCT_DEPENDENCIES = host-pkgconf libmnl
-+LIBNETFILTER_ACCT_AUTORECONF = YES
- LIBNETFILTER_ACCT_LICENSE = LGPLv2.1+
- LIBNETFILTER_ACCT_LICENSE_FILES = COPYING
+diff --git a/package/libnfnetlink/libnfnetlink.mk b/package/libnfnetlink/libnfnetlink.mk
+index 192fa8f..de5a9d8 100644
+--- a/package/libnfnetlink/libnfnetlink.mk
++++ b/package/libnfnetlink/libnfnetlink.mk
+@@ -7,6 +7,7 @@
+ LIBNFNETLINK_VERSION = 1.0.1
+ LIBNFNETLINK_SOURCE = libnfnetlink-$(LIBNFNETLINK_VERSION).tar.bz2
+ LIBNFNETLINK_SITE = http://www.netfilter.org/projects/libnfnetlink/files
++LIBNFNETLINK_AUTORECONF = YES
+ LIBNFNETLINK_INSTALL_STAGING = YES
  
+ $(eval $(autotools-package))
 -- 
 1.8.1.5
