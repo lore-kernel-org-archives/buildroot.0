@@ -1,37 +1,31 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 10 Sep 2013 15:17:41 -0300
-Subject: [Buildroot] [PATCH] libunwind: needs threads
-Message-ID: <1378837061-28568-1-git-send-email-gustavo@zacarias.com.ar>
+From: =?ISO-8859-1?Q?Peter_K=FCmmel?= <syntheticpp@gmx.net>
+Date: Tue, 10 Sep 2013 21:18:38 +0200
+Subject: [Buildroot] backtrace()  depth
+Message-ID: <522F708E.2070004@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-http://autobuild.buildroot.net/results/39a/39a32d323252e3d986fd9290108db7a496d429d9/
+I've a question about the depth of a backtrace.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/libunwind/Config.in | 4 ++++
- 1 file changed, 4 insertions(+)
+I've configured uClibc/Buildroot to build libubacktrace-0.9.33.2.so
+via the standard Buildroot menuconfigs:
+Buildroot 2013.02, GCC 4.7.2 by Buildroot, uClibc-0.9.33
 
-diff --git a/package/libunwind/Config.in b/package/libunwind/Config.in
-index 4f130f0..110ea90 100644
---- a/package/libunwind/Config.in
-+++ b/package/libunwind/Config.in
-@@ -1,8 +1,12 @@
- config BR2_PACKAGE_LIBUNWIND
- 	bool "libunwind"
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_arm || BR2_armeb || BR2_mips || BR2_mipsel || BR2_mips64 || \
- 		BR2_mips64el || BR2_powerpc || BR2_sh || BR2_sh64 || BR2_i386 || BR2_x86_64
- 	help
- 	  C API to determine the call-chain of a program.
- 
- 	  http://www.nongnu.org/libunwind/index.html
-+
-+comment "libunwind requires a toolchain with thread support"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS
--- 
-1.8.1.5
+When I call backtrace() on a segfault, I only see the function
+where the segfault is produced, and not much more (only /lib/libc.so.0,
+and two more addresses). The function name could be demanded correctly,
+so I assume the compiler flags are ok (-rdynamic).
+
+The segfault is not in the main thread
+(overall 4 threads, /lib/libpthread-0.9.33.2.so)
+And the bt looks equal for debug and release builds.
+
+A build with crosstool-ng and eglibc produces the same bad backtrace.
+
+Is there a way to get a more complete backtrace?
+
+Many thanks,
+Peter
