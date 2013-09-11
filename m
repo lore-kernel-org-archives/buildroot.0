@@ -1,78 +1,133 @@
-From: Ralph Siemsen <ralphs@netwinder.org>
-Date: Wed, 11 Sep 2013 08:06:30 -0400
-Subject: [Buildroot] [PATCH] apply-patches.sh: detect missing patches
-In-Reply-To: <CAAXf6LWWnb5xQUtZA8p3kgoU2et-kD6x9TzyzXykgNbxdsuv+Q@mail.gmail.com>
-References: <20130813160017.GA2590@harvey.netwinder.org>
- <CAAXf6LXBHm7nG__780PqUaO+v9+4j2KON7UO0dw4Ej2qC3=XGg@mail.gmail.com>
- <CAAXf6LV9HPWdzqV_F5zQ+aABtVxZGRRkhDszF2Qx8vyXMb+PhA@mail.gmail.com>
- <20130905100459.13173009@skate> <5228425A.7090502@lucaceresoli.net>
- <20130905140135.GC3136@free.fr>
- <CAAXf6LWWnb5xQUtZA8p3kgoU2et-kD6x9TzyzXykgNbxdsuv+Q@mail.gmail.com>
-Message-ID: <20130911120630.GA14745@harvey.netwinder.org>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed, 11 Sep 2013 09:12:04 -0300
+Subject: [Buildroot] [PATCH 1/3] downloads: add basic CVS support
+Message-ID: <1378901526-29167-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+The support is for pserver mode anonymous CVS.
+source-check is based on login since many servers don't support or have
+ls/rls disabled.
 
-Sorry for delayed response.
+Usage is pretty straightforward.
+PKG_SITE defines the site hostname and remote directory.
+The module is defined by the bare package name.
+Version is date based.
 
-On Thu, Sep 05, 2013 at 09:20:36PM +0200, Thomas De Schampheleire wrote:
-> 
-> Would you mind sending a second patch that changes the 'unknown patch
-> format' case so that an error is thrown?
-
-I've added it. Note that it is possible to fool this check, by using
-for example a name like mydiff.patch.zzz. This matches "*.patch*" and
-therefore is allowed, even though we don't know how to deal with ".zzz".
-
-> Additionally, in your current patch, I would suggest changing the 'if
-> test ...' into 'if [ ... ], for the sake of lining up with the style
-> in the rest of the script.
-
-Also done. Revised patch follows.
-
-Cheers,
--Ralph
-
-The return status of the "cat <patchfile> | patch ..." pipeline
-is zero (success) even if the patchfile does not exist. This is
-because patch receives no input, which is not an error condition.
-Therefore, explicitly check that patch file exists.
-
-Based on feedback on buildroot mailing list, also changed the
-check for unsupported file format. The build will now error out,
-rather than continuing on silently.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- support/scripts/apply-patches.sh |   10 +++++++---
- 1 files changed, 7 insertions(+), 3 deletions(-)
+ Config.in               |  4 ++++
+ package/pkg-download.mk | 39 +++++++++++++++++++++++++++++----------
+ package/pkg-generic.mk  |  2 ++
+ 3 files changed, 35 insertions(+), 10 deletions(-)
 
-diff --git a/support/scripts/apply-patches.sh b/support/scripts/apply-patches.sh
-index 7d5856c..d6e8983 100755
---- a/support/scripts/apply-patches.sh
-+++ b/support/scripts/apply-patches.sh
-@@ -70,13 +70,17 @@ function apply_patch {
- 	*.patch*)
- 	type="patch"; uncomp="cat"; ;;
- 	*)
--	echo "Unsupported format file for ${patch}, skip it";
--	return 0;
-+	echo "Unsupported format file for ${path}/${patch}";
-+	return 1;
- 	;;
-     esac
-     echo ""
-     echo "Applying $patch using ${type}: "
--	echo $patch >> ${builddir}/.applied_patches_list
-+    if [ ! -e "${path}/$patch" ] ; then
-+	echo "Error: missing patch file ${path}/$patch"
-+	return 1
-+    fi
-+    echo $patch >> ${builddir}/.applied_patches_list
-     ${uncomp} "${path}/$patch" | patch -g0 -p1 -E -d "${builddir}" -t
-     if [ $? != 0 ] ; then
-         echo "Patch failed!  Please fix ${patch}!"
+diff --git a/Config.in b/Config.in
+index 65c29b4..158a8ab 100644
+--- a/Config.in
++++ b/Config.in
+@@ -42,6 +42,10 @@ config BR2_GIT
+ 	string "Git command"
+ 	default "git"
+ 
++config BR2_CVS
++	string "Cvs command"
++	default "cvs"
++
+ config BR2_LOCALFILES
+ 	string "Local files retrieval command"
+ 	default "cp"
+diff --git a/package/pkg-download.mk b/package/pkg-download.mk
+index 97c9226..8e4a1ec 100644
+--- a/package/pkg-download.mk
++++ b/package/pkg-download.mk
+@@ -10,6 +10,7 @@
+ # Download method commands
+ WGET := $(call qstrip,$(BR2_WGET)) $(QUIET)
+ SVN := $(call qstrip,$(BR2_SVN))
++CVS := $(call qstrip,$(BR2_CVS))
+ BZR := $(call qstrip,$(BR2_BZR))
+ GIT := $(call qstrip,$(BR2_GIT))
+ HG := $(call qstrip,$(BR2_HG)) $(QUIET)
+@@ -55,22 +56,21 @@ notdomain=$(patsubst $(call domain,$(1),$(2))$(call domainseparator,$(2))%,%,$(c
+ domainseparator=$(if $(1),$(1),/)
+ 
+ ################################################################################
+-# The DOWNLOAD_{GIT,SVN,BZR,HG,LOCALFILES} helpers are in charge of getting a
+-# working copy of the source repository for their corresponding SCM,
++# The DOWNLOAD_* helpers are in charge of getting a working copy
++# of the source repository for their corresponding SCM,
+ # checking out the requested version / commit / tag, and create an
+ # archive out of it. DOWNLOAD_SCP uses scp to obtain a remote file with
+ # ssh authentication. DOWNLOAD_WGET is the normal wget-based download
+ # mechanism.
+ #
+-# The SOURCE_CHECK_{GIT,SVN,BZR,HG,WGET,LOCALFILES,SCP} helpers are in charge of
+-# simply checking that the source is available for download. This can be used
+-# to make sure one will be able to get all the sources needed for
+-# one's build configuration.
++# The SOURCE_CHECK_* helpers are in charge of simply checking that the source
++# is available for download. This can be used to make sure one will be able
++# to get all the sources needed for one's build configuration.
+ #
+-# The SHOW_EXTERNAL_DEPS_{GIT,SVN,BZR,HG,WGET,LOCALFILES,SCP} helpers simply
+-# output to the console the names of the files that will be downloaded, or path
+-# and revision of the source repositories, producing a list of all the
+-# "external dependencies" of a given build configuration.
++# The SHOW_EXTERNAL_DEPS_* helpers simply output to the console the names
++# of the files that will be downloaded, or path and revision of the
++# source repositories, producing a list of all the "external dependencies"
++# of a given build configuration.
+ ################################################################################
+ 
+ # Try a shallow clone - but that only works if the version is a ref (tag or
+@@ -119,6 +119,24 @@ define SHOW_EXTERNAL_DEPS_BZR
+ 	echo $($(PKG)_SOURCE)
+ endef
+ 
++define DOWNLOAD_CVS
++	test -e $(DL_DIR)/$($(PKG)_SOURCE) || \
++	(pushd $(DL_DIR) > /dev/null && \
++	$(CVS) -z3 -d:pserver:anonymous@$(call stripurischeme,$(call qstrip,$($(PKG)_SITE))) \
++		co -d $($(PKG)_BASE_NAME) -r :$($(PKG)_DL_VERSION) -P $($(PKG)_RAWNAME) && \
++	$(TAR) czf $($(PKG)_SOURCE) $($(PKG)_BASE_NAME)/ && \
++	rm -rf $($(PKG)_DL_DIR) && \
++	popd > /dev/null)
++endef
++
++# Not all CVS servers support ls/rls, use login to see if we can connect
++define SOURCE_CHECK_CVS
++	$(CVS) -d:pserver:anonymous:@$(call stripurischeme,$(call qstrip,$($(PKG)_SITE))) login
++endef
++
++define SHOW_EXTERNAL_DEPS_CVS
++	echo $($(PKG)_SOURCE)
++endef
+ 
+ define DOWNLOAD_SVN
+ 	test -e $(DL_DIR)/$($(PKG)_SOURCE) || \
+@@ -244,6 +262,7 @@ define DOWNLOAD_INNER
+ 		case "$$scheme" in \
+ 			git) $($(DL_MODE)_GIT) && exit ;; \
+ 			svn) $($(DL_MODE)_SVN) && exit ;; \
++			cvs) $($(DL_MODE)_CVS) && exit ;; \
+ 			bzr) $($(DL_MODE)_BZR) && exit ;; \
+ 			file) $($(DL_MODE)_LOCALFILES) && exit ;; \
+ 			scp) $($(DL_MODE)_SCP) && exit ;; \
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 4dd395b..bfc4dc1 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -542,6 +542,8 @@ else ifeq ($$($(2)_SITE_METHOD),scp)
+ DL_TOOLS_DEPENDENCIES += scp ssh
+ else ifeq ($$($(2)_SITE_METHOD),hg)
+ DL_TOOLS_DEPENDENCIES += hg
++else ifeq ($$($(2)_SITE_METHOD),cvs)
++DL_TOOLS_DEPENDENCIES += cvs
+ endif # SITE_METHOD
+ 
+ # $(firstword) is used here because the extractor can have arguments, like
 -- 
-1.7.7.6
+1.8.1.5
