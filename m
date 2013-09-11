@@ -1,9 +1,9 @@
 From: Clayton Shotwell <clshotwe@rockwellcollins.com>
-Date: Wed, 11 Sep 2013 16:59:25 -0500
-Subject: [Buildroot] [PATCH v2 05/17] checkpolicy: new package
+Date: Wed, 11 Sep 2013 16:59:28 -0500
+Subject: [Buildroot] [PATCH v2 08/17] libcgroup: new package
 In-Reply-To: <1378936777-28308-1-git-send-email-clshotwe@rockwellcollins.com>
 References: <1378936777-28308-1-git-send-email-clshotwe@rockwellcollins.com>
-Message-ID: <1378936777-28308-6-git-send-email-clshotwe@rockwellcollins.com>
+Message-ID: <1378936777-28308-9-git-send-email-clshotwe@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,77 +15,82 @@ Signed-off-by: Clayton Shotwell <clshotwe@rockwellcollins.com>
 ---
 Changes v1 -> v2:
   - General cleanup to the mk file to conform to the standard format.
-  - Removed the option to do a target build because it should never 
-    be needed during normal operation.
-  - Added checkpolicy as a host package. (Suggested by Arnout)
+  - Corrected the license version and license file to be correct.
+  - Cleaned up the configure options to enable options for static
+    libraries and linux-pam if they are selected in the configuration.
 
- package/checkpolicy/checkpolicy.mk |   30 ++++++++++++++++++++++++++++++
- 3 files changed, 41 insertions(+), 0 deletions(-)
- create mode 100644 package/checkpolicy/Config.in.host
- create mode 100644 package/checkpolicy/checkpolicy.mk
+ package/Config.in              |    1 +
+ package/libcgroup/Config.in    |    4 ++++
+ package/libcgroup/libcgroup.mk |   38 ++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 43 insertions(+), 0 deletions(-)
+ create mode 100644 package/libcgroup/Config.in
+ create mode 100644 package/libcgroup/libcgroup.mk
 
-diff --git a/package/Config.in.host b/package/Config.in.host
-index 5fd2570..1b3e11b 100644
---- a/package/Config.in.host
-+++ b/package/Config.in.host
-@@ -1,5 +1,6 @@
- menu "Host utilities"
- 
-+source "package/checkpolicy/Config.in.host"
- source "package/dfu-util/Config.in.host"
- source "package/dosfstools/Config.in.host"
- source "package/e2fsprogs/Config.in.host"
-diff --git a/package/checkpolicy/Config.in.host b/package/checkpolicy/Config.in.host
+diff --git a/package/Config.in b/package/Config.in
+index 0e7184a..a0ba26d 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -654,6 +654,7 @@ source "package/libatomic_ops/Config.in"
+ source "package/libbsd/Config.in"
+ source "package/libcap/Config.in"
+ source "package/libcap-ng/Config.in"
++source "package/libcgroup/Config.in"
+ source "package/libdaemon/Config.in"
+ source "package/libelf/Config.in"
+ source "package/libevent/Config.in"
+diff --git a/package/libcgroup/Config.in b/package/libcgroup/Config.in
 new file mode 100644
-index 0000000..75794be
+index 0000000..17d2db2
 --- /dev/null
-+++ b/package/checkpolicy/Config.in.host
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_HOST_CHECKPOLICY
-+	bool "host checkpolicy"
++++ b/package/libcgroup/Config.in
+@@ -0,0 +1,4 @@
++config BR2_PACKAGE_LIBCGROUP
++	bool "libcgroup"
 +	help
-+	  checkpolicy is the policy compiler. It uses libsepol to 
-+	  generate the binary policy. checkpolicy uses the static 
-+	  libsepol since it deals with low level details of the policy 
-+	  that have not been encapsulated/abstracted by a proper 
-+	  shared library interface. 
-+	  
-+	  http://selinuxproject.org/page/Main_Page
-diff --git a/package/checkpolicy/checkpolicy.mk b/package/checkpolicy/checkpolicy.mk
++	  libcgroup is a library that abstracts the control group file system in Linux. 
+diff --git a/package/libcgroup/libcgroup.mk b/package/libcgroup/libcgroup.mk
 new file mode 100644
-index 0000000..0c82d63
+index 0000000..06f1e60
 --- /dev/null
-+++ b/package/checkpolicy/checkpolicy.mk
-@@ -0,0 +1,30 @@
++++ b/package/libcgroup/libcgroup.mk
+@@ -0,0 +1,38 @@
 +################################################################################
 +#
-+# checkpolicy
++# libcgroup
 +#
 +################################################################################
 +
-+CHECKPOLICY_VERSION = 2.1.12
-+CHECKPOLICY_SITE = http://userspace.selinuxproject.org/releases/20130423/
-+CHECKPOLICY_LICENSE = GPLv2
-+CHECKPOLICY_LICENSE_FILES = COPYING
++LIBCGROUP_VERSION = 0.38
++LIBCGROUP_SOURCE = libcgroup-$(LIBCGROUP_VERSION).tar.bz2
++LIBCGROUP_SITE = http://sourceforge.net/projects/libcg/files/latest/download
++LIBCGROUP_LICENSE = LGPLv2.1
++LIBCGROUP_LICENSE_FILES = COPYING
 +
-+HOST_CHECKPOLICY_DEPENDENCIES = host-libselinux host-flex host-bison
++LIBCGROUP_INSTALL_STAGING = YES
 +
-+HOST_CHECKPOLICY_MAKE_OPTS = $(HOST_CONFIGURE_OPTS) \
-+	LEX="$(HOST_DIR)/usr/bin/flex" \
-+	YACC="$(HOST_DIR)/usr/bin/bison -y"
++# Undefining _FILE_OFFSET_BITS here because of a "bug" with glibc fts.h 
++# large file support. See https://bugzilla.redhat.com/show_bug.cgi?id=574992 
++# for more information.
++LIBCGROUP_CONF_ENV = \
++	CXXFLAGS+="-U_FILE_OFFSET_BITS" \
++	CFLAGS+="-U_FILE_OFFSET_BITS"
 +
-+define HOST_CHECKPOLICY_BUILD_CMDS
-+	$(MAKE) -C $(@D) $(HOST_CHECKPOLICY_MAKE_OPTS) DESTDIR=$(HOST_DIR)
-+endef
++LIBCGROUP_CONF_OPT = \
++	--disable-tools \
++	--disable-daemon \
++	--disable-initscript-install
 +
-+define HOST_CHECKPOLICY_INSTALL_CMDS
-+	$(MAKE) -C $(@D) install $(HOST_CHECKPOLICY_MAKE_OPTS) DESTDIR=$(HOST_DIR)
-+endef
++ifeq ($(BR2_PREFER_STATIC_LIB),y)
++	LIBCGROUP_CONF_OPT += --enable-static --disable-shared
++endif
 +
-+define HOST_CHECKPOLICY_CLEAN_CMDS
-+	$(MAKE) -C $(@D) clean
-+endef
++ifeq ($(BR2_PACKAGE_LINUX_PAM),y)
++	LIBCGROUP_DEPENDENCIES += linux-pam
++	LIBCGROUP_CONF_OPT += --enable-pam
++else
++	LIBCGROUP_CONF_OPT += --disable-pam
++endif
 +
-+$(eval $(host-generic-package))
++$(eval $(autotools-package))
 -- 
 1.7.1
