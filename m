@@ -1,9 +1,9 @@
 From: Clayton Shotwell <clshotwe@rockwellcollins.com>
-Date: Wed, 11 Sep 2013 16:59:30 -0500
-Subject: [Buildroot] [PATCH v2 10/17] python-pyxml: new package
+Date: Wed, 11 Sep 2013 16:59:34 -0500
+Subject: [Buildroot] [PATCH v2 14/17] shadow: new package
 In-Reply-To: <1378936777-28308-1-git-send-email-clshotwe@rockwellcollins.com>
 References: <1378936777-28308-1-git-send-email-clshotwe@rockwellcollins.com>
-Message-ID: <1378936777-28308-11-git-send-email-clshotwe@rockwellcollins.com>
+Message-ID: <1378936777-28308-15-git-send-email-clshotwe@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,105 +16,100 @@ Signed-off-by: Clayton Shotwell <clshotwe@rockwellcollins.com>
 Changes v1 -> v2:
   - General cleanup to the mk file to conform to the standard format.
 
- package/Config.in                  |    1 +
- package/python-pyxml/Config.in     |   11 +++++++
- package/python-pyxml/python-xml.mk |   58 ++++++++++++++++++++++++++++++++++++
- 3 files changed, 70 insertions(+), 0 deletions(-)
- create mode 100644 package/python-pyxml/Config.in
- create mode 100644 package/python-pyxml/python-xml.mk
+ package/Config.in        |    3 ++
+ package/shadow/Config.in |   13 ++++++++++++
+ package/shadow/shadow.mk |   49 ++++++++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 65 insertions(+), 0 deletions(-)
+ create mode 100644 package/shadow/Config.in
+ create mode 100644 package/shadow/shadow.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index d80518d..84190f2 100644
+index b5b4a6e..b9b0d3e 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -394,6 +394,7 @@ source "package/python-protobuf/Config.in"
- source "package/python-pygame/Config.in"
- source "package/python-pyparsing/Config.in"
- source "package/python-pyro/Config.in"
-+source "package/python-pyxml/Config.in"
- source "package/python-serial/Config.in"
- source "package/python-setuptools/Config.in"
- source "package/python-thrift/Config.in"
-diff --git a/package/python-pyxml/Config.in b/package/python-pyxml/Config.in
+@@ -929,6 +929,9 @@ source "package/lockfile-progs/Config.in"
+ source "package/logrotate/Config.in"
+ source "package/logsurfer/Config.in"
+ source "package/screen/Config.in"
++if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
++source "package/shadow/Config.in"
++endif
+ source "package/sudo/Config.in"
+ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ source "package/time/Config.in"
+diff --git a/package/shadow/Config.in b/package/shadow/Config.in
 new file mode 100644
-index 0000000..420f3ad
+index 0000000..5692ac6
 --- /dev/null
-+++ b/package/python-pyxml/Config.in
-@@ -0,0 +1,11 @@
-+config BR2_PACKAGE_PYTHON_PYXML
-+	bool "python-pyxml"
-+	depends on BR2_PACKAGE_PYTHON
++++ b/package/shadow/Config.in
+@@ -0,0 +1,13 @@
++config BR2_PACKAGE_SHADOW
++	bool "shadow"
 +	help
-+	  This is the Python XML package.  The distribution contains a
-+	  validating XML parser, an implementation of the SAX and DOM
-+	  programming interfaces, an interface to the Expat parser (and the
-+	  Expat parser itself), and a C helper module that can speed up
-+	  xmllib.py by a factor of 5.  There's even documentation!
-+
-+	  http://pyxml.sourceforge.net/topics/index.html
-diff --git a/package/python-pyxml/python-xml.mk b/package/python-pyxml/python-xml.mk
++	  The shadow-utils package includes the necessary programs for
++	  converting UNIX password files to the shadow password format, plus
++	  programs for managing user and group accounts. The pwconv command
++	  converts passwords to the shadow password format. The pwunconv command
++	  unconverts shadow passwords and generates an npasswd file (a standard
++	  UNIX password file). The pwck command checks the integrity of password
++	  and shadow files. The lastlog command prints out the last login times
++	  for all users. The useradd, userdel, and usermod commands are used for
++	  managing user accounts. The groupadd, groupdel, and groupmod commands
++	  are used for managing group accounts.
+diff --git a/package/shadow/shadow.mk b/package/shadow/shadow.mk
 new file mode 100644
-index 0000000..0723e42
+index 0000000..8783533
 --- /dev/null
-+++ b/package/python-pyxml/python-xml.mk
-@@ -0,0 +1,58 @@
++++ b/package/shadow/shadow.mk
+@@ -0,0 +1,49 @@
 +################################################################################
 +#
-+# python-pyxml
++# shadow
 +#
 +################################################################################
 +
-+PYTHON_PYXML_VERSION = 0.8.4
-+PYTHON_PYXML_SOURCE  = PyXML-$(PYTHON_PYXML_VERSION).tar.gz
-+PYTHON_PYXML_SITE    = http://sourceforge.net/projects/pyxml/files/pyxml/0.8.4/PyXML-0.8.4.tar.gz/download
-+PYTHON_PYXML_LICENSE = BSD-3c
-+PYTHON_PYXML_LICENSE_FILES = LICENSE
++SHADOW_VERSION = 4.1.5.1
++SHADOW_SOURCE = shadow-$(SHADOW_VERSION).tar.bz2
++SHADOW_SITE = http://pkg-shadow.alioth.debian.org/releases/
++SHADOW_LICENSE = BSD
++SHADOW_LICENSE_FILES = COPYING
++SHADOW_DEPENDENCIES = acl attr busybox
 +
-+PYTHON_PYXML_DEPENDENCIES = host-python python expat
++SHADOW_INSTALL_STAGING = NO
 +
-+PYTHON_PYXML_INSTALL_STAGING = NO
++SHADOW_CONF_OPT = --disable-nls
 +
-+define PYTHON_PYXML_BUILD_CMDS
-+	(cd $(@D); \
-+		CC="$(TARGET_CC)" \
-+		CFLAGS="$(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include" \
-+		LDSHARED="$(TARGET_CC) -shared" \
-+		LDFLAGS="$(TARGET_LDFLAGS) -L$(STAGING_DIR)/lib -L$(STAGING_DIR)/usr/lib" \
-+		$(HOST_DIR)/usr/bin/python setup.py build_ext \
-+		--include-dirs=$(STAGING_DIR)/usr/include/python$(PYTHON_VERSION_MAJOR) \
-+		--with-libexpat=$(STAGING_DIR)/usr \
-+	)
-+	(cd $(@D); $(HOST_DIR)/usr/bin/python setup.py build)
++# Shadow configuration to support audit
++ifeq ($(BR2_PACKAGE_AUDIT),y)
++SHADOW_DEPENDENCIES += audit
++SHADOW_CONF_OPT += --with-audit=yes
++endif
++
++# Shawdow with linux-pam support
++ifeq ($(BR2_PACKAGE_LINUX_PAM),y) 
++SHADOW_DEPENDENCIES += linux-pam
++SHADOW_CONF_OPT += --with-libpam=yes
++endif
++
++# Shadow with selinux support
++ifeq ($(BR2_PACKAGE_LIBSELINUX),y)
++SHADOW_DEPENDENCIES += libselinux libsemanage
++SHADOW_CONF_OPT += --with-selinux=yes
++endif
++
++# Comment out all config entries that conflict with using PAM
++define SHADOW_LOGIN_CONFIGURATION
++	for FUNCTION in FAIL_DELAY FAILLOG_ENAB LASTLOG_ENAB MAIL_CHECK_ENAB \
++		OBSCURE_CHECKS_ENAB PORTTIME_CHECKS_ENAB QUOTAS_ENAB CONSOLE MOTD_FILE \
++		FTMP_FILE NOLOGINS_FILE ENV_HZ PASS_MIN_LEN SU_WHEEL_ONLY CRACKLIB_DICTPATH \
++		PASS_CHANGE_TRIES PASS_ALWAYS_WARN CHFN_AUTH ENCRYPT_METHOD ENVIRON_FILE ; \
++	do \
++		sed -i "s/^$${FUNCTION}/# &/" $(TARGET_DIR)/etc/login.defs ; \
++	done
 +endef
 +
-+define PYTHON_PYXML_CLEAN_CMDS
-+	(cd $(@D); $(HOST_DIR)/usr/bin/python setup.py clean -a)
-+endef
++SHADOW_POST_INSTALL_TARGET_HOOKS += SHADOW_LOGIN_CONFIGURATION
 +
-+define PYTHON_PYXML_INSTALL_STAGING_CMDS
-+	(cd $(@D); $(HOST_DIR)/usr/bin/python setup.py install --prefix=$(STAGING_DIR)/usr)
-+endef
-+
-+define PYTHON_PYXML_INSTALL_TARGET_CMDS
-+	(cd $(@D); $(HOST_DIR)/usr/bin/python setup.py install --prefix=$(TARGET_DIR)/usr)
-+endef
-+
-+HOST_PYTHON_PYXML_DEPENDENCIES = host-python
-+
-+define HOST_PYTHON_PYXML_BUILD_CMDS
-+	(cd $(@D); $(HOST_DIR)/usr/bin/python setup.py build_ext --with-libexpat=$(HOST_DIR)/usr)
-+	(cd $(@D); $(HOST_DIR)/usr/bin/python setup.py build)
-+endef
-+
-+define HOST_PYTHON_PYXML_CLEAN_CMDS
-+	(cd $(@D); $(HOST_DIR)/usr/bin/python setup.py clean)
-+endef
-+
-+define HOST_PYTHON_PYXML_INSTALL_CMDS
-+	(cd $(@D); $(HOST_DIR)/usr/bin/python setup.py install --prefix=$(HOST_DIR)/usr)
-+endef
-+
-+$(eval $(generic-package))
-+$(eval $(host-generic-package))
++$(eval $(autotools-package))
 -- 
 1.7.1
