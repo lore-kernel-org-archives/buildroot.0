@@ -1,9 +1,9 @@
 From: Clayton Shotwell <clshotwe@rockwellcollins.com>
-Date: Wed, 11 Sep 2013 16:59:26 -0500
-Subject: [Buildroot] [PATCH v2 06/17] sepolgen: new package
+Date: Wed, 11 Sep 2013 16:59:30 -0500
+Subject: [Buildroot] [PATCH v2 10/17] python-pyxml: new package
 In-Reply-To: <1378936777-28308-1-git-send-email-clshotwe@rockwellcollins.com>
 References: <1378936777-28308-1-git-send-email-clshotwe@rockwellcollins.com>
-Message-ID: <1378936777-28308-7-git-send-email-clshotwe@rockwellcollins.com>
+Message-ID: <1378936777-28308-11-git-send-email-clshotwe@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,84 +15,106 @@ Signed-off-by: Clayton Shotwell <clshotwe@rockwellcollins.com>
 ---
 Changes v1 -> v2:
   - General cleanup to the mk file to conform to the standard format.
-  - Changed package dependencies into selects in the config.
 
- package/Config.in            |    4 ++++
- package/sepolgen/Config.in   |    8 ++++++++
- package/sepolgen/sepolgen.mk |   35 +++++++++++++++++++++++++++++++++++
- 3 files changed, 47 insertions(+), 0 deletions(-)
- create mode 100644 package/sepolgen/Config.in
- create mode 100644 package/sepolgen/sepolgen.mk
+ package/Config.in                  |    1 +
+ package/python-pyxml/Config.in     |   11 +++++++
+ package/python-pyxml/python-xml.mk |   58 ++++++++++++++++++++++++++++++++++++
+ 3 files changed, 70 insertions(+), 0 deletions(-)
+ create mode 100644 package/python-pyxml/Config.in
+ create mode 100644 package/python-pyxml/python-xml.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 4569fa2..57fe70d 100644
+index d80518d..84190f2 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -905,6 +905,10 @@ source "package/xenomai/Config.in"
- source "package/rtai/Config.in"
- endmenu
- 
-+menu "Security"
-+source "package/sepolgen/Config.in"
-+endmenu
-+
- menu "Shell and utilities"
- source "package/at/Config.in"
- if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
-diff --git a/package/sepolgen/Config.in b/package/sepolgen/Config.in
+@@ -394,6 +394,7 @@ source "package/python-protobuf/Config.in"
+ source "package/python-pygame/Config.in"
+ source "package/python-pyparsing/Config.in"
+ source "package/python-pyro/Config.in"
++source "package/python-pyxml/Config.in"
+ source "package/python-serial/Config.in"
+ source "package/python-setuptools/Config.in"
+ source "package/python-thrift/Config.in"
+diff --git a/package/python-pyxml/Config.in b/package/python-pyxml/Config.in
 new file mode 100644
-index 0000000..2a4b49c
+index 0000000..420f3ad
 --- /dev/null
-+++ b/package/sepolgen/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_SEPOLGEN
-+	bool "sepolgen"
-+	select BR2_PACKAGE_PYTHON
++++ b/package/python-pyxml/Config.in
+@@ -0,0 +1,11 @@
++config BR2_PACKAGE_PYTHON_PYXML
++	bool "python-pyxml"
++	depends on BR2_PACKAGE_PYTHON
 +	help
-+	  sepolgen is a python module/library that forms the core 
-+	  of the modern audit2allow (a rewrite). 
-+	  
-+	  http://selinuxproject.org/page/Main_Page
-diff --git a/package/sepolgen/sepolgen.mk b/package/sepolgen/sepolgen.mk
++	  This is the Python XML package.  The distribution contains a
++	  validating XML parser, an implementation of the SAX and DOM
++	  programming interfaces, an interface to the Expat parser (and the
++	  Expat parser itself), and a C helper module that can speed up
++	  xmllib.py by a factor of 5.  There's even documentation!
++
++	  http://pyxml.sourceforge.net/topics/index.html
+diff --git a/package/python-pyxml/python-xml.mk b/package/python-pyxml/python-xml.mk
 new file mode 100644
-index 0000000..a8c4786
+index 0000000..0723e42
 --- /dev/null
-+++ b/package/sepolgen/sepolgen.mk
-@@ -0,0 +1,35 @@
++++ b/package/python-pyxml/python-xml.mk
+@@ -0,0 +1,58 @@
 +################################################################################
 +#
-+# sepolgen
++# python-pyxml
 +#
 +################################################################################
 +
-+SEPOLGEN_VERSION = 1.1.9
-+SEPOLGEN_SITE = http://userspace.selinuxproject.org/releases/20130423/
-+SEPOLGEN_LICENSE = GPLv2
-+SEPOLGEN_LICENSE_FILES = COPYING
++PYTHON_PYXML_VERSION = 0.8.4
++PYTHON_PYXML_SOURCE  = PyXML-$(PYTHON_PYXML_VERSION).tar.gz
++PYTHON_PYXML_SITE    = http://sourceforge.net/projects/pyxml/files/pyxml/0.8.4/PyXML-0.8.4.tar.gz/download
++PYTHON_PYXML_LICENSE = BSD-3c
++PYTHON_PYXML_LICENSE_FILES = LICENSE
 +
-+SEPOLGEN_DEPENDENCIES = python
++PYTHON_PYXML_DEPENDENCIES = host-python python expat
 +
-+SEPOLGEN_INSTALL_STAGING = YES
++PYTHON_PYXML_INSTALL_STAGING = NO
 +
-+SEPOLGEN_MAKE_CMDS = $(TARGET_CONFIGURE_OPTS) \
-+	PYTHONLIBDIR=/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages
-+
-+define SEPOLGEN_BUILD_CMDS
-+	$(MAKE) -C $(@D) $(SEPOLGEN_MAKE_CMDS) DESTDIR=$(STAGING_DIR)
++define PYTHON_PYXML_BUILD_CMDS
++	(cd $(@D); \
++		CC="$(TARGET_CC)" \
++		CFLAGS="$(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include" \
++		LDSHARED="$(TARGET_CC) -shared" \
++		LDFLAGS="$(TARGET_LDFLAGS) -L$(STAGING_DIR)/lib -L$(STAGING_DIR)/usr/lib" \
++		$(HOST_DIR)/usr/bin/python setup.py build_ext \
++		--include-dirs=$(STAGING_DIR)/usr/include/python$(PYTHON_VERSION_MAJOR) \
++		--with-libexpat=$(STAGING_DIR)/usr \
++	)
++	(cd $(@D); $(HOST_DIR)/usr/bin/python setup.py build)
 +endef
 +
-+define SEPOLGEN_INSTALL_STAGING_CMDS
-+	$(MAKE) -C $(@D) install $(SEPOLGEN_MAKE_CMDS) DESTDIR=$(STAGING_DIR)
++define PYTHON_PYXML_CLEAN_CMDS
++	(cd $(@D); $(HOST_DIR)/usr/bin/python setup.py clean -a)
 +endef
 +
-+define SEPOLGEN_INSTALL_TARGET_CMDS
-+	$(MAKE) -C $(@D) install $(SEPOLGEN_MAKE_CMDS) DESTDIR=$(TARGET_DIR)
++define PYTHON_PYXML_INSTALL_STAGING_CMDS
++	(cd $(@D); $(HOST_DIR)/usr/bin/python setup.py install --prefix=$(STAGING_DIR)/usr)
 +endef
 +
-+define SEPOLGEN_CLEAN_CMDS
-+	$(MAKE) -C $(@D) clean
++define PYTHON_PYXML_INSTALL_TARGET_CMDS
++	(cd $(@D); $(HOST_DIR)/usr/bin/python setup.py install --prefix=$(TARGET_DIR)/usr)
++endef
++
++HOST_PYTHON_PYXML_DEPENDENCIES = host-python
++
++define HOST_PYTHON_PYXML_BUILD_CMDS
++	(cd $(@D); $(HOST_DIR)/usr/bin/python setup.py build_ext --with-libexpat=$(HOST_DIR)/usr)
++	(cd $(@D); $(HOST_DIR)/usr/bin/python setup.py build)
++endef
++
++define HOST_PYTHON_PYXML_CLEAN_CMDS
++	(cd $(@D); $(HOST_DIR)/usr/bin/python setup.py clean)
++endef
++
++define HOST_PYTHON_PYXML_INSTALL_CMDS
++	(cd $(@D); $(HOST_DIR)/usr/bin/python setup.py install --prefix=$(HOST_DIR)/usr)
 +endef
 +
 +$(eval $(generic-package))
++$(eval $(host-generic-package))
 -- 
 1.7.1
