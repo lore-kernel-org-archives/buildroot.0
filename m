@@ -1,26 +1,32 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 11 Sep 2013 13:13:40 +0200
-Subject: [Buildroot] Building Manual Errors
-In-Reply-To: <CAHXCMMLZGQ0HreWYvXp1-bih+0yeG+8vCaw-Bb-_hpnpwUf7=A@mail.gmail.com>
- (Samuel Martin's message of "Wed, 11 Sep 2013 11:14:18 +0200")
-References: <OF433C040C.2486075F-ON86257BE2.00813B52-86257BE2.0082DB6E@rockwellcollins.com>
- <CAHXCMMLZGQ0HreWYvXp1-bih+0yeG+8vCaw-Bb-_hpnpwUf7=A@mail.gmail.com>
-Message-ID: <878uz3sja3.fsf@dell.be.48ers.dk>
+Date: Wed, 11 Sep 2013 13:23:37 +0200
+Subject: [Buildroot] [PATCH 1/1] linux: update depmod path for install
+	to target
+In-Reply-To: <20130911092734.2c4bee5f@skate> (Thomas Petazzoni's message of
+ "Wed, 11 Sep 2013 09:27:34 +0200")
+References: <1378850315-22371-1-git-send-email-bluemrp9@gmail.com>
+ <20130911092734.2c4bee5f@skate>
+Message-ID: <874n9rsiti.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Samuel" == Samuel Martin <s.martin49@gmail.com> writes:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-Hi,
+ Thomas> Dear Ryan Coe,
+ Thomas> On Tue, 10 Sep 2013 14:58:35 -0700, Ryan Coe wrote:
+ >> $(TARGET_MAKE_ENV) $(MAKE1) $(LINUX_MAKE_FLAGS) -C $(@D) 		\
+ >> -			DEPMOD="$(HOST_DIR)/usr/sbin/depmod" modules_install ;		\
+ >> +			DEPMOD="$(HOST_DIR)/sbin/depmod" modules_install ;		\
 
- Samuel> I whish we had a buildfarm regularly building the manual (and pushing it on the
- Samuel> web).
- Samuel> Peter, any news about this?
+ Thomas> Not sure why we have to pass DEPMOD here since it's already part of
+ Thomas> LINUX_MAKE_FLAGS. Am I missing something?
 
-Sorry, I completely forgot about that. I'll look into it.
+No, I think you're right. I've removed it in git.
+
+Thanks.
 
 -- 
 Bye, Peter Korsgaard
