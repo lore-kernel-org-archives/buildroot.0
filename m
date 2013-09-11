@@ -1,32 +1,37 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 11 Sep 2013 13:23:37 +0200
-Subject: [Buildroot] [PATCH 1/1] linux: update depmod path for install
-	to target
-In-Reply-To: <20130911092734.2c4bee5f@skate> (Thomas Petazzoni's message of
- "Wed, 11 Sep 2013 09:27:34 +0200")
-References: <1378850315-22371-1-git-send-email-bluemrp9@gmail.com>
- <20130911092734.2c4bee5f@skate>
-Message-ID: <874n9rsiti.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Wed, 11 Sep 2013 13:21:53 +0200
+Subject: [Buildroot] [git commit] linux.mk: target-install: drop extra
+	(invalid) DEPMOD parameter
+Message-ID: <20130911112409.F09F99B6F1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=3f817237fdc66f9484a65df7631b48d4103578e0
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Thomas> Dear Ryan Coe,
- Thomas> On Tue, 10 Sep 2013 14:58:35 -0700, Ryan Coe wrote:
- >> $(TARGET_MAKE_ENV) $(MAKE1) $(LINUX_MAKE_FLAGS) -C $(@D) 		\
- >> -			DEPMOD="$(HOST_DIR)/usr/sbin/depmod" modules_install ;		\
- >> +			DEPMOD="$(HOST_DIR)/sbin/depmod" modules_install ;		\
+DEPMOD is already specified in LINUX_MAKE_FLAGS, and is no longer located
+in HOST_DIR/usr/sbin after the move to host-kmod, so drop it from here.
 
- Thomas> Not sure why we have to pass DEPMOD here since it's already part of
- Thomas> LINUX_MAKE_FLAGS. Am I missing something?
+Reported-by: Ryan Coe <bluemrp9@gmail.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ linux/linux.mk |    3 +--
+ 1 files changed, 1 insertions(+), 2 deletions(-)
 
-No, I think you're right. I've removed it in git.
-
-Thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/linux/linux.mk b/linux/linux.mk
+index 649d06b..901ce25 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -273,8 +273,7 @@ define LINUX_INSTALL_TARGET_CMDS
+ 	# Install modules and remove symbolic links pointing to build
+ 	# directories, not relevant on the target
+ 	@if grep -q "CONFIG_MODULES=y" $(@D)/.config; then 	\
+-		$(TARGET_MAKE_ENV) $(MAKE1) $(LINUX_MAKE_FLAGS) -C $(@D) 		\
+-			DEPMOD="$(HOST_DIR)/usr/sbin/depmod" modules_install ;		\
++		$(TARGET_MAKE_ENV) $(MAKE1) $(LINUX_MAKE_FLAGS) -C $(@D) modules_install; \
+ 		rm -f $(TARGET_DIR)/lib/modules/$(LINUX_VERSION_PROBED)/build ;		\
+ 		rm -f $(TARGET_DIR)/lib/modules/$(LINUX_VERSION_PROBED)/source ;	\
+ 	fi
