@@ -1,9 +1,9 @@
 From: Clayton Shotwell <clshotwe@rockwellcollins.com>
-Date: Wed, 11 Sep 2013 16:59:35 -0500
-Subject: [Buildroot] [PATCH v2 15/17] pcre: Add host build support
+Date: Wed, 11 Sep 2013 16:59:37 -0500
+Subject: [Buildroot] [PATCH v2 17/17] sqlite: Add host build support
 In-Reply-To: <1378936777-28308-1-git-send-email-clshotwe@rockwellcollins.com>
 References: <1378936777-28308-1-git-send-email-clshotwe@rockwellcollins.com>
-Message-ID: <1378936777-28308-16-git-send-email-clshotwe@rockwellcollins.com>
+Message-ID: <1378936777-28308-18-git-send-email-clshotwe@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,17 +16,18 @@ Signed-off-by: Clayton Shotwell <clshotwe@rockwellcollins.com>
 Changes v1 -> v2:
   - No changes
 
- package/pcre/pcre.mk |    1 +
+ package/sqlite/sqlite.mk |    1 +
  1 files changed, 1 insertions(+), 0 deletions(-)
 
-diff --git a/package/pcre/pcre.mk b/package/pcre/pcre.mk
-index bf86a3d..1b59dbc 100644
---- a/package/pcre/pcre.mk
-+++ b/package/pcre/pcre.mk
-@@ -21,3 +21,4 @@ PCRE_CONF_OPT += $(if $(BR2_PACKAGE_PCRE_16),--enable-pcre16,--disable-pcre16)
- PCRE_CONF_OPT += $(if $(BR2_PACKAGE_PCRE_32),--enable-pcre32,--disable-pcre32)
+diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
+index d474619..4d93172 100644
+--- a/package/sqlite/sqlite.mk
++++ b/package/sqlite/sqlite.mk
+@@ -68,3 +68,4 @@ define SQLITE_UNINSTALL_STAGING_CMDS
+ endef
  
  $(eval $(autotools-package))
 +$(eval $(host-autotools-package))
+\ No newline at end of file
 -- 
 1.7.1
