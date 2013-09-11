@@ -1,56 +1,26 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 11 Sep 2013 13:00:58 +0200
-Subject: [Buildroot] [git commit] pkg-stats: update set of files to skip
-Message-ID: <20130911110611.F27B181DED@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 11 Sep 2013 13:13:40 +0200
+Subject: [Buildroot] Building Manual Errors
+In-Reply-To: <CAHXCMMLZGQ0HreWYvXp1-bih+0yeG+8vCaw-Bb-_hpnpwUf7=A@mail.gmail.com>
+ (Samuel Martin's message of "Wed, 11 Sep 2013 11:14:18 +0200")
+References: <OF433C040C.2486075F-ON86257BE2.00813B52-86257BE2.0082DB6E@rockwellcollins.com>
+ <CAHXCMMLZGQ0HreWYvXp1-bih+0yeG+8vCaw-Bb-_hpnpwUf7=A@mail.gmail.com>
+Message-ID: <878uz3sja3.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c403fedbc72438866e8acacf6c1b1d7204a40e1a
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Samuel" == Samuel Martin <s.martin49@gmail.com> writes:
 
-In BR sub-directory boot/ linux/ and package/ there are a few .mk files which
-aren't <package>.mk files. These files shouldn't be taken into account
-in package statistics.
+Hi,
 
-Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- support/scripts/pkg-stats |   17 ++++++++++-------
- 1 files changed, 10 insertions(+), 7 deletions(-)
+ Samuel> I whish we had a buildfarm regularly building the manual (and pushing it on the
+ Samuel> web).
+ Samuel> Peter, any news about this?
 
-diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
-index a65a6ae..4effa59 100755
---- a/support/scripts/pkg-stats
-+++ b/support/scripts/pkg-stats
-@@ -87,18 +87,21 @@ for i in $(find boot/ linux/ package/ -name '*.mk' | sort) ; do
- 	$i = "boot/common.mk" -o \
- 	$i = "linux/linux-ext-xenomai.mk" -o \
- 	$i = "linux/linux-ext-rtai.mk" -o \
--	$i = "linux/linux-ext-ocf-linux.mk" -o \
- 	$i = "package/efl/efl.mk" -o \
--	$i = "package/games/games.mk" -o \
-+	$i = "package/freescale-imx/freescale-imx.mk" -o \
-+	$i = "package/gcc/gcc.mk" -o \
-+	$i = "package/gstreamer/gstreamer.mk" -o \
-+	$i = "package/gstreamer1/gstreamer1.mk" -o \
- 	$i = "package/gtk2-themes/gtk2-themes.mk" -o \
--	$i = "package/multimedia/multimedia.mk" -o \
-+	$i = "package/matchbox/matchbox.mk" -o \
-+	$i = "package/opengl/opengl.mk" -o \
-+	$i = "package/qt5/qt5.mk" -o \
-+	$i = "package/x11r7/x11r7.mk" -o \
-  	$i = "package/pkg-autotools.mk" -o \
-  	$i = "package/pkg-cmake.mk" -o \
-+	$i = "package/pkg-download.mk" -o \
-  	$i = "package/pkg-generic.mk" -o \
-- 	$i = "package/pkg-utils.mk" -o \
-- 	$i = "package/pkg-download.mk" -o \
--	$i = "package/matchbox/matchbox.mk" -o \
--	$i = "package/x11r7/x11r7.mk" ; then
-+ 	$i = "package/pkg-utils.mk" ; then
- 	echo "skipping $i" 1>&2
- 	continue
-     fi
+Sorry, I completely forgot about that. I'll look into it.
+
+-- 
+Bye, Peter Korsgaard
