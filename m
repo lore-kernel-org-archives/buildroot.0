@@ -1,39 +1,113 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 11 Sep 2013 23:22:16 +0200
-Subject: [Buildroot] [PATCH 1/1] aiccu: new package
-In-Reply-To: <AF069D6A-BBA5-4CE4-B424-22362C2C6128@layer-7.net>
-References: <1378677483-2424-1-git-send-email-rommel@layer-7.net>
- <AF069D6A-BBA5-4CE4-B424-22362C2C6128@layer-7.net>
-Message-ID: <5230DF08.9080402@mind.be>
+From: Clayton Shotwell <clshotwe@rockwellcollins.com>
+Date: Wed, 11 Sep 2013 16:59:21 -0500
+Subject: [Buildroot] [PATCH v2 01/17] libsepol: new package
+In-Reply-To: <1378936777-28308-1-git-send-email-clshotwe@rockwellcollins.com>
+References: <1378936777-28308-1-git-send-email-clshotwe@rockwellcollins.com>
+Message-ID: <1378936777-28308-2-git-send-email-clshotwe@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 11/09/13 20:34, Michael Rommel wrote:
-> @Arnout: you made comment regarding use of the toolchains from the
-> autobuilders. I do not fully understand what you mean, do you refer to these:
-> http://autobuild.buildroot.net/toolchains/configs/free-electrons/
-> configurations and suggest, that I set up some of these cross compilers to
-> test packages I submit first, if they work under these configs? Which would be
-> the most important ones - I do not have so much space to accomodate them
-> all, so if I must focus on 3-5, which should I take?
 
-  I actually mean e.g. 
-http://autobuild.buildroot.org/toolchains/tarballs/br-powerpc-e500mc-full-2013.05-1.tar.bz2 
-- it has IPv6 and largefile, nothing else.
+Signed-off-by: Clayton Shotwell <clshotwe@rockwellcollins.com>
+---
+Changes v1 -> v2:
+  - Move Config.in entry into the libraries section since this is a
+    library.
+  - General cleanup to the mk file to conform to the standard format.
+  - Fixed the license version to be LGPLv2.1+ to match the headers in
+    the source files (suggested by Thomas)
 
-  One uClibc build is probably sufficient. If something else is wrong it 
-will come out of the autobuilders.
+ package/Config.in            |    4 +++
+ package/libsepol/Config.in   |    7 ++++++
+ package/libsepol/libsepol.mk |   48 ++++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 59 insertions(+), 0 deletions(-)
+ create mode 100644 package/libsepol/Config.in
+ create mode 100644 package/libsepol/libsepol.mk
 
-  Regards,
-  Arnout
-
+diff --git a/package/Config.in b/package/Config.in
+index 2351839..aa0b1df 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -689,6 +689,10 @@ source "package/liblog4c-localtime/Config.in"
+ source "package/tzdata/Config.in"
+ endmenu
+ 
++menu "Security"
++source "package/libsepol/Config.in"
++endmenu
++
+ menu "Text and terminal handling"
+ source "package/enchant/Config.in"
+ source "package/libfribidi/Config.in"
+diff --git a/package/libsepol/Config.in b/package/libsepol/Config.in
+new file mode 100644
+index 0000000..feb7f39
+--- /dev/null
++++ b/package/libsepol/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_LIBSEPOL
++	bool "libsepol"
++	help
++	  Libsepol is the binary policy manipulation library. It doesn't 
++	  depend upon or use any of the other SELinux components.
++	  
++	  http://selinuxproject.org/page/Main_Page
+diff --git a/package/libsepol/libsepol.mk b/package/libsepol/libsepol.mk
+new file mode 100644
+index 0000000..2731c57
+--- /dev/null
++++ b/package/libsepol/libsepol.mk
+@@ -0,0 +1,48 @@
++################################################################################
++#
++# libsepol
++#
++################################################################################
++
++LIBSEPOL_VERSION = 2.1.9
++LIBSEPOL_SITE = http://userspace.selinuxproject.org/releases/20130423/
++LIBSEPOL_LICENSE = LGPLv2.1+
++LIBSEPOL_LICENSE_FILES = COPYING
++
++LIBSEPOL_INSTALL_STAGING = YES
++
++define LIBSEPOL_BUILD_CMDS
++	# DESTDIR is needed during the compile to compute library and 
++	# header paths.
++	$(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS) DESTDIR=$(STAGING_DIR)
++endef
++
++define LIBSEPOL_INSTALL_STAGING_CMDS
++	$(MAKE) -C $(@D) install $(TARGET_CONFIGURE_OPTS) DESTDIR=$(STAGING_DIR)
++endef
++
++define LIBSEPOL_INSTALL_TARGET_CMDS
++	$(MAKE) -C $(@D) install $(TARGET_CONFIGURE_OPTS) DESTDIR=$(TARGET_DIR)
++endef
++
++define LIBSEPOL_CLEAN_CMDS
++	$(MAKE) -C $(@D) clean
++endef
++
++define HOST_LIBSEPOL_BUILD_CMDS
++	$(MAKE) -C $(@D) $(HOST_CONFIGURE_OPTS) DESTDIR=$(HOST_DIR)
++endef
++
++define HOST_LIBSEPOL_INSTALL_CMDS
++	$(MAKE) -C $(@D) install $(HOST_CONFIGURE_OPTS) DESTDIR=$(HOST_DIR)
++	mv $(HOST_DIR)/lib/libsepol.so.1 $(HOST_DIR)/usr/lib
++	(cd $(HOST_DIR)/usr/lib; rm -f libsepol.so; ln -s libsepol.so.1 libsepol.so)
++	-rmdir $(HOST_DIR)/lib
++endef
++
++define HOST_LIBSEPOL_CLEAN_CMDS
++	$(MAKE) -C $(@D) clean
++endef
++
++$(eval $(generic-package))
++$(eval $(host-generic-package))
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+1.7.1
