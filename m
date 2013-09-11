@@ -1,37 +1,46 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 11 Sep 2013 13:21:53 +0200
-Subject: [Buildroot] [git commit] linux.mk: target-install: drop extra
-	(invalid) DEPMOD parameter
-Message-ID: <20130911112409.F09F99B6F1@busybox.osuosl.org>
+From: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+Date: Wed, 11 Sep 2013 13:24:29 +0200
+Subject: [Buildroot] [PATCH 2/2] pkg-stats: fix proper identification of
+ package infrastructure
+In-Reply-To: <CAAXf6LXW33j4R5+r1mmJ8-MF-wAvWr54_dk+8z88O-GruEhmNw@mail.gmail.com>
+References: <1378890739-3788-1-git-send-email-jerzy.grzegorek@trzebnica.net>
+ <1378890739-3788-2-git-send-email-jerzy.grzegorek@trzebnica.net>
+ <CAAXf6LXW33j4R5+r1mmJ8-MF-wAvWr54_dk+8z88O-GruEhmNw@mail.gmail.com>
+Message-ID: <523052ED.5040109@trzebnica.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3f817237fdc66f9484a65df7631b48d4103578e0
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Thomas,
 
-DEPMOD is already specified in LINUX_MAKE_FLAGS, and is no longer located
-in HOST_DIR/usr/sbin after the move to host-kmod, so drop it from here.
+Thanks for the feedback.
 
-Reported-by: Ryan Coe <bluemrp9@gmail.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- linux/linux.mk |    3 +--
- 1 files changed, 1 insertions(+), 2 deletions(-)
+> Hi,
+>
+> On Wed, Sep 11, 2013 at 11:12 AM, Jerzy Grzegorek
+> <jerzy.grzegorek@trzebnica.net> wrote:
+>> Typically each package invokes the macro which generates the Makefile code, in the way
+>> like this: e.g. $(eval $(generic-package)) or $(eval $(autotools-package)) ,
+>> but a few packages have to invoke this macro in other way:
+>> $(eval $(call generic-package)) e.g. dhcpcd.mk
+>> $(eval $(call autotools-package)) e.g. wireshark.mk .
+> I rather think that the 'call' is an accident. Arnout removed the need
+> for the extra $(call) in July 2012, with commit
+> e1502ebc0c92763896c53d405ee9c7c7a1a33e24, and both dhcpcd and
+> wireshark were added after that time. So I think this has been missed
+> during code review.
+>
+> A quick search shows only three packages with a remaining $(eval
+> $(call)) construct: dhcpcd, wireshark, jquery-keyboard.
+> So I'd rather fix those packages...
 
-diff --git a/linux/linux.mk b/linux/linux.mk
-index 649d06b..901ce25 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -273,8 +273,7 @@ define LINUX_INSTALL_TARGET_CMDS
- 	# Install modules and remove symbolic links pointing to build
- 	# directories, not relevant on the target
- 	@if grep -q "CONFIG_MODULES=y" $(@D)/.config; then 	\
--		$(TARGET_MAKE_ENV) $(MAKE1) $(LINUX_MAKE_FLAGS) -C $(@D) 		\
--			DEPMOD="$(HOST_DIR)/usr/sbin/depmod" modules_install ;		\
-+		$(TARGET_MAKE_ENV) $(MAKE1) $(LINUX_MAKE_FLAGS) -C $(@D) modules_install; \
- 		rm -f $(TARGET_DIR)/lib/modules/$(LINUX_VERSION_PROBED)/build ;		\
- 		rm -f $(TARGET_DIR)/lib/modules/$(LINUX_VERSION_PROBED)/source ;	\
- 	fi
+Ah, I understand now.
+
+Regards,
+Jerzy
+>
+> Best regards,
+> Thomas
+>
