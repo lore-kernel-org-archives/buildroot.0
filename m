@@ -1,42 +1,36 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 11 Sep 2013 11:17:32 +0200
-Subject: [Buildroot] A Bug: xserver_xorg 1.12.4
-In-Reply-To: <20130909080432.GA2684@zuhnb712.ap.bm.net>
-References: <20130909080432.GA2684@zuhnb712.ap.bm.net>
-Message-ID: <20130911111732.3300eaa7@skate>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Wed, 11 Sep 2013 11:53:30 +0200
+Subject: [Buildroot] [PATCH 2/2] pkg-stats: fix proper identification of
+ package infrastructure
+In-Reply-To: <1378890739-3788-2-git-send-email-jerzy.grzegorek@trzebnica.net>
+References: <1378890739-3788-1-git-send-email-jerzy.grzegorek@trzebnica.net>
+ <1378890739-3788-2-git-send-email-jerzy.grzegorek@trzebnica.net>
+Message-ID: <CAAXf6LXW33j4R5+r1mmJ8-MF-wAvWr54_dk+8z88O-GruEhmNw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Woody Wu,
+Hi,
 
-On Mon, 9 Sep 2013 16:04:33 +0800, Woody Wu wrote:
-> In 2013.08, build is using 1.12.4 version of xserver_xorg package.
-> However, I found there is bug in this version, which cause the options
-> parsing of kdrive modules is not correct.
-> 
-> I attached a patch file in the message (not sure what's the correct way
-> to commit buildroot package patches).
+On Wed, Sep 11, 2013 at 11:12 AM, Jerzy Grzegorek
+<jerzy.grzegorek@trzebnica.net> wrote:
+> Typically each package invokes the macro which generates the Makefile code, in the way
+> like this: e.g. $(eval $(generic-package)) or $(eval $(autotools-package)) ,
+> but a few packages have to invoke this macro in other way:
+> $(eval $(call generic-package)) e.g. dhcpcd.mk
+> $(eval $(call autotools-package)) e.g. wireshark.mk .
 
-Unfortunately, no, it's not the correct. You should submit a patch
-against Buildroot, which adds a patch in
-package/x11r7/xserver_xorg-server/ that fixes the bug you're seeing.
+I rather think that the 'call' is an accident. Arnout removed the need
+for the extra $(call) in July 2012, with commit
+e1502ebc0c92763896c53d405ee9c7c7a1a33e24, and both dhcpcd and
+wireshark were added after that time. So I think this has been missed
+during code review.
 
-See http://buildroot.org/downloads/manual/manual.html#patch-policy.
+A quick search shows only three packages with a remaining $(eval
+$(call)) construct: dhcpcd, wireshark, jquery-keyboard.
+So I'd rather fix those packages...
 
-Also, it'd be good to see if this patch has been fixed upstream
-already. If it's already fixed upstream, either backport the upstream
-patch, or bump the X.org server version used in Buildroot. If not, then
-try to submit your patch upstream so that it gets integrated in future
-releases of X.org.
-
-Thanks,
-
+Best regards,
 Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
