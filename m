@@ -1,34 +1,44 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 11 Sep 2013 14:15:15 +0200
-Subject: [Buildroot] [git commit] Makefile: also unexport PKG_CONFIG_LIBDIR
-Message-ID: <20130911121620.BF7109B6F7@busybox.osuosl.org>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed, 11 Sep 2013 09:53:44 -0300
+Subject: [Buildroot] [PATCH] nommu/flat: build packages with the correct
+	FLAGS
+Message-ID: <1378904024-14607-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=bdf472d5bf9b90322c38886814e29bdf8921c5af
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+When building for nommu flat targets the CFLAGS/CXXFLAGS/LDFLAGS must be
+adjusted accordingly.
+For gcc this means passing along -Wl,-elf2flt to signal the linker.
+For ld this means -elf2flt.
 
-Similar to how we do it for _PATH / _SYSROOT_DIR. Buildroot gets fairly
-confused if the user has set up a custom PKG_CONFIG_LIBDIR, so ensure
-it gets unset.
+Also correct the error in STACKSIZE settings from commit 9edf482d which
+is setting gcc flags as ld flags and will surely fail (no package uses
+it at the moment so it was never seen).
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- Makefile |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+ package/Makefile.in | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/Makefile b/Makefile
-index 3ca7313..8610592 100644
---- a/Makefile
-+++ b/Makefile
-@@ -175,6 +175,7 @@ export HOSTCC_NOCCACHE HOSTCXX_NOCCACHE
- # Make sure pkg-config doesn't look outside the buildroot tree
- unexport PKG_CONFIG_PATH
- unexport PKG_CONFIG_SYSROOT_DIR
-+unexport PKG_CONFIG_LIBDIR
+diff --git a/package/Makefile.in b/package/Makefile.in
+index 91ae1b9..dd365be 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -115,7 +115,11 @@ TARGET_CXXFLAGS = $(TARGET_CFLAGS)
+ TARGET_LDFLAGS = $(call qstrip,$(BR2_TARGET_LDFLAGS))
  
- # Having DESTDIR set in the environment confuses the installation
- # steps of some packages.
+ ifeq ($(BR2_BINFMT_FLAT),y)
+-TARGET_LDFLAGS += $(if $($(PKG)_FLAT_STACKSIZE),-Wl$(comma)-elf2flt=-s$($(PKG)_FLAT_STACKSIZE))
++TARGET_CFLAGS += $(if $($(PKG)_FLAT_STACKSIZE),-Wl$(comma)-elf2flt=-s$($(PKG)_FLAT_STACKSIZE),\
++	-Wl$(comma)-elf2flt)
++TARGET_CXXFLAGS += $(if $($(PKG)_FLAT_STACKSIZE),-Wl$(comma)-elf2flt=-s$($(PKG)_FLAT_STACKSIZE),\
++	-Wl$(comma)-elf2flt)
++TARGET_LDFLAGS += $(if $($(PKG)_FLAT_STACKSIZE),-elf2flt=-s$($(PKG)_FLAT_STACKSIZE),-elf2flt)
+ endif
+ 
+ ifeq ($(BR2_BINFMT_FLAT_SHARED),y)
+-- 
+1.8.1.5
