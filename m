@@ -1,37 +1,32 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 11 Sep 2013 09:12:06 -0300
-Subject: [Buildroot] [PATCH 3/3] toolchain/gcc: add elf2flt to dependencies
-In-Reply-To: <1378901526-29167-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1378901526-29167-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1378901526-29167-3-git-send-email-gustavo@zacarias.com.ar>
+Date: Wed, 11 Sep 2013 09:14:16 -0300
+Subject: [Buildroot] [PATCH] gcc-initial: Add host-elf2flt dependency
+ when BR2_PACKAGE_HOST_ELF2FLT=y
+In-Reply-To: <20130904181958.36251b69@skate>
+References: <1378307915.5313.1.camel@phoenix> <20130904181958.36251b69@skate>
+Message-ID: <52305E98.7040202@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add host-elf2flt to the gcc common dependencies so we get it built after
-binutils but before gcc/uclibc since it's required for all packages and
-in some uClibc configuration scenarios.
+On 09/04/2013 01:19 PM, Thomas Petazzoni wrote:
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/gcc/gcc.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+> Dear Axel Lin,
+> 
+> On Wed, 04 Sep 2013 23:18:35 +0800, Axel Lin wrote:
+>> It's needed for some uClibc combination, link-flat.so which uses elf2flt
+>> pulls in libgcc according to uclibc/Makerules (used in uclibc/libc/Makefile.in).
+>> Thus pull it in for gcc-initial.
+>>
+>> This also ensures elf2flt is ready when BR2_PACKAGE_HOST_ELF2FLT=y before
+>> building other packages.
+>>
+>> Signed-off-by: Axel Lin <axel.lin@ingics.com>
+> 
+> Reviewed-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
-index 6654b51..157357c 100644
---- a/package/gcc/gcc.mk
-+++ b/package/gcc/gcc.mk
-@@ -86,7 +86,8 @@ endef
- HOST_GCC_COMMON_DEPENDENCIES = \
- 	host-binutils \
- 	host-gmp \
--	host-mpfr
-+	host-mpfr \
-+	$(if $(BR2_BINFMT_FLAT),host-elf2flt)
- 
- HOST_GCC_COMMON_CONF_OPT = \
- 	--target=$(GNU_TARGET_NAME) \
--- 
-1.8.1.5
+Actually pulling in host-elf2flt should depend on BINFMT_FLAT rather
+than the package being selected, as per the patch i've just sent.
+Regards.
