@@ -1,152 +1,115 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 11 Sep 2013 19:39:58 +0200
-Subject: [Buildroot] [PATCH 1/3] Makefile: factorize *config dependencies
-In-Reply-To: <1378646129-4167-2-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1378646129-4167-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1378646129-4167-2-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20130911173958.GC3410@free.fr>
+From: Matt Weber <mlweber1@rockwellcollins.com>
+Date: Wed, 11 Sep 2013 13:13:59 -0500
+Subject: [Buildroot] [PATCH v2] omniorb: new package
+Message-ID: <1378923239-30344-1-git-send-email-mlweber1@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
 
-On 2013-09-08 15:15 +0200, Thomas Petazzoni spake thusly:
-> All of the *config targets have common dependencies. Currently, the
-> only common dependency is the 'outputmakefile' target, but as we are
-> going to add one more, it makes sense to factorize these common
-> dependencies under the COMMON_CONFIG_DEPS variable.
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Matt Weber <mlweber1@rockwellcollins.com>
+---
+Changes v1 -> v2:
+  * Fixed formatting of help and added select of python in  package/omniorb/Config.in (suggested by Thomas)
+  * Removed extra open ended config option as it isn't used  package/omniorb/Config.in (suggested by Thomas)
+  * Cleaned up use of brackets and replaced with braces package/omniorb/Config.in (suggested by Thomas)
+  * Updated licenses to be GPL and LGPL with a + package/omniorb/omniorb.mk (suggested by Thomas)
+  * Removed redundant conf opt and target install sets package/omniorb/omniorb.mk (suggested by Thomas)
+  * Added a post install step to replace overloading the default staging installs package/omniorb/omniorb.mk (suggested by Thomas)
+  * Broke out tools(host) build into seperate post conf step package/omniorb/omniorb.mk (suggested by Thomas)
+  * Removed clean and uninstall package/omniorb/omniorb.mk (suggested by Thomas)
 
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ package/Config.in          |    1 +
+ package/omniorb/Config.in  |    9 ++++++++
+ package/omniorb/omniorb.mk |   50 ++++++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 60 insertions(+), 0 deletions(-)
+ create mode 100644 package/omniorb/Config.in
+ create mode 100644 package/omniorb/omniorb.mk
 
-> ---
->  Makefile | 37 ++++++++++++++++++++-----------------
->  1 file changed, 20 insertions(+), 17 deletions(-)
-> 
-> diff --git a/Makefile b/Makefile
-> index 0d7476a..fc55b87 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -633,43 +633,46 @@ COMMON_CONFIG_ENV = \
->  	KCONFIG_TRISTATE=$(BUILD_DIR)/buildroot-config/tristate.config \
->  	BUILDROOT_CONFIG=$(BUILDROOT_CONFIG)
->  
-> -xconfig: $(BUILD_DIR)/buildroot-config/qconf outputmakefile
-> +COMMON_CONFIG_DEPS = \
-> +	outputmakefile
-> +
-> +xconfig: $(BUILD_DIR)/buildroot-config/qconf $(COMMON_CONFIG_DEPS)
->  	@mkdir -p $(BUILD_DIR)/buildroot-config
->  	@$(COMMON_CONFIG_ENV) $< $(CONFIG_CONFIG_IN)
->  
-> -gconfig: $(BUILD_DIR)/buildroot-config/gconf outputmakefile
-> +gconfig: $(BUILD_DIR)/buildroot-config/gconf $(COMMON_CONFIG_DEPS)
->  	@mkdir -p $(BUILD_DIR)/buildroot-config
->  	@$(COMMON_CONFIG_ENV) srctree=$(TOPDIR) $< $(CONFIG_CONFIG_IN)
->  
-> -menuconfig: $(BUILD_DIR)/buildroot-config/mconf outputmakefile
-> +menuconfig: $(BUILD_DIR)/buildroot-config/mconf $(COMMON_CONFIG_DEPS)
->  	@mkdir -p $(BUILD_DIR)/buildroot-config
->  	@$(COMMON_CONFIG_ENV) $< $(CONFIG_CONFIG_IN)
->  
-> -nconfig: $(BUILD_DIR)/buildroot-config/nconf outputmakefile
-> +nconfig: $(BUILD_DIR)/buildroot-config/nconf $(COMMON_CONFIG_DEPS)
->  	@mkdir -p $(BUILD_DIR)/buildroot-config
->  	@$(COMMON_CONFIG_ENV) $< $(CONFIG_CONFIG_IN)
->  
-> -config: $(BUILD_DIR)/buildroot-config/conf outputmakefile
-> +config: $(BUILD_DIR)/buildroot-config/conf $(COMMON_CONFIG_DEPS)
->  	@mkdir -p $(BUILD_DIR)/buildroot-config
->  	@$(COMMON_CONFIG_ENV) $< $(CONFIG_CONFIG_IN)
->  
-> -oldconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
-> +oldconfig: $(BUILD_DIR)/buildroot-config/conf $(COMMON_CONFIG_DEPS)
->  	mkdir -p $(BUILD_DIR)/buildroot-config
->  	@$(COMMON_CONFIG_ENV) $< --oldconfig $(CONFIG_CONFIG_IN)
->  
-> -randconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
-> +randconfig: $(BUILD_DIR)/buildroot-config/conf $(COMMON_CONFIG_DEPS)
->  	@mkdir -p $(BUILD_DIR)/buildroot-config
->  	@$(COMMON_CONFIG_ENV) $< --randconfig $(CONFIG_CONFIG_IN)
->  
-> -allyesconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
-> +allyesconfig: $(BUILD_DIR)/buildroot-config/conf $(COMMON_CONFIG_DEPS)
->  	@mkdir -p $(BUILD_DIR)/buildroot-config
->  	@$(COMMON_CONFIG_ENV) $< --allyesconfig $(CONFIG_CONFIG_IN)
->  
-> -allnoconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
-> +allnoconfig: $(BUILD_DIR)/buildroot-config/conf $(COMMON_CONFIG_DEPS)
->  	@mkdir -p $(BUILD_DIR)/buildroot-config
->  	@$(COMMON_CONFIG_ENV) $< --allnoconfig $(CONFIG_CONFIG_IN)
->  
-> -randpackageconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
-> +randpackageconfig: $(BUILD_DIR)/buildroot-config/conf $(COMMON_CONFIG_DEPS)
->  	@mkdir -p $(BUILD_DIR)/buildroot-config
->  	@grep -v BR2_PACKAGE_ $(BUILDROOT_CONFIG) > $(CONFIG_DIR)/.config.nopkg
->  	@grep '^config BR2_PACKAGE_' Config.in.legacy | \
-> @@ -680,7 +683,7 @@ randpackageconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
->  		$< --randconfig $(CONFIG_CONFIG_IN)
->  	@rm -f $(CONFIG_DIR)/.config.nopkg
->  
-> -allyespackageconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
-> +allyespackageconfig: $(BUILD_DIR)/buildroot-config/conf $(COMMON_CONFIG_DEPS)
->  	@mkdir -p $(BUILD_DIR)/buildroot-config
->  	@grep -v BR2_PACKAGE_ $(BUILDROOT_CONFIG) > $(CONFIG_DIR)/.config.nopkg
->  	@grep '^config BR2_PACKAGE_' Config.in.legacy | \
-> @@ -691,7 +694,7 @@ allyespackageconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
->  		$< --allyesconfig $(CONFIG_CONFIG_IN)
->  	@rm -f $(CONFIG_DIR)/.config.nopkg
->  
-> -allnopackageconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
-> +allnopackageconfig: $(BUILD_DIR)/buildroot-config/conf $(COMMON_CONFIG_DEPS)
->  	@mkdir -p $(BUILD_DIR)/buildroot-config
->  	@grep -v BR2_PACKAGE_ $(BUILDROOT_CONFIG) > $(CONFIG_DIR)/.config.nopkg
->  	@$(COMMON_CONFIG_ENV) \
-> @@ -699,23 +702,23 @@ allnopackageconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
->  		$< --allnoconfig $(CONFIG_CONFIG_IN)
->  	@rm -f $(CONFIG_DIR)/.config.nopkg
->  
-> -silentoldconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
-> +silentoldconfig: $(BUILD_DIR)/buildroot-config/conf $(COMMON_CONFIG_DEPS)
->  	@mkdir -p $(BUILD_DIR)/buildroot-config
->  	$(COMMON_CONFIG_ENV) $< --silentoldconfig $(CONFIG_CONFIG_IN)
->  
-> -olddefconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
-> +olddefconfig: $(BUILD_DIR)/buildroot-config/conf $(COMMON_CONFIG_DEPS)
->  	@mkdir -p $(BUILD_DIR)/buildroot-config
->  	$(COMMON_CONFIG_ENV) $< --olddefconfig $(CONFIG_CONFIG_IN)
->  
-> -defconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
-> +defconfig: $(BUILD_DIR)/buildroot-config/conf $(COMMON_CONFIG_DEPS)
->  	@mkdir -p $(BUILD_DIR)/buildroot-config
->  	@$(COMMON_CONFIG_ENV) $< --defconfig$(if $(DEFCONFIG),=$(DEFCONFIG)) $(CONFIG_CONFIG_IN)
->  
-> -%_defconfig: $(BUILD_DIR)/buildroot-config/conf $(TOPDIR)/configs/%_defconfig outputmakefile
-> +%_defconfig: $(BUILD_DIR)/buildroot-config/conf $(TOPDIR)/configs/%_defconfig $(COMMON_CONFIG_DEPS)
->  	@mkdir -p $(BUILD_DIR)/buildroot-config
->  	@$(COMMON_CONFIG_ENV) $< --defconfig=$(TOPDIR)/configs/$@ $(CONFIG_CONFIG_IN)
->  
-> -savedefconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
-> +savedefconfig: $(BUILD_DIR)/buildroot-config/conf $(COMMON_CONFIG_DEPS)
->  	@mkdir -p $(BUILD_DIR)/buildroot-config
->  	@$(COMMON_CONFIG_ENV) $< \
->  		--savedefconfig=$(if $(DEFCONFIG),$(DEFCONFIG),$(CONFIG_DIR)/defconfig) \
-> -- 
-> 1.8.1.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/Config.in b/package/Config.in
+index a94cb62..b4cc869 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -600,6 +600,7 @@ source "package/libupnp/Config.in"
+ source "package/libvncserver/Config.in"
+ source "package/libwebsockets/Config.in"
+ source "package/nss-mdns/Config.in"
++source "package/omniorb/Config.in"
+ source "package/openpgm/Config.in"
+ source "package/ortp/Config.in"
+ source "package/slirp/Config.in"
+diff --git a/package/omniorb/Config.in b/package/omniorb/Config.in
+new file mode 100644
+index 0000000..eaa1585
+--- /dev/null
++++ b/package/omniorb/Config.in
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_OMNIORB
++	bool "omniorb"
++	select BR2_PACKAGE_PYTHON
++	help
++	  omniORB is a robust high performance CORBA ORB for C++ and Python.
++	  omniORB is largely CORBA 2.6 compliant. omniORB is one of only 
++	  three ORBs to have been awarded the Open Group's Open Brand for 
++	  CORBA. This means that omniORB has been tested and certified 
++	  CORBA compliant, to version 2.1 of the CORBA specification. 
+diff --git a/package/omniorb/omniorb.mk b/package/omniorb/omniorb.mk
+new file mode 100644
+index 0000000..15f7ced
+--- /dev/null
++++ b/package/omniorb/omniorb.mk
+@@ -0,0 +1,50 @@
++################################################################################
++#
++# omniorb
++#
++################################################################################
++
++OMNIORB_VERSION = 4.1.6
++OMNIORB_SITE = http://downloads.sourceforge.net/project/omniorb/omniORB/omniORB-$(OMNIORB_VERSION)
++OMNIORB_SOURCE = omniORB-$(OMNIORB_VERSION).tar.bz2
++OMNIORB_INSTALL_STAGING = YES
++OMNIORB_LICENSE = GPL2+ LGPLv2.1+
++OMNIORB_LICENSE_FILES = COPYING COPYING.LIB
++OMNIORB_DEPENDENCIES += host-python
++
++ifeq ($(BR2_PACKAGE_PYTHON),y)
++	OMNIORB_DEPENDENCIES += python
++	OMNIORB_CONF_OPT += --enable-python-bindings
++else
++	OMNIORB_CONF_OPT += --disable-python-bindings
++endif
++
++
++# The following is a space-separated list of files that need to have directory fixups
++OMNIORB_FIXUP_FILES = ${STAGING_DIR}/usr/bin/omniidl
++
++# Should be able to create a patch that cleans this up.........
++define OMNIORB_FIXUP_FILE_PATHS_HOOK
++	echo "Fixing file paths..."
++	for i in $(OMNIORB_FIXUP_FILES); do \
++	$(SED) "s:$(HOST_DIR)/usr:/usr:g" $$i; \
++	done
++endef
++OMNIORB_POST_INSTALL_STAGING_HOOKS += OMNIORB_FIXUP_FILE_PATHS_HOOK 
++
++# OMNIORB is currently not cross-compile friendly and has some assumptions where
++# a couple host tools are built in place and then used during the build.  The tools
++# generate code from the IDL description language, which is then built into the 
++# cross compiled OMNIORB application.
++# So this hook first builds the couple tools required for the host side generation of code.
++# It then leaves/places them in the locations where the existing build infrastructure expects.
++define OMNIORB_TOOLS_HOOK
++	${HOST_MAKE_ENV} ${MAKE} CXX=${HOSTCXX} CC=${HOSTCC} -C $(@D)/src/tool/omkdepend
++	cp $(@D)/src/tool/omkdepend/omkdepend $(@D)/bin/
++	${HOST_MAKE_ENV} ${MAKE} CXX=${HOSTCXX} CC=${HOSTCC} -C $(@D)/src/tool/omniidl/cxx/cccp
++	${HOST_MAKE_ENV} ${MAKE} CXX=${HOSTCXX} CC=${HOSTCC} -C $(@D)/src/tool/omniidl/cxx
++endef
++OMNIORB_POST_CONFIGURE_HOOKS += OMNIORB_TOOLS_HOOK
++
++$(eval $(autotools-package))
++
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.7.1
