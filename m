@@ -1,34 +1,34 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 11 Sep 2013 23:04:33 +0200
-Subject: [Buildroot] adding users in readonly file system
-In-Reply-To: <1378879598226-51085.post@n4.nabble.com>
-References: <1378879598226-51085.post@n4.nabble.com>
-Message-ID: <5230DAE1.30603@mind.be>
+Date: Wed, 11 Sep 2013 23:22:16 +0200
+Subject: [Buildroot] [PATCH 1/1] aiccu: new package
+In-Reply-To: <AF069D6A-BBA5-4CE4-B424-22362C2C6128@layer-7.net>
+References: <1378677483-2424-1-git-send-email-rommel@layer-7.net>
+ <AF069D6A-BBA5-4CE4-B424-22362C2C6128@layer-7.net>
+Message-ID: <5230DF08.9080402@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 11/09/13 08:06, sajjadi335 wrote:
-> Hi
->
-> I have searched for a while for this, but have not been able to find
-> anything. I am not familiar with how linux manages users. So this might be
-> something obvious I don't know.
-> My problem is I have an embedded system with a readonly root fs, and I want
-> to
-> - add a user to the system.
-> - Change both the root and the user password.
-> How could that be done?
+On 11/09/13 20:34, Michael Rommel wrote:
+> @Arnout: you made comment regarding use of the toolchains from the
+> autobuilders. I do not fully understand what you mean, do you refer to these:
+> http://autobuild.buildroot.net/toolchains/configs/free-electrons/
+> configurations and suggest, that I set up some of these cross compilers to
+> test packages I submit first, if they work under these configs? Which would be
+> the most important ones - I do not have so much space to accomodate them
+> all, so if I must focus on 3-5, which should I take?
 
-  The users are in /etc/passwd and the passwords in /etc/shadow. If you 
-need to be able to modify these at runtime, you can move them to 
-$(TARGET_DIR)/tmp in the post-build script and make symlinks to them.
+  I actually mean e.g. 
+http://autobuild.buildroot.org/toolchains/tarballs/br-powerpc-e500mc-full-2013.05-1.tar.bz2 
+- it has IPv6 and largefile, nothing else.
+
+  One uClibc build is probably sufficient. If something else is wrong it 
+will come out of the autobuilders.
 
   Regards,
   Arnout
-
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
