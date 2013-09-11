@@ -1,122 +1,42 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 11 Sep 2013 07:58:56 +0200
-Subject: [Buildroot] [PATCH v2 7/7] mesa3d-demos: new package
-In-Reply-To: <1378441521-10050-8-git-send-email-spenser@gillilanding.com>
-References: <1378441521-10050-1-git-send-email-spenser@gillilanding.com>
- <1378441521-10050-8-git-send-email-spenser@gillilanding.com>
-Message-ID: <523006A0.40907@mind.be>
+Date: Wed, 11 Sep 2013 08:07:14 +0200
+Subject: [Buildroot] [PATCH 1/1] aiccu: new package
+In-Reply-To: <CAAXf6LXxcmwVN3hoaV0YqNyN5HPYQSkmqtJ4RBwYYOmQJTLUfA@mail.gmail.com>
+References: <1378418213-22160-1-git-send-email-rommel@layer-7.net>
+ <CAAXf6LXZnoX6u1fUD_2HX108_-6JnWaBFowV-yzLxsaeDOfFJA@mail.gmail.com>
+ <CAAXf6LXxcmwVN3hoaV0YqNyN5HPYQSkmqtJ4RBwYYOmQJTLUfA@mail.gmail.com>
+Message-ID: <52300892.2030700@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 06/09/13 06:25, Spenser Gilliland wrote:
+On 08/09/13 13:39, Thomas De Schampheleire wrote:
+> I tried compiling on a powerpc target, but this unfortunately failed:
 >
-> Signed-off-by: Spenser Gilliland <spenser@gillilanding.com>
-> ---
->   package/Config.in                                  |   1 +
->   package/mesa3d-demos/Config.in                     |   8 +
->   .../mesa3d-demos/mesa3d-demos-optional-gl.patch    | 348 +++++++++++++++++++++
->   package/mesa3d-demos/mesa3d-demos.mk               |  63 ++++
->   4 files changed, 420 insertions(+)
->   create mode 100644 package/mesa3d-demos/Config.in
->   create mode 100644 package/mesa3d-demos/mesa3d-demos-optional-gl.patch
->   create mode 100644 package/mesa3d-demos/mesa3d-demos.mk
+> strip aiccu
+> strip: Unable to recognise the format of the input file `aiccu'
+> make[2]: *** [aiccu] Error 1
+> make[2]: Leaving directory
+> `/home/tdescham/repo/contrib/buildroot-review/output/build/aiccu-20070115/unix-console'
 >
-> diff --git a/package/Config.in b/package/Config.in
-> index 27bd70a..e8ceb5a 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -39,6 +39,7 @@ source "package/lttng-modules/Config.in"
->   source "package/lttng-tools/Config.in"
->   source "package/ltrace/Config.in"
->   source "package/memstat/Config.in"
-> +source "package/mesa3d-demos/Config.in"
+>
+> The aiccu/unix-console/Makefile hardcodes the 'strip' command, but
+> this should be the cross-strip, provided by buildroot through
+> TARGET_STRIP. I think that aiccu should be patched to use STRIP, which
+> defaults to 'strip', and aiccu.mk in buildroot should then pass the
+> right STRIP command.
+> This patch could then also be upstreamed...
 
-  I don't think that the Debug tools menu is the right place for this - 
-at least, we have nothing similar there at the moment. How about putting 
-it in the Graphical libraries and applications menu?
-
->   source "package/netperf/Config.in"
->   source "package/oprofile/Config.in"
->   source "package/pax-utils/Config.in"
-> diff --git a/package/mesa3d-demos/Config.in b/package/mesa3d-demos/Config.in
-> new file mode 100644
-> index 0000000..24c29e0
-> --- /dev/null
-> +++ b/package/mesa3d-demos/Config.in
-> @@ -0,0 +1,8 @@
-> +config BR2_PACKAGE_MESA3D_DEMOS
-> +	bool "mesa3d-demos"
-> +	depends on BR2_PACKAGE_HAS_OPENGL || BR2_PACKAGE_HAS_OPENGL_ES \
-> +		|| BR2_PACKAGE_HAS_OPENGL_EGL || BR2_PACKAGE_HAS_OPENVG
-> +	help
-> +	  OpenGL demos from the Mesa 3D project.
-> +
-> +	  http://mesa3d.org
-> diff --git a/package/mesa3d-demos/mesa3d-demos-optional-gl.patch b/package/mesa3d-demos/mesa3d-demos-optional-gl.patch
-> new file mode 100644
-> index 0000000..9345d29
-> --- /dev/null
-> +++ b/package/mesa3d-demos/mesa3d-demos-optional-gl.patch
-> @@ -0,0 +1,348 @@
-> +This patch makes the egl stuff work with other opengles providers and makes
-> +it possible to build the demos without opengl (only opengles.)
-
-  Can you upstream this? Probably needs to be split into two patches in 
-that case.
-
-> +
-> +Signed-off-by: Spenser Gilliland <spenser@gillilanding.com>
-> +---
-> +Index: mesa3d-demos-8.1.0/configure.ac
-> +===================================================================
-> +--- mesa3d-demos-8.1.0.orig/configure.ac	2013-02-24 04:49:47.000000000 -0600
-> ++++ mesa3d-demos-8.1.0/configure.ac	2013-09-05 10:01:19.137886856 -0500
-> +@@ -51,6 +51,14 @@
-> +   ACLOCAL="aclocal -I/other/macro/dir" before running autoreconf.])])
-> + PKG_PROG_PKG_CONFIG()
-> +
-> ++AC_ARG_ENABLE([gl],
-> ++    [AS_HELP_STRING([--enable-gl],
-> ++        [enable GL library @<:@default=no@:>@])],
-> ++    [gl_enabled="$enableval"],
-> ++    [gl_enabled=auto])
-> ++
-> ++if test "x$gl_enabled" != "xno"; then
-> ++
-> + dnl Get the pkg-config definitions for libGL.  We include a fallback
-> + dnl path for GL implementation that don't provide a .pc file
-> + PKG_CHECK_MODULES(GL, [gl], [], [
-> +@@ -103,6 +111,8 @@
-> + DEMO_CFLAGS="$DEMO_CFLAGS $GLU_CFLAGS"
-> + DEMO_LIBS="$DEMO_LIBS $GLU_LIBS"
-> +
-> ++fi
-> ++
-> + AC_ARG_ENABLE([egl],
-> +     [AS_HELP_STRING([--enable-egl],
-> +         [enable EGL library @<:@default=no@:>@])],
-> +@@ -202,7 +212,6 @@
-> +         [enable support for wayland @<:@default=no@:>@])],
-> +     [wayland_enabled="$enableval"],
-> +     [wayland_enabled=no])
-> +-
-
-  Why remove this line?
-
+  Actually, it is better to remove the strip completely. We strip the 
+target directory in a final step, so that you still have unstripped 
+binaries in the build and staging directories. Most packages leave it up 
+to the distro to strip the binaries - which makes it possible to build 
+foo-dbg packages that have the debug symbols.
 
   Regards,
   Arnout
-
-> + if test "x$wayland_enabled" != "xno"; then
-> +     PKG_CHECK_MODULES(WAYLAND, [wayland-client wayland-egl], [wayland_enabled=yes], [wayland_enabled=no])
-> + fi
-> +@@ -287,7 +296,7 @@
-[snip]
-
-
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
