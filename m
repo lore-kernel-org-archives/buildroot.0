@@ -1,29 +1,26 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Wed, 11 Sep 2013 08:00:19 +0300
-Subject: [Buildroot] [PATCH 0/3] Support for out-of-tree Buildroot
- customization
-In-Reply-To: <1378646129-4167-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1378646129-4167-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20130911050019.GP4644@tarshish>
+From: sajjadi335 <sajjadi335@yahoo.com>
+Date: Tue, 10 Sep 2013 23:06:38 -0700 (PDT)
+Subject: [Buildroot] adding users in readonly file system
+Message-ID: <1378879598226-51085.post@n4.nabble.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Hi
 
-On Sun, Sep 08, 2013 at 03:15:26PM +0200, Thomas Petazzoni wrote:
-> Following the e-mail from Ryan Barnett entitled "[RFC] New feature to
-> handle a custom board folder", I finally took a bit of time to
-> implement how I think the support for externally stored Buildroot
-> customization should be done.
+I have searched for a while for this, but have not been able to find
+anything. I am not familiar with how linux manages users. So this might be
+something obvious I don't know.
+My problem is I have an embedded system with a readonly root fs, and I want
+to
+- add a user to the system.
+- Change both the root and the user password.
+How could that be done? 
 
-Thanks! This set of patched would be very useful for projects I'm involved in.
 
-baruch
 
--- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+--
+View this message in context: http://buildroot-busybox.2317881.n4.nabble.com/adding-users-in-readonly-file-system-tp51085.html
+Sent from the Buildroot (busybox) mailing list archive at Nabble.com.
