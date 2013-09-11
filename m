@@ -1,32 +1,34 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 11 Sep 2013 09:14:16 -0300
-Subject: [Buildroot] [PATCH] gcc-initial: Add host-elf2flt dependency
- when BR2_PACKAGE_HOST_ELF2FLT=y
-In-Reply-To: <20130904181958.36251b69@skate>
-References: <1378307915.5313.1.camel@phoenix> <20130904181958.36251b69@skate>
-Message-ID: <52305E98.7040202@zacarias.com.ar>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Wed, 11 Sep 2013 14:15:15 +0200
+Subject: [Buildroot] [git commit] Makefile: also unexport PKG_CONFIG_LIBDIR
+Message-ID: <20130911121620.BF7109B6F7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 09/04/2013 01:19 PM, Thomas Petazzoni wrote:
+commit: http://git.buildroot.net/buildroot/commit/?id=bdf472d5bf9b90322c38886814e29bdf8921c5af
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Dear Axel Lin,
-> 
-> On Wed, 04 Sep 2013 23:18:35 +0800, Axel Lin wrote:
->> It's needed for some uClibc combination, link-flat.so which uses elf2flt
->> pulls in libgcc according to uclibc/Makerules (used in uclibc/libc/Makefile.in).
->> Thus pull it in for gcc-initial.
->>
->> This also ensures elf2flt is ready when BR2_PACKAGE_HOST_ELF2FLT=y before
->> building other packages.
->>
->> Signed-off-by: Axel Lin <axel.lin@ingics.com>
-> 
-> Reviewed-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Similar to how we do it for _PATH / _SYSROOT_DIR. Buildroot gets fairly
+confused if the user has set up a custom PKG_CONFIG_LIBDIR, so ensure
+it gets unset.
 
-Actually pulling in host-elf2flt should depend on BINFMT_FLAT rather
-than the package being selected, as per the patch i've just sent.
-Regards.
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ Makefile |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index 3ca7313..8610592 100644
+--- a/Makefile
++++ b/Makefile
+@@ -175,6 +175,7 @@ export HOSTCC_NOCCACHE HOSTCXX_NOCCACHE
+ # Make sure pkg-config doesn't look outside the buildroot tree
+ unexport PKG_CONFIG_PATH
+ unexport PKG_CONFIG_SYSROOT_DIR
++unexport PKG_CONFIG_LIBDIR
+ 
+ # Having DESTDIR set in the environment confuses the installation
+ # steps of some packages.
