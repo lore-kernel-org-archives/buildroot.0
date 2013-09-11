@@ -1,36 +1,88 @@
-From: Ryan Barnett <rjbarnet@rockwellcollins.com>
-Date: Wed, 11 Sep 2013 09:58:27 -0500
-Subject: [Buildroot] [PATCH 00/10] Enable SELinux Support in Existing
-	Packages
-In-Reply-To: <CAAXf6LX2+3VukwnPcW++iF=8XqcKQVscoGP2voY7_nkBbz1XtA@mail.gmail.com>
-References: <1378429464-12546-1-git-send-email-rjbarnet@rockwellcollins.com>	<20130908182641.06c78a78@skate>
- <OFAE0C3563.5656CD6E-ON86257BE1.004AAF7F-86257BE1.004B2688@rockwellcollins.com>
- <CAAXf6LX2+3VukwnPcW++iF=8XqcKQVscoGP2voY7_nkBbz1XtA@mail.gmail.com>
-Message-ID: <OF10BF2440.89FD35C6-ON86257BE3.0051B5DB-86257BE3.005241C4@rockwellcollins.com>
+From: =?UTF-8?q?Arnaud=20R=C3=A9billout?= <rebillout@syscom.ch>
+Date: Wed, 11 Sep 2013 17:07:57 +0200
+Subject: [Buildroot] [PATCH] tcping: new package
+Message-ID: <1378912077-8707-1-git-send-email-rebillout@syscom.ch>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas De Schampheleire,
+tcping does a TCP connect to the given ip/port combination. The user can
+specify a timeout in seconds. This is useful in shell scripts running in
+firewalled environments. Often SYNs are just being dropped by firewalls,
+thus connection establishment will be retried several times (for
+minutes) until a TCP timeout is reached. With tcping it is possible to
+check first if the desired port is reachable and then start connection
+establishment.
 
-Thomas De Schampheleire <patrickdepinguin@gmail.com> wrote on 09/11/2013 
-06:48:12 AM:
+http://www.linuxco.de/tcping/tcping.html
+Signed-off-by: Arnaud R?billout <rebillout@syscom.ch>
+---
+ package/Config.in        |  1 +
+ package/tcping/Config.in |  7 +++++++
+ package/tcping/tcping.mk | 27 +++++++++++++++++++++++++++
+ 3 files changed, 35 insertions(+)
+ create mode 100644 package/tcping/Config.in
+ create mode 100644 package/tcping/tcping.mk
 
-> 
-> Not specifically related to this thread, but: would it be possible for
-> you to send your mails to the list in plain text mode, rather than
-> html?
-
-I'm currently trying to work our IT department on it but I'm stuck 
-using Lotus Notes in which they have restricted access some settings for
-my replies in which even if I try to do plain-text email they still it 
-still
-gets sent as MIME format since the setting to change this are locked down.
-
-Thanks,
--Ryan
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130911/bd40c677/attachment.html>
+diff --git a/package/Config.in b/package/Config.in
+index 2351839..fc1ec87 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -854,6 +854,7 @@ source "package/squid/Config.in"
+ source "package/strongswan/Config.in"
+ source "package/stunnel/Config.in"
+ source "package/tcpdump/Config.in"
++source "package/tcping/Config.in"
+ source "package/tcpreplay/Config.in"
+ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ source "package/tftpd/Config.in"
+diff --git a/package/tcping/Config.in b/package/tcping/Config.in
+new file mode 100644
+index 0000000..d440c56
+--- /dev/null
++++ b/package/tcping/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_TCPING
++	bool "tcping"
++	help
++	  tcping does a TCP connect to the given ip/port combination. 
++
++	  http://www.linuxco.de/tcping/tcping.html
++
+diff --git a/package/tcping/tcping.mk b/package/tcping/tcping.mk
+new file mode 100644
+index 0000000..67bb30a
+--- /dev/null
++++ b/package/tcping/tcping.mk
+@@ -0,0 +1,27 @@
++#############################################################
++#
++# tcping
++#
++#############################################################
++TCPING_VERSION = 1.3.5
++TCPING_SOURCE = tcping-$(TCPING_VERSION).tar.gz
++TCPING_SITE = http://www.linuxco.de/tcping
++TCPING_LICENSE = GPLv3+
++
++define TCPING_BUILD_CMDS
++	$(MAKE) CC="$(TARGET_CC)" CCFLAGS="$(TARGET_CFLAGS)" -C $(@D) tcping.linux
++endef
++
++define TCPING_INSTALL_TARGET_CMDS
++	$(INSTALL) -D -m 0755 $(@D)/tcping $(TARGET_DIR)/usr/bin/tcping
++endef
++
++define TCPING_UNINSTALL_TARGET_CMDS
++	rm -f $(TARGET_DIR)/usr/bin/tcping
++endef
++
++define TCPING_CLEAN_CMDS
++	-$(MAKE) -C $(@D) clean
++endef
++
++$(eval $(generic-package))
+-- 
+1.8.4.rc3
