@@ -1,20 +1,38 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 12 Sep 2013 19:22:20 -0300
-Subject: [Buildroot] [PATCH 01/11] libmnl: add patch for uclinux tuple
-In-Reply-To: <87zjrhof4s.fsf@dell.be.48ers.dk>
-References: <1378841180-23467-1-git-send-email-gustavo@zacarias.com.ar>
- <87zjrhof4s.fsf@dell.be.48ers.dk>
-Message-ID: <52323E9C.2060901@zacarias.com.ar>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Fri, 13 Sep 2013 00:23:58 +0200
+Subject: [Buildroot] [git commit] libsoc: add new package
+In-Reply-To: <52323C55.4010201@mind.be> (Arnout Vandecappelle's message of
+ "Fri, 13 Sep 2013 00:12:37 +0200")
+References: <20130912203028.B34909B295@busybox.osuosl.org>
+ <52323C55.4010201@mind.be>
+Message-ID: <87vc25of0h.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 09/12/2013 07:21 PM, Peter Korsgaard wrote:
+>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
 
-> Committed series, thanks - And don't forget to send the patches
-> upstream.
+ >> +LIBSOC_VERSION = 356760dcb93b22d6c67c5232cde2ade8c968c932
+ >> +LIBSOC_SITE = http://github.com/jackmitch/libsoc/tarball/$(LIBSOC_VERSION)
+ >> +LIBSOC_LICENSE = LGPLv2.1
 
-Already sent, i'm pretty quick for well-supported upstream :)
-Regards.
+ Arnout>  Actually, according to the (L)GPL text:
+
+ Arnout> "If the Library does not specify a
+ Arnout> license version number, you may choose any version ever published by
+ Arnout> the Free Software Foundation."
+
+ Arnout>  Since none of the source file specify a license, let alone a version,
+ Arnout> I guess it should be LGPLv2.1+.
+
+Well, the README clearly says:
+
+libsoc is licenced under the LGPLv2.1, please see the COPYING files for
+futher details.
+
+So I've kept it at LGPLv2.1
+
+-- 
+Bye, Peter Korsgaard
