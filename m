@@ -1,101 +1,146 @@
 From: Spenser Gilliland <spenser@gillilanding.com>
-Date: Wed, 11 Sep 2013 22:20:16 -0500
-Subject: [Buildroot] [PATCH v2 5/7] libpng12: new package
-In-Reply-To: <523000A3.9000909@mind.be>
+Date: Wed, 11 Sep 2013 22:21:14 -0500
+Subject: [Buildroot] [PATCH v2 7/7] mesa3d-demos: new package
+In-Reply-To: <523006A0.40907@mind.be>
 References: <1378441521-10050-1-git-send-email-spenser@gillilanding.com>
- <1378441521-10050-6-git-send-email-spenser@gillilanding.com>
- <20130908190457.6406d70d@skate> <523000A3.9000909@mind.be>
-Message-ID: <CAEBucnAgG1nLsFcMhOR=M_ZHcw5CziMx-M6aU4j-J1RA5qNA5A@mail.gmail.com>
+ <1378441521-10050-8-git-send-email-spenser@gillilanding.com>
+ <523006A0.40907@mind.be>
+Message-ID: <CAEBucnBMMx=O9cAuXhXc+LV=27ZXB1KBG9zcSp-K8GB0Dburtg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, Arnout,
+Arnout,
 
-On Wed, Sep 11, 2013 at 12:33 AM, Arnout Vandecappelle <arnout@mind.be> wrote:
-> On 08/09/13 19:04, Thomas Petazzoni wrote:
->>
->> Dear Spenser Gilliland,
->>
->> On Thu,  5 Sep 2013 23:25:19 -0500, Spenser Gilliland wrote:
->>
->>> +config BR2_PACKAGE_LIBPNG12
->>> +       bool "libpng"
+On Wed, Sep 11, 2013 at 12:58 AM, Arnout Vandecappelle <arnout@mind.be> wrote:
+> On 06/09/13 06:25, Spenser Gilliland wrote:
 >>
 >>
->> Maybe:
+>> Signed-off-by: Spenser Gilliland <spenser@gillilanding.com>
+>> ---
+>>   package/Config.in                                  |   1 +
+>>   package/mesa3d-demos/Config.in                     |   8 +
+>>   .../mesa3d-demos/mesa3d-demos-optional-gl.patch    | 348
+>> +++++++++++++++++++++
+>>   package/mesa3d-demos/mesa3d-demos.mk               |  63 ++++
+>>   4 files changed, 420 insertions(+)
+>>   create mode 100644 package/mesa3d-demos/Config.in
+>>   create mode 100644 package/mesa3d-demos/mesa3d-demos-optional-gl.patch
+>>   create mode 100644 package/mesa3d-demos/mesa3d-demos.mk
 >>
->>         bool "libpng12"
->>
->>> +       select BR2_PACKAGE_ZLIB
->>> +       help
->>> +         Library for handling PNG (Portable Network Graphics)
->>> +         images. This installs the 1.2.x series.  Different versions of
->>> +         libpng have different APIs.
->>> +
->>> +         http://www.libpng.org/
->>> diff --git a/package/libpng12/libpng12.mk b/package/libpng12/libpng12.mk
->>> new file mode 100644
->>> index 0000000..39094f2
->>> --- /dev/null
->>> +++ b/package/libpng12/libpng12.mk
->>> @@ -0,0 +1,18 @@
->>>
->>> +################################################################################
->>> +#
->>> +# libpng12
->>> +#
->>>
->>> +################################################################################
->>> +
->>> +LIBPNG12_VERSION = 1.2.50
->>> +LIBPNG12_SERIES = 12
+>> diff --git a/package/Config.in b/package/Config.in
+>> index 27bd70a..e8ceb5a 100644
+>> --- a/package/Config.in
+>> +++ b/package/Config.in
+>> @@ -39,6 +39,7 @@ source "package/lttng-modules/Config.in"
+>>   source "package/lttng-tools/Config.in"
+>>   source "package/ltrace/Config.in"
+>>   source "package/memstat/Config.in"
+>> +source "package/mesa3d-demos/Config.in"
 >
 >
->  Since the 12 is hardcoded in the package name, it is pretty silly to have
-> this as a variable. It's there for consistency with libpng itself, but I
-> don't think that that is required.
->
->
->>> +LIBPNG12_SOURCE = libpng-$(LIBPNG12_VERSION).tar.bz2
->>> +LIBPNG12_SITE =
->>> http://downloads.sourceforge.net/project/libpng/libpng$(LIBPNG12_SERIES)/$(LIBPNG12_VERSION)
->>> +LIBPNG12_LICENSE = libpng license
->>> +LIBPNG12_LICENSE_FILES = LICENSE
->>> +LIBPNG12_INSTALL_STAGING = YES
->>> +LIBPNG12_DEPENDENCIES = host-pkgconf zlib
->>> +LIBPNG12_CONFIG_SCRIPTS = libpng$(LIBPNG12_SERIES)-config libpng-config
->>
->>
->> This last one annoys me a bit: if both libpng and libpng12 install
->> libpng-config, it means that another package that runs libpng-config to
->> find out where libpng is and how to link against it will either be
->> linked against the modern libpng or the older libpng12 depending on
->> which one was installed.
->>
->> Since libpng12 is only installed for compatibility reasons with some
->> packages, I would therefore suggest that we do not install
->> libpng-config in libpng12.mk (and ensure that nothing installed by
->> libpng12 can conflict with the real libpng installation).
->
->
->  Sounds correct to me. It is making things more complex, of course, because
-> you need something like:
->
-> LIBPNG_DEPENDENCIES += $(if $(BR2_PACKAGE_LIBPNG12),libpng12)
->
-> in libpng.mk.
->
->  Or else you have to override the install commands, or patch the Makefile.
+>  I don't think that the Debug tools menu is the right place for this - at
+> least, we have nothing similar there at the moment. How about putting it in
+> the Graphical libraries and applications menu?
 
-Will fix using method above. (also the glaring omission in kconfig
-option name is fixed)
+Will fix.
+
+>
+>>   source "package/netperf/Config.in"
+>>   source "package/oprofile/Config.in"
+>>   source "package/pax-utils/Config.in"
+>> diff --git a/package/mesa3d-demos/Config.in
+>> b/package/mesa3d-demos/Config.in
+>> new file mode 100644
+>> index 0000000..24c29e0
+>> --- /dev/null
+>> +++ b/package/mesa3d-demos/Config.in
+>> @@ -0,0 +1,8 @@
+>> +config BR2_PACKAGE_MESA3D_DEMOS
+>> +       bool "mesa3d-demos"
+>> +       depends on BR2_PACKAGE_HAS_OPENGL || BR2_PACKAGE_HAS_OPENGL_ES \
+>> +               || BR2_PACKAGE_HAS_OPENGL_EGL || BR2_PACKAGE_HAS_OPENVG
+>> +       help
+>> +         OpenGL demos from the Mesa 3D project.
+>> +
+>> +         http://mesa3d.org
+>> diff --git a/package/mesa3d-demos/mesa3d-demos-optional-gl.patch
+>> b/package/mesa3d-demos/mesa3d-demos-optional-gl.patch
+>> new file mode 100644
+>> index 0000000..9345d29
+>> --- /dev/null
+>> +++ b/package/mesa3d-demos/mesa3d-demos-optional-gl.patch
+>> @@ -0,0 +1,348 @@
+>> +This patch makes the egl stuff work with other opengles providers and
+>> makes
+>> +it possible to build the demos without opengl (only opengles.)
+>
+>
+>  Can you upstream this? Probably needs to be split into two patches in that
+> case.
+
+Will do.
+
+>
+>> +
+>> +Signed-off-by: Spenser Gilliland <spenser@gillilanding.com>
+>> +---
+>> +Index: mesa3d-demos-8.1.0/configure.ac
+>> +===================================================================
+>> +--- mesa3d-demos-8.1.0.orig/configure.ac       2013-02-24
+>> 04:49:47.000000000 -0600
+>> ++++ mesa3d-demos-8.1.0/configure.ac    2013-09-05 10:01:19.137886856
+>> -0500
+>> +@@ -51,6 +51,14 @@
+>> +   ACLOCAL="aclocal -I/other/macro/dir" before running autoreconf.])])
+>> + PKG_PROG_PKG_CONFIG()
+>> +
+>> ++AC_ARG_ENABLE([gl],
+>> ++    [AS_HELP_STRING([--enable-gl],
+>> ++        [enable GL library @<:@default=no@:>@])],
+>> ++    [gl_enabled="$enableval"],
+>> ++    [gl_enabled=auto])
+>> ++
+>> ++if test "x$gl_enabled" != "xno"; then
+>> ++
+>> + dnl Get the pkg-config definitions for libGL.  We include a fallback
+>> + dnl path for GL implementation that don't provide a .pc file
+>> + PKG_CHECK_MODULES(GL, [gl], [], [
+>> +@@ -103,6 +111,8 @@
+>> + DEMO_CFLAGS="$DEMO_CFLAGS $GLU_CFLAGS"
+>> + DEMO_LIBS="$DEMO_LIBS $GLU_LIBS"
+>> +
+>> ++fi
+>> ++
+>> + AC_ARG_ENABLE([egl],
+>> +     [AS_HELP_STRING([--enable-egl],
+>> +         [enable EGL library @<:@default=no@:>@])],
+>> +@@ -202,7 +212,6 @@
+>> +         [enable support for wayland @<:@default=no@:>@])],
+>> +     [wayland_enabled="$enableval"],
+>> +     [wayland_enabled=no])
+>> +-
+>
+>
+>  Why remove this line?
+
+Will fix.
 
 >
 >  Regards,
 >  Arnout
+>
+>
+>> + if test "x$wayland_enabled" != "xno"; then
+>> +     PKG_CHECK_MODULES(WAYLAND, [wayland-client wayland-egl],
+>> [wayland_enabled=yes], [wayland_enabled=no])
+>> + fi
+>> +@@ -287,7 +296,7 @@
+>
+> [snip]
+>
 >
 >
 > --
@@ -106,6 +151,8 @@ option name is fixed)
 > LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
 > GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
 
+Thanks,
+Spenser
 
 
 -- 
