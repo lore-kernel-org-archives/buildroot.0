@@ -1,100 +1,52 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 12 Sep 2013 18:44:11 +0200
-Subject: [Buildroot] [PATCH] tcping: new package
-In-Reply-To: <1378912077-8707-1-git-send-email-rebillout@syscom.ch>
-References: <1378912077-8707-1-git-send-email-rebillout@syscom.ch>
-Message-ID: <20130912184411.1afe29d2@skate>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Thu, 12 Sep 2013 18:51:22 +0200
+Subject: [Buildroot] Building Manual Errors
+In-Reply-To: <20130912183745.64503913@skate>
+References: <OF433C040C.2486075F-ON86257BE2.00813B52-86257BE2.0082DB6E@rockwellcollins.com>
+ <CAAXf6LWJ8DM-UBfEi=quWo7g-g_RGSYuRgEJM_y__mh+10F3pQ@mail.gmail.com>
+ <OF56171A80.616C14AA-ON86257BE4.0059D6AD-86257BE4.005A710F@rockwellcollins.com>
+ <20130912183745.64503913@skate>
+Message-ID: <CAAXf6LXS_9G=329VecwOD8hd9x+DD8+6O96o7xPn2jZi6s2iAg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Arnaud R?billout,
+Hi,
 
-Thanks for this contribution! A few comments below, if you could fix
-them and resend an updated version, that'd be great!
+On Thu, Sep 12, 2013 at 6:37 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Dear Ryan Barnett,
+>
+> On Thu, 12 Sep 2013 11:27:51 -0500, Ryan Barnett wrote:
+>
+>> > Samuel: shouldn't we check the dependencies for building the manual
+>> > before someone attemps to do that? On my Linux Mint system
+>> > (=Ubuntu-based) I had to install asciidoc (which pulled in a lot of
+>> > tex deps) and w3m.
+>>
+>> One I idea I had to solve these dependancies issues between specific
+>> versions and packages for all the different distro's is to add all
+>> of the packages that are needed for building manual or any other
+>> buildroot maintenance script (stuff that is in support/scripts) to
+>> buildroot as host packages and then put together a
+>> buildroot_maintenance_defconfig that will build all of the packages
+>> need for the host system to run this scripts. Let me know what
+>> you think about that and we can maybe continue this discussion
+>> in a different thread.
+>
+> My understanding is that asciidoc requires a very large number of TeX /
+> LaTeX dependencies which I really don't think we want to package in
+> Buildroot, so I believe doing this is not such a good idea.
+>
+> Normal users shouldn't need to build the manual, since it's available
+> online for reading. Only developers will care about this, and I believe
+> installing asciidoc is a reasonable requirement for developers.
 
-> http://www.linuxco.de/tcping/tcping.html
-> Signed-off-by: Arnaud R?billout <rebillout@syscom.ch>
+I agree with this.
+But I do think that it would be nice to check for missing
+dependencies, being asciidoc and w3m.
 
-First, leave one empty line before the Signed-off-by line.
-
-On Wed, 11 Sep 2013 17:07:57 +0200, Arnaud R?billout wrote:
-
-> diff --git a/package/tcping/Config.in b/package/tcping/Config.in
-> new file mode 100644
-> index 0000000..d440c56
-> --- /dev/null
-> +++ b/package/tcping/Config.in
-> @@ -0,0 +1,7 @@
-> +config BR2_PACKAGE_TCPING
-> +	bool "tcping"
-> +	help
-> +	  tcping does a TCP connect to the given ip/port combination. 
-
-I believe you could put here a slightly longer description, such as the
-one you've written in your commit log.
-
-> +	  http://www.linuxco.de/tcping/tcping.html
-> +
-> diff --git a/package/tcping/tcping.mk b/package/tcping/tcping.mk
-> new file mode 100644
-> index 0000000..67bb30a
-> --- /dev/null
-> +++ b/package/tcping/tcping.mk
-> @@ -0,0 +1,27 @@
-> +#############################################################
-> +#
-> +# tcping
-> +#
-> +#############################################################
-
-There should be 80 # dashes, and an empty line between this header and
-the first variable.
-
-> +TCPING_VERSION = 1.3.5
-> +TCPING_SOURCE = tcping-$(TCPING_VERSION).tar.gz
-
-This last line is not needed since it is the default value.
-
-> +TCPING_SITE = http://www.linuxco.de/tcping
-> +TCPING_LICENSE = GPLv3+
-
-You should add another line here for the licensing informations:
-
-TCPING_LICENSE_FILES = LICENSE
-
-this will automatically consider the file called 'LICENSE' in the
-tcping source tree as the license file.
-
-> +define TCPING_BUILD_CMDS
-> +	$(MAKE) CC="$(TARGET_CC)" CCFLAGS="$(TARGET_CFLAGS)" -C $(@D) tcping.linux
-> +endef
-
-It's quite unfortunate that the Makefile uses the non-standard CCFLAGS
-instead of CFLAGS, but ok.
-
-> +define TCPING_INSTALL_TARGET_CMDS
-> +	$(INSTALL) -D -m 0755 $(@D)/tcping $(TARGET_DIR)/usr/bin/tcping
-> +endef
-> +
-> +define TCPING_UNINSTALL_TARGET_CMDS
-> +	rm -f $(TARGET_DIR)/usr/bin/tcping
-> +endef
-> +
-> +define TCPING_CLEAN_CMDS
-> +	-$(MAKE) -C $(@D) clean
-> +endef
-
-You can remove the uninstall and clean commands, we are going to remove
-them soon.
-
-Other than that, looks good! Thanks again!
-
+Best regards,
 Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
