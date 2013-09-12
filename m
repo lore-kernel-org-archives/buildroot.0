@@ -1,94 +1,33 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Thu, 12 Sep 2013 09:54:56 +0200
-Subject: [Buildroot] [PATCH 0/3] Support for out-of-tree Buildroot
-	customization
-In-Reply-To: <20130911172709.GB3410@free.fr>
-References: <1378646129-4167-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <OF0AEEFBDE.5291EB54-ON86257BE3.0005DA76-86257BE3.00087A88@rockwellcollins.com>
- <20130911091700.0b24df41@skate>
- <OFA3C6DE52.DF6BBCA7-ON86257BE3.0054A3F9-86257BE3.00577394@rockwellcollins.com>
- <20130911172709.GB3410@free.fr>
-Message-ID: <CAAXf6LVD590fVudge3Fk+2B8pSzvUEV2GQLTcbz=VpOB2HCmtQ@mail.gmail.com>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Thu, 12 Sep 2013 09:42:15 +0200
+Subject: [Buildroot] [git commit] usb_modeswitch_data: bump to version
+	20130807
+Message-ID: <20130912080443.1323A9B725@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+commit: http://git.buildroot.net/buildroot/commit/?id=9cdbe8f30f4cb89c5b3aea44bf3f373231d573e1
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, Sep 11, 2013 at 7:27 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> Ryan, Thomas, All,
->
-[..]
->
-> Yes, as I said above, I would have expected companies (well, people at
-> companies) be stressed by projects deadlines, and that they would work
-> in BR2_EXTERNAL, and only try to upstream later, when it would be too
-> late (for them!) to have proper reviews, since they would be internally
-> committed to their changes in BR2_EXTERNAL, and we would not be able to
-> take their changes.
->
-> But if people use BR2_EXTERNAL as a fallback for anything that did not
-> make it upstream (by lack of time, or of interest), or for purely
-> internal stuff, then I don't see a reason for concern. All the better! :-)
->
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/usb_modeswitch_data/usb_modeswitch_data.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-Not to ruin the atmosphere, but even though Ryan and his colleagues
-may be using BR2_EXTERNAL 'the good way', ultimately helping the
-buildroot project with their contributions, the danger of others not
-doing that is still real. Of course, _not_ contributing changes made
-in a company project was also possible previously, without
-BR2_EXTERNAL, so this is no reason to block the patchset.
-
-In case it may be useful to others: here is how I am using buildroot
-in a company environment. We are not directly tracking mainline, but
-base ourselves on release tarballs. We have one Mercurial repository
-in which each of these release tarballs are extracted (the pristine
-repository). In this repository, no changes are made other than the
-extracting. Since these are release tarballs, there is obviously no
-information about the individual commits made in buildroot git, but
-this is generally not a problem. In case we do want to know who made a
-particular change, we can still look that up in buildroot git.
-A second repository is cloned from this first one, and does contain
-our own changes. This two-repository approach is similar to having a
-pristine branch and a master branch for development, it's a matter of
-choice.
-Our changes are mainly in package/company, board/company and configs.
-This makes updating to a new buildroot release pretty straightforward:
-first the pristine repo is updated with a new tarball. Then, these
-changes are pulled into the development repo, and merged. Most merges
-will be trivial because most changes are in separate files.
-If necessary, changes made upstream are imported as separate commits
-on top of the releases, but this happens only occasionally.
-
-Of course, we do sometimes make changes in standard buildroot files.
-These can be new non-proprietary packages, or other changes throughout
-the tree. We take care to keep this upstreamable, and do effectively
-upstream when/where possible. It are these files that can pose a merge
-conflict, because for example the implementation originally committed
-is slightly different from the one accepted upstream. Or maybe, the
-patch has not yet been accepted upstream when a new release is taken
-in.
-The upstreaming work is currently done by one person (me) and this is
-clearly the weak point. If I stop paying attention to upstreaming, or
-to keeping the changes we make upstreamable, the delta between our
-development repo and mainline buildroot becomes so large that it is a
-nightmare to keep up with newer releases.
-
-In our overall build process, at some point the buildroot repo will be
-cloned at the right revision, the relevant config set, and 'make' will
-be run in buildroot. Afterwards, the result files will be collected
-from output/images and post-processed into the right format to put on
-our boards. One could consider buildroot here as a backend, as Yann
-referred to.
-
-Upstreaming is also done with Mercurial: I convert buildroot git to hg
-using the hg-git extension. Patches are directly sent from Mercurial
-through the patchbomb extension. The only git command I execute is
-'git pull' in the git repo, and possible 'git checkout next' during
-the time there is a master and active next branch.
-
-
-Best regards,
-Thomas
+diff --git a/package/usb_modeswitch_data/usb_modeswitch_data.mk b/package/usb_modeswitch_data/usb_modeswitch_data.mk
+index a9ce006..10a3902 100644
+--- a/package/usb_modeswitch_data/usb_modeswitch_data.mk
++++ b/package/usb_modeswitch_data/usb_modeswitch_data.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-USB_MODESWITCH_DATA_VERSION = 20130610
++USB_MODESWITCH_DATA_VERSION = 20130807
+ USB_MODESWITCH_DATA_SOURCE = usb-modeswitch-data-$(USB_MODESWITCH_DATA_VERSION).tar.bz2
+ USB_MODESWITCH_DATA_SITE = http://www.draisberghof.de/usb_modeswitch
+ USB_MODESWITCH_DATA_DEPENDENCIES = usb_modeswitch
