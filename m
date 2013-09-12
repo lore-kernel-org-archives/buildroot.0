@@ -1,46 +1,97 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 13 Sep 2013 00:06:43 +0200
-Subject: [Buildroot] [PATCH 1/3] downloads: add basic CVS support
-In-Reply-To: <1378901526-29167-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Wed, 11 Sep 2013 09:12:04 -0300")
-References: <1378901526-29167-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87k3ilpudo.fsf@dell.be.48ers.dk>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 13 Sep 2013 00:07:57 +0200
+Subject: [Buildroot] [PATCH 0/3] Support for out-of-tree Buildroot
+ customization
+In-Reply-To: <20130912203359.7e650ebe@skate>
+References: <1378646129-4167-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <OF0AEEFBDE.5291EB54-ON86257BE3.0005DA76-86257BE3.00087A88@rockwellcollins.com>
+ <20130911091700.0b24df41@skate>
+ <OFA3C6DE52.DF6BBCA7-ON86257BE3.0054A3F9-86257BE3.00577394@rockwellcollins.com>
+ <20130911172709.GB3410@free.fr>
+ <CAAXf6LVD590fVudge3Fk+2B8pSzvUEV2GQLTcbz=VpOB2HCmtQ@mail.gmail.com>
+ <20130912202157.536e5904@skate>
+ <F9C551623D2CBB4C9488801D14F864C639AC8DAF@ex-mb1.corp.adtran.com>
+ <20130912203359.7e650ebe@skate>
+Message-ID: <20130912220757.GD3362@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+Thomas, All,
 
- Gustavo> The support is for pserver mode anonymous CVS.
- Gustavo> source-check is based on login since many servers don't support or have
- Gustavo> ls/rls disabled.
+On 2013-09-12 20:33 +0200, Thomas Petazzoni spake thusly:
+> On Thu, 12 Sep 2013 18:25:40 +0000, ANDY KENNEDY wrote:
+> 
+> > This sounds much like the way Linux does things for the IP related
+> > drivers.  Is that the intent we are going for (personally, I think this
+> > is a GREAT idea, as it allows companies to have IP related widgets in
+> > BuildRoot without the fear of being REQUIRED to push back their secret
+> > sauce)?
+> > 
+> > If that is what you intend, you have my vote!
+> 
+> I am not sure what you mean by "IP related drivers". Do you mean
+> proprietary drivers?
+> 
+> It is true that the BR2_EXTERNAL thing raises a licensing question:
+> should the BR2_EXTERNAL contents also be released under GPLv2, like the
+> rest of Buildroot? Do we really want the root filesystem overlays and
+> other highly project-specific contents be released under GPLv2 ?
 
- Gustavo> Usage is pretty straightforward.
- Gustavo> PKG_SITE defines the site hostname and remote directory.
- Gustavo> The module is defined by the bare package name.
- Gustavo> Version is date based.
+IANAL, this is not legal advice, talk to your lawyer.
 
- Gustavo> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
- Gustavo> ---
- Gustavo>  Config.in               |  4 ++++
- Gustavo>  package/pkg-download.mk | 39 +++++++++++++++++++++++++++++----------
- Gustavo>  package/pkg-generic.mk  |  2 ++
- Gustavo>  3 files changed, 35 insertions(+), 10 deletions(-)
+Here are however my toughts on this:
 
- Gustavo> diff --git a/Config.in b/Config.in
- Gustavo> index 65c29b4..158a8ab 100644
- Gustavo> --- a/Config.in
- Gustavo> +++ b/Config.in
- Gustavo> @@ -42,6 +42,10 @@ config BR2_GIT
- Gustavo>  	string "Git command"
- Gustavo>  	default "git"
- 
- Gustavo> +config BR2_CVS
- Gustavo> +	string "Cvs command"
+ 1- all the Config.in and package.mk files, plus the external.mk file,
+    and all other files sourced or otherwise included by a file from
+    Buildroot (and thus use Buildroot's infrastructure) could be
+    considered a derived work of Buildroot, and thus must be licensed
+    with a compatible license,
+ 2- the defconfigs could be considered as what the GPL identifies as the
+    "scripts used to control compilation and installation of the
+    executable", since without the .config file, an end-user can not
+    reproduce the executable(s),
+ 3- everything else might be considered not a derived work of Buildroot,
+    and might not be required to be licensed with a license compatible
+    with Buildroot's license.
 
-I've changed this to "CVS command" and committed, thanks.
+Explanations:
+
+1- It's not because it is to be licensed under a license compatible with
+   the Buildroot  license that it *has* to be distributed. Just that if
+   it *is* distributed, the licensing terms on that should be compatible
+   with Buildroot's licensing terms.
+
+2- That's because Buildroot will most probably build a GPL/LGPL program
+   that will end up in the ytarget that this applies, because of the
+   license of those programs, not because of Buildroot's license. Even
+   if Buildroot was under a different license, this would still apply as
+   long as a GPL/LGPL program ends up in the target.
+
+3- By "everything else", I mean: a package (in Buildroot's terminology:
+   the Config.in and associated .mk file) that directly embbeds the source
+   files (.c and .h and ...) for this package (like the host-mkpasswd).
+   These source files can not be considered a derived work of Buildroot,
+   so Buildroot's license does not apply to those.
+
+So, I think the make legal-stuff should descend into BR2_EXTERNAL, as if
+it was an integral part of Buildroot.
+
+BR2_EXTERNAL is here *just* to separate parts of the recipes from the
+upstream ones, as a mean to clearly separate local changes from the
+upstream reference.
+
+But again: IANAL, this is not legal advice, talk to your legal counsel.
+
+Regards,
+Yann E. MORIN.
 
 -- 
-Bye, Peter Korsgaard
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
