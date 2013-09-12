@@ -1,56 +1,75 @@
-From: Ryan Barnett <rjbarnet@rockwellcollins.com>
-Date: Thu, 12 Sep 2013 12:54:48 -0500
-Subject: [Buildroot] Building Manual Errors
-In-Reply-To: <CAAXf6LW8Gfc_Skos1YbpPbt+G9B-qpU3_6sV4xe1mFSDHLA04Q@mail.gmail.com>
-References: <OF433C040C.2486075F-ON86257BE2.00813B52-86257BE2.0082DB6E@rockwellcollins.com>
- <CAAXf6LWJ8DM-UBfEi=quWo7g-g_RGSYuRgEJM_y__mh+10F3pQ@mail.gmail.com>	<OF56171A80.616C14AA-ON86257BE4.0059D6AD-86257BE4.005A710F@rockwellcollins.com>
- <20130912183745.64503913@skate>	<CAAXf6LXS_9G=329VecwOD8hd9x+DD8+6O96o7xPn2jZi6s2iAg@mail.gmail.com>
- <20130912185609.4e04fb9b@skate>
- <CAAXf6LW8Gfc_Skos1YbpPbt+G9B-qpU3_6sV4xe1mFSDHLA04Q@mail.gmail.com>
-Message-ID: <OF852DA38D.01A2571D-ON86257BE4.0061D76D-86257BE4.006266D9@rockwellcollins.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 12 Sep 2013 20:18:47 +0200
+Subject: [Buildroot] [PATCH 0/3] Support for out-of-tree Buildroot
+ customization
+In-Reply-To: <20130911172709.GB3410@free.fr>
+References: <1378646129-4167-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <OF0AEEFBDE.5291EB54-ON86257BE3.0005DA76-86257BE3.00087A88@rockwellcollins.com>
+ <20130911091700.0b24df41@skate>
+ <OFA3C6DE52.DF6BBCA7-ON86257BE3.0054A3F9-86257BE3.00577394@rockwellcollins.com>
+ <20130911172709.GB3410@free.fr>
+Message-ID: <20130912201847.35df6dfd@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas(es) -
+Dear Yann E. MORIN,
 
-Thomas De Schampheleire <patrickdepinguin@gmail.com> wrote on 09/12/2013 
-12:02:45 PM:
+On Wed, 11 Sep 2013 19:27:09 +0200, Yann E. MORIN wrote:
 
-> On Thu, Sep 12, 2013 at 6:56 PM, Thomas Petazzoni
-> <thomas.petazzoni@free-electrons.com> wrote:
-> > Dear Thomas De Schampheleire,
-> >
-> > On Thu, 12 Sep 2013 18:51:22 +0200, Thomas De Schampheleire wrote:
-> >
-> >> I agree with this.
-> >> But I do think that it would be nice to check for missing
-> >> dependencies, being asciidoc and w3m.
-
-Didn't really think about the dependancies or the black hole that this 
-would imply. I satisfied with just adding these checks and documenting 
-a know working configuration.
-
-> > Agreed, but they should only be checked when the user actually tries 
-to
-> > build the documentation. I don't want to make these additional
-> > mandatory dependencies.
+> > That just becomes nasty and doesn't really easily allow for different 
+> > configurations where you don't always want all your propriety packages
+> > to build. Also it doesn't make your propriety packages visible within
+> > the buildroot menuconfig. The other nice feature is the is that company's
+> > configs are automatically pulled in a separate area.
 > 
-> Yes, fully agreed.
-> Anyone volunteering to make a patch for this? If not, I'm willing to
-> do this, but as time permits.
+> The way *I* see this is that Buildroot is not the main /frontend/ of the
+> build system, but rather a backend. That's the way I use it: I have a
+> kind of /upper-layer/ build system that uses Buildroot as a kind of
+> /backend/.
 
-I don't think I would have time to put the checks into the scripts. With
-not being familiar with these it would be a time consuming addition.
-However, when I'm updating the documentation for SELinux stuff I can add 
-a known working configuration to the manual for my system and the 
-versions too.
+I think that's one way of using it, but that's not necessarily the only
+way we should support. In all the Buildroot based projects I've done,
+I've also tried to make Buildroot directly be the front-end, and
+include whatever build logic is needed within Buildroot.
 
-Thanks,
--Ryan
+I can only remember of one project in which I did not do that, and it
+was because the customer had already written his build logic using
+Buildroot as a back-end.
 
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130912/87c242f7/attachment.html>
+> Yes, as I said above, I would have expected companies (well, people at
+> companies) be stressed by projects deadlines, and that they would work
+> in BR2_EXTERNAL, and only try to upstream later, when it would be too
+> late (for them!) to have proper reviews, since they would be internally
+> committed to their changes in BR2_EXTERNAL, and we would not be able to
+> take their changes.
+> 
+> But if people use BR2_EXTERNAL as a fallback for anything that did not
+> make it upstream (by lack of time, or of interest), or for purely
+> internal stuff, then I don't see a reason for concern. All the better! :-)
+
+If companies are in a hurry, they are not going to upstream anything
+anyway, so we're not loosing something. Today, without BR2_EXTERNAL,
+companies can already fork Buildroot, do a massive amount of changes
+directly within Buildroot, and not upstream anything at all. Therefore,
+adding BR2_EXTERNAL is not going to make things worse.
+
+I believe it could potentially make things better. It might allow
+companies to separate what they consider "company-specific" in the
+BR2_EXTERNAL directory, while still making the Buildroot core changes,
+or open-source package additions in the main Buildroot tree, and submit
+those changes upstream. It allows them to keep cleanly separated the
+changes that will never be upstreamed because it doesn't make sense
+(specific board support, highly specific and proprietary packages) from
+the things that might be upstreamed if the submission effort is made.
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
