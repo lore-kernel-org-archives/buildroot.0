@@ -1,22 +1,20 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 13 Sep 2013 00:21:23 +0200
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu, 12 Sep 2013 19:22:20 -0300
 Subject: [Buildroot] [PATCH 01/11] libmnl: add patch for uclinux tuple
-In-Reply-To: <1378841180-23467-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Tue, 10 Sep 2013 16:26:10 -0300")
+In-Reply-To: <87zjrhof4s.fsf@dell.be.48ers.dk>
 References: <1378841180-23467-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87zjrhof4s.fsf@dell.be.48ers.dk>
+ <87zjrhof4s.fsf@dell.be.48ers.dk>
+Message-ID: <52323E9C.2060901@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+On 09/12/2013 07:21 PM, Peter Korsgaard wrote:
 
- Gustavo> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> Committed series, thanks - And don't forget to send the patches
+> upstream.
 
-Committed series, thanks - And don't forget to send the patches
-upstream.
-
--- 
-Bye, Peter Korsgaard
+Already sent, i'm pretty quick for well-supported upstream :)
+Regards.
