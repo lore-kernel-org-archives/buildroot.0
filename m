@@ -1,68 +1,100 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 12 Sep 2013 22:30:18 +0200
-Subject: [Buildroot] [git commit] libsoc: add new package
-Message-ID: <20130912203028.B34909B295@busybox.osuosl.org>
+Date: Thu, 12 Sep 2013 22:01:17 +0200
+Subject: [Buildroot] [git commit] ubifs filesystem image: line up and
+	improve Config.in options
+Message-ID: <20130912203028.B03379B726@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b7fe073678a7b3202436c4e77d5e20cc54f34734
+commit: http://git.buildroot.net/buildroot/commit/?id=88768fccfce55c786238028d26aecd5b01a9b2e6
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-[Peter: fix help text, doesn't need fork, file header, license tags]
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Triggered by the 'some comment required here', this patch updates the Config.in
+comments for the ubifs filesystem image options. This includes:
+- 'erase block' --> 'eraseblock' (following mtd online documentation)
+- remove 'UBI' prefix to make options uniform. Sometimes the option is not a
+  property of UBI but rather of the flash. Also, line up the name of the option
+  with the help of mkfs.ubifs.
+- add help text on all options, referring to the mkfs.ubifs/ubinize options
+
+Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/Config.in        |    1 +
- package/libsoc/Config.in |    7 +++++++
- package/libsoc/libsoc.mk |   15 +++++++++++++++
- 3 files changed, 23 insertions(+), 0 deletions(-)
+ fs/ubifs/Config.in |   31 ++++++++++++++++++++-----------
+ 1 files changed, 20 insertions(+), 11 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 02e5afc..0d457a6 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -542,6 +542,7 @@ source "package/libnfc/Config.in"
- source "package/libnfc-llcp/Config.in"
- source "package/libqmi/Config.in"
- source "package/libserial/Config.in"
-+source "package/libsoc/Config.in"
- source "package/libusb/Config.in"
- source "package/libusb-compat/Config.in"
- source "package/libv4l/Config.in"
-diff --git a/package/libsoc/Config.in b/package/libsoc/Config.in
-new file mode 100644
-index 0000000..3e750bd
---- /dev/null
-+++ b/package/libsoc/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_LIBSOC
-+	bool "libsoc"
+diff --git a/fs/ubifs/Config.in b/fs/ubifs/Config.in
+index 4cf5d13..70ea81e 100644
+--- a/fs/ubifs/Config.in
++++ b/fs/ubifs/Config.in
+@@ -6,27 +6,33 @@ config BR2_TARGET_ROOTFS_UBIFS
+ if BR2_TARGET_ROOTFS_UBIFS
+ 
+ config BR2_TARGET_ROOTFS_UBIFS_LEBSIZE
+-	hex "UBI logical erase block size"
++	hex "logical eraseblock size"
+ 	default 0x1f800
 +	help
-+	  libsoc is a C library for interfacing with common SoC
-+	  peripherals through generic kernel interfaces
-+
-+	  https://github.com/jackmitch/libsoc
-diff --git a/package/libsoc/libsoc.mk b/package/libsoc/libsoc.mk
-new file mode 100644
-index 0000000..f310266
---- /dev/null
-+++ b/package/libsoc/libsoc.mk
-@@ -0,0 +1,15 @@
-+################################################################################
-+#
-+# libsoc
-+#
-+################################################################################
-+
-+LIBSOC_VERSION = 356760dcb93b22d6c67c5232cde2ade8c968c932
-+LIBSOC_SITE = http://github.com/jackmitch/libsoc/tarball/$(LIBSOC_VERSION)
-+LIBSOC_LICENSE = LGPLv2.1
-+LIBSOC_LICENSE_FILES = COPYING
-+LIBSOC_AUTORECONF = YES
-+LIBSOC_INSTALL_STAGING = YES
-+
-+$(eval $(autotools-package))
-+
++	  Logical eraseblock (LEB) size. The value provided here is
++	  passed to the -e/--leb-size option of mkfs.ubifs.
+ 
+ config BR2_TARGET_ROOTFS_UBIFS_MINIOSIZE
+-	hex "UBI minimum I/O size"
++	hex "minimum I/O unit size"
+ 	default 0x800
+ 	help
+-	  Some comment required here
++	  Minimum I/O unit size. The value provided here is passed
++	  to the -m/--min-io-size option of mkfs.ubifs/ubinize.
+ 
+ config BR2_TARGET_ROOTFS_UBIFS_MAXLEBCNT
+-	int "Maximum LEB count"
++	int "maximum logical eraseblock count"
+ 	default 2048
+ 	help
+-	  Some comment required here
++	  Maximum logical eraseblock (LEB) count. The value provided
++	  here is passed to the -c/--max-leb-cnt option of mkfs.ubifs.
+ 
+ choice
+ 	prompt "ubifs runtime compression"
+ 	default BR2_TARGET_ROOTFS_UBIFS_RT_LZO
+ 	help
+ 	  Select which compression format to use at run-time within
+-	  the ubifs file system.
++	  the ubifs file system. The choice made here is passed to
++	  the -x/--compr option of mkfs.ubifs
+ 
+ config BR2_TARGET_ROOTFS_UBIFS_RT_NONE
+ 	bool "no compression"
+@@ -97,18 +103,21 @@ config BR2_TARGET_ROOTFS_UBI
+ if BR2_TARGET_ROOTFS_UBI
+ 
+ config BR2_TARGET_ROOTFS_UBI_PEBSIZE
+-	hex "UBI physical erase block size"
++	hex "physical eraseblock size"
+ 	default 0x20000
+ 	help
+-	  Tells ubinize the physical eraseblock size of the flash chip
+-	  the ubi image is created for.
++	  Tells ubinize the physical eraseblock (PEB) size of the
++	  flash chip the ubi image is created for. The value provided
++	  here is passed to the -p/--peb-size option of ubinize.
+ 
+ config BR2_TARGET_ROOTFS_UBI_SUBSIZE
+-	int "UBI sub-page size"
++	int "sub-page size"
+ 	default 512
+ 	help
+ 	  Tells ubinize that the flash supports sub-pages and the sub-page
+-	  size. Use 0 if subpages are not supported on flash chip.
++	  size. Use 0 if sub-pages are not supported on flash chip.
++	  The value provided here is passed to the -s/--sub-page-size
++	  option of ubinize.
+ 
+ config BR2_TARGET_ROOTFS_UBI_OPTS
+ 	string "Additional ubinize options"
