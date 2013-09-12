@@ -1,46 +1,37 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 13 Sep 2013 00:12:15 +0200
-Subject: [Buildroot] [git commit] nommu/flat: build packages with the
-	correct FLAGS
-Message-ID: <20130912223325.617849B295@busybox.osuosl.org>
+Date: Fri, 13 Sep 2013 00:08:04 +0200
+Subject: [Buildroot] [git commit] toolchain/gcc: add elf2flt to dependencies
+Message-ID: <20130912223325.58BDB9B295@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=71701eb6d77f2fe03124f559ed0d1a9e559b3d17
+commit: http://git.buildroot.net/buildroot/commit/?id=4fc45ccca5de28fec0b1f777f3b6c920b02c2dcf
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-When building for nommu flat targets the CFLAGS/CXXFLAGS/LDFLAGS must be
-adjusted accordingly.
-For gcc this means passing along -Wl,-elf2flt to signal the linker.
-For ld this means -elf2flt.
-
-Also correct the error in STACKSIZE settings from commit 9edf482d which
-is setting gcc flags as ld flags and will surely fail (no package uses
-it at the moment so it was never seen).
+Add host-elf2flt to the gcc common dependencies so we get it built after
+binutils but before gcc/uclibc since it's required for all packages and
+in some uClibc configuration scenarios.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/Makefile.in |    6 +++++-
- 1 files changed, 5 insertions(+), 1 deletions(-)
+ package/gcc/gcc.mk |    3 ++-
+ 1 files changed, 2 insertions(+), 1 deletions(-)
 
-diff --git a/package/Makefile.in b/package/Makefile.in
-index 91ae1b9..dd365be 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -115,7 +115,11 @@ TARGET_CXXFLAGS = $(TARGET_CFLAGS)
- TARGET_LDFLAGS = $(call qstrip,$(BR2_TARGET_LDFLAGS))
+diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
+index 6654b51..157357c 100644
+--- a/package/gcc/gcc.mk
++++ b/package/gcc/gcc.mk
+@@ -86,7 +86,8 @@ endef
+ HOST_GCC_COMMON_DEPENDENCIES = \
+ 	host-binutils \
+ 	host-gmp \
+-	host-mpfr
++	host-mpfr \
++	$(if $(BR2_BINFMT_FLAT),host-elf2flt)
  
- ifeq ($(BR2_BINFMT_FLAT),y)
--TARGET_LDFLAGS += $(if $($(PKG)_FLAT_STACKSIZE),-Wl$(comma)-elf2flt=-s$($(PKG)_FLAT_STACKSIZE))
-+TARGET_CFLAGS += $(if $($(PKG)_FLAT_STACKSIZE),-Wl$(comma)-elf2flt=-s$($(PKG)_FLAT_STACKSIZE),\
-+	-Wl$(comma)-elf2flt)
-+TARGET_CXXFLAGS += $(if $($(PKG)_FLAT_STACKSIZE),-Wl$(comma)-elf2flt=-s$($(PKG)_FLAT_STACKSIZE),\
-+	-Wl$(comma)-elf2flt)
-+TARGET_LDFLAGS += $(if $($(PKG)_FLAT_STACKSIZE),-elf2flt=-s$($(PKG)_FLAT_STACKSIZE),-elf2flt)
- endif
- 
- ifeq ($(BR2_BINFMT_FLAT_SHARED),y)
+ HOST_GCC_COMMON_CONF_OPT = \
+ 	--target=$(GNU_TARGET_NAME) \
