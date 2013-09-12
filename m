@@ -1,51 +1,46 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 13 Sep 2013 00:07:07 +0200
-Subject: [Buildroot] [git commit] docs/manual: add CVS support documentation
-Message-ID: <20130912223325.4FBD79B295@busybox.osuosl.org>
+Date: Fri, 13 Sep 2013 00:12:15 +0200
+Subject: [Buildroot] [git commit] nommu/flat: build packages with the
+	correct FLAGS
+Message-ID: <20130912223325.617849B295@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=457620232ee181d122c198900f1f2247f5110a55
+commit: http://git.buildroot.net/buildroot/commit/?id=71701eb6d77f2fe03124f559ed0d1a9e559b3d17
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+When building for nommu flat targets the CFLAGS/CXXFLAGS/LDFLAGS must be
+adjusted accordingly.
+For gcc this means passing along -Wl,-elf2flt to signal the linker.
+For ld this means -elf2flt.
+
+Also correct the error in STACKSIZE settings from commit 9edf482d which
+is setting gcc flags as ld flags and will surely fail (no package uses
+it at the moment so it was never seen).
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- docs/manual/adding-packages-generic.txt |    7 +++++++
- docs/manual/prerequisite.txt            |    2 +-
- 2 files changed, 8 insertions(+), 1 deletions(-)
+ package/Makefile.in |    6 +++++-
+ 1 files changed, 5 insertions(+), 1 deletions(-)
 
-diff --git a/docs/manual/adding-packages-generic.txt b/docs/manual/adding-packages-generic.txt
-index 67967a2..cb067bd 100644
---- a/docs/manual/adding-packages-generic.txt
-+++ b/docs/manual/adding-packages-generic.txt
-@@ -266,6 +266,13 @@ information is (assuming the package name is +libfoo+) :
-      Buildroot performs a checkout which is preserved as a tarball in
-      the download cache; subsequent builds use the tarball instead of
-      performing another checkout.
-+  ** +cvs+ for retrieving source code from a CVS repository.
-+     Used by default when +LIBFOO_SITE+ begins with +cvs://+.
-+     The downloaded source code is cached as with the +svn+ method.
-+     Only anonymous pserver mode is supported.
-+     +LIBFOO_SITE+ 'must' contain the source URL as well as the remote
-+     repository directory. The module is the package name.
-+     +LIBFOO_VERSION+ is 'mandatory' and 'must' be a timestamp.
-   ** +git+ for retrieving source code from a Git repository.  Used by
-      default when +LIBFOO_SITE+ begins with +git://+. The downloaded
-      source code is cached as with the +svn+
-diff --git a/docs/manual/prerequisite.txt b/docs/manual/prerequisite.txt
-index 9d36402..78ce436 100644
---- a/docs/manual/prerequisite.txt
-+++ b/docs/manual/prerequisite.txt
-@@ -52,7 +52,7 @@ Optional packages
- +
- In the official tree, most of the package sources are retrieved
- using +wget+; a few are only available through their +git+, +mercurial+,
--or +svn+ repository.
-++svn+ or +cvs+ repository.
- +
- All other source fetching methods are implemented and may be used in a
- development context (further details: refer to xref:download-infra[]).
+diff --git a/package/Makefile.in b/package/Makefile.in
+index 91ae1b9..dd365be 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -115,7 +115,11 @@ TARGET_CXXFLAGS = $(TARGET_CFLAGS)
+ TARGET_LDFLAGS = $(call qstrip,$(BR2_TARGET_LDFLAGS))
+ 
+ ifeq ($(BR2_BINFMT_FLAT),y)
+-TARGET_LDFLAGS += $(if $($(PKG)_FLAT_STACKSIZE),-Wl$(comma)-elf2flt=-s$($(PKG)_FLAT_STACKSIZE))
++TARGET_CFLAGS += $(if $($(PKG)_FLAT_STACKSIZE),-Wl$(comma)-elf2flt=-s$($(PKG)_FLAT_STACKSIZE),\
++	-Wl$(comma)-elf2flt)
++TARGET_CXXFLAGS += $(if $($(PKG)_FLAT_STACKSIZE),-Wl$(comma)-elf2flt=-s$($(PKG)_FLAT_STACKSIZE),\
++	-Wl$(comma)-elf2flt)
++TARGET_LDFLAGS += $(if $($(PKG)_FLAT_STACKSIZE),-elf2flt=-s$($(PKG)_FLAT_STACKSIZE),-elf2flt)
+ endif
+ 
+ ifeq ($(BR2_BINFMT_FLAT_SHARED),y)
