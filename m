@@ -1,149 +1,87 @@
-From: Ryan Barnett <rjbarnet@rockwellcollins.com>
-Date: Thu, 12 Sep 2013 16:53:36 -0500
-Subject: [Buildroot] Fwd:  [PATCH 2/3] Add support for BR2_EXTERNAL
-In-Reply-To: <CAC2S8kiHUwNFprvvYd85UEGjDJhEX0Jgtb4e7Pd1vwwFGF7m_w@mail.gmail.com>
-References: <1378646129-4167-1-git-send-email-thomas.petazzoni@free-electrons.com>	<1378646129-4167-3-git-send-email-thomas.petazzoni@free-electrons.com>
- <CAC2S8kiHUwNFprvvYd85UEGjDJhEX0Jgtb4e7Pd1vwwFGF7m_w@mail.gmail.com>
-Message-ID: <OF01C3E7FE.7941F7CC-ON86257BE4.0077887C-86257BE4.007843E4@rockwellcollins.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Fri, 13 Sep 2013 00:04:04 +0200
+Subject: [Buildroot] [PATCH 0/3] Support for out-of-tree Buildroot
+	customization
+In-Reply-To: <20130912203359.7e650ebe@skate>
+References: <1378646129-4167-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <OF0AEEFBDE.5291EB54-ON86257BE3.0005DA76-86257BE3.00087A88@rockwellcollins.com>
+ <20130911091700.0b24df41@skate>
+ <OFA3C6DE52.DF6BBCA7-ON86257BE3.0054A3F9-86257BE3.00577394@rockwellcollins.com>
+ <20130911172709.GB3410@free.fr>
+ <CAAXf6LVD590fVudge3Fk+2B8pSzvUEV2GQLTcbz=VpOB2HCmtQ@mail.gmail.com>
+ <20130912202157.536e5904@skate>
+ <F9C551623D2CBB4C9488801D14F864C639AC8DAF@ex-mb1.corp.adtran.com>
+ <20130912203359.7e650ebe@skate>
+Message-ID: <52323A54.7020808@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-While utilizing this patch, I found the following that should be fixed
+On 12/09/13 20:33, Thomas Petazzoni wrote:
+> Dear ANDY KENNEDY,
+>
+> On Thu, 12 Sep 2013 18:25:40 +0000, ANDY KENNEDY wrote:
+>
+>> This sounds much like the way Linux does things for the IP related
+>> drivers.  Is that the intent we are going for (personally, I think this
+>> is a GREAT idea, as it allows companies to have IP related widgets in
+>> BuildRoot without the fear of being REQUIRED to push back their secret
+>> sauce)?
+>>
+>> If that is what you intend, you have my vote!
+>
+> I am not sure what you mean by "IP related drivers". Do you mean
+> proprietary drivers?
+>
+> It is true that the BR2_EXTERNAL thing raises a licensing question:
+> should the BR2_EXTERNAL contents also be released under GPLv2, like the
+> rest of Buildroot? Do we really want the root filesystem overlays and
+> other highly project-specific contents be released under GPLv2 ?
 
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote on 09/12/2013 
-04:39 PM:
+  You can never be sure unless a judge makes a ruling, but the GPL is 
+pretty clear on this:
 
-> diff --git a/Makefile b/Makefile
-> index fc55b87..1014399 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -47,7 +47,6 @@ export HOSTARCH := $(shell uname -m | \
-> 
->  # absolute path
->  TOPDIR:=$(shell pwd)
-> -CONFIG_CONFIG_IN=Config.in
->  CONFIG=support/kconfig
->  DATE:=$(shell date +%Y%m%d)
-> 
-> @@ -339,6 +338,10 @@ include boot/common.mk
->  include linux/linux.mk
->  include system/system.mk
-> 
-> +ifneq ($(BR2_EXTERNAL),)
-> +include $(BR2_EXTERNAL)/external.mk
-> +endif
-> +
->  TARGETS+=target-finalize
-> 
->  ifeq ($(BR2_ENABLE_LOCALE_PURGE),y)
-> @@ -622,6 +625,18 @@ $(BUILD_DIR)/buildroot-config/%onf:
->         mkdir -p $(@D)/lxdialog
->         $(MAKE) CC="$(HOSTCC_NOCCACHE)" HOSTCC="$(HOSTCC_NOCCACHE)"
-> obj=$(@D) -C $(CONFIG) -f Makefile.br $(@F)
-> 
-> +CONFIG_CONFIG_IN=$(BUILD_DIR)/buildroot-config/toplevel.in
-> +
-> +# This is intentionally a virtual target so that the file gets
-> +# regenerated everytime this target is invoked.
-> +toplevelin-generate:
-> +       mkdir -p $(dir $(CONFIG_CONFIG_IN))
-> +       echo "mainmenu \"Buildroot $$BR2_VERSION Configuration\"" >
-> $(CONFIG_CONFIG_IN)
-> +       echo "source \"Config.in\"" >> $(CONFIG_CONFIG_IN)
-> +ifneq ($(BR2_EXTERNAL),)
-> +       echo "source \"$$BR2_EXTERNAL/Config.in\"" >> 
-$(CONFIG_CONFIG_IN)
-> +endif
-> +
->  DEFCONFIG = $(call qstrip,$(BR2_DEFCONFIG))
+"If identifiable sections of that work are not derived from the Program,
+and can be reasonably considered independent and separate works in
+themselves, then this License, and its terms, do not apply to those
+sections when you distribute them as separate works."
 
-Each command above should have a @ symbol since the commands print out 
-every
-time. As follows:
+  i.e. you can distribute the source of buildroot itself separately from 
+your external directory.
 
-+toplevelin-generate:
-+       @mkdir -p $(dir $(CONFIG_CONFIG_IN))
-+       @echo "mainmenu \"Buildroot $$BR2_VERSION Configuration\"" >
-$(CONFIG_CONFIG_IN)
-+       @echo "source \"Config.in\"" >> $(CONFIG_CONFIG_IN)
-+ifneq ($(BR2_EXTERNAL),)
-+       @echo "source \"$$BR2_EXTERNAL/Config.in\"" >> $(CONFIG_CONFIG_IN)
-+endif
-+
+  GPL continues:
 
->  # We don't want to fully expand BR2_DEFCONFIG here, so Kconfig will
-> @@ -631,10 +646,12 @@ COMMON_CONFIG_ENV = \
->         KCONFIG_AUTOCONFIG=$(BUILD_DIR)/buildroot-config/auto.conf \
->         KCONFIG_AUTOHEADER=$(BUILD_DIR)/buildroot-config/autoconf.h \
->         KCONFIG_TRISTATE=$(BUILD_DIR)/buildroot-config/tristate.config \
-> -       BUILDROOT_CONFIG=$(BUILDROOT_CONFIG)
-> +       BUILDROOT_CONFIG=$(BUILDROOT_CONFIG) \
-> +       BR2_EXTERNAL=$(BR2_EXTERNAL)
-> 
->  COMMON_CONFIG_DEPS = \
-> -       outputmakefile
-> +       outputmakefile \
-> +       toplevelin-generate
-> 
->  xconfig: $(BUILD_DIR)/buildroot-config/qconf $(COMMON_CONFIG_DEPS)
->         @mkdir -p $(BUILD_DIR)/buildroot-config
-> @@ -718,6 +735,10 @@ defconfig: $(BUILD_DIR)/buildroot-config/conf
-> $(COMMON_CONFIG_DEPS)
->         @mkdir -p $(BUILD_DIR)/buildroot-config
->         @$(COMMON_CONFIG_ENV) $< --defconfig=$(TOPDIR)/configs/$@
-> $(CONFIG_CONFIG_IN)
-> 
-> +%_defconfig: $(BUILD_DIR)/buildroot-config/conf
-> $(BR2_EXTERNAL)/configs/%_defconfig $(COMMON_CONFIG_DEPS)
-> +       @mkdir -p $(BUILD_DIR)/buildroot-config
-> +       @$(COMMON_CONFIG_ENV) $<
-> --defconfig=$(BR2_EXTERNAL)/configs/$@ $(CONFIG_CONFIG_IN)
-> +
->  savedefconfig: $(BUILD_DIR)/buildroot-config/conf $(COMMON_CONFIG_DEPS)
->         @mkdir -p $(BUILD_DIR)/buildroot-config
->         @$(COMMON_CONFIG_ENV) $< \
-> @@ -829,7 +850,7 @@ endif
->         @echo '  make V=0|1             - 0 => quiet build (default),
-> 1 => verbose build'
->         @echo '  make O=dir             - Locate all output files in
-> "dir", including .config'
->         @echo
-> -       @$(foreach b, $(sort $(notdir $(wildcard
-> $(TOPDIR)/configs/*_defconfig))), \
-> +       @$(foreach b, $(sort $(notdir $(wildcard
-> $(TOPDIR)/configs/*_defconfig $(BR2_EXTERNAL)/configs/*_defconfig))),
-> \
->           printf "  %-35s - Build for %s\\n" $(b) $(b:_defconfig=);)
->         @echo
->         @echo 'See docs/README, or generate the Buildroot manual for
-> further details'
-> diff --git a/docs/manual/manual.mk b/docs/manual/manual.mk
-> index 4906bc8..8e0ab30 100644
-> --- a/docs/manual/manual.mk
-> +++ b/docs/manual/manual.mk
-> @@ -1,6 +1,6 @@
->  manual-update-lists:
->         $(Q)$(call MESSAGE,"Updating the manual lists...")
-> -       $(Q)BR2_DEFCONFIG="" TOPDIR=$(TOPDIR) O=$(O)/docs/manual/.build 
-\
-> +       $(Q)BR2_DEFCONFIG="" BR2_EXTERNAL="$(BR2_EXTERNAL)"
-> TOPDIR=$(TOPDIR) O=$(O)/docs/manual/.build \
->                 $(TOPDIR)/support/scripts/gen-manual-lists.py
-> 
-> 
-> 
-################################################################################
-> --
-> 1.8.1.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+"But when you
+distribute the same sections as part of a whole which is a work based
+on the Program, the distribution of the whole must be on the terms of
+this License, whose permissions for other licensees extend to the
+entire whole, and thus to each and every part regardless of who wrote it.
 
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130912/3f5ae746/attachment.html>
+Thus, it is not the intent of this section to claim rights or contest
+your rights to work written entirely by you; rather, the intent is to
+exercise the right to control the distribution of derivative or
+collective works based on the Program.
+
+In addition, mere aggregation of another work not based on the Program
+with the Program (or with a work based on the Program) on a volume of
+a storage or distribution medium does not bring the other work under
+the scope of this License."
+
+  As long as your external stuff merely aggregates with the GPL'd stuff 
+under buildroot, there shouldn't be an issue.
+
+
+  Regards,
+  Arnout
+
+
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
