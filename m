@@ -1,37 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 12 Sep 2013 09:17:04 +0200
-Subject: [Buildroot] [PATCH 05/17] checkpolicy: new package
-In-Reply-To: <52309DD8.3080506@mind.be>
-References: <1378336196-27403-1-git-send-email-clshotwe@rockwellcollins.com>
- <1378336196-27403-6-git-send-email-clshotwe@rockwellcollins.com>
- <20130906195609.237ba6d0@skate>
- <OFC0C68881.BE62946A-ON86257BE1.005F39EC-86257BE1.00606A14@rockwellcollins.com>
- <52309DD8.3080506@mind.be>
-Message-ID: <20130912091704.3bb27460@skate>
+Date: Thu, 12 Sep 2013 09:23:00 +0200
+Subject: [Buildroot] [PATCH] gcc-initial: Add host-elf2flt dependency
+ when BR2_PACKAGE_HOST_ELF2FLT=y
+In-Reply-To: <CAFRkauDMtOvQj0dx0Xxz2KhWxeHBFERvvU6cohSmpwv5ydRtiQ@mail.gmail.com>
+References: <1378307915.5313.1.camel@phoenix> <20130904181958.36251b69@skate>
+ <52305E98.7040202@zacarias.com.ar>
+ <CAFRkauDMtOvQj0dx0Xxz2KhWxeHBFERvvU6cohSmpwv5ydRtiQ@mail.gmail.com>
+Message-ID: <20130912092300.0b3fbb9d@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Arnout Vandecappelle,
+Dear Axel Lin,
 
-On Wed, 11 Sep 2013 18:44:08 +0200, Arnout Vandecappelle wrote:
+On Thu, 12 Sep 2013 09:13:21 +0800, Axel Lin wrote:
 
->   Note: you'll probably want to add a Config.in.host for this
-> package, so people can select it in their config and use it in a
-> post-build script.
+> Probably not directly related to this topic, but I have a question
+> about the dependency between BR2_BINFMT_FLAT &
+> BR2_PACKAGE_HOST_ELF2FLT.
 > 
->   In the long term, it is probably also a good idea to have a 
-> system-level SELinux menu where you can specify some policy files to
-> be put on the target, and buildroot will compile and install them for
-> you.
+> Why not just make BR2_PACKAGE_HOST_ELF2FLT depend on BR2_BINFMT_FLAT
+> rather than "depends on BR2_arm || BR2_bfin || BR2_sh || BR2_sparc"?
 
-I agree. Usage of SELinux is such a system-wide thing that we might
-need an entry for it in the "System configuration" menu for example.
+As Gustavo pointed out (maybe on IRC ?), BR2_PACKAGE_HOST_ELF2FLT
+should simply be removed. There is no need to have a Kconfig option to
+host tools when they can simply be built as a dependency of something
+else (which is the case here).
 
-But well, let's get the packages merged first, and we'll work together
-to see how to polish the integration.
+The only case for which we add a Kconfig option for host tools is when
+this host tool is not built as a dependency of something else, and that
+the user may still be interested in building it.
 
 Best regards,
 
