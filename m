@@ -1,326 +1,275 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 12 Sep 2013 23:03:07 +0200
-Subject: [Buildroot] [git commit] ola: new package
-Message-ID: <20130912210357.D76D59B726@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 12 Sep 2013 23:04:13 +0200
+Subject: [Buildroot] [PATCH 2/3] Add support for BR2_EXTERNAL
+In-Reply-To: <1378646129-4167-3-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1378646129-4167-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1378646129-4167-3-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <52322C4D.4060202@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b5b940eaaa5e70d754b8f1c9690ae242d6853fce
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+  Hi Thomas,
 
-[Peter: fixup help text]
-Signed-off-by: Dave Skok <blanco.ether@gmail.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/Config.in     |    1 +
- package/ola/Config.in |  134 +++++++++++++++++++++++++++++++++++++++++++++
- package/ola/ola.mk    |  146 +++++++++++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 281 insertions(+), 0 deletions(-)
+  It's funny how people can change their mind...
 
-diff --git a/package/Config.in b/package/Config.in
-index 0d457a6..5835bcb 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -304,6 +304,7 @@ source "package/memtester/Config.in"
- source "package/minicom/Config.in"
- source "package/nanocom/Config.in"
- source "package/neard/Config.in"
-+source "package/ola/Config.in"
- source "package/ofono/Config.in"
- source "package/on2-8170-modules/Config.in"
- source "package/open2300/Config.in"
-diff --git a/package/ola/Config.in b/package/ola/Config.in
-new file mode 100644
-index 0000000..f5a9a7a
---- /dev/null
-+++ b/package/ola/Config.in
-@@ -0,0 +1,134 @@
-+comment "ola requires a toolchain with C++, thread, largefile and wchar support"
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_LARGEFILE || !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
-+
-+config BR2_PACKAGE_OLA
-+	bool "ola (open lighting architecture)"
-+	select BR2_PACKAGE_PROTOBUF
-+	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
-+	select BR2_PACKAGE_UTIL_LINUX
-+	depends on BR2_INSTALL_LIBSTDCPP # protobuf
-+	depends on BR2_LARGEFILE # util-linux
-+	depends on BR2_USE_WCHAR # util-linux
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	help
-+	  Open Lighting Architecture provides applications
-+	  with a mechanism to send and receive DMX512 & RDM
-+	  commands using hardware devices and DMX over IP protocols.
-+
-+	  http://www.opendmx.net/index.php/OLA
-+
-+if BR2_PACKAGE_OLA
-+
-+menu "bindings and interface"
-+
-+config BR2_PACKAGE_OLA_WEB
-+	bool "http interface"
-+	select BR2_PACKAGE_LIBMICROHTTPD
-+	help
-+	  Build OLA with browser interface.
-+
-+config BR2_PACKAGE_OLA_PYTHON_BINDINGS
-+	bool "python bindings"
-+	select BR2_PACKAGE_PYTHON
-+	select BR2_PACKAGE_PYTHON_PROTOBUF
-+	depends on BR2_USE_MMU
-+	help
-+	  Build OLA with support for the Python language.
-+
-+config BR2_PACKAGE_OLA_SLP
-+	bool "slp tools"
-+	help
-+	  Build OLA with slp tools.
-+
-+endmenu
-+
-+menu "tests and examples"
-+
-+config BR2_PACKAGE_OLA_EXAMPLES
-+	bool "examples"
-+	select BR2_PACKAGE_NCURSES
-+	help
-+	  Build OLA examples.
-+
-+config BR2_PACKAGE_OLA_RDM_TESTS
-+	bool "rdm tests"
-+	select BR2_PACKAGE_OLA_PYTHON_BINDINGS
-+	depends on BR2_USE_MMU
-+	help
-+	  Build OLA RDM tests.
-+
-+endmenu
-+
-+menu "plugin selections"
-+
-+config BR2_PACKAGE_OLA_PLUGIN_E131
-+	bool "acn E131"
-+	help
-+	  Build ACN E131 plugin for OLA.
-+
-+config BR2_PACKAGE_OLA_PLUGIN_ARTNET
-+	bool "artnet"
-+	help
-+	  Build Artnet plugin for OLA.
-+
-+config BR2_PACKAGE_OLA_PLUGIN_OPENDMX
-+	bool "DMX4Linux"
-+	help
-+	  Build DMX4Linux plugin for OLA.
-+
-+config BR2_PACKAGE_OLA_PLUGIN_DUMMY
-+	bool "dummy"
-+	help
-+	  Build Dummy plugin for OLA.
-+
-+config BR2_PACKAGE_OLA_PLUGIN_ESPNET
-+	bool "espnet"
-+	help
-+	  Build EspNet plugin for OLA.
-+
-+config BR2_PACKAGE_OLA_PLUGIN_KINET
-+	bool "kinet"
-+	help
-+	  Build KiNet plugin for OLA.
-+
-+config BR2_PACKAGE_OLA_PLUGIN_MILINT
-+	bool "Milford Instruments"
-+	help
-+	  Build Milford Instruments 1-463 plugin for OLA.
-+
-+config BR2_PACKAGE_OLA_PLUGIN_OSC
-+	bool "osc"
-+	select BR2_PACKAGE_LIBLO
-+	help
-+	  Build Open Sound Control plugin for OLA.
-+
-+config BR2_PACKAGE_OLA_PLUGIN_PATHPORT
-+	bool "pathport"
-+	help
-+	  Build Pathport plugin for OLA.
-+
-+config BR2_PACKAGE_OLA_PLUGIN_SANDNET
-+	bool "sandnet"
-+	help
-+	  Build SandNet plugin for OLA.
-+
-+config BR2_PACKAGE_OLA_PLUGIN_SHOWNET
-+	bool "shownet"
-+	help
-+	  Build ShowNet plugin for OLA.
-+
-+config BR2_PACKAGE_OLA_PLUGIN_STAGEPROFI
-+	bool "stageprofi"
-+	select BR2_PACKAGE_LIBUSB
-+	help
-+	  Build StageProfi plugin for OLA.
-+
-+config BR2_PACKAGE_OLA_PLUGIN_USBPRO
-+	bool "usbpro"
-+	select BR2_PACKAGE_LIBUSB
-+	help
-+	  Build UsbPro plugin for OLA.
-+
-+endmenu
-+
-+endif
-diff --git a/package/ola/ola.mk b/package/ola/ola.mk
-new file mode 100644
-index 0000000..55386b1
---- /dev/null
-+++ b/package/ola/ola.mk
-@@ -0,0 +1,146 @@
-+################################################################################
-+#
-+# ola
-+#
-+################################################################################
-+
-+OLA_VERSION = 0.8.31
-+OLA_SITE = https://open-lighting.googlecode.com/files
-+
-+OLA_LICENSE = LGPLv2.1+ (libola, libolacommon, Python bindings), GPLv2+ (libolaserver, olad, Python examples and tests)
-+OLA_LICENSE_FILES = LICENCE GPL LGPL
-+OLA_INSTALL_STAGING = YES
-+
-+# util-linux provides uuid lib
-+OLA_DEPENDENCIES = protobuf util-linux
-+
-+OLA_CONF_OPT = \
-+	--disable-gcov \
-+	--disable-tcmalloc \
-+	--disable-unittests \
-+	--disable-root-check \
-+	--disable-java-libs
-+
-+# sets where to find python libs built for target and required by ola
-+OLA_CONF_ENV = PYTHONPATH=$(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages
-+OLA_MAKE_ENV = PYTHONPATH=$(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages
-+
-+## OLA Bindings and Interface selections
-+
-+ifeq ($(BR2_PACKAGE_OLA_WEB),y)
-+OLA_CONF_OPT += --enable-http
-+OLA_DEPENDENCIES += libmicrohttpd
-+else
-+OLA_CONF_OPT += --disable-http
-+endif
-+
-+ifeq ($(BR2_PACKAGE_OLA_SLP),y)
-+OLA_CONF_OPT += --enable-slp
-+else
-+OLA_CONF_OPT += --disable-slp
-+endif
-+
-+ifeq ($(BR2_PACKAGE_OLA_PYTHON_BINDINGS),y)
-+OLA_CONF_OPT += --enable-python-libs
-+OLA_DEPENDENCIES += python python-protobuf
-+else
-+OLA_CONF_OPT += --disable-python-libs
-+endif
-+
-+## OLA Examples and Tests
-+
-+ifeq ($(BR2_PACKAGE_OLA_EXAMPLES),y)
-+OLA_CONF_OPT += --enable-examples
-+OLA_DEPENDENCIES += ncurses
-+else
-+OLA_CONF_OPT += --disable-examples
-+endif
-+
-+ifeq ($(BR2_PACKAGE_OLA_RDM_TESTS),y)
-+OLA_CONF_OPT += --enable-rdm-tests
-+else
-+OLA_CONF_OPT += --disable-rdm-tests
-+endif
-+
-+## OLA Plugin selections
-+
-+ifeq ($(BR2_PACKAGE_OLA_PLUGIN_E131),y)
-+OLA_CONF_OPT += --enable-e131
-+else
-+OLA_CONF_OPT += --disable-e131
-+endif
-+
-+ifeq ($(BR2_PACKAGE_OLA_PLUGIN_ARTNET),y)
-+OLA_CONF_OPT += --enable-artnet
-+else
-+OLA_CONF_OPT += --disable-artnet
-+endif
-+
-+ifeq ($(BR2_PACKAGE_OLA_PLUGIN_OPENDMX),y)
-+OLA_CONF_OPT += --enable-opendmx
-+else
-+OLA_CONF_OPT += --disable-opendmx
-+endif
-+
-+ifeq ($(BR2_PACKAGE_OLA_PLUGIN_DUMMY),y)
-+OLA_CONF_OPT += --enable-dummy
-+else
-+OLA_CONF_OPT += --disable-dummy
-+endif
-+
-+ifeq ($(BR2_PACKAGE_OLA_PLUGIN_ESPNET),y)
-+OLA_CONF_OPT += --enable-espnet
-+else
-+OLA_CONF_OPT += --disable-espnet
-+endif
-+
-+ifeq ($(BR2_PACKAGE_OLA_PLUGIN_KINET),y)
-+OLA_CONF_OPT += --enable-kinet
-+else
-+OLA_CONF_OPT += --disable-kinet
-+endif
-+
-+ifeq ($(BR2_PACKAGE_OLA_PLUGIN_OSC),y)
-+OLA_CONF_OPT += --enable-osc
-+OLA_DEPENDENCIES += liblo
-+else
-+OLA_CONF_OPT += --disable-osc
-+endif
-+
-+ifeq ($(BR2_PACKAGE_OLA_PLUGIN_MILINT),y)
-+OLA_CONF_OPT += --enable-milinst
-+else
-+OLA_CONF_OPT += --disable-milinst
-+endif
-+
-+ifeq ($(BR2_PACKAGE_OLA_PLUGIN_PATHPORT),y)
-+OLA_CONF_OPT += --enable-pathport
-+else
-+OLA_CONF_OPT += --disable-pathport
-+endif
-+
-+ifeq ($(BR2_PACKAGE_OLA_PLUGIN_SANDNET),y)
-+OLA_CONF_OPT += --enable-sandnet
-+else
-+OLA_CONF_OPT += --disable-sandnet
-+endif
-+
-+ifeq ($(BR2_PACKAGE_OLA_PLUGIN_SHOWNET),y)
-+OLA_CONF_OPT += --enable-shownet
-+else
-+OLA_CONF_OPT += --disable-shownet
-+endif
-+
-+ifeq ($(BR2_PACKAGE_OLA_PLUGIN_STAGEPROFI),y)
-+OLA_CONF_OPT += --enable-stageprofi --enable-libusb
-+else
-+OLA_CONF_OPT += --disable-stageprofi
-+endif
-+
-+ifeq ($(BR2_PACKAGE_OLA_PLUGIN_USBPRO),y)
-+OLA_CONF_OPT += --enable-usbpro --enable-libusb
-+else
-+OLA_CONF_OPT += --disable-usbpro
-+endif
-+
-+$(eval $(autotools-package))
+  I've put Tzu-Jung Lee in CC, who wrote something similar a while ago.
+
+On 08/09/13 15:15, Thomas Petazzoni wrote:
+> This commit adds support for an environment variable named
+> BR2_EXTERNAL, which the user can point to a directory outside of
+> Buildroot that contains root filesystem overlays, kernel configuration
+> files, package recipes, defconfigs, etc. It allows users to keep their
+> specific Buildroot customizations outside of the Buildroot tree.
+>
+> BR2_EXTERNAL allows:
+
+  I would split this into three separate patches for the three separate 
+features. I think (1) and (3) are a lot less controversial than (2).
+
+>
+>   (1) To use $(BR2_EXTERNAL) in all Buildroot configuration options
+>       that take a path as argument. This allows to reference a root
+>       filesystem overlay, a kernel configuration file, a Barebox
+>       configuration file located in the BR2_EXTERNAL directory.
+
+  Note to list: this was already possible before, of course, the 
+difference is that now this path will be stored in the .config.
+
+  There is one small issue with this: I don't think that all the use 
+cases support relative paths. Ideally, the Makefile should be smart 
+enough to prepend $(TOPDIR) if it doesn't start with a /.
+
+
+>   (2) To store external package or makefile logic, since the
+>       BR2_EXTERNAL/external.mk file is automatically included by the
+>       Makefile logic, and the BR2_EXTERNAL/Config.in file is
+>       automatically included, and appears in the top-level menu. The
+>       typical usage would be to create a BR2_EXTERNAL/package/
+>       directory to contain package definitions.
+
+  I'm not really convinced by the principle. The external.mk is exactly 
+the same as the local override .mk; the Config.in appears at the very end 
+of the top-level menu. Instead, I think we should enforce the buildroot 
+hierarchy in the external dir, i.e.
+
+source <path-to-external-dir>/package/Config.in
+
+at the top of package/Config.in, and
+
+-include $(sort $(wildcard $(BR2_EXTERNAL)/package/*/*.mk))
+
+in the top-level Makefile.
+
+  Of course, that Config.in thing is a lot trickier because it's almost 
+impossible to refer to the output directory from the Config.in.
+
+>   (3) To store defconfig files under BR2_EXTERNAL/configs/. They will
+>       be visible in 'make help' and usable through 'make
+>       <someboard>_defconfig'.
+
+  That's a great idea.
+
+
+> In terms of implementation, it is relatively straightforward:
+>
+>   * A BR2_EXTERNAL kconfig variable is added, which is set to the value
+>     of the BR2_EXTERNAL environment variable.
+>
+>   * The top-level Config.in file given to kconfig is no longer the main
+>     Config.in in the Buildroot sources, but instead a toplevel.in file
+>     generated in the output directory, which includes the top-level
+>     Buildroot Config.in file and the BR2_EXTERNAL/Config.in file if
+>     provided. Since is needed because the kconfig 'source' statement
+>     errors out if the included file doesn't exist. I have written
+>     patches that add support for an 'isource' statement in kconfig
+>     (that silently ignores the inclusion if the pointed file doesn't
+>     exist), but keeping feature patches against kconfig doesn't seem
+>     like a good idea.
+
+  It took me a while to realize that that was _not_ the approach you had 
+taken...
+
+>     Note that the "mainmenu" statement is part of
+>     this generated file, because it must be the first statement seen in
+>     the toplevel Config.in file passed to kconfig.
+>
+>   * The BR2_EXTERNAL/external.mk makefile gets included.
+>
+>   * The BR2_EXTERNAL environment variable gets passed in the
+>     environment of kconfig and when executing the kconfiglib-based
+>     Python script that updates the manual, so that the references to
+>     the BR2_EXTERNAL variable within Config.in files can be resolved.
+
+  So this means that the external packages will appear in the package 
+list in the manual? I'm not sure if that is what you typically want.
+
+
+>   * The 'make help' and 'make %_defconfig' targets are updated to take
+>     into account the defconfig files stored under
+>     BR2_EXTERNAL/configs/.
+>
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> ---
+>   Config.in             |  6 ++++--
+>   Makefile              | 29 +++++++++++++++++++++++++----
+>   docs/manual/manual.mk |  2 +-
+>   3 files changed, 30 insertions(+), 7 deletions(-)
+>
+> diff --git a/Config.in b/Config.in
+> index cb246a4..7e253c6 100644
+> --- a/Config.in
+> +++ b/Config.in
+> @@ -1,7 +1,5 @@
+>   #
+>
+> -mainmenu "Buildroot $BR2_VERSION Configuration"
+> -
+>   config BR2_HAVE_DOT_CONFIG
+>   	bool
+>   	default y
+> @@ -14,6 +12,10 @@ config BR2_HOSTARCH
+>   	string
+>   	option env="HOSTARCH"
+>
+> +config BR2_EXTERNAL
+> +	string
+> +	option env="BR2_EXTERNAL"
+> +
+>   # Hidden boolean selected by pre-built packages for x86, when they
+>   # need to run on x86-64 machines (example: pre-built external
+>   # toolchains, binary tools like SAM-BA, etc.).
+> diff --git a/Makefile b/Makefile
+> index fc55b87..1014399 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -47,7 +47,6 @@ export HOSTARCH := $(shell uname -m | \
+>
+>   # absolute path
+>   TOPDIR:=$(shell pwd)
+> -CONFIG_CONFIG_IN=Config.in
+>   CONFIG=support/kconfig
+>   DATE:=$(shell date +%Y%m%d)
+>
+> @@ -339,6 +338,10 @@ include boot/common.mk
+>   include linux/linux.mk
+>   include system/system.mk
+>
+> +ifneq ($(BR2_EXTERNAL),)
+> +include $(BR2_EXTERNAL)/external.mk
+> +endif
+> +
+>   TARGETS+=target-finalize
+>
+>   ifeq ($(BR2_ENABLE_LOCALE_PURGE),y)
+> @@ -622,6 +625,18 @@ $(BUILD_DIR)/buildroot-config/%onf:
+>   	mkdir -p $(@D)/lxdialog
+>   	$(MAKE) CC="$(HOSTCC_NOCCACHE)" HOSTCC="$(HOSTCC_NOCCACHE)" obj=$(@D) -C $(CONFIG) -f Makefile.br $(@F)
+>
+> +CONFIG_CONFIG_IN=$(BUILD_DIR)/buildroot-config/toplevel.in
+> +
+> +# This is intentionally a virtual target so that the file gets
+> +# regenerated everytime this target is invoked.
+> +toplevelin-generate:
+
+  I guess you mean phony target. You should also add
+.PHONY: toplevelin-generate
+for the (unlikely) case that someone creates a file with this name.
+
+  BTW I don't like the target's name. generate-config-dot-in maybe?
+
+> +	mkdir -p $(dir $(CONFIG_CONFIG_IN))
+> +	echo "mainmenu \"Buildroot $$BR2_VERSION Configuration\"" > $(CONFIG_CONFIG_IN)
+> +	echo "source \"Config.in\"" >> $(CONFIG_CONFIG_IN)
+> +ifneq ($(BR2_EXTERNAL),)
+> +	echo "source \"$$BR2_EXTERNAL/Config.in\"" >> $(CONFIG_CONFIG_IN)
+
+  $(BR2_EXTERNAL) would be a lot more readable than $$BR2_EXTERNAL IMHO. 
+Then you can also put it in single quotes and remove the \.
+
+> +endif
+> +
+>   DEFCONFIG = $(call qstrip,$(BR2_DEFCONFIG))
+>
+>   # We don't want to fully expand BR2_DEFCONFIG here, so Kconfig will
+> @@ -631,10 +646,12 @@ COMMON_CONFIG_ENV = \
+>   	KCONFIG_AUTOCONFIG=$(BUILD_DIR)/buildroot-config/auto.conf \
+>   	KCONFIG_AUTOHEADER=$(BUILD_DIR)/buildroot-config/autoconf.h \
+>   	KCONFIG_TRISTATE=$(BUILD_DIR)/buildroot-config/tristate.config \
+> -	BUILDROOT_CONFIG=$(BUILDROOT_CONFIG)
+> +	BUILDROOT_CONFIG=$(BUILDROOT_CONFIG) \
+> +	BR2_EXTERNAL=$(BR2_EXTERNAL)
+
+  There is one tricky issue:
+
+cd ~/src/myproject/output
+make -C ~/src/buildroot O=$PWD menuconfig
+Hack hack hack
+Hm, I need an external dir...
+BR2_EXTERNAL=.. make menuconfig
+=> BR2_EXTERNAL will point to ~/src instead of ~/src/myproject
+
+  I.e., it doesn't work well for relative paths.
+
+  I don't know if there is an elegant way to solve that.
+
+
+>   COMMON_CONFIG_DEPS = \
+> -	outputmakefile
+> +	outputmakefile \
+> +	toplevelin-generate
+>
+>   xconfig: $(BUILD_DIR)/buildroot-config/qconf $(COMMON_CONFIG_DEPS)
+>   	@mkdir -p $(BUILD_DIR)/buildroot-config
+> @@ -718,6 +735,10 @@ defconfig: $(BUILD_DIR)/buildroot-config/conf $(COMMON_CONFIG_DEPS)
+>   	@mkdir -p $(BUILD_DIR)/buildroot-config
+>   	@$(COMMON_CONFIG_ENV) $< --defconfig=$(TOPDIR)/configs/$@ $(CONFIG_CONFIG_IN)
+>
+> +%_defconfig: $(BUILD_DIR)/buildroot-config/conf $(BR2_EXTERNAL)/configs/%_defconfig $(COMMON_CONFIG_DEPS)
+> +	@mkdir -p $(BUILD_DIR)/buildroot-config
+> +	@$(COMMON_CONFIG_ENV) $< --defconfig=$(BR2_EXTERNAL)/configs/$@ $(CONFIG_CONFIG_IN)
+
+  This should be in a
+ifneq ($(BR2_EXTERNAL),)
+
+
+  Regards,
+  Arnout
+
+> +
+>   savedefconfig: $(BUILD_DIR)/buildroot-config/conf $(COMMON_CONFIG_DEPS)
+>   	@mkdir -p $(BUILD_DIR)/buildroot-config
+>   	@$(COMMON_CONFIG_ENV) $< \
+> @@ -829,7 +850,7 @@ endif
+>   	@echo '  make V=0|1             - 0 => quiet build (default), 1 => verbose build'
+>   	@echo '  make O=dir             - Locate all output files in "dir", including .config'
+>   	@echo
+> -	@$(foreach b, $(sort $(notdir $(wildcard $(TOPDIR)/configs/*_defconfig))), \
+> +	@$(foreach b, $(sort $(notdir $(wildcard $(TOPDIR)/configs/*_defconfig $(BR2_EXTERNAL)/configs/*_defconfig))), \
+>   	  printf "  %-35s - Build for %s\\n" $(b) $(b:_defconfig=);)
+>   	@echo
+>   	@echo 'See docs/README, or generate the Buildroot manual for further details'
+> diff --git a/docs/manual/manual.mk b/docs/manual/manual.mk
+> index 4906bc8..8e0ab30 100644
+> --- a/docs/manual/manual.mk
+> +++ b/docs/manual/manual.mk
+> @@ -1,6 +1,6 @@
+>   manual-update-lists:
+>   	$(Q)$(call MESSAGE,"Updating the manual lists...")
+> -	$(Q)BR2_DEFCONFIG="" TOPDIR=$(TOPDIR) O=$(O)/docs/manual/.build \
+> +	$(Q)BR2_DEFCONFIG="" BR2_EXTERNAL="$(BR2_EXTERNAL)" TOPDIR=$(TOPDIR) O=$(O)/docs/manual/.build \
+>   		$(TOPDIR)/support/scripts/gen-manual-lists.py
+>
+>   ################################################################################
+>
+
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
