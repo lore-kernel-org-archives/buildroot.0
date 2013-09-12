@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 12 Sep 2013 21:29:07 +0200
-Subject: [Buildroot] [PATCH v2 02/17] libselinux: new package
-In-Reply-To: <1378936777-28308-3-git-send-email-clshotwe@rockwellcollins.com>
+Date: Thu, 12 Sep 2013 21:34:30 +0200
+Subject: [Buildroot] [PATCH v2 03/17] ustr: new package
+In-Reply-To: <1378936777-28308-4-git-send-email-clshotwe@rockwellcollins.com>
 References: <1378936777-28308-1-git-send-email-clshotwe@rockwellcollins.com>
- <1378936777-28308-3-git-send-email-clshotwe@rockwellcollins.com>
-Message-ID: <20130912212907.57bdf08c@skate>
+ <1378936777-28308-4-git-send-email-clshotwe@rockwellcollins.com>
+Message-ID: <20130912213430.0898522c@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,25 +13,27 @@ To: buildroot@busybox.net
 
 Dear Clayton Shotwell,
 
-On Wed, 11 Sep 2013 16:59:22 -0500, Clayton Shotwell wrote:
-> 
-> Signed-off-by: Clayton Shotwell <clshotwe@rockwellcollins.com>
+On Wed, 11 Sep 2013 16:59:23 -0500, Clayton Shotwell wrote:
 
-After testing this package, it turns out that:
+>  .../ustr/ustr-0001-crossCompileModifications.patch |  144 ++++++++++++++++++++
 
- *) By default it needs large file support, because src/Makefile forces
- -D_FILE_OFFSET_BITS=64. If you remove this from the Makefile, then it
- builds fine with a toolchain that does not have large file support. So
- your options are: remove this flag from the Makefile, or make the
- package (and all its reverse dependencies depend on large file
- support).
+Please name the patch:
 
- *) It needs thread support. So you should add a 'depends on
- BR2_TOOLCHAIN_HAS_THREADS', a comment when no thread support is
- available, and propagate this to all the reverse dependencies of
- libselinux.
+ustr-0001-cross-compile-modifications.patch
 
-Best regards,
+The naming of patch files should be fixed globally in the patch series.
+We use lower case names, with '-' as the separator between words in the
+patch description.
+
+Also, this package doesn't build properly when the toolchain does not
+have large file support. Just like libselinux, the Makefile hardcodes
+-D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE. Your options are either to
+make ustr depend on large file support in the toolchain, or to modify
+the Makefile.
+
+Other than that, looks good.
+
+Thanks!
 
 Thomas
 -- 
