@@ -1,83 +1,169 @@
-From: Ryan Barnett <rjbarnet@rockwellcollins.com>
-Date: Thu, 12 Sep 2013 16:30:37 -0500
-Subject: [Buildroot] [PATCH 2/3] Add support for BR2_EXTERNAL
-In-Reply-To: <52322C8E.7010501@mind.be>
-References: <1378646129-4167-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1378646129-4167-3-git-send-email-thomas.petazzoni@free-electrons.com>
- <OF916AAFB6.8E78891C-ON86257BE3.000A49F0-86257BE3.000B5AF0@rockwellcollins.com>
- <52322C8E.7010501@mind.be>
-Message-ID: <OFD093CE04.A9291FB9-ON86257BE4.007504CF-86257BE4.00762929@rockwellcollins.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 12 Sep 2013 23:41:27 +0200
+Subject: [Buildroot] [PATCH v3] omniorb: new package
+In-Reply-To: <1379017961-22950-1-git-send-email-mlweber1@rockwellcollins.com>
+ (Matt Weber's message of "Thu, 12 Sep 2013 15:32:41 -0500")
+References: <1379017961-22950-1-git-send-email-mlweber1@rockwellcollins.com>
+Message-ID: <87six9pvjs.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout Vandecappelle <arnout@mind.be> wrote on 09/12/2013 04:05:18 PM:
+>>>>> "Matt" == Matt Weber <mlweber1@rockwellcollins.com> writes:
 
-> On 11/09/13 04:03, rjbarnet at rockwellcollins.com wrote:
-> > Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote on
-> > 09/08/2013 08:15:28 AM:
-> >
-> >  >
-> >  > Signed-off-by: Thomas Petazzoni 
-<thomas.petazzoni@free-electrons.com>
-> >  > ---
-> >  >  Config.in   |  6 ++++--
-> >  >  Makefile    | 29 +++++++++++++++++++++++++----
-> >  >  docs/manual/manual.mk |  2 +-
-> >
-> > One idea that I have, is for the make file that is genreated for the 
-an
-> > external output directory, if we could preserve the the value of
-> > BR2_EXTERNAL
-> > as follows.
-> 
->   Thomas's patch already does that, because BR2_EXTERNAL is stored in 
-the 
-> config file.
-> 
+ Matt> Signed-off-by: Matt Weber <mlweber1@rockwellcollins.com>
+ Matt> ---
+ Matt> Changes v2 -> v3
+ Matt>   * Removed depend on python as the mk accounts for it 
+ Matt>     package/omniorb/Config.in (suggested by Thomas)
+ Matt>   * Added link to website package/omniorb/Config.in (suggested by Thomas)
+ Matt>   * Added note about host python requirement for build 
+ Matt>     package/omniorb/omniorb.mk (suggested by Thomas)
+ Matt>   * Removed staging loop of fixing file paths for a single file.  Instead it 
+ Matt>     no just operates on a single file package/omniorb/omniorb.mk (suggested by Thomas)
+ Matt>   * Fixed brackets  package/omniorb/omniorb.mk (suggested by Thomas)
+ Matt>   * Cleaned up host tool comment  package/omniorb/omniorb.mk (suggested by Thomas)
+ Matt>   * Cleaned up host tools to use HOST_CONFIGURE_OPTS to fix ccache 
+ Matt>     support package/omniorb/omniorb.mk (suggested by Thomas)
+ Matt>   * Switched over to use a make tools export and clean hook.  Required
+ Matt>     patching of the package to correctly assign the CC/CXX/etc defines.
+ Matt>     Submitted this patch upsteam as well as including in this patchset.
+ Matt>     package/omniorb/omniorb.mk (suggested by Arnout)
 
-I don't believe it gets stored in the config since Config.in pulls
-the variable in from the shell's or make's environment. 
+ Matt> Changes v1 -> v2:
+ Matt>   * Fixed formatting of help and added select of python in  package/omniorb/Config.in (suggested by Thomas)
+ Matt>   * Removed extra open ended config option as it isn't used  package/omniorb/Config.in (suggested by Thomas)
+ Matt>   * Cleaned up use of brackets and replaced with braces package/omniorb/Config.in (suggested by Thomas)
+ Matt>   * Updated licenses to be GPL and LGPL with a + package/omniorb/omniorb.mk (suggested by Thomas)
+ Matt>   * Removed redundant conf opt and target install sets package/omniorb/omniorb.mk (suggested by Thomas)
+ Matt>   * Added a post install step to replace overloading the default staging installs package/omniorb/omniorb.mk (suggested by Thomas)
+ Matt>   * Broke out tools(host) build into seperate post conf step package/omniorb/omniorb.mk (suggested by Thomas)
+ Matt>   * Removed clean and uninstall package/omniorb/omniorb.mk (suggested by Thomas)
 
-+config BR2_EXTERNAL
-+       string
-+       option env="BR2_EXTERNAL"
+ Matt>  package/Config.in                                  |    1 +
+ Matt>  package/omniorb/Config.in                          |   10 ++++
+ Matt>  ...mniorb-0001-supportCrossCompileToolExport.patch |   27 +++++++++++
+ Matt>  package/omniorb/omniorb.mk                         |   47 ++++++++++++++++++++
+ Matt>  4 files changed, 85 insertions(+), 0 deletions(-)
+ Matt>  create mode 100644 package/omniorb/Config.in
+ Matt>  create mode 100644 package/omniorb/omniorb-0001-supportCrossCompileToolExport.patch
+ Matt>  create mode 100644 package/omniorb/omniorb.mk
 
-In order to utilize the BR2_EXTERNAL feature I must have BR2_EXTERNAL
-either exported into my environment or be called as 
+ Matt> diff --git a/package/Config.in b/package/Config.in
+ Matt> index 02e5afc..820fae2 100644
+ Matt> --- a/package/Config.in
+ Matt> +++ b/package/Config.in
+ Matt> @@ -624,6 +624,7 @@ source "package/libupnp/Config.in"
+ Matt>  source "package/libvncserver/Config.in"
+ Matt>  source "package/libwebsockets/Config.in"
+ Matt>  source "package/nss-mdns/Config.in"
+ Matt> +source "package/omniorb/Config.in"
+ Matt>  source "package/openpgm/Config.in"
+ Matt>  source "package/ortp/Config.in"
+ Matt>  source "package/slirp/Config.in"
+ Matt> diff --git a/package/omniorb/Config.in b/package/omniorb/Config.in
+ Matt> new file mode 100644
+ Matt> index 0000000..327de03
+ Matt> --- /dev/null
+ Matt> +++ b/package/omniorb/Config.in
+ Matt> @@ -0,0 +1,10 @@
+ Matt> +config BR2_PACKAGE_OMNIORB
+ Matt> +	bool "omniorb"
+ Matt> +	help
+ Matt> +	  omniORB is a robust high performance CORBA ORB for C++ and Python.
+ Matt> +	  omniORB is largely CORBA 2.6 compliant. omniORB is one of only 
+ Matt> +	  three ORBs to have been awarded the Open Group's Open Brand for 
+ Matt> +	  CORBA. This means that omniORB has been tested and certified 
+ Matt> +	  CORBA compliant, to version 2.1 of the CORBA specification. 
 
-'make BR2_EXTERNAL=/some/path <target>'
+Presumably this needs to depend on BR2_INSTALL_LIBSTCPP and show a
+comment if the toolchain doesn't have C++ support.
+
+You also have a number of trailing spaces in the help text.
 
 
-When utilizing the BR2_EXTERNAL I usual want to use some defconfig from
-my BR2_EXTERNAL so it adding it the makefile that is generated in your 
-build directory when specifying O= would be extermely useful as that 
-way I can switch shells and my definition of BR2_EXTERNAL would still 
-be present.
+ Matt> +
+ Matt> +	  http://omniorb.sourceforge.net/
+ Matt> diff --git a/package/omniorb/omniorb-0001-supportCrossCompileToolExport.patch b/package/omniorb/omniorb-0001-supportCrossCompileToolExport.patch
+ Matt> new file mode 100644
+ Matt> index 0000000..20643a0
+ Matt> --- /dev/null
+ Matt> +++ b/package/omniorb/omniorb-0001-supportCrossCompileToolExport.patch
+ Matt> @@ -0,0 +1,27 @@
+ Matt> +
+ Matt> +This patch has been posted upstream (mlweber1 at rockwellcollins.com) 09/12/2013.
+ Matt> +
 
-'make O=/build/path BR2_EXTERNAL=/path/to/external defconfig'
+Please provide a git-style description of what the patch does and your
+signed-off-by.
 
-> > I don't think my logic is fully there but there is more of a
-> > sudo implementation:
-> >
-> > diff --git a/support/scripts/mkmakefile b/support/scripts/mkmakefile
-> > --- a/support/scripts/mkmakefile
-> > +++ b/support/scripts/mkmakefile
-> > @@ -27,6 +27,7 @@ makedir := \$(dir \$(call 
-lastword,\$(MAKEFILE_LIST)))
-> >
-> >   MAKEARGS := -C $1
-> >   MAKEARGS += O=\$(if \$(patsubst
-> > /%,,\$(makedir)),\$(CURDIR)/)\$(patsubst %/,%,\$(makedir))
-> > +MAKEARGS += BR2_EXTERNAL=\$(realpath \$(BR2_EXTERNAL))
-> >
-> >   MAKEFLAGS += --no-print-directory
-> >
-> > Again this is only a suggestion but otherwise I'll ack the patchset.
-> >
+If possible, add a link to the mailing list archive of the patch you
+sent upstream.
 
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130912/e06f840b/attachment.html>
+I believe you were already asked to rename this patch filename to lower case/words-seperated-by-dashes?
+
+ Matt> diff --git a/package/omniorb/omniorb.mk b/package/omniorb/omniorb.mk
+ Matt> new file mode 100644
+ Matt> index 0000000..5dd1a98
+ Matt> --- /dev/null
+ Matt> +++ b/package/omniorb/omniorb.mk
+ Matt> @@ -0,0 +1,47 @@
+ Matt> +################################################################################
+ Matt> +#
+ Matt> +# omniorb
+ Matt> +#
+ Matt> +################################################################################
+ Matt> +
+ Matt> +OMNIORB_VERSION = 4.1.6
+ Matt> +OMNIORB_SITE = http://downloads.sourceforge.net/project/omniorb/omniORB/omniORB-$(OMNIORB_VERSION)
+ Matt> +OMNIORB_SOURCE = omniORB-$(OMNIORB_VERSION).tar.bz2
+ Matt> +OMNIORB_INSTALL_STAGING = YES
+ Matt> +OMNIORB_LICENSE = GPL2+ LGPLv2.1+
+ Matt> +OMNIORB_LICENSE_FILES = COPYING COPYING.LIB
+ Matt> +# Required for internal code generation scripts
+ Matt> +OMNIORB_DEPENDENCIES = host-python
+ Matt> +
+ Matt> +ifeq ($(BR2_PACKAGE_PYTHON),y)
+ Matt> +	OMNIORB_DEPENDENCIES += python
+ Matt> +	OMNIORB_CONF_OPT += --enable-python-bindings
+ Matt> +else
+ Matt> +	OMNIORB_CONF_OPT += --disable-python-bindings
+ Matt> +endif
+ Matt> +
+ Matt> +# OMNIORB is currently not cross-compile friendly and has some assumptions 
+ Matt> +# where a couple host tools are built in place and then used during the 
+ Matt> +# build.  The tools generate code from the IDL description language, which 
+ Matt> +# is then built into the cross compiled OMNIORB application.
+ Matt> +# So this first hook builds the tools required for the host side 
+ Matt> +# generation of code. Then the second hook cleans up before the install.
+
+Why the upper case OMNIORB?
+
+
+ Matt> +define OMNIORB_BUILD_TOOLS
+ Matt> +	$(HOST_MAKE_ENV) $(MAKE) $(HOST_CONFIGURE_OPTS) \
+ Matt> +		-C $(@D)/src/tool export
+ Matt> +endef
+ Matt> +OMNIORB_POST_CONFIGURE_HOOKS += OMNIORB_BUILD_TOOLS
+ Matt> +
+ Matt> +define OMNIORB_CLEAN_TOOLS
+ Matt> +	$(HOST_MAKE_ENV) $(MAKE) $(HOST_CONFIGURE_OPTS) \
+ Matt> +		-C $(@D)/src/tool clean
+ Matt> +endef
+ Matt> +OMNIORB_POST_BUILD_HOOKS += OMNIORB_CLEAN_TOOLS
+ Matt> +
+ Matt> +define OMNIORB_FIXUP_FILE_PATHS_HOOK
+ Matt> +	$(SED) "s:$(HOST_DIR)/usr:/usr:g" $(STAGING_DIR)/usr/bin/omniidl;
+ Matt> +endef
+ Matt> +OMNIORB_POST_INSTALL_STAGING_HOOKS += OMNIORB_FIXUP_FILE_PATHS_HOOK 
+ Matt> +
+ Matt> +$(eval $(autotools-package))
+ Matt> +
+
+Please don't add empty lines after autotools-package. You also have a
+number of trailing spaces.
+
+-- 
+Bye, Peter Korsgaard
