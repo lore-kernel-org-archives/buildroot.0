@@ -1,39 +1,30 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 12 Sep 2013 09:23:00 +0200
-Subject: [Buildroot] [PATCH] gcc-initial: Add host-elf2flt dependency
- when BR2_PACKAGE_HOST_ELF2FLT=y
-In-Reply-To: <CAFRkauDMtOvQj0dx0Xxz2KhWxeHBFERvvU6cohSmpwv5ydRtiQ@mail.gmail.com>
-References: <1378307915.5313.1.camel@phoenix> <20130904181958.36251b69@skate>
- <52305E98.7040202@zacarias.com.ar>
- <CAFRkauDMtOvQj0dx0Xxz2KhWxeHBFERvvU6cohSmpwv5ydRtiQ@mail.gmail.com>
-Message-ID: <20130912092300.0b3fbb9d@skate>
+Date: Thu, 12 Sep 2013 09:23:58 +0200
+Subject: [Buildroot] [PATCH v2 3/7] mesa3d: pull out from x11
+In-Reply-To: <CAEBucnB6NJGS=5WoiwieasauipypqSX5phq-Xp_GGSiALM3dnA@mail.gmail.com>
+References: <1378441521-10050-1-git-send-email-spenser@gillilanding.com>
+ <1378441521-10050-4-git-send-email-spenser@gillilanding.com>
+ <20130908190231.70e667fa@skate>
+ <CAEBucnB6NJGS=5WoiwieasauipypqSX5phq-Xp_GGSiALM3dnA@mail.gmail.com>
+Message-ID: <20130912092358.0f0db2ec@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Axel Lin,
+Dear Spenser Gilliland,
 
-On Thu, 12 Sep 2013 09:13:21 +0800, Axel Lin wrote:
+On Wed, 11 Sep 2013 21:57:21 -0500, Spenser Gilliland wrote:
 
-> Probably not directly related to this topic, but I have a question
-> about the dependency between BR2_BINFMT_FLAT &
-> BR2_PACKAGE_HOST_ELF2FLT.
+> > Bottom-line: I believe it's too early to move mesa3d outside of
+> > package/x11r7/. Let's keep it in there for now, merge your current
+> > patches, and work on that as a followup step.
 > 
-> Why not just make BR2_PACKAGE_HOST_ELF2FLT depend on BR2_BINFMT_FLAT
-> rather than "depends on BR2_arm || BR2_bfin || BR2_sh || BR2_sparc"?
+> I'll add the move of pthread stubs (and any other required X libs) to
+> this patch set.
 
-As Gustavo pointed out (maybe on IRC ?), BR2_PACKAGE_HOST_ELF2FLT
-should simply be removed. There is no need to have a Kconfig option to
-host tools when they can simply be built as a dependency of something
-else (which is the case here).
-
-The only case for which we add a Kconfig option for host tools is when
-this host tool is not built as a dependency of something else, and that
-the user may still be interested in building it.
-
-Best regards,
+Great, thanks!
 
 Thomas
 -- 
