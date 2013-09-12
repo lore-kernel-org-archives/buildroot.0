@@ -1,30 +1,43 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 12 Sep 2013 10:04:31 +0200
-Subject: [Buildroot] [PATCH] Update config.guess to version 2013-06-10
-In-Reply-To: <1378960962-17411-1-git-send-email-jouko.nikula@espotel.com>
- (Jouko Nikula's message of "Thu, 12 Sep 2013 07:42:42 +0300")
-References: <1378960962-17411-1-git-send-email-jouko.nikula@espotel.com>
-Message-ID: <87eh8uqxdc.fsf@dell.be.48ers.dk>
+Date: Thu, 12 Sep 2013 10:45:06 +0200
+Subject: [Buildroot] [PATCH 1/2] knock: new package
+In-Reply-To: <1378653779-903-1-git-send-email-rommel@layer-7.net> (Michael
+ Rommel's message of "Sun, 8 Sep 2013 17:22:58 +0200")
+References: <1378653779-903-1-git-send-email-rommel@layer-7.net>
+Message-ID: <87a9jiqvhp.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Jouko" == Jouko Nikula <jouko.nikula@espotel.com> writes:
+>>>>> "Michael" == Michael Rommel <rommel@layer-7.net> writes:
 
- Jouko> Current version of config.guess may fail to detect host libc version, which
- Jouko> results in problems with configure when building gcc.
+ Michael> A port knocking implementation with daemon and user application.
+ Michael> Signed-off-by: Michael Rommel <rommel@layer-7.net>
+ Michael> ---
 
- Jouko> Signed-off-by: Jouko Nikula <jouko.nikula@espotel.com>
- Jouko> ---
- Jouko>  support/gnuconfig/config.guess |  117 +++++++++++++++++++++-------------------
- Jouko>  1 file changed, 61 insertions(+), 56 deletions(-)
+ Michael> Added the dependency on libpcap to the .mk file
 
-Please also adjust the git id in README.buildroot.
+Committed with a minor change (see below), thanks.
 
-What about our patches? I see that atleast the uclibc handling is
-different here than it used to be.
+ Michael> +++ b/package/knock/Config.in
+ Michael> @@ -0,0 +1,13 @@
+ Michael> +config BR2_PACKAGE_KNOCK
+ Michael> +	bool "knock"
+ Michael> +	select BR2_PACKAGE_LIBPCAP
+ Michael> +	help
+ Michael> +	  A port knocking implementation.
+ Michael> +	  Provides a daemon and a user application. Port knocking can be
+ Michael> +	  used to run an arbitrary application, once the daemon detects
+ Michael> +	  a predefined sequence of incoming TCP/UDP packets on a network
+ Michael> +	  interface. This can be used, e.g. to open up ports in a
+ Michael> +	  firewall.
+ Michael> +
+ Michael> +	  http://www.zeroflux.org/projects/knock
+ Michael> +
+
+You shouldn't add an empty line after the URL.
 
 -- 
 Bye, Peter Korsgaard
