@@ -1,11 +1,10 @@
 From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Fri, 13 Sep 2013 18:07:06 +0200
-Subject: [Buildroot] [RFCv1 04/11] toolchain: move helpers.mk into
-	toolchain-external/
-In-Reply-To: <1378416469-17708-5-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Fri, 13 Sep 2013 18:10:17 +0200
+Subject: [Buildroot] [RFCv1 02/11] toolchain-crosstool-ng: remove support
+In-Reply-To: <1378416469-17708-3-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1378416469-17708-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1378416469-17708-5-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <5233382A.2070304@lucaceresoli.net>
+ <1378416469-17708-3-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <523338E9.4090406@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,17 +12,20 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Thomas Petazzoni wrote:
-> The helpers.mk file is no longer used by the Crosstool-NG backend, so
-> it is moved into the toolchain/toolchain-external/ directory.
+> In order to avoid the work of converting the toolchain-crosstool-ng
+> logic to the package infrastructure, we remove it from Buildroot,
+> since it has been deprecated since quite some time.
 >
 > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 > ---
->   toolchain/{ => toolchain-external}/helpers.mk | 0
->   1 file changed, 0 insertions(+), 0 deletions(-)
->   rename toolchain/{ => toolchain-external}/helpers.mk (100%)
+> If we consider it too early to get rid of the Crosstool-NG backend
+> entirely, then it can of course be converted to the package
+> infrastructure, with quite a bit of effort (which we wanted to avoid
+> for now).
 
-Ok, but you're still including this file. The inclusion is removedin
-later patches, it should be done here.This is just to improve
-bisectability, I'm ok with the idea.
+I have nothing against the removal of crosstool-NG.
+
+I'm happy with using ct-NG to build a toolchain and use it inBR as an
+external toolchain.
 
 Luca
