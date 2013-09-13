@@ -1,30 +1,29 @@
-From: Frank Hunleth <fhunleth@troodon-software.com>
-Date: Fri, 13 Sep 2013 11:25:17 -0400
-Subject: [Buildroot] [PATCH 1/1] erlang: bump to version R16B01
-Message-ID: <1379085917-22625-1-git-send-email-fhunleth@troodon-software.com>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Fri, 13 Sep 2013 18:07:06 +0200
+Subject: [Buildroot] [RFCv1 04/11] toolchain: move helpers.mk into
+	toolchain-external/
+In-Reply-To: <1378416469-17708-5-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1378416469-17708-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1378416469-17708-5-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <5233382A.2070304@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
----
- package/erlang/erlang.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Thomas Petazzoni wrote:
+> The helpers.mk file is no longer used by the Crosstool-NG backend, so
+> it is moved into the toolchain/toolchain-external/ directory.
+>
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> ---
+>   toolchain/{ => toolchain-external}/helpers.mk | 0
+>   1 file changed, 0 insertions(+), 0 deletions(-)
+>   rename toolchain/{ => toolchain-external}/helpers.mk (100%)
 
-diff --git a/package/erlang/erlang.mk b/package/erlang/erlang.mk
-index 89104c9..1f3a1ef 100644
---- a/package/erlang/erlang.mk
-+++ b/package/erlang/erlang.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--ERLANG_VERSION = R15B03-1
-+ERLANG_VERSION = R16B01
- ERLANG_SITE = http://www.erlang.org/download
- ERLANG_SOURCE = otp_src_$(ERLANG_VERSION).tar.gz
- ERLANG_DEPENDENCIES = host-erlang
--- 
-1.8.1.2
+Ok, but you're still including this file. The inclusion is removedin
+later patches, it should be done here.This is just to improve
+bisectability, I'm ok with the idea.
+
+Luca
