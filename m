@@ -1,47 +1,52 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 13 Sep 2013 09:01:34 +0200
-Subject: [Buildroot] [PATCH 1/1] uboot: add support for a uEnv.txt file
-In-Reply-To: <1379029303-17804-1-git-send-email-rjbarnet@rockwellcollins.com>
-References: <1379029303-17804-1-git-send-email-rjbarnet@rockwellcollins.com>
-Message-ID: <20130913090134.2b05d3e8@skate>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Fri, 13 Sep 2013 09:08:34 +0200
+Subject: [Buildroot] C++ Compiling
+In-Reply-To: <15AE5A936F5E3A42A9144E66875A0A8934DC07@server1-derijp.CLB-Benelux.lokaal>
+References: <15AE5A936F5E3A42A9144E66875A0A8934DC07@server1-derijp.CLB-Benelux.lokaal>
+Message-ID: <CAGm1_kvR5zLfHRrcnKmoTSetC9SsiqOj2=xV2Xxa1502CkC8KA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Ryan Barnett,
+Hi Ruud,
 
-On Thu, 12 Sep 2013 18:41:43 -0500, Ryan Barnett wrote:
-> Some boards in u-boot support the ability to modify the environment
-> by placing a plain text file as uEnv.txt in the root of the partition
-> of an SD card. For the extact placement of where the uEnv.txt should
-> be, consult your u-boot environment. Your board supports this
-> overwriting of environment variables if "loadbootenv" and
-> "importbootenv" are defined in the board's environment.
+On Fri, Sep 13, 2013 at 9:00 AM, Ruud Commandeur <RCommandeur@clb.nl> wrote:
+> Hi Everyone,
+>
+> This week I tried build my 1st aplication using boost. Adding the boost
+> part was easy from buildroot, but when trying to build the application,
+> I get "Relocations in generic ELF" and "could not read symbols: File in
+> wrong format".
 
-loadbootenv and importbootenv are just U-Boot scripts that are specific
-to certain board configurations.
+Have you tried using CMake (http://cmake.org/)? CMake in BR
+(http://buildroot.uclibc.org/downloads/manual/manual.html#_infrastructure_for_cmake_based_packages)
 
-All what loadbootenv does it load a file into memory, and all what
-importbootenv does is call 'env import -t <addr> <size>' to load the
-environment into U-Boot.
+This is how you include Boost modules:
 
-So I don't think we should be mentioning loadbootenv and importbootenv
-here.
+# Boost
+find_package( Boost 1.36.0 COMPONENTS program_options REQUIRED)
 
-However, what I'm really wondering if is we really need this. After
-all, this is all about copying a text file to $(BINARIES_DIR),
-something a post-build or a post-image script can do perfectly fine. I
-mean, there's nothing U-Boot specific involved here, it's just a plain
-'cp'. Therefore, I'm not sure we need this at all, but I am open to
-discussion on this.
+and here you link them:
 
-Best regards,
+ADD_EXECUTABLE(test ${SOURCES})
+TARGET_LINK_LIBRARIES(test ${Boost_LIBRARIES})
 
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+That's it. CMake will check for working C++ compiler at configuring stage.
+
+
+> Obviously, this has to do with cross-compiling. When compiling a
+> C-source, it uses arm-none-linux-gnueabi-gcc. But for a cpp it uses g++,
+> resulting in an Intel 80386 object file. Looking at the internet, I read
+> about an otion called "Toolchain has C++ support?". This must be the one
+> to use, but I can't find it. Neither in the Toolchain section nor the
+> System configuration.
+>
+> I am using Buildroot 2013.02 with CodeSourcery (Sourcery Codebench) for
+> ARM 2012.03.
+
+This toolchain always provides a C++ compiler, so you don't need to
+configure it in BR.
+
+Yegor
