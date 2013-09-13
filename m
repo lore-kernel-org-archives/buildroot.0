@@ -1,31 +1,46 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 13 Sep 2013 09:56:22 +0200
-Subject: [Buildroot] C++ Compiling
-In-Reply-To: <15AE5A936F5E3A42A9144E66875A0A8934DC0F@server1-derijp.CLB-Benelux.lokaal>
- (Ruud Commandeur's message of "Fri, 13 Sep 2013 09:37:15 +0200")
-References: <15AE5A936F5E3A42A9144E66875A0A8934DC07@server1-derijp.CLB-Benelux.lokaal>
- <CAGm1_kvR5zLfHRrcnKmoTSetC9SsiqOj2=xV2Xxa1502CkC8KA@mail.gmail.com>
- <15AE5A936F5E3A42A9144E66875A0A8934DC0F@server1-derijp.CLB-Benelux.lokaal>
-Message-ID: <87li31noih.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Fri, 13 Sep 2013 11:06:43 +0200
+Subject: [Buildroot] [git commit] nfs-utils: fix build failure caused by
+	missing include
+Message-ID: <20130913090700.C54A69B750@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Ruud" == Ruud Commandeur <RCommandeur@clb.nl> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=afa2a7cebe1d7c31adfd69548842978ea00f6c75
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Hi,
+Fixes http://autobuild.buildroot.net/results/a7fabcf61d56bca4bb005a91f8f367ffc8474ea0/
 
- Ruud> OK, I did not think of using CMake yet. Since Boost is mostly header
- Ruud> files, I thought it would be no different from my other simple
- Ruud> C-application. I build this with a generic-package like this:
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ ...s-0007-sockaddr-h-needs-stddef-h-for-NULL.patch |   19 +++++++++++++++++++
+ 1 files changed, 19 insertions(+), 0 deletions(-)
 
- Ruud> define CLB_TEST_APP_BUILD_CMDS
- Ruud> 	$(MAKE) CC="$(TARGET_CC)" LD="$(TARGET_LD)" -C $(@D) all
-
-Presumably you need to pass CXX="$(TARGET_CXX)" or even better just use
-TARGET_CONFIGURE_OPTS that set them all.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/nfs-utils/nfs-utils-0007-sockaddr-h-needs-stddef-h-for-NULL.patch b/package/nfs-utils/nfs-utils-0007-sockaddr-h-needs-stddef-h-for-NULL.patch
+new file mode 100644
+index 0000000..8fcf1dd
+--- /dev/null
++++ b/package/nfs-utils/nfs-utils-0007-sockaddr-h-needs-stddef-h-for-NULL.patch
+@@ -0,0 +1,19 @@
++[PATCH] sockaddr.h: needs stddef.h for NULL
++
++Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
++---
++ support/include/sockaddr.h |    1 +
++ 1 file changed, 1 insertion(+)
++
++Index: nfs-utils-1.2.6/support/include/sockaddr.h
++===================================================================
++--- nfs-utils-1.2.6.orig/support/include/sockaddr.h
+++++ nfs-utils-1.2.6/support/include/sockaddr.h
++@@ -25,6 +25,7 @@
++ #include <libio.h> 
++ #endif
++ #include <stdbool.h>
+++#include <stddef.h>
++ #include <sys/socket.h>
++ #include <netinet/in.h>
++ 
