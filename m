@@ -1,93 +1,91 @@
-From: Ruud Commandeur <RCommandeur@clb.nl>
-Date: Fri, 13 Sep 2013 09:37:15 +0200
-Subject: [Buildroot] C++ Compiling
-References: <15AE5A936F5E3A42A9144E66875A0A8934DC07@server1-derijp.CLB-Benelux.lokaal>
- <CAGm1_kvR5zLfHRrcnKmoTSetC9SsiqOj2=xV2Xxa1502CkC8KA@mail.gmail.com>
-Message-ID: <15AE5A936F5E3A42A9144E66875A0A8934DC0F@server1-derijp.CLB-Benelux.lokaal>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Fri, 13 Sep 2013 09:35:04 +0200
+Subject: [Buildroot] [PATCH 0/3] Support for out-of-tree Buildroot
+	customization
+In-Reply-To: <20130912202157.536e5904@skate>
+References: <1378646129-4167-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <OF0AEEFBDE.5291EB54-ON86257BE3.0005DA76-86257BE3.00087A88@rockwellcollins.com>
+ <20130911091700.0b24df41@skate>
+ <OFA3C6DE52.DF6BBCA7-ON86257BE3.0054A3F9-86257BE3.00577394@rockwellcollins.com>
+ <20130911172709.GB3410@free.fr>
+ <CAAXf6LVD590fVudge3Fk+2B8pSzvUEV2GQLTcbz=VpOB2HCmtQ@mail.gmail.com>
+ <20130912202157.536e5904@skate>
+Message-ID: <CAAXf6LXr0Ry1VFZ2zFBLqsKWRL_sYpBKjK-Bmj0AvxWmUK36fQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hi Thomas,
 
-> -----Oorspronkelijk bericht-----
-> Van: Yegor Yefremov [mailto:yegorslists at googlemail.com] 
-> Verzonden: vrijdag 13 september 2013 9:09
-> Aan: Ruud Commandeur
-> CC: buildroot at uclibc.org
-> Onderwerp: Re: [Buildroot] C++ Compiling
-> 
-> Hi Ruud,
-> 
-> On Fri, Sep 13, 2013 at 9:00 AM, Ruud Commandeur 
-> <RCommandeur@clb.nl> wrote:
-> > Hi Everyone,
-> >
-> > This week I tried build my 1st aplication using boost. 
-> Adding the boost
-> > part was easy from buildroot, but when trying to build the 
-> application,
-> > I get "Relocations in generic ELF" and "could not read 
-> symbols: File in
-> > wrong format".
-> 
-> Have you tried using CMake (http://cmake.org/)? CMake in BR
-> (http://buildroot.uclibc.org/downloads/manual/manual.html#_inf
-> rastructure_for_cmake_based_packages)
-> 
-> This is how you include Boost modules:
-> 
-> # Boost
-> find_package( Boost 1.36.0 COMPONENTS program_options REQUIRED)
-> 
-> and here you link them:
-> 
-> ADD_EXECUTABLE(test ${SOURCES})
-> TARGET_LINK_LIBRARIES(test ${Boost_LIBRARIES})
-> 
-> That's it. CMake will check for working C++ compiler at 
-> configuring stage.
-> 
+On Thu, Sep 12, 2013 at 8:21 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Dear Thomas De Schampheleire,
+>
+> On Thu, 12 Sep 2013 09:54:56 +0200, Thomas De Schampheleire wrote:
+>
 
-OK, I did not think of using CMake yet. Since Boost is mostly header
-files, I thought it would be no different from my other simple
-C-application. I build this with a generic-package like this:
+>> The upstreaming work is currently done by one person (me) and this is
+>> clearly the weak point. If I stop paying attention to upstreaming, or
+>> to keeping the changes we make upstreamable, the delta between our
+>> development repo and mainline buildroot becomes so large that it is a
+>> nightmare to keep up with newer releases.
+>
+> Do you think there is something we can do at the Buildroot level to
+> ease this process?
 
-define CLB_TEST_APP_BUILD_CMDS
-	$(MAKE) CC="$(TARGET_CC)" LD="$(TARGET_LD)" -C $(@D) all
-endef
+I don't think there is much to do about that. The buildroot community
+is very open and active, so there is no real reason why others
+couldn't do what I do. The 'time' aspect is the only hurdle I have
+experienced in the past, in two ways:
+1. upstreaming changes requires effort and time from the developer
+side, in order to prepare the patch in the first place, send it, and
+update after comments. All this in several cycles depending on the
+comments. In a typical company mindset, upstreaming is not a first
+priority, so these tasks go in-between other stuff.
+Except for encouraging companies and other forks to upstream their
+changes as much as possible, there is little the buildroot community
+can do here.
 
-Wouldn't this be possible for an application using Boost?
+2. sometimes patches get very little, if any, response. Especially in
+the beginning of my contributions, this was very frustrating. I pinged
+patches, re-sent them, even multiple times, and still not even a
+comment was given. I can imagine that not everyone continues trying,
+and several people will just give up, tagging the buildroot community
+as 'not accepting patches'.
+The situation has certainly improved since then, I think: the
+introduction of patchwork helps keeping track of open patches, and
+although I have not kept numbers I think the community certainly has
+grown, and there are now several more people systematically reviewing
+patches so that the burden does not fall entirely on Peter and
+yourself.
+I think we should still keep an eye on this though. I think it still
+happens that patches are sent by 'new' people in the community, and
+there is little or no reaction. Sometimes the patch does not really
+fit in our general belief of how buildroot should be, but maybe we
+don't always dare to say it. Or sometimes the patch is so specific
+that it is hard to  give a good review, so one waits until someone
+else with more experience in that area gives some comments, which may
+never happen.
+Ideally, patches should stay no longer than a fixed amount of time in
+patchwork. Either the patch is given some comments and we
+wait/encourage for the submitter to send an updated version, or we
+reject the patch with some explanation, or we ask more details so we
+can either accept/reject it with more background. This may not be
+feasible for all patches. Sometimes there is simply no-one who really
+needs the extra feature/fix except the submitter himself, but that is
+not necessarily a reason not to accept the patch.
 
-> 
-> > Obviously, this has to do with cross-compiling. When compiling a
-> > C-source, it uses arm-none-linux-gnueabi-gcc. But for a cpp 
-> it uses g++,
-> > resulting in an Intel 80386 object file. Looking at the 
-> internet, I read
-> > about an otion called "Toolchain has C++ support?". This 
-> must be the one
-> > to use, but I can't find it. Neither in the Toolchain 
-> section nor the
-> > System configuration.
-> >
-> > I am using Buildroot 2013.02 with CodeSourcery (Sourcery 
-> Codebench) for
-> > ARM 2012.03.
-> 
-> This toolchain always provides a C++ compiler, so you don't need to
-> configure it in BR.
-> 
+[..]
+>
+> Thanks a lot for this write-up. I think we should keep it somewhere in
+> a section of the manual.
 
-OK, that explains why I couldn't find it :-). But, apart from the
-Boost-stuff, it doesn't explain why it doesn't use the arm-gcc in this
-case then. Should it be someting (the BUILD_CMD line?) in the mk-file of
-my custom package?
+Thanks. I'm adding Samuel on this one.
+If we add this to the manual, then maybe we should add some other ways
+in which buildroot can be used: a number of recipes that work and from
+which beginning users can choose or get ideas from.
 
-> Yegor
-> 
-
-Thanks for your instant reply,
-
-Ruud
+Best regards,
+Thomas
