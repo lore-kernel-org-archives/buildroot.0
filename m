@@ -1,16 +1,13 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Fri, 13 Sep 2013 09:35:04 +0200
-Subject: [Buildroot] [PATCH 0/3] Support for out-of-tree Buildroot
-	customization
-In-Reply-To: <20130912202157.536e5904@skate>
+From: Tzu-Jung Lee <roylee17@gmail.com>
+Date: Fri, 13 Sep 2013 15:47:51 +0800
+Subject: [Buildroot] [PATCH 2/3] Add support for BR2_EXTERNAL
+In-Reply-To: <20130913091048.0423cf51@skate>
 References: <1378646129-4167-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <OF0AEEFBDE.5291EB54-ON86257BE3.0005DA76-86257BE3.00087A88@rockwellcollins.com>
- <20130911091700.0b24df41@skate>
- <OFA3C6DE52.DF6BBCA7-ON86257BE3.0054A3F9-86257BE3.00577394@rockwellcollins.com>
- <20130911172709.GB3410@free.fr>
- <CAAXf6LVD590fVudge3Fk+2B8pSzvUEV2GQLTcbz=VpOB2HCmtQ@mail.gmail.com>
- <20130912202157.536e5904@skate>
-Message-ID: <CAAXf6LXr0Ry1VFZ2zFBLqsKWRL_sYpBKjK-Bmj0AvxWmUK36fQ@mail.gmail.com>
+ <1378646129-4167-3-git-send-email-thomas.petazzoni@free-electrons.com>
+ <52322C4D.4060202@mind.be> <20130913054850.4e618f01@skate>
+ <CAEvN+1jveAKCG0d9fY_YKwhnpJ38PsObZ=ahKp8AFSc3jnhf0Q@mail.gmail.com>
+ <20130913091048.0423cf51@skate>
+Message-ID: <CAEvN+1hsLucZZmfW=PPkKs_HGxOGP1tmeSphuG6hc_G7sLbG3g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -19,73 +16,123 @@ To: buildroot@busybox.net
 
 Hi Thomas,
 
-On Thu, Sep 12, 2013 at 8:21 PM, Thomas Petazzoni
+On Fri, Sep 13, 2013 at 3:10 PM, Thomas Petazzoni
 <thomas.petazzoni@free-electrons.com> wrote:
-> Dear Thomas De Schampheleire,
+> Dear Tzu-Jung Lee,
 >
-> On Thu, 12 Sep 2013 09:54:56 +0200, Thomas De Schampheleire wrote:
+> On Fri, 13 Sep 2013 14:43:11 +0800, Tzu-Jung Lee wrote:
 >
-
->> The upstreaming work is currently done by one person (me) and this is
->> clearly the weak point. If I stop paying attention to upstreaming, or
->> to keeping the changes we make upstreamable, the delta between our
->> development repo and mainline buildroot becomes so large that it is a
->> nightmare to keep up with newer releases.
+>> >>   I'm not really convinced by the principle. The external.mk is exactly
+>> >> the same as the local override .mk; the Config.in appears at the very end
+>> >> of the top-level menu. Instead, I think we should enforce the buildroot
+>> >> hierarchy in the external dir, i.e.
+>> >>
+>> >> source <path-to-external-dir>/package/Config.in
+>> >>
+>> >> at the top of package/Config.in, and
+>> >>
+>> >> -include $(sort $(wildcard $(BR2_EXTERNAL)/package/*/*.mk))
+>> >>
+>> >> in the top-level Makefile.
+>> >
+>> > This is what I had originally done, but it seemed to me that the
+>> > external stuff may wish to add other Kconfig options than just
+>> > packages. That said, I've done this BR2_EXTERNAL stuff mainly for
+>> > packages, so if people think that we should restrict this to packages,
+>> > I'm fine with that.
+>> >
+>>
+>> We do want to support the absolute paths for both Config.in and *.mk.
+>>
+>> As a "buildroot overlay", we have similar structures in overlay/ like
+>> the buildroot/,
+>> such as configs, fs, packages, etc.
+>>
+>> This requires the buildroot to support only only the *.mk and
+>> Config.in in the top
+>> level over overlay/, but also those in their sub directories.
+>>
+>> The *.mk case may be get rid of with Arnount's suggestion.
+>> But I'm wondering could we solve the Config.in case in a less trickier way?
 >
-> Do you think there is something we can do at the Buildroot level to
-> ease this process?
-
-I don't think there is much to do about that. The buildroot community
-is very open and active, so there is no real reason why others
-couldn't do what I do. The 'time' aspect is the only hurdle I have
-experienced in the past, in two ways:
-1. upstreaming changes requires effort and time from the developer
-side, in order to prepare the patch in the first place, send it, and
-update after comments. All this in several cycles depending on the
-comments. In a typical company mindset, upstreaming is not a first
-priority, so these tasks go in-between other stuff.
-Except for encouraging companies and other forks to upstream their
-changes as much as possible, there is little the buildroot community
-can do here.
-
-2. sometimes patches get very little, if any, response. Especially in
-the beginning of my contributions, this was very frustrating. I pinged
-patches, re-sent them, even multiple times, and still not even a
-comment was given. I can imagine that not everyone continues trying,
-and several people will just give up, tagging the buildroot community
-as 'not accepting patches'.
-The situation has certainly improved since then, I think: the
-introduction of patchwork helps keeping track of open patches, and
-although I have not kept numbers I think the community certainly has
-grown, and there are now several more people systematically reviewing
-patches so that the burden does not fall entirely on Peter and
-yourself.
-I think we should still keep an eye on this though. I think it still
-happens that patches are sent by 'new' people in the community, and
-there is little or no reaction. Sometimes the patch does not really
-fit in our general belief of how buildroot should be, but maybe we
-don't always dare to say it. Or sometimes the patch is so specific
-that it is hard to  give a good review, so one waits until someone
-else with more experience in that area gives some comments, which may
-never happen.
-Ideally, patches should stay no longer than a fixed amount of time in
-patchwork. Either the patch is given some comments and we
-wait/encourage for the submitter to send an updated version, or we
-reject the patch with some explanation, or we ask more details so we
-can either accept/reject it with more background. This may not be
-feasible for all patches. Sometimes there is simply no-one who really
-needs the extra feature/fix except the submitter himself, but that is
-not necessarily a reason not to accept the patch.
-
-[..]
+> I am not sure what you mean here. What do you mean by "support the
+> absolute paths for both Config.in and *.mk" ?
 >
-> Thanks a lot for this write-up. I think we should keep it somewhere in
-> a section of the manual.
+>> The overlay/Makefile plays a trick, which allows us to work under overlay/ as we
+>> work under buildroot/
+>>
+>> Suppose we have the following configs,
+>>
+>>   overlay/configs/foo_defconfig
+>>
+>> Our build sequence will be:
+>>
+>>   $ cd overlay
+>>   $ make O=../output/foo foo_defconfig
+>>   $ make O=../output/foo
+>>
+>> With either Thomas's patch or our local patch, other targets supported by
+>> buildroot, such as menuconfig, help, etc also works under overlay/ as they do
+>> under buildroot/.
+>>
+>> ##### overlay/Makefile #######
+>> EXTERNAL_OVERLAY       ?= $(realpath $(dir $(lastword $(MAKEFILE_LIST))))
+>> export EXTERNAL_OVERLAY
+>>
+>> BUILDROOT_TOP           = ../buildroot
+>>
+>> all:
+>>         ln -fs ../overlay $(BUILDROOT_TOP)
+>>         make -C $(BUILDROOT_TOP)
+>>
+>> %:
+>>         ln -fs ../overlay $(BUILDROOT_TOP)
+>>         make -C $(BUILDROOT_TOP) $(MAKECMDGOALS)
+>>
+>> ##### overlay/local.mk #######
+>> -include overlay/package/*/*.mk
+>> -include overlay/package/*/*/*.mk
+>>
+>> -include overlay/cust/*/*.mk
+>> -include overlay/cust/*/*/*.mk
+>>
+>> -include overlay/linux/*.mk
+>>
+>> ###### overlay/Config.in ######
+>> source "overlay/package/Config.in"
+>> source "overlay/cust/Config.in"
+>>
+>> ###### overlay/package/Config.in ######
+>> source "overlay/package/xxx/Config.in"
+>
+> This is what BR2_EXTERNAL allows. Of course, doing a
+> BR2_EXTERNAL/Makefile that allows to run Buildroot from the external
+> (overlay) directory is something left for the person who creates the
+> overlay, I believe.
 
-Thanks. I'm adding Samuel on this one.
-If we add this to the manual, then maybe we should add some other ways
-in which buildroot can be used: a number of recipes that work and from
-which beginning users can choose or get ideas from.
 
-Best regards,
-Thomas
+By the absolute path, I mean the paths of sub Config.in included by the
+BR2_EXTERNAL/Config.in, not the path of itself.
+
+For example, suppose we have private packages in the overlay
+
+  overlay/Config.in
+  overlay/packages/foo/Config.in
+  overlay/packages/bar/Config.in
+
+The overlay/Config.in can't include them without support of absolute paths
+
+  source "overlay/packages/foo/Config.in"
+  source "overlay/packages/bar/Config.in"
+
+In ths case, Buildroot tries to include them from the
+
+  myproj/buildroot/overlay/packages/foo/Config.in
+
+instead of
+
+  myproj/overlay/packages/foo/Config.in
+
+Thanks.
+
+Roy
