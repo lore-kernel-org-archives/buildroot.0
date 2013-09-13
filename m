@@ -1,9 +1,9 @@
 From: =?UTF-8?q?Arnaud=20R=C3=A9billout?= <rebillout@syscom.ch>
-Date: Fri, 13 Sep 2013 09:31:48 +0200
+Date: Fri, 13 Sep 2013 09:33:58 +0200
 Subject: [Buildroot] [PATCH] tcping: new package
 In-Reply-To: <5232BED1.5040603@syscom.ch>
 References: <5232BED1.5040603@syscom.ch>
-Message-ID: <1379057508-27911-1-git-send-email-rebillout@syscom.ch>
+Message-ID: <1379057638-27970-1-git-send-email-rebillout@syscom.ch>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
