@@ -1,75 +1,61 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 13 Sep 2013 20:27:02 +0200
-Subject: [Buildroot] [PATCH v2] apply-patches.sh: detect missing patches
-In-Reply-To: <20130913181527.GA11933@harvey.netwinder.org>
-References: <20130813160017.GA2590@harvey.netwinder.org>
- <CAAXf6LXBHm7nG__780PqUaO+v9+4j2KON7UO0dw4Ej2qC3=XGg@mail.gmail.com>
- <CAAXf6LV9HPWdzqV_F5zQ+aABtVxZGRRkhDszF2Qx8vyXMb+PhA@mail.gmail.com>
- <20130905100459.13173009@skate> <5228425A.7090502@lucaceresoli.net>
- <20130905140135.GC3136@free.fr>
- <CAAXf6LWWnb5xQUtZA8p3kgoU2et-kD6x9TzyzXykgNbxdsuv+Q@mail.gmail.com>
- <20130911120630.GA14745@harvey.netwinder.org>
- <CAAXf6LX7o9P1tXv3Egk8By-VbzarRYe5JRyTh5+3wYNBz9Z6aQ@mail.gmail.com>
- <20130913181527.GA11933@harvey.netwinder.org>
-Message-ID: <20130913182702.GB3301@free.fr>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Fri, 13 Sep 2013 22:42:12 +0200
+Subject: [Buildroot] [PATCH 1/1] uboot: add support for a uEnv.txt file
+In-Reply-To: <OFD202041F.E301E6A3-ON86257BE5.004F84A9-86257BE5.00503B17@rockwellcollins.com>
+References: <1379029303-17804-1-git-send-email-rjbarnet@rockwellcollins.com>
+ <20130913090134.2b05d3e8@skate>
+ <OFD202041F.E301E6A3-ON86257BE5.004F84A9-86257BE5.00503B17@rockwellcollins.com>
+Message-ID: <523378A4.6080904@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Ralph, All,
+On 13/09/13 16:36, Ryan Barnett wrote:
+> Thomas,
+>
+> Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote on
+> 09/13/2013 02:01:34 AM:
+>  >
+>  > Dear Ryan Barnett,
+>  >
+>  > On Thu, 12 Sep 2013 18:41:43 -0500, Ryan Barnett wrote:
+>  > > Some boards in u-boot support the ability to modify the environment
+>  > > by placing a plain text file as uEnv.txt in the root of the partition
+>  > > of an SD card. For the extact placement of where the uEnv.txt should
+>  > > be, consult your u-boot environment. Your board supports this
+>  > > overwriting of environment variables if "loadbootenv" and
+>  > > "importbootenv" are defined in the board's environment.
+[snip]
+>  > However, what I'm really wondering if is we really need this. After
+>  > all, this is all about copying a text file to $(BINARIES_DIR),
+>  > something a post-build or a post-image script can do perfectly fine. I
+>  > mean, there's nothing U-Boot specific involved here, it's just a plain
+>  > 'cp'. Therefore, I'm not sure we need this at all, but I am open to
+>  > discussion on this.
+>  >
+>
+> Well I do agree that it isn't difficult to place in post-build/image script
+> which is how I currently do things. My thought with adding it here is that
+> it is a potential alternative to an Environment image. I didn't know about
+> this feature until just within the last couple months and I always keep
+> forgetting it is an option. So placing it under the "Environment image"
+> may open some eye's that this option exists for them. It seems like more
+> and more boards are adapting this feature.
 
-On 2013-09-13 14:15 -0400, Ralph Siemsen spake thusly:
-> The return status of the "cat <patchfile> | patch ..." pipeline
-> is zero (success) even if the patchfile does not exist. This is
-> because patch receives no input, which is not an error condition.
-> Therefore, explicitly check that patch file exists.
-> 
-> Based on feedback on buildroot mailing list, also changed the
-> check for unsupported file format. The build will now error out,
-> rather than continuing on silently.
-> ---
-> 
-> Hi Thomas,
-> Hopefully the formatting is now correct.
-> -Ralph
-> 
-> diff --git a/support/scripts/apply-patches.sh b/support/scripts/apply-patches.sh
-> index 7d5856c..d6e8983 100755
-> --- a/support/scripts/apply-patches.sh
-> +++ b/support/scripts/apply-patches.sh
-> @@ -70,13 +70,17 @@ function apply_patch {
->  	*.patch*)
->  	type="patch"; uncomp="cat"; ;;
->  	*)
-> -	echo "Unsupported format file for ${patch}, skip it";
-> -	return 0;
-> +	echo "Unsupported format file for ${path}/${patch}";
-> +	return 1;
+  I'm with Thomas on this one. It's not buildroot's mission to replace 
+the documentation of the underlying tools/packages. If there is something 
+simple that we can do that saves the user a lot of time, let's go for it, 
+but otherwise buildroot should be about building upstream code.
 
-I was a bit surprised to read that you used "return 1" here, rather than
-a more explicit "exit 1".
-
-For example, if the patch failed to apply cleanly, the function does not
-"return 1" but does "exit 1" (just the line after your patch ends). So I
-would prefer this behaviour to be homogeneous across the different
-code-paths.
-
-For the records, "return 1" does work since we call apply_patch thus:
-    apply_patch "${patchfile}" || exit 1
-
-This is not really straightforward. Just remove the "|| exit 1" and
-change all the "return 1" into "exit 1", so the script really errors out
-right away.
-
-Regards,
-Yann E. MORIN.
+  Regards,
+  Arnout
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
