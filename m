@@ -1,56 +1,69 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 13 Sep 2013 22:42:12 +0200
-Subject: [Buildroot] [PATCH 1/1] uboot: add support for a uEnv.txt file
-In-Reply-To: <OFD202041F.E301E6A3-ON86257BE5.004F84A9-86257BE5.00503B17@rockwellcollins.com>
-References: <1379029303-17804-1-git-send-email-rjbarnet@rockwellcollins.com>
- <20130913090134.2b05d3e8@skate>
- <OFD202041F.E301E6A3-ON86257BE5.004F84A9-86257BE5.00503B17@rockwellcollins.com>
-Message-ID: <523378A4.6080904@mind.be>
+Date: Fri, 13 Sep 2013 22:56:59 +0200
+Subject: [Buildroot] [PATCH 2/3] Add support for BR2_EXTERNAL
+In-Reply-To: <OFC3B467E6.5C4667CC-ON86257BE4.0078D9C7-86257BE4.0079F00F@rockwellcollins.com>
+References: <1378646129-4167-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1378646129-4167-3-git-send-email-thomas.petazzoni@free-electrons.com>
+ <OF916AAFB6.8E78891C-ON86257BE3.000A49F0-86257BE3.000B5AF0@rockwellcollins.com>
+ <52322C8E.7010501@mind.be>
+ <OFD093CE04.A9291FB9-ON86257BE4.007504CF-86257BE4.00762929@rockwellcollins.com>
+ <5232351D.3030703@mind.be>
+ <OFCA626374.83240A5A-ON86257BE4.0077C33E-86257BE4.00781ADF@rockwellcollins.com>
+ <523238B0.3050500@mind.be>
+ <OFC3B467E6.5C4667CC-ON86257BE4.0078D9C7-86257BE4.0079F00F@rockwellcollins.com>
+Message-ID: <52337C1B.3090108@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 13/09/13 16:36, Ryan Barnett wrote:
-> Thomas,
+On 13/09/13 00:11, Ryan Barnett wrote:
+> Arnout Vandecappelle <arnout@mind.be> wrote on 09/12/2013 04:57:04 PM:
 >
-> Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote on
-> 09/13/2013 02:01:34 AM:
+>  > On 12/09/13 23:51, Ryan Barnett wrote:
+>  > >  > > In order to utilize the BR2_EXTERNAL feature I must have
+> BR2_EXTERNAL
+>  > >  > > either exported into my environment or be called as
+>  > >  >
+>  > >  >   The Makefile exports it in the environment of the Kconfig
+> targets. So
+>  > >  > once it is in the .config, it will stay there. Try it and you'll
+> see :-)
+>  > >
+>  > > I have looked as I'm experiment with this and it definitely isn't
+> there :)
+>  > > Also according to the documentation you need to define it every time :)
+>  > >
 >  >
->  > Dear Ryan Barnett,
->  >
->  > On Thu, 12 Sep 2013 18:41:43 -0500, Ryan Barnett wrote:
->  > > Some boards in u-boot support the ability to modify the environment
->  > > by placing a plain text file as uEnv.txt in the root of the partition
->  > > of an SD card. For the extact placement of where the uEnv.txt should
->  > > be, consult your u-boot environment. Your board supports this
->  > > overwriting of environment variables if "loadbootenv" and
->  > > "importbootenv" are defined in the board's environment.
-[snip]
->  > However, what I'm really wondering if is we really need this. After
->  > all, this is all about copying a text file to $(BINARIES_DIR),
->  > something a post-build or a post-image script can do perfectly fine. I
->  > mean, there's nothing U-Boot specific involved here, it's just a plain
->  > 'cp'. Therefore, I'm not sure we need this at all, but I am open to
->  > discussion on this.
->  >
+>  >   Ah, yes indeed, sorry about that - I was trying to be too smart.
 >
-> Well I do agree that it isn't difficult to place in post-build/image script
-> which is how I currently do things. My thought with adding it here is that
-> it is a potential alternative to an Environment image. I didn't know about
-> this feature until just within the last couple months and I always keep
-> forgetting it is an option. So placing it under the "Environment image"
-> may open some eye's that this option exists for them. It seems like more
-> and more boards are adapting this feature.
+> Happens to the best of us.
+>
+>  >   To save it in the .config, it needs a prompt, and to be able to take it
+>  > from the environment it needs a helper variable. Like BR2_DEFCONFIG.
+>
+> I like to view BR2_EXTERNAL as something that is similar to "O=" which means
+> that I have the ability to change it at a moments notice. However, like it
+> is done in mkmakefile when doing the following from within buildroot
+> toplevel
+> source directory:
+>
+> make O=/path/to/build defconfig
+>
+> O= is stored in the generated makefile (as you know). However, it gets very
+> annoying to type BR2_EXTERNAL=/path/to/external and I don't always want to
+> export it as shell environment variable. Thus, adding that line to
+> mkmakefile is handy since usually when you specify O= you are doing a
+> specific build which BR2_EXTERNAL would definitely be a part of.
 
-  I'm with Thomas on this one. It's not buildroot's mission to replace 
-the documentation of the underlying tools/packages. If there is something 
-simple that we can do that saves the user a lot of time, let's go for it, 
-but otherwise buildroot should be about building upstream code.
+  My point is: it should (and can) be made part of the .config. It really 
+has to be part of the .config, because some options in the .config will 
+refer to the packages that are defined in the external directory.
 
   Regards,
   Arnout
+
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
