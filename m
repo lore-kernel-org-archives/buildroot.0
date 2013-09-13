@@ -1,184 +1,86 @@
-From: Matt Weber <mlweber1@rockwellcollins.com>
-Date: Fri, 13 Sep 2013 11:28:43 -0500
-Subject: [Buildroot] [PATCH v5] omniorb: new package
-Message-ID: <1379089723-7253-1-git-send-email-mlweber1@rockwellcollins.com>
+From: Ryan Barnett <rjbarnet@rockwellcollins.com>
+Date: Fri, 13 Sep 2013 11:41:41 -0500
+Subject: [Buildroot] [RFC] Effective Patchwork Use and Patch Review
+Message-ID: <OFD77E15AC.FCFBC1CA-ON86257BE5.005BB4D9-86257BE5.005BB4FE@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Matt Weber <mlweber1@rockwellcollins.com>
----
-Changes v4 -> v5
-  * Fixed depend bug, didn't retest Kconfig before submitting v4
-    package/omniorb/Config.in
+Thomas De Schampheleire, all,
 
-Changes v3 -> v4
-  * Added depedency on BR2_INSTALL_LIBSTCPP and comment about
-    support when it's missing. package/omniorb/Config.in (suggested by Peter)
-  * Removed trailing white space package/omniorb/Config.in (suggested by Peter)
-  * Cleaned up omni patch name and added description with upstream link
-    package/omniorb/omniorb-0001-supportCrossCompileToolExport.patch (suggested by Peter)
-  * Changed places where OMNIORB was uppercase to omniORB.  ORB is an
-    acronym, omni is not. package/omniorb/omniorb.mk (suggested by Peter)
-  * Removed empty line after autotools-package package/omniorb/omniorb.mk (suggested by Peter)
+In the massive thread that has become [PATCH 0/3] Support for
+out-of-tree Buildroot customization, Thomas De Schampheleire
+brought up the following:
 
-Changes v2 -> v3
-  * Removed depend on python as the mk accounts for it
-    package/omniorb/Config.in (suggested by Thomas)
-  * Added link to website package/omniorb/Config.in (suggested by Thomas)
-  * Added note about host python requirement for build
-    package/omniorb/omniorb.mk (suggested by Thomas)
-  * Removed staging loop of fixing file paths for a single file.  Instead it
-    no just operates on a single file package/omniorb/omniorb.mk (suggested by Thomas)
-  * Fixed brackets  package/omniorb/omniorb.mk (suggested by Thomas)
-  * Cleaned up host tool comment  package/omniorb/omniorb.mk (suggested by Thomas)
-  * Cleaned up host tools to use HOST_CONFIGURE_OPTS to fix ccache
-    support package/omniorb/omniorb.mk (suggested by Thomas)
-  * Switched over to use a make tools export and clean hook.  Required
-    patching of the package to correctly assign the CC/CXX/etc defines.
-    Submitted this patch upsteam as well as including in this patchset.
-    package/omniorb/omniorb.mk (suggested by Arnout)
+Thomas De Schampheleire <patrickdepinguin@gmail.com> wrote on
+09/13/2013 02:35:04 AM:
 
-Changes v1 -> v2:
-  * Fixed formatting of help and added select of python in  package/omniorb/Config.in (suggested by Thomas)
-  * Removed extra open ended config option as it isn't used  package/omniorb/Config.in (suggested by Thomas)
-  * Cleaned up use of brackets and replaced with braces package/omniorb/Config.in (suggested by Thomas)
-  * Updated licenses to be GPL and LGPL with a + package/omniorb/omniorb.mk (suggested by Thomas)
-  * Removed redundant conf opt and target install sets package/omniorb/omniorb.mk (suggested by Thomas)
-  * Added a post install step to replace overloading the default staging installs package/omniorb/omniorb.mk (suggested by Thomas)
-  * Broke out tools(host) build into seperate post conf step package/omniorb/omniorb.mk (suggested by Thomas)
-  * Removed clean and uninstall package/omniorb/omniorb.mk (suggested by Thomas)
+> 2. sometimes patches get very little, if any, response. Especially in
+> the beginning of my contributions, this was very frustrating. I pinged
+> patches, re-sent them, even multiple times, and still not even a
+> comment was given. I can imagine that not everyone continues trying,
+> and several people will just give up, tagging the buildroot community
+> as 'not accepting patches'.
 
- package/Config.in                                  |    1 +
- package/omniorb/Config.in                          |   14 ++++++
- .../omniorb-0001-crosscompile-tool-export.patch    |   30 +++++++++++++
- package/omniorb/omniorb.mk                         |   46 ++++++++++++++++++++
- 4 files changed, 91 insertions(+), 0 deletions(-)
- create mode 100644 package/omniorb/Config.in
- create mode 100644 package/omniorb/omniorb-0001-crosscompile-tool-export.patch
- create mode 100644 package/omniorb/omniorb.mk
+> The situation has certainly improved since then, I think: the
+> introduction of patchwork helps keeping track of open patches, and
+> although I have not kept numbers I think the community certainly has
+> grown, and there are now several more people systematically reviewing
+> patches so that the burden does not fall entirely on Peter and
+> yourself.
 
-diff --git a/package/Config.in b/package/Config.in
-index 0d457a6..91e68e7 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -625,6 +625,7 @@ source "package/libupnp/Config.in"
- source "package/libvncserver/Config.in"
- source "package/libwebsockets/Config.in"
- source "package/nss-mdns/Config.in"
-+source "package/omniorb/Config.in"
- source "package/openpgm/Config.in"
- source "package/ortp/Config.in"
- source "package/slirp/Config.in"
-diff --git a/package/omniorb/Config.in b/package/omniorb/Config.in
-new file mode 100644
-index 0000000..4ea0db1
---- /dev/null
-+++ b/package/omniorb/Config.in
-@@ -0,0 +1,14 @@
-+config BR2_PACKAGE_OMNIORB
-+	bool "omniorb"
-+	depends on BR2_INSTALL_LIBSTCPP
-+	help
-+	  omniORB is a robust high performance CORBA ORB for C++ and Python.
-+	  omniORB is largely CORBA 2.6 compliant. omniORB is one of only
-+	  three ORBs to have been awarded the Open Group's Open Brand for
-+	  CORBA. This means that omniORB has been tested and certified
-+	  CORBA compliant, to version 2.1 of the CORBA specification.
-+
-+	  http://omniorb.sourceforge.net/
-+
-+comment "omniORB requires a toolchain with C++ support"
-+	depends on !BR2_INSTALL_LIBSTCPP
-diff --git a/package/omniorb/omniorb-0001-crosscompile-tool-export.patch b/package/omniorb/omniorb-0001-crosscompile-tool-export.patch
-new file mode 100644
-index 0000000..260d86f
---- /dev/null
-+++ b/package/omniorb/omniorb-0001-crosscompile-tool-export.patch
-@@ -0,0 +1,30 @@
-+beforeauto.mk.in: added support for overriding the configure time
-+defined CC/CXX/RANLIB/CPP variables so that a couple pkg tools could be
-+built which generate code during the cross compile build.
-+
-+http://www.omniorb-support.com/pipermail/omniorb-list/2013-September/031473.html
-+
-+Signed-off-by: Matt Weber <mlweber1@rockwellcollins.com>
-+
-+--- omniorb-4.1.6.orig/mk/beforeauto.mk.in	2013-09-12 12:49:55.668708148 -0500
-++++ omniorb-4.1.6/mk/beforeauto.mk.in	2013-09-12 12:51:22.707928579 -0500
-+@@ -672,15 +672,15 @@
-+ #
-+ 
-+ AR              = ar cq
-+-CC              = @CC@
-+-CXX             = @CXX@
-+-RANLIB		= @RANLIB@
-++CC		?= @CC@
-++CXX		?= @CXX@
-++RANLIB		?= @RANLIB@
-+ MKDIRHIER	= $(BASE_OMNI_TREE)/bin/scripts/omkdirhier
-+ INSTLIBFLAGS	= -m 0644
-+ INSTEXEFLAGS	= -m 0755
-+ CP		= cp
-+ MV		= mv -f
-+-CPP		= @CPP@
-++CPP		?= @CPP@
-+ OMKDEPEND	= $(TOOLBINDIR)/omkdepend
-+ RMDIRHIER	= $(RM) -rf
-+ 
-diff --git a/package/omniorb/omniorb.mk b/package/omniorb/omniorb.mk
-new file mode 100644
-index 0000000..2d425b3
---- /dev/null
-+++ b/package/omniorb/omniorb.mk
-@@ -0,0 +1,46 @@
-+################################################################################
-+#
-+# omniorb
-+#
-+################################################################################
-+
-+OMNIORB_VERSION = 4.1.6
-+OMNIORB_SITE = http://downloads.sourceforge.net/project/omniorb/omniORB/omniORB-$(OMNIORB_VERSION)
-+OMNIORB_SOURCE = omniORB-$(OMNIORB_VERSION).tar.bz2
-+OMNIORB_INSTALL_STAGING = YES
-+OMNIORB_LICENSE = GPL2+ LGPLv2.1+
-+OMNIORB_LICENSE_FILES = COPYING COPYING.LIB
-+# Required for internal code generation scripts
-+OMNIORB_DEPENDENCIES = host-python
-+
-+ifeq ($(BR2_PACKAGE_PYTHON),y)
-+	OMNIORB_DEPENDENCIES += python
-+	OMNIORB_CONF_OPT += --enable-python-bindings
-+else
-+	OMNIORB_CONF_OPT += --disable-python-bindings
-+endif
-+
-+# omniORB is currently not cross-compile friendly and has some assumptions 
-+# where a couple host tools are built in place and then used during the 
-+# build.  The tools generate code from the IDL description language, which 
-+# is then built into the cross compiled OMNIORB application.
-+# So this first hook builds the tools required for the host side 
-+# generation of code. Then the second hook cleans up before the install.
-+define OMNIORB_BUILD_TOOLS
-+	$(HOST_MAKE_ENV) $(MAKE) $(HOST_CONFIGURE_OPTS) \
-+		-C $(@D)/src/tool export
-+endef
-+OMNIORB_POST_CONFIGURE_HOOKS += OMNIORB_BUILD_TOOLS
-+
-+define OMNIORB_CLEAN_TOOLS
-+	$(HOST_MAKE_ENV) $(MAKE) $(HOST_CONFIGURE_OPTS) \
-+		-C $(@D)/src/tool clean
-+endef
-+OMNIORB_POST_BUILD_HOOKS += OMNIORB_CLEAN_TOOLS
-+
-+define OMNIORB_FIXUP_FILE_PATHS_HOOK
-+	$(SED) "s:$(HOST_DIR)/usr:/usr:g" $(STAGING_DIR)/usr/bin/omniidl;
-+endef
-+OMNIORB_POST_INSTALL_STAGING_HOOKS += OMNIORB_FIXUP_FILE_PATHS_HOOK 
-+
-+$(eval $(autotools-package))
--- 
-1.7.1
+> I think we should still keep an eye on this though. I think it still
+> happens that patches are sent by 'new' people in the community, and
+> there is little or no reaction. Sometimes the patch does not really
+> fit in our general belief of how buildroot should be, but maybe we
+> don't always dare to say it. Or sometimes the patch is so specific
+> that it is hard to  give a good review, so one waits until someone
+> else with more experience in that area gives some comments, which may
+> never happen.
+
+> Ideally, patches should stay no longer than a fixed amount of time in
+> patchwork. Either the patch is given some comments and we
+> wait/encourage for the submitter to send an updated version, or we
+> reject the patch with some explanation, or we ask more details so we
+> can either accept/reject it with more background. This may not be
+> feasible for all patches. Sometimes there is simply no-one who really
+> needs the extra feature/fix except the submitter himself, but that is
+> not necessarily a reason not to accept the patch.
+
+One thing that I've found difficult is finding an effective way for
+someone new to buildroot community to perform reviews on patches they
+find of interest. What I mean by effective is a way that takes little
+time to pull the patch down and then mark it up for review and send it
+back out. Our email client in my work environment isn't ideal.
+However, we do have ways of sending email directly using git-email.
+
+The thing is that I haven't been able find good documentation on how
+to effectively use Patchworks for review (pwclient). I don't
+necessarily need someone to tell me how to exactly use it but rather
+maybe an example workflow for interacting with patchworks with
+"pwclient" and maybe some example helper scripts for formatting
+replies to these patches.
+
+So I guess the two things that I would like to see eventually be
+addressed by provide a little more detail some how are:
+
+1) Guidelines for providing reviews comments on patches
+
+2) Some examples of how to effectively use patchworks for reviewing
+
+If somebody is willing to chime in on this, I can maybe look to
+document this feedback under the contributing to buildroot section
+of the manual.
+
+------------------------------------------------------------
+Ryan J Barnett / Software Engineer / Platform SW
+MS 137-157, 855 35th St NE, Cedar Rapids, IA, 52498-3161, US
+Phone: 319-263-3880 / VPN: 263-3880 
+rjbarnet at rockwellcollins.com
+www.rockwellcollins.com
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130913/a48433a2/attachment.html>
