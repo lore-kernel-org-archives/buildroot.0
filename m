@@ -1,79 +1,69 @@
-From: mlweber1 at rockwellcollins.com <mlweber1@rockwellcollins.com>
-Date: Fri, 13 Sep 2013 11:11:15 -0500
-Subject: [Buildroot] [PATCH v4] omniorb: new package
-In-Reply-To: <1379075641-18347-1-git-send-email-mlweber1@rockwellcollins.com>
-References: <1379075641-18347-1-git-send-email-mlweber1@rockwellcollins.com>
-Message-ID: <OF4836DA8A.1B5738BC-ON86257BE5.0057FDFB-86257BE5.0058F076@rockwellcollins.com>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Fri, 13 Sep 2013 18:24:41 +0200
+Subject: [Buildroot] [RFCv1 05/11] toolchain: introduce a virtual package
+In-Reply-To: <1378416469-17708-6-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1378416469-17708-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1378416469-17708-6-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <52333C49.7000504@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Matt Weber <mlweber1@rockwellcollins.com> wrote on 09/13/2013 07:34:01 AM:
-
-> From: Matt Weber <mlweber1@rockwellcollins.com>
-> To: buildroot at busybox.net
-> Cc: Matt Weber <mlweber1@rockwellcollins.com>
-> Date: 09/13/2013 07:34 AM
-> Subject: [PATCH v4] omniorb: new package
-> 
-> Signed-off-by: Matt Weber <mlweber1@rockwellcollins.com>
+Thomas Petazzoni wrote:
+> This commit introduces a virtual package called 'toolchain', located
+> in 'toolchain/toolchain', which simply depends on
+> 'toolchain-buildroot' or 'toolchain-external' depending on the
+> selected toolchain backend.
+>
+> For now, toolchain-buildroot and toolchain-external are still manual
+> make targets, but the following patches convert those backends to use
+> the package infrastructure as well.
+>
+> In addition to this:
+>
+>   * The main Makefile is modified to always make BASE_TARGETS point to
+>     this new toolchain virtual package.
+>
+>   * The main Makefile is changed to include all the toolchain/*/*.mk
+>     files: the toolchain virtual package, and the toolchain-buildroot
+>     and toolchain-external directories.
+>
+>   * The dependency of the toolchain on prepare dirs and dependencies is
+>     moved to the toolchain virtual package. It is moved as a
+>     prerequisite of the "toolchain-source" rule to ensure that all
+>     directories are prepared before we even start extracting the
+>     toolchain.
+>
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 > ---
-> Changes v3 -> v4
->   * Added depedency on BR2_INSTALL_LIBSTCPP and comment about
->     support when it's missing. package/omniorb/Config.in (suggested by 
-Peter)
->   * Removed trailing white space package/omniorb/Config.in 
-> (suggested by Peter)
->   * Cleaned up omni patch name and added description with upstream link
->     package/omniorb/omniorb-0001-supportCrossCompileToolExport.patch
-> (suggested by Peter)
->   * Changed places where OMNIORB was uppercase to omniORB.  ORB is an
->     acronym, omni is not. package/omniorb/omniorb.mk (suggested by 
-Peter)
->   * Removed empty line after autotools-package package/omniorb/
-> omniorb.mk (suggested by Peter)
-> 
-[snip]
+>   Makefile                         | 18 +++---------------
+>   toolchain/toolchain/toolchain.mk | 18 ++++++++++++++++++
+>   2 files changed, 21 insertions(+), 15 deletions(-)
+>   create mode 100644 toolchain/toolchain/toolchain.mk
+>
+> diff --git a/Makefile b/Makefile
+> index f64a101..f2430eb 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -222,11 +222,7 @@ GNU_HOST_NAME:=$(shell support/gnuconfig/config.guess)
+>   #
+>   ################################################################################
+>   
+> -ifeq ($(BR2_TOOLCHAIN_BUILDROOT),y)
+> -BASE_TARGETS += toolchain-buildroot
+> -else ifeq ($(BR2_TOOLCHAIN_EXTERNAL),y)
+> -BASE_TARGETS += toolchain-external
+> -endif
+> +BASE_TARGETS = toolchain
 
-> 
-> diff --git a/package/Config.in b/package/Config.in
-> index 0d457a6..91e68e7 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -625,6 +625,7 @@ source "package/libupnp/Config.in"
->  source "package/libvncserver/Config.in"
->  source "package/libwebsockets/Config.in"
->  source "package/nss-mdns/Config.in"
-> +source "package/omniorb/Config.in"
->  source "package/openpgm/Config.in"
->  source "package/ortp/Config.in"
->  source "package/slirp/Config.in"
-> diff --git a/package/omniorb/Config.in b/package/omniorb/Config.in
-> new file mode 100644
-> index 0000000..fcf6fc7
-> --- /dev/null
-> +++ b/package/omniorb/Config.in
-> @@ -0,0 +1,14 @@
-> +config BR2_PACKAGE_OMNIORB
-> +   bool "omniorb"
-> +   depend BR2_INSTALL_LIBSTCPP
-> +   help
-> +     omniORB is a robust high performance CORBA ORB for C++ and Python.
-> +     omniORB is largely CORBA 2.6 compliant. omniORB is one of only
-> +     three ORBs to have been awarded the Open Group's Open Brand for
-> +     CORBA. This means that omniORB has been tested and certified
-> +     CORBA compliant, to version 2.1 of the CORBA specification.
-> +
-> +     http://omniorb.sourceforge.net/
-> +
-> +comment "omniORB requires a toolchain with C++ support"
-> +   depends !BR2_INSTALL_LIBSTCPP
-created a bug with the depends.  will fix and resubmit.
+At first sight I thought this might be a bug, because the += becamea =.
+But since this is the only place where we set BASE_TARGETS this isnot a
+problem of course.
 
-[snip]
+I like this cleanup work, thanks.
 
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130913/35db293e/attachment-0001.html>
+Acked-by: Luca Ceresoli <luca@lucaceresoli.net>
+
+Luca
