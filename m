@@ -1,44 +1,60 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri, 13 Sep 2013 13:42:38 -0300
-Subject: [Buildroot] [PATCH] squid: fix build failure after bump
-Message-ID: <1379090558-4270-1-git-send-email-gustavo@zacarias.com.ar>
+From: Ralph Siemsen <ralphs@netwinder.org>
+Date: Fri, 13 Sep 2013 14:15:27 -0400
+Subject: [Buildroot] [PATCH v2] apply-patches.sh: detect missing patches
+In-Reply-To: <CAAXf6LX7o9P1tXv3Egk8By-VbzarRYe5JRyTh5+3wYNBz9Z6aQ@mail.gmail.com>
+References: <20130813160017.GA2590@harvey.netwinder.org>
+ <CAAXf6LXBHm7nG__780PqUaO+v9+4j2KON7UO0dw4Ej2qC3=XGg@mail.gmail.com>
+ <CAAXf6LV9HPWdzqV_F5zQ+aABtVxZGRRkhDszF2Qx8vyXMb+PhA@mail.gmail.com>
+ <20130905100459.13173009@skate> <5228425A.7090502@lucaceresoli.net>
+ <20130905140135.GC3136@free.fr>
+ <CAAXf6LWWnb5xQUtZA8p3kgoU2et-kD6x9TzyzXykgNbxdsuv+Q@mail.gmail.com>
+ <20130911120630.GA14745@harvey.netwinder.org>
+ <CAAXf6LX7o9P1tXv3Egk8By-VbzarRYe5JRyTh5+3wYNBz9Z6aQ@mail.gmail.com>
+Message-ID: <20130913181527.GA11933@harvey.netwinder.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add missing patch, fixes:
-http://autobuild.buildroot.net/results/f6a/f6a6dd1f3138406d1daa31e5e4ff5d5026b3c069/
+The return status of the "cat <patchfile> | patch ..." pipeline
+is zero (success) even if the patchfile does not exist. This is
+because patch receives no input, which is not an error condition.
+Therefore, explicitly check that patch file exists.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Based on feedback on buildroot mailing list, also changed the
+check for unsupported file format. The build will now error out,
+rather than continuing on silently.
 ---
- package/squid/squid-02-atomic-cross.patch | 17 +++++++++++++++++
- 1 file changed, 17 insertions(+)
- create mode 100644 package/squid/squid-02-atomic-cross.patch
 
-diff --git a/package/squid/squid-02-atomic-cross.patch b/package/squid/squid-02-atomic-cross.patch
-new file mode 100644
-index 0000000..c1b59dc
---- /dev/null
-+++ b/package/squid/squid-02-atomic-cross.patch
-@@ -0,0 +1,17 @@
-+AC_RUN_IFELSE is bad for cross compiling, switch to AC_COMPILE_IFELSE
-+since it's enough for this test.
-+
-+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+
-+diff -Nura squid-3.3.9.orig/configure.ac squid-3.3.9/configure.ac
-+--- squid-3.3.9.orig/configure.ac	2013-09-13 09:15:32.473365627 -0300
-++++ squid-3.3.9/configure.ac	2013-09-13 13:27:06.829711487 -0300
-+@@ -392,7 +392,7 @@
-+ dnl Check for atomic operations support in the compiler
-+ dnl
-+ AC_MSG_CHECKING([for GNU atomic operations support])
-+-AC_RUN_IFELSE([AC_LANG_PROGRAM([[
-++AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
-+     int n = 0;
-+ ]],[[
-+     __sync_add_and_fetch(&n, 10); // n becomes 10
+Hi Thomas,
+Hopefully the formatting is now correct.
+-Ralph
+
+diff --git a/support/scripts/apply-patches.sh b/support/scripts/apply-patches.sh
+index 7d5856c..d6e8983 100755
+--- a/support/scripts/apply-patches.sh
++++ b/support/scripts/apply-patches.sh
+@@ -70,13 +70,17 @@ function apply_patch {
+ 	*.patch*)
+ 	type="patch"; uncomp="cat"; ;;
+ 	*)
+-	echo "Unsupported format file for ${patch}, skip it";
+-	return 0;
++	echo "Unsupported format file for ${path}/${patch}";
++	return 1;
+ 	;;
+     esac
+     echo ""
+     echo "Applying $patch using ${type}: "
+-	echo $patch >> ${builddir}/.applied_patches_list
++    if [ ! -e "${path}/$patch" ] ; then
++	echo "Error: missing patch file ${path}/$patch"
++	return 1
++    fi
++    echo $patch >> ${builddir}/.applied_patches_list
+     ${uncomp} "${path}/$patch" | patch -g0 -p1 -E -d "${builddir}"
+     if [ $? != 0 ] ; then
+         echo "Patch failed!  Please fix ${patch}!"
 -- 
-1.8.1.5
+1.7.7.6
