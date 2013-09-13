@@ -1,138 +1,96 @@
-From: Tzu-Jung Lee <roylee17@gmail.com>
-Date: Fri, 13 Sep 2013 15:47:51 +0800
-Subject: [Buildroot] [PATCH 2/3] Add support for BR2_EXTERNAL
-In-Reply-To: <20130913091048.0423cf51@skate>
-References: <1378646129-4167-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1378646129-4167-3-git-send-email-thomas.petazzoni@free-electrons.com>
- <52322C4D.4060202@mind.be> <20130913054850.4e618f01@skate>
- <CAEvN+1jveAKCG0d9fY_YKwhnpJ38PsObZ=ahKp8AFSc3jnhf0Q@mail.gmail.com>
- <20130913091048.0423cf51@skate>
-Message-ID: <CAEvN+1hsLucZZmfW=PPkKs_HGxOGP1tmeSphuG6hc_G7sLbG3g@mail.gmail.com>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Fri, 13 Sep 2013 09:52:20 +0200
+Subject: [Buildroot] C++ Compiling
+In-Reply-To: <15AE5A936F5E3A42A9144E66875A0A8934DC0F@server1-derijp.CLB-Benelux.lokaal>
+References: <15AE5A936F5E3A42A9144E66875A0A8934DC07@server1-derijp.CLB-Benelux.lokaal>
+ <CAGm1_kvR5zLfHRrcnKmoTSetC9SsiqOj2=xV2Xxa1502CkC8KA@mail.gmail.com>
+ <15AE5A936F5E3A42A9144E66875A0A8934DC0F@server1-derijp.CLB-Benelux.lokaal>
+Message-ID: <CAGm1_kuO8Bk00v7XicHNJPfSmtodNO_XH2EAG1Sp8im2zE+wxw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
-
-On Fri, Sep 13, 2013 at 3:10 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Dear Tzu-Jung Lee,
+On Fri, Sep 13, 2013 at 9:37 AM, Ruud Commandeur <RCommandeur@clb.nl> wrote:
 >
-> On Fri, 13 Sep 2013 14:43:11 +0800, Tzu-Jung Lee wrote:
->
->> >>   I'm not really convinced by the principle. The external.mk is exactly
->> >> the same as the local override .mk; the Config.in appears at the very end
->> >> of the top-level menu. Instead, I think we should enforce the buildroot
->> >> hierarchy in the external dir, i.e.
->> >>
->> >> source <path-to-external-dir>/package/Config.in
->> >>
->> >> at the top of package/Config.in, and
->> >>
->> >> -include $(sort $(wildcard $(BR2_EXTERNAL)/package/*/*.mk))
->> >>
->> >> in the top-level Makefile.
+>> -----Oorspronkelijk bericht-----
+>> Van: Yegor Yefremov [mailto:yegorslists at googlemail.com]
+>> Verzonden: vrijdag 13 september 2013 9:09
+>> Aan: Ruud Commandeur
+>> CC: buildroot at uclibc.org
+>> Onderwerp: Re: [Buildroot] C++ Compiling
+>>
+>> Hi Ruud,
+>>
+>> On Fri, Sep 13, 2013 at 9:00 AM, Ruud Commandeur
+>> <RCommandeur@clb.nl> wrote:
+>> > Hi Everyone,
 >> >
->> > This is what I had originally done, but it seemed to me that the
->> > external stuff may wish to add other Kconfig options than just
->> > packages. That said, I've done this BR2_EXTERNAL stuff mainly for
->> > packages, so if people think that we should restrict this to packages,
->> > I'm fine with that.
+>> > This week I tried build my 1st aplication using boost.
+>> Adding the boost
+>> > part was easy from buildroot, but when trying to build the
+>> application,
+>> > I get "Relocations in generic ELF" and "could not read
+>> symbols: File in
+>> > wrong format".
+>>
+>> Have you tried using CMake (http://cmake.org/)? CMake in BR
+>> (http://buildroot.uclibc.org/downloads/manual/manual.html#_inf
+>> rastructure_for_cmake_based_packages)
+>>
+>> This is how you include Boost modules:
+>>
+>> # Boost
+>> find_package( Boost 1.36.0 COMPONENTS program_options REQUIRED)
+>>
+>> and here you link them:
+>>
+>> ADD_EXECUTABLE(test ${SOURCES})
+>> TARGET_LINK_LIBRARIES(test ${Boost_LIBRARIES})
+>>
+>> That's it. CMake will check for working C++ compiler at
+>> configuring stage.
+>>
+>
+> OK, I did not think of using CMake yet. Since Boost is mostly header
+> files, I thought it would be no different from my other simple
+> C-application. I build this with a generic-package like this:
+>
+> define CLB_TEST_APP_BUILD_CMDS
+>         $(MAKE) CC="$(TARGET_CC)" LD="$(TARGET_LD)" -C $(@D) all
+> endef
+>
+> Wouldn't this be possible for an application using Boost?
+
+You should use TARGET_CXX instead of TARGET_CC. See
+package/libjson/libjson.mk, package/qt/qt.mk and other
+generic-packages for example.
+
+>> > Obviously, this has to do with cross-compiling. When compiling a
+>> > C-source, it uses arm-none-linux-gnueabi-gcc. But for a cpp
+>> it uses g++,
+>> > resulting in an Intel 80386 object file. Looking at the
+>> internet, I read
+>> > about an otion called "Toolchain has C++ support?". This
+>> must be the one
+>> > to use, but I can't find it. Neither in the Toolchain
+>> section nor the
+>> > System configuration.
 >> >
+>> > I am using Buildroot 2013.02 with CodeSourcery (Sourcery
+>> Codebench) for
+>> > ARM 2012.03.
 >>
->> We do want to support the absolute paths for both Config.in and *.mk.
+>> This toolchain always provides a C++ compiler, so you don't need to
+>> configure it in BR.
 >>
->> As a "buildroot overlay", we have similar structures in overlay/ like
->> the buildroot/,
->> such as configs, fs, packages, etc.
->>
->> This requires the buildroot to support only only the *.mk and
->> Config.in in the top
->> level over overlay/, but also those in their sub directories.
->>
->> The *.mk case may be get rid of with Arnount's suggestion.
->> But I'm wondering could we solve the Config.in case in a less trickier way?
 >
-> I am not sure what you mean here. What do you mean by "support the
-> absolute paths for both Config.in and *.mk" ?
->
->> The overlay/Makefile plays a trick, which allows us to work under overlay/ as we
->> work under buildroot/
->>
->> Suppose we have the following configs,
->>
->>   overlay/configs/foo_defconfig
->>
->> Our build sequence will be:
->>
->>   $ cd overlay
->>   $ make O=../output/foo foo_defconfig
->>   $ make O=../output/foo
->>
->> With either Thomas's patch or our local patch, other targets supported by
->> buildroot, such as menuconfig, help, etc also works under overlay/ as they do
->> under buildroot/.
->>
->> ##### overlay/Makefile #######
->> EXTERNAL_OVERLAY       ?= $(realpath $(dir $(lastword $(MAKEFILE_LIST))))
->> export EXTERNAL_OVERLAY
->>
->> BUILDROOT_TOP           = ../buildroot
->>
->> all:
->>         ln -fs ../overlay $(BUILDROOT_TOP)
->>         make -C $(BUILDROOT_TOP)
->>
->> %:
->>         ln -fs ../overlay $(BUILDROOT_TOP)
->>         make -C $(BUILDROOT_TOP) $(MAKECMDGOALS)
->>
->> ##### overlay/local.mk #######
->> -include overlay/package/*/*.mk
->> -include overlay/package/*/*/*.mk
->>
->> -include overlay/cust/*/*.mk
->> -include overlay/cust/*/*/*.mk
->>
->> -include overlay/linux/*.mk
->>
->> ###### overlay/Config.in ######
->> source "overlay/package/Config.in"
->> source "overlay/cust/Config.in"
->>
->> ###### overlay/package/Config.in ######
->> source "overlay/package/xxx/Config.in"
->
-> This is what BR2_EXTERNAL allows. Of course, doing a
-> BR2_EXTERNAL/Makefile that allows to run Buildroot from the external
-> (overlay) directory is something left for the person who creates the
-> overlay, I believe.
+> OK, that explains why I couldn't find it :-). But, apart from the
+> Boost-stuff, it doesn't explain why it doesn't use the arm-gcc in this
+> case then. Should it be someting (the BUILD_CMD line?) in the mk-file of
+> my custom package?
 
+See above.
 
-By the absolute path, I mean the paths of sub Config.in included by the
-BR2_EXTERNAL/Config.in, not the path of itself.
-
-For example, suppose we have private packages in the overlay
-
-  overlay/Config.in
-  overlay/packages/foo/Config.in
-  overlay/packages/bar/Config.in
-
-The overlay/Config.in can't include them without support of absolute paths
-
-  source "overlay/packages/foo/Config.in"
-  source "overlay/packages/bar/Config.in"
-
-In ths case, Buildroot tries to include them from the
-
-  myproj/buildroot/overlay/packages/foo/Config.in
-
-instead of
-
-  myproj/overlay/packages/foo/Config.in
-
-Thanks.
-
-Roy
+Yegor
