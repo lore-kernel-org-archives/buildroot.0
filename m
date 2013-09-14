@@ -1,84 +1,86 @@
-From: Stephan Hoffmann <sho@relinux.de>
-Date: Sat, 14 Sep 2013 15:19:40 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
-	2013-09-13
-In-Reply-To: <16A28366-18D6-4148-B7E5-1FB4C61CB473@layer-7.net>
-References: <20130914063005.CC66352C101@lolut.humanoidz.org>
- <16A28366-18D6-4148-B7E5-1FB4C61CB473@layer-7.net>
-Message-ID: <5234626C.6020107@relinux.de>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Sat, 14 Sep 2013 16:36:59 +0200
+Subject: [Buildroot] [PATCH] perl: fix on uClibc without IPv6 support
+Message-ID: <1379169420-3088-1-git-send-email-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Michael!
 
-Am 14.09.2013 14:36, schrieb Michael Rommel:
-> Hi,
->
-> I thought I take care of one of the build failures from yesterday and
-> picked the line:
->
->       arm |                  libssh2-1.4.3 | NOK
-> | http://autobuild.buildroot.net/results/e93e24d210dc7a2a51758536b7b3964b8a3251b4/
->
-> I tried to reproduce the error, but was unable to do so in three attempts.
->  1. used a clean i568 toolchain without configuration and gave only a
-> make toolchain libssh2
->  2. used a clean arm toolchain with a default .config file and made a
-> make toolchain libssh2
->  3. used the config file from the autobuilder and did a make toolchain
-> libssh2
-I would try to store the config file found under the link as .config and
-then simply run "make". Or use the provided defconfig instead.
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+---
+ package/perl/perl-uClibc-IPv6.patch |   61 +++++++++++++++++++++++++++++++++++
+ 1 file changed, 61 insertions(+)
+ create mode 100644 package/perl/perl-uClibc-IPv6.patch
 
-Hope it helps
-
-Stephan
->
-> Always used the toolchain from buildroot itself.
->
-> All three commands completed successfully and libssh2 found the libssl
-> without any problems.
->
-> Although I'd like to help, I am now stuck - without reproducing the
-> error, I have no idea, how to fix it.
->
-> BR,
->
->   Michael.
->
-> -- 
-> Michael Rommel, Erlangen, Germany
->
-> On Sep 14, 2013, at 8:30 , Thomas Petazzoni
-> <thomas.petazzoni@free-electrons.com
-> <mailto:thomas.petazzoni@free-electrons.com>> wrote:
->
->> Build statistics for 2013-09-13
->> ===============================
->>
->>        success : 52
->>       failures : 56
->>       timeouts : 0  
->>          TOTAL : 108
->>
->
->
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
-
+diff --git a/package/perl/perl-uClibc-IPv6.patch b/package/perl/perl-uClibc-IPv6.patch
+new file mode 100644
+index 0000000..8ace75e
+--- /dev/null
++++ b/package/perl/perl-uClibc-IPv6.patch
+@@ -0,0 +1,61 @@
++fix on uClibc without IPv6 support
++
++Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
++
++Index: b/cpan/Socket/Socket.xs
++===================================================================
++--- a/cpan/Socket/Socket.xs
+++++ b/cpan/Socket/Socket.xs
++@@ -896,7 +896,7 @@
++ 	CODE:
++ #ifdef HAS_INETNTOP
++ 	STRLEN addrlen;
++-#ifdef AF_INET6
+++#if (defined(__UCLIBC__) && defined(__UCLIBC_HAS_IPV6__)) || (!defined(__UCLIBC__) && defined(AF_INET6))
++ 	struct in6_addr addr;
++ 	char str[INET6_ADDRSTRLEN];
++ #else
++@@ -916,7 +916,7 @@
++ 		croak("Bad address length for Socket::inet_ntop on AF_INET;"
++ 		      " got %"UVuf", should be 4", (UV)addrlen);
++ 	    break;
++-#ifdef AF_INET6
+++#if (defined(__UCLIBC__) && defined(__UCLIBC_HAS_IPV6__)) || (!defined(__UCLIBC__) && defined(AF_INET6))
++ 	  case AF_INET6:
++ 	    if(addrlen != 16)
++ 		croak("Bad address length for Socket::inet_ntop on AF_INET6;"
++@@ -925,7 +925,7 @@
++ #endif
++ 	  default:
++ 		croak("Bad address family for %s, got %d, should be"
++-#ifdef AF_INET6
+++#if (defined(__UCLIBC__) && defined(__UCLIBC_HAS_IPV6__)) || (!defined(__UCLIBC__) && defined(AF_INET6))
++ 		      " either AF_INET or AF_INET6",
++ #else
++ 		      " AF_INET",
++@@ -955,7 +955,7 @@
++ #ifdef HAS_INETPTON
++ 	int ok;
++ 	int addrlen = 0;
++-#ifdef AF_INET6
+++#if (defined(__UCLIBC__) && defined(__UCLIBC_HAS_IPV6__)) || (!defined(__UCLIBC__) && defined(AF_INET6))
++ 	struct in6_addr ip_address;
++ #else
++ 	struct in_addr ip_address;
++@@ -965,14 +965,14 @@
++ 	  case AF_INET:
++ 	    addrlen = 4;
++ 	    break;
++-#ifdef AF_INET6
+++#if (defined(__UCLIBC__) && defined(__UCLIBC_HAS_IPV6__)) || (!defined(__UCLIBC__) && defined(AF_INET6))
++ 	  case AF_INET6:
++ 	    addrlen = 16;
++ 	    break;
++ #endif
++ 	  default:
++ 		croak("Bad address family for %s, got %d, should be"
++-#ifdef AF_INET6
+++#if (defined(__UCLIBC__) && defined(__UCLIBC_HAS_IPV6__)) || (!defined(__UCLIBC__) && defined(AF_INET6))
++ 		      " either AF_INET or AF_INET6",
++ #else
++ 		      " AF_INET",
 -- 
-reLinux     -    Stephan Hoffmann
-Am Schmidtgrund 124    50765 K?ln
-Tel. +49.221.95595-19    Fax: -64
-www.reLinux.de     sho at reLinux.de
-
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130914/db984408/attachment.html>
+1.7.9.5
