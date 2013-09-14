@@ -1,65 +1,71 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 14 Sep 2013 07:41:24 +0200
-Subject: [Buildroot] BeagleBoneBlack Updates?
-In-Reply-To: <20130913153827.46f1c747d8fb425408b5c75b@lavabit.com>
-References: <CA+-urNRrUA_M45M_99OuGJvpvzRi40tCWoqPWVgUuGtpRPjj4w@mail.gmail.com>
- <20130913153827.46f1c747d8fb425408b5c75b@lavabit.com>
-Message-ID: <20130914074124.2e98d5db@skate>
+Date: Sat, 14 Sep 2013 07:47:40 +0200
+Subject: [Buildroot] [RFC] Effective Patchwork Use and Patch Review
+In-Reply-To: <OFD77E15AC.FCFBC1CA-ON86257BE5.005BB4D9-86257BE5.005BB4FE@rockwellcollins.com>
+References: <OFD77E15AC.FCFBC1CA-ON86257BE5.005BB4D9-86257BE5.005BB4FE@rockwellcollins.com>
+Message-ID: <20130914074740.424283aa@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear rh,
+Dear Ryan Barnett,
 
-On Fri, 13 Sep 2013 15:38:27 -0700, rh wrote:
+On Fri, 13 Sep 2013 11:41:41 -0500, Ryan Barnett wrote:
 
-> I've heard that someone (TI) was supposed to be getting code into
-> the kernel 3.12-rc series. But I saw a message recently and it looked
-> like the 3.12 merge window was missed so 3.13 is the target.
+> One thing that I've found difficult is finding an effective way for
+> someone new to buildroot community to perform reviews on patches they
+> find of interest. What I mean by effective is a way that takes little
+> time to pull the patch down and then mark it up for review and send it
+> back out. Our email client in my work environment isn't ideal.
+> However, we do have ways of sending email directly using git-email.
+> 
+> The thing is that I haven't been able find good documentation on how
+> to effectively use Patchworks for review (pwclient). I don't
+> necessarily need someone to tell me how to exactly use it but rather
+> maybe an example workflow for interacting with patchworks with
+> "pwclient" and maybe some example helper scripts for formatting
+> replies to these patches.
 
-A patch adding a basic Device Tree for the BBB has been posted on the
-Linux ARM kernel mailing list. But the support is fairly minimal, i.e
-MMC/SD is not even supported, for example.
+patchwork is really not here to help with the reviewing process. It's
+mainly of use for the Buildroot maintainer to keep track of which
+patches remain to be merged/rejected.
 
-> Some in the linux kernel aren't fond of ARM devices so maybe there's
-> a logjam.
+All the reviewing process takes place on the mailing list, using e-mail
+clients. We don't use patchwork at all for this.
 
-I really don't see where this statement comes from. There are
-gazillions of patches being integrated to support ARM devices. I've
-myself worked over the last year on upstreaming the support for some
-ARM processors, and while it certainly requires some work, I clearly
-don't think there is some resistance against ARM devices at all.
+The only use of patchwork you may be interested in is to apply patches
+locally in order to be able to test them. But you don't even need
+pwclient for that. You can simply do:
 
-> But I've also been told that it's due to lack of resources at
-> TI.
+wget -O - http://patchwork.ozlabs.org/patch/274867/mbox/ | git am
 
-I believe this is more the problem. TI already had issues getting the
-complete support for their SoCs merged in mainline (due to the
-complexity of their SoC, and also probably due to the internal
-organization of TI), but now TI has laid off a huge number of
-engineers, including some of which where working on upstreaming work.
-So there's even less work force in TI to do this work.
+This will fetch a patch from patchwork and apply it to the current
+branch.
 
-And on the other hand, the CircuitCo guys have not tried at all to
-submit any of their patches to mainline (the Device Tree patch
-mentioned above being the first one). Their excuse is that they have
-been having issues to cooperate with TI on upstreaming effort, but when
-we see how long it takes TI to bring stuff in mainline, there is
-certainly room for others to contribute. However, I admit it is hard to
-do mainline work when the SOC vendor is also doing something, but you
-don't know what.
+But besides that, all the review process simply consists in replying to
+the patch on the mailing list.
 
-> So maybe BBB will truly be a DIY platform. The problem that exists
-> is that using the wrong device tree code can result in destroying devices.
-> It seems that some people have done that and blown up their HDMI
-> interface.
+> So I guess the two things that I would like to see eventually be
+> addressed by provide a little more detail some how are:
+> 
+> 1) Guidelines for providing reviews comments on patches
 
-This is if you use the mainline kernel. The BBB defconfig in Buildroot
-will use the BBB-custom kernel provided by CircuitCo, because we should
-certainly offer to our users a kernel that allows to use as many
-features as possible of the BBB.
+As said above, it's really just "hit reply in your mailer", and provide
+your comments at the relevant places in the patch itself.
+
+> 2) Some examples of how to effectively use patchworks for reviewing
+
+patchwork is of little use for reviewing. The only thing it is used for
+is to know the list of patches that are still pending to be applied.
+
+I believe you might have seen patchwork like gerrit, but it is not:
+patchwork is really a patch tracking tool, not a patch reviewing tool.
+At the time we introduced patchwork, I believe we discussed gerrit and
+things like that, but if I remember correctly, we thought that
+patchwork was already a good step forward, and we didn't want to move
+to a more complicated tool in one step.
 
 Best regards,
 
