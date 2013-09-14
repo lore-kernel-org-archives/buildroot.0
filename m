@@ -1,98 +1,60 @@
-From: Michael Rommel <rommel@layer-7.net>
-Date: Sat, 14 Sep 2013 16:53:47 +0200
-Subject: [Buildroot] [buildroot] [PATCH v2] python-crc16: new package
-In-Reply-To: <y>
-References: <y>
-Message-ID: <1379170427-16802-1-git-send-email-rommel@layer-7.net>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 14 Sep 2013 17:03:16 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2013-09-13
+In-Reply-To: <16A28366-18D6-4148-B7E5-1FB4C61CB473@layer-7.net>
+References: <20130914063005.CC66352C101@lolut.humanoidz.org>
+ <16A28366-18D6-4148-B7E5-1FB4C61CB473@layer-7.net>
+Message-ID: <20130914170316.52a4eec6@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-A python library that calculates CRC checksums of the CCITT/XModem
-variant.
+Dear Michael Rommel,
 
-Signed-off-by: Michael Rommel <rommel@layer-7.net>
----
-Changes v1 -> v2
- * corrected a typo in the filename for the .mk file
+On Sat, 14 Sep 2013 14:36:26 +0200, Michael Rommel wrote:
 
- package/Config.in                    |    1 +
- package/python-crc16/Config.in       |   11 +++++++++++
- package/python-crc16/python-crc16.mk |   34 ++++++++++++++++++++++++++++++++++
- 3 files changed, 46 insertions(+)
- create mode 100644 package/python-crc16/Config.in
- create mode 100644 package/python-crc16/python-crc16.mk
+> I thought I take care of one of the build failures from yesterday and picked the line:
+> 
+>       arm |                  libssh2-1.4.3 | NOK | http://autobuild.buildroot.net/results/e93e24d210dc7a2a51758536b7b3964b8a3251b4/
+> 
+> I tried to reproduce the error, but was unable to do so in three attempts.
+>  1. used a clean i568 toolchain without configuration and gave only a make toolchain libssh2
+>  2. used a clean arm toolchain with a default .config file and made a make toolchain libssh2
+>  3. used the config file from the autobuilder and did a make toolchain libssh2
 
-diff --git a/package/Config.in b/package/Config.in
-index 2884bfb..ccd5e11 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -385,6 +385,7 @@ source "package/python/Config.in"
- if BR2_PACKAGE_PYTHON
- menu "external python modules"
- source "package/python-bottle/Config.in"
-+source "package/python-crc16/Config.in"
- source "package/python-dpkt/Config.in"
- source "package/python-id3/Config.in"
- source "package/python-mad/Config.in"
-diff --git a/package/python-crc16/Config.in b/package/python-crc16/Config.in
-new file mode 100644
-index 0000000..d5c62e9
---- /dev/null
-+++ b/package/python-crc16/Config.in
-@@ -0,0 +1,11 @@
-+config BR2_PACKAGE_PYTHON_CRC16
-+	bool "python-crc16"
-+	depends on BR2_PACKAGE_PYTHON
-+	help
-+	  This library calculates only CRC16 (16-bit codes) and the
-+	  only supported variant at the moment is CRC-CCITT (XModem).
-+	  CRC is a way of detecting accidental changes in data storage
-+	  or transmission. There are many variants of CRC and CRC16,
-+	  in particular.
-+
-+	  http://pycrc16.googlecode.com/files/crc16-0.1.1.tar.gz
-diff --git a/package/python-crc16/python-crc16.mk b/package/python-crc16/python-crc16.mk
-new file mode 100644
-index 0000000..0119ab8
---- /dev/null
-+++ b/package/python-crc16/python-crc16.mk
-@@ -0,0 +1,34 @@
-+################################################################################
-+#
-+# python-crc16
-+#
-+################################################################################
-+
-+PYTHON_CRC16_VERSION = 0.1.1
-+PYTHON_CRC16_SOURCE = crc16-$(PYTHON_CRC16_VERSION).tar.gz
-+PYTHON_CRC16_SITE = http://pycrc16.googlecode.com/files/
-+PYTHON_CRC16_LICENSE = LGPLv3+
-+PYTHON_CRC16_LICENSE_FILES = COPYING.txt
-+PYTHON_CRC16_DEPENDENCIES = python host-python
-+
-+PYTHON_CRC16_PARAMS = CC="$(TARGET_CC)" \
-+		CFLAGS="$(TARGET_CFLAGS)" \
-+		LDSHARED="$(TARGET_CC) -shared" \
-+		CROSS_COMPILING=yes \
-+		_python_sysroot=$(STAGING_DIR) \
-+		_python_srcdir=$(PYTHON_DIR) \
-+		_python_prefix=/usr \
-+		_python_exec_prefix=/usr
-+
-+define PYTHON_CRC16_BUILD_CMDS
-+	(cd $(@D); $(PYTHON_CRC16_PARAMS) \
-+		$(HOST_DIR)/usr/bin/python setup.py build)
-+endef
-+
-+define PYTHON_CRC16_INSTALL_TARGET_CMDS
-+	(cd $(@D); $(PYTHON_CRC16_PARAMS) \
-+		$(HOST_DIR)/usr/bin/python setup.py install \
-+		--prefix=$(TARGET_DIR)/usr)
-+endef
-+
-+$(eval $(generic-package))
+If you do 'make toolchain libssh2', you're not reproducing what the
+autobuilder did, because you're telling Buildroot to just build the
+toolchain, and then libssh2 (and its dependencies).
+
+What the autobuilder is just a simple 'make'. So many more things might
+have been built before libssh2 and its dependencies, and it is
+sometimes what is affecting the build and causing the failure.
+
+Another possibility is that your host system isn't necessarily
+comparable to the one of the autobuilders. All the build tests executed
+on the Free Electrons server take place inside a minimal Debian chroot,
+that has only the minimal set of packages needed to get Buildroot
+running. This is most likely different from your machine, which
+probably has a lot more packages installed, including a number of
+development packages for some libraries.
+
+I'd recommend to first try to reproduce with just a plain 'make'. If
+you still can't reproduce the failure, then I'll have a look myself
+using the autobuilder environment.
+
+Maybe I should be providing a script that downloads the complete
+chroot, and reproduce the build failure within the chroot, so that
+people can get the exact same behavior as the one in the autobuilder
+machine.
+
+Anyway, thanks for having taken the time to look at this build failure!
+
+Thomas
 -- 
-1.7.9.5
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
