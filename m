@@ -1,52 +1,129 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 14 Sep 2013 19:00:42 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2013-09-13
-In-Reply-To: <523481F4.7000304@googlemail.com>
-References: <20130914063005.CC66352C101@lolut.humanoidz.org>
- <16A28366-18D6-4148-B7E5-1FB4C61CB473@layer-7.net>
- <20130914170316.52a4eec6@skate> <523481F4.7000304@googlemail.com>
-Message-ID: <20130914190042.4b6f0833@skate>
+Date: Sat, 14 Sep 2013 21:03:49 +0200
+Subject: [Buildroot] [PATCHv2 0/4] Add a BR2_EXTERNAL mechanism
+Message-ID: <1379185433-8770-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Carsten Schoenert,
+Hello,
 
-On Sat, 14 Sep 2013 17:34:12 +0200, Carsten Schoenert wrote:
+Here is the second version of the BR2_EXTERNAL patch series.
 
-> In Debian we use sbuild (Perl), cowbuilder (ELF executable) / pbuilder
-> (shell) to set up a clean basic chroot and after that clone this base
-> chroot and build the *.deb packages inside. The core chroot is setted up
-> by calling debootstrap for the target platform.
-> 
-> Maybe you want to look at it and can grap something?
-> I just use the tools, Perl isn't my favorite language and pbuilder just
-> works as expected, so don't ask me anything special. *g*
-> 
-> I personally use pbuilder, it's just a shell script with soem external
-> calls, there should be something suitable I think.
+Changes since v1
+================
 
-Thanks for the suggestion. It happens that almost 10 years ago, I did a
-bit of Debian packaging, and I was a user of pbuilder to isolate the
-build process in a chroot.
+ * Store BR2_EXTERNAL in the Makefile generated in the output
+   directory, so that BR2_EXTERNAL doesn't have to be passed over and
+   over again. Suggested by Ryan Barnett.
 
-It could indeed be useful for others to reproduce builds in a minimal
-chroot, but for the autobuilder servers themselves it's not very
-useful. pbuilder is mainly useful when you need to create a different
-chroot everytime you want to build a package (the chroot should have
-the build dependencies installed). While with Buildroot, the set of
-core dependencies to be installed is always the same. So what happens
-in my autobuilder machine is that I have one static chroot, in which all
-the builds are done.
+ * Patch set splitted in more fine-grained changes, as suggested by
+   Arnout.
+
+ * Instead of having the top-level Config.in file generated at
+   run-time, use instead a trick proposed by Arnout: make BR2_EXTERNAL
+   point to support/dummy-external/, which contains an empty
+   Config.in. This way, regardless of whether BR2_EXTERNAL is
+   specified by the user or not, kconfig is happy as 'source
+   "$BR2_EXTERNAL/Config.in"' will always point to an existing
+   file. If BR2_EXTERNAL is not used, it will point to the dummy file,
+   if BR2_EXTERNAL is used, it will point to Config.in file in the
+   provided BR2_EXTERNAL directory.
+
+   With this, BR2_EXTERNAL always has a value, so testing whether
+   BR2_EXTERNAL is empty no longer tells us if the user has provided a
+   value or not. Therefore, we have another variable,
+   BR2_EXTERNAL_USED, which tells if the mechanism is used by the user
+   or not. This variable avoids trying to use defconfigs from the
+   dummy directory, or to encode the BR2_EXTERNAL value in the
+   Makefile wrapper.
+
+ * As a consequence of the previous change, it is no longer needed to
+   refactor the *config dependencies using a variable, so I've dropped
+   what was previously the first patch of the series.
+
+ * BR2_EXTERNAL is turned into an absolute path, in order to avoid any
+   problem. Suggested by Arnout.
+
+ * Fixed the usage of <some board> vs. <boardname> in the
+   documentation, as noted by Arnout.
+
+Remaning questions
+==================
+
+ * Interaction with the 'local.mk' mechanism. Should 'external.mk'
+   replace the 'local.mk' mechanism? Should they co-exist?
+
+Introduction to the patch series
+================================
+
+Following the e-mail from Ryan Barnett entitled "[RFC] New feature to
+handle a custom board folder", I finally took a bit of time to
+implement how I think the support for externally stored Buildroot
+customization should be done.
+
+I really think the approach of having board-related configuration
+options within Buildroot is wrong: it is the Buildroot configuration
+as a whole that defines what the configuration of the user system is:
+a combination of a kernel, a root filesystem with various packages, a
+selection of a root filesystem image format, some system configuration
+tuning, a bootloader, etc.
+
+In Ryan e-mail, I believe the most important thing is the wish to
+store the board-specific details outside of the Buildroot tree. In
+fact, this is already possible: nothing prevents anyone from using
+$(TOPDIR)/../company/kernel.config as the kernel configuration file
+for example, where $(TOPDIR)/../company/ is outside of the Buildroot
+tree, and versioned in a completely different way.
+
+However, it seems like this possibility is not 'visible' enough, and
+admittedly only usable for some Buildroot configuration elements,
+while an user may also be interested in storing Buildroot package
+recipes and Buildroot deconfig files outside of the main Buildroot
+tree.
+
+So, this patch set adds the BR2_EXTERNAL mechanism. It is very
+lightweight, and doesn't change anything to the Buildroot overall
+logic. Basically, BR2_EXTERNAL is an environment variable that one can
+point to a directory that will contain Buildroot customizations. It is
+then usable for three things:
+
+ * It is available as $(BR2_EXTERNAL) within all of the Buildroot
+   configuration options, to define the location of the kernel
+   configuration file, the root filesystem overlay, etc.
+
+ * It allows to store additional Config.in options and makefile logic
+   in $(BR2_EXTERNAL), since Buildroot automatically includes
+   $(BR2_EXTERNAL)/Config.in into the top-level menu, and
+   $(BR2_EXTERNAL)/external.mk in the makefile logic. The main purpose
+   of this is to be able to store custom packages outside of the
+   Buildroot tree.
+
+ * It allows to store defconfigs in $(BR2_EXTERNAL)/configs/. They
+   appear automatically in 'make help' and can be loaded like any
+   other defconfig using 'make <something>_defconfig'.
 
 Best regards,
 
 Thomas
+
+Thomas Petazzoni (4):
+  core: introduce the BR2_EXTERNAL variable
+  core: allow external Config.in/makefile code to be integrated
+  core: allow external defconfigs to be used
+  docs/manual: add explanations about BR2_EXTERNAL
+
+ Config.in                            |   6 ++
+ Makefile                             |  25 +++++++-
+ docs/manual/customize-outside-br.txt | 112 +++++++++++++++++++++++++++++++++++
+ docs/manual/customize.txt            |   2 +
+ support/dummy-external/Config.in     |   0
+ support/scripts/mkmakefile           |   3 +-
+ 6 files changed, 144 insertions(+), 4 deletions(-)
+ create mode 100644 docs/manual/customize-outside-br.txt
+ create mode 100644 support/dummy-external/Config.in
+
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+1.8.1.2
