@@ -1,86 +1,96 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Sat, 14 Sep 2013 16:36:59 +0200
-Subject: [Buildroot] [PATCH] perl: fix on uClibc without IPv6 support
-Message-ID: <1379169420-3088-1-git-send-email-francois.perrad@gadz.org>
+From: Michael Rommel <rommel@layer-7.net>
+Date: Sat, 14 Sep 2013 16:43:59 +0200
+Subject: [Buildroot] [buildroot] [PATCH v1] python-crc16: new package
+Message-ID: <1379169840-16377-1-git-send-email-rommel@layer-7.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+A python library that calculates CRC checksums of the CCITT/XModem
+variant.
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Michael Rommel <rommel@layer-7.net>
 ---
- package/perl/perl-uClibc-IPv6.patch |   61 +++++++++++++++++++++++++++++++++++
- 1 file changed, 61 insertions(+)
- create mode 100644 package/perl/perl-uClibc-IPv6.patch
 
-diff --git a/package/perl/perl-uClibc-IPv6.patch b/package/perl/perl-uClibc-IPv6.patch
+Initial version v1.
+
+ package/Config.in                   |    1 +
+ package/python-crc16/Config.in      |   11 +++++++++++
+ package/python-crc16/python-crc1.mk |   34 ++++++++++++++++++++++++++++++++++
+ 3 files changed, 46 insertions(+)
+ create mode 100644 package/python-crc16/Config.in
+ create mode 100644 package/python-crc16/python-crc1.mk
+
+diff --git a/package/Config.in b/package/Config.in
+index 2884bfb..ccd5e11 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -385,6 +385,7 @@ source "package/python/Config.in"
+ if BR2_PACKAGE_PYTHON
+ menu "external python modules"
+ source "package/python-bottle/Config.in"
++source "package/python-crc16/Config.in"
+ source "package/python-dpkt/Config.in"
+ source "package/python-id3/Config.in"
+ source "package/python-mad/Config.in"
+diff --git a/package/python-crc16/Config.in b/package/python-crc16/Config.in
 new file mode 100644
-index 0000000..8ace75e
+index 0000000..d5c62e9
 --- /dev/null
-+++ b/package/perl/perl-uClibc-IPv6.patch
-@@ -0,0 +1,61 @@
-+fix on uClibc without IPv6 support
++++ b/package/python-crc16/Config.in
+@@ -0,0 +1,11 @@
++config BR2_PACKAGE_PYTHON_CRC16
++	bool "python-crc16"
++	depends on BR2_PACKAGE_PYTHON
++	help
++	  This library calculates only CRC16 (16-bit codes) and the
++	  only supported variant at the moment is CRC-CCITT (XModem).
++	  CRC is a way of detecting accidental changes in data storage
++	  or transmission. There are many variants of CRC and CRC16,
++	  in particular.
 +
-+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
++	  http://pycrc16.googlecode.com/files/crc16-0.1.1.tar.gz
+diff --git a/package/python-crc16/python-crc1.mk b/package/python-crc16/python-crc1.mk
+new file mode 100644
+index 0000000..0119ab8
+--- /dev/null
++++ b/package/python-crc16/python-crc1.mk
+@@ -0,0 +1,34 @@
++################################################################################
++#
++# python-crc16
++#
++################################################################################
 +
-+Index: b/cpan/Socket/Socket.xs
-+===================================================================
-+--- a/cpan/Socket/Socket.xs
-++++ b/cpan/Socket/Socket.xs
-+@@ -896,7 +896,7 @@
-+ 	CODE:
-+ #ifdef HAS_INETNTOP
-+ 	STRLEN addrlen;
-+-#ifdef AF_INET6
-++#if (defined(__UCLIBC__) && defined(__UCLIBC_HAS_IPV6__)) || (!defined(__UCLIBC__) && defined(AF_INET6))
-+ 	struct in6_addr addr;
-+ 	char str[INET6_ADDRSTRLEN];
-+ #else
-+@@ -916,7 +916,7 @@
-+ 		croak("Bad address length for Socket::inet_ntop on AF_INET;"
-+ 		      " got %"UVuf", should be 4", (UV)addrlen);
-+ 	    break;
-+-#ifdef AF_INET6
-++#if (defined(__UCLIBC__) && defined(__UCLIBC_HAS_IPV6__)) || (!defined(__UCLIBC__) && defined(AF_INET6))
-+ 	  case AF_INET6:
-+ 	    if(addrlen != 16)
-+ 		croak("Bad address length for Socket::inet_ntop on AF_INET6;"
-+@@ -925,7 +925,7 @@
-+ #endif
-+ 	  default:
-+ 		croak("Bad address family for %s, got %d, should be"
-+-#ifdef AF_INET6
-++#if (defined(__UCLIBC__) && defined(__UCLIBC_HAS_IPV6__)) || (!defined(__UCLIBC__) && defined(AF_INET6))
-+ 		      " either AF_INET or AF_INET6",
-+ #else
-+ 		      " AF_INET",
-+@@ -955,7 +955,7 @@
-+ #ifdef HAS_INETPTON
-+ 	int ok;
-+ 	int addrlen = 0;
-+-#ifdef AF_INET6
-++#if (defined(__UCLIBC__) && defined(__UCLIBC_HAS_IPV6__)) || (!defined(__UCLIBC__) && defined(AF_INET6))
-+ 	struct in6_addr ip_address;
-+ #else
-+ 	struct in_addr ip_address;
-+@@ -965,14 +965,14 @@
-+ 	  case AF_INET:
-+ 	    addrlen = 4;
-+ 	    break;
-+-#ifdef AF_INET6
-++#if (defined(__UCLIBC__) && defined(__UCLIBC_HAS_IPV6__)) || (!defined(__UCLIBC__) && defined(AF_INET6))
-+ 	  case AF_INET6:
-+ 	    addrlen = 16;
-+ 	    break;
-+ #endif
-+ 	  default:
-+ 		croak("Bad address family for %s, got %d, should be"
-+-#ifdef AF_INET6
-++#if (defined(__UCLIBC__) && defined(__UCLIBC_HAS_IPV6__)) || (!defined(__UCLIBC__) && defined(AF_INET6))
-+ 		      " either AF_INET or AF_INET6",
-+ #else
-+ 		      " AF_INET",
++PYTHON_CRC16_VERSION = 0.1.1
++PYTHON_CRC16_SOURCE = crc16-$(PYTHON_CRC16_VERSION).tar.gz
++PYTHON_CRC16_SITE = http://pycrc16.googlecode.com/files/
++PYTHON_CRC16_LICENSE = LGPLv3+
++PYTHON_CRC16_LICENSE_FILES = COPYING.txt
++PYTHON_CRC16_DEPENDENCIES = python host-python
++
++PYTHON_CRC16_PARAMS = CC="$(TARGET_CC)" \
++		CFLAGS="$(TARGET_CFLAGS)" \
++		LDSHARED="$(TARGET_CC) -shared" \
++		CROSS_COMPILING=yes \
++		_python_sysroot=$(STAGING_DIR) \
++		_python_srcdir=$(PYTHON_DIR) \
++		_python_prefix=/usr \
++		_python_exec_prefix=/usr
++
++define PYTHON_CRC16_BUILD_CMDS
++	(cd $(@D); $(PYTHON_CRC16_PARAMS) \
++		$(HOST_DIR)/usr/bin/python setup.py build)
++endef
++
++define PYTHON_CRC16_INSTALL_TARGET_CMDS
++	(cd $(@D); $(PYTHON_CRC16_PARAMS) \
++		$(HOST_DIR)/usr/bin/python setup.py install \
++		--prefix=$(TARGET_DIR)/usr)
++endef
++
++$(eval $(generic-package))
 -- 
 1.7.9.5
