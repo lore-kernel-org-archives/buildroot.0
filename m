@@ -1,40 +1,55 @@
-From: Carsten Schoenert <c.schoenert@gmail.com>
-Date: Sat, 14 Sep 2013 21:08:25 +0200
-Subject: [Buildroot] [RFC] Effective Patchwork Use and Patch Review
-In-Reply-To: <20130914074740.424283aa@skate>
-References: <OFD77E15AC.FCFBC1CA-ON86257BE5.005BB4D9-86257BE5.005BB4FE@rockwellcollins.com>
- <20130914074740.424283aa@skate>
-Message-ID: <5234B429.9010607@googlemail.com>
+From: Simon Dawson <spdawson@gmail.com>
+Date: Sat, 14 Sep 2013 20:32:22 +0100
+Subject: [Buildroot] [PATCHv2 4/4] docs/manual: add explanations about
+	BR2_EXTERNAL
+In-Reply-To: <1379185433-8770-5-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1379185433-8770-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1379185433-8770-5-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <CAHt8ZCNHEXrQ_jZrqdVD1G3OySYj+dD-kKOh2KL78nzriW5O8Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Ryan,
+On 14 September 2013 20:03, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> +This +BR2_EXTERNAL+ then allows three different things:
+> +
+> + * One can store all the board-specific configuration files here, such
+> +   as the kernel configuration, the root filesystem overlay, or any
+> +   other configuration file for which Buildroot allows to set its
+> +   location. The +BR2_EXTERNAL+ value is available within the
+> +   Buildroot configuration using +$(BR2_EXTERNAL)+. As an example, one
+> +   could set the +BR2_ROOTFS_OVERLAY+ Buildroot option to
+> +   +$(BR2_EXTERNAL)/board/<boardname>/overlay/+ (to specify a root
+> +   filesystem overlay), or the +BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE+
+> +   Buildroot option to +$(BR2_EXTERNAL)/board/<boardname>/kernel.config+
+> +   (to specify the location of the kernel configuration file).  + To
+> +   achieve this, it is recommended but not mandatory, to store those
+> +   details in directories called +board/<boardname>/+ under
+> +   +BR2_EXTERNAL+.
 
-On 14.09.2013 07:47, Thomas Petazzoni wrote:
-> wget -O - http://patchwork.ozlabs.org/patch/274867/mbox/ | git am
-> 
-> This will fetch a patch from patchwork and apply it to the current
-> branch.
-> 
-> But besides that, all the review process simply consists in replying to
-> the patch on the mailing list.
-...
+A minor point: this is slightly inconsistent with the existing
+Buildroot manual (see customize-store.txt), where the root filesystem
+overlay subdirectory is named "fs-overlay", and the kernel
+configuration is named "linux.config".
 
-Wolfram Sang gave this year at the Fosdem a talk how he is maintaining
-the I2C subsystem in the kernel. His talk was right after Thomas talk
-about the ARM support in the Linux kernel. ;)
+> +The main usage of this is to store package recipes. The recommended
+> +   way to do this is to write a +BR2_EXTERNAL/Config.in+ that looks
+> +   like:
+> ++
+> +------
+> +menu "<somecompany> packages"
+> +
+> +source "$BR2_EXTERNAL/package/package1/Config.in"
+> +source "$BR2_EXTERNAL/package/package2/Config.in"
+> +
+> +endmenu
+> +------
 
-Wolfram talks a lot about *his* workflow while maintaining the I2C
-subsystem.
+Shouldn't this rather be in the $BR2_EXTERNAL/package/Config.in file
+(which appears in your example overlay directory layout tree diagram),
+which should itself be sourced from the $BR2_EXTERNAL/Config.in file?
 
-Unfortunately Wolfram doesn't uploaded his slides, but the interesting
-parts are the live demos about that. So you may want see the video from
-this talk?
-
-https://archive.fosdem.org/2013/schedule/event/maintaining_a_kernel_subsystem/
-
-Regards
-Carsten
+Simon.
