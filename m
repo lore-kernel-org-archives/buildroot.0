@@ -1,215 +1,85 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 15 Sep 2013 21:38:27 +0200
-Subject: [Buildroot] [git commit] aiccu: new package
-Message-ID: <20130915193910.A46FA9B766@busybox.osuosl.org>
+From: Espen Frimann Koren <espenfk@gmail.com>
+Date: Sun, 15 Sep 2013 21:51:36 +0200
+Subject: [Buildroot] Building Qt5 Declarative on nitrogen6x with buildroot
+	2013.08
+Message-ID: <CA+csPL6BGsmEFAag7uXsUxo73Bv5KcqCjLhLJifV_t4M6Oy8WQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1e9b983fe24fd9345df609e1f84a570208cdb45e
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi.
 
-Automatic IPv6 Connectivity Configuration Utility for users of a
-IPv6 tunnel broker, developed by sixxs.net
+I have been trying to get the mentioned configuration to compile. It is not
+straight forward :-)
 
-[Peter: drop strip patch, pass TARGET_CONFIGURE_OPTS]
-Signed-off-by: Michael Rommel <rommel@layer-7.net>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/Config.in                                  |    1 +
- package/aiccu/Config.in                            |   21 ++++
- .../aiccu/aiccu-0001-gnutls-and-uclibc-fixes.patch |  104 ++++++++++++++++++++
- package/aiccu/aiccu.mk                             |   34 +++++++
- 4 files changed, 160 insertions(+), 0 deletions(-)
+First of all I compiled the nitrogen6x_defconfig without any problems. But
+I need Qt5 Declarative so I tried to figure out how to configure it. From
+the default config I had to do this:
 
-diff --git a/package/Config.in b/package/Config.in
-index ca92812..973d32c 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -743,6 +743,7 @@ source "package/sound-theme-freedesktop/Config.in"
- endmenu
- 
- menu "Networking applications"
-+source "package/aiccu/Config.in"
- source "package/aircrack-ng/Config.in"
- source "package/argus/Config.in"
- source "package/arptables/Config.in"
-diff --git a/package/aiccu/Config.in b/package/aiccu/Config.in
-new file mode 100644
-index 0000000..1c6f554
---- /dev/null
-+++ b/package/aiccu/Config.in
-@@ -0,0 +1,21 @@
-+config BR2_PACKAGE_AICCU
-+	bool "aiccu"
-+	depends on BR2_INET_IPV6
-+	depends on BR2_USE_WCHAR
-+	select BR2_PACKAGE_GNUTLS
-+	help
-+	  SixXS Automatic IPv6 Connectivity Client Utility
-+
-+	  AICCU (Automatic IPv6 Connectivity Client Utility) makes it
-+	  easy for users to get IPv6 connectivity. After having
-+	  requested an account, tunnel and optionally a subnet, AICCU
-+	  can be used to automatically configure the tunnel. AICCU
-+	  supports TIC (Tunnel Information & Control protocol), which it
-+	  uses for retrieving the tunnel configuration information,
-+	  AYIYA, which allows tunnels to be created even behind
-+	  firewalls and NAT's.
-+
-+	  http://www.sixxs.net/tools/aiccu/
-+
-+comment "aiccu requires a toolchain with IPv6 and WCHAR support"
-+	depends on !(BR2_INET_IPV6 && BR2_USE_WCHAR)
-diff --git a/package/aiccu/aiccu-0001-gnutls-and-uclibc-fixes.patch b/package/aiccu/aiccu-0001-gnutls-and-uclibc-fixes.patch
-new file mode 100644
-index 0000000..d316f8f
---- /dev/null
-+++ b/package/aiccu/aiccu-0001-gnutls-and-uclibc-fixes.patch
-@@ -0,0 +1,104 @@
-+aiccu.h, common.c, common.h: fixes for deprecated GNUTLS functions and types
-+resolver.c: fixes for selection of wrong resolver function under uclibc
-+
-+Signed-off-by: Michael Rommel <rommel@layer-7.net>
-+
-+diff -purN aiccu_20070115.orig/common/aiccu.h aiccu_20070115/common/aiccu.h
-+--- aiccu_20070115.orig/common/aiccu.h	2007-01-15 13:01:43.000000000 +0100
-++++ aiccu_20070115/common/aiccu.h	2013-08-31 23:50:53.651936146 +0200
-+@@ -111,7 +111,7 @@ struct AICCU_conf
-+ #endif
-+ 
-+ #ifdef AICCU_GNUTLS
-+-	gnutls_certificate_credentials	tls_cred;	/* GNUTLS credentials */
-++	gnutls_certificate_credentials_t tls_cred;	/* GNUTLS credentials */
-+ #endif
-+ 
-+ 	bool		daemonize;		/* Daemonize? */
-+diff -purN aiccu_20070115.orig/common/common.c aiccu_20070115/common/common.c
-+--- aiccu_20070115.orig/common/common.c	2006-12-21 15:08:50.000000000 +0100
-++++ aiccu_20070115/common/common.c	2013-09-01 01:21:36.031396740 +0200
-+@@ -271,9 +271,8 @@ TLSSOCKET sock_alloc(void);
-+ TLSSOCKET sock_alloc(void)
-+ {
-+ #ifdef AICCU_GNUTLS
-+-	/* Allow connections to servers that have OpenPGP keys as well */
-+-	const int	cert_type_priority[3] = { GNUTLS_CRT_X509, GNUTLS_CRT_OPENPGP, 0 };
-+ 	int		ret;
-++	const char	*err;
-+ #endif /* AICCU_GNUTLS*/
-+ 
-+ 	TLSSOCKET	sock;	
-+@@ -297,11 +296,16 @@ TLSSOCKET sock_alloc(void)
-+ 	}
-+ 
-+ 	/* Use default priorities */
-+-	gnutls_set_default_priority(sock->session);
-+-	/* XXX: Return value is not documented in GNUTLS documentation! */
-+-
-+-	gnutls_certificate_type_set_priority(sock->session, cert_type_priority);
-+-	/* XXX: Return value is not documented in GNUTLS documentation! */
-++	ret = gnutls_priority_set_direct(sock->session, "NORMAL", &err); 
-++	if (ret < 0)
-++	{
-++		if (ret == GNUTLS_E_INVALID_REQUEST)
-++		{
-++			dolog( LOG_ERR, "TLS set priority failed, syntax error at: %s\n", err);
-++		}
-++		free(sock);
-++		return NULL;
-++	}
-+ 
-+ 	/* Configure the x509 credentials for the current session */
-+ 	gnutls_credentials_set(sock->session, GNUTLS_CRD_CERTIFICATE, g_aiccu->tls_cred);
-+@@ -474,7 +478,7 @@ bool sock_gotls(TLSSOCKET sock)
-+ 	}
-+ 
-+ 	/* Set the transport */
-+-	gnutls_transport_set_ptr(sock->session, (gnutls_transport_ptr)sock->socket);
-++	gnutls_transport_set_ptr(sock->session, (gnutls_transport_ptr_t) sock->socket);
-+ 
-+ 	/* Perform the TLS handshake */
-+ 	ret = gnutls_handshake(sock->session);
-+diff -purN aiccu_20070115.orig/common/common.h aiccu_20070115/common/common.h
-+--- aiccu_20070115.orig/common/common.h	2007-01-11 15:50:51.000000000 +0100
-++++ aiccu_20070115/common/common.h	2013-08-31 23:26:13.683659455 +0200
-+@@ -381,7 +381,7 @@ struct tlssocket
-+ 	SOCKET			socket;
-+ #ifdef AICCU_GNUTLS
-+ 	bool			tls_active;	/* TLS active? */
-+-	gnutls_session		session;	/* The GnuTLS sesision */
-++	gnutls_session_t	session;	/* The GnuTLS sesision */
-+ #endif
-+ };
-+ 
-+diff -purN aiccu_20070115.orig/common/resolver.c aiccu_20070115/common/resolver.c
-+--- aiccu_20070115.orig/common/resolver.c	2006-07-23 16:55:14.000000000 +0200
-++++ aiccu_20070115/common/resolver.c	2013-08-31 23:44:31.574866862 +0200
-+@@ -26,7 +26,7 @@
-+ 
-+ int getrrs(const char *label, int rrtype, void gotrec(unsigned int num, int type, const char *record))
-+ {
-+-#ifdef _LINUX
-++#if defined(_LINUX) && !defined(__UCLIBC__)
-+ 	struct __res_state	res;
-+ #endif
-+ 	unsigned char		answer[8192];
-+@@ -38,7 +38,7 @@ int getrrs(const char *label, int rrtype
-+ 	uint16_t		type = 0, class = 0;
-+ 	uint32_t		ttl = 0;
-+ 
-+-#ifdef _LINUX
-++#if defined(_LINUX) && !defined(__UCLIBC__)
-+ 	memset(&res, 0, sizeof(res));
-+ 	res.options = RES_DEBUG;
-+ 	res_ninit(&res);
-+@@ -47,7 +47,7 @@ int getrrs(const char *label, int rrtype
-+ #endif
-+ 
-+ 	memset(answer, 0, sizeof(answer));
-+-#ifdef _LINUX
-++#if defined(_LINUX) && !defined(__UCLIBC__)
-+ 	ret = res_nquery(&res, label, C_IN, rrtype, answer, sizeof(answer));
-+ #else
-+ 	ret = res_query(label, C_IN, rrtype, answer, sizeof(answer));
-diff --git a/package/aiccu/aiccu.mk b/package/aiccu/aiccu.mk
-new file mode 100644
-index 0000000..2c54644
---- /dev/null
-+++ b/package/aiccu/aiccu.mk
-@@ -0,0 +1,34 @@
-+################################################################################
-+#
-+# aiccu
-+#
-+################################################################################
-+
-+AICCU_VERSION = 20070115
-+AICCU_SOURCE = aiccu_$(AICCU_VERSION).tar.gz
-+AICCU_SITE = http://www.sixxs.net/archive/sixxs/aiccu/unix/
-+AICCU_LICENSE = SixXS License, concise redistribution license
-+AICCU_LICENSE_FILES = doc/LICENSE
-+AICCU_DEPENDENCIES = gnutls
-+
-+# dummy RPM_OPT_FLAGS to disable stripping
-+define AICCU_BUILD_CMDS
-+	$(TARGET_CONFIGURE_OPTS) $(MAKE) CC="$(TARGET_CC)" \
-+		RPM_OPT_FLAGS=1 -C $(@D)/unix-console all
-+endef
-+
-+define AICCU_INSTALL_TARGET_CMDS
-+	$(INSTALL) -D -m 0755 $(@D)/unix-console/aiccu \
-+		$(TARGET_DIR)/usr/sbin/aiccu
-+	[ -f $(TARGET_DIR)/etc/aiccu.conf ] || \
-+		$(INSTALL) -D -m 0644 $(@D)/doc/aiccu.conf \
-+		$(TARGET_DIR)/etc/aiccu.conf
-+endef
-+
-+define AICCU_INSTALL_INIT_SYSV
-+	[ -f $(TARGET_DIR)/etc/init.d/S50aiccu ] || \
-+		$(INSTALL) -D -m 0755 $(@D)/doc/aiccu.init \
-+		$(TARGET_DIR)/etc/init.d/S50aiccu
-+endef
-+
-+$(eval $(generic-package))
+1. Add C++ and WCHAR support in the tool chain. This made Qt5 available.
+2. Qt5 Declarative was not available though needing an Open GL capable
+backend, according to the menuconfig tool.
+3. The Open GL-backend I found was in Target packages/Hardware
+handling/Freescale i.MX libraries/gpu-viv-bin-mx6q. It needs eglibc, so I
+had to change to that from uclibc.
+
+But this configuration does not compile. I connot figure out what I am
+missing. The first problem is that when Qt5 are running a lot of tests to
+figure out what the target supports, it fails when trying to link the
+libGLESv2.so in output/build/qt5base-5.0.2/config.tests/unix/openglesv2.
+The libraries it needs is in the toolchain (in
+output/host/usr/arm-buildroot-linux-gnueabi/sysroot/usr/lib): libGAL.so and
+libEGL.so exists, so I got the compilation a little bit further by adding
+the following lines into
+output/build/qt5base-5.0.2/mkspecs/devices/linux-buildroot-g++/qmake.conf:
+
+QMAKE_LIBS_OPENGL_ES2 += -lGAL
+QMAKE_LIBS_OPENGL_ES2 += -lEGL
+
+The problem now is compiling EGL (still in Qt5 config.tests/qpa/egl):
+
+EGL auto-detection... ()
+gmake[1]: Entering directory
+`/home/espenfk/imx6/buildroot-2013.08/output/build/qt5base-5.0.2/config.tests/qpa/egl'
+/home/espenfk/imx6/buildroot-2013.08/output/host/usr/bin/arm-buildroot-linux-gnueabi-g++
+-c -pipe -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64
+-pipe -Os
+--sysroot=/home/espenfk/imx6/buildroot-2013.08/output/host/usr/arm-buildroot-linux-gnueabi/sysroot
+-O2 -O3 -Wall -W -fPIE  -I../../../mkspecs/devices/linux-buildroot-g++ -I.
+-I/home/espenfk/imx6/buildroot-2013.08/output/host/usr/arm-buildroot-linux-gnueabi/sysroot/usr/include
+-o egl.o egl.cpp
+In file included from
+/home/espenfk/imx6/buildroot-2013.08/output/host/usr/arm-buildroot-linux-gnueabi/sysroot/usr/include/EGL/eglplatform.h:38:0,
+                 from
+/home/espenfk/imx6/buildroot-2013.08/output/host/usr/arm-buildroot-linux-gnueabi/sysroot/usr/include/EGL/egl.h:34,
+                 from egl.cpp:42:
+/home/espenfk/imx6/buildroot-2013.08/output/host/usr/arm-buildroot-linux-gnueabi/sysroot/usr/include/EGL/eglvivante.h:224:22:
+fatal error: X11/Xlib.h: No such file or directory
+compilation terminated.
+gmake[1]: *** [egl.o] Error 1
+gmake[1]: Leaving directory
+`/home/espenfk/imx6/buildroot-2013.08/output/build/qt5base-5.0.2/config.tests/qpa/egl'
+EGL disabled.
+ The EGL functionality test failed; EGL is required by some QPA plugins to
+manage contexts & surfaces.
+ You might need to modify the include and library search paths by editing
+ QMAKE_INCDIR_EGL, QMAKE_LIBDIR_EGL and QMAKE_LIBS_EGL in
+/home/espenfk/imx6/buildroot-2013.08/output/build/qt5base-5.0.2/mkspecs/devices/linux-buildroot-g++.
+make: ***
+[/home/espenfk/imx6/buildroot-2013.08/output/build/qt5base-5.0.2/.stamp_configured]
+Error 1
+
+The reason that it fails in eglvivante.h is that a symbol should have been
+defined: EGL_API_FB (or EGL_API_DFB, but I think I cannot use DirectFB). At
+this point I think it is a bit too much to hack the stuff in. I haven't
+studied the inner makings of buildroot so much that I can figure out how to
+define that symbol. So therefore I think that someone who knows this better
+than me may either fix it in the next buildroot version or direct me to a
+solution.
+
+Sp1
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130915/c652c53f/attachment.html>
