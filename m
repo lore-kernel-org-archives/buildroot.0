@@ -1,11 +1,12 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 15 Sep 2013 23:07:47 +0200
-Subject: [Buildroot] [PATCHv2 07/14] toolchain: add support for glibc
-In-Reply-To: <1378138000-12739-8-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Mon, 2 Sep 2013 18:06:33 +0200")
+Date: Sun, 15 Sep 2013 23:08:01 +0200
+Subject: [Buildroot] [PATCHv2 08/14] gcc/gcc-final: use the common
+	HOST_GCC_CONFIGURE_SYMLINK macro
+In-Reply-To: <1378138000-12739-9-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Mon, 2 Sep 2013 18:06:34 +0200")
 References: <1378138000-12739-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1378138000-12739-8-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <871u4pkd3w.fsf@dell.be.48ers.dk>
+ <1378138000-12739-9-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <87wqmhiyj2.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,13 +15,14 @@ To: buildroot@busybox.net
 
 >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- Thomas> The support for eglibc 2.17 was added to the internal toolchain
- Thomas> backend for 2013.08. This commit now adds glibc 2.18 support to the
- Thomas> internal toolchain backend.
+ Thomas> Each stage of the gcc build needs to make a small dance before the
+ Thomas> configuration step to create a build sub-directory and a symbolic link
+ Thomas> to the configure script. The common gcc.mk had a
+ Thomas> HOST_GCC_CONFIGURE_SYMLINK already used by the gcc-initial and
+ Thomas> gcc-intermediate steps, but the gcc-final step wasn't using it.
 
- Thomas> Since the building procedure is very similar to the one of eglibc, we
- Thomas> have renamed the 'eglibc' package to 'glibc', and made it capable of
- Thomas> handling either glibc or eglibc.
+ Thomas> This commit fixes this inconsistency, and therefore removes the
+ Thomas> HOST_GCC_FINAL_CONFIGURE_SYMLINK macro.
 
 Committed, thanks.
 
