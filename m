@@ -1,121 +1,214 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 15 Sep 2013 23:24:35 +0200
-Subject: [Buildroot] [git commit] gcc: provide option to enable mudflap
-	support
-Message-ID: <20130915213314.D5B1C82A40@busybox.osuosl.org>
+Date: Sun, 15 Sep 2013 22:58:37 +0200
+Subject: [Buildroot] [git commit] toolchain: add support for glibc
+Message-ID: <20130915213314.96CCE9B76A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=530777aaebdcd63b7acd75ab5df650d9db750f49
+commit: http://git.buildroot.net/buildroot/commit/?id=14a2d0b5ab87d16fa405b52612b181bfca03da20
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The mudflap library is only useful if one uses the -fmudflap gcc
-option to do more checks on pointers/arrays. This commit adds an
-option to enable/disable mudflap support at the gcc level. By default,
-it is disabled, which saves a little bit of build time compared to the
-default of gcc which consists in enabling mudflap support.
+The support for eglibc 2.17 was added to the internal toolchain
+backend for 2013.08. This commit now adds glibc 2.18 support to the
+internal toolchain backend.
 
-Since mudflap is now disabled by default, and ensured to never be enabled
-on platforms where it is not available, some gcc.mk code that was used to
-disable mudflap in problematic configurations can be removed.
+Since the building procedure is very similar to the one of eglibc, we
+have renamed the 'eglibc' package to 'glibc', and made it capable of
+handling either glibc or eglibc.
 
-Whether -fmudflap is used when building is left to the user.
-
-[Peter: tweak commit text, fix white space]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/gcc/Config.in.host         |   15 +++++++++++++++
- package/gcc/gcc-final/gcc-final.mk |    8 ++++++++
- package/gcc/gcc.mk                 |   24 +++++++-----------------
- 3 files changed, 30 insertions(+), 17 deletions(-)
+ package/gcc/Config.in.host                   |    2 +-
+ package/gcc/gcc-final/gcc-final.mk           |    4 +-
+ package/{eglibc/eglibc.mk => glibc/glibc.mk} |   62 ++++++++++++++++----------
+ toolchain/toolchain-buildroot/Config.in      |   24 ++++++++++-
+ 4 files changed, 64 insertions(+), 28 deletions(-)
 
 diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
-index 111da3b..116fd24 100644
+index dbf0f20..111da3b 100644
 --- a/package/gcc/Config.in.host
 +++ b/package/gcc/Config.in.host
-@@ -155,3 +155,18 @@ config BR2_GCC_ENABLE_OPENMP
- 	depends on !BR2_PTHREADS_NONE && !BR2_avr32 && !BR2_arc
+@@ -145,7 +145,7 @@ config BR2_INSTALL_FORTRAN
+ config BR2_GCC_ENABLE_TLS
+ 	bool "Enable compiler tls support" if BR2_TOOLCHAIN_BUILDROOT_UCLIBC
+ 	default y
+-	depends on BR2_PTHREADS_NATIVE || BR2_TOOLCHAIN_BUILDROOT_EGLIBC
++	depends on BR2_PTHREADS_NATIVE || BR2_TOOLCHAIN_BUILDROOT_EGLIBC || BR2_TOOLCHAIN_BUILDROOT_GLIBC
  	help
- 	  Enable OpenMP support for the compiler
-+
-+config BR2_GCC_ENABLE_LIBMUDFLAP
-+	bool "Enable libmudflap support"
-+	# There are architectures, or specific configurations for
-+	# which mudflap is not supported.
-+	depends on !BR2_avr32 && !BR2_bfin && !BR2_ARM_INSTRUCTIONS_THUMB && !BR2_powerpc_SPE
-+	help
-+	  libmudflap is a gcc library used for the mudflap pointer
-+	  debugging functionality. It is only needed if you intend to
-+	  use the -fmudflap gcc flag.
-+
-+	  See http://gcc.gnu.org/wiki/Mudflap_Pointer_Debugging and
-+	  the help of the gcc -fmudflap option for more details.
-+
-+	  If you're unsure, leave this option disabled.
+ 	  Enable the compiler to generate code for accessing
+ 	  thread local storage variables
 diff --git a/package/gcc/gcc-final/gcc-final.mk b/package/gcc/gcc-final/gcc-final.mk
-index 69a4ccd..b396382 100644
+index 2dbdfab..f627767 100644
 --- a/package/gcc/gcc-final/gcc-final.mk
 +++ b/package/gcc/gcc-final/gcc-final.mk
-@@ -119,6 +119,14 @@ ifeq ($(BR2_INSTALL_OBJC),y)
- HOST_GCC_FINAL_USR_LIBS += libobjc
- endif
+@@ -80,11 +80,11 @@ endef
  
-+ifeq ($(BR2_GCC_ENABLE_LIBMUDFLAP),y)
-+ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
-+HOST_GCC_FINAL_USR_LIBS += libmudflapth
+ HOST_GCC_FINAL_POST_INSTALL_HOOKS += HOST_GCC_FINAL_CREATE_SIMPLE_SYMLINKS
+ 
+-# In gcc 4.7.x, the ARM EABIhf library loader path for eglibc was not
++# In gcc 4.7.x, the ARM EABIhf library loader path for (e)glibc was not
+ # correct, so we create a symbolic link to make things work
+ # properly. eglibc installs the library loader as ld-linux-armhf.so.3,
+ # but gcc creates binaries that reference ld-linux.so.3.
+-ifeq ($(BR2_arm)$(BR2_ARM_EABIHF)$(BR2_GCC_VERSION_4_7_X)$(BR2_TOOLCHAIN_BUILDROOT_EGLIBC),yyyy)
++ifeq ($(BR2_arm)$(BR2_ARM_EABIHF)$(BR2_GCC_VERSION_4_7_X)$(BR2_TOOLCHAIN_USES_GLIBC),yyyy)
+ define HOST_GCC_FINAL_LD_LINUX_LINK
+ 	ln -sf ld-linux-armhf.so.3 $(TARGET_DIR)/lib/ld-linux.so.3
+ 	ln -sf ld-linux-armhf.so.3 $(STAGING_DIR)/lib/ld-linux.so.3
+diff --git a/package/eglibc/eglibc.mk b/package/glibc/glibc.mk
+similarity index 59%
+rename from package/eglibc/eglibc.mk
+rename to package/glibc/glibc.mk
+index 0ed908d..4dd2e63 100644
+--- a/package/eglibc/eglibc.mk
++++ b/package/glibc/glibc.mk
+@@ -1,32 +1,46 @@
+ ################################################################################
+ #
+-# eglibc
++# glibc/eglibc
+ #
+ ################################################################################
+ 
+-EGLIBC_VERSION = 2.17-svnr22064
+-EGLIBC_SITE = http://downloads.yoctoproject.org/releases/eglibc/
+-EGLIBC_SOURCE = eglibc-$(EGLIBC_VERSION).tar.bz2
+-EGLIBC_LICENSE = GPLv2+ (programs), LGPLv2.1+, BSD-3c, MIT (library)
+-EGLIBC_LICENSE_FILES = libc/COPYING libc/COPYING.LIB libc/LICENSES
++ifeq ($(BR2_TOOLCHAIN_BUILDROOT_EGLIBC),y)
++GLIBC_VERSION = 2.17-svnr22064
++GLIBC_SITE = http://downloads.yoctoproject.org/releases/eglibc/
++GLIBC_SOURCE = eglibc-$(GLIBC_VERSION).tar.bz2
++GLIBC_SRC_SUBDIR = libc
 +else
-+HOST_GCC_FINAL_USR_LIBS += libmudflap
-+endif
++GLIBC_VERSION = 2.18
++GLIBC_SITE = $(BR2_GNU_MIRROR)/libc
++GLIBC_SOURCE = glibc-$(GLIBC_VERSION).tar.xz
++GLIBC_SRC_SUBDIR = .
 +endif
 +
- ifneq ($(HOST_GCC_FINAL_USR_LIBS),)
- define HOST_GCC_FINAL_INSTALL_USR_LIBS
- 	mkdir -p $(TARGET_DIR)/usr/lib
-diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
-index 5636c6f..0c0cc99 100644
---- a/package/gcc/gcc.mk
-+++ b/package/gcc/gcc.mk
-@@ -125,6 +125,12 @@ else
- HOST_GCC_COMMON_CONF_OPT += --disable-tls
- endif
++GLIBC_LICENSE = GPLv2+ (programs), LGPLv2.1+, BSD-3c, MIT (library)
++GLIBC_LICENSE_FILES = $(addprefix $(GLIBC_SRC_SUBDIR)/,COPYING COPYING.LIB LICENSES)
  
-+ifeq ($(BR2_GCC_ENABLE_LIBMUDFLAP),y)
-+HOST_GCC_COMMON_CONF_OPT += --enable-libmudflap
-+else
-+HOST_GCC_COMMON_CONF_OPT += --disable-libmudflap
-+endif
+-# Before eglibc is configured, we must have the first stage
++# Before (e)glibc is configured, we must have the first stage
+ # cross-compiler and the kernel headers
+-EGLIBC_DEPENDENCIES = host-gcc-initial linux-headers host-gawk
++GLIBC_DEPENDENCIES = host-gcc-initial linux-headers
 +
- ifeq ($(BR2_PTHREADS_NONE),y)
- HOST_GCC_COMMON_CONF_OPT += \
- 	--disable-threads \
-@@ -198,25 +204,9 @@ HOST_GCC_COMMON_CONF_OPT += \
- 	--with-bugurl="http://bugs.buildroot.net/"
++# eglibc also needs host-gawk
++ifeq ($(BR2_TOOLCHAIN_BUILDROOT_EGLIBC),y)
++GLIBC_DEPENDENCIES += host-gawk
++endif
+ 
+-# Before eglibc is built, we must have the second stage
++# Before (e)glibc is built, we must have the second stage
+ # cross-compiler, for some gcc versions
+-eglibc-build: $(if $(BR2_TOOLCHAIN_NEEDS_THREE_STAGE_BUILD),host-gcc-intermediate)
++glibc-build: $(if $(BR2_TOOLCHAIN_NEEDS_THREE_STAGE_BUILD),host-gcc-intermediate)
+ 
+-EGLIBC_SUBDIR = build
++GLIBC_SUBDIR = build
+ 
+-EGLIBC_INSTALL_STAGING = YES
++GLIBC_INSTALL_STAGING = YES
+ 
+-EGLIBC_INSTALL_STAGING_OPT = install_root=$(STAGING_DIR) install
++GLIBC_INSTALL_STAGING_OPT = install_root=$(STAGING_DIR) install
+ 
+ # Thumb build is broken, build in ARM mode
+ ifeq ($(BR2_ARM_INSTRUCTIONS_THUMB),y)
+-EGLIBC_EXTRA_CFLAGS += -marm
++GLIBC_EXTRA_CFLAGS += -marm
  endif
  
--# AVR32 GCC special configuration
--ifeq ($(BR2_avr32),y)
--HOST_GCC_COMMON_CONF_OPT += --disable-libmudflap
--endif
--
--# ARM Thumb and mudflap aren't friends
--ifeq ($(BR2_ARM_INSTRUCTIONS_THUMB),y)
--HOST_GCC_COMMON_CONF_OPT += --disable-libmudflap
--endif
--
--# Blackfin doesn't do mudflap
--ifeq ($(BR2_bfin),y)
--HOST_GCC_COMMON_CONF_OPT += --disable-libmudflap
--endif
--
--# Disable mudflap and enable proper double/long double for SPE ABI
-+# Enable proper double/long double for SPE ABI
- ifeq ($(BR2_powerpc_SPE),y)
- HOST_GCC_COMMON_CONF_OPT += \
--	--disable-libmudflap \
- 	--enable-e500_double \
- 	--with-long-double-128
+ # Even though we use the autotools-package infrastructure, we have to
+@@ -38,16 +52,16 @@ endif
+ #  2. We have to execute the configure script with bash and not sh.
+ #
+ # Note that as mentionned in
+-# http://patches.openembedded.org/patch/38849/, eglibc must be built
+-# with -O2, so we pass our own CFLAGS and CXXFLAGS below.
+-define EGLIBC_CONFIGURE_CMDS
++# http://patches.openembedded.org/patch/38849/, eglibc/glibc must be
++# built with -O2, so we pass our own CFLAGS and CXXFLAGS below.
++define GLIBC_CONFIGURE_CMDS
+ 	mkdir -p $(@D)/build
+ 	# Do the configuration
+ 	(cd $(@D)/build; \
+ 		$(TARGET_CONFIGURE_OPTS) \
+-		CFLAGS="-O2 $(EGLIBC_EXTRA_CFLAGS)" CPPFLAGS="" \
+-		CXXFLAGS="-O2 $(EGLIBC_EXTRA_CFLAGS)" \
+-		$(SHELL) $(@D)/libc/configure \
++		CFLAGS="-O2 $(GLIBC_EXTRA_CFLAGS)" CPPFLAGS="" \
++		CXXFLAGS="-O2 $(GLIBC_EXTRA_CFLAGS)" \
++		$(SHELL) $(@D)/$(GLIBC_SRC_SUBDIR)/configure \
+ 		ac_cv_path_BASH_SHELL=/bin/bash \
+ 		libc_cv_forced_unwind=yes \
+ 		--target=$(GNU_TARGET_NAME) \
+@@ -81,17 +95,17 @@ endef
+ # to install the libraries, and nothing more.
+ #
+ 
+-EGLIBC_LIBS_LIB = \
++GLIBC_LIBS_LIB = \
+ 	ld*.so libc.so libcrypt.so libdl.so libgcc_s.so libm.so	   \
+ 	libnsl.so libpthread.so libresolv.so librt.so libutil.so   \
+ 	libnss_files.so libnss_dns.so
+ 
+ ifeq ($(BR2_PACKAGE_GDB_SERVER),y)
+-EGLIBC_LIBS_LIB += libthread_db.so
++GLIBC_LIBS_LIB += libthread_db.so
  endif
+ 
+-define EGLIBC_INSTALL_TARGET_CMDS
+-	for libs in $(EGLIBC_LIBS_LIB); do \
++define GLIBC_INSTALL_TARGET_CMDS
++	for libs in $(GLIBC_LIBS_LIB); do \
+ 		$(call copy_toolchain_lib_root,$(STAGING_DIR)/,,lib,$$libs,/lib) ; \
+ 	done
+ endef
+diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
+index 7a26441..060b494 100644
+--- a/toolchain/toolchain-buildroot/Config.in
++++ b/toolchain/toolchain-buildroot/Config.in
+@@ -35,12 +35,34 @@ config BR2_TOOLCHAIN_BUILDROOT_EGLIBC
+ 
+ 	  http://eglibc.org
+ 
++config BR2_TOOLCHAIN_BUILDROOT_GLIBC
++	bool "glibc (experimental)"
++	depends on BR2_arm    || BR2_armeb    || BR2_aarch64 || \
++		   BR2_i386   || BR2_mips     || BR2_mipsel  || \
++		   BR2_mips64 || BR2_mips64el || BR2_powerpc || \
++		   BR2_sh     || BR2_sh64     || BR2_sparc   || \
++		   BR2_x86_64
++	select BR2_TOOLCHAIN_USES_GLIBC
++	# our glibc.mk enables RPC support
++	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
++	help
++	  This option selects glibc as the C library for the
++	  cross-compilation toolchain.
++
++	  The glibc support in the Buildroot toolchain backend is
++	  very recent, and therefore marked experimental.
++
++	  http://www.gnu.org/software/libc/
++
+ endchoice
+ 
+ config BR2_TOOLCHAIN_BUILDROOT_LIBC
+ 	string
+ 	default "uclibc" if BR2_TOOLCHAIN_BUILDROOT_UCLIBC
+-	default "eglibc" if BR2_TOOLCHAIN_BUILDROOT_EGLIBC
++	# Both glibc and eglibc are handled by the package called
++	# 'glibc'
++	default "glibc"  if BR2_TOOLCHAIN_BUILDROOT_EGLIBC
++	default "glibc"  if BR2_TOOLCHAIN_BUILDROOT_GLIBC
+ 
+ source "package/uclibc/Config.in"
+ 
