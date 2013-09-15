@@ -1,28 +1,57 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 15 Sep 2013 20:02:12 +0200
-Subject: [Buildroot] [PATCH] Update config.guess to version 2013-06-10
-In-Reply-To: <E720F69E63F812489DA4D50AB9BE43F48B1A5E41@ESEXE002.espotel.espotel.fi>
-References: <1378960962-17411-1-git-send-email-jouko.nikula@espotel.com>
- <87eh8uqxdc.fsf@dell.be.48ers.dk>
- <E720F69E63F812489DA4D50AB9BE43F48B1A5E41@ESEXE002.espotel.espotel.fi>
-Message-ID: <20130915200212.12bc35b7@skate>
+Date: Sun, 15 Sep 2013 20:15:15 +0200
+Subject: [Buildroot] [PATCH 1/1] systemd: bumped to version 206
+In-Reply-To: <522C5FE6.6000603@free.fr>
+References: <CALdGskLJPNgZ+iRokvubyE0FdG=miQHTHsdC56q84pQGcZE7Zw@mail.gmail.com>
+ <20130902150405.GB6918@pc-eric>
+ <CALdGskLxtMn7uZi1OvXKBS_MMjoCCfnp0ZZNDipDfUESA3Q0-A@mail.gmail.com>
+ <522C5FE6.6000603@free.fr>
+Message-ID: <20130915201515.7f6963f1@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Nikula Jouko,
+Dear Eric Le Bihan,
 
-On Fri, 13 Sep 2013 05:51:39 +0000, Nikula Jouko wrote:
+On Sun, 08 Sep 2013 13:30:46 +0200, Eric Le Bihan wrote:
 
-> Ok, I missed the readme and patches totally. Now I tried to apply the patches, but  they can't be applied to the new version of config.guess. I'll see if I can recreate the patches and apply them.
+> I posted an update of the systemd package. See '[PATCH 1/1] package:
+> udev is now provided by systemd or eudev.' In this version, I added
+> libgcrypt has a hard dependency for building Systemd. So it builds in
+> any case but it forces journal signature.
+> 
+> So, for AM_PATH_LIBGCRYPT to be found, you must have libgcrypt among
+> SYSTEMD_DEPENDENCIES, but I'd better have journal signature optional,
+> with something like:
+> 
+> ifeq ($(BR2_PACKAGE_SYSTEMD_SIGN_JOURNAL),y)
+> 	SYSTEMD_CONF_OPT += --enable-libgcrypt
+> else
+> 	SYSTEMD_CONF_OPT += --disable-libcgrypt
+> endif
+> 
+> Is there a way in Buildroot to have a library built for the target and
+> installed into 'staging', but not installed on the target (apart for
+> pruning the files in post-build.sh)?
 
-Note that I think we could drop the patch
-0002-config-add-support-for-ps2.patch. It really doesn't seem to be
-useful for any sort of machine we support.
+No, that's not possible in a clean way.
 
-Thoma
+In this situation, I believe the best option is:
+
+ (1) As a temporary measure, take the src/libgcrypt.m4 file from the
+ libgcrypt sources, and create a patch that adds it to the m4/
+ directory of systemd sources. This way, regardless of whether
+ libgcrypt is available or not, the AM_PATH_LIBGCRYPT m4 macro will be
+ available for autoreconf to use.
+
+ (2) As a permanent measure, upstream the other systemd patches so that
+ ultimately we can get rid of the SYSTEMD_AUTORECONF = YES.
+
+Best regards,
+
+Thomas
 -- 
 Thomas Petazzoni, Free Electrons
 Kernel, drivers, real-time and embedded Linux
