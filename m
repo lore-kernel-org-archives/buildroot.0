@@ -1,195 +1,205 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 15 Sep 2013 22:50:20 +0200
-Subject: [Buildroot] [git commit] toolchain-internal: skip gcc-intermediate
-	when possible
-Message-ID: <20130915213314.6ECE282A40@busybox.osuosl.org>
+Date: Sun, 15 Sep 2013 23:02:57 +0200
+Subject: [Buildroot] [git commit] toolchain: refactor Stack Smashing
+	Protection support
+Message-ID: <20130915213314.C51F182A40@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=2babed4a50fcd050abc4686e05e24d0e374d10a8
+commit: http://git.buildroot.net/buildroot/commit/?id=c5866be0ad90a97bbf04af846d6aec869bc1918a
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-When NPTL support was introduced, gcc required a three stages build
-process. Since gcc 4.7, this is no longer necessary, and it is
-possible to get back to a two stages build process. This patch takes
-advantage of this, by doing a two stages build process when possible.
+This commit refactors how Stack Smashing Protection support is handled
+in Buildroot:
 
-We introduce a few hidden kconfig options:
+ *) It turns the BR2_TOOLCHAIN_BUILDROOT_USE_SSP option into an option
+    that only enables the SSP support in uClibc, when using the internal
+    toolchain backend.
 
- * BR2_GCC_VERSION_NEEDS_THREE_STAGE_BUILD, which is set by the gcc
-   Config.in logic to indicate that the compiler might need a three
-   stages build. Currently, all versions prior to 4.7.x are selecting
-   this kconfig option.
+ *) It adds an hidden BR2_TOOLCHAIN_HAS_SSP option that gets enabled
+    when the toolchain has SSP support. Here we have the usual dance:
+    glibc/eglibc in internal/external backend always select this
+    option, in the case of uClibc/internal, it gets selected when
+    BR2_TOOLCHAIN_BUILDROOT_USE_SSP is enabled, in the case of
+    uClibc/external, there is a new configuration option that the user
+    must select (or not) depending on whether the toolchain has SSP
+    support.
 
- * BR2_TOOLCHAIN_LIBC_NEEDS_THREE_STAGE_BUILD, which indicates whether
-   the C library might need a three stages build. This is the case for
-   eglibc, and uClibc when NPTL is enabled.
-
- * BR2_TOOLCHAIN_NEEDS_THREE_STAGE_BUILD finally is enabled when both
-   of the previous options are enabled. It indicates that a three
-   stages build is actually needed.
-
-In addition to those options, the uClibc/gcc build logic is changed to
-use only a two stages build process when possible.
+ *) It adds a new options BR2_ENABLE_SSP in the "Build options" menu,
+    to enable the usage of SSP support, by adding
+    -fstack-protector-all to the CFLAGS.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/eglibc/eglibc.mk               |    5 +++--
- package/gcc/Config.in.host             |   11 +++++++++++
- package/gcc/gcc-initial/gcc-initial.mk |    8 ++++++++
- package/uclibc/Config.in               |    1 +
- package/uclibc/uclibc.mk               |    5 +++--
- toolchain/Config.in                    |    9 +++++++++
- 6 files changed, 35 insertions(+), 4 deletions(-)
+ Config.in                                 |   17 +++++++++++++++++
+ package/Makefile.in                       |    2 +-
+ package/psmisc/psmisc.mk                  |    4 ++--
+ package/uclibc/Config.in                  |   10 ++++++++++
+ toolchain/Config.in                       |    1 +
+ toolchain/helpers.mk                      |    3 ++-
+ toolchain/toolchain-buildroot/Config.in.2 |    9 ---------
+ toolchain/toolchain-common.in             |    3 +++
+ toolchain/toolchain-external/Config.in    |    9 +++++++++
+ 9 files changed, 45 insertions(+), 13 deletions(-)
 
-diff --git a/package/eglibc/eglibc.mk b/package/eglibc/eglibc.mk
-index fe12299..0ed908d 100644
---- a/package/eglibc/eglibc.mk
-+++ b/package/eglibc/eglibc.mk
-@@ -14,8 +14,9 @@ EGLIBC_LICENSE_FILES = libc/COPYING libc/COPYING.LIB libc/LICENSES
- # cross-compiler and the kernel headers
- EGLIBC_DEPENDENCIES = host-gcc-initial linux-headers host-gawk
+diff --git a/Config.in b/Config.in
+index 1b30ce1..af720ec 100644
+--- a/Config.in
++++ b/Config.in
+@@ -402,6 +402,23 @@ config BR2_OPTIMIZE_S
  
--# Before eglibc is built, we must have the second stage cross-compiler
--eglibc-build: host-gcc-intermediate
-+# Before eglibc is built, we must have the second stage
-+# cross-compiler, for some gcc versions
-+eglibc-build: $(if $(BR2_TOOLCHAIN_NEEDS_THREE_STAGE_BUILD),host-gcc-intermediate)
+ endchoice
  
- EGLIBC_SUBDIR = build
- 
-diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
-index a6acaa2..7e6df2d 100644
---- a/package/gcc/Config.in.host
-+++ b/package/gcc/Config.in.host
-@@ -3,6 +3,12 @@ comment "GCC Options"
- config BR2_GCC_NEEDS_MPC
- 	bool
- 
-+# Until gcc 4.7, a three stage build process was needed when using
-+# NPTL. This hidden option tells whether gcc is a version that
-+# requires this three stage build process.
-+config BR2_GCC_VERSION_NEEDS_THREE_STAGE_BUILD
-+	bool
++config BR2_ENABLE_SSP
++	bool "build code with Stack Smashing Protection"
++	depends on BR2_TOOLCHAIN_HAS_SSP
++	help
++	  Enable stack smashing protection support using GCCs
++	  -fstack-protector-all option.
 +
- choice
- 	prompt "GCC compiler Version"
- 	default BR2_GCC_VERSION_4_4_X if BR2_sparc_sparchfleon || BR2_sparc_sparchfleonv8 || BR2_sparc_sparcsfleon || BR2_sparc_sparcsfleonv8
-@@ -16,11 +22,13 @@ choice
- 	config BR2_GCC_VERSION_4_2_2_AVR32_2_1_5
- 		depends on BR2_avr32
- 		bool "gcc 4.2.2-avr32-2.1.5"
-+		select BR2_GCC_VERSION_NEEDS_THREE_STAGE_BUILD
- 
- 	config BR2_GCC_VERSION_4_3_X
- 		depends on !BR2_arc && !BR2_avr32 && !BR2_sparc_sparchfleon && !BR2_sparc_sparchfleonv8 && !BR2_sparc_sparcsfleon && !BR2_sparc_sparcsfleonv8 && !BR2_cortex_a5 && !BR2_cortex_a7 && !BR2_cortex_a8 && !BR2_cortex_a9 && !BR2_cortex_a15 && !BR2_x86_atom && !BR2_powerpc_e300c2 && !BR2_powerpc_e300c3 && !BR2_powerpc_e500mc && !BR2_powerpc_464 && !BR2_powerpc_464fp && !BR2_powerpc_476 && !BR2_powerpc_476fp && !BR2_fa526 && !BR2_pj4
- 		depends on !BR2_ARM_EABIHF
- 		bool "gcc 4.3.x"
-+		select BR2_GCC_VERSION_NEEDS_THREE_STAGE_BUILD
- 
- 	config BR2_GCC_VERSION_4_4_X
- 		depends on !BR2_arc && !BR2_avr32 && !BR2_cortex_a5 && !BR2_cortex_a7 && !BR2_cortex_a15 && !BR2_x86_atom && !BR2_powerpc_476 && !BR2_powerpc_476fp && !BR2_fa526 && !BR2_pj4
-@@ -29,6 +37,7 @@ choice
- 		depends on !BR2_ARM_EABIHF
- 		# VFPv4 support appeared in gcc 4.5
- 		depends on !BR2_ARM_FPU_VFPV4 && !BR2_ARM_FPU_VFPV4D16
-+		select BR2_GCC_VERSION_NEEDS_THREE_STAGE_BUILD
- 
- 	config BR2_GCC_VERSION_4_5_X
- 		depends on !BR2_arc && !BR2_avr32 && !BR2_cortex_a7 && !BR2_cortex_a15 && !BR2_sparc_sparchfleon && !BR2_sparc_sparchfleonv8 && !BR2_sparc_sparcsfleon && !BR2_sparc_sparcsfleonv8 && !BR2_fa526 && !BR2_pj4
-@@ -36,11 +45,13 @@ choice
- 		# ARM EABIhf support appeared in gcc 4.6
- 		depends on !BR2_ARM_EABIHF
- 		bool "gcc 4.5.x"
-+		select BR2_GCC_VERSION_NEEDS_THREE_STAGE_BUILD
- 
- 	config BR2_GCC_VERSION_4_6_X
- 		depends on !BR2_arc && !BR2_avr32 && !BR2_bfin && !BR2_cortex_a7 && !BR2_sparc_sparchfleon && !BR2_sparc_sparchfleonv8 && !BR2_sparc_sparcsfleon && !BR2_sparc_sparcsfleonv8 && !BR2_pj4
- 		select BR2_GCC_NEEDS_MPC
- 		bool "gcc 4.6.x"
-+		select BR2_GCC_VERSION_NEEDS_THREE_STAGE_BUILD
- 
- 	config BR2_GCC_VERSION_4_7_X
- 		depends on !BR2_arc && !BR2_avr32 && !BR2_bfin && !BR2_sparc_sparchfleon && !BR2_sparc_sparchfleonv8 && !BR2_sparc_sparcsfleon && !BR2_sparc_sparcsfleonv8 && !BR2_pj4
-diff --git a/package/gcc/gcc-initial/gcc-initial.mk b/package/gcc/gcc-initial/gcc-initial.mk
-index 0eb492f..83767ea 100644
---- a/package/gcc/gcc-initial/gcc-initial.mk
-+++ b/package/gcc/gcc-initial/gcc-initial.mk
-@@ -29,6 +29,7 @@ HOST_GCC_INITIAL_CONF_OPT = \
- 	--enable-languages=c \
- 	--disable-shared \
- 	--without-headers \
-+	--disable-threads \
- 	--with-newlib \
- 	--disable-largefile \
- 	--disable-nls \
-@@ -40,4 +41,11 @@ HOST_GCC_INITIAL_CONF_ENV = \
- HOST_GCC_INITIAL_MAKE_OPT = all-gcc
- HOST_GCC_INITIAL_INSTALL_OPT = install-gcc
- 
-+ifeq ($(BR2_TOOLCHAIN_NEEDS_THREE_STAGE_BUILD),)
-+ifeq ($(BR2_GCC_SUPPORTS_FINEGRAINEDMTUNE),y)
-+HOST_GCC_INITIAL_MAKE_OPT += all-target-libgcc
-+HOST_GCC_INITIAL_INSTALL_OPT += install-target-libgcc
-+endif
-+endif
++	  See http://www.linuxfromscratch.org/hints/downloads/files/ssp.txt
++          for details.
 +
- $(eval $(host-autotools-package))
++	  Note that this requires the toolchain to have SSP
++	  support. This is always the case for glibc and eglibc
++	  toolchain, but is optional in uClibc toolchains.
++
++comment "enabling Stack Smashing Protection requires support in the toolchain"
++	depends on !BR2_TOOLCHAIN_HAS_SSP
++
+ config BR2_PREFER_STATIC_LIB
+ 	bool "prefer static libraries"
+ 	help
+diff --git a/package/Makefile.in b/package/Makefile.in
+index 4adc33d..170ad78 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -133,7 +133,7 @@ TARGET_CFLAGS += -msep-data
+ TARGET_CXXFLAGS += -msep-data
+ endif
+ 
+-ifeq ($(BR2_TOOLCHAIN_BUILDROOT_USE_SSP),y)
++ifeq ($(BR2_ENABLE_SSP),y)
+ TARGET_CFLAGS += -fstack-protector-all
+ TARGET_CXXFLAGS += -fstack-protector-all
+ endif
+diff --git a/package/psmisc/psmisc.mk b/package/psmisc/psmisc.mk
+index 1340ee6..c18ba94 100644
+--- a/package/psmisc/psmisc.mk
++++ b/package/psmisc/psmisc.mk
+@@ -10,8 +10,8 @@ PSMISC_LICENSE = GPLv2
+ PSMISC_LICENSE_FILES = COPYING
+ PSMISC_DEPENDENCIES = ncurses $(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext)
+ 
+-ifneq ($(BR2_TOOLCHAIN_BUILDROOT_USE_SSP),y)
+-# Don't force -fstack-protector
++ifeq ($(BR2_TOOLCHAIN_HAS_SSP),)
++# Don't force -fstack-protector when SSP is not available in toolchain
+ PSMISC_CONF_OPT = --disable-harden-flags
+ endif
+ 
 diff --git a/package/uclibc/Config.in b/package/uclibc/Config.in
-index 92e04e9..037ca01 100644
+index 037ca01..eeb3b83 100644
 --- a/package/uclibc/Config.in
 +++ b/package/uclibc/Config.in
-@@ -115,6 +115,7 @@ choice
- 	config BR2_PTHREADS_NATIVE
- 		bool "Native POSIX Threading (NPTL)"
- 		select BR2_TOOLCHAIN_HAS_THREADS
-+		select BR2_TOOLCHAIN_LIBC_NEEDS_THREE_STAGE_BUILD
- 		depends on !BR2_arc
- 		depends on !BR2_avr32
- 		depends on !BR2_bfin
-diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
-index 39877bb..181a772 100644
---- a/package/uclibc/uclibc.mk
-+++ b/package/uclibc/uclibc.mk
-@@ -22,8 +22,9 @@ UCLIBC_INSTALL_STAGING = YES
- # cross-compiler and the kernel headers
- UCLIBC_DEPENDENCIES = host-gcc-initial linux-headers
+@@ -130,6 +130,16 @@ config BR2_PTHREAD_DEBUG
+ 	help
+ 	  Build the thread library with debugging enabled.
  
--# Before uClibc is built, we must have the second stage cross-compiler
--uclibc-build: host-gcc-intermediate
-+# Before uClibc is built, we must have the second stage
-+# cross-compiler, for some gcc versions, and when NPTL is used.
-+uclibc-build: $(if $(BR2_TOOLCHAIN_NEEDS_THREE_STAGE_BUILD),host-gcc-intermediate)
- 
- # specifying UCLIBC_CONFIG_FILE on the command-line overrides the .config
- # setting.
++config BR2_TOOLCHAIN_BUILDROOT_USE_SSP
++	bool "Enable stack protection support"
++	select BR2_TOOLCHAIN_HAS_SSP
++	help
++	  Enable stack smashing protection support using GCCs
++	  -fstack-protector-all option in uClibc.
++
++	  See http://www.linuxfromscratch.org/hints/downloads/files/ssp.txt
++	  for details.
++
+ config BR2_UCLIBC_INSTALL_UTILS
+ 	bool "Compile and install uClibc utilities"
+ 	depends on !BR2_bfin
 diff --git a/toolchain/Config.in b/toolchain/Config.in
-index 9d1e68f..27f7b50 100644
+index 27f7b50..96713a8 100644
 --- a/toolchain/Config.in
 +++ b/toolchain/Config.in
-@@ -1,5 +1,13 @@
- menu "Toolchain"
- 
-+config BR2_TOOLCHAIN_NEEDS_THREE_STAGE_BUILD
-+	bool
-+	default y if BR2_TOOLCHAIN_LIBC_NEEDS_THREE_STAGE_BUILD && \
-+		BR2_GCC_VERSION_NEEDS_THREE_STAGE_BUILD
-+
-+config BR2_TOOLCHAIN_LIBC_NEEDS_THREE_STAGE_BUILD
-+	bool
-+
- # Should be selected for glibc or eglibc
- config BR2_TOOLCHAIN_USES_GLIBC
- 	bool
-@@ -10,6 +18,7 @@ config BR2_TOOLCHAIN_USES_GLIBC
+@@ -18,6 +18,7 @@ config BR2_TOOLCHAIN_USES_GLIBC
  	select BR2_TOOLCHAIN_HAS_THREADS
  	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
  	select BR2_TOOLCHAIN_HAS_SHADOW_PASSWORDS
-+	select BR2_TOOLCHAIN_LIBC_NEEDS_THREE_STAGE_BUILD
++	select BR2_TOOLCHAIN_HAS_SSP
+ 	select BR2_TOOLCHAIN_LIBC_NEEDS_THREE_STAGE_BUILD
  
  config BR2_TOOLCHAIN_USES_UCLIBC
+diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
+index 44b6018..0e270ee 100644
+--- a/toolchain/helpers.mk
++++ b/toolchain/helpers.mk
+@@ -258,7 +258,8 @@ check_uclibc = \
+ 	$(call check_uclibc_feature,__UCLIBC_HAS_LOCALE__,BR2_ENABLE_LOCALE,$${UCLIBC_CONFIG_FILE},Locale support) ;\
+ 	$(call check_uclibc_feature,__UCLIBC_HAS_WCHAR__,BR2_USE_WCHAR,$${UCLIBC_CONFIG_FILE},Wide char support) ;\
+ 	$(call check_uclibc_feature,__UCLIBC_HAS_THREADS__,BR2_TOOLCHAIN_HAS_THREADS,$${UCLIBC_CONFIG_FILE},Thread support) ;\
+-	$(call check_uclibc_feature,__PTHREADS_DEBUG_SUPPORT__,BR2_TOOLCHAIN_HAS_THREADS_DEBUG,$${UCLIBC_CONFIG_FILE},Thread debugging support)
++	$(call check_uclibc_feature,__PTHREADS_DEBUG_SUPPORT__,BR2_TOOLCHAIN_HAS_THREADS_DEBUG,$${UCLIBC_CONFIG_FILE},Thread debugging support) ;\
++	$(call check_uclibc_feature,__UCLIBC_HAS_SSP__,BR2_TOOLCHAIN_HAS_SSP,$${UCLIBC_CONFIG_FILE},Stack Smashing Protection support)
+ 
+ #
+ # Check that the Buildroot configuration of the ABI matches the
+diff --git a/toolchain/toolchain-buildroot/Config.in.2 b/toolchain/toolchain-buildroot/Config.in.2
+index 1371c31..df26079 100644
+--- a/toolchain/toolchain-buildroot/Config.in.2
++++ b/toolchain/toolchain-buildroot/Config.in.2
+@@ -4,15 +4,6 @@ if BR2_TOOLCHAIN_BUILDROOT
+ 
+ comment "Toolchain Options"
+ 
+-config BR2_TOOLCHAIN_BUILDROOT_USE_SSP
+-	bool "Enable stack protection support"
+-	help
+-	  Enable stack smashing protection support using GCCs
+-	  -fstack-protector-all option.
+-
+-	  See http://www.linuxfromscratch.org/hints/downloads/files/ssp.txt
+-	  for details.
+-
+ source "package/elf2flt/Config.in.host"
+ 
+ endif
+diff --git a/toolchain/toolchain-common.in b/toolchain/toolchain-common.in
+index dc3bd2a..1085fb3 100644
+--- a/toolchain/toolchain-common.in
++++ b/toolchain/toolchain-common.in
+@@ -32,6 +32,9 @@ config BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ config BR2_TOOLCHAIN_HAS_SHADOW_PASSWORDS
  	bool
+ 
++config BR2_TOOLCHAIN_HAS_SSP
++	bool
++
+ config BR2_ENABLE_LOCALE_PURGE
+ 	bool "Purge unwanted locales"
+ 	help
+diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
+index 24f1f27..8e25aa3 100644
+--- a/toolchain/toolchain-external/Config.in
++++ b/toolchain/toolchain-external/Config.in
+@@ -935,6 +935,15 @@ config BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG
+ 	  debugging support. If you don't know, leave the default
+ 	  value, Buildroot will tell you if it's correct or not.
+ 
++config BR2_TOOLCHAIN_EXTERNAL_HAS_SSP
++	bool "Toolchain has SSP support?"
++	select BR2_TOOLCHAIN_HAS_SSP
++	help
++	  Selection this option if your external toolchain has Stack
++	  Smashing Protection support enabled. If you don't know,
++	  leave the default value, Buildroot will tell you if it's
++	  correct or not.
++
+ endif # BR2_TOOLCHAIN_EXTERNAL_CUSTOM_UCLIBC
+ 
+ config BR2_TOOLCHAIN_EXTERNAL_INET_RPC
