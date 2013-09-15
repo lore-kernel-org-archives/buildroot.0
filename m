@@ -1,63 +1,41 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 15 Sep 2013 23:20:54 +0200
-Subject: [Buildroot] [git commit] toolchain: move elf2flt option inclusion
-	to toolchain-buildroot/Config.in
-Message-ID: <20130915213314.CDA8782A40@busybox.osuosl.org>
+Date: Sun, 15 Sep 2013 23:02:13 +0200
+Subject: [Buildroot] [git commit] gcc: force symlink creation
+Message-ID: <20130915213314.BA45982A40@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=859b49ed678be0f4b247a04d17ad554f54be0c96
+commit: http://git.buildroot.net/buildroot/commit/?id=094fd1d01de46a61bbc59343841f762817b9cc81
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The only remaining thing in toolchain-buildroot/Config.in.2 is the
-inclusion of the elf2flt option. It doesn't really make sense to have
-a separate Config.in file for that, so let's move this to
-toolchain-buildroot/Config.in.
+The HOST_GCC_CONFIGURE_SYMLINK creates a symbolic link
+$(@D)/build/configure -> $(@D)/configure for each build step of
+gcc. However, it was only using 'ln -s' and not 'ln -sf', which was
+causing problems when doing 'make host-gcc-final-reconfigure' for
+example, because the configure commands (including this macro) are
+being re-executed, but the symbolic link already exists.
+
+Changing this symbolic link creation to 'ln -sf' fixes this problem.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- toolchain/Config.in                       |    1 -
- toolchain/toolchain-buildroot/Config.in   |    1 +
- toolchain/toolchain-buildroot/Config.in.2 |    9 ---------
- 3 files changed, 1 insertions(+), 10 deletions(-)
+ package/gcc/gcc.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/toolchain/Config.in b/toolchain/Config.in
-index 96713a8..17be32a 100644
---- a/toolchain/Config.in
-+++ b/toolchain/Config.in
-@@ -63,6 +63,5 @@ source "toolchain/toolchain-buildroot/Config.in"
- source "toolchain/toolchain-external/Config.in"
- source "toolchain/toolchain-crosstool-ng/Config.in"
- source "toolchain/toolchain-common.in"
--source "toolchain/toolchain-buildroot/Config.in.2"
+diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
+index 157357c..5636c6f 100644
+--- a/package/gcc/gcc.mk
++++ b/package/gcc/gcc.mk
+@@ -76,7 +76,7 @@ endef
  
- endmenu
-diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
-index 060b494..0ebbd6c 100644
---- a/toolchain/toolchain-buildroot/Config.in
-+++ b/toolchain/toolchain-buildroot/Config.in
-@@ -68,4 +68,5 @@ source "package/uclibc/Config.in"
+ define HOST_GCC_CONFIGURE_SYMLINK
+ 	mkdir -p $(@D)/build
+-	ln -s ../configure $(@D)/build/configure
++	ln -sf ../configure $(@D)/build/configure
+ endef
  
- source "package/binutils/Config.in.host"
- source "package/gcc/Config.in.host"
-+source "package/elf2flt/Config.in.host"
- endif
-diff --git a/toolchain/toolchain-buildroot/Config.in.2 b/toolchain/toolchain-buildroot/Config.in.2
-deleted file mode 100644
-index df26079..0000000
---- a/toolchain/toolchain-buildroot/Config.in.2
-+++ /dev/null
-@@ -1,9 +0,0 @@
--# Buildroot backend specific options
--
--if BR2_TOOLCHAIN_BUILDROOT
--
--comment "Toolchain Options"
--
--source "package/elf2flt/Config.in.host"
--
--endif
+ #
