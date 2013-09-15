@@ -1,22 +1,28 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 15 Sep 2013 20:48:34 +0200
-Subject: [Buildroot] [PATCH] squid: fix build failure after bump
-In-Reply-To: <1379090558-4270-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Fri, 13 Sep 2013 13:42:38 -0300")
-References: <1379090558-4270-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87ob7tly4d.fsf@dell.be.48ers.dk>
+Date: Sun, 15 Sep 2013 20:51:28 +0200
+Subject: [Buildroot] [PATCH] Update config.guess to version 2013-06-10
+In-Reply-To: <20130915200212.12bc35b7@skate> (Thomas Petazzoni's message of
+ "Sun, 15 Sep 2013 20:02:12 +0200")
+References: <1378960962-17411-1-git-send-email-jouko.nikula@espotel.com>
+ <87eh8uqxdc.fsf@dell.be.48ers.dk>
+ <E720F69E63F812489DA4D50AB9BE43F48B1A5E41@ESEXE002.espotel.espotel.fi>
+ <20130915200212.12bc35b7@skate>
+Message-ID: <87k3ihlxzj.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- Gustavo> Add missing patch, fixes:
- Gustavo> http://autobuild.buildroot.net/results/f6a/f6a6dd1f3138406d1daa31e5e4ff5d5026b3c069/
+Hi,
 
-Committed, thanks.
+ Thomas> Note that I think we could drop the patch
+ Thomas> 0002-config-add-support-for-ps2.patch. It really doesn't seem to be
+ Thomas> useful for any sort of machine we support.
+
+Agreed.
 
 -- 
 Bye, Peter Korsgaard
