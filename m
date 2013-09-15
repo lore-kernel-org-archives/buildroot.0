@@ -1,41 +1,35 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sun, 15 Sep 2013 11:52:20 -0300
-Subject: [Buildroot] [PATCH 2/2] linux: bump 3.11.x stable version
-In-Reply-To: <1379256740-18574-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1379256740-18574-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1379256740-18574-2-git-send-email-gustavo@zacarias.com.ar>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Sun, 15 Sep 2013 16:33:37 +0200
+Subject: [Buildroot] [RFCv1 07/11] toolchain: intermediate .mk files no
+ longer needed
+In-Reply-To: <1378416469-17708-8-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1378416469-17708-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1378416469-17708-8-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <CAAXf6LX2SMBFZ_d7WL9YXeyPFq52=63fjWdvxqezzt2e8rCZ8A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- linux/Config.in | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+On Thu, Sep 5, 2013 at 11:27 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> ---
+>  toolchain/toolchain-external.mk | 4 ----
+>  1 file changed, 4 deletions(-)
+>  delete mode 100644 toolchain/toolchain-external.mk
+>
+> diff --git a/toolchain/toolchain-external.mk b/toolchain/toolchain-external.mk
+> deleted file mode 100644
+> index 2f43db7..0000000
+> --- a/toolchain/toolchain-external.mk
+> +++ /dev/null
+> @@ -1,4 +0,0 @@
+> -# Required includes for the external toolchain backend
+> -
+> -include toolchain/helpers.mk
+> -include toolchain/toolchain-external/ext-tool.mk
+> --
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 7864f65..a96ee04 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -21,7 +21,7 @@ choice
- 	prompt "Kernel version"
- 
- config BR2_LINUX_KERNEL_LATEST_VERSION
--	bool "3.11"
-+	bool "3.11.1"
- 
- config BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	bool "Same as toolchain kernel headers"
-@@ -75,7 +75,7 @@ config BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION
- 
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "3.11" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "3.11.1" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default BR2_DEFAULT_KERNEL_HEADERS if BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE if BR2_LINUX_KERNEL_CUSTOM_VERSION
- 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
--- 
-1.8.1.5
+Acked-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
