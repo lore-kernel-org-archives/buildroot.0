@@ -1,47 +1,87 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 15 Sep 2013 20:18:07 +0200
-Subject: [Buildroot] [PATCH 1/3] knock: new package
-In-Reply-To: <522F880D.1090904@mind.be>
-References: <1378071216-19697-1-git-send-email-rommel@layer-7.net>
- <CAAXf6LXW8GfZzPAHkFjP_coASZ8CPNPNNc6=KjWrek94Ndn_cw@mail.gmail.com>
- <E9670545-EE12-445D-A15C-C0C3E4A4116A@layer-7.net>
- <1DD66D3B-6E8F-41C4-859E-A36677BA0A6B@layer-7.net>
- <CAAXf6LWfhUhQ2pRwaFh6szZ=51WfPPJNB2AVwzoodV0w4XT4DQ@mail.gmail.com>
- <522F880D.1090904@mind.be>
-Message-ID: <20130915201807.4453878c@skate>
+From: Danomi Manchego <danomimanchego123@gmail.com>
+Date: Sun, 15 Sep 2013 14:37:21 -0400
+Subject: [Buildroot] [PATCH] fs/ubi: add option to use custom volume
+ config file
+In-Reply-To: <20130915200014.5543b2a1@skate>
+References: <1379215295-1805-1-git-send-email-danomimanchego123@gmail.com>
+ <20130915200014.5543b2a1@skate>
+Message-ID: <CANxTyt4GZNTtACwf4W8OCKUBZLf7YfZ=pBM-6KGmgeaf8UCPLg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Thomas,
 
-On Tue, 10 Sep 2013 22:58:53 +0200, Arnout Vandecappelle wrote:
+On Sun, Sep 15, 2013 at 2:00 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+>> +config BR2_TARGET_ROOTFS_UBI_USE_CUSTOM_CONFIG
+>> +     bool "Use custom config file"
+>> +     help
+>> +       Select to use a custom volume configuration file.  Otherwise,
+>> +       a configuration file will be generated automatically.
+>
+> I'd like to have a bit more documentation here, and especially
+> explicitly mention that we're talking about the configuration file
+> passed to the 'ubinize' tool. Also, I'm not sure the name 'volume
+> configuration file' is correct: the ubinize configuration file does not
+> describe the configuration of one volume, but rather the configuration
+> of all volumes that will be contained in an UBI "space".
+>
+> Some maybe something:
+>
+>         Select this option to use a custom ubinize configuration file,
+>         rather than the default configuration used by Buildroot (which
+>         consists in generating an UBI image that contains a single
+>         volume, itself containing the root filesystem). Passing a
+>         custom ubinize configuration file will allow you to create
+>         several volumes.
+>
+> However, I'd like to add more detail on using the rootfs UBIFS image in
+> a volume (i.e $@fs in the existing code), but I'm not sure what
+> suggestion to give to the user: i.e, what image= line should he put in
+> his custom configuration file?
 
->   And you can also use the toolchains used by the autobuilders, to test 
-> with uClibc-based toolchains.
+What I found was that the image path is relative to the $(TOPDIR).  So
+if you are providing your own file, you need to know your $(O) and
+either specify a path relative to $(TOPDIR), or an absolute path.  i
+played with the idea of having a sed line or something to substitute
+in a file path, but decided against.  I though that if you are
+providing your own config file, then it could refer to multiple images
+in different output directories (for whatever reason), in which case
+you have to know where your files are anyway.
 
-Correct. As a reminder, I put all the toolchain defconfigs tested by
-the autobuilders in
-http://autobuild.buildroot.org/toolchains/configs/free-electrons/. Some
-of them point to well-known external toolchains (Linaro, Sourcery
-CodeBench, Blackfin, etc.), and some other point to external toolchains
-that I have built specifically for the autobuilders, but the defconfig
-contains an URL that is available for everyone.
+Maybe the description needs something like:
 
-Whenever I need to test some package, I often start with:
 
-wget -O .config http://autobuild.buildroot.org/toolchains/configs/free-electrons/br-arm-basic.config
+>> +config BR2_TARGET_ROOTFS_UBI_CUSTOM_CONFIG_FILE
+>> +     string "Configuration file path"
+>> +     depends on BR2_TARGET_ROOTFS_UBI_USE_CUSTOM_CONFIG
+>> +     help
+>> +       Path to the volume configuration file
+>
+> Path to the ubinize configuration file.
 
-which will create me a minimal .config file that points to a very
-simple uClibc toolchain.
+Okay.
 
-Best regards,
 
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+>> +ifeq ($(BR2_TARGET_ROOTFS_UBI_USE_CUSTOM_CONFIG),y)
+>> +UBI_UBINIZE_PREP_CFG = \
+>> +     cp $(BR2_TARGET_ROOTFS_UBI_CUSTOM_CONFIG_FILE) ./ubinize.cfg
+>> +else
+>> +UBI_UBINIZE_PREP_CFG = \
+>> +     cp fs/ubifs/ubinize.cfg . ; echo "image=$@fs" >> ./ubinize.cfg
+>> +endif
+>> +
+>>  define ROOTFS_UBI_CMD
+>> -     cp fs/ubifs/ubinize.cfg . ;\
+>
+> Am I looking wrong, or are we copying ubinize.cfg to the root of the
+> Buildroot source tree? If that's the case, then it's really really
+> wrong, as the source tree should be read-only. Instead, we should copy
+> it to some location in $(O).
+
+Correct - that's the way it was, so I didn't change it.  But it would
+be easy to change "./ubinize.cfg" to "$(O)/ubinize.cfg".  I'll do
+that.
