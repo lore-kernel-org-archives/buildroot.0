@@ -1,9 +1,8 @@
 From: Ralph Siemsen <ralphs@netwinder.org>
-Date: Sun, 15 Sep 2013 09:37:09 -0400
-Subject: [Buildroot] [PATCH v2] apply-patches.sh: detect missing patches
-In-Reply-To: <20130913182702.GB3301@free.fr>
-References: <CAAXf6LXBHm7nG__780PqUaO+v9+4j2KON7UO0dw4Ej2qC3=XGg@mail.gmail.com>
- <CAAXf6LV9HPWdzqV_F5zQ+aABtVxZGRRkhDszF2Qx8vyXMb+PhA@mail.gmail.com>
+Date: Sun, 15 Sep 2013 10:13:14 -0400
+Subject: [Buildroot] [PATCH v3] apply-patches.sh: detect missing patches
+In-Reply-To: <20130915133709.GA16826@harvey.netwinder.org>
+References: <CAAXf6LV9HPWdzqV_F5zQ+aABtVxZGRRkhDszF2Qx8vyXMb+PhA@mail.gmail.com>
  <20130905100459.13173009@skate> <5228425A.7090502@lucaceresoli.net>
  <20130905140135.GC3136@free.fr>
  <CAAXf6LWWnb5xQUtZA8p3kgoU2et-kD6x9TzyzXykgNbxdsuv+Q@mail.gmail.com>
@@ -11,38 +10,69 @@ References: <CAAXf6LXBHm7nG__780PqUaO+v9+4j2KON7UO0dw4Ej2qC3=XGg@mail.gmail.com>
  <CAAXf6LX7o9P1tXv3Egk8By-VbzarRYe5JRyTh5+3wYNBz9Z6aQ@mail.gmail.com>
  <20130913181527.GA11933@harvey.netwinder.org>
  <20130913182702.GB3301@free.fr>
-Message-ID: <20130915133709.GA16826@harvey.netwinder.org>
+ <20130915133709.GA16826@harvey.netwinder.org>
+Message-ID: <20130915141314.GA18166@harvey.netwinder.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Sep 13, 2013 at 08:27:02PM +0200, Yann E. MORIN wrote:
-> > 
-> > diff --git a/support/scripts/apply-patches.sh b/support/scripts/apply-patches.sh
-> > index 7d5856c..d6e8983 100755
-> > --- a/support/scripts/apply-patches.sh
-> > +++ b/support/scripts/apply-patches.sh
-> > @@ -70,13 +70,17 @@ function apply_patch {
-> >  	*.patch*)
-> >  	type="patch"; uncomp="cat"; ;;
-> >  	*)
-> > -	echo "Unsupported format file for ${patch}, skip it";
-> > -	return 0;
-> > +	echo "Unsupported format file for ${path}/${patch}";
-> > +	return 1;
-> 
-> I was a bit surprised to read that you used "return 1" here, rather than
-> a more explicit "exit 1".
+The "patch" command returns an error code only if patches fail
+to apply. Therefore the pipleline "cat <patchfile> | patch ..."
+does not fail, even if <patchfile> is missing. Fix this by
+adding an explicit check for patch file existence.
 
-As you mentioned, both "return" and "exit" work here, so I opted for the
-lesser change, figuring it would be less controversial ;)
+Based on feedback from buildroot mailing list, also change the
+existing check for unsupported patch format into a fatal error.
+---
 
-> This is not really straightforward. Just remove the "|| exit 1" and
-> change all the "return 1" into "exit 1", so the script really errors out
-> right away.
+v1. original
+v2. error on unsupported patch formats
+v3. explicit exit calls
 
-I'll submit v3 with that fixed.
-
--R
+diff --git a/support/scripts/apply-patches.sh b/support/scripts/apply-patches.sh
+index e9c6869..656aa71 100755
+--- a/support/scripts/apply-patches.sh
++++ b/support/scripts/apply-patches.sh
+@@ -73,13 +73,17 @@ function apply_patch {
+ 	*.patch*)
+ 	type="patch"; uncomp="cat"; ;;
+ 	*)
+-	echo "Unsupported format file for ${patch}, skip it";
+-	return 0;
++	echo "Unsupported format file for ${path}/${patch}";
++	exit 1;
+ 	;;
+     esac
+     echo ""
+     echo "Applying $patch using ${type}: "
+-	echo $patch >> ${builddir}/.applied_patches_list
++    if [ ! -e "${path}/$patch" ] ; then
++	echo "Error: missing patch file ${path}/$patch"
++	exit 1
++    fi
++    echo $patch >> ${builddir}/.applied_patches_list
+     ${uncomp} "${path}/$patch" | patch -g0 -p1 -E -d "${builddir}" -t
+     if [ $? != 0 ] ; then
+         echo "Patch failed!  Please fix ${patch}!"
+@@ -96,7 +100,7 @@ function scan_patchdir {
+     # to apply patches. Skip line starting with a dash.
+     if [ -e "${path}/series" ] ; then
+         for i in `grep -Ev "^#" ${path}/series 2> /dev/null` ; do
+-            apply_patch "$path" "$i" || exit 1
++            apply_patch "$path" "$i"
+         done
+     else
+         for i in `cd $path; ls -d $patches 2> /dev/null` ; do
+@@ -109,7 +113,7 @@ function scan_patchdir {
+                 tar -C "$unpackedarchivedir" -xaf "${path}/$i"
+                 scan_patchdir "$unpackedarchivedir"
+             else
+-                apply_patch "$path" "$i" || exit 1
++                apply_patch "$path" "$i"
+             fi
+         done
+     fi
+-- 
+1.8.3.1
