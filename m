@@ -1,12 +1,12 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 15 Sep 2013 23:25:42 +0200
-Subject: [Buildroot] [PATCHv2 11/14] toolchain: move elf2flt option
-	inclusion to toolchain-buildroot/Config.in
-In-Reply-To: <1378138000-12739-12-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Mon, 2 Sep 2013 18:06:37 +0200")
+Date: Sun, 15 Sep 2013 23:28:04 +0200
+Subject: [Buildroot] [PATCHv2 12/14] gcc: provide option to enable
+	mudflap support
+In-Reply-To: <1378138000-12739-13-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Mon, 2 Sep 2013 18:06:38 +0200")
 References: <1378138000-12739-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1378138000-12739-12-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <87k3ihixpl.fsf@dell.be.48ers.dk>
+ <1378138000-12739-13-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <87fvt5ixln.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,12 +15,30 @@ To: buildroot@busybox.net
 
 >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- Thomas> The only remaining thing in toolchain-buildroot/Config.in.2 is the
- Thomas> inclusion of the elf2flt option. It doesn't really make sense to have
- Thomas> a separate Config.in file for that, so let's move this to
- Thomas> toolchain-buildroot/Config.in.
+ Thomas> The mudflap library is only useful if one uses the -fmudflap gcc
+ Thomas> option, to do more checks on pointers/arrays. This commit adds an
+ Thomas> option to enable/disable mudflap support at the gcc level. By default,
+ Thomas> it is disabled, which saves a little bit of build time compared to the
+ Thomas> default of gcc which consists in enabling mudflap support.
 
-Committed, thanks.
+ Thomas> Since mudflap is now disabled by default, and ensured to be enabled on
+
+.. and ensure to NEVER be enabled on
+
+ Thomas> some platforms where it is not available, some gcc.mk code that was
+
+I dropped 'some'.
+
+ Thomas> +
+ Thomas> +config BR2_GCC_ENABLE_LIBMUDFLAP
+ Thomas> +	bool "Enable libmudflap support"
+ Thomas> +	# There are architectures, or specific configurations for
+ Thomas> +	# which mudflap is not supported.
+ Thomas> +	depends on !BR2_avr32 && !BR2_bfin && !BR2_ARM_INSTRUCTIONS_THUMB &&!BR2_powerpc_SPE
+
+Space missing before !BR2_powerpc_SPE
+
+Committed with this fixed, thanks.
 
 -- 
 Bye, Peter Korsgaard
