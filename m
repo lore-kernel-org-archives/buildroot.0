@@ -1,47 +1,47 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 15 Sep 2013 23:01:06 +0200
-Subject: [Buildroot] [git commit] gcc/gcc-final: use the common
-	HOST_GCC_CONFIGURE_SYMLINK macro
-Message-ID: <20130915213314.B0B6682A40@busybox.osuosl.org>
+Date: Sun, 15 Sep 2013 23:34:25 +0200
+Subject: [Buildroot] [git commit branch/2013.08.x] Makefile: make
+	$(BUILD_DIR)/.root rule idempotent
+Message-ID: <20130915213410.84CF79B76A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=df9bbb779f37ef55136aeb838068cb2be9115b14
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+commit: http://git.buildroot.net/buildroot/commit/?id=63344acefaa31b713a1811e5b0ba66217bd596d3
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/2013.08.x
 
-Each stage of the gcc build needs to make a small dance before the
-configuration step to create a build sub-directory and a symbolic link
-to the configure script. The common gcc.mk had a
-HOST_GCC_CONFIGURE_SYMLINK already used by the gcc-initial and
-gcc-intermediate steps, but the gcc-final step wasn't using it.
+The $(BUILD_DIR)/.root rule is executed as part of the 'dirs'
+target. The 'dirs' target is re-executed at every execution of 'make
+external-deps', and make external-deps explicitly tells make to ignore
+targets that have already been made (through the -B option). This
+means that the $(BUILD_DIR)/.root rule has to be idempotant, which was
+not the case this the introduction of the lib32/lib64 symbolic link.
 
-This commit fixes this inconsistency, and therefore removes the
-HOST_GCC_FINAL_CONFIGURE_SYMLINK macro.
+Running 'make external-deps' three times in a row was sufficient to
+trigger an error due to symbolic links being incorrectly created. This
+patch fixes that.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/gcc/gcc-final/gcc-final.mk |    7 +------
- 1 files changed, 1 insertions(+), 6 deletions(-)
+ Makefile |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/gcc/gcc-final/gcc-final.mk b/package/gcc/gcc-final/gcc-final.mk
-index f627767..69a4ccd 100644
---- a/package/gcc/gcc-final/gcc-final.mk
-+++ b/package/gcc/gcc-final/gcc-final.mk
-@@ -24,12 +24,7 @@ HOST_GCC_FINAL_POST_PATCH_HOOKS += HOST_GCC_APPLY_PATCHES
- # subdirectory in the gcc sources, and build from there.
- HOST_GCC_FINAL_SUBDIR = build
+diff --git a/Makefile b/Makefile
+index e2454a7..819a597 100644
+--- a/Makefile
++++ b/Makefile
+@@ -451,9 +451,9 @@ $(BUILD_DIR)/.root:
+ 		--exclude .hg --exclude=CVS --exclude '*~' \
+ 		$(TARGET_SKELETON)/ $(TARGET_DIR)/
+ 	cp support/misc/target-dir-warning.txt $(TARGET_DIR_WARNING_FILE)
+-	@ln -s lib $(TARGET_DIR)/$(LIB_SYMLINK)
++	@ln -snf lib $(TARGET_DIR)/$(LIB_SYMLINK)
+ 	@mkdir -p $(TARGET_DIR)/usr
+-	@ln -s lib $(TARGET_DIR)/usr/$(LIB_SYMLINK)
++	@ln -snf lib $(TARGET_DIR)/usr/$(LIB_SYMLINK)
+ 	touch $@
  
--define HOST_GCC_FINAL_CONFIGURE_SYMLINK
--	mkdir -p $(@D)/build
--	ln -s ../configure $(@D)/build/configure
--endef
--
--HOST_GCC_FINAL_PRE_CONFIGURE_HOOKS += HOST_GCC_FINAL_CONFIGURE_SYMLINK
-+HOST_GCC_FINAL_PRE_CONFIGURE_HOOKS += HOST_GCC_CONFIGURE_SYMLINK
- 
- # Languages supported by the cross-compiler
- GCC_FINAL_CROSS_LANGUAGES-y = c
+ $(TARGET_DIR): $(BUILD_DIR)/.root
