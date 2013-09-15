@@ -1,77 +1,215 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 15 Sep 2013 21:37:03 +0200
-Subject: [Buildroot] [PATCH v5] aiccu: new package
-In-Reply-To: <1379105824-26020-1-git-send-email-rommel@layer-7.net> (Michael
- Rommel's message of "Fri, 13 Sep 2013 22:57:04 +0200")
-References: <1379105824-26020-1-git-send-email-rommel@layer-7.net>
-Message-ID: <87fvt5lvvk.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Sun, 15 Sep 2013 21:38:27 +0200
+Subject: [Buildroot] [git commit] aiccu: new package
+Message-ID: <20130915193910.A46FA9B766@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Michael" == Michael Rommel <rommel@layer-7.net> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=1e9b983fe24fd9345df609e1f84a570208cdb45e
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Michael> Automatic IPv6 Connectivity Configuration Utility for users of a
- Michael> IPv6 tunnel broker, developed by sixxs.net
+Automatic IPv6 Connectivity Configuration Utility for users of a
+IPv6 tunnel broker, developed by sixxs.net
 
- Michael> Signed-off-by: Michael Rommel <rommel@layer-7.net>
- Michael> ---
- Michael> Changes v4 -> v5
- Michael>  * changed the patch to remove the strip command completely
- Michael>    tested cross compilation for i568 and powerpc
+[Peter: drop strip patch, pass TARGET_CONFIGURE_OPTS]
+Signed-off-by: Michael Rommel <rommel@layer-7.net>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/Config.in                                  |    1 +
+ package/aiccu/Config.in                            |   21 ++++
+ .../aiccu/aiccu-0001-gnutls-and-uclibc-fixes.patch |  104 ++++++++++++++++++++
+ package/aiccu/aiccu.mk                             |   34 +++++++
+ 4 files changed, 160 insertions(+), 0 deletions(-)
 
- Michael> +++ b/package/aiccu/aiccu-0002-makefile-remove-strip.patch
- Michael> @@ -0,0 +1,20 @@
- Michael> +Makefile: removed strip command, it would not cater for cross compiling
- Michael> +	  and since buildroot strips the binaries anyway, it was suggested
- Michael> +	  by Arnout to remove it completely.
- Michael> +
- Michael> +Signed-off-by: Michael Rommel <rommel@layer-7.net>
- Michael> +
- Michael> +--- aiccu_20070115.orig/unix-console/Makefile	2007-01-15 12:04:27.000000000 +0100
- Michael> ++++ aiccu_20070115/unix-console/Makefile	2013-09-13 19:54:51.740933958 +0200
- Michael> +@@ -145,11 +145,6 @@ all: aiccu
- Michael> + 
- Michael> + aiccu:	$(OBJS) ${SRCS} ${INCS}
- Michael> + 	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $(OBJS)
- Michael> +-ifeq ($(shell echo $(CFLAGS) | grep -c "DEBUG"),0)
- Michael> +-ifeq ($(shell echo "$(RPM_OPT_FLAGS)" | wc -c),1)
- Michael> +-	strip $@
- Michael> +-endif
- Michael> +-endif
-
-So we can just pass RPM_OPT_FLAGS to get it to not strip? That seems
-nicer.
-
- Michael> +################################################################################
- Michael> +#
- Michael> +# aiccu
- Michael> +#
- Michael> +################################################################################
- Michael> +
- Michael> +AICCU_VERSION = 20070115
- Michael> +AICCU_SOURCE = aiccu_$(AICCU_VERSION).tar.gz
- Michael> +AICCU_SITE = http://www.sixxs.net/archive/sixxs/aiccu/unix/
- Michael> +AICCU_LICENSE = SixXS License, concise redistribution license
- Michael> +AICCU_LICENSE_FILES = doc/LICENSE
- Michael> +AICCU_DEPENDENCIES = gnutls
- Michael> +
- Michael> +define AICCU_BUILD_CMDS
- Michael> +	$(MAKE) CC="$(TARGET_CC)" LD="$(TARGET_LD)" -C $(@D) all
-
-We also need to pass our CFLAGS / LDFLAGS. Looking at the Makefile's we
-can just pass them in the environment if we directly call the sub
-Makefile in unix-console. LD doesn't seem to be used anywhere, so we can
-drop it.
-
-E.G. we end up with something like:
-
-	$(TARGET_CONFIGURE_OPTS) $(MAKE) CC="$(TARGET_CC)" \
-		RPM_OPT_FLAGS=1 -C $(@D)/unix-console all
-
-Committed with these changes, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/Config.in b/package/Config.in
+index ca92812..973d32c 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -743,6 +743,7 @@ source "package/sound-theme-freedesktop/Config.in"
+ endmenu
+ 
+ menu "Networking applications"
++source "package/aiccu/Config.in"
+ source "package/aircrack-ng/Config.in"
+ source "package/argus/Config.in"
+ source "package/arptables/Config.in"
+diff --git a/package/aiccu/Config.in b/package/aiccu/Config.in
+new file mode 100644
+index 0000000..1c6f554
+--- /dev/null
++++ b/package/aiccu/Config.in
+@@ -0,0 +1,21 @@
++config BR2_PACKAGE_AICCU
++	bool "aiccu"
++	depends on BR2_INET_IPV6
++	depends on BR2_USE_WCHAR
++	select BR2_PACKAGE_GNUTLS
++	help
++	  SixXS Automatic IPv6 Connectivity Client Utility
++
++	  AICCU (Automatic IPv6 Connectivity Client Utility) makes it
++	  easy for users to get IPv6 connectivity. After having
++	  requested an account, tunnel and optionally a subnet, AICCU
++	  can be used to automatically configure the tunnel. AICCU
++	  supports TIC (Tunnel Information & Control protocol), which it
++	  uses for retrieving the tunnel configuration information,
++	  AYIYA, which allows tunnels to be created even behind
++	  firewalls and NAT's.
++
++	  http://www.sixxs.net/tools/aiccu/
++
++comment "aiccu requires a toolchain with IPv6 and WCHAR support"
++	depends on !(BR2_INET_IPV6 && BR2_USE_WCHAR)
+diff --git a/package/aiccu/aiccu-0001-gnutls-and-uclibc-fixes.patch b/package/aiccu/aiccu-0001-gnutls-and-uclibc-fixes.patch
+new file mode 100644
+index 0000000..d316f8f
+--- /dev/null
++++ b/package/aiccu/aiccu-0001-gnutls-and-uclibc-fixes.patch
+@@ -0,0 +1,104 @@
++aiccu.h, common.c, common.h: fixes for deprecated GNUTLS functions and types
++resolver.c: fixes for selection of wrong resolver function under uclibc
++
++Signed-off-by: Michael Rommel <rommel@layer-7.net>
++
++diff -purN aiccu_20070115.orig/common/aiccu.h aiccu_20070115/common/aiccu.h
++--- aiccu_20070115.orig/common/aiccu.h	2007-01-15 13:01:43.000000000 +0100
+++++ aiccu_20070115/common/aiccu.h	2013-08-31 23:50:53.651936146 +0200
++@@ -111,7 +111,7 @@ struct AICCU_conf
++ #endif
++ 
++ #ifdef AICCU_GNUTLS
++-	gnutls_certificate_credentials	tls_cred;	/* GNUTLS credentials */
+++	gnutls_certificate_credentials_t tls_cred;	/* GNUTLS credentials */
++ #endif
++ 
++ 	bool		daemonize;		/* Daemonize? */
++diff -purN aiccu_20070115.orig/common/common.c aiccu_20070115/common/common.c
++--- aiccu_20070115.orig/common/common.c	2006-12-21 15:08:50.000000000 +0100
+++++ aiccu_20070115/common/common.c	2013-09-01 01:21:36.031396740 +0200
++@@ -271,9 +271,8 @@ TLSSOCKET sock_alloc(void);
++ TLSSOCKET sock_alloc(void)
++ {
++ #ifdef AICCU_GNUTLS
++-	/* Allow connections to servers that have OpenPGP keys as well */
++-	const int	cert_type_priority[3] = { GNUTLS_CRT_X509, GNUTLS_CRT_OPENPGP, 0 };
++ 	int		ret;
+++	const char	*err;
++ #endif /* AICCU_GNUTLS*/
++ 
++ 	TLSSOCKET	sock;	
++@@ -297,11 +296,16 @@ TLSSOCKET sock_alloc(void)
++ 	}
++ 
++ 	/* Use default priorities */
++-	gnutls_set_default_priority(sock->session);
++-	/* XXX: Return value is not documented in GNUTLS documentation! */
++-
++-	gnutls_certificate_type_set_priority(sock->session, cert_type_priority);
++-	/* XXX: Return value is not documented in GNUTLS documentation! */
+++	ret = gnutls_priority_set_direct(sock->session, "NORMAL", &err); 
+++	if (ret < 0)
+++	{
+++		if (ret == GNUTLS_E_INVALID_REQUEST)
+++		{
+++			dolog( LOG_ERR, "TLS set priority failed, syntax error at: %s\n", err);
+++		}
+++		free(sock);
+++		return NULL;
+++	}
++ 
++ 	/* Configure the x509 credentials for the current session */
++ 	gnutls_credentials_set(sock->session, GNUTLS_CRD_CERTIFICATE, g_aiccu->tls_cred);
++@@ -474,7 +478,7 @@ bool sock_gotls(TLSSOCKET sock)
++ 	}
++ 
++ 	/* Set the transport */
++-	gnutls_transport_set_ptr(sock->session, (gnutls_transport_ptr)sock->socket);
+++	gnutls_transport_set_ptr(sock->session, (gnutls_transport_ptr_t) sock->socket);
++ 
++ 	/* Perform the TLS handshake */
++ 	ret = gnutls_handshake(sock->session);
++diff -purN aiccu_20070115.orig/common/common.h aiccu_20070115/common/common.h
++--- aiccu_20070115.orig/common/common.h	2007-01-11 15:50:51.000000000 +0100
+++++ aiccu_20070115/common/common.h	2013-08-31 23:26:13.683659455 +0200
++@@ -381,7 +381,7 @@ struct tlssocket
++ 	SOCKET			socket;
++ #ifdef AICCU_GNUTLS
++ 	bool			tls_active;	/* TLS active? */
++-	gnutls_session		session;	/* The GnuTLS sesision */
+++	gnutls_session_t	session;	/* The GnuTLS sesision */
++ #endif
++ };
++ 
++diff -purN aiccu_20070115.orig/common/resolver.c aiccu_20070115/common/resolver.c
++--- aiccu_20070115.orig/common/resolver.c	2006-07-23 16:55:14.000000000 +0200
+++++ aiccu_20070115/common/resolver.c	2013-08-31 23:44:31.574866862 +0200
++@@ -26,7 +26,7 @@
++ 
++ int getrrs(const char *label, int rrtype, void gotrec(unsigned int num, int type, const char *record))
++ {
++-#ifdef _LINUX
+++#if defined(_LINUX) && !defined(__UCLIBC__)
++ 	struct __res_state	res;
++ #endif
++ 	unsigned char		answer[8192];
++@@ -38,7 +38,7 @@ int getrrs(const char *label, int rrtype
++ 	uint16_t		type = 0, class = 0;
++ 	uint32_t		ttl = 0;
++ 
++-#ifdef _LINUX
+++#if defined(_LINUX) && !defined(__UCLIBC__)
++ 	memset(&res, 0, sizeof(res));
++ 	res.options = RES_DEBUG;
++ 	res_ninit(&res);
++@@ -47,7 +47,7 @@ int getrrs(const char *label, int rrtype
++ #endif
++ 
++ 	memset(answer, 0, sizeof(answer));
++-#ifdef _LINUX
+++#if defined(_LINUX) && !defined(__UCLIBC__)
++ 	ret = res_nquery(&res, label, C_IN, rrtype, answer, sizeof(answer));
++ #else
++ 	ret = res_query(label, C_IN, rrtype, answer, sizeof(answer));
+diff --git a/package/aiccu/aiccu.mk b/package/aiccu/aiccu.mk
+new file mode 100644
+index 0000000..2c54644
+--- /dev/null
++++ b/package/aiccu/aiccu.mk
+@@ -0,0 +1,34 @@
++################################################################################
++#
++# aiccu
++#
++################################################################################
++
++AICCU_VERSION = 20070115
++AICCU_SOURCE = aiccu_$(AICCU_VERSION).tar.gz
++AICCU_SITE = http://www.sixxs.net/archive/sixxs/aiccu/unix/
++AICCU_LICENSE = SixXS License, concise redistribution license
++AICCU_LICENSE_FILES = doc/LICENSE
++AICCU_DEPENDENCIES = gnutls
++
++# dummy RPM_OPT_FLAGS to disable stripping
++define AICCU_BUILD_CMDS
++	$(TARGET_CONFIGURE_OPTS) $(MAKE) CC="$(TARGET_CC)" \
++		RPM_OPT_FLAGS=1 -C $(@D)/unix-console all
++endef
++
++define AICCU_INSTALL_TARGET_CMDS
++	$(INSTALL) -D -m 0755 $(@D)/unix-console/aiccu \
++		$(TARGET_DIR)/usr/sbin/aiccu
++	[ -f $(TARGET_DIR)/etc/aiccu.conf ] || \
++		$(INSTALL) -D -m 0644 $(@D)/doc/aiccu.conf \
++		$(TARGET_DIR)/etc/aiccu.conf
++endef
++
++define AICCU_INSTALL_INIT_SYSV
++	[ -f $(TARGET_DIR)/etc/init.d/S50aiccu ] || \
++		$(INSTALL) -D -m 0755 $(@D)/doc/aiccu.init \
++		$(TARGET_DIR)/etc/init.d/S50aiccu
++endef
++
++$(eval $(generic-package))
