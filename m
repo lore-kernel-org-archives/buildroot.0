@@ -1,115 +1,53 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Sun, 15 Sep 2013 21:29:58 +0200
-Subject: [Buildroot] [RFCv1 08/11] package: package-based implementation
- of source, external-deps and legal-info
-In-Reply-To: <1378416469-17708-9-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1378416469-17708-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1378416469-17708-9-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <CAAXf6LXvWgtX4h_2NH6=zOiaDyXLmzRoAfviaTwbmTdMFKvoyg@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 15 Sep 2013 21:28:45 +0200
+Subject: [Buildroot] [PATCHv2] Makefile: make $(BUILD_DIR)/.root rule
+	idempotent
+Message-ID: <1379273325-5933-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+The $(BUILD_DIR)/.root rule is executed as part of the 'dirs'
+target. The 'dirs' target is re-executed at every execution of 'make
+external-deps', and make external-deps explicitly tells make to ignore
+targets that have already been made (through the -B option). This
+means that the $(BUILD_DIR)/.root rule has to be idempotant, which was
+not the case this the introduction of the lib32/lib64 symbolic link.
 
-On Thu, Sep 5, 2013 at 11:27 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Until now, the make source, make external-deps and make legal-info
-> where relying on enumerating the packages by looking at $(TARGETS)
-> which contains only the target packages and not the host
-> packages. Thanks to the TARGET_HOST_DEPS and HOST_DEPS variables, it
-> was doing a two-level resolution of host package dependencies, but it
-> was not entirely correct since the dependency chain might be deeper
-> than that: some packages could be missed.
->
-> From an idea of Arnout, this patch introduces in each package
-> additional targets <pkg>-all-source and <pkg>-all-legal-info that
-> executes the 'source' and 'legal-info' targets for this package and
-> all its dependencies, be they target or host dependencies.
->
-> This provides a much cleaner implementation of this mechanism, which
-> is also more robust.
->
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
->  Makefile               | 26 +++-----------------------
->  package/pkg-generic.mk |  4 ++++
->  2 files changed, 7 insertions(+), 23 deletions(-)
->
-> diff --git a/Makefile b/Makefile
-> index f2430eb..8fe0209 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -348,30 +348,10 @@ include fs/common.mk
->  TARGETS+=target-post-image
->
->  TARGETS_CLEAN:=$(patsubst %,%-clean,$(TARGETS))
-> -TARGETS_SOURCE:=$(patsubst %,%-source,$(TARGETS) $(BASE_TARGETS))
-> +TARGETS_SOURCE:=$(patsubst %,%-all-source,$(TARGETS) $(BASE_TARGETS))
+Running 'make external-deps' three times in a row was sufficient to
+trigger an error due to symbolic links being incorrectly created. This
+patch fixes that.
 
-Am I correct in understanding that, due to the full dependency chain,
-TARGETS_SOURCE will have many duplicate entries?
-When executing 'make source', then, each of these targets will be
-executed multiple times, correct? Even though the actual download will
-only be executed once for each package, I wonder if there can be other
-side effects by executing the targets multiple times. Would it make
-sense to do $(shell sort -u ... ) here?
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+This should probably be taken for 2013.08.1 as a fix of 'make
+external-deps'.
 
->  TARGETS_DIRCLEAN:=$(patsubst %,%-dirclean,$(TARGETS))
->  TARGETS_ALL:=$(patsubst %,__real_tgt_%,$(TARGETS))
-> -
-> -# host-* dependencies have to be handled specially, as those aren't
-> -# visible in Kconfig and hence not added to a variable like TARGETS.
-> -# instead, find all the host-* targets listed in each <PKG>_DEPENDENCIES
-> -# variable for each enabled target.
-> -# Notice: this only works for newstyle gentargets/autotargets packages
-> -TARGETS_HOST_DEPS = $(sort $(filter host-%,$(foreach dep,\
-> -               $(addsuffix _DEPENDENCIES,$(call UPPERCASE,$(TARGETS))),\
-> -               $($(dep)))))
-> -# Host packages can in turn have their own dependencies. Likewise find
-> -# all the package names listed in the HOST_<PKG>_DEPENDENCIES for each
-> -# host package found above. Ideally this should be done recursively until
-> -# no more packages are found, but that's hard to do in make, so limit to
-> -# 1 level for now.
-> -HOST_DEPS = $(sort $(foreach dep,\
-> -               $(addsuffix _DEPENDENCIES,$(call UPPERCASE,$(TARGETS_HOST_DEPS))),\
-> -               $($(dep))))
-> -HOST_SOURCE += $(addsuffix -source,$(sort $(TARGETS_HOST_DEPS) $(HOST_DEPS)))
-> -
-> -TARGETS_LEGAL_INFO:=$(patsubst %,%-legal-info,\
-> -               $(TARGETS) $(BASE_TARGETS) $(TARGETS_HOST_DEPS) $(HOST_DEPS))))
-> +TARGETS_LEGAL_INFO:=$(patsubst %,%-all-legal-info,$(TARGETS) $(BASE_TARGETS))
->
->  # all targets depend on the crosscompiler and it's prerequisites
->  $(TARGETS_ALL): __real_tgt_%: $(BASE_TARGETS) %
-> @@ -564,7 +544,7 @@ target-post-image:
->  toolchain-eclipse-register:
->         ./support/scripts/eclipse-register-toolchain `readlink -f $(O)` $(notdir $(TARGET_CROSS)) $(BR2_ARCH)
->
-> -source: dirs $(TARGETS_SOURCE) $(HOST_SOURCE)
-> +source: dirs $(TARGETS_SOURCE)
->
->  external-deps:
->         @$(MAKE) -Bs DL_MODE=SHOW_EXTERNAL_DEPS $(EXTRAMAKEARGS) source | sort -u
-> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-> index 2e2e66f..b6f0bdd 100644
-> --- a/package/pkg-generic.mk
-> +++ b/package/pkg-generic.mk
-> @@ -418,6 +418,10 @@ endif
->  $(1)-show-depends:
->                         @echo $$($(2)_DEPENDENCIES)
->
-> +$(1)-all-source:       $(foreach p,$($(2)_DEPENDENCIES),$(p)-all-source) $(1)-source
-> +
-> +$(1)-all-legal-info:   $(foreach p,$($(2)_DEPENDENCIES),$(p)-all-legal-info) $(1)-legal-info
-> +
->  $(1)-uninstall:                $(1)-configure $$($(2)_TARGET_UNINSTALL)
->
->  $(1)-clean:            $(1)-uninstall \
-> --
+Changes since v1:
 
+ * Posted separately from the toolchain source patch set
+ * Use ln -snf instead of if tests.
+---
+ Makefile | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Best regards,
-Thomas
+diff --git a/Makefile b/Makefile
+index 8610592..2163e95 100644
+--- a/Makefile
++++ b/Makefile
+@@ -448,9 +448,9 @@ $(BUILD_DIR)/.root:
+ 		--exclude .hg --exclude=CVS --exclude '*~' \
+ 		$(TARGET_SKELETON)/ $(TARGET_DIR)/
+ 	cp support/misc/target-dir-warning.txt $(TARGET_DIR_WARNING_FILE)
+-	@ln -s lib $(TARGET_DIR)/$(LIB_SYMLINK)
++	@ln -snf lib $(TARGET_DIR)/$(LIB_SYMLINK)
+ 	@mkdir -p $(TARGET_DIR)/usr
+-	@ln -s lib $(TARGET_DIR)/usr/$(LIB_SYMLINK)
++	@ln -snf lib $(TARGET_DIR)/usr/$(LIB_SYMLINK)
+ 	touch $@
+ 
+ $(TARGET_DIR): $(BUILD_DIR)/.root
+-- 
+1.8.1.2
