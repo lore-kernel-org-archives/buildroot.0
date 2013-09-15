@@ -1,132 +1,68 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 15 Sep 2013 22:15:59 +0200
-Subject: [Buildroot] [git commit] getty: Create specific getty config +
-	cleanups
-Message-ID: <20130915201927.02E1A9B315@busybox.osuosl.org>
+Date: Sun, 15 Sep 2013 22:17:53 +0200
+Subject: [Buildroot] [git commit] getty: add the ability to pass options to
+	getty
+Message-ID: <20130915201927.104B888DFA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ed6912e87d78b5f3a152a8df7bef2cc5846ab0d8
+commit: http://git.buildroot.net/buildroot/commit/?id=a68a51257e9ba0f1654d6ca087bb5259841952e7
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-This commit introduces a specific BR2_TARGET_GENERIC_GETTY configuration flag.
-This eliminates the need for checking if BR2_TARGET_GENERIC_GETTY_PORT is an
-empty string or not. It also allows hiding various getty options when getty
-isn't enabled.
 
 Signed-off-by: Assaf Inbal <shmuelzon@gmail.com>
 Acked-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- system/Config.in |   17 ++++++++++++-----
- system/system.mk |   26 +++++++++++++-------------
- 2 files changed, 25 insertions(+), 18 deletions(-)
+ system/Config.in |    7 +++++++
+ system/system.mk |    5 +++--
+ 2 files changed, 10 insertions(+), 2 deletions(-)
 
 diff --git a/system/Config.in b/system/Config.in
-index 401285b..92dc7dd 100644
+index 92dc7dd..73986fb 100644
 --- a/system/Config.in
 +++ b/system/Config.in
-@@ -198,15 +198,20 @@ config BR2_TARGET_GENERIC_ROOT_PASSWD
- 	  in the build log! Avoid using a valuable password if either the
- 	  .config file or the build log may be distributed!
- 
-+config BR2_TARGET_GENERIC_GETTY
-+       bool "Run a getty (login prompt) after boot"
-+       default y
-+
-+if BR2_TARGET_GENERIC_GETTY
-+menu "getty options"
- config BR2_TARGET_GENERIC_GETTY_PORT
--	string "Port to run a getty (login prompt) on"
-+	string "TTY port"
- 	default "ttyS0"
- 	help
--	  Specify a port to run a getty (login prompt) on.
--	  Set to the empty string to not run a getty.
-+	  Specify a port to run a getty on.
- 
- choice
--	prompt "Baudrate to use"
-+	prompt "Baudrate"
- 	default BR2_TARGET_GENERIC_GETTY_BAUDRATE_115200
- 	help
- 	  Select a baudrate to use.
-@@ -235,10 +240,12 @@ config BR2_TARGET_GENERIC_GETTY_BAUDRATE
- 	default "115200"	if BR2_TARGET_GENERIC_GETTY_BAUDRATE_115200
- 
- config BR2_TARGET_GENERIC_GETTY_TERM
--	string "Value to assign the TERM environment variable"
-+	string "TERM environment variable"
+@@ -244,6 +244,13 @@ config BR2_TARGET_GENERIC_GETTY_TERM
  	default "vt100"
  	help
  	  Specify a TERM type.
-+endmenu
-+endif
++
++config BR2_TARGET_GENERIC_GETTY_OPTIONS
++	string "other options to pass to getty"
++	default ""
++	help
++	  Any other flags you want to pass to getty,
++	  Refer to getty --help for details.
+ endmenu
+ endif
  
- config BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW
- 	bool "remount root filesystem read-write during boot"
 diff --git a/system/system.mk b/system/system.mk
-index b4ddc3e..0d23d54 100644
+index 0d23d54..01a6c3a 100644
 --- a/system/system.mk
 +++ b/system/system.mk
-@@ -1,14 +1,14 @@
--TARGET_GENERIC_HOSTNAME := $(call qstrip,$(BR2_TARGET_GENERIC_HOSTNAME))
--TARGET_GENERIC_ISSUE := $(call qstrip,$(BR2_TARGET_GENERIC_ISSUE))
--TARGET_GENERIC_ROOT_PASSWD := $(call qstrip,$(BR2_TARGET_GENERIC_ROOT_PASSWD))
--TARGET_GENERIC_PASSWD_METHOD := $(call qstrip,$(BR2_TARGET_GENERIC_PASSWD_METHOD))
--TARGET_GENERIC_GETTY := $(call qstrip,$(BR2_TARGET_GENERIC_GETTY_PORT))
--TARGET_GENERIC_GETTY_BAUDRATE := $(call qstrip,$(BR2_TARGET_GENERIC_GETTY_BAUDRATE))
--TARGET_GENERIC_GETTY_TERM := $(call qstrip,$(BR2_TARGET_GENERIC_GETTY_TERM))
-+TARGET_GENERIC_HOSTNAME = $(call qstrip,$(BR2_TARGET_GENERIC_HOSTNAME))
-+TARGET_GENERIC_ISSUE = $(call qstrip,$(BR2_TARGET_GENERIC_ISSUE))
-+TARGET_GENERIC_ROOT_PASSWD = $(call qstrip,$(BR2_TARGET_GENERIC_ROOT_PASSWD))
-+TARGET_GENERIC_PASSWD_METHOD = $(call qstrip,$(BR2_TARGET_GENERIC_PASSWD_METHOD))
-+TARGET_GENERIC_GETTY_PORT = $(call qstrip,$(BR2_TARGET_GENERIC_GETTY_PORT))
-+TARGET_GENERIC_GETTY_BAUDRATE = $(call qstrip,$(BR2_TARGET_GENERIC_GETTY_BAUDRATE))
-+TARGET_GENERIC_GETTY_TERM = $(call qstrip,$(BR2_TARGET_GENERIC_GETTY_TERM))
+@@ -5,6 +5,7 @@ TARGET_GENERIC_PASSWD_METHOD = $(call qstrip,$(BR2_TARGET_GENERIC_PASSWD_METHOD)
+ TARGET_GENERIC_GETTY_PORT = $(call qstrip,$(BR2_TARGET_GENERIC_GETTY_PORT))
+ TARGET_GENERIC_GETTY_BAUDRATE = $(call qstrip,$(BR2_TARGET_GENERIC_GETTY_BAUDRATE))
+ TARGET_GENERIC_GETTY_TERM = $(call qstrip,$(BR2_TARGET_GENERIC_GETTY_TERM))
++TARGET_GENERIC_GETTY_OPTIONS = $(call qstrip,$(BR2_TARGET_GENERIC_GETTY_OPTIONS))
  
  target-generic-securetty:
--	grep -q '^$(TARGET_GENERIC_GETTY)$$' $(TARGET_DIR)/etc/securetty || \
--		echo '$(TARGET_GENERIC_GETTY)' >> $(TARGET_DIR)/etc/securetty
-+	grep -q '^$(TARGET_GENERIC_GETTY_PORT)$$' $(TARGET_DIR)/etc/securetty || \
-+		echo '$(TARGET_GENERIC_GETTY_PORT)' >> $(TARGET_DIR)/etc/securetty
- 
- target-generic-hostname:
- 	mkdir -p $(TARGET_DIR)/etc
-@@ -29,13 +29,13 @@ target-root-passwd:
+ 	grep -q '^$(TARGET_GENERIC_GETTY_PORT)$$' $(TARGET_DIR)/etc/securetty || \
+@@ -29,13 +30,13 @@ target-root-passwd:
  	$(SED) "s,^root:[^:]*:,root:$$TARGET_GENERIC_ROOT_PASSWD_HASH:," $(TARGET_DIR)/etc/shadow
  
  target-generic-getty-busybox:
--	$(SED) '/# GENERIC_SERIAL$$/s~^.*#~$(TARGET_GENERIC_GETTY)::respawn:/sbin/getty -L $(TARGET_GENERIC_GETTY) $(TARGET_GENERIC_GETTY_BAUDRATE) $(TARGET_GENERIC_GETTY_TERM) #~' \
-+	$(SED) '/# GENERIC_SERIAL$$/s~^.*#~$(TARGET_GENERIC_GETTY_PORT)::respawn:/sbin/getty -L $(TARGET_GENERIC_GETTY_PORT) $(TARGET_GENERIC_GETTY_BAUDRATE) $(TARGET_GENERIC_GETTY_TERM) #~' \
+-	$(SED) '/# GENERIC_SERIAL$$/s~^.*#~$(TARGET_GENERIC_GETTY_PORT)::respawn:/sbin/getty -L $(TARGET_GENERIC_GETTY_PORT) $(TARGET_GENERIC_GETTY_BAUDRATE) $(TARGET_GENERIC_GETTY_TERM) #~' \
++	$(SED) '/# GENERIC_SERIAL$$/s~^.*#~$(TARGET_GENERIC_GETTY_PORT)::respawn:/sbin/getty -L $(TARGET_GENERIC_GETTY_OPTIONS) $(TARGET_GENERIC_GETTY_PORT) $(TARGET_GENERIC_GETTY_BAUDRATE) $(TARGET_GENERIC_GETTY_TERM) #~' \
  		$(TARGET_DIR)/etc/inittab
  
  # In sysvinit inittab, the "id" must not be longer than 4 bytes, so we
  # skip the "tty" part and keep only the remaining.
  target-generic-getty-sysvinit:
--	$(SED) '/# GENERIC_SERIAL$$/s~^.*#~$(shell echo $(TARGET_GENERIC_GETTY) | tail -c+4)::respawn:/sbin/getty -L $(TARGET_GENERIC_GETTY) $(TARGET_GENERIC_GETTY_BAUDRATE) $(TARGET_GENERIC_GETTY_TERM) #~' \
-+	$(SED) '/# GENERIC_SERIAL$$/s~^.*#~$(shell echo $(TARGET_GENERIC_GETTY_PORT) | tail -c+4)::respawn:/sbin/getty -L $(TARGET_GENERIC_GETTY_PORT) $(TARGET_GENERIC_GETTY_BAUDRATE) $(TARGET_GENERIC_GETTY_TERM) #~' \
+-	$(SED) '/# GENERIC_SERIAL$$/s~^.*#~$(shell echo $(TARGET_GENERIC_GETTY_PORT) | tail -c+4)::respawn:/sbin/getty -L $(TARGET_GENERIC_GETTY_PORT) $(TARGET_GENERIC_GETTY_BAUDRATE) $(TARGET_GENERIC_GETTY_TERM) #~' \
++	$(SED) '/# GENERIC_SERIAL$$/s~^.*#~$(shell echo $(TARGET_GENERIC_GETTY_PORT) | tail -c+4)::respawn:/sbin/getty -L $(TARGET_GENERIC_GETTY_OPTIONS) $(TARGET_GENERIC_GETTY_PORT) $(TARGET_GENERIC_GETTY_BAUDRATE) $(TARGET_GENERIC_GETTY_TERM) #~' \
  		$(TARGET_DIR)/etc/inittab
  
  # Find commented line, if any, and remove leading '#'s
-@@ -46,7 +46,7 @@ target-generic-do-remount-rw:
- target-generic-dont-remount-rw:
- 	$(SED) '/^[^#].*# REMOUNT_ROOTFS_RW$$/s~^~#~' $(TARGET_DIR)/etc/inittab
- 
--ifneq ($(TARGET_GENERIC_GETTY),)
-+ifeq ($(BR2_TARGET_GENERIC_GETTY),y)
- TARGETS += target-generic-securetty
- endif
- 
-@@ -61,7 +61,7 @@ endif
- ifeq ($(BR2_ROOTFS_SKELETON_DEFAULT),y)
- TARGETS += target-root-passwd
- 
--ifneq ($(TARGET_GENERIC_GETTY),)
-+ifeq ($(BR2_TARGET_GENERIC_GETTY),y)
- TARGETS += target-generic-getty-$(if $(BR2_PACKAGE_SYSVINIT),sysvinit,busybox)
- endif
- 
