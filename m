@@ -1,120 +1,50 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Sun, 15 Sep 2013 16:27:49 +0200
-Subject: [Buildroot] [RFCv1 05/11] toolchain: introduce a virtual package
-In-Reply-To: <1378416469-17708-6-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1378416469-17708-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1378416469-17708-6-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <CAAXf6LX7PNGiEP3XOkg_VVhX7664VRSYNx71C79c26Re5qNPdA@mail.gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Sun, 15 Sep 2013 11:52:19 -0300
+Subject: [Buildroot] [PATCH 1/2] linux-headers: bump 3.{0, 4, 10,
+	11}.x stable versions
+Message-ID: <1379256740-18574-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Sep 5, 2013 at 11:27 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> This commit introduces a virtual package called 'toolchain', located
-> in 'toolchain/toolchain', which simply depends on
-> 'toolchain-buildroot' or 'toolchain-external' depending on the
-> selected toolchain backend.
->
-> For now, toolchain-buildroot and toolchain-external are still manual
-> make targets, but the following patches convert those backends to use
-> the package infrastructure as well.
->
-> In addition to this:
->
->  * The main Makefile is modified to always make BASE_TARGETS point to
->    this new toolchain virtual package.
->
->  * The main Makefile is changed to include all the toolchain/*/*.mk
->    files: the toolchain virtual package, and the toolchain-buildroot
->    and toolchain-external directories.
->
->  * The dependency of the toolchain on prepare dirs and dependencies is
->    moved to the toolchain virtual package. It is moved as a
->    prerequisite of the "toolchain-source" rule to ensure that all
->    directories are prepared before we even start extracting the
->    toolchain.
->
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
->  Makefile                         | 18 +++---------------
->  toolchain/toolchain/toolchain.mk | 18 ++++++++++++++++++
->  2 files changed, 21 insertions(+), 15 deletions(-)
->  create mode 100644 toolchain/toolchain/toolchain.mk
->
-> diff --git a/Makefile b/Makefile
-> index f64a101..f2430eb 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -222,11 +222,7 @@ GNU_HOST_NAME:=$(shell support/gnuconfig/config.guess)
->  #
->  ################################################################################
->
-> -ifeq ($(BR2_TOOLCHAIN_BUILDROOT),y)
-> -BASE_TARGETS += toolchain-buildroot
-> -else ifeq ($(BR2_TOOLCHAIN_EXTERNAL),y)
-> -BASE_TARGETS += toolchain-external
-> -endif
-> +BASE_TARGETS = toolchain
->
->  TARGETS:=
->
-> @@ -316,11 +312,7 @@ include support/dependencies/dependencies.mk
->  # We also need the various per-package makefiles, which also add
->  # each selected package to TARGETS if that package was selected
->  # in the .config file.
-> -ifeq ($(BR2_TOOLCHAIN_BUILDROOT),y)
-> -include toolchain/toolchain-buildroot.mk
-> -else ifeq ($(BR2_TOOLCHAIN_EXTERNAL),y)
-> -include toolchain/toolchain-external.mk
-> -endif
-> +include toolchain/*/*.mk
->
->  # Include the package override file if one has been provided in the
->  # configuration.
-> @@ -387,16 +379,12 @@ $(TARGETS_ALL): __real_tgt_%: $(BASE_TARGETS) %
->  dirs: $(BUILD_DIR) $(STAGING_DIR) $(TARGET_DIR) \
->         $(HOST_DIR) $(BINARIES_DIR) $(STAMP_DIR)
->
-> -$(BASE_TARGETS): dirs $(HOST_DIR)/usr/share/buildroot/toolchainfile.cmake
-> -
->  $(BUILD_DIR)/buildroot-config/auto.conf: $(BUILDROOT_CONFIG)
->         $(MAKE) $(EXTRAMAKEARGS) HOSTCC="$(HOSTCC_NOCCACHE)" HOSTCXX="$(HOSTCXX_NOCCACHE)" silentoldconfig
->
->  prepare: $(BUILD_DIR)/buildroot-config/auto.conf
->
-> -toolchain: prepare dirs dependencies $(BASE_TARGETS)
-> -
-> -world: toolchain $(TARGETS_ALL)
-> +world: $(BASE_TARGETS) $(TARGETS_ALL)
->
->  .PHONY: all world toolchain dirs clean distclean source outputmakefile \
->         legal-info legal-info-prepare legal-info-clean printvars \
-> diff --git a/toolchain/toolchain/toolchain.mk b/toolchain/toolchain/toolchain.mk
-> new file mode 100644
-> index 0000000..44ed629
-> --- /dev/null
-> +++ b/toolchain/toolchain/toolchain.mk
-> @@ -0,0 +1,18 @@
-> +################################################################################
-> +#
-> +# toolchain
-> +#
-> +################################################################################
-> +
-> +TOOLCHAIN_SOURCE =
-> +
-> +ifeq ($(BR2_TOOLCHAIN_BUILDROOT),y)
-> +TOOLCHAIN_DEPENDENCIES += toolchain-buildroot
-> +else ifeq ($(BR2_TOOLCHAIN_EXTERNAL),y)
-> +TOOLCHAIN_DEPENDENCIES += toolchain-external
-> +endif
-> +
-> +$(eval $(generic-package))
-> +
-> +toolchain-source: prepare dirs dependencies $(HOST_DIR)/usr/share/buildroot/toolchainfile.cmake
-> +
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ ...ers-headers_install-fix-__packed-in-exported-kernel-head.patch | 0
+ package/linux-headers/Config.in.host                              | 8 ++++----
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+ rename package/linux-headers/{3.0.95 => 3.0.96}/linux-headers-headers_install-fix-__packed-in-exported-kernel-head.patch (100%)
 
-Acked-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+diff --git a/package/linux-headers/3.0.95/linux-headers-headers_install-fix-__packed-in-exported-kernel-head.patch b/package/linux-headers/3.0.96/linux-headers-headers_install-fix-__packed-in-exported-kernel-head.patch
+similarity index 100%
+rename from package/linux-headers/3.0.95/linux-headers-headers_install-fix-__packed-in-exported-kernel-head.patch
+rename to package/linux-headers/3.0.96/linux-headers-headers_install-fix-__packed-in-exported-kernel-head.patch
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 3dc0b9d..bc8f821 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -76,17 +76,17 @@ config BR2_DEFAULT_KERNEL_VERSION
+ 
+ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+-	default "3.0.95"	if BR2_KERNEL_HEADERS_3_0
++	default "3.0.96"	if BR2_KERNEL_HEADERS_3_0
+ 	default "3.1.10"	if BR2_KERNEL_HEADERS_3_1
+ 	default "3.2.51"	if BR2_KERNEL_HEADERS_3_2
+ 	default "3.3.8"		if BR2_KERNEL_HEADERS_3_3
+-	default "3.4.61"	if BR2_KERNEL_HEADERS_3_4
++	default "3.4.62"	if BR2_KERNEL_HEADERS_3_4
+ 	default "3.5.7"		if BR2_KERNEL_HEADERS_3_5
+ 	default "3.6.11"	if BR2_KERNEL_HEADERS_3_6
+ 	default "3.7.10"	if BR2_KERNEL_HEADERS_3_7
+ 	default "3.8.13"	if BR2_KERNEL_HEADERS_3_8
+ 	default "3.9.11"	if BR2_KERNEL_HEADERS_3_9
+-	default "3.10.11"	if BR2_KERNEL_HEADERS_3_10
+-	default "3.11"		if BR2_KERNEL_HEADERS_3_11
++	default "3.10.12"	if BR2_KERNEL_HEADERS_3_10
++	default "3.11.1"	if BR2_KERNEL_HEADERS_3_11
+ 	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
+ 	default $BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+-- 
+1.8.1.5
