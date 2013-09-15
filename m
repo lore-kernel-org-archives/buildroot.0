@@ -1,54 +1,44 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 15 Sep 2013 22:09:08 +0200
-Subject: [Buildroot] [RFCv1 08/11] package: package-based implementation
- of source, external-deps and legal-info
-In-Reply-To: <CAAXf6LXvWgtX4h_2NH6=zOiaDyXLmzRoAfviaTwbmTdMFKvoyg@mail.gmail.com>
-References: <1378416469-17708-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1378416469-17708-9-git-send-email-thomas.petazzoni@free-electrons.com>
- <CAAXf6LXvWgtX4h_2NH6=zOiaDyXLmzRoAfviaTwbmTdMFKvoyg@mail.gmail.com>
-Message-ID: <20130915220908.3d826b82@skate>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 15 Sep 2013 22:09:45 +0200
+Subject: [Buildroot] [PATCH v3] apply-patches.sh: detect missing patches
+In-Reply-To: <20130915141314.GA18166@harvey.netwinder.org> (Ralph Siemsen's
+ message of "Sun, 15 Sep 2013 10:13:14 -0400")
+References: <CAAXf6LV9HPWdzqV_F5zQ+aABtVxZGRRkhDszF2Qx8vyXMb+PhA@mail.gmail.com>
+ <20130905100459.13173009@skate> <5228425A.7090502@lucaceresoli.net>
+ <20130905140135.GC3136@free.fr>
+ <CAAXf6LWWnb5xQUtZA8p3kgoU2et-kD6x9TzyzXykgNbxdsuv+Q@mail.gmail.com>
+ <20130911120630.GA14745@harvey.netwinder.org>
+ <CAAXf6LX7o9P1tXv3Egk8By-VbzarRYe5JRyTh5+3wYNBz9Z6aQ@mail.gmail.com>
+ <20130913181527.GA11933@harvey.netwinder.org>
+ <20130913182702.GB3301@free.fr>
+ <20130915133709.GA16826@harvey.netwinder.org>
+ <20130915141314.GA18166@harvey.netwinder.org>
+Message-ID: <8738p5lud2.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas De Schampheleire,
+>>>>> "Ralph" == Ralph Siemsen <ralphs@netwinder.org> writes:
 
-On Sun, 15 Sep 2013 21:29:58 +0200, Thomas De Schampheleire wrote:
+ Ralph> The "patch" command returns an error code only if patches fail
+ Ralph> to apply. Therefore the pipleline "cat <patchfile> | patch ..."
+ Ralph> does not fail, even if <patchfile> is missing. Fix this by
+ Ralph> adding an explicit check for patch file existence.
 
-> >  TARGETS_CLEAN:=$(patsubst %,%-clean,$(TARGETS))
-> > -TARGETS_SOURCE:=$(patsubst %,%-source,$(TARGETS) $(BASE_TARGETS))
-> > +TARGETS_SOURCE:=$(patsubst %,%-all-source,$(TARGETS) $(BASE_TARGETS))
-> 
-> Am I correct in understanding that, due to the full dependency chain,
-> TARGETS_SOURCE will have many duplicate entries?
+ Ralph> Based on feedback from buildroot mailing list, also change the
+ Ralph> existing check for unsupported patch format into a fatal error.
+ Ralph> ---
 
-Well, TARGETS_SOURCE itself will not have many duplicate entries: in
-the TARGETS variable, each selected package is only mentioned once, and
-TARGETS_SOURCE has the exact same number of entries as TARGETS, except
-that each word in TARGETS is replaced by %-all-source (I'm excluding
-BASE_TARGETS here, but it only ever contains one entry: 'toolchain').
+ Ralph> v1. original
+ Ralph> v2. error on unsupported patch formats
+ Ralph> v3. explicit exit calls
 
-However, when *evaluating* those targets, we will indeed be looking
-multiple times at the same dependencies.
+Committed, thanks.
 
-> When executing 'make source', then, each of these targets will be
-> executed multiple times, correct? Even though the actual download will
-> only be executed once for each package, I wonder if there can be other
-> side effects by executing the targets multiple times. Would it make
-> sense to do $(shell sort -u ... ) here?
+You forgot to add your 'Signed-off-by' on the patch. I've added it for
+you, hopefully that is OK?
 
-As explained above, no: TARGETS_SOURCE by itself does not contain any
-duplicated entry. It's the fact of evaluating each target in
-TARGETS_SOURCE that will lead to looking multiple times at the same
-things. But I'm not sure how to solve that.
-
-Best regards,
-
-Thomas
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Bye, Peter Korsgaard
