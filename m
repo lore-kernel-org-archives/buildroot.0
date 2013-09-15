@@ -1,45 +1,89 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 15 Sep 2013 20:48:05 +0200
-Subject: [Buildroot] [git commit] squid: fix build failure after bump
-Message-ID: <20130915185135.D13E29B750@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 15 Sep 2013 20:53:10 +0200
+Subject: [Buildroot] [PATCH] fs/ubi: add option to use custom volume
+ config file
+In-Reply-To: <CANxTyt4GZNTtACwf4W8OCKUBZLf7YfZ=pBM-6KGmgeaf8UCPLg@mail.gmail.com>
+References: <1379215295-1805-1-git-send-email-danomimanchego123@gmail.com>
+ <20130915200014.5543b2a1@skate>
+ <CANxTyt4GZNTtACwf4W8OCKUBZLf7YfZ=pBM-6KGmgeaf8UCPLg@mail.gmail.com>
+Message-ID: <20130915205310.06f8af50@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=710e0b4d69c2fd334cfdda0bbd5e35545e4414a6
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Danomi Manchego,
 
-Add missing patch, fixes:
-http://autobuild.buildroot.net/results/f6a/f6a6dd1f3138406d1daa31e5e4ff5d5026b3c069/
+On Sun, 15 Sep 2013 14:37:21 -0400, Danomi Manchego wrote:
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/squid/squid-02-atomic-cross.patch |   17 +++++++++++++++++
- 1 files changed, 17 insertions(+), 0 deletions(-)
+> > However, I'd like to add more detail on using the rootfs UBIFS
+> > image in a volume (i.e $@fs in the existing code), but I'm not sure
+> > what suggestion to give to the user: i.e, what image= line should
+> > he put in his custom configuration file?
+> 
+> What I found was that the image path is relative to the $(TOPDIR).  So
+> if you are providing your own file, you need to know your $(O) and
+> either specify a path relative to $(TOPDIR), or an absolute path.  i
+> played with the idea of having a sed line or something to substitute
+> in a file path, but decided against.  I though that if you are
+> providing your own config file, then it could refer to multiple images
+> in different output directories (for whatever reason), in which case
+> you have to know where your files are anyway.
 
-diff --git a/package/squid/squid-02-atomic-cross.patch b/package/squid/squid-02-atomic-cross.patch
-new file mode 100644
-index 0000000..c1b59dc
---- /dev/null
-+++ b/package/squid/squid-02-atomic-cross.patch
-@@ -0,0 +1,17 @@
-+AC_RUN_IFELSE is bad for cross compiling, switch to AC_COMPILE_IFELSE
-+since it's enough for this test.
-+
-+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+
-+diff -Nura squid-3.3.9.orig/configure.ac squid-3.3.9/configure.ac
-+--- squid-3.3.9.orig/configure.ac	2013-09-13 09:15:32.473365627 -0300
-++++ squid-3.3.9/configure.ac	2013-09-13 13:27:06.829711487 -0300
-+@@ -392,7 +392,7 @@
-+ dnl Check for atomic operations support in the compiler
-+ dnl
-+ AC_MSG_CHECKING([for GNU atomic operations support])
-+-AC_RUN_IFELSE([AC_LANG_PROGRAM([[
-++AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
-+     int n = 0;
-+ ]],[[
-+     __sync_add_and_fetch(&n, 10); // n becomes 10
+Using sed sounds like a good idea. Just provide a keyword that the user
+can use in his custom configuration file, and that Buildroot will
+automatically replace by the path to the UBIFS root filesystem image.
+Of course, for the other volumes, the user can specify whichever image
+he wants.
+
+So, the user could write something like:
+
+[rootfs]
+mode=ubi
+vol_id=0
+vol_type=dynamic
+vol_name=rootfs
+vol_alignment=1
+vol_flags=autoresize
+image=BR2_ROOTFS_UBIFS_PATH
+
+[datafs]
+mode=ubi
+vol_id=1
+vol_type=dynamic
+vol_name=datafs
+vol_alignment=1
+vol_flags=autoresize
+image=/some/other/location.img
+
+and Buildroot replaces BR2_ROOTFS_UBIFS_PATH by the proper
+$(O)/images/ubifs.img.
+
+Note that this could also be used in the fs/ubifs/ubinize.cfg file,
+therefore making the default and custom cases more similar:
+
+ifeq ($(BR2_TARGET_ROOTFS_UBI_USE_CUSTOM_CONFIG),y)
+UBINIZE_CONFIG_FILE_PATH = $(call qstrip,$(BR2_TARGET_ROOTFS_UBI_CUSTOM_CONFIG_FILE))
+else
+UBINIZE_CONFIG_FILE_PATH = fs/ubifs/ubinize.cfg
+endef
+
+define ROOTFS_UBI_CMD
+	cp $(UBINIZE_CONFIG_FILE_PATH) $(BUILD_DIR)/ubinize.cfg
+	$(SED) 's/BR2_ROOTFS_UBIFS_PATH/$@fs/' $(BUILD_DIR)/ubinize.cfg
+	$(HOST_DIR)/usr/sbin/ubinize -o $@ $(UBI_UBINIZE_OPTS) $(BUILD_DIR)/ubinize.cfg
+	rm $(BUILD_DIR)/ubinize.cfg
+endef
+
+Of course, the BR2_ROOTFS_UBIFS_PATH trick would have to be properly
+documented in the configuration option help text.
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
