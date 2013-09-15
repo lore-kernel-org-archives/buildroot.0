@@ -1,41 +1,54 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 15 Sep 2013 21:47:59 +0200
-Subject: [Buildroot] [PATCHv2] Makefile: make $(BUILD_DIR)/.root rule
-	idempotent
-In-Reply-To: <1379273325-5933-1-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Sun, 15 Sep 2013 21:28:45 +0200")
-References: <1379273325-5933-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <877gehlvdc.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 15 Sep 2013 22:09:08 +0200
+Subject: [Buildroot] [RFCv1 08/11] package: package-based implementation
+ of source, external-deps and legal-info
+In-Reply-To: <CAAXf6LXvWgtX4h_2NH6=zOiaDyXLmzRoAfviaTwbmTdMFKvoyg@mail.gmail.com>
+References: <1378416469-17708-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1378416469-17708-9-git-send-email-thomas.petazzoni@free-electrons.com>
+ <CAAXf6LXvWgtX4h_2NH6=zOiaDyXLmzRoAfviaTwbmTdMFKvoyg@mail.gmail.com>
+Message-ID: <20130915220908.3d826b82@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+Dear Thomas De Schampheleire,
 
- Thomas> The $(BUILD_DIR)/.root rule is executed as part of the 'dirs'
- Thomas> target. The 'dirs' target is re-executed at every execution of 'make
- Thomas> external-deps', and make external-deps explicitly tells make to ignore
- Thomas> targets that have already been made (through the -B option). This
- Thomas> means that the $(BUILD_DIR)/.root rule has to be idempotant, which was
- Thomas> not the case this the introduction of the lib32/lib64 symbolic link.
+On Sun, 15 Sep 2013 21:29:58 +0200, Thomas De Schampheleire wrote:
 
- Thomas> Running 'make external-deps' three times in a row was sufficient to
- Thomas> trigger an error due to symbolic links being incorrectly created. This
- Thomas> patch fixes that.
+> >  TARGETS_CLEAN:=$(patsubst %,%-clean,$(TARGETS))
+> > -TARGETS_SOURCE:=$(patsubst %,%-source,$(TARGETS) $(BASE_TARGETS))
+> > +TARGETS_SOURCE:=$(patsubst %,%-all-source,$(TARGETS) $(BASE_TARGETS))
+> 
+> Am I correct in understanding that, due to the full dependency chain,
+> TARGETS_SOURCE will have many duplicate entries?
 
- Thomas> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
- Thomas> ---
- Thomas> This should probably be taken for 2013.08.1 as a fix of 'make
- Thomas> external-deps'.
+Well, TARGETS_SOURCE itself will not have many duplicate entries: in
+the TARGETS variable, each selected package is only mentioned once, and
+TARGETS_SOURCE has the exact same number of entries as TARGETS, except
+that each word in TARGETS is replaced by %-all-source (I'm excluding
+BASE_TARGETS here, but it only ever contains one entry: 'toolchain').
 
- Thomas> Changes since v1:
+However, when *evaluating* those targets, we will indeed be looking
+multiple times at the same dependencies.
 
- Thomas>  * Posted separately from the toolchain source patch set
- Thomas>  * Use ln -snf instead of if tests.
+> When executing 'make source', then, each of these targets will be
+> executed multiple times, correct? Even though the actual download will
+> only be executed once for each package, I wonder if there can be other
+> side effects by executing the targets multiple times. Would it make
+> sense to do $(shell sort -u ... ) here?
 
-Committed, thanks.
+As explained above, no: TARGETS_SOURCE by itself does not contain any
+duplicated entry. It's the fact of evaluating each target in
+TARGETS_SOURCE that will lead to looking multiple times at the same
+things. But I'm not sure how to solve that.
 
+Best regards,
+
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
