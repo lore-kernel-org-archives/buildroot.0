@@ -1,53 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 15 Sep 2013 20:15:15 +0200
-Subject: [Buildroot] [PATCH 1/1] systemd: bumped to version 206
-In-Reply-To: <522C5FE6.6000603@free.fr>
-References: <CALdGskLJPNgZ+iRokvubyE0FdG=miQHTHsdC56q84pQGcZE7Zw@mail.gmail.com>
- <20130902150405.GB6918@pc-eric>
- <CALdGskLxtMn7uZi1OvXKBS_MMjoCCfnp0ZZNDipDfUESA3Q0-A@mail.gmail.com>
- <522C5FE6.6000603@free.fr>
-Message-ID: <20130915201515.7f6963f1@skate>
+Date: Sun, 15 Sep 2013 20:18:07 +0200
+Subject: [Buildroot] [PATCH 1/3] knock: new package
+In-Reply-To: <522F880D.1090904@mind.be>
+References: <1378071216-19697-1-git-send-email-rommel@layer-7.net>
+ <CAAXf6LXW8GfZzPAHkFjP_coASZ8CPNPNNc6=KjWrek94Ndn_cw@mail.gmail.com>
+ <E9670545-EE12-445D-A15C-C0C3E4A4116A@layer-7.net>
+ <1DD66D3B-6E8F-41C4-859E-A36677BA0A6B@layer-7.net>
+ <CAAXf6LWfhUhQ2pRwaFh6szZ=51WfPPJNB2AVwzoodV0w4XT4DQ@mail.gmail.com>
+ <522F880D.1090904@mind.be>
+Message-ID: <20130915201807.4453878c@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Eric Le Bihan,
+Hello,
 
-On Sun, 08 Sep 2013 13:30:46 +0200, Eric Le Bihan wrote:
+On Tue, 10 Sep 2013 22:58:53 +0200, Arnout Vandecappelle wrote:
 
-> I posted an update of the systemd package. See '[PATCH 1/1] package:
-> udev is now provided by systemd or eudev.' In this version, I added
-> libgcrypt has a hard dependency for building Systemd. So it builds in
-> any case but it forces journal signature.
-> 
-> So, for AM_PATH_LIBGCRYPT to be found, you must have libgcrypt among
-> SYSTEMD_DEPENDENCIES, but I'd better have journal signature optional,
-> with something like:
-> 
-> ifeq ($(BR2_PACKAGE_SYSTEMD_SIGN_JOURNAL),y)
-> 	SYSTEMD_CONF_OPT += --enable-libgcrypt
-> else
-> 	SYSTEMD_CONF_OPT += --disable-libcgrypt
-> endif
-> 
-> Is there a way in Buildroot to have a library built for the target and
-> installed into 'staging', but not installed on the target (apart for
-> pruning the files in post-build.sh)?
+>   And you can also use the toolchains used by the autobuilders, to test 
+> with uClibc-based toolchains.
 
-No, that's not possible in a clean way.
+Correct. As a reminder, I put all the toolchain defconfigs tested by
+the autobuilders in
+http://autobuild.buildroot.org/toolchains/configs/free-electrons/. Some
+of them point to well-known external toolchains (Linaro, Sourcery
+CodeBench, Blackfin, etc.), and some other point to external toolchains
+that I have built specifically for the autobuilders, but the defconfig
+contains an URL that is available for everyone.
 
-In this situation, I believe the best option is:
+Whenever I need to test some package, I often start with:
 
- (1) As a temporary measure, take the src/libgcrypt.m4 file from the
- libgcrypt sources, and create a patch that adds it to the m4/
- directory of systemd sources. This way, regardless of whether
- libgcrypt is available or not, the AM_PATH_LIBGCRYPT m4 macro will be
- available for autoreconf to use.
+wget -O .config http://autobuild.buildroot.org/toolchains/configs/free-electrons/br-arm-basic.config
 
- (2) As a permanent measure, upstream the other systemd patches so that
- ultimately we can get rid of the SYSTEMD_AUTORECONF = YES.
+which will create me a minimal .config file that points to a very
+simple uClibc toolchain.
 
 Best regards,
 
