@@ -1,115 +1,115 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 15 Sep 2013 21:20:31 +0200
-Subject: [Buildroot] [PATCHv2 00/14] Toolchain updates and improvements
-In-Reply-To: <1378138000-12739-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1378138000-12739-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20130915212031.3fd92bbd@skate>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Sun, 15 Sep 2013 21:29:58 +0200
+Subject: [Buildroot] [RFCv1 08/11] package: package-based implementation
+ of source, external-deps and legal-info
+In-Reply-To: <1378416469-17708-9-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1378416469-17708-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1378416469-17708-9-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <CAAXf6LXvWgtX4h_2NH6=zOiaDyXLmzRoAfviaTwbmTdMFKvoyg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter,
+Hi Thomas,
 
-I haven't received any comments on the v2 of this patch series, and it
-still applies cleanly on current master. Would it be possible to apply
-it?
+On Thu, Sep 5, 2013 at 11:27 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Until now, the make source, make external-deps and make legal-info
+> where relying on enumerating the packages by looking at $(TARGETS)
+> which contains only the target packages and not the host
+> packages. Thanks to the TARGET_HOST_DEPS and HOST_DEPS variables, it
+> was doing a two-level resolution of host package dependencies, but it
+> was not entirely correct since the dependency chain might be deeper
+> than that: some packages could be missed.
+>
+> From an idea of Arnout, this patch introduces in each package
+> additional targets <pkg>-all-source and <pkg>-all-legal-info that
+> executes the 'source' and 'legal-info' targets for this package and
+> all its dependencies, be they target or host dependencies.
+>
+> This provides a much cleaner implementation of this mechanism, which
+> is also more robust.
+>
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> ---
+>  Makefile               | 26 +++-----------------------
+>  package/pkg-generic.mk |  4 ++++
+>  2 files changed, 7 insertions(+), 23 deletions(-)
+>
+> diff --git a/Makefile b/Makefile
+> index f2430eb..8fe0209 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -348,30 +348,10 @@ include fs/common.mk
+>  TARGETS+=target-post-image
+>
+>  TARGETS_CLEAN:=$(patsubst %,%-clean,$(TARGETS))
+> -TARGETS_SOURCE:=$(patsubst %,%-source,$(TARGETS) $(BASE_TARGETS))
+> +TARGETS_SOURCE:=$(patsubst %,%-all-source,$(TARGETS) $(BASE_TARGETS))
 
-It's some toolchain stuff, so as usual it's pretty 'dangerous', so I'd
-prefer to have it merged sooner rather than later, and also because I'd
-like after that one to get the patch set that fixes the toolchain
-'make source' merged.
+Am I correct in understanding that, due to the full dependency chain,
+TARGETS_SOURCE will have many duplicate entries?
+When executing 'make source', then, each of these targets will be
+executed multiple times, correct? Even though the actual download will
+only be executed once for each package, I wonder if there can be other
+side effects by executing the targets multiple times. Would it make
+sense to do $(shell sort -u ... ) here?
 
-Thanks!
+>  TARGETS_DIRCLEAN:=$(patsubst %,%-dirclean,$(TARGETS))
+>  TARGETS_ALL:=$(patsubst %,__real_tgt_%,$(TARGETS))
+> -
+> -# host-* dependencies have to be handled specially, as those aren't
+> -# visible in Kconfig and hence not added to a variable like TARGETS.
+> -# instead, find all the host-* targets listed in each <PKG>_DEPENDENCIES
+> -# variable for each enabled target.
+> -# Notice: this only works for newstyle gentargets/autotargets packages
+> -TARGETS_HOST_DEPS = $(sort $(filter host-%,$(foreach dep,\
+> -               $(addsuffix _DEPENDENCIES,$(call UPPERCASE,$(TARGETS))),\
+> -               $($(dep)))))
+> -# Host packages can in turn have their own dependencies. Likewise find
+> -# all the package names listed in the HOST_<PKG>_DEPENDENCIES for each
+> -# host package found above. Ideally this should be done recursively until
+> -# no more packages are found, but that's hard to do in make, so limit to
+> -# 1 level for now.
+> -HOST_DEPS = $(sort $(foreach dep,\
+> -               $(addsuffix _DEPENDENCIES,$(call UPPERCASE,$(TARGETS_HOST_DEPS))),\
+> -               $($(dep))))
+> -HOST_SOURCE += $(addsuffix -source,$(sort $(TARGETS_HOST_DEPS) $(HOST_DEPS)))
+> -
+> -TARGETS_LEGAL_INFO:=$(patsubst %,%-legal-info,\
+> -               $(TARGETS) $(BASE_TARGETS) $(TARGETS_HOST_DEPS) $(HOST_DEPS))))
+> +TARGETS_LEGAL_INFO:=$(patsubst %,%-all-legal-info,$(TARGETS) $(BASE_TARGETS))
+>
+>  # all targets depend on the crosscompiler and it's prerequisites
+>  $(TARGETS_ALL): __real_tgt_%: $(BASE_TARGETS) %
+> @@ -564,7 +544,7 @@ target-post-image:
+>  toolchain-eclipse-register:
+>         ./support/scripts/eclipse-register-toolchain `readlink -f $(O)` $(notdir $(TARGET_CROSS)) $(BR2_ARCH)
+>
+> -source: dirs $(TARGETS_SOURCE) $(HOST_SOURCE)
+> +source: dirs $(TARGETS_SOURCE)
+>
+>  external-deps:
+>         @$(MAKE) -Bs DL_MODE=SHOW_EXTERNAL_DEPS $(EXTRAMAKEARGS) source | sort -u
+> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+> index 2e2e66f..b6f0bdd 100644
+> --- a/package/pkg-generic.mk
+> +++ b/package/pkg-generic.mk
+> @@ -418,6 +418,10 @@ endif
+>  $(1)-show-depends:
+>                         @echo $$($(2)_DEPENDENCIES)
+>
+> +$(1)-all-source:       $(foreach p,$($(2)_DEPENDENCIES),$(p)-all-source) $(1)-source
+> +
+> +$(1)-all-legal-info:   $(foreach p,$($(2)_DEPENDENCIES),$(p)-all-legal-info) $(1)-legal-info
+> +
+>  $(1)-uninstall:                $(1)-configure $$($(2)_TARGET_UNINSTALL)
+>
+>  $(1)-clean:            $(1)-uninstall \
+> --
 
+
+Best regards,
 Thomas
-
-On Mon,  2 Sep 2013 18:06:26 +0200, Thomas Petazzoni wrote:
-> Hello,
-> 
-> Here is a set of updates/improvements to the internal toolchain
-> backend (with some impacts on the external toolchain one). Mainly it:
-> 
->  * Allows to build the toolchain with only two passes of gcc build as
->    opposed to three. Of course, this is only possible in the
->    appropriate situations. This patch had already been posted
->    previously to the list, and was rebased on top of current master.
-> 
->  * Fixes Fortran and Objective-C support, moves the C++ option close
->    to the one for Fortran and Objective-C.
-> 
->  * Adds support for glibc, in addition to eglibc. Note that as
->    suggested by Arnout, I'm proposing a single package to handle both
->    libraries.
-> 
->  * Refactors the Stack Smashing Protection support.
-> 
->  * Refactors the Mudflap support in the internal toolchain backend, by
->    providing a Config.in option to enable it. It is now disabled by
->    default.
-> 
->  * Update the Linaro ARM and AArchr64 toolchains.
-> 
->  * Makes a small number of related cleanups.
-> 
-> Changes since v1:
-> 
->  * Use psmisc --disable-harden-flags only when BR2_TOOLCHAIN_HAS_SSP
->    is false, as suggested by Arnout.
-> 
->  * Simplify the mudflap stuff by only providing an option in the
->    internal gcc backend to enable or disable it. We no longer provide
->    a global "Build options" to add -fmudflap when building all
->    packages as it is too complicated and probably not that useful.
-> 
->  * Add updates to Linaro toolchains.
-> 
-> Thomas
-> 
-> Thomas Petazzoni (14):
->   package/Makefile.in: fix incorrect comment
->   eglibc: libstdc++ is not part of the C library
->   toolchain-internal: skip gcc-intermediate when possible
->   gcc: fix Fortran support
->   gcc: fix Objective-C support
->   gcc: move C++ support option next to Fortran/Objective-C
->   toolchain: add support for glibc
->   gcc/gcc-final: use the common HOST_GCC_CONFIGURE_SYMLINK macro
->   gcc: force symlink creation
->   toolchain: refactor Stack Smashing Protection support
->   toolchain: move elf2flt option inclusion to
->     toolchain-buildroot/Config.in
->   gcc: provide option to enable mudflap support
->   toolchain: update Linaro ARM external toolchains
->   toolchain: update Linaro AArch64 external toolchains
-> 
->  Config.in                                    | 17 +++++++
->  package/Makefile.in                          |  5 +-
->  package/gcc/Config.in.host                   | 55 ++++++++++++++++++---
->  package/gcc/gcc-final/gcc-final.mk           | 31 ++++++++----
->  package/gcc/gcc-initial/gcc-initial.mk       |  8 ++++
->  package/gcc/gcc.mk                           | 26 ++++------
->  package/{eglibc/eglibc.mk => glibc/glibc.mk} | 70 +++++++++++++++------------
->  package/psmisc/psmisc.mk                     |  4 +-
->  package/uclibc/Config.in                     | 11 +++++
->  package/uclibc/uclibc.mk                     |  5 +-
->  toolchain/Config.in                          | 11 ++++-
->  toolchain/helpers.mk                         |  3 +-
->  toolchain/toolchain-buildroot/Config.in      | 25 +++++++++-
->  toolchain/toolchain-buildroot/Config.in.2    | 31 ------------
->  toolchain/toolchain-common.in                |  3 ++
->  toolchain/toolchain-external/Config.in       | 72 ++++++++++++++++------------
->  toolchain/toolchain-external/ext-tool.mk     | 24 +++++-----
->  17 files changed, 252 insertions(+), 149 deletions(-)
->  rename package/{eglibc/eglibc.mk => glibc/glibc.mk} (58%)
->  delete mode 100644 toolchain/toolchain-buildroot/Config.in.2
-> 
-
-
-
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
