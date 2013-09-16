@@ -1,143 +1,145 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 16 Sep 2013 19:30:46 +0200
-Subject: [Buildroot] [PATCH 0/3] Support for out-of-tree Buildroot
- customization
-In-Reply-To: <F9C551623D2CBB4C9488801D14F864C639ACDED6@ex-mb1.corp.adtran.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 16 Sep 2013 19:58:46 +0200
+Subject: [Buildroot] Is GPLv2 the right license for Buildroot?
+In-Reply-To: <20130916170815.GB3293@free.fr>
 References: <20130911172709.GB3410@free.fr>
  <CAAXf6LVD590fVudge3Fk+2B8pSzvUEV2GQLTcbz=VpOB2HCmtQ@mail.gmail.com>
  <20130912202157.536e5904@skate>
  <F9C551623D2CBB4C9488801D14F864C639AC8DAF@ex-mb1.corp.adtran.com>
  <20130912203359.7e650ebe@skate> <52323A54.7020808@mind.be>
  <20130912221256.GE3362@free.fr> <523388B6.7090305@mind.be>
- <20130914221613.GA3444@free.fr>
- <F9C551623D2CBB4C9488801D14F864C639ACDED6@ex-mb1.corp.adtran.com>
-Message-ID: <20130916173046.GC3293@free.fr>
+ <20130914221613.GA3444@free.fr> <20130916182101.3844a686@skate>
+ <20130916170815.GB3293@free.fr>
+Message-ID: <20130916195846.32e98c8a@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Andy, All,
+Hello,
 
-On 2013-09-16 15:43 +0000, ANDY KENNEDY spake thusly:
-> > From: Yann E. MORIN [mailto:yann.morin.1998 at gmail.com] On Behalf Of Yann E. MORIN
-> > Sent: Saturday, September 14, 2013 5:16 PM
+On Mon, 16 Sep 2013 19:08:15 +0200, Yann E. MORIN wrote:
+
+> > but I'm wondering if the GPLv2 is the
+> > right license for Buildroot. I believe it is not very easy to
+> > understand how the terms of the GPL apply to something such as a
+> > build system, and I am not sure that the GPL copyleft requirements
+> > are really benefiting to Buildroot in any way. I am pretty sure
+> > that the vast majority of companies using Buildroot are not really
+> > realizing it's licensed under the GPL and therefore are not
+> > complying with the Buildroot license terms (while they probably do
+> > realize that the kernel, U-Boot, etc. are under the GPL and comply
+> > with their terms).
 > 
-> Everything you guys said here was sound, logical reasoning.  This is
-> what I believe to be the spirit of what *some* in the free software community
-> intended (though there are a few radicals out there which have taken it
-> down a different road).
+> On the other hand, the GPLv2 only applies at the time of distribution.
+> So long as the Buildroot tre is not distributed, there is no reason to
+> fear anything.
+
+Right, that's true.
+
+> Now, let's try to make things clear:
 > 
-> <snip>
-> > > >Yes, but I believe BR2_EXTERNAL *is* a derived work of Buildroot, so as
-> > > >such should be licensed under a license compatible with BuildRoot's.
+>   - on an embedded system, the probability that there is a GPL program
+>     is rather high (eg. busybox, the Linux kernel);
 > 
-> About this:  There was a BIG case here in the States within the last
-> two years.  Google vs. Sun Micro systems.
+>   - lets assume Buildroot is used to build those programs;
+> 
+>   - the GPL (as applied to _those_ programs, not Buildroot) mandates
+>     that the script to control compilation and installation of those
+>     programs be made available (section of GPLv2);
 
-Yes, that story has crossed the ocean. ;-)
+Whether Buildroot is part of such scripts or not remains a slightly
+open question. That the kernel makefiles and scripts, the Busybox
+makefiles and scripts should remain part of the kernel and Busybox
+sources is clear. That the tool that is used to orchestrate the overall
+building process is part of those "script to control compilation and
+installation" is not so clear-cut from my point of view.
 
->  The argument was over the header
-> files of the language Java (if you already know this, sorry for the recap).
-> It was decided that an INTERFACE is not protected by _anything_.
+At least so far, I don't think I've seen many companies using
+Buildroot, on products that include GPL components, providing the
+source code for Buildroot.
 
-That's where we can argue: is the Buildroot-specific infrastructure an
-interface, or is it not an interface.
+>   - so the easiest way to comply with those programs' GPL is to
+>     distribute the Buildroot tree that was used to build the target
+>     filesystem, since it does contain all required recipes (aka the
+>     scripts of section 3 of the GPLv2)
 
-That's the same argument that applies to kernel modules: if a module is
-written explicitly for the Linux kernel, then some kernel developpers
-believe that module is a derived work of the Linux kernel. If the module
-is pre-existing, and merely ported over to the Linux interfaces, it
-might not be a derived work.
+Right, but it is not necessarily easy to separate within Buildroot the
+thing that you are ready to distribute (package recipes of open-source
+programs) from the package recipes of proprietary programs, your root
+filesystem overlay and so on.
 
-Although this is still considered a "gray area", and has not been tried
-yet, so we can't use that as anything but a guideline of thought.
+>   - Buildroot is itself GPLv2, so by distributing the Buildroot tree,
+> a company has to release it under GPLv2.
 
->  So,
-> from a certain point of view, the *.mk files contain various variables
-> and then make a FUNCTION call back into the system.  This would negate there
-> being a "derived work" for anyone adding on an IP app to the build system.
+Yes, that's for sure, I'm not questioning that.
 
-I think you are confused by your "IP app" and the "recipes to build your
-IP app".
+What I'm questioning is really the case where a company makes an
+embedded product, and has used Buildroot to generate a rootfs that
+includes GPL programs, is this company required to distribute Buildroot.
 
-Of course your proprietary application is not covered by the Buildroot
-license. So yes, you can bundle it in your rootfs, and not be bound to
-provide a means to rebuild it.
+> > Of
+> > course that's not an argument to change the license, but I believe
+> > it also highlights how hard it is to understand the GPL
+> > requirements on the Buildroot case.
+> 
+> Sorry, but it is very clear to me, and I am no lawyer. And any decent
+> company will have a rather decent team of lawyers to help in these
+> types of cases.
 
-> However, you are dead-on about the GPL apps that may be built that way as
-> one would ABSOLUTELY have to release the build process with the binary.
+That might be the case where you work, but I honestly don't believe
+it's the case in many companies, especially SMEs doing embedded
+products.
 
-Yes, this is section 3 of the GPLv2. Excerpt:
+> > So, I believe that we should either:
+> > 
+> >  (1) Clarify and document how we believe the GPL terms apply to
+> >      Buildroot (this would probably be a long discussion process, in
+> >      which the SFLC should probably participate). When I see the
+> >      discussions around BR2_EXTERNAL where the package .mk files and
+> >      Config.in files may be seen as derivative work, but not the
+> > root filesystem overlay, or that package .mk files for GPL packages
+> >      should be under the GPL,
+> 
+> It all revolves around the definition of a "derivative work".
+> 
+> We have to decide whether BR2_EXTERNAL is, or parts of it are, a
+> derived work of Buildroot. I think you now know my position, I
+> guess. ;-)
 
-    ---8<---
-    For an executable work, complete source
-    code means all the source code for all modules it contains, plus any
-    associated interface definition files, plus the scripts used to
-    control compilation and installation of the executable.
-    ---8<---
+Right.
 
-So, if you distribute a binary of busybox on your device, you have to
-provide the recipient of that device with:
+> >      but not necessarily .mk files for non-GPL
+> >      packages,
+> 
+> Wrong. *If* they are distributed, they'll be under the GPLv2.
+> But since they build proprietary (or weak-copyleft licensed) packages,
+> it is _not_ required that they be distributed.
 
-  - the source code of busybox itself (ie the .c and .h files)
+Yes, hence I said "not necessarily".
 
-  - the build instructions to reproduce that busybox binary
+> >      I believe it is way too complicated for users. To me, it
+> >      seems like complying with the Buildroot license is more
+> >      complicated than using Buildroot itself, which is kind of
+> > silly.
+> 
+> 
+> >  (2) Change the Buildroot license to a non-copyleft license.
+> 
+> That would be a *hard* thing to do, I'm afraid.
 
-To fulfill that second point, you have two options:
+Yes, license changes are difficult. Not impossible (VLC changed its
+license, for example), but certainly annoying.
 
-  - provide your Buildroot tree
-or
-  - provide the exact commands to rebuild busybox
+> I lean toward an explanation in the manual (with proper disclaimer
+> that entice the user to seek legal counsel).
 
-Since the former is way easier than the latter, you'd probably opt for
-providing the Buildroot tree.
+Fair enough. Care to submit a patch? :-)
 
-Now, if your Buildroot tree also contains recipes for proprietary
-application (what you call "IP app"), you can well expunge your Buildroot
-tree from those recipes, and distribute that expunged Buildroot tree to
-the recipient of your device, since that expunged Buildroot tree is
-sufficient to rebuild the aforementioned busybox binary.
-
-Indeed, that's not the exact Buildroot tree used to build busybox, but
-since it is absolutely sufficient, that would not be a problem at all.
-
-But expunging the recipes for the proprietary app would need a proper
-process that guarantees it does not "leak" changes to other recipes for
-non-proprietary apps.
-
-Enters now BR2_EXTERNAL. If your BR2_EXTERNAL only contains recipes for
-proprietary applications, and there are none in your Buildroot tree, you
-will *not* have to provide that BR2_EXTERNAL tree@all.
-
-But if your BR2_EXTERNAL tree contains recipes for GPL applications that
-end up in your device, you will *have* to provide *those* recipes.
-
-Ditto for the Buildroot tree, you may expunge the recipes for your
-proprietary apps from the BR2_EXTERNAL tree you distribute, since they
-are not required to rebuild the GPL applications.
-
-> So, whether this would work in courts across the globe, I have no idea.
-> Ethically speaking (and I'm big on ethics), I would not want to release IP
-> code that could _ONLY_ be built using BuildRoot, however, adding something
-> in that doesn't DEPEND on being built by BuildRoot is clearly okay by
-> our license and the GPL under which BuildRoot is released.
-
-OK, so you basically said there is no problem. Good! :-)
-
-> Now, as Yann has stated previously: the information above and 1.25USD will
-> buy you a Coke!
-
-Indeed, the above would have to be tried in a court of law.
-
-Regards,
-Yann E. MORIN.
-
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
