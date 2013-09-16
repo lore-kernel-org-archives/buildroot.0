@@ -1,41 +1,50 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 16 Sep 2013 22:15:54 +0200
-Subject: [Buildroot] Is GPLv2 the right license for Buildroot?
-In-Reply-To: <l17nem$4gn$1@ger.gmane.org>
-References: <20130912202157.536e5904@skate>
- <F9C551623D2CBB4C9488801D14F864C639AC8DAF@ex-mb1.corp.adtran.com>
- <20130912203359.7e650ebe@skate> <52323A54.7020808@mind.be>
- <20130912221256.GE3362@free.fr> <523388B6.7090305@mind.be>
- <20130914221613.GA3444@free.fr> <20130916182101.3844a686@skate>
- <20130916170815.GB3293@free.fr> <l17nem$4gn$1@ger.gmane.org>
-Message-ID: <20130916201553.GG3293@free.fr>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 16 Sep 2013 22:38:29 +0200
+Subject: [Buildroot] [PATCHv2 0/4] Add a BR2_EXTERNAL mechanism
+In-Reply-To: <1379185433-8770-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1379185433-8770-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <52376C45.1020406@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Grant, All,
+  Hi all,
 
-On 2013-09-16 19:50 +0000, Grant Edwards spake thusly:
-> On 2013-09-16, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> 
-> > Sorry, but it is very clear to me, and I am no lawyer. And any decent
-> > company will have a rather decent team of lawyers to help in these types
-> > of cases.
-> 
-> So no company with less that several hundred employees is "decent"?
+On 14/09/13 21:03, Thomas Petazzoni wrote:
+> Here is the second version of the BR2_EXTERNAL patch series.
 
-Yes, sorry, I've been pushing that one a bit too far.
-You've served me right. I do apologise.
+  I've taken a few days to let the dust settle on this patch series (and 
+it seems it still hasn't settled...). After reading the entire series 
+this time (instead of commenting before I understood what was happening 
+exactly), I have two overall comments still. More comments will follow in 
+individual patches.
 
-Regards,
-Yann E. MORIN.
+
+1. Peter nacked all previous attempts of having this type of feature, so 
+I think it's best if he gives an indication if this series has a chance 
+of survival before we all spend more time on it.
+
+
+2. I really have a huge problem with the fact that the .config is no 
+longer complete, and that instead you have to explicitly provide extra 
+command-line arguments to be able to reproduce the build. And it doesn't 
+help that it behaves differently when you have an out-of-tree output 
+directory (where the BR2_EXTERNAL is stored) than when you're using the 
+default output directory. I'm actually very surprised that nobody else 
+seems to have a problem with this. So for me, this gets a big Nack unless 
+the BR2_EXTERNAL is stored in the .config.
+
+
+
+  Regards,
+  Arnout
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
