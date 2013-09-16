@@ -1,38 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 16 Sep 2013 20:08:40 +0200
-Subject: [Buildroot] [PATCH 3/3] enable needed modules for cubieboard2
-In-Reply-To: <1379328727-2577-4-git-send-email-carlos@crqgestion.es>
-References: <1379328727-2577-1-git-send-email-carlos@crqgestion.es>
- <1379328727-2577-4-git-send-email-carlos@crqgestion.es>
-Message-ID: <20130916200840.2c79e6be@skate>
+Date: Mon, 16 Sep 2013 20:10:04 +0200
+Subject: [Buildroot] Problems with 'iw'
+In-Reply-To: <BECCD53EFF877A4F8D909C37120A85375303DD68@CHEWBACCA.connectBlue.local>
+References: <BECCD53EFF877A4F8D909C37120A85375303DD68@CHEWBACCA.connectBlue.local>
+Message-ID: <20130916201004.4fb7e9ef@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Carlos Quijano,
+Dear Jonas Ludvigsson,
 
-On Mon, 16 Sep 2013 12:52:07 +0200, Carlos Quijano wrote:
+On Mon, 16 Sep 2013 12:07:35 +0000, Jonas Ludvigsson wrote:
 
-> diff --git a/board/cubietech/cubieboard2/cubieboard2_kernel.config b/board/cubietech/cubieboard2/cubieboard2_kernel.config
-> index 081e00b..690b5a1 100644
-> --- a/board/cubietech/cubieboard2/cubieboard2_kernel.config
-> +++ b/board/cubietech/cubieboard2/cubieboard2_kernel.config
-> @@ -2109,9 +2109,9 @@ CONFIG_FB_MODE_HELPERS=y
->  CONFIG_FB_SUNXI=y
->  CONFIG_FB_SUNXI_RESERVED_MEM=y
->  CONFIG_FB_SUNXI_UMP=y
-> -# CONFIG_FB_SUNXI_LCD is not set
-> +CONFIG_FB_SUNXI_LCD=y
->  CONFIG_FB_SUNXI_HDMI=y
-> -# CONFIG_HDMI_CEC is not set
-> +CONFIG_HDMI_CEC=y
->  # CONFIG_FB_ARMCLCD is not set
->  # CONFIG_FB_UVESA is not set
->  # CONFIG_FB_S1D13XXX is not set
+> I'm trying to enable the wlan module on a TI AM335x EVM Board and have successfully been able to add drivers and firmware for wl1271.
+> But when I'm trying start a scan using 'iw' I get 'Segmentation fault'. In fact all 'iw' always returns segmentation fault.
+> 
+> I added support for 'iw' in Buildroot (2013.08) which is configured to use its internal toolchain (uClibc 0.9.33.x),
+> kernel version (3.2.42) and Busybox (1.21.x).
+> 
+> What could be the problem?
 
-This should be part of the patch adding the kernel configuration file.
+Hum, many things. Your best starting point is probably to do:
+
+# ulimit -c unlimited
+# iw
+
+and then take the generated 'core' file, bring it into your cross gdb
+on your development machine, and look at the backtrace to see where the
+crash is happening.
 
 Thomas
 -- 
