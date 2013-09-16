@@ -1,50 +1,47 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 16 Sep 2013 22:38:29 +0200
-Subject: [Buildroot] [PATCHv2 0/4] Add a BR2_EXTERNAL mechanism
-In-Reply-To: <1379185433-8770-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1379185433-8770-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <52376C45.1020406@mind.be>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Mon, 16 Sep 2013 22:49:58 +0200
+Subject: [Buildroot] [PATCH v3] apply-patches.sh: detect missing patches
+In-Reply-To: <20130916172444.2573614e@skate> (Thomas Petazzoni's message of
+ "Mon, 16 Sep 2013 17:24:44 +0200")
+References: <CAAXf6LV9HPWdzqV_F5zQ+aABtVxZGRRkhDszF2Qx8vyXMb+PhA@mail.gmail.com>
+ <20130905100459.13173009@skate> <5228425A.7090502@lucaceresoli.net>
+ <20130905140135.GC3136@free.fr>
+ <CAAXf6LWWnb5xQUtZA8p3kgoU2et-kD6x9TzyzXykgNbxdsuv+Q@mail.gmail.com>
+ <20130911120630.GA14745@harvey.netwinder.org>
+ <CAAXf6LX7o9P1tXv3Egk8By-VbzarRYe5JRyTh5+3wYNBz9Z6aQ@mail.gmail.com>
+ <20130913181527.GA11933@harvey.netwinder.org>
+ <20130913182702.GB3301@free.fr>
+ <20130915133709.GA16826@harvey.netwinder.org>
+ <20130915141314.GA18166@harvey.netwinder.org>
+ <8738p5lud2.fsf@dell.be.48ers.dk> <8738p5i6kq.fsf@dell.be.48ers.dk>
+ <20130916172444.2573614e@skate>
+Message-ID: <87d2o8h4p5.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-  Hi all,
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-On 14/09/13 21:03, Thomas Petazzoni wrote:
-> Here is the second version of the BR2_EXTERNAL patch series.
+ Thomas> Dear Peter Korsgaard,
+ Thomas> On Mon, 16 Sep 2013 09:11:49 +0200, Peter Korsgaard wrote:
 
-  I've taken a few days to let the dust settle on this patch series (and 
-it seems it still hasn't settled...). After reading the entire series 
-this time (instead of commenting before I understood what was happening 
-exactly), I have two overall comments still. More comments will follow in 
-individual patches.
+ >> So a bunch of non-patch files. I guess our best option is to degrade the
+ >> "Unsupported format" check to a warning again?
 
+ Thomas> Another way of seeing that is that using:
 
-1. Peter nacked all previous attempts of having this type of feature, so 
-I think it's best if he gives an indication if this series has a chance 
-of survival before we all spend more time on it.
+ Thomas> <pkg>_PATCH = some-debian-tarball
 
+ Thomas> is not a good idea, and we should have a better way of handling this,
+ Thomas> no?
 
-2. I really have a huge problem with the fact that the .config is no 
-longer complete, and that instead you have to explicitly provide extra 
-command-line arguments to be able to reproduce the build. And it doesn't 
-help that it behaves differently when you have an out-of-tree output 
-directory (where the BR2_EXTERNAL is stored) than when you're using the 
-default output directory. I'm actually very surprised that nobody else 
-seems to have a problem with this. So for me, this gets a big Nack unless 
-the BR2_EXTERNAL is stored in the .config.
+Arguably yes, but this used to work so some people might be relying on
+it - So I change it back to only warn about these files.
 
-
-
-  Regards,
-  Arnout
+Nevertheless, it would be good if we could come up with a better way of
+handling these Debian patches.
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+Bye, Peter Korsgaard
