@@ -1,77 +1,81 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 16 Sep 2013 23:03:11 +0200
-Subject: [Buildroot] [PATCH] libroxml: bump version to 2.2.3
-In-Reply-To: <1379351518-5771-1-git-send-email-blunderer@blunderer.org>
- (blunderer@blunderer.org's message of "Mon, 16 Sep 2013 10:11:58
- -0700")
-References: <1379351518-5771-1-git-send-email-blunderer@blunderer.org>
-Message-ID: <87zjrcfpio.fsf@dell.be.48ers.dk>
+Date: Mon, 16 Sep 2013 23:12:55 +0200
+Subject: [Buildroot] Is GPLv2 the right license for Buildroot?
+In-Reply-To: <20130916182101.3844a686@skate> (Thomas Petazzoni's message of
+ "Mon, 16 Sep 2013 18:21:01 +0200")
+References: <20130911091700.0b24df41@skate>
+ <OFA3C6DE52.DF6BBCA7-ON86257BE3.0054A3F9-86257BE3.00577394@rockwellcollins.com>
+ <20130911172709.GB3410@free.fr>
+ <CAAXf6LVD590fVudge3Fk+2B8pSzvUEV2GQLTcbz=VpOB2HCmtQ@mail.gmail.com>
+ <20130912202157.536e5904@skate>
+ <F9C551623D2CBB4C9488801D14F864C639AC8DAF@ex-mb1.corp.adtran.com>
+ <20130912203359.7e650ebe@skate> <52323A54.7020808@mind.be>
+ <20130912221256.GE3362@free.fr> <523388B6.7090305@mind.be>
+ <20130914221613.GA3444@free.fr> <20130916182101.3844a686@skate>
+Message-ID: <87vc20fp2g.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "blunderer" == blunderer  <blunderer@blunderer.org> writes:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- blunderer> From: Tristan Lelong <tristan.lelong@blunderer.org>
+Hi,
 
-Looks good. Could you please resend with your Signed-off-by: tag?
+ Thomas> So, I believe that we should either:
 
-http://buildroot.net/downloads/manual/manual.html#submitting-patches
+ Thomas>  (1) Clarify and document how we believe the GPL terms apply to
+ Thomas>      Buildroot (this would probably be a long discussion process, in
+ Thomas>      which the SFLC should probably participate). When I see the
+ Thomas>      discussions around BR2_EXTERNAL where the package .mk files and
+ Thomas>      Config.in files may be seen as derivative work, but not the root
+ Thomas>      filesystem overlay, or that package .mk files for GPL packages
+ Thomas>      should be under the GPL, but not necessarily .mk files for non-GPL
+ Thomas>      packages, I believe it is way too complicated for users. To me, it
+ Thomas>      seems like complying with the Buildroot license is more
+ Thomas>      complicated than using Buildroot itself, which is kind of silly.
 
- blunderer> ---
- blunderer>  package/libroxml/libroxml-werror.patch |    4 ++--
- blunderer>  package/libroxml/libroxml.mk           |    6 +++---
- blunderer>  2 files changed, 5 insertions(+), 5 deletions(-)
+We have already tried to clarify it in the user manual:
 
- blunderer> diff --git a/package/libroxml/libroxml-werror.patch b/package/libroxml/libroxml-werror.patch
- blunderer> index a99962f..6435b01 100644
- blunderer> --- a/package/libroxml/libroxml-werror.patch
- blunderer> +++ b/package/libroxml/libroxml-werror.patch
- blunderer> @@ -15,8 +15,8 @@ Index: a/Makefile
-  
- blunderer>   # options
- blunderer>   override CPPFLAGS += -Iinc/
- blunderer> --override CFLAGS += $(OPTIM) -fPIC -Wall -Wextra -Wno-unused -Werror -Iinc/ $(DEFINES)
- blunderer> -+override CFLAGS += $(OPTIM) -fPIC -Wall -Wextra -Wno-unused -Iinc/ $(DEFINES)
- blunderer> +-override CFLAGS += $(OPTIM) -fPIC -Wall -Wextra -Wno-unused-parameter -Wno-unused-result -Werror -Iinc/ $(DEFINES)
- blunderer> ++override CFLAGS += $(OPTIM) -fPIC -Wall -Wextra -Wno-unused-parameter -Wno-unused-result -Iinc/ $(DEFINES)
- blunderer>   override LDFLAGS += 
-  
- blunderer>   ifeq ("$(OS)", "Darwin")
- blunderer> diff --git a/package/libroxml/libroxml.mk b/package/libroxml/libroxml.mk
- blunderer> index 76ffa14..d602513 100644
- blunderer> --- a/package/libroxml/libroxml.mk
- blunderer> +++ b/package/libroxml/libroxml.mk
- blunderer> @@ -4,8 +4,8 @@
- blunderer>  #
- blunderer>  ################################################################################
- 
- blunderer> -LIBROXML_VERSION = 2.2.2
- blunderer> -LIBROXML_SITE = http://libroxml.googlecode.com/files
- blunderer> +LIBROXML_VERSION = 2.2.3
- blunderer> +LIBROXML_SITE = http://download.libroxml.net/pool/v2.x/
- blunderer>  LIBROXML_INSTALL_STAGING = YES
- 
- blunderer>  define LIBROXML_BUILD_CMDS
- blunderer> @@ -17,7 +17,7 @@ define LIBROXML_INSTALL_STAGING_CMDS
- blunderer>  endef
- 
- blunderer>  define LIBROXML_INSTALL_TARGET_CMDS
- blunderer> -	$(MAKE) DESTDIR=$(TARGET_DIR) -C $(@D) install
- blunderer> +	$(MAKE) DESTDIR=$(TARGET_DIR)/usr/ -C $(@D) install
- blunderer>  endef
- 
- blunderer>  define LIBROXML_UNINSTALL_STAGING_CMDS
- blunderer> -- 
- blunderer> 618FE3EF
+http://buildroot.net/downloads/manual/manual.html#_complying_with_the_buildroot_license
 
- blunderer> _______________________________________________
- blunderer> buildroot mailing list
- blunderer> buildroot at busybox.net
- blunderer> http://lists.busybox.net/mailman/listinfo/buildroot
+E.G. Buildroot should be handled just like how you handle the Linux
+kernel and Busybox.
 
+
+ Thomas>  (2) Change the Buildroot license to a non-copyleft license. Of course,
+ Thomas>      that requires contacting a lot of people, but maybe not so much:
+ Thomas>      over the last 3-4 years, the vast majority of the Buildroot code
+ Thomas>      base has been rewritten, and many of the people having worked on
+ Thomas>      that are still around today.
+
+It's imho still too many people to be realistic:
+
+git shortlog -s --since='3 years' | wc -l
+230
+
+
+ Thomas> What other build systems are doing:
+
+ Thomas>  * Yocto/OpenEmbeded: bitbake is under GPLv2, the rest (package
+ Thomas>    recipes) is under MIT.
+
+ Thomas>  * PTXdist is under GPLv2, but has a small license clarification "Note:
+ Thomas>    PTXdist is a build system which generates a distribution for
+ Thomas>    embedded systems. This license does only cover the build system
+ Thomas>    itself and doesn't affect the license of managed software in any
+ Thomas>    way, even if it might be distributed together with the build
+ Thomas>    system." I believe it doesn't really clarify completely how the GPL
+ Thomas>    applies to a build system.
+
+ Thomas>  * OpenBricks is under GPLv2.
+
+ Thomas>  * OpenWRT is under GPLv2, since it is originally a fork of Buildroot.
+
+ Thomas>  * LTIB is under GPLv2.
+
+So they are basically all in the same boat as us.
 
 -- 
 Bye, Peter Korsgaard
