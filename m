@@ -1,48 +1,59 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 16 Sep 2013 23:17:52 +0200
-Subject: [Buildroot] Is GPLv2 the right license for Buildroot?
-In-Reply-To: <20130916200135.1724084e@skate> (Thomas Petazzoni's message of
- "Mon, 16 Sep 2013 20:01:35 +0200")
-References: <20130911172709.GB3410@free.fr>
- <CAAXf6LVD590fVudge3Fk+2B8pSzvUEV2GQLTcbz=VpOB2HCmtQ@mail.gmail.com>
- <20130912202157.536e5904@skate>
- <F9C551623D2CBB4C9488801D14F864C639AC8DAF@ex-mb1.corp.adtran.com>
- <20130912203359.7e650ebe@skate> <52323A54.7020808@mind.be>
- <20130912221256.GE3362@free.fr> <523388B6.7090305@mind.be>
- <20130914221613.GA3444@free.fr> <20130916182101.3844a686@skate>
- <20130916170815.GB3293@free.fr>
- <F9C551623D2CBB4C9488801D14F864C639ACE1F5@ex-mb1.corp.adtran.com>
- <20130916200135.1724084e@skate>
-Message-ID: <87mwncfou7.fsf@dell.be.48ers.dk>
+From: blunderer at blunderer.org <blunderer@blunderer.org>
+Date: Mon, 16 Sep 2013 14:47:49 -0700
+Subject: [Buildroot] [PATCH] libroxml: bump version to 2.2.3
+Message-ID: <1379368069-29373-1-git-send-email-blunderer@blunderer.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+From: Tristan Lelong <tristan.lelong@blunderer.org>
 
-Hi,
+Signed-off-by: Tristan Lelong <tristan.lelong@blunderer.org>
+---
+ package/libroxml/libroxml-werror.patch |    4 ++--
+ package/libroxml/libroxml.mk           |    6 +++---
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
- Thomas> Sure. But in Buildroot, things are more complicated: within Buildroot
- Thomas> *itself* there may be parts that you have to redistribute (i.e package
- Thomas> recipes for GPL programs), and some other parts you may not be willing
- Thomas> to redistribute (i.e package recipes for your own applications, or your
- Thomas> root filesystem overlay). This makes it quite difficult for a company
- Thomas> using Buildroot to easily separate what must be distributed from what
- Thomas> shouldn't be distributed.
-
-I can only speak of personal experience, naturally (and you get to work
-with a lot more companies than I do), but I haven't seen this as a big
-problem. These things typically don't contain many "secrets".
-
-People basically have 2 options:
-
-- Integrate their changes in the Buildroot tree and gain the advantages
-  of Buildroot
-
-- Or keep it seperate (E.G add the stuff outside buildroot) and be able
-  to keep it secret.
-
+diff --git a/package/libroxml/libroxml-werror.patch b/package/libroxml/libroxml-werror.patch
+index a99962f..6435b01 100644
+--- a/package/libroxml/libroxml-werror.patch
++++ b/package/libroxml/libroxml-werror.patch
+@@ -15,8 +15,8 @@ Index: a/Makefile
+  
+  # options
+  override CPPFLAGS += -Iinc/
+--override CFLAGS += $(OPTIM) -fPIC -Wall -Wextra -Wno-unused -Werror -Iinc/ $(DEFINES)
+-+override CFLAGS += $(OPTIM) -fPIC -Wall -Wextra -Wno-unused -Iinc/ $(DEFINES)
++-override CFLAGS += $(OPTIM) -fPIC -Wall -Wextra -Wno-unused-parameter -Wno-unused-result -Werror -Iinc/ $(DEFINES)
+++override CFLAGS += $(OPTIM) -fPIC -Wall -Wextra -Wno-unused-parameter -Wno-unused-result -Iinc/ $(DEFINES)
+  override LDFLAGS += 
+  
+  ifeq ("$(OS)", "Darwin")
+diff --git a/package/libroxml/libroxml.mk b/package/libroxml/libroxml.mk
+index 76ffa14..d602513 100644
+--- a/package/libroxml/libroxml.mk
++++ b/package/libroxml/libroxml.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-LIBROXML_VERSION = 2.2.2
+-LIBROXML_SITE = http://libroxml.googlecode.com/files
++LIBROXML_VERSION = 2.2.3
++LIBROXML_SITE = http://download.libroxml.net/pool/v2.x/
+ LIBROXML_INSTALL_STAGING = YES
+ 
+ define LIBROXML_BUILD_CMDS
+@@ -17,7 +17,7 @@ define LIBROXML_INSTALL_STAGING_CMDS
+ endef
+ 
+ define LIBROXML_INSTALL_TARGET_CMDS
+-	$(MAKE) DESTDIR=$(TARGET_DIR) -C $(@D) install
++	$(MAKE) DESTDIR=$(TARGET_DIR)/usr/ -C $(@D) install
+ endef
+ 
+ define LIBROXML_UNINSTALL_STAGING_CMDS
 -- 
-Bye, Peter Korsgaard
+618FE3EF
