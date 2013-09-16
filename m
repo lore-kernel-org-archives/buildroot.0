@@ -1,77 +1,55 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 16 Sep 2013 09:11:49 +0200
-Subject: [Buildroot] [PATCH v3] apply-patches.sh: detect missing patches
-In-Reply-To: <8738p5lud2.fsf@dell.be.48ers.dk> (Peter Korsgaard's message of
- "Sun, 15 Sep 2013 22:09:45 +0200")
-References: <CAAXf6LV9HPWdzqV_F5zQ+aABtVxZGRRkhDszF2Qx8vyXMb+PhA@mail.gmail.com>
- <20130905100459.13173009@skate> <5228425A.7090502@lucaceresoli.net>
- <20130905140135.GC3136@free.fr>
- <CAAXf6LWWnb5xQUtZA8p3kgoU2et-kD6x9TzyzXykgNbxdsuv+Q@mail.gmail.com>
- <20130911120630.GA14745@harvey.netwinder.org>
- <CAAXf6LX7o9P1tXv3Egk8By-VbzarRYe5JRyTh5+3wYNBz9Z6aQ@mail.gmail.com>
- <20130913181527.GA11933@harvey.netwinder.org>
- <20130913182702.GB3301@free.fr>
- <20130915133709.GA16826@harvey.netwinder.org>
- <20130915141314.GA18166@harvey.netwinder.org>
- <8738p5lud2.fsf@dell.be.48ers.dk>
-Message-ID: <8738p5i6kq.fsf@dell.be.48ers.dk>
+From: Fatih =?UTF-8?Q?A=C5=9F=C4=B1c=C4=B1?= <fatih.asici@gmail.com>
+Date: Mon, 16 Sep 2013 10:32:14 +0300
+Subject: [Buildroot] [PATCH] directfb: Add upstream patch to fix qt5base
+	build
+Message-ID: <1379316734.4275.2.camel@viko>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <jacmet@uclibc.org> writes:
+Fixes http://autobuild.buildroot.net/results/8c7eaf99e365ecff28c097475b235dbe8d614294/
 
->>>>> "Ralph" == Ralph Siemsen <ralphs@netwinder.org> writes:
- Ralph> The "patch" command returns an error code only if patches fail
- Ralph> to apply. Therefore the pipleline "cat <patchfile> | patch ..."
- Ralph> does not fail, even if <patchfile> is missing. Fix this by
- Ralph> adding an explicit check for patch file existence.
+Signed-off-by: Fatih A??c? <fatih.asici@gmail.com>
+---
+ ...irectfb-remove-redefinition-of-__typeof__.patch |   28 ++++++++++++++++++++
+ 1 file changed, 28 insertions(+)
+ create mode 100644 package/directfb/directfb-remove-redefinition-of-__typeof__.patch
 
- Ralph> Based on feedback from buildroot mailing list, also change the
- Ralph> existing check for unsupported patch format into a fatal error.
- Ralph> ---
-
- Ralph> v1. original
- Ralph> v2. error on unsupported patch formats
- Ralph> v3. explicit exit calls
-
- Peter> Committed, thanks.
-
- Peter> You forgot to add your 'Signed-off-by' on the patch. I've added it for
- Peter> you, hopefully that is OK?
-
-It unfortunately for the projects using tarballs containing patches,
-E.G:
-
-http://autobuild.buildroot.net/results/3d5/3d5f2c960ff2cc2003c9cc68d3a5a48009f5602f/build-end.log
-
-The tarball contains:
-
-debian/
-debian/control
-debian/postinst
-debian/postinst.nfs
-debian/source/
-debian/source/options
-debian/source/format
-debian/shlibs
-debian/prerm.nfs
-debian/rules
-debian/postrm
-debian/shlibs.nfslock
-debian/patches/
-debian/patches/07-493462-dotlockfile.c.patch
-debian/patches/series
-debian/patches/04-505851-remove-debug-code.patch
-debian/patches/02-COPYRIGHT.patch
-debian/patches/06-493462-dotlockfile.1.patch
-debian/patches/09-562937-make-ar-overwrittable.patch
-debian/changelog
-
-So a bunch of non-patch files. I guess our best option is to degrade the
-"Unsupported format" check to a warning again?
-
+diff --git a/package/directfb/directfb-remove-redefinition-of-__typeof__.patch b/package/directfb/directfb-remove-redefinition-of-__typeof__.patch
+new file mode 100644
+index 0000000..e3861af
+--- /dev/null
++++ b/package/directfb/directfb-remove-redefinition-of-__typeof__.patch
+@@ -0,0 +1,28 @@
++Remove definition to fix qt5 build.
++
++Fetch from: http://git.directfb.org/?p=core/DirectFB.git;a=patch;h=203f78a4193a8ff110dec3c860e0928af1a0a72f
++
++From 203f78a4193a8ff110dec3c860e0928af1a0a72f Mon Sep 17 00:00:00 2001
++From: Denis Oliver Kropp <dok@directfb.org>
++Date: Wed, 31 Jul 2013 21:56:05 +0200
++Subject: [PATCH] libdirect: Remove redefinition of __typeof__!!!
++
++---
++ lib/direct/os/linux/glibc/types.h |    1 -
++ 1 file changed, 1 deletion(-)
++
++diff --git a/lib/direct/os/linux/glibc/types.h b/lib/direct/os/linux/glibc/types.h
++index 08e94b2..80cb350 100644
++--- a/lib/direct/os/linux/glibc/types.h
+++++ b/lib/direct/os/linux/glibc/types.h
++@@ -81,7 +81,6 @@ typedef int64_t s64;
++ #define __dfb_no_instrument_function__  __attribute__((no_instrument_function))
++ #define __constructor__                 __attribute__((constructor))
++ #define __destructor__                  __attribute__((destructor))
++-#define __typeof__(x)                   __typeof__(x)
++ 
++ #ifndef __func__
++ #define __func__                        __FUNCTION__
++-- 
++1.7.9.5
++
 -- 
-Bye, Peter Korsgaard
+1.7.10.4
