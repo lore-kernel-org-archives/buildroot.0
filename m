@@ -1,64 +1,64 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 16 Sep 2013 20:34:07 +0200
-Subject: [Buildroot] [PATCHv2 1/4] core: introduce the BR2_EXTERNAL
- variable
-In-Reply-To: <OF0FD99CA0.0DD1D9C1-ON86257BE8.005A4297-86257BE8.005B1032@rockwellcollins.com>
-References: <1379185433-8770-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1379185433-8770-2-git-send-email-thomas.petazzoni@free-electrons.com>
- <OF0FD99CA0.0DD1D9C1-ON86257BE8.005A4297-86257BE8.005B1032@rockwellcollins.com>
-Message-ID: <20130916203407.63509990@skate>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 16 Sep 2013 20:56:21 +0200
+Subject: [Buildroot] [PATCH 0/3] Support for out-of-tree Buildroot
+	customization
+In-Reply-To: <20130914221613.GA3444@free.fr>
+References: <20130911091700.0b24df41@skate>
+ <OFA3C6DE52.DF6BBCA7-ON86257BE3.0054A3F9-86257BE3.00577394@rockwellcollins.com>
+ <20130911172709.GB3410@free.fr>
+ <CAAXf6LVD590fVudge3Fk+2B8pSzvUEV2GQLTcbz=VpOB2HCmtQ@mail.gmail.com>
+ <20130912202157.536e5904@skate>
+ <F9C551623D2CBB4C9488801D14F864C639AC8DAF@ex-mb1.corp.adtran.com>
+ <20130912203359.7e650ebe@skate> <52323A54.7020808@mind.be>
+ <20130912221256.GE3362@free.fr> <523388B6.7090305@mind.be>
+ <20130914221613.GA3444@free.fr>
+Message-ID: <52375455.7010602@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Ryan Barnett,
+On 15/09/13 00:16, Yann E. MORIN wrote:
+> Arnout, All,
+>
+> Once again, I am not a lawyer, and the below is not legal advice.
+> Anyone sane would consult a lawyer for a definitive legal counsel.
 
-On Mon, 16 Sep 2013 11:34:39 -0500, Ryan Barnett wrote:
+[snip]
 
-> Per our chat on IRC, putting BR2_EXTERNAL into the generated makefile
-> isn't quite working out like I expected. I'm losing the BR2_EXTERNAL
-> variable definition.
-> 
-> Here are the steps I'm taking after applying your v2 of this patch to
-> a git clone of the mainline of buildroot. The buildroot clone is not
-> in the directory of ~/tmp but elsewhere.
-> 
-> make O=~/tmp/build_xm BR2_EXTERNAL=~/tmp/buildroot 
-> rc_beagle_xm_min_defconfig
-> cd ~/tmp/build_xm
-> make
-
-Ah, right. The below patch fixes that:
-
-diff --git a/Makefile b/Makefile
-index 799c529..5d942bd 100644
---- a/Makefile
-+++ b/Makefile
-@@ -59,6 +59,8 @@ else
- BR2_EXTERNAL = $(TOPDIR)/support/dummy-external/
- endif
- 
-+EXTRAMAKEARGS += BR2_EXTERNAL="$(BR2_EXTERNAL)"
-+
- # Compute the full local version string so packages can use it as-is
- # Need to export it, so it can be got from environment in children (eg. mconf)
- export BR2_VERSION_FULL:=$(BR2_VERSION)$(shell $(TOPDIR)/support/scripts/setlocalversion)
-@@ -95,7 +97,7 @@ MAKEOVERRIDES =
- override O:=$(O)
- CONFIG_DIR:=$(O)
- # we need to pass O= everywhere we call back into the toplevel makefile
--EXTRAMAKEARGS = O=$(O)
-+EXTRAMAKEARGS += O=$(O)
- NEED_WRAPPER=y
- endif
- 
+  I'm not going to quote the entire mail, but I agree with Yann's analysis.
 
 
+[snip]
+>>   After thinking about it this much, it looks like the buildroot license is a
+>> lot more lenient than I first thought. But of course, I don't really now.
+>
+> I don't believe you could call the GPLv2 'lenient'. In fact I would call
+> it anything but lenient: anything that is a derived work of Buildroot is
+> covered by its license.
+>
+> Note: the target rootfs is *not* a derived work of Buildroot.
+
+  With "lenient" I mean that, even though the GPL forces you to make the 
+buildroot source available if you use it to build a GPL'ed program, there 
+is in fact nothing compelling you to make the _complete_ buildroot source 
+(and .config) available - as long as it produces the same GPL'ed program.
+
+  My intuitive assumption, without thinking about it, was that if you are 
+compelled to make the buildroot source available, that also means that 
+you're compelled to make your modifications (e.g. additional proprietary 
+packages) available. However, our analysis in this thread seems to 
+indicate that it doesn't. That's why I said it is more lenient than I 
+thought.
+
+  Regards,
+  Arnout
 
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
