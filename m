@@ -1,52 +1,47 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 16 Sep 2013 17:48:21 +0200
-Subject: [Buildroot] [RFC] Effective Patchwork Use and Patch Review
-In-Reply-To: <OFD4BE18C9.32F86585-ON86257BE8.004CBA65-86257BE8.005044AA@rockwellcollins.com>
-References: <OFD77E15AC.FCFBC1CA-ON86257BE5.005BB4D9-86257BE5.005BB4FE@rockwellcollins.com>
- <20130914074740.424283aa@skate>
- <CAAXf6LWLmdBcOh5q9YvLtzHaSmfeeZbG-yjkfzZMdTeAVDC+zA@mail.gmail.com>
- <OFD4BE18C9.32F86585-ON86257BE8.004CBA65-86257BE8.005044AA@rockwellcollins.com>
-Message-ID: <20130916174821.41a0c368@skate>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Mon, 16 Sep 2013 17:53:53 +0200
+Subject: [Buildroot] [PATCHv2 04/14] gcc: fix Fortran support
+In-Reply-To: <20130916173812.5c424599@skate>
+References: <1378138000-12739-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1378138000-12739-5-git-send-email-thomas.petazzoni@free-electrons.com>
+ <87eh8pkd53.fsf@dell.be.48ers.dk> <20130916173812.5c424599@skate>
+Message-ID: <CAHXCMMLm_xxEGsAX+Yz+QQoAgozXCo_h3ftcrkbxcqz68yQ8KQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Ryan Barnett,
+Thomas, Peter,
 
-On Mon, 16 Sep 2013 09:36:44 -0500, Ryan Barnett wrote:
 
-> > Agreed. When I wrote that patchwork improved the situation, I meant
-> > that patchwork provided a good overview of outstanding patches, both
-> > for reviewers as for maintainers.
-> 
-> OK that fine. I was just wondering if anyone had used patchworks
-> to write some scripts to pull patches down and then mark-up and send 
-> the review back out over email. My email client is a pain for this so
-> I was just wondering if there was a way to not use it...
+2013/9/16 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-No, the only person using scripts for patchwork is really the
-maintainer, so that when he applies patches, they are automatically
-marked as "Applied" on the patchwork.
+> Dear Peter Korsgaard,
+>
+> On Sun, 15 Sep 2013 23:07:04 +0200, Peter Korsgaard wrote:
+>
+> > I wonder if we shouldn't deprecate fortran (and objc) support and get
+> > rid of them. Is there really a use case for them? Any interesting sw
+> > that needs them?
+>
+> I have no idea. I believe Objective-C is completely useless. However, I
+> believe Fortran *might* be useful for some scientific applications that
+> could be used on embedded devices. But the fact that no-one ever
+> complained about our Fortran support being broken (the runtime library
+> was never copied to the target) is a fairly strong indication that
+> nobody is using this.
+>
+I confirm.
+I have not checked recently, but few versions ago, fortan was needed to
+build opencv.
 
-Also, since I (and a few other core developers) have some kind of admin
-access to patchwork, we can mark patches as Superseded, Rejected, etc.
-But we do this with the web interface.
 
-> Under Section 10.2 of the manual, would it be useful to update this 
-> say explicitly state that the review takes place over the mailing 
-> list? Currently I think the section implies it that but doesn't
-> say it explicitly. 
+Regards,
 
-Sure, if anything is unclear in the manual, it's certainly worth making
-it explicit.
 
-Best regards,
-
-Thomas
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Samuel
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130916/87308e0c/attachment.html>
