@@ -1,11 +1,11 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Mon, 16 Sep 2013 15:29:36 +0200
-Subject: [Buildroot] [RFCv1 10/11] toolchain-external: convert to the
- package infrastructure
-In-Reply-To: <1378416469-17708-11-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Mon, 16 Sep 2013 15:39:22 +0200
+Subject: [Buildroot] [RFCv1 09/11] package: add a <pkg>_SOURCE_ADDONS
+	variable
+In-Reply-To: <1378416469-17708-10-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1378416469-17708-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1378416469-17708-11-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <CAAXf6LUnjxUhx44Cg-NnwuzQq+L33KM9P-HjacDcEKwgT8-0ng@mail.gmail.com>
+ <1378416469-17708-10-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <CAAXf6LVXRvw34-d5vq9Oh+tZXd2a4Dzy1mxzWLdOS2FPs59vVA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,106 +16,44 @@ Hi Thomas,
 
 On Thu, Sep 5, 2013 at 11:27 PM, Thomas Petazzoni
 <thomas.petazzoni@free-electrons.com> wrote:
-> This commit converts the 'toolchain-external' logic to the package
-> infrastructure.
+> Converting the external toolchain logic into a package raises a very
+> special use case that wasn't handled by the package infrastructure:
+> the Blackfin toolchain is delivered as two tarballs instead of
+> one. Unfortunately <pkg>_SOURCE only allows to pass one tarball name.
 >
-> The TOOLCHAIN_EXTERNAL_DIR variable (which points to where the
-> toolchain is located) is renamed to TOOLCHAIN_EXTERNAL_INSTALL_DIR,
-> because the former conflicts with the package infrastructure (which
-> defines the <pkg>_DIR variable for each package as pointing to its
-> build directory).
+> However, we really want both tarballs to be known by the package
+> infrastructure, so that the normal 'source' and 'external-deps'
+> mechanism work fine.
 >
-> The new _SOURCE_ADDONS mechanism is used for Blackfin toolchains.
->
-> The extract, configuration and installation steps are converted inside
-> the <pkg>_EXTRACT_CMDS, <pkg>_CONFIGURE_CMDS and
-> <pkg>_INSTALL_STAGING_CMDS.
+> In order to achieve this, we add a <pkg>_SOURCE_ADDONS variable, which
+> allows a package to list other stuff it would like to see downloaded,
+> but that are otherwise not used by the package infrastructure itself:
+> it is up to the package to do it by itself.
 >
 > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 > ---
-[..]
-
+>  package/pkg-generic.mk | 1 +
+>  1 file changed, 1 insertion(+)
 >
-> +TOOLCHAIN_EXTERNAL_INSTALL_STAGING = YES
-> +
-> +ifeq ($(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R1)$(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2),y)
->  # Special handling for Blackfin toolchain, because of the split in two
->  # tarballs, and the organization of tarball contents. The tarballs
->  # contain ./opt/uClinux/{bfin-uclinux,bfin-linux-uclibc} directories,
->  # which themselves contain the toolchain. This is why we strip more
->  # components than usual.
-> -ifeq ($(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R1)$(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2),y)
-> -$(DL_DIR)/$(TOOLCHAIN_EXTERNAL_SOURCE_1):
-> -       $(call DOWNLOAD,$(TOOLCHAIN_EXTERNAL_SITE_1:/=)/$(TOOLCHAIN_EXTERNAL_SOURCE_1))
-> -
-> -$(DL_DIR)/$(TOOLCHAIN_EXTERNAL_SOURCE_2):
-> -       $(call DOWNLOAD,$(TOOLCHAIN_EXTERNAL_SITE_2:/=)/$(TOOLCHAIN_EXTERNAL_SOURCE_2))
-> -
-> -$(TOOLCHAIN_EXTERNAL_DIR)/.extracted: $(DL_DIR)/$(TOOLCHAIN_EXTERNAL_SOURCE_1) $(DL_DIR)/$(TOOLCHAIN_EXTERNAL_SOURCE_2)
-> -       mkdir -p $(@D)
-> -       $(INFLATE$(suffix $(TOOLCHAIN_EXTERNAL_SOURCE_1))) $(DL_DIR)/$(TOOLCHAIN_EXTERNAL_SOURCE_1) | \
-> -               $(TAR) $(TAR_STRIP_COMPONENTS)=3 --hard-dereference -C $(@D) $(TAR_OPTIONS) -
-> -       $(INFLATE$(suffix $(TOOLCHAIN_EXTERNAL_SOURCE_2))) $(DL_DIR)/$(TOOLCHAIN_EXTERNAL_SOURCE_2) | \
-> -               $(TAR) $(TAR_STRIP_COMPONENTS)=3 --hard-dereference -C $(@D) $(TAR_OPTIONS) -
-> -       $(Q)touch $@
-> -else
-> -# Download and extraction of a toolchain
-> -$(DL_DIR)/$(TOOLCHAIN_EXTERNAL_SOURCE):
-> -       $(call DOWNLOAD,$(TOOLCHAIN_EXTERNAL_SITE)$(TOOLCHAIN_EXTERNAL_SOURCE),$(TOOLCHAIN_EXTERNAL_SOURCE))
-> -
-> -$(TOOLCHAIN_EXTERNAL_DIR)/.extracted: $(DL_DIR)/$(TOOLCHAIN_EXTERNAL_SOURCE)
-> -       mkdir -p $(@D)
-> -       $(INFLATE$(suffix $(TOOLCHAIN_EXTERNAL_SOURCE))) $^ | \
-> -               $(TAR) $(TAR_STRIP_COMPONENTS)=1 --exclude='usr/lib/locale/*' -C $(@D) $(TAR_OPTIONS) -
-> +define TOOLCHAIN_EXTERNAL_EXTRACT_CMDS
-> +       mkdir -p $(TOOLCHAIN_EXTERNAL_INSTALL_DIR)
-> +       $(INFLATE$(suffix $(TOOLCHAIN_EXTERNAL_SOURCE))) $(DL_DIR)/$(TOOLCHAIN_EXTERNAL_SOURCE) | \
-> +               $(TAR) $(TAR_STRIP_COMPONENTS)=3 --hard-dereference -C $(TOOLCHAIN_EXTERNAL_INSTALL_DIR) $(TAR_OPTIONS) -
-> +       $(INFLATE$(suffix $(TOOLCHAIN_EXTERNAL_SOURCE_ADDONS))) $(DL_DIR)/$(TOOLCHAIN_EXTERNAL_SOURCE_ADDONS) | \
-> +               $(TAR) $(TAR_STRIP_COMPONENTS)=3 --hard-dereference -C $(TOOLCHAIN_EXTERNAL_INSTALL_DIR) $(TAR_OPTIONS) -
-> +endef
-> +else ifneq ($(TOOLCHAIN_EXTERNAL_SOURCE),)
-> +# Normal handling of toolchain tarball extraction.
-> +define TOOLCHAIN_EXTERNAL_EXTRACT_CMDS
-> +       mkdir -p $(TOOLCHAIN_EXTERNAL_INSTALL_DIR)
-> +       $(INFLATE$(suffix $(TOOLCHAIN_EXTERNAL_SOURCE))) $(DL_DIR)/$(TOOLCHAIN_EXTERNAL_SOURCE) | \
-> +               $(TAR) $(TAR_STRIP_COMPONENTS)=1 --exclude='usr/lib/locale/*' -C $(TOOLCHAIN_EXTERNAL_INSTALL_DIR) $(TAR_OPTIONS) -
->         $(TOOLCHAIN_EXTERNAL_FIXUP_CMDS)
-> -       $(Q)touch $@
-> +endef
+> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+> index b6f0bdd..2ce615f 100644
+> --- a/package/pkg-generic.mk
+> +++ b/package/pkg-generic.mk
+> @@ -40,6 +40,7 @@ ifeq ($(DL_MODE),DOWNLOAD)
+>         fi
 >  endif
+>         $(if $($(PKG)_SOURCE),$(call DOWNLOAD,$($(PKG)_SITE:/=)/$($(PKG)_SOURCE)))
+> +       $(foreach p,$($(PKG)_SOURCE_ADDONS),$(call DOWNLOAD,$($(PKG)_SITE:/=)/$(p))$(sep))
+>         $(foreach p,$($(PKG)_PATCH),$(call DOWNLOAD,$($(PKG)_SITE:/=)/$(p))$(sep))
+>         $(foreach hook,$($(PKG)_POST_DOWNLOAD_HOOKS),$(call $(hook))$(sep))
+>  ifeq ($(DL_MODE),DOWNLOAD)
+> --
 
-Given that the extract commands are now very similar between blackfin
-and non-blackfin, wouldn't it make more sense to define it once and
-tweak it based on a variable?
-Something like (quick and untested):
-
-ifeq ($(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R1)$(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2),y)
-TOOLCHAIN_EXTERNAL_TAR_OPTIONS = $(TAR_STRIP_COMPONENTS)=3 --hard-dereference
-else
-TOOLCHAIN_EXTERNAL_TAR_OPTIONS = $(TAR_STRIP_COMPONENTS)=1
---exclude='usr/lib/locale/*'
-endif
-
-define TOOLCHAIN_EXTERNAL_EXTRACT_CMDS
-       mkdir -p $(TOOLCHAIN_EXTERNAL_INSTALL_DIR)
-       $(INFLATE$(suffix $(TOOLCHAIN_EXTERNAL_SOURCE)))
-$(DL_DIR)/$(TOOLCHAIN_EXTERNAL_SOURCE) | \
-               $(TAR) $(TOOLCHAIN_EXTERNAL_TAR_OPTIONS) -C
-$(TOOLCHAIN_EXTERNAL_INSTALL_DIR) $(TAR_OPTIONS) -
-       if [ -n "$(TOOLCHAIN_EXTERNAL_SOURCE_ADDONS)" ]; then \
-           $(INFLATE$(suffix $(TOOLCHAIN_EXTERNAL_SOURCE_ADDONS)))
-$(DL_DIR)/$(TOOLCHAIN_EXTERNAL_SOURCE_ADDONS) | \
-                   $(TAR) $(TOOLCHAIN_EXTERNAL_TAR_OPTIONS) -C
-$(TOOLCHAIN_EXTERNAL_INSTALL_DIR) $(TAR_OPTIONS) - \
-       fi
-endef
-
-
-One can even wonder why the 'exclude=' couldn't be used for blackfin,
-and why the --hard-dereference couldn't be used for non-blackfin. This
-would make the only difference the strip-components.
-
+What about allowing FOO_SOURCE to contain multiple words directly, and
+thus not introducing a new variable? The package infrastructure can
+download each word of FOO_SOURCE, but only extract (and otherwise use)
+the first one. Any subsequent word has to be handled by the package
+itself.
 
 Best regards,
 Thomas
