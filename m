@@ -1,48 +1,39 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 16 Sep 2013 22:51:40 +0200
-Subject: [Buildroot] [git commit] apply-patches.sh: Go back to only warn
-	about unsupported file types
-Message-ID: <20130916205158.89B1D9B7A1@busybox.osuosl.org>
+Date: Mon, 16 Sep 2013 22:57:22 +0200
+Subject: [Buildroot] [PATCH v3] apply-patches.sh: detect missing patches
+In-Reply-To: <20130916205147.GH3293@free.fr> (Yann E. MORIN's message of "Mon, 
+ 16 Sep 2013 22:51:47 +0200")
+References: <20130911120630.GA14745@harvey.netwinder.org>
+ <CAAXf6LX7o9P1tXv3Egk8By-VbzarRYe5JRyTh5+3wYNBz9Z6aQ@mail.gmail.com>
+ <20130913181527.GA11933@harvey.netwinder.org>
+ <20130913182702.GB3301@free.fr>
+ <20130915133709.GA16826@harvey.netwinder.org>
+ <20130915141314.GA18166@harvey.netwinder.org>
+ <8738p5lud2.fsf@dell.be.48ers.dk> <8738p5i6kq.fsf@dell.be.48ers.dk>
+ <20130916172444.2573614e@skate> <87d2o8h4p5.fsf@dell.be.48ers.dk>
+ <20130916205147.GH3293@free.fr>
+Message-ID: <874n9kh4ct.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=8d22c1bab7a36f636171ba263deb80fed86298b1
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-Fixes http://autobuild.buildroot.net/results/868/8687be8ec029486d9c5e2224cde542134f72884b/
+Hi,
 
-The recent (d245fbb41dc: apply-patches.sh: detect missing patches)
-change to apply-patches.sh causes a number of regressions with packages
-using downloadable tarballs of patches (typically from Debian), as
-those contain additional files besides just the patches (ChangeLog's,
-debian/rules, ..).
+ >> Arguably yes, but this used to work so some people might be relying on
+ >> it - So I change it back to only warn about these files.
+ >> 
+ >> Nevertheless, it would be good if we could come up with a better way of
+ >> handling these Debian patches.
 
-This use case is arguably abusing the _PATCH handling, but it used to
-work so people might rely on it so go back to only warn about this
-instead of erroring out.
+ Yann> What about extracting the tarballs and only applying patches if the
+ Yann> filename contains (or end up with) '.patch' ?
 
-At the same time reword the warning message.
+I'm fairly sure that atleast some Debian packages use .diff. We could
+presumably get it to work, but it feels a bit fragile / complicated to me.
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- support/scripts/apply-patches.sh |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/support/scripts/apply-patches.sh b/support/scripts/apply-patches.sh
-index 656aa71..1ebaea9 100755
---- a/support/scripts/apply-patches.sh
-+++ b/support/scripts/apply-patches.sh
-@@ -73,8 +73,8 @@ function apply_patch {
- 	*.patch*)
- 	type="patch"; uncomp="cat"; ;;
- 	*)
--	echo "Unsupported format file for ${path}/${patch}";
--	exit 1;
-+	echo "Unsupported file type for ${path}/${patch}, skipping";
-+	return 0
- 	;;
-     esac
-     echo ""
+-- 
+Bye, Peter Korsgaard
