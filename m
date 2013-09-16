@@ -1,57 +1,91 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Mon, 16 Sep 2013 03:21:37 +0200
-Subject: [Buildroot] [RFCv1 08/11] package: package-based implementation
- of source, external-deps and legal-info
-In-Reply-To: <20130915220908.3d826b82@skate>
-References: <1378416469-17708-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1378416469-17708-9-git-send-email-thomas.petazzoni@free-electrons.com>
- <CAAXf6LXvWgtX4h_2NH6=zOiaDyXLmzRoAfviaTwbmTdMFKvoyg@mail.gmail.com>
- <20130915220908.3d826b82@skate>
-Message-ID: <CAAXf6LU9EF=6zc8mO138E6qKZ8Ow1kLsYLqEgejDdMSaCK8-VQ@mail.gmail.com>
+From: Frank Hunleth <fhunleth@troodon-software.com>
+Date: Sun, 15 Sep 2013 21:16:08 -0400
+Subject: [Buildroot] BeagleBoneBlack Updates?
+In-Reply-To: <20130914073325.50417147@skate>
+References: <CA+-urNRrUA_M45M_99OuGJvpvzRi40tCWoqPWVgUuGtpRPjj4w@mail.gmail.com>
+ <20130914073325.50417147@skate>
+Message-ID: <CA+-urNSk1Y4ch-GfPGYC52waPaBZ_hP=-iKtMjoXf73g3tmuUg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Op 15-sep.-2013 22:09 schreef "Thomas Petazzoni" <
-thomas.petazzoni@free-electrons.com> het volgende:
+On Sat, Sep 14, 2013 at 1:33 AM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
 >
-> Dear Thomas De Schampheleire,
+> Dear Frank Hunleth,
 >
-> On Sun, 15 Sep 2013 21:29:58 +0200, Thomas De Schampheleire wrote:
->
-> > >  TARGETS_CLEAN:=$(patsubst %,%-clean,$(TARGETS))
-> > > -TARGETS_SOURCE:=$(patsubst %,%-source,$(TARGETS) $(BASE_TARGETS))
-> > > +TARGETS_SOURCE:=$(patsubst %,%-all-source,$(TARGETS) $(BASE_TARGETS))
+> On Fri, 13 Sep 2013 08:58:27 -0400, Frank Hunleth wrote:
+> > It's been a while since there's been discussion on the bbb, and I
+> > wanted to check on the current status. I've been sitting on some
+> > patches that have been working for me for the past few months. Spenser
+> > Gilliland had also posted a github reference to his patches a month or
+> > so ago. As far as I can tell, the main difference is HDMI and graphics
+> > acceleration are either working or close to working in his tree. I
+> > don't use either feature.
 > >
-> > Am I correct in understanding that, due to the full dependency chain,
-> > TARGETS_SOURCE will have many duplicate entries?
+> > I don't mind making a pass to clean up what I have and submit it to
+> > the list, but if work is going on with Spenser's or someone else's
+> > then I'll hold off.
 >
-> Well, TARGETS_SOURCE itself will not have many duplicate entries: in
-> the TARGETS variable, each selected package is only mentioned once, and
-> TARGETS_SOURCE has the exact same number of entries as TARGETS, except
-> that each word in TARGETS is replaced by %-all-source (I'm excluding
-> BASE_TARGETS here, but it only ever contains one entry: 'toolchain').
->
-> However, when *evaluating* those targets, we will indeed be looking
-> multiple times at the same dependencies.
->
-> > When executing 'make source', then, each of these targets will be
-> > executed multiple times, correct? Even though the actual download will
-> > only be executed once for each package, I wonder if there can be other
-> > side effects by executing the targets multiple times. Would it make
-> > sense to do $(shell sort -u ... ) here?
->
-> As explained above, no: TARGETS_SOURCE by itself does not contain any
-> duplicated entry. It's the fact of evaluating each target in
-> TARGETS_SOURCE that will lead to looking multiple times at the same
-> things. But I'm not sure how to solve that.
+> I believe Spenser might be busy with the other OpenGL work, so I think
+> you could probably take your work and his BBB work, and submit patches
+> to the list. I'd really to see the BBB be an officially supported
+> platform in Buildroot.
 
-Ah yes, correct. Then I also don't see a simple solution...
+Sounds good.
 
-Best regards,
-Thomas
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130916/c91749f9/attachment-0001.html>
+I just rebased to the upstream and was pleased to see the updated
+Linaro compilers. The Beaglebone Debian work uses Linaro 4.8-2013.07,
+and I had as a todo item to try to match up compilers when I had a
+chance. Both Spenser and I were using EABI compilers (as opposed to an
+EABIhf one like Debian.)
+
+I tried making the switch to EABIhf, but found out a that init won't
+start due to not being able to load libc.so.6. I assumed that
+somewhere I just had a compiler option different so that busybox was
+being compiled with a slightly different ABI than what Linaro had done
+with their version of libc. As far as I can tell with readelf, I have
+both busybox and libc.so.6 reporting ABI 3.1.1 and listing:
+
+Attribute Section: aeabi
+File Attributes
+  Tag_CPU_name: "7-A"
+  Tag_CPU_arch: v7
+  Tag_CPU_arch_profile: Application
+  Tag_ARM_ISA_use: Yes
+  Tag_THUMB_ISA_use: Thumb-2
+  Tag_FP_arch: VFPv3
+  Tag_Advanced_SIMD_arch: NEONv1
+  Tag_ABI_PCS_wchar_t: 4
+  Tag_ABI_FP_rounding: Needed
+  Tag_ABI_FP_denormal: Needed
+  Tag_ABI_FP_exceptions: Needed
+  Tag_ABI_FP_number_model: IEEE 754
+  Tag_ABI_align_needed: 8-byte
+  Tag_ABI_align_preserved: 8-byte, except leaf SP
+  Tag_ABI_enum_size: int
+  Tag_ABI_HardFP_use: SP and DP
+  Tag_ABI_VFP_args: VFP registers
+  Tag_CPU_unaligned_access: v6
+
+Right now, I'm not sure where to look for possible other differences.
+CodeSourcery and the built-in toolchains work fine (albeit with EABI).
+I was wondering if anyone else has run into issues with EABIhf to
+might help me debug this.
+
+Thanks,
+Frank
+
+
+
+>
+> Thanks,
+>
+> Thomas
+> --
+> Thomas Petazzoni, Free Electrons
+> Kernel, drivers, real-time and embedded Linux
+> development, consulting, training and support.
+> http://free-electrons.com
