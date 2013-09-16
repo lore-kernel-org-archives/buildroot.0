@@ -1,43 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 16 Sep 2013 20:26:49 +0200
-Subject: [Buildroot] [PATCH 0/3] Support for out-of-tree Buildroot
- customization
-In-Reply-To: <20130916173046.GC3293@free.fr>
-References: <20130911172709.GB3410@free.fr>
- <CAAXf6LVD590fVudge3Fk+2B8pSzvUEV2GQLTcbz=VpOB2HCmtQ@mail.gmail.com>
- <20130912202157.536e5904@skate>
- <F9C551623D2CBB4C9488801D14F864C639AC8DAF@ex-mb1.corp.adtran.com>
- <20130912203359.7e650ebe@skate> <52323A54.7020808@mind.be>
- <20130912221256.GE3362@free.fr> <523388B6.7090305@mind.be>
- <20130914221613.GA3444@free.fr>
- <F9C551623D2CBB4C9488801D14F864C639ACDED6@ex-mb1.corp.adtran.com>
- <20130916173046.GC3293@free.fr>
-Message-ID: <20130916202649.0a834bad@skate>
+Date: Mon, 16 Sep 2013 20:31:30 +0200
+Subject: [Buildroot] [RFCv1 09/11] package: add a <pkg>_SOURCE_ADDONS
+ variable
+In-Reply-To: <CAAXf6LVXRvw34-d5vq9Oh+tZXd2a4Dzy1mxzWLdOS2FPs59vVA@mail.gmail.com>
+References: <1378416469-17708-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1378416469-17708-10-git-send-email-thomas.petazzoni@free-electrons.com>
+ <CAAXf6LVXRvw34-d5vq9Oh+tZXd2a4Dzy1mxzWLdOS2FPs59vVA@mail.gmail.com>
+Message-ID: <20130916203130.2307521a@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+Dear Thomas De Schampheleire,
 
-On Mon, 16 Sep 2013 19:30:46 +0200, Yann E. MORIN wrote:
+On Mon, 16 Sep 2013 15:39:22 +0200, Thomas De Schampheleire wrote:
 
-> >  So,
-> > from a certain point of view, the *.mk files contain various variables
-> > and then make a FUNCTION call back into the system.  This would negate there
-> > being a "derived work" for anyone adding on an IP app to the build system.
-> 
-> I think you are confused by your "IP app" and the "recipes to build your
-> IP app".
+> What about allowing FOO_SOURCE to contain multiple words directly, and
+> thus not introducing a new variable? The package infrastructure can
+> download each word of FOO_SOURCE, but only extract (and otherwise use)
+> the first one. Any subsequent word has to be handled by the package
+> itself.
 
-By the way, "IP app", or "IP" doesn't mean anything. Why would
-"Intellectual Property" refer to something that is
-proprietary/non-free? That doesn't make any sense.
+The problem is that the default extract step needs to know what to do.
+And what it does today is that it extracts the tarball whose name is
+given in FOO_SOURCE. If we put several words in FOO_SOURCE, then what
+should be the semantic of the default extract commands? Extract the
+first one? All of them?
 
-Can't we use "proprietary applications", or "private applications"
-instead? Intellectual property really has nothing to do with whether
-something is closed-source or open-source.
+That's why I've decided to go with another variable, which really means
+"I want this stuff to be downloaded, but don't do anything with it, the
+package recipe will take care of it".
+
+Of course, I'm open to changing the semantic of FOO_SOURCE instead, we
+would just need to define what this new semantic should be.
+
+Thanks!
 
 Thomas
 -- 
