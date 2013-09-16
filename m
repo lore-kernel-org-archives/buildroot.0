@@ -1,45 +1,98 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 16 Sep 2013 20:16:58 +0200
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 16 Sep 2013 20:24:39 +0200
 Subject: [Buildroot] Is GPLv2 the right license for Buildroot?
-In-Reply-To: <20130916200135.1724084e@skate>
-References: <F9C551623D2CBB4C9488801D14F864C639AC8DAF@ex-mb1.corp.adtran.com>
+In-Reply-To: <20130916181512.GD3293@free.fr>
+References: <20130912202157.536e5904@skate>
+ <F9C551623D2CBB4C9488801D14F864C639AC8DAF@ex-mb1.corp.adtran.com>
  <20130912203359.7e650ebe@skate> <52323A54.7020808@mind.be>
  <20130912221256.GE3362@free.fr> <523388B6.7090305@mind.be>
  <20130914221613.GA3444@free.fr> <20130916182101.3844a686@skate>
- <20130916170815.GB3293@free.fr>
- <F9C551623D2CBB4C9488801D14F864C639ACE1F5@ex-mb1.corp.adtran.com>
- <20130916200135.1724084e@skate>
-Message-ID: <20130916181658.GE3293@free.fr>
+ <20130916170815.GB3293@free.fr> <20130916195846.32e98c8a@skate>
+ <20130916181512.GD3293@free.fr>
+Message-ID: <20130916202439.50de3e76@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, Andy, All,
+Dear Yann E. MORIN,
 
-On 2013-09-16 20:01 +0200, Thomas Petazzoni spake thusly:
-> On Mon, 16 Sep 2013 17:45:00 +0000, ANDY KENNEDY wrote:
-> > >   - on an embedded system, the probability that there is a GPL
-> > > program is rather high (eg. busybox, the Linux kernel);
+On Mon, 16 Sep 2013 20:15:12 +0200, Yann E. MORIN wrote:
+
+> > Whether Buildroot is part of such scripts or not remains a slightly
+> > open question. That the kernel makefiles and scripts, the Busybox
+> > makefiles and scripts should remain part of the kernel and Busybox
+> > sources is clear. That the tool that is used to orchestrate the overall
+> > building process is part of those "script to control compilation and
+> > installation" is not so clear-cut from my point of view.
 > > 
-> > Not always.  There is still a high contingent in the States that use
-> > VXWorks, and then a lesser population use a home-grown kernel without
-> > every touching GPL code.
+> > At least so far, I don't think I've seen many companies using
+> > Buildroot, on products that include GPL components, providing the
+> > source code for Buildroot.
 > 
-> I believe Yann was implicitly saying "embedded Linux system". Buildroot
-> is of no-use for VxWorks based systems or other non-Linux operating
-> systems.
+> I never said you *had* to provide the Buildroot tree. I said that
+> providing it was *easier* than trying to separately provide build
+> instructions for each GPL program on the device.
 
-Yes, of course. :-)
+Right. But are there any companies doing any of above? I don't think
+I've ever seen a document, or script, or anything like that that
+details the build process of the overall system.
 
-Regards,
-Yann E. MORIN.
+I remain unsure that what Buildroot is doing is part of the scripts
+governing the compilation of the GPL components.
 
+> > Right, but it is not necessarily easy to separate within Buildroot the
+> > thing that you are ready to distribute (package recipes of open-source
+> > programs) from the package recipes of proprietary programs, your root
+> > filesystem overlay and so on.
+> 
+> But your BR2_EXTERNAL will make this really trivial:
+>   - do all FLOSS stuff in Buildroot tree
+>   - do all proprietary stuff in BR2_EXTERNAL
+>   - provide the Buidlroot tree to be compliant
+>   - keep BR2_EXTERNAL private
+> 
+> Et voil?! :-)
+
+What a good selling argument for BR2_EXTERNAL :-)
+
+But it isn't quite sufficient: by your definition, the
+Buildroot .config should also be shipped, and it also contains config
+options for the company-specific proprietary packages. So the .config
+should be "filtered" before being released. Not simple.
+
+> > What I'm questioning is really the case where a company makes an
+> > embedded product, and has used Buildroot to generate a rootfs that
+> > includes GPL programs, is this company required to distribute Buildroot.
+> 
+> Short answer: no.
+> Long answer: no, but it is an easy path.
+
+Aren't companies going to be afraid of revealing too much of their
+secret sauce if they have to disclose their Buildroot tree?
+
+My point is also that nobody has ever cared about enforcing the
+Buildroot license, and I sincerely doubt anyone will be willing to do
+in the foreseeable future. Since no-one cares about that, is it really
+necessary to annoy companies with the fairly fuzzy requirements of the
+GPL when applied to a build system?
+
+> We just have to settle on what we want to put in there: BR2_EXTERNAL:
+> derived work or not? ;-)
+
+If it's considered as a derived work, then your above idea of using
+BR2_EXTERNAL to split things between secret stuff and released stuff no
+longer works.
+
+> But not before next week, I have to finish my presentations for KR`13
+> first! ;-)
+
+Argh, I should do that too!
+
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
