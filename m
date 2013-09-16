@@ -1,11 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 16 Sep 2013 23:30:49 +0200
-Subject: [Buildroot] [PATCHv2 1/4] core: introduce the BR2_EXTERNAL
-	variable
-In-Reply-To: <1379185433-8770-2-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Mon, 16 Sep 2013 23:39:34 +0200
+Subject: [Buildroot] [PATCHv2 2/4] core: allow external
+ Config.in/makefile code to be integrated
+In-Reply-To: <1379185433-8770-3-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1379185433-8770-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1379185433-8770-2-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <52377889.3010402@mind.be>
+ <1379185433-8770-3-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <52377A96.8080402@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,179 +13,89 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 On 14/09/13 21:03, Thomas Petazzoni wrote:
-> This commit introduces the BR2_EXTERNAL environment variable, which
-> will allow to keep Buildroot customization (board-specific
-> configuration files or root filesystem overlays, package Config.in and
-> makefiles, as well as defconfigs) outside of the Buildroot tree.
+> This commit allows the BR2_EXTERNAL directory to contain Config.in and
+> Makefile code, which gets integrated into the Buildroot build logic:
 >
-> This commit only introduces the variable itself, and ensures that it
-> is available within Config.in options, so that string options used to
-> specify paths to directories or files can use $BR2_EXTERNAL as a
-
-  $(BR2_EXTERNAL). The $ is expanded by make. Same comment applies to 
-other places in the commit message as well. You did put it correctly in 
-the manual.
-
-> reference. For example, one can use
-> $BR2_EXTERNAL/board/<someboard>/kernel.config as the
-> BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE value.
+>   - Buildroot automatically includes the $BR2_EXTERNAL/Config.in in the
+>     top-level configuration menu.
 >
-> Following patches extend the usage of BR2_EXTERNAL to other areas
-> (packages and defconfigs).
+>   - Buildroot automatically includes the BR2_EXTERNAL/external.mk in
+>     the build logic, so it can for example be used to include other .mk
+>     files that define package recipes.
 >
-> In details, this commit:
->
->   * Introduces the BR2_EXTERNAL Kconfig option. This option has no
->     prompt, and is therefore not visible to the user and also not
->     stored in the .config file. It is automatically set to the value of
->     the BR2_EXTERNAL environment variable. The only purpose of this
->     BR2_EXTERNAL Kconfig option is to allow $BR2_EXTERNAL to be
->     properly expanded when used inside Kconfig option values.
->
->   * Ensures that the path given in BR2_EXTERNAL is an absolute path, or
->     if not path is given, ensures that BR2_EXTERNAL points to a dummy
->     implementation in $(TOPDIR)/support/dummy-external/. This last part
->     is not directly useful in this commit, but is needed to properly
->     support Config.in options declared in BR2_EXTERNAL (next commit).
-
-  It would make more sense to do it in that commit then, but that's just 
-nitpicking.
-
->
->   * Passes the BR2_EXTERNAL into the *config environment, so that its
->     value is found when parsing/evaluating Config.in files and .config
->     values.
-
-  That's pretty useless in this commit, since it anyway doesn't end up in 
-.config and isn't used in Config.in.
-
->
->   * Encodes the BR2_EXTERNAL value into the Makefile wrapper (only if
->     BR2_EXTERNAL is specified by the user, not if the dummy internal
->     value is used).
+> We also add a dummy Config.in file in support/dummy-external/ to
+> ensure that the source "$BR2_EXTERNAL/Config.in" line will point to an
+> existing file even when BR2_EXTERNAL is not used by the user.
 >
 > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 > ---
->   Config.in                  |  4 ++++
->   Makefile                   | 13 +++++++++++--
->   support/scripts/mkmakefile |  3 ++-
->   3 files changed, 17 insertions(+), 3 deletions(-)
+>   Config.in                        | 2 ++
+>   Makefile                         | 4 ++++
+>   support/dummy-external/Config.in | 0
+>   3 files changed, 6 insertions(+)
+>   create mode 100644 support/dummy-external/Config.in
 >
 > diff --git a/Config.in b/Config.in
-> index 65c29b4..522eaf8 100644
+> index 522eaf8..9ef5466 100644
 > --- a/Config.in
 > +++ b/Config.in
-> @@ -14,6 +14,10 @@ config BR2_HOSTARCH
->   	string
->   	option env="HOSTARCH"
+> @@ -465,3 +465,5 @@ source "boot/Config.in"
+>   source "package/Config.in.host"
 >
-> +config BR2_EXTERNAL
-> +	string
-> +	option env="BR2_EXTERNAL"
+>   source "Config.in.legacy"
 > +
+> +source "$BR2_EXTERNAL/Config.in"
 
-  If you agree to store the value in the .config file, it could look 
-something like this.
+  I would prefer this to be in package/Config.in, and source 
+$BR2_EXTERNAL/package/Config.in. I think 95% of the use cases will be for 
+packages, and the other 5% are bootloaders which are the same as packages 
+anyway. And even if it is not a proper generic package (e.g. it's a 
+filesystem), putting it in the packages menu doesn't hurt that much. If 
+you don't put it in the package subdirectory, then you either force users 
+to create a oneline Config.in, or you end up with a messy looking 
+directory mixing packages with the configs/ and board/ directories.
 
--------
 
-config BR2_EXTERNAL_FROM_ENV
-         string
-         option env="BR2_EXTERNAL"
+  Also it is perhaps better to add to the Makefile:
 
-# This condition forces the user to set BR2_EXTERNAL from the
-# command line the first time.
-if BR2_EXTERNAL_FROM_ENV != ""
-config BR2_EXTERNAL
-         string "External buildroot add-ons"
-         default BR2_EXTERNAL_FROM_ENV
-         help
-           List of directories with buildroot add-ons. ...
+ifeq ($(wildcard $(BR2_EXTERNAL)/package/Config.in,)
+EXTERNAL_PACKAGE_CONFIG_IN = support/dummy-external/Config.in
+else
+EXTERNAL_PACKAGE_CONFIG_IN = $(BR2_EXTERNAL)/package/Config.in
 endif
 
-if BR2_EXTERNAL != BR2_EXTERNAL_FROM_ENV
-comment "You need to re-run the config to see the new packages"
-endif
+(and pass that to the config env as well).
 
+  That way, you're not obliged to have a Config.in in your external tree, 
+and it is still possible to use it for nothing more than the defconfigs etc.
 
--------
-
-  It doesn't really work, though, because currently the .config is not 
-read in when doing 'make menuconfig', so that BR2_EXTERNAL_FROM_ENV will 
-always be "". But I'm sure we'll be able to find something that works 
-with a little more effort.
-
-
->   # Hidden boolean selected by pre-built packages for x86, when they
->   # need to run on x86-64 machines (example: pre-built external
->   # toolchains, binary tools like SAM-BA, etc.).
 > diff --git a/Makefile b/Makefile
-> index 8610592..13ad342 100644
+> index 13ad342..bea5ad5 100644
 > --- a/Makefile
 > +++ b/Makefile
-> @@ -51,6 +51,14 @@ CONFIG_CONFIG_IN=Config.in
->   CONFIG=support/kconfig
->   DATE:=$(shell date +%Y%m%d)
+> @@ -348,6 +348,10 @@ include boot/common.mk
+>   include linux/linux.mk
+>   include system/system.mk
 >
-> +# Turn BR2_EXTERNAL into an absolute path
-> +ifneq ($(BR2_EXTERNAL),)
-> +override BR2_EXTERNAL := $(realpath $(BR2_EXTERNAL))
-> +BR2_EXTERNAL_USED = y
-> +else
-> +BR2_EXTERNAL = $(TOPDIR)/support/dummy-external/
-> +endif
-> +
->   # Compute the full local version string so packages can use it as-is
->   # Need to export it, so it can be got from environment in children (eg. mconf)
->   export BR2_VERSION_FULL:=$(BR2_VERSION)$(shell $(TOPDIR)/support/scripts/setlocalversion)
-> @@ -632,7 +640,8 @@ COMMON_CONFIG_ENV = \
->   	KCONFIG_AUTOCONFIG=$(BUILD_DIR)/buildroot-config/auto.conf \
->   	KCONFIG_AUTOHEADER=$(BUILD_DIR)/buildroot-config/autoconf.h \
->   	KCONFIG_TRISTATE=$(BUILD_DIR)/buildroot-config/tristate.config \
-> -	BUILDROOT_CONFIG=$(BUILDROOT_CONFIG)
-> +	BUILDROOT_CONFIG=$(BUILDROOT_CONFIG) \
-> +	BR2_EXTERNAL=$(BR2_EXTERNAL)
->
->   xconfig: $(BUILD_DIR)/buildroot-config/qconf outputmakefile
->   	@mkdir -p $(BUILD_DIR)/buildroot-config
-> @@ -739,7 +748,7 @@ source-check:
->   # output directory.
->   outputmakefile:
->   ifeq ($(NEED_WRAPPER),y)
-> -	$(Q)$(TOPDIR)/support/scripts/mkmakefile $(TOPDIR) $(O)
-> +	$(Q)$(TOPDIR)/support/scripts/mkmakefile $(TOPDIR) $(O) $(if $(BR2_EXTERNAL_USED),$(BR2_EXTERNAL))
->   endif
->
->   # printvars prints all the variables currently defined in our Makefiles
-> diff --git a/support/scripts/mkmakefile b/support/scripts/mkmakefile
-> index cef2ec7..e7c1bd0 100755
-> --- a/support/scripts/mkmakefile
-> +++ b/support/scripts/mkmakefile
-> @@ -6,7 +6,7 @@
->   # Usage
->   # $1 - Kernel src directory
->   # $2 - Output directory
-> -
-> +# $3 - BR2_EXTERNAL directory
->
->   test ! -r $2/Makefile -o -O $2/Makefile || exit 0
->   # Only overwrite automatically generated Makefiles
-> @@ -27,6 +27,7 @@ makedir := \$(dir \$(call lastword,\$(MAKEFILE_LIST)))
->
->   MAKEARGS := -C $1
->   MAKEARGS += O=\$(if \$(patsubst /%,,\$(makedir)),\$(CURDIR)/)\$(patsubst %/,%,\$(makedir))
-> +MAKEARGS += BR2_EXTERNAL=$3
+> +ifeq ($(BR2_EXTERNAL_USED),y)
+> +include $(BR2_EXTERNAL)/external.mk
 
-  Obviously, this won't be needed anymore if the EXTERNAL is stored in 
-the .config.
+  Here I'd
+
+-include $(sort $(wildcard $(BR2_EXTERNAL)/package/*/*.mk))
 
 
   Regards,
   Arnout
 
+> +endif
+> +
+>   TARGETS+=target-finalize
 >
->   MAKEFLAGS += --no-print-directory
->
+>   ifeq ($(BR2_ENABLE_LOCALE_PURGE),y)
+> diff --git a/support/dummy-external/Config.in b/support/dummy-external/Config.in
+> new file mode 100644
+> index 0000000..e69de29
 >
 
 
