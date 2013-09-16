@@ -1,47 +1,198 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 16 Sep 2013 23:13:48 +0200
-Subject: [Buildroot] Is GPLv2 the right license for Buildroot?
-In-Reply-To: <20130916170815.GB3293@free.fr> (Yann E. MORIN's message of "Mon, 
- 16 Sep 2013 19:08:15 +0200")
-References: <20130911172709.GB3410@free.fr>
- <CAAXf6LVD590fVudge3Fk+2B8pSzvUEV2GQLTcbz=VpOB2HCmtQ@mail.gmail.com>
- <20130912202157.536e5904@skate>
- <F9C551623D2CBB4C9488801D14F864C639AC8DAF@ex-mb1.corp.adtran.com>
- <20130912203359.7e650ebe@skate> <52323A54.7020808@mind.be>
- <20130912221256.GE3362@free.fr> <523388B6.7090305@mind.be>
- <20130914221613.GA3444@free.fr> <20130916182101.3844a686@skate>
- <20130916170815.GB3293@free.fr>
-Message-ID: <87r4cofp0z.fsf@dell.be.48ers.dk>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 16 Sep 2013 23:30:49 +0200
+Subject: [Buildroot] [PATCHv2 1/4] core: introduce the BR2_EXTERNAL
+	variable
+In-Reply-To: <1379185433-8770-2-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1379185433-8770-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1379185433-8770-2-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <52377889.3010402@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+On 14/09/13 21:03, Thomas Petazzoni wrote:
+> This commit introduces the BR2_EXTERNAL environment variable, which
+> will allow to keep Buildroot customization (board-specific
+> configuration files or root filesystem overlays, package Config.in and
+> makefiles, as well as defconfigs) outside of the Buildroot tree.
+>
+> This commit only introduces the variable itself, and ensures that it
+> is available within Config.in options, so that string options used to
+> specify paths to directories or files can use $BR2_EXTERNAL as a
 
-Hi,
+  $(BR2_EXTERNAL). The $ is expanded by make. Same comment applies to 
+other places in the commit message as well. You did put it correctly in 
+the manual.
 
- Yann> Now, let's try to make things clear:
+> reference. For example, one can use
+> $BR2_EXTERNAL/board/<someboard>/kernel.config as the
+> BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE value.
+>
+> Following patches extend the usage of BR2_EXTERNAL to other areas
+> (packages and defconfigs).
+>
+> In details, this commit:
+>
+>   * Introduces the BR2_EXTERNAL Kconfig option. This option has no
+>     prompt, and is therefore not visible to the user and also not
+>     stored in the .config file. It is automatically set to the value of
+>     the BR2_EXTERNAL environment variable. The only purpose of this
+>     BR2_EXTERNAL Kconfig option is to allow $BR2_EXTERNAL to be
+>     properly expanded when used inside Kconfig option values.
+>
+>   * Ensures that the path given in BR2_EXTERNAL is an absolute path, or
+>     if not path is given, ensures that BR2_EXTERNAL points to a dummy
+>     implementation in $(TOPDIR)/support/dummy-external/. This last part
+>     is not directly useful in this commit, but is needed to properly
+>     support Config.in options declared in BR2_EXTERNAL (next commit).
 
- Yann>   - on an embedded system, the probability that there is a GPL program
- Yann>     is rather high (eg. busybox, the Linux kernel);
+  It would make more sense to do it in that commit then, but that's just 
+nitpicking.
 
- Yann>   - lets assume Buildroot is used to build those programs;
+>
+>   * Passes the BR2_EXTERNAL into the *config environment, so that its
+>     value is found when parsing/evaluating Config.in files and .config
+>     values.
 
- Yann>   - the GPL (as applied to _those_ programs, not Buildroot) mandates
- Yann>     that the script to control compilation and installation of those
- Yann>     programs be made available (section of GPLv2);
+  That's pretty useless in this commit, since it anyway doesn't end up in 
+.config and isn't used in Config.in.
 
- Yann>   - so the easiest way to comply with those programs' GPL is to
- Yann>     distribute the Buildroot tree that was used to build the target
- Yann>     filesystem, since it does contain all required recipes (aka the
- Yann>     scripts of section 3 of the GPLv2)
+>
+>   * Encodes the BR2_EXTERNAL value into the Makefile wrapper (only if
+>     BR2_EXTERNAL is specified by the user, not if the dummy internal
+>     value is used).
+>
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> ---
+>   Config.in                  |  4 ++++
+>   Makefile                   | 13 +++++++++++--
+>   support/scripts/mkmakefile |  3 ++-
+>   3 files changed, 17 insertions(+), 3 deletions(-)
+>
+> diff --git a/Config.in b/Config.in
+> index 65c29b4..522eaf8 100644
+> --- a/Config.in
+> +++ b/Config.in
+> @@ -14,6 +14,10 @@ config BR2_HOSTARCH
+>   	string
+>   	option env="HOSTARCH"
+>
+> +config BR2_EXTERNAL
+> +	string
+> +	option env="BR2_EXTERNAL"
+> +
 
- Yann>   - Buildroot is itself GPLv2, so by distributing the Buildroot tree, a
- Yann>     company has to release it under GPLv2.
+  If you agree to store the value in the .config file, it could look 
+something like this.
 
-Indeed.
+-------
+
+config BR2_EXTERNAL_FROM_ENV
+         string
+         option env="BR2_EXTERNAL"
+
+# This condition forces the user to set BR2_EXTERNAL from the
+# command line the first time.
+if BR2_EXTERNAL_FROM_ENV != ""
+config BR2_EXTERNAL
+         string "External buildroot add-ons"
+         default BR2_EXTERNAL_FROM_ENV
+         help
+           List of directories with buildroot add-ons. ...
+endif
+
+if BR2_EXTERNAL != BR2_EXTERNAL_FROM_ENV
+comment "You need to re-run the config to see the new packages"
+endif
+
+
+-------
+
+  It doesn't really work, though, because currently the .config is not 
+read in when doing 'make menuconfig', so that BR2_EXTERNAL_FROM_ENV will 
+always be "". But I'm sure we'll be able to find something that works 
+with a little more effort.
+
+
+>   # Hidden boolean selected by pre-built packages for x86, when they
+>   # need to run on x86-64 machines (example: pre-built external
+>   # toolchains, binary tools like SAM-BA, etc.).
+> diff --git a/Makefile b/Makefile
+> index 8610592..13ad342 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -51,6 +51,14 @@ CONFIG_CONFIG_IN=Config.in
+>   CONFIG=support/kconfig
+>   DATE:=$(shell date +%Y%m%d)
+>
+> +# Turn BR2_EXTERNAL into an absolute path
+> +ifneq ($(BR2_EXTERNAL),)
+> +override BR2_EXTERNAL := $(realpath $(BR2_EXTERNAL))
+> +BR2_EXTERNAL_USED = y
+> +else
+> +BR2_EXTERNAL = $(TOPDIR)/support/dummy-external/
+> +endif
+> +
+>   # Compute the full local version string so packages can use it as-is
+>   # Need to export it, so it can be got from environment in children (eg. mconf)
+>   export BR2_VERSION_FULL:=$(BR2_VERSION)$(shell $(TOPDIR)/support/scripts/setlocalversion)
+> @@ -632,7 +640,8 @@ COMMON_CONFIG_ENV = \
+>   	KCONFIG_AUTOCONFIG=$(BUILD_DIR)/buildroot-config/auto.conf \
+>   	KCONFIG_AUTOHEADER=$(BUILD_DIR)/buildroot-config/autoconf.h \
+>   	KCONFIG_TRISTATE=$(BUILD_DIR)/buildroot-config/tristate.config \
+> -	BUILDROOT_CONFIG=$(BUILDROOT_CONFIG)
+> +	BUILDROOT_CONFIG=$(BUILDROOT_CONFIG) \
+> +	BR2_EXTERNAL=$(BR2_EXTERNAL)
+>
+>   xconfig: $(BUILD_DIR)/buildroot-config/qconf outputmakefile
+>   	@mkdir -p $(BUILD_DIR)/buildroot-config
+> @@ -739,7 +748,7 @@ source-check:
+>   # output directory.
+>   outputmakefile:
+>   ifeq ($(NEED_WRAPPER),y)
+> -	$(Q)$(TOPDIR)/support/scripts/mkmakefile $(TOPDIR) $(O)
+> +	$(Q)$(TOPDIR)/support/scripts/mkmakefile $(TOPDIR) $(O) $(if $(BR2_EXTERNAL_USED),$(BR2_EXTERNAL))
+>   endif
+>
+>   # printvars prints all the variables currently defined in our Makefiles
+> diff --git a/support/scripts/mkmakefile b/support/scripts/mkmakefile
+> index cef2ec7..e7c1bd0 100755
+> --- a/support/scripts/mkmakefile
+> +++ b/support/scripts/mkmakefile
+> @@ -6,7 +6,7 @@
+>   # Usage
+>   # $1 - Kernel src directory
+>   # $2 - Output directory
+> -
+> +# $3 - BR2_EXTERNAL directory
+>
+>   test ! -r $2/Makefile -o -O $2/Makefile || exit 0
+>   # Only overwrite automatically generated Makefiles
+> @@ -27,6 +27,7 @@ makedir := \$(dir \$(call lastword,\$(MAKEFILE_LIST)))
+>
+>   MAKEARGS := -C $1
+>   MAKEARGS += O=\$(if \$(patsubst /%,,\$(makedir)),\$(CURDIR)/)\$(patsubst %/,%,\$(makedir))
+> +MAKEARGS += BR2_EXTERNAL=$3
+
+  Obviously, this won't be needed anymore if the EXTERNAL is stored in 
+the .config.
+
+
+  Regards,
+  Arnout
+
+>
+>   MAKEFLAGS += --no-print-directory
+>
+>
+
 
 -- 
-Bye, Peter Korsgaard
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
