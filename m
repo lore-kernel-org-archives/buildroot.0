@@ -1,103 +1,119 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 16 Sep 2013 21:53:48 +0200
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 16 Sep 2013 22:04:20 +0200
 Subject: [Buildroot] Is GPLv2 the right license for Buildroot?
-In-Reply-To: <20130916170815.GB3293@free.fr>
-References: <20130911172709.GB3410@free.fr>
- <CAAXf6LVD590fVudge3Fk+2B8pSzvUEV2GQLTcbz=VpOB2HCmtQ@mail.gmail.com>
- <20130912202157.536e5904@skate>
- <F9C551623D2CBB4C9488801D14F864C639AC8DAF@ex-mb1.corp.adtran.com>
- <20130912203359.7e650ebe@skate> <52323A54.7020808@mind.be>
+In-Reply-To: <20130916202439.50de3e76@skate>
+References: <20130912203359.7e650ebe@skate> <52323A54.7020808@mind.be>
  <20130912221256.GE3362@free.fr> <523388B6.7090305@mind.be>
  <20130914221613.GA3444@free.fr> <20130916182101.3844a686@skate>
- <20130916170815.GB3293@free.fr>
-Message-ID: <523761CC.3050803@mind.be>
+ <20130916170815.GB3293@free.fr> <20130916195846.32e98c8a@skate>
+ <20130916181512.GD3293@free.fr> <20130916202439.50de3e76@skate>
+Message-ID: <20130916200420.GF3293@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 16/09/13 19:08, Yann E. MORIN wrote:
-> Thomas, All,
->
-> On 2013-09-16 18:21 +0200, Thomas Petazzoni spake thusly:
->> >On Sun, 15 Sep 2013 00:16:13 +0200, Yann E. MORIN wrote:
->> >
->>> > >Since Buildroot's license is the GPLv2, BR2_EXTERNAL is covered by the
->>> > >GPLv2.
->> >
->> >Probably going to make waves,
-> Probably, yes.;-)
->
->> >but I'm wondering if the GPLv2 is the
->> >right license for Buildroot. I believe it is not very easy to
->> >understand how the terms of the GPL apply to something such as a build
->> >system, and I am not sure that the GPL copyleft requirements are really
->> >benefiting to Buildroot in any way. I am pretty sure that the vast
->> >majority of companies using Buildroot are not really realizing it's
->> >licensed under the GPL and therefore are not complying with the
->> >Buildroot license terms (while they probably do realize that the
->> >kernel, U-Boot, etc. are under the GPL and comply with their terms).
-> On the other hand, the GPLv2 only applies at the time of distribution.
-> So long as the Buildroot tre is not distributed, there is no reason to
-> fear anything.
->
-> Now, let's try to make things clear:
->
->    - on an embedded system, the probability that there is a GPL program
->      is rather high (eg. busybox, the Linux kernel);
->
->    - lets assume Buildroot is used to build those programs;
->
->    - the GPL (as applied to_those_  programs, not Buildroot) mandates
->      that the script to control compilation and installation of those
->      programs be made available (section of GPLv2);
->
->    - so the easiest way to comply with those programs' GPL is to
->      distribute the Buildroot tree that was used to build the target
->      filesystem, since it does contain all required recipes (aka the
->      scripts of section 3 of the GPLv2)
->
->    - Buildroot is itself GPLv2, so by distributing the Buildroot tree, a
->      company has to release it under GPLv2.
+Thomas, All,
 
-  I think this states the same as docs/manual/legal-notice.txt already 
-does, though a bit easier to follow. That paragraph in the manual also 
-clearly states that this is the interpretation of the buildroot developers.
+On 2013-09-16 20:24 +0200, Thomas Petazzoni spake thusly:
+> On Mon, 16 Sep 2013 20:15:12 +0200, Yann E. MORIN wrote:
+> > But your BR2_EXTERNAL will make this really trivial:
+> >   - do all FLOSS stuff in Buildroot tree
+> >   - do all proprietary stuff in BR2_EXTERNAL
+> >   - provide the Buidlroot tree to be compliant
+> >   - keep BR2_EXTERNAL private
+> > 
+> > Et voil?! :-)
+> 
+> What a good selling argument for BR2_EXTERNAL :-)
 
-  I think that for the users, things are still simple: just make 
-buildroot available. It also takes away a large part of the burden of 
-GPL-compliance, because buildroot takes care of downloading the source so 
-you can consider that job done (at least according to the spirit of the 
-license, and explicitly in GPLv3).
+Hehe! :-)
 
-  As to the .config: would it really be an issue for your company that 
-the end user can see that there is something called BR2_THE_APP installed 
-on the system? Looking back at some buildroot projects I've done, the 
-proprietary packages had names like "pir", "h264", "upgrade", "rt_app", 
-"system". Like, that's really leaking information...
+Also, I would like to reiterate my suggestion the vriable BR2_EXTERNAL
+contains a list (space- or colon-sperated, as you wish) of external
+trees to descend into, rather than containing a single entry.
 
-  And for the really paranoid companies that lock down their filesystem 
-sufficiently that users can't read (and thereby discover those top-secret 
-application names), I think they will can afford the 15-minute investment 
-to grep away the proprietary packages from the .config.
+This way, one could have this layout:
 
+    buildroot/    <- Buildroot tree with only redistributable changes
+    ext-floss/    <- external tree with only FLOSS components
+    ext-prop/     <- external tree with weak-copyleft or proprietary
+                     components
 
-  However, coming back to Thomas's idea of changing the license: the 
-buildroot license is not really the issue here. Even if buildroot were 
-MIT-licensed, the GPL of the target programs may still require you to 
-provide the buildroot source. Since buildroot itself is source-only, 
-there is really no big difference between GPL or any other free software 
-license.
+which would be used as thus:
+    make BR2_EXTERNAL="/path/to/ext-floss /path/to/ext-prop"
 
+Then, distribute both buildroot/ and ext-floss/ and you're compliant
+without leaking any sensitive stuff.
 
-  Regards,
-  Arnout
+A side question to this: what if any of the external tree(s) contain a
+package already in a previous external tree or in the original Buildroot
+tree?
+
+> But it isn't quite sufficient: by your definition, the
+> Buildroot .config should also be shipped, and it also contains config
+> options for the company-specific proprietary packages. So the .config
+> should be "filtered" before being released. Not simple.
+
+I think that is relatively easy: in the Buildroot tree, just run:
+    make BR2_EXTERNAL= oldconfig
+
+That will expunge the .config from any variable from the BR2_EXTERNAL
+tree. You can then tar up the Buildroot tree, and make that available.
+Quite easy, but requires a process that documents this simple extra step
+prior to publication.
+
+> > > What I'm questioning is really the case where a company makes an
+> > > embedded product, and has used Buildroot to generate a rootfs that
+> > > includes GPL programs, is this company required to distribute Buildroot.
+> > 
+> > Short answer: no.
+> > Long answer: no, but it is an easy path.
+> 
+> Aren't companies going to be afraid of revealing too much of their
+> secret sauce if they have to disclose their Buildroot tree?
+
+Depends on what you call "their secret sauce". If you meant "their
+prorietary apps packaged in Buildroot" then, curently, yes, since those
+would be in the Buildroot tree. But with BR2_EXTERNAL (and the little
+oldconfig trick above), that'd be straightforward.
+
+If you meant "the fact that they actually use Buildroot", then I don;t
+think how this could be seen as a "secret sauce".
+
+> My point is also that nobody has ever cared about enforcing the
+> Buildroot license, and I sincerely doubt anyone will be willing to do
+> in the foreseeable future. Since no-one cares about that, is it really
+> necessary to annoy companies with the fairly fuzzy requirements of the
+> GPL when applied to a build system?
+> 
+> > We just have to settle on what we want to put in there: BR2_EXTERNAL:
+> > derived work or not? ;-)
+> 
+> If it's considered as a derived work, then your above idea of using
+> BR2_EXTERNAL to split things between secret stuff and released stuff no
+> longer works.
+
+Well, yes it still stands. The GPL only applies at the time of
+distribution. So if BR2_EXTERNAL only contains recipes for
+weak-copyleft or non-copyleft packages, then there is no need for the
+company to distribute it, since the "official" Buildroot tree is enough
+to reproduce the GPL program(s) on the target.
+
+This applies, of course, only if the company decides to publish
+Buildroot to catter for section 3 of the GPL of those programs.
+
+If the company decides for another route, then this point is moot
+anyway, since there is no distribution at all.
+
+Regards,
+Yann E. MORIN.
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
