@@ -1,100 +1,157 @@
-From: Greg Beresford <greg.beresford@zbdsolutions.com>
-Date: Mon, 16 Sep 2013 18:39:15 +0100
-Subject: [Buildroot] [PATCH] Add support for eglibc-2.17 multiarch layout,
-	from Linaro 2013.07+
-Message-ID: <1379353155-26459-1-git-send-email-greg.beresford@zbdsolutions.com>
+From: ANDY KENNEDY <ANDY.KENNEDY@adtran.com>
+Date: Mon, 16 Sep 2013 17:45:00 +0000
+Subject: [Buildroot] Is GPLv2 the right license for Buildroot?
+In-Reply-To: <20130916170815.GB3293@free.fr>
+References: <20130911172709.GB3410@free.fr>
+ <CAAXf6LVD590fVudge3Fk+2B8pSzvUEV2GQLTcbz=VpOB2HCmtQ@mail.gmail.com>
+ <20130912202157.536e5904@skate>
+ <F9C551623D2CBB4C9488801D14F864C639AC8DAF@ex-mb1.corp.adtran.com>
+ <20130912203359.7e650ebe@skate> <52323A54.7020808@mind.be>
+ <20130912221256.GE3362@free.fr> <523388B6.7090305@mind.be>
+ <20130914221613.GA3444@free.fr> <20130916182101.3844a686@skate>
+ <20130916170815.GB3293@free.fr>
+Message-ID: <F9C551623D2CBB4C9488801D14F864C639ACE1F5@ex-mb1.corp.adtran.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Henry Luis <henry@echelon.com>
+> From: Yann E. MORIN [mailto:yann.morin.1998 at gmail.com] On Behalf Of Yann E. MORIN
+> Sent: Monday, September 16, 2013 12:08 PM
+> 
+> Thomas, All,
+> 
+> On 2013-09-16 18:21 +0200, Thomas Petazzoni spake thusly:
+> > On Sun, 15 Sep 2013 00:16:13 +0200, Yann E. MORIN wrote:
+> >
+> > > Since Buildroot's license is the GPLv2, BR2_EXTERNAL is covered by the
+> > > GPLv2.
+> >
+> > Probably going to make waves,
+> 
+> Probably, yes. ;-)
+> 
+> > but I'm wondering if the GPLv2 is the
+> > right license for Buildroot. I believe it is not very easy to
+> > understand how the terms of the GPL apply to something such as a build
+> > system, and I am not sure that the GPL copyleft requirements are really
+> > benefiting to Buildroot in any way. I am pretty sure that the vast
+> > majority of companies using Buildroot are not really realizing it's
+> > licensed under the GPL and therefore are not complying with the
+> > Buildroot license terms (while they probably do realize that the
+> > kernel, U-Boot, etc. are under the GPL and comply with their terms).
+> 
+> On the other hand, the GPLv2 only applies at the time of distribution.
+> So long as the Buildroot tre is not distributed, there is no reason to
+> fear anything.
+> 
+> Now, let's try to make things clear:
+> 
+>   - on an embedded system, the probability that there is a GPL program
+>     is rather high (eg. busybox, the Linux kernel);
 
-Arch-specific libraries, including libc.so.6, are expected to be in a
-subdirectory of /lib (e.g. /lib/arm-linux-gnueabihf). This patch
-changes copy_toolchain_lib_root() in helper.mk to preserve the
-toolchain sysroot's lib directory structure, except for SUPPORT_LIB_DIR
-which are still copied directly under DESTDIR.
-
-Signed-off-by: Greg Beresford <greg.beresford@zbdsolutions.com>
----
-I've copied and reformatted Henry Luis' patch from the attachment to
-https://bugs.busybox.net/show_bug.cgi?id=6452. I've given it a test
-with Linaro ARM 2013.08 and CodeSourcery ARM 2013.05 toolchains and
-it seems to work ok. It does result in a non-hf ld-linux.so being
-copied in addition to the correct one on the linaro toolchain, but
-the target still works. (I think that this is because buildroot checks
-for both versions, and copies everything it successfully finds.)
-
-Also, this is my first submission to anything using git. I've tried to
-follow the instructions in the manual, so I hope everything is in order!
-
-Regards
-Greg
-
- toolchain/helpers.mk | 24 ++++++++++++++++--------
- 1 file changed, 16 insertions(+), 8 deletions(-)
-
-diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
-index 0e270ee..b2b1b2f 100644
---- a/toolchain/helpers.mk
-+++ b/toolchain/helpers.mk
-@@ -50,11 +50,12 @@ copy_toolchain_lib_root = \
- 	LIB="$(strip $4)"; \
- 	DESTDIR="$(strip $5)" ; \
-  \
-+	pushd $${ARCH_SYSROOT_DIR} > /dev/null; \
- 	for dir in \
--		$${ARCH_SYSROOT_DIR}/$${ARCH_LIB_DIR}/$(TOOLCHAIN_EXTERNAL_PREFIX) \
--		$${ARCH_SYSROOT_DIR}/usr/$(TOOLCHAIN_EXTERNAL_PREFIX)/$${ARCH_LIB_DIR} \
--		$${ARCH_SYSROOT_DIR}/$${ARCH_LIB_DIR} \
--		$${ARCH_SYSROOT_DIR}/usr/$${ARCH_LIB_DIR} \
-+		./$${ARCH_LIB_DIR}/$(TOOLCHAIN_EXTERNAL_PREFIX) \
-+		./usr/$(TOOLCHAIN_EXTERNAL_PREFIX)/$${ARCH_LIB_DIR} \
-+		./$${ARCH_LIB_DIR} \
-+		./usr/$${ARCH_LIB_DIR} \
- 		$${SUPPORT_LIB_DIR} ; do \
- 		LIBSPATH=`find $${dir} -maxdepth 1 -name "$${LIB}.*" 2>/dev/null` ; \
- 		if test -n "$${LIBSPATH}" ; then \
-@@ -66,18 +67,25 @@ copy_toolchain_lib_root = \
- 		LIBDIR=`dirname $${LIBPATH}` ; \
- 		while test \! -z "$${LIBNAME}" ; do \
- 			LIBPATH=$${LIBDIR}/$${LIBNAME} ; \
--			rm -fr $(TARGET_DIR)/$${DESTDIR}/$${LIBNAME}; \
--			mkdir -p $(TARGET_DIR)/$${DESTDIR}; \
-+			if [ "$${dir}" = "$${SUPPORT_LIB_DIR}" ]; then \
-+				DDIR=$${DESTDIR} ; \
-+			else \
-+				DDIR=$${LIBDIR} ; \
-+			fi; \
-+			rm -fr $(TARGET_DIR)/$${DDIR}/$${LIBNAME}; \
-+			mkdir -p $(TARGET_DIR)/$${DDIR}; \
- 			if test -h $${LIBPATH} ; then \
--				cp -d $${LIBPATH} $(TARGET_DIR)/$${DESTDIR}/; \
-+				cp -d $${LIBPATH} $(TARGET_DIR)/$${DDIR}/; \
- 			elif test -f $${LIBPATH}; then \
--				$(INSTALL) -D -m0755 $${LIBPATH} $(TARGET_DIR)/$${DESTDIR}/$${LIBNAME}; \
-+				$(INSTALL) -D -m0755 $${LIBPATH} $(TARGET_DIR)/$${DDIR}/$${LIBNAME}; \
- 			else \
-+				popd > /dev/null; \
- 				exit -1; \
- 			fi; \
- 			LIBNAME="`readlink $${LIBPATH}`"; \
- 		done; \
- 	done; \
-+	popd > /dev/null; \
-  \
- 	echo -n
- 
--- 
-1.8.4
+Not always.  There is still a high contingent in the States that use
+VXWorks, and then a lesser population use a home-grown kernel without
+every touching GPL code.
 
 
- 
-Disclaimer: This email contains proprietary information some or all of which may be legally privileged and/or is confidential. It is for the intended recipient only. If an addressing or transmission error has misdirected this email, please notify the author by replying to this email. If you are not the intended recipient, you must not use, disclose, distribute, copy or print this email. Any views expressed in this message are those of the individual sender, except where the message states otherwise. ZBD Displays accepts no responsibility for any computer virus which might be transferred by way of this email. We may monitor all email communication through our networks. If you contact us by email, we may store your name and address to facilitate communication. ZBD Displays Ltd is registered in England and Wales, company registration number: 03929602. Registered Office: Malvern Hills Science Park, Geraldine Road, Malvern,  Worcestershire, WR14 3SZ, UK
+> 
+>   - lets assume Buildroot is used to build those programs;
+> 
+>   - the GPL (as applied to _those_ programs, not Buildroot) mandates
+>     that the script to control compilation and installation of those
+>     programs be made available (section of GPLv2);
+> 
+>   - so the easiest way to comply with those programs' GPL is to
+>     distribute the Buildroot tree that was used to build the target
+>     filesystem, since it does contain all required recipes (aka the
+>     scripts of section 3 of the GPLv2)
+> 
+>   - Buildroot is itself GPLv2, so by distributing the Buildroot tree, a
+>     company has to release it under GPLv2.
 
-______________________________________________________________________
-This email has been scanned by the Symantec Email Security.cloud service.
-For more information please visit http://www.symanteccloud.com
-______________________________________________________________________
+I agree with Yann on this point.  I don't see a valid reason to change
+the license of BuildRoot (even if you wanted to make it a less restrictive
+license for the main package/*.mk files).  In my current company, I have
+discussed in great detail exactly what must be done in order to comply
+with the GPL.  The team I'm on has taken great care to isolate the code
+into two sections:  Open Sourced code (including MIT license stuff, etc)
+and IP code.  I have stressed the importance of carefully considering
+how applications are made, what dependencies we have on the applications,
+etc.  My company is on-board with (when we get to the point in which
+we are shipping Linux as the OS on a product) releasing all the
+non-company code.
+
+I believe that, as Yann states below (more to comment on this), a company
+acting in "good faith" has the desire to "do the right thing"(tm) ;).  I
+would expect that the part that Thomas said is more likely the case.
+People who are using BuildRoot may be breaking the license agreement
+without intending to, nor without the knowledge they are doing so. In
+keeping with his thought, I would support writing a fairly detailed
+document (probably should even put a short "comment" in Kconfig about
+it) to detail what we believe to be the "right thing".
+
+> 
+> > Of
+> > course that's not an argument to change the license, but I believe it
+> > also highlights how hard it is to understand the GPL requirements on
+> > the Buildroot case.
+> 
+> Sorry, but it is very clear to me, and I am no lawyer. And any decent
+> company will have a rather decent team of lawyers to help in these types
+> of cases.
+
+Don't assume to much on this one.  Though I have been in the Opened Source
+community since 1993, I have seen many companies that didn?t have any
+legal support on this.  In fact, I have seen SEVERAL law companies that,
+though they are experts on licensing, etc, have never dealt with the GPL.
+
+In the previous three companies that I worked for, there was hardly a
+concern about licensing issues as the customer was the US army :\.  So,
+we were careful, in those other companies, to package up all the open
+sourced code, but we didn't really _do_ anything with it.
+
+> 
+> > So, I believe that we should either:
+> >
+> >  (1) Clarify and document how we believe the GPL terms apply to
+> >      Buildroot (this would probably be a long discussion process, in
+> >      which the SFLC should probably participate). When I see the
+> >      discussions around BR2_EXTERNAL where the package .mk files and
+> >      Config.in files may be seen as derivative work, but not the root
+> >      filesystem overlay, or that package .mk files for GPL packages
+> >      should be under the GPL,
+> 
+> It all revolves around the definition of a "derivative work".
+> 
+> We have to decide whether BR2_EXTERNAL is, or parts of it are, a derived
+> work of Buildroot. I think you now know my position, I guess. ;-)
+
+Well, In your e-mail (which predates this e-mail by a few minutes)
+that starts out: 
+
+	Andy, All,
+	
+	On 2013-09-16 15:43 +0000, ANDY KENNEDY spake thusly:
+
+You have expounded on what you believe to a derived work.  What you stated
+clearly in that e-mail was not the same meaning I derived from your former
+e-mails.  I have no problem with your definition of a derived work, thus
+I you and I are on the same side of this issue.
+
+<snip>
+<Crap!  snipped too much>
+
+Yann, You stated that you would like to see further documentation that
+clearly sets guidelines on this matter.  I stated this last week several
+times, therefore I completely agree with you.
+
+How ever we choose to license this, we should EXPLICITLY state this in
+documentation and CLEARLY show where this document is.  If it comes down
+to a vote of current developers, I would like to even put that into the
+document, perhaps with a  S H O R T  comment as to the viewpoint of the
+voter ;) so that in 10 years there is no confusion about our points of
+view to the next generation of BuildRoot users and developers.
+
+Andy
