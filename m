@@ -1,55 +1,103 @@
-From: Fatih =?UTF-8?Q?A=C5=9F=C4=B1c=C4=B1?= <fatih.asici@gmail.com>
-Date: Mon, 16 Sep 2013 10:32:14 +0300
-Subject: [Buildroot] [PATCH] directfb: Add upstream patch to fix qt5base
-	build
-Message-ID: <1379316734.4275.2.camel@viko>
+From: Greg Beresford <greg.beresford@zbdsolutions.com>
+Date: Mon, 16 Sep 2013 10:06:31 +0100
+Subject: [Buildroot] BeagleBoneBlack Updates?
+In-Reply-To: <CA+-urNSk1Y4ch-GfPGYC52waPaBZ_hP=-iKtMjoXf73g3tmuUg@mail.gmail.com>
+References: <CA+-urNRrUA_M45M_99OuGJvpvzRi40tCWoqPWVgUuGtpRPjj4w@mail.gmail.com>
+ <20130914073325.50417147@skate>
+ <CA+-urNSk1Y4ch-GfPGYC52waPaBZ_hP=-iKtMjoXf73g3tmuUg@mail.gmail.com>
+Message-ID: <BF980CD5635D994FA25831A4A9C113BF1BC5336F25@THHS2E12BE9X.hostedservice2.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes http://autobuild.buildroot.net/results/8c7eaf99e365ecff28c097475b235dbe8d614294/
 
-Signed-off-by: Fatih A??c? <fatih.asici@gmail.com>
----
- ...irectfb-remove-redefinition-of-__typeof__.patch |   28 ++++++++++++++++++++
- 1 file changed, 28 insertions(+)
- create mode 100644 package/directfb/directfb-remove-redefinition-of-__typeof__.patch
 
-diff --git a/package/directfb/directfb-remove-redefinition-of-__typeof__.patch b/package/directfb/directfb-remove-redefinition-of-__typeof__.patch
-new file mode 100644
-index 0000000..e3861af
---- /dev/null
-+++ b/package/directfb/directfb-remove-redefinition-of-__typeof__.patch
-@@ -0,0 +1,28 @@
-+Remove definition to fix qt5 build.
-+
-+Fetch from: http://git.directfb.org/?p=core/DirectFB.git;a=patch;h=203f78a4193a8ff110dec3c860e0928af1a0a72f
-+
-+From 203f78a4193a8ff110dec3c860e0928af1a0a72f Mon Sep 17 00:00:00 2001
-+From: Denis Oliver Kropp <dok@directfb.org>
-+Date: Wed, 31 Jul 2013 21:56:05 +0200
-+Subject: [PATCH] libdirect: Remove redefinition of __typeof__!!!
-+
-+---
-+ lib/direct/os/linux/glibc/types.h |    1 -
-+ 1 file changed, 1 deletion(-)
-+
-+diff --git a/lib/direct/os/linux/glibc/types.h b/lib/direct/os/linux/glibc/types.h
-+index 08e94b2..80cb350 100644
-+--- a/lib/direct/os/linux/glibc/types.h
-++++ b/lib/direct/os/linux/glibc/types.h
-+@@ -81,7 +81,6 @@ typedef int64_t s64;
-+ #define __dfb_no_instrument_function__  __attribute__((no_instrument_function))
-+ #define __constructor__                 __attribute__((constructor))
-+ #define __destructor__                  __attribute__((destructor))
-+-#define __typeof__(x)                   __typeof__(x)
-+ 
-+ #ifndef __func__
-+ #define __func__                        __FUNCTION__
-+-- 
-+1.7.9.5
-+
--- 
-1.7.10.4
+> -----Original Message-----
+> From: buildroot-bounces at busybox.net [mailto:buildroot-
+> bounces at busybox.net] On Behalf Of Frank Hunleth
+> Sent: 16 September 2013 02:16
+> To: Thomas Petazzoni
+> Cc: buildroot
+> Subject: Re: [Buildroot] BeagleBoneBlack Updates?
+>
+> On Sat, Sep 14, 2013 at 1:33 AM, Thomas Petazzoni
+> <thomas.petazzoni@free-electrons.com> wrote:
+> >
+> > Dear Frank Hunleth,
+> >
+> > On Fri, 13 Sep 2013 08:58:27 -0400, Frank Hunleth wrote:
+> > > It's been a while since there's been discussion on the bbb, and I
+> > > wanted to check on the current status. I've been sitting on some
+> > > patches that have been working for me for the past few months. Spenser
+> > > Gilliland had also posted a github reference to his patches a month or
+> > > so ago. As far as I can tell, the main difference is HDMI and graphics
+> > > acceleration are either working or close to working in his tree. I
+> > > don't use either feature.
+> > >
+> > > I don't mind making a pass to clean up what I have and submit it to
+> > > the list, but if work is going on with Spenser's or someone else's
+> > > then I'll hold off.
+> >
+> > I believe Spenser might be busy with the other OpenGL work, so I think
+> > you could probably take your work and his BBB work, and submit patches
+> > to the list. I'd really to see the BBB be an officially supported
+> > platform in Buildroot.
+>
+> Sounds good.
+>
+> I just rebased to the upstream and was pleased to see the updated
+> Linaro compilers. The Beaglebone Debian work uses Linaro 4.8-2013.07,
+> and I had as a todo item to try to match up compilers when I had a
+> chance. Both Spenser and I were using EABI compilers (as opposed to an
+> EABIhf one like Debian.)
+>
+> I tried making the switch to EABIhf, but found out a that init won't
+> start due to not being able to load libc.so.6. I assumed that
+> somewhere I just had a compiler option different so that busybox was
+> being compiled with a slightly different ABI than what Linaro had done
+> with their version of libc. As far as I can tell with readelf, I have
+> both busybox and libc.so.6 reporting ABI 3.1.1 and listing:
+>
+> Attribute Section: aeabi
+> File Attributes
+>   Tag_CPU_name: "7-A"
+>   Tag_CPU_arch: v7
+>   Tag_CPU_arch_profile: Application
+>   Tag_ARM_ISA_use: Yes
+>   Tag_THUMB_ISA_use: Thumb-2
+>   Tag_FP_arch: VFPv3
+>   Tag_Advanced_SIMD_arch: NEONv1
+>   Tag_ABI_PCS_wchar_t: 4
+>   Tag_ABI_FP_rounding: Needed
+>   Tag_ABI_FP_denormal: Needed
+>   Tag_ABI_FP_exceptions: Needed
+>   Tag_ABI_FP_number_model: IEEE 754
+>   Tag_ABI_align_needed: 8-byte
+>   Tag_ABI_align_preserved: 8-byte, except leaf SP
+>   Tag_ABI_enum_size: int
+>   Tag_ABI_HardFP_use: SP and DP
+>   Tag_ABI_VFP_args: VFP registers
+>   Tag_CPU_unaligned_access: v6
+>
+> Right now, I'm not sure where to look for possible other differences.
+> CodeSourcery and the built-in toolchains work fine (albeit with EABI).
+> I was wondering if anyone else has run into issues with EABIhf to
+> might help me debug this.
+>
+
+This is because the new linaro toolchain is expecting to find libc in /lib/arm-linux-gnueabihf/ as reported in https://bugs.busybox.net/show_bug.cgi?id=6452.
+
+There's a patch to adapt toolchain/helpers.mk to the new linaro layout in the attachment to that bug, and I can say that the patch works for me, but I don't know if it would break anything else!
+
+Regards
+Greg
+
+
+Disclaimer: This email contains proprietary information some or all of which may be legally privileged and/or is confidential. It is for the intended recipient only. If an addressing or transmission error has misdirected this email, please notify the author by replying to this email. If you are not the intended recipient, you must not use, disclose, distribute, copy or print this email. Any views expressed in this message are those of the individual sender, except where the message states otherwise. ZBD Displays accepts no responsibility for any computer virus which might be transferred by way of this email. We may monitor all email communication through our networks. If you contact us by email, we may store your name and address to facilitate communication. ZBD Displays Ltd is registered in England and Wales, company registration number: 03929602. Registered Office: Malvern Hills Science Park, Geraldine Road, Malvern,  Worcestershire, WR14 3SZ, UK
+
+______________________________________________________________________
+This email has been scanned by the Symantec Email Security.cloud service.
+For more information please visit http://www.symanteccloud.com
+______________________________________________________________________
