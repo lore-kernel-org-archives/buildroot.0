@@ -1,59 +1,42 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Mon, 16 Sep 2013 15:39:22 +0200
-Subject: [Buildroot] [RFCv1 09/11] package: add a <pkg>_SOURCE_ADDONS
-	variable
-In-Reply-To: <1378416469-17708-10-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1378416469-17708-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1378416469-17708-10-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <CAAXf6LVXRvw34-d5vq9Oh+tZXd2a4Dzy1mxzWLdOS2FPs59vVA@mail.gmail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 16 Sep 2013 15:42:30 +0200
+Subject: [Buildroot] [PATCH v3] apply-patches.sh: detect missing patches
+In-Reply-To: <20130916123623.GA24501@harvey.netwinder.org> (Ralph Siemsen's
+ message of "Mon, 16 Sep 2013 08:36:23 -0400")
+References: <5228425A.7090502@lucaceresoli.net> <20130905140135.GC3136@free.fr>
+ <CAAXf6LWWnb5xQUtZA8p3kgoU2et-kD6x9TzyzXykgNbxdsuv+Q@mail.gmail.com>
+ <20130911120630.GA14745@harvey.netwinder.org>
+ <CAAXf6LX7o9P1tXv3Egk8By-VbzarRYe5JRyTh5+3wYNBz9Z6aQ@mail.gmail.com>
+ <20130913181527.GA11933@harvey.netwinder.org>
+ <20130913182702.GB3301@free.fr>
+ <20130915133709.GA16826@harvey.netwinder.org>
+ <20130915141314.GA18166@harvey.netwinder.org>
+ <8738p5lud2.fsf@dell.be.48ers.dk>
+ <20130916123623.GA24501@harvey.netwinder.org>
+Message-ID: <87pps8hohl.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+>>>>> "Ralph" == Ralph Siemsen <ralphs@netwinder.org> writes:
 
-On Thu, Sep 5, 2013 at 11:27 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Converting the external toolchain logic into a package raises a very
-> special use case that wasn't handled by the package infrastructure:
-> the Blackfin toolchain is delivered as two tarballs instead of
-> one. Unfortunately <pkg>_SOURCE only allows to pass one tarball name.
->
-> However, we really want both tarballs to be known by the package
-> infrastructure, so that the normal 'source' and 'external-deps'
-> mechanism work fine.
->
-> In order to achieve this, we add a <pkg>_SOURCE_ADDONS variable, which
-> allows a package to list other stuff it would like to see downloaded,
-> but that are otherwise not used by the package infrastructure itself:
-> it is up to the package to do it by itself.
->
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
->  package/pkg-generic.mk | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-> index b6f0bdd..2ce615f 100644
-> --- a/package/pkg-generic.mk
-> +++ b/package/pkg-generic.mk
-> @@ -40,6 +40,7 @@ ifeq ($(DL_MODE),DOWNLOAD)
->         fi
->  endif
->         $(if $($(PKG)_SOURCE),$(call DOWNLOAD,$($(PKG)_SITE:/=)/$($(PKG)_SOURCE)))
-> +       $(foreach p,$($(PKG)_SOURCE_ADDONS),$(call DOWNLOAD,$($(PKG)_SITE:/=)/$(p))$(sep))
->         $(foreach p,$($(PKG)_PATCH),$(call DOWNLOAD,$($(PKG)_SITE:/=)/$(p))$(sep))
->         $(foreach hook,$($(PKG)_POST_DOWNLOAD_HOOKS),$(call $(hook))$(sep))
->  ifeq ($(DL_MODE),DOWNLOAD)
-> --
+ Ralph> On Sun, Sep 15, 2013 at 10:09:45PM +0200, Peter Korsgaard wrote:
+ >> 
+ >> Committed, thanks.
+ >> 
+ >> You forgot to add your 'Signed-off-by' on the patch. I've added it for
+ >> you, hopefully that is OK?
 
-What about allowing FOO_SOURCE to contain multiple words directly, and
-thus not introducing a new variable? The package infrastructure can
-download each word of FOO_SOURCE, but only extract (and otherwise use)
-the first one. Any subsequent word has to be handled by the package
-itself.
+ Ralph> Yes, that is fine. What is the exact syntax/capitalization for this? The
+ Ralph> current buildroot manual lists a couple of slight variations.
 
-Best regards,
-Thomas
+The format used by git format-patch -s / the Linux kernel - E.G:
+
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+
+I'll fix the manual to use this everywhere, thanks.
+
+-- 
+Bye, Peter Korsgaard
