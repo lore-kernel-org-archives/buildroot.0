@@ -1,68 +1,124 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 16 Sep 2013 13:52:55 -0300
-Subject: [Buildroot] [PATCH 6/6] luaposix: bump to version 31
-In-Reply-To: <1379350375-18843-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1379350375-18843-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1379350375-18843-6-git-send-email-gustavo@zacarias.com.ar>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 16 Sep 2013 19:08:15 +0200
+Subject: [Buildroot] Is GPLv2 the right license for Buildroot?
+In-Reply-To: <20130916182101.3844a686@skate>
+References: <20130911172709.GB3410@free.fr>
+ <CAAXf6LVD590fVudge3Fk+2B8pSzvUEV2GQLTcbz=VpOB2HCmtQ@mail.gmail.com>
+ <20130912202157.536e5904@skate>
+ <F9C551623D2CBB4C9488801D14F864C639AC8DAF@ex-mb1.corp.adtran.com>
+ <20130912203359.7e650ebe@skate> <52323A54.7020808@mind.be>
+ <20130912221256.GE3362@free.fr> <523388B6.7090305@mind.be>
+ <20130914221613.GA3444@free.fr> <20130916182101.3844a686@skate>
+Message-ID: <20130916170815.GB3293@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Releases are no longer named 5.1.X, just the X portion remains now.
+Thomas, All,
 
-Fixes autoreconf issues with the automake bump, however since the patch
-is no longer required that's not an issue now.
+On 2013-09-16 18:21 +0200, Thomas Petazzoni spake thusly:
+> On Sun, 15 Sep 2013 00:16:13 +0200, Yann E. MORIN wrote:
+> 
+> > Since Buildroot's license is the GPLv2, BR2_EXTERNAL is covered by the
+> > GPLv2.
+> 
+> Probably going to make waves,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/luaposix/luaposix-remove-lua-header-check.patch | 16 ----------------
- package/luaposix/luaposix.mk                            |  6 +++---
- 2 files changed, 3 insertions(+), 19 deletions(-)
- delete mode 100644 package/luaposix/luaposix-remove-lua-header-check.patch
+Probably, yes. ;-)
 
-diff --git a/package/luaposix/luaposix-remove-lua-header-check.patch b/package/luaposix/luaposix-remove-lua-header-check.patch
-deleted file mode 100644
-index 7909b91..0000000
---- a/package/luaposix/luaposix-remove-lua-header-check.patch
-+++ /dev/null
-@@ -1,16 +0,0 @@
--Checking the Lua version inside the headers requires compiling a small
--C program. However, autoconf will raise an error when attempting to do so
--while cross-compiling. Hence, this specific test is removed.
--
--Signed-off-by: Assaf Inbal <shmuelzon@gmail.com>
----- a/configure.ac	2013-06-20 07:23:27.943091833 +0300
--+++ b/configure.ac	2013-06-20 07:23:30.644441710 +0300
--@@ -105,7 +105,7 @@
-- 
-- dnl Lua 5.1 or 5.2
-- AX_PROG_LUA(501, 503)
-- AX_LUA_HEADERS
---AX_LUA_HEADERS_VERSION(501, 503)
--+#AX_LUA_HEADERS_VERSION(501, 503)
-- AC_SUBST(LUA)
-- AC_SUBST(LUA_INCLUDE)
-diff --git a/package/luaposix/luaposix.mk b/package/luaposix/luaposix.mk
-index 1d1ee6a..ff99127 100644
---- a/package/luaposix/luaposix.mk
-+++ b/package/luaposix/luaposix.mk
-@@ -4,12 +4,12 @@
- #
- ################################################################################
- 
--LUAPOSIX_VERSION = 5.1.20
--LUAPOSIX_SITE = https://github.com/downloads/luaposix/luaposix
-+LUAPOSIX_VERSION = 31
-+LUAPOSIX_SITE = https://github.com/luaposix/luaposix/archive
-+LUAPOSIX_SOURCE = release-v$(LUAPOSIX_VERSION).tar.gz
- LUAPOSIX_LICENSE = MIT
- LUAPOSIX_LICENSE_FILES = COPYING
- LUAPOSIX_DEPENDENCIES = lua host-lua
- LUAPOSIX_CONF_OPT = --libdir="/usr/lib/lua" --datarootdir="/usr/share/lua"
--LUAPOSIX_AUTORECONF = YES
- 
- $(eval $(autotools-package))
+> but I'm wondering if the GPLv2 is the
+> right license for Buildroot. I believe it is not very easy to
+> understand how the terms of the GPL apply to something such as a build
+> system, and I am not sure that the GPL copyleft requirements are really
+> benefiting to Buildroot in any way. I am pretty sure that the vast
+> majority of companies using Buildroot are not really realizing it's
+> licensed under the GPL and therefore are not complying with the
+> Buildroot license terms (while they probably do realize that the
+> kernel, U-Boot, etc. are under the GPL and comply with their terms).
+
+On the other hand, the GPLv2 only applies at the time of distribution.
+So long as the Buildroot tre is not distributed, there is no reason to
+fear anything.
+
+Now, let's try to make things clear:
+
+  - on an embedded system, the probability that there is a GPL program
+    is rather high (eg. busybox, the Linux kernel);
+
+  - lets assume Buildroot is used to build those programs;
+
+  - the GPL (as applied to _those_ programs, not Buildroot) mandates
+    that the script to control compilation and installation of those
+    programs be made available (section of GPLv2);
+
+  - so the easiest way to comply with those programs' GPL is to
+    distribute the Buildroot tree that was used to build the target
+    filesystem, since it does contain all required recipes (aka the
+    scripts of section 3 of the GPLv2)
+
+  - Buildroot is itself GPLv2, so by distributing the Buildroot tree, a
+    company has to release it under GPLv2.
+
+> Of
+> course that's not an argument to change the license, but I believe it
+> also highlights how hard it is to understand the GPL requirements on
+> the Buildroot case.
+
+Sorry, but it is very clear to me, and I am no lawyer. And any decent
+company will have a rather decent team of lawyers to help in these types
+of cases.
+
+> So, I believe that we should either:
+> 
+>  (1) Clarify and document how we believe the GPL terms apply to
+>      Buildroot (this would probably be a long discussion process, in
+>      which the SFLC should probably participate). When I see the
+>      discussions around BR2_EXTERNAL where the package .mk files and
+>      Config.in files may be seen as derivative work, but not the root
+>      filesystem overlay, or that package .mk files for GPL packages
+>      should be under the GPL,
+
+It all revolves around the definition of a "derivative work".
+
+We have to decide whether BR2_EXTERNAL is, or parts of it are, a derived
+work of Buildroot. I think you now know my position, I guess. ;-)
+
+>      but not necessarily .mk files for non-GPL
+>      packages,
+
+Wrong. *If* they are distributed, they'll be under the GPLv2.
+But since they build proprietary (or weak-copyleft licensed) packages,
+it is _not_ required that they be distributed.
+
+>      I believe it is way too complicated for users. To me, it
+>      seems like complying with the Buildroot license is more
+>      complicated than using Buildroot itself, which is kind of silly.
+
+
+>  (2) Change the Buildroot license to a non-copyleft license.
+
+That would be a *hard* thing to do, I'm afraid.
+
+>      Of course,
+>      that requires contacting a lot of people, but maybe not so much:
+>      over the last 3-4 years, the vast majority of the Buildroot code
+>      base has been rewritten, and many of the people having worked on
+>      that are still around today.
+> 
+> Thoughts?
+
+I lean toward an explanation in the manual (with proper disclaimer that
+entice the user to seek legal counsel).
+
+Regards,
+Yann E. MORIN.
+
 -- 
-1.8.1.5
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
