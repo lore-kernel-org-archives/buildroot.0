@@ -1,44 +1,62 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 16 Sep 2013 20:31:30 +0200
-Subject: [Buildroot] [RFCv1 09/11] package: add a <pkg>_SOURCE_ADDONS
+Date: Mon, 16 Sep 2013 20:34:07 +0200
+Subject: [Buildroot] [PATCHv2 1/4] core: introduce the BR2_EXTERNAL
  variable
-In-Reply-To: <CAAXf6LVXRvw34-d5vq9Oh+tZXd2a4Dzy1mxzWLdOS2FPs59vVA@mail.gmail.com>
-References: <1378416469-17708-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1378416469-17708-10-git-send-email-thomas.petazzoni@free-electrons.com>
- <CAAXf6LVXRvw34-d5vq9Oh+tZXd2a4Dzy1mxzWLdOS2FPs59vVA@mail.gmail.com>
-Message-ID: <20130916203130.2307521a@skate>
+In-Reply-To: <OF0FD99CA0.0DD1D9C1-ON86257BE8.005A4297-86257BE8.005B1032@rockwellcollins.com>
+References: <1379185433-8770-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1379185433-8770-2-git-send-email-thomas.petazzoni@free-electrons.com>
+ <OF0FD99CA0.0DD1D9C1-ON86257BE8.005A4297-86257BE8.005B1032@rockwellcollins.com>
+Message-ID: <20130916203407.63509990@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas De Schampheleire,
+Dear Ryan Barnett,
 
-On Mon, 16 Sep 2013 15:39:22 +0200, Thomas De Schampheleire wrote:
+On Mon, 16 Sep 2013 11:34:39 -0500, Ryan Barnett wrote:
 
-> What about allowing FOO_SOURCE to contain multiple words directly, and
-> thus not introducing a new variable? The package infrastructure can
-> download each word of FOO_SOURCE, but only extract (and otherwise use)
-> the first one. Any subsequent word has to be handled by the package
-> itself.
+> Per our chat on IRC, putting BR2_EXTERNAL into the generated makefile
+> isn't quite working out like I expected. I'm losing the BR2_EXTERNAL
+> variable definition.
+> 
+> Here are the steps I'm taking after applying your v2 of this patch to
+> a git clone of the mainline of buildroot. The buildroot clone is not
+> in the directory of ~/tmp but elsewhere.
+> 
+> make O=~/tmp/build_xm BR2_EXTERNAL=~/tmp/buildroot 
+> rc_beagle_xm_min_defconfig
+> cd ~/tmp/build_xm
+> make
 
-The problem is that the default extract step needs to know what to do.
-And what it does today is that it extracts the tarball whose name is
-given in FOO_SOURCE. If we put several words in FOO_SOURCE, then what
-should be the semantic of the default extract commands? Extract the
-first one? All of them?
+Ah, right. The below patch fixes that:
 
-That's why I've decided to go with another variable, which really means
-"I want this stuff to be downloaded, but don't do anything with it, the
-package recipe will take care of it".
+diff --git a/Makefile b/Makefile
+index 799c529..5d942bd 100644
+--- a/Makefile
++++ b/Makefile
+@@ -59,6 +59,8 @@ else
+ BR2_EXTERNAL = $(TOPDIR)/support/dummy-external/
+ endif
+ 
++EXTRAMAKEARGS += BR2_EXTERNAL="$(BR2_EXTERNAL)"
++
+ # Compute the full local version string so packages can use it as-is
+ # Need to export it, so it can be got from environment in children (eg. mconf)
+ export BR2_VERSION_FULL:=$(BR2_VERSION)$(shell $(TOPDIR)/support/scripts/setlocalversion)
+@@ -95,7 +97,7 @@ MAKEOVERRIDES =
+ override O:=$(O)
+ CONFIG_DIR:=$(O)
+ # we need to pass O= everywhere we call back into the toplevel makefile
+-EXTRAMAKEARGS = O=$(O)
++EXTRAMAKEARGS += O=$(O)
+ NEED_WRAPPER=y
+ endif
+ 
 
-Of course, I'm open to changing the semantic of FOO_SOURCE instead, we
-would just need to define what this new semantic should be.
 
-Thanks!
 
-Thomas
 -- 
 Thomas Petazzoni, Free Electrons
 Kernel, drivers, real-time and embedded Linux
