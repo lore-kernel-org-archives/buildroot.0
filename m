@@ -1,56 +1,42 @@
-From: Ryan Barnett <rjbarnet@rockwellcollins.com>
-Date: Mon, 16 Sep 2013 09:36:44 -0500
-Subject: [Buildroot] [RFC] Effective Patchwork Use and Patch Review
-In-Reply-To: <CAAXf6LWLmdBcOh5q9YvLtzHaSmfeeZbG-yjkfzZMdTeAVDC+zA@mail.gmail.com>
-References: <OFD77E15AC.FCFBC1CA-ON86257BE5.005BB4D9-86257BE5.005BB4FE@rockwellcollins.com>
- <20130914074740.424283aa@skate>
- <CAAXf6LWLmdBcOh5q9YvLtzHaSmfeeZbG-yjkfzZMdTeAVDC+zA@mail.gmail.com>
-Message-ID: <OFD4BE18C9.32F86585-ON86257BE8.004CBA65-86257BE8.005044AA@rockwellcollins.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 16 Sep 2013 17:24:44 +0200
+Subject: [Buildroot] [PATCH v3] apply-patches.sh: detect missing patches
+In-Reply-To: <8738p5i6kq.fsf@dell.be.48ers.dk>
+References: <CAAXf6LV9HPWdzqV_F5zQ+aABtVxZGRRkhDszF2Qx8vyXMb+PhA@mail.gmail.com>
+ <20130905100459.13173009@skate> <5228425A.7090502@lucaceresoli.net>
+ <20130905140135.GC3136@free.fr>
+ <CAAXf6LWWnb5xQUtZA8p3kgoU2et-kD6x9TzyzXykgNbxdsuv+Q@mail.gmail.com>
+ <20130911120630.GA14745@harvey.netwinder.org>
+ <CAAXf6LX7o9P1tXv3Egk8By-VbzarRYe5JRyTh5+3wYNBz9Z6aQ@mail.gmail.com>
+ <20130913181527.GA11933@harvey.netwinder.org>
+ <20130913182702.GB3301@free.fr>
+ <20130915133709.GA16826@harvey.netwinder.org>
+ <20130915141314.GA18166@harvey.netwinder.org>
+ <8738p5lud2.fsf@dell.be.48ers.dk> <8738p5i6kq.fsf@dell.be.48ers.dk>
+Message-ID: <20130916172444.2573614e@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas(es),
+Dear Peter Korsgaard,
 
-Thomas De Schampheleire <patrickdepinguin@gmail.com> wrote on 
-09/15/2013 09:23:35 AM:
+On Mon, 16 Sep 2013 09:11:49 +0200, Peter Korsgaard wrote:
 
-> Hi,
-> 
-> On Sat, Sep 14, 2013 at 7:47 AM, Thomas Petazzoni
-> <thomas.petazzoni@free-electrons.com> wrote:
-> > Dear Ryan Barnett,
-> >
-> > On Fri, 13 Sep 2013 11:41:41 -0500, Ryan Barnett wrote:
-> >
-> >
-> > patchwork is really not here to help with the reviewing process. It's
-> > mainly of use for the Buildroot maintainer to keep track of which
-> > patches remain to be merged/rejected.
-> >
-> > All the reviewing process takes place on the mailing list, using 
-e-mail
-> > clients. We don't use patchwork at all for this.
-> 
-> Agreed. When I wrote that patchwork improved the situation, I meant
-> that patchwork provided a good overview of outstanding patches, both
-> for reviewers as for maintainers.
+> So a bunch of non-patch files. I guess our best option is to degrade the
+> "Unsupported format" check to a warning again?
 
-OK that fine. I was just wondering if anyone had used patchworks
-to write some scripts to pull patches down and then mark-up and send 
-the review back out over email. My email client is a pain for this so
-I was just wondering if there was a way to not use it...
+Another way of seeing that is that using:
 
-Under Section 10.2 of the manual, would it be useful to update this 
-say explicitly state that the review takes place over the mailing 
-list? Currently I think the section implies it that but doesn't
-say it explicitly. 
+<pkg>_PATCH = some-debian-tarball
 
-Thanks,
--Ryan
+is not a good idea, and we should have a better way of handling this,
+no?
 
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130916/752167b1/attachment.html>
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
