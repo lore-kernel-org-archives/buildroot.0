@@ -1,36 +1,55 @@
-From: Fatih =?UTF-8?Q?A=C5=9F=C4=B1c=C4=B1?= <fatih.asici@gmail.com>
-Date: Mon, 16 Sep 2013 16:08:40 +0300
-Subject: [Buildroot] Building Qt5 Declarative on nitrogen6x with
- buildroot 2013.08
-In-Reply-To: <CA+csPL43ygbFLgBgqfHyU7JP10x7=cejdaQGKdBDNAUXcBDoDQ@mail.gmail.com>
-References: <CA+csPL6BGsmEFAag7uXsUxo73Bv5KcqCjLhLJifV_t4M6Oy8WQ@mail.gmail.com>
- <CA+csPL43ygbFLgBgqfHyU7JP10x7=cejdaQGKdBDNAUXcBDoDQ@mail.gmail.com>
-Message-ID: <1379336920.4275.13.camel@viko>
+From: Ralph Siemsen <ralphs@netwinder.org>
+Date: Mon, 16 Sep 2013 09:07:28 -0400
+Subject: [Buildroot] [PATCH] Trivial documentation fix for Signed-off-by
+Message-ID: <20130916130728.GA30181@harvey.netwinder.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Make consistent the capitalization and punctuation of Signed-of-by examples.
 
-> I see a challenge here in that the linux-buildroot-g++-"device" that
-> buildroot "generates" must have some platform dependent stuff in it.
-> How this is done in buildroot, I do not know, but two things must into
-> the qmake.conf file of linux-buildroot-g++:
-> 
-> 
-> - the EGL and GAL libraries (in the imx6-file it is:
-> QMAKE_LIBS_OPENGL_ES2  += -lEGL -lGAL)
-> 
-> - the symbol EGL_API_FB must be defined (in the imx6-file it is:
-> IMX6_CFLAGS             = -DEGL_API_FB=1) 
-> 
-> I understand that it cannot be put into the patch-file, since the EGL
-> and GAL libraries are interesting for imx6 only.
-> 
-qt5 packages use pkg-config to get EGL flags. See
-rpi-userland/rpi-userland-add-pkgconfig-files.patch.
+Signed-off-by: Ralph Siemsen <ralphs@netwinder.org>
+---
+ docs/manual/contribute.txt   | 4 ++--
+ docs/manual/patch-policy.txt | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-A similar patch is probably needed for the package providing EGL
-libraries to nitrogen6x.
+diff --git a/docs/manual/contribute.txt b/docs/manual/contribute.txt
+index 3736d61..2b2783d 100644
+--- a/docs/manual/contribute.txt
++++ b/docs/manual/contribute.txt
+@@ -40,7 +40,7 @@ $ git format-patch -M -n -s -o outgoing origin/master
+ ---------------------
+ 
+ This will generate patch files in the +outgoing+ subdirectory,
+-automatically adding the +signed-off-by+ line.
++automatically adding the +Signed-off-by+ line.
+ 
+ Once patch files are generated, you can review/edit the commit message
+ before submitting them using your favorite text editor.
+@@ -106,7 +106,7 @@ Some more paragraph giving some more details.
+ 
+ And yet another paragraph giving more details.
+ 
+-Signed-off-by John Doe <john.doe@noname.org>
++Signed-off-by: John Doe <john.doe@noname.org>
+ ---
+ Changes v2 -> v3:
+   - foo bar  (suggested by Jane)
+diff --git a/docs/manual/patch-policy.txt b/docs/manual/patch-policy.txt
+index d2250ad..2439cc6 100644
+--- a/docs/manual/patch-policy.txt
++++ b/docs/manual/patch-policy.txt
+@@ -105,7 +105,7 @@ At the end, the patch should look like:
+ ---------------
+ configure.ac: add C++ support test
+ 
+-signed-off-by John Doe <john.doe@noname.org>
++Signed-off-by: John Doe <john.doe@noname.org>
+ 
+ --- configure.ac.orig
+ +++ configure.ac
+-- 
+1.8.3.1
