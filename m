@@ -1,52 +1,35 @@
-From: Frank Bergmann <bergmann@rosho.de>
-Date: Mon, 16 Sep 2013 17:34:25 +0200
-Subject: [Buildroot] running gtk programs fail
-In-Reply-To: <20130914073514.6a5f3954@skate>
-References: <52330AFB.1050204@rosho.de> <20130914073514.6a5f3954@skate>
-Message-ID: <52372501.9070600@rosho.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 16 Sep 2013 17:38:12 +0200
+Subject: [Buildroot] [PATCHv2 04/14] gcc: fix Fortran support
+In-Reply-To: <87eh8pkd53.fsf@dell.be.48ers.dk>
+References: <1378138000-12739-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1378138000-12739-5-git-send-email-thomas.petazzoni@free-electrons.com>
+ <87eh8pkd53.fsf@dell.be.48ers.dk>
+Message-ID: <20130916173812.5c424599@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am 14.09.2013 07:35, schrieb Thomas Petazzoni:
-> On Fri, 13 Sep 2013 14:54:19 +0200, Frank Bergmann wrote:
->
->> If I start a small test program
->> (https://developer.gnome.org/gtk-tutorial/stable/c39.html#SEC-HELLOWORLD)
->> the window appears but no button. Also I'm unable to close the
->> window. Starting /usr/bin/gtk-demo fail too, nothing happens
->> (no window). I use xorg (modular) and fluxbox, blackbox and
->> enlightenment  work properly.
->>
->> Did I miss something or is libgtk broken ?
->
-> Hum, unfortunately there is too little details here to help you. Are
-> you running gtk-demo from a terminal? If so, are there any messages
-> appearing?
->
-> Usually, when doing some X.org, testing I do something like:
->
-> X -someoptions &
-> export DISPLAY=:0
-> gtk-demo
->
-> from the serial port console. This way, you can see which messages are
-> displayed by gtk-demo.
+Dear Peter Korsgaard,
 
-Thanks for your hint !
-But unfortunately it does not help - I can't see anything on the
-console.
+On Sun, 15 Sep 2013 23:07:04 +0200, Peter Korsgaard wrote:
 
-I also tested a very basic SDL program which simple call
+> I wonder if we shouldn't deprecate fortran (and objc) support and get
+> rid of them. Is there really a use case for them? Any interesting sw
+> that needs them?
 
-   SDL_Init(SDL_INIT_VIDEO)
+I have no idea. I believe Objective-C is completely useless. However, I
+believe Fortran *might* be useful for some scientific applications that
+could be used on embedded devices. But the fact that no-one ever
+complained about our Fortran support being broken (the runtime library
+was never copied to the target) is a fairly strong indication that
+nobody is using this.
 
-That call does not return and let the program hang. So I guess there
-is something important missing in my system that inhibit gtk and SDL
-from working (maybe some Xorg or kernel stuff). I have to investigate
-this.
-
-With regards,
-Frank.
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
