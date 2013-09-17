@@ -1,34 +1,34 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 17 Sep 2013 17:39:36 +0200
-Subject: [Buildroot] [git commit] quagga: security bump to version 0.99.22.3
-Message-ID: <20130917154313.D5E609B77C@busybox.osuosl.org>
+Date: Tue, 17 Sep 2013 17:39:44 +0200
+Subject: [Buildroot] [git commit] ruby: security bump to version 1.9.3-p448
+Message-ID: <20130917154314.208B19B7C1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=855b21a9cc3f43979be81e054ce1eee9f9ea349a
+commit: http://git.buildroot.net/buildroot/commit/?id=0fe0fca96997b8a6b8a761f3c12311309f760ccc
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes CVE-2013-2236.
+Fixes CVE-2013-4073.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/quagga/quagga.mk |    2 +-
+ package/ruby/ruby.mk |    2 +-
  1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/quagga/quagga.mk b/package/quagga/quagga.mk
-index 8b51917..995e42d 100644
---- a/package/quagga/quagga.mk
-+++ b/package/quagga/quagga.mk
+diff --git a/package/ruby/ruby.mk b/package/ruby/ruby.mk
+index 020cd76..ba2d49b 100644
+--- a/package/ruby/ruby.mk
++++ b/package/ruby/ruby.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--QUAGGA_VERSION = 0.99.22.1
-+QUAGGA_VERSION = 0.99.22.3
- QUAGGA_SOURCE = quagga-$(QUAGGA_VERSION).tar.xz
- QUAGGA_SITE = http://download.savannah.gnu.org/releases/quagga
- QUAGGA_DEPENDENCIES = host-gawk
+-RUBY_VERSION = 1.9.3-p429
++RUBY_VERSION = 1.9.3-p448
+ RUBY_SITE = ftp://ftp.ruby-lang.org/pub/ruby/1.9
+ RUBY_DEPENDENCIES = host-pkgconf host-ruby
+ HOST_RUBY_DEPENDENCIES = host-pkgconf
