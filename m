@@ -1,54 +1,43 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Tue, 17 Sep 2013 09:21:09 +0200
-Subject: [Buildroot] [RFCv1 09/11] package: add a <pkg>_SOURCE_ADDONS
-	variable
-In-Reply-To: <523759FA.5040706@mind.be>
-References: <1378416469-17708-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1378416469-17708-10-git-send-email-thomas.petazzoni@free-electrons.com>
- <CAAXf6LVXRvw34-d5vq9Oh+tZXd2a4Dzy1mxzWLdOS2FPs59vVA@mail.gmail.com>
- <20130916203130.2307521a@skate> <523759FA.5040706@mind.be>
-Message-ID: <CAAXf6LVQ7HuAs3LLdVj1jUAmcdtZa_s5P=mrPGRA+Crr1HseDw@mail.gmail.com>
+From: Espen Frimann Koren <espenfk@gmail.com>
+Date: Tue, 17 Sep 2013 09:37:46 +0200
+Subject: [Buildroot] Fix to Qt5base-build
+Message-ID: <CA+csPL67CJSJHgfhgnJJfBcw+LUszPWT3VwFCEFw5n3Oy4jN1Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, Arnout,
+Hi.
 
-On Mon, Sep 16, 2013 at 9:20 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
-> On 16/09/13 20:31, Thomas Petazzoni wrote:
->>
->> Dear Thomas De Schampheleire,
->>
->> On Mon, 16 Sep 2013 15:39:22 +0200, Thomas De Schampheleire wrote:
->>
->>> What about allowing FOO_SOURCE to contain multiple words directly, and
->>> thus not introducing a new variable? The package infrastructure can
->>> download each word of FOO_SOURCE, but only extract (and otherwise use)
->>> the first one. Any subsequent word has to be handled by the package
->>> itself.
->>
->>
->> The problem is that the default extract step needs to know what to do.
->> And what it does today is that it extracts the tarball whose name is
->> given in FOO_SOURCE. If we put several words in FOO_SOURCE, then what
->> should be the semantic of the default extract commands? Extract the
->> first one? All of them?
->>
->> That's why I've decided to go with another variable, which really means
->> "I want this stuff to be downloaded, but don't do anything with it, the
->> package recipe will take care of it".
->>
->> Of course, I'm open to changing the semantic of FOO_SOURCE instead, we
->> would just need to define what this new semantic should be.
->
->
->  I'm more in favour of the <pkg>_SOURCE_ADDONS proposal. I think having
-> multiple _SOURCE files would be confusing.
+I have found a solution to why Qt5 does not find either OpenGL ES2 or EGL
+during configuration.
 
-Ok, fair enough.
-I think you should add this to the documentation, then.
+In the file package/qt5/qt5base/qt5base-mkspecs-files.patch, two files are
+created in output/build/qt5base-5.0.2/mkspecs/devices/linux-buildroot-g++.
+In my opinion the following lines must be included in the file (from the
+patch):
 
-Best regards,
-Thomas
+QMAKE_LIBS_EGL         += -lEGL
+QMAKE_LIBS_OPENGL_ES2  += -lEGL -lGAL
+
+QMAKE_CFLAGS           += -DEGL_API_FB=1
+QMAKE_CXXFLAGS         += -DEGL_API_FB=1
+QMAKE_CFLAGS_DEBUG     += -DEGL_API_FB=1
+QMAKE_CXXFLAGS_DEBUG   += -DEGL_API_FB=1
+
+I cannot commit to the buildroot tree, so someone have to do this. There
+are other issues in the corresponding file in
+output/build/qt5base-5.0.2/mkspecs/devices/linux-imx6-g++/qmake.conf, which
+is provided by Qt themselves, that may need to be taken into consideration,
+for instance
+
+EGLFS_PLATFORM_HOOKS_SOURCES = $$PWD/qeglfshooks_imx6.cpp
+
+Maybe there should be possible to select Qt device mkspec in the make
+menuconfig-system?
+
+Sp1
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130917/c46171b6/attachment.html>
