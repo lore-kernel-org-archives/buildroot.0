@@ -1,23 +1,34 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 17 Sep 2013 14:01:47 +0200
-Subject: [Buildroot] [PATCH] libroxml: bump version to 2.2.3
-In-Reply-To: <1379368069-29373-1-git-send-email-blunderer@blunderer.org>
- (blunderer@blunderer.org's message of "Mon, 16 Sep 2013 14:47:49
- -0700")
-References: <1379368069-29373-1-git-send-email-blunderer@blunderer.org>
-Message-ID: <874n9jfyhg.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Tue, 17 Sep 2013 14:00:04 +0200
+Subject: [Buildroot] [git commit] Makefile: release: create tarball from
+	current branch, not master
+Message-ID: <20130917120200.4A73D9B7BD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "blunderer" == blunderer  <blunderer@blunderer.org> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=c6715b69e467182ee5242d7484caace2088340c8
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- blunderer> From: Tristan Lelong <tristan.lelong@blunderer.org>
- blunderer> Signed-off-by: Tristan Lelong <tristan.lelong@blunderer.org>
+To support stable bugfix releases.
 
-Committed, thanks.
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ Makefile |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/Makefile b/Makefile
+index 2163e95..6ef0edc 100644
+--- a/Makefile
++++ b/Makefile
+@@ -838,7 +838,7 @@ release: OUT=buildroot-$(BR2_VERSION)
+ # Create release tarballs. We need to fiddle a bit to add the generated
+ # documentation to the git output
+ release:
+-	git archive --format=tar --prefix=$(OUT)/ master > $(OUT).tar
++	git archive --format=tar --prefix=$(OUT)/ HEAD > $(OUT).tar
+ 	$(MAKE) O=$(OUT) manual-html manual-txt manual-pdf
+ 	tar rf $(OUT).tar $(OUT)
+ 	gzip -9 -c < $(OUT).tar > $(OUT).tar.gz
