@@ -1,7 +1,7 @@
 From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Tue, 17 Sep 2013 09:54:31 +0200
+Date: Tue, 17 Sep 2013 09:59:10 +0200
 Subject: [Buildroot] [PATCH v4 0/3] Fix for top-level parallel make part 1
-Message-ID: <1379404474-3089-1-git-send-email-fabio.porcedda@gmail.com>
+Message-ID: <1379404753-3471-1-git-send-email-fabio.porcedda@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -25,7 +25,7 @@ parallel make, example:
 Before to try that you have to remove the ".NOTPARALLEL" line in the top-level Makefile.
 
 The part that remain to fix for top-level parallel make is the toolchain
-building and targets after building all the packages.
+building and targets after building all the packages, also i'm preparing patch to add + prefix to every line that call a sub-make.
 
 Best regards
 Fabio Porcedda
@@ -44,15 +44,16 @@ v2:
    because was not working fine against recent toolchain changes.
 
 Fabio Porcedda (3):
-  enable top-level parallel make
   package: add toolchain dependency to inner-generic-package
   pkg-generic: fix rules for top-level parallel make
+  package/Makefile.in: add a way to don't force jobs in sub-make
 
- Makefile                 |  5 +----
+ Makefile                 |  2 +-
+ package/Makefile.in      |  2 +-
  package/pkg-autotools.mk |  3 ++-
  package/pkg-generic.mk   | 51 ++++++++++++++++++++++++------------------------
  package/uclibc/uclibc.mk |  3 ++-
- 4 files changed, 31 insertions(+), 31 deletions(-)
+ 5 files changed, 32 insertions(+), 29 deletions(-)
 
 -- 
 1.8.4
