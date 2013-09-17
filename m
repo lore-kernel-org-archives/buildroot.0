@@ -1,55 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 17 Sep 2013 20:50:24 +0200
-Subject: [Buildroot] [PATCH v2] Add support for eglibc-2.17 multiarch
- layout, from Linaro 2013.07+
-In-Reply-To: <CA+-urNTYe7NF43KmEQDYVZBsqvgC0w+F7VtEafRUQVxhzO+CNA@mail.gmail.com>
-References: <1379353155-26459-1-git-send-email-greg.beresford@zbdsolutions.com>
- <5237F574.9070700@mind.be>
- <1379411093-37240-1-git-send-email-greg.beresford@zbdsolutions.com>
- <CA+-urNTYe7NF43KmEQDYVZBsqvgC0w+F7VtEafRUQVxhzO+CNA@mail.gmail.com>
-Message-ID: <20130917205024.0bd97ef9@skate>
+Date: Tue, 17 Sep 2013 20:47:54 +0200
+Subject: [Buildroot] [PATCHv2 1/4] core: introduce the BR2_EXTERNAL
+ variable
+In-Reply-To: <5237F243.2040503@mind.be>
+References: <1379185433-8770-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1379185433-8770-2-git-send-email-thomas.petazzoni@free-electrons.com>
+ <52377889.3010402@mind.be> <20130917062645.37b34ee6@skate>
+ <5237F243.2040503@mind.be>
+Message-ID: <20130917204754.1579d573@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Frank Hunleth,
+Dear Arnout Vandecappelle,
 
-On Tue, 17 Sep 2013 13:01:14 -0400, Frank Hunleth wrote:
+On Tue, 17 Sep 2013 08:10:11 +0200, Arnout Vandecappelle wrote:
 
-> Thanks for posting the patch. I've been trying it out, but I think
-> that I'm running into a bigger problem of how the shared library
-> search path works now. I.e. /usr/lib is not searched by default
-> anymore even though that's where many buildroot packages install their
-> libraries.
+> > I mean, if an user changes the value of BR2_EXTERNAL in menuconfig, he
+> > has to exit / re-run menuconfig to anyway see the updated set of
+> > configuration options after the BR2_EXTERNAL value change. Does it
+> > really makes sense to set in menuconfig a configuration option that by
+> > itself changes the available configuration options, but which requires
+> > exiting/re-runnning menuconfig?
 > 
-> Here's the new search path:
+>   The primary way of setting BR2_EXTERNAL would still be through the 
+> environment - in fact, the code above forces you to set it through the 
+> environment the first time, otherwise the option won't be visible.
 > 
-> /lib/arm-linux-gnueabihf/
-> /usr/lib/arm-linux-gnueabihf/tls/v7l/neon/vfp/
-> /usr/lib/arm-linux-gnueabihf/tls/v7l/neon/
-> /usr/lib/arm-linux-gnueabihf/tls/v7l/vfp/
-> /usr/lib/arm-linux-gnueabihf/tls/v7l/
-> /usr/lib/arm-linux-gnueabihf/tls/neon/vfp/
-> /usr/lib/arm-linux-gnueabihf/tls/neon/
-> /usr/lib/arm-linux-gnueabihf/tls/vfp/
-> /usr/lib/arm-linux-gnueabihf/tls/
-> /usr/lib/arm-linux-gnueabihf/v7l/neon/vfp/
-> /usr/lib/arm-linux-gnueabihf/v7l/neon/
-> /usr/lib/arm-linux-gnueabihf/v7l/vfp/
-> /usr/lib/arm-linux-gnueabihf/v7l/
-> /usr/lib/arm-linux-gnueabihf/neon/vfp/
 > 
-> I can think of a few hacks to get around this, but is there a right
-> way that I should be configuring buildroot to deal with this
-> multiarch/multilib toolchain feature?
+> >>    It doesn't really work, though, because currently the .config is
+> >> not read in when doing 'make menuconfig', so that
+> >> BR2_EXTERNAL_FROM_ENV will always be "". But I'm sure we'll be able
+> >> to find something that works with a little more effort.
+> >
+> > Hum, the .config is not read when doing 'make menuconfig'? Then how can
+> > 'make menuconfig' show the current state of enabled options?
+> 
+>   I mena that it isn't read by the Makefile.
 
-I haven't had the time yet to try the patch and experiment with this
-problem specifically, but I believe one of the possible solutions is to
-continue to install the libraries in /lib and /usr/lib, and
-creates /lib/arm-linux-gnueabihf/ -> /lib
-and /usr/lib/arm-linux-gnueabihf/ -> /usr/lib symbolic links.
+Ok, so what do you suggest exactly? Because you proposed an
+implementation, but concluded with 'it doesn't work'. So I'm a little
+bit confused here :-)
+
+Thanks!
 
 Thomas
 -- 
