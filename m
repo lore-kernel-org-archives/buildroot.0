@@ -1,55 +1,49 @@
-From: Fatih =?UTF-8?Q?A=C5=9F=C4=B1c=C4=B1?= <fatih.asici@gmail.com>
-Date: Tue, 17 Sep 2013 14:20:10 +0300
-Subject: [Buildroot] [PATCH] gpu-viv-bin-mx6q: add pkgconfig files for EGL
-	and OpenGLESv2
-Message-ID: <1379416810.13187.1.camel@viko>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Tue, 17 Sep 2013 13:21:15 +0200
+Subject: [Buildroot] [git commit branch/2013.08.x] Update for 2013.08.1
+Message-ID: <20130917112852.7989A9B7A9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Fatih A??c? <fatih.asici@gmail.com>
----
- .../gpu-viv-bin-mx6q-add-pkgconfig-files.patch     |   30 ++++++++++++++++++++
- 1 file changed, 30 insertions(+)
- create mode 100644 package/freescale-imx/gpu-viv-bin-mx6q/gpu-viv-bin-mx6q-add-pkgconfig-files.patch
+commit: http://git.buildroot.net/buildroot/commit/?id=ad2600ce216f3df4c2cf0ff097c0bceb1ef149b0
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/2013.08.x
 
-diff --git a/package/freescale-imx/gpu-viv-bin-mx6q/gpu-viv-bin-mx6q-add-pkgconfig-files.patch b/package/freescale-imx/gpu-viv-bin-mx6q/gpu-viv-bin-mx6q-add-pkgconfig-files.patch
-new file mode 100644
-index 0000000..8ed4ffe
---- /dev/null
-+++ b/package/freescale-imx/gpu-viv-bin-mx6q/gpu-viv-bin-mx6q-add-pkgconfig-files.patch
-@@ -0,0 +1,30 @@
-+Add .pc files for the OpenGLESv2 and EGL libraries
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ CHANGES  |    9 +++++++++
+ Makefile |    2 +-
+ 2 files changed, 10 insertions(+), 1 deletions(-)
+
+diff --git a/CHANGES b/CHANGES
+index f1b01a3..754f379 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -1,3 +1,12 @@
++2013.08.1, Released September 17th, 2013:
 +
-+Signed-off-by: Fatih A??c? <fatih.asici@gmail.com>
++	Handle the removed GCC and development files on target options
++	through Config.in.legacy.
 +
-+--- /dev/null
-++++ b/usr/lib/pkgconfig/egl.pc
-+@@ -0,0 +1,10 @@
-++prefix=/usr
-++exec_prefix=${prefix}
-++libdir=${exec_prefix}/lib
-++includedir=${prefix}/include
-++
-++Name: egl
-++Description: Freescale gpu-viv-bin-mx6q implementation of EGL
-++Version: 1.0
-++Libs: -L${libdir} -lEGL
-++Cflags: -I${includedir}/ -DEGL_API_FB=1
-+--- /dev/null
-++++ b/usr/lib/pkgconfig/glesv2.pc
-+@@ -0,0 +1,10 @@
-++prefix=/usr
-++exec_prefix=${prefix}
-++libdir=${exec_prefix}/lib
-++includedir=${prefix}/include
-++
-++Name: glesv2
-++Description: Freescale gpu-viv-bin-mx6q implementation of OpenGL ESv2
-++Version: 2.0
-++Libs: -L${libdir} -lGAL -lEGL -lGLESv2
-++Cflags: -I${includedir}/ -DEGL_API_FB=1
--- 
-1.7.10.4
++	Rootfs /lib symlink handling fixed (triggered by make external-deps)
++
++	Updated/fixed packages: elf2flt, ti-gfx
++
+ 2013.08, Released August 31th, 2013:
+ 
+ 	Minor fixes.
+diff --git a/Makefile b/Makefile
+index 819a597..70749ef 100644
+--- a/Makefile
++++ b/Makefile
+@@ -24,7 +24,7 @@
+ #--------------------------------------------------------------
+ 
+ # Set and export the version string
+-export BR2_VERSION:=2013.08
++export BR2_VERSION:=2013.08.1
+ 
+ # Check for minimal make version (note: this check will break at make 10.x)
+ MIN_MAKE_VERSION=3.81
