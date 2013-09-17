@@ -1,105 +1,97 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 17 Sep 2013 08:23:48 +0200
-Subject: [Buildroot] [PATCH] Add support for eglibc-2.17 multiarch
- layout, from Linaro 2013.07+
-In-Reply-To: <1379353155-26459-1-git-send-email-greg.beresford@zbdsolutions.com>
-References: <1379353155-26459-1-git-send-email-greg.beresford@zbdsolutions.com>
-Message-ID: <5237F574.9070700@mind.be>
+Date: Tue, 17 Sep 2013 08:07:43 +0200
+Subject: [Buildroot] [PATCHv2 0/4] Add a BR2_EXTERNAL mechanism
+In-Reply-To: <20130917063717.1b005fd2@skate>
+References: <1379185433-8770-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <52376C45.1020406@mind.be> <20130917063717.1b005fd2@skate>
+Message-ID: <5237F1AF.8000400@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 16/09/13 19:39, Greg Beresford wrote:
-> From: Henry Luis <henry@echelon.com>
+On 17/09/13 06:37, Thomas Petazzoni wrote:
+> Dear Arnout Vandecappelle,
 >
-> Arch-specific libraries, including libc.so.6, are expected to be in a
-> subdirectory of /lib (e.g. /lib/arm-linux-gnueabihf). This patch
-> changes copy_toolchain_lib_root() in helper.mk to preserve the
-> toolchain sysroot's lib directory structure, except for SUPPORT_LIB_DIR
-> which are still copied directly under DESTDIR.
+> On Mon, 16 Sep 2013 22:38:29 +0200, Arnout Vandecappelle wrote:
 >
-> Signed-off-by: Greg Beresford <greg.beresford@zbdsolutions.com>
-> ---
-> I've copied and reformatted Henry Luis' patch from the attachment to
-> https://bugs.busybox.net/show_bug.cgi?id=6452. I've given it a test
-> with Linaro ARM 2013.08 and CodeSourcery ARM 2013.05 toolchains and
-> it seems to work ok. It does result in a non-hf ld-linux.so being
-> copied in addition to the correct one on the linaro toolchain, but
-> the target still works. (I think that this is because buildroot checks
-> for both versions, and copies everything it successfully finds.)
+>>    I've taken a few days to let the dust settle on this patch series
+>> (and it seems it still hasn't settled...). After reading the entire
+>> series this time (instead of commenting before I understood what was
+>> happening exactly), I have two overall comments still. More comments
+>> will follow in individual patches.
+>>
+>>
+>> 1. Peter nacked all previous attempts of having this type of feature,
+>> so I think it's best if he gives an indication if this series has a
+>> chance of survival before we all spend more time on it.
 >
-> Also, this is my first submission to anything using git. I've tried to
-> follow the instructions in the manual, so I hope everything is in order!
+> Adding Peter in Cc on this one. I know he is a bit behind in terms of
+> reading the backlog of Buildroot e-mails (which has been enormous since
+> a few days).
+>
+> I have the pretension of thinking that the currently proposed
+> implementation is simple enough to remain in the KISS spirit of
+> Buildroot. I believe that what prevented earlier implementation from
+> being merged was not so much that they allowed 'external packages',
+> but more due to their complexity. But honestly, I don't really remember
+> the implementation details of the previous proposals, so I might be
+> wrong on that one.
+>
+>> 2. I really have a huge problem with the fact that the .config is no
+>> longer complete, and that instead you have to explicitly provide
+>> extra command-line arguments to be able to reproduce the build. And
+>> it doesn't help that it behaves differently when you have an
+>> out-of-tree output directory (where the BR2_EXTERNAL is stored) than
+>> when you're using the default output directory. I'm actually very
+>> surprised that nobody else seems to have a problem with this. So for
+>> me, this gets a big Nack unless the BR2_EXTERNAL is stored in
+>> the .config.
+>
+> On the wrapper Makefile that contains BR2_EXTERNAL, I am not convinced
+> it is a good idea, since as you mention it creates a difference whether
+> you're building out-of-tree from the output directory, or out-of-tree
+> but from the source directory. I think this is not good, and therefore
+> that BR2_EXTERNAL shouldn't be kept in the wrapper Makefile.
+>
+> However, I still do not understand how storing BR2_EXTERNAL in .config
+> will clarify things for the user. Changing BR2_EXTERNAL affects what
+> 'menuconfig' shows. So there is no way for 'menuconfig' to update what
+> it displays when the user changes the value of BR2_EXTERNAL without
+> exiting/re-running menuconfig, which sounds really odd.
+>
+> To me, BR2_EXTERNAL= is a bit like O=, it's a local build decision that
+> you make to add some external configurations/external packages. Most
+> likely, if you have external packages in BR2_EXTERNAL, the defconfig
+> you have to use is also in BR2_EXTERNAL, so there's no way you can
+> forget to specify BR2_EXTERNAL on the command, since otherwise you
+> won't be able to even see your defconfig.
 
-  The way you did it is perfect! I'm glad to see that documentation works :-)
+  But you usually don't run "make foo_defconfig; make". You usually run 
+either "make menuconfig; make" or "make foo-dirclean; make" or some other 
+variant.
 
->
-> Regards
-> Greg
->
->   toolchain/helpers.mk | 24 ++++++++++++++++--------
->   1 file changed, 16 insertions(+), 8 deletions(-)
->
-> diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
-> index 0e270ee..b2b1b2f 100644
-> --- a/toolchain/helpers.mk
-> +++ b/toolchain/helpers.mk
-> @@ -50,11 +50,12 @@ copy_toolchain_lib_root = \
->   	LIB="$(strip $4)"; \
->   	DESTDIR="$(strip $5)" ; \
->    \
-> +	pushd $${ARCH_SYSROOT_DIR} > /dev/null; \
+  I just think it's a really bad idea to split the buildroot 
+configuration over the .config file and the environment. The concept just 
+scares the hell out of me.
 
-  I don't see why this pushd change is needed, and I think it makes 
-things even less clear.
+  The comparison with O= is a good one: O= makes pretty damn sure that 
+things remain consistent, because the .config is stored in the O= 
+directory rather than someplace else.
+
+
+
+> So while I do agree that being able to store BR2_EXTERNAL would be
+> nice, I don't see how it can be achieved in a way that isn't confusing
+> for the user.
+
+  Since the user probably is never going to change the value of 
+BR2_EXTERNAL, I think that's a relatively small price to pay and that it 
+can be solved with documentation.
 
   Regards,
   Arnout
->   	for dir in \
-> -		$${ARCH_SYSROOT_DIR}/$${ARCH_LIB_DIR}/$(TOOLCHAIN_EXTERNAL_PREFIX) \
-> -		$${ARCH_SYSROOT_DIR}/usr/$(TOOLCHAIN_EXTERNAL_PREFIX)/$${ARCH_LIB_DIR} \
-> -		$${ARCH_SYSROOT_DIR}/$${ARCH_LIB_DIR} \
-> -		$${ARCH_SYSROOT_DIR}/usr/$${ARCH_LIB_DIR} \
-> +		./$${ARCH_LIB_DIR}/$(TOOLCHAIN_EXTERNAL_PREFIX) \
-> +		./usr/$(TOOLCHAIN_EXTERNAL_PREFIX)/$${ARCH_LIB_DIR} \
-> +		./$${ARCH_LIB_DIR} \
-> +		./usr/$${ARCH_LIB_DIR} \
->   		$${SUPPORT_LIB_DIR} ; do \
->   		LIBSPATH=`find $${dir} -maxdepth 1 -name "$${LIB}.*" 2>/dev/null` ; \
->   		if test -n "$${LIBSPATH}" ; then \
-> @@ -66,18 +67,25 @@ copy_toolchain_lib_root = \
->   		LIBDIR=`dirname $${LIBPATH}` ; \
->   		while test \! -z "$${LIBNAME}" ; do \
->   			LIBPATH=$${LIBDIR}/$${LIBNAME} ; \
-> -			rm -fr $(TARGET_DIR)/$${DESTDIR}/$${LIBNAME}; \
-> -			mkdir -p $(TARGET_DIR)/$${DESTDIR}; \
-> +			if [ "$${dir}" = "$${SUPPORT_LIB_DIR}" ]; then \
-> +				DDIR=$${DESTDIR} ; \
-> +			else \
-> +				DDIR=$${LIBDIR} ; \
-> +			fi; \
-> +			rm -fr $(TARGET_DIR)/$${DDIR}/$${LIBNAME}; \
-> +			mkdir -p $(TARGET_DIR)/$${DDIR}; \
->   			if test -h $${LIBPATH} ; then \
-> -				cp -d $${LIBPATH} $(TARGET_DIR)/$${DESTDIR}/; \
-> +				cp -d $${LIBPATH} $(TARGET_DIR)/$${DDIR}/; \
->   			elif test -f $${LIBPATH}; then \
-> -				$(INSTALL) -D -m0755 $${LIBPATH} $(TARGET_DIR)/$${DESTDIR}/$${LIBNAME}; \
-> +				$(INSTALL) -D -m0755 $${LIBPATH} $(TARGET_DIR)/$${DDIR}/$${LIBNAME}; \
->   			else \
-> +				popd > /dev/null; \
->   				exit -1; \
->   			fi; \
->   			LIBNAME="`readlink $${LIBPATH}`"; \
->   		done; \
->   	done; \
-> +	popd > /dev/null; \
->    \
->   	echo -n
->
->
 
 
 -- 
