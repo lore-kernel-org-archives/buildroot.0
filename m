@@ -1,23 +1,34 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 17 Sep 2013 17:40:05 +0200
-Subject: [Buildroot] [PATCH 1/2] quagga: security bump to version
-	0.99.22.3
-In-Reply-To: <1379428198-12458-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Tue, 17 Sep 2013 11:29:57 -0300")
-References: <1379428198-12458-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87ioxze9t6.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Tue, 17 Sep 2013 17:39:36 +0200
+Subject: [Buildroot] [git commit] quagga: security bump to version 0.99.22.3
+Message-ID: <20130917154313.D5E609B77C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=855b21a9cc3f43979be81e054ce1eee9f9ea349a
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Gustavo> Fixes CVE-2013-2236.
- Gustavo> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Fixes CVE-2013-2236.
 
-Committed both, thanks.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/quagga/quagga.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/quagga/quagga.mk b/package/quagga/quagga.mk
+index 8b51917..995e42d 100644
+--- a/package/quagga/quagga.mk
++++ b/package/quagga/quagga.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-QUAGGA_VERSION = 0.99.22.1
++QUAGGA_VERSION = 0.99.22.3
+ QUAGGA_SOURCE = quagga-$(QUAGGA_VERSION).tar.xz
+ QUAGGA_SITE = http://download.savannah.gnu.org/releases/quagga
+ QUAGGA_DEPENDENCIES = host-gawk
