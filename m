@@ -1,42 +1,36 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 17 Sep 2013 20:44:07 +0200
-Subject: [Buildroot] [git commit] aiccu: needs threads
-Message-ID: <20130917184540.EEAD39B7C2@busybox.osuosl.org>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue, 17 Sep 2013 15:45:53 -0300
+Subject: [Buildroot] [PATCH] apply-patches.sh: avoid reversed/already
+	applied patches
+Message-ID: <1379443553-12452-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=46baba78ffc6db422d9cfb1e24894497467c501a
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Fixes:
-http://autobuild.buildroot.net/results/f6e/f6e1da89b3a0418a50cbfa39fc9373dad3fc968c/
+Disable reversed/already applied patches fallout from commit
+5871b791995ebe295db7dca608afe3f293ce8953
+Reverse patches are bad, they may unfix things with version bumps and
+just sneak under the radar with pure batch mode.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/aiccu/Config.in |    5 +++--
- 1 files changed, 3 insertions(+), 2 deletions(-)
+ support/scripts/apply-patches.sh | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/aiccu/Config.in b/package/aiccu/Config.in
-index 1c6f554..15959b1 100644
---- a/package/aiccu/Config.in
-+++ b/package/aiccu/Config.in
-@@ -2,6 +2,7 @@ config BR2_PACKAGE_AICCU
- 	bool "aiccu"
- 	depends on BR2_INET_IPV6
- 	depends on BR2_USE_WCHAR
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	select BR2_PACKAGE_GNUTLS
- 	help
- 	  SixXS Automatic IPv6 Connectivity Client Utility
-@@ -17,5 +18,5 @@ config BR2_PACKAGE_AICCU
- 
- 	  http://www.sixxs.net/tools/aiccu/
- 
--comment "aiccu requires a toolchain with IPv6 and WCHAR support"
--	depends on !(BR2_INET_IPV6 && BR2_USE_WCHAR)
-+comment "aiccu requires a toolchain with IPv6, WCHAR and thread support"
-+	depends on !(BR2_INET_IPV6 && BR2_USE_WCHAR && BR2_TOOLCHAIN_HAS_THREADS)
+diff --git a/support/scripts/apply-patches.sh b/support/scripts/apply-patches.sh
+index 1ebaea9..ff72b45 100755
+--- a/support/scripts/apply-patches.sh
++++ b/support/scripts/apply-patches.sh
+@@ -84,7 +84,7 @@ function apply_patch {
+ 	exit 1
+     fi
+     echo $patch >> ${builddir}/.applied_patches_list
+-    ${uncomp} "${path}/$patch" | patch -g0 -p1 -E -d "${builddir}" -t
++    ${uncomp} "${path}/$patch" | patch -g0 -p1 -E -d "${builddir}" -t -N
+     if [ $? != 0 ] ; then
+         echo "Patch failed!  Please fix ${patch}!"
+ 	exit 1
+-- 
+1.8.1.5
