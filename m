@@ -1,43 +1,36 @@
-From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Tue, 17 Sep 2013 09:59:13 +0200
-Subject: [Buildroot] [PATCH v4 3/3] package/Makefile.in: add a way to don't
-	force jobs in sub-make
-In-Reply-To: <1379404753-3471-1-git-send-email-fabio.porcedda@gmail.com>
-References: <1379404753-3471-1-git-send-email-fabio.porcedda@gmail.com>
-Message-ID: <1379404753-3471-4-git-send-email-fabio.porcedda@gmail.com>
+From: Markos Chandras <markos.chandras@imgtec.com>
+Date: Tue, 17 Sep 2013 10:04:17 +0100
+Subject: [Buildroot] [PATCH] toolchain-external: Update Sourcery CodeBench
+	MIPS toolchain
+Message-ID: <1379408657-18335-1-git-send-email-markos.chandras@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When the "BR2_JLEVEL" variable is empty use "make"
-without the "-j" option.
-To be able to use top-level parallel make we must don't force
-the number of jobs in sub-make.
+Update to the latest update for the 2013.05 toolchain
+released on 11 September 2013.
 
-Example:
-	make BR2_JLEVEL= -j8
+https://sourcery.mentor.com/GNUToolchain/release2554
 
-Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
 ---
- package/Makefile.in | 2 +-
+ toolchain/toolchain-external/ext-tool.mk | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/Makefile.in b/package/Makefile.in
-index 170ad78..d406901 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -18,7 +18,7 @@ PARALLEL_JOBS:=$(BR2_JLEVEL)
- endif
- 
- MAKE1:=$(HOSTMAKE) -j1
--MAKE:=$(HOSTMAKE) -j$(PARALLEL_JOBS)
-+MAKE:=$(HOSTMAKE) $(if $(PARALLEL_JOBS),-j$(PARALLEL_JOBS))
- 
- # Compute GNU_TARGET_NAME
- GNU_TARGET_NAME=$(ARCH)-buildroot-$(TARGET_OS)-$(LIBC)$(ABI)
+diff --git a/toolchain/toolchain-external/ext-tool.mk b/toolchain/toolchain-external/ext-tool.mk
+index 3539cb5..db2a99e 100644
+--- a/toolchain/toolchain-external/ext-tool.mk
++++ b/toolchain/toolchain-external/ext-tool.mk
+@@ -246,7 +246,7 @@ TOOLCHAIN_EXTERNAL_SITE = http://sourcery.mentor.com/public/gnu_toolchain/mips-l
+ TOOLCHAIN_EXTERNAL_SOURCE = mips-2012.09-99-mips-linux-gnu-i686-pc-linux-gnu.tar.bz2
+ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201305),y)
+ TOOLCHAIN_EXTERNAL_SITE = http://sourcery.mentor.com/public/gnu_toolchain/mips-linux-gnu/
+-TOOLCHAIN_EXTERNAL_SOURCE = mips-2013.05-36-mips-linux-gnu-i686-pc-linux-gnu.tar.bz2
++TOOLCHAIN_EXTERNAL_SOURCE = mips-2013.05-66-mips-linux-gnu-i686-pc-linux-gnu.tar.bz2
+ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201305),y)
+ TOOLCHAIN_EXTERNAL_SITE = http://sourcery.mentor.com/public/gnu_toolchain/nios2-linux-gnu/
+ TOOLCHAIN_EXTERNAL_SOURCE = sourceryg++-2013.05-43-nios2-linux-gnu-i686-pc-linux-gnu.tar.bz2
 -- 
-1.8.4
+1.8.3.2
