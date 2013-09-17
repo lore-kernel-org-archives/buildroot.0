@@ -1,77 +1,105 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 17 Sep 2013 06:37:17 +0200
-Subject: [Buildroot] [PATCHv2 0/4] Add a BR2_EXTERNAL mechanism
-In-Reply-To: <52376C45.1020406@mind.be>
-References: <1379185433-8770-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <52376C45.1020406@mind.be>
-Message-ID: <20130917063717.1b005fd2@skate>
+Date: Tue, 17 Sep 2013 06:44:05 +0200
+Subject: [Buildroot] Is GPLv2 the right license for Buildroot?
+In-Reply-To: <87vc20fp2g.fsf@dell.be.48ers.dk>
+References: <20130911091700.0b24df41@skate>
+ <OFA3C6DE52.DF6BBCA7-ON86257BE3.0054A3F9-86257BE3.00577394@rockwellcollins.com>
+ <20130911172709.GB3410@free.fr>
+ <CAAXf6LVD590fVudge3Fk+2B8pSzvUEV2GQLTcbz=VpOB2HCmtQ@mail.gmail.com>
+ <20130912202157.536e5904@skate>
+ <F9C551623D2CBB4C9488801D14F864C639AC8DAF@ex-mb1.corp.adtran.com>
+ <20130912203359.7e650ebe@skate> <52323A54.7020808@mind.be>
+ <20130912221256.GE3362@free.fr> <523388B6.7090305@mind.be>
+ <20130914221613.GA3444@free.fr> <20130916182101.3844a686@skate>
+ <87vc20fp2g.fsf@dell.be.48ers.dk>
+Message-ID: <20130917064405.6300d72b@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Arnout Vandecappelle,
+Dear Peter Korsgaard,
 
-On Mon, 16 Sep 2013 22:38:29 +0200, Arnout Vandecappelle wrote:
+On Mon, 16 Sep 2013 23:12:55 +0200, Peter Korsgaard wrote:
 
->   I've taken a few days to let the dust settle on this patch series
-> (and it seems it still hasn't settled...). After reading the entire
-> series this time (instead of commenting before I understood what was
-> happening exactly), I have two overall comments still. More comments
-> will follow in individual patches.
+> We have already tried to clarify it in the user manual:
+> 
+> http://buildroot.net/downloads/manual/manual.html#_complying_with_the_buildroot_license
+> 
+> E.G. Buildroot should be handled just like how you handle the Linux
+> kernel and Busybox.
+
+I think it's not really as clear as some other explanations that Yann
+gave. Especially that:
+
+ *) Distributing Buildroot as part of the "scripts needed for
+ compilation" requirement is not due to the fact that Buildroot is
+ under the GPL, but because most likely the embedded Linux system
+ produced does contain GPL packages.
+
+ *) That an alternate possibilities to distributing Buildroot is to
+ provide a large shell script that runs the same commands that
+ Buildroot is doing, but that this is probably much more complicated
+ than providing the Buildroot source code.
+
+ *) That package recipes for non-GPL packages can be removed from the
+ Buildroot tree before it is distributed (especially the package
+ recipes for proprietary applications)
+
+ *) That the .config should be included as well, but that references to
+ non-GPL applications can be removed from the .config if necessary.
+
+>  Thomas>  (2) Change the Buildroot license to a non-copyleft license.
+>  Thomas> Of course, that requires contacting a lot of people, but
+>  Thomas> maybe not so much: over the last 3-4 years, the vast
+>  Thomas> majority of the Buildroot code base has been rewritten, and
+>  Thomas> many of the people having worked on that are still around
+>  Thomas> today.
+> 
+> It's imho still too many people to be realistic:
+> 
+> git shortlog -s --since='3 years' | wc -l
+> 230
+
+It's not so many people in fact :)
+
+
 > 
 > 
-> 1. Peter nacked all previous attempts of having this type of feature,
-> so I think it's best if he gives an indication if this series has a
-> chance of survival before we all spend more time on it.
+>  Thomas> What other build systems are doing:
+> 
+>  Thomas>  * Yocto/OpenEmbeded: bitbake is under GPLv2, the rest
+>  Thomas> (package recipes) is under MIT.
+> 
+>  Thomas>  * PTXdist is under GPLv2, but has a small license
+>  Thomas> clarification "Note: PTXdist is a build system which
+>  Thomas> generates a distribution for embedded systems. This license
+>  Thomas> does only cover the build system itself and doesn't affect
+>  Thomas> the license of managed software in any way, even if it might
+>  Thomas> be distributed together with the build system." I believe it
+>  Thomas> doesn't really clarify completely how the GPL applies to a
+>  Thomas> build system.
+> 
+>  Thomas>  * OpenBricks is under GPLv2.
+> 
+>  Thomas>  * OpenWRT is under GPLv2, since it is originally a fork of
+>  Thomas> Buildroot.
+> 
+>  Thomas>  * LTIB is under GPLv2.
+> 
+> So they are basically all in the same boat as us.
 
-Adding Peter in Cc on this one. I know he is a bit behind in terms of
-reading the backlog of Buildroot e-mails (which has been enormous since
-a few days).
+Yes, but I do believe that no company is actually complying to the GPL
+requirements by providing the build system source code. So yes, they
+are under GPLv2, now whether that makes sense or not is a different
+question :-)
 
-I have the pretension of thinking that the currently proposed
-implementation is simple enough to remain in the KISS spirit of
-Buildroot. I believe that what prevented earlier implementation from
-being merged was not so much that they allowed 'external packages',
-but more due to their complexity. But honestly, I don't really remember
-the implementation details of the previous proposals, so I might be
-wrong on that one.
-
-> 2. I really have a huge problem with the fact that the .config is no 
-> longer complete, and that instead you have to explicitly provide
-> extra command-line arguments to be able to reproduce the build. And
-> it doesn't help that it behaves differently when you have an
-> out-of-tree output directory (where the BR2_EXTERNAL is stored) than
-> when you're using the default output directory. I'm actually very
-> surprised that nobody else seems to have a problem with this. So for
-> me, this gets a big Nack unless the BR2_EXTERNAL is stored in
-> the .config.
-
-On the wrapper Makefile that contains BR2_EXTERNAL, I am not convinced
-it is a good idea, since as you mention it creates a difference whether
-you're building out-of-tree from the output directory, or out-of-tree
-but from the source directory. I think this is not good, and therefore
-that BR2_EXTERNAL shouldn't be kept in the wrapper Makefile.
-
-However, I still do not understand how storing BR2_EXTERNAL in .config
-will clarify things for the user. Changing BR2_EXTERNAL affects what
-'menuconfig' shows. So there is no way for 'menuconfig' to update what
-it displays when the user changes the value of BR2_EXTERNAL without
-exiting/re-running menuconfig, which sounds really odd.
-
-To me, BR2_EXTERNAL= is a bit like O=, it's a local build decision that
-you make to add some external configurations/external packages. Most
-likely, if you have external packages in BR2_EXTERNAL, the defconfig
-you have to use is also in BR2_EXTERNAL, so there's no way you can
-forget to specify BR2_EXTERNAL on the command, since otherwise you
-won't be able to even see your defconfig.
-
-So while I do agree that being able to store BR2_EXTERNAL would be
-nice, I don't see how it can be achieved in a way that isn't confusing
-for the user.
-
-Best regards,
+But ok, my question "Is GPLv2 the right license for Buildroot" was
+mainly a rhetoric question, I am really not that much interested in
+working on a license change process, but I continue to think that
+additional clarifications on how the license requirements apply to
+Buildroot would be nice.
 
 Thomas
 -- 
