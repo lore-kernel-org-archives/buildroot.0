@@ -1,25 +1,38 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 17 Sep 2013 23:07:45 +0200
-Subject: [Buildroot] [PATCH] apply-patches.sh: avoid reversed/already
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Tue, 17 Sep 2013 23:07:34 +0200
+Subject: [Buildroot] [git commit] apply-patches.sh: avoid reversed/already
 	applied patches
-In-Reply-To: <1379443553-12452-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Tue, 17 Sep 2013 15:45:53 -0300")
-References: <1379443553-12452-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <871u4ndun2.fsf@dell.be.48ers.dk>
+Message-ID: <20130917210737.AA5349B7BF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=eca77d0429f531a6f377da5d25d8ee72cd98a449
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Gustavo> Disable reversed/already applied patches fallout from commit
- Gustavo> 5871b791995ebe295db7dca608afe3f293ce8953
- Gustavo> Reverse patches are bad, they may unfix things with version bumps and
- Gustavo> just sneak under the radar with pure batch mode.
+Disable reversed/already applied patches fallout from commit
+5871b791995ebe295db7dca608afe3f293ce8953
+Reverse patches are bad, they may unfix things with version bumps and
+just sneak under the radar with pure batch mode.
 
-Committed, thanks.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ support/scripts/apply-patches.sh |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/support/scripts/apply-patches.sh b/support/scripts/apply-patches.sh
+index 1ebaea9..ff72b45 100755
+--- a/support/scripts/apply-patches.sh
++++ b/support/scripts/apply-patches.sh
+@@ -84,7 +84,7 @@ function apply_patch {
+ 	exit 1
+     fi
+     echo $patch >> ${builddir}/.applied_patches_list
+-    ${uncomp} "${path}/$patch" | patch -g0 -p1 -E -d "${builddir}" -t
++    ${uncomp} "${path}/$patch" | patch -g0 -p1 -E -d "${builddir}" -t -N
+     if [ $? != 0 ] ; then
+         echo "Patch failed!  Please fix ${patch}!"
+ 	exit 1
