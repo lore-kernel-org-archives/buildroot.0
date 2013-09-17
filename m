@@ -1,49 +1,36 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 17 Sep 2013 13:21:15 +0200
-Subject: [Buildroot] [git commit branch/2013.08.x] Update for 2013.08.1
-Message-ID: <20130917112852.7989A9B7A9@busybox.osuosl.org>
+From: Fatih =?UTF-8?Q?A=C5=9F=C4=B1c=C4=B1?= <fatih.asici@gmail.com>
+Date: Tue, 17 Sep 2013 14:35:12 +0300
+Subject: [Buildroot] [PATCH v1] Fix EGL support in qt5base
+In-Reply-To: <1379411589-8935-1-git-send-email-jezz@sysmic.org>
+References: <CA+csPL67CJSJHgfhgnJJfBcw+LUszPWT3VwFCEFw5n3Oy4jN1Q@mail.gmail.com>
+ <1379411589-8935-1-git-send-email-jezz@sysmic.org>
+Message-ID: <1379417712.13187.12.camel@viko>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ad2600ce216f3df4c2cf0ff097c0bceb1ef149b0
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/2013.08.x
+Hi,
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- CHANGES  |    9 +++++++++
- Makefile |    2 +-
- 2 files changed, 10 insertions(+), 1 deletions(-)
+On Tue, 2013-09-17 at 11:53 +0200, J?r?me Pouiller wrote:
+> +else ifeq ($(BR2_PACKAGE_GPU_VIV_BIN_MX6Q)x$(BR2_PACKAGE_XORG7),yx)
+> +define QT5BASE_EXTRA_OPTIONS
+> +EGLFS_PLATFORM_HOOKS_SOURCES = \
+> +	$(@D)/mkspecs/devices/linux-imx6-g++/qeglfshooks_imx6.cpp   \n\
+> +QMAKE_CFLAGS += -DEGL_API_FB=1                                      \n\
+> +QMAKE_CXXFLAGS += -DEGL_API_FB=1                                    \n\
+> +QMAKE_LIBS_OPENGL_ES2 += -lEGL -lGAL                                \n\
+> +QMAKE_LIBS_OPENVG += -lEGL -lGAL                                    \n
 
-diff --git a/CHANGES b/CHANGES
-index f1b01a3..754f379 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -1,3 +1,12 @@
-+2013.08.1, Released September 17th, 2013:
-+
-+	Handle the removed GCC and development files on target options
-+	through Config.in.legacy.
-+
-+	Rootfs /lib symlink handling fixed (triggered by make external-deps)
-+
-+	Updated/fixed packages: elf2flt, ti-gfx
-+
- 2013.08, Released August 31th, 2013:
- 
- 	Minor fixes.
-diff --git a/Makefile b/Makefile
-index 819a597..70749ef 100644
---- a/Makefile
-+++ b/Makefile
-@@ -24,7 +24,7 @@
- #--------------------------------------------------------------
- 
- # Set and export the version string
--export BR2_VERSION:=2013.08
-+export BR2_VERSION:=2013.08.1
- 
- # Check for minimal make version (note: this check will break at make 10.x)
- MIN_MAKE_VERSION=3.81
+Hardcoding device specific code in qt5base.mk is not nice; but it seems
+impossible to get rid of them since qt needs a platform hook path.
+
+I have sent a patch to the list which adds .pc files to gpu-viv-bin-mx6q
+package. This helps qt5 to get needed flags; but for the platform
+hook .mk file still needs to be modified.
+
+I have also sent a bug report[1] to qt developers for another file with
+hardcoded EGL flags.
+
+[1] https://bugreports.qt-project.org/browse/QTBUG-33494
