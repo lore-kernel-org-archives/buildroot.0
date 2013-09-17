@@ -1,21 +1,21 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 17 Sep 2013 14:01:12 +0200
-Subject: [Buildroot] [PATCH] can-utils: bump version
-In-Reply-To: <1379401852-7662-1-git-send-email-yegorslists@googlemail.com>
- (yegorslists@googlemail.com's message of "Tue, 17 Sep 2013 09:10:52
- +0200")
-References: <1379401852-7662-1-git-send-email-yegorslists@googlemail.com>
-Message-ID: <878uyvfyif.fsf@dell.be.48ers.dk>
+Date: Tue, 17 Sep 2013 14:01:47 +0200
+Subject: [Buildroot] [PATCH] libroxml: bump version to 2.2.3
+In-Reply-To: <1379368069-29373-1-git-send-email-blunderer@blunderer.org>
+ (blunderer@blunderer.org's message of "Mon, 16 Sep 2013 14:47:49
+ -0700")
+References: <1379368069-29373-1-git-send-email-blunderer@blunderer.org>
+Message-ID: <874n9jfyhg.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "yegorslists" == yegorslists  <yegorslists@googlemail.com> writes:
+>>>>> "blunderer" == blunderer  <blunderer@blunderer.org> writes:
 
- yegorslists> From: Yegor Yefremov <yegorslists@googlemail.com>
- yegorslists> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+ blunderer> From: Tristan Lelong <tristan.lelong@blunderer.org>
+ blunderer> Signed-off-by: Tristan Lelong <tristan.lelong@blunderer.org>
 
 Committed, thanks.
 
