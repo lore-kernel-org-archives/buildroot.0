@@ -1,30 +1,34 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 17 Sep 2013 15:27:52 +0200
-Subject: [Buildroot] [git commit] screen: needs mmu
-Message-ID: <20130917132814.6F2CA9ADA1@busybox.osuosl.org>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue, 17 Sep 2013 10:30:04 -0300
+Subject: [Buildroot] [PATCH] dash: bump to version 0.5.7-3
+Message-ID: <1379424604-1316-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=9fe9d4e232fe0c8668de9bb44b2988b45e5ae0ca
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Bump to patchlevel 3 since 2 is gone upstream, fixes when
+sources.buildroot.net isn't available:
+http://autobuild.buildroot.net/results/5ee/5ee6544a9d08025060cb5806870ae1c3f252cd93/
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/screen/Config.in |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+ package/dash/dash.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/screen/Config.in b/package/screen/Config.in
-index c232392..b5876e8 100644
---- a/package/screen/Config.in
-+++ b/package/screen/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_SCREEN
- 	bool "screen"
-+	depends on BR2_USE_MMU # fork()
- 	select BR2_PACKAGE_NCURSES
- 	help
- 	  Screen is a full-screen window manager that multiplexes a physical
+diff --git a/package/dash/dash.mk b/package/dash/dash.mk
+index c6a8b11..970286d 100644
+--- a/package/dash/dash.mk
++++ b/package/dash/dash.mk
+@@ -7,7 +7,7 @@
+ DASH_VERSION = 0.5.7
+ DASH_SOURCE = dash_$(DASH_VERSION).orig.tar.gz
+ DASH_SITE = $(BR2_DEBIAN_MIRROR)/debian/pool/main/d/dash
+-DASH_PATCH = dash_$(DASH_VERSION)-2.diff.gz
++DASH_PATCH = dash_$(DASH_VERSION)-3.diff.gz
+ DASH_LICENSE = BSD-3c, GPLv2+ (mksignames.c)
+ DASH_LICENSE_FILES = COPYING
+ 
+-- 
+1.8.1.5
