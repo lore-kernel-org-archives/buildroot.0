@@ -1,36 +1,71 @@
-From: Markos Chandras <markos.chandras@imgtec.com>
-Date: Tue, 17 Sep 2013 10:04:17 +0100
-Subject: [Buildroot] [PATCH] toolchain-external: Update Sourcery CodeBench
-	MIPS toolchain
-Message-ID: <1379408657-18335-1-git-send-email-markos.chandras@imgtec.com>
+From: Greg Beresford <greg.beresford@zbdsolutions.com>
+Date: Tue, 17 Sep 2013 10:44:53 +0100
+Subject: [Buildroot] [PATCH v2] Add support for eglibc-2.17 multiarch layout,
+	from Linaro 2013.07+
+References: <1379353155-26459-1-git-send-email-greg.beresford@zbdsolutions.com>
+ <5237F574.9070700@mind.be>
+Message-ID: <1379411093-37240-1-git-send-email-greg.beresford@zbdsolutions.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Update to the latest update for the 2013.05 toolchain
-released on 11 September 2013.
+From: Henry Luis <henry@echelon.com>
 
-https://sourcery.mentor.com/GNUToolchain/release2554
+Arch-specific libraries, including libc.so.6, are expected to be in a
+subdirectory of /lib (e.g. /lib/arm-linux-gnueabihf). This patch
+changes copy_toolchain_lib_root() in helper.mk to preserve the
+toolchain sysroot's lib directory structure, except for SUPPORT_LIB_DIR
+which are still copied directly under DESTDIR.
 
-Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
+Signed-off-by: Greg Beresford <greg.beresford@zbdsolutions.com>
 ---
- toolchain/toolchain-external/ext-tool.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/toolchain/toolchain-external/ext-tool.mk b/toolchain/toolchain-external/ext-tool.mk
-index 3539cb5..db2a99e 100644
---- a/toolchain/toolchain-external/ext-tool.mk
-+++ b/toolchain/toolchain-external/ext-tool.mk
-@@ -246,7 +246,7 @@ TOOLCHAIN_EXTERNAL_SITE = http://sourcery.mentor.com/public/gnu_toolchain/mips-l
- TOOLCHAIN_EXTERNAL_SOURCE = mips-2012.09-99-mips-linux-gnu-i686-pc-linux-gnu.tar.bz2
- else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201305),y)
- TOOLCHAIN_EXTERNAL_SITE = http://sourcery.mentor.com/public/gnu_toolchain/mips-linux-gnu/
--TOOLCHAIN_EXTERNAL_SOURCE = mips-2013.05-36-mips-linux-gnu-i686-pc-linux-gnu.tar.bz2
-+TOOLCHAIN_EXTERNAL_SOURCE = mips-2013.05-66-mips-linux-gnu-i686-pc-linux-gnu.tar.bz2
- else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201305),y)
- TOOLCHAIN_EXTERNAL_SITE = http://sourcery.mentor.com/public/gnu_toolchain/nios2-linux-gnu/
- TOOLCHAIN_EXTERNAL_SOURCE = sourceryg++-2013.05-43-nios2-linux-gnu-i686-pc-linux-gnu.tar.bz2
+I couldn't initially see a particularly clear way of removing the pushd
+and popd commands, but the below worked (once I figured out how escape
+it properly.)
+
+Regards
+Greg
+
+ toolchain/helpers.mk | 13 +++++++++----
+ 1 file changed, 9 insertions(+), 4 deletions(-)
+
+diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
+index 0e270ee..3b4900d 100644
+--- a/toolchain/helpers.mk
++++ b/toolchain/helpers.mk
+@@ -66,12 +66,17 @@ copy_toolchain_lib_root = \
+ 		LIBDIR=`dirname $${LIBPATH}` ; \
+ 		while test \! -z "$${LIBNAME}" ; do \
+ 			LIBPATH=$${LIBDIR}/$${LIBNAME} ; \
+-			rm -fr $(TARGET_DIR)/$${DESTDIR}/$${LIBNAME}; \
+-			mkdir -p $(TARGET_DIR)/$${DESTDIR}; \
++			if [ "$${dir}" = "$${SUPPORT_LIB_DIR}" ]; then \
++				DDIR=$${DESTDIR} ; \
++			else \
++				DDIR=$${LIBDIR\#$${ARCH_SYSROOT_DIR}} ; \
++			fi; \
++			rm -fr $(TARGET_DIR)/$${DDIR}/$${LIBNAME}; \
++			mkdir -p $(TARGET_DIR)/$${DDIR}; \
+ 			if test -h $${LIBPATH} ; then \
+-				cp -d $${LIBPATH} $(TARGET_DIR)/$${DESTDIR}/; \
++				cp -d $${LIBPATH} $(TARGET_DIR)/$${DDIR}/; \
+ 			elif test -f $${LIBPATH}; then \
+-				$(INSTALL) -D -m0755 $${LIBPATH} $(TARGET_DIR)/$${DESTDIR}/$${LIBNAME}; \
++				$(INSTALL) -D -m0755 $${LIBPATH} $(TARGET_DIR)/$${DDIR}/$${LIBNAME}; \
+ 			else \
+ 				exit -1; \
+ 			fi; \
 -- 
-1.8.3.2
+1.8.4
+
+
+ 
+Disclaimer: This email contains proprietary information some or all of which may be legally privileged and/or is confidential. It is for the intended recipient only. If an addressing or transmission error has misdirected this email, please notify the author by replying to this email. If you are not the intended recipient, you must not use, disclose, distribute, copy or print this email. Any views expressed in this message are those of the individual sender, except where the message states otherwise. ZBD Displays accepts no responsibility for any computer virus which might be transferred by way of this email. We may monitor all email communication through our networks. If you contact us by email, we may store your name and address to facilitate communication. ZBD Displays Ltd is registered in England and Wales, company registration number: 03929602. Registered Office: Malvern Hills Science Park, Geraldine Road, Malvern,  Worcestershire, WR14 3SZ, UK
+
+______________________________________________________________________
+This email has been scanned by the Symantec Email Security.cloud service.
+For more information please visit http://www.symanteccloud.com
+______________________________________________________________________
