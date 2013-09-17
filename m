@@ -1,34 +1,40 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 17 Sep 2013 11:29:58 -0300
-Subject: [Buildroot] [PATCH 2/2] ruby: security bump to version 1.9.3-p448
-In-Reply-To: <1379428198-12458-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1379428198-12458-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1379428198-12458-2-git-send-email-gustavo@zacarias.com.ar>
+From: Grant Edwards <grant.b.edwards@gmail.com>
+Date: Tue, 17 Sep 2013 14:53:09 +0000 (UTC)
+Subject: [Buildroot] Is GPLv2 the right license for Buildroot?
+References: <20130911091700.0b24df41@skate>
+ <OFA3C6DE52.DF6BBCA7-ON86257BE3.0054A3F9-86257BE3.00577394@rockwellcollins.com>
+ <20130911172709.GB3410@free.fr>
+ <CAAXf6LVD590fVudge3Fk+2B8pSzvUEV2GQLTcbz=VpOB2HCmtQ@mail.gmail.com>
+ <20130912202157.536e5904@skate>
+ <F9C551623D2CBB4C9488801D14F864C639AC8DAF@ex-mb1.corp.adtran.com>
+ <20130912203359.7e650ebe@skate> <52323A54.7020808@mind.be>
+ <20130912221256.GE3362@free.fr> <523388B6.7090305@mind.be>
+ <20130914221613.GA3444@free.fr> <20130916182101.3844a686@skate>
+ <87vc20fp2g.fsf@dell.be.48ers.dk> <20130917064405.6300d72b@skate>
+Message-ID: <l19qcl$f47$1@ger.gmane.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes CVE-2013-4073.
+On 2013-09-17, Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/ruby/ruby.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> Yes, but I do believe that no company is actually complying to the
+> GPL requirements by providing the build system source code.
 
-diff --git a/package/ruby/ruby.mk b/package/ruby/ruby.mk
-index 020cd76..ba2d49b 100644
---- a/package/ruby/ruby.mk
-+++ b/package/ruby/ruby.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--RUBY_VERSION = 1.9.3-p429
-+RUBY_VERSION = 1.9.3-p448
- RUBY_SITE = ftp://ftp.ruby-lang.org/pub/ruby/1.9
- RUBY_DEPENDENCIES = host-pkgconf host-ruby
- HOST_RUBY_DEPENDENCIES = host-pkgconf
+We do.  I wrote a shell-script that removes proprietary files/packages
+and bundles the resulting buildroot source tree which can then be used
+to build all of the open-source stuff.
+
+Nobody's ever _requested_ the sources, but they're available.  
+
+I don't expect that anyone ever will request sources, since without
+the proprietary software, the hardware is pretty much useless.  I
+doubt any of our customers would be capable of building it even if
+they did have the source tree in hand.
+
 -- 
-1.8.1.5
+Grant Edwards               grant.b.edwards        Yow! If I had a Q-TIP, I
+                                  at               could prevent th' collapse
+                              gmail.com            of NEGOTIATIONS!!
