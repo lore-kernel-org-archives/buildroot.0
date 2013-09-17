@@ -1,32 +1,54 @@
-From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Tue, 17 Sep 2013 09:10:52 +0200
-Subject: [Buildroot] [PATCH] can-utils: bump version
-Message-ID: <1379401852-7662-1-git-send-email-yegorslists@googlemail.com>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Tue, 17 Sep 2013 09:21:09 +0200
+Subject: [Buildroot] [RFCv1 09/11] package: add a <pkg>_SOURCE_ADDONS
+	variable
+In-Reply-To: <523759FA.5040706@mind.be>
+References: <1378416469-17708-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1378416469-17708-10-git-send-email-thomas.petazzoni@free-electrons.com>
+ <CAAXf6LVXRvw34-d5vq9Oh+tZXd2a4Dzy1mxzWLdOS2FPs59vVA@mail.gmail.com>
+ <20130916203130.2307521a@skate> <523759FA.5040706@mind.be>
+Message-ID: <CAAXf6LVQ7HuAs3LLdVj1jUAmcdtZa_s5P=mrPGRA+Crr1HseDw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Yegor Yefremov <yegorslists@googlemail.com>
+Thomas, Arnout,
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
----
- package/can-utils/can-utils.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+On Mon, Sep 16, 2013 at 9:20 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
+> On 16/09/13 20:31, Thomas Petazzoni wrote:
+>>
+>> Dear Thomas De Schampheleire,
+>>
+>> On Mon, 16 Sep 2013 15:39:22 +0200, Thomas De Schampheleire wrote:
+>>
+>>> What about allowing FOO_SOURCE to contain multiple words directly, and
+>>> thus not introducing a new variable? The package infrastructure can
+>>> download each word of FOO_SOURCE, but only extract (and otherwise use)
+>>> the first one. Any subsequent word has to be handled by the package
+>>> itself.
+>>
+>>
+>> The problem is that the default extract step needs to know what to do.
+>> And what it does today is that it extracts the tarball whose name is
+>> given in FOO_SOURCE. If we put several words in FOO_SOURCE, then what
+>> should be the semantic of the default extract commands? Extract the
+>> first one? All of them?
+>>
+>> That's why I've decided to go with another variable, which really means
+>> "I want this stuff to be downloaded, but don't do anything with it, the
+>> package recipe will take care of it".
+>>
+>> Of course, I'm open to changing the semantic of FOO_SOURCE instead, we
+>> would just need to define what this new semantic should be.
+>
+>
+>  I'm more in favour of the <pkg>_SOURCE_ADDONS proposal. I think having
+> multiple _SOURCE files would be confusing.
 
-diff --git a/package/can-utils/can-utils.mk b/package/can-utils/can-utils.mk
-index c4a777b..743fe7c 100644
---- a/package/can-utils/can-utils.mk
-+++ b/package/can-utils/can-utils.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--CAN_UTILS_VERSION = 836d3cc0122ce31a1b732d369cbd27b690c3110f
-+CAN_UTILS_VERSION = 16c970d40e6c19dde705bad4751bab1a3a4f3a0d
- CAN_UTILS_SITE = git://gitorious.org/linux-can/can-utils.git
- CAN_UTILS_AUTORECONF = YES
- 
--- 
-1.7.7
+Ok, fair enough.
+I think you should add this to the documentation, then.
+
+Best regards,
+Thomas
