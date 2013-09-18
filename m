@@ -1,53 +1,137 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 18 Sep 2013 23:57:41 +0200
-Subject: [Buildroot] [PATCH 3 of 4 RFC] manual: add section about
- depending on toolchain options
-In-Reply-To: <20130918201812.3e08d883@skate>
-References: <patchbomb.1379494893@argentina>
- <89b40887c8268e316399.1379494896@argentina>
- <CAAXf6LXD_7jt42XAG_XgKWKi_+te40hgYNd4mTLbmCDMxfG0QA@mail.gmail.com>
- <20130918183414.45e6a247@skate>
- <CAAXf6LWmH2xtBe_P-P+1HJhndDM1BhHZcgJzu9o7JrfwjtwWVg@mail.gmail.com>
- <20130918194042.302e9afe@skate> <5239E6E5.4000401@zacarias.com.ar>
- <20130918195925.1884c0a7@skate> <5239EB63.2090203@zacarias.com.ar>
- <20130918201812.3e08d883@skate>
-Message-ID: <523A21D5.6040005@mind.be>
+From: Matthew Weber <mlweber1@rockwellcollins.com>
+Date: Wed, 18 Sep 2013 17:03:27 -0500
+Subject: [Buildroot] [PATCH 1/1] iputils: new package
+In-Reply-To: <1379533013-13209-1-git-send-email-mlweber1@rockwellcollins.com>
+References: <1379533013-13209-1-git-send-email-mlweber1@rockwellcollins.com>
+Message-ID: <OF293F3CE4.C9BDFB06-ON86257BEA.00790EBC-86257BEA.00792B22@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 18/09/13 20:18, Thomas Petazzoni wrote:
-> Dear Gustavo Zacarias,
->
-> On Wed, 18 Sep 2013 15:05:23 -0300, Gustavo Zacarias wrote:
->> On 09/18/2013 02:59 PM, Thomas Petazzoni wrote:
->>
->>> I think it's a bit more than just renaming this symbol. I can try to
->>> cook something.
->>
->> Add the relevant legacy entry, adjusting help / manuals.
->> Is there something else i'm missing?
->
-> Yes, we probably want to have the choice between building static only,
-> static + shared, or shared only, default to shared only. Currently,
-> when !BR2_PREFER_STATIC_LIB, we build both the shared and static
-> variants, which takes time because it requires building everything
-> twice, once with -fPIC, once without.
+Found a better way to check for uClibc and the state of IPV6 support. 
+Workin on v2 of this patch.
 
-  I don't think the static + shared option really makes sense, does it? 
-The only use case I can think of is when you want a proprietary 
-executable to link statically in order to speed up start time.
+Matt
 
-  Regards,
-  Arnout
+Matt Weber <mlweber1@rockwellcollins.com> wrote on 09/18/2013 02:36:53 PM:
 
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+> From: Matt Weber <mlweber1@rockwellcollins.com>
+> To: buildroot at busybox.net
+> Cc: Matt Weber <mlweber1@rockwellcollins.com>
+> Date: 09/18/2013 02:36 PM
+> Subject: [PATCH 1/1] iputils: new package
+> 
+> This new package adds full versions of ping/traceroute/etc.
+> 
+> Built against GCC4.7 ARM, x86 uclibc IPv6 and uclibc no IPv6.
+> 
+> Signed-off-by: Matt Weber <mlweber1@rockwellcollins.com>
+> ---
+>  package/Config.in          |    1 +
+>  package/iputils/Config.in  |    7 +++++
+>  package/iputils/iputils.mk |   57 +++++++++++++++++++++++++++++++++
+> +++++++++++
+>  3 files changed, 65 insertions(+), 0 deletions(-)
+>  create mode 100644 package/iputils/Config.in
+>  create mode 100644 package/iputils/iputils.mk
+> 
+> diff --git a/package/Config.in b/package/Config.in
+> index 973d32c..14ca821 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -792,6 +792,7 @@ source "package/iproute2/Config.in"
+>  source "package/ipsec-tools/Config.in"
+>  source "package/ipset/Config.in"
+>  source "package/iptables/Config.in"
+> +source "package/iputils/Config.in"
+>  source "package/iw/Config.in"
+>  source "package/kismet/Config.in"
+>  source "package/knock/Config.in"
+> diff --git a/package/iputils/Config.in b/package/iputils/Config.in
+> new file mode 100644
+> index 0000000..92bbea9
+> --- /dev/null
+> +++ b/package/iputils/Config.in
+> @@ -0,0 +1,7 @@
+> +config BR2_PACKAGE_IPUTILS
+> +   bool "iputils"
+> +   help
+> +     This package is set of small useful utilities for Linux 
+networking.
+> +     It includes complete versions of ping, traceroute, etc.
+> +
+> +     http://sourceforge.net/projects/iputils/
+> diff --git a/package/iputils/iputils.mk b/package/iputils/iputils.mk
+> new file mode 100644
+> index 0000000..b4576cc
+> --- /dev/null
+> +++ b/package/iputils/iputils.mk
+> @@ -0,0 +1,57 @@
+> 
++################################################################################
+> +#
+> +# iputils
+> +#
+> 
++################################################################################
+> +
+> +IPUTILS_VERSION = 20121011
+> +IPUTILS_SITE = http://www.skbuff.net/iputils/
+> +IPUTILS_SOURCE = iputils-s$(IPUTILS_VERSION).tar.bz2
+> +IPUTILS_LICENSE = GPLv2+ BSD-3c
+> +# Only included a license file for BSD.
+> +IPUTILS_LICENSE_FILES = COPYING
+> +
+> +IPUTILS_DEPENDENCIES = libcap libsysfs openssl
+> +# Build after busybox so target ends up with this package's full
+> +# versions of the applications instead of busybox applets.
+> +ifeq ($(BR2_PACKAGE_BUSYBOX),y)
+> +IPUTILS_DEPENDENCIES += busybox
+> +endif
+> +
+> +define IPUTILS_IPV6_TARGET_CMDS
+> +   $(INSTALL) -D -m 755 $(@D)/ping6       $(TARGET_DIR)/bin/ping6
+> +   $(INSTALL) -D -m 755 $(@D)/tracepath6  $(TARGET_DIR)/bin/tracepath6
+> +   $(INSTALL) -D -m 755 $(@D)/traceroute6 $(TARGET_DIR)/bin/traceroute6
+> +endef
+> +IPUTILS_IPV6_MKTARGETS = ping6 tracepath6 traceroute6
+> +
+> +ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),y)
+> +ifneq ($(BR2_TOOLCHAIN_BUILDROOT_INET_IPV6),y)
+> +define IPUTILS_IPV6_TARGET_CMDS
+> +endef
+> +define IPUTILS_IPV6_MKTARGETS
+> +endef
+> +endif
+> +endif
+> +
+> +IPUTILS_MKTARGETS = arping clockdiff ping rarpd rdisc tftpd 
+> tracepath $(IPUTILS_IPV6_MKTARGETS)
+> +
+> +IPUTILS_MAKE_CMDS = $(TARGET_CONFIGURE_OPTS) KERNEL_INCLUDE=$
+> (STAGING_DIR)/usr/include/linux \
+> +      CFLAGS+="-D_GNU_SOURCE -Wstrict-prototypes -Wall -
+> DCAPABILITIES -DUSE_SYSFS"
+> +
+> +define IPUTILS_BUILD_CMDS
+> +   $(MAKE) -C $(@D) $(IPUTILS_MAKE_CMDS) DESTDIR=$(STAGING_DIR) $
+> (IPUTILS_MKTARGETS)
+> +endef
+> +
+> +define IPUTILS_INSTALL_TARGET_CMDS
+> +   $(INSTALL) -D -m 755 $(@D)/arping      $(TARGET_DIR)/sbin/arping
+> +   $(INSTALL) -D -m 755 $(@D)/clockdiff   $(TARGET_DIR)/bin/clockdiff
+> +   $(INSTALL) -D -m 755 $(@D)/ping        $(TARGET_DIR)/bin/ping
+> +   $(INSTALL) -D -m 755 $(@D)/rarpd       $(TARGET_DIR)/sbin/rarpd
+> +   $(INSTALL) -D -m 755 $(@D)/rdisc       $(TARGET_DIR)/sbin/rdisc
+> +   $(INSTALL) -D -m 755 $(@D)/tftpd $(TARGET_DIR)/usr/sbin/in.tftpd
+> +   $(INSTALL) -D -m 755 $(@D)/tracepath   $(TARGET_DIR)/bin/tracepath
+> +   $(IPUTILS_IPV6_TARGET_CMDS)
+> +endef
+> +
+> +$(eval $(generic-package))
+> -- 
+> 1.7.1
+> 
