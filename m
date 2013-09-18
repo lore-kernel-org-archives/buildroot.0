@@ -1,157 +1,45 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 19 Sep 2013 00:36:30 +0200
-Subject: [Buildroot] [PATCH 1/1] iputils: new package
-In-Reply-To: <1379533013-13209-1-git-send-email-mlweber1@rockwellcollins.com>
-References: <1379533013-13209-1-git-send-email-mlweber1@rockwellcollins.com>
-Message-ID: <523A2AEE.4070606@mind.be>
+Date: Thu, 19 Sep 2013 00:48:39 +0200
+Subject: [Buildroot] [PATCH 1/1] package: remove the trailing slash sign
+ from the URL address
+In-Reply-To: <CAAXf6LU8GCW7vwVvoBrSeTaongix761F=DT1Tbh=qJ_3m32CMw@mail.gmail.com>
+References: <1379517858-28720-1-git-send-email-jerzy.grzegorek@trzebnica.net>
+ <CAAXf6LU8GCW7vwVvoBrSeTaongix761F=DT1Tbh=qJ_3m32CMw@mail.gmail.com>
+Message-ID: <523A2DC7.7010202@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 18/09/13 21:36, Matt Weber wrote:
-> This new package adds full versions of ping/traceroute/etc.
+On 18/09/13 17:34, Thomas De Schampheleire wrote:
+> Hi Jerzy,
 >
-> Built against GCC4.7 ARM, x86 uclibc IPv6 and uclibc no IPv6.
+> Op 18-sep.-2013 17:25 schreef "Jerzy Grzegorek"
+> <jerzy.grzegorek at trzebnica.net <mailto:jerzy.grzegorek@trzebnica.net>>
+> het volgende:
+>  >
+>  > Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net
+> <mailto:jerzy.grzegorek@trzebnica.net>>
+>  > ---
 >
-> Signed-off-by: Matt Weber <mlweber1@rockwellcollins.com>
-> ---
->   package/Config.in          |    1 +
->   package/iputils/Config.in  |    7 +++++
->   package/iputils/iputils.mk |   57 ++++++++++++++++++++++++++++++++++++++++++++
->   3 files changed, 65 insertions(+), 0 deletions(-)
->   create mode 100644 package/iputils/Config.in
->   create mode 100644 package/iputils/iputils.mk
+> Could you clarify why this is desirable? Note that urls with our without
+> trailing slash are not identical: the web server needs to properly
+> support this. For example, the autobuild website does not properly do it
+> (something very annoying ;) )
 >
-> diff --git a/package/Config.in b/package/Config.in
-> index 973d32c..14ca821 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -792,6 +792,7 @@ source "package/iproute2/Config.in"
->   source "package/ipsec-tools/Config.in"
->   source "package/ipset/Config.in"
->   source "package/iptables/Config.in"
-> +source "package/iputils/Config.in"
->   source "package/iw/Config.in"
->   source "package/kismet/Config.in"
->   source "package/knock/Config.in"
-> diff --git a/package/iputils/Config.in b/package/iputils/Config.in
-> new file mode 100644
-> index 0000000..92bbea9
-> --- /dev/null
-> +++ b/package/iputils/Config.in
-> @@ -0,0 +1,7 @@
-> +config BR2_PACKAGE_IPUTILS
-> +	bool "iputils"
+> So, with a change like this, every changed url needs to be tested.
 
-  You're missing a couple of select statements here.
+  Well, with the trailing slash is stripped by pkg-generic.mk:
 
-> +	help
-> +	  This package is set of small useful utilities for Linux networking.
-> +	  It includes complete versions of ping, traceroute, etc.
-> +
-> +	  http://sourceforge.net/projects/iputils/
-> diff --git a/package/iputils/iputils.mk b/package/iputils/iputils.mk
-> new file mode 100644
-> index 0000000..b4576cc
-> --- /dev/null
-> +++ b/package/iputils/iputils.mk
-> @@ -0,0 +1,57 @@
-> +################################################################################
-> +#
-> +# iputils
-> +#
-> +################################################################################
-> +
-> +IPUTILS_VERSION = 20121011
-> +IPUTILS_SITE = http://www.skbuff.net/iputils/
-> +IPUTILS_SOURCE = iputils-s$(IPUTILS_VERSION).tar.bz2
+$(call DOWNLOAD,$($(PKG)_SITE:/=)/$($(PKG)_SOURCE))
 
-  I think the s should be considered part of the version number.
+  So functionally it doesn't matter if the / is there or not.
 
-> +IPUTILS_LICENSE = GPLv2+ BSD-3c
-> +# Only included a license file for BSD.
-> +IPUTILS_LICENSE_FILES = COPYING
-> +
-> +IPUTILS_DEPENDENCIES = libcap libsysfs openssl
-
-  openssl is only needed for ping6. cap and sysfs can be avoided with 
-USE_CAP=no and USE_SYSFS=no.
-
-> +# Build after busybox so target ends up with this package's full
-> +# versions of the applications instead of busybox applets.
-> +ifeq ($(BR2_PACKAGE_BUSYBOX),y)
-> +IPUTILS_DEPENDENCIES += busybox
-> +endif
-> +
-> +define IPUTILS_IPV6_TARGET_CMDS
-
-  I guess you mean INSTALL_TARGET_CMDS.
-
-  Also, this define should be in a BR2_INET_IPV6 condition and the 
-conditions below should be removed.
-
-> +	$(INSTALL) -D -m 755 $(@D)/ping6       $(TARGET_DIR)/bin/ping6
-> +	$(INSTALL) -D -m 755 $(@D)/tracepath6  $(TARGET_DIR)/bin/tracepath6
-> +	$(INSTALL) -D -m 755 $(@D)/traceroute6 $(TARGET_DIR)/bin/traceroute6
-> +endef
-> +IPUTILS_IPV6_MKTARGETS = ping6 tracepath6 traceroute6
-> +
-> +ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),y)
-> +ifneq ($(BR2_TOOLCHAIN_BUILDROOT_INET_IPV6),y)
-> +define IPUTILS_IPV6_TARGET_CMDS
-> +endef
-> +define IPUTILS_IPV6_MKTARGETS
-> +endef
-> +endif
-> +endif
-> +
-> +IPUTILS_MKTARGETS = arping clockdiff ping rarpd rdisc tftpd tracepath $(IPUTILS_IPV6_MKTARGETS)
-
-  Define this variable before the IPv6 stuff, and append to it inside the 
-IPv6 condition. Then you don't need the additional variable.
-
-  Also, I would prefer if the variable was called IPUTILS_MAKE_OPT, so it 
-is the same as what is used by autotools.
-
-> +
-> +IPUTILS_MAKE_CMDS = $(TARGET_CONFIGURE_OPTS) KERNEL_INCLUDE=$(STAGING_DIR)/usr/include/linux \
-
-  This can also be part of the _MAKE_OPT variable.
-
-  Since you're not building the module, the KERNEL_INCLUDE isn't used, right?
-
-> +		CFLAGS+="-D_GNU_SOURCE -Wstrict-prototypes -Wall -DCAPABILITIES -DUSE_SYSFS"
-
-  How about CFLAGS="$(TARGET_CFLAGS) $$(CCOPT) $$(GLIBCFIX) $$(DEFINES)"
-i.e. reusing the package's make variables.
-
-> +
-> +define IPUTILS_BUILD_CMDS
-> +	$(MAKE) -C $(@D) $(IPUTILS_MAKE_CMDS) DESTDIR=$(STAGING_DIR) $(IPUTILS_MKTARGETS)
-
-  The Makefile doesn't use DESTDIR.
-
+  I'm pretty much in favour of removing the /.
 
   Regards,
   Arnout
-
-> +endef
-> +
-> +define IPUTILS_INSTALL_TARGET_CMDS
-> +	$(INSTALL) -D -m 755 $(@D)/arping      $(TARGET_DIR)/sbin/arping
-> +	$(INSTALL) -D -m 755 $(@D)/clockdiff   $(TARGET_DIR)/bin/clockdiff
-> +	$(INSTALL) -D -m 755 $(@D)/ping        $(TARGET_DIR)/bin/ping
-> +	$(INSTALL) -D -m 755 $(@D)/rarpd       $(TARGET_DIR)/sbin/rarpd
-> +	$(INSTALL) -D -m 755 $(@D)/rdisc       $(TARGET_DIR)/sbin/rdisc
-> +	$(INSTALL) -D -m 755 $(@D)/tftpd       $(TARGET_DIR)/usr/sbin/in.tftpd
-> +	$(INSTALL) -D -m 755 $(@D)/tracepath   $(TARGET_DIR)/bin/tracepath
-> +	$(IPUTILS_IPV6_TARGET_CMDS)
-> +endef
-> +
-> +$(eval $(generic-package))
->
 
 
 -- 
