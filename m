@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 18 Sep 2013 18:53:17 +0200
-Subject: [Buildroot] [PATCH v3] gpu-viv-bin-mx6q: add pkgconfig files
- for EGL, OpenGLESv2 and OpenVG
-In-Reply-To: <1379504493-7617-1-git-send-email-fatih.asici@gmail.com>
-References: <1379504493-7617-1-git-send-email-fatih.asici@gmail.com>
-Message-ID: <20130918185317.0b22dac9@skate>
+Date: Wed, 18 Sep 2013 18:53:42 +0200
+Subject: [Buildroot] [PATCH v2] gpu-viv-bin-mx6q: select libXdamage and
+ libXext when xorg enabled
+In-Reply-To: <1379507271-21217-1-git-send-email-fatih.asici@gmail.com>
+References: <1379507271-21217-1-git-send-email-fatih.asici@gmail.com>
+Message-ID: <20130918185342.722504f3@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,7 +13,7 @@ To: buildroot@busybox.net
 
 Dear Fatih A??c?,
 
-On Wed, 18 Sep 2013 14:41:33 +0300, Fatih A??c? wrote:
+On Wed, 18 Sep 2013 15:27:51 +0300, Fatih A??c? wrote:
 > Signed-off-by: Fatih A??c? <fatih.asici@gmail.com>
 
 Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
