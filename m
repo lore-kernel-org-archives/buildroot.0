@@ -1,28 +1,50 @@
-From: Jason Rennie <jason.rennie@rftechnology.com.au>
-Date: Wed, 18 Sep 2013 11:52:50 +1000
-Subject: [Buildroot] Is GPLv2 the right license for Buildroot?
-In-Reply-To: <l17nem$4gn$1@ger.gmane.org>
-References: <20130911172709.GB3410@free.fr>
- <CAAXf6LVD590fVudge3Fk+2B8pSzvUEV2GQLTcbz=VpOB2HCmtQ@mail.gmail.com>
- <20130912202157.536e5904@skate>
- <F9C551623D2CBB4C9488801D14F864C639AC8DAF@ex-mb1.corp.adtran.com>
- <20130912203359.7e650ebe@skate> <52323A54.7020808@mind.be>
- <20130912221256.GE3362@free.fr> <523388B6.7090305@mind.be>
- <20130914221613.GA3444@free.fr> <20130916182101.3844a686@skate>
- <20130916170815.GB3293@free.fr> <l17nem$4gn$1@ger.gmane.org>
-Message-ID: <52390772.9040002@rftechnology.com.au>
+From: clshotwe at rockwellcollins.com <clshotwe@rockwellcollins.com>
+Date: Tue, 17 Sep 2013 21:15:31 -0500
+Subject: [Buildroot] [PATCH v2 03/17] ustr: new package
+In-Reply-To: <20130912213430.0898522c@skate>
+References: <1378936777-28308-1-git-send-email-clshotwe@rockwellcollins.com>	<1378936777-28308-4-git-send-email-clshotwe@rockwellcollins.com>
+ <20130912213430.0898522c@skate>
+Message-ID: <OF971CA447.93A3E414-ON86257BEA.000C0991-86257BEA.000C6886@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 17/09/2013 5:50 AM, Grant Edwards wrote:
-> On 2013-09-16, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
->
->> Sorry, but it is very clear to me, and I am no lawyer. And any decent
->> company will have a rather decent team of lawyers to help in these types
->> of cases.
-> So no company with less that several hundred employees is "decent"?
->
-I think decent means large in this context rather than morally upright.
+Thomas,
+
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote on 09/12/2013 
+02:34:30 PM:
+
+> The naming of patch files should be fixed globally in the 
+> patch series.
+> We use lower case names, with '-' as the separator between
+> words in the
+> patch description.
+> 
+> Also, this package doesn't build properly when the 
+> toolchain does not
+> have large file support. Just like libselinux, the 
+> Makefile hardcodes
+> -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE. Your options 
+> are either to
+> make ustr depend on large file support in the toolchain, 
+> or to modify
+> the Makefile.
+> 
+I will correct all of the patch names since I forgot to make that change 
+in my last revision.  I will also add the large file support dependency 
+where needed and get a new set of patches sent out. Do I need to continue 
+sending out all of the patches until they are all submitted even if they 
+have no changes?
+
+Thanks,
+Clayton
+
+Clayton Shotwell
+Software Engineer
+clshotwe at rockwellcollins.com
+www.rockwellcollins.com
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130917/7cc3498a/attachment.html>
