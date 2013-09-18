@@ -1,39 +1,56 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 18 Sep 2013 19:39:07 +0200
-Subject: [Buildroot] [PATCH 1/1] package: udev is now provided by
- systemd or eudev.
-In-Reply-To: <60DD971516BF4BC19E62266390C4237A@JohanW7>
-References: <1378476068-25300-1-git-send-email-eric.le.bihan.dev@free.fr>
- <20130917071737.4af20d60@skate> <20130917125352.GB13723@pc-eric>
- <20130917204539.7c788c2b@skate> <52394FAB.30109@mind.be>
- <20130918175838.32d9763a@skate> <5239CF75.2050807@mind.be>
- <20130918184118.3794c883@skate>
- <60DD971516BF4BC19E62266390C4237A@JohanW7>
-Message-ID: <20130918193907.789b09dd@skate>
+Date: Wed, 18 Sep 2013 19:40:42 +0200
+Subject: [Buildroot] [PATCH 3 of 4 RFC] manual: add section about
+ depending on toolchain options
+In-Reply-To: <CAAXf6LWmH2xtBe_P-P+1HJhndDM1BhHZcgJzu9o7JrfwjtwWVg@mail.gmail.com>
+References: <patchbomb.1379494893@argentina>
+ <89b40887c8268e316399.1379494896@argentina>
+ <CAAXf6LXD_7jt42XAG_XgKWKi_+te40hgYNd4mTLbmCDMxfG0QA@mail.gmail.com>
+ <20130918183414.45e6a247@skate>
+ <CAAXf6LWmH2xtBe_P-P+1HJhndDM1BhHZcgJzu9o7JrfwjtwWVg@mail.gmail.com>
+Message-ID: <20130918194042.302e9afe@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Sagaert Johan,
+Dear Thomas De Schampheleire,
 
-On Wed, 18 Sep 2013 19:34:20 +0200, Sagaert Johan wrote:
+On Wed, 18 Sep 2013 19:30:11 +0200, Thomas De Schampheleire wrote:
 
-> Just out of curiosity I tried to build using systemd :
+> Currently there is one option PREFER_STATIC_LIB, with help text:
+>           Where possible, build and use static libraries for the
+> target.
+>           This potentially increases your code size and should only be
+>           used if you know what you do.
+>           The default is to build dynamic libraries and use those on
+>           the target filesystem.
 > 
-> I think it will need a patch :
-> src/macro.h:39:19: error: static declaration of 'execvpe' follows non-static declaration
+> However, my interpretation of the current usage of this symbol is that
+> it is not PREFER_STATIC_LIB, but rather something like
+> STATIC_LIB_ONLY. Because some packages are simply not available when
+> this is set, instead of building the package with dynamic linking.
+> 
+> The current name PREFER_STATIC_LIB is also unfortunate in the case
+> that dynamic linking is not available because the target does not
+> support it, e.g. because of no MMU (thanks for mentioning this, I
+> wasn't aware). A name STATIC_LIB_ONLY would also match better here.
+> 
+> Note that I'm not necessarily requesting we rename the symbol, but I
+> find the current situation confusing.
+> 
+> Maybe we need an extra symbol, ARCH_NEEDS_STATIC_LIB or similar (or
+> re-use a possible new !ARCH_HAS_MMU) in addition to a user choice
+> PREFER_STATIC_LIB. When a package cannot be linked statically, we only
+> check on ARCH_NEEDS_STATIC_LIB. If ARCH_NEEDS_STATIC_LIB is false, and
+> PREFER_STATIC_LIB is true, then we build the package dynamically.
 
-Which toolchain are you using? Our internal uClibc toolchain has a
-patch to add execvpe().
-
-That said, I am not sure packages should make the assumption that
-execvpe() is available, because it means that we won't support any
-external uClibc toolchain.
-
-Also, Johan, systemd 44 is precisely going to be updated significantly
-by the patch set you are replying.
+The situation definitely needs to be clarified. We have gradually
+changed the semantic of BR2_PREFER_STATIC_LIB from "prefer static
+libraries" (which doesn't make any sense: you were getting static
+libraries for some packages, dynamic for some others) to "use only
+static libraries".
 
 Best regards,
 
