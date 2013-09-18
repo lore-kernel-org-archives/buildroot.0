@@ -1,41 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 18 Sep 2013 18:38:12 +0200
-Subject: [Buildroot] [PATCH] uclibc: Add UCLIBC_MMU_CONFIG to
- UCLIBC_SETUP_DOT_CONFIG
-In-Reply-To: <CAFRkauAfAoS6JT8q1wvSFHahVLLOmTeHvddkQpECGEe-qsJ8+w@mail.gmail.com>
-References: <CAFRkauAfAoS6JT8q1wvSFHahVLLOmTeHvddkQpECGEe-qsJ8+w@mail.gmail.com>
-Message-ID: <20130918183812.6a068f82@skate>
+Date: Wed, 18 Sep 2013 19:20:20 +0200
+Subject: [Buildroot] [PATCH 1/1] Allow svn tags and branches notation in
+ $(PKG)_VERSION variable.
+In-Reply-To: <2228068.y4thvyPt1K@portaka>
+References: <2228068.y4thvyPt1K@portaka>
+Message-ID: <20130918192020.2ea7cb7e@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Axel, Peter,
+Dear Ra?l S?nchez Siles,
 
-On Wed, 18 Sep 2013 15:38:11 +0800, Axel Lin wrote:
-> 2013/9/6 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>:
-> > Dear Axel Lin,
-> >
-> > On Thu, 05 Sep 2013 10:24:19 +0800, Axel Lin wrote:
-> >> commit c798bec25 "uclibc: set MMU usage accordingly" defines UCLIBC_MMU_CONFIG,
-> >> but forgot adding it to UCLIBC_SETUP_DOT_CONFIG. Fix it.
-> >>
-> >> Signed-off-by: Axel Lin <axel.lin@ingics.com>
-> >> Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> >
-> > Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+On Wed, 18 Sep 2013 07:11:43 +0200, Ra?l S?nchez Siles wrote:
+
+> According to user manual "generic-package Reference" section, LIBFOO_VERSION
+> could refer to a branch or tag. This patch adds supports for this in the svn
+> method case for the repositories following the branches/tags/trunk layout.
 > 
-> Hi Peter,
-> I sent the patch 2 weeks ago, and it got Thomas's Acked-by.
-> Any chance to pick up this path as I need it for nommu build.
-> If a resend or revision is necessary, just let me know.
+> Examples:
+> LIBFOO_VERSION = tags/v3.2.1
+> LIBFOO_SITE = svn://svn.server.net/myproject
 > 
-> The patch is available in patchwork:
-> http://patchwork.ozlabs.org/patch/272778/
+> LIBFOO2_VERSION = branches/featureA
+> LIBFOO2_SITE = http://svn.happyserver.net/theproject
+> LIBFOO2_SITE_METHOD = svn
+> 
+> Signed-off-by: Ra?l S?nchez Siles <rasasi78@gmail.com>
 
-Gently-requested-to-be-applied-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Hum, I am not sure. In the SVN world, a version is really a revision
+number that you get with 'svn checkout -r'.
 
+I believe to get a specific branch or tag with SVN, one should instead
+use:
+
+LIBFOO2_VERSION = <some revision number>
+LIBFOO2_SITE = http://svn.happyserver.net/theproject/branches/featureA
+
+I do understand the wish to make things 'like other VCS', but I am not
+entirely convinced it's a good idea. But I can probably be convinced
+with good arguments :)
+
+Thomas
 -- 
 Thomas Petazzoni, Free Electrons
 Kernel, drivers, real-time and embedded Linux
