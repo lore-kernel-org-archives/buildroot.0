@@ -1,58 +1,50 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 18 Sep 2013 18:06:13 +0200
-Subject: [Buildroot] [PATCH 1/1] package: udev is now provided by
- systemd or eudev.
-In-Reply-To: <20130918175838.32d9763a@skate>
-References: <1378476068-25300-1-git-send-email-eric.le.bihan.dev@free.fr>
- <20130917071737.4af20d60@skate> <20130917125352.GB13723@pc-eric>
- <20130917204539.7c788c2b@skate> <52394FAB.30109@mind.be>
- <20130918175838.32d9763a@skate>
-Message-ID: <5239CF75.2050807@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 18 Sep 2013 18:27:09 +0200
+Subject: [Buildroot] [PATCH v1] Fix EGL support in qt5base
+In-Reply-To: <208f618f05b351b3ef2eddf624978189@sysmic.org>
+References: <CA+csPL67CJSJHgfhgnJJfBcw+LUszPWT3VwFCEFw5n3Oy4jN1Q@mail.gmail.com>
+ <1379411589-8935-1-git-send-email-jezz@sysmic.org>
+ <20130917203313.0da278a9@skate>
+ <208f618f05b351b3ef2eddf624978189@sysmic.org>
+Message-ID: <20130918182709.7a845c19@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 18/09/13 17:58, Thomas Petazzoni wrote:
-> Dear Arnout Vandecappelle,
->
-> On Wed, 18 Sep 2013 09:00:59 +0200, Arnout Vandecappelle wrote:
->
->>    Perhaps it makes more sense to include the extra config for eudev and
->> systemd to the system menu? I think it's a bit strange to have to
->> navigate to a completely different, hard to find menu to enable systemd's
->> journal gateway...
->>
->>    You can easily do this by moving the
->> source "package/systemd/systemd.mk"
->> line from package/Config.in to system/Config.in.
->
-> I already suggested that the selection of eudev vs. systemd should not
-> be in Target Packages, and Eric already made a proposal to solve this.
-> In fact, we don't need any new configuration option: when the systemd
-> init system is selected, then systemd is used. When another init
-> systemd is used, but the selected /dev management method is udev, then
-> we use eudev.
->
-> There's no need for more options. The only thing that Eric proposed is
-> to re-order the Init System selection vs. the /dev management selection
-> to make things a bit more logical.
+Dear J?r?me Pouiller,
 
-  For systemd, journal compression and journal gateway still have to be 
-selectable. IMHO it is not nice for the user to have to navigate to a 
-completely unrelated place in order to enable those. So my suggestion is 
-to include the Config.in that has these extra options immediately below 
-the systemd selection in the system menu.
+On Wed, 18 Sep 2013 13:13:57 +0200, J?r?me Pouiller wrote:
 
-  Regards,
-  Arnout
+> > I'm sorry, but this really looks ugly.
+> I agree :-)
+> 
+> In fact, I mainly  wrote this patch as a work around for  one of my 
+> imx6
+> compilations. I sent it only because Espen seemed to have same issue.
 
+Ok, no problem :)
 
+> > ifeq ($(BR2_PACKAGE_GPU_VIV_BIN_MX6Q),y)
+> > QT5BASE_EGLFS_PLATFORM_HOOKS_SOURCES = \
+> > 	$(@D)/mkspecs/devices/linux-imx6-g++/qeglfshooks_imx6.cpp
+> > endif
+> My idea  was QT5BASE_EGLFS_PLATFORM_HOOKS_SOURCES may not  be 
+> sufficient
+> to  support all  future cases  and we  may have  a more  generic way  
+> to
+> customize qmake.conf. But I am agree, this case is not yet arrived.
+
+Of course, this might happen, but until that happens, let's not plan
+something in advance without having any idea of what will exactly
+happen :-)
+
+Best regards,
+
+Thomas
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
