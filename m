@@ -1,52 +1,33 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 18 Sep 2013 08:57:46 +0200
+Date: Wed, 18 Sep 2013 09:00:59 +0200
 Subject: [Buildroot] [PATCH 1/1] package: udev is now provided by
  systemd or eudev.
-In-Reply-To: <20130917203726.5b02fe08@skate>
+In-Reply-To: <20130917204539.7c788c2b@skate>
 References: <1378476068-25300-1-git-send-email-eric.le.bihan.dev@free.fr>
- <522F8008.1000207@mind.be> <20130917203726.5b02fe08@skate>
-Message-ID: <52394EEA.4000603@mind.be>
+ <20130917071737.4af20d60@skate> <20130917125352.GB13723@pc-eric>
+ <20130917204539.7c788c2b@skate>
+Message-ID: <52394FAB.30109@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 17/09/13 20:37, Thomas Petazzoni wrote:
-> Dear Arnout Vandecappelle,
->
-> On Tue, 10 Sep 2013 22:24:40 +0200, Arnout Vandecappelle wrote:
->
->>> +comment "eudev requires /dev mgmnt set to udev under System configuration"
->>> +	depends on !BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_UDEV
->>> +
->>> +comment "eudev not available with Systemd as init system"
->>> +	depends on BR2_PACKAGE_SYSTEMD
->>
->>    I think these comments are not really necessary. Actually, I would say
->> that the only reason that eudev has a user-visible Config option is for
->> the "enable all extras". And that config option is slightly redundant,
->> since the additional size of gudev is almost nothing compared to
->> libglib2, so you could just as well use an automatic dependency.
->
-> No, I disagree with this. There are some other packages (currently
-> udisks and network-manager) that explicitly need the udev extras. So I
-> believe it's useful for these packages to be able to 'select
-> BR2_PACKAGE_UDEV_ALL_EXTRAS'. Of course, they could 'select
-> BR2_PACKAGE_LIBGLIB2' and depend on udev, but this means that they have
-> internal knowledge of the fact that udev needs libglib2 to enable 'all
-> extras', an internal knowledge that could very well be broken if
-> tomorrow udev needs another dependency to build its 'all extras' things.
->
-> So, the BR2_PACKAGE_(E)UDEV_ALL_EXTRAS option should remain in place, I
-> believe.
+On 17/09/13 20:45, Thomas Petazzoni wrote:
+>> >The user can configure
+>> >the extras for eudev in the appropriate "Target packages" section.
+> Right.
 
-  I didn't write the network-manager and udisks integration, but I think 
-that they _actually_ need gudev, not some vague "all extras". And for 
-gudev it's pretty darn obvious that there is a relation with libglib2. In 
-fact, both of them should probably select libglib2 directly, because they 
-are based on gobject classes.
+  Perhaps it makes more sense to include the extra config for eudev and 
+systemd to the system menu? I think it's a bit strange to have to 
+navigate to a completely different, hard to find menu to enable systemd's 
+journal gateway...
 
+  You can easily do this by moving the
+source "package/systemd/systemd.mk"
+line from package/Config.in to system/Config.in.
+
+  But first check if it looks good, of course.
 
   Regards,
   Arnout
