@@ -1,62 +1,49 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Wed, 18 Sep 2013 13:15:41 +0200
-Subject: [Buildroot] [PATCH 3 of 4 RFC] manual: add section about
- depending on toolchain options
-In-Reply-To: <89b40887c8268e316399.1379494896@argentina>
-References: <patchbomb.1379494893@argentina>
- <89b40887c8268e316399.1379494896@argentina>
-Message-ID: <CAAXf6LXD_7jt42XAG_XgKWKi_+te40hgYNd4mTLbmCDMxfG0QA@mail.gmail.com>
+From: =?UTF-8?q?Fatih=20A=C5=9F=C4=B1c=C4=B1?= <fatih.asici@gmail.com>
+Date: Wed, 18 Sep 2013 14:17:51 +0300
+Subject: [Buildroot] [PATCH] qt5base: fix build when egl headers need a
+	definition
+Message-ID: <1379503071-5446-1-git-send-email-fatih.asici@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-All,
+The build with gpu-viv-bin-mx6q libraries was broken since it wasn't
+using "-DEGL_API_FB=1" flag which is found in egl.pc.
 
-On Wed, Sep 18, 2013 at 11:01 AM, Thomas De Schampheleire
-<patrickdepinguin@gmail.com> wrote:
-> Currently, the comments in Config.in files when depending on toolchain options
-> are not at all lined up. This patch adds a section to the documentation that
-> explains which format is to be used.
->
-> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
->
-> ---
-> Notes:
-> - How we will specify the C library is currently marked as 'to be decided'.
-> This patch series does not yet unify that, but I plan to do that in a new
-> patch (or update this series if we can reach a decision shortly).  The problem
-> is that not all packages that have a dependency on e.g. glibc add a comment to
-> show this to the user. A proposal would be to have a comment like:
->     foo needs a (e)glibc toolchain w/ featA, featB, featC
-> where the '(e)glibc' string would be left out if there is no constraint on the
-> C library.
->
-> - For the 'dynamic library' option: there are packages that depend on it but do
-> not have a comment indicating that. If there is an agreement on the format as
-> shown in this patch, then I will do that.
->
->
->  docs/manual/adding-packages-directory.txt |  75 ++++++++++++++++++++++++++++---
->  1 files changed, 67 insertions(+), 8 deletions(-)
->
+Signed-off-by: Fatih A??c? <fatih.asici@gmail.com>
+---
+ package/qt5/qt5base/qt5base-egl-cflags.patch |   21 +++++++++++++++++++++
+ 1 file changed, 21 insertions(+)
+ create mode 100644 package/qt5/qt5base/qt5base-egl-cflags.patch
 
-
-In the original thread, there were a few outstanding questions:
-- capitalization
-  In this series I have opted for the mixed capitalization (one of the
-options mentioned by ThomasP): mostly lowercase except for acronyms
-like RPC, IPv6, C++.
-
-- which features to mention in comments
-  After thinking about it, it makes sense to me to mention C++,
-thread, wchar, RPC, dynamic library, and IPv6 in comments, and not to
-mention MMU and target architecture. My reasoning is that the last two
-are not freely choosable for a given project, while the other options
-can pretty easily be turned on when desired.
-
-I'm open to discussing this, if you do not agree.
-
-Best regards,
-Thomas
+diff --git a/package/qt5/qt5base/qt5base-egl-cflags.patch b/package/qt5/qt5base/qt5base-egl-cflags.patch
+new file mode 100644
+index 0000000..7f9d779
+--- /dev/null
++++ b/package/qt5/qt5base/qt5base-egl-cflags.patch
+@@ -0,0 +1,21 @@
++--- a/configure
+++++ b/configure
++@@ -5391,6 +5391,7 @@
++         QMAKE_CFLAGS_EGL=`$PKG_CONFIG --cflags egl 2>/dev/null`
++         QMakeVar set QMAKE_INCDIR_EGL "$QMAKE_INCDIR_EGL"
++         QMakeVar set QMAKE_LIBS_EGL "$QMAKE_LIBS_EGL"
+++        QMakeVar set QMAKE_CFLAGS_EGL "$QMAKE_CFLAGS_EGL"
++     fi       # detect EGL support
++     if compileTest qpa/egl "EGL" $QMAKE_CFLAGS_EGL $QMAKE_LIBS_EGL; then
++         CFG_EGL=yes
++--- a/mkspecs/features/egl.prf
+++++ b/mkspecs/features/egl.prf
++@@ -14,6 +14,8 @@
++ } else {
++     INCLUDEPATH += $$QMAKE_INCDIR_EGL
++     LIBS_PRIVATE += $$QMAKE_LIBS_EGL
+++    QMAKE_CFLAGS += $$QMAKE_CFLAGS_EGL
+++    QMAKE_CXXFLAGS += $$QMAKE_CFLAGS_EGL
++     LIBS += $$QMAKE_LFLAGS_EGL
++     for(p, QMAKE_LIBDIR_EGL) {
++         exists($$p):LIBS_PRIVATE += -L$$p
+-- 
+1.7.10.4
