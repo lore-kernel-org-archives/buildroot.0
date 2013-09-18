@@ -1,72 +1,62 @@
-From: =?UTF-8?Q?J=C3=A9r=C3=B4me_Pouiller?= <jezz@sysmic.org>
-Date: Wed, 18 Sep 2013 13:13:57 +0200
-Subject: [Buildroot] [PATCH v1] Fix EGL support in qt5base
-In-Reply-To: <20130917203313.0da278a9@skate>
-References: <CA+csPL67CJSJHgfhgnJJfBcw+LUszPWT3VwFCEFw5n3Oy4jN1Q@mail.gmail.com>
- <1379411589-8935-1-git-send-email-jezz@sysmic.org>
- <20130917203313.0da278a9@skate>
-Message-ID: <208f618f05b351b3ef2eddf624978189@sysmic.org>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Wed, 18 Sep 2013 13:15:41 +0200
+Subject: [Buildroot] [PATCH 3 of 4 RFC] manual: add section about
+ depending on toolchain options
+In-Reply-To: <89b40887c8268e316399.1379494896@argentina>
+References: <patchbomb.1379494893@argentina>
+ <89b40887c8268e316399.1379494896@argentina>
+Message-ID: <CAAXf6LXD_7jt42XAG_XgKWKi_+te40hgYNd4mTLbmCDMxfG0QA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2013-09-17 20:33, Thomas Petazzoni wrote:
-> Dear J?r?me Pouiller,
->
-> On Tue, 17 Sep 2013 11:53:09 +0200, J?r?me Pouiller wrote:
->> For many EGL libraries, Qt5 need special instructions to compile 
->> correctly.
->> This patch implement a more generic way to customize Qt5 
->> compilation.
->>
->> In add, it fix support for Rasberry Pi and Vivante GPUs.
->>
->> Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
->
-> I'm sorry, but this really looks ugly.
-I agree :-)
+All,
 
-In fact, I mainly  wrote this patch as a work around for  one of my 
-imx6
-compilations. I sent it only because Espen seemed to have same issue.
-
-> and doesn't seem needed at all.
-> We already have a working solution for this problem (which we already
-> had for the RPi, and we solved in a much nicer way I believe) :
+On Wed, Sep 18, 2013 at 11:01 AM, Thomas De Schampheleire
+<patrickdepinguin@gmail.com> wrote:
+> Currently, the comments in Config.in files when depending on toolchain options
+> are not at all lined up. This patch adds a section to the documentation that
+> explains which format is to be used.
 >
->  (1) The OpenGL implementation should install proper pkg-config files
->      to allow Qt5 to get the right compilation flags/libraries. See 
-> the
->      "gpu-viv-bin-mx6q: add pkgconfig files for EGL and OpenGLESv2"
->      patch that Fatih has sent today.
-100% agree
-
->  (2) We already have a mechanism in qt5.mk to customize the EGL
->      platform hook implementation. It just need to be extended to 
-> cover
->      the i.MX6 case. I.e, next to:
+> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 >
-> ifeq ($(BR2_PACKAGE_RPI_USERLAND),y)
-> QT5BASE_EGLFS_PLATFORM_HOOKS_SOURCES = \
->         $(@D)/mkspecs/devices/linux-rasp-pi-g++/qeglfshooks_pi.cpp
-> endif
+> ---
+> Notes:
+> - How we will specify the C library is currently marked as 'to be decided'.
+> This patch series does not yet unify that, but I plan to do that in a new
+> patch (or update this series if we can reach a decision shortly).  The problem
+> is that not all packages that have a dependency on e.g. glibc add a comment to
+> show this to the user. A proposal would be to have a comment like:
+>     foo needs a (e)glibc toolchain w/ featA, featB, featC
+> where the '(e)glibc' string would be left out if there is no constraint on the
+> C library.
 >
->      one should add:
+> - For the 'dynamic library' option: there are packages that depend on it but do
+> not have a comment indicating that. If there is an agreement on the format as
+> shown in this patch, then I will do that.
 >
-> ifeq ($(BR2_PACKAGE_GPU_VIV_BIN_MX6Q),y)
-> QT5BASE_EGLFS_PLATFORM_HOOKS_SOURCES = \
-> 	$(@D)/mkspecs/devices/linux-imx6-g++/qeglfshooks_imx6.cpp
-> endif
-My idea  was QT5BASE_EGLFS_PLATFORM_HOOKS_SOURCES may not  be 
-sufficient
-to  support all  future cases  and we  may have  a more  generic way  
-to
-customize qmake.conf. But I am agree, this case is not yet arrived.
+>
+>  docs/manual/adding-packages-directory.txt |  75 ++++++++++++++++++++++++++++---
+>  1 files changed, 67 insertions(+), 8 deletions(-)
+>
 
 
--- 
-J?r?me Pouiller, Sysmic
-Embedded Linux specialist
-http://www.sysmic.fr
+In the original thread, there were a few outstanding questions:
+- capitalization
+  In this series I have opted for the mixed capitalization (one of the
+options mentioned by ThomasP): mostly lowercase except for acronyms
+like RPC, IPv6, C++.
+
+- which features to mention in comments
+  After thinking about it, it makes sense to me to mention C++,
+thread, wchar, RPC, dynamic library, and IPv6 in comments, and not to
+mention MMU and target architecture. My reasoning is that the last two
+are not freely choosable for a given project, while the other options
+can pretty easily be turned on when desired.
+
+I'm open to discussing this, if you do not agree.
+
+Best regards,
+Thomas
