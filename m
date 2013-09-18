@@ -1,48 +1,24 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 18 Sep 2013 19:20:20 +0200
-Subject: [Buildroot] [PATCH 1/1] Allow svn tags and branches notation in
- $(PKG)_VERSION variable.
-In-Reply-To: <2228068.y4thvyPt1K@portaka>
-References: <2228068.y4thvyPt1K@portaka>
-Message-ID: <20130918192020.2ea7cb7e@skate>
+Date: Wed, 18 Sep 2013 19:20:41 +0200
+Subject: [Buildroot] [PATCH] qt5base: set eglfs platform hook for imx6
+In-Reply-To: <1379481429-14687-1-git-send-email-fatih.asici@gmail.com>
+References: <1379481429-14687-1-git-send-email-fatih.asici@gmail.com>
+Message-ID: <20130918192041.10a44cda@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Ra?l S?nchez Siles,
+Dear Fatih A??c?,
 
-On Wed, 18 Sep 2013 07:11:43 +0200, Ra?l S?nchez Siles wrote:
+On Wed, 18 Sep 2013 08:17:09 +0300, Fatih A??c? wrote:
+> Signed-off-by: Fatih A??c? <fatih.asici@gmail.com>
+> ---
+>  package/qt5/qt5base/qt5base.mk |    4 ++++
+>  1 file changed, 4 insertions(+)
 
-> According to user manual "generic-package Reference" section, LIBFOO_VERSION
-> could refer to a branch or tag. This patch adds supports for this in the svn
-> method case for the repositories following the branches/tags/trunk layout.
-> 
-> Examples:
-> LIBFOO_VERSION = tags/v3.2.1
-> LIBFOO_SITE = svn://svn.server.net/myproject
-> 
-> LIBFOO2_VERSION = branches/featureA
-> LIBFOO2_SITE = http://svn.happyserver.net/theproject
-> LIBFOO2_SITE_METHOD = svn
-> 
-> Signed-off-by: Ra?l S?nchez Siles <rasasi78@gmail.com>
-
-Hum, I am not sure. In the SVN world, a version is really a revision
-number that you get with 'svn checkout -r'.
-
-I believe to get a specific branch or tag with SVN, one should instead
-use:
-
-LIBFOO2_VERSION = <some revision number>
-LIBFOO2_SITE = http://svn.happyserver.net/theproject/branches/featureA
-
-I do understand the wish to make things 'like other VCS', but I am not
-entirely convinced it's a good idea. But I can probably be convinced
-with good arguments :)
-
-Thomas
+Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 -- 
 Thomas Petazzoni, Free Electrons
 Kernel, drivers, real-time and embedded Linux
