@@ -1,30 +1,103 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 18 Sep 2013 08:33:30 -0300
-Subject: [Buildroot] [PATCH] mplayer: security bump to version 1.1.1
-Message-ID: <1379504010-32483-1-git-send-email-gustavo@zacarias.com.ar>
+From: =?UTF-8?q?Fatih=20A=C5=9F=C4=B1c=C4=B1?= <fatih.asici@gmail.com>
+Date: Wed, 18 Sep 2013 14:41:33 +0300
+Subject: [Buildroot] [PATCH v3] gpu-viv-bin-mx6q: add pkgconfig files for
+	EGL, OpenGLESv2 and OpenVG
+Message-ID: <1379504493-7617-1-git-send-email-fatih.asici@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Fatih A??c? <fatih.asici@gmail.com>
 ---
- package/mplayer/mplayer.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Changes v2 -> v3:
+  - Define EGL_API_FB if GPU_VIV_BIN_MX6Q_LIB_TARGET == fb (suggested by
+    J?r?me Pouiller)
 
-diff --git a/package/mplayer/mplayer.mk b/package/mplayer/mplayer.mk
-index a13efed..9a511b4 100644
---- a/package/mplayer/mplayer.mk
-+++ b/package/mplayer/mplayer.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+Changes v1 -> v2:
+  - Add .pc files to package dir instead of patching (suggested by
+    Arnout Vandecappelle)
+  - EGL library needs requires -lGAL, too (suggested by Arnout
+    Vandecappelle)
+  - Added .pc file for OpenVG (suggested by Arnout Vandecappelle)
+---
+ package/freescale-imx/gpu-viv-bin-mx6q/egl.pc              |   10 ++++++++++
+ package/freescale-imx/gpu-viv-bin-mx6q/glesv2.pc           |   10 ++++++++++
+ package/freescale-imx/gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk |    9 +++++++++
+ package/freescale-imx/gpu-viv-bin-mx6q/vg.pc               |   10 ++++++++++
+ 4 files changed, 39 insertions(+)
+ create mode 100644 package/freescale-imx/gpu-viv-bin-mx6q/egl.pc
+ create mode 100644 package/freescale-imx/gpu-viv-bin-mx6q/glesv2.pc
+ create mode 100644 package/freescale-imx/gpu-viv-bin-mx6q/vg.pc
+
+diff --git a/package/freescale-imx/gpu-viv-bin-mx6q/egl.pc b/package/freescale-imx/gpu-viv-bin-mx6q/egl.pc
+new file mode 100644
+index 0000000..c984247
+--- /dev/null
++++ b/package/freescale-imx/gpu-viv-bin-mx6q/egl.pc
+@@ -0,0 +1,10 @@
++prefix=/usr
++exec_prefix=${prefix}
++libdir=${exec_prefix}/lib
++includedir=${prefix}/include
++
++Name: egl
++Description: Freescale gpu-viv-bin-mx6q implementation of EGL
++Version: 1.0
++Libs: -L${libdir} -lGAL -lEGL
++Cflags: -I${includedir}/ -DEGL_API_FB=1
+diff --git a/package/freescale-imx/gpu-viv-bin-mx6q/glesv2.pc b/package/freescale-imx/gpu-viv-bin-mx6q/glesv2.pc
+new file mode 100644
+index 0000000..7cfb5e7
+--- /dev/null
++++ b/package/freescale-imx/gpu-viv-bin-mx6q/glesv2.pc
+@@ -0,0 +1,10 @@
++prefix=/usr
++exec_prefix=${prefix}
++libdir=${exec_prefix}/lib
++includedir=${prefix}/include
++
++Name: glesv2
++Description: Freescale gpu-viv-bin-mx6q implementation of OpenGL ESv2
++Version: 2.0
++Libs: -L${libdir} -lGAL -lEGL -lGLESv2
++Cflags: -I${includedir}/ -DEGL_API_FB=1
+diff --git a/package/freescale-imx/gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk b/package/freescale-imx/gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk
+index 0338e13..1b9684a 100644
+--- a/package/freescale-imx/gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk
++++ b/package/freescale-imx/gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk
+@@ -51,6 +51,15 @@ endef
  
--MPLAYER_VERSION = 1.1
-+MPLAYER_VERSION = 1.1.1
- MPLAYER_SOURCE = MPlayer-$(MPLAYER_VERSION).tar.xz
- MPLAYER_SITE = http://www.mplayerhq.hu/MPlayer/releases
+ define GPU_VIV_BIN_MX6Q_INSTALL_STAGING_CMDS
+ 	cp -r $(@D)/usr/* $(STAGING_DIR)/usr
++	for lib in egl glesv2 vg; do \
++		$(INSTALL) -m 0644 -D \
++			package/freescale-imx/gpu-viv-bin-mx6q/$${lib}.pc \
++			$(STAGING_DIR)/usr/lib/pkgconfig/$${lib}.pc; \
++		if [ "$(GPU_VIV_BIN_MX6Q_LIB_TARGET)" != "fb" ]; then \
++			$(SED) "s/-DEGL_API_FB=1//" \
++				$(STAGING_DIR)/usr/lib/pkgconfig/$${lib}.pc; \
++		fi; \
++	done
+ endef
  
+ ifeq ($(BR2_PACKAGE_GPU_VIV_BIN_MX6Q_EXAMPLES),y)
+diff --git a/package/freescale-imx/gpu-viv-bin-mx6q/vg.pc b/package/freescale-imx/gpu-viv-bin-mx6q/vg.pc
+new file mode 100644
+index 0000000..fb14005
+--- /dev/null
++++ b/package/freescale-imx/gpu-viv-bin-mx6q/vg.pc
+@@ -0,0 +1,10 @@
++prefix=/usr
++exec_prefix=${prefix}
++libdir=${exec_prefix}/lib
++includedir=${prefix}/include
++
++Name: vg
++Description: Freescale gpu-viv-bin-mx6q implementation of OpenVG
++Version: 1.1
++Libs: -L${libdir} -lGAL -lEGL -lOpenVG
++Cflags: -I${includedir}/ -DEGL_API_FB=1
 -- 
-1.8.1.5
+1.7.10.4
