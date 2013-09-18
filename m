@@ -1,25 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 18 Sep 2013 18:49:41 +0200
-Subject: [Buildroot] [PATCH 1/3] gettext: fixup library permissions
-In-Reply-To: <1379511483-30618-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1379511483-30618-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20130918184941.6e0271d1@skate>
+Date: Wed, 18 Sep 2013 18:51:55 +0200
+Subject: [Buildroot] [PATCH 1/1] package: remove the trailing slash sign
+ from the URL address
+In-Reply-To: <CAAXf6LU8GCW7vwVvoBrSeTaongix761F=DT1Tbh=qJ_3m32CMw@mail.gmail.com>
+References: <1379517858-28720-1-git-send-email-jerzy.grzegorek@trzebnica.net>
+ <CAAXf6LU8GCW7vwVvoBrSeTaongix761F=DT1Tbh=qJ_3m32CMw@mail.gmail.com>
+Message-ID: <20130918185155.0c045e28@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+Dear Thomas De Schampheleire,
 
-On Wed, 18 Sep 2013 10:38:01 -0300, Gustavo Zacarias wrote:
-> libintl.so* is installed without +x permissions thus preventing
-> stripping. Fix it up in the post install target hooks.
-> 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+On Wed, 18 Sep 2013 17:34:12 +0200, Thomas De Schampheleire wrote:
 
-There are apparently a few other packages affected by this, see
-http://patchwork.ozlabs.org/patch/246622/.
+> Could you clarify why this is desirable? Note that urls with our
+> without trailing slash are not identical: the web server needs to
+> properly support this. For example, the autobuild website does not
+> properly do it (something very annoying ;) )
+
+I do certainly welcome some help with Apache configuration to make the
+rewrite rules behave better. I hate doing sysadmin stuff, so when it
+worked more or less, I considered it good enough :)
+
+What I currently have is:
+
+        RewriteEngine on
+        RewriteCond %{REQUEST_FILENAME} !-f
+        RewriteCond %{REQUEST_FILENAME} !-d
+        RewriteRule ^/results/([a-f0-9]{3})([a-f0-9]{37})/(.*) /results/$1/$1$2/$3 [L]
+
+this is needed because the old URLs were:
+
+	/results/<complete-hash>/
+
+while the way it's stored (and the new URLs) are:
+
+	/results/<first three chars of hash>/<complete-hash>/
 
 Thomas
 -- 
