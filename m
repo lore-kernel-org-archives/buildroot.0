@@ -1,30 +1,34 @@
-From: Fatih =?UTF-8?Q?A=C5=9F=C4=B1c=C4=B1?= <fatih.asici@gmail.com>
-Date: Wed, 18 Sep 2013 14:31:27 +0300
-Subject: [Buildroot] [PATCH v2] gpu-viv-bin-mx6q: add pkgconfig files
- for EGL, OpenGLESv2 and OpenVG
-In-Reply-To: <8bf55b2e7b82a691d6e61fe3bcb843c2@sysmic.org>
-References: <1379502224-4999-1-git-send-email-fatih.asici@gmail.com>
- <8bf55b2e7b82a691d6e61fe3bcb843c2@sysmic.org>
-Message-ID: <1379503887.9971.8.camel@viko>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed, 18 Sep 2013 08:31:39 -0300
+Subject: [Buildroot] [PATCH] ola: needs host-bison and host-flex
+Message-ID: <1379503899-26048-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Fixes:
+http://autobuild.buildroot.net/results/385/385f05b5e1b023b6c4ca220aab897e400b5aeccb/
+and a future failure (host-bison).
 
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/ola/ola.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-On Wed, 2013-09-18 at 13:20 +0200, J?r?me Pouiller wrote:
-> > +Name: egl
-> > +Description: Freescale gpu-viv-bin-mx6q implementation of EGL
-> > +Version: 1.0
-> > +Libs: -L${libdir} -lGAL -lEGL
-> > +Cflags: -I${includedir}/ -DEGL_API_FB=1
-> IFAIK, -DEGL_API_FB=1 must be used only if GPU_VIV_BIN_MX6Q_LIB_TARGET
-> == fb.
-
-I did not know this option. I will send a new patch sed'ing
-installed .pc files.
-
-Thanks,
-Fatih
+diff --git a/package/ola/ola.mk b/package/ola/ola.mk
+index 55386b1..d7ddab7 100644
+--- a/package/ola/ola.mk
++++ b/package/ola/ola.mk
+@@ -12,7 +12,7 @@ OLA_LICENSE_FILES = LICENCE GPL LGPL
+ OLA_INSTALL_STAGING = YES
+ 
+ # util-linux provides uuid lib
+-OLA_DEPENDENCIES = protobuf util-linux
++OLA_DEPENDENCIES = protobuf util-linux host-bison host-flex
+ 
+ OLA_CONF_OPT = \
+ 	--disable-gcov \
+-- 
+1.8.1.5
