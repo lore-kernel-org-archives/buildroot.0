@@ -1,137 +1,132 @@
-From: Matthew Weber <mlweber1@rockwellcollins.com>
-Date: Wed, 18 Sep 2013 17:03:27 -0500
-Subject: [Buildroot] [PATCH 1/1] iputils: new package
-In-Reply-To: <1379533013-13209-1-git-send-email-mlweber1@rockwellcollins.com>
-References: <1379533013-13209-1-git-send-email-mlweber1@rockwellcollins.com>
-Message-ID: <OF293F3CE4.C9BDFB06-ON86257BEA.00790EBC-86257BEA.00792B22@rockwellcollins.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 19 Sep 2013 00:06:24 +0200
+Subject: [Buildroot] [PATCH 3 of 4 RFC] manual: add section about
+ depending on toolchain options
+In-Reply-To: <89b40887c8268e316399.1379494896@argentina>
+References: <patchbomb.1379494893@argentina>
+ <89b40887c8268e316399.1379494896@argentina>
+Message-ID: <523A23E0.4040602@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Found a better way to check for uClibc and the state of IPV6 support. 
-Workin on v2 of this patch.
-
-Matt
-
-Matt Weber <mlweber1@rockwellcollins.com> wrote on 09/18/2013 02:36:53 PM:
-
-> From: Matt Weber <mlweber1@rockwellcollins.com>
-> To: buildroot at busybox.net
-> Cc: Matt Weber <mlweber1@rockwellcollins.com>
-> Date: 09/18/2013 02:36 PM
-> Subject: [PATCH 1/1] iputils: new package
-> 
-> This new package adds full versions of ping/traceroute/etc.
-> 
-> Built against GCC4.7 ARM, x86 uclibc IPv6 and uclibc no IPv6.
-> 
-> Signed-off-by: Matt Weber <mlweber1@rockwellcollins.com>
+On 18/09/13 11:01, Thomas De Schampheleire wrote:
+> Currently, the comments in Config.in files when depending on toolchain options
+> are not at all lined up. This patch adds a section to the documentation that
+> explains which format is to be used.
+>
+> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+>
 > ---
->  package/Config.in          |    1 +
->  package/iputils/Config.in  |    7 +++++
->  package/iputils/iputils.mk |   57 +++++++++++++++++++++++++++++++++
-> +++++++++++
->  3 files changed, 65 insertions(+), 0 deletions(-)
->  create mode 100644 package/iputils/Config.in
->  create mode 100644 package/iputils/iputils.mk
-> 
-> diff --git a/package/Config.in b/package/Config.in
-> index 973d32c..14ca821 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -792,6 +792,7 @@ source "package/iproute2/Config.in"
->  source "package/ipsec-tools/Config.in"
->  source "package/ipset/Config.in"
->  source "package/iptables/Config.in"
-> +source "package/iputils/Config.in"
->  source "package/iw/Config.in"
->  source "package/kismet/Config.in"
->  source "package/knock/Config.in"
-> diff --git a/package/iputils/Config.in b/package/iputils/Config.in
-> new file mode 100644
-> index 0000000..92bbea9
-> --- /dev/null
-> +++ b/package/iputils/Config.in
-> @@ -0,0 +1,7 @@
-> +config BR2_PACKAGE_IPUTILS
-> +   bool "iputils"
-> +   help
-> +     This package is set of small useful utilities for Linux 
-networking.
-> +     It includes complete versions of ping, traceroute, etc.
+> Notes:
+> - How we will specify the C library is currently marked as 'to be decided'.
+> This patch series does not yet unify that, but I plan to do that in a new
+> patch (or update this series if we can reach a decision shortly).  The problem
+> is that not all packages that have a dependency on e.g. glibc add a comment to
+> show this to the user. A proposal would be to have a comment like:
+>      foo needs a (e)glibc toolchain w/ featA, featB, featC
+> where the '(e)glibc' string would be left out if there is no constraint on the
+> C library.
+>
+> - For the 'dynamic library' option: there are packages that depend on it but do
+> not have a comment indicating that. If there is an agreement on the format as
+> shown in this patch, then I will do that.
+
+  I agree on all points.
+
+  For the 'dynamic library' option, I don't think it's that important to 
+add a comment for it. It's so exotic, and you probably select only very 
+few packages in that case anyway, so the likelihood of someone 
+encountering that situation is pretty slim.
+
+
+[snip]
+> +[[dependencies-toolchain-options]]
+> +Dependencies on toolchain options
+> +^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> +Many packages depend on certain options of the toolchain, like the
+> +C library, C++ support, largefile support, thread support, RPC
+> +support, IPv6 support, wchar support, or dynamic libraries. These
+> +dependencies have to expressed with the appropriate 'depends on'
+> +statements in the Config.in file. Additionally, a +comment+ should be
+> +displayed when the option is not enabled, so that the user knows why
+> +the package is not available.
 > +
-> +     http://sourceforge.net/projects/iputils/
-> diff --git a/package/iputils/iputils.mk b/package/iputils/iputils.mk
-> new file mode 100644
-> index 0000000..b4576cc
-> --- /dev/null
-> +++ b/package/iputils/iputils.mk
-> @@ -0,0 +1,57 @@
-> 
-+################################################################################
-> +#
-> +# iputils
-> +#
-> 
-+################################################################################
+> +The general format of such a +comment+ for package foo is:
+> +--------------------------
+> +foo needs a toolchain w/ featA, featB, featC
+> +--------------------------
 > +
-> +IPUTILS_VERSION = 20121011
-> +IPUTILS_SITE = http://www.skbuff.net/iputils/
-> +IPUTILS_SOURCE = iputils-s$(IPUTILS_VERSION).tar.bz2
-> +IPUTILS_LICENSE = GPLv2+ BSD-3c
-> +# Only included a license file for BSD.
-> +IPUTILS_LICENSE_FILES = COPYING
+> +for example:
+> +--------------------------
+> +aircrack-ng needs a toolchain w/ largefile, threads
+> +--------------------------
 > +
-> +IPUTILS_DEPENDENCIES = libcap libsysfs openssl
-> +# Build after busybox so target ends up with this package's full
-> +# versions of the applications instead of busybox applets.
-> +ifeq ($(BR2_PACKAGE_BUSYBOX),y)
-> +IPUTILS_DEPENDENCIES += busybox
-> +endif
+> +Note that this text is kept brief on purpose, so that it will fit on a
+> +80-character terminal without scrolling.
+
+  There is no scrolling in menuconfig, so just put "so that it will fit 
+on a 80-character terminal".
+
+  Regards,
+  Arnout
+
 > +
-> +define IPUTILS_IPV6_TARGET_CMDS
-> +   $(INSTALL) -D -m 755 $(@D)/ping6       $(TARGET_DIR)/bin/ping6
-> +   $(INSTALL) -D -m 755 $(@D)/tracepath6  $(TARGET_DIR)/bin/tracepath6
-> +   $(INSTALL) -D -m 755 $(@D)/traceroute6 $(TARGET_DIR)/bin/traceroute6
-> +endef
-> +IPUTILS_IPV6_MKTARGETS = ping6 tracepath6 traceroute6
+> +The rest of this section enumerates the different toolchain options,
+> +the corresponding config symbols to depend on, and the string literals
+> +to use in the comment.
 > +
-> +ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),y)
-> +ifneq ($(BR2_TOOLCHAIN_BUILDROOT_INET_IPV6),y)
-> +define IPUTILS_IPV6_TARGET_CMDS
-> +endef
-> +define IPUTILS_IPV6_MKTARGETS
-> +endef
-> +endif
-> +endif
+> +* C library
+> +** Dependency symbol: +BR2_TOOLCHAIN_USES_GLIBC+,
+> ++BR2_TOOLCHAIN_USES_UCLIBC+
+> +** Comment string: (to be decided)
 > +
-> +IPUTILS_MKTARGETS = arping clockdiff ping rarpd rdisc tftpd 
-> tracepath $(IPUTILS_IPV6_MKTARGETS)
+> +* C++ support
+> +** Dependency symbol: +BR2_INSTALL_LIBSTDCPP+
+> +** Comment string: `C++`
 > +
-> +IPUTILS_MAKE_CMDS = $(TARGET_CONFIGURE_OPTS) KERNEL_INCLUDE=$
-> (STAGING_DIR)/usr/include/linux \
-> +      CFLAGS+="-D_GNU_SOURCE -Wstrict-prototypes -Wall -
-> DCAPABILITIES -DUSE_SYSFS"
+> +* largefile support
+> +** Dependency symbol: +BR2_LARGEFILE+
+> +** Comment string: +largefile+
 > +
-> +define IPUTILS_BUILD_CMDS
-> +   $(MAKE) -C $(@D) $(IPUTILS_MAKE_CMDS) DESTDIR=$(STAGING_DIR) $
-> (IPUTILS_MKTARGETS)
-> +endef
+> +* thread support
+> +** Dependency symbol: +BR2_TOOLCHAIN_HAS_THREADS+
+> +** Comment string: +threads+
 > +
-> +define IPUTILS_INSTALL_TARGET_CMDS
-> +   $(INSTALL) -D -m 755 $(@D)/arping      $(TARGET_DIR)/sbin/arping
-> +   $(INSTALL) -D -m 755 $(@D)/clockdiff   $(TARGET_DIR)/bin/clockdiff
-> +   $(INSTALL) -D -m 755 $(@D)/ping        $(TARGET_DIR)/bin/ping
-> +   $(INSTALL) -D -m 755 $(@D)/rarpd       $(TARGET_DIR)/sbin/rarpd
-> +   $(INSTALL) -D -m 755 $(@D)/rdisc       $(TARGET_DIR)/sbin/rdisc
-> +   $(INSTALL) -D -m 755 $(@D)/tftpd $(TARGET_DIR)/usr/sbin/in.tftpd
-> +   $(INSTALL) -D -m 755 $(@D)/tracepath   $(TARGET_DIR)/bin/tracepath
-> +   $(IPUTILS_IPV6_TARGET_CMDS)
-> +endef
+> +* RPC support
+> +** Dependency symbol: +BR2_TOOLCHAIN_HAS_NATIVE_RPC+
+> +** Comment string: +RPC+
 > +
-> +$(eval $(generic-package))
-> -- 
-> 1.7.1
-> 
+> +* IPv6 support
+> +** Dependency symbol: +BR2_INET_IPV6+
+> +** Comment string: +IPv6+ (lowercase v)
+> +
+> +* wchar support
+> +** Dependency symbol: +BR2_USE_WCHAR+
+> +** Comment string: +wchar+
+> +
+> +* dynamic library: the user can indicate that he wants static
+> +libraries where possible, but not all packages support that.
+> +** Dependency symbol: +BR2_PREFER_STATIC_LIB+
+> +** Comment string: +dynamic library+
+> +
+> +
+>   The +.mk+ file
+>   ~~~~~~~~~~~~~~
+>   [[adding-packages-mk]]
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+>
+
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
