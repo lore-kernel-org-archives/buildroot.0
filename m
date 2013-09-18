@@ -1,68 +1,95 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Wed, 18 Sep 2013 19:30:11 +0200
-Subject: [Buildroot] [PATCH 3 of 4 RFC] manual: add section about
- depending on toolchain options
-In-Reply-To: <20130918183414.45e6a247@skate>
-References: <patchbomb.1379494893@argentina>
- <89b40887c8268e316399.1379494896@argentina>
- <CAAXf6LXD_7jt42XAG_XgKWKi_+te40hgYNd4mTLbmCDMxfG0QA@mail.gmail.com>
- <20130918183414.45e6a247@skate>
-Message-ID: <CAAXf6LWmH2xtBe_P-P+1HJhndDM1BhHZcgJzu9o7JrfwjtwWVg@mail.gmail.com>
+From: Sagaert Johan <sagaert.johan@skynet.be>
+Date: Wed, 18 Sep 2013 19:34:20 +0200
+Subject: [Buildroot] [PATCH 1/1] package: udev is now provided by
+	systemd or eudev.
+In-Reply-To: <20130918184118.3794c883@skate>
+References: <1378476068-25300-1-git-send-email-eric.le.bihan.dev@free.fr>
+ <20130917071737.4af20d60@skate> <20130917125352.GB13723@pc-eric>
+ <20130917204539.7c788c2b@skate> <52394FAB.30109@mind.be>
+ <20130918175838.32d9763a@skate> <5239CF75.2050807@mind.be>
+ <20130918184118.3794c883@skate>
+Message-ID: <60DD971516BF4BC19E62266390C4237A@JohanW7>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+ 
+Hi
 
-On Wed, Sep 18, 2013 at 6:34 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Dear Thomas De Schampheleire,
->
-> On Wed, 18 Sep 2013 13:15:41 +0200, Thomas De Schampheleire wrote:
->
->
-> I agree with both. I believe the documentation should explicitly state
-> that a BR2_USE_MMU dependency or an architecture dependency should not
-> be mentioned in a comment (with the reason that you explain).
+Just out of curiosity I tried to build using systemd :
 
-Ok, I will add that.
+I think it will need a patch :
+src/macro.h:39:19: error: static declaration of 'execvpe' follows non-static declaration
 
->
-> However, for the reason that you explain, showing a comment when the
-> problem is a lack of dynamic library is not completely good. On some
-> noMMU architectures, there no support for dynamic libraries at all, so
-> the user cannot "enable" that at all. But well, despite this, I believe
-> it's better to show a comment when a package is not available due to
-> the lack of shared libraries.
 
-Currently there is one option PREFER_STATIC_LIB, with help text:
-          Where possible, build and use static libraries for the
-target.
-          This potentially increases your code size and should only be
-          used if you know what you do.
-          The default is to build dynamic libraries and use those on
-          the target filesystem.
+>>> systemd 44 Building
+PATH="/home/buildroot12git/output/host/bin:/home/buildroot12git/output/host/usr/bin:/home/buildroot12git/output/host/usr/sbin/:/usr/
+local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/home/buildroot12git/output/host/usr/bin"
+PERLLIB="/home/buildroot12git/output/host/usr/lib/perl"  /usr/bin/make -j5 LIBS=-lrt LDFLAGS+=-ldl -C
+/home/buildroot12git/output/build/systemd-44/
+make[1]: Entering directory `/home/buildroot12git/output/build/systemd-44'
+/usr/bin/make  all-recursive
+make[2]: Entering directory `/home/buildroot12git/output/build/systemd-44'
+Making all in po
+make[3]: Entering directory `/home/buildroot12git/output/build/systemd-44/po'
+make[3]: Nothing to be done for `all'.
+make[3]: Leaving directory `/home/buildroot12git/output/build/systemd-44/po'
+make[3]: Entering directory `/home/buildroot12git/output/build/systemd-44'
+  CC     src/libsystemd_login_la-cgroup-util.lo
+  CC     src/libsystemd_core_la-unit.lo
+  CC     src/libsystemd_core_la-job.lo
+  CC     src/libsystemd_core_la-manager.lo
+  CC     src/libsystemd_core_la-path-lookup.lo
+In file included from src/util.h:38:0,
+                 from src/def.h:25,
+                 from src/cgroup-util.h:30,
+                 from src/cgroup-util.c:32:
+src/macro.h:39:19: error: static declaration of 'execvpe' follows non-static declaration
+/home/buildroot12git/output/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/include/unistd.h:553:12: note: previous
+declaration of 'execvpe' was here
+make[3]: *** [src/libsystemd_login_la-cgroup-util.lo] Error 1
+make[3]: *** Waiting for unfinished jobs....
 
-However, my interpretation of the current usage of this symbol is that
-it is not PREFER_STATIC_LIB, but rather something like
-STATIC_LIB_ONLY. Because some packages are simply not available when
-this is set, instead of building the package with dynamic linking.
+Regards, Johan
 
-The current name PREFER_STATIC_LIB is also unfortunate in the case
-that dynamic linking is not available because the target does not
-support it, e.g. because of no MMU (thanks for mentioning this, I
-wasn't aware). A name STATIC_LIB_ONLY would also match better here.
+-----Oorspronkelijk bericht-----
+Van: buildroot-bounces at busybox.net [mailto:buildroot-bounces at busybox.net] Namens Thomas Petazzoni
+Verzonden: woensdag 18 september 2013 18:41
+Aan: Arnout Vandecappelle
+CC: buildroot at busybox.net
+Onderwerp: Re: [Buildroot] [PATCH 1/1] package: udev is now provided by systemd or eudev.
 
-Note that I'm not necessarily requesting we rename the symbol, but I
-find the current situation confusing.
+Dear Arnout Vandecappelle,
 
-Maybe we need an extra symbol, ARCH_NEEDS_STATIC_LIB or similar (or
-re-use a possible new !ARCH_HAS_MMU) in addition to a user choice
-PREFER_STATIC_LIB. When a package cannot be linked statically, we only
-check on ARCH_NEEDS_STATIC_LIB. If ARCH_NEEDS_STATIC_LIB is false, and
-PREFER_STATIC_LIB is true, then we build the package dynamically.
+On Wed, 18 Sep 2013 18:06:13 +0200, Arnout Vandecappelle wrote:
 
-Best regards,
+> > I already suggested that the selection of eudev vs. systemd should 
+> > not be in Target Packages, and Eric already made a proposal to solve 
+> > this. In fact, we don't need any new configuration option:
+> > when the systemd init system is selected, then systemd is used.
+> > When another init systemd is used, but the selected /dev management 
+> > method is udev, then we use eudev.
+> >
+> > There's no need for more options. The only thing that Eric proposed 
+> > is to re-order the Init System selection vs. the /dev management 
+> > selection to make things a bit more logical.
+> 
+>   For systemd, journal compression and journal gateway still have to 
+> be selectable. IMHO it is not nice for the user to have to navigate to 
+> a completely unrelated place in order to enable those. So my 
+> suggestion is to include the Config.in that has these extra options 
+> immediately below the systemd selection in the system menu.
+
+Hum, right. Probably makes sense, yes.
+
 Thomas
+--
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux development, consulting, training and support.
+http://free-electrons.com
+_______________________________________________
+buildroot mailing list
+buildroot at busybox.net
+http://lists.busybox.net/mailman/listinfo/buildroot
