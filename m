@@ -1,32 +1,35 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 18 Sep 2013 16:55:53 +0200
-Subject: [Buildroot] [git commit] mplayer: security bump to version 1.1.1
-Message-ID: <20130918222318.A36349B7D3@busybox.osuosl.org>
+Date: Thu, 19 Sep 2013 00:18:28 +0200
+Subject: [Buildroot] [git commit] qt5base: set eglfs platform hook for imx6
+Message-ID: <20130918222318.DB2A89B737@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=abd5db62fdec410eaf857b6eb107602734c87999
+commit: http://git.buildroot.net/buildroot/commit/?id=3577ca6af2597db4defda8db03e2fffb174d3fdc
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Fatih A????c?? <fatih.asici@gmail.com>
+Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/mplayer/mplayer.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/qt5/qt5base/qt5base.mk |    4 ++++
+ 1 files changed, 4 insertions(+), 0 deletions(-)
 
-diff --git a/package/mplayer/mplayer.mk b/package/mplayer/mplayer.mk
-index a13efed..9a511b4 100644
---- a/package/mplayer/mplayer.mk
-+++ b/package/mplayer/mplayer.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MPLAYER_VERSION = 1.1
-+MPLAYER_VERSION = 1.1.1
- MPLAYER_SOURCE = MPlayer-$(MPLAYER_VERSION).tar.xz
- MPLAYER_SITE = http://www.mplayerhq.hu/MPlayer/releases
- 
+diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
+index 1686dad..ddc5574 100644
+--- a/package/qt5/qt5base/qt5base.mk
++++ b/package/qt5/qt5base/qt5base.mk
+@@ -98,6 +98,10 @@ endif
+ ifeq ($(BR2_PACKAGE_QT5BASE_EGLFS),y)
+ QT5BASE_CONFIGURE_OPTS += -opengl es2 -eglfs
+ QT5BASE_DEPENDENCIES   += libgles libegl
++ifeq ($(BR2_PACKAGE_GPU_VIV_BIN_MX6Q),y)
++QT5BASE_EGLFS_PLATFORM_HOOKS_SOURCES = \
++	$(@D)/mkspecs/devices/linux-imx6-g++/qeglfshooks_imx6.cpp
++endif
+ ifeq ($(BR2_PACKAGE_RPI_USERLAND),y)
+ QT5BASE_EGLFS_PLATFORM_HOOKS_SOURCES = \
+ 	$(@D)/mkspecs/devices/linux-rasp-pi-g++/qeglfshooks_pi.cpp
