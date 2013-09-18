@@ -1,79 +1,94 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 19 Sep 2013 00:09:53 +0200
-Subject: [Buildroot] Is GPLv2 the right license for Buildroot?
-In-Reply-To: <523906E4.8080404@rftechnology.com.au>
-References: <20130912203359.7e650ebe@skate> <52323A54.7020808@mind.be>
- <20130912221256.GE3362@free.fr> <523388B6.7090305@mind.be>
- <20130914221613.GA3444@free.fr> <20130916182101.3844a686@skate>
- <20130916170815.GB3293@free.fr>
- <F9C551623D2CBB4C9488801D14F864C639ACE1F5@ex-mb1.corp.adtran.com>
- <20130916200135.1724084e@skate>
- <523906E4.8080404@rftechnology.com.au>
-Message-ID: <20130918220953.GA3557@free.fr>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 19 Sep 2013 00:17:18 +0200
+Subject: [Buildroot] [PATCH v3] python-crc16: new package
+In-Reply-To: <1379504896-16754-1-git-send-email-rommel@layer-7.net> (Michael
+ Rommel's message of "Wed, 18 Sep 2013 13:48:16 +0200")
+References: <1379504896-16754-1-git-send-email-rommel@layer-7.net>
+Message-ID: <87y56thj0x.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Jason, All,
+>>>>> "Michael" == Michael Rommel <rommel@layer-7.net> writes:
 
-On 2013-09-18 11:50 +1000, Jason Rennie spake thusly:
-> I may be missing something here and feel free to call me names if I am, also
-> IANAL.
-> 
-> That being said, wouldn't building a system with buildroot be essentially
-> the same case to using GCC to compile a program? The final libraries you
-> link with (or packages you include in the case of buildroot) may be
-> encumbered with all manner of licenses but the license of the buildtool
-> doesn't make any difference to the license status of the final product.
+ Michael> A python library that calculates CRC checksums of the CCITT/XModem
+ Michael> variant.
 
-Yes, that's basically true.
+ Michael> Signed-off-by: Michael Rommel <rommel@layer-7.net>
+ Michael> ---
+ Michael> Changes v2 -> v3
+ Michael> * changed homepage URL
+ Michael> * added LDFLAGS for correct linking
 
-But consider this:
+ Michael> Changes v1 -> v2
+ Michael> * corrected a typo in the filename for the .mk file
 
-  - you use Buildroot to build a GPL package, which ends up on the
-    target
+ Michael>  package/Config.in                    |    1 +
+ Michael>  package/python-crc16/Config.in       |   11 +++++++++++
+ Michael>  package/python-crc16/python-crc16.mk |   35 ++++++++++++++++++++++++++++++++++
+ Michael>  3 files changed, 47 insertions(+)
+ Michael>  create mode 100644 package/python-crc16/Config.in
+ Michael>  create mode 100644 package/python-crc16/python-crc16.mk
 
-  - that package is GPL, so the GPL applies to that package
+ Michael> diff --git a/package/Config.in b/package/Config.in
+ Michael> index 56c316e..779e9da 100644
+ Michael> --- a/package/Config.in
+ Michael> +++ b/package/Config.in
+ Michael> @@ -385,6 +385,7 @@ source "package/python/Config.in"
+ Michael>  if BR2_PACKAGE_PYTHON
+ Michael>  menu "external python modules"
+ Michael>  source "package/python-bottle/Config.in"
+ Michael> +source "package/python-crc16/Config.in"
+ Michael>  source "package/python-dpkt/Config.in"
+ Michael>  source "package/python-id3/Config.in"
+ Michael>  source "package/python-mad/Config.in"
+ Michael> diff --git a/package/python-crc16/Config.in b/package/python-crc16/Config.in
+ Michael> new file mode 100644
+ Michael> index 0000000..3fd8da7
+ Michael> --- /dev/null
+ Michael> +++ b/package/python-crc16/Config.in
+ Michael> @@ -0,0 +1,11 @@
+ Michael> +config BR2_PACKAGE_PYTHON_CRC16
+ Michael> +	bool "python-crc16"
+ Michael> +	depends on BR2_PACKAGE_PYTHON
+ Michael> +	help
+ Michael> +	  This library calculates only CRC16 (16-bit codes) and the
+ Michael> +	  only supported variant at the moment is CRC-CCITT (XModem).
+ Michael> +	  CRC is a way of detecting accidental changes in data storage
+ Michael> +	  or transmission. There are many variants of CRC and CRC16,
+ Michael> +	  in particular.
+ Michael> +
+ Michael> +	  http://pycrc16.googlecode.com/
+ Michael> diff --git a/package/python-crc16/python-crc16.mk b/package/python-crc16/python-crc16.mk
+ Michael> new file mode 100644
+ Michael> index 0000000..adfdcc6
+ Michael> --- /dev/null
+ Michael> +++ b/package/python-crc16/python-crc16.mk
+ Michael> @@ -0,0 +1,35 @@
+ Michael> +################################################################################
+ Michael> +#
+ Michael> +# python-crc16
+ Michael> +#
+ Michael> +################################################################################
+ Michael> +
+ Michael> +PYTHON_CRC16_VERSION = 0.1.1
+ Michael> +PYTHON_CRC16_SOURCE = crc16-$(PYTHON_CRC16_VERSION).tar.gz
+ Michael> +PYTHON_CRC16_SITE = http://pycrc16.googlecode.com/files/
+ Michael> +PYTHON_CRC16_LICENSE = LGPLv3+
+ Michael> +PYTHON_CRC16_LICENSE_FILES = COPYING.txt
+ Michael> +PYTHON_CRC16_DEPENDENCIES = python host-python
+ Michael> +
+ Michael> +PYTHON_CRC16_PARAMS = CC="$(TARGET_CC)" \
+ Michael> +		CFLAGS="$(TARGET_CFLAGS)" \
+ Michael> +		LDSHARED="$(TARGET_CC) -shared" \
+ Michael> +		LDFLAGS="$(TARGET_LDFLAGS) -L$(STAGING_DIR)/usr/lib" \
 
-  - section 3 of the GPL requires you provide the "scripts used to
-    control compilation and installation of the executable."
+The LDFLAGS thing is a bit hackish as it still passes -L/usr/lib, but
+the python stuff doesn't really seem forseen for cross compilation.
 
-  - So you have two options:
-    - come up with the instructions by yourself (by looking at how
-      Buildroot does its stuff, for example), but it's not trivial;
-    - or provide your Buildroot tree (and .config) since this is the
-      easiest. Let's assume that's the way you go.
-
-  - so, since you are distributing Buildroot, you have to abide by its
-    license. It happens that this license is the GPL, but it's just
-    happenstance that it is the same license as your GPL package, above.
-
-> If you were making changes to buildroot and redistributing those then the
-> license would apply but not otherwise.
-
-I believe we never argued otherwise. :-)
-
-What was said was, to comply with the section 3 of the GPLv2 for programs
-on the target, the easiest is to provide the Buildroot tree (and .config).
-
-Note that doing so is not enough: you'd still have to provide the sources
-of the (L)GPL programs that end up on the target.
-
-Again, IANAL... ;-)
-
-Note: I'm talking about section 3 of the GPLv2. GPLv3 has a similar
-section, but I'm not digging it now; I'll let you look at it by
-yourself! ;-p
-
-Regards,
-Yann E. MORIN.
+Committed, thanks.
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Bye, Peter Korsgaard
