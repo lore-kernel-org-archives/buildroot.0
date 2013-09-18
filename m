@@ -1,50 +1,44 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 18 Sep 2013 23:46:57 +0200
-Subject: [Buildroot] [PATCH 1/1] package: udev is now provided by
- systemd or eudev.
-In-Reply-To: <20130918184035.24b2c345@skate>
-References: <1378476068-25300-1-git-send-email-eric.le.bihan.dev@free.fr>
- <522F8008.1000207@mind.be> <20130917203726.5b02fe08@skate>
- <52394EEA.4000603@mind.be> <20130918175655.3f3a8466@skate>
- <5239CF12.6040308@mind.be> <20130918184035.24b2c345@skate>
-Message-ID: <523A1F51.1090906@mind.be>
+Date: Wed, 18 Sep 2013 23:57:41 +0200
+Subject: [Buildroot] [PATCH 3 of 4 RFC] manual: add section about
+ depending on toolchain options
+In-Reply-To: <20130918201812.3e08d883@skate>
+References: <patchbomb.1379494893@argentina>
+ <89b40887c8268e316399.1379494896@argentina>
+ <CAAXf6LXD_7jt42XAG_XgKWKi_+te40hgYNd4mTLbmCDMxfG0QA@mail.gmail.com>
+ <20130918183414.45e6a247@skate>
+ <CAAXf6LWmH2xtBe_P-P+1HJhndDM1BhHZcgJzu9o7JrfwjtwWVg@mail.gmail.com>
+ <20130918194042.302e9afe@skate> <5239E6E5.4000401@zacarias.com.ar>
+ <20130918195925.1884c0a7@skate> <5239EB63.2090203@zacarias.com.ar>
+ <20130918201812.3e08d883@skate>
+Message-ID: <523A21D5.6040005@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 18/09/13 18:40, Thomas Petazzoni wrote:
-> Dear Arnout Vandecappelle,
+On 18/09/13 20:18, Thomas Petazzoni wrote:
+> Dear Gustavo Zacarias,
 >
-> On Wed, 18 Sep 2013 18:04:34 +0200, Arnout Vandecappelle wrote:
->
->>> Right, that's one way of seeing things, indeed. It sounds a bit
->>> convoluted to me, though. When a package A needs a specific feature
->>> from package B (such as gudev), I believe it makes sense for
->>> package B to provide a sub-option that package A can select, rather
->>> than package A having intimate knowledge of the dependencies needed
->>> by package B to enable whatever feature package A needs to have
->>> from package B.
+> On Wed, 18 Sep 2013 15:05:23 -0300, Gustavo Zacarias wrote:
+>> On 09/18/2013 02:59 PM, Thomas Petazzoni wrote:
 >>
->>    Makes sense, but we probably already have tons of these already. If
->> gudev would have been added in the normal way instead of introducing
->> the all_extras option, then the implementors of network-manager and
->> udisks wouldn't even have noticed that udev had to be compiled in a
->> specific way: since these tools already select libglib2, udev would
->> have been compiled with gudev support.
+>>> I think it's a bit more than just renaming this symbol. I can try to
+>>> cook something.
+>>
+>> Add the relevant legacy entry, adjusting help / manuals.
+>> Is there something else i'm missing?
 >
-> True.
->
->>    Really, the all-extras is historical accident because a long time
->> ago udev's configure had an EXTRAS=... option in its build commands.
->
-> Right. But the extras have more dependencies that just glib2: it also
-> depends on hwdata and on acl. Will glib2 be sufficient to get gudev
-> built, for use by udisks? Maybe.
+> Yes, we probably want to have the choice between building static only,
+> static + shared, or shared only, default to shared only. Currently,
+> when !BR2_PREFER_STATIC_LIB, we build both the shared and static
+> variants, which takes time because it requires building everything
+> twice, once with -fPIC, once without.
 
-  For eudev this doesn't seem to be the case anymore. Or else the patch 
-was wrong :-)
+  I don't think the static + shared option really makes sense, does it? 
+The only use case I can think of is when you want a proprietary 
+executable to link statically in order to speed up start time.
 
   Regards,
   Arnout
