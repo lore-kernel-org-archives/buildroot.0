@@ -1,10 +1,10 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 18 Sep 2013 16:57:42 +0200
-Subject: [Buildroot] [PATCH 1/3] gettext: fixup library permissions
-In-Reply-To: <1379511483-30618-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Wed, 18 Sep 2013 10:38:01 -0300")
-References: <1379511483-30618-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <878uyub2jd.fsf@dell.be.48ers.dk>
+Date: Wed, 18 Sep 2013 16:56:16 +0200
+Subject: [Buildroot] [PATCH] ola: needs host-bison and host-flex
+In-Reply-To: <1379503899-26048-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Wed, 18 Sep 2013 08:31:39 -0300")
+References: <1379503899-26048-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87hadib2lr.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,10 +13,11 @@ To: buildroot@busybox.net
 
 >>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
- Gustavo> libintl.so* is installed without +x permissions thus preventing
- Gustavo> stripping. Fix it up in the post install target hooks.
+ Gustavo> Fixes:
+ Gustavo> http://autobuild.buildroot.net/results/385/385f05b5e1b023b6c4ca220aab897e400b5aeccb/
+ Gustavo> and a future failure (host-bison).
 
-Committed series, thanks.
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
