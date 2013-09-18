@@ -1,77 +1,104 @@
-From: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
-Date: Wed, 18 Sep 2013 22:48:12 +0200
-Subject: [Buildroot] [PATCH 1/1] package: remove the trailing slash sign
- from the URL address
-In-Reply-To: <9FA76BDE-EE31-4C40-B226-FBBBDFB35FCE@layer-7.net>
-References: <1379517858-28720-1-git-send-email-jerzy.grzegorek@trzebnica.net>
- <CAAXf6LU8GCW7vwVvoBrSeTaongix761F=DT1Tbh=qJ_3m32CMw@mail.gmail.com>
- <5239CA66.4000108@trzebnica.net>
- <9FA76BDE-EE31-4C40-B226-FBBBDFB35FCE@layer-7.net>
-Message-ID: <523A118C.8080001@trzebnica.net>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 18 Sep 2013 22:51:41 +0200
+Subject: [Buildroot] [PATCH 1/3] gettext: fixup library permissions
+In-Reply-To: <1379511483-30618-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1379511483-30618-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <523A125D.6000301@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-
-Hi Michael,
-
-
-> Hi Jerzy,
+On 18/09/13 15:38, Gustavo Zacarias wrote:
+> libintl.so* is installed without +x permissions thus preventing
+> stripping. Fix it up in the post install target hooks.
 >
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+
+  I wonder if this is the right path to take. There is really no reason 
+why shared libs should be executable. And in the target of my 
+allpackageyesconfig I find a lot more than these three:
+
+$ find target -type f -a \
+   \( -name \*.so -o -name \*.so.[0-9]* \) -a \
+   \! -executable
+target/usr/libexec/sudoers.so
+target/usr/libexec/sudo_noexec.so
+target/usr/lib/libisc.so.57.1.2
+target/usr/lib/python2.7/site-packages/_omniidlmodule.so.4.1
+target/usr/lib/libdvbsec.so
+target/usr/lib/libesg.so
+target/usr/lib/libacl.so.1.1.0
+target/usr/lib/libCOSDynamic4.so.1.6
+target/usr/lib/libomniDynamic4.so.1.6
+target/usr/lib/libhogweed.so.2.5
+target/usr/lib/libdns.so.113.0.1
+target/usr/lib/libpci.so.3.2.0
+target/usr/lib/nm-n.libdirectfb-1.6.so.0
+target/usr/lib/libisccfg.so.50.0.9
+target/usr/lib/lua/cjson.so
+target/usr/lib/nm-n.libdirect-1.6.so.0
+target/usr/lib/libattr.so.1.1.0
+target/usr/lib/libomniORB4.so.1.6
+target/usr/lib/nm-n.libfusion-1.6.so.0
+target/usr/lib/libbind9.so.50.0.10
+target/usr/lib/libucsi.so
+target/usr/lib/libisccc.so.50.0.4
+target/usr/lib/libdvbcfg.so
+target/usr/lib/libomniConnectionMgmt4.so.1.6
+target/usr/lib/libebml.so.3
+target/usr/lib/libproxychains4.so
+target/usr/lib/libdvben50221.so
+target/usr/lib/libomniCodeSets4.so.1.6
+target/usr/lib/libmatroska.so.5
+target/usr/lib/liblwres.so.50.0.9
+target/usr/lib/libdvbapi.so
+target/usr/lib/libCOS4.so.1.6
+target/usr/lib/liblockdev.1.0.3.so
+target/usr/lib/libnettle.so.4.7
+target/usr/lib/libomnithread.so.3.4
+
+
+  In addition, such patches are not really future-safe in case a package 
+adds a new library.
+
+  So I would propose to instead change the find command to
+
+STRIP_FIND_CMD += -type f
+STRIP_FIND_CMD += \( -perm /111 -o -name \*.so -o -name \*.so.[0-9]* \)
+
+  Regards,
+  Arnout
+
+> ---
+>   package/gettext/gettext.mk | 7 +++++++
+>   1 file changed, 7 insertions(+)
 >
-> On Sep 18, 2013, at 17:44 , Jerzy Grzegorek 
-> <jerzy.grzegorek at trzebnica.net <mailto:jerzy.grzegorek@trzebnica.net>> 
-> wrote:
->>>
->>> Could you clarify why this is desirable? Note that urls with our 
->>> without trailing slash are not identical: the web server needs to 
->>> properly support this. For example, the autobuild website does not 
->>> properly do it (something very annoying ;) )
->>>
->>
->> The only reason is - for BR consistency.
->>
+> diff --git a/package/gettext/gettext.mk b/package/gettext/gettext.mk
+> index baf42ef..7af2035 100644
+> --- a/package/gettext/gettext.mk
+> +++ b/package/gettext/gettext.mk
+> @@ -58,5 +58,12 @@ endef
+>   endif
+>   endif # GETTEXT_TOOLS = n
 >
-> actually I would not recommend to implement that. The RFC 3986 states 
-> in chapter 6.2.3: "In general, a URI that uses the generic syntax for 
-> authority with an empty path should be normalised to a path of "/".
->
-> It is common practise to redirect from the URL without trailing slash 
-> to one with a trailing slash. So in essence, in most times when 
-> the user selects a url without a trailing slash, an unnecessary  round 
-> trip to the web server occurs.
+> +# Library lacks +x so strip skips it
+> +define GETTEXT_FIX_LIBRARY_MODE
+> +	-chmod +x $(TARGET_DIR)/usr/lib/libintl.so*
+> +endef
+> +
+> +GETTEXT_POST_INSTALL_TARGET_HOOKS += GETTEXT_FIX_LIBRARY_MODE
+> +
+>   $(eval $(autotools-package))
+>   $(eval $(host-autotools-package))
 >
 
-Thanks for the clarification.
 
-What we have now is:
-about 800 package URLs without trailing slash
-about 230 package URLs with a trailing slash
-
-We have following possibilities:
-*  current package URLs:
-1. leave all current package URLs as they are
-2. change all current package URLs for those without trailing slash
-3. change all current package URLs for those with a trailing slash
-4. other action (what?)
-*  new package URLs:
-a. add the trailing slash to all new package URLs
-b. other action (what?)
-
-What should we do : 1+a, 2+a, 3+a, 4+a, 1+b, 2+b, 3+b or 4+b ?
-
-Regards,
-Jerzy
-
-
->   Michael.
->
-> -- 
-> Michael Rommel, Erlangen, Germany
->
-
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130918/ab7fcdbe/attachment.html>
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
