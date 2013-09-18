@@ -1,62 +1,37 @@
-From: Fatih =?utf-8?q?A=C5=9F=C4=B1c=C4=B1?= <fatih.asici@gmail.com>
-Date: Wed, 18 Sep 2013 20:52:22 +0300
-Subject: [Buildroot] [PATCH v2] qt5base: fix build when egl headers need a
-	definition
-Message-ID: <201309182052.22917.fatih.asici@gmail.com>
+From: Michael Rommel <rommel@layer-7.net>
+Date: Wed, 18 Sep 2013 19:56:21 +0200
+Subject: [Buildroot] [PATCH 1/1] package: remove the trailing slash sign
+	from the URL address
+In-Reply-To: <5239CA66.4000108@trzebnica.net>
+References: <1379517858-28720-1-git-send-email-jerzy.grzegorek@trzebnica.net>
+ <CAAXf6LU8GCW7vwVvoBrSeTaongix761F=DT1Tbh=qJ_3m32CMw@mail.gmail.com>
+ <5239CA66.4000108@trzebnica.net>
+Message-ID: <9FA76BDE-EE31-4C40-B226-FBBBDFB35FCE@layer-7.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The build with gpu-viv-bin-mx6q libraries was broken since it wasn't
-using "-DEGL_API_FB=1" flag which is found in egl.pc.
+Hi Jerzy,
 
-Signed-off-by: Fatih A??c? <fatih.asici@gmail.com>
----
-Changes v1 -> v2:
-  - Add description and Signed-off-by line to the patch (suggested by
-    Thomas Petazzoni)
 
- package/qt5/qt5base/qt5base-egl-cflags.patch |   28 
-++++++++++++++++++++++++++
- 1 file changed, 28 insertions(+)
- create mode 100644 package/qt5/qt5base/qt5base-egl-cflags.patch
+On Sep 18, 2013, at 17:44 , Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net> wrote:
+>> Could you clarify why this is desirable? Note that urls with our without trailing slash are not identical: the web server needs to properly support this. For example, the autobuild website does not properly do it (something very annoying ;) )
+>> 
+> 
+> The only reason is - for BR consistency.
+> 
 
-diff --git a/package/qt5/qt5base/qt5base-egl-cflags.patch 
-b/package/qt5/qt5base/qt5base-egl-cflags.patch
-new file mode 100644
-index 0000000..a483997
---- /dev/null
-+++ b/package/qt5/qt5base/qt5base-egl-cflags.patch
-@@ -0,0 +1,28 @@
-+egl.prf: Append egl CFLAGS to QMAKE_C[XX]FLAGS
-+
-+Projects including egl in their config (e.g. with CONFIG += egl) cannot get
-+egl CFLAGS without this.
-+
-+Signed-off-by: Fatih A??c? <fatih.asici@gmail.com>
-+
-+--- a/configure
-++++ b/configure
-+@@ -5391,6 +5391,7 @@
-+         QMAKE_CFLAGS_EGL=`$PKG_CONFIG --cflags egl 2>/dev/null`
-+         QMakeVar set QMAKE_INCDIR_EGL "$QMAKE_INCDIR_EGL"
-+         QMakeVar set QMAKE_LIBS_EGL "$QMAKE_LIBS_EGL"
-++        QMakeVar set QMAKE_CFLAGS_EGL "$QMAKE_CFLAGS_EGL"
-+     fi       # detect EGL support
-+     if compileTest qpa/egl "EGL" $QMAKE_CFLAGS_EGL $QMAKE_LIBS_EGL; then
-+         CFG_EGL=yes
-+--- a/mkspecs/features/egl.prf
-++++ b/mkspecs/features/egl.prf
-+@@ -14,6 +14,8 @@
-+ } else {
-+     INCLUDEPATH += $$QMAKE_INCDIR_EGL
-+     LIBS_PRIVATE += $$QMAKE_LIBS_EGL
-++    QMAKE_CFLAGS += $$QMAKE_CFLAGS_EGL
-++    QMAKE_CXXFLAGS += $$QMAKE_CFLAGS_EGL
-+     LIBS += $$QMAKE_LFLAGS_EGL
-+     for(p, QMAKE_LIBDIR_EGL) {
-+         exists($$p):LIBS_PRIVATE += -L$$p
+actually I would not recommend to implement that. The RFC 3986 states in chapter 6.2.3: "In general, a URI that uses the generic syntax for authority with an empty path should be normalised to a path of "/".
+
+It is common practise to redirect from the URL without trailing slash to one with a trailing slash. So in essence, in most times when the user selects a url without a trailing slash, an unnecessary  round trip to the web server occurs.
+
+  Michael.
+
 -- 
-1.7.10.4
+Michael Rommel, Erlangen, Germany
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130918/2eec9b71/attachment.html>
