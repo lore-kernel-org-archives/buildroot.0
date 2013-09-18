@@ -1,83 +1,357 @@
-From: Fatih =?UTF-8?Q?A=C5=9F=C4=B1c=C4=B1?= <fatih.asici@gmail.com>
-Date: Wed, 18 Sep 2013 11:36:54 +0300
-Subject: [Buildroot] [PATCH] gpu-viv-bin-mx6q: add pkgconfig files for
- EGL and OpenGLESv2
-In-Reply-To: <52395192.4070908@mind.be>
-References: <1379416810.13187.1.camel@viko> <52395192.4070908@mind.be>
-Message-ID: <1379493414.9971.6.camel@viko>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Wed, 18 Sep 2013 11:01:33 +0200
+Subject: [Buildroot] [PATCH 0 of 4 RFC] Unification of comments on toolchain
+ option dependencies
+Message-ID: <patchbomb.1379494893@argentina>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 2013-09-18 at 09:09 +0200, Arnout Vandecappelle wrote:
-> On 17/09/13 13:20, Fatih A??c? wrote:
-> > Signed-off-by: Fatih A??c? <fatih.asici@gmail.com>
-> > ---
-> >   .../gpu-viv-bin-mx6q-add-pkgconfig-files.patch     |   30 ++++++++++++++++++++
-> >   1 file changed, 30 insertions(+)
-> >   create mode 100644 package/freescale-imx/gpu-viv-bin-mx6q/gpu-viv-bin-mx6q-add-pkgconfig-files.patch
-> >
-> > diff --git a/package/freescale-imx/gpu-viv-bin-mx6q/gpu-viv-bin-mx6q-add-pkgconfig-files.patch b/package/freescale-imx/gpu-viv-bin-mx6q/gpu-viv-bin-mx6q-add-pkgconfig-files.patch
-> > new file mode 100644
-> > index 0000000..8ed4ffe
-> > --- /dev/null
-> > +++ b/package/freescale-imx/gpu-viv-bin-mx6q/gpu-viv-bin-mx6q-add-pkgconfig-files.patch
-> 
->   Personally, I would prefer to have these as plain files in the package 
-> directory and copy them to staging in the INSTALL_STAGING_CMDS. But I 
-> guess that's a matter of taste.
-> 
+Hi,
 
-OK. It will be easier with plain files.
+This patch series unifies the comments in Config.in files that clarify the
+dependencies on toolchain options.
 
->   If you do keep it as a patch, make sure it gets a number.
-> 
-> > @@ -0,0 +1,30 @@
-> > +Add .pc files for the OpenGLESv2 and EGL libraries
-> > +
-> > +Signed-off-by: Fatih A??c? <fatih.asici@gmail.com>
-> > +
-> > +--- /dev/null
-> > ++++ b/usr/lib/pkgconfig/egl.pc
-> > +@@ -0,0 +1,10 @@
-> > ++prefix=/usr
-> > ++exec_prefix=${prefix}
-> > ++libdir=${exec_prefix}/lib
-> > ++includedir=${prefix}/include
-> > ++
-> > ++Name: egl
-> > ++Description: Freescale gpu-viv-bin-mx6q implementation of EGL
-> > ++Version: 1.0
-> > ++Libs: -L${libdir} -lEGL
-> 
->   I haven't double-checked, but I think that -lEGL requires -lGAL as well.
+It is not yet mergeable, see note in the last patch. If we can agree on the
+principle, I can rebase on last master.
 
-You are right.
+Thanks for your input,
+Thomas
 
-> > ++Cflags: -I${includedir}/ -DEGL_API_FB=1
-> > +--- /dev/null
-> > ++++ b/usr/lib/pkgconfig/glesv2.pc
-> > +@@ -0,0 +1,10 @@
-> > ++prefix=/usr
-> > ++exec_prefix=${prefix}
-> > ++libdir=${exec_prefix}/lib
-> > ++includedir=${prefix}/include
-> > ++
-> > ++Name: glesv2
-> > ++Description: Freescale gpu-viv-bin-mx6q implementation of OpenGL ESv2
-> > ++Version: 2.0
-> > ++Libs: -L${libdir} -lGAL -lEGL -lGLESv2
-> > ++Cflags: -I${includedir}/ -DEGL_API_FB=1
-> >
-> 
->   What about OpenVG?
+Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
-I will add vg.pc within the next version of patch.
+---
 
->   Regards,
->   Arnout
-
-Thanks,
-Fatih
+ docs/manual/adding-packages-directory.txt      |  81 +++++++++++++++++++++++---
+ linux/Config.ext.in                            |   2 +-
+ package/acl/Config.in                          |   2 +-
+ package/aircrack-ng/Config.in                  |   2 +-
+ package/alsa-lib/Config.in                     |   2 +-
+ package/alsa-utils/Config.in                   |   4 +-
+ package/alsamixergui/Config.in                 |   2 +-
+ package/atk/Config.in                          |   2 +-
+ package/attr/Config.in                         |   2 +-
+ package/audiofile/Config.in                    |   2 +-
+ package/avahi/Config.in                        |   2 +-
+ package/axel/Config.in                         |   2 +-
+ package/bcusdk/Config.in                       |   2 +-
+ package/beecrypt/Config.in                     |   4 +-
+ package/bellagio/Config.in                     |   2 +-
+ package/bind/Config.in                         |   2 +-
+ package/bison/Config.in                        |   2 +-
+ package/blackbox/Config.in                     |   2 +-
+ package/bluez_utils/Config.in                  |   4 +-
+ package/bmon/Config.in                         |   2 +-
+ package/bonnie/Config.in                       |   2 +-
+ package/boost/Config.in                        |   4 +-
+ package/bootutils/Config.in                    |   2 +-
+ package/bustle/Config.in                       |   2 +-
+ package/ccid/Config.in                         |   2 +-
+ package/cdrkit/Config.in                       |   2 +-
+ package/cegui06/Config.in                      |   2 +-
+ package/classpath/Config.in                    |   2 +-
+ package/collectd/Config.in                     |   4 +-
+ package/connman/Config.in                      |   2 +-
+ package/conntrack-tools/Config.in              |   2 +-
+ package/coreutils/Config.in                    |   2 +-
+ package/cppcms/Config.in                       |   2 +-
+ package/cppzmq/Config.in                       |   2 +-
+ package/crda/Config.in                         |   2 +-
+ package/cryptsetup/Config.in                   |   2 +-
+ package/ctorrent/Config.in                     |   2 +-
+ package/cups/Config.in                         |   2 +-
+ package/curlftpfs/Config.in                    |   2 +-
+ package/cvs/Config.in                          |   2 +-
+ package/czmq/Config.in                         |   2 +-
+ package/dbus-glib/Config.in                    |   2 +-
+ package/dbus-python/Config.in                  |   2 +-
+ package/dbus/Config.in                         |   2 +-
+ package/dhcpcd/Config.in                       |   2 +-
+ package/diffutils/Config.in                    |   2 +-
+ package/directfb/Config.in                     |   2 +-
+ package/dmraid/Config.in                       |   2 +-
+ package/dnsmasq/Config.in                      |   2 +-
+ package/docker/Config.in                       |   2 +-
+ package/dosfstools/Config.in                   |   2 +-
+ package/dropwatch/Config.in                    |   2 +-
+ package/dstat/Config.in                        |   2 +-
+ package/duma/Config.in                         |   2 +-
+ package/dvb-apps/Config.in                     |   2 +-
+ package/dvbsnoop/Config.in                     |   2 +-
+ package/e2fsprogs/Config.in                    |   2 +-
+ package/ebtables/Config.in                     |   2 +-
+ package/efl/Config.in                          |   2 +-
+ package/efl/expedite/Config.in                 |   2 +-
+ package/efl/libedbus/Config.in                 |   4 +-
+ package/efl/libevas-generic-loaders/Config.in  |   2 +-
+ package/elfutils/Config.in                     |   2 +-
+ package/enchant/Config.in                      |   2 +-
+ package/enlightenment/Config.in                |   2 +-
+ package/exfat-utils/Config.in                  |   2 +-
+ package/exfat/Config.in                        |   2 +-
+ package/f2fs-tools/Config.in                   |   2 +-
+ package/fbterm/Config.in                       |   2 +-
+ package/fdk-aac/Config.in                      |   2 +-
+ package/ffmpeg/Config.in                       |   2 +-
+ package/filemq/Config.in                       |   2 +-
+ package/findutils/Config.in                    |   2 +-
+ package/flashbench/Config.in                   |   2 +-
+ package/flex/Config.in                         |   2 +-
+ package/fltk/Config.in                         |   2 +-
+ package/fluxbox/Config.in                      |   2 +-
+ package/foomatic-filters/Config.in             |   2 +-
+ package/gadgetfs-test/Config.in                |   2 +-
+ package/gamin/Config.in                        |   2 +-
+ package/gawk/Config.in                         |   2 +-
+ package/gdb/Config.in                          |   4 +-
+ package/gdk-pixbuf/Config.in                   |   2 +-
+ package/genext2fs/Config.in                    |   2 +-
+ package/gesftpserver/Config.in                 |   2 +-
+ package/gettext/Config.in                      |   2 +-
+ package/git/Config.in                          |   2 +-
+ package/glib-networking/Config.in              |   2 +-
+ package/glibmm/Config.in                       |   2 +-
+ package/gmpc/Config.in                         |   2 +-
+ package/gnuchess/Config.in                     |   2 +-
+ package/gnutls/Config.in                       |   2 +-
+ package/gob2/Config.in                         |   2 +-
+ package/gperf/Config.in                        |   2 +-
+ package/gpsd/Config.in                         |   2 +-
+ package/gptfdisk/Config.in                     |   2 +-
+ package/grep/Config.in                         |   2 +-
+ package/gstreamer/gst-ffmpeg/Config.in         |   2 +-
+ package/gstreamer/gst-plugins-bad/Config.in    |   8 +-
+ package/gstreamer/gst-plugins-base/Config.in   |   2 +-
+ package/gstreamer/gst-plugins-good/Config.in   |   6 +-
+ package/gstreamer/gstreamer/Config.in          |   2 +-
+ package/gstreamer1/gst1-plugins-bad/Config.in  |  10 +-
+ package/gstreamer1/gst1-plugins-base/Config.in |   2 +-
+ package/gstreamer1/gst1-plugins-good/Config.in |   6 +-
+ package/gstreamer1/gst1-plugins-ugly/Config.in |   2 +-
+ package/gstreamer1/gstreamer1/Config.in        |   2 +-
+ package/gtest/Config.in                        |   2 +-
+ package/gutenprint/Config.in                   |   2 +-
+ package/gvfs/Config.in                         |   2 +-
+ package/gzip/Config.in                         |   2 +-
+ package/harfbuzz/Config.in                     |   2 +-
+ package/hdparm/Config.in                       |   2 +-
+ package/hiawatha/Config.in                     |   2 +-
+ package/hostapd/Config.in                      |   2 +-
+ package/hplip/Config.in                        |   2 +-
+ package/icu/Config.in                          |   2 +-
+ package/iftop/Config.in                        |   2 +-
+ package/inotify-tools/Config.in                |   2 +-
+ package/iperf/Config.in                        |   2 +-
+ package/ipset/Config.in                        |   2 +-
+ package/iw/Config.in                           |   2 +-
+ package/jamvm/Config.in                        |   2 +-
+ package/jhead/Config.in                        |   2 +-
+ package/json-glib/Config.in                    |   2 +-
+ package/kismet/Config.in                       |   2 +-
+ package/latencytop/Config.in                   |   2 +-
+ package/lcdapi/Config.in                       |   2 +-
+ package/libarchive/Config.in                   |   2 +-
+ package/libbsd/Config.in                       |   2 +-
+ package/libcec/Config.in                       |   2 +-
+ package/libcgicc/Config.in                     |   2 +-
+ package/libdrm/Config.in                       |   2 +-
+ package/libdvbsi/Config.in                     |   2 +-
+ package/libdvdnav/Config.in                    |   2 +-
+ package/libdvdread/Config.in                   |   2 +-
+ package/libebml/Config.in                      |   2 +-
+ package/libedit/Config.in                      |   2 +-
+ package/libfreefare/Config.in                  |   2 +-
+ package/libftdi/Config.in                      |   2 +-
+ package/libfuse/Config.in                      |   2 +-
+ package/libgail/Config.in                      |   2 +-
+ package/libglade/Config.in                     |   2 +-
+ package/libglib2/Config.in                     |   2 +-
+ package/libgtk2/Config.in                      |   2 +-
+ package/libhid/Config.in                       |   2 +-
+ package/libical/Config.in                      |   2 +-
+ package/libiqrf/Config.in                      |   2 +-
+ package/libjson/Config.in                      |   2 +-
+ package/liblo/Config.in                        |   2 +-
+ package/libmatroska/Config.in                  |   2 +-
+ package/libmicrohttpd/Config.in                |   4 +-
+ package/libmms/Config.in                       |   2 +-
+ package/libmnl/Config.in                       |   2 +-
+ package/libmpd/Config.in                       |   2 +-
+ package/libnetfilter_acct/Config.in            |   2 +-
+ package/libnetfilter_conntrack/Config.in       |   2 +-
+ package/libnetfilter_cthelper/Config.in        |   2 +-
+ package/libnetfilter_cttimeout/Config.in       |   2 +-
+ package/libnetfilter_queue/Config.in           |   2 +-
+ package/libnfc/Config.in                       |   2 +-
+ package/libnl/Config.in                        |   2 +-
+ package/libnspr/Config.in                      |   2 +-
+ package/libnss/Config.in                       |   2 +-
+ package/liboping/Config.in                     |   2 +-
+ package/libplayer/Config.in                    |   4 +-
+ package/libqmi/Config.in                       |   2 +-
+ package/libraw/Config.in                       |   2 +-
+ package/librsvg/Config.in                      |   2 +-
+ package/libsecret/Config.in                    |   2 +-
+ package/libserial/Config.in                    |   2 +-
+ package/libsigc/Config.in                      |   2 +-
+ package/libsndfile/Config.in                   |   2 +-
+ package/libsoup/Config.in                      |   2 +-
+ package/libtorrent/Config.in                   |   2 +-
+ package/libupnp/Config.in                      |   2 +-
+ package/liburcu/Config.in                      |   2 +-
+ package/libusb/Config.in                       |   2 +-
+ package/libv4l/Config.in                       |   8 +-
+ package/libxmlpp/Config.in                     |   2 +-
+ package/linknx/Config.in                       |   2 +-
+ package/linphone/Config.in                     |   2 +-
+ package/linux-pam/Config.in                    |   2 +-
+ package/live555/Config.in                      |   2 +-
+ package/log4cxx/Config.in                      |   2 +-
+ package/logrotate/Config.in                    |   2 +-
+ package/lshw/Config.in                         |   2 +-
+ package/ltp-testsuite/Config.in                |   2 +-
+ package/lttng-babeltrace/Config.in             |   2 +-
+ package/lttng-libust/Config.in                 |   4 +-
+ package/lttng-tools/Config.in                  |   2 +-
+ package/lvm2/Config.in                         |   2 +-
+ package/lxc/Config.in                          |   2 +-
+ package/lzma/Config.in                         |   2 +-
+ package/m4/Config.in                           |   2 +-
+ package/mediastreamer/Config.in                |   2 +-
+ package/memtester/Config.in                    |   2 +-
+ package/midori/Config.in                       |   2 +-
+ package/minicom/Config.in                      |   2 +-
+ package/minidlna/Config.in                     |   2 +-
+ package/mongoose/Config.in                     |   2 +-
+ package/monit/Config.in                        |   2 +-
+ package/mpd/Config.in                          |   6 +-
+ package/mplayer/Config.in                      |   2 +-
+ package/msgpack/Config.in                      |   2 +-
+ package/mtd/Config.in                          |   4 +-
+ package/mtdev2tuio/Config.in                   |   2 +-
+ package/mutt/Config.in                         |   2 +-
+ package/mysql_client/Config.in                 |   2 +-
+ package/nbd/Config.in                          |   2 +-
+ package/ndisc6/Config.in                       |   2 +-
+ package/neard/Config.in                        |   2 +-
+ package/neardal/Config.in                      |   2 +-
+ package/netatalk/Config.in                     |   2 +-
+ package/netkitbase/Config.in                   |   2 +-
+ package/netkittelnet/Config.in                 |   2 +-
+ package/network-manager/Config.in              |   2 +-
+ package/nfacct/Config.in                       |   2 +-
+ package/nfs-utils/Config.in                    |   2 +-
+ package/nmap/Config.in                         |   2 +-
+ package/nodejs/Config.in                       |   2 +-
+ package/ntfs-3g/Config.in                      |   2 +-
+ package/numactl/Config.in                      |   2 +-
+ package/ocrad/Config.in                        |   2 +-
+ package/ofono/Config.in                        |   2 +-
+ package/olsr/Config.in                         |   2 +-
+ package/opencv/Config.in                       |   8 +-
+ package/openobex/Config.in                     |   6 +-
+ package/openocd/Config.in                      |   2 +-
+ package/openpgm/Config.in                      |   2 +-
+ package/openvpn/Config.in                      |   2 +-
+ package/oprofile/Config.in                     |   2 +-
+ package/orc/Config.in                          |   2 +-
+ package/ortp/Config.in                         |   2 +-
+ package/p11-kit/Config.in                      |   2 +-
+ package/pango/Config.in                        |   2 +-
+ package/parted/Config.in                       |   2 +-
+ package/patch/Config.in                        |   2 +-
+ package/pcmanfm/Config.in                      |   2 +-
+ package/pcsc-lite/Config.in                    |   2 +-
+ package/perf/Config.in                         |   2 +-
+ package/php/Config.ext                         |   6 +-
+ package/pkg-config/Config.in                   |   2 +-
+ package/poco/Config.in                         |   2 +-
+ package/polkit/Config.in                       |   2 +-
+ package/poppler/Config.in                      |   2 +-
+ package/portaudio/Config.in                    |   2 +-
+ package/portmap/Config.in                      |   2 +-
+ package/protobuf-c/Config.in                   |   2 +-
+ package/protobuf/Config.in                     |   2 +-
+ package/proxychains-ng/Config.in               |   2 +-
+ package/pulseaudio/Config.in                   |   2 +-
+ package/python-nfc/Config.in                   |   2 +-
+ package/python/Config.in                       |   2 +-
+ package/python3/Config.in                      |   2 +-
+ package/qt/Config.in                           |   4 +-
+ package/qt5/Config.in                          |   2 +-
+ package/quagga/Config.in                       |   2 +-
+ package/quota/Config.in                        |   2 +-
+ package/radvd/Config.in                        |   2 +-
+ package/redis/Config.in                        |   2 +-
+ package/rpi-userland/Config.in                 |   2 +-
+ package/rpm/Config.in                          |   4 +-
+ package/rrdtool/Config.in                      |   2 +-
+ package/rt-tests/Config.in                     |   2 +-
+ package/rtorrent/Config.in                     |   2 +-
+ package/ruby/Config.in                         |   2 +-
+ package/samba/Config.in                        |   2 +-
+ package/schifra/Config.in                      |   2 +-
+ package/sconeserver/Config.in                  |   2 +-
+ package/sed/Config.in                          |   2 +-
+ package/ser2net/Config.in                      |   2 +-
+ package/sg3_utils/Config.in                    |   2 +-
+ package/shared-mime-info/Config.in             |   2 +-
+ package/smartmontools/Config.in                |   2 +-
+ package/snappy/Config.in                       |   2 +-
+ package/snowball-init/Config.in                |   2 +-
+ package/socat/Config.in                        |   2 +-
+ package/socketcand/Config.in                   |   2 +-
+ package/spice/Config.in                        |   2 +-
+ package/squashfs/Config.in                     |   2 +-
+ package/squashfs3/Config.in                    |   2 +-
+ package/squid/Config.in                        |   2 +-
+ package/sshfs/Config.in                        |   2 +-
+ package/strongswan/Config.in                   |   2 +-
+ package/synergy/Config.in                      |   2 +-
+ package/sysklogd/Config.in                     |   2 +-
+ package/sysprof/Config.in                      |   2 +-
+ package/systemd/Config.in                      |   2 +-
+ package/taglib/Config.in                       |   2 +-
+ package/tar/Config.in                          |   2 +-
+ package/ti-utils/Config.in                     |   2 +-
+ package/trace-cmd/Config.in                    |   2 +-
+ package/transmission/Config.in                 |   6 +-
+ package/tree/Config.in                         |   2 +-
+ package/tstools/Config.in                      |   2 +-
+ package/tvheadend/Config.in                    |   2 +-
+ package/udev/Config.in                         |   2 +-
+ package/udisks/Config.in                       |   2 +-
+ package/udpcast/Config.in                      |   2 +-
+ package/ulogd/Config.in                        |   2 +-
+ package/unionfs/Config.in                      |   2 +-
+ package/urg/Config.in                          |   2 +-
+ package/usb_modeswitch/Config.in               |   2 +-
+ package/usb_modeswitch_data/Config.in          |   2 +-
+ package/usbredir/Config.in                     |   2 +-
+ package/usbutils/Config.in                     |   2 +-
+ package/ushare/Config.in                       |   2 +-
+ package/ussp-push/Config.in                    |   2 +-
+ package/util-linux/Config.in                   |   4 +-
+ package/vala/Config.in                         |   2 +-
+ package/wayland/Config.in                      |   2 +-
+ package/webkit/Config.in                       |   2 +-
+ package/webrtc-audio-processing/Config.in      |   2 +-
+ package/wget/Config.in                         |   2 +-
+ package/wireshark/Config.in                    |   2 +-
+ package/wvdial/Config.in                       |   2 +-
+ package/wvstreams/Config.in                    |   2 +-
+ package/x11r7/Config.in                        |   2 +-
+ package/x11r7/xapp_xinput-calibrator/Config.in |   2 +-
+ package/x11r7/xlib_libpciaccess/Config.in      |   2 +-
+ package/x11r7/xserver_xorg-server/Config.in    |   2 +-
+ package/xenomai/Config.in                      |   2 +-
+ package/xerces/Config.in                       |   2 +-
+ package/xfsprogs/Config.in                     |   2 +-
+ package/zeromq/Config.in                       |   2 +-
+ package/zmqpp/Config.in                        |   4 +-
+ package/zxing/Config.in                        |   2 +-
+ package/zyre/Config.in                         |   2 +-
+ system/Config.in                               |   4 +-
+ 330 files changed, 440 insertions(+), 381 deletions(-)
