@@ -1,159 +1,33 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 18 Sep 2013 09:28:47 +0200
-Subject: [Buildroot] [git commit] python-pyzmq: new package
-Message-ID: <20130918072858.733A59B7CE@busybox.osuosl.org>
+From: Axel Lin <axel.lin@ingics.com>
+Date: Wed, 18 Sep 2013 15:38:11 +0800
+Subject: [Buildroot] [PATCH] uclibc: Add UCLIBC_MMU_CONFIG to
+	UCLIBC_SETUP_DOT_CONFIG
+Message-ID: <CAFRkauAfAoS6JT8q1wvSFHahVLLOmTeHvddkQpECGEe-qsJ8+w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=53722e54d08e31f007fa6a1682495eae725eccdf
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+2013/9/6 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>:
+> Dear Axel Lin,
+>
+> On Thu, 05 Sep 2013 10:24:19 +0800, Axel Lin wrote:
+>> commit c798bec25 "uclibc: set MMU usage accordingly" defines UCLIBC_MMU_CONFIG,
+>> but forgot adding it to UCLIBC_SETUP_DOT_CONFIG. Fix it.
+>>
+>> Signed-off-by: Axel Lin <axel.lin@ingics.com>
+>> Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
+>
+> Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-The python language bindings for ZeroMQ.
+Hi Peter,
+I sent the patch 2 weeks ago, and it got Thomas's Acked-by.
+Any chance to pick up this path as I need it for nommu build.
+If a resend or revision is necessary, just let me know.
 
-[Peter: moved version note to .mk, single toolchain deps line]
-Signed-off-by: Michael Rommel <rommel@layer-7.net>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/Config.in                                  |    1 +
- package/python-pyzmq/Config.in                     |   17 ++++++++
- ...e-buildroot-zmq-version-instead-of-detect.patch |   43 +++++++++++++++++++
- package/python-pyzmq/python-pyzmq.mk               |   44 ++++++++++++++++++++
- 4 files changed, 105 insertions(+), 0 deletions(-)
+The patch is available in patchwork:
+http://patchwork.ozlabs.org/patch/272778/
 
-diff --git a/package/Config.in b/package/Config.in
-index 973d32c..56c316e 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -395,6 +395,7 @@ source "package/python-protobuf/Config.in"
- source "package/python-pygame/Config.in"
- source "package/python-pyparsing/Config.in"
- source "package/python-pyro/Config.in"
-+source "package/python-pyzmq/Config.in"
- source "package/python-serial/Config.in"
- source "package/python-setuptools/Config.in"
- source "package/python-thrift/Config.in"
-diff --git a/package/python-pyzmq/Config.in b/package/python-pyzmq/Config.in
-new file mode 100644
-index 0000000..a650865
---- /dev/null
-+++ b/package/python-pyzmq/Config.in
-@@ -0,0 +1,17 @@
-+config BR2_PACKAGE_PYTHON_PYZMQ
-+	bool "python-pyzmq"
-+	depends on BR2_LARGEFILE # zeromq
-+	depends on BR2_INET_IPV6 # zeromq
-+	depends on BR2_USE_WCHAR # zeromq
-+	depends on BR2_INSTALL_LIBSTDCPP # zeromq
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # zeromq
-+	depends on BR2_PACKAGE_PYTHON
-+	select BR2_PACKAGE_ZEROMQ
-+	help
-+	  This package contains the python language binding for zeromq.
-+
-+	  http://zeromq.org/bindings:python
-+
-+comment "python-pyzmq requires a toolchain with C++, IPV6, LARGEFILE, WCHAR & thread support"
-+	depends on !(BR2_INSTALL_LIBSTDCPP && BR2_INET_IPV6 && BR2_LARGEFILE \
-+		&& BR2_USE_WCHAR && BR2_TOOLCHAIN_HAS_THREADS)
-diff --git a/package/python-pyzmq/python-pyzmq-0001-use-buildroot-zmq-version-instead-of-detect.patch b/package/python-pyzmq/python-pyzmq-0001-use-buildroot-zmq-version-instead-of-detect.patch
-new file mode 100644
-index 0000000..5606069
---- /dev/null
-+++ b/package/python-pyzmq/python-pyzmq-0001-use-buildroot-zmq-version-instead-of-detect.patch
-@@ -0,0 +1,43 @@
-+detect.py: fix the ZMQ version check to the ZMQ version of the buildroot
-+
-+The setup.py script tries to compile a test C program and runs it, to
-+retrieve a version string for the installed ZMQ library, but if the cross
-+compiler links it together, the result cannot be run on the host, due to
-+different architectures and libraries.
-+
-+And if the host compiler would compile/link it, it would not link with the
-+library version inside buildroot but with the library from the host, possibly returning a wrong version number.
-+
-+Instead of trying to run the compiled test program to get the version
-+dynamically, return the version of the buildroot environment.
-+
-+Signed-off-by: Michael Rommel <rommel@layer-7.net>
-+
-+--- pyzmq-13.0.2/buildutils/detect.py.orig	2013-08-10 00:49:28.242557978 +0200
-++++ pyzmq-13.0.2/buildutils/detect.py	2013-08-10 00:44:35.197572704 +0200
-+@@ -119,15 +119,17 @@ def detect_zmq(basedir, compiler=None, *
-+             
-+     efile = test_compilation(cfile, compiler=compiler, **compiler_attrs)
-+     
-+-    result = Popen(efile, stdout=PIPE, stderr=PIPE)
-+-    so, se = result.communicate()
-++    # result = Popen(efile, stdout=PIPE, stderr=PIPE)
-++    # so, se = result.communicate()
-+     # for py3k:
-+-    so = so.decode()
-+-    se = se.decode()
-+-    if result.returncode:
-+-        msg = "Error running version detection script:\n%s\n%s" % (so,se)
-+-        logging.error(msg)
-+-        raise IOError(msg)
-++    #so = so.decode()
-++    #se = se.decode()
-++    #if result.returncode:
-++    #    msg = "Error running version detection script:\n%s\n%s" % (so,se)
-++    #    logging.error(msg)
-++    #    raise IOError(msg)
-++
-++    so = "vers: ##ZEROMQ_VERSION##"
-+ 
-+     handlers = {'vers':  lambda val: tuple(int(v) for v in val.split('.'))}
-+ 
-diff --git a/package/python-pyzmq/python-pyzmq.mk b/package/python-pyzmq/python-pyzmq.mk
-new file mode 100644
-index 0000000..a281aed
---- /dev/null
-+++ b/package/python-pyzmq/python-pyzmq.mk
-@@ -0,0 +1,44 @@
-+################################################################################
-+#
-+# python-pyzmq
-+#
-+################################################################################
-+
-+PYTHON_PYZMQ_VERSION = 13.1.0
-+PYTHON_PYZMQ_SOURCE = pyzmq-$(PYTHON_PYZMQ_VERSION).tar.gz
-+PYTHON_PYZMQ_SITE = https://pypi.python.org/packages/source/p/pyzmq/
-+PYTHON_PYZMQ_LICENSE = LGPLv3+ BSD-3c Apache License Version 2.0
-+# Apache license only online: http://www.apache.org/licenses/LICENSE-2.0
-+PYTHON_PYZMQ_LICENSE_FILES = COPYING.LESSER COPYING.BSD
-+PYTHON_PYZMQ_DEPENDENCIES = zeromq python host-python
-+
-+# Due to issues with cross-compiling, hardcode to the zeromq in BR
-+define PYTHON_PYZMQ_PATCH_ZEROMQ_VERSION
-+	$(SED) 's/##ZEROMQ_VERSION##/$(ZEROMQ_VERSION)/' \
-+		$(@D)/buildutils/detect.py
-+endef
-+
-+PYTHON_PYZMQ_POST_PATCH_HOOKS += PYTHON_PYZMQ_PATCH_ZEROMQ_VERSION
-+
-+PYTHON_PYZMQ_PARAMS = CC="$(TARGET_CC)" \
-+		CFLAGS="$(TARGET_CFLAGS)" \
-+		LDSHARED="$(TARGET_CC) -shared" \
-+		CROSS_COMPILING=yes \
-+		_python_sysroot=$(STAGING_DIR) \
-+		_python_srcdir=$(PYTHON_DIR) \
-+		_python_prefix=/usr \
-+		_python_exec_prefix=/usr
-+
-+define PYTHON_PYZMQ_CONFIGURE_CMDS
-+	(cd $(@D); $(PYTHON_PYZMQ_PARAMS) \
-+		$(HOST_DIR)/usr/bin/python setup.py configure \
-+		--zmq=$(STAGING_DIR)/usr)
-+endef
-+
-+define PYTHON_PYZMQ_INSTALL_TARGET_CMDS
-+	(cd $(@D); $(PYTHON_PYZMQ_PARAMS) \
-+		$(HOST_DIR)/usr/bin/python setup.py install \
-+		--prefix=$(TARGET_DIR)/usr)
-+endef
-+
-+$(eval $(generic-package))
+Thanks,
+Axel
