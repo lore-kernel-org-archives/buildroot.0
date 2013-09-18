@@ -1,35 +1,41 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 19 Sep 2013 00:18:28 +0200
-Subject: [Buildroot] [git commit] qt5base: set eglfs platform hook for imx6
-Message-ID: <20130918222318.DB2A89B737@busybox.osuosl.org>
+Date: Thu, 19 Sep 2013 00:19:42 +0200
+Subject: [Buildroot] [git commit] webrtc-audio-processing: needs threads
+Message-ID: <20130918222318.E4F539B737@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3577ca6af2597db4defda8db03e2fffb174d3fdc
+commit: http://git.buildroot.net/buildroot/commit/?id=2e7823833e62cdbd98a8bfe9cacbae4e29d4003c
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Fatih A????c?? <fatih.asici@gmail.com>
-Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Fixes:
+http://autobuild.buildroot.net/results/543/5435304b12fa1344411821b749cb028485431a82/
+
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/qt5/qt5base/qt5base.mk |    4 ++++
- 1 files changed, 4 insertions(+), 0 deletions(-)
+ package/webrtc-audio-processing/Config.in |    5 +++--
+ 1 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
-index 1686dad..ddc5574 100644
---- a/package/qt5/qt5base/qt5base.mk
-+++ b/package/qt5/qt5base/qt5base.mk
-@@ -98,6 +98,10 @@ endif
- ifeq ($(BR2_PACKAGE_QT5BASE_EGLFS),y)
- QT5BASE_CONFIGURE_OPTS += -opengl es2 -eglfs
- QT5BASE_DEPENDENCIES   += libgles libegl
-+ifeq ($(BR2_PACKAGE_GPU_VIV_BIN_MX6Q),y)
-+QT5BASE_EGLFS_PLATFORM_HOOKS_SOURCES = \
-+	$(@D)/mkspecs/devices/linux-imx6-g++/qeglfshooks_imx6.cpp
-+endif
- ifeq ($(BR2_PACKAGE_RPI_USERLAND),y)
- QT5BASE_EGLFS_PLATFORM_HOOKS_SOURCES = \
- 	$(@D)/mkspecs/devices/linux-rasp-pi-g++/qeglfshooks_pi.cpp
+diff --git a/package/webrtc-audio-processing/Config.in b/package/webrtc-audio-processing/Config.in
+index 90341d6..9fa141f 100644
+--- a/package/webrtc-audio-processing/Config.in
++++ b/package/webrtc-audio-processing/Config.in
+@@ -2,11 +2,12 @@ config BR2_PACKAGE_WEBRTC_AUDIO_PROCESSING
+ 	bool "webrtc-audio-processing"
+ 	depends on BR2_arm || BR2_i386 || BR2_x86_64
+ 	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	help
+ 	  AudioProcessing library based on Google's implementation of
+ 	  WebRTC.
+ 
+ 	  http://freedesktop.org/software/pulseaudio/webrtc-audio-processing/
+ 
+-comment "webrtc-audio-processing requires a toolchain with C++ support enabled"
+-	depends on !BR2_INSTALL_LIBSTDCPP
++comment "webrtc-audio-processing requires a toolchain with C++ and thread support enabled"
++	depends on !(BR2_INSTALL_LIBSTDCPP && BR2_TOOLCHAIN_HAS_THREADS)
