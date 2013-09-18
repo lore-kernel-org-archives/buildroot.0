@@ -1,132 +1,79 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 19 Sep 2013 00:06:24 +0200
-Subject: [Buildroot] [PATCH 3 of 4 RFC] manual: add section about
- depending on toolchain options
-In-Reply-To: <89b40887c8268e316399.1379494896@argentina>
-References: <patchbomb.1379494893@argentina>
- <89b40887c8268e316399.1379494896@argentina>
-Message-ID: <523A23E0.4040602@mind.be>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 19 Sep 2013 00:09:53 +0200
+Subject: [Buildroot] Is GPLv2 the right license for Buildroot?
+In-Reply-To: <523906E4.8080404@rftechnology.com.au>
+References: <20130912203359.7e650ebe@skate> <52323A54.7020808@mind.be>
+ <20130912221256.GE3362@free.fr> <523388B6.7090305@mind.be>
+ <20130914221613.GA3444@free.fr> <20130916182101.3844a686@skate>
+ <20130916170815.GB3293@free.fr>
+ <F9C551623D2CBB4C9488801D14F864C639ACE1F5@ex-mb1.corp.adtran.com>
+ <20130916200135.1724084e@skate>
+ <523906E4.8080404@rftechnology.com.au>
+Message-ID: <20130918220953.GA3557@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 18/09/13 11:01, Thomas De Schampheleire wrote:
-> Currently, the comments in Config.in files when depending on toolchain options
-> are not at all lined up. This patch adds a section to the documentation that
-> explains which format is to be used.
->
-> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
->
-> ---
-> Notes:
-> - How we will specify the C library is currently marked as 'to be decided'.
-> This patch series does not yet unify that, but I plan to do that in a new
-> patch (or update this series if we can reach a decision shortly).  The problem
-> is that not all packages that have a dependency on e.g. glibc add a comment to
-> show this to the user. A proposal would be to have a comment like:
->      foo needs a (e)glibc toolchain w/ featA, featB, featC
-> where the '(e)glibc' string would be left out if there is no constraint on the
-> C library.
->
-> - For the 'dynamic library' option: there are packages that depend on it but do
-> not have a comment indicating that. If there is an agreement on the format as
-> shown in this patch, then I will do that.
+Jason, All,
 
-  I agree on all points.
+On 2013-09-18 11:50 +1000, Jason Rennie spake thusly:
+> I may be missing something here and feel free to call me names if I am, also
+> IANAL.
+> 
+> That being said, wouldn't building a system with buildroot be essentially
+> the same case to using GCC to compile a program? The final libraries you
+> link with (or packages you include in the case of buildroot) may be
+> encumbered with all manner of licenses but the license of the buildtool
+> doesn't make any difference to the license status of the final product.
 
-  For the 'dynamic library' option, I don't think it's that important to 
-add a comment for it. It's so exotic, and you probably select only very 
-few packages in that case anyway, so the likelihood of someone 
-encountering that situation is pretty slim.
+Yes, that's basically true.
 
+But consider this:
 
-[snip]
-> +[[dependencies-toolchain-options]]
-> +Dependencies on toolchain options
-> +^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-> +Many packages depend on certain options of the toolchain, like the
-> +C library, C++ support, largefile support, thread support, RPC
-> +support, IPv6 support, wchar support, or dynamic libraries. These
-> +dependencies have to expressed with the appropriate 'depends on'
-> +statements in the Config.in file. Additionally, a +comment+ should be
-> +displayed when the option is not enabled, so that the user knows why
-> +the package is not available.
-> +
-> +The general format of such a +comment+ for package foo is:
-> +--------------------------
-> +foo needs a toolchain w/ featA, featB, featC
-> +--------------------------
-> +
-> +for example:
-> +--------------------------
-> +aircrack-ng needs a toolchain w/ largefile, threads
-> +--------------------------
-> +
-> +Note that this text is kept brief on purpose, so that it will fit on a
-> +80-character terminal without scrolling.
+  - you use Buildroot to build a GPL package, which ends up on the
+    target
 
-  There is no scrolling in menuconfig, so just put "so that it will fit 
-on a 80-character terminal".
+  - that package is GPL, so the GPL applies to that package
 
-  Regards,
-  Arnout
+  - section 3 of the GPL requires you provide the "scripts used to
+    control compilation and installation of the executable."
 
-> +
-> +The rest of this section enumerates the different toolchain options,
-> +the corresponding config symbols to depend on, and the string literals
-> +to use in the comment.
-> +
-> +* C library
-> +** Dependency symbol: +BR2_TOOLCHAIN_USES_GLIBC+,
-> ++BR2_TOOLCHAIN_USES_UCLIBC+
-> +** Comment string: (to be decided)
-> +
-> +* C++ support
-> +** Dependency symbol: +BR2_INSTALL_LIBSTDCPP+
-> +** Comment string: `C++`
-> +
-> +* largefile support
-> +** Dependency symbol: +BR2_LARGEFILE+
-> +** Comment string: +largefile+
-> +
-> +* thread support
-> +** Dependency symbol: +BR2_TOOLCHAIN_HAS_THREADS+
-> +** Comment string: +threads+
-> +
-> +* RPC support
-> +** Dependency symbol: +BR2_TOOLCHAIN_HAS_NATIVE_RPC+
-> +** Comment string: +RPC+
-> +
-> +* IPv6 support
-> +** Dependency symbol: +BR2_INET_IPV6+
-> +** Comment string: +IPv6+ (lowercase v)
-> +
-> +* wchar support
-> +** Dependency symbol: +BR2_USE_WCHAR+
-> +** Comment string: +wchar+
-> +
-> +* dynamic library: the user can indicate that he wants static
-> +libraries where possible, but not all packages support that.
-> +** Dependency symbol: +BR2_PREFER_STATIC_LIB+
-> +** Comment string: +dynamic library+
-> +
-> +
->   The +.mk+ file
->   ~~~~~~~~~~~~~~
->   [[adding-packages-mk]]
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
->
+  - So you have two options:
+    - come up with the instructions by yourself (by looking at how
+      Buildroot does its stuff, for example), but it's not trivial;
+    - or provide your Buildroot tree (and .config) since this is the
+      easiest. Let's assume that's the way you go.
 
+  - so, since you are distributing Buildroot, you have to abide by its
+    license. It happens that this license is the GPL, but it's just
+    happenstance that it is the same license as your GPL package, above.
+
+> If you were making changes to buildroot and redistributing those then the
+> license would apply but not otherwise.
+
+I believe we never argued otherwise. :-)
+
+What was said was, to comply with the section 3 of the GPLv2 for programs
+on the target, the easiest is to provide the Buildroot tree (and .config).
+
+Note that doing so is not enough: you'd still have to provide the sources
+of the (L)GPL programs that end up on the target.
+
+Again, IANAL... ;-)
+
+Note: I'm talking about section 3 of the GPLv2. GPLv3 has a similar
+section, but I'm not digging it now; I'll let you look at it by
+yourself! ;-p
+
+Regards,
+Yann E. MORIN.
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
