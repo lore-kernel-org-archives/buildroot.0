@@ -1,57 +1,49 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 18 Sep 2013 18:04:34 +0200
+Date: Wed, 18 Sep 2013 18:06:13 +0200
 Subject: [Buildroot] [PATCH 1/1] package: udev is now provided by
  systemd or eudev.
-In-Reply-To: <20130918175655.3f3a8466@skate>
+In-Reply-To: <20130918175838.32d9763a@skate>
 References: <1378476068-25300-1-git-send-email-eric.le.bihan.dev@free.fr>
- <522F8008.1000207@mind.be> <20130917203726.5b02fe08@skate>
- <52394EEA.4000603@mind.be> <20130918175655.3f3a8466@skate>
-Message-ID: <5239CF12.6040308@mind.be>
+ <20130917071737.4af20d60@skate> <20130917125352.GB13723@pc-eric>
+ <20130917204539.7c788c2b@skate> <52394FAB.30109@mind.be>
+ <20130918175838.32d9763a@skate>
+Message-ID: <5239CF75.2050807@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 18/09/13 17:56, Thomas Petazzoni wrote:
+On 18/09/13 17:58, Thomas Petazzoni wrote:
 > Dear Arnout Vandecappelle,
 >
-> On Wed, 18 Sep 2013 08:57:46 +0200, Arnout Vandecappelle wrote:
+> On Wed, 18 Sep 2013 09:00:59 +0200, Arnout Vandecappelle wrote:
 >
->>> No, I disagree with this. There are some other packages (currently
->>> udisks and network-manager) that explicitly need the udev extras. So I
->>> believe it's useful for these packages to be able to 'select
->>> BR2_PACKAGE_UDEV_ALL_EXTRAS'. Of course, they could 'select
->>> BR2_PACKAGE_LIBGLIB2' and depend on udev, but this means that they have
->>> internal knowledge of the fact that udev needs libglib2 to enable 'all
->>> extras', an internal knowledge that could very well be broken if
->>> tomorrow udev needs another dependency to build its 'all extras' things.
->>>
->>> So, the BR2_PACKAGE_(E)UDEV_ALL_EXTRAS option should remain in place, I
->>> believe.
+>>    Perhaps it makes more sense to include the extra config for eudev and
+>> systemd to the system menu? I think it's a bit strange to have to
+>> navigate to a completely different, hard to find menu to enable systemd's
+>> journal gateway...
 >>
->>    I didn't write the network-manager and udisks integration, but I think
->> that they _actually_ need gudev, not some vague "all extras". And for
->> gudev it's pretty darn obvious that there is a relation with libglib2. In
->> fact, both of them should probably select libglib2 directly, because they
->> are based on gobject classes.
+>>    You can easily do this by moving the
+>> source "package/systemd/systemd.mk"
+>> line from package/Config.in to system/Config.in.
 >
-> Right, that's one way of seeing things, indeed. It sounds a bit
-> convoluted to me, though. When a package A needs a specific feature
-> from package B (such as gudev), I believe it makes sense for package B
-> to provide a sub-option that package A can select, rather than package
-> A having intimate knowledge of the dependencies needed by package B to
-> enable whatever feature package A needs to have from package B.
+> I already suggested that the selection of eudev vs. systemd should not
+> be in Target Packages, and Eric already made a proposal to solve this.
+> In fact, we don't need any new configuration option: when the systemd
+> init system is selected, then systemd is used. When another init
+> systemd is used, but the selected /dev management method is udev, then
+> we use eudev.
+>
+> There's no need for more options. The only thing that Eric proposed is
+> to re-order the Init System selection vs. the /dev management selection
+> to make things a bit more logical.
 
-  Makes sense, but we probably already have tons of these already. If 
-gudev would have been added in the normal way instead of introducing the 
-all_extras option, then the implementors of network-manager and udisks 
-wouldn't even have noticed that udev had to be compiled in a specific 
-way: since these tools already select libglib2, udev would have been 
-compiled with gudev support.
-
-  Really, the all-extras is historical accident because a long time ago 
-udev's configure had an EXTRAS=... option in its build commands.
+  For systemd, journal compression and journal gateway still have to be 
+selectable. IMHO it is not nice for the user to have to navigate to a 
+completely unrelated place in order to enable those. So my suggestion is 
+to include the Config.in that has these extra options immediately below 
+the systemd selection in the system menu.
 
   Regards,
   Arnout
