@@ -1,61 +1,44 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 18 Sep 2013 07:00:20 +0200
-Subject: [Buildroot] [PATCH v2 13/17] audit: new package
-In-Reply-To: <1378936777-28308-14-git-send-email-clshotwe@rockwellcollins.com>
-References: <1378936777-28308-1-git-send-email-clshotwe@rockwellcollins.com>
- <1378936777-28308-14-git-send-email-clshotwe@rockwellcollins.com>
-Message-ID: <20130918070020.22ff8ca9@skate>
+From: =?ISO-8859-1?Q?Ra=FAl_S=E1nchez?= Siles <rasasi78@gmail.com>
+Date: Wed, 18 Sep 2013 07:11:43 +0200
+Subject: [Buildroot] [PATCH 1/1] Allow svn tags and branches notation in
+	$(PKG)_VERSION variable.
+Message-ID: <2228068.y4thvyPt1K@portaka>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Clayton Shotwell,
 
-On Wed, 11 Sep 2013 16:59:33 -0500, Clayton Shotwell wrote:
+According to user manual "generic-package Reference" section, LIBFOO_VERSION
+could refer to a branch or tag. This patch adds supports for this in the svn
+method case for the repositories following the branches/tags/trunk layout.
 
-> diff --git a/package/audit/audit-0001-crossCompileHeaderCreationFix.patch b/package/audit/audit-0001-crossCompileHeaderCreationFix.patch
-> new file mode 100644
-> index 0000000..11ab393
-> --- /dev/null
-> +++ b/package/audit/audit-0001-crossCompileHeaderCreationFix.patch
-> @@ -0,0 +1,1420 @@
-> +Rework the build system to generate the required header files using a 
-> +Python script rather than compiling executables.  This change has
-> +to be made because the executables that are generated are built for
-> +the target architecture and are generally not compilable on the host
-> +build machine.  
-> +
-> +Signed-off-by Clayton Shotwell <clshotwe@rockwellcollins.com>
+Examples:
+LIBFOO_VERSION = tags/v3.2.1
+LIBFOO_SITE = svn://svn.server.net/myproject
 
-In this patch for 'audit', you are replacing a nice C program by a
-Python script, with the argument that it helps cross-compilation. I
-must say I quite disagree with that: building a small C program for the
-host has always been easier than programs that require executing a
-Python script at build time.
+LIBFOO2_VERSION = branches/featureA
+LIBFOO2_SITE = http://svn.happyserver.net/theproject
+LIBFOO2_SITE_METHOD = svn
 
-Why not keeping the existing C program, and just adjust the way it is
-built to get it built by the native compiler?
 
-There is a fairly standardized way of doing that with the autotools,
-that consists in using the CC_FOR_BUILD variable instead of CC to build
-this tool. In native compilation, CC_FOR_BUILD == CC == gcc, while in
-cross-compilation, CC_FOR_BUILD == gcc and CC == <arch-tuple>-gcc.
-
-See http://www.sourceware.org/autobook/autobook/autobook_270.html.
-
-There is apparently even an existing m4 macro to define CC_FOR_BUILD:
-http://ac-archive.sourceforge.net/ac-archive/ac_prog_cc_for_build.html.
-
-Or maybe the Python script approach is something that has been agreed
-upon with the audit/SELinux community?
-
-Best regards,
-
-Thomas Petazzoni
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Signed-off-by: Ra?l S?nchez Siles <rasasi78@gmail.com>
+---
+ docs/manual/adding-packages-generic.txt | 2 ++
+ package/pkg-download.mk                 | 4 +++-
+ 2 files changed, 5 insertions(+), 1 deletion(-)
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: 0001-Allow-svn-tags-and-branches-notation-in-PKG-_VERSION.patch
+Type: text/x-patch
+Size: 1350 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130918/e022a560/attachment.bin>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 490 bytes
+Desc: This is a digitally signed message part.
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130918/e022a560/attachment.asc>
