@@ -1,22 +1,34 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 18 Sep 2013 12:28:15 +0200
-Subject: [Buildroot] [PATCH] aiccu: needs mmu
-In-Reply-To: <1379499490-13797-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Wed, 18 Sep 2013 07:18:10 -0300")
-References: <1379499490-13797-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <8738p2ctkw.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Wed, 18 Sep 2013 12:27:33 +0200
+Subject: [Buildroot] [git commit] aiccu: needs mmu
+Message-ID: <20130918102802.E31429B7D1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=d804657a2cf04020d58d9661f00edc2c4b5d19c8
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Gustavo> Fixes:
- Gustavo> http://autobuild.buildroot.net/results/549/549bc89aeaa0ebf9162fc5853cb637f4f70d0b51/
+Fixes:
+http://autobuild.buildroot.net/results/549/549bc89aeaa0ebf9162fc5853cb637f4f70d0b51/
 
-Committed, thanks.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/aiccu/Config.in |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/aiccu/Config.in b/package/aiccu/Config.in
+index 15959b1..9cff8cc 100644
+--- a/package/aiccu/Config.in
++++ b/package/aiccu/Config.in
+@@ -3,6 +3,7 @@ config BR2_PACKAGE_AICCU
+ 	depends on BR2_INET_IPV6
+ 	depends on BR2_USE_WCHAR
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_USE_MMU # fork()
+ 	select BR2_PACKAGE_GNUTLS
+ 	help
+ 	  SixXS Automatic IPv6 Connectivity Client Utility
