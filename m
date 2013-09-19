@@ -1,42 +1,34 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Thu, 19 Sep 2013 17:49:09 +0200
-Subject: [Buildroot] [PATCH 4 of 4] manual generation: rename manual-txt
- into manual-text
-In-Reply-To: <20130919174042.541b6c51@skate>
-References: <patchbomb.1379587632@argentina>
- <a2b05987569c1439422b.1379587636@argentina>
- <20130919174042.541b6c51@skate>
-Message-ID: <CAAXf6LUFF+KTNicPmjy1Qp1=01-Qtm9Ytz8bndV=3a27qX7J7g@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 19 Sep 2013 18:11:50 +0200
+Subject: [Buildroot] [PATCH 1/1] iputils: new package
+In-Reply-To: <OF952C3494.90E0D391-ON86257BEB.00528672-86257BEB.0052A01A@rockwellcollins.com>
+References: <1379533013-13209-1-git-send-email-mlweber1@rockwellcollins.com>
+ <523A2AEE.4070606@mind.be>
+ <OF635D0B64.199C14BF-ON86257BEB.000D9C69-86257BEB.004AD41E@rockwellcollins.com>
+ <523AFFFA.7020809@mind.be> <20130919165917.021f2bd4@skate>
+ <OF952C3494.90E0D391-ON86257BEB.00528672-86257BEB.0052A01A@rockwellcollins.com>
+Message-ID: <20130919181150.107b3285@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Hello,
 
-On Thu, Sep 19, 2013 at 5:40 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Dear Thomas De Schampheleire,
->
-> On Thu, 19 Sep 2013 12:47:16 +0200, Thomas De Schampheleire wrote:
->> The output extension and the generation messages refer to 'text', but the make
->> target was confusingly 'txt'. This patch changes the make target for
->> consistency.
->>
->> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
->
-> That's a change in the Buildroot interface, but I believe it's ok.
+On Thu, 19 Sep 2013 10:02:28 -0500, mlweber1 at rockwellcollins.com wrote:
 
-True. I figured that the manual is built only rarely (many people are
-using the release tarballs), let alone that manual-txt is explicitly
-called. People that do build manual-txt are often buildroot
-developers, and hopefully they are flexible enough :-)
+> Yeah, only for IPv6 doing a md5 sum.  What's the cleanest way to comment 
+> that in the Config.in?  Part of the description?
 
-> However, you're not updating another occurrence of manual-txt in the
-> main Makefile (see the release target).
+Just:
 
-Ai, sorry, I didn't think of that. Will fix.
+	# IPv6 support needs to do a MD5 sum for <some reason>
+	select BR2_PACKAGE_OPENSSL if BR2_INET_IPV6
 
-Thanks for your feedback,
 Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
