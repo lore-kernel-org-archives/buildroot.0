@@ -1,31 +1,52 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 19 Sep 2013 17:40:42 +0200
-Subject: [Buildroot] [PATCH 4 of 4] manual generation: rename manual-txt
- into manual-text
-In-Reply-To: <a2b05987569c1439422b.1379587636@argentina>
-References: <patchbomb.1379587632@argentina>
- <a2b05987569c1439422b.1379587636@argentina>
-Message-ID: <20130919174042.541b6c51@skate>
+Date: Thu, 19 Sep 2013 17:43:36 +0200
+Subject: [Buildroot] [PATCH 1/1] u-boot: allow to pass a custom
+ configuration file
+In-Reply-To: <1379589006-28682-1-git-send-email-eric.jarrige@armadeus.org>
+References: <1379589006-28682-1-git-send-email-eric.jarrige@armadeus.org>
+Message-ID: <20130919174336.537e265e@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas De Schampheleire,
+Dear Eric Jarrige,
 
-On Thu, 19 Sep 2013 12:47:16 +0200, Thomas De Schampheleire wrote:
-> The output extension and the generation messages refer to 'text', but the make
-> target was confusingly 'txt'. This patch changes the make target for
-> consistency.
-> 
-> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+On Thu, 19 Sep 2013 13:10:06 +0200, Eric Jarrige wrote:
 
-That's a change in the Buildroot interface, but I believe it's ok.
-However, you're not updating another occurrence of manual-txt in the
-main Makefile (see the release target).
+>  choice
+> +	prompt "U-Boot configuration"
+> +	default BR2_TARGET_UBOOT_USE_DEFCONFIG
+> +
+> +config BR2_TARGET_UBOOT_USE_DEFCONFIG
+> +	bool "Using default configuration"
 
-Thanks,
+I don't think using the word 'defconfig' for U-Boot is appropriate,
+since 'defconfig' really refers to a kconfig terminology and U-Boot,
+sadly, doesn't use kconfig.
+
+>  define UBOOT_CONFIGURE_CMDS
+> +	$(if $(BR2_TARGET_UBOOT_USE_CUSTOM_CONFIG),
+> +		cp -pf $(call qstrip,$(BR2_TARGET_UBOOT_CUSTOM_CONFIG_FILE)) \
+> +			$(@D)/include/configs/$(UBOOT_BOARD_NAME).h)
+>  	$(TARGET_CONFIGURE_OPTS) $(UBOOT_CONFIGURE_OPTS) 	\
+>  		$(MAKE) -C $(@D) $(UBOOT_MAKE_OPTS)		\
+>  		$(UBOOT_BOARD_NAME)_config
+
+I am a bit hesitant on the overall feature. The fact that a
+include/configs/<something>.h file is really a configuration file is
+pretty fuzzy in U-Boot, especially since now boards are supposed to
+also be listed in the main boards.cfg file.
+
+Therefore, I'm tempted to say that users who need to do that should
+instead use patches against U-Boot (to add their own board, including
+the include/configs/<something>.h file).
+
+But on this one, I believe I can be convinced if there are good
+arguments :)
+
+Best regards,
 
 Thomas
 -- 
