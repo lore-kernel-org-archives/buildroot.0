@@ -1,11 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 19 Sep 2013 17:37:12 +0200
-Subject: [Buildroot] [PATCH 1 of 4] manual generation: change
- capitalization of messages
-In-Reply-To: <4d78895bc1ab7d77560e.1379587633@argentina>
+Date: Thu, 19 Sep 2013 17:37:43 +0200
+Subject: [Buildroot] [PATCH 2 of 4] manual generation: update help
+In-Reply-To: <20ec6e5e9482847e47fe.1379587634@argentina>
 References: <patchbomb.1379587632@argentina>
- <4d78895bc1ab7d77560e.1379587633@argentina>
-Message-ID: <20130919173712.0fddcf01@skate>
+ <20ec6e5e9482847e47fe.1379587634@argentina>
+Message-ID: <20130919173743.6916a5f8@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,22 +13,10 @@ To: buildroot@busybox.net
 
 Dear Thomas De Schampheleire,
 
-On Thu, 19 Sep 2013 12:47:13 +0200, Thomas De Schampheleire wrote:
-> When generating the manual, you see following messages:
-> 
-> >>>   Generating HTML manual...
-> >>>   Generating Split HTML manual...
-> >>>   Generating PDF manual...
-> >>>   Generating Text manual...
-> >>>   Generating EPUB manual...
-> 
-> and with this patch the capitalization is changed so that it becomes:
-> 
-> >>>   Generating HTML manual...
-> >>>   Generating split HTML manual...
-> >>>   Generating PDF manual...
-> >>>   Generating text manual...
-> >>>   Generating ePUB manual...
+On Thu, 19 Sep 2013 12:47:14 +0200, Thomas De Schampheleire wrote:
+> The 'make help' lines for generating the manual did not consider ePub correctly.
+> Instead of providing a limitative list for 'make manual', the text is changed
+> into 'all formats'.
 > 
 > Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
