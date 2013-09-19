@@ -1,13 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 19 Sep 2013 17:39:26 +0200
-Subject: [Buildroot] [PATCH 3 of 4] manual generation: check
- dependencies first
-In-Reply-To: <CAAXf6LW=7dUUEjGHp6xVFy9-SEXVuUyiK8Lvom2imyCX=s+3oQ@mail.gmail.com>
+Date: Thu, 19 Sep 2013 17:40:42 +0200
+Subject: [Buildroot] [PATCH 4 of 4] manual generation: rename manual-txt
+ into manual-text
+In-Reply-To: <a2b05987569c1439422b.1379587636@argentina>
 References: <patchbomb.1379587632@argentina>
- <246bed054da59d6508dc.1379587635@argentina>
- <CAHXCMMJ2oSqF_MoyDJYjxCKKZukwg6vr2ewP+TUFy9kaDrwcoA@mail.gmail.com>
- <CAAXf6LW=7dUUEjGHp6xVFy9-SEXVuUyiK8Lvom2imyCX=s+3oQ@mail.gmail.com>
-Message-ID: <20130919173926.0bf04d9a@skate>
+ <a2b05987569c1439422b.1379587636@argentina>
+Message-ID: <20130919174042.541b6c51@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,16 +14,18 @@ To: buildroot@busybox.net
 
 Dear Thomas De Schampheleire,
 
-On Thu, 19 Sep 2013 15:30:25 +0200, Thomas De Schampheleire wrote:
+On Thu, 19 Sep 2013 12:47:16 +0200, Thomas De Schampheleire wrote:
+> The output extension and the generation messages refer to 'text', but the make
+> target was confusingly 'txt'. This patch changes the make target for
+> consistency.
+> 
+> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
-> For python, should we check and bail out, or rather skip the package
-> list generation? In fact, why is the package list generation coupled
-> to the manual?
+That's a change in the Buildroot interface, but I believe it's ok.
+However, you're not updating another occurrence of manual-txt in the
+main Makefile (see the release target).
 
-Because the package list is used in the manual only, and the best
-moment to generate is when building the manual?
-
-When would you want to generate it?
+Thanks,
 
 Thomas
 -- 
