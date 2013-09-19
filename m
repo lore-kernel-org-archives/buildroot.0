@@ -1,11 +1,12 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Thu, 19 Sep 2013 13:43:02 +0200
-Subject: [Buildroot] [PATCH 3 of 4] manual generation: check
-	dependencies first
-In-Reply-To: <246bed054da59d6508dc.1379587635@argentina>
-References: <patchbomb.1379587632@argentina>
- <246bed054da59d6508dc.1379587635@argentina>
-Message-ID: <CAHXCMMJ2oSqF_MoyDJYjxCKKZukwg6vr2ewP+TUFy9kaDrwcoA@mail.gmail.com>
+Date: Thu, 19 Sep 2013 13:47:55 +0200
+Subject: [Buildroot] [PATCH 4 of 4 RFC] Config.in files: unify comments
+ of toolchain option dependencies
+In-Reply-To: <CAAXf6LWbCWMA2ofRSx4bdLyLsLYnaVfoBJupejSKLUsWqKYoZA@mail.gmail.com>
+References: <patchbomb.1379494893@argentina>
+ <a7cea7dd647ea16661bf.1379494897@argentina>
+ <CAAXf6LWbCWMA2ofRSx4bdLyLsLYnaVfoBJupejSKLUsWqKYoZA@mail.gmail.com>
+Message-ID: <CAHXCMMK3NPuyfVeOfxAiJsC9ZCrBR56H9jFAQkrZZPmtp7A9xw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,64 +15,45 @@ To: buildroot@busybox.net
 
 Thomas, all,
 
+
 2013/9/19 Thomas De Schampheleire <patrickdepinguin@gmail.com>
 
-> To generate the manual, you need asciidoc and w3m. If these are not
-> present,
-> pretty cryptic error messages are given.
-> This patch adds a simple check for these dependencies, before attempting to
-> build the manual.
+> Hi,
 >
-> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+> On Wed, Sep 18, 2013 at 11:01 AM, Thomas De Schampheleire
+> <patrickdepinguin@gmail.com> wrote:
+> > This patch lines up the comments in Config.in files that clarify which
+> toolchain
+> > options the package depends on.
+> >
+> > Signed-off-by: Thomas De Schampheleire <
+> thomas.de.schampheleire at gmail.com>
+> >
+> > ---
 >
-> ---
->  docs/manual/manual.mk |  11 +++++++++++
->  1 files changed, 11 insertions(+), 0 deletions(-)
+> In connman, there is a vague mentioning about 'resolver' support:
 >
-> diff --git a/docs/manual/manual.mk b/docs/manual/manual.mk
-> --- a/docs/manual/manual.mk
-> +++ b/docs/manual/manual.mk
-> @@ -3,6 +3,16 @@ manual-update-lists:
->         $(Q)BR2_DEFCONFIG="" TOPDIR=$(TOPDIR) O=$(O)/docs/manual/.build \
->                 $(TOPDIR)/support/scripts/gen-manual-lists.py
+> comment "connman needs a toolchain with IPv6, WCHAR, threading and
+> resolver support"
+>         depends on BR2_UCLIBC_VERSION_0_9_32 || \
+>                 !BR2_USE_WCHAR || !BR2_INET_IPV6 ||
+> !BR2_TOOLCHAIN_HAS_THREADS
 >
-> +manual-check-dependencies:
-> +       $(Q)if [ -z "`which a2x 2>/dev/null`" ]; then \
-> +               echo "You need asciidoc on your host to generate the
-> manual"; \
-> +               false; \
-> +       fi
-> +       $(Q)if [ -z "`which w3m 2>/dev/null`" ]; then \
-> +               echo "You need w3m on your host to generate the manual"; \
-> +               false; \
-> +       fi
 >
-To generate the pdf manual, you need dblatex too.
-Also, to update the lists of the manual, you need python with argparse
-package.
-
-
-> +
+> I guess there must be some linke with uclibc 0.9.32, but does anyone
+> know more? Is this still correct?
+> In this patch I just took over the 'resolver' string, but it seems odd
+> anyway.
 >
->  ################################################################################
->  # GENDOC -- generates the make targets needed to build a specific type of
->  #           asciidoc documentation.
-> @@ -24,6 +34,7 @@ define GENDOC_INNER
->
->  $$(O)/docs/$(1)/$(1).$(4): docs/$(1)/$(1).txt \
->                            $$($(call UPPERCASE,$(1))_SOURCES) \
-> +                          manual-check-dependencies \
->                            manual-update-lists
->         $(Q)$(call MESSAGE,"Generating $(5) $(1)...")
->         $(Q)mkdir -p $$(@D)/.build
->
-
+IIRC, this is about resolv.h, for which uclibc only provided stub (not full
+implementation) some years ago.
+I know there were patches implementing this on the web, but I don't know if
+they have been merged.
 
 Regards,
-
 
 -- 
 Samuel
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130919/e84d53e4/attachment.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130919/760ffa63/attachment.html>
