@@ -1,43 +1,90 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 19 Sep 2013 22:32:13 +0200
-Subject: [Buildroot] Broken generation of locales
-In-Reply-To: <20130919213002.44823bb2@skate>
-References: <523A9508.7040403@wanadoo.fr> <20130919170406.0e04a348@skate>
- <523B1807.1070102@wanadoo.fr> <523B4C91.1020307@mind.be>
- <20130919213002.44823bb2@skate>
-Message-ID: <523B5F4D.6040101@mind.be>
+From: Eric Jarrige <eric.jarrige@armadeus.org>
+Date: Thu, 19 Sep 2013 22:07:22 +0200
+Subject: [Buildroot] [PATCH 1/1] u-boot: allow to pass a custom
+	configuration file
+In-Reply-To: <20130919174336.537e265e@skate>
+References: <1379589006-28682-1-git-send-email-eric.jarrige@armadeus.org>
+ <20130919174336.537e265e@skate>
+Message-ID: <0AF585C7-2CB6-443B-8F22-0EC2889259A3@armadeus.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 19/09/13 21:30, Thomas Petazzoni wrote:
-> Dear Arnout Vandecappelle,
->
-> On Thu, 19 Sep 2013 21:12:17 +0200, Arnout Vandecappelle wrote:
->
->>    Note that you've caused Thomas's confusion by unnecessarily moving the
->> -s option in the charmap line.
->
-> Ah, yes. Thierry, can you resend a proper patch (i.e without moving the
-> -s option in the charmap line, and with a proper description and
-> Signed-off-by line) ?
+Hi Thomas,
 
-  And don't forget to add my
+On 19 sept. 2013, at 17:43, Thomas Petazzoni wrote:
 
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> Dear Eric Jarrige,
+> 
+> On Thu, 19 Sep 2013 13:10:06 +0200, Eric Jarrige wrote:
+> 
+>> choice
+>> +	prompt "U-Boot configuration"
+>> +	default BR2_TARGET_UBOOT_USE_DEFCONFIG
+>> +
+>> +config BR2_TARGET_UBOOT_USE_DEFCONFIG
+>> +	bool "Using default configuration"
+> 
+> I don't think using the word 'defconfig' for U-Boot is appropriate,
+> since 'defconfig' really refers to a kconfig terminology and U-Boot,
+> sadly, doesn't use kconfig.
 
-  :-)
+Does the alternate terminology DEFAULT_CONFIG could be more
+appropriate or acceptable ?
 
-  Regards,
-  Arnout
+> 
+>> define UBOOT_CONFIGURE_CMDS
+>> +	$(if $(BR2_TARGET_UBOOT_USE_CUSTOM_CONFIG),
+>> +		cp -pf $(call qstrip,$(BR2_TARGET_UBOOT_CUSTOM_CONFIG_FILE)) \
+>> +			$(@D)/include/configs/$(UBOOT_BOARD_NAME).h)
+>> 	$(TARGET_CONFIGURE_OPTS) $(UBOOT_CONFIGURE_OPTS) 	\
+>> 		$(MAKE) -C $(@D) $(UBOOT_MAKE_OPTS)		\
+>> 		$(UBOOT_BOARD_NAME)_config
+> 
+> I am a bit hesitant on the overall feature. The fact that a
+> include/configs/<something>.h file is really a configuration file is
+> pretty fuzzy in U-Boot, especially since now boards are supposed to
+> also be listed in the main boards.cfg file.
+> 
+> Therefore, I'm tempted to say that users who need to do that should
+> instead use patches against U-Boot (to add their own board, including
+> the include/configs/<something>.h file).
+> 
+> But on this one, I believe I can be convinced if there are good
+> arguments :)
+
+The file boards.cfg is a source of confusion for me. This file provides
+the list of boards with some extra information like status of the board and
+maintainer email address.
+Nevertheless the concrete config files are the <BOARD>.h files located in
+include/config even if U-Boot a C syntax with a list of #define instead of
+the common kconfig syntax.
+
+You are right, a customization of the U-Boot config  file can be done
+through the use of patches as it could be done for some other packages
+like Barebox, Busybox or the linux kernel but the BuildRoot feature to
+support custom config files for the main packages is more than
+convenient. So the purpose of this patch is to add this feature to the U
+Boot option as well.
+IMHO such a feature could be useful for some other BuildRoot/U-Boot
+user but may be I wrong. Please let me know.
+
+Best regards,
+Eric
 
 
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+
+
+
+ 
+ 
+
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 203 bytes
+Desc: Message signed with OpenPGP using GPGMail
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130919/a3b7e941/attachment-0001.asc>
