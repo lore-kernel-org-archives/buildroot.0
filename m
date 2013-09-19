@@ -1,61 +1,103 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 19 Sep 2013 21:41:33 +0200
-Subject: [Buildroot] [git commit] qt: install translations
-Message-ID: <20130919195156.958619B7F4@busybox.osuosl.org>
+From: mlweber1 at rockwellcollins.com <mlweber1@rockwellcollins.com>
+Date: Thu, 19 Sep 2013 14:52:32 -0500
+Subject: [Buildroot] [PATCH v2] iputils: new package
+In-Reply-To: <87six0fxdy.fsf@dell.be.48ers.dk>
+References: <1379603872-25903-1-git-send-email-mlweber1@rockwellcollins.com>
+ <87six0fxdy.fsf@dell.be.48ers.dk>
+Message-ID: <OF7917966A.7534CE7A-ON86257BEB.006CC68E-86257BEB.006D2EC7@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=93917b6980f7f2b51302e1a3fa451b07cf7d674e
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Peter Korsgaard <jacmet@gmail.com> wrote on 09/19/2013 02:02:17 PM:
 
-The Qt translation files are currently created and moved under
-$(STAGING_DIR)/usr/translations but not installed on the target.
+> From: Peter Korsgaard <jacmet@uclibc.org>
+> To: Matt Weber <mlweber1@rockwellcollins.com>
+> Cc: buildroot at busybox.net
+> Date: 09/19/2013 02:02 PM
+> Subject: Re: [PATCH v2] iputils: new package
+> Sent by: Peter Korsgaard <jacmet@gmail.com>
+> 
+> >>>>> "Matt" == Matt Weber <mlweber1@rockwellcollins.com> writes:
+> 
+>  Matt> Signed-off-by: Matt Weber <mlweber1@rockwellcollins.com>
+>  Matt> ---
+>  Matt> Changes v1 -> v2:
+>  Matt>   * Updated depends in Config.in and added comment
+>  Matt>     (Suggested by Thomas/Arnout)
+>  Matt>   * Adjusted version to include "s" as part of version
+>  Matt>     (Suggested by Arnout)
+>  Matt>   * Removed dependency on file capabilities (libcap)
+>  Matt>     and sysfs.  Commented that file capabilities is disabled
+>  Matt>   * Cleaned up CFLAGS to have minimal complexity
+>  Matt>     (Suggested by Arnout)
+> 
+>  Matt>  package/Config.in          |    1 +
+>  Matt>  package/iputils/Config.in  |    8 ++++++
+>  Matt>  package/iputils/iputils.mk |   53 ++++++++++++++++++++++++++
+> ++++++++++++++++++
+>  Matt>  3 files changed, 62 insertions(+), 0 deletions(-)
+>  Matt>  create mode 100644 package/iputils/Config.in
+>  Matt>  create mode 100644 package/iputils/iputils.mk
+> 
+>  Matt> diff --git a/package/iputils/Config.in 
+b/package/iputils/Config.in
+>  Matt> new file mode 100644
+>  Matt> index 0000000..0c77b5f
+>  Matt> --- /dev/null
+>  Matt> +++ b/package/iputils/Config.in
+>  Matt> @@ -0,0 +1,9 @@
+>  Matt> +config BR2_PACKAGE_IPUTILS
+>  Matt> +   bool "iputils"
+>  Matt> +   select BR2_OPENSSL if BR2_INET_IPV6
+>  Matt> +   help
+>  Matt> +     This package is set of small useful utilities for Linux
+> networking.
+>  Matt> +     It includes complete versions of ping, traceroute, etc.
+>  Matt> +
+>  Matt> +     http://sourceforge.net/projects/iputils/
+> 
+> Something apparently corrupted the patch on the way, as you only have 8
+> lines here. Did you edit the patch by hand afterwards?
 
-This patch defines the translations directory to
-/usr/share/qt/translations and defines a QT_INSTALL_TARGET_TRANSLATIONS
-macro to deploy them from the staging directory to the target directory.
+Yep, sorry about that, I should have made the change to the actual file 
+and regenerated the patch.
 
-Signed-off-by: Vivien Didelot <vivien.didelot@savoirfairelinux.com>
-Reviewed-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/qt/qt.mk |    9 +++++++++
- 1 files changed, 9 insertions(+), 0 deletions(-)
+> 
+>  Matt> diff --git a/package/iputils/iputils.mk 
+b/package/iputils/iputils.mk
+>  Matt> new file mode 100644
+>  Matt> index 0000000..5836430
+>  Matt> --- /dev/null
+>  Matt> +++ b/package/iputils/iputils.mk
+>  Matt> @@ -0,0 +1,53 @@
+>  Matt> 
+> 
++################################################################################
+>  Matt> +#
+>  Matt> +# iputils
+>  Matt> +#
+>  Matt> 
+> 
++################################################################################
+>  Matt> +
+>  Matt> +IPUTILS_VERSION = s20121011
+>  Matt> +IPUTILS_SITE = http://www.skbuff.net/iputils/
+>  Matt> +IPUTILS_SOURCE = iputils-$(IPUTILS_VERSION).tar.bz2
+>  Matt> +IPUTILS_LICENSE = GPLv2+ BSD-3c
+>  Matt> +# Only included a license file for BSD.
+>  Matt> +IPUTILS_LICENSE_FILES = COPYING
+> 
+> There's no COPYING. I assume you meant ninfod/COPYING?
 
-diff --git a/package/qt/qt.mk b/package/qt/qt.mk
-index daade3c..48d39fc 100644
---- a/package/qt/qt.mk
-+++ b/package/qt/qt.mk
-@@ -516,6 +516,7 @@ define QT_CONFIGURE_CMDS
- 		-prefix /usr \
- 		-plugindir /usr/lib/qt/plugins \
- 		-importdir /usr/lib/qt/imports \
-+		-translationdir /usr/share/qt/translations \
- 		-hostprefix $(STAGING_DIR) \
- 		-fast \
- 		-no-rpath \
-@@ -666,6 +667,13 @@ define QT_INSTALL_TARGET_POWERVR
- endef
- endif
- 
-+define QT_INSTALL_TARGET_TRANSLATIONS
-+	if [ -d $(STAGING_DIR)/usr/share/qt/translations/ ] ; then \
-+		mkdir -p $(TARGET_DIR)/usr/share/qt/translations ; \
-+		cp -dpfr $(STAGING_DIR)/usr/share/qt/translations/* $(TARGET_DIR)/usr/share/qt/translations ; \
-+	fi
-+endef
-+
- define QT_INSTALL_TARGET_CMDS
- 	$(QT_INSTALL_TARGET_LIBS)
- 	$(QT_INSTALL_TARGET_PLUGINS)
-@@ -673,6 +681,7 @@ define QT_INSTALL_TARGET_CMDS
- 	$(QT_INSTALL_TARGET_FONTS)
- 	$(QT_INSTALL_TARGET_FONTS_TTF)
- 	$(QT_INSTALL_TARGET_POWERVR)
-+	$(QT_INSTALL_TARGET_TRANSLATIONS)
- endef
- 
- define QT_CLEAN_CMDS
+Yep
+
+Thanks,
+Matt
+
+[snip]
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130919/08eb9bdc/attachment.html>
