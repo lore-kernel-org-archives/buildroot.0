@@ -1,57 +1,53 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 19 Sep 2013 21:07:42 +0200
-Subject: [Buildroot] [PATCH 3 of 4 RFC] manual: add section about
- depending on toolchain options
-In-Reply-To: <CAAXf6LXtiSyVejwF_ZyW3qjzy8CS_n+0Xgj84MGFa-6kk+MggA@mail.gmail.com>
-References: <patchbomb.1379494893@argentina>
- <89b40887c8268e316399.1379494896@argentina> <523A23E0.4040602@mind.be>
- <CAAXf6LXtiSyVejwF_ZyW3qjzy8CS_n+0Xgj84MGFa-6kk+MggA@mail.gmail.com>
-Message-ID: <523B4B7E.9070204@mind.be>
+Date: Thu, 19 Sep 2013 21:12:17 +0200
+Subject: [Buildroot] Broken generation of locales
+In-Reply-To: <523B1807.1070102@wanadoo.fr>
+References: <523A9508.7040403@wanadoo.fr> <20130919170406.0e04a348@skate>
+ <523B1807.1070102@wanadoo.fr>
+Message-ID: <523B4C91.1020307@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 19/09/13 09:23, Thomas De Schampheleire wrote:
-> Arnout, all,
+On 19/09/13 17:28, Thierry Bultel wrote:
+> Hi Thomas,
 >
-> On Thu, Sep 19, 2013 at 12:06 AM, Arnout Vandecappelle <arnout@mind.be> wrote:
-> [..]
->>
->>   For the 'dynamic library' option, I don't think it's that important to add
->> a comment for it. It's so exotic, and you probably select only very few
->> packages in that case anyway, so the likelihood of someone encountering that
->> situation is pretty slim.
->>
+> This does not exactly revert the named commit, that
+> added 's' for both inputfile and charmap.
 >
-> Well, I think this depends on the semantics of PREFER_STATIC_LIB or
-> the way we will handle the dynamic library option(s) in the future. If
-> there is really an option that says 'I want static libs', then I think
-> it makes sense to add a comment, because it's a user choice. If the
-> linking is only based on the architecture supporting it or not, and
-> the user will get dynamic libs when supported, then a comment is not
-> needed.
+> I pretend that the 's' option is mandatory for charmap only,
+> else inputfile is always empty:
 >
-> Based on the discussion so far, I don't think we should try to fix the
-> situation in the context of this patchset, but rather in a separate
-> one. I would therefore propose, for this patchset, to keep the current
-> situation and the documentation as proposed in the patch. Later, any
-> needed changes can be made when the dynamic library handling is
-> cleared out. In the mean time, I will not add new comments for
-> packages that depend on !STATIC but do not yet have a comment, as this
-> may be wasted effort.
+> inputfile:
 >
-> What do you think?
+> thierry at thierry-desktop:~$ echo fr_FR | cut -f1 -d '.'
+> fr_FR
+> thierry at thierry-desktop:~$ echo fr_FR | cut -f1 -d '.' -s
+> thierry at thierry-desktop:~$
+>
+> charmap:
+>
+> thierry at thierry-desktop:~$ echo fr_FR.utf8 | cut -f2 -d '.'
+> utf8
+> thierry at thierry-desktop:~$ echo fr_FR.utf8 | cut -f2 -d '.' -s
+> utf8
 
-  Good idea.
+  Ack that.
+
+  So this patch gets
+
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+
+  Note that you've caused Thomas's confusion by unnecessarily moving the 
+-s option in the charmap line.
+
 
   Regards,
   Arnout
 
 [snip]
-
-
 -- 
 Arnout Vandecappelle                          arnout at mind be
 Senior Embedded Software Architect            +32-16-286500
