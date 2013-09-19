@@ -1,51 +1,51 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 19 Sep 2013 17:04:06 +0200
-Subject: [Buildroot] Broken generation of locales
-In-Reply-To: <523A9508.7040403@wanadoo.fr>
-References: <523A9508.7040403@wanadoo.fr>
-Message-ID: <20130919170406.0e04a348@skate>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Thu, 19 Sep 2013 17:08:03 +0200
+Subject: [Buildroot] [PATCH 3 of 4] manual generation: check
+	dependencies first
+In-Reply-To: <OF255A0DB6.0256D3EC-ON86257BEB.004C84DB-86257BEB.004F7C41@rockwellcollins.com>
+References: <patchbomb.1379587632@argentina>
+ <246bed054da59d6508dc.1379587635@argentina>
+ <CAHXCMMJ2oSqF_MoyDJYjxCKKZukwg6vr2ewP+TUFy9kaDrwcoA@mail.gmail.com>
+ <CAAXf6LW=7dUUEjGHp6xVFy9-SEXVuUyiK8Lvom2imyCX=s+3oQ@mail.gmail.com>
+ <OF255A0DB6.0256D3EC-ON86257BEB.004C84DB-86257BEB.004F7C41@rockwellcollins.com>
+Message-ID: <CAAXf6LWOeKch8sQ7H3qbKG3CEtL=R0mO1vZY38aggUNo6mtVcA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thierry Bultel,
+Hi Ryan,
 
-On Thu, 19 Sep 2013 08:09:12 +0200, Thierry Bultel wrote:
+On Thu, Sep 19, 2013 at 4:28 PM, Ryan Barnett
+<rjbarnet@rockwellcollins.com> wrote:
+>
+>
+> I was also going to to add to the documentation the versions of the Ubuntu
+> packages that I got the manual to build with. Ubuntu version + package
+> version so that way in the manual we can give a reference system
+> configuration that we say builds the manual. For Ubuntu 10.04 I was having
+> issues building the manual but with Ubuntu 12.04 I could successfully build
+> everything.
+>
+> I haven't had a chance to get around to doing this yet so I don't know if
+> you want to add your Ubuntu configuration as a reference configuration for
+> generating the manual under Section 3.2? Maybe this warrants a subsection
+> (3.2.1) in manual for generating the manual? If you don't get around to
+> doing this, I will when I get around to adding some documentation to the
+> regarding SELinux and information about patch reviews.
 
-> When setting BR2_GENERATE_LOCALE, for instance like that:
-> BR2_GENERATE_LOCALE="fr_FR en_US es_ES es_ES.ISO-8859-1 hu_HU"
-> 
-> nothing is generated.
-> 
-> next patch fixes that issue:
-> 
-> diff --git a/Makefile b/Makefile
-> index 7997e3b..98afd7e 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -543,8 +543,8 @@ ifneq ($(GENERATE_LOCALE),)
->   target-generatelocales: host-localedef
->          $(Q)mkdir -p $(TARGET_DIR)/usr/lib/locale/
->          $(Q)for locale in $(GENERATE_LOCALE) ; do \
-> -               inputfile=`echo $${locale} | cut -f1 -d'.' -s` ; \
-> -               charmap=`echo $${locale} | cut -f2 -d'.' -s` ; \
-> +               inputfile=`echo $${locale} | cut -f1 -d'.'` ; \
-> +               charmap=`echo $${locale} | cut -s -f2 -d'.'` ; \
->                  if test -z "$${charmap}" ; then \
->                          charmap="UTF-8" ; \
->                  fi ; \
+I'm wondering whether this is very useful. A user will not install
+another Linux distribution just to build the buildroot manual, so the
+Ubuntu version doesn't seem necessary to me. The package version only
+seems relevant in case we know that some versions give problems for
+building the manual. But unless we have some more info on that, I
+would not add such info to the manual (also because it is very quickly
+out-of-date).
 
-This exactly reverts commit 8e2696eab6a781727c09408528678d4d29edd7a3
-which was merged in August. I've added Arnout in Cc so that you can
-discuss the issue together and decide who wins :-)
+For the problems you saw on Ubuntu 10.04, there may be a solution with
+asciidoc 8.6.3, as I just posted in your original thread. If this
+could be verified, then we could update the manual with just that.
 
-Thanks,
-
+Best regards,
 Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
