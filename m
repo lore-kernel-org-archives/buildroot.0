@@ -1,51 +1,38 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Thu, 19 Sep 2013 17:08:03 +0200
-Subject: [Buildroot] [PATCH 3 of 4] manual generation: check
-	dependencies first
-In-Reply-To: <OF255A0DB6.0256D3EC-ON86257BEB.004C84DB-86257BEB.004F7C41@rockwellcollins.com>
-References: <patchbomb.1379587632@argentina>
- <246bed054da59d6508dc.1379587635@argentina>
- <CAHXCMMJ2oSqF_MoyDJYjxCKKZukwg6vr2ewP+TUFy9kaDrwcoA@mail.gmail.com>
- <CAAXf6LW=7dUUEjGHp6xVFy9-SEXVuUyiK8Lvom2imyCX=s+3oQ@mail.gmail.com>
- <OF255A0DB6.0256D3EC-ON86257BEB.004C84DB-86257BEB.004F7C41@rockwellcollins.com>
-Message-ID: <CAAXf6LWOeKch8sQ7H3qbKG3CEtL=R0mO1vZY38aggUNo6mtVcA@mail.gmail.com>
+From: Ryan Barnett <rjbarnet@rockwellcollins.com>
+Date: Thu, 19 Sep 2013 10:12:48 -0500
+Subject: [Buildroot] Building Manual Errors
+In-Reply-To: <CAAXf6LVf+pFDG3-tvuWMOPJT8f4ErbfBfmg33hAaZuZtBT9XGw@mail.gmail.com>
+References: <OF433C040C.2486075F-ON86257BE2.00813B52-86257BE2.0082DB6E@rockwellcollins.com>
+ <CAAXf6LVf+pFDG3-tvuWMOPJT8f4ErbfBfmg33hAaZuZtBT9XGw@mail.gmail.com>
+Message-ID: <OF30138444.F508A036-ON86257BEB.005357FA-86257BEB.00539212@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Ryan,
+Thomas/Samuel,
 
-On Thu, Sep 19, 2013 at 4:28 PM, Ryan Barnett
-<rjbarnet@rockwellcollins.com> wrote:
->
->
-> I was also going to to add to the documentation the versions of the Ubuntu
-> packages that I got the manual to build with. Ubuntu version + package
-> version so that way in the manual we can give a reference system
-> configuration that we say builds the manual. For Ubuntu 10.04 I was having
-> issues building the manual but with Ubuntu 12.04 I could successfully build
-> everything.
->
-> I haven't had a chance to get around to doing this yet so I don't know if
-> you want to add your Ubuntu configuration as a reference configuration for
-> generating the manual under Section 3.2? Maybe this warrants a subsection
-> (3.2.1) in manual for generating the manual? If you don't get around to
-> doing this, I will when I get around to adding some documentation to the
-> regarding SELinux and information about patch reviews.
+Thomas De Schampheleire <patrickdepinguin@gmail.com> wrote on 09/19/2013 
+10:03:45 AM:
 
-I'm wondering whether this is very useful. A user will not install
-another Linux distribution just to build the buildroot manual, so the
-Ubuntu version doesn't seem necessary to me. The package version only
-seems relevant in case we know that some versions give problems for
-building the manual. But unless we have some more info on that, I
-would not add such info to the manual (also because it is very quickly
-out-of-date).
+> I found this:
+> https://groups.google.com/forum/#!topic/asciidoc/sPvOIQzhY2Q
+> 
+> There, they mention that asciidoc 8.6.3 fixes the issue. Could you 
+> verify that the Ubuntu 10.04 system has asciidoc < 8.6.3, while the 
+> Ubuntu 12.04 system has >= 8.6.3 ?
 
-For the problems you saw on Ubuntu 10.04, there may be a solution with
-asciidoc 8.6.3, as I just posted in your original thread. If this
-could be verified, then we could update the manual with just that.
+I've verified the version of asciidoc that I have on Ubuntu 10.04 is 8.5.2 
+and 
+Ubuntu 12.04 is 8.6.6. So that is why I get different results.
 
-Best regards,
-Thomas
+> Thanks, 
+> Thomas 
+
+Thanks,
+-Ryan
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130919/0123a510/attachment.html>
