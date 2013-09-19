@@ -1,168 +1,109 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 19 Sep 2013 15:45:30 +0200
-Subject: [Buildroot] [PATCH 1/1] iputils: new package
-In-Reply-To: <OF635D0B64.199C14BF-ON86257BEB.000D9C69-86257BEB.004AD41E@rockwellcollins.com>
-References: <1379533013-13209-1-git-send-email-mlweber1@rockwellcollins.com>
- <523A2AEE.4070606@mind.be>
- <OF635D0B64.199C14BF-ON86257BEB.000D9C69-86257BEB.004AD41E@rockwellcollins.com>
-Message-ID: <523AFFFA.7020809@mind.be>
+From: Michael Rommel <rommel@layer-7.net>
+Date: Thu, 19 Sep 2013 15:56:29 +0200
+Subject: [Buildroot] [PATCH 1/1] package: remove the trailing slash sign
+	from the URL address
+In-Reply-To: <523A2DC7.7010202@mind.be>
+References: <1379517858-28720-1-git-send-email-jerzy.grzegorek@trzebnica.net>
+ <CAAXf6LU8GCW7vwVvoBrSeTaongix761F=DT1Tbh=qJ_3m32CMw@mail.gmail.com>
+ <523A2DC7.7010202@mind.be>
+Message-ID: <5A95E57D-D33E-4AAF-9D83-8C6ECEBCD0D6@layer-7.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 19/09/13 15:37, mlweber1 at rockwellcollins.com wrote:
-> Arnout Vandecappelle <arnout@mind.be> wrote on 09/18/2013 05:36:30 PM:
->
->  > From: Arnout Vandecappelle <arnout@mind.be>
->  > To: Matt Weber <mlweber1@rockwellcollins.com>
->  > Cc: buildroot at busybox.net
->  > Date: 09/18/2013 05:36 PM
->  > Subject: Re: [Buildroot] [PATCH 1/1] iputils: new package
->  >
->  > On 18/09/13 21:36, Matt Weber wrote:
->  > > This new package adds full versions of ping/traceroute/etc.
->  > >
->  > > Built against GCC4.7 ARM, x86 uclibc IPv6 and uclibc no IPv6.
->  > >
->  > > Signed-off-by: Matt Weber <mlweber1@rockwellcollins.com>
->  > > ---
->  > >   package/Config.in          |    1 +
->  > >   package/iputils/Config.in  |    7 +++++
->  > >   package/iputils/iputils.mk |   57 ++++++++++++++++++++++++++++++
->  > ++++++++++++++
->  > >   3 files changed, 65 insertions(+), 0 deletions(-)
->  > >   create mode 100644 package/iputils/Config.in
->  > >   create mode 100644 package/iputils/iputils.mk
->  > >
->  > > diff --git a/package/Config.in b/package/Config.in
->  > > index 973d32c..14ca821 100644
->  > > --- a/package/Config.in
->  > > +++ b/package/Config.in
->  > > @@ -792,6 +792,7 @@ source "package/iproute2/Config.in"
->  > >   source "package/ipsec-tools/Config.in"
->  > >   source "package/ipset/Config.in"
->  > >   source "package/iptables/Config.in"
->  > > +source "package/iputils/Config.in"
->  > >   source "package/iw/Config.in"
->  > >   source "package/kismet/Config.in"
->  > >   source "package/knock/Config.in"
->  > > diff --git a/package/iputils/Config.in b/package/iputils/Config.in
->  > > new file mode 100644
->  > > index 0000000..92bbea9
->  > > --- /dev/null
->  > > +++ b/package/iputils/Config.in
->  > > @@ -0,0 +1,7 @@
->  > > +config BR2_PACKAGE_IPUTILS
->  > > +   bool "iputils"
->  >
->  >   You're missing a couple of select statements here.
->  >
->
-> After removing libsysfs and libcap (below) that leaves openssl.  Since
-> that's conditional, would something like this be reasonable?
-> if BR2_INET_IPV6
->          select BR2_OPENSSL
-> endif
 
-  Correct, except that it should be:
+Hi Arnout and Jerzy,
 
-	select BR2_OPENSSL if BR2_INET_IPV6
+of course, Arnout is right that the change of the URLs in the _SITE variables is not that relevant.
+My comment was more targeted to all the other URLs for the upstream projects. Which I now see,
+was not part of your original patch submission. Sorry, that I overlooked that.
 
->
->  > > +   help
->  > > +     This package is set of small useful utilities for Linux
-> networking.
->  > > +     It includes complete versions of ping, traceroute, etc.
->  > > +
->  > > + http://sourceforge.net/projects/iputils/
->  > > diff --git a/package/iputils/iputils.mk b/package/iputils/iputils.mk
->  > > new file mode 100644
->  > > index 0000000..b4576cc
->  > > --- /dev/null
->  > > +++ b/package/iputils/iputils.mk
->  > > @@ -0,0 +1,57 @@
->  > >
->  >
-> +################################################################################
->  > > +#
->  > > +# iputils
->  > > +#
->  > >
->  >
-> +################################################################################
->  > > +
->  > > +IPUTILS_VERSION = 20121011
->  > > +IPUTILS_SITE = http://www.skbuff.net/iputils/
->  > > +IPUTILS_SOURCE = iputils-s$(IPUTILS_VERSION).tar.bz2
->  >
->  >   I think the s should be considered part of the version number.
->
-> Ok
->
->  >
->  > > +IPUTILS_LICENSE = GPLv2+ BSD-3c
->  > > +# Only included a license file for BSD.
->  > > +IPUTILS_LICENSE_FILES = COPYING
->  > > +
->  > > +IPUTILS_DEPENDENCIES = libcap libsysfs openssl
->  >
->  >   openssl is only needed for ping6. cap and sysfs can be avoided with
->
-> I'll update so it's added to the dependencies only when IPv6 is enabled
->
->  > USE_CAP=no and USE_SYSFS=no.
->
-> I went back and double checked if I needed those options and I don't.
+But since I thought you overall wanted to have more consistency with all the URLs, I decided
+to quickly analyse what else we do have in our Config.ins:
 
-  Er, if you don't set USE_CAP=no then it will try to link with -lcap, so 
-if you don't have libcap in your staging dir it will fail...
+Apart from the _SITE URLs, we have:
+ - 751 packages, where another URL is used to point to the upstream project
+ - 465 of these 751 had a trailing slash at the end of the URL
 
-[snip]
->  >
->  > > +      CFLAGS+="-D_GNU_SOURCE -Wstrict-prototypes -Wall -
->  > DCAPABILITIES -DUSE_SYSFS"
->  >
->  >   How about CFLAGS="$(TARGET_CFLAGS) $$(CCOPT) $$(GLIBCFIX) $$(DEFINES)"
->  > i.e. reusing the package's make variables.
->
-> I don't believe the $$( will expand out.  I tried this quick and they end
-> up as $(CCOPT), etc on the build line with a bash command error of not
-> found.
+I then tried to analyse, whether there is a need to modify them:
+ - 726 were HTTP Urls where the server responded with:
+	535		200 OK
+	132		301 Moved Permanently
+	42		302
+	1		400
+	2		403
+	13		404
+	1		500
+- 71 of the 132 moved URLs had a trailing slash at the end of their new locations.
 
-  Ah yes forgot about bash... So it should be
+Used scripts:
+find package/ -name "Config.in" -exec egrep -i "  (ht|f)tp://.*$" {} \; >../buildroot-urls.txt
+cat buildroot-urls.txt |xargs -i ./show_response.sh {} >buildroot-checked-urls.txt
+egrep "^HTTP" buildroot-checked-urls.txt |sed -e "s/HTTP\/.\.. \(...\) .*$/\1/g" | sort | uniq -c
 
-CFLAGS="$(TARGET_CFLAGS) \$$(CCOPT) \$$(GLIBCFIX) \$$(DEFINES)"
+show_response.sh just invokes curl.
+#! /bin/bash
+ARG=$*
+echo "Original URL: " $ARG
+echo "Response: "
+curl -I $ARG 2>/dev/null |egrep "^(HTTP/|Location:)"
+echo
 
-  With that kind of complexity, I guess it's better to stick with what 
-you had... Only, that means that you'll have to add conditions for 
--DCAPABILITIES and -DUSE_SYSFS as well.
+I made the input files available at: 
 
+  http://michaelrommel.com/buildroot-urls.txt
+  http://michaelrommel.com/buildroot-checked-urls.txt
+  http://michaelrommel.com/buildroot-moved-urls.txt
 
-  Regards,
-  Arnout
+to avoid clutter on this list.
 
->  >
->  > > +
->  > > +define IPUTILS_BUILD_CMDS
->  > > +   $(MAKE) -C $(@D) $(IPUTILS_MAKE_CMDS) DESTDIR=$(STAGING_DIR) $
->  > (IPUTILS_MKTARGETS)
->  >
->  >   The Makefile doesn't use DESTDIR.
->
-> Correct, I'll update.
->
-> Thanks,
-> Matt
->
-> [snip]
-
-
+  Michael.
+ 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+Michael Rommel, Erlangen, Germany
+
+On Sep 19, 2013, at 0:48 , Arnout Vandecappelle <arnout@mind.be> wrote:
+
+> On 18/09/13 17:34, Thomas De Schampheleire wrote:
+>> Hi Jerzy,
+>> 
+>> Op 18-sep.-2013 17:25 schreef "Jerzy Grzegorek"
+>> <jerzy.grzegorek at trzebnica.net <mailto:jerzy.grzegorek@trzebnica.net>>
+>> het volgende:
+>> >
+>> > Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net
+>> <mailto:jerzy.grzegorek@trzebnica.net>>
+>> > ---
+>> 
+>> Could you clarify why this is desirable? Note that urls with our without
+>> trailing slash are not identical: the web server needs to properly
+>> support this. For example, the autobuild website does not properly do it
+>> (something very annoying ;) )
+>> 
+>> So, with a change like this, every changed url needs to be tested.
+> 
+> Well, with the trailing slash is stripped by pkg-generic.mk:
+> 
+> $(call DOWNLOAD,$($(PKG)_SITE:/=)/$($(PKG)_SOURCE))
+> 
+> So functionally it doesn't matter if the / is there or not.
+> 
+> I'm pretty much in favour of removing the /.
+> 
+> Regards,
+> Arnout
+> 
+> 
+> -- 
+> Arnout Vandecappelle                          arnout at mind be
+> Senior Embedded Software Architect            +32-16-286500
+> Essensium/Mind                                http://www.mind.be
+> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+> GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
