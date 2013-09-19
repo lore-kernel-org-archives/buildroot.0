@@ -1,55 +1,446 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Thu, 19 Sep 2013 09:23:37 +0200
-Subject: [Buildroot] [PATCH 3 of 4 RFC] manual: add section about
- depending on toolchain options
-In-Reply-To: <523A23E0.4040602@mind.be>
-References: <patchbomb.1379494893@argentina>
- <89b40887c8268e316399.1379494896@argentina>
- <523A23E0.4040602@mind.be>
-Message-ID: <CAAXf6LXtiSyVejwF_ZyW3qjzy8CS_n+0Xgj84MGFa-6kk+MggA@mail.gmail.com>
+From: Thierry Bultel <thierry.bultel@wanadoo.fr>
+Date: Thu, 19 Sep 2013 12:03:38 +0200
+Subject: [Buildroot] [PATCH] Add pyside + shiboken packages
+Message-ID: <523ACBFA.2070401@wanadoo.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout, all,
+Signed-off-by: Thierry Bultel <thierry.bultel@wanadoo.fr>
+---
+Adds support for pyside, pyside-tools and shiboken
+Shiboken is also built for the host, else the target version
+would need a configured qemu + binfmt_misc to run
+the generator.
+---
+diff --git a/package/Config.in b/package/Config.in
+index 779e9da..c1927dc 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -399,6 +399,9 @@ source "package/python-pyro/Config.in"
+  source "package/python-pyzmq/Config.in"
+  source "package/python-serial/Config.in"
+  source "package/python-setuptools/Config.in"
++source "package/shiboken/Config.in"
++source "package/pyside/Config.in"
++source "package/pyside-tools/Config.in"
+  source "package/python-thrift/Config.in"
+  endmenu
+  endif
+diff --git a/package/pyside-tools/Config.in 
+b/package/pyside-tools/Config.in
+new file mode 100644
+index 0000000..2e5d8d2
+--- /dev/null
++++ b/package/pyside-tools/Config.in
+@@ -0,0 +1,5 @@
++config BR2_PACKAGE_PYSIDE_TOOLS
++        bool "pyside-tools"
++    depends on BR2_PACKAGE_PYSIDE
++        help
++          PySide tools
+diff --git a/package/pyside-tools/pyside-tools.mk 
+b/package/pyside-tools/pyside-tools.mk
+new file mode 100644
+index 0000000..0b696dc
+--- /dev/null
++++ b/package/pyside-tools/pyside-tools.mk
+@@ -0,0 +1,62 @@
++############################
++#
++#    pyside-tools
++#
++#############################
++
++PYSIDE_TOOLS_VERSION=0.2.15
++PYSIDE_TOOLS_SITE=https://github.com/PySide/Tools/archive/
++PYSIDE_TOOLS_SOURCE=$(PYSIDE_TOOLS_VERSION).tar.gz
++PYSIDE_TOOLS_INSTALL_STAGING=YES
++PYSIDE_TOOLS_DEPENDENCIES=pyside
++
++PYSIDESANDBOXPATH=$(STAGING_DIR)
++
++PYSIDE_TOOLS_CONF_OPT+=-DCMAKE_INSTALL_PREFIX=$(PYSIDESANDBOXPATH)
++PYSIDE_TOOLS_CONF_OPT+=-DENABLE_ICECC=0
++
++PYSIDE_TOOLS_CONF_ENV+=PYTHONPATH=$(PYSIDESANDBOXPATH)/lib/python2.6/site-packages:$$PYTHONPATH 
 
-On Thu, Sep 19, 2013 at 12:06 AM, Arnout Vandecappelle <arnout@mind.be> wrote:
-[..]
->
->  For the 'dynamic library' option, I don't think it's that important to add
-> a comment for it. It's so exotic, and you probably select only very few
-> packages in that case anyway, so the likelihood of someone encountering that
-> situation is pretty slim.
->
++PYSIDE_TOOLS_CONF_ENV+=LD_LIBRARY_PATH=$(PYSIDESANDBOXPATH)/lib:$$LD_LIBRARY_PATH 
 
-Well, I think this depends on the semantics of PREFER_STATIC_LIB or
-the way we will handle the dynamic library option(s) in the future. If
-there is really an option that says 'I want static libs', then I think
-it makes sense to add a comment, because it's a user choice. If the
-linking is only based on the architecture supporting it or not, and
-the user will get dynamic libs when supported, then a comment is not
-needed.
++PYSIDE_TOOLS_CONF_ENV+=PKG_CONFIG_PATH=$(PYSIDESANDBOXPATH)/lib/pkgconfig:$$PKG_CONFIG_PATH 
 
-Based on the discussion so far, I don't think we should try to fix the
-situation in the context of this patchset, but rather in a separate
-one. I would therefore propose, for this patchset, to keep the current
-situation and the documentation as proposed in the patch. Later, any
-needed changes can be made when the dynamic library handling is
-cleared out. In the mean time, I will not add new comments for
-packages that depend on !STATIC but do not yet have a comment, as this
-may be wasted effort.
++
++#PYSIDE_MAKE_ENV+=VERBOSE=1
++
++PYSIDE_TOOLS_CMAKE_INSTALL_CMAKE=            \
++cmake_install.cmake                    \
++tests/cmake_install.cmake                \
++tests/rcc/cmake_install.cmake                \
++pyrcc/cmake_install.cmake                \
++pylupdate/cmake_install.cmake
++
++define PYSIDE_TOOLS_CONFIGURE_CMDS
++    (                                        \
++    cd $(@D) &&                                     \
++    mkdir -p build && cd build &&             \
++    rm -f CMakeCache.txt &&                             \
++    $(PYSIDE_TOOLS_CONF_ENV) $(HOST_DIR)/usr/bin/cmake .. \
++ 
+-DCMAKE_TOOLCHAIN_FILE="$(HOST_DIR)/usr/share/buildroot/toolchainfile.cmake" 
+     \
++    -DCMAKE_INSTALL_PREFIX="/usr"                             \
++    $(PYSIDE_TOOLS_CONF_OPT)                             \
++    )
++endef
++
++define PYSIDE_TOOLS_BUILD_CMDS
++    $(TARGET_MAKE_ENV) $(PYSIDE_TOOLS_MAKE_ENV) $(MAKE) 
+$(PYSIDE_TOOLS_MAKE_OPT) -C $(@D)/build
++endef
++
++
++define PYSIDE_TOOLS_INSTALL_STAGING_CMDS
++    (                                                \
++    cd  $(@D)/build &&     \
++    for ins in $(PYSIDE_TOOLS_CMAKE_INSTALL_CMAKE); do             \
++       cat $$ins | sed -e 's|sysroot|sysroot/usr|g' > $${ins}2 ;        
+             \
++    done;                                                \
++    sed -i -e 's/cmake_install.cmake/cmake_install.cmake2/g' 
+cmake_install.cmake2;            \
++    sed -i -e 's/cmake_install.cmake/cmake_install.cmake2/g' 
+tests/cmake_install.cmake2;        \
++    $(HOST_DIR)/usr/bin/cmake -DCMAKE_INSTALL_PREFIX=$(STAGING_DIR)/usr 
+-P cmake_install.cmake2;    \
++    echo "pyside-tools staging install OK";         \
++    )
++endef
++
++$(eval $(generic-package))
++$(eval $(host-generic-package))
+diff --git a/package/pyside/Config.in b/package/pyside/Config.in
+new file mode 100644
+index 0000000..61618b7
+--- /dev/null
++++ b/package/pyside/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_PYSIDE
++        bool "pyside"
++    select BR2_PACKAGE_SHIBOKEN
++    depends on BR2_PACKAGE_QT
++        help
++          PySide
+diff --git a/package/pyside/pyside.mk b/package/pyside/pyside.mk
+new file mode 100644
+index 0000000..70c26b6
+--- /dev/null
++++ b/package/pyside/pyside.mk
+@@ -0,0 +1,121 @@
++############################
++#
++#    Pyside
++#
++#############################
++
++PYSIDE_VERSION=1.2.1
++PYSIDE_SITE=https://distfiles.macports.org/py-pyside
++PYSIDE_SOURCE=pyside-qt4.8+$(PYSIDE_VERSION).tar.bz2
++PYSIDE_INSTALL_STAGING=YES
++PYSIDE_DEPENDENCIES=python qt shiboken host-cmake
++
++PYSIDESANDBOXPATH=$(STAGING_DIR)
++
++PYSIDE_CONF_OPT+=-DCMAKE_INSTALL_PREFIX=$(PYSIDESANDBOXPATH)
++PYSIDE_CONF_OPT+=-DENABLE_ICECC=0
++
++PYSIDE_CONF_ENV+=PYTHONPATH=$(PYSIDESANDBOXPATH)/lib/python2.6/site-packages:$$PYTHONPATH 
 
-What do you think?
++PYSIDE_CONF_ENV+=LD_LIBRARY_PATH=$(PYSIDESANDBOXPATH)/lib:$$LD_LIBRARY_PATH 
 
-[..]
->
->
->  There is no scrolling in menuconfig, so just put "so that it will fit on a
-> 80-character terminal".
++PYSIDE_CONF_ENV+=PKG_CONFIG_PATH=$(PYSIDESANDBOXPATH)/lib/pkgconfig:$$PKG_CONFIG_PATH 
 
-Ok, thanks, will fix.
++
++# Uncomment next line to attempt to understand something in what CMake 
+does
++#PYSIDE_MAKE_ENV+=VERBOSE=1
++
++define PYSIDE_CONFIGURE_CMDS
++    (                                        \
++    cd $(@D) &&                                     \
++    mkdir -p build && cd build &&             \
++    rm -f CMakeCache.txt &&                             \
++    $(PYSIDE_CONF_ENV) $(HOST_DIR)/usr/bin/cmake .. \
++ 
+-DCMAKE_TOOLCHAIN_FILE="$(HOST_DIR)/usr/share/buildroot/toolchainfile.cmake" 
+     \
++    -DCMAKE_INSTALL_PREFIX="/usr"                             \
++    $(PYSIDE_CONF_OPT)                                 \
++    )
++endef
++
++
++define PYSIDE_BUILD_CMDS
++    $(TARGET_MAKE_ENV) $(PYSIDE_MAKE_ENV) $(MAKE) $(PYSIDE_MAKE_OPT) -C 
+$(@D)/build
++endef
++
++PYSIDE_CMAKE_INSTALL_CMAKE=        \
++libpyside/cmake_install.cmake         \
++PySide/cmake_install.cmake        \
++PySide/QtTest/cmake_install.cmake    \
++PySide/QtCore/cmake_install.cmake    \
++tests/cmake_install.cmake        \
++tests/QtTest/cmake_install.cmake    \
++tests/QtCore/cmake_install.cmake    \
++tests/pysidetest/cmake_install.cmake    \
++tests/signals/cmake_install.cmake
++
++ifneq ($(BR2_PACKAGE_QT_GUI_MODULE),)
++PYSIDE_CMAKE_INSTALL_CMAKE+=PySide/QtGui/cmake_install.cmake
++PYSIDE_CMAKE_INSTALL_CMAKE+=tests/QtGui/cmake_install.cmake
++endif
++
++ifneq ($(BR2_PACKAGE_QT_NETWORK),)
++PYSIDE_CMAKE_INSTALL_CMAKE+=PySide/QtNetwork/cmake_install.cmake
++PYSIDE_CMAKE_INSTALL_CMAKE+=tests/QtNetwork/cmake_install.cmake
++endif
++
++ifneq ($(BR2_PACKAGE_QT_OPENGL_ES),)
++PYSIDE_CMAKE_INSTALL_CMAKE+=PySide/QtOpenGL/cmake_install.cmake
++PYSIDE_CMAKE_INSTALL_CMAKE+=tests/QtOpenGL/cmake_install.cmake
++endif
++
++ifneq ($(BR2_PACKAGE_QT_SQL_MODULE),)
++PYSIDE_CMAKE_INSTALL_CMAKE+=PySide/QtSql/cmake_install.cmake
++PYSIDE_CMAKE_INSTALL_CMAKE+=tests/QtSql/cmake_install.cmake
++endif
++
++ifneq ($(BR2_PACKAGE_QT_SVG),)
++PYSIDE_CMAKE_INSTALL_CMAKE+=PySide/QtSvg/cmake_install.cmake
++PYSIDE_CMAKE_INSTALL_CMAKE+=tests/QtSvg/cmake_install.cmake
++endif
++
++ifneq ($(BR2_PACKAGE_QT_XML),)
++PYSIDE_CMAKE_INSTALL_CMAKE+=PySide/QtXml/cmake_install.cmake
++PYSIDE_CMAKE_INSTALL_CMAKE+=tests/QtXml/cmake_install.cmake
++endif
++
++ifneq ($(BR2_PACKAGE_QT_SCRIPT),)
++PYSIDE_CMAKE_INSTALL_CMAKE+=PySide/QtScript/cmake_install.cmake
++PYSIDE_CMAKE_INSTALL_CMAKE+=tests/QtScript/cmake_install.cmake
++endif
++
++
++define PYSIDE_INSTALL_TARGET_CMDS
++    (                                                    \
++    cd  $(@D)/build &&         \
++    for ins in $(PYSIDE_CMAKE_INSTALL_CMAKE); do \
++       cat $$ins | sed -e 's|$(STAGING_DIR)|$(TARGET_DIR)/usr|g' > 
+$${ins}2 ;                \
++    done;                                                    \
++    cat cmake_install.cmake | sed -e 
+'s/cmake_install.cmake/cmake_install.cmake2/g' > cmake_install.cmake2;    \
++    sed -i -e 's/cmake_install.cmake/cmake_install.cmake2/g' 
+PySide/cmake_install.cmake2;            \
++    sed -i -e 's/cmake_install.cmake/cmake_install.cmake2/g' 
+tests/cmake_install.cmake2;            \
++    $(HOST_DIR)/usr/bin/cmake -DCMAKE_INSTALL_PREFIX=$(TARGET_DIR)/usr 
+-P cmake_install.cmake2;     \
++    echo "PySide target OK"; \
++    rm -rf $(TARGET_DIR)/include/PySide;         \
++    )
++endef
++
++
++define PYSIDE_INSTALL_STAGING_CMDS
++    (                                                    \
++    cd  $(@D)/build &&         \
++    echo "Replace $(STAGING_DIR) by $(STAGING_DIR)/usr";                 \
++    for ins in $(PYSIDE_CMAKE_INSTALL_CMAKE); do \
++       cat $$ins | sed -e 's|sysroot/lib|sysroot/usr/lib|g' > $${ins}2 
+;                    \
++    done;                                                    \
++    sed -i -e 's|sysroot/lib|sysroot/usr/lib|g' 
+libpyside/PySideConfig.cmake;                \
++    cat cmake_install.cmake | sed -e 
+'s/cmake_install.cmake/cmake_install.cmake2/g' > cmake_install.cmake2;    \
++    sed -i -e 's/cmake_install.cmake/cmake_install.cmake2/g' 
+PySide/cmake_install.cmake2;            \
++    sed -i -e 's/cmake_install.cmake/cmake_install.cmake2/g' 
+tests/cmake_install.cmake2;            \
++    $(HOST_DIR)/usr/bin/cmake -DCMAKE_INSTALL_PREFIX=$(STAGING_DIR)/usr 
+-P cmake_install.cmake2;        \
++    echo "PySide staging install OK";         \
++    )
++endef
++
++$(eval $(generic-package))
+diff --git a/package/python/Config.in b/package/python/Config.in
+index cfe73db..bebe36b 100644
+--- a/package/python/Config.in
++++ b/package/python/Config.in
+@@ -22,9 +22,11 @@ choice
 
-Best regards,
-Thomas
+  config BR2_PACKAGE_PYTHON_PY_ONLY
+      bool ".py sources only"
++    depends on !BR2_PACKAGE_PYSIDE
+
+  config BR2_PACKAGE_PYTHON_PYC_ONLY
+      bool ".pyc compiled sources only"
++    depends on !BR2_PACKAGE_PYSIDE
+
+  config BR2_PACKAGE_PYTHON_PY_PYC
+      bool ".py sources and .pyc compiled"
+diff --git a/package/shiboken/Config.in b/package/shiboken/Config.in
+new file mode 100644
+index 0000000..f13eb7c
+--- /dev/null
++++ b/package/shiboken/Config.in
+@@ -0,0 +1,5 @@
++config BR2_PACKAGE_SHIBOKEN
++        bool "shiboken"
++    select BR2_PACKAGE_QT_STL
++        help
++          Shiboken for PySide
+diff --git a/package/shiboken/shiboken.mk b/package/shiboken/shiboken.mk
+new file mode 100644
+index 0000000..cfb87bb
+--- /dev/null
++++ b/package/shiboken/shiboken.mk
+@@ -0,0 +1,115 @@
++############################
++#
++#    Shiboken
++#
++#############################
++
++SHIBOKEN_VERSION=1.2.1
++SHIBOKEN_SITE=https://distfiles.macports.org/py-shiboken
++SHIBOKEN_SOURCE=shiboken-$(SHIBOKEN_VERSION).tar.bz2
++SHIBOKEN_INSTALL_STAGING=YES
++SHIBOKEN_DEPENDENCIES=python qt host-cmake host-shiboken
++HOST_SHIBOKEN_DEPENDENCIES=
++
++PYSIDESANDBOXPATH=$(STAGING_DIR)
++
++SHIBOKEN_CONF_OPT+=-DCMAKE_INSTALL_PREFIX=$(PYSIDESANDBOXPATH)
++SHIBOKEN_CONF_OPT+=-DENABLE_ICECC=0
++
++SHIBOKEN_CONF_ENV+=PYTHONPATH=$(PYSIDESANDBOXPATH)/lib/python2.6/site-packages:$$PYTHONPATH 
+
++SHIBOKEN_CONF_ENV+=LD_LIBRARY_PATH=$(PYSIDESANDBOXPATH)/lib:$$LD_LIBRARY_PATH 
+
++SHIBOKEN_CONF_ENV+=PKG_CONFIG_PATH=$(PYSIDESANDBOXPATH)/lib/pkgconfig:$$PKG_CONFIG_PATH 
+
++
++#SHIBOKEN_MAKE_ENV+=VERBOSE=1
++
++# HOST
++
++define HOST_SHIBOKEN_CONFIGURE_CMDS
++    (                                        \
++    cd $(@D) &&                                     \
++    mkdir -p build && cd build &&             \
++     $(HOST_DIR)/usr/bin/cmake ..                            \
++    -DCMAKE_INSTALL_PREFIX="$(HOST_DIR)/usr"                    \
++    )
++endef
++
++define HOST_SHIBOKEN_BUILD_CMDS
++    $(HOST_MAKE_ENV) $(MAKE) -C $(@D)/build
++endef
++
++define HOST_SHIBOKEN_INSTALL_CMDS
++    $(HOST_MAKE_ENV) $(MAKE) -C $(@D)/build install
++    rm -rf $(HOST_DIR)/usr/lib/cmake/Shiboken*
++endef
++
++# TARGET
++SHIBOKEN_TESTS_CMAKE=                \
++$(@D)/tests/samplebinding/CMakeLists.txt    \
++$(@D)/tests/otherbinding/CMakeLists.txt        \
++$(@D)/tests/minimalbinding/CMakeLists.txt
++
++define SHIBOKEN_PRE_CONFIGURE_GENERATOR_PATH
++    sed -i  -e 
+'s|$${shibokengenerator_BINARY_DIR}/shiboken|$(HOST_DIR)/usr/bin/shiboken|g' 
+     \
++        -e 's/Running generator/Running HOST generator/g' 
+$(@D)/shibokenmodule/CMakeLists.txt
++    for cmakelist in $(SHIBOKEN_TESTS_CMAKE) ; do             \
++        sed -i -e 's|COMMAND shiboken|COMMAND 
+$(HOST_DIR)/usr/bin/shiboken|g'            \
++            -e 's/Running generator/Running HOST generator/g' 
+$$cmakelist;            \
++    done;
++endef
++
++SHIBOKEN_PRE_CONFIGURE_HOOKS+=SHIBOKEN_PRE_CONFIGURE_GENERATOR_PATH
++
++define SHIBOKEN_CONFIGURE_CMDS
++    echo "HERE ! SHIBOKEN_CONFIGURE_CMDS"
++    (                                        \
++    cd $(@D) &&                                     \
++    mkdir -p build && cd build &&             \
++    rm -f CMakeCache.txt &&                             \
++    $(SHIBOKEN_CONF_ENV) $(HOST_DIR)/usr/bin/cmake ..     \
++ 
+-DCMAKE_TOOLCHAIN_FILE="$(HOST_DIR)/usr/share/buildroot/toolchainfile.cmake" 
+     \
++    -DCMAKE_INSTALL_PREFIX="/usr"                             \
++    $(SHIBOKEN_CONF_OPT)                                 \
++    )
++endef
++
++define SHIBOKEN_BUILD_CMDS
++    $(TARGET_MAKE_ENV) $(SHIBOKEN_MAKE_ENV) $(MAKE) 
+$(SHIBOKEN_MAKE_OPT) -C $(@D)/build
++endef
++
++SHIBOKEN_CMAKE_INSTALL_CMAKE=                \
++data/cmake_install.cmake                \
++doc/cmake_install.cmake                    \
++generator/cmake_install.cmake                \
++libshiboken/cmake_install.cmake                \
++shibokenmodule/cmake_install.cmake             \
++ApiExtractor/cmake_install.cmake            \
++tests/cmake_install.cmake                \
++
++
++SHIBOKEN_CMAKE_CONF=$(STAGING_DIR)/lib/cmake/Shiboken-1.2.1/ShibokenConfig-python2.7.cmake 
+
++
++define SHIBOKEN_INSTALL_TARGET_CMDS
++    (                                                        \
++    cd  $(@D)/build &&             \
++    for ins in $(SHIBOKEN_CMAKE_INSTALL_CMAKE); do                     \
++       cat $$ins | sed -e 's|$(STAGING_DIR)|$(TARGET_DIR)/usr|g' > 
+$${ins}2 ;                    \
++    done; \
++    cat cmake_install.cmake | sed -e 
+'s/cmake_install.cmake/cmake_install.cmake2/g' > cmake_install.cmake2 
+;    \
++    $(HOST_DIR)/usr/bin/cmake -DCMAKE_INSTALL_PREFIX=$(TARGET_DIR)/usr 
+-P cmake_install.cmake2;         \
++    )
++    sed -i -e '/SHIBOKEN_BINARY/d' 
+$(STAGING_DIR)/lib/cmake/Shiboken-1.2.1/ShibokenConfig-python2.7.cmake
++    echo 'set(SHIBOKEN_BINARY "$(HOST_DIR)/usr/bin/shiboken")' >> 
+$(STAGING_DIR)/lib/cmake/Shiboken-1.2.1/ShibokenConfig-python2.7.cmake
++    rm -rf $(TARGET_DIR)/include/shiboken
++    rm -rf $(TARGET_DIR)/usr/bin/shiboken
++    rm -rf $(TARGET_DIR)/usr/lib/cmake/Shiboken*
++    rm -rf $(TARGET_DIR)//usr/lib/pkgconfig/shiboken.pc
++    echo "shiboken target OK";
++endef
++
++
++define SHIBOKEN_INSTALL_STAGING_CMDS
++    $(TARGET_MAKE_ENV) $(SHIBOKEN_MAKE_ENV) $(MAKE) 
+$(SHIBOKEN_MAKE_OPT) -C $(@D)/build install
++endef
++
++$(eval $(generic-package))
++$(eval $(host-generic-package))
