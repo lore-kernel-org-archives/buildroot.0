@@ -1,17 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 19 Sep 2013 06:10:52 +0200
-Subject: [Buildroot] [PATCH 3 of 4 RFC] manual: add section about
- depending on toolchain options
-In-Reply-To: <523A21D5.6040005@mind.be>
-References: <patchbomb.1379494893@argentina>
- <89b40887c8268e316399.1379494896@argentina>
- <CAAXf6LXD_7jt42XAG_XgKWKi_+te40hgYNd4mTLbmCDMxfG0QA@mail.gmail.com>
- <20130918183414.45e6a247@skate>
- <CAAXf6LWmH2xtBe_P-P+1HJhndDM1BhHZcgJzu9o7JrfwjtwWVg@mail.gmail.com>
- <20130918194042.302e9afe@skate> <5239E6E5.4000401@zacarias.com.ar>
- <20130918195925.1884c0a7@skate> <5239EB63.2090203@zacarias.com.ar>
- <20130918201812.3e08d883@skate> <523A21D5.6040005@mind.be>
-Message-ID: <20130919061052.3679c035@skate>
+Date: Thu, 19 Sep 2013 06:12:33 +0200
+Subject: [Buildroot] [PATCH] qt5base: fix build when egl headers need a
+ definition
+In-Reply-To: <523A1AE3.9090802@mind.be>
+References: <1379503071-5446-1-git-send-email-fatih.asici@gmail.com>
+ <20130918185539.00adb05c@skate> <523A1AE3.9090802@mind.be>
+Message-ID: <20130919061233.35eb34e3@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -20,28 +14,25 @@ To: buildroot@busybox.net
 
 Dear Arnout Vandecappelle,
 
-On Wed, 18 Sep 2013 23:57:41 +0200, Arnout Vandecappelle wrote:
+On Wed, 18 Sep 2013 23:28:03 +0200, Arnout Vandecappelle wrote:
 
-> > Yes, we probably want to have the choice between building static only,
-> > static + shared, or shared only, default to shared only. Currently,
-> > when !BR2_PREFER_STATIC_LIB, we build both the shared and static
-> > variants, which takes time because it requires building everything
-> > twice, once with -fPIC, once without.
+> >> >+++ b/package/qt5/qt5base/qt5base-egl-cflags.patch
+> > All patches should have a description, and a Signed-off-by line. See
+> > http://buildroot.org/downloads/manual/manual.html#_format_and_licensing_of_the_package_patches.
 > 
->   I don't think the static + shared option really makes sense, does it? 
-> The only use case I can think of is when you want a proprietary 
-> executable to link statically in order to speed up start time.
+>   Also, please give your patch a number so that the order in which 
+> they're applied is predictable. At the moment this probably doesn't 
+> matter much, but it makes it easier later on to make sure a new patch 
+> will be applied after this one.
 
-Well, there might be cases were you would want to link some of your
-applications statically, against some libraries, but not some others.
+Yeah, I also wanted to ask that, but there are existing patches for
+qt5base that doesn't comply with this, so I felt that it was maybe not
+appropriate to ask a contributor to fix our (my ?) mess :-)
 
-I've had such a case with a customer project using Buildroot: they have
-limited flash space (16 MB, if I recall), in which they were trying to
-put many many things. Some shared libraries were used by only one
-executable, so linking them statically actually reduced the overall
-storage consumption.
+But indeed, Fatih, as a preparation patch, you could add number to the
+existing patches, and then add your own.
 
-But I agree it shouldn't be the default.
+Best regards,
 
 Thomas
 -- 
