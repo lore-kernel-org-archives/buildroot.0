@@ -1,38 +1,30 @@
-From: Thierry Bultel <thierry.bultel@wanadoo.fr>
-Date: Thu, 19 Sep 2013 08:09:12 +0200
-Subject: [Buildroot] Broken generation of locales
-Message-ID: <523A9508.7040403@wanadoo.fr>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Thu, 19 Sep 2013 08:31:38 +0200
+Subject: [Buildroot] [PATCH 1/2] luaposix: fix runtime dependency
+Message-ID: <1379572299-8191-1-git-send-email-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
 
-When setting BR2_GENERATE_LOCALE, for instance like that:
-BR2_GENERATE_LOCALE="fr_FR en_US es_ES es_ES.ISO-8859-1 hu_HU"
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+---
+ package/luaposix/Config.in |    2 ++
+ 1 file changed, 2 insertions(+)
 
-nothing is generated.
-
-next patch fixes that issue:
-
-diff --git a/Makefile b/Makefile
-index 7997e3b..98afd7e 100644
---- a/Makefile
-+++ b/Makefile
-@@ -543,8 +543,8 @@ ifneq ($(GENERATE_LOCALE),)
-  target-generatelocales: host-localedef
-         $(Q)mkdir -p $(TARGET_DIR)/usr/lib/locale/
-         $(Q)for locale in $(GENERATE_LOCALE) ; do \
--               inputfile=`echo $${locale} | cut -f1 -d'.' -s` ; \
--               charmap=`echo $${locale} | cut -f2 -d'.' -s` ; \
-+               inputfile=`echo $${locale} | cut -f1 -d'.'` ; \
-+               charmap=`echo $${locale} | cut -s -f2 -d'.'` ; \
-                 if test -z "$${charmap}" ; then \
-                         charmap="UTF-8" ; \
-                 fi ; \
-
-
-Cheers
-Thierry
+diff --git a/package/luaposix/Config.in b/package/luaposix/Config.in
+index 412e07f..598bf11 100644
+--- a/package/luaposix/Config.in
++++ b/package/luaposix/Config.in
+@@ -1,5 +1,7 @@
+ config BR2_PACKAGE_LUAPOSIX
+ 	bool "luaposix"
++	select BR2_PACKAGE_LUABITOP if BR2_PACKAGE_LUA
++	# LuaBitOp is already included in LuaJIT
+ 	help
+ 	  luaposix is a POSIX binding, including curses, for Lua 5.1
+ 	  and 5.2; Like most libraries it simply binds to C APIs on
+-- 
+1.7.9.5
