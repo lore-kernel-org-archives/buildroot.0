@@ -1,50 +1,77 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 19 Sep 2013 20:57:18 +0200
-Subject: [Buildroot] [PATCH 3 of 4] manual generation: check
- dependencies first
-In-Reply-To: <CAAXf6LWpjXetyUo4QHbc3FFi4qP2qmeSsJbuwwP9+3_vnuabyQ@mail.gmail.com>
-References: <patchbomb.1379587632@argentina>
- <246bed054da59d6508dc.1379587635@argentina>
- <CAHXCMMJ2oSqF_MoyDJYjxCKKZukwg6vr2ewP+TUFy9kaDrwcoA@mail.gmail.com>
- <CAAXf6LW=7dUUEjGHp6xVFy9-SEXVuUyiK8Lvom2imyCX=s+3oQ@mail.gmail.com>
- <20130919173926.0bf04d9a@skate>
- <CAAXf6LWpjXetyUo4QHbc3FFi4qP2qmeSsJbuwwP9+3_vnuabyQ@mail.gmail.com>
-Message-ID: <20130919205718.45d3c7cc@skate>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 19 Sep 2013 21:02:17 +0200
+Subject: [Buildroot] [PATCH v2] iputils: new package
+In-Reply-To: <1379603872-25903-1-git-send-email-mlweber1@rockwellcollins.com>
+ (Matt Weber's message of "Thu, 19 Sep 2013 10:17:52 -0500")
+References: <1379603872-25903-1-git-send-email-mlweber1@rockwellcollins.com>
+Message-ID: <87six0fxdy.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas De Schampheleire,
+>>>>> "Matt" == Matt Weber <mlweber1@rockwellcollins.com> writes:
 
-On Thu, 19 Sep 2013 18:27:34 +0200, Thomas De Schampheleire wrote:
+ Matt> Signed-off-by: Matt Weber <mlweber1@rockwellcollins.com>
+ Matt> ---
+ Matt> Changes v1 -> v2:
+ Matt>   * Updated depends in Config.in and added comment
+ Matt>     (Suggested by Thomas/Arnout)
+ Matt>   * Adjusted version to include "s" as part of version
+ Matt>     (Suggested by Arnout)
+ Matt>   * Removed dependency on file capabilities (libcap)
+ Matt>     and sysfs.  Commented that file capabilities is disabled
+ Matt>   * Cleaned up CFLAGS to have minimal complexity
+ Matt>     (Suggested by Arnout)
 
-> I was thinking it could become a separate build target. But at that
-> time I didn't fully realize (and didn't check) that these lists are
-> actually included in the manual. So, that question is void now.
+ Matt>  package/Config.in          |    1 +
+ Matt>  package/iputils/Config.in  |    8 ++++++
+ Matt>  package/iputils/iputils.mk |   53 ++++++++++++++++++++++++++++++++++++++++++++
+ Matt>  3 files changed, 62 insertions(+), 0 deletions(-)
+ Matt>  create mode 100644 package/iputils/Config.in
+ Matt>  create mode 100644 package/iputils/iputils.mk
 
-No problem :)
+ Matt> diff --git a/package/iputils/Config.in b/package/iputils/Config.in
+ Matt> new file mode 100644
+ Matt> index 0000000..0c77b5f
+ Matt> --- /dev/null
+ Matt> +++ b/package/iputils/Config.in
+ Matt> @@ -0,0 +1,9 @@
+ Matt> +config BR2_PACKAGE_IPUTILS
+ Matt> +	bool "iputils"
+ Matt> +	select BR2_OPENSSL if BR2_INET_IPV6
+ Matt> +	help
+ Matt> +	  This package is set of small useful utilities for Linux networking.
+ Matt> +	  It includes complete versions of ping, traceroute, etc.
+ Matt> +
+ Matt> +	  http://sourceforge.net/projects/iputils/
 
-> Remains: how should we check for python argparse? Module argparse is
-> included from python-2.7 and python-3.2 onwards. It seems that Ubuntu
-> has been providing python-argparse for older python versions as well,
-> but IMO it is not needed to check for this explicitly. If you ask me,
-> I would simply check for python 2.7+ and 3.2+, but I'm open for
-> discussion.
+Something apparently corrupted the patch on the way, as you only have 8
+lines here. Did you edit the patch by hand afterwards?
 
-if ! python -c "import argparse" >/dev/null 2>&1 ; then
-	echo "No Python, or argparse not available"
-	exit 1
-fi
+ Matt> diff --git a/package/iputils/iputils.mk b/package/iputils/iputils.mk
+ Matt> new file mode 100644
+ Matt> index 0000000..5836430
+ Matt> --- /dev/null
+ Matt> +++ b/package/iputils/iputils.mk
+ Matt> @@ -0,0 +1,53 @@
+ Matt> +################################################################################
+ Matt> +#
+ Matt> +# iputils
+ Matt> +#
+ Matt> +################################################################################
+ Matt> +
+ Matt> +IPUTILS_VERSION = s20121011
+ Matt> +IPUTILS_SITE = http://www.skbuff.net/iputils/
+ Matt> +IPUTILS_SOURCE = iputils-$(IPUTILS_VERSION).tar.bz2
+ Matt> +IPUTILS_LICENSE = GPLv2+ BSD-3c
+ Matt> +# Only included a license file for BSD.
+ Matt> +IPUTILS_LICENSE_FILES = COPYING
 
-something like that, no? It would cover both cases were argparse is
-part of the default Python installation and the cases were argparse was
-installed separately.
+There's no COPYING. I assume you meant ninfod/COPYING?
 
-Thomas
+Committed with this fixed, thanks.
+
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Bye, Peter Korsgaard
