@@ -1,39 +1,59 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 19 Sep 2013 20:38:12 +0200
-Subject: [Buildroot] [PATCH] tslib: bump version to 1.1
-In-Reply-To: <1379574777-9399-1-git-send-email-yegorslists@googlemail.com>
- (yegorslists@googlemail.com's message of "Thu, 19 Sep 2013 09:12:57
- +0200")
-References: <1379574777-9399-1-git-send-email-yegorslists@googlemail.com>
-Message-ID: <87wqmcfyi3.fsf@dell.be.48ers.dk>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 19 Sep 2013 19:41:45 +0200
+Subject: [Buildroot] [PATCH 1/5] qt5: bump to 5.1.1
+In-Reply-To: <1379568660.27759.4.camel@viko>
+References: <201309182118.23091.fatih.asici@gmail.com>
+ <20130919062450.10f51848@skate> <1379568660.27759.4.camel@viko>
+Message-ID: <523B3759.1000901@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "yegorslists" == yegorslists  <yegorslists@googlemail.com> writes:
+On 19/09/13 07:31, Fatih A??c? wrote:
+> On Thu, 2013-09-19 at 06:24 +0200, Thomas Petazzoni wrote:
+>>>>> -@@ -0,0 +1,43 @@
+>>>>> +@@ -0,0 +1,44 @@
+>>>>>
+>>>>>   +MAKEFILE_GENERATOR      = UNIX
+>>>>>
+>>>>> -+CONFIG                  += incremental gdb_dwarf_index
+>>>>> ++CONFIG                 += incremental gdb_dwarf_index
+>>>>
+>>>> Is this change needed? Seems like white space change only, no?
+>>>
+>>> I checked the mkspec files in old and new versions of upstream.
+>> Upstream's
+>>> files have this change. So I changed our mkspec file to reduce diff
+>> output.
+>>> I think, this will help checking again in new versions. Yes, it is
+>> only
+>>> a white space change and not needed.
+>>
+>> It's a bit early, so maybe my brain is not yet up and running, but if
+>> the upstream has changed this, and we don't care about whether there's
+>> a space or not, why does our patch contains something to change this?
+>
+> It is just a cosmetic change not to see the difference when comparing
+> files :)
+>
+> If the rule is not to touch anywhere unrelated to the version change, I
+> can revert that part.
 
- yegorslists> From: Yegor Yefremov <yegorslists@googlemail.com>
- yegorslists> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
- yegorslists> ---
- yegorslists>  package/tslib/tslib.mk |    2 +-
- yegorslists>  1 files changed, 1 insertions(+), 1 deletions(-)
+  I think it's a good idea to keep it. The closer that our mkspecs stays 
+to one of the upstream examples, the better.
 
- yegorslists> diff --git a/package/tslib/tslib.mk b/package/tslib/tslib.mk
- yegorslists> index 7f5aa21..ebc33b2 100644
- yegorslists> --- a/package/tslib/tslib.mk
- yegorslists> +++ b/package/tslib/tslib.mk
- yegorslists> @@ -4,7 +4,7 @@
- yegorslists>  #
- yegorslists>  ################################################################################
- 
- yegorslists> -TSLIB_VERSION = 158ee49b32f83cb7b02d5315f41c2e4cff38942d
- yegorslists> +TSLIB_VERSION = e2e03ef7192a7e0a84f725522be17a61b21b41c5
+  Perhaps we could try upstreaming our mkspecs? Does that make sense?
 
-It makes more sense to use the 1.1 tag.
+  Regards,
+  Arnout
 
-Committed with that fixed, thanks.
 
 -- 
-Bye, Peter Korsgaard
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
