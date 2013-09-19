@@ -1,73 +1,93 @@
-From: soochon radee <sradee@gmail.com>
-Date: Thu, 19 Sep 2013 13:02:33 -0400
-Subject: [Buildroot] Two or three stages gcc build?
-Message-ID: <CADXR8ejAOgcjrxoHM8obEL0vFSeJhgbDn46aBT6OPpkoOfc-DQ@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 19 Sep 2013 19:54:13 +0200
+Subject: [Buildroot] Is GPLv2 the right license for Buildroot?
+In-Reply-To: <523A448E.6010402@rftechnology.com.au>
+References: <20130912221256.GE3362@free.fr> <523388B6.7090305@mind.be>
+ <20130914221613.GA3444@free.fr> <20130916182101.3844a686@skate>
+ <20130916170815.GB3293@free.fr>
+ <F9C551623D2CBB4C9488801D14F864C639ACE1F5@ex-mb1.corp.adtran.com>
+ <20130916200135.1724084e@skate>
+ <523906E4.8080404@rftechnology.com.au>
+ <20130918220953.GA3557@free.fr>
+ <523A448E.6010402@rftechnology.com.au>
+Message-ID: <20130919175413.GB3317@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Jason, All,
 
-I am also seeing the two-phase build break eglibc trying to link
-SSP-related symbols on 64-bit targets (powerpc/970, x86_64/core2) in
-libc/resolv. This happens even if SSP is enabled in .config
-
-I've been digging around gcc-initial's configure arguments and directories
-passed around to eglibc's configure script to no avail. But, I've been able
-to make it work by forcing eglibc to assume no SSP support with the
-following patch. Hopefully this will point a way to a better solution.
-
-diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
-index 4dd2e63..1e8b325 100644
---- a/package/glibc/glibc.mk
-+++ b/package/glibc/glibc.mk
-@@ -63,6 +63,7 @@ define GLIBC_CONFIGURE_CMDS
-                CXXFLAGS="-O2 $(GLIBC_EXTRA_CFLAGS)" \
-                $(SHELL) $(@D)/$(GLIBC_SRC_SUBDIR)/configure \
-                ac_cv_path_BASH_SHELL=/bin/bash \
-+               libc_cv_ssp=no \
-                libc_cv_forced_unwind=yes \
-                --target=$(GNU_TARGET_NAME) \
-                --host=$(GNU_TARGET_NAME) \
-
-Thanks,
-Soochon
-
-> Dear Khem Raj,
->
-> On Fri, 6 Sep 2013 09:59:34 -0700, Khem Raj wrote:
->
-> > > In the mean time, I've experimented a bit and actually implemented it.
-> > > The patch hasn't been merged yet in Buildroot, but it has been posted:
-> > >
-http://lists.busybox.net/pipermail/buildroot/2013-September/077344.html.
-> > >
-> > > Don't hesitate to have a look and tell me what you think.
+On 2013-09-19 10:25 +1000, Jason Rennie spake thusly:
+> On 19/09/2013 8:09 AM, Yann E. MORIN wrote:
+> >But consider this:
+> >   - you use Buildroot to build a GPL package, which ends up on the
+> >     target
 > >
-> > OK. The patch looks ok to me. one thing
->
-> After merging the patch, we got a report that it breaks SSP support,
-> see [1]. After investigation, depending on the architecture, the
-> __stack_chk_fail symbol maybe be part of the TLS (it's the case on x86,
-> but on ARM, for example).
->
-> However, since we're now only doing gcc-initial -> uclibc -> gcc-final,
-> and gcc-initial has no thread/TLS support, it breaks the build of
-> uClibc when SSP support is enabled (in such a case, uClibc is built
-> with -fstack-protector, which creates references to __stack_chk_fail,
-> but this symbol isn't available because we don't have TLS support).
->
-> Have you already seen this problem? What solution do you suggest?
->
-> Thanks!
->
-> Thomas
->
-> [1]
->
-http://buildroot-busybox.2317881.n4.nabble.com/uClibc-fails-to-build-with-stack-smash-protection-td51478.html
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130919/4dd2c02c/attachment-0001.html>
+> >   - that package is GPL, so the GPL applies to that package
+> >
+> >   - section 3 of the GPL requires you provide the "scripts used to
+> >     control compilation and installation of the executable."
+> >
+> >   - So you have two options:
+> >     - come up with the instructions by yourself (by looking at how
+> >       Buildroot does its stuff, for example), but it's not trivial;
+> >     - or provide your Buildroot tree (and .config) since this is the
+> >       easiest. Let's assume that's the way you go.
+> >
+> >   - so, since you are distributing Buildroot, you have to abide by its
+> >     license. It happens that this license is the GPL, but it's just
+> >     happenstance that it is the same license as your GPL package, above.
+> >
+> 
+> Wouldn't the intent of the license suggest that this was talking about the
+> makefiles/configure scripts/whatever that you need to actually build the
+> executable? Rather than some metabuild script like buildroot? I'm guessing
+> the clause is there to stop someone "complying" by giving you a bunch of .c
+> and .h files but not providing you a meaningful way to get an executeable
+> out the other end.
+> 
+> The understanding you are suggesting would seem to be like requiring that
+> the automated build script that runs on a build server of an evening (which
+> calls the make files, maybe runs some automated tests etc, basically an
+> automated developer task) would need to be included to distribute the
+> software.
+
+No, I never said that [*].
+I said doing so would make complying _much easier_.
+
+And since we're speaking on the Buildroot ML, I'm assuming the build
+system in question is Buildroot, not some weirdo internal and
+proprietary build system.
+
+> As I said IANAL and so perhaps that would be required but that would seem
+> like a bug in the license at that point and the problem is the terms of the
+> license needing review.
+
+Well, what is important is the _spirit_ of the license, as much as the
+_letter_ of the license is.
+
+Now, I believe we've gone as far as our uninformed opinions would get
+us, and we won't be able to cover all cases, so we can safely close this
+subject for now. ;-)
+
+I'll try to gather all of this thread in a patch against the manual later
+next week, and will submit that back here for further discussion. Thanks
+all of you for your very valuable inputs! :-)
+
+
+[*] In fact, I even never said that you had to, or did not have to
+    provide it. I just said providing it makes complying very easy.
+    YMMV, as they use to say! ;-)
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
