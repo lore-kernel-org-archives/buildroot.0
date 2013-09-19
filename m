@@ -1,103 +1,43 @@
-From: mlweber1 at rockwellcollins.com <mlweber1@rockwellcollins.com>
-Date: Thu, 19 Sep 2013 14:52:32 -0500
-Subject: [Buildroot] [PATCH v2] iputils: new package
-In-Reply-To: <87six0fxdy.fsf@dell.be.48ers.dk>
-References: <1379603872-25903-1-git-send-email-mlweber1@rockwellcollins.com>
- <87six0fxdy.fsf@dell.be.48ers.dk>
-Message-ID: <OF7917966A.7534CE7A-ON86257BEB.006CC68E-86257BEB.006D2EC7@rockwellcollins.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 19 Sep 2013 22:32:13 +0200
+Subject: [Buildroot] Broken generation of locales
+In-Reply-To: <20130919213002.44823bb2@skate>
+References: <523A9508.7040403@wanadoo.fr> <20130919170406.0e04a348@skate>
+ <523B1807.1070102@wanadoo.fr> <523B4C91.1020307@mind.be>
+ <20130919213002.44823bb2@skate>
+Message-ID: <523B5F4D.6040101@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter Korsgaard <jacmet@gmail.com> wrote on 09/19/2013 02:02:17 PM:
+On 19/09/13 21:30, Thomas Petazzoni wrote:
+> Dear Arnout Vandecappelle,
+>
+> On Thu, 19 Sep 2013 21:12:17 +0200, Arnout Vandecappelle wrote:
+>
+>>    Note that you've caused Thomas's confusion by unnecessarily moving the
+>> -s option in the charmap line.
+>
+> Ah, yes. Thierry, can you resend a proper patch (i.e without moving the
+> -s option in the charmap line, and with a proper description and
+> Signed-off-by line) ?
 
-> From: Peter Korsgaard <jacmet@uclibc.org>
-> To: Matt Weber <mlweber1@rockwellcollins.com>
-> Cc: buildroot at busybox.net
-> Date: 09/19/2013 02:02 PM
-> Subject: Re: [PATCH v2] iputils: new package
-> Sent by: Peter Korsgaard <jacmet@gmail.com>
-> 
-> >>>>> "Matt" == Matt Weber <mlweber1@rockwellcollins.com> writes:
-> 
->  Matt> Signed-off-by: Matt Weber <mlweber1@rockwellcollins.com>
->  Matt> ---
->  Matt> Changes v1 -> v2:
->  Matt>   * Updated depends in Config.in and added comment
->  Matt>     (Suggested by Thomas/Arnout)
->  Matt>   * Adjusted version to include "s" as part of version
->  Matt>     (Suggested by Arnout)
->  Matt>   * Removed dependency on file capabilities (libcap)
->  Matt>     and sysfs.  Commented that file capabilities is disabled
->  Matt>   * Cleaned up CFLAGS to have minimal complexity
->  Matt>     (Suggested by Arnout)
-> 
->  Matt>  package/Config.in          |    1 +
->  Matt>  package/iputils/Config.in  |    8 ++++++
->  Matt>  package/iputils/iputils.mk |   53 ++++++++++++++++++++++++++
-> ++++++++++++++++++
->  Matt>  3 files changed, 62 insertions(+), 0 deletions(-)
->  Matt>  create mode 100644 package/iputils/Config.in
->  Matt>  create mode 100644 package/iputils/iputils.mk
-> 
->  Matt> diff --git a/package/iputils/Config.in 
-b/package/iputils/Config.in
->  Matt> new file mode 100644
->  Matt> index 0000000..0c77b5f
->  Matt> --- /dev/null
->  Matt> +++ b/package/iputils/Config.in
->  Matt> @@ -0,0 +1,9 @@
->  Matt> +config BR2_PACKAGE_IPUTILS
->  Matt> +   bool "iputils"
->  Matt> +   select BR2_OPENSSL if BR2_INET_IPV6
->  Matt> +   help
->  Matt> +     This package is set of small useful utilities for Linux
-> networking.
->  Matt> +     It includes complete versions of ping, traceroute, etc.
->  Matt> +
->  Matt> +     http://sourceforge.net/projects/iputils/
-> 
-> Something apparently corrupted the patch on the way, as you only have 8
-> lines here. Did you edit the patch by hand afterwards?
+  And don't forget to add my
 
-Yep, sorry about that, I should have made the change to the actual file 
-and regenerated the patch.
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-> 
->  Matt> diff --git a/package/iputils/iputils.mk 
-b/package/iputils/iputils.mk
->  Matt> new file mode 100644
->  Matt> index 0000000..5836430
->  Matt> --- /dev/null
->  Matt> +++ b/package/iputils/iputils.mk
->  Matt> @@ -0,0 +1,53 @@
->  Matt> 
-> 
-+################################################################################
->  Matt> +#
->  Matt> +# iputils
->  Matt> +#
->  Matt> 
-> 
-+################################################################################
->  Matt> +
->  Matt> +IPUTILS_VERSION = s20121011
->  Matt> +IPUTILS_SITE = http://www.skbuff.net/iputils/
->  Matt> +IPUTILS_SOURCE = iputils-$(IPUTILS_VERSION).tar.bz2
->  Matt> +IPUTILS_LICENSE = GPLv2+ BSD-3c
->  Matt> +# Only included a license file for BSD.
->  Matt> +IPUTILS_LICENSE_FILES = COPYING
-> 
-> There's no COPYING. I assume you meant ninfod/COPYING?
+  :-)
 
-Yep
+  Regards,
+  Arnout
 
-Thanks,
-Matt
 
-[snip]
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130919/08eb9bdc/attachment.html>
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
