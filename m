@@ -1,60 +1,51 @@
-From: Jason Rennie <jason.rennie@rftechnology.com.au>
-Date: Thu, 19 Sep 2013 10:25:50 +1000
-Subject: [Buildroot] Is GPLv2 the right license for Buildroot?
-In-Reply-To: <20130918220953.GA3557@free.fr>
-References: <20130912203359.7e650ebe@skate> <52323A54.7020808@mind.be>
- <20130912221256.GE3362@free.fr> <523388B6.7090305@mind.be>
- <20130914221613.GA3444@free.fr> <20130916182101.3844a686@skate>
- <20130916170815.GB3293@free.fr>
- <F9C551623D2CBB4C9488801D14F864C639ACE1F5@ex-mb1.corp.adtran.com>
- <20130916200135.1724084e@skate> <523906E4.8080404@rftechnology.com.au>
- <20130918220953.GA3557@free.fr>
-Message-ID: <523A448E.6010402@rftechnology.com.au>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 19 Sep 2013 06:10:52 +0200
+Subject: [Buildroot] [PATCH 3 of 4 RFC] manual: add section about
+ depending on toolchain options
+In-Reply-To: <523A21D5.6040005@mind.be>
+References: <patchbomb.1379494893@argentina>
+ <89b40887c8268e316399.1379494896@argentina>
+ <CAAXf6LXD_7jt42XAG_XgKWKi_+te40hgYNd4mTLbmCDMxfG0QA@mail.gmail.com>
+ <20130918183414.45e6a247@skate>
+ <CAAXf6LWmH2xtBe_P-P+1HJhndDM1BhHZcgJzu9o7JrfwjtwWVg@mail.gmail.com>
+ <20130918194042.302e9afe@skate> <5239E6E5.4000401@zacarias.com.ar>
+ <20130918195925.1884c0a7@skate> <5239EB63.2090203@zacarias.com.ar>
+ <20130918201812.3e08d883@skate> <523A21D5.6040005@mind.be>
+Message-ID: <20130919061052.3679c035@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 19/09/2013 8:09 AM, Yann E. MORIN wrote:
->
-> Yes, that's basically true.
->
-> But consider this:
->    - you use Buildroot to build a GPL package, which ends up on the
->      target
->
->    - that package is GPL, so the GPL applies to that package
->
->    - section 3 of the GPL requires you provide the "scripts used to
->      control compilation and installation of the executable."
->
->    - So you have two options:
->      - come up with the instructions by yourself (by looking at how
->        Buildroot does its stuff, for example), but it's not trivial;
->      - or provide your Buildroot tree (and .config) since this is the
->        easiest. Let's assume that's the way you go.
->
->    - so, since you are distributing Buildroot, you have to abide by its
->      license. It happens that this license is the GPL, but it's just
->      happenstance that it is the same license as your GPL package, above.
->
+Dear Arnout Vandecappelle,
 
-Wouldn't the intent of the license suggest that this was talking about 
-the makefiles/configure scripts/whatever that you need to actually build 
-the executable? Rather than some metabuild script like buildroot? I'm 
-guessing the clause is there to stop someone "complying" by giving you a 
-bunch of .c and .h files but not providing you a meaningful way to get 
-an executeable out the other end.
+On Wed, 18 Sep 2013 23:57:41 +0200, Arnout Vandecappelle wrote:
 
-The understanding you are suggesting would seem to be like requiring 
-that the automated build script that runs on a build server of an 
-evening (which calls the make files, maybe runs some automated tests 
-etc, basically an automated developer task) would need to be included to 
-distribute the software.
+> > Yes, we probably want to have the choice between building static only,
+> > static + shared, or shared only, default to shared only. Currently,
+> > when !BR2_PREFER_STATIC_LIB, we build both the shared and static
+> > variants, which takes time because it requires building everything
+> > twice, once with -fPIC, once without.
+> 
+>   I don't think the static + shared option really makes sense, does it? 
+> The only use case I can think of is when you want a proprietary 
+> executable to link statically in order to speed up start time.
 
-As I said IANAL and so perhaps that would be required but that would 
-seem like a bug in the license at that point and the problem is the 
-terms of the license needing review.
+Well, there might be cases were you would want to link some of your
+applications statically, against some libraries, but not some others.
 
-Jason
+I've had such a case with a customer project using Buildroot: they have
+limited flash space (16 MB, if I recall), in which they were trying to
+put many many things. Some shared libraries were used by only one
+executable, so linking them statically actually reduced the overall
+storage consumption.
+
+But I agree it shouldn't be the default.
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
