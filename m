@@ -1,116 +1,83 @@
-From: Matt Weber <mlweber1@rockwellcollins.com>
-Date: Thu, 19 Sep 2013 10:17:52 -0500
-Subject: [Buildroot] [PATCH v2] iputils: new package
-Message-ID: <1379603872-25903-1-git-send-email-mlweber1@rockwellcollins.com>
+From: Ryan Barnett <rjbarnet@rockwellcollins.com>
+Date: Thu, 19 Sep 2013 10:20:08 -0500
+Subject: [Buildroot] [PATCH 3 of 4] manual generation: check
+	dependencies first
+In-Reply-To: <CAAXf6LWOeKch8sQ7H3qbKG3CEtL=R0mO1vZY38aggUNo6mtVcA@mail.gmail.com>
+References: <patchbomb.1379587632@argentina>	<246bed054da59d6508dc.1379587635@argentina>
+ <CAHXCMMJ2oSqF_MoyDJYjxCKKZukwg6vr2ewP+TUFy9kaDrwcoA@mail.gmail.com>	<CAAXf6LW=7dUUEjGHp6xVFy9-SEXVuUyiK8Lvom2imyCX=s+3oQ@mail.gmail.com>
+ <OF255A0DB6.0256D3EC-ON86257BEB.004C84DB-86257BEB.004F7C41@rockwellcollins.com>
+ <CAAXf6LWOeKch8sQ7H3qbKG3CEtL=R0mO1vZY38aggUNo6mtVcA@mail.gmail.com>
+Message-ID: <OF35F90E21.2F95AFCB-ON86257BEB.0053D79C-86257BEB.00543DF9@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Matt Weber <mlweber1@rockwellcollins.com>
----
-Changes v1 -> v2:
-  * Updated depends in Config.in and added comment
-    (Suggested by Thomas/Arnout)
-  * Adjusted version to include "s" as part of version
-    (Suggested by Arnout)
-  * Removed dependency on file capabilities (libcap)
-    and sysfs.  Commented that file capabilities is disabled
-  * Cleaned up CFLAGS to have minimal complexity
-    (Suggested by Arnout)
+Thomas,
 
- package/Config.in          |    1 +
- package/iputils/Config.in  |    8 ++++++
- package/iputils/iputils.mk |   53 ++++++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 62 insertions(+), 0 deletions(-)
- create mode 100644 package/iputils/Config.in
- create mode 100644 package/iputils/iputils.mk
+Thomas De Schampheleire <patrickdepinguin@gmail.com> wrote on 09/19/2013 
+10:08:03 AM:
+ 
+> Hi Ryan,
+> 
+> On Thu, Sep 19, 2013 at 4:28 PM, Ryan Barnett
+> <rjbarnet@rockwellcollins.com> wrote:
+> >
+> >
+> > I was also going to to add to the documentation the versions of the 
+Ubuntu
+> > packages that I got the manual to build with. Ubuntu version + package
+> > version so that way in the manual we can give a reference system
+> > configuration that we say builds the manual. For Ubuntu 10.04 I was 
+having
+> > issues building the manual but with Ubuntu 12.04 I could successfully 
+build
+> > everything.
+> >
+> > I haven't had a chance to get around to doing this yet so I don't know 
+if
+> > you want to add your Ubuntu configuration as a reference configuration 
+for
+> > generating the manual under Section 3.2? Maybe this warrants a 
+subsection
+> > (3.2.1) in manual for generating the manual? If you don't get around 
+to
+> > doing this, I will when I get around to adding some documentation to 
+the
+> > regarding SELinux and information about patch reviews.
+> 
+> I'm wondering whether this is very useful. A user will not install
+> another Linux distribution just to build the buildroot manual, so the
+> Ubuntu version doesn't seem necessary to me. The package version only
+> seems relevant in case we know that some versions give problems for
+> building the manual. But unless we have some more info on that, I
+> would not add such info to the manual (also because it is very quickly
+> out-of-date).
 
-diff --git a/package/Config.in b/package/Config.in
-index 56c316e..254145a 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -793,6 +793,7 @@ source "package/iproute2/Config.in"
- source "package/ipsec-tools/Config.in"
- source "package/ipset/Config.in"
- source "package/iptables/Config.in"
-+source "package/iputils/Config.in"
- source "package/iw/Config.in"
- source "package/kismet/Config.in"
- source "package/knock/Config.in"
-diff --git a/package/iputils/Config.in b/package/iputils/Config.in
-new file mode 100644
-index 0000000..0c77b5f
---- /dev/null
-+++ b/package/iputils/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_IPUTILS
-+	bool "iputils"
-+	select BR2_OPENSSL if BR2_INET_IPV6
-+	help
-+	  This package is set of small useful utilities for Linux networking.
-+	  It includes complete versions of ping, traceroute, etc.
-+
-+	  http://sourceforge.net/projects/iputils/
-diff --git a/package/iputils/iputils.mk b/package/iputils/iputils.mk
-new file mode 100644
-index 0000000..5836430
---- /dev/null
-+++ b/package/iputils/iputils.mk
-@@ -0,0 +1,53 @@
-+################################################################################
-+#
-+# iputils
-+#
-+################################################################################
-+
-+IPUTILS_VERSION = s20121011
-+IPUTILS_SITE = http://www.skbuff.net/iputils/
-+IPUTILS_SOURCE = iputils-$(IPUTILS_VERSION).tar.bz2
-+IPUTILS_LICENSE = GPLv2+ BSD-3c
-+# Only included a license file for BSD.
-+IPUTILS_LICENSE_FILES = COPYING
-+
-+# Build after busybox so target ends up with this package's full
-+# versions of the applications instead of busybox applets.
-+ifeq ($(BR2_PACKAGE_BUSYBOX),y)
-+IPUTILS_DEPENDENCIES += busybox
-+endif
-+
-+# Disabling CAP_SETPCAP (file capabilities)
-+IPUTILS_MAKE_OPT = $(TARGET_CONFIGURE_OPTS) USE_CAP=no USE_SYSFS=no\
-+	CFLAGS="$(TARGET_CFLAGS) -D_GNU_SOURCE" \
-+	arping clockdiff ping rarpd rdisc tftpd tracepath
-+
-+ifeq ($(BR2_INET_IPV6),y)
-+# To support md5 for ping6
-+IPUTILS_DEPENDENCIES += openssl
-+
-+IPUTILS_MAKE_OPT += ping6 tracepath6 traceroute6
-+
-+define IPUTILS_IPV6_INSTALL_TARGET_CMDS
-+	$(INSTALL) -D -m 755 $(@D)/ping6       $(TARGET_DIR)/bin/ping6
-+	$(INSTALL) -D -m 755 $(@D)/tracepath6  $(TARGET_DIR)/bin/tracepath6
-+	$(INSTALL) -D -m 755 $(@D)/traceroute6 $(TARGET_DIR)/bin/traceroute6
-+endef
-+endif
-+
-+define IPUTILS_BUILD_CMDS
-+	$(MAKE) -C $(@D) $(IPUTILS_MAKE_OPT)
-+endef
-+
-+define IPUTILS_INSTALL_TARGET_CMDS
-+	$(INSTALL) -D -m 755 $(@D)/arping      $(TARGET_DIR)/sbin/arping
-+	$(INSTALL) -D -m 755 $(@D)/clockdiff   $(TARGET_DIR)/bin/clockdiff
-+	$(INSTALL) -D -m 755 $(@D)/ping        $(TARGET_DIR)/bin/ping
-+	$(INSTALL) -D -m 755 $(@D)/rarpd       $(TARGET_DIR)/sbin/rarpd
-+	$(INSTALL) -D -m 755 $(@D)/rdisc       $(TARGET_DIR)/sbin/rdisc
-+	$(INSTALL) -D -m 755 $(@D)/tftpd       $(TARGET_DIR)/usr/sbin/in.tftpd
-+	$(INSTALL) -D -m 755 $(@D)/tracepath   $(TARGET_DIR)/bin/tracepath
-+	$(IPUTILS_IPV6_INSTALL_TARGET_CMDS)
-+endef
-+
-+$(eval $(generic-package))
--- 
-1.7.1
+I'm sorry I misspoke and I do agree with you that we should just give the
+version of asciidoc/w3m/(don't remember the other packages). After I sent
+the previous message I figured that wasn't good idea. But I still think
+that it would be helpful to have the versions of the tools that are used
+and the version for which they are known to work for.
+ 
+> For the problems you saw on Ubuntu 10.04, there may be a solution with
+> asciidoc 8.6.3, as I just posted in your original thread. If this
+> could be verified, then we could update the manual with just that.
+
+Thanks - I never really had time to track down the solution or what
+version issue was fixed at. I've replied with the information to the email
+on that original thread.
+
+> 
+> Best regards,
+> Thomas
+
+Thanks,
+-Ryan
+
+
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130919/cdd4943d/attachment.html>
