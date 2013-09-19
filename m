@@ -1,64 +1,64 @@
-From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Thu, 19 Sep 2013 08:59:50 +0200
-Subject: [Buildroot] [PATCH v4 3/3] package/Makefile.in: add a way to
- don't force jobs in sub-make
-In-Reply-To: <CAAXf6LX4wRk8WuGt=LK2Oqu76+CFeh2oMdKdmyYaw+nayBt_FQ@mail.gmail.com>
-References: <1379404753-3471-1-git-send-email-fabio.porcedda@gmail.com>
- <1379404753-3471-4-git-send-email-fabio.porcedda@gmail.com>
- <20130917201751.48fb34d3@skate>
- <CA+ojGf6su7WqJ2uMTkTdjpardn_QuE_vPfKFPC8CcrB58jCXvw@mail.gmail.com>
- <CAHkwnC86ZqHD0UTDZ9_hXD7Br9guaB2ywu57=sXO+z_pRyCMwQ@mail.gmail.com>
- <CAAXf6LX4wRk8WuGt=LK2Oqu76+CFeh2oMdKdmyYaw+nayBt_FQ@mail.gmail.com>
-Message-ID: <CAHkwnC_BMFu594Q8_4QdGh7diz--JmoTE18oVVSrwsuFsvk8wQ@mail.gmail.com>
+From: =?UTF-8?q?Fatih=20A=C5=9F=C4=B1c=C4=B1?= <fatih.asici@gmail.com>
+Date: Thu, 19 Sep 2013 10:01:43 +0300
+Subject: [Buildroot] [PATCH v3] qt5base: fix build when egl headers need a
+	definition
+Message-ID: <1379574103-9992-1-git-send-email-fatih.asici@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
-thanks for reviewing.
+The build with gpu-viv-bin-mx6q libraries was broken since it wasn't
+using "-DEGL_API_FB=1" flag which is found in egl.pc.
 
-On Thu, Sep 19, 2013 at 8:44 AM, Thomas De Schampheleire
-<patrickdepinguin@gmail.com> wrote:
->
-> Op 19-sep.-2013 08:35 schreef "Fabio Porcedda" <fabio.porcedda@gmail.com>
-> het volgende:
->
->
->>
->> Hi Thomas and Clar?n,
->> thanks for reviewing.
->>
->> On Tue, Sep 17, 2013 at 8:24 PM, Ciar?n Rehill <cir.vfi@gmail.com> wrote:
->> > Maybe "add a way to prevent forcing of [parallel?] jobs in sub-make"?
->> >
->> > On Sep 17, 2013 7:18 PM, "Thomas Petazzoni"
->> > <thomas.petazzoni@free-electrons.com> wrote:
->> >>
->> >> Dear Fabio Porcedda,
->> >>
->> >> That's a minor nit, but "add a way to don't force jobs in sub-make"
->> >> isn't really correct english I blieve. "add away to not force the
->> >> number of jobs in sub-make" or something like that would be more
->> >> appropriate.
->>
->> What about a mix of both?
->> "add a way to prevent forcing the number of jobs in sub-make"
->>
->
-> In fact, we don't add a way, since the user cannot choose to force or not.
+Signed-off-by: Fatih A??c? <fatih.asici@gmail.com>
+---
+Changes v2 -> v3:
+  - Give a number to the patch file (suggested by Arnout Vandecappelle and
+    Thomas Petazzoni)
 
-IMHO the user can choose  by means of the "BR2_JLEVEL" variable, if
-that variable contains a value buildroot will force the number of
-jobs, if that variable is empty buildroot will not force the number of
-jobs.
+Changes v1 -> v2:
+  - Add description and Signed-off-by line to the patch (suggested by
+      Thomas Petazzoni)
 
-> So I'd suggest something like:
-> Don't force the number of jobs...
-> Or if you prefer:
-> Prevent forcing...
+ package/qt5/qt5base/qt5base-0004-egl-cflags.patch |   28 +++++++++++++++++++++
+ 1 file changed, 28 insertions(+)
+ create mode 100644 package/qt5/qt5base/qt5base-0004-egl-cflags.patch
 
-Thanks and best regards
+diff --git a/package/qt5/qt5base/qt5base-0004-egl-cflags.patch b/package/qt5/qt5base/qt5base-0004-egl-cflags.patch
+new file mode 100644
+index 0000000..bff82a8
+--- /dev/null
++++ b/package/qt5/qt5base/qt5base-0004-egl-cflags.patch
+@@ -0,0 +1,28 @@
++egl.prf: Append egl CFLAGS to QMAKE_C[XX]FLAGS
++
++Projects including egl in their config (e.g. with CONFIG += egl) cannot get
++egl CFLAGS without this.
++
++Signed-off-by: Fatih A??c? <fatih.asici@gmail.com>
++
++--- a/configure
+++++ b/configure
++@@ -4934,6 +4934,7 @@
++         QMAKE_CFLAGS_EGL=`$PKG_CONFIG --cflags egl 2>/dev/null`
++         QMakeVar set QMAKE_INCDIR_EGL "$QMAKE_INCDIR_EGL"
++         QMakeVar set QMAKE_LIBS_EGL "$QMAKE_LIBS_EGL"
+++        QMakeVar set QMAKE_CFLAGS_EGL "$QMAKE_CFLAGS_EGL"
++     fi       # detect EGL support
++     if compileTest qpa/egl "EGL" $QMAKE_CFLAGS_EGL $QMAKE_LIBS_EGL; then
++         CFG_EGL=yes
++--- a/mkspecs/features/egl.prf
+++++ b/mkspecs/features/egl.prf
++@@ -14,6 +14,8 @@
++ } else {
++     INCLUDEPATH += $$QMAKE_INCDIR_EGL
++     LIBS_PRIVATE += $$QMAKE_LIBS_EGL
+++    QMAKE_CFLAGS += $$QMAKE_CFLAGS_EGL
+++    QMAKE_CXXFLAGS += $$QMAKE_CFLAGS_EGL
++     LIBS += $$QMAKE_LFLAGS_EGL
++     for(p, QMAKE_LIBDIR_EGL) {
++         exists($$p):LIBS_PRIVATE += -L$$p
 -- 
-Fabio Porcedda
+1.7.10.4
