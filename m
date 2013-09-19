@@ -1,51 +1,60 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 19 Sep 2013 00:48:39 +0200
-Subject: [Buildroot] [PATCH 1/1] package: remove the trailing slash sign
- from the URL address
-In-Reply-To: <CAAXf6LU8GCW7vwVvoBrSeTaongix761F=DT1Tbh=qJ_3m32CMw@mail.gmail.com>
-References: <1379517858-28720-1-git-send-email-jerzy.grzegorek@trzebnica.net>
- <CAAXf6LU8GCW7vwVvoBrSeTaongix761F=DT1Tbh=qJ_3m32CMw@mail.gmail.com>
-Message-ID: <523A2DC7.7010202@mind.be>
+From: Jason Rennie <jason.rennie@rftechnology.com.au>
+Date: Thu, 19 Sep 2013 10:25:50 +1000
+Subject: [Buildroot] Is GPLv2 the right license for Buildroot?
+In-Reply-To: <20130918220953.GA3557@free.fr>
+References: <20130912203359.7e650ebe@skate> <52323A54.7020808@mind.be>
+ <20130912221256.GE3362@free.fr> <523388B6.7090305@mind.be>
+ <20130914221613.GA3444@free.fr> <20130916182101.3844a686@skate>
+ <20130916170815.GB3293@free.fr>
+ <F9C551623D2CBB4C9488801D14F864C639ACE1F5@ex-mb1.corp.adtran.com>
+ <20130916200135.1724084e@skate> <523906E4.8080404@rftechnology.com.au>
+ <20130918220953.GA3557@free.fr>
+Message-ID: <523A448E.6010402@rftechnology.com.au>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 18/09/13 17:34, Thomas De Schampheleire wrote:
-> Hi Jerzy,
+On 19/09/2013 8:09 AM, Yann E. MORIN wrote:
 >
-> Op 18-sep.-2013 17:25 schreef "Jerzy Grzegorek"
-> <jerzy.grzegorek at trzebnica.net <mailto:jerzy.grzegorek@trzebnica.net>>
-> het volgende:
->  >
->  > Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net
-> <mailto:jerzy.grzegorek@trzebnica.net>>
->  > ---
+> Yes, that's basically true.
 >
-> Could you clarify why this is desirable? Note that urls with our without
-> trailing slash are not identical: the web server needs to properly
-> support this. For example, the autobuild website does not properly do it
-> (something very annoying ;) )
+> But consider this:
+>    - you use Buildroot to build a GPL package, which ends up on the
+>      target
 >
-> So, with a change like this, every changed url needs to be tested.
+>    - that package is GPL, so the GPL applies to that package
+>
+>    - section 3 of the GPL requires you provide the "scripts used to
+>      control compilation and installation of the executable."
+>
+>    - So you have two options:
+>      - come up with the instructions by yourself (by looking at how
+>        Buildroot does its stuff, for example), but it's not trivial;
+>      - or provide your Buildroot tree (and .config) since this is the
+>        easiest. Let's assume that's the way you go.
+>
+>    - so, since you are distributing Buildroot, you have to abide by its
+>      license. It happens that this license is the GPL, but it's just
+>      happenstance that it is the same license as your GPL package, above.
+>
 
-  Well, with the trailing slash is stripped by pkg-generic.mk:
+Wouldn't the intent of the license suggest that this was talking about 
+the makefiles/configure scripts/whatever that you need to actually build 
+the executable? Rather than some metabuild script like buildroot? I'm 
+guessing the clause is there to stop someone "complying" by giving you a 
+bunch of .c and .h files but not providing you a meaningful way to get 
+an executeable out the other end.
 
-$(call DOWNLOAD,$($(PKG)_SITE:/=)/$($(PKG)_SOURCE))
+The understanding you are suggesting would seem to be like requiring 
+that the automated build script that runs on a build server of an 
+evening (which calls the make files, maybe runs some automated tests 
+etc, basically an automated developer task) would need to be included to 
+distribute the software.
 
-  So functionally it doesn't matter if the / is there or not.
+As I said IANAL and so perhaps that would be required but that would 
+seem like a bug in the license at that point and the problem is the 
+terms of the license needing review.
 
-  I'm pretty much in favour of removing the /.
-
-  Regards,
-  Arnout
-
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+Jason
