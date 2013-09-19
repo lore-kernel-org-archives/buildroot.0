@@ -1,59 +1,63 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Thu, 19 Sep 2013 13:47:55 +0200
-Subject: [Buildroot] [PATCH 4 of 4 RFC] Config.in files: unify comments
- of toolchain option dependencies
-In-Reply-To: <CAAXf6LWbCWMA2ofRSx4bdLyLsLYnaVfoBJupejSKLUsWqKYoZA@mail.gmail.com>
-References: <patchbomb.1379494893@argentina>
- <a7cea7dd647ea16661bf.1379494897@argentina>
- <CAAXf6LWbCWMA2ofRSx4bdLyLsLYnaVfoBJupejSKLUsWqKYoZA@mail.gmail.com>
-Message-ID: <CAHXCMMK3NPuyfVeOfxAiJsC9ZCrBR56H9jFAQkrZZPmtp7A9xw@mail.gmail.com>
+From: Eric Jarrige <eric.jarrige@armadeus.org>
+Date: Thu, 19 Sep 2013 13:10:06 +0200
+Subject: [Buildroot] [PATCH 1/1] u-boot: allow to pass a custom
+	configuration file
+Message-ID: <1379589006-28682-1-git-send-email-eric.jarrige@armadeus.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, all,
 
+Signed-off-by: Eric Jarrige <eric.jarrige@armadeus.org>
+---
+ boot/uboot/Config.in |   18 ++++++++++++++++++
+ boot/uboot/uboot.mk  |    3 +++
+ 2 files changed, 21 insertions(+), 0 deletions(-)
 
-2013/9/19 Thomas De Schampheleire <patrickdepinguin@gmail.com>
-
-> Hi,
->
-> On Wed, Sep 18, 2013 at 11:01 AM, Thomas De Schampheleire
-> <patrickdepinguin@gmail.com> wrote:
-> > This patch lines up the comments in Config.in files that clarify which
-> toolchain
-> > options the package depends on.
-> >
-> > Signed-off-by: Thomas De Schampheleire <
-> thomas.de.schampheleire at gmail.com>
-> >
-> > ---
->
-> In connman, there is a vague mentioning about 'resolver' support:
->
-> comment "connman needs a toolchain with IPv6, WCHAR, threading and
-> resolver support"
->         depends on BR2_UCLIBC_VERSION_0_9_32 || \
->                 !BR2_USE_WCHAR || !BR2_INET_IPV6 ||
-> !BR2_TOOLCHAIN_HAS_THREADS
->
->
-> I guess there must be some linke with uclibc 0.9.32, but does anyone
-> know more? Is this still correct?
-> In this patch I just took over the 'resolver' string, but it seems odd
-> anyway.
->
-IIRC, this is about resolv.h, for which uclibc only provided stub (not full
-implementation) some years ago.
-I know there were patches implementing this on the web, but I don't know if
-they have been merged.
-
-Regards,
-
+diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
+index 1b98339..1358f4a 100644
+--- a/boot/uboot/Config.in
++++ b/boot/uboot/Config.in
+@@ -71,6 +71,24 @@ config BR2_TARGET_UBOOT_CUSTOM_GIT_VERSION
+ endif
+ 
+ choice
++	prompt "U-Boot configuration"
++	default BR2_TARGET_UBOOT_USE_DEFCONFIG
++
++config BR2_TARGET_UBOOT_USE_DEFCONFIG
++	bool "Using default configuration"
++
++config BR2_TARGET_UBOOT_USE_CUSTOM_CONFIG
++	bool "Using a custom configuration file"
++
++endchoice
++
++config BR2_TARGET_UBOOT_CUSTOM_CONFIG_FILE
++	string "Configuration file path"
++	depends on BR2_TARGET_UBOOT_USE_CUSTOM_CONFIG
++	help
++	  Path to the customized U-Boot configuration file
++
++choice
+ 	prompt "U-Boot binary format"
+ 	default BR2_TARGET_UBOOT_FORMAT_BIN
+ 
+diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
+index 631da6b..8bcf260 100644
+--- a/boot/uboot/uboot.mk
++++ b/boot/uboot/uboot.mk
+@@ -80,6 +80,9 @@ UBOOT_POST_PATCH_HOOKS += UBOOT_APPLY_CUSTOM_PATCHES
+ endif
+ 
+ define UBOOT_CONFIGURE_CMDS
++	$(if $(BR2_TARGET_UBOOT_USE_CUSTOM_CONFIG),
++		cp -pf $(call qstrip,$(BR2_TARGET_UBOOT_CUSTOM_CONFIG_FILE)) \
++			$(@D)/include/configs/$(UBOOT_BOARD_NAME).h)
+ 	$(TARGET_CONFIGURE_OPTS) $(UBOOT_CONFIGURE_OPTS) 	\
+ 		$(MAKE) -C $(@D) $(UBOOT_MAKE_OPTS)		\
+ 		$(UBOOT_BOARD_NAME)_config
 -- 
-Samuel
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130919/760ffa63/attachment.html>
+1.7.2.5
