@@ -1,59 +1,100 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Thu, 19 Sep 2013 09:06:48 +0200
-Subject: [Buildroot] [PATCH 1/1] package: remove the trailing slash sign
- from the URL address
-In-Reply-To: <20130918185155.0c045e28@skate>
-References: <1379517858-28720-1-git-send-email-jerzy.grzegorek@trzebnica.net>
- <CAAXf6LU8GCW7vwVvoBrSeTaongix761F=DT1Tbh=qJ_3m32CMw@mail.gmail.com>
- <20130918185155.0c045e28@skate>
-Message-ID: <CAAXf6LUXa6ep3KMMxVVvVKC0AxBM_Mboy2+SFtmBixQ-Zj6s-A@mail.gmail.com>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Thu, 19 Sep 2013 09:09:53 +0200
+Subject: [Buildroot] [PATCH] qt5: give numbers to patch files
+In-Reply-To: <1379573808-9750-1-git-send-email-fatih.asici@gmail.com>
+References: <1379573808-9750-1-git-send-email-fatih.asici@gmail.com>
+Message-ID: <CAHXCMM+Ln-xFOoKRJaWrNBKM6vqqUTkh17buHh-fnJXweHe82g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+2013/9/19 Fatih A??c? <fatih.asici@gmail.com>
 
-On Wed, Sep 18, 2013 at 6:51 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Dear Thomas De Schampheleire,
+> Signed-off-by: Fatih A??c? <fatih.asici@gmail.com>
 >
-[..]
->
-> I do certainly welcome some help with Apache configuration to make the
-> rewrite rules behave better. I hate doing sysadmin stuff, so when it
-> worked more or less, I considered it good enough :)
->
-> What I currently have is:
->
->         RewriteEngine on
->         RewriteCond %{REQUEST_FILENAME} !-f
->         RewriteCond %{REQUEST_FILENAME} !-d
->         RewriteRule ^/results/([a-f0-9]{3})([a-f0-9]{37})/(.*) /results/$1/$1$2/$3 [L]
->
-> this is needed because the old URLs were:
->
->         /results/<complete-hash>/
->
-> while the way it's stored (and the new URLs) are:
->
->         /results/<first three chars of hash>/<complete-hash>/
+Acked-by: "Samuel Martin" <s.martin49@gmail.com>
 
-This is untested, but should work:
-        RewriteRule ^/results/([a-f0-9]{3})([a-f0-9]{37})/?(.*)
-/results/$1/$1$2/$3 [L]
+---
+>  ...se-0001-eglconvenience-add-egl-to-CONFIG-to-get-correct-incl.patch} |
+>    0
+>  .../{qt5base-mkspecs-files.patch => qt5base-0002-mkspecs-files.patch}  |
+>    0
+>  .../{qt5base-uclibc-no-lfs.patch => qt5base-0003-uclibc-no-lfs.patch}  |
+>    0
+>  ...ule.patch => qt5jsbackend-0001-dont-import-bz2-python-module.patch} |
+>    0
+>  ...t5jsbackend-fix-uclibc.patch => qt5jsbackend-0002-fix-uclibc.patch} |
+>    0
+>  ...bkit-egl-includepath.patch => qt5webkit-0001-egl-includepath.patch} |
+>    0
+>  6 files changed, 0 insertions(+), 0 deletions(-)
+>  rename
+> package/qt5/qt5base/{qt5base-eglconvenience-add-egl-to-CONFIG-to-get-correct-incl.patch
+> => qt5base-0001-eglconvenience-add-egl-to-CONFIG-to-get-correct-incl.patch}
+> (100%)
+>  rename package/qt5/qt5base/{qt5base-mkspecs-files.patch =>
+> qt5base-0002-mkspecs-files.patch} (100%)
+>  rename package/qt5/qt5base/{qt5base-uclibc-no-lfs.patch =>
+> qt5base-0003-uclibc-no-lfs.patch} (100%)
+>  rename
+> package/qt5/qt5jsbackend/{qt5jsbackend-dont-import-bz2-python-module.patch
+> => qt5jsbackend-0001-dont-import-bz2-python-module.patch} (100%)
+>  rename package/qt5/qt5jsbackend/{qt5jsbackend-fix-uclibc.patch =>
+> qt5jsbackend-0002-fix-uclibc.patch} (100%)
+>  rename package/qt5/qt5webkit/{qt5webkit-egl-includepath.patch =>
+> qt5webkit-0001-egl-includepath.patch} (100%)
+>
+> diff --git
+> a/package/qt5/qt5base/qt5base-eglconvenience-add-egl-to-CONFIG-to-get-correct-incl.patch
+> b/package/qt5/qt5base/qt5base-0001-eglconvenience-add-egl-to-CONFIG-to-get-correct-incl.patch
+> similarity index 100%
+> rename from
+> package/qt5/qt5base/qt5base-eglconvenience-add-egl-to-CONFIG-to-get-correct-incl.patch
+> rename to
+> package/qt5/qt5base/qt5base-0001-eglconvenience-add-egl-to-CONFIG-to-get-correct-incl.patch
+> diff --git a/package/qt5/qt5base/qt5base-mkspecs-files.patch
+> b/package/qt5/qt5base/qt5base-0002-mkspecs-files.patch
+> similarity index 100%
+> rename from package/qt5/qt5base/qt5base-mkspecs-files.patch
+> rename to package/qt5/qt5base/qt5base-0002-mkspecs-files.patch
+> diff --git a/package/qt5/qt5base/qt5base-uclibc-no-lfs.patch
+> b/package/qt5/qt5base/qt5base-0003-uclibc-no-lfs.patch
+> similarity index 100%
+> rename from package/qt5/qt5base/qt5base-uclibc-no-lfs.patch
+> rename to package/qt5/qt5base/qt5base-0003-uclibc-no-lfs.patch
+> diff --git
+> a/package/qt5/qt5jsbackend/qt5jsbackend-dont-import-bz2-python-module.patch
+> b/package/qt5/qt5jsbackend/qt5jsbackend-0001-dont-import-bz2-python-module.patch
+> similarity index 100%
+> rename from
+> package/qt5/qt5jsbackend/qt5jsbackend-dont-import-bz2-python-module.patch
+> rename to
+> package/qt5/qt5jsbackend/qt5jsbackend-0001-dont-import-bz2-python-module.patch
+> diff --git a/package/qt5/qt5jsbackend/qt5jsbackend-fix-uclibc.patch
+> b/package/qt5/qt5jsbackend/qt5jsbackend-0002-fix-uclibc.patch
+> similarity index 100%
+> rename from package/qt5/qt5jsbackend/qt5jsbackend-fix-uclibc.patch
+> rename to package/qt5/qt5jsbackend/qt5jsbackend-0002-fix-uclibc.patch
+> diff --git a/package/qt5/qt5webkit/qt5webkit-egl-includepath.patch
+> b/package/qt5/qt5webkit/qt5webkit-0001-egl-includepath.patch
+> similarity index 100%
+> rename from package/qt5/qt5webkit/qt5webkit-egl-includepath.patch
+> rename to package/qt5/qt5webkit/qt5webkit-0001-egl-includepath.patch
+> --
+> 1.7.10.4
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-This would also accept URLs of the form /results/<complete-hash>foo
-without any slash in between, but this would then fail after
-redirection I think. If you do not want that, I think you need two
-rules:
-        RewriteRule ^/results/([a-f0-9]{3})([a-f0-9]{37})/?
-/results/$1/$1$2/ [L]
-        RewriteRule ^/results/([a-f0-9]{3})([a-f0-9]{37})/(.*)
-/results/$1/$1$2/$3 [L]
 
-The set of two rules is maybe cleaner, but I leave it up to you.
+Regards,
 
-Best regards,
-Thomas
+-- 
+Samuel
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130919/88d4e9cb/attachment.html>
