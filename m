@@ -1,56 +1,42 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 19 Sep 2013 17:43:36 +0200
-Subject: [Buildroot] [PATCH 1/1] u-boot: allow to pass a custom
- configuration file
-In-Reply-To: <1379589006-28682-1-git-send-email-eric.jarrige@armadeus.org>
-References: <1379589006-28682-1-git-send-email-eric.jarrige@armadeus.org>
-Message-ID: <20130919174336.537e265e@skate>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Thu, 19 Sep 2013 17:49:09 +0200
+Subject: [Buildroot] [PATCH 4 of 4] manual generation: rename manual-txt
+ into manual-text
+In-Reply-To: <20130919174042.541b6c51@skate>
+References: <patchbomb.1379587632@argentina>
+ <a2b05987569c1439422b.1379587636@argentina>
+ <20130919174042.541b6c51@skate>
+Message-ID: <CAAXf6LUFF+KTNicPmjy1Qp1=01-Qtm9Ytz8bndV=3a27qX7J7g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Eric Jarrige,
+Hi Thomas,
 
-On Thu, 19 Sep 2013 13:10:06 +0200, Eric Jarrige wrote:
+On Thu, Sep 19, 2013 at 5:40 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Dear Thomas De Schampheleire,
+>
+> On Thu, 19 Sep 2013 12:47:16 +0200, Thomas De Schampheleire wrote:
+>> The output extension and the generation messages refer to 'text', but the make
+>> target was confusingly 'txt'. This patch changes the make target for
+>> consistency.
+>>
+>> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+>
+> That's a change in the Buildroot interface, but I believe it's ok.
 
->  choice
-> +	prompt "U-Boot configuration"
-> +	default BR2_TARGET_UBOOT_USE_DEFCONFIG
-> +
-> +config BR2_TARGET_UBOOT_USE_DEFCONFIG
-> +	bool "Using default configuration"
+True. I figured that the manual is built only rarely (many people are
+using the release tarballs), let alone that manual-txt is explicitly
+called. People that do build manual-txt are often buildroot
+developers, and hopefully they are flexible enough :-)
 
-I don't think using the word 'defconfig' for U-Boot is appropriate,
-since 'defconfig' really refers to a kconfig terminology and U-Boot,
-sadly, doesn't use kconfig.
+> However, you're not updating another occurrence of manual-txt in the
+> main Makefile (see the release target).
 
->  define UBOOT_CONFIGURE_CMDS
-> +	$(if $(BR2_TARGET_UBOOT_USE_CUSTOM_CONFIG),
-> +		cp -pf $(call qstrip,$(BR2_TARGET_UBOOT_CUSTOM_CONFIG_FILE)) \
-> +			$(@D)/include/configs/$(UBOOT_BOARD_NAME).h)
->  	$(TARGET_CONFIGURE_OPTS) $(UBOOT_CONFIGURE_OPTS) 	\
->  		$(MAKE) -C $(@D) $(UBOOT_MAKE_OPTS)		\
->  		$(UBOOT_BOARD_NAME)_config
+Ai, sorry, I didn't think of that. Will fix.
 
-I am a bit hesitant on the overall feature. The fact that a
-include/configs/<something>.h file is really a configuration file is
-pretty fuzzy in U-Boot, especially since now boards are supposed to
-also be listed in the main boards.cfg file.
-
-Therefore, I'm tempted to say that users who need to do that should
-instead use patches against U-Boot (to add their own board, including
-the include/configs/<something>.h file).
-
-But on this one, I believe I can be convinced if there are good
-arguments :)
-
-Best regards,
-
+Thanks for your feedback,
 Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
