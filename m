@@ -1,46 +1,42 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 19 Sep 2013 21:49:08 +0200
-Subject: [Buildroot] [PATCH 0 of 9 v4] linux/uboot: add support for
- custom Mercurial repositories
-In-Reply-To: <patchbomb.1378152469@argentina>
-References: <patchbomb.1378152469@argentina>
-Message-ID: <20130919214908.35f7f8ca@skate>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Thu, 19 Sep 2013 21:49:18 +0200
+Subject: [Buildroot] [git commit] gcc: deprecate objective C and fortran
+	support
+Message-ID: <20130919195156.B123F9B7D1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas De Schampheleire,
+commit: http://git.buildroot.net/buildroot/commit/?id=5bbc83c6e778827307436e0feb9fd829ae562f1c
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 02 Sep 2013 22:07:49 +0200, Thomas De Schampheleire wrote:
+As discussed on the list. They have been broken for a long time, and are
+not commonly used in embedded systems.
 
-> This series adds support for custom Mercurial repositories in uboot and linux
-> packages.
-> 
-> This version is rebased with the 2013.08 master, there are only a few
-> real changes.
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/gcc/Config.in.host |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-Since it seems we have issues deciding what to do with the
-Config.in.legacy handling for string options, I was thinking: can't we
-just avoid the problem altogether? Instead of having separate Config.in
-options for each of Git, Mercurial, SVN and so on, what about just
-adding an option "BR2_TARGET_LINUX_CUSTOM_REPO_METHOD" which allows the
-user to select git, hg, svn or cvs, and keep the other option names
-unchanged. I admit it's a bit funky to keep options such as
-BR2_LINUX_KERNEL_CUSTOM_GIT_REPO_URL to store the location of a
-Mercurial repository, but well, since we can't make up your mind on the
-Config.in.legacy stuff, maybe that's a way of at least getting your
-feature merged.
-
-I'm just thinking of a way to move forward, not sure it's the right
-solution.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
+index 116fd24..32c668a 100644
+--- a/package/gcc/Config.in.host
++++ b/package/gcc/Config.in.host
+@@ -128,6 +128,7 @@ comment "C++ support broken in uClibc with locale enabled with gcc 4.2"
+ config BR2_INSTALL_OBJC
+ 	bool "Enable Objective-C support"
+ 	depends on !BR2_avr32
++	depends on BR2_DEPRECATED
+ 	help
+ 	  Enable the support for the Objective-C language in the
+ 	  cross-compiler, and install the Objective-C runtime to the
+@@ -136,6 +137,7 @@ config BR2_INSTALL_OBJC
+ config BR2_INSTALL_FORTRAN
+ 	bool "Enable Fortran support"
+ 	depends on !BR2_avr32
++	depends on BR2_DEPRECATED
+ 	select BR2_PACKAGE_LIBMPFR
+ 	help
+ 	  Enable the support for the Fortran language in the
