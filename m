@@ -1,93 +1,39 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 19 Sep 2013 19:54:13 +0200
-Subject: [Buildroot] Is GPLv2 the right license for Buildroot?
-In-Reply-To: <523A448E.6010402@rftechnology.com.au>
-References: <20130912221256.GE3362@free.fr> <523388B6.7090305@mind.be>
- <20130914221613.GA3444@free.fr> <20130916182101.3844a686@skate>
- <20130916170815.GB3293@free.fr>
- <F9C551623D2CBB4C9488801D14F864C639ACE1F5@ex-mb1.corp.adtran.com>
- <20130916200135.1724084e@skate>
- <523906E4.8080404@rftechnology.com.au>
- <20130918220953.GA3557@free.fr>
- <523A448E.6010402@rftechnology.com.au>
-Message-ID: <20130919175413.GB3317@free.fr>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 19 Sep 2013 20:38:12 +0200
+Subject: [Buildroot] [PATCH] tslib: bump version to 1.1
+In-Reply-To: <1379574777-9399-1-git-send-email-yegorslists@googlemail.com>
+ (yegorslists@googlemail.com's message of "Thu, 19 Sep 2013 09:12:57
+ +0200")
+References: <1379574777-9399-1-git-send-email-yegorslists@googlemail.com>
+Message-ID: <87wqmcfyi3.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Jason, All,
+>>>>> "yegorslists" == yegorslists  <yegorslists@googlemail.com> writes:
 
-On 2013-09-19 10:25 +1000, Jason Rennie spake thusly:
-> On 19/09/2013 8:09 AM, Yann E. MORIN wrote:
-> >But consider this:
-> >   - you use Buildroot to build a GPL package, which ends up on the
-> >     target
-> >
-> >   - that package is GPL, so the GPL applies to that package
-> >
-> >   - section 3 of the GPL requires you provide the "scripts used to
-> >     control compilation and installation of the executable."
-> >
-> >   - So you have two options:
-> >     - come up with the instructions by yourself (by looking at how
-> >       Buildroot does its stuff, for example), but it's not trivial;
-> >     - or provide your Buildroot tree (and .config) since this is the
-> >       easiest. Let's assume that's the way you go.
-> >
-> >   - so, since you are distributing Buildroot, you have to abide by its
-> >     license. It happens that this license is the GPL, but it's just
-> >     happenstance that it is the same license as your GPL package, above.
-> >
-> 
-> Wouldn't the intent of the license suggest that this was talking about the
-> makefiles/configure scripts/whatever that you need to actually build the
-> executable? Rather than some metabuild script like buildroot? I'm guessing
-> the clause is there to stop someone "complying" by giving you a bunch of .c
-> and .h files but not providing you a meaningful way to get an executeable
-> out the other end.
-> 
-> The understanding you are suggesting would seem to be like requiring that
-> the automated build script that runs on a build server of an evening (which
-> calls the make files, maybe runs some automated tests etc, basically an
-> automated developer task) would need to be included to distribute the
-> software.
+ yegorslists> From: Yegor Yefremov <yegorslists@googlemail.com>
+ yegorslists> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+ yegorslists> ---
+ yegorslists>  package/tslib/tslib.mk |    2 +-
+ yegorslists>  1 files changed, 1 insertions(+), 1 deletions(-)
 
-No, I never said that [*].
-I said doing so would make complying _much easier_.
+ yegorslists> diff --git a/package/tslib/tslib.mk b/package/tslib/tslib.mk
+ yegorslists> index 7f5aa21..ebc33b2 100644
+ yegorslists> --- a/package/tslib/tslib.mk
+ yegorslists> +++ b/package/tslib/tslib.mk
+ yegorslists> @@ -4,7 +4,7 @@
+ yegorslists>  #
+ yegorslists>  ################################################################################
+ 
+ yegorslists> -TSLIB_VERSION = 158ee49b32f83cb7b02d5315f41c2e4cff38942d
+ yegorslists> +TSLIB_VERSION = e2e03ef7192a7e0a84f725522be17a61b21b41c5
 
-And since we're speaking on the Buildroot ML, I'm assuming the build
-system in question is Buildroot, not some weirdo internal and
-proprietary build system.
+It makes more sense to use the 1.1 tag.
 
-> As I said IANAL and so perhaps that would be required but that would seem
-> like a bug in the license at that point and the problem is the terms of the
-> license needing review.
-
-Well, what is important is the _spirit_ of the license, as much as the
-_letter_ of the license is.
-
-Now, I believe we've gone as far as our uninformed opinions would get
-us, and we won't be able to cover all cases, so we can safely close this
-subject for now. ;-)
-
-I'll try to gather all of this thread in a patch against the manual later
-next week, and will submit that back here for further discussion. Thanks
-all of you for your very valuable inputs! :-)
-
-
-[*] In fact, I even never said that you had to, or did not have to
-    provide it. I just said providing it makes complying very easy.
-    YMMV, as they use to say! ;-)
-
-Regards,
-Yann E. MORIN.
+Committed with that fixed, thanks.
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Bye, Peter Korsgaard
