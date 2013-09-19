@@ -1,34 +1,45 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 19 Sep 2013 18:11:50 +0200
-Subject: [Buildroot] [PATCH 1/1] iputils: new package
-In-Reply-To: <OF952C3494.90E0D391-ON86257BEB.00528672-86257BEB.0052A01A@rockwellcollins.com>
-References: <1379533013-13209-1-git-send-email-mlweber1@rockwellcollins.com>
- <523A2AEE.4070606@mind.be>
- <OF635D0B64.199C14BF-ON86257BEB.000D9C69-86257BEB.004AD41E@rockwellcollins.com>
- <523AFFFA.7020809@mind.be> <20130919165917.021f2bd4@skate>
- <OF952C3494.90E0D391-ON86257BEB.00528672-86257BEB.0052A01A@rockwellcollins.com>
-Message-ID: <20130919181150.107b3285@skate>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Thu, 19 Sep 2013 18:27:34 +0200
+Subject: [Buildroot] [PATCH 3 of 4] manual generation: check
+	dependencies first
+In-Reply-To: <20130919173926.0bf04d9a@skate>
+References: <patchbomb.1379587632@argentina>
+ <246bed054da59d6508dc.1379587635@argentina>
+ <CAHXCMMJ2oSqF_MoyDJYjxCKKZukwg6vr2ewP+TUFy9kaDrwcoA@mail.gmail.com>
+ <CAAXf6LW=7dUUEjGHp6xVFy9-SEXVuUyiK8Lvom2imyCX=s+3oQ@mail.gmail.com>
+ <20130919173926.0bf04d9a@skate>
+Message-ID: <CAAXf6LWpjXetyUo4QHbc3FFi4qP2qmeSsJbuwwP9+3_vnuabyQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+On Thu, Sep 19, 2013 at 5:39 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Dear Thomas De Schampheleire,
+>
+> On Thu, 19 Sep 2013 15:30:25 +0200, Thomas De Schampheleire wrote:
+>
+>> For python, should we check and bail out, or rather skip the package
+>> list generation? In fact, why is the package list generation coupled
+>> to the manual?
+>
+> Because the package list is used in the manual only, and the best
+> moment to generate is when building the manual?
+>
+> When would you want to generate it?
 
-On Thu, 19 Sep 2013 10:02:28 -0500, mlweber1 at rockwellcollins.com wrote:
+I was thinking it could become a separate build target. But at that
+time I didn't fully realize (and didn't check) that these lists are
+actually included in the manual. So, that question is void now.
 
-> Yeah, only for IPv6 doing a md5 sum.  What's the cleanest way to comment 
-> that in the Config.in?  Part of the description?
+Remains: how should we check for python argparse? Module argparse is
+included from python-2.7 and python-3.2 onwards. It seems that Ubuntu
+has been providing python-argparse for older python versions as well,
+but IMO it is not needed to check for this explicitly. If you ask me,
+I would simply check for python 2.7+ and 3.2+, but I'm open for
+discussion.
 
-Just:
-
-	# IPv6 support needs to do a MD5 sum for <some reason>
-	select BR2_PACKAGE_OPENSSL if BR2_INET_IPV6
-
+Thanks,
 Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
