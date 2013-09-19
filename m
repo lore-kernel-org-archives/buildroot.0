@@ -1,50 +1,44 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 19 Sep 2013 19:41:45 +0200
-Subject: [Buildroot] [PATCH 1/5] qt5: bump to 5.1.1
-In-Reply-To: <1379568660.27759.4.camel@viko>
-References: <201309182118.23091.fatih.asici@gmail.com>
- <20130919062450.10f51848@skate> <1379568660.27759.4.camel@viko>
-Message-ID: <523B3759.1000901@mind.be>
+Date: Thu, 19 Sep 2013 19:36:26 +0200
+Subject: [Buildroot] [PATCH] qt5base: fix build when egl headers need a
+ definition
+In-Reply-To: <20130919061233.35eb34e3@skate>
+References: <1379503071-5446-1-git-send-email-fatih.asici@gmail.com>
+ <20130918185539.00adb05c@skate> <523A1AE3.9090802@mind.be>
+ <20130919061233.35eb34e3@skate>
+Message-ID: <523B361A.6070603@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 19/09/13 07:31, Fatih A??c? wrote:
-> On Thu, 2013-09-19 at 06:24 +0200, Thomas Petazzoni wrote:
->>>>> -@@ -0,0 +1,43 @@
->>>>> +@@ -0,0 +1,44 @@
->>>>>
->>>>>   +MAKEFILE_GENERATOR      = UNIX
->>>>>
->>>>> -+CONFIG                  += incremental gdb_dwarf_index
->>>>> ++CONFIG                 += incremental gdb_dwarf_index
->>>>
->>>> Is this change needed? Seems like white space change only, no?
->>>
->>> I checked the mkspec files in old and new versions of upstream.
->> Upstream's
->>> files have this change. So I changed our mkspec file to reduce diff
->> output.
->>> I think, this will help checking again in new versions. Yes, it is
->> only
->>> a white space change and not needed.
+On 19/09/13 06:12, Thomas Petazzoni wrote:
+> Dear Arnout Vandecappelle,
+>
+> On Wed, 18 Sep 2013 23:28:03 +0200, Arnout Vandecappelle wrote:
+>
+>>>>> +++ b/package/qt5/qt5base/qt5base-egl-cflags.patch
+>>> All patches should have a description, and a Signed-off-by line. See
+>>> http://buildroot.org/downloads/manual/manual.html#_format_and_licensing_of_the_package_patches.
 >>
->> It's a bit early, so maybe my brain is not yet up and running, but if
->> the upstream has changed this, and we don't care about whether there's
->> a space or not, why does our patch contains something to change this?
+>>    Also, please give your patch a number so that the order in which
+>> they're applied is predictable. At the moment this probably doesn't
+>> matter much, but it makes it easier later on to make sure a new patch
+>> will be applied after this one.
 >
-> It is just a cosmetic change not to see the difference when comparing
-> files :)
+> Yeah, I also wanted to ask that, but there are existing patches for
+> qt5base that doesn't comply with this, so I felt that it was maybe not
+> appropriate to ask a contributor to fix our (my ?) mess :-)
 >
-> If the rule is not to touch anywhere unrelated to the version change, I
-> can revert that part.
+> But indeed, Fatih, as a preparation patch, you could add number to the
+> existing patches, and then add your own.
 
-  I think it's a good idea to keep it. The closer that our mkspecs stays 
-to one of the upstream examples, the better.
-
-  Perhaps we could try upstreaming our mkspecs? Does that make sense?
+  I didn't say to add a number to the existing patches. Since the order 
+doesn't matter for this patch, you can just give this patch a number and 
+leave the other ones alone. This is particularly relevant since your qt5 
+version bumping patch removes some of the patches, so renaming would give 
+a conflict...
 
   Regards,
   Arnout
