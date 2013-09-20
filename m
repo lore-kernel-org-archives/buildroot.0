@@ -1,26 +1,55 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 20 Sep 2013 15:21:23 +0200
-Subject: [Buildroot] [PATCH v3] libtirpc: requires toolchain with
-	threading support
-In-Reply-To: <1379068880-18028-1-git-send-email-s.martin49@gmail.com> (Samuel
- Martin's message of "Fri, 13 Sep 2013 12:41:20 +0200")
-References: <1379068880-18028-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <8738ozd3xo.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Fri, 20 Sep 2013 15:16:02 +0200
+Subject: [Buildroot] [git commit] manual generation: change capitalization
+	of messages
+Message-ID: <20130920132138.BA3EC9B810@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Samuel" == Samuel Martin <s.martin49@gmail.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=50a18b63c977ce5a04d92476ad5a6202009a2cb6
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Samuel> Fixes:
- Samuel> http://autobuild.buildroot.org/results/8ba720f47f74df94b8c70ac4befd47c47ce65f2f
+When generating the manual, you see following messages:
 
- Samuel> Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
- Samuel> Signed-off-by: "Samuel Martin" <s.martin49@gmail.com>
+>>>   Generating HTML manual...
+>>>   Generating Split HTML manual...
+>>>   Generating PDF manual...
+>>>   Generating Text manual...
+>>>   Generating EPUB manual...
 
-Committed, thanks.
+and with this patch the capitalization is changed so that it becomes:
 
--- 
-Bye, Peter Korsgaard
+>>>   Generating HTML manual...
+>>>   Generating split HTML manual...
+>>>   Generating PDF manual...
+>>>   Generating text manual...
+>>>   Generating ePUB manual...
+
+Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ docs/manual/manual.mk |    6 +++---
+ 1 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/docs/manual/manual.mk b/docs/manual/manual.mk
+index bcbedad..d092d3f 100644
+--- a/docs/manual/manual.mk
++++ b/docs/manual/manual.mk
+@@ -43,10 +43,10 @@ endef
+ ################################################################################
+ define GENDOC
+ $(call GENDOC_INNER,$(1),xhtml,html,html,HTML,--xsltproc-opts "--stringparam toc.section.depth 4")
+-$(call GENDOC_INNER,$(1),chunked,split-html,chunked,Split HTML,--xsltproc-opts "--stringparam toc.section.depth 4")
++$(call GENDOC_INNER,$(1),chunked,split-html,chunked,split HTML,--xsltproc-opts "--stringparam toc.section.depth 4")
+ $(call GENDOC_INNER,$(1),pdf,pdf,pdf,PDF,--dblatex-opts "-P latex.output.revhistory=0")
+-$(call GENDOC_INNER,$(1),text,txt,text,Text)
+-$(call GENDOC_INNER,$(1),epub,epub,epub,EPUB)
++$(call GENDOC_INNER,$(1),text,txt,text,text)
++$(call GENDOC_INNER,$(1),epub,epub,epub,ePUB)
+ clean: $(1)-clean
+ $(1)-clean:
+ 	$(Q)$(RM) -rf $(O)/docs/$(1)
