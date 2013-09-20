@@ -1,7 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 21 Sep 2013 00:00:29 +0200
-Subject: [Buildroot] [pull request] Pull request for branch yem/misc-updates
-Message-ID: <cover.1379714259.git.yann.morin.1998@free.fr>
+Date: Sat, 21 Sep 2013 00:00:30 +0200
+Subject: [Buildroot] [PATCH 1/2] toolchain/wrapper: add option to print one
+	argument per line
+In-Reply-To: <cover.1379714259.git.yann.morin.1998@free.fr>
+References: <cover.1379714259.git.yann.morin.1998@free.fr>
+Message-ID: <31f4ddb9ea718e4bb9321ffb8bf5d75f5fb02361.1379714259.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,42 +13,95 @@ To: buildroot@busybox.net
 
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Hello All!
+In case there are many arguments passed to the tools, the command line
+can get very long, and difficult to parse visually.
 
-Here are two misc updates:
-  - bump the RPi firmware for some fixes
-  - alternate debug mode for the toolchain wrapper
+For example, the Linux kernel passes a lot of arguments to gcc (at least
+45, which gives 53 with our hard-coded args). Looking at such a command
+line is daunting.
 
-Regards,
-Yann E. MORIN.
+So, add the possibility to print each argument on its own line.
 
+Also, enclose all args between single quotes, so the command line
+can be safely copy-pasted without special chars (spaces, $) being
+inrerpreted by the shell.
 
-The following changes since commit 1fe1165e619fdaa2fedc027137974797796f80aa:
+Add blurb about toolchain-wrapper to documentation at the same
+time.
 
-  civetweb: new package (2013-09-20 16:14:10 +0200)
-
-are available in the git repository at:
-
-  git://gitorious.org/buildroot/buildroot.git yem/misc-updates
-
-for you to fetch changes up to 4092a345daa1077982e8355fdfa22c27b7240a7f:
-
-  package/rpi-firmware: bump version (2013-09-20 19:57:56 +0200)
-
-----------------------------------------------------------------
-Yann E. MORIN (2):
-      toolchain/wrapper: add option to print one argument per line
-      package/rpi-firmware: bump version
-
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Acked-by: Luca Ceresoli <luca@lucaceresoli.net>
+Tested-by: Luca Ceresoli <luca@lucaceresoli.net>
+---
  docs/manual/customize-toolchain.txt                | 11 ++++++++++
- package/rpi-firmware/rpi-firmware.mk               |  2 +-
  .../toolchain-external/ext-toolchain-wrapper.c     | 25 +++++++++++++++-------
- 3 files changed, 29 insertions(+), 9 deletions(-)
+ 2 files changed, 28 insertions(+), 8 deletions(-)
 
+diff --git a/docs/manual/customize-toolchain.txt b/docs/manual/customize-toolchain.txt
+index 811a6dc..82ecc28 100644
+--- a/docs/manual/customize-toolchain.txt
++++ b/docs/manual/customize-toolchain.txt
+@@ -17,6 +17,17 @@ generate it.
+ It also requires to set the Buildroot settings according to the toolchain ones
+ (see xref:external-toolchain-backend[]).
+ 
++When using an external toolchain, Buildroot generates a wrapper program, that
++passes the appropriate options (according to the configuration) to the
++external toolchain programs. In case you need to debug this wrapper, you can
++set the environment variable BR_DEBUG_WRAPPER to either one of:
++
++* +0+, empty or not set: no debug
++
++* +1+: trace all arguments on a single line
++
++* +2+: trace one argument per line
++
+ Using the internal Buildroot toolchain backend
+ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 
+diff --git a/toolchain/toolchain-external/ext-toolchain-wrapper.c b/toolchain/toolchain-external/ext-toolchain-wrapper.c
+index 565e36b..dfdfcff 100644
+--- a/toolchain/toolchain-external/ext-toolchain-wrapper.c
++++ b/toolchain/toolchain-external/ext-toolchain-wrapper.c
+@@ -74,7 +74,8 @@ int main(int argc, char **argv)
+ 	char *relbasedir, *absbasedir;
+ 	char *progpath = argv[0];
+ 	char *basename;
+-	int ret, i, count = 0;
++	char *env_debug;
++	int ret, i, count = 0, debug;
+ 
+ 	/* Calculate the relative paths */
+ 	basename = strrchr(progpath, '/');
+@@ -157,13 +158,21 @@ int main(int argc, char **argv)
+ 	/* finish with NULL termination */
+ 	*cur = NULL;
+ 
+-	if (getenv("BR_DEBUG_WRAPPER")) {
+-		fprintf(stderr, "Executing");
+-
+-		for (i = 0; args[i]; i++)
+-			fprintf(stderr, " %s", args[i]);
+-
+-		fprintf(stderr, "\n");
++	/* Debug the wrapper to see actual arguments passed to
++	 * the compiler:
++	 * unset, empty, or 0: do not trace
++	 * set to 1          : trace all arguments on a single line
++	 * set to 2          : trace one argument per line
++	 */
++	if ((env_debug = getenv("BR_DEBUG_WRAPPER"))) {
++		debug = atoi(env_debug);
++		if (debug > 0) {
++			fprintf(stderr, "Toolchain wrapper executing:");
++			for (i = 0; args[i]; i++)
++				fprintf(stderr, "%s'%s'",
++					(debug == 2)?"\n    ":" ", args[i]);
++			fprintf(stderr, "\n");
++		}
+ 	}
+ 
+ 	if (execv(path, args))
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.8.1.2
