@@ -1,97 +1,151 @@
 From: =?UTF-8?q?Fatih=20A=C5=9F=C4=B1c=C4=B1?= <fatih.asici@gmail.com>
-Date: Fri, 20 Sep 2013 08:43:13 +0300
-Subject: [Buildroot] [PATCH v2 4/6] qt5serialport: new package
+Date: Fri, 20 Sep 2013 08:43:15 +0300
+Subject: [Buildroot] [PATCH v2 6/6] qt5: remove configure options from
+	module packages
 In-Reply-To: <1379655795-22429-1-git-send-email-fatih.asici@gmail.com>
 References: <1379655795-22429-1-git-send-email-fatih.asici@gmail.com>
-Message-ID: <1379655795-22429-5-git-send-email-fatih.asici@gmail.com>
+Message-ID: <1379655795-22429-7-git-send-email-fatih.asici@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+These packages do not have configure scripts.
+
 Signed-off-by: Fatih A??c? <fatih.asici@gmail.com>
 ---
- package/qt5/Config.in                      |    1 +
- package/qt5/qt5serialport/Config.in        |   10 +++++++
- package/qt5/qt5serialport/qt5serialport.mk |   40 ++++++++++++++++++++++++++++
- 3 files changed, 51 insertions(+)
- create mode 100644 package/qt5/qt5serialport/Config.in
- create mode 100644 package/qt5/qt5serialport/qt5serialport.mk
+ package/qt5/qt5declarative/qt5declarative.mk           |    1 -
+ package/qt5/qt5graphicaleffects/qt5graphicaleffects.mk |    1 -
+ package/qt5/qt5imageformats/qt5imageformats.mk         |    1 -
+ package/qt5/qt5jsbackend/qt5jsbackend.mk               |    1 -
+ package/qt5/qt5multimedia/qt5multimedia.mk             |    1 -
+ package/qt5/qt5quick1/qt5quick1.mk                     |    1 -
+ package/qt5/qt5script/qt5script.mk                     |    1 -
+ package/qt5/qt5svg/qt5svg.mk                           |    1 -
+ package/qt5/qt5webkit/qt5webkit.mk                     |    1 -
+ package/qt5/qt5xmlpatterns/qt5xmlpatterns.mk           |    1 -
+ 10 files changed, 10 deletions(-)
 
-diff --git a/package/qt5/Config.in b/package/qt5/Config.in
-index 8488578..fa10155 100644
---- a/package/qt5/Config.in
-+++ b/package/qt5/Config.in
-@@ -25,6 +25,7 @@ source "package/qt5/qt5quick1/Config.in"
- source "package/qt5/qt5quickcontrols/Config.in"
- source "package/qt5/qt5script/Config.in"
- source "package/qt5/qt5sensors/Config.in"
-+source "package/qt5/qt5serialport/Config.in"
- source "package/qt5/qt5svg/Config.in"
- source "package/qt5/qt5webkit/Config.in"
- source "package/qt5/qt5xmlpatterns/Config.in"
-diff --git a/package/qt5/qt5serialport/Config.in b/package/qt5/qt5serialport/Config.in
-new file mode 100644
-index 0000000..772de88
---- /dev/null
-+++ b/package/qt5/qt5serialport/Config.in
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_QT5SERIALPORT
-+	bool "qt5serialport"
-+	select BR2_PACKAGE_QT5BASE
-+	help
-+	  Qt is a cross-platform application and UI framework for
-+	  developers using C++.
-+
-+	  This package corresponds to the qt5serialport module.
-+
-+	  http://qt-project.org
-diff --git a/package/qt5/qt5serialport/qt5serialport.mk b/package/qt5/qt5serialport/qt5serialport.mk
-new file mode 100644
-index 0000000..0328ef8
---- /dev/null
-+++ b/package/qt5/qt5serialport/qt5serialport.mk
-@@ -0,0 +1,40 @@
-+################################################################################
-+#
-+# qt5serialport
-+#
-+################################################################################
-+
-+QT5SERIALPORT_VERSION = $(QT5_VERSION)
-+QT5SERIALPORT_SITE = $(QT5_SITE)
-+QT5SERIALPORT_SOURCE = qtserialport-opensource-src-$(QT5SERIALPORT_VERSION).tar.xz
-+QT5SERIALPORT_DEPENDENCIES = qt5base
-+QT5SERIALPORT_INSTALL_STAGING = YES
-+
-+ifeq ($(BR2_PACKAGE_QT5BASE_LICENSE_APPROVED),y)
-+QT5SERIALPORT_LICENSE = LGPLv2.1 or GPLv3.0
-+QT5SERIALPORT_LICENSE_FILES = LICENSE.GPL LICENSE.LGPL LGPL_EXCEPTION.txt
-+else
-+QT5SERIALPORT_LICENSE = Commercial license
-+QT5SERIALPORT_REDISTRIBUTE = NO
-+endif
-+
-+define QT5SERIALPORT_CONFIGURE_CMDS
-+	(cd $(@D); $(HOST_DIR)/usr/bin/qmake)
-+endef
-+
-+define QT5SERIALPORT_BUILD_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
-+endef
-+
-+define QT5SERIALPORT_INSTALL_STAGING_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install
-+	$(QT5_LA_PRL_FILES_FIXUP)
-+endef
-+
-+ifeq ($(BR2_PREFER_STATIC_LIB),)
-+define QT5SERIALPORT_INSTALL_TARGET_CMDS
-+	cp -dpf $(STAGING_DIR)/usr/lib/libQt5SerialPort.so.* $(TARGET_DIR)/usr/lib
-+endef
-+endif
-+
-+$(eval $(generic-package))
+diff --git a/package/qt5/qt5declarative/qt5declarative.mk b/package/qt5/qt5declarative/qt5declarative.mk
+index 943f33d..11b9287 100644
+--- a/package/qt5/qt5declarative/qt5declarative.mk
++++ b/package/qt5/qt5declarative/qt5declarative.mk
+@@ -11,7 +11,6 @@ QT5DECLARATIVE_DEPENDENCIES = qt5base qt5xmlpatterns qt5jsbackend
+ QT5DECLARATIVE_INSTALL_STAGING = YES
+ 
+ ifeq ($(BR2_PACKAGE_QT5BASE_LICENSE_APPROVED),y)
+-QT5DECLARATIVE_CONFIGURE_OPTS += -opensource -confirm-license
+ QT5DECLARATIVE_LICENSE = LGPLv2.1 or GPLv3.0
+ QT5DECLARATIVE_LICENSE_FILES = LICENSE.GPL LICENSE.LGPL LGPL_EXCEPTION.txt
+ else
+diff --git a/package/qt5/qt5graphicaleffects/qt5graphicaleffects.mk b/package/qt5/qt5graphicaleffects/qt5graphicaleffects.mk
+index fc9a2ec..1e492c9 100644
+--- a/package/qt5/qt5graphicaleffects/qt5graphicaleffects.mk
++++ b/package/qt5/qt5graphicaleffects/qt5graphicaleffects.mk
+@@ -11,7 +11,6 @@ QT5GRAPHICALEFFECTS_DEPENDENCIES = qt5base qt5declarative
+ QT5GRAPHICALEFFECTS_INSTALL_STAGING = YES
+ 
+ ifeq ($(BR2_PACKAGE_QT5BASE_LICENSE_APPROVED),y)
+-QT5GRAPHICALEFFECTS_CONFIGURE_OPTS += -opensource -confirm-license
+ QT5GRAPHICALEFFECTS_LICENSE = LGPLv2.1 or GPLv3.0
+ # Here we would like to get license files from qt5base, but qt5base
+ # may not be extracted at the time we get the legal-info for
+diff --git a/package/qt5/qt5imageformats/qt5imageformats.mk b/package/qt5/qt5imageformats/qt5imageformats.mk
+index 10d744b..52192c6 100644
+--- a/package/qt5/qt5imageformats/qt5imageformats.mk
++++ b/package/qt5/qt5imageformats/qt5imageformats.mk
+@@ -11,7 +11,6 @@ QT5IMAGEFORMATS_DEPENDENCIES = qt5base
+ QT5IMAGEFORMATS_INSTALL_STAGING = YES
+ 
+ ifeq ($(BR2_PACKAGE_QT5BASE_LICENSE_APPROVED),y)
+-QT5IMAGEFORMATS_CONFIGURE_OPTS += -opensource -confirm-license
+ QT5IMAGEFORMATS_LICENSE = LGPLv2.1 or GPLv3.0
+ QT5IMAGEFORMATS_LICENSE_FILES = LICENSE.GPL LICENSE.LGPL LGPL_EXCEPTION.txt
+ else
+diff --git a/package/qt5/qt5jsbackend/qt5jsbackend.mk b/package/qt5/qt5jsbackend/qt5jsbackend.mk
+index d065f0b..9eccd23 100644
+--- a/package/qt5/qt5jsbackend/qt5jsbackend.mk
++++ b/package/qt5/qt5jsbackend/qt5jsbackend.mk
+@@ -11,7 +11,6 @@ QT5JSBACKEND_DEPENDENCIES = qt5base
+ QT5JSBACKEND_INSTALL_STAGING = YES
+ 
+ ifeq ($(BR2_PACKAGE_QT5BASE_LICENSE_APPROVED),y)
+-QT5JSBACKEND_CONFIGURE_OPTS += -opensource -confirm-license
+ QT5JSBACKEND_LICENSE = LGPLv2.1 or GPLv3.0
+ QT5JSBACKEND_LICENSE_FILES = LICENSE.GPL LICENSE.LGPL LGPL_EXCEPTION.txt
+ else
+diff --git a/package/qt5/qt5multimedia/qt5multimedia.mk b/package/qt5/qt5multimedia/qt5multimedia.mk
+index 8f62274..1a3ca6b 100644
+--- a/package/qt5/qt5multimedia/qt5multimedia.mk
++++ b/package/qt5/qt5multimedia/qt5multimedia.mk
+@@ -11,7 +11,6 @@ QT5MULTIMEDIA_DEPENDENCIES = qt5base qt5declarative
+ QT5MULTIMEDIA_INSTALL_STAGING = YES
+ 
+ ifeq ($(BR2_PACKAGE_QT5BASE_LICENSE_APPROVED),y)
+-QT5MULTIMEDIA_CONFIGURE_OPTS += -opensource -confirm-license
+ QT5MULTIMEDIA_LICENSE = LGPLv2.1 or GPLv3.0
+ # Here we would like to get license files from qt5base, but qt5base
+ # may not be extracted at the time we get the legal-info for
+diff --git a/package/qt5/qt5quick1/qt5quick1.mk b/package/qt5/qt5quick1/qt5quick1.mk
+index d1b0b36..f9bb3e8 100644
+--- a/package/qt5/qt5quick1/qt5quick1.mk
++++ b/package/qt5/qt5quick1/qt5quick1.mk
+@@ -12,7 +12,6 @@ QT5QUICK1_DEPENDENCIES = qt5base qt5xmlpatterns qt5script qt5declarative qt5jsba
+ QT5QUICK1_INSTALL_STAGING = YES
+ 
+ ifeq ($(BR2_PACKAGE_QT5BASE_LICENSE_APPROVED),y)
+-QT5QUICK1_CONFIGURE_OPTS += -opensource -confirm-license
+ QT5QUICK1_LICENSE = LGPLv2.1 or GPLv3.0
+ QT5QUICK1_LICENSE_FILES = LICENSE.GPL LICENSE.LGPL LGPL_EXCEPTION.txt
+ else
+diff --git a/package/qt5/qt5script/qt5script.mk b/package/qt5/qt5script/qt5script.mk
+index e436474..e62e0ac 100644
+--- a/package/qt5/qt5script/qt5script.mk
++++ b/package/qt5/qt5script/qt5script.mk
+@@ -11,7 +11,6 @@ QT5SCRIPT_DEPENDENCIES = qt5base
+ QT5SCRIPT_INSTALL_STAGING = YES
+ 
+ ifeq ($(BR2_PACKAGE_QT5BASE_LICENSE_APPROVED),y)
+-QT5SCRIPT_CONFIGURE_OPTS += -opensource -confirm-license
+ QT5SCRIPT_LICENSE = LGPLv2.1 or GPLv3.0
+ QT5SCRIPT_LICENSE_FILES = LICENSE.GPL LICENSE.LGPL LGPL_EXCEPTION.txt
+ else
+diff --git a/package/qt5/qt5svg/qt5svg.mk b/package/qt5/qt5svg/qt5svg.mk
+index 8a31ac8..2ff7fc8 100644
+--- a/package/qt5/qt5svg/qt5svg.mk
++++ b/package/qt5/qt5svg/qt5svg.mk
+@@ -11,7 +11,6 @@ QT5SVG_DEPENDENCIES = qt5base
+ QT5SVG_INSTALL_STAGING = YES
+ 
+ ifeq ($(BR2_PACKAGE_QT5BASE_LICENSE_APPROVED),y)
+-QT5SVG_CONFIGURE_OPTS += -opensource -confirm-license
+ QT5SVG_LICENSE = LGPLv2.1 or GPLv3.0
+ # Here we would like to get license files from qt5base, but qt5base
+ # may not be extracted at the time we get the legal-info for qt5svg.
+diff --git a/package/qt5/qt5webkit/qt5webkit.mk b/package/qt5/qt5webkit/qt5webkit.mk
+index 320a2ea..87b15a9 100644
+--- a/package/qt5/qt5webkit/qt5webkit.mk
++++ b/package/qt5/qt5webkit/qt5webkit.mk
+@@ -11,7 +11,6 @@ QT5WEBKIT_DEPENDENCIES = qt5base sqlite host-ruby host-gperf
+ QT5WEBKIT_INSTALL_STAGING = YES
+ 
+ ifeq ($(BR2_PACKAGE_QT5BASE_LICENSE_APPROVED),y)
+-QT5WEBKIT_CONFIGURE_OPTS += -opensource -confirm-license
+ QT5WEBKIT_LICENSE = LGPLv2.1 or GPLv3.0
+ # Here we would like to get license files from qt5base, but qt5base
+ # may not be extracted at the time we get the legal-info for
+diff --git a/package/qt5/qt5xmlpatterns/qt5xmlpatterns.mk b/package/qt5/qt5xmlpatterns/qt5xmlpatterns.mk
+index 322fd70..6f4fdc8 100644
+--- a/package/qt5/qt5xmlpatterns/qt5xmlpatterns.mk
++++ b/package/qt5/qt5xmlpatterns/qt5xmlpatterns.mk
+@@ -11,7 +11,6 @@ QT5XMLPATTERNS_DEPENDENCIES = qt5base
+ QT5XMLPATTERNS_INSTALL_STAGING = YES
+ 
+ ifeq ($(BR2_PACKAGE_QT5BASE_LICENSE_APPROVED),y)
+-QT5XMLPATTERNS_CONFIGURE_OPTS += -opensource -confirm-license
+ QT5XMLPATTERNS_LICENSE = LGPLv2.1 or GPLv3.0
+ QT5XMLPATTERNS_LICENSE_FILES = LICENSE.GPL LICENSE.LGPL LGPL_EXCEPTION.txt
+ else
 -- 
 1.7.10.4
