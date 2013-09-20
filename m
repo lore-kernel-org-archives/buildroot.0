@@ -1,32 +1,29 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 20 Sep 2013 15:10:21 +0200
-Subject: [Buildroot] [git commit] feh: bump to 2.9.3
-Message-ID: <20130920132138.A689C9B80E@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 20 Sep 2013 15:34:30 +0200
+Subject: [Buildroot] [PATCH v2 01/17] libsepol: new package
+In-Reply-To: <1378936777-28308-2-git-send-email-clshotwe@rockwellcollins.com>
+ (Clayton Shotwell's message of "Wed, 11 Sep 2013 16:59:21 -0500")
+References: <1378936777-28308-1-git-send-email-clshotwe@rockwellcollins.com>
+ <1378936777-28308-2-git-send-email-clshotwe@rockwellcollins.com>
+Message-ID: <87y56rbord.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=8ccbca218ed17945a07e585abcc8e28f7eb5b9dc
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Clayton" == Clayton Shotwell <clshotwe@rockwellcollins.com> writes:
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/feh/feh.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ Clayton> Signed-off-by: Clayton Shotwell <clshotwe@rockwellcollins.com>
+ Clayton> ---
+ Clayton> Changes v1 -> v2:
+ Clayton>   - Move Config.in entry into the libraries section since this is a
+ Clayton>     library.
+ Clayton>   - General cleanup to the mk file to conform to the standard format.
+ Clayton>   - Fixed the license version to be LGPLv2.1+ to match the headers in
+ Clayton>     the source files (suggested by Thomas)
 
-diff --git a/package/feh/feh.mk b/package/feh/feh.mk
-index 360d03a..b7fd54c 100644
---- a/package/feh/feh.mk
-+++ b/package/feh/feh.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--FEH_VERSION = 2.9.1
-+FEH_VERSION = 2.9.3
- FEH_SOURCE = feh-$(FEH_VERSION).tar.bz2
- FEH_SITE = http://feh.finalrewind.org/
- FEH_DEPENDENCIES = libcurl giblib imlib2 libpng xlib_libXinerama xlib_libXt
+Committed with some minor whitespace fixes, thanks.
+
+-- 
+Bye, Peter Korsgaard
