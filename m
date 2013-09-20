@@ -1,125 +1,66 @@
 From: Eric Jarrige <eric.jarrige@armadeus.org>
-Date: Fri, 20 Sep 2013 12:01:49 +0200
-Subject: [Buildroot] [PATCH 1/1] u-boot: allow to pass a custom
-	configuration file
-In-Reply-To: <20130920070811.584e83bc@skate>
+Date: Fri, 20 Sep 2013 13:03:36 +0200
+Subject: [Buildroot] [PATCH v2] u-boot: allow to pass a custom configuration
+	file
+In-Reply-To: <1379589006-28682-1-git-send-email-eric.jarrige@armadeus.org>
 References: <1379589006-28682-1-git-send-email-eric.jarrige@armadeus.org>
- <20130919174336.537e265e@skate>
- <0AF585C7-2CB6-443B-8F22-0EC2889259A3@armadeus.org>
- <20130920070811.584e83bc@skate>
-Message-ID: <DC3C25A2-7306-4B51-8811-0480C9EAA194@armadeus.org>
+Message-ID: <1379675016-24302-1-git-send-email-eric.jarrige@armadeus.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+---
+Changes v1 -> v2:
+  - Fix typo
 
-Please forget my previous email that was sadly formated.
+ boot/uboot/Config.in |   18 ++++++++++++++++++
+ boot/uboot/uboot.mk  |    3 +++
+ 2 files changed, 21 insertions(+), 0 deletions(-)
 
-On 20 sept. 2013, at 07:08, Thomas Petazzoni wrote:
-
-> Dear Eric Jarrige,
-> 
-> On Thu, 19 Sep 2013 22:07:22 +0200, Eric Jarrige wrote:
-> 
->>> I don't think using the word 'defconfig' for U-Boot is appropriate,
->>> since 'defconfig' really refers to a kconfig terminology and U-Boot,
->>> sadly, doesn't use kconfig.
->> 
->> Does the alternate terminology DEFAULT_CONFIG could be more
->> appropriate or acceptable ?
-> 
-> I don't think "default" is really meaningful. Just "Path to the board
-> configuration file" would be sufficient.
-
-ok
-
-> 
->>>> define UBOOT_CONFIGURE_CMDS
->>>> +	$(if $(BR2_TARGET_UBOOT_USE_CUSTOM_CONFIG),
->>>> +		cp -pf $(call qstrip,$(BR2_TARGET_UBOOT_CUSTOM_CONFIG_FILE)) \
->>>> +			$(@D)/include/configs/$(UBOOT_BOARD_NAME).h)
->>>> 	$(TARGET_CONFIGURE_OPTS) $(UBOOT_CONFIGURE_OPTS) 	\
->>>> 		$(MAKE) -C $(@D) $(UBOOT_MAKE_OPTS)		\
->>>> 		$(UBOOT_BOARD_NAME)_config
->>> 
->>> I am a bit hesitant on the overall feature. The fact that a
->>> include/configs/<something>.h file is really a configuration file is
->>> pretty fuzzy in U-Boot, especially since now boards are supposed to
->>> also be listed in the main boards.cfg file.
->>> 
->>> Therefore, I'm tempted to say that users who need to do that should
->>> instead use patches against U-Boot (to add their own board, including
->>> the include/configs/<something>.h file).
->>> 
->>> But on this one, I believe I can be convinced if there are good
->>> arguments :)
->> 
->> The file boards.cfg is a source of confusion for me. This file provides
->> the list of boards with some extra information like status of the board and
->> maintainer email address.
->> Nevertheless the concrete config files are the <BOARD>.h files located in
->> include/config even if U-Boot a C syntax with a list of #define instead of
->> the common kconfig syntax.
-> 
-> Right, but it looks like nowadays that adding a board
-> configuration requires both adding a include/configs/<BOARD>.h file and
-> an entry in boards.cfg (though I agree that was the 'mkconfig' script
-> is doing is quite obscure).
-
-Right, by providing an external config file it is only possible to customize the
-behaviors of an existing board in U-Boot. 
-
-> 
->> You are right, a customization of the U-Boot config  file can be done
->> through the use of patches as it could be done for some other packages
->> like Barebox, Busybox or the linux kernel but the BuildRoot feature to
->> support custom config files for the main packages is more than
->> convenient. So the purpose of this patch is to add this feature to the U
->> Boot option as well.
->> IMHO such a feature could be useful for some other BuildRoot/U-Boot
->> user but may be I wrong. Please let me know.
-> 
-> Well again, the problem I see is that the "board configuration" in
-> U-Boot is not something that is as well isolated as it is in the kernel
-> or Barebox. In the kernel or Barebox, the configuration file is only
-> here to describe *how* you would like the support for a particular
-> board to be built (with network, without, with this or that other
-> driver).
-> 
-> While in U-Boot, the <BOARD>.h file is an *integral* part of the board
-> support itself: it not only defines the configuration you want for this
-> particular build, but also describes the hardware itself. In U-Boot,
-> whether you want the network support or not is mixed with the
-> information of which network device your board has, and how it is
-> connected on the board. So a <BOARD>.h file is typically not
-> standalone, it comes with a new board/<something>/<boardname>/
-> directory.
-
-Sorry for the confusion, but the purpose of this patch is more way to
-customize one of the U-Boot config than adding a new board to U-Boot.
-This will probably change in the future as soon as U-Boot - like Barebox
-- fully support the openfirmware device tree architecture.
-
-> 
-> That's the reason I'm skeptical that this is useful in practice.
-
-I apologize if you understood to be able to support any new board by just
-adding a new config file.
-
-I hope to have clarified the purpose of this patch and will submit a new 
-version of this patch with the change discussed here above in the
-meantime.
-
-Best regards,
-Eric
-
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: signature.asc
-Type: application/pgp-signature
-Size: 203 bytes
-Desc: Message signed with OpenPGP using GPGMail
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130920/9ec9b93c/attachment.asc>
+diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
+index 1b98339..1db0339 100644
+--- a/boot/uboot/Config.in
++++ b/boot/uboot/Config.in
+@@ -71,6 +71,24 @@ config BR2_TARGET_UBOOT_CUSTOM_GIT_VERSION
+ endif
+ 
+ choice
++	prompt "U-Boot configuration"
++	default BR2_TARGET_UBOOT_USE_DEFCONFIG
++
++config BR2_TARGET_UBOOT_USE_DEFCONFIG
++	bool "Using default board configuration file"
++
++config BR2_TARGET_UBOOT_USE_CUSTOM_CONFIG
++	bool "Using a custom board configuration file"
++
++endchoice
++
++config BR2_TARGET_UBOOT_CUSTOM_CONFIG_FILE
++	string "Configuration file path"
++	depends on BR2_TARGET_UBOOT_USE_CUSTOM_CONFIG
++	help
++	  Path to the board configuration file
++
++choice
+ 	prompt "U-Boot binary format"
+ 	default BR2_TARGET_UBOOT_FORMAT_BIN
+ 
+diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
+index 631da6b..8bcf260 100644
+--- a/boot/uboot/uboot.mk
++++ b/boot/uboot/uboot.mk
+@@ -80,6 +80,9 @@ UBOOT_POST_PATCH_HOOKS += UBOOT_APPLY_CUSTOM_PATCHES
+ endif
+ 
+ define UBOOT_CONFIGURE_CMDS
++	$(if $(BR2_TARGET_UBOOT_USE_CUSTOM_CONFIG),
++		cp -pf $(call qstrip,$(BR2_TARGET_UBOOT_CUSTOM_CONFIG_FILE)) \
++			$(@D)/include/configs/$(UBOOT_BOARD_NAME).h)
+ 	$(TARGET_CONFIGURE_OPTS) $(UBOOT_CONFIGURE_OPTS) 	\
+ 		$(MAKE) -C $(@D) $(UBOOT_MAKE_OPTS)		\
+ 		$(UBOOT_BOARD_NAME)_config
+-- 
+1.7.2.5
