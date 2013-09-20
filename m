@@ -1,32 +1,21 @@
-From: spdawson at gmail.com <spdawson@gmail.com>
-Date: Fri, 20 Sep 2013 14:12:22 +0100
-Subject: [Buildroot] [PATCH] zeromq: bump version to 3.2.4
-Message-ID: <1379682742-5536-1-git-send-email-spdawson@gmail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 20 Sep 2013 15:15:49 +0200
+Subject: [Buildroot] [PATCH] luaposix: remove IPv6 constraint
+In-Reply-To: <1379667879-30002-1-git-send-email-francois.perrad@gadz.org>
+ (Francois Perrad's message of "Fri, 20 Sep 2013 11:04:39 +0200")
+References: <1379667879-30002-1-git-send-email-francois.perrad@gadz.org>
+Message-ID: <87ob7nd46y.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Simon Dawson <spdawson@gmail.com>
+>>>>> "Francois" == Francois Perrad <fperrad@gmail.com> writes:
 
-Signed-off-by: Simon Dawson <spdawson@gmail.com>
----
- package/zeromq/zeromq.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ Francois> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 
-diff --git a/package/zeromq/zeromq.mk b/package/zeromq/zeromq.mk
-index 4847ed8..a624b52 100644
---- a/package/zeromq/zeromq.mk
-+++ b/package/zeromq/zeromq.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--ZEROMQ_VERSION = 3.2.3
-+ZEROMQ_VERSION = 3.2.4
- ZEROMQ_SITE = http://download.zeromq.org/
- ZEROMQ_INSTALL_STAGING = YES
- ZEROMQ_DEPENDENCIES = util-linux
+Committed, thanks.
+
 -- 
-1.8.1.2
+Bye, Peter Korsgaard
