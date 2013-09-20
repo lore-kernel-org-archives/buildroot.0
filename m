@@ -1,16 +1,18 @@
 From: Eric Jarrige <eric.jarrige@armadeus.org>
-Date: Fri, 20 Sep 2013 13:03:36 +0200
-Subject: [Buildroot] [PATCH v2] u-boot: allow to pass a custom configuration
-	file
+Date: Fri, 20 Sep 2013 13:11:16 +0200
+Subject: [Buildroot] [PATCH v2 1/1] u-boot: allow to pass a custom
+	configuration file
 In-Reply-To: <1379589006-28682-1-git-send-email-eric.jarrige@armadeus.org>
 References: <1379589006-28682-1-git-send-email-eric.jarrige@armadeus.org>
-Message-ID: <1379675016-24302-1-git-send-email-eric.jarrige@armadeus.org>
+Message-ID: <1379675476-24448-1-git-send-email-eric.jarrige@armadeus.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+
+Signed-off-by: Eric Jarrige <eric.jarrige@armadeus.org>
 ---
 Changes v1 -> v2:
   - Fix typo
