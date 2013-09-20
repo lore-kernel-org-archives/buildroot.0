@@ -1,215 +1,183 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 20 Sep 2013 10:41:01 +0200
-Subject: [Buildroot] [git commit] libdrm: bump and add experimental ARM
-	framebuffer support
-Message-ID: <20130920084107.663FB9B800@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 20 Sep 2013 10:41:26 +0200
+Subject: [Buildroot] [PATCH v2 1/7] libdrm: bump and add experimental
+	ARM framebuffer support
+In-Reply-To: <1378441521-10050-2-git-send-email-spenser@gillilanding.com>
+ (Spenser Gilliland's message of "Thu, 5 Sep 2013 23:25:15 -0500")
+References: <1378441521-10050-1-git-send-email-spenser@gillilanding.com>
+ <1378441521-10050-2-git-send-email-spenser@gillilanding.com>
+Message-ID: <87a9j7evgp.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b35acfffbd6667e2ce7cc116183585b543fbf488
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Spenser" == Spenser Gilliland <spenser@gillilanding.com> writes:
 
-[Peter: adjust intel/ati drivers to match]
-Signed-off-by: Spenser Gilliland <spenser@gillilanding.com>
-Reviewed-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/libdrm/Config.in                         |   68 ++++++++++++++++++----
- package/libdrm/libdrm.mk                         |   53 ++++++++++++++---
- package/x11r7/xdriver_xf86-video-ati/Config.in   |    1 +
- package/x11r7/xdriver_xf86-video-intel/Config.in |    1 +
- 4 files changed, 102 insertions(+), 21 deletions(-)
+ Spenser> Signed-off-by: Spenser Gilliland <spenser@gillilanding.com>
+ Spenser> ---
+ Spenser>  package/libdrm/Config.in | 68 ++++++++++++++++++++++++++++++++++++++++--------
+ Spenser>  package/libdrm/libdrm.mk | 53 ++++++++++++++++++++++++++++++-------
+ Spenser>  2 files changed, 100 insertions(+), 21 deletions(-)
 
-diff --git a/package/libdrm/Config.in b/package/libdrm/Config.in
-index 8bf676b..533e985 100644
---- a/package/libdrm/Config.in
-+++ b/package/libdrm/Config.in
-@@ -1,22 +1,68 @@
- config BR2_PACKAGE_LIBDRM
- 	bool "libdrm"
-+	select BR2_PACKAGE_XLIB_LIBPTHREAD_STUBS
- 	depends on BR2_PACKAGE_XORG7
- 	depends on BR2_LARGEFILE
--	select BR2_PACKAGE_XPROTO_GLPROTO
--	select BR2_PACKAGE_XPROTO_XF86VIDMODEPROTO
--	select BR2_PACKAGE_XLIB_LIBXXF86VM
--	select BR2_PACKAGE_XLIB_LIBXMU
--	select BR2_PACKAGE_XLIB_LIBPCIACCESS
--	select BR2_PACKAGE_XPROTO_DRI2PROTO
--	select BR2_PACKAGE_XLIB_LIBPTHREAD_STUBS
--	# libatomic_ops is only available on a subset of the supported
--	# architectures, and we make the assumption that the intel
--	# driver can only be used on x86 and x86_64 machines.
--	select BR2_PACKAGE_LIBATOMIC_OPS if (BR2_PACKAGE_XDRIVER_XF86_VIDEO_INTEL && (BR2_i386 || BR2_x86_64))
- 	help
- 	  Direct Rendering Manager
+ Spenser> diff --git a/package/libdrm/Config.in b/package/libdrm/Config.in
+ Spenser> index 8bf676b..533e985 100644
+ Spenser> --- a/package/libdrm/Config.in
+ Spenser> +++ b/package/libdrm/Config.in
+ Spenser> @@ -1,22 +1,68 @@
+ Spenser>  config BR2_PACKAGE_LIBDRM
+ Spenser>  	bool "libdrm"
+ Spenser> +	select BR2_PACKAGE_XLIB_LIBPTHREAD_STUBS
+ Spenser>  	depends on BR2_PACKAGE_XORG7
+ Spenser>  	depends on BR2_LARGEFILE
+ Spenser> -	select BR2_PACKAGE_XPROTO_GLPROTO
+ Spenser> -	select BR2_PACKAGE_XPROTO_XF86VIDMODEPROTO
+ Spenser> -	select BR2_PACKAGE_XLIB_LIBXXF86VM
+ Spenser> -	select BR2_PACKAGE_XLIB_LIBXMU
+ Spenser> -	select BR2_PACKAGE_XLIB_LIBPCIACCESS
+ Spenser> -	select BR2_PACKAGE_XPROTO_DRI2PROTO
+ Spenser> -	select BR2_PACKAGE_XLIB_LIBPTHREAD_STUBS
+ Spenser> -	# libatomic_ops is only available on a subset of the supported
+ Spenser> -	# architectures, and we make the assumption that the intel
+ Spenser> -	# driver can only be used on x86 and x86_64 machines.
+ Spenser> -	select BR2_PACKAGE_LIBATOMIC_OPS if (BR2_PACKAGE_XDRIVER_XF86_VIDEO_INTEL && (BR2_i386 || BR2_x86_64))
+ Spenser>  	help
+ Spenser>  	  Direct Rendering Manager
  
- 	  http://dri.freedesktop.org/libdrm/
+ Spenser>  	  http://dri.freedesktop.org/libdrm/
  
-+if BR2_PACKAGE_LIBDRM
-+
-+menu "DRM Drivers"
-+
-+config BR2_PACKAGE_LIBDRM_INTEL
-+	bool "intel"
-+	select BR2_PACKAGE_LIBATOMIC_OPS
-+	select BR2_PACKAGE_XLIB_LIBPCIACCESS
-+	depends on BR2_i386 || BR2_x86_64
-+	help
-+	  installs intel graphics driver
-+
-+config BR2_PACKAGE_LIBDRM_RADEON
-+	bool "radeon"
-+	select BR2_PACKAGE_LIBATOMIC_OPS
-+	select BR2_PACKAGE_XLIB_LIBPCIACCESS
-+	depends on BR2_i386 || BR2_x86_64
-+	help
-+	  install AMD/ATI graphics driver
-+
-+config BR2_PACKAGE_LIBDRM_NOUVEAU
-+	bool "nouveau"
-+	select BR2_PACKAGE_XLIB_LIBPCIACCESS
-+	depends on BR2_i386 || BR2_x86_64
-+	help
-+	  install Nvidia graphics driver
-+
-+config BR2_PACKAGE_LIBDRM_VMWGFX
-+	bool "vmwgfx"
-+	select BR2_PACKAGE_XLIB_LIBPCIACCESS
-+	depends on BR2_i386 || BR2_x86_64
-+	help
-+	  installs Vmware graphics driver
-+
-+config BR2_PACKAGE_LIBDRM_OMAP
-+	bool "omap (experimental)"
-+	depends on BR2_arm
-+	help
-+	  install the TI OMAP driver using an experimental API.
-+
-+config BR2_PACKAGE_LIBDRM_EXYNOS
-+	bool "exynos (experimental)"
-+	depends on BR2_arm
-+	help
-+	  installs Samsung Exynos driver using an experimental API.
-+
-+config BR2_PACKAGE_LIBDRM_FREEDRENO
-+	bool "freedreno (experimental)"
-+	depends on BR2_arm
-+	help
-+	  install Qualcomm Snapdragon driver using an experimental API.
-+
-+endmenu
-+
-+endif
-+
- comment "libdrm requires a toolchain with LARGEFILE support"
- 	depends on BR2_PACKAGE_XORG7 && !BR2_LARGEFILE
-diff --git a/package/libdrm/libdrm.mk b/package/libdrm/libdrm.mk
-index d3d2b2d..697cd2f 100644
---- a/package/libdrm/libdrm.mk
-+++ b/package/libdrm/libdrm.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+ Spenser> +if BR2_PACKAGE_LIBDRM
+ Spenser> +
+ Spenser> +menu "DRM Drivers"
+ Spenser> +
+ Spenser> +config BR2_PACKAGE_LIBDRM_INTEL
+ Spenser> +	bool "intel"
+ Spenser> +	select BR2_PACKAGE_LIBATOMIC_OPS
+ Spenser> +	select BR2_PACKAGE_XLIB_LIBPCIACCESS
+ Spenser> +	depends on BR2_i386 || BR2_x86_64
+ Spenser> +	help
+ Spenser> +	  installs intel graphics driver
+ Spenser> +
+ Spenser> +config BR2_PACKAGE_LIBDRM_RADEON
+ Spenser> +	bool "radeon"
+ Spenser> +	select BR2_PACKAGE_LIBATOMIC_OPS
+ Spenser> +	select BR2_PACKAGE_XLIB_LIBPCIACCESS
+ Spenser> +	depends on BR2_i386 || BR2_x86_64
+ Spenser> +	help
+ Spenser> +	  install AMD/ATI graphics driver
+ Spenser> +
+ Spenser> +config BR2_PACKAGE_LIBDRM_NOUVEAU
+ Spenser> +	bool "nouveau"
+ Spenser> +	select BR2_PACKAGE_XLIB_LIBPCIACCESS
+ Spenser> +	depends on BR2_i386 || BR2_x86_64
+ Spenser> +	help
+ Spenser> +	  install Nvidia graphics driver
+ Spenser> +
+ Spenser> +config BR2_PACKAGE_LIBDRM_VMWGFX
+ Spenser> +	bool "vmwgfx"
+ Spenser> +	select BR2_PACKAGE_XLIB_LIBPCIACCESS
+ Spenser> +	depends on BR2_i386 || BR2_x86_64
+ Spenser> +	help
+ Spenser> +	  installs Vmware graphics driver
+ Spenser> +
+ Spenser> +config BR2_PACKAGE_LIBDRM_OMAP
+ Spenser> +	bool "omap (experimental)"
+ Spenser> +	depends on BR2_arm
+ Spenser> +	help
+ Spenser> +	  install the TI OMAP driver using an experimental API.
+ Spenser> +
+ Spenser> +config BR2_PACKAGE_LIBDRM_EXYNOS
+ Spenser> +	bool "exynos (experimental)"
+ Spenser> +	depends on BR2_arm
+ Spenser> +	help
+ Spenser> +	  installs Samsung Exynos driver using an experimental API.
+ Spenser> +
+ Spenser> +config BR2_PACKAGE_LIBDRM_FREEDRENO
+ Spenser> +	bool "freedreno (experimental)"
+ Spenser> +	depends on BR2_arm
+ Spenser> +	help
+ Spenser> +	  install Qualcomm Snapdragon driver using an experimental API.
+ Spenser> +
+ Spenser> +endmenu
+ Spenser> +
+ Spenser> +endif
+ Spenser> +
+ Spenser>  comment "libdrm requires a toolchain with LARGEFILE support"
+ Spenser>  	depends on BR2_PACKAGE_XORG7 && !BR2_LARGEFILE
+ Spenser> diff --git a/package/libdrm/libdrm.mk b/package/libdrm/libdrm.mk
+ Spenser> index d3d2b2d..697cd2f 100644
+ Spenser> --- a/package/libdrm/libdrm.mk
+ Spenser> +++ b/package/libdrm/libdrm.mk
+ Spenser> @@ -4,7 +4,7 @@
+ Spenser>  #
+ Spenser>  ################################################################################
  
--LIBDRM_VERSION = 2.4.38
-+LIBDRM_VERSION = 2.4.46
- LIBDRM_SOURCE = libdrm-$(LIBDRM_VERSION).tar.bz2
- LIBDRM_SITE = http://dri.freedesktop.org/libdrm/
- LIBDRM_LICENSE = MIT
-@@ -12,26 +12,59 @@ LIBDRM_LICENSE = MIT
- LIBDRM_INSTALL_STAGING = YES
+ Spenser> -LIBDRM_VERSION = 2.4.38
+ Spenser> +LIBDRM_VERSION = 2.4.46
+ Spenser>  LIBDRM_SOURCE = libdrm-$(LIBDRM_VERSION).tar.bz2
+ Spenser>  LIBDRM_SITE = http://dri.freedesktop.org/libdrm/
+ Spenser>  LIBDRM_LICENSE = MIT
+ Spenser> @@ -12,26 +12,59 @@ LIBDRM_LICENSE = MIT
+ Spenser>  LIBDRM_INSTALL_STAGING = YES
  
- LIBDRM_DEPENDENCIES = \
--	xproto_glproto \
--	xproto_xf86vidmodeproto \
--	xlib_libXxf86vm \
--	xlib_libXmu \
--	xlib_libpciaccess \
--	xproto_dri2proto \
- 	xlib_libpthread-stubs \
- 	host-pkgconf
+ Spenser>  LIBDRM_DEPENDENCIES = \
+ Spenser> -	xproto_glproto \
+ Spenser> -	xproto_xf86vidmodeproto \
+ Spenser> -	xlib_libXxf86vm \
+ Spenser> -	xlib_libXmu \
+ Spenser> -	xlib_libpciaccess \
+ Spenser> -	xproto_dri2proto \
+ Spenser>  	xlib_libpthread-stubs \
+ Spenser>  	host-pkgconf
  
--ifeq ($(BR2_PACKAGE_XDRIVER_XF86_VIDEO_INTEL),y)
-+LIBDRM_CONF_OPT = \
-+	--disable-cairo-tests \
-+	--disable-manpages
-+
-+ifeq ($(BR2_PACKAGE_LIBDRM_INTEL),y)
- LIBDRM_CONF_OPT += --enable-intel
--LIBDRM_DEPENDENCIES += libatomic_ops
-+LIBDRM_DEPENDENCIES += libatomic_ops xlib_libpciaccess
- else
- LIBDRM_CONF_OPT += --disable-intel
- endif
+ Spenser> -ifeq ($(BR2_PACKAGE_XDRIVER_XF86_VIDEO_INTEL),y)
+ Spenser> +LIBDRM_CONF_OPT = \
+ Spenser> +	--disable-cairo-tests \
+ Spenser> +	--disable-manpages
+ Spenser> +
+ Spenser> +ifeq ($(BR2_PACKAGE_LIBDRM_INTEL),y)
+
+You need to select LIBDRM_INTEL from XDRIVER_XF86_VIDEO_INTEL then to
+ensure it is enabled.
+
+ Spenser>  LIBDRM_CONF_OPT += --enable-intel
+ Spenser> -LIBDRM_DEPENDENCIES += libatomic_ops
+ Spenser> +LIBDRM_DEPENDENCIES += libatomic_ops xlib_libpciaccess
+ Spenser>  else
+ Spenser>  LIBDRM_CONF_OPT += --disable-intel
+ Spenser>  endif
  
--ifneq ($(BR2_PACKAGE_XDRIVER_XF86_VIDEO_ATI),y)
-+ifeq ($(BR2_PACKAGE_LIBDRM_RADEON),y)
-+LIBDRM_CONF_OPT += --enable-radeon
-+LIBDRM_DEPENDENCIES += xlib_libpciaccess
-+else
- LIBDRM_CONF_OPT += --disable-radeon
- endif
+ Spenser> -ifneq ($(BR2_PACKAGE_XDRIVER_XF86_VIDEO_ATI),y)
+ Spenser> +ifeq ($(BR2_PACKAGE_LIBDRM_RADEON),y)
+
+Same here for ATI.
+
+ Spenser> +LIBDRM_CONF_OPT += --enable-radeon
+ Spenser> +LIBDRM_DEPENDENCIES += xlib_libpciaccess
+ Spenser> +else
+ Spenser>  LIBDRM_CONF_OPT += --disable-radeon
+ Spenser>  endif
  
-+ifeq ($(BR2_PACKAGE_LIBDRM_NOUVEAU),y)
-+LIBDRM_CONF_OPT += --enable-nouveau
-+LIBDRM_DEPENDENCIES += xlib_libpciaccess
-+else
-+LIBDRM_CONF_OPT += --disable-nouveau
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBDRM_VMWGFX),y)
-+LIBDRM_CONF_OPT += --enable-vmwgfx
-+LIBDRM_DEPENDENCIES += xlib_libpciaccess
-+else
-+LIBDRM_CONF_OPT += --enable-vmwgfx
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBDRM_OMAP),y)
-+LIBDRM_CONF_OPT += --enable-omap-experimental-api
-+else
-+LIBDRM_CONF_OPT += --disable-omap-experimental-api
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBDRM_EXYNOS),y)
-+LIBDRM_CONF_OPT += --enable-exynos-experimental-api
-+else
-+LIBDRM_CONF_OPT += --disable-exynos-experimental-api
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBDRM_FREEDRENO),y)
-+LIBDRM_CONF_OPT += --enable-freedreno-experimental-api
-+else
-+LIBDRM_CONF_OPT += --disable-freedreno-experimental-api
-+endif
-+
- ifeq ($(BR2_PACKAGE_UDEV),y)
- LIBDRM_CONF_OPT += --enable-udev
- LIBDRM_DEPENDENCIES += udev
-diff --git a/package/x11r7/xdriver_xf86-video-ati/Config.in b/package/x11r7/xdriver_xf86-video-ati/Config.in
-index 19bed3c..3c0cac3 100644
---- a/package/x11r7/xdriver_xf86-video-ati/Config.in
-+++ b/package/x11r7/xdriver_xf86-video-ati/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_XDRIVER_XF86_VIDEO_ATI
- 	bool "xf86-video-ati"
- 	select BR2_PACKAGE_LIBDRM
-+	select BR2_PACKAGE_LIBDRM_RADEON
- 	select BR2_PACKAGE_MESA3D
- 	select BR2_PACKAGE_XPROTO_FONTSPROTO
- 	select BR2_PACKAGE_XPROTO_GLPROTO
-diff --git a/package/x11r7/xdriver_xf86-video-intel/Config.in b/package/x11r7/xdriver_xf86-video-intel/Config.in
-index c972ce1..83b714a 100644
---- a/package/x11r7/xdriver_xf86-video-intel/Config.in
-+++ b/package/x11r7/xdriver_xf86-video-intel/Config.in
-@@ -6,6 +6,7 @@ config BR2_PACKAGE_XDRIVER_XF86_VIDEO_INTEL
- 	select BR2_PACKAGE_XPROTO_XPROTO
- 	select BR2_PACKAGE_XLIB_LIBPCIACCESS
- 	select BR2_PACKAGE_LIBDRM
-+	select BR2_PACKAGE_LIBDRM_INTEL
- 	select BR2_PACKAGE_MESA3D
- 	depends on (BR2_i386 || BR2_x86_64)
- 	help
+ Spenser> +ifeq ($(BR2_PACKAGE_LIBDRM_NOUVEAU),y)
+ Spenser> +LIBDRM_CONF_OPT += --enable-nouveau
+ Spenser> +LIBDRM_DEPENDENCIES += xlib_libpciaccess
+ Spenser> +else
+ Spenser> +LIBDRM_CONF_OPT += --disable-nouveau
+ Spenser> +endif
+ Spenser> +
+ Spenser> +ifeq ($(BR2_PACKAGE_LIBDRM_VMWGFX),y)
+ Spenser> +LIBDRM_CONF_OPT += --enable-vmwgfx
+ Spenser> +LIBDRM_DEPENDENCIES += xlib_libpciaccess
+ Spenser> +else
+ Spenser> +LIBDRM_CONF_OPT += --enable-vmwgfx
+ Spenser> +endif
+
+Conceptually we should also select this from the vmware driver, but it
+apparently only use it if mesa-xatracker is enabled (which we don't
+have).
+
+Committed with that fixed, thanks.
+
+-- 
+Bye, Peter Korsgaard
