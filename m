@@ -1,5 +1,5 @@
 From: Eric Jarrige <eric.jarrige@armadeus.org>
-Date: Fri, 20 Sep 2013 11:51:21 +0200
+Date: Fri, 20 Sep 2013 12:01:49 +0200
 Subject: [Buildroot] [PATCH 1/1] u-boot: allow to pass a custom
 	configuration file
 In-Reply-To: <20130920070811.584e83bc@skate>
@@ -7,7 +7,7 @@ References: <1379589006-28682-1-git-send-email-eric.jarrige@armadeus.org>
  <20130919174336.537e265e@skate>
  <0AF585C7-2CB6-443B-8F22-0EC2889259A3@armadeus.org>
  <20130920070811.584e83bc@skate>
-Message-ID: <DF0B2F85-0FA3-4DE8-93A7-CAA28EC33B87@armadeus.org>
+Message-ID: <DC3C25A2-7306-4B51-8811-0480C9EAA194@armadeus.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,6 +15,8 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Hi Thomas,
+
+Please forget my previous email that was sadly formated.
 
 On 20 sept. 2013, at 07:08, Thomas Petazzoni wrote:
 
@@ -99,7 +101,7 @@ behaviors of an existing board in U-Boot.
 Sorry for the confusion, but the purpose of this patch is more way to
 customize one of the U-Boot config than adding a new board to U-Boot.
 This will probably change in the future as soon as U-Boot - like Barebox
-- fully support the openfirmware device tree architecture. 
+- fully support the openfirmware device tree architecture.
 
 > 
 > That's the reason I'm skeptical that this is useful in practice.
@@ -114,11 +116,10 @@ meantime.
 Best regards,
 Eric
 
-
 -------------- next part --------------
 A non-text attachment was scrubbed...
 Name: signature.asc
 Type: application/pgp-signature
 Size: 203 bytes
 Desc: Message signed with OpenPGP using GPGMail
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130920/fde647ec/attachment-0001.asc>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130920/9ec9b93c/attachment.asc>
