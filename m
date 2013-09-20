@@ -1,38 +1,215 @@
-From: Thierry Bultel <thierry.bultel@wanadoo.fr>
-Date: Fri, 20 Sep 2013 10:35:46 +0200
-Subject: [Buildroot] [PATCH] Fixed the generation of locales
-Message-ID: <1379666146-5993-1-git-send-email-thierry.bultel@wanadoo.fr>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Fri, 20 Sep 2013 10:41:01 +0200
+Subject: [Buildroot] [git commit] libdrm: bump and add experimental ARM
+	framebuffer support
+Message-ID: <20130920084107.663FB9B800@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: tbultel <tbultel@basystemes.fr>
+commit: http://git.buildroot.net/buildroot/commit/?id=b35acfffbd6667e2ce7cc116183585b543fbf488
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Thierry Bultel <thierry.bultel@wanadoo.fr>
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> 
-
-The -s option is only mandatory for the charmap,
-else the filename is always empty and nothing
-is generated.
-
+[Peter: adjust intel/ati drivers to match]
+Signed-off-by: Spenser Gilliland <spenser@gillilanding.com>
+Reviewed-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- Makefile |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/libdrm/Config.in                         |   68 ++++++++++++++++++----
+ package/libdrm/libdrm.mk                         |   53 ++++++++++++++---
+ package/x11r7/xdriver_xf86-video-ati/Config.in   |    1 +
+ package/x11r7/xdriver_xf86-video-intel/Config.in |    1 +
+ 4 files changed, 102 insertions(+), 21 deletions(-)
 
-diff --git a/Makefile b/Makefile
-index 6ef0edc..71d94ad 100644
---- a/Makefile
-+++ b/Makefile
-@@ -554,7 +554,7 @@ ifneq ($(GENERATE_LOCALE),)
- target-generatelocales: host-localedef
- 	$(Q)mkdir -p $(TARGET_DIR)/usr/lib/locale/
- 	$(Q)for locale in $(GENERATE_LOCALE) ; do \
--		inputfile=`echo $${locale} | cut -f1 -d'.' -s` ; \
-+		inputfile=`echo $${locale} | cut -f1 -d'.'` ; \
- 		charmap=`echo $${locale} | cut -f2 -d'.' -s` ; \
- 		if test -z "$${charmap}" ; then \
- 			charmap="UTF-8" ; \
--- 
-1.7.0.4
+diff --git a/package/libdrm/Config.in b/package/libdrm/Config.in
+index 8bf676b..533e985 100644
+--- a/package/libdrm/Config.in
++++ b/package/libdrm/Config.in
+@@ -1,22 +1,68 @@
+ config BR2_PACKAGE_LIBDRM
+ 	bool "libdrm"
++	select BR2_PACKAGE_XLIB_LIBPTHREAD_STUBS
+ 	depends on BR2_PACKAGE_XORG7
+ 	depends on BR2_LARGEFILE
+-	select BR2_PACKAGE_XPROTO_GLPROTO
+-	select BR2_PACKAGE_XPROTO_XF86VIDMODEPROTO
+-	select BR2_PACKAGE_XLIB_LIBXXF86VM
+-	select BR2_PACKAGE_XLIB_LIBXMU
+-	select BR2_PACKAGE_XLIB_LIBPCIACCESS
+-	select BR2_PACKAGE_XPROTO_DRI2PROTO
+-	select BR2_PACKAGE_XLIB_LIBPTHREAD_STUBS
+-	# libatomic_ops is only available on a subset of the supported
+-	# architectures, and we make the assumption that the intel
+-	# driver can only be used on x86 and x86_64 machines.
+-	select BR2_PACKAGE_LIBATOMIC_OPS if (BR2_PACKAGE_XDRIVER_XF86_VIDEO_INTEL && (BR2_i386 || BR2_x86_64))
+ 	help
+ 	  Direct Rendering Manager
+ 
+ 	  http://dri.freedesktop.org/libdrm/
+ 
++if BR2_PACKAGE_LIBDRM
++
++menu "DRM Drivers"
++
++config BR2_PACKAGE_LIBDRM_INTEL
++	bool "intel"
++	select BR2_PACKAGE_LIBATOMIC_OPS
++	select BR2_PACKAGE_XLIB_LIBPCIACCESS
++	depends on BR2_i386 || BR2_x86_64
++	help
++	  installs intel graphics driver
++
++config BR2_PACKAGE_LIBDRM_RADEON
++	bool "radeon"
++	select BR2_PACKAGE_LIBATOMIC_OPS
++	select BR2_PACKAGE_XLIB_LIBPCIACCESS
++	depends on BR2_i386 || BR2_x86_64
++	help
++	  install AMD/ATI graphics driver
++
++config BR2_PACKAGE_LIBDRM_NOUVEAU
++	bool "nouveau"
++	select BR2_PACKAGE_XLIB_LIBPCIACCESS
++	depends on BR2_i386 || BR2_x86_64
++	help
++	  install Nvidia graphics driver
++
++config BR2_PACKAGE_LIBDRM_VMWGFX
++	bool "vmwgfx"
++	select BR2_PACKAGE_XLIB_LIBPCIACCESS
++	depends on BR2_i386 || BR2_x86_64
++	help
++	  installs Vmware graphics driver
++
++config BR2_PACKAGE_LIBDRM_OMAP
++	bool "omap (experimental)"
++	depends on BR2_arm
++	help
++	  install the TI OMAP driver using an experimental API.
++
++config BR2_PACKAGE_LIBDRM_EXYNOS
++	bool "exynos (experimental)"
++	depends on BR2_arm
++	help
++	  installs Samsung Exynos driver using an experimental API.
++
++config BR2_PACKAGE_LIBDRM_FREEDRENO
++	bool "freedreno (experimental)"
++	depends on BR2_arm
++	help
++	  install Qualcomm Snapdragon driver using an experimental API.
++
++endmenu
++
++endif
++
+ comment "libdrm requires a toolchain with LARGEFILE support"
+ 	depends on BR2_PACKAGE_XORG7 && !BR2_LARGEFILE
+diff --git a/package/libdrm/libdrm.mk b/package/libdrm/libdrm.mk
+index d3d2b2d..697cd2f 100644
+--- a/package/libdrm/libdrm.mk
++++ b/package/libdrm/libdrm.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBDRM_VERSION = 2.4.38
++LIBDRM_VERSION = 2.4.46
+ LIBDRM_SOURCE = libdrm-$(LIBDRM_VERSION).tar.bz2
+ LIBDRM_SITE = http://dri.freedesktop.org/libdrm/
+ LIBDRM_LICENSE = MIT
+@@ -12,26 +12,59 @@ LIBDRM_LICENSE = MIT
+ LIBDRM_INSTALL_STAGING = YES
+ 
+ LIBDRM_DEPENDENCIES = \
+-	xproto_glproto \
+-	xproto_xf86vidmodeproto \
+-	xlib_libXxf86vm \
+-	xlib_libXmu \
+-	xlib_libpciaccess \
+-	xproto_dri2proto \
+ 	xlib_libpthread-stubs \
+ 	host-pkgconf
+ 
+-ifeq ($(BR2_PACKAGE_XDRIVER_XF86_VIDEO_INTEL),y)
++LIBDRM_CONF_OPT = \
++	--disable-cairo-tests \
++	--disable-manpages
++
++ifeq ($(BR2_PACKAGE_LIBDRM_INTEL),y)
+ LIBDRM_CONF_OPT += --enable-intel
+-LIBDRM_DEPENDENCIES += libatomic_ops
++LIBDRM_DEPENDENCIES += libatomic_ops xlib_libpciaccess
+ else
+ LIBDRM_CONF_OPT += --disable-intel
+ endif
+ 
+-ifneq ($(BR2_PACKAGE_XDRIVER_XF86_VIDEO_ATI),y)
++ifeq ($(BR2_PACKAGE_LIBDRM_RADEON),y)
++LIBDRM_CONF_OPT += --enable-radeon
++LIBDRM_DEPENDENCIES += xlib_libpciaccess
++else
+ LIBDRM_CONF_OPT += --disable-radeon
+ endif
+ 
++ifeq ($(BR2_PACKAGE_LIBDRM_NOUVEAU),y)
++LIBDRM_CONF_OPT += --enable-nouveau
++LIBDRM_DEPENDENCIES += xlib_libpciaccess
++else
++LIBDRM_CONF_OPT += --disable-nouveau
++endif
++
++ifeq ($(BR2_PACKAGE_LIBDRM_VMWGFX),y)
++LIBDRM_CONF_OPT += --enable-vmwgfx
++LIBDRM_DEPENDENCIES += xlib_libpciaccess
++else
++LIBDRM_CONF_OPT += --enable-vmwgfx
++endif
++
++ifeq ($(BR2_PACKAGE_LIBDRM_OMAP),y)
++LIBDRM_CONF_OPT += --enable-omap-experimental-api
++else
++LIBDRM_CONF_OPT += --disable-omap-experimental-api
++endif
++
++ifeq ($(BR2_PACKAGE_LIBDRM_EXYNOS),y)
++LIBDRM_CONF_OPT += --enable-exynos-experimental-api
++else
++LIBDRM_CONF_OPT += --disable-exynos-experimental-api
++endif
++
++ifeq ($(BR2_PACKAGE_LIBDRM_FREEDRENO),y)
++LIBDRM_CONF_OPT += --enable-freedreno-experimental-api
++else
++LIBDRM_CONF_OPT += --disable-freedreno-experimental-api
++endif
++
+ ifeq ($(BR2_PACKAGE_UDEV),y)
+ LIBDRM_CONF_OPT += --enable-udev
+ LIBDRM_DEPENDENCIES += udev
+diff --git a/package/x11r7/xdriver_xf86-video-ati/Config.in b/package/x11r7/xdriver_xf86-video-ati/Config.in
+index 19bed3c..3c0cac3 100644
+--- a/package/x11r7/xdriver_xf86-video-ati/Config.in
++++ b/package/x11r7/xdriver_xf86-video-ati/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_XDRIVER_XF86_VIDEO_ATI
+ 	bool "xf86-video-ati"
+ 	select BR2_PACKAGE_LIBDRM
++	select BR2_PACKAGE_LIBDRM_RADEON
+ 	select BR2_PACKAGE_MESA3D
+ 	select BR2_PACKAGE_XPROTO_FONTSPROTO
+ 	select BR2_PACKAGE_XPROTO_GLPROTO
+diff --git a/package/x11r7/xdriver_xf86-video-intel/Config.in b/package/x11r7/xdriver_xf86-video-intel/Config.in
+index c972ce1..83b714a 100644
+--- a/package/x11r7/xdriver_xf86-video-intel/Config.in
++++ b/package/x11r7/xdriver_xf86-video-intel/Config.in
+@@ -6,6 +6,7 @@ config BR2_PACKAGE_XDRIVER_XF86_VIDEO_INTEL
+ 	select BR2_PACKAGE_XPROTO_XPROTO
+ 	select BR2_PACKAGE_XLIB_LIBPCIACCESS
+ 	select BR2_PACKAGE_LIBDRM
++	select BR2_PACKAGE_LIBDRM_INTEL
+ 	select BR2_PACKAGE_MESA3D
+ 	depends on (BR2_i386 || BR2_x86_64)
+ 	help
