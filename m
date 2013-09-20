@@ -1,27 +1,31 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 20 Sep 2013 16:52:24 +0200
-Subject: [Buildroot] [PATCH v2 6/6] qt5: remove configure options from
- module packages
-In-Reply-To: <1379655795-22429-7-git-send-email-fatih.asici@gmail.com>
-References: <1379655795-22429-1-git-send-email-fatih.asici@gmail.com>
- <1379655795-22429-7-git-send-email-fatih.asici@gmail.com>
-Message-ID: <20130920165224.18979692@skate>
+From: Thomas Davis <sunsetbrew@sunsetbrew.com>
+Date: Fri, 20 Sep 2013 10:59:50 -0400
+Subject: [Buildroot] [PATCHv4 1/1] civetweb: new package
+In-Reply-To: <87li2rbmwe.fsf@dell.be.48ers.dk>
+References: <1377662171-2425-1-git-send-email-sunsetbrew@sunsetbrew.com>
+ <1377662171-2425-2-git-send-email-sunsetbrew@sunsetbrew.com>
+ <87li2rbmwe.fsf@dell.be.48ers.dk>
+Message-ID: <CAG3-AMpMMcCbB4FFNUXe684-gh7R60WHzw8_+QUtycA10sv2pw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Fatih A??c?,
+Thank you!
 
-On Fri, 20 Sep 2013 08:43:15 +0300, Fatih A??c? wrote:
-> These packages do not have configure scripts.
-> 
-> Signed-off-by: Fatih A??c? <fatih.asici@gmail.com>
 
-Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+On Fri, Sep 20, 2013 at 10:14 AM, Peter Korsgaard <jacmet@uclibc.org> wrote:
+
+> >>>>> "Thomas" == Thomas Davis <sunsetbrew@sunsetbrew.com> writes:
+>
+>  Thomas> Signed-off-by: Thomas Davis <sunsetbrew@sunsetbrew.com>
+>
+> Committed, thanks.
+>
+> --
+> Bye, Peter Korsgaard
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130920/34d6c4e2/attachment.html>
