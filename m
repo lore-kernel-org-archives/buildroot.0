@@ -1,23 +1,32 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 20 Sep 2013 15:10:31 +0200
-Subject: [Buildroot] [PATCH] feh: bump to 2.9.3
-In-Reply-To: <1379680143-30096-1-git-send-email-yegorslists@googlemail.com>
- (yegorslists@googlemail.com's message of "Fri, 20 Sep 2013 14:29:03
- +0200")
-References: <1379680143-30096-1-git-send-email-yegorslists@googlemail.com>
-Message-ID: <87siwzd4fs.fsf@dell.be.48ers.dk>
+From: spdawson at gmail.com <spdawson@gmail.com>
+Date: Fri, 20 Sep 2013 14:12:22 +0100
+Subject: [Buildroot] [PATCH] zeromq: bump version to 3.2.4
+Message-ID: <1379682742-5536-1-git-send-email-spdawson@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "yegorslists" == yegorslists  <yegorslists@googlemail.com> writes:
+From: Simon Dawson <spdawson@gmail.com>
 
- yegorslists> From: Yegor Yefremov <yegorslists@googlemail.com>
- yegorslists> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Simon Dawson <spdawson@gmail.com>
+---
+ package/zeromq/zeromq.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Committed, thanks.
-
+diff --git a/package/zeromq/zeromq.mk b/package/zeromq/zeromq.mk
+index 4847ed8..a624b52 100644
+--- a/package/zeromq/zeromq.mk
++++ b/package/zeromq/zeromq.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-ZEROMQ_VERSION = 3.2.3
++ZEROMQ_VERSION = 3.2.4
+ ZEROMQ_SITE = http://download.zeromq.org/
+ ZEROMQ_INSTALL_STAGING = YES
+ ZEROMQ_DEPENDENCIES = util-linux
 -- 
-Bye, Peter Korsgaard
+1.8.1.2
