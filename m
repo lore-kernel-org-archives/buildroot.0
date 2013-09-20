@@ -1,28 +1,38 @@
-From: Fatih =?UTF-8?Q?A=C5=9F=C4=B1c=C4=B1?= <fatih.asici@gmail.com>
-Date: Fri, 20 Sep 2013 11:33:24 +0300
-Subject: [Buildroot] [PATCH v2 1/6] qt5: bump to 5.1.1
-In-Reply-To: <CA+csPL5cbqKLM86HtZ3YtMXfjWZwxmHLBAmx+b1m=3GR4gW46A@mail.gmail.com>
-References: <1379655795-22429-1-git-send-email-fatih.asici@gmail.com>
- <1379655795-22429-2-git-send-email-fatih.asici@gmail.com>
- <CA+csPL5cbqKLM86HtZ3YtMXfjWZwxmHLBAmx+b1m=3GR4gW46A@mail.gmail.com>
-Message-ID: <1379666004.20818.3.camel@viko>
+From: Thierry Bultel <thierry.bultel@wanadoo.fr>
+Date: Fri, 20 Sep 2013 10:35:46 +0200
+Subject: [Buildroot] [PATCH] Fixed the generation of locales
+Message-ID: <1379666146-5993-1-git-send-email-thierry.bultel@wanadoo.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, 2013-09-20 at 09:20 +0200, Espen Frimann Koren wrote:
-> Thank you for taking care of this.
-> 
-> Unfortunately doesn't it work yet. The configuration part is OK.
-> 
-> After a long while it is going to compile the file
-> eglconvenience/qeglconvenience.cpp, and then it complains about not
-> finding X11/Xlib.h. This is because the symbol EGL_API_FB must be
-> defined. I saw some discussion about this and that you have filed a
-> bug to Qt. It is a Qt-problem you think?
-> 
-Did you apply this patch[1]?
+From: tbultel <tbultel@basystemes.fr>
 
-[1] http://patchwork.ozlabs.org/patch/275885/
+Signed-off-by: Thierry Bultel <thierry.bultel@wanadoo.fr>
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> 
+
+The -s option is only mandatory for the charmap,
+else the filename is always empty and nothing
+is generated.
+
+---
+ Makefile |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index 6ef0edc..71d94ad 100644
+--- a/Makefile
++++ b/Makefile
+@@ -554,7 +554,7 @@ ifneq ($(GENERATE_LOCALE),)
+ target-generatelocales: host-localedef
+ 	$(Q)mkdir -p $(TARGET_DIR)/usr/lib/locale/
+ 	$(Q)for locale in $(GENERATE_LOCALE) ; do \
+-		inputfile=`echo $${locale} | cut -f1 -d'.' -s` ; \
++		inputfile=`echo $${locale} | cut -f1 -d'.'` ; \
+ 		charmap=`echo $${locale} | cut -f2 -d'.' -s` ; \
+ 		if test -z "$${charmap}" ; then \
+ 			charmap="UTF-8" ; \
+-- 
+1.7.0.4
