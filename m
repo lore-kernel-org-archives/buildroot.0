@@ -1,98 +1,37 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 20 Sep 2013 15:10:56 +0200
-Subject: [Buildroot] [git commit] luaposix: remove IPv6 constraint
-Message-ID: <20130920132138.C3CD49B80F@busybox.osuosl.org>
+Date: Fri, 20 Sep 2013 15:17:38 +0200
+Subject: [Buildroot] [git commit] manual generation: update help
+Message-ID: <20130920132138.DB43A9B80F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c958658288c4f2754981be4524ac9dad4706b3a0
+commit: http://git.buildroot.net/buildroot/commit/?id=55ecab1bbc32f9b4a36b588db1fed4ae0403dd74
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+The 'make help' lines for generating the manual did not consider ePub
+correctly.  Instead of providing a limitative list for 'make manual', the
+text is changed into 'all formats'.
+
+Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/luaposix/Config.in                   |    3 -
- package/luaposix/luaposix-without-IPv6.patch |   55 ++++++++++++++++++++++++++
- 2 files changed, 55 insertions(+), 3 deletions(-)
+ Makefile |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/luaposix/Config.in b/package/luaposix/Config.in
-index beae8e4..922fd9e 100644
---- a/package/luaposix/Config.in
-+++ b/package/luaposix/Config.in
-@@ -1,6 +1,5 @@
- config BR2_PACKAGE_LUAPOSIX
- 	bool "luaposix"
--	depends on BR2_INET_IPV6
- 	select BR2_PACKAGE_LUABITOP if BR2_PACKAGE_LUA
- 	# LuaBitOp is already included in LuaJIT
- 	help
-@@ -13,5 +12,3 @@ config BR2_PACKAGE_LUAPOSIX
- 
- 	  https://github.com/luaposix/luaposix
- 
--comment "luaposix requires a toolchain with IPv6 support"
--	depends on !BR2_INET_IPV6
-diff --git a/package/luaposix/luaposix-without-IPv6.patch b/package/luaposix/luaposix-without-IPv6.patch
-new file mode 100644
-index 0000000..f187882
---- /dev/null
-+++ b/package/luaposix/luaposix-without-IPv6.patch
-@@ -0,0 +1,55 @@
-+fix without IPv6
-+
-+see https://github.com/luaposix/luaposix/pull/117
-+
-+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-+
-+Index: b/ext/posix/posix.c
-+===================================================================
-+--- a/ext/posix/posix.c
-++++ b/ext/posix/posix.c
-+@@ -3637,6 +3637,7 @@
-+ 					break;
-+ 			}
-+ 			break;
-++#if defined(IPV6_JOIN_GROUP) && defined(IPV6_LEAVE_GROUP)
-+ 		case IPPROTO_IPV6:
-+ 			switch(optname) {
-+ 				case IPV6_JOIN_GROUP:
-+@@ -3650,6 +3651,7 @@
-+ 					break;
-+ 			}
-+ 			break;
-++#endif
-+ 		case IPPROTO_TCP:
-+ 			switch(optname) {
-+ 				default:
-+@@ -4697,13 +4699,27 @@
-+ 	MENTRY( AI_V4MAPPED	);
-+ 	MENTRY( AI_ALL		);
-+ 	MENTRY( AI_ADDRCONFIG	);
-++#endif
-+ 
-++#ifdef IPV6_JOIN_GROUP
-+ 	MENTRY( IPV6_JOIN_GROUP		);
-++#endif
-++#ifdef IPV6_LEAVE_GROUP
-+ 	MENTRY( IPV6_LEAVE_GROUP	);
-++#endif
-++#ifdef IPV6_MULTICAST_HOPS
-+ 	MENTRY( IPV6_MULTICAST_HOPS	);
-++#endif
-++#ifdef IPV6_MULTICAST_IF
-+ 	MENTRY( IPV6_MULTICAST_IF	);
-++#endif
-++#ifdef IPV6_MULTICAST_LOOP
-+ 	MENTRY( IPV6_MULTICAST_LOOP	);
-++#endif
-++#ifdef IPV6_UNICAST_HOPS
-+ 	MENTRY( IPV6_UNICAST_HOPS	);
-++#endif
-++#ifdef IPV6_V6ONLY
-+ 	MENTRY( IPV6_V6ONLY		);
-+ #endif
-+ #undef MENTRY
-+
+diff --git a/Makefile b/Makefile
+index 71d94ad..667e233 100644
+--- a/Makefile
++++ b/Makefile
+@@ -811,7 +811,7 @@ ifeq ($(BR2_TARGET_BAREBOX),y)
+ endif
+ 	@echo
+ 	@echo 'Documentation:'
+-	@echo '  manual                 - build manual in HTML, split HTML, PDF and txt'
++	@echo '  manual                 - build manual in all formats'
+ 	@echo '  manual-html            - build manual in HTML'
+ 	@echo '  manual-split-html      - build manual in split HTML'
+ 	@echo '  manual-pdf             - build manual in PDF'
