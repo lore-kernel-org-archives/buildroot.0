@@ -1,593 +1,180 @@
-From: Thierry Bultel <thierry.bultel@wanadoo.fr>
-Date: Sat, 21 Sep 2013 07:41:42 +0200
-Subject: [Buildroot] [PATCH] Add pyside + shiboken packages
-In-Reply-To: <20130920175457.65a4d63c@skate>
-References: <523ACBFA.2070401@wanadoo.fr> <20130919173426.47c2bba8@skate>
- <523C5EFC.5040204@wanadoo.fr> <20130920175457.65a4d63c@skate>
-Message-ID: <523D3196.9090702@wanadoo.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 21 Sep 2013 08:30:08 +0200 (CEST)
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2013-09-20
+Message-ID: <20130921063008.1D1C452C1BE@lolut.humanoidz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
-Many thanks Thomas for your review.
+Build statistics for 2013-09-20
+===============================
 
-I will pay more attention to my patch formatting in the future,
-the lesson from that is that I cannot trust thunderbird for doing the
-things right.
+        success : 73 
+       failures : 112
+       timeouts : 0  
+          TOTAL : 185
 
-My first approach was to use Cmake infrastructure indeed.
-The most annoying thing with shiboken and pyside CMakefiles is that
-it seems really a pain in the neck to have proper paths set,
-my fault here is to have not put enough comments around the
-various hacks I had to do to cope with it.
+Classification of failures by reason
+====================================
 
-I will start from scratch and try to possibly better fit in the model,
-and keep you in touch of what I see, if you don't mind.
+                  zeromq-3.2.4 | 21
+    trace-cmd-trace-cmd-v2.2.1 | 10
+make: *** [/home/test/test/... | 7 
+                    orc-0.4.18 | 7 
+make: *** [/home/test/test/... | 6 
+           python-pyzmq-13.1.0 | 5 
+make: *** [/home/test/test/... | 4 
+                  civetweb-1.3 | 4 
+                       bc-1.06 | 3 
+             alsa-utils-1.0.26 | 3 
+               alsa-lib-1.0.26 | 3 
+                  zeromq-3.2.3 | 3 
+                directfb-1.6.3 | 3 
+                      pv-1.4.6 | 2 
+                 qt5base-5.0.2 | 2 
+                libtirpc-0.2.2 | 2 
+               libglib2-2.36.3 | 2 
+                   dbus-1.4.26 | 2 
+                aiccu-20070115 | 2 
+      host-gcc-initial-4.8-arc | 2 
+              cryptsetup-1.6.2 | 1 
+               audiofile-0.3.6 | 1 
+                  ne10-88c18f0 | 1 
+                      qt-4.8.5 | 1 
+                      icu-51.2 | 1 
+                 python3-3.3.0 | 1 
+make: *** [core-dependencie... | 1 
+                 webkit-1.11.5 | 1 
+                     m4-1.4.16 | 1 
+                  nettle-2.7.1 | 1 
+                 binutils-2.21 | 1 
+media-ctl-ac40b79f002a2315f... | 1 
+                 libnspr-4.9.6 | 1 
+                  libnl-3.2.21 | 1 
+                 cairo-1.12.10 | 1 
+                  poco-1.4.6p1 | 1 
+               w_scan-20130331 | 1 
+                beecrypt-4.2.1 | 1 
+                  python-2.7.3 | 1 
 
-About the BR2_PACKAGE_PYTHON_PY_PYC:
+Detail of failures
+===================
 
-There are 2 issues when not having it
+       sh4 |                 aiccu-20070115 | NOK | http://autobuild.buildroot.net/results/8c65e9f878af6c3b4edf8ac84f7dc3d8a703a189/
+       arm |                 aiccu-20070115 | NOK | http://autobuild.buildroot.net/results/5fca5a9f7895c7d4b7cdb5a95e476e15eff3e3a6/
+      i686 |                alsa-lib-1.0.26 | NOK | http://autobuild.buildroot.net/results/84f27569e7be5b7b0c48d5b11f5dca88f1ed887b/
+      bfin |                alsa-lib-1.0.26 | NOK | http://autobuild.buildroot.net/results/af4c876e195304be50283c9fa5fc785f61798f95/
+      bfin |                alsa-lib-1.0.26 | NOK | http://autobuild.buildroot.net/results/de4e219ff882aaae23c4503560be38e8df8893bb/
+      sh4a |              alsa-utils-1.0.26 | NOK | http://autobuild.buildroot.net/results/a4ef3e29e385468adce61e88863ad68f5f4be3b6/
+      bfin |              alsa-utils-1.0.26 | NOK | http://autobuild.buildroot.net/results/4809e351522514bcccd855a3e3a77c80706f15cc/
+      bfin |              alsa-utils-1.0.26 | NOK | http://autobuild.buildroot.net/results/458c4e91b6435de59a225b973323555324937cbd/
+   powerpc |                audiofile-0.3.6 | NOK | http://autobuild.buildroot.net/results/d8e14e86c2a3b2212aef9c915aa2b2a7ac3bbc11/
+    mipsel |                        bc-1.06 | NOK | http://autobuild.buildroot.net/results/c06f1e08ec3ea68a4088875098454138f554a99e/
+   powerpc |                        bc-1.06 | NOK | http://autobuild.buildroot.net/results/5390c3187690f81e812fdee1557a8c01f4ed551f/
+       arm |                        bc-1.06 | NOK | http://autobuild.buildroot.net/results/765cb9e22e14d10d0bc0f58ca74634fa1cd43eab/
+microblaze |                 beecrypt-4.2.1 | NOK | http://autobuild.buildroot.net/results/0b729b85a6462b5c75f8e916edfade69f4585fe8/
+   powerpc |                  binutils-2.21 | NOK | http://autobuild.buildroot.net/results/de2d9c9dbae224e01c92245f48a0b5923a39d14f/
+      bfin |                  cairo-1.12.10 | NOK | http://autobuild.buildroot.net/results/777c8452a6ef0eb11950019fdb84e7c3e2756f7c/
+   aarch64 |                   civetweb-1.3 | NOK | http://autobuild.buildroot.net/results/bdbee9ab5603d4762ce01c90c11b5624034c9317/
+   aarch64 |                   civetweb-1.3 | NOK | http://autobuild.buildroot.net/results/83b9cb46b8a31a2e2c75330cd1e175af6652a290/
+       arm |                   civetweb-1.3 | NOK | http://autobuild.buildroot.net/results/0407d11208823eb6df603633d437406d3a5474ce/
+      sh4a |                   civetweb-1.3 | NOK | http://autobuild.buildroot.net/results/a406e58d717077897d19e195e65ed4688b3e5102/
+       arm |               cryptsetup-1.6.2 | NOK | http://autobuild.buildroot.net/results/9250afa239d8348be43d95d86517ac4498494948/
+   aarch64 |                    dbus-1.4.26 | NOK | http://autobuild.buildroot.net/results/d9c7c0185ecb42758acfb588b63cc2ee25cc6835/
+       arm |                    dbus-1.4.26 | NOK | http://autobuild.buildroot.net/results/cff90bfaa16aa2c74a6bfe097dc70ab7f163aff1/
+    x86_64 |                 directfb-1.6.3 | NOK | http://autobuild.buildroot.net/results/38b238447d1904c3683626cae0f9a44a1dcbcc9a/
+      bfin |                 directfb-1.6.3 | NOK | http://autobuild.buildroot.net/results/f6c3ec416c35c0d37ac533152dcdc4b26a1d4dbb/
+    x86_64 |                 directfb-1.6.3 | NOK | http://autobuild.buildroot.net/results/dabee00c788035ea884d23942cd63d63670981e4/
+       arc |       host-gcc-initial-4.8-arc | NOK | http://autobuild.buildroot.net/results/3323b87a7fd808dbae68b6248a6d0f5ddac66ba7/
+       arc |       host-gcc-initial-4.8-arc | NOK | http://autobuild.buildroot.net/results/b4a4092898aba9d8541412f4de506bab5184edbf/
+       arm |                       icu-51.2 | NOK | http://autobuild.buildroot.net/results/02acf915e044cbeca4956addb2931e7fbfa9b01b/
+microblaze |                libglib2-2.36.3 | NOK | http://autobuild.buildroot.net/results/6fee6fd3071faa68be77278e1a9a2a5203be95cd/
+microblaze |                libglib2-2.36.3 | NOK | http://autobuild.buildroot.net/results/73de897120c5be2e4eae07f8c3815f8b6f6dbfad/
+      bfin |                   libnl-3.2.21 | NOK | http://autobuild.buildroot.net/results/85c9990f0b5a62c6adbd247f9308e71d192d5c5d/
+       arm |                  libnspr-4.9.6 | NOK | http://autobuild.buildroot.net/results/dca87fe0ada00d29116992b70e6503890e94ee5d/
+       arm |                 libtirpc-0.2.2 | NOK | http://autobuild.buildroot.net/results/1527e2281337587985f021bf516ffb646f86e8a8/
+       arm |                 libtirpc-0.2.2 | NOK | http://autobuild.buildroot.net/results/cc79c0ea9b09021547fcd0e5e48ab0699a0af109/
+    xtensa |                      m4-1.4.16 | NOK | http://autobuild.buildroot.net/results/3ad15cb5cb29074c65f6fb0424c7600a70f7de2e/
+    x86_64 | make: *** [/home/test/test/... | NOK | http://autobuild.buildroot.net/results/4fd49862c1c91ebe45dc4d63df9e8573b7a958fe/
+    x86_64 | make: *** [/home/test/test/... | NOK | http://autobuild.buildroot.net/results/60250aefd9f405eaa81361622bd61c6d3dc75d7b/
+    x86_64 | make: *** [/home/test/test/... | NOK | http://autobuild.buildroot.net/results/1642cd4a0f63b4a713ecc8ab1011bf0382be9cdd/
+      i686 | make: *** [/home/test/test/... | NOK | http://autobuild.buildroot.net/results/8f402b9cf2888539ab01b252b1f80a4106736505/
+    x86_64 | make: *** [/home/test/test/... | NOK | http://autobuild.buildroot.net/results/978ff61dda9c54f1b7f77cceac37fb3884f2b040/
+       arm | make: *** [/home/test/test/... | NOK | http://autobuild.buildroot.net/results/9526d12e6f26d9d91f5c13a2caf06d81f57820ec/
+      i686 | make: *** [/home/test/test/... | NOK | http://autobuild.buildroot.net/results/ae93db3590a9419c4699b29a75bb028d9154425b/
+      i686 | make: *** [/home/test/test/... | NOK | http://autobuild.buildroot.net/results/9444c186ccec8cc1260351179f88930c1c4c58f2/
+      i686 | make: *** [/home/test/test/... | NOK | http://autobuild.buildroot.net/results/0359230487d49f51772fd5833fcef7aa3c279caa/
+       arm | make: *** [/home/test/test/... | NOK | http://autobuild.buildroot.net/results/10b31ccbada80d2a6e968b06f37be3479ea4b0b5/
+       arm | make: *** [/home/test/test/... | NOK | http://autobuild.buildroot.net/results/bf6ca62c0547740951d64d5f6969e5f697031556/
+       arm | make: *** [/home/test/test/... | NOK | http://autobuild.buildroot.net/results/a92c4893b29ebdea35be4e54cac8973b98bfe784/
+       arm | make: *** [/home/test/test/... | NOK | http://autobuild.buildroot.net/results/509a2c5a6b17c216f36c1b23b90950547cf6ba38/
+      i686 | make: *** [/home/test/test/... | NOK | http://autobuild.buildroot.net/results/2b8a2343f55e460c0776eaf7ee3e5efec0a803c9/
+       arm | make: *** [/home/test/test/... | NOK | http://autobuild.buildroot.net/results/a8f213f2d2cd54c3a1eb46b3d7d924c82ce4c6fc/
+    x86_64 | make: *** [/home/test/test/... | NOK | http://autobuild.buildroot.net/results/8fa35298f2f98ae4d353ef59182e1235dcf52771/
+    x86_64 | make: *** [/home/test/test/... | NOK | http://autobuild.buildroot.net/results/436e0610d4cba59df33e0de306b02ffda9da612d/
+       arm | make: *** [core-dependencie... | NOK | http://autobuild.buildroot.net/results/861ab324ae116c0bddc792f5b4c34b67f3ea3bf1/
+   powerpc | media-ctl-ac40b79f002a2315f... | NOK | http://autobuild.buildroot.net/results/c9956c12ccda23cf71f9f6d08d39aaa6eaff8929/
+       arm |                   ne10-88c18f0 | NOK | http://autobuild.buildroot.net/results/0a2d750275eeab76fcd3c4559149be2f8095d9f9/
+microblaze |                   nettle-2.7.1 | NOK | http://autobuild.buildroot.net/results/42194b7919e44bf346d93e974b38ae33f0ef3438/
+       sh4 |                     orc-0.4.18 | NOK | http://autobuild.buildroot.net/results/cea1514b2f551c4da778d7b3f4e593d31c4b3c86/
+       arm |                     orc-0.4.18 | NOK | http://autobuild.buildroot.net/results/cef9848d7a7745e75828ed18f63f95f53a1a8a76/
+       arm |                     orc-0.4.18 | NOK | http://autobuild.buildroot.net/results/96d6ede45e83a2ee0187a403dbfc6aa2b923c48d/
+   powerpc |                     orc-0.4.18 | NOK | http://autobuild.buildroot.net/results/51f33778bc2b7bc2f04481f913a5df49f0b2457e/
+    mipsel |                     orc-0.4.18 | NOK | http://autobuild.buildroot.net/results/ad1d514e887e53f37bde79f6a9b7eac246552952/
+       sh4 |                     orc-0.4.18 | NOK | http://autobuild.buildroot.net/results/6942e6ecf585c5491f7bf71933b22153b4d6a498/
+      i686 |                     orc-0.4.18 | NOK | http://autobuild.buildroot.net/results/298fff81e31e8f537ecc8861f4dfa9984cafbe16/
+      sh4a |                   poco-1.4.6p1 | NOK | http://autobuild.buildroot.net/results/389607f79a414395d8332c103fd1eb48f44293b8/
+  mips64el |                       pv-1.4.6 | NOK | http://autobuild.buildroot.net/results/05a5705a941a388918b11a6e1ff442410760c70b/
+  mips64el |                       pv-1.4.6 | NOK | http://autobuild.buildroot.net/results/08230527cf13946bb790ceb92b385320050d6341/
+       arm |                   python-2.7.3 | NOK | http://autobuild.buildroot.net/results/77f3d9cee2351c166a8473543db72db1f7467f3c/
+       arm |            python-pyzmq-13.1.0 | NOK | http://autobuild.buildroot.net/results/558c8057b367b92d1b7ba8c9e5bc35c7eadaa693/
+       arm |            python-pyzmq-13.1.0 | NOK | http://autobuild.buildroot.net/results/5fdc426244e1f6fdddd43039caa653714b0a0f6c/
+    mipsel |            python-pyzmq-13.1.0 | NOK | http://autobuild.buildroot.net/results/ca19d01377c47f2724700ceb847ea7db466046d8/
+       arm |            python-pyzmq-13.1.0 | NOK | http://autobuild.buildroot.net/results/c908256ed086a6f8d749242b5e45e3c4ba9751ce/
+       arm |            python-pyzmq-13.1.0 | NOK | http://autobuild.buildroot.net/results/7c263c8b5ae8050f9ecdf17c4c5689159c8533c4/
+     avr32 |                  python3-3.3.0 | NOK | http://autobuild.buildroot.net/results/43ba0e6db4f5206f5b6e5d4bee8cb4161f17e7e0/
+       arm |                       qt-4.8.5 | NOK | http://autobuild.buildroot.net/results/022009d9fce6156e8dc007f8e6504c019a8972fe/
+      i686 |                  qt5base-5.0.2 | NOK | http://autobuild.buildroot.net/results/03b346c1ac43d95de28f4881f960018c4b7343c1/
+       arm |                  qt5base-5.0.2 | NOK | http://autobuild.buildroot.net/results/3f557edcabc3e50149f79bac1476abc5a5e11a64/
+   powerpc |     trace-cmd-trace-cmd-v2.2.1 | NOK | http://autobuild.buildroot.net/results/582c7fad99217809787f68bb44b8a9a1bb754600/
+   powerpc |     trace-cmd-trace-cmd-v2.2.1 | NOK | http://autobuild.buildroot.net/results/9f60753ea575d38738bbf865559123313c2a7e96/
+       arm |     trace-cmd-trace-cmd-v2.2.1 | NOK | http://autobuild.buildroot.net/results/1c4567a230940a5287d03e2a5c2c7afbdc64cd36/
+   powerpc |     trace-cmd-trace-cmd-v2.2.1 | NOK | http://autobuild.buildroot.net/results/b88638e436117e5c3fded5ebb0ab50572a9aa192/
+   powerpc |     trace-cmd-trace-cmd-v2.2.1 | NOK | http://autobuild.buildroot.net/results/f69970ffe56d238e30b5f22d002be8b12f26c71c/
+   powerpc |     trace-cmd-trace-cmd-v2.2.1 | NOK | http://autobuild.buildroot.net/results/73b7aa2714aa8f95595390c34041f94f9b8ddb67/
+   powerpc |     trace-cmd-trace-cmd-v2.2.1 | NOK | http://autobuild.buildroot.net/results/d1ad09d775c69dc99c7c4133d065914b51aab46c/
+   powerpc |     trace-cmd-trace-cmd-v2.2.1 | NOK | http://autobuild.buildroot.net/results/ed719d7a17032e9a1f2611395706029583c2d641/
+   powerpc |     trace-cmd-trace-cmd-v2.2.1 | NOK | http://autobuild.buildroot.net/results/6681064223fc11ad44811aa9af4ab36955c777df/
+       arm |     trace-cmd-trace-cmd-v2.2.1 | NOK | http://autobuild.buildroot.net/results/09f1c6cbd5b41a455076cca09ae3320b8eb45f6f/
+       sh4 |                  webkit-1.11.5 | NOK | http://autobuild.buildroot.net/results/5494463f1dbd40f252e3a1105f56d5f5a847a93b/
+   powerpc |                w_scan-20130331 | NOK | http://autobuild.buildroot.net/results/839920de3f4f9d2edc3904b76bf6e3ee6f08878a/
+     avr32 |                   zeromq-3.2.3 | NOK | http://autobuild.buildroot.net/results/c0d857a939de78fb7b9173b4fc2f3ad388abea73/
+     avr32 |                   zeromq-3.2.3 | NOK | http://autobuild.buildroot.net/results/fb63718573abb8d62c9b65dc557731da7e3920f3/
+     avr32 |                   zeromq-3.2.3 | NOK | http://autobuild.buildroot.net/results/9cdf1fab08fe4e19505dff611d9685fc49307e6f/
+    x86_64 |                   zeromq-3.2.4 | NOK | http://autobuild.buildroot.net/results/b947f2a45e6439b5ecea926626ef531005984180/
+       arm |                   zeromq-3.2.4 | NOK | http://autobuild.buildroot.net/results/8c7d1383de8d00665be01b1ee8e98b66c687cfe9/
+       arm |                   zeromq-3.2.4 | NOK | http://autobuild.buildroot.net/results/ce28bf104699cec6aa14a65a873eabce2bb98e22/
+  mips64el |                   zeromq-3.2.4 | NOK | http://autobuild.buildroot.net/results/f173a22566f9bddb31df38f6c5128b46fedcd043/
+   aarch64 |                   zeromq-3.2.4 | NOK | http://autobuild.buildroot.net/results/d9eb50914eb362ea288a963df06f86b3e485d0dc/
+       arm |                   zeromq-3.2.4 | NOK | http://autobuild.buildroot.net/results/004968a21c1054052f1a0d0147c6424bd20c838b/
+       arm |                   zeromq-3.2.4 | NOK | http://autobuild.buildroot.net/results/fbca727ac93c60e4bb0ef17263f00ea599434ac9/
+       arm |                   zeromq-3.2.4 | NOK | http://autobuild.buildroot.net/results/e163f2c626a8c6e8c8e8e944afbc4083de28a6ff/
+       arm |                   zeromq-3.2.4 | NOK | http://autobuild.buildroot.net/results/d793f621cb0a7c7183c92cc96bb406eaac61f9d5/
+      mips |                   zeromq-3.2.4 | NOK | http://autobuild.buildroot.net/results/73e40e27bac0d2555dea2fb53be0d534c8050ad9/
+       arm |                   zeromq-3.2.4 | NOK | http://autobuild.buildroot.net/results/d83118fc9bc4f373e911288edfa42fc4f2bebb94/
+  mips64el |                   zeromq-3.2.4 | NOK | http://autobuild.buildroot.net/results/2f6eb5572993fd18ee7457ff53149e9a89b37d2f/
+   powerpc |                   zeromq-3.2.4 | NOK | http://autobuild.buildroot.net/results/b4284324b9ba0bee106742c985ce2714124cf67e/
+   powerpc |                   zeromq-3.2.4 | NOK | http://autobuild.buildroot.net/results/9352adcd1f038e4868f0d4478fa5e0a9e500cc21/
+      i686 |                   zeromq-3.2.4 | NOK | http://autobuild.buildroot.net/results/8cdbbd3c8dd792cdf0268c91d84a02c9652f6658/
+   powerpc |                   zeromq-3.2.4 | NOK | http://autobuild.buildroot.net/results/cccb85fc4faa5b3521c98d2d517b9c1e2c0920fd/
+   powerpc |                   zeromq-3.2.4 | NOK | http://autobuild.buildroot.net/results/0dc5cc342aa88053a569db715cb5f83d64a3e721/
+       arm |                   zeromq-3.2.4 | NOK | http://autobuild.buildroot.net/results/e19f04671169cbf5c3336f95c177ac5e07d9c753/
+    x86_64 |                   zeromq-3.2.4 | NOK | http://autobuild.buildroot.net/results/a5318b7d92f83b76f3e42add7a284a6ca178d1f6/
+       arm |                   zeromq-3.2.4 | NOK | http://autobuild.buildroot.net/results/373b35d9e18e66b411a298067ba20c86de0c3b39/
+   powerpc |                   zeromq-3.2.4 | NOK | http://autobuild.buildroot.net/results/d81374b7e386a446bc541b049d7870c7ce063210/
 
-1)
-host/usr/arm-buildroot-linux-gnueabi/sysroot/lib/python2.7/site-packages/PySide/__init__.py
-gets removed.
-I agree that setting the option for just one file if a shame but ...
-2) The aim of pyside is to run python code (compiled or not, and that 
-may call libraries in pyc).
-So if the user python application is part of buildroot it would be
-removed from the target as well.
 
-About your comment on "HOST_PYSIDE_BUILD_CMDS or HOST_PYSIDE_CONFIGURE_CMDS"
-I think you made a confusion, and this is likely because my patch is too 
-big.
-The host variant is needed for pyside-tools, not for pyside.
-
-As I said in my (too short) comment, the host variant is needed for
-shiboken, in order to get the generator that is used by the build.
-After that, a target shiboken library is needed as well, that leads to
-building it twice ...
-
-I think that the shiboken Cmake is not completely "cross-build" proof,
-and that is the main difficulty to deal with.
-The fact that it calls the target  'shiboken' binary for itself
-illustrates that.
-(but for that point it was "easy" to workaround with 
-SHIBOKEN_PRE_CONFIGURE_GENERATOR_PATH)
-
-Regards
-Thierry
-
->> Le 19/09/2013 17:34, Thomas Petazzoni a ?crit :
->>> Dear Thierry Bultel,
->>>
->>> Thanks for this contribution!
->>>
->>> On Thu, 19 Sep 2013 12:03:38 +0200, Thierry Bultel wrote:
->>>> Signed-off-by: Thierry Bultel <thierry.bultel@wanadoo.fr>
->>>> ---
->>>> Adds support for pyside, pyside-tools and shiboken
->>>> Shiboken is also built for the host, else the target version
->>>> would need a configured qemu + binfmt_misc to run
->>>> the generator.
->>> Thanks. This should be three patches, one per package. Also, your patch
->>> is badly line-wrapped, so it's hard to review, and impossible to apply.
->>> Can you either fix your mailer, or even better, use 'git send-email' to
->>> send your patches?
->>>
->>>> ---
->>>> diff --git a/package/Config.in b/package/Config.in
->>>> index 779e9da..c1927dc 100644
->>>> --- a/package/Config.in
->>>> +++ b/package/Config.in
->>>> @@ -399,6 +399,9 @@ source "package/python-pyro/Config.in"
->>>>    source "package/python-pyzmq/Config.in"
->>>>    source "package/python-serial/Config.in"
->>>>    source "package/python-setuptools/Config.in"
->>>> +source "package/shiboken/Config.in"
->>>> +source "package/pyside/Config.in"
->>>> +source "package/pyside-tools/Config.in"
->>>>    source "package/python-thrift/Config.in"
->>>>    endmenu
->>>>    endif
->>>> diff --git a/package/pyside-tools/Config.in
->>>> b/package/pyside-tools/Config.in
->>>> new file mode 100644
->>>> index 0000000..2e5d8d2
->>>> --- /dev/null
->>>> +++ b/package/pyside-tools/Config.in
->>>> @@ -0,0 +1,5 @@
->>>> +config BR2_PACKAGE_PYSIDE_TOOLS
->>>> +        bool "pyside-tools"
->>>> +    depends on BR2_PACKAGE_PYSIDE
->>>> +        help
->>>> +          PySide tools
->>> The indentation is completely funky, throughout the patch. Also, the
->>> description should be better than that, and should include the
->>> upstream URL of the project. Please see
->>> http://buildroot.org/downloads/manual/manual.html#writing-rules-config-in.
->>>
->>>> diff --git a/package/pyside-tools/pyside-tools.mk
->>>> b/package/pyside-tools/pyside-tools.mk
->>>> new file mode 100644
->>>> index 0000000..0b696dc
->>>> --- /dev/null
->>>> +++ b/package/pyside-tools/pyside-tools.mk
->>>> @@ -0,0 +1,62 @@
->>>> +############################
->>>> +#
->>>> +#    pyside-tools
->>>> +#
->>>> +#############################
->>> See http://buildroot.org/downloads/manual/manual.html#writing-rules-mk
->>> for the right format of the header.
->>>
->>>> +PYSIDE_TOOLS_VERSION=0.2.15
->>>> +PYSIDE_TOOLS_SITE=https://github.com/PySide/Tools/archive/
->>>> +PYSIDE_TOOLS_SOURCE=$(PYSIDE_TOOLS_VERSION).tar.gz
->>>> +PYSIDE_TOOLS_INSTALL_STAGING=YES
->>>> +PYSIDE_TOOLS_DEPENDENCIES=pyside
->>> Spaces around '=' (to be fixed globally).
->>>
->>>> +PYSIDESANDBOXPATH=$(STAGING_DIR)
->>> Why not use STAGING_DIR directly? It's actually shorter than your new
->>> variable.
->>>
->>>> +
->>>> +PYSIDE_TOOLS_CONF_OPT+=-DCMAKE_INSTALL_PREFIX=$(PYSIDESANDBOXPATH)
->>>> +PYSIDE_TOOLS_CONF_OPT+=-DENABLE_ICECC=0
->>> You're using generic-package, but you should be using cmake-package.
->>> And if you use cmake-package, then the CMAKE_INSTALL_PREFIX is already
->>> passed.
->>>
->>>> +
->>>> +PYSIDE_TOOLS_CONF_ENV+=PYTHONPATH=$(PYSIDESANDBOXPATH)/lib/python2.6/site-packages:$$PYTHONPATH
->>>>
->>>> +PYSIDE_TOOLS_CONF_ENV+=LD_LIBRARY_PATH=$(PYSIDESANDBOXPATH)/lib:$$LD_LIBRARY_PATH
->>>>
->>>> +PYSIDE_TOOLS_CONF_ENV+=PKG_CONFIG_PATH=$(PYSIDESANDBOXPATH)/lib/pkgconfig:$$PKG_CONFIG_PATH
->>> None of those variables are needed. They are already part of the
->>> environment if you use cmake-package.
->>>
->>>> +
->>>> +#PYSIDE_MAKE_ENV+=VERBOSE=1
->>> To be removed.
->>>
->>>> +PYSIDE_TOOLS_CMAKE_INSTALL_CMAKE=            \
->>>> +cmake_install.cmake                    \
->>>> +tests/cmake_install.cmake                \
->>>> +tests/rcc/cmake_install.cmake                \
->>>> +pyrcc/cmake_install.cmake                \
->>>> +pylupdate/cmake_install.cmake
->>> Ok, but it looks ugly, please fix it as below:
->>>
->>> PYSIDE_TOOLS_CMAKE_INSTALL_CMAKE = \
->>> 	cmake_install.cmake \
->>> 	test/cmake_install.cmake \
->>> 	tests/rcc/cmake_install.cmake \
->>> 	...
->>>
->>> Generally, how your backslashes are placed is not really nice. You
->>> should try to follow the style used in other packages.
->>>
->>>> +
->>>> +define PYSIDE_TOOLS_CONFIGURE_CMDS
->>>> +    (                                        \
->>>> +    cd $(@D) &&                                     \
->>>> +    mkdir -p build && cd build &&             \
->>>> +    rm -f CMakeCache.txt &&                             \
->>>> +    $(PYSIDE_TOOLS_CONF_ENV) $(HOST_DIR)/usr/bin/cmake .. \
->>>> +
->>>> -DCMAKE_TOOLCHAIN_FILE="$(HOST_DIR)/usr/share/buildroot/toolchainfile.cmake"
->>>>       \
->>>> +    -DCMAKE_INSTALL_PREFIX="/usr"                             \
->>>> +    $(PYSIDE_TOOLS_CONF_OPT)                             \
->>>> +    )
->>>> +endef
->>> This is already done by the CMake package infrastructure, so it can be
->>> removed completely. Please read
->>> http://buildroot.org/downloads/manual/manual.html#_infrastructure_for_cmake_based_packages.
->>>
->>>> +define PYSIDE_TOOLS_BUILD_CMDS
->>>> +    $(TARGET_MAKE_ENV) $(PYSIDE_TOOLS_MAKE_ENV) $(MAKE)
->>>> $(PYSIDE_TOOLS_MAKE_OPT) -C $(@D)/build
->>>> +endef
->>> Same thing.
->>>
->>>> +
->>>> +
->>>> +define PYSIDE_TOOLS_INSTALL_STAGING_CMDS
->>>> +    (                                                \
->>>> +    cd  $(@D)/build &&     \
->>>> +    for ins in $(PYSIDE_TOOLS_CMAKE_INSTALL_CMAKE); do             \
->>>> +       cat $$ins | sed -e 's|sysroot|sysroot/usr|g' > $${ins}2 ;
->>>>               \
->>>> +    done;                                                \
->>>> +    sed -i -e 's/cmake_install.cmake/cmake_install.cmake2/g'
->>>> cmake_install.cmake2;            \
->>>> +    sed -i -e 's/cmake_install.cmake/cmake_install.cmake2/g'
->>>> tests/cmake_install.cmake2;        \
->>> Huh? What is happening here?
->>>
->>>> +    $(HOST_DIR)/usr/bin/cmake -DCMAKE_INSTALL_PREFIX=$(STAGING_DIR)/usr
->>>> -P cmake_install.cmake2;    \
->>> That's normally done by default by the cmake-package infrastructure.
->>>
->>>> +    echo "pyside-tools staging install OK";         \
->>> Don't display custom messages, Buildroot already has some before each
->>> step of the package build process.
->>>
->>>> +    )
->>>> +endef
->>>> +
->>>> +$(eval $(generic-package))
->>>> +$(eval $(host-generic-package))
->>> You're having a host variant of a generic-package, but there is no
->>> definition of HOST_PYSIDE_BUILD_CMDS or HOST_PYSIDE_CONFIGURE_CMDS,
->>> which means that your host variant cannot work.
->>>
->>>> diff --git a/package/pyside/Config.in b/package/pyside/Config.in
->>>> new file mode 100644
->>>> index 0000000..61618b7
->>>> --- /dev/null
->>>> +++ b/package/pyside/Config.in
->>>> @@ -0,0 +1,6 @@
->>>> +config BR2_PACKAGE_PYSIDE
->>>> +        bool "pyside"
->>>> +    select BR2_PACKAGE_SHIBOKEN
->>>> +    depends on BR2_PACKAGE_QT
->>> In "pyside", I see "py", so I believe some Python dependency is most
->>> likely needed somewhere.
->>>
->>>> +        help
->>>> +          PySide
->>> Please fix the indentation, and add a proper description.
->>>
->>>> diff --git a/package/pyside/pyside.mk b/package/pyside/pyside.mk
->>>> new file mode 100644
->>>> index 0000000..70c26b6
->>>> --- /dev/null
->>>> +++ b/package/pyside/pyside.mk
->>>> @@ -0,0 +1,121 @@
->>>> +############################
->>>> +#
->>>> +#    Pyside
->>>> +#
->>>> +#############################
->>> Header to be fixed.
->>>
->>>> +
->>>> +PYSIDE_VERSION=1.2.1
->>>> +PYSIDE_SITE=https://distfiles.macports.org/py-pyside
->>>> +PYSIDE_SOURCE=pyside-qt4.8+$(PYSIDE_VERSION).tar.bz2
->>>> +PYSIDE_INSTALL_STAGING=YES
->>>> +PYSIDE_DEPENDENCIES=python qt shiboken host-cmake
->>> Spaces around '='.
->>>
->>> Ah, we have the python dependency now. It should also be in the
->>> Config.in.
->>>
->>> host-cmake dependency not needed: please convert your package to the
->>> cmake-package infrastructure.
->>>
->>>> +PYSIDESANDBOXPATH=$(STAGING_DIR)
->>>> +
->>>> +PYSIDE_CONF_OPT+=-DCMAKE_INSTALL_PREFIX=$(PYSIDESANDBOXPATH)
->>>> +PYSIDE_CONF_OPT+=-DENABLE_ICECC=0
->>>> +
->>>> +PYSIDE_CONF_ENV+=PYTHONPATH=$(PYSIDESANDBOXPATH)/lib/python2.6/site-packages:$$PYTHONPATH
->>>>
->>>> +PYSIDE_CONF_ENV+=LD_LIBRARY_PATH=$(PYSIDESANDBOXPATH)/lib:$$LD_LIBRARY_PATH
->>>>
->>>> +PYSIDE_CONF_ENV+=PKG_CONFIG_PATH=$(PYSIDESANDBOXPATH)/lib/pkgconfig:$$PKG_CONFIG_PATH
->>>>
->>>> +
->>>> +# Uncomment next line to attempt to understand something in what CMake
->>>> does
->>>> +#PYSIDE_MAKE_ENV+=VERBOSE=1
->>>> +
->>>> +define PYSIDE_CONFIGURE_CMDS
->>>> +    (                                        \
->>>> +    cd $(@D) &&                                     \
->>>> +    mkdir -p build && cd build &&             \
->>>> +    rm -f CMakeCache.txt &&                             \
->>>> +    $(PYSIDE_CONF_ENV) $(HOST_DIR)/usr/bin/cmake .. \
->>>> +
->>>> -DCMAKE_TOOLCHAIN_FILE="$(HOST_DIR)/usr/share/buildroot/toolchainfile.cmake"
->>>>       \
->>>> +    -DCMAKE_INSTALL_PREFIX="/usr"                             \
->>>> +    $(PYSIDE_CONF_OPT)                                 \
->>>> +    )
->>>> +endef
->>>> +
->>>> +
->>>> +define PYSIDE_BUILD_CMDS
->>>> +    $(TARGET_MAKE_ENV) $(PYSIDE_MAKE_ENV) $(MAKE) $(PYSIDE_MAKE_OPT) -C
->>>> $(@D)/build
->>>> +endef
->>>> +
->>>> +PYSIDE_CMAKE_INSTALL_CMAKE=        \
->>>> +libpyside/cmake_install.cmake         \
->>>> +PySide/cmake_install.cmake        \
->>>> +PySide/QtTest/cmake_install.cmake    \
->>>> +PySide/QtCore/cmake_install.cmake    \
->>>> +tests/cmake_install.cmake        \
->>>> +tests/QtTest/cmake_install.cmake    \
->>>> +tests/QtCore/cmake_install.cmake    \
->>>> +tests/pysidetest/cmake_install.cmake    \
->>>> +tests/signals/cmake_install.cmake
->>>> +
->>>> +ifneq ($(BR2_PACKAGE_QT_GUI_MODULE),)
->>>> +PYSIDE_CMAKE_INSTALL_CMAKE+=PySide/QtGui/cmake_install.cmake
->>>> +PYSIDE_CMAKE_INSTALL_CMAKE+=tests/QtGui/cmake_install.cmake
->>>> +endif
->>>> +
->>>> +ifneq ($(BR2_PACKAGE_QT_NETWORK),)
->>>> +PYSIDE_CMAKE_INSTALL_CMAKE+=PySide/QtNetwork/cmake_install.cmake
->>>> +PYSIDE_CMAKE_INSTALL_CMAKE+=tests/QtNetwork/cmake_install.cmake
->>>> +endif
->>>> +
->>>> +ifneq ($(BR2_PACKAGE_QT_OPENGL_ES),)
->>>> +PYSIDE_CMAKE_INSTALL_CMAKE+=PySide/QtOpenGL/cmake_install.cmake
->>>> +PYSIDE_CMAKE_INSTALL_CMAKE+=tests/QtOpenGL/cmake_install.cmake
->>>> +endif
->>>> +
->>>> +ifneq ($(BR2_PACKAGE_QT_SQL_MODULE),)
->>>> +PYSIDE_CMAKE_INSTALL_CMAKE+=PySide/QtSql/cmake_install.cmake
->>>> +PYSIDE_CMAKE_INSTALL_CMAKE+=tests/QtSql/cmake_install.cmake
->>>> +endif
->>>> +
->>>> +ifneq ($(BR2_PACKAGE_QT_SVG),)
->>>> +PYSIDE_CMAKE_INSTALL_CMAKE+=PySide/QtSvg/cmake_install.cmake
->>>> +PYSIDE_CMAKE_INSTALL_CMAKE+=tests/QtSvg/cmake_install.cmake
->>>> +endif
->>>> +
->>>> +ifneq ($(BR2_PACKAGE_QT_XML),)
->>>> +PYSIDE_CMAKE_INSTALL_CMAKE+=PySide/QtXml/cmake_install.cmake
->>>> +PYSIDE_CMAKE_INSTALL_CMAKE+=tests/QtXml/cmake_install.cmake
->>>> +endif
->>>> +
->>>> +ifneq ($(BR2_PACKAGE_QT_SCRIPT),)
->>>> +PYSIDE_CMAKE_INSTALL_CMAKE+=PySide/QtScript/cmake_install.cmake
->>>> +PYSIDE_CMAKE_INSTALL_CMAKE+=tests/QtScript/cmake_install.cmake
->>>> +endif
->>>> +
->>>> +
->>>> +define PYSIDE_INSTALL_TARGET_CMDS
->>>> +    (                                                    \
->>>> +    cd  $(@D)/build &&         \
->>>> +    for ins in $(PYSIDE_CMAKE_INSTALL_CMAKE); do \
->>>> +       cat $$ins | sed -e 's|$(STAGING_DIR)|$(TARGET_DIR)/usr|g' >
->>>> $${ins}2 ;                \
->>>> +    done;                                                    \
->>>> +    cat cmake_install.cmake | sed -e
->>>> 's/cmake_install.cmake/cmake_install.cmake2/g' > cmake_install.cmake2;    \
->>>> +    sed -i -e 's/cmake_install.cmake/cmake_install.cmake2/g'
->>>> PySide/cmake_install.cmake2;            \
->>>> +    sed -i -e 's/cmake_install.cmake/cmake_install.cmake2/g'
->>>> tests/cmake_install.cmake2;            \
->>>> +    $(HOST_DIR)/usr/bin/cmake -DCMAKE_INSTALL_PREFIX=$(TARGET_DIR)/usr
->>>> -P cmake_install.cmake2;     \
->>>> +    echo "PySide target OK"; \
->>>> +    rm -rf $(TARGET_DIR)/include/PySide;         \
->>>> +    )
->>>> +endef
->>>> +
->>>> +
->>>> +define PYSIDE_INSTALL_STAGING_CMDS
->>>> +    (                                                    \
->>>> +    cd  $(@D)/build &&         \
->>>> +    echo "Replace $(STAGING_DIR) by $(STAGING_DIR)/usr";                 \
->>>> +    for ins in $(PYSIDE_CMAKE_INSTALL_CMAKE); do \
->>>> +       cat $$ins | sed -e 's|sysroot/lib|sysroot/usr/lib|g' > $${ins}2
->>>> ;                    \
->>>> +    done;                                                    \
->>>> +    sed -i -e 's|sysroot/lib|sysroot/usr/lib|g'
->>>> libpyside/PySideConfig.cmake;                \
->>>> +    cat cmake_install.cmake | sed -e
->>>> 's/cmake_install.cmake/cmake_install.cmake2/g' > cmake_install.cmake2;    \
->>>> +    sed -i -e 's/cmake_install.cmake/cmake_install.cmake2/g'
->>>> PySide/cmake_install.cmake2;            \
->>>> +    sed -i -e 's/cmake_install.cmake/cmake_install.cmake2/g'
->>>> tests/cmake_install.cmake2;            \
->>>> +    $(HOST_DIR)/usr/bin/cmake -DCMAKE_INSTALL_PREFIX=$(STAGING_DIR)/usr
->>>> -P cmake_install.cmake2;        \
->>>> +    echo "PySide staging install OK";         \
->>>> +    )
->>>> +endef
->>>> +
->>>> +$(eval $(generic-package))
->>> Same comments: please convert to cmake-package infrastructure first.
->>>
->>>> diff --git a/package/python/Config.in b/package/python/Config.in
->>>> index cfe73db..bebe36b 100644
->>>> --- a/package/python/Config.in
->>>> +++ b/package/python/Config.in
->>>> @@ -22,9 +22,11 @@ choice
->>>>
->>>>    config BR2_PACKAGE_PYTHON_PY_ONLY
->>>>        bool ".py sources only"
->>>> +    depends on !BR2_PACKAGE_PYSIDE
->>>>
->>>>    config BR2_PACKAGE_PYTHON_PYC_ONLY
->>>>        bool ".pyc compiled sources only"
->>>> +    depends on !BR2_PACKAGE_PYSIDE
->>> Why? This certainly needs more explanations, but it looks suspicious.
->>>
->>>>    config BR2_PACKAGE_PYTHON_PY_PYC
->>>>        bool ".py sources and .pyc compiled"
->>>> diff --git a/package/shiboken/Config.in b/package/shiboken/Config.in
->>>> new file mode 100644
->>>> index 0000000..f13eb7c
->>>> --- /dev/null
->>>> +++ b/package/shiboken/Config.in
->>>> @@ -0,0 +1,5 @@
->>>> +config BR2_PACKAGE_SHIBOKEN
->>>> +        bool "shiboken"
->>>> +    select BR2_PACKAGE_QT_STL
->>> shiboken is selected by pyside, but shiboken forgets to depends on Qt.
->>> If you give us more details on exactly which package needs Qt, we can
->>> probably help you to sort out how to express the dependencies.
->>>
->>>> +        help
->>>> +          Shiboken for PySide
->>> Better description needed.
->>>
->>>> diff --git a/package/shiboken/shiboken.mk b/package/shiboken/shiboken.mk
->>>> new file mode 100644
->>>> index 0000000..cfb87bb
->>>> --- /dev/null
->>>> +++ b/package/shiboken/shiboken.mk
->>>> @@ -0,0 +1,115 @@
->>>> +############################
->>>> +#
->>>> +#    Shiboken
->>>> +#
->>>> +#############################
->>> Header to be fixed.
->>>
->>>> +SHIBOKEN_VERSION=1.2.1
->>>> +SHIBOKEN_SITE=https://distfiles.macports.org/py-shiboken
->>>> +SHIBOKEN_SOURCE=shiboken-$(SHIBOKEN_VERSION).tar.bz2
->>>> +SHIBOKEN_INSTALL_STAGING=YES
->>>> +SHIBOKEN_DEPENDENCIES=python qt host-cmake host-shiboken
->>>> +HOST_SHIBOKEN_DEPENDENCIES=
->>> Spaces around '='. Not need for host-cmake, you should convert your
->>> package to cmake-package.
->>>
->>>> +
->>>> +PYSIDESANDBOXPATH=$(STAGING_DIR)
->>>> +
->>>> +SHIBOKEN_CONF_OPT+=-DCMAKE_INSTALL_PREFIX=$(PYSIDESANDBOXPATH)
->>>> +SHIBOKEN_CONF_OPT+=-DENABLE_ICECC=0
->>>> +
->>>> +SHIBOKEN_CONF_ENV+=PYTHONPATH=$(PYSIDESANDBOXPATH)/lib/python2.6/site-packages:$$PYTHONPATH
->>>>
->>>> +SHIBOKEN_CONF_ENV+=LD_LIBRARY_PATH=$(PYSIDESANDBOXPATH)/lib:$$LD_LIBRARY_PATH
->>>>
->>>> +SHIBOKEN_CONF_ENV+=PKG_CONFIG_PATH=$(PYSIDESANDBOXPATH)/lib/pkgconfig:$$PKG_CONFIG_PATH
->>>>
->>>> +
->>>> +#SHIBOKEN_MAKE_ENV+=VERBOSE=1
->>>> +
->>>> +# HOST
->>>> +
->>>> +define HOST_SHIBOKEN_CONFIGURE_CMDS
->>>> +    (                                        \
->>>> +    cd $(@D) &&                                     \
->>>> +    mkdir -p build && cd build &&             \
->>>> +     $(HOST_DIR)/usr/bin/cmake ..                            \
->>>> +    -DCMAKE_INSTALL_PREFIX="$(HOST_DIR)/usr"                    \
->>>> +    )
->>>> +endef
->>>> +
->>>> +define HOST_SHIBOKEN_BUILD_CMDS
->>>> +    $(HOST_MAKE_ENV) $(MAKE) -C $(@D)/build
->>>> +endef
->>>> +
->>>> +define HOST_SHIBOKEN_INSTALL_CMDS
->>>> +    $(HOST_MAKE_ENV) $(MAKE) -C $(@D)/build install
->>>> +    rm -rf $(HOST_DIR)/usr/lib/cmake/Shiboken*
->>>> +endef
->>>> +
->>>> +# TARGET
->>>> +SHIBOKEN_TESTS_CMAKE=                \
->>>> +$(@D)/tests/samplebinding/CMakeLists.txt    \
->>>> +$(@D)/tests/otherbinding/CMakeLists.txt        \
->>>> +$(@D)/tests/minimalbinding/CMakeLists.txt
->>>> +
->>>> +define SHIBOKEN_PRE_CONFIGURE_GENERATOR_PATH
->>>> +    sed -i  -e
->>>> 's|$${shibokengenerator_BINARY_DIR}/shiboken|$(HOST_DIR)/usr/bin/shiboken|g'
->>>>       \
->>>> +        -e 's/Running generator/Running HOST generator/g'
->>>> $(@D)/shibokenmodule/CMakeLists.txt
->>>> +    for cmakelist in $(SHIBOKEN_TESTS_CMAKE) ; do             \
->>>> +        sed -i -e 's|COMMAND shiboken|COMMAND
->>>> $(HOST_DIR)/usr/bin/shiboken|g'            \
->>>> +            -e 's/Running generator/Running HOST generator/g'
->>>> $$cmakelist;            \
->>>> +    done;
->>>> +endef
->>>> +
->>>> +SHIBOKEN_PRE_CONFIGURE_HOOKS+=SHIBOKEN_PRE_CONFIGURE_GENERATOR_PATH
->>>> +
->>>> +define SHIBOKEN_CONFIGURE_CMDS
->>>> +    echo "HERE ! SHIBOKEN_CONFIGURE_CMDS"
->>>> +    (                                        \
->>>> +    cd $(@D) &&                                     \
->>>> +    mkdir -p build && cd build &&             \
->>>> +    rm -f CMakeCache.txt &&                             \
->>>> +    $(SHIBOKEN_CONF_ENV) $(HOST_DIR)/usr/bin/cmake ..     \
->>>> +
->>>> -DCMAKE_TOOLCHAIN_FILE="$(HOST_DIR)/usr/share/buildroot/toolchainfile.cmake"
->>>>       \
->>>> +    -DCMAKE_INSTALL_PREFIX="/usr"                             \
->>>> +    $(SHIBOKEN_CONF_OPT)                                 \
->>>> +    )
->>>> +endef
->>>> +
->>>> +define SHIBOKEN_BUILD_CMDS
->>>> +    $(TARGET_MAKE_ENV) $(SHIBOKEN_MAKE_ENV) $(MAKE)
->>>> $(SHIBOKEN_MAKE_OPT) -C $(@D)/build
->>>> +endef
->>>> +
->>>> +SHIBOKEN_CMAKE_INSTALL_CMAKE=                \
->>>> +data/cmake_install.cmake                \
->>>> +doc/cmake_install.cmake                    \
->>>> +generator/cmake_install.cmake                \
->>>> +libshiboken/cmake_install.cmake                \
->>>> +shibokenmodule/cmake_install.cmake             \
->>>> +ApiExtractor/cmake_install.cmake            \
->>>> +tests/cmake_install.cmake                \
->>>> +
->>>> +
->>>> +SHIBOKEN_CMAKE_CONF=$(STAGING_DIR)/lib/cmake/Shiboken-1.2.1/ShibokenConfig-python2.7.cmake
->>>>
->>>> +
->>>> +define SHIBOKEN_INSTALL_TARGET_CMDS
->>>> +    (                                                        \
->>>> +    cd  $(@D)/build &&             \
->>>> +    for ins in $(SHIBOKEN_CMAKE_INSTALL_CMAKE); do                     \
->>>> +       cat $$ins | sed -e 's|$(STAGING_DIR)|$(TARGET_DIR)/usr|g' >
->>>> $${ins}2 ;                    \
->>>> +    done; \
->>>> +    cat cmake_install.cmake | sed -e
->>>> 's/cmake_install.cmake/cmake_install.cmake2/g' > cmake_install.cmake2
->>>> ;    \
->>>> +    $(HOST_DIR)/usr/bin/cmake -DCMAKE_INSTALL_PREFIX=$(TARGET_DIR)/usr
->>>> -P cmake_install.cmake2;         \
->>>> +    )
->>>> +    sed -i -e '/SHIBOKEN_BINARY/d'
->>>> $(STAGING_DIR)/lib/cmake/Shiboken-1.2.1/ShibokenConfig-python2.7.cmake
->>>> +    echo 'set(SHIBOKEN_BINARY "$(HOST_DIR)/usr/bin/shiboken")' >>
->>>> $(STAGING_DIR)/lib/cmake/Shiboken-1.2.1/ShibokenConfig-python2.7.cmake
->>>> +    rm -rf $(TARGET_DIR)/include/shiboken
->>>> +    rm -rf $(TARGET_DIR)/usr/bin/shiboken
->>>> +    rm -rf $(TARGET_DIR)/usr/lib/cmake/Shiboken*
->>>> +    rm -rf $(TARGET_DIR)//usr/lib/pkgconfig/shiboken.pc
->>>> +    echo "shiboken target OK";
->>>> +endef
->>>> +
->>>> +
->>>> +define SHIBOKEN_INSTALL_STAGING_CMDS
->>>> +    $(TARGET_MAKE_ENV) $(SHIBOKEN_MAKE_ENV) $(MAKE)
->>>> $(SHIBOKEN_MAKE_OPT) -C $(@D)/build install
->>>> +endef
->>>> +
->>>> +$(eval $(generic-package))
->>>> +$(eval $(host-generic-package))
->>> Ok, same thing: convert to cmake-package. With this work done, and a
->>> split of your patch in at least 3 patches (one per package), maybe 4
->>> (for the change in package/python/Config.in), we should be able to do a
->>> more detailed review and sort out the remaining problems.
->>>
->>> Thanks!
->>>
->>> Thomas
->>
->
->
->
+-- 
+http://autobuild.buildroot.net
