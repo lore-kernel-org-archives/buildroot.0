@@ -1,267 +1,208 @@
-From: Romain Naour <romain.naour@openwide.fr>
-Date: Sat, 21 Sep 2013 02:48:06 +0200 (CEST)
-Subject: [Buildroot] [PATCH 1/1] Openpowerlink: new package
-In-Reply-To: <1165322922.7308619.1379724109699.JavaMail.root@openwide.fr>
-Message-ID: <681556336.7308664.1379724486354.JavaMail.root@openwide.fr>
+From: Matt Weber <mlweber1@rockwellcollins.com>
+Date: Fri, 20 Sep 2013 20:29:03 -0500
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+	2013-09-19
+In-Reply-To: <20130920063008.7C55952C101@lolut.humanoidz.org>
+References: <20130920063008.7C55952C101@lolut.humanoidz.org>
+Message-ID: <CAC2S8kgcLiKT7jGSwcuvi_uq0Lupbn_qAKdOiQZq4bdJNh50Bw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On Sep 20, 2013 1:30 AM, "Thomas Petazzoni" <
+thomas.petazzoni@free-electrons.com> wrote:
+>
+> Build statistics for 2013-09-19
+> ===============================
+>
+>         success : 70
+>        failures : 63
+>        timeouts : 0
+>           TOTAL : 133
+>
+> Classification of failures by reason
+> ====================================
+>
+>     trace-cmd-trace-cmd-v2.2.1 | 9
+>                  qt5base-5.0.2 | 4
+> make: *** [/home/test/test/... | 4
+> make: *** [/home/test/test/... | 4
+>                     orc-0.4.18 | 4
+>            python-pyzmq-13.1.0 | 3
+>                  dropwatch-1.4 | 3
+>       host-gcc-initial-4.8-arc | 3
+>                alsa-lib-1.0.26 | 3
+>                        bc-1.06 | 2
 
-Signed-off-by: Romain Naour <romain.naour@openwide.fr>
----
- package/Config.in                                  |  1 +
- package/openpowerlink/Config.in                    | 92 +++++++++++++++++++++
- .../openpowerlink-FIX-demo_mn_qt.patch             | 27 +++++++
- package/openpowerlink/openpowerlink.mk             | 93 ++++++++++++++++++++++
- 4 files changed, 213 insertions(+)
- create mode 100644 package/openpowerlink/Config.in
- create mode 100644 package/openpowerlink/openpowerlink-FIX-demo_mn_qt.patch
- create mode 100644 package/openpowerlink/openpowerlink.mk
+Thanks for adding the flex depend to bc.
 
-diff --git a/package/Config.in b/package/Config.in
-index e1dfd5d..fdf9b55 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -912,6 +912,7 @@ endmenu
- menu "Real-Time"
- source "package/xenomai/Config.in"
- source "package/rtai/Config.in"
-+source "package/openpowerlink/Config.in"
- endmenu
- 
- menu "Shell and utilities"
-diff --git a/package/openpowerlink/Config.in b/package/openpowerlink/Config.in
-new file mode 100644
-index 0000000..42a6099
---- /dev/null
-+++ b/package/openpowerlink/Config.in
-@@ -0,0 +1,92 @@
-+comment "openpowerlink requires thread support in toolchain"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS
-+
-+config BR2_PACKAGE_OPENPOWERLINK
-+	bool "Openpowerlink"
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_i386 || BR2_x86_64
-+	help
-+	  openPOWERLINK is an Open Source Industrial Ethernet 
-+	  stack implementing the POWERLINK protocol for Managing Node 
-+	  (MN, POWERLINK Master) and Controlled Node (CN, POWERLINK Slave).
-+
-+	  It is provided by SYSTEC electronic (http://www.systec-electronic.com), 
-+	  B&R (http://www.br-automation.com) and 
-+	  Kalycito (http://www.kalycito.com).
-+
-+if BR2_PACKAGE_OPENPOWERLINK
-+
-+choice
-+	prompt "Openpowerlink mode"
-+
-+config BR2_PACKAGE_OPENPOWERLINK_LIBPCAP
-+	bool "userspace stack"
-+	select BR2_PACKAGE_LIBPCAP
-+
-+config BR2_PACKAGE_OPENPOWERLINK_KERNEL_MODULE
-+	bool "kernel stack"
-+	depends on BR2_LINUX_KERNEL
-+	help
-+	  You may select BR2_PACKAGE_PCIUTILS for lscpi, and BR2_PACKAGE_PROCPS for ps command.
-+	  These commands are used in EplLoad and EplUndload scripts.
-+
-+endchoice
-+
-+if BR2_PACKAGE_OPENPOWERLINK_KERNEL_MODULE
-+
-+choice
-+	prompt "Select Ethernet Powerlink Driver"
-+
-+config BR2_PACKAGE_OPENPOWERLINK_82573
-+	bool "Intel 82573"
-+
-+config BR2_PACKAGE_OPENPOWERLINK_8255x
-+	bool "Intel 8255x"
-+
-+config BR2_PACKAGE_OPENPOWERLINK_RTL8139
-+	bool "Realteck RTL-8139"
-+
-+endchoice
-+
-+endif
-+
-+choice
-+	prompt "Select MN/CN mode"
-+
-+	config BR2_PACKAGE_OPENPOWERLINK_MN
-+	bool "MN"
-+	help
-+	  Enable Managing Node mode
-+
-+	config BR2_PACKAGE_OPENPOWERLINK_CN
-+	bool "CN"
-+	help
-+	  Enable Controlled Node mode
-+
-+endchoice
-+
-+# Powerlink Demos
-+config BR2_PACKAGE_OPENPOWERLINK_DEMO_MN_CONSOLE
-+	bool "Console MN demo"
-+	depends on BR2_PACKAGE_OPENPOWERLINK_MN
-+
-+config BR2_PACKAGE_OPENPOWERLINK_DEMO_MN_QT
-+	bool "QT MN demo"
-+	depends on BR2_PACKAGE_OPENPOWERLINK_MN
-+	select BR2_PACKAGE_QT
-+	select BR2_PACKAGE_QT_STL
-+
-+config BR2_PACKAGE_OPENPOWERLINK_DEMO_CN_CONSOLE
-+	bool "Console CN demo"
-+	depends on !BR2_PACKAGE_OPENPOWERLINK_MN
-+
-+config BR2_PACKAGE_OPENPOWERLINK_DEMO_LINUX_KERNEL
-+	bool "Kernel demo"
-+	depends on BR2_PACKAGE_OPENPOWERLINK_KERNEL_MODULE
-+
-+config BR2_PACKAGE_OPENPOWERLINK_DEBUG_LEVEL
-+	string "Debug level for EPL"
-+	help
-+	  default value: 0xEC000000L
-+
-+endif
-diff --git a/package/openpowerlink/openpowerlink-FIX-demo_mn_qt.patch b/package/openpowerlink/openpowerlink-FIX-demo_mn_qt.patch
-new file mode 100644
-index 0000000..a71298d
---- /dev/null
-+++ b/package/openpowerlink/openpowerlink-FIX-demo_mn_qt.patch
-@@ -0,0 +1,27 @@
-+From 8658075bd7c49a7481e8f6d0d7a13b0651e1dfd7 Mon Sep 17 00:00:00 2001
-+From: Romain Naour <romain.naour@openwide.fr>
-+Date: Wed, 18 Sep 2013 23:33:04 +0200
-+Subject: [PATCH 1/1] [FIX] demo_mn_qt: add EplDebug.c in demo_sources list
-+
-+demo_mn_qt use EplGetEmergErrCodeStr()
-+
-+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-+---
-+ Examples/X86/Generic/demo_mn_qt/CMakeLists.txt | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/Examples/X86/Generic/demo_mn_qt/CMakeLists.txt b/Examples/X86/Generic/demo_mn_qt/CMakeLists.txt
-+index 9db2f7f..48ae9eb 100644
-+--- a/Examples/X86/Generic/demo_mn_qt/CMakeLists.txt
-++++ b/Examples/X86/Generic/demo_mn_qt/CMakeLists.txt
-+@@ -78,6 +78,7 @@ SET(DEMO_SOURCES src/EplApi.cpp
-+                  src/MainWindow.cpp
-+                  src/NodeState.cpp
-+                  ${POWERLINK_SOURCE_DIR}/ObjDicts/${OBJDICT}/EplApiProcessImageSetup.c
-++                 ${POWERLINK_SOURCE_DIR}/EplStack/EplDebug.c
-+     )
-+ 
-+ # The TRACE macros need trace.c on the Windows platform
-+-- 
-+1.8.4
-+
-diff --git a/package/openpowerlink/openpowerlink.mk b/package/openpowerlink/openpowerlink.mk
-new file mode 100644
-index 0000000..ac28de9
---- /dev/null
-+++ b/package/openpowerlink/openpowerlink.mk
-@@ -0,0 +1,93 @@
-+################################################################################
-+#
-+# openPOWERLINK
-+#
-+################################################################################
-+
-+OPENPOWERLINK_VERSION = V1.08.3
-+OPENPOWERLINK_SOURCE = openPOWERLINK-$(OPENPOWERLINK_VERSION).zip
-+OPENPOWERLINK_SITE = http://downloads.sourceforge.net/project/openpowerlink/openPOWERLINK/V1.8.3
-+
-+OPENPOWERLINK_LICENSE = BSD-2c, GPLv2
-+OPENPOWERLINK_LICENSE_FILES = license.txt
-+OPENPOWERLINK_INSTALL_STAGING = YES
-+
-+ifeq ($(BR2_i386),y)
-+OPENPOWERLINK_ARCH = x86
-+endif
-+
-+ifeq ($(BR2_x86_64),y)
-+OPENPOWERLINK_ARCH = x86_64
-+endif
-+
-+OPENPOWERLINK_CONF_OPT = -DCMAKE_SYSTEM_PROCESSOR=$(OPENPOWERLINK_ARCH)
-+OPENPOWERLINK_CONF_OPT += -DCMAKE_BUILD_TYPE=Debug
-+OPENPOWERLINK_CONF_OPT += -DCMAKE_INSTALL_PREFIX=/usr/
-+
-+OPENPOWERLINK_DEBUG_LEVEL = $(call qstrip,$(BR2_PACKAGE_OPENPOWERLINK_DEBUG_LEVEL))
-+
-+ifeq ($(OPENPOWERLINK_DEBUG_LEVEL),)
-+OPENPOWERLINK_CONF_OPT += -DCFG_DEBUG_LVL=0xEC000000L
-+else
-+OPENPOWERLINK_CONF_OPT += -DCFG_DEBUG_LVL=$(OPENPOWERLINK_DEBUG_LEVEL)
-+endif
-+
-+ifeq ($(BR2_PACKAGE_OPENPOWERLINK_LIBPCAP),y)
-+#  use the user space stack (libpcap)
-+OPENPOWERLINK_CONF_OPT += -DCFG_KERNEL_STACK=OFF
-+OPENPOWERLINK_DEPENDENCIES = libpcap
-+else
-+# use the kernel stack
-+OPENPOWERLINK_CONF_OPT += -DCFG_KERNEL_STACK=ON
-+OPENPOWERLINK_CONF_OPT += -DCFG_KERNEL_DIR=$(LINUX_DIR)
-+OPENPOWERLINK_CONF_OPT += -DCMAKE_SYSTEM_VERSION=$(LINUX_VERSION)
-+OPENPOWERLINK_DEPENDENCIES = linux
-+endif
-+
-+ifeq ($(BR2_PACKAGE_OPENPOWERLINK_82573),y)
-+OPENPOWERLINK_CONF_OPT += -DCFG_POWERLINK_EDRV=82573
-+else ifeq ($(BR2_PACKAGE_OPENPOWERLINK_RTL8139),y)
-+OPENPOWERLINK_CONF_OPT += -DCFG_POWERLINK_EDRV=8139
-+else ifeq ($(BR2_PACKAGE_OPENPOWERLINK_8255x),y)
-+OPENPOWERLINK_CONF_OPT += -DCFG_POWERLINK_EDRV=8255x
-+endif
-+
-+ifeq ($(BR2_PACKAGE_OPENPOWERLINK_MN),y)
-+OPENPOWERLINK_CONF_OPT += -DCFG_POWERLINK_MN=ON
-+else
-+OPENPOWERLINK_CONF_OPT += -DCFG_POWERLINK_MN=OFF
-+endif
-+
-+ifeq ($(BR2_PACKAGE_OPENPOWERLINK_DEMO_MN_CONSOLE),y)
-+OPENPOWERLINK_CONF_OPT += -DCFG_X86_DEMO_MN_CONSOLE=ON
-+else
-+OPENPOWERLINK_CONF_OPT += -DCFG_X86_DEMO_MN_CONSOLE=OFF
-+endif
-+
-+ifeq ($(BR2_PACKAGE_OPENPOWERLINK_DEMO_MN_QT),y)
-+OPENPOWERLINK_CONF_OPT += -DCFG_X86_DEMO_MN_QT=ON
-+OPENPOWERLINK_DEPENDENCIES += qt
-+else
-+OPENPOWERLINK_CONF_OPT += -DCFG_X86_DEMO_MN_QT=OFF
-+endif
-+
-+ifeq ($(BR2_PACKAGE_OPENPOWERLINK_DEMO_CN_CONSOLE),y)
-+OPENPOWERLINK_CONF_OPT += -DCFG_X86_DEMO_CN_CONSOLE=ON
-+else
-+OPENPOWERLINK_CONF_OPT += -DCFG_X86_DEMO_CN_CONSOLE=OFF
-+endif
-+
-+ifeq ($(BR2_PACKAGE_OPENPOWERLINK_DEMO_LINUX_KERNEL),y)
-+OPENPOWERLINK_CONF_OPT += -DCFG_X86_DEMO_LINUX_KERNEL=ON
-+else
-+OPENPOWERLINK_CONF_OPT += -DCFG_X86_DEMO_LINUX_KERNEL=OFF
-+endif
-+
-+define OPENPOWERLINK_EXTRACT_CMDS
-+	$(RM) -rf $(OPENPOWERLINK_DIR)
-+	unzip -q -d $(BUILD_DIR)/ $(DL_DIR)/$(OPENPOWERLINK_SOURCE)
-+	test -d $(OPENPOWERLINK_DIR) || \
-+		mv $(BUILD_DIR)/$(subst .zip,,$(OPENPOWERLINK_SOURCE)) $(OPENPOWERLINK_DIR)
-+endef
-+
-+$(eval $(cmake-package))
--- 
-1.8.4
+> make: *** [/home/test/test/... | 2
+>                     ola-0.8.31 | 2
+>                       qt-4.8.5 | 1
+>              gstreamer-0.10.36 | 1
+>                w_scan-20130331 | 1
+>         host-util-linux-2.23.2 | 1
+>                   iozone-3_414 | 1
+>                   boost-1.53.0 | 1
+>                qt5script-5.0.2 | 1
+>                       icu-51.2 | 1
+>                qt5webkit-5.0.2 | 1
+>                  webkit-1.11.5 | 1
+> make: *** [/home/test/test/... | 1
+>                  omniorb-4.1.6 | 1
+
+Omniorb is failing because of how I'm building the host tools ( target
+cflags are getting used).  Working on a fix.
+
+>                libglib2-2.36.3 | 1
+>                 directfb-1.6.3 | 1
+>                      popt-1.16 | 1
+>                  mplayer-1.1.1 | 1
+>                  libssh2-1.4.3 | 1
+>                 aiccu-20070115 | 1
+>                 libtirpc-0.2.2 | 1
+>                    ncftp-3.2.5 | 1
+>
+> Detail of failures
+> ===================
+>
+>   mips64el |                 aiccu-20070115 | NOK |
+http://autobuild.buildroot.net/results/193127bbfe0c6070194e62fbedc783d50d232a2c/
+>       bfin |                alsa-lib-1.0.26 | NOK |
+http://autobuild.buildroot.net/results/6e6b2ddee308626098dcad9208e0425536cc9f76/
+>     x86_64 |                alsa-lib-1.0.26 | NOK |
+http://autobuild.buildroot.net/results/09b2279ece11f56a3ce4722e8639af5d932a10b6/
+>     x86_64 |                alsa-lib-1.0.26 | NOK |
+http://autobuild.buildroot.net/results/aee6ed7dddd69de8520a0ebe7d97f9c758ebbf93/
+>        arm |                        bc-1.06 | NOK |
+http://autobuild.buildroot.net/results/49d78f0528c6ecc2adfcfa17f4b09ec225c594be/
+>    powerpc |                        bc-1.06 | NOK |
+http://autobuild.buildroot.net/results/3d50274fd7fdb4f1576d068ceda8b759a08b2fc9/
+>       bfin |                   boost-1.53.0 | NOK |
+http://autobuild.buildroot.net/results/77c53ddf804b8c54a710d039b8b1beb77325214e/
+>     x86_64 |                 directfb-1.6.3 | NOK |
+http://autobuild.buildroot.net/results/33c95f8c36ca8db40648ef9f70c7aa531d520e92/
+>      avr32 |                  dropwatch-1.4 | NOK |
+http://autobuild.buildroot.net/results/7c7b7df5695df94557e7461dcba085573645fd07/
+>   mips64el |                  dropwatch-1.4 | NOK |
+http://autobuild.buildroot.net/results/4ebde0913a7f96e8ee78df528d47a68b8743af76/
+>   mips64el |                  dropwatch-1.4 | NOK |
+http://autobuild.buildroot.net/results/604d68540885922aa63fd23613b5472495e71db6/
+>     xtensa |              gstreamer-0.10.36 | NOK |
+http://autobuild.buildroot.net/results/ea9c30dcf5847b12ce33b8cd5ab3b9fa1f658694/
+>        arc |       host-gcc-initial-4.8-arc | NOK |
+http://autobuild.buildroot.net/results/ff903ce970ea652cc1aa57a5eb57e923dc4c5405/
+>        arc |       host-gcc-initial-4.8-arc | NOK |
+http://autobuild.buildroot.net/results/d3b2e4e32d531c08c19d39b248898fe462b81d8f/
+>        arc |       host-gcc-initial-4.8-arc | NOK |
+http://autobuild.buildroot.net/results/76a2ab46ef7183f14eec944db4a598325e00b503/
+>     x86_64 |         host-util-linux-2.23.2 | NOK |
+http://autobuild.buildroot.net/results/0e2ff8e61a67a40e143a5d714a29c89afa140de8/
+>       bfin |                       icu-51.2 | NOK |
+http://autobuild.buildroot.net/results/58b34c7729166b4ae8b585d98ed6b905530d97b8/
+>      avr32 |                   iozone-3_414 | NOK |
+http://autobuild.buildroot.net/results/ce1fecd6445b10c9e43ec43f3b91eb5c8f67b34b/
+>       bfin |                libglib2-2.36.3 | NOK |
+http://autobuild.buildroot.net/results/6fc465d1663d276bc6bac6b9edbd0b0d63071f80/
+>    powerpc |                  libssh2-1.4.3 | NOK |
+http://autobuild.buildroot.net/results/b68848cd8e77f7c0f7ba93efb6754d7a274cd227/
+>        arm |                 libtirpc-0.2.2 | NOK |
+http://autobuild.buildroot.net/results/8a09a7d89073b6c74a7551864c5487de69a9af86/
+>        arm | make: *** [/home/test/test/... | NOK |
+http://autobuild.buildroot.net/results/14eeec85eb97fa4dc27425eb13198b1ffd6cf450/
+>        arm | make: *** [/home/test/test/... | NOK |
+http://autobuild.buildroot.net/results/2b452476b75cdda4bfce57b1d93fefd71301d41b/
+>        arm | make: *** [/home/test/test/... | NOK |
+http://autobuild.buildroot.net/results/3610be3ef00226a6fd4fd1235e7b247288c7e57f/
+>       i686 | make: *** [/home/test/test/... | NOK |
+http://autobuild.buildroot.net/results/e5c4f5e25c72430e5160308b4db7210e7877666e/
+>     x86_64 | make: *** [/home/test/test/... | NOK |
+http://autobuild.buildroot.net/results/063915a55e49096a39a53f8839953f5efaec261e/
+>     x86_64 | make: *** [/home/test/test/... | NOK |
+http://autobuild.buildroot.net/results/b4710a36679b516c07b37e73a815857764cab449/
+>        arm | make: *** [/home/test/test/... | NOK |
+http://autobuild.buildroot.net/results/73de8ca9a30642ccef8bb0181bb028d6ea9c49d1/
+>     x86_64 | make: *** [/home/test/test/... | NOK |
+http://autobuild.buildroot.net/results/c22ca77ba84ba8423883f5e34a28d2c6c3a1ad51/
+>        arm | make: *** [/home/test/test/... | NOK |
+http://autobuild.buildroot.net/results/e91c4868fa911c7498985c72f2eb7566385764e1/
+>     x86_64 | make: *** [/home/test/test/... | NOK |
+http://autobuild.buildroot.net/results/19acd48195857bffd99a703dbe05846a883f792a/
+>       i686 | make: *** [/home/test/test/... | NOK |
+http://autobuild.buildroot.net/results/5f5cc4f4a0d30da582934affba2724aeeb91d7d5/
+>        arm |                  mplayer-1.1.1 | NOK |
+http://autobuild.buildroot.net/results/a8f5a018f297307976bd0a1a0217c44786d864ca/
+>       i686 |                    ncftp-3.2.5 | NOK |
+http://autobuild.buildroot.net/results/33d0fde74a5c35da7ed9c38039b581b7da8c7d27/
+>    aarch64 |                     ola-0.8.31 | NOK |
+http://autobuild.buildroot.net/results/7d8437cda1c9f8cc3a93f28bdec2616ddebbebef/
+>    aarch64 |                     ola-0.8.31 | NOK |
+http://autobuild.buildroot.net/results/9cba27b7e35e3639c55a95b3291111577b5834bc/
+>        arm |                  omniorb-4.1.6 | NOK |
+http://autobuild.buildroot.net/results/61a0d3b22943623778265dad3bec9007924ab2fe/
+>        arm |                     orc-0.4.18 | NOK |
+http://autobuild.buildroot.net/results/7cb544393816d62284cca9dd3381703d782841d1/
+>        arm |                     orc-0.4.18 | NOK |
+http://autobuild.buildroot.net/results/8fc1e8cbd6cc3e3066056b5983d09ecd8ae659b2/
+>        arm |                     orc-0.4.18 | NOK |
+http://autobuild.buildroot.net/results/8517f4e75b0a69353b8bcd55e24dbd88376006f1/
+>    powerpc |                     orc-0.4.18 | NOK |
+http://autobuild.buildroot.net/results/1cdba71798ed90e69a8a5e845fe547ba25b4913a/
+>       bfin |                      popt-1.16 | NOK |
+http://autobuild.buildroot.net/results/b5e158eb64b68dfaba92e8ac45156546c58f1bd3/
+>        arm |            python-pyzmq-13.1.0 | NOK |
+http://autobuild.buildroot.net/results/b557fcb270c2984184715834c904c79d8c4a0868/
+>    powerpc |            python-pyzmq-13.1.0 | NOK |
+http://autobuild.buildroot.net/results/6f624771016012f075d9082fc039dcd447bfd645/
+>        arm |            python-pyzmq-13.1.0 | NOK |
+http://autobuild.buildroot.net/results/458d1fe1682afeb1638061e70e7005dec02c7bca/
+>   mips64el |                       qt-4.8.5 | NOK |
+http://autobuild.buildroot.net/results/c53eda251e8fc11d11d6fdb27a48328bd1acb465/
+>        arm |                  qt5base-5.0.2 | NOK |
+http://autobuild.buildroot.net/results/520dd41b93f2f82932b2308c971b5365a8c9f8da/
+>     mipsel |                  qt5base-5.0.2 | NOK |
+http://autobuild.buildroot.net/results/436dc8c03e2f728e375013b2a9edbdd45722e7ce/
+>        arm |                  qt5base-5.0.2 | NOK |
+http://autobuild.buildroot.net/results/1f72b1bc6b8aa95ba3cf3081617608ee6ab2096f/
+>        arm |                  qt5base-5.0.2 | NOK |
+http://autobuild.buildroot.net/results/c332567f06b49b230c475b2b8a6c19b10278c17f/
+>   mips64el |                qt5script-5.0.2 | NOK |
+http://autobuild.buildroot.net/results/8a8142676066b40fe7a03946c2fce4024aed6c56/
+>    powerpc |                qt5webkit-5.0.2 | NOK |
+http://autobuild.buildroot.net/results/642f902c105592c759392a38a3c8f7aee2756965/
+>    powerpc |     trace-cmd-trace-cmd-v2.2.1 | NOK |
+http://autobuild.buildroot.net/results/deb376c626bca6a5a35b1125db9e5692cd901478/
+>    powerpc |     trace-cmd-trace-cmd-v2.2.1 | NOK |
+http://autobuild.buildroot.net/results/1e98d95aaacd2a976b00063820c471646003fd6e/
+>    powerpc |     trace-cmd-trace-cmd-v2.2.1 | NOK |
+http://autobuild.buildroot.net/results/5ba39e047e26ff7dc9ec9cbd8b9185a3dd7cd511/
+>    powerpc |     trace-cmd-trace-cmd-v2.2.1 | NOK |
+http://autobuild.buildroot.net/results/e529d92b956050ac96332a20a906a03889992ff0/
+>        arm |     trace-cmd-trace-cmd-v2.2.1 | NOK |
+http://autobuild.buildroot.net/results/0f9c5875d8e937896446f866cb3faa3da8f2723f/
+>    powerpc |     trace-cmd-trace-cmd-v2.2.1 | NOK |
+http://autobuild.buildroot.net/results/5a50f8a3b82c76192917d075050ee2334ae09119/
+>    powerpc |     trace-cmd-trace-cmd-v2.2.1 | NOK |
+http://autobuild.buildroot.net/results/ab80d73398f295025887c7ad17eb1c9328277896/
+>    powerpc |     trace-cmd-trace-cmd-v2.2.1 | NOK |
+http://autobuild.buildroot.net/results/510ea5d0889a6363e20f7fa14792e73d96923625/
+>        arm |     trace-cmd-trace-cmd-v2.2.1 | NOK |
+http://autobuild.buildroot.net/results/5c69dc5b52b9b8bc3e77946bb05ec4e205fd6f16/
+>        arm |                  webkit-1.11.5 | NOK |
+http://autobuild.buildroot.net/results/5e33f7ce11a40a78fd5be8e0089814acf6d3aa3f/
+>    powerpc |                w_scan-20130331 | NOK |
+http://autobuild.buildroot.net/results/31b9169ed9bd00fcf0bff8de12e0c7f382ca2dac/
+>
+>
+> --
+> http://autobuild.buildroot.net
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130920/3b879d09/attachment-0001.html>
