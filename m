@@ -1,50 +1,40 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sat, 21 Sep 2013 16:58:16 +0200
-Subject: [Buildroot] [git commit] zeromq: remove unneeded patch after
-	version bump
-Message-ID: <20130921181107.ACEE39B81F@busybox.osuosl.org>
+From: Fatih =?utf-8?q?A=C5=9F=C4=B1c=C4=B1?= <fatih.asici@gmail.com>
+Date: Sat, 21 Sep 2013 21:38:02 +0300
+Subject: [Buildroot] [PATCH 1/5] qt5: bump to 5.1.1
+In-Reply-To: <20130919205514.53b092ff@skate>
+References: <201309182118.23091.fatih.asici@gmail.com>
+ <523B3759.1000901@mind.be> <20130919205514.53b092ff@skate>
+Message-ID: <201309212138.02246.fatih.asici@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=da46ffed4050889ac890af781e896f7fbdad6bd2
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Thomas,
 
-Commit b3c525b886b375256a8e0d60a749ea07f6591974 has bumped zeromq to
-version 2.3.4, which makes the patch
-zeromq-0001-test-collect-delay-end-of-line.patch unneeded since it has
-been merged upstream.
+On Thursday 19 September 2013 21:55:14 Thomas Petazzoni wrote:
+> On Thu, 19 Sep 2013 19:41:45 +0200, Arnout Vandecappelle wrote:
+> >   Perhaps we could try upstreaming our mkspecs? Does that make sense?
+> 
+> Our mkspecs is really meant to be a template that has to be tuned by
+> the qt5base.mk makefile, and therefore outside Buildroot itself I
+> believe its meaning is not so important. We could even carry it within
+> package/qt5/qt5base/ rather than as a patch, for example.
 
-Fixes:
+I think, this part could be simplified by using a mkspec file for "Generic 
+Linux" device which could be accepted by upstream. In order to customize 
+variables we can use -device-option argument. As you mention in a comment in 
+qt5base.mk, this option has some problems. I sent[1] a patch to upstream which 
+fixes a problem when the value contains an equal sign.
 
-  http://autobuild.buildroot.org/results/e8c/e8c8ba8c31fd081c34c8772790d4c581eb3ec3ed/build-end.log
+I am also waiting[2] for a reply from upstream about the linux-generic-g++ 
+device suggestion.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+I have tried this method on my local machine and it seems working.
+
+[1] https://bugreports.qt-project.org/browse/QTBUG-33584
+[2] https://bugreports.qt-project.org/browse/QTBUG-33586
+
 ---
- ...eromq-0001-test-collect-delay-end-of-line.patch |   15 ---------------
- 1 files changed, 0 insertions(+), 15 deletions(-)
-
-diff --git a/package/zeromq/zeromq-0001-test-collect-delay-end-of-line.patch b/package/zeromq/zeromq-0001-test-collect-delay-end-of-line.patch
-deleted file mode 100644
-index 6a1a655..0000000
---- a/package/zeromq/zeromq-0001-test-collect-delay-end-of-line.patch
-+++ /dev/null
-@@ -1,15 +0,0 @@
--test_connect_delay: add missing newline at end of file
--
--Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
--Backported-from: https://github.com/zeromq/zeromq3-x/commit/143ae519b4a325bb68d29e6f7e00cb98a440dd12
--
--diff --git a/tests/test_connect_delay.cpp b/tests/test_connect_delay.cpp
----- a/tests/test_connect_delay.cpp
--+++ b/tests/test_connect_delay.cpp
--@@ -257,4 +257,4 @@ int main (void)
--     
--     rc = zmq_ctx_destroy(context2);
--     assert (rc == 0);
---}
--\ No newline at end of file
--+}
+Fatih
