@@ -1,10 +1,10 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Sat, 21 Sep 2013 10:15:20 +0200
+Date: Sat, 21 Sep 2013 10:17:24 +0200
 Subject: [Buildroot] [PATCH 1/1] Openpowerlink: new package
 In-Reply-To: <681556336.7308664.1379724486354.JavaMail.root@openwide.fr>
 References: <1165322922.7308619.1379724109699.JavaMail.root@openwide.fr>
  <681556336.7308664.1379724486354.JavaMail.root@openwide.fr>
-Message-ID: <CAAXf6LW7vu5CdLqbgOsyxv3NihrXQpJB+DYA4T2c7Cfa206GTg@mail.gmail.com>
+Message-ID: <CAAXf6LWRhU6D4CgKkrvNA_s3T_CbRvnQaaX=wPZJTDPzgP5vfA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,22 +13,17 @@ To: buildroot@busybox.net
 
 Hi Thomas,
 
-Op 21-sep.-2013 02:48 schreef "Romain Naour" <romain.naour@openwide.fr> het
-volgende:
->
+On Sat, Sep 21, 2013 at 2:48 AM, Romain Naour <romain.naour@openwide.fr> wrote:
 >
 > Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 > ---
 >  package/Config.in                                  |  1 +
->  package/openpowerlink/Config.in                    | 92
-+++++++++++++++++++++
+>  package/openpowerlink/Config.in                    | 92 +++++++++++++++++++++
 >  .../openpowerlink-FIX-demo_mn_qt.patch             | 27 +++++++
->  package/openpowerlink/openpowerlink.mk             | 93
-++++++++++++++++++++++
+>  package/openpowerlink/openpowerlink.mk             | 93 ++++++++++++++++++++++
 >  4 files changed, 213 insertions(+)
 >  create mode 100644 package/openpowerlink/Config.in
->  create mode 100644
-package/openpowerlink/openpowerlink-FIX-demo_mn_qt.patch
+>  create mode 100644 package/openpowerlink/openpowerlink-FIX-demo_mn_qt.patch
 >  create mode 100644 package/openpowerlink/openpowerlink.mk
 >
 > diff --git a/package/Config.in b/package/Config.in
@@ -43,8 +38,7 @@ package/openpowerlink/openpowerlink-FIX-demo_mn_qt.patch
 >  endmenu
 >
 >  menu "Shell and utilities"
-> diff --git a/package/openpowerlink/Config.in
-b/package/openpowerlink/Config.in
+> diff --git a/package/openpowerlink/Config.in b/package/openpowerlink/Config.in
 > new file mode 100644
 > index 0000000..42a6099
 > --- /dev/null
@@ -60,11 +54,9 @@ b/package/openpowerlink/Config.in
 > +       help
 > +         openPOWERLINK is an Open Source Industrial Ethernet
 > +         stack implementing the POWERLINK protocol for Managing Node
-> +         (MN, POWERLINK Master) and Controlled Node (CN, POWERLINK
-Slave).
+> +         (MN, POWERLINK Master) and Controlled Node (CN, POWERLINK Slave).
 > +
-> +         It is provided by SYSTEC electronic (
-http://www.systec-electronic.com),
+> +         It is provided by SYSTEC electronic (http://www.systec-electronic.com),
 > +         B&R (http://www.br-automation.com) and
 > +         Kalycito (http://www.kalycito.com).
 > +
@@ -81,8 +73,7 @@ http://www.systec-electronic.com),
 > +       bool "kernel stack"
 > +       depends on BR2_LINUX_KERNEL
 > +       help
-> +         You may select BR2_PACKAGE_PCIUTILS for lscpi, and
-BR2_PACKAGE_PROCPS for ps command.
+> +         You may select BR2_PACKAGE_PCIUTILS for lscpi, and BR2_PACKAGE_PROCPS for ps command.
 > +         These commands are used in EplLoad and EplUndload scripts.
 > +
 > +endchoice
@@ -145,8 +136,7 @@ BR2_PACKAGE_PROCPS for ps command.
 > +         default value: 0xEC000000L
 > +
 > +endif
-> diff --git a/package/openpowerlink/openpowerlink-FIX-demo_mn_qt.patch
-b/package/openpowerlink/openpowerlink-FIX-demo_mn_qt.patch
+> diff --git a/package/openpowerlink/openpowerlink-FIX-demo_mn_qt.patch b/package/openpowerlink/openpowerlink-FIX-demo_mn_qt.patch
 > new file mode 100644
 > index 0000000..a71298d
 > --- /dev/null
@@ -155,8 +145,7 @@ b/package/openpowerlink/openpowerlink-FIX-demo_mn_qt.patch
 > +From 8658075bd7c49a7481e8f6d0d7a13b0651e1dfd7 Mon Sep 17 00:00:00 2001
 > +From: Romain Naour <romain.naour@openwide.fr>
 > +Date: Wed, 18 Sep 2013 23:33:04 +0200
-> +Subject: [PATCH 1/1] [FIX] demo_mn_qt: add EplDebug.c in demo_sources
-list
+> +Subject: [PATCH 1/1] [FIX] demo_mn_qt: add EplDebug.c in demo_sources list
 > +
 > +demo_mn_qt use EplGetEmergErrCodeStr()
 > +
@@ -165,16 +154,14 @@ list
 > + Examples/X86/Generic/demo_mn_qt/CMakeLists.txt | 1 +
 > + 1 file changed, 1 insertion(+)
 > +
-> +diff --git a/Examples/X86/Generic/demo_mn_qt/CMakeLists.txt
-b/Examples/X86/Generic/demo_mn_qt/CMakeLists.txt
+> +diff --git a/Examples/X86/Generic/demo_mn_qt/CMakeLists.txt b/Examples/X86/Generic/demo_mn_qt/CMakeLists.txt
 > +index 9db2f7f..48ae9eb 100644
 > +--- a/Examples/X86/Generic/demo_mn_qt/CMakeLists.txt
 > ++++ b/Examples/X86/Generic/demo_mn_qt/CMakeLists.txt
 > +@@ -78,6 +78,7 @@ SET(DEMO_SOURCES src/EplApi.cpp
 > +                  src/MainWindow.cpp
 > +                  src/NodeState.cpp
-> +
- ${POWERLINK_SOURCE_DIR}/ObjDicts/${OBJDICT}/EplApiProcessImageSetup.c
+> +                  ${POWERLINK_SOURCE_DIR}/ObjDicts/${OBJDICT}/EplApiProcessImageSetup.c
 > ++                 ${POWERLINK_SOURCE_DIR}/EplStack/EplDebug.c
 > +     )
 > +
@@ -182,25 +169,21 @@ b/Examples/X86/Generic/demo_mn_qt/CMakeLists.txt
 > +--
 > +1.8.4
 > +
-> diff --git a/package/openpowerlink/openpowerlink.mkb/package/openpowerlink/
-openpowerlink.mk
+> diff --git a/package/openpowerlink/openpowerlink.mk b/package/openpowerlink/openpowerlink.mk
 > new file mode 100644
 > index 0000000..ac28de9
 > --- /dev/null
 > +++ b/package/openpowerlink/openpowerlink.mk
 > @@ -0,0 +1,93 @@
->
-+################################################################################
+> +################################################################################
 > +#
 > +# openPOWERLINK
 > +#
->
-+################################################################################
+> +################################################################################
 > +
 > +OPENPOWERLINK_VERSION = V1.08.3
 > +OPENPOWERLINK_SOURCE = openPOWERLINK-$(OPENPOWERLINK_VERSION).zip
-> +OPENPOWERLINK_SITE =
-http://downloads.sourceforge.net/project/openpowerlink/openPOWERLINK/V1.8.3
+> +OPENPOWERLINK_SITE = http://downloads.sourceforge.net/project/openpowerlink/openPOWERLINK/V1.8.3
 > +
 > +OPENPOWERLINK_LICENSE = BSD-2c, GPLv2
 > +OPENPOWERLINK_LICENSE_FILES = license.txt
@@ -218,8 +201,7 @@ http://downloads.sourceforge.net/project/openpowerlink/openPOWERLINK/V1.8.3
 > +OPENPOWERLINK_CONF_OPT += -DCMAKE_BUILD_TYPE=Debug
 > +OPENPOWERLINK_CONF_OPT += -DCMAKE_INSTALL_PREFIX=/usr/
 > +
-> +OPENPOWERLINK_DEBUG_LEVEL = $(call
-qstrip,$(BR2_PACKAGE_OPENPOWERLINK_DEBUG_LEVEL))
+> +OPENPOWERLINK_DEBUG_LEVEL = $(call qstrip,$(BR2_PACKAGE_OPENPOWERLINK_DEBUG_LEVEL))
 > +
 > +ifeq ($(OPENPOWERLINK_DEBUG_LEVEL),)
 > +OPENPOWERLINK_CONF_OPT += -DCFG_DEBUG_LVL=0xEC000000L
@@ -282,23 +264,19 @@ qstrip,$(BR2_PACKAGE_OPENPOWERLINK_DEBUG_LEVEL))
 > +       $(RM) -rf $(OPENPOWERLINK_DIR)
 > +       unzip -q -d $(BUILD_DIR)/ $(DL_DIR)/$(OPENPOWERLINK_SOURCE)
 > +       test -d $(OPENPOWERLINK_DIR) || \
-> +               mv $(BUILD_DIR)/$(subst .zip,,$(OPENPOWERLINK_SOURCE))
-$(OPENPOWERLINK_DIR)
+> +               mv $(BUILD_DIR)/$(subst .zip,,$(OPENPOWERLINK_SOURCE)) $(OPENPOWERLINK_DIR)
 > +endef
 > +
 > +$(eval $(cmake-package))
 > --
 > 1.8.4
+>
 
-Thanks for mentioning the line wrapping problem, I wasn't aware. I think
-the problem only occurs when I send mail from the gmail app on my phone. I
-now changed a setting but I fear it will not affect outgoing mail. This is
-a test mail.
-If it doesn't work I'll find a better mail app for android. Suggestions are
-welcome...
+Hmm, that test didn't seem to work.
+This test is from Gmail on desktop, just to be double-check that that
+is OK. Sorry for the spam by the way, don't know a better way to check
+it, because the gmail web interface does not show any bad line
+wrapping...
 
-Thanks,
+Best regards,
 Thomas
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130921/3c1e7610/attachment-0001.html>
