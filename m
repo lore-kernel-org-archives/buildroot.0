@@ -1,9 +1,9 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Sat, 21 Sep 2013 11:38:45 +0200
+Date: Sat, 21 Sep 2013 11:41:31 +0200
 Subject: [Buildroot] [PATCH 1/1] Openpowerlink: new package
 In-Reply-To: <681556336.7308664.1379724486354.JavaMail.root@openwide.fr>
 References: <681556336.7308664.1379724486354.JavaMail.root@openwide.fr>
-Message-ID: <bf458463-280c-4a63-91e6-4fb0dcf3b06c@email.android.com>
+Message-ID: <1a79dc2d-e40d-441e-a579-6f029b14dedb@email.android.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -283,4 +283,4 @@ Romain Naour <romain.naour@openwide.fr> schreef:
 >+
 >+$(eval $(cmake-package))
 
-Here it's another test from k9...
+ Why is this so hard?
