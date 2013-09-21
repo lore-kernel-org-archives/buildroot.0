@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 21 Sep 2013 05:37:54 +0200
+Date: Sat, 21 Sep 2013 05:41:45 +0200
 Subject: [Buildroot] [autobuild.buildroot.net] Build results for
  2013-09-19
 In-Reply-To: <20130920063008.7C55952C101@lolut.humanoidz.org>
 References: <20130920063008.7C55952C101@lolut.humanoidz.org>
-Message-ID: <20130921053754.4d269f1c@skate>
+Message-ID: <20130921054145.52b70d5e@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,21 +15,20 @@ Hello,
 
 On Fri, 20 Sep 2013 08:30:08 +0200 (CEST), Thomas Petazzoni wrote:
 
->        arm | make: *** [/home/test/test/... | NOK | http://autobuild.buildroot.net/results/14eeec85eb97fa4dc27425eb13198b1ffd6cf450/
->        arm | make: *** [/home/test/test/... | NOK | http://autobuild.buildroot.net/results/2b452476b75cdda4bfce57b1d93fefd71301d41b/
->        arm | make: *** [/home/test/test/... | NOK | http://autobuild.buildroot.net/results/3610be3ef00226a6fd4fd1235e7b247288c7e57f/
->       i686 | make: *** [/home/test/test/... | NOK | http://autobuild.buildroot.net/results/e5c4f5e25c72430e5160308b4db7210e7877666e/
->     x86_64 | make: *** [/home/test/test/... | NOK | http://autobuild.buildroot.net/results/063915a55e49096a39a53f8839953f5efaec261e/
->     x86_64 | make: *** [/home/test/test/... | NOK | http://autobuild.buildroot.net/results/b4710a36679b516c07b37e73a815857764cab449/
->        arm | make: *** [/home/test/test/... | NOK | http://autobuild.buildroot.net/results/73de8ca9a30642ccef8bb0181bb028d6ea9c49d1/
->     x86_64 | make: *** [/home/test/test/... | NOK | http://autobuild.buildroot.net/results/c22ca77ba84ba8423883f5e34a28d2c6c3a1ad51/
->        arm | make: *** [/home/test/test/... | NOK | http://autobuild.buildroot.net/results/e91c4868fa911c7498985c72f2eb7566385764e1/
->     x86_64 | make: *** [/home/test/test/... | NOK | http://autobuild.buildroot.net/results/19acd48195857bffd99a703dbe05846a883f792a/
->       i686 | make: *** [/home/test/test/... | NOK | http://autobuild.buildroot.net/results/5f5cc4f4a0d30da582934affba2724aeeb91d7d5/
+>        arc |       host-gcc-initial-4.8-arc | NOK | http://autobuild.buildroot.net/results/ff903ce970ea652cc1aa57a5eb57e923dc4c5405/
+>        arc |       host-gcc-initial-4.8-arc | NOK | http://autobuild.buildroot.net/results/d3b2e4e32d531c08c19d39b248898fe462b81d8f/
+>        arc |       host-gcc-initial-4.8-arc | NOK | http://autobuild.buildroot.net/results/76a2ab46ef7183f14eec944db4a598325e00b503/
 
-I've fixed all those ones, they were caused by the introduction of the
-SSP support and the toolchain configurations used in the autobuilders
-not being up-to-date with this change.
+Hum, apparently on ARC, building libgcc requires having the C library
+headers. So, due to the change to build gcc in two passes instead of
+three, we're building libgcc in the first pass, before the C library is
+built, causing (I believe) the above failure. Mischa, if you have any
+insights about this, I'm interested :)
+
+Considering this problem, and the other SSP problems, I'm starting to
+wonder if my patch that changes the toolchain build mechanism to use
+two passes instead of three shouldn't be reverted for now, until I find
+the time to investigate all the problems that it is causing.
 
 Thomas
 -- 
