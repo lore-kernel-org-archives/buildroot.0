@@ -1,339 +1,127 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Sat, 21 Sep 2013 09:16:15 +0200
-Subject: [Buildroot] [PATCH 1/1] Openpowerlink: new package
-In-Reply-To: <681556336.7308664.1379724486354.JavaMail.root@openwide.fr>
-References: <1165322922.7308619.1379724109699.JavaMail.root@openwide.fr>
- <681556336.7308664.1379724486354.JavaMail.root@openwide.fr>
-Message-ID: <CAAXf6LViY2cutV0xCQApXPQveDFNai1_=gWe01-+TNT_5j84gQ@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 21 Sep 2013 09:38:43 +0200
+Subject: [Buildroot] [PATCH] Add pyside + shiboken packages
+In-Reply-To: <523D3196.9090702@wanadoo.fr>
+References: <523ACBFA.2070401@wanadoo.fr> <20130919173426.47c2bba8@skate>
+ <523C5EFC.5040204@wanadoo.fr> <20130920175457.65a4d63c@skate>
+ <523D3196.9090702@wanadoo.fr>
+Message-ID: <20130921093843.7fe3ea0e@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Romain,
+Dear Thierry Bultel,
 
-Thanks for contributing! A few comments below.
+(Thanks for resending the message to the list! As a further improvement
+next time, it'd be great if you could avoid top-posting.)
 
-Op 21-sep.-2013 02:48 schreef "Romain Naour" <romain.naour@openwide.fr> het
-volgende:
->
->
-> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-> ---
->  package/Config.in                                  |  1 +
->  package/openpowerlink/Config.in                    | 92
-+++++++++++++++++++++
->  .../openpowerlink-FIX-demo_mn_qt.patch             | 27 +++++++
->  package/openpowerlink/openpowerlink.mk             | 93
-++++++++++++++++++++++
->  4 files changed, 213 insertions(+)
->  create mode 100644 package/openpowerlink/Config.in
->  create mode 100644
-package/openpowerlink/openpowerlink-FIX-demo_mn_qt.patch
->  create mode 100644 package/openpowerlink/openpowerlink.mk
->
-> diff --git a/package/Config.in b/package/Config.in
-> index e1dfd5d..fdf9b55 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -912,6 +912,7 @@ endmenu
->  menu "Real-Time"
->  source "package/xenomai/Config.in"
->  source "package/rtai/Config.in"
-> +source "package/openpowerlink/Config.in"
+On Sat, 21 Sep 2013 07:41:42 +0200, Thierry Bultel wrote:
 
-Is real-time the right menu for openpowerlink? The current packages in that
-menu provide real time capabilities, not packages you use in a real time
-environment. There is an other menu 'hardware handling' that at first sight
-seems also fitting.
+> I will pay more attention to my patch formatting in the future,
+> the lesson from that is that I cannot trust thunderbird for doing the
+> things right.
 
-Note that entries should be in alphabetical order, but apparently xenomai
-and rtai weren't yet.
+I believe Thunderbird can be taught to do the right thing, but it's
+quite certainly far more convenient to configure 'git send-email' once
+for all, and enjoy scripted sending of patches. For example, since
+you'll have to split this patch in at least 3 patches, you'd have to
+manually send 3 e-mails with Thunderbird. git send-email would them all
+of them automatically for you.
 
->  endmenu
->
->  menu "Shell and utilities"
-> diff --git a/package/openpowerlink/Config.in
-b/package/openpowerlink/Config.in
-> new file mode 100644
-> index 0000000..42a6099
-> --- /dev/null
-> +++ b/package/openpowerlink/Config.in
-> @@ -0,0 +1,92 @@
-> +comment "openpowerlink requires thread support in toolchain"
-> +       depends on !BR2_TOOLCHAIN_HAS_THREADS
-> +
-> +config BR2_PACKAGE_OPENPOWERLINK
-> +       bool "Openpowerlink"
+> My first approach was to use Cmake infrastructure indeed.
+> The most annoying thing with shiboken and pyside CMakefiles is that
+> it seems really a pain in the neck to have proper paths set,
+> my fault here is to have not put enough comments around the
+> various hacks I had to do to cope with it.
 
-We typically write such entries in all-lowercase.
+If they are CMake based packages, then they should use the
+cmake-package infrastructure. Of course, if they have some tricky
+aspects, we might need to adapt/improve the cmake-package
+infrastructure if needed.
 
-> +       depends on BR2_TOOLCHAIN_HAS_THREADS
-> +       depends on BR2_i386 || BR2_x86_64
-> +       help
-> +         openPOWERLINK is an Open Source Industrial Ethernet
-> +         stack implementing the POWERLINK protocol for Managing Node
-> +         (MN, POWERLINK Master) and Controlled Node (CN, POWERLINK
-Slave).
-> +
-> +         It is provided by SYSTEC electronic (
-http://www.systec-electronic.com),
-> +         B&R (http://www.br-automation.com) and
-> +         Kalycito (http://www.kalycito.com).
+> I will start from scratch and try to possibly better fit in the model,
+> and keep you in touch of what I see, if you don't mind.
+> 
+> About the BR2_PACKAGE_PYTHON_PY_PYC:
+> 
+> There are 2 issues when not having it
+> 
+> 1)
+> host/usr/arm-buildroot-linux-gnueabi/sysroot/lib/python2.7/site-packages/PySide/__init__.py
+> gets removed.
+> I agree that setting the option for just one file if a shame but ...
 
-It's there a url specifically for this package? This should be mentioned as
-the last line of the entry.
+Hum, I guess the problem is that the .py files installed by PySide
+don't get compiled into the pyc bytecode? It'd be great to investigate
+why, but as a temporary solution, we can disable the PySide package
+when only .pyc files are kept (i.e do the opposite of what you did:
+instead of preventing the .pyc only option to be enabled when pyside is
+enabled, you prevent pyside from being enabled when the .pyc only
+option is enabled. The reasoning is that the user certainly select
+python before choosing the specific Python modules he wants to install).
 
-> +
-> +if BR2_PACKAGE_OPENPOWERLINK
-> +
-> +choice
-> +       prompt "Openpowerlink mode"
+> 2) The aim of pyside is to run python code (compiled or not, and that 
+> may call libraries in pyc).
+> So if the user python application is part of buildroot it would be
+> removed from the target as well.
 
-Is it necessary to repeat the package name here?
+A Python application is usually made of two parts: one Python script
+installed in /usr/bin, without any .py extension, so that it appears
+like a normal executable. Regardless of the Python .py only / .pyc only
+configuration, this file will be kept. The second part is a Python
+module, which normally should get byte-compiled, and therefore
+have corresponding .pyc files.
 
-> +
-> +config BR2_PACKAGE_OPENPOWERLINK_LIBPCAP
-> +       bool "userspace stack"
-> +       select BR2_PACKAGE_LIBPCAP
-> +
-> +config BR2_PACKAGE_OPENPOWERLINK_KERNEL_MODULE
-> +       bool "kernel stack"
-> +       depends on BR2_LINUX_KERNEL
-> +       help
-> +         You may select BR2_PACKAGE_PCIUTILS for lscpi, and
-BR2_PACKAGE_PROCPS for ps command.
-> +         These commands are used in EplLoad and EplUndload scripts.
-> +
-> +endchoice
+> About your comment on "HOST_PYSIDE_BUILD_CMDS or HOST_PYSIDE_CONFIGURE_CMDS"
 
-Is there more help that can be given for both options? Are there
-benefits/advantages on either? Or limitations in functionality?
+When you make a comment, what about replying by quoting the relevant
+part of the e-mail? :-) It would make things easier to follow. See
+http://en.wikipedia.org/wiki/Posting_style#Bottom-posting.
 
-> +
-> +if BR2_PACKAGE_OPENPOWERLINK_KERNEL_MODULE
-> +
-> +choice
-> +       prompt "Select Ethernet Powerlink Driver"
-> +
-> +config BR2_PACKAGE_OPENPOWERLINK_82573
-> +       bool "Intel 82573"
-> +
-> +config BR2_PACKAGE_OPENPOWERLINK_8255x
-> +       bool "Intel 8255x"
-> +
-> +config BR2_PACKAGE_OPENPOWERLINK_RTL8139
-> +       bool "Realteck RTL-8139"
+> I think you made a confusion, and this is likely because my patch is too 
+> big.
+> The host variant is needed for pyside-tools, not for pyside.
 
-This should be Realtek
+Ah, yes, I referred to the wrong package. What I should have said is
+that: package/pyside-tools/pyside-tools.mk contains a $(eval
+$(host-generic-package)) to declare a host variant, but there is no
+HOST_PYSIDE_TOOLS_BUILD_CMDS or HOST_PYSIDE_TOOLS_INSTALL_CMDS or
+HOST_PYSIDE_TOOLS_CONFIGURE_CMDS, so essentially, the host-pyside-tools
+package cannot work (if ever needed).
 
-> +
-> +endchoice
-> +
-> +endif
-> +
-> +choice
-> +       prompt "Select MN/CN mode"
-> +
-> +       config BR2_PACKAGE_OPENPOWERLINK_MN
-> +       bool "MN"
-> +       help
-> +         Enable Managing Node mode
-> +
-> +       config BR2_PACKAGE_OPENPOWERLINK_CN
-> +       bool "CN"
-> +       help
-> +         Enable Controlled Node mode
-> +
-> +endchoice
-> +
-> +# Powerlink Demos
+> As I said in my (too short) comment, the host variant is needed for
+> shiboken, in order to get the generator that is used by the build.
 
-It would make sense to group the demos under a suboption, don't you think?
+The host variant of pyside-tools?
 
-> +config BR2_PACKAGE_OPENPOWERLINK_DEMO_MN_CONSOLE
-> +       bool "Console MN demo"
-> +       depends on BR2_PACKAGE_OPENPOWERLINK_MN
-> +
-> +config BR2_PACKAGE_OPENPOWERLINK_DEMO_MN_QT
-> +       bool "QT MN demo"
-> +       depends on BR2_PACKAGE_OPENPOWERLINK_MN
-> +       select BR2_PACKAGE_QT
-> +       select BR2_PACKAGE_QT_STL
-> +
-> +config BR2_PACKAGE_OPENPOWERLINK_DEMO_CN_CONSOLE
-> +       bool "Console CN demo"
-> +       depends on !BR2_PACKAGE_OPENPOWERLINK_MN
-> +
-> +config BR2_PACKAGE_OPENPOWERLINK_DEMO_LINUX_KERNEL
-> +       bool "Kernel demo"
-> +       depends on BR2_PACKAGE_OPENPOWERLINK_KERNEL_MODULE
-> +
-> +config BR2_PACKAGE_OPENPOWERLINK_DEBUG_LEVEL
-> +       string "Debug level for EPL"
-> +       help
-> +         default value: 0xEC000000L
-> +
-> +endif
-> diff --git a/package/openpowerlink/openpowerlink-FIX-demo_mn_qt.patch
-b/package/openpowerlink/openpowerlink-FIX-demo_mn_qt.patch
+> After that, a target shiboken library is needed as well, that leads to
+> building it twice ...
+> 
+> I think that the shiboken Cmake is not completely "cross-build" proof,
+> and that is the main difficulty to deal with.
+> The fact that it calls the target  'shiboken' binary for itself
+> illustrates that.
+> (but for that point it was "easy" to workaround with 
+> SHIBOKEN_PRE_CONFIGURE_GENERATOR_PATH)
 
-Patches should be named openpowerlink-0001-description.patch, and we
-typically use lowercase and dashes for the description.
+It happens for quite a few packages that the package needs a part of
+itself to build the rest, which causes problems in cross-compilation
+mode. In that kind of cases, we usually have two possible solutions:
 
-> new file mode 100644
-> index 0000000..a71298d
-> --- /dev/null
-> +++ b/package/openpowerlink/openpowerlink-FIX-demo_mn_qt.patch
-> @@ -0,0 +1,27 @@
-> +From 8658075bd7c49a7481e8f6d0d7a13b0651e1dfd7 Mon Sep 17 00:00:00 2001
-> +From: Romain Naour <romain.naour@openwide.fr>
-> +Date: Wed, 18 Sep 2013 23:33:04 +0200
-> +Subject: [PATCH 1/1] [FIX] demo_mn_qt: add EplDebug.c in demo_sources
-list
-> +
-> +demo_mn_qt use EplGetEmergErrCodeStr()
-> +
-> +Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-> +---
-> + Examples/X86/Generic/demo_mn_qt/CMakeLists.txt | 1 +
-> + 1 file changed, 1 insertion(+)
-> +
-> +diff --git a/Examples/X86/Generic/demo_mn_qt/CMakeLists.txt
-b/Examples/X86/Generic/demo_mn_qt/CMakeLists.txt
-> +index 9db2f7f..48ae9eb 100644
-> +--- a/Examples/X86/Generic/demo_mn_qt/CMakeLists.txt
-> ++++ b/Examples/X86/Generic/demo_mn_qt/CMakeLists.txt
-> +@@ -78,6 +78,7 @@ SET(DEMO_SOURCES src/EplApi.cpp
-> +                  src/MainWindow.cpp
-> +                  src/NodeState.cpp
-> +
- ${POWERLINK_SOURCE_DIR}/ObjDicts/${OBJDICT}/EplApiProcessImageSetup.c
-> ++                 ${POWERLINK_SOURCE_DIR}/EplStack/EplDebug.c
-> +     )
-> +
-> + # The TRACE macros need trace.c on the Windows platform
-> +--
-> +1.8.4
-> +
+ (*) If what is needed during the build is also needed in the final
+     result on the target, then the best option is to build a host
+     variant of the package, and tweak the build system to be able to
+     point to this host variant while building the target variant (which
+     is what you've done, and I think is fine).
 
-Is this patch something that can be upstreamed?
-
-> diff --git a/package/openpowerlink/openpowerlink.mkb/package/openpowerlink/
-openpowerlink.mk
-> new file mode 100644
-> index 0000000..ac28de9
-> --- /dev/null
-> +++ b/package/openpowerlink/openpowerlink.mk
-> @@ -0,0 +1,93 @@
->
-+################################################################################
-> +#
-> +# openPOWERLINK
-> +#
->
-+################################################################################
-> +
-> +OPENPOWERLINK_VERSION = V1.08.3
-> +OPENPOWERLINK_SOURCE = openPOWERLINK-$(OPENPOWERLINK_VERSION).zip
-> +OPENPOWERLINK_SITE =
-http://downloads.sourceforge.net/project/openpowerlink/openPOWERLINK/V1.8.3
-> +
-> +OPENPOWERLINK_LICENSE = BSD-2c, GPLv2
-> +OPENPOWERLINK_LICENSE_FILES = license.txt
-> +OPENPOWERLINK_INSTALL_STAGING = YES
-> +
-> +ifeq ($(BR2_i386),y)
-> +OPENPOWERLINK_ARCH = x86
-> +endif
-> +
-> +ifeq ($(BR2_x86_64),y)
-> +OPENPOWERLINK_ARCH = x86_64
-> +endif
-> +
-> +OPENPOWERLINK_CONF_OPT = -DCMAKE_SYSTEM_PROCESSOR=$(OPENPOWERLINK_ARCH)
-> +OPENPOWERLINK_CONF_OPT += -DCMAKE_BUILD_TYPE=Debug
-> +OPENPOWERLINK_CONF_OPT += -DCMAKE_INSTALL_PREFIX=/usr/
-> +
-> +OPENPOWERLINK_DEBUG_LEVEL = $(call
-qstrip,$(BR2_PACKAGE_OPENPOWERLINK_DEBUG_LEVEL))
-> +
-> +ifeq ($(OPENPOWERLINK_DEBUG_LEVEL),)
-> +OPENPOWERLINK_CONF_OPT += -DCFG_DEBUG_LVL=0xEC000000L
-
-What about moving this as default to Config.in, then you don't need a
-if-else here?
-
-> +else
-> +OPENPOWERLINK_CONF_OPT += -DCFG_DEBUG_LVL=$(OPENPOWERLINK_DEBUG_LEVEL)
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_OPENPOWERLINK_LIBPCAP),y)
-> +#  use the user space stack (libpcap)
-> +OPENPOWERLINK_CONF_OPT += -DCFG_KERNEL_STACK=OFF
-> +OPENPOWERLINK_DEPENDENCIES = libpcap
-> +else
-> +# use the kernel stack
-> +OPENPOWERLINK_CONF_OPT += -DCFG_KERNEL_STACK=ON
-> +OPENPOWERLINK_CONF_OPT += -DCFG_KERNEL_DIR=$(LINUX_DIR)
-> +OPENPOWERLINK_CONF_OPT += -DCMAKE_SYSTEM_VERSION=$(LINUX_VERSION)
-> +OPENPOWERLINK_DEPENDENCIES = linux
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_OPENPOWERLINK_82573),y)
-> +OPENPOWERLINK_CONF_OPT += -DCFG_POWERLINK_EDRV=82573
-> +else ifeq ($(BR2_PACKAGE_OPENPOWERLINK_RTL8139),y)
-> +OPENPOWERLINK_CONF_OPT += -DCFG_POWERLINK_EDRV=8139
-> +else ifeq ($(BR2_PACKAGE_OPENPOWERLINK_8255x),y)
-> +OPENPOWERLINK_CONF_OPT += -DCFG_POWERLINK_EDRV=8255x
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_OPENPOWERLINK_MN),y)
-> +OPENPOWERLINK_CONF_OPT += -DCFG_POWERLINK_MN=ON
-> +else
-> +OPENPOWERLINK_CONF_OPT += -DCFG_POWERLINK_MN=OFF
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_OPENPOWERLINK_DEMO_MN_CONSOLE),y)
-> +OPENPOWERLINK_CONF_OPT += -DCFG_X86_DEMO_MN_CONSOLE=ON
-> +else
-> +OPENPOWERLINK_CONF_OPT += -DCFG_X86_DEMO_MN_CONSOLE=OFF
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_OPENPOWERLINK_DEMO_MN_QT),y)
-> +OPENPOWERLINK_CONF_OPT += -DCFG_X86_DEMO_MN_QT=ON
-> +OPENPOWERLINK_DEPENDENCIES += qt
-> +else
-> +OPENPOWERLINK_CONF_OPT += -DCFG_X86_DEMO_MN_QT=OFF
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_OPENPOWERLINK_DEMO_CN_CONSOLE),y)
-> +OPENPOWERLINK_CONF_OPT += -DCFG_X86_DEMO_CN_CONSOLE=ON
-> +else
-> +OPENPOWERLINK_CONF_OPT += -DCFG_X86_DEMO_CN_CONSOLE=OFF
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_OPENPOWERLINK_DEMO_LINUX_KERNEL),y)
-> +OPENPOWERLINK_CONF_OPT += -DCFG_X86_DEMO_LINUX_KERNEL=ON
-> +else
-> +OPENPOWERLINK_CONF_OPT += -DCFG_X86_DEMO_LINUX_KERNEL=OFF
-> +endif
-> +
-> +define OPENPOWERLINK_EXTRACT_CMDS
-> +       $(RM) -rf $(OPENPOWERLINK_DIR)
-> +       unzip -q -d $(BUILD_DIR)/ $(DL_DIR)/$(OPENPOWERLINK_SOURCE)
-> +       test -d $(OPENPOWERLINK_DIR) || \
-> +               mv $(BUILD_DIR)/$(subst .zip,,$(OPENPOWERLINK_SOURCE))
-$(OPENPOWERLINK_DIR)
-> +endef
-> +
-> +$(eval $(cmake-package))
-> --
-> 1.8.4
+ (*) If what is needed is just a tool used at build time, then
+     sometimes we just build this tool manually prior to starting the
+     build.
 
 Best regards,
-Thomas
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130921/e097f2d9/attachment-0001.html>
+-- 
+Thomas Petazzoni, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
