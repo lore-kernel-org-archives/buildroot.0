@@ -1,41 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 21 Sep 2013 09:41:22 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2013-09-19
-In-Reply-To: <87hadebvkm.fsf@dell.be.48ers.dk>
-References: <20130920063008.7C55952C101@lolut.humanoidz.org>
- <20130921054145.52b70d5e@skate> <87hadebvkm.fsf@dell.be.48ers.dk>
-Message-ID: <20130921094122.4c9d4552@skate>
+Date: Sat, 21 Sep 2013 09:42:46 +0200
+Subject: [Buildroot] [PATCH 1/1] Openpowerlink: new package
+In-Reply-To: <CAAXf6LViY2cutV0xCQApXPQveDFNai1_=gWe01-+TNT_5j84gQ@mail.gmail.com>
+References: <1165322922.7308619.1379724109699.JavaMail.root@openwide.fr>
+ <681556336.7308664.1379724486354.JavaMail.root@openwide.fr>
+ <CAAXf6LViY2cutV0xCQApXPQveDFNai1_=gWe01-+TNT_5j84gQ@mail.gmail.com>
+Message-ID: <20130921094246.0ba6b23a@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Peter Korsgaard,
+Dear Thomas De Schampheleire,
 
-On Sat, 21 Sep 2013 07:19:37 +0200, Peter Korsgaard wrote:
-
->  Thomas> Hum, apparently on ARC, building libgcc requires having the C library
->  Thomas> headers. So, due to the change to build gcc in two passes instead of
->  Thomas> three, we're building libgcc in the first pass, before the C library is
->  Thomas> built, causing (I believe) the above failure. Mischa, if you have any
->  Thomas> insights about this, I'm interested :)
+On Sat, 21 Sep 2013 09:16:15 +0200, Thomas De Schampheleire wrote:
+> Hi Romain,
 > 
->  Thomas> Considering this problem, and the other SSP problems, I'm starting to
->  Thomas> wonder if my patch that changes the toolchain build mechanism to use
->  Thomas> two passes instead of three shouldn't be reverted for now, until I find
->  Thomas> the time to investigate all the problems that it is causing.
+> Thanks for contributing! A few comments below.
 > 
-> I'm thinking the same. Will you have time to work on it in the next week
-> or so? Otherwise I think we should revert for now.
+> Op 21-sep.-2013 02:48 schreef "Romain Naour" <romain.naour@openwide.fr> het
+> volgende:
+> >
+> >
+> > Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+> > ---
+> >  package/Config.in                                  |  1 +
+> >  package/openpowerlink/Config.in                    | 92
+> +++++++++++++++++++++
+> >  .../openpowerlink-FIX-demo_mn_qt.patch             | 27 +++++++
+> >  package/openpowerlink/openpowerlink.mk             | 93
+> ++++++++++++++++++++++
+> >  4 files changed, 213 insertions(+)
 
-No, I will not have the time in the next week, that's also why I was
-suggesting to revert it for now. Let's see the good side of the thing:
-I'm now aware of a few problematic cases that I should test before
-submitting the next version.
+Whenever you reply to an e-mail, since a few weeks, your replies are
+badly line-wrapped. Would it be possible to tune your e-mail client not
+to do so?
 
-Thanks,
+Thanks a lot!
 
 Thomas
 -- 
