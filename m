@@ -1,46 +1,31 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 21 Sep 2013 09:42:46 +0200
-Subject: [Buildroot] [PATCH 1/1] Openpowerlink: new package
-In-Reply-To: <CAAXf6LViY2cutV0xCQApXPQveDFNai1_=gWe01-+TNT_5j84gQ@mail.gmail.com>
-References: <1165322922.7308619.1379724109699.JavaMail.root@openwide.fr>
- <681556336.7308664.1379724486354.JavaMail.root@openwide.fr>
- <CAAXf6LViY2cutV0xCQApXPQveDFNai1_=gWe01-+TNT_5j84gQ@mail.gmail.com>
-Message-ID: <20130921094246.0ba6b23a@skate>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sat, 21 Sep 2013 09:43:44 +0200
+Subject: [Buildroot] [PATCH 1/5] qt5: bump to 5.1.1
+In-Reply-To: <20130919205514.53b092ff@skate> (Thomas Petazzoni's message of
+ "Thu, 19 Sep 2013 20:55:14 +0200")
+References: <201309182118.23091.fatih.asici@gmail.com>
+ <20130919062450.10f51848@skate> <1379568660.27759.4.camel@viko>
+ <523B3759.1000901@mind.be> <20130919205514.53b092ff@skate>
+Message-ID: <87d2o2bowf.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas De Schampheleire,
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-On Sat, 21 Sep 2013 09:16:15 +0200, Thomas De Schampheleire wrote:
-> Hi Romain,
-> 
-> Thanks for contributing! A few comments below.
-> 
-> Op 21-sep.-2013 02:48 schreef "Romain Naour" <romain.naour@openwide.fr> het
-> volgende:
-> >
-> >
-> > Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-> > ---
-> >  package/Config.in                                  |  1 +
-> >  package/openpowerlink/Config.in                    | 92
-> +++++++++++++++++++++
-> >  .../openpowerlink-FIX-demo_mn_qt.patch             | 27 +++++++
-> >  package/openpowerlink/openpowerlink.mk             | 93
-> ++++++++++++++++++++++
-> >  4 files changed, 213 insertions(+)
+ Thomas> Dear Arnout Vandecappelle,
+ Thomas> On Thu, 19 Sep 2013 19:41:45 +0200, Arnout Vandecappelle wrote:
 
-Whenever you reply to an e-mail, since a few weeks, your replies are
-badly line-wrapped. Would it be possible to tune your e-mail client not
-to do so?
+ >> Perhaps we could try upstreaming our mkspecs? Does that make sense?
 
-Thanks a lot!
+ Thomas> Our mkspecs is really meant to be a template that has to be tuned by
+ Thomas> the qt5base.mk makefile, and therefore outside Buildroot itself I
+ Thomas> believe its meaning is not so important. We could even carry it within
+ Thomas> package/qt5/qt5base/ rather than as a patch, for example.
 
-Thomas
+That might indeed be a good idea.
+
 -- 
-Thomas Petazzoni, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
