@@ -1,31 +1,48 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 21 Sep 2013 09:43:44 +0200
-Subject: [Buildroot] [PATCH 1/5] qt5: bump to 5.1.1
-In-Reply-To: <20130919205514.53b092ff@skate> (Thomas Petazzoni's message of
- "Thu, 19 Sep 2013 20:55:14 +0200")
-References: <201309182118.23091.fatih.asici@gmail.com>
- <20130919062450.10f51848@skate> <1379568660.27759.4.camel@viko>
- <523B3759.1000901@mind.be> <20130919205514.53b092ff@skate>
-Message-ID: <87d2o2bowf.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 21 Sep 2013 10:05:38 +0200
+Subject: [Buildroot] [PATCH] zeromq: remove unneeded patch after version bump
+Message-ID: <1379750738-6358-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+Commit b3c525b886b375256a8e0d60a749ea07f6591974 has bumped zeromq to
+version 2.3.4, which makes the patch
+zeromq-0001-test-collect-delay-end-of-line.patch unneeded since it has
+been merged upstream.
 
- Thomas> Dear Arnout Vandecappelle,
- Thomas> On Thu, 19 Sep 2013 19:41:45 +0200, Arnout Vandecappelle wrote:
+Fixes:
 
- >> Perhaps we could try upstreaming our mkspecs? Does that make sense?
+  http://autobuild.buildroot.org/results/e8c/e8c8ba8c31fd081c34c8772790d4c581eb3ec3ed/build-end.log
 
- Thomas> Our mkspecs is really meant to be a template that has to be tuned by
- Thomas> the qt5base.mk makefile, and therefore outside Buildroot itself I
- Thomas> believe its meaning is not so important. We could even carry it within
- Thomas> package/qt5/qt5base/ rather than as a patch, for example.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ .../zeromq-0001-test-collect-delay-end-of-line.patch      | 15 ---------------
+ 1 file changed, 15 deletions(-)
+ delete mode 100644 package/zeromq/zeromq-0001-test-collect-delay-end-of-line.patch
 
-That might indeed be a good idea.
-
+diff --git a/package/zeromq/zeromq-0001-test-collect-delay-end-of-line.patch b/package/zeromq/zeromq-0001-test-collect-delay-end-of-line.patch
+deleted file mode 100644
+index 6a1a655..0000000
+--- a/package/zeromq/zeromq-0001-test-collect-delay-end-of-line.patch
++++ /dev/null
+@@ -1,15 +0,0 @@
+-test_connect_delay: add missing newline at end of file
+-
+-Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+-Backported-from: https://github.com/zeromq/zeromq3-x/commit/143ae519b4a325bb68d29e6f7e00cb98a440dd12
+-
+-diff --git a/tests/test_connect_delay.cpp b/tests/test_connect_delay.cpp
+---- a/tests/test_connect_delay.cpp
+-+++ b/tests/test_connect_delay.cpp
+-@@ -257,4 +257,4 @@ int main (void)
+-     
+-     rc = zmq_ctx_destroy(context2);
+-     assert (rc == 0);
+--}
+-\ No newline at end of file
+-+}
 -- 
-Bye, Peter Korsgaard
+1.8.1.2
