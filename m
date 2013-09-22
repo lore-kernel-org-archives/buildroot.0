@@ -1,63 +1,43 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 22 Sep 2013 15:50:36 +0200
-Subject: [Buildroot] [PATCH v1 1/1] Openpowerlink: new package
-In-Reply-To: <327943565.7314001.1379758800651.JavaMail.root@openwide.fr>
-References: <1103454476.7313953.1379758391823.JavaMail.root@openwide.fr>
- <327943565.7314001.1379758800651.JavaMail.root@openwide.fr>
-Message-ID: <20130922155036.2d967c64@skate>
+From: Woody Wu <narkewoody@gmail.com>
+Date: Sun, 22 Sep 2013 23:18:40 +0800
+Subject: [Buildroot] Am I using hardware floating? (CodeBench)
+In-Reply-To: <20130922103729.10b54416@skate>
+References: <20130921152445.GA9629@zuhnb712>
+ <20130922103729.10b54416@skate>
+Message-ID: <20130922151840.GA2804@zuhnb712>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Romain Naour,
+On Sun, Sep 22, 2013 at 10:37:29AM +0200, Thomas Petazzoni wrote:
+> Dear Woody Wu,
+> 
+> On Sat, 21 Sep 2013 23:24:45 +0800, Woody Wu wrote:
+> 
+> > The toolchain I selected is codebench from buildroot. CPU is ARM
+> > s3c2416. I want to know what kind of floating method is used in my
+> > system. Does this related to BR?
+> 
+> The S3C2416 is an ARM926, and it does not have a floating point unit,
+> so your only solution is to use software floating point on this
+> platform.
+> 
+> Thomas
 
-On Sat, 21 Sep 2013 12:20:00 +0200 (CEST), Romain Naour wrote:
+Okay, understand.  For software floating, I know there are two ways, one
+is to generating an interrupt every time a floating instruction is
+executed, which is very slow. And, another way is let the compiler to
+convert all floating calculation to a function call which implemented in
+a floating library, this method is a little faster than the former. My
+compiler is CodeBench from BR, does it have this feature and has it
+already enabled?  Thank you very much.
 
-> --- /dev/null
-> +++ b/package/openpowerlink/openpowerlink.mk
-> @@ -0,0 +1,92 @@
-> +################################################################################
-> +#
-> +# openPOWERLINK
+> -- 
+> Thomas Petazzoni, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
 
-It should be lower cased completely.
-
-> +#
-> +################################################################################
-> +
-> +OPENPOWERLINK_VERSION = V1.08.3
-> +OPENPOWERLINK_SOURCE = openPOWERLINK-$(OPENPOWERLINK_VERSION).zip
-> +OPENPOWERLINK_SITE = http://downloads.sourceforge.net/project/openpowerlink/openPOWERLINK/V1.8.3
-> +
-> +OPENPOWERLINK_LICENSE = BSD-2c, GPLv2
-> +OPENPOWERLINK_LICENSE_FILES = license.txt
-> +OPENPOWERLINK_INSTALL_STAGING = YES
-> +
-> +ifeq ($(BR2_i386),y)
-> +OPENPOWERLINK_ARCH = x86
-> +endif
-> +
-> +ifeq ($(BR2_x86_64),y)
-> +OPENPOWERLINK_ARCH = x86_64
-> +endif
-> +
-> +OPENPOWERLINK_CONF_OPT = -DCMAKE_SYSTEM_PROCESSOR=$(OPENPOWERLINK_ARCH)
-> +OPENPOWERLINK_CONF_OPT += -DCMAKE_INSTALL_PREFIX=/usr/
-
-We normally put such things with one statement:
-
-FOO_CONF_OPT = \
-	BLEH1 \
-	BLEH2
-
-*But* in this particular case, there is no need to pass
--DCMAKE_INSTALL_PREFIX, because it is already passed by the CMake
-package infrastructure.
-
-Thomas
 -- 
-Thomas Petazzoni, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+I can't go back to yesterday - because I was a different person then
