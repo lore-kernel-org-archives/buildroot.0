@@ -1,39 +1,35 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Sun, 22 Sep 2013 11:19:39 +0200
-Subject: [Buildroot] [PATCH 2 of 2 v2] manual generation: rename
-	manual-txt into manual-text
-In-Reply-To: <20130922102721.353c2957@skate>
-References: <patchbomb.1379761612@argentina>
- <067ad8e508dd7fc0f163.1379761614@argentina>
- <20130922102721.353c2957@skate>
-Message-ID: <CAHXCMM+y7gKfXjL-eTH8vCEAsdvb2GZ=n6=v3yE3OHb5TwKM9Q@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 22 Sep 2013 11:27:09 +0200
+Subject: [Buildroot] [PATCH] package/tvheadend: bump for misc fixes
+Message-ID: <1379842029-15931-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2013/9/22 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-> Dear Thomas De Schampheleire,
->
-> On Sat, 21 Sep 2013 13:06:54 +0200, Thomas De Schampheleire wrote:
-> > The output extension and the generation messages refer to 'text', but
-> the make
-> > target was confusingly 'txt'. This patch changes the make target for
-> > consistency.
-> >
-> > Signed-off-by: Thomas De Schampheleire <
-> thomas.de.schampheleire at gmail.com>
->
-> Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
->
-Acked-by: Samuel Martin <s.martin49@gmail.com>
+Bump to the latest cset in master for a bunch of fixes
+for transconding, muxer and html5 video.
 
-Regards,
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+---
+ package/tvheadend/tvheadend.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
+diff --git a/package/tvheadend/tvheadend.mk b/package/tvheadend/tvheadend.mk
+index 2a09263..5593791 100644
+--- a/package/tvheadend/tvheadend.mk
++++ b/package/tvheadend/tvheadend.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-TVHEADEND_VERSION           = 5956233
++TVHEADEND_VERSION           = 2b64995
+ TVHEADEND_SITE              = git://github.com/tvheadend/tvheadend.git
+ TVHEADEND_LICENSE           = GPLv3+
+ TVHEADEND_LICENSE_FILES     = LICENSE
 -- 
-Samuel
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130922/2490f151/attachment.html>
+1.8.1.2
