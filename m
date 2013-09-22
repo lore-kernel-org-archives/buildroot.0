@@ -1,120 +1,173 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 22 Sep 2013 10:43:29 +0200
-Subject: [Buildroot] [PATCH] Add lesstif package
-In-Reply-To: <523A9EE2.9050701@wanadoo.fr> (Thierry Bultel's message of "Thu, 
- 19 Sep 2013 08:51:14 +0200")
-References: <523A9EE2.9050701@wanadoo.fr>
-Message-ID: <87zjr59rgu.fsf@dell.be.48ers.dk>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Sun, 22 Sep 2013 10:50:38 +0200
+Subject: [Buildroot] [PATCH 1 of 2 v2] manual generation: check
+	dependencies first
+In-Reply-To: <f873d24e7a1146f10791.1379761613@argentina>
+References: <patchbomb.1379761612@argentina>
+ <f873d24e7a1146f10791.1379761613@argentina>
+Message-ID: <CAHXCMML=UfxuYBXpcVPFpRaii2ue+CNbeKTdGqF_WVXSuTuMOg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thierry" == Thierry Bultel <thierry.bultel@wanadoo.fr> writes:
+2013/9/21 Thomas De Schampheleire <patrickdepinguin@gmail.com>
 
- Thierry> Signed-off-by: Thierry Bultel <thierry.bultel@wanadoo.fr>
- Thierry> ---
- Thierry> Adds support for lesstif.
- Thierry> Quite old thing but useful for porting applications based on xmotif
- Thierry> ---
- Thierry> diff --git a/package/x11r7/Config.in b/package/x11r7/Config.in
- Thierry> index 205079c..c6d48b3 100644
- Thierry> --- a/package/x11r7/Config.in
- Thierry> +++ b/package/x11r7/Config.in
- Thierry> @@ -12,6 +12,7 @@ if BR2_PACKAGE_XORG7
- Thierry>  		source package/x11r7/xserver_xorg-server/Config.in
- Thierry>  	endmenu
- Thierry>  	menu "X11R7 Libraries"
- Thierry> +		source package/x11r7/lesstif/Config.in
- Thierry>  		source package/x11r7/libxcb/Config.in
- Thierry>  		source package/x11r7/mesa3d/Config.in
- Thierry>  		source package/x11r7/xcb-util/Config.in
- Thierry> diff --git a/package/x11r7/lesstif/Config.in b/package/x11r7/lesstif/Config.in
- Thierry> new file mode 100644
- Thierry> index 0000000..5d7cb11
- Thierry> --- /dev/null
- Thierry> +++ b/package/x11r7/lesstif/Config.in
- Thierry> @@ -0,0 +1,7 @@
- Thierry> +config BR2_PACKAGE_LESSTIF
- Thierry> +        bool "lesstif"
- Thierry> +	select BR2_PACKAGE_XLIB_LIBXP
- Thierry> +        help
+> To generate the manual, you need a few tools. If these are not present,
+> pretty cryptic error messages are given.
+> This patch adds a simple check for these dependencies, before attempting to
+> build the manual.
+>
+> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+>
+Acked-by: Samuel Martin <s.martin49@gmail.com>
 
-You have a mix of spaces and tabs here. The rule for Config.in is to
-indent with tab (and help text with tab+space+space).
 
-We don't have a XLIB_LIBXP package in Buildroot?
+> ---
+> v2:
+> - update manual with the list of tools (comment Ryan)
+> - add check for dblatex and python-argparse (comment Samuel)
+> - check minimal version of asciidoc, using suitable-host-package mechanism
+>
+>  docs/manual/make-tips.txt                   |   3 +--
+>  docs/manual/manual.mk                       |  30
+> +++++++++++++++++++++++++++++-
+>  docs/manual/prerequisite.txt                |   5 ++++-
+>  support/dependencies/check-host-asciidoc.sh |  36
+> ++++++++++++++++++++++++++++++++++++
+>  4 files changed, 70 insertions(+), 4 deletions(-)
+>
+> diff --git a/docs/manual/make-tips.txt b/docs/manual/make-tips.txt
+> --- a/docs/manual/make-tips.txt
+> +++ b/docs/manual/make-tips.txt
+> @@ -66,9 +66,8 @@ To generate the manual:
+>  The manual outputs will be generated in 'output/docs/manual'.
+>
+>  .Notes
+> -- +asciidoc+ is required to build the documentation (see:
+> +- A few tools are required to build the documentation (see:
+>    xref:requirement-optional[]).
+> -- There is a known issue that you can't build it under Debian Squeeze.
+>
+>  .Reseting Buildroot for a new target:
+>
+> diff --git a/docs/manual/manual.mk b/docs/manual/manual.mk
+> --- a/docs/manual/manual.mk
+> +++ b/docs/manual/manual.mk
+> @@ -1,8 +1,32 @@
+> -manual-update-lists:
+> +manual-update-lists: manual-check-dependencies-lists
+>         $(Q)$(call MESSAGE,"Updating the manual lists...")
+>         $(Q)BR2_DEFCONFIG="" TOPDIR=$(TOPDIR) O=$(O)/docs/manual/.build \
+>                 $(TOPDIR)/support/scripts/gen-manual-lists.py
+>
+> +manual-check-dependencies:
+> +       $(Q)if [ -z "$(call suitable-host-package,asciidoc,)" ]; then \
+> +               echo "You need a sufficiently recent asciidoc on your
+> host" \
+> +                       "to generate the manual"; \
+> +               exit 1; \
+> +       fi
+> +       $(Q)if [ -z "`which w3m 2>/dev/null`" ]; then \
+> +               echo "You need w3m on your host to generate the manual"; \
+> +               exit 1; \
+> +       fi
+> +
+> +manual-check-dependencies-pdf:
+> +       $(Q)if [ -z "`which dblatex 2>/dev/null`" ]; then \
+> +               echo "You need dblatex on your host to generate the pdf
+> manual"; \
+> +               exit 1; \
+> +       fi
+> +
+> +manual-check-dependencies-lists:
+> +       $(Q)if ! python -c "import argparse" >/dev/null 2>&1 ; then \
+> +               echo "You need python with argparse on your host to
+> generate" \
+> +                       "the list of packages in the manual"; \
+> +               exit 1; \
+> +       fi
+> +
+>
+>  ################################################################################
+>  # GENDOC -- generates the make targets needed to build a specific type of
+>  #           asciidoc documentation.
+> @@ -22,8 +46,12 @@ define GENDOC_INNER
+>  .PHONY: $(1)-$(3)
+>  $(1)-$(3): $$(O)/docs/$(1)/$(1).$(4)
+>
+> +manual-check-dependencies-$(3):
+> +
+>  $$(O)/docs/$(1)/$(1).$(4): docs/$(1)/$(1).txt \
+>                            $$($(call UPPERCASE,$(1))_SOURCES) \
+> +                          manual-check-dependencies \
+> +                          manual-check-dependencies-$(3) \
+>                            manual-update-lists
+>         $(Q)$(call MESSAGE,"Generating $(5) $(1)...")
+>         $(Q)mkdir -p $$(@D)/.build
+> diff --git a/docs/manual/prerequisite.txt b/docs/manual/prerequisite.txt
+> --- a/docs/manual/prerequisite.txt
+> +++ b/docs/manual/prerequisite.txt
+> @@ -76,4 +76,7 @@ development context (further details: re
+>  ** The +jar+ tool
+>
+>  * Documentation generation tools:
+> -** +asciidoc+
+> +** +asciidoc+, version 8.6.3 or higher
+> +** +w3m+
+> +** +python+ with the +argparse+ module (automatically present in 2.7+ and
+> 3.2+)
+> +** +dblatex+ (required for the pdf manual only)
+> diff --git a/support/dependencies/check-host-asciidoc.sh
+> b/support/dependencies/check-host-asciidoc.sh
+> new file mode 100755
+> --- /dev/null
+> +++ b/support/dependencies/check-host-asciidoc.sh
+> @@ -0,0 +1,36 @@
+> +#!/bin/sh
+> +
+> +candidate="$1" #ignored
+> +
+> +asciidoc=`which asciidoc`
+> +if [ ! -x "$asciidoc" ]; then
+> +       # echo nothing: no suitable asciidoc found
+> +       exit 1
+> +fi
+> +
+> +# Output of 'asciidoc --version' examples:
+> +# asciidoc 8.6.7
+> +version=`$asciidoc --version | cut -d\  -f2`
+> +major=`echo "$version" | cut -d. -f1`
+> +minor=`echo "$version" | cut -d. -f2`
+> +bugfix=`echo "$version" | cut -d. -f3`
+> +
+> +# To generate the manual, we need asciidoc >= 8.6.3
+> +major_min=8
+> +minor_min=6
+> +bugfix_min=3
+> +if [ $major -gt $major_min ]; then
+> +       echo $asciidoc
+> +else
+> +       if [ $major -eq $major_min -a $minor -ge $minor_min ]; then
+> +               echo $asciidoc
+> +       else
+> +               if [ $major -eq $major_min -a $minor -eq $minor_min \
+> +                       -a $bugfix -ge $bugfix_min ]; then
+> +                       echo $asciidoc
+> +               else
+> +                       # echo nothing: no suitable asciidoc found
+> +                       exit 1
+> +               fi
+> +       fi
+> +fi
+>
 
- Thierry> +          lesstif is the Hungry Programmers' version of OSF/Motif
- Thierry> +
- Thierry> +          http://lesstif.sourceforge.net/
- Thierry> diff --git a/package/x11r7/lesstif/lesstif.mk b/package/x11r7/lesstif/lesstif.mk
- Thierry> new file mode 100644
- Thierry> index 0000000..ed09581
- Thierry> --- /dev/null
- Thierry> +++ b/package/x11r7/lesstif/lesstif.mk
- Thierry> @@ -0,0 +1,39 @@
- Thierry> +
- Thierry> +#############################################################
 
-No empty line before the banner and the #### line should be 80 chars.
-
- Thierry> +#
- Thierry> +# lesstif
- Thierry> +#
- Thierry> +#############################################################
- Thierry> +LESSTIF_VERSION = 0.95.2
- Thierry> +LESSTIF_SOURCE = lesstif-$(LESSTIF_VERSION).tar.bz2
- Thierry> +LESSTIF_SITE =  http://downloads.sourceforge.net/project/lesstif/lesstif/$(LESSTIF_VERSION)
- Thierry> +LESSTIF_INSTALL_STAGING = YES
- Thierry> +LESSTIF_INSTALL_TARGET = YES
-
-_INSTALL_TARGET defaults to YES, so you can drop that line.
-
- Thierry> +LESSTIF_DEPENDENCIES = xlib_libXt xlib_libXext
-
-This doesn't match the Config.in. You need to select
-BR2_PACKAGE_XLIB_LIBX{T,EXT} in Config.in as well.
-
- Thierry> +
- Thierry> +LESSTIF_CONF_OPT = \
- Thierry> +	--with-freetype-config=$(STAGING_DIR)/usr/bin/freetype-config	\
-
-You don't have freetype in _DEPENDENCIES. Either drop it here if it
-isn't used or add it to dependenciees.
-
- Thierry> +	--with-gnu-ld							\
- Thierry> +	--enable-debug=no						\
- Thierry> +	--enable-production=yes						\
- Thierry> +	--enable-build-tests=no
- Thierry> +
- Thierry> +# Reduces the buggy makefile to the smallest possible (and working) thing
- Thierry> +define LESSTIF_NOMAN2HTML
- Thierry> +	echo "all:" 	> $(@D)/doc/Makefile
- Thierry> +	echo "" 		>> $(@D)/doc/Makefile
- Thierry> +	echo "install:" >> $(@D)/doc/Makefile
- Thierry> +	echo "" 		>> $(@D)/doc/Makefile
- Thierry> +	echo "clean:" 	>> $(@D)/doc/Makefile
- Thierry> +endef
- Thierry> +
- Thierry> +# Remove the ac_find_motif.m4 that is copied on target
- Thierry> +define LESSTIF_FIXACLOCAL
- Thierry> +	rm -rf $(TARGET_DIR)/$(HOME)
- Thierry> +endef
-
-HOME?
-
- Thierry> +
- Thierry> +LESSTIF_POST_CONFIGURE_HOOKS += LESSTIF_NOMAN2HTML
- Thierry> +LESSTIF_POST_INSTALL_TARGET_HOOKS += LESSTIF_FIXACLOCAL
- Thierry> +
- Thierry> +$(eval $(autotools-package))
- Thierry> +
-
-No empty line after autotools-package.
-
-Care to fix and resend?
+Regards,
 
 -- 
-Bye, Peter Korsgaard
+Samuel
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130922/2a930a7d/attachment.html>
