@@ -1,134 +1,120 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Sun, 22 Sep 2013 10:40:45 +0200
-Subject: [Buildroot] [PATCH 1/2] toolchain/wrapper: add option to print
- one argument per line
-In-Reply-To: <31f4ddb9ea718e4bb9321ffb8bf5d75f5fb02361.1379714259.git.yann.morin.1998@free.fr>
-References: <cover.1379714259.git.yann.morin.1998@free.fr>
- <31f4ddb9ea718e4bb9321ffb8bf5d75f5fb02361.1379714259.git.yann.morin.1998@free.fr>
-Message-ID: <CAHXCMMLRwaYa=famK9dT5BAAbuexFOzddwhyLLdvzrf9sQsqYA@mail.gmail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 22 Sep 2013 10:43:29 +0200
+Subject: [Buildroot] [PATCH] Add lesstif package
+In-Reply-To: <523A9EE2.9050701@wanadoo.fr> (Thierry Bultel's message of "Thu, 
+ 19 Sep 2013 08:51:14 +0200")
+References: <523A9EE2.9050701@wanadoo.fr>
+Message-ID: <87zjr59rgu.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2013/9/21 Yann E. MORIN <yann.morin.1998@free.fr>
+>>>>> "Thierry" == Thierry Bultel <thierry.bultel@wanadoo.fr> writes:
 
-> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
->
-> In case there are many arguments passed to the tools, the command line
-> can get very long, and difficult to parse visually.
->
-> For example, the Linux kernel passes a lot of arguments to gcc (at least
-> 45, which gives 53 with our hard-coded args). Looking at such a command
-> line is daunting.
->
-> So, add the possibility to print each argument on its own line.
->
-> Also, enclose all args between single quotes, so the command line
-> can be safely copy-pasted without special chars (spaces, $) being
-> inrerpreted by the shell.
->
-> Add blurb about toolchain-wrapper to documentation at the same
-> time.
->
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-> Acked-by: Luca Ceresoli <luca@lucaceresoli.net>
-> Tested-by: Luca Ceresoli <luca@lucaceresoli.net>
->
-Acked-by: Samuel Martin <s.martin49@gmail.com>
+ Thierry> Signed-off-by: Thierry Bultel <thierry.bultel@wanadoo.fr>
+ Thierry> ---
+ Thierry> Adds support for lesstif.
+ Thierry> Quite old thing but useful for porting applications based on xmotif
+ Thierry> ---
+ Thierry> diff --git a/package/x11r7/Config.in b/package/x11r7/Config.in
+ Thierry> index 205079c..c6d48b3 100644
+ Thierry> --- a/package/x11r7/Config.in
+ Thierry> +++ b/package/x11r7/Config.in
+ Thierry> @@ -12,6 +12,7 @@ if BR2_PACKAGE_XORG7
+ Thierry>  		source package/x11r7/xserver_xorg-server/Config.in
+ Thierry>  	endmenu
+ Thierry>  	menu "X11R7 Libraries"
+ Thierry> +		source package/x11r7/lesstif/Config.in
+ Thierry>  		source package/x11r7/libxcb/Config.in
+ Thierry>  		source package/x11r7/mesa3d/Config.in
+ Thierry>  		source package/x11r7/xcb-util/Config.in
+ Thierry> diff --git a/package/x11r7/lesstif/Config.in b/package/x11r7/lesstif/Config.in
+ Thierry> new file mode 100644
+ Thierry> index 0000000..5d7cb11
+ Thierry> --- /dev/null
+ Thierry> +++ b/package/x11r7/lesstif/Config.in
+ Thierry> @@ -0,0 +1,7 @@
+ Thierry> +config BR2_PACKAGE_LESSTIF
+ Thierry> +        bool "lesstif"
+ Thierry> +	select BR2_PACKAGE_XLIB_LIBXP
+ Thierry> +        help
 
-> ---
->  docs/manual/customize-toolchain.txt                | 11 ++++++++++
->  .../toolchain-external/ext-toolchain-wrapper.c     | 25
-> +++++++++++++++-------
->  2 files changed, 28 insertions(+), 8 deletions(-)
->
-> diff --git a/docs/manual/customize-toolchain.txt
-> b/docs/manual/customize-toolchain.txt
-> index 811a6dc..82ecc28 100644
-> --- a/docs/manual/customize-toolchain.txt
-> +++ b/docs/manual/customize-toolchain.txt
-> @@ -17,6 +17,17 @@ generate it.
->  It also requires to set the Buildroot settings according to the toolchain
-> ones
->  (see xref:external-toolchain-backend[]).
->
-> +When using an external toolchain, Buildroot generates a wrapper program,
-> that
-> +passes the appropriate options (according to the configuration) to the
-> +external toolchain programs. In case you need to debug this wrapper, you
-> can
-> +set the environment variable BR_DEBUG_WRAPPER to either one of:
-> +
-> +* +0+, empty or not set: no debug
-> +
-> +* +1+: trace all arguments on a single line
-> +
-> +* +2+: trace one argument per line
-> +
->  Using the internal Buildroot toolchain backend
->  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->
-> diff --git a/toolchain/toolchain-external/ext-toolchain-wrapper.c
-> b/toolchain/toolchain-external/ext-toolchain-wrapper.c
-> index 565e36b..dfdfcff 100644
-> --- a/toolchain/toolchain-external/ext-toolchain-wrapper.c
-> +++ b/toolchain/toolchain-external/ext-toolchain-wrapper.c
-> @@ -74,7 +74,8 @@ int main(int argc, char **argv)
->         char *relbasedir, *absbasedir;
->         char *progpath = argv[0];
->         char *basename;
-> -       int ret, i, count = 0;
-> +       char *env_debug;
-> +       int ret, i, count = 0, debug;
->
->         /* Calculate the relative paths */
->         basename = strrchr(progpath, '/');
-> @@ -157,13 +158,21 @@ int main(int argc, char **argv)
->         /* finish with NULL termination */
->         *cur = NULL;
->
-> -       if (getenv("BR_DEBUG_WRAPPER")) {
-> -               fprintf(stderr, "Executing");
-> -
-> -               for (i = 0; args[i]; i++)
-> -                       fprintf(stderr, " %s", args[i]);
-> -
-> -               fprintf(stderr, "\n");
-> +       /* Debug the wrapper to see actual arguments passed to
-> +        * the compiler:
-> +        * unset, empty, or 0: do not trace
-> +        * set to 1          : trace all arguments on a single line
-> +        * set to 2          : trace one argument per line
-> +        */
-> +       if ((env_debug = getenv("BR_DEBUG_WRAPPER"))) {
-> +               debug = atoi(env_debug);
-> +               if (debug > 0) {
-> +                       fprintf(stderr, "Toolchain wrapper executing:");
-> +                       for (i = 0; args[i]; i++)
-> +                               fprintf(stderr, "%s'%s'",
-> +                                       (debug == 2)?"\n    ":" ",
-> args[i]);
-> +                       fprintf(stderr, "\n");
-> +               }
->         }
->
->         if (execv(path, args))
-> --
-> 1.8.1.2
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
->
+You have a mix of spaces and tabs here. The rule for Config.in is to
+indent with tab (and help text with tab+space+space).
 
-Regards,
+We don't have a XLIB_LIBXP package in Buildroot?
+
+ Thierry> +          lesstif is the Hungry Programmers' version of OSF/Motif
+ Thierry> +
+ Thierry> +          http://lesstif.sourceforge.net/
+ Thierry> diff --git a/package/x11r7/lesstif/lesstif.mk b/package/x11r7/lesstif/lesstif.mk
+ Thierry> new file mode 100644
+ Thierry> index 0000000..ed09581
+ Thierry> --- /dev/null
+ Thierry> +++ b/package/x11r7/lesstif/lesstif.mk
+ Thierry> @@ -0,0 +1,39 @@
+ Thierry> +
+ Thierry> +#############################################################
+
+No empty line before the banner and the #### line should be 80 chars.
+
+ Thierry> +#
+ Thierry> +# lesstif
+ Thierry> +#
+ Thierry> +#############################################################
+ Thierry> +LESSTIF_VERSION = 0.95.2
+ Thierry> +LESSTIF_SOURCE = lesstif-$(LESSTIF_VERSION).tar.bz2
+ Thierry> +LESSTIF_SITE =  http://downloads.sourceforge.net/project/lesstif/lesstif/$(LESSTIF_VERSION)
+ Thierry> +LESSTIF_INSTALL_STAGING = YES
+ Thierry> +LESSTIF_INSTALL_TARGET = YES
+
+_INSTALL_TARGET defaults to YES, so you can drop that line.
+
+ Thierry> +LESSTIF_DEPENDENCIES = xlib_libXt xlib_libXext
+
+This doesn't match the Config.in. You need to select
+BR2_PACKAGE_XLIB_LIBX{T,EXT} in Config.in as well.
+
+ Thierry> +
+ Thierry> +LESSTIF_CONF_OPT = \
+ Thierry> +	--with-freetype-config=$(STAGING_DIR)/usr/bin/freetype-config	\
+
+You don't have freetype in _DEPENDENCIES. Either drop it here if it
+isn't used or add it to dependenciees.
+
+ Thierry> +	--with-gnu-ld							\
+ Thierry> +	--enable-debug=no						\
+ Thierry> +	--enable-production=yes						\
+ Thierry> +	--enable-build-tests=no
+ Thierry> +
+ Thierry> +# Reduces the buggy makefile to the smallest possible (and working) thing
+ Thierry> +define LESSTIF_NOMAN2HTML
+ Thierry> +	echo "all:" 	> $(@D)/doc/Makefile
+ Thierry> +	echo "" 		>> $(@D)/doc/Makefile
+ Thierry> +	echo "install:" >> $(@D)/doc/Makefile
+ Thierry> +	echo "" 		>> $(@D)/doc/Makefile
+ Thierry> +	echo "clean:" 	>> $(@D)/doc/Makefile
+ Thierry> +endef
+ Thierry> +
+ Thierry> +# Remove the ac_find_motif.m4 that is copied on target
+ Thierry> +define LESSTIF_FIXACLOCAL
+ Thierry> +	rm -rf $(TARGET_DIR)/$(HOME)
+ Thierry> +endef
+
+HOME?
+
+ Thierry> +
+ Thierry> +LESSTIF_POST_CONFIGURE_HOOKS += LESSTIF_NOMAN2HTML
+ Thierry> +LESSTIF_POST_INSTALL_TARGET_HOOKS += LESSTIF_FIXACLOCAL
+ Thierry> +
+ Thierry> +$(eval $(autotools-package))
+ Thierry> +
+
+No empty line after autotools-package.
+
+Care to fix and resend?
 
 -- 
-Samuel
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130922/d5df1064/attachment.html>
+Bye, Peter Korsgaard
