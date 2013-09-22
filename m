@@ -1,36 +1,60 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 22 Sep 2013 15:43:58 +0200
-Subject: [Buildroot] [PATCH 1/1] Openpowerlink: new package
-In-Reply-To: <CAAXf6LW7vu5CdLqbgOsyxv3NihrXQpJB+DYA4T2c7Cfa206GTg@mail.gmail.com>
-References: <1165322922.7308619.1379724109699.JavaMail.root@openwide.fr>
- <681556336.7308664.1379724486354.JavaMail.root@openwide.fr>
- <CAAXf6LW7vu5CdLqbgOsyxv3NihrXQpJB+DYA4T2c7Cfa206GTg@mail.gmail.com>
-Message-ID: <20130922154358.6351078a@skate>
+Date: Sun, 22 Sep 2013 15:50:36 +0200
+Subject: [Buildroot] [PATCH v1 1/1] Openpowerlink: new package
+In-Reply-To: <327943565.7314001.1379758800651.JavaMail.root@openwide.fr>
+References: <1103454476.7313953.1379758391823.JavaMail.root@openwide.fr>
+ <327943565.7314001.1379758800651.JavaMail.root@openwide.fr>
+Message-ID: <20130922155036.2d967c64@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas De Schampheleire,
+Dear Romain Naour,
 
-On Sat, 21 Sep 2013 10:15:20 +0200, Thomas De Schampheleire wrote:
+On Sat, 21 Sep 2013 12:20:00 +0200 (CEST), Romain Naour wrote:
 
-> Thanks for mentioning the line wrapping problem, I wasn't aware. I think
-> the problem only occurs when I send mail from the gmail app on my phone. I
-> now changed a setting but I fear it will not affect outgoing mail. This is
-> a test mail.
+> --- /dev/null
+> +++ b/package/openpowerlink/openpowerlink.mk
+> @@ -0,0 +1,92 @@
+> +################################################################################
+> +#
+> +# openPOWERLINK
 
-Your reply was line-wrapped.
+It should be lower cased completely.
 
-> If it doesn't work I'll find a better mail app for android. Suggestions are
-> welcome...
+> +#
+> +################################################################################
+> +
+> +OPENPOWERLINK_VERSION = V1.08.3
+> +OPENPOWERLINK_SOURCE = openPOWERLINK-$(OPENPOWERLINK_VERSION).zip
+> +OPENPOWERLINK_SITE = http://downloads.sourceforge.net/project/openpowerlink/openPOWERLINK/V1.8.3
+> +
+> +OPENPOWERLINK_LICENSE = BSD-2c, GPLv2
+> +OPENPOWERLINK_LICENSE_FILES = license.txt
+> +OPENPOWERLINK_INSTALL_STAGING = YES
+> +
+> +ifeq ($(BR2_i386),y)
+> +OPENPOWERLINK_ARCH = x86
+> +endif
+> +
+> +ifeq ($(BR2_x86_64),y)
+> +OPENPOWERLINK_ARCH = x86_64
+> +endif
+> +
+> +OPENPOWERLINK_CONF_OPT = -DCMAKE_SYSTEM_PROCESSOR=$(OPENPOWERLINK_ARCH)
+> +OPENPOWERLINK_CONF_OPT += -DCMAKE_INSTALL_PREFIX=/usr/
 
-Have you tried K9 ? I use it, but I admit only for reading e-mails. I
-find a phone so impractical to write stuff that I only ever send
-e-mails from my laptop.
+We normally put such things with one statement:
 
-Best regards,
+FOO_CONF_OPT = \
+	BLEH1 \
+	BLEH2
+
+*But* in this particular case, there is no need to pass
+-DCMAKE_INSTALL_PREFIX, because it is already passed by the CMake
+package infrastructure.
 
 Thomas
 -- 
