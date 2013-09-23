@@ -1,52 +1,59 @@
-From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Mon, 23 Sep 2013 10:00:34 +0200
-Subject: [Buildroot] [PATCH v4 3/3] package/Makefile.in: add a way to
- don't force jobs in sub-make
-In-Reply-To: <CAHkwnC9ZDdokTwVJYNpX=UuUhkCBrS5oggaRriWZhUurC=ajMg@mail.gmail.com>
-References: <1379404753-3471-1-git-send-email-fabio.porcedda@gmail.com>
- <1379404753-3471-4-git-send-email-fabio.porcedda@gmail.com>
- <20130917201751.48fb34d3@skate>
- <CA+ojGf6su7WqJ2uMTkTdjpardn_QuE_vPfKFPC8CcrB58jCXvw@mail.gmail.com>
- <CAHkwnC86ZqHD0UTDZ9_hXD7Br9guaB2ywu57=sXO+z_pRyCMwQ@mail.gmail.com>
- <CAAXf6LX4wRk8WuGt=LK2Oqu76+CFeh2oMdKdmyYaw+nayBt_FQ@mail.gmail.com>
- <CAHkwnC_BMFu594Q8_4QdGh7diz--JmoTE18oVVSrwsuFsvk8wQ@mail.gmail.com>
- <CAAXf6LW284WVbeYvP_K0XnVsCMs8SC_HETufFibb4UQTcmHbTg@mail.gmail.com>
- <CAHkwnC9ZDdokTwVJYNpX=UuUhkCBrS5oggaRriWZhUurC=ajMg@mail.gmail.com>
-Message-ID: <CAHkwnC-QdYCYg6YFf6bCc3oPUqjHni71gn6uUPPkcKyPj_AuUQ@mail.gmail.com>
+From: Axel Lin <axel.lin@ingics.com>
+Date: Mon, 23 Sep 2013 17:16:50 +0800
+Subject: [Buildroot] [PATCH RESEND] package/Makefile.in: Fix dependency for
+ selecting uclinux as TARGET_OS
+Message-ID: <1379927810.16071.2.camel@phoenix>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Sep 20, 2013 at 4:57 PM, Fabio Porcedda
-<fabio.porcedda@gmail.com> wrote:
-> On Thu, Sep 19, 2013 at 9:11 AM, Thomas De Schampheleire
-> <patrickdepinguin@gmail.com> wrote:
->> Hi Fabio,
->>
->> On Thu, Sep 19, 2013 at 8:59 AM, Fabio Porcedda
->> <fabio.porcedda@gmail.com> wrote:
->> [..]
->>>> In fact, we don't add a way, since the user cannot choose to force or not.
->>>
->>> IMHO the user can choose  by means of the "BR2_JLEVEL" variable, if
->>> that variable contains a value buildroot will force the number of
->>> jobs, if that variable is empty buildroot will not force the number of
->>> jobs.
->>
->> True, but BR2_JLEVEL was already there before your patch. What your
->> patch fixes is the situation where BR2_JLEVEL is empty, not 0, 1, 2,
->> 3, ... as the original code expected. So, maybe a better title is:
->>
->> package/Makefile.in: don't force parallel building when BR2_JLEVEL is empty
->
-> Ok it's fine for me.
+Current setting only allows blackfin to select uclinux as TARGET_OS.
+However, some noMMU ARM platforms that using FLAT binary format also need to
+select uclinux as TARGET_OS. Fix the dependency.
 
-Well the line it's too long (75 character), i will use:
+Signed-off-by: Axel Lin <axel.lin@ingics.com>
+---
+This patch was sent on
+http://lists.busybox.net/pipermail/buildroot/2013-September/077488.html
 
-package/Makefile.in: don't force jobs when BR2_JLEVEL is empty
+I found that without this patch, I hit below build error:
+__uClibc_main.c:(.text+0x240): undefined reference to `__preinit_array_start'
+__uClibc_main.c:(.text+0x244): undefined reference to `__preinit_array_end'
+__uClibc_main.c:(.text+0x248): undefined reference to `__init_array_start'
+__uClibc_main.c:(.text+0x24c): undefined reference to `__init_array_end'
+/opt/test/buildroot/buildroot/output/host/usr/arm-buildroot-linux-uclibcgnueabi/bin/ld.real: ./libgcc_s.so.1.tmp: hidden symbol `__fini_array_end' isn't defined
+/opt/test/buildroot/buildroot/output/host/usr/arm-buildroot-linux-uclibcgnueabi/bin/ld.real: final link failed: Bad value
+collect2: ld returned 1 exit status
+make[3]: *** [libgcc_s.so] Error 1
+make[3]: Leaving directory `/opt/test/buildroot/buildroot/output/build/host-gcc-final-4.5.4/build/arm-buildroot-linux-uclibcgnueabi/libgcc'
+make[2]: *** [all-target-libgcc] Error 2
+make[2]: Leaving directory `/opt/test/buildroot/buildroot/output/build/host-gcc-final-4.5.4/build'
+make[1]: *** [all] Error 2
+make[1]: Leaving directory `/opt/test/buildroot/buildroot/output/build/host-gcc-final-4.5.4/build'
+make: *** [/opt/test/buildroot/buildroot/output/build/host-gcc-final-4.5.4/.stamp_built] Error 2
 
-Best regards
+I remember that someone has reported the same build error on the maillist.
+With this patch, the build result looks OK.
+
+ package/Makefile.in | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/Makefile.in b/package/Makefile.in
+index 170ad78..1699fdf 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -23,8 +23,8 @@ MAKE:=$(HOSTMAKE) -j$(PARALLEL_JOBS)
+ # Compute GNU_TARGET_NAME
+ GNU_TARGET_NAME=$(ARCH)-buildroot-$(TARGET_OS)-$(LIBC)$(ABI)
+ 
+-# Blackfin FLAT needs uclinux
+-ifeq ($(BR2_bfin)$(BR2_BINFMT_FLAT),yy)
++# FLAT binary format needs uclinux
++ifeq ($(BR2_BINFMT_FLAT),y)
+ TARGET_OS=uclinux
+ else
+ TARGET_OS=linux
 -- 
-Fabio Porcedda
+1.8.1.2
