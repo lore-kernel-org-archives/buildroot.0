@@ -1,38 +1,26 @@
-From: Ryan Barnett <rjbarnet@rockwellcollins.com>
-Date: Mon, 23 Sep 2013 08:29:08 -0500
-Subject: [Buildroot] [PATCH 1 of 2 v2] manual generation: check
-	dependencies first
-In-Reply-To: <f873d24e7a1146f10791.1379761613@argentina>
-References: <patchbomb.1379761612@argentina>
- <f873d24e7a1146f10791.1379761613@argentina>
-Message-ID: <OFB4942A27.1BA8AFE3-ON86257BEF.0049DACE-86257BEF.004A1445@rockwellcollins.com>
+From: Bryce Schober <bryce.schober@gmail.com>
+Date: Mon, 23 Sep 2013 11:58:12 -0700
+Subject: [Buildroot] [BFCI] HOWTO Defconfig for host package
+Message-ID: <CAJpxd06FJXZde5VS9BdifeH5ejSDDWUmHUoA8x3tt6FJ+77A-Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas De Schampheleire <patrickdepinguin@gmail.com> wrote on 09/21/2013 
-06:06:53 AM:
+[Buildroot for Complete Idiots] question here:
 
-> To generate the manual, you need a few tools. If these are not present,
-> pretty cryptic error messages are given.
-> This patch adds a simple check for these dependencies, before attempting 
-to
-> build the manual.
-> 
-> Signed-off-by: Thomas De Schampheleire 
-<thomas.de.schampheleire@gmail.com>
-> 
-> ---
-> v2:
-> - update manual with the list of tools (comment Ryan)
-> - add check for dblatex and python-argparse (comment Samuel)
-> - check minimal version of asciidoc, using suitable-host-package 
-mechanism
-> 
-Acked-by: Ryan Barnett <rjbarnet@rockwellcollins.com>
+How do I configure (in a defconfig) to build a host package variant? I was
+guessing that BR2_PACKAGE_HOST_FOO would work, but apparently not. I've
+defined a new generic package, and its host-foo target works as expected,
+but I don't see anything obvious in the manual about how to get this in my
+defconfig.
 
+I'm on an ancient version of buildroot here, so that may complicate
+things...
+
+<><  <><  <><
+Bryce Schober
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130923/e484f54b/attachment.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130923/dd5dd996/attachment.html>
