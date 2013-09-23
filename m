@@ -1,31 +1,43 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 23 Sep 2013 09:49:24 +0200
-Subject: [Buildroot] [PATCH] Add lesstif package
-In-Reply-To: <523FEF98.10707@wanadoo.fr>
-References: <523A9EE2.9050701@wanadoo.fr> <87zjr59rgu.fsf@dell.be.48ers.dk>
- <20130922154155.09a7fa50@skate> <523FEF98.10707@wanadoo.fr>
-Message-ID: <20130923094924.212dd403@skate>
+From: Simon Dawson <spdawson@gmail.com>
+Date: Mon, 23 Sep 2013 08:54:40 +0100
+Subject: [Buildroot] [PATCH] xapp_xscreensaver: new package
+In-Reply-To: <87ioxs9e3z.fsf@dell.be.48ers.dk>
+References: <1379872398-25558-1-git-send-email-spdawson@gmail.com>
+ <87ioxs9e3z.fsf@dell.be.48ers.dk>
+Message-ID: <CAHt8ZCPkZbFt7zvQtXbz-Pmcepy4X0YNAMKPJqs1xq4cRz0QnA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thierry Bultel,
+On 23 September 2013 08:44, Peter Korsgaard <jacmet@uclibc.org> wrote:
+>>>>>> "spdawson" == spdawson  <spdawson@gmail.com> writes:
+>  spdawson> +            source package/x11r7/xapp_xscreensaver/Config.in
+>
+> Like Thomas commented on the recently posted lesstif package, this
+> shouldn't go under x11r7 as it isn't part of x.org (and should just be
+> called xscreensaver).
 
-On Mon, 23 Sep 2013 09:36:56 +0200, Thierry Bultel wrote:
+Okay; I'll move it.
 
-> Shall I put it in the  "Graphics" menu (inserting it with the
-> alphabetical order)
-> or in "Graphics  libraries and applications (graphic/text) / graphic
-> libraries" ?
+>  spdawson> +XAPP_XSCREENSAVER_LICENSE = MIT-like
+>  spdawson> +XAPP_XSCREENSAVER_LICENSE_FILES = hacks/screenhack.h
+>
+> According to the Debian package, it also contains GPLv2+ parts
+> (hacks/glx/chessmodels.{c,man}), but perhaps we don't build that file?
+>
+> A comment explaining it might be good.
 
-I believe it should be under 'Libraries' -> 'Graphics'.
+Ah, right. I'll fix this then.
 
-Thanks!
+>  spdawson> +XAPP_XSCREENSAVER_CONF_OPT += \
+>  spdawson> +    CFLAGS="$(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include" \
+>  spdawson> +    LDFLAGS="$(TARGET_LDFLAGS) -L$(STAGING_DIR)/usr/lib" \
+>
+> The compiler should already be looking under STAGING_DIR, why is this
+> needed?
 
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Right; not needed, in fact. I'll remove this in the next iteration of the patch.
+
+Simon.
