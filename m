@@ -1,56 +1,79 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 23 Sep 2013 12:50:04 +0200
-Subject: [Buildroot] [PATCH] Add lesstif package
-In-Reply-To: <52401C48.7090402@wanadoo.fr> (Thierry Bultel's message of "Mon, 
- 23 Sep 2013 12:47:36 +0200")
-References: <523A9EE2.9050701@wanadoo.fr> <87zjr59rgu.fsf@dell.be.48ers.dk>
- <52401C48.7090402@wanadoo.fr>
-Message-ID: <87a9j3ak2r.fsf@dell.be.48ers.dk>
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Mon, 23 Sep 2013 13:08:57 +0200 (CEST)
+Subject: [Buildroot] [PATCH v1 1/1] Openpowerlink: new package
+In-Reply-To: <20130922155036.2d967c64@skate>
+Message-ID: <1712630978.7359309.1379934537810.JavaMail.root@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thierry" == Thierry Bultel <thierry.bultel@wanadoo.fr> writes:
+Hi Thomas,
 
-Hi,
+----- Mail original -----
+| De: "Thomas Petazzoni" <thomas.petazzoni@free-electrons.com>
+| ?: "Romain Naour" <romain.naour@openwide.fr>
+| Cc: "buildroot" <buildroot@busybox.net>
+| Envoy?: Dimanche 22 Septembre 2013 15:50:36
+| Objet: Re: [Buildroot] [PATCH v1 1/1] Openpowerlink: new package
+| 
+| Dear Romain Naour,
+| 
+| On Sat, 21 Sep 2013 12:20:00 +0200 (CEST), Romain Naour wrote:
+| 
+| > --- /dev/null
+| > +++ b/package/openpowerlink/openpowerlink.mk
+| > @@ -0,0 +1,92 @@
+| > +################################################################################
+| > +#
+| > +# openPOWERLINK
+| 
+| It should be lower cased completely.
+| 
+| > +#
+| > +################################################################################
+| > +
+| > +OPENPOWERLINK_VERSION = V1.08.3
+| > +OPENPOWERLINK_SOURCE = openPOWERLINK-$(OPENPOWERLINK_VERSION).zip
+| > +OPENPOWERLINK_SITE =
+| > http://downloads.sourceforge.net/project/openpowerlink/openPOWERLINK/V1.8.3
+| > +
+| > +OPENPOWERLINK_LICENSE = BSD-2c, GPLv2
+| > +OPENPOWERLINK_LICENSE_FILES = license.txt
+| > +OPENPOWERLINK_INSTALL_STAGING = YES
+| > +
+| > +ifeq ($(BR2_i386),y)
+| > +OPENPOWERLINK_ARCH = x86
+| > +endif
+| > +
+| > +ifeq ($(BR2_x86_64),y)
+| > +OPENPOWERLINK_ARCH = x86_64
+| > +endif
+| > +
+| > +OPENPOWERLINK_CONF_OPT =
+| > -DCMAKE_SYSTEM_PROCESSOR=$(OPENPOWERLINK_ARCH)
+| > +OPENPOWERLINK_CONF_OPT += -DCMAKE_INSTALL_PREFIX=/usr/
+| 
+| We normally put such things with one statement:
+| 
+| FOO_CONF_OPT = \
+| 	BLEH1 \
+| 	BLEH2
+| 
+| *But* in this particular case, there is no need to pass
+| -DCMAKE_INSTALL_PREFIX, because it is already passed by the CMake
+| package infrastructure.
 
- >> We don't have a XLIB_LIBXP package in Buildroot?
+Thanks for the advice.
 
- Thierry> ack
- Thierry> This is a mistake.
- Thierry> Taking your notes below in account, this should be
+Best regards,
+Romain
 
- Thierry>     select BR2_PACKAGE_XLIB_LIBXT
- Thierry>     select BR2_PACKAGE_XLIB_LIBXEXT
-
- Thierry> I wonder if I should not add "depends on BR2_PACKAGE_XORG7" as well ?
- Thierry> Else the needed libraries will not be built at all.
-
-Indeed. Look at the blackbox package for an example
-
-
- Thierry> +# Remove the ac_find_motif.m4 that is copied on target
- Thierry> +define LESSTIF_FIXACLOCAL
- Thierry> +	rm -rf $(TARGET_DIR)/$(HOME)
- Thierry> +endef
- >> 
- >> HOME?
-
- Thierry> yes, current user $(HOME).
- Thierry> This is weird indeed but lesstif actually creates
-
- Thierry> $(TARGET_DIR)/$(HOME)/$(TOPDIR)/output/host/usr/share/aclocal/ac_find_motif.m4
-
-Ahh. Could you extend the comment a bit to explain this?
-
-
- >> Care to fix and resend?
-
- Thierry> Sure, once we are ok with the all points above
-
-Great, thanks.
-
--- 
-Bye, Peter Korsgaard
+| 
+| Thomas
+| --
+| Thomas Petazzoni, Free Electrons
+| Embedded Linux, Kernel and Android engineering
+| http://free-electrons.com
+| 
