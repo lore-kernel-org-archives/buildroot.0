@@ -1,100 +1,76 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Mon, 23 Sep 2013 09:41:16 +0200
-Subject: [Buildroot] Dates for the next Buildroot Developers Meeting
-In-Reply-To: <CAG2jQ8im=rfRdMw+ypL4djNuCfyCnYX6eN4P73YDWYjDo7ERdw@mail.gmail.com>
-References: <20130525222335.42f91125@skate> <87bo72qyqi.fsf@dell.be.48ers.dk>
- <87hagan2al.fsf@dell.be.48ers.dk> <20130704104808.360f3738@skate>
- <20130704161724.GA5374@free.fr> <20130715212511.GB12096@free.fr>
- <CAG2jQ8im=rfRdMw+ypL4djNuCfyCnYX6eN4P73YDWYjDo7ERdw@mail.gmail.com>
-Message-ID: <CAHXCMM+t3m=-HUXqxbtTDkPHrPZ=6XB9=qJwoGsCR-+Lu=-vow@mail.gmail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 23 Sep 2013 09:44:16 +0200
+Subject: [Buildroot] [PATCH] xapp_xscreensaver: new package
+In-Reply-To: <1379872398-25558-1-git-send-email-spdawson@gmail.com>
+ (spdawson@gmail.com's message of "Sun, 22 Sep 2013 18:53:18 +0100")
+References: <1379872398-25558-1-git-send-email-spdawson@gmail.com>
+Message-ID: <87ioxs9e3z.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-All,
+>>>>> "spdawson" == spdawson  <spdawson@gmail.com> writes:
 
-2013/8/12 Markos Chandras <markos.chandras@gmail.com>
+ spdawson> From: Simon Dawson <spdawson@gmail.com>
+ spdawson> Signed-off-by: Simon Dawson <spdawson@gmail.com>
+ spdawson> ---
+ spdawson>  package/x11r7/Config.in                            |   1 +
+ spdawson>  package/x11r7/xapp_xscreensaver/Config.in          |  22 ++++
+ spdawson>  ...ver-0001-fix-cross-compile-ansi-c-bailout.patch |  29 +++++
+ spdawson>  ...creensaver-0002-fix-minixpm-build-problem.patch | 134 +++++++++++++++++++++
+ spdawson>  .../x11r7/xapp_xscreensaver/xapp_xscreensaver.mk   |  24 ++++
+ spdawson>  5 files changed, 210 insertions(+)
+ spdawson>  create mode 100644 package/x11r7/xapp_xscreensaver/Config.in
+ spdawson>  create mode 100644 package/x11r7/xapp_xscreensaver/xapp_xscreensaver-0001-fix-cross-compile-ansi-c-bailout.patch
+ spdawson>  create mode 100644 package/x11r7/xapp_xscreensaver/xapp_xscreensaver-0002-fix-minixpm-build-problem.patch
+ spdawson>  create mode 100644 package/x11r7/xapp_xscreensaver/xapp_xscreensaver.mk
 
-> On 15 July 2013 22:25, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> > Thomas, Peter, All,
-> >
-> > On 2013-07-04 18:17 +0200, Yann E. MORIN spake thusly:
-> >> On 2013-07-04 10:48 +0200, Thomas Petazzoni spake thusly:
-> >> > On Thu, 04 Jul 2013 10:43:14 +0200, Peter Korsgaard wrote:
-> >> > >  Thomas> The next Embedded Linux Conference Europe will take place
-> on
-> >> > >  Thomas> Thursday 24th and Friday 25th of October, in Edinburgh,
-> >> > >  Thomas> UK. Since LinuxCon Europe will take place at the beginning
-> of
-> >> > >  Thomas> the week (from Monday to Wednesday), I believe the best
-> date
-> >> > >  Thomas> for our meeting will be on Saturday 26th and Sunday 27th.
-> >> > >
-> >> > >  Peter> I'm planning on attending the gstreamer conference
-> (22-23th), so the
-> >> > >  Peter> weekend after would also fit me best.
-> >> > >
-> >> > >  Peter> If anyone disagrees, please let us know because I would
-> like to book
-> >> > >  Peter> flight/hotel soon.
-> >> > >
-> >> > > I've now booked conference/hotel/flights (21-27th). Anybody else?
-> >
-> > Ok, everything is under control!
-> >
-> > LCE: registered
-> > ELCE: registered
-> > Hotel: booked
-> > Flight: processing
-> >
-> > I'll be in Edimburgh starting the 20st late in the afternoon.
-> > I'll be leaving on the 28th in the morning.
-> >
-> > So, I'll be attending the DevDay Saturday & Sunday.
-> >
-> > /me is looking forward to being there! :-)
-> >
-> > Regards,
-> > Yann E. MORIN.
-> >
-> > --
-> >
-> .-----------------.--------------------.------------------.--------------------.
-> > |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics'
-> conspiracy: |
-> > | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___
->         |
-> > | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There
-> is no  |
-> > | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v
-> conspiracy.  |
-> >
-> '------------------------------^-------^------------------^--------------------'
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot at busybox.net
-> > http://lists.busybox.net/mailman/listinfo/buildroot
->
-> I will also attend the Buildroot DevDays as well :)
->
-> --
-> Regards,
-> Markos Chandras
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
->
+ spdawson> diff --git a/package/x11r7/Config.in b/package/x11r7/Config.in
+ spdawson> index 205079c..19c46a5 100644
+ spdawson> --- a/package/x11r7/Config.in
+ spdawson> +++ b/package/x11r7/Config.in
+ spdawson> @@ -127,6 +127,7 @@ if BR2_PACKAGE_XORG7
+ spdawson>  		source package/x11r7/xapp_xrandr/Config.in
+ spdawson>  		source package/x11r7/xapp_xrdb/Config.in
+ spdawson>  		source package/x11r7/xapp_xrefresh/Config.in
+ spdawson> +		source package/x11r7/xapp_xscreensaver/Config.in
 
-I'll be there too.
+Like Thomas commented on the recently posted lesstif package, this
+shouldn't go under x11r7 as it isn't part of x.org (and should just be
+called xscreensaver).
 
+ spdawson> +++ b/package/x11r7/xapp_xscreensaver/xapp_xscreensaver.mk
+ spdawson> @@ -0,0 +1,24 @@
+ spdawson> +################################################################################
+ spdawson> +#
+ spdawson> +# xapp_xscreensaver
+ spdawson> +#
+ spdawson> +################################################################################
+ spdawson> +
+ spdawson> +XAPP_XSCREENSAVER_VERSION = 5.22
+ spdawson> +XAPP_XSCREENSAVER_SITE = http://www.jwz.org/xscreensaver
+ spdawson> +XAPP_XSCREENSAVER_SOURCE = xscreensaver-$(XAPP_XSCREENSAVER_VERSION).tar.gz
+ spdawson> +
+ spdawson> +XAPP_XSCREENSAVER_LICENSE = MIT-like
+ spdawson> +XAPP_XSCREENSAVER_LICENSE_FILES = hacks/screenhack.h
 
-Regards,
+According to the Debian package, it also contains GPLv2+ parts
+(hacks/glx/chessmodels.{c,man}), but perhaps we don't build that file?
+
+A comment explaining it might be good.
+
+ spdawson> +
+ spdawson> +XAPP_XSCREENSAVER_DEPENDENCIES = jpeg libglade libgtk2 xlib_libX11 xlib_libXt \
+ spdawson> +	$(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext)
+ spdawson> +
+ spdawson> +XAPP_XSCREENSAVER_CONF_OPT += \
+ spdawson> +	CFLAGS="$(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include" \
+ spdawson> +	LDFLAGS="$(TARGET_LDFLAGS) -L$(STAGING_DIR)/usr/lib" \
+
+The compiler should already be looking under STAGING_DIR, why is this
+needed?
 
 -- 
-Samuel
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130923/1f5450c4/attachment-0001.html>
+Bye, Peter Korsgaard
