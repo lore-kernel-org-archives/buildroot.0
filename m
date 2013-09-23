@@ -1,35 +1,45 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Mon, 23 Sep 2013 13:34:55 +0200
-Subject: [Buildroot] [PATCH 1/1] Openpowerlink: new package
-In-Reply-To: <20130922154358.6351078a@skate>
-References: <1165322922.7308619.1379724109699.JavaMail.root@openwide.fr>
- <681556336.7308664.1379724486354.JavaMail.root@openwide.fr>
- <CAAXf6LW7vu5CdLqbgOsyxv3NihrXQpJB+DYA4T2c7Cfa206GTg@mail.gmail.com>
- <20130922154358.6351078a@skate>
-Message-ID: <CAAXf6LUaeZ0aNvbSRya9CmDt1RFQ7UZLQEq6aZLdPgWx37XefQ@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 23 Sep 2013 14:12:22 +0200
+Subject: [Buildroot] [PATCH] Add lesstif package
+In-Reply-To: <52401C48.7090402@wanadoo.fr>
+References: <523A9EE2.9050701@wanadoo.fr> <87zjr59rgu.fsf@dell.be.48ers.dk>
+ <52401C48.7090402@wanadoo.fr>
+Message-ID: <20130923141222.2fb3c9a7@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Dear Thierry Bultel,
 
-On Sun, Sep 22, 2013 at 3:43 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
->> If it doesn't work I'll find a better mail app for android. Suggestions are
->> welcome...
->
-> Have you tried K9 ? I use it, but I admit only for reading e-mails. I
-> find a phone so impractical to write stuff that I only ever send
-> e-mails from my laptop.
+On Mon, 23 Sep 2013 12:47:36 +0200, Thierry Bultel wrote:
 
-After your initial mail I tried K9, but those darn bastards also wrap
-at 72 lines! Luckily, K9 is open-source, and I found the offending
-code quite easily and filed a bug report here:
-http://code.google.com/p/k9mail/issues/detail?id=5957
-In the mean time, I'll try to compile it myself, haven't done any
-Android development before.
+> >  Thierry> +# Remove the ac_find_motif.m4 that is copied on target
+> >  Thierry> +define LESSTIF_FIXACLOCAL
+> >  Thierry> +	rm -rf $(TARGET_DIR)/$(HOME)
+> >  Thierry> +endef
+> > 
+> > HOME?
+> 
+> yes, current user $(HOME).
+> This is weird indeed but lesstif actually creates
+
+For those users who run Buildroot as root, this is going to remove
+$(TARGET_DIR)/root from the root filesystem, which isn't nice. Also if
+the user running Buildroot is foo and a 'foo' user has been created for
+the target filesystem, it will remove its home directory.
+
+Therefore, either the package should be patched not to install things
+in such an odd location, or the removal should be made a bit more
+specific. Remember to also test the case where Buildroot is built
+out-of-tree using O=, since those files will then most likely not be
+installed in $(TARGET_DIR)/$(HOME)/$(TOPDIR)/output.
 
 Best regards,
+
 Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
