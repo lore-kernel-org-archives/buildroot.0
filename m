@@ -1,40 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 23 Sep 2013 14:12:22 +0200
-Subject: [Buildroot] [PATCH] Add lesstif package
-In-Reply-To: <52401C48.7090402@wanadoo.fr>
-References: <523A9EE2.9050701@wanadoo.fr> <87zjr59rgu.fsf@dell.be.48ers.dk>
- <52401C48.7090402@wanadoo.fr>
-Message-ID: <20130923141222.2fb3c9a7@skate>
+Date: Mon, 23 Sep 2013 14:13:58 +0200
+Subject: [Buildroot] [PATCH 1/1] Openpowerlink: new package
+In-Reply-To: <CAAXf6LUaeZ0aNvbSRya9CmDt1RFQ7UZLQEq6aZLdPgWx37XefQ@mail.gmail.com>
+References: <1165322922.7308619.1379724109699.JavaMail.root@openwide.fr>
+ <681556336.7308664.1379724486354.JavaMail.root@openwide.fr>
+ <CAAXf6LW7vu5CdLqbgOsyxv3NihrXQpJB+DYA4T2c7Cfa206GTg@mail.gmail.com>
+ <20130922154358.6351078a@skate>
+ <CAAXf6LUaeZ0aNvbSRya9CmDt1RFQ7UZLQEq6aZLdPgWx37XefQ@mail.gmail.com>
+Message-ID: <20130923141358.25086aa1@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thierry Bultel,
+Dear Thomas De Schampheleire,
 
-On Mon, 23 Sep 2013 12:47:36 +0200, Thierry Bultel wrote:
+On Mon, 23 Sep 2013 13:34:55 +0200, Thomas De Schampheleire wrote:
 
-> >  Thierry> +# Remove the ac_find_motif.m4 that is copied on target
-> >  Thierry> +define LESSTIF_FIXACLOCAL
-> >  Thierry> +	rm -rf $(TARGET_DIR)/$(HOME)
-> >  Thierry> +endef
-> > 
-> > HOME?
-> 
-> yes, current user $(HOME).
-> This is weird indeed but lesstif actually creates
+> After your initial mail I tried K9, but those darn bastards also wrap
+> at 72 lines! Luckily, K9 is open-source, and I found the offending
+> code quite easily and filed a bug report here:
+> http://code.google.com/p/k9mail/issues/detail?id=5957
+> In the mean time, I'll try to compile it myself, haven't done any
+> Android development before.
 
-For those users who run Buildroot as root, this is going to remove
-$(TARGET_DIR)/root from the root filesystem, which isn't nice. Also if
-the user running Buildroot is foo and a 'foo' user has been created for
-the target filesystem, it will remove its home directory.
+Nice!
 
-Therefore, either the package should be patched not to install things
-in such an odd location, or the removal should be made a bit more
-specific. Remember to also test the case where Buildroot is built
-out-of-tree using O=, since those files will then most likely not be
-installed in $(TARGET_DIR)/$(HOME)/$(TOPDIR)/output.
+This is getting out-of-topic, but personally, I like the wrap or to
+not wrap question to be decided on a per e-mail basis. When I need to
+reply to a patch, I don't want the original e-mail to be wrapped.
+However, when I reply to a normal e-mail that has been sent with
+Outlook or some other crappy mail client that does not wrap at all,
+then I generally like wrapping such e-mails to have a nice formatting
+when replying.
 
 Best regards,
 
