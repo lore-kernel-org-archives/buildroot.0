@@ -1,59 +1,36 @@
-From: Axel Lin <axel.lin@ingics.com>
-Date: Mon, 23 Sep 2013 17:16:50 +0800
-Subject: [Buildroot] [PATCH RESEND] package/Makefile.in: Fix dependency for
- selecting uclinux as TARGET_OS
-Message-ID: <1379927810.16071.2.camel@phoenix>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon, 23 Sep 2013 10:06:41 +0000 (UTC)
+Subject: [Buildroot] [Bug 1153] Buildroot fails to build packages if
+ BR2_GCC_SHARED_LIBGCC=y
+In-Reply-To: <bug-1153-163@https.bugs.busybox.net/>
+References: <bug-1153-163@https.bugs.busybox.net/>
+Message-ID: <20130923100641.6B3409B848@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Current setting only allows blackfin to select uclinux as TARGET_OS.
-However, some noMMU ARM platforms that using FLAT binary format also need to
-select uclinux as TARGET_OS. Fix the dependency.
+https://bugs.busybox.net/show_bug.cgi?id=1153
 
-Signed-off-by: Axel Lin <axel.lin@ingics.com>
----
-This patch was sent on
-http://lists.busybox.net/pipermail/buildroot/2013-September/077488.html
+--- Comment #3 from busybox at crayor.com 2013-09-23 10:07:03 UTC ---
+I just want to let everybody know what might be the source of this problem.
 
-I found that without this patch, I hit below build error:
-__uClibc_main.c:(.text+0x240): undefined reference to `__preinit_array_start'
-__uClibc_main.c:(.text+0x244): undefined reference to `__preinit_array_end'
-__uClibc_main.c:(.text+0x248): undefined reference to `__init_array_start'
-__uClibc_main.c:(.text+0x24c): undefined reference to `__init_array_end'
-/opt/test/buildroot/buildroot/output/host/usr/arm-buildroot-linux-uclibcgnueabi/bin/ld.real: ./libgcc_s.so.1.tmp: hidden symbol `__fini_array_end' isn't defined
-/opt/test/buildroot/buildroot/output/host/usr/arm-buildroot-linux-uclibcgnueabi/bin/ld.real: final link failed: Bad value
-collect2: ld returned 1 exit status
-make[3]: *** [libgcc_s.so] Error 1
-make[3]: Leaving directory `/opt/test/buildroot/buildroot/output/build/host-gcc-final-4.5.4/build/arm-buildroot-linux-uclibcgnueabi/libgcc'
-make[2]: *** [all-target-libgcc] Error 2
-make[2]: Leaving directory `/opt/test/buildroot/buildroot/output/build/host-gcc-final-4.5.4/build'
-make[1]: *** [all] Error 2
-make[1]: Leaving directory `/opt/test/buildroot/buildroot/output/build/host-gcc-final-4.5.4/build'
-make: *** [/opt/test/buildroot/buildroot/output/build/host-gcc-final-4.5.4/.stamp_built] Error 2
+undefined hidden symbol in libgcc.a(xxxxxxx.o)  '__xxxxx()' referenced by DSO.
 
-I remember that someone has reported the same build error on the maillist.
-With this patch, the build result looks OK.
+These kind of errors are usually due to libgcc.a not being linked into a
+library. So when creating a library that process went wrong.
+If you delete the specific library so that Buildroot (usually) re-creates them,
+you have a good chance that the build will succeed.
 
- package/Makefile.in | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+These undefined hidden symbol errors happen to me in Buildroot 2009.11 when I
+build the util-linux package until I delete statging/usr/lib/libncurses.so.5.6
+before building.
 
-diff --git a/package/Makefile.in b/package/Makefile.in
-index 170ad78..1699fdf 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -23,8 +23,8 @@ MAKE:=$(HOSTMAKE) -j$(PARALLEL_JOBS)
- # Compute GNU_TARGET_NAME
- GNU_TARGET_NAME=$(ARCH)-buildroot-$(TARGET_OS)-$(LIBC)$(ABI)
- 
--# Blackfin FLAT needs uclinux
--ifeq ($(BR2_bfin)$(BR2_BINFMT_FLAT),yy)
-+# FLAT binary format needs uclinux
-+ifeq ($(BR2_BINFMT_FLAT),y)
- TARGET_OS=uclinux
- else
- TARGET_OS=linux
+I know this does not exactly track down the problem but might still be an
+important info of what to look for.
+
 -- 
-1.8.1.2
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
