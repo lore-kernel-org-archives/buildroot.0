@@ -1,36 +1,39 @@
-From: Thierry Bultel <thierry.bultel@wanadoo.fr>
-Date: Mon, 23 Sep 2013 09:36:56 +0200
-Subject: [Buildroot] [PATCH] Add lesstif package
-In-Reply-To: <20130922154155.09a7fa50@skate>
-References: <523A9EE2.9050701@wanadoo.fr> <87zjr59rgu.fsf@dell.be.48ers.dk>
- <20130922154155.09a7fa50@skate>
-Message-ID: <523FEF98.10707@wanadoo.fr>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 23 Sep 2013 09:34:54 +0200
+Subject: [Buildroot] [PATCH 1/2] toolchain/wrapper: add option to print
+	one argument per line
+In-Reply-To: <31f4ddb9ea718e4bb9321ffb8bf5d75f5fb02361.1379714259.git.yann.morin.1998@free.fr>
+ (Yann E. MORIN's message of "Sat, 21 Sep 2013 00:00:30 +0200")
+References: <cover.1379714259.git.yann.morin.1998@free.fr>
+ <cover.1379714259.git.yann.morin.1998@free.fr>
+ <31f4ddb9ea718e4bb9321ffb8bf5d75f5fb02361.1379714259.git.yann.morin.1998@free.fr>
+Message-ID: <87mwn49ejl.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le 22/09/2013 15:41, Thomas Petazzoni a ?crit :
-> Peter, Thierry,
->
-> On Sun, 22 Sep 2013 10:43:29 +0200, Peter Korsgaard wrote:
->
->>  Thierry>  	menu "X11R7 Libraries"
->>  Thierry> +		source package/x11r7/lesstif/Config.in
-> I am also unsure it should be under package/x11r7/. What we normally
-> keep under package/x11r7/ is really the X.org stack itself, which comes
-> from the X.org project. 
-I agree with that.
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-Shall I put it in the  "Graphics" menu (inserting it with the
-alphabetical order)
-or in "Graphics  libraries and applications (graphic/text) / graphic
-libraries" ?
+ Yann> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ Yann> In case there are many arguments passed to the tools, the command line
+ Yann> can get very long, and difficult to parse visually.
 
-Thierry
-> As I understand it, Lesstif is more a toolkit
-> such as Gtk/Qt/EFL, so it should probably be packaged directly in
-> package/.
->
-> Thomas
+ Yann> For example, the Linux kernel passes a lot of arguments to gcc (at least
+ Yann> 45, which gives 53 with our hard-coded args). Looking at such a command
+ Yann> line is daunting.
+
+ Yann> So, add the possibility to print each argument on its own line.
+
+ Yann> Also, enclose all args between single quotes, so the command line
+ Yann> can be safely copy-pasted without special chars (spaces, $) being
+ Yann> inrerpreted by the shell.
+
+ Yann> Add blurb about toolchain-wrapper to documentation at the same
+ Yann> time.
+
+Committed with minor code style changes, thanks.
+
+-- 
+Bye, Peter Korsgaard
