@@ -1,39 +1,100 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 23 Sep 2013 09:34:54 +0200
-Subject: [Buildroot] [PATCH 1/2] toolchain/wrapper: add option to print
-	one argument per line
-In-Reply-To: <31f4ddb9ea718e4bb9321ffb8bf5d75f5fb02361.1379714259.git.yann.morin.1998@free.fr>
- (Yann E. MORIN's message of "Sat, 21 Sep 2013 00:00:30 +0200")
-References: <cover.1379714259.git.yann.morin.1998@free.fr>
- <cover.1379714259.git.yann.morin.1998@free.fr>
- <31f4ddb9ea718e4bb9321ffb8bf5d75f5fb02361.1379714259.git.yann.morin.1998@free.fr>
-Message-ID: <87mwn49ejl.fsf@dell.be.48ers.dk>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Mon, 23 Sep 2013 09:41:16 +0200
+Subject: [Buildroot] Dates for the next Buildroot Developers Meeting
+In-Reply-To: <CAG2jQ8im=rfRdMw+ypL4djNuCfyCnYX6eN4P73YDWYjDo7ERdw@mail.gmail.com>
+References: <20130525222335.42f91125@skate> <87bo72qyqi.fsf@dell.be.48ers.dk>
+ <87hagan2al.fsf@dell.be.48ers.dk> <20130704104808.360f3738@skate>
+ <20130704161724.GA5374@free.fr> <20130715212511.GB12096@free.fr>
+ <CAG2jQ8im=rfRdMw+ypL4djNuCfyCnYX6eN4P73YDWYjDo7ERdw@mail.gmail.com>
+Message-ID: <CAHXCMM+t3m=-HUXqxbtTDkPHrPZ=6XB9=qJwoGsCR-+Lu=-vow@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+All,
 
- Yann> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
- Yann> In case there are many arguments passed to the tools, the command line
- Yann> can get very long, and difficult to parse visually.
+2013/8/12 Markos Chandras <markos.chandras@gmail.com>
 
- Yann> For example, the Linux kernel passes a lot of arguments to gcc (at least
- Yann> 45, which gives 53 with our hard-coded args). Looking at such a command
- Yann> line is daunting.
+> On 15 July 2013 22:25, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> > Thomas, Peter, All,
+> >
+> > On 2013-07-04 18:17 +0200, Yann E. MORIN spake thusly:
+> >> On 2013-07-04 10:48 +0200, Thomas Petazzoni spake thusly:
+> >> > On Thu, 04 Jul 2013 10:43:14 +0200, Peter Korsgaard wrote:
+> >> > >  Thomas> The next Embedded Linux Conference Europe will take place
+> on
+> >> > >  Thomas> Thursday 24th and Friday 25th of October, in Edinburgh,
+> >> > >  Thomas> UK. Since LinuxCon Europe will take place at the beginning
+> of
+> >> > >  Thomas> the week (from Monday to Wednesday), I believe the best
+> date
+> >> > >  Thomas> for our meeting will be on Saturday 26th and Sunday 27th.
+> >> > >
+> >> > >  Peter> I'm planning on attending the gstreamer conference
+> (22-23th), so the
+> >> > >  Peter> weekend after would also fit me best.
+> >> > >
+> >> > >  Peter> If anyone disagrees, please let us know because I would
+> like to book
+> >> > >  Peter> flight/hotel soon.
+> >> > >
+> >> > > I've now booked conference/hotel/flights (21-27th). Anybody else?
+> >
+> > Ok, everything is under control!
+> >
+> > LCE: registered
+> > ELCE: registered
+> > Hotel: booked
+> > Flight: processing
+> >
+> > I'll be in Edimburgh starting the 20st late in the afternoon.
+> > I'll be leaving on the 28th in the morning.
+> >
+> > So, I'll be attending the DevDay Saturday & Sunday.
+> >
+> > /me is looking forward to being there! :-)
+> >
+> > Regards,
+> > Yann E. MORIN.
+> >
+> > --
+> >
+> .-----------------.--------------------.------------------.--------------------.
+> > |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics'
+> conspiracy: |
+> > | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___
+>         |
+> > | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There
+> is no  |
+> > | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v
+> conspiracy.  |
+> >
+> '------------------------------^-------^------------------^--------------------'
+> > _______________________________________________
+> > buildroot mailing list
+> > buildroot at busybox.net
+> > http://lists.busybox.net/mailman/listinfo/buildroot
+>
+> I will also attend the Buildroot DevDays as well :)
+>
+> --
+> Regards,
+> Markos Chandras
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+>
 
- Yann> So, add the possibility to print each argument on its own line.
+I'll be there too.
 
- Yann> Also, enclose all args between single quotes, so the command line
- Yann> can be safely copy-pasted without special chars (spaces, $) being
- Yann> inrerpreted by the shell.
 
- Yann> Add blurb about toolchain-wrapper to documentation at the same
- Yann> time.
-
-Committed with minor code style changes, thanks.
+Regards,
 
 -- 
-Bye, Peter Korsgaard
+Samuel
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130923/1f5450c4/attachment-0001.html>
