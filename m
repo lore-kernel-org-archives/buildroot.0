@@ -1,56 +1,66 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 24 Sep 2013 07:47:04 +0200
-Subject: [Buildroot] [PATCHv2 1/4] core: introduce the BR2_EXTERNAL
- variable
-In-Reply-To: <OFCF97B6AC.08C8B010-ON86257BEF.007B61FF-86257BEF.007B99C0@rockwellcollins.com>
-References: <1379185433-8770-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1379185433-8770-2-git-send-email-thomas.petazzoni@free-electrons.com>
- <OF92E620E9.2D6A14D7-ON86257BEF.0070A92F-86257BEF.007178BD@rockwellcollins.com>
- <CAHXCMM+GdD3A1RGMawhct3QZViQ+qnSuh66e4p1txZSJ5J8Zvw@mail.gmail.com>
- <OFCF97B6AC.08C8B010-ON86257BEF.007B61FF-86257BEF.007B99C0@rockwellcollins.com>
-Message-ID: <20130924074704.12a4ef4c@skate>
+Date: Tue, 24 Sep 2013 08:30:11 +0200 (CEST)
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2013-09-23
+Message-ID: <20130924063011.38C4F52C1A0@lolut.humanoidz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Ryan Barnett,
+Build statistics for 2013-09-23
+===============================
 
-It's a problem I had already fixed in earlier versions, where I was
-passing the proper BR2_EXTERNAL value, but Arnout disagreed in that
-external packages should not be listed in the manual (which is
-certainly correct), so I removed the variable. But indeed, there needs
-to be a value, or the Kconfig logic is broken. The solution (below)
-from Samuel is correct.
+        success : 30 
+       failures : 22 
+       timeouts : 0  
+          TOTAL : 52 
 
-On Mon, 23 Sep 2013 17:30:02 -0500, Ryan Barnett wrote:
+Classification of failures by reason
+====================================
 
-> Could you send this in an email? I can't get to any pastebin type 
-> website from behind my work's firewall.
+                  civetweb-1.3 | 5 
+           python-pyzmq-13.1.0 | 3 
+                netatalk-3.0.5 | 2 
+                libiscsi-1.6.0 | 1 
+    trace-cmd-trace-cmd-v2.2.1 | 1 
+                  prboom-2.5.0 | 1 
+media-ctl-ac40b79f002a2315f... | 1 
+                      icu-51.2 | 1 
+make: *** [/home/test/test/... | 1 
+                   attr-2.4.47 | 1 
+                       kmod-15 | 1 
+make: *** [/home/test/test/... | 1 
+make: *** [/home/test/test/... | 1 
+make: *** [/home/test/test/... | 1 
+      host-gcc-initial-4.8-arc | 1 
 
-commit f160920f50898ee7fd8d96a4613af2e7a893db13
-Author: Samuel Martin <s.martin49@gmail.com>
-Date:   Tue Sep 24 00:07:09 2013 +0200
+Detail of failures
+===================
 
-    manual: fix BR2_EXTERNAL support when building the manual
-    
-    Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+       arm |                    attr-2.4.47 | NOK | http://autobuild.buildroot.net/results/26477bd456671be03d9b49d08c7fd658be431380/
+       arm |                   civetweb-1.3 | NOK | http://autobuild.buildroot.net/results/9cddc75cc540c5b7da0f862be6be1ec3c563acc3/
+       arm |                   civetweb-1.3 | NOK | http://autobuild.buildroot.net/results/35a176accf69584c5583ca3c6514c33221f1f8f9/
+       arm |                   civetweb-1.3 | NOK | http://autobuild.buildroot.net/results/8ba8b5b700d0d294f2f57119f9e84cd46f72a755/
+       arm |                   civetweb-1.3 | NOK | http://autobuild.buildroot.net/results/f57fdb0b39f1dd7a33a3a2cd3cd95b5dc70a96df/
+       arm |                   civetweb-1.3 | NOK | http://autobuild.buildroot.net/results/9849108e425ab93f7e20aae5f912a359b1a437ca/
+       arc |       host-gcc-initial-4.8-arc | NOK | http://autobuild.buildroot.net/results/d191ada8bb8bc8b3fc62f7358d3e95655e62e457/
+      bfin |                       icu-51.2 | NOK | http://autobuild.buildroot.net/results/115c5f8c55788131a47cfe4cd0c60e47c34a9f48/
+    xtensa |                        kmod-15 | NOK | http://autobuild.buildroot.net/results/e55e8c42311fff0b0851f018332958c8636bd3cf/
+  mips64el |                 libiscsi-1.6.0 | NOK | http://autobuild.buildroot.net/results/724e9f8edc73d3e42572efb1542c8ab0a8cc6c4d/
+    x86_64 | make: *** [/home/test/test/... | NOK | http://autobuild.buildroot.net/results/166f2e3130c1c479f8f2a6fc7c6a21d2dc430dae/
+    mipsel | make: *** [/home/test/test/... | NOK | http://autobuild.buildroot.net/results/85758afbd4072014d7df0bf1517d94e6f93a1748/
+  mips64el | make: *** [/home/test/test/... | NOK | http://autobuild.buildroot.net/results/4b97a79235007a4a812e023544705c3040c3b045/
+   powerpc | make: *** [/home/test/test/... | NOK | http://autobuild.buildroot.net/results/b0b8e2bef45a24afcc9816eb2da92746fc3e1e90/
+   powerpc | media-ctl-ac40b79f002a2315f... | NOK | http://autobuild.buildroot.net/results/34fa99e16d1ae9c0ec944b532d5f7e13440052ad/
+      i686 |                 netatalk-3.0.5 | NOK | http://autobuild.buildroot.net/results/5f8495bf563d01489bf060870ffa917f3125b352/
+      i686 |                 netatalk-3.0.5 | NOK | http://autobuild.buildroot.net/results/372545d9d449748ae64f915f578febc731826e7c/
+      sh4a |                   prboom-2.5.0 | NOK | http://autobuild.buildroot.net/results/e58aaffa51a8509542f4b61984ff98f9e4d49f9f/
+      i686 |            python-pyzmq-13.1.0 | NOK | http://autobuild.buildroot.net/results/e8702e999bf77d2fa391dd23f74dbb17e103fe9e/
+      i686 |            python-pyzmq-13.1.0 | NOK | http://autobuild.buildroot.net/results/a70e476a7d618eb8b8fa50b059add6bde58d3afa/
+       arm |            python-pyzmq-13.1.0 | NOK | http://autobuild.buildroot.net/results/a23e1a50846ba800bb3f89fa2bae0257b9da4a2c/
+       arm |     trace-cmd-trace-cmd-v2.2.1 | NOK | http://autobuild.buildroot.net/results/5058f158f49f6f2e9bd76505f3e99f2a5e2aea6b/
 
-diff --git a/docs/manual/manual.mk b/docs/manual/manual.mk
-index 157d13c..8cd732a 100644
---- a/docs/manual/manual.mk
-+++ b/docs/manual/manual.mk
-@@ -1,6 +1,7 @@
- manual-update-lists: manual-check-dependencies-lists
- 	$(Q)$(call MESSAGE,"Updating the manual lists...")
- 	$(Q)BR2_DEFCONFIG="" TOPDIR=$(TOPDIR) O=$(O)/docs/manual/.build \
-+		BR2_EXTERNAL=$(TOPDIR)/support/dummy-external \
- 		$(TOPDIR)/support/scripts/gen-manual-lists.py
- 
- manual-check-dependencies:
 
 -- 
-Thomas Petazzoni, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+http://autobuild.buildroot.net
