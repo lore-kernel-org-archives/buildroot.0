@@ -1,71 +1,72 @@
-From: Ryan Barnett <rjbarnet@rockwellcollins.com>
-Date: Tue, 24 Sep 2013 09:01:29 -0500
-Subject: [Buildroot] [PATCH] manual: fix manual generation with
-	BR2_EXTERNAL support
-In-Reply-To: <1380016412-25085-1-git-send-email-s.martin49@gmail.com>
-References: <1380016412-25085-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <OFC6144035.2D5C1D1F-ON86257BF0.004C1516-86257BF0.004D0A5A@rockwellcollins.com>
+From: Mischa Jonker <Mischa.Jonker@synopsys.com>
+Date: Tue, 24 Sep 2013 13:56:44 +0000
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+	2013-09-19
+In-Reply-To: <87hadebvkm.fsf@dell.be.48ers.dk>
+References: <20130920063008.7C55952C101@lolut.humanoidz.org>
+ <20130921054145.52b70d5e@skate> <87hadebvkm.fsf@dell.be.48ers.dk>
+Message-ID: <E6BF041E97966E4DB955F0DF883AD2D685F0BE15@de02wembxa.internal.synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Samuel/Martin,
+Hi all,
 
-I can confirm that this patch fixes the issues with manual generation.
+First of all sorry for responding late. I have been traveling the past two weeks with limited access to e-mail/internet.
 
-Samuel/Thomas,
+>  Thomas> Hum, apparently on ARC, building libgcc requires having the C
+> library  Thomas> headers. So, due to the change to build gcc in two
+> passes instead of  Thomas> three, we're building libgcc in the first
+> pass, before the C library is  Thomas> built, causing (I believe) the
+> above failure. Mischa, if you have any  Thomas> insights about this, I'm
+> interested :)
 
-I can confirm the manual now generates correctly for buildroot
-to when the BR2_EXTERNAL v2 patch set is applied.
+Yes, apparently these headers are used inside the 'gmon' part of libgcc. 
 
-Samuel Martin <s.martin49@gmail.com> wrote on 09/24/2013 04:53:32 AM:
+> 
+>  Thomas> Considering this problem, and the other SSP problems, I'm
+> starting to  Thomas> wonder if my patch that changes the toolchain
+> build mechanism to use  Thomas> two passes instead of three shouldn't
+> be reverted for now, until I find  Thomas> the time to investigate all the problems that it is causing.
+> 
+> I'm thinking the same. Will you have time to work on it in the next
+> week or so? Otherwise I think we should revert for now.
+
+I like the speed improvement:-) I can provide a patch that adds a 'uclibc-headers' target inside the uclibc package, and let gcc-initial depend on both uclibc-headers and linux-headers for ARC. That seems to work OK for me.
+
+Something like this:
+
+--- a/package/gcc/gcc-initial/gcc-initial.mk
++++ b/package/gcc/gcc-initial/gcc-initial.mk
+@@ -8,7 +8,7 @@ GCC_INITIAL_VERSION = $(GCC_VERSION)
+ GCC_INITIAL_SITE    = $(GCC_SITE)
+ GCC_INITIAL_SOURCE  = $(GCC_SOURCE)
  
-> Reported-by: Ryan Barnett <rjbarnet@rockwellcollins.com>
-> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Tested-by: Ryan Barnett <rjbarnet@rockwellcollins.com>
-> ---
->  docs/manual/manual.mk         | 1 +
->  support/scripts/kconfiglib.py | 2 +-
->  2 files changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/docs/manual/manual.mk b/docs/manual/manual.mk
-> index d092d3f..99f2b84 100644
-> --- a/docs/manual/manual.mk
-> +++ b/docs/manual/manual.mk
-> @@ -1,6 +1,7 @@
->  manual-update-lists:
->     $(Q)$(call MESSAGE,"Updating the manual lists...")
->     $(Q)BR2_DEFCONFIG="" TOPDIR=$(TOPDIR) O=$(O)/docs/manual/.build \
-> +      BR2_EXTERNAL=$(TOPDIR)/support/dummy-external \
->        $(TOPDIR)/support/scripts/gen-manual-lists.py
-> 
-> 
-> 
-################################################################################
-> diff --git a/support/scripts/kconfiglib.py 
-b/support/scripts/kconfiglib.py
-> index 0704cc0..e40947c 100644
-> --- a/support/scripts/kconfiglib.py
-> +++ b/support/scripts/kconfiglib.py
-> @@ -2074,7 +2074,7 @@ set_re   = re.compile(r"CONFIG_(\w+)=(.*)")
->  unset_re = re.compile(r"# CONFIG_(\w+) is not set")
-> 
->  # Regular expression for finding $-references to symbols in strings
-> -sym_ref_re = re.compile(r"\$[A-Za-z_]+")
-> +sym_ref_re = re.compile(r"\$[A-Za-z_][0-9A-Za-z_]*")
-> 
->  # Integers representing symbol types
->  UNKNOWN, BOOL, TRISTATE, STRING, HEX, INT = range(0, 6)
-> -- 
-> 1.8.4
-> 
+-HOST_GCC_INITIAL_DEPENDENCIES = $(HOST_GCC_COMMON_DEPENDENCIES)
++HOST_GCC_INITIAL_DEPENDENCIES = $(HOST_GCC_COMMON_DEPENDENCIES) uclibc-headers linux-headers
+ 
+ HOST_GCC_INITIAL_EXTRACT_CMDS = $(HOST_GCC_EXTRACT_CMDS)
+ 
+diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
+index 3993d9b..30a5461 100644
+--- a/package/uclibc/uclibc.mk
++++ b/package/uclibc/uclibc.mk
+@@ -547,6 +547,14 @@ define UCLIBC_INSTALL_STAGING_CMDS
+        $(UCLIBC_INSTALL_UTILS_STAGING)
+ endef
+ 
++uclibc-headers: dirs uclibc-patch
++       $(MAKE1) -C $(UCLIBC_DIR) \
++               $(UCLIBC_MAKE_FLAGS) \
++               PREFIX=$(STAGING_DIR) \
++               DEVEL_PREFIX=/usr/ \
++               RUNTIME_PREFIX=$(STAGING_DIR) \
++               install_headers
++
+ uclibc-menuconfig: dirs uclibc-patch
+        $(MAKE1) -C $(UCLIBC_DIR) \
+                $(UCLIBC_MAKE_FLAGS) \
 
-Thanks,
--Ryan
-
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130924/0f6dc502/attachment-0001.html>
+Mischa
