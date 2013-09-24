@@ -1,32 +1,25 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 24 Sep 2013 17:20:41 +0200
-Subject: [Buildroot] [PATCH] i2c-tools: Add i2c-dev.h to staging
- directory for userspace i2c drivers.
-In-Reply-To: <1380017924-20072-1-git-send-email-jouko.nikula@espotel.com>
-References: <1380017924-20072-1-git-send-email-jouko.nikula@espotel.com>
-Message-ID: <20130924172041.57ec6b88@skate>
+From: Thierry Bultel <thierry.bultel@wanadoo.fr>
+Date: Tue, 24 Sep 2013 17:45:51 +0200
+Subject: [Buildroot] [PATCH v3] Added lesstif support
+Message-ID: <1380037552-26919-1-git-send-email-thierry.bultel@wanadoo.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Jouko Nikula,
+This patch adds support for lesstif.
+This is a quite old thing, latest version is from 2009
+but it is useful to applications based on xmotif.
+It has been tested with buildroot on ARM/iMX6.
 
-On Tue, 24 Sep 2013 13:18:43 +0300, Jouko Nikula wrote:
-
-> +define I2C_TOOLS_INSTALL_STAGING_CMDS
-> +	$(INSTALL) -D -m644 $(@D)/include/linux/i2c-dev.h $(STAGING_DIR)/usr/include/linux/
-> +endef
-
-This header is already part of the kernel headers, so it should already
-be part of the toolchain. Do you have a specific case where this header
-is missing?
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Signed-off-by Thierry Bultel <thierry.bultel@wanadoo.fr>
+---
+Changes v2 -> v3
+  - Text alignment changes merged into a single patch
+Changes v1 -> v2
+  - Fixed the way the aclocal file is handled: The lesstif makefile is patched in order not to install it.
+  - Changed the location in xconfig, lesstif is now under 'Libraries' -> 'Graphics' (suggested by Thomas).
+  - Fixes the indentation
+  - Added dependency to freetype
+  - Match dependencies in Config.in and lesstif.mk (Suggested by Peter) 
