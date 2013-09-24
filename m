@@ -1,10 +1,12 @@
 From: Clayton Shotwell <clshotwe@rockwellcollins.com>
-Date: Tue, 24 Sep 2013 12:47:59 -0500
-Subject: [Buildroot] [PATCH v2 13/17] audit: new package
-In-Reply-To: <20130918070020.22ff8ca9@skate>
-References: <1378936777-28308-1-git-send-email-clshotwe@rockwellcollins.com>	<1378936777-28308-14-git-send-email-clshotwe@rockwellcollins.com>
- <20130918070020.22ff8ca9@skate>
-Message-ID: <OF1C36952D.12623546-ON86257BF0.0061A062-86257BF0.0061C58C@rockwellcollins.com>
+Date: Tue, 24 Sep 2013 13:07:29 -0500
+Subject: [Buildroot] [PATCH v2 11/17] refpolicy: new package
+In-Reply-To: <20130924171826.785ac962@skate>
+References: <1378936777-28308-1-git-send-email-clshotwe@rockwellcollins.com>	<1378936777-28308-12-git-send-email-clshotwe@rockwellcollins.com>
+ <20130918071804.2548927a@skate>	<OF0AE894A4.B1D82316-ON86257BEF.005CA11D-86257BEF.00782938@rockwellcollins.com>
+ <20130924083028.7949259b@skate>	<OF8AC563B8.B3F98355-ON86257BF0.00510B0E-86257BF0.00513A09@rockwellcollins.com>
+ <20130924171826.785ac962@skate>
+Message-ID: <OF743D993F.78D7C469-ON86257BF0.0061D082-86257BF0.00638E9B@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,42 +15,32 @@ To: buildroot@busybox.net
 
 Thomas,
 
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote on 09/18/2013 
-12:00:20 AM:
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote on 09/24/2013 
+10:18:26 AM:
 
-> In this patch for 'audit', you are replacing a nice C program by a
-> Python script, with the argument that it helps cross-compilation. I
-> must say I quite disagree with that: building a small C 
-> program for the
-> host has always been easier than programs that require executing a
-> Python script at build time.
-> 
-> Why not keeping the existing C program, and just adjust 
-> the way it is
-> built to get it built by the native compiler?
-> 
-> There is a fairly standardized way of doing that with the autotools,
-> that consists in using the CC_FOR_BUILD variable instead 
-> of CC to build
-> this tool. In native compilation, CC_FOR_BUILD == CC == 
-> gcc, while in
-> cross-compilation, CC_FOR_BUILD == gcc and CC == <arch-tuple>-gcc.
-> 
-> See http://www.sourceware.org/autobook/autobook/autobook_270.html.
-> 
-> There is apparently even an existing m4 macro to define 
-> CC_FOR_BUILD:
-> http://ac-archive.sourceforge.net/ac-archive/
-> ac_prog_cc_for_build.html.
-> 
-> Or maybe the Python script approach is something that has 
-> been agreed
-> upon with the audit/SELinux community?
+> Ok. The problem is that the "Buildroot" distribution is 
+> not something
+> that exists really. Depending on the Buildroot configuration, the
+> contents of the filesystem and the base system can be verydifferent.
+> It could be Busybox based, or Systemd+coreutils based, or something
+> else. How does it work in real distributions? Is each package coming
+> with the SELinux rules for itself? Or should be in the context of
+> Buildroot just provide the tools and leave it entirely to 
+> the user to
+> write the proper SELinux policy?
 
-I have been working with the audit community to get this patch accepted. 
-There is an issue with the C program not pulling in the correct headers 
-when you build it for this host.  The python script is able to get around 
-this issue. 
+Most distributions provide the base refpolicy that is customized to work 
+with the distribution.  Fedora, for instance, applies a 166450 line patch 
+file to the refpolicy to make it work with all of the Fedora packages. The 
+refpolicy always seem to be constantly evolving package in these 
+distributions that always has bugs against it.  I would like to see 
+Buildroot just supply the ability to build a SELinux policy and maybe 
+support for a select few packages.  It will be a huge undertaking to make 
+sure all of the policy is able to work with all of the package in 
+Buildroot. During my development, I will work to get a base, minimal 
+configuration working in enforcing mode right out of the box.  I think 
+this would be a reasonable place to start that would hopefully allow other 
+people to expand the functionality.
 
 Thanks,
 Clayton
@@ -59,6 +51,7 @@ clshotwe at rockwellcollins.com
 www.rockwellcollins.com 
 
 
+
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130924/de93ba9d/attachment.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130924/4a5c67d9/attachment.html>
