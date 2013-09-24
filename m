@@ -1,11 +1,11 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 24 Sep 2013 18:55:15 +0300
-Subject: [Buildroot] [PATCH] i2c-tools: Add i2c-dev.h to staging
- directory for userspace i2c drivers.
-In-Reply-To: <20130924172041.57ec6b88@skate>
-References: <1380017924-20072-1-git-send-email-jouko.nikula@espotel.com>
- <20130924172041.57ec6b88@skate>
-Message-ID: <20130924155515.GD4838@tarshish>
+From: Thierry Bultel <thierry.bultel@wanadoo.fr>
+Date: Tue, 24 Sep 2013 18:41:21 +0200
+Subject: [Buildroot] [PATCH] Add pyside + shiboken packages
+In-Reply-To: <20130921093843.7fe3ea0e@skate>
+References: <523ACBFA.2070401@wanadoo.fr> <20130919173426.47c2bba8@skate>
+ <523C5EFC.5040204@wanadoo.fr> <20130920175457.65a4d63c@skate>
+ <523D3196.9090702@wanadoo.fr> <20130921093843.7fe3ea0e@skate>
+Message-ID: <5241C0B1.7060408@wanadoo.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,28 +14,35 @@ To: buildroot@busybox.net
 
 Hi Thomas,
 
-On Tue, Sep 24, 2013 at 05:20:41PM +0200, Thomas Petazzoni wrote:
-> On Tue, 24 Sep 2013 13:18:43 +0300, Jouko Nikula wrote:
-> > +define I2C_TOOLS_INSTALL_STAGING_CMDS
-> > +	$(INSTALL) -D -m644 $(@D)/include/linux/i2c-dev.h $(STAGING_DIR)/usr/include/linux/
-> > +endef
-> 
-> This header is already part of the kernel headers, so it should already
-> be part of the toolchain. Do you have a specific case where this header
-> is missing?
+>
+> If they are CMake based packages, then they should use the
+> cmake-package infrastructure. Of course, if they have some tricky
+> aspects, we might need to adapt/improve the cmake-package
+> infrastructure if needed.
+>
 
-This is a different header than the kernel one, although confusingly named 
-identically. On my Debian system the libi2c-dev package provides i2c-dev.h, 
-and diverts the kernel header to i2c-dev.h.kernel.
+There are (at least) 2 tricky aspects indeed.
 
-$ dpkg -S /usr/include/linux/i2c-dev.h
-diversion by libi2c-dev from: /usr/include/linux/i2c-dev.h
-diversion by libi2c-dev to: /usr/include/linux/i2c-dev.h.kernel
-linux-libc-dev:amd64, libi2c-dev: /usr/include/linux/i2c-dev.h
+1) Shiboken does not support to be built in place. A build directory is 
+mandatory. (Else it fails, because it attempts to link the "shiboken" 
+binary at a location where the is a directory of the same name)
+FYI, see: http://qt-project.org/wiki/Building_PySide_on_Linux
 
-baruch
+For now I cannot see such an option in the Cmake infrastructure in 
+buildroot.
+Would that be a potential improvement ?
 
--- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+2) When compiling the host version, it fails with that error:
+
+  from 
+/nous/BASYSTEMES/buildroot/output/build/host-shiboken-1.2.1/ApiExtractor/apiextractor.cpp:24:
+/nous/BASYSTEMES/buildroot/output/host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/include/gnu/stubs.h:7:29: 
+error: gnu/stubs-soft.h: no such file or directory
+
+The issue is that looking at the headers in the sysroot cannot work,
+I am using BR2_ARM_FPU_NEON for my target, I suspect that I do not have 
+got the soft stubs due to that.
+Anyway, shouldn't the host build rather take host headers instead ?
+
+Best regards
+Thierry
