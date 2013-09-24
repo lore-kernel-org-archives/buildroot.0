@@ -1,36 +1,38 @@
-From: Woody Wu <narkewoody@gmail.com>
-Date: Tue, 24 Sep 2013 20:48:41 +0800
-Subject: [Buildroot] Am I using hardware floating? (CodeBench)
-In-Reply-To: <20130923092811.0ac82091@skate>
-References: <20130921152445.GA9629@zuhnb712> <20130922103729.10b54416@skate>
- <20130922151840.GA2804@zuhnb712> <20130923092811.0ac82091@skate>
-Message-ID: <CAAsE_ueLtAQAKPsEqdvfWYrkPjYCFppq+H_n0b5=pN6mcafmJw@mail.gmail.com>
+From: Michael Rommel <rommel@layer-7.net>
+Date: Tue, 24 Sep 2013 15:06:03 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+	2013-09-23
+In-Reply-To: <20130924063011.38C4F52C1A0@lolut.humanoidz.org>
+References: <20130924063011.38C4F52C1A0@lolut.humanoidz.org>
+Message-ID: <7baa74c2417bed2bb6d1b1ba265016e9@imap.tschaeche.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-? 2013-9-23 PM3:28?"Thomas Petazzoni" <thomas.petazzoni@free-electrons.com
->???
->
-> Dear Woody Wu,
->
-> On Sun, 22 Sep 2013 23:18:40 +0800, Woody Wu wrote:
->
-> > Okay, understand.  For software floating, I know there are two ways,
-> > one is to generating an interrupt every time a floating instruction is
-> > executed, which is very slow. And, another way is let the compiler to
-> > convert all floating calculation to a function call which implemented
-> > in a floating library, this method is a little faster than the
-> > former. My compiler is CodeBench from BR, does it have this feature
-> > and has it already enabled?  Thank you very much.
->
-> Yes, the Sourcery CodeBench toolchain for ARM uses soft-float for its
-> ARMv5 multilib variant, which gets used if you select the arm926
-> processor type in Buildroot.
->
-Many thanks Thomas!
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130924/e8be2e0d/attachment.html>
+
+Hi Thomas,
+
+On Tue, 24 Sep 2013 08:30:11 +0200 (CEST), Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Build statistics for 2013-09-23
+>       i686 |            python-pyzmq-13.1.0 | NOK |
+> http://autobuild.buildroot.net/results/e8702e999bf77d2fa391dd23f74dbb17e103fe9e/
+>       i686 |            python-pyzmq-13.1.0 | NOK |
+> http://autobuild.buildroot.net/results/a70e476a7d618eb8b8fa50b059add6bde58d3afa/
+>        arm |            python-pyzmq-13.1.0 | NOK |
+> http://autobuild.buildroot.net/results/a23e1a50846ba800bb3f89fa2bae0257b9da4a2c/
+
+this is still due to the parsing of the https certificate. Although
+Peter changed the URL to an http instead of https URL, it still doesn't
+work, since the website redirects again to the https version.
+Maybe a newer version of wget or curl may get around this issue, at
+least on Ubuntu 12.04LTS I did not experience the problem.
+
+Best wishes,
+
+  Michael.
+
+-- 
+Michael Rommel, Erlangen, Germany
