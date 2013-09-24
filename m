@@ -1,66 +1,112 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 24 Sep 2013 08:30:11 +0200 (CEST)
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2013-09-23
-Message-ID: <20130924063011.38C4F52C1A0@lolut.humanoidz.org>
+Date: Tue, 24 Sep 2013 08:30:28 +0200
+Subject: [Buildroot] [PATCH v2 11/17] refpolicy: new package
+In-Reply-To: <OF0AE894A4.B1D82316-ON86257BEF.005CA11D-86257BEF.00782938@rockwellcollins.com>
+References: <1378936777-28308-1-git-send-email-clshotwe@rockwellcollins.com>
+ <1378936777-28308-12-git-send-email-clshotwe@rockwellcollins.com>
+ <20130918071804.2548927a@skate>
+ <OF0AE894A4.B1D82316-ON86257BEF.005CA11D-86257BEF.00782938@rockwellcollins.com>
+Message-ID: <20130924083028.7949259b@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Build statistics for 2013-09-23
-===============================
+Dear Clayton Shotwell,
 
-        success : 30 
-       failures : 22 
-       timeouts : 0  
-          TOTAL : 52 
+On Mon, 23 Sep 2013 16:52:32 -0500, Clayton Shotwell wrote:
 
-Classification of failures by reason
-====================================
+> The different distributions add a few changes that are specific to
+> the distribution. I looked through the distributions and none of them
+> really fit with the way buildroot works so I am going to remove this
+> option from the config.
 
-                  civetweb-1.3 | 5 
-           python-pyzmq-13.1.0 | 3 
-                netatalk-3.0.5 | 2 
-                libiscsi-1.6.0 | 1 
-    trace-cmd-trace-cmd-v2.2.1 | 1 
-                  prboom-2.5.0 | 1 
-media-ctl-ac40b79f002a2315f... | 1 
-                      icu-51.2 | 1 
-make: *** [/home/test/test/... | 1 
-                   attr-2.4.47 | 1 
-                       kmod-15 | 1 
-make: *** [/home/test/test/... | 1 
-make: *** [/home/test/test/... | 1 
-make: *** [/home/test/test/... | 1 
-      host-gcc-initial-4.8-arc | 1 
-
-Detail of failures
-===================
-
-       arm |                    attr-2.4.47 | NOK | http://autobuild.buildroot.net/results/26477bd456671be03d9b49d08c7fd658be431380/
-       arm |                   civetweb-1.3 | NOK | http://autobuild.buildroot.net/results/9cddc75cc540c5b7da0f862be6be1ec3c563acc3/
-       arm |                   civetweb-1.3 | NOK | http://autobuild.buildroot.net/results/35a176accf69584c5583ca3c6514c33221f1f8f9/
-       arm |                   civetweb-1.3 | NOK | http://autobuild.buildroot.net/results/8ba8b5b700d0d294f2f57119f9e84cd46f72a755/
-       arm |                   civetweb-1.3 | NOK | http://autobuild.buildroot.net/results/f57fdb0b39f1dd7a33a3a2cd3cd95b5dc70a96df/
-       arm |                   civetweb-1.3 | NOK | http://autobuild.buildroot.net/results/9849108e425ab93f7e20aae5f912a359b1a437ca/
-       arc |       host-gcc-initial-4.8-arc | NOK | http://autobuild.buildroot.net/results/d191ada8bb8bc8b3fc62f7358d3e95655e62e457/
-      bfin |                       icu-51.2 | NOK | http://autobuild.buildroot.net/results/115c5f8c55788131a47cfe4cd0c60e47c34a9f48/
-    xtensa |                        kmod-15 | NOK | http://autobuild.buildroot.net/results/e55e8c42311fff0b0851f018332958c8636bd3cf/
-  mips64el |                 libiscsi-1.6.0 | NOK | http://autobuild.buildroot.net/results/724e9f8edc73d3e42572efb1542c8ab0a8cc6c4d/
-    x86_64 | make: *** [/home/test/test/... | NOK | http://autobuild.buildroot.net/results/166f2e3130c1c479f8f2a6fc7c6a21d2dc430dae/
-    mipsel | make: *** [/home/test/test/... | NOK | http://autobuild.buildroot.net/results/85758afbd4072014d7df0bf1517d94e6f93a1748/
-  mips64el | make: *** [/home/test/test/... | NOK | http://autobuild.buildroot.net/results/4b97a79235007a4a812e023544705c3040c3b045/
-   powerpc | make: *** [/home/test/test/... | NOK | http://autobuild.buildroot.net/results/b0b8e2bef45a24afcc9816eb2da92746fc3e1e90/
-   powerpc | media-ctl-ac40b79f002a2315f... | NOK | http://autobuild.buildroot.net/results/34fa99e16d1ae9c0ec944b532d5f7e13440052ad/
-      i686 |                 netatalk-3.0.5 | NOK | http://autobuild.buildroot.net/results/5f8495bf563d01489bf060870ffa917f3125b352/
-      i686 |                 netatalk-3.0.5 | NOK | http://autobuild.buildroot.net/results/372545d9d449748ae64f915f578febc731826e7c/
-      sh4a |                   prboom-2.5.0 | NOK | http://autobuild.buildroot.net/results/e58aaffa51a8509542f4b61984ff98f9e4d49f9f/
-      i686 |            python-pyzmq-13.1.0 | NOK | http://autobuild.buildroot.net/results/e8702e999bf77d2fa391dd23f74dbb17e103fe9e/
-      i686 |            python-pyzmq-13.1.0 | NOK | http://autobuild.buildroot.net/results/a70e476a7d618eb8b8fa50b059add6bde58d3afa/
-       arm |            python-pyzmq-13.1.0 | NOK | http://autobuild.buildroot.net/results/a23e1a50846ba800bb3f89fa2bae0257b9da4a2c/
-       arm |     trace-cmd-trace-cmd-v2.2.1 | NOK | http://autobuild.buildroot.net/results/5058f158f49f6f2e9bd76505f3e99f2a5e2aea6b/
+Ok.
 
 
+> > Do we have a chance of getting this patch merged upstream? We don't
+> > like to carry feature patches in Buildroot, so if a feature doesn't
+> > exist upstream, or is so broken upstream and never going 
+> > to be fixed,
+> > then we prefer to not support it at all.
+> > 
+> > If fixing this upstream is an on-going effort, then no 
+> > problem to carry
+> > the patch in Buildroot.
+> 
+> There has been work on the upstream in relation to these fixes. I
+> have pulled down the latest upstream software and it builds without
+> any problems. This patch will be able to be removed when the next
+> version is released.
+
+Ok, perfect.
+
+> There are many changes that need to be made for
+> things to work with buildroot that I have not made yet. I don't have
+> the resources to customize the refpolicy to work completely, as is,
+> with buildroot. Currently, a lot of the paths listed in the policy do
+> not match the way buildroot works. This is especially true with the
+> init scripts. Would it be best to make a bunch of modifications to
+> the refpolicy to make it work for buildroot? I'm not sure the best
+> way to proceed with this.
+
+I believe we can merge the refpolicy in its current state (i.e not
+fully perfect for Buildroot usage), with a clear comment in the
+Config.in that says so. And then you can continue the development and
+add more fixes to the refpolicy package as you progress towards making
+it fully usable in a Buildroot environment.
+
+The thing I'm more worried about is that if we need Buildroot-specific
+changes, will we have to keep them as patches within Buildroot forever?
+
+> > Do we really need all those dependencies? I've tried to 
+> > draw a diagram
+> > of all the host and target dependencies between all these SELinux
+> > packages, but I must admit I get a bit lost. If you could give some
+> > general comments on why the various target/host variants of each
+> > package are needed, that'd be really great.
+> 
+> I will create a diagram and submit it with the documentation that
+> needs to be created.  Hopefully that will be done by the end of the
+> week but I am pretty busy with several things right now. 
+
+No problem. Note that I had a look at the SELinux handbook (but it's
+*very* long), and especially the diagram that they have. It was
+certainly helpful, but it does not clarify an aspect that is essential
+in a Buildroot context: what component is used on the target, what
+component is used only on the build machine.
+
+
+> > > +   # Currently, semodule is unabled to compile the 
+> > policy during the build so 
+> > > +   # the modules must be compiled into the policy 
+> > during the first boot.  This 
+> > > +   # is done by the S12selinux startup script.
+> > > +   #( export PATH=$(TARGET_PATH); \
+> > > +   #   $(HOST_DIR)/usr/sbin/semodule -v -n -p $
+> > (TARGET_DIR) -s $(BR2_PACKAGE_REFPOLICY_NAME) \
+> > > +   #      -b $(@D)/base.pp -i $(shell ls $(@D)/*.pp | 
+> > grep -v base); \
+> > > +   #)
+> > 
+> > So if this was done at build time, we could avoid having a bunch of
+> > tools on the target?
+> 
+> This is only for the modular policy.  The monolithic policy will be 
+> completely built on the host and saved to the target.  I could
+> probably go through and pair down a bunch of dependencies based on
+> that.  I'll look into that and make some changes.
+
+That'd be great, I believe. Especially since you're stating earlier
+that the monolithic policy is the most efficient one, and recommended
+for usage on embedded systems, I believe it'd be good to not have the
+tools to build policies on the target if they are not needed.
+
+Best regards,
+
+Thomas
 -- 
-http://autobuild.buildroot.net
+Thomas Petazzoni, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
