@@ -1,66 +1,64 @@
-From: Will Wagner <will_wagner@carallon.com>
-Date: Tue, 24 Sep 2013 17:47:00 +0100
-Subject: [Buildroot] Fwd: Re: [PATCH] i2c-tools: Add i2c-dev.h to staging
- directory for userspace i2c drivers.
-In-Reply-To: <20130924181804.1f76e012@skate>
-References: <20130924181804.1f76e012@skate>
-Message-ID: <5241C204.4010004@carallon.com>
+From: Clayton Shotwell <clshotwe@rockwellcollins.com>
+Date: Tue, 24 Sep 2013 12:47:59 -0500
+Subject: [Buildroot] [PATCH v2 13/17] audit: new package
+In-Reply-To: <20130918070020.22ff8ca9@skate>
+References: <1378936777-28308-1-git-send-email-clshotwe@rockwellcollins.com>	<1378936777-28308-14-git-send-email-clshotwe@rockwellcollins.com>
+ <20130918070020.22ff8ca9@skate>
+Message-ID: <OF1C36952D.12623546-ON86257BF0.0061A062-86257BF0.0061C58C@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Sorry, I managed to drop mailing list from recipient list. Forwarding to 
-list.
+Thomas,
+
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote on 09/18/2013 
+12:00:20 AM:
+
+> In this patch for 'audit', you are replacing a nice C program by a
+> Python script, with the argument that it helps cross-compilation. I
+> must say I quite disagree with that: building a small C 
+> program for the
+> host has always been easier than programs that require executing a
+> Python script at build time.
+> 
+> Why not keeping the existing C program, and just adjust 
+> the way it is
+> built to get it built by the native compiler?
+> 
+> There is a fairly standardized way of doing that with the autotools,
+> that consists in using the CC_FOR_BUILD variable instead 
+> of CC to build
+> this tool. In native compilation, CC_FOR_BUILD == CC == 
+> gcc, while in
+> cross-compilation, CC_FOR_BUILD == gcc and CC == <arch-tuple>-gcc.
+> 
+> See http://www.sourceware.org/autobook/autobook/autobook_270.html.
+> 
+> There is apparently even an existing m4 macro to define 
+> CC_FOR_BUILD:
+> http://ac-archive.sourceforge.net/ac-archive/
+> ac_prog_cc_for_build.html.
+> 
+> Or maybe the Python script approach is something that has 
+> been agreed
+> upon with the audit/SELinux community?
+
+I have been working with the audit community to get this patch accepted. 
+There is an issue with the C program not pulling in the correct headers 
+when you build it for this host.  The python script is able to get around 
+this issue. 
+
+Thanks,
+Clayton
+
+Clayton Shotwell
+Software Engineer
+clshotwe at rockwellcollins.com
+www.rockwellcollins.com 
 
 
--------- Original Message --------
-Subject: Re: [Buildroot] [PATCH] i2c-tools: Add i2c-dev.h to staging 
-directory for userspace i2c drivers.
-Date: Tue, 24 Sep 2013 18:18:04 +0200
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Organisation: Free Electrons
-To: Will Wagner <will_wagner@carallon.com>
-
-Dear Will Wagner,
-
-On Tue, 24 Sep 2013 16:32:10 +0100, Will Wagner wrote:
-> On 24/09/2013 16:20, Thomas Petazzoni wrote:
-
-> >> +define I2C_TOOLS_INSTALL_STAGING_CMDS
-> >> +	$(INSTALL) -D -m644 $(@D)/include/linux/i2c-dev.h
-> >> $(STAGING_DIR)/usr/include/linux/ +endef
-> >
-> > This header is already part of the kernel headers, so it should
-> > already be part of the toolchain. Do you have a specific case where
-> > this header is missing?
-> >
->
-> The contents of the header are different, the one from i2c-tools
-> contains more.
->
-> We also carry a patch similar to this. Our patch has an addition
-> which is a dependency on linux (assuming it is selected in the
-> config). This ensures that the header from the kernel gets over
-> ridden by the one from i2c-tools and not the other way around.
-
-Ah, ok, makes sense. Well, I believe it's really a poor practice from
-upstream to have an header with the same location provided by two
-separate packages. i2c-tools should really be providing another header,
-which includes the kernel one, and adds more stuff.
-
-But, well, this it's not the case, let's support this. Jouko, can you
-resend your patch after adding something like:
-
-# make sure we're built after linux so that we can override the kernel
-# i2c-dev.h header file
-I2C_TOOLS_DEPENDENCIES += $(if $(BR2_PACKAGE_LINUX),linux)
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130924/de93ba9d/attachment.html>
