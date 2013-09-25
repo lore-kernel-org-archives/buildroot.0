@@ -1,67 +1,74 @@
 From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Wed, 25 Sep 2013 10:05:35 +0200
-Subject: [Buildroot] [PATCH v5 0/4] Fix for top-level parallel make part 1
-Message-ID: <1380096339-4686-1-git-send-email-fabio.porcedda@gmail.com>
+Date: Wed, 25 Sep 2013 10:05:36 +0200
+Subject: [Buildroot] [PATCH v5 1/4] package: add toolchain dependency to
+	inner-generic-package
+In-Reply-To: <1380096339-4686-1-git-send-email-fabio.porcedda@gmail.com>
+References: <1380096339-4686-1-git-send-email-fabio.porcedda@gmail.com>
+Message-ID: <1380096339-4686-2-git-send-email-fabio.porcedda@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
-this is the first patch set for fixing top-level parallel make in buildroot,
-the common problem scattered in buildroot's top-level makefile is that in the
-rules it relies on the order of evaluation of the prerequisites,
-to be able to use top-level parallel make instead of reling on the left to
-right ordering of evaluation of the prerequisites we must add an explicit
-rule to describe the dependencies.
+This commit makes the dependency from the target toolchain explicit.
+This way we can buid from command line a package that use
+innger-generic-package right after the configuration phase, example:
 
-With this patch set the package building seems to work fine with top-level
-parallel make, example:
+	make clean <package-name>
 
-	make clean toolchain
-	make BR2_JLEVEL= -j<n> <package name list>
+This is a step forward top-level parallel make.
 
-Before to try that you have to remove the ".NOTPARALLEL" line in the top-level
-Makefile.
+Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+---
+ Makefile                 | 2 +-
+ package/pkg-autotools.mk | 3 ++-
+ package/pkg-generic.mk   | 6 +++++-
+ 3 files changed, 8 insertions(+), 3 deletions(-)
 
-The part that remain to fix for top-level parallel make is the toolchain
-building and targets after building all the packages.
-
-Best regards
-Fabio Porcedda
-
-v5:
- - added the fourth patch
- - fixed some typos
- - rewrited the second patch to use only $$($(2)_TARGET_*) in the rules
- - add support for top-level parallel make for the glibc package
-v4:
- - rebased over master
- - add Acked-by: Thomas Petazzoni on the third patch
- - changed the orderd of the patches
-v3:
- - add back the patch "package: add toolchain dependency to
-    inner-generic-package" because now is working fine.
- - add Acked-by: Arnout Vandecappelle to the third patch.
- - reworked the second patch following Arnout suggestions.
-v2:
- - remove patch "package: add toolchain dependency to inner-generic-package"
-   because was not working fine against recent toolchain changes.
-
-Fabio Porcedda (4):
-  package: add toolchain dependency to inner-generic-package
-  pkg-generic: fix rules for top-level parallel make
-  package/Makefile.in: don't force jobs when BR2_JLEVEL is empty
-  pkg-generic: enable recursive make for $($(PKG)_BUILD_CMDS)
-
- Makefile                 |  2 +-
- package/Makefile.in      |  2 +-
- package/glibc/glibc.mk   |  3 ++-
- package/pkg-autotools.mk |  3 ++-
- package/pkg-generic.mk   | 46 +++++++++++++++++++++++++++-------------------
- package/uclibc/uclibc.mk |  3 ++-
- 6 files changed, 35 insertions(+), 24 deletions(-)
-
+diff --git a/Makefile b/Makefile
+index 6b86541..22c5364 100644
+--- a/Makefile
++++ b/Makefile
+@@ -398,7 +398,7 @@ prepare: $(BUILD_DIR)/buildroot-config/auto.conf
+ 
+ toolchain: prepare dirs dependencies $(BASE_TARGETS)
+ 
+-world: toolchain $(TARGETS_ALL)
++world: $(TARGETS_ALL)
+ 
+ .PHONY: all world toolchain dirs clean distclean source outputmakefile \
+ 	legal-info legal-info-prepare legal-info-clean printvars \
+diff --git a/package/pkg-autotools.mk b/package/pkg-autotools.mk
+index b0eddde..aafa396 100644
+--- a/package/pkg-autotools.mk
++++ b/package/pkg-autotools.mk
+@@ -202,7 +202,8 @@ endef
+ # This must be repeated from inner-generic-package, otherwise we get an empty
+ # _DEPENDENCIES if _AUTORECONF is YES.  Also filter the result of _AUTORECONF
+ # away from the non-host rule
+-$(2)_DEPENDENCIES ?= $(filter-out host-automake host-autoconf host-libtool $(1),\
++$(2)_DEPENDENCIES ?= $(filter-out host-automake host-autoconf host-libtool \
++				host-toolchain $(1),\
+     $(patsubst host-host-%,host-%,$(addprefix host-,$($(3)_DEPENDENCIES))))
+ 
+ 
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index bfc4dc1..d7efcd3 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -307,7 +307,11 @@ endif
+ $(2)_REDISTRIBUTE		?= YES
+ 
+ 
+-$(2)_DEPENDENCIES ?= $(filter-out $(1),$(patsubst host-host-%,host-%,$(addprefix host-,$($(3)_DEPENDENCIES))))
++$(2)_DEPENDENCIES ?= $(filter-out  host-toolchain $(1),\
++	$(patsubst host-host-%,host-%,$(addprefix host-,$($(3)_DEPENDENCIES))))
++ifeq ($$($(2)_TYPE),target)
++$(2)_DEPENDENCIES += toolchain
++endif
+ 
+ $(2)_INSTALL_STAGING		?= NO
+ $(2)_INSTALL_IMAGES		?= NO
 -- 
 1.8.4
