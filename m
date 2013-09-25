@@ -1,33 +1,22 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 25 Sep 2013 09:01:41 +0000 (UTC)
-Subject: [Buildroot] [Bug 6506] New: Help!!!
-Message-ID: <bug-6506-163@https.bugs.busybox.net/>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 25 Sep 2013 10:41:42 +0200
+Subject: [Buildroot] linux-pam: bump to version 1.1.8
+In-Reply-To: <1380055853-7849-1-git-send-email-clshotwe@rockwellcollins.com>
+ (Clayton Shotwell's message of "Tue, 24 Sep 2013 15:50:53 -0500")
+References: <1380055853-7849-1-git-send-email-clshotwe@rockwellcollins.com>
+Message-ID: <87d2nx8f95.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=6506
+>>>>> "Clayton" == Clayton Shotwell <clshotwe@rockwellcollins.com> writes:
 
-           Summary: Help!!!
-           Product: buildroot
-           Version: unspecified
-          Platform: Other
-        OS/Version: Linux
-            Status: NEW
-          Severity: minor
-          Priority: P5
-         Component: Outdated package
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: warrbarq at gmail.com
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
+ Clayton> Bump version to fix compile error with 1.1.7.
+ Clayton> Signed-off-by: Clayton Shotwell <clshotwe@rockwellcollins.com>
 
-
-I want to root my sansung galaxy s 2 .Dont know how!!!!
+Committed, thanks.
 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Bye, Peter Korsgaard
