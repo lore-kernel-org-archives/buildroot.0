@@ -1,47 +1,42 @@
 From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Wed, 25 Sep 2013 10:05:39 +0200
-Subject: [Buildroot] [PATCH v5 4/4] pkg-generic: enable recursive make for
-	$($(PKG)_BUILD_CMDS)
+Date: Wed, 25 Sep 2013 10:05:38 +0200
+Subject: [Buildroot] [PATCH v5 3/4] package/Makefile.in: don't force jobs
+	when BR2_JLEVEL is empty
 In-Reply-To: <1380096339-4686-1-git-send-email-fabio.porcedda@gmail.com>
 References: <1380096339-4686-1-git-send-email-fabio.porcedda@gmail.com>
-Message-ID: <1380096339-4686-5-git-send-email-fabio.porcedda@gmail.com>
+Message-ID: <1380096339-4686-4-git-send-email-fabio.porcedda@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add '+' prefix to the $($(PKG)_BUILD_CMDS) command to enable jobserver
-for the sub-make.
+When the "BR2_JLEVEL" variable is empty use "make" without
+the "-j" option, because to be able to use top-level parallel
+make we must don't force the number of jobs in sub-make.
 
-Without the '+' prefix GNU make does not detect the sub-make so the
-jobserver is not avaiable for the sub-make.
-
-From GNU make documentation:
-Using the MAKE variable has the same effect as using a ?+? character
-at the beginning of the recipe line.  This special feature is only
-enabled if the MAKE variable appears directly in the recipe: it does
-not apply if the MAKE variable is referenced through expansion of
-another variable. In the latter case you must use the ?+? token to get
-these special effects.
+Example:
+	make BR2_JLEVEL= -j8
 
 Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/pkg-generic.mk | 2 +-
+ package/Makefile.in | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 0de1f35..499362b 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -117,7 +117,7 @@ $(BUILD_DIR)/%/.stamp_configured:
- # Build
- $(BUILD_DIR)/%/.stamp_built::
- 	@$(call MESSAGE,"Building")
--	$($(PKG)_BUILD_CMDS)
-+	+$($(PKG)_BUILD_CMDS)
- 	$(foreach hook,$($(PKG)_POST_BUILD_HOOKS),$(call $(hook))$(sep))
- 	$(Q)touch $@
+diff --git a/package/Makefile.in b/package/Makefile.in
+index 170ad78..d406901 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -18,7 +18,7 @@ PARALLEL_JOBS:=$(BR2_JLEVEL)
+ endif
  
+ MAKE1:=$(HOSTMAKE) -j1
+-MAKE:=$(HOSTMAKE) -j$(PARALLEL_JOBS)
++MAKE:=$(HOSTMAKE) $(if $(PARALLEL_JOBS),-j$(PARALLEL_JOBS))
+ 
+ # Compute GNU_TARGET_NAME
+ GNU_TARGET_NAME=$(ARCH)-buildroot-$(TARGET_OS)-$(LIBC)$(ABI)
 -- 
 1.8.4
