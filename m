@@ -1,9 +1,9 @@
 From: Clayton Shotwell <clshotwe@rockwellcollins.com>
-Date: Wed, 25 Sep 2013 14:32:41 -0500
-Subject: [Buildroot] [PATCH v3 06/16] checkpolicy: new package
+Date: Wed, 25 Sep 2013 14:32:42 -0500
+Subject: [Buildroot] [PATCH v3 07/16] sepolgen: new package
 In-Reply-To: <1380137571-688-1-git-send-email-clshotwe@rockwellcollins.com>
 References: <1380137571-688-1-git-send-email-clshotwe@rockwellcollins.com>
-Message-ID: <1380137571-688-7-git-send-email-clshotwe@rockwellcollins.com>
+Message-ID: <1380137571-688-8-git-send-email-clshotwe@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,82 +14,87 @@ To: buildroot@busybox.net
 Signed-off-by: Clayton Shotwell <clshotwe@rockwellcollins.com>
 ---
 Changes v2 -> v3:
-  - Added checkpolicy as a host package (suggested by Arnout).
+  - No changes.
 Changes v1 -> v2:
   - General cleanup to the mk file to conform to the standard format.
-  - Removed the option to do a target build because it should never 
-    be needed during normal operation.
-  - Added checkpolicy as a host package. (Suggested by Arnout)
+  - Changed package dependencies into selects in the config.
 
- package/Config.in.host             |    1 +
- package/checkpolicy/Config.in.host |   10 ++++++++++
- package/checkpolicy/checkpolicy.mk |   30 ++++++++++++++++++++++++++++++
- 3 files changed, 41 insertions(+), 0 deletions(-)
- create mode 100644 package/checkpolicy/Config.in.host
- create mode 100644 package/checkpolicy/checkpolicy.mk
+ package/Config.in            |    4 ++++
+ package/sepolgen/Config.in   |    8 ++++++++
+ package/sepolgen/sepolgen.mk |   35 +++++++++++++++++++++++++++++++++++
+ 3 files changed, 47 insertions(+), 0 deletions(-)
+ create mode 100644 package/sepolgen/Config.in
+ create mode 100644 package/sepolgen/sepolgen.mk
 
-diff --git a/package/Config.in.host b/package/Config.in.host
-index 5fd2570..1b3e11b 100644
---- a/package/Config.in.host
-+++ b/package/Config.in.host
-@@ -1,5 +1,6 @@
- menu "Host utilities"
+diff --git a/package/Config.in b/package/Config.in
+index 31eefed..056a6ef 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -917,6 +917,10 @@ source "package/rtai/Config.in"
+ source "package/xenomai/Config.in"
+ endmenu
  
-+source "package/checkpolicy/Config.in.host"
- source "package/dfu-util/Config.in.host"
- source "package/dosfstools/Config.in.host"
- source "package/e2fsprogs/Config.in.host"
-diff --git a/package/checkpolicy/Config.in.host b/package/checkpolicy/Config.in.host
++menu "Security"
++source "package/sepolgen/Config.in"
++endmenu
++
+ menu "Shell and utilities"
+ source "package/at/Config.in"
+ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+diff --git a/package/sepolgen/Config.in b/package/sepolgen/Config.in
 new file mode 100644
-index 0000000..75794be
+index 0000000..2a4b49c
 --- /dev/null
-+++ b/package/checkpolicy/Config.in.host
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_HOST_CHECKPOLICY
-+	bool "host checkpolicy"
++++ b/package/sepolgen/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_SEPOLGEN
++	bool "sepolgen"
++	select BR2_PACKAGE_PYTHON
 +	help
-+	  checkpolicy is the policy compiler. It uses libsepol to 
-+	  generate the binary policy. checkpolicy uses the static 
-+	  libsepol since it deals with low level details of the policy 
-+	  that have not been encapsulated/abstracted by a proper 
-+	  shared library interface. 
++	  sepolgen is a python module/library that forms the core 
++	  of the modern audit2allow (a rewrite). 
 +	  
 +	  http://selinuxproject.org/page/Main_Page
-diff --git a/package/checkpolicy/checkpolicy.mk b/package/checkpolicy/checkpolicy.mk
+diff --git a/package/sepolgen/sepolgen.mk b/package/sepolgen/sepolgen.mk
 new file mode 100644
-index 0000000..0c82d63
+index 0000000..a8c4786
 --- /dev/null
-+++ b/package/checkpolicy/checkpolicy.mk
-@@ -0,0 +1,30 @@
++++ b/package/sepolgen/sepolgen.mk
+@@ -0,0 +1,35 @@
 +################################################################################
 +#
-+# checkpolicy
++# sepolgen
 +#
 +################################################################################
 +
-+CHECKPOLICY_VERSION = 2.1.12
-+CHECKPOLICY_SITE = http://userspace.selinuxproject.org/releases/20130423/
-+CHECKPOLICY_LICENSE = GPLv2
-+CHECKPOLICY_LICENSE_FILES = COPYING
++SEPOLGEN_VERSION = 1.1.9
++SEPOLGEN_SITE = http://userspace.selinuxproject.org/releases/20130423/
++SEPOLGEN_LICENSE = GPLv2
++SEPOLGEN_LICENSE_FILES = COPYING
 +
-+HOST_CHECKPOLICY_DEPENDENCIES = host-libselinux host-flex host-bison
++SEPOLGEN_DEPENDENCIES = python
 +
-+HOST_CHECKPOLICY_MAKE_OPTS = $(HOST_CONFIGURE_OPTS) \
-+	LEX="$(HOST_DIR)/usr/bin/flex" \
-+	YACC="$(HOST_DIR)/usr/bin/bison -y"
++SEPOLGEN_INSTALL_STAGING = YES
 +
-+define HOST_CHECKPOLICY_BUILD_CMDS
-+	$(MAKE) -C $(@D) $(HOST_CHECKPOLICY_MAKE_OPTS) DESTDIR=$(HOST_DIR)
++SEPOLGEN_MAKE_CMDS = $(TARGET_CONFIGURE_OPTS) \
++	PYTHONLIBDIR=/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages
++
++define SEPOLGEN_BUILD_CMDS
++	$(MAKE) -C $(@D) $(SEPOLGEN_MAKE_CMDS) DESTDIR=$(STAGING_DIR)
 +endef
 +
-+define HOST_CHECKPOLICY_INSTALL_CMDS
-+	$(MAKE) -C $(@D) install $(HOST_CHECKPOLICY_MAKE_OPTS) DESTDIR=$(HOST_DIR)
++define SEPOLGEN_INSTALL_STAGING_CMDS
++	$(MAKE) -C $(@D) install $(SEPOLGEN_MAKE_CMDS) DESTDIR=$(STAGING_DIR)
 +endef
 +
-+define HOST_CHECKPOLICY_CLEAN_CMDS
++define SEPOLGEN_INSTALL_TARGET_CMDS
++	$(MAKE) -C $(@D) install $(SEPOLGEN_MAKE_CMDS) DESTDIR=$(TARGET_DIR)
++endef
++
++define SEPOLGEN_CLEAN_CMDS
 +	$(MAKE) -C $(@D) clean
 +endef
 +
-+$(eval $(host-generic-package))
++$(eval $(generic-package))
 -- 
 1.7.1
