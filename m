@@ -1,46 +1,118 @@
-From: =?ISO-8859-1?Q?Fran=E7ois_Perrad?= <francois.perrad@gadz.org>
-Date: Wed, 25 Sep 2013 16:09:39 +0200
-Subject: [Buildroot] [PATCH] ljsyscall: new package
-In-Reply-To: <CANxTyt53=D+o9NV_WeYn0SZQng_YjmYjzxk8kYjNU67EVBfkCA@mail.gmail.com>
-References: <1380070732-1834-1-git-send-email-danomimanchego123@gmail.com>
- <CAB0FRsuHwyT_LK=3Ga+nvDLdUzreAiMHkj22TxayeazCCPbQGw@mail.gmail.com>
- <CANxTyt53=D+o9NV_WeYn0SZQng_YjmYjzxk8kYjNU67EVBfkCA@mail.gmail.com>
-Message-ID: <CAB0FRst4YnrgXNqd_k5Ti=XqqwpQWim_G1WnB-Z60J8GFgNjNQ@mail.gmail.com>
+From: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+Date: Wed, 25 Sep 2013 16:14:55 +0200
+Subject: [Buildroot] [PATCH] jq: new package
+In-Reply-To: <CANxTyt4RWk4=cF0-VvaQWnqGDyzUWoAdVRf2Cj50WxQCty0pLw@mail.gmail.com>
+References: <1380070714-1795-1-git-send-email-danomimanchego123@gmail.com>
+ <bb47a7f9-6e83-4203-a8be-7038e346998c@email.android.com>
+ <CANxTyt4RWk4=cF0-VvaQWnqGDyzUWoAdVRf2Cj50WxQCty0pLw@mail.gmail.com>
+Message-ID: <5242EFDF.5090101@trzebnica.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2013/9/25 Danomi Manchego <danomimanchego123@gmail.com>:
-> Fran?ois,
+
+Hi Danomi,
+
+
+> Hi Thomas,
 >
-> On Wed, Sep 25, 2013 at 7:31 AM, Fran?ois Perrad >> diff --git
-> a/package/ljsyscall/Config.in b/package/ljsyscall/Config.in
+> On Wed, Sep 25, 2013 at 1:59 AM, Thomas De Schampheleire
+> <patrickdepinguin@gmail.com> wrote:
+>> Danomi Manchego <danomimanchego123@gmail.com> wrote:
+>>> jq is like sed for JSON data - you can use it to slice and filter
+>>> and map and transform structured data with the same ease that sed,
+>>> awk, grep and friends let you play with text.
+>>>
+>>> Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
+>>>
+>>> ---
+>>>
+>>> The package description is as per the author - not my words.
+>>> ---
+>>> package/Config.in    |    1 +
+>>> package/jq/Config.in |    8 ++++++++
+>>> package/jq/jq.mk     |   13 +++++++++++++
+>>> 3 files changed, 22 insertions(+)
+>>> create mode 100644 package/jq/Config.in
+>>> create mode 100644 package/jq/jq.mk
+>>>
+>>> diff --git a/package/Config.in b/package/Config.in
+>>> index 1dd60d1..ce18ec7 100644
+>>> --- a/package/Config.in
+>>> +++ b/package/Config.in
+>>> @@ -108,6 +108,7 @@ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+>>> source "package/grep/Config.in"
+>>> endif
+>>> source "package/intltool/Config.in"
+>>> +source "package/jq/Config.in"
+>>> source "package/make/Config.in"
+>>> source "package/libtool/Config.in"
+>>> source "package/m4/Config.in"
+>>> diff --git a/package/jq/Config.in b/package/jq/Config.in
 >>> new file mode 100644
->>> index 0000000..0bed738
+>>> index 0000000..9329b2f
 >>> --- /dev/null
->>> +++ b/package/ljsyscall/Config.in
+>>> +++ b/package/jq/Config.in
 >>> @@ -0,0 +1,8 @@
->>> +config BR2_PACKAGE_LJSYSCALL
->>> +       bool "ljsyscall"
->>> +       # ljsyscall is specifically for LuaJIT, not Lua.
->>> +       depends on BR2_PACKAGE_LUAJIT
+>>> +config BR2_PACKAGE_JQ
+>>> +      bool "jq"
+>>> +      help
+>>> +        jq is like sed for JSON data - you can use it to slice and filter
+>>> +        and map and transform structured data with the same ease that sed,
+>>> +        awk, grep and friends let you play with text.
+>>> +
+>>> +        http://stedolan.github.io/jq/
+>>> diff --git a/package/jq/jq.mk b/package/jq/jq.mk
+>>> new file mode 100644
+>>> index 0000000..b0436bb
+>>> --- /dev/null
+>>> +++ b/package/jq/jq.mk
+>>> @@ -0,0 +1,13 @@
+>>> +################################################################################
+>>> +#
+>>> +# jq
+>>> +#
+>>> +################################################################################
+>>> +
+>>> +JQ_VERSION = 1.3
+
+JQ_VERSION = jq-1.3
+
+
+Regards,
+Jerzy
+
+
+>>> +JQ_SITE = http://github.com/stedolan/jq/archive
+>> The buildroot manual talks about a slightly different url for github packages. It's there a specific reason you're not using that one?
+> Yes, I saw the github documentation in the on-line documentation, so I
+> tried this:
+>
+> JQ_SITE = http://github.com/stedolan/jq/tarball/$(JQ_VERSION)
+>
+> But it didn't work - after a github redirection or two, I got 404.
+>
+>
+>>> +JQ_AUTORECONF = YES
+>>> +JQ_LICENSE = jq license
+>>> +JQ_LICENSE_FILES = COPYING
+>>> +
+>>> +$(eval $(autotools-package))
+>> Are there no dependencies?
+>> No need for threads, c++, or any of that?
+> No, none that I can see - the source is all .c, and no pthread hits
+> when I grep for "thread".
+>
+> Do you use a particular defconfig to verify this?
+>
+>
+>> Best regards,
+>> Thomas
 >>
->> not available on all architecture
->>     depends on BR2_i386 || BR2_x86_64 || BR2_arm || BR2_powerpc || BR2_mips
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 >
-> True - but those conditions are already in LuaJIT, except even more
-> restrictive, so I didn't bother.  But I take the point, will add.
->
-
-You are right, conditions are already in LuaJIT.
-Them don't need duplication.
-
-Fran?ois
-
-> From your other email:  points taken, I'll remove the LuaJIT
-> dependency and the add -m0644.
->
->
-> Danomi -
