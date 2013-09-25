@@ -1,97 +1,37 @@
-From: Danomi Manchego <danomimanchego123@gmail.com>
-Date: Tue, 24 Sep 2013 20:58:52 -0400
-Subject: [Buildroot] [PATCH] ljsyscall: new package
-Message-ID: <1380070732-1834-1-git-send-email-danomimanchego123@gmail.com>
+From: Axel Lin <axel.lin@ingics.com>
+Date: Wed, 25 Sep 2013 09:55:16 +0800
+Subject: [Buildroot] [PATCH] proftpd: needs mmu
+Message-ID: <1380074116.19850.2.camel@phoenix>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-An FFI implementation of the Linux and NetBSD kernel ABIs for LuaJIT.
-
-Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
-
+Signed-off-by: Axel Lin <axel.lin@ingics.com>
 ---
+Fix below build error:
 
-Note: this package requires LuaJIT specifically, so there is a depends-on
-in the ljsyscall/Config.in, even though though it is included from a
-menu with a "if BR2_PACKAGE_LUA || BR2_PACKAGE_LUAJIT" test around it.
----
- package/Config.in              |    1 +
- package/ljsyscall/Config.in    |    8 ++++++++
- package/ljsyscall/ljsyscall.mk |   36 ++++++++++++++++++++++++++++++++++++
- 3 files changed, 45 insertions(+)
- create mode 100644 package/ljsyscall/Config.in
- create mode 100644 package/ljsyscall/ljsyscall.mk
+src/main.o: In function `fork_server':
+main.c:(.text+0x26fc): undefined reference to `fork'
+src/main.o: In function `main':
+main.c:(.text+0x39bc): undefined reference to `fork'
+collect2: ld returned 1 exit status
+make[1]: *** [proftpd] Error 1
 
-diff --git a/package/Config.in b/package/Config.in
-index 1dd60d1..457e5ad 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -355,6 +355,7 @@ source "package/cgilua/Config.in"
- source "package/copas/Config.in"
- source "package/coxpcall/Config.in"
- source "package/lbase64/Config.in"
-+source "package/ljsyscall/Config.in"
- source "package/luabitop/Config.in"
- source "package/luacjson/Config.in"
- source "package/luacrypto/Config.in"
-diff --git a/package/ljsyscall/Config.in b/package/ljsyscall/Config.in
-new file mode 100644
-index 0000000..0bed738
---- /dev/null
-+++ b/package/ljsyscall/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_LJSYSCALL
-+	bool "ljsyscall"
-+	# ljsyscall is specifically for LuaJIT, not Lua.
-+	depends on BR2_PACKAGE_LUAJIT
-+	help
-+	  An FFI implementation of the Linux and NetBSD kernel ABIs for LuaJIT.
-+
-+	  http://github.com/justincormack/ljsyscall
-diff --git a/package/ljsyscall/ljsyscall.mk b/package/ljsyscall/ljsyscall.mk
-new file mode 100644
-index 0000000..25a5ec9
---- /dev/null
-+++ b/package/ljsyscall/ljsyscall.mk
-@@ -0,0 +1,36 @@
-+################################################################################
-+#
-+# ljsyscall
-+#
-+################################################################################
-+
-+LJSYSCALL_VERSION = v0.8
-+LJSYSCALL_SITE = http://github.com/justincormack/ljsyscall/tarball/$(LJSYSCALL_VERSION)
-+LJSYSCALL_DEPENDENCIES = luajit
-+LJSYSCALL_LICENSE = MIT
-+LJSYSCALL_LICENSE_FILES = COPYRIGHT
-+
-+ifeq ($(BR2_i386),y)
-+LJSYSCALL_ARCH = x86
-+endif
-+ifeq ($(BR2_x86_64),y)
-+LJSYSCALL_ARCH = x64
-+endif
-+ifeq ($(BR2_powerpc),y)
-+LJSYSCALL_ARCH = ppc
-+endif
-+ifeq ($(LJSYSCALL_ARCH),)
-+LJSYSCALL_ARCH = $(BR2_ARCH)
-+endif
-+
-+define LJSYSCALL_INSTALL_TARGET_CMDS
-+	$(INSTALL) -d $(TARGET_DIR)/usr/share/luajit-$(LUAJIT_VERSION)/syscall
-+	$(INSTALL) -t $(TARGET_DIR)/usr/share/luajit-$(LUAJIT_VERSION)/ $(@D)/syscall.lua
-+	$(INSTALL) -t $(TARGET_DIR)/usr/share/luajit-$(LUAJIT_VERSION)/syscall $(@D)/syscall/*.lua
-+
-+	$(INSTALL) -d $(TARGET_DIR)/usr/share/luajit-$(LUAJIT_VERSION)/syscall/linux/$(LJSYSCALL_ARCH)
-+	$(INSTALL) -t $(TARGET_DIR)/usr/share/luajit-$(LUAJIT_VERSION)/syscall/linux/ $(@D)/syscall/linux/*.lua
-+	$(INSTALL) -t $(TARGET_DIR)/usr/share/luajit-$(LUAJIT_VERSION)/syscall/linux/$(LJSYSCALL_ARCH) $(@D)/syscall/linux/$(LJSYSCALL_ARCH)/*.lua
-+endef
-+
-+$(eval $(generic-package))
+ package/proftpd/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/package/proftpd/Config.in b/package/proftpd/Config.in
+index 7793713..18407d1 100644
+--- a/package/proftpd/Config.in
++++ b/package/proftpd/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_PROFTPD
+ 	bool "proftpd"
++	depends on BR2_USE_MMU # fork()
+ 	help
+ 	  ProFTPD, a highly configurable FTP server.
+ 
 -- 
-1.7.9.5
+1.8.1.2
