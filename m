@@ -1,55 +1,54 @@
-From: Lionel Orry <lionel.orry@gmail.com>
-Date: Wed, 25 Sep 2013 21:10:02 +0200
-Subject: [Buildroot] [PATCH] jq: new package
-In-Reply-To: <CANxTyt6y3OENf_zOd76y7SJ=9qJddYnrZGePZb6mmQOHraG7TQ@mail.gmail.com>
-References: <1380070714-1795-1-git-send-email-danomimanchego123@gmail.com>
- <bb47a7f9-6e83-4203-a8be-7038e346998c@email.android.com>
- <CANxTyt4RWk4=cF0-VvaQWnqGDyzUWoAdVRf2Cj50WxQCty0pLw@mail.gmail.com>
- <5242EFDF.5090101@trzebnica.net>
- <CANxTyt6y3OENf_zOd76y7SJ=9qJddYnrZGePZb6mmQOHraG7TQ@mail.gmail.com>
-Message-ID: <CAKAx1ciYt1rcVJHancJ=2gQLkgBUEozJbM8MVMACVHR2081Ewg@mail.gmail.com>
+From: Eric Nelson <eric.nelson@boundarydevices.com>
+Date: Wed, 25 Sep 2013 11:59:42 -0700
+Subject: [Buildroot] [PATCH 0/4] i.MX6 and Nitrogen6x updates
+In-Reply-To: <1380135327-9722-1-git-send-email-eric.nelson@boundarydevices.com>
+References: <1380135327-9722-1-git-send-email-eric.nelson@boundarydevices.com>
+Message-ID: <5243329E.7030603@boundarydevices.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+BTW, I'd like to thank each of you for getting this support
+into Buildroot to begin with.
 
-On Wed, Sep 25, 2013 at 5:42 PM, Danomi Manchego
-<danomimanchego123@gmail.com> wrote:
-> Jerzy,
->
-> On Wed, Sep 25, 2013 at 10:14 AM, Jerzy Grzegorek
-> <jerzy.grzegorek@trzebnica.net> wrote:
->>>>> +JQ_VERSION = 1.3
->>
->>
->> JQ_VERSION = jq-1.3
->
-> Ah, you're right, specifying version as "jq-1.3" work with the github
-> rule in the buildroot users manual.  Though, then you get a tarball
-> called "jq-jq-1.3.tar.gz", which seems odd.
+It's been a while since I last touched Buildroot and was
+pleasantly surprised at all of the activity.
 
-The fact is, you should actually use:
+Regards,
 
-JQ_VERSION = 1.3
-JQ_SITE = http://github.com/stedolan/jq/tarball/jq-$(JQ_VERSION)
 
->
-> Is it better to use the normal github site and get this strange name?
-> That section of the manual says "Packages on github often don?t have a
-> download area with release tarballs."  But this package *does* have a
-> download area, to get "jq-1.3.tar.gz" and older version.  So I'm
-> thinking that I can keep as is.
->
-> No?
->
-> Danomi -
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Eric
 
-Cheers,
-Lionel
+On 09/25/2013 11:55 AM, Eric Nelson wrote:
+> This patch series updates U-Boot and the Linux kernel for the
+> Boundary Devices Nitrogen6x board to the latest production-ready
+> releases and also updates Freescale-provided packages to the
+> matching versions to maintain ABI compatibility.
+>
+> Eric Nelson (4):
+>    nitrogen6x: bump U-Boot to latest production version (2013.07)
+>    nitrogen6x: use 6x_bootscript/6x_upgrade instead of older 6q_ versions
+>    nitrogen6x: bump kernel to latest version (3.0.35-4.1.0)
+>    i.MX6: Update Freescale hardware-acceleration bits to latest versions
+>
+>   board/boundarydevices/nitrogen6x/6q_bootscript     | Bin 455 -> 0 bytes
+>   board/boundarydevices/nitrogen6x/6q_upgrade        | Bin 1587 -> 0 bytes
+>   board/boundarydevices/nitrogen6x/6x_bootscript     | Bin 0 -> 1653 bytes
+>   board/boundarydevices/nitrogen6x/6x_upgrade        | Bin 0 -> 1744 bytes
+>   board/boundarydevices/nitrogen6x/post-build.sh     |  14 +++++++------
+>   configs/nitrogen6x_defconfig                       |   4 ++--
+>   package/freescale-imx/freescale-imx.mk             |   4 ++--
+>   .../gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk           |   8 +++++---
+>   package/freescale-imx/imx-lib/imx-lib.mk           |  11 ++++++++++-
+>   .../gstreamer/gst-fsl-plugins/gst-fsl-plugins.mk   |   4 ++--
+>   package/libfslcodec/libfslcodec.mk                 |   4 ++--
+>   package/libfslparser/libfslparser.mk               |   8 +++++---
+>   package/libfslvpuwrap/libfslvpuwrap.mk             |  22 +++++++++++++++++++--
+>   13 files changed, 56 insertions(+), 23 deletions(-)
+>   delete mode 100644 board/boundarydevices/nitrogen6x/6q_bootscript
+>   delete mode 100644 board/boundarydevices/nitrogen6x/6q_upgrade
+>   create mode 100644 board/boundarydevices/nitrogen6x/6x_bootscript
+>   create mode 100644 board/boundarydevices/nitrogen6x/6x_upgrade
+>
