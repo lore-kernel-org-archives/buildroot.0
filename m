@@ -1,104 +1,34 @@
 From: Danomi Manchego <danomimanchego123@gmail.com>
-Date: Wed, 25 Sep 2013 08:44:54 -0400
-Subject: [Buildroot] [PATCH] jq: new package
-In-Reply-To: <bb47a7f9-6e83-4203-a8be-7038e346998c@email.android.com>
-References: <1380070714-1795-1-git-send-email-danomimanchego123@gmail.com>
- <bb47a7f9-6e83-4203-a8be-7038e346998c@email.android.com>
-Message-ID: <CANxTyt4RWk4=cF0-VvaQWnqGDyzUWoAdVRf2Cj50WxQCty0pLw@mail.gmail.com>
+Date: Wed, 25 Sep 2013 08:58:05 -0400
+Subject: [Buildroot] [PATCH] ljsyscall: new package
+In-Reply-To: <b1ff0935-bab9-4aa5-8aa7-9fdfd59dab7b@email.android.com>
+References: <1380070732-1834-1-git-send-email-danomimanchego123@gmail.com>
+ <b1ff0935-bab9-4aa5-8aa7-9fdfd59dab7b@email.android.com>
+Message-ID: <CANxTyt4t2nNe4__3DZNvrsM3_k55d9A+LPfFJtaPVsjiSG2rHw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Thomas,
 
-On Wed, Sep 25, 2013 at 1:59 AM, Thomas De Schampheleire
+On Wed, Sep 25, 2013 at 2:04 AM, Thomas De Schampheleire
 <patrickdepinguin@gmail.com> wrote:
-> Danomi Manchego <danomimanchego123@gmail.com> wrote:
->>jq is like sed for JSON data - you can use it to slice and filter
->>and map and transform structured data with the same ease that sed,
->>awk, grep and friends let you play with text.
->>
->>Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
->>
->>---
->>
->>The package description is as per the author - not my words.
->>---
->> package/Config.in    |    1 +
->> package/jq/Config.in |    8 ++++++++
->> package/jq/jq.mk     |   13 +++++++++++++
->> 3 files changed, 22 insertions(+)
->> create mode 100644 package/jq/Config.in
->> create mode 100644 package/jq/jq.mk
->>
->>diff --git a/package/Config.in b/package/Config.in
->>index 1dd60d1..ce18ec7 100644
->>--- a/package/Config.in
->>+++ b/package/Config.in
->>@@ -108,6 +108,7 @@ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
->> source "package/grep/Config.in"
->> endif
->> source "package/intltool/Config.in"
->>+source "package/jq/Config.in"
->> source "package/make/Config.in"
->> source "package/libtool/Config.in"
->> source "package/m4/Config.in"
->>diff --git a/package/jq/Config.in b/package/jq/Config.in
->>new file mode 100644
->>index 0000000..9329b2f
->>--- /dev/null
->>+++ b/package/jq/Config.in
->>@@ -0,0 +1,8 @@
->>+config BR2_PACKAGE_JQ
->>+      bool "jq"
->>+      help
->>+        jq is like sed for JSON data - you can use it to slice and filter
->>+        and map and transform structured data with the same ease that sed,
->>+        awk, grep and friends let you play with text.
+>>+define LJSYSCALL_INSTALL_TARGET_CMDS
+>>+      $(INSTALL) -d $(TARGET_DIR)/usr/share/luajit-$(LUAJIT_VERSION)/syscall
+>>+      $(INSTALL) -t $(TARGET_DIR)/usr/share/luajit-$(LUAJIT_VERSION)/ $(@D)/syscall.lua
+>>+      $(INSTALL) -t $(TARGET_DIR)/usr/share/luajit-$(LUAJIT_VERSION)/syscall $(@D)/syscall/*.lua
 >>+
->>+        http://stedolan.github.io/jq/
->>diff --git a/package/jq/jq.mk b/package/jq/jq.mk
->>new file mode 100644
->>index 0000000..b0436bb
->>--- /dev/null
->>+++ b/package/jq/jq.mk
->>@@ -0,0 +1,13 @@
->>+################################################################################
->>+#
->>+# jq
->>+#
->>+################################################################################
->>+
->>+JQ_VERSION = 1.3
->>+JQ_SITE = http://github.com/stedolan/jq/archive
+>>+      $(INSTALL) -d $(TARGET_DIR)/usr/share/luajit-$(LUAJIT_VERSION)/syscall/linux/$(LJSYSCALL_ARCH)
+>>+      $(INSTALL) -t $(TARGET_DIR)/usr/share/luajit-$(LUAJIT_VERSION)/syscall/linux/ $(@D)/syscall/linux/*.lua
+>>+      $(INSTALL) -t $(TARGET_DIR)/usr/share/luajit-$(LUAJIT_VERSION)/syscall/linux/$(LJSYSCALL_ARCH) $(@D)/syscall/linux/$(LJSYSCALL_ARCH)/*.lua
+>>+endef
 >
-> The buildroot manual talks about a slightly different url for github packages. It's there a specific reason you're not using that one?
+> Any specific reason why the standard install rule doesn't work?
 
-Yes, I saw the github documentation in the on-line documentation, so I
-tried this:
+By "standard install rule", do you mean "$(INSTALL) -D srcfile
+dstfile"?  I couldn't get the directory creation to work while using
+wildcards, just single files.  So I just left it as-is.
 
-JQ_SITE = http://github.com/stedolan/jq/tarball/$(JQ_VERSION)
-
-But it didn't work - after a github redirection or two, I got 404.
-
-
->>+JQ_AUTORECONF = YES
->>+JQ_LICENSE = jq license
->>+JQ_LICENSE_FILES = COPYING
->>+
->>+$(eval $(autotools-package))
->
-> Are there no dependencies?
-> No need for threads, c++, or any of that?
-
-No, none that I can see - the source is all .c, and no pthread hits
-when I grep for "thread".
-
-Do you use a particular defconfig to verify this?
-
-
-> Best regards,
-> Thomas
->
+Is it the -t that offends?
