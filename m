@@ -1,112 +1,474 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 25 Sep 2013 08:30:07 +0200 (CEST)
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2013-09-24
-Message-ID: <20130925063007.848ED52C1A0@lolut.humanoidz.org>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Wed, 25 Sep 2013 10:01:43 +0200
+Subject: [Buildroot] [PATCH] package/Config.in: order alphabetically
+Message-ID: <2fd3fbf902d87dab33eb.1380096103@argentina>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Build statistics for 2013-09-24
-===============================
+Even though new packages are normally added in the right alphabetical order,
+there still remain quite a number of incorrect orderings in package/Config.in.
+In this patch, alphabetical order is created in each menu.
 
-        success : 74 
-       failures : 51 
-       timeouts : 0  
-          TOTAL : 125
+Note that this sometimes mean that packages that logically belong together, like
+cups, gutenprint, hplip, are now split apart.
 
-Classification of failures by reason
-====================================
+Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
-    trace-cmd-trace-cmd-v2.2.1 | 7 
-                netatalk-3.0.5 | 5 
-                  civetweb-1.3 | 3 
-                      qt-4.8.5 | 2 
-               binutils-2.21.1 | 2 
-               alsa-lib-1.0.26 | 2 
-                 libssh2-1.4.3 | 2 
-                 qt5base-5.0.2 | 2 
-      host-gcc-initial-4.8-arc | 2 
-             alsa-utils-1.0.26 | 2 
-          host-protobuf-c-0.15 | 1 
-                 omniorb-4.1.6 | 1 
-            ecryptfs-utils-103 | 1 
-                 libffi-3.0.13 | 1 
-                openssl-1.0.1e | 1 
-                 dropwatch-1.4 | 1 
-                   cups-1.3.11 | 1 
-                  weston-1.1.0 | 1 
-                valgrind-3.8.1 | 1 
-                  libnl-3.2.21 | 1 
-                  aespipe-2.4c | 1 
-                  connman-1.12 | 1 
-           python-pyzmq-13.1.0 | 1 
-                  zeromq-3.2.4 | 1 
-               libglib2-2.36.3 | 1 
-                      pv-1.4.6 | 1 
-                     gmp-5.1.2 | 1 
-                   attr-2.4.47 | 1 
-                rrdtool-1.2.30 | 1 
-                  tstools-1_11 | 1 
-             util-linux-2.23.2 | 1 
-        host-util-linux-2.23.2 | 1 
+---
+ package/Config.in |  102 ++++++++++++++++++++++++++++-------------------------
+ 1 files changed, 53 insertions(+), 49 deletions(-)
 
-Detail of failures
-===================
+For the vim users out there: do you know the 'filter' command? This allows to
+take content from the document, pipe it through a shell pipeline of your
+choosing, and put the output back in the document in place of the original text.
+For example:
+:'<,'>! sort
+will replace the visual selection with its sorted version.
+There exist also 'read!' and 'write!' commands that do more or less half of the
+filter command: read takes output from a shell pipeline and pastes it in the
+document, but does not use any input from the document. The write command
+uses text from the document as input for the shell pipeline, but discards the
+output.
+See :help filter, :help read!, :help write!
 
-       arm |                   aespipe-2.4c | NOK | http://autobuild.buildroot.net/results/9bcaa81d35bd98d35ba825fbcd4a550f5396169a/
-      i686 |                alsa-lib-1.0.26 | NOK | http://autobuild.buildroot.net/results/6025deabe661334e6402d9e8ec920d5de59e90e3/
-   powerpc |                alsa-lib-1.0.26 | NOK | http://autobuild.buildroot.net/results/a98fd3c2f41992a3b9ab30cfd439268f788a2bde/
-      bfin |              alsa-utils-1.0.26 | NOK | http://autobuild.buildroot.net/results/a3431426ad5459b6b5dca1c91ad9b30f81bfb976/
-      bfin |              alsa-utils-1.0.26 | NOK | http://autobuild.buildroot.net/results/eeb3761a0d8cae7104720408072bec888585535b/
-       arm |                    attr-2.4.47 | NOK | http://autobuild.buildroot.net/results/3eab3657992d8fdb20fb9fc5ca6e2fa36558108b/
-    xtensa |                binutils-2.21.1 | NOK | http://autobuild.buildroot.net/results/b3eb834d1acd9927085552b30e4a175b9159306d/
-    xtensa |                binutils-2.21.1 | NOK | http://autobuild.buildroot.net/results/ecc8c6ee7b36af3fcdd5d13132929d07608c8813/
-   aarch64 |                   civetweb-1.3 | NOK | http://autobuild.buildroot.net/results/53266d20aa831b9634c23834b69652b816518051/
-   aarch64 |                   civetweb-1.3 | NOK | http://autobuild.buildroot.net/results/d258bcfbabd9e2993f6397aa9137bec91988ea90/
-  mips64el |                   civetweb-1.3 | NOK | http://autobuild.buildroot.net/results/acfefc4f0f23ef646094ec427c9502eab7b86736/
-     avr32 |                   connman-1.12 | NOK | http://autobuild.buildroot.net/results/fba2c445ffbdb05622cac0a9b0d31f61ec7f5318/
-  mips64el |                    cups-1.3.11 | NOK | http://autobuild.buildroot.net/results/427c8930e520042b452eaa8b3bf60b6447d2a18b/
-  mips64el |                  dropwatch-1.4 | NOK | http://autobuild.buildroot.net/results/5f526c37d804e2b30ba17bf13ddb7764433be62e/
-      mips |             ecryptfs-utils-103 | NOK | http://autobuild.buildroot.net/results/d7088e421184e8eafefb73e5cc156dd55f07dd8a/
-       arm |                      gmp-5.1.2 | NOK | http://autobuild.buildroot.net/results/68b6f377795ff0cc3bec7454d23906fc17595bb5/
-       arc |       host-gcc-initial-4.8-arc | NOK | http://autobuild.buildroot.net/results/0a82d67bef07a440f2198963237ba2bd293bb0de/
-       arc |       host-gcc-initial-4.8-arc | NOK | http://autobuild.buildroot.net/results/c7543e1af64108617bcb1d47549b5160d92db67f/
-       sh4 |           host-protobuf-c-0.15 | NOK | http://autobuild.buildroot.net/results/e67616f0376c9dd2b8dc677a747930fd6df8907e/
-    x86_64 |         host-util-linux-2.23.2 | NOK | http://autobuild.buildroot.net/results/b6a28dcc60bb30f0ea28cffb0925a6e4568b29ad/
-       arm |                  libffi-3.0.13 | NOK | http://autobuild.buildroot.net/results/92d15d7ea98b97c2accfec13c4d4d5352b7244ec/
-      bfin |                libglib2-2.36.3 | NOK | http://autobuild.buildroot.net/results/44933b702b649fffd114f55971909dcf8ab5e348/
-      bfin |                   libnl-3.2.21 | NOK | http://autobuild.buildroot.net/results/3184690ccb130ae6b1cfc3020c0b7a3196b9c8f0/
-      i686 |                  libssh2-1.4.3 | NOK | http://autobuild.buildroot.net/results/9027f3789d97857e0f6374fb2969825da1fb1abf/
-      i686 |                  libssh2-1.4.3 | NOK | http://autobuild.buildroot.net/results/8accb36f3487e47aaeb68aa0780cdb95ddcea32f/
-      i686 |                 netatalk-3.0.5 | NOK | http://autobuild.buildroot.net/results/b32c273a155a058522406cce4054080d1eedc7f3/
-      i686 |                 netatalk-3.0.5 | NOK | http://autobuild.buildroot.net/results/0199340b47d6eca47bd9ef3380ed700b67823027/
-      i686 |                 netatalk-3.0.5 | NOK | http://autobuild.buildroot.net/results/315f25da7152226f6500c357037670fc04c99305/
-      i686 |                 netatalk-3.0.5 | NOK | http://autobuild.buildroot.net/results/7a60d1ed2b2c29f3de3e7ec405ee41bce07a80df/
-      i686 |                 netatalk-3.0.5 | NOK | http://autobuild.buildroot.net/results/ecb80851765eb7440a43c21b761c8b5cd791d7e5/
-       arm |                  omniorb-4.1.6 | NOK | http://autobuild.buildroot.net/results/bb7a5862d42ed1a121daad25c8b24969d40fe5a8/
-microblaze |                 openssl-1.0.1e | NOK | http://autobuild.buildroot.net/results/8014171075416e393b3a17c531853870dced5cb0/
-  mips64el |                       pv-1.4.6 | NOK | http://autobuild.buildroot.net/results/2f697bee1927fd8282e3eb55a17054059fc6ca9e/
-   powerpc |            python-pyzmq-13.1.0 | NOK | http://autobuild.buildroot.net/results/4c9d7e4f129c786654d86932114ad08844817658/
-       arm |                       qt-4.8.5 | NOK | http://autobuild.buildroot.net/results/489f3ddcd023e6d1eaf8efa1da99d726f60da921/
-  mips64el |                       qt-4.8.5 | NOK | http://autobuild.buildroot.net/results/07308dc3120f287230b67a0da41909fcd404d82a/
-    mipsel |                  qt5base-5.0.2 | NOK | http://autobuild.buildroot.net/results/0f74bf397a9aa3b859f1596a80d776be14c92ee0/
-       arm |                  qt5base-5.0.2 | NOK | http://autobuild.buildroot.net/results/c77005aa3d43114794a97eb01d85fabc3af1c32d/
-       arm |                 rrdtool-1.2.30 | NOK | http://autobuild.buildroot.net/results/f7ab00ddae121ccfc6d54f7eda8ea8ac6df359c2/
-   powerpc |     trace-cmd-trace-cmd-v2.2.1 | NOK | http://autobuild.buildroot.net/results/b8dcd4fc5b55f68883f976c4442a0c44b9b6d53a/
-   powerpc |     trace-cmd-trace-cmd-v2.2.1 | NOK | http://autobuild.buildroot.net/results/95c059f18a17ce31ccd8ac9d33fbe83c0c235ba5/
-   powerpc |     trace-cmd-trace-cmd-v2.2.1 | NOK | http://autobuild.buildroot.net/results/da4b113c84ecb00a91a1cbc5e5c1b93ca41db7cc/
-   powerpc |     trace-cmd-trace-cmd-v2.2.1 | NOK | http://autobuild.buildroot.net/results/f1f60faf695a45a55aebaf60f0a206408db303f4/
-       arm |     trace-cmd-trace-cmd-v2.2.1 | NOK | http://autobuild.buildroot.net/results/9ea04ecd663d1cd763c81a93479ac760abe5f524/
-   powerpc |     trace-cmd-trace-cmd-v2.2.1 | NOK | http://autobuild.buildroot.net/results/0d0364714b39fcb0005c8e72c31e6245bec0256b/
-   powerpc |     trace-cmd-trace-cmd-v2.2.1 | NOK | http://autobuild.buildroot.net/results/faa903b1e6c898ada7fdf2fb993c0317920510ef/
-    x86_64 |                   tstools-1_11 | NOK | http://autobuild.buildroot.net/results/90e13e178c9ac7ee3945b18df17791df3f3fa995/
-     avr32 |              util-linux-2.23.2 | NOK | http://autobuild.buildroot.net/results/ffc4b8599685027fcd2ef0a4e12ec270d5cc7ff9/
-       arm |                 valgrind-3.8.1 | NOK | http://autobuild.buildroot.net/results/ad276afd0d3cdea3afdb89b5ff842c473dc3c067/
-       arm |                   weston-1.1.0 | NOK | http://autobuild.buildroot.net/results/19acc0c6c266f28f2b4b97a6d58a2e16c1ca6b30/
-     avr32 |                   zeromq-3.2.4 | NOK | http://autobuild.buildroot.net/results/d12dba90e41460768a0de453d09fe35308701eab/
-
-
--- 
-http://autobuild.buildroot.net
+diff --git a/package/Config.in b/package/Config.in
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -7,8 +7,8 @@ source "package/alsa-utils/Config.in"
+ source "package/aumix/Config.in"
+ source "package/bellagio/Config.in"
+ source "package/faad2/Config.in"
++source "package/ffmpeg/Config.in"
+ source "package/flac/Config.in"
+-source "package/ffmpeg/Config.in"
+ source "package/gstreamer/Config.in"
+ source "package/gstreamer1/Config.in"
+ source "package/lame/Config.in"
+@@ -34,8 +34,8 @@ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ source "package/gzip/Config.in"
+ endif
+ source "package/infozip/Config.in"
++source "package/lzma/Config.in"
+ source "package/lzop/Config.in"
+-source "package/lzma/Config.in"
+ source "package/xz/Config.in"
+ endmenu
+ 
+@@ -43,9 +43,9 @@ menu "Debugging, profiling and benchmark
+ source "package/bonnie/Config.in"
+ source "package/cache-calibrator/Config.in"
+ source "package/dhrystone/Config.in"
+-source "package/dstat/Config.in"
+ source "package/dmalloc/Config.in"
+ source "package/dropwatch/Config.in"
++source "package/dstat/Config.in"
+ source "package/duma/Config.in"
+ source "package/gdb/Config.in"
+ source "package/iozone/Config.in"
+@@ -56,26 +56,26 @@ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ source "package/lsof/Config.in"
+ endif
+ source "package/ltp-testsuite/Config.in"
++source "package/ltrace/Config.in"
+ source "package/lttng-babeltrace/Config.in"
+ source "package/lttng-modules/Config.in"
+ source "package/lttng-tools/Config.in"
+-source "package/ltrace/Config.in"
+ source "package/memstat/Config.in"
+ source "package/netperf/Config.in"
+ source "package/oprofile/Config.in"
+ source "package/pax-utils/Config.in"
+ source "package/perf/Config.in"
++source "package/pv/Config.in"
++source "package/ramsmp/Config.in"
+ source "package/ramspeed/Config.in"
+-source "package/ramsmp/Config.in"
+ source "package/rt-tests/Config.in"
+ source "package/strace/Config.in"
+ source "package/stress/Config.in"
+ source "package/sysprof/Config.in"
+ source "package/tinymembench/Config.in"
+ source "package/trace-cmd/Config.in"
++source "package/valgrind/Config.in"
+ source "package/whetstone/Config.in"
+-source "package/valgrind/Config.in"
+-source "package/pv/Config.in"
+ endmenu
+ 
+ menu "Development tools"
+@@ -108,9 +108,9 @@ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ source "package/grep/Config.in"
+ endif
+ source "package/intltool/Config.in"
+-source "package/make/Config.in"
+ source "package/libtool/Config.in"
+ source "package/m4/Config.in"
++source "package/make/Config.in"
+ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ source "package/patch/Config.in"
+ endif
+@@ -130,9 +130,9 @@ source "package/yasm/Config.in"
+ endmenu
+ 
+ menu "Games"
++source "package/doom-wad/Config.in"
+ source "package/gnuchess/Config.in"
+ source "package/prboom/Config.in"
+-source "package/doom-wad/Config.in"
+ source "package/rubix/Config.in"
+ endmenu
+ 
+@@ -162,12 +162,12 @@ source "package/lite/Config.in"
+ source "package/ocrad/Config.in"
+ source "package/sawman/Config.in"
+ source "package/sdl/Config.in"
++source "package/sdl_gfx/Config.in"
+ source "package/sdl_image/Config.in"
+ source "package/sdl_mixer/Config.in"
++source "package/sdl_net/Config.in"
+ source "package/sdl_sound/Config.in"
+-source "package/sdl_net/Config.in"
+ source "package/sdl_ttf/Config.in"
+-source "package/sdl_gfx/Config.in"
+ 
+ comment "other GUIs"
+ source "package/efl/Config.in"
+@@ -192,20 +192,20 @@ source "package/libsexy/Config.in"
+ source "package/x11r7/xkeyboard-config/Config.in"
+ 
+ comment "X Window managers"
++source "package/blackbox/Config.in"
+ source "package/enlightenment/Config.in"
++source "package/fluxbox/Config.in"
+ source "package/matchbox/Config.in"
+ source "package/metacity/Config.in"
+-source "package/blackbox/Config.in"
+-source "package/fluxbox/Config.in"
+ 
+ comment "X applications"
+ source "package/alsamixergui/Config.in"
+ source "package/docker/Config.in"
+ source "package/feh/Config.in"
+ source "package/freerdp/Config.in"
+-source "package/gqview/Config.in"
+ source "package/gmpc/Config.in"
+ source "package/gob2/Config.in"
++source "package/gqview/Config.in"
+ source "package/gtkperf/Config.in"
+ source "package/leafpad/Config.in"
+ source "package/midori/Config.in"
+@@ -256,7 +256,6 @@ source "package/sunxi-boards/Config.in"
+ source "package/ux500-firmware/Config.in"
+ source "package/zd1211-firmware/Config.in"
+ endmenu
+-source "package/freescale-imx/Config.in"
+ source "package/a10disp/Config.in"
+ source "package/acpid/Config.in"
+ source "package/cdrkit/Config.in"
+@@ -274,10 +273,11 @@ source "package/dvbsnoop/Config.in"
+ source "package/eeprog/Config.in"
+ source "package/evtest/Config.in"
+ source "package/fan-ctrl/Config.in"
+-source "package/flashrom/Config.in"
+ source "package/fconfig/Config.in"
+ source "package/fis/Config.in"
++source "package/flashrom/Config.in"
+ source "package/fmtools/Config.in"
++source "package/freescale-imx/Config.in"
+ source "package/fxload/Config.in"
+ source "package/gadgetfs-test/Config.in"
+ source "package/gpsd/Config.in"
+@@ -304,8 +304,8 @@ source "package/memtester/Config.in"
+ source "package/minicom/Config.in"
+ source "package/nanocom/Config.in"
+ source "package/neard/Config.in"
++source "package/ofono/Config.in"
+ source "package/ola/Config.in"
+-source "package/ofono/Config.in"
+ source "package/on2-8170-modules/Config.in"
+ source "package/open2300/Config.in"
+ source "package/openocd/Config.in"
+@@ -450,10 +450,10 @@ menu "Crypto"
+ source "package/beecrypt/Config.in"
+ source "package/cryptodev/Config.in"
+ source "package/gnutls/Config.in"
++source "package/libassuan/Config.in"
+ source "package/libgcrypt/Config.in"
+ source "package/libgpg-error/Config.in"
+ source "package/libgpgme/Config.in"
+-source "package/libassuan/Config.in"
+ source "package/libmcrypt/Config.in"
+ source "package/libmhash/Config.in"
+ source "package/libnss/Config.in"
+@@ -491,6 +491,7 @@ source "package/fltk/Config.in"
+ source "package/fontconfig/Config.in"
+ source "package/freetype/Config.in"
+ source "package/gd/Config.in"
++source "package/gdk-pixbuf/Config.in"
+ source "package/giblib/Config.in"
+ source "package/gtk2-engines/Config.in"
+ source "package/gtk2-themes/Config.in"
+@@ -505,7 +506,6 @@ source "package/libexif/Config.in"
+ source "package/libgail/Config.in"
+ source "package/libgeotiff/Config.in"
+ source "package/libglade/Config.in"
+-source "package/gdk-pixbuf/Config.in"
+ source "package/libgtk2/Config.in"
+ source "package/libpng/Config.in"
+ source "package/libqrencode/Config.in"
+@@ -535,8 +535,6 @@ source "package/lcdapi/Config.in"
+ source "package/libaio/Config.in"
+ source "package/libatasmart/Config.in"
+ source "package/libcec/Config.in"
+-source "package/libraw1394/Config.in"
+-source "package/tslib/Config.in"
+ source "package/libfreefare/Config.in"
+ source "package/libftdi/Config.in"
+ source "package/libhid/Config.in"
+@@ -544,6 +542,7 @@ source "package/libiqrf/Config.in"
+ source "package/libnfc/Config.in"
+ source "package/libnfc-llcp/Config.in"
+ source "package/libqmi/Config.in"
++source "package/libraw1394/Config.in"
+ source "package/libserial/Config.in"
+ source "package/libsoc/Config.in"
+ source "package/libusb/Config.in"
+@@ -554,6 +553,7 @@ source "package/mtdev/Config.in"
+ source "package/ne10/Config.in"
+ source "package/neardal/Config.in"
+ source "package/pcsc-lite/Config.in"
++source "package/tslib/Config.in"
+ source "package/urg/Config.in"
+ endmenu
+ 
+@@ -572,8 +572,8 @@ endmenu
+ 
+ menu "Multimedia"
+ source "package/libdvbsi/Config.in"
++source "package/libdvdnav/Config.in"
+ source "package/libdvdread/Config.in"
+-source "package/libdvdnav/Config.in"
+ source "package/libebml/Config.in"
+ source "package/libfslcodec/Config.in"
+ source "package/libfslparser/Config.in"
+@@ -589,12 +589,12 @@ source "package/mediastreamer/Config.in"
+ endmenu
+ 
+ menu "Networking"
++source "package/cppzmq/Config.in"
+ source "package/czmq/Config.in"
+-source "package/cppzmq/Config.in"
+ source "package/filemq/Config.in"
+ source "package/glib-networking/Config.in"
++source "package/libcgicc/Config.in"
+ source "package/libcgi/Config.in"
+-source "package/libcgicc/Config.in"
+ source "package/libcurl/Config.in"
+ source "package/libdnet/Config.in"
+ source "package/libesmtp/Config.in"
+@@ -603,12 +603,10 @@ source "package/libfcgi/Config.in"
+ source "package/libgsasl/Config.in"
+ source "package/libidn/Config.in"
+ source "package/libiscsi/Config.in"
+-source "package/liboauth/Config.in"
++source "package/libmbus/Config.in"
+ source "package/libmicrohttpd/Config.in"
+-source "package/neon/Config.in"
+ source "package/libmnl/Config.in"
+ source "package/libmodbus/Config.in"
+-source "package/libmbus/Config.in"
+ source "package/libnetfilter_acct/Config.in"
+ source "package/libnetfilter_conntrack/Config.in"
+ source "package/libnetfilter_cthelper/Config.in"
+@@ -617,9 +615,10 @@ source "package/libnetfilter_log/Config.
+ source "package/libnetfilter_queue/Config.in"
+ source "package/libnfnetlink/Config.in"
+ source "package/libnl/Config.in"
++source "package/liboauth/Config.in"
+ source "package/liboping/Config.in"
++source "package/libosip2/Config.in"
+ source "package/libpcap/Config.in"
+-source "package/libosip2/Config.in"
+ source "package/librsync/Config.in"
+ source "package/libsoup/Config.in"
+ source "package/libtirpc/Config.in"
+@@ -627,6 +626,7 @@ source "package/libtorrent/Config.in"
+ source "package/libupnp/Config.in"
+ source "package/libvncserver/Config.in"
+ source "package/libwebsockets/Config.in"
++source "package/neon/Config.in"
+ source "package/nss-mdns/Config.in"
+ source "package/omniorb/Config.in"
+ source "package/openpgm/Config.in"
+@@ -642,38 +642,39 @@ endmenu
+ menu "Other"
+ source "package/apr/Config.in"
+ source "package/apr-util/Config.in"
+-source "package/libcofi/Config.in"
++source "package/argp-standalone/Config.in"
++source "package/boost/Config.in"
+ source "package/classpath/Config.in"
+ source "package/cppcms/Config.in"
+ source "package/eigen/Config.in"
+ source "package/elfutils/Config.in"
+ source "package/fftw/Config.in"
+-source "package/libargtable2/Config.in"
+-source "package/argp-standalone/Config.in"
+-source "package/boost/Config.in"
+ source "package/glibmm/Config.in"
+ source "package/gmp/Config.in"
+ source "package/gsl/Config.in"
+ source "package/gtest/Config.in"
++source "package/libargtable2/Config.in"
+ source "package/libatomic_ops/Config.in"
+ source "package/libbsd/Config.in"
+ source "package/libcap/Config.in"
+ source "package/libcap-ng/Config.in"
++source "package/libcofi/Config.in"
+ source "package/libdaemon/Config.in"
+ source "package/libelf/Config.in"
++source "package/libev/Config.in"
+ source "package/libevent/Config.in"
+-source "package/libev/Config.in"
+ source "package/libffi/Config.in"
+ source "package/libglib2/Config.in"
+ source "package/libical/Config.in"
++source "package/liblog4c-localtime/Config.in"
+ source "package/libnspr/Config.in"
+ source "package/libpfm4/Config.in"
+ source "package/libpthsem/Config.in"
++source "package/libseccomp/Config.in"
+ source "package/libsigc/Config.in"
+ source "package/libsigsegv/Config.in"
+ source "package/libtasn1/Config.in"
+ source "package/libtpl/Config.in"
+-source "package/libseccomp/Config.in"
+ source "package/libunwind/Config.in"
+ source "package/liburcu/Config.in"
+ source "package/linux-pam/Config.in"
+@@ -690,7 +691,6 @@ source "package/protobuf/Config.in"
+ source "package/protobuf-c/Config.in"
+ source "package/schifra/Config.in"
+ source "package/startup-notification/Config.in"
+-source "package/liblog4c-localtime/Config.in"
+ source "package/tzdata/Config.in"
+ endmenu
+ 
+@@ -700,9 +700,9 @@ endmenu
+ 
+ menu "Text and terminal handling"
+ source "package/enchant/Config.in"
+-source "package/libfribidi/Config.in"
+ source "package/icu/Config.in"
+ source "package/libedit/Config.in"
++source "package/libfribidi/Config.in"
+ source "package/libiconv/Config.in"
+ source "package/linenoise/Config.in"
+ source "package/ncurses/Config.in"
+@@ -757,23 +757,20 @@ source "package/arptables/Config.in"
+ source "package/avahi/Config.in"
+ source "package/axel/Config.in"
+ source "package/bcusdk/Config.in"
++source "package/bind/Config.in"
+ source "package/bluez_utils/Config.in"
++source "package/bmon/Config.in"
+ source "package/boa/Config.in"
+-source "package/bind/Config.in"
+-source "package/bmon/Config.in"
+ source "package/bridge-utils/Config.in"
+ source "package/bwm-ng/Config.in"
+ source "package/can-utils/Config.in"
+ source "package/chrony/Config.in"
+ source "package/civetweb/Config.in"
+ source "package/connman/Config.in"
++source "package/conntrack-tools/Config.in"
+ source "package/crda/Config.in"
+ source "package/ctorrent/Config.in"
+-source "package/conntrack-tools/Config.in"
+ source "package/cups/Config.in"
+-source "package/foomatic-filters/Config.in"
+-source "package/gutenprint/Config.in"
+-source "package/hplip/Config.in"
+ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ source "package/dhcp/Config.in"
+ endif
+@@ -783,10 +780,13 @@ source "package/dnsmasq/Config.in"
+ source "package/dropbear/Config.in"
+ source "package/ebtables/Config.in"
+ source "package/ethtool/Config.in"
++source "package/foomatic-filters/Config.in"
+ source "package/gesftpserver/Config.in"
++source "package/gutenprint/Config.in"
+ source "package/heirloom-mailx/Config.in"
+ source "package/hiawatha/Config.in"
+ source "package/hostapd/Config.in"
++source "package/hplip/Config.in"
+ source "package/httping/Config.in"
+ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ source "package/ifplugd/Config.in"
+@@ -820,21 +820,21 @@ source "package/mutt/Config.in"
+ source "package/nbd/Config.in"
+ source "package/ncftp/Config.in"
+ source "package/ndisc6/Config.in"
++source "package/netatalk/Config.in"
+ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ source "package/netcat/Config.in"
+ source "package/netkitbase/Config.in"
+ source "package/netkittelnet/Config.in"
+ endif
+-source "package/netatalk/Config.in"
+ source "package/netplug/Config.in"
+ source "package/netsnmp/Config.in"
+ source "package/netstat-nat/Config.in"
+ source "package/network-manager/Config.in"
+ source "package/nfacct/Config.in"
++source "package/ngircd/Config.in"
++source "package/ngrep/Config.in"
+ source "package/nmap/Config.in"
+ source "package/noip/Config.in"
+-source "package/ngircd/Config.in"
+-source "package/ngrep/Config.in"
+ source "package/ntp/Config.in"
+ source "package/nuttcp/Config.in"
+ source "package/olsr/Config.in"
+@@ -863,8 +863,8 @@ source "package/ser2net/Config.in"
+ source "package/socat/Config.in"
+ source "package/socketcand/Config.in"
+ source "package/spawn-fcgi/Config.in"
++source "package/spice/Config.in"
+ source "package/spice-protocol/Config.in"
+-source "package/spice/Config.in"
+ source "package/squid/Config.in"
+ source "package/strongswan/Config.in"
+ source "package/stunnel/Config.in"
+@@ -944,6 +944,7 @@ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ source "package/bootutils/Config.in"
+ endif
+ source "package/cpuload/Config.in"
++source "package/dsp-tools/Config.in"
+ source "package/htop/Config.in"
+ source "package/keyutils/Config.in"
+ source "package/kmod/Config.in"
+@@ -959,13 +960,16 @@ endif
+ source "package/quota/Config.in"
+ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ source "package/rsyslog/Config.in"
++endif
++source "package/supervisor/Config.in"
++if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ source "package/sysklogd/Config.in"
++endif
++source "package/systemd/Config.in"
++if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ source "package/sysvinit/Config.in"
+ endif
+-source "package/supervisor/Config.in"
+-source "package/systemd/Config.in"
+ source "package/util-linux/Config.in"
+-source "package/dsp-tools/Config.in"
+ endmenu
+ 
+ menu "Text editors and viewers"
