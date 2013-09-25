@@ -1,34 +1,30 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 25 Sep 2013 10:14:11 +0200
-Subject: [Buildroot] [git commit] linux-pam: bump to version 1.1.8
-Message-ID: <20130925092155.DB9C79B463@busybox.osuosl.org>
+Date: Wed, 25 Sep 2013 10:21:19 +0200
+Subject: [Buildroot] [git commit] proftpd: needs mmu
+Message-ID: <20130925092155.ED2409B880@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b74f81d56c5f9b46b4ba2db56edabbbbcad13cf8
+commit: http://git.buildroot.net/buildroot/commit/?id=1954c4e0c685d17db2c8d7ecdbd4feccfea5b77a
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Bump version to fix compile error with 1.1.7.
-
-Signed-off-by: Clayton Shotwell <clshotwe@rockwellcollins.com>
+Signed-off-by: Axel Lin <axel.lin@ingics.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/linux-pam/linux-pam.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/proftpd/Config.in |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-diff --git a/package/linux-pam/linux-pam.mk b/package/linux-pam/linux-pam.mk
-index 6d57593..7d2cbd3 100644
---- a/package/linux-pam/linux-pam.mk
-+++ b/package/linux-pam/linux-pam.mk
-@@ -4,7 +4,7 @@
- # 
- ################################################################################
+diff --git a/package/proftpd/Config.in b/package/proftpd/Config.in
+index 7793713..18407d1 100644
+--- a/package/proftpd/Config.in
++++ b/package/proftpd/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_PROFTPD
+ 	bool "proftpd"
++	depends on BR2_USE_MMU # fork()
+ 	help
+ 	  ProFTPD, a highly configurable FTP server.
  
--LINUX_PAM_VERSION = 1.1.7
-+LINUX_PAM_VERSION = 1.1.8
- LINUX_PAM_SOURCE = Linux-PAM-$(LINUX_PAM_VERSION).tar.bz2
- LINUX_PAM_SITE = http://linux-pam.org/library/
- LINUX_PAM_INSTALL_STAGING = YES
