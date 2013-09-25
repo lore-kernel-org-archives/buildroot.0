@@ -1,9 +1,9 @@
 From: =?ISO-8859-1?Q?Fran=E7ois_Perrad?= <francois.perrad@gadz.org>
-Date: Wed, 25 Sep 2013 13:31:01 +0200
+Date: Wed, 25 Sep 2013 13:41:01 +0200
 Subject: [Buildroot] [PATCH] ljsyscall: new package
 In-Reply-To: <1380070732-1834-1-git-send-email-danomimanchego123@gmail.com>
 References: <1380070732-1834-1-git-send-email-danomimanchego123@gmail.com>
-Message-ID: <CAB0FRsuHwyT_LK=3Ga+nvDLdUzreAiMHkj22TxayeazCCPbQGw@mail.gmail.com>
+Message-ID: <CAB0FRstQKyprRpi0NTaOE3R2NoZAgPjHOwo_65bZACJxthBwRA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -50,12 +50,6 @@ To: buildroot@busybox.net
 > +       bool "ljsyscall"
 > +       # ljsyscall is specifically for LuaJIT, not Lua.
 > +       depends on BR2_PACKAGE_LUAJIT
-
-not available on all architecture
-    depends on BR2_i386 || BR2_x86_64 || BR2_arm || BR2_powerpc || BR2_mips
-
-Fran?ois
-
 > +       help
 > +         An FFI implementation of the Linux and NetBSD kernel ABIs for LuaJIT.
 > +
@@ -75,6 +69,9 @@ Fran?ois
 > +LJSYSCALL_VERSION = v0.8
 > +LJSYSCALL_SITE = http://github.com/justincormack/ljsyscall/tarball/$(LJSYSCALL_VERSION)
 > +LJSYSCALL_DEPENDENCIES = luajit
+
+this built time dependency is useless.
+
 > +LJSYSCALL_LICENSE = MIT
 > +LJSYSCALL_LICENSE_FILES = COPYRIGHT
 > +
@@ -99,6 +96,11 @@ Fran?ois
 > +       $(INSTALL) -d $(TARGET_DIR)/usr/share/luajit-$(LUAJIT_VERSION)/syscall/linux/$(LJSYSCALL_ARCH)
 > +       $(INSTALL) -t $(TARGET_DIR)/usr/share/luajit-$(LUAJIT_VERSION)/syscall/linux/ $(@D)/syscall/linux/*.lua
 > +       $(INSTALL) -t $(TARGET_DIR)/usr/share/luajit-$(LUAJIT_VERSION)/syscall/linux/$(LJSYSCALL_ARCH) $(@D)/syscall/linux/$(LJSYSCALL_ARCH)/*.lua
+
+the 'x' bit is not needed for *.lua files, so use $(INSTALL) with -m 0644
+
+Fran?ois
+
 > +endef
 > +
 > +$(eval $(generic-package))
