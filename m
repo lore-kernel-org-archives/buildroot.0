@@ -1,38 +1,62 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 24 Sep 2013 23:57:15 +0200
-Subject: [Buildroot] [PATCH v2 13/17] audit: new package
-In-Reply-To: <OF1C36952D.12623546-ON86257BF0.0061A062-86257BF0.0061C58C@rockwellcollins.com>
-References: <1378936777-28308-1-git-send-email-clshotwe@rockwellcollins.com>
- <1378936777-28308-14-git-send-email-clshotwe@rockwellcollins.com>
- <20130918070020.22ff8ca9@skate>
- <OF1C36952D.12623546-ON86257BF0.0061A062-86257BF0.0061C58C@rockwellcollins.com>
-Message-ID: <20130924235715.47ca2a68@skate>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed, 25 Sep 2013 00:03:56 +0000 (UTC)
+Subject: [Buildroot] [Bug 6500] New: php fails to build for armel.
+Message-ID: <bug-6500-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Clayton Shotwell,
+https://bugs.busybox.net/show_bug.cgi?id=6500
 
-On Tue, 24 Sep 2013 12:47:59 -0500, Clayton Shotwell wrote:
+           Summary: php fails to build for armel.
+           Product: buildroot
+           Version: 2013.08
+          Platform: Other
+        OS/Version: Linux
+            Status: NEW
+          Severity: minor
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: seetwobob at live.co.uk
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
-> I have been working with the audit community to get this patch
-> accepted. There is an issue with the C program not pulling in the
-> correct headers when you build it for this host.  The python script
-> is able to get around this issue. 
 
-Hum this is strange because with CFLAGS_FOR_BUILD, you're supposed to
-receive the correct -I arguments even for building host tools. I really
-believe adding Python as a build dependency for something that already
-has a nice C program to be built is not the nicest move. Of course, if
-that's upstream choice, then we'll follow it, but I believe it's not
-the best choice.
+Unsure what other details may be helpful...
 
-Best regards,
 
-Thomas
+/home/me/GIT/buildroot-13-08/output/build/php-5.3.27/ext/fileinfo/libmagic/apprentice.c:
+In function 'apprentice_load':
+/home/me/GIT/buildroot-13-08/output/build/php-5.3.27/ext/fileinfo/libmagic/apprentice.c:781:4:
+warning: passing argument 1 of '_php_stream_opendir' discards 'const' qualifier
+from pointer target type [enabled by default]
+In file included from
+/home/me/GIT/buildroot-13-08/output/build/php-5.3.27/main/php.h:400:0,
+                 from
+/home/me/GIT/buildroot-13-08/output/build/php-5.3.27/ext/fileinfo/libmagic/apprentice.c:32:
+/home/me/GIT/buildroot-13-08/output/build/php-5.3.27/main/php_streams.h:339:53:
+note: expected 'char *' but argument is of type 'const char *'
+make[1]: Leaving directory
+`/home/me/GIT/buildroot-13-08/output/build/php-5.3.27'
+make: *** [/home/me/GIT/buildroot-13-08/output/build/php-5.3.27/.stamp_built]
+Error 2
+
+Seems like a minor messup somewhere.
+Upstream?  Unsure.  seems likely
+
+Happy to provide more details upon request.
+Hope this helps.
+
+Will dig around for similar errors. I did find a bunch of pastebin logs of
+fails that looked PRETTY similar but now obvious patches...
+
+and a few similar reports of this error output laterally.
+Just thought you should know.
+
 -- 
-Thomas Petazzoni, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
