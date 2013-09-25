@@ -1,42 +1,104 @@
-From: Clayton Shotwell <clshotwe@rockwellcollins.com>
-Date: Wed, 25 Sep 2013 07:29:40 -0500
-Subject: [Buildroot] [PATCH v2 13/17] audit: new package
-In-Reply-To: <20130924235715.47ca2a68@skate>
-References: <1378936777-28308-1-git-send-email-clshotwe@rockwellcollins.com>	<1378936777-28308-14-git-send-email-clshotwe@rockwellcollins.com>
- <20130918070020.22ff8ca9@skate>	<OF1C36952D.12623546-ON86257BF0.0061A062-86257BF0.0061C58C@rockwellcollins.com>
- <20130924235715.47ca2a68@skate>
-Message-ID: <OF2AC6A1BB.46077216-ON86257BF1.00444464-86257BF1.0044A19D@rockwellcollins.com>
+From: Danomi Manchego <danomimanchego123@gmail.com>
+Date: Wed, 25 Sep 2013 08:44:54 -0400
+Subject: [Buildroot] [PATCH] jq: new package
+In-Reply-To: <bb47a7f9-6e83-4203-a8be-7038e346998c@email.android.com>
+References: <1380070714-1795-1-git-send-email-danomimanchego123@gmail.com>
+ <bb47a7f9-6e83-4203-a8be-7038e346998c@email.android.com>
+Message-ID: <CANxTyt4RWk4=cF0-VvaQWnqGDyzUWoAdVRf2Cj50WxQCty0pLw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas,
+Hi Thomas,
 
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote on 09/24/2013 
-04:57:15 PM:
+On Wed, Sep 25, 2013 at 1:59 AM, Thomas De Schampheleire
+<patrickdepinguin@gmail.com> wrote:
+> Danomi Manchego <danomimanchego123@gmail.com> wrote:
+>>jq is like sed for JSON data - you can use it to slice and filter
+>>and map and transform structured data with the same ease that sed,
+>>awk, grep and friends let you play with text.
+>>
+>>Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
+>>
+>>---
+>>
+>>The package description is as per the author - not my words.
+>>---
+>> package/Config.in    |    1 +
+>> package/jq/Config.in |    8 ++++++++
+>> package/jq/jq.mk     |   13 +++++++++++++
+>> 3 files changed, 22 insertions(+)
+>> create mode 100644 package/jq/Config.in
+>> create mode 100644 package/jq/jq.mk
+>>
+>>diff --git a/package/Config.in b/package/Config.in
+>>index 1dd60d1..ce18ec7 100644
+>>--- a/package/Config.in
+>>+++ b/package/Config.in
+>>@@ -108,6 +108,7 @@ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+>> source "package/grep/Config.in"
+>> endif
+>> source "package/intltool/Config.in"
+>>+source "package/jq/Config.in"
+>> source "package/make/Config.in"
+>> source "package/libtool/Config.in"
+>> source "package/m4/Config.in"
+>>diff --git a/package/jq/Config.in b/package/jq/Config.in
+>>new file mode 100644
+>>index 0000000..9329b2f
+>>--- /dev/null
+>>+++ b/package/jq/Config.in
+>>@@ -0,0 +1,8 @@
+>>+config BR2_PACKAGE_JQ
+>>+      bool "jq"
+>>+      help
+>>+        jq is like sed for JSON data - you can use it to slice and filter
+>>+        and map and transform structured data with the same ease that sed,
+>>+        awk, grep and friends let you play with text.
+>>+
+>>+        http://stedolan.github.io/jq/
+>>diff --git a/package/jq/jq.mk b/package/jq/jq.mk
+>>new file mode 100644
+>>index 0000000..b0436bb
+>>--- /dev/null
+>>+++ b/package/jq/jq.mk
+>>@@ -0,0 +1,13 @@
+>>+################################################################################
+>>+#
+>>+# jq
+>>+#
+>>+################################################################################
+>>+
+>>+JQ_VERSION = 1.3
+>>+JQ_SITE = http://github.com/stedolan/jq/archive
+>
+> The buildroot manual talks about a slightly different url for github packages. It's there a specific reason you're not using that one?
 
-> Hum this is strange because with CFLAGS_FOR_BUILD, you're supposed to
-> receive the correct -I arguments even for building host tools. I really
-> believe adding Python as a build dependency for something that already
-> has a nice C program to be built is not the nicest move. Of course, if
-> that's upstream choice, then we'll follow it, but I believe it's not
-> the best choice.
+Yes, I saw the github documentation in the on-line documentation, so I
+tried this:
 
-I guess I should give a little more detail on what the C program is doing. 
- That program takes kernel syscall numbers and generates lookup tables to 
-reference the number to a string.  This is used in decoding the audit log 
-information and presenting it in a method that is human readable.  The 
-issue I am seeing with building it for the host is incorrect tables are 
-generated.  I do not know of a way to get a C program to compile using 
-different kernel headers and preprocessor values.  Do you know of a way to 
-do this?
+JQ_SITE = http://github.com/stedolan/jq/tarball/$(JQ_VERSION)
 
-Thanks,
-Clayton
+But it didn't work - after a github redirection or two, I got 404.
 
-Clayton Shotwell
-Software Engineer
-clshotwe at rockwellcollins.com
-www.rockwellcollins.com 
+
+>>+JQ_AUTORECONF = YES
+>>+JQ_LICENSE = jq license
+>>+JQ_LICENSE_FILES = COPYING
+>>+
+>>+$(eval $(autotools-package))
+>
+> Are there no dependencies?
+> No need for threads, c++, or any of that?
+
+No, none that I can see - the source is all .c, and no pthread hits
+when I grep for "thread".
+
+Do you use a particular defconfig to verify this?
+
+
+> Best regards,
+> Thomas
+>
