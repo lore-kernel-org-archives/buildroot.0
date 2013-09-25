@@ -1,474 +1,67 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Wed, 25 Sep 2013 10:01:43 +0200
-Subject: [Buildroot] [PATCH] package/Config.in: order alphabetically
-Message-ID: <2fd3fbf902d87dab33eb.1380096103@argentina>
+From: Fabio Porcedda <fabio.porcedda@gmail.com>
+Date: Wed, 25 Sep 2013 10:05:35 +0200
+Subject: [Buildroot] [PATCH v5 0/4] Fix for top-level parallel make part 1
+Message-ID: <1380096339-4686-1-git-send-email-fabio.porcedda@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Even though new packages are normally added in the right alphabetical order,
-there still remain quite a number of incorrect orderings in package/Config.in.
-In this patch, alphabetical order is created in each menu.
+Hi all,
+this is the first patch set for fixing top-level parallel make in buildroot,
+the common problem scattered in buildroot's top-level makefile is that in the
+rules it relies on the order of evaluation of the prerequisites,
+to be able to use top-level parallel make instead of reling on the left to
+right ordering of evaluation of the prerequisites we must add an explicit
+rule to describe the dependencies.
 
-Note that this sometimes mean that packages that logically belong together, like
-cups, gutenprint, hplip, are now split apart.
+With this patch set the package building seems to work fine with top-level
+parallel make, example:
 
-Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+	make clean toolchain
+	make BR2_JLEVEL= -j<n> <package name list>
 
----
- package/Config.in |  102 ++++++++++++++++++++++++++++-------------------------
- 1 files changed, 53 insertions(+), 49 deletions(-)
+Before to try that you have to remove the ".NOTPARALLEL" line in the top-level
+Makefile.
 
-For the vim users out there: do you know the 'filter' command? This allows to
-take content from the document, pipe it through a shell pipeline of your
-choosing, and put the output back in the document in place of the original text.
-For example:
-:'<,'>! sort
-will replace the visual selection with its sorted version.
-There exist also 'read!' and 'write!' commands that do more or less half of the
-filter command: read takes output from a shell pipeline and pastes it in the
-document, but does not use any input from the document. The write command
-uses text from the document as input for the shell pipeline, but discards the
-output.
-See :help filter, :help read!, :help write!
+The part that remain to fix for top-level parallel make is the toolchain
+building and targets after building all the packages.
 
-diff --git a/package/Config.in b/package/Config.in
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -7,8 +7,8 @@ source "package/alsa-utils/Config.in"
- source "package/aumix/Config.in"
- source "package/bellagio/Config.in"
- source "package/faad2/Config.in"
-+source "package/ffmpeg/Config.in"
- source "package/flac/Config.in"
--source "package/ffmpeg/Config.in"
- source "package/gstreamer/Config.in"
- source "package/gstreamer1/Config.in"
- source "package/lame/Config.in"
-@@ -34,8 +34,8 @@ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- source "package/gzip/Config.in"
- endif
- source "package/infozip/Config.in"
-+source "package/lzma/Config.in"
- source "package/lzop/Config.in"
--source "package/lzma/Config.in"
- source "package/xz/Config.in"
- endmenu
- 
-@@ -43,9 +43,9 @@ menu "Debugging, profiling and benchmark
- source "package/bonnie/Config.in"
- source "package/cache-calibrator/Config.in"
- source "package/dhrystone/Config.in"
--source "package/dstat/Config.in"
- source "package/dmalloc/Config.in"
- source "package/dropwatch/Config.in"
-+source "package/dstat/Config.in"
- source "package/duma/Config.in"
- source "package/gdb/Config.in"
- source "package/iozone/Config.in"
-@@ -56,26 +56,26 @@ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- source "package/lsof/Config.in"
- endif
- source "package/ltp-testsuite/Config.in"
-+source "package/ltrace/Config.in"
- source "package/lttng-babeltrace/Config.in"
- source "package/lttng-modules/Config.in"
- source "package/lttng-tools/Config.in"
--source "package/ltrace/Config.in"
- source "package/memstat/Config.in"
- source "package/netperf/Config.in"
- source "package/oprofile/Config.in"
- source "package/pax-utils/Config.in"
- source "package/perf/Config.in"
-+source "package/pv/Config.in"
-+source "package/ramsmp/Config.in"
- source "package/ramspeed/Config.in"
--source "package/ramsmp/Config.in"
- source "package/rt-tests/Config.in"
- source "package/strace/Config.in"
- source "package/stress/Config.in"
- source "package/sysprof/Config.in"
- source "package/tinymembench/Config.in"
- source "package/trace-cmd/Config.in"
-+source "package/valgrind/Config.in"
- source "package/whetstone/Config.in"
--source "package/valgrind/Config.in"
--source "package/pv/Config.in"
- endmenu
- 
- menu "Development tools"
-@@ -108,9 +108,9 @@ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- source "package/grep/Config.in"
- endif
- source "package/intltool/Config.in"
--source "package/make/Config.in"
- source "package/libtool/Config.in"
- source "package/m4/Config.in"
-+source "package/make/Config.in"
- if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- source "package/patch/Config.in"
- endif
-@@ -130,9 +130,9 @@ source "package/yasm/Config.in"
- endmenu
- 
- menu "Games"
-+source "package/doom-wad/Config.in"
- source "package/gnuchess/Config.in"
- source "package/prboom/Config.in"
--source "package/doom-wad/Config.in"
- source "package/rubix/Config.in"
- endmenu
- 
-@@ -162,12 +162,12 @@ source "package/lite/Config.in"
- source "package/ocrad/Config.in"
- source "package/sawman/Config.in"
- source "package/sdl/Config.in"
-+source "package/sdl_gfx/Config.in"
- source "package/sdl_image/Config.in"
- source "package/sdl_mixer/Config.in"
-+source "package/sdl_net/Config.in"
- source "package/sdl_sound/Config.in"
--source "package/sdl_net/Config.in"
- source "package/sdl_ttf/Config.in"
--source "package/sdl_gfx/Config.in"
- 
- comment "other GUIs"
- source "package/efl/Config.in"
-@@ -192,20 +192,20 @@ source "package/libsexy/Config.in"
- source "package/x11r7/xkeyboard-config/Config.in"
- 
- comment "X Window managers"
-+source "package/blackbox/Config.in"
- source "package/enlightenment/Config.in"
-+source "package/fluxbox/Config.in"
- source "package/matchbox/Config.in"
- source "package/metacity/Config.in"
--source "package/blackbox/Config.in"
--source "package/fluxbox/Config.in"
- 
- comment "X applications"
- source "package/alsamixergui/Config.in"
- source "package/docker/Config.in"
- source "package/feh/Config.in"
- source "package/freerdp/Config.in"
--source "package/gqview/Config.in"
- source "package/gmpc/Config.in"
- source "package/gob2/Config.in"
-+source "package/gqview/Config.in"
- source "package/gtkperf/Config.in"
- source "package/leafpad/Config.in"
- source "package/midori/Config.in"
-@@ -256,7 +256,6 @@ source "package/sunxi-boards/Config.in"
- source "package/ux500-firmware/Config.in"
- source "package/zd1211-firmware/Config.in"
- endmenu
--source "package/freescale-imx/Config.in"
- source "package/a10disp/Config.in"
- source "package/acpid/Config.in"
- source "package/cdrkit/Config.in"
-@@ -274,10 +273,11 @@ source "package/dvbsnoop/Config.in"
- source "package/eeprog/Config.in"
- source "package/evtest/Config.in"
- source "package/fan-ctrl/Config.in"
--source "package/flashrom/Config.in"
- source "package/fconfig/Config.in"
- source "package/fis/Config.in"
-+source "package/flashrom/Config.in"
- source "package/fmtools/Config.in"
-+source "package/freescale-imx/Config.in"
- source "package/fxload/Config.in"
- source "package/gadgetfs-test/Config.in"
- source "package/gpsd/Config.in"
-@@ -304,8 +304,8 @@ source "package/memtester/Config.in"
- source "package/minicom/Config.in"
- source "package/nanocom/Config.in"
- source "package/neard/Config.in"
-+source "package/ofono/Config.in"
- source "package/ola/Config.in"
--source "package/ofono/Config.in"
- source "package/on2-8170-modules/Config.in"
- source "package/open2300/Config.in"
- source "package/openocd/Config.in"
-@@ -450,10 +450,10 @@ menu "Crypto"
- source "package/beecrypt/Config.in"
- source "package/cryptodev/Config.in"
- source "package/gnutls/Config.in"
-+source "package/libassuan/Config.in"
- source "package/libgcrypt/Config.in"
- source "package/libgpg-error/Config.in"
- source "package/libgpgme/Config.in"
--source "package/libassuan/Config.in"
- source "package/libmcrypt/Config.in"
- source "package/libmhash/Config.in"
- source "package/libnss/Config.in"
-@@ -491,6 +491,7 @@ source "package/fltk/Config.in"
- source "package/fontconfig/Config.in"
- source "package/freetype/Config.in"
- source "package/gd/Config.in"
-+source "package/gdk-pixbuf/Config.in"
- source "package/giblib/Config.in"
- source "package/gtk2-engines/Config.in"
- source "package/gtk2-themes/Config.in"
-@@ -505,7 +506,6 @@ source "package/libexif/Config.in"
- source "package/libgail/Config.in"
- source "package/libgeotiff/Config.in"
- source "package/libglade/Config.in"
--source "package/gdk-pixbuf/Config.in"
- source "package/libgtk2/Config.in"
- source "package/libpng/Config.in"
- source "package/libqrencode/Config.in"
-@@ -535,8 +535,6 @@ source "package/lcdapi/Config.in"
- source "package/libaio/Config.in"
- source "package/libatasmart/Config.in"
- source "package/libcec/Config.in"
--source "package/libraw1394/Config.in"
--source "package/tslib/Config.in"
- source "package/libfreefare/Config.in"
- source "package/libftdi/Config.in"
- source "package/libhid/Config.in"
-@@ -544,6 +542,7 @@ source "package/libiqrf/Config.in"
- source "package/libnfc/Config.in"
- source "package/libnfc-llcp/Config.in"
- source "package/libqmi/Config.in"
-+source "package/libraw1394/Config.in"
- source "package/libserial/Config.in"
- source "package/libsoc/Config.in"
- source "package/libusb/Config.in"
-@@ -554,6 +553,7 @@ source "package/mtdev/Config.in"
- source "package/ne10/Config.in"
- source "package/neardal/Config.in"
- source "package/pcsc-lite/Config.in"
-+source "package/tslib/Config.in"
- source "package/urg/Config.in"
- endmenu
- 
-@@ -572,8 +572,8 @@ endmenu
- 
- menu "Multimedia"
- source "package/libdvbsi/Config.in"
-+source "package/libdvdnav/Config.in"
- source "package/libdvdread/Config.in"
--source "package/libdvdnav/Config.in"
- source "package/libebml/Config.in"
- source "package/libfslcodec/Config.in"
- source "package/libfslparser/Config.in"
-@@ -589,12 +589,12 @@ source "package/mediastreamer/Config.in"
- endmenu
- 
- menu "Networking"
-+source "package/cppzmq/Config.in"
- source "package/czmq/Config.in"
--source "package/cppzmq/Config.in"
- source "package/filemq/Config.in"
- source "package/glib-networking/Config.in"
-+source "package/libcgicc/Config.in"
- source "package/libcgi/Config.in"
--source "package/libcgicc/Config.in"
- source "package/libcurl/Config.in"
- source "package/libdnet/Config.in"
- source "package/libesmtp/Config.in"
-@@ -603,12 +603,10 @@ source "package/libfcgi/Config.in"
- source "package/libgsasl/Config.in"
- source "package/libidn/Config.in"
- source "package/libiscsi/Config.in"
--source "package/liboauth/Config.in"
-+source "package/libmbus/Config.in"
- source "package/libmicrohttpd/Config.in"
--source "package/neon/Config.in"
- source "package/libmnl/Config.in"
- source "package/libmodbus/Config.in"
--source "package/libmbus/Config.in"
- source "package/libnetfilter_acct/Config.in"
- source "package/libnetfilter_conntrack/Config.in"
- source "package/libnetfilter_cthelper/Config.in"
-@@ -617,9 +615,10 @@ source "package/libnetfilter_log/Config.
- source "package/libnetfilter_queue/Config.in"
- source "package/libnfnetlink/Config.in"
- source "package/libnl/Config.in"
-+source "package/liboauth/Config.in"
- source "package/liboping/Config.in"
-+source "package/libosip2/Config.in"
- source "package/libpcap/Config.in"
--source "package/libosip2/Config.in"
- source "package/librsync/Config.in"
- source "package/libsoup/Config.in"
- source "package/libtirpc/Config.in"
-@@ -627,6 +626,7 @@ source "package/libtorrent/Config.in"
- source "package/libupnp/Config.in"
- source "package/libvncserver/Config.in"
- source "package/libwebsockets/Config.in"
-+source "package/neon/Config.in"
- source "package/nss-mdns/Config.in"
- source "package/omniorb/Config.in"
- source "package/openpgm/Config.in"
-@@ -642,38 +642,39 @@ endmenu
- menu "Other"
- source "package/apr/Config.in"
- source "package/apr-util/Config.in"
--source "package/libcofi/Config.in"
-+source "package/argp-standalone/Config.in"
-+source "package/boost/Config.in"
- source "package/classpath/Config.in"
- source "package/cppcms/Config.in"
- source "package/eigen/Config.in"
- source "package/elfutils/Config.in"
- source "package/fftw/Config.in"
--source "package/libargtable2/Config.in"
--source "package/argp-standalone/Config.in"
--source "package/boost/Config.in"
- source "package/glibmm/Config.in"
- source "package/gmp/Config.in"
- source "package/gsl/Config.in"
- source "package/gtest/Config.in"
-+source "package/libargtable2/Config.in"
- source "package/libatomic_ops/Config.in"
- source "package/libbsd/Config.in"
- source "package/libcap/Config.in"
- source "package/libcap-ng/Config.in"
-+source "package/libcofi/Config.in"
- source "package/libdaemon/Config.in"
- source "package/libelf/Config.in"
-+source "package/libev/Config.in"
- source "package/libevent/Config.in"
--source "package/libev/Config.in"
- source "package/libffi/Config.in"
- source "package/libglib2/Config.in"
- source "package/libical/Config.in"
-+source "package/liblog4c-localtime/Config.in"
- source "package/libnspr/Config.in"
- source "package/libpfm4/Config.in"
- source "package/libpthsem/Config.in"
-+source "package/libseccomp/Config.in"
- source "package/libsigc/Config.in"
- source "package/libsigsegv/Config.in"
- source "package/libtasn1/Config.in"
- source "package/libtpl/Config.in"
--source "package/libseccomp/Config.in"
- source "package/libunwind/Config.in"
- source "package/liburcu/Config.in"
- source "package/linux-pam/Config.in"
-@@ -690,7 +691,6 @@ source "package/protobuf/Config.in"
- source "package/protobuf-c/Config.in"
- source "package/schifra/Config.in"
- source "package/startup-notification/Config.in"
--source "package/liblog4c-localtime/Config.in"
- source "package/tzdata/Config.in"
- endmenu
- 
-@@ -700,9 +700,9 @@ endmenu
- 
- menu "Text and terminal handling"
- source "package/enchant/Config.in"
--source "package/libfribidi/Config.in"
- source "package/icu/Config.in"
- source "package/libedit/Config.in"
-+source "package/libfribidi/Config.in"
- source "package/libiconv/Config.in"
- source "package/linenoise/Config.in"
- source "package/ncurses/Config.in"
-@@ -757,23 +757,20 @@ source "package/arptables/Config.in"
- source "package/avahi/Config.in"
- source "package/axel/Config.in"
- source "package/bcusdk/Config.in"
-+source "package/bind/Config.in"
- source "package/bluez_utils/Config.in"
-+source "package/bmon/Config.in"
- source "package/boa/Config.in"
--source "package/bind/Config.in"
--source "package/bmon/Config.in"
- source "package/bridge-utils/Config.in"
- source "package/bwm-ng/Config.in"
- source "package/can-utils/Config.in"
- source "package/chrony/Config.in"
- source "package/civetweb/Config.in"
- source "package/connman/Config.in"
-+source "package/conntrack-tools/Config.in"
- source "package/crda/Config.in"
- source "package/ctorrent/Config.in"
--source "package/conntrack-tools/Config.in"
- source "package/cups/Config.in"
--source "package/foomatic-filters/Config.in"
--source "package/gutenprint/Config.in"
--source "package/hplip/Config.in"
- if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- source "package/dhcp/Config.in"
- endif
-@@ -783,10 +780,13 @@ source "package/dnsmasq/Config.in"
- source "package/dropbear/Config.in"
- source "package/ebtables/Config.in"
- source "package/ethtool/Config.in"
-+source "package/foomatic-filters/Config.in"
- source "package/gesftpserver/Config.in"
-+source "package/gutenprint/Config.in"
- source "package/heirloom-mailx/Config.in"
- source "package/hiawatha/Config.in"
- source "package/hostapd/Config.in"
-+source "package/hplip/Config.in"
- source "package/httping/Config.in"
- if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- source "package/ifplugd/Config.in"
-@@ -820,21 +820,21 @@ source "package/mutt/Config.in"
- source "package/nbd/Config.in"
- source "package/ncftp/Config.in"
- source "package/ndisc6/Config.in"
-+source "package/netatalk/Config.in"
- if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- source "package/netcat/Config.in"
- source "package/netkitbase/Config.in"
- source "package/netkittelnet/Config.in"
- endif
--source "package/netatalk/Config.in"
- source "package/netplug/Config.in"
- source "package/netsnmp/Config.in"
- source "package/netstat-nat/Config.in"
- source "package/network-manager/Config.in"
- source "package/nfacct/Config.in"
-+source "package/ngircd/Config.in"
-+source "package/ngrep/Config.in"
- source "package/nmap/Config.in"
- source "package/noip/Config.in"
--source "package/ngircd/Config.in"
--source "package/ngrep/Config.in"
- source "package/ntp/Config.in"
- source "package/nuttcp/Config.in"
- source "package/olsr/Config.in"
-@@ -863,8 +863,8 @@ source "package/ser2net/Config.in"
- source "package/socat/Config.in"
- source "package/socketcand/Config.in"
- source "package/spawn-fcgi/Config.in"
-+source "package/spice/Config.in"
- source "package/spice-protocol/Config.in"
--source "package/spice/Config.in"
- source "package/squid/Config.in"
- source "package/strongswan/Config.in"
- source "package/stunnel/Config.in"
-@@ -944,6 +944,7 @@ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- source "package/bootutils/Config.in"
- endif
- source "package/cpuload/Config.in"
-+source "package/dsp-tools/Config.in"
- source "package/htop/Config.in"
- source "package/keyutils/Config.in"
- source "package/kmod/Config.in"
-@@ -959,13 +960,16 @@ endif
- source "package/quota/Config.in"
- if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- source "package/rsyslog/Config.in"
-+endif
-+source "package/supervisor/Config.in"
-+if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- source "package/sysklogd/Config.in"
-+endif
-+source "package/systemd/Config.in"
-+if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- source "package/sysvinit/Config.in"
- endif
--source "package/supervisor/Config.in"
--source "package/systemd/Config.in"
- source "package/util-linux/Config.in"
--source "package/dsp-tools/Config.in"
- endmenu
- 
- menu "Text editors and viewers"
+Best regards
+Fabio Porcedda
+
+v5:
+ - added the fourth patch
+ - fixed some typos
+ - rewrited the second patch to use only $$($(2)_TARGET_*) in the rules
+ - add support for top-level parallel make for the glibc package
+v4:
+ - rebased over master
+ - add Acked-by: Thomas Petazzoni on the third patch
+ - changed the orderd of the patches
+v3:
+ - add back the patch "package: add toolchain dependency to
+    inner-generic-package" because now is working fine.
+ - add Acked-by: Arnout Vandecappelle to the third patch.
+ - reworked the second patch following Arnout suggestions.
+v2:
+ - remove patch "package: add toolchain dependency to inner-generic-package"
+   because was not working fine against recent toolchain changes.
+
+Fabio Porcedda (4):
+  package: add toolchain dependency to inner-generic-package
+  pkg-generic: fix rules for top-level parallel make
+  package/Makefile.in: don't force jobs when BR2_JLEVEL is empty
+  pkg-generic: enable recursive make for $($(PKG)_BUILD_CMDS)
+
+ Makefile                 |  2 +-
+ package/Makefile.in      |  2 +-
+ package/glibc/glibc.mk   |  3 ++-
+ package/pkg-autotools.mk |  3 ++-
+ package/pkg-generic.mk   | 46 +++++++++++++++++++++++++++-------------------
+ package/uclibc/uclibc.mk |  3 ++-
+ 6 files changed, 35 insertions(+), 24 deletions(-)
+
+-- 
+1.8.4
