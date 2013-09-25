@@ -1,22 +1,27 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 25 Sep 2013 10:41:42 +0200
-Subject: [Buildroot] linux-pam: bump to version 1.1.8
-In-Reply-To: <1380055853-7849-1-git-send-email-clshotwe@rockwellcollins.com>
- (Clayton Shotwell's message of "Tue, 24 Sep 2013 15:50:53 -0500")
-References: <1380055853-7849-1-git-send-email-clshotwe@rockwellcollins.com>
-Message-ID: <87d2nx8f95.fsf@dell.be.48ers.dk>
+Date: Wed, 25 Sep 2013 10:40:25 +0200
+Subject: [Buildroot] [PATCHv2] libevent: Bump to 2.0.21
+In-Reply-To: <1380033764-906-1-git-send-email-mjonker@synopsys.com> (Mischa
+ Jonker's message of "Tue, 24 Sep 2013 16:42:44 +0200")
+References: <1380033764-906-1-git-send-email-mjonker@synopsys.com>
+Message-ID: <87had98fba.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Clayton" == Clayton Shotwell <clshotwe@rockwellcollins.com> writes:
+>>>>> "Mischa" == Mischa Jonker <Mischa.Jonker@synopsys.com> writes:
 
- Clayton> Bump version to fix compile error with 1.1.7.
- Clayton> Signed-off-by: Clayton Shotwell <clshotwe@rockwellcollins.com>
+ Mischa> This fixes the build on ARC as well, as 2.0.17 includes a fix
+ Mischa> that checks for existence of 'sysctl'.
 
-Committed, thanks.
+ Mischa> v2: Change 2.0.17 to 2.0.21, as that is the latest stable version.
+
+This comment should go under the --- line so it doesn't become part of
+the commit message.
+
+Committed with that fixed, thanks.
 
 -- 
 Bye, Peter Korsgaard
