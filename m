@@ -1,35 +1,30 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 25 Sep 2013 10:13:47 +0200
-Subject: [Buildroot] [git commit] libevent: Bump to 2.0.21
-Message-ID: <20130925092155.D10C39B881@busybox.osuosl.org>
+Date: Wed, 25 Sep 2013 10:21:29 +0200
+Subject: [Buildroot] [git commit] stress: needs mmu
+Message-ID: <20130925092156.0D4C09B463@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b088752be330e3ff4f2a284e6067d439a4d4ae5f
+commit: http://git.buildroot.net/buildroot/commit/?id=77a2607fa3fe840427cbb088ddddc8c592a4976d
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This fixes the build on ARC as well, as 2.0.17+ includes a fix
-that checks for existence of 'sysctl'.
-
-Signed-off-by: Mischa Jonker <mjonker@synopsys.com>
+Signed-off-by: Axel Lin <axel.lin@ingics.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/libevent/libevent.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/stress/Config.in |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-diff --git a/package/libevent/libevent.mk b/package/libevent/libevent.mk
-index 94882b5..a6def1a 100644
---- a/package/libevent/libevent.mk
-+++ b/package/libevent/libevent.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBEVENT_VERSION = 2.0.14
-+LIBEVENT_VERSION = 2.0.21
- LIBEVENT_SOURCE = libevent-$(LIBEVENT_VERSION)-stable.tar.gz
- LIBEVENT_SITE = https://github.com/downloads/libevent/libevent
- LIBEVENT_INSTALL_STAGING = YES
+diff --git a/package/stress/Config.in b/package/stress/Config.in
+index b092b03..37f8946 100644
+--- a/package/stress/Config.in
++++ b/package/stress/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_STRESS
+ 	bool "stress"
++	depends on BR2_USE_MMU # fork()
+ 	help
+ 	  A deliberately simple workload generator for POSIX systems.
+ 	  It imposes a configurable amount of CPU, memory, I/O, and
