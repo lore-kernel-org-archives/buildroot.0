@@ -1,91 +1,89 @@
-From: Matt Weber <mlweber1@rockwellcollins.com>
-Date: Wed, 25 Sep 2013 14:41:55 -0500
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
-	2013-09-19
-In-Reply-To: <CAC2S8kgcLiKT7jGSwcuvi_uq0Lupbn_qAKdOiQZq4bdJNh50Bw@mail.gmail.com>
-References: <20130920063008.7C55952C101@lolut.humanoidz.org>
- <CAC2S8kgcLiKT7jGSwcuvi_uq0Lupbn_qAKdOiQZq4bdJNh50Bw@mail.gmail.com>
-Message-ID: <CAC2S8kj5UhTyp=JYVNGSozp2X00cWZ-etrUqrnziOcUWmZphOg@mail.gmail.com>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Wed, 25 Sep 2013 22:12:37 +0200
+Subject: [Buildroot] [PATCH 0 of 9 v4] linux/uboot: add support for
+ custom Mercurial repositories
+In-Reply-To: <CAAXf6LU43Qj8CwnPcC2=w5d_cV5=+L=rXoaYmJgU4wHrG4YwdA@mail.gmail.com>
+References: <patchbomb.1378152469@argentina> <20130919214908.35f7f8ca@skate>
+ <CAAXf6LU43Qj8CwnPcC2=w5d_cV5=+L=rXoaYmJgU4wHrG4YwdA@mail.gmail.com>
+Message-ID: <CAAXf6LWfZ-uut7m97tyaCWs_FjmR4rh9k876Vyaq65m87qQGhQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Sep 20, 2013 at 8:29 PM, Matt Weber
-<mlweber1@rockwellcollins.com> wrote:
+All,
+
+On Fri, Sep 20, 2013 at 11:22 AM, Thomas De Schampheleire
+<patrickdepinguin+buildroot@gmail.com> wrote:
+> Hi Thomas,
 >
-> On Sep 20, 2013 1:30 AM, "Thomas Petazzoni"
+> Thanks for coming back to this...
+>
+> On Thu, Sep 19, 2013 at 9:49 PM, Thomas Petazzoni
 > <thomas.petazzoni@free-electrons.com> wrote:
+>> Dear Thomas De Schampheleire,
 >>
->> Build statistics for 2013-09-19
->> ===============================
+>> On Mon, 02 Sep 2013 22:07:49 +0200, Thomas De Schampheleire wrote:
 >>
->>         success : 70
->>        failures : 63
->>        timeouts : 0
->>           TOTAL : 133
+>>> This series adds support for custom Mercurial repositories in uboot and linux
+>>> packages.
+>>>
+>>> This version is rebased with the 2013.08 master, there are only a few
+>>> real changes.
 >>
->> Classification of failures by reason
->> ====================================
+>> Since it seems we have issues deciding what to do with the
+>> Config.in.legacy handling for string options, I was thinking: can't we
+>> just avoid the problem altogether? Instead of having separate Config.in
+>> options for each of Git, Mercurial, SVN and so on, what about just
+>> adding an option "BR2_TARGET_LINUX_CUSTOM_REPO_METHOD" which allows the
+>> user to select git, hg, svn or cvs, and keep the other option names
+>> unchanged. I admit it's a bit funky to keep options such as
+>> BR2_LINUX_KERNEL_CUSTOM_GIT_REPO_URL to store the location of a
+>> Mercurial repository, but well, since we can't make up your mind on the
+>> Config.in.legacy stuff, maybe that's a way of at least getting your
+>> feature merged.
 >>
->>     trace-cmd-trace-cmd-v2.2.1 | 9
->>                  qt5base-5.0.2 | 4
->> make: *** [/home/test/test/... | 4
->> make: *** [/home/test/test/... | 4
->>                     orc-0.4.18 | 4
->>            python-pyzmq-13.1.0 | 3
->>                  dropwatch-1.4 | 3
->>       host-gcc-initial-4.8-arc | 3
->>                alsa-lib-1.0.26 | 3
->>                        bc-1.06 | 2
+>> I'm just thinking of a way to move forward, not sure it's the right
+>> solution.
+>>
 >
-> Thanks for adding the flex depend to bc.
+> Currently, both for Linux and Uboot, the choice between Git and Hg is
+> done via the 'Version' choice (which provides the choice between a
+> number of real versions, custom tarball, and git and hg). So there is
+> already a choice and no real separate option for each version control
+> system.
+> What my patches did was avoid adding extra options for Mercurial, by
+> re-using (and renaming) the git options to specify the URL and
+> revision. Not renaming the git options is indeed possible, but pretty
+> funky indeed. I'm not a big fan of this, to be honest.
 >
->> make: *** [/home/test/test/... | 2
->>                     ola-0.8.31 | 2
->>                       qt-4.8.5 | 1
->>              gstreamer-0.10.36 | 1
->>                w_scan-20130331 | 1
->>         host-util-linux-2.23.2 | 1
->>                   iozone-3_414 | 1
->>                   boost-1.53.0 | 1
->>                qt5script-5.0.2 | 1
->>                       icu-51.2 | 1
->>                qt5webkit-5.0.2 | 1
->>                  webkit-1.11.5 | 1
->> make: *** [/home/test/test/... | 1
->>                  omniorb-4.1.6 | 1
+> It's true that it seems difficult to reach a decision in the legacy
+> questions. From the top of my head, the main questions are:
+> 1. Do we want that legacy options are automatically propagated to
+> their new options, when possible, or should the user do this?
+> 2. Do we accept that the user needs to save-and-reopen menuconfig in
+> case we opt for automatic propagation.
 >
-> Omniorb is failing because of how I'm building the host tools ( target
-> cflags are getting used).  Working on a fix.
+> I see three ways out:
+> a. we reach a consensus
+> b. a decision is taken by the maintainer, possibly without consensus
+> c. we leave the current situation (for now)
+>
+> Note that my patchset does not _change_ the current situation. Rather,
+> it merely documents how you should handle legacy options in this
+> current situation, both to the user and the developer. The Mercurial
+> support just follows the existing approach.
+> This provides a good way forward in my opinion, if a and b turn out to
+> be impossible: we accept the patchset as it is, knowing that it just
+> follows the same route as we were going, and if we want to change
+> something about the legacy handling we can do that later.
+>
+> Note also that regardless of how we proceed, I really want this to be
+> part of 2013.11, because this series is already circulating for a long
+> time.
 
-I've narrowed down the omniorb bug to a couple issues, one of which is
-where a ?= is never evaluating to the "configure" default value on
-Make's second "deferred" pass through the make files.  i.e. my
-overload Env define of a value is working, but the value that
-autotools populates in the make file does not get defined....
-Something like the following is happening inside this package and I
-haven't been able to track down why....
+ping?
 
-in omniorb/mk/beforeauto.mk CPP is defined as....
-          CPP ?= /path/to/g++
-
-(I've double checked and CPP is not redefined any where in the package)
-
-Observations............
-1) Externally if I provide CPP as an Env option to Make it overloads
-correctly and I get CPP=/overloaded/path/to/g++
-
-2) If I don't provide an overload of CPP to Make, CPP never gets
-defined and defaults to CPP = g++ (which I assume is a Make default if
-CPP doesn't exist? Because no where in the package build system is it
-defined as just g++)
-
-Thanks in advance for any tips/suggests,
-Matt Weber
-
-
-
-
-[snip]
+Thanks,
+Thomas
