@@ -1,50 +1,74 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 25 Sep 2013 00:19:11 +0000 (UTC)
-Subject: [Buildroot] [Bug 6500] php fails to build for armel.
-In-Reply-To: <bug-6500-163@https.bugs.busybox.net/>
-References: <bug-6500-163@https.bugs.busybox.net/>
-Message-ID: <20130925001911.C71B29B866@busybox.osuosl.org>
+From: Danomi Manchego <danomimanchego123@gmail.com>
+Date: Tue, 24 Sep 2013 20:58:33 -0400
+Subject: [Buildroot] [PATCH] jq: new package
+Message-ID: <1380070714-1795-1-git-send-email-danomimanchego123@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=6500
+jq is like sed for JSON data - you can use it to slice and filter
+and map and transform structured data with the same ease that sed,
+awk, grep and friends let you play with text.
 
---- Comment #2 from twobob <seetwobob@live.co.uk> 2013-09-25 00:19:11 UTC ---
-okay...
+Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
 
-perhaps it is this?
+---
 
-cc1: warning: include location "/usr/include" is unsafe for cross-compilation
-[-Wpoison-system-directories]
-In file included from /usr/include/features.h:389:0,
-                 from /usr/include/stdlib.h:25,
-                 from
-/home/me/GIT/buildroot-13-08/output/build/php-5.3.27/include/../main/php_config.h:2458,
-                 from
-/home/me/GIT/buildroot-13-08/output/build/php-5.3.27/Zend/zend_config.h:1,
-                 from
-/home/me/GIT/buildroot-13-08/output/build/php-5.3.27/Zend/zend.h:51,
-                 from
-/home/me/GIT/buildroot-13-08/output/build/php-5.3.27/main/php.h:34,
-                 from
-/home/me/GIT/buildroot-13-08/output/build/php-5.3.27/ext/iconv/iconv.c:27:
-/usr/include/gnu/stubs.h:7:27: fatal error: gnu/stubs-32.h: No such file or
-directory
-compilation terminated.
-make[1]: *** [ext/iconv/iconv.lo] Error 1
-make[1]: *** Waiting for unfinished jobs....
-make[1]: Leaving directory
-`/home/me/GIT/buildroot-13-08/output/build/php-5.3.27'
-make: *** [/home/me/GIT/buildroot-13-08/output/build/php-5.3.27/.stamp_built]
-Error 2
+The package description is as per the author - not my words.
+---
+ package/Config.in    |    1 +
+ package/jq/Config.in |    8 ++++++++
+ package/jq/jq.mk     |   13 +++++++++++++
+ 3 files changed, 22 insertions(+)
+ create mode 100644 package/jq/Config.in
+ create mode 100644 package/jq/jq.mk
 
-
-Hope this helps.
-
+diff --git a/package/Config.in b/package/Config.in
+index 1dd60d1..ce18ec7 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -108,6 +108,7 @@ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ source "package/grep/Config.in"
+ endif
+ source "package/intltool/Config.in"
++source "package/jq/Config.in"
+ source "package/make/Config.in"
+ source "package/libtool/Config.in"
+ source "package/m4/Config.in"
+diff --git a/package/jq/Config.in b/package/jq/Config.in
+new file mode 100644
+index 0000000..9329b2f
+--- /dev/null
++++ b/package/jq/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_JQ
++	bool "jq"
++	help
++	  jq is like sed for JSON data - you can use it to slice and filter
++	  and map and transform structured data with the same ease that sed,
++	  awk, grep and friends let you play with text.
++
++	  http://stedolan.github.io/jq/
+diff --git a/package/jq/jq.mk b/package/jq/jq.mk
+new file mode 100644
+index 0000000..b0436bb
+--- /dev/null
++++ b/package/jq/jq.mk
+@@ -0,0 +1,13 @@
++################################################################################
++#
++# jq
++#
++################################################################################
++
++JQ_VERSION = 1.3
++JQ_SITE = http://github.com/stedolan/jq/archive
++JQ_AUTORECONF = YES
++JQ_LICENSE = jq license
++JQ_LICENSE_FILES = COPYING
++
++$(eval $(autotools-package))
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+1.7.9.5
