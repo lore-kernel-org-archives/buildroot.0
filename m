@@ -1,37 +1,39 @@
-From: Axel Lin <axel.lin@ingics.com>
-Date: Wed, 25 Sep 2013 09:55:16 +0800
-Subject: [Buildroot] [PATCH] proftpd: needs mmu
-Message-ID: <1380074116.19850.2.camel@phoenix>
+From: Nikula Jouko <Jouko.Nikula@espotel.com>
+Date: Wed, 25 Sep 2013 05:14:34 +0000
+Subject: [Buildroot] [PATCH] i2c-tools: Add i2c-dev.h to staging
+ directory for userspace i2c drivers.
+In-Reply-To: <5241C1C8.4010809@carallon.com>
+References: <1380017924-20072-1-git-send-email-jouko.nikula@espotel.com>
+ <20130924172041.57ec6b88@skate> <5241C1C8.4010809@carallon.com>
+Message-ID: <E720F69E63F812489DA4D50AB9BE43F48B1A818F@ESEXE002.espotel.espotel.fi>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Axel Lin <axel.lin@ingics.com>
----
-Fix below build error:
+From: buildroot-bounces@busybox.net [mailto:buildroot-bounces at busybox.net] On Behalf Of Will Wagner
+Sent: 24. syyskuuta 2013 19:46
 
-src/main.o: In function `fork_server':
-main.c:(.text+0x26fc): undefined reference to `fork'
-src/main.o: In function `main':
-main.c:(.text+0x39bc): undefined reference to `fork'
-collect2: ld returned 1 exit status
-make[1]: *** [proftpd] Error 1
+>> This header is already part of the kernel headers, so it should 
+>> already be part of the toolchain. Do you have a specific case where 
+>> this header is missing?
 
- package/proftpd/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+>The contents of the header are different, the one from i2c-tools contains more.
 
-diff --git a/package/proftpd/Config.in b/package/proftpd/Config.in
-index 7793713..18407d1 100644
---- a/package/proftpd/Config.in
-+++ b/package/proftpd/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_PROFTPD
- 	bool "proftpd"
-+	depends on BR2_USE_MMU # fork()
- 	help
- 	  ProFTPD, a highly configurable FTP server.
- 
--- 
-1.8.1.2
+Yes. In the kernel documentation (Documentation/i2c/dev-interface) it is explained as follows:
+
+"So let's say you want to access an i2c adapter from a C program. The
+first thing to do is "#include <linux/i2c-dev.h>". Please note that
+there are two files named "i2c-dev.h" out there, one is distributed
+with the Linux kernel and is meant to be included from kernel
+driver code, the other one is distributed with i2c-tools and is
+meant to be included from user-space programs. You obviously want
+the second one here."
+
+>We also carry a patch similar to this. Our patch has an addition which is a dependency on linux (assuming it is selected in the config). This ensures that the >header from the kernel gets over ridden by the one from i2c-tools and not the other way around.
+
+Makes sense. Could this patch be mainlined, instead of what I sent?
+
+Regards
+	- Jouko
