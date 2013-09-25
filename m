@@ -1,28 +1,36 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Wed, 25 Sep 2013 16:36:53 +0200
-Subject: [Buildroot] gnome package ?
-In-Reply-To: <5242E01B.4040607@free.fr>
-References: <5241AED5.1020903@free.fr> <5242E01B.4040607@free.fr>
-Message-ID: <e5b330be-68be-407c-818d-a351aab19085@email.android.com>
+Date: Wed, 25 Sep 2013 16:39:31 +0200
+Subject: [Buildroot] [PATCH] ljsyscall: new package
+In-Reply-To: <CANxTyt7_Vet9D=trCbpPkajq0LTm+sh_Oc3EpDp9aF6HziRu=Q@mail.gmail.com>
+References: <1380070732-1834-1-git-send-email-danomimanchego123@gmail.com>
+ <b1ff0935-bab9-4aa5-8aa7-9fdfd59dab7b@email.android.com>
+ <CANxTyt4t2nNe4__3DZNvrsM3_k55d9A+LPfFJtaPVsjiSG2rHw@mail.gmail.com>
+ <3acdaea5-ea9d-4bf6-9865-08a310c8fde9@email.android.com>
+ <CANxTyt7_Vet9D=trCbpPkajq0LTm+sh_Oc3EpDp9aF6HziRu=Q@mail.gmail.com>
+Message-ID: <addbf155-74ff-49dc-8973-6a19f623445a@email.android.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-"St?phane ANCELOT" <sancelot@free.fr> wrote:
->On 24/09/2013 17:25, St?phane ANCELOT wrote:
->> Hi,
->> I would like to know if I can build gnome ?
+Danomi Manchego <danomimanchego123@gmail.com> wrote:
+>Thomas,
+snip
+>>>> Any specific reason why the standard install rule doesn't work?
+>>>
+>>>By "standard install rule", do you mean "$(INSTALL) -D srcfile
+>>>dstfile"?  I couldn't get the directory creation to work while using
+>>>wildcards, just single files.  So I just left it as-is.
+>>>
+>>>Is it the -t that offends?
 >>
->> Can you point me to the right direction?
+>> What I meant was 'make install' in the package directory (I'm assuming make is used)
 >
->So, I suppose it is not provided ?
->
+>No, this is a pure lua package, no compilation, and no makefile.  You
+>just put all the *.lua files some place where LuaJIT will find them.
 
-Currently, buildroot does indeed not have a recipe for gnome, not kde, only more simple window managers like fluxbox, enlightenment, etc. Since buildroot is mainly aimed at embedded devices, where gnome is not a typical option, I'm not sure if we even want that complexity and the vast amount of packages that come with it.
-
-For your information, the manual (also available online) contains a list of packages currently available.
+Ok, thanks for the clarification.
 
 Best regards,
 Thomas
