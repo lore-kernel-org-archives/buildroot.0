@@ -1,23 +1,25 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 26 Sep 2013 21:20:15 +0200
-Subject: [Buildroot] [PATCH 3/4] nitrogen6x: bump kernel to latest
-	version (3.0.35-4.1.0)
-In-Reply-To: <1380136072-9879-4-git-send-email-eric.nelson@boundarydevices.com>
- (Eric Nelson's message of "Wed, 25 Sep 2013 12:07:51 -0700")
-References: <1380136072-9879-1-git-send-email-eric.nelson@boundarydevices.com>
- <1380136072-9879-4-git-send-email-eric.nelson@boundarydevices.com>
-Message-ID: <87ob7f5r0w.fsf@dell.be.48ers.dk>
+From: Naitik Amin <Naitik.Amin@ametek.com>
+Date: Thu, 26 Sep 2013 15:09:15 -0400
+Subject: [Buildroot] custom application
+Message-ID: <OF9ADA6F51.A3CB613B-ON85257BF2.0068F0A1-85257BF2.00693830@LocalDomain>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Eric" == Eric Nelson <eric.nelson@boundarydevices.com> writes:
+Hi there,
 
- Eric> Signed-off-by: Eric Nelson <eric.nelson@boundarydevices.com>
+I recently used buildroot to setup my build environment, to generate 
+uboot, kernel and rootfs. It has been very helpful. 
 
-Committed, thanks.
+Now I am at a point, where I would like to add my custom application. Does 
 
--- 
-Bye, Peter Korsgaard
+the framework allow to create skeletals for applications ? Which gets 
+compiled and be made part of rootfs by doing top level make.
+
+Thanks,
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130926/d3f755cf/attachment.html>
