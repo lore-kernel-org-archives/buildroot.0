@@ -1,21 +1,31 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 26 Sep 2013 17:15:43 +0200
-Subject: [Buildroot] [PATCH 1/1] atk: bump to version 2.10.0
-In-Reply-To: <1380205225-4198-1-git-send-email-jerzy.grzegorek@trzebnica.net>
- (Jerzy Grzegorek's message of "Thu, 26 Sep 2013 16:20:25 +0200")
-References: <1380205225-4198-1-git-send-email-jerzy.grzegorek@trzebnica.net>
-Message-ID: <87a9iz7gww.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Thu, 26 Sep 2013 16:48:23 +0200
+Subject: [Buildroot] [git commit] socat: needs mmu
+Message-ID: <20130926151558.DE8949B892@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Jerzy" == Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=4cb5ec7c6cf1ac7360f12dd079eec069d2996aec
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Jerzy> Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+Signed-off-by: Axel Lin <axel.lin@ingics.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/socat/Config.in |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/socat/Config.in b/package/socat/Config.in
+index c478282..ec69c96 100644
+--- a/package/socat/Config.in
++++ b/package/socat/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_SOCAT
+ 	bool "socat"
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_USE_MMU # fork()
+ 	help
+ 	  Multipurpose socket relay program.
+ 
