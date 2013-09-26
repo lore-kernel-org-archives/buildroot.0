@@ -1,34 +1,30 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 26 Sep 2013 16:55:30 +0200
-Subject: [Buildroot] [git commit] atk: bump to version 2.10.0
-Message-ID: <20130926151559.06A8E9B852@busybox.osuosl.org>
+Date: Thu, 26 Sep 2013 16:50:13 +0200
+Subject: [Buildroot] [git commit] logsurfer: needs mmu
+Message-ID: <20130926151558.E6FE39B892@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=aa797d76a508016cca7b2011de2910349c22de82
+commit: http://git.buildroot.net/buildroot/commit/?id=8f8a5d84130fa7afb2f7cda10c7c0edec2cb3ae5
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+Signed-off-by: Axel Lin <axel.lin@ingics.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/atk/atk.mk |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ package/logsurfer/Config.in |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-diff --git a/package/atk/atk.mk b/package/atk/atk.mk
-index 433e1e3..1a8bbea 100644
---- a/package/atk/atk.mk
-+++ b/package/atk/atk.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--ATK_VERSION_MAJOR = 2.9
--ATK_VERSION = $(ATK_VERSION_MAJOR).4
-+ATK_VERSION_MAJOR = 2.10
-+ATK_VERSION = $(ATK_VERSION_MAJOR).0
- ATK_SOURCE = atk-$(ATK_VERSION).tar.xz
- ATK_SITE = http://ftp.gnome.org/pub/gnome/sources/atk/$(ATK_VERSION_MAJOR)/
- ATK_LICENSE = LGPLv2+
+diff --git a/package/logsurfer/Config.in b/package/logsurfer/Config.in
+index 27d1881..d4218bc 100644
+--- a/package/logsurfer/Config.in
++++ b/package/logsurfer/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_LOGSURFER
+ 	bool "logsurfer"
++	depends on BR2_USE_MMU # fork()
+ 	help
+ 	  Logsurfer is a program for monitoring system logs in real-time,
+ 	  and reporting on the occurrence of events.
