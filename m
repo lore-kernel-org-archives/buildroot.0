@@ -1,86 +1,97 @@
-From: Jason Kridner <jkridner@beagleboard.org>
-Date: Thu, 26 Sep 2013 16:53:46 -0400
-Subject: [Buildroot] [PATCH] beagleboneblack: add board
-In-Reply-To: <OF4892FC0E.FA9FE3E3-ON86257BF2.006E10F1-86257BF2.006EC6A2@rockwellcollins.com>
-References: <1380220826-17732-1-git-send-email-jkridner@beagleboard.org>
- <87bo3f5pz4.fsf@dell.be.48ers.dk>
- <OF4892FC0E.FA9FE3E3-ON86257BF2.006E10F1-86257BF2.006EC6A2@rockwellcollins.com>
-Message-ID: <CA+T6QPknCP3O2uM_S8va-MqY+jjzmojgmADw3wg4=4ePNmLw0A@mail.gmail.com>
+From: Spenser Gilliland <spenser@gillilanding.com>
+Date: Thu, 26 Sep 2013 18:21:43 -0500
+Subject: [Buildroot] [PATCH v3 00/11] glmark2 and Mesa updates
+Message-ID: <1380237714-2470-1-git-send-email-spenser@gillilanding.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Sep 26, 2013 at 4:09 PM, Ryan Barnett
-<rjbarnet@rockwellcollins.com> wrote:
->
-> Peter/Jason/All,
->
-> Peter Korsgaard <jacmet@uclibc.org> wrote on
-> 09/26/2013 02:42:55 PM:
->
-> >
-> > >>>>> "Jason" == Jason Kridner <jkridner@beagleboard.org> writes:
-> >
-> > Hi Jason,
-> >
-> >  Jason> From: Jason Kridner <jdk@ti.com>
-> >  Jason> Signed-off-by: Jason Kridner <jdk@ti.com>
-> >  Jason> ---
-> >  Jason>  board/beagleboneblack/linux-3.8.config | 4305 +++++++++++++++
-> > +++++++++++++++++
-> >  Jason>  configs/beagleboneblack_defconfig      |   38 +
-> >  Jason>  2 files changed, 4343 insertions(+)
-> >  Jason>  create mode 100644 board/beagleboneblack/linux-3.8.config
-> >  Jason>  create mode 100644 configs/beagleboneblack_defconfig
-> >
-> >  Jason> diff --git a/board/beagleboneblack/linux-3.8.config b/board/
-> > beagleboneblack/linux-3.8.config
-> >  Jason> new file mode 100644
-> >  Jason> index 0000000..e6cf0a2
-> >  Jason> --- /dev/null
-> >  Jason> +++ b/board/beagleboneblack/linux-3.8.config
-> >  Jason> @@ -0,0 +1,4305 @@
-> >  Jason> +#
-> >  Jason> +# Automatically generated file; DO NOT EDIT.
-> >  Jason> +# Linux/arm 3.8.13 Kernel Configuration
-> >
-> > Please run make ARCH=arm savedefconfig in the kernel source directory to
-> > make a minimal config instead.
+this patch series adds glmark2 and mesa3d-demos along with supporting updates
+for mesa3d and libdrm.  Additionally, a udev bug fix for EABIhf toolchains is
+included.
 
+v2->v3:
+  - Updates based on reviews.
 
-Will do. I'll probably post v2 late tonight.
+v1->v2:
+  - updates based on reviews.
+  - add mesa3d-demos
 
->
->
-> I believe there is an issue with that kernel where it is unable to
-> compile the musb driver for the omap (CONFIG_USB_MUSB_OMAP2PLUS)
-> statically into the kernel because it will default to being a module
-> which will cause the kernel to fail to compile. I ran into this issue
-> with the Beagleboard-XM with the same kernel. The solution I found was
-> here:
->
-> http://www.spinics.net/lists/linux-usb/msg67054.html
->
-> I think added this patch to the kernel which I would may recommend adding
-> to the git repository you reference for this kernel.
+Spenser Gilliland (11):
+  udev: explicitly include pthreads
+  sunxi-mali: add explicit pthread/dl/rt dependencies
+  libpthread-stubs: move out of x11r7
+  libdrm: remove x11 dependency.
+  sunxi-cedarx: bump to newer version, use armel2 binaries, add demo
+  mesa3d: pull out from x11
+  mesa3d: modularize and bump to version 9.1.6
+  libpng12: new package
+  libpng: ensure libpng12 is installed before libpng
+  glmark2: new package
+  mesa3d-demos: new package
 
-Well, the musb is working in my image, so I'm not sure what to say
-other than I don't think this is necessary. I will move to the
-mainline kernel as soon as the features are sufficiently stable.
-
-Other questions from Peter cut out of the reply:
-> Any specific reason to not use 2013.07 instead?
-
-No, I just took this from the existing BeagleBone config. I'll move up
-to 2013.07.
-
-> Would there be any issues with bumping the kernel version to this for
-> the original (white) beaglebone as well?
-
-Nope. I could make one build that supported both boards, but it would
-need to have both .dtb files in it. That's the only reason I made a
-separate config. Is there an easy way to include multiple .dtb files?
-Mainline u-boot is smart enough to tell me which one needs to be used
-at boot.
+ package/Config.in                                  |    5 +
+ package/glmark2/Config.in                          |   17 ++
+ package/glmark2/glmark2-add-mali-support.patch     |  102 ++++++++
+ package/glmark2/glmark2-fix-add-GLchar.patch       |   17 ++
+ .../glmark2-gl-to-glesv2-on-drm-flavor.patch       |   25 ++
+ package/glmark2/glmark2.mk                         |   70 ++++++
+ package/libdrm/Config.in                           |    3 +-
+ package/libdrm/libdrm.mk                           |    5 +-
+ package/libpng/libpng.mk                           |    4 +
+ package/libpng12/Config.in                         |    9 +
+ package/libpng12/libpng12.mk                       |   18 ++
+ .../Config.in                                      |    2 +-
+ package/libpthread-stubs/xlib_libpthread-stubs.mk  |   17 ++
+ package/mesa3d-demos/Config.in                     |    8 +
+ .../mesa3d-demos/mesa3d-demos-non-mesa-impl.patch  |  244 ++++++++++++++++++++
+ .../mesa3d-demos/mesa3d-demos-optional-gl.patch    |   75 ++++++
+ package/mesa3d-demos/mesa3d-demos-x11-fix.patch    |   30 +++
+ package/mesa3d-demos/mesa3d-demos.mk               |   63 +++++
+ package/mesa3d/Config.in                           |  182 +++++++++++++++
+ package/mesa3d/mesa3d-cross-glsl-compiler.patch    |   41 ++++
+ package/mesa3d/mesa3d-gbm-without-dri.patch        |   30 +++
+ package/mesa3d/mesa3d.mk                           |  126 ++++++++++
+ package/opengl/Config.in                           |    3 +
+ package/opengl/libegl/libegl.mk                    |    4 +
+ package/opengl/libgl/libgl.mk                      |   20 ++
+ package/opengl/libgles/libgles.mk                  |    4 +
+ package/opengl/libopenvg/libopenvg.mk              |    4 +
+ package/sunxi-cedarx/Config.in                     |   10 +
+ package/sunxi-cedarx/sunxi-cedarx.mk               |   27 ++-
+ package/sunxi-mali/egl.pc                          |    2 +-
+ package/sunxi-mali/glesv2.pc                       |    2 +-
+ package/udev/udev.mk                               |    2 +-
+ package/x11r7/Config.in                            |    2 -
+ package/x11r7/libxcb/Config.in                     |    2 +-
+ package/x11r7/mesa3d/Config.in                     |   15 --
+ package/x11r7/mesa3d/mesa3d-uclibc-locale.patch    |   56 -----
+ package/x11r7/mesa3d/mesa3d.mk                     |   40 ----
+ .../xlib_libpthread-stubs/xlib_libpthread-stubs.mk |   16 --
+ .../xserver_xorg-server/xserver_xorg-server.mk     |    4 +-
+ 39 files changed, 1163 insertions(+), 143 deletions(-)
+ create mode 100644 package/glmark2/Config.in
+ create mode 100644 package/glmark2/glmark2-add-mali-support.patch
+ create mode 100644 package/glmark2/glmark2-fix-add-GLchar.patch
+ create mode 100644 package/glmark2/glmark2-gl-to-glesv2-on-drm-flavor.patch
+ create mode 100644 package/glmark2/glmark2.mk
+ create mode 100644 package/libpng12/Config.in
+ create mode 100644 package/libpng12/libpng12.mk
+ rename package/{x11r7/xlib_libpthread-stubs => libpthread-stubs}/Config.in (81%)
+ create mode 100644 package/libpthread-stubs/xlib_libpthread-stubs.mk
+ create mode 100644 package/mesa3d-demos/Config.in
+ create mode 100644 package/mesa3d-demos/mesa3d-demos-non-mesa-impl.patch
+ create mode 100644 package/mesa3d-demos/mesa3d-demos-optional-gl.patch
+ create mode 100644 package/mesa3d-demos/mesa3d-demos-x11-fix.patch
+ create mode 100644 package/mesa3d-demos/mesa3d-demos.mk
+ create mode 100644 package/mesa3d/Config.in
+ create mode 100644 package/mesa3d/mesa3d-cross-glsl-compiler.patch
+ create mode 100644 package/mesa3d/mesa3d-gbm-without-dri.patch
+ create mode 100644 package/mesa3d/mesa3d.mk
+ create mode 100644 package/opengl/libgl/libgl.mk
+ delete mode 100644 package/x11r7/mesa3d/Config.in
+ delete mode 100644 package/x11r7/mesa3d/mesa3d-uclibc-locale.patch
+ delete mode 100644 package/x11r7/mesa3d/mesa3d.mk
+ delete mode 100644 package/x11r7/xlib_libpthread-stubs/xlib_libpthread-stubs.mk
