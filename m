@@ -1,28 +1,28 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 26 Sep 2013 22:41:36 +0200
-Subject: [Buildroot] [PATCH 0/4] i.MX6 and Nitrogen6x updates
-In-Reply-To: <5243329E.7030603@boundarydevices.com> (Eric Nelson's message of
- "Wed, 25 Sep 2013 11:59:42 -0700")
-References: <1380135327-9722-1-git-send-email-eric.nelson@boundarydevices.com>
- <5243329E.7030603@boundarydevices.com>
-Message-ID: <87r4cb48ov.fsf@dell.be.48ers.dk>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Thu, 26 Sep 2013 23:09:56 +0200
+Subject: [Buildroot] custom application
+In-Reply-To: <OF9ADA6F51.A3CB613B-ON85257BF2.0068F0A1-85257BF2.00693830@LocalDomain>
+References: <OF9ADA6F51.A3CB613B-ON85257BF2.0068F0A1-85257BF2.00693830@LocalDomain>
+Message-ID: <5244A2A4.8010206@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Eric" == Eric Nelson <eric.nelson@boundarydevices.com> writes:
+Naitik Amin wrote:
+> Hi there,
+>
+> I recently used buildroot to setup my build environment, to generate 
+> uboot, kernel and rootfs. It has been very helpful.
+>
+> Now I am at a point, where I would like to add my custom application. 
+> Does the framework allow to create skeletals for applications ? Which 
+> gets compiled and be made part of rootfs by doing top level make.
 
-Hi Eric,
+Of course you can!
+The Buildroot manual has a detail explanation of how you can do it.
+See section 6.2, "Adding new packages to Buildroot"
+(http://buildroot.net/downloads/manual/manual.html#adding-packages).
 
- Eric> BTW, I'd like to thank each of you for getting this support
- Eric> into Buildroot to begin with.
-
- Eric> It's been a while since I last touched Buildroot and was
- Eric> pleasantly surprised at all of the activity.
-
-Great to hear, we aim to please ;)
-
--- 
-Bye, Peter Korsgaard
+Luca
