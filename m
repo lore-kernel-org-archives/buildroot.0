@@ -1,30 +1,32 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 26 Sep 2013 16:50:13 +0200
-Subject: [Buildroot] [git commit] logsurfer: needs mmu
-Message-ID: <20130926151558.E6FE39B892@busybox.osuosl.org>
+From: Danomi Manchego <danomimanchego123@gmail.com>
+Date: Thu, 26 Sep 2013 11:20:36 -0400
+Subject: [Buildroot] libssh2 dependencies
+Message-ID: <CANxTyt7r0O5Vtr4EGU+JGi71W-ZJHD4tahLnHi6PQFDxmOK_6A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=8f8a5d84130fa7afb2f7cda10c7c0edec2cb3ae5
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Ryan, Peter,
 
-Signed-off-by: Axel Lin <axel.lin@ingics.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/logsurfer/Config.in |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+I was just looking at the select in libssh2/Config.in:
 
-diff --git a/package/logsurfer/Config.in b/package/logsurfer/Config.in
-index 27d1881..d4218bc 100644
---- a/package/logsurfer/Config.in
-+++ b/package/logsurfer/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_LOGSURFER
- 	bool "logsurfer"
-+	depends on BR2_USE_MMU # fork()
- 	help
- 	  Logsurfer is a program for monitoring system logs in real-time,
- 	  and reporting on the occurrence of events.
+  select BR2_PACKAGE_LIBGCRYPT if !BR2_PACKAGE_OPENSSL
+
+If you don't already have either openssl or libgcrypt, then when you
+enable libssh2, libgcrypt and libgpg-error get selected as if they are
+unconditional dependencies - but then unselect themselves if you
+enable openssl.  But it's not clear from menuconfig that this is an
+option.  Would it be better to do:
+
+  depends on BR2_PACKAGE_LIBGCRYPT || BR2_PACKAGE_OPENSSL
+
+and then comment:
+
+  comment "libssh2 requires libgcrypt or openssl"
+    depends on (!BR2_PACKAGE_LIBGCRYPT && !BR2_PACKAGE_OPENSSL)
+
+Just a thought ....
+
+Danomi -
