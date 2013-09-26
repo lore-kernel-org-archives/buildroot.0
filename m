@@ -1,9 +1,9 @@
 From: Spenser Gilliland <spenser@gillilanding.com>
-Date: Thu, 26 Sep 2013 18:21:53 -0500
-Subject: [Buildroot] [PATCH v3 10/11] glmark2: new package
+Date: Thu, 26 Sep 2013 18:21:54 -0500
+Subject: [Buildroot] [PATCH v3 11/11] mesa3d-demos: new package
 In-Reply-To: <1380237714-2470-1-git-send-email-spenser@gillilanding.com>
 References: <1380237714-2470-1-git-send-email-spenser@gillilanding.com>
-Message-ID: <1380237714-2470-11-git-send-email-spenser@gillilanding.com>
+Message-ID: <1380237714-2470-12-git-send-email-spenser@gillilanding.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,290 +14,479 @@ To: buildroot@busybox.net
 Signed-off-by: Spenser Gilliland <spenser@gillilanding.com>
 ---
  package/Config.in                                  |    1 +
- package/glmark2/Config.in                          |   17 ++++
- package/glmark2/glmark2-add-mali-support.patch     |  102 ++++++++++++++++++++
- package/glmark2/glmark2-fix-add-GLchar.patch       |   17 ++++
- .../glmark2-gl-to-glesv2-on-drm-flavor.patch       |   25 +++++
- package/glmark2/glmark2.mk                         |   70 +++++++++++++
- 6 files changed, 232 insertions(+), 0 deletions(-)
- create mode 100644 package/glmark2/Config.in
- create mode 100644 package/glmark2/glmark2-add-mali-support.patch
- create mode 100644 package/glmark2/glmark2-fix-add-GLchar.patch
- create mode 100644 package/glmark2/glmark2-gl-to-glesv2-on-drm-flavor.patch
- create mode 100644 package/glmark2/glmark2.mk
+ package/mesa3d-demos/Config.in                     |    8 +
+ .../mesa3d-demos/mesa3d-demos-non-mesa-impl.patch  |  244 ++++++++++++++++++++
+ .../mesa3d-demos/mesa3d-demos-optional-gl.patch    |   75 ++++++
+ package/mesa3d-demos/mesa3d-demos-x11-fix.patch    |   30 +++
+ package/mesa3d-demos/mesa3d-demos.mk               |   63 +++++
+ 6 files changed, 421 insertions(+), 0 deletions(-)
+ create mode 100644 package/mesa3d-demos/Config.in
+ create mode 100644 package/mesa3d-demos/mesa3d-demos-non-mesa-impl.patch
+ create mode 100644 package/mesa3d-demos/mesa3d-demos-optional-gl.patch
+ create mode 100644 package/mesa3d-demos/mesa3d-demos-x11-fix.patch
+ create mode 100644 package/mesa3d-demos/mesa3d-demos.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 075bdc6..cf79ea0 100644
+index cf79ea0..e14265b 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -48,6 +48,7 @@ source "package/dmalloc/Config.in"
- source "package/dropwatch/Config.in"
- source "package/duma/Config.in"
- source "package/gdb/Config.in"
-+source "package/glmark2/Config.in"
- source "package/iozone/Config.in"
- source "package/kexec/Config.in"
- source "package/latencytop/Config.in"
-diff --git a/package/glmark2/Config.in b/package/glmark2/Config.in
+@@ -140,6 +140,7 @@ endmenu
+ menu "Graphic libraries and applications (graphic/text)"
+ 
+ comment "Graphic applications"
++source "package/mesa3d-demos/Config.in"
+ source "package/gnuplot/Config.in"
+ source "package/jhead/Config.in"
+ source "package/rrdtool/Config.in"
+diff --git a/package/mesa3d-demos/Config.in b/package/mesa3d-demos/Config.in
 new file mode 100644
-index 0000000..7349690
+index 0000000..24c29e0
 --- /dev/null
-+++ b/package/glmark2/Config.in
-@@ -0,0 +1,17 @@
-+config BR2_PACKAGE_GLMARK2
-+	bool "glmark2"
-+	depends on BR2_PACKAGE_MESA3D
-+	depends on BR2_PACKAGE_MESA3D_GBM # depends on udev cannot select
-+	depends on BR2_LARGEFILE
-+	depends on BR2_PACKAGE_HAS_OPENGL || \
-+		(BR2_PACKAGE_HAS_OPENGL_EGL && BR2_PACKAGE_HAS_OPENGL_ES)
-+	select BR2_PACKAGE_JPEG
-+	select BR2_PACKAGE_LIBPNG12
++++ b/package/mesa3d-demos/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_MESA3D_DEMOS
++	bool "mesa3d-demos"
++	depends on BR2_PACKAGE_HAS_OPENGL || BR2_PACKAGE_HAS_OPENGL_ES \
++		|| BR2_PACKAGE_HAS_OPENGL_EGL || BR2_PACKAGE_HAS_OPENVG
 +	help
-+	  glmark2 is a benchmark for OpenGL (ES) 2.0. It uses only the subset of the
-+	  OpenGL 2.0 API that is compatible with OpenGL ES 2.0.
++	  OpenGL demos from the Mesa 3D project.
 +
-+comment "glmark2 requires Mesa3D GBM support and largefile support in toolchain"
-+	depends on (BR2_PACKAGE_HAS_OPENGL || \
-+		(BR2_PACKAGE_HAS_OPENGL_EGL && BR2_PACKAGE_HAS_OPENGL_ES)) && \
-+		(!BR2_LARGEFILE || !BR2_PACKAGE_MESA3D_GBM)
-diff --git a/package/glmark2/glmark2-add-mali-support.patch b/package/glmark2/glmark2-add-mali-support.patch
++	  http://mesa3d.org
+diff --git a/package/mesa3d-demos/mesa3d-demos-non-mesa-impl.patch b/package/mesa3d-demos/mesa3d-demos-non-mesa-impl.patch
 new file mode 100644
-index 0000000..c37c88c
+index 0000000..d370929
 --- /dev/null
-+++ b/package/glmark2/glmark2-add-mali-support.patch
-@@ -0,0 +1,102 @@
-+Mali uses a slightly different windowing structure than most
-+implementations add support through this patch.
++++ b/package/mesa3d-demos/mesa3d-demos-non-mesa-impl.patch
+@@ -0,0 +1,244 @@
++This makes it possible to build the demos against opengl
++implementations other than Mesa 
 +
 +Signed-off-by: Spenser Gilliland <spenser@gillilanding.com>
 +---
-+Index: glmark2-279/src/gl-state-egl.cpp
++Index: mesa3d-demos-8.1.0/src/egl/eglut/eglut.c
 +===================================================================
-+--- glmark2-279.orig/src/gl-state-egl.cpp	2013-08-21 14:49:38.953803965 -0500
-++++ glmark2-279/src/gl-state-egl.cpp	2013-08-21 14:59:42.389814979 -0500
-+@@ -414,9 +414,12 @@
++--- mesa3d-demos-8.1.0.orig/src/egl/eglut/eglut.c
+++++ mesa3d-demos-8.1.0/src/egl/eglut/eglut.c
++@@ -76,8 +76,9 @@ _eglutNow(void)
++ static void
++ _eglutDestroyWindow(struct eglut_window *win)
 + {
-+     if (egl_display_)
-+         return true;
-+-
-++#ifdef HAS_MALI
-++    egl_display_ = eglGetDisplay(EGL_DEFAULT_DISPLAY);
-++#else
-+     egl_display_ = eglGetDisplay(native_display_);
-+-    if (!egl_display_) {
++-   if (_eglut->surface_type != EGL_PBUFFER_BIT &&
++-       _eglut->surface_type != EGL_SCREEN_BIT_MESA)
+++
+++   if (_eglut->surface_type == EGL_WINDOW_BIT ||
+++       _eglut->surface_type == EGL_PIXMAP_BIT)
++       eglDestroySurface(_eglut->dpy, win->surface);
++ 
++    _eglutNativeFiniWindow(win);
++@@ -175,7 +176,9 @@ _eglutCreateWindow(const char *title, in
++             win->config, win->native.u.pixmap, NULL);
++       break;
++    case EGL_PBUFFER_BIT:
+++#ifdef EGL_MESA_screen_surface
++    case EGL_SCREEN_BIT_MESA:
 ++#endif
-++    if (egl_display_ == EGL_NO_DISPLAY) {
-+         Log::error("eglGetDisplay() failed with error: 0x%x\n", eglGetError());
-+         return false;
-+     }
-+Index: glmark2-279/src/native-state-fbdev.cpp
++       win->surface = win->native.u.surface;
++       break;
++    default:
++@@ -289,8 +292,10 @@ eglutDestroyWindow(int win)
++    if (window->index != win)
++       return;
++ 
+++#ifdef EGL_MESA_screen_surface
++    /* XXX it causes some bug in st/egl KMS backend */
++    if ( _eglut->surface_type != EGL_SCREEN_BIT_MESA)
+++#endif
++       eglMakeCurrent(_eglut->dpy, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT);
++ 
++    _eglutDestroyWindow(_eglut->current);
++Index: mesa3d-demos-8.1.0/src/egl/eglut/eglut_screen.c
 +===================================================================
-+--- glmark2-279.orig/src/native-state-fbdev.cpp	2013-08-19 17:36:32.000000000 -0500
-++++ glmark2-279/src/native-state-fbdev.cpp	2013-08-21 14:59:58.629815276 -0500
-+@@ -31,7 +31,9 @@
-+ #include <unistd.h>
-+ #include <sys/ioctl.h>
-+ #include <linux/fb.h>
-+-
-++#if HAS_MALI
-++#include <EGL/egl.h>
++--- mesa3d-demos-8.1.0.orig/src/egl/eglut/eglut_screen.c
+++++ mesa3d-demos-8.1.0/src/egl/eglut/eglut_screen.c
++@@ -35,26 +35,33 @@
++ 
++ #define MAX_MODES 100
++ 
+++#ifdef EGL_MESA_screen_surface
++ static EGLScreenMESA kms_screen;
++ static EGLModeMESA kms_mode;
++ static EGLint kms_width, kms_height;
 ++#endif
-+ #ifdef ANDROID
-+ #define FBDEV_DEV "/dev/graphics/fb"
-+ #else
-+@@ -79,7 +81,13 @@
-+ NativeStateFBDEV::window(WindowProperties& properties)
++ 
++ void
++ _eglutNativeInitDisplay(void)
 + {
-+     properties = winprops;
-++#ifdef HAS_MALI
-++    native_window.height = winprops.height;
-++    native_window.width = winprops.width;
-++    return reinterpret_cast<void*>(&native_window);
-++#else
-+     return NULL;
+++#ifdef EGL_MESA_screen_surface
++    _eglut->native_dpy = EGL_DEFAULT_DISPLAY;
++    _eglut->surface_type = EGL_SCREEN_BIT_MESA;
 ++#endif
 + }
 + 
 + void
-+Index: glmark2-279/src/native-state-fbdev.h
-+===================================================================
-+--- glmark2-279.orig/src/native-state-fbdev.h	2013-08-19 17:36:32.000000000 -0500
-++++ glmark2-279/src/native-state-fbdev.h	2013-08-21 15:00:14.345815563 -0500
-+@@ -30,6 +30,10 @@
-+ #include <csignal>
-+ #include <cstring>
-+ 
-++#ifdef HAS_MALI
-++#include <EGL/egl.h>
-++#endif
-++
-+ class NativeStateFBDEV : public NativeState
++ _eglutNativeFiniDisplay(void)
 + {
-+ public:
-+@@ -50,7 +54,9 @@
-+     static volatile std::sig_atomic_t should_quit_;
-+     int fd;
-+     WindowProperties winprops;
-+-
-++#ifdef HAS_MALI
-++    struct mali_native_window native_window;
+++#ifdef EGL_MESA_screen_surface
++    kms_screen = 0;
++    kms_mode = 0;
++    kms_width = 0;
++    kms_height = 0;
 ++#endif
-+     bool init();
-+     void cleanup();
-+ };
-+Index: glmark2-279/wscript
-+===================================================================
-+--- glmark2-279.orig/wscript	2013-08-19 17:36:32.000000000 -0500
-++++ glmark2-279/wscript	2013-08-21 15:00:24.245815743 -0500
-+@@ -46,7 +46,8 @@
-+                    dest = 'flavors',
-+                    help = "a list of flavors to build (%s, all)" % FLAVORS_STR)
-+     opt.parser.set_default('flavors', [])
-+-
-++    opt.add_option('--for-mali', action='store_true', dest = 'mali',
-++                   default = False, help='enable ARM Mali GPU support')
-+     opt.add_option('--no-debug', action='store_false', dest = 'debug',
-+                    default = True, help='disable compiler debug information')
-+     opt.add_option('--no-opt', action='store_false', dest = 'opt',
-+@@ -132,6 +133,8 @@
-+         ctx.env.prepend_value('CXXFLAGS', '-O2')
-+     if Options.options.debug:
-+         ctx.env.prepend_value('CXXFLAGS', '-g')
-++    if Options.options.mali:
-++        ctx.env.append_unique('DEFINES','HAS_MALI=1')
-+ 
-+     ctx.env.HAVE_EXTRAS = False
-+     if Options.options.extras_path is not None:
-diff --git a/package/glmark2/glmark2-fix-add-GLchar.patch b/package/glmark2/glmark2-fix-add-GLchar.patch
-new file mode 100644
-index 0000000..15653de
---- /dev/null
-+++ b/package/glmark2/glmark2-fix-add-GLchar.patch
-@@ -0,0 +1,17 @@
-+Bug fix in program.cc.  There is no such type as GLchar.
-+
-+Signed-off-by: Spenser Gilliland <spenser@gillilanding.com>
-+---
-+Index: glmark2-2012.12/src/libmatrix/program.cc
-+===================================================================
-+--- glmark2-2012.12.orig/src/libmatrix/program.cc	2012-12-18 13:45:45.000000000 -0600
-++++ glmark2-2012.12/src/libmatrix/program.cc	2013-08-13 20:08:27.005724911 -0500
-+@@ -17,6 +17,8 @@
-+ #include "gl-if.h"
-+ #include "program.h"
-+ 
-++typedef char GLchar;
-++
-+ using std::string;
-+ using LibMatrix::mat4;
-+ using LibMatrix::mat3;
-diff --git a/package/glmark2/glmark2-gl-to-glesv2-on-drm-flavor.patch b/package/glmark2/glmark2-gl-to-glesv2-on-drm-flavor.patch
-new file mode 100644
-index 0000000..5f838cc
---- /dev/null
-+++ b/package/glmark2/glmark2-gl-to-glesv2-on-drm-flavor.patch
-@@ -0,0 +1,25 @@
-+Bug in build script requires full opengl when only opengl es is actually
-+required.
-+
-+Signed-off-by: Spenser Gilliland <spenser@gillilanding.com>
-+---
-+Index: glmark2-279/src/wscript_build
-+===================================================================
-+--- glmark2-279.orig/src/wscript_build	2013-08-19 17:36:32.000000000 -0500
-++++ glmark2-279/src/wscript_build	2013-08-20 10:31:39.364629078 -0500
-+@@ -23,11 +23,12 @@
-+   'x11-gl' : ['x11', 'gl', 'matrix-gl'],
-+   'x11-glesv2' : ['x11', 'egl', 'glesv2', 'matrix-glesv2'],
-+   'drm-gl' : ['drm', 'gbm', 'egl', 'gl', 'matrix-gl'],
-+-  'drm-glesv2' : ['drm', 'gbm', 'egl', 'glesv2', 'matrix-gl'],
-++  'drm-glesv2' : ['drm', 'gbm', 'egl', 'glesv2', 'matrix-glesv2'],
-+   'mir-gl' : ['mirclient', 'egl', 'gl', 'matrix-gl'],
-+-  'mir-glesv2' : ['mirclient', 'egl', 'glesv2', 'matrix-gl'],
-++  'mir-glesv2' : ['mirclient', 'egl', 'glesv2', 'matrix-glesv2'],
-+   'wayland-gl' : ['wayland-client', 'wayland-egl', 'egl', 'gl', 'matrix-gl'],
-+-  'wayland-glesv2' : ['wayland-client', 'wayland-egl', 'egl', 'glesv2', 'matrix-gl'],
-++  'wayland-glesv2' : ['wayland-client', 'wayland-egl', 'egl', 'glesv2',
-++  'matrix-glesv2'],
-+   'fbdev-glesv2' : ['egl', 'glesv2', 'matrix-glesv2']
 + }
-+ flavor_defines = {
-diff --git a/package/glmark2/glmark2.mk b/package/glmark2/glmark2.mk
++ 
+++#ifdef EGL_MESA_screen_surface
++ static void
++ init_kms(void)
++ {
++@@ -94,19 +101,23 @@ init_kms(void)
++    kms_width = width;
++    kms_height = height;
++ }
+++#endif
++ 
++ void
++ _eglutNativeInitWindow(struct eglut_window *win, const char *title,
++                        int x, int y, int w, int h)
++ {
+++#ifdef EGL_MESA_screen_surface
++    EGLint surf_attribs[16];
++    EGLint i;
+++#endif
++    const char *exts;
++ 
++    exts = eglQueryString(_eglut->dpy, EGL_EXTENSIONS);
++    if (!exts || !strstr(exts, "EGL_MESA_screen_surface"))
++       _eglutFatal("EGL_MESA_screen_surface is not supported\n");
++ 
+++#ifdef EGL_MESA_screen_surface
++    init_kms();
++ 
++    i = 0;
++@@ -128,14 +139,17 @@ _eglutNativeInitWindow(struct eglut_wind
++ 
++    win->native.width = kms_width;
++    win->native.height = kms_height;
+++#endif
++ }
++ 
++ void
++ _eglutNativeFiniWindow(struct eglut_window *win)
++ {
+++#ifdef EGL_MESA_screen_surface
++    eglShowScreenSurfaceMESA(_eglut->dpy,
++          kms_screen, EGL_NO_SURFACE, 0);
++    eglDestroySurface(_eglut->dpy, win->native.u.surface);
+++#endif
++ }
++ 
++ void
++Index: mesa3d-demos-8.1.0/src/egl/opengl/demo1.c
++===================================================================
++--- mesa3d-demos-8.1.0.orig/src/egl/opengl/demo1.c
+++++ mesa3d-demos-8.1.0/src/egl/opengl/demo1.c
++@@ -18,6 +18,7 @@
++ static void
++ TestScreens(EGLDisplay dpy)
++ {
+++#ifdef EGL_MESA_screen_surface
++ #define MAX 8
++    EGLScreenMESA screens[MAX];
++    EGLint numScreens;
++@@ -28,6 +29,7 @@ TestScreens(EGLDisplay dpy)
++    for (i = 0; i < numScreens; i++) {
++       printf(" Screen %d handle: %d\n", i, (int) screens[i]);
++    }
+++#endif
++ }
++ 
++ /**
++Index: mesa3d-demos-8.1.0/src/egl/opengl/demo2.c
++===================================================================
++--- mesa3d-demos-8.1.0.orig/src/egl/opengl/demo2.c
+++++ mesa3d-demos-8.1.0/src/egl/opengl/demo2.c
++@@ -16,6 +16,7 @@
++ 
++ /*#define FRONTBUFFER*/
++ 
+++#ifdef EGL_MESA_screen_surface
++ static void _subset_Rectf(GLfloat x1, GLfloat y1, GLfloat x2, GLfloat y2,
++                           GLfloat r, GLfloat g, GLfloat b)
++ {
++@@ -95,12 +96,13 @@ TestScreens(EGLDisplay dpy)
++       printf(" Screen %d handle: %d\n", i, (int) screens[i]);
++    }
++ }
++-
+++#endif
++ 
++ int
++ main(int argc, char *argv[])
++ {
++    int maj, min;
+++#ifdef EGL_MESA_screen_surface
++    EGLContext ctx;
++    EGLSurface pbuffer, screen_surf;
++    EGLConfig configs[10];
++@@ -115,6 +117,7 @@ main(int argc, char *argv[])
++    EGLModeMESA mode;
++    EGLScreenMESA screen;
++    EGLint count;
+++#endif
++ 
++    EGLDisplay d = eglGetDisplay(EGL_DEFAULT_DISPLAY);
++    assert(d);
++@@ -132,6 +135,7 @@ main(int argc, char *argv[])
++       exit(1);
++    }
++ 
+++#ifdef EGL_MESA_screen_surface
++    eglGetConfigs(d, configs, 10, &numConfigs);
++    printf("Got %d EGL configs:\n", numConfigs);
++    for (i = 0; i < numConfigs; i++) {
++@@ -211,6 +215,7 @@ main(int argc, char *argv[])
++    eglDestroySurface(d, pbuffer);
++    eglDestroyContext(d, ctx);
++    eglTerminate(d);
+++#endif
++ 
++    return 0;
++ }
++Index: mesa3d-demos-8.1.0/src/egl/opengl/demo3.c
++===================================================================
++--- mesa3d-demos-8.1.0.orig/src/egl/opengl/demo3.c
+++++ mesa3d-demos-8.1.0/src/egl/opengl/demo3.c
++@@ -46,7 +46,7 @@ GLubyte OpenGL_bits[] = {
++    0x3e, 0x00, 0x00, 0xf8, 0x0c, 0x00, 
++ };
++ 
++-
+++#ifdef EGL_MESA_screen_surface
++ static void Init(void)
++ {
++ 
++@@ -551,11 +551,13 @@ write_ppm(const char *filename, const GL
++       fclose(f);
++    }
++ }
+++#endif
++ 
++ int
++ main(int argc, char *argv[])
++ {
++    int maj, min;
+++#ifdef EGL_MESA_screen_surface
++    EGLContext ctx;
++    EGLSurface screen_surf;
++    EGLConfig configs[10];
++@@ -566,6 +568,7 @@ main(int argc, char *argv[])
++    const GLubyte *bitmap;
++    EGLint screenAttribs[32];
++    EGLint i;
+++#endif
++ 
++    EGLDisplay d = eglGetDisplay(EGL_DEFAULT_DISPLAY);
++    assert(d);
++@@ -583,6 +586,7 @@ main(int argc, char *argv[])
++       exit(1);
++    }
++ 
+++#ifdef EGL_MESA_screen_surface
++    eglGetConfigs(d, configs, 10, &numConfigs);
++    eglGetScreensMESA(d, &screen, 1, &count);
++    eglGetModesMESA(d, screen, &mode, 1, &count);
++@@ -642,6 +646,7 @@ main(int argc, char *argv[])
++    eglDestroySurface(d, screen_surf);
++    eglDestroyContext(d, ctx);
++    eglTerminate(d);
+++#endif
++ 
++    return 0;
++ }
+diff --git a/package/mesa3d-demos/mesa3d-demos-optional-gl.patch b/package/mesa3d-demos/mesa3d-demos-optional-gl.patch
 new file mode 100644
-index 0000000..d96db0d
+index 0000000..b198531
 --- /dev/null
-+++ b/package/glmark2/glmark2.mk
-@@ -0,0 +1,70 @@
++++ b/package/mesa3d-demos/mesa3d-demos-optional-gl.patch
+@@ -0,0 +1,75 @@
++This patches makes opengl an optional component.
++
++Signed-off-by: Spenser Gilliland <spenser@gillilanding.com>
++---
++Index: mesa3d-demos-8.1.0/configure.ac
++===================================================================
++--- mesa3d-demos-8.1.0.orig/configure.ac
+++++ mesa3d-demos-8.1.0/configure.ac
++@@ -51,6 +51,14 @@ m4_ifndef([PKG_PROG_PKG_CONFIG],
++   ACLOCAL="aclocal -I/other/macro/dir" before running autoreconf.])])
++ PKG_PROG_PKG_CONFIG()
++ 
+++AC_ARG_ENABLE([gl],
+++    [AS_HELP_STRING([--enable-gl],
+++        [enable GL library @<:@default=no@:>@])],
+++    [gl_enabled="$enableval"],
+++    [gl_enabled=auto])
+++
+++if test "x$gl_enabled" != "xno"; then
+++
++ dnl Get the pkg-config definitions for libGL.  We include a fallback
++ dnl path for GL implementation that don't provide a .pc file
++ PKG_CHECK_MODULES(GL, [gl], [], [
++@@ -103,6 +111,8 @@ PKG_CHECK_MODULES(GLU, [glu], [],
++ DEMO_CFLAGS="$DEMO_CFLAGS $GLU_CFLAGS"
++ DEMO_LIBS="$DEMO_LIBS $GLU_LIBS"
++ 
+++fi
+++
++ AC_ARG_ENABLE([egl],
++     [AS_HELP_STRING([--enable-egl],
++         [enable EGL library @<:@default=no@:>@])],
++@@ -287,7 +297,7 @@ AC_SUBST([MESA_GLAPI])
++ AC_SUBST([WAYLAND_CFLAGS])
++ AC_SUBST([WAYLAND_LIBS])
++ 
++-
+++AM_CONDITIONAL(HAVE_GL, test "x$gl_enabled" = "xyes")
++ AM_CONDITIONAL(HAVE_EGL, test "x$egl_enabled" = "xyes")
++ AM_CONDITIONAL(HAVE_GLESV1, test "x$glesv1_enabled" = "xyes")
++ AM_CONDITIONAL(HAVE_GLESV2, test "x$glesv2_enabled" = "xyes")
++Index: mesa3d-demos-8.1.0/src/egl/opengl/Makefile.am
++===================================================================
++--- mesa3d-demos-8.1.0.orig/src/egl/opengl/Makefile.am
+++++ mesa3d-demos-8.1.0/src/egl/opengl/Makefile.am
++@@ -50,6 +50,7 @@ endif
++ endif
++ 
++ if HAVE_EGL
+++if HAVE_GL
++ noinst_PROGRAMS = \
++ 	demo1 \
++ 	demo2 \
++@@ -61,6 +62,7 @@ noinst_PROGRAMS = \
++ 	$(EGL_DRM_DEMOS) \
++ 	$(EGL_X11_DEMOS)
++ endif
+++endif
++ 
++ egltri_screen_SOURCES = egltri.c
++ eglgears_screen_SOURCES = eglgears.c
++Index: mesa3d-demos-8.1.0/src/util/Makefile.am
++===================================================================
++--- mesa3d-demos-8.1.0.orig/src/util/Makefile.am
+++++ mesa3d-demos-8.1.0/src/util/Makefile.am
++@@ -27,7 +27,9 @@ AM_CFLAGS = \
++ AM_LDFLAGS = \
++ 	$(DEMO_LIBS)
++ 
+++if HAVE_GL
++ noinst_LTLIBRARIES = libutil.la
+++endif
++ 
++ if HAVE_GLUT
++ AM_CFLAGS += \
+diff --git a/package/mesa3d-demos/mesa3d-demos-x11-fix.patch b/package/mesa3d-demos/mesa3d-demos-x11-fix.patch
+new file mode 100644
+index 0000000..f6b3b0c
+--- /dev/null
++++ b/package/mesa3d-demos/mesa3d-demos-x11-fix.patch
+@@ -0,0 +1,30 @@
++This patch ensures that programs which depend on x11 are not build if x11
++is not available.
++
++Signed-off-by: Spenser Gilliland <spenser@gillilanding.com>
++---
++Index: mesa3d-demos-8.1.0/src/egl/opengles2/Makefile.am
++===================================================================
++--- mesa3d-demos-8.1.0.orig/src/egl/opengles2/Makefile.am
+++++ mesa3d-demos-8.1.0/src/egl/opengles2/Makefile.am
++@@ -35,9 +35,10 @@ AM_LDFLAGS = \
++ 
++ if HAVE_EGL
++ if HAVE_GLESV2
++-bin_PROGRAMS = \
+++bin_PROGRAMS = es2gears_screen
+++if HAVE_X11
+++bin_PROGRAMS += \
++ 	es2_info \
++-	es2gears_screen \
++ 	es2gears_x11 \
++ 	es2tri
++ if HAVE_WAYLAND
++@@ -45,6 +46,7 @@ bin_PROGRAMS += es2gears_wayland
++ endif
++ endif
++ endif
+++endif
++ 
++ es2_info_LDADD = $(X11_LIBS)
++ es2tri_LDADD = $(X11_LIBS)
+diff --git a/package/mesa3d-demos/mesa3d-demos.mk b/package/mesa3d-demos/mesa3d-demos.mk
+new file mode 100644
+index 0000000..2cb7cd8
+--- /dev/null
++++ b/package/mesa3d-demos/mesa3d-demos.mk
+@@ -0,0 +1,63 @@
 +################################################################################
 +#
-+# glmark2
++# mesa3d-demos
 +#
 +################################################################################
 +
-+GLMARK2_VERSION = 279
-+GLMARK2_SITE = http://bazaar.launchpad.net/~laanwj/glmark2/fbdev
-+GLMARK2_SITE_METHOD = bzr
-+GLMARK2_LICENSE = GPLv3+ SGIv1
-+GLMARK2_LICENSE_FILES = COPYING COPYING.SGI
++MESA3D_DEMOS_VERSION = 8.1.0
++MESA3D_DEMOS_SOURCE = mesa-demos-$(MESA3D_DEMOS_VERSION).tar.bz2
++MESA3D_DEMOS_SITE = ftp://ftp.freedesktop.org/pub/mesa/demos/$(MESA3D_DEMOS_VERSION)
++MESA3D_DEMOS_INSTALL_STAGING = YES
++MESA3D_DEMOS_AUTORECONF = YES
++MESA3D_DEMOS_DEPENDENCIES = host-pkgconf
 +
-+GLMARK2_DEPENDENCIES = jpeg libpng12 mesa3d host-pkgconf
-+
-+GLMARK2_CONF_OPTS = --prefix=/usr/
-+
-+GLMARK2_CONF_ENV = LDFLAGS="-lrt -lpthread"
-+
-+ifeq ($(BR2_PACKAGE_XSERVER_XORG_SERVER)$(BR2_PACKAGE_HAS_OPENGL_ES),yy)
-+GLMARK2_DEPENDENCIES += libegl libgles
-+GLMARK2_FLAVORS += x11-glesv2
++ifeq ($(BR2_PACKAGE_HAS_OPENGL),y)
++MESA3D_DEMOS_DEPENDENCIES += libgl
++MESA3D_DEMOS_CONF_OPT += --enable-gl
++else
++MESA3D_DEMOS_CONF_OPT += --disable-gl
 +endif
 +
-+ifeq ($(BR2_PACKAGE_XSERVER_XORG_SERVER)$(BR2_PACKAGE_HAS_OPENGL),yy)
-+GLMARK2_DEPENDENCIES += libgl
-+GLMARK2_FLAVORS += x11-gl
++ifeq ($(BR2_PACKAGE_HAS_OPENGL_EGL),y)
++MESA3D_DEMOS_DEPENDENCIES += libegl
++MESA3D_DEMOS_CONF_OPT += --enable-egl
++else
++MESA3D_DEMOS_CONF_OPT += --disable-egl
 +endif
 +
-+ifeq ($(BR2_PACKAGE_HAS_OPENGL_EGL)$(BR2_PACKAGE_HAS_OPENGL_ES),yy)
-+GLMARK2_DEPENDENCIES += libdrm libegl libgles
-+GLMARK2_FLAVORS += drm-glesv2 fbdev-glesv2
++ifeq ($(BR2_PACKAGE_HAS_OPENGL_ES),y)
++MESA3D_DEMOS_DEPENDENCIES += libgles
++MESA3D_DEMOS_CONF_OPT += --enable-gles1 --enable-gles2
++else
++MESA3D_DEMOS_CONF_OPT += --disable-gles1 --disable-gles2
 +endif
 +
-+ifeq ($(BR2_PACKAGE_HAS_OPENGL_EGL)$(BR2_PACKAGE_HAS_OPENGL),yy)
-+GLMARK2_DEPENDENCIES += libdrm libgl
-+GLMARK2_FLAVORS += drm-gl
++ifeq ($(BR2_PACKAGE_HAS_OPENVG),y)
++MESA3D_DEMOS_DEPENDENCIES += libopenvg
++MESA3D_DEMOS_CONF_OPT += --enable-vg
++else
++MESA3D_DEMOS_CONF_OPT += --disable-vg
 +endif
 +
-+ifeq ($(BR2_PACKAGE_WAYLAND)$(BR2_PACKAGE_HAS_OPENGL_ES),yy)
-+GLMARK2_DEPENDENCIES += wayland libegl libgles
-+GLMARK2_FLAVORS += wayland-glesv2
++ifeq ($(BR2_PACKAGE_MESA3D_GBM),y)
++MESA3D_DEMOS_DEPENDENCIES += mesa3d
++MESA3D_DEMOS_CONF_OPT += --enable-gbm
++else
++MESA3D_DEMOS_CONF_OPT += --disable-gbm
 +endif
 +
-+ifeq ($(BR2_PACKAGE_WAYLAND)$(BR2_PACKAGE_HAS_OPENGL),yy)
-+GLMARK2_DEPENDENCIES += wayland libgl
-+GLMARK2_FLAVORS += wayland-gl
++ifeq ($(BR2_PACKAGE_FREETYPE),y)
++MESA3D_DEMOS_DEPENDENCIES += freetype
++MESA3D_DEMOS_CONF_OPT += --enable-freetype2
++else
++MESA3D_DEMOS_CONF_OPT += --disable-freetype2
 +endif
 +
-+ifeq ($(BR2_PACKAGE_SUNXI_MALI),y)
-+GLMARK2_CONF_OPTS += --for-mali
++ifeq ($(BR2_PACKAGE_WAYLAND),y)
++MESA3D_DEMOS_DEPENDENCIES += wayland
++MESA3D_DEMOS_CONF_OPT += --enable-wayland
++else
++MESA3D_DEMOS_CONF_OPT += --disable-wayland
 +endif
 +
-+GLMARK2_CONF_OPTS += \
-+	--with-flavors=$(subst $(space),$(comma),$(GLMARK2_FLAVORS))
-+
-+define GLMARK2_CONFIGURE_CMDS
-+	cd $(@D) && \
-+		$(TARGET_MAKE_ENV) $(GLMARK2_CONF_ENV) $(TARGET_CONFIGURE_OPTS) ./waf configure \
-+		$(GLMARK2_CONF_OPTS)
-+endef
-+
-+define GLMARK2_BUILD_CMDS
-+	cd $(@D) && $(TARGET_MAKE_ENV) ./waf
-+endef
-+
-+define GLMARK2_INSTALL_TARGET_CMDS
-+	cd $(@D) && $(TARGET_MAKE_ENV) ./waf install --destdir=$(TARGET_DIR)
-+endef
-+
-+$(eval $(generic-package))
++$(eval $(autotools-package))
 -- 
 1.7.1
