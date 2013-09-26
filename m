@@ -1,42 +1,33 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 26 Sep 2013 21:37:36 +0200
-Subject: [Buildroot] [PATCH] configs: add Freescale i.MX 6SoloLite EVK
-	support
-In-Reply-To: <1380185523-26736-1-git-send-email-gilles.talis@gmail.com>
- (Gilles Talis's message of "Thu, 26 Sep 2013 10:52:02 +0200")
-References: <1380185523-26736-1-git-send-email-gilles.talis@gmail.com>
-Message-ID: <87fvsr5q7z.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Thu, 26 Sep 2013 21:11:03 +0200
+Subject: [Buildroot] [git commit] nitrogen6x: bump U-Boot to latest
+	production version (2013.07)
+Message-ID: <20130926193801.577589B88F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gilles" == Gilles Talis <gilles.talis@gmail.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=f368f2d19befa2adaa237a4e08d62a2ac3c92be6
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Gilles> i.MX6 SoloLite EVK is Freescale's evaluation board based on
- Gilles> the i.MX6 SoloLite applications processor.
+Signed-off-by: Eric Nelson <eric.nelson@boundarydevices.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ configs/nitrogen6x_defconfig |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
- Gilles> This defconfig is based off Freescale "official" git repo on git.freescale.com
- Gilles> and SW release 3.0.35_4.1.0.
-
- Gilles> Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
- Gilles> ---
- Gilles>  configs/freescale_imx6sololiteevk_defconfig |   15 +++++++++++++++
- Gilles>  1 file changed, 15 insertions(+)
- Gilles>  create mode 100644 configs/freescale_imx6sololiteevk_defconfig
-
- Gilles> diff --git a/configs/freescale_imx6sololiteevk_defconfig b/configs/freescale_imx6sololiteevk_defconfig
- Gilles> new file mode 100644
- Gilles> index 0000000..7ed6e6c
- Gilles> --- /dev/null
- Gilles> +++ b/configs/freescale_imx6sololiteevk_defconfig
- Gilles> @@ -0,0 +1,15 @@
- Gilles> +BR2_arm=y
- Gilles> +BR2_cortex_a9=y
- Gilles> +BR2_ROOTFS_DEVICE_CREATION_STATIC=y
-
-Why do you want static device nodes?
-
--- 
-Bye, Peter Korsgaard
+diff --git a/configs/nitrogen6x_defconfig b/configs/nitrogen6x_defconfig
+index cdd8000..4c4bd1b 100644
+--- a/configs/nitrogen6x_defconfig
++++ b/configs/nitrogen6x_defconfig
+@@ -15,7 +15,7 @@ BR2_TARGET_ROOTFS_EXT2_2r1=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BOARDNAME="nitrogen6q"
+ BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
+-BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="http://github.com/boundarydevices/u-boot-imx6/tarball/7176d07/u-boot-7176d07.tar.gz"
++BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="http://github.com/boundarydevices/u-boot-imx6/tarball/4034391/u-boot-4034391.tar.gz"
+ 
+ # kernel
+ BR2_LINUX_KERNEL=y
