@@ -1,7 +1,7 @@
 From: Axel Lin <axel.lin@ingics.com>
-Date: Thu, 26 Sep 2013 09:54:53 +0800
-Subject: [Buildroot] [PATCH] socat: needs mmu
-Message-ID: <1380160493.18654.0.camel@phoenix>
+Date: Thu, 26 Sep 2013 10:17:40 +0800
+Subject: [Buildroot] [PATCH] logsurfer: needs mmu
+Message-ID: <1380161860.11201.1.camel@phoenix>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,30 +12,34 @@ Signed-off-by: Axel Lin <axel.lin@ingics.com>
 ---
 Fix below build error:
 
-sycls.o: In sycls.ofunction `: Fork'In:
-sycls.c :function (.text`Fork+0x16d0':): undefined
- referencesycls.c to `fork'
-collect2: ld returned 1 exit status:
-(.text+0x16d0): undefined reference to `fork'
+exec.o: In function `do_exec':
+exec.c:(.text+0x14c): undefined reference to `fork'
+exec.o: In function `do_pipe_line':
+exec.c:(.text+0x218): undefined reference to `fork'
+logsurfer.o: In function `runasdaemon':
+logsurfer.c:(.text+0x388): undefined reference to `fork'
+logsurfer.c:(.text+0x3dc): undefined reference to `fork'
+report.o: In function `make_report':
+report.c:(.text+0x1a8): undefined reference to `fork'
 collect2: ld returned 1 exit status
-make[1]: *** [procan] Error 1
-make[1]: *** Waiting for unfinished jobs....
-make[1]: *** [filan] Error 1
+make[2]: *** [logsurfer] Error 1
+make[2]: Leaving directory `/opt/test/buildroot/buildroot/output/build/logsurfer-1.8/src'
+make[1]: *** [all] Error 2
+make[1]: Leaving directory `/opt/test/buildroot/buildroot/output/build/logsurfer-1.8'
 
- package/socat/Config.in | 1 +
+ package/logsurfer/Config.in | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/package/socat/Config.in b/package/socat/Config.in
-index c478282..ec69c96 100644
---- a/package/socat/Config.in
-+++ b/package/socat/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_SOCAT
- 	bool "socat"
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/logsurfer/Config.in b/package/logsurfer/Config.in
+index 27d1881..d4218bc 100644
+--- a/package/logsurfer/Config.in
++++ b/package/logsurfer/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_LOGSURFER
+ 	bool "logsurfer"
 +	depends on BR2_USE_MMU # fork()
  	help
- 	  Multipurpose socket relay program.
- 
+ 	  Logsurfer is a program for monitoring system logs in real-time,
+ 	  and reporting on the occurrence of events.
 -- 
 1.8.1.2
