@@ -1,47 +1,38 @@
-From: Gilles Talis <gilles.talis@gmail.com>
-Date: Thu, 26 Sep 2013 10:52:03 +0200
-Subject: [Buildroot] [PATCH] configs: add Freescale SABRE-SD board support
-In-Reply-To: <1380185523-26736-1-git-send-email-gilles.talis@gmail.com>
-References: <1380185523-26736-1-git-send-email-gilles.talis@gmail.com>
-Message-ID: <1380185523-26736-2-git-send-email-gilles.talis@gmail.com>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Thu, 26 Sep 2013 11:34:02 +0200
+Subject: [Buildroot] Using source inclusions in defconfig
+In-Reply-To: <CAJpxd04ok1Eu_kERG1UQy=y4ixUWcz-YZJujx=SnJysJThtOaA@mail.gmail.com>
+References: <CAJpxd04ok1Eu_kERG1UQy=y4ixUWcz-YZJujx=SnJysJThtOaA@mail.gmail.com>
+Message-ID: <CAAXf6LV8fu30gj5fuoMJEGjgrem-jM2RQj32m+Kd7ox1==oY7Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-SABRE Board for Smart Devices (SABRE-SD) is Freescale's evaluation board
-based on the i.MX 6Quad ARM Cortex-A9 applications processor.
+Hi Bryce,
 
-This defconfig is based off Freescale "official" git repo on git.freescale.com
-and SW release 3.0.35_4.1.0.
+On Thu, Sep 26, 2013 at 2:47 AM, Bryce Schober <bryce.schober@gmail.com> wrote:
+> It looks to me like the "source" command doesn't work in defconfigs. I get
+> "warning:: unexpected data", and it doesn't include the referenced config.
+>
+> Is this a generic limitation, or an artifact of my ancient buildroot?
+>
+> It sure would be nice to modularize defconfigs for my target variants...
 
-Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
----
- configs/freescale_imx6sabresd_defconfig |   15 +++++++++++++++
- 1 file changed, 15 insertions(+)
- create mode 100644 configs/freescale_imx6sabresd_defconfig
+This is not buildroot-specific, it is kconfig that does not support
+it. The same behavior is present in the most recent buildroot version.
 
-diff --git a/configs/freescale_imx6sabresd_defconfig b/configs/freescale_imx6sabresd_defconfig
-new file mode 100644
-index 0000000..4b071e7
---- /dev/null
-+++ b/configs/freescale_imx6sabresd_defconfig
-@@ -0,0 +1,15 @@
-+BR2_arm=y
-+BR2_cortex_a9=y
-+BR2_ROOTFS_DEVICE_CREATION_STATIC=y
-+BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_GIT=y
-+BR2_LINUX_KERNEL_CUSTOM_GIT_REPO_URL="git://git.freescale.com/imx/linux-2.6-imx.git"
-+BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION="rel_imx_3.0.35_4.1.0"
-+BR2_LINUX_KERNEL_DEFCONFIG="imx6"
-+BR2_TARGET_ROOTFS_EXT2=y
-+BR2_TARGET_UBOOT=y
-+BR2_TARGET_UBOOT_BOARDNAME="mx6q_sabresd"
-+BR2_TARGET_UBOOT_CUSTOM_GIT=y
-+BR2_TARGET_UBOOT_CUSTOM_GIT_REPO_URL="git://git.freescale.com/imx/uboot-imx.git"
-+BR2_TARGET_UBOOT_CUSTOM_GIT_VERSION="rel_imx_3.0.35_4.1.0"
--- 
-1.7.10.4
+This question/feature request has come up in the past. One idea is to
+pre-process the config yourself with a script before running
+buildroot. Basically this would be 'cat config1 config2 config3 >
+configs/my_board_defconfig' followed by 'make my_board_defconfig'.
+This works, but the biggest problem that I see is: how to save your
+configuration back after you made changes. Since there is no record of
+which original config file contained a given symbol, where should the
+new value be written? You can easily generate the accumulated
+defconfig, but then you'd have to manually split it up again into the
+original files.
+
+Best regards,
+Thomas
