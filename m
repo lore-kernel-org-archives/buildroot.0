@@ -1,66 +1,47 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 26 Sep 2013 16:37:09 +0200
-Subject: [Buildroot] [PATCH 2/4] nitrogen6x: use
-	6x_bootscript/6x_upgrade instead of older 6q_ versions
-In-Reply-To: <1380136072-9879-3-git-send-email-eric.nelson@boundarydevices.com>
- (Eric Nelson's message of "Wed, 25 Sep 2013 12:07:50 -0700")
-References: <1380136072-9879-1-git-send-email-eric.nelson@boundarydevices.com>
- <1380136072-9879-3-git-send-email-eric.nelson@boundarydevices.com>
-Message-ID: <87r4cb7ip6.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Thu, 26 Sep 2013 16:41:25 +0200
+Subject: [Buildroot] [git commit] u-boot: add option for Freescale
+	u-boot.imx format
+Message-ID: <20130926144208.D33839B879@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Eric" == Eric Nelson <eric.nelson@boundarydevices.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=b8326cb643d29f7259905a1c157611e6f53c5cad
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Hi Eric,
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ boot/uboot/Config.in |    3 +++
+ boot/uboot/uboot.mk  |    2 ++
+ 2 files changed, 5 insertions(+), 0 deletions(-)
 
- Eric> Signed-off-by: Eric Nelson <eric.nelson@boundarydevices.com>
-
- Eric> +++ b/board/boundarydevices/nitrogen6x/post-build.sh
- Eric> @@ -1,18 +1,20 @@
- Eric>  #!/bin/sh
- Eric>  # post-build fixups
- Eric> -# for furthe details, see
- Eric> -# http://boundarydevices.com/u-boot-conventions-for-i-mx6-nitrogen6x-and-sabrelite/
- Eric> +# for further details, see
- Eric> +#
- Eric> +#  http://boundarydevices.com/u-boot-on-i-mx6/
- Eric> +#
+diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
+index 1b98339..998cda2 100644
+--- a/boot/uboot/Config.in
++++ b/boot/uboot/Config.in
+@@ -87,6 +87,9 @@ config BR2_TARGET_UBOOT_FORMAT_BIN
+ config BR2_TARGET_UBOOT_FORMAT_IMG
+ 	bool "u-boot.img"
  
- Eric>  TARGET_DIR=$1
- Eric>  IMAGES_DIR=$1/../images
- Eric>  BOARD_DIR="$(dirname $0)"
++config BR2_TARGET_UBOOT_FORMAT_IMX
++	bool "u-boot.imx"
++
+ config BR2_TARGET_UBOOT_FORMAT_NAND_BIN
+ 	bool "u-boot-nand.bin"
  
- Eric>  # bd u-boot looks for bootscript here
- Eric> -cp $BOARD_DIR/6q_bootscript $TARGET_DIR
- Eric> +cp $BOARD_DIR/6x_bootscript $TARGET_DIR
- 
- Eric>  # u-boot / update script for bd upgradeu command
- Eric> -if [ -e $IMAGES_DIR/u-boot.bin ];
- Eric> +if [ -e $IMAGES_DIR/u-boot.imx ];
- Eric>  then
- Eric> -    cp $IMAGES_DIR/u-boot.bin $TARGET_DIR
- Eric> -    cp $BOARD_DIR/6q_upgrade $TARGET_DIR
- Eric> +    cp $IMAGES_DIR/u-boot.imx $TARGET_DIR
- Eric> +    cp $BOARD_DIR/6x_upgrade $TARGET_DIR
-
-Hmm, how is that supposed to work? I don't know the details of the imx6
-boot sequence, but:
-
-- We don't currently have an option in the u-boot package to install
-  u-boot.imx to IMAGES_DIR/, so this will never run
-
-- Comparing 6q_upgrade and 6x_upgrade I see we used to write the raw
-  u-boot.bin to offset 0 in the spi flash, and now are writing
-  u-boot.imx (which presumably is u-boot.bin with a freescale header) to
-  offset 1K. I see that the .imx file is 4K bigger than the .bin
-  file, so that's presumably the size of the freescale header.
-
-I'll go and add a option for u-boot.imx to the u-boot package, but would
-like to hear if 6x_upgrade is doing the right thing here.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
+index 631da6b..dc8e26f 100644
+--- a/boot/uboot/uboot.mk
++++ b/boot/uboot/uboot.mk
+@@ -40,6 +40,8 @@ else ifeq ($(BR2_TARGET_UBOOT_FORMAT_NAND_BIN),y)
+ UBOOT_BIN          = u-boot-nand.bin
+ else ifeq ($(BR2_TARGET_UBOOT_FORMAT_IMG),y)
+ UBOOT_BIN          = u-boot.img
++else ifeq ($(BR2_TARGET_UBOOT_FORMAT_IMX),y)
++UBOOT_BIN          = u-boot.imx
+ else ifeq ($(BR2_TARGET_UBOOT_FORMAT_SB),y)
+ UBOOT_BIN          = u-boot.sb
+ UBOOT_MAKE_TARGET  = $(UBOOT_BIN)
