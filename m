@@ -1,34 +1,111 @@
 From: Spenser Gilliland <spenser@gillilanding.com>
-Date: Thu, 26 Sep 2013 18:21:44 -0500
-Subject: [Buildroot] [PATCH v3 01/11] udev: explicitly include pthreads
+Date: Thu, 26 Sep 2013 18:21:48 -0500
+Subject: [Buildroot] [PATCH v3 05/11] sunxi-cedarx: bump to newer version,
+	use armel2 binaries, add demo
 In-Reply-To: <1380237714-2470-1-git-send-email-spenser@gillilanding.com>
 References: <1380237714-2470-1-git-send-email-spenser@gillilanding.com>
-Message-ID: <1380237714-2470-2-git-send-email-spenser@gillilanding.com>
+Message-ID: <1380237714-2470-6-git-send-email-spenser@gillilanding.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This fixes builds with Linaro hard float toolchains.
 
 Signed-off-by: Spenser Gilliland <spenser@gillilanding.com>
 ---
- package/udev/udev.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/sunxi-cedarx/Config.in       |   10 ++++++++++
+ package/sunxi-cedarx/sunxi-cedarx.mk |   27 +++++++++++++++++++++++----
+ 2 files changed, 33 insertions(+), 4 deletions(-)
 
-diff --git a/package/udev/udev.mk b/package/udev/udev.mk
-index db86850..b512ec5 100644
---- a/package/udev/udev.mk
-+++ b/package/udev/udev.mk
-@@ -12,7 +12,7 @@ UDEV_LICENSE_FILES = COPYING
- UDEV_INSTALL_STAGING = YES
+diff --git a/package/sunxi-cedarx/Config.in b/package/sunxi-cedarx/Config.in
+index b280db0..aa520b5 100644
+--- a/package/sunxi-cedarx/Config.in
++++ b/package/sunxi-cedarx/Config.in
+@@ -10,5 +10,15 @@ config BR2_PACKAGE_SUNXI_CEDARX
+ 	  http://github.com/linux-sunxi/cedarx-libs
+ 	  http://linux-sunxi.org/CedarX
  
- # mq_getattr is in librt
--UDEV_CONF_ENV += LIBS=-lrt
-+UDEV_CONF_ENV += LIBS="-lrt -lpthread"
++if BR2_PACKAGE_SUNXI_CEDARX
++
++config BR2_PACKAGE_SUNXI_CEDARX_DEMO
++	bool "install enc_dec_test demo"
++	help
++	  Install a test program which verifies the functionality of the CedarX
++	  libraries
++
++endif
++
+ comment "sunxi-cedarx requires an eglibc/glibc based toolchain"
+ 	depends on !BR2_TOOLCHAIN_USES_GLIBC && BR2_arm
+diff --git a/package/sunxi-cedarx/sunxi-cedarx.mk b/package/sunxi-cedarx/sunxi-cedarx.mk
+index 07c85d4..5e68d7d 100644
+--- a/package/sunxi-cedarx/sunxi-cedarx.mk
++++ b/package/sunxi-cedarx/sunxi-cedarx.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- UDEV_CONF_OPT =			\
- 	--sbindir=/sbin		\
+-SUNXI_CEDARX_VERSION = 74923e55fc
++SUNXI_CEDARX_VERSION = 74c3e9052
+ SUNXI_CEDARX_SITE = http://github.com/linux-sunxi/cedarx-libs/tarball/$(SUNXI_CEDARX_VERSION)
+ 
+ SUNXI_CEDARX_INSTALL_STAGING = YES
+@@ -14,7 +14,12 @@ SUNXI_CEDARX_CONFIGURE_OPTS = \
+ 
+ ifeq ($(BR2_ARM_EABIHF),y)
+ SUNXI_CEDARX_BIN_DIR = $(@D)/libcedarv/linux-armhf
+-# libavheap.so is only available on EABIHF
++SUNXI_CEDARX_SAMPLE_LOC = $(SUNXI_CEDARX_BIN_DIR)/sample/ve
++else
++SUNXI_CEDARX_BIN_DIR = $(@D)/libcedarv/linux-armel2
++SUNXI_CEDARX_SAMPLE_LOC = $(SUNXI_CEDARX_BIN_DIR)/sample/output/ve
++endif
++
+ define SUNXI_CEDARX_BUILD_AVHEAP
+ 	$(TARGET_CC) $(TARGET_CFLAGS) \
+ 		-c $(SUNXI_CEDARX_BIN_DIR)/adapter/avheap/avheap.c \
+@@ -25,18 +30,31 @@ define SUNXI_CEDARX_BUILD_AVHEAP
+ 		-o $(SUNXI_CEDARX_BIN_DIR)/adapter/avheap/libavheap.so \
+ 		$(SUNXI_CEDARX_BIN_DIR)/adapter/avheap/avheap.o
+ endef
++
+ define SUNXI_CEDARX_INSTALL_AVHEAP
+ 	$(INSTALL) -D -m 755 $(SUNXI_CEDARX_BIN_DIR)/adapter/avheap/libavheap.so \
+ 		$(1)/usr/lib/libavheap.so
+ endef
+-else
+-SUNXI_CEDARX_BIN_DIR = $(@D)/libcedarv/linux-armel
++
++ifeq ($(BR2_PACKAGE_SUNXI_CEDARX_DEMO),y)
++
++define SUNXI_CEDARX_BUILD_DEMO
++	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) \
++		-C $(SUNXI_CEDARX_BIN_DIR)/sample $(SUNXI_CEDARX_CONFIGURE_OPTS)
++endef
++
++define SUNXI_CEDARX_INSTALL_DEMO
++	$(INSTALL) -D -m 755 $(SUNXI_CEDARX_SAMPLE_LOC) \
++		$(TARGET_DIR)/usr/bin/ve
++endef
++
+ endif
+ 
+ define SUNXI_CEDARX_BUILD_CMDS
+ 	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(SUNXI_CEDARX_BIN_DIR) \
+ 		$(SUNXI_CEDARX_CONFIGURE_OPTS)
+ 	$(SUNXI_CEDARX_BUILD_AVHEAP)
++	$(SUNXI_CEDARX_BUILD_DEMO)
+ endef
+ 
+ define SUNXI_CEDARX_INSTALL_STAGING_CMDS
+@@ -54,6 +72,7 @@ define SUNXI_CEDARX_INSTALL_TARGET_CMDS
+ 	$(INSTALL) -D -m 755 $(SUNXI_CEDARX_BIN_DIR)/libvecore/libvecore.so \
+ 		$(TARGET_DIR)/usr/lib/libvecore.so
+ 	$(call SUNXI_CEDARX_INSTALL_AVHEAP, $(TARGET_DIR))
++	$(SUNXI_CEDARX_INSTALL_DEMO)
+ endef
+ 
+ $(eval $(generic-package))
 -- 
 1.7.1
