@@ -1,10 +1,9 @@
 From: Spenser Gilliland <spenser@gillilanding.com>
-Date: Thu, 26 Sep 2013 18:21:48 -0500
-Subject: [Buildroot] [PATCH v3 05/11] sunxi-cedarx: bump to newer version,
-	use armel2 binaries, add demo
+Date: Thu, 26 Sep 2013 18:21:51 -0500
+Subject: [Buildroot] [PATCH v3 08/11] libpng12: new package
 In-Reply-To: <1380237714-2470-1-git-send-email-spenser@gillilanding.com>
 References: <1380237714-2470-1-git-send-email-spenser@gillilanding.com>
-Message-ID: <1380237714-2470-6-git-send-email-spenser@gillilanding.com>
+Message-ID: <1380237714-2470-9-git-send-email-spenser@gillilanding.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,98 +13,63 @@ To: buildroot@busybox.net
 
 Signed-off-by: Spenser Gilliland <spenser@gillilanding.com>
 ---
- package/sunxi-cedarx/Config.in       |   10 ++++++++++
- package/sunxi-cedarx/sunxi-cedarx.mk |   27 +++++++++++++++++++++++----
- 2 files changed, 33 insertions(+), 4 deletions(-)
+ package/Config.in            |    1 +
+ package/libpng12/Config.in   |    9 +++++++++
+ package/libpng12/libpng12.mk |   18 ++++++++++++++++++
+ 3 files changed, 28 insertions(+), 0 deletions(-)
+ create mode 100644 package/libpng12/Config.in
+ create mode 100644 package/libpng12/libpng12.mk
 
-diff --git a/package/sunxi-cedarx/Config.in b/package/sunxi-cedarx/Config.in
-index b280db0..aa520b5 100644
---- a/package/sunxi-cedarx/Config.in
-+++ b/package/sunxi-cedarx/Config.in
-@@ -10,5 +10,15 @@ config BR2_PACKAGE_SUNXI_CEDARX
- 	  http://github.com/linux-sunxi/cedarx-libs
- 	  http://linux-sunxi.org/CedarX
- 
-+if BR2_PACKAGE_SUNXI_CEDARX
-+
-+config BR2_PACKAGE_SUNXI_CEDARX_DEMO
-+	bool "install enc_dec_test demo"
+diff --git a/package/Config.in b/package/Config.in
+index 408bc24..075bdc6 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -509,6 +509,7 @@ source "package/libglade/Config.in"
+ source "package/gdk-pixbuf/Config.in"
+ source "package/libgtk2/Config.in"
+ source "package/libpng/Config.in"
++source "package/libpng12/Config.in"
+ source "package/libqrencode/Config.in"
+ source "package/libraw/Config.in"
+ source "package/librsvg/Config.in"
+diff --git a/package/libpng12/Config.in b/package/libpng12/Config.in
+new file mode 100644
+index 0000000..8e36483
+--- /dev/null
++++ b/package/libpng12/Config.in
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_LIBPNG12
++	bool "libpng12"
++	select BR2_PACKAGE_ZLIB
 +	help
-+	  Install a test program which verifies the functionality of the CedarX
-+	  libraries
++	  Library for handling PNG (Portable Network Graphics)
++	  images. This installs the 1.2.x series.  Different versions of
++	  libpng have different APIs.
 +
-+endif
++	  http://www.libpng.org/
+diff --git a/package/libpng12/libpng12.mk b/package/libpng12/libpng12.mk
+new file mode 100644
+index 0000000..39094f2
+--- /dev/null
++++ b/package/libpng12/libpng12.mk
+@@ -0,0 +1,18 @@
++################################################################################
++#
++# libpng12
++#
++################################################################################
 +
- comment "sunxi-cedarx requires an eglibc/glibc based toolchain"
- 	depends on !BR2_TOOLCHAIN_USES_GLIBC && BR2_arm
-diff --git a/package/sunxi-cedarx/sunxi-cedarx.mk b/package/sunxi-cedarx/sunxi-cedarx.mk
-index 07c85d4..5e68d7d 100644
---- a/package/sunxi-cedarx/sunxi-cedarx.mk
-+++ b/package/sunxi-cedarx/sunxi-cedarx.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SUNXI_CEDARX_VERSION = 74923e55fc
-+SUNXI_CEDARX_VERSION = 74c3e9052
- SUNXI_CEDARX_SITE = http://github.com/linux-sunxi/cedarx-libs/tarball/$(SUNXI_CEDARX_VERSION)
- 
- SUNXI_CEDARX_INSTALL_STAGING = YES
-@@ -14,7 +14,12 @@ SUNXI_CEDARX_CONFIGURE_OPTS = \
- 
- ifeq ($(BR2_ARM_EABIHF),y)
- SUNXI_CEDARX_BIN_DIR = $(@D)/libcedarv/linux-armhf
--# libavheap.so is only available on EABIHF
-+SUNXI_CEDARX_SAMPLE_LOC = $(SUNXI_CEDARX_BIN_DIR)/sample/ve
-+else
-+SUNXI_CEDARX_BIN_DIR = $(@D)/libcedarv/linux-armel2
-+SUNXI_CEDARX_SAMPLE_LOC = $(SUNXI_CEDARX_BIN_DIR)/sample/output/ve
-+endif
++LIBPNG12_VERSION = 1.2.50
++LIBPNG12_SERIES = 12
++LIBPNG12_SOURCE = libpng-$(LIBPNG12_VERSION).tar.bz2
++LIBPNG12_SITE = http://downloads.sourceforge.net/project/libpng/libpng$(LIBPNG12_SERIES)/$(LIBPNG12_VERSION)
++LIBPNG12_LICENSE = libpng license
++LIBPNG12_LICENSE_FILES = LICENSE
++LIBPNG12_INSTALL_STAGING = YES
++LIBPNG12_DEPENDENCIES = host-pkgconf zlib
++LIBPNG12_CONFIG_SCRIPTS = libpng$(LIBPNG12_SERIES)-config libpng-config
 +
- define SUNXI_CEDARX_BUILD_AVHEAP
- 	$(TARGET_CC) $(TARGET_CFLAGS) \
- 		-c $(SUNXI_CEDARX_BIN_DIR)/adapter/avheap/avheap.c \
-@@ -25,18 +30,31 @@ define SUNXI_CEDARX_BUILD_AVHEAP
- 		-o $(SUNXI_CEDARX_BIN_DIR)/adapter/avheap/libavheap.so \
- 		$(SUNXI_CEDARX_BIN_DIR)/adapter/avheap/avheap.o
- endef
-+
- define SUNXI_CEDARX_INSTALL_AVHEAP
- 	$(INSTALL) -D -m 755 $(SUNXI_CEDARX_BIN_DIR)/adapter/avheap/libavheap.so \
- 		$(1)/usr/lib/libavheap.so
- endef
--else
--SUNXI_CEDARX_BIN_DIR = $(@D)/libcedarv/linux-armel
-+
-+ifeq ($(BR2_PACKAGE_SUNXI_CEDARX_DEMO),y)
-+
-+define SUNXI_CEDARX_BUILD_DEMO
-+	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) \
-+		-C $(SUNXI_CEDARX_BIN_DIR)/sample $(SUNXI_CEDARX_CONFIGURE_OPTS)
-+endef
-+
-+define SUNXI_CEDARX_INSTALL_DEMO
-+	$(INSTALL) -D -m 755 $(SUNXI_CEDARX_SAMPLE_LOC) \
-+		$(TARGET_DIR)/usr/bin/ve
-+endef
-+
- endif
- 
- define SUNXI_CEDARX_BUILD_CMDS
- 	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(SUNXI_CEDARX_BIN_DIR) \
- 		$(SUNXI_CEDARX_CONFIGURE_OPTS)
- 	$(SUNXI_CEDARX_BUILD_AVHEAP)
-+	$(SUNXI_CEDARX_BUILD_DEMO)
- endef
- 
- define SUNXI_CEDARX_INSTALL_STAGING_CMDS
-@@ -54,6 +72,7 @@ define SUNXI_CEDARX_INSTALL_TARGET_CMDS
- 	$(INSTALL) -D -m 755 $(SUNXI_CEDARX_BIN_DIR)/libvecore/libvecore.so \
- 		$(TARGET_DIR)/usr/lib/libvecore.so
- 	$(call SUNXI_CEDARX_INSTALL_AVHEAP, $(TARGET_DIR))
-+	$(SUNXI_CEDARX_INSTALL_DEMO)
- endef
- 
- $(eval $(generic-package))
++$(eval $(autotools-package))
++$(eval $(host-autotools-package))
 -- 
 1.7.1
