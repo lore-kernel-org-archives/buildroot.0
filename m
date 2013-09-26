@@ -1,37 +1,63 @@
 From: Spenser Gilliland <spenser@gillilanding.com>
-Date: Thu, 26 Sep 2013 18:21:52 -0500
-Subject: [Buildroot] [PATCH v3 09/11] libpng: ensure libpng12 is installed
-	before libpng
+Date: Thu, 26 Sep 2013 18:21:49 -0500
+Subject: [Buildroot] [PATCH v3 06/11] mesa3d: pull out from x11
 In-Reply-To: <1380237714-2470-1-git-send-email-spenser@gillilanding.com>
 References: <1380237714-2470-1-git-send-email-spenser@gillilanding.com>
-Message-ID: <1380237714-2470-10-git-send-email-spenser@gillilanding.com>
+Message-ID: <1380237714-2470-7-git-send-email-spenser@gillilanding.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This ensures that libpng (which is a newer version) is used when a specific
-version of libpng (i.e. libpng12) is not selected.
 
 Signed-off-by: Spenser Gilliland <spenser@gillilanding.com>
 ---
- package/libpng/libpng.mk |    4 ++++
- 1 files changed, 4 insertions(+), 0 deletions(-)
+ package/Config.in                                  |    1 +
+ package/{x11r7 => }/mesa3d/Config.in               |    0
+ .../{x11r7 => }/mesa3d/mesa3d-uclibc-locale.patch  |    0
+ package/{x11r7 => }/mesa3d/mesa3d.mk               |    0
+ package/x11r7/Config.in                            |    1 -
+ 5 files changed, 1 insertions(+), 1 deletions(-)
+ rename package/{x11r7 => }/mesa3d/Config.in (100%)
+ rename package/{x11r7 => }/mesa3d/mesa3d-uclibc-locale.patch (100%)
+ rename package/{x11r7 => }/mesa3d/mesa3d.mk (100%)
 
-diff --git a/package/libpng/libpng.mk b/package/libpng/libpng.mk
-index f5bf956..033587e 100644
---- a/package/libpng/libpng.mk
-+++ b/package/libpng/libpng.mk
-@@ -14,5 +14,9 @@ LIBPNG_INSTALL_STAGING = YES
- LIBPNG_DEPENDENCIES = host-pkgconf zlib
- LIBPNG_CONFIG_SCRIPTS = libpng$(LIBPNG_SERIES)-config libpng-config
- 
-+# Ensure this libpng is the last installed in the case of multiple libpng
-+# installs.
-+LIBPNG_DEPENDENCIES += $(if $(BR2_PACKAGE_LIBPNG12),libpng12)
-+
- $(eval $(autotools-package))
- $(eval $(host-autotools-package))
+diff --git a/package/Config.in b/package/Config.in
+index ca825f5..408bc24 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -301,6 +301,7 @@ source "package/lvm2/Config.in"
+ source "package/mdadm/Config.in"
+ source "package/media-ctl/Config.in"
+ source "package/memtester/Config.in"
++source "package/mesa3d/Config.in"
+ source "package/minicom/Config.in"
+ source "package/nanocom/Config.in"
+ source "package/neard/Config.in"
+diff --git a/package/x11r7/mesa3d/Config.in b/package/mesa3d/Config.in
+similarity index 100%
+rename from package/x11r7/mesa3d/Config.in
+rename to package/mesa3d/Config.in
+diff --git a/package/x11r7/mesa3d/mesa3d-uclibc-locale.patch b/package/mesa3d/mesa3d-uclibc-locale.patch
+similarity index 100%
+rename from package/x11r7/mesa3d/mesa3d-uclibc-locale.patch
+rename to package/mesa3d/mesa3d-uclibc-locale.patch
+diff --git a/package/x11r7/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+similarity index 100%
+rename from package/x11r7/mesa3d/mesa3d.mk
+rename to package/mesa3d/mesa3d.mk
+diff --git a/package/x11r7/Config.in b/package/x11r7/Config.in
+index 16cd4b4..53c1893 100644
+--- a/package/x11r7/Config.in
++++ b/package/x11r7/Config.in
+@@ -13,7 +13,6 @@ if BR2_PACKAGE_XORG7
+ 	endmenu
+ 	menu "X11R7 Libraries"
+ 		source package/x11r7/libxcb/Config.in
+-		source package/x11r7/mesa3d/Config.in
+ 		source package/x11r7/xcb-util/Config.in
+ 		source package/x11r7/xcb-util-image/Config.in
+ 		source package/x11r7/xcb-util-keysyms/Config.in
 -- 
 1.7.1
