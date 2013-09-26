@@ -1,22 +1,76 @@
-From: Bryce Schober <bryce.schober@gmail.com>
-Date: Wed, 25 Sep 2013 17:47:09 -0700
-Subject: [Buildroot] Using source inclusions in defconfig
-Message-ID: <CAJpxd04ok1Eu_kERG1UQy=y4ixUWcz-YZJujx=SnJysJThtOaA@mail.gmail.com>
+From: Danomi Manchego <danomimanchego123@gmail.com>
+Date: Wed, 25 Sep 2013 21:09:55 -0400
+Subject: [Buildroot] [PATCH v2] jq: new package
+Message-ID: <1380157795-1854-1-git-send-email-danomimanchego123@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-It looks to me like the "source" command doesn't work in defconfigs. I get
-"warning:: unexpected data", and it doesn't include the referenced config.
+jq is like sed for JSON data - you can use it to slice and filter
+and map and transform structured data with the same ease that sed,
+awk, grep and friends let you play with text.
 
-Is this a generic limitation, or an artifact of my ancient buildroot?
+Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
 
-It sure would be nice to modularize defconfigs for my target variants...
+---
 
-<><  <><  <><
-Bryce Schober
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130925/a4fda23b/attachment.html>
+The package description is as per the author - not my words.
+
+v1 -> v2: changed SITE to be more like the github example in the buildroot user manual.
+---
+ package/Config.in    |    1 +
+ package/jq/Config.in |    8 ++++++++
+ package/jq/jq.mk     |   13 +++++++++++++
+ 3 files changed, 22 insertions(+)
+ create mode 100644 package/jq/Config.in
+ create mode 100644 package/jq/jq.mk
+
+diff --git a/package/Config.in b/package/Config.in
+index 1dd60d1..ce18ec7 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -108,6 +108,7 @@ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ source "package/grep/Config.in"
+ endif
+ source "package/intltool/Config.in"
++source "package/jq/Config.in"
+ source "package/make/Config.in"
+ source "package/libtool/Config.in"
+ source "package/m4/Config.in"
+diff --git a/package/jq/Config.in b/package/jq/Config.in
+new file mode 100644
+index 0000000..9329b2f
+--- /dev/null
++++ b/package/jq/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_JQ
++	bool "jq"
++	help
++	  jq is like sed for JSON data - you can use it to slice and filter
++	  and map and transform structured data with the same ease that sed,
++	  awk, grep and friends let you play with text.
++
++	  http://stedolan.github.io/jq/
+diff --git a/package/jq/jq.mk b/package/jq/jq.mk
+new file mode 100644
+index 0000000..59cea9c
+--- /dev/null
++++ b/package/jq/jq.mk
+@@ -0,0 +1,13 @@
++################################################################################
++#
++# jq
++#
++################################################################################
++
++JQ_VERSION = 1.3
++JQ_SITE = http://github.com/stedolan/jq/tarball/jq-$(JQ_VERSION)
++JQ_AUTORECONF = YES
++JQ_LICENSE = jq license
++JQ_LICENSE_FILES = COPYING
++
++$(eval $(autotools-package))
+-- 
+1.7.9.5
