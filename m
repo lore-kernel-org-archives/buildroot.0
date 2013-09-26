@@ -1,160 +1,56 @@
-From: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
-Date: Thu, 26 Sep 2013 13:43:08 +0200
-Subject: [Buildroot] [PATCH 1/1] package: fix github download URL
-Message-ID: <1380195788-32432-1-git-send-email-jerzy.grzegorek@trzebnica.net>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 26 Sep 2013 15:48:44 +0200
+Subject: [Buildroot] [PATCH v2] xscreensaver: new package
+In-Reply-To: <1379923332-14027-1-git-send-email-spdawson@gmail.com>
+ (spdawson@gmail.com's message of "Mon, 23 Sep 2013 09:02:12 +0100")
+References: <1379923332-14027-1-git-send-email-spdawson@gmail.com>
+Message-ID: <87zjqz7kxv.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
----
- package/cpuload/cpuload.mk                       |    4 ++--
- package/fb-test-app/fb-test-app.mk               |    4 ++--
- package/input-event-daemon/input-event-daemon.mk |    4 ++--
- package/lcdapi/lcdapi.mk                         |    4 ++--
- package/libcec/libcec.mk                         |    4 ++--
- package/libiqrf/libiqrf.mk                       |    4 ++--
- package/luasql/luasql.mk                         |    4 ++--
- package/tinymembench/tinymembench.mk             |    4 ++--
- package/xl2tp/xl2tp.mk                           |    4 ++--
- 9 files changed, 18 insertions(+), 18 deletions(-)
+>>>>> "spdawson" == spdawson  <spdawson@gmail.com> writes:
 
-diff --git a/package/cpuload/cpuload.mk b/package/cpuload/cpuload.mk
-index e0b8ccf..d00c3a4 100644
---- a/package/cpuload/cpuload.mk
-+++ b/package/cpuload/cpuload.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--CPULOAD_VERSION = v0.3
--CPULOAD_SITE = http://github.com/kelvincheung/cpuload/tarball/$(CPULOAD_VERSION)
-+CPULOAD_VERSION = 0.3
-+CPULOAD_SITE = https://github.com/kelvincheung/cpuload/tarball/v$(CPULOAD_VERSION)
- CPULOAD_LICENSE = GPLv2
- CPULOAD_LICENSE_FILES = COPYING
- 
-diff --git a/package/fb-test-app/fb-test-app.mk b/package/fb-test-app/fb-test-app.mk
-index a2183e0..3c14c4f 100644
---- a/package/fb-test-app/fb-test-app.mk
-+++ b/package/fb-test-app/fb-test-app.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--FB_TEST_APP_VERSION = v1.0.0
--FB_TEST_APP_SITE = http://github.com/prpplague/fb-test-app/tarball/$(FB_TEST_APP_VERSION)
-+FB_TEST_APP_VERSION = 1.0.0
-+FB_TEST_APP_SITE = https://github.com/prpplague/fb-test-app/tarball/v$(FB_TEST_APP_VERSION)
- FB_TEST_APP_LICENSE = GPLv2
- FB_TEST_APP_LICENSE_FILES = COPYING
- 
-diff --git a/package/input-event-daemon/input-event-daemon.mk b/package/input-event-daemon/input-event-daemon.mk
-index 762d3c2..4ce123f 100644
---- a/package/input-event-daemon/input-event-daemon.mk
-+++ b/package/input-event-daemon/input-event-daemon.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--INPUT_EVENT_DAEMON_VERSION = v0.1.3
--INPUT_EVENT_DAEMON_SITE = http://github.com/gandro/input-event-daemon/tarball/$(INPUT_EVENT_DAEMON_VERSION)
-+INPUT_EVENT_DAEMON_VERSION = 0.1.3
-+INPUT_EVENT_DAEMON_SITE = https://github.com/gandro/input-event-daemon/tarball/v$(INPUT_EVENT_DAEMON_VERSION)
- INPUT_EVENT_DAEMON_LICENSE = input-event-daemon license
- INPUT_EVENT_DAEMON_LICENSE_FILES = README
- 
-diff --git a/package/lcdapi/lcdapi.mk b/package/lcdapi/lcdapi.mk
-index 1b7ea43..73c798e 100644
---- a/package/lcdapi/lcdapi.mk
-+++ b/package/lcdapi/lcdapi.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--LCDAPI_VERSION = v0.4
--LCDAPI_SITE = http://github.com/spdawson/lcdapi/tarball/$(LCDAPI_VERSION)
-+LCDAPI_VERSION = 0.4
-+LCDAPI_SITE = https://github.com/spdawson/lcdapi/tarball/v$(LCDAPI_VERSION)
- LCDAPI_LICENSE = LGPLv2.1+
- LCDAPI_LICENSE_FILES = COPYING
- 
-diff --git a/package/libcec/libcec.mk b/package/libcec/libcec.mk
-index 8a58e1e..10f9c26 100644
---- a/package/libcec/libcec.mk
-+++ b/package/libcec/libcec.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--LIBCEC_VERSION = libcec-2.1.1
--LIBCEC_SITE = http://github.com/Pulse-Eight/libcec/tarball/$(LIBCEC_VERSION)
-+LIBCEC_VERSION = 2.1.1
-+LIBCEC_SITE = https://github.com/Pulse-Eight/libcec/tarball/libcec-$(LIBCEC_VERSION)
- LIBCEC_LICENSE = GPLv2+
- LIBCEC_LICENSE_FILES = COPYING
- 
-diff --git a/package/libiqrf/libiqrf.mk b/package/libiqrf/libiqrf.mk
-index 6c33654..1907303 100644
---- a/package/libiqrf/libiqrf.mk
-+++ b/package/libiqrf/libiqrf.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--LIBIQRF_VERSION = v0.1.2
--LIBIQRF_SITE = http://github.com/nandra/libiqrf/tarball/$(LIBIQRF_VERSION)
-+LIBIQRF_VERSION = 0.1.2
-+LIBIQRF_SITE = https://github.com/nandra/libiqrf/tarball/v$(LIBIQRF_VERSION)
- LIBIQRF_INSTALL_STAGING = YES
- 
- LIBIQRF_DEPENDENCIES = libusb
-diff --git a/package/luasql/luasql.mk b/package/luasql/luasql.mk
-index 6fbdccc..21c102b 100644
---- a/package/luasql/luasql.mk
-+++ b/package/luasql/luasql.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--LUASQL_VERSION = v2.3.0
--LUASQL_SITE = https://github.com/keplerproject/luasql/tarball/$(LUASQL_VERSION)
-+LUASQL_VERSION = 2.3.0
-+LUASQL_SITE = https://github.com/keplerproject/luasql/tarball/v$(LUASQL_VERSION)
- LUASQL_LICENSE = MIT
- LUASQL_LICENSE_FILES = README
- LUASQL_DEPENDENCIES = lua
-diff --git a/package/tinymembench/tinymembench.mk b/package/tinymembench/tinymembench.mk
-index 732616f..bb280af 100644
---- a/package/tinymembench/tinymembench.mk
-+++ b/package/tinymembench/tinymembench.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--TINYMEMBENCH_VERSION = v0.2
--TINYMEMBENCH_SITE = http://github.com/ssvb/tinymembench/tarball/$(TINYMEMBENCH_VERSION)
-+TINYMEMBENCH_VERSION = 0.2
-+TINYMEMBENCH_SITE = https://github.com/ssvb/tinymembench/tarball/v$(TINYMEMBENCH_VERSION)
- TINYMEMBENCH_LICENSE = MIT
- TINYMEMBENCH_LICENSE_FILES = main.c
- 
-diff --git a/package/xl2tp/xl2tp.mk b/package/xl2tp/xl2tp.mk
-index 7b0a228..7b8e015 100644
---- a/package/xl2tp/xl2tp.mk
-+++ b/package/xl2tp/xl2tp.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--XL2TP_VERSION = v1.3.1
--XL2TP_SITE = http://github.com/xelerance/xl2tpd/tarball/$(XL2TP_VERSION)
-+XL2TP_VERSION = 1.3.1
-+XL2TP_SITE = https://github.com/xelerance/xl2tpd/tarball/v$(XL2TP_VERSION)
- XL2TP_DEPENDENCIES = libpcap
- 
- define XL2TP_BUILD_CMDS
+ spdawson> From: Simon Dawson <spdawson@gmail.com>
+ spdawson> Signed-off-by: Simon Dawson <spdawson@gmail.com>
+
+ spdawson> +++ b/package/xscreensaver/xscreensaver.mk
+ spdawson> @@ -0,0 +1,21 @@
+ spdawson> +################################################################################
+ spdawson> +#
+ spdawson> +# xscreensaver
+ spdawson> +#
+ spdawson> +################################################################################
+ spdawson> +
+ spdawson> +XSCREENSAVER_VERSION = 5.22
+ spdawson> +XSCREENSAVER_SITE = http://www.jwz.org/xscreensaver
+ spdawson> +
+ spdawson> +# N.B. GPLv2+ code (in the hacks/glx subdirectory) is not currently built.
+ spdawson> +XSCREENSAVER_LICENSE = MIT-like GPLv2+
+ spdawson> +XSCREENSAVER_LICENSE_FILES = hacks/screenhack.h hacks/glx/chessmodels.h
+
+You could argue that we shouldn't add the glx / GPLv2+ stuff here if we
+aren't using them - But ok, like this we won't forget to add them if we
+ever enable the glx support.
+
+
+ spdawson> +
+ spdawson> +XSCREENSAVER_DEPENDENCIES = jpeg libglade libgtk2 xlib_libX11 xlib_libXt \
+ spdawson> +	$(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext)
+ spdawson> +
+ spdawson> +XSCREENSAVER_CONF_OPT += LIBS=-lintl
+
+We should only add -lintl if gettext is enabled, otherwise we'll end up
+with linker errors, and we normally pass LIBS= in the configure
+environment, not as an option.
+
+Here I had to explicitly point --includedir / --libdir to staging,
+otherwise it would end up adding -I/usr/include and -L/usr/lib causing
+all kinds of issues.
+
+Committed with these changes, thanks.
+
 -- 
-1.7.9.5
+Bye, Peter Korsgaard
