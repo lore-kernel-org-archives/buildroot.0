@@ -1,34 +1,33 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 26 Sep 2013 15:55:59 +0200
-Subject: [Buildroot] [git commit] tcl: cleanup: use TCL_VERSION in TCL_SITE
-Message-ID: <20130926144208.BC0089B879@busybox.osuosl.org>
+Date: Thu, 26 Sep 2013 16:50:37 +0200
+Subject: [Buildroot] [PATCH] socat: needs mmu
+In-Reply-To: <1380160493.18654.0.camel@phoenix> (Axel Lin's message of "Thu,
+ 26 Sep 2013 09:54:53 +0800")
+References: <1380160493.18654.0.camel@phoenix>
+Message-ID: <87mwmz7i2q.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=9731bff1400cf43b7d979c6e44ca65933e0e3bce
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Axel" == Axel Lin <axel.lin@ingics.com> writes:
 
-No functional change.
+ Axel> Signed-off-by: Axel Lin <axel.lin@ingics.com>
+ Axel> ---
+ Axel> Fix below build error:
 
-Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/tcl/tcl.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ Axel> sycls.o: In sycls.ofunction `: Fork'In:
+ Axel> sycls.c :function (.text`Fork+0x16d0':): undefined
+ Axel>  referencesycls.c to `fork'
+ Axel> collect2: ld returned 1 exit status:
+ Axel> (.text+0x16d0): undefined reference to `fork'
+ Axel> collect2: ld returned 1 exit status
+ Axel> make[1]: *** [procan] Error 1
+ Axel> make[1]: *** Waiting for unfinished jobs....
+ Axel> make[1]: *** [filan] Error 1
 
-diff --git a/package/tcl/tcl.mk b/package/tcl/tcl.mk
-index f1193d3..3291c1b 100644
---- a/package/tcl/tcl.mk
-+++ b/package/tcl/tcl.mk
-@@ -8,7 +8,7 @@ TCL_VERSION_MAJOR = 8.4
- TCL_VERSION_MINOR = 19
- TCL_VERSION = $(TCL_VERSION_MAJOR).$(TCL_VERSION_MINOR)
- TCL_SOURCE = tcl$(TCL_VERSION)-src.tar.gz
--TCL_SITE = http://downloads.sourceforge.net/project/tcl/Tcl/$(TCL_VERSION_MAJOR).$(TCL_VERSION_MINOR)
-+TCL_SITE = http://downloads.sourceforge.net/project/tcl/Tcl/$(TCL_VERSION)
- TCL_LICENSE = tcl license
- TCL_LICENSE_FILES = license.terms
- TCL_SUBDIR = unix
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
