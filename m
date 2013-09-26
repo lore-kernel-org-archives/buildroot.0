@@ -1,10 +1,9 @@
 From: Spenser Gilliland <spenser@gillilanding.com>
-Date: Thu, 26 Sep 2013 18:21:50 -0500
-Subject: [Buildroot] [PATCH v3 07/11] mesa3d: modularize and bump to version
-	9.1.6
+Date: Thu, 26 Sep 2013 18:21:53 -0500
+Subject: [Buildroot] [PATCH v3 10/11] glmark2: new package
 In-Reply-To: <1380237714-2470-1-git-send-email-spenser@gillilanding.com>
 References: <1380237714-2470-1-git-send-email-spenser@gillilanding.com>
-Message-ID: <1380237714-2470-8-git-send-email-spenser@gillilanding.com>
+Message-ID: <1380237714-2470-11-git-send-email-spenser@gillilanding.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,608 +13,291 @@ To: buildroot@busybox.net
 
 Signed-off-by: Spenser Gilliland <spenser@gillilanding.com>
 ---
- package/mesa3d/Config.in                           |  179 +++++++++++++++++++-
- package/mesa3d/mesa3d-cross-glsl-compiler.patch    |   41 +++++
- package/mesa3d/mesa3d-gbm-without-dri.patch        |   30 ++++
- package/mesa3d/mesa3d-uclibc-locale.patch          |   56 ------
- package/mesa3d/mesa3d.mk                           |  120 +++++++++++--
- package/opengl/Config.in                           |    3 +
- package/opengl/libegl/libegl.mk                    |    4 +
- package/opengl/libgl/libgl.mk                      |   20 +++
- package/opengl/libgles/libgles.mk                  |    4 +
- package/opengl/libopenvg/libopenvg.mk              |    4 +
- .../xserver_xorg-server/xserver_xorg-server.mk     |    4 +-
- 11 files changed, 384 insertions(+), 81 deletions(-)
- create mode 100644 package/mesa3d/mesa3d-cross-glsl-compiler.patch
- create mode 100644 package/mesa3d/mesa3d-gbm-without-dri.patch
- delete mode 100644 package/mesa3d/mesa3d-uclibc-locale.patch
- create mode 100644 package/opengl/libgl/libgl.mk
+ package/Config.in                                  |    1 +
+ package/glmark2/Config.in                          |   17 ++++
+ package/glmark2/glmark2-add-mali-support.patch     |  102 ++++++++++++++++++++
+ package/glmark2/glmark2-fix-add-GLchar.patch       |   17 ++++
+ .../glmark2-gl-to-glesv2-on-drm-flavor.patch       |   25 +++++
+ package/glmark2/glmark2.mk                         |   70 +++++++++++++
+ 6 files changed, 232 insertions(+), 0 deletions(-)
+ create mode 100644 package/glmark2/Config.in
+ create mode 100644 package/glmark2/glmark2-add-mali-support.patch
+ create mode 100644 package/glmark2/glmark2-fix-add-GLchar.patch
+ create mode 100644 package/glmark2/glmark2-gl-to-glesv2-on-drm-flavor.patch
+ create mode 100644 package/glmark2/glmark2.mk
 
-diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
-index 080f56a..a9770f3 100644
---- a/package/mesa3d/Config.in
-+++ b/package/mesa3d/Config.in
-@@ -1,15 +1,182 @@
- config BR2_PACKAGE_MESA3D
- 	bool "Mesa 3D Graphics Library"
--	select BR2_PACKAGE_XPROTO_GLPROTO
--	select BR2_PACKAGE_XLIB_LIBXXF86VM
--	select BR2_PACKAGE_XLIB_LIBXDAMAGE
--	select BR2_PACKAGE_XLIB_LIBXFIXES
--	select BR2_PACKAGE_XPROTO_DRI2PROTO
- 	select BR2_PACKAGE_LIBDRM
- 	select BR2_PACKAGE_EXPAT
- 	select BR2_PACKAGE_HOST_LIBXML2_PYTHON
--	depends on BR2_PACKAGE_XSERVER_XORG_SERVER_MODULAR
-+	select BR2_PACKAGE_XPROTO_DRI2_PROTO if BR2_PACKAGE_XSERVER_XORG_SERVER
-+	select BR2_PACKAGE_XPROTO_XF86DRIPROTO if BR2_PACKAGE_XSERVER_XORG_SERVER
-+	select BR2_PACKAGE_XLIB_LIBX11 if BR2_PACKAGE_XSERVER_XORG_SERVER
-+	select BR2_PACKAGE_XLIB_LIBXEXT if BR2_PACKAGE_XSERVER_XORG_SERVER
-+	select BR2_PACKAGE_XLIB_LIBXDAMAGE if BR2_PACKAGE_XSERVER_XORG_SERVER
-+	select BR2_PACKAGE_XLIB_LIBXFIXES if BR2_PACKAGE_XSERVER_XORG_SERVER
-+	select BR2_PACKAGE_LIBXCB if BR2_PACKAGE_XSERVER_XORG_SERVER
- 	depends on BR2_INSTALL_LIBSTDCPP
+diff --git a/package/Config.in b/package/Config.in
+index 075bdc6..cf79ea0 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -48,6 +48,7 @@ source "package/dmalloc/Config.in"
+ source "package/dropwatch/Config.in"
+ source "package/duma/Config.in"
+ source "package/gdb/Config.in"
++source "package/glmark2/Config.in"
+ source "package/iozone/Config.in"
+ source "package/kexec/Config.in"
+ source "package/latencytop/Config.in"
+diff --git a/package/glmark2/Config.in b/package/glmark2/Config.in
+new file mode 100644
+index 0000000..7349690
+--- /dev/null
++++ b/package/glmark2/Config.in
+@@ -0,0 +1,17 @@
++config BR2_PACKAGE_GLMARK2
++	bool "glmark2"
++	depends on BR2_PACKAGE_MESA3D
++	depends on BR2_PACKAGE_MESA3D_GBM # depends on udev cannot select
 +	depends on BR2_LARGEFILE
- 	help
- 	  Mesa 3D, an open-source implementation of the OpenGL specification.
- 
-+	  http://mesa3d.org
-+
-+if BR2_PACKAGE_MESA3D
-+
-+menu "libraries"
-+
-+config BR2_PACKAGE_MESA3D_GBM
-+	depends on BR2_PACKAGE_UDEV
-+	bool "gbm support"
++	depends on BR2_PACKAGE_HAS_OPENGL || \
++		(BR2_PACKAGE_HAS_OPENGL_EGL && BR2_PACKAGE_HAS_OPENGL_ES)
++	select BR2_PACKAGE_JPEG
++	select BR2_PACKAGE_LIBPNG12
 +	help
-+	  Add support for Graphics Buffer Manager.
++	  glmark2 is a benchmark for OpenGL (ES) 2.0. It uses only the subset of the
++	  OpenGL 2.0 API that is compatible with OpenGL ES 2.0.
 +
-+config BR2_PACKAGE_MESA3D_XVMC
-+	bool "xvmc support"
-+	help
-+	  Add support for X Video Motion Compensation.
-+
-+config BR2_PACKAGE_MESA3D_VDPAU
-+	bool "vdpau support"
-+	help
-+	  Add support for Video Decode and Presentation API for Unix.
-+
-+endmenu
-+
-+menu "Drivers"
-+
-+config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_I915
-+	bool "Gallium i915 driver"
-+	depends on BR2_i386 || BR2_x86_64
-+	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
-+	select BR2_PACKAGE_LIBDRM_INTEL
-+	help
-+	  Supports intel chips with Gallium. In most cases, the DRI i965 driver
-+	  should be used as it is better maintained by Intel.
-+
-+config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_NOUVEAU
-+	bool "Gallium nouveau driver"
-+	depends on BR2_i386 || BR2_x86_64
-+	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
-+	select BR2_PACKAGE_LIBDRM_NOUVEAU
-+	help
-+	  Supports all Nvidia GPUs.
-+
-+config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_R300
-+	bool "Gallium r300 driver"
-+	depends on BR2_i386 || BR2_x86_64
-+	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
-+	select BR2_PACKAGE_LIBDRM_RADEON
-+	help
-+	  Supports the R300, R400, and R500 series of ATI/AMD GPUs.
-+
-+config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_R600
-+	bool "Gallium r600 driver"
-+	depends on BR2_i386 || BR2_x86_64
-+	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
-+	select BR2_PACKAGE_LIBDRM_RADEON
-+	help
-+	  Supports the R600, R700, and R800 series of ATI/AMD GPUs.
-+
-+config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_RADEONSI
-+	bool "Gallium radeonsi driver"
-+	depends on BR2_i386 || BR2_x86_64
-+	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
-+	select BR2_PACKAGE_LIBDRM_RADEON
-+	help
-+	  Supports the Radeon HD7000/HD8000/HD9000 series of ATI/AMD GPUs.
-+
-+config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SVGA
-+	bool "Gallium vmware svga driver"
-+	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
-+	select BR2_PACKAGE_LIBDRM_VMWGFX
-+	help
-+	  This is a virtual GPU driver for VMWare virtual machines.
-+
-+config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SWRAST
-+	bool "Gallium swrast driver"
-+	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
-+	help
-+	  This is a software opengl implementation using the Gallium3D
-+	  infrastructure.
-+
-+config BR2_PACKAGE_MESA3D_DRI_DRIVERS_SWRAST
-+	bool "DRI swrast driver"
-+	select BR2_PACKAGE_MESA3D_DRI_DRIVER
-+	help
-+	  This is a software opengl implementation using the DRI infrastructure.
-+
-+config BR2_PACKAGE_MESA3D_DRI_DRIVERS_I965
-+	bool "DRI i965 driver"
-+	depends on BR2_i386 || BR2_x86_64
-+	select BR2_PACKAGE_MESA3D_DRI_DRIVER
-+	select BR2_PACKAGE_LIBDRM_INTEL
-+	help
-+	  Supports all Intel GPUs.  This version is most supported by Intel.
-+
-+config BR2_PACKAGE_MESA3D_DRI_DRIVERS_RADEON
-+	bool "DRI radeon driver"
-+	depends on BR2_i386 || BR2_x86_64
-+	select BR2_PACKAGE_MESA3D_DRI_DRIVER
-+	select BR2_PACKAGE_LIBDRM_RADEON
-+	help
-+	  Legacy Radeon driver for R100 series GPUs.
-+
-+endmenu
-+
-+# The following hidden options inform gallium or dri driver selection.
-+config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
-+	select BR2_PACKAGE_MESA3D_DRIVER
-+	bool
-+
-+config BR2_PACKAGE_MESA3D_DRI_DRIVER
-+	select BR2_PACKAGE_MESA3D_DRIVER
-+	bool
-+
-+config BR2_PACKAGE_MESA3D_DRIVER
-+	bool
-+
-+menu "API Support"
-+depends on BR2_PACKAGE_MESA3D_GALLIUM_DRIVER || BR2_PACKAGE_MESA3D_DRI_DRIVER
-+
-+config BR2_PACKAGE_MESA3D_OPENGL
-+	bool "OpenGL"
-+	select BR2_PACKAGE_HAS_OPENGL
-+	help
-+	  Use the Khronos OpenGL API.  This is a desktop computer API and is not
-+	  normally implemented by embedded systems.
-+
-+config BR2_PACKAGE_MESA3D_EGL
-+	bool "EGL"
-+	select BR2_PACKAGE_MESA3D_GBM
-+	select BR2_PACKAGE_HAS_OPENGL_EGL
-+	help
-+	  Use the Khronos EGL APIs. EGL is a window manager for OpenGL applications
-+	  similar to GLX, for X, and WGL, for Windows.
-+
-+ config BR2_PACKAGE_MESA3D_OPENGL_ES
-+	bool "OpenGL ES"
-+	select BR2_PACKAGE_HAS_OPENGL_ES
-+	help
-+	  Use the Khronos OpenGL ES APIs.  This is commonly used on embedded
-+	  systems and represents a subset of the OpenGL API.
-+
-+config BR2_PACKAGE_MESA3D_OPENVG
-+	bool "OpenVG"
-+	depends on BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
-+	select BR2_PACKAGE_HAS_OPENVG
-+	select BR2_PACKAGE_MESA3D_OPENGL_EGL
-+	help
-+	  Use the Khronos OpenVG APIs. This is a 2D API commonly used on
-+	  embedded systems.
-+
-+config BR2_PACKAGE_MESA3D_OPENCL
-+	bool "OpenCL"
-+	depends on BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
-+	select BR2_PACKAGE_HAS_OPENCL
-+	help
-+	  Use the Khronos OpenCL APIs. This is a GPU computation language
-+	  commonly used in GPGPU computing applications.
-+
-+endmenu
-+
-+endif
-+
-+comment "mesa3d depends on a toolchain with C++ and largefile support"
-+	depends on !BR2_LARGEFILE || !BR2_INSTALL_LIBSTDCPP
-diff --git a/package/mesa3d/mesa3d-cross-glsl-compiler.patch b/package/mesa3d/mesa3d-cross-glsl-compiler.patch
++comment "glmark2 requires Mesa3D GBM support and largefile support in toolchain"
++	depends on (BR2_PACKAGE_HAS_OPENGL || \
++		(BR2_PACKAGE_HAS_OPENGL_EGL && BR2_PACKAGE_HAS_OPENGL_ES)) && \
++		(!BR2_LARGEFILE || !BR2_PACKAGE_MESA3D_GBM)
+diff --git a/package/glmark2/glmark2-add-mali-support.patch b/package/glmark2/glmark2-add-mali-support.patch
 new file mode 100644
-index 0000000..1028ea1
+index 0000000..c37c88c
 --- /dev/null
-+++ b/package/mesa3d/mesa3d-cross-glsl-compiler.patch
-@@ -0,0 +1,41 @@
-+This patch fixes a cross compile issue as described here
-+https://bugs.freedesktop.org/show_bug.cgi?id=44618
++++ b/package/glmark2/glmark2-add-mali-support.patch
+@@ -0,0 +1,102 @@
++Mali uses a slightly different windowing structure than most
++implementations add support through this patch.
 +
 +Signed-off-by: Spenser Gilliland <spenser@gillilanding.com>
 +---
-+diff --git a/src/glsl/builtin_compiler/Makefile.am b/src/glsl/builtin_compiler/Makefile.am
-+index e11a17f..8ebe0a2 100644
-+--- a/src/glsl/builtin_compiler/Makefile.am
-++++ b/src/glsl/builtin_compiler/Makefile.am
-+@@ -64,6 +64,8 @@ AM_CXXFLAGS = $(AM_CFLAGS)
-+ include ../Makefile.sources
-+ 
-+ noinst_PROGRAMS = builtin_compiler
-++
-++if !CROSS_COMPILING
-+ noinst_LTLIBRARIES = libglslcore.la libglcpp.la
-+ 
-+ libglcpp_la_SOURCES =					\
-+@@ -73,6 +75,7 @@ libglcpp_la_SOURCES =					\
-+ libglslcore_la_SOURCES =				\
-+ 	$(BUILTIN_COMPILER_GENERATED_CXX_FILES)		\
-+ 	$(LIBGLSL_FILES)
-++endif
-+ 
-+ builtin_compiler_SOURCES = \
-+ 	$(top_srcdir)/src/mesa/main/hash_table.c	\
-+@@ -81,4 +84,14 @@ builtin_compiler_SOURCES = \
-+ 	$(top_srcdir)/src/mesa/program/symbol_table.c	\
-+ 	$(BUILTIN_COMPILER_CXX_FILES)			\
-+ 	$(GLSL_COMPILER_CXX_FILES)
-++
-++if CROSS_COMPILING
-++builtin_compiler_SOURCES += \
-++	$(LIBGLCPP_GENERATED_FILES) \
-++	$(LIBGLCPP_FILES) \
-++	$(BUILTIN_COMPILER_GENERATED_CXX_FILES) \
-++	$(LIBGLSL_FILES)
-++builtin_compiler_CPPFLAGS = $(AM_CPPFLAGS)
-++else
-+ builtin_compiler_LDADD = libglslcore.la libglcpp.la
-++endif
-diff --git a/package/mesa3d/mesa3d-gbm-without-dri.patch b/package/mesa3d/mesa3d-gbm-without-dri.patch
-new file mode 100644
-index 0000000..2c417f4
---- /dev/null
-+++ b/package/mesa3d/mesa3d-gbm-without-dri.patch
-@@ -0,0 +1,30 @@
-+Fix build issue when gbm backend is built without dri support.
-+
-+Signed-off-by: Spenser Gilliland <spenser@gillilanding.com>
-+
-+---
-+Index: mesa3d-9.1.6/src/gbm/main/backend.c
++Index: glmark2-279/src/gl-state-egl.cpp
 +===================================================================
-+--- mesa3d-9.1.6.orig/src/gbm/main/backend.c	2012-11-24 11:57:41.000000000 -0600
-++++ mesa3d-9.1.6/src/gbm/main/backend.c	2013-08-16 10:59:58.844753588 -0500
-+@@ -36,7 +36,9 @@
-+ 
-+ #define ARRAY_SIZE(a) (sizeof(a)/sizeof((a)[0]))
-+ 
-++#ifdef HAVE_DRI
-+ extern const struct gbm_backend gbm_dri_backend;
++--- glmark2-279.orig/src/gl-state-egl.cpp	2013-08-21 14:49:38.953803965 -0500
+++++ glmark2-279/src/gl-state-egl.cpp	2013-08-21 14:59:42.389814979 -0500
++@@ -414,9 +414,12 @@
++ {
++     if (egl_display_)
++         return true;
++-
+++#ifdef HAS_MALI
+++    egl_display_ = eglGetDisplay(EGL_DEFAULT_DISPLAY);
+++#else
++     egl_display_ = eglGetDisplay(native_display_);
++-    if (!egl_display_) {
 ++#endif
-+ 
-+ struct backend_desc {
-+    const char *name;
-+@@ -44,7 +46,9 @@
-+ };
-+ 
-+ static const struct backend_desc backends[] = {
-+-   { "gbm_dri.so", &gbm_dri_backend },
-++#ifdef HAVE_DRI
-++	{ "gbm_dri.so", &gbm_dri_backend },
+++    if (egl_display_ == EGL_NO_DISPLAY) {
++         Log::error("eglGetDisplay() failed with error: 0x%x\n", eglGetError());
++         return false;
++     }
++Index: glmark2-279/src/native-state-fbdev.cpp
++===================================================================
++--- glmark2-279.orig/src/native-state-fbdev.cpp	2013-08-19 17:36:32.000000000 -0500
+++++ glmark2-279/src/native-state-fbdev.cpp	2013-08-21 14:59:58.629815276 -0500
++@@ -31,7 +31,9 @@
++ #include <unistd.h>
++ #include <sys/ioctl.h>
++ #include <linux/fb.h>
++-
+++#if HAS_MALI
+++#include <EGL/egl.h>
 ++#endif
-+    { "gbm_gallium_drm.so", NULL },
-+ };
++ #ifdef ANDROID
++ #define FBDEV_DEV "/dev/graphics/fb"
++ #else
++@@ -79,7 +81,13 @@
++ NativeStateFBDEV::window(WindowProperties& properties)
++ {
++     properties = winprops;
+++#ifdef HAS_MALI
+++    native_window.height = winprops.height;
+++    native_window.width = winprops.width;
+++    return reinterpret_cast<void*>(&native_window);
+++#else
++     return NULL;
+++#endif
++ }
 + 
-diff --git a/package/mesa3d/mesa3d-uclibc-locale.patch b/package/mesa3d/mesa3d-uclibc-locale.patch
-deleted file mode 100644
-index 99afe8d..0000000
---- a/package/mesa3d/mesa3d-uclibc-locale.patch
-+++ /dev/null
-@@ -1,56 +0,0 @@
--[PATCH] Fix compilation on uClibc without locale support
--
--Based on similar patch from OE:
--
--http://git.openembedded.org/openembedded-core/commit/meta/recipes-graphics/mesa/mesa/0001-Compile-with-uclibc.patch?id=e4039eb74b20e96d4b8837cd58cf2d13d091e1ad
--
--Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
-----
-- configure.ac            |    3 +++
-- src/glsl/strtod.c       |    2 +-
-- src/mesa/main/imports.c |    2 +-
-- 3 files changed, 5 insertions(+), 2 deletions(-)
--
--diff --git a/configure.ac b/configure.ac
--index fbaa376..454dad2 100644
----- a/configure.ac
--+++ b/configure.ac
--@@ -450,6 +450,9 @@ AC_SUBST([DLOPEN_LIBS])
-- dnl See if posix_memalign is available
-- AC_CHECK_FUNC([posix_memalign], [DEFINES="$DEFINES -DHAVE_POSIX_MEMALIGN"])
-- 
--+dnl See if newlocale is available
--+AC_CHECK_FUNCS_ONCE(newlocale)
--+
-- dnl SELinux awareness.
-- AC_ARG_ENABLE([selinux],
--     [AS_HELP_STRING([--enable-selinux],
--diff --git a/src/glsl/strtod.c b/src/glsl/strtod.c
--index a876e13..9fce7e9 100644
----- a/src/glsl/strtod.c
--+++ b/src/glsl/strtod.c
--@@ -44,7 +44,7 @@ double
-- double
-- glsl_strtod(const char *s, char **end)
-- {
---#if defined(_GNU_SOURCE) && !defined(__CYGWIN__) && !defined(__FreeBSD__)
--+#if defined(_GNU_SOURCE) && !defined(__CYGWIN__) && !defined(__FreeBSD__) && defined(HAVE_NEWLOCALE)
--    static locale_t loc = NULL;
--    if (!loc) {
--       loc = newlocale(LC_CTYPE_MASK, "C", NULL);
--diff --git a/src/mesa/main/imports.c b/src/mesa/main/imports.c
--index d3727ef..363bf32 100644
----- a/src/mesa/main/imports.c
--+++ b/src/mesa/main/imports.c
--@@ -757,7 +757,7 @@ float
-- float
-- _mesa_strtof( const char *s, char **end )
-- {
---#if defined(_GNU_SOURCE) && !defined(__CYGWIN__) && !defined(__FreeBSD__)
--+#if defined(_GNU_SOURCE) && !defined(__CYGWIN__) && !defined(__FreeBSD__) && defined(HAVE_NEWLOCALE)
--    static locale_t loc = NULL;
--    if (!loc) {
--       loc = newlocale(LC_CTYPE_MASK, "C", NULL);
---- 
--1.7.10.4
--
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index d4080d4..7b207b2 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -4,31 +4,16 @@
- #
- ################################################################################
- 
--MESA3D_VERSION = 7.10.3
-+MESA3D_VERSION = 9.1.6
- MESA3D_SOURCE = MesaLib-$(MESA3D_VERSION).tar.gz
--MESA3D_SITE = ftp://ftp.freedesktop.org/pub/mesa/older-versions/7.x/$(MESA3D_VERSION)
-+MESA3D_SITE = ftp://ftp.freedesktop.org/pub/mesa/$(MESA3D_VERSION)
- MESA3D_LICENSE = MIT, SGI, Khronos
- MESA3D_LICENSE_FILES = docs/license.html
- 
- MESA3D_AUTORECONF = YES
- MESA3D_INSTALL_STAGING = YES
- 
--MESA3D_CONF_OPT = \
--	--disable-egl \
--	--disable-glu \
--	--disable-glw \
--	--disable-glut \
--	--disable-gallium \
--	--with-driver=dri \
--	--with-dri-drivers=swrast \
--	--disable-static
--
- MESA3D_DEPENDENCIES = \
--	xproto_glproto \
--	xlib_libXxf86vm \
--	xlib_libXdamage \
--	xlib_libXfixes \
--	xproto_dri2proto \
- 	libdrm \
- 	expat \
- 	host-xutil_makedepend \
-@@ -37,4 +22,105 @@ MESA3D_DEPENDENCIES = \
- 	host-bison \
- 	host-flex
- 
-+MESA3D_CONF_OPT = \
-+	--disable-static
-+
-+MESA3D_CONF_ENV = \
-+	LIBS="-lrt -lpthread"
-+
-+# Libraries
-+
-+ifeq ($(BR2_PACKAGE_MESA3D_GBM),y)
-+MESA3D_DEPENDENCIES += udev
-+MESA3D_CONF_OPT += --enable-gbm
-+else
-+MESA3D_CONF_OPT += --disable-gbm
-+endif
-+
-+ifeq ($(BR2_PACKAGE_XSERVER_XORG_SERVER),y)
-+MESA3D_DEPENDENCIES += \
-+	xproto_xf86driproto xproto_dri2proto xproto_glproto \
-+	xlib_libX11 xlib_libXext xlib_libXdamage xlib_libXfixes libxcb
-+MESA3D_CONF_OPT += \
-+	--enable-dri \
-+	--enable-xa \
-+	--enable-glx
-+else
-+MESA3D_CONF_OPT += \
-+	--disable-dri \
-+	--disable-xa \
-+	--disable-glx
-+endif
-+
-+# Drivers
-+
-+#Gallium Drivers
-+MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_I915)     += i915
-+MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_NOUVEAU)  += nouveau
-+MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_R300)     += r300
-+MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_R600)     += r600
-+MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_RADEONSI) += radeonsi
-+MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SVGA)     += svga
-+MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SWRAST)   += swrast
-+# DRI Drivers
-+MESA3D_DRI_DRIVERS-$(BR2_PACKAGE_MESA3D_DRI_DRIVER_SWRAST) += swrast
-+MESA3D_DRI_DRIVERS-$(BR2_PACKAGE_MESA3D_DRI_DRIVER_I965)   += i965
-+MESA3D_DRI_DRIVERS-$(BR2_PACKAGE_MESA3D_DRI_DRIVER_RADEON) += radeon
-+
-+ifneq ($(MESA3D_GALLIUM_DRIVERS),)
-+MESA3D_CONF_OPT += \
-+	--with-gallium-drivers=$(subst $(space),$(comma),$(MESA3D_GALLIUM_DRIVERS-y))
-+else
-+MESA3D_CONF_OPT += --without-gallium-drivers
-+endif
-+
-+ifneq ($(MESA3D_DRI_DRIVERS),)
-+MESA3D_CONF_OPT += \
-+	--with-dri-drivers=$(subst $(space),$(comma),$(MESA3D_DRI_DRIVERS-y))
-+else
-+MESA3D_CONF_OPT += --without-dri-drivers
-+endif
-+
-+# APIs
-+
-+ifeq ($(BR2_PACKAGE_MESA3D_EGL),y)
-+MESA3D_EGL_PLATFORMS = drm
-+ifeq ($(BR2_PACKAGE_WAYLAND),y)
-+MESA3D_DEPENDENCIES += wayland
-+MESA3D_EGL_PLATFORMS += wayland
-+endif
-+ifeq ($(BR2_PACKAGE_XSERVER_XORG_SERVER),y)
-+MESA3D_EGL_PLATFORMS += x11
-+endif
-+MESA3D_CONF_OPT += \
-+	--enable-egl \
-+	--with-egl-platforms=$(foreach subst $(space),$(comma),$(MESA3D_EGL_PLATFORMS))
-+else
-+MESA3D_CONF_OPT += --disable-egl
-+endif
-+
-+ifeq ($(BR2_PACKAGE_MESA3D_OPENGL),y)
-+MESA3D_CONF_OPT += --enable-opengl
-+else
-+MESA3D_CONF_OPT += --disable-opengl
-+endif
-+
-+ifeq ($(BR2_PACKAGE_MESA3D_OPENGL_ES),y)
-+MESA3D_CONF_OPT += --enable-gles1 --enable-gles2
-+else
-+MESA3D_CONF_OPT += --disable-gles1 --disable-gles2
-+endif
-+
-+ifeq ($(BR2_PACKAGE_MESA3D_OPENVG),y)
-+MESA3D_CONF_OPT += --enable-openvg --enable-gallium-egl
-+else
-+MESA3D_CONF_OPT += --disable-openvg --disable-gallium-egl
-+endif
-+
-+ifeq ($(BR2_PACKAGE_MESA3D_OPENCL),y)
-+MESA3D_CONF_OPT += --enable-opencl
-+else
-+MESA3D_CONF_OPT += --disable-opencl
-+endif
-+
- $(eval $(autotools-package))
-diff --git a/package/opengl/Config.in b/package/opengl/Config.in
-index 1636807..c705446 100644
---- a/package/opengl/Config.in
-+++ b/package/opengl/Config.in
-@@ -1,3 +1,6 @@
-+config BR2_PACKAGE_HAS_OPENGL
-+	bool
-+
- config BR2_PACKAGE_HAS_OPENGL_EGL
- 	bool
- 
-diff --git a/package/opengl/libegl/libegl.mk b/package/opengl/libegl/libegl.mk
-index c194b02..2d52fe3 100644
---- a/package/opengl/libegl/libegl.mk
-+++ b/package/opengl/libegl/libegl.mk
-@@ -22,6 +22,10 @@ ifeq ($(BR2_PACKAGE_GPU_VIV_BIN_MX6Q),y)
- LIBEGL_DEPENDENCIES += gpu-viv-bin-mx6q
- endif
- 
-+ifeq ($(BR2_PACKAGE_MESA3D_EGL),y)
-+LIBEGL_DEPENDENCIES += mesa3d
-+endif
-+
- ifeq ($(LIBEGL_DEPENDENCIES),)
- define LIBEGL_CONFIGURE_CMDS
- 	echo "No libEGL implementation selected. Configuration error."
-diff --git a/package/opengl/libgl/libgl.mk b/package/opengl/libgl/libgl.mk
++ void
++Index: glmark2-279/src/native-state-fbdev.h
++===================================================================
++--- glmark2-279.orig/src/native-state-fbdev.h	2013-08-19 17:36:32.000000000 -0500
+++++ glmark2-279/src/native-state-fbdev.h	2013-08-21 15:00:14.345815563 -0500
++@@ -30,6 +30,10 @@
++ #include <csignal>
++ #include <cstring>
++ 
+++#ifdef HAS_MALI
+++#include <EGL/egl.h>
+++#endif
+++
++ class NativeStateFBDEV : public NativeState
++ {
++ public:
++@@ -50,7 +54,9 @@
++     static volatile std::sig_atomic_t should_quit_;
++     int fd;
++     WindowProperties winprops;
++-
+++#ifdef HAS_MALI
+++    struct mali_native_window native_window;
+++#endif
++     bool init();
++     void cleanup();
++ };
++Index: glmark2-279/wscript
++===================================================================
++--- glmark2-279.orig/wscript	2013-08-19 17:36:32.000000000 -0500
+++++ glmark2-279/wscript	2013-08-21 15:00:24.245815743 -0500
++@@ -46,7 +46,8 @@
++                    dest = 'flavors',
++                    help = "a list of flavors to build (%s, all)" % FLAVORS_STR)
++     opt.parser.set_default('flavors', [])
++-
+++    opt.add_option('--for-mali', action='store_true', dest = 'mali',
+++                   default = False, help='enable ARM Mali GPU support')
++     opt.add_option('--no-debug', action='store_false', dest = 'debug',
++                    default = True, help='disable compiler debug information')
++     opt.add_option('--no-opt', action='store_false', dest = 'opt',
++@@ -132,6 +133,8 @@
++         ctx.env.prepend_value('CXXFLAGS', '-O2')
++     if Options.options.debug:
++         ctx.env.prepend_value('CXXFLAGS', '-g')
+++    if Options.options.mali:
+++        ctx.env.append_unique('DEFINES','HAS_MALI=1')
++ 
++     ctx.env.HAVE_EXTRAS = False
++     if Options.options.extras_path is not None:
+diff --git a/package/glmark2/glmark2-fix-add-GLchar.patch b/package/glmark2/glmark2-fix-add-GLchar.patch
 new file mode 100644
-index 0000000..4b0d7f2
+index 0000000..15653de
 --- /dev/null
-+++ b/package/opengl/libgl/libgl.mk
-@@ -0,0 +1,20 @@
++++ b/package/glmark2/glmark2-fix-add-GLchar.patch
+@@ -0,0 +1,17 @@
++Bug fix in program.cc.  There is no such type as GLchar.
++
++Signed-off-by: Spenser Gilliland <spenser@gillilanding.com>
++---
++Index: glmark2-2012.12/src/libmatrix/program.cc
++===================================================================
++--- glmark2-2012.12.orig/src/libmatrix/program.cc	2012-12-18 13:45:45.000000000 -0600
+++++ glmark2-2012.12/src/libmatrix/program.cc	2013-08-13 20:08:27.005724911 -0500
++@@ -17,6 +17,8 @@
++ #include "gl-if.h"
++ #include "program.h"
++ 
+++typedef char GLchar;
+++
++ using std::string;
++ using LibMatrix::mat4;
++ using LibMatrix::mat3;
+diff --git a/package/glmark2/glmark2-gl-to-glesv2-on-drm-flavor.patch b/package/glmark2/glmark2-gl-to-glesv2-on-drm-flavor.patch
+new file mode 100644
+index 0000000..5f838cc
+--- /dev/null
++++ b/package/glmark2/glmark2-gl-to-glesv2-on-drm-flavor.patch
+@@ -0,0 +1,25 @@
++Bug in build script requires full opengl when only opengl es is actually
++required.
++
++Signed-off-by: Spenser Gilliland <spenser@gillilanding.com>
++---
++Index: glmark2-279/src/wscript_build
++===================================================================
++--- glmark2-279.orig/src/wscript_build	2013-08-19 17:36:32.000000000 -0500
+++++ glmark2-279/src/wscript_build	2013-08-20 10:31:39.364629078 -0500
++@@ -23,11 +23,12 @@
++   'x11-gl' : ['x11', 'gl', 'matrix-gl'],
++   'x11-glesv2' : ['x11', 'egl', 'glesv2', 'matrix-glesv2'],
++   'drm-gl' : ['drm', 'gbm', 'egl', 'gl', 'matrix-gl'],
++-  'drm-glesv2' : ['drm', 'gbm', 'egl', 'glesv2', 'matrix-gl'],
+++  'drm-glesv2' : ['drm', 'gbm', 'egl', 'glesv2', 'matrix-glesv2'],
++   'mir-gl' : ['mirclient', 'egl', 'gl', 'matrix-gl'],
++-  'mir-glesv2' : ['mirclient', 'egl', 'glesv2', 'matrix-gl'],
+++  'mir-glesv2' : ['mirclient', 'egl', 'glesv2', 'matrix-glesv2'],
++   'wayland-gl' : ['wayland-client', 'wayland-egl', 'egl', 'gl', 'matrix-gl'],
++-  'wayland-glesv2' : ['wayland-client', 'wayland-egl', 'egl', 'glesv2', 'matrix-gl'],
+++  'wayland-glesv2' : ['wayland-client', 'wayland-egl', 'egl', 'glesv2',
+++  'matrix-glesv2'],
++   'fbdev-glesv2' : ['egl', 'glesv2', 'matrix-glesv2']
++ }
++ flavor_defines = {
+diff --git a/package/glmark2/glmark2.mk b/package/glmark2/glmark2.mk
+new file mode 100644
+index 0000000..d96db0d
+--- /dev/null
++++ b/package/glmark2/glmark2.mk
+@@ -0,0 +1,70 @@
 +################################################################################
 +#
-+# libgl
++# glmark2
 +#
 +################################################################################
 +
-+LIBGL_SOURCE =
++GLMARK2_VERSION = 279
++GLMARK2_SITE = http://bazaar.launchpad.net/~laanwj/glmark2/fbdev
++GLMARK2_SITE_METHOD = bzr
++GLMARK2_LICENSE = GPLv3+ SGIv1
++GLMARK2_LICENSE_FILES = COPYING COPYING.SGI
 +
-+ifeq ($(BR2_PACKAGE_MESA_OPENGL),y)
-+LIBGL_DEPENDENCIES += mesa3d
++GLMARK2_DEPENDENCIES = jpeg libpng12 mesa3d host-pkgconf
++
++GLMARK2_CONF_OPTS = --prefix=/usr/
++
++GLMARK2_CONF_ENV = LDFLAGS="-lrt -lpthread"
++
++ifeq ($(BR2_PACKAGE_XSERVER_XORG_SERVER)$(BR2_PACKAGE_HAS_OPENGL_ES),yy)
++GLMARK2_DEPENDENCIES += libegl libgles
++GLMARK2_FLAVORS += x11-glesv2
 +endif
 +
-+ifeq ($(LIBGL_DEPENDENCIES),)
-+define LIBOPENGL_CONFIGURE_CMDS
-+	echo "No libOpenGL implementation selected. Configuration error."
-+	exit 1
++ifeq ($(BR2_PACKAGE_XSERVER_XORG_SERVER)$(BR2_PACKAGE_HAS_OPENGL),yy)
++GLMARK2_DEPENDENCIES += libgl
++GLMARK2_FLAVORS += x11-gl
++endif
++
++ifeq ($(BR2_PACKAGE_HAS_OPENGL_EGL)$(BR2_PACKAGE_HAS_OPENGL_ES),yy)
++GLMARK2_DEPENDENCIES += libdrm libegl libgles
++GLMARK2_FLAVORS += drm-glesv2 fbdev-glesv2
++endif
++
++ifeq ($(BR2_PACKAGE_HAS_OPENGL_EGL)$(BR2_PACKAGE_HAS_OPENGL),yy)
++GLMARK2_DEPENDENCIES += libdrm libgl
++GLMARK2_FLAVORS += drm-gl
++endif
++
++ifeq ($(BR2_PACKAGE_WAYLAND)$(BR2_PACKAGE_HAS_OPENGL_ES),yy)
++GLMARK2_DEPENDENCIES += wayland libegl libgles
++GLMARK2_FLAVORS += wayland-glesv2
++endif
++
++ifeq ($(BR2_PACKAGE_WAYLAND)$(BR2_PACKAGE_HAS_OPENGL),yy)
++GLMARK2_DEPENDENCIES += wayland libgl
++GLMARK2_FLAVORS += wayland-gl
++endif
++
++ifeq ($(BR2_PACKAGE_SUNXI_MALI),y)
++GLMARK2_CONF_OPTS += --for-mali
++endif
++
++GLMARK2_CONF_OPTS += \
++	--with-flavors=$(subst $(space),$(comma),$(GLMARK2_FLAVORS))
++
++define GLMARK2_CONFIGURE_CMDS
++	cd $(@D) && \
++		$(TARGET_MAKE_ENV) $(GLMARK2_CONF_ENV) $(TARGET_CONFIGURE_OPTS) ./waf configure \
++		$(GLMARK2_CONF_OPTS)
 +endef
-+endif
++
++define GLMARK2_BUILD_CMDS
++	cd $(@D) && $(TARGET_MAKE_ENV) ./waf
++endef
++
++define GLMARK2_INSTALL_TARGET_CMDS
++	cd $(@D) && $(TARGET_MAKE_ENV) ./waf install --destdir=$(TARGET_DIR)
++endef
 +
 +$(eval $(generic-package))
-diff --git a/package/opengl/libgles/libgles.mk b/package/opengl/libgles/libgles.mk
-index ec157ac..8e5cef1 100644
---- a/package/opengl/libgles/libgles.mk
-+++ b/package/opengl/libgles/libgles.mk
-@@ -22,6 +22,10 @@ ifeq ($(BR2_PACKAGE_GPU_VIV_BIN_MX6Q),y)
- LIBGLES_DEPENDENCIES += gpu-viv-bin-mx6q
- endif
- 
-+ifeq ($(BR2_PACKAGE_MESA3D_OPENGL_ES),y)
-+LIBGLES_DEPENDENCIES += mesa3d
-+endif
-+
- ifeq ($(LIBGLES_DEPENDENCIES),)
- define LIBGLES_CONFIGURE_CMDS
- 	echo "No libGLES implementation selected. Configuration error."
-diff --git a/package/opengl/libopenvg/libopenvg.mk b/package/opengl/libopenvg/libopenvg.mk
-index 3296f63..e897423 100644
---- a/package/opengl/libopenvg/libopenvg.mk
-+++ b/package/opengl/libopenvg/libopenvg.mk
-@@ -10,6 +10,10 @@ ifeq ($(BR2_PACKAGE_RPI_USERLAND),y)
- LIBOPENVG_DEPENDENCIES += rpi-userland
- endif
- 
-+ifeq ($(BR2_PACKAGE_MESA3D_OPENVG),y)
-+LIBOPENVG_DEPENDENCIES += mesa3d
-+endif
-+
- ifeq ($(LIBOPENVG_DEPENDENCIES),)
- define LIBOPENVG_CONFIGURE_CMDS
- 	echo "No libOpenVG implementation selected. Configuration error."
-diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-index 4089aab..f5a4db6 100644
---- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-+++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-@@ -99,7 +99,7 @@ else # modular
- XSERVER_XORG_SERVER_CONF_OPT += --disable-kdrive --disable-xfbdev
- endif
- 
--ifeq ($(BR2_PACKAGE_MESA3D),y)
-+ifeq ($(BR2_PACKAGE_MESA3D_DRIVER),y)
- XSERVER_XORG_SERVER_DEPENDENCIES += mesa3d xproto_xf86driproto
- else
- XSERVER_XORG_SERVER_CONF_OPT += --disable-dri
-@@ -172,7 +172,7 @@ ifneq ($(BR2_PACKAGE_XLIB_LIBDMX),y)
- XSERVER_XORG_SERVER_CONF_OPT += --disable-dmx
- endif
- 
--ifeq ($(BR2_PACKAGE_MESA3D),y)
-+ifeq ($(BR2_PACKAGE_MESA3D_DRIVER),y)
- XSERVER_XORG_SERVER_CONF_OPT += --enable-glx
- else
- XSERVER_XORG_SERVER_CONF_OPT += --disable-glx
 -- 
 1.7.1
