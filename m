@@ -1,43 +1,54 @@
-From: Fatih =?UTF-8?Q?A=C5=9F=C4=B1c=C4=B1?= <fatih.asici@gmail.com>
-Date: Fri, 27 Sep 2013 15:21:09 +0300
+From: Ryan Barnett <rjbarnet@rockwellcollins.com>
+Date: Fri, 27 Sep 2013 08:07:23 -0500
 Subject: [Buildroot] [PATCH] beagleboneblack: add board
-In-Reply-To: <1380220826-17732-1-git-send-email-jkridner@beagleboard.org>
-References: <1380220826-17732-1-git-send-email-jkridner@beagleboard.org>
-Message-ID: <1380284469.22318.31.camel@viko>
+In-Reply-To: <CA+T6QPknCP3O2uM_S8va-MqY+jjzmojgmADw3wg4=4ePNmLw0A@mail.gmail.com>
+References: <1380220826-17732-1-git-send-email-jkridner@beagleboard.org>	<87bo3f5pz4.fsf@dell.be.48ers.dk>
+ <OF4892FC0E.FA9FE3E3-ON86257BF2.006E10F1-86257BF2.006EC6A2@rockwellcollins.com>
+ <CA+T6QPknCP3O2uM_S8va-MqY+jjzmojgmADw3wg4=4ePNmLw0A@mail.gmail.com>
+Message-ID: <OF041F2659.5DF7B620-ON86257BF3.00475360-86257BF3.0048165F@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 2013-09-26 at 18:40 +0000, Jason Kridner wrote:
-> From: Jason Kridner <jdk@ti.com>
+Jason,
+
+Jason Kridner <jkridner@beagleboard.org> wrote on 09/26/2013 03:53:46 PM:
+
+[...]
+
+> >
+> > I believe there is an issue with that kernel where it is unable to
+> > compile the musb driver for the omap (CONFIG_USB_MUSB_OMAP2PLUS)
+> > statically into the kernel because it will default to being a module
+> > which will cause the kernel to fail to compile. I ran into this issue
+> > with the Beagleboard-XM with the same kernel. The solution I found was
+> > here:
+> >
+> > http://www.spinics.net/lists/linux-usb/msg67054.html
+> >
+> > I think added this patch to the kernel which I would may recommend 
+adding
+> > to the git repository you reference for this kernel.
 > 
-> Signed-off-by: Jason Kridner <jdk@ti.com>
-> ---
->  board/beagleboneblack/linux-3.8.config | 4305 ++++++++++++++++++++++++++++++++
->  configs/beagleboneblack_defconfig      |   38 +
->  2 files changed, 4343 insertions(+)
->  create mode 100644 board/beagleboneblack/linux-3.8.config
->  create mode 100644 configs/beagleboneblack_defconfig
-> 
+> Well, the musb is working in my image, so I'm not sure what to say
+> other than I don't think this is necessary. I will move to the
+> mainline kernel as soon as the features are sufficiently stable.
 
-Tested this with Beaglebone Black. u-boot loads kernel image
-from /boot/uImage by default (see include/configs/am335x_evm.h) so that
-BR2_LINUX_KERNEL_INSTALL_TARGET is needed to be able to boot.
+OK, well there was someone on the IRC that was saying they were having 
+issues
+saving a defconfig for the beaglebone black on the IRC where the defconfig
+wasn't translating correctly to the full config. I guess that wasn't 
+you. 
 
-I see these errors at startup:
-
-/etc/init.d/S93-am335x-pm-firmware-load: line 4: can't
-create /sys/devices/ocp.2/44d00000.wkup_m3/firmware/am335x-pm-firmware.bin/loading: nonexistent directory
-/etc/init.d/S93-am335x-pm-firmware-load: line 5: can't
-create /sys/devices/ocp.2/44d00000.wkup_m3/firmware/am335x-pm-firmware.bin/data: nonexistent directory
-/etc/init.d/S93-am335x-pm-firmware-load: line 6: can't
-create /sys/devices/ocp.2/44d00000.wkup_m3/firmware/am335x-pm-firmware.bin/loading: nonexistent directory
-
-
-I have also tried my chance to boot "am335x evm starter kit" by adding
-am335x-evmsk to the dts list; but it didn't boot :/
+I ran into that problem after I saw the talk on the IRC so I thought I
+would make my solution to the problem available on the mailing list.
+ 
+[...]
 
 Thanks,
-Fatih
+-Ryan
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130927/d103706b/attachment.html>
