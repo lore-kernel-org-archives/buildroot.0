@@ -1,38 +1,50 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 27 Sep 2013 12:50:26 +0200
-Subject: [Buildroot] [PATCH] configs: add Freescale i.MX 6SoloLite EVK
-	support
-In-Reply-To: <CAKcgs2x1v5=aMLy0HCbJoLGK-A9rn=WBNZevgbyk-Jnui5yK9A@mail.gmail.com>
- (Gilles Talis's message of "Fri, 27 Sep 2013 12:08:22 +0200")
-References: <1380185523-26736-1-git-send-email-gilles.talis@gmail.com>
- <87fvsr5q7z.fsf@dell.be.48ers.dk>
- <CAKcgs2wLPOTpRqu5Xe_1LkuuZwCcuAfHOSfS+Hy+gvpbS_Vk3g@mail.gmail.com>
- <87ioxm4m6m.fsf@dell.be.48ers.dk>
- <CAKcgs2x1v5=aMLy0HCbJoLGK-A9rn=WBNZevgbyk-Jnui5yK9A@mail.gmail.com>
-Message-ID: <87eh8a4jyl.fsf@dell.be.48ers.dk>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Fri, 27 Sep 2013 07:59:03 -0300
+Subject: [Buildroot] [PATCH 1/2] linux-headers: bump 3.{0, 4, 10,
+	11}.x stable versions
+Message-ID: <1380279544-17790-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gilles" == Gilles Talis <gilles.talis@gmail.com> writes:
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ ...ers-headers_install-fix-__packed-in-exported-kernel-head.patch | 0
+ package/linux-headers/Config.in.host                              | 8 ++++----
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+ rename package/linux-headers/{3.0.96 => 3.0.97}/linux-headers-headers_install-fix-__packed-in-exported-kernel-head.patch (100%)
 
- Gilles> Hi Peter,
- >> It's not really a problem, no - Just quite uncommon. Do notice that
- >> Buildroot automatically enables devtmpfs support in the kernel if
- >> needed, so it should all just work.
-
- Gilles> Does it? I was not aware of that. It did not seem to work for me,
- Gilles> hence the reason why I had to force static device nodes. Let me give
- Gilles> it another try and see how it goes.
-
-As long as you build the kernel through buildroot it should:
-
-git grep -B1  DEVTMPFS linux/linux.mk
-linux/linux.mk- $(if $(BR2_ROOTFS_DEVICE_CREATION_STATIC),,
-linux/linux.mk:         $(call KCONFIG_ENABLE_OPT,CONFIG_DEVTMPFS,$(@D)/.config)
-linux/linux.mk:         $(call KCONFIG_ENABLE_OPT,CONFIG_DEVTMPFS_MOUNT,$(@D)/.c
-
+diff --git a/package/linux-headers/3.0.96/linux-headers-headers_install-fix-__packed-in-exported-kernel-head.patch b/package/linux-headers/3.0.97/linux-headers-headers_install-fix-__packed-in-exported-kernel-head.patch
+similarity index 100%
+rename from package/linux-headers/3.0.96/linux-headers-headers_install-fix-__packed-in-exported-kernel-head.patch
+rename to package/linux-headers/3.0.97/linux-headers-headers_install-fix-__packed-in-exported-kernel-head.patch
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index bc8f821..1ebfaad 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -76,17 +76,17 @@ config BR2_DEFAULT_KERNEL_VERSION
+ 
+ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+-	default "3.0.96"	if BR2_KERNEL_HEADERS_3_0
++	default "3.0.97"	if BR2_KERNEL_HEADERS_3_0
+ 	default "3.1.10"	if BR2_KERNEL_HEADERS_3_1
+ 	default "3.2.51"	if BR2_KERNEL_HEADERS_3_2
+ 	default "3.3.8"		if BR2_KERNEL_HEADERS_3_3
+-	default "3.4.62"	if BR2_KERNEL_HEADERS_3_4
++	default "3.4.63"	if BR2_KERNEL_HEADERS_3_4
+ 	default "3.5.7"		if BR2_KERNEL_HEADERS_3_5
+ 	default "3.6.11"	if BR2_KERNEL_HEADERS_3_6
+ 	default "3.7.10"	if BR2_KERNEL_HEADERS_3_7
+ 	default "3.8.13"	if BR2_KERNEL_HEADERS_3_8
+ 	default "3.9.11"	if BR2_KERNEL_HEADERS_3_9
+-	default "3.10.12"	if BR2_KERNEL_HEADERS_3_10
+-	default "3.11.1"	if BR2_KERNEL_HEADERS_3_11
++	default "3.10.13"	if BR2_KERNEL_HEADERS_3_10
++	default "3.11.2"	if BR2_KERNEL_HEADERS_3_11
+ 	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
+ 	default $BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
 -- 
-Bye, Peter Korsgaard
+1.8.1.5
