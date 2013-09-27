@@ -1,59 +1,140 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 27 Sep 2013 19:54:02 +0200
-Subject: [Buildroot] [PATCH] Allow Buildroot to update toolchain
-In-Reply-To: <F9C551623D2CBB4C9488801D14F864C639AD6B4A@ex-mb1.corp.adtran.com>
-References: <F9C551623D2CBB4C9488801D14F864C639AD62E9@ex-mb1.corp.adtran.com>
- <87vc1n49b9.fsf@dell.be.48ers.dk>
- <F9C551623D2CBB4C9488801D14F864C639AD653F@ex-mb1.corp.adtran.com>
- <20130927100513.690cdd23@skate>
- <F9C551623D2CBB4C9488801D14F864C639AD6A6C@ex-mb1.corp.adtran.com>
- <F9C551623D2CBB4C9488801D14F864C639AD6B4A@ex-mb1.corp.adtran.com>
-Message-ID: <20130927195402.3320eeb0@skate>
+From: Matt Weber <mlweber1@rockwellcollins.com>
+Date: Fri, 27 Sep 2013 14:54:34 -0500
+Subject: [Buildroot] [PATCH 1/1] omniorb: cleanup autobuild failure,
+	CFLAGS issue
+Message-ID: <1380311674-6883-1-git-send-email-mlweber1@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear ANDY KENNEDY,
+Fixed:
+http://autobuild.buildroot.net/results/a08baf8821e3ee1fb9c36c8f74c4ced466af167b/
+http://autobuild.buildroot.net/results/f0c7379c1f405385d3a64c0349c3d9565065e8a7/
+http://autobuild.buildroot.net/results/c3de25ca52fdb8ffda7472cf9f7b64514954cbb1/
 
-On Fri, 27 Sep 2013 15:41:36 +0000, ANDY KENNEDY wrote:
+Change Log:
+The target CFLAGS were getting mixed in during a manual build of some
+omniorb pkg tools that could be viewed as host tools.
+This manual build was a dirty workaround and created some bad
+cornercases. So I converted the package over to actually using the
+host pkg build and removed the need for a patch and custom mods in the build.
 
-> Okay, I see the difference between my patch and what HOST_DIR does.
-> When using HOST_DIR, the normal location of output/host is redirected
-> to /opt/somedir then the toolchain, all existing libs, all buildroot
-> built libs get dumped into that location.
-> 
-> In my patch, I have made this assumption:  The user already has
-> a toolchain in /opt/somedir/mytoolchain and desires to keep that
-> location.  After looking at what the code does, I don't really think
-> that I can specify the SAME location for HOST_DIR as it would attempt
-> to copy files onto itself (which would then, presumably, error out).
-> In the case of using the SYSROOT as the staging directory, ONLY the
-> libraries get copied back to the toolchain's sysroot (and the really
-> nice thing about this is that the user never has to tell me where to
-> put the stuff, I asked the toolchain for the sysroot dir).
-> 
-> So, as I stated before, I'll keep dragging this patch around if you
-> don't want to include it into Buildroot, but I believe this may be
-> something that others would like to use.  But, I've been wrong
-> MANY times before ;).
+Also there wasn't a dependency on the target having python, just
+host-python for performing the initial build.  So depends were adjusted
+accordingly. If python bindings are required, they can be found in a different
+package called omniORBpy.  The omniORB package only uses python for
+the build process.
 
-I still don't quite understand your use case. If you don't use
-BR2_HOST_DIR=/opt/someplace/ and keep telling your users to use their
-original toolchain, they have to pass many options to the compiler and
-linker to point to the right library locations. They also don't have
-access to the right pkg-config that works in cross-compilation mode
-that Buildroot has built.
+Fixed a bug with long double support.  Currently leaving it disabled
+as most targets won't use it.  This allows greater toolchain compatibility.
 
-I *really* believe you should have a deeper look at what it means to
-specify a custom BR2_HOST_DIR, I think it's really what you should be
-using.
+Signed-off-by: Matt Weber <mlweber1@rockwellcollins.com>
+---
+ .../omniorb-0001-crosscompile-tool-export.patch    |   30 ------------
+ package/omniorb/omniorb.mk                         |   47 +++++++++-----------
+ 2 files changed, 21 insertions(+), 56 deletions(-)
+ delete mode 100644 package/omniorb/omniorb-0001-crosscompile-tool-export.patch
 
-Best regards,
-
-Thomas
+diff --git a/package/omniorb/omniorb-0001-crosscompile-tool-export.patch b/package/omniorb/omniorb-0001-crosscompile-tool-export.patch
+deleted file mode 100644
+index 260d86f..0000000
+--- a/package/omniorb/omniorb-0001-crosscompile-tool-export.patch
++++ /dev/null
+@@ -1,30 +0,0 @@
+-beforeauto.mk.in: added support for overriding the configure time
+-defined CC/CXX/RANLIB/CPP variables so that a couple pkg tools could be
+-built which generate code during the cross compile build.
+-
+-http://www.omniorb-support.com/pipermail/omniorb-list/2013-September/031473.html
+-
+-Signed-off-by: Matt Weber <mlweber1@rockwellcollins.com>
+-
+---- omniorb-4.1.6.orig/mk/beforeauto.mk.in	2013-09-12 12:49:55.668708148 -0500
+-+++ omniorb-4.1.6/mk/beforeauto.mk.in	2013-09-12 12:51:22.707928579 -0500
+-@@ -672,15 +672,15 @@
+- #
+- 
+- AR              = ar cq
+--CC              = @CC@
+--CXX             = @CXX@
+--RANLIB		= @RANLIB@
+-+CC		?= @CC@
+-+CXX		?= @CXX@
+-+RANLIB		?= @RANLIB@
+- MKDIRHIER	= $(BASE_OMNI_TREE)/bin/scripts/omkdirhier
+- INSTLIBFLAGS	= -m 0644
+- INSTEXEFLAGS	= -m 0755
+- CP		= cp
+- MV		= mv -f
+--CPP		= @CPP@
+-+CPP		?= @CPP@
+- OMKDEPEND	= $(TOOLBINDIR)/omkdepend
+- RMDIRHIER	= $(RM) -rf
+- 
+diff --git a/package/omniorb/omniorb.mk b/package/omniorb/omniorb.mk
+index 8a41dc7..f225cdd 100644
+--- a/package/omniorb/omniorb.mk
++++ b/package/omniorb/omniorb.mk
+@@ -10,37 +10,32 @@ OMNIORB_SOURCE = omniORB-$(OMNIORB_VERSION).tar.bz2
+ OMNIORB_INSTALL_STAGING = YES
+ OMNIORB_LICENSE = GPL2+ LGPLv2.1+
+ OMNIORB_LICENSE_FILES = COPYING COPYING.LIB
+-# Required for internal code generation scripts
+-OMNIORB_DEPENDENCIES = host-python
++OMNIORB_DEPENDENCIES = host-omniorb
++OMNIORB_INSTALL_TARGET = YES
+ 
+-ifeq ($(BR2_PACKAGE_PYTHON),y)
+-	OMNIORB_DEPENDENCIES += python
+-	OMNIORB_CONF_OPT += --enable-python-bindings
+-else
+-	OMNIORB_CONF_OPT += --disable-python-bindings
+-endif
++# Defaulting long double support to a safe option for the
++# mix of embedded targets, this could later be automated
++# based on checking the capability of the cross toolchain
++# for "__LONG_DOUBLE_128__".  Currently the host and target
++# need to match because of the code generation done by the
++# host tools during the target compile (ie headers generated
++# on host are used in target build).
++OMNIORB_CONF_OPT += --disable-longdouble
+ 
+-# omniORB is currently not cross-compile friendly and has some assumptions
+-# where a couple host tools are built in place and then used during the
+-# build.  The tools generate code from the IDL description language, which
+-# is then built into the cross compiled OMNIORB application.
+-# So this first hook builds the tools required for the host side
+-# generation of code. Then the second hook cleans up before the install.
++# omniORB is not completely cross-compile friendly and has some
++# assumptions where a couple host tools must be built and then
++# used by the target build.  The host tools generate code from
++# the IDL description language, which is then built into the
++# cross compiled target OMNIORB application.
+ define OMNIORB_BUILD_TOOLS
+-	$(HOST_MAKE_ENV) $(MAKE) $(HOST_CONFIGURE_OPTS) \
+-		-C $(@D)/src/tool export
++	# Point to the host folder to get HOST_OMNIORB tools
++	$(SED) 's:TOOLBINDIR = $$(TOP)/$$(BINDIR):TOOLBINDIR = $(HOST_DIR)/usr/bin:g' $(@D)/mk/beforeauto.mk
++	# Disables OMNIORB tool building
++	echo "EmbeddedSystem=1" >> $(@D)/mk/beforeauto.mk
+ endef
+ OMNIORB_POST_CONFIGURE_HOOKS += OMNIORB_BUILD_TOOLS
+ 
+-define OMNIORB_CLEAN_TOOLS
+-	$(HOST_MAKE_ENV) $(MAKE) $(HOST_CONFIGURE_OPTS) \
+-		-C $(@D)/src/tool clean
+-endef
+-OMNIORB_POST_BUILD_HOOKS += OMNIORB_CLEAN_TOOLS
+-
+-define OMNIORB_FIXUP_FILE_PATHS_HOOK
+-	$(SED) "s:$(HOST_DIR)/usr:/usr:g" $(STAGING_DIR)/usr/bin/omniidl
+-endef
+-OMNIORB_POST_INSTALL_STAGING_HOOKS += OMNIORB_FIXUP_FILE_PATHS_HOOK
++HOST_OMNIORB_DEPENDENCIES = host-python
+ 
+ $(eval $(autotools-package))
++$(eval $(host-autotools-package))
 -- 
-Thomas Petazzoni, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.7.1
