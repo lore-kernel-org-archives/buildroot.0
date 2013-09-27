@@ -1,44 +1,92 @@
-From: ANDY KENNEDY <ANDY.KENNEDY@adtran.com>
-Date: Fri, 27 Sep 2013 14:56:33 +0000
-Subject: [Buildroot] [PATCH] Allow Buildroot to update toolchain
-In-Reply-To: <20130927100513.690cdd23@skate>
-References: <F9C551623D2CBB4C9488801D14F864C639AD62E9@ex-mb1.corp.adtran.com>
- <87vc1n49b9.fsf@dell.be.48ers.dk>
- <F9C551623D2CBB4C9488801D14F864C639AD653F@ex-mb1.corp.adtran.com>
- <20130927100513.690cdd23@skate>
-Message-ID: <F9C551623D2CBB4C9488801D14F864C639AD6A4D@ex-mb1.corp.adtran.com>
+From: Frank Hunleth <fhunleth@troodon-software.com>
+Date: Fri, 27 Sep 2013 11:06:15 -0400
+Subject: [Buildroot] [PATCH v2] Add support for eglibc-2.17 multiarch
+ layout, from Linaro 2013.07+
+In-Reply-To: <20130917205024.0bd97ef9@skate>
+References: <1379353155-26459-1-git-send-email-greg.beresford@zbdsolutions.com>
+ <5237F574.9070700@mind.be>
+ <1379411093-37240-1-git-send-email-greg.beresford@zbdsolutions.com>
+ <CA+-urNTYe7NF43KmEQDYVZBsqvgC0w+F7VtEafRUQVxhzO+CNA@mail.gmail.com>
+ <20130917205024.0bd97ef9@skate>
+Message-ID: <CA+-urNQwu7jcgAgHmpEY8Do_hbBMK85qZcTyaTo4HCm5kW-8Mw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> I still don't understand. What you're explaining is exactly what
-> Buildroot is doing today. When you use an external toolchain, Buildroot
-> copies the toolchain sysroot (which contains just the C library) in
-> output/staging and then progressively "improves" this sysroot by adding
-> all the libraries that have been cross-compiled for your target.
-> 
-> If what you need is then the ability to deliver this toolchain to
-> application developers who will not be using Buildroot, but need a
-> toolchain with all the libraries, then the proper way to do this is, as
-> Peter suggested, to do BR2_HOST_DIR=/opt/some-location/, then do your
-> Buildroot build, tarball /opt/some-location/ and deliver that as the
-> toolchain to be used by your application developers.
+Hi Thomas,
 
-Oh, really?  I totally missed that then.  I remember when that came
-out (like last year sometime, right?) but I didn't really look into
-it that much.
+On Tue, Sep 17, 2013 at 2:50 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Dear Frank Hunleth,
+>
+> On Tue, 17 Sep 2013 13:01:14 -0400, Frank Hunleth wrote:
+>
+>> Thanks for posting the patch. I've been trying it out, but I think
+>> that I'm running into a bigger problem of how the shared library
+>> search path works now. I.e. /usr/lib is not searched by default
+>> anymore even though that's where many buildroot packages install their
+>> libraries.
+>>
+>> Here's the new search path:
+>>
+>> /lib/arm-linux-gnueabihf/
+>> /usr/lib/arm-linux-gnueabihf/tls/v7l/neon/vfp/
+>> /usr/lib/arm-linux-gnueabihf/tls/v7l/neon/
+>> /usr/lib/arm-linux-gnueabihf/tls/v7l/vfp/
+>> /usr/lib/arm-linux-gnueabihf/tls/v7l/
+>> /usr/lib/arm-linux-gnueabihf/tls/neon/vfp/
+>> /usr/lib/arm-linux-gnueabihf/tls/neon/
+>> /usr/lib/arm-linux-gnueabihf/tls/vfp/
+>> /usr/lib/arm-linux-gnueabihf/tls/
+>> /usr/lib/arm-linux-gnueabihf/v7l/neon/vfp/
+>> /usr/lib/arm-linux-gnueabihf/v7l/neon/
+>> /usr/lib/arm-linux-gnueabihf/v7l/vfp/
+>> /usr/lib/arm-linux-gnueabihf/v7l/
+>> /usr/lib/arm-linux-gnueabihf/neon/vfp/
+>>
+>> I can think of a few hacks to get around this, but is there a right
+>> way that I should be configuring buildroot to deal with this
+>> multiarch/multilib toolchain feature?
+>
+> I haven't had the time yet to try the patch and experiment with this
+> problem specifically, but I believe one of the possible solutions is to
+> continue to install the libraries in /lib and /usr/lib, and
+> creates /lib/arm-linux-gnueabihf/ -> /lib
+> and /usr/lib/arm-linux-gnueabihf/ -> /usr/lib symbolic links.
 
-Well, cool!  I guess I reinvented the wheel on this one, eh?
+I'm not sure if you had a chance to revisit this, but I wanted to
+report that using symlinks works. Here's what I've temporarily added
+to my rootfs post build script:
 
-I guess I'll try your way then and see what happens ;).
+if [ -d $TARGETDIR/lib/arm-linux-gnueabihf -a ! -h
+$TARGETDIR/lib/arm-linux-gnueabihf ]; then
+    mv $TARGETDIR/lib/arm-linux-gnueabihf/* $TARGETDIR/lib
+    rm -fr $TARGETDIR/lib/arm-linux-gnueabihf
+    rm -fr $TARGETDIR/lib/arm-linux-gnueabi
+    ln -fs . $TARGETDIR/lib/arm-linux-gnueabihf
+    ln -fs . $TARGETDIR/usr/lib/arm-linux-gnueabihf
+fi
 
-If it works exactly as what I'm doing that's cool!
+I'm not sure how best to integrate this with buildroot, but I've
+haven't had much time to work on it. I'm hoping that this may be
+helpful to someone fixing armhf builds when using the external
+toolchain option.
 
-> 
-> Or maybe I misunderstanding the use case?
+Frank
 
-Um, yeah, that's it.  It isn't that I'm goofy or anything ;).
+>
+> Thomas
+> --
+> Thomas Petazzoni, Free Electrons
+> Kernel, drivers, real-time and embedded Linux
+> development, consulting, training and support.
+> http://free-electrons.com
 
-Andy
+
+
+-- 
+Frank Hunleth
+Troodon Software LLC
+http://troodon-software.com/
