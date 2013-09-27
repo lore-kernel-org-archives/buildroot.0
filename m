@@ -1,44 +1,73 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Fri, 27 Sep 2013 17:11:44 +0200
-Subject: [Buildroot] [RFC] package: Redownload HEAD packages every build
-In-Reply-To: <1380293015-20331-1-git-send-email-clshotwe@rockwellcollins.com>
-References: <1380293015-20331-1-git-send-email-clshotwe@rockwellcollins.com>
-Message-ID: <422c5b3f-36c2-46c5-b033-7644523dfad0@email.android.com>
+From: ANDY KENNEDY <ANDY.KENNEDY@adtran.com>
+Date: Fri, 27 Sep 2013 15:41:36 +0000
+Subject: [Buildroot] [PATCH] Allow Buildroot to update toolchain
+In-Reply-To: <F9C551623D2CBB4C9488801D14F864C639AD6A6C@ex-mb1.corp.adtran.com>
+References: <F9C551623D2CBB4C9488801D14F864C639AD62E9@ex-mb1.corp.adtran.com>
+ <87vc1n49b9.fsf@dell.be.48ers.dk>
+ <F9C551623D2CBB4C9488801D14F864C639AD653F@ex-mb1.corp.adtran.com>
+ <20130927100513.690cdd23@skate>
+ <F9C551623D2CBB4C9488801D14F864C639AD6A6C@ex-mb1.corp.adtran.com>
+Message-ID: <F9C551623D2CBB4C9488801D14F864C639AD6B4A@ex-mb1.corp.adtran.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Clayton Shotwell <clshotwe@rockwellcollins.com> wrote:
->Adding a check to remove a downloaded package if the version is HEAD. This causes the package to be re-downloaded with updated software. This feature is very useful during package development.
->
->Signed-off-by: Clayton Shotwell <clshotwe@rockwellcollins.com>
->---
-> package/pkg-generic.mk |    7 +++++++
-> 1 files changed, 7 insertions(+), 0 deletions(-)
->
->diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
->index bfc4dc1..859c4a9 100644
->--- a/package/pkg-generic.mk
->+++ b/package/pkg-generic.mk
->@@ -27,6 +27,13 @@
-> # Retrieve the archive
-> $(BUILD_DIR)/%/.stamp_downloaded:
-> ifeq ($(DL_MODE),DOWNLOAD)
->+# Remove the pre-downloaded tar file if the package is a HEAD version
->+	$(Q)( \
->+	if test $($(PKG)_VERSION) == HEAD -a -e $(DL_DIR)/$($(PKG)_SOURCE); then \
->+		rm $(DL_DIR)/$($(PKG)_SOURCE); \
->+		$(call MESSAGE,"Removing $(PKG) HEAD source file"); \
->+	fi; \
->+	)
-> # Only show the download message if it isn't already downloaded
-> 	$(Q)if test ! -e $(DL_DIR)/$($(PKG)_SOURCE); then \
-> 		$(call MESSAGE,"Downloading") ; \
+> > I still don't understand. What you're explaining is exactly what
+> > Buildroot is doing today. When you use an external toolchain, Buildroot
+> > copies the toolchain sysroot (which contains just the C library) in
+> > output/staging and then progressively "improves" this sysroot by adding
+> > all the libraries that have been cross-compiled for your target.
+> >
+> > If what you need is then the ability to deliver this toolchain to
+> > application developers who will not be using Buildroot, but need a
+> > toolchain with all the libraries, then the proper way to do this is, as
+> > Peter suggested, to do BR2_HOST_DIR=/opt/some-location/, then do your
+> > Buildroot build, tarball /opt/some-location/ and deliver that as the
+> > toolchain to be used by your application developers.
+> 
+> Thomas/Peter/all:
+> 
+> The following blurb (from the help menu) doesn't really say what
+> you said above:
+> 
+> Directory to store all the binary files that are built for the host.
+> This includes the cross compilation toolchain when building the
+> internal buildroot toolchain.
+> 
+> What the above says to me is that aclocal, automake, bison, flex,
+> etc will end up in my toolchain.  I don't really want this.
+> 
+> Now, if using an external toolchain changes this statement to what
+> you said "then progressively "improves" this sysroot by adding
+> all the libraries that have been cross-compiled for your target."
+> without making a bunch of additional build tools in there (which
+> won't really be needed in the follow-on builds by developers not
+> using Buildroot), then we probably need to specify this.  Otherwise,
+> my patch ONLY updates the sysroot and does not dump a bunch of
+> library compile time junk into the toolchain (never to be used
+> again).
+> 
 
+Okay, I see the difference between my patch and what HOST_DIR does.
+When using HOST_DIR, the normal location of output/host is redirected
+to /opt/somedir then the toolchain, all existing libs, all buildroot
+built libs get dumped into that location.
 
-Not sure if this patch would be accepted, but in case it is I think you should also check for 'tip' which is the mercurial name for HEAD. Note that it may be safer to also check the FOO_SITE_METHOD variable for hg or git, to avoid that tip would match with a git tag or branch, and similarly that HEAD would match a mercurial tag or branch.
+In my patch, I have made this assumption:  The user already has
+a toolchain in /opt/somedir/mytoolchain and desires to keep that
+location.  After looking at what the code does, I don't really think
+that I can specify the SAME location for HOST_DIR as it would attempt
+to copy files onto itself (which would then, presumably, error out).
+In the case of using the SYSROOT as the staging directory, ONLY the
+libraries get copied back to the toolchain's sysroot (and the really
+nice thing about this is that the user never has to tell me where to
+put the stuff, I asked the toolchain for the sysroot dir).
 
-Best regards,
-Thomas
+So, as I stated before, I'll keep dragging this patch around if you
+don't want to include it into Buildroot, but I believe this may be
+something that others would like to use.  But, I've been wrong
+MANY times before ;).
+
+Andy
