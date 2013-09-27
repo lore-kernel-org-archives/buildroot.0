@@ -1,56 +1,55 @@
-From: Jason Kridner <jkridner@beagleboard.org>
-Date: Fri, 27 Sep 2013 10:24:50 -0400
-Subject: [Buildroot] [PATCH] beagleboneblack: add board
-In-Reply-To: <1380284469.22318.31.camel@viko>
-References: <1380220826-17732-1-git-send-email-jkridner@beagleboard.org>
- <1380284469.22318.31.camel@viko>
-Message-ID: <CA+T6QP=hofgj0D+L2SPBO3UMs7Fe3CeqEwJfAxMynkncGPH0tA@mail.gmail.com>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Fri, 27 Sep 2013 16:27:50 +0200
+Subject: [Buildroot] [RFCv1 09/11] package: add a <pkg>_SOURCE_ADDONS
+ variable
+In-Reply-To: <CAAXf6LVQ7HuAs3LLdVj1jUAmcdtZa_s5P=mrPGRA+Crr1HseDw@mail.gmail.com>
+References: <1378416469-17708-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1378416469-17708-10-git-send-email-thomas.petazzoni@free-electrons.com>
+ <CAAXf6LVXRvw34-d5vq9Oh+tZXd2a4Dzy1mxzWLdOS2FPs59vVA@mail.gmail.com>
+ <20130916203130.2307521a@skate> <523759FA.5040706@mind.be>
+ <CAAXf6LVQ7HuAs3LLdVj1jUAmcdtZa_s5P=mrPGRA+Crr1HseDw@mail.gmail.com>
+Message-ID: <524595E6.4080700@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Sep 27, 2013 at 8:21 AM, Fatih A??c? <fatih.asici@gmail.com> wrote:
-> On Thu, 2013-09-26 at 18:40 +0000, Jason Kridner wrote:
->> From: Jason Kridner <jdk@ti.com>
+Thomas De Schampheleire wrote:
+> Thomas, Arnout,
+>
+> On Mon, Sep 16, 2013 at 9:20 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
+>> On 16/09/13 20:31, Thomas Petazzoni wrote:
+>>> Dear Thomas De Schampheleire,
+>>>
+>>> On Mon, 16 Sep 2013 15:39:22 +0200, Thomas De Schampheleire wrote:
+>>>
+>>>> What about allowing FOO_SOURCE to contain multiple words directly, and
+>>>> thus not introducing a new variable? The package infrastructure can
+>>>> download each word of FOO_SOURCE, but only extract (and otherwise use)
+>>>> the first one. Any subsequent word has to be handled by the package
+>>>> itself.
+>>>
+>>> The problem is that the default extract step needs to know what to do.
+>>> And what it does today is that it extracts the tarball whose name is
+>>> given in FOO_SOURCE. If we put several words in FOO_SOURCE, then what
+>>> should be the semantic of the default extract commands? Extract the
+>>> first one? All of them?
+>>>
+>>> That's why I've decided to go with another variable, which really means
+>>> "I want this stuff to be downloaded, but don't do anything with it, the
+>>> package recipe will take care of it".
+>>>
+>>> Of course, I'm open to changing the semantic of FOO_SOURCE instead, we
+>>> would just need to define what this new semantic should be.
 >>
->> Signed-off-by: Jason Kridner <jdk@ti.com>
->> ---
->>  board/beagleboneblack/linux-3.8.config | 4305 ++++++++++++++++++++++++++++++++
->>  configs/beagleboneblack_defconfig      |   38 +
->>  2 files changed, 4343 insertions(+)
->>  create mode 100644 board/beagleboneblack/linux-3.8.config
->>  create mode 100644 configs/beagleboneblack_defconfig
->>
->
-> Tested this with Beaglebone Black. u-boot loads kernel image
-> from /boot/uImage by default (see include/configs/am335x_evm.h) so that
-> BR2_LINUX_KERNEL_INSTALL_TARGET is needed to be able to boot.
->
-> I see these errors at startup:
->
-> /etc/init.d/S93-am335x-pm-firmware-load: line 4: can't
-> create /sys/devices/ocp.2/44d00000.wkup_m3/firmware/am335x-pm-firmware.bin/loading: nonexistent directory
-> /etc/init.d/S93-am335x-pm-firmware-load: line 5: can't
-> create /sys/devices/ocp.2/44d00000.wkup_m3/firmware/am335x-pm-firmware.bin/data: nonexistent directory
-> /etc/init.d/S93-am335x-pm-firmware-load: line 6: can't
-> create /sys/devices/ocp.2/44d00000.wkup_m3/firmware/am335x-pm-firmware.bin/loading: nonexistent directory
+>>   I'm more in favour of the <pkg>_SOURCE_ADDONS proposal. I think having
+>> multiple _SOURCE files would be confusing.
+> Ok, fair enough.
+> I think you should add this to the documentation, then.
 
-First, there is an error in hardcoding the index. The script needs to
-be edited to say "ocp.*", since the index can change.
+I also think keeping things separate is the best option to avoid confusion.
+But to make it even more clear, I would name the variable _EXTRA_DOWNLOADS.
 
-Second, I'm missing something in my kernel defconfig for this wkup_m3
-to show up. I'll try to fix it in a second rev because right now I
-have a kernel/config I know works well.  I'll drop this package from
-my initial commit.
-
->
->
-> I have also tried my chance to boot "am335x evm starter kit" by adding
-> am335x-evmsk to the dts list; but it didn't boot :/
->
-> Thanks,
-> Fatih
->
->
+-- 
+Luca
