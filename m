@@ -1,35 +1,84 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 27 Sep 2013 22:09:50 +0200
-Subject: [Buildroot] [git commit] package/gst1-plugins-good: remove
-	duplicate VPX entry
-Message-ID: <20130927201422.99D189B8AB@busybox.osuosl.org>
+From: Matt Weber <mlweber1@rockwellcollins.com>
+Date: Fri, 27 Sep 2013 16:42:29 -0500
+Subject: [Buildroot] [PATCH 1/1] python-ipy: new package
+Message-ID: <1380318149-22696-1-git-send-email-mlweber1@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=231f95a94b7251d6b17e4c0bb91c1f48e84f4db1
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+Signed-off-by: Matt Weber <mlweber1@rockwellcollins.com>
 ---
- package/gstreamer1/gst1-plugins-good/Config.in |    4 ----
- 1 files changed, 0 insertions(+), 4 deletions(-)
+ package/Config.in                |    1 +
+ package/python-ipy/Config.in     |    8 ++++++++
+ package/python-ipy/python-ipy.mk |   30 ++++++++++++++++++++++++++++++
+ 3 files changed, 39 insertions(+), 0 deletions(-)
+ create mode 100644 package/python-ipy/Config.in
+ create mode 100644 package/python-ipy/python-ipy.mk
 
-diff --git a/package/gstreamer1/gst1-plugins-good/Config.in b/package/gstreamer1/gst1-plugins-good/Config.in
-index 8031a63..ac05d66 100644
---- a/package/gstreamer1/gst1-plugins-good/Config.in
-+++ b/package/gstreamer1/gst1-plugins-good/Config.in
-@@ -327,10 +327,6 @@ config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_VPX
- 	help
- 	  VP8 plugin
- 
--config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_VPX
--	bool "vpx (webm)"
--	select BR2_PACKAGE_LIBVPX
--
- config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_WAVPACK
- 	bool "wavpack (*.wv audio)"
- 	select BR2_PACKAGE_WAVPACK
+diff --git a/package/Config.in b/package/Config.in
+index c6ea66b..2d05560 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -389,6 +389,7 @@ source "package/python-bottle/Config.in"
+ source "package/python-crc16/Config.in"
+ source "package/python-dpkt/Config.in"
+ source "package/python-id3/Config.in"
++source "package/python-ipy/Config.in"
+ source "package/python-mad/Config.in"
+ source "package/python-meld3/Config.in"
+ source "package/python-netifaces/Config.in"
+diff --git a/package/python-ipy/Config.in b/package/python-ipy/Config.in
+new file mode 100644
+index 0000000..bead932
+--- /dev/null
++++ b/package/python-ipy/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_PYTHON_IPY
++	bool "python-ipy"
++	depends on BR2_PACKAGE_PYTHON
++	help
++	  IPy - class and tools for handling of IPv4 and
++	  IPv6 addresses and networks.
++
++	  https://github.com/haypo/python-ipy/
+diff --git a/package/python-ipy/python-ipy.mk b/package/python-ipy/python-ipy.mk
+new file mode 100644
+index 0000000..9e09762
+--- /dev/null
++++ b/package/python-ipy/python-ipy.mk
+@@ -0,0 +1,30 @@
++################################################################################
++#
++# python-ipy
++#
++################################################################################
++
++PYTHON_IPY_VERSION = 0.75-0-g58006fb
++PYTHON_IPY_SOURCE  = haypo-python-ipy-IPy-$(PYTHON_IPY_VERSION).tar.gz
++PYTHON_IPY_SITE    = https://github.com/haypo/python-ipy/tarball/IPy-0.75
++PYTHON_IPY_DEPENDENCIES = host-python python
++PYTHON_IPY_LICENSE = BSD-3c
++PYTHON_IPY_LICENSE_FILES = COPYING
++
++define PYTHON_IPY_BUILD_CMDS
++	(cd $(@D); \
++		CC="$(TARGET_CC)" \
++		CFLAGS="$(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include" \
++		LDSHARED="$(TARGET_CC) -shared" \
++		LDFLAGS="$(TARGET_LDFLAGS) -L$(STAGING_DIR)/lib -L$(STAGING_DIR)/usr/lib" \
++		$(HOST_DIR)/usr/bin/python setup.py build_ext \
++		--include-dirs=$(STAGING_DIR)/usr/include/python$(PYTHON_VERSION_MAJOR) \
++	)
++	(cd $(@D); $(HOST_DIR)/usr/bin/python setup.py build)
++endef
++
++define PYTHON_IPY_INSTALL_TARGET_CMDS
++	(cd $(@D); $(HOST_DIR)/usr/bin/python setup.py install --prefix=$(TARGET_DIR)/usr)
++endef
++
++$(eval $(generic-package))
+-- 
+1.7.1
