@@ -1,34 +1,44 @@
-From: Clayton Shotwell <clshotwe@rockwellcollins.com>
-Date: Fri, 27 Sep 2013 09:51:50 -0500
-Subject: [Buildroot] [RFC] package: Redownload HEAD packages every build
-In-Reply-To: <1380293015-20331-1-git-send-email-clshotwe@rockwellcollins.com>
-References: <1380293015-20331-1-git-send-email-clshotwe@rockwellcollins.com>
-Message-ID: <OFB62018A9.E1F1612C-ON86257BF3.00517397-86257BF3.005194BE@rockwellcollins.com>
+From: ANDY KENNEDY <ANDY.KENNEDY@adtran.com>
+Date: Fri, 27 Sep 2013 14:56:33 +0000
+Subject: [Buildroot] [PATCH] Allow Buildroot to update toolchain
+In-Reply-To: <20130927100513.690cdd23@skate>
+References: <F9C551623D2CBB4C9488801D14F864C639AD62E9@ex-mb1.corp.adtran.com>
+ <87vc1n49b9.fsf@dell.be.48ers.dk>
+ <F9C551623D2CBB4C9488801D14F864C639AD653F@ex-mb1.corp.adtran.com>
+ <20130927100513.690cdd23@skate>
+Message-ID: <F9C551623D2CBB4C9488801D14F864C639AD6A4D@ex-mb1.corp.adtran.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Clayton Shotwell <clshotwe@rockwellcollins.com> wrote on 09/27/2013 
-09:43:35 AM:
-
-> Subject: [RFC] package: Redownload HEAD packages every build
+> I still don't understand. What you're explaining is exactly what
+> Buildroot is doing today. When you use an external toolchain, Buildroot
+> copies the toolchain sysroot (which contains just the C library) in
+> output/staging and then progressively "improves" this sysroot by adding
+> all the libraries that have been cross-compiled for your target.
 > 
-> Adding a check to remove a downloaded package if the version is 
-> HEAD. This causes the package to be re-downloaded with updated 
-> software. This feature is very useful during package development.
+> If what you need is then the ability to deliver this toolchain to
+> application developers who will not be using Buildroot, but need a
+> toolchain with all the libraries, then the proper way to do this is, as
+> Peter suggested, to do BR2_HOST_DIR=/opt/some-location/, then do your
+> Buildroot build, tarball /opt/some-location/ and deliver that as the
+> toolchain to be used by your application developers.
 
-I apologize for messing up the commit message.  That will be fixed in the 
-next version.
+Oh, really?  I totally missed that then.  I remember when that came
+out (like last year sometime, right?) but I didn't really look into
+it that much.
 
-Thanks,
-Clayton
+Well, cool!  I guess I reinvented the wheel on this one, eh?
 
-Clayton Shotwell
-Software Engineer
-clshotwe at rockwellcollins.com
-www.rockwellcollins.com 
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130927/bdca5831/attachment.html>
+I guess I'll try your way then and see what happens ;).
+
+If it works exactly as what I'm doing that's cool!
+
+> 
+> Or maybe I misunderstanding the use case?
+
+Um, yeah, that's it.  It isn't that I'm goofy or anything ;).
+
+Andy
