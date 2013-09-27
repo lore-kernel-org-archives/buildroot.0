@@ -1,37 +1,34 @@
 From: Clayton Shotwell <clshotwe@rockwellcollins.com>
-Date: Fri, 27 Sep 2013 09:43:35 -0500
+Date: Fri, 27 Sep 2013 09:51:50 -0500
 Subject: [Buildroot] [RFC] package: Redownload HEAD packages every build
-Message-ID: <1380293015-20331-1-git-send-email-clshotwe@rockwellcollins.com>
+In-Reply-To: <1380293015-20331-1-git-send-email-clshotwe@rockwellcollins.com>
+References: <1380293015-20331-1-git-send-email-clshotwe@rockwellcollins.com>
+Message-ID: <OFB62018A9.E1F1612C-ON86257BF3.00517397-86257BF3.005194BE@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Adding a check to remove a downloaded package if the version is HEAD. This causes the package to be re-downloaded with updated software. This feature is very useful during package development.
+Clayton Shotwell <clshotwe@rockwellcollins.com> wrote on 09/27/2013 
+09:43:35 AM:
 
-Signed-off-by: Clayton Shotwell <clshotwe@rockwellcollins.com>
----
- package/pkg-generic.mk |    7 +++++++
- 1 files changed, 7 insertions(+), 0 deletions(-)
+> Subject: [RFC] package: Redownload HEAD packages every build
+> 
+> Adding a check to remove a downloaded package if the version is 
+> HEAD. This causes the package to be re-downloaded with updated 
+> software. This feature is very useful during package development.
 
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index bfc4dc1..859c4a9 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -27,6 +27,13 @@
- # Retrieve the archive
- $(BUILD_DIR)/%/.stamp_downloaded:
- ifeq ($(DL_MODE),DOWNLOAD)
-+# Remove the pre-downloaded tar file if the package is a HEAD version
-+	$(Q)( \
-+	if test $($(PKG)_VERSION) == HEAD -a -e $(DL_DIR)/$($(PKG)_SOURCE); then \
-+		rm $(DL_DIR)/$($(PKG)_SOURCE); \
-+		$(call MESSAGE,"Removing $(PKG) HEAD source file"); \
-+	fi; \
-+	)
- # Only show the download message if it isn't already downloaded
- 	$(Q)if test ! -e $(DL_DIR)/$($(PKG)_SOURCE); then \
- 		$(call MESSAGE,"Downloading") ; \
--- 
-1.7.1
+I apologize for messing up the commit message.  That will be fixed in the 
+next version.
+
+Thanks,
+Clayton
+
+Clayton Shotwell
+Software Engineer
+clshotwe at rockwellcollins.com
+www.rockwellcollins.com 
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130927/bdca5831/attachment.html>
