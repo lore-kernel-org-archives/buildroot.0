@@ -1,35 +1,50 @@
-From: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
-Date: Fri, 27 Sep 2013 09:48:34 +0200
-Subject: [Buildroot] ntp init script and config file issue
-Message-ID: <52453852.20904@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 27 Sep 2013 10:05:13 +0200
+Subject: [Buildroot] [PATCH] Allow Buildroot to update toolchain
+In-Reply-To: <F9C551623D2CBB4C9488801D14F864C639AD653F@ex-mb1.corp.adtran.com>
+References: <F9C551623D2CBB4C9488801D14F864C639AD62E9@ex-mb1.corp.adtran.com>
+ <87vc1n49b9.fsf@dell.be.48ers.dk>
+ <F9C551623D2CBB4C9488801D14F864C639AD653F@ex-mb1.corp.adtran.com>
+Message-ID: <20130927100513.690cdd23@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Dear ANDY KENNEDY,
 
-i was just wondering: the ntp init script shipped in
-packages/ntp/S49ntpd sources the /etc/default/ntpd file, but it does not
-use all of the settings from there, only the NTPDATE_OPTS and the
-NTPSERVERS variables. It's seems to be faulty for me, but maybe i miss
-something obvious, please correct me if so. For my application i
-modified the init script to:
+On Thu, 26 Sep 2013 20:34:40 +0000, ANDY KENNEDY wrote:
 
-* also sources the /etc/ntpd file if exist, which overrides the settings
-coming from /etc/default/ntpd
+> Oh, my bad.  I mean for when one uses an external toolchain.  For
+> example:
+> 
+> I build a toolchain using Crosstool-NG.  I have a few libraries in
+> there, but to fully use this as a cross compiler I need things like
+> ncurses, pcap, lttng, etc.  In this case, I would either need to have
+> some sort of SYSROOT configured. It is not always desirable to have
+> those two items disjoined.  So, I dump my additional libraries into
+> the toolchain.
 
-* starts the daemon only if NTPD=yes
+I still don't understand. What you're explaining is exactly what
+Buildroot is doing today. When you use an external toolchain, Buildroot
+copies the toolchain sysroot (which contains just the C library) in
+output/staging and then progressively "improves" this sysroot by adding
+all the libraries that have been cross-compiled for your target.
 
-* also calls the ntpdate only when NTPDATE=yes
+If what you need is then the ability to deliver this toolchain to
+application developers who will not be using Buildroot, but need a
+toolchain with all the libraries, then the proper way to do this is, as
+Peter suggested, to do BR2_HOST_DIR=/opt/some-location/, then do your
+Buildroot build, tarball /opt/some-location/ and deliver that as the
+toolchain to be used by your application developers.
 
-Is the community interested in such a fix? If so, please let me know and
-I'll send in a patch.
-Thanks,
+Or maybe I misunderstanding the use case?
 
+Best regards,
+
+Thomas
 -- 
-br, 
-Zoltan Gyarmati
-mail: mr.zoltan.gyarmati at gmail.com
-freenode nick: zgyarmati
+Thomas Petazzoni, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
