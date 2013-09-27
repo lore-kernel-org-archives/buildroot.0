@@ -1,34 +1,32 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 27 Sep 2013 22:11:14 +0200
-Subject: [Buildroot] [git commit] package/gst1-plugins-bad: fix decklink
-	comment
-Message-ID: <20130927201422.A37219B8A5@busybox.osuosl.org>
+Date: Fri, 27 Sep 2013 22:09:15 +0200
+Subject: [Buildroot] [git commit] samba: bump to version 3.6.19
+Message-ID: <20130927201422.801619B8AA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=0c4c5619d0bb32e45a5be4f8d6e6f15cd2df9d2d
+commit: http://git.buildroot.net/buildroot/commit/?id=41d1628e301df564997bcc178e1dd532ad235b53
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-It was missing the dependency on the toolchain features.
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/gstreamer1/gst1-plugins-bad/Config.in |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+ package/samba/samba.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/gstreamer1/gst1-plugins-bad/Config.in b/package/gstreamer1/gst1-plugins-bad/Config.in
-index f30f2b3..0903aee 100644
---- a/package/gstreamer1/gst1-plugins-bad/Config.in
-+++ b/package/gstreamer1/gst1-plugins-bad/Config.in
-@@ -346,6 +346,7 @@ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_DECKLINK
- 	  Blackmagic Decklink plugin
+diff --git a/package/samba/samba.mk b/package/samba/samba.mk
+index cb80174..76a46b8 100644
+--- a/package/samba/samba.mk
++++ b/package/samba/samba.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- comment "decklink requires a toolchain with C++ support enabled"
-+	depends on !BR2_INSTALL_LIBSTDCPP
- 
- config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_DIRECTFB
- 	bool "directfb"
+-SAMBA_VERSION = 3.6.18
++SAMBA_VERSION = 3.6.19
+ SAMBA_SITE = http://ftp.samba.org/pub/samba/stable
+ SAMBA_SUBDIR = source3
+ SAMBA_INSTALL_STAGING = YES
