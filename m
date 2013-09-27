@@ -1,42 +1,39 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 27 Sep 2013 10:12:42 +0200
-Subject: [Buildroot] Recent and upcoming Buildroot talks
-Message-ID: <20130927101242.3dbc2bc8@skate>
+From: Axel Lin <axel.lin@ingics.com>
+Date: Fri, 27 Sep 2013 16:19:19 +0800
+Subject: [Buildroot] [PATCH] xinetd: needs mmu
+Message-ID: <1380269959.32472.1.camel@phoenix>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello all,
+Signed-off-by: Axel Lin <axel.lin@ingics.com>
+---
+Fixes below build error:
 
-There has been, or will be, a number of Buildroot talks at various
-conference:
+/opt/test/buildroot/buildroot/output/host/usr/bin/arm-buildroot-uclinux-uclibcgnueabi-gcc -pipe -Os   -Wl,-elf2flt -DNO_RPC  -I../libs/include  -o xinetd access.o addr.o builtins.o child.o conf.o confparse.o connection.o env.o ident.o init.o int.o intcommon.o internals.o log.o logctl.o main.o msg.o nvlists.o parse.o parsesup.o parsers.o reconfig.o retry.o sconf.o sensor.o server.o service.o signals.o special.o tcpint.o time.o udpint.o util.o redirect.o xgetloadavg.o options.o includedir.o xtimer.o inet.o xmdns.o -L../libs/lib -lsio -lmisc -lxlog -lportable -lstr -lpset -lm -lcrypt  || rm -f xinetd
+init.o: In function `init_daemon':
+init.c:(.text+0x318): undefined reference to `fork'
+int.o: In function `intercept':
+int.c:(.text+0x3a4): undefined reference to `fork'
+server.o: In function `server_start':
+server.c:(.text+0x1b8): undefined reference to `fork'
+collect2: ld returned 1 exit status
 
- * On Wednesday, at the Kernel Recipes conference in Paris, I gave a
-   short lightning talk titled "Rootfs made easy with Buildroot - How
-   kernel developers can finally solve the rootfs problem". The slides
-   are available at
-   http://free-electrons.com/pub/conferences/2013/kernel-recipes/rootfs-kernel-developer/rootfs-kernel-developer.pdf.
-   The video will be made available in the near future on the
-   conference website at http://kernel-recipes.org.
+ package/xinetd/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
- * At the Embedded Linux Conference Europe late October 2013, Peter
-   Korsgaard is going to give a talk titled "Buildroot: What's New". See
-   http://embeddedlinuxconferenceeu2013.sched.org/event/57df3a9a392f3eaa933d70d83b1c8b80.
-   The conference takes place in Edinburgh, right before the Buildroot
-   Developers Meeting.
-
- * At Linux Conf Australia in January 2014, I'm going to give a talk
-   "Buildroot: building embedded Linux systems made easy!". The
-   detailed conference schedule hasn't been announced yet, but the
-   conference is already visible on
-   https://lca2014.linux.org.au/programme/speakers.
-
-Best regards,
-
-Thomas Petazzoni
+diff --git a/package/xinetd/Config.in b/package/xinetd/Config.in
+index 76fe603..7f3575c 100644
+--- a/package/xinetd/Config.in
++++ b/package/xinetd/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_XINETD
+ 	bool "xinetd"
++	depends on BR2_USE_MMU # fork()
+ 	help
+ 	  xinetd is a secure replacement for inetd. It was originally written by
+ 	  panos at cs.colorado.edu.
 -- 
-Thomas Petazzoni, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.8.1.2
