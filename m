@@ -1,38 +1,35 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 27 Sep 2013 09:31:55 +0200
-Subject: [Buildroot] libgcc erroneously built as armv5 for
- arm920t(armv4t)
-In-Reply-To: <20130926175221.GC3418@free.fr>
-References: <1380209693.38971.YahooMailNeo@web162205.mail.bf1.yahoo.com>
- <20130926175405.67336473@skate> <20130926175221.GC3418@free.fr>
-Message-ID: <20130927093155.57432f09@skate>
+From: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
+Date: Fri, 27 Sep 2013 09:48:34 +0200
+Subject: [Buildroot] ntp init script and config file issue
+Message-ID: <52453852.20904@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+Hi,
 
-On Thu, 26 Sep 2013 19:52:21 +0200, Yann E. MORIN wrote:
+i was just wondering: the ntp init script shipped in
+packages/ntp/S49ntpd sources the /etc/default/ntpd file, but it does not
+use all of the settings from there, only the NTPDATE_OPTS and the
+NTPSERVERS variables. It's seems to be faulty for me, but maybe i miss
+something obvious, please correct me if so. For my application i
+modified the init script to:
 
-> In crosstool-Ng, we have this:
->     http://crosstool-ng.org/hg/crosstool-ng/annotate/98b7806295cc/patches/gcc/4.4.5/210-arm-unbreak-armv4t.patch#l1
-> 
-> For gcc, if --with-cpu is not specified, then it defaults to
-> TARGET_CPU_arm10tdmi which is an armv5 (as far as I understand it).
+* also sources the /etc/ntpd file if exist, which overrides the settings
+coming from /etc/default/ntpd
 
-So even when --with-arch=armv7a, gcc will use --with-cpu=arm10tdmi? I'm
-not sure to understand what will be the effect of having
---with-arch=armv7a and --with-cpu=arm10tdmi.
+* starts the daemon only if NTPD=yes
 
-> The patch above downgrades the default CPU to an armv4t. Maybe worth a
-> try. That, or passing --with-cpu=... as suggested by Adam.
+* also calls the ntpdate only when NTPDATE=yes
 
-Ok.
+Is the community interested in such a fix? If so, please let me know and
+I'll send in a patch.
+Thanks,
 
-Thomas
 -- 
-Thomas Petazzoni, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+br, 
+Zoltan Gyarmati
+mail: mr.zoltan.gyarmati at gmail.com
+freenode nick: zgyarmati
