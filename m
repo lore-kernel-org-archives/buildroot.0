@@ -1,88 +1,56 @@
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Fri, 27 Sep 2013 16:24:33 +0200
-Subject: [Buildroot] [RFCv1 10/11] toolchain-external: convert to the
- package infrastructure
-In-Reply-To: <1378416469-17708-11-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1378416469-17708-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1378416469-17708-11-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <52459521.9080809@lucaceresoli.net>
+From: Jason Kridner <jkridner@beagleboard.org>
+Date: Fri, 27 Sep 2013 10:24:50 -0400
+Subject: [Buildroot] [PATCH] beagleboneblack: add board
+In-Reply-To: <1380284469.22318.31.camel@viko>
+References: <1380220826-17732-1-git-send-email-jkridner@beagleboard.org>
+ <1380284469.22318.31.camel@viko>
+Message-ID: <CA+T6QP=hofgj0D+L2SPBO3UMs7Fe3CeqEwJfAxMynkncGPH0tA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas Petazzoni wrote:
-> This commit converts the 'toolchain-external' logic to the package
-> infrastructure.
+On Fri, Sep 27, 2013 at 8:21 AM, Fatih A??c? <fatih.asici@gmail.com> wrote:
+> On Thu, 2013-09-26 at 18:40 +0000, Jason Kridner wrote:
+>> From: Jason Kridner <jdk@ti.com>
+>>
+>> Signed-off-by: Jason Kridner <jdk@ti.com>
+>> ---
+>>  board/beagleboneblack/linux-3.8.config | 4305 ++++++++++++++++++++++++++++++++
+>>  configs/beagleboneblack_defconfig      |   38 +
+>>  2 files changed, 4343 insertions(+)
+>>  create mode 100644 board/beagleboneblack/linux-3.8.config
+>>  create mode 100644 configs/beagleboneblack_defconfig
+>>
 >
-> The TOOLCHAIN_EXTERNAL_DIR variable (which points to where the
-> toolchain is located) is renamed to TOOLCHAIN_EXTERNAL_INSTALL_DIR,
-> because the former conflicts with the package infrastructure (which
-> defines the <pkg>_DIR variable for each package as pointing to its
-> build directory).
+> Tested this with Beaglebone Black. u-boot loads kernel image
+> from /boot/uImage by default (see include/configs/am335x_evm.h) so that
+> BR2_LINUX_KERNEL_INSTALL_TARGET is needed to be able to boot.
 >
-> The new _SOURCE_ADDONS mechanism is used for Blackfin toolchains.
+> I see these errors at startup:
 >
-> The extract, configuration and installation steps are converted inside
-> the <pkg>_EXTRACT_CMDS, <pkg>_CONFIGURE_CMDS and
-> <pkg>_INSTALL_STAGING_CMDS.
+> /etc/init.d/S93-am335x-pm-firmware-load: line 4: can't
+> create /sys/devices/ocp.2/44d00000.wkup_m3/firmware/am335x-pm-firmware.bin/loading: nonexistent directory
+> /etc/init.d/S93-am335x-pm-firmware-load: line 5: can't
+> create /sys/devices/ocp.2/44d00000.wkup_m3/firmware/am335x-pm-firmware.bin/data: nonexistent directory
+> /etc/init.d/S93-am335x-pm-firmware-load: line 6: can't
+> create /sys/devices/ocp.2/44d00000.wkup_m3/firmware/am335x-pm-firmware.bin/loading: nonexistent directory
+
+First, there is an error in hardcoding the index. The script needs to
+be edited to say "ocp.*", since the index can change.
+
+Second, I'm missing something in my kernel defconfig for this wkup_m3
+to show up. I'll try to fix it in a second rev because right now I
+have a kernel/config I know works well.  I'll drop this package from
+my initial commit.
+
 >
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
-
-...
-
->   # Checks for an already installed toolchain: check the toolchain
->   # location, check that it supports sysroot, and then verify that it
->   # matches the configuration provided in Buildroot: ABI, C++ support,
->   # type of C library and all C library features.
-> -$(STAMP_DIR)/ext-toolchain-checked: $(TOOLCHAIN_EXTERNAL_DEPENDENCIES)
-> -	@$(call MESSAGE,"Checking external toolchain settings")
-> +define TOOLCHAIN_EXTERNAL_CONFIGURE_CMDS
->   	$(Q)$(call check_cross_compiler_exists,$(TOOLCHAIN_EXTERNAL_CC))
->   	$(Q)LIBC_A_LOCATION=`readlink -f $$(LANG=C $(TOOLCHAIN_EXTERNAL_CC) -print-file-name=libc.a)` ; \
->   	SYSROOT_DIR=`echo $${LIBC_A_LOCATION} | sed -r -e 's:usr/lib(32|64)?/(.*/)?libc\.a::'` ; \
-> @@ -385,7 +368,7 @@ $(STAMP_DIR)/ext-toolchain-checked: $(TOOLCHAIN_EXTERNAL_DEPENDENCIES)
->   	else \
->   		$(call check_glibc,$${SYSROOT_DIR}) ; \
->   	fi
-> -	$(Q)touch $@
-> +endef
-
-...
-
-> -toolchain-external: dependencies $(HOST_DIR)/usr/bin/ext-toolchain-wrapper
-> +# Even though we're installing things in both the staging, the host
-> +# and the target directory, we do everything within the
-> +# install-staging step, arbitrarily.
-> +define TOOLCHAIN_EXTERNAL_INSTALL_STAGING_CMDS
-> +	$(TOOLCHAIN_EXTERNAL_INSTALL_CORE)
-> +	$(TOOLCHAIN_EXTERNAL_INSTALL_BFIN_FDPIC)
-> +	$(TOOLCHAIN_EXTERNAL_INSTALL_BFIN_FLAT)
-> +	$(TOOLCHAIN_EXTERNAL_INSTALL_WRAPPER)
-> +endef
-
-At first sight, hijacking the configure step to check toolchain settings 
-and the
-install staging step to install into host and target does not look very 
-clean.
-I think here we are pushing the package infrastructure a bit beyond what 
-it is
-conceived for.
-
-Nevertheless this it not a very dirty hack (just a bit) and makes the 
-whole file
-a little simpler. Not to mention this unlocks new features, which is the 
-final
-goalof the whole patchset, isn't it?
-
-Overall I think the pros are stronger than the cons here. And extending the
-package infra just to make this one file more polite wouldn't be worth 
-the effort,
-I suppose. So:
-
-Acked-by: Luca Ceresoli <luca@lucaceresoli.net>
-
--- 
-Luca
+>
+> I have also tried my chance to boot "am335x evm starter kit" by adding
+> am335x-evmsk to the dts list; but it didn't boot :/
+>
+> Thanks,
+> Fatih
+>
+>
