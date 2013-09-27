@@ -1,54 +1,46 @@
-From: Ryan Barnett <rjbarnet@rockwellcollins.com>
-Date: Fri, 27 Sep 2013 08:07:23 -0500
+From: Jason Kridner <jkridner@beagleboard.org>
+Date: Fri, 27 Sep 2013 10:19:32 -0400
 Subject: [Buildroot] [PATCH] beagleboneblack: add board
-In-Reply-To: <CA+T6QPknCP3O2uM_S8va-MqY+jjzmojgmADw3wg4=4ePNmLw0A@mail.gmail.com>
-References: <1380220826-17732-1-git-send-email-jkridner@beagleboard.org>	<87bo3f5pz4.fsf@dell.be.48ers.dk>
+In-Reply-To: <1380262376.22318.10.camel@viko>
+References: <1380220826-17732-1-git-send-email-jkridner@beagleboard.org>
+ <87bo3f5pz4.fsf@dell.be.48ers.dk>
  <OF4892FC0E.FA9FE3E3-ON86257BF2.006E10F1-86257BF2.006EC6A2@rockwellcollins.com>
  <CA+T6QPknCP3O2uM_S8va-MqY+jjzmojgmADw3wg4=4ePNmLw0A@mail.gmail.com>
-Message-ID: <OF041F2659.5DF7B620-ON86257BF3.00475360-86257BF3.0048165F@rockwellcollins.com>
+ <1380262376.22318.10.camel@viko>
+Message-ID: <CA+T6QPm4Er6ECV=YzDofWjMB61SxwgXbS35k3KkpYqHO+ZTFoA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Jason,
+On Fri, Sep 27, 2013 at 2:12 AM, Fatih A??c? <fatih.asici@gmail.com> wrote:
+> On Thu, 2013-09-26 at 16:53 -0400, Jason Kridner wrote:
+>> > Would there be any issues with bumping the kernel version to this
+>> for
+>> > the original (white) beaglebone as well?
+>>
+>> Nope. I could make one build that supported both boards, but it would
+>> need to have both .dtb files in it. That's the only reason I made a
+>> separate config. Is there an easy way to include multiple .dtb files?
+>> Mainline u-boot is smart enough to tell me which one needs to be used
+>> at boot.
+>>
+> This seems possible according to linux/Config.in:
+>
+> "
+> config BR2_LINUX_KERNEL_INTREE_DTS_NAME
+>         string "Device Tree Source file names"
+>         depends on BR2_LINUX_KERNEL_USE_INTREE_DTS
+>         help
+>          Name of the device tree source file, without
+>          the trailing .dts. You can provide a list of
+>          dts files to build, separated by spaces.
+> "
 
-Jason Kridner <jkridner@beagleboard.org> wrote on 09/26/2013 03:53:46 PM:
+Adding multiple makes it not output any .dtb files to the
+output/images directory. It seems there is a single assignment in
+linux.mk. :(
 
-[...]
-
-> >
-> > I believe there is an issue with that kernel where it is unable to
-> > compile the musb driver for the omap (CONFIG_USB_MUSB_OMAP2PLUS)
-> > statically into the kernel because it will default to being a module
-> > which will cause the kernel to fail to compile. I ran into this issue
-> > with the Beagleboard-XM with the same kernel. The solution I found was
-> > here:
-> >
-> > http://www.spinics.net/lists/linux-usb/msg67054.html
-> >
-> > I think added this patch to the kernel which I would may recommend 
-adding
-> > to the git repository you reference for this kernel.
-> 
-> Well, the musb is working in my image, so I'm not sure what to say
-> other than I don't think this is necessary. I will move to the
-> mainline kernel as soon as the features are sufficiently stable.
-
-OK, well there was someone on the IRC that was saying they were having 
-issues
-saving a defconfig for the beaglebone black on the IRC where the defconfig
-wasn't translating correctly to the full config. I guess that wasn't 
-you. 
-
-I ran into that problem after I saw the talk on the IRC so I thought I
-would make my solution to the problem available on the mailing list.
- 
-[...]
-
-Thanks,
--Ryan
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130927/d103706b/attachment.html>
+>
+>
