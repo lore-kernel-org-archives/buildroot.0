@@ -1,65 +1,59 @@
 From: Eric Nelson <eric.nelson@boundarydevices.com>
-Date: Sun, 29 Sep 2013 15:54:56 -0700
-Subject: [Buildroot] [PATCH 2/4] i.MX: Use FREESCALE_IMX_MIRROR_SITE for
-	newly-moved packages
-In-Reply-To: <1380495298-22823-1-git-send-email-eric.nelson@boundarydevices.com>
-References: <1380495298-22823-1-git-send-email-eric.nelson@boundarydevices.com>
-Message-ID: <1380495298-22823-3-git-send-email-eric.nelson@boundarydevices.com>
+Date: Sun, 29 Sep 2013 15:54:54 -0700
+Subject: [Buildroot] [PATCH 0/4] i.MX: Refactor and update library versions
+Message-ID: <1380495298-22823-1-git-send-email-eric.nelson@boundarydevices.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Now that libfslcodec, libfslparser, and libfslvpuwrap are in
-the package/freescale-imx directory, they can share the
-_SITE mirror with other similar packages.
+This patch set restructures several libraries to share common
+Makefile fragments in package/freescale-imx and bumps the 
+library versions to match the Freescale 3.0.35_4.1.0 release
+for i.MX6.
 
-Signed-off-by: Eric Nelson <eric.nelson@boundarydevices.com>
----
- package/freescale-imx/libfslcodec/libfslcodec.mk     | 2 +-
- package/freescale-imx/libfslparser/libfslparser.mk   | 2 +-
- package/freescale-imx/libfslvpuwrap/libfslvpuwrap.mk | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
+This series essentially replaces and improves upon patch 4/4
+sent on 2013-09-25:
+	http://lists.busybox.net/pipermail/buildroot/2013-September/thread.html#78989
 
-diff --git a/package/freescale-imx/libfslcodec/libfslcodec.mk b/package/freescale-imx/libfslcodec/libfslcodec.mk
-index c18332a..e0dca7f 100644
---- a/package/freescale-imx/libfslcodec/libfslcodec.mk
-+++ b/package/freescale-imx/libfslcodec/libfslcodec.mk
-@@ -6,7 +6,7 @@
- 
- LIBFSLCODEC_VERSION = 3.0.1
- # No official download site from freescale, just this mirror
--LIBFSLCODEC_SITE = http://download.ossystems.com.br/bsp/freescale/source
-+LIBFSLCODEC_SITE = $(FREESCALE_IMX_MIRROR_SITE)
- LIBFSLCODEC_SOURCE = libfslcodec-$(LIBFSLCODEC_VERSION).bin
- LIBFSLCODEC_LICENSE = Freescale Semiconductor Software License Agreement, BSD-3c (flac, ogg headers)
- LIBFSLCODEC_LICENSE_FILES = EULA EULA.txt
-diff --git a/package/freescale-imx/libfslparser/libfslparser.mk b/package/freescale-imx/libfslparser/libfslparser.mk
-index 3e27a6a..c2af129 100644
---- a/package/freescale-imx/libfslparser/libfslparser.mk
-+++ b/package/freescale-imx/libfslparser/libfslparser.mk
-@@ -6,7 +6,7 @@
- 
- LIBFSLPARSER_VERSION = 3.0.1
- # No official download site from freescale, just this mirror
--LIBFSLPARSER_SITE = http://download.ossystems.com.br/bsp/freescale/source
-+LIBFSLPARSER_SITE = $(FREESCALE_IMX_MIRROR_SITE)
- LIBFSLPARSER_SOURCE = libfslparser-$(LIBFSLPARSER_VERSION).bin
- LIBFSLPARSER_LICENSE = Freescale Semiconductor Software License Agreement
- LIBFSLPARSER_LICENSE_FILES = EULA EULA.txt
-diff --git a/package/freescale-imx/libfslvpuwrap/libfslvpuwrap.mk b/package/freescale-imx/libfslvpuwrap/libfslvpuwrap.mk
-index 1bc7129..f4539f3 100644
---- a/package/freescale-imx/libfslvpuwrap/libfslvpuwrap.mk
-+++ b/package/freescale-imx/libfslvpuwrap/libfslvpuwrap.mk
-@@ -6,7 +6,7 @@
- 
- LIBFSLVPUWRAP_VERSION = 1.0.17
- # No official download site from freescale, just this mirror
--LIBFSLVPUWRAP_SITE = http://download.ossystems.com.br/bsp/freescale/source
-+LIBFSLVPUWRAP_SITE = $(FREESCALE_IMX_MIRROR_SITE)
- LIBFSLVPUWRAP_LICENSE = Freescale Semiconductor Software License Agreement
- LIBFSLVPUWRAP_LICENSE_FILES = EULA.txt
- LIBFSLVPUWRAP_REDISTRIBUTE = NO
+Eric Nelson (4):
+  i.MX: move Freescale i.MX packages into freescale-imx/
+  i.MX: Use FREESCALE_IMX_MIRROR_SITE for newly-moved packages
+  i.MX6: Use canonical site for Freescale packages
+  i.MX: Bump library versions to latest release (3.0.35-4.1.0)
+
+ package/Config.in                                  |  3 --
+ package/freescale-imx/Config.in                    |  3 ++
+ package/freescale-imx/firmware-imx/firmware-imx.mk |  2 +-
+ package/freescale-imx/freescale-imx.mk             |  6 ++--
+ .../gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk           |  8 +++--
+ package/freescale-imx/imx-lib/imx-lib.mk           | 18 ++++++++--
+ package/freescale-imx/libfslcodec/Config.in        |  8 +++++
+ package/freescale-imx/libfslcodec/libfslcodec.mk   | 39 ++++++++++++++++++++
+ package/freescale-imx/libfslparser/Config.in       |  8 +++++
+ package/freescale-imx/libfslparser/libfslparser.mk | 41 ++++++++++++++++++++++
+ package/freescale-imx/libfslvpuwrap/Config.in      | 13 +++++++
+ .../freescale-imx/libfslvpuwrap/libfslvpuwrap.mk   | 35 ++++++++++++++++++
+ package/libfslcodec/Config.in                      |  8 -----
+ package/libfslcodec/libfslcodec.mk                 | 40 ---------------------
+ package/libfslparser/Config.in                     |  8 -----
+ package/libfslparser/libfslparser.mk               | 40 ---------------------
+ package/libfslvpuwrap/Config.in                    | 13 -------
+ package/libfslvpuwrap/libfslvpuwrap.mk             | 18 ----------
+ 18 files changed, 172 insertions(+), 139 deletions(-)
+ create mode 100644 package/freescale-imx/libfslcodec/Config.in
+ create mode 100644 package/freescale-imx/libfslcodec/libfslcodec.mk
+ create mode 100644 package/freescale-imx/libfslparser/Config.in
+ create mode 100644 package/freescale-imx/libfslparser/libfslparser.mk
+ create mode 100644 package/freescale-imx/libfslvpuwrap/Config.in
+ create mode 100644 package/freescale-imx/libfslvpuwrap/libfslvpuwrap.mk
+ delete mode 100644 package/libfslcodec/Config.in
+ delete mode 100644 package/libfslcodec/libfslcodec.mk
+ delete mode 100644 package/libfslparser/Config.in
+ delete mode 100644 package/libfslparser/libfslparser.mk
+ delete mode 100644 package/libfslvpuwrap/Config.in
+ delete mode 100644 package/libfslvpuwrap/libfslvpuwrap.mk
+
 -- 
 1.8.1.2
