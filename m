@@ -1,56 +1,42 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 29 Sep 2013 10:26:12 +0200
-Subject: [Buildroot] [git commit] configs: add Freescale SABRE-SD board
-	support
-Message-ID: <20130929083442.57A159B880@busybox.osuosl.org>
+From: Michael Rommel <rommel@layer-7.net>
+Date: Sun, 29 Sep 2013 14:59:32 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+	2013-09-28
+In-Reply-To: <20130929063005.E848752C1A0@lolut.humanoidz.org>
+References: <20130929063005.E848752C1A0@lolut.humanoidz.org>
+Message-ID: <E69A5ED7-8837-4975-B209-CB92E817949A@layer-7.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=867867bb1914ce4196d1e9f3fc64e806ea516bf1
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Thomas,
 
-SABRE Board for Smart Devices (SABRE-SD) is Freescale's evaluation board
-based on the i.MX 6Quad ARM Cortex-A9 applications processor.
+I took the config file from: 
 
-This defconfig is based off Freescale "official" git repo on git.freescale.com
-and SW release 3.0.35_4.1.0.
+  http://autobuild.buildroot.net/results/9fb298d4e09a6f9b88207909d583dce05392048e/config
 
-[Peter: add comments to defconfig]
-Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- configs/freescale_imx6sabresd_defconfig |   23 +++++++++++++++++++++++
- 1 files changed, 23 insertions(+), 0 deletions(-)
+and reproduced the error. After some tinkering I found that the build option "prefer static libraries" causes aiccu and knock to not compile on the arm architecture. I am not expert enough to find out why this is the case, so I wanted to ask whether there is a way to specify for some programs that they are not compatible with this setting and maybe disable them from being shown in the menuconfig. 
 
-diff --git a/configs/freescale_imx6sabresd_defconfig b/configs/freescale_imx6sabresd_defconfig
-new file mode 100644
-index 0000000..b030eee
---- /dev/null
-+++ b/configs/freescale_imx6sabresd_defconfig
-@@ -0,0 +1,23 @@
-+# architecture
-+BR2_arm=y
-+BR2_cortex_a9=y
-+
-+# system
-+BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
-+
-+# kernel
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_GIT=y
-+BR2_LINUX_KERNEL_CUSTOM_GIT_REPO_URL="git://git.freescale.com/imx/linux-2.6-imx.git"
-+BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION="rel_imx_3.0.35_4.1.0"
-+BR2_LINUX_KERNEL_DEFCONFIG="imx6"
-+
-+# filesystem
-+BR2_TARGET_ROOTFS_EXT2=y
-+
-+# bootloader
-+BR2_TARGET_UBOOT=y
-+BR2_TARGET_UBOOT_BOARDNAME="mx6q_sabresd"
-+BR2_TARGET_UBOOT_CUSTOM_GIT=y
-+BR2_TARGET_UBOOT_CUSTOM_GIT_REPO_URL="git://git.freescale.com/imx/uboot-imx.git"
-+BR2_TARGET_UBOOT_CUSTOM_GIT_VERSION="rel_imx_3.0.35_4.1.0"
+Or if someone has an idea where I could start looking, please tell me. I have no clue, why static linking fails completely, even when the libraries are available in .../target/usr/lib, e.g. libgnutls.a and .la. 
+
+  Michael.
+
+-- 
+Michael Rommel, Erlangen, Germany
+
+On Sep 29, 2013, at 8:30 , Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
+
+> Build statistics for 2013-09-28
+> ===============================
+> 
+>                aiccu-20070115 | 2 
+> 
+> Detail of failures
+> ===================
+> 
+>      i686 |                 aiccu-20070115 | NOK | http://autobuild.buildroot.net/results/308087e1f85e822dec8b73a3ed892c7cd2376cbd/
+>       arm |                 aiccu-20070115 | NOK | http://autobuild.buildroot.net/results/9fb298d4e09a6f9b88207909d583dce05392048e/
+> 
+> 
