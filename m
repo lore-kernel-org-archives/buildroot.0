@@ -1,49 +1,125 @@
-From: Michael Rommel <rommel@layer-7.net>
-Date: Sun, 29 Sep 2013 23:01:28 +0200
-Subject: [Buildroot] [buildroot] [PATCH] aiccu: patched Makefile to enable
-	static linking
-Message-ID: <1380488488-9510-1-git-send-email-rommel@layer-7.net>
+From: Eric Nelson <eric.nelson@boundarydevices.com>
+Date: Sun, 29 Sep 2013 15:54:57 -0700
+Subject: [Buildroot] [PATCH 3/4] i.MX6: Use canonical site for Freescale
+	packages
+In-Reply-To: <1380495298-22823-1-git-send-email-eric.nelson@boundarydevices.com>
+References: <1380495298-22823-1-git-send-email-eric.nelson@boundarydevices.com>
+Message-ID: <1380495298-22823-4-git-send-email-eric.nelson@boundarydevices.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Use official Freescale site for distribution of i.MX packages,
+rename FREESCALE_IMX_MIRROR_SITE to FREESCALE_IMX_SITE as
+suggested by Peter Korsgaard.
 
-Signed-off-by: Michael Rommel <rommel@layer-7.net>
+Signed-off-by: Eric Nelson <eric.nelson@boundarydevices.com>
 ---
-v1: initial patch to add required libraries for static linking to LDFLAGS
-    and reorder the CC commandline
+ package/freescale-imx/firmware-imx/firmware-imx.mk         | 2 +-
+ package/freescale-imx/freescale-imx.mk                     | 4 ++--
+ package/freescale-imx/gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk | 2 +-
+ package/freescale-imx/imx-lib/imx-lib.mk                   | 2 +-
+ package/freescale-imx/libfslcodec/libfslcodec.mk           | 3 +--
+ package/freescale-imx/libfslparser/libfslparser.mk         | 3 +--
+ package/freescale-imx/libfslvpuwrap/libfslvpuwrap.mk       | 3 +--
+ 7 files changed, 8 insertions(+), 11 deletions(-)
 
- ...cu-0002-makefile-reorder-linked-libraries.patch |   20 ++++++++++++++++++++
- 1 file changed, 20 insertions(+)
- create mode 100644 package/aiccu/aiccu-0002-makefile-reorder-linked-libraries.patch
-
-diff --git a/package/aiccu/aiccu-0002-makefile-reorder-linked-libraries.patch b/package/aiccu/aiccu-0002-makefile-reorder-linked-libraries.patch
-new file mode 100644
-index 0000000..07c9eb3
---- /dev/null
-+++ b/package/aiccu/aiccu-0002-makefile-reorder-linked-libraries.patch
-@@ -0,0 +1,20 @@
-+--- aiccu_20070115.orig/unix-console/Makefile	2007-01-15 12:04:27.000000000 +0100
-++++ aiccu_20070115/unix-console/Makefile	2013-09-29 22:54:42.742963861 +0200
-+@@ -42,7 +42,7 @@ CFLAGS	+= -D AICCU_CONSOLE
-+ # Currently defaultly builds only on Linux, but other platforms might easily also support it
-+ ifeq ($(shell uname | grep -c "Linux"),1)
-+ CFLAGS	+= -D AICCU_GNUTLS
-+-LDFLAGS += -lgnutls
-++LDFLAGS += -lgnutls -lhogweed -lnettle -lgmp -lz
-+ endif
-+ 
-+ # Linux
-+@@ -144,7 +144,7 @@ endif
-+ all: aiccu
-+ 
-+ aiccu:	$(OBJS) ${SRCS} ${INCS}
-+-	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $(OBJS)
-++	$(CC) $(CFLAGS) -o $@ $(OBJS) $(LDFLAGS)
-+ ifeq ($(shell echo $(CFLAGS) | grep -c "DEBUG"),0)
-+ ifeq ($(shell echo "$(RPM_OPT_FLAGS)" | wc -c),1)
-+ 	strip $@
+diff --git a/package/freescale-imx/firmware-imx/firmware-imx.mk b/package/freescale-imx/firmware-imx/firmware-imx.mk
+index d9fcb89..d26b31c 100644
+--- a/package/freescale-imx/firmware-imx/firmware-imx.mk
++++ b/package/freescale-imx/firmware-imx/firmware-imx.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ FIRMWARE_IMX_VERSION = $(FREESCALE_IMX_VERSION)
+-FIRMWARE_IMX_SITE = $(FREESCALE_IMX_MIRROR_SITE)
++FIRMWARE_IMX_SITE = $(FREESCALE_IMX_SITE)
+ FIRMWARE_IMX_SOURCE = firmware-imx-$(FIRMWARE_IMX_VERSION).bin
+ FIRMWARE_IMX_LICENSE = Freescale Semiconductor Software License Agreement, \
+ 	Atheros license (ath6k)
+diff --git a/package/freescale-imx/freescale-imx.mk b/package/freescale-imx/freescale-imx.mk
+index d35a62e..47e7be2 100644
+--- a/package/freescale-imx/freescale-imx.mk
++++ b/package/freescale-imx/freescale-imx.mk
+@@ -6,7 +6,7 @@
+ 
+ FREESCALE_IMX_VERSION = 1.1.0
+ 
+-# No official download site from freescale, just this mirror
+-FREESCALE_IMX_MIRROR_SITE   = http://download.ossystems.com.br/bsp/freescale/source
++FREESCALE_IMX_SITE   = http://www.freescale.com/lgfiles/NMG/MAD/YOCTO/
++#FREESCALE_IMX_MIRROR_SITE   = http://download.ossystems.com.br/bsp/freescale/source
+ 
+ include $(sort $(wildcard package/freescale-imx/*/*.mk))
+diff --git a/package/freescale-imx/gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk b/package/freescale-imx/gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk
+index c48d108..8e979ee 100644
+--- a/package/freescale-imx/gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk
++++ b/package/freescale-imx/gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ GPU_VIV_BIN_MX6Q_VERSION = $(FREESCALE_IMX_VERSION)
+-GPU_VIV_BIN_MX6Q_SITE    = $(FREESCALE_IMX_MIRROR_SITE)
++GPU_VIV_BIN_MX6Q_SITE    = $(FREESCALE_IMX_SITE)
+ GPU_VIV_BIN_MX6Q_SOURCE  = gpu-viv-bin-mx6q-$(GPU_VIV_BIN_MX6Q_VERSION).bin
+ 
+ GPU_VIV_BIN_MX6Q_INSTALL_STAGING = YES
+diff --git a/package/freescale-imx/imx-lib/imx-lib.mk b/package/freescale-imx/imx-lib/imx-lib.mk
+index bd7e174..e1a68ef 100644
+--- a/package/freescale-imx/imx-lib/imx-lib.mk
++++ b/package/freescale-imx/imx-lib/imx-lib.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ IMX_LIB_VERSION = $(FREESCALE_IMX_VERSION)
+-IMX_LIB_SITE    = $(FREESCALE_IMX_MIRROR_SITE)
++IMX_LIB_SITE    = $(FREESCALE_IMX_SITE)
+ IMX_LIB_LICENSE = LGPLv2.1+
+ # No license file included
+ 
+diff --git a/package/freescale-imx/libfslcodec/libfslcodec.mk b/package/freescale-imx/libfslcodec/libfslcodec.mk
+index e0dca7f..ad1cc63 100644
+--- a/package/freescale-imx/libfslcodec/libfslcodec.mk
++++ b/package/freescale-imx/libfslcodec/libfslcodec.mk
+@@ -5,8 +5,7 @@
+ ################################################################################
+ 
+ LIBFSLCODEC_VERSION = 3.0.1
+-# No official download site from freescale, just this mirror
+-LIBFSLCODEC_SITE = $(FREESCALE_IMX_MIRROR_SITE)
++LIBFSLCODEC_SITE = $(FREESCALE_IMX_SITE)
+ LIBFSLCODEC_SOURCE = libfslcodec-$(LIBFSLCODEC_VERSION).bin
+ LIBFSLCODEC_LICENSE = Freescale Semiconductor Software License Agreement, BSD-3c (flac, ogg headers)
+ LIBFSLCODEC_LICENSE_FILES = EULA EULA.txt
+diff --git a/package/freescale-imx/libfslparser/libfslparser.mk b/package/freescale-imx/libfslparser/libfslparser.mk
+index c2af129..3aab3a7 100644
+--- a/package/freescale-imx/libfslparser/libfslparser.mk
++++ b/package/freescale-imx/libfslparser/libfslparser.mk
+@@ -5,8 +5,7 @@
+ ################################################################################
+ 
+ LIBFSLPARSER_VERSION = 3.0.1
+-# No official download site from freescale, just this mirror
+-LIBFSLPARSER_SITE = $(FREESCALE_IMX_MIRROR_SITE)
++LIBFSLPARSER_SITE = $(FREESCALE_IMX_SITE)
+ LIBFSLPARSER_SOURCE = libfslparser-$(LIBFSLPARSER_VERSION).bin
+ LIBFSLPARSER_LICENSE = Freescale Semiconductor Software License Agreement
+ LIBFSLPARSER_LICENSE_FILES = EULA EULA.txt
+diff --git a/package/freescale-imx/libfslvpuwrap/libfslvpuwrap.mk b/package/freescale-imx/libfslvpuwrap/libfslvpuwrap.mk
+index f4539f3..346a20a 100644
+--- a/package/freescale-imx/libfslvpuwrap/libfslvpuwrap.mk
++++ b/package/freescale-imx/libfslvpuwrap/libfslvpuwrap.mk
+@@ -5,8 +5,7 @@
+ ################################################################################
+ 
+ LIBFSLVPUWRAP_VERSION = 1.0.17
+-# No official download site from freescale, just this mirror
+-LIBFSLVPUWRAP_SITE = $(FREESCALE_IMX_MIRROR_SITE)
++LIBFSLVPUWRAP_SITE = $(FREESCALE_IMX_SITE)
+ LIBFSLVPUWRAP_LICENSE = Freescale Semiconductor Software License Agreement
+ LIBFSLVPUWRAP_LICENSE_FILES = EULA.txt
+ LIBFSLVPUWRAP_REDISTRIBUTE = NO
 -- 
-1.7.10.4
+1.8.1.2
