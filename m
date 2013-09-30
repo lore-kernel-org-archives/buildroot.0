@@ -1,65 +1,113 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 30 Sep 2013 23:20:45 +0200
-Subject: [Buildroot] [PATCH 2/4] python: fix python-config for
-	cross-compilation
+Date: Mon, 30 Sep 2013 23:20:47 +0200
+Subject: [Buildroot] [PATCH 4/4] trace-cmd: improve Python support
 In-Reply-To: <1380576047-21001-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1380576047-21001-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1380576047-21001-2-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1380576047-21001-4-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Some packages (trace-cmd) use python-config to find out which headers
-and libraries should be used to link against the Python libraries. By
-default, python-config returns paths that are inappropriate for
-cross-compilation: this patch fixes this by prepending those paths by
-the staging directory location.
+Unless NO_PYTHON is defined, the trace-cmd build system calls the host
+python and tries to use it, causing build failures. So we now pass
+NO_PYTHON properly when Python is not available for the target.
 
-We also fix one of the python*-config file to actually be a symbolic
-link to the script, rather than a copy of it.
+Fixes:
+
+  http://autobuild.buildroot.net/results/1c4567a230940a5287d03e2a5c2c7afbdc64cd36/build-end.log
+
+We also fix the trace-cmd build to properly link against the target
+Python library, when Python is enabled for the target.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/python/python.mk | 21 +++++++++++++++++----
- 1 file changed, 17 insertions(+), 4 deletions(-)
+ .../trace-cmd-0001-support-for-python-config.patch | 48 ++++++++++++++++++++++
+ package/trace-cmd/trace-cmd.mk                     | 13 ++++++
+ 2 files changed, 61 insertions(+)
+ create mode 100644 package/trace-cmd/trace-cmd-0001-support-for-python-config.patch
 
-diff --git a/package/python/python.mk b/package/python/python.mk
-index df02b35..dfa0686 100644
---- a/package/python/python.mk
-+++ b/package/python/python.mk
-@@ -134,14 +134,27 @@ PYTHON_MAKE_ENV = \
- 	PYTHON_MODULES_INCLUDE=$(STAGING_DIR)/usr/include \
- 	PYTHON_MODULES_LIB="$(STAGING_DIR)/lib $(STAGING_DIR)/usr/lib"
+diff --git a/package/trace-cmd/trace-cmd-0001-support-for-python-config.patch b/package/trace-cmd/trace-cmd-0001-support-for-python-config.patch
+new file mode 100644
+index 0000000..dc9d1d2
+--- /dev/null
++++ b/package/trace-cmd/trace-cmd-0001-support-for-python-config.patch
+@@ -0,0 +1,48 @@
++From 1fb959ec7c2e7f1d663db3125f190ead2f3be91c Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++Date: Mon, 23 Sep 2013 17:55:00 +0200
++Subject: [PATCH] Support for PYTHON_CONFIG
++
++This patch adds support for a PYTHON_CONFIG variable, which can be
++overriden from the make command line. In cross-compilation cases, it
++allows to override which python-config program should be used to find
++the Python headers and libraries.
++
++We also remove the flags added from the distutils LINKFORSHARED
++variable, as they come from the host build, and are anyway already
++provided by the python-config --ldflags option.
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++---
++ Makefile | 8 ++++----
++ 1 file changed, 4 insertions(+), 4 deletions(-)
++
++diff --git a/Makefile b/Makefile
++index 83329ca..5c5c71b 100644
++--- a/Makefile
+++++ b/Makefile
++@@ -81,7 +81,8 @@ PYTHON		:= ctracecmd.so
++ PYTHON_GUI	:= ctracecmd.so ctracecmdgui.so
++ 
++ # Can build python?
++-ifeq ($(shell sh -c "python-config --includes > /dev/null 2>&1 && echo y"), y)
+++PYTHON_CONFIG = python-config
+++ifeq ($(shell sh -c "$(PYTHON_CONFIG) --includes > /dev/null 2>&1 && echo y"), y)
++ 	PYTHON_PLUGINS := plugin_python.so
++ 	BUILD_PYTHON := $(PYTHON) $(PYTHON_PLUGINS)
++ 	PYTHON_SO_INSTALL := ctracecmd.install
++@@ -546,9 +547,8 @@ clean:
++ 
++ ##### PYTHON STUFF #####
++ 
++-PYTHON_INCLUDES = `python-config --includes`
++-PYTHON_LDFLAGS = `python-config --ldflags` \
++-		$(shell python -c "import distutils.sysconfig; print distutils.sysconfig.get_config_var('LINKFORSHARED')")
+++PYTHON_INCLUDES = `$(PYTHON_CONFIG) --includes`
+++PYTHON_LDFLAGS = `$(PYTHON_CONFIG) --ldflags`
++ PYGTK_CFLAGS = `pkg-config --cflags pygtk-2.0`
++ 
++ ctracecmd.so: $(TCMD_LIB_OBJS) ctracecmd.i
++-- 
++1.8.1.2
++
+diff --git a/package/trace-cmd/trace-cmd.mk b/package/trace-cmd/trace-cmd.mk
+index 7a750f9..191eb6d 100644
+--- a/package/trace-cmd/trace-cmd.mk
++++ b/package/trace-cmd/trace-cmd.mk
+@@ -15,9 +15,22 @@ TRACE_CMD_LICENSE_FILES = COPYING COPYING.LIB
+ # redefining it on the command line causes build problems.
+ TRACE_CMD_CFLAGS=$(filter-out -D_LARGEFILE64_SOURCE,$(TARGET_CFLAGS)) -D_GNU_SOURCE
  
--# python distutils adds -L$LIBDIR when linking binary extensions, causing
--# trouble for cross compilation
--define PYTHON_FIXUP_LIBDIR
-+# 1. python distutils adds -L$LIBDIR when linking binary extensions,
-+# causing trouble for cross compilation.
-+#
-+# 2. adjust the python-config in the staging directory so that it
-+# returns include paths that are valid on the build machine (i.e
-+# prefixed by the STAGING_DIR).
-+#
-+# 3. make sure all python-*config are symbolic links to
-+# python2.7-config, instead of being another file.
-+#
-+define PYTHON_FIXUP_DIRS
- 	$(SED) 's|^LIBDIR=.*|LIBDIR= $(STAGING_DIR)/usr/lib|' \
- 	   $(STAGING_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/config/Makefile
-+	$(SED) "s|'-I'|'-I$(STAGING_DIR)'|" \
-+	   $(STAGING_DIR)/usr/bin/python$(PYTHON_VERSION_MAJOR)-config
-+	$(RM) -f $(STAGING_DIR)/usr/bin/python-config
-+	ln -sf $(STAGING_DIR)/usr/bin/python$(PYTHON_VERSION_MAJOR)-config \
-+		$(STAGING_DIR)/usr/bin/python-config
++ifeq ($(BR2_PACKAGE_PYTHON)$(BR2_PACKAGE_PYTHON3),)
++TRACE_CMD_MAKE_OPTS += NO_PYTHON=1
++else ifeq ($(BR2_PACKAGE_PYTHON),y)
++TRACE_CMD_DEPENDENCIES += python host-swig
++TRACE_CMD_MAKE_OPTS += \
++	PYTHON_CONFIG=$(STAGING_DIR)/usr/bin/python$(PYTHON_VERSION_MAJOR)-config
++else ifeq ($(BR2_PACKAGE_PYTHON3),y)
++TRACE_CMD_DEPENDENCIES += python3 host-swig
++TRACE_CMD_MAKE_OPTS += \
++	PYTHON_CONFIG=$(STAGING_DIR)/usr/bin/python$(PYTHON3_VERSION_MAJOR)-config
++endif
++
+ define TRACE_CMD_BUILD_CMDS
+ 	$(MAKE) $(TARGET_CONFIGURE_OPTS) \
+ 		CFLAGS="$(TRACE_CMD_CFLAGS)" \
++		$(TRACE_CMD_MAKE_OPTS) \
+ 		-C $(@D) all
  endef
  
--PYTHON_POST_INSTALL_STAGING_HOOKS += PYTHON_FIXUP_LIBDIR
-+PYTHON_POST_INSTALL_STAGING_HOOKS += PYTHON_FIXUP_DIRS
- 
- #
- # Remove useless files. In the config/ directory, only the Makefile
 -- 
 1.8.1.2
