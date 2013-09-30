@@ -1,34 +1,54 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 30 Sep 2013 14:17:23 +0200
-Subject: [Buildroot] Recent and upcoming Buildroot talks
-In-Reply-To: <20130927101242.3dbc2bc8@skate>
-References: <20130927101242.3dbc2bc8@skate>
-Message-ID: <20130930141723.67f77568@skate>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Mon, 30 Sep 2013 15:40:26 +0200
+Subject: [Buildroot] [PATCH] dhcpcd: add option to override dbdir
+Message-ID: <1380548426-26780-1-git-send-email-luca@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello all,
+Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+---
+ package/dhcpcd/Config.in | 14 ++++++++++++++
+ package/dhcpcd/dhcpcd.mk |  1 +
+ 2 files changed, 15 insertions(+)
 
-On Fri, 27 Sep 2013 10:12:42 +0200, Thomas Petazzoni wrote:
-
->  * At the Embedded Linux Conference Europe late October 2013, Peter
->    Korsgaard is going to give a talk titled "Buildroot: What's New". See
->    http://embeddedlinuxconferenceeu2013.sched.org/event/57df3a9a392f3eaa933d70d83b1c8b80.
->    The conference takes place in Edinburgh, right before the Buildroot
->    Developers Meeting.
-
-Oh, and I forgot: on Friday morning at ELCE, the keynote is actually a
-panel on the topic of "Embedded Linux build systems". I will be
-representing Buildroot during this panel. See http://sched.co/14DkSAO
-for more details about the topic and the other panelists.
-
-Best regards,
-
-Thomas
+diff --git a/package/dhcpcd/Config.in b/package/dhcpcd/Config.in
+index a06a973..c144dd3 100644
+--- a/package/dhcpcd/Config.in
++++ b/package/dhcpcd/Config.in
+@@ -6,5 +6,19 @@ config BR2_PACKAGE_DHCPCD
+ 
+ 	  http://roy.marples.name/downloads/dhcpcd
+ 
++if BR2_PACKAGE_DHCPCD
++
++config BR2_PACKAGE_DHCPCD_DBDIR
++	string "database directory"
++	default "/var/db"
++	help
++	  By default dhcpcd stores obtained DHCP leases and other info in
++	  /var/db. Set this to any other directory you wish to use. This must
++	  be on a read-write filesystem, otherwise dhcpcd will not work.
++	  For example, you may want to change this directory if /var is on a
++	  read-only filesystem in your embedded system.
++
++endif
++
+ comment "dhcpcd requires a toolchain with IPV6 support"
+ 	depends on !BR2_INET_IPV6
+diff --git a/package/dhcpcd/dhcpcd.mk b/package/dhcpcd/dhcpcd.mk
+index 5296db8..4d0e86c 100644
+--- a/package/dhcpcd/dhcpcd.mk
++++ b/package/dhcpcd/dhcpcd.mk
+@@ -18,6 +18,7 @@ define DHCPCD_CONFIGURE_CMDS
+ 	./configure \
+ 		--target=$(BR2_GCC_TARGET_ARCH) \
+ 		--os=linux \
++		--dbdir=$(BR2_PACKAGE_DHCPCD_DBDIR) \
+ 		$(DHCPCD_CONFIG_OPT) )
+ endef
+ 
 -- 
-Thomas Petazzoni, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.8.1.2
