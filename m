@@ -1,59 +1,41 @@
-From: Peter Sanford <psanford@nearbuysystems.com>
-Date: Sun, 29 Sep 2013 17:25:20 -0700
-Subject: [Buildroot] [PATCH v2 1/1] gnupg: option to include RSA support.
-Message-ID: <1380500720-29245-1-git-send-email-psanford@nearbuysystems.com>
+From: Axel Lin <axel.lin@ingics.com>
+Date: Mon, 30 Sep 2013 10:04:29 +0800
+Subject: [Buildroot] [PATCH] findutils: needs mmu
+Message-ID: <1380506669.14281.0.camel@phoenix>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-gnupg is compiled with --enable-minimal flag. This produces a binary that only
-supports ElGamal and DSA public key algorithms.
-
-RSA has been the default for `gpg --gen-key` since 2009, so it makes sense to
-be able to build a gnupg binary that supports it.
+Signed-off-by: Axel Lin <axel.lin@ingics.com>
 ---
-Changes v1 -> v2:
-  - Fix tab/space issue in Config.in (suggested by Thomas Petazzoni)
-  - Added explict else clause for --disable-rsa case
----
- package/gnupg/Config.in |    5 +++++
- package/gnupg/gnupg.mk  |    6 ++++++
- 2 files changed, 11 insertions(+)
+Fix below build error:
 
-diff --git a/package/gnupg/Config.in b/package/gnupg/Config.in
-index 8ddffaa..90f07c2 100644
---- a/package/gnupg/Config.in
-+++ b/package/gnupg/Config.in
-@@ -15,6 +15,11 @@ config BR2_PACKAGE_GNUPG
- 
- if BR2_PACKAGE_GNUPG
- 
-+config BR2_PACKAGE_GNUPG_RSA
-+	bool "RSA support"
-+	help
-+	  Support for RSA public key algorithm
-+
- config BR2_PACKAGE_GNUPG_GPGV
- 	bool "gpgv"
+./libfindtools.a(pred.o): In function `launch':
+pred.c:(.text+0x240c): undefined reference to `fork'
+collect2: .ld returned 1 exit status/libfindtools.a
+(pred.o): In function `launch':
+pred.c:(.text+0x240c): undefined reference to `fork'
+collect2: ld returned 1 exit status
+make[4]: *** [oldfind] Error 1
+make[4]: *** Waiting for unfinished jobs....
+make[4]: *** [find] Error 1
+
+ package/findutils/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/package/findutils/Config.in b/package/findutils/Config.in
+index bbe2cc1..32e87c2 100644
+--- a/package/findutils/Config.in
++++ b/package/findutils/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_FINDUTILS
+ 	bool "findutils"
+ 	depends on BR2_USE_WCHAR
++	depends on BR2_USE_MMU # fork()
  	help
-diff --git a/package/gnupg/gnupg.mk b/package/gnupg/gnupg.mk
-index f0c4b03..38604b5 100644
---- a/package/gnupg/gnupg.mk
-+++ b/package/gnupg/gnupg.mk
-@@ -31,6 +31,12 @@ else
- GNUPG_CONF_OPT += --without-readline
- endif
- 
-+ifeq ($(BR2_PACKAGE_GNUPG_RSA),y)
-+GNUPG_CONF_OPT += --enable-rsa
-+else
-+GNUPG_CONF_OPT += --disable-rsa
-+endif
-+
- ifneq ($(BR2_PACKAGE_GNUPG_GPGV),y)
- define GNUPG_REMOVE_GPGV
- 	rm -f $(TARGET_DIR)/usr/bin/gpgv \
+ 	  Basic directory searching utilities.  Provides the
+ 	  common 'find', 'xargs', 'locate', and 'updatedb' binaries.
 -- 
-1.7.9.5
+1.8.1.2
