@@ -1,53 +1,52 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 30 Sep 2013 22:54:08 +0200
-Subject: [Buildroot] [v4 1/2] luainterpreter: create virtual package
-In-Reply-To: <CA+-urNQZVaNvLwNUA_X6N7Ft2N0U1Yo6h+L__vNtHJfOZVPUSA@mail.gmail.com>
-References: <1376469325-3707-1-git-send-email-francois.perrad@gadz.org>
- <CA+-urNQZVaNvLwNUA_X6N7Ft2N0U1Yo6h+L__vNtHJfOZVPUSA@mail.gmail.com>
-Message-ID: <20130930225408.4ea0f858@skate>
+Date: Mon, 30 Sep 2013 23:08:08 +0200
+Subject: [Buildroot] [PATCH] diffutils: set gnu99 C mode
+In-Reply-To: <1380511689.20480.1.camel@phoenix>
+References: <1380511689.20480.1.camel@phoenix>
+Message-ID: <20130930230808.030cdd45@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Frank Hunleth,
+Dear Axel Lin,
 
-On Mon, 30 Sep 2013 14:31:46 -0400, Frank Hunleth wrote:
-
-> > +#############################################################
-> > +#
-> > +# Virtual package for luainterpreter
-> > +#
-> > +#############################################################
-> > +
-> > +LUAINTERPRETER_VERSION = 5.1
+On Mon, 30 Sep 2013 11:28:09 +0800, Axel Lin wrote:
+> Signed-off-by: Axel Lin <axel.lin@ingics.com>
+> ---
+> Fix below build error:
 > 
-> I was curious on your choice of version number for the virtual
-> package. Is this intended to be used for API compatibility checks?
+>   CC       dir.o
+> dir.c: In function 'find_dir_file_pathname':
+> dir.c:345:8: error: 'for' loop initial declarations are only allowed in C99 mode
+> dir.c:345:8: note: use option -std=c99 or -std=gnu99 to compile your code
+> make[3]: *** [dir.o] Error 1
+> make[3]: *** Waiting for unfinished jobs....
 > 
-> The reason that I'm asking is that I'm going to need to upgrade a
-> project to Lua 5.2. There are enough API differences between Lua 5.1
-> and 5.2 that it would be useful to use your patch set and add Lua 5.2
-> as another luainterpreter. Using LUAINTERPRETER_VERSION sounds like
-> one way of checking Lua API compatibility in other projects. Or did
-> you have other thoughts?
+>  package/diffutils/diffutils.mk | 1 +
+>  1 file changed, 1 insertion(+)
 > 
-> Also, any word on the status of your patches?
+> diff --git a/package/diffutils/diffutils.mk b/package/diffutils/diffutils.mk
+> index 6934532..38b1ccd 100644
+> --- a/package/diffutils/diffutils.mk
+> +++ b/package/diffutils/diffutils.mk
+> @@ -10,6 +10,7 @@ DIFFUTILS_SITE = $(BR2_GNU_MIRROR)/diffutils
+>  DIFFUTILS_DEPENDENCIES = $(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext)
+>  DIFFUTILS_LICENSE = GPLv3+
+>  DIFFUTILS_LICENSE_FILES = COPYING
+> +DIFFUTILS_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
+>  
+>  ifeq ($(BR2_PACKAGE_BUSYBOX),y)
+>  DIFFUTILS_DEPENDENCIES += busybox
 
-Having a "version" attached to a virtual package does not make sense, I
-believe.
+Hum, seems strange that this is needed. I see that the configure.ac of
+diffutils 3.2 (currently in Buildroot) has AM_PROG_CC_STDC, it has been
+removed since then. If diffutils uses C99 constructs, then it should be
+specifying AC_PROG_CC_C99 in its configure.ac, I guess.
 
-If there are several incompatible versions of Lua that need to be
-supported in Buildroot, then they must be packaged as separate
-packages: lua, lua52 for example, like we're doing for python vs.
-python4 and qt vs. qt5.
-
-A virtual package should remain only have as dependencies packages that
-provide the same API, i.e that interchangeable.
-
-(Note: I have no knowledge about Lua specifically, those statements are
-generic Buildroot rules.)
+Of course, what you propose is a relatively simple workaround, but I
+believe the real fix is in diffutils itself.
 
 Best regards,
 
