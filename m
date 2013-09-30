@@ -1,66 +1,97 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Mon, 30 Sep 2013 09:48:08 +0200
-Subject: [Buildroot] [buildroot] [PATCH] aiccu: patched Makefile to
- enable static linking
-In-Reply-To: <1380488488-9510-1-git-send-email-rommel@layer-7.net>
-References: <1380488488-9510-1-git-send-email-rommel@layer-7.net>
-Message-ID: <CAAXf6LVh6qawTi9nXP25qSvFciMQcmzumtUD1RAEgPc79WwJ4w@mail.gmail.com>
+From: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+Date: Mon, 30 Sep 2013 09:52:15 +0200
+Subject: [Buildroot] [PATCH 1/1] docs/manual: update information about how
+	to add a package from github
+Message-ID: <1380527536-23694-1-git-send-email-jerzy.grzegorek@trzebnica.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Michael,
+Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+---
+ docs/manual/adding-packages-tips.txt |   62 +++++++++++++++++++++++++++++++---
+ 1 file changed, 57 insertions(+), 5 deletions(-)
 
-On Sun, Sep 29, 2013 at 11:01 PM, Michael Rommel <rommel@layer-7.net> wrote:
->
-> Signed-off-by: Michael Rommel <rommel@layer-7.net>
-> ---
-> v1: initial patch to add required libraries for static linking to LDFLAGS
->     and reorder the CC commandline
-
-When a commit fixes an autobuild problem, we typically specify that in
-the commit message, like:
-"Fixes <autobuild-url>"
-
-
->
->  ...cu-0002-makefile-reorder-linked-libraries.patch |   20 ++++++++++++++++++++
->  1 file changed, 20 insertions(+)
->  create mode 100644 package/aiccu/aiccu-0002-makefile-reorder-linked-libraries.patch
->
-> diff --git a/package/aiccu/aiccu-0002-makefile-reorder-linked-libraries.patch b/package/aiccu/aiccu-0002-makefile-reorder-linked-libraries.patch
-> new file mode 100644
-> index 0000000..07c9eb3
-> --- /dev/null
-> +++ b/package/aiccu/aiccu-0002-makefile-reorder-linked-libraries.patch
-
-The patch itself should also contain a commit message and Signed-off-by line.
-
-> @@ -0,0 +1,20 @@
-> +--- aiccu_20070115.orig/unix-console/Makefile  2007-01-15 12:04:27.000000000 +0100
-> ++++ aiccu_20070115/unix-console/Makefile       2013-09-29 22:54:42.742963861 +0200
-> +@@ -42,7 +42,7 @@ CFLAGS       += -D AICCU_CONSOLE
-> + # Currently defaultly builds only on Linux, but other platforms might easily also support it
-> + ifeq ($(shell uname | grep -c "Linux"),1)
-> + CFLAGS        += -D AICCU_GNUTLS
-> +-LDFLAGS += -lgnutls
-> ++LDFLAGS += -lgnutls -lhogweed -lnettle -lgmp -lz
-> + endif
-> +
-> + # Linux
-> +@@ -144,7 +144,7 @@ endif
-> + all: aiccu
-> +
-> + aiccu:        $(OBJS) ${SRCS} ${INCS}
-> +-      $(CC) $(CFLAGS) $(LDFLAGS) -o $@ $(OBJS)
-> ++      $(CC) $(CFLAGS) -o $@ $(OBJS) $(LDFLAGS)
-> + ifeq ($(shell echo $(CFLAGS) | grep -c "DEBUG"),0)
-> + ifeq ($(shell echo "$(RPM_OPT_FLAGS)" | wc -c),1)
-> +       strip $@
-> --
-> 1.7.10.4
-
-Best regards,
-Thomas
+diff --git a/docs/manual/adding-packages-tips.txt b/docs/manual/adding-packages-tips.txt
+index 8b27c61..67a8610 100644
+--- a/docs/manual/adding-packages-tips.txt
++++ b/docs/manual/adding-packages-tips.txt
+@@ -41,17 +41,69 @@ How to add a package from github
+ 
+ Packages on github often don't have a download area with release tarballs.
+ However, it is possible to download tarballs directly from the repository
+-on github.
++on github. There are two possibilities:
++
++1. Using (abbreviated) commit ID
++
++------------------------
++FOO_VERSION = 1234567
++FOO_SITE = https://github.com/<user>/<package>/tarball/$(FOO_VERSION)
++------------------------
++
++tarball name downloaded by Buildroot: foo-1234567.tar.gz
++
++example:
++package: cpuload
++abbreviated commit ID: 96ac037
++CPULOAD_VERSION = 96ac037
++CPULOAD_SITE = https://github.com/kelvincheung/cpuload/tarball/$(CPULOAD_VERSION)
++tarball name downloaded by Buildroot: cpuload-96ac037.tar.gz
++
++
++2. Using tag
++
++a) tag without prefix
++
++------------------------
++FOO_VERSION = 1.0
++FOO_SITE = https://github.com/<user>/<package>/tarball/$(FOO_VERSION)
++------------------------
++
++tarball name downloaded by Buildroot: foo-1.0.tar.gz
++
++example:
++package: luacrypto
++tag: 0.3.2
++LUACRYPTO_VERSION = 0.3.2
++LUACRYPTO_SITE = https://github.com/mkottman/luacrypto/tarball/$(LUACRYPTO_VERSION)
++tarball name downloaded by Buildroot: luacrypto-0.3.2.tar.gz
++
++b) tag with prefix
+ 
+ ------------------------
+-FOO_VERSION = v1.0 # tag or (abbreviated) commit ID
+-FOO_SITE = http://github.com/<user>/<package>/tarball/$(FOO_VERSION)
++FOO_VERSION = 1.0
++FOO_SITE = https://github.com/<user>/<package>/tarball/<prefix>$(FOO_VERSION)
+ ------------------------
+ 
++tarball name downloaded by Buildroot: foo-1.0.tar.gz
++
++examples:
++package: cpuload
++tag: v0.3
++CPULOAD_VERSION = 0.3
++CPULOAD_SITE = https://github.com/kelvincheung/cpuload/tarball/v$(CPULOAD_VERSION)
++tarball name downloaded by Buildroot: cpuload-0.3.tar.gz
++
++package: libcec
++tag: libcec-2.1.1
++LIBCEC_VERSION = 2.1.1
++LIBCEC_SITE = https://github.com/Pulse-Eight/libcec/tarball/libcec-$(LIBCEC_VERSION)
++tarball name downloaded by Buildroot: libcec-2.1.1.tar.gz
++ 
+ .Notes
+-- The FOO_VERSION can either be a tag or a commit ID.
+ - The tarball name generated by github matches the default one from
+-  Buildroot (e.g.: +foo-1234567.tar.gz+),
++  Buildroot (e.g.: +foo-1234567.tar.gz+ or +foo-1.0.tar.gz+)
+   so it is not necessary to specify it in the +.mk+ file.
+ - When using a commit ID as version, usually the first 7 characters of
+   the SHA1 are enough.
++- https vs http avoids redirection
+-- 
+1.7.9.5
