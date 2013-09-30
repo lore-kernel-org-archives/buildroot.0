@@ -1,46 +1,42 @@
-From: Markos Chandras <Markos.Chandras@imgtec.com>
-Date: Mon, 30 Sep 2013 09:33:47 +0100
-Subject: [Buildroot] [PATCH] glibc: Pass correct -mabi for MIPS
-In-Reply-To: <1380121257-10449-1-git-send-email-markos.chandras@imgtec.com>
-References: <1380121257-10449-1-git-send-email-markos.chandras@imgtec.com>
-Message-ID: <5249376B.5020407@imgtec.com>
+From: Axel Lin <axel.lin@ingics.com>
+Date: Mon, 30 Sep 2013 17:18:47 +0800
+Subject: [Buildroot] [PATCH] pppd: needs mmu and shared objects
+Message-ID: <1380532727.13663.1.camel@phoenix>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 09/25/13 16:00, Markos Chandras wrote:
-> According to glibc-2.18/ports/sysdeps/mips/preconfigure,
-> if no -mabi was passed to CFLAGS, then it defaults to -mabi=n32.
-> This breaks o32 and n64 builds for MIPS64. Therefore, it is
-> necessary to append -mabi to CFLAGS.
->
-> Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
-> ---
->   package/glibc/glibc.mk | 10 ++++++++++
->   1 file changed, 10 insertions(+)
->
-> diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
-> index 4dd2e63..68c4636 100644
-> --- a/package/glibc/glibc.mk
-> +++ b/package/glibc/glibc.mk
-> @@ -43,6 +43,16 @@ ifeq ($(BR2_ARM_INSTRUCTIONS_THUMB),y)
->   GLIBC_EXTRA_CFLAGS += -marm
->   endif
->
-> +# MIPS64 defaults to n32 so pass the correct -mabi if
-> +# we are using a different ABI. OABI32 is also used
-> +# in MIPS so we pass -mabi=32 in this case as well
-> +# even though it's not strictly necessary.
-> +ifeq ($(BR2_MIPS_NABI64),y)
-> +GLIBC_EXTRA_CFLAGS += -mabi=64
-> +else ifeq ($(BR2_MIPS_OABI32),y)
-> +GLIBC_EXTRA_CFLAGS += -mabi=32
-> +endif
-> +
->   # Even though we use the autotools-package infrastructure, we have to
->   # override the default configure commands for several reasons:
->   #
->
-Ping? :)
+The plugin infrastructure is based on shared objects so it won't build
+for static-only scenarios.
+And the daemon uses fork() so MMU is required.
+
+Signed-off-by: Axel Lin <axel.lin@ingics.com>
+---
+ package/pppd/Config.in | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/package/pppd/Config.in b/package/pppd/Config.in
+index 879b263..074c2fd 100644
+--- a/package/pppd/Config.in
++++ b/package/pppd/Config.in
+@@ -1,10 +1,16 @@
+ config BR2_PACKAGE_PPPD
+ 	bool "pppd"
++	depends on !BR2_PREFER_STATIC_LIB
++	depends on BR2_USE_MMU
+ 	help
+ 	  An implementation of the Point-to-point protocol.
+ 
+ 	  http://www.samba.org/ppp/
+ 
++comment "pppd requires a toolchain with dynamic library support"
++	depends on BR2_PREFER_STATIC_LIB
++	depends on BR2_USE_MMU
++
+ config BR2_PACKAGE_PPPD_FILTER
+ 	depends on BR2_PACKAGE_PPPD
+ 	select BR2_PACKAGE_LIBPCAP
+-- 
+1.8.1.2
