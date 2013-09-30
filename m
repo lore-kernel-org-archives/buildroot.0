@@ -1,38 +1,33 @@
-From: Axel Lin <axel.lin@ingics.com>
-Date: Mon, 30 Sep 2013 11:28:09 +0800
-Subject: [Buildroot] [PATCH] diffutils: set gnu99 C mode
-Message-ID: <1380511689.20480.1.camel@phoenix>
+From: Fatih =?UTF-8?Q?A=C5=9F=C4=B1c=C4=B1?= <fatih.asici@gmail.com>
+Date: Mon, 30 Sep 2013 09:23:15 +0300
+Subject: [Buildroot] [PATCHv2] beaglebone: add BeagleBone Black support
+In-Reply-To: <1380337717-19697-1-git-send-email-jkridner@beagleboard.org>
+References: <1380220826-17732-1-git-send-email-jkridner@beagleboard.org>
+ <1380337717-19697-1-git-send-email-jkridner@beagleboard.org>
+Message-ID: <1380522195.4232.2.camel@viko>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Axel Lin <axel.lin@ingics.com>
----
-Fix below build error:
+On Sat, 2013-09-28 at 03:08 +0000, Jason Kridner wrote:
+> From: Jason Kridner <jdk@ti.com>
+> 
+> * Configure as initramfs
+> * Update BeagleBone to 3.8.13-beagleboard kernel
+> * Update to u-boot 2013.07
+> * Add BeagleBone Black device tree
+> 
+> Changes since v1 (http://lists.busybox.net/pipermail/buildroot/2013-September/079046.html):
+> * Added BeagleBone Black to single config for BeagleBone and BeagleBone Black,
+>   rather than having two configs
+> * Used 'make ARCH=arm savedefconfig' to create Linux config file
+> * Dropped setting of DEVTMPFS, since it is default now
+> * Switched to u-boot 2013.07 from 2013.04
+> * Patched u-boot to work with initramfs by default without uEnv.txt
+> * Removed wake-up M3 firmware loading for now, until debugged
+> 
+> Signed-off-by: Jason Kridner <jdk@ti.com>
 
-  CC       dir.o
-dir.c: In function 'find_dir_file_pathname':
-dir.c:345:8: error: 'for' loop initial declarations are only allowed in C99 mode
-dir.c:345:8: note: use option -std=c99 or -std=gnu99 to compile your code
-make[3]: *** [dir.o] Error 1
-make[3]: *** Waiting for unfinished jobs....
-
- package/diffutils/diffutils.mk | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/package/diffutils/diffutils.mk b/package/diffutils/diffutils.mk
-index 6934532..38b1ccd 100644
---- a/package/diffutils/diffutils.mk
-+++ b/package/diffutils/diffutils.mk
-@@ -10,6 +10,7 @@ DIFFUTILS_SITE = $(BR2_GNU_MIRROR)/diffutils
- DIFFUTILS_DEPENDENCIES = $(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext)
- DIFFUTILS_LICENSE = GPLv3+
- DIFFUTILS_LICENSE_FILES = COPYING
-+DIFFUTILS_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
- 
- ifeq ($(BR2_PACKAGE_BUSYBOX),y)
- DIFFUTILS_DEPENDENCIES += busybox
--- 
-1.8.1.2
+Tested-by: Fatih A??c? <fatih.asici@gmail.com>
