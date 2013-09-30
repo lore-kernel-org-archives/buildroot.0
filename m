@@ -1,59 +1,32 @@
-From: Michael Rommel <rommel@layer-7.net>
-Date: Mon, 30 Sep 2013 19:57:42 +0200
-Subject: [Buildroot] [buildroot] [PATCH v2] aiccu: patched Makefile to
-	enable static linking
-Message-ID: <1380563862-4241-1-git-send-email-rommel@layer-7.net>
+From: spdawson at gmail.com <spdawson@gmail.com>
+Date: Mon, 30 Sep 2013 19:19:46 +0100
+Subject: [Buildroot] [PATCH] monit: bump version to 5.6
+Message-ID: <1380565186-19702-1-git-send-email-spdawson@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes autobuild errors:
-http://autobuild.buildroot.net/results/308087e1f85e822dec8b73a3ed892c7cd2376cbd/
-http://autobuild.buildroot.net/results/9fb298d4e09a6f9b88207909d583dce05392048e/
+From: Simon Dawson <spdawson@gmail.com>
 
-Signed-off-by: Michael Rommel <rommel@layer-7.net>
+Signed-off-by: Simon Dawson <spdawson@gmail.com>
 ---
-v1: initial patch to add required libraries for static linking to LDFLAGS
-    and reorder the CC commandline
+ package/monit/monit.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-v2: added signed-off line and commit msg to patch, added autobuild URIs to 
-    commit msg
-
- ...cu-0002-makefile-reorder-linked-libraries.patch |   24 ++++++++++++++++++++
- 1 file changed, 24 insertions(+)
- create mode 100644 package/aiccu/aiccu-0002-makefile-reorder-linked-libraries.patch
-
-diff --git a/package/aiccu/aiccu-0002-makefile-reorder-linked-libraries.patch b/package/aiccu/aiccu-0002-makefile-reorder-linked-libraries.patch
-new file mode 100644
-index 0000000..cc189b2
---- /dev/null
-+++ b/package/aiccu/aiccu-0002-makefile-reorder-linked-libraries.patch
-@@ -0,0 +1,24 @@
-+Makefile: changed LDFLAGS contents and order on the compile line for --static
-+
-+Signed-off-by: Michael Rommel <rommel@layer-7.net>
-+
-+--- aiccu_20070115.orig/unix-console/Makefile	2007-01-15 12:04:27.000000000 +0100
-++++ aiccu_20070115/unix-console/Makefile	2013-09-29 22:54:42.742963861 +0200
-+@@ -42,7 +42,7 @@ CFLAGS	+= -D AICCU_CONSOLE
-+ # Currently defaultly builds only on Linux, but other platforms might easily also support it
-+ ifeq ($(shell uname | grep -c "Linux"),1)
-+ CFLAGS	+= -D AICCU_GNUTLS
-+-LDFLAGS += -lgnutls
-++LDFLAGS += -lgnutls -lhogweed -lnettle -lgmp -lz
-+ endif
-+ 
-+ # Linux
-+@@ -144,7 +144,7 @@ endif
-+ all: aiccu
-+ 
-+ aiccu:	$(OBJS) ${SRCS} ${INCS}
-+-	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $(OBJS)
-++	$(CC) $(CFLAGS) -o $@ $(OBJS) $(LDFLAGS)
-+ ifeq ($(shell echo $(CFLAGS) | grep -c "DEBUG"),0)
-+ ifeq ($(shell echo "$(RPM_OPT_FLAGS)" | wc -c),1)
-+ 	strip $@
+diff --git a/package/monit/monit.mk b/package/monit/monit.mk
+index e2847fc..ec7c95d 100644
+--- a/package/monit/monit.mk
++++ b/package/monit/monit.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MONIT_VERSION = 5.4
++MONIT_VERSION = 5.6
+ MONIT_SITE = http://mmonit.com/monit/dist/
+ MONIT_LICENSE = AGPLv3 with OpenSSL exception
+ MONIT_LICENSE_FILES = COPYING
 -- 
-1.7.10.4
+1.8.1.2
