@@ -1,57 +1,55 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 30 Sep 2013 23:08:08 +0200
-Subject: [Buildroot] [PATCH] diffutils: set gnu99 C mode
-In-Reply-To: <1380511689.20480.1.camel@phoenix>
-References: <1380511689.20480.1.camel@phoenix>
-Message-ID: <20130930230808.030cdd45@skate>
+Date: Mon, 30 Sep 2013 23:20:46 +0200
+Subject: [Buildroot] [PATCH 3/4] python3: fix python-config for
+	cross-compilation
+In-Reply-To: <1380576047-21001-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1380576047-21001-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1380576047-21001-3-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Axel Lin,
+Some packages (trace-cmd) use python3-config to find out which headers
+and libraries should be used to link against the Python libraries. By
+default, python3-config returns paths that are inappropriate for
+cross-compilation: this patch fixes this by prepending those paths by
+the staging directory location.
 
-On Mon, 30 Sep 2013 11:28:09 +0800, Axel Lin wrote:
-> Signed-off-by: Axel Lin <axel.lin@ingics.com>
-> ---
-> Fix below build error:
-> 
->   CC       dir.o
-> dir.c: In function 'find_dir_file_pathname':
-> dir.c:345:8: error: 'for' loop initial declarations are only allowed in C99 mode
-> dir.c:345:8: note: use option -std=c99 or -std=gnu99 to compile your code
-> make[3]: *** [dir.o] Error 1
-> make[3]: *** Waiting for unfinished jobs....
-> 
->  package/diffutils/diffutils.mk | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/package/diffutils/diffutils.mk b/package/diffutils/diffutils.mk
-> index 6934532..38b1ccd 100644
-> --- a/package/diffutils/diffutils.mk
-> +++ b/package/diffutils/diffutils.mk
-> @@ -10,6 +10,7 @@ DIFFUTILS_SITE = $(BR2_GNU_MIRROR)/diffutils
->  DIFFUTILS_DEPENDENCIES = $(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext)
->  DIFFUTILS_LICENSE = GPLv3+
->  DIFFUTILS_LICENSE_FILES = COPYING
-> +DIFFUTILS_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
->  
->  ifeq ($(BR2_PACKAGE_BUSYBOX),y)
->  DIFFUTILS_DEPENDENCIES += busybox
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/python3/python3.mk | 14 ++++++++++----
+ 1 file changed, 10 insertions(+), 4 deletions(-)
 
-Hum, seems strange that this is needed. I see that the configure.ac of
-diffutils 3.2 (currently in Buildroot) has AM_PROG_CC_STDC, it has been
-removed since then. If diffutils uses C99 constructs, then it should be
-specifying AC_PROG_CC_C99 in its configure.ac, I guess.
-
-Of course, what you propose is a relatively simple workaround, but I
-believe the real fix is in diffutils itself.
-
-Best regards,
-
-Thomas
+diff --git a/package/python3/python3.mk b/package/python3/python3.mk
+index a8a1942..e6cf8d4 100644
+--- a/package/python3/python3.mk
++++ b/package/python3/python3.mk
+@@ -124,14 +124,20 @@ PYTHON3_MAKE_ENV = \
+ 	PYTHON_MODULES_INCLUDE=$(STAGING_DIR)/usr/include \
+ 	PYTHON_MODULES_LIB="$(STAGING_DIR)/lib $(STAGING_DIR)/usr/lib"
+ 
+-# python distutils adds -L$LIBDIR when linking binary extensions, causing
+-# trouble for cross compilation
+-define PYTHON3_FIXUP_LIBDIR
++# 1. python distutils adds -L$LIBDIR when linking binary extensions,
++# causing trouble for cross compilation.
++#
++# 2. adjust the python-config in the staging directory so that it
++# returns include paths that are valid on the build machine (i.e
++# prefixed by the STAGING_DIR).
++define PYTHON3_FIXUP_DIRS
+ 	$(SED) 's|^LIBDIR=.*|LIBDIR= $(STAGING_DIR)/usr/lib|' \
+ 	   $(STAGING_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/config-3.3m/Makefile
++	$(SED) "s|'-I'|'-I$(STAGING_DIR)'|" \
++	   $(STAGING_DIR)/usr/bin/python$(PYTHON3_VERSION_MAJOR)-config
+ endef
+ 
+-PYTHON3_POST_INSTALL_STAGING_HOOKS += PYTHON3_FIXUP_LIBDIR
++PYTHON3_POST_INSTALL_STAGING_HOOKS += PYTHON3_FIXUP_DIRS
+ 
+ #
+ # Remove useless files. In the config/ directory, only the Makefile
 -- 
-Thomas Petazzoni, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.8.1.2
