@@ -1,64 +1,39 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 01 Oct 2013 22:48:26 +0200
-Subject: [Buildroot] [PATCH 2/2] gst-fsl-plugins: Bump version and
- change URL to match other i.MX components
-In-Reply-To: <1380650790-18097-3-git-send-email-eric.nelson@boundarydevices.com>
-References: <1380650790-18097-1-git-send-email-eric.nelson@boundarydevices.com>
- <1380650790-18097-3-git-send-email-eric.nelson@boundarydevices.com>
-Message-ID: <524B351A.6000200@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 1 Oct 2013 23:14:01 +0200
+Subject: [Buildroot] [PATCH v3 10/16] libcgroup: new package
+In-Reply-To: <OF65F0E18D.9A0E7DE2-ON86257BF7.006E0B8B-86257BF7.006E4047@rockwellcollins.com>
+References: <1380137571-688-1-git-send-email-clshotwe@rockwellcollins.com>
+ <1380137571-688-11-git-send-email-clshotwe@rockwellcollins.com>
+ <20131001214853.62a871b3@skate>
+ <OF65F0E18D.9A0E7DE2-ON86257BF7.006E0B8B-86257BF7.006E4047@rockwellcollins.com>
+Message-ID: <20131001231401.2856aca6@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 10/01/13 20:06, Eric Nelson wrote:
-> Signed-off-by: Eric Nelson <eric.nelson@boundarydevices.com>
-> ---
->   package/gstreamer/gst-fsl-plugins/gst-fsl-plugins.mk | 8 +++++---
->   1 file changed, 5 insertions(+), 3 deletions(-)
->
-> diff --git a/package/gstreamer/gst-fsl-plugins/gst-fsl-plugins.mk b/package/gstreamer/gst-fsl-plugins/gst-fsl-plugins.mk
-> index ccdb521..00c6acb 100644
-> --- a/package/gstreamer/gst-fsl-plugins/gst-fsl-plugins.mk
-> +++ b/package/gstreamer/gst-fsl-plugins/gst-fsl-plugins.mk
-> @@ -4,9 +4,11 @@
->   #
->   ################################################################################
->
-> -GST_FSL_PLUGINS_VERSION = 3.0.1
-> -# No official download site from freescale, just this mirror
-> -GST_FSL_PLUGINS_SITE = http://download.ossystems.com.br/bsp/freescale/source
-> +include package/freescale-imx/freescale-imx.inc
+Clayton,
 
-  This is make, not C. You should never include the same file twice 
-unless you _really_ know what you're doing.
+On Tue, 1 Oct 2013 15:04:47 -0500, clshotwe at rockwellcollins.com wrote:
 
-  It is not a problem to define a variable in one file and use it in a 
-completely different file. This is already done for instance with 
-LINUX_DIR. The only potential problem is when you want to use the 
-variable in a condition. But that is not the case here, so you can use 
-FREESCALE_IMX_VERSION etc. below without this include statement, even if 
-gst-fsl-plugins.mk is read before freescale-imx.mk.
+> > Maybe you want to resend just this patch with those fixes, so we can
+> > get it merged quickly, independently of the other SELinux changes.
+> 
+> Should I do that with all of the simple patches?
 
-  Regards,
-  Arnout
+It's a matter of strategy. When a relatively simple patch is part of a
+larger, more complicated patch series, then it is unlikely to get
+committed until the entire patch series gets committed. So,
+strategically speaking, you might want to progressively reduce the size
+of your patch series by merging parts of it that are independent of the
+rest of the series, but are needed for it. Your libcgroup package is a
+good candidate :)
 
+Best regards,
 
-> +
-> +GST_FSL_PLUGINS_VERSION = $(FREESCALE_IMX_VERSION)
-> +GST_FSL_PLUGINS_SITE = $(FREESCALE_IMX_SITE)
-> +GST_FSL_PLUGINS_SOURCE = gst-fsl-plugins-$(GST_FSL_PLUGINS_VERSION).tar.gz
->
->   # Most is LGPLv2+, but some sources are copied from upstream and are
->   # LGPLv2.1+, which essentially makes it LGPLv2.1+
->
-
-
+Thomas
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+Thomas Petazzoni, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
