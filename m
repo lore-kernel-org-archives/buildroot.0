@@ -1,54 +1,48 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 01 Oct 2013 19:21:30 +0200
-Subject: [Buildroot] [PATCH 2 of 2] make clean: remove redundant removal
-	of STAGING_DIR
-In-Reply-To: <e4d1fd22ccc32a9c0ffc.1380539367@argentina>
-References: <patchbomb.1380539365@argentina>
- <e4d1fd22ccc32a9c0ffc.1380539367@argentina>
-Message-ID: <524B049A.2090206@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 1 Oct 2013 20:51:54 +0200
+Subject: [Buildroot] [RFC] package: Redownload HEAD packages every build
+In-Reply-To: <1380293015-20331-1-git-send-email-clshotwe@rockwellcollins.com>
+References: <1380293015-20331-1-git-send-email-clshotwe@rockwellcollins.com>
+Message-ID: <20131001205154.059ec4af@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 09/30/13 13:09, Thomas De Schampheleire wrote:
-> Since STAGING_DIR is defined as (package/Makefile.in):
->
-> STAGING_SUBDIR = usr/$(GNU_TARGET_NAME)/sysroot
-> STAGING_DIR    = $(HOST_DIR)/$(STAGING_SUBDIR)
->
-> removing HOST_DIR will automatically remove STAGING_DIR. This patch updates
-> 'make clean' based on this knowledge.
->
-> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+Dear Clayton Shotwell,
 
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+On Fri, 27 Sep 2013 09:43:35 -0500, Clayton Shotwell wrote:
 
->
-> ---
->   Makefile |  2 +-
->   1 files changed, 1 insertions(+), 1 deletions(-)
->
-> diff --git a/Makefile b/Makefile
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -748,7 +748,7 @@ printvars:
->   		$(info $V=$($V) ($(value $V)))))
->
->   clean:
-> -	rm -rf $(STAGING_DIR) $(TARGET_DIR) $(BINARIES_DIR) $(HOST_DIR) \
-> +	rm -rf $(TARGET_DIR) $(BINARIES_DIR) $(HOST_DIR) \
->   		$(STAMP_DIR) $(BUILD_DIR) $(BASE_DIR)/staging \
->   		$(LEGAL_INFO_DIR)
->
->
+> Adding a check to remove a downloaded package if the version is HEAD. This causes the 
+> package to be re-downloaded with updated software. This feature is very
+> useful during package development.
 
+I haven't made up my mind yet on this, but in general, I'd like to
+avoid having several "mechanisms" achieving the same goal. I believe
+the <pkg>_OVERRIDE_SRCDIR mechanism is already here to easily allow to
+rebuild the latest version of a component source code during its
+development.
 
+It seems like the mechanism you're proposing overlaps quite
+significantly with that, while being a bit less flexible. Have you
+tried the <pkg>_OVERRIDE_SRCDIR mechanism?
+
+Regarding the implementation, I'm not sure to understand how
+<pkg>_VERSION = HEAD is supposed to be used. For example, I have a
+software, whose source code is handled in Git, in its 'master' branch.
+How would I tell your mechanism that I want the latest source code to
+be redownloaded each time?
+
+Moreover, it's going to be redownloaded each time completely, which is
+quite annoying during development. The <pkg>_OVERRIDE_SRCDIR allows you
+to point to a local directory, which avoids re-downloading the entire
+source code everytime.
+
+Thanks!
+
+Thomas
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+Thomas Petazzoni, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
