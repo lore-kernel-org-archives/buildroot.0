@@ -1,114 +1,100 @@
-From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Tue,  1 Oct 2013 14:55:04 +0200
-Subject: [Buildroot] [PATCH v6 5/5] Makefile: fix rules for top-level
-	parallel make
-In-Reply-To: <1380632104-10421-1-git-send-email-fabio.porcedda@gmail.com>
-References: <1380632104-10421-1-git-send-email-fabio.porcedda@gmail.com>
-Message-ID: <1380632104-10421-6-git-send-email-fabio.porcedda@gmail.com>
+From: Phil Eichinger <phil.eichinger@gmail.com>
+Date: Tue,  1 Oct 2013 15:10:20 +0200
+Subject: [Buildroot] [PATCH v2 1/1] psplash: new package
+Message-ID: <1380633020-27233-1-git-send-email-phil@zankapfel.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-To be able to use top-level parallel make we must not depend in a rule
-on the order of evaluation of the prerequisites, so instead of relyng on
-the left to right ordering of evaluation of the prerequisites add
-an explicit rule to describe the dependencies.
 
-Add explicit rules to describe the following dependency chain:
-$(TARGETS) -> target-finalize -> rootfs-* -> target-post-image
-
-Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+Signed-off-by: Phil Eichinger <phil@zankapfel.net>
 ---
- Makefile     | 14 +++++---------
- fs/common.mk |  4 ++--
- 2 files changed, 7 insertions(+), 11 deletions(-)
+Changes v1 -> v2:
+ - psplash needs BR2_USE_WCHAR
 
-diff --git a/Makefile b/Makefile
-index c31995a..0ee2c62 100644
---- a/Makefile
-+++ b/Makefile
-@@ -337,8 +337,6 @@ include boot/common.mk
- include linux/linux.mk
- include system/system.mk
- 
--TARGETS+=target-finalize
--
- ifeq ($(BR2_ENABLE_LOCALE_PURGE),y)
- TARGETS+=target-purgelocales
- endif
-@@ -355,8 +353,6 @@ endif
- 
- include fs/common.mk
- 
--TARGETS+=target-post-image
--
- TARGETS_CLEAN:=$(patsubst %,%-clean,$(TARGETS))
- TARGETS_SOURCE:=$(patsubst %,%-source,$(TARGETS) $(BASE_TARGETS))
- TARGETS_DIRCLEAN:=$(patsubst %,%-dirclean,$(TARGETS))
-@@ -394,11 +390,11 @@ prepare: $(BUILD_DIR)/buildroot-config/auto.conf
- 
- toolchain: prepare dirs dependencies $(BASE_TARGETS)
- 
--world: $(TARGETS)
-+world: target-post-image
- 
- .PHONY: all world toolchain dirs clean distclean source outputmakefile \
- 	legal-info legal-info-prepare legal-info-clean printvars \
--	$(BASE_TARGETS) $(TARGETS) \
-+	target-finalize target-post-image $(TARGETS) $(TARGETS_ROOTFS) \
- 	$(TARGETS_CLEAN) $(TARGETS_DIRCLEAN) $(TARGETS_SOURCE) $(TARGETS_LEGAL_INFO) \
- 	$(BUILD_DIR) $(STAGING_DIR) $(TARGET_DIR) \
- 	$(HOST_DIR) $(BINARIES_DIR) $(STAMP_DIR)
-@@ -455,7 +451,7 @@ endif
- STRIP_FIND_CMD += -type f -perm /111
- STRIP_FIND_CMD += -not \( $(call findfileclauses,libpthread*.so* $(call qstrip,$(BR2_STRIP_EXCLUDE_FILES))) \) -print
- 
--target-finalize:
-+target-finalize: $(TARGETS)
- 	rm -rf $(TARGET_DIR)/usr/include $(TARGET_DIR)/usr/share/aclocal \
- 		$(TARGET_DIR)/usr/lib/pkgconfig $(TARGET_DIR)/usr/share/pkgconfig \
- 		$(TARGET_DIR)/usr/lib/cmake $(TARGET_DIR)/usr/share/cmake
-@@ -562,7 +558,7 @@ target-generatelocales: host-localedef
- 	done
- endif
- 
--target-post-image:
-+target-post-image: $(TARGETS_ROOTFS)
- 	@$(foreach s, $(call qstrip,$(BR2_ROOTFS_POST_IMAGE_SCRIPT)), \
- 		$(call MESSAGE,"Executing post-image script $(s)"); \
- 		$(s) $(BINARIES_DIR) $(call qstrip,$(BR2_ROOTFS_POST_SCRIPT_ARGS))$(sep))
-@@ -598,7 +594,7 @@ legal-info: dirs legal-info-clean legal-info-prepare $(REDIST_SOURCES_DIR) \
- 	@rm -f $(LEGAL_WARNINGS)
- 
- show-targets:
--	@echo $(TARGETS)
-+	@echo $(TARGETS) $(TARGETS_ROOTFS)
- 
- else # ifeq ($(BR2_HAVE_DOT_CONFIG),y)
- 
-diff --git a/fs/common.mk b/fs/common.mk
-index 4dab7ea..1056679 100644
---- a/fs/common.mk
-+++ b/fs/common.mk
-@@ -42,7 +42,7 @@ define ROOTFS_TARGET_INTERNAL
- # extra deps
- ROOTFS_$(2)_DEPENDENCIES += host-fakeroot host-makedevs $$(if $$(BR2_TARGET_ROOTFS_$(2)_LZMA),host-lzma) $$(if $$(BR2_TARGET_ROOTFS_$(2)_LZO),host-lzop) $$(if $$(BR2_TARGET_ROOTFS_$(2)_XZ),host-xz)
- 
--$$(BINARIES_DIR)/rootfs.$(1): $$(ROOTFS_$(2)_DEPENDENCIES)
-+$$(BINARIES_DIR)/rootfs.$(1): $$(ROOTFS_$(2)_DEPENDENCIES) target-finalize
- 	@$$(call MESSAGE,"Generating root filesystem image rootfs.$(1)")
- 	$$(foreach hook,$$(ROOTFS_$(2)_PRE_GEN_HOOKS),$$(call $$(hook))$$(sep))
- 	rm -f $$(FAKEROOT_SCRIPT)
-@@ -86,7 +86,7 @@ rootfs-$(1)-show-depends:
- rootfs-$(1): $$(BINARIES_DIR)/rootfs.$(1) $$(ROOTFS_$(2)_POST_TARGETS)
- 
- ifeq ($$(BR2_TARGET_ROOTFS_$(2)),y)
--TARGETS += rootfs-$(1)
-+TARGETS_ROOTFS += rootfs-$(1)
- endif
- endef
- 
+ package/Config.in          |    1 +
+ package/psplash/Config.in  |   16 ++++++++++++++++
+ package/psplash/README     |   16 ++++++++++++++++
+ package/psplash/psplash.mk |   11 +++++++++++
+ 4 files changed, 44 insertions(+)
+ create mode 100644 package/psplash/Config.in
+ create mode 100644 package/psplash/README
+ create mode 100644 package/psplash/psplash.mk
+
+diff --git a/package/Config.in b/package/Config.in
+index c6ea66b..86fbce2 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -156,6 +156,7 @@ endif
+ source "package/fbterm/Config.in"
+ source "package/fbv/Config.in"
+ source "package/fb-test-app/Config.in"
++source "package/psplash/Config.in"
+ source "package/imagemagick/Config.in"
+ source "package/linux-fusion/Config.in"
+ source "package/lite/Config.in"
+diff --git a/package/psplash/Config.in b/package/psplash/Config.in
+new file mode 100644
+index 0000000..b87e29e
+--- /dev/null
++++ b/package/psplash/Config.in
+@@ -0,0 +1,16 @@
++config BR2_PACKAGE_PSPLASH
++	bool "psplash"
++	depends on BR2_USE_WCHAR
++	help
++	  PSplash is a userspace graphical boot splash screen for mainly
++	  embedded Linux devices supporting a 16bpp or 32bpp framebuffer.
++	  It has few dependencies (just libc), supports basic images and
++	  text and handles rotation. Its visual look is configurable by
++	  basic source changes.
++
++	  Also included is a 'client' command utility for sending
++	  information to psplash such as boot progress information.
++
++	  For usage see README in package directory.
++
++	  http://git.yoctoproject.org/cgit/cgit.cgi/psplash/
+diff --git a/package/psplash/README b/package/psplash/README
+new file mode 100644
+index 0000000..89376ad
+--- /dev/null
++++ b/package/psplash/README
+@@ -0,0 +1,16 @@
++psplash utility is started, draws its image and progress bar and waits for communication. 
++psplash-write utility can be used to emit text messages and progress indication to a running psplash.
++
++Start the drawing process with 'psplash -n&' as early as possible.
++
++Note: psplash creates a FIFO in /tmp for communication with psplash-write.
++
++Usage: 
++* Set progress bar to 50 percent:
++  psplash-write "PROGRESS 50"
++
++* Display message "foobar" above progress bar:
++  psplash-write "MSG foobar"
++
++* Terminate psplash:
++  psplash-write "QUIT"
+diff --git a/package/psplash/psplash.mk b/package/psplash/psplash.mk
+new file mode 100644
+index 0000000..d3b912d
+--- /dev/null
++++ b/package/psplash/psplash.mk
+@@ -0,0 +1,11 @@
++################################################################################
++#
++# psplash
++#
++################################################################################
++
++PSPLASH_VERSION = 0.1
++PSPLASH_SITE = http://downloads.yoctoproject.org/releases/psplash
++PSPLASH_LICENSE = GPLv2+
++
++$(eval $(autotools-package))
 -- 
-1.8.4
+1.7.10.4
