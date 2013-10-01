@@ -1,49 +1,96 @@
-From: Axel Lin <axel.lin@ingics.com>
-Date: Tue, 1 Oct 2013 16:08:30 +0800
-Subject: [Buildroot] [PATCH 1/2] logrotate: nees mmu
-In-Reply-To: <20131001093249.6a135a15@skate>
-References: <1380594702.9353.1.camel@phoenix> <20131001093249.6a135a15@skate>
-Message-ID: <CAFRkauCMd5+Ce+_Y8uOEJLmRbZwYDUdvuxHz-8ATdzVC1TZyWQ@mail.gmail.com>
+From: Phil Eichinger <phil.eichinger@gmail.com>
+Date: Tue,  1 Oct 2013 10:14:55 +0200
+Subject: [Buildroot] [PATCH 1/2] psplash: new package
+Message-ID: <1380615296-26194-1-git-send-email-phil@zankapfel.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2013/10/1 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>:
-> Dear Axel Lin,
->
-> On Tue, 01 Oct 2013 10:31:42 +0800, Axel Lin wrote:
->> Signed-off-by: Axel Lin <axel.lin@ingics.com>
->> ---
->> Fix below build error:
->>
->> logrotate.o: In function `switch_user_permanently':
->> /opt/test/buildroot/buildroot/output/build/logrotate-3.8.4/logrotate.c:129: undefined reference to `fork'
->> logrotate.o: In function `removeLogFile':
->> /opt/test/buildroot/buildroot/output/build/logrotate-3.8.4/logrotate.c:431: undefined reference to `fork'
->> logrotate.o: In function `mailLog':
->> /opt/test/buildroot/buildroot/output/build/logrotate-3.8.4/logrotate.c:597: undefined reference to `fork'
->> /opt/test/buildroot/buildroot/output/build/logrotate-3.8.4/logrotate.c:615: undefined reference to `fork'
->> logrotate.o: In function `compressLogFile':
->> /opt/test/buildroot/buildroot/output/build/logrotate-3.8.4/logrotate.c:533: undefined reference to `fork'
->> collect2: ld returned 1 exit status
->> make[1]: *** [logrotate] Error 1
->
-> It's a minor comment, but I believe the log of the error could go
-> within the commit log itself (i.e, before the --- separator). It really
-> is part of the explanation of why the change is needed.
->
-> Note that there is no need to resend this patch just for this reason,
-> it was merely a suggestion for future patches.
 
-Actually, I check git log before sending patches.
-Some commit log includes a link to the autobuild build log.
-But I don't find any commit log with build error so I didn't include the
-build error messages.
-I just add the error messages here to make it easier for review.
+Signed-off-by: Phil Eichinger <phil@zankapfel.net>
+---
+ package/Config.in          |    1 +
+ package/psplash/Config.in  |   15 +++++++++++++++
+ package/psplash/README     |   16 ++++++++++++++++
+ package/psplash/psplash.mk |   11 +++++++++++
+ 4 files changed, 43 insertions(+)
+ create mode 100644 package/psplash/Config.in
+ create mode 100644 package/psplash/README
+ create mode 100644 package/psplash/psplash.mk
 
-Anyway, I will include the error message in commit log next time I send a patch.
-
-Regards,
-Axel
+diff --git a/package/Config.in b/package/Config.in
+index c6ea66b..86fbce2 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -156,6 +156,7 @@ endif
+ source "package/fbterm/Config.in"
+ source "package/fbv/Config.in"
+ source "package/fb-test-app/Config.in"
++source "package/psplash/Config.in"
+ source "package/imagemagick/Config.in"
+ source "package/linux-fusion/Config.in"
+ source "package/lite/Config.in"
+diff --git a/package/psplash/Config.in b/package/psplash/Config.in
+new file mode 100644
+index 0000000..186fe8a
+--- /dev/null
++++ b/package/psplash/Config.in
+@@ -0,0 +1,15 @@
++config BR2_PACKAGE_PSPLASH
++	bool "psplash"
++	help
++	  PSplash is a userspace graphical boot splash screen for mainly
++	  embedded Linux devices supporting a 16bpp or 32bpp framebuffer.
++	  It has few dependencies (just libc), supports basic images and
++	  text and handles rotation. Its visual look is configurable by
++	  basic source changes.
++
++	  Also included is a 'client' command utility for sending
++	  information to psplash such as boot progress information.
++
++	  For usage see README in package directory.
++
++	  http://git.yoctoproject.org/cgit/cgit.cgi/psplash/
+diff --git a/package/psplash/README b/package/psplash/README
+new file mode 100644
+index 0000000..89376ad
+--- /dev/null
++++ b/package/psplash/README
+@@ -0,0 +1,16 @@
++psplash utility is started, draws its image and progress bar and waits for communication. 
++psplash-write utility can be used to emit text messages and progress indication to a running psplash.
++
++Start the drawing process with 'psplash -n&' as early as possible.
++
++Note: psplash creates a FIFO in /tmp for communication with psplash-write.
++
++Usage: 
++* Set progress bar to 50 percent:
++  psplash-write "PROGRESS 50"
++
++* Display message "foobar" above progress bar:
++  psplash-write "MSG foobar"
++
++* Terminate psplash:
++  psplash-write "QUIT"
+diff --git a/package/psplash/psplash.mk b/package/psplash/psplash.mk
+new file mode 100644
+index 0000000..d3b912d
+--- /dev/null
++++ b/package/psplash/psplash.mk
+@@ -0,0 +1,11 @@
++################################################################################
++#
++# psplash
++#
++################################################################################
++
++PSPLASH_VERSION = 0.1
++PSPLASH_SITE = http://downloads.yoctoproject.org/releases/psplash
++PSPLASH_LICENSE = GPLv2+
++
++$(eval $(autotools-package))
+-- 
+1.7.10.4
