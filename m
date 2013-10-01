@@ -1,31 +1,25 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 1 Oct 2013 11:53:12 +0200
-Subject: [Buildroot] ARC builds failing
-In-Reply-To: <E6BF041E97966E4DB955F0DF883AD2D685F0CE28@de02wembxa.internal.synopsys.com>
-References: <E6BF041E97966E4DB955F0DF883AD2D685F0CE28@de02wembxa.internal.synopsys.com>
-Message-ID: <20131001115312.7cae4d80@skate>
+Date: Tue, 1 Oct 2013 11:55:08 +0200
+Subject: [Buildroot] [PATCH] setserial: bump to version 2.17-45.3
+In-Reply-To: <1380609394.20990.0.camel@phoenix>
+References: <1380609394.20990.0.camel@phoenix>
+Message-ID: <20131001115508.502bffbc@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Mischa Jonker,
+Dear Axel Lin,
 
-On Tue, 1 Oct 2013 07:58:35 +0000, Mischa Jonker wrote:
+On Tue, 01 Oct 2013 14:36:34 +0800, Axel Lin wrote:
+> Bump to patchlevel 3 since 2 is gone upstream.
+> 
+> Signed-off-by: Axel Lin <axel.lin@ingics.com>
 
-> Any comments/suggestions on below patch?
-
-Well, I'm considering reverting my patch that turns the 3 stages build
-into a 2 stages build, because it causes too much problems (not only
-the ARC one, which you fixed, but also problems related to SSP), and I
-don't know when I'll have the time to investigate those problems, which
-are not so easy.
-
-If you have some time, and interest in digging into such issues, let me
-know, we can probably work together on them.
-
-Best regards,
+I believe we should get rid of the BR2_DEBIAN_MIRROR thing altogether,
+and switch all packages that are sourced from Debian to use
+http://snapshot.debian.org/ to avoid disappearing packages.
 
 Thomas
 -- 
