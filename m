@@ -1,50 +1,44 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 01 Oct 2013 21:37:58 +0200
-Subject: [Buildroot] [PATCH] pppd: needs mmu and shared objects
-In-Reply-To: <1380532727.13663.1.camel@phoenix> (Axel Lin's message of "Mon,
- 30 Sep 2013 17:18:47 +0800")
-References: <1380532727.13663.1.camel@phoenix>
-Message-ID: <87siwku6i1.fsf@dell.be.48ers.dk>
+Date: Tue, 1 Oct 2013 21:37:21 +0200
+Subject: [Buildroot] [git commit] pppd: needs mmu and shared objects
+Message-ID: <20131001193835.727809B585@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Axel" == Axel Lin <axel.lin@ingics.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=4cfb3fc26723211c16dd2793295d6674858ca4e3
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Axel> The plugin infrastructure is based on shared objects so it won't build
- Axel> for static-only scenarios.
- Axel> And the daemon uses fork() so MMU is required.
+The plugin infrastructure is based on shared objects so it won't build
+for static-only scenarios.
+And the daemon uses fork() so MMU is required.
 
- Axel> Signed-off-by: Axel Lin <axel.lin@ingics.com>
- Axel> ---
- Axel>  package/pppd/Config.in | 6 ++++++
- Axel>  1 file changed, 6 insertions(+)
+[Peter: move below suboptions]
+Signed-off-by: Axel Lin <axel.lin@ingics.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/pppd/Config.in |    6 ++++++
+ 1 files changed, 6 insertions(+), 0 deletions(-)
 
- Axel> diff --git a/package/pppd/Config.in b/package/pppd/Config.in
- Axel> index 879b263..074c2fd 100644
- Axel> --- a/package/pppd/Config.in
- Axel> +++ b/package/pppd/Config.in
- Axel> @@ -1,10 +1,16 @@
- Axel>  config BR2_PACKAGE_PPPD
- Axel>  	bool "pppd"
- Axel> +	depends on !BR2_PREFER_STATIC_LIB
- Axel> +	depends on BR2_USE_MMU
- Axel>  	help
- Axel>  	  An implementation of the Point-to-point protocol.
+diff --git a/package/pppd/Config.in b/package/pppd/Config.in
+index 879b263..ba35fed 100644
+--- a/package/pppd/Config.in
++++ b/package/pppd/Config.in
+@@ -1,5 +1,7 @@
+ config BR2_PACKAGE_PPPD
+ 	bool "pppd"
++	depends on !BR2_PREFER_STATIC_LIB
++	depends on BR2_USE_MMU
+ 	help
+ 	  An implementation of the Point-to-point protocol.
  
- Axel>  	  http://www.samba.org/ppp/
- 
- Axel> +comment "pppd requires a toolchain with dynamic library support"
- Axel> +	depends on BR2_PREFER_STATIC_LIB
- Axel> +	depends on BR2_USE_MMU
- Axel> +
-
-This needs to go under the sub options otherwise they won't get properly
-indented.
-
-Committed with that fixed, thanks.
-
--- 
-Bye, Peter Korsgaard
+@@ -19,3 +21,7 @@ config BR2_PACKAGE_PPPD_RADIUS
+ 	bool "radius"
+ 	help
+ 	  Install RADIUS support for pppd
++
++comment "pppd requires a toolchain with dynamic library support"
++	depends on BR2_PREFER_STATIC_LIB
++	depends on BR2_USE_MMU
