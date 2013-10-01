@@ -1,69 +1,49 @@
-From: =?ISO-8859-1?Q?Fran=E7ois_Perrad?= <francois.perrad@gadz.org>
-Date: Tue, 1 Oct 2013 12:47:20 +0200
-Subject: [Buildroot] [UNSURE]Re: [v4 1/2] luainterpreter: create virtual
-	package
-In-Reply-To: <20131001093122.48b1c5f4@skate>
-References: <1376469325-3707-1-git-send-email-francois.perrad@gadz.org>
- <CA+-urNQZVaNvLwNUA_X6N7Ft2N0U1Yo6h+L__vNtHJfOZVPUSA@mail.gmail.com>
- <20130930225408.4ea0f858@skate>
- <CAB0FRssEyA+HqrMGw4B-sEswJY7YAMqw0Jh+L6gpyE0TVCyB6A@mail.gmail.com>
- <20131001093122.48b1c5f4@skate>
-Message-ID: <CAB0FRsspaq_BTykGrOPP=iyTxpm9Wu46wMvWgRHNDzSpj-XCkA@mail.gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 01 Oct 2013 12:56:45 +0200
+Subject: [Buildroot] [PATCH 1/1] package: fix github download URL
+In-Reply-To: <1380195788-32432-1-git-send-email-jerzy.grzegorek@trzebnica.net>
+References: <1380195788-32432-1-git-send-email-jerzy.grzegorek@trzebnica.net>
+Message-ID: <524AAA6D.8000103@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2013/10/1 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>:
-> Dear Fran?ois Perrad,
+On 09/26/13 13:43, Jerzy Grzegorek wrote:
+> diff --git a/package/cpuload/cpuload.mk b/package/cpuload/cpuload.mk
+> index e0b8ccf..d00c3a4 100644
+> --- a/package/cpuload/cpuload.mk
+> +++ b/package/cpuload/cpuload.mk
+> @@ -4,8 +4,8 @@
+>   #
+>   ################################################################################
 >
-> On Tue, 1 Oct 2013 09:27:48 +0200, Fran?ois Perrad wrote:
->
->> A version for a virtual package is not mandatory.
->> A virtual package is used to create a OR dependency.
->> With luainterpreter, a Lua module (LuaSocket for example) depends on
->> lua OR on luajit.
->> Both Lua 5.1.5 and LuaJIT 2.0.2 provides a Lua 5.1 ABI/API compatible
->> interpreter.
->> The only effect of setting LUAINTERPRETER_VERSION is the name of the
->> directory 'build/luainterpreter-5.1' instead of
->> 'build/luainterpreter-undefined'.
->
-> Ok, makes sense.
->
->> I don't like name containing 'undefined', but I'll be fine with a BR
->> convention what says :
->>   - all virtual packages use 'virtual' as version.
->
-> I probably haven't thought about all the implications, but it indeed
-> looks like an interesting suggestion. Virtual packages are anyway
-> something that we should progressively formalize through a new section
-> in the documentation.
->
->> I've already did some experiments with the Lua 5.2 serie in my own
->> repository, see https://github.com/fperrad/br/tree/lua5.2
->
-> So should we package Lua 5.1 and 5.2 separately, because Lua modules
-> are only compatible with 5.1 or 5.2, or can we keep the same package
-> for both Lua versions?
->
+> -CPULOAD_VERSION = v0.3
+> -CPULOAD_SITE =http://github.com/kelvincheung/cpuload/tarball/$(CPULOAD_VERSION)
+> +CPULOAD_VERSION = 0.3
+> +CPULOAD_SITE =https://github.com/kelvincheung/cpuload/tarball/v$(CPULOAD_VERSION)
+>   CPULOAD_LICENSE = GPLv2
 
-Lua 5.2.0 was released on December 2011 (see
-https://raw.github.com/fperrad/graph-versions/gh-pages/slides/lua.png).
-Since this, Lua module authors release new version which are
-compatible 5.1 and 5.2 (not a hard job, differences are small). But
-this process is not fast and not finished.
+  Not that it's a big deal to me, but I don't agree with the concept of 
+this change. The meaning of this URL is that you export a certain tag 
+from a git repository. It is conceptually not the same as a release 
+tarball that a project creates. Therefore, I think the VERSION should be 
+exactly the same as the tag name, so that it stays as close as possible 
+as what we would have if we used the git site method.
 
-So, I think Lua 5.1.x and 5.2.x can be handled by the same package
-with a choice (like gcc, binutils)
 
-Fran?ois
+  Also you change the URL to https here. With the recent problems with 
+https URLs that we've seen on the autobuilders recently, I wonder if this 
+is a good idea?
 
-> Thanks!
->
-> Thomas
-> --
-> Thomas Petazzoni, Free Electrons
-> Embedded Linux, Kernel and Android engineering
-> http://free-electrons.com
+
+  Regards,
+  Arnout
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
