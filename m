@@ -1,7 +1,9 @@
 From: Axel Lin <axel.lin@ingics.com>
-Date: Tue, 01 Oct 2013 10:31:42 +0800
-Subject: [Buildroot] [PATCH 1/2] logrotate: nees mmu
-Message-ID: <1380594702.9353.1.camel@phoenix>
+Date: Tue, 01 Oct 2013 10:32:32 +0800
+Subject: [Buildroot] [PATCH 2/2] logrotate: bump to version 3.8.6
+In-Reply-To: <1380594702.9353.1.camel@phoenix>
+References: <1380594702.9353.1.camel@phoenix>
+Message-ID: <1380594752.9353.2.camel@phoenix>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,34 +12,21 @@ To: buildroot@busybox.net
 
 Signed-off-by: Axel Lin <axel.lin@ingics.com>
 ---
-Fix below build error:
+ package/logrotate/logrotate.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-logrotate.o: In function `switch_user_permanently':
-/opt/test/buildroot/buildroot/output/build/logrotate-3.8.4/logrotate.c:129: undefined reference to `fork'
-logrotate.o: In function `removeLogFile':
-/opt/test/buildroot/buildroot/output/build/logrotate-3.8.4/logrotate.c:431: undefined reference to `fork'
-logrotate.o: In function `mailLog':
-/opt/test/buildroot/buildroot/output/build/logrotate-3.8.4/logrotate.c:597: undefined reference to `fork'
-/opt/test/buildroot/buildroot/output/build/logrotate-3.8.4/logrotate.c:615: undefined reference to `fork'
-logrotate.o: In function `compressLogFile':
-/opt/test/buildroot/buildroot/output/build/logrotate-3.8.4/logrotate.c:533: undefined reference to `fork'
-collect2: ld returned 1 exit status
-make[1]: *** [logrotate] Error 1
-
- package/logrotate/Config.in | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/package/logrotate/Config.in b/package/logrotate/Config.in
-index 0d0ec61..bc7b295 100644
---- a/package/logrotate/Config.in
-+++ b/package/logrotate/Config.in
-@@ -2,6 +2,7 @@ config BR2_PACKAGE_LOGROTATE
- 	bool "logrotate"
- 	select BR2_PACKAGE_POPT
- 	depends on BR2_USE_WCHAR
-+	depends on BR2_USE_MMU # fork()
- 	help
- 	  A simple program to rotate logs.
+diff --git a/package/logrotate/logrotate.mk b/package/logrotate/logrotate.mk
+index f5ef0b9..4bae431 100644
+--- a/package/logrotate/logrotate.mk
++++ b/package/logrotate/logrotate.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
+-LOGROTATE_VERSION = 3.8.4
++LOGROTATE_VERSION = 3.8.6
+ LOGROTATE_SOURCE = logrotate-$(LOGROTATE_VERSION).tar.gz
+ LOGROTATE_SITE = https://www.fedorahosted.org/releases/l/o/logrotate/
+ LOGROTATE_LICENSE = GPLv2+
 -- 
 1.8.1.2
