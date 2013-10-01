@@ -1,28 +1,30 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 1 Oct 2013 11:55:08 +0200
-Subject: [Buildroot] [PATCH] setserial: bump to version 2.17-45.3
-In-Reply-To: <1380609394.20990.0.camel@phoenix>
-References: <1380609394.20990.0.camel@phoenix>
-Message-ID: <20131001115508.502bffbc@skate>
+From: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+Date: Tue,  1 Oct 2013 11:55:11 +0200
+Subject: [Buildroot] [PATCH 1/1] picocom: bump to version 1.7
+Message-ID: <1380621311-15898-1-git-send-email-jerzy.grzegorek@trzebnica.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Axel Lin,
+Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+---
+ package/picocom/picocom.mk |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-On Tue, 01 Oct 2013 14:36:34 +0800, Axel Lin wrote:
-> Bump to patchlevel 3 since 2 is gone upstream.
-> 
-> Signed-off-by: Axel Lin <axel.lin@ingics.com>
-
-I believe we should get rid of the BR2_DEBIAN_MIRROR thing altogether,
-and switch all packages that are sourced from Debian to use
-http://snapshot.debian.org/ to avoid disappearing packages.
-
-Thomas
+diff --git a/package/picocom/picocom.mk b/package/picocom/picocom.mk
+index 4298faa..8f8ad20 100644
+--- a/package/picocom/picocom.mk
++++ b/package/picocom/picocom.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PICOCOM_VERSION = 1.6
++PICOCOM_VERSION = 1.7
+ PICOCOM_SITE    = http://picocom.googlecode.com/files/
+ 
+ define PICOCOM_BUILD_CMDS
 -- 
-Thomas Petazzoni, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.7.9.5
