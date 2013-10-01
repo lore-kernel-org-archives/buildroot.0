@@ -1,49 +1,90 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 01 Oct 2013 12:56:45 +0200
-Subject: [Buildroot] [PATCH 1/1] package: fix github download URL
-In-Reply-To: <1380195788-32432-1-git-send-email-jerzy.grzegorek@trzebnica.net>
-References: <1380195788-32432-1-git-send-email-jerzy.grzegorek@trzebnica.net>
-Message-ID: <524AAA6D.8000103@mind.be>
+From: =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= <jezz@sysmic.org>
+Date: Tue,  1 Oct 2013 13:38:12 +0200
+Subject: [Buildroot] [PATCH] Fix compilation of systemd with uclibc
+Message-ID: <1380627492-25380-1-git-send-email-jezz@sysmic.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 09/26/13 13:43, Jerzy Grzegorek wrote:
-> diff --git a/package/cpuload/cpuload.mk b/package/cpuload/cpuload.mk
-> index e0b8ccf..d00c3a4 100644
-> --- a/package/cpuload/cpuload.mk
-> +++ b/package/cpuload/cpuload.mk
-> @@ -4,8 +4,8 @@
->   #
->   ################################################################################
->
-> -CPULOAD_VERSION = v0.3
-> -CPULOAD_SITE =http://github.com/kelvincheung/cpuload/tarball/$(CPULOAD_VERSION)
-> +CPULOAD_VERSION = 0.3
-> +CPULOAD_SITE =https://github.com/kelvincheung/cpuload/tarball/v$(CPULOAD_VERSION)
->   CPULOAD_LICENSE = GPLv2
+systemd-uclibc-fix.patch was applied to systemd to provide execvpe function
+when compiled with uclibc. However, this function is now provided by
+libc-add-non-standard-execvpe-function.patch in uclibc package.
 
-  Not that it's a big deal to me, but I don't agree with the concept of 
-this change. The meaning of this URL is that you export a certain tag 
-from a git repository. It is conceptually not the same as a release 
-tarball that a project creates. Therefore, I think the VERSION should be 
-exactly the same as the tag name, so that it stays as close as possible 
-as what we would have if we used the git site method.
+These two patchs are now in conflict. This commit remove
+systemd/systemd-uclibc-fix.patch.
 
+Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
+---
+ package/systemd/systemd-uclibc-fix.patch |   59 ------------------------------
+ 1 file changed, 59 deletions(-)
+ delete mode 100644 package/systemd/systemd-uclibc-fix.patch
 
-  Also you change the URL to https here. With the recent problems with 
-https URLs that we've seen on the autobuilders recently, I wonder if this 
-is a good idea?
-
-
-  Regards,
-  Arnout
+diff --git a/package/systemd/systemd-uclibc-fix.patch b/package/systemd/systemd-uclibc-fix.patch
+deleted file mode 100644
+index 9a20845..0000000
+--- a/package/systemd/systemd-uclibc-fix.patch
++++ /dev/null
+@@ -1,59 +0,0 @@
+-[PATCH] fix build with uClibc
+-
+-Based on OE patch from Khem Raj:
+-
+-http://cgit.openembedded.org/meta-openembedded/tree/meta-oe/recipes-core/systemd/systemd/paper-over-mkostemp.patch
+-
+-But extended to also cover execvpe (OE carries a patch adding execvpe
+-support to uClibc).
+-
+-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+----
+- src/journal/journal-file.c |    2 ++
+- src/macro.h                |   15 +++++++++++++++
+- 2 files changed, 17 insertions(+)
+-
+-Index: systemd-44/src/macro.h
+-===================================================================
+---- systemd-44.orig/src/macro.h
+-+++ systemd-44/src/macro.h
+-@@ -28,6 +28,21 @@
+- #include <sys/uio.h>
+- #include <inttypes.h>
+- 
+-+#ifdef __UCLIBC__
+-+/* uclibc does not implement mkostemp GNU extension */
+-+#define mkostemp(x,y) mkstemp(x)
+-+/* uclibc does not implement execvpe GNU extension */
+-+#ifndef _GNU_SOURCE
+-+#define _GNU_SOURCE
+-+#endif
+-+#include <unistd.h>
+-+static inline int execvpe(const char *file, char *const argv[],
+-+                          char *const envp[])
+-+{
+-+        environ = (char **)envp;
+-+        return execvp(file, argv);
+-+}
+-+#endif
+- #define _printf_attr_(a,b) __attribute__ ((format (printf, a, b)))
+- #define _sentinel_ __attribute__ ((sentinel))
+- #define _noreturn_ __attribute__((noreturn))
+-Index: systemd-44/src/journal/journal-file.c
+-===================================================================
+---- systemd-44.orig/src/journal/journal-file.c
+-+++ systemd-44/src/journal/journal-file.c
+-@@ -229,11 +229,13 @@
+-                 }
+-         }
+- 
+-+#ifndef __UCLIBC__
+-         /* Note that the glibc fallocate() fallback is very
+-            inefficient, hence we try to minimize the allocation area
+-            as we can. */
+-         if (posix_fallocate(f->fd, old_size, new_size - old_size) < 0)
+-                 return -errno;
+-+#endif
+- 
+-         if (fstat(f->fd, &f->last_stat) < 0)
+-                 return -errno;
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+1.7.9.5
