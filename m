@@ -1,48 +1,46 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 1 Oct 2013 23:26:12 +0200
-Subject: [Buildroot] [git commit] trace-cmd: fix largefile build problem
-Message-ID: <20131001220021.CEEE39B527@busybox.osuosl.org>
+Date: Tue, 1 Oct 2013 23:58:52 +0200
+Subject: [Buildroot] [git commit] glibc: Pass correct -mabi for MIPS
+Message-ID: <20131001220021.E17A29B527@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c07f1ce0ec8a75aeed67c0991a10106e79f22323
+commit: http://git.buildroot.net/buildroot/commit/?id=3dfa23fcc2d54e75eb80d14fc2b0045a3a24c355
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The source files of trace-cmd already define _LARGEFILE64_SOURCE, but
-Buildroot passes it again on the build command line through CFLAGS,
-which causes a build error. We fix this by filtering out our
-definition of _LARGEFILE64_SOURCE from the CFLAGS before passing them
-to the trace-cmd Makefile.
+According to glibc-2.18/ports/sysdeps/mips/preconfigure,
+if no -mabi was passed to CFLAGS, then it defaults to -mabi=n32.
+This breaks o32 and n64 builds for MIPS64. Therefore, it is
+necessary to append -mabi to CFLAGS.
 
-Fixes the warning visible at:
-
- http://autobuild.buildroot.net/results/1c4567a230940a5287d03e2a5c2c7afbdc64cd36/build-end.log
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
+Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/trace-cmd/trace-cmd.mk |    6 +++++-
- 1 files changed, 5 insertions(+), 1 deletions(-)
+ package/glibc/glibc.mk |   10 ++++++++++
+ 1 files changed, 10 insertions(+), 0 deletions(-)
 
-diff --git a/package/trace-cmd/trace-cmd.mk b/package/trace-cmd/trace-cmd.mk
-index ada0306..7a750f9 100644
---- a/package/trace-cmd/trace-cmd.mk
-+++ b/package/trace-cmd/trace-cmd.mk
-@@ -11,9 +11,13 @@ TRACE_CMD_INSTALL_STAGING = YES
- TRACE_CMD_LICENSE = GPLv2 LGPLv2.1
- TRACE_CMD_LICENSE_FILES = COPYING COPYING.LIB
+diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
+index 4dd2e63..68c4636 100644
+--- a/package/glibc/glibc.mk
++++ b/package/glibc/glibc.mk
+@@ -43,6 +43,16 @@ ifeq ($(BR2_ARM_INSTRUCTIONS_THUMB),y)
+ GLIBC_EXTRA_CFLAGS += -marm
+ endif
  
-+# trace-cmd already defines _LARGEFILE64_SOURCE when necessary,
-+# redefining it on the command line causes build problems.
-+TRACE_CMD_CFLAGS=$(filter-out -D_LARGEFILE64_SOURCE,$(TARGET_CFLAGS)) -D_GNU_SOURCE
++# MIPS64 defaults to n32 so pass the correct -mabi if
++# we are using a different ABI. OABI32 is also used
++# in MIPS so we pass -mabi=32 in this case as well
++# even though it's not strictly necessary.
++ifeq ($(BR2_MIPS_NABI64),y)
++GLIBC_EXTRA_CFLAGS += -mabi=64
++else ifeq ($(BR2_MIPS_OABI32),y)
++GLIBC_EXTRA_CFLAGS += -mabi=32
++endif
 +
- define TRACE_CMD_BUILD_CMDS
- 	$(MAKE) $(TARGET_CONFIGURE_OPTS) \
--		CFLAGS="$(TARGET_CFLAGS) -D_GNU_SOURCE" \
-+		CFLAGS="$(TRACE_CMD_CFLAGS)" \
- 		-C $(@D) all
- endef
- 
+ # Even though we use the autotools-package infrastructure, we have to
+ # override the default configure commands for several reasons:
+ #
