@@ -1,51 +1,49 @@
-From: Mischa Jonker <Mischa.Jonker@synopsys.com>
-Date: Tue, 1 Oct 2013 07:58:35 +0000
-Subject: [Buildroot] ARC builds failing
-Message-ID: <E6BF041E97966E4DB955F0DF883AD2D685F0CE28@de02wembxa.internal.synopsys.com>
+From: Axel Lin <axel.lin@ingics.com>
+Date: Tue, 1 Oct 2013 16:08:30 +0800
+Subject: [Buildroot] [PATCH 1/2] logrotate: nees mmu
+In-Reply-To: <20131001093249.6a135a15@skate>
+References: <1380594702.9353.1.camel@phoenix> <20131001093249.6a135a15@skate>
+Message-ID: <CAFRkauCMd5+Ce+_Y8uOEJLmRbZwYDUdvuxHz-8ATdzVC1TZyWQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
+2013/10/1 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>:
+> Dear Axel Lin,
+>
+> On Tue, 01 Oct 2013 10:31:42 +0800, Axel Lin wrote:
+>> Signed-off-by: Axel Lin <axel.lin@ingics.com>
+>> ---
+>> Fix below build error:
+>>
+>> logrotate.o: In function `switch_user_permanently':
+>> /opt/test/buildroot/buildroot/output/build/logrotate-3.8.4/logrotate.c:129: undefined reference to `fork'
+>> logrotate.o: In function `removeLogFile':
+>> /opt/test/buildroot/buildroot/output/build/logrotate-3.8.4/logrotate.c:431: undefined reference to `fork'
+>> logrotate.o: In function `mailLog':
+>> /opt/test/buildroot/buildroot/output/build/logrotate-3.8.4/logrotate.c:597: undefined reference to `fork'
+>> /opt/test/buildroot/buildroot/output/build/logrotate-3.8.4/logrotate.c:615: undefined reference to `fork'
+>> logrotate.o: In function `compressLogFile':
+>> /opt/test/buildroot/buildroot/output/build/logrotate-3.8.4/logrotate.c:533: undefined reference to `fork'
+>> collect2: ld returned 1 exit status
+>> make[1]: *** [logrotate] Error 1
+>
+> It's a minor comment, but I believe the log of the error could go
+> within the commit log itself (i.e, before the --- separator). It really
+> is part of the explanation of why the change is needed.
+>
+> Note that there is no need to resend this patch just for this reason,
+> it was merely a suggestion for future patches.
 
-Any comments/suggestions on below patch?
+Actually, I check git log before sending patches.
+Some commit log includes a link to the autobuild build log.
+But I don't find any commit log with build error so I didn't include the
+build error messages.
+I just add the error messages here to make it easier for review.
 
-> I can provide a patch that adds a
-> 'uclibc- headers' target inside the uclibc package, and let
-> gcc-initial depend on both uclibc-headers and linux-headers for ARC. That seems to work OK for me.
-> 
-> Something like this:
-> 
-> --- a/package/gcc/gcc-initial/gcc-initial.mk
-> +++ b/package/gcc/gcc-initial/gcc-initial.mk
-> @@ -8,7 +8,7 @@ GCC_INITIAL_VERSION = $(GCC_VERSION)
->  GCC_INITIAL_SITE    = $(GCC_SITE)
->  GCC_INITIAL_SOURCE  = $(GCC_SOURCE)
-> -HOST_GCC_INITIAL_DEPENDENCIES = $(HOST_GCC_COMMON_DEPENDENCIES)
-> +HOST_GCC_INITIAL_DEPENDENCIES = $(HOST_GCC_COMMON_DEPENDENCIES)
-> +uclibc-headers linux-headers
-> 
->  HOST_GCC_INITIAL_EXTRACT_CMDS = $(HOST_GCC_EXTRACT_CMDS)
-> diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk index
-> 3993d9b..30a5461 100644
-> --- a/package/uclibc/uclibc.mk
-> +++ b/package/uclibc/uclibc.mk
-> @@ -547,6 +547,14 @@ define UCLIBC_INSTALL_STAGING_CMDS
->         $(UCLIBC_INSTALL_UTILS_STAGING)  endef
-> +uclibc-headers: dirs uclibc-patch
-> +       $(MAKE1) -C $(UCLIBC_DIR) \
-> +               $(UCLIBC_MAKE_FLAGS) \
-> +               PREFIX=$(STAGING_DIR) \
-> +               DEVEL_PREFIX=/usr/ \
-> +               RUNTIME_PREFIX=$(STAGING_DIR) \
-> +               install_headers
-> +
->  uclibc-menuconfig: dirs uclibc-patch
->         $(MAKE1) -C $(UCLIBC_DIR) \
->                 $(UCLIBC_MAKE_FLAGS) \
+Anyway, I will include the error message in commit log next time I send a patch.
 
-It fixes the ARC build which has been broken for a couple of weeks now.
-
-Mischa
+Regards,
+Axel
