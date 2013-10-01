@@ -1,60 +1,84 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 01 Oct 2013 09:55:25 +0200
-Subject: [Buildroot] [PATCH v2] aiccu: patched Makefile to enable static
-	linking
-In-Reply-To: <1380563862-4241-1-git-send-email-rommel@layer-7.net> (Michael
- Rommel's message of "Mon, 30 Sep 2013 19:57:42 +0200")
-References: <1380563862-4241-1-git-send-email-rommel@layer-7.net>
-Message-ID: <8761th1l3m.fsf@dell.be.48ers.dk>
+From: =?ISO-8859-1?Q?Fran=E7ois_Perrad?= <francois.perrad@gadz.org>
+Date: Tue, 1 Oct 2013 09:27:48 +0200
+Subject: [Buildroot] [v4 1/2] luainterpreter: create virtual package
+In-Reply-To: <20130930225408.4ea0f858@skate>
+References: <1376469325-3707-1-git-send-email-francois.perrad@gadz.org>
+ <CA+-urNQZVaNvLwNUA_X6N7Ft2N0U1Yo6h+L__vNtHJfOZVPUSA@mail.gmail.com>
+ <20130930225408.4ea0f858@skate>
+Message-ID: <CAB0FRssEyA+HqrMGw4B-sEswJY7YAMqw0Jh+L6gpyE0TVCyB6A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "M" == Michael Rommel <rommel@layer-7.net> writes:
+2013/9/30 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>:
+> Dear Frank Hunleth,
+>
+> On Mon, 30 Sep 2013 14:31:46 -0400, Frank Hunleth wrote:
+>
+>> > +#############################################################
+>> > +#
+>> > +# Virtual package for luainterpreter
+>> > +#
+>> > +#############################################################
+>> > +
+>> > +LUAINTERPRETER_VERSION = 5.1
+>>
+>> I was curious on your choice of version number for the virtual
+>> package. Is this intended to be used for API compatibility checks?
+>>
 
- M> Fixes autobuild errors:
- M> http://autobuild.buildroot.net/results/308087e1f85e822dec8b73a3ed892c7cd2376cbd/
- M> http://autobuild.buildroot.net/results/9fb298d4e09a6f9b88207909d583dce05392048e/
+A version for a virtual package is not mandatory.
+A virtual package is used to create a OR dependency.
+With luainterpreter, a Lua module (LuaSocket for example) depends on
+lua OR on luajit.
+Both Lua 5.1.5 and LuaJIT 2.0.2 provides a Lua 5.1 ABI/API compatible
+interpreter.
+The only effect of setting LUAINTERPRETER_VERSION is the name of the
+directory 'build/luainterpreter-5.1' instead of
+'build/luainterpreter-undefined'.
 
- M> Signed-off-by: Michael Rommel <rommel@layer-7.net>
- M> ---
- M> v1: initial patch to add required libraries for static linking to LDFLAGS
- M>     and reorder the CC commandline
+I don't like name containing 'undefined', but I'll be fine with a BR
+convention what says :
+  - all virtual packages use 'virtual' as version.
 
- M> v2: added signed-off line and commit msg to patch, added autobuild URIs to 
- M>     commit msg
+I've already did some experiments with the Lua 5.2 serie in my own
+repository, see https://github.com/fperrad/br/tree/lua5.2
 
- M>  ...cu-0002-makefile-reorder-linked-libraries.patch |   24 ++++++++++++++++++++
- M>  1 file changed, 24 insertions(+)
- M>  create mode 100644 package/aiccu/aiccu-0002-makefile-reorder-linked-libraries.patch
+Fran?ois
 
- M> diff --git a/package/aiccu/aiccu-0002-makefile-reorder-linked-libraries.patch b/package/aiccu/aiccu-0002-makefile-reorder-linked-libraries.patch
- M> new file mode 100644
- M> index 0000000..cc189b2
- M> --- /dev/null
- M> +++ b/package/aiccu/aiccu-0002-makefile-reorder-linked-libraries.patch
- M> @@ -0,0 +1,24 @@
- M> +Makefile: changed LDFLAGS contents and order on the compile line for --static
- M> +
- M> +Signed-off-by: Michael Rommel <rommel@layer-7.net>
- M> +
- M> +--- aiccu_20070115.orig/unix-console/Makefile	2007-01-15 12:04:27.000000000 +0100
- M> ++++ aiccu_20070115/unix-console/Makefile	2013-09-29 22:54:42.742963861 +0200
- M> +@@ -42,7 +42,7 @@ CFLAGS	+= -D AICCU_CONSOLE
- M> + # Currently defaultly builds only on Linux, but other platforms might easily also support it
- M> + ifeq ($(shell uname | grep -c "Linux"),1)
- M> + CFLAGS	+= -D AICCU_GNUTLS
- M> +-LDFLAGS += -lgnutls
- M> ++LDFLAGS += -lgnutls -lhogweed -lnettle -lgmp -lz
-
-Thanks. The problem is that zlib (and libidn, p11-kit and libtasn1) are
-all optional for gnutls (but needed in LDFLAGS when statically linking),
-so this doesn't really work.
-
-Perhaps we should handle it in aiccu.mk instead, either manually or
-using pkg-config --static --libs gnutls
-
--- 
-Bye, Peter Korsgaard
+>> The reason that I'm asking is that I'm going to need to upgrade a
+>> project to Lua 5.2. There are enough API differences between Lua 5.1
+>> and 5.2 that it would be useful to use your patch set and add Lua 5.2
+>> as another luainterpreter. Using LUAINTERPRETER_VERSION sounds like
+>> one way of checking Lua API compatibility in other projects. Or did
+>> you have other thoughts?
+>>
+>> Also, any word on the status of your patches?
+>
+> Having a "version" attached to a virtual package does not make sense, I
+> believe.
+>
+> If there are several incompatible versions of Lua that need to be
+> supported in Buildroot, then they must be packaged as separate
+> packages: lua, lua52 for example, like we're doing for python vs.
+> python4 and qt vs. qt5.
+>
+> A virtual package should remain only have as dependencies packages that
+> provide the same API, i.e that interchangeable.
+>
+> (Note: I have no knowledge about Lua specifically, those statements are
+> generic Buildroot rules.)
+>
+> Best regards,
+>
+> Thomas
+> --
+> Thomas Petazzoni, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
