@@ -1,71 +1,73 @@
-From: Eric Nelson <eric.nelson@boundarydevices.com>
-Date: Tue, 01 Oct 2013 11:08:33 -0700
-Subject: [Buildroot] [PATCH 1/2] freescale-imx: separate variable
- assignment from Makefile
-In-Reply-To: <1380650790-18097-2-git-send-email-eric.nelson@boundarydevices.com>
-References: <1380650790-18097-1-git-send-email-eric.nelson@boundarydevices.com>
- <1380650790-18097-2-git-send-email-eric.nelson@boundarydevices.com>
-Message-ID: <524B0FA1.3000603@boundarydevices.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 01 Oct 2013 18:08:23 +0200
+Subject: [Buildroot] [RFC] package: Redownload HEAD packages every build
+In-Reply-To: <1380293015-20331-1-git-send-email-clshotwe@rockwellcollins.com>
+References: <1380293015-20331-1-git-send-email-clshotwe@rockwellcollins.com>
+Message-ID: <524AF377.50909@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Arnout,
-
-On 10/01/2013 11:06 AM, Eric Nelson wrote:
-> This patch pulls the variable assignments for the site and
-> version from freescale-imx.mk and places them into freescale-imx.inc
-> so they can be used by components in other trees
-> (e.g. gstreamer plugins).
+On 09/27/13 16:43, Clayton Shotwell wrote:
+> Adding a check to remove a downloaded package if the version is HEAD. This causes the package to be re-downloaded with updated software. This feature is very useful during package development.
 >
-> Signed-off-by: Eric Nelson <eric.nelson@boundarydevices.com>
+> Signed-off-by: Clayton Shotwell <clshotwe@rockwellcollins.com>
 > ---
->   package/freescale-imx/freescale-imx.inc | 9 +++++++++
->   package/freescale-imx/freescale-imx.mk  | 6 +-----
->   2 files changed, 10 insertions(+), 5 deletions(-)
->   create mode 100644 package/freescale-imx/freescale-imx.inc
+>   package/pkg-generic.mk |    7 +++++++
+>   1 files changed, 7 insertions(+), 0 deletions(-)
 >
-> diff --git a/package/freescale-imx/freescale-imx.inc b/package/freescale-imx/freescale-imx.inc
-> new file mode 100644
-> index 0000000..51709f4
-> --- /dev/null
-> +++ b/package/freescale-imx/freescale-imx.inc
-> @@ -0,0 +1,9 @@
-> +################################################################################
-> +#
-> +# Set freescale-imx variables to make it easy to align versions of various
-> +# packages
-> +#
-> +################################################################################
-> +FREESCALE_IMX_VERSION = 3.5.7-1.0.0
-> +FREESCALE_IMX_SITE   = http://www.freescale.com/lgfiles/NMG/MAD/YOCTO/
-> +
-> diff --git a/package/freescale-imx/freescale-imx.mk b/package/freescale-imx/freescale-imx.mk
-> index 2762972..46f4ddb 100644
-> --- a/package/freescale-imx/freescale-imx.mk
-> +++ b/package/freescale-imx/freescale-imx.mk
-> @@ -4,9 +4,5 @@
->   #
->   ################################################################################
->
-> -FREESCALE_IMX_VERSION = 3.5.7-1.0.0
-> -
-> -FREESCALE_IMX_SITE   = http://www.freescale.com/lgfiles/NMG/MAD/YOCTO/
-> -#FREESCALE_IMX_MIRROR_SITE   = http://download.ossystems.com.br/bsp/freescale/source
-> -
-> +include package/freescale-imx/freescale-imx.inc
->   include $(sort $(wildcard package/freescale-imx/*/*.mk))
+> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+> index bfc4dc1..859c4a9 100644
+> --- a/package/pkg-generic.mk
+> +++ b/package/pkg-generic.mk
+> @@ -27,6 +27,13 @@
+>   # Retrieve the archive
+>   $(BUILD_DIR)/%/.stamp_downloaded:
+>   ifeq ($(DL_MODE),DOWNLOAD)
+> +# Remove the pre-downloaded tar file if the package is a HEAD version
+> +	$(Q)( \
+> +	if test $($(PKG)_VERSION) == HEAD -a -e $(DL_DIR)/$($(PKG)_SOURCE); then \
+> +		rm $(DL_DIR)/$($(PKG)_SOURCE); \
+
+  Use $(RM) instead of rm, then you don't need to check for existence.
+
+> +		$(call MESSAGE,"Removing $(PKG) HEAD source file"); \
+
+  I don't think this extra message is needed.
+
+> +	fi; \
+> +	)
+>   # Only show the download message if it isn't already downloaded
+>   	$(Q)if test ! -e $(DL_DIR)/$($(PKG)_SOURCE); then \
+>   		$(call MESSAGE,"Downloading") ; \
 >
 
-Note that with this patch, we could leave libfslcodec, libfslparser,
-and libvpuwrap in their original locations if that's what you'd
-like to do.
+  You'll also need to avoid touching the stamp file after the download, 
+otherwise the rule is not even evaluated.
 
-I still have a preference to keep them together, FWIW.
+  Also I think I would prefer instead to have an explicit variable to 
+indicate that it should be re-downloaded, e.g.
 
-Regards,
+ifneq ($($(PKG)_FORCE_DOWNLOAD),)
+	$(Q)$(RM) $(DL_DIR)/$($(PKG)_SOURCE)
+endif
+
+  This variable can be set either from the package's .mk file or from the 
+local override file.
 
 
-Eric
+  And finally, the documentation should be updated as well.
+
+
+  Regards,
+  Arnout
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
