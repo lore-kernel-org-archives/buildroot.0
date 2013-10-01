@@ -1,68 +1,124 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 01 Oct 2013 18:08:23 +0200
-Subject: [Buildroot] [RFC] package: Redownload HEAD packages every build
-In-Reply-To: <1380293015-20331-1-git-send-email-clshotwe@rockwellcollins.com>
-References: <1380293015-20331-1-git-send-email-clshotwe@rockwellcollins.com>
-Message-ID: <524AF377.50909@mind.be>
+Date: Tue, 01 Oct 2013 18:30:04 +0200
+Subject: [Buildroot] [PATCH 1/1] omniorb: cleanup autobuild failure,
+ CFLAGS issue
+In-Reply-To: <1380311674-6883-1-git-send-email-mlweber1@rockwellcollins.com>
+References: <1380311674-6883-1-git-send-email-mlweber1@rockwellcollins.com>
+Message-ID: <524AF88C.4070906@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 09/27/13 16:43, Clayton Shotwell wrote:
-> Adding a check to remove a downloaded package if the version is HEAD. This causes the package to be re-downloaded with updated software. This feature is very useful during package development.
+On 09/27/13 21:54, Matt Weber wrote:
+> Fixed:
+> http://autobuild.buildroot.net/results/a08baf8821e3ee1fb9c36c8f74c4ced466af167b/
+> http://autobuild.buildroot.net/results/f0c7379c1f405385d3a64c0349c3d9565065e8a7/
+> http://autobuild.buildroot.net/results/c3de25ca52fdb8ffda7472cf9f7b64514954cbb1/
 >
-> Signed-off-by: Clayton Shotwell <clshotwe@rockwellcollins.com>
-> ---
->   package/pkg-generic.mk |    7 +++++++
->   1 files changed, 7 insertions(+), 0 deletions(-)
+> Change Log:
+> The target CFLAGS were getting mixed in during a manual build of some
+> omniorb pkg tools that could be viewed as host tools.
+> This manual build was a dirty workaround and created some bad
+> cornercases. So I converted the package over to actually using the
+> host pkg build and removed the need for a patch and custom mods in the build.
 >
-> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-> index bfc4dc1..859c4a9 100644
-> --- a/package/pkg-generic.mk
-> +++ b/package/pkg-generic.mk
-> @@ -27,6 +27,13 @@
->   # Retrieve the archive
->   $(BUILD_DIR)/%/.stamp_downloaded:
->   ifeq ($(DL_MODE),DOWNLOAD)
-> +# Remove the pre-downloaded tar file if the package is a HEAD version
-> +	$(Q)( \
-> +	if test $($(PKG)_VERSION) == HEAD -a -e $(DL_DIR)/$($(PKG)_SOURCE); then \
-> +		rm $(DL_DIR)/$($(PKG)_SOURCE); \
-
-  Use $(RM) instead of rm, then you don't need to check for existence.
-
-> +		$(call MESSAGE,"Removing $(PKG) HEAD source file"); \
-
-  I don't think this extra message is needed.
-
-> +	fi; \
-> +	)
->   # Only show the download message if it isn't already downloaded
->   	$(Q)if test ! -e $(DL_DIR)/$($(PKG)_SOURCE); then \
->   		$(call MESSAGE,"Downloading") ; \
+> Also there wasn't a dependency on the target having python, just
+> host-python for performing the initial build.  So depends were adjusted
+> accordingly. If python bindings are required, they can be found in a different
+> package called omniORBpy.  The omniORB package only uses python for
+> the build process.
 >
+> Fixed a bug with long double support.  Currently leaving it disabled
+> as most targets won't use it.  This allows greater toolchain compatibility.
+>
+> Signed-off-by: Matt Weber <mlweber1@rockwellcollins.com>
 
-  You'll also need to avoid touching the stamp file after the download, 
-otherwise the rule is not even evaluated.
+  Looks good. However:
 
-  Also I think I would prefer instead to have an explicit variable to 
-indicate that it should be re-downloaded, e.g.
+[snip]
+> +# Defaulting long double support to a safe option for the
+> +# mix of embedded targets, this could later be automated
+> +# based on checking the capability of the cross toolchain
+> +# for "__LONG_DOUBLE_128__".  Currently the host and target
+> +# need to match because of the code generation done by the
+> +# host tools during the target compile (ie headers generated
+> +# on host are used in target build).
 
-ifneq ($($(PKG)_FORCE_DOWNLOAD),)
-	$(Q)$(RM) $(DL_DIR)/$($(PKG)_SOURCE)
-endif
+  Ouch, this smells like there could also be an issue when the host and 
+the target have different data representations (e.g. endianness or 
+bitwidth). Do you think there is a risk of this?
 
-  This variable can be set either from the package's .mk file or from the 
-local override file.
+> +OMNIORB_CONF_OPT += --disable-longdouble
+>
+> -# omniORB is currently not cross-compile friendly and has some assumptions
+> -# where a couple host tools are built in place and then used during the
+> -# build.  The tools generate code from the IDL description language, which
+> -# is then built into the cross compiled OMNIORB application.
+> -# So this first hook builds the tools required for the host side
+> -# generation of code. Then the second hook cleans up before the install.
+> +# omniORB is not completely cross-compile friendly and has some
+> +# assumptions where a couple host tools must be built and then
+> +# used by the target build.  The host tools generate code from
+> +# the IDL description language, which is then built into the
+> +# cross compiled target OMNIORB application.
+>   define OMNIORB_BUILD_TOOLS
 
+  Minor nit: you probably want to rename this variable as well.
 
-  And finally, the documentation should be updated as well.
+> -	$(HOST_MAKE_ENV) $(MAKE) $(HOST_CONFIGURE_OPTS) \
+> -		-C $(@D)/src/tool export
+> +	# Point to the host folder to get HOST_OMNIORB tools
+> +	$(SED) 's:TOOLBINDIR = $$(TOP)/$$(BINDIR):TOOLBINDIR = $(HOST_DIR)/usr/bin:g' $(@D)/mk/beforeauto.mk
+> +	# Disables OMNIORB tool building
+> +	echo "EmbeddedSystem=1" >> $(@D)/mk/beforeauto.mk
+>   endef
+>   OMNIORB_POST_CONFIGURE_HOOKS += OMNIORB_BUILD_TOOLS
+>
+> -define OMNIORB_CLEAN_TOOLS
+> -	$(HOST_MAKE_ENV) $(MAKE) $(HOST_CONFIGURE_OPTS) \
+> -		-C $(@D)/src/tool clean
+> -endef
+> -OMNIORB_POST_BUILD_HOOKS += OMNIORB_CLEAN_TOOLS
+> -
+> -define OMNIORB_FIXUP_FILE_PATHS_HOOK
+> -	$(SED) "s:$(HOST_DIR)/usr:/usr:g" $(STAGING_DIR)/usr/bin/omniidl
+> -endef
+> -OMNIORB_POST_INSTALL_STAGING_HOOKS += OMNIORB_FIXUP_FILE_PATHS_HOOK
+> +HOST_OMNIORB_DEPENDENCIES = host-python
+
+  We usually put the host DEPENDENCIES just below the target stuff. So:
+
+###########
+# header
+###########
+
+<target variable definitions>
+
+<host variable definitions>
+
+<conditional target variables>
+
+<conditional host variables>
+
+<target cmds and hooks>
+
+<host cmds and hooks>
+
+$(eval $(...))
+$(eval $(host-...))
+
 
 
   Regards,
   Arnout
+
+>
+>   $(eval $(autotools-package))
+> +$(eval $(host-autotools-package))
+>
+
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
