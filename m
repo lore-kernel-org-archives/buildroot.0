@@ -1,42 +1,32 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 1 Oct 2013 21:56:40 +0200
-Subject: [Buildroot] [git commit] make clean: remove redundant removal of
-	STAGING_DIR
-Message-ID: <20131001195951.05CA58F6F9@busybox.osuosl.org>
+Date: Tue, 1 Oct 2013 21:51:17 +0200
+Subject: [Buildroot] [git commit] webp: bump to version 0.3.1
+Message-ID: <20131001195950.EE8309B902@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=300eb6b751bc623a2446ead4c885bcfa84419744
+commit: http://git.buildroot.net/buildroot/commit/?id=a932f959dc5be2036995d02742d45d154ebbecb3
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Since STAGING_DIR is defined as (package/Makefile.in):
-
-STAGING_SUBDIR = usr/$(GNU_TARGET_NAME)/sysroot
-STAGING_DIR    = $(HOST_DIR)/$(STAGING_SUBDIR)
-
-removing HOST_DIR will automatically remove STAGING_DIR. This patch updates
-'make clean' based on this knowledge.
-
-Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- Makefile |    2 +-
+ package/webp/webp.mk |    2 +-
  1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/Makefile b/Makefile
-index 667e233..cd3dc0d 100644
---- a/Makefile
-+++ b/Makefile
-@@ -751,7 +751,7 @@ printvars:
- 		$(info $V=$($V) ($(value $V)))))
+diff --git a/package/webp/webp.mk b/package/webp/webp.mk
+index 9f2acf9..15acd8a 100644
+--- a/package/webp/webp.mk
++++ b/package/webp/webp.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- clean:
--	rm -rf $(STAGING_DIR) $(TARGET_DIR) $(BINARIES_DIR) $(HOST_DIR) \
-+	rm -rf $(TARGET_DIR) $(BINARIES_DIR) $(HOST_DIR) \
- 		$(STAMP_DIR) $(BUILD_DIR) $(BASE_DIR)/staging \
- 		$(LEGAL_INFO_DIR)
- 
+-WEBP_VERSION = 0.3.0
++WEBP_VERSION = 0.3.1
+ WEBP_SOURCE = libwebp-$(WEBP_VERSION).tar.gz
+ WEBP_SITE = https://webp.googlecode.com/files
+ WEBP_LICENSE = BSD-3c
