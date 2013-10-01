@@ -1,50 +1,60 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 01 Oct 2013 22:41:53 +0200
-Subject: [Buildroot] [PATCH 1/1] omniorb: cleanup autobuild failure,
- CFLAGS issue
-In-Reply-To: <OF8984387D.63FADA60-ON86257BF7.006A9834-86257BF7.006B779D@rockwellcollins.com>
-References: <1380311674-6883-1-git-send-email-mlweber1@rockwellcollins.com>
- <524AF88C.4070906@mind.be>
- <OF8984387D.63FADA60-ON86257BF7.006A9834-86257BF7.006B779D@rockwellcollins.com>
-Message-ID: <524B3391.5020907@mind.be>
+Date: Tue, 01 Oct 2013 22:48:26 +0200
+Subject: [Buildroot] [PATCH 2/2] gst-fsl-plugins: Bump version and
+ change URL to match other i.MX components
+In-Reply-To: <1380650790-18097-3-git-send-email-eric.nelson@boundarydevices.com>
+References: <1380650790-18097-1-git-send-email-eric.nelson@boundarydevices.com>
+ <1380650790-18097-3-git-send-email-eric.nelson@boundarydevices.com>
+Message-ID: <524B351A.6000200@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 10/01/13 21:33, Matthew Weber wrote:
-> Arnout Vandecappelle<arnout@mind.be>  wrote on 10/01/2013 11:30:04 AM:
-[snip]
->>> > >+# Defaulting long double support to a safe option for the
->>> > >+# mix of embedded targets, this could later be automated
->>> > >+# based on checking the capability of the cross toolchain
->>> > >+# for "__LONG_DOUBLE_128__".  Currently the host and target
->>> > >+# need to match because of the code generation done by the
->>> > >+# host tools during the target compile (ie headers generated
->>> > >+# on host are used in target build).
->> >
->> >   Ouch, this smells like there could also be an issue when the host and
->> >the target have different data representations (e.g. endianness or
->> >bitwidth). Do you think there is a risk of this?
- >
-> I don't believe there is a risk if I also disable it on the host
-> (which I'll add in my next update).
+On 10/01/13 20:06, Eric Nelson wrote:
+> Signed-off-by: Eric Nelson <eric.nelson@boundarydevices.com>
+> ---
+>   package/gstreamer/gst-fsl-plugins/gst-fsl-plugins.mk | 8 +++++---
+>   1 file changed, 5 insertions(+), 3 deletions(-)
+>
+> diff --git a/package/gstreamer/gst-fsl-plugins/gst-fsl-plugins.mk b/package/gstreamer/gst-fsl-plugins/gst-fsl-plugins.mk
+> index ccdb521..00c6acb 100644
+> --- a/package/gstreamer/gst-fsl-plugins/gst-fsl-plugins.mk
+> +++ b/package/gstreamer/gst-fsl-plugins/gst-fsl-plugins.mk
+> @@ -4,9 +4,11 @@
+>   #
+>   ################################################################################
+>
+> -GST_FSL_PLUGINS_VERSION = 3.0.1
+> -# No official download site from freescale, just this mirror
+> -GST_FSL_PLUGINS_SITE = http://download.ossystems.com.br/bsp/freescale/source
+> +include package/freescale-imx/freescale-imx.inc
 
-  That's not what I meant. For longdouble it's fine because it's 
-disabled. However, you are building the omniidl with native compilation, 
-and you use that to generate some source code for the target (at least 
-that's what I understand). My guess is that this is used to generate the 
-(de)serialization code of the RPC. However, if omniorb is so bad at 
-cross-compilation, there is a risk that they didn't consider that the 
-endianness and bitwidths of the generated code may be different from the 
-endianness and bitwidths that are detected during native compilation.
+  This is make, not C. You should never include the same file twice 
+unless you _really_ know what you're doing.
 
-  So to be sure, it should be tested on a big-endian target if the 
-generated code works correctly. Bitwidths are even trickier to test...
+  It is not a problem to define a variable in one file and use it in a 
+completely different file. This is already done for instance with 
+LINUX_DIR. The only potential problem is when you want to use the 
+variable in a condition. But that is not the case here, so you can use 
+FREESCALE_IMX_VERSION etc. below without this include statement, even if 
+gst-fsl-plugins.mk is read before freescale-imx.mk.
 
   Regards,
   Arnout
+
+
+> +
+> +GST_FSL_PLUGINS_VERSION = $(FREESCALE_IMX_VERSION)
+> +GST_FSL_PLUGINS_SITE = $(FREESCALE_IMX_SITE)
+> +GST_FSL_PLUGINS_SOURCE = gst-fsl-plugins-$(GST_FSL_PLUGINS_VERSION).tar.gz
+>
+>   # Most is LGPLv2+, but some sources are copied from upstream and are
+>   # LGPLv2.1+, which essentially makes it LGPLv2.1+
+>
+
+
 -- 
 Arnout Vandecappelle                          arnout at mind be
 Senior Embedded Software Architect            +32-16-286500
