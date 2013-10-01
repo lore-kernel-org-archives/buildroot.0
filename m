@@ -1,84 +1,58 @@
-From: Matt Weber <mlweber1@rockwellcollins.com>
-Date: Tue, 1 Oct 2013 15:01:08 -0500
-Subject: [Buildroot] [PATCH v2] python-ipy: new package
-Message-ID: <1380657668-23489-1-git-send-email-mlweber1@rockwellcollins.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 1 Oct 2013 22:01:09 +0200
+Subject: [Buildroot] [git commit] gnupg: option to include RSA support.
+Message-ID: <20131001200152.CE2779B903@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Matt Weber <mlweber1@rockwellcollins.com>
+commit: http://git.buildroot.net/buildroot/commit/?id=b2fab93b1636027c73c664cdf395cb8f93dc55dc
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+gnupg is compiled with --enable-minimal flag. This produces a binary that only
+supports ElGamal and DSA public key algorithms.
+
+RSA has been the default for `gpg --gen-key` since 2009, so it makes sense to
+be able to build a gnupg binary that supports it.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
-Changes v1 -> v2:
-  * Replaced env config options to use TARGET_CONFIGURE_OPTS
-       package/python-ipy/Config.in (suggested by Arnout)
+ package/gnupg/Config.in |    5 +++++
+ package/gnupg/gnupg.mk  |    6 ++++++
+ 2 files changed, 11 insertions(+), 0 deletions(-)
 
- package/Config.in                |    1 +
- package/python-ipy/Config.in     |    8 ++++++++
- package/python-ipy/python-ipy.mk |   27 +++++++++++++++++++++++++++
- 3 files changed, 36 insertions(+), 0 deletions(-)
- create mode 100644 package/python-ipy/Config.in
- create mode 100644 package/python-ipy/python-ipy.mk
-
-diff --git a/package/Config.in b/package/Config.in
-index da10a23..10b156b 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -390,6 +390,7 @@ source "package/python-bottle/Config.in"
- source "package/python-crc16/Config.in"
- source "package/python-dpkt/Config.in"
- source "package/python-id3/Config.in"
-+source "package/python-ipy/Config.in"
- source "package/python-mad/Config.in"
- source "package/python-meld3/Config.in"
- source "package/python-netifaces/Config.in"
-diff --git a/package/python-ipy/Config.in b/package/python-ipy/Config.in
-new file mode 100644
-index 0000000..bead932
---- /dev/null
-+++ b/package/python-ipy/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_PYTHON_IPY
-+	bool "python-ipy"
-+	depends on BR2_PACKAGE_PYTHON
+diff --git a/package/gnupg/Config.in b/package/gnupg/Config.in
+index 8ddffaa..90f07c2 100644
+--- a/package/gnupg/Config.in
++++ b/package/gnupg/Config.in
+@@ -15,6 +15,11 @@ config BR2_PACKAGE_GNUPG
+ 
+ if BR2_PACKAGE_GNUPG
+ 
++config BR2_PACKAGE_GNUPG_RSA
++	bool "RSA support"
 +	help
-+	  IPy - class and tools for handling of IPv4 and
-+	  IPv6 addresses and networks.
++	  Support for RSA public key algorithm
 +
-+	  https://github.com/haypo/python-ipy/
-diff --git a/package/python-ipy/python-ipy.mk b/package/python-ipy/python-ipy.mk
-new file mode 100644
-index 0000000..f3fb7c1
---- /dev/null
-+++ b/package/python-ipy/python-ipy.mk
-@@ -0,0 +1,27 @@
-+################################################################################
-+#
-+# python-ipy
-+#
-+################################################################################
+ config BR2_PACKAGE_GNUPG_GPGV
+ 	bool "gpgv"
+ 	help
+diff --git a/package/gnupg/gnupg.mk b/package/gnupg/gnupg.mk
+index f0c4b03..38604b5 100644
+--- a/package/gnupg/gnupg.mk
++++ b/package/gnupg/gnupg.mk
+@@ -31,6 +31,12 @@ else
+ GNUPG_CONF_OPT += --without-readline
+ endif
+ 
++ifeq ($(BR2_PACKAGE_GNUPG_RSA),y)
++GNUPG_CONF_OPT += --enable-rsa
++else
++GNUPG_CONF_OPT += --disable-rsa
++endif
 +
-+PYTHON_IPY_VERSION = 0.75-0-g58006fb
-+PYTHON_IPY_SOURCE  = haypo-python-ipy-IPy-$(PYTHON_IPY_VERSION).tar.gz
-+PYTHON_IPY_SITE    = https://github.com/haypo/python-ipy/tarball/IPy-0.75
-+PYTHON_IPY_DEPENDENCIES = host-python python
-+PYTHON_IPY_LICENSE = BSD-3c
-+PYTHON_IPY_LICENSE_FILES = COPYING
-+
-+define PYTHON_IPY_BUILD_CMDS
-+	(cd $(@D); \
-+		$(TARGET_CONFIGURE_OPTS) \
-+		$(HOST_DIR)/usr/bin/python setup.py build_ext \
-+		--include-dirs=$(STAGING_DIR)/usr/include/python$(PYTHON_VERSION_MAJOR) \
-+	)
-+	(cd $(@D); $(HOST_DIR)/usr/bin/python setup.py build)
-+endef
-+
-+define PYTHON_IPY_INSTALL_TARGET_CMDS
-+	(cd $(@D); $(HOST_DIR)/usr/bin/python setup.py install --prefix=$(TARGET_DIR)/usr)
-+endef
-+
-+$(eval $(generic-package))
--- 
-1.7.1
+ ifneq ($(BR2_PACKAGE_GNUPG_GPGV),y)
+ define GNUPG_REMOVE_GPGV
+ 	rm -f $(TARGET_DIR)/usr/bin/gpgv \
