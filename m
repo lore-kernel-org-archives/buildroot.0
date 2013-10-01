@@ -1,31 +1,37 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 2 Oct 2013 00:02:27 +0200
-Subject: [Buildroot] [git commit] tremor: add license info
-Message-ID: <20131001220629.ABBCC9B902@busybox.osuosl.org>
+From: Eric Nelson <eric.nelson@boundarydevices.com>
+Date: Tue,  1 Oct 2013 16:34:21 -0700
+Subject: [Buildroot] [PATCH V2] gst-fsl-plugins: Bump version and change URL
+	to match other i.MX components
+Message-ID: <1380670461-6431-1-git-send-email-eric.nelson@boundarydevices.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3b583a16c71689d252652602f7bef5eaa76a4a2e
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Eric Nelson <eric.nelson@boundarydevices.com>
 ---
- package/tremor/tremor.mk |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+V2 removes the include file packages/freescale-imx/freescale-imx.inc
 
-diff --git a/package/tremor/tremor.mk b/package/tremor/tremor.mk
-index 291a413..b1515c1 100644
---- a/package/tremor/tremor.mk
-+++ b/package/tremor/tremor.mk
-@@ -7,6 +7,8 @@
- TREMOR_SITE = http://svn.xiph.org/trunk/Tremor/
- TREMOR_SITE_METHOD = svn
- TREMOR_VERSION = 18153
-+TREMOR_LICENSE = BSD-3c
-+TREMOR_LICENSE_FILES = COPYING
+ package/gstreamer/gst-fsl-plugins/gst-fsl-plugins.mk | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/gstreamer/gst-fsl-plugins/gst-fsl-plugins.mk b/package/gstreamer/gst-fsl-plugins/gst-fsl-plugins.mk
+index ccdb521..27d7711 100644
+--- a/package/gstreamer/gst-fsl-plugins/gst-fsl-plugins.mk
++++ b/package/gstreamer/gst-fsl-plugins/gst-fsl-plugins.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
  
- TREMOR_AUTORECONF = YES
- TREMOR_INSTALL_STAGING = YES
+-GST_FSL_PLUGINS_VERSION = 3.0.1
+-# No official download site from freescale, just this mirror
+-GST_FSL_PLUGINS_SITE = http://download.ossystems.com.br/bsp/freescale/source
++GST_FSL_PLUGINS_VERSION = $(FREESCALE_IMX_VERSION)
++GST_FSL_PLUGINS_SITE = $(FREESCALE_IMX_SITE)
++GST_FSL_PLUGINS_SOURCE = gst-fsl-plugins-$(GST_FSL_PLUGINS_VERSION).tar.gz
+ 
+ # Most is LGPLv2+, but some sources are copied from upstream and are
+ # LGPLv2.1+, which essentially makes it LGPLv2.1+
+-- 
+1.8.1.2
