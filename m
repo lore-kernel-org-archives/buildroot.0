@@ -1,70 +1,69 @@
-From: Phil Eichinger <phil.eichinger@gmail.com>
-Date: Tue,  1 Oct 2013 11:59:31 +0200
-Subject: [Buildroot] [PATCH 1/1] zsh: new package
-Message-ID: <1380621571-21921-1-git-send-email-phil@zankapfel.net>
+From: =?ISO-8859-1?Q?Fran=E7ois_Perrad?= <francois.perrad@gadz.org>
+Date: Tue, 1 Oct 2013 12:47:20 +0200
+Subject: [Buildroot] [UNSURE]Re: [v4 1/2] luainterpreter: create virtual
+	package
+In-Reply-To: <20131001093122.48b1c5f4@skate>
+References: <1376469325-3707-1-git-send-email-francois.perrad@gadz.org>
+ <CA+-urNQZVaNvLwNUA_X6N7Ft2N0U1Yo6h+L__vNtHJfOZVPUSA@mail.gmail.com>
+ <20130930225408.4ea0f858@skate>
+ <CAB0FRssEyA+HqrMGw4B-sEswJY7YAMqw0Jh+L6gpyE0TVCyB6A@mail.gmail.com>
+ <20131001093122.48b1c5f4@skate>
+Message-ID: <CAB0FRsspaq_BTykGrOPP=iyTxpm9Wu46wMvWgRHNDzSpj-XCkA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+2013/10/1 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>:
+> Dear Fran?ois Perrad,
+>
+> On Tue, 1 Oct 2013 09:27:48 +0200, Fran?ois Perrad wrote:
+>
+>> A version for a virtual package is not mandatory.
+>> A virtual package is used to create a OR dependency.
+>> With luainterpreter, a Lua module (LuaSocket for example) depends on
+>> lua OR on luajit.
+>> Both Lua 5.1.5 and LuaJIT 2.0.2 provides a Lua 5.1 ABI/API compatible
+>> interpreter.
+>> The only effect of setting LUAINTERPRETER_VERSION is the name of the
+>> directory 'build/luainterpreter-5.1' instead of
+>> 'build/luainterpreter-undefined'.
+>
+> Ok, makes sense.
+>
+>> I don't like name containing 'undefined', but I'll be fine with a BR
+>> convention what says :
+>>   - all virtual packages use 'virtual' as version.
+>
+> I probably haven't thought about all the implications, but it indeed
+> looks like an interesting suggestion. Virtual packages are anyway
+> something that we should progressively formalize through a new section
+> in the documentation.
+>
+>> I've already did some experiments with the Lua 5.2 serie in my own
+>> repository, see https://github.com/fperrad/br/tree/lua5.2
+>
+> So should we package Lua 5.1 and 5.2 separately, because Lua modules
+> are only compatible with 5.1 or 5.2, or can we keep the same package
+> for both Lua versions?
+>
 
-Signed-off-by: Phil Eichinger <phil@zankapfel.net>
----
- package/Config.in     |    1 +
- package/zsh/Config.in |   10 ++++++++++
- package/zsh/zsh.mk    |   14 ++++++++++++++
- 3 files changed, 25 insertions(+)
- create mode 100644 package/zsh/Config.in
- create mode 100644 package/zsh/zsh.mk
+Lua 5.2.0 was released on December 2011 (see
+https://raw.github.com/fperrad/graph-versions/gh-pages/slides/lua.png).
+Since this, Lua module authors release new version which are
+compatible 5.1 and 5.2 (not a hard job, differences are small). But
+this process is not fast and not finished.
 
-diff --git a/package/Config.in b/package/Config.in
-index 86fbce2..0cbcbda 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -921,6 +921,7 @@ source "package/at/Config.in"
- if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- source "package/bash/Config.in"
- source "package/dash/Config.in"
-+source "package/zsh/Config.in"
- endif
- source "package/dialog/Config.in"
- source "package/dtach/Config.in"
-diff --git a/package/zsh/Config.in b/package/zsh/Config.in
-new file mode 100644
-index 0000000..fd63aa9
---- /dev/null
-+++ b/package/zsh/Config.in
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_ZSH
-+	bool "zsh"
-+	select BR2_PACKAGE_NCURSES
-+	help
-+	  zsh is a shell designed for interactive use, although it is also
-+	  a powerful scripting language. Many of the useful features of bash,
-+	  ksh, and tcsh were incorporated into zsh; many original features
-+	  were added.
-+
-+	  http://zsh.sourceforge.net/
-diff --git a/package/zsh/zsh.mk b/package/zsh/zsh.mk
-new file mode 100644
-index 0000000..ca865a4
---- /dev/null
-+++ b/package/zsh/zsh.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# zsh
-+#
-+################################################################################
-+
-+ZSH_VERSION=5.0.2
-+ZSH_SITE=http://downloads.sourceforge.net/project/zsh/zsh/$(ZSH_VERSION)
-+ZSH_LICENSE = MIT-like
-+ZSH_LICENSE_FILES = LICENCE
-+
-+ZSH_DEPENDENCIES = ncurses
-+
-+$(eval $(autotools-package))
--- 
-1.7.10.4
+So, I think Lua 5.1.x and 5.2.x can be handled by the same package
+with a choice (like gcc, binutils)
+
+Fran?ois
+
+> Thanks!
+>
+> Thomas
+> --
+> Thomas Petazzoni, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
