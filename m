@@ -1,49 +1,40 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 1 Oct 2013 21:51:20 +0200
-Subject: [Buildroot] [PATCH v3 00/16] SELinux Buildroot Additions
-In-Reply-To: <1380137571-688-1-git-send-email-clshotwe@rockwellcollins.com>
-References: <1380137571-688-1-git-send-email-clshotwe@rockwellcollins.com>
-Message-ID: <20131001215120.0b4d0d0a@skate>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 01 Oct 2013 21:55:43 +0200
+Subject: [Buildroot] [PATCH 1 of 2] make clean: improve when no .config
+	present
+In-Reply-To: <524B0477.1030604@mind.be> (Arnout Vandecappelle's message of
+ "Tue, 01 Oct 2013 19:20:55 +0200")
+References: <patchbomb.1380539365@argentina>
+ <2c5cb4c167d3cb700c22.1380539366@argentina>
+ <20130930140438.713b4879@skate> <524B0477.1030604@mind.be>
+Message-ID: <87k3hwu5og.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Clayton Shotwell,
+>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
 
-On Wed, 25 Sep 2013 14:32:35 -0500, Clayton Shotwell wrote:
+Hi,
 
-> For this implementation, I have added a package hierarchy that will allow
-> for both a debugging and a paired down release version.  The debugging
-> version required Python support, and is therefore much larger while the
-> release version does not.  To enable the release version, simply select
-> the refpolicy package (BR2_PACKAGE_REFPOLICY) and it selects all of the 
-> necessary packages to enable SELinux. For the debugging version, select
-> the policycoreutils debugging configure option
-> (BR2_PACKAGE_POLICYCOREUTILS_POLICY_DEBUGGING).  This will pull in Python
-> and a bunch of other packages into the build to debug the SELinux policy 
-> on target.  
+ >>> Note: we could improve the HOST_DIR cleanup by removing
+ >>> 'output/host' unconditionally, but it's an assumption. Let me know
+ >>> your thoughts on this, it could be fixed in another patch.
+ >> 
+ >> Hum, yeah, indeed. This means that the contents of output/host are not
+ >> removed, which is quite annoying. I don't immediately see a solution to
+ >> this problem, though.
 
-I still don't quite understand when Python is needed exactly. For
-example, in your PATCH 02/16 that adds the libselinux package, the
-Python support is enabled as soon as the Python interpreter is enabled.
+ Arnout>  I would be OK with defining HOST_DIR as $(BASE_DIR)/host before
+ Arnout> .config is included. If .config exists, it will be overridden
+ Arnout> afterwards.
 
-Is this libselinux Python stuff only needed to *debug* SELinux on the
-target?
+Yes, that sounds like a plan. The only potential issue is if somebody
+builds out of tree _AND_ has changed the BR2_HOST_DIR _AND_ runs make clean
+in a directory where they have an important 'host' subdir.
 
-If so, then we clearly don't want to enable it as soon as Python is
-enabled in the Buildroot configuration: an user can perfectly want a
-Python interpreter to be installed on the target and to use SELinux,
-but not to have the SELinux debugging stuff.
+That's probably all fairly unlikely to be a real issue.
 
-I'd really like to understand this point before moving on with those
-packages.
-
-Best regards,
-
-Thomas
 -- 
-Thomas Petazzoni, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
