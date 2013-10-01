@@ -1,55 +1,56 @@
-From: Eric Nelson <eric.nelson@boundarydevices.com>
-Date: Tue, 01 Oct 2013 14:50:03 -0700
-Subject: [Buildroot] [PATCH 1/2] freescale-imx: separate variable
- assignment from Makefile
-In-Reply-To: <20131001232710.2e3aaae5@skate>
-References: <1380650790-18097-1-git-send-email-eric.nelson@boundarydevices.com>	<1380650790-18097-2-git-send-email-eric.nelson@boundarydevices.com>	<20131001214420.34d3ef48@skate>	<524B3C4D.20906@boundarydevices.com>
- <20131001232710.2e3aaae5@skate>
-Message-ID: <524B438B.9000408@boundarydevices.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 01 Oct 2013 23:58:32 +0200
+Subject: [Buildroot] [PATCH 2/4] python: fix python-config for
+	cross-compilation
+In-Reply-To: <1380576047-21001-2-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Mon, 30 Sep 2013 23:20:45 +0200")
+References: <1380576047-21001-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1380576047-21001-2-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <87y56cslfb.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-You (and Arnout) are right, of course.
+Hi,
 
-On 10/01/2013 02:27 PM, Thomas Petazzoni wrote:
-> Dear Eric Nelson,
->
-> On Tue, 01 Oct 2013 14:19:09 -0700, Eric Nelson wrote:
->
->> I can do that if I move packages/gstreamer/gst-fsl-plugins/ under
->> packages/freescale-imx, but not otherwise.
->
-> Are you sure?
->
-> See:
->
-> $ cat foo.mk
-> YOURPACKAGE_VERSION = $(FREESCALE_IMX_VERSION)
->
-> FREESCALE_IMX_VERSION = 42
->
-> all:
-> 	@echo $(YOURPACKAGE_VERSION)
->
-> $ make -f foo.mk
-> 42
-> $
->
-> This shows that the value of FREESCALE_IMX_VERSION can be given *after*
-> it is used.
->
+ Thomas> Some packages (trace-cmd) use python-config to find out which
+ Thomas> headers and libraries should be used to link against the Python
+ Thomas> libraries. By default, python-config returns paths that are
+ Thomas> inappropriate for cross-compilation: this patch fixes this by
+ Thomas> prepending those paths by the staging directory location.
 
-As Arnout said, I didn't grok that this is Make, with no
-sub-makes, so everything's global...
+My first thought was that this should just use PYTHON_CONFIG_SCRIPTS,
+but looking closer at it, I see that it's actually a python script so it
+won't work. It would be good to add a comment about this.
 
-I'll re-submit the gstreamer patch without this bit.
+The shebang reads:
 
-Regards,
+#!/usr/bin/python2.7
 
+Now that we go to the effort to build a host-python I think it makes
+sense to fixup the shebang as well - But:
 
-Eric
+./output/host/usr/bin/python output/staging/usr/bin/python2.7-config --cflags
+-I/home/peko/source/buildroot/output/host/usr/include/python2.7 -I/home/peko/source/buildroot/output/host/usr/include/python2.7 -fno-strict-aliasing -O2 -I/home/peko/source/buildroot/output/host/usr/include -DNDEBUG -g -fwrapv -O3 -Wall -Wstrict-prototypes
+
+E.G. your s/-I/-I$(STAGING_DIR)/ trick won't work (and it didn't work
+before if the host python wasn't built with --prefix=/usr).
+
+ Thomas> We also fix one of the python*-config file to actually be a symbolic
+ Thomas> link to the script, rather than a copy of it.
+
+This I don't see here:
+
+ls -lah output/staging/usr/bin/python*-config
+-rwxr-xr-x 1 peko peko 1.6K Oct  1 23:50 output/staging/usr/bin/python2.7-config
+lrwxrwxrwx 1 peko peko   16 Oct  1 23:50 output/staging/usr/bin/python2-config -> python2.7-config
+lrwxrwxrwx 1 peko peko   14 Oct  1 23:50 output/staging/usr/bin/python-config -> python2-config
+
+Care to fix these issues and resubmit?
+
+-- 
+Bye, Peter Korsgaard
