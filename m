@@ -1,52 +1,48 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 01 Oct 2013 19:20:55 +0200
-Subject: [Buildroot] [PATCH 1 of 2] make clean: improve when no .config
- present
-In-Reply-To: <20130930140438.713b4879@skate>
+Date: Tue, 01 Oct 2013 19:21:30 +0200
+Subject: [Buildroot] [PATCH 2 of 2] make clean: remove redundant removal
+	of STAGING_DIR
+In-Reply-To: <e4d1fd22ccc32a9c0ffc.1380539367@argentina>
 References: <patchbomb.1380539365@argentina>
- <2c5cb4c167d3cb700c22.1380539366@argentina> <20130930140438.713b4879@skate>
-Message-ID: <524B0477.1030604@mind.be>
+ <e4d1fd22ccc32a9c0ffc.1380539367@argentina>
+Message-ID: <524B049A.2090206@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 09/30/13 14:04, Thomas Petazzoni wrote:
-> Dear Thomas De Schampheleire,
+On 09/30/13 13:09, Thomas De Schampheleire wrote:
+> Since STAGING_DIR is defined as (package/Makefile.in):
 >
-> On Mon, 30 Sep 2013 13:09:26 +0200, Thomas De Schampheleire wrote:
->> The 'make clean' recipe is using variables that are not defined without .config
->> file, causing only a partial cleanup when the .config file is accidentally
->> deleted.
->>
->> This patch moves those variables that do not depend on values from .config
->> outside the BR2_HAVE_DOT_CONFIG check, so that 'make clean' is much more similar
->> with and without .config.
+> STAGING_SUBDIR = usr/$(GNU_TARGET_NAME)/sysroot
+> STAGING_DIR    = $(HOST_DIR)/$(STAGING_SUBDIR)
 >
-> Yeah, this has bothered me for a while, so I agree with that.
+> removing HOST_DIR will automatically remove STAGING_DIR. This patch updates
+> 'make clean' based on this knowledge.
 >
->> The HOST_DIR (and the derived STAGING_DIR) are determined from BR2_HOST_DIR in
->> .config, so the host directory can still not be cleaned correctly without making
->> assumptions, if no .config is present.
->>
->> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
->>
->> ---
->> Note: we could improve the HOST_DIR cleanup by removing 'output/host'
->> unconditionally, but it's an assumption. Let me know your thoughts on this, it
->> could be fixed in another patch.
->
-> Hum, yeah, indeed. This means that the contents of output/host are not
-> removed, which is quite annoying. I don't immediately see a solution to
-> this problem, though.
+> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
-  I would be OK with defining HOST_DIR as $(BASE_DIR)/host before .config 
-is included. If .config exists, it will be overridden afterwards.
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-
-  Regards,
-  Arnout
+>
+> ---
+>   Makefile |  2 +-
+>   1 files changed, 1 insertions(+), 1 deletions(-)
+>
+> diff --git a/Makefile b/Makefile
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -748,7 +748,7 @@ printvars:
+>   		$(info $V=$($V) ($(value $V)))))
+>
+>   clean:
+> -	rm -rf $(STAGING_DIR) $(TARGET_DIR) $(BINARIES_DIR) $(HOST_DIR) \
+> +	rm -rf $(TARGET_DIR) $(BINARIES_DIR) $(HOST_DIR) \
+>   		$(STAMP_DIR) $(BUILD_DIR) $(BASE_DIR)/staging \
+>   		$(LEGAL_INFO_DIR)
+>
+>
 
 
 -- 
