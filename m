@@ -1,45 +1,60 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 1 Oct 2013 09:32:49 +0200
-Subject: [Buildroot] [PATCH 1/2] logrotate: nees mmu
-In-Reply-To: <1380594702.9353.1.camel@phoenix>
-References: <1380594702.9353.1.camel@phoenix>
-Message-ID: <20131001093249.6a135a15@skate>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 01 Oct 2013 09:55:25 +0200
+Subject: [Buildroot] [PATCH v2] aiccu: patched Makefile to enable static
+	linking
+In-Reply-To: <1380563862-4241-1-git-send-email-rommel@layer-7.net> (Michael
+ Rommel's message of "Mon, 30 Sep 2013 19:57:42 +0200")
+References: <1380563862-4241-1-git-send-email-rommel@layer-7.net>
+Message-ID: <8761th1l3m.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Axel Lin,
+>>>>> "M" == Michael Rommel <rommel@layer-7.net> writes:
 
-On Tue, 01 Oct 2013 10:31:42 +0800, Axel Lin wrote:
-> Signed-off-by: Axel Lin <axel.lin@ingics.com>
-> ---
-> Fix below build error:
-> 
-> logrotate.o: In function `switch_user_permanently':
-> /opt/test/buildroot/buildroot/output/build/logrotate-3.8.4/logrotate.c:129: undefined reference to `fork'
-> logrotate.o: In function `removeLogFile':
-> /opt/test/buildroot/buildroot/output/build/logrotate-3.8.4/logrotate.c:431: undefined reference to `fork'
-> logrotate.o: In function `mailLog':
-> /opt/test/buildroot/buildroot/output/build/logrotate-3.8.4/logrotate.c:597: undefined reference to `fork'
-> /opt/test/buildroot/buildroot/output/build/logrotate-3.8.4/logrotate.c:615: undefined reference to `fork'
-> logrotate.o: In function `compressLogFile':
-> /opt/test/buildroot/buildroot/output/build/logrotate-3.8.4/logrotate.c:533: undefined reference to `fork'
-> collect2: ld returned 1 exit status
-> make[1]: *** [logrotate] Error 1
+ M> Fixes autobuild errors:
+ M> http://autobuild.buildroot.net/results/308087e1f85e822dec8b73a3ed892c7cd2376cbd/
+ M> http://autobuild.buildroot.net/results/9fb298d4e09a6f9b88207909d583dce05392048e/
 
-It's a minor comment, but I believe the log of the error could go
-within the commit log itself (i.e, before the --- separator). It really
-is part of the explanation of why the change is needed.
+ M> Signed-off-by: Michael Rommel <rommel@layer-7.net>
+ M> ---
+ M> v1: initial patch to add required libraries for static linking to LDFLAGS
+ M>     and reorder the CC commandline
 
-Note that there is no need to resend this patch just for this reason,
-it was merely a suggestion for future patches.
+ M> v2: added signed-off line and commit msg to patch, added autobuild URIs to 
+ M>     commit msg
 
-Thanks!
+ M>  ...cu-0002-makefile-reorder-linked-libraries.patch |   24 ++++++++++++++++++++
+ M>  1 file changed, 24 insertions(+)
+ M>  create mode 100644 package/aiccu/aiccu-0002-makefile-reorder-linked-libraries.patch
 
-Thomas
+ M> diff --git a/package/aiccu/aiccu-0002-makefile-reorder-linked-libraries.patch b/package/aiccu/aiccu-0002-makefile-reorder-linked-libraries.patch
+ M> new file mode 100644
+ M> index 0000000..cc189b2
+ M> --- /dev/null
+ M> +++ b/package/aiccu/aiccu-0002-makefile-reorder-linked-libraries.patch
+ M> @@ -0,0 +1,24 @@
+ M> +Makefile: changed LDFLAGS contents and order on the compile line for --static
+ M> +
+ M> +Signed-off-by: Michael Rommel <rommel@layer-7.net>
+ M> +
+ M> +--- aiccu_20070115.orig/unix-console/Makefile	2007-01-15 12:04:27.000000000 +0100
+ M> ++++ aiccu_20070115/unix-console/Makefile	2013-09-29 22:54:42.742963861 +0200
+ M> +@@ -42,7 +42,7 @@ CFLAGS	+= -D AICCU_CONSOLE
+ M> + # Currently defaultly builds only on Linux, but other platforms might easily also support it
+ M> + ifeq ($(shell uname | grep -c "Linux"),1)
+ M> + CFLAGS	+= -D AICCU_GNUTLS
+ M> +-LDFLAGS += -lgnutls
+ M> ++LDFLAGS += -lgnutls -lhogweed -lnettle -lgmp -lz
+
+Thanks. The problem is that zlib (and libidn, p11-kit and libtasn1) are
+all optional for gnutls (but needed in LDFLAGS when statically linking),
+so this doesn't really work.
+
+Perhaps we should handle it in aiccu.mk instead, either manually or
+using pkg-config --static --libs gnutls
+
 -- 
-Thomas Petazzoni, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
