@@ -1,47 +1,49 @@
-From: Matthew Weber <mlweber1@rockwellcollins.com>
-Date: Tue, 1 Oct 2013 14:51:00 -0500
-Subject: [Buildroot] [PATCH 1/1] python-ipy: new package
-In-Reply-To: <524AFB18.1000203@mind.be>
-References: <1380318149-22696-1-git-send-email-mlweber1@rockwellcollins.com>
- <524AFB18.1000203@mind.be>
-Message-ID: <OFAC85354E.AB2D8986-ON86257BF7.006BD434-86257BF7.006D09FF@rockwellcollins.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 1 Oct 2013 21:51:20 +0200
+Subject: [Buildroot] [PATCH v3 00/16] SELinux Buildroot Additions
+In-Reply-To: <1380137571-688-1-git-send-email-clshotwe@rockwellcollins.com>
+References: <1380137571-688-1-git-send-email-clshotwe@rockwellcollins.com>
+Message-ID: <20131001215120.0b4d0d0a@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout Vandecappelle <arnout@mind.be> wrote on 10/01/2013 11:40:56 AM:
+Dear Clayton Shotwell,
 
-> From: Arnout Vandecappelle <arnout@mind.be>
-> To: Matt Weber <mlweber1@rockwellcollins.com>
-> Cc: buildroot at busybox.net
-> Date: 10/01/2013 01:36 PM
-> Subject: Re: [Buildroot] [PATCH 1/1] python-ipy: new package
-> 
-> On 09/27/13 23:42, Matt Weber wrote:
-[snip]
+On Wed, 25 Sep 2013 14:32:35 -0500, Clayton Shotwell wrote:
 
-> > +define PYTHON_IPY_BUILD_CMDS
-> > +   (cd $(@D); \
-> > +      CC="$(TARGET_CC)" \
-> > +      CFLAGS="$(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include" \
-> > +      LDSHARED="$(TARGET_CC) -shared" \
-> > +      LDFLAGS="$(TARGET_LDFLAGS) -L$(STAGING_DIR)/lib -L$
-> (STAGING_DIR)/usr/lib" \
-> 
->   The -I and -L shouldn't be needed - if they are, something else must 
-be 
-> wrong...
-> 
->   I realize the other python packages don't do it, but why not use 
-> TARGET_CONFIGURE_OPTS?
+> For this implementation, I have added a package hierarchy that will allow
+> for both a debugging and a paired down release version.  The debugging
+> version required Python support, and is therefore much larger while the
+> release version does not.  To enable the release version, simply select
+> the refpolicy package (BR2_PACKAGE_REFPOLICY) and it selects all of the 
+> necessary packages to enable SELinux. For the debugging version, select
+> the policycoreutils debugging configure option
+> (BR2_PACKAGE_POLICYCOREUTILS_POLICY_DEBUGGING).  This will pull in Python
+> and a bunch of other packages into the build to debug the SELinux policy 
+> on target.  
 
-Agree, I switched over to that and it works perfectly.
-Plus the patch looks much cleaner :-)
+I still don't quite understand when Python is needed exactly. For
+example, in your PATCH 02/16 that adds the libselinux package, the
+Python support is enabled as soon as the Python interpreter is enabled.
 
+Is this libselinux Python stuff only needed to *debug* SELinux on the
+target?
 
-[snip]
-> 
->   Regards,
->   Arnout
+If so, then we clearly don't want to enable it as soon as Python is
+enabled in the Buildroot configuration: an user can perfectly want a
+Python interpreter to be installed on the target and to use SELinux,
+but not to have the SELinux debugging stuff.
+
+I'd really like to understand this point before moving on with those
+packages.
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
