@@ -1,45 +1,68 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 1 Oct 2013 21:32:35 +0200
-Subject: [Buildroot] [git commit] logrotate: needs mmu
-Message-ID: <20131001193429.979909B313@busybox.osuosl.org>
+Date: Tue, 1 Oct 2013 21:28:18 +0200
+Subject: [Buildroot] [git commit] diffutils: bump to version 3.3
+Message-ID: <20131001193429.899E09B313@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=243fe9a7d9b19ab48df88e1493c2a4dacd1e91f3
+commit: http://git.buildroot.net/buildroot/commit/?id=51243f52e10326e872ecbd57b10fe30317f215f1
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fix below build error:
-
-logrotate.o: In function `switch_user_permanently':
-/opt/test/buildroot/buildroot/output/build/logrotate-3.8.4/logrotate.c:129: undefined reference to `fork'
-logrotate.o: In function `removeLogFile':
-/opt/test/buildroot/buildroot/output/build/logrotate-3.8.4/logrotate.c:431: undefined reference to `fork'
-logrotate.o: In function `mailLog':
-/opt/test/buildroot/buildroot/output/build/logrotate-3.8.4/logrotate.c:597: undefined reference to `fork'
-/opt/test/buildroot/buildroot/output/build/logrotate-3.8.4/logrotate.c:615: undefined reference to `fork'
-logrotate.o: In function `compressLogFile':
-/opt/test/buildroot/buildroot/output/build/logrotate-3.8.4/logrotate.c:533: undefined reference to `fork'
-collect2: ld returned 1 exit status
-make[1]: *** [logrotate] Error 1
+Also drop diffutils-gets-no-longer-exists-in-eglibc-2.16.patch because
+gets is unconditionally undefined now so we don't need the patch.
 
 Signed-off-by: Axel Lin <axel.lin@ingics.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/logrotate/Config.in |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+ ...tils-gets-no-longer-exists-in-eglibc-2.16.patch |   26 --------------------
+ package/diffutils/diffutils.mk                     |    2 +-
+ 2 files changed, 1 insertions(+), 27 deletions(-)
 
-diff --git a/package/logrotate/Config.in b/package/logrotate/Config.in
-index 0d0ec61..bc7b295 100644
---- a/package/logrotate/Config.in
-+++ b/package/logrotate/Config.in
-@@ -2,6 +2,7 @@ config BR2_PACKAGE_LOGROTATE
- 	bool "logrotate"
- 	select BR2_PACKAGE_POPT
- 	depends on BR2_USE_WCHAR
-+	depends on BR2_USE_MMU # fork()
- 	help
- 	  A simple program to rotate logs.
+diff --git a/package/diffutils/diffutils-gets-no-longer-exists-in-eglibc-2.16.patch b/package/diffutils/diffutils-gets-no-longer-exists-in-eglibc-2.16.patch
+deleted file mode 100644
+index 4785718..0000000
+--- a/package/diffutils/diffutils-gets-no-longer-exists-in-eglibc-2.16.patch
++++ /dev/null
+@@ -1,26 +0,0 @@
+-Handle the fact that gets() no longer exists in glibc >= 2.16
+-
+-The problem has been fixed upstream, but no release containing the fix
+-has been made so far.
+-
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-
+-Index: b/lib/stdio.in.h
+-===================================================================
+---- a/lib/stdio.in.h
+-+++ b/lib/stdio.in.h
+-@@ -693,12 +693,14 @@
+- _GL_CXXALIAS_SYS (gets, char *, (char *s));
+- #  undef gets
+- # endif
+-+# if defined gets
+- _GL_CXXALIASWARN (gets);
+- /* It is very rare that the developer ever has full control of stdin,
+-    so any use of gets warrants an unconditional warning.  Assume it is
+-    always declared, since it is required by C89.  */
+- _GL_WARN_ON_USE (gets, "gets is a security hole - use fgets instead");
+- #endif
+-+#endif
+- 
+- 
+- #if @GNULIB_OBSTACK_PRINTF@ || @GNULIB_OBSTACK_PRINTF_POSIX@
+diff --git a/package/diffutils/diffutils.mk b/package/diffutils/diffutils.mk
+index 6934532..191fd2e 100644
+--- a/package/diffutils/diffutils.mk
++++ b/package/diffutils/diffutils.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
+-DIFFUTILS_VERSION = 3.2
++DIFFUTILS_VERSION = 3.3
+ DIFFUTILS_SOURCE = diffutils-$(DIFFUTILS_VERSION).tar.xz
+ DIFFUTILS_SITE = $(BR2_GNU_MIRROR)/diffutils
+ DIFFUTILS_DEPENDENCIES = $(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext)
