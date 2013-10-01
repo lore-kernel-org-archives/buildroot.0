@@ -1,100 +1,158 @@
 From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Tue,  1 Oct 2013 15:24:33 +0200
-Subject: [Buildroot] [PATCH v6 1/5] package: add toolchain dependency to
-	inner-generic-package
+Date: Tue,  1 Oct 2013 15:24:34 +0200
+Subject: [Buildroot] [PATCH v6 2/5] pkg-generic: fix rules for top-level
+	parallel make
 In-Reply-To: <1380633877-10702-1-git-send-email-fabio.porcedda@gmail.com>
 References: <1380633877-10702-1-git-send-email-fabio.porcedda@gmail.com>
-Message-ID: <1380633877-10702-2-git-send-email-fabio.porcedda@gmail.com>
+Message-ID: <1380633877-10702-3-git-send-email-fabio.porcedda@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This commit makes the dependency from the target toolchain explicit.
-This way we can buid from command line a package that use
-innger-generic-package right after the configuration phase, example:
+To be able to use top-level parallel make we must not depend in a rule
+on the order of evaluation of the prerequisites, so instead of relyng on
+the left to right ordering of evaluation of the prerequisites add
+an explicit rule to describe the dependencies.
 
-	make clean <package-name>
+So add explicit dependencies for the following stamp files:
+   %/.stamp_extracted
+   %/.stamp_patched
+   %/.stamp_configured
+   %/.stamp_built
+   %/.stamp_host_installed
+   %/.stamp_staging_installed
+   %/.stamp_images_installed
+   %/.stamp_target_installed
 
-Also remove TARGETS_ALL because the only purpose was to add toolchain
-dependency so it's superseded by this commit.
-
-This is a step forward top-level parallel make.
+Because the %-build target is not anymore part of the dependency chain,
+add a new variable <pkgname>_BUILD_DEPENDENCIES to be used instead.
+This new variable is used only by the uclibc package for building
+the toolchain.
 
 Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
 ---
- Makefile                 | 8 ++------
- package/pkg-autotools.mk | 3 ++-
- package/pkg-generic.mk   | 6 +++++-
- 3 files changed, 9 insertions(+), 8 deletions(-)
+ package/glibc/glibc.mk   |  3 ++-
+ package/pkg-generic.mk   | 38 +++++++++++++++++++++-----------------
+ package/uclibc/uclibc.mk |  3 ++-
+ 3 files changed, 25 insertions(+), 19 deletions(-)
 
-diff --git a/Makefile b/Makefile
-index 6b86541..c31995a 100644
---- a/Makefile
-+++ b/Makefile
-@@ -360,7 +360,6 @@ TARGETS+=target-post-image
- TARGETS_CLEAN:=$(patsubst %,%-clean,$(TARGETS))
- TARGETS_SOURCE:=$(patsubst %,%-source,$(TARGETS) $(BASE_TARGETS))
- TARGETS_DIRCLEAN:=$(patsubst %,%-dirclean,$(TARGETS))
--TARGETS_ALL:=$(patsubst %,__real_tgt_%,$(TARGETS))
+diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
+index 4dd2e63..57f15dc 100644
+--- a/package/glibc/glibc.mk
++++ b/package/glibc/glibc.mk
+@@ -30,7 +30,8 @@ endif
  
- # host-* dependencies have to be handled specially, as those aren't
- # visible in Kconfig and hence not added to a variable like TARGETS.
-@@ -383,9 +382,6 @@ HOST_SOURCE += $(addsuffix -source,$(sort $(TARGETS_HOST_DEPS) $(HOST_DEPS)))
- TARGETS_LEGAL_INFO:=$(patsubst %,%-legal-info,\
- 		$(TARGETS) $(BASE_TARGETS) $(TARGETS_HOST_DEPS) $(HOST_DEPS))))
+ # Before (e)glibc is built, we must have the second stage
+ # cross-compiler, for some gcc versions
+-glibc-build: $(if $(BR2_TOOLCHAIN_NEEDS_THREE_STAGE_BUILD),host-gcc-intermediate)
++GLIBC_BUILD_DEPENDENCIES = \
++	$(if $(BR2_TOOLCHAIN_NEEDS_THREE_STAGE_BUILD),host-gcc-intermediate)
  
--# all targets depend on the crosscompiler and it's prerequisites
--$(TARGETS_ALL): __real_tgt_%: $(BASE_TARGETS) %
--
- dirs: $(BUILD_DIR) $(STAGING_DIR) $(TARGET_DIR) \
- 	$(HOST_DIR) $(BINARIES_DIR) $(STAMP_DIR)
- 
-@@ -398,11 +394,11 @@ prepare: $(BUILD_DIR)/buildroot-config/auto.conf
- 
- toolchain: prepare dirs dependencies $(BASE_TARGETS)
- 
--world: toolchain $(TARGETS_ALL)
-+world: $(TARGETS)
- 
- .PHONY: all world toolchain dirs clean distclean source outputmakefile \
- 	legal-info legal-info-prepare legal-info-clean printvars \
--	$(BASE_TARGETS) $(TARGETS) $(TARGETS_ALL) \
-+	$(BASE_TARGETS) $(TARGETS) \
- 	$(TARGETS_CLEAN) $(TARGETS_DIRCLEAN) $(TARGETS_SOURCE) $(TARGETS_LEGAL_INFO) \
- 	$(BUILD_DIR) $(STAGING_DIR) $(TARGET_DIR) \
- 	$(HOST_DIR) $(BINARIES_DIR) $(STAMP_DIR)
-diff --git a/package/pkg-autotools.mk b/package/pkg-autotools.mk
-index b0eddde..aafa396 100644
---- a/package/pkg-autotools.mk
-+++ b/package/pkg-autotools.mk
-@@ -202,7 +202,8 @@ endef
- # This must be repeated from inner-generic-package, otherwise we get an empty
- # _DEPENDENCIES if _AUTORECONF is YES.  Also filter the result of _AUTORECONF
- # away from the non-host rule
--$(2)_DEPENDENCIES ?= $(filter-out host-automake host-autoconf host-libtool $(1),\
-+$(2)_DEPENDENCIES ?= $(filter-out host-automake host-autoconf host-libtool \
-+				host-toolchain $(1),\
-     $(patsubst host-host-%,host-%,$(addprefix host-,$($(3)_DEPENDENCIES))))
- 
+ GLIBC_SUBDIR = build
  
 diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index bfc4dc1..d7efcd3 100644
+index d7efcd3..0de1f35 100644
 --- a/package/pkg-generic.mk
 +++ b/package/pkg-generic.mk
-@@ -307,7 +307,11 @@ endif
- $(2)_REDISTRIBUTE		?= YES
- 
- 
--$(2)_DEPENDENCIES ?= $(filter-out $(1),$(patsubst host-host-%,host-%,$(addprefix host-,$($(3)_DEPENDENCIES))))
-+$(2)_DEPENDENCIES ?= $(filter-out  host-toolchain $(1),\
-+	$(patsubst host-host-%,host-%,$(addprefix host-,$($(3)_DEPENDENCIES))))
-+ifeq ($$($(2)_TYPE),target)
-+$(2)_DEPENDENCIES += toolchain
-+endif
+@@ -312,6 +312,7 @@ $(2)_DEPENDENCIES ?= $(filter-out  host-toolchain $(1),\
+ ifeq ($$($(2)_TYPE),target)
+ $(2)_DEPENDENCIES += toolchain
+ endif
++$(2)_BUILD_DEPENDENCIES		?=
  
  $(2)_INSTALL_STAGING		?= NO
  $(2)_INSTALL_IMAGES		?= NO
+@@ -363,30 +364,34 @@ $(1)-install:		$(1)-install-staging $(1)-install-target $(1)-install-images
+ endif
+ 
+ ifeq ($$($(2)_INSTALL_TARGET),YES)
+-$(1)-install-target:	$(1)-build \
+-			$$($(2)_TARGET_INSTALL_TARGET)
++$(1)-install-target:	$$($(2)_TARGET_INSTALL_TARGET)
+ else
+ $(1)-install-target:
+ endif
+ 
+ ifeq ($$($(2)_INSTALL_STAGING),YES)
+-$(1)-install-staging:	$(1)-build \
+-			$$($(2)_TARGET_INSTALL_STAGING)
++$(1)-install-staging:	$$($(2)_TARGET_INSTALL_STAGING)
+ else
+ $(1)-install-staging:
+ endif
+ 
+ ifeq ($$($(2)_INSTALL_IMAGES),YES)
+-$(1)-install-images:	$(1)-build \
+-			$$($(2)_TARGET_INSTALL_IMAGES)
++$(1)-install-images:	$$($(2)_TARGET_INSTALL_IMAGES)
+ else
+ $(1)-install-images:
+ endif
+ 
+-$(1)-install-host:      $(1)-build $$($(2)_TARGET_INSTALL_HOST)
++$(1)-install-host:      $$($(2)_TARGET_INSTALL_HOST)
+ 
+-$(1)-build:		$(1)-configure \
+-			$$($(2)_TARGET_BUILD)
++$$($(2)_TARGET_INSTALL_TARGET) $$($(2)_TARGET_INSTALL_STAGING) \
++$$($(2)_TARGET_INSTALL_IMAGES) $$($(2)_TARGET_INSTALL_HOST): \
++	$$($(2)_TARGET_BUILD)
++
++$(1)-build:		$$($(2)_TARGET_BUILD)
++$$($(2)_TARGET_BUILD):	$$($(2)_TARGET_CONFIGURE) | $$($(2)_BUILD_DEPENDENCIES)
++
++$(1)-configure:			$$($(2)_TARGET_CONFIGURE)
++$$($(2)_TARGET_CONFIGURE):	| $$($(2)_DEPENDENCIES)
+ 
+ ifeq ($$($(2)_OVERRIDE_SRCDIR),)
+ # In the normal case (no package override), the sequence of steps is
+@@ -395,13 +400,13 @@ ifeq ($$($(2)_OVERRIDE_SRCDIR),)
+ #  extract
+ #  patch
+ #  configure
+-$(1)-configure:		$(1)-patch $(1)-depends \
+-			$$($(2)_TARGET_CONFIGURE)
++$$($(2)_TARGET_CONFIGURE):	$$($(2)_TARGET_PATCH)
+ 
+-$(1)-patch:		$(1)-extract $$($(2)_TARGET_PATCH)
++$(1)-patch:		$$($(2)_TARGET_PATCH)
++$$($(2)_TARGET_PATCH):	$$($(2)_TARGET_EXTRACT)
+ 
+-$(1)-extract:		$(1)-source \
+-			$$($(2)_TARGET_EXTRACT)
++$(1)-extract:			$$($(2)_TARGET_EXTRACT)
++$$($(2)_TARGET_EXTRACT):	$$($(2)_TARGET_SOURCE)
+ 
+ $(1)-depends:		$$($(2)_DEPENDENCIES)
+ 
+@@ -411,10 +416,9 @@ else
+ #  source, by rsyncing
+ #  depends
+ #  configure
+-$(1)-configure:		$(1)-depends \
+-			$$($(2)_TARGET_CONFIGURE)
++$$($(2)_TARGET_CONFIGURE):	$$($(2)_TARGET_RSYNC)
+ 
+-$(1)-depends:		$(1)-rsync $$($(2)_DEPENDENCIES)
++$(1)-depends:		$$($(2)_DEPENDENCIES)
+ 
+ $(1)-patch:		$(1)-rsync
+ $(1)-extract:		$(1)-rsync
+diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
+index 3993d9b..f05b647 100644
+--- a/package/uclibc/uclibc.mk
++++ b/package/uclibc/uclibc.mk
+@@ -24,7 +24,8 @@ UCLIBC_DEPENDENCIES = host-gcc-initial linux-headers
+ 
+ # Before uClibc is built, we must have the second stage
+ # cross-compiler, for some gcc versions, and when NPTL is used.
+-uclibc-build: $(if $(BR2_TOOLCHAIN_NEEDS_THREE_STAGE_BUILD),host-gcc-intermediate)
++UCLIBC_BUILD_DEPENDENCIES = \
++	$(if $(BR2_TOOLCHAIN_NEEDS_THREE_STAGE_BUILD),host-gcc-intermediate)
+ 
+ # specifying UCLIBC_CONFIG_FILE on the command-line overrides the .config
+ # setting.
 -- 
 1.8.4
