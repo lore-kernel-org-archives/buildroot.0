@@ -1,32 +1,30 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 1 Oct 2013 21:57:58 +0200
-Subject: [Buildroot] Patchwork superseded patches
-In-Reply-To: <CAAXf6LW8YVfgiMDyu+PnYdMKA0Lh2BU6=DkPiCpORUWf+x1Adw@mail.gmail.com>
-References: <CAAXf6LW8YVfgiMDyu+PnYdMKA0Lh2BU6=DkPiCpORUWf+x1Adw@mail.gmail.com>
-Message-ID: <20131001215758.29f06d76@skate>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 01 Oct 2013 21:59:09 +0200
+Subject: [Buildroot] [PATCH 2 of 2] make clean: remove redundant removal
+	of STAGING_DIR
+In-Reply-To: <e4d1fd22ccc32a9c0ffc.1380539367@argentina> (Thomas De
+ Schampheleire's message of "Mon, 30 Sep 2013 13:09:27 +0200")
+References: <patchbomb.1380539365@argentina>
+ <e4d1fd22ccc32a9c0ffc.1380539367@argentina>
+Message-ID: <87fvsku5iq.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, Peter,
+>>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin@gmail.com> writes:
 
-On Wed, 25 Sep 2013 11:16:47 +0200, Thomas De Schampheleire wrote:
+ Thomas> Since STAGING_DIR is defined as (package/Makefile.in):
+ Thomas> STAGING_SUBDIR = usr/$(GNU_TARGET_NAME)/sysroot
+ Thomas> STAGING_DIR    = $(HOST_DIR)/$(STAGING_SUBDIR)
 
-> Here are some patches that can be marked as superseded in patchwork:
+ Thomas> removing HOST_DIR will automatically remove STAGING_DIR. This
+ Thomas> patch updates 'make clean' based on this knowledge.
 
-Thanks, all marked as superseded.
+ Thomas> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
-Peter, can you add Thomas DS to the list of people allowed to change
-the status of patches in patchwork? I believe Thomas has a long track
-record of BR contributions, and he is willing to help us triaging the
-backlog of patches.
+Committed, thanks.
 
-Thanks!
-
-Thomas
 -- 
-Thomas Petazzoni, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
