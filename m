@@ -1,90 +1,42 @@
-From: =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= <jezz@sysmic.org>
-Date: Tue,  1 Oct 2013 13:38:12 +0200
-Subject: [Buildroot] [PATCH] Fix compilation of systemd with uclibc
-Message-ID: <1380627492-25380-1-git-send-email-jezz@sysmic.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 1 Oct 2013 14:10:17 +0200
+Subject: [Buildroot] [UNSURE]Re: [v4 1/2] luainterpreter: create virtual
+ package
+In-Reply-To: <CAB0FRsspaq_BTykGrOPP=iyTxpm9Wu46wMvWgRHNDzSpj-XCkA@mail.gmail.com>
+References: <1376469325-3707-1-git-send-email-francois.perrad@gadz.org>
+ <CA+-urNQZVaNvLwNUA_X6N7Ft2N0U1Yo6h+L__vNtHJfOZVPUSA@mail.gmail.com>
+ <20130930225408.4ea0f858@skate>
+ <CAB0FRssEyA+HqrMGw4B-sEswJY7YAMqw0Jh+L6gpyE0TVCyB6A@mail.gmail.com>
+ <20131001093122.48b1c5f4@skate>
+ <CAB0FRsspaq_BTykGrOPP=iyTxpm9Wu46wMvWgRHNDzSpj-XCkA@mail.gmail.com>
+Message-ID: <20131001141017.422ee8ab@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-systemd-uclibc-fix.patch was applied to systemd to provide execvpe function
-when compiled with uclibc. However, this function is now provided by
-libc-add-non-standard-execvpe-function.patch in uclibc package.
+Dear Fran?ois Perrad,
 
-These two patchs are now in conflict. This commit remove
-systemd/systemd-uclibc-fix.patch.
+On Tue, 1 Oct 2013 12:47:20 +0200, Fran?ois Perrad wrote:
 
-Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
----
- package/systemd/systemd-uclibc-fix.patch |   59 ------------------------------
- 1 file changed, 59 deletions(-)
- delete mode 100644 package/systemd/systemd-uclibc-fix.patch
+> Lua 5.2.0 was released on December 2011 (see
+> https://raw.github.com/fperrad/graph-versions/gh-pages/slides/lua.png).
+> Since this, Lua module authors release new version which are
+> compatible 5.1 and 5.2 (not a hard job, differences are small). But
+> this process is not fast and not finished.
+> 
+> So, I think Lua 5.1.x and 5.2.x can be handled by the same package
+> with a choice (like gcc, binutils)
 
-diff --git a/package/systemd/systemd-uclibc-fix.patch b/package/systemd/systemd-uclibc-fix.patch
-deleted file mode 100644
-index 9a20845..0000000
---- a/package/systemd/systemd-uclibc-fix.patch
-+++ /dev/null
-@@ -1,59 +0,0 @@
--[PATCH] fix build with uClibc
--
--Based on OE patch from Khem Raj:
--
--http://cgit.openembedded.org/meta-openembedded/tree/meta-oe/recipes-core/systemd/systemd/paper-over-mkostemp.patch
--
--But extended to also cover execvpe (OE carries a patch adding execvpe
--support to uClibc).
--
--Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
-----
-- src/journal/journal-file.c |    2 ++
-- src/macro.h                |   15 +++++++++++++++
-- 2 files changed, 17 insertions(+)
--
--Index: systemd-44/src/macro.h
--===================================================================
----- systemd-44.orig/src/macro.h
--+++ systemd-44/src/macro.h
--@@ -28,6 +28,21 @@
-- #include <sys/uio.h>
-- #include <inttypes.h>
-- 
--+#ifdef __UCLIBC__
--+/* uclibc does not implement mkostemp GNU extension */
--+#define mkostemp(x,y) mkstemp(x)
--+/* uclibc does not implement execvpe GNU extension */
--+#ifndef _GNU_SOURCE
--+#define _GNU_SOURCE
--+#endif
--+#include <unistd.h>
--+static inline int execvpe(const char *file, char *const argv[],
--+                          char *const envp[])
--+{
--+        environ = (char **)envp;
--+        return execvp(file, argv);
--+}
--+#endif
-- #define _printf_attr_(a,b) __attribute__ ((format (printf, a, b)))
-- #define _sentinel_ __attribute__ ((sentinel))
-- #define _noreturn_ __attribute__((noreturn))
--Index: systemd-44/src/journal/journal-file.c
--===================================================================
----- systemd-44.orig/src/journal/journal-file.c
--+++ systemd-44/src/journal/journal-file.c
--@@ -229,11 +229,13 @@
--                 }
--         }
-- 
--+#ifndef __UCLIBC__
--         /* Note that the glibc fallocate() fallback is very
--            inefficient, hence we try to minimize the allocation area
--            as we can. */
--         if (posix_fallocate(f->fd, old_size, new_size - old_size) < 0)
--                 return -errno;
--+#endif
-- 
--         if (fstat(f->fd, &f->last_stat) < 0)
--                 return -errno;
+Ok. But then Lua packages that are not yet compatible with 5.2.x will
+have to be marked "depends on !BR2_PACKAGE_LUA_5_2". Is this what you
+had in mind?
+
+Thanks!
+
+Thomas
 -- 
-1.7.9.5
+Thomas Petazzoni, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
