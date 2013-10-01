@@ -1,58 +1,72 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 1 Oct 2013 22:01:09 +0200
-Subject: [Buildroot] [git commit] gnupg: option to include RSA support.
-Message-ID: <20131001200152.CE2779B903@busybox.osuosl.org>
+From: clshotwe at rockwellcollins.com <clshotwe@rockwellcollins.com>
+Date: Tue, 1 Oct 2013 15:01:52 -0500
+Subject: [Buildroot] [RFC] package: Redownload HEAD packages every build
+In-Reply-To: <20131001205154.059ec4af@skate>
+References: <1380293015-20331-1-git-send-email-clshotwe@rockwellcollins.com>
+ <20131001205154.059ec4af@skate>
+Message-ID: <OF074BC262.DC488FB4-ON86257BF7.006D21D1-86257BF7.006DFBEC@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b2fab93b1636027c73c664cdf395cb8f93dc55dc
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Thomas and Arnout,
 
-gnupg is compiled with --enable-minimal flag. This produces a binary that only
-supports ElGamal and DSA public key algorithms.
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote on 10/01/2013 
+01:51:54 PM:
 
-RSA has been the default for `gpg --gen-key` since 2009, so it makes sense to
-be able to build a gnupg binary that supports it.
+> It seems like the mechanism you're proposing overlaps quite
+> significantly with that, while being a bit less flexible. Have you
+> tried the <pkg>_OVERRIDE_SRCDIR mechanism?
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/gnupg/Config.in |    5 +++++
- package/gnupg/gnupg.mk  |    6 ++++++
- 2 files changed, 11 insertions(+), 0 deletions(-)
+I did a little digging into the <pkg>_OVERRIDE_SRCDIR mechanism but I 
+could not find any documentation and the implementation in the make 
+structure is a little unclear.  What is the full intent of that mechanism?
 
-diff --git a/package/gnupg/Config.in b/package/gnupg/Config.in
-index 8ddffaa..90f07c2 100644
---- a/package/gnupg/Config.in
-+++ b/package/gnupg/Config.in
-@@ -15,6 +15,11 @@ config BR2_PACKAGE_GNUPG
- 
- if BR2_PACKAGE_GNUPG
- 
-+config BR2_PACKAGE_GNUPG_RSA
-+	bool "RSA support"
-+	help
-+	  Support for RSA public key algorithm
-+
- config BR2_PACKAGE_GNUPG_GPGV
- 	bool "gpgv"
- 	help
-diff --git a/package/gnupg/gnupg.mk b/package/gnupg/gnupg.mk
-index f0c4b03..38604b5 100644
---- a/package/gnupg/gnupg.mk
-+++ b/package/gnupg/gnupg.mk
-@@ -31,6 +31,12 @@ else
- GNUPG_CONF_OPT += --without-readline
- endif
- 
-+ifeq ($(BR2_PACKAGE_GNUPG_RSA),y)
-+GNUPG_CONF_OPT += --enable-rsa
-+else
-+GNUPG_CONF_OPT += --disable-rsa
-+endif
-+
- ifneq ($(BR2_PACKAGE_GNUPG_GPGV),y)
- define GNUPG_REMOVE_GPGV
- 	rm -f $(TARGET_DIR)/usr/bin/gpgv \
+> Regarding the implementation, I'm not sure to understand how
+> <pkg>_VERSION = HEAD is supposed to be used. For example, I have a
+> software, whose source code is handled in Git, in its 'master' branch.
+> How would I tell your mechanism that I want the latest source code to
+> be redownloaded each time?
+
+I failed to take git and mercurial into account with this patch. 
+Subversion uses "HEAD" for its latest source code.
+
+> Moreover, it's going to be redownloaded each time completely, which is
+> quite annoying during development. The <pkg>_OVERRIDE_SRCDIR allows you
+> to point to a local directory, which avoids re-downloading the entire
+> source code everytime.
+
+Arnout Vandecappelle <arnout@mind.be> wrote on 10/01/2013 11:08:23 AM:
+
+>   Also I think I would prefer instead to have an explicit variable to 
+> indicate that it should be re-downloaded, e.g.
+> 
+> ifneq ($($(PKG)_FORCE_DOWNLOAD),)
+>    $(Q)$(RM) $(DL_DIR)/$($(PKG)_SOURCE)
+> endif
+
+I like this approach much better.  It would make this mechanism very 
+explicit and avoid having to handle all of the different repository 
+nuances. I would like to create a new patch that implements this method.
+
+>   This variable can be set either from the package's .mk file or from 
+the 
+> local override file.
+> 
+> 
+>   And finally, the documentation should be updated as well.
+
+Agreed.
+
+Thanks,
+Clayton
+
+Clayton Shotwell
+Software Engineer
+clshotwe at rockwellcollins.com
+www.rockwellcollins.com 
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20131001/48284d2e/attachment.html>
