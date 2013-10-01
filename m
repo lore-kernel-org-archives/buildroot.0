@@ -1,29 +1,55 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 01 Oct 2013 23:29:06 +0200
-Subject: [Buildroot] [PATCH 1/4] trace-cmd: fix largefile build problem
-In-Reply-To: <1380576047-21001-1-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Mon, 30 Sep 2013 23:20:44 +0200")
-References: <1380576047-21001-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <8738oku1ct.fsf@dell.be.48ers.dk>
+From: Eric Nelson <eric.nelson@boundarydevices.com>
+Date: Tue, 01 Oct 2013 14:50:03 -0700
+Subject: [Buildroot] [PATCH 1/2] freescale-imx: separate variable
+ assignment from Makefile
+In-Reply-To: <20131001232710.2e3aaae5@skate>
+References: <1380650790-18097-1-git-send-email-eric.nelson@boundarydevices.com>	<1380650790-18097-2-git-send-email-eric.nelson@boundarydevices.com>	<20131001214420.34d3ef48@skate>	<524B3C4D.20906@boundarydevices.com>
+ <20131001232710.2e3aaae5@skate>
+Message-ID: <524B438B.9000408@boundarydevices.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+Hi Thomas,
 
- Thomas> The source files of trace-cmd already define _LARGEFILE64_SOURCE, but
- Thomas> Buildroot passes it again on the build command line through CFLAGS,
- Thomas> which causes a build error. We fix this by filtering out our
- Thomas> definition of _LARGEFILE64_SOURCE from the CFLAGS before passing them
- Thomas> to the trace-cmd Makefile.
+You (and Arnout) are right, of course.
 
- Thomas> Fixes the warning visible at:
+On 10/01/2013 02:27 PM, Thomas Petazzoni wrote:
+> Dear Eric Nelson,
+>
+> On Tue, 01 Oct 2013 14:19:09 -0700, Eric Nelson wrote:
+>
+>> I can do that if I move packages/gstreamer/gst-fsl-plugins/ under
+>> packages/freescale-imx, but not otherwise.
+>
+> Are you sure?
+>
+> See:
+>
+> $ cat foo.mk
+> YOURPACKAGE_VERSION = $(FREESCALE_IMX_VERSION)
+>
+> FREESCALE_IMX_VERSION = 42
+>
+> all:
+> 	@echo $(YOURPACKAGE_VERSION)
+>
+> $ make -f foo.mk
+> 42
+> $
+>
+> This shows that the value of FREESCALE_IMX_VERSION can be given *after*
+> it is used.
+>
 
- Thomas>  http://autobuild.buildroot.net/results/1c4567a230940a5287d03e2a5c2c7afbdc64cd36/build-end.log
+As Arnout said, I didn't grok that this is Make, with no
+sub-makes, so everything's global...
 
-It's just a warning, but ok - Committed, thanks.
+I'll re-submit the gstreamer patch without this bit.
 
--- 
-Bye, Peter Korsgaard
+Regards,
+
+
+Eric
