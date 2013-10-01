@@ -1,26 +1,48 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 01 Oct 2013 23:59:48 +0200
-Subject: [Buildroot] [PATCH] glibc: Pass correct -mabi for MIPS
-In-Reply-To: <1380121257-10449-1-git-send-email-markos.chandras@imgtec.com>
- (Markos Chandras's message of "Wed, 25 Sep 2013 16:00:57 +0100")
-References: <1380121257-10449-1-git-send-email-markos.chandras@imgtec.com>
-Message-ID: <87txh0sld7.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 1 Oct 2013 23:26:12 +0200
+Subject: [Buildroot] [git commit] trace-cmd: fix largefile build problem
+Message-ID: <20131001220021.CEEE39B527@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Markos" == Markos Chandras <markos.chandras@imgtec.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=c07f1ce0ec8a75aeed67c0991a10106e79f22323
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Markos> According to glibc-2.18/ports/sysdeps/mips/preconfigure,
- Markos> if no -mabi was passed to CFLAGS, then it defaults to -mabi=n32.
- Markos> This breaks o32 and n64 builds for MIPS64. Therefore, it is
- Markos> necessary to append -mabi to CFLAGS.
+The source files of trace-cmd already define _LARGEFILE64_SOURCE, but
+Buildroot passes it again on the build command line through CFLAGS,
+which causes a build error. We fix this by filtering out our
+definition of _LARGEFILE64_SOURCE from the CFLAGS before passing them
+to the trace-cmd Makefile.
 
- Markos> Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
+Fixes the warning visible at:
 
-Committed, thanks.
+ http://autobuild.buildroot.net/results/1c4567a230940a5287d03e2a5c2c7afbdc64cd36/build-end.log
 
--- 
-Bye, Peter Korsgaard
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/trace-cmd/trace-cmd.mk |    6 +++++-
+ 1 files changed, 5 insertions(+), 1 deletions(-)
+
+diff --git a/package/trace-cmd/trace-cmd.mk b/package/trace-cmd/trace-cmd.mk
+index ada0306..7a750f9 100644
+--- a/package/trace-cmd/trace-cmd.mk
++++ b/package/trace-cmd/trace-cmd.mk
+@@ -11,9 +11,13 @@ TRACE_CMD_INSTALL_STAGING = YES
+ TRACE_CMD_LICENSE = GPLv2 LGPLv2.1
+ TRACE_CMD_LICENSE_FILES = COPYING COPYING.LIB
+ 
++# trace-cmd already defines _LARGEFILE64_SOURCE when necessary,
++# redefining it on the command line causes build problems.
++TRACE_CMD_CFLAGS=$(filter-out -D_LARGEFILE64_SOURCE,$(TARGET_CFLAGS)) -D_GNU_SOURCE
++
+ define TRACE_CMD_BUILD_CMDS
+ 	$(MAKE) $(TARGET_CONFIGURE_OPTS) \
+-		CFLAGS="$(TARGET_CFLAGS) -D_GNU_SOURCE" \
++		CFLAGS="$(TRACE_CMD_CFLAGS)" \
+ 		-C $(@D) all
+ endef
+ 
