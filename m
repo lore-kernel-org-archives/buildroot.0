@@ -1,29 +1,24 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 01 Oct 2013 21:27:51 +0200
-Subject: [Buildroot] [PATCH] setserial: bump to version 2.17-45.3
-In-Reply-To: <20131001115508.502bffbc@skate> (Thomas Petazzoni's message of
- "Tue, 1 Oct 2013 11:55:08 +0200")
-References: <1380609394.20990.0.camel@phoenix> <20131001115508.502bffbc@skate>
-Message-ID: <87a9isvljc.fsf@dell.be.48ers.dk>
+Date: Tue, 01 Oct 2013 21:32:09 +0200
+Subject: [Buildroot] [PATCH] diffutils: bump to version 3.3
+In-Reply-To: <1380605162.20038.1.camel@phoenix> (Axel Lin's message of "Tue,
+ 01 Oct 2013 13:26:02 +0800")
+References: <1380605162.20038.1.camel@phoenix>
+Message-ID: <8761tgvlc6.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+>>>>> "Axel" == Axel Lin <axel.lin@ingics.com> writes:
 
- Thomas> Dear Axel Lin,
- Thomas> On Tue, 01 Oct 2013 14:36:34 +0800, Axel Lin wrote:
- >> Bump to patchlevel 3 since 2 is gone upstream.
- >> 
- >> Signed-off-by: Axel Lin <axel.lin@ingics.com>
+ Axel> Also drop diffutils-gets-no-longer-exists-in-eglibc-2.16.patch because
+ Axel> gets is unconditionally undefined now so we don't need the patch.
 
- Thomas> I believe we should get rid of the BR2_DEBIAN_MIRROR thing altogether,
- Thomas> and switch all packages that are sourced from Debian to use
- Thomas> http://snapshot.debian.org/ to avoid disappearing packages.
+ Axel> Signed-off-by: Axel Lin <axel.lin@ingics.com>
 
-Agreed. Axel, care to send a patch doing that?
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
