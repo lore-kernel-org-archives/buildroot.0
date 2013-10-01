@@ -1,122 +1,98 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 01 Oct 2013 18:30:04 +0200
-Subject: [Buildroot] [PATCH 1/1] omniorb: cleanup autobuild failure,
- CFLAGS issue
-In-Reply-To: <1380311674-6883-1-git-send-email-mlweber1@rockwellcollins.com>
-References: <1380311674-6883-1-git-send-email-mlweber1@rockwellcollins.com>
-Message-ID: <524AF88C.4070906@mind.be>
+Date: Tue, 01 Oct 2013 18:40:56 +0200
+Subject: [Buildroot] [PATCH 1/1] python-ipy: new package
+In-Reply-To: <1380318149-22696-1-git-send-email-mlweber1@rockwellcollins.com>
+References: <1380318149-22696-1-git-send-email-mlweber1@rockwellcollins.com>
+Message-ID: <524AFB18.1000203@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 09/27/13 21:54, Matt Weber wrote:
-> Fixed:
-> http://autobuild.buildroot.net/results/a08baf8821e3ee1fb9c36c8f74c4ced466af167b/
-> http://autobuild.buildroot.net/results/f0c7379c1f405385d3a64c0349c3d9565065e8a7/
-> http://autobuild.buildroot.net/results/c3de25ca52fdb8ffda7472cf9f7b64514954cbb1/
->
-> Change Log:
-> The target CFLAGS were getting mixed in during a manual build of some
-> omniorb pkg tools that could be viewed as host tools.
-> This manual build was a dirty workaround and created some bad
-> cornercases. So I converted the package over to actually using the
-> host pkg build and removed the need for a patch and custom mods in the build.
->
-> Also there wasn't a dependency on the target having python, just
-> host-python for performing the initial build.  So depends were adjusted
-> accordingly. If python bindings are required, they can be found in a different
-> package called omniORBpy.  The omniORB package only uses python for
-> the build process.
->
-> Fixed a bug with long double support.  Currently leaving it disabled
-> as most targets won't use it.  This allows greater toolchain compatibility.
+On 09/27/13 23:42, Matt Weber wrote:
 >
 > Signed-off-by: Matt Weber <mlweber1@rockwellcollins.com>
-
-  Looks good. However:
-
-[snip]
-> +# Defaulting long double support to a safe option for the
-> +# mix of embedded targets, this could later be automated
-> +# based on checking the capability of the cross toolchain
-> +# for "__LONG_DOUBLE_128__".  Currently the host and target
-> +# need to match because of the code generation done by the
-> +# host tools during the target compile (ie headers generated
-> +# on host are used in target build).
-
-  Ouch, this smells like there could also be an issue when the host and 
-the target have different data representations (e.g. endianness or 
-bitwidth). Do you think there is a risk of this?
-
-> +OMNIORB_CONF_OPT += --disable-longdouble
+> ---
+>   package/Config.in                |    1 +
+>   package/python-ipy/Config.in     |    8 ++++++++
+>   package/python-ipy/python-ipy.mk |   30 ++++++++++++++++++++++++++++++
+>   3 files changed, 39 insertions(+), 0 deletions(-)
+>   create mode 100644 package/python-ipy/Config.in
+>   create mode 100644 package/python-ipy/python-ipy.mk
 >
-> -# omniORB is currently not cross-compile friendly and has some assumptions
-> -# where a couple host tools are built in place and then used during the
-> -# build.  The tools generate code from the IDL description language, which
-> -# is then built into the cross compiled OMNIORB application.
-> -# So this first hook builds the tools required for the host side
-> -# generation of code. Then the second hook cleans up before the install.
-> +# omniORB is not completely cross-compile friendly and has some
-> +# assumptions where a couple host tools must be built and then
-> +# used by the target build.  The host tools generate code from
-> +# the IDL description language, which is then built into the
-> +# cross compiled target OMNIORB application.
->   define OMNIORB_BUILD_TOOLS
+> diff --git a/package/Config.in b/package/Config.in
+> index c6ea66b..2d05560 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -389,6 +389,7 @@ source "package/python-bottle/Config.in"
+>   source "package/python-crc16/Config.in"
+>   source "package/python-dpkt/Config.in"
+>   source "package/python-id3/Config.in"
+> +source "package/python-ipy/Config.in"
+>   source "package/python-mad/Config.in"
+>   source "package/python-meld3/Config.in"
+>   source "package/python-netifaces/Config.in"
+> diff --git a/package/python-ipy/Config.in b/package/python-ipy/Config.in
+> new file mode 100644
+> index 0000000..bead932
+> --- /dev/null
+> +++ b/package/python-ipy/Config.in
+> @@ -0,0 +1,8 @@
+> +config BR2_PACKAGE_PYTHON_IPY
+> +	bool "python-ipy"
+> +	depends on BR2_PACKAGE_PYTHON
+> +	help
+> +	  IPy - class and tools for handling of IPv4 and
+> +	  IPv6 addresses and networks.
+> +
+> +	  https://github.com/haypo/python-ipy/
+> diff --git a/package/python-ipy/python-ipy.mk b/package/python-ipy/python-ipy.mk
+> new file mode 100644
+> index 0000000..9e09762
+> --- /dev/null
+> +++ b/package/python-ipy/python-ipy.mk
+> @@ -0,0 +1,30 @@
+> +################################################################################
+> +#
+> +# python-ipy
+> +#
+> +################################################################################
+> +
+> +PYTHON_IPY_VERSION = 0.75-0-g58006fb
+> +PYTHON_IPY_SOURCE  = haypo-python-ipy-IPy-$(PYTHON_IPY_VERSION).tar.gz
+> +PYTHON_IPY_SITE    = https://github.com/haypo/python-ipy/tarball/IPy-0.75
+> +PYTHON_IPY_DEPENDENCIES = host-python python
+> +PYTHON_IPY_LICENSE = BSD-3c
+> +PYTHON_IPY_LICENSE_FILES = COPYING
+> +
+> +define PYTHON_IPY_BUILD_CMDS
+> +	(cd $(@D); \
+> +		CC="$(TARGET_CC)" \
+> +		CFLAGS="$(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include" \
+> +		LDSHARED="$(TARGET_CC) -shared" \
+> +		LDFLAGS="$(TARGET_LDFLAGS) -L$(STAGING_DIR)/lib -L$(STAGING_DIR)/usr/lib" \
 
-  Minor nit: you probably want to rename this variable as well.
+  The -I and -L shouldn't be needed - if they are, something else must be 
+wrong...
 
-> -	$(HOST_MAKE_ENV) $(MAKE) $(HOST_CONFIGURE_OPTS) \
-> -		-C $(@D)/src/tool export
-> +	# Point to the host folder to get HOST_OMNIORB tools
-> +	$(SED) 's:TOOLBINDIR = $$(TOP)/$$(BINDIR):TOOLBINDIR = $(HOST_DIR)/usr/bin:g' $(@D)/mk/beforeauto.mk
-> +	# Disables OMNIORB tool building
-> +	echo "EmbeddedSystem=1" >> $(@D)/mk/beforeauto.mk
->   endef
->   OMNIORB_POST_CONFIGURE_HOOKS += OMNIORB_BUILD_TOOLS
->
-> -define OMNIORB_CLEAN_TOOLS
-> -	$(HOST_MAKE_ENV) $(MAKE) $(HOST_CONFIGURE_OPTS) \
-> -		-C $(@D)/src/tool clean
-> -endef
-> -OMNIORB_POST_BUILD_HOOKS += OMNIORB_CLEAN_TOOLS
-> -
-> -define OMNIORB_FIXUP_FILE_PATHS_HOOK
-> -	$(SED) "s:$(HOST_DIR)/usr:/usr:g" $(STAGING_DIR)/usr/bin/omniidl
-> -endef
-> -OMNIORB_POST_INSTALL_STAGING_HOOKS += OMNIORB_FIXUP_FILE_PATHS_HOOK
-> +HOST_OMNIORB_DEPENDENCIES = host-python
-
-  We usually put the host DEPENDENCIES just below the target stuff. So:
-
-###########
-# header
-###########
-
-<target variable definitions>
-
-<host variable definitions>
-
-<conditional target variables>
-
-<conditional host variables>
-
-<target cmds and hooks>
-
-<host cmds and hooks>
-
-$(eval $(...))
-$(eval $(host-...))
-
-
+  I realize the other python packages don't do it, but why not use 
+TARGET_CONFIGURE_OPTS?
 
   Regards,
   Arnout
 
->
->   $(eval $(autotools-package))
-> +$(eval $(host-autotools-package))
+> +		$(HOST_DIR)/usr/bin/python setup.py build_ext \
+> +		--include-dirs=$(STAGING_DIR)/usr/include/python$(PYTHON_VERSION_MAJOR) \
+> +	)
+> +	(cd $(@D); $(HOST_DIR)/usr/bin/python setup.py build)
+> +endef
+> +
+> +define PYTHON_IPY_INSTALL_TARGET_CMDS
+> +	(cd $(@D); $(HOST_DIR)/usr/bin/python setup.py install --prefix=$(TARGET_DIR)/usr)
+> +endef
+> +
+> +$(eval $(generic-package))
 >
 
 
