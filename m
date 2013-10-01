@@ -1,49 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 1 Oct 2013 09:31:22 +0200
-Subject: [Buildroot] [v4 1/2] luainterpreter: create virtual package
-In-Reply-To: <CAB0FRssEyA+HqrMGw4B-sEswJY7YAMqw0Jh+L6gpyE0TVCyB6A@mail.gmail.com>
-References: <1376469325-3707-1-git-send-email-francois.perrad@gadz.org>
- <CA+-urNQZVaNvLwNUA_X6N7Ft2N0U1Yo6h+L__vNtHJfOZVPUSA@mail.gmail.com>
- <20130930225408.4ea0f858@skate>
- <CAB0FRssEyA+HqrMGw4B-sEswJY7YAMqw0Jh+L6gpyE0TVCyB6A@mail.gmail.com>
-Message-ID: <20131001093122.48b1c5f4@skate>
+Date: Tue, 1 Oct 2013 09:32:49 +0200
+Subject: [Buildroot] [PATCH 1/2] logrotate: nees mmu
+In-Reply-To: <1380594702.9353.1.camel@phoenix>
+References: <1380594702.9353.1.camel@phoenix>
+Message-ID: <20131001093249.6a135a15@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Fran?ois Perrad,
+Dear Axel Lin,
 
-On Tue, 1 Oct 2013 09:27:48 +0200, Fran?ois Perrad wrote:
+On Tue, 01 Oct 2013 10:31:42 +0800, Axel Lin wrote:
+> Signed-off-by: Axel Lin <axel.lin@ingics.com>
+> ---
+> Fix below build error:
+> 
+> logrotate.o: In function `switch_user_permanently':
+> /opt/test/buildroot/buildroot/output/build/logrotate-3.8.4/logrotate.c:129: undefined reference to `fork'
+> logrotate.o: In function `removeLogFile':
+> /opt/test/buildroot/buildroot/output/build/logrotate-3.8.4/logrotate.c:431: undefined reference to `fork'
+> logrotate.o: In function `mailLog':
+> /opt/test/buildroot/buildroot/output/build/logrotate-3.8.4/logrotate.c:597: undefined reference to `fork'
+> /opt/test/buildroot/buildroot/output/build/logrotate-3.8.4/logrotate.c:615: undefined reference to `fork'
+> logrotate.o: In function `compressLogFile':
+> /opt/test/buildroot/buildroot/output/build/logrotate-3.8.4/logrotate.c:533: undefined reference to `fork'
+> collect2: ld returned 1 exit status
+> make[1]: *** [logrotate] Error 1
 
-> A version for a virtual package is not mandatory.
-> A virtual package is used to create a OR dependency.
-> With luainterpreter, a Lua module (LuaSocket for example) depends on
-> lua OR on luajit.
-> Both Lua 5.1.5 and LuaJIT 2.0.2 provides a Lua 5.1 ABI/API compatible
-> interpreter.
-> The only effect of setting LUAINTERPRETER_VERSION is the name of the
-> directory 'build/luainterpreter-5.1' instead of
-> 'build/luainterpreter-undefined'.
+It's a minor comment, but I believe the log of the error could go
+within the commit log itself (i.e, before the --- separator). It really
+is part of the explanation of why the change is needed.
 
-Ok, makes sense.
-
-> I don't like name containing 'undefined', but I'll be fine with a BR
-> convention what says :
->   - all virtual packages use 'virtual' as version.
-
-I probably haven't thought about all the implications, but it indeed
-looks like an interesting suggestion. Virtual packages are anyway
-something that we should progressively formalize through a new section
-in the documentation.
-
-> I've already did some experiments with the Lua 5.2 serie in my own
-> repository, see https://github.com/fperrad/br/tree/lua5.2
-
-So should we package Lua 5.1 and 5.2 separately, because Lua modules
-are only compatible with 5.1 or 5.2, or can we keep the same package
-for both Lua versions?
+Note that there is no need to resend this patch just for this reason,
+it was merely a suggestion for future patches.
 
 Thanks!
 
