@@ -1,32 +1,50 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 1 Oct 2013 21:26:19 +0200
-Subject: [Buildroot] [git commit] mtdev: bump version to 1.1.4
-Message-ID: <20131001193429.7C7E89B313@busybox.osuosl.org>
+Date: Tue, 01 Oct 2013 21:37:58 +0200
+Subject: [Buildroot] [PATCH] pppd: needs mmu and shared objects
+In-Reply-To: <1380532727.13663.1.camel@phoenix> (Axel Lin's message of "Mon,
+ 30 Sep 2013 17:18:47 +0800")
+References: <1380532727.13663.1.camel@phoenix>
+Message-ID: <87siwku6i1.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=2e162a76ff3fa7ac3536cb0498e3e9b8d2eebee6
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Axel" == Axel Lin <axel.lin@ingics.com> writes:
 
-Signed-off-by: Phil Eichinger <phil@zankapfel.net>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/mtdev/mtdev.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ Axel> The plugin infrastructure is based on shared objects so it won't build
+ Axel> for static-only scenarios.
+ Axel> And the daemon uses fork() so MMU is required.
 
-diff --git a/package/mtdev/mtdev.mk b/package/mtdev/mtdev.mk
-index 5c94352..3ae2a10 100644
---- a/package/mtdev/mtdev.mk
-+++ b/package/mtdev/mtdev.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+ Axel> Signed-off-by: Axel Lin <axel.lin@ingics.com>
+ Axel> ---
+ Axel>  package/pppd/Config.in | 6 ++++++
+ Axel>  1 file changed, 6 insertions(+)
+
+ Axel> diff --git a/package/pppd/Config.in b/package/pppd/Config.in
+ Axel> index 879b263..074c2fd 100644
+ Axel> --- a/package/pppd/Config.in
+ Axel> +++ b/package/pppd/Config.in
+ Axel> @@ -1,10 +1,16 @@
+ Axel>  config BR2_PACKAGE_PPPD
+ Axel>  	bool "pppd"
+ Axel> +	depends on !BR2_PREFER_STATIC_LIB
+ Axel> +	depends on BR2_USE_MMU
+ Axel>  	help
+ Axel>  	  An implementation of the Point-to-point protocol.
  
--MTDEV_VERSION = 1.1.3
-+MTDEV_VERSION = 1.1.4
- MTDEV_SOURCE = mtdev-$(MTDEV_VERSION).tar.bz2
- MTDEV_SITE = http://bitmath.org/code/mtdev/
+ Axel>  	  http://www.samba.org/ppp/
  
+ Axel> +comment "pppd requires a toolchain with dynamic library support"
+ Axel> +	depends on BR2_PREFER_STATIC_LIB
+ Axel> +	depends on BR2_USE_MMU
+ Axel> +
+
+This needs to go under the sub options otherwise they won't get properly
+indented.
+
+Committed with that fixed, thanks.
+
+-- 
+Bye, Peter Korsgaard
