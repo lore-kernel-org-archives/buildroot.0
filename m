@@ -1,32 +1,36 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed,  2 Oct 2013 09:28:45 -0300
-Subject: [Buildroot] [PATCH 2/3] bison: bump to version 3.0
+Date: Wed,  2 Oct 2013 09:28:46 -0300
+Subject: [Buildroot] [PATCH 3/3] gmp: bump to version 5.1.3
 In-Reply-To: <1380716926-24611-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1380716926-24611-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1380716926-24611-2-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1380716926-24611-3-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Also switch to http gnu site instead of ftp.
+
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/bison/bison.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/gmp/gmp.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/bison/bison.mk b/package/bison/bison.mk
-index 1fbbf91..47a7560 100644
---- a/package/bison/bison.mk
-+++ b/package/bison/bison.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/gmp/gmp.mk b/package/gmp/gmp.mk
+index 86ed33c..d970545 100644
+--- a/package/gmp/gmp.mk
++++ b/package/gmp/gmp.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--BISON_VERSION = 2.7.1
-+BISON_VERSION = 3.0
- BISON_SOURCE = bison-$(BISON_VERSION).tar.xz
- BISON_SITE = $(BR2_GNU_MIRROR)/bison
- BISON_LICENSE = GPLv3+
+-GMP_VERSION = 5.1.2
+-GMP_SITE = ftp://ftp.gmplib.org/pub/gmp-$(GMP_VERSION)
++GMP_VERSION = 5.1.3
++GMP_SITE = $(BR2_GNU_MIRROR)/gmp
+ GMP_SOURCE = gmp-$(GMP_VERSION).tar.xz
+ GMP_INSTALL_STAGING = YES
+ GMP_LICENSE = LGPLv3+
 -- 
 1.8.1.5
