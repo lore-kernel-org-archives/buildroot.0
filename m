@@ -1,53 +1,45 @@
-From: clshotwe at rockwellcollins.com <clshotwe@rockwellcollins.com>
-Date: Wed, 2 Oct 2013 13:34:05 -0500
-Subject: [Buildroot] [RFC] package: Redownload HEAD packages every build
-In-Reply-To: <20131002091349.652d110c@skate>
-References: <1380293015-20331-1-git-send-email-clshotwe@rockwellcollins.com>	<20131001205154.059ec4af@skate>
- <OF074BC262.DC488FB4-ON86257BF7.006D21D1-86257BF7.006DFBEC@rockwellcollins.com>
- <20131001233739.618eb9f0@skate>	<OFB02446AE.7536F58C-ON86257BF7.007705C1-86257BF7.00784F1A@rockwellcollins.com>
- <20131002091349.652d110c@skate>
-Message-ID: <OFC0CCA765.968A2DC7-ON86257BF8.0065C6C6-86257BF8.0065F2C5@rockwellcollins.com>
+From: Ryan Barnett <rjbarnet@rockwellcollins.com>
+Date: Wed, 2 Oct 2013 13:49:57 -0500
+Subject: [Buildroot] Some legal-info observations/problems
+In-Reply-To: <CAAXf6LXHXo2vY8ns61fxoLzD0n2yzLASZqFk75xzYQwgDHp15Q@mail.gmail.com>
+References: <CAAXf6LXHXo2vY8ns61fxoLzD0n2yzLASZqFk75xzYQwgDHp15Q@mail.gmail.com>
+Message-ID: <OF28FCBE52.CC9DE764-ON86257BF8.00513AFD-86257BF8.006773C0@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas,
+Thomas De Schampheleire <patrickdepinguin@gmail.com> wrote on 
+10/02/2013 09:06:13 AM:
 
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote on 10/02/2013 
-02:13:49 AM:
+[...]
 
-> > > Buildroot will rsync again the source code, and restart the build at
-> > > the configuration step, or the build step of the foo package.
-> > > 
-> > > Usually, /path/to/foo/sources/ will be the directory where you did 
-your
-> > > Subversion checkout or Git clone of your "foo" source code.
-> > 
-> > Could you add this explanation to buildroot manual since it looks like
-> > <pkg>_OVERRIDE_SRCDIR mechanism is your feature and it is currently
-> > lacking in documentation in the manual? I too have tried to understand
-> > how this feature worked and it was a bit unclear.
-> > 
-> > The only mention of OVERRIDE_SRCDIR in the documentation is under the
-> > rebuild and reconfigure commands. Where is says that it that it only
-> > makes sense to use these features with OVERRIDE_SRCDIR but doesn't
-> > explain what you just explained above.
-> 
-> Right, I will submit a documentation patch.
+> 5. the manifest also lists all host packages, like automake, autoconf,
+> ... while these are not distributed on target. Strictly speaking you
+> do not have to list these in the customer documentation of a product,
+> in my interpretation. I find it confusing that both target and host
+> packages are mixed like that.
+> Of course, it's probably difficult to change this, because some
+> packages can be built for host _and_ target, and the legal-info
+> infrastructure does not know which of these was used for a particular
+> project.
 
-This sounds like a much better method for my development.  Thanks for 
-explaining it.
+One other thing that I would like to add about the legal-info that I
+would like to see added is the manifest.csv file contain the 
+URL from which the source packages originated from. Is this something
+that people be interested in seeing added? As part of our release 
+process, we need to show where the original source file came from (URL).
 
 Thanks,
-Clayton
+-Ryan
 
-Clayton Shotwell
-Software Engineer
-clshotwe at rockwellcollins.com
-www.rockwellcollins.com 
+------------------------------------------------------------------------------------------
+Ryan J Barnett / Software Engineer / Platform SW
+MS 137-157, 855 35th St NE, Cedar Rapids, IA, 52498-3161, US
+rjbarnet at rockwellcollins.com
+www.rockwellcollins.com
 
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20131002/1353fa91/attachment.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20131002/a45d223b/attachment.html>
