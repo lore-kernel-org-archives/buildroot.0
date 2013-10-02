@@ -1,28 +1,30 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 2 Oct 2013 15:44:39 +0200
-Subject: [Buildroot] [Patch v4] libcgroup: new package
-In-Reply-To: <87ioxfriwd.fsf@dell.be.48ers.dk>
-References: <1380658785-16964-1-git-send-email-clshotwe@rockwellcollins.com>
- <87ioxfriwd.fsf@dell.be.48ers.dk>
-Message-ID: <20131002154439.0aa04855@skate>
+From: Mischa Jonker <Mischa.Jonker@synopsys.com>
+Date: Wed, 2 Oct 2013 13:46:48 +0000
+Subject: [Buildroot] ARC builds failing
+In-Reply-To: <20131001115312.7cae4d80@skate>
+References: <E6BF041E97966E4DB955F0DF883AD2D685F0CE28@de02wembxa.internal.synopsys.com>
+ <20131001115312.7cae4d80@skate>
+Message-ID: <E6BF041E97966E4DB955F0DF883AD2D685F0FA00@de02wembxa.internal.synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Peter Korsgaard,
+Hi Thomas,
 
-On Wed, 02 Oct 2013 13:50:42 +0200, Peter Korsgaard wrote:
+> > Any comments/suggestions on below patch?
+> 
+> Well, I'm considering reverting my patch that turns the 3 stages build into a
+> 2 stages build, because it causes too much problems (not only the ARC one,
+> which you fixed, but also problems related to SSP), and I don't know when
+> I'll have the time to investigate those problems, which are not so easy.
+> 
+> If you have some time, and interest in digging into such issues, let me know,
+> we can probably work together on them.
 
-> So either we should see how much work it would be to change libcgroup to
-> use nftw() instead (perhaps it is already done in 0.40.rc1?) or you
+Unfortunately I don't have a lot of time in the coming weeks, but Anton (on cc) is actually more involved with ARC GNU toolchain development than I am, and he may be able/interested to spend some time digging into these build problems.
 
-I think I had a quick look at the Git repository yesterday, and the
-latest version was still using the old fts() interface, unfortunately.
+Thanks,
 
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Mischa
