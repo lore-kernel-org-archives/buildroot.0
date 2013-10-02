@@ -1,42 +1,110 @@
-From: Thierry Bultel <thierry.bultel@wanadoo.fr>
-Date: Wed, 02 Oct 2013 14:33:32 +0200
-Subject: [Buildroot] [PATCH v3] Added lesstif support
-In-Reply-To: <87vc1gq7qm.fsf@dell.be.48ers.dk>
-References: <1380037552-26919-1-git-send-email-thierry.bultel@wanadoo.fr>
- <1380037552-26919-2-git-send-email-thierry.bultel@wanadoo.fr>
- <877gdwu1kc.fsf@dell.be.48ers.dk> <524BEEA7.3080000@wanadoo.fr>
- <87vc1gq7qm.fsf@dell.be.48ers.dk>
-Message-ID: <524C129C.8020109@wanadoo.fr>
+From: Clayton Shotwell <clshotwe@rockwellcollins.com>
+Date: Wed, 2 Oct 2013 07:46:04 -0500
+Subject: [Buildroot] [Patch v5] libcgroup: new package
+Message-ID: <1380717964-15081-1-git-send-email-clshotwe@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le 02/10/2013 12:37, Peter Korsgaard a ?crit :
->>>>>> "Thierry" == Thierry Bultel <thierry.bultel@wanadoo.fr> writes:
-> 
->  Thierry> Le 01/10/2013 23:24, Peter Korsgaard a ?crit :
->  >>>>>>> "Thierry" == Thierry Bultel <thierry.bultel@wanadoo.fr> writes:
->  >> 
->  >> The commit message should have been in this email.
->  >> 
->  >> I've added it and committed, thanks.
->  >> 
->  >> I had to pass --no-recursion to not have it error out in test/configure
->  >> though.
->  >> 
-> 
->  Thierry> Thanks Peter,
-> 
->  Thierry> could you please be more specific about that --no-recustion
->  Thierry> issue that I have missed ?
-> 
-> Without --no-recursion, ./configure executes test/configure at the end,
-> which error'ed out with missing XPrint headers (as far as I
-> remember). Perhaps you have a bunch of X development packages installed
-> on your build machine?
-> 
 
-Yes indeed.
-Thanks for having noticed it.
+Signed-off-by: Clayton Shotwell <clshotwe@rockwellcollins.com>
+---
+Changes v4 -> v5:
+  - Cleaned up extra spaces (suggested by Peter)
+  - Corrected the dl path (suggested by Peter)
+  - Added dependencies on BR2_TOOLCHAIN_USES_GLIBC and
+    BR2_INSTALL_LIBSTDCPP rather than reworking the 
+    package (suggested by Peter)
+Changes v3 -> v4:
+  - Changed the length of the config comment (suggested by Thomas)
+  - Removed unneeded configure options (suggested by Thomas)
+Changes v2 -> v3:
+  - No changes.
+Changes v1 -> v2:
+  - General cleanup to the mk file to conform to the standard format.
+  - Corrected the license version and license file to be correct.
+  - Cleaned up the configure options to enable options for static
+    libraries and linux-pam if they are selected in the configuration.
+
+ package/Config.in              |    1 +
+ package/libcgroup/Config.in    |   13 +++++++++++++
+ package/libcgroup/libcgroup.mk |   34 ++++++++++++++++++++++++++++++++++
+ 3 files changed, 48 insertions(+), 0 deletions(-)
+ create mode 100644 package/libcgroup/Config.in
+ create mode 100644 package/libcgroup/libcgroup.mk
+
+diff --git a/package/Config.in b/package/Config.in
+index d410c34..9874c43 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -662,6 +662,7 @@ source "package/libatomic_ops/Config.in"
+ source "package/libbsd/Config.in"
+ source "package/libcap/Config.in"
+ source "package/libcap-ng/Config.in"
++source "package/libcgroup/Config.in"
+ source "package/libdaemon/Config.in"
+ source "package/libelf/Config.in"
+ source "package/libevent/Config.in"
+diff --git a/package/libcgroup/Config.in b/package/libcgroup/Config.in
+new file mode 100644
+index 0000000..0f5c097
+--- /dev/null
++++ b/package/libcgroup/Config.in
+@@ -0,0 +1,13 @@
++config BR2_PACKAGE_LIBCGROUP
++	bool "libcgroup"
++	depends on BR2_INSTALL_LIBSTDCPP
++	# libcgroup uses <fts.h> which is not included by default in uClibc
++	depends on BR2_TOOLCHAIN_USES_GLIBC
++	help
++	  libcgroup is a library that abstracts the control
++	  group file system in Linux.
++
++	  http://libcg.sourceforge.net/
++
++comment "libcgroup requires a glibc toolchain with C++ support"
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_USES_GLIBC
+diff --git a/package/libcgroup/libcgroup.mk b/package/libcgroup/libcgroup.mk
+new file mode 100644
+index 0000000..c2392e0
+--- /dev/null
++++ b/package/libcgroup/libcgroup.mk
+@@ -0,0 +1,34 @@
++################################################################################
++#
++# libcgroup
++#
++################################################################################
++
++LIBCGROUP_VERSION = 0.38
++LIBCGROUP_SOURCE = libcgroup-$(LIBCGROUP_VERSION).tar.bz2
++LIBCGROUP_SITE = http://downloads.sourceforge.net/project/libcg/libcgroup/v.038
++LIBCGROUP_LICENSE = LGPLv2.1
++LIBCGROUP_LICENSE_FILES = COPYING
++
++LIBCGROUP_INSTALL_STAGING = YES
++
++# Undefining _FILE_OFFSET_BITS here because of a "bug" with glibc fts.h
++# large file support. See https://bugzilla.redhat.com/show_bug.cgi?id=574992
++# for more information.
++LIBCGROUP_CONF_ENV = \
++	CXXFLAGS+="-U_FILE_OFFSET_BITS" \
++	CFLAGS+="-U_FILE_OFFSET_BITS"
++
++LIBCGROUP_CONF_OPT = \
++	--disable-tools \
++	--disable-daemon \
++	--disable-initscript-install
++
++ifeq ($(BR2_PACKAGE_LINUX_PAM),y)
++	LIBCGROUP_DEPENDENCIES += linux-pam
++	LIBCGROUP_CONF_OPT += --enable-pam
++else
++	LIBCGROUP_CONF_OPT += --disable-pam
++endif
++
++$(eval $(autotools-package))
+-- 
+1.7.1
