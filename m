@@ -1,64 +1,44 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 02 Oct 2013 18:31:35 +0200
-Subject: [Buildroot] Some legal-info observations/problems
-In-Reply-To: <CAAXf6LXHXo2vY8ns61fxoLzD0n2yzLASZqFk75xzYQwgDHp15Q@mail.gmail.com>
-References: <CAAXf6LXHXo2vY8ns61fxoLzD0n2yzLASZqFk75xzYQwgDHp15Q@mail.gmail.com>
-Message-ID: <524C4A67.9000000@mind.be>
+Date: Wed, 02 Oct 2013 18:43:19 +0200
+Subject: [Buildroot] [PATCH] Fix compilation of systemd with uclibc
+In-Reply-To: <20131001144009.4117ea4c@skate>
+References: <1380627492-25380-1-git-send-email-jezz@sysmic.org>
+ <20131001144009.4117ea4c@skate>
+Message-ID: <524C4D27.9030601@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 10/02/13 16:06, Thomas De Schampheleire wrote:
-> Hi,
+On 10/01/13 14:40, Thomas Petazzoni wrote:
+> Dear J?r?me Pouiller,
 >
-> I am starting to use the legal-info infrastructure now, and this
-> resulted in a number of observations/problems, which I'll list below.
+> On Tue,  1 Oct 2013 13:38:12 +0200, J?r?me Pouiller wrote:
+>> systemd-uclibc-fix.patch was applied to systemd to provide execvpe function
+>> when compiled with uclibc. However, this function is now provided by
+>> libc-add-non-standard-execvpe-function.patch in uclibc package.
+>>
+>> These two patchs are now in conflict. This commit remove
+>> systemd/systemd-uclibc-fix.patch.
 >
-> 1. there is no longer a provision to 'hide' proprietary packages from
-> the manifest, and not get warnings on them. Previously you could mark
-> a package as license: PROPRIETARY, but this has been removed. I still
-> think that a similar feature is useful.
+> The thing that worries me is that we start to rely on uClibc features
+> that are provided by specific patches we have added to our uClibc
+> package. This means that an user using an uClibc toolchain provided by
+> Analog Devices for Blackfin, or built with Crosstool-NG will no longer
+> work properly to build those packages.
+>
+> I'm not sure what to do about this, though. Mark those packages as
+> available only with glibc or the internal uClibc toolchain? Stop
+> backporting uClibc feature patches (like we do for other packages) and
+> tell people to work with upstream uClibc to get things fixed and
+> released?
 
-  I don't see why this is relevant. You probably anyway want to filter 
-the license results to only contain the relevant licenses (i.e. the 
-licenses that require you to mention the authors and the license in the 
-documentation). And you can simply set the license to PROPRIETARY and 
-grep it out of the csv file.
+  We could make kconfig options for them and verify them in 
+$sysroot/include/bits/uClibc_config.h. Or, in the case of execvpe which 
+doesn't have a kconfig option, verify in $sysroot/include/unistd.h. But 
+it's adding a lot of complexity.
 
-
-[snip]
-> 4. Suppose that a package has no license files and explicitly declares
-> this with FOO_LICENSE_FILES =
-> In this case, you will still get a warning: "cannot save license
-> (FOO_LICENSE_FILES not defined)", but in fact it is simply empty.
-> I think it would be better to distinghuish the situation 'empty' and
-> 'not defined'.
-
-  This may indeed be relevant for private packages and for public domain 
-packages.
-
-> 5. the manifest also lists all host packages, like automake, autoconf,
-> ... while these are not distributed on target. Strictly speaking you
-> do not have to list these in the customer documentation of a product,
-> in my interpretation. I find it confusing that both target and host
-> packages are mixed like that.
-
-  This was intentional, I think. The host packages may be part of "the 
-scripts used to control compilation and installation of the executable" 
-(esp. for automake and autoconf), so they may be necessary.
-
-  It would be useful, though, if the manifest would contain a column to 
-indicate if it is a host package or a target package.
-
-> Of course, it's probably difficult to change this, because some
-> packages can be built for host _and_ target, and the legal-info
-> infrastructure does not know which of these was used for a particular
-> project.
-
-  Actually it's not, the host packages are added explicitly to 
-TARGETS_LEGAL_INFO.
 
   Regards,
   Arnout
