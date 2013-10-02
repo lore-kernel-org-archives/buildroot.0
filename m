@@ -1,40 +1,50 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 2 Oct 2013 13:53:27 +0200
-Subject: [Buildroot] [git commit] linux: bump 3.11.x stable version
-Message-ID: <20131002115359.D38729A6BD@busybox.osuosl.org>
+Date: Wed, 2 Oct 2013 13:52:33 +0200
+Subject: [Buildroot] [git commit] linux-headers: bump 3.{0, 4, 10,
+	11}.x stable versions
+Message-ID: <20131002115359.B7F9C9B913@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f467debd5cc7346f172db531db97dde1fef38da2
+commit: http://git.buildroot.net/buildroot/commit/?id=b408ca9eda9714c9e927ec80d32eacf3677c7b79
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- linux/Config.in |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ ...tall-fix-__packed-in-exported-kernel-head.patch |    0
+ package/linux-headers/Config.in.host               |    8 ++++----
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 201bcef..9eb2268 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -21,7 +21,7 @@ choice
- 	prompt "Kernel version"
+diff --git a/package/linux-headers/3.0.97/linux-headers-headers_install-fix-__packed-in-exported-kernel-head.patch b/package/linux-headers/3.0.98/linux-headers-headers_install-fix-__packed-in-exported-kernel-head.patch
+similarity index 100%
+rename from package/linux-headers/3.0.97/linux-headers-headers_install-fix-__packed-in-exported-kernel-head.patch
+rename to package/linux-headers/3.0.98/linux-headers-headers_install-fix-__packed-in-exported-kernel-head.patch
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 1ebfaad..a0deb34 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -76,17 +76,17 @@ config BR2_DEFAULT_KERNEL_VERSION
  
- config BR2_LINUX_KERNEL_LATEST_VERSION
--	bool "3.11.2"
-+	bool "3.11.3"
- 
- config BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	bool "Same as toolchain kernel headers"
-@@ -75,7 +75,7 @@ config BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION
- 
- config BR2_LINUX_KERNEL_VERSION
+ config BR2_DEFAULT_KERNEL_HEADERS
  	string
--	default "3.11.2" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "3.11.3" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default BR2_DEFAULT_KERNEL_HEADERS if BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE if BR2_LINUX_KERNEL_CUSTOM_VERSION
- 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
+-	default "3.0.97"	if BR2_KERNEL_HEADERS_3_0
++	default "3.0.98"	if BR2_KERNEL_HEADERS_3_0
+ 	default "3.1.10"	if BR2_KERNEL_HEADERS_3_1
+ 	default "3.2.51"	if BR2_KERNEL_HEADERS_3_2
+ 	default "3.3.8"		if BR2_KERNEL_HEADERS_3_3
+-	default "3.4.63"	if BR2_KERNEL_HEADERS_3_4
++	default "3.4.64"	if BR2_KERNEL_HEADERS_3_4
+ 	default "3.5.7"		if BR2_KERNEL_HEADERS_3_5
+ 	default "3.6.11"	if BR2_KERNEL_HEADERS_3_6
+ 	default "3.7.10"	if BR2_KERNEL_HEADERS_3_7
+ 	default "3.8.13"	if BR2_KERNEL_HEADERS_3_8
+ 	default "3.9.11"	if BR2_KERNEL_HEADERS_3_9
+-	default "3.10.13"	if BR2_KERNEL_HEADERS_3_10
+-	default "3.11.2"	if BR2_KERNEL_HEADERS_3_11
++	default "3.10.14"	if BR2_KERNEL_HEADERS_3_10
++	default "3.11.3"	if BR2_KERNEL_HEADERS_3_11
+ 	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
+ 	default $BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
