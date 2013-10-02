@@ -1,28 +1,42 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 02 Oct 2013 23:11:27 +0200
-Subject: [Buildroot] [PATCH] bison: fix docs build breakage
-In-Reply-To: <1380745292-9743-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Wed, 2 Oct 2013 17:21:32 -0300")
-References: <1380745292-9743-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <8738ojpedc.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 2 Oct 2013 23:17:04 +0200
+Subject: [Buildroot] [PATCH] Fix compilation of systemd with uclibc
+In-Reply-To: <524C4D27.9030601@mind.be>
+References: <1380627492-25380-1-git-send-email-jezz@sysmic.org>
+ <20131001144009.4117ea4c@skate> <524C4D27.9030601@mind.be>
+Message-ID: <20131002231704.5ba5d1e8@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+Dear Arnout Vandecappelle,
 
- Gustavo> Building docs running the binary itself to see if docs need to be
- Gustavo> changed is somewhat skippy. Disable it. Fixes:
- Gustavo> http://autobuild.buildroot.net/results/e8a/e8a960f38e66f31355af733e510002d45052b541/
+On Wed, 02 Oct 2013 18:43:19 +0200, Arnout Vandecappelle wrote:
 
-The bison bump also seems to have broken E.G. gstreamer:
+> > The thing that worries me is that we start to rely on uClibc features
+> > that are provided by specific patches we have added to our uClibc
+> > package. This means that an user using an uClibc toolchain provided by
+> > Analog Devices for Blackfin, or built with Crosstool-NG will no longer
+> > work properly to build those packages.
+> >
+> > I'm not sure what to do about this, though. Mark those packages as
+> > available only with glibc or the internal uClibc toolchain? Stop
+> > backporting uClibc feature patches (like we do for other packages) and
+> > tell people to work with upstream uClibc to get things fixed and
+> > released?
+> 
+>   We could make kconfig options for them and verify them in 
+> $sysroot/include/bits/uClibc_config.h. Or, in the case of execvpe which 
+> doesn't have a kconfig option, verify in $sysroot/include/unistd.h. But 
+> it's adding a lot of complexity.
 
-http://autobuild.buildroot.net/results/af0/af0c1f66a05ff08bf10d2abaef6aab6421d7a62e/build-end.log
+Yeah, it would add a lot of complexity. Another option is to make such
+packages non-selectable if an external uClibc toolchain is used.
 
-With 0.10 being end of life, upstream will most likely not fix
-this. Care to take a look?
-
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
