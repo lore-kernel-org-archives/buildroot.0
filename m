@@ -1,39 +1,39 @@
 From: Axel Lin <axel.lin@ingics.com>
-Date: Wed, 02 Oct 2013 09:47:14 +0800
-Subject: [Buildroot] [PATCH v2] setserial: bump to version 2.17-45.3
-Message-ID: <1380678434.6489.1.camel@phoenix>
+Date: Wed, 02 Oct 2013 13:49:36 +0800
+Subject: [Buildroot] [PATCH 1/3] nfs-utils: needs mmu
+Message-ID: <1380692976.31880.0.camel@phoenix>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bump to patchlevel 3 since 2 is gone upstream.
-Also switch to use http://snapshot.debian.org/ instead of BR2_DEBIAN_MIRROR to
-avoid disappearing packages.
+Fix below build error:
+
+mountd-mountd.o: In function `main':
+mountd.c:(.text+0x1264): undefined reference to `fork'
+mountd.c:(.text+0x1320): undefined reference to `fork'
+mountd-rmtab.o: In function `ha_callout':
+rmtab.c:(.text+0xa8): undefined reference to `fork'
+collect2: ld returned 1 exit status
+make[3]: *** [mountd] Error 1
 
 Signed-off-by: Axel Lin <axel.lin@ingics.com>
 ---
-v2: Switch to use http://snapshot.debian.org/ instead of BR2_DEBIAN_MIRROR.
+ package/nfs-utils/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
- package/setserial/setserial.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/setserial/setserial.mk b/package/setserial/setserial.mk
-index e6846b2..f8d0a4b 100644
---- a/package/setserial/setserial.mk
-+++ b/package/setserial/setserial.mk
-@@ -5,9 +5,9 @@
- ################################################################################
- 
- SETSERIAL_VERSION            = 2.17
--SETSERIAL_PATCH              = setserial_2.17-45.2.diff.gz
-+SETSERIAL_PATCH              = setserial_2.17-45.3.diff.gz
- SETSERIAL_SOURCE             = setserial_$(SETSERIAL_VERSION).orig.tar.gz
--SETSERIAL_SITE               = $(BR2_DEBIAN_MIRROR)/debian/pool/main/s/setserial/
-+SETSERIAL_SITE               = http://snapshot.debian.org/archive/debian/20131001T214925Z/pool/main/s/setserial/
- 
- define SETSERIAL_APPLY_DEBIAN_PATCHES
- 	# Touching gorhack.h is needed for the Debian patch 18 to work
+diff --git a/package/nfs-utils/Config.in b/package/nfs-utils/Config.in
+index 8f61f2b..6ba2f70 100644
+--- a/package/nfs-utils/Config.in
++++ b/package/nfs-utils/Config.in
+@@ -3,6 +3,7 @@ config BR2_PACKAGE_NFS_UTILS
+ 	depends on BR2_TOOLCHAIN_HAS_NATIVE_RPC || BR2_TOOLCHAIN_HAS_THREADS # libtirpc
+ 	select BR2_PACKAGE_LIBTIRPC if !BR2_TOOLCHAIN_HAS_NATIVE_RPC
+ 	depends on BR2_LARGEFILE
++	depends on BR2_USE_MMU # fork()
+ 	help
+ 	  The NFS Linux kernel server.
+ 	  Warning: We do not force largefile support on here on purpose.
 -- 
 1.8.1.2
