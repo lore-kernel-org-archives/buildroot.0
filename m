@@ -1,53 +1,106 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 02 Oct 2013 18:43:19 +0200
-Subject: [Buildroot] [PATCH] Fix compilation of systemd with uclibc
-In-Reply-To: <20131001144009.4117ea4c@skate>
-References: <1380627492-25380-1-git-send-email-jezz@sysmic.org>
- <20131001144009.4117ea4c@skate>
-Message-ID: <524C4D27.9030601@mind.be>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Wed, 02 Oct 2013 22:06:40 +0200
+Subject: [Buildroot] [PATCH] make clean: improve when no .config present
+Message-ID: <dc1ad257f9e5b8d5b999.1380744400@argentina>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 10/01/13 14:40, Thomas Petazzoni wrote:
-> Dear J?r?me Pouiller,
->
-> On Tue,  1 Oct 2013 13:38:12 +0200, J?r?me Pouiller wrote:
->> systemd-uclibc-fix.patch was applied to systemd to provide execvpe function
->> when compiled with uclibc. However, this function is now provided by
->> libc-add-non-standard-execvpe-function.patch in uclibc package.
->>
->> These two patchs are now in conflict. This commit remove
->> systemd/systemd-uclibc-fix.patch.
->
-> The thing that worries me is that we start to rely on uClibc features
-> that are provided by specific patches we have added to our uClibc
-> package. This means that an user using an uClibc toolchain provided by
-> Analog Devices for Blackfin, or built with Crosstool-NG will no longer
-> work properly to build those packages.
->
-> I'm not sure what to do about this, though. Mark those packages as
-> available only with glibc or the internal uClibc toolchain? Stop
-> backporting uClibc feature patches (like we do for other packages) and
-> tell people to work with upstream uClibc to get things fixed and
-> released?
+The 'make clean' recipe is using variables that are not defined without .config
+file, causing only a partial cleanup when the .config file is accidentally
+deleted.
 
-  We could make kconfig options for them and verify them in 
-$sysroot/include/bits/uClibc_config.h. Or, in the case of execvpe which 
-doesn't have a kconfig option, verify in $sysroot/include/unistd.h. But 
-it's adding a lot of complexity.
+This patch moves those variables that do not depend on values from .config
+outside the BR2_HAVE_DOT_CONFIG check, so that 'make clean' is much more similar
+with and without .config.
 
+Since HOST_DIR is determined from BR2_HOST_DIR in .config, the host directory
+cannot be cleaned correctly without making assumptions, if no .config is
+present. However, to cover most people's use cases, we assume the default value
+of $(BASE_DIR)/host in this specific case.
 
-  Regards,
-  Arnout
+Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
+---
+v2: implement initial HOST_DIR value (and move everything to before .config is
+    included.
 
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+ Makefile |  48 ++++++++++++++++++++++++------------------------
+ 1 files changed, 24 insertions(+), 24 deletions(-)
+
+diff --git a/Makefile b/Makefile
+--- a/Makefile
++++ b/Makefile
+@@ -91,6 +91,30 @@ EXTRAMAKEARGS = O=$(O)
+ NEED_WRAPPER=y
+ endif
+ 
++# bash prints the name of the directory on 'cd <dir>' if CDPATH is
++# set, so unset it here to not cause problems. Notice that the export
++# line doesn't affect the environment of $(shell ..) calls, so
++# explictly throw away any output from 'cd' here.
++export CDPATH:=
++BASE_DIR := $(shell mkdir -p $(O) && cd $(O) >/dev/null && pwd)
++$(if $(BASE_DIR),, $(error output directory "$(O)" does not exist))
++
++BUILD_DIR:=$(BASE_DIR)/build
++STAMP_DIR:=$(BASE_DIR)/stamps
++BINARIES_DIR:=$(BASE_DIR)/images
++TARGET_DIR:=$(BASE_DIR)/target
++# initial definition so that 'make clean' works for most users, even without
++# .config. HOST_DIR will be overwritten later when .config is included.
++HOST_DIR:=$(BASE_DIR)/host
++
++LEGAL_INFO_DIR=$(BASE_DIR)/legal-info
++REDIST_SOURCES_DIR=$(LEGAL_INFO_DIR)/sources
++LICENSE_FILES_DIR=$(LEGAL_INFO_DIR)/licenses
++LEGAL_MANIFEST_CSV=$(LEGAL_INFO_DIR)/manifest.csv
++LEGAL_LICENSES_TXT=$(LEGAL_INFO_DIR)/licenses.txt
++LEGAL_WARNINGS=$(LEGAL_INFO_DIR)/.warnings
++LEGAL_REPORT=$(LEGAL_INFO_DIR)/README
++
+ BUILDROOT_CONFIG=$(CONFIG_DIR)/.config
+ 
+ # Pull in the user's configuration file
+@@ -184,17 +208,6 @@ unexport DESTDIR
+ # Causes breakage with packages that needs host-ruby
+ unexport RUBYOPT
+ 
+-# bash prints the name of the directory on 'cd <dir>' if CDPATH is
+-# set, so unset it here to not cause problems. Notice that the export
+-# line doesn't affect the environment of $(shell ..) calls, so
+-# explictly throw away any output from 'cd' here.
+-export CDPATH:=
+-BASE_DIR := $(shell mkdir -p $(O) && cd $(O) >/dev/null && pwd)
+-$(if $(BASE_DIR),, $(error output directory "$(O)" does not exist))
+-
+-BUILD_DIR:=$(BASE_DIR)/build
+-
+-
+ ifeq ($(BR2_HAVE_DOT_CONFIG),y)
+ 
+ ################################################################################
+@@ -262,21 +275,8 @@ HOST_DIR:=$(call qstrip,$(BR2_HOST_DIR))
+ # locales to generate
+ GENERATE_LOCALE=$(call qstrip,$(BR2_GENERATE_LOCALE))
+ 
+-# stamp (dependency) files go here
+-STAMP_DIR:=$(BASE_DIR)/stamps
+-
+-BINARIES_DIR:=$(BASE_DIR)/images
+-TARGET_DIR:=$(BASE_DIR)/target
+ TARGET_SKELETON=$(TOPDIR)/system/skeleton
+ 
+-LEGAL_INFO_DIR=$(BASE_DIR)/legal-info
+-REDIST_SOURCES_DIR=$(LEGAL_INFO_DIR)/sources
+-LICENSE_FILES_DIR=$(LEGAL_INFO_DIR)/licenses
+-LEGAL_MANIFEST_CSV=$(LEGAL_INFO_DIR)/manifest.csv
+-LEGAL_LICENSES_TXT=$(LEGAL_INFO_DIR)/licenses.txt
+-LEGAL_WARNINGS=$(LEGAL_INFO_DIR)/.warnings
+-LEGAL_REPORT=$(LEGAL_INFO_DIR)/README
+-
+ # Location of a file giving a big fat warning that output/target
+ # should not be used as the root filesystem.
+ TARGET_DIR_WARNING_FILE=$(TARGET_DIR)/THIS_IS_NOT_YOUR_ROOT_FILESYSTEM
