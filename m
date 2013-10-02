@@ -1,37 +1,39 @@
-From: Eric Nelson <eric.nelson@boundarydevices.com>
-Date: Tue,  1 Oct 2013 16:34:21 -0700
-Subject: [Buildroot] [PATCH V2] gst-fsl-plugins: Bump version and change URL
-	to match other i.MX components
-Message-ID: <1380670461-6431-1-git-send-email-eric.nelson@boundarydevices.com>
+From: Axel Lin <axel.lin@ingics.com>
+Date: Wed, 02 Oct 2013 09:47:14 +0800
+Subject: [Buildroot] [PATCH v2] setserial: bump to version 2.17-45.3
+Message-ID: <1380678434.6489.1.camel@phoenix>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Eric Nelson <eric.nelson@boundarydevices.com>
+Bump to patchlevel 3 since 2 is gone upstream.
+Also switch to use http://snapshot.debian.org/ instead of BR2_DEBIAN_MIRROR to
+avoid disappearing packages.
+
+Signed-off-by: Axel Lin <axel.lin@ingics.com>
 ---
-V2 removes the include file packages/freescale-imx/freescale-imx.inc
+v2: Switch to use http://snapshot.debian.org/ instead of BR2_DEBIAN_MIRROR.
 
- package/gstreamer/gst-fsl-plugins/gst-fsl-plugins.mk | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ package/setserial/setserial.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/gstreamer/gst-fsl-plugins/gst-fsl-plugins.mk b/package/gstreamer/gst-fsl-plugins/gst-fsl-plugins.mk
-index ccdb521..27d7711 100644
---- a/package/gstreamer/gst-fsl-plugins/gst-fsl-plugins.mk
-+++ b/package/gstreamer/gst-fsl-plugins/gst-fsl-plugins.mk
-@@ -4,9 +4,9 @@
- #
+diff --git a/package/setserial/setserial.mk b/package/setserial/setserial.mk
+index e6846b2..f8d0a4b 100644
+--- a/package/setserial/setserial.mk
++++ b/package/setserial/setserial.mk
+@@ -5,9 +5,9 @@
  ################################################################################
  
--GST_FSL_PLUGINS_VERSION = 3.0.1
--# No official download site from freescale, just this mirror
--GST_FSL_PLUGINS_SITE = http://download.ossystems.com.br/bsp/freescale/source
-+GST_FSL_PLUGINS_VERSION = $(FREESCALE_IMX_VERSION)
-+GST_FSL_PLUGINS_SITE = $(FREESCALE_IMX_SITE)
-+GST_FSL_PLUGINS_SOURCE = gst-fsl-plugins-$(GST_FSL_PLUGINS_VERSION).tar.gz
+ SETSERIAL_VERSION            = 2.17
+-SETSERIAL_PATCH              = setserial_2.17-45.2.diff.gz
++SETSERIAL_PATCH              = setserial_2.17-45.3.diff.gz
+ SETSERIAL_SOURCE             = setserial_$(SETSERIAL_VERSION).orig.tar.gz
+-SETSERIAL_SITE               = $(BR2_DEBIAN_MIRROR)/debian/pool/main/s/setserial/
++SETSERIAL_SITE               = http://snapshot.debian.org/archive/debian/20131001T214925Z/pool/main/s/setserial/
  
- # Most is LGPLv2+, but some sources are copied from upstream and are
- # LGPLv2.1+, which essentially makes it LGPLv2.1+
+ define SETSERIAL_APPLY_DEBIAN_PATCHES
+ 	# Touching gorhack.h is needed for the Debian patch 18 to work
 -- 
 1.8.1.2
