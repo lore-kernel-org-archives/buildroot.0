@@ -1,106 +1,32 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Wed, 02 Oct 2013 22:06:40 +0200
-Subject: [Buildroot] [PATCH] make clean: improve when no .config present
-Message-ID: <dc1ad257f9e5b8d5b999.1380744400@argentina>
+Date: Wed, 2 Oct 2013 22:08:45 +0200
+Subject: [Buildroot] [PATCH 0 of 3 v2] Unification of comments on
+	toolchain option dependencies
+In-Reply-To: <patchbomb.1380099393@argentina>
+References: <patchbomb.1380099393@argentina>
+Message-ID: <CAAXf6LU-mbUyZjVig58fzzCNT7iw3g1jpkR03hV8U+-YeARJQg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The 'make clean' recipe is using variables that are not defined without .config
-file, causing only a partial cleanup when the .config file is accidentally
-deleted.
+On Wed, Sep 25, 2013 at 10:56 AM, Thomas De Schampheleire
+<patrickdepinguin@gmail.com> wrote:
+> Hi,
+>
+> This patch series unifies the comments in Config.in files that clarify the
+> dependencies on toolchain options.
+>
+> It is not yet mergeable, see note in the last patch. If we can agree on the
+> principle, I can rebase on last master.
+>
+> Best regards,
+> Thomas
+>
+> ---
+> v2: update documentation with comments from ThomasP and Arnout
+>
 
-This patch moves those variables that do not depend on values from .config
-outside the BR2_HAVE_DOT_CONFIG check, so that 'make clean' is much more similar
-with and without .config.
 
-Since HOST_DIR is determined from BR2_HOST_DIR in .config, the host directory
-cannot be cleaned correctly without making assumptions, if no .config is
-present. However, to cover most people's use cases, we assume the default value
-of $(BASE_DIR)/host in this specific case.
-
-Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-
----
-v2: implement initial HOST_DIR value (and move everything to before .config is
-    included.
-
- Makefile |  48 ++++++++++++++++++++++++------------------------
- 1 files changed, 24 insertions(+), 24 deletions(-)
-
-diff --git a/Makefile b/Makefile
---- a/Makefile
-+++ b/Makefile
-@@ -91,6 +91,30 @@ EXTRAMAKEARGS = O=$(O)
- NEED_WRAPPER=y
- endif
- 
-+# bash prints the name of the directory on 'cd <dir>' if CDPATH is
-+# set, so unset it here to not cause problems. Notice that the export
-+# line doesn't affect the environment of $(shell ..) calls, so
-+# explictly throw away any output from 'cd' here.
-+export CDPATH:=
-+BASE_DIR := $(shell mkdir -p $(O) && cd $(O) >/dev/null && pwd)
-+$(if $(BASE_DIR),, $(error output directory "$(O)" does not exist))
-+
-+BUILD_DIR:=$(BASE_DIR)/build
-+STAMP_DIR:=$(BASE_DIR)/stamps
-+BINARIES_DIR:=$(BASE_DIR)/images
-+TARGET_DIR:=$(BASE_DIR)/target
-+# initial definition so that 'make clean' works for most users, even without
-+# .config. HOST_DIR will be overwritten later when .config is included.
-+HOST_DIR:=$(BASE_DIR)/host
-+
-+LEGAL_INFO_DIR=$(BASE_DIR)/legal-info
-+REDIST_SOURCES_DIR=$(LEGAL_INFO_DIR)/sources
-+LICENSE_FILES_DIR=$(LEGAL_INFO_DIR)/licenses
-+LEGAL_MANIFEST_CSV=$(LEGAL_INFO_DIR)/manifest.csv
-+LEGAL_LICENSES_TXT=$(LEGAL_INFO_DIR)/licenses.txt
-+LEGAL_WARNINGS=$(LEGAL_INFO_DIR)/.warnings
-+LEGAL_REPORT=$(LEGAL_INFO_DIR)/README
-+
- BUILDROOT_CONFIG=$(CONFIG_DIR)/.config
- 
- # Pull in the user's configuration file
-@@ -184,17 +208,6 @@ unexport DESTDIR
- # Causes breakage with packages that needs host-ruby
- unexport RUBYOPT
- 
--# bash prints the name of the directory on 'cd <dir>' if CDPATH is
--# set, so unset it here to not cause problems. Notice that the export
--# line doesn't affect the environment of $(shell ..) calls, so
--# explictly throw away any output from 'cd' here.
--export CDPATH:=
--BASE_DIR := $(shell mkdir -p $(O) && cd $(O) >/dev/null && pwd)
--$(if $(BASE_DIR),, $(error output directory "$(O)" does not exist))
--
--BUILD_DIR:=$(BASE_DIR)/build
--
--
- ifeq ($(BR2_HAVE_DOT_CONFIG),y)
- 
- ################################################################################
-@@ -262,21 +275,8 @@ HOST_DIR:=$(call qstrip,$(BR2_HOST_DIR))
- # locales to generate
- GENERATE_LOCALE=$(call qstrip,$(BR2_GENERATE_LOCALE))
- 
--# stamp (dependency) files go here
--STAMP_DIR:=$(BASE_DIR)/stamps
--
--BINARIES_DIR:=$(BASE_DIR)/images
--TARGET_DIR:=$(BASE_DIR)/target
- TARGET_SKELETON=$(TOPDIR)/system/skeleton
- 
--LEGAL_INFO_DIR=$(BASE_DIR)/legal-info
--REDIST_SOURCES_DIR=$(LEGAL_INFO_DIR)/sources
--LICENSE_FILES_DIR=$(LEGAL_INFO_DIR)/licenses
--LEGAL_MANIFEST_CSV=$(LEGAL_INFO_DIR)/manifest.csv
--LEGAL_LICENSES_TXT=$(LEGAL_INFO_DIR)/licenses.txt
--LEGAL_WARNINGS=$(LEGAL_INFO_DIR)/.warnings
--LEGAL_REPORT=$(LEGAL_INFO_DIR)/README
--
- # Location of a file giving a big fat warning that output/target
- # should not be used as the root filesystem.
- TARGET_DIR_WARNING_FILE=$(TARGET_DIR)/THIS_IS_NOT_YOUR_ROOT_FILESYSTEM
+ping on this series?
