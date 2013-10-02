@@ -1,55 +1,23 @@
-From: =?UTF-8?q?Fatih=20A=C5=9F=C4=B1c=C4=B1?= <fatih.asici@gmail.com>
-Date: Wed,  2 Oct 2013 09:32:02 +0300
-Subject: [Buildroot] [PATCH] qt5: give numbers to patch files
-In-Reply-To: <1379573808-9750-1-git-send-email-fatih.asici@gmail.com>
-References: <1379573808-9750-1-git-send-email-fatih.asici@gmail.com>
-Message-ID: <1380695522-25419-1-git-send-email-fatih.asici@gmail.com>
+From: Fatih =?UTF-8?Q?A=C5=9F=C4=B1c=C4=B1?= <fatih.asici@gmail.com>
+Date: Wed, 02 Oct 2013 09:31:30 +0300
+Subject: [Buildroot] Patch backlog and email problems
+In-Reply-To: <87ob78u5we.fsf@dell.be.48ers.dk>
+References: <87ob78u5we.fsf@dell.be.48ers.dk>
+Message-ID: <1380695490.8681.5.camel@viko>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Fatih A??c? <fatih.asici@gmail.com>
-Acked-by: "Samuel Martin" <s.martin49@gmail.com>
----
- ...se-0001-eglconvenience-add-egl-to-CONFIG-to-get-correct-incl.patch} |    0
- .../{qt5base-mkspecs-files.patch => qt5base-0002-mkspecs-files.patch}  |    0
- .../{qt5base-uclibc-no-lfs.patch => qt5base-0003-uclibc-no-lfs.patch}  |    0
- ...ule.patch => qt5jsbackend-0001-dont-import-bz2-python-module.patch} |    0
- ...t5jsbackend-fix-uclibc.patch => qt5jsbackend-0002-fix-uclibc.patch} |    0
- ...bkit-egl-includepath.patch => qt5webkit-0001-egl-includepath.patch} |    0
- 6 files changed, 0 insertions(+), 0 deletions(-)
- rename package/qt5/qt5base/{qt5base-eglconvenience-add-egl-to-CONFIG-to-get-correct-incl.patch => qt5base-0001-eglconvenience-add-egl-to-CONFIG-to-get-correct-incl.patch} (100%)
- rename package/qt5/qt5base/{qt5base-mkspecs-files.patch => qt5base-0002-mkspecs-files.patch} (100%)
- rename package/qt5/qt5base/{qt5base-uclibc-no-lfs.patch => qt5base-0003-uclibc-no-lfs.patch} (100%)
- rename package/qt5/qt5jsbackend/{qt5jsbackend-dont-import-bz2-python-module.patch => qt5jsbackend-0001-dont-import-bz2-python-module.patch} (100%)
- rename package/qt5/qt5jsbackend/{qt5jsbackend-fix-uclibc.patch => qt5jsbackend-0002-fix-uclibc.patch} (100%)
- rename package/qt5/qt5webkit/{qt5webkit-egl-includepath.patch => qt5webkit-0001-egl-includepath.patch} (100%)
+On Tue, 2013-10-01 at 21:50 +0200, Peter Korsgaard wrote:
+> Nothing is lost as the patches are all archived in patchwork, but I
+> cannot easily reply to the original patch when I apply it now.
+> 
+It seems my patch[1] which renames qt5 patches is not archived.
+Patchwork might have a problem with patches containing only renames.
 
-diff --git a/package/qt5/qt5base/qt5base-eglconvenience-add-egl-to-CONFIG-to-get-correct-incl.patch b/package/qt5/qt5base/qt5base-0001-eglconvenience-add-egl-to-CONFIG-to-get-correct-incl.patch
-similarity index 100%
-rename from package/qt5/qt5base/qt5base-eglconvenience-add-egl-to-CONFIG-to-get-correct-incl.patch
-rename to package/qt5/qt5base/qt5base-0001-eglconvenience-add-egl-to-CONFIG-to-get-correct-incl.patch
-diff --git a/package/qt5/qt5base/qt5base-mkspecs-files.patch b/package/qt5/qt5base/qt5base-0002-mkspecs-files.patch
-similarity index 100%
-rename from package/qt5/qt5base/qt5base-mkspecs-files.patch
-rename to package/qt5/qt5base/qt5base-0002-mkspecs-files.patch
-diff --git a/package/qt5/qt5base/qt5base-uclibc-no-lfs.patch b/package/qt5/qt5base/qt5base-0003-uclibc-no-lfs.patch
-similarity index 100%
-rename from package/qt5/qt5base/qt5base-uclibc-no-lfs.patch
-rename to package/qt5/qt5base/qt5base-0003-uclibc-no-lfs.patch
-diff --git a/package/qt5/qt5jsbackend/qt5jsbackend-dont-import-bz2-python-module.patch b/package/qt5/qt5jsbackend/qt5jsbackend-0001-dont-import-bz2-python-module.patch
-similarity index 100%
-rename from package/qt5/qt5jsbackend/qt5jsbackend-dont-import-bz2-python-module.patch
-rename to package/qt5/qt5jsbackend/qt5jsbackend-0001-dont-import-bz2-python-module.patch
-diff --git a/package/qt5/qt5jsbackend/qt5jsbackend-fix-uclibc.patch b/package/qt5/qt5jsbackend/qt5jsbackend-0002-fix-uclibc.patch
-similarity index 100%
-rename from package/qt5/qt5jsbackend/qt5jsbackend-fix-uclibc.patch
-rename to package/qt5/qt5jsbackend/qt5jsbackend-0002-fix-uclibc.patch
-diff --git a/package/qt5/qt5webkit/qt5webkit-egl-includepath.patch b/package/qt5/qt5webkit/qt5webkit-0001-egl-includepath.patch
-similarity index 100%
-rename from package/qt5/qt5webkit/qt5webkit-egl-includepath.patch
-rename to package/qt5/qt5webkit/qt5webkit-0001-egl-includepath.patch
--- 
-1.7.10.4
+I'll resend the patch to the list.
+
+[1]
+http://lists.busybox.net/pipermail/buildroot/2013-September/078634.html
