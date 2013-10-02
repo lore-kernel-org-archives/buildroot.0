@@ -1,45 +1,32 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 2 Oct 2013 09:13:49 +0200
-Subject: [Buildroot] [RFC] package: Redownload HEAD packages every build
-In-Reply-To: <OFB02446AE.7536F58C-ON86257BF7.007705C1-86257BF7.00784F1A@rockwellcollins.com>
-References: <1380293015-20331-1-git-send-email-clshotwe@rockwellcollins.com>
- <20131001205154.059ec4af@skate>
- <OF074BC262.DC488FB4-ON86257BF7.006D21D1-86257BF7.006DFBEC@rockwellcollins.com>
- <20131001233739.618eb9f0@skate>
- <OFB02446AE.7536F58C-ON86257BF7.007705C1-86257BF7.00784F1A@rockwellcollins.com>
-Message-ID: <20131002091349.652d110c@skate>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Wed, 2 Oct 2013 09:28:39 +0200
+Subject: [Buildroot] Patchwork superseded patches
+In-Reply-To: <87bo38u58y.fsf@dell.be.48ers.dk>
+References: <CAAXf6LW8YVfgiMDyu+PnYdMKA0Lh2BU6=DkPiCpORUWf+x1Adw@mail.gmail.com>
+ <20131001215758.29f06d76@skate> <87bo38u58y.fsf@dell.be.48ers.dk>
+Message-ID: <CAAXf6LU0R3=DPzQ+NMH4ooub0tWX412vRHyaRQHJ4ZNBumRn9Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Ryan Barnett,
+Hi Thomas, Peter,
 
-On Tue, 1 Oct 2013 16:54:04 -0500, Ryan Barnett wrote:
+On Tue, Oct 1, 2013 at 10:05 PM, Peter Korsgaard <jacmet@uclibc.org> wrote:
+>>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-> > Buildroot will rsync again the source code, and restart the build at
-> > the configuration step, or the build step of the foo package.
-> > 
-> > Usually, /path/to/foo/sources/ will be the directory where you did your
-> > Subversion checkout or Git clone of your "foo" source code.
-> 
-> Could you add this explanation to buildroot manual since it looks like
-> <pkg>_OVERRIDE_SRCDIR mechanism is your feature and it is currently
-> lacking in documentation in the manual? I too have tried to understand
-> how this feature worked and it was a bit unclear.
-> 
-> The only mention of OVERRIDE_SRCDIR in the documentation is under the
-> rebuild and reconfigure commands. Where is says that it that it only
-> makes sense to use these features with OVERRIDE_SRCDIR but doesn't
-> explain what you just explained above.
+>  Thomas> Peter, can you add Thomas DS to the list of people allowed to
+>  Thomas> change the status of patches in patchwork? I believe Thomas has
+>  Thomas> a long track record of BR contributions, and he is willing to
+>  Thomas> help us triaging the backlog of patches.
+>
+> Sure - Thomas (DS), please send me your patchwork account name and I'll
+> get it added.
 
-Right, I will submit a documentation patch.
+Many thanks for this vote of confidence!
 
-Thanks!
+Peter, I'll send you my account name in private.
 
+Thanks,
 Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
