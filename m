@@ -1,25 +1,36 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 02 Oct 2013 14:48:32 +0200
-Subject: [Buildroot] [PATCH 1/3] m4: bump to version 1.4.17
-In-Reply-To: <1380716926-24611-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Wed, 2 Oct 2013 09:28:44 -0300")
-References: <1380716926-24611-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <8761tfrg7z.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 2 Oct 2013 14:34:08 +0200
+Subject: [Buildroot] [git commit] gmp: bump to version 5.1.3
+Message-ID: <20131002125021.BF7279B912@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=574ab8ce9a08d751f8f1d615ec550e6f162f0077
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Gustavo> Remove MB_CUR_MAX patch since it's unnecessary/insufficent for
- Gustavo> non-wchar compilation since
- Gustavo> c29e01e61e5754c446eb524f65b01195cf25cbcc
+Also switch to http gnu site instead of ftp.
 
- Gustavo> no-gets patch unnecessary also since it's been fixed.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/gmp/gmp.mk |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-Committed series, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/gmp/gmp.mk b/package/gmp/gmp.mk
+index 86ed33c..d970545 100644
+--- a/package/gmp/gmp.mk
++++ b/package/gmp/gmp.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-GMP_VERSION = 5.1.2
+-GMP_SITE = ftp://ftp.gmplib.org/pub/gmp-$(GMP_VERSION)
++GMP_VERSION = 5.1.3
++GMP_SITE = $(BR2_GNU_MIRROR)/gmp
+ GMP_SOURCE = gmp-$(GMP_VERSION).tar.xz
+ GMP_INSTALL_STAGING = YES
+ GMP_LICENSE = LGPLv3+
