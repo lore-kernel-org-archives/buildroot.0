@@ -1,36 +1,43 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed,  2 Oct 2013 09:28:46 -0300
-Subject: [Buildroot] [PATCH 3/3] gmp: bump to version 5.1.3
-In-Reply-To: <1380716926-24611-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1380716926-24611-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1380716926-24611-3-git-send-email-gustavo@zacarias.com.ar>
+From: Sundareson, Prabindh <prabu@ti.com>
+Date: Wed, 2 Oct 2013 12:30:03 +0000
+Subject: [Buildroot] Analysis of the Buildroot activity
+In-Reply-To: <20131002142337.22fb6419@skate>
+References: <20131002142337.22fb6419@skate>
+Message-ID: <321768C95D21724485BCE784F1BE98473EBE278D@DBDE04.ent.ti.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Also switch to http gnu site instead of ftp.
+Hello Thomas,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/gmp/gmp.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Good to see this!
 
-diff --git a/package/gmp/gmp.mk b/package/gmp/gmp.mk
-index 86ed33c..d970545 100644
---- a/package/gmp/gmp.mk
-+++ b/package/gmp/gmp.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--GMP_VERSION = 5.1.2
--GMP_SITE = ftp://ftp.gmplib.org/pub/gmp-$(GMP_VERSION)
-+GMP_VERSION = 5.1.3
-+GMP_SITE = $(BR2_GNU_MIRROR)/gmp
- GMP_SOURCE = gmp-$(GMP_VERSION).tar.xz
- GMP_INSTALL_STAGING = YES
- GMP_LICENSE = LGPLv3+
--- 
-1.8.1.5
+regards,
+Prabindh
+
+
+-----Original Message-----
+From: buildroot-bounces@busybox.net [mailto:buildroot-bounces at busybox.net] On Behalf Of Thomas Petazzoni
+Sent: Wednesday, October 02, 2013 5:54 PM
+To: buildroot at busybox.net
+Subject: [Buildroot] Analysis of the Buildroot activity
+
+Hello,
+
+Over the last few months, I had the feeling that the activity inside the Buildroot project has increased quite significantly, both in terms of discussions on the list, patches being exchanged, contributors, etc.
+
+To visualize this, I've made a small analysis based on the number of commits, number of contributors, number of e-mails on the list and number of packages in Buildroot. You can see this analysis, which has
+(hopefully) nice graphs, at
+http://free-electrons.com/blog/buildroot-community-activity/.
+
+Best regards,
+
+Thomas
+--
+Thomas Petazzoni, Free Electrons
+Embedded Linux, Kernel and Android engineering http://free-electrons.com _______________________________________________
+buildroot mailing list
+buildroot at busybox.net
+http://lists.busybox.net/mailman/listinfo/buildroot
