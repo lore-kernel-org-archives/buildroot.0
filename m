@@ -1,128 +1,80 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Thu, 3 Oct 2013 09:34:47 +0200
-Subject: [Buildroot] [PATCH 2 of 3 v2] manual: add section about
- depending on target and toolchain options
-In-Reply-To: <524D00D9.9070800@mind.be>
-References: <patchbomb.1380099393@argentina>
- <679aaf4f4d6cb323f13d.1380099395@argentina>
- <524D00D9.9070800@mind.be>
-Message-ID: <CAAXf6LXLV59szv9d-7FJJdGE=cOvvDowTTZGpWep5vyFFxJ2jQ@mail.gmail.com>
+Date: Thu, 3 Oct 2013 09:42:14 +0200
+Subject: [Buildroot] [PATCH] make clean: improve when no .config present
+In-Reply-To: <87fvsjpfsx.fsf@dell.be.48ers.dk>
+References: <dc1ad257f9e5b8d5b999.1380744400@argentina>
+ <87fvsjpfsx.fsf@dell.be.48ers.dk>
+Message-ID: <CAAXf6LVAgr0SoAFr9BSr3esGcJFHZfeqpmtfm-Z-jaXYdc3XUg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Arnout,
+Hi Peter,
 
-On Thu, Oct 3, 2013 at 7:30 AM, Arnout Vandecappelle <arnout@mind.be> wrote:
-> On 09/25/13 10:56, Thomas De Schampheleire wrote:
-[..]
->> Notes:
->> - How we will specify the C library is currently marked as 'to be
->> decided'.
->> This patch series does not yet unify that, but I plan to do that in a new
->> patch (or update this series if we can reach a decision shortly).  The
->> problem
->> is that not all packages that have a dependency on e.g. glibc add a
->> comment to
->> show this to the user. A proposal would be to have a comment like:
->>      foo needs a (e)glibc toolchain w/ featA, featB, featC
->> where the '(e)glibc' string would be left out if there is no constraint on
->> the
->> C library.
+On Wed, Oct 2, 2013 at 10:40 PM, Peter Korsgaard <jacmet@uclibc.org> wrote:
+>>>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin@gmail.com> writes:
 >
+>  Thomas> The 'make clean' recipe is using variables that are not defined
+>  Thomas> without .config file, causing only a partial cleanup when the
+>  Thomas> .config file is accidentally deleted.
 >
->  Looks good to me. Though for glibc there is only one feature AFAIK: C++.
+>  Thomas> This patch moves those variables that do not depend on values
+>  Thomas> from .config outside the BR2_HAVE_DOT_CONFIG check, so that
+>  Thomas> 'make clean' is much more similar with and without .config.
 >
+>  Thomas> Since HOST_DIR is determined from BR2_HOST_DIR in .config, the
+>  Thomas> host directory cannot be cleaned correctly without making
+>  Thomas> assumptions, if no .config is present. However, to cover most
+>  Thomas> people's use cases, we assume the default value of
+>  Thomas> $(BASE_DIR)/host in this specific case.
 >
+> Nit: please wrap the commit text so it fits within 80 chars when
+> displayed through git log (which indents by 4 spaces).
 
-I'm not sure what you mean here. I think that some packages depend on
-an (e)glibc toolchain because it requires certain features that are
-lacking in uclibc. I haven't checked for the details though. It may be
-the presence of certain system calls.
-
-[..]
-
->> +[[dependencies-target-toolchain-options]]
->> +Dependencies on target and toolchain options
->> +^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->> +Many packages depend on certain options of the toolchain, like the
->
->
->  "like" indicates that you're giving a few examples, but you're actually
-> giving an exhaustive list. So instead I't put a colon.
->
-
-Ok, will fix.
+Thanks for mentioning, I will take this into account next time.
 
 >
->> +C library, C++ support, largefile support, thread support, RPC
+>  Thomas> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 >
+>  Thomas> ---
+>  Thomas> v2: implement initial HOST_DIR value (and move everything to before .config is
+>  Thomas>     included.
 >
->  the choice of C library,
+>  Thomas>  Makefile |  48 ++++++++++++++++++++++++------------------------
+>  Thomas>  1 files changed, 24 insertions(+), 24 deletions(-)
+>
+>  Thomas> diff --git a/Makefile b/Makefile
+>  Thomas> --- a/Makefile
+>  Thomas> +++ b/Makefile
+>  Thomas> @@ -91,6 +91,30 @@ EXTRAMAKEARGS = O=$(O)
+>  Thomas>  NEED_WRAPPER=y
+>  Thomas>  endif
+>
+>  Thomas> +# bash prints the name of the directory on 'cd <dir>' if CDPATH is
+>  Thomas> +# set, so unset it here to not cause problems. Notice that the export
+>  Thomas> +# line doesn't affect the environment of $(shell ..) calls, so
+>  Thomas> +# explictly throw away any output from 'cd' here.
+>  Thomas> +export CDPATH:=
+>  Thomas> +BASE_DIR := $(shell mkdir -p $(O) && cd $(O) >/dev/null && pwd)
+>  Thomas> +$(if $(BASE_DIR),, $(error output directory "$(O)" does not exist))
+>
+> Hmm, this means that we always create ./output, even when you run
+> E.G. 'make help, make print-version or make <blah>'.
+>
+> I guess it isn't a big problem, and I don't see a solution for it right
+> away, but it doesn't seem "nice".
 
-Ok, will fix.
-
->
->
->> +support, IPv6 support, wchar support, or dynamic libraries. Some
->
->
->  dynamic library support.
-
-This is partially related to the PREFER_STATIC_LIB discussion, but
-right now it's probably cleaner to add support, so will fix.
-
-[..]
->> +
->> +The rest of this section enumerates the different target and toolchain
->> +options, the corresponding config symbols to depend on, and the string
->> +literals to use in the comment.
->
->
->  "string literals" sounds a bit strange here. "text" seems more appropriate
-> to me.
->
-
-Ok, will fix.
-
->
->> +
->> +* Target architecture
->> +** Dependency symbol: +BR2_powerpc+, +BR2_mips+, ... (see
->> +arch/Config.in+)
->> +** Comment string: no comment to be added
->> +
->
->
->  I could be wrong, but I think asciidoc doesn't allow an empty line here:
-> you'll end up with two <ul>s with a single <li>. Can you verify that?
-
-I do see one overal <ul> with several list items 'target
-architecture', 'mmu support', etc. so it looks ok to me.
-
-[..]
->> +
->> +* dynamic library
->> +** Dependency symbol: +BR2_PREFER_STATIC_LIB+
->
->
->  !BR2_PREFER_STATIC_LIB
-
-Ok, that's clearer, will fix.
+It's probably possible to determine BASE_DIR initially without
+creating the directory:
+- if O starts with a slash, it's an absolute path, and we can do
+'BASE_DIR := $(O)'
+- otherwise, BASE_DIR := $(TOPDIR)/$(O) . If needed we can strip ../
+to make it cleaner, but that's not really mandatory.
 
 >
->
->> +** Comment string: +dynamic library+
->
->
->  For the sake of brevity, maybe "DLL"?
+> Committed, thanks.
 
-DLL really has a Windows annotation for me. Moreover, it's not so
-commonly used in the Linux world, don't you think?
-
-Thanks for your review!
-
-Best regards,
+Thanks,
 Thomas
