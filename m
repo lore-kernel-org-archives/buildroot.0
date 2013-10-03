@@ -1,80 +1,63 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Thu, 3 Oct 2013 09:42:14 +0200
-Subject: [Buildroot] [PATCH] make clean: improve when no .config present
-In-Reply-To: <87fvsjpfsx.fsf@dell.be.48ers.dk>
-References: <dc1ad257f9e5b8d5b999.1380744400@argentina>
- <87fvsjpfsx.fsf@dell.be.48ers.dk>
-Message-ID: <CAAXf6LVAgr0SoAFr9BSr3esGcJFHZfeqpmtfm-Z-jaXYdc3XUg@mail.gmail.com>
+From: Axel Lin <axel.lin@ingics.com>
+Date: Thu, 03 Oct 2013 15:43:09 +0800
+Subject: [Buildroot] [PATCH] sqlite: bump to version 3.8.0.2
+Message-ID: <1380786189.9966.1.camel@phoenix>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter,
+Also drop sqlite-dont-force-posix-fallocate.patch because it is fixed upstream.
 
-On Wed, Oct 2, 2013 at 10:40 PM, Peter Korsgaard <jacmet@uclibc.org> wrote:
->>>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin@gmail.com> writes:
->
->  Thomas> The 'make clean' recipe is using variables that are not defined
->  Thomas> without .config file, causing only a partial cleanup when the
->  Thomas> .config file is accidentally deleted.
->
->  Thomas> This patch moves those variables that do not depend on values
->  Thomas> from .config outside the BR2_HAVE_DOT_CONFIG check, so that
->  Thomas> 'make clean' is much more similar with and without .config.
->
->  Thomas> Since HOST_DIR is determined from BR2_HOST_DIR in .config, the
->  Thomas> host directory cannot be cleaned correctly without making
->  Thomas> assumptions, if no .config is present. However, to cover most
->  Thomas> people's use cases, we assume the default value of
->  Thomas> $(BASE_DIR)/host in this specific case.
->
-> Nit: please wrap the commit text so it fits within 80 chars when
-> displayed through git log (which indents by 4 spaces).
+Signed-off-by: Axel Lin <axel.lin@ingics.com>
+---
+ .../sqlite/sqlite-dont-force-posix-fallocate.patch | 23 ----------------------
+ package/sqlite/sqlite.mk                           |  2 +-
+ 2 files changed, 1 insertion(+), 24 deletions(-)
+ delete mode 100644 package/sqlite/sqlite-dont-force-posix-fallocate.patch
 
-Thanks for mentioning, I will take this into account next time.
-
->
->  Thomas> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
->
->  Thomas> ---
->  Thomas> v2: implement initial HOST_DIR value (and move everything to before .config is
->  Thomas>     included.
->
->  Thomas>  Makefile |  48 ++++++++++++++++++++++++------------------------
->  Thomas>  1 files changed, 24 insertions(+), 24 deletions(-)
->
->  Thomas> diff --git a/Makefile b/Makefile
->  Thomas> --- a/Makefile
->  Thomas> +++ b/Makefile
->  Thomas> @@ -91,6 +91,30 @@ EXTRAMAKEARGS = O=$(O)
->  Thomas>  NEED_WRAPPER=y
->  Thomas>  endif
->
->  Thomas> +# bash prints the name of the directory on 'cd <dir>' if CDPATH is
->  Thomas> +# set, so unset it here to not cause problems. Notice that the export
->  Thomas> +# line doesn't affect the environment of $(shell ..) calls, so
->  Thomas> +# explictly throw away any output from 'cd' here.
->  Thomas> +export CDPATH:=
->  Thomas> +BASE_DIR := $(shell mkdir -p $(O) && cd $(O) >/dev/null && pwd)
->  Thomas> +$(if $(BASE_DIR),, $(error output directory "$(O)" does not exist))
->
-> Hmm, this means that we always create ./output, even when you run
-> E.G. 'make help, make print-version or make <blah>'.
->
-> I guess it isn't a big problem, and I don't see a solution for it right
-> away, but it doesn't seem "nice".
-
-It's probably possible to determine BASE_DIR initially without
-creating the directory:
-- if O starts with a slash, it's an absolute path, and we can do
-'BASE_DIR := $(O)'
-- otherwise, BASE_DIR := $(TOPDIR)/$(O) . If needed we can strip ../
-to make it cleaner, but that's not really mandatory.
-
->
-> Committed, thanks.
-
-Thanks,
-Thomas
+diff --git a/package/sqlite/sqlite-dont-force-posix-fallocate.patch b/package/sqlite/sqlite-dont-force-posix-fallocate.patch
+deleted file mode 100644
+index 118001b..0000000
+--- a/package/sqlite/sqlite-dont-force-posix-fallocate.patch
++++ /dev/null
+@@ -1,23 +0,0 @@
+-This is checked by configure and passed as a define directive when building.
+-There's no need to check again and potentially override a failed check
+-(uClibc <= 0.9.33.2 for example lacks posix_fallocate).
+-
+-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+-
+-diff -Nura sqlite-autoconf-3071700.orig/sqlite3.c sqlite-autoconf-3071700/sqlite3.c
+---- sqlite-autoconf-3071700.orig/sqlite3.c	2013-05-23 03:17:27.170459400 -0300
+-+++ sqlite-autoconf-3071700/sqlite3.c	2013-05-23 03:25:01.839227616 -0300
+-@@ -22931,13 +22931,6 @@
+- */
+- #if SQLITE_OS_UNIX              /* This file is used on unix only */
+-
+--/* Use posix_fallocate() if it is available
+--*/
+--#if !defined(HAVE_POSIX_FALLOCATE) \
+--      && (_XOPEN_SOURCE >= 600 || _POSIX_C_SOURCE >= 200112L)
+--# define HAVE_POSIX_FALLOCATE 1
+--#endif
+--
+- /*
+- ** There are various methods for file locking used for concurrency
+- ** control:
+diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
+index d474619..5fc1e9e 100644
+--- a/package/sqlite/sqlite.mk
++++ b/package/sqlite/sqlite.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SQLITE_VERSION = 3071700
++SQLITE_VERSION = 3080002
+ SQLITE_SOURCE = sqlite-autoconf-$(SQLITE_VERSION).tar.gz
+ SQLITE_SITE = http://www.sqlite.org/2013
+ SQLITE_LICENSE = Public domain
+-- 
+1.8.1.2
