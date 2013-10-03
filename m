@@ -1,48 +1,30 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 3 Oct 2013 17:31:55 +0200
-Subject: [Buildroot] Advice on a board support
-In-Reply-To: <CA+TH9V=zwoQoHmMcgNooxDRim0G4TmB70tyXZybeFW_Na9q-hQ@mail.gmail.com>
-References: <CA+TH9V=EdvEv4UF1s-ad9EoFCUBZHaoEqgiyqB1wsBUhETJZiQ@mail.gmail.com>
- <20131003170627.2cdd2a94@skate>
- <CA+TH9V=zwoQoHmMcgNooxDRim0G4TmB70tyXZybeFW_Na9q-hQ@mail.gmail.com>
-Message-ID: <20131003173155.388ef2b4@skate>
+From: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+Date: Thu,  3 Oct 2013 18:29:29 +0200
+Subject: [Buildroot] [PATCH 1/1] xz: bump to version 5.0.5
+Message-ID: <1380817770-25716-1-git-send-email-jerzy.grzegorek@trzebnica.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Angelo Compagnucci,
+Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+---
+ package/xz/xz.mk |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-On Thu, 3 Oct 2013 17:15:50 +0200, Angelo Compagnucci wrote:
-
-> > The Git tree you pointed at is unfortunately not a kernel Git tree
-> > which you can directly point Buildroot at. It's a tree that contains
-> > kernel patches, so Buildroot cannot do much with this. However, since
-> > the number of patches is rather small, you can simply copy them in
-> > Buildroot in board/olimex/<boardname>/, and point Buildroot to this
-> > directory for the kernel patches.
-> 
-> Yep. That was the problem. I'm aware of the kernel programming in
-> general (I have a driver in mainline tree), but cannot understand if
-> simply copying some spare patches was the way. Probably I should force
-> the kernel version in the configuration, is this correct?
-
-Correct.
-
-> > Note that the patches in this tree look a bit weird: there are some
-> > patches for AT91 SOCs, and some other patches for i.MX SOCs.
-> 
-> Yes, it's weird. Probably the best way is to make myself a git kernel
-> tree with these patches applied.
-
-Either that, or even the number of patches is quite small, add them to
-board/olimex/<boardname>/ as I suggested above. I believe we don't like
-much to have board support that depend on 'personal' Git trees, and
-these trees are unlikely to be updated.
-
-Thomas
+diff --git a/package/xz/xz.mk b/package/xz/xz.mk
+index 98fca3a..af90f05 100644
+--- a/package/xz/xz.mk
++++ b/package/xz/xz.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-XZ_VERSION = 5.0.4
++XZ_VERSION = 5.0.5
+ XZ_SOURCE = xz-$(XZ_VERSION).tar.bz2
+ XZ_SITE = http://tukaani.org/xz/
+ XZ_INSTALL_STAGING = YES
 -- 
-Thomas Petazzoni, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.7.9.5
