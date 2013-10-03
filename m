@@ -1,81 +1,114 @@
 From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Thu,  3 Oct 2013 14:10:43 +0200
-Subject: [Buildroot] [PATCH v7 4/6] pkg-generic: enable jobserver for
-	recursive make
+Date: Thu,  3 Oct 2013 14:10:44 +0200
+Subject: [Buildroot] [PATCH v7 5/6] Makefile: fix rules for top-level
+	parallel make
 In-Reply-To: <1380802245-16978-1-git-send-email-fabio.porcedda@gmail.com>
 References: <1380802245-16978-1-git-send-email-fabio.porcedda@gmail.com>
-Message-ID: <1380802245-16978-5-git-send-email-fabio.porcedda@gmail.com>
+Message-ID: <1380802245-16978-6-git-send-email-fabio.porcedda@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add '+' prefix to the $($(PKG)_BUILD_CMDS) and $($(PKG)_INSTALL*_CMDS)
-commands to enable jobserver for the sub-make.
+To be able to use top-level parallel make we must not depend in a rule
+on the order of evaluation of the prerequisites, so instead of relyng on
+the left to right ordering of evaluation of the prerequisites add
+an explicit rule to describe the dependencies.
 
-Without the '+' prefix GNU make does not detect the sub-make so it
-disable the jobserver for the sub-make.
-
-From GNU make documentation:
-Using the MAKE variable has the same effect as using a ?+? character
-at the beginning of the recipe line.  This special feature is only
-enabled if the MAKE variable appears directly in the recipe: it does
-not apply if the MAKE variable is referenced through expansion of
-another variable. In the latter case you must use the ?+? token to get
-these special effects.
+Add explicit rules to describe the following dependency chain:
+$(TARGETS) -> target-finalize -> rootfs-* -> target-post-image
 
 Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
 ---
- package/pkg-generic.mk | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+ Makefile     | 14 +++++---------
+ fs/common.mk |  4 ++--
+ 2 files changed, 7 insertions(+), 11 deletions(-)
 
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 84e843b..577956e 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -117,21 +117,21 @@ $(BUILD_DIR)/%/.stamp_configured:
- # Build
- $(BUILD_DIR)/%/.stamp_built::
- 	@$(call MESSAGE,"Building")
--	$($(PKG)_BUILD_CMDS)
-+	+$($(PKG)_BUILD_CMDS)
- 	$(foreach hook,$($(PKG)_POST_BUILD_HOOKS),$(call $(hook))$(sep))
- 	$(Q)touch $@
+diff --git a/Makefile b/Makefile
+index 44dc584..2c9e17e 100644
+--- a/Makefile
++++ b/Makefile
+@@ -340,8 +340,6 @@ include boot/common.mk
+ include linux/linux.mk
+ include system/system.mk
  
- # Install to host dir
- $(BUILD_DIR)/%/.stamp_host_installed:
- 	@$(call MESSAGE,"Installing to host directory")
--	$($(PKG)_INSTALL_CMDS)
-+	+$($(PKG)_INSTALL_CMDS)
- 	$(foreach hook,$($(PKG)_POST_INSTALL_HOOKS),$(call $(hook))$(sep))
- 	$(Q)touch $@
+-TARGETS+=target-finalize
+-
+ ifeq ($(BR2_ENABLE_LOCALE_PURGE),y)
+ TARGETS+=target-purgelocales
+ endif
+@@ -358,8 +356,6 @@ endif
  
- # Install to staging dir
- $(BUILD_DIR)/%/.stamp_staging_installed:
- 	@$(call MESSAGE,"Installing to staging directory")
--	$($(PKG)_INSTALL_STAGING_CMDS)
-+	+$($(PKG)_INSTALL_STAGING_CMDS)
- 	$(foreach hook,$($(PKG)_POST_INSTALL_STAGING_HOOKS),$(call $(hook))$(sep))
- 	$(Q)if test -n "$($(PKG)_CONFIG_SCRIPTS)" ; then \
- 		$(call MESSAGE,"Fixing package configuration files") ;\
-@@ -145,7 +145,7 @@ $(BUILD_DIR)/%/.stamp_staging_installed:
- # Install to images dir
- $(BUILD_DIR)/%/.stamp_images_installed:
- 	@$(call MESSAGE,"Installing to images directory")
--	$($(PKG)_INSTALL_IMAGES_CMDS)
-+	+$($(PKG)_INSTALL_IMAGES_CMDS)
- 	$(foreach hook,$($(PKG)_POST_INSTALL_IMAGES_HOOKS),$(call $(hook))$(sep))
- 	$(Q)touch $@
+ include fs/common.mk
  
-@@ -156,7 +156,7 @@ $(BUILD_DIR)/%/.stamp_target_installed:
- 		$($(PKG)_INSTALL_INIT_SYSTEMD))
- 	$(if $(BR2_INIT_SYSV)$(BR2_INIT_BUSYBOX),\
- 		$($(PKG)_INSTALL_INIT_SYSV))
--	$($(PKG)_INSTALL_TARGET_CMDS)
-+	+$($(PKG)_INSTALL_TARGET_CMDS)
- 	$(foreach hook,$($(PKG)_POST_INSTALL_TARGET_HOOKS),$(call $(hook))$(sep))
- 	$(Q)if test -n "$($(PKG)_CONFIG_SCRIPTS)" ; then \
- 		$(RM) -f $(addprefix $(TARGET_DIR)/usr/bin/,$($(PKG)_CONFIG_SCRIPTS)) ; \
+-TARGETS+=target-post-image
+-
+ TARGETS_CLEAN:=$(patsubst %,%-clean,$(TARGETS))
+ TARGETS_SOURCE:=$(patsubst %,%-source,$(TARGETS) $(BASE_TARGETS))
+ TARGETS_DIRCLEAN:=$(patsubst %,%-dirclean,$(TARGETS))
+@@ -397,11 +393,11 @@ prepare: $(BUILD_DIR)/buildroot-config/auto.conf
+ 
+ toolchain: prepare dirs dependencies $(BASE_TARGETS)
+ 
+-world: $(TARGETS)
++world: target-post-image
+ 
+ .PHONY: all world toolchain dirs clean distclean source outputmakefile \
+ 	legal-info legal-info-prepare legal-info-clean printvars \
+-	$(BASE_TARGETS) $(TARGETS) \
++	target-finalize target-post-image $(TARGETS) $(TARGETS_ROOTFS) \
+ 	$(TARGETS_CLEAN) $(TARGETS_DIRCLEAN) $(TARGETS_SOURCE) $(TARGETS_LEGAL_INFO) \
+ 	$(BUILD_DIR) $(STAGING_DIR) $(TARGET_DIR) \
+ 	$(HOST_DIR) $(BINARIES_DIR) $(STAMP_DIR)
+@@ -458,7 +454,7 @@ endif
+ STRIP_FIND_CMD += -type f -perm /111
+ STRIP_FIND_CMD += -not \( $(call findfileclauses,libpthread*.so* $(call qstrip,$(BR2_STRIP_EXCLUDE_FILES))) \) -print
+ 
+-target-finalize:
++target-finalize: $(TARGETS)
+ 	rm -rf $(TARGET_DIR)/usr/include $(TARGET_DIR)/usr/share/aclocal \
+ 		$(TARGET_DIR)/usr/lib/pkgconfig $(TARGET_DIR)/usr/share/pkgconfig \
+ 		$(TARGET_DIR)/usr/lib/cmake $(TARGET_DIR)/usr/share/cmake
+@@ -565,7 +561,7 @@ target-generatelocales: host-localedef
+ 	done
+ endif
+ 
+-target-post-image:
++target-post-image: target-finalize $(TARGETS_ROOTFS)
+ 	@$(foreach s, $(call qstrip,$(BR2_ROOTFS_POST_IMAGE_SCRIPT)), \
+ 		$(call MESSAGE,"Executing post-image script $(s)"); \
+ 		$(s) $(BINARIES_DIR) $(call qstrip,$(BR2_ROOTFS_POST_SCRIPT_ARGS))$(sep))
+@@ -601,7 +597,7 @@ legal-info: dirs legal-info-clean legal-info-prepare $(REDIST_SOURCES_DIR) \
+ 	@rm -f $(LEGAL_WARNINGS)
+ 
+ show-targets:
+-	@echo $(TARGETS)
++	@echo $(TARGETS) $(TARGETS_ROOTFS)
+ 
+ else # ifeq ($(BR2_HAVE_DOT_CONFIG),y)
+ 
+diff --git a/fs/common.mk b/fs/common.mk
+index 4dab7ea..7698c53 100644
+--- a/fs/common.mk
++++ b/fs/common.mk
+@@ -42,7 +42,7 @@ define ROOTFS_TARGET_INTERNAL
+ # extra deps
+ ROOTFS_$(2)_DEPENDENCIES += host-fakeroot host-makedevs $$(if $$(BR2_TARGET_ROOTFS_$(2)_LZMA),host-lzma) $$(if $$(BR2_TARGET_ROOTFS_$(2)_LZO),host-lzop) $$(if $$(BR2_TARGET_ROOTFS_$(2)_XZ),host-xz)
+ 
+-$$(BINARIES_DIR)/rootfs.$(1): $$(ROOTFS_$(2)_DEPENDENCIES)
++$$(BINARIES_DIR)/rootfs.$(1): target-finalize $$(ROOTFS_$(2)_DEPENDENCIES)
+ 	@$$(call MESSAGE,"Generating root filesystem image rootfs.$(1)")
+ 	$$(foreach hook,$$(ROOTFS_$(2)_PRE_GEN_HOOKS),$$(call $$(hook))$$(sep))
+ 	rm -f $$(FAKEROOT_SCRIPT)
+@@ -86,7 +86,7 @@ rootfs-$(1)-show-depends:
+ rootfs-$(1): $$(BINARIES_DIR)/rootfs.$(1) $$(ROOTFS_$(2)_POST_TARGETS)
+ 
+ ifeq ($$(BR2_TARGET_ROOTFS_$(2)),y)
+-TARGETS += rootfs-$(1)
++TARGETS_ROOTFS += rootfs-$(1)
+ endif
+ endef
+ 
 -- 
 1.8.4
