@@ -1,58 +1,58 @@
-From: Ryan Barnett <rjbarnet@rockwellcollins.com>
-Date: Thu, 3 Oct 2013 09:12:02 -0500
-Subject: [Buildroot] Some legal-info observations/problems
-In-Reply-To: <CANxTyt5STqs0sVnG0q1PVWm+5OLi=8QbrFLHfGHJr4po4vhKgw@mail.gmail.com>
-References: <CAAXf6LXHXo2vY8ns61fxoLzD0n2yzLASZqFk75xzYQwgDHp15Q@mail.gmail.com>	<OF28FCBE52.CC9DE764-ON86257BF8.00513AFD-86257BF8.006773C0@rockwellcollins.com>
- <CAAXf6LXj9m1Vo8W5SJGGBHCyiRj=gUP=574Xjcqvn1jhnZZwgg@mail.gmail.com>	<OFA9E6CB32.66C4A13C-ON86257BF9.0049F1F8-86257BF9.004A5509@rockwellcollins.com>
- <CANxTyt5STqs0sVnG0q1PVWm+5OLi=8QbrFLHfGHJr4po4vhKgw@mail.gmail.com>
-Message-ID: <OF745746BB.02FF7D3A-ON86257BF9.004D84C8-86257BF9.004E01F3@rockwellcollins.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 3 Oct 2013 17:06:27 +0200
+Subject: [Buildroot] Advice on a board support
+In-Reply-To: <CA+TH9V=EdvEv4UF1s-ad9EoFCUBZHaoEqgiyqB1wsBUhETJZiQ@mail.gmail.com>
+References: <CA+TH9V=EdvEv4UF1s-ad9EoFCUBZHaoEqgiyqB1wsBUhETJZiQ@mail.gmail.com>
+Message-ID: <20131003170627.2cdd2a94@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Danomi, All,
+Dear Angelo Compagnucci,
 
-Danomi Manchego <danomimanchego123@gmail.com> wrote on
-10/03/2013 08:42:55 AM:
+On Thu, 3 Oct 2013 14:39:14 +0200, Angelo Compagnucci wrote:
 
-> Ryan,
+> Recently I discovered the OLinuxIno nano board form Olimex and I
+> really loved every corner of that!
 > 
-> On Thu, Oct 3, 2013 at 9:31 AM, Ryan Barnett
-> <rjbarnet@rockwellcollins.com> wrote:
-> >> While I don't need the URL for my process, I currently also don't 
-need
-> >> the name of the tarball in manifest.csv (and I leave out this last
-> >> column anyway). So, I'm not opposed to adding this extra column, but
-> >> there may be some caveats: with the OVERRIDE_SRCDIR mechanism it is
-> >> possible for a project to completely change the sources of an 
-existing
-> >> package in buildroot. Strictly speaking this could mean that there is
-> >> no relation whatsoever between the URL specified in the .mk file and
-> >> the actual sources used. This is probably very exotic, though, and
-> >> maybe it doesn't really matter for your process.
-> >
-> > You bring up an interesting point that I never thought of. However, in
-> > the application of OVERRIDE_SRCDIR, I would think that it mainly 
-intended
-> > for company's application but I could be wrong.
+> Now I really want to build a rootfs with buildroot, but unfortunately
+> I discovered the board is not supported.
 > 
-> FWIW, several of our projects regularly use permanent OVERRIDE_SRCDIR
-> settings to compile exploded copies of uboot and xloader checked into
-> our source control system, rather than maintain patches against some
-> off-upstream vendor tarball; it's just easier than educating the folks
-> in remote offices about patching.
+> I really would like to contribute to the buildroot project supporting
+> this board, but this will be my first contribution. I read several
+> docs and I have a last question open.
+> 
+> To make this board fully operative, several patches should be applied
+> to some specific versions of the linux kernel. Patches are ready
+> available[1] but how integrate them with boildroot?
+> 
+> So my question is: what is the recommended way to support this new platform?
 
-Thanks for the use case as I never though of that since I've just maintain
-a large u-boot/x-loader patch set.
+As explained in
+http://buildroot.org/downloads/manual/manual.html#customize-store-board-support,
+adding the support for a board in Buildroot is a matter of creating a
+minimal working configuration. You can also look at the existing
+configurations in Buildroot for other boards.
 
-My thought for how this column would work is that if the OVERRIDE_SRCDIR
-is used that in the column, "OVERRIDE_SRCDIR Used" would be placed instead
-of the URL. This will also make sure that someone explicitly knows they 
-are
-using the OVERRIDE_SRCDIR feature (not that isn't already obvious in 
-local.mk)
+The Git tree you pointed at is unfortunately not a kernel Git tree
+which you can directly point Buildroot at. It's a tree that contains
+kernel patches, so Buildroot cannot do much with this. However, since
+the number of patches is rather small, you can simply copy them in
+Buildroot in board/olimex/<boardname>/, and point Buildroot to this
+directory for the kernel patches.
 
-Thanks,
--Ryan
+Note that the patches in this tree look a bit weird: there are some
+patches for AT91 SOCs, and some other patches for i.MX SOCs.
+
+Another option is to find a real kernel Git tree that works for your
+platform. Or even better, the mainline kernel!
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
