@@ -1,66 +1,39 @@
-From: Ryan Barnett <rjbarnet@rockwellcollins.com>
-Date: Thu, 3 Oct 2013 16:21:47 -0500
-Subject: [Buildroot] [PATCH 0/5] Introduce New Package PySnmp
-In-Reply-To: <20131003231552.123a5212@skate>
-References: <1380830465-16083-1-git-send-email-rjbarnet@rockwellcollins.com>
- <20131003231552.123a5212@skate>
-Message-ID: <OFB63905E5.F3F656E6-ON86257BF9.00750EF7-86257BF9.00755A43@rockwellcollins.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 03 Oct 2013 23:38:56 +0200
+Subject: [Buildroot] Some legal-info observations/problems
+In-Reply-To: <CAAXf6LXj9m1Vo8W5SJGGBHCyiRj=gUP=574Xjcqvn1jhnZZwgg@mail.gmail.com>
+ (Thomas De Schampheleire's message of "Thu, 3 Oct 2013 10:34:30
+ +0200")
+References: <CAAXf6LXHXo2vY8ns61fxoLzD0n2yzLASZqFk75xzYQwgDHp15Q@mail.gmail.com>
+ <OF28FCBE52.CC9DE764-ON86257BF8.00513AFD-86257BF8.006773C0@rockwellcollins.com>
+ <CAAXf6LXj9m1Vo8W5SJGGBHCyiRj=gUP=574Xjcqvn1jhnZZwgg@mail.gmail.com>
+Message-ID: <87bo36m3v3.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas,
+>>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin@gmail.com> writes:
 
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote on 
-10/03/2013 04:15:52 PM:
+Hi,
 
-> Dear Ryan Barnett,
-> 
-> On Thu, 3 Oct 2013 15:01:00 -0500, Ryan Barnett wrote:
-> > This patchset adds support for building PySnmp. One thing that I'm not
-> > sure on and am open to debate is the naming of the packages under
-> > Target Packages > Interpreter languages and scripting > external 
-python
-> > modules in the menuconfig since the majority of the packages are named
-> > python-<pkg_name> but pygame and pyparsing don't fall under this
-> > category.
-> > 
-> > Menuconfig
-> >  -> python-nfc
-> >  -> python-protobuf
-> >  -> pygame
-> >  -> pyparsing
-> >  -> python-pyro
-> >  -> python-pyzmq
-> > 
-> > The make rules for the pygame and pyparsing packages are python-pygame
-> > python-pyparsing.
-> > 
-> > Location of the packages in buildroot is package/python-pygame and
-> > package/python-pyparsing.
-> 
-> Aaah, I now understand better what you were mentioning on IRC. Sorry
-> for not understanding earlier. I did understand that the name of the
-> package was "pyparsing", i.e that it was located in package/pyparsing/.
-> But indeed, it is located in package/python-pyparsing/, so the package
-> name is 'python-pyparsing'. The only thing that doesn't match is the
-> Config.in option prompt, and this is not nice.
-> 
-> So clearly, I'm all for changing the Config.in option name, i.e:
-> 
-> -   bool "pyparsing"
-> +   bool "python-pyparsing"
-> 
-> Thanks, and sorry again for the misunderstanding,
+ Thomas> While I don't need the URL for my process, I currently also
+ Thomas> don't need the name of the tarball in manifest.csv (and I leave
+ Thomas> out this last column anyway). So, I'm not opposed to adding
+ Thomas> this extra column, but there may be some caveats: with the
+ Thomas> OVERRIDE_SRCDIR mechanism it is possible for a project to
+ Thomas> completely change the sources of an existing package in
+ Thomas> buildroot. Strictly speaking this could mean that there is no
+ Thomas> relation whatsoever between the URL specified in the .mk file
+ Thomas> and the actual sources used. This is probably very exotic,
+ Thomas> though, and maybe it doesn't really matter for your process.
 
-Not a problem, I figured I would explain the problem better in this
-email. I'll work on the patch later but for now I've got to figure how
-to get pycrypto to cross compile.
+Same could be said about the other fields (license, license files). In
+general, you can only expect the legal-info stuff to be (hopefully)
+valid if you don't override.
 
-> Thomas
-> -- 
-> Thomas Petazzoni, Free Electrons
-> Embedded Linux, Kernel and Android engineering
-> http://free-electrons.com
+But yeah, I would be OK with adding the upstream URL (as in <pkg>_SITE).
+
+-- 
+Bye, Peter Korsgaard
