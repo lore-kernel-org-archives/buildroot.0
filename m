@@ -1,51 +1,55 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 03 Oct 2013 22:41:23 +0200
-Subject: [Buildroot] [PATCH v3 01/11] udev: explicitly include pthreads
-In-Reply-To: <1380237714-2470-2-git-send-email-spenser@gillilanding.com>
- (Spenser Gilliland's message of "Thu, 26 Sep 2013 18:21:44 -0500")
-References: <1380237714-2470-1-git-send-email-spenser@gillilanding.com>
- <1380237714-2470-2-git-send-email-spenser@gillilanding.com>
-Message-ID: <87li2am6j0.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 3 Oct 2013 23:15:52 +0200
+Subject: [Buildroot] [PATCH 0/5] Introduce New Package PySnmp
+In-Reply-To: <1380830465-16083-1-git-send-email-rjbarnet@rockwellcollins.com>
+References: <1380830465-16083-1-git-send-email-rjbarnet@rockwellcollins.com>
+Message-ID: <20131003231552.123a5212@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Spenser" == Spenser Gilliland <spenser@gillilanding.com> writes:
+Dear Ryan Barnett,
 
- Spenser> This fixes builds with Linaro hard float toolchains.
+On Thu, 3 Oct 2013 15:01:00 -0500, Ryan Barnett wrote:
+> This patchset adds support for building PySnmp. One thing that I'm not
+> sure on and am open to debate is the naming of the packages under
+> Target Packages > Interpreter languages and scripting > external python
+> modules in the menuconfig since the majority of the packages are named
+> python-<pkg_name> but pygame and pyparsing don't fall under this
+> category.
+> 
+> Menuconfig
+>  -> python-nfc
+>  -> python-protobuf
+>  -> pygame
+>  -> pyparsing
+>  -> python-pyro
+>  -> python-pyzmq
+> 
+> The make rules for the pygame and pyparsing packages are python-pygame
+> python-pyparsing.
+> 
+> Location of the packages in buildroot is package/python-pygame and
+> package/python-pyparsing.
 
-Sorry, what toolchain exactly? I just did a test build with our default
-(Linaro 2013.08) ext toolchain, and didn't have any linker issues.
+Aaah, I now understand better what you were mentioning on IRC. Sorry
+for not understanding earlier. I did understand that the name of the
+package was "pyparsing", i.e that it was located in package/pyparsing/.
+But indeed, it is located in package/python-pyparsing/, so the package
+name is 'python-pyparsing'. The only thing that doesn't match is the
+Config.in option prompt, and this is not nice.
 
+So clearly, I'm all for changing the Config.in option name, i.e:
 
- Spenser> Signed-off-by: Spenser Gilliland <spenser@gillilanding.com>
- Spenser> ---
- Spenser>  package/udev/udev.mk |    2 +-
- Spenser>  1 files changed, 1 insertions(+), 1 deletions(-)
+-	bool "pyparsing"
++	bool "python-pyparsing"
 
- Spenser> diff --git a/package/udev/udev.mk b/package/udev/udev.mk
- Spenser> index db86850..b512ec5 100644
- Spenser> --- a/package/udev/udev.mk
- Spenser> +++ b/package/udev/udev.mk
- Spenser> @@ -12,7 +12,7 @@ UDEV_LICENSE_FILES = COPYING
- Spenser>  UDEV_INSTALL_STAGING = YES
- 
- Spenser>  # mq_getattr is in librt
- Spenser> -UDEV_CONF_ENV += LIBS=-lrt
- Spenser> +UDEV_CONF_ENV += LIBS="-lrt -lpthread"
- 
- Spenser>  UDEV_CONF_OPT =			\
- Spenser>  	--sbindir=/sbin		\
- Spenser> -- 
- Spenser> 1.7.1
+Thanks, and sorry again for the misunderstanding,
 
- Spenser> _______________________________________________
- Spenser> buildroot mailing list
- Spenser> buildroot at busybox.net
- Spenser> http://lists.busybox.net/mailman/listinfo/buildroot
-
-
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
