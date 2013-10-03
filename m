@@ -1,76 +1,58 @@
-From: Ryan Barnett <rjbarnet@rockwellcollins.com>
-Date: Thu, 3 Oct 2013 08:31:53 -0500
-Subject: [Buildroot] Some legal-info observations/problems
-In-Reply-To: <CAAXf6LXj9m1Vo8W5SJGGBHCyiRj=gUP=574Xjcqvn1jhnZZwgg@mail.gmail.com>
-References: <CAAXf6LXHXo2vY8ns61fxoLzD0n2yzLASZqFk75xzYQwgDHp15Q@mail.gmail.com>	<OF28FCBE52.CC9DE764-ON86257BF8.00513AFD-86257BF8.006773C0@rockwellcollins.com>
- <CAAXf6LXj9m1Vo8W5SJGGBHCyiRj=gUP=574Xjcqvn1jhnZZwgg@mail.gmail.com>
-Message-ID: <OFA9E6CB32.66C4A13C-ON86257BF9.0049F1F8-86257BF9.004A5509@rockwellcollins.com>
+From: Danomi Manchego <danomimanchego123@gmail.com>
+Date: Thu, 3 Oct 2013 09:34:37 -0400
+Subject: [Buildroot] [PATCH] python-pygame: fix _python_srcdir
+In-Reply-To: <20131003111031.181a669b@skate>
+References: <1380766200-2443-1-git-send-email-danomimanchego123@gmail.com>
+ <20131003111031.181a669b@skate>
+Message-ID: <CANxTyt6=OSKoxo-nj3i73EUz5v5suEL7aUegHJGSqeTdWSCSNg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas,
+Hi Thomas,
 
-Thomas De Schampheleire <patrickdepinguin@gmail.com> wrote on 
-10/03/2013 03:34:30 AM:
+On Thu, Oct 3, 2013 at 5:10 AM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Dear Danomi Manchego,
+>
+> On Wed,  2 Oct 2013 22:09:59 -0400, Danomi Manchego wrote:
+>
+>>               _python_sysroot=$(STAGING_DIR) \
+>> -             _python_srcdir=$(BUILD_DIR)/python$(PYTHON_VERSION) \
+>> +             _python_srcdir=$(PYTHON_DIR) \
+>
+> I'm just wondering, why do these packages need access to the Python
+> *source* tree? What's missing from $(STAGING_DIR) to build those Python
+> modules?
+>
+> Normally, the source/build tree of each package are just temporary
+> locations, we should *theoretically* be able of removing the
+> source/build tree of a package once its build has completed (well, in
+> practice, there are of course some exceptions, but it seems weird that
+> all Python modules would need these exceptions).
 
-> Hi Ryan,
-> 
-> On Wed, Oct 2, 2013 at 8:49 PM, Ryan Barnett
-> <rjbarnet@rockwellcollins.com> wrote:
-> > Thomas De Schampheleire <patrickdepinguin@gmail.com> wrote on
-> > 10/02/2013 09:06:13 AM:
-> >
-> > [...]
-> >
-> >
-> >> 5. the manifest also lists all host packages, like automake, 
-autoconf,
-> >> ... while these are not distributed on target. Strictly speaking you
-> >> do not have to list these in the customer documentation of a product,
-> >> in my interpretation. I find it confusing that both target and host
-> >> packages are mixed like that.
-> >> Of course, it's probably difficult to change this, because some
-> >> packages can be built for host _and_ target, and the legal-info
-> >> infrastructure does not know which of these was used for a particular
-> >> project.
-> >
-> > One other thing that I would like to add about the legal-info that I
-> > would like to see added is the manifest.csv file contain the
-> > URL from which the source packages originated from. Is this something
-> > that people be interested in seeing added? As part of our release
-> > process, we need to show where the original source file came from 
-(URL).
-> >
-> 
-> While I don't need the URL for my process, I currently also don't need
-> the name of the tarball in manifest.csv (and I leave out this last
-> column anyway). So, I'm not opposed to adding this extra column, but
-> there may be some caveats: with the OVERRIDE_SRCDIR mechanism it is
-> possible for a project to completely change the sources of an existing
-> package in buildroot. Strictly speaking this could mean that there is
-> no relation whatsoever between the URL specified in the .mk file and
-> the actual sources used. This is probably very exotic, though, and
-> maybe it doesn't really matter for your process.
+Unfortunately, I have almost no experience with python, except for
+recently needing to install a proprietary python package at work -
+which caused me to look for examples, which led to noticing that the
+_python_srcdir paths in the two packages were invalid.
 
-You bring up an interesting point that I never thought of. However, in
-the application of OVERRIDE_SRCDIR, I would think that it mainly intended
-for company's application but I could be wrong. 
+In my case, my module has to be buildable with both python and python3
+(just one or the other in a given build), so dropping the
+_python_srcdir altogether simplified the .mk file, and worked just
+fine for both cases.  (I modified the host-python3 install to create a
+"python" symlink to the host/usr/bin/python3 when python [2] wasn't
+selected, so that other packages can continue to call "python" in
+their build and install commands.)
 
-I will go ahead an propose a patch in the next couple weeks that 
-implements this feature and takes the OVERRIDE_SRDIR mechanism into 
-consideration.
+I don't know if the people who made python-crc16, -pygame, -pyzmq had
+a reason for specifying the python src path, or if there was just a
+lot of copy/paste from a single source who just thought it seemed like
+a good idea at the time.  The purpose of my two patches was to fix a
+path that was clearly wrong - out of a sense of civic duty to the
+community.  Then, if someone more python-savvy comes along and decides
+that those params are not needed, at least they all look the same.
+(Better for grepping and sed and whatnot.)
 
-> Best regards,
-> Thomas
-
-Thanks,
--Ryan
-
-------------------------------------------------------------------------------------------
-Ryan J Barnett / Software Engineer / Platform SW
-MS 137-157, 855 35th St NE, Cedar Rapids, IA, 52498-3161, US
-rjbarnet at rockwellcollins.com
-www.rockwellcollins.com
+Danomi -
