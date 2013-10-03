@@ -1,9 +1,9 @@
 From: Ryan Barnett <rjbarnet@rockwellcollins.com>
-Date: Thu, 3 Oct 2013 15:01:01 -0500
-Subject: [Buildroot] [PATCH 1/5] python-pyasn: new package
+Date: Thu, 3 Oct 2013 15:01:03 -0500
+Subject: [Buildroot] [PATCH 3/5] python-pysnmp: new package
 In-Reply-To: <1380830465-16083-1-git-send-email-rjbarnet@rockwellcollins.com>
 References: <1380830465-16083-1-git-send-email-rjbarnet@rockwellcollins.com>
-Message-ID: <1380830465-16083-2-git-send-email-rjbarnet@rockwellcollins.com>
+Message-ID: <1380830465-16083-4-git-send-email-rjbarnet@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,94 +11,71 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Signed-off-by: Ryan Barnett <rjbarnet@rockwellcollins.com>
-
 ---
-
-The definition of CFLAGS/LDFLAGS/LDSHARED is necessary since the
-compilation of won't work correctly using either TARGET_CONFIGURE_OPTS
-because it won't link against the correct python library. Also using
-python-distutilcross doesn't work as the setup.py doesn't understand
-the -x option.
-
+Even though the documentation for PySNMP says PyCrypto is an optional
+dependancy, it is required for any system besides Windows.
+(see Setup.py)
 ---
- package/Config.in                    |    1 +
- package/python-pyasn/Config.in       |   13 +++++++++++
- package/python-pyasn/python-pyasn.mk |   38 ++++++++++++++++++++++++++++++++++
- 3 files changed, 52 insertions(+), 0 deletions(-)
- create mode 100644 package/python-pyasn/Config.in
- create mode 100644 package/python-pyasn/python-pyasn.mk
+ package/Config.in                      |    1 +
+ package/python-pysnmp/Config.in        |   10 ++++++++++
+ package/python-pysnmp/python-pysnmp.mk |   23 +++++++++++++++++++++++
+ 3 files changed, 34 insertions(+), 0 deletions(-)
+ create mode 100644 package/python-pysnmp/Config.in
+ create mode 100644 package/python-pysnmp/python-pysnmp.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index b7fdb89..3592cb7 100644
+index a1f7901..68262f9 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -396,6 +396,7 @@ source "package/python-meld3/Config.in"
- source "package/python-netifaces/Config.in"
- source "package/python-nfc/Config.in"
- source "package/python-protobuf/Config.in"
-+source "package/python-pyasn/Config.in"
+@@ -401,6 +401,7 @@ source "package/python-pycrypto/Config.in"
  source "package/python-pygame/Config.in"
  source "package/python-pyparsing/Config.in"
  source "package/python-pyro/Config.in"
-diff --git a/package/python-pyasn/Config.in b/package/python-pyasn/Config.in
++source "package/python-pysnmp/Config.in"
+ source "package/python-pyzmq/Config.in"
+ source "package/python-serial/Config.in"
+ source "package/python-setuptools/Config.in"
+diff --git a/package/python-pysnmp/Config.in b/package/python-pysnmp/Config.in
 new file mode 100644
-index 0000000..a352fe4
+index 0000000..88f6f6f
 --- /dev/null
-+++ b/package/python-pyasn/Config.in
-@@ -0,0 +1,13 @@
-+config BR2_PACKAGE_PYTHON_PYASN
-+	bool "python-pyasn"
++++ b/package/python-pysnmp/Config.in
+@@ -0,0 +1,10 @@
++config BR2_PACKAGE_PYTHON_PYSNMP
++	bool "python-pysnmp"
 +	depends on BR2_PACKAGE_PYTHON
-+	depends on BR2_INSTALL_LIBSTDCPP
++	select BR2_PACKAGE_PYTHON_PYASN
++	select BR2_PACKAGE_PYTHON_PYCRYPTO
 +	help
-+	  PyASN is a Python extension module that enables you to
-+	  perform very fast IP address to Autonomous System Number
-+	  lookups.
++	  PySNMP is a cross-platform, pure-Python SNMP engine
++	  implementation.
 +
-+	  https://code.google.com/p/pyasn/
-+
-+comment "python-pyasn requires C++ support in toolchain"
-+        depends on !BR2_INSTALL_LIBSTDCPP
-diff --git a/package/python-pyasn/python-pyasn.mk b/package/python-pyasn/python-pyasn.mk
++	  http://pysnmp.sf.net
+diff --git a/package/python-pysnmp/python-pysnmp.mk b/package/python-pysnmp/python-pysnmp.mk
 new file mode 100644
-index 0000000..4579f38
+index 0000000..d4a25c8
 --- /dev/null
-+++ b/package/python-pyasn/python-pyasn.mk
-@@ -0,0 +1,38 @@
++++ b/package/python-pysnmp/python-pysnmp.mk
+@@ -0,0 +1,23 @@
 +################################################################################
 +#
-+# python-pyasn
++# python-pysnmp
 +#
 +################################################################################
 +
-+PYTHON_PYASN_VERSION = 1.2
-+PYTHON_PYASN_SOURCE  = PyASN-$(PYTHON_PYASN_VERSION).zip
-+PYTHON_PYASN_SITE    = https://pyasn.googlecode.com/files
-+PYTHON_PYASN_LICENSE = LGPL
++PYTHON_PYSNMP_VERSION = 4.2.4
++PYTHON_PYSNMP_SOURCE  = pysnmp-$(PYTHON_PYSNMP_VERSION).tar.gz
++PYTHON_PYSNMP_SITE    = https://pypi.python.org/packages/source/p/pysnmp
++PYTHON_PYSNMP_LICENSE = BSD-3c
++PYTHON_PYSNMP_LICENSE_FILES = LICENSE
 +
-+PYTHON_PYASN_DEPENDENCIES = python
++PYTHON_PYSNMP_DEPENDENCIES = python python-pyasn python-pycrypto
 +
-+define PYTHON_PYASN_EXTRACT_CMDS
-+	unzip -d $(@D) $(DL_DIR)/$(PYTHON_PYASN_SOURCE)
-+	mv $(@D)/PyASN-$(PYTHON_PYASN_VERSION)/* $(@D)
-+	$(RM) -r $(@D)/PyASN-$(PYTHON_PYASN_VERSION)
++define PYTHON_PYSNMP_BUILD_CMDS
++	(cd $(@D); $(HOST_DIR)/usr/bin/python setup.py build --executable=/usr/bin/python)
 +endef
 +
-+define PYTHON_PYASN_BUILD_CMDS
-+	(cd $(@D); \
-+		CC="$(TARGET_CC)" \
-+		CFLAGS="$(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include" \
-+		CXX="$(TARGET_CXX)" \
-+		CXXFLAGS="$(TARGET_CXXFLAGS) -I$(STAGING_DIR)/usr/include" \
-+		LDSHARED="$(TARGET_CC) -shared" \
-+		LDFLAGS="$(TARGET_LDFLAGS) -L$(STAGING_DIR)/lib -L$(STAGING_DIR)/usr/lib" \
-+		$(HOST_DIR)/usr/bin/python setup.py build_ext \
-+		--include-dirs=$(STAGING_DIR)/usr/include/python$(PYTHON_VERSION_MAJOR) \
-+	)
-+	(cd $(@D); $(HOST_DIR)/usr/bin/python setup.py build)
-+endef
-+
-+define PYTHON_PYASN_INSTALL_TARGET_CMDS
++define PYTHON_PYSNMP_INSTALL_TARGET_CMDS
 +	(cd $(@D); $(HOST_DIR)/usr/bin/python setup.py install --prefix=$(TARGET_DIR)/usr)
 +endef
 +
