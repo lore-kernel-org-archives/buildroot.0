@@ -1,58 +1,38 @@
 From: Danomi Manchego <danomimanchego123@gmail.com>
-Date: Thu, 3 Oct 2013 09:34:37 -0400
-Subject: [Buildroot] [PATCH] python-pygame: fix _python_srcdir
-In-Reply-To: <20131003111031.181a669b@skate>
-References: <1380766200-2443-1-git-send-email-danomimanchego123@gmail.com>
- <20131003111031.181a669b@skate>
-Message-ID: <CANxTyt6=OSKoxo-nj3i73EUz5v5suEL7aUegHJGSqeTdWSCSNg@mail.gmail.com>
+Date: Thu, 3 Oct 2013 09:42:55 -0400
+Subject: [Buildroot] Some legal-info observations/problems
+In-Reply-To: <OFA9E6CB32.66C4A13C-ON86257BF9.0049F1F8-86257BF9.004A5509@rockwellcollins.com>
+References: <CAAXf6LXHXo2vY8ns61fxoLzD0n2yzLASZqFk75xzYQwgDHp15Q@mail.gmail.com>
+ <OF28FCBE52.CC9DE764-ON86257BF8.00513AFD-86257BF8.006773C0@rockwellcollins.com>
+ <CAAXf6LXj9m1Vo8W5SJGGBHCyiRj=gUP=574Xjcqvn1jhnZZwgg@mail.gmail.com>
+ <OFA9E6CB32.66C4A13C-ON86257BF9.0049F1F8-86257BF9.004A5509@rockwellcollins.com>
+Message-ID: <CANxTyt5STqs0sVnG0q1PVWm+5OLi=8QbrFLHfGHJr4po4vhKgw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Ryan,
 
-On Thu, Oct 3, 2013 at 5:10 AM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Dear Danomi Manchego,
+On Thu, Oct 3, 2013 at 9:31 AM, Ryan Barnett
+<rjbarnet@rockwellcollins.com> wrote:
+>> While I don't need the URL for my process, I currently also don't need
+>> the name of the tarball in manifest.csv (and I leave out this last
+>> column anyway). So, I'm not opposed to adding this extra column, but
+>> there may be some caveats: with the OVERRIDE_SRCDIR mechanism it is
+>> possible for a project to completely change the sources of an existing
+>> package in buildroot. Strictly speaking this could mean that there is
+>> no relation whatsoever between the URL specified in the .mk file and
+>> the actual sources used. This is probably very exotic, though, and
+>> maybe it doesn't really matter for your process.
 >
-> On Wed,  2 Oct 2013 22:09:59 -0400, Danomi Manchego wrote:
->
->>               _python_sysroot=$(STAGING_DIR) \
->> -             _python_srcdir=$(BUILD_DIR)/python$(PYTHON_VERSION) \
->> +             _python_srcdir=$(PYTHON_DIR) \
->
-> I'm just wondering, why do these packages need access to the Python
-> *source* tree? What's missing from $(STAGING_DIR) to build those Python
-> modules?
->
-> Normally, the source/build tree of each package are just temporary
-> locations, we should *theoretically* be able of removing the
-> source/build tree of a package once its build has completed (well, in
-> practice, there are of course some exceptions, but it seems weird that
-> all Python modules would need these exceptions).
+> You bring up an interesting point that I never thought of. However, in
+> the application of OVERRIDE_SRCDIR, I would think that it mainly intended
+> for company's application but I could be wrong.
 
-Unfortunately, I have almost no experience with python, except for
-recently needing to install a proprietary python package at work -
-which caused me to look for examples, which led to noticing that the
-_python_srcdir paths in the two packages were invalid.
-
-In my case, my module has to be buildable with both python and python3
-(just one or the other in a given build), so dropping the
-_python_srcdir altogether simplified the .mk file, and worked just
-fine for both cases.  (I modified the host-python3 install to create a
-"python" symlink to the host/usr/bin/python3 when python [2] wasn't
-selected, so that other packages can continue to call "python" in
-their build and install commands.)
-
-I don't know if the people who made python-crc16, -pygame, -pyzmq had
-a reason for specifying the python src path, or if there was just a
-lot of copy/paste from a single source who just thought it seemed like
-a good idea at the time.  The purpose of my two patches was to fix a
-path that was clearly wrong - out of a sense of civic duty to the
-community.  Then, if someone more python-savvy comes along and decides
-that those params are not needed, at least they all look the same.
-(Better for grepping and sed and whatnot.)
-
-Danomi -
+FWIW, several of our projects regularly use permanent OVERRIDE_SRCDIR
+settings to compile exploded copies of uboot and xloader checked into
+our source control system, rather than maintain patches against some
+off-upstream vendor tarball; it's just easier than educating the folks
+in remote offices about patching.
