@@ -1,78 +1,64 @@
-From: Ryan Barnett <rjbarnet@rockwellcollins.com>
-Date: Thu, 3 Oct 2013 15:01:05 -0500
-Subject: [Buildroot] [PATCH 5/5] python-pysnmp-mibs: new package
-In-Reply-To: <1380830465-16083-1-git-send-email-rjbarnet@rockwellcollins.com>
-References: <1380830465-16083-1-git-send-email-rjbarnet@rockwellcollins.com>
-Message-ID: <1380830465-16083-6-git-send-email-rjbarnet@rockwellcollins.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 3 Oct 2013 14:11:47 +0200
+Subject: [Buildroot] [git commit] sqlite: bump to version 3.8.0.2
+Message-ID: <20131003200657.C8F6D9B91D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Ryan Barnett <rjbarnet@rockwellcollins.com>
----
- package/Config.in                                |    1 +
- package/python-pysnmp-mibs/Config.in             |    8 +++++++
- package/python-pysnmp-mibs/python-pysnmp-mibs.mk |   23 ++++++++++++++++++++++
- 3 files changed, 32 insertions(+), 0 deletions(-)
- create mode 100644 package/python-pysnmp-mibs/Config.in
- create mode 100644 package/python-pysnmp-mibs/python-pysnmp-mibs.mk
+commit: http://git.buildroot.net/buildroot/commit/?id=bdabe4cbcc1ed58a5db30e3aa01c0ff697d68b8d
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-diff --git a/package/Config.in b/package/Config.in
-index 970f5ce..71a4357 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -404,6 +404,7 @@ source "package/python-pyro/Config.in"
- source "package/python-pysnmp/Config.in"
- if BR2_PACKAGE_PYTHON_PYSNMP
- source "package/python-pysnmp-apps/Config.in"
-+source "package/python-pysnmp-mibs/Config.in"
- endif
- source "package/python-pyzmq/Config.in"
- source "package/python-serial/Config.in"
-diff --git a/package/python-pysnmp-mibs/Config.in b/package/python-pysnmp-mibs/Config.in
-new file mode 100644
-index 0000000..2835678
---- /dev/null
-+++ b/package/python-pysnmp-mibs/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_PYTHON_PYSNMP_MIBS
-+	bool "python-pysnmp-mibs"
-+	depends on BR2_PACKAGE_PYTHON && BR2_PACKAGE_PYTHON_PYSNMP
-+	help
-+	  PySNMP MIBs is a set of IETF & IANA MIBs pre-compiled and 
-+	  packaged to simplify their use with the PySNMP library.
-+
-+	  http://pysnmp.sf.net
-diff --git a/package/python-pysnmp-mibs/python-pysnmp-mibs.mk b/package/python-pysnmp-mibs/python-pysnmp-mibs.mk
-new file mode 100644
-index 0000000..1e2ee84
---- /dev/null
-+++ b/package/python-pysnmp-mibs/python-pysnmp-mibs.mk
-@@ -0,0 +1,23 @@
-+################################################################################
-+#
-+# python-pysnmp-mibs
-+#
-+################################################################################
-+
-+PYTHON_PYSNMP_MIBS_VERSION = 0.1.4
-+PYTHON_PYSNMP_MIBS_SOURCE  = pysnmp-mibs-$(PYTHON_PYSNMP_MIBS_VERSION).tar.gz
-+PYTHON_PYSNMP_MIBS_SITE    = https://pypi.python.org/packages/source/p/pysnmp-mibs
-+PYTHON_PYSNMP_MIBS_LICENSE = BSD-3c
-+PYTHON_PYSNMP_MIBS_LICENSE_FILES = LICENSE
-+
-+PYTHON_PYSNMP_MIBS_DEPENDENCIES = python python-pysnmp
-+
-+define PYTHON_PYSNMP_MIBS_BUILD_CMDS
-+	(cd $(@D); $(HOST_DIR)/usr/bin/python setup.py build --executable=/usr/bin/python)
-+endef
-+
-+define PYTHON_PYSNMP_MIBS_INSTALL_TARGET_CMDS
-+	(cd $(@D); $(HOST_DIR)/usr/bin/python setup.py install --prefix=$(TARGET_DIR)/usr)
-+endef
-+
-+$(eval $(generic-package))
--- 
-1.7.1
+Also drop sqlite-dont-force-posix-fallocate.patch because it is fixed upstream.
+
+Signed-off-by: Axel Lin <axel.lin@ingics.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ .../sqlite/sqlite-dont-force-posix-fallocate.patch |   23 --------------------
+ package/sqlite/sqlite.mk                           |    2 +-
+ 2 files changed, 1 insertions(+), 24 deletions(-)
+
+diff --git a/package/sqlite/sqlite-dont-force-posix-fallocate.patch b/package/sqlite/sqlite-dont-force-posix-fallocate.patch
+deleted file mode 100644
+index 118001b..0000000
+--- a/package/sqlite/sqlite-dont-force-posix-fallocate.patch
++++ /dev/null
+@@ -1,23 +0,0 @@
+-This is checked by configure and passed as a define directive when building.
+-There's no need to check again and potentially override a failed check
+-(uClibc <= 0.9.33.2 for example lacks posix_fallocate).
+-
+-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+-
+-diff -Nura sqlite-autoconf-3071700.orig/sqlite3.c sqlite-autoconf-3071700/sqlite3.c
+---- sqlite-autoconf-3071700.orig/sqlite3.c	2013-05-23 03:17:27.170459400 -0300
+-+++ sqlite-autoconf-3071700/sqlite3.c	2013-05-23 03:25:01.839227616 -0300
+-@@ -22931,13 +22931,6 @@
+- */
+- #if SQLITE_OS_UNIX              /* This file is used on unix only */
+-
+--/* Use posix_fallocate() if it is available
+--*/
+--#if !defined(HAVE_POSIX_FALLOCATE) \
+--      && (_XOPEN_SOURCE >= 600 || _POSIX_C_SOURCE >= 200112L)
+--# define HAVE_POSIX_FALLOCATE 1
+--#endif
+--
+- /*
+- ** There are various methods for file locking used for concurrency
+- ** control:
+diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
+index d474619..5fc1e9e 100644
+--- a/package/sqlite/sqlite.mk
++++ b/package/sqlite/sqlite.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SQLITE_VERSION = 3071700
++SQLITE_VERSION = 3080002
+ SQLITE_SOURCE = sqlite-autoconf-$(SQLITE_VERSION).tar.gz
+ SQLITE_SITE = http://www.sqlite.org/2013
+ SQLITE_LICENSE = Public domain
