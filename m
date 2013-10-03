@@ -1,40 +1,41 @@
-From: Danomi Manchego <danomimanchego123@gmail.com>
-Date: Wed,  2 Oct 2013 22:10:26 -0400
-Subject: [Buildroot] [PATCH] python-pyparsing: fix _python_srcdir
-Message-ID: <1380766226-2482-1-git-send-email-danomimanchego123@gmail.com>
+From: Axel Lin <axel.lin@ingics.com>
+Date: Thu, 03 Oct 2013 10:13:32 +0800
+Subject: [Buildroot] [PATCH] nano: needs mmu
+Message-ID: <1380766412.29754.0.camel@phoenix>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The previous expression for _python_srcdir forgot the dash
-between "python" and the version, so the path was actually
-non-existent.  Change the expression to "$(PYTHON_DIR)", which
-is simpler, and matches python-crc16 and python-pyzmq.
+Fix below build error if !BR2_USE_MMU:
 
-Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
+text.o: In function `execute_command':
+text.c:(.text+0x7f8): undefined reference to `fork'
+text.o: In function `do_int_speller':
+text.c:(.text+0x3480): undefined reference to `fork'
+text.c:(.text+0x34f4): undefined reference to `fork'
+text.c:(.text+0x3568): undefined reference to `fork'
+text.o: In function `do_alt_speller':
+text.c:(.text+0x3914): undefined reference to `fork'
+collect2: ld returned 1 exit status
+make[3]: *** [nano] Error 1
 
+Signed-off-by: Axel Lin <axel.lin@ingics.com>
 ---
+ package/nano/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-I don't actually know if _python_srcdir needs to be there, but
-if it's there, then it shouldn't point to an invalid location.
----
- package/python-pyparsing/python-pyparsing.mk |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/package/python-pyparsing/python-pyparsing.mk b/package/python-pyparsing/python-pyparsing.mk
-index 7814ce3..70a7e3b 100644
---- a/package/python-pyparsing/python-pyparsing.mk
-+++ b/package/python-pyparsing/python-pyparsing.mk
-@@ -20,7 +20,7 @@ define PYTHON_PYPARSING_BUILD_CMDS
- 	 LDSHARED="$(TARGET_CROSS)gcc -shared"                  \
- 	 CROSS_COMPILING=yes                                    \
- 	 _python_sysroot=$(STAGING_DIR)                         \
--	 _python_srcdir=$(BUILD_DIR)/python$(PYTHON_VERSION)    \
-+	 _python_srcdir=$(PYTHON_DIR)                           \
- 	 _python_prefix=/usr                                    \
- 	 _python_exec_prefix=/usr                               \
- 	 $(HOST_DIR)/usr/bin/python setup.py build              \
+diff --git a/package/nano/Config.in b/package/nano/Config.in
+index ef7f69d..036313f 100644
+--- a/package/nano/Config.in
++++ b/package/nano/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_NANO
+ 	bool "nano"
++	depends on BR2_USE_MMU # fork()
+ 	select BR2_PACKAGE_NCURSES
+ 	help
+ 	  A nice ncurses-based editor. Started out as a clone of pico.
 -- 
-1.7.9.5
+1.8.1.2
