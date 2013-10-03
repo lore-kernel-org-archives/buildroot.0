@@ -1,55 +1,51 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 03 Oct 2013 22:32:39 +0200
-Subject: [Buildroot] [PATCH] beagleboneblack: add board
-In-Reply-To: <CA+T6QPm4Er6ECV=YzDofWjMB61SxwgXbS35k3KkpYqHO+ZTFoA@mail.gmail.com>
- (Jason Kridner's message of "Fri, 27 Sep 2013 10:19:32 -0400")
-References: <1380220826-17732-1-git-send-email-jkridner@beagleboard.org>
- <87bo3f5pz4.fsf@dell.be.48ers.dk>
- <OF4892FC0E.FA9FE3E3-ON86257BF2.006E10F1-86257BF2.006EC6A2@rockwellcollins.com>
- <CA+T6QPknCP3O2uM_S8va-MqY+jjzmojgmADw3wg4=4ePNmLw0A@mail.gmail.com>
- <1380262376.22318.10.camel@viko>
- <CA+T6QPm4Er6ECV=YzDofWjMB61SxwgXbS35k3KkpYqHO+ZTFoA@mail.gmail.com>
-Message-ID: <87r4c2m6xk.fsf@dell.be.48ers.dk>
+Date: Thu, 03 Oct 2013 22:41:23 +0200
+Subject: [Buildroot] [PATCH v3 01/11] udev: explicitly include pthreads
+In-Reply-To: <1380237714-2470-2-git-send-email-spenser@gillilanding.com>
+ (Spenser Gilliland's message of "Thu, 26 Sep 2013 18:21:44 -0500")
+References: <1380237714-2470-1-git-send-email-spenser@gillilanding.com>
+ <1380237714-2470-2-git-send-email-spenser@gillilanding.com>
+Message-ID: <87li2am6j0.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Jason" == Jason Kridner <jkridner@beagleboard.org> writes:
+>>>>> "Spenser" == Spenser Gilliland <spenser@gillilanding.com> writes:
 
-Hi,
+ Spenser> This fixes builds with Linaro hard float toolchains.
 
- >> config BR2_LINUX_KERNEL_INTREE_DTS_NAME
- >> string "Device Tree Source file names"
- >> depends on BR2_LINUX_KERNEL_USE_INTREE_DTS
- >> help
- >> Name of the device tree source file, without
- >> the trailing .dts. You can provide a list of
- >> dts files to build, separated by spaces.
- >> "
+Sorry, what toolchain exactly? I just did a test build with our default
+(Linaro 2013.08) ext toolchain, and didn't have any linker issues.
 
- Jason> Adding multiple makes it not output any .dtb files to the
- Jason> output/images directory. It seems there is a single assignment in
- Jason> linux.mk. :(
 
-No? It works here. I just tried taking our beaglebone_defconfig and
-changing the DTS_NAME setting to:
+ Spenser> Signed-off-by: Spenser Gilliland <spenser@gillilanding.com>
+ Spenser> ---
+ Spenser>  package/udev/udev.mk |    2 +-
+ Spenser>  1 files changed, 1 insertions(+), 1 deletions(-)
 
-BR2_LINUX_KERNEL_INTREE_DTS_NAME="am335x-bone am335x-boneblack"
+ Spenser> diff --git a/package/udev/udev.mk b/package/udev/udev.mk
+ Spenser> index db86850..b512ec5 100644
+ Spenser> --- a/package/udev/udev.mk
+ Spenser> +++ b/package/udev/udev.mk
+ Spenser> @@ -12,7 +12,7 @@ UDEV_LICENSE_FILES = COPYING
+ Spenser>  UDEV_INSTALL_STAGING = YES
+ 
+ Spenser>  # mq_getattr is in librt
+ Spenser> -UDEV_CONF_ENV += LIBS=-lrt
+ Spenser> +UDEV_CONF_ENV += LIBS="-lrt -lpthread"
+ 
+ Spenser>  UDEV_CONF_OPT =			\
+ Spenser>  	--sbindir=/sbin		\
+ Spenser> -- 
+ Spenser> 1.7.1
 
-And I get:
+ Spenser> _______________________________________________
+ Spenser> buildroot mailing list
+ Spenser> buildroot at busybox.net
+ Spenser> http://lists.busybox.net/mailman/listinfo/buildroot
 
-ls -l output/images
-total 7044
--rw-r--r-- 1 peko peko   10494 Oct  3 22:25 am335x-boneblack.dtb
--rw-r--r-- 1 peko peko   10537 Oct  3 22:25 am335x-bone.dtb
--rw-r--r-- 1 peko peko  100400 Oct  3 22:19 MLO
--rw-r--r-- 1 peko peko 5104640 Oct  3 22:25 rootfs.ext2
--rw-r--r-- 1 peko peko  377076 Oct  3 22:19 u-boot.img
--rw-r--r-- 1 peko peko 2831464 Oct  3 22:25 uImage
-
-What did you do exactly?
 
 -- 
 Bye, Peter Korsgaard
