@@ -1,28 +1,27 @@
-From: Assaf Inbal <shmuelzon@gmail.com>
-Date: Thu, 3 Oct 2013 08:32:53 +0200
-Subject: [Buildroot] Using external toolchain with a different uclibc
-Message-ID: <CADwac6Dq2qJinDQ8K8xfr6WuhYEE0JH5nzM2AVRoPufFyfEHfw@mail.gmail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 03 Oct 2013 08:48:13 +0200
+Subject: [Buildroot] [PATCH] zsh: needs mmu
+In-Reply-To: <1380763207.1614.1.camel@phoenix> (Axel Lin's message of "Thu, 03
+ Oct 2013 09:20:07 +0800")
+References: <1380763207.1614.1.camel@phoenix>
+Message-ID: <87li2aono2.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hey all,
+>>>>> "Axel" == Axel Lin <axel.lin@ingics.com> writes:
 
-I'm in need of compiling buildroot for a platform for which I was
-given a toolchain (gcc + uclibc) and also a different version of
-uclibc (compiled + headers) that should be used.
+ Axel> Fix below build error if !BR2_USE_MMU:
+ Axel> exec.o: In function `zfork':
+ Axel> exec.c:(.text+0x150c): undefined reference to `fork'
+ Axel> collect2: ld returned 1 exit status
+ Axel> make[2]: *** [zsh] Error 1
 
-If I use this toolchain (with its embedded uclibc) everything works as
-expected, but I wasn't able to use the external uclibc.
-I've tried passing various flags to gcc (that are incorporated in the
-ext-toolchain-wrapper) including -nostdlib -nostdinc and specifying
-the exact directories (with -I and -L) where to find the libraries.
-None of these changes worked.
+ Axel> Signed-off-by: Axel Lin <axel.lin@ingics.com>
 
-How could I go by configuring buildroot to use a uclibc that's
-external to the toolchain?
+Committed, thanks.
 
-Thanks in advance,
-Assaf
+-- 
+Bye, Peter Korsgaard
