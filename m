@@ -1,31 +1,66 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 3 Oct 2013 23:17:55 +0200
-Subject: [Buildroot] [PATCH 1/5] python-pyasn: new package
-In-Reply-To: <1380830465-16083-2-git-send-email-rjbarnet@rockwellcollins.com>
+From: Ryan Barnett <rjbarnet@rockwellcollins.com>
+Date: Thu, 3 Oct 2013 16:21:47 -0500
+Subject: [Buildroot] [PATCH 0/5] Introduce New Package PySnmp
+In-Reply-To: <20131003231552.123a5212@skate>
 References: <1380830465-16083-1-git-send-email-rjbarnet@rockwellcollins.com>
- <1380830465-16083-2-git-send-email-rjbarnet@rockwellcollins.com>
-Message-ID: <20131003231755.72ecace9@skate>
+ <20131003231552.123a5212@skate>
+Message-ID: <OFB63905E5.F3F656E6-ON86257BF9.00750EF7-86257BF9.00755A43@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Ryan Barnett,
+Thomas,
 
-On Thu, 3 Oct 2013 15:01:01 -0500, Ryan Barnett wrote:
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote on 
+10/03/2013 04:15:52 PM:
 
-> +		CFLAGS="$(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include" \
-> +		CXX="$(TARGET_CXX)" \
-> +		CXXFLAGS="$(TARGET_CXXFLAGS) -I$(STAGING_DIR)/usr/include" \
-> +		LDSHARED="$(TARGET_CC) -shared" \
-> +		LDFLAGS="$(TARGET_LDFLAGS) -L$(STAGING_DIR)/lib -L$(STAGING_DIR)/usr/lib" \
+> Dear Ryan Barnett,
+> 
+> On Thu, 3 Oct 2013 15:01:00 -0500, Ryan Barnett wrote:
+> > This patchset adds support for building PySnmp. One thing that I'm not
+> > sure on and am open to debate is the naming of the packages under
+> > Target Packages > Interpreter languages and scripting > external 
+python
+> > modules in the menuconfig since the majority of the packages are named
+> > python-<pkg_name> but pygame and pyparsing don't fall under this
+> > category.
+> > 
+> > Menuconfig
+> >  -> python-nfc
+> >  -> python-protobuf
+> >  -> pygame
+> >  -> pyparsing
+> >  -> python-pyro
+> >  -> python-pyzmq
+> > 
+> > The make rules for the pygame and pyparsing packages are python-pygame
+> > python-pyparsing.
+> > 
+> > Location of the packages in buildroot is package/python-pygame and
+> > package/python-pyparsing.
+> 
+> Aaah, I now understand better what you were mentioning on IRC. Sorry
+> for not understanding earlier. I did understand that the name of the
+> package was "pyparsing", i.e that it was located in package/pyparsing/.
+> But indeed, it is located in package/python-pyparsing/, so the package
+> name is 'python-pyparsing'. The only thing that doesn't match is the
+> Config.in option prompt, and this is not nice.
+> 
+> So clearly, I'm all for changing the Config.in option name, i.e:
+> 
+> -   bool "pyparsing"
+> +   bool "python-pyparsing"
+> 
+> Thanks, and sorry again for the misunderstanding,
 
-These additional -I and -L are rather weird because they simply pass
-what are already the default search paths for headers and libraries.
+Not a problem, I figured I would explain the problem better in this
+email. I'll work on the patch later but for now I've got to figure how
+to get pycrypto to cross compile.
 
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+> Thomas
+> -- 
+> Thomas Petazzoni, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
