@@ -1,32 +1,46 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 3 Oct 2013 22:08:30 +0200
-Subject: [Buildroot] [git commit] xz: bump to version 5.0.5
-Message-ID: <20131003215306.AAA639B931@busybox.osuosl.org>
+From: Ryan Barnett <rjbarnet@rockwellcollins.com>
+Date: Thu, 3 Oct 2013 17:39:41 -0500
+Subject: [Buildroot] [PATCH 1/5] python-pyasn: new package
+In-Reply-To: <20131003231755.72ecace9@skate>
+References: <1380830465-16083-1-git-send-email-rjbarnet@rockwellcollins.com>	<1380830465-16083-2-git-send-email-rjbarnet@rockwellcollins.com>
+ <20131003231755.72ecace9@skate>
+Message-ID: <OF6A6DE032.B7F52EBF-ON86257BF9.007A1734-86257BF9.007C7C37@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e9eb2a7e20e3c5f0a236d6776f82a5659bac4074
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Thomas,
 
-Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/xz/xz.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote on
+10/03/2013 04:17:55 PM:
 
-diff --git a/package/xz/xz.mk b/package/xz/xz.mk
-index 98fca3a..af90f05 100644
---- a/package/xz/xz.mk
-+++ b/package/xz/xz.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--XZ_VERSION = 5.0.4
-+XZ_VERSION = 5.0.5
- XZ_SOURCE = xz-$(XZ_VERSION).tar.bz2
- XZ_SITE = http://tukaani.org/xz/
- XZ_INSTALL_STAGING = YES
+> Dear Ryan Barnett,
+> 
+> On Thu, 3 Oct 2013 15:01:01 -0500, Ryan Barnett wrote:
+> 
+> > +      CFLAGS="$(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include" \
+> > +      CXX="$(TARGET_CXX)" \
+> > +      CXXFLAGS="$(TARGET_CXXFLAGS) -I$(STAGING_DIR)/usr/include" \
+> > +      LDSHARED="$(TARGET_CC) -shared" \
+> > +      LDFLAGS="$(TARGET_LDFLAGS) -L$(STAGING_DIR)/lib -L$
+> (STAGING_DIR)/usr/lib" \
+> 
+> These additional -I and -L are rather weird because they simply pass
+> what are already the default search paths for headers and libraries.
+
+The additional -I and -L are needed to ensure that the $(STAGING_DIR)
+header and library files are pulled. Otherwise the distutils package 
+before the ones that the distutils package will find the 
+headers/libraries that are located at $(HOST_DIR)/usr.
+
+I've added this comment to both pyasn and pycrypto. I'm not a fan
+of it but I don't really want to rewrite the setup.py in order to 
+support cross compiling.
+
+> Thomas
+> -- 
+> Thomas Petazzoni, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
