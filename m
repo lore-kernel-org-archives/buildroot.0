@@ -1,50 +1,57 @@
-From: =?ISO-8859-1?Q?Fran=E7ois_Perrad?= <francois.perrad@gadz.org>
-Date: Thu, 3 Oct 2013 19:02:21 +0200
-Subject: [Buildroot] Advice on a board support
-In-Reply-To: <CA+TH9V=EdvEv4UF1s-ad9EoFCUBZHaoEqgiyqB1wsBUhETJZiQ@mail.gmail.com>
-References: <CA+TH9V=EdvEv4UF1s-ad9EoFCUBZHaoEqgiyqB1wsBUhETJZiQ@mail.gmail.com>
-Message-ID: <CAB0FRsvA=Mj0rbUc-7HxjwS3zYiGA1ivmJw-ZGQ+gZ=8geaq_Q@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 3 Oct 2013 20:11:16 +0200
+Subject: [Buildroot] Buildroot Developers meeting sponsored by Imagination
+	Technologies
+Message-ID: <20131003201116.751f3bdf@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2013/10/3 Angelo Compagnucci <angelo.compagnucci@gmail.com>:
-> Hi all,
->
-> Recently I discovered the OLinuxIno nano board form Olimex and I
-> really loved every corner of that!
->
-> Now I really want to build a rootfs with buildroot, but unfortunately
-> I discovered the board is not supported.
->
+Hello,
 
-Since BR-2013.08, imx233_olinuxino was added (see
-http://git.buildroot.net/buildroot/tree/board/olimex/imx233_olinuxino)
-I think that covers MAXI, MINI, MICRO, NANO variants (but not their
-A13, A10S, A20 Allwinner based boards)
+I am proud to announce that the next Buildroot Developers Meeting is
+going to be sponsored by Imagination Technologies. They accepted to
+sponsor both the meeting room and the Saturday evening dinner, so that
+the participants can have nice and efficient working conditions during
+this meeting.
 
-Fran?ois
+   http://elinux.org/Buildroot:DeveloperDaysELCE2013
 
-> I really would like to contribute to the buildroot project supporting
-> this board, but this will be my first contribution. I read several
-> docs and I have a last question open.
->
-> To make this board fully operative, several patches should be applied
-> to some specific versions of the linux kernel. Patches are ready
-> available[1] but how integrate them with boildroot?
->
-> So my question is: what is the recommended way to support this new platform?
->
-> Thank you!
->
->
-> [1] https://github.com/RobertCNelson/armv5_devel/tree/v3.11.x-imxv5/patches
->
-> --
-> Profile: http://it.linkedin.com/in/compagnucciangelo
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Imagination Technologies is a global leader in multimedia, processor
+and communication technologies. The company creates and licenses
+market-leading IP solutions for graphics, video and vision, CPU/general
+purpose processing, multi-standard communications and connectivity, and
+cross-platform voice and video communications. Imagination's MIPS CPU
+cores and architectures range from solutions for ultra low-power 32-bit
+microcontrollers to high-performance 32/64-bit advanced applications
+and network processing. MIPS is supported by a broad ecosystem of tools
+and software including open source embedded Linux distributions like
+Buildroot. 
+
+   http://www.imgtec.com/
+
+Thanks to Imagination Technologies sponsoring, the event will take
+place at at the Edinburgh Training and Conference Venue
+(http://www.edintrain.com/), 16 St. Mary's Street, Edinburgh. See
+http://www.edintrain.com/location-and-accesibility/ for details on the
+location.
+
+The meeting room has been booked for up to 8 participants, and there
+are for the moment 6 participants, so we have seats left for those who
+would like to participate. I'd like to remind everyone that the
+Buildroot Meeting takes place right after the Embedded Linux Conference
+Europe in Edinburgh, which makes the entire trip even more useful and
+interesting.
+
+That being said, I'd like to thank Imagination Technologies for their
+support!
+
+Best regards,
+
+Thomas Petazzoni
+-- 
+Thomas Petazzoni, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
