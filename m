@@ -1,46 +1,46 @@
 From: Ryan Barnett <rjbarnet@rockwellcollins.com>
-Date: Thu, 3 Oct 2013 17:39:41 -0500
-Subject: [Buildroot] [PATCH 1/5] python-pyasn: new package
-In-Reply-To: <20131003231755.72ecace9@skate>
-References: <1380830465-16083-1-git-send-email-rjbarnet@rockwellcollins.com>	<1380830465-16083-2-git-send-email-rjbarnet@rockwellcollins.com>
- <20131003231755.72ecace9@skate>
-Message-ID: <OF6A6DE032.B7F52EBF-ON86257BF9.007A1734-86257BF9.007C7C37@rockwellcollins.com>
+Date: Thu, 3 Oct 2013 17:44:52 -0500
+Subject: [Buildroot] Some legal-info observations/problems
+In-Reply-To: <87bo36m3v3.fsf@dell.be.48ers.dk>
+References: <CAAXf6LXHXo2vY8ns61fxoLzD0n2yzLASZqFk75xzYQwgDHp15Q@mail.gmail.com>	<OF28FCBE52.CC9DE764-ON86257BF8.00513AFD-86257BF8.006773C0@rockwellcollins.com>
+ <CAAXf6LXj9m1Vo8W5SJGGBHCyiRj=gUP=574Xjcqvn1jhnZZwgg@mail.gmail.com>
+ <87bo36m3v3.fsf@dell.be.48ers.dk>
+Message-ID: <OF570635FC.B485D61A-ON86257BF9.00771275-86257BF9.007CF591@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas,
+Peter, Thomas, All,
 
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote on
-10/03/2013 04:17:55 PM:
+Peter Korsgaard <jacmet@gmail.com> wrote on 10/03/2013 04:38:56 PM:
 
-> Dear Ryan Barnett,
+> >>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin@gmail.com> 
+writes:
 > 
-> On Thu, 3 Oct 2013 15:01:01 -0500, Ryan Barnett wrote:
+> Hi,
 > 
-> > +      CFLAGS="$(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include" \
-> > +      CXX="$(TARGET_CXX)" \
-> > +      CXXFLAGS="$(TARGET_CXXFLAGS) -I$(STAGING_DIR)/usr/include" \
-> > +      LDSHARED="$(TARGET_CC) -shared" \
-> > +      LDFLAGS="$(TARGET_LDFLAGS) -L$(STAGING_DIR)/lib -L$
-> (STAGING_DIR)/usr/lib" \
+>  Thomas> While I don't need the URL for my process, I currently also
+>  Thomas> don't need the name of the tarball in manifest.csv (and I leave
+>  Thomas> out this last column anyway). So, I'm not opposed to adding
+>  Thomas> this extra column, but there may be some caveats: with the
+>  Thomas> OVERRIDE_SRCDIR mechanism it is possible for a project to
+>  Thomas> completely change the sources of an existing package in
+>  Thomas> buildroot. Strictly speaking this could mean that there is no
+>  Thomas> relation whatsoever between the URL specified in the .mk file
+>  Thomas> and the actual sources used. This is probably very exotic,
+>  Thomas> though, and maybe it doesn't really matter for your process.
 > 
-> These additional -I and -L are rather weird because they simply pass
-> what are already the default search paths for headers and libraries.
+> Same could be said about the other fields (license, license files). In
+> general, you can only expect the legal-info stuff to be (hopefully)
+> valid if you don't override.
+> 
+> But yeah, I would be OK with adding the upstream URL (as in <pkg>_SITE).
 
-The additional -I and -L are needed to ensure that the $(STAGING_DIR)
-header and library files are pulled. Otherwise the distutils package 
-before the ones that the distutils package will find the 
-headers/libraries that are located at $(HOST_DIR)/usr.
+Hopefully, if under the upstream URL if I put "OVERRIDE_SRCDIR Used" in
+the column it can indicate that everything should be taken with a grain
+of salt.
 
-I've added this comment to both pyasn and pycrypto. I'm not a fan
-of it but I don't really want to rewrite the setup.py in order to 
-support cross compiling.
-
-> Thomas
-> -- 
-> Thomas Petazzoni, Free Electrons
-> Embedded Linux, Kernel and Android engineering
-> http://free-electrons.com
+Thanks,
+-Ryan
