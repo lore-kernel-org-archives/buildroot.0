@@ -1,35 +1,25 @@
-From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Thu, 3 Oct 2013 14:39:14 +0200
-Subject: [Buildroot] Advice on a board support
-Message-ID: <CA+TH9V=EdvEv4UF1s-ad9EoFCUBZHaoEqgiyqB1wsBUhETJZiQ@mail.gmail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 03 Oct 2013 15:04:31 +0200
+Subject: [Buildroot] [PATCH v2 1/1] gnupg: option to include RSA support.
+In-Reply-To: <1380500720-29245-1-git-send-email-psanford@nearbuysystems.com>
+ (Peter Sanford's message of "Sun, 29 Sep 2013 17:25:20 -0700")
+References: <1380500720-29245-1-git-send-email-psanford@nearbuysystems.com>
+Message-ID: <87zjqqmrog.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
+>>>>> "Peter" == Peter Sanford <psanford@nearbuysystems.com> writes:
 
-Recently I discovered the OLinuxIno nano board form Olimex and I
-really loved every corner of that!
+ Peter> gnupg is compiled with --enable-minimal flag. This produces a
+ Peter> binary that only supports ElGamal and DSA public key algorithms.
 
-Now I really want to build a rootfs with buildroot, but unfortunately
-I discovered the board is not supported.
+ Peter> RSA has been the default for `gpg --gen-key` since 2009, so it
+ Peter> makes sense to be able to build a gnupg binary that supports it.
 
-I really would like to contribute to the buildroot project supporting
-this board, but this will be my first contribution. I read several
-docs and I have a last question open.
-
-To make this board fully operative, several patches should be applied
-to some specific versions of the linux kernel. Patches are ready
-available[1] but how integrate them with boildroot?
-
-So my question is: what is the recommended way to support this new platform?
-
-Thank you!
-
-
-[1] https://github.com/RobertCNelson/armv5_devel/tree/v3.11.x-imxv5/patches
+Committed, thanks.
 
 -- 
-Profile: http://it.linkedin.com/in/compagnucciangelo
+Bye, Peter Korsgaard
