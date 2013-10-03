@@ -1,32 +1,46 @@
-From: Axel Lin <axel.lin@ingics.com>
-Date: Fri, 04 Oct 2013 16:09:59 +0800
-Subject: [Buildroot] [PATCH 2/2] dmidecode: add license info
-In-Reply-To: <1380874152.7626.2.camel@phoenix>
-References: <1380874152.7626.2.camel@phoenix>
-Message-ID: <1380874199.7626.3.camel@phoenix>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 03 Oct 2013 18:44:36 +0200
+Subject: [Buildroot] [PATCH] legal info: split manifest for host and
+	target
+In-Reply-To: <6e469ce45201f09b20bd.1380807778@argentina>
+References: <6e469ce45201f09b20bd.1380807778@argentina>
+Message-ID: <524D9EF4.9010805@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Axel Lin <axel.lin@ingics.com>
----
- package/dmidecode/dmidecode.mk | 2 ++
- 1 file changed, 2 insertions(+)
+On 10/03/13 15:42, Thomas De Schampheleire wrote:
+> Signed-off-by: Thomas De Schampheleire<thomas.de.schampheleire@gmail.com>
+>
+> ---
+>   Makefile                     |  8 +++++---
+>   docs/manual/legal-notice.txt |  6 +++---
+>   package/pkg-generic.mk       |  2 +-
+>   package/pkg-utils.mk         |  2 +-
+>   4 files changed, 10 insertions(+), 8 deletions(-)
+>
+> Note: I tried hundreds of things, but couldn't find the correct way of using
+> $(2)_TYPE correctly in the call to legal-manifest,
 
-diff --git a/package/dmidecode/dmidecode.mk b/package/dmidecode/dmidecode.mk
-index c53bd33..32e7ff2 100644
---- a/package/dmidecode/dmidecode.mk
-+++ b/package/dmidecode/dmidecode.mk
-@@ -6,6 +6,8 @@
- 
- DMIDECODE_VERSION = 2.12
- DMIDECODE_SITE    = http://download.savannah.gnu.org/releases/dmidecode/
-+DMIDECODE_LICENSE = GPLv2+
-+DMIDECODE_LICENSE_FILES = LICENSE
- 
- define DMIDECODE_BUILD_CMDS
- 	$(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS)
+  Better not use $(2)_TYPE anyway, it's pretty much redundant.
+
+> I can only make it work with
+> $(5). I'm currently dollar-sign-dizzy:
+> @$(call legal-manifest,$$($(2)_RAWNAME),$$($(2)_VERSION),$$($(2)_LICENSE),$$($(2)_MANIFEST_LICENSE_FILES),$$($(2)_MANIFEST_TARBALL),$(call UPPERCASE,$(5)))
+
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+
+
+  Regards,
+  Arnout
+
+[snip]
 -- 
-1.8.1.2
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
