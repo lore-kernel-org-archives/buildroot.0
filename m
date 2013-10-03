@@ -1,21 +1,34 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 03 Oct 2013 22:09:34 +0200
-Subject: [Buildroot] [PATCH] webp: bump to version 0.3.1
-In-Reply-To: <1380373803-3293-1-git-send-email-gilles.talis@gmail.com> (Gilles
- Talis's message of "Sat, 28 Sep 2013 15:10:03 +0200")
-References: <1380373803-3293-1-git-send-email-gilles.talis@gmail.com>
-Message-ID: <87vc1em801.fsf@dell.be.48ers.dk>
+From: spdawson at gmail.com <spdawson@gmail.com>
+Date: Thu,  3 Oct 2013 21:12:41 +0100
+Subject: [Buildroot] [PATCH] pppd: add license information
+Message-ID: <1380831161-3225-1-git-send-email-spdawson@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gilles" == Gilles Talis <gilles.talis@gmail.com> writes:
+From: Simon Dawson <spdawson@gmail.com>
 
- Gilles> Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
+Signed-off-by: Simon Dawson <spdawson@gmail.com>
+---
+ package/pppd/pppd.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-Committed, thanks.
-
+diff --git a/package/pppd/pppd.mk b/package/pppd/pppd.mk
+index b2ced29..471a71e 100644
+--- a/package/pppd/pppd.mk
++++ b/package/pppd/pppd.mk
+@@ -7,6 +7,10 @@
+ PPPD_VERSION = 2.4.5
+ PPPD_SOURCE = ppp-$(PPPD_VERSION).tar.gz
+ PPPD_SITE = ftp://ftp.samba.org/pub/ppp
++PPPD_LICENSE = LGPLv2+ LGPL BSD-4c BSD-3c GPLv2+
++PPPD_LICENSE_FILES = pppd/tdb.c pppd/plugins/pppoatm/COPYING \
++	pppdump/bsd-comp.c pppd/ccp.c pppd/plugins/passprompt.c
++
+ PPPD_TARGET_BINS = chat pppd pppdump pppstats
+ PPPD_MANPAGES = $(if $(BR2_HAVE_DOCUMENTATION),chat pppd pppdump pppstats)
+ PPPD_RADIUS_MANPAGES = $(if $(BR2_HAVE_DOCUMENTATION),pppd-radattr pppd-radius)
 -- 
-Bye, Peter Korsgaard
+1.8.1.2
