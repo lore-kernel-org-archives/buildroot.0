@@ -1,30 +1,50 @@
-From: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
-Date: Thu,  3 Oct 2013 18:32:18 +0200
-Subject: [Buildroot] [PATCH 1/1] empty: bump to version 0.6.19b
-Message-ID: <1380817938-25881-1-git-send-email-jerzy.grzegorek@trzebnica.net>
+From: =?ISO-8859-1?Q?Fran=E7ois_Perrad?= <francois.perrad@gadz.org>
+Date: Thu, 3 Oct 2013 19:02:21 +0200
+Subject: [Buildroot] Advice on a board support
+In-Reply-To: <CA+TH9V=EdvEv4UF1s-ad9EoFCUBZHaoEqgiyqB1wsBUhETJZiQ@mail.gmail.com>
+References: <CA+TH9V=EdvEv4UF1s-ad9EoFCUBZHaoEqgiyqB1wsBUhETJZiQ@mail.gmail.com>
+Message-ID: <CAB0FRsvA=Mj0rbUc-7HxjwS3zYiGA1ivmJw-ZGQ+gZ=8geaq_Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
----
- package/empty/empty.mk |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+2013/10/3 Angelo Compagnucci <angelo.compagnucci@gmail.com>:
+> Hi all,
+>
+> Recently I discovered the OLinuxIno nano board form Olimex and I
+> really loved every corner of that!
+>
+> Now I really want to build a rootfs with buildroot, but unfortunately
+> I discovered the board is not supported.
+>
 
-diff --git a/package/empty/empty.mk b/package/empty/empty.mk
-index 4294777..3339ff6 100644
---- a/package/empty/empty.mk
-+++ b/package/empty/empty.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--EMPTY_VERSION = 0.6.18b
-+EMPTY_VERSION = 0.6.19b
- EMPTY_SOURCE = empty-$(EMPTY_VERSION).tgz
- EMPTY_SITE = http://downloads.sourceforge.net/project/empty/empty/empty-$(EMPTY_VERSION)
- EMPTY_LICENSE = BSD-3c
--- 
-1.7.9.5
+Since BR-2013.08, imx233_olinuxino was added (see
+http://git.buildroot.net/buildroot/tree/board/olimex/imx233_olinuxino)
+I think that covers MAXI, MINI, MICRO, NANO variants (but not their
+A13, A10S, A20 Allwinner based boards)
+
+Fran?ois
+
+> I really would like to contribute to the buildroot project supporting
+> this board, but this will be my first contribution. I read several
+> docs and I have a last question open.
+>
+> To make this board fully operative, several patches should be applied
+> to some specific versions of the linux kernel. Patches are ready
+> available[1] but how integrate them with boildroot?
+>
+> So my question is: what is the recommended way to support this new platform?
+>
+> Thank you!
+>
+>
+> [1] https://github.com/RobertCNelson/armv5_devel/tree/v3.11.x-imxv5/patches
+>
+> --
+> Profile: http://it.linkedin.com/in/compagnucciangelo
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
