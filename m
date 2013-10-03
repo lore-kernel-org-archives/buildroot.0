@@ -1,38 +1,96 @@
-From: Danomi Manchego <danomimanchego123@gmail.com>
-Date: Thu, 3 Oct 2013 09:42:55 -0400
-Subject: [Buildroot] Some legal-info observations/problems
-In-Reply-To: <OFA9E6CB32.66C4A13C-ON86257BF9.0049F1F8-86257BF9.004A5509@rockwellcollins.com>
-References: <CAAXf6LXHXo2vY8ns61fxoLzD0n2yzLASZqFk75xzYQwgDHp15Q@mail.gmail.com>
- <OF28FCBE52.CC9DE764-ON86257BF8.00513AFD-86257BF8.006773C0@rockwellcollins.com>
- <CAAXf6LXj9m1Vo8W5SJGGBHCyiRj=gUP=574Xjcqvn1jhnZZwgg@mail.gmail.com>
- <OFA9E6CB32.66C4A13C-ON86257BF9.0049F1F8-86257BF9.004A5509@rockwellcollins.com>
-Message-ID: <CANxTyt5STqs0sVnG0q1PVWm+5OLi=8QbrFLHfGHJr4po4vhKgw@mail.gmail.com>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Thu, 03 Oct 2013 15:42:58 +0200
+Subject: [Buildroot] [PATCH] legal info: split manifest for host and target
+Message-ID: <6e469ce45201f09b20bd.1380807778@argentina>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Ryan,
+Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
-On Thu, Oct 3, 2013 at 9:31 AM, Ryan Barnett
-<rjbarnet@rockwellcollins.com> wrote:
->> While I don't need the URL for my process, I currently also don't need
->> the name of the tarball in manifest.csv (and I leave out this last
->> column anyway). So, I'm not opposed to adding this extra column, but
->> there may be some caveats: with the OVERRIDE_SRCDIR mechanism it is
->> possible for a project to completely change the sources of an existing
->> package in buildroot. Strictly speaking this could mean that there is
->> no relation whatsoever between the URL specified in the .mk file and
->> the actual sources used. This is probably very exotic, though, and
->> maybe it doesn't really matter for your process.
->
-> You bring up an interesting point that I never thought of. However, in
-> the application of OVERRIDE_SRCDIR, I would think that it mainly intended
-> for company's application but I could be wrong.
+---
+ Makefile                     |  8 +++++---
+ docs/manual/legal-notice.txt |  6 +++---
+ package/pkg-generic.mk       |  2 +-
+ package/pkg-utils.mk         |  2 +-
+ 4 files changed, 10 insertions(+), 8 deletions(-)
 
-FWIW, several of our projects regularly use permanent OVERRIDE_SRCDIR
-settings to compile exploded copies of uboot and xloader checked into
-our source control system, rather than maintain patches against some
-off-upstream vendor tarball; it's just easier than educating the folks
-in remote offices about patching.
+Note: I tried hundreds of things, but couldn't find the correct way of using
+$(2)_TYPE correctly in the call to legal-manifest, I can only make it work with
+$(5). I'm currently dollar-sign-dizzy:
+@$(call legal-manifest,$$($(2)_RAWNAME),$$($(2)_VERSION),$$($(2)_LICENSE),$$($(2)_MANIFEST_LICENSE_FILES),$$($(2)_MANIFEST_TARBALL),$(call UPPERCASE,$(5)))
+
+diff --git a/Makefile b/Makefile
+--- a/Makefile
++++ b/Makefile
+@@ -272,7 +272,8 @@ TARGET_SKELETON=$(TOPDIR)/system/skeleto
+ LEGAL_INFO_DIR=$(BASE_DIR)/legal-info
+ REDIST_SOURCES_DIR=$(LEGAL_INFO_DIR)/sources
+ LICENSE_FILES_DIR=$(LEGAL_INFO_DIR)/licenses
+-LEGAL_MANIFEST_CSV=$(LEGAL_INFO_DIR)/manifest.csv
++LEGAL_MANIFEST_CSV_TARGET=$(LEGAL_INFO_DIR)/manifest.csv
++LEGAL_MANIFEST_CSV_HOST=$(LEGAL_INFO_DIR)/host-manifest.csv
+ LEGAL_LICENSES_TXT=$(LEGAL_INFO_DIR)/licenses.txt
+ LEGAL_WARNINGS=$(LEGAL_INFO_DIR)/.warnings
+ LEGAL_REPORT=$(LEGAL_INFO_DIR)/README
+@@ -588,8 +589,9 @@ legal-info-clean:
+ legal-info-prepare: $(LEGAL_INFO_DIR)
+ 	@$(call MESSAGE,"Collecting legal info")
+ 	@$(call legal-license-file,buildroot,COPYING,COPYING)
+-	@$(call legal-manifest,PACKAGE,VERSION,LICENSE,LICENSE FILES,SOURCE ARCHIVE)
+-	@$(call legal-manifest,buildroot,$(BR2_VERSION_FULL),GPLv2+,COPYING,not saved)
++	@$(call legal-manifest,PACKAGE,VERSION,LICENSE,LICENSE FILES,SOURCE ARCHIVE,TARGET)
++	@$(call legal-manifest,PACKAGE,VERSION,LICENSE,LICENSE FILES,SOURCE ARCHIVE,HOST)
++	@$(call legal-manifest,buildroot,$(BR2_VERSION_FULL),GPLv2+,COPYING,not saved,HOST)
+ 	@$(call legal-warning,the Buildroot source code has not been saved)
+ 	@$(call legal-warning,the toolchain has not been saved)
+ 	@cp $(BUILDROOT_CONFIG) $(LEGAL_INFO_DIR)/buildroot.config
+diff --git a/docs/manual/legal-notice.txt b/docs/manual/legal-notice.txt
+--- a/docs/manual/legal-notice.txt
++++ b/docs/manual/legal-notice.txt
+@@ -44,8 +44,8 @@ There you will find:
+   saved);
+   patches applied to some packages by Buildroot are distributed with the
+   Buildroot sources and are not duplicated in the +sources/+ subdirectory.
+-* A manifest file listing the configured packages, their version, license and
+-  related information.
++* A manifest file (one for host and one for target packages) listing the
++  configured packages, their version, license and related information.
+   Some of this information might not be defined in Buildroot; such items are
+   marked as "unknown".
+ * A +licenses/+ subdirectory, which contains the license text of packages.
+@@ -72,7 +72,7 @@ License abbreviations
+ ---------------------
+ 
+ Here is a list of the licenses that are most widely used by packages in
+-Buildroot, with the name used in the manifest file:
++Buildroot, with the name used in the manifest files:
+ 
+ * `GPLv2`:
+   http://www.gnu.org/licenses/old-licenses/gpl-2.0.html[
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -519,7 +519,7 @@ ifeq ($$($(2)_REDISTRIBUTE),YES)
+ 	   cp $(DL_DIR)/$$($(2)_SOURCE) $(REDIST_SOURCES_DIR)
+ endif
+ endif
+-	@$(call legal-manifest,$$($(2)_RAWNAME),$$($(2)_VERSION),$$($(2)_LICENSE),$$($(2)_MANIFEST_LICENSE_FILES),$$($(2)_MANIFEST_TARBALL))
++	@$(call legal-manifest,$$($(2)_RAWNAME),$$($(2)_VERSION),$$($(2)_LICENSE),$$($(2)_MANIFEST_LICENSE_FILES),$$($(2)_MANIFEST_TARBALL),$(call UPPERCASE,$(5)))
+ endif # ifneq ($(call qstrip,$$($(2)_SOURCE)),)
+ 	$(foreach hook,$($(2)_POST_LEGAL_INFO_HOOKS),$(call $(hook))$(sep))
+ 
+diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
+--- a/package/pkg-utils.mk
++++ b/package/pkg-utils.mk
+@@ -96,7 +96,7 @@ legal-warning-pkg=echo "WARNING: $(1): $
+ define legal-warning-pkg-savednothing # pkg, {local|override}
+ 	$(call legal-warning-pkg,$(1),sources and license files not saved ($(2) packages not handled))
+ endef
+-legal-manifest=echo '"$(1)","$(2)","$(3)","$(4)","$(5)"' >>$(LEGAL_MANIFEST_CSV)
++legal-manifest=echo '"$(1)","$(2)","$(3)","$(4)","$(5)"' >>$(LEGAL_MANIFEST_CSV_$(6))
+ define legal-license-header
+ 	echo -e "$(LEGAL_INFO_SEPARATOR)\n\t$(1):" \
+ 		"$(2)\n$(LEGAL_INFO_SEPARATOR)\n\n" >>$(LEGAL_LICENSES_TXT)
