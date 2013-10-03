@@ -1,96 +1,60 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Thu, 03 Oct 2013 15:42:58 +0200
-Subject: [Buildroot] [PATCH] legal info: split manifest for host and target
-Message-ID: <6e469ce45201f09b20bd.1380807778@argentina>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 3 Oct 2013 16:03:53 +0200
+Subject: [Buildroot] [PATCH] python-pygame: fix _python_srcdir
+In-Reply-To: <CANxTyt6=OSKoxo-nj3i73EUz5v5suEL7aUegHJGSqeTdWSCSNg@mail.gmail.com>
+References: <1380766200-2443-1-git-send-email-danomimanchego123@gmail.com>
+ <20131003111031.181a669b@skate>
+ <CANxTyt6=OSKoxo-nj3i73EUz5v5suEL7aUegHJGSqeTdWSCSNg@mail.gmail.com>
+Message-ID: <20131003160353.1dc25db1@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+Dear Danomi Manchego,
 
----
- Makefile                     |  8 +++++---
- docs/manual/legal-notice.txt |  6 +++---
- package/pkg-generic.mk       |  2 +-
- package/pkg-utils.mk         |  2 +-
- 4 files changed, 10 insertions(+), 8 deletions(-)
+On Thu, 3 Oct 2013 09:34:37 -0400, Danomi Manchego wrote:
 
-Note: I tried hundreds of things, but couldn't find the correct way of using
-$(2)_TYPE correctly in the call to legal-manifest, I can only make it work with
-$(5). I'm currently dollar-sign-dizzy:
-@$(call legal-manifest,$$($(2)_RAWNAME),$$($(2)_VERSION),$$($(2)_LICENSE),$$($(2)_MANIFEST_LICENSE_FILES),$$($(2)_MANIFEST_TARBALL),$(call UPPERCASE,$(5)))
+> > I'm just wondering, why do these packages need access to the Python
+> > *source* tree? What's missing from $(STAGING_DIR) to build those
+> > Python modules?
+> >
+> > Normally, the source/build tree of each package are just temporary
+> > locations, we should *theoretically* be able of removing the
+> > source/build tree of a package once its build has completed (well,
+> > in practice, there are of course some exceptions, but it seems
+> > weird that all Python modules would need these exceptions).
+> 
+> Unfortunately, I have almost no experience with python, except for
+> recently needing to install a proprietary python package at work -
+> which caused me to look for examples, which led to noticing that the
+> _python_srcdir paths in the two packages were invalid.
+> 
+> In my case, my module has to be buildable with both python and python3
+> (just one or the other in a given build), so dropping the
+> _python_srcdir altogether simplified the .mk file, and worked just
+> fine for both cases.  (I modified the host-python3 install to create a
+> "python" symlink to the host/usr/bin/python3 when python [2] wasn't
+> selected, so that other packages can continue to call "python" in
+> their build and install commands.)
+> 
+> I don't know if the people who made python-crc16, -pygame, -pyzmq had
+> a reason for specifying the python src path, or if there was just a
+> lot of copy/paste from a single source who just thought it seemed like
+> a good idea at the time.  The purpose of my two patches was to fix a
+> path that was clearly wrong - out of a sense of civic duty to the
+> community.  Then, if someone more python-savvy comes along and decides
+> that those params are not needed, at least they all look the same.
+> (Better for grepping and sed and whatnot.)
 
-diff --git a/Makefile b/Makefile
---- a/Makefile
-+++ b/Makefile
-@@ -272,7 +272,8 @@ TARGET_SKELETON=$(TOPDIR)/system/skeleto
- LEGAL_INFO_DIR=$(BASE_DIR)/legal-info
- REDIST_SOURCES_DIR=$(LEGAL_INFO_DIR)/sources
- LICENSE_FILES_DIR=$(LEGAL_INFO_DIR)/licenses
--LEGAL_MANIFEST_CSV=$(LEGAL_INFO_DIR)/manifest.csv
-+LEGAL_MANIFEST_CSV_TARGET=$(LEGAL_INFO_DIR)/manifest.csv
-+LEGAL_MANIFEST_CSV_HOST=$(LEGAL_INFO_DIR)/host-manifest.csv
- LEGAL_LICENSES_TXT=$(LEGAL_INFO_DIR)/licenses.txt
- LEGAL_WARNINGS=$(LEGAL_INFO_DIR)/.warnings
- LEGAL_REPORT=$(LEGAL_INFO_DIR)/README
-@@ -588,8 +589,9 @@ legal-info-clean:
- legal-info-prepare: $(LEGAL_INFO_DIR)
- 	@$(call MESSAGE,"Collecting legal info")
- 	@$(call legal-license-file,buildroot,COPYING,COPYING)
--	@$(call legal-manifest,PACKAGE,VERSION,LICENSE,LICENSE FILES,SOURCE ARCHIVE)
--	@$(call legal-manifest,buildroot,$(BR2_VERSION_FULL),GPLv2+,COPYING,not saved)
-+	@$(call legal-manifest,PACKAGE,VERSION,LICENSE,LICENSE FILES,SOURCE ARCHIVE,TARGET)
-+	@$(call legal-manifest,PACKAGE,VERSION,LICENSE,LICENSE FILES,SOURCE ARCHIVE,HOST)
-+	@$(call legal-manifest,buildroot,$(BR2_VERSION_FULL),GPLv2+,COPYING,not saved,HOST)
- 	@$(call legal-warning,the Buildroot source code has not been saved)
- 	@$(call legal-warning,the toolchain has not been saved)
- 	@cp $(BUILDROOT_CONFIG) $(LEGAL_INFO_DIR)/buildroot.config
-diff --git a/docs/manual/legal-notice.txt b/docs/manual/legal-notice.txt
---- a/docs/manual/legal-notice.txt
-+++ b/docs/manual/legal-notice.txt
-@@ -44,8 +44,8 @@ There you will find:
-   saved);
-   patches applied to some packages by Buildroot are distributed with the
-   Buildroot sources and are not duplicated in the +sources/+ subdirectory.
--* A manifest file listing the configured packages, their version, license and
--  related information.
-+* A manifest file (one for host and one for target packages) listing the
-+  configured packages, their version, license and related information.
-   Some of this information might not be defined in Buildroot; such items are
-   marked as "unknown".
- * A +licenses/+ subdirectory, which contains the license text of packages.
-@@ -72,7 +72,7 @@ License abbreviations
- ---------------------
- 
- Here is a list of the licenses that are most widely used by packages in
--Buildroot, with the name used in the manifest file:
-+Buildroot, with the name used in the manifest files:
- 
- * `GPLv2`:
-   http://www.gnu.org/licenses/old-licenses/gpl-2.0.html[
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -519,7 +519,7 @@ ifeq ($$($(2)_REDISTRIBUTE),YES)
- 	   cp $(DL_DIR)/$$($(2)_SOURCE) $(REDIST_SOURCES_DIR)
- endif
- endif
--	@$(call legal-manifest,$$($(2)_RAWNAME),$$($(2)_VERSION),$$($(2)_LICENSE),$$($(2)_MANIFEST_LICENSE_FILES),$$($(2)_MANIFEST_TARBALL))
-+	@$(call legal-manifest,$$($(2)_RAWNAME),$$($(2)_VERSION),$$($(2)_LICENSE),$$($(2)_MANIFEST_LICENSE_FILES),$$($(2)_MANIFEST_TARBALL),$(call UPPERCASE,$(5)))
- endif # ifneq ($(call qstrip,$$($(2)_SOURCE)),)
- 	$(foreach hook,$($(2)_POST_LEGAL_INFO_HOOKS),$(call $(hook))$(sep))
- 
-diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
---- a/package/pkg-utils.mk
-+++ b/package/pkg-utils.mk
-@@ -96,7 +96,7 @@ legal-warning-pkg=echo "WARNING: $(1): $
- define legal-warning-pkg-savednothing # pkg, {local|override}
- 	$(call legal-warning-pkg,$(1),sources and license files not saved ($(2) packages not handled))
- endef
--legal-manifest=echo '"$(1)","$(2)","$(3)","$(4)","$(5)"' >>$(LEGAL_MANIFEST_CSV)
-+legal-manifest=echo '"$(1)","$(2)","$(3)","$(4)","$(5)"' >>$(LEGAL_MANIFEST_CSV_$(6))
- define legal-license-header
- 	echo -e "$(LEGAL_INFO_SEPARATOR)\n\t$(1):" \
- 		"$(2)\n$(LEGAL_INFO_SEPARATOR)\n\n" >>$(LEGAL_LICENSES_TXT)
+Ok, so let's add a bunch of Python-savvy people in Cc and see what they
+have to say about _python_srcdir :-)
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
