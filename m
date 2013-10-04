@@ -1,72 +1,73 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Fri, 4 Oct 2013 16:08:34 +0200
-Subject: [Buildroot] [PATCH 3 of 5] legal-info: split license texts for
-	host and target
-In-Reply-To: <e6a358594ba5b49cdf7e.1380892352@argentina>
-References: <patchbomb.1380892349@argentina>
- <e6a358594ba5b49cdf7e.1380892352@argentina>
-Message-ID: <CAAXf6LV-Ora02Fxb=pqMn5TNpeBe9k1mJQfJYFUDzc1GqNPM+A@mail.gmail.com>
+From: Ryan Barnett <rjbarnet@rockwellcollins.com>
+Date: Fri, 4 Oct 2013 09:09:21 -0500
+Subject: [Buildroot] [PATCH 1/5] python-pyasn: new package
+In-Reply-To: <CANxTyt7aMX3wGmi+SoNKbVwyNpsGUvtd5M9K-JN0obgK1GAUQA@mail.gmail.com>
+References: <1380849129-18517-1-git-send-email-rjbarnet@rockwellcollins.com>	<1380849129-18517-2-git-send-email-rjbarnet@rockwellcollins.com>
+ <CANxTyt7aMX3wGmi+SoNKbVwyNpsGUvtd5M9K-JN0obgK1GAUQA@mail.gmail.com>
+Message-ID: <OF4BAC5C25.D85D1618-ON86257BFA.004B3B7B-86257BFA.004DC2F0@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Oct 4, 2013 at 3:12 PM, Thomas De Schampheleire
-<patrickdepinguin@gmail.com> wrote:
-> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
->
-> ---
->  Makefile               |   8 +++++---
->  package/pkg-generic.mk |   2 +-
->  package/pkg-utils.mk   |  16 ++++++++--------
->  3 files changed, 14 insertions(+), 12 deletions(-)
->
-> diff --git a/Makefile b/Makefile
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -109,10 +109,12 @@ HOST_DIR:=$(BASE_DIR)/host
->
->  LEGAL_INFO_DIR=$(BASE_DIR)/legal-info
->  REDIST_SOURCES_DIR=$(LEGAL_INFO_DIR)/sources
-> -LICENSE_FILES_DIR=$(LEGAL_INFO_DIR)/licenses
-> +LICENSE_FILES_DIR_TARGET=$(LEGAL_INFO_DIR)/licenses
-> +LICENSE_FILES_DIR_HOST=$(LEGAL_INFO_DIR)/host-licenses
->  LEGAL_MANIFEST_CSV_TARGET=$(LEGAL_INFO_DIR)/manifest.csv
->  LEGAL_MANIFEST_CSV_HOST=$(LEGAL_INFO_DIR)/host-manifest.csv
-> -LEGAL_LICENSES_TXT=$(LEGAL_INFO_DIR)/licenses.txt
-> +LEGAL_LICENSES_TXT_TARGET=$(LEGAL_INFO_DIR)/licenses.txt
-> +LEGAL_LICENSES_TXT_HOST=$(LEGAL_INFO_DIR)/host-licenses.txt
->  LEGAL_WARNINGS=$(LEGAL_INFO_DIR)/.warnings
->  LEGAL_REPORT=$(LEGAL_INFO_DIR)/README
->
-> @@ -588,7 +590,7 @@ legal-info-clean:
->
->  legal-info-prepare: $(LEGAL_INFO_DIR)
->         @$(call MESSAGE,"Collecting legal info")
-> -       @$(call legal-license-file,buildroot,COPYING,COPYING)
-> +       @$(call legal-license-file,buildroot,COPYING,COPYING,HOST)
->         @$(call legal-manifest,PACKAGE,VERSION,LICENSE,LICENSE FILES,SOURCE ARCHIVE,TARGET)
->         @$(call legal-manifest,PACKAGE,VERSION,LICENSE,LICENSE FILES,SOURCE ARCHIVE,HOST)
->         @$(call legal-manifest,buildroot,$(BR2_VERSION_FULL),GPLv2+,COPYING,not saved,HOST)
-> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-> --- a/package/pkg-generic.mk
-> +++ b/package/pkg-generic.mk
-> @@ -508,7 +508,7 @@ else
->  # Other packages
->  # Save license files if defined
->  ifeq ($(call qstrip,$$($(2)_LICENSE_FILES)),)
-> -       @$(call legal-license-nofiles,$$($(2)_RAWNAME))
-> +       @$(call legal-license-nofiles,$$($(2)_RAWNAME),$(call UPPERCASE,$(5)))
->         @$(call legal-warning-pkg,$$($(2)_RAWNAME),cannot save license ($(2)_LICENSE_FILES not defined))
->  else
->         @$(foreach F,$$($(2)_LICENSE_FILES),$(call legal-license-file,$$($(2)_RAWNAME),$(F),$$($(2)_DIR)/$(F),$(call UPPERCASE,$(5)))$$(sep))
+Danomi,
 
-This $(call UPPERCASE,$(5)) extra parameter accidentally ended up in
-the first patch of this series.
-I will fix that, when I investigated the problem with that patch
-(double dollar sign). (or if someone else knows what the problem is,
-please let me know).
+Danomi Manchego <danomimanchego123@gmail.com> wrote on 
+10/03/2013 09:27:56 PM:
 
-Best regards,
-Thomas
+> Ryan,
+> 
+> On Thu, Oct 3, 2013 at 9:12 PM, Ryan Barnett
+> <rjbarnet@rockwellcollins.com> wrote:
+> > +               CFLAGS="$(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include" 
+\
+> > +               CXX="$(TARGET_CXX)" \
+> > +               CXXFLAGS="$(TARGET_CXXFLAGS) 
+-I$(STAGING_DIR)/usr/include" \
+> > +               LDSHARED="$(TARGET_CC) -shared" \
+> > +               LDFLAGS="$(TARGET_LDFLAGS) -L$(STAGING_DIR)/lib -L$
+> (STAGING_DIR)/usr/lib" \
+> > +       $(HOST_DIR)/usr/bin/python setup.py build_ext \
+> > +       --include-dirs=$(STAGING_DIR)/usr/include/python$
+> (PYTHON_VERSION_MAJOR) \
+> > +       )
+> 
+> I'm curious as to why the mix of -I and --include-dirs.  I.e., why not
+> three -I's, or one --include-dirs=path1:path2:path3?  Is there a
+> difference?
+
+The --include-dirs part is left over from copy and paste from 
+python-serial.mk
+which I used for my base. I like using --include-dirs to point all my 
+include
+paths so I will move the include path from CFLAGS= down to --include-dirs=
+ 
+> I'm also wondering if all of these packages should have
+> CROSS_COMPILING=yes ... several of the python patches go through pains
+> to introduce CROSS_COMPILING, presumably there is a reason why.
+
+I thought introducing CROSS_COMPILING in the python patches is meant for 
+cross compiling python itself since it is modifying the setup.py in python 
+
+itself.
+
+These are the first python packages that I'm trying to get to cross 
+compile.
+I've tried using the CROSS_COMPILING flag and it doesn't appear to do
+anything so I'm not exactly sure how setting that in the environment will
+help in these packages?
+
+If you or somebody else has more familiarity with python cross compiling
+modules can explain how this will help, I'm open to changing how these
+packages are built.
+
+Finally, I've tried the suggestions that Arnout that gave for the 
+python-ipy but those suggestions didn't work.
+
+> No objections, just wondering ...
+> 
+> Danomi -
+
+Thanks,
+-Ryan
