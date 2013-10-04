@@ -1,48 +1,82 @@
-From: Jason Kridner <jkridner@beagleboard.org>
-Date: Fri, 4 Oct 2013 11:41:04 -0400
-Subject: [Buildroot] [PATCHv2] beaglebone: add BeagleBone Black support
-In-Reply-To: <87fvshjbnd.fsf@dell.be.48ers.dk>
-References: <1380220826-17732-1-git-send-email-jkridner@beagleboard.org>
- <1380337717-19697-1-git-send-email-jkridner@beagleboard.org>
- <1380522195.4232.2.camel@viko> <87fvshjbnd.fsf@dell.be.48ers.dk>
-Message-ID: <CA+T6QP=KvL5Atvb6naGqsxJLMvku_=XaWONmMZZHKrt36wYELg@mail.gmail.com>
+From: Ryan Barnett <rjbarnet@rockwellcollins.com>
+Date: Fri, 4 Oct 2013 11:25:33 -0500
+Subject: [Buildroot] [PATCH 1/1] python-tornado: new package
+Message-ID: <1380903933-11960-1-git-send-email-rjbarnet@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Oct 4, 2013 at 11:31 AM, Peter Korsgaard <jacmet@uclibc.org> wrote:
->>>>>> "Fatih" == Fatih A??c? <fatih.asici@gmail.com> writes:
->
->  Fatih> On Sat, 2013-09-28 at 03:08 +0000, Jason Kridner wrote:
->  >> From: Jason Kridner <jdk@ti.com>
->  >>
->  >> * Configure as initramfs
->  >> * Update BeagleBone to 3.8.13-beagleboard kernel
->  >> * Update to u-boot 2013.07
->  >> * Add BeagleBone Black device tree
->  >>
->  >> Changes since v1 (http://lists.busybox.net/pipermail/buildroot/2013-September/079046.html):
->  >> * Added BeagleBone Black to single config for BeagleBone and BeagleBone Black,
->  >> rather than having two configs
->  >> * Used 'make ARCH=arm savedefconfig' to create Linux config file
->  >> * Dropped setting of DEVTMPFS, since it is default now
->  >> * Switched to u-boot 2013.07 from 2013.04
->  >> * Patched u-boot to work with initramfs by default without uEnv.txt
->  >> * Removed wake-up M3 firmware loading for now, until debugged
->
-> I don't seem to have received the original here (probably because of my
-> mail problems), but what's the reason for the ext2 -> initramfs changes?
+Signed-off-by: Ryan Barnett <rjbarnet@rockwellcollins.com>
+---
+Note: This one is pretty straight forward since it is all python based
+scripts.
+---
+ package/Config.in                        |    1 +
+ package/python-tornado/Config.in         |    8 ++++++++
+ package/python-tornado/python-tornado.mk |   26 ++++++++++++++++++++++++++
+ 3 files changed, 35 insertions(+), 0 deletions(-)
+ create mode 100644 package/python-tornado/Config.in
+ create mode 100644 package/python-tornado/python-tornado.mk
 
-Just enabling rapid testing. This can boot off of a FAT formatted SD
-card, over USB, over serial or over Ethernet without passing a
-separate ramdisk. The ext2 required a separate download or special
-formatting of the card and wasted memory if used as a ramdisk.
-Nothing too special here, but it simplifies use as a recovery system,
-validation system or bootloader.
-
-I will keep it however you'd like. The important part is the kernel.
->
-> --
-> Bye, Peter Korsgaard
+diff --git a/package/Config.in b/package/Config.in
+index b7fdb89..3a4f60a 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -403,6 +403,7 @@ source "package/python-pyzmq/Config.in"
+ source "package/python-serial/Config.in"
+ source "package/python-setuptools/Config.in"
+ source "package/python-thrift/Config.in"
++source "package/python-tornado/Config.in"
+ endmenu
+ endif
+ source "package/python3/Config.in"
+diff --git a/package/python-tornado/Config.in b/package/python-tornado/Config.in
+new file mode 100644
+index 0000000..c127d0e
+--- /dev/null
++++ b/package/python-tornado/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_PYTHON_TORNADO
++	bool "python-tornado"
++	depends on BR2_PACKAGE_PYTHON
++	help
++	  Tornado is a Python web framework and asynchronous networking
++	  library, originally developed at FriendFeed.
++
++	  http://www.tornadoweb.org
+diff --git a/package/python-tornado/python-tornado.mk b/package/python-tornado/python-tornado.mk
+new file mode 100644
+index 0000000..f228a7c
+--- /dev/null
++++ b/package/python-tornado/python-tornado.mk
+@@ -0,0 +1,26 @@
++################################################################################
++#
++# python-tornado
++#
++################################################################################
++
++PYTHON_TORNADO_VERSION = 3.1.1
++PYTHON_TORNADO_SOURCE  = tornado-$(PYTHON_TORNADO_VERSION).tar.gz
++PYTHON_TORNADO_SITE    = https://pypi.python.org/packages/source/t/tornado
++PYTHON_TORNADO_LICENSE = Apache-v2
++
++PYTHON_TORNADO_DEPENDENCIES = python
++
++define PYTHON_TORNADO_BUILD_CMDS
++	(cd $(@D); $(HOST_DIR)/usr/bin/python setup.py build --executable=/usr/bin/python)
++endef
++
++# PYTHONPATH definition is need for install since an error could
++# be thrown about installing to location that isn't in PYTHONPATH
++define PYTHON_TORNADO_INSTALL_TARGET_CMDS
++	(cd $(@D); \
++		PYTHONPATH=$(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages \
++	$(HOST_DIR)/usr/bin/python setup.py install --prefix=$(TARGET_DIR)/usr)
++endef
++
++$(eval $(generic-package))
+--
+1.7.1
