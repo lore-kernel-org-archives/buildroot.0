@@ -1,63 +1,56 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 4 Oct 2013 23:52:11 +0200
-Subject: [Buildroot] [git commit] configs/qemu_*: unbreak after version bump
-Message-ID: <20131004215424.73E519B940@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 04 Oct 2013 23:55:48 +0200
+Subject: [Buildroot] [PATCH] configs/qemu: bump relevant config versions
+In-Reply-To: <1380890978-13158-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Fri, 4 Oct 2013 09:49:38 -0300")
+References: <1380890978-13158-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87wqlsituj.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=5d7fb2e350cc6e3d2a5f72278b2f488ca8599189
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-Commit 2c859079cd (configs/qemu: bump relevant config version) renamed
-a number of linux configuration files, but forgot to update the defconfigs.
+ Gustavo> arm_nuri needs some DT fixups to switch to the 3.11.x series
+ Gustavo> since it's now default for that kernel defconfig.
 
-Tests shows that atleast arm versatile doesn't boot with 3.11, so rename
-the linux configuration files back rather than adjusting the defconfigs.
+ Gustavo> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+ Gustavo> ---
+ Gustavo>  board/qemu/arm-nuri/readme.txt                                    | 2 +-
+ Gustavo>  board/qemu/arm-versatile/{linux-3.10.config => linux-3.11.config} | 0
+ Gustavo>  board/qemu/arm-versatile/readme.txt                               | 2 +-
+ Gustavo>  board/qemu/arm-vexpress/readme.txt                                | 2 +-
+ Gustavo>  .../microblazebe-mmu/{linux-3.10.config => linux-3.11.config}     | 0
+ Gustavo>  board/qemu/microblazebe-mmu/readme.txt                            | 2 +-
+ Gustavo>  .../microblazeel-mmu/{linux-3.10.config => linux-3.11.config}     | 0
+ Gustavo>  board/qemu/microblazeel-mmu/readme.txt                            | 2 +-
+ Gustavo>  board/qemu/mips-malta/{linux-3.10.config => linux-3.11.config}    | 0
+ Gustavo>  board/qemu/mips-malta/readme.txt                                  | 2 +-
+ Gustavo>  board/qemu/mips64-malta/{linux-3.10.config => linux-3.11.config}  | 0
+ Gustavo>  board/qemu/mips64-malta/readme.txt                                | 2 +-
+ Gustavo>  board/qemu/mipsel-malta/{linux-3.10.config => linux-3.11.config}  | 0
+ Gustavo>  board/qemu/mipsel-malta/readme.txt                                | 2 +-
+ Gustavo>  .../qemu/powerpc-g3beige/{linux-3.10.config => linux-3.11.config} | 0
+ Gustavo>  board/qemu/powerpc-g3beige/readme.txt                             | 4 ++--
+ Gustavo>  board/qemu/powerpc-mpc8544ds/readme.txt                           | 2 +-
+ Gustavo>  board/qemu/powerpc-virtex-ml507/readme.txt                        | 2 +-
+ Gustavo>  board/qemu/sh4-r2d/readme.txt                                     | 2 +-
+ Gustavo>  board/qemu/sparc-ss10/readme.txt                                  | 2 +-
+ Gustavo>  board/qemu/x86/{linux-3.10.config => linux-3.11.config}           | 0
+ Gustavo>  board/qemu/x86/readme.txt                                         | 2 +-
+ Gustavo>  board/qemu/x86_64/{linux-3.10.config => linux-3.11.config}        | 0
+ Gustavo>  board/qemu/x86_64/readme.txt                                      | 2 +-
+ Gustavo>  configs/qemu_mips64_malta_defconfig                               | 8 ++++----
+ Gustavo>  configs/qemu_sparc_ss10_defconfig                                 | 4 ++--
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- .../{linux-3.11.config => linux-3.10.config}       |    0
- .../{linux-3.11.config => linux-3.10.config}       |    0
- .../{linux-3.11.config => linux-3.10.config}       |    0
- .../{linux-3.11.config => linux-3.10.config}       |    0
- .../{linux-3.11.config => linux-3.10.config}       |    0
- .../{linux-3.11.config => linux-3.10.config}       |    0
- .../x86/{linux-3.11.config => linux-3.10.config}   |    0
- .../{linux-3.11.config => linux-3.10.config}       |    0
- 8 files changed, 0 insertions(+), 0 deletions(-)
+I'm not sure what went wrong here. You renamed a bunch of Linux
+configuration files, but you didn't update the defconfigs to match.
 
-diff --git a/board/qemu/arm-versatile/linux-3.11.config b/board/qemu/arm-versatile/linux-3.10.config
-similarity index 100%
-rename from board/qemu/arm-versatile/linux-3.11.config
-rename to board/qemu/arm-versatile/linux-3.10.config
-diff --git a/board/qemu/microblazebe-mmu/linux-3.11.config b/board/qemu/microblazebe-mmu/linux-3.10.config
-similarity index 100%
-rename from board/qemu/microblazebe-mmu/linux-3.11.config
-rename to board/qemu/microblazebe-mmu/linux-3.10.config
-diff --git a/board/qemu/microblazeel-mmu/linux-3.11.config b/board/qemu/microblazeel-mmu/linux-3.10.config
-similarity index 100%
-rename from board/qemu/microblazeel-mmu/linux-3.11.config
-rename to board/qemu/microblazeel-mmu/linux-3.10.config
-diff --git a/board/qemu/mips-malta/linux-3.11.config b/board/qemu/mips-malta/linux-3.10.config
-similarity index 100%
-rename from board/qemu/mips-malta/linux-3.11.config
-rename to board/qemu/mips-malta/linux-3.10.config
-diff --git a/board/qemu/mipsel-malta/linux-3.11.config b/board/qemu/mipsel-malta/linux-3.10.config
-similarity index 100%
-rename from board/qemu/mipsel-malta/linux-3.11.config
-rename to board/qemu/mipsel-malta/linux-3.10.config
-diff --git a/board/qemu/powerpc-g3beige/linux-3.11.config b/board/qemu/powerpc-g3beige/linux-3.10.config
-similarity index 100%
-rename from board/qemu/powerpc-g3beige/linux-3.11.config
-rename to board/qemu/powerpc-g3beige/linux-3.10.config
-diff --git a/board/qemu/x86/linux-3.11.config b/board/qemu/x86/linux-3.10.config
-similarity index 100%
-rename from board/qemu/x86/linux-3.11.config
-rename to board/qemu/x86/linux-3.10.config
-diff --git a/board/qemu/x86_64/linux-3.11.config b/board/qemu/x86_64/linux-3.10.config
-similarity index 100%
-rename from board/qemu/x86_64/linux-3.11.config
-rename to board/qemu/x86_64/linux-3.10.config
+I tested arm versatile with 3.11 and it didn't boot for me, so I've
+changed the Linux configuration file names back to 3.10 rather than
+adjusting the defconfigs.
+
+-- 
+Bye, Peter Korsgaard
