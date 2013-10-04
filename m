@@ -1,34 +1,45 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 5 Oct 2013 00:03:06 +0200
-Subject: [Buildroot] [git commit] package/rpi-firmware: bump version
-Message-ID: <20131004220445.3A9F99B941@busybox.osuosl.org>
+From: Eric Nelson <eric.nelson@boundarydevices.com>
+Date: Fri, 04 Oct 2013 15:46:25 -0700
+Subject: [Buildroot] [PATCH 0/4] i.MX: Refactor and update library
+	versions
+In-Reply-To: <1380495298-22823-1-git-send-email-eric.nelson@boundarydevices.com>
+References: <1380495298-22823-1-git-send-email-eric.nelson@boundarydevices.com>
+Message-ID: <524F4541.1090004@boundarydevices.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d06678b78342b55f63a56f5800035fc0ce86bbce
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi all,
 
-Fix for issues with USB, audio, and GLESv2.
+I clearly need to send a V2 of this patch set to remove the
+freescale.inc file.
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/rpi-firmware/rpi-firmware.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+On 09/29/2013 03:54 PM, Eric Nelson wrote:
+> This patch set restructures several libraries to share common
+> Makefile fragments in package/freescale-imx and bumps the
+> library versions to match the Freescale 3.0.35_4.1.0 release
+> for i.MX6.
+>
 
-diff --git a/package/rpi-firmware/rpi-firmware.mk b/package/rpi-firmware/rpi-firmware.mk
-index 9319429..ddb48b3 100644
---- a/package/rpi-firmware/rpi-firmware.mk
-+++ b/package/rpi-firmware/rpi-firmware.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--RPI_FIRMWARE_VERSION = fadc4cb
-+RPI_FIRMWARE_VERSION = e6b21d6
- RPI_FIRMWARE_SITE = http://github.com/raspberrypi/firmware/tarball/$(RPI_FIRMWARE_VERSION)
- RPI_FIRMWARE_LICENSE = BSD-3c
- RPI_FIRMWARE_LICENSE_FILES = boot/LICENCE.broadcom
+Thomas and Arnout: do you want these to stay in /package?
+
+>   create mode 100644 package/freescale-imx/libfslcodec/Config.in
+>   create mode 100644 package/freescale-imx/libfslcodec/libfslcodec.mk
+>   create mode 100644 package/freescale-imx/libfslparser/Config.in
+>   create mode 100644 package/freescale-imx/libfslparser/libfslparser.mk
+>   create mode 100644 package/freescale-imx/libfslvpuwrap/Config.in
+>   create mode 100644 package/freescale-imx/libfslvpuwrap/libfslvpuwrap.mk
+>   delete mode 100644 package/libfslcodec/Config.in
+>   delete mode 100644 package/libfslcodec/libfslcodec.mk
+>   delete mode 100644 package/libfslparser/Config.in
+>   delete mode 100644 package/libfslparser/libfslparser.mk
+>   delete mode 100644 package/libfslvpuwrap/Config.in
+>   delete mode 100644 package/libfslvpuwrap/libfslvpuwrap.mk
+>
+
+Please advise,
+
+
+Eric
