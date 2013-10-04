@@ -1,75 +1,111 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 4 Oct 2013 11:07:04 +0200
-Subject: [Buildroot] Some legal-info observations/problems
-In-Reply-To: <CAAXf6LUTTX0OFNaP4NxVWXKC4OFBROXK-PFiumL8zYrumkbtog@mail.gmail.com>
-References: <CAAXf6LXHXo2vY8ns61fxoLzD0n2yzLASZqFk75xzYQwgDHp15Q@mail.gmail.com>
- <20131002172307.0d6f02ea@skate> <524C4AD4.9040902@lucaceresoli.net>
- <CAAXf6LXWf34Amx44pdixKL0m87jq_FMBxN8BJO9TBDbQ58Po1Q@mail.gmail.com>
- <524D9DE2.7090509@mind.be>
- <CAAXf6LUTTX0OFNaP4NxVWXKC4OFBROXK-PFiumL8zYrumkbtog@mail.gmail.com>
-Message-ID: <20131004110704.78f5b1a6@skate>
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Fri, 4 Oct 2013 11:19:17 +0200 (CEST)
+Subject: [Buildroot] [PATCH v2 1/1] openpowerlink: new package
+In-Reply-To: <87y56bnym4.fsf@dell.be.48ers.dk>
+Message-ID: <107504174.7985997.1380878357121.JavaMail.root@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas De Schampheleire,
+Hi,
 
-On Fri, 4 Oct 2013 10:54:55 +0200, Thomas De Schampheleire wrote:
+----- Mail original -----
+| De: "Peter Korsgaard" <jacmet@uclibc.org>
+| ?: "Romain Naour" <romain.naour@openwide.fr>
+| Cc: buildroot at busybox.net
+| Envoy?: Mercredi 2 Octobre 2013 23:37:07
+| Objet: Re: [PATCH v2 1/1] openpowerlink: new package
+| 
+| >>>>> "R" == Romain Naour <romain.naour@openwide.fr> writes:
+| 
+| Hi,
+| 
+|  R> +++ b/package/openpowerlink/Config.in
+|  R> @@ -0,0 +1,107 @@
+|  R> +comment "openpowerlink requires thread support in toolchain"
+|  R> +        depends on !BR2_TOOLCHAIN_HAS_THREADS
+| 
+| It also needs C++ support. From CMakeLists.txt:
+| 
+| PROJECT (openPOWERLINK C CXX)
 
-> To come back on the comment ThomasP made about 'FOO =' and not
-> defining FOO leading to the same empty FOO variable: this does not
-> mean we cannot differentiate both cases: with $(origin FOO) you can.
+Indedd, but C++ support is currently only needded for qt demo which is not always selected.
+I'll fix that, thanks.
 
-You can also use "ifdef" I believe. But still, I believe that having:
+| 
+|  R> +
+|  R> +config BR2_PACKAGE_OPENPOWERLINK
+|  R> +        bool "openpowerlink"
+|  R> +        depends on BR2_TOOLCHAIN_HAS_THREADS
+|  R> +        depends on BR2_i386 || BR2_x86_64
+|  R> +        help
+| 
+| Your indentation is wrong. Config.in files should be indented with
+| <tab>
+| (and help lines with <tab><space><space>).
 
-BLEH_LICENSE_FILES =
+Sory for that, it's my webmail... 
 
-in a package looks somewhat strange. I found find it more
-explicit/readable to have:
+| 
+|  R> +          openPOWERLINK is an Open Source Industrial Ethernet
+|  R> +          stack implementing the POWERLINK protocol for Managing
+|  Node
+|  R> +          (MN, POWERLINK Master) and Controlled Node (CN,
+|  POWERLINK Slave).
+|  R> +
+|  R> +          It is provided by SYSTEC electronic
+|  (http://www.systec-electronic.com),
+| 
+| Too long line, please wrap after 'provided by'.
+| 
+Ok
 
-BLEH_LICENSE_FILES = N/A
-BLEH_LICENSE_FILES = none
-BLEH_LICENSE_FILES = NONE
+| Besides this, it looks good. I did a quick test build with everything
+| kept to their default and got:
+| 
+| [100%] Built target powerlink
+| make[2]: Leaving directory
+| `/home/peko/source/buildroot/output/build/openpowerlink-V1.08.3'
+| make[1]: Leaving directory
+| `/home/peko/source/buildroot/output/build/openpowerlink-V1.08.3'
+| >>> openpowerlink V1.08.3 Installing to staging directory
+| PATH="/home/peko/source/buildroot/output/host/bin:/home/peko/source/buildroot/output/host/usr/bin:/home/peko/source/buildroot/output/host/usr/sbin/:/home/peko/bin:/home/peko/bin:/usr/local/bin:/usr/bin:/bin:/usr/local/games:/usr/games:/opt/barco/current/usr/bin:/opt/barco/current/usr/bin"
+| PERLLIB="/home/peko/source/buildroot/output/host/usr/lib/perl"
+|  /usr/bin/make -j5
+|  DESTDIR=/home/peko/source/buildroot/output/host/usr/i686-buildroot-linux-uclibc/sysroot
+| install -C
+| /home/peko/source/buildroot/output/build/openpowerlink-V1.08.3/
+| make[1]: Entering directory
+| `/home/peko/source/buildroot/output/build/openpowerlink-V1.08.3'
+| make[1]: *** No rule to make target `install'.  Stop.
+| make[1]: Leaving directory
+| `/home/peko/source/buildroot/output/build/openpowerlink-V1.08.3'
+| make: ***
+| [/home/peko/source/buildroot/output/build/openpowerlink-V1.08.3/.stamp_staging_installed]
+| Error 2
+| 
+| So I guess you're missing something?
 
-(pick your choice).
+I see, the user space stack is selected but no demo is build.
+So, there is no INSTALL rules for libpowerlink.a
+I'll fix that.
 
-> >  That said, it would be good if we would just error out when a license is
-> > defined but no license files are provided. Now we check for that during
-> > review (and require an explicit comment if no license file exists), but it's
-> > of course even better if that can be done during autobuilder tests.
-> 
-> When you say 'error out' you mean actually aborting the make process?
-> Currently, anomalies in the legal-info area are just warnings hinting
-> the developer he has to take some action. Do we really want to error
-> out in such cases?
-> 
-> But if we will make a distinction between an undefined
-> FOO_LICENSE_FILES (an anomaly) and an empty/magic one, then the
-> autobuilder package stats could be updated with an extra column, or a
-> YES/NO/EMPTY value in the existing column.
-> http://autobuild.buildroot.org/stats/
-> 
-> (by the way: where is the code that generates these stats? I had
-> expected to find it in buildroot-test, but didn't.)
+Furthermore, if the kernel space is sectected the build may break with latest kernels since openpowerlink stack is not mainline.
+openpowerlink 1.8.3 break with kernels >= 3.5.
+I'll backport a patch from devel branch for that.
 
-support/scripts/pkg-stats in your favorite Buildroot tree :-)
+| 
+| Please fix and resubmit, thanks.
 
-> But, re-thinking this, I think none of these are actually very good:
-> there _should_ be a license file but it is missing. So it's not
-> 'not-applicable', and it's not 'none'. Rather, something like:
-> FOO_LICENSE_FILES = missing
-> FOO_LICENSE_FILES = not-provided
-> FOO_LICENSE_FILES = none-provided
-
-I'm fine with either of those choices, except 'missing'. There is very
-often a 'missing' script in autotools-based packages.
+Thanks, for testing.
+I'll resubmit as soon as possible.
 
 Best regards,
+Romain Naour
 
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+| 
+| --
+| Bye, Peter Korsgaard
+| 
