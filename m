@@ -1,33 +1,40 @@
-From: Ryan Barnett <rjbarnet@rockwellcollins.com>
-Date: Fri, 4 Oct 2013 09:25:13 -0500
-Subject: [Buildroot] [PATCH 0/5] Introduce New Package PySnmp
-In-Reply-To: <1380849129-18517-1-git-send-email-rjbarnet@rockwellcollins.com>
-References: <1380849129-18517-1-git-send-email-rjbarnet@rockwellcollins.com>
-Message-ID: <OFB5AF7D15.996FD6E0-ON86257BFA.004ED431-86257BFA.004F36D9@rockwellcollins.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 4 Oct 2013 16:54:40 +0200
+Subject: [Buildroot] [git commit] dropbear: bump version
+Message-ID: <20131004145528.4A1769B940@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-All,
+commit: http://git.buildroot.net/buildroot/commit/?id=69b37ad7cc3e81e04b28f608d3e015faf4f8c448
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-I accidentally forgot to put a "PATCH v2" in the title of these 
-patches so the following patches in patchworks can be marked as
-superseded.
+Fixes two security issues:
 
-http://patchwork.ozlabs.org/patch/280410/
-http://patchwork.ozlabs.org/patch/280409/
-http://patchwork.ozlabs.org/patch/280408/
-http://patchwork.ozlabs.org/patch/280406/
-http://patchwork.ozlabs.org/patch/280407/
+- The Dropbear server could be made to consume large amounts
+of memory because decompressed packet sizes weren't checked.
+Depending on the OS and hardware this might be a denial of
+service.
 
-I apologies for the inconvience.
+- Valid users could be identified due to timing variations.
 
-Ryan Barnett <rjbarnet@rockwellcollins.com> wrote on 10/03/2013 08:12:04 
-PM:
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/dropbear/dropbear.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-[...]
-
-Thanks,
--Ryan
+diff --git a/package/dropbear/dropbear.mk b/package/dropbear/dropbear.mk
+index 34dd79b..c4372ca 100644
+--- a/package/dropbear/dropbear.mk
++++ b/package/dropbear/dropbear.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-DROPBEAR_VERSION = 2013.58
++DROPBEAR_VERSION = 2013.59
+ DROPBEAR_SITE = http://matt.ucc.asn.au/dropbear/releases
+ DROPBEAR_SOURCE = dropbear-$(DROPBEAR_VERSION).tar.bz2
+ DROPBEAR_TARGET_BINS = dbclient dropbearkey dropbearconvert scp ssh
