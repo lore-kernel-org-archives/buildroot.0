@@ -1,87 +1,60 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Fri, 04 Oct 2013 15:12:32 +0200
-Subject: [Buildroot] [PATCH 3 of 5] legal-info: split license texts for host
-	and target
+Date: Fri, 04 Oct 2013 15:12:34 +0200
+Subject: [Buildroot] [PATCH 5 of 5] legal info: cleanup utility functions
 In-Reply-To: <patchbomb.1380892349@argentina>
 References: <patchbomb.1380892349@argentina>
-Message-ID: <e6a358594ba5b49cdf7e.1380892352@argentina>
+Message-ID: <9939e8c5aeece3d9c897.1380892354@argentina>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+The legal-info utility functions where defined using two ways
+util-foo = command-foo
+and
+define util-bar # parameter description
+	command-bar
+endef
+
+This commit changes these functions to use the second form for clarity and
+additionally adds parameter descriptions on all functions.
+
 Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
 ---
- Makefile               |   8 +++++---
- package/pkg-generic.mk |   2 +-
- package/pkg-utils.mk   |  16 ++++++++--------
- 3 files changed, 14 insertions(+), 12 deletions(-)
+ package/pkg-utils.mk |  16 +++++++++++-----
+ 1 files changed, 11 insertions(+), 5 deletions(-)
 
-diff --git a/Makefile b/Makefile
---- a/Makefile
-+++ b/Makefile
-@@ -109,10 +109,12 @@ HOST_DIR:=$(BASE_DIR)/host
- 
- LEGAL_INFO_DIR=$(BASE_DIR)/legal-info
- REDIST_SOURCES_DIR=$(LEGAL_INFO_DIR)/sources
--LICENSE_FILES_DIR=$(LEGAL_INFO_DIR)/licenses
-+LICENSE_FILES_DIR_TARGET=$(LEGAL_INFO_DIR)/licenses
-+LICENSE_FILES_DIR_HOST=$(LEGAL_INFO_DIR)/host-licenses
- LEGAL_MANIFEST_CSV_TARGET=$(LEGAL_INFO_DIR)/manifest.csv
- LEGAL_MANIFEST_CSV_HOST=$(LEGAL_INFO_DIR)/host-manifest.csv
--LEGAL_LICENSES_TXT=$(LEGAL_INFO_DIR)/licenses.txt
-+LEGAL_LICENSES_TXT_TARGET=$(LEGAL_INFO_DIR)/licenses.txt
-+LEGAL_LICENSES_TXT_HOST=$(LEGAL_INFO_DIR)/host-licenses.txt
- LEGAL_WARNINGS=$(LEGAL_INFO_DIR)/.warnings
- LEGAL_REPORT=$(LEGAL_INFO_DIR)/README
- 
-@@ -588,7 +590,7 @@ legal-info-clean:
- 
- legal-info-prepare: $(LEGAL_INFO_DIR)
- 	@$(call MESSAGE,"Collecting legal info")
--	@$(call legal-license-file,buildroot,COPYING,COPYING)
-+	@$(call legal-license-file,buildroot,COPYING,COPYING,HOST)
- 	@$(call legal-manifest,PACKAGE,VERSION,LICENSE,LICENSE FILES,SOURCE ARCHIVE,TARGET)
- 	@$(call legal-manifest,PACKAGE,VERSION,LICENSE,LICENSE FILES,SOURCE ARCHIVE,HOST)
- 	@$(call legal-manifest,buildroot,$(BR2_VERSION_FULL),GPLv2+,COPYING,not saved,HOST)
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -508,7 +508,7 @@ else
- # Other packages
- # Save license files if defined
- ifeq ($(call qstrip,$$($(2)_LICENSE_FILES)),)
--	@$(call legal-license-nofiles,$$($(2)_RAWNAME))
-+	@$(call legal-license-nofiles,$$($(2)_RAWNAME),$(call UPPERCASE,$(5)))
- 	@$(call legal-warning-pkg,$$($(2)_RAWNAME),cannot save license ($(2)_LICENSE_FILES not defined))
- else
- 	@$(foreach F,$$($(2)_LICENSE_FILES),$(call legal-license-file,$$($(2)_RAWNAME),$(F),$$($(2)_DIR)/$(F),$(call UPPERCASE,$(5)))$$(sep))
 diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
 --- a/package/pkg-utils.mk
 +++ b/package/pkg-utils.mk
-@@ -99,15 +99,15 @@ endef
- legal-manifest=echo '"$(1)","$(2)","$(3)","$(4)","$(5)"' >>$(LEGAL_MANIFEST_CSV_$(6))
- define legal-license-header
+@@ -91,17 +91,23 @@ endef
+ # legal-info helper functions
+ #
+ LEGAL_INFO_SEPARATOR="::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::"
+-legal-warning=echo "WARNING: $(1)" >>$(LEGAL_WARNINGS)
+-legal-warning-pkg=echo "WARNING: $(1): $(2)" >>$(LEGAL_WARNINGS)
++define legal-warning # text
++	echo "WARNING: $(1)" >>$(LEGAL_WARNINGS)
++endef
++define legal-warning-pkg # pkg, text
++	echo "WARNING: $(1): $(2)" >>$(LEGAL_WARNINGS)
++endef
+ define legal-warning-pkg-savednothing # pkg, {local|override}
+ 	$(call legal-warning-pkg,$(1),sources and license files not saved ($(2) packages not handled))
+ endef
+-legal-manifest=echo '"$(1)","$(2)","$(3)","$(4)","$(5)"' >>$(LEGAL_MANIFEST_CSV_$(6))
+-define legal-license-header
++define legal-manifest # pkg, version, license, license-files, source, type
++	echo '"$(1)","$(2)","$(3)","$(4)","$(5)"' >>$(LEGAL_MANIFEST_CSV_$(6))
++endef
++define legal-license-header # pkg, license-file, type
  	echo -e "$(LEGAL_INFO_SEPARATOR)\n\t$(1):" \
--		"$(2)\n$(LEGAL_INFO_SEPARATOR)\n\n" >>$(LEGAL_LICENSES_TXT)
-+		"$(2)\n$(LEGAL_INFO_SEPARATOR)\n\n" >>$(LEGAL_LICENSES_TXT_$(3))
+ 		"$(2)\n$(LEGAL_INFO_SEPARATOR)\n\n" >>$(LEGAL_LICENSES_TXT_$(3))
  endef
- define legal-license-nofiles
--	$(call legal-license-header,$(1),unknown license file(s))
-+	$(call legal-license-header,$(1),unknown license file(s),$(2))
+-define legal-license-nofiles
++define legal-license-nofiles # pkg, type
+ 	$(call legal-license-header,$(1),unknown license file(s),$(2))
  endef
--define legal-license-file # pkg, filename, file-fullpath
--	$(call legal-license-header,$(1),$(2) file) && \
--	cat $(3) >>$(LEGAL_LICENSES_TXT) && \
--	echo >>$(LEGAL_LICENSES_TXT) && \
--	mkdir -p $(LICENSE_FILES_DIR)/$(1)/$(dir $(2)) && \
--	cp $(3) $(LICENSE_FILES_DIR)/$(1)/$(2)
-+define legal-license-file # pkg, filename, file-fullpath, type
-+	$(call legal-license-header,$(1),$(2) file,$(4)) && \
-+	cat $(3) >>$(LEGAL_LICENSES_TXT_$(4)) && \
-+	echo >>$(LEGAL_LICENSES_TXT_$(4)) && \
-+	mkdir -p $(LICENSE_FILES_DIR_$(4))/$(1)/$(dir $(2)) && \
-+	cp $(3) $(LICENSE_FILES_DIR_$(4))/$(1)/$(2)
- endef
+ define legal-license-file # pkg, filename, file-fullpath, type
