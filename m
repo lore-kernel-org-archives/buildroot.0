@@ -1,82 +1,32 @@
-From: Ryan Barnett <rjbarnet@rockwellcollins.com>
-Date: Fri, 4 Oct 2013 11:25:33 -0500
-Subject: [Buildroot] [PATCH 1/1] python-tornado: new package
-Message-ID: <1380903933-11960-1-git-send-email-rjbarnet@rockwellcollins.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 4 Oct 2013 18:39:17 +0200
+Subject: [Buildroot] Date of the FOSDEM 2014 meeting?
+In-Reply-To: <20131004114337.7780231a@skate>
+References: <20130525222335.42f91125@skate>
+ <CAAHaz6FOnjVfN4zF9Bor0HLHu0HcVHR2Ss+gC2f9J0_GSiH57Q@mail.gmail.com>
+ <20131004114337.7780231a@skate>
+Message-ID: <20131004163917.GA4237@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Ryan Barnett <rjbarnet@rockwellcollins.com>
----
-Note: This one is pretty straight forward since it is all python based
-scripts.
----
- package/Config.in                        |    1 +
- package/python-tornado/Config.in         |    8 ++++++++
- package/python-tornado/python-tornado.mk |   26 ++++++++++++++++++++++++++
- 3 files changed, 35 insertions(+), 0 deletions(-)
- create mode 100644 package/python-tornado/Config.in
- create mode 100644 package/python-tornado/python-tornado.mk
+Thomas, All,
 
-diff --git a/package/Config.in b/package/Config.in
-index b7fdb89..3a4f60a 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -403,6 +403,7 @@ source "package/python-pyzmq/Config.in"
- source "package/python-serial/Config.in"
- source "package/python-setuptools/Config.in"
- source "package/python-thrift/Config.in"
-+source "package/python-tornado/Config.in"
- endmenu
- endif
- source "package/python3/Config.in"
-diff --git a/package/python-tornado/Config.in b/package/python-tornado/Config.in
-new file mode 100644
-index 0000000..c127d0e
---- /dev/null
-+++ b/package/python-tornado/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_PYTHON_TORNADO
-+	bool "python-tornado"
-+	depends on BR2_PACKAGE_PYTHON
-+	help
-+	  Tornado is a Python web framework and asynchronous networking
-+	  library, originally developed at FriendFeed.
-+
-+	  http://www.tornadoweb.org
-diff --git a/package/python-tornado/python-tornado.mk b/package/python-tornado/python-tornado.mk
-new file mode 100644
-index 0000000..f228a7c
---- /dev/null
-+++ b/package/python-tornado/python-tornado.mk
-@@ -0,0 +1,26 @@
-+################################################################################
-+#
-+# python-tornado
-+#
-+################################################################################
-+
-+PYTHON_TORNADO_VERSION = 3.1.1
-+PYTHON_TORNADO_SOURCE  = tornado-$(PYTHON_TORNADO_VERSION).tar.gz
-+PYTHON_TORNADO_SITE    = https://pypi.python.org/packages/source/t/tornado
-+PYTHON_TORNADO_LICENSE = Apache-v2
-+
-+PYTHON_TORNADO_DEPENDENCIES = python
-+
-+define PYTHON_TORNADO_BUILD_CMDS
-+	(cd $(@D); $(HOST_DIR)/usr/bin/python setup.py build --executable=/usr/bin/python)
-+endef
-+
-+# PYTHONPATH definition is need for install since an error could
-+# be thrown about installing to location that isn't in PYTHONPATH
-+define PYTHON_TORNADO_INSTALL_TARGET_CMDS
-+	(cd $(@D); \
-+		PYTHONPATH=$(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages \
-+	$(HOST_DIR)/usr/bin/python setup.py install --prefix=$(TARGET_DIR)/usr)
-+endef
-+
-+$(eval $(generic-package))
---
-1.7.1
+On 2013-10-04 11:43 +0200, Thomas Petazzoni spake thusly:
+> Since the FOSDEM is on Saturday 1st and Sunday 2nd, I'd like to propose
+> Monday 3rd and Tuesday 4th as the dates for the Buildroot meeting.
+
+Fine with me! :-)
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
