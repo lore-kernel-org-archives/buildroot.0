@@ -1,58 +1,105 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 03 Oct 2013 18:54:15 +0200
-Subject: [Buildroot] [PATCH v7 3/6] package/Makefile.in: don't force
- jobs when BR2_JLEVEL is empty
-In-Reply-To: <1380802245-16978-4-git-send-email-fabio.porcedda@gmail.com>
-References: <1380802245-16978-1-git-send-email-fabio.porcedda@gmail.com>
- <1380802245-16978-4-git-send-email-fabio.porcedda@gmail.com>
-Message-ID: <524DA137.304@mind.be>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Fri, 4 Oct 2013 10:54:55 +0200
+Subject: [Buildroot] Some legal-info observations/problems
+In-Reply-To: <524D9DE2.7090509@mind.be>
+References: <CAAXf6LXHXo2vY8ns61fxoLzD0n2yzLASZqFk75xzYQwgDHp15Q@mail.gmail.com>
+ <20131002172307.0d6f02ea@skate> <524C4AD4.9040902@lucaceresoli.net>
+ <CAAXf6LXWf34Amx44pdixKL0m87jq_FMBxN8BJO9TBDbQ58Po1Q@mail.gmail.com>
+ <524D9DE2.7090509@mind.be>
+Message-ID: <CAAXf6LUTTX0OFNaP4NxVWXKC4OFBROXK-PFiumL8zYrumkbtog@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 10/03/13 14:10, Fabio Porcedda wrote:
-> When the "BR2_JLEVEL" variable is empty use "make" without
-> the "-j" option, because to be able to use top-level parallel
-> make we must don't force the number of jobs in sub-make.
->
-> Example:
-> 	make BR2_JLEVEL= -j8
->
-> Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
-> Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Hi Arnout,
 
-  Peter, can we get this committed?
-
-  Regards,
-  Arnout
-
-> ---
->   package/Makefile.in | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
+On Thu, Oct 3, 2013 at 6:40 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
+> On 10/03/13 10:24, Thomas De Schampheleire wrote:
+>>
+>>>>
+>>>> Agreed. However, in make, doing FOOBAR = or not defining FOOBAR leads
+>>>> to the same thing: FOOBAR is an empty variable. So we have to decide on
+>>>> an explicit magic value to use when no license files are available (and
+>>>> ensure this magic value is never going to be used for the name of a
+>>>> license file).
+>>>>
+>>>> FOO_LICENSE_FILES = N/A
+>>>> FOO_LICENSE_FILES = not-available
+>>>> FOO_LICENSE_FILES = none
+>>>> FOO_LICENSE_FILES = NONE
+>>>
+>>>
+>>>
+>>> It's not clear to me whether this is the correct way to address the
+>>> problem
+>>> of packages having license file.
+>>>
+>>> I think usually that means they /do/ have a license, but it's only
+>>> written
+>>> in the top lines of source files and/or in a README containing other
+>>> stuff.
+>>> IOW, the license text is there, but we currently have no way to extract
+>>> it.
+>>
+>>
+>> This is also how I see it.
 >
-> diff --git a/package/Makefile.in b/package/Makefile.in
-> index 170ad78..d406901 100644
-> --- a/package/Makefile.in
-> +++ b/package/Makefile.in
-> @@ -18,7 +18,7 @@ PARALLEL_JOBS:=$(BR2_JLEVEL)
->   endif
 >
->   MAKE1:=$(HOSTMAKE) -j1
-> -MAKE:=$(HOSTMAKE) -j$(PARALLEL_JOBS)
-> +MAKE:=$(HOSTMAKE) $(if $(PARALLEL_JOBS),-j$(PARALLEL_JOBS))
+>  So in this situation, the proper way to deal with it is to issue a warning,
+> right? Which is exactly what the current code does.
 >
->   # Compute GNU_TARGET_NAME
->   GNU_TARGET_NAME=$(ARCH)-buildroot-$(TARGET_OS)-$(LIBC)$(ABI)
->
+>  I can think of only one situation (except for the PROPRIETARY case) where
+> no license text is provided and we don't need to be warned of this, and that
+> is when it is public domain. But maybe that's just a limit of my imagination
+> :-).
 
+Probably a warning is the safe action here, because most licenses do
+indeed require you to distribute the actual text, as you mentioned.
+However, I dislike the current warning 'FOO_LICENSE_FILES not defined'
+because it is not accurate: in such a case we _know_ that the package
+does not contain a license file and intentionally provided an empty or
+magic FOO_LICENSE_FILES. So the warning should rather be something
+like: 'foo does not contain a license file'.
 
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+To come back on the comment ThomasP made about 'FOO =' and not
+defining FOO leading to the same empty FOO variable: this does not
+mean we cannot differentiate both cases: with $(origin FOO) you can.
+
+>
+>  That said, it would be good if we would just error out when a license is
+> defined but no license files are provided. Now we check for that during
+> review (and require an explicit comment if no license file exists), but it's
+> of course even better if that can be done during autobuilder tests.
+
+When you say 'error out' you mean actually aborting the make process?
+Currently, anomalies in the legal-info area are just warnings hinting
+the developer he has to take some action. Do we really want to error
+out in such cases?
+
+But if we will make a distinction between an undefined
+FOO_LICENSE_FILES (an anomaly) and an empty/magic one, then the
+autobuilder package stats could be updated with an extra column, or a
+YES/NO/EMPTY value in the existing column.
+http://autobuild.buildroot.org/stats/
+
+(by the way: where is the code that generates these stats? I had
+expected to find it in buildroot-test, but didn't.)
+
+> As to
+> the naming, I think N/A is very good because the chance of having an N
+> directory with an A file is very small.
+
+The chances of having a license file called none or NONE are also
+pretty small IMO :)
+
+But, re-thinking this, I think none of these are actually very good:
+there _should_ be a license file but it is missing. So it's not
+'not-applicable', and it's not 'none'. Rather, something like:
+FOO_LICENSE_FILES = missing
+FOO_LICENSE_FILES = not-provided
+FOO_LICENSE_FILES = none-provided
+
+Best regards,
+Thomas
