@@ -1,36 +1,288 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 04 Oct 2013 14:44:39 +0200
-Subject: [Buildroot] Date of the FOSDEM 2014 meeting?
-In-Reply-To: <20131004114337.7780231a@skate> (Thomas Petazzoni's message of
- "Fri, 4 Oct 2013 11:43:37 +0200")
-References: <20130525222335.42f91125@skate>
- <CAAHaz6FOnjVfN4zF9Bor0HLHu0HcVHR2Ss+gC2f9J0_GSiH57Q@mail.gmail.com>
- <20131004114337.7780231a@skate>
-Message-ID: <87hacxkxxk.fsf@dell.be.48ers.dk>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Fri,  4 Oct 2013 09:49:38 -0300
+Subject: [Buildroot] [PATCH] configs/qemu: bump relevant config versions
+Message-ID: <1380890978-13158-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+arm_nuri needs some DT fixups to switch to the 3.11.x series since it's
+now default for that kernel defconfig.
 
-Hi,
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ board/qemu/arm-nuri/readme.txt                                    | 2 +-
+ board/qemu/arm-versatile/{linux-3.10.config => linux-3.11.config} | 0
+ board/qemu/arm-versatile/readme.txt                               | 2 +-
+ board/qemu/arm-vexpress/readme.txt                                | 2 +-
+ .../microblazebe-mmu/{linux-3.10.config => linux-3.11.config}     | 0
+ board/qemu/microblazebe-mmu/readme.txt                            | 2 +-
+ .../microblazeel-mmu/{linux-3.10.config => linux-3.11.config}     | 0
+ board/qemu/microblazeel-mmu/readme.txt                            | 2 +-
+ board/qemu/mips-malta/{linux-3.10.config => linux-3.11.config}    | 0
+ board/qemu/mips-malta/readme.txt                                  | 2 +-
+ board/qemu/mips64-malta/{linux-3.10.config => linux-3.11.config}  | 0
+ board/qemu/mips64-malta/readme.txt                                | 2 +-
+ board/qemu/mipsel-malta/{linux-3.10.config => linux-3.11.config}  | 0
+ board/qemu/mipsel-malta/readme.txt                                | 2 +-
+ .../qemu/powerpc-g3beige/{linux-3.10.config => linux-3.11.config} | 0
+ board/qemu/powerpc-g3beige/readme.txt                             | 4 ++--
+ board/qemu/powerpc-mpc8544ds/readme.txt                           | 2 +-
+ board/qemu/powerpc-virtex-ml507/readme.txt                        | 2 +-
+ board/qemu/sh4-r2d/readme.txt                                     | 2 +-
+ board/qemu/sparc-ss10/readme.txt                                  | 2 +-
+ board/qemu/x86/{linux-3.10.config => linux-3.11.config}           | 0
+ board/qemu/x86/readme.txt                                         | 2 +-
+ board/qemu/x86_64/{linux-3.10.config => linux-3.11.config}        | 0
+ board/qemu/x86_64/readme.txt                                      | 2 +-
+ configs/qemu_mips64_malta_defconfig                               | 8 ++++----
+ configs/qemu_sparc_ss10_defconfig                                 | 4 ++--
+ 26 files changed, 22 insertions(+), 22 deletions(-)
+ rename board/qemu/arm-versatile/{linux-3.10.config => linux-3.11.config} (100%)
+ rename board/qemu/microblazebe-mmu/{linux-3.10.config => linux-3.11.config} (100%)
+ rename board/qemu/microblazeel-mmu/{linux-3.10.config => linux-3.11.config} (100%)
+ rename board/qemu/mips-malta/{linux-3.10.config => linux-3.11.config} (100%)
+ rename board/qemu/mips64-malta/{linux-3.10.config => linux-3.11.config} (100%)
+ rename board/qemu/mipsel-malta/{linux-3.10.config => linux-3.11.config} (100%)
+ rename board/qemu/powerpc-g3beige/{linux-3.10.config => linux-3.11.config} (100%)
+ rename board/qemu/x86/{linux-3.10.config => linux-3.11.config} (100%)
+ rename board/qemu/x86_64/{linux-3.10.config => linux-3.11.config} (100%)
 
- >> Are there any plans yet?
-
- Thomas> There are no fixed plans yet, but it's true that February 2014
- Thomas> is approaching, and that booking flights now allows to benefit
- Thomas> from lower fares.
-
- Thomas> Since the FOSDEM is on Saturday 1st and Sunday 2nd, I'd like to
- Thomas> propose Monday 3rd and Tuesday 4th as the dates for the
- Thomas> Buildroot meeting.
-
- Thomas> I'm Cc'ing the usual participants to the Buildroot meeting, to
- Thomas> see what they think about these dates.
-
-Good for me.
-
+diff --git a/board/qemu/arm-nuri/readme.txt b/board/qemu/arm-nuri/readme.txt
+index 0c64492..0fed2f7 100644
+--- a/board/qemu/arm-nuri/readme.txt
++++ b/board/qemu/arm-nuri/readme.txt
+@@ -7,4 +7,4 @@ graphical window is the framebuffer.
+ 
+ Startup time is slow because of the SMP CPU emulation so be patient.
+ 
+-Tested with QEMU 1.5.2
++Tested with QEMU 1.6.0
+diff --git a/board/qemu/arm-versatile/linux-3.10.config b/board/qemu/arm-versatile/linux-3.11.config
+similarity index 100%
+rename from board/qemu/arm-versatile/linux-3.10.config
+rename to board/qemu/arm-versatile/linux-3.11.config
+diff --git a/board/qemu/arm-versatile/readme.txt b/board/qemu/arm-versatile/readme.txt
+index e734d56..4902c54 100644
+--- a/board/qemu/arm-versatile/readme.txt
++++ b/board/qemu/arm-versatile/readme.txt
+@@ -5,4 +5,4 @@ Run the emulation with:
+ The login prompt will appear in the terminal that started Qemu. The
+ graphical window is the framebuffer.
+ 
+-Tested with QEMU 1.5.2
++Tested with QEMU 1.6.0
+diff --git a/board/qemu/arm-vexpress/readme.txt b/board/qemu/arm-vexpress/readme.txt
+index bde90ef..65d1996 100644
+--- a/board/qemu/arm-vexpress/readme.txt
++++ b/board/qemu/arm-vexpress/readme.txt
+@@ -5,4 +5,4 @@ Run the emulation with:
+ The login prompt will appear in the terminal that started Qemu. The
+ graphical window is the framebuffer.
+ 
+-Tested with QEMU 1.5.2
++Tested with QEMU 1.6.0
+diff --git a/board/qemu/microblazebe-mmu/linux-3.10.config b/board/qemu/microblazebe-mmu/linux-3.11.config
+similarity index 100%
+rename from board/qemu/microblazebe-mmu/linux-3.10.config
+rename to board/qemu/microblazebe-mmu/linux-3.11.config
+diff --git a/board/qemu/microblazebe-mmu/readme.txt b/board/qemu/microblazebe-mmu/readme.txt
+index 7d172d1..473a934 100644
+--- a/board/qemu/microblazebe-mmu/readme.txt
++++ b/board/qemu/microblazebe-mmu/readme.txt
+@@ -4,4 +4,4 @@ Run the emulation with:
+ 
+ The login prompt will appear in the terminal that started Qemu.
+ 
+-Tested with QEMU 1.5.2
++Tested with QEMU 1.6.0
+diff --git a/board/qemu/microblazeel-mmu/linux-3.10.config b/board/qemu/microblazeel-mmu/linux-3.11.config
+similarity index 100%
+rename from board/qemu/microblazeel-mmu/linux-3.10.config
+rename to board/qemu/microblazeel-mmu/linux-3.11.config
+diff --git a/board/qemu/microblazeel-mmu/readme.txt b/board/qemu/microblazeel-mmu/readme.txt
+index 9728a45..baddc7a 100644
+--- a/board/qemu/microblazeel-mmu/readme.txt
++++ b/board/qemu/microblazeel-mmu/readme.txt
+@@ -4,4 +4,4 @@ Run the emulation with:
+ 
+ The login prompt will appear in the terminal that started Qemu.
+ 
+-Tested with QEMU 1.5.2
++Tested with QEMU 1.6.0
+diff --git a/board/qemu/mips-malta/linux-3.10.config b/board/qemu/mips-malta/linux-3.11.config
+similarity index 100%
+rename from board/qemu/mips-malta/linux-3.10.config
+rename to board/qemu/mips-malta/linux-3.11.config
+diff --git a/board/qemu/mips-malta/readme.txt b/board/qemu/mips-malta/readme.txt
+index ccdcc84..33764ea 100644
+--- a/board/qemu/mips-malta/readme.txt
++++ b/board/qemu/mips-malta/readme.txt
+@@ -6,4 +6,4 @@ The login prompt will appear in the terminal that started Qemu. The
+ graphical window is the framebuffer. No keyboard support has been
+ enabled.
+ 
+-Tested with QEMU 1.5.2
++Tested with QEMU 1.6.0
+diff --git a/board/qemu/mips64-malta/linux-3.10.config b/board/qemu/mips64-malta/linux-3.11.config
+similarity index 100%
+rename from board/qemu/mips64-malta/linux-3.10.config
+rename to board/qemu/mips64-malta/linux-3.11.config
+diff --git a/board/qemu/mips64-malta/readme.txt b/board/qemu/mips64-malta/readme.txt
+index 7361722..23b85ab 100644
+--- a/board/qemu/mips64-malta/readme.txt
++++ b/board/qemu/mips64-malta/readme.txt
+@@ -8,4 +8,4 @@ enabled.
+ 
+ This configuration is known to be flaky.
+ 
+-Tested with QEMU 1.5.2
++Tested with QEMU 1.6.0
+diff --git a/board/qemu/mipsel-malta/linux-3.10.config b/board/qemu/mipsel-malta/linux-3.11.config
+similarity index 100%
+rename from board/qemu/mipsel-malta/linux-3.10.config
+rename to board/qemu/mipsel-malta/linux-3.11.config
+diff --git a/board/qemu/mipsel-malta/readme.txt b/board/qemu/mipsel-malta/readme.txt
+index 52d424d..1e17828 100644
+--- a/board/qemu/mipsel-malta/readme.txt
++++ b/board/qemu/mipsel-malta/readme.txt
+@@ -6,4 +6,4 @@ The login prompt will appear in the terminal that started Qemu. The
+ graphical window is the framebuffer. No keyboard support has been
+ enabled.
+ 
+-Tested with QEMU 1.5.2
++Tested with QEMU 1.6.0
+diff --git a/board/qemu/powerpc-g3beige/linux-3.10.config b/board/qemu/powerpc-g3beige/linux-3.11.config
+similarity index 100%
+rename from board/qemu/powerpc-g3beige/linux-3.10.config
+rename to board/qemu/powerpc-g3beige/linux-3.11.config
+diff --git a/board/qemu/powerpc-g3beige/readme.txt b/board/qemu/powerpc-g3beige/readme.txt
+index b5c73a4..4c0bf8a 100644
+--- a/board/qemu/powerpc-g3beige/readme.txt
++++ b/board/qemu/powerpc-g3beige/readme.txt
+@@ -1,8 +1,8 @@
+ Run the emulation with:
+ 
+-  qemu-system-ppc -M g3beige -kernel output/images/vmlinux -hda output/images/rootfs.ext2 -append "console=ttyS0 root=/dev/hdc" -serial stdio -net nic,model=rtl8139 -net user
++  qemu-system-ppc -M g3beige -kernel output/images/vmlinux -hda output/images/rootfs.ext2 -append "console=ttyS0 root=/dev/hda" -serial stdio -net nic,model=rtl8139 -net user
+ 
+ The login prompt will appear in the terminal that started Qemu. The
+ graphical window is the framebuffer.
+ 
+-Tested with QEMU 1.5.2
++Tested with QEMU 1.6.0
+diff --git a/board/qemu/powerpc-mpc8544ds/readme.txt b/board/qemu/powerpc-mpc8544ds/readme.txt
+index dfe1ac2..8c57ead 100644
+--- a/board/qemu/powerpc-mpc8544ds/readme.txt
++++ b/board/qemu/powerpc-mpc8544ds/readme.txt
+@@ -4,4 +4,4 @@ Run the emulation with:
+ 
+ The login prompt will appear in the terminal that started Qemu.
+ 
+-Tested with QEMU 1.5.2
++Tested with QEMU 1.6.0
+diff --git a/board/qemu/powerpc-virtex-ml507/readme.txt b/board/qemu/powerpc-virtex-ml507/readme.txt
+index f4bc5d5..e958d49 100644
+--- a/board/qemu/powerpc-virtex-ml507/readme.txt
++++ b/board/qemu/powerpc-virtex-ml507/readme.txt
+@@ -5,4 +5,4 @@ Run the emulation with:
+ 
+ The login prompt will appear in the terminal that started Qemu.
+ 
+-Tested with QEMU 1.5.2
++Tested with QEMU 1.6.0
+diff --git a/board/qemu/sh4-r2d/readme.txt b/board/qemu/sh4-r2d/readme.txt
+index 34f4857..45fca86 100644
+--- a/board/qemu/sh4-r2d/readme.txt
++++ b/board/qemu/sh4-r2d/readme.txt
+@@ -5,4 +5,4 @@ Run the emulation with:
+ The login prompt will appear in the terminal that started Qemu.
+ The graphical window is the framebuffer.
+ 
+-Tested with QEMU 1.5.2
++Tested with QEMU 1.6.0
+diff --git a/board/qemu/sparc-ss10/readme.txt b/board/qemu/sparc-ss10/readme.txt
+index 8f4b5be..dab4028 100644
+--- a/board/qemu/sparc-ss10/readme.txt
++++ b/board/qemu/sparc-ss10/readme.txt
+@@ -5,4 +5,4 @@ Run the emulation with:
+ The login prompt will appear in the terminal that started Qemu.
+ The graphical window is the framebuffer.
+ 
+-Tested with QEMU 1.5.2
++Tested with QEMU 1.6.0
+diff --git a/board/qemu/x86/linux-3.10.config b/board/qemu/x86/linux-3.11.config
+similarity index 100%
+rename from board/qemu/x86/linux-3.10.config
+rename to board/qemu/x86/linux-3.11.config
+diff --git a/board/qemu/x86/readme.txt b/board/qemu/x86/readme.txt
+index 7bc3a1c..5f3af40 100644
+--- a/board/qemu/x86/readme.txt
++++ b/board/qemu/x86/readme.txt
+@@ -4,4 +4,4 @@ Run the emulation with:
+ 
+ The login prompt will appear in the graphical window.
+ 
+-Tested with QEMU 1.5.2
++Tested with QEMU 1.6.0
+diff --git a/board/qemu/x86_64/linux-3.10.config b/board/qemu/x86_64/linux-3.11.config
+similarity index 100%
+rename from board/qemu/x86_64/linux-3.10.config
+rename to board/qemu/x86_64/linux-3.11.config
+diff --git a/board/qemu/x86_64/readme.txt b/board/qemu/x86_64/readme.txt
+index b6f4659..d9eaf56 100644
+--- a/board/qemu/x86_64/readme.txt
++++ b/board/qemu/x86_64/readme.txt
+@@ -4,4 +4,4 @@ Run the emulation with:
+ 
+ The login prompt will appear in the graphical window.
+ 
+-Tested with QEMU 1.5.2
++Tested with QEMU 1.6.0
+diff --git a/configs/qemu_mips64_malta_defconfig b/configs/qemu_mips64_malta_defconfig
+index 61abdcf..035cfa1 100644
+--- a/configs/qemu_mips64_malta_defconfig
++++ b/configs/qemu_mips64_malta_defconfig
+@@ -10,16 +10,16 @@ BR2_PREFER_STATIC_LIB=y
+ BR2_TARGET_ROOTFS_EXT2=y
+ # BR2_TARGET_ROOTFS_TAR is not set
+ 
+-# Lock to 3.10 headers to avoid breaking with newer kernels
++# Lock to 3.11 headers to avoid breaking with newer kernels
+ BR2_KERNEL_HEADERS_VERSION=y
+-BR2_DEFAULT_KERNEL_VERSION="3.10.7"
++BR2_DEFAULT_KERNEL_VERSION="3.11.3"
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.10.7"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.11.3"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+-BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mips64-malta/linux-3.10.config"
++BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mips64-malta/linux-3.11.config"
+ BR2_LINUX_KERNEL_VMLINUX=y
+ 
+ # Serial port config
+diff --git a/configs/qemu_sparc_ss10_defconfig b/configs/qemu_sparc_ss10_defconfig
+index 33f0b21..ca2ed02 100644
+--- a/configs/qemu_sparc_ss10_defconfig
++++ b/configs/qemu_sparc_ss10_defconfig
+@@ -8,11 +8,11 @@ BR2_TARGET_ROOTFS_EXT2=y
+ 
+ # Lock to 3.7 headers to avoid breaking with newer kernels
+ BR2_KERNEL_HEADERS_VERSION=y
+-BR2_DEFAULT_KERNEL_VERSION="3.7.10"
++BR2_DEFAULT_KERNEL_VERSION="3.11.3"
+ 
+ # Linux kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.7.10"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.11.3"
+ BR2_LINUX_KERNEL_DEFCONFIG="sparc32"
+ BR2_LINUX_KERNEL_ZIMAGE=y
 -- 
-Bye, Peter Korsgaard
+1.8.1.5
