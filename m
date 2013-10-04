@@ -1,7 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat,  5 Oct 2013 00:00:06 +0200
-Subject: [Buildroot] [pull request] Pull request for branch yem/misc-updates
-Message-ID: <cover.1380923923.git.yann.morin.1998@free.fr>
+Date: Sat,  5 Oct 2013 00:00:07 +0200
+Subject: [Buildroot] [PATCH 1/2] package/rpi-firmware: bump version
+In-Reply-To: <cover.1380923923.git.yann.morin.1998@free.fr>
+References: <cover.1380923923.git.yann.morin.1998@free.fr>
+Message-ID: <5652961ba6bc7ca0914f8d406601a316f0548415.1380923923.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,41 +12,25 @@ To: buildroot@busybox.net
 
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Hello All!
+Fix for issues with USB, audio, and GLESv2.
 
-Here are two changes to the RPi packages:
-  - bump firmware for misc fixes: USB, audio, GLESv2
-  - bump userland for misc fixes: USB, camera, audio, codecs...
-
-Regards,
-Yann E. MORIN.
-
-
-The following changes since commit 4ba4d1ad37810b19a7bbf9b1d4fb3e9c94f7f528:
-
-  atngw100_defconfig: use BR2_KERNEL_HEADERS_VERSION to specify kernel headers (2013-10-04 22:06:52 +0200)
-
-are available in the git repository at:
-
-  git://gitorious.org/buildroot/buildroot.git yem/misc-updates
-
-for you to fetch changes up to 57f69b1a8e7a518cc9649b9f67f99894e62580f6:
-
-  package/rpi-userland: bump version (2013-10-04 23:52:10 +0200)
-
-----------------------------------------------------------------
-Yann E. MORIN (2):
-      package/rpi-firmware: bump version
-      package/rpi-userland: bump version
-
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+---
  package/rpi-firmware/rpi-firmware.mk | 2 +-
- package/rpi-userland/rpi-userland.mk | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
+diff --git a/package/rpi-firmware/rpi-firmware.mk b/package/rpi-firmware/rpi-firmware.mk
+index 9319429..ddb48b3 100644
+--- a/package/rpi-firmware/rpi-firmware.mk
++++ b/package/rpi-firmware/rpi-firmware.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-RPI_FIRMWARE_VERSION = fadc4cb
++RPI_FIRMWARE_VERSION = e6b21d6
+ RPI_FIRMWARE_SITE = http://github.com/raspberrypi/firmware/tarball/$(RPI_FIRMWARE_VERSION)
+ RPI_FIRMWARE_LICENSE = BSD-3c
+ RPI_FIRMWARE_LICENSE_FILES = boot/LICENCE.broadcom
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.8.1.2
