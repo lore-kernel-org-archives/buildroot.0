@@ -1,28 +1,30 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 04 Oct 2013 08:58:27 +0200
-Subject: [Buildroot] [PATCH] Revert "toolchain-internal: skip
-	gcc-intermediate when possible"
-In-Reply-To: <1380825301-1079-1-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Thu, 3 Oct 2013 20:35:01 +0200")
-References: <1380825301-1079-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <87pprlldyk.fsf@dell.be.48ers.dk>
+From: Axel Lin <axel.lin@ingics.com>
+Date: Fri, 04 Oct 2013 16:09:12 +0800
+Subject: [Buildroot] [PATCH 1/2] dmidecode: bump to version 2.12
+Message-ID: <1380874152.7626.2.camel@phoenix>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+Signed-off-by: Axel Lin <axel.lin@ingics.com>
+---
+ package/dmidecode/dmidecode.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- Thomas> While the idea of skipping the intermediate gcc step seems to work
- Thomas> fine in most situations, it causes problems with the SSP
- Thomas> support. Until we can figure out a proper solution for this problem,
- Thomas> we need to revert back to the previous solution of a three stages
- Thomas> build.
-
- Thomas> This reverts commit 2babed4a50fcd050abc4686e05e24d0e374d10a8.
-
-Committed, thanks.
-
+diff --git a/package/dmidecode/dmidecode.mk b/package/dmidecode/dmidecode.mk
+index 86a3be5..c53bd33 100644
+--- a/package/dmidecode/dmidecode.mk
++++ b/package/dmidecode/dmidecode.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-DMIDECODE_VERSION = 2.11
++DMIDECODE_VERSION = 2.12
+ DMIDECODE_SITE    = http://download.savannah.gnu.org/releases/dmidecode/
+ 
+ define DMIDECODE_BUILD_CMDS
 -- 
-Bye, Peter Korsgaard
+1.8.1.2
