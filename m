@@ -1,92 +1,150 @@
 From: Ryan Barnett <rjbarnet@rockwellcollins.com>
-Date: Thu, 3 Oct 2013 20:12:04 -0500
-Subject: [Buildroot] [PATCH 0/5] Introduce New Package PySnmp
-Message-ID: <1380849129-18517-1-git-send-email-rjbarnet@rockwellcollins.com>
+Date: Thu, 3 Oct 2013 20:12:05 -0500
+Subject: [Buildroot] [PATCH 1/5] python-pyasn: new package
+In-Reply-To: <1380849129-18517-1-git-send-email-rjbarnet@rockwellcollins.com>
+References: <1380849129-18517-1-git-send-email-rjbarnet@rockwellcollins.com>
+Message-ID: <1380849129-18517-2-git-send-email-rjbarnet@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I apologies for the first patch set, I thought I tested it more
-throughly than I actually did. I guess that is what I get for multi-
-tasking...
+Signed-off-by: Ryan Barnett <rjbarnet@rockwellcollins.com>
 
-The first version of this patch set has problem with cross-compiling
-PyCrypto which it really didn't do. This second version fixes those
-problems but because I wasn't compiling PyCrypto correctly, it lead
-to more changes than I anticipated.
+---
 
-This updated patchset has added host compiling support for PyASN,
-PySNMP, and PyCrypto because there are issues with the installing
-PySNMP-Apps to target and not being able to find installed versions
-of PyASN/PySNMP and PyCrypto since it uses setuptools and doesn't
-search in the correct location (TARGET_DIR). The workaround for the
-problem is to compile PyASN, PyCrypto and PySNMP for the target to
-fake-out setuptools into thinking that packages are installed.
+The definition of CFLAGS/LDFLAGS/LDSHARED is necessary since the
+compilation of won't work correctly using either TARGET_CONFIGURE_OPTS
+because it won't link against the correct python library. Also using
+python-distutilcross doesn't work as the setup.py doesn't understand
+the -x option.
 
-Note: PySNMP-Apps will install in the correct location just doesn't
-search for the dependancies in the correct location.
+---
 
-========================================
-
-This patchset adds support for building PySnmp. One thing that I'm not
-sure on and am open to debate is the naming of the packages under
-Target Packages > Interpreter languages and scripting > external python
-modules in the menuconfig since the majority of the packages are named
-python-<pkg_name> but pygame and pyparsing don't fall under this
-category.
-
-Menuconfig
- -> python-nfc
- -> python-protobuf
- -> pygame
- -> pyparsing
- -> python-pyro
- -> python-pyzmq
-
-The make rules for the pygame and pyparsing packages are python-pygame
-python-pyparsing.
-
-Location of the packages in buildroot is package/python-pygame and
-package/python-pyparsing.
-
-Question I have for the packages I added is the following:
-
-Should I follow what is currently done for pygame and pyparsing
-or should I keep them how I have things done and change the name of
-pygame and pyparsing in seperate patches? Whatever is chosen, I would
-just like to have consistency with naming.
-
-My vote is to change pygame and pyparsing names. But my mind can
-easily be changed.
-
-Ryan Barnett (5):
-  python-pyasn: new package
-  python-pycrypto: new package
-  python-pysnmp: new package
-  python-pysnmp-apps: new package
-  python-pysnmp-mibs: new package
-
- package/Config.in                                |    7 ++++
- package/python-pyasn/Config.in                   |   13 +++++++
- package/python-pyasn/python-pyasn.mk             |   38 ++++++++++++++++++++++
- package/python-pycrypto/Config.in                |    8 ++++
- package/python-pycrypto/python-pycrypto.mk       |   25 ++++++++++++++
- package/python-pysnmp-apps/Config.in             |    7 ++++
- package/python-pysnmp-apps/python-pysnmp-apps.mk |   23 +++++++++++++
- package/python-pysnmp-mibs/Config.in             |    8 ++++
- package/python-pysnmp-mibs/python-pysnmp-mibs.mk |   23 +++++++++++++
- package/python-pysnmp/Config.in                  |   10 ++++++
- package/python-pysnmp/python-pysnmp.mk           |   23 +++++++++++++
- 11 files changed, 185 insertions(+), 0 deletions(-)
+v1 -> v2
+ * Added comment explain why the -I and -L options are needed
+   which is the same comment as PyCrypto package.
+ * Added PYTHONPATH definition to the install target command
+ * Added host-version of PyAsn since PySNMP-apps will not be able to
+   find the installed version of PyASN and try to install it.
+---
+ package/Config.in                    |    1 +
+ package/python-pyasn/Config.in       |   13 ++++++
+ package/python-pyasn/python-pyasn.mk |   73 ++++++++++++++++++++++++++++++++++
+ 3 files changed, 87 insertions(+), 0 deletions(-)
  create mode 100644 package/python-pyasn/Config.in
  create mode 100644 package/python-pyasn/python-pyasn.mk
- create mode 100644 package/python-pycrypto/Config.in
- create mode 100644 package/python-pycrypto/python-pycrypto.mk
- create mode 100644 package/python-pysnmp-apps/Config.in
- create mode 100644 package/python-pysnmp-apps/python-pysnmp-apps.mk
- create mode 100644 package/python-pysnmp-mibs/Config.in
- create mode 100644 package/python-pysnmp-mibs/python-pysnmp-mibs.mk
- create mode 100644 package/python-pysnmp/Config.in
- create mode 100644 package/python-pysnmp/python-pysnmp.mk
+
+diff --git a/package/Config.in b/package/Config.in
+index b7fdb89..3592cb7 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -396,6 +396,7 @@ source "package/python-meld3/Config.in"
+ source "package/python-netifaces/Config.in"
+ source "package/python-nfc/Config.in"
+ source "package/python-protobuf/Config.in"
++source "package/python-pyasn/Config.in"
+ source "package/python-pygame/Config.in"
+ source "package/python-pyparsing/Config.in"
+ source "package/python-pyro/Config.in"
+diff --git a/package/python-pyasn/Config.in b/package/python-pyasn/Config.in
+new file mode 100644
+index 0000000..a352fe4
+--- /dev/null
++++ b/package/python-pyasn/Config.in
+@@ -0,0 +1,13 @@
++config BR2_PACKAGE_PYTHON_PYASN
++	bool "python-pyasn"
++	depends on BR2_PACKAGE_PYTHON
++	depends on BR2_INSTALL_LIBSTDCPP
++	help
++	  PyASN is a Python extension module that enables you to
++	  perform very fast IP address to Autonomous System Number
++	  lookups.
++
++	  https://code.google.com/p/pyasn/
++
++comment "python-pyasn requires C++ support in toolchain"
++        depends on !BR2_INSTALL_LIBSTDCPP
+diff --git a/package/python-pyasn/python-pyasn.mk b/package/python-pyasn/python-pyasn.mk
+new file mode 100644
+index 0000000..bfad659
+--- /dev/null
++++ b/package/python-pyasn/python-pyasn.mk
+@@ -0,0 +1,73 @@
++################################################################################
++#
++# python-pyasn
++#
++################################################################################
++
++PYTHON_PYASN_VERSION = 1.2
++PYTHON_PYASN_SOURCE  = PyASN-$(PYTHON_PYASN_VERSION).zip
++PYTHON_PYASN_SITE    = https://pyasn.googlecode.com/files
++PYTHON_PYASN_LICENSE = LGPL
++
++PYTHON_PYASN_DEPENDENCIES = python
++HOST_PYTHON_PYASN_DEPENDENCIES = host-python
++
++#############
++# Target
++#############
++define PYTHON_PYASN_EXTRACT_CMDS
++	unzip -d $(@D) $(DL_DIR)/$(PYTHON_PYASN_SOURCE)
++	mv $(@D)/PyASN-$(PYTHON_PYASN_VERSION)/* $(@D)
++	$(RM) -r $(@D)/PyASN-$(PYTHON_PYASN_VERSION)
++endef
++
++# The additional -I and -L are needed to ensure that the $(STAGING_DIR)
++# header and library files are pulled. Otherwise the distutils package before
++# the ones that the distutils package will find the headers/libraries that are
++# located at $(HOST_DIR)/usr.
++define PYTHON_PYASN_BUILD_CMDS
++	(cd $(@D); \
++		CC="$(TARGET_CC)" \
++		CFLAGS="$(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include" \
++		CXX="$(TARGET_CXX)" \
++		CXXFLAGS="$(TARGET_CXXFLAGS) -I$(STAGING_DIR)/usr/include" \
++		LDSHARED="$(TARGET_CC) -shared" \
++		LDFLAGS="$(TARGET_LDFLAGS) -L$(STAGING_DIR)/lib -L$(STAGING_DIR)/usr/lib" \
++	$(HOST_DIR)/usr/bin/python setup.py build_ext \
++	--include-dirs=$(STAGING_DIR)/usr/include/python$(PYTHON_VERSION_MAJOR) \
++	)
++	(cd $(@D); $(HOST_DIR)/usr/bin/python setup.py build)
++endef
++
++# PYTHONPATH definition is need for install since an error could
++# be thrown about installing to location that isn't in PYTHONPATH
++define PYTHON_PYASN_INSTALL_TARGET_CMDS
++	(cd $(@D); \
++		PYTHONPATH=$(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages \
++	$(HOST_DIR)/usr/bin/python setup.py install --prefix=$(TARGET_DIR)/usr)
++endef
++
++#############
++# Host
++#############
++define HOST_PYTHON_PYASN_EXTRACT_CMDS
++	unzip -d $(@D) $(DL_DIR)/$(PYTHON_PYASN_SOURCE)
++	mv $(@D)/PyASN-$(PYTHON_PYASN_VERSION)/* $(@D)
++	$(RM) -r $(@D)/PyASN-$(PYTHON_PYASN_VERSION)
++endef
++
++define HOST_PYTHON_PYASN_BUILD_CMDS
++	(cd $(@D); \
++	$(HOST_DIR)/usr/bin/python setup.py build_ext \
++	)
++	(cd $(@D); $(HOST_DIR)/usr/bin/python setup.py build)
++endef
++
++define HOST_PYTHON_PYASN_INSTALL_TARGET_CMDS
++	(cd $(@D); \
++	$(HOST_DIR)/usr/bin/python setup.py install --prefix=$(TARGET_DIR)/usr)
++endef
++
++
++$(eval $(generic-package))
++$(eval $(host-generic-package))
+-- 
+1.7.1
