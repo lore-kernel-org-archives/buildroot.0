@@ -1,30 +1,32 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 04 Oct 2013 15:05:35 +0200
-Subject: [Buildroot] [PATCH] configs/qemu: bump relevant config versions
-In-Reply-To: <1380890978-13158-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Fri, 4 Oct 2013 09:49:38 -0300")
-References: <1380890978-13158-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <874n8xkwyo.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 4 Oct 2013 15:00:24 +0200
+Subject: [Buildroot] [git commit] dmidecode: bump to version 2.12
+Message-ID: <20131004130855.B10489B93F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=4c921006688a19f94f139ad1ef1e8d5523c48ebd
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Gustavo> arm_nuri needs some DT fixups to switch to the 3.11.x series
- Gustavo> since it's now default for that kernel defconfig.
+Signed-off-by: Axel Lin <axel.lin@ingics.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/dmidecode/dmidecode.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
- Gustavo> +++ b/configs/qemu_sparc_ss10_defconfig
- Gustavo> @@ -8,11 +8,11 @@ BR2_TARGET_ROOTFS_EXT2=y
+diff --git a/package/dmidecode/dmidecode.mk b/package/dmidecode/dmidecode.mk
+index 86a3be5..c53bd33 100644
+--- a/package/dmidecode/dmidecode.mk
++++ b/package/dmidecode/dmidecode.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- Gustavo>  # Lock to 3.7 headers to avoid breaking with newer kernels
- Gustavo>  BR2_KERNEL_HEADERS_VERSION=y
- Gustavo> -BR2_DEFAULT_KERNEL_VERSION="3.7.10"
- Gustavo> +BR2_DEFAULT_KERNEL_VERSION="3.11.3"
-
-Committed with the comment updated, thanks.
-
--- 
-Bye, Peter Korsgaard
+-DMIDECODE_VERSION = 2.11
++DMIDECODE_VERSION = 2.12
+ DMIDECODE_SITE    = http://download.savannah.gnu.org/releases/dmidecode/
+ 
+ define DMIDECODE_BUILD_CMDS
