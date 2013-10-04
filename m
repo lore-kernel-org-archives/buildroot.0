@@ -1,36 +1,51 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 04 Oct 2013 15:08:00 +0200
-Subject: [Buildroot] [PATCH v7 3/6] package/Makefile.in: don't force
-	jobs when BR2_JLEVEL is empty
-In-Reply-To: <524DA137.304@mind.be> (Arnout Vandecappelle's message of "Thu,
- 03 Oct 2013 18:54:15 +0200")
-References: <1380802245-16978-1-git-send-email-fabio.porcedda@gmail.com>
- <1380802245-16978-4-git-send-email-fabio.porcedda@gmail.com>
- <524DA137.304@mind.be>
-Message-ID: <87zjqpjia7.fsf@dell.be.48ers.dk>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Fri,  4 Oct 2013 10:28:18 -0300
+Subject: [Buildroot] [PATCH] gstreamer: fix bison bump build failure
+Message-ID: <1380893298-11365-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+It's due to deprecations in bison 3.0+, fixes:
+http://autobuild.buildroot.net/results/df4/df473cb34c9914b2c3d3d8ae344cbf7c19255468/
 
- Arnout> On 10/03/13 14:10, Fabio Porcedda wrote:
- >> When the "BR2_JLEVEL" variable is empty use "make" without
- >> the "-j" option, because to be able to use top-level parallel
- >> make we must don't force the number of jobs in sub-make.
- >> 
- >> Example:
- >> make BR2_JLEVEL= -j8
- >> 
- >> Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
- >> Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
- >> Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ .../gstreamer/gstreamer/gstreamer-01-bison3.patch  | 24 ++++++++++++++++++++++
+ 1 file changed, 24 insertions(+)
+ create mode 100644 package/gstreamer/gstreamer/gstreamer-01-bison3.patch
 
- Arnout>  Peter, can we get this committed?
-
-Yes, committed - Thanks.
-
+diff --git a/package/gstreamer/gstreamer/gstreamer-01-bison3.patch b/package/gstreamer/gstreamer/gstreamer-01-bison3.patch
+new file mode 100644
+index 0000000..f9ec52d
+--- /dev/null
++++ b/package/gstreamer/gstreamer/gstreamer-01-bison3.patch
+@@ -0,0 +1,24 @@
++Fix deprecation from bison 3.0+
++From http://comments.gmane.org/gmane.linux.lfs.beyond.devel/24620
++
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++
++diff -Nura gstreamer-0.10.36.orig/gst/parse/grammar.y gstreamer-0.10.36/gst/parse/grammar.y
++--- gstreamer-0.10.36.orig/gst/parse/grammar.y	2013-10-04 09:52:21.685282055 -0300
+++++ gstreamer-0.10.36/gst/parse/grammar.y	2013-10-04 10:21:54.800211238 -0300
++@@ -26,7 +26,6 @@
++  */
++
++ #define YYERROR_VERBOSE 1
++-#define YYLEX_PARAM scanner
++
++ #define YYENABLE_NLS 0
++
++@@ -648,6 +647,7 @@
++ %right '.'
++ %left '!' '='
++
+++%lex-param { void *scanner }
++ %parse-param { void *scanner }
++ %parse-param { graph_t *graph }
++ %pure-parser
 -- 
-Bye, Peter Korsgaard
+1.8.1.5
