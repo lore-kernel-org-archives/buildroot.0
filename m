@@ -1,71 +1,44 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat,  5 Oct 2013 16:16:10 +0200
-Subject: [Buildroot] [PATCH 1/5] toolchain-external: conditionalize the
-	installation of libraries
-In-Reply-To: <1380982574-16628-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1380982574-16628-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1380982574-16628-2-git-send-email-thomas.petazzoni@free-electrons.com>
+From: Eric Nelson <eric.nelson@boundarydevices.com>
+Date: Sat, 05 Oct 2013 07:52:55 -0700
+Subject: [Buildroot] [PATCH 0/4] i.MX: Refactor and update library
+	versions
+In-Reply-To: <20131005133630.7f799fd6@skate>
+References: <1380495298-22823-1-git-send-email-eric.nelson@boundarydevices.com>	<524F4541.1090004@boundarydevices.com>
+ <20131005133630.7f799fd6@skate>
+Message-ID: <525027C7.6040608@boundarydevices.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The external toolchain code makes the assumption that all C libraries
-have a ld*.so, libc.so, libcrypt.so, libdl.so, libgcc_s.so, libm.so,
-libnsl.so, libresolv.so, libutil.so, and when thread support is
-enabled, libpthread.so, etc.
+Thanks Thomas,
 
-However, this is not the case with the musl C library, which
-integrates all the functionalities in a single libc.so file. In
-preparation of the support of the musl library, we make the current
-value of LIB_EXTERNAL_LIBS conditional to glibc or uClibc.
+On 10/05/2013 04:36 AM, Thomas Petazzoni wrote:
+> Dear Eric Nelson,
+>
+> On Fri, 04 Oct 2013 15:46:25 -0700, Eric Nelson wrote:
+>
+>> On 09/29/2013 03:54 PM, Eric Nelson wrote:
+>>> This patch set restructures several libraries to share common
+>>> Makefile fragments in package/freescale-imx and bumps the
+>>> library versions to match the Freescale 3.0.35_4.1.0 release
+>>> for i.MX6.
+>>>
+>>
+>> Thomas and Arnout: do you want these to stay in /package?
+>
+> I don't have a strong opinion on this one. If they use the
+> FREESCALE_IMX_MIRROR / FREESCALE_IMX_VERSION variable, I would find it
+> more logical to have them under package/freescale-imx/, but it's really
+> not a strong requirement.
+>
+Arnout, you seemed to prefer keeping them where they were.
 
-The addition of additional libraries through
-BR2_TOOLCHAIN_EXTRA_EXTERNAL_LIBS is kept outside the condition, at
-the end.
+If that's still the case, I'll rework them in-place, which
+will be a smaller commit.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- toolchain/toolchain-external/ext-tool.mk | 19 +++++++++++--------
- 1 file changed, 11 insertions(+), 8 deletions(-)
+Regards,
 
-diff --git a/toolchain/toolchain-external/ext-tool.mk b/toolchain/toolchain-external/ext-tool.mk
-index db2a99e..93f1c0f 100644
---- a/toolchain/toolchain-external/ext-tool.mk
-+++ b/toolchain/toolchain-external/ext-tool.mk
-@@ -49,8 +49,16 @@
- #  $(HOST_DIR)/usr/bin like for the internal toolchains, and the rest
- #  of Buildroot is handled identical for the 2 toolchain types.
- 
--LIB_EXTERNAL_LIBS=ld*.so libc.so libcrypt.so libdl.so libgcc_s.so libm.so libnsl.so libresolv.so librt.so libutil.so
--LIB_EXTERNAL_LIBS+=$(call qstrip,$(BR2_TOOLCHAIN_EXTRA_EXTERNAL_LIBS))
-+ifeq ($(BR2_TOOLCHAIN_EXTERNAL_GLIBC)$(BR2_TOOLCHAIN_EXTERNAL_UCLIBC),y)
-+LIB_EXTERNAL_LIBS+=ld*.so libc.so libcrypt.so libdl.so libgcc_s.so libm.so libnsl.so libresolv.so librt.so libutil.so
-+ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
-+LIB_EXTERNAL_LIBS+=libpthread.so
-+ifneq ($(BR2_PACKAGE_GDB_SERVER)$(BR2_TOOLCHAIN_EXTERNAL_GDB_SERVER_COPY),)
-+LIB_EXTERNAL_LIBS+=libthread_db.so
-+endif # gdbserver
-+endif # ! no threads
-+endif
-+
- ifeq ($(BR2_TOOLCHAIN_EXTERNAL_GLIBC),y)
- LIB_EXTERNAL_LIBS+=libnss_files.so libnss_dns.so
- endif
-@@ -59,12 +67,7 @@ ifeq ($(BR2_INSTALL_LIBSTDCPP),y)
- USR_LIB_EXTERNAL_LIBS+=libstdc++.so
- endif
- 
--ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
--LIB_EXTERNAL_LIBS+=libpthread.so
--ifneq ($(BR2_PACKAGE_GDB_SERVER)$(BR2_TOOLCHAIN_EXTERNAL_GDB_SERVER_COPY),)
--LIB_EXTERNAL_LIBS+=libthread_db.so
--endif # gdbserver
--endif # ! no threads
-+LIB_EXTERNAL_LIBS+=$(call qstrip,$(BR2_TOOLCHAIN_EXTRA_EXTERNAL_LIBS))
- 
- # Details about sysroot directory selection.
- #
--- 
-1.8.1.2
+
+Eric
