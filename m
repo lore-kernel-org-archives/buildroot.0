@@ -1,30 +1,30 @@
-From: Axel Lin <axel.lin@ingics.com>
-Date: Sat, 05 Oct 2013 22:59:03 +0800
-Subject: [Buildroot] [PATCH] enchant: bump to version 1.6.0
-Message-ID: <1380985143.4554.0.camel@phoenix>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sat, 05 Oct 2013 20:13:37 +0200
+Subject: [Buildroot] [PATCHv2] beaglebone: add BeagleBone Black support
+In-Reply-To: <2072070.rCLOs5ZVTX@asici> ("Fatih =?utf-8?B?QcWfxLFjxLEiJ3M=?=
+ message of "Sat, 05 Oct 2013 13:21:27 +0300")
+References: <1380220826-17732-1-git-send-email-jkridner@beagleboard.org>
+ <4620256.4JgqIslJcA@asici> <87mwmohyie.fsf@dell.be.48ers.dk>
+ <2072070.rCLOs5ZVTX@asici>
+Message-ID: <87ioxbio1a.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Axel Lin <axel.lin@ingics.com>
----
- package/enchant/enchant.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+>>>>> "Fatih" == Fatih A??c? <fatih.asici@gmail.com> writes:
 
-diff --git a/package/enchant/enchant.mk b/package/enchant/enchant.mk
-index 8a76c6b..977c37b 100644
---- a/package/enchant/enchant.mk
-+++ b/package/enchant/enchant.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--ENCHANT_VERSION = 1.5.0
-+ENCHANT_VERSION = 1.6.0
- ENCHANT_SOURCE = enchant-$(ENCHANT_VERSION).tar.gz
- ENCHANT_SITE = http://www.abisource.com/downloads/enchant/$(ENCHANT_VERSION)
- ENCHANT_INSTALL_STAGING = YES
+Hi,
+
+ >> So it looks for uImage and .dtb files in rootfs:/boot? That sounds fine,
+ >> as that's where we're installing them.
+
+ Fatih> That's true; but we should enable
+ Fatih> BR2_LINUX_KERNEL_INSTALL_TARGET in defconfig too. It is not
+ Fatih> enabled by default.
+
+Sure, for the places where it makes sense (like on beaglebone).
+
 -- 
-1.8.1.2
+Bye, Peter Korsgaard
