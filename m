@@ -1,39 +1,35 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 5 Oct 2013 13:36:30 +0200
-Subject: [Buildroot] [PATCH 0/4] i.MX: Refactor and update library
-	versions
-In-Reply-To: <524F4541.1090004@boundarydevices.com>
-References: <1380495298-22823-1-git-send-email-eric.nelson@boundarydevices.com>
- <524F4541.1090004@boundarydevices.com>
-Message-ID: <20131005133630.7f799fd6@skate>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Sat, 05 Oct 2013 10:11:27 -0300
+Subject: [Buildroot] [PATCH] configs/qemu: bump relevant config versions
+In-Reply-To: <87wqlsituj.fsf@dell.be.48ers.dk>
+References: <1380890978-13158-1-git-send-email-gustavo@zacarias.com.ar>
+ <87wqlsituj.fsf@dell.be.48ers.dk>
+Message-ID: <52500FFF.9060603@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Eric Nelson,
+On 10/04/2013 06:55 PM, Peter Korsgaard wrote:
 
-On Fri, 04 Oct 2013 15:46:25 -0700, Eric Nelson wrote:
-
-> On 09/29/2013 03:54 PM, Eric Nelson wrote:
-> > This patch set restructures several libraries to share common
-> > Makefile fragments in package/freescale-imx and bumps the
-> > library versions to match the Freescale 3.0.35_4.1.0 release
-> > for i.MX6.
-> >
+> I'm not sure what went wrong here. You renamed a bunch of Linux
+> configuration files, but you didn't update the defconfigs to match.
 > 
-> Thomas and Arnout: do you want these to stay in /package?
+> I tested arm versatile with 3.11 and it didn't boot for me, so I've
+> changed the Linux configuration file names back to 3.10 rather than
+> adjusting the defconfigs.
 
-I don't have a strong opinion on this one. If they use the
-FREESCALE_IMX_MIRROR / FREESCALE_IMX_VERSION variable, I would find it
-more logical to have them under package/freescale-imx/, but it's really
-not a strong requirement.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+I've probably made some mistake when moving things around before doing
+the commit.
+That said it's working fine with 3.11.3 + qemu 1.6.0 for me, i do
+extensive tests before sending this series.
+I've placed some of my generated images at
+https://www.zacarias.com.ar/buildroot-qemu/ if you want to give those a
+try (or someone else to see if there's a pattern with qemu version or
+distribution).
+Maybe it's time we do a host-qemu for these to make it more
+predictable/concise. There's always some breakage when there's a new
+qemu version or kernel series and since we can't control which version
+each distribution has it's problematic IMHO.
+Regards.
