@@ -1,123 +1,191 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Sat,  5 Oct 2013 21:49:09 +0200
-Subject: [Buildroot] [PATCH 4/9] manual: add information about buildroot
-	toolchain not being relocable and put some hints to use it
+Date: Sat,  5 Oct 2013 21:49:13 +0200
+Subject: [Buildroot] [PATCH 8/9] manual: update get-involved section
 In-Reply-To: <cover.1381002281.git.s.martin49@gmail.com>
 References: <cover.1381002281.git.s.martin49@gmail.com>
-Message-ID: <ef67fc0502d4a0a4cdce65dc850921e08e0cfef0.1381002281.git.s.martin49@gmail.com>
+Message-ID: <2bc40dfe2f4f52569c0df066326a01360d5c0bdf.1381002281.git.s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: A.R.D. <contact@team-ard.com>
+* add events from the html page to the list
+* add "Buildroot material" section. This new section references material
+  (video, slides, posters, etc) used during presentations about Buildroot.
+
 Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 
 ---
-Changes v2 -> v3:
-- rephrase how to use buildroot toochain as an external one
+Let me know if I miss some events, or if you have some unreferenced
+material urls or url fixes.
 
-Changes v1 -> v2:
-- rephrase commit message
-- wrap line at 70-80 chars
-- misc. typo and formating fixes
-- misc. rewordings
+TIA,
 
 Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 ---
- docs/manual/customize-toolchain.txt | 72 +++++++++++++++++++++++++++++--------
- 1 file changed, 57 insertions(+), 15 deletions(-)
+ docs/manual/get-involved.txt | 145 ++++++++++++++++++++++++++++++++++++++++---
+ 1 file changed, 135 insertions(+), 10 deletions(-)
 
-diff --git a/docs/manual/customize-toolchain.txt b/docs/manual/customize-toolchain.txt
-index 82ecc28..324afd2 100644
---- a/docs/manual/customize-toolchain.txt
-+++ b/docs/manual/customize-toolchain.txt
-@@ -31,28 +31,70 @@ set the environment variable BR_DEBUG_WRAPPER to either one of:
- Using the internal Buildroot toolchain backend
- ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+diff --git a/docs/manual/get-involved.txt b/docs/manual/get-involved.txt
+index 49ab54c..27603a9 100644
+--- a/docs/manual/get-involved.txt
++++ b/docs/manual/get-involved.txt
+@@ -84,20 +84,145 @@ Currently, this page is mainly used as a _todo-list_.
+ Events
+ ------
  
--The internal Buildroot toolchain backend *only* allows to generate
--*http://www.uclibc.org/[uClibc]-based toolchains*.
-+The internal Buildroot toolchain backend allows to generate any C-library-based
-+toolchains. 'eglibc' and 'glibc' -based toolchain generation support is still
-+experimental in Buildroot
- 
--However, it allows to tune major settings, such as:
-+It allows to tune major settings, such as:
- 
- * Linux headers version;
- 
--* http://www.uclibc.org/[uClibc] configuration (see xref:uclibc-custom[uClibc]);
-+* C library configuration (only available for
-+  http://www.uclibc.org/[uClibc], see xref:uclibc-custom[uClibc]);
- 
- * Binutils, GCC, Gdb and toolchain options.
- 
- These settings are available after selecting the +Buildroot toolchain+ type in
- the menu +Toolchain+.
- 
--Using the Crosstool-NG backend
--^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
--
--The http://crosstool-ng.org[crosstool-NG] toolchain backend enables a rather
--limited set of settings under the Buildroot +Toolchain+ menu:
--
--* The http://crosstool-ng.org[crosstool-NG] configuration file
--
--* Gdb and some toolchain options
--
--Then, the toolchain can be fine-tuned by invoking +make ctng-menuconfig+.
-+It is possible to only build the toolchain by running:
+-Buildroot Developer Days aside FOSDEM 2012 (February 3, 2012 - Brussels)
+-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++Upcoming events
++~~~~~~~~~~~~~~~
 +
-+---------------------------------------
-+make toolchain
-+---------------------------------------
++* Buildroot Developer Days aside ELC-E 2013 (October 26-27 2013 - Edinburgh, UK)
+++
++Announcement and draft agenda of the event can also be found on:
+++
++** http://lists.busybox.net/pipermail/buildroot/2013-May/072645.html[]
++** http://lists.busybox.net/pipermail/buildroot/2013-August/076560.html[]
++** http://elinux.org/Buildroot:DeveloperDaysELCE2013[]
 +
-+To avoid to rebuild the toolchain (when using the 'internal Buildroot toolchain
-+backend') after executing +make clean+, you can build the toolchain in some
-+place, then use this prebuilt toolchain as an 'external toolchain' in another
-+buildroot configuration.
++Latest events
++~~~~~~~~~~~~~
 +
-+1. Configure the toolchain using the 'internal Buildroot toolchain backend'
-+  to meet your needs:
-++
-+---------------------------------------
-+make O=/path/to/somewhere menuconfig
-+---------------------------------------
-++
-+1. Build the toolchain:
-++
-+---------------------------------------
-+make O=/path/to/somewhere toolchain
-+---------------------------------------
-++
-+1. Configure target configuration using the prebuilt toolchain as an
-+   'external toolchain':
-++
-+---------------------------------------
-+make O=/path/to/somewhere_else menuconfig
-+---------------------------------------
-++
-+In the 'Toolchain' menu, set:
-++
-+* 'Toolchain type': +External toolchain+ (+BR2_TOOLCHAIN_EXTERNAL+)
-+* 'Toolchain': +Custom toolchain+ (+BR2_TOOLCHAIN_EXTERNAL_CUSTOM+)
-+* 'Toolchain origin': +Pre-installed toolchain+
-+  (+BR2_TOOLCHAIN_EXTERNAL_PREINSTALLED+)
-+* 'Toolchain path': +/path/to/somewhere/host/usr+
-+  (+BR2_TOOLCHAIN_EXTERNAL_PATH+)
-+* and set the external toolchain properties accordingly to the ones set for
-+  the prebuilt toolchain.
-++
-+1. Build the target binaries:
-++
-+---------------------------------------
-+make O=/path/to/somewhere_else
-+---------------------------------------
++* Lightning talks about 'Build system and Buildroot' at Kernel Recipes 2013
++  (September 24-25, 2013 - Paris, France)
 +
-+Note that toolchains built using the 'internal Buildroot toolchain backend' are
-+*not* relocable, so if you plan to share it with other machines, you will
-+*have to* install it in the same location (i.e.: in +/path/to/somewhere+).
++* GSoC participation (Summer 2013)
+++
++For the fisrt time of of its life, Builldroot will participate to the Google
++Summer of Code 2013, by mentoring one student.
+++
++This GSoC will mainly deal with improving support for ARM SoC multimedia features.
+++
++** GSoC topic ideas: http://elinux.org/Buildroot:GSoC2013Ideas[]
++** GSoC project presentation: http://www.google-melange.com/gsoc/org/google/gsoc2013/buildroot[]
++
++* Buildroot technical showcase at ELC 2013 (February 20-21, 2013 - San Francisco, US)
+++
++** Poster: http://free-electrons.com/~thomas/pub/buildroot-poster.png[]
++** Slides: http://free-electrons.com/~thomas/pub/buildroot-slides.pdf[]
++
++* Buildroot Developer Days aside FOSDEM 2013 (February 4-5, 2012 - Brussels, Belgium)
+++
++A report from the recent Buildroot Developers Meeting is now
++http://lists.busybox.net/pipermail/buildroot/2013-February/067105.html[available].
+++
++http://emlinews.net[Embedded Linux News] also has a
++http://www.emlinews.net/2013/02/buildroot-developers-meeting-report[writeup
++about the event], including photos.
+++
++Announcement and report of the event can alsobe found on the
++http://elinux.org/Buildroot:DeveloperDaysFOSDEM2013[related Wiki page].
+++
++Once again, thanks to all the participants and to http://www.google.com[Google]
++for sponsoring the event.
++
++* Buildroot Developer Days aside ELC-E 2012 (November 3-4, 2012 - Barcelona, Spain)
+++
++A report from the recent _Buildroot Developer Days_ meeting in Barcelona,
++Spain is now
++http://lists.busybox.net/pipermail/buildroot/2012-November/061558.html[available].
+++
++Many thanks to all the participants, and a special thanks to Arnout
++Vandecappelle from http://mind.be[mind] for taking notes and Thomas Petazzoni
++from http://free-electrons.com[Free Electrons] for handling all the practical
++arrangements, and naturally our sponsors, http://www.fluendo.com[Fluendo] and
++http://www.synopsys.com[Synopsis].
+++
++Announcement and report and draft agenda of the event can alsobe found on:
+++
++** http://elinux.org/Buildroot:DeveloperDaysELCE2012[]
++** http://elinux.org/Buildroot#Buildroot_Developers_Meeting.2C_3-4_November_2012.2C_Barcelona_Spain[]
++
++* Buildroot presentation at LSM 2012 (July 12-14, 2012 - Geneva, Switzerland)
+++
++** Announcement: http://lists.busybox.net/pipermail/buildroot/2012-May/053845.html[]
++
++* Buildroot presentation at ELC 2012 (February 15-17, 2012 - San Francisco, US)
+++
++** Slides: http://elinux.org/images/9/9e/Buildroot2.pdf[]
++** Video: http://video.linux.com/videos/buildroot-a-nice-simple-and-efficient-embedded-linux-build-system[]
++
++* Buildroot Developer Days aside FOSDEM 2012 (February 3, 2012 - Brussels, Belgium)
+++
++** Announcement:
++*** http://lists.busybox.net/pipermail/buildroot/2012-January/049340.html[]
++*** http://free-electrons.com/blog/bdd-2012-brussels[]
++** Report: http://lists.busybox.net/pipermail/buildroot/2012-February/050371.html[]
++
++* Buildroot presentation at ELC-E 2011 (October 26-28, 2011- Prague, Czech)
+++
++** Slides: http://elinux.org/images/2/2a/Using-buildroot-real-project.pdf[]
++** Video:
++http://free-electrons.com/pub/video/2011/elce/elce-2011-petazzoni-buildroot-for-real-project.webm[full HD],
++ http://free-electrons.com/pub/video/2011/elce/elce-2011-petazzoni-buildroot-for-real-project-450p.webm[450x800]
++
++* Buildroot Developer Day aside ELC-E 2010 (October 29, 2010 - Cambridge, UK)
+++
++** Announcement: http://lists.busybox.net/pipermail/buildroot/2010-September/037930.html[]
++
++* Buildroot presentation at FOSDEM 2010 (May 2, 2010 - Brussels, Belgium)
+++
++** Presentation: http://fosdem.org/2010/schedule/events/emb_cross_build[Build Systems:
++Present & Future]
++** Slides: http://send-patches.org/news/20100211-1-FOSDEM-Crossdev-Workshop.pdf[]
++** Video: http://free-electrons.com/pub/video/2010/fosdem/fosdem2010-workshop-cross-build-systems.ogv[]
++
++* Buildroot Developer Day aside ELC-E 2009 (October 17, 2009 - Grenoble, France)
+++
++The first _Buildroot Developer Day_ took place on Saturday, October 17th in
++Grenoble, France, just the day after Embedded Linux Conference Europe.
+++
++This _Developer Day_ aims at allowing Buildroot developers to meet and exchange
++ideas on the project and its future.
+++
++This _Developer Day_ took place thanks to the sponsoring of
++http://www.calao-systems.com[Calao Systems] and
++http://www.free-electrons.com[Free Electrons].
++
++[[material]]
++Buildroot material
++------------------
++
++Some regular contributors give talks about their works with Buildroot.
++
++Hereafter is a list of videos or slides or orther material used during these
++presentations.
+ 
+-* Announcement & agenda thread: http://lists.busybox.net/pipermail/buildroot/2012-January/049340.html[]
+-* Report: http://lists.busybox.net/pipermail/buildroot/2012-February/050371.html[]
++[WARNING]
++Keep in mind that the information given in these documents may be outdated,
++refers to this manual for the latest and up-to-date information.
+ 
+-Buildroot Developer Days aside ELC-E 2012 (November 3-4, 2012 - Barcelona)
+-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++* ELC 2013: Technical Showcase
++** http://free-electrons.com/~thomas/pub/buildroot-poster.png[Poster]
++** http://free-electrons.com/~thomas/pub/buildroot-slides.pdf[Slides]
+ 
+-* Event page: http://elinux.org/Buildroot:DeveloperDaysELCE2012[]
++* ELC 2012: Buildroot: A nice, simple and efficient embedde Linux build system
++** http://elinux.org/images/9/9e/Buildroot2.pdf[Slides]
++** http://video.linux.com/videos/buildroot-a-nice-simple-and-efficient-embedded-linux-build-system[Video]
+ 
+-Buildroot presentation at LSM 2012 (July 12-14, 2012 - Geneva)
+-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++* ELC-E 2011: Using Buildroot in real projects
++** http://elinux.org/images/2/2a/Using-buildroot-real-project.pdf[Slides]
++** Videos:
++http://free-electrons.com/pub/video/2011/elce/elce-2011-petazzoni-buildroot-for-real-project.webm[full HD],
++ http://free-electrons.com/pub/video/2011/elce/elce-2011-petazzoni-buildroot-for-real-project-450p.webm[450x800]
+ 
+-* Announcement: http://lists.busybox.net/pipermail/buildroot/2012-May/053845.html[]
++* FOSDEM 2010: Build Systems: Present & Future
++** http://send-patches.org/news/20100211-1-FOSDEM-Crossdev-Workshop.pdf[Slides]
++** http://free-electrons.com/pub/video/2010/fosdem/fosdem2010-workshop-cross-build-systems.ogv[Video]
+ 
+ 
 -- 
 1.8.4
