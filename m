@@ -1,36 +1,34 @@
-From: Axel Lin <axel.lin@ingics.com>
-Date: Sat, 05 Oct 2013 17:07:09 +0800
-Subject: [Buildroot] [PATCH] ndisc6: needs mmu
-Message-ID: <1380964029.3121.0.camel@phoenix>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sat, 05 Oct 2013 11:12:41 +0200
+Subject: [Buildroot] [PATCHv2] beaglebone: add BeagleBone Black support
+In-Reply-To: <4620256.4JgqIslJcA@asici> ("Fatih =?utf-8?B?QcWfxLFjxLEiJ3M=?=
+ message of "Sat, 05 Oct 2013 10:53:33 +0300")
+References: <1380220826-17732-1-git-send-email-jkridner@beagleboard.org>
+ <A20C6CC8-715F-45C3-BB9F-5085269FFD13@ti.com>
+ <878uy9jb7r.fsf@dell.be.48ers.dk> <4620256.4JgqIslJcA@asici>
+Message-ID: <87mwmohyie.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fix below build error if !BR2_USE_MMU:
+>>>>> "Fatih" == Fatih A??c? <fatih.asici@gmail.com> writes:
 
-tcpspray.o: In function `tcpspray':
-tcpspray.c:(.text+0x4a8): undefined reference to `fork'
-collect2: ld returned 1 exit status
-make[3]: *** [tcpspray] Error 1
+Hi,
 
-Signed-off-by: Axel Lin <axel.lin@ingics.com>
----
- package/ndisc6/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+ >> I would like to keep it with ext2 just to keep it similar to the other
+ >> defconfigs. Then we also don't need to carry the u-boot patch.
 
-diff --git a/package/ndisc6/Config.in b/package/ndisc6/Config.in
-index 6abe4ce..095b2e8 100644
---- a/package/ndisc6/Config.in
-+++ b/package/ndisc6/Config.in
-@@ -4,6 +4,7 @@ comment "ndisc6 requires a toolchain with IPv6 support"
- config BR2_PACKAGE_NDISC6
- 	bool "ndisc6 tools"
- 	depends on BR2_INET_IPV6
-+	depends on BR2_USE_MMU # fork()
- 	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
- 	help
- 	  NDisc6 is a small collection of useful tools for IPv6 networking
+ Fatih> A patch is still needed since the default am335x_evm (also
+ Fatih> omap[45]) config changes "bootdir" to "/boot" unlike the other
+ Fatih> u-boot configs. I don't have an idea about the other options;
+ Fatih> but at least this change is needed for a familiar experience
+ Fatih> with other boards.
+
+So it looks for uImage and .dtb files in rootfs:/boot? That sounds fine,
+as that's where we're installing them.
+
+
 -- 
-1.8.1.2
+Bye, Peter Korsgaard
