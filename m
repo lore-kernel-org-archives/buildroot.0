@@ -1,81 +1,56 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat,  5 Oct 2013 20:34:20 +0200
-Subject: [Buildroot] [PATCH] mysql_client: needs thread support
-Message-ID: <1380998060-18125-1-git-send-email-thomas.petazzoni@free-electrons.com>
+From: Carsten Schoenert <c.schoenert@gmail.com>
+Date: Sat,  5 Oct 2013 20:58:42 +0200
+Subject: [Buildroot] [PATCH] package/opkg: bumping version to 0.2.0
+Message-ID: <1380999522-2915-1-git-send-email-c.schoenert@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
+From: Carsten Schoenert <c.schoenert@gmail.com>
 
-   http://autobuild.buildroot.org/results/9b1/9b19b312651d21ea2fd54f364b11b01e4aa25e4b/build-end.log
+opkg has released a new version v0.2.0. The opkg community is also on
+the way to switching completely from subversion to git.
+The current git repository is placed on Bitbucket and will probably move
+once again if there will be find a new home for the project.
+https://bitbucket.org/opkg/opkg
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+The new version 0.2.0 is almost a bugfixing release with a lot of small
+changes.
+This patch is adding the license info too.
+
+Signed-off-by: Carsten Schoenert <c.schoenert@gmail.com>
 ---
- package/collectd/Config.in     | 1 +
- package/mysql_client/Config.in | 5 +++--
- package/php/Config.ext         | 3 +++
- 3 files changed, 7 insertions(+), 2 deletions(-)
+ package/opkg/opkg.mk | 13 +++++++------
+ 1 file changed, 7 insertions(+), 6 deletions(-)
 
-diff --git a/package/collectd/Config.in b/package/collectd/Config.in
-index 4957115..da65053 100644
---- a/package/collectd/Config.in
-+++ b/package/collectd/Config.in
-@@ -235,6 +235,7 @@ config BR2_PACKAGE_COLLECTD_MYSQL
- 	bool "mysql"
- 	depends on BR2_INSTALL_LIBSTDCPP # mysql
- 	depends on BR2_USE_MMU # mysql
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # mysql
- 	select BR2_PACKAGE_MYSQL_CLIENT
- 	help
- 	  Connects to a MySQL database and issues a "show status" command.
-diff --git a/package/mysql_client/Config.in b/package/mysql_client/Config.in
-index 970b9b9..8c98b7a 100644
---- a/package/mysql_client/Config.in
-+++ b/package/mysql_client/Config.in
-@@ -2,10 +2,11 @@ config BR2_PACKAGE_MYSQL_CLIENT
- 	bool "MySQL client"
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_USE_MMU # fork()
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	select BR2_PACKAGE_NCURSES
- 	select BR2_PACKAGE_READLINE
- 	help
- 	  MySQL client
+diff --git a/package/opkg/opkg.mk b/package/opkg/opkg.mk
+index 5846433..c57bd7f 100644
+--- a/package/opkg/opkg.mk
++++ b/package/opkg/opkg.mk
+@@ -4,15 +4,16 @@
+ #
+ ################################################################################
  
--comment "Mysql client requires a toolchain with C++ support enabled"
--	depends on !BR2_INSTALL_LIBSTDCPP
-+comment "Mysql client requires a toolchain with C++ and thread support"
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/php/Config.ext b/package/php/Config.ext
-index 006d7dd..3ba591d 100644
---- a/package/php/Config.ext
-+++ b/package/php/Config.ext
-@@ -106,6 +106,7 @@ config BR2_PACKAGE_PHP_EXT_MYSQL
- 	bool "Mysql"
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_USE_MMU # mysql
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # mysql
- 	select BR2_PACKAGE_MYSQL_CLIENT
- 	help
- 	  MySQL support
-@@ -114,6 +115,7 @@ config BR2_PACKAGE_PHP_EXT_MYSQLI
- 	bool "Mysqli"
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_USE_MMU # mysql
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # mysql
- 	select BR2_PACKAGE_MYSQL_CLIENT
- 	select BR2_PACKAGE_PHP_EXT_MYSQL
- 	help
-@@ -130,6 +132,7 @@ config BR2_PACKAGE_PHP_EXT_PDO_MYSQL
- 	bool "MySQL"
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_USE_MMU # mysql
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # mysql
- 	select BR2_PACKAGE_MYSQL_CLIENT
- 	help
- 	  PDO driver for MySQL
+-OPKG_VERSION = 635
+-OPKG_SOURCE = opkg-$(OPKG_VERSION).tar.gz
+-OPKG_SITE = http://opkg.googlecode.com/svn/trunk/
+-OPKG_SITE_METHOD = svn
++OPKG_VERSION = v0.2.0
++OPKG_SOURCE = $(OPKG_VERSION).tar.bz2
++OPKG_SITE = https://bitbucket.org/opkg/opkg/get
++# Uses PKG_CHECK_MODULES() in configure.ac
++OPKG_DEPENDENCIES = host-pkgconf
++OPKG_LICENSE = GPLv2+
++OPKG_LICENSE_FILES = COPYING
+ OPKG_INSTALL_STAGING = YES
+ OPKG_CONF_OPT = --disable-curl
+ OPKG_AUTORECONF = YES
+-# Uses PKG_CHECK_MODULES() in configure.ac
+-OPKG_DEPENDENCIES = host-pkgconf
+ 
+ # Ensure directory for lockfile exists
+ define OPKG_CREATE_LOCKDIR
 -- 
-1.8.1.2
+1.8.4.rc3
