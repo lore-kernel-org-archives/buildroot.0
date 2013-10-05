@@ -1,45 +1,45 @@
-From: Eric Nelson <eric.nelson@boundarydevices.com>
-Date: Fri, 04 Oct 2013 15:46:25 -0700
-Subject: [Buildroot] [PATCH 0/4] i.MX: Refactor and update library
-	versions
-In-Reply-To: <1380495298-22823-1-git-send-email-eric.nelson@boundarydevices.com>
-References: <1380495298-22823-1-git-send-email-eric.nelson@boundarydevices.com>
-Message-ID: <524F4541.1090004@boundarydevices.com>
+From: Axel Lin <axel.lin@ingics.com>
+Date: Sat, 05 Oct 2013 12:30:59 +0800
+Subject: [Buildroot] [PATCH 1/2] proxychains-ng: needs dynamic library
+	support
+Message-ID: <1380947459.27085.0.camel@phoenix>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
+Fix below build error if BR2_PREFER_STATIC_LIB is set:
 
-I clearly need to send a V2 of this patch set to remove the
-freescale.inc file.
+src/libproxychains.c:34:19: fatal error: dlfcn.h: No such file or directory
+compilation terminated.
+make[1]: *** [src/libproxychains.o] Error 1
 
-On 09/29/2013 03:54 PM, Eric Nelson wrote:
-> This patch set restructures several libraries to share common
-> Makefile fragments in package/freescale-imx and bumps the
-> library versions to match the Freescale 3.0.35_4.1.0 release
-> for i.MX6.
->
+In additional, the README file also mentions that this program works only on
+dynamically linked programs.
 
-Thomas and Arnout: do you want these to stay in /package?
+Signed-off-by: Axel Lin <axel.lin@ingics.com>
+---
+ package/proxychains-ng/Config.in | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
->   create mode 100644 package/freescale-imx/libfslcodec/Config.in
->   create mode 100644 package/freescale-imx/libfslcodec/libfslcodec.mk
->   create mode 100644 package/freescale-imx/libfslparser/Config.in
->   create mode 100644 package/freescale-imx/libfslparser/libfslparser.mk
->   create mode 100644 package/freescale-imx/libfslvpuwrap/Config.in
->   create mode 100644 package/freescale-imx/libfslvpuwrap/libfslvpuwrap.mk
->   delete mode 100644 package/libfslcodec/Config.in
->   delete mode 100644 package/libfslcodec/libfslcodec.mk
->   delete mode 100644 package/libfslparser/Config.in
->   delete mode 100644 package/libfslparser/libfslparser.mk
->   delete mode 100644 package/libfslvpuwrap/Config.in
->   delete mode 100644 package/libfslvpuwrap/libfslvpuwrap.mk
->
-
-Please advise,
-
-
-Eric
+diff --git a/package/proxychains-ng/Config.in b/package/proxychains-ng/Config.in
+index 99e49bd..97eaa0c 100644
+--- a/package/proxychains-ng/Config.in
++++ b/package/proxychains-ng/Config.in
+@@ -1,10 +1,11 @@
+ config BR2_PACKAGE_PROXYCHAINS_NG
+ 	bool "proxychains-ng"
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_PREFER_STATIC_LIB
+ 	help
+ 	  Force any tcp connections to flow through a proxy (or proxy chain)
+ 
+ 	  https://github.com/rofl0r/proxychains
+ 
+-comment "proxychains-ng needs a toolchain with thread support"
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS
++comment "proxychains-ng needs a toolchain with thread and dynamic library support"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_PREFER_STATIC_LIB
+-- 
+1.8.1.2
