@@ -1,10 +1,10 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Sat,  5 Oct 2013 21:49:07 +0200
-Subject: [Buildroot] [PATCH 2/9] manual: developer-guide.txt: cleanup
-	non-existing source
+Date: Sat,  5 Oct 2013 21:49:08 +0200
+Subject: [Buildroot] [PATCH 3/9] manual: update dependency list to build the
+	documentation
 In-Reply-To: <cover.1381002281.git.s.martin49@gmail.com>
 References: <cover.1381002281.git.s.martin49@gmail.com>
-Message-ID: <8cf99b63b2722a42a5a31788a71b1f26aec761dd.1381002281.git.s.martin49@gmail.com>
+Message-ID: <b03af600c8b5b0cfd0de60397918367cc3aeeaec.1381002281.git.s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,18 +13,21 @@ To: buildroot@busybox.net
 
 Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 ---
- docs/manual/developer-guide.txt | 2 --
- 1 file changed, 2 deletions(-)
+ docs/manual/prerequisite.txt | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/docs/manual/developer-guide.txt b/docs/manual/developer-guide.txt
-index 43272f5..8125ad5 100644
---- a/docs/manual/developer-guide.txt
-+++ b/docs/manual/developer-guide.txt
-@@ -11,5 +11,3 @@ include::adding-packages.txt[]
- include::patch-policy.txt[]
+diff --git a/docs/manual/prerequisite.txt b/docs/manual/prerequisite.txt
+index 78ce436..74b6a6c 100644
+--- a/docs/manual/prerequisite.txt
++++ b/docs/manual/prerequisite.txt
+@@ -76,4 +76,7 @@ development context (further details: refer to xref:download-infra[]).
+ ** The +jar+ tool
  
- include::download-infra.txt[]
--
--include::board-support.txt[]
+ * Documentation generation tools:
+-** +asciidoc+
++** +asciidoc+ version 8.6.3 or later
++** +dblatex+
++** +w3m+
++** +python+ with +argparse+ module
 -- 
 1.8.4
