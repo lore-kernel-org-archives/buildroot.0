@@ -1,30 +1,40 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 05 Oct 2013 20:13:37 +0200
-Subject: [Buildroot] [PATCHv2] beaglebone: add BeagleBone Black support
-In-Reply-To: <2072070.rCLOs5ZVTX@asici> ("Fatih =?utf-8?B?QcWfxLFjxLEiJ3M=?=
- message of "Sat, 05 Oct 2013 13:21:27 +0300")
-References: <1380220826-17732-1-git-send-email-jkridner@beagleboard.org>
- <4620256.4JgqIslJcA@asici> <87mwmohyie.fsf@dell.be.48ers.dk>
- <2072070.rCLOs5ZVTX@asici>
-Message-ID: <87ioxbio1a.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat,  5 Oct 2013 20:29:56 +0200
+Subject: [Buildroot] [PATCH] sqlcipher: needs thread support
+Message-ID: <1380997796-17929-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fatih" == Fatih A??c? <fatih.asici@gmail.com> writes:
+Fixes:
 
-Hi,
+  http://autobuild.buildroot.org/results/ac4/ac482030479b8172bf45c4f850d9007ec7c95ea5/
 
- >> So it looks for uImage and .dtb files in rootfs:/boot? That sounds fine,
- >> as that's where we're installing them.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/sqlcipher/Config.in | 4 ++++
+ 1 file changed, 4 insertions(+)
 
- Fatih> That's true; but we should enable
- Fatih> BR2_LINUX_KERNEL_INSTALL_TARGET in defconfig too. It is not
- Fatih> enabled by default.
-
-Sure, for the places where it makes sense (like on beaglebone).
-
+diff --git a/package/sqlcipher/Config.in b/package/sqlcipher/Config.in
+index af41eb2..e793019 100644
+--- a/package/sqlcipher/Config.in
++++ b/package/sqlcipher/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_SQLCIPHER
+ 	bool "sqlcipher"
+ 	depends on !BR2_PACKAGE_SQLITE
++	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_PACKAGE_OPENSSL
+ 	help
+ 	  SQLCipher is an SQLite extension that provides 256 bits AES
+@@ -27,3 +28,6 @@ config BR2_PACKAGE_SQLCIPHER_STAT3
+ 
+ comment "sqlcipher conflicts with sqlite"
+ 	depends on BR2_PACKAGE_SQLITE
++
++comment "sqlcipher needs a toolchain with thread support"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS
 -- 
-Bye, Peter Korsgaard
+1.8.1.2
