@@ -1,23 +1,40 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun,  6 Oct 2013 14:32:46 +0000 (UTC)
-Subject: [Buildroot] [Bug 6452] eglibc from Linaro 2013.07 not copied to
-	target correctly
-In-Reply-To: <bug-6452-163@https.bugs.busybox.net/>
-References: <bug-6452-163@https.bugs.busybox.net/>
-Message-ID: <20131006143246.2E1619B940@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 6 Oct 2013 16:48:48 +0200
+Subject: [Buildroot] [PATCH] libevent: Add Gentoo patch for C libraries
+ without the sysctl syscall
+In-Reply-To: <1353495389-20179-1-git-send-email-markos.chandras@gmail.com>
+References: <1353495389-20179-1-git-send-email-markos.chandras@gmail.com>
+Message-ID: <20131006164848.1af52324@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=6452
+Dear Markos Chandras,
 
---- Comment #2 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> 2013-10-06 14:32:41 UTC ---
-I've sent a fix for this problem as part of the patch set at
-http://lists.busybox.net/pipermail/buildroot/2013-October/079647.html.
+On Wed, 21 Nov 2012 10:56:29 +0000, Markos Chandras wrote:
+> From: Markos Chandras <markos.chandras@imgtec.com>
+> 
+> Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
+> ---
+>  package/libevent/libevent-sysctl.patch |   46 ++++++++++++++++++++++++++++++++
+>  package/libevent/libevent.mk           |    1 +
+>  2 files changed, 47 insertions(+), 0 deletions(-)
+>  create mode 100644 package/libevent/libevent-sysctl.patch
 
+This patch was never applied to Buildroot, but libevent has been
+updated to 2.0.21 recently, and my understanding is that the sysctl
+problem is fixed in 2.0.21.
+
+Therefore, I'm marking this patch as "non-applicable" in patchwork.
+Do not hesitate to resend an updated patch if my understanding turns
+out to be wrong.
+
+Thanks!
+
+Thomas
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Thomas Petazzoni, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
