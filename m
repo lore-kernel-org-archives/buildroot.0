@@ -1,39 +1,21 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 6 Oct 2013 10:58:37 +0200
-Subject: [Buildroot] [PATCH 0/4] i.MX: Refactor and update library
- versions
-In-Reply-To: <525027C7.6040608@boundarydevices.com>
-References: <1380495298-22823-1-git-send-email-eric.nelson@boundarydevices.com>
- <524F4541.1090004@boundarydevices.com>
- <20131005133630.7f799fd6@skate>
- <525027C7.6040608@boundarydevices.com>
-Message-ID: <20131006105837.69d64d1e@skate>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 06 Oct 2013 11:02:36 +0200
+Subject: [Buildroot] [PATCH 1/2] stunnel: fix download url
+In-Reply-To: <1381023024.2508.0.camel@phoenix> (Axel Lin's message of "Sun, 06
+ Oct 2013 09:30:24 +0800")
+References: <1381023024.2508.0.camel@phoenix>
+Message-ID: <87eh7yhivn.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Eric Nelson,
+>>>>> "Axel" == Axel Lin <axel.lin@ingics.com> writes:
 
-On Sat, 05 Oct 2013 07:52:55 -0700, Eric Nelson wrote:
+ Axel> Signed-off-by: Axel Lin <axel.lin@ingics.com>
 
-> > I don't have a strong opinion on this one. If they use the
-> > FREESCALE_IMX_MIRROR / FREESCALE_IMX_VERSION variable, I would find it
-> > more logical to have them under package/freescale-imx/, but it's really
-> > not a strong requirement.
-> >
-> Arnout, you seemed to prefer keeping them where they were.
-> 
-> If that's still the case, I'll rework them in-place, which
-> will be a smaller commit.
+Committed both, thanks.
 
-Yes, seems good to me.
-
-Best regards,
-
-Thomas
 -- 
-Thomas Petazzoni, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
