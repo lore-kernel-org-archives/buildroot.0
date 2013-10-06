@@ -1,74 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun,  6 Oct 2013 16:19:20 +0200
-Subject: [Buildroot] [PATCHv2 10/21] package: add a <pkg>_EXTRA_DOWNLOADS
-	variable
+Date: Sun,  6 Oct 2013 16:19:22 +0200
+Subject: [Buildroot] [PATCHv2 12/21] dependencies: remove useless targets
 In-Reply-To: <1381069171-29748-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1381069171-29748-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1381069171-29748-11-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1381069171-29748-13-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Converting the external toolchain logic into a package raises a very
-special use case that wasn't handled by the package infrastructure:
-the Blackfin toolchain is delivered as two tarballs instead of
-one. Unfortunately <pkg>_SOURCE only allows to pass one tarball name.
-
-However, we really want both tarballs to be known by the package
-infrastructure, so that the normal 'source' and 'external-deps'
-mechanism work fine.
-
-In order to achieve this, we add a <pkg>_EXTRA_DOWNLOADS variable,
-which allows a package to list other stuff it would like to see
-downloaded, but that are otherwise not used by the package
-infrastructure itself: it is up to the package to do it by itself.
+The dependencies-source, dependencies-clean and dependencies-dirclean
+targets are not needed, as long as 'dependencies' is not used in the
+<pkg>_DEPENDENCIES of a package.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- docs/manual/adding-packages-generic.txt | 6 ++++++
- package/pkg-generic.mk                  | 4 ++++
- 2 files changed, 10 insertions(+)
+ support/dependencies/dependencies.mk | 8 --------
+ 1 file changed, 8 deletions(-)
 
-diff --git a/docs/manual/adding-packages-generic.txt b/docs/manual/adding-packages-generic.txt
-index cb067bd..59a2684 100644
---- a/docs/manual/adding-packages-generic.txt
-+++ b/docs/manual/adding-packages-generic.txt
-@@ -248,6 +248,12 @@ information is (assuming the package name is +libfoo+) :
-     +LIBFOO_SITE=/opt/software/libfoo.tar.gz+ +
-     +LIBFOO_SITE=$(TOPDIR)/../src/libfoo/+
+diff --git a/support/dependencies/dependencies.mk b/support/dependencies/dependencies.mk
+index 97f85e6..155a909 100644
+--- a/support/dependencies/dependencies.mk
++++ b/support/dependencies/dependencies.mk
+@@ -33,14 +33,6 @@ dependencies: HOSTCC=$(HOSTCC_NOCCACHE)
+ dependencies: HOSTCXX=$(HOSTCXX_NOCCACHE)
+ dependencies: core-dependencies $(DEPENDENCIES_HOST_PREREQ)
  
-+* +LIBFOO_EXTRA_DOWNLOADS+ lists a number of additional files that
-+  Buildroot should download from +LIBFOO_SITE+ in addition to the main
-+  +LIBFOO_SOURCE+ (which usually is a tarball). Buildroot will not do
-+  anything with those additional files, except download files: it will
-+  be up to the package recipe to use them from +$(DL_DIR)+.
-+
- * +LIBFOO_SITE_METHOD+ determines the method used to fetch or copy the
-   package source code. In many cases, Buildroot guesses the method
-   from the contents of +LIBFOO_SITE+ and setting +LIBFOO_SITE_METHOD+
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 438a954..6e2b0e2 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -40,6 +40,7 @@ ifeq ($(DL_MODE),DOWNLOAD)
- 	fi
- endif
- 	$(if $($(PKG)_SOURCE),$(call DOWNLOAD,$($(PKG)_SITE:/=)/$($(PKG)_SOURCE)))
-+	$(foreach p,$($(PKG)_EXTRA_DOWNLOADS),$(call DOWNLOAD,$($(PKG)_SITE:/=)/$(p))$(sep))
- 	$(foreach p,$($(PKG)_PATCH),\
- 		$(if $(findstring ://,$(p)),\
- 			$(call DOWNLOAD,$(p)),\
-@@ -426,6 +427,9 @@ $(1)-external-deps:
- ifneq ($$($(2)_SOURCE),)
- 			@echo $$($(2)_SOURCE)
- endif
-+ifneq ($$($(2)_EXTRA_DOWNLOADS),)
-+			@echo $$($(2)_EXTRA_DOWNLOADS)
-+endif
- 
- $(1)-all-external-deps:	$(foreach p,$($(2)_DEPENDENCIES),$(p)-all-external-deps) $(1)-external-deps
- 
+-dependencies-source:
+-
+-dependencies-clean:
+-	rm -f $(SSTRIP_TARGET)
+-
+-dependencies-dirclean:
+-	true
+-
+ ################################################################################
+ #
+ # Toplevel Makefile options
 -- 
 1.8.1.2
