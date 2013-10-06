@@ -1,36 +1,30 @@
-From: Romain Naour <romain.naour@openwide.fr>
-Date: Sun, 06 Oct 2013 01:39:55 +0200
-Subject: [Buildroot] [PATCH 1/1] dbus: pthread static lib
-Message-ID: <5250A34B.3060903@openwide.fr>
+From: Axel Lin <axel.lin@ingics.com>
+Date: Sun, 06 Oct 2013 09:30:24 +0800
+Subject: [Buildroot] [PATCH 1/2] stunnel: fix download url
+Message-ID: <1381023024.2508.0.camel@phoenix>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
--lpthread is missing when dbus is build with static lib
-
-fix build failure:
-http://autobuild.buildroot.net/results/80a317e33afd1d5ba2f7dd9ecd89314b09b4b1fe/
-http://autobuild.buildroot.net/results/2c3c040624652547bbeec363d7d6b03f2477ff00/
+Signed-off-by: Axel Lin <axel.lin@ingics.com>
 ---
- package/dbus/dbus.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+ package/stunnel/stunnel.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/dbus/dbus.mk b/package/dbus/dbus.mk
-index d50f630..e241247 100644
---- a/package/dbus/dbus.mk
-+++ b/package/dbus/dbus.mk
-@@ -30,6 +30,10 @@ DBUS_CONF_OPT = --with-dbus-user=dbus \
- 		--with-system-socket=/var/run/dbus/system_bus_socket \
- 		--with-system-pid-file=/var/run/messagebus.pid
-
-+ifeq ($(BR2_PREFER_STATIC_LIB),y)
-+DBUS_CONF_OPT += LIBS='-lpthread'
-+endif
-+
- ifeq ($(BR2_microblaze),y)
- # microblaze toolchain doesn't provide inotify_rm_* but does have sys/inotify.h
- DBUS_CONF_OPT += --disable-inotify
+diff --git a/package/stunnel/stunnel.mk b/package/stunnel/stunnel.mk
+index bfe96c3..8548eab 100644
+--- a/package/stunnel/stunnel.mk
++++ b/package/stunnel/stunnel.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ STUNNEL_VERSION = 4.55
+-STUNNEL_SITE = http://ftp.nluug.nl/pub/networking/stunnel
++STUNNEL_SITE = http://ftp.nluug.nl/pub/networking/stunnel/archive/4.x/
+ STUNNEL_DEPENDENCIES = openssl
+ STUNNEL_CONF_OPT = --with-ssl=$(STAGING_DIR)/usr --with-threads=fork
+ STUNNEL_LICENSE = GPLv2+
 -- 
-1.8.4
+1.8.1.2
