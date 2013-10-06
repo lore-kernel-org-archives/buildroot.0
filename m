@@ -1,200 +1,162 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun,  6 Oct 2013 16:19:12 +0200
-Subject: [Buildroot] [PATCHv2 02/21] docs: update manual after Crosstool-NG
-	backend removal
+Date: Sun,  6 Oct 2013 16:19:19 +0200
+Subject: [Buildroot] [PATCHv2 09/21] package: remove useless
+	SHOW_EXTERNAL_DEPS support
 In-Reply-To: <1381069171-29748-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1381069171-29748-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1381069171-29748-3-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1381069171-29748-10-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Now that a package-based 'make external-deps' support has been added,
+the DL_MODE=SHOW_EXTERNAL_DEPS mechanism is no longer needed, so some
+clean up is done in this commit.
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- docs/manual/configure.txt           | 60 +++----------------------------------
- docs/manual/customize-store.txt     | 20 ++++++-------
- docs/manual/customize-toolchain.txt | 12 --------
- docs/manual/make-tips.txt           |  2 --
- docs/manual/rebuilding-packages.txt |  2 --
- 5 files changed, 14 insertions(+), 82 deletions(-)
+ package/pkg-download.mk | 44 ++------------------------------------------
+ package/pkg-generic.mk  |  5 +----
+ 2 files changed, 3 insertions(+), 46 deletions(-)
 
-diff --git a/docs/manual/configure.txt b/docs/manual/configure.txt
-index 56b0469..8912a81 100644
---- a/docs/manual/configure.txt
-+++ b/docs/manual/configure.txt
-@@ -47,8 +47,7 @@ target system uses ARM, the regular compilation toolchain on your host
- runs on x86 and generates code for x86, while the cross-compilation
- toolchain runs on x86 and generates code for ARM.
+diff --git a/package/pkg-download.mk b/package/pkg-download.mk
+index 8e4a1ec..208c83c 100644
+--- a/package/pkg-download.mk
++++ b/package/pkg-download.mk
+@@ -18,9 +18,8 @@ SCP := $(call qstrip,$(BR2_SCP)) $(QUIET)
+ SSH := $(call qstrip,$(BR2_SSH)) $(QUIET)
+ LOCALFILES := $(call qstrip,$(BR2_LOCALFILES))
  
--Buildroot provides different solutions to build, or use existing
--cross-compilation toolchains:
-+Buildroot provides two solutions for the cross-compilation toolchain:
+-# Default spider mode is 'DOWNLOAD'. Other possible values are 'SOURCE_CHECK'
+-# used by the _source-check target and 'SHOW_EXTERNAL_DEPS', used by the
+-# external-deps target.
++# Default spider mode is 'DOWNLOAD'. The possible value is
++# 'SOURCE_CHECK' used by the _source-check target.
+ DL_MODE=DOWNLOAD
  
-  * The *internal toolchain backend*, called +Buildroot toolchain+ in
-    the configuration interface.
-@@ -56,10 +55,7 @@ cross-compilation toolchains:
-  * The *external toolchain backend*, called +External toolchain+ in
-    the configuration interface.
+ # Override BR2_DL_DIR if shell variable defined
+@@ -66,11 +65,6 @@ domainseparator=$(if $(1),$(1),/)
+ # The SOURCE_CHECK_* helpers are in charge of simply checking that the source
+ # is available for download. This can be used to make sure one will be able
+ # to get all the sources needed for one's build configuration.
+-#
+-# The SHOW_EXTERNAL_DEPS_* helpers simply output to the console the names
+-# of the files that will be downloaded, or path and revision of the
+-# source repositories, producing a list of all the "external dependencies"
+-# of a given build configuration.
+ ################################################################################
  
-- * The *Crosstool-NG toolchain backend*, called +Crosstool-NG
--   toolchain+ in the configuration interface.
--
--The choice between these three solutions is done using the +Toolchain
-+The choice between these two solutions is done using the +Toolchain
- Type+ option in the +Toolchain+ menu. Once one solution has been
- chosen, a number of configuration options appear, they are detailed in
- the following sections.
-@@ -76,8 +72,8 @@ This backend is the historical backend of Buildroot, and has been
- limited for a long time to the usage of the
- http://www.uclibc.org[uClibc C library]. Support for the _eglibc_ C
- library has been added in 2013 and is at this point considered
--experimental. See the _External toolchain backend_ and _Crosstool-NG
--toolchain backend_ for other solutions to use _glibc_ or _eglibc_.
-+experimental. See the _External toolchain backend_ for another
-+solution to use _glibc_ or _eglibc_.
+ # Try a shallow clone - but that only works if the version is a ref (tag or
+@@ -101,11 +95,6 @@ define SOURCE_CHECK_GIT
+   $(GIT) ls-remote --heads $($(PKG)_SITE) > /dev/null
+ endef
  
- Once you have selected this backend, a number of options appear. The
- most important ones allow to:
-@@ -242,54 +238,6 @@ Drawbacks of this backend:
-   fix from the toolchain vendor, unless you build your external
-   toolchain by yourself using Crosstool-NG.
+-define SHOW_EXTERNAL_DEPS_GIT
+-	echo $($(PKG)_SOURCE)
+-endef
+-
+-
+ define DOWNLOAD_BZR
+ 	test -e $(DL_DIR)/$($(PKG)_SOURCE) || \
+ 	$(BZR) export $(DL_DIR)/$($(PKG)_SOURCE) $($(PKG)_SITE) -r $($(PKG)_DL_VERSION)
+@@ -115,10 +104,6 @@ define SOURCE_CHECK_BZR
+ 	$(BZR) ls --quiet $($(PKG)_SITE) > /dev/null
+ endef
  
--[[crosstool-ng-toolchain-backend]]
--Crosstool-NG toolchain backend
--^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+-define SHOW_EXTERNAL_DEPS_BZR
+-	echo $($(PKG)_SOURCE)
+-endef
 -
--The _Crosstool-NG toolchain backend_ integrates the
--http://crosstool-ng.org[Crosstool-NG] project with
--Buildroot. Crosstool-NG is a highly-configurable, versatile and
--well-maintained tool to build cross-compilation toolchains.
--
--If you select the +Crosstool-NG toolchain+ option in +Toolchain Type+,
--then you will be offered to:
--
-- * Choose which C library you want to use. Crosstool-NG supports the
--   three most important C libraries used in Linux systems: glibc,
--   eglibc and uClibc
--
-- * Choose a custom Crosstool-NG configuration file. Buildroot has its
--   own default configuration file (one per C library choice), but you
--   can provide your own. Another option is to run +make
--   ctng-menuconfig+ to get access to the Crosstool-NG configuration
--   interface. However, note that all Buildroot packages have only been
--   tested with the default Crosstool-NG configurations.
--
-- * Choose a number of toolchain options (rather limited if glibc or
--   eglibc are used, or numerous if uClibc is used)
--
--When you will start the Buildroot build process, Buildroot will
--download and install the Crosstool-NG tool, build and install its
--required dependencies, and then run Crosstool-NG with the provided
--configuration.
--
--Advantages of this backend:
--
--* Not limited to uClibc: glibc and eglibc are supported.
--
--* Vast possibilities of toolchain configuration.
--
--Drawbacks of this backend:
--
--* Crosstool-NG is not perfectly integrated with Buildroot. For
--  example, Crosstool-NG has its own download infrastructure, not
--  integrated with the one in Buildroot (for example a Buildroot +make
--  source+ will not download all the source code tarballs needed by
--  Crosstool-NG).
--
--* The toolchain is completely rebuilt from scratch if you do a +make
--  clean+.
--
- /dev management
- ~~~~~~~~~~~~~~~
+ define DOWNLOAD_CVS
+ 	test -e $(DL_DIR)/$($(PKG)_SOURCE) || \
+ 	(pushd $(DL_DIR) > /dev/null && \
+@@ -134,10 +119,6 @@ define SOURCE_CHECK_CVS
+ 	$(CVS) -d:pserver:anonymous:@$(call stripurischeme,$(call qstrip,$($(PKG)_SITE))) login
+ endef
  
-diff --git a/docs/manual/customize-store.txt b/docs/manual/customize-store.txt
-index 5083339..c2f5235 100644
---- a/docs/manual/customize-store.txt
-+++ b/docs/manual/customize-store.txt
-@@ -42,13 +42,14 @@ Alternatively, you can copy the file to any other place and rebuild with
- Other package configuration
- ^^^^^^^^^^^^^^^^^^^^^^^^^^^
- 
--The configuration files for busybox, the linux kernel, barebox, uClibc and
--crosstool-NG should be stored as well if changed. For each of these, a
--buildroot configuration option exists to point to an input configuration
--file, e.g. +BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE+.  To save their
--configuration, set those configuration options to a path outside
--your output directory, e.g. +board/<manufacturer>/<boardname>/linux.config+.
--Then, copy the configuration files to that path.
-+The configuration files for busybox, the linux kernel, barebox and
-+uClibc should be stored as well if changed. For each of these, a
-+buildroot configuration option exists to point to an input
-+configuration file, e.g. +BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE+.  To
-+save their configuration, set those configuration options to a path
-+outside your output directory,
-+e.g. +board/<manufacturer>/<boardname>/linux.config+.  Then, copy the
-+configuration files to that path.
- 
- Make sure that you create a configuration file 'before' changing
- the +BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE+ etc. options.  Otherwise,
-@@ -70,9 +71,8 @@ configuration files easier.
-   path specified by +BR2_UCLIBC_CONFIG+.
- * +make barebox-update-defconfig+ saves the barebox configuration to the
-   path specified by +BR2_TARGET_BAREBOX_CUSTOM_CONFIG_FILE+.
--* For crosstool-NG and at91bootstrap3, no helper exists so you
--  have to copy the config file manually to +BR2_TOOLCHAIN_CTNG_CONFIG+,
--  resp. +BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_CONFIG_FILE+.
-+* For at91bootstrap3, no helper exists so you have to copy the config
-+  file manually to +BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_CONFIG_FILE+.
- 
- 
- [[customize-store-board-support]]
-diff --git a/docs/manual/customize-toolchain.txt b/docs/manual/customize-toolchain.txt
-index 82ecc28..841dbfd 100644
---- a/docs/manual/customize-toolchain.txt
-+++ b/docs/manual/customize-toolchain.txt
-@@ -44,15 +44,3 @@ However, it allows to tune major settings, such as:
- 
- These settings are available after selecting the +Buildroot toolchain+ type in
- the menu +Toolchain+.
+-define SHOW_EXTERNAL_DEPS_CVS
+-	echo $($(PKG)_SOURCE)
+-endef
 -
--Using the Crosstool-NG backend
--^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
--
--The http://crosstool-ng.org[crosstool-NG] toolchain backend enables a rather
--limited set of settings under the Buildroot +Toolchain+ menu:
--
--* The http://crosstool-ng.org[crosstool-NG] configuration file
--
--* Gdb and some toolchain options
--
--Then, the toolchain can be fine-tuned by invoking +make ctng-menuconfig+.
-diff --git a/docs/manual/make-tips.txt b/docs/manual/make-tips.txt
-index c3fd155..31a88bf 100644
---- a/docs/manual/make-tips.txt
-+++ b/docs/manual/make-tips.txt
-@@ -36,8 +36,6 @@ some settings in the +.config+ file may hide some targets:
-   +linux+ is enabled;
- * +uclibc-menuconfig+ is only available when the
-   Buildroot internal toolchain backend is used;
--* +ctng-menuconfig+ is only available when the
--  crosstool-NG backend is used;
- * +barebox-menuconfig+ and +barebox-savedefconfig+ only work when the
-   +barebox+ bootloader is enabled.
+ define DOWNLOAD_SVN
+ 	test -e $(DL_DIR)/$($(PKG)_SOURCE) || \
+ 	(pushd $(DL_DIR) > /dev/null && \
+@@ -151,10 +132,6 @@ define SOURCE_CHECK_SVN
+   $(SVN) ls $($(PKG)_SITE) > /dev/null
+ endef
  
-diff --git a/docs/manual/rebuilding-packages.txt b/docs/manual/rebuilding-packages.txt
-index 044c908..88d6670 100644
---- a/docs/manual/rebuilding-packages.txt
-+++ b/docs/manual/rebuilding-packages.txt
-@@ -17,8 +17,6 @@ In some cases, a full rebuild is mandatory:
+-define SHOW_EXTERNAL_DEPS_SVN
+-  echo $($(PKG)_SOURCE)
+-endef
+-
+ # SCP URIs should be of the form scp://[user@]host:filepath
+ # Note that filepath is relative to the user's home directory, so you may want
+ # to prepend the path with a slash: scp://[user@]host:/absolutepath
+@@ -167,11 +144,6 @@ define SOURCE_CHECK_SCP
+ 	$(SSH) $(call domain,$(1),:) ls '$(call notdomain,$(1),:)' > /dev/null
+ endef
  
- ** after changing any toolchain option under the _Toolchain_ menu (if
-    the internal Buildroot backend is used);
--** after running +make ctng-menuconfig+ (if the crosstool-NG backend
--   is used);
- ** after running +make uclibc-menuconfig+.
+-define SHOW_EXTERNAL_DEPS_SCP
+-	echo $(2)
+-endef
+-
+-
+ define DOWNLOAD_HG
+ 	test -e $(DL_DIR)/$($(PKG)_SOURCE) || \
+ 	(pushd $(DL_DIR) > /dev/null && \
+@@ -188,10 +160,6 @@ define SOURCE_CHECK_HG
+   $(HG) incoming --force -l1 $($(PKG)_SITE) > /dev/null
+ endef
  
- * after removing some libraries from the package selection.
+-define SHOW_EXTERNAL_DEPS_HG
+-  echo $($(PKG)_SOURCE)
+-endef
+-
+ # Download a file using wget. Only download the file if it doesn't
+ # already exist in the download directory. If the download fails,
+ # remove the file (because wget -O creates a 0-byte file even if the
+@@ -209,10 +177,6 @@ define SOURCE_CHECK_WGET
+   $(WGET) --spider '$(call qstrip,$(1))'
+ endef
+ 
+-define SHOW_EXTERNAL_DEPS_WGET
+-  echo $(2)
+-endef
+-
+ define DOWNLOAD_LOCALFILES
+ 	test -e $(DL_DIR)/$(2) || \
+ 		$(LOCALFILES) $(call stripurischeme,$(call qstrip,$(1))) $(DL_DIR)
+@@ -222,10 +186,6 @@ define SOURCE_CHECK_LOCALFILES
+   test -e $(call stripurischeme,$(call qstrip,$(1)))
+ endef
+ 
+-define SHOW_EXTERNAL_DEPS_LOCALFILES
+-  echo $(2)
+-endef
+-
+ ################################################################################
+ # DOWNLOAD -- Download helper. Will try to download source from:
+ # 1) BR2_PRIMARY_SITE if enabled
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 91e79f5..438a954 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -70,13 +70,10 @@ $(BUILD_DIR)/%/.stamp_rsynced:
+ 	rsync -au --cvs-exclude --include core $(SRCDIR)/ $(@D)
+ 	$(Q)touch $@
+ 
+-# Handle the SOURCE_CHECK and SHOW_EXTERNAL_DEPS cases for rsynced
+-# packages
++# Handle the SOURCE_CHECK case for rsynced packages
+ $(BUILD_DIR)/%/.stamp_rsync_sourced:
+ ifeq ($(DL_MODE),SOURCE_CHECK)
+ 	test -d $(SRCDIR)
+-else ifeq ($(DL_MODE),SHOW_EXTERNAL_DEPS)
+-	echo "file://$(SRCDIR)"
+ else
+ 	@true # Nothing to do to source a local package
+ endif
 -- 
 1.8.1.2
