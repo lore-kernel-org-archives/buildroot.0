@@ -1,75 +1,115 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun,  6 Oct 2013 19:49:07 +0200
-Subject: [Buildroot] [PATCH] docs/manual: add a 'Known issues' chapter
-Message-ID: <1381081747-20598-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Sun,  6 Oct 2013 19:52:25 +0200
+Subject: [Buildroot] [PATCH] ltp-testsuite: bump version and other fixes
+Message-ID: <1381081945-20712-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add a 'Known issues' chapter, which lists the exceptions I have
-currently in the autobuilder scripts to avoid known problems from
-occuring. I believe it is more useful to document them rather than
-keeping them hidden in my autobuilder script.
+This commit bumps ltp-testsuite to the latest version available. In
+addition to that, it also:
+
+ * Removes the ltp-testsuite-disable-controllers.patch file, which
+   becomes useless thanks to the workaround that consists in removing
+   -D_FILE_OFFSET_BITS=64 from the CFLAGS. This is necessary because
+   ltp-testsuite uses the non-largefile compatible <fts.h> interface.
+
+ * Marks the package as not-available on AArch64, since it doesn't
+   build properly. A bug has been submitted upstream to the Linaro
+   people doing the AArch64 support.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- docs/manual/known-issues.txt | 32 ++++++++++++++++++++++++++++++++
- docs/manual/manual.txt       |  2 ++
- 2 files changed, 34 insertions(+)
- create mode 100644 docs/manual/known-issues.txt
+ package/ltp-testsuite/Config.in                    |  7 ++++--
+ .../ltp-testsuite-disable-controllers.patch        | 29 ----------------------
+ package/ltp-testsuite/ltp-testsuite.mk             | 10 ++++++--
+ 3 files changed, 13 insertions(+), 33 deletions(-)
+ delete mode 100644 package/ltp-testsuite/ltp-testsuite-disable-controllers.patch
 
-diff --git a/docs/manual/known-issues.txt b/docs/manual/known-issues.txt
-new file mode 100644
-index 0000000..f731f8f
---- /dev/null
-+++ b/docs/manual/known-issues.txt
-@@ -0,0 +1,32 @@
-+// -*- mode:doc; -*-
-+// vim: set syntax=asciidoc:
-+
-+Known issues
-+============
-+
-+* The +ltp-testsuite+ package does not build with the default uClibc
-+  configuration used by the Buildroot toolchain backend. The LTP
-+  testsuite uses several functions that are considered obsolete, such
-+  as sigset() and others. uClibc configuration options such as
-+  DO_XSI_MATH, UCLIBC_HAS_OBSOLETE_BSD_SIGNAL and
-+  UCLIBC_SV4_DEPRECATED are needed if one wants to build the
-+  +ltp-testsuite+ package with uClibc. You need to either a glibc or
-+  eglibc based toolchain, or enable the appropriate options in the
-+  uClibc configuration.
-+
-+* The +xfsprogs+ package does not build with the default uClibc
-+  configuration used by the Buildroot toolchain backend. You need to
-+  either a glibc or eglibc based toolchain, or enable the appropriate
-+  options in the uClibc configuration.
-+
-+* The +mrouted+ package does not build with the default uClibc
-+  configuration used by the Buildroot toolchain backend. You need to
-+  either a glibc or eglibc based toolchain, or enable the appropriate
-+  options in the uClibc configuration.
-+
-+* The +libffi+ package is not supported on the SuperH 2 and ARC
-+  architectures.
-+
-+* The +prboom+ package triggers a compiler failure with the SuperH 4
-+  compiler from Soucery CodeBench, version 2012.09.
-+
-diff --git a/docs/manual/manual.txt b/docs/manual/manual.txt
-index 9685667..9ae658e 100644
---- a/docs/manual/manual.txt
-+++ b/docs/manual/manual.txt
-@@ -23,6 +23,8 @@ include::working-with.txt[]
+diff --git a/package/ltp-testsuite/Config.in b/package/ltp-testsuite/Config.in
+index 75b029f..3681eaf 100644
+--- a/package/ltp-testsuite/Config.in
++++ b/package/ltp-testsuite/Config.in
+@@ -7,6 +7,9 @@ config BR2_PACKAGE_LTP_TESTSUITE
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_INET_IPV6
+ 	depends on BR2_TOOLCHAIN_HAS_NATIVE_RPC
++	# aarch64 build currently broken, reported at
++	# https://bugs.launchpad.net/linaro-aarch64/+bug/1236027
++	depends on !BR2_aarch64
+ 	help
+ 	  The Linux Test Project provides a huge testsuite for Linux.
  
- include::faq-troubleshooting.txt[]
+@@ -20,5 +23,5 @@ config BR2_PACKAGE_LTP_TESTSUITE
+ 	  http://ltp.sourceforge.net/
  
-+include::known-issues.txt[]
+ comment "ltp-testsuite requires a toolchain with IPV6, RPC and thread support"
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INET_IPV6 || \
+-		!BR2_TOOLCHAIN_HAS_NATIVE_RPC
++	depends on (!BR2_TOOLCHAIN_HAS_THREADS || !BR2_INET_IPV6 || \
++		!BR2_TOOLCHAIN_HAS_NATIVE_RPC) && !BR2_aarch64
+diff --git a/package/ltp-testsuite/ltp-testsuite-disable-controllers.patch b/package/ltp-testsuite/ltp-testsuite-disable-controllers.patch
+deleted file mode 100644
+index 85ef262..0000000
+--- a/package/ltp-testsuite/ltp-testsuite-disable-controllers.patch
++++ /dev/null
+@@ -1,29 +0,0 @@
+-Disable controllers testcases.
+-This fix is carried over from 20101031 version.
+-
+-The cpuset controllers testcases do not build due to bug
+-https://sourceforge.net/tracker/?func=detail&aid=3126942&group_id=3382&atid=103382.
+-Disabling just the cpuset controllers do not seem to be easily possible, and
+-those controller features are rarely used on embedded systems anyway.
+-
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-Signed-off-by: Jerin Jacob  <jerinjacobk@gmail.com>
+----
+- testcases/kernel/Makefile |    1 -
+- 1 files changed, 0 insertions(+), 1 deletions(-)
+-
+-diff --git a/testcases/kernel/Makefile b/testcases/kernel/Makefile
+-index 4b4800d..d6ab7b6 100644
+---- a/testcases/kernel/Makefile
+-+++ b/testcases/kernel/Makefile
+-@@ -37,7 +37,6 @@ ifneq ($(UCLINUX),1)
+- # KEEP THIS LIST ALPHABETIZED PLEASE!
+- SUBDIRS			+= connectors \
+- 			   containers \
+--			   controllers \
+- 			   fs \
+- 			   hotplug \
+- 			   io \
+--- 
+-1.7.6.5
+-
+diff --git a/package/ltp-testsuite/ltp-testsuite.mk b/package/ltp-testsuite/ltp-testsuite.mk
+index 16d1fe8..594fa18 100644
+--- a/package/ltp-testsuite/ltp-testsuite.mk
++++ b/package/ltp-testsuite/ltp-testsuite.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-LTP_TESTSUITE_VERSION = 20130109
+-LTP_TESTSUITE_SOURCE  = ltp-full-$(LTP_TESTSUITE_VERSION).bz2
++LTP_TESTSUITE_VERSION = 20130904
++LTP_TESTSUITE_SOURCE  = ltp-full-$(LTP_TESTSUITE_VERSION).tar.xz
+ LTP_TESTSUITE_SITE    = http://downloads.sourceforge.net/project/ltp/LTP%20Source/ltp-$(LTP_TESTSUITE_VERSION)
+ LTP_TESTSUITE_LICENSE = GPLv2 GPLv2+
+ LTP_TESTSUITE_LICENSE_FILES = COPYING
+@@ -17,4 +17,10 @@ else
+ LTP_TESTSUITE_CONF_ENV += ac_cv_lib_cap_cap_compare=no
+ endif
+ 
++# ltp-testsuite uses <fts.h>, which isn't compatible with largefile
++# support.
++LTP_TESTSUITE_CONF_ENV += \
++	CFLAGS="$(filter-out -D_FILE_OFFSET_BITS=64,$(TARGET_CFLAGS))" \
++	CPPFLAGS="$(filter-out -D_FILE_OFFSET_BITS=64,$(TARGET_CPPFLAGS))"
 +
- include::going-further.txt[]
- 
- include::developer-guide.txt[]
+ $(eval $(autotools-package))
 -- 
 1.8.1.2
