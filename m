@@ -1,9 +1,11 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Sun, 6 Oct 2013 18:05:20 +0200
-Subject: [Buildroot] [PATCH 1/2] media-ctl: bump version
-In-Reply-To: <1381073285-30058-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Sun, 6 Oct 2013 18:09:02 +0200
+Subject: [Buildroot] [PATCH 2/2] media-ctl: fix build with old kernel
+	headers
+In-Reply-To: <1381073285-30058-2-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1381073285-30058-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <CAAXf6LUkiz0b1nX2JgOjQ5N68JbkEwUH_oU8zvsiBnOoR1tE=w@mail.gmail.com>
+ <1381073285-30058-2-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <CAAXf6LX_9=PQDOi85b3GoaTamD+bu+-aDy=iY-B40gh7NcoGvA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
