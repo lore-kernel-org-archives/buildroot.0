@@ -1,32 +1,32 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 6 Oct 2013 20:40:21 +0200
-Subject: [Buildroot] [git commit] pv: bump to version 1.4.12
-Message-ID: <20131006184800.0CD959B92C@busybox.osuosl.org>
+Date: Sun, 6 Oct 2013 20:37:17 +0200
+Subject: [Buildroot] [git commit] glib-networking: bump to version 2.36.2
+Message-ID: <20131006184759.DF67C96CB6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d57d4a8ede2949f5a02d90528392bf34a2ec8a81
+commit: http://git.buildroot.net/buildroot/commit/?id=07a23498d948e18b0e355ce8ee4027b8812a55f0
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/pv/pv.mk |    2 +-
+ package/glib-networking/glib-networking.mk |    2 +-
  1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/pv/pv.mk b/package/pv/pv.mk
-index c2dca2a..a8b2651 100644
---- a/package/pv/pv.mk
-+++ b/package/pv/pv.mk
-@@ -4,7 +4,7 @@
- #
+diff --git a/package/glib-networking/glib-networking.mk b/package/glib-networking/glib-networking.mk
+index 168e5ea..99fc591 100644
+--- a/package/glib-networking/glib-networking.mk
++++ b/package/glib-networking/glib-networking.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--PV_VERSION = 1.4.6
-+PV_VERSION = 1.4.12
- PV_SOURCE = pv-$(PV_VERSION).tar.bz2
- PV_SITE = http://www.ivarch.com/programs/sources
- PV_LICENSE = Artistic-2.0
+ GLIB_NETWORKING_MAJOR_VERSION = 2.36
+-GLIB_NETWORKING_MINOR_VERSION = 1
++GLIB_NETWORKING_MINOR_VERSION = 2
+ GLIB_NETWORKING_VERSION = $(GLIB_NETWORKING_MAJOR_VERSION).$(GLIB_NETWORKING_MINOR_VERSION)
+ GLIB_NETWORKING_SITE = http://ftp.gnome.org/pub/gnome/sources/glib-networking/$(GLIB_NETWORKING_MAJOR_VERSION)
+ GLIB_NETWORKING_SOURCE = glib-networking-$(GLIB_NETWORKING_VERSION).tar.xz
