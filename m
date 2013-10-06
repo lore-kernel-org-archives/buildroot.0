@@ -1,41 +1,36 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 6 Oct 2013 11:01:53 +0200
-Subject: [Buildroot] [git commit] linux: bump 3.11.x stable version
-Message-ID: <20131006105631.BA5149B88B@busybox.osuosl.org>
+Date: Sun, 6 Oct 2013 11:02:58 +0200
+Subject: [Buildroot] [git commit] socat: bump to version 2.0.0-b6
+Message-ID: <20131006105631.DD3B99B88B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e8e7b5340c8eec8bd15654effdc61eb7d2b3b11b
+commit: http://git.buildroot.net/buildroot/commit/?id=6f6b103f6538de3e13d7c3098a498562e629a31f
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+2.0.0-b6 fix a security issue:
+Under certain circumstances an FD leak occurs and may be misused for denial of
+service attacks against socat running in server mode.
+
+Signed-off-by: Axel Lin <axel.lin@ingics.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- linux/Config.in |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ package/socat/socat.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 9eb2268..6c642ef 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -21,7 +21,7 @@ choice
- 	prompt "Kernel version"
+diff --git a/package/socat/socat.mk b/package/socat/socat.mk
+index 8ba399b..df60961 100644
+--- a/package/socat/socat.mk
++++ b/package/socat/socat.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- config BR2_LINUX_KERNEL_LATEST_VERSION
--	bool "3.11.3"
-+	bool "3.11.4"
- 
- config BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	bool "Same as toolchain kernel headers"
-@@ -75,7 +75,7 @@ config BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION
- 
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "3.11.3" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "3.11.4" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default BR2_DEFAULT_KERNEL_HEADERS if BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE if BR2_LINUX_KERNEL_CUSTOM_VERSION
- 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
+-SOCAT_VERSION = 2.0.0-b5
++SOCAT_VERSION = 2.0.0-b6
+ SOCAT_SOURCE = socat-$(SOCAT_VERSION).tar.bz2
+ SOCAT_SITE = http://www.dest-unreach.org/socat/download/
+ SOCAT_LICENSE = GPLv2
