@@ -1,102 +1,72 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Sun, 6 Oct 2013 20:37:18 +0200
-Subject: [Buildroot] [PATCH] docs/manual: add a 'Known issues' chapter
-In-Reply-To: <1381081747-20598-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1381081747-20598-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <CAHXCMMKYZ6eCvf=jy0jQ7xpMdj+TOoX-Jx2xBWCcSp18TAvjyw@mail.gmail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 06 Oct 2013 20:47:16 +0200
+Subject: [Buildroot] [PATCH] pakage/rpi-userland: add and install our
+	bcm_host.pc
+In-Reply-To: <1381011437-7113-1-git-send-email-yann.morin.1998@free.fr> (Yann
+ E. MORIN's message of "Sun, 6 Oct 2013 00:17:17 +0200")
+References: <1381011437-7113-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <87wqlqdyob.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas,
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-2013/10/6 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ Yann> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ Yann> This allows pkg-config-aware packages to include headers from, and
+ Yann> link against Broadcom VideoCore host API library.
 
-> Add a 'Known issues' chapter, which lists the exceptions I have
-> currently in the autobuilder scripts to avoid known problems from
-> occuring. I believe it is more useful to document them rather than
-> keeping them hidden in my autobuilder script.
->
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
->  docs/manual/known-issues.txt | 32 ++++++++++++++++++++++++++++++++
->  docs/manual/manual.txt       |  2 ++
->  2 files changed, 34 insertions(+)
->  create mode 100644 docs/manual/known-issues.txt
->
-> diff --git a/docs/manual/known-issues.txt b/docs/manual/known-issues.txt
-> new file mode 100644
-> index 0000000..f731f8f
-> --- /dev/null
-> +++ b/docs/manual/known-issues.txt
-> @@ -0,0 +1,32 @@
-> +// -*- mode:doc; -*-
-> +// vim: set syntax=asciidoc:
-> +
-> +Known issues
-> +============
-> +
-> +* The +ltp-testsuite+ package does not build with the default uClibc
-> +  configuration used by the Buildroot toolchain backend. The LTP
-> +  testsuite uses several functions that are considered obsolete, such
-> +  as sigset() and others. uClibc configuration options such as
-> +  DO_XSI_MATH, UCLIBC_HAS_OBSOLETE_BSD_SIGNAL and
-> +  UCLIBC_SV4_DEPRECATED are needed if one wants to build the
-> +  +ltp-testsuite+ package with uClibc. You need to either a glibc or
-> +  eglibc based toolchain, or enable the appropriate options in the
-> +  uClibc configuration.
-> +
-> +* The +xfsprogs+ package does not build with the default uClibc
-> +  configuration used by the Buildroot toolchain backend. You need to
-> +  either a glibc or eglibc based toolchain, or enable the appropriate
-> +  options in the uClibc configuration.
->
-+
-> +* The +mrouted+ package does not build with the default uClibc
-> +  configuration used by the Buildroot toolchain backend. You need to
-> +  either a glibc or eglibc based toolchain, or enable the appropriate
-> +  options in the uClibc configuration.
->
+ Yann> bcm_host.pc copied almost as-is from:
+ Yann>     http://cgit.collabora.com/git/user/pq/android-pc-files.git/tree/pkgconfig?h=raspberrypi
+ Yann> with only a fix to the prefix (we're using /usr).
 
-For all these 3 packages that miss options in the default uClibc
-configuration,
-there are comments in the Config.in files mentioning what are these missing
-options.
-It is weird to list them for ltp-testsuite, but not for xfsprog or mrouted.
+ Yann> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ Yann> ---
+ Yann>  package/rpi-userland/bcm_host.pc     | 11 +++++++++++
+ Yann>  package/rpi-userland/rpi-userland.mk |  7 ++++++-
+ Yann>  2 files changed, 17 insertions(+), 1 deletion(-)
+ Yann>  create mode 100644 package/rpi-userland/bcm_host.pc
 
+ Yann> diff --git a/package/rpi-userland/bcm_host.pc b/package/rpi-userland/bcm_host.pc
+ Yann> new file mode 100644
+ Yann> index 0000000..28bbe96
+ Yann> --- /dev/null
+ Yann> +++ b/package/rpi-userland/bcm_host.pc
+ Yann> @@ -0,0 +1,11 @@
+ Yann> +prefix=/usr
+ Yann> +exec_prefix=${prefix}
+ Yann> +libdir=${exec_prefix}/lib
+ Yann> +includedir=${prefix}/include
+ Yann> +
+ Yann> +Name: bcm_host
+ Yann> +Description: Broadcom VideoCore host API library
+ Yann> +Version: 1
+ Yann> +Libs: -L${libdir} -lbcm_host -lvcos -lvchiq_arm
+ Yann> +Cflags: -I${includedir} -I${includedir}/interface/vmcs_host/linux -I${includedir}/interface/vcos/pthreads -DUSE_VCHIQ_ARM
+ Yann> +
+ Yann> diff --git a/package/rpi-userland/rpi-userland.mk b/package/rpi-userland/rpi-userland.mk
+ Yann> index c3ea43a..575b0c9 100644
+ Yann> --- a/package/rpi-userland/rpi-userland.mk
+ Yann> +++ b/package/rpi-userland/rpi-userland.mk
+ Yann> @@ -14,7 +14,12 @@ RPI_USERLAND_CONF_OPT = -DVMCS_INSTALL_PREFIX=/usr
+ Yann>  define RPI_USERLAND_POST_TARGET_CLEANUP
+ Yann>      rm -Rf $(TARGET_DIR)/usr/src
+ Yann>  endef
+ Yann> -
+ Yann>  RPI_USERLAND_POST_INSTALL_TARGET_HOOKS += RPI_USERLAND_POST_TARGET_CLEANUP
+ 
+ Yann> +define RPI_USERLAND_POST_TARGET_PC_FILE
+ Yann> +	install -D -m 0644 package/rpi-userland/bcm_host.pc \
+ Yann> +		$(STAGING_DIR)/usr/lib/pkgconfig/bcm_host.pc
+ Yann> +endef
+ Yann> +RPI_USERLAND_POST_INSTALL_TARGET_HOOKS += RPI_USERLAND_POST_TARGET_PC_FILE
 
-> +
-> +* The +libffi+ package is not supported on the SuperH 2 and ARC
-> +  architectures.
-> +
-> +* The +prboom+ package triggers a compiler failure with the SuperH 4
-> +  compiler from Soucery CodeBench, version 2012.09.
-> +
-> diff --git a/docs/manual/manual.txt b/docs/manual/manual.txt
-> index 9685667..9ae658e 100644
-> --- a/docs/manual/manual.txt
-> +++ b/docs/manual/manual.txt
-> @@ -23,6 +23,8 @@ include::working-with.txt[]
->
->  include::faq-troubleshooting.txt[]
->
-> +include::known-issues.txt[]
-> +
->  include::going-further.txt[]
->
->  include::developer-guide.txt[]
-> --
->
+It installs into staging so it should be
+RPI_USERLAND_POST_INSTALL_STAGING_HOOKS.
 
-Otherwise, you have my ack:
-Acked-by: Samuel Martin <s.martin49@gmail.com>
-
-Regards,
+Committed with that fixed, thanks.
 
 -- 
-Samuel
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20131006/374f25c8/attachment-0001.html>
+Bye, Peter Korsgaard
