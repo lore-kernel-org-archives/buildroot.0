@@ -1,190 +1,200 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun,  6 Oct 2013 16:19:18 +0200
-Subject: [Buildroot] [PATCHv2 08/21] package: package-based implementation
-	of source, external-deps and legal-info
+Date: Sun,  6 Oct 2013 16:19:12 +0200
+Subject: [Buildroot] [PATCHv2 02/21] docs: update manual after Crosstool-NG
+	backend removal
 In-Reply-To: <1381069171-29748-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1381069171-29748-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1381069171-29748-9-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1381069171-29748-3-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Until now, the make source, make external-deps and make legal-info
-where relying on enumerating the packages by looking at $(TARGETS)
-which contains only the target packages and not the host
-packages. Thanks to the TARGET_HOST_DEPS and HOST_DEPS variables, it
-was doing a two-level resolution of host package dependencies, but it
-was not entirely correct since the dependency chain might be deeper
-than that: some packages could be missed.
-
-From an idea of Arnout, this patch introduces in each package
-additional targets <pkg>-all-source, <pkg>-all-legal-info and
-<pkg>-all-external-deps that executes the 'source', 'legal-info' and
-'external-deps' targets for this package and all its dependencies, be
-they target or host dependencies.
-
-This provides a much cleaner implementation of this mechanism, which
-is also more robust.
-
-In order to achieve this, this patch also separates the "package"
-targets from other targets: instead of mixing them both in the global
-TARGETS variable, the new PACKAGES variable contains the name of all
-packages that are enabled in the configuration, while TARGETS is only
-used for additional things to be done (target-finalize, etc.). This
-separation is needed so that we don't try to use targets (such as
-<foo>-all-external-deps) on things that are not packages. Some further
-cleanups in this direction are possible, this commit takes a
-relatively minimal approach for now.
-
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- Makefile               | 53 +++++++++++++-------------------------------------
- package/pkg-generic.mk | 13 ++++++++++++-
- 2 files changed, 25 insertions(+), 41 deletions(-)
+ docs/manual/configure.txt           | 60 +++----------------------------------
+ docs/manual/customize-store.txt     | 20 ++++++-------
+ docs/manual/customize-toolchain.txt | 12 --------
+ docs/manual/make-tips.txt           |  2 --
+ docs/manual/rebuilding-packages.txt |  2 --
+ 5 files changed, 14 insertions(+), 82 deletions(-)
 
-diff --git a/Makefile b/Makefile
-index bd59259..8483d79 100644
---- a/Makefile
-+++ b/Makefile
-@@ -238,8 +238,6 @@ GNU_HOST_NAME:=$(shell support/gnuconfig/config.guess)
+diff --git a/docs/manual/configure.txt b/docs/manual/configure.txt
+index 56b0469..8912a81 100644
+--- a/docs/manual/configure.txt
++++ b/docs/manual/configure.txt
+@@ -47,8 +47,7 @@ target system uses ARM, the regular compilation toolchain on your host
+ runs on x86 and generates code for x86, while the cross-compilation
+ toolchain runs on x86 and generates code for ARM.
  
- BASE_TARGETS = toolchain
+-Buildroot provides different solutions to build, or use existing
+-cross-compilation toolchains:
++Buildroot provides two solutions for the cross-compilation toolchain:
  
--TARGETS:=
+  * The *internal toolchain backend*, called +Buildroot toolchain+ in
+    the configuration interface.
+@@ -56,10 +55,7 @@ cross-compilation toolchains:
+  * The *external toolchain backend*, called +External toolchain+ in
+    the configuration interface.
+ 
+- * The *Crosstool-NG toolchain backend*, called +Crosstool-NG
+-   toolchain+ in the configuration interface.
 -
- # silent mode requested?
- QUIET:=$(if $(findstring s,$(MAKEFLAGS)),-q)
+-The choice between these three solutions is done using the +Toolchain
++The choice between these two solutions is done using the +Toolchain
+ Type+ option in the +Toolchain+ menu. Once one solution has been
+ chosen, a number of configuration options appear, they are detailed in
+ the following sections.
+@@ -76,8 +72,8 @@ This backend is the historical backend of Buildroot, and has been
+ limited for a long time to the usage of the
+ http://www.uclibc.org[uClibc C library]. Support for the _eglibc_ C
+ library has been added in 2013 and is at this point considered
+-experimental. See the _External toolchain backend_ and _Crosstool-NG
+-toolchain backend_ for other solutions to use _glibc_ or _eglibc_.
++experimental. See the _External toolchain backend_ for another
++solution to use _glibc_ or _eglibc_.
  
-@@ -310,9 +308,6 @@ endif
- include package/Makefile.in
- include support/dependencies/dependencies.mk
+ Once you have selected this backend, a number of options appear. The
+ most important ones allow to:
+@@ -242,54 +238,6 @@ Drawbacks of this backend:
+   fix from the toolchain vendor, unless you build your external
+   toolchain by yourself using Crosstool-NG.
  
--# We also need the various per-package makefiles, which also add
--# each selected package to TARGETS if that package was selected
--# in the .config file.
- include toolchain/*/*.mk
- 
- # Include the package override file if one has been provided in the
-@@ -348,34 +343,11 @@ include fs/common.mk
- 
- TARGETS+=target-post-image
- 
--TARGETS_CLEAN:=$(patsubst %,%-clean,$(TARGETS))
--TARGETS_SOURCE:=$(patsubst %,%-source,$(TARGETS) $(BASE_TARGETS))
--TARGETS_DIRCLEAN:=$(patsubst %,%-dirclean,$(TARGETS))
--TARGETS_ALL:=$(patsubst %,__real_tgt_%,$(TARGETS))
+-[[crosstool-ng-toolchain-backend]]
+-Crosstool-NG toolchain backend
+-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 -
--# host-* dependencies have to be handled specially, as those aren't
--# visible in Kconfig and hence not added to a variable like TARGETS.
--# instead, find all the host-* targets listed in each <PKG>_DEPENDENCIES
--# variable for each enabled target.
--# Notice: this only works for newstyle gentargets/autotargets packages
--TARGETS_HOST_DEPS = $(sort $(filter host-%,$(foreach dep,\
--		$(addsuffix _DEPENDENCIES,$(call UPPERCASE,$(TARGETS))),\
--		$($(dep)))))
--# Host packages can in turn have their own dependencies. Likewise find
--# all the package names listed in the HOST_<PKG>_DEPENDENCIES for each
--# host package found above. Ideally this should be done recursively until
--# no more packages are found, but that's hard to do in make, so limit to
--# 1 level for now.
--HOST_DEPS = $(sort $(foreach dep,\
--		$(addsuffix _DEPENDENCIES,$(call UPPERCASE,$(TARGETS_HOST_DEPS))),\
--		$($(dep))))
--HOST_SOURCE += $(addsuffix -source,$(sort $(TARGETS_HOST_DEPS) $(HOST_DEPS)))
+-The _Crosstool-NG toolchain backend_ integrates the
+-http://crosstool-ng.org[Crosstool-NG] project with
+-Buildroot. Crosstool-NG is a highly-configurable, versatile and
+-well-maintained tool to build cross-compilation toolchains.
 -
--TARGETS_LEGAL_INFO:=$(patsubst %,%-legal-info,\
--		$(TARGETS) $(BASE_TARGETS) $(TARGETS_HOST_DEPS) $(HOST_DEPS))))
+-If you select the +Crosstool-NG toolchain+ option in +Toolchain Type+,
+-then you will be offered to:
 -
--# all targets depend on the crosscompiler and it's prerequisites
--$(TARGETS_ALL): __real_tgt_%: $(BASE_TARGETS) %
-+PACKAGES_CLEAN:=$(patsubst %,%-clean,$(PACKAGES))
-+PACKAGES_SOURCE:=$(patsubst %,%-all-source,$(PACKAGES) $(BASE_TARGETS))
-+PACKAGES_EXTERNAL_DEPS:=$(patsubst %,%-all-external-deps,$(PACKAGES) $(BASE_TARGETS))
-+PACKAGES_DIRCLEAN:=$(patsubst %,%-dirclean,$(PACKAGES))
-+PACKAGES_LEGAL_INFO:=$(patsubst %,%-all-legal-info,$(PACKAGES) $(BASE_TARGETS))
+- * Choose which C library you want to use. Crosstool-NG supports the
+-   three most important C libraries used in Linux systems: glibc,
+-   eglibc and uClibc
+-
+- * Choose a custom Crosstool-NG configuration file. Buildroot has its
+-   own default configuration file (one per C library choice), but you
+-   can provide your own. Another option is to run +make
+-   ctng-menuconfig+ to get access to the Crosstool-NG configuration
+-   interface. However, note that all Buildroot packages have only been
+-   tested with the default Crosstool-NG configurations.
+-
+- * Choose a number of toolchain options (rather limited if glibc or
+-   eglibc are used, or numerous if uClibc is used)
+-
+-When you will start the Buildroot build process, Buildroot will
+-download and install the Crosstool-NG tool, build and install its
+-required dependencies, and then run Crosstool-NG with the provided
+-configuration.
+-
+-Advantages of this backend:
+-
+-* Not limited to uClibc: glibc and eglibc are supported.
+-
+-* Vast possibilities of toolchain configuration.
+-
+-Drawbacks of this backend:
+-
+-* Crosstool-NG is not perfectly integrated with Buildroot. For
+-  example, Crosstool-NG has its own download infrastructure, not
+-  integrated with the one in Buildroot (for example a Buildroot +make
+-  source+ will not download all the source code tarballs needed by
+-  Crosstool-NG).
+-
+-* The toolchain is completely rebuilt from scratch if you do a +make
+-  clean+.
+-
+ /dev management
+ ~~~~~~~~~~~~~~~
  
- dirs: $(BUILD_DIR) $(STAGING_DIR) $(TARGET_DIR) \
- 	$(HOST_DIR) $(BINARIES_DIR) $(STAMP_DIR)
-@@ -385,12 +357,13 @@ $(BUILD_DIR)/buildroot-config/auto.conf: $(BUILDROOT_CONFIG)
+diff --git a/docs/manual/customize-store.txt b/docs/manual/customize-store.txt
+index 5083339..c2f5235 100644
+--- a/docs/manual/customize-store.txt
++++ b/docs/manual/customize-store.txt
+@@ -42,13 +42,14 @@ Alternatively, you can copy the file to any other place and rebuild with
+ Other package configuration
+ ^^^^^^^^^^^^^^^^^^^^^^^^^^^
  
- prepare: $(BUILD_DIR)/buildroot-config/auto.conf
+-The configuration files for busybox, the linux kernel, barebox, uClibc and
+-crosstool-NG should be stored as well if changed. For each of these, a
+-buildroot configuration option exists to point to an input configuration
+-file, e.g. +BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE+.  To save their
+-configuration, set those configuration options to a path outside
+-your output directory, e.g. +board/<manufacturer>/<boardname>/linux.config+.
+-Then, copy the configuration files to that path.
++The configuration files for busybox, the linux kernel, barebox and
++uClibc should be stored as well if changed. For each of these, a
++buildroot configuration option exists to point to an input
++configuration file, e.g. +BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE+.  To
++save their configuration, set those configuration options to a path
++outside your output directory,
++e.g. +board/<manufacturer>/<boardname>/linux.config+.  Then, copy the
++configuration files to that path.
  
--world: $(BASE_TARGETS) $(TARGETS_ALL)
-+world: $(BASE_TARGETS) $(PACKAGES) $(TARGETS)
+ Make sure that you create a configuration file 'before' changing
+ the +BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE+ etc. options.  Otherwise,
+@@ -70,9 +71,8 @@ configuration files easier.
+   path specified by +BR2_UCLIBC_CONFIG+.
+ * +make barebox-update-defconfig+ saves the barebox configuration to the
+   path specified by +BR2_TARGET_BAREBOX_CUSTOM_CONFIG_FILE+.
+-* For crosstool-NG and at91bootstrap3, no helper exists so you
+-  have to copy the config file manually to +BR2_TOOLCHAIN_CTNG_CONFIG+,
+-  resp. +BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_CONFIG_FILE+.
++* For at91bootstrap3, no helper exists so you have to copy the config
++  file manually to +BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_CONFIG_FILE+.
  
- .PHONY: all world toolchain dirs clean distclean source outputmakefile \
- 	legal-info legal-info-prepare legal-info-clean printvars \
--	$(BASE_TARGETS) $(TARGETS) $(TARGETS_ALL) \
--	$(TARGETS_CLEAN) $(TARGETS_DIRCLEAN) $(TARGETS_SOURCE) $(TARGETS_LEGAL_INFO) \
-+	$(BASE_TARGETS) $(PACKAGES) $(TARGETS) \
-+	$(PACKAGES_CLEAN) $(PACKAGES_DIRCLEAN) $(PACKAGES_SOURCE) $(PACKAGES_LEGAL_INFO) \
-+	$(PACKAGES_EXTERNAL_DEPS) \
- 	$(BUILD_DIR) $(STAGING_DIR) $(TARGET_DIR) \
- 	$(HOST_DIR) $(BINARIES_DIR) $(STAMP_DIR)
  
-@@ -561,10 +534,10 @@ target-post-image:
- toolchain-eclipse-register:
- 	./support/scripts/eclipse-register-toolchain `readlink -f $(O)` $(notdir $(TARGET_CROSS)) $(BR2_ARCH)
+ [[customize-store-board-support]]
+diff --git a/docs/manual/customize-toolchain.txt b/docs/manual/customize-toolchain.txt
+index 82ecc28..841dbfd 100644
+--- a/docs/manual/customize-toolchain.txt
++++ b/docs/manual/customize-toolchain.txt
+@@ -44,15 +44,3 @@ However, it allows to tune major settings, such as:
  
--source: dirs $(TARGETS_SOURCE) $(HOST_SOURCE)
-+source: dirs $(PACKAGES_SOURCE)
+ These settings are available after selecting the +Buildroot toolchain+ type in
+ the menu +Toolchain+.
+-
+-Using the Crosstool-NG backend
+-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+-
+-The http://crosstool-ng.org[crosstool-NG] toolchain backend enables a rather
+-limited set of settings under the Buildroot +Toolchain+ menu:
+-
+-* The http://crosstool-ng.org[crosstool-NG] configuration file
+-
+-* Gdb and some toolchain options
+-
+-Then, the toolchain can be fine-tuned by invoking +make ctng-menuconfig+.
+diff --git a/docs/manual/make-tips.txt b/docs/manual/make-tips.txt
+index c3fd155..31a88bf 100644
+--- a/docs/manual/make-tips.txt
++++ b/docs/manual/make-tips.txt
+@@ -36,8 +36,6 @@ some settings in the +.config+ file may hide some targets:
+   +linux+ is enabled;
+ * +uclibc-menuconfig+ is only available when the
+   Buildroot internal toolchain backend is used;
+-* +ctng-menuconfig+ is only available when the
+-  crosstool-NG backend is used;
+ * +barebox-menuconfig+ and +barebox-savedefconfig+ only work when the
+   +barebox+ bootloader is enabled.
  
- external-deps:
--	@$(MAKE) -Bs DL_MODE=SHOW_EXTERNAL_DEPS $(EXTRAMAKEARGS) source | sort -u
-+	@$(MAKE) -s $(EXTRAMAKEARGS) $(PACKAGES_EXTERNAL_DEPS) | sort -u
+diff --git a/docs/manual/rebuilding-packages.txt b/docs/manual/rebuilding-packages.txt
+index 044c908..88d6670 100644
+--- a/docs/manual/rebuilding-packages.txt
++++ b/docs/manual/rebuilding-packages.txt
+@@ -17,8 +17,6 @@ In some cases, a full rebuild is mandatory:
  
- legal-info-clean:
- 	@rm -fr $(LEGAL_INFO_DIR)
-@@ -579,7 +552,7 @@ legal-info-prepare: $(LEGAL_INFO_DIR)
- 	@cp $(BUILDROOT_CONFIG) $(LEGAL_INFO_DIR)/buildroot.config
+ ** after changing any toolchain option under the _Toolchain_ menu (if
+    the internal Buildroot backend is used);
+-** after running +make ctng-menuconfig+ (if the crosstool-NG backend
+-   is used);
+ ** after running +make uclibc-menuconfig+.
  
- legal-info: dirs legal-info-clean legal-info-prepare $(REDIST_SOURCES_DIR) \
--		$(TARGETS_LEGAL_INFO)
-+		$(PACKAGES_LEGAL_INFO)
- 	@cat support/legal-info/README.header >>$(LEGAL_REPORT)
- 	@if [ -r $(LEGAL_WARNINGS) ]; then \
- 		cat support/legal-info/README.warnings-header \
-@@ -589,7 +562,7 @@ legal-info: dirs legal-info-clean legal-info-prepare $(REDIST_SOURCES_DIR) \
- 	@rm -f $(LEGAL_WARNINGS)
- 
- show-targets:
--	@echo $(TARGETS)
-+	@echo $(BASE_TARGETS) $(PACKAGES) $(TARGETS)
- 
- else # ifeq ($(BR2_HAVE_DOT_CONFIG),y)
- 
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index bfc4dc1..91e79f5 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -423,6 +423,17 @@ endif
- $(1)-show-depends:
- 			@echo $$($(2)_DEPENDENCIES)
- 
-+$(1)-all-source: 	$(foreach p,$($(2)_DEPENDENCIES),$(p)-all-source) $(1)-source
-+
-+$(1)-external-deps:
-+ifneq ($$($(2)_SOURCE),)
-+			@echo $$($(2)_SOURCE)
-+endif
-+
-+$(1)-all-external-deps:	$(foreach p,$($(2)_DEPENDENCIES),$(p)-all-external-deps) $(1)-external-deps
-+
-+$(1)-all-legal-info:	$(foreach p,$($(2)_DEPENDENCIES),$(p)-all-legal-info) $(1)-legal-info
-+
- $(1)-uninstall:		$(1)-configure $$($(2)_TARGET_UNINSTALL)
- 
- $(1)-clean:		$(1)-uninstall \
-@@ -527,7 +538,7 @@ endif # ifneq ($(call qstrip,$$($(2)_SOURCE)),)
- # configuration
- ifeq ($$($$($(2)_KCONFIG_VAR)),y)
- 
--TARGETS += $(1)
-+PACKAGES += $(1)
- PACKAGES_PERMISSIONS_TABLE += $$($(2)_PERMISSIONS)$$(sep)
- PACKAGES_DEVICES_TABLE += $$($(2)_DEVICES)$$(sep)
- PACKAGES_USERS += $$($(2)_USERS)$$(sep)
+ * after removing some libraries from the package selection.
 -- 
 1.8.1.2
