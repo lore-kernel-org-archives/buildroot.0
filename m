@@ -1,40 +1,32 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 6 Oct 2013 12:55:29 +0200
-Subject: [Buildroot] [git commit] dbus: fix static linking issue with pthread
-Message-ID: <20131006105631.E72229B88B@busybox.osuosl.org>
+Date: Sun, 6 Oct 2013 11:02:17 +0200
+Subject: [Buildroot] [git commit] stunnel: bump to version 4.56
+Message-ID: <20131006105631.D5C049B88B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=561fb5f702cd84c6953803d44d1ce1204e85412f
+commit: http://git.buildroot.net/buildroot/commit/?id=f91b0a0c7d76aed1086086daecfd5ff9e5dd674e
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
--lpthread is missing when dbus is build with static lib
-
-Fixes build failures:
-http://autobuild.buildroot.net/results/80a317e33afd1d5ba2f7dd9ecd89314b09b4b1fe/
-http://autobuild.buildroot.net/results/2c3c040624652547bbeec363d7d6b03f2477ff00/
-
-Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+Signed-off-by: Axel Lin <axel.lin@ingics.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/dbus/dbus.mk |    4 ++++
- 1 files changed, 4 insertions(+), 0 deletions(-)
+ package/stunnel/stunnel.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/dbus/dbus.mk b/package/dbus/dbus.mk
-index d50f630..e241247 100644
---- a/package/dbus/dbus.mk
-+++ b/package/dbus/dbus.mk
-@@ -30,6 +30,10 @@ DBUS_CONF_OPT = --with-dbus-user=dbus \
- 		--with-system-socket=/var/run/dbus/system_bus_socket \
- 		--with-system-pid-file=/var/run/messagebus.pid
+diff --git a/package/stunnel/stunnel.mk b/package/stunnel/stunnel.mk
+index 8548eab..fbe7b94 100644
+--- a/package/stunnel/stunnel.mk
++++ b/package/stunnel/stunnel.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+ifeq ($(BR2_PREFER_STATIC_LIB),y)
-+DBUS_CONF_OPT += LIBS='-lpthread'
-+endif
-+
- ifeq ($(BR2_microblaze),y)
- # microblaze toolchain doesn't provide inotify_rm_* but does have sys/inotify.h
- DBUS_CONF_OPT += --disable-inotify
+-STUNNEL_VERSION = 4.55
++STUNNEL_VERSION = 4.56
+ STUNNEL_SITE = http://ftp.nluug.nl/pub/networking/stunnel/archive/4.x/
+ STUNNEL_DEPENDENCIES = openssl
+ STUNNEL_CONF_OPT = --with-ssl=$(STAGING_DIR)/usr --with-threads=fork
