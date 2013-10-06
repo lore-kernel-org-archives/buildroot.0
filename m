@@ -1,28 +1,30 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 06 Oct 2013 20:53:08 +0200
-Subject: [Buildroot] [PATCHv2 01/21] toolchain-crosstool-ng: remove
-	support
-In-Reply-To: <1381069171-29748-2-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Sun, 6 Oct 2013 16:19:11 +0200")
-References: <1381069171-29748-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1381069171-29748-2-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <87ob72dyej.fsf@dell.be.48ers.dk>
+From: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+Date: Sun,  6 Oct 2013 21:03:07 +0200
+Subject: [Buildroot] [PATCH 1/1] git: bump to version 1.8.4.1
+Message-ID: <1381086187-973-1-git-send-email-jerzy.grzegorek@trzebnica.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+---
+ package/git/git.mk |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- Thomas> In order to avoid the work of converting the toolchain-crosstool-ng
- Thomas> logic to the package infrastructure, we remove it from Buildroot,
- Thomas> since it has been deprecated since quite some time.
-
- Thomas> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
- Thomas> Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
-Committed, thanks.
-
+diff --git a/package/git/git.mk b/package/git/git.mk
+index b8a7623..58455b1 100644
+--- a/package/git/git.mk
++++ b/package/git/git.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GIT_VERSION         = 1.8.3
++GIT_VERSION         = 1.8.4.1
+ GIT_SITE            = http://git-core.googlecode.com/files/
+ GIT_LICENSE         = GPLv2 LGPLv2.1+
+ GIT_LICENSE_FILES   = COPYING LGPL-2.1
 -- 
-Bye, Peter Korsgaard
+1.7.9.5
