@@ -1,34 +1,39 @@
-From: =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= <jezz@sysmic.org>
-Date: Sun,  6 Oct 2013 10:27:46 +0200
-Subject: [Buildroot] [PATCH] Fix glibc dependency to gcc-intermediate
-Message-ID: <1381048066-18510-1-git-send-email-jezz@sysmic.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 6 Oct 2013 10:58:37 +0200
+Subject: [Buildroot] [PATCH 0/4] i.MX: Refactor and update library
+ versions
+In-Reply-To: <525027C7.6040608@boundarydevices.com>
+References: <1380495298-22823-1-git-send-email-eric.nelson@boundarydevices.com>
+ <524F4541.1090004@boundarydevices.com>
+ <20131005133630.7f799fd6@skate>
+ <525027C7.6040608@boundarydevices.com>
+Message-ID: <20131006105837.69d64d1e@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-In commit ebc81933, we rerverted 2babed4a, but meanwhile eglibc/ was
-renamed glibc/ so rules eglibc-build muste renmaed glibc-build to
-correctly work.
+Dear Eric Nelson,
 
-Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
----
- package/glibc/glibc.mk |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On Sat, 05 Oct 2013 07:52:55 -0700, Eric Nelson wrote:
 
-diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
-index 998bd0f..48ff0f7 100644
---- a/package/glibc/glibc.mk
-+++ b/package/glibc/glibc.mk
-@@ -29,7 +29,7 @@ GLIBC_DEPENDENCIES += host-gawk
- endif
- 
- # Before (e)glibc is built, we must have the second stage cross-compiler
--eglibc-build: host-gcc-intermediate
-+glibc-build: host-gcc-intermediate
- 
- GLIBC_SUBDIR = build
- 
+> > I don't have a strong opinion on this one. If they use the
+> > FREESCALE_IMX_MIRROR / FREESCALE_IMX_VERSION variable, I would find it
+> > more logical to have them under package/freescale-imx/, but it's really
+> > not a strong requirement.
+> >
+> Arnout, you seemed to prefer keeping them where they were.
+> 
+> If that's still the case, I'll rework them in-place, which
+> will be a smaller commit.
+
+Yes, seems good to me.
+
+Best regards,
+
+Thomas
 -- 
-1.7.9.5
+Thomas Petazzoni, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
