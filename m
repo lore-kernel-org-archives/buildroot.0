@@ -1,24 +1,37 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 06 Oct 2013 20:48:49 +0200
-Subject: [Buildroot] [PATCH] Fix glibc dependency to gcc-intermediate
-In-Reply-To: <1381048066-18510-1-git-send-email-jezz@sysmic.org>
- (=?utf-8?B?IkrDqXLDtG1l?=
- Pouiller"'s message of "Sun, 6 Oct 2013 10:27:46 +0200")
-References: <1381048066-18510-1-git-send-email-jezz@sysmic.org>
-Message-ID: <87siwedylq.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 6 Oct 2013 20:48:15 +0200
+Subject: [Buildroot] [git commit] Fix glibc dependency to gcc-intermediate
+Message-ID: <20131006184900.957129B92E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "J?r?me" == J?r?me Pouiller <jezz@sysmic.org> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=0148cdd4dff1d34d4134b109d72fcc0f5e727de8
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- J?r?me> In commit ebc81933, we rerverted 2babed4a, but meanwhile eglibc/ was
- J?r?me> renamed glibc/ so rules eglibc-build muste renmaed glibc-build to
- J?r?me> correctly work.
+In commit ebc81933, we reverted 2babed4a, but meanwhile eglibc/ was
+renamed glibc/ so rules eglibc-build must be renamed glibc-build to
+correctly work.
 
-Committed with the typos fixed, thanks.
+Signed-off-by: J??r??me Pouiller <jezz@sysmic.org>
+Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/glibc/glibc.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
+index 998bd0f..48ff0f7 100644
+--- a/package/glibc/glibc.mk
++++ b/package/glibc/glibc.mk
+@@ -29,7 +29,7 @@ GLIBC_DEPENDENCIES += host-gawk
+ endif
+ 
+ # Before (e)glibc is built, we must have the second stage cross-compiler
+-eglibc-build: host-gcc-intermediate
++glibc-build: host-gcc-intermediate
+ 
+ GLIBC_SUBDIR = build
+ 
