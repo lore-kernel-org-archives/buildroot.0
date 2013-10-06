@@ -1,81 +1,53 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun,  6 Oct 2013 16:19:31 +0200
-Subject: [Buildroot] [PATCHv2 21/21] toolchain-external: fix Linaro ARM
-	toolchain support
+Date: Sun,  6 Oct 2013 16:19:14 +0200
+Subject: [Buildroot] [PATCHv2 04/21] toolchain: move helpers.mk into
+	toolchain-external/
 In-Reply-To: <1381069171-29748-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1381069171-29748-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1381069171-29748-22-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1381069171-29748-5-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This commit fixes bug #6452 (eglibc from Linaro 2013.07 not copied to
-target correctly) by:
-
- * Copying only the relevant library loader to the target on ARMhf
-   (i.e ld-linux-armhf.so and not ld.so*). This is needed since Linaro
-   toolchains provide two library loaders, one ARMv7 hf, and one ARMv4
-   soft-float.
-
- * Making sure a $(TARGET_DIR)/lib/arm-linux-gnueabihf/ symbolic link
-   to $(TARGET_DIR)/lib/ exists, since the dynamic loader of Linaro
-   toolchains expects libraries to be found in
-   $(TARGET_DIR)/lib/arm-linux-gnueabihf/.
+The helpers.mk file is no longer used by the Crosstool-NG backend, so
+it is moved into the toolchain/toolchain-external/ directory.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- toolchain/toolchain-external/toolchain-external.mk | 17 ++++++++++++++++-
- 1 file changed, 16 insertions(+), 1 deletion(-)
+ toolchain/toolchain-buildroot.mk              | 2 --
+ toolchain/toolchain-external.mk               | 2 +-
+ toolchain/{ => toolchain-external}/helpers.mk | 0
+ 3 files changed, 1 insertion(+), 3 deletions(-)
+ rename toolchain/{ => toolchain-external}/helpers.mk (100%)
 
-diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
-index 73a761b..b5b1ce7 100644
---- a/toolchain/toolchain-external/toolchain-external.mk
-+++ b/toolchain/toolchain-external/toolchain-external.mk
-@@ -55,7 +55,12 @@
- #  of Buildroot is handled identical for the 2 toolchain types.
+diff --git a/toolchain/toolchain-buildroot.mk b/toolchain/toolchain-buildroot.mk
+index 3a05800..ff89125 100644
+--- a/toolchain/toolchain-buildroot.mk
++++ b/toolchain/toolchain-buildroot.mk
+@@ -2,8 +2,6 @@
+ # build of binutils, uClibc, kernel headers and all the intermediate
+ # gcc steps.
  
- ifeq ($(BR2_TOOLCHAIN_EXTERNAL_GLIBC)$(BR2_TOOLCHAIN_EXTERNAL_UCLIBC),y)
--LIB_EXTERNAL_LIBS+=ld*.so.* libc.so.* libcrypt.so.* libdl.so.* libgcc_s.so.* libm.so.* libnsl.so.* libresolv.so.* librt.so.* libutil.so.*
-+LIB_EXTERNAL_LIBS+=libc.so.* libcrypt.so.* libdl.so.* libgcc_s.so.* libm.so.* libnsl.so.* libresolv.so.* librt.so.* libutil.so.*
-+ifeq ($(BR2_ARM_EABIHF),y)
-+LIB_EXTERNAL_LIBS+=ld-linux-armhf.so.*
-+else
-+LIB_EXTERNAL_LIBS+=ld*.so.*
-+endif
- ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
- LIB_EXTERNAL_LIBS+=libpthread.so.*
- ifneq ($(BR2_PACKAGE_GDB_SERVER)$(BR2_TOOLCHAIN_EXTERNAL_GDB_SERVER_COPY),)
-@@ -216,6 +221,13 @@ TOOLCHAIN_EXTERNAL_CFLAGS += -msoft-float
- TOOLCHAIN_EXTERNAL_WRAPPER_ARGS += -DBR_SOFTFLOAT=1
- endif
+-include toolchain/helpers.mk
+-
+ BUILDROOT_LIBC = $(call qstrip,$(BR2_TOOLCHAIN_BUILDROOT_LIBC))
  
-+# The Linaro ARMhf toolchain expects the libraries in
-+# /lib/arm-linux-gnueabihf, but Buildroot copies them to /lib, so we
-+# need to create a symbolic link.
-+define TOOLCHAIN_EXTERNAL_LINARO_ARMHF_SYMLINK
-+	ln -sf . $(TARGET_DIR)/lib/arm-linux-gnueabihf
-+endef
-+
- ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201109),y)
- TOOLCHAIN_EXTERNAL_SITE = http://sourcery.mentor.com/public/gnu_toolchain/arm-none-linux-gnueabi/
- TOOLCHAIN_EXTERNAL_SOURCE = arm-2011.09-70-arm-none-linux-gnueabi-i686-pc-linux-gnu.tar.bz2
-@@ -242,12 +254,15 @@ endef
- else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_07),y)
- TOOLCHAIN_EXTERNAL_SITE = http://releases.linaro.org/13.07/components/toolchain/binaries/
- TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-arm-linux-gnueabihf-4.8-2013.07-1_linux.tar.xz
-+TOOLCHAIN_EXTERNAL_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_EXTERNAL_LINARO_ARMHF_SYMLINK
- else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_08),y)
- TOOLCHAIN_EXTERNAL_SITE = http://releases.linaro.org/13.08/components/toolchain/binaries/
- TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-arm-linux-gnueabihf-4.8-2013.08_linux.tar.xz
-+TOOLCHAIN_EXTERNAL_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_EXTERNAL_LINARO_ARMHF_SYMLINK
- else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_09),y)
- TOOLCHAIN_EXTERNAL_SITE = http://releases.linaro.org/13.09/components/toolchain/binaries/
- TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-arm-linux-gnueabihf-4.8-2013.09_linux.tar.xz
-+TOOLCHAIN_EXTERNAL_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_EXTERNAL_LINARO_ARMHF_SYMLINK
- else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201203),y)
- TOOLCHAIN_EXTERNAL_SITE = http://sourcery.mentor.com/public/gnu_toolchain/mips-linux-gnu/
- TOOLCHAIN_EXTERNAL_SOURCE = mips-2012.03-63-mips-linux-gnu-i686-pc-linux-gnu.tar.bz2
+ toolchain-buildroot: host-gcc-final
+diff --git a/toolchain/toolchain-external.mk b/toolchain/toolchain-external.mk
+index 2f43db7..2644689 100644
+--- a/toolchain/toolchain-external.mk
++++ b/toolchain/toolchain-external.mk
+@@ -1,4 +1,4 @@
+ # Required includes for the external toolchain backend
+ 
+-include toolchain/helpers.mk
++include toolchain/toolchain-external/helpers.mk
+ include toolchain/toolchain-external/ext-tool.mk
+diff --git a/toolchain/helpers.mk b/toolchain/toolchain-external/helpers.mk
+similarity index 100%
+rename from toolchain/helpers.mk
+rename to toolchain/toolchain-external/helpers.mk
 -- 
 1.8.1.2
