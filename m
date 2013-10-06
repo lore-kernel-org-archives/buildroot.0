@@ -1,32 +1,43 @@
-From: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
-Date: Sun,  6 Oct 2013 22:04:36 +0200
-Subject: [Buildroot] [PATCH 2/2] gob2: bump to version 2.0.19
-In-Reply-To: <1381089876-23875-1-git-send-email-jerzy.grzegorek@trzebnica.net>
-References: <1381089876-23875-1-git-send-email-jerzy.grzegorek@trzebnica.net>
-Message-ID: <1381089876-23875-2-git-send-email-jerzy.grzegorek@trzebnica.net>
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Sun, 06 Oct 2013 22:10:24 +0200
+Subject: [Buildroot] [PATCH 1/1] libcap: fix static linking issue
+Message-ID: <5251C3B0.7090105@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
----
- package/gob2/gob2.mk |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Add -fPIC flag
 
-diff --git a/package/gob2/gob2.mk b/package/gob2/gob2.mk
-index 9f6cc3e..58d0c60 100644
---- a/package/gob2/gob2.mk
-+++ b/package/gob2/gob2.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GOB2_VERSION = 2.0.18
-+GOB2_VERSION = 2.0.19
- GOB2_SITE = http://ftp.5z.com/pub/gob
- GOB2_DEPENDENCIES = libglib2 flex bison host-pkgconf host-flex
- HOST_GOB2_DEPENDENCIES = host-bison host-flex host-libglib2
+Fixes:
+http://autobuild.buildroot.net/results/619bceb3491ecd2ed4e1ae552fdb237a0ed2fa47/
+
+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+---
+ package/libcap/libcap.mk | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
+
+diff --git a/package/libcap/libcap.mk b/package/libcap/libcap.mk
+index 16afaef..6248fed 100644
+--- a/package/libcap/libcap.mk
++++ b/package/libcap/libcap.mk
+@@ -25,10 +25,15 @@ endif
+ # we don't have host-attr
+ HOST_LIBCAP_DEPENDENCIES =
+
++ifeq ($(BR2_PREFER_STATIC_LIB),y)
++LIBCAP_LDFLAGS=-fPIC
++endif
++
+ define LIBCAP_BUILD_CMDS
+ 	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
+ 		LIBATTR=$(LIBCAP_HAVE_LIBATTR) BUILD_CC="$(HOSTCC)" \
+-		BUILD_CFLAGS="$(HOST_CFLAGS)"
++		BUILD_CFLAGS="$(HOST_CFLAGS)" \
++		LDFLAGS="$(LIBCAP_LDFLAGS)"
+ endef
+
+ define LIBCAP_INSTALL_STAGING_CMDS
 -- 
-1.7.9.5
+1.8.4
