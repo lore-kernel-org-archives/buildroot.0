@@ -1,36 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 6 Oct 2013 23:26:48 +0200
-Subject: [Buildroot] [PATCH 1/2] i.MX: Use FREESCALE_IMX_SITE for
-	Freescale packages
-In-Reply-To: <1381088868-12739-2-git-send-email-eric.nelson@boundarydevices.com>
-References: <1381088868-12739-1-git-send-email-eric.nelson@boundarydevices.com>
- <1381088868-12739-2-git-send-email-eric.nelson@boundarydevices.com>
-Message-ID: <20131006232648.69e85f80@skate>
+Date: Sun, 6 Oct 2013 23:29:54 +0200
+Subject: [Buildroot] [PATCH 1/1] libcap: fix static linking issue
+In-Reply-To: <5251C3B0.7090105@openwide.fr>
+References: <5251C3B0.7090105@openwide.fr>
+Message-ID: <20131006232954.71da4d75@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Eric Nelson,
+Dear Romain Naour,
 
-On Sun,  6 Oct 2013 12:47:47 -0700, Eric Nelson wrote:
-> This patch consolidates the URLs for various Freescale-supplied
-> packages to use FREESCALE_IMX_SITE.
+On Sun, 06 Oct 2013 22:10:24 +0200, Romain Naour wrote:
+> Add -fPIC flag
 > 
-> Signed-off-by: Eric Nelson <eric.nelson@boundarydevices.com>
+> Fixes:
+> http://autobuild.buildroot.net/results/619bceb3491ecd2ed4e1ae552fdb237a0ed2fa47/
+> 
+> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 > ---
->  package/freescale-imx/firmware-imx/firmware-imx.mk         | 2 +-
->  package/freescale-imx/freescale-imx.mk                     | 2 +-
->  package/freescale-imx/gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk | 2 +-
->  package/freescale-imx/imx-lib/imx-lib.mk                   | 2 +-
->  package/gstreamer/gst-fsl-plugins/gst-fsl-plugins.mk       | 3 +--
->  package/libfslcodec/libfslcodec.mk                         | 3 +--
->  package/libfslparser/libfslparser.mk                       | 3 +--
->  package/libfslvpuwrap/libfslvpuwrap.mk                     | 3 +--
->  8 files changed, 8 insertions(+), 12 deletions(-)
+>  package/libcap/libcap.mk | 7 ++++++-
+>  1 file changed, 6 insertions(+), 1 deletion(-)
+> 
+> diff --git a/package/libcap/libcap.mk b/package/libcap/libcap.mk
+> index 16afaef..6248fed 100644
+> --- a/package/libcap/libcap.mk
+> +++ b/package/libcap/libcap.mk
+> @@ -25,10 +25,15 @@ endif
+>  # we don't have host-attr
+>  HOST_LIBCAP_DEPENDENCIES =
+> 
+> +ifeq ($(BR2_PREFER_STATIC_LIB),y)
+> +LIBCAP_LDFLAGS=-fPIC
+> +endif
 
-Reviewed-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+This seems really weird, because normally, we would expect exactly the
+opposite: position independent code is needed for shared libraries, not
+for static libraries.
+
+Thomas
 -- 
 Thomas Petazzoni, Free Electrons
 Embedded Linux, Kernel and Android engineering
