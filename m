@@ -1,10 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 6 Oct 2013 23:22:40 +0200
-Subject: [Buildroot] [PATCH] docs/manual: add a 'Known issues' chapter
-In-Reply-To: <87r4byfdql.fsf@dell.be.48ers.dk>
-References: <1381081747-20598-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <87r4byfdql.fsf@dell.be.48ers.dk>
-Message-ID: <20131006232240.3c8923c0@skate>
+Date: Sun, 6 Oct 2013 23:23:44 +0200
+Subject: [Buildroot] [PATCH] libcap-ng: doesn't build on AVR32,
+	requires TLS support
+In-Reply-To: <871u3yfddd.fsf@dell.be.48ers.dk>
+References: <1381077279-19561-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <871u3yfddd.fsf@dell.be.48ers.dk>
+Message-ID: <20131006232344.493a4ebc@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,18 +14,24 @@ To: buildroot@busybox.net
 
 Dear Peter Korsgaard,
 
-On Sun, 06 Oct 2013 20:36:34 +0200, Peter Korsgaard wrote:
+On Sun, 06 Oct 2013 20:44:30 +0200, Peter Korsgaard wrote:
 
->  Thomas> +* The +prboom+ package triggers a compiler failure with the SuperH 4
->  Thomas> +  compiler from Soucery CodeBench, version 2012.09.
+>  Thomas> diff --git a/package/libcap-ng/Config.in b/package/libcap-ng/Config.in
+>  Thomas> index d1663cd..b799dc9 100644
+>  Thomas> --- a/package/libcap-ng/Config.in
+>  Thomas> +++ b/package/libcap-ng/Config.in
+>  Thomas> @@ -1,5 +1,7 @@
+>  Thomas>  config BR2_PACKAGE_LIBCAP_NG
+>  Thomas>  	bool "libcap-ng"
+>  Thomas> +	# tls support, needed by libcap-ng, not available on avr32
+>  Thomas> +	depends on !BR2_avr32
 > 
-> I believe we have a lot of other situations with packages triggering
-> internal compiler errors, especially for microblaze and avr32.
+> Shouldn't it then depend on BR2_GCC_ENABLE_TLS (and the avr32 toolchain
+> not select it)?
 
-I agree, but I'm merely documenting the exceptions I've added in my
-autobuilders script. I'm planning on adding similar exceptions and
-documentation in this "Known issues" section for the other compiler
-failures as well.
+It wouldn't work with external toolchains, which is the reason why I
+excluded the AVR32 architecture rather than using a BR2_GCC_ENABLE_TLS
+condition.
 
 Best regards,
 
