@@ -1,64 +1,77 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 6 Oct 2013 20:47:22 +0200
-Subject: [Buildroot] [git commit] pakage/rpi-userland: add and install our
-	bcm_host.pc
-Message-ID: <20131006184800.27C9196CB6@busybox.osuosl.org>
+Date: Sun, 6 Oct 2013 20:34:40 +0200
+Subject: [Buildroot] [git commit] docs/manual: add a 'Known issues' chapter
+Message-ID: <20131006184759.C85899B948@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=19b4a6f4e08fdf7b698e4be735328cb69c40020d
+commit: http://git.buildroot.net/buildroot/commit/?id=4aa9fb945fde3b74ecc1a6887bf597466cd67a0d
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This allows pkg-config-aware packages to include headers from, and
-link against Broadcom VideoCore host API library.
+Add a 'Known issues' chapter, which lists the exceptions I have
+currently in the autobuilder scripts to avoid known problems from
+occuring. I believe it is more useful to document them rather than
+keeping them hidden in my autobuilder script.
 
-bcm_host.pc copied almost as-is from:
-    http://cgit.collabora.com/git/user/pq/android-pc-files.git/tree/pkgconfig?h=raspberrypi
-with only a fix to the prefix (we're using /usr).
-
-[Peter: s/TARGET/STAGING/]
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+[Peter: s/either/either use/]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/rpi-userland/bcm_host.pc     |   11 +++++++++++
- package/rpi-userland/rpi-userland.mk |    7 ++++++-
- 2 files changed, 17 insertions(+), 1 deletions(-)
+ docs/manual/known-issues.txt |   32 ++++++++++++++++++++++++++++++++
+ docs/manual/manual.txt       |    2 ++
+ 2 files changed, 34 insertions(+), 0 deletions(-)
 
-diff --git a/package/rpi-userland/bcm_host.pc b/package/rpi-userland/bcm_host.pc
+diff --git a/docs/manual/known-issues.txt b/docs/manual/known-issues.txt
 new file mode 100644
-index 0000000..28bbe96
+index 0000000..4ef8c05
 --- /dev/null
-+++ b/package/rpi-userland/bcm_host.pc
-@@ -0,0 +1,11 @@
-+prefix=/usr
-+exec_prefix=${prefix}
-+libdir=${exec_prefix}/lib
-+includedir=${prefix}/include
++++ b/docs/manual/known-issues.txt
+@@ -0,0 +1,32 @@
++// -*- mode:doc; -*-
++// vim: set syntax=asciidoc:
 +
-+Name: bcm_host
-+Description: Broadcom VideoCore host API library
-+Version: 1
-+Libs: -L${libdir} -lbcm_host -lvcos -lvchiq_arm
-+Cflags: -I${includedir} -I${includedir}/interface/vmcs_host/linux -I${includedir}/interface/vcos/pthreads -DUSE_VCHIQ_ARM
++Known issues
++============
 +
-diff --git a/package/rpi-userland/rpi-userland.mk b/package/rpi-userland/rpi-userland.mk
-index c3ea43a..cc032bf 100644
---- a/package/rpi-userland/rpi-userland.mk
-+++ b/package/rpi-userland/rpi-userland.mk
-@@ -14,7 +14,12 @@ RPI_USERLAND_CONF_OPT = -DVMCS_INSTALL_PREFIX=/usr
- define RPI_USERLAND_POST_TARGET_CLEANUP
-     rm -Rf $(TARGET_DIR)/usr/src
- endef
--
- RPI_USERLAND_POST_INSTALL_TARGET_HOOKS += RPI_USERLAND_POST_TARGET_CLEANUP
++* The +ltp-testsuite+ package does not build with the default uClibc
++  configuration used by the Buildroot toolchain backend. The LTP
++  testsuite uses several functions that are considered obsolete, such
++  as sigset() and others. uClibc configuration options such as
++  DO_XSI_MATH, UCLIBC_HAS_OBSOLETE_BSD_SIGNAL and
++  UCLIBC_SV4_DEPRECATED are needed if one wants to build the
++  +ltp-testsuite+ package with uClibc. You need to either use a glibc
++  or eglibc based toolchain, or enable the appropriate options in the
++  uClibc configuration.
++
++* The +xfsprogs+ package does not build with the default uClibc
++  configuration used by the Buildroot toolchain backend. You need to
++  either use a glibc or eglibc based toolchain, or enable the
++  appropriate options in the uClibc configuration.
++
++* The +mrouted+ package does not build with the default uClibc
++  configuration used by the Buildroot toolchain backend. You need to
++  either use a glibc or eglibc based toolchain, or enable the
++  appropriate options in the uClibc configuration.
++
++* The +libffi+ package is not supported on the SuperH 2 and ARC
++  architectures.
++
++* The +prboom+ package triggers a compiler failure with the SuperH 4
++  compiler from Soucery CodeBench, version 2012.09.
++
+diff --git a/docs/manual/manual.txt b/docs/manual/manual.txt
+index 9685667..9ae658e 100644
+--- a/docs/manual/manual.txt
++++ b/docs/manual/manual.txt
+@@ -23,6 +23,8 @@ include::working-with.txt[]
  
-+define RPI_USERLAND_POST_STAGING_PC_FILE
-+	install -D -m 0644 package/rpi-userland/bcm_host.pc \
-+		$(STAGING_DIR)/usr/lib/pkgconfig/bcm_host.pc
-+endef
-+RPI_USERLAND_POST_INSTALL_STAGING_HOOKS += RPI_USERLAND_POST_STAGING_PC_FILE
+ include::faq-troubleshooting.txt[]
+ 
++include::known-issues.txt[]
 +
- $(eval $(cmake-package))
+ include::going-further.txt[]
+ 
+ include::developer-guide.txt[]
