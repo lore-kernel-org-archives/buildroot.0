@@ -1,42 +1,35 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 06 Oct 2013 23:40:41 +0200
-Subject: [Buildroot] [PATCHv2 04/21] toolchain: move helpers.mk into
-	toolchain-external/
-In-Reply-To: <20131006232608.432630fe@skate> (Thomas Petazzoni's message of
- "Sun, 6 Oct 2013 23:26:08 +0200")
-References: <1381069171-29748-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1381069171-29748-5-git-send-email-thomas.petazzoni@free-electrons.com>
- <87a9imdwm5.fsf@dell.be.48ers.dk> <20131006232608.432630fe@skate>
-Message-ID: <87k3hqcc2u.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 6 Oct 2013 23:48:31 +0200
+Subject: [Buildroot] [git commit] binutils: default to 2.22
+Message-ID: <20131006215147.D84959B94D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=9777dbedb012f68e54e14f9567d9dc0187d53b17
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Hi,
+2.21.1 is getting quite old, the linker issues with 2.22 seems to be
+(mostly?) sorted out by now and armhf needs 2.22+, so let's bump the
+default version.
 
- >> git grep copy_toolchain package/
- >> package/glibc/glibc.mk:         $(call copy_toolchain_lib_root,$(STAGING_DIR)/,,
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/binutils/Config.in.host |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
- Thomas> Oh, I'm impressed how well you know the code, even code that I have
- Thomas> written.
-
-git grep is your friend ;)
-
- Thomas> We really need some kind of "test suite" to check patches or
- Thomas> something like that: a patch set such as this toolchain-related patch
- Thomas> set is really a pain to test in all the various possible conditions. I
- Thomas> did test the internal backend, but only with uClibc toolchain.
-
-Yeah, but I'm afraid the only real way of testing things is to build the
-various affected variants (internal uclibc/glibc + external).
-
- Thomas> I'll rework my patch series.
-
-Great, thanks!
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/binutils/Config.in.host b/package/binutils/Config.in.host
+index c2d2495..8f19597 100644
+--- a/package/binutils/Config.in.host
++++ b/package/binutils/Config.in.host
+@@ -4,7 +4,7 @@ choice
+ 	prompt "Binutils Version"
+ 	depends on !BR2_arc
+ 	default BR2_BINUTILS_VERSION_2_21 if (BR2_mips || BR2_mipsel || BR2_sh)
+-	default BR2_BINUTILS_VERSION_2_21_1
++	default BR2_BINUTILS_VERSION_2_22
+ 	help
+ 	  Select the version of binutils you wish to use.
+ 
