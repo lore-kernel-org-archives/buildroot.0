@@ -1,39 +1,22 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 6 Oct 2013 18:38:07 +0200
-Subject: [Buildroot] [PATCH V2 2/3] i.MX6: Use canonical site for
- Freescale packages
-In-Reply-To: <1381073624-27739-2-git-send-email-eric.nelson@boundarydevices.com>
-References: <1381073624-27739-1-git-send-email-eric.nelson@boundarydevices.com>
- <1381073624-27739-2-git-send-email-eric.nelson@boundarydevices.com>
-Message-ID: <20131006183807.3a87ff12@skate>
+Date: Sun, 6 Oct 2013 18:38:36 +0200
+Subject: [Buildroot] [PATCH 1/2] media-ctl: bump version
+In-Reply-To: <CAAXf6LUkiz0b1nX2JgOjQ5N68JbkEwUH_oU8zvsiBnOoR1tE=w@mail.gmail.com>
+References: <1381073285-30058-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <CAAXf6LUkiz0b1nX2JgOjQ5N68JbkEwUH_oU8zvsiBnOoR1tE=w@mail.gmail.com>
+Message-ID: <20131006183836.0dc99820@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Eric Nelson,
+Dear Thomas De Schampheleire,
 
-On Sun,  6 Oct 2013 08:33:43 -0700, Eric Nelson wrote:
-> -# No official download site from freescale, just this mirror
-> -FREESCALE_IMX_MIRROR_SITE   = http://download.ossystems.com.br/bsp/freescale/source
-> +FREESCALE_IMX_SITE   = http://www.freescale.com/lgfiles/NMG/MAD/YOCTO/
-> +#FREESCALE_IMX_MIRROR_SITE   = http://download.ossystems.com.br/bsp/freescale/source
+On Sun, 6 Oct 2013 18:05:20 +0200, Thomas De Schampheleire wrote:
+> 
 
-Please don't keep this as a comment.
-
-Also, this patch actually does two things: renaming the variable, and
-change the site from download.ossystems.com.br to freescale.com. I
-believe the switch to freescale.com does not work if you don't also
-bump the version at the same time, so I'd suggest that:
-
- * this patch only renames the variable from IMX_MIRROR_SITE to
-   IMX_SITE, but does not change its value
-
- * the change from ossystems.com.br to freescale.com is done in the
-   following patch that bumps the version.
-
-Thanks,
+Both of your e-mails were empty.
 
 Thomas
 -- 
