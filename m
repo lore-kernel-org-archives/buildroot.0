@@ -1,115 +1,82 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun,  6 Oct 2013 19:52:25 +0200
-Subject: [Buildroot] [PATCH] ltp-testsuite: bump version and other fixes
-Message-ID: <1381081945-20712-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Sun, 6 Oct 2013 16:42:27 +0200
+Subject: [Buildroot] Buildroot patchwork: decision on the 10 oldest patches,
+	week 1
+Message-ID: <20131006164227.0ab2a172@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This commit bumps ltp-testsuite to the latest version available. In
-addition to that, it also:
+Hello,
 
- * Removes the ltp-testsuite-disable-controllers.patch file, which
-   becomes useless thanks to the workaround that consists in removing
-   -D_FILE_OFFSET_BITS=64 from the CFLAGS. This is necessary because
-   ltp-testsuite uses the non-largefile compatible <fts.h> interface.
+The oldest patches in patchwork don't get a lot of attention (or even
+any attention at all). I had a discussion this week with Thomas De
+Schampheleire, and we would like to progressively clean up the backlog
+of patches we have in patchwork, especially the oldest one.
 
- * Marks the package as not-available on AArch64, since it doesn't
-   build properly. A bug has been submitted upstream to the Linaro
-   people doing the AArch64 support.
+So, every week, I'll be posting the list of the 10 oldest patches, with
+the original patch contributors in Cc. During one week, we have the
+opportunity to discuss the patch, whether it is still necessary or not,
+how it should be changed to be merged.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/ltp-testsuite/Config.in                    |  7 ++++--
- .../ltp-testsuite-disable-controllers.patch        | 29 ----------------------
- package/ltp-testsuite/ltp-testsuite.mk             | 10 ++++++--
- 3 files changed, 13 insertions(+), 33 deletions(-)
- delete mode 100644 package/ltp-testsuite/ltp-testsuite-disable-controllers.patch
+In particular, I'm interested in knowing if the original contributor is
+still interested by the patch, or if someone else is interested in
+adopting the patch and sending an updated version, or if the patch no
+longer makes sense due to other changes made in Buildroot.
 
-diff --git a/package/ltp-testsuite/Config.in b/package/ltp-testsuite/Config.in
-index 75b029f..3681eaf 100644
---- a/package/ltp-testsuite/Config.in
-+++ b/package/ltp-testsuite/Config.in
-@@ -7,6 +7,9 @@ config BR2_PACKAGE_LTP_TESTSUITE
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_INET_IPV6
- 	depends on BR2_TOOLCHAIN_HAS_NATIVE_RPC
-+	# aarch64 build currently broken, reported at
-+	# https://bugs.launchpad.net/linaro-aarch64/+bug/1236027
-+	depends on !BR2_aarch64
- 	help
- 	  The Linux Test Project provides a huge testsuite for Linux.
- 
-@@ -20,5 +23,5 @@ config BR2_PACKAGE_LTP_TESTSUITE
- 	  http://ltp.sourceforge.net/
- 
- comment "ltp-testsuite requires a toolchain with IPV6, RPC and thread support"
--	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INET_IPV6 || \
--		!BR2_TOOLCHAIN_HAS_NATIVE_RPC
-+	depends on (!BR2_TOOLCHAIN_HAS_THREADS || !BR2_INET_IPV6 || \
-+		!BR2_TOOLCHAIN_HAS_NATIVE_RPC) && !BR2_aarch64
-diff --git a/package/ltp-testsuite/ltp-testsuite-disable-controllers.patch b/package/ltp-testsuite/ltp-testsuite-disable-controllers.patch
-deleted file mode 100644
-index 85ef262..0000000
---- a/package/ltp-testsuite/ltp-testsuite-disable-controllers.patch
-+++ /dev/null
-@@ -1,29 +0,0 @@
--Disable controllers testcases.
--This fix is carried over from 20101031 version.
--
--The cpuset controllers testcases do not build due to bug
--https://sourceforge.net/tracker/?func=detail&aid=3126942&group_id=3382&atid=103382.
--Disabling just the cpuset controllers do not seem to be easily possible, and
--those controller features are rarely used on embedded systems anyway.
--
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--Signed-off-by: Jerin Jacob  <jerinjacobk@gmail.com>
-----
-- testcases/kernel/Makefile |    1 -
-- 1 files changed, 0 insertions(+), 1 deletions(-)
--
--diff --git a/testcases/kernel/Makefile b/testcases/kernel/Makefile
--index 4b4800d..d6ab7b6 100644
----- a/testcases/kernel/Makefile
--+++ b/testcases/kernel/Makefile
--@@ -37,7 +37,6 @@ ifneq ($(UCLINUX),1)
-- # KEEP THIS LIST ALPHABETIZED PLEASE!
-- SUBDIRS			+= connectors \
-- 			   containers \
---			   controllers \
-- 			   fs \
-- 			   hotplug \
-- 			   io \
---- 
--1.7.6.5
--
-diff --git a/package/ltp-testsuite/ltp-testsuite.mk b/package/ltp-testsuite/ltp-testsuite.mk
-index 16d1fe8..594fa18 100644
---- a/package/ltp-testsuite/ltp-testsuite.mk
-+++ b/package/ltp-testsuite/ltp-testsuite.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--LTP_TESTSUITE_VERSION = 20130109
--LTP_TESTSUITE_SOURCE  = ltp-full-$(LTP_TESTSUITE_VERSION).bz2
-+LTP_TESTSUITE_VERSION = 20130904
-+LTP_TESTSUITE_SOURCE  = ltp-full-$(LTP_TESTSUITE_VERSION).tar.xz
- LTP_TESTSUITE_SITE    = http://downloads.sourceforge.net/project/ltp/LTP%20Source/ltp-$(LTP_TESTSUITE_VERSION)
- LTP_TESTSUITE_LICENSE = GPLv2 GPLv2+
- LTP_TESTSUITE_LICENSE_FILES = COPYING
-@@ -17,4 +17,10 @@ else
- LTP_TESTSUITE_CONF_ENV += ac_cv_lib_cap_cap_compare=no
- endif
- 
-+# ltp-testsuite uses <fts.h>, which isn't compatible with largefile
-+# support.
-+LTP_TESTSUITE_CONF_ENV += \
-+	CFLAGS="$(filter-out -D_FILE_OFFSET_BITS=64,$(TARGET_CFLAGS))" \
-+	CPPFLAGS="$(filter-out -D_FILE_OFFSET_BITS=64,$(TARGET_CPPFLAGS))"
-+
- $(eval $(autotools-package))
+All patches that have not received any comment or attention within the
+week will be removed from patchwork. This is aggressive, but we have
+patches sitting in patchwork since one year and half, and this cannot
+work.
+
+So, for this first week, the patches are:
+
+ 1 New: add lava-test package
+   http://patchwork.ozlabs.org/patch/155498/
+   ludovic.desroches at atmel.com
+
+ 2 [v3] busybox: install S41inetd and inetd.conf if inetd is enabled in busybox.
+   http://patchwork.ozlabs.org/patch/164551/
+   keguang.zhang at gmail.com
+
+ 3 [1/1] ccache: expose control interface via 'make ccache-options'
+   http://patchwork.ozlabs.org/patch/165382/
+   roylee17 at gmail.com
+
+ 4 [V2] p910nd: Add p910nd lightweight printserver
+   http://patchwork.ozlabs.org/patch/165542/
+   david.c.purdy at gmail.com
+
+ 5 Added package v86d which provides a real-mode helper for uvesafb driver.
+   http://patchwork.ozlabs.org/patch/171840/
+   golubovsky at gmail.com
+
+ 6 grub: fix stage2 link with recent binutils
+   http://patchwork.ozlabs.org/patch/173191/
+   net147 at gmail.com
+
+ 7 valgrind: valgrind/valgrind.h missing if --disable-tls enabled
+   http://patchwork.ozlabs.org/patch/176795/
+   stefan.froberg at petroprogram.com
+
+ 8 [2/2] rdiff-backup: new package
+   http://patchwork.ozlabs.org/patch/176956/
+   avishorp at gmail.com
+
+ 9 [1/2,v4] package: pkg-generic: Support building override source without copying in common package infrastructure.
+   http://patchwork.ozlabs.org/patch/177618/
+   sonic.adi at gmail.com
+
+10 grub: add host support
+   http://patchwork.ozlabs.org/patch/177705/
+   rbraun at sceen.net
+
+Thanks,
+
+Thomas
 -- 
-1.8.1.2
+Thomas Petazzoni, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
