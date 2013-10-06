@@ -1,7 +1,9 @@
 From: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
-Date: Sun,  6 Oct 2013 22:04:35 +0200
-Subject: [Buildroot] [PATCH 1/2] gob2: change the patch name
-Message-ID: <1381089876-23875-1-git-send-email-jerzy.grzegorek@trzebnica.net>
+Date: Sun,  6 Oct 2013 22:04:36 +0200
+Subject: [Buildroot] [PATCH 2/2] gob2: bump to version 2.0.19
+In-Reply-To: <1381089876-23875-1-git-send-email-jerzy.grzegorek@trzebnica.net>
+References: <1381089876-23875-1-git-send-email-jerzy.grzegorek@trzebnica.net>
+Message-ID: <1381089876-23875-2-git-send-email-jerzy.grzegorek@trzebnica.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,13 +12,21 @@ To: buildroot@busybox.net
 
 Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
 ---
- ...atch => gob2-01-dont-include-from-prefix.patch} |    0
- 1 file changed, 0 insertions(+), 0 deletions(-)
- rename package/gob2/{gob2-dont-include-from-prefix.patch => gob2-01-dont-include-from-prefix.patch} (100%)
+ package/gob2/gob2.mk |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/gob2/gob2-dont-include-from-prefix.patch b/package/gob2/gob2-01-dont-include-from-prefix.patch
-similarity index 100%
-rename from package/gob2/gob2-dont-include-from-prefix.patch
-rename to package/gob2/gob2-01-dont-include-from-prefix.patch
+diff --git a/package/gob2/gob2.mk b/package/gob2/gob2.mk
+index 9f6cc3e..58d0c60 100644
+--- a/package/gob2/gob2.mk
++++ b/package/gob2/gob2.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GOB2_VERSION = 2.0.18
++GOB2_VERSION = 2.0.19
+ GOB2_SITE = http://ftp.5z.com/pub/gob
+ GOB2_DEPENDENCIES = libglib2 flex bison host-pkgconf host-flex
+ HOST_GOB2_DEPENDENCIES = host-bison host-flex host-libglib2
 -- 
 1.7.9.5
