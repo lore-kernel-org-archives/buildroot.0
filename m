@@ -1,128 +1,185 @@
 From: Eric Nelson <eric.nelson@boundarydevices.com>
-Date: Sun,  6 Oct 2013 08:33:43 -0700
-Subject: [Buildroot] [PATCH V2 2/3] i.MX6: Use canonical site for Freescale
-	packages
+Date: Sun,  6 Oct 2013 08:33:44 -0700
+Subject: [Buildroot] [PATCH V2 3/3] i.MX: Bump library versions to latest
+	release (3.0.35-4.1.0)
 In-Reply-To: <1381073624-27739-1-git-send-email-eric.nelson@boundarydevices.com>
 References: <1381073624-27739-1-git-send-email-eric.nelson@boundarydevices.com>
-Message-ID: <1381073624-27739-2-git-send-email-eric.nelson@boundarydevices.com>
+Message-ID: <1381073624-27739-3-git-send-email-eric.nelson@boundarydevices.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Use official Freescale site for distribution of i.MX packages,
-rename FREESCALE_IMX_MIRROR_SITE to FREESCALE_IMX_SITE as
-suggested by Peter Korsgaard.
+This patchset updates the Freescale gstreamer and GPU libraries
+to the latest release (3.0.35_4.1.0).
+
+Note that the package names refer to and are compatible with
+an alpha release of kernel version 3.5.7, and the package
+release versions reflect that by using the nomenclature
+3.5.7_1.0.0.
+
+The primary release package (based on LTIB) is available
+here and includes documentation.
+	https://community.freescale.com/docs/DOC-95560
+
+The 3.5.7 kernel sources are available here:
+	http://git.freescale.com/git/cgit.cgi/imx/linux-2.6-imx.git/log/?h=imx_3.5.7_1.0.0_alpha
+
+Note that there are some structural changes for various
+packages in this release:
+	- gpu-viv-bin-mx6q gains two variants for ARMEL (sfp)
+	and ARMHF (hfp).
+	- imx-lib and libfslvpuwrap packages are distributed
+	as self-extracting shell scripts requiring acceptance
+	of an end-user license agreement (EULA).
 
 Signed-off-by: Eric Nelson <eric.nelson@boundarydevices.com>
 ---
 V2 updates libfslcodec/libfslparser/libfslvpuwrap in their
 original directories instead of freescale-imx/.
- 
- package/freescale-imx/firmware-imx/firmware-imx.mk         | 2 +-
- package/freescale-imx/freescale-imx.mk                     | 4 ++--
- package/freescale-imx/gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk | 2 +-
- package/freescale-imx/imx-lib/imx-lib.mk                   | 2 +-
- package/libfslcodec/libfslcodec.mk                         | 3 +--
- package/libfslparser/libfslparser.mk                       | 3 +--
- package/libfslvpuwrap/libfslvpuwrap.mk                     | 3 +--
- 7 files changed, 8 insertions(+), 11 deletions(-)
 
-diff --git a/package/freescale-imx/firmware-imx/firmware-imx.mk b/package/freescale-imx/firmware-imx/firmware-imx.mk
-index d9fcb89..d26b31c 100644
---- a/package/freescale-imx/firmware-imx/firmware-imx.mk
-+++ b/package/freescale-imx/firmware-imx/firmware-imx.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- FIRMWARE_IMX_VERSION = $(FREESCALE_IMX_VERSION)
--FIRMWARE_IMX_SITE = $(FREESCALE_IMX_MIRROR_SITE)
-+FIRMWARE_IMX_SITE = $(FREESCALE_IMX_SITE)
- FIRMWARE_IMX_SOURCE = firmware-imx-$(FIRMWARE_IMX_VERSION).bin
- FIRMWARE_IMX_LICENSE = Freescale Semiconductor Software License Agreement, \
- 	Atheros license (ath6k)
+ package/freescale-imx/freescale-imx.mk               |  2 +-
+ .../gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk             |  6 +++++-
+ package/freescale-imx/imx-lib/imx-lib.mk             | 16 ++++++++++++++--
+ package/libfslcodec/libfslcodec.mk                   |  2 +-
+ package/libfslparser/libfslparser.mk                 |  4 +++-
+ package/libfslvpuwrap/libfslvpuwrap.mk               | 20 +++++++++++++++++++-
+ 6 files changed, 43 insertions(+), 7 deletions(-)
+
 diff --git a/package/freescale-imx/freescale-imx.mk b/package/freescale-imx/freescale-imx.mk
-index d35a62e..47e7be2 100644
+index 47e7be2..2762972 100644
 --- a/package/freescale-imx/freescale-imx.mk
 +++ b/package/freescale-imx/freescale-imx.mk
-@@ -6,7 +6,7 @@
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- FREESCALE_IMX_VERSION = 1.1.0
+-FREESCALE_IMX_VERSION = 1.1.0
++FREESCALE_IMX_VERSION = 3.5.7-1.0.0
  
--# No official download site from freescale, just this mirror
--FREESCALE_IMX_MIRROR_SITE   = http://download.ossystems.com.br/bsp/freescale/source
-+FREESCALE_IMX_SITE   = http://www.freescale.com/lgfiles/NMG/MAD/YOCTO/
-+#FREESCALE_IMX_MIRROR_SITE   = http://download.ossystems.com.br/bsp/freescale/source
- 
- include $(sort $(wildcard package/freescale-imx/*/*.mk))
+ FREESCALE_IMX_SITE   = http://www.freescale.com/lgfiles/NMG/MAD/YOCTO/
+ #FREESCALE_IMX_MIRROR_SITE   = http://download.ossystems.com.br/bsp/freescale/source
 diff --git a/package/freescale-imx/gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk b/package/freescale-imx/gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk
-index c48d108..8e979ee 100644
+index 8e979ee..e799fd2 100644
 --- a/package/freescale-imx/gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk
 +++ b/package/freescale-imx/gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk
-@@ -5,7 +5,7 @@
+@@ -4,7 +4,11 @@
+ #
  ################################################################################
  
- GPU_VIV_BIN_MX6Q_VERSION = $(FREESCALE_IMX_VERSION)
--GPU_VIV_BIN_MX6Q_SITE    = $(FREESCALE_IMX_MIRROR_SITE)
-+GPU_VIV_BIN_MX6Q_SITE    = $(FREESCALE_IMX_SITE)
+-GPU_VIV_BIN_MX6Q_VERSION = $(FREESCALE_IMX_VERSION)
++ifeq ($(BR2_ARM_EABIHF),y)
++GPU_VIV_BIN_MX6Q_VERSION = $(FREESCALE_IMX_VERSION)-hfp
++else
++GPU_VIV_BIN_MX6Q_VERSION = $(FREESCALE_IMX_VERSION)-sfp
++endif
+ GPU_VIV_BIN_MX6Q_SITE    = $(FREESCALE_IMX_SITE)
  GPU_VIV_BIN_MX6Q_SOURCE  = gpu-viv-bin-mx6q-$(GPU_VIV_BIN_MX6Q_VERSION).bin
  
- GPU_VIV_BIN_MX6Q_INSTALL_STAGING = YES
 diff --git a/package/freescale-imx/imx-lib/imx-lib.mk b/package/freescale-imx/imx-lib/imx-lib.mk
-index bd7e174..e1a68ef 100644
+index e1a68ef..416bb1b 100644
 --- a/package/freescale-imx/imx-lib/imx-lib.mk
 +++ b/package/freescale-imx/imx-lib/imx-lib.mk
-@@ -5,7 +5,7 @@
- ################################################################################
+@@ -6,8 +6,8 @@
  
  IMX_LIB_VERSION = $(FREESCALE_IMX_VERSION)
--IMX_LIB_SITE    = $(FREESCALE_IMX_MIRROR_SITE)
-+IMX_LIB_SITE    = $(FREESCALE_IMX_SITE)
- IMX_LIB_LICENSE = LGPLv2.1+
- # No license file included
+ IMX_LIB_SITE    = $(FREESCALE_IMX_SITE)
+-IMX_LIB_LICENSE = LGPLv2.1+
+-# No license file included
++IMX_LIB_LICENSE = Freescale Semiconductor Software License Agreement
++IMX_LIB_SOURCE = imx-lib-$(IMX_LIB_VERSION).bin
  
+ IMX_LIB_INSTALL_STAGING = YES
+ 
+@@ -25,6 +25,18 @@ IMX_LIB_MAKE_ENV = \
+ 	PLATFORM=$(BR2_PACKAGE_IMX_LIB_PLATFORM) \
+ 	INCLUDE="$(IMX_LIB_INCLUDE)"
+ 
++# The archive is a shell-self-extractor of a bzipped tar. It happens
++# to extract in the correct directory (imx-lib-x.y.z)
++# The --force makes sure it doesn't fail if the source dir already exists.
++# The --auto-accept skips the license check - not needed for us
++# because we have legal-info
++# Since the EULA in the bin file differs from the one in the tar file,
++# extract the one from the bin file as well.
++define IMX_LIB_EXTRACT_CMDS
++	(cd $(BUILD_DIR); \
++		sh $(DL_DIR)/$(IMX_LIB_SOURCE) --force --auto-accept)
++endef
++
+ define IMX_LIB_BUILD_CMDS
+ 	$(IMX_LIB_MAKE_ENV) $(MAKE1) -C $(@D)
+ endef
 diff --git a/package/libfslcodec/libfslcodec.mk b/package/libfslcodec/libfslcodec.mk
-index e0dca7f..ad1cc63 100644
+index ad1cc63..d52158c 100644
 --- a/package/libfslcodec/libfslcodec.mk
 +++ b/package/libfslcodec/libfslcodec.mk
-@@ -5,8 +5,7 @@
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- LIBFSLCODEC_VERSION = 3.0.1
--# No official download site from freescale, just this mirror
--LIBFSLCODEC_SITE = $(FREESCALE_IMX_MIRROR_SITE)
-+LIBFSLCODEC_SITE = $(FREESCALE_IMX_SITE)
+-LIBFSLCODEC_VERSION = 3.0.1
++LIBFSLCODEC_VERSION = $(FREESCALE_IMX_VERSION)
+ LIBFSLCODEC_SITE = $(FREESCALE_IMX_SITE)
  LIBFSLCODEC_SOURCE = libfslcodec-$(LIBFSLCODEC_VERSION).bin
  LIBFSLCODEC_LICENSE = Freescale Semiconductor Software License Agreement, BSD-3c (flac, ogg headers)
- LIBFSLCODEC_LICENSE_FILES = EULA EULA.txt
 diff --git a/package/libfslparser/libfslparser.mk b/package/libfslparser/libfslparser.mk
-index c2af129..3aab3a7 100644
+index 3aab3a7..1aa975b 100644
 --- a/package/libfslparser/libfslparser.mk
 +++ b/package/libfslparser/libfslparser.mk
-@@ -5,8 +5,7 @@
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- LIBFSLPARSER_VERSION = 3.0.1
--# No official download site from freescale, just this mirror
--LIBFSLPARSER_SITE = $(FREESCALE_IMX_MIRROR_SITE)
-+LIBFSLPARSER_SITE = $(FREESCALE_IMX_SITE)
+-LIBFSLPARSER_VERSION = 3.0.1
++LIBFSLPARSER_VERSION = $(FREESCALE_IMX_VERSION)
+ LIBFSLPARSER_SITE = $(FREESCALE_IMX_SITE)
  LIBFSLPARSER_SOURCE = libfslparser-$(LIBFSLPARSER_VERSION).bin
  LIBFSLPARSER_LICENSE = Freescale Semiconductor Software License Agreement
- LIBFSLPARSER_LICENSE_FILES = EULA EULA.txt
+@@ -36,4 +36,6 @@ endef
+ # The Makefile installs several versions of the libraries, but we only
+ # need one of them, depending on the platform.
+ 
++LIBFSLPARSER_AUTORECONF = YES
++
+ $(eval $(autotools-package))
 diff --git a/package/libfslvpuwrap/libfslvpuwrap.mk b/package/libfslvpuwrap/libfslvpuwrap.mk
-index f4539f3..346a20a 100644
+index 346a20a..45193c4 100644
 --- a/package/libfslvpuwrap/libfslvpuwrap.mk
 +++ b/package/libfslvpuwrap/libfslvpuwrap.mk
-@@ -5,8 +5,7 @@
+@@ -4,8 +4,9 @@
+ #
  ################################################################################
  
- LIBFSLVPUWRAP_VERSION = 1.0.17
--# No official download site from freescale, just this mirror
--LIBFSLVPUWRAP_SITE = $(FREESCALE_IMX_MIRROR_SITE)
-+LIBFSLVPUWRAP_SITE = $(FREESCALE_IMX_SITE)
+-LIBFSLVPUWRAP_VERSION = 1.0.17
++LIBFSLVPUWRAP_VERSION = $(FREESCALE_IMX_VERSION)
+ LIBFSLVPUWRAP_SITE = $(FREESCALE_IMX_SITE)
++LIBFSLVPUWRAP_SOURCE = libfslvpuwrap-$(LIBFSLVPUWRAP_VERSION).bin
  LIBFSLVPUWRAP_LICENSE = Freescale Semiconductor Software License Agreement
  LIBFSLVPUWRAP_LICENSE_FILES = EULA.txt
  LIBFSLVPUWRAP_REDISTRIBUTE = NO
+@@ -14,4 +15,21 @@ LIBFSLVPUWRAP_INSTALL_STAGING = YES
+ 
+ LIBFSLVPUWRAP_DEPENDENCIES += imx-lib
+ 
++# The archive is a shell-self-extractor of a bzipped tar. It happens
++# to extract in the correct directory (libfslvpuwrap-x.y.z)
++# The --force makes sure it doesn't fail if the source dir already exists.
++# The --auto-accept skips the license check - not needed for us
++# because we have legal-info
++# Since the EULA in the bin file differs from the one in the tar file,
++# extract the one from the bin file as well.
++define LIBFSLVPUWRAP_EXTRACT_CMDS
++	awk 'BEGIN      { start=0; } \
++	     /^EOEULA/  { start = 0; } \
++	                { if (start) print; } \
++	     /<<EOEULA/ { start=1; }'\
++	    $(DL_DIR)/$(LIBFSLVPUWRAP_SOURCE) > $(@D)/EULA
++	cd $(BUILD_DIR); \
++	sh $(DL_DIR)/$(LIBFSLVPUWRAP_SOURCE) --force --auto-accept
++endef
++
+ $(eval $(autotools-package))
 -- 
 1.8.1.2
