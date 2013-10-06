@@ -1,25 +1,28 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 6 Oct 2013 18:38:36 +0200
-Subject: [Buildroot] [PATCH 1/2] media-ctl: bump version
-In-Reply-To: <CAAXf6LUkiz0b1nX2JgOjQ5N68JbkEwUH_oU8zvsiBnOoR1tE=w@mail.gmail.com>
-References: <1381073285-30058-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <CAAXf6LUkiz0b1nX2JgOjQ5N68JbkEwUH_oU8zvsiBnOoR1tE=w@mail.gmail.com>
-Message-ID: <20131006183836.0dc99820@skate>
+From: Eric Nelson <eric.nelson@boundarydevices.com>
+Date: Sun, 06 Oct 2013 09:49:13 -0700
+Subject: [Buildroot] [PATCH V2 1/3] i.MX: Use FREESCALE_IMX_MIRROR_SITE
+ for newly-moved packages
+In-Reply-To: <20131006183552.52dcf84d@skate>
+References: <1381073624-27739-1-git-send-email-eric.nelson@boundarydevices.com>
+ <20131006183552.52dcf84d@skate>
+Message-ID: <52519489.90006@boundarydevices.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas De Schampheleire,
+Thanks for the review, Thomas.
 
-On Sun, 6 Oct 2013 18:05:20 +0200, Thomas De Schampheleire wrote:
-> 
+On 10/06/2013 09:35 AM, Thomas Petazzoni wrote:
+> Dear Eric Nelson,
+>
+> On Sun,  6 Oct 2013 08:33:42 -0700, Eric Nelson wrote:
+>> Now that libfslcodec, libfslparser, and libfslvpuwrap are in
+>> the package/freescale-imx directory, they can share the
+>> _SITE mirror with other similar packages.
+>
+> This commit message doesn't match what the patch is doing :-)
+>
 
-Both of your e-mails were empty.
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Will fix & re-send.
