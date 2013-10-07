@@ -1,32 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 7 Oct 2013 11:48:28 +0200
-Subject: [Buildroot] [git commit] smartmontools: bump to version 6.2
-Message-ID: <20131007095748.01F629B978@busybox.osuosl.org>
+Date: Mon, 7 Oct 2013 11:53:14 +0200
+Subject: [Buildroot] [git commit] barebox: bump to version 2013.10.0
+Message-ID: <20131007095748.081FD9B8ED@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b953d79b62ae75950349ea6575fe8ee9b895f0c0
+commit: http://git.buildroot.net/buildroot/commit/?id=c907adbfc9c13e0e8cb3bde3e9c4ebfe9441f9a6
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Axel Lin <axel.lin@ingics.com>
+Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/smartmontools/smartmontools.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ boot/barebox/Config.in |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/smartmontools/smartmontools.mk b/package/smartmontools/smartmontools.mk
-index fb9fb3c..903ed47 100644
---- a/package/smartmontools/smartmontools.mk
-+++ b/package/smartmontools/smartmontools.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/boot/barebox/Config.in b/boot/barebox/Config.in
+index 1bbbe06..eb2b0b2 100644
+--- a/boot/barebox/Config.in
++++ b/boot/barebox/Config.in
+@@ -12,7 +12,7 @@ choice
+ 	  Select the specific Barebox version you want to use
  
--SMARTMONTOOLS_VERSION = 6.1
-+SMARTMONTOOLS_VERSION = 6.2
- SMARTMONTOOLS_SITE = http://downloads.sourceforge.net/project/smartmontools/smartmontools/$(SMARTMONTOOLS_VERSION)
- SMARTMONTOOLS_LICENSE = GPLv2+
- SMARTMONTOOLS_LICENSE_FILES = COPYING
+ config BR2_TARGET_BAREBOX_LATEST_VERSION
+-	bool "2013.09.0"
++	bool "2013.10.0"
+ 
+ config BR2_TARGET_BAREBOX_CUSTOM_VERSION
+ 	bool "Custom version"
+@@ -40,7 +40,7 @@ endif
+ 
+ config BR2_TARGET_BAREBOX_VERSION
+ 	string
+-	default "2013.09.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
++	default "2013.10.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
+ 	default $BR2_TARGET_BAREBOX_CUSTOM_VERSION_VALUE if BR2_TARGET_BAREBOX_CUSTOM_VERSION
+ 	default "custom"	if BR2_TARGET_BAREBOX_CUSTOM_TARBALL
+ 	default $BR2_TARGET_BAREBOX_CUSTOM_GIT_VERSION if BR2_TARGET_BAREBOX_CUSTOM_GIT
