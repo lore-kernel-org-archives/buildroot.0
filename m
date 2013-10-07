@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 7 Oct 2013 13:57:27 +0200
-Subject: [Buildroot] [PATCH] Allow PHP to compile ans link with
- berkeleydb 6
-In-Reply-To: <1381146130-8575-1-git-send-email-jezz@sysmic.org>
-References: <1381146130-8575-1-git-send-email-jezz@sysmic.org>
-Message-ID: <20131007135727.3cb4150d@skate>
+Date: Mon, 7 Oct 2013 14:07:33 +0200
+Subject: [Buildroot] [PATCH] pkg-infra: log current message
+In-Reply-To: <30033387.d25L1SpIx8@sagittae>
+References: <1381058388-24055-1-git-send-email-yann.morin.1998@free.fr>
+ <30033387.d25L1SpIx8@sagittae>
+Message-ID: <20131007140733.173904b6@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,33 +13,24 @@ To: buildroot@busybox.net
 
 Dear J?r?me Pouiller,
 
-On Mon,  7 Oct 2013 13:42:10 +0200, J?r?me Pouiller wrote:
-> Add patch from :
->   https://bugs.php.net/patch-display.php?bug_id=65426&patch=db6.patch&revision=1376033083&download=1
+On Mon, 07 Oct 2013 12:09:50 +0200, J?r?me Pouiller wrote:
+
+> I have also in my local git some branches modified in a similar fashion. 
+> Some weeks ago, Francois Perrad also suggested a patch with a similar 
+> modification (http://patchwork.ozlabs.org/patch/265214). Thomas also 
+> wrote a patch to get build time statistics   
+> (http://lists.busybox.net/pipermail/buildroot/2011-October/046513.html). 
 > 
-> Notice this patch was not applied by upstream because of licence
-> issue with berkeleydb 6. Linking with berkeleydb 6 may force user
-> to publish patch applyed to php.
-> 
-> Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
+> IMHO, these patchs are too much specific and should not be mainlined. 
 
-This looks problematic to me. PHP is licensed under the "PHP license",
-which according to http://en.wikipedia.org/wiki/PHP_License is
-incompatible with the GPL (and therefore I assume with the AGPL,
-which is the new license of BerkeleyDB).
-
-Therefore, linking PHP with BerkeleyDB version 6 creates a PHP binary
-that cannot legally be distributed.
-
-If this analysis is correct, I'd suggest one of the following options:
-
- * Drop the support for BerkeleyDB support in PHP.
-
- * Add a berkeleydb5 package that packages the last known non-AGPL
-   version of BerkeleyDB, and use that for PHP.
-
-Considering how useful BerkeleyDB can be with PHP, I'm suggesting the
-first option.
+I am not sure I agree here. The fact that several of us have such
+patches, and that they would indeed be useful to produce build time
+statistics, or help the autobuilders provide better diagnostics could
+be useful. I believe that it's the real strength of the common package
+infrastructure: we can add such additional features on all packages at
+once, very easily. Of course, it should be implemented in a nice and
+clean way that doesn't complexity too much the core package
+infrastructure, but it's very likely easy to achieve with some hooks.
 
 Best regards,
 
