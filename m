@@ -1,93 +1,49 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 07 Oct 2013 19:27:19 +0200
-Subject: [Buildroot] [PATCH 2/2] manual: move the manual rsync directory
- under $(O)/build/
-In-Reply-To: <1381072055-26797-2-git-send-email-s.martin49@gmail.com>
-References: <1381072055-26797-1-git-send-email-s.martin49@gmail.com>
- <1381072055-26797-2-git-send-email-s.martin49@gmail.com>
-Message-ID: <5252EEF7.1090308@mind.be>
+From: =?ISO-8859-1?Q?J=E9r=F4me?= Pouiller <jezz@sysmic.org>
+Date: Mon, 07 Oct 2013 22:53:34 +0200
+Subject: [Buildroot] [PATCH] pkg-infra: log current message
+In-Reply-To: <20131007165956.GE9561@free.fr>
+References: <1381058388-24055-1-git-send-email-yann.morin.1998@free.fr>
+ <20131007164829.GB9561@free.fr> <20131007165956.GE9561@free.fr>
+Message-ID: <2510480.hUTq69UsTb@sagittae>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 10/06/13 17:07, Samuel Martin wrote:
-> This patch just moves the manual source/build directory in $(O)/build/
-> (currently this location is $(O)/docs/manual/.build/, which is removed
-> at this end of the manual generation).
->
-> This location is used to:
-> - generate the package list files
-> - rsync the *.txt source from docs/manual/
->
-> The output manuals are still generated in $(O)/docs/manual/, so the release
-> target is unchanged.
->
-> Moving the manual source/build directory is more consistent with the rest
-> of how Buildroot works.
-> This also avoid to remove the *.txt that are generated and are actually
-> used by a2x, this is very helpful for investigating
-> asdciidoc/dblatex/texlive related issues.
->
-> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+On Monday 07 October 2013 18:59:56 Yann E. MORIN wrote:
+[...]
+> I have another interesting idea about such a script: detect whether a
+> package overwrites or otherwise modifies a file already existing in
+> staging/ and/or target/ to assess for the sanity of the packaging.
+I wrote something like this. It is able to track owner of each files of 
+target/ and host/. It generates list of owners[1][2]. These list may be 
+usefull to generate binary packages. 
 
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+I am also able to generate list of overwritten files[3][4]. 
 
->
-> ---
-> Changes v1 -> v2:
-> - split patch content
-> - detail a bit more the commit message
-> ---
->   docs/manual/manual.mk | 13 +++++++------
->   1 file changed, 7 insertions(+), 6 deletions(-)
->
-> diff --git a/docs/manual/manual.mk b/docs/manual/manual.mk
-> index d092d3f..84acaae 100644
-> --- a/docs/manual/manual.mk
-> +++ b/docs/manual/manual.mk
-> @@ -1,6 +1,8 @@
-> +MANUAL_BUILDDIR = $(BUILD_DIR)/buildroot-manual
->   manual-update-lists:
->   	$(Q)$(call MESSAGE,"Updating the manual lists...")
-> -	$(Q)BR2_DEFCONFIG="" TOPDIR=$(TOPDIR) O=$(O)/docs/manual/.build \
-> +	$(Q)mkdir -p $(MANUAL_BUILDDIR)
-> +	$(Q)BR2_DEFCONFIG="" TOPDIR=$(TOPDIR) O=$(MANUAL_BUILDDIR) \
->   		$(TOPDIR)/support/scripts/gen-manual-lists.py
->
->   ################################################################################
-> @@ -26,11 +28,10 @@ $$(O)/docs/$(1)/$(1).$(4): docs/$(1)/$(1).txt \
->   			   $$($(call UPPERCASE,$(1))_SOURCES) \
->   			   manual-update-lists
->   	$(Q)$(call MESSAGE,"Generating $(5) $(1)...")
-> -	$(Q)mkdir -p $$(@D)/.build
-> -	$(Q)rsync -au docs/$(1)/*.txt $$(@D)/.build
-> +	$(Q)mkdir -p $$(@D) $(MANUAL_BUILDDIR)
-> +	$(Q)rsync -au docs/$(1)/*.txt $(MANUAL_BUILDDIR)
->   	$(Q)a2x $(6) -f $(2) -d book -L -r $(TOPDIR)/docs/images \
-> -	        -D $$(@D) $$(@D)/.build/$(1).txt
-> -	-$(Q)rm -rf $$(@D)/.build
-> +		-D $$(@D) $(MANUAL_BUILDDIR)/$(1).txt
->   endef
->
->   ################################################################################
-> @@ -49,7 +50,7 @@ $(call GENDOC_INNER,$(1),text,txt,text,text)
->   $(call GENDOC_INNER,$(1),epub,epub,epub,ePUB)
->   clean: $(1)-clean
->   $(1)-clean:
-> -	$(Q)$(RM) -rf $(O)/docs/$(1)
-> +	$(Q)$(RM) -rf $(O)/docs/$(1) $(MANUAL_BUILDDIR)
->   .PHONY: $(1) $(1)-clean manual-update-lists
->   endef
->
->
+Once I have list of owners in host/, I can track which files are 
+accessed during build and compute dependencies between packages[5]. 
 
+As you notice, it is only a proof of concept. There is plenty of false 
+positives and I noticed many problems. Especially, current script is not 
+very reliable when I launch compilation from a dirty directory. 
+
+It is currently done by launching a daemon which watch target and host 
+(using inotify) during each step a built. This daemon log access to 
+files and another script post-process it. (I think, I would have far 
+better results if I maintain in real time a database of owners of all 
+installed files). I may send patches if you are interested (but they are 
+a little ugly).
+
+
+[1] http://sysmic.org/~jezz/instrument/host_owners.gz
+[2] http://sysmic.org/~jezz/instrument/target_owners.gz
+[3] http://sysmic.org/~jezz/instrument/host_owners.err.gz
+[4] http://sysmic.org/~jezz/instrument/target_owners.err.gz
+[5] http://sysmic.org/~jezz/instrument/depends
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+J?r?me Pouiller, Sysmic
+Embedded Linux specialist
+http://www.sysmic.fr
