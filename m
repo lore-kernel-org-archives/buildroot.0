@@ -1,44 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 7 Oct 2013 19:19:05 +0200
-Subject: [Buildroot] [PATCH] pkg-infra: log current message
-In-Reply-To: <20131007165956.GE9561@free.fr>
-References: <1381058388-24055-1-git-send-email-yann.morin.1998@free.fr>
- <30033387.d25L1SpIx8@sagittae> <20131007140733.173904b6@skate>
- <20131007164829.GB9561@free.fr> <20131007165956.GE9561@free.fr>
-Message-ID: <20131007191905.7715dd69@skate>
+Date: Mon, 7 Oct 2013 19:56:45 +0200
+Subject: [Buildroot] [git commit] ltp-testsuite: needs largefile support
+In-Reply-To: <20131006184759.B376396CB6@busybox.osuosl.org>
+References: <20131006184759.B376396CB6@busybox.osuosl.org>
+Message-ID: <20131007195645.5c17a27f@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+Dear Peter Korsgaard,
 
-On Mon, 7 Oct 2013 18:59:56 +0200, Yann E. MORIN wrote:
-
-> > It would then be the responsibility of the user to provide such a
-> > script. We could provide a simple script that just do this logging as an
-> > example.
+On Sun, 6 Oct 2013 20:32:32 +0200, Peter Korsgaard wrote:
+> commit: http://git.buildroot.net/buildroot/commit/?id=ef5f9b9b9a6353eafae15f7e5e148a1a1cf607a2
+> branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 > 
-> I have another interesting idea about such a script: detect whether a
-> package overwrites or otherwise modifies a file already existing in
-> staging/ and/or target/ to assess for the sanity of the packaging.
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+> ---
+>  package/ltp-testsuite/Config.in |    5 +++--
+>  1 files changed, 3 insertions(+), 2 deletions(-)
+> 
+> diff --git a/package/ltp-testsuite/Config.in b/package/ltp-testsuite/Config.in
+> index 3681eaf..a984d7b 100644
+> --- a/package/ltp-testsuite/Config.in
+> +++ b/package/ltp-testsuite/Config.in
+> @@ -6,6 +6,7 @@ config BR2_PACKAGE_LTP_TESTSUITE
+>  	bool "ltp-testsuite"
+>  	depends on BR2_TOOLCHAIN_HAS_THREADS
+>  	depends on BR2_INET_IPV6
+> +	depends on BR2_LARGEFILE
 
-I believe there are cases where we are doing this today, and where it
-is valid. Think for example the full-blown versions of some commands
-that overwrite the symbolic link installed by Busybox.
-
-> We could also add another sanity-check to look at build issues (eg.
-> build-path in RPATH, build-path in scripts...).
-
-Right! However, I don't see why those checks should be in some external
-scripts that the user should install. I believe those checks should be
-part of the Buildroot core, possibly with a Config.in option to decide
-whether a check failure should result to a global build failure or just
-a warning (default value would be a warning, a global build failure
-could be used in the autobuilders, for example).
-
-Best regards,
+Did you had a specific build failure in a !largefile case?
 
 Thomas
 -- 
