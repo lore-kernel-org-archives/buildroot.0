@@ -1,63 +1,64 @@
-From: Tzu-Jung Lee <roylee17@gmail.com>
-Date: Mon, 7 Oct 2013 15:09:34 -0700
-Subject: [Buildroot] [PATCH 1/1] ccache: expose control interface via
-	'make ccache-options'
-In-Reply-To: <CAEvN+1jCAvFYsOkbv4Rf4g7YqZJe4Ty9cwpFMiAUTTAvh7mvQg@mail.gmail.com>
-References: <1339991408-25620-1-git-send-email-tjlee@ambarella.com>
- <CAEvN+1jCAvFYsOkbv4Rf4g7YqZJe4Ty9cwpFMiAUTTAvh7mvQg@mail.gmail.com>
-Message-ID: <CAEvN+1iBLh_Kr25EQTJPXn2-hh2KdeGQ1nhagT3haHMB=Jx1-A@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 8 Oct 2013 00:10:24 +0200
+Subject: [Buildroot] [PATCH] Revert "berkeleydb: bump to version 6.0.20"
+In-Reply-To: <1381174561-22507-1-git-send-email-jezz@sysmic.org>
+References: <1381174561-22507-1-git-send-email-jezz@sysmic.org>
+Message-ID: <20131007221024.GF9561@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-# Response to patchwork cleanup of week #1
+J?r?me, All,
 
-This patch provides an easy way to operate on buildroot ccache such as
-changing the cache limit or showing statistics.
-
-Without it, users would have to explicitly specify both the environment variable
-and the path of patched ccache, for example:
-
-  BUILDROOT_CACHE_DIR=~/.buildroot-ccache/ $PWD/host/usr/bin/ccache -s
-.
-Thanks.
-
-Roy
-
-On Fri, Jun 22, 2012 at 7:55 PM, Tzu-Jung Lee <roylee17@gmail.com> wrote:
-> ---------- Forwarded message ----------
-> From: Tzu-Jung Lee <roylee17@gmail.com>
-> Date: Mon, Jun 18, 2012 at 11:50 AM
-> Subject: [PATCH 1/1] ccache: expose control interface via 'make ccache-options'
-> To: buildroot at busybox.net
-> Cc: roylee17 at gmail.com, Tzu-Jung Lee <tjlee@ambarella.com>
->
->
-> usage:
->        # set cache limit size
->        make CCACHE_OPTIONS="--max-size=5G" ccache-options
->
->        # zero statistics counters
->        make CCACHE_OPTIONS="--zero-stats" ccache-options
->
-> Change-Id: I0162a2612a9aa4afd49f6d93c9c36dce3e0c8228
+On 2013-10-07 21:36 +0200, J?r?me Pouiller spake thusly:
+> BerkeleyDB has changed its license since version 6. New license (AGPL) may
+> be incompatible with some packages. So we prefer to stick to version 5
+> 
+> This reverts commit 4c478de2e76ffc1d0a6dc413475307fd44a0a595.
+> 
+> Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
 > ---
->  package/ccache/ccache.mk |    4 ++++
->  1 files changed, 4 insertions(+), 0 deletions(-)
->
-> diff --git a/package/ccache/ccache.mk b/package/ccache/ccache.mk
-> index d7106ee..d46fbb9 100644
-> --- a/package/ccache/ccache.mk
-> +++ b/package/ccache/ccache.mk
-> @@ -50,3 +50,7 @@ ccache-stats: host-ccache
->        $(Q)$(CCACHE) -s
->  endif
->
-> +ifeq ($(BR2_CCACHE),y)
-> +ccache-options: host-ccache
-> +       $(Q)$(CCACHE) $(CCACHE_OPTIONS)
-> +endif
-> --
-> 1.7.8.6
+>  package/berkeleydb/berkeleydb.mk |    5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
+> 
+> diff --git a/package/berkeleydb/berkeleydb.mk b/package/berkeleydb/berkeleydb.mk
+> index 9b23623..d39bf80 100644
+> --- a/package/berkeleydb/berkeleydb.mk
+> +++ b/package/berkeleydb/berkeleydb.mk
+> @@ -4,7 +4,10 @@
+>  #
+>  ################################################################################
+>  
+> -BERKELEYDB_VERSION = 6.0.20
+> +# If you want to use lastest version of BerkeleyDB, just change VERSION below.
+> +# However, notice BerkeleyDB license changed and is now Affero GPL since
+> +# version 6
+
+I'd prefer we'd phrase it something like:
+
+    # Since BerkeleyDB version 6 and above are licensed under the Affero
+    # GPL (AGPL), we want to keep this 'bdb' package at version 5.x to
+    # avoid licensing issues.
+    # BerkeleyDB version 6 or above should be provided by a dedicated
+    # package instead.
+
+Because we really do want to keep 5.x, while your text seems to imply we
+could bump the version. We do not want this to happen.
+
+> +BERKELEYDB_VERSION = 5.3.21
+>  BERKELEYDB_SITE = http://download.oracle.com/berkeley-db
+>  BERKELEYDB_SOURCE = db-$(BERKELEYDB_VERSION).NC.tar.gz
+>  BERKELEYDB_SUBDIR = build_unix
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
