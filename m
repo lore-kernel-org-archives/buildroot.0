@@ -1,135 +1,44 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 08 Oct 2013 00:31:53 +0200
-Subject: [Buildroot] [PATCH 2/2] i.MX: Update versions to match latest
-	Freescale release
-In-Reply-To: <1381088868-12739-3-git-send-email-eric.nelson@boundarydevices.com>
-References: <1381088868-12739-1-git-send-email-eric.nelson@boundarydevices.com>
- <1381088868-12739-3-git-send-email-eric.nelson@boundarydevices.com>
-Message-ID: <52533659.30105@mind.be>
+Date: Tue, 08 Oct 2013 00:43:58 +0200
+Subject: [Buildroot] Some legal-info observations/problems
+In-Reply-To: <CAHt8ZCPpVROvLJ8Fb1TrtwMTLKfBcdCBDwH0k4m-QNfisPnugg@mail.gmail.com>
+References: <CAAXf6LXHXo2vY8ns61fxoLzD0n2yzLASZqFk75xzYQwgDHp15Q@mail.gmail.com>
+ <20131002172307.0d6f02ea@skate> <524C4AD4.9040902@lucaceresoli.net>
+ <CAAXf6LXWf34Amx44pdixKL0m87jq_FMBxN8BJO9TBDbQ58Po1Q@mail.gmail.com>
+ <524D9DE2.7090509@mind.be>
+ <CAAXf6LUTTX0OFNaP4NxVWXKC4OFBROXK-PFiumL8zYrumkbtog@mail.gmail.com>
+ <20131004110704.78f5b1a6@skate>
+ <OFD293F65F.D1285988-ON86257BFA.00549871-86257BFA.0055339A@rockwellcollins.com>
+ <20131004173452.4f93d1c3@skate>
+ <CAHt8ZCPpVROvLJ8Fb1TrtwMTLKfBcdCBDwH0k4m-QNfisPnugg@mail.gmail.com>
+Message-ID: <5253392E.8060000@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 10/06/13 21:47, Eric Nelson wrote:
-[snip]
-> diff --git a/package/freescale-imx/imx-lib/imx-lib.mk b/package/freescale-imx/imx-lib/imx-lib.mk
-> index e1a68ef..416bb1b 100644
-> --- a/package/freescale-imx/imx-lib/imx-lib.mk
-> +++ b/package/freescale-imx/imx-lib/imx-lib.mk
-> @@ -6,8 +6,8 @@
->   
->   IMX_LIB_VERSION = $(FREESCALE_IMX_VERSION)
->   IMX_LIB_SITE    = $(FREESCALE_IMX_SITE)
-> -IMX_LIB_LICENSE = LGPLv2.1+
-> -# No license file included
-> +IMX_LIB_LICENSE = Freescale Semiconductor Software License Agreement
+On 10/04/13 17:46, Simon Dawson wrote:
+> On 4 October 2013 16:34, Thomas Petazzoni
+> <thomas.petazzoni@free-electrons.com> wrote:
+>> My suggestion in this case would be to use <pkg>_LICENSE_FILES = N/A
+>> (or whatever magic value is chosen) and in parallel ask the upstream
+>> maintainer to include the license file directly into the release
+>> tarballs.
+>
+> This is an existing problem for the jquery package, where there is no
+> release tarball as such. It would be nice to be able to specify URLs
+> in the <pkg>_LICENSE_FILES variable.
 
- Most of it is still LGPLv2.1+, only the vpu library is FSSLA. So I think
-it should be:
+  +1.
 
-IMX_LIB_LICENSE = Freescale Semiconductor Software License Agreement (vpu), LGPLv2.1+ (the rest)
+  Now to find a volunteer who implements it :-)
 
-> +IMX_LIB_SOURCE = imx-lib-$(IMX_LIB_VERSION).bin
->   
->   IMX_LIB_INSTALL_STAGING = YES
->   
-> @@ -25,6 +25,18 @@ IMX_LIB_MAKE_ENV = \
->   	PLATFORM=$(BR2_PACKAGE_IMX_LIB_PLATFORM) \
->   	INCLUDE="$(IMX_LIB_INCLUDE)"
->   
-> +# The archive is a shell-self-extractor of a bzipped tar. It happens
-> +# to extract in the correct directory (imx-lib-x.y.z)
-> +# The --force makes sure it doesn't fail if the source dir already exists.
-> +# The --auto-accept skips the license check - not needed for us
-> +# because we have legal-info
-> +# Since the EULA in the bin file differs from the one in the tar file,
-> +# extract the one from the bin file as well.
+  Ideally, such an external license should be downloaded already with 
+'make source'. Though that is perhaps stretching it a little...
 
- This comment doesn't seem to be correct.
-
- Can you add the awk trick to extract the license file, and add an 
-IMX_LIB_LICENSE_FILES variable?
-
-> +define IMX_LIB_EXTRACT_CMDS
-> +	(cd $(BUILD_DIR); \
-> +		sh $(DL_DIR)/$(IMX_LIB_SOURCE) --force --auto-accept)
-> +endef
-> +
->   define IMX_LIB_BUILD_CMDS
->   	$(IMX_LIB_MAKE_ENV) $(MAKE1) -C $(@D)
->   endef
-
-[snip]
-> diff --git a/package/libfslparser/libfslparser.mk b/package/libfslparser/libfslparser.mk
-> index 3aab3a7..1aa975b 100644
-> --- a/package/libfslparser/libfslparser.mk
-> +++ b/package/libfslparser/libfslparser.mk
-> @@ -4,7 +4,7 @@
->   #
->   ################################################################################
->   
-> -LIBFSLPARSER_VERSION = 3.0.1
-> +LIBFSLPARSER_VERSION = $(FREESCALE_IMX_VERSION)
->   LIBFSLPARSER_SITE = $(FREESCALE_IMX_SITE)
->   LIBFSLPARSER_SOURCE = libfslparser-$(LIBFSLPARSER_VERSION).bin
->   LIBFSLPARSER_LICENSE = Freescale Semiconductor Software License Agreement
-> @@ -36,4 +36,6 @@ endef
->   # The Makefile installs several versions of the libraries, but we only
->   # need one of them, depending on the platform.
->   
-> +LIBFSLPARSER_AUTORECONF = YES
-
- Please add a comment why autoreconf is needed.
-
-> +
->   $(eval $(autotools-package))
-> diff --git a/package/libfslvpuwrap/libfslvpuwrap.mk b/package/libfslvpuwrap/libfslvpuwrap.mk
-> index 346a20a..45193c4 100644
-> --- a/package/libfslvpuwrap/libfslvpuwrap.mk
-> +++ b/package/libfslvpuwrap/libfslvpuwrap.mk
-> @@ -4,8 +4,9 @@
->   #
->   ################################################################################
->   
-> -LIBFSLVPUWRAP_VERSION = 1.0.17
-> +LIBFSLVPUWRAP_VERSION = $(FREESCALE_IMX_VERSION)
->   LIBFSLVPUWRAP_SITE = $(FREESCALE_IMX_SITE)
-> +LIBFSLVPUWRAP_SOURCE = libfslvpuwrap-$(LIBFSLVPUWRAP_VERSION).bin
->   LIBFSLVPUWRAP_LICENSE = Freescale Semiconductor Software License Agreement
->   LIBFSLVPUWRAP_LICENSE_FILES = EULA.txt
->   LIBFSLVPUWRAP_REDISTRIBUTE = NO
-> @@ -14,4 +15,21 @@ LIBFSLVPUWRAP_INSTALL_STAGING = YES
->   
->   LIBFSLVPUWRAP_DEPENDENCIES += imx-lib
->   
-> +# The archive is a shell-self-extractor of a bzipped tar. It happens
-> +# to extract in the correct directory (libfslvpuwrap-x.y.z)
-> +# The --force makes sure it doesn't fail if the source dir already exists.
-> +# The --auto-accept skips the license check - not needed for us
-> +# because we have legal-info
-> +# Since the EULA in the bin file differs from the one in the tar file,
-> +# extract the one from the bin file as well.
-> +define LIBFSLVPUWRAP_EXTRACT_CMDS
-> +	awk 'BEGIN      { start=0; } \
-> +	     /^EOEULA/  { start = 0; } \
-> +	                { if (start) print; } \
-> +	     /<<EOEULA/ { start=1; }'\
-> +	    $(DL_DIR)/$(LIBFSLVPUWRAP_SOURCE) > $(@D)/EULA
-
- You should add this to LIBFSLVPUWRAP_LICENSE_FILES.
-
-
- Regards,
- Arnout
-
-> +	cd $(BUILD_DIR); \
-> +	sh $(DL_DIR)/$(LIBFSLVPUWRAP_SOURCE) --force --auto-accept
-> +endef
-> +
->   $(eval $(autotools-package))
-> 
+  Regards,
+  Arnout
 
 
 -- 
