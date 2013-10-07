@@ -1,60 +1,72 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Mon, 07 Oct 2013 08:50:08 +0200
-Subject: [Buildroot] [PATCH 2 of 2 v3] manual generation: rename manual-txt
- into manual-text
-In-Reply-To: <patchbomb.1381128606@argentina>
-References: <patchbomb.1381128606@argentina>
-Message-ID: <3cc7ac38a363cff3a41f.1381128608@argentina>
+Date: Mon, 7 Oct 2013 08:53:24 +0200
+Subject: [Buildroot] [git commit] docs/manual: add a 'Known issues'
+	chapter
+In-Reply-To: <20131006184759.C85899B948@busybox.osuosl.org>
+References: <20131006184759.C85899B948@busybox.osuosl.org>
+Message-ID: <CAAXf6LXSg7-1AwOiAu5_mJwuuNhTbMLY9T9cyJH9j7Kw3CFDKg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The output extension and the generation messages refer to 'text', but the make
-target was confusingly 'txt'. This patch changes the make target for
-consistency.
+On Sun, Oct 6, 2013 at 8:34 PM, Peter Korsgaard <peter@korsgaard.com> wrote:
+> commit: http://git.buildroot.net/buildroot/commit/?id=4aa9fb945fde3b74ecc1a6887bf597466cd67a0d
+> branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>
+> Add a 'Known issues' chapter, which lists the exceptions I have
+> currently in the autobuilder scripts to avoid known problems from
+> occuring. I believe it is more useful to document them rather than
+> keeping them hidden in my autobuilder script.
+>
+> [Peter: s/either/either use/]
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+> ---
+>  docs/manual/known-issues.txt |   32 ++++++++++++++++++++++++++++++++
+>  docs/manual/manual.txt       |    2 ++
+>  2 files changed, 34 insertions(+), 0 deletions(-)
+>
+> diff --git a/docs/manual/known-issues.txt b/docs/manual/known-issues.txt
+> new file mode 100644
+> index 0000000..4ef8c05
+> --- /dev/null
+> +++ b/docs/manual/known-issues.txt
+> @@ -0,0 +1,32 @@
+> +// -*- mode:doc; -*-
+> +// vim: set syntax=asciidoc:
+> +
+> +Known issues
+> +============
+> +
+> +* The +ltp-testsuite+ package does not build with the default uClibc
+> +  configuration used by the Buildroot toolchain backend. The LTP
+> +  testsuite uses several functions that are considered obsolete, such
+> +  as sigset() and others. uClibc configuration options such as
+> +  DO_XSI_MATH, UCLIBC_HAS_OBSOLETE_BSD_SIGNAL and
+> +  UCLIBC_SV4_DEPRECATED are needed if one wants to build the
+> +  +ltp-testsuite+ package with uClibc. You need to either use a glibc
+> +  or eglibc based toolchain, or enable the appropriate options in the
+> +  uClibc configuration.
+> +
+> +* The +xfsprogs+ package does not build with the default uClibc
+> +  configuration used by the Buildroot toolchain backend. You need to
+> +  either use a glibc or eglibc based toolchain, or enable the
+> +  appropriate options in the uClibc configuration.
+> +
+> +* The +mrouted+ package does not build with the default uClibc
+> +  configuration used by the Buildroot toolchain backend. You need to
+> +  either use a glibc or eglibc based toolchain, or enable the
+> +  appropriate options in the uClibc configuration.
+> +
+> +* The +libffi+ package is not supported on the SuperH 2 and ARC
+> +  architectures.
+> +
+> +* The +prboom+ package triggers a compiler failure with the SuperH 4
+> +  compiler from Soucery CodeBench, version 2012.09.
 
-Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+s/Soucery/Sourcery/
 
----
-v3: no changes
-v2: fix missing rename in Makefile (thanks ThomasP)
-
- Makefile              |  4 ++--
- docs/manual/manual.mk |  2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/Makefile b/Makefile
---- a/Makefile
-+++ b/Makefile
-@@ -808,7 +808,7 @@ endif
- 	@echo '  manual-html            - build manual in HTML'
- 	@echo '  manual-split-html      - build manual in split HTML'
- 	@echo '  manual-pdf             - build manual in PDF'
--	@echo '  manual-txt             - build manual in txt'
-+	@echo '  manual-text            - build manual in text'
- 	@echo '  manual-epub            - build manual in ePub'
- 	@echo
- 	@echo 'Miscellaneous:'
-@@ -832,7 +832,7 @@ release: OUT=buildroot-$(BR2_VERSION)
- # documentation to the git output
- release:
- 	git archive --format=tar --prefix=$(OUT)/ HEAD > $(OUT).tar
--	$(MAKE) O=$(OUT) manual-html manual-txt manual-pdf
-+	$(MAKE) O=$(OUT) manual-html manual-text manual-pdf
- 	tar rf $(OUT).tar $(OUT)
- 	gzip -9 -c < $(OUT).tar > $(OUT).tar.gz
- 	bzip2 -9 -c < $(OUT).tar > $(OUT).tar.bz2
-diff --git a/docs/manual/manual.mk b/docs/manual/manual.mk
---- a/docs/manual/manual.mk
-+++ b/docs/manual/manual.mk
-@@ -75,7 +75,7 @@ define GENDOC
- $(call GENDOC_INNER,$(1),xhtml,html,html,HTML,--xsltproc-opts "--stringparam toc.section.depth 4")
- $(call GENDOC_INNER,$(1),chunked,split-html,chunked,split HTML,--xsltproc-opts "--stringparam toc.section.depth 4")
- $(call GENDOC_INNER,$(1),pdf,pdf,pdf,PDF,--dblatex-opts "-P latex.output.revhistory=0")
--$(call GENDOC_INNER,$(1),text,txt,text,text)
-+$(call GENDOC_INNER,$(1),text,text,text,text)
- $(call GENDOC_INNER,$(1),epub,epub,epub,ePUB)
- clean: $(1)-clean
- $(1)-clean:
+Best regards,
+Thomas
