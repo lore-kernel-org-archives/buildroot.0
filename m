@@ -1,50 +1,101 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 08 Oct 2013 00:43:58 +0200
-Subject: [Buildroot] Some legal-info observations/problems
-In-Reply-To: <CAHt8ZCPpVROvLJ8Fb1TrtwMTLKfBcdCBDwH0k4m-QNfisPnugg@mail.gmail.com>
-References: <CAAXf6LXHXo2vY8ns61fxoLzD0n2yzLASZqFk75xzYQwgDHp15Q@mail.gmail.com>
- <20131002172307.0d6f02ea@skate> <524C4AD4.9040902@lucaceresoli.net>
- <CAAXf6LXWf34Amx44pdixKL0m87jq_FMBxN8BJO9TBDbQ58Po1Q@mail.gmail.com>
- <524D9DE2.7090509@mind.be>
- <CAAXf6LUTTX0OFNaP4NxVWXKC4OFBROXK-PFiumL8zYrumkbtog@mail.gmail.com>
- <20131004110704.78f5b1a6@skate>
- <OFD293F65F.D1285988-ON86257BFA.00549871-86257BFA.0055339A@rockwellcollins.com>
- <20131004173452.4f93d1c3@skate>
- <CAHt8ZCPpVROvLJ8Fb1TrtwMTLKfBcdCBDwH0k4m-QNfisPnugg@mail.gmail.com>
-Message-ID: <5253392E.8060000@mind.be>
+From: Eric Nelson <eric.nelson@boundarydevices.com>
+Date: Mon, 07 Oct 2013 15:55:20 -0700
+Subject: [Buildroot] [PATCH 2/2] i.MX: Update versions to match latest
+	Freescale release
+In-Reply-To: <52533659.30105@mind.be>
+References: <1381088868-12739-1-git-send-email-eric.nelson@boundarydevices.com>
+ <1381088868-12739-3-git-send-email-eric.nelson@boundarydevices.com>
+ <52533659.30105@mind.be>
+Message-ID: <52533BD8.1020804@boundarydevices.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 10/04/13 17:46, Simon Dawson wrote:
-> On 4 October 2013 16:34, Thomas Petazzoni
-> <thomas.petazzoni@free-electrons.com> wrote:
->> My suggestion in this case would be to use <pkg>_LICENSE_FILES = N/A
->> (or whatever magic value is chosen) and in parallel ask the upstream
->> maintainer to include the license file directly into the release
->> tarballs.
+Thanks for the review, Arnout,
+
+On 10/07/2013 03:31 PM, Arnout Vandecappelle wrote:
+> On 10/06/13 21:47, Eric Nelson wrote:
+> [snip]
+>> diff --git a/package/freescale-imx/imx-lib/imx-lib.mk b/package/freescale-imx/imx-lib/imx-lib.mk
+>> index e1a68ef..416bb1b 100644
+>> --- a/package/freescale-imx/imx-lib/imx-lib.mk
+>> +++ b/package/freescale-imx/imx-lib/imx-lib.mk
+>> @@ -6,8 +6,8 @@
+>>
+>>    IMX_LIB_VERSION = $(FREESCALE_IMX_VERSION)
+>>    IMX_LIB_SITE    = $(FREESCALE_IMX_SITE)
+>> -IMX_LIB_LICENSE = LGPLv2.1+
+>> -# No license file included
+>> +IMX_LIB_LICENSE = Freescale Semiconductor Software License Agreement
 >
-> This is an existing problem for the jquery package, where there is no
-> release tarball as such. It would be nice to be able to specify URLs
-> in the <pkg>_LICENSE_FILES variable.
+>   Most of it is still LGPLv2.1+, only the vpu library is FSSLA. So I think
+> it should be:
+>
+> IMX_LIB_LICENSE = Freescale Semiconductor Software License Agreement (vpu), LGPLv2.1+ (the rest)
+>
 
-  +1.
+Thanks.
 
-  Now to find a volunteer who implements it :-)
+>> +IMX_LIB_SOURCE = imx-lib-$(IMX_LIB_VERSION).bin
+>>
+>>    IMX_LIB_INSTALL_STAGING = YES
+>>
+>> @@ -25,6 +25,18 @@ IMX_LIB_MAKE_ENV = \
+>>    	PLATFORM=$(BR2_PACKAGE_IMX_LIB_PLATFORM) \
+>>    	INCLUDE="$(IMX_LIB_INCLUDE)"
+>>
+>> +# The archive is a shell-self-extractor of a bzipped tar. It happens
+>> +# to extract in the correct directory (imx-lib-x.y.z)
+>> +# The --force makes sure it doesn't fail if the source dir already exists.
+>> +# The --auto-accept skips the license check - not needed for us
+>> +# because we have legal-info
+>> +# Since the EULA in the bin file differs from the one in the tar file,
+>> +# extract the one from the bin file as well.
+>
+>   This comment doesn't seem to be correct.
+>
+>   Can you add the awk trick to extract the license file, and add an
+> IMX_LIB_LICENSE_FILES variable?
+>
 
-  Ideally, such an external license should be downloaded already with 
-'make source'. Though that is perhaps stretching it a little...
+Will do.
 
-  Regards,
-  Arnout
+> [snip]
+
+>>    LIBFSLPARSER_LICENSE = Freescale Semiconductor Software License Agreement
+>> @@ -36,4 +36,6 @@ endef
+>>    # The Makefile installs several versions of the libraries, but we only
+>>    # need one of them, depending on the platform.
+>>
+>> +LIBFSLPARSER_AUTORECONF = YES
+>
+>   Please add a comment why autoreconf is needed.
+>
+
+I'm not sure I know why...
+
+Does it suffice to say that without 'autoreconf', the configure
+step fails with message "unable to create executables"?
+
+I originally copied the process from LTIB and executed 'autogen.sh'
+by hand. Then Peter pointed out the _AUTORECONF flag.
+
+ > <snip>
+>> +define LIBFSLVPUWRAP_EXTRACT_CMDS
+>> +	awk 'BEGIN      { start=0; } \
+>> +	     /^EOEULA/  { start = 0; } \
+>> +	                { if (start) print; } \
+>> +	     /<<EOEULA/ { start=1; }'\
+>> +	    $(DL_DIR)/$(LIBFSLVPUWRAP_SOURCE) > $(@D)/EULA
+>
+>   You should add this to LIBFSLVPUWRAP_LICENSE_FILES.
+>
+
+Can do.
+
+Regards,
 
 
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+Eric
