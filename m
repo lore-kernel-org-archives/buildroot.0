@@ -1,31 +1,22 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 07 Oct 2013 22:16:08 +0200
-Subject: [Buildroot] [git commit] ltp-testsuite: needs largefile support
-In-Reply-To: <20131007195645.5c17a27f@skate> (Thomas Petazzoni's message of
- "Mon, 7 Oct 2013 19:56:45 +0200")
-References: <20131006184759.B376396CB6@busybox.osuosl.org>
- <20131007195645.5c17a27f@skate>
-Message-ID: <87li2496rb.fsf@dell.be.48ers.dk>
+Date: Mon, 07 Oct 2013 22:17:07 +0200
+Subject: [Buildroot] [PATCH 1/2] ffmpeg: security bump to version 0.8.15
+In-Reply-To: <1381175216-30916-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Mon, 7 Oct 2013 16:46:55 -0300")
+References: <1381175216-30916-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87hacs96po.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-Hi,
+ Gustavo> Fixes several vulnerabilities.
+ Gustavo> TODO: update to a more modern branch.
 
- >> depends on BR2_TOOLCHAIN_HAS_THREADS
- >> depends on BR2_INET_IPV6
- >> +	depends on BR2_LARGEFILE
-
- Thomas> Did you had a specific build failure in a !largefile case?
-
-Yes. I don't have the build results at hand, but I believe it was the
-usual uClibc-complaining-about-FILE_OFFSET_BITS/LARGEFILE_SOURCE-getting-redefined.
-
-I can retest if you're interested.
+Committed both, thanks.
 
 -- 
 Bye, Peter Korsgaard
