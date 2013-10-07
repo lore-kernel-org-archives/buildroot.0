@@ -1,34 +1,59 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 7 Oct 2013 22:08:02 +0200
-Subject: [Buildroot] [git commit] minicom: bump to version 2.6.2
-Message-ID: <20131007201927.B2E759B97C@busybox.osuosl.org>
+Date: Mon, 7 Oct 2013 22:16:51 +0200
+Subject: [Buildroot] [git commit] minidlna: security bump to version 1.0.26
+Message-ID: <20131007201928.0C60F9B979@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d4a389324cf3b018b9eb29e0b21d2711098edb01
+commit: http://git.buildroot.net/buildroot/commit/?id=97c386e4586201dbd976925f021ff877620462fc
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Axel Lin <axel.lin@ingics.com>
+Fixes CVE-2013-2738, CVE-2013-2739 and CVE-2013-2745.
+Also needs threads, which fixes:
+http://autobuild.buildroot.net/results/d91/d91b64c93097580e1da53b6ccfb4b492f382a5f3
+
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/minicom/minicom.mk |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ package/minidlna/Config.in   |    5 +++--
+ package/minidlna/minidlna.mk |    3 +--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/minicom/minicom.mk b/package/minicom/minicom.mk
-index d46376e..05004b8 100644
---- a/package/minicom/minicom.mk
-+++ b/package/minicom/minicom.mk
-@@ -4,8 +4,8 @@
+diff --git a/package/minidlna/Config.in b/package/minidlna/Config.in
+index c73c001..2b684ba 100644
+--- a/package/minidlna/Config.in
++++ b/package/minidlna/Config.in
+@@ -3,6 +3,7 @@ config BR2_PACKAGE_MINIDLNA
+ 	depends on BR2_LARGEFILE # ffmpeg
+ 	depends on BR2_INET_IPV6 # ffmpeg
+ 	depends on BR2_USE_MMU # fork
++	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_PACKAGE_FFMPEG
+ 	select BR2_PACKAGE_FLAC
+ 	select BR2_PACKAGE_LIBVORBIS # selects libogg
+@@ -17,5 +18,5 @@ config BR2_PACKAGE_MINIDLNA
+ 
+ 	  http://minidlna.sourceforge.net/
+ 
+-comment "minidlna requires a toolchain with LARGEFILE and IPV6 support"
+-	depends on !(BR2_LARGEFILE && BR2_INET_IPV6)
++comment "minidlna requires a toolchain with LARGEFILE, IPV6 and thread support"
++	depends on !(BR2_LARGEFILE && BR2_INET_IPV6 && BR2_TOOLCHAIN_HAS_THREADS)
+diff --git a/package/minidlna/minidlna.mk b/package/minidlna/minidlna.mk
+index 077e257..4df6ff0 100644
+--- a/package/minidlna/minidlna.mk
++++ b/package/minidlna/minidlna.mk
+@@ -4,9 +4,8 @@
  #
  ################################################################################
  
--MINICOM_VERSION = 2.6.1
--MINICOM_SITE = http://alioth.debian.org/frs/download.php/file/3700/
-+MINICOM_VERSION = 2.6.2
-+MINICOM_SITE = http://alioth.debian.org/frs/download.php/file/3869/
- MINICOM_LICENSE = GPLv2+
- MINICOM_LICENSE_FILES = COPYING
+-MINIDLNA_VERSION = 1.0.25
++MINIDLNA_VERSION = 1.0.26
+ MINIDLNA_SITE = http://downloads.sourceforge.net/project/minidlna/minidlna/$(MINIDLNA_VERSION)
+-MINIDLNA_SOURCE = minidlna_$(MINIDLNA_VERSION)_src.tar.gz
+ MINIDLNA_LICENSE = GPLv2 BSD-3c
+ MINIDLNA_LICENSE_FILES = LICENCE LICENCE.miniupnpd
  
