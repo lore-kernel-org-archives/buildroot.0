@@ -1,30 +1,21 @@
-From: Axel Lin <axel.lin@ingics.com>
-Date: Mon, 07 Oct 2013 17:56:14 +0800
-Subject: [Buildroot] [PATCH] gtest: add license information
-Message-ID: <1381139774.12106.3.camel@phoenix>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 07 Oct 2013 11:57:20 +0200
+Subject: [Buildroot] [PATCH] mpg123: bump to version 1.16.0
+In-Reply-To: <1381139191.12106.1.camel@phoenix> (Axel Lin's message of "Mon,
+ 07 Oct 2013 17:46:31 +0800")
+References: <1381139191.12106.1.camel@phoenix>
+Message-ID: <874n8tbdz3.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Axel Lin <axel.lin@ingics.com>
----
- package/gtest/gtest.mk | 2 ++
- 1 file changed, 2 insertions(+)
+>>>>> "Axel" == Axel Lin <axel.lin@ingics.com> writes:
 
-diff --git a/package/gtest/gtest.mk b/package/gtest/gtest.mk
-index 60aeb49..e661d73 100644
---- a/package/gtest/gtest.mk
-+++ b/package/gtest/gtest.mk
-@@ -9,6 +9,8 @@ GTEST_SOURCE = gtest-$(GTEST_VERSION).zip
- GTEST_SITE = http://googletest.googlecode.com/files/
- GTEST_INSTALL_STAGING = YES
- GTEST_INSTALL_TARGET = NO
-+GTEST_LICENSE = BSD-3c
-+GTEST_LICENSE_FILES = LICENSE
- 
- define GTEST_EXTRACT_CMDS
- 	unzip $(DL_DIR)/$(GTEST_SOURCE) -d $(BUILD_DIR)
+ Axel> Signed-off-by: Axel Lin <axel.lin@ingics.com>
+
+Committed, thanks.
+
 -- 
-1.8.1.2
+Bye, Peter Korsgaard
