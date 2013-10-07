@@ -1,101 +1,207 @@
-From: =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= <jezz@sysmic.org>
-Date: Mon,  7 Oct 2013 13:42:10 +0200
-Subject: [Buildroot] [PATCH] Allow PHP to compile ans link with berkeleydb 6
-Message-ID: <1381146130-8575-1-git-send-email-jezz@sysmic.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 7 Oct 2013 13:48:18 +0200
+Subject: [Buildroot] eSpeak: new package
+In-Reply-To: <CACjG4BJjXtXVBTTS9zneQ-JEmsOA+zzbDhNiZv6N5AvXhz7cPw@mail.gmail.com>
+References: <CACjG4BJjXtXVBTTS9zneQ-JEmsOA+zzbDhNiZv6N5AvXhz7cPw@mail.gmail.com>
+Message-ID: <20131007134818.6be83088@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add patch from :
-  https://bugs.php.net/patch-display.php?bug_id=65426&patch=db6.patch&revision=1376033083&download=1
+Dear arnaud aujon,
 
-Notice this patch was not applied by upstream because of licence
-issue with berkeleydb 6. Linking with berkeleydb 6 may force user
-to publish patch applyed to php.
+On Mon, 7 Oct 2013 12:25:45 +0200, arnaud aujon wrote:
+> From 853618d37de1afd4fe43b502e5582423ceea3d43 Mon Sep 17 00:00:00 2001
+> From: Arnaud Aujon <arnaud.aujon@gmail.com>
+> Date: Mon, 7 Oct 2013 11:48:52 +0200
+> Subject: [PATCH] Add new package espeak, a speech synthesizer software
+> 
+> Signed-off-by: Arnaud Aujon <arnaud.aujon@gmail.com>
 
-Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
----
- package/php/php-db6.patch |   70 +++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 70 insertions(+)
- create mode 100644 package/php/php-db6.patch
+Thanks for this patch. It looks pretty good, but there are a few issues
+to fix. First of all, could you use "git send-email" to send patches?
+Your patch is currently completely line-wrapped, most likely due to
+your mail client. Using "git send-email" ensures your mail client does
+not do bad things with your patches, and there are plenty of tutorials
+on the Web that explain how to configure "git send-email" for GMail
+users.
 
-diff --git a/package/php/php-db6.patch b/package/php/php-db6.patch
-new file mode 100644
-index 0000000..e28e715
---- /dev/null
-+++ b/package/php/php-db6.patch
-@@ -0,0 +1,70 @@
-+Allow PHP to compile ans link with berkeleydb 6
-+
-+Copied from: 
-+  https://bugs.php.net/patch-display.php?bug_id=65426&patch=db6.patch&revision=1376033083&download=1
-+
-+Notice this patch iwas not applied by upstream because of licence 
-+problem with berkeleydb 6. Linking with berkeleydb 6 may force you 
-+to publish patch applyed to php.
-+
-+Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
-+
-+--- a/configure	2013-07-03 08:16:15.000000000 +0200
-++++ b/configure	2013-08-07 19:19:16.797273766 +0200
-+@@ -42409,7 +42409,7 @@
-+ /* end confdefs.h.  */
-+ 
-+ #include "$THIS_INCLUDE"
-+-#if DB_VERSION_MAJOR == 4 || (4 == 4 && DB_VERSION_MAJOR == 5)
-++#if DB_VERSION_MAJOR == 4 || (4 == 4 && DB_VERSION_MAJOR >= 5)
-+             yes
-+ #endif
-+ 
-+@@ -42785,7 +42785,7 @@
-+ /* end confdefs.h.  */
-+ 
-+ #include "$THIS_INCLUDE"
-+-#if DB_VERSION_MAJOR == 3 || (3 == 4 && DB_VERSION_MAJOR == 5)
-++#if DB_VERSION_MAJOR == 3 || (3 == 4 && DB_VERSION_MAJOR >= 5)
-+             yes
-+ #endif
-+ 
-+@@ -43161,7 +43161,7 @@
-+ /* end confdefs.h.  */
-+ 
-+ #include "$THIS_INCLUDE"
-+-#if DB_VERSION_MAJOR == 2 || (2 == 4 && DB_VERSION_MAJOR == 5)
-++#if DB_VERSION_MAJOR == 2 || (2 == 4 && DB_VERSION_MAJOR >= 5)
-+             yes
-+ #endif
-+ 
-+--- a/ext/dba/config.m4	2013-07-03 08:10:53.000000000 +0200
-++++ b/ext/dba/config.m4	2013-08-07 19:18:55.774448348 +0200
-+@@ -245,7 +245,7 @@
-+         ],[
-+           AC_EGREP_CPP(yes,[
-+ #include "$THIS_INCLUDE"
-+-#if DB_VERSION_MAJOR == $1 || ($1 == 4 && DB_VERSION_MAJOR == 5)
-++#if DB_VERSION_MAJOR == $1 || ($1 == 4 && DB_VERSION_MAJOR >= 5)
-+             yes
-+ #endif
-+           ],[
-+--- a/ext/dba/dba_db4.c	2013-07-03 08:10:53.000000000 +0200
-++++ b/ext/dba/dba_db4.c	2013-08-07 19:19:04.827562638 +0200
-+@@ -44,7 +44,7 @@
-+ {
-+ 	TSRMLS_FETCH();
-+ 
-+-#if (DB_VERSION_MAJOR == 5 || (DB_VERSION_MAJOR == 4 && DB_VERSION_MINOR == 8))
-++#if (DB_VERSION_MAJOR >= 5 || (DB_VERSION_MAJOR == 4 && DB_VERSION_MINOR == 8))
-+ /* Bug 51086, Berkeley DB 4.8.26 */
-+ /* This code suppresses a BDB 4.8+ error message, thus keeping PHP test compatibility */
-+ 	{
-+--- a/ext/dba/tests/dba_db4_handlers.phpt	2013-07-03 08:10:53.000000000 +0200
-++++ b/ext/dba/tests/dba_db4_handlers.phpt	2013-08-07 20:39:34.640194224 +0200
-+@@ -47,4 +47,4 @@
-+ Test 1
-+ Success: db4 enabled
-+ Test 2 - full info
-+-.*Berkeley DB (4|5).*
-++.*Berkeley DB (4|5|6).*
+> +comment "eSpeak requires a toolchain with C++ and WCHAR support"
+> +    depends on !(BR2_INSTALL_LIBSTDCPP && BR2_USE_WCHAR)
+> +
+> +config BR2_PACKAGE_ESPEAK
+> +    bool "eSpeak"
+> +    depends on BR2_INSTALL_LIBSTDCPP
+> +    depends on BR2_USE_WCHAR
+> +    help
+
+Indentation should be done with one tab, but maybe it's correct in your
+original code, and your mail client has replaced the tab with spaces.
+Just make sure that you're indeed using tabs in your code, and resend
+with git send-email.
+
+> +      eSpeak is a speech synthesizer software for English and other
+> languages.
+> +
+> +      http://espeak.sourceforge.net/
+> +
+> +
+> +
+> +if BR2_PACKAGE_ESPEAK
+> +
+> +config BR2_PACKAGE_ESPEAK_SOUND
+> +    bool
+
+This option is not used anywhere, as far as I can see.
+
+> +choice
+> +    prompt "choose audio backend"
+> +    default BR2_PACKAGE_ESPEAK_SOUND_NOSOUND
+> +    help
+> +      Select the audio backend you want to use
+> +
+> +    config BR2_PACKAGE_ESPEAK_SOUND_NOSOUND
+> +        bool "No sound backend, only produce wav files"
+> +
+> +    comment "ALSA backend requires a toolchain with threads support"
+> +    depends on !(BR2_TOOLCHAIN_HAS_THREADS)
+
+Useless parenthesis.
+
+> +
+> +    config BR2_PACKAGE_ESPEAK_SOUND_ALSA
+> +        bool "Portaudio and ALSA"
+> +        select BR2_PACKAGE_PORTAUDIO
+> +        select BR2_PACKAGE_PORTAUDIO_CXX
+> +        depends on BR2_TOOLCHAIN_HAS_THREADS #portaudio
+> +        help
+> +          Allow eSpeak to output sound using ALSA
+> +
+> +    comment "Pulseaudio backend requires a toolchain with WCHAR, LARGEFILE
+> and threads support"
+> +    depends on !(BR2_TOOLCHAIN_HAS_THREADS && BR2_USE_WCHAR &&
+> BR2_LARGEFILE)
+> +
+> +    config BR2_PACKAGE_ESPEAK_SOUND_PULSEAUDIO
+> +        bool "pulseaudio"
+> +        select BR2_PACKAGE_PULSEAUDIO
+> +        depends on BR2_TOOLCHAIN_HAS_THREADS # pulseaudio
+> +        depends on BR2_USE_WCHAR # pulseaudio
+> +        depends on BR2_LARGEFILE # pulseaudio
+> +        help
+> +          Allow eSpeak to output sound using Pulseaudio
+> +
+> +
+> +endchoice
+> +endif #BR2_PACKAGE_ESPEAK
+> diff --git a/package/espeak/espeak-1-do-not-compil-when-install.patch
+> b/package/espeak/espeak-1-do-not-compil-when-install.patch
+> new file mode 100644
+> index 0000000..744af62
+> --- /dev/null
+> +++ b/package/espeak/espeak-1-do-not-compil-when-install.patch
+> @@ -0,0 +1,15 @@
+> +Index: espeak-1.47.11-source/src/Makefile
+> +Makefile: do not executethe rule "all" when executing "install"
+> +signed-off-by Arnaud Aujon <arnaud.aujon@gmail.com>
+
+The Index: line is not needed, and there should be one empty line
+between the description and the Signed-off-by line. Also, Signed-off-by
+should be followed by a colon sign, such as:
+
+Signed-off-by: Foo Bar <foo.bar@barfoo.com>
+
+And while you're at it, add a space between 'execute' and 'the'.
+
+> +###############################################################################
+> +#
+> +# eSpeak
+
+The package name in the header should be all lower case.
+
+> +#
+> +################################################################################
+
+Please add one empty line between the header and the first variable.
+
+> +ESPEAK_VERSION = 1.47.11-source
+> +ESPEAK_SOURCE = espeak-$(ESPEAK_VERSION).zip
+> +ESPEAK_SITE =
+> http://sourceforge.net/projects/espeak/files/espeak/espeak-1.47
+
+We use downloads.sourceforge.net for all Sourceforge downloads. See
+other Sourceforge packages in Buildroot.
+
+> +ESPEAK_LICENSE = GPLv3
+
+Can you check it's really GPLv3 and not GPLv3+ ?
+
+> +ESPEAK_LICENSE_FILES = Licence.txt
+> +
+> +ifeq ($(BR2_PACKAGE_ESPEAK_SOUND_ALSA), y)
+> +AUDIO = portaudio
+> +ESPEAK_DEPENDENCIES = portaudio
+> +endif
+> +ifeq ($(BR2_PACKAGE_ESPEAK_SOUND_PULSEAUDIO), y)
+> +AUDIO = pulseaudio
+> +ESPEAK_DEPENDENCIES = pulseaudio
+> +endif
+> +ifeq ($(BR2_PACKAGE_ESPEAK_SOUND_NOSOUND), y)
+> +AUDIO =
+> +endif
+
+Those last three lines are not needed: variables are automatically
+empty in make. Also, remove the spaces between ", y" in the tests, i.e:
+
+ifeq ($(BR2_<something>),y)
+...
+
+Also, please use ESPEAK_AUDIO_BACKEND instead of AUDIO, because the
+namespace of variables is global in Buildroot, so "AUDIO" is too
+generic.
+
+> +
+> +define ESPEAK_EXTRACT_CMDS
+> +    unzip $(DL_DIR)/$(ESPEAK_SOURCE) -d $(BUILD_DIR)
+> +endef
+> +
+> +define ESPEAK_CONFIGURE_CMDS
+> +    # next command is required because buildroot provides portaudio V19,
+> this is explained in package ReadMe file.
+
+This comment needs to be wrapped at a reasonable length.
+
+> +    cp $(@D)/src/portaudio19.h $(@D)/src/portaudio.h
+> +endef
+> +
+> +define ESPEAK_BUILD_CMDS
+> +    $(MAKE) CXX="$(TARGET_CXX)" LD="$(TARGET_LD)" AUDIO="$(AUDIO)" -C
+> $(@D)/src all
+
+Use $(TARGET_CONFIGURE_OPTS) instead of CXX and LD, so something like:
+
+	$(MAKE) $(TARGET_CONFIGURE_OPTS) \
+		AUDIO="$(ESPEAK_AUDIO_BACKEND)" \
+		-C $(@D)/src all
+
+> +endef
+> +
+> +define ESPEAK_INSTALL_TARGET_CMDS
+> +    $(MAKE) install DESTDIR="$(TARGET_DIR)" -C $(@D)/src
+> +endef
+> +
+> +$(eval $(generic-package))
+
+Can you resubmit a new version (see
+http://buildroot.org/downloads/manual/manual.html#_patch_revision_changelog)
+with those issues fixed?
+
+Thanks a lot!
+
+Thomas
 -- 
-1.7.9.5
+Thomas Petazzoni, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
