@@ -1,21 +1,23 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 07 Oct 2013 11:44:38 +0200
-Subject: [Buildroot] [PATCH] openssh: needs mmu
-In-Reply-To: <1381104566-29479-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Sun, 6 Oct 2013 21:09:26 -0300")
-References: <1381104566-29479-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87txgtbek9.fsf@dell.be.48ers.dk>
+Date: Mon, 07 Oct 2013 11:45:57 +0200
+Subject: [Buildroot] [PATCH] gtest: bump to version 1.7.0
+In-Reply-To: <1381123588.28461.1.camel@phoenix> (Axel Lin's message of "Mon,
+ 07 Oct 2013 13:26:28 +0800")
+References: <1381123588.28461.1.camel@phoenix>
+Message-ID: <87pprhbei2.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+>>>>> "Axel" == Axel Lin <axel.lin@ingics.com> writes:
 
- Gustavo> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+ Axel> Signed-off-by: Axel Lin <axel.lin@ingics.com>
 
 Committed, thanks.
+
+It would be good if you could add the needed legal info tags as well.
 
 -- 
 Bye, Peter Korsgaard
