@@ -1,104 +1,66 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Mon, 7 Oct 2013 17:01:19 +0200
-Subject: [Buildroot] [PATCH 1 of 5] legal info: fix saving of host
-	package licenses
-In-Reply-To: <CAAXf6LUTEtCoyLLb6o+gmbxHmEPOAm6mULw4xeeCK8gFhW+60w@mail.gmail.com>
-References: <patchbomb.1380892349@argentina>
- <d7c22445ecf6c2362d5b.1380892350@argentina>
- <CAAXf6LWniNtQiwD0avXMHYOvEq6gCONAAgTo21HOiG+aXSc0vA@mail.gmail.com>
- <CAAXf6LUTEtCoyLLb6o+gmbxHmEPOAm6mULw4xeeCK8gFhW+60w@mail.gmail.com>
-Message-ID: <CAAXf6LUdH0WPhktyPmGQ73uqaXP3fqub9LBwDwP=W+Vcde-ySg@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 7 Oct 2013 18:48:29 +0200
+Subject: [Buildroot] [PATCH] pkg-infra: log current message
+In-Reply-To: <20131007140733.173904b6@skate>
+References: <1381058388-24055-1-git-send-email-yann.morin.1998@free.fr>
+ <30033387.d25L1SpIx8@sagittae> <20131007140733.173904b6@skate>
+Message-ID: <20131007164829.GB9561@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Oct 4, 2013 at 5:29 PM, Thomas De Schampheleire
-<patrickdepinguin@gmail.com> wrote:
-> Hi,
->
-> On Fri, Oct 4, 2013 at 3:24 PM, Thomas De Schampheleire
-> <patrickdepinguin@gmail.com> wrote:
->> On Fri, Oct 4, 2013 at 3:12 PM, Thomas De Schampheleire
->> <patrickdepinguin@gmail.com> wrote:
->>> Due to a missing dollar sign, the licenses for host packages were not saved.
->>>
->>> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
->>>
->>> ---
->>> Note: Aaargh this dollar sign madness!
->>>
->>>  package/pkg-generic.mk |  2 +-
->>>  1 files changed, 1 insertions(+), 1 deletions(-)
->>>
->>> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
->>> --- a/package/pkg-generic.mk
->>> +++ b/package/pkg-generic.mk
->>> @@ -511,7 +511,7 @@ ifeq ($(call qstrip,$$($(2)_LICENSE_FILE
->>>         @$(call legal-license-nofiles,$$($(2)_RAWNAME))
->>>         @$(call legal-warning-pkg,$$($(2)_RAWNAME),cannot save license ($(2)_LICENSE_FILES not defined))
->>>  else
->>> -       @$(foreach F,$($(2)_LICENSE_FILES),$(call legal-license-file,$$($(2)_RAWNAME),$(F),$$($(2)_DIR)/$(F))$$(sep))
->>> +       @$(foreach F,$$($(2)_LICENSE_FILES),$(call legal-license-file,$$($(2)_RAWNAME),$(F),$$($(2)_DIR)/$(F),$(call UPPERCASE,$(5)))$$(sep))
->>>  endif
->>>  ifeq ($$($(2)_REDISTRIBUTE),YES)
->>>  # Copy the source tarball (just hardlink if possible)
->>
->> Hold this one: it seems to break packages that define multiple license
->> files, like libfuse. Looking into it...
->
-> This is a tricky problem, and I don't know how to solve it. The
-> foreach line does not work correctly with variables that are defined
-> inside an evaluated macro, as our inner-generic-package is.
-> Here is an example Makefile that shows the problem:
->
-> all:
->
-> VARA = foo bar
->
-> define inner
-> VARB = foo bar
-> VARC = $(1)
-> some-$(1):
->         @echo $(1) != $(VARC)
->         @echo $(1) = $$(VARC)
->         @echo
->         @echo $(foreach F,foo bar,echo $(F))
->         @echo $(foreach F,$(VARA),echo $(F))
->         @echo $(foreach F,$$(VARB),echo $(F))
->         @echo $(foreach F,$$(VARC),echo $(F))
-> endef
->
-> outer = $(call inner,foo bar)
-> $(eval $(outer))
->
->
-> The first set of echoes shows that $(VARC) cannot be used like that,
-> it is empty. Using double-dollar signs does work.
-> However, when passing this to foreach you get problems. The first two
-> foreach'es show the expected output, while the second two show the
-> problem.
->
-> Here is the output:
->
-> $ make -f ~/tmp/wrap some-foo
-> foo bar !=
-> foo bar = foo bar
->
-> echo foo echo bar
-> echo foo echo bar
-> echo foo bar
-> echo foo bar
->
-> As you can see, the fact that we pass $$(VARC) to foreach renders the
-> foreach useless: it only iterates once instead of for each word. But
-> we cannot pass simply $(VARC) as that is empty when foreach is
-> evaluated.
->
-> Does anyone know how to solve this?
+Thomas, J?r?me, All,
 
-Note: I found a solution and submitted a second version of this series...
+On 2013-10-07 14:07 +0200, Thomas Petazzoni spake thusly:
+> Dear J?r?me Pouiller,
+> 
+> On Mon, 07 Oct 2013 12:09:50 +0200, J?r?me Pouiller wrote:
+> 
+> > I have also in my local git some branches modified in a similar fashion. 
+> > Some weeks ago, Francois Perrad also suggested a patch with a similar 
+> > modification (http://patchwork.ozlabs.org/patch/265214). Thomas also 
+> > wrote a patch to get build time statistics   
+> > (http://lists.busybox.net/pipermail/buildroot/2011-October/046513.html). 
+> > 
+> > IMHO, these patchs are too much specific and should not be mainlined. 
+> 
+> I am not sure I agree here. The fact that several of us have such
+> patches, and that they would indeed be useful to produce build time
+> statistics, or help the autobuilders provide better diagnostics could
+> be useful. I believe that it's the real strength of the common package
+> infrastructure: we can add such additional features on all packages at
+> once, very easily. Of course, it should be implemented in a nice and
+> clean way that doesn't complexity too much the core package
+> infrastructure, but it's very likely easy to achieve with some hooks.
 
-Best regards,
-Thomas
+What about adding a new Kconfig option like:
+
+    config BR2_BUILD_INFRA_STEP_SCRIPT
+        bool "script to run before and after each step"
+        help
+          Buildroot will call this script before executing any single
+          step in the build process. The arguments to this script are:
+              $1: either "pre" or "post", resp. meaning "before" or
+                  "after" the step
+              $2: name of the package
+              $3: version of the package
+              $4: action to be done
+
+          Leave empty (the default) to not run any script.
+
+It would then be the responsibility of the user to provide such a
+script. We could provide a simple script that just do this logging as an
+example.
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
