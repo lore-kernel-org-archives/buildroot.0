@@ -1,91 +1,106 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Mon, 07 Oct 2013 15:15:08 +0200
-Subject: [Buildroot] [PATCH 1 of 6 v2] legal info: fix saving of host
-	package licenses
+Date: Mon, 07 Oct 2013 15:15:10 +0200
+Subject: [Buildroot] [PATCH 3 of 6 v2] legal info: split license texts for
+	host and target
 In-Reply-To: <patchbomb.1381151707@argentina>
 References: <patchbomb.1381151707@argentina>
-Message-ID: <e07dc5f55104adb4a171.1381151708@argentina>
+Message-ID: <15f6330a82d9a7164d72.1381151710@argentina>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Due to some tricky make behavior, the license texts of host packages that
-did not provide an explicit HOST_FOO_LICENSE_FILES definition was not saved.
-The problem is that you cannot correctly use a variable defined/updated
-inside a call'ed block as input to a foreach statement. If you try to use
-$(FOO) then only the original value of FOO is used for foreach, any update
-inside the call'ed block is ignored. However, if you use $$(FOO), the entire
-contents of FOO (typically a list of items) is passed as one item to
-foreach, thus causing just one iteration instead of several.
-
-To fix the problem, one should only use values in foreach that have not
-changed inside the call'ed block. In the case of (HOST_)FOO_LICENSE_FILES,
-this means repeating the checks for a valid HOST_FOO_X and using FOO_X as
-fallback.
-
-Additionally, a few empty lines have been added to the legal-info-foo block
-for clarity, as the amount of nested ifdef/ifeq statements have become very
-high.
-
 Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+Acked-by: Luca Ceresoli <luca@lucaceresoli.net>
 
 ---
 v2:
-- implement a solution for packages that have multiple license files.
-- fix accidental mixup of code from another patch
+- rebase after changes in first patch
+- fix accidental mixup of contents from first patch
 
- package/pkg-generic.mk |  23 ++++++++++++++++++++---
- 1 files changed, 20 insertions(+), 3 deletions(-)
+ Makefile               |   8 +++++---
+ package/pkg-generic.mk |   6 +++---
+ package/pkg-utils.mk   |  16 ++++++++--------
+ 3 files changed, 16 insertions(+), 14 deletions(-)
 
+diff --git a/Makefile b/Makefile
+--- a/Makefile
++++ b/Makefile
+@@ -109,10 +109,12 @@ HOST_DIR:=$(BASE_DIR)/host
+ 
+ LEGAL_INFO_DIR=$(BASE_DIR)/legal-info
+ REDIST_SOURCES_DIR=$(LEGAL_INFO_DIR)/sources
+-LICENSE_FILES_DIR=$(LEGAL_INFO_DIR)/licenses
++LICENSE_FILES_DIR_TARGET=$(LEGAL_INFO_DIR)/licenses
++LICENSE_FILES_DIR_HOST=$(LEGAL_INFO_DIR)/host-licenses
+ LEGAL_MANIFEST_CSV_TARGET=$(LEGAL_INFO_DIR)/manifest.csv
+ LEGAL_MANIFEST_CSV_HOST=$(LEGAL_INFO_DIR)/host-manifest.csv
+-LEGAL_LICENSES_TXT=$(LEGAL_INFO_DIR)/licenses.txt
++LEGAL_LICENSES_TXT_TARGET=$(LEGAL_INFO_DIR)/licenses.txt
++LEGAL_LICENSES_TXT_HOST=$(LEGAL_INFO_DIR)/host-licenses.txt
+ LEGAL_WARNINGS=$(LEGAL_INFO_DIR)/.warnings
+ LEGAL_REPORT=$(LEGAL_INFO_DIR)/README
+ 
+@@ -588,7 +590,7 @@ legal-info-clean:
+ 
+ legal-info-prepare: $(LEGAL_INFO_DIR)
+ 	@$(call MESSAGE,"Collecting legal info")
+-	@$(call legal-license-file,buildroot,COPYING,COPYING)
++	@$(call legal-license-file,buildroot,COPYING,COPYING,HOST)
+ 	@$(call legal-manifest,PACKAGE,VERSION,LICENSE,LICENSE FILES,SOURCE ARCHIVE,TARGET)
+ 	@$(call legal-manifest,PACKAGE,VERSION,LICENSE,LICENSE FILES,SOURCE ARCHIVE,HOST)
+ 	@$(call legal-manifest,buildroot,$(BR2_VERSION_FULL),GPLv2+,COPYING,not saved,HOST)
 diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
 --- a/package/pkg-generic.mk
 +++ b/package/pkg-generic.mk
-@@ -499,26 +499,43 @@ endif
- $(1)-legal-info:
- # Packages without a source are assumed to be part of Buildroot, skip them.
- ifneq ($(call qstrip,$$($(2)_SOURCE)),)
-+
- ifeq ($$($(2)_SITE_METHOD),local)
- # Packages without a tarball: don't save and warn
- 	@$(call legal-warning-pkg-savednothing,$$($(2)_RAWNAME),local)
-+
- else ifneq ($$($(2)_OVERRIDE_SRCDIR),)
- 	@$(call legal-warning-pkg-savednothing,$$($(2)_RAWNAME),override)
-+
- else
- # Other packages
-+
+@@ -512,7 +512,7 @@ else
+ 
  # Save license files if defined
  ifeq ($(call qstrip,$$($(2)_LICENSE_FILES)),)
- 	@$(call legal-license-nofiles,$$($(2)_RAWNAME))
+-	@$(call legal-license-nofiles,$$($(2)_RAWNAME))
++	@$(call legal-license-nofiles,$$($(2)_RAWNAME),$(call UPPERCASE,$(5)))
  	@$(call legal-warning-pkg,$$($(2)_RAWNAME),cannot save license ($(2)_LICENSE_FILES not defined))
  else
-+# We cannot use $$($(2)_LICENSE_FILES) in the foreach below because it fails
-+# for host packages that have no explicit HOST_FOO_LICENSE_FILES set. We have
-+# to explicitly repeat the check for HOST_FOO_X and FOO_X.
-+ifeq ($($(2)_LICENSE_FILES),)
-+ifneq ($($(3)_LICENSE_FILES),)
-+# Host package with no explicit HOST_FOO_LICENSE_FILES
-+	@$(foreach F,$($(3)_LICENSE_FILES),$(call legal-license-file,$$($(2)_RAWNAME),$(F),$$($(2)_DIR)/$(F))$$(sep))
-+endif
-+else
-+# Target package, or host package with explicit HOST_FOO_LICENSE_FILES
- 	@$(foreach F,$($(2)_LICENSE_FILES),$(call legal-license-file,$$($(2)_RAWNAME),$(F),$$($(2)_DIR)/$(F))$$(sep))
--endif
-+endif # host/target distinction
-+endif # license files
-+
- ifeq ($$($(2)_REDISTRIBUTE),YES)
- # Copy the source tarball (just hardlink if possible)
- 	@cp -l $(DL_DIR)/$$($(2)_SOURCE) $(REDIST_SOURCES_DIR) 2>/dev/null || \
- 	   cp $(DL_DIR)/$$($(2)_SOURCE) $(REDIST_SOURCES_DIR)
--endif
--endif
-+endif # redistribute
-+
-+endif # other packages
- 	@$(call legal-manifest,$$($(2)_RAWNAME),$$($(2)_VERSION),$$($(2)_LICENSE),$$($(2)_MANIFEST_LICENSE_FILES),$$($(2)_MANIFEST_TARBALL))
- endif # ifneq ($(call qstrip,$$($(2)_SOURCE)),)
- 	$(foreach hook,$($(2)_POST_LEGAL_INFO_HOOKS),$(call $(hook))$(sep))
+ # We cannot use $$($(2)_LICENSE_FILES) in the foreach below because it fails
+@@ -521,11 +521,11 @@ else
+ ifeq ($($(2)_LICENSE_FILES),)
+ ifneq ($($(3)_LICENSE_FILES),)
+ # Host package with no explicit HOST_FOO_LICENSE_FILES
+-	@$(foreach F,$($(3)_LICENSE_FILES),$(call legal-license-file,$$($(2)_RAWNAME),$(F),$$($(2)_DIR)/$(F))$$(sep))
++	@$(foreach F,$($(3)_LICENSE_FILES),$(call legal-license-file,$$($(2)_RAWNAME),$(F),$$($(2)_DIR)/$(F),$(call UPPERCASE,$(5)))$$(sep))
+ endif
+ else
+ # Target package, or host package with explicit HOST_FOO_LICENSE_FILES
+-	@$(foreach F,$($(2)_LICENSE_FILES),$(call legal-license-file,$$($(2)_RAWNAME),$(F),$$($(2)_DIR)/$(F))$$(sep))
++	@$(foreach F,$($(2)_LICENSE_FILES),$(call legal-license-file,$$($(2)_RAWNAME),$(F),$$($(2)_DIR)/$(F),$(call UPPERCASE,$(5)))$$(sep))
+ endif # host/target distinction
+ endif # license files
+ 
+diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
+--- a/package/pkg-utils.mk
++++ b/package/pkg-utils.mk
+@@ -99,15 +99,15 @@ endef
+ legal-manifest=echo '"$(1)","$(2)","$(3)","$(4)","$(5)"' >>$(LEGAL_MANIFEST_CSV_$(6))
+ define legal-license-header
+ 	echo -e "$(LEGAL_INFO_SEPARATOR)\n\t$(1):" \
+-		"$(2)\n$(LEGAL_INFO_SEPARATOR)\n\n" >>$(LEGAL_LICENSES_TXT)
++		"$(2)\n$(LEGAL_INFO_SEPARATOR)\n\n" >>$(LEGAL_LICENSES_TXT_$(3))
+ endef
+ define legal-license-nofiles
+-	$(call legal-license-header,$(1),unknown license file(s))
++	$(call legal-license-header,$(1),unknown license file(s),$(2))
+ endef
+-define legal-license-file # pkg, filename, file-fullpath
+-	$(call legal-license-header,$(1),$(2) file) && \
+-	cat $(3) >>$(LEGAL_LICENSES_TXT) && \
+-	echo >>$(LEGAL_LICENSES_TXT) && \
+-	mkdir -p $(LICENSE_FILES_DIR)/$(1)/$(dir $(2)) && \
+-	cp $(3) $(LICENSE_FILES_DIR)/$(1)/$(2)
++define legal-license-file # pkg, filename, file-fullpath, type
++	$(call legal-license-header,$(1),$(2) file,$(4)) && \
++	cat $(3) >>$(LEGAL_LICENSES_TXT_$(4)) && \
++	echo >>$(LEGAL_LICENSES_TXT_$(4)) && \
++	mkdir -p $(LICENSE_FILES_DIR_$(4))/$(1)/$(dir $(2)) && \
++	cp $(3) $(LICENSE_FILES_DIR_$(4))/$(1)/$(2)
+ endef
