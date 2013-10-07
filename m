@@ -1,59 +1,40 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 7 Oct 2013 22:16:51 +0200
-Subject: [Buildroot] [git commit] minidlna: security bump to version 1.0.26
-Message-ID: <20131007201928.0C60F9B979@busybox.osuosl.org>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon,  7 Oct 2013 17:21:57 -0300
+Subject: [Buildroot] [PATCH 1/2] mediastreamer: bump to version 2.9.0
+Message-ID: <1381177318-16998-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=97c386e4586201dbd976925f021ff877620462fc
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Fixes CVE-2013-2738, CVE-2013-2739 and CVE-2013-2745.
-Also needs threads, which fixes:
-http://autobuild.buildroot.net/results/d91/d91b64c93097580e1da53b6ccfb4b492f382a5f3
+Fixes the fallout from commit 280a387737ed72a2dd844253eeb64cc373ca7656
+which didn't test building things that links against ortp, fixing:
+http://autobuild.buildroot.net/results/ac6/ac69ff3332713e3a6681fd1d418f1cb9c1941098
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/minidlna/Config.in   |    5 +++--
- package/minidlna/minidlna.mk |    3 +--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/mediastreamer/mediastreamer.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/minidlna/Config.in b/package/minidlna/Config.in
-index c73c001..2b684ba 100644
---- a/package/minidlna/Config.in
-+++ b/package/minidlna/Config.in
-@@ -3,6 +3,7 @@ config BR2_PACKAGE_MINIDLNA
- 	depends on BR2_LARGEFILE # ffmpeg
- 	depends on BR2_INET_IPV6 # ffmpeg
- 	depends on BR2_USE_MMU # fork
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	select BR2_PACKAGE_FFMPEG
- 	select BR2_PACKAGE_FLAC
- 	select BR2_PACKAGE_LIBVORBIS # selects libogg
-@@ -17,5 +18,5 @@ config BR2_PACKAGE_MINIDLNA
- 
- 	  http://minidlna.sourceforge.net/
- 
--comment "minidlna requires a toolchain with LARGEFILE and IPV6 support"
--	depends on !(BR2_LARGEFILE && BR2_INET_IPV6)
-+comment "minidlna requires a toolchain with LARGEFILE, IPV6 and thread support"
-+	depends on !(BR2_LARGEFILE && BR2_INET_IPV6 && BR2_TOOLCHAIN_HAS_THREADS)
-diff --git a/package/minidlna/minidlna.mk b/package/minidlna/minidlna.mk
-index 077e257..4df6ff0 100644
---- a/package/minidlna/minidlna.mk
-+++ b/package/minidlna/minidlna.mk
-@@ -4,9 +4,8 @@
+diff --git a/package/mediastreamer/mediastreamer.mk b/package/mediastreamer/mediastreamer.mk
+index 5093df7..52a5b5a 100644
+--- a/package/mediastreamer/mediastreamer.mk
++++ b/package/mediastreamer/mediastreamer.mk
+@@ -4,12 +4,12 @@
  #
  ################################################################################
  
--MINIDLNA_VERSION = 1.0.25
-+MINIDLNA_VERSION = 1.0.26
- MINIDLNA_SITE = http://downloads.sourceforge.net/project/minidlna/minidlna/$(MINIDLNA_VERSION)
--MINIDLNA_SOURCE = minidlna_$(MINIDLNA_VERSION)_src.tar.gz
- MINIDLNA_LICENSE = GPLv2 BSD-3c
- MINIDLNA_LICENSE_FILES = LICENCE LICENCE.miniupnpd
+-MEDIASTREAMER_VERSION = 2.8.2
++MEDIASTREAMER_VERSION = 2.9.0
+ MEDIASTREAMER_SITE = http://download.savannah.nongnu.org/releases/linphone/mediastreamer
+ MEDIASTREAMER_INSTALL_STAGING = YES
+ MEDIASTREAMER_DEPENDENCIES = host-intltool host-pkgconf ortp host-gettext
+ # tests fail linking on some architectures, so disable them
+-MEDIASTREAMER_CONF_OPT = --disable-tests
++MEDIASTREAMER_CONF_OPT = --disable-tests --disable-glx --disable-strict
+ MEDIASTREAMER_LICENSE = GPLv2+
+ MEDIASTREAMER_LICENSE_FILES = COPYING
  
+-- 
+1.8.1.5
