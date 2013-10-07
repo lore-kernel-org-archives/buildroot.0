@@ -1,33 +1,59 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon,  7 Oct 2013 16:46:55 -0300
-Subject: [Buildroot] [PATCH 1/2] ffmpeg: security bump to version 0.8.15
-Message-ID: <1381175216-30916-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Mon,  7 Oct 2013 16:46:56 -0300
+Subject: [Buildroot] [PATCH 2/2] minidlna: security bump to version 1.0.26
+In-Reply-To: <1381175216-30916-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1381175216-30916-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1381175216-30916-2-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes several vulnerabilities.
-TODO: update to a more modern branch.
+Fixes CVE-2013-2738, CVE-2013-2739 and CVE-2013-2745.
+Also needs threads, which fixes:
+http://autobuild.buildroot.net/results/d91/d91b64c93097580e1da53b6ccfb4b492f382a5f3
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/ffmpeg/ffmpeg.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/minidlna/Config.in   | 5 +++--
+ package/minidlna/minidlna.mk | 3 +--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
-index b102af1..6685110 100644
---- a/package/ffmpeg/ffmpeg.mk
-+++ b/package/ffmpeg/ffmpeg.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/minidlna/Config.in b/package/minidlna/Config.in
+index c73c001..2b684ba 100644
+--- a/package/minidlna/Config.in
++++ b/package/minidlna/Config.in
+@@ -3,6 +3,7 @@ config BR2_PACKAGE_MINIDLNA
+ 	depends on BR2_LARGEFILE # ffmpeg
+ 	depends on BR2_INET_IPV6 # ffmpeg
+ 	depends on BR2_USE_MMU # fork
++	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_PACKAGE_FFMPEG
+ 	select BR2_PACKAGE_FLAC
+ 	select BR2_PACKAGE_LIBVORBIS # selects libogg
+@@ -17,5 +18,5 @@ config BR2_PACKAGE_MINIDLNA
+ 
+ 	  http://minidlna.sourceforge.net/
+ 
+-comment "minidlna requires a toolchain with LARGEFILE and IPV6 support"
+-	depends on !(BR2_LARGEFILE && BR2_INET_IPV6)
++comment "minidlna requires a toolchain with LARGEFILE, IPV6 and thread support"
++	depends on !(BR2_LARGEFILE && BR2_INET_IPV6 && BR2_TOOLCHAIN_HAS_THREADS)
+diff --git a/package/minidlna/minidlna.mk b/package/minidlna/minidlna.mk
+index 077e257..4df6ff0 100644
+--- a/package/minidlna/minidlna.mk
++++ b/package/minidlna/minidlna.mk
+@@ -4,9 +4,8 @@
  #
  ################################################################################
  
--FFMPEG_VERSION = 0.8.12
-+FFMPEG_VERSION = 0.8.15
- FFMPEG_SOURCE = ffmpeg-$(FFMPEG_VERSION).tar.bz2
- FFMPEG_SITE = http://ffmpeg.org/releases
- FFMPEG_INSTALL_STAGING = YES
+-MINIDLNA_VERSION = 1.0.25
++MINIDLNA_VERSION = 1.0.26
+ MINIDLNA_SITE = http://downloads.sourceforge.net/project/minidlna/minidlna/$(MINIDLNA_VERSION)
+-MINIDLNA_SOURCE = minidlna_$(MINIDLNA_VERSION)_src.tar.gz
+ MINIDLNA_LICENSE = GPLv2 BSD-3c
+ MINIDLNA_LICENSE_FILES = LICENCE LICENCE.miniupnpd
+ 
 -- 
 1.8.1.5
