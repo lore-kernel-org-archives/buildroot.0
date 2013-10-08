@@ -1,32 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 8 Oct 2013 23:51:46 +0200
-Subject: [Buildroot] [PATCH 1/1] xlib_libpthread-stubs: needs thread
- support
-In-Reply-To: <1381267637-3957-1-git-send-email-jerzy.grzegorek@trzebnica.net>
-References: <1381267637-3957-1-git-send-email-jerzy.grzegorek@trzebnica.net>
-Message-ID: <20131008235146.63b90c26@skate>
+Date: Tue, 8 Oct 2013 23:55:37 +0200
+Subject: [Buildroot] [PATCHv3 03/20] package: add a
+ <pkg>_EXTRA_DOWNLOADS variable
+In-Reply-To: <87wqln4ffj.fsf@dell.be.48ers.dk>
+References: <1381256237-27948-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1381256237-27948-4-git-send-email-thomas.petazzoni@free-electrons.com>
+ <87wqln4ffj.fsf@dell.be.48ers.dk>
+Message-ID: <20131008235537.102caeda@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Jerzy Grzegorek,
+Dear Peter Korsgaard,
 
-On Tue,  8 Oct 2013 23:27:17 +0200, Jerzy Grzegorek wrote:
+On Tue, 08 Oct 2013 23:32:16 +0200, Peter Korsgaard wrote:
 
->  config BR2_PACKAGE_XLIB_LIBPTHREAD_STUBS
->  	bool "libpthread-stubs"
-> +	depends on BR2_TOOLCHAIN_HAS_THREADS
+>  Thomas> In order to achieve this, we add a <pkg>_EXTRA_DOWNLOADS variable,
+>  Thomas> which allows a package to list other stuff it would like to see
+>  Thomas> downloaded, but that are otherwise not used by the package
+>  Thomas> infrastructure itself: it is up to the package to do it by itself.
+> 
+> I think it should be possible to support a space seperated list of
+> sources in <pkg>_SOURCE, similar to how we do it for <pkg>_PATCH without
+> breaking backwards compatibility, but I won't delay this series because
+> of it - So committed, thanks.
 
-No, that doesn't work. When you add a toolchain dependency to one
-package, you must propagate it to the reverse dependencies of this
-package that are selecting this package.
+This has been discussed in a prior version of this patch set. The
+problem is that <pkg>_SOURCE is not only about downloading, but also
+about extracting.
 
-For example, libdrm and libxcb are both selecting
-XLIB_LIBPTHREAD_STUBS, but they do not have the
-BR2_TOOLCHAIN_HAS_THREADS, so you should add this dependency to libdrm
-and libxcb as well.
+So, what would <pkg>_SOURCE do? Download all the files listed, but
+extract only the first one? This seems like a weird semantic. I think I
+prefer the following clear semantic:
+
+ <pkg>_SOURCE is one file, that gets downloaded and then extracted into
+ the source directory of the package.
+
+ <pkg>_PATCH is a list of files or URLs, that get downloaded and apply
+ as patches into the source directory
+
+ <pkg>_EXTRA_DOWNLOADS is a list of files that get downloaded, and
+ nothing else. The package is responsible for doing something with them.
 
 Best regards,
 
