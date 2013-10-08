@@ -1,37 +1,36 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 8 Oct 2013 22:40:14 +0200
-Subject: [Buildroot] [git commit] perl: fix license info
-Message-ID: <20131008204238.A98339B8ED@busybox.osuosl.org>
+Date: Tue, 8 Oct 2013 22:40:44 +0200
+Subject: [Buildroot] [git commit] ruby: fix license info
+Message-ID: <20131008204238.B4F779B8ED@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=83630bc494a3bf221187a0e64428a0d18ec4475a
+commit: http://git.buildroot.net/buildroot/commit/?id=3a26628bf3dcd20d9b7d27d53bc5e2752cf515dc
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-According to the README, perl can be used either under
-Artistic or under GPLv1+ license, so include both.
+Based on the contents of LEGAL, without checking the code.
 
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/perl/perl.mk |    4 ++--
+ package/ruby/ruby.mk |    4 ++--
  1 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/perl/perl.mk b/package/perl/perl.mk
-index 5ef0b24..ac85ed9 100644
---- a/package/perl/perl.mk
-+++ b/package/perl/perl.mk
-@@ -8,8 +8,8 @@ PERL_VERSION_MAJOR = 18
- PERL_VERSION = 5.$(PERL_VERSION_MAJOR).1
- PERL_SITE = http://www.cpan.org/src/5.0
- PERL_SOURCE = perl-$(PERL_VERSION).tar.bz2
--PERL_LICENSE = Artistic
--PERL_LICENSE_FILES = Artistic
-+PERL_LICENSE = Artistic or GPLv1+
-+PERL_LICENSE_FILES = Artistic Copying README
- PERL_INSTALL_STAGING = YES
+diff --git a/package/ruby/ruby.mk b/package/ruby/ruby.mk
+index ba2d49b..2188837 100644
+--- a/package/ruby/ruby.mk
++++ b/package/ruby/ruby.mk
+@@ -12,8 +12,8 @@ RUBY_MAKE_ENV = $(TARGET_MAKE_ENV)
+ RUBY_MAKE = $(MAKE1)
+ RUBY_CONF_OPT = --disable-install-doc --disable-rpath
+ HOST_RUBY_CONF_OPT = --disable-install-doc --with-out-ext=curses,readline
+-RUBY_LICENSE = Ruby
+-RUBY_LICENSE_FILES = LEGAL
++RUBY_LICENSE = Ruby or BSD-2c, BSD-3c, others
++RUBY_LICENSE_FILES = LEGAL COPYING BSDL
  
- PERL_CROSS_VERSION = 0.8
+ # Force optionals to build before we do
+ ifeq ($(BR2_PACKAGE_BERKELEYDB),y)
