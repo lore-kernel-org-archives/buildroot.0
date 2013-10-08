@@ -1,38 +1,41 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 08 Oct 2013 23:32:16 +0200
-Subject: [Buildroot] [PATCHv3 03/20] package: add a
-	<pkg>_EXTRA_DOWNLOADS variable
-In-Reply-To: <1381256237-27948-4-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Tue, 8 Oct 2013 20:17:00 +0200")
-References: <1381256237-27948-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1381256237-27948-4-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <87wqln4ffj.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 8 Oct 2013 22:57:23 +0200
+Subject: [Buildroot] [git commit] glibc: both eglibc and glibc need host-gawk
+Message-ID: <20131008213236.C01B29B98A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=d8664dd43853ee744eb5eefdc48f72750000c1aa
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Thomas> Converting the external toolchain logic into a package raises a very
- Thomas> special use case that wasn't handled by the package infrastructure:
- Thomas> the Blackfin toolchain is delivered as two tarballs instead of
- Thomas> one. Unfortunately <pkg>_SOURCE only allows to pass one tarball name.
+Until now, only the eglibc build was pulling host-gawk as a
+dependency, but after more testing, it turns out that the glibc build
+also requires host-gawk.
 
- Thomas> However, we really want both tarballs to be known by the package
- Thomas> infrastructure, so that the normal 'source' and 'external-deps'
- Thomas> mechanism work fine.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/glibc/glibc.mk |    7 +------
+ 1 files changed, 1 insertions(+), 6 deletions(-)
 
- Thomas> In order to achieve this, we add a <pkg>_EXTRA_DOWNLOADS variable,
- Thomas> which allows a package to list other stuff it would like to see
- Thomas> downloaded, but that are otherwise not used by the package
- Thomas> infrastructure itself: it is up to the package to do it by itself.
-
-I think it should be possible to support a space seperated list of
-sources in <pkg>_SOURCE, similar to how we do it for <pkg>_PATCH without
-breaking backwards compatibility, but I won't delay this series because
-of it - So committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
+index 48ff0f7..a9e89f1 100644
+--- a/package/glibc/glibc.mk
++++ b/package/glibc/glibc.mk
+@@ -21,12 +21,7 @@ GLIBC_LICENSE_FILES = $(addprefix $(GLIBC_SRC_SUBDIR)/,COPYING COPYING.LIB LICEN
+ 
+ # Before (e)glibc is configured, we must have the first stage
+ # cross-compiler and the kernel headers
+-GLIBC_DEPENDENCIES = host-gcc-initial linux-headers
+-
+-# eglibc also needs host-gawk
+-ifeq ($(BR2_TOOLCHAIN_BUILDROOT_EGLIBC),y)
+-GLIBC_DEPENDENCIES += host-gawk
+-endif
++GLIBC_DEPENDENCIES = host-gcc-initial linux-headers host-gawk
+ 
+ # Before (e)glibc is built, we must have the second stage cross-compiler
+ glibc-build: host-gcc-intermediate
