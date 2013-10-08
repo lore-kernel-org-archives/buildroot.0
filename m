@@ -1,32 +1,46 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 8 Oct 2013 22:39:21 +0200
-Subject: [Buildroot] [git commit] netatalk: add license info
-Message-ID: <20131008204238.A195A9B989@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 08 Oct 2013 22:54:25 +0200
+Subject: [Buildroot] [PATCH] lvm2: bump to version 2.02.103 and add
+	license information
+In-Reply-To: <1381195908.12897.2.camel@phoenix> (Axel Lin's message of "Tue,
+ 08 Oct 2013 09:31:48 +0800")
+References: <1381195908.12897.2.camel@phoenix>
+Message-ID: <87a9ij5vr2.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=fa4e3d5e602beb776037f94a6b9efcf74c3a0632
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Axel" == Axel Lin <axel.lin@ingics.com> writes:
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/netatalk/netatalk.mk |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+ Axel> Signed-off-by: Axel Lin <axel.lin@ingics.com>
+ Axel> ---
+ Axel>  package/lvm2/lvm2.mk | 4 +++-
+ Axel>  1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/package/netatalk/netatalk.mk b/package/netatalk/netatalk.mk
-index 5dab57d..2bd63ec 100644
---- a/package/netatalk/netatalk.mk
-+++ b/package/netatalk/netatalk.mk
-@@ -11,6 +11,8 @@ NETATALK_AUTORECONF = YES
- NETATALK_CONFIG_SCRIPTS = netatalk-config
- NETATALK_DEPENDENCIES = host-pkgconf openssl berkeleydb libgcrypt libgpg-error \
- 	libevent
-+NETATALK_LICENSE = GPLv2+, LGPLv3+, MIT-like
-+NETATALK_LICENSE_FILES = COPYING COPYRIGHT
+ Axel> diff --git a/package/lvm2/lvm2.mk b/package/lvm2/lvm2.mk
+ Axel> index 873216c..07c0d94 100644
+ Axel> --- a/package/lvm2/lvm2.mk
+ Axel> +++ b/package/lvm2/lvm2.mk
+ Axel> @@ -4,10 +4,12 @@
+ Axel>  #
+ Axel>  ################################################################################
  
- # Don't run ldconfig!
- NETATALK_CONF_ENV += CC="$(TARGET_CC) -std=gnu99" \
+ Axel> -LVM2_VERSION = 2.02.79
+ Axel> +LVM2_VERSION = 2.02.103
+ Axel>  LVM2_SOURCE = LVM2.$(LVM2_VERSION).tgz
+ Axel>  LVM2_SITE = ftp://sources.redhat.com/pub/lvm2/releases
+ Axel>  LVM2_INSTALL_STAGING = YES
+ Axel> +LVM2_LICENSE = GPLv2+ LGPLv2.1+
+ Axel> +LVM2_LICENSE_FILES = COPYING COPYING.LIB
+
+I see no hits of 'any later version' in any of the source files, and
+Debian also lists it without the +:
+
+http://ftp-master.metadata.debian.org/changelogs//main/l/lvm2/lvm2_2.02.95-7_copyright
+
+So I've dropped those and committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
