@@ -1,10 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 8 Oct 2013 10:13:27 +0200
-Subject: [Buildroot] [PATCH 1/1] libcap: fix static linking issue
-In-Reply-To: <420407879.8180852.1381219913546.JavaMail.root@openwide.fr>
-References: <20131006232954.71da4d75@skate>
- <420407879.8180852.1381219913546.JavaMail.root@openwide.fr>
-Message-ID: <20131008101327.5ee7cc9c@skate>
+Date: Tue, 8 Oct 2013 10:20:42 +0200
+Subject: [Buildroot] [PATCH 1/1] ngrep: fix static linking issue with
+ libpcre
+In-Reply-To: <93031320.8180859.1381219933227.JavaMail.root@openwide.fr>
+References: <52532B99.20204@mind.be>
+ <93031320.8180859.1381219933227.JavaMail.root@openwide.fr>
+Message-ID: <20131008102042.3a938439@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,25 +14,14 @@ To: buildroot@busybox.net
 
 Dear Romain Naour,
 
-On Tue, 8 Oct 2013 10:11:53 +0200 (CEST), Romain Naour wrote:
+On Tue, 8 Oct 2013 10:12:13 +0200 (CEST), Romain Naour wrote:
 
-> | > +ifeq ($(BR2_PREFER_STATIC_LIB),y)
-> | > +LIBCAP_LDFLAGS=-fPIC
-> | > +endif
-> | 
-> | This seems really weird, because normally, we would expect exactly
-> | the
-> | opposite: position independent code is needed for shared libraries,
-> | not
-> | for static libraries.
+> Also, Gentoo seems to have a patch for this problem.
+> http://ftp.eenet.ee/gentoo-portage/net-analyzer/ngrep/files/ngrep-1.45.patch
 > 
-> Ok, I'll take the problem from the beginning.
-> Sorry for that mistake.
+> Maybe just patch Makefile.in to add -lpcre beside -lpcap ?
 
-Note that I'm not sure about what I said, but having to build with
--fPIC in the static lib case seems really strange.
-
-Thanks!
+Or use pkg-config to get the proper list of libraries.
 
 Thomas
 -- 
