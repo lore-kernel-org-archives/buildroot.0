@@ -1,120 +1,121 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue,  8 Oct 2013 20:17:01 +0200
-Subject: [Buildroot] [PATCHv3 04/20] toolchain: introduce a virtual package
-In-Reply-To: <1381256237-27948-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1381256237-27948-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1381256237-27948-5-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Tue,  8 Oct 2013 20:16:57 +0200
+Subject: [Buildroot] [PATCHv3 00/20] Toolchain updates: package infra,
+	musl support, Linaro updates, glibc fixes
+Message-ID: <1381256237-27948-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This commit introduces a virtual package called 'toolchain', located
-in 'toolchain/toolchain', which simply depends on
-'toolchain-buildroot' or 'toolchain-external' depending on the
-selected toolchain backend.
+Hello,
 
-For now, toolchain-buildroot and toolchain-external are still manual
-make targets, but the following patches convert those backends to use
-the package infrastructure as well.
+Here is a new version of the toolchain fixes and updates. Careful
+review of patches 19 and 20 would be appreciated.
 
-In addition to this:
+Peter, the other patches (before 19 and 20) can be merged even if
+there is still ongoing discussion on patches 19 and 20.
 
- * The main Makefile is modified to always make BASE_TARGETS point to
-   this new toolchain virtual package.
+Changes since v2:
 
- * The main Makefile is changed to include all the toolchain/*/*.mk
-   files: the toolchain virtual package, and the toolchain-buildroot
-   and toolchain-external directories.
+ * Different order for the patches: the intrusive modification of the
+   package infrastructure to support package-based 'make
+   external-deps' is pushed at the end of the series, since it's most
+   likely to be the commit causing the biggest amount of
+   discussion/testing.
 
- * The dependency of the toolchain on prepare dirs and dependencies is
-   moved to the toolchain virtual package. It is moved as a
-   prerequisite of the "toolchain-source" rule to ensure that all
-   directories are prepared before we even start extracting the
-   toolchain.
+ * Two fixes for the internal glibc build logic have been added.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Acked-by: Luca Ceresoli <luca@lucaceresoli.net>
-Acked-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
----
- Makefile                         | 19 ++++---------------
- toolchain/toolchain/toolchain.mk | 18 ++++++++++++++++++
- 2 files changed, 22 insertions(+), 15 deletions(-)
+ * The helpers.mk is no longer moved into
+   toolchain/toolchain-external/. Even though moving it in this
+   location is not causing any problem, it is not very logical, since
+   it's also used by the package/glibc/glibc.mk file, part of the
+   internal toolchain backend.
+
+ * Some minor cleanup of the helpers.mk file.
+
+Changes since RFCv1:
+
+ * Remove remaining references to the Crosstool-NG backend in the
+   source code, noticed by Thomas De Schampheleire.
+
+ * Update the manual after Crosstool-NG backend removal
+
+ * Added Acked-by on the relevant patches.
+
+ * Ensure 'helpers.mk' is properly include from the right place after
+   being moved into toolchain-external. Noticed by Luca Ceresoli.
+
+ * Fixed a few typos in comments, noticed by Thomas De Schampheleire.
+
+ * Renamed <pkg>_SOURCE_ADDONS to <pkg>_EXTRA_DOWNLOADS as suggested
+   by Luca Ceresoli, and added documentation for this new variable in
+   the Buildroot manual.
+
+ * The support for musl-based external toolchains has been integrated
+   in this patch set, together with the fix for the hardcoded
+   ld-linux-arm.so problem that was noticed in the v1 of the musl
+   patch set.
+
+ * Updates for the Linaro ARM and AArch64 toolchains have been added.
+
+ * A fix for the Linaro ARM related bug #6452 has been added.
+
+Thanks,
+
+Thomas
+
+Thomas Petazzoni (20):
+  glibc: both eglibc and glibc need host-gawk
+  glibc: fix glibc build by creating an empty gnu/stubs.h
+  package: add a <pkg>_EXTRA_DOWNLOADS variable
+  toolchain: introduce a virtual package
+  toolchain-buildroot: convert to the package infrastructure
+  toolchain-external: convert to the package infrastructure
+  dependencies: remove useless targets
+  toolchain-external: conditionalize the installation of libraries
+  toolchain: modify the wildcard logic for shared libraries copying
+  toolchain: fix the helpers.mk comment
+  toolchain: do not check largefile, wchar, IPv6 and locale for glibc
+    toolchains
+  toolchain-external: add support for musl C library
+  toolchain-external: improve help text of some options
+  busybox: add patches to fix build with the musl C library
+  toolchain-external: update Linaro ARM toolchain
+  toolchain-external: update Linaro AArch64 toolchain
+  toolchain-external: improve target library copy logic
+  toolchain-external: fix Linaro ARM toolchain support
+  package: package-based implementation of source, external-deps and
+    legal-info
+  package: remove useless SHOW_EXTERNAL_DEPS support
+
+ Makefile                                           |  70 ++-----
+ docs/manual/adding-packages-generic.txt            |   6 +
+ ...01-libbb-use-poll.h-instead-of-sys-poll.h.patch |  32 +++
+ ...onfig-include-linux-if_slip.h-instead-of-.patch |  33 ++++
+ ...libiproute-use-linux-if_packet.h-instead-.patch |  36 ++++
+ package/glibc/glibc.mk                             |  27 ++-
+ package/pkg-download.mk                            |  44 +----
+ package/pkg-generic.mk                             |  22 ++-
+ support/dependencies/dependencies.mk               |   8 -
+ toolchain/Config.in                                |   9 +
+ toolchain/helpers.mk                               |  46 +++--
+ toolchain/toolchain-buildroot.mk                   |   9 -
+ .../toolchain-buildroot/toolchain-buildroot.mk     |  17 ++
+ toolchain/toolchain-external.mk                    |   4 -
+ toolchain/toolchain-external/Config.in             |  61 ++++--
+ .../{ext-tool.mk => toolchain-external.mk}         | 220 +++++++++++----------
+ toolchain/toolchain/toolchain.mk                   |  18 ++
+ 17 files changed, 391 insertions(+), 271 deletions(-)
+ create mode 100644 package/busybox/1.21.1/0001-libbb-use-poll.h-instead-of-sys-poll.h.patch
+ create mode 100644 package/busybox/1.21.1/0002-network-ifconfig-include-linux-if_slip.h-instead-of-.patch
+ create mode 100644 package/busybox/1.21.1/0003-networking-libiproute-use-linux-if_packet.h-instead-.patch
+ delete mode 100644 toolchain/toolchain-buildroot.mk
+ create mode 100644 toolchain/toolchain-buildroot/toolchain-buildroot.mk
+ delete mode 100644 toolchain/toolchain-external.mk
+ rename toolchain/toolchain-external/{ext-tool.mk => toolchain-external.mk} (82%)
  create mode 100644 toolchain/toolchain/toolchain.mk
 
-diff --git a/Makefile b/Makefile
-index 2fb1168..f266e2d 100644
---- a/Makefile
-+++ b/Makefile
-@@ -236,11 +236,7 @@ GNU_HOST_NAME:=$(shell support/gnuconfig/config.guess)
- #
- ################################################################################
- 
--ifeq ($(BR2_TOOLCHAIN_BUILDROOT),y)
--BASE_TARGETS += toolchain-buildroot
--else ifeq ($(BR2_TOOLCHAIN_EXTERNAL),y)
--BASE_TARGETS += toolchain-external
--endif
-+BASE_TARGETS = toolchain
- 
- TARGETS:=
- 
-@@ -317,11 +313,8 @@ include support/dependencies/dependencies.mk
- # We also need the various per-package makefiles, which also add
- # each selected package to TARGETS if that package was selected
- # in the .config file.
--ifeq ($(BR2_TOOLCHAIN_BUILDROOT),y)
--include toolchain/toolchain-buildroot.mk
--else ifeq ($(BR2_TOOLCHAIN_EXTERNAL),y)
--include toolchain/toolchain-external.mk
--endif
-+include toolchain/helpers.mk
-+include toolchain/*/*.mk
- 
- # Include the package override file if one has been provided in the
- # configuration.
-@@ -388,16 +381,12 @@ $(TARGETS_ALL): __real_tgt_%: $(BASE_TARGETS) %
- dirs: $(BUILD_DIR) $(STAGING_DIR) $(TARGET_DIR) \
- 	$(HOST_DIR) $(BINARIES_DIR) $(STAMP_DIR)
- 
--$(BASE_TARGETS): dirs $(HOST_DIR)/usr/share/buildroot/toolchainfile.cmake
--
- $(BUILD_DIR)/buildroot-config/auto.conf: $(BUILDROOT_CONFIG)
- 	$(MAKE) $(EXTRAMAKEARGS) HOSTCC="$(HOSTCC_NOCCACHE)" HOSTCXX="$(HOSTCXX_NOCCACHE)" silentoldconfig
- 
- prepare: $(BUILD_DIR)/buildroot-config/auto.conf
- 
--toolchain: prepare dirs dependencies $(BASE_TARGETS)
--
--world: toolchain $(TARGETS_ALL)
-+world: $(BASE_TARGETS) $(TARGETS_ALL)
- 
- .PHONY: all world toolchain dirs clean distclean source outputmakefile \
- 	legal-info legal-info-prepare legal-info-clean printvars \
-diff --git a/toolchain/toolchain/toolchain.mk b/toolchain/toolchain/toolchain.mk
-new file mode 100644
-index 0000000..44ed629
---- /dev/null
-+++ b/toolchain/toolchain/toolchain.mk
-@@ -0,0 +1,18 @@
-+################################################################################
-+#
-+# toolchain
-+#
-+################################################################################
-+
-+TOOLCHAIN_SOURCE =
-+
-+ifeq ($(BR2_TOOLCHAIN_BUILDROOT),y)
-+TOOLCHAIN_DEPENDENCIES += toolchain-buildroot
-+else ifeq ($(BR2_TOOLCHAIN_EXTERNAL),y)
-+TOOLCHAIN_DEPENDENCIES += toolchain-external
-+endif
-+
-+$(eval $(generic-package))
-+
-+toolchain-source: prepare dirs dependencies $(HOST_DIR)/usr/share/buildroot/toolchainfile.cmake
-+
 -- 
 1.8.1.2
