@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed,  9 Oct 2013 00:09:54 +0200
-Subject: [Buildroot] [PATCH 08/11] package/weston: introduce infrastructure
-	to select other compositors
+Date: Wed,  9 Oct 2013 00:09:53 +0200
+Subject: [Buildroot] [PATCH 07/11] package/weston: fix configure.ac for
+	fbdev compositor
 In-Reply-To: <cover.1381269937.git.yann.morin.1998@free.fr>
 References: <cover.1381269937.git.yann.morin.1998@free.fr>
-Message-ID: <39c150aaaafda146089fa861569c11a84d6c90b7.1381269937.git.yann.morin.1998@free.fr>
+Message-ID: <2747e5e41d1b23999d19589ccc3dd589d2f1ee2b.1381269937.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,40 +13,41 @@ To: buildroot@busybox.net
 
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
+Apply patch from upstream.
+
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/weston/Config.in | 11 +++++++++--
- 1 file changed, 9 insertions(+), 2 deletions(-)
+ ...ompositor-fbdev-drop-dependency-on-libdrm.patch | 22 ++++++++++++++++++++++
+ 1 file changed, 22 insertions(+)
+ create mode 100644 package/weston/weston-0003-compositor-fbdev-drop-dependency-on-libdrm.patch
 
-diff --git a/package/weston/Config.in b/package/weston/Config.in
-index 56eb135..0f168ac 100644
---- a/package/weston/Config.in
-+++ b/package/weston/Config.in
-@@ -14,8 +14,6 @@ config BR2_PACKAGE_WESTON
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # wayland
- 	# Runtime dependency
- 	select BR2_PACKAGE_XKEYBOARD_CONFIG
--	# Make sure at least one backend is selected
--	select BR2_PACKAGE_WESTON_FBDEV
- 	help
- 	  Weston is the reference implementation of a Wayland
- 	  compositor, and a useful compositor in its own right.
-@@ -26,7 +24,16 @@ config BR2_PACKAGE_WESTON
- 
- if BR2_PACKAGE_WESTON
- 
-+# These two options make sure at least one compositor is selected.
-+config BR2_PACKAGE_WESTON_HAS_COMPOSITOR
-+	bool
-+config BR2_PACKAGE_WESTON_NEEDS_ONE_COMPOSITOR
-+	def_bool y
-+	depends on ! BR2_PACKAGE_WESTON_HAS_COMPOSITOR
-+	select BR2_PACKAGE_WESTON_FBDEV
+diff --git a/package/weston/weston-0003-compositor-fbdev-drop-dependency-on-libdrm.patch b/package/weston/weston-0003-compositor-fbdev-drop-dependency-on-libdrm.patch
+new file mode 100644
+index 0000000..dfc20de
+--- /dev/null
++++ b/package/weston/weston-0003-compositor-fbdev-drop-dependency-on-libdrm.patch
+@@ -0,0 +1,22 @@
++commit 7b8e970ad1f1ef96db23b379a41edeb40ef1e8b6
++Author: Adrian Negreanu <adrian.m.negreanu@intel.com>
++Date:   Thu Sep 26 19:31:32 2013 +0300
 +
- config BR2_PACKAGE_WESTON_FBDEV
- 	bool "fbdev compositor"
-+	default y
- 
- endif
++    compositor-fbdev: drop dependency on libdrm
++    
++    Signed-off-by: Adrian Negreanu <adrian.m.negreanu@intel.com>
++    Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
++
++diff --git a/configure.ac b/configure.ac
++index 7c2da44..a43bf5b 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -190,7 +190,7 @@ AM_CONDITIONAL([ENABLE_FBDEV_COMPOSITOR],
++                [test x$enable_fbdev_compositor = xyes])
++ AS_IF([test x$enable_fbdev_compositor = xyes], [
++   AC_DEFINE([BUILD_FBDEV_COMPOSITOR], [1], [Build the fbdev compositor])
++-  PKG_CHECK_MODULES([FBDEV_COMPOSITOR], [libudev >= 136 mtdev >= 1.1.0 libdrm >= 2.4.30])
+++  PKG_CHECK_MODULES([FBDEV_COMPOSITOR], [libudev >= 136 mtdev >= 1.1.0])
++ ])
++ 
++ AC_ARG_ENABLE([rdp-compositor], [  --enable-rdp-compositor],,
 -- 
 1.8.1.2
