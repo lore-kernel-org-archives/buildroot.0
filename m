@@ -1,92 +1,71 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue,  8 Oct 2013 20:17:13 +0200
-Subject: [Buildroot] [PATCHv3 16/20] toolchain-external: update Linaro
-	AArch64 toolchain
+Date: Tue,  8 Oct 2013 20:17:05 +0200
+Subject: [Buildroot] [PATCHv3 08/20] toolchain-external: conditionalize the
+	installation of libraries
 In-Reply-To: <1381256237-27948-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1381256237-27948-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1381256237-27948-17-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1381256237-27948-9-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+The external toolchain code makes the assumption that all C libraries
+have a ld*.so, libc.so, libcrypt.so, libdl.so, libgcc_s.so, libm.so,
+libnsl.so, libresolv.so, libutil.so, and when thread support is
+enabled, libpthread.so, etc.
+
+However, this is not the case with the musl C library, which
+integrates all the functionalities in a single libc.so file. In
+preparation of the support of the musl library, we make the current
+value of LIB_EXTERNAL_LIBS conditional to glibc or uClibc.
+
+The addition of additional libraries through
+BR2_TOOLCHAIN_EXTRA_EXTERNAL_LIBS is kept outside the condition, at
+the end.
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- toolchain/toolchain-external/Config.in             | 14 +++++++-------
- toolchain/toolchain-external/toolchain-external.mk |  6 +++---
- 2 files changed, 10 insertions(+), 10 deletions(-)
+ toolchain/toolchain-external/toolchain-external.mk | 19 +++++++++++--------
+ 1 file changed, 11 insertions(+), 8 deletions(-)
 
-diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-index ecfe17c..0d42041 100644
---- a/toolchain/toolchain-external/Config.in
-+++ b/toolchain/toolchain-external/Config.in
-@@ -730,8 +730,8 @@ config BR2_TOOLCHAIN_EXTERNAL_XILINX_MICROBLAZEBE_V2
- 	  Toolchain for the Microblaze architecture, from
- 	  http://wiki.xilinx.com/mb-gnu-tools
- 
--config BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64_13_08
--	bool "Linaro AArch64 13.08"
-+config BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64_13_09
-+	bool "Linaro AArch64 13.09"
- 	depends on BR2_aarch64
- 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
- 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
-@@ -742,8 +742,8 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64_13_08
- 	  Toolchain for the AArch64 architecture, from
- 	  http://www.linaro.org/engineering/armv8/
- 
--config BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64_13_07
--	bool "Linaro AArch64 13.07"
-+config BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64_13_08
-+	bool "Linaro AArch64 13.08"
- 	depends on BR2_aarch64
- 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
- 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
-@@ -754,8 +754,8 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64_13_07
- 	  Toolchain for the AArch64 architecture, from
- 	  http://www.linaro.org/engineering/armv8/
- 
--config BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64_13_06
--	bool "Linaro AArch64 13.04"
-+config BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64_13_07
-+	bool "Linaro AArch64 13.07"
- 	depends on BR2_aarch64
- 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
- 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
-@@ -824,9 +824,9 @@ config BR2_TOOLCHAIN_EXTERNAL_PREFIX
- 	default "arm-none-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201305
- 	default "arm-arago-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_ARAGO_ARMV7A_201109
- 	default "arm-arago-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_ARAGO_ARMV5TE_201109
-+	default "aarch64-linux-gnu"      if BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64_13_09
- 	default "aarch64-linux-gnu"      if BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64_13_08
- 	default "aarch64-linux-gnu"      if BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64_13_07
--	default "aarch64-linux-gnu"      if BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64_13_06
- 	default "microblazeel-unknown-linux-gnu" if BR2_TOOLCHAIN_EXTERNAL_XILINX_MICROBLAZEEL_14_3
- 	default "microblazeel-unknown-linux-gnu" if BR2_TOOLCHAIN_EXTERNAL_XILINX_MICROBLAZEEL_V2
- 	default "microblaze-unknown-linux-gnu" if BR2_TOOLCHAIN_EXTERNAL_XILINX_MICROBLAZEBE_14_3
 diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
-index e38ee48..73a761b 100644
+index 85fc341..aaf4994 100644
 --- a/toolchain/toolchain-external/toolchain-external.mk
 +++ b/toolchain/toolchain-external/toolchain-external.mk
-@@ -310,15 +310,15 @@ TOOLCHAIN_EXTERNAL_SOURCE = lin32-microblaze-unknown-linux-gnu_14.3_early.tar.xz
- else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_XILINX_MICROBLAZEBE_V2),y)
- TOOLCHAIN_EXTERNAL_SITE = http://sources.buildroot.net/
- TOOLCHAIN_EXTERNAL_SOURCE = microblaze-unknown-linux-gnu.tgz
--else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64_13_06),y)
--TOOLCHAIN_EXTERNAL_SITE = https://releases.linaro.org/13.06/components/toolchain/binaries/
--TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-aarch64-linux-gnu-4.8-2013.06_linux.tar.xz
- else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64_13_07),y)
- TOOLCHAIN_EXTERNAL_SITE = http://releases.linaro.org/13.07/components/toolchain/binaries/
- TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-aarch64-linux-gnu-4.8-2013.07-1_linux.tar.xz
- else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64_13_08),y)
- TOOLCHAIN_EXTERNAL_SITE = http://releases.linaro.org/13.08/components/toolchain/binaries/
- TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-aarch64-linux-gnu-4.8-2013.08_linux.tar.xz
-+else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64_13_09),y)
-+TOOLCHAIN_EXTERNAL_SITE = http://releases.linaro.org/13.09/components/toolchain/binaries/
-+TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-aarch64-linux-gnu-4.8-2013.09_linux.tar.xz
- else
- # Custom toolchain
- TOOLCHAIN_EXTERNAL_SITE = $(dir $(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_URL)))
+@@ -54,8 +54,16 @@
+ #  $(HOST_DIR)/usr/bin like for the internal toolchains, and the rest
+ #  of Buildroot is handled identical for the 2 toolchain types.
+ 
+-LIB_EXTERNAL_LIBS=ld*.so libc.so libcrypt.so libdl.so libgcc_s.so libm.so libnsl.so libresolv.so librt.so libutil.so
+-LIB_EXTERNAL_LIBS+=$(call qstrip,$(BR2_TOOLCHAIN_EXTRA_EXTERNAL_LIBS))
++ifeq ($(BR2_TOOLCHAIN_EXTERNAL_GLIBC)$(BR2_TOOLCHAIN_EXTERNAL_UCLIBC),y)
++LIB_EXTERNAL_LIBS+=ld*.so libc.so libcrypt.so libdl.so libgcc_s.so libm.so libnsl.so libresolv.so librt.so libutil.so
++ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
++LIB_EXTERNAL_LIBS+=libpthread.so
++ifneq ($(BR2_PACKAGE_GDB_SERVER)$(BR2_TOOLCHAIN_EXTERNAL_GDB_SERVER_COPY),)
++LIB_EXTERNAL_LIBS+=libthread_db.so
++endif # gdbserver
++endif # ! no threads
++endif
++
+ ifeq ($(BR2_TOOLCHAIN_EXTERNAL_GLIBC),y)
+ LIB_EXTERNAL_LIBS+=libnss_files.so libnss_dns.so
+ endif
+@@ -64,12 +72,7 @@ ifeq ($(BR2_INSTALL_LIBSTDCPP),y)
+ USR_LIB_EXTERNAL_LIBS+=libstdc++.so
+ endif
+ 
+-ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
+-LIB_EXTERNAL_LIBS+=libpthread.so
+-ifneq ($(BR2_PACKAGE_GDB_SERVER)$(BR2_TOOLCHAIN_EXTERNAL_GDB_SERVER_COPY),)
+-LIB_EXTERNAL_LIBS+=libthread_db.so
+-endif # gdbserver
+-endif # ! no threads
++LIB_EXTERNAL_LIBS+=$(call qstrip,$(BR2_TOOLCHAIN_EXTRA_EXTERNAL_LIBS))
+ 
+ # Details about sysroot directory selection.
+ #
 -- 
 1.8.1.2
