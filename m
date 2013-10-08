@@ -1,51 +1,31 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 08 Oct 2013 18:47:37 +0200
-Subject: [Buildroot] [PATCH] pkg-infra: log current message
-In-Reply-To: <20131007191905.7715dd69@skate>
-References: <1381058388-24055-1-git-send-email-yann.morin.1998@free.fr>
- <30033387.d25L1SpIx8@sagittae> <20131007140733.173904b6@skate>
- <20131007164829.GB9561@free.fr> <20131007165956.GE9561@free.fr>
- <20131007191905.7715dd69@skate>
-Message-ID: <52543729.2010809@mind.be>
+Date: Tue, 08 Oct 2013 19:41:51 +0200
+Subject: [Buildroot] [PATCH 1/1] ngrep: fix static linking issue with
+ libpcre
+In-Reply-To: <20131008102042.3a938439@skate>
+References: <52532B99.20204@mind.be>
+ <93031320.8180859.1381219933227.JavaMail.root@openwide.fr>
+ <20131008102042.3a938439@skate>
+Message-ID: <525443DF.2090809@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 10/07/13 19:19, Thomas Petazzoni wrote:
-> Dear Yann E. MORIN,
+On 10/08/13 10:20, Thomas Petazzoni wrote:
+> Dear Romain Naour,
 >
-> On Mon, 7 Oct 2013 18:59:56 +0200, Yann E. MORIN wrote:
+> On Tue, 8 Oct 2013 10:12:13 +0200 (CEST), Romain Naour wrote:
 >
->>> It would then be the responsibility of the user to provide such a
->>> script. We could provide a simple script that just do this logging as an
->>> example.
+>> Also, Gentoo seems to have a patch for this problem.
+>> http://ftp.eenet.ee/gentoo-portage/net-analyzer/ngrep/files/ngrep-1.45.patch
 >>
->> I have another interesting idea about such a script: detect whether a
->> package overwrites or otherwise modifies a file already existing in
->> staging/ and/or target/ to assess for the sanity of the packaging.
+>> Maybe just patch Makefile.in to add -lpcre beside -lpcap ?
 >
-> I believe there are cases where we are doing this today, and where it
-> is valid. Think for example the full-blown versions of some commands
-> that overwrite the symbolic link installed by Busybox.
->
->> We could also add another sanity-check to look at build issues (eg.
->> build-path in RPATH, build-path in scripts...).
->
-> Right! However, I don't see why those checks should be in some external
-> scripts that the user should install. I believe those checks should be
-> part of the Buildroot core, possibly with a Config.in option to decide
-> whether a check failure should result to a global build failure or just
-> a warning (default value would be a warning, a global build failure
-> could be used in the autobuilders, for example).
+> Or use pkg-config to get the proper list of libraries.
 
-  I agree with that. Any check or whatever that makes life easier for a 
-contributor should be part of the mainline.
-
-  That said, it still makes sense to give the possibility to add custom 
-pre/post hooks. And autobuilder-specific things that are _not_ relevant 
-to the generic contributor would fit there.
+  If upstream is dead, that's a bit pointless, no?
 
   Regards,
   Arnout
