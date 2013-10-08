@@ -1,52 +1,56 @@
-From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Tue,  8 Oct 2013 09:11:55 +0200
-Subject: [Buildroot] [PATCH] libsoc: bump to 0.4
-Message-ID: <1381216315-14838-1-git-send-email-yegorslists@googlemail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 8 Oct 2013 09:15:46 +0200
+Subject: [Buildroot] [PATCH 2/2] stress: add license information
+In-Reply-To: <1381200417.18302.3.camel@phoenix>
+References: <1381200229.18302.0.camel@phoenix>
+ <1381200417.18302.3.camel@phoenix>
+Message-ID: <20131008091546.69d58892@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Yegor Yefremov <yegorslists@googlemail.com>
+Dear Axel Lin,
 
-"Non-blocking GPIO Interrupts with callback mechanism" feature
-requires pthreads.
+On Tue, 08 Oct 2013 10:46:57 +0800, Axel Lin wrote:
+> Signed-off-by: Axel Lin <axel.lin@ingics.com>
+> ---
+>  package/stress/stress.mk | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/package/stress/stress.mk b/package/stress/stress.mk
+> index 6e82b50..387166d 100644
+> --- a/package/stress/stress.mk
+> +++ b/package/stress/stress.mk
+> @@ -6,6 +6,8 @@
+>  
+>  STRESS_VERSION = 1.0.4
+>  STRESS_SITE = http://people.seas.harvard.edu/~apw/stress
+> +STRESS_LICENSE = GPLv3+
+> +STRESS_LICENSE_FILES = COPYING
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
----
- package/libsoc/Config.in |    4 ++++
- package/libsoc/libsoc.mk |    2 +-
- 2 files changed, 5 insertions(+), 1 deletions(-)
+Hum, the situation is a bit weird:
 
-diff --git a/package/libsoc/Config.in b/package/libsoc/Config.in
-index 3e750bd..0f6336d 100644
---- a/package/libsoc/Config.in
-+++ b/package/libsoc/Config.in
-@@ -1,7 +1,11 @@
- config BR2_PACKAGE_LIBSOC
- 	bool "libsoc"
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	help
- 	  libsoc is a C library for interfacing with common SoC
- 	  peripherals through generic kernel interfaces
- 
- 	  https://github.com/jackmitch/libsoc
-+
-+comment "libsoc requires a toolchain with threads support"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/libsoc/libsoc.mk b/package/libsoc/libsoc.mk
-index 509d8eb..79c7e90 100644
---- a/package/libsoc/libsoc.mk
-+++ b/package/libsoc/libsoc.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBSOC_VERSION = 356760dcb93b22d6c67c5232cde2ade8c968c932
-+LIBSOC_VERSION = 0.4
- LIBSOC_SITE = http://github.com/jackmitch/libsoc/tarball/$(LIBSOC_VERSION)
- LIBSOC_LICENSE = LGPLv2.1
- LIBSOC_LICENSE_FILES = COPYING
+ * The homepage of the project states " It is written in C, and is free
+   software licensed under the GPLv2."
+
+ * The tarball contains a COPYING file which is a copy of the GPLv3.
+
+ * The source code itself contains the mention:
+
+     This program is free software; you can redistribute it and/or
+     modify it under the terms of the GNU General Public License as
+     published by the Free Software Foundation; either version 2 of the
+     License, or (at your option) any later version.
+
+So in the end, it's hard to decide whether it's GPLv2+ or GPLv3+. Maybe
+you could contact the author of 'stress' and clarify the situation?
+
+Best regards,
+
+Thomas
 -- 
-1.7.7
+Thomas Petazzoni, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
