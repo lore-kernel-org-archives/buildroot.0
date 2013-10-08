@@ -1,36 +1,38 @@
-From: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
-Date: Tue,  8 Oct 2013 23:27:17 +0200
-Subject: [Buildroot] [PATCH 1/1] xlib_libpthread-stubs: needs thread support
-Message-ID: <1381267637-3957-1-git-send-email-jerzy.grzegorek@trzebnica.net>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 08 Oct 2013 23:32:16 +0200
+Subject: [Buildroot] [PATCHv3 03/20] package: add a
+	<pkg>_EXTRA_DOWNLOADS variable
+In-Reply-To: <1381256237-27948-4-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Tue, 8 Oct 2013 20:17:00 +0200")
+References: <1381256237-27948-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1381256237-27948-4-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <87wqln4ffj.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-  http://autobuild.buildroot.org/results/609/6099baac4bb469ae18aab6512233db25183eaabd/
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
----
- package/x11r7/xlib_libpthread-stubs/Config.in |    4 ++++
- 1 file changed, 4 insertions(+)
+ Thomas> Converting the external toolchain logic into a package raises a very
+ Thomas> special use case that wasn't handled by the package infrastructure:
+ Thomas> the Blackfin toolchain is delivered as two tarballs instead of
+ Thomas> one. Unfortunately <pkg>_SOURCE only allows to pass one tarball name.
 
-diff --git a/package/x11r7/xlib_libpthread-stubs/Config.in b/package/x11r7/xlib_libpthread-stubs/Config.in
-index fb53585..b2df95a 100644
---- a/package/x11r7/xlib_libpthread-stubs/Config.in
-+++ b/package/x11r7/xlib_libpthread-stubs/Config.in
-@@ -1,7 +1,11 @@
- config BR2_PACKAGE_XLIB_LIBPTHREAD_STUBS
- 	bool "libpthread-stubs"
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	help
- 	  This library provides weak aliases for pthread functions not
- 	  provided in libc or otherwise available by default.
- 
- 	  http://xcb.freedesktop.org/
-+
-+comment "xlib_libpthread-stubs needs a toolchain with thread support"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS
+ Thomas> However, we really want both tarballs to be known by the package
+ Thomas> infrastructure, so that the normal 'source' and 'external-deps'
+ Thomas> mechanism work fine.
+
+ Thomas> In order to achieve this, we add a <pkg>_EXTRA_DOWNLOADS variable,
+ Thomas> which allows a package to list other stuff it would like to see
+ Thomas> downloaded, but that are otherwise not used by the package
+ Thomas> infrastructure itself: it is up to the package to do it by itself.
+
+I think it should be possible to support a space seperated list of
+sources in <pkg>_SOURCE, similar to how we do it for <pkg>_PATCH without
+breaking backwards compatibility, but I won't delay this series because
+of it - So committed, thanks.
+
 -- 
-1.7.9.5
+Bye, Peter Korsgaard
