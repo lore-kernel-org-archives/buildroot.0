@@ -1,39 +1,36 @@
 From: Axel Lin <axel.lin@ingics.com>
-Date: Tue, 08 Oct 2013 09:08:21 +0800
-Subject: [Buildroot] [PATCH] icu: needs threads
-Message-ID: <1381194501.18210.0.camel@phoenix>
+Date: Tue, 08 Oct 2013 09:31:48 +0800
+Subject: [Buildroot] [PATCH] lvm2: bump to version 2.02.103 and add license
+	information
+Message-ID: <1381195908.12897.2.camel@phoenix>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-http://autobuild.buildroot.net/results/ae7/ae721db2dd4e764a2af3825c388a63cad9720ebe/
-
 Signed-off-by: Axel Lin <axel.lin@ingics.com>
 ---
- package/icu/Config.in | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ package/lvm2/lvm2.mk | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/package/icu/Config.in b/package/icu/Config.in
-index 21f5c2f..d4f4207 100644
---- a/package/icu/Config.in
-+++ b/package/icu/Config.in
-@@ -2,10 +2,12 @@ config BR2_PACKAGE_ICU
- 	bool "icu"
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_USE_WCHAR
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	help
- 	  International Components for Unicode.
+diff --git a/package/lvm2/lvm2.mk b/package/lvm2/lvm2.mk
+index 873216c..07c0d94 100644
+--- a/package/lvm2/lvm2.mk
++++ b/package/lvm2/lvm2.mk
+@@ -4,10 +4,12 @@
+ #
+ ################################################################################
  
- 	  http://site.icu-project.org/
+-LVM2_VERSION = 2.02.79
++LVM2_VERSION = 2.02.103
+ LVM2_SOURCE = LVM2.$(LVM2_VERSION).tgz
+ LVM2_SITE = ftp://sources.redhat.com/pub/lvm2/releases
+ LVM2_INSTALL_STAGING = YES
++LVM2_LICENSE = GPLv2+ LGPLv2.1+
++LVM2_LICENSE_FILES = COPYING COPYING.LIB
  
--comment "icu requires a toolchain with C++ support and WCHAR enabled"
--	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR
-+comment "icu requires a toolchain with C++, WCHAR and threading support"
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
-+		!BR2_TOOLCHAIN_HAS_THREADS
+ LVM2_BINS = \
+ 	dmsetup fsadm lvm lvmconf lvmdump vgimportclone \
 -- 
 1.8.1.2
