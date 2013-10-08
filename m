@@ -1,9 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed,  9 Oct 2013 00:09:50 +0200
-Subject: [Buildroot] [PATCH 04/11] package/wayland: bump version
+Date: Wed,  9 Oct 2013 00:09:51 +0200
+Subject: [Buildroot] [PATCH 05/11] package/weston: bump version
 In-Reply-To: <cover.1381269937.git.yann.morin.1998@free.fr>
 References: <cover.1381269937.git.yann.morin.1998@free.fr>
-Message-ID: <364d40f2083b9506747960ae699bf495202ef20e.1381269937.git.yann.morin.1998@free.fr>
+Message-ID: <b7adbed0949ae5e69119fe9ebc9acb3c7d4f0170.1381269937.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,21 +14,21 @@ From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/wayland/wayland.mk | 2 +-
+ package/weston/weston.mk | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/wayland/wayland.mk b/package/wayland/wayland.mk
-index b5fe94d..0810536 100644
---- a/package/wayland/wayland.mk
-+++ b/package/wayland/wayland.mk
+diff --git a/package/weston/weston.mk b/package/weston/weston.mk
+index 38647bd..990fb04 100644
+--- a/package/weston/weston.mk
++++ b/package/weston/weston.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--WAYLAND_VERSION = 1.1.0
-+WAYLAND_VERSION = 1.2.1
- WAYLAND_SITE = http://wayland.freedesktop.org/releases/
- WAYLAND_SOURCE = wayland-$(WAYLAND_VERSION).tar.xz
- WAYLAND_LICENSE = MIT
+-WESTON_VERSION = 1.1.0
++WESTON_VERSION = 1.2.2
+ WESTON_SITE = http://wayland.freedesktop.org/releases/
+ WESTON_SOURCE = weston-$(WESTON_VERSION).tar.xz
+ WESTON_LICENSE = MIT
 -- 
 1.8.1.2
