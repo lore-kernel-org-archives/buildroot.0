@@ -1,33 +1,28 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 8 Oct 2013 15:26:26 +0200
-Subject: [Buildroot] [PATCH] Fix compilation of busybox 1.21.1
-In-Reply-To: <1381238186-24937-1-git-send-email-jezz@sysmic.org>
-References: <1381238186-24937-1-git-send-email-jezz@sysmic.org>
-Message-ID: <20131008152626.7217c920@skate>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Tue, 08 Oct 2013 15:49:25 +0200
+Subject: [Buildroot] [PATCH] conntrack-tools: correct license GPLv2 -> GPLv2+
+Message-ID: <59413208037947d31c30.1381240165@argentina>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear J?r?me Pouiller,
+Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
-On Tue,  8 Oct 2013 15:16:26 +0200, J?r?me Pouiller wrote:
-> It seems patches previously applied on busybox 1.20.2 are also needed
-> for version 1.21.1.
-> 
-> Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
-> ---  
->  .../busybox/1.21.1/busybox-1.21.1-kernel_ver.patch |   25 ++++
->  package/busybox/1.21.1/busybox-1.21.1-ntpd.patch   |   11 ++
+---
+ package/conntrack-tools/conntrack-tools.mk |  2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-Those two patches lack the description + Signed-off-by.
-
-The first patch is 556ac3633ce3e7bd51c93b78827ae3874d856257 upstream,
-and the second patch is b7841cf7b919b16d1bd4619154bf7cb4c22b4ccd.
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/conntrack-tools/conntrack-tools.mk b/package/conntrack-tools/conntrack-tools.mk
+--- a/package/conntrack-tools/conntrack-tools.mk
++++ b/package/conntrack-tools/conntrack-tools.mk
+@@ -10,7 +10,7 @@ CONNTRACK_TOOLS_SITE = http://www.netfil
+ CONNTRACK_TOOLS_DEPENDENCIES = host-pkgconf \
+ 	libnetfilter_conntrack libnetfilter_cthelper libnetfilter_cttimeout \
+ 	libnetfilter_queue host-bison host-flex
+-CONNTRACK_TOOLS_LICENSE = GPLv2
++CONNTRACK_TOOLS_LICENSE = GPLv2+
+ CONNTRACK_TOOLS_LICENSE_FILES = COPYING
+ 
+ ifeq ($(BR2_PACKAGE_LIBTIRPC),y)
