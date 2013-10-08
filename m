@@ -1,146 +1,162 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue,  8 Oct 2013 20:17:11 +0200
-Subject: [Buildroot] [PATCHv3 14/20] busybox: add patches to fix build with
-	the musl C library
+Date: Tue,  8 Oct 2013 20:17:09 +0200
+Subject: [Buildroot] [PATCHv3 12/20] toolchain-external: add support for
+	musl C library
 In-Reply-To: <1381256237-27948-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1381256237-27948-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1381256237-27948-15-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1381256237-27948-13-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Those patches have been submitted upstream.
+This commit adds support for external toolchains based on the musl C
+library, as available from http://www.musl-libc.org.
+
+Note that the pre-built musl toolchains available from
+http://musl.codu.org/ are not working for the moment, since they lack
+sysroot support. However, this problem has been reported to the
+maintainer, who has already added sysroot support in his scripts at
+https://bitbucket.org/GregorR/musl-cross, and therefore the next
+version of the pre-built toolchains should work with Buildroot
+out-of-the-box. In the mean time, the musl-cross script must be used
+to build the toolchain.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- ...01-libbb-use-poll.h-instead-of-sys-poll.h.patch | 32 +++++++++++++++++++
- ...onfig-include-linux-if_slip.h-instead-of-.patch | 33 ++++++++++++++++++++
- ...libiproute-use-linux-if_packet.h-instead-.patch | 36 ++++++++++++++++++++++
- 3 files changed, 101 insertions(+)
- create mode 100644 package/busybox/1.21.1/0001-libbb-use-poll.h-instead-of-sys-poll.h.patch
- create mode 100644 package/busybox/1.21.1/0002-network-ifconfig-include-linux-if_slip.h-instead-of-.patch
- create mode 100644 package/busybox/1.21.1/0003-networking-libiproute-use-linux-if_packet.h-instead-.patch
+ toolchain/Config.in                                |  9 +++++++++
+ toolchain/helpers.mk                               | 11 +++++++++++
+ toolchain/toolchain-external/Config.in             | 12 ++++++++++++
+ toolchain/toolchain-external/toolchain-external.mk | 18 +++++++++++++++++-
+ 4 files changed, 49 insertions(+), 1 deletion(-)
 
-diff --git a/package/busybox/1.21.1/0001-libbb-use-poll.h-instead-of-sys-poll.h.patch b/package/busybox/1.21.1/0001-libbb-use-poll.h-instead-of-sys-poll.h.patch
-new file mode 100644
-index 0000000..089d858
---- /dev/null
-+++ b/package/busybox/1.21.1/0001-libbb-use-poll.h-instead-of-sys-poll.h.patch
-@@ -0,0 +1,32 @@
-+From 676452a92d1fc4f85e8d89930d7729197c031026 Mon Sep 17 00:00:00 2001
-+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+Date: Sat, 5 Oct 2013 15:51:56 +0200
-+Subject: [PATCH 1/3] libbb: use <poll.h> instead of <sys/poll.h>
+diff --git a/toolchain/Config.in b/toolchain/Config.in
+index 0f9a7dd..3980d79 100644
+--- a/toolchain/Config.in
++++ b/toolchain/Config.in
+@@ -15,6 +15,15 @@ config BR2_TOOLCHAIN_USES_GLIBC
+ config BR2_TOOLCHAIN_USES_UCLIBC
+ 	bool
+ 
++config BR2_TOOLCHAIN_USES_MUSL
++	bool
++	select BR2_LARGEFILE
++	select BR2_INET_IPV6
++	select BR2_USE_WCHAR
++	select BR2_ENABLE_LOCALE
++	select BR2_TOOLCHAIN_HAS_THREADS
++	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
 +
-+As the pol() manpage recommends, include the <poll.h> header instead
-+of <sys/poll.h>. This allows to get rid of gazillions of warnings when
-+building Busybox against the musl C library, which prints a warning
-+when the internal header <sys/poll.h> is included directly instead of
-+the <poll.h> header.
+ choice
+ 	prompt "Toolchain type"
+ 	help
+diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
+index b530a02..dfeef76 100644
+--- a/toolchain/helpers.mk
++++ b/toolchain/helpers.mk
+@@ -210,6 +210,17 @@ check_glibc = \
+ 	$(call check_glibc_rpc_feature,$${SYSROOT_DIR})
+ 
+ #
++# Check that the selected C library is really musl
++#
++# $1: sysroot directory
++check_musl = \
++	SYSROOT_DIR="$(strip $1)"; \
++	if test ! -f $${SYSROOT_DIR}/lib/libc.so -o -e $${SYSROOT_DIR}/lib/libm.so ; then \
++		echo "Incorrect selection of the C library" ; \
++		exit -1; \
++	fi
 +
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+---
-+ include/libbb.h | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
++#
+ # Check the conformity of Buildroot configuration with regard to the
+ # uClibc configuration of the external toolchain, for a particular
+ # feature.
+diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
+index c53577e..89c799e 100644
+--- a/toolchain/toolchain-external/Config.in
++++ b/toolchain/toolchain-external/Config.in
+@@ -860,6 +860,10 @@ config BR2_TOOLCHAIN_EXTERNAL_UCLIBC
+ 	bool
+ 	select BR2_TOOLCHAIN_USES_UCLIBC
+ 
++config BR2_TOOLCHAIN_EXTERNAL_MUSL
++	bool
++	select BR2_TOOLCHAIN_USES_MUSL
 +
-+diff --git a/include/libbb.h b/include/libbb.h
-+index e520060..f03f454 100644
-+--- a/include/libbb.h
-++++ b/include/libbb.h
-+@@ -37,7 +37,7 @@
-+ #include <libgen.h> /* dirname,basename */
-+ #undef basename
-+ #define basename dont_use_basename
-+-#include <sys/poll.h>
-++#include <poll.h>
-+ #include <sys/ioctl.h>
-+ #include <sys/mman.h>
-+ #include <sys/socket.h>
-+-- 
-+1.8.1.2
+ if BR2_TOOLCHAIN_EXTERNAL_CUSTOM
+ 
+ choice
+@@ -882,6 +886,13 @@ config BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC
+ 	  eglibc configured to exclude key features may cause build failures to
+ 	  some packages.
+ 
++config BR2_TOOLCHAIN_EXTERNAL_CUSTOM_MUSL
++	bool "musl"
++	select BR2_TOOLCHAIN_EXTERNAL_MUSL
++	help
++	  Select this option if your external toolchain uses the
++	  'musl' C library, available from http://www.musl-libc.org/.
 +
-diff --git a/package/busybox/1.21.1/0002-network-ifconfig-include-linux-if_slip.h-instead-of-.patch b/package/busybox/1.21.1/0002-network-ifconfig-include-linux-if_slip.h-instead-of-.patch
-new file mode 100644
-index 0000000..ed35719
---- /dev/null
-+++ b/package/busybox/1.21.1/0002-network-ifconfig-include-linux-if_slip.h-instead-of-.patch
-@@ -0,0 +1,33 @@
-+From 5eae213031a3ef88fe8d9d0a387f44264ea635cc Mon Sep 17 00:00:00 2001
-+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+Date: Sat, 5 Oct 2013 15:53:16 +0200
-+Subject: [PATCH 2/3] network/ifconfig: include <linux/if_slip.h> instead of
-+ <net/if_slip.h>
+ endchoice
+ 
+ if BR2_TOOLCHAIN_EXTERNAL_CUSTOM_UCLIBC
+@@ -952,6 +963,7 @@ endif # BR2_TOOLCHAIN_EXTERNAL_CUSTOM_UCLIBC
+ config BR2_TOOLCHAIN_EXTERNAL_INET_RPC
+ 	bool "Toolchain has RPC support?"
+ 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
++	depends on !BR2_TOOLCHAIN_EXTERNAL_MUSL
+ 	default y if BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	help
+ 	  Select this option if your external toolchain supports
+diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
+index 2bfe64a..b2266b6 100644
+--- a/toolchain/toolchain-external/toolchain-external.mk
++++ b/toolchain/toolchain-external/toolchain-external.mk
+@@ -68,6 +68,10 @@ ifeq ($(BR2_TOOLCHAIN_EXTERNAL_GLIBC),y)
+ LIB_EXTERNAL_LIBS+=libnss_files.so.* libnss_dns.so.*
+ endif
+ 
++ifeq ($(BR2_TOOLCHAIN_EXTERNAL_MUSL),y)
++LIB_EXTERNAL_LIBS += libc.so libgcc_s.so.*
++endif
 +
-+The musl C library doesn't provide the <net/if_slip.h> since userspace
-+applications can just as well use the <linux/if_slip.h> kernel header.
+ ifeq ($(BR2_INSTALL_LIBSTDCPP),y)
+ USR_LIB_EXTERNAL_LIBS+=libstdc++.so.*
+ endif
+@@ -353,7 +357,7 @@ endif
+ define TOOLCHAIN_EXTERNAL_CONFIGURE_CMDS
+ 	$(Q)$(call check_cross_compiler_exists,$(TOOLCHAIN_EXTERNAL_CC))
+ 	$(Q)LIBC_A_LOCATION=`readlink -f $$(LANG=C $(TOOLCHAIN_EXTERNAL_CC) -print-file-name=libc.a)` ; \
+-	SYSROOT_DIR=`echo $${LIBC_A_LOCATION} | sed -r -e 's:usr/lib(32|64)?/(.*/)?libc\.a::'` ; \
++	SYSROOT_DIR=`echo $${LIBC_A_LOCATION} | sed -r -e 's:(usr/)?lib(32|64)?/(.*/)?libc\.a::'` ; \
+ 	if test -z "$${SYSROOT_DIR}" ; then \
+ 		@echo "External toolchain doesn't support --sysroot. Cannot use." ; \
+ 		exit 1 ; \
+@@ -368,11 +372,23 @@ define TOOLCHAIN_EXTERNAL_CONFIGURE_CMDS
+ 	fi ; \
+ 	if test "$(BR2_TOOLCHAIN_EXTERNAL_UCLIBC)" = "y" ; then \
+ 		$(call check_uclibc,$${SYSROOT_DIR}) ; \
++	elif test "$(BR2_TOOLCHAIN_EXTERNAL_MUSL)" = "y" ; then \
++		$(call check_musl,$${SYSROOT_DIR}) ; \
+ 	else \
+ 		$(call check_glibc,$${SYSROOT_DIR}) ; \
+ 	fi
+ endef
+ 
++# With the musl C library, the libc.so library directly plays the role
++# of the dynamic library loader. We just need to create a symbolic
++# link to libc.so with the appropriate name.
++ifeq ($(BR2_TOOLCHAIN_EXTERNAL_MUSL),y)
++define TOOLCHAIN_EXTERNAL_MUSL_LD_LINK
++	ln -sf libc.so $(TARGET_DIR)/lib/ld-musl-$(ARCH).so.1
++endef
++TOOLCHAIN_EXTERNAL_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_EXTERNAL_MUSL_LD_LINK
++endif
 +
-+This commit fixes the build of the ifconfig applet with the musl C
-+library.
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+---
-+ networking/ifconfig.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/networking/ifconfig.c b/networking/ifconfig.c
-+index 782374b..c90ed6b 100644
-+--- a/networking/ifconfig.c
-++++ b/networking/ifconfig.c
-+@@ -56,7 +56,7 @@
-+ #endif
-+ 
-+ #if ENABLE_FEATURE_IFCONFIG_SLIP
-+-# include <net/if_slip.h>
-++# include <linux/if_slip.h>
-+ #endif
-+ 
-+ /* I don't know if this is needed for busybox or not.  Anyone? */
-+-- 
-+1.8.1.2
-+
-diff --git a/package/busybox/1.21.1/0003-networking-libiproute-use-linux-if_packet.h-instead-.patch b/package/busybox/1.21.1/0003-networking-libiproute-use-linux-if_packet.h-instead-.patch
-new file mode 100644
-index 0000000..7b74656
---- /dev/null
-+++ b/package/busybox/1.21.1/0003-networking-libiproute-use-linux-if_packet.h-instead-.patch
-@@ -0,0 +1,36 @@
-+From d4fec31889ad660a58dab633c511221feb66e817 Mon Sep 17 00:00:00 2001
-+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+Date: Sat, 5 Oct 2013 15:55:06 +0200
-+Subject: [PATCH 3/3] networking/libiproute: use <linux/if_packet.h> instead of
-+ <net/if_packet.h>
-+
-+The musl C library doesn't provide the <net/if_packet.h> since the
-+corresponding kernel headers <linux/if_packet.h> already provides the
-+necessary definitions. Replacing <net/if_packet.h> by
-+<linux/if_packet.h> also removes the need to include
-+<netpacket/packet.h>
-+
-+This commit fixes the build of iplink with the musl C library.
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+---
-+ networking/libiproute/iplink.c | 3 +--
-+ 1 file changed, 1 insertion(+), 2 deletions(-)
-+
-+diff --git a/networking/libiproute/iplink.c b/networking/libiproute/iplink.c
-+index bad2017..32ccb1c 100644
-+--- a/networking/libiproute/iplink.c
-++++ b/networking/libiproute/iplink.c
-+@@ -5,8 +5,7 @@
-+  * Licensed under GPLv2 or later, see file LICENSE in this source tree.
-+  */
-+ #include <net/if.h>
-+-#include <net/if_packet.h>
-+-#include <netpacket/packet.h>
-++#include <linux/if_packet.h>
-+ #include <netinet/if_ether.h>
-+ 
-+ #include "ip_common.h"  /* #include "libbb.h" is inside */
-+-- 
-+1.8.1.2
-+
+ # Integration of the toolchain into Buildroot: find the main sysroot
+ # and the variant-specific sysroot, then copy the needed libraries to
+ # the $(TARGET_DIR) and copy the whole sysroot (libraries and headers)
 -- 
 1.8.1.2
