@@ -1,85 +1,76 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 08 Oct 2013 08:46:17 +0200
-Subject: [Buildroot] [PATCH 1/1] ccache: expose control interface via
- 'make ccache-options'
-In-Reply-To: <CAEvN+1iBLh_Kr25EQTJPXn2-hh2KdeGQ1nhagT3haHMB=Jx1-A@mail.gmail.com>
-References: <1339991408-25620-1-git-send-email-tjlee@ambarella.com>
- <CAEvN+1jCAvFYsOkbv4Rf4g7YqZJe4Ty9cwpFMiAUTTAvh7mvQg@mail.gmail.com>
- <CAEvN+1iBLh_Kr25EQTJPXn2-hh2KdeGQ1nhagT3haHMB=Jx1-A@mail.gmail.com>
-Message-ID: <5253AA39.1090908@mind.be>
+Date: Tue, 08 Oct 2013 09:20:20 +0200
+Subject: [Buildroot] [PATCH] Allow PHP to compile ans link with
+ berkeleydb 6
+In-Reply-To: <20131007145734.781254cd@skate>
+References: <1381146130-8575-1-git-send-email-jezz@sysmic.org>
+ <20131007135727.3cb4150d@skate> <5252A7DF.5020008@zacarias.com.ar>
+ <20131007142614.45304395@skate> <5252A958.6010001@zacarias.com.ar>
+ <20131007145734.781254cd@skate>
+Message-ID: <5253B234.60001@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 10/08/13 00:09, Tzu-Jung Lee wrote:
-> # Response to patchwork cleanup of week #1
+On 10/07/13 14:57, Thomas Petazzoni wrote:
+> Dear Gustavo Zacarias,
 >
-> This patch provides an easy way to operate on buildroot ccache such as
-> changing the cache limit or showing statistics.
->
-> Without it, users would have to explicitly specify both the environment variable
-> and the path of patched ccache, for example:
->
->    BUILDROOT_CACHE_DIR=~/.buildroot-ccache/ $PWD/host/usr/bin/ccache -s
-> .
-> Thanks.
->
-> Roy
->
-> On Fri, Jun 22, 2012 at 7:55 PM, Tzu-Jung Lee <roylee17@gmail.com> wrote:
->> ---------- Forwarded message ----------
->> From: Tzu-Jung Lee <roylee17@gmail.com>
->> Date: Mon, Jun 18, 2012 at 11:50 AM
->> Subject: [PATCH 1/1] ccache: expose control interface via 'make ccache-options'
->> To: buildroot at busybox.net
->> Cc: roylee17 at gmail.com, Tzu-Jung Lee <tjlee@ambarella.com>
+> On Mon, 07 Oct 2013 09:30:16 -0300, Gustavo Zacarias wrote:
+>> On 10/07/2013 09:26 AM, Thomas Petazzoni wrote:
 >>
+>>> Sorry, I forgot to add a smiley or something. To be "how useful
+>>> BerkleyDB can be with PHP" was ironic, so I was actually meaning that I
+>>> don't think PHP+BerkeleyDB is so useful, so that to me, the first
+>>> option is perfectly acceptable.
 >>
->> usage:
->>         # set cache limit size
->>         make CCACHE_OPTIONS="--max-size=5G" ccache-options
->>
->>         # zero statistics counters
->>         make CCACHE_OPTIONS="--zero-stats" ccache-options
+>> Seems to be useful to Jerome maybe since he cared about fixing it.
+>> That being said the license is rotten and not only for PHP, we should
+>> just stick away from bdb6 IMHO.
+>
+> Ok, so as discussed on IRC, my proposal would be:
+ >
+ >   * Downgrade the berkeleydb package to the last known non-AGPL version
+ >     (i.e essentially revert commit
+ >     4c478de2e76ffc1d0a6dc413475307fd44a0a595). This way, all existing
+ >     packages in Buildroot that rely on berkeleydb continue to work with
+ >     no change, and don't create a legal issue. Add a comment in the
+ >     berkeleydb.mk file that explains why it shouldn't be bumped to v6 of
+ >     the project.
+ >
+ >   * If someone cares, integrate an additional berkeleydb6 package that
+ >     packages the v6 of berkeleydb under AGPL.
 
-  You should add this text to the documentation in
-docs/manual/ccache-support.txt
+  I didn't follow the conversation on IRC, but IMHO this proposal has 
+important political implications.  With this change, we are taking a 
+stand: non-copyleft software should be the default. So in my opinion, we 
+should instead make the default berkeleydb v6 and add a berkeleydb5 
+package for PHP.
 
->>
->> Change-Id: I0162a2612a9aa4afd49f6d93c9c36dce3e0c8228
+  I took a quick look at which other packages are using berkeleydb. Most 
+of them are compatible with GPL.
 
-  Missing Signed-off-by line.
+netatalk: GPLv2+ -> compatible (note that _LICENSE is missing)
+perl: Aristic is not compatible, but GPLv1+ is (note that _LICENSE is wrong)
+python: PSF license v2 is compatible
+ruby: Ruby license is probably incompatible, but BSD-2c is (note that 
+_LICENSE is wrong). Unfortunately, there are also a few incompatible 
+files in the ruby distribution.
 
-  Otherwise looks good to me.
+
+  Footnote: except for python, none of the licenses above are actually 
+correctly defined in buildroot. This worries me...
+
 
   Regards,
   Arnout
 
->> ---
->>   package/ccache/ccache.mk |    4 ++++
->>   1 files changed, 4 insertions(+), 0 deletions(-)
->>
->> diff --git a/package/ccache/ccache.mk b/package/ccache/ccache.mk
->> index d7106ee..d46fbb9 100644
->> --- a/package/ccache/ccache.mk
->> +++ b/package/ccache/ccache.mk
->> @@ -50,3 +50,7 @@ ccache-stats: host-ccache
->>         $(Q)$(CCACHE) -s
->>   endif
->>
->> +ifeq ($(BR2_CCACHE),y)
->> +ccache-options: host-ccache
->> +       $(Q)$(CCACHE) $(CCACHE_OPTIONS)
->> +endif
->> --
->> 1.7.8.6
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> J?r?me, are you interested in doing such work?
 >
+> Best regards,
+>
+> Thomas
 >
 
 
