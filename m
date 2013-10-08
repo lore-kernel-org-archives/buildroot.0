@@ -1,10 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 08 Oct 2013 21:08:20 +0200
-Subject: [Buildroot] [PATCH 1 of 4] i2c-tools: add license information
-In-Reply-To: <8d5a6b127c579be29db4.1381226815@argentina>
+Date: Tue, 08 Oct 2013 21:25:25 +0200
+Subject: [Buildroot] [PATCH 3 of 4] ncftp: add license information
+In-Reply-To: <0c52e8e64bc16f37df1e.1381226817@argentina>
 References: <patchbomb.1381226814@argentina>
- <8d5a6b127c579be29db4.1381226815@argentina>
-Message-ID: <52545824.70907@mind.be>
+ <0c52e8e64bc16f37df1e.1381226817@argentina>
+Message-ID: <52545C25.2060307@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,35 +13,33 @@ To: buildroot@busybox.net
 
 On 10/08/13 12:06, Thomas De Schampheleire wrote:
 > Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
->
-> ---
->   package/i2c-tools/i2c-tools.mk |  2 ++
->   1 files changed, 2 insertions(+), 0 deletions(-)
->
-> diff --git a/package/i2c-tools/i2c-tools.mk b/package/i2c-tools/i2c-tools.mk
-> --- a/package/i2c-tools/i2c-tools.mk
-> +++ b/package/i2c-tools/i2c-tools.mk
-> @@ -7,6 +7,8 @@
->   I2C_TOOLS_VERSION = 3.1.0
->   I2C_TOOLS_SOURCE = i2c-tools-$(I2C_TOOLS_VERSION).tar.bz2
->   I2C_TOOLS_SITE = http://dl.lm-sensors.org/i2c-tools/releases
-> +I2C_TOOLS_LICENSE = GPLv2
 
-  All files are GPLv2+ AFAICS. Only py-smbus/setup.py claims that the 
-package is GPLv2, but that's just wrong.
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
   Regards,
   Arnout
 
-> +I2C_TOOLS_LICENSE_FILES = COPYING
 >
->   define I2C_TOOLS_BUILD_CMDS
->    $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
+> ---
+>   package/ncftp/ncftp.mk |  2 ++
+>   1 files changed, 2 insertions(+), 0 deletions(-)
+>
+> diff --git a/package/ncftp/ncftp.mk b/package/ncftp/ncftp.mk
+> --- a/package/ncftp/ncftp.mk
+> +++ b/package/ncftp/ncftp.mk
+> @@ -8,6 +8,8 @@ NCFTP_VERSION = 3.2.5
+>   NCFTP_SOURCE = ncftp-$(NCFTP_VERSION)-src.tar.bz2
+>   NCFTP_SITE = ftp://ftp.ncftp.com/ncftp
+>   NCFTP_TARGET_BINS = ncftp
+> +NCFTP_LICENSE = Clarified Artistic License
+> +NCFTP_LICENSE_FILES = doc/LICENSE.txt
+>
+>   ifeq ($(BR2_PACKAGE_NCFTP_GET),y)
+>   	NCFTP_TARGET_BINS += ncftpget
 > _______________________________________________
 > buildroot mailing list
 > buildroot at busybox.net
 > http://lists.busybox.net/mailman/listinfo/buildroot
->
 >
 
 
