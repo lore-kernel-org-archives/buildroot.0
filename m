@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 9 Oct 2013 00:11:32 +0200
-Subject: [Buildroot] [PATCH 01/11] package/rpi-userland: rename patches
-In-Reply-To: <a9f94140f940ceb096089e477d0c173b648b66bf.1381269937.git.yann.morin.1998@free.fr>
+Date: Wed, 9 Oct 2013 00:13:01 +0200
+Subject: [Buildroot] [PATCH 03/11] package/weston: requires host-pkgconf
+In-Reply-To: <eca1220c9cf9f31fc7d2fda903af60725d8fa930.1381269937.git.yann.morin.1998@free.fr>
 References: <cover.1381269937.git.yann.morin.1998@free.fr>
- <a9f94140f940ceb096089e477d0c173b648b66bf.1381269937.git.yann.morin.1998@free.fr>
-Message-ID: <20131009001132.78adf7c5@skate>
+ <eca1220c9cf9f31fc7d2fda903af60725d8fa930.1381269937.git.yann.morin.1998@free.fr>
+Message-ID: <20131009001301.41908be7@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,10 +13,11 @@ To: buildroot@busybox.net
 
 Dear Yann E. MORIN,
 
-On Wed,  9 Oct 2013 00:09:47 +0200, Yann E. MORIN wrote:
+On Wed,  9 Oct 2013 00:09:49 +0200, Yann E. MORIN wrote:
 > From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 > 
-> Rename patches to follow standard naming scheme.
+> weston's configure.ac uses PKG_CHECK_MODULES,
+> so it needs to depend on host-pkgconf.
 > 
 > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
