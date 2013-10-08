@@ -1,10 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed,  9 Oct 2013 00:09:53 +0200
-Subject: [Buildroot] [PATCH 07/11] package/weston: fix configure.ac for
-	fbdev compositor
+Date: Wed,  9 Oct 2013 00:09:56 +0200
+Subject: [Buildroot] [PATCH 10/11] package/weston: add RPi compositor
 In-Reply-To: <cover.1381269937.git.yann.morin.1998@free.fr>
 References: <cover.1381269937.git.yann.morin.1998@free.fr>
-Message-ID: <2747e5e41d1b23999d19589ccc3dd589d2f1ee2b.1381269937.git.yann.morin.1998@free.fr>
+Message-ID: <f3d4d0ad8f045aab1763d5cbc8c7145d38405fef.1381269937.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,41 +12,86 @@ To: buildroot@busybox.net
 
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Apply patch from upstream.
+Procedure highly inspired by:
+    http://wayland.freedesktop.org/raspberrypi.html
+
+The resulting weston works almost flawlessly, but requires a bit
+of love:
+  - /boot/config.txt must include this line: dispmanx_offline=1
+  - at least 128MiB of RAM must be allocated to the GPU
+  - after 24-or-so terminal-clients are connected, the screen
+    turns black. Exiting a client restores the screen
+
+It seems increasing/decreasing the amount of memory allocated to
+the GPU makes the clients limit to wobble above/below 24 clients
+at a time. YMMV, as they say...
+
+Without dispmanx_offline=1, the limit is much below 24, arounf 13.
+But changing the amount of memory allocated to the GPU does not
+change this limit in this case. YMMV, again.
+
+Anyway, there are not many different clients available, besides the
+terminal client, since all other clients are EGL-based, and there
+is (yet) no EGL support (for weston!) on the RPi. So the tests were
+made only with the terminal client.
+
+The system is rather smooth, but spwaning too many clients in a
+rapid-fire is sure to exhibit some lag. Resizing windows is a bit
+jerky, but moving them along is fine.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- ...ompositor-fbdev-drop-dependency-on-libdrm.patch | 22 ++++++++++++++++++++++
- 1 file changed, 22 insertions(+)
- create mode 100644 package/weston/weston-0003-compositor-fbdev-drop-dependency-on-libdrm.patch
+ package/weston/Config.in |  8 ++++++++
+ package/weston/weston.mk | 14 +++++++++++++-
+ 2 files changed, 21 insertions(+), 1 deletion(-)
 
-diff --git a/package/weston/weston-0003-compositor-fbdev-drop-dependency-on-libdrm.patch b/package/weston/weston-0003-compositor-fbdev-drop-dependency-on-libdrm.patch
-new file mode 100644
-index 0000000..dfc20de
---- /dev/null
-+++ b/package/weston/weston-0003-compositor-fbdev-drop-dependency-on-libdrm.patch
-@@ -0,0 +1,22 @@
-+commit 7b8e970ad1f1ef96db23b379a41edeb40ef1e8b6
-+Author: Adrian Negreanu <adrian.m.negreanu@intel.com>
-+Date:   Thu Sep 26 19:31:32 2013 +0300
+diff --git a/package/weston/Config.in b/package/weston/Config.in
+index 0f168ac..8c00bf6 100644
+--- a/package/weston/Config.in
++++ b/package/weston/Config.in
+@@ -36,4 +36,12 @@ config BR2_PACKAGE_WESTON_FBDEV
+ 	bool "fbdev compositor"
+ 	default y
+ 
++config BR2_PACKAGE_WESTON_RPI
++	bool "RPi compositor"
++	depends on BR2_arm                  # rpi-userland
++	depends on BR2_INSTALL_LIBSTDCPP    # rpi-userland
++	depends on BR2_LARGEFILE            # rpi-userland
++	select BR2_PACKAGE_RPI_USERLAND
++	select BR2_PACKAGE_WESTON_HAS_COMPOSITOR
 +
-+    compositor-fbdev: drop dependency on libdrm
-+    
-+    Signed-off-by: Adrian Negreanu <adrian.m.negreanu@intel.com>
-+    Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ endif
+diff --git a/package/weston/weston.mk b/package/weston/weston.mk
+index 8b719b8..da3e2f5 100644
+--- a/package/weston/weston.mk
++++ b/package/weston/weston.mk
+@@ -23,8 +23,8 @@ WESTON_CONF_OPT = \
+ 	--disable-drm-compositor \
+ 	--disable-wayland-compositor \
+ 	--disable-headless-compositor \
+-	--disable-rpi-compositor \
+ 	--disable-weston-launch \
++	--disable-colord \
+ 	--disable-libunwind
+ 
+ ifeq ($(BR2_PACKAGE_WESTON_FBDEV),y)
+@@ -33,4 +33,16 @@ else
+ WESTON_CONF_OPT += --disable-fbdev-compositor
+ endif
+ 
++ifeq ($(BR2_PACKAGE_WESTON_RPI),y)
++WESTON_DEPENDENCIES += rpi-userland
++WESTON_CONF_OPT += --enable-rpi-compositor \
++	--disable-resize-optimization \
++	--disable-setuid-install \
++	--disable-xwayland-test \
++	--disable-simple-egl-clients \
++	WESTON_NATIVE_BACKEND=rpi-backend.so
++else
++WESTON_CONF_OPT += --disable-rpi-compositor
++endif # BR2_PACKAGE_WESTON_RPI
 +
-+diff --git a/configure.ac b/configure.ac
-+index 7c2da44..a43bf5b 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -190,7 +190,7 @@ AM_CONDITIONAL([ENABLE_FBDEV_COMPOSITOR],
-+                [test x$enable_fbdev_compositor = xyes])
-+ AS_IF([test x$enable_fbdev_compositor = xyes], [
-+   AC_DEFINE([BUILD_FBDEV_COMPOSITOR], [1], [Build the fbdev compositor])
-+-  PKG_CHECK_MODULES([FBDEV_COMPOSITOR], [libudev >= 136 mtdev >= 1.1.0 libdrm >= 2.4.30])
-++  PKG_CHECK_MODULES([FBDEV_COMPOSITOR], [libudev >= 136 mtdev >= 1.1.0])
-+ ])
-+ 
-+ AC_ARG_ENABLE([rdp-compositor], [  --enable-rdp-compositor],,
+ $(eval $(autotools-package))
 -- 
 1.8.1.2
