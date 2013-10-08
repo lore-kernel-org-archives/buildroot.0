@@ -1,36 +1,32 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 8 Oct 2013 22:40:44 +0200
-Subject: [Buildroot] [git commit] ruby: fix license info
-Message-ID: <20131008204238.B4F779B8ED@busybox.osuosl.org>
+Date: Tue, 8 Oct 2013 22:39:21 +0200
+Subject: [Buildroot] [git commit] netatalk: add license info
+Message-ID: <20131008204238.A195A9B989@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3a26628bf3dcd20d9b7d27d53bc5e2752cf515dc
+commit: http://git.buildroot.net/buildroot/commit/?id=fa4e3d5e602beb776037f94a6b9efcf74c3a0632
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Based on the contents of LEGAL, without checking the code.
 
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/ruby/ruby.mk |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ package/netatalk/netatalk.mk |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/ruby/ruby.mk b/package/ruby/ruby.mk
-index ba2d49b..2188837 100644
---- a/package/ruby/ruby.mk
-+++ b/package/ruby/ruby.mk
-@@ -12,8 +12,8 @@ RUBY_MAKE_ENV = $(TARGET_MAKE_ENV)
- RUBY_MAKE = $(MAKE1)
- RUBY_CONF_OPT = --disable-install-doc --disable-rpath
- HOST_RUBY_CONF_OPT = --disable-install-doc --with-out-ext=curses,readline
--RUBY_LICENSE = Ruby
--RUBY_LICENSE_FILES = LEGAL
-+RUBY_LICENSE = Ruby or BSD-2c, BSD-3c, others
-+RUBY_LICENSE_FILES = LEGAL COPYING BSDL
+diff --git a/package/netatalk/netatalk.mk b/package/netatalk/netatalk.mk
+index 5dab57d..2bd63ec 100644
+--- a/package/netatalk/netatalk.mk
++++ b/package/netatalk/netatalk.mk
+@@ -11,6 +11,8 @@ NETATALK_AUTORECONF = YES
+ NETATALK_CONFIG_SCRIPTS = netatalk-config
+ NETATALK_DEPENDENCIES = host-pkgconf openssl berkeleydb libgcrypt libgpg-error \
+ 	libevent
++NETATALK_LICENSE = GPLv2+, LGPLv3+, MIT-like
++NETATALK_LICENSE_FILES = COPYING COPYRIGHT
  
- # Force optionals to build before we do
- ifeq ($(BR2_PACKAGE_BERKELEYDB),y)
+ # Don't run ldconfig!
+ NETATALK_CONF_ENV += CC="$(TARGET_CC) -std=gnu99" \
