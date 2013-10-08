@@ -1,81 +1,162 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue,  8 Oct 2013 20:17:15 +0200
-Subject: [Buildroot] [PATCHv3 18/20] toolchain-external: fix Linaro ARM
-	toolchain support
+Date: Tue,  8 Oct 2013 20:17:17 +0200
+Subject: [Buildroot] [PATCHv3 20/20] package: remove useless
+	SHOW_EXTERNAL_DEPS support
 In-Reply-To: <1381256237-27948-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1381256237-27948-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1381256237-27948-19-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1381256237-27948-21-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This commit fixes bug #6452 (eglibc from Linaro 2013.07 not copied to
-target correctly) by:
-
- * Copying only the relevant library loader to the target on ARMhf
-   (i.e ld-linux-armhf.so and not ld.so*). This is needed since Linaro
-   toolchains provide two library loaders, one ARMv7 hf, and one ARMv4
-   soft-float.
-
- * Making sure a $(TARGET_DIR)/lib/arm-linux-gnueabihf/ symbolic link
-   to $(TARGET_DIR)/lib/ exists, since the dynamic loader of Linaro
-   toolchains expects libraries to be found in
-   $(TARGET_DIR)/lib/arm-linux-gnueabihf/.
+Now that a package-based 'make external-deps' support has been added,
+the DL_MODE=SHOW_EXTERNAL_DEPS mechanism is no longer needed, so some
+clean up is done in this commit.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- toolchain/toolchain-external/toolchain-external.mk | 17 ++++++++++++++++-
- 1 file changed, 16 insertions(+), 1 deletion(-)
+ package/pkg-download.mk | 44 ++------------------------------------------
+ package/pkg-generic.mk  |  5 +----
+ 2 files changed, 3 insertions(+), 46 deletions(-)
 
-diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
-index 73a761b..b5b1ce7 100644
---- a/toolchain/toolchain-external/toolchain-external.mk
-+++ b/toolchain/toolchain-external/toolchain-external.mk
-@@ -55,7 +55,12 @@
- #  of Buildroot is handled identical for the 2 toolchain types.
+diff --git a/package/pkg-download.mk b/package/pkg-download.mk
+index 8e4a1ec..208c83c 100644
+--- a/package/pkg-download.mk
++++ b/package/pkg-download.mk
+@@ -18,9 +18,8 @@ SCP := $(call qstrip,$(BR2_SCP)) $(QUIET)
+ SSH := $(call qstrip,$(BR2_SSH)) $(QUIET)
+ LOCALFILES := $(call qstrip,$(BR2_LOCALFILES))
  
- ifeq ($(BR2_TOOLCHAIN_EXTERNAL_GLIBC)$(BR2_TOOLCHAIN_EXTERNAL_UCLIBC),y)
--LIB_EXTERNAL_LIBS+=ld*.so.* libc.so.* libcrypt.so.* libdl.so.* libgcc_s.so.* libm.so.* libnsl.so.* libresolv.so.* librt.so.* libutil.so.*
-+LIB_EXTERNAL_LIBS+=libc.so.* libcrypt.so.* libdl.so.* libgcc_s.so.* libm.so.* libnsl.so.* libresolv.so.* librt.so.* libutil.so.*
-+ifeq ($(BR2_ARM_EABIHF),y)
-+LIB_EXTERNAL_LIBS+=ld-linux-armhf.so.*
-+else
-+LIB_EXTERNAL_LIBS+=ld*.so.*
-+endif
- ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
- LIB_EXTERNAL_LIBS+=libpthread.so.*
- ifneq ($(BR2_PACKAGE_GDB_SERVER)$(BR2_TOOLCHAIN_EXTERNAL_GDB_SERVER_COPY),)
-@@ -216,6 +221,13 @@ TOOLCHAIN_EXTERNAL_CFLAGS += -msoft-float
- TOOLCHAIN_EXTERNAL_WRAPPER_ARGS += -DBR_SOFTFLOAT=1
+-# Default spider mode is 'DOWNLOAD'. Other possible values are 'SOURCE_CHECK'
+-# used by the _source-check target and 'SHOW_EXTERNAL_DEPS', used by the
+-# external-deps target.
++# Default spider mode is 'DOWNLOAD'. The possible value is
++# 'SOURCE_CHECK' used by the _source-check target.
+ DL_MODE=DOWNLOAD
+ 
+ # Override BR2_DL_DIR if shell variable defined
+@@ -66,11 +65,6 @@ domainseparator=$(if $(1),$(1),/)
+ # The SOURCE_CHECK_* helpers are in charge of simply checking that the source
+ # is available for download. This can be used to make sure one will be able
+ # to get all the sources needed for one's build configuration.
+-#
+-# The SHOW_EXTERNAL_DEPS_* helpers simply output to the console the names
+-# of the files that will be downloaded, or path and revision of the
+-# source repositories, producing a list of all the "external dependencies"
+-# of a given build configuration.
+ ################################################################################
+ 
+ # Try a shallow clone - but that only works if the version is a ref (tag or
+@@ -101,11 +95,6 @@ define SOURCE_CHECK_GIT
+   $(GIT) ls-remote --heads $($(PKG)_SITE) > /dev/null
+ endef
+ 
+-define SHOW_EXTERNAL_DEPS_GIT
+-	echo $($(PKG)_SOURCE)
+-endef
+-
+-
+ define DOWNLOAD_BZR
+ 	test -e $(DL_DIR)/$($(PKG)_SOURCE) || \
+ 	$(BZR) export $(DL_DIR)/$($(PKG)_SOURCE) $($(PKG)_SITE) -r $($(PKG)_DL_VERSION)
+@@ -115,10 +104,6 @@ define SOURCE_CHECK_BZR
+ 	$(BZR) ls --quiet $($(PKG)_SITE) > /dev/null
+ endef
+ 
+-define SHOW_EXTERNAL_DEPS_BZR
+-	echo $($(PKG)_SOURCE)
+-endef
+-
+ define DOWNLOAD_CVS
+ 	test -e $(DL_DIR)/$($(PKG)_SOURCE) || \
+ 	(pushd $(DL_DIR) > /dev/null && \
+@@ -134,10 +119,6 @@ define SOURCE_CHECK_CVS
+ 	$(CVS) -d:pserver:anonymous:@$(call stripurischeme,$(call qstrip,$($(PKG)_SITE))) login
+ endef
+ 
+-define SHOW_EXTERNAL_DEPS_CVS
+-	echo $($(PKG)_SOURCE)
+-endef
+-
+ define DOWNLOAD_SVN
+ 	test -e $(DL_DIR)/$($(PKG)_SOURCE) || \
+ 	(pushd $(DL_DIR) > /dev/null && \
+@@ -151,10 +132,6 @@ define SOURCE_CHECK_SVN
+   $(SVN) ls $($(PKG)_SITE) > /dev/null
+ endef
+ 
+-define SHOW_EXTERNAL_DEPS_SVN
+-  echo $($(PKG)_SOURCE)
+-endef
+-
+ # SCP URIs should be of the form scp://[user@]host:filepath
+ # Note that filepath is relative to the user's home directory, so you may want
+ # to prepend the path with a slash: scp://[user@]host:/absolutepath
+@@ -167,11 +144,6 @@ define SOURCE_CHECK_SCP
+ 	$(SSH) $(call domain,$(1),:) ls '$(call notdomain,$(1),:)' > /dev/null
+ endef
+ 
+-define SHOW_EXTERNAL_DEPS_SCP
+-	echo $(2)
+-endef
+-
+-
+ define DOWNLOAD_HG
+ 	test -e $(DL_DIR)/$($(PKG)_SOURCE) || \
+ 	(pushd $(DL_DIR) > /dev/null && \
+@@ -188,10 +160,6 @@ define SOURCE_CHECK_HG
+   $(HG) incoming --force -l1 $($(PKG)_SITE) > /dev/null
+ endef
+ 
+-define SHOW_EXTERNAL_DEPS_HG
+-  echo $($(PKG)_SOURCE)
+-endef
+-
+ # Download a file using wget. Only download the file if it doesn't
+ # already exist in the download directory. If the download fails,
+ # remove the file (because wget -O creates a 0-byte file even if the
+@@ -209,10 +177,6 @@ define SOURCE_CHECK_WGET
+   $(WGET) --spider '$(call qstrip,$(1))'
+ endef
+ 
+-define SHOW_EXTERNAL_DEPS_WGET
+-  echo $(2)
+-endef
+-
+ define DOWNLOAD_LOCALFILES
+ 	test -e $(DL_DIR)/$(2) || \
+ 		$(LOCALFILES) $(call stripurischeme,$(call qstrip,$(1))) $(DL_DIR)
+@@ -222,10 +186,6 @@ define SOURCE_CHECK_LOCALFILES
+   test -e $(call stripurischeme,$(call qstrip,$(1)))
+ endef
+ 
+-define SHOW_EXTERNAL_DEPS_LOCALFILES
+-  echo $(2)
+-endef
+-
+ ################################################################################
+ # DOWNLOAD -- Download helper. Will try to download source from:
+ # 1) BR2_PRIMARY_SITE if enabled
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index bd6169c..1e09efb 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -71,13 +71,10 @@ $(BUILD_DIR)/%/.stamp_rsynced:
+ 	rsync -au --cvs-exclude --include core $(SRCDIR)/ $(@D)
+ 	$(Q)touch $@
+ 
+-# Handle the SOURCE_CHECK and SHOW_EXTERNAL_DEPS cases for rsynced
+-# packages
++# Handle the SOURCE_CHECK case for rsynced packages
+ $(BUILD_DIR)/%/.stamp_rsync_sourced:
+ ifeq ($(DL_MODE),SOURCE_CHECK)
+ 	test -d $(SRCDIR)
+-else ifeq ($(DL_MODE),SHOW_EXTERNAL_DEPS)
+-	echo "file://$(SRCDIR)"
+ else
+ 	@true # Nothing to do to source a local package
  endif
- 
-+# The Linaro ARMhf toolchain expects the libraries in
-+# /lib/arm-linux-gnueabihf, but Buildroot copies them to /lib, so we
-+# need to create a symbolic link.
-+define TOOLCHAIN_EXTERNAL_LINARO_ARMHF_SYMLINK
-+	ln -sf . $(TARGET_DIR)/lib/arm-linux-gnueabihf
-+endef
-+
- ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201109),y)
- TOOLCHAIN_EXTERNAL_SITE = http://sourcery.mentor.com/public/gnu_toolchain/arm-none-linux-gnueabi/
- TOOLCHAIN_EXTERNAL_SOURCE = arm-2011.09-70-arm-none-linux-gnueabi-i686-pc-linux-gnu.tar.bz2
-@@ -242,12 +254,15 @@ endef
- else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_07),y)
- TOOLCHAIN_EXTERNAL_SITE = http://releases.linaro.org/13.07/components/toolchain/binaries/
- TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-arm-linux-gnueabihf-4.8-2013.07-1_linux.tar.xz
-+TOOLCHAIN_EXTERNAL_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_EXTERNAL_LINARO_ARMHF_SYMLINK
- else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_08),y)
- TOOLCHAIN_EXTERNAL_SITE = http://releases.linaro.org/13.08/components/toolchain/binaries/
- TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-arm-linux-gnueabihf-4.8-2013.08_linux.tar.xz
-+TOOLCHAIN_EXTERNAL_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_EXTERNAL_LINARO_ARMHF_SYMLINK
- else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_09),y)
- TOOLCHAIN_EXTERNAL_SITE = http://releases.linaro.org/13.09/components/toolchain/binaries/
- TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-arm-linux-gnueabihf-4.8-2013.09_linux.tar.xz
-+TOOLCHAIN_EXTERNAL_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_EXTERNAL_LINARO_ARMHF_SYMLINK
- else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201203),y)
- TOOLCHAIN_EXTERNAL_SITE = http://sourcery.mentor.com/public/gnu_toolchain/mips-linux-gnu/
- TOOLCHAIN_EXTERNAL_SOURCE = mips-2012.03-63-mips-linux-gnu-i686-pc-linux-gnu.tar.bz2
 -- 
 1.8.1.2
