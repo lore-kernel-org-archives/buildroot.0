@@ -1,55 +1,64 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 8 Oct 2013 22:57:49 +0200
-Subject: [Buildroot] [git commit] glibc: fix glibc build by creating an
-	empty gnu/stubs.h
-Message-ID: <20131008213236.C64A19B700@busybox.osuosl.org>
+Date: Tue, 8 Oct 2013 22:58:49 +0200
+Subject: [Buildroot] [git commit] package: add a <pkg>_EXTRA_DOWNLOADS
+	variable
+Message-ID: <20131008213236.CF37A9B700@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=03b05402df6f2a06ffc936c6364da5951f315197
+commit: http://git.buildroot.net/buildroot/commit/?id=2c13d5bc60749717634fac60b8165a3e2567bcdb
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The stubs.h header is not installed by install-headers, but is needed
-for the gcc build. An empty stubs.h will work, as explained in
-http://gcc.gnu.org/ml/gcc/2002-01/msg00900.html. The same trick is
-used by Crosstool-NG.
+Converting the external toolchain logic into a package raises a very
+special use case that wasn't handled by the package infrastructure:
+the Blackfin toolchain is delivered as two tarballs instead of
+one. Unfortunately <pkg>_SOURCE only allows to pass one tarball name.
+
+However, we really want both tarballs to be known by the package
+infrastructure, so that the normal 'source' and 'external-deps'
+mechanism work fine.
+
+In order to achieve this, we add a <pkg>_EXTRA_DOWNLOADS variable,
+which allows a package to list other stuff it would like to see
+downloaded, but that are otherwise not used by the package
+infrastructure itself: it is up to the package to do it by itself.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/glibc/glibc.mk |   12 ++++++++++++
- 1 files changed, 12 insertions(+), 0 deletions(-)
+ docs/manual/adding-packages-generic.txt |    6 ++++++
+ package/pkg-generic.mk                  |    1 +
+ 2 files changed, 7 insertions(+), 0 deletions(-)
 
-diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
-index a9e89f1..4d89caf 100644
---- a/package/glibc/glibc.mk
-+++ b/package/glibc/glibc.mk
-@@ -47,6 +47,17 @@ else ifeq ($(BR2_MIPS_OABI32),y)
- GLIBC_EXTRA_CFLAGS += -mabi=32
- endif
+diff --git a/docs/manual/adding-packages-generic.txt b/docs/manual/adding-packages-generic.txt
+index cb067bd..59a2684 100644
+--- a/docs/manual/adding-packages-generic.txt
++++ b/docs/manual/adding-packages-generic.txt
+@@ -248,6 +248,12 @@ information is (assuming the package name is +libfoo+) :
+     +LIBFOO_SITE=/opt/software/libfoo.tar.gz+ +
+     +LIBFOO_SITE=$(TOPDIR)/../src/libfoo/+
  
-+# The stubs.h header is not installed by install-headers, but is
-+# needed for the gcc build. An empty stubs.h will work, as explained
-+# in http://gcc.gnu.org/ml/gcc/2002-01/msg00900.html. The same trick
-+# is used by Crosstool-NG.
-+ifeq ($(BR2_TOOLCHAIN_BUILDROOT_GLIBC),y)
-+define GLIBC_ADD_MISSING_STUB_H
-+	mkdir -p $(STAGING_DIR)/usr/include/gnu
-+	touch $(STAGING_DIR)/usr/include/gnu/stubs.h
-+endef
-+endif
++* +LIBFOO_EXTRA_DOWNLOADS+ lists a number of additional files that
++  Buildroot should download from +LIBFOO_SITE+ in addition to the main
++  +LIBFOO_SOURCE+ (which usually is a tarball). Buildroot will not do
++  anything with those additional files, except download files: it will
++  be up to the package recipe to use them from +$(DL_DIR)+.
 +
- # Even though we use the autotools-package infrastructure, we have to
- # override the default configure commands for several reasons:
- #
-@@ -89,6 +100,7 @@ define GLIBC_CONFIGURE_CMDS
- 	cp $(@D)/build/csu/crt1.o $(STAGING_DIR)/usr/lib/
- 	cp $(@D)/build/csu/crti.o $(STAGING_DIR)/usr/lib/
- 	cp $(@D)/build/csu/crtn.o $(STAGING_DIR)/usr/lib/
-+	$(GLIBC_ADD_MISSING_STUB_H)
- 	$(TARGET_CROSS)gcc -nostdlib \
- 		-nostartfiles -shared -x c /dev/null -o $(STAGING_DIR)/usr/lib/libc.so
- endef
+ * +LIBFOO_SITE_METHOD+ determines the method used to fetch or copy the
+   package source code. In many cases, Buildroot guesses the method
+   from the contents of +LIBFOO_SITE+ and setting +LIBFOO_SITE_METHOD+
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index bfc4dc1..a46457c 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -40,6 +40,7 @@ ifeq ($(DL_MODE),DOWNLOAD)
+ 	fi
+ endif
+ 	$(if $($(PKG)_SOURCE),$(call DOWNLOAD,$($(PKG)_SITE:/=)/$($(PKG)_SOURCE)))
++	$(foreach p,$($(PKG)_EXTRA_DOWNLOADS),$(call DOWNLOAD,$($(PKG)_SITE:/=)/$(p))$(sep))
+ 	$(foreach p,$($(PKG)_PATCH),\
+ 		$(if $(findstring ://,$(p)),\
+ 			$(call DOWNLOAD,$(p)),\
