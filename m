@@ -1,25 +1,32 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 08 Oct 2013 16:55:10 +0200
-Subject: [Buildroot] [PATCHv2] lighttpd: fix build failure without ipv6
-In-Reply-To: <1381179735-21272-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Mon, 7 Oct 2013 18:02:15 -0300")
-References: <1381179735-21272-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <874n8r95ip.fsf@dell.be.48ers.dk>
+From: Spenser Gilliland <spenser@gillilanding.com>
+Date: Tue, 8 Oct 2013 09:55:24 -0500
+Subject: [Buildroot] [PATCH v3 01/11] udev: explicitly include pthreads
+In-Reply-To: <87li2am6j0.fsf@dell.be.48ers.dk>
+References: <1380237714-2470-1-git-send-email-spenser@gillilanding.com>
+ <1380237714-2470-2-git-send-email-spenser@gillilanding.com>
+ <87li2am6j0.fsf@dell.be.48ers.dk>
+Message-ID: <CAEBucnDSVnod2rt6y2AaT+XpnOtnmk=zKapM2hXChasjdXHqLQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+Peter,
+>
+>  Spenser> This fixes builds with Linaro hard float toolchains.
+>
+> Sorry, what toolchain exactly? I just did a test build with our default
+> (Linaro 2013.08) ext toolchain, and didn't have any linker issues.
 
- Gustavo> Reported in https://bugs.gentoo.org/show_bug.cgi?id=486426
- Gustavo> and http://redmine.lighttpd.net/issues/2515
- Gustavo> Autobuilders didn't hit it yet, but i did.
+This has been occurring with the Linaro 2013.06 toolchain.  I'll test
+with the 2013.08 toolchain.  I'm not sure why the 2013.06 was chosen
+by default.
 
- Gustavo> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-
-Committed, thanks.
+Thanks,
+Spenser
 
 -- 
-Bye, Peter Korsgaard
+Spenser Gilliland
+Computer Engineer
+Doctoral Candidate
