@@ -1,74 +1,89 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 08 Oct 2013 20:04:13 +0200
-Subject: [Buildroot] [PATCH 7/9] manual: get-involved.txt: fix event
-	order
-In-Reply-To: <CAAXf6LVf5gH72TMNh=pTADHfBs66qrUhhC3HrA9-E--pCHh9TQ@mail.gmail.com>
-References: <cover.1381002281.git.s.martin49@gmail.com>
- <6ec3090443f3012c35dabdb148b92105a4c5bf12.1381002281.git.s.martin49@gmail.com>
- <CAAXf6LVf5gH72TMNh=pTADHfBs66qrUhhC3HrA9-E--pCHh9TQ@mail.gmail.com>
-Message-ID: <5254491D.7040407@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 8 Oct 2013 20:09:55 +0200
+Subject: [Buildroot] [PATCH] Allow PHP to compile ans link with
+ berkeleydb 6
+In-Reply-To: <52543DD9.3020909@mind.be>
+References: <1381146130-8575-1-git-send-email-jezz@sysmic.org>
+ <20131007135727.3cb4150d@skate> <5252A7DF.5020008@zacarias.com.ar>
+ <20131007142614.45304395@skate> <5252A958.6010001@zacarias.com.ar>
+ <20131007145734.781254cd@skate> <5253B234.60001@mind.be>
+ <20131008100141.252ec3ae@skate> <52543DD9.3020909@mind.be>
+Message-ID: <20131008200955.02fe19bc@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 10/08/13 11:31, Thomas De Schampheleire wrote:
-> Hi Samuel,
->
-> On Sat, Oct 5, 2013 at 9:49 PM, Samuel Martin <s.martin49@gmail.com> wrote:
->> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
->> ---
->>   docs/manual/get-involved.txt | 10 ++++++----
->>   1 file changed, 6 insertions(+), 4 deletions(-)
->>
->> diff --git a/docs/manual/get-involved.txt b/docs/manual/get-involved.txt
->> index 8515d34..49ab54c 100644
->> --- a/docs/manual/get-involved.txt
->> +++ b/docs/manual/get-involved.txt
->> @@ -84,6 +84,12 @@ Currently, this page is mainly used as a _todo-list_.
->>   Events
->>   ------
->>
->> +Buildroot Developer Days aside FOSDEM 2012 (February 3, 2012 - Brussels)
->> +~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->> +
->> +* Announcement & agenda thread: http://lists.busybox.net/pipermail/buildroot/2012-January/049340.html[]
->> +* Report: http://lists.busybox.net/pipermail/buildroot/2012-February/050371.html[]
->> +
->>   Buildroot Developer Days aside ELC-E 2012 (November 3-4, 2012 - Barcelona)
->>   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->>
->> @@ -94,8 +100,4 @@ Buildroot presentation at LSM 2012 (July 12-14, 2012 - Geneva)
->>
->>   * Announcement: http://lists.busybox.net/pipermail/buildroot/2012-May/053845.html[]
->>
->> -Buildroot Developer Days aside FOSDEM 2012 (February 3, 2012 - Brussels)
->> -~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->>
->> -* Announcement & agenda thread: http://lists.busybox.net/pipermail/buildroot/2012-January/049340.html[]
->> -* Report: http://lists.busybox.net/pipermail/buildroot/2012-February/050371.html[]
->> --
->
-> What is the meaning of 'aside' here ?
-> For me, aside means 'next to' in a spatial context.
-> In this case, I think we are rather talking about time, in the sense
-> that BDD are before or after the mentioned conference. I'm not sure if
-> there exists a word like aside/adjacent that can be used in a time
-> context, but otherwise we could use:
->
-> ... prior to ...
-> ... after ...
+Dear Arnout Vandecappelle,
 
-  I think "alongside" is correct. Any native English speaker who can confirm?
+On Tue, 08 Oct 2013 19:16:09 +0200, Arnout Vandecappelle wrote:
 
-  Regards,
-  Arnout
+> > However, AGPLv3+ (the new license of berkeleydb) is a fairly strong
+> > license, so I'm quite sure a number of embedded system markers would be
+> > interested in having the ability to build Python, or Perl, against a
+> > non-strongly-copyleft licensed version of berkeleydb.
+> 
+>   Indeed, I think it may be a good idea to offer the user the possibility 
+> to use a non-copyleft version. But that's something completely different 
+> than forcing the user to use an old version just because the current one 
+> has strong copyleft...
 
+True. But offering a choice between two versions is always complicated,
+because we're not sure the new version will remain API compatible with
+the old version.
+
+And remember that randpackageconfig is not capable of randomizing
+'choices' in Kconfig, so the autobuilders are only testing the default
+value of all the choices we have in Buildroot.
+
+>   BTW for the typical embedded use cases, AGPL is hardly stronger than 
+> GPL. The "remote user" is typically the owner of the embedded device so 
+> the rights granted under GPL already apply.
+
+It's not really the A in front of GPL that causes the problem in AGPL,
+but the v3 at the end of it. For consumer devices, the v3 requires that
+the end user must be given the physical possibility of running a
+modified version of the software under (A)GPLv3. I'm not saying it's
+useless, on the contrary, but it's quite a significant change compared
+to the requirement of GPLv2.
+
+> >> netatalk: GPLv2+ -> compatible (note that _LICENSE is missing)
+> >> perl: Aristic is not compatible, but GPLv1+ is (note that _LICENSE is
+> >> wrong)
+> >
+> > But aren't all Perl modules licensed under the Artistic license? Not
+> > sure if it can cause some problems with berkeleydb being AGPLv3+,
+> > though.
+> 
+>   I haven't checked everything, but the ones I looked at either specify 
+> "GPL or Artistic", or "under the same terms as Perl".
+
+Ok.
+
+> >> python: PSF license v2 is compatible
+> >> ruby: Ruby license is probably incompatible, but BSD-2c is (note that
+> >> _LICENSE is wrong). Unfortunately, there are also a few incompatible
+> >> files in the ruby distribution.
+> >>
+> >>    Footnote: except for python, none of the licenses above are
+> >> actually correctly defined in buildroot. This worries me...
+> >
+> > Well, licensing information is tricky to get right. I believe the kind
+> > of review you made is typically what makes the licensing information
+> > progressively better.
+> 
+>   You're saying I should produce patches, right? :-)
+
+That's one way of reading what I said, which obviously, would be the
+best thing. But if that doesn't happen, the simple fact that you
+mentioned those licensing issues is likely to encourage someone to do
+the corresponding patches.
+
+Best regards,
+
+Thomas
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+Thomas Petazzoni, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
