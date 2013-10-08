@@ -1,64 +1,61 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 8 Oct 2013 22:58:49 +0200
-Subject: [Buildroot] [git commit] package: add a <pkg>_EXTRA_DOWNLOADS
-	variable
-Message-ID: <20131008213236.CF37A9B700@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 8 Oct 2013 23:49:43 +0200
+Subject: [Buildroot] [PATCH 1/1] manual: update review process and
+ patchwork
+In-Reply-To: <1381266205-29322-1-git-send-email-rjbarnet@rockwellcollins.com>
+References: <1381266205-29322-1-git-send-email-rjbarnet@rockwellcollins.com>
+Message-ID: <20131008234943.688148ea@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=2c13d5bc60749717634fac60b8165a3e2567bcdb
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Ryan Barnett,
 
-Converting the external toolchain logic into a package raises a very
-special use case that wasn't handled by the package infrastructure:
-the Blackfin toolchain is delivered as two tarballs instead of
-one. Unfortunately <pkg>_SOURCE only allows to pass one tarball name.
+On Tue, 8 Oct 2013 16:03:25 -0500, Ryan Barnett wrote:
+> Adding more documentaiton based on discussion from the mailing list
+> in regards the buildroot review process and how patchworks can be
+> used to pull in patches for testing purposes.
+> 
+> Mailing list discussion:
+> http://lists.busybox.net/pipermail/buildroot/2013-September/078170.html
+> 
+> Signed-off-by: Ryan Barnett <rjbarnet@rockwellcollins.com>
 
-However, we really want both tarballs to be known by the package
-infrastructure, so that the normal 'source' and 'external-deps'
-mechanism work fine.
+Thanks, looks good! A few comments below.
 
-In order to achieve this, we add a <pkg>_EXTRA_DOWNLOADS variable,
-which allows a package to list other stuff it would like to see
-downloaded, but that are otherwise not used by the package
-infrastructure itself: it is up to the package to do it by itself.
+> +The patchworks website can be used to pull in patches for testing
+> +purposes. Please see xref:apply-patches-patchwork[] for more
+> +information on using the patchworks website to apply patches.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- docs/manual/adding-packages-generic.txt |    6 ++++++
- package/pkg-generic.mk                  |    1 +
- 2 files changed, 7 insertions(+), 0 deletions(-)
+It's actually "patchwork", not "patchworks", as far as I can see.
 
-diff --git a/docs/manual/adding-packages-generic.txt b/docs/manual/adding-packages-generic.txt
-index cb067bd..59a2684 100644
---- a/docs/manual/adding-packages-generic.txt
-+++ b/docs/manual/adding-packages-generic.txt
-@@ -248,6 +248,12 @@ information is (assuming the package name is +libfoo+) :
-     +LIBFOO_SITE=/opt/software/libfoo.tar.gz+ +
-     +LIBFOO_SITE=$(TOPDIR)/../src/libfoo/+
- 
-+* +LIBFOO_EXTRA_DOWNLOADS+ lists a number of additional files that
-+  Buildroot should download from +LIBFOO_SITE+ in addition to the main
-+  +LIBFOO_SOURCE+ (which usually is a tarball). Buildroot will not do
-+  anything with those additional files, except download files: it will
-+  be up to the package recipe to use them from +$(DL_DIR)+.
-+
- * +LIBFOO_SITE_METHOD+ determines the method used to fetch or copy the
-   package source code. In many cases, Buildroot guesses the method
-   from the contents of +LIBFOO_SITE+ and setting +LIBFOO_SITE_METHOD+
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index bfc4dc1..a46457c 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -40,6 +40,7 @@ ifeq ($(DL_MODE),DOWNLOAD)
- 	fi
- endif
- 	$(if $($(PKG)_SOURCE),$(call DOWNLOAD,$($(PKG)_SITE:/=)/$($(PKG)_SOURCE)))
-+	$(foreach p,$($(PKG)_EXTRA_DOWNLOADS),$(call DOWNLOAD,$($(PKG)_SITE:/=)/$(p))$(sep))
- 	$(foreach p,$($(PKG)_PATCH),\
- 		$(if $(findstring ://,$(p)),\
- 			$(call DOWNLOAD,$(p)),\
+
+> -The Buildroot patch management interface is at
+> +Patchwork is a web-based patch tracking system designed to facilitate
+> +the contribution and management of contributions to an open-source
+> +project. Patches that have been sent to a mailing list are \'caught' by
+> +the system, and appear on a web page. Any comments posted that
+> +reference the patch are appended to the patch page too. For more
+> +information on Patchwork see
+> +http://jk.ozlabs.org/projects/patchwork[].
+> +
+> +Buildroot utilizes this tool to ensure patches aren't missed
+> +along with exposing all patches and their corresponding review comments
+> +in a clean web interface.
+
+This looks good, but I would probably emphasize the fact that patchwork
+is mainly a tool for the maintainers and core contributors. Newcomers
+don't have to worry about patchwork. I believe this was the original
+misunderstanding that you had, thinking that you had to somehow
+interact with patchwork to get your patches reviewed or accepted, which
+is not the case.
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
