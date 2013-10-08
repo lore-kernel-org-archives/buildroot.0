@@ -1,119 +1,79 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue,  8 Oct 2013 20:17:12 +0200
-Subject: [Buildroot] [PATCHv3 15/20] toolchain-external: update Linaro ARM
-	toolchain
+Date: Tue,  8 Oct 2013 20:17:14 +0200
+Subject: [Buildroot] [PATCHv3 17/20] toolchain-external: improve target
+	library copy logic
 In-Reply-To: <1381256237-27948-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1381256237-27948-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1381256237-27948-16-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1381256237-27948-18-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+The copy_toolchain_lib_root function is responsible for copying a
+given library (and its symbolic link) to the target filesystem. To do
+so, it looks for the library in various locations, and then iterates
+over the symbolic link all the way to the library, copying them as
+needed to the target filesystem.
+
+However, the latest Linaro toolchains bring an interesting use case:
+the lib/ directory in the toolchain is organized as follows:
+
+ - ld-linux.so.3 -> arm-linux-gnueabi/ld-2.17...so
+ - ld-linux-armhf.so.3 -> arm-linux-gnueabihf/ld-2.17...so
+ - arm-linux-gnueabi/
+   - all ARMv4T soft float libraries
+ - arm-linux-gnueabihf/
+   - all ARMv7 hard float libraries
+
+In order to match what we do with all other toolchains, we want all
+those libraries and symbolic links to be copied directly under
+$(TARGET_DIR)/lib. This commit does that by adjusting the copy logic.
+
+This is part of the fix for bug #6452 (eglibc from Linaro 2013.07 not
+copied to target correctly).
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- toolchain/toolchain-external/Config.in             | 20 ++++++++++----------
- toolchain/toolchain-external/toolchain-external.mk |  6 +++---
- 2 files changed, 13 insertions(+), 13 deletions(-)
+ toolchain/helpers.mk | 17 ++++++++++-------
+ 1 file changed, 10 insertions(+), 7 deletions(-)
 
-diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-index 67f4fc7..ecfe17c 100644
---- a/toolchain/toolchain-external/Config.in
-+++ b/toolchain/toolchain-external/Config.in
-@@ -3,8 +3,8 @@ if BR2_TOOLCHAIN_EXTERNAL
- choice
- 	prompt "Toolchain"
- 
--config BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_08
--	bool "Linaro 2013.08"
-+config BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_09
-+	bool "Linaro 2013.09"
- 	depends on BR2_arm
- 	depends on BR2_GCC_TARGET_ARCH = "armv7-a"
- 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
-@@ -15,7 +15,7 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_08
- 	select BR2_HOSTARCH_NEEDS_IA32_LIBS
- 	help
- 	  Linaro toolchain for the ARM architecture. It uses Linaro
--	  GCC 2013.08 (based on gcc 4.8), Linaro GDB 2013.05 (based on
-+	  GCC 2013.09 (based on gcc 4.8), Linaro GDB 2013.05 (based on
- 	  GDB 7.6), eglibc 2.17, Binutils 2013.06 (based on 2.23). It
- 	  generates code that runs on all Cortex-A profile devices,
- 	  but tuned for the Cortex-A9. The code generated is Thumb 2,
-@@ -24,8 +24,8 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_08
- 
- 	  To use this toolchain, you must disable soft float usage.
- 
--config BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_07
--	bool "Linaro 2013.07"
-+config BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_08
-+	bool "Linaro 2013.08"
- 	depends on BR2_arm
- 	depends on BR2_GCC_TARGET_ARCH = "armv7-a"
- 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
-@@ -36,7 +36,7 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_07
- 	select BR2_HOSTARCH_NEEDS_IA32_LIBS
- 	help
- 	  Linaro toolchain for the ARM architecture. It uses Linaro
--	  GCC 2013.07 (based on gcc 4.8), Linaro GDB 2013.05 (based on
-+	  GCC 2013.08 (based on gcc 4.8), Linaro GDB 2013.05 (based on
- 	  GDB 7.6), eglibc 2.17, Binutils 2013.06 (based on 2.23). It
- 	  generates code that runs on all Cortex-A profile devices,
- 	  but tuned for the Cortex-A9. The code generated is Thumb 2,
-@@ -45,8 +45,8 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_07
- 
- 	  To use this toolchain, you must disable soft float usage.
- 
--config BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_06
--	bool "Linaro 2013.06"
-+config BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_07
-+	bool "Linaro 2013.07"
- 	depends on BR2_arm
- 	depends on BR2_GCC_TARGET_ARCH = "armv7-a"
- 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
-@@ -57,7 +57,7 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_06
- 	select BR2_HOSTARCH_NEEDS_IA32_LIBS
- 	help
- 	  Linaro toolchain for the ARM architecture. It uses Linaro
--	  GCC 2013.06 (based on gcc 4.8), Linaro GDB 2013.05 (based on
-+	  GCC 2013.07 (based on gcc 4.8), Linaro GDB 2013.05 (based on
- 	  GDB 7.6), eglibc 2.17, Binutils 2013.06 (based on 2.23). It
- 	  generates code that runs on all Cortex-A profile devices,
- 	  but tuned for the Cortex-A9. The code generated is Thumb 2,
-@@ -816,9 +816,9 @@ config BR2_TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX
- 
- config BR2_TOOLCHAIN_EXTERNAL_PREFIX
- 	string
-+	default "arm-linux-gnueabihf"	 if BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_09
- 	default "arm-linux-gnueabihf"	 if BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_08
- 	default "arm-linux-gnueabihf"	 if BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_07
--	default "arm-linux-gnueabihf"	 if BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_06
- 	default "arm-none-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201109
- 	default "arm-none-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201203
- 	default "arm-none-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201305
-diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
-index b2266b6..e38ee48 100644
---- a/toolchain/toolchain-external/toolchain-external.mk
-+++ b/toolchain/toolchain-external/toolchain-external.mk
-@@ -239,15 +239,15 @@ define TOOLCHAIN_EXTERNAL_FIXUP_CMDS
- 	mv $(TOOLCHAIN_EXTERNAL_INSTALL_DIR)/arago-2011.09/armv5te/* $(TOOLCHAIN_EXTERNAL_INSTALL_DIR)/
- 	rm -rf $(TOOLCHAIN_EXTERNAL_INSTALL_DIR)/arago-2011.09/
- endef
--else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_06),y)
--TOOLCHAIN_EXTERNAL_SITE = https://releases.linaro.org/13.06/components/toolchain/binaries/
--TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-arm-linux-gnueabihf-4.8-2013.06_linux.tar.xz
- else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_07),y)
- TOOLCHAIN_EXTERNAL_SITE = http://releases.linaro.org/13.07/components/toolchain/binaries/
- TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-arm-linux-gnueabihf-4.8-2013.07-1_linux.tar.xz
- else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_08),y)
- TOOLCHAIN_EXTERNAL_SITE = http://releases.linaro.org/13.08/components/toolchain/binaries/
- TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-arm-linux-gnueabihf-4.8-2013.08_linux.tar.xz
-+else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_09),y)
-+TOOLCHAIN_EXTERNAL_SITE = http://releases.linaro.org/13.09/components/toolchain/binaries/
-+TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-arm-linux-gnueabihf-4.8-2013.09_linux.tar.xz
- else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201203),y)
- TOOLCHAIN_EXTERNAL_SITE = http://sourcery.mentor.com/public/gnu_toolchain/mips-linux-gnu/
- TOOLCHAIN_EXTERNAL_SOURCE = mips-2012.03-63-mips-linux-gnu-i686-pc-linux-gnu.tar.bz2
+diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
+index dfeef76..f7e70cd 100644
+--- a/toolchain/helpers.mk
++++ b/toolchain/helpers.mk
+@@ -61,21 +61,24 @@ copy_toolchain_lib_root = \
+ 			break ; \
+ 		fi \
+ 	done ; \
++	mkdir -p $(TARGET_DIR)/$${DESTDIR}; \
+ 	for LIBPATH in $${LIBSPATH} ; do \
+-		LIBNAME=`basename $${LIBPATH}`; \
+-		LIBDIR=`dirname $${LIBPATH}` ; \
+-		while test \! -z "$${LIBNAME}" ; do \
+-			LIBPATH=$${LIBDIR}/$${LIBNAME} ; \
++		while true ; do \
++			LIBNAME=`basename $${LIBPATH}`; \
++			LIBDIR=`dirname $${LIBPATH}` ; \
++			LINKTARGET=`readlink $${LIBPATH}` ; \
+ 			rm -fr $(TARGET_DIR)/$${DESTDIR}/$${LIBNAME}; \
+-			mkdir -p $(TARGET_DIR)/$${DESTDIR}; \
+ 			if test -h $${LIBPATH} ; then \
+-				cp -d $${LIBPATH} $(TARGET_DIR)/$${DESTDIR}/; \
++				ln -sf `basename $${LINKTARGET}` $(TARGET_DIR)/$${DESTDIR}/$${LIBNAME} ; \
+ 			elif test -f $${LIBPATH}; then \
+ 				$(INSTALL) -D -m0755 $${LIBPATH} $(TARGET_DIR)/$${DESTDIR}/$${LIBNAME}; \
+ 			else \
+ 				exit -1; \
+ 			fi; \
+-			LIBNAME="`readlink $${LIBPATH}`"; \
++			if test -z "$${LINKTARGET}" ; then \
++				break ; \
++			fi ; \
++			LIBPATH="`readlink -f $${LIBPATH}`"; \
+ 		done; \
+ 	done; \
+  \
 -- 
 1.8.1.2
