@@ -1,49 +1,52 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 8 Oct 2013 16:54:40 +0200
-Subject: [Buildroot] [git commit] lighttpd: fix build failure without ipv6
-Message-ID: <20131008150944.042109B98B@busybox.osuosl.org>
+Date: Tue, 8 Oct 2013 17:08:14 +0200
+Subject: [Buildroot] [git commit] libsoc: bump to 0.4
+Message-ID: <20131008150944.7D66B9B930@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1fffa00852e74e839d53dbbac7a27a72e87020ff
+commit: http://git.buildroot.net/buildroot/commit/?id=09e59d73f588ff26a62787dc91e0a0bc810b39e0
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Reported in https://bugs.gentoo.org/show_bug.cgi?id=486426
-and http://redmine.lighttpd.net/issues/2515
-Autobuilders didn't hit it yet, but i did.
+"Non-blocking GPIO Interrupts with callback mechanism" feature
+requires pthreads.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Reviewed-by: Markos Chandras <markos.chandras@imgtec.com>
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...h => lighttpd-01-Fix-default-config-file.patch} |    0
- package/lighttpd/lighttpd-02-mod_extforward.patch  |   14 ++++++++++++++
- 2 files changed, 14 insertions(+), 0 deletions(-)
+ package/libsoc/Config.in |    4 ++++
+ package/libsoc/libsoc.mk |    2 +-
+ 2 files changed, 5 insertions(+), 1 deletions(-)
 
-diff --git a/package/lighttpd/lighttpd-Fix-default-config-file.patch b/package/lighttpd/lighttpd-01-Fix-default-config-file.patch
-similarity index 100%
-rename from package/lighttpd/lighttpd-Fix-default-config-file.patch
-rename to package/lighttpd/lighttpd-01-Fix-default-config-file.patch
-diff --git a/package/lighttpd/lighttpd-02-mod_extforward.patch b/package/lighttpd/lighttpd-02-mod_extforward.patch
-new file mode 100644
-index 0000000..3efd2b1
---- /dev/null
-+++ b/package/lighttpd/lighttpd-02-mod_extforward.patch
-@@ -0,0 +1,14 @@
-+From http://redmine.lighttpd.net/issues/2515
+diff --git a/package/libsoc/Config.in b/package/libsoc/Config.in
+index 3e750bd..0f6336d 100644
+--- a/package/libsoc/Config.in
++++ b/package/libsoc/Config.in
+@@ -1,7 +1,11 @@
+ config BR2_PACKAGE_LIBSOC
+ 	bool "libsoc"
++	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	help
+ 	  libsoc is a C library for interfacing with common SoC
+ 	  peripherals through generic kernel interfaces
+ 
+ 	  https://github.com/jackmitch/libsoc
 +
-+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+
-+--- a/src/mod_extforward.c	(revision 2909)
-++++ b/src/mod_extforward.c	(working copy)
-+@@ -439,7 +439,6 @@
-+ #ifdef HAVE_IPV6
-+ 		ipstr_to_sockaddr(srv, real_remote_addr, &sock);
-+ #else
-+-		UNUSED(addrs_left);
-+ 		sock.ipv4.sin_addr.s_addr = inet_addr(real_remote_addr);
-+ 		sock.plain.sa_family = (sock.ipv4.sin_addr.s_addr == 0xFFFFFFFF) ? AF_UNSPEC : AF_INET;
-+ #endif
++comment "libsoc requires a toolchain with threads support"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/libsoc/libsoc.mk b/package/libsoc/libsoc.mk
+index 509d8eb..79c7e90 100644
+--- a/package/libsoc/libsoc.mk
++++ b/package/libsoc/libsoc.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBSOC_VERSION = 356760dcb93b22d6c67c5232cde2ade8c968c932
++LIBSOC_VERSION = 0.4
+ LIBSOC_SITE = http://github.com/jackmitch/libsoc/tarball/$(LIBSOC_VERSION)
+ LIBSOC_LICENSE = LGPLv2.1
+ LIBSOC_LICENSE_FILES = COPYING
