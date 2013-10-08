@@ -1,38 +1,32 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 8 Oct 2013 22:38:16 +0200
-Subject: [Buildroot] [git commit] harfbuzz: unbreak legal-info after version
-	bump
-Message-ID: <20131008203904.2E4249B98C@busybox.osuosl.org>
+Date: Tue, 8 Oct 2013 22:18:16 +0200
+Subject: [Buildroot] [git commit] stress: fix download url
+Message-ID: <20131008203903.F21E39B975@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=050f6935b25f92bd674e2db1211eb42881a1d1cb
+commit: http://git.buildroot.net/buildroot/commit/?id=972a73e61aa6b73ce8ac8cffcf03a374d4d07b5e
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The embedded icu support library has been removed upstream:
-
-http://cgit.freedesktop.org/harfbuzz/commit/src?id=ac1b723917d9b8f247a350f8d3e1bc5d1e472073
-
+Signed-off-by: Axel Lin <axel.lin@ingics.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/harfbuzz/harfbuzz.mk |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ package/stress/stress.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/harfbuzz/harfbuzz.mk b/package/harfbuzz/harfbuzz.mk
-index 847075d..23bc848 100644
---- a/package/harfbuzz/harfbuzz.mk
-+++ b/package/harfbuzz/harfbuzz.mk
-@@ -7,8 +7,8 @@
- HARFBUZZ_VERSION = 0.9.22
- HARFBUZZ_SITE = http://www.freedesktop.org/software/harfbuzz/release/
- HARFBUZZ_SOURCE = harfbuzz-$(HARFBUZZ_VERSION).tar.bz2
--HARFBUZZ_LICENSE = MIT, ISC (ucdn library), ICU License (icu support library)
--HARFBUZZ_LICENSE_FILES = COPYING src/hb-ucdn/COPYING src/hb-icu-le/COPYING
-+HARFBUZZ_LICENSE = MIT, ISC (ucdn library)
-+HARFBUZZ_LICENSE_FILES = COPYING src/hb-ucdn/COPYING
- HARFBUZZ_INSTALL_STAGING = YES
+diff --git a/package/stress/stress.mk b/package/stress/stress.mk
+index df9065a..6e82b50 100644
+--- a/package/stress/stress.mk
++++ b/package/stress/stress.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
  
- HARFBUZZ_CONF_OPT = --without-coretext --without-uniscribe --without-graphite2
+ STRESS_VERSION = 1.0.4
+-STRESS_SITE    = http://weather.ou.edu/~apw/projects/stress
++STRESS_SITE = http://people.seas.harvard.edu/~apw/stress
+ STRESS_AUTORECONF = YES
+ 
+ # Stress is linked statically if the --enable-static is specified.
