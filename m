@@ -1,46 +1,52 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 8 Oct 2013 09:11:39 +0200
-Subject: [Buildroot] [PATCH 1/1] ccache: expose control interface via
- 'make ccache-options'
-In-Reply-To: <CAEvN+1iBLh_Kr25EQTJPXn2-hh2KdeGQ1nhagT3haHMB=Jx1-A@mail.gmail.com>
-References: <1339991408-25620-1-git-send-email-tjlee@ambarella.com>
- <CAEvN+1jCAvFYsOkbv4Rf4g7YqZJe4Ty9cwpFMiAUTTAvh7mvQg@mail.gmail.com>
- <CAEvN+1iBLh_Kr25EQTJPXn2-hh2KdeGQ1nhagT3haHMB=Jx1-A@mail.gmail.com>
-Message-ID: <20131008091139.657596a9@skate>
+From: yegorslists at googlemail.com <yegorslists@googlemail.com>
+Date: Tue,  8 Oct 2013 09:11:55 +0200
+Subject: [Buildroot] [PATCH] libsoc: bump to 0.4
+Message-ID: <1381216315-14838-1-git-send-email-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Tzu-Jung Lee,
+From: Yegor Yefremov <yegorslists@googlemail.com>
 
-On Mon, 7 Oct 2013 15:09:34 -0700, Tzu-Jung Lee wrote:
-> # Response to patchwork cleanup of week #1
-> 
-> This patch provides an easy way to operate on buildroot ccache such as
-> changing the cache limit or showing statistics.
-> 
-> Without it, users would have to explicitly specify both the environment variable
-> and the path of patched ccache, for example:
-> 
->   BUILDROOT_CACHE_DIR=~/.buildroot-ccache/ $PWD/host/usr/bin/ccache -s
+"Non-blocking GPIO Interrupts with callback mechanism" feature
+requires pthreads.
 
-Well, in the case of just passing "-s", we already have the
-ccache-stats target.
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+---
+ package/libsoc/Config.in |    4 ++++
+ package/libsoc/libsoc.mk |    2 +-
+ 2 files changed, 5 insertions(+), 1 deletions(-)
 
-But I agree that for all other options, adding another
-ccache-<something> target would be impractical, so probably your
-proposal of CCACHE_OPTIONS makes sense.
-
-Can you respin your patch on top of the latest master, and add an
-update to the manual (we already have a section about ccache support,
-see http://buildroot.org/downloads/manual/manual.html#ccache).
-
-Thanks!
-
-Thomas
+diff --git a/package/libsoc/Config.in b/package/libsoc/Config.in
+index 3e750bd..0f6336d 100644
+--- a/package/libsoc/Config.in
++++ b/package/libsoc/Config.in
+@@ -1,7 +1,11 @@
+ config BR2_PACKAGE_LIBSOC
+ 	bool "libsoc"
++	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	help
+ 	  libsoc is a C library for interfacing with common SoC
+ 	  peripherals through generic kernel interfaces
+ 
+ 	  https://github.com/jackmitch/libsoc
++
++comment "libsoc requires a toolchain with threads support"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/libsoc/libsoc.mk b/package/libsoc/libsoc.mk
+index 509d8eb..79c7e90 100644
+--- a/package/libsoc/libsoc.mk
++++ b/package/libsoc/libsoc.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBSOC_VERSION = 356760dcb93b22d6c67c5232cde2ade8c968c932
++LIBSOC_VERSION = 0.4
+ LIBSOC_SITE = http://github.com/jackmitch/libsoc/tarball/$(LIBSOC_VERSION)
+ LIBSOC_LICENSE = LGPLv2.1
+ LIBSOC_LICENSE_FILES = COPYING
 -- 
-Thomas Petazzoni, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.7.7
