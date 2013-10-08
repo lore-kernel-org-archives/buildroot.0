@@ -1,43 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 9 Oct 2013 00:23:31 +0200
-Subject: [Buildroot] using a local package file : why copy it to the dl
- directory ?
-In-Reply-To: <22B9374628844ED0809C78AC328E71C5@JohanW7>
-References: <22B9374628844ED0809C78AC328E71C5@JohanW7>
-Message-ID: <20131009002331.5e89e31a@skate>
+Date: Wed, 9 Oct 2013 00:25:25 +0200
+Subject: [Buildroot] [PATCH 06/11] package/weston: fix configure.ac to
+ check for wayland-scanner
+In-Reply-To: <20131008222318.GE3373@free.fr>
+References: <cover.1381269937.git.yann.morin.1998@free.fr>
+ <301b21c6f968c2964560af77536057f6c90ebc95.1381269937.git.yann.morin.1998@free.fr>
+ <20131009001515.0358a990@skate> <20131008222318.GE3373@free.fr>
+Message-ID: <20131009002525.63b72619@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Sagaert Johan,
+Dear Yann E. MORIN,
 
-On Wed, 9 Oct 2013 00:19:12 +0200, Sagaert Johan wrote:
+On Wed, 9 Oct 2013 00:23:18 +0200, Yann E. MORIN wrote:
 
-> I noticed when using SITE_METHOD = file, the package is copied to the download directory.
-> Is this needed, since the package is already on our local filesystem ?
+> > Huh? wayland.mk does build wayland-scanner with the native compiler
+> > before starting the build itself. It doesn't work anymore with 1.2.x ?
+> 
+> He! I did not even check... Yes, it does.
+> I basically did not expect wayland to build host tools.
+> 
+> I'll rework the series so wayland installs wayland-scanner to $(HOST),
+> and use that instead of host-wayland.
 
-Yes it is needed, because:
-
- (1) Buildroot do not want to make changes outside of its output
-     directory. We clearly do not want Buildroot to mess up with your
-     source directory, and create its stamp files, and the result of
-     the compilation there.
-
- (2) Buildroot does not use out of tree build for packages. If it was
-     using out of tree build, then we could avoid that copy by using
-     your local directory as the source tree, and the
-     output/build/<pkgname>-<pkgversion> directory as the build tree. A
-     while ago, I started working on out-of-tree build for packages,
-     precisely to improve this situation. See
-     http://lists.busybox.net/pipermail/buildroot/2013-April/070573.html.
-     It is certainly not impossible to do, but quite a huge patch set,
-     with a lot of implications. Basically, my stuff was working in the
-     general case, but there were some issues here and there that
-     remained to be sorted out.
-
-Best regards,
+Well, using a host-wayland package is certainly an alternate approach.
+But at least at the time of wayland 1.1.x, building wayland-scanner
+manually was very easy, so I thought it was the best solution to just
+do it manually in wayland.mk. Should the build process of
+wayland-scanner become too complicated, having a host-wayland package
+would certainly be the appropriate solution.
 
 Thomas
 -- 
