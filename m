@@ -1,59 +1,37 @@
-From: Markos Chandras <Markos.Chandras@imgtec.com>
-Date: Tue, 8 Oct 2013 09:21:11 +0100
-Subject: [Buildroot] [PATCHv2] lighttpd: fix build failure without ipv6
-In-Reply-To: <1381179735-21272-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1381179735-21272-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <5253C077.4020503@imgtec.com>
+From: Phil Eichinger <phil.eichinger@gmail.com>
+Date: Tue,  8 Oct 2013 10:36:48 +0200
+Subject: [Buildroot] [PATCH 1/1] rpi-userland: needs threads
+Message-ID: <1381221408-15700-1-git-send-email-phil@zankapfel.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 10/07/13 22:02, Gustavo Zacarias wrote:
-> Reported in https://bugs.gentoo.org/show_bug.cgi?id=486426
-> and http://redmine.lighttpd.net/issues/2515
-> Autobuilders didn't hit it yet, but i did.
->
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->   ...ile.patch => lighttpd-01-Fix-default-config-file.patch} |  0
->   package/lighttpd/lighttpd-02-mod_extforward.patch          | 14 ++++++++++++++
->   2 files changed, 14 insertions(+)
->   rename package/lighttpd/{lighttpd-Fix-default-config-file.patch => lighttpd-01-Fix-default-config-file.patch} (100%)
->   create mode 100644 package/lighttpd/lighttpd-02-mod_extforward.patch
->
-> diff --git a/package/lighttpd/lighttpd-Fix-default-config-file.patch b/package/lighttpd/lighttpd-01-Fix-default-config-file.patch
-> similarity index 100%
-> rename from package/lighttpd/lighttpd-Fix-default-config-file.patch
-> rename to package/lighttpd/lighttpd-01-Fix-default-config-file.patch
-> diff --git a/package/lighttpd/lighttpd-02-mod_extforward.patch b/package/lighttpd/lighttpd-02-mod_extforward.patch
-> new file mode 100644
-> index 0000000..3efd2b1
-> --- /dev/null
-> +++ b/package/lighttpd/lighttpd-02-mod_extforward.patch
-> @@ -0,0 +1,14 @@
-> +From http://redmine.lighttpd.net/issues/2515
-> +
-> +Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> +
-> +--- a/src/mod_extforward.c	(revision 2909)
-> ++++ b/src/mod_extforward.c	(working copy)
-> +@@ -439,7 +439,6 @@
-> + #ifdef HAVE_IPV6
-> + 		ipstr_to_sockaddr(srv, real_remote_addr, &sock);
-> + #else
-> +-		UNUSED(addrs_left);
-> + 		sock.ipv4.sin_addr.s_addr = inet_addr(real_remote_addr);
-> + 		sock.plain.sa_family = (sock.ipv4.sin_addr.s_addr == 0xFFFFFFFF) ? AF_UNSPEC : AF_INET;
-> + #endif
->
+Signed-off-by: Phil Eichinger <phil@zankapfel.net>
+---
+ package/rpi-userland/Config.in |    5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-oh this is rather embarrasing. I am taking care of the Gentoo bug myself 
-:/ I assumed the ipv6 is disabled by default since i didn't see it in 
-the lighttpd.mk makefile but reading the configure.ac it appears to 
-always be enabled :( Sorry about that.
-
-Thanks for the patch!
-
-Reviewed-by: Markos Chandras <markos.chandras@imgtec.com>
+diff --git a/package/rpi-userland/Config.in b/package/rpi-userland/Config.in
+index da5726f..d4e28a1 100644
+--- a/package/rpi-userland/Config.in
++++ b/package/rpi-userland/Config.in
+@@ -3,6 +3,7 @@ config BR2_PACKAGE_RPI_USERLAND
+ 	depends on BR2_arm
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_LARGEFILE
++	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_PACKAGE_HAS_OPENGL_EGL
+ 	select BR2_PACKAGE_HAS_OPENGL_ES
+ 	select BR2_PACKAGE_HAS_OPENVG
+@@ -16,5 +17,5 @@ config BR2_PACKAGE_RPI_USERLAND
+ 
+ 	  https://github.com/raspberrypi/userland/
+ 
+-comment "rpi-userland requires a toolchain with C++ and LARGEFILE support"
+-	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_LARGEFILE
++comment "rpi-userland requires a toolchain with C++, LARGEFILE and threads support"
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS
+-- 
+1.7.10.4
