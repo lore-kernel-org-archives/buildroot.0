@@ -1,24 +1,22 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 09 Oct 2013 22:19:14 +0200
-Subject: [Buildroot] [PATCH] redis: bump to version 2.6.16
-In-Reply-To: <1381308425.20719.1.camel@phoenix> (Axel Lin's message of "Wed,
- 09 Oct 2013 16:47:05 +0800")
-References: <1381308425.20719.1.camel@phoenix>
-Message-ID: <87bo2yyz7h.fsf@dell.be.48ers.dk>
+Date: Wed, 09 Oct 2013 22:21:46 +0200
+Subject: [Buildroot] [PATCH 1/5] gnupg: security bump to version 1.4.15
+In-Reply-To: <1381348177-2189-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Wed, 9 Oct 2013 16:49:33 -0300")
+References: <1381348177-2189-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <877gdmyz39.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Axel" == Axel Lin <axel.lin@ingics.com> writes:
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
- Axel> The Redis project home page moved to redis.io, thus also update
- Axel> the download url accordingly.
+ Gustavo> Fixes CVE-2013-4402.
+ Gustavo> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
- Axel> Signed-off-by: Axel Lin <axel.lin@ingics.com>
-
-Committed, thanks.
+Committed series, thanks.
 
 -- 
 Bye, Peter Korsgaard
