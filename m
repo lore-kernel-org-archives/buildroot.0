@@ -1,139 +1,252 @@
-From: Ryan Barnett <rjbarnet@rockwellcollins.com>
-Date: Wed, 9 Oct 2013 08:01:25 -0500
-Subject: [Buildroot] [PATCH v2 1/1] manual: update review process and
-	patchwork
-In-Reply-To: <CAAXf6LXdEikqkXSWJywPwDXraWtnE8teYFNwMOs8oW6YP2JfgA@mail.gmail.com>
-References: <1381278711-24631-1-git-send-email-rjbarnet@rockwellcollins.com>
- <CAAXf6LXdEikqkXSWJywPwDXraWtnE8teYFNwMOs8oW6YP2JfgA@mail.gmail.com>
-Message-ID: <OFE85A6A03.946CB738-ON86257BFF.00470072-86257BFF.00478ADB@rockwellcollins.com>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Wed, 9 Oct 2013 15:09:02 +0200
+Subject: [Buildroot] [PATCH] libxmlrpc: new package
+In-Reply-To: <1381320976-948-1-git-send-email-alvaro.gamez@hazent.com>
+References: <CAM+bi4vJbFEGdDKMjJxesqR8T=g=KQkgeZpaLNy=1L_FsDkrPA@mail.gmail.com>
+ <1381320976-948-1-git-send-email-alvaro.gamez@hazent.com>
+Message-ID: <CAAXf6LUo7nVgHoRNy5aqseXEijPACxsp7NwVJSUQ-q_bQR0VMw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas D.,
+Hi Alvaro,
 
-Thomas De Schampheleire <patrickdepinguin@gmail.com> wrote on 10/09/2013 
-01:50:57 AM:
+On Wed, Oct 9, 2013 at 2:16 PM, Alvaro G. M <alvaro.gamez@hazent.com> wrote:
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Signed-off-by: Alvaro G. M <alvaro.gamez@hazent.com>
+> ---
+>  package/Config.in                                  |  1 +
+>  package/libxmlrpc/Config.in                        | 10 ++++++++
+>  .../libxmlrpc-01-fix-gennmtab-build.patch          | 25 ++++++++++++++++++
+>  .../libxmlrpc-02-fix-non-cplusplus-build.patch     | 27 +++++++++++++++++++
+>  .../libxmlrpc/libxmlrpc-03-non-wchar-build.patch   | 24 +++++++++++++++++
+>  .../libxmlrpc-04-use-correct-curl-config.patch     | 22 ++++++++++++++++
+>  package/libxmlrpc/libxmlrpc.mk                     | 30 ++++++++++++++++++++++
+>  7 files changed, 139 insertions(+)
+>  create mode 100644 package/libxmlrpc/Config.in
+>  create mode 100644 package/libxmlrpc/libxmlrpc-01-fix-gennmtab-build.patch
+>  create mode 100644 package/libxmlrpc/libxmlrpc-02-fix-non-cplusplus-build.patch
+>  create mode 100644 package/libxmlrpc/libxmlrpc-03-non-wchar-build.patch
+>  create mode 100644 package/libxmlrpc/libxmlrpc-04-use-correct-curl-config.patch
+>  create mode 100644 package/libxmlrpc/libxmlrpc.mk
 
-> Hi Ryan,
-> 
-> On Wed, Oct 9, 2013 at 2:31 AM, Ryan Barnett
-> <rjbarnet@rockwellcollins.com> wrote:
-> > Adding more documentaiton based on discussion from the mailing list
-> > in regards the buildroot review process and how patchworks can be
-> > used to pull in patches for testing purposes.
-> >
-> > Mailing list discussion:
-> > 
-http://lists.busybox.net/pipermail/buildroot/2013-September/078170.html
-> >
-> > Signed-off-by: Ryan Barnett <rjbarnet@rockwellcollins.com>
-> >
-> > ---
-> >
-> > v1 -> v2
-> >  * Updated all references to patchwork to be Patchwork or Buildroot's
-> >    Patchwork instead of a few misspellings (suggested by Thomas
-> >    Petazzoni)
-> >  * Added clarification that patchwork main use is for the Buildroot
-> >    maintainer (suggested by Thomas Petazzoni)
-> >
-> > Signed-off-by: Ryan Barnett <rjbarnet@rockwellcollins.com>
-> > ---
-> >  docs/manual/contribute.txt   |   12 +++++++++++-
-> >  docs/manual/get-involved.txt |   38 
-+++++++++++++++++++++++++++++++++++---
-> >  2 files changed, 46 insertions(+), 4 deletions(-)
-> >
-> > diff --git a/docs/manual/contribute.txt b/docs/manual/contribute.txt
-> > index 2b2783d..201685c 100644
-> > --- a/docs/manual/contribute.txt
-> > +++ b/docs/manual/contribute.txt
-> > @@ -132,9 +132,15 @@ $ git format-patch --subject-prefix "PATCH v4" \
-> >  Reviewing/Testing patches
-> >  -------------------------
-> >
-> > +The review process for new patches is done over the mailing list. 
-Once
-> > +a patch is submitted to the mailing list, other developers will 
-provide
-> > +feedback to the patch via emails sent through the mailing list.
-> > +
-> >  In the review process, do not hesitate to respond to patch 
-submissions
-> >  for remarks, suggestions or anything that will help everyone to
-> > -understand the patches and make them better.
-> > +understand the patches and make them better. Please use internet
-> > +style replies in plain text emails when responding to patch
-> > +submissions.
-> >
-> >  Some tags are used to help following the state of any patch posted on
-> >  the mailing-list:
-> > @@ -144,6 +150,10 @@ Acked-by:: Indicates that the patch can be 
-committed.
-> >  Tested-by:: Indicates that the patch has been tested. It is useful
-> >    but not necessary to add a comment about what has been tested.
-> >
-> > +Buildroot's Patchwork website can be used to pull in patches for 
-testing
-> > +purposes. Please see xref:apply-patches-patchwork[] for more
-> > +information on using Buildroot's Patchwork website to apply patches.
-> > +
-> >  Autobuild
-> >  ---------
-> >
-> > diff --git a/docs/manual/get-involved.txt 
-b/docs/manual/get-involved.txt
-> > index 8515d34..173b0f4 100644
-> > --- a/docs/manual/get-involved.txt
-> > +++ b/docs/manual/get-involved.txt
-> > @@ -55,11 +55,43 @@ using a code sharing website.
-> >  Patchwork
-> >  ---------
-> >
-> > -The Buildroot patch management interface is at
-> > +Patchwork is a web-based patch tracking system designed to facilitate
-> > +the contribution and management of contributions to an open-source
-> > +project. Patches that have been sent to a mailing list are \'caught' 
-by
-> > +the system, and appear on a web page. Any comments posted that
-> > +reference the patch are appended to the patch page too. For more
-> > +information on Patchwork see
-> > +http://jk.ozlabs.org/projects/patchwork[].
-> > +
-> > +Buildroot's Patchwork website is mainly for use by the Buildroot's
-> > +maintainer to ensure patches aren't missed. The website however,
-> > +exposes patches and their corresponding review comments in a clean
-> > +and concise web interface.
-> > +
-> > +The Buildroot patch management interface is available at
-> >  http://patchwork.buildroot.org[].
-> >
-> > -All patches and comments sent through the mailing list are
-> > -automatically indexed in http://patchwork.buildroot.org[patchwork].
-> > +[[apply-patches-patchwork]]
-> > +Applying Patches from Patchwork
-> > +~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> > +
-> > +Buildroot's Patchwork website main use for a developer is for pulling
-> > +in patches into their local git repository for testing purposes.
-> > +
-> > +When browsing patches in the patchwork management interface, a +mbox+
-> 
-> shouldn't this be 'an mbox' because you pronounce mbox as embox ?
+We have had a long discussion on two buildroot developer days about
+the format of the number in patch names. I thought we had decided to
+use a four-digit format to correspond to the patches generated with
+git. So this should be 0001, 0002, etc.
+However, this may be mis-remembered by me, so I'm including some of
+the people involved in that discussion to this mail...
 
-I was on the fence on this one too and with this question you are now
-testing my grammar education from primary school :) I did do a bit of
-google research on this and have come to the conclusion that I used 'a'
-correctly in this instance. Please see this website which is consider
-in the US to be a reputable source for English writing:
+>
+> diff --git a/package/Config.in b/package/Config.in
+> index 9aa9d81..3c44f67 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -727,6 +727,7 @@ source "package/libjson/Config.in"
+>  source "package/libroxml/Config.in"
+>  source "package/libxml-parser-perl/Config.in"
+>  source "package/libxml2/Config.in"
+> +source "package/libxmlrpc/Config.in"
+>  source "package/libxmlpp/Config.in"
 
-https://owl.english.purdue.edu/owl/resource/591/01
+This alphabetical order is not correct, libxmlrpc should come after libxmlpp.
 
-> Best regards,
-> Thomas
+>  source "package/libxslt/Config.in"
+>  source "package/libyaml/Config.in"
+> diff --git a/package/libxmlrpc/Config.in b/package/libxmlrpc/Config.in
+> new file mode 100644
+> index 0000000..26e4a52
+> --- /dev/null
+> +++ b/package/libxmlrpc/Config.in
+> @@ -0,0 +1,10 @@
+> +config BR2_PACKAGE_LIBXMLRPC
+> +       bool "libxmlrpc"
+> +       select BR2_PACKAGE_LIBCURL
+> +       help
+> +         XML-RPC is a quick-and-easy way to make procedure calls over
+> +         the Internet. It converts the procedure call into an XML
+> +         document, sends it to a remote server using HTTP, and gets
+> +         back the response as XML.
+> +
+> +         http://xmlrpc-c.sourceforge.net/
+> diff --git a/package/libxmlrpc/libxmlrpc-01-fix-gennmtab-build.patch b/package/libxmlrpc/libxmlrpc-01-fix-gennmtab-build.patch
+> new file mode 100644
+> index 0000000..8cdd932
+> --- /dev/null
+> +++ b/package/libxmlrpc/libxmlrpc-01-fix-gennmtab-build.patch
+> @@ -0,0 +1,25 @@
+> +Fix build of host tool
+> +
+> +genmtab is a tool that needs to be built for the host as it is used
+> +during the compilation process of libxmlrpc. Its Makefile needs a bit
+> +of tuning to use the conventional CC_FOR_BUILD, CFLAGS_FOR_BUILD and
+> +LDFLAGS_FOR_BUILD variables.
+> +
+> +Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> +
+> +Index: b/lib/expat/gennmtab/Makefile
+> +===================================================================
+> +--- a/lib/expat/gennmtab/Makefile
+> ++++ b/lib/expat/gennmtab/Makefile
+> +@@ -40,9 +40,9 @@
+> + dep: dep-common
+> +
+> + gennmtab.o:%.o:%.c
+> +-      $(BUILDTOOL_CC) -c $< -o $@ $(CFLAGS_ALL) $(INCLUDES)
+> ++      $(CC_FOR_BUILD) -c $< -o $@ $(CFLAGS_FOR_BUILD) $(INCLUDES)
+> +
+> + gennmtab:%:%.o
+> +-      $(BUILDTOOL_CCLD) -o $@ $(LDFLAGS) $^
+> ++      $(CC_FOR_BUILD) -o $@ $(LDFLAGS_FOR_BUILD) $^
+> +
+> + include depend.mk
+> diff --git a/package/libxmlrpc/libxmlrpc-02-fix-non-cplusplus-build.patch b/package/libxmlrpc/libxmlrpc-02-fix-non-cplusplus-build.patch
+> new file mode 100644
+> index 0000000..efeb9cc
+> --- /dev/null
+> +++ b/package/libxmlrpc/libxmlrpc-02-fix-non-cplusplus-build.patch
+> @@ -0,0 +1,27 @@
+> +Handle builds without C++
+> +
+> +libxmlrpc nicely handles the fact of being built without C++ support,
+> +except for one location, fixed by this patch.
+> +
+> +Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> +
+> +Index: b/lib/util/Makefile
+> +===================================================================
+> +--- a/lib/util/Makefile
+> ++++ b/lib/util/Makefile
+> +@@ -41,11 +41,14 @@
+> + LIBOBJS = \
+> +   casprintf.o \
+> +   cmdline_parser.o \
+> +-  cmdline_parser_cpp.o \
+> +   getoptx.o \
+> +   string_parser.o \
+> +   stripcaseeq.o \
+> +
+> ++ifeq ($(ENABLE_CPLUSPLUS),yes)
+> ++LIBOBJS += cmdline_parser_cpp.o
+> ++endif
+> ++
+> + .PHONY: all
+> + all: $(LIBOBJS)
+> +
+> diff --git a/package/libxmlrpc/libxmlrpc-03-non-wchar-build.patch b/package/libxmlrpc/libxmlrpc-03-non-wchar-build.patch
+> new file mode 100644
+> index 0000000..1f04353
+> --- /dev/null
+> +++ b/package/libxmlrpc/libxmlrpc-03-non-wchar-build.patch
+> @@ -0,0 +1,24 @@
+> +Disable wide-char specific code
+> +
+> +The vast majority of the libxmlrpc code nicely handles the absence of
+> +wide char support, except at one location, which is fixed by this
+> +patch.
+> +
+> +Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> +
+> +Index: b/src/xmlrpc_decompose.c
+> +===================================================================
+> +--- a/src/xmlrpc_decompose.c
+> ++++ b/src/xmlrpc_decompose.c
+> +@@ -217,7 +217,11 @@
+> +         xmlrpc_strfree(*decompRootP->store.Tstring.valueP);
+> +         break;
+> +     case 'w':
+> ++#if HAVE_UNICODE_WCHAR
+> +         free((void*)*decompRootP->store.TwideString.valueP);
+> ++#else
+> ++      XMLRPC_ASSERT(false);
+> ++#endif
+> +         break;
+> +     case '6':
+> +         free((void*)*decompRootP->store.TbitString.valueP);
+> diff --git a/package/libxmlrpc/libxmlrpc-04-use-correct-curl-config.patch b/package/libxmlrpc/libxmlrpc-04-use-correct-curl-config.patch
+> new file mode 100644
+> index 0000000..ada0bd2
+> --- /dev/null
+> +++ b/package/libxmlrpc/libxmlrpc-04-use-correct-curl-config.patch
+> @@ -0,0 +1,22 @@
+> +Use correct curl-config program
+> +
+> +Instead of calling again curl-config in src/Makefile (which ends up
+> +calling the wrong curl-config: the one in the PATH instead of the one
+> +pointed at by the environment variables at configure time), let's use
+> +the CURL_LDADD variable which was computed at configure time.
+> +
+> +Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> +
+> +Index: b/src/Makefile
+> +===================================================================
+> +--- a/src/Makefile
+> ++++ b/src/Makefile
+> +@@ -56,7 +56,7 @@
+> +   TRANSPORT_MODS += blddir/lib/curl_transport/curltransaction
+> +   TRANSPORT_MODS += blddir/lib/curl_transport/curlmulti
+> +   TRANSPORT_MODS += blddir/lib/curl_transport/lock_pthread
+> +-  TRANSPORT_LIBDEP += $(shell curl-config --libs)
+> ++  TRANSPORT_LIBDEP += $(CURL_LDADD)
+> + endif
+> + ifeq ($(MUST_BUILD_LIBWWW_CLIENT),yes)
+> +   TRANSPORT_MODS += blddir/lib/libwww_transport/xmlrpc_libwww_transport
+> diff --git a/package/libxmlrpc/libxmlrpc.mk b/package/libxmlrpc/libxmlrpc.mk
+> new file mode 100644
+> index 0000000..956dae9
+> --- /dev/null
+> +++ b/package/libxmlrpc/libxmlrpc.mk
+> @@ -0,0 +1,30 @@
+> +################################################################################
+> +#
+> +# libxmlrpc
+> +#
+> +################################################################################
+> +
+> +LIBXMLRPC_VERSION = 1.25.26
+> +LIBXMLRPC_SOURCE = xmlrpc-c-$(LIBXMLRPC_VERSION).tgz
+> +LIBXMLRPC_SITE = "http://downloads.sourceforge.net/project/xmlrpc-c/Xmlrpc-c%20Super%20Stable/1.25.26"
 
-Thanks,
--Ryan
+Why are there quotes around the URL?
+
+> +LIBXMLRPC_LICENSE = BSD-like, Expat, Python 1.5.2 License
+> +LIBXMLRPC_LICENSE_FILES = doc/COPYING
+
+Are these three licenses used on identifyable parts of libxmlrpc, such
+that you could be more specific, like
+BSD-like (partA), Expat (partB) etc.?
+
+Also, what exactly do you mean with BSD-like? Is it possible to map
+onto one of the standard strings specified in
+http://buildroot.uclibc.org/downloads/manual/manual.html#legal-info-list-licenses
+?
+
+And finally, if there are three licenses, I'd expect three license
+files, unless the file doc/COPYING accumulates the license texts of
+all three licenses. Can you confirm?
+
+> +LIBXMLRPC_INSTALL_STAGING = YES
+> +LIBXMLRPC_DEPENDENCIES = libcurl
+> +LIBXMLRPC_CONFIG_SCRIPTS = xmlrpc-c-config
+> +
+> +LIBXMLRPC_CONF_OPT = \
+> +       $(if $(BR2_USE_WCHAR),,ac_cv_header_wchar_h=no) \
+> +       $(if $(BR2_INSTALL_LIBSTDCPP),,--disable-cplusplus) \
+> +       have_curl_config=$(STAGING_DIR)/usr/bin/curl-config \
+> +       CURL_CONFIG=$(STAGING_DIR)/usr/bin/curl-config
+> +
+> +# Our package uses autoconf, but not automake, so we need to pass
+> +# those variables at compile time as well.
+> +LIBXMLRPC_MAKE_ENV = \
+> +       CC_FOR_BUILD="$(HOSTCC)" \
+> +       LD_FOR_BUILD="$(HOSTLD)" \
+> +       CFLAGS_FOR_BUILD="$(HOST_CFLAGS)" \
+> +       LDFLAGS_FOR_BUILD="$(HOST_LDFLAGS)"
+> +
+> +$(eval $(autotools-package))
+> --
+
+Best regards,
+Thomas
