@@ -1,47 +1,58 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 09 Oct 2013 09:55:26 +0200
-Subject: [Buildroot] [PATCH v2] i2c-tools: add license information
-In-Reply-To: <fc3b3afc1459d7a16e5b.1381302651@argentina>
-References: <fc3b3afc1459d7a16e5b.1381302651@argentina>
-Message-ID: <52550BEE.3000600@mind.be>
+From: Espen Frimann Koren <espenfk@gmail.com>
+Date: Wed, 9 Oct 2013 10:23:49 +0200
+Subject: [Buildroot] Qt 5.0.2 with OpenSSL
+In-Reply-To: <20131009095154.2d368292@skate>
+References: <CA+csPL7n8=fX7LLyLE4uS4s4uXHTYoLyNVm66b6_Dj0k3N+p-Q@mail.gmail.com>
+ <20131008104858.69c60676@skate>
+ <CA+csPL5q=rYc_-Q4enRD07Pomj9A6hossAB9cesFnMNnLQv5GA@mail.gmail.com>
+ <20131009095154.2d368292@skate>
+Message-ID: <CA+csPL6eKEBs3vT4G-Ayx7hUHeZwVvhT85UAsTUWDsmKHWt5LQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 10/09/13 09:10, Thomas De Schampheleire wrote:
-> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+I lost the build log and when I did make clean, it worked :-)
 
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+The link errors did not relate to OpesSSL-libs, but to functions within Qt
+that should have been compiled/present when OpenSSL was enabled. Maybe it
+was a consequence of how I did the build:
 
->
-> ---
-> v2: clarify separate py-smbus license (Arnout)
->
->   package/i2c-tools/i2c-tools.mk |  2 ++
->   1 files changed, 2 insertions(+), 0 deletions(-)
->
-> diff --git a/package/i2c-tools/i2c-tools.mk b/package/i2c-tools/i2c-tools.mk
-> --- a/package/i2c-tools/i2c-tools.mk
-> +++ b/package/i2c-tools/i2c-tools.mk
-> @@ -7,6 +7,8 @@
->   I2C_TOOLS_VERSION = 3.1.0
->   I2C_TOOLS_SOURCE = i2c-tools-$(I2C_TOOLS_VERSION).tar.bz2
->   I2C_TOOLS_SITE = http://dl.lm-sensors.org/i2c-tools/releases
-> +I2C_TOOLS_LICENSE = GPLv2+, GPLv2 (py-smbus)
-> +I2C_TOOLS_LICENSE_FILES = COPYING
->
->   define I2C_TOOLS_BUILD_CMDS
->    $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
->
->
+1. Built all without openssl
+2. Added openssl and built again, but without clean
+2.1 Qt is not rebuilt then
+3. Ran make qt5base-dirclean && make qt5base-build because I needed more
+features in Qt
+3.1 The link error is present
+4. make clean && make
+4.1 Everything builds fine.
+
+Sp1
 
 
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+On 9 October 2013 09:51, Thomas Petazzoni <
+thomas.petazzoni@free-electrons.com> wrote:
+
+> Dear Espen Frimann Koren,
+>
+> (Please keep the Buildroot list in Cc, and avoid top-posting if
+> possible, thanks!)
+>
+> On Wed, 9 Oct 2013 09:43:18 +0200, Espen Frimann Koren wrote:
+>
+> > Nothing that make clean could not fix. Sorry for the "noise".
+>
+> Ok, but what was the build failure? Probably we can fix it.
+>
+> Thanks,
+>
+> Thomas
+> --
+> Thomas Petazzoni, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20131009/7093c517/attachment.html>
