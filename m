@@ -1,32 +1,33 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 9 Oct 2013 22:28:47 +0200
-Subject: [Buildroot] [git commit] ebtables: correct license GPLv2 -> GPLv2+
-Message-ID: <20131009202946.452A09B9A3@busybox.osuosl.org>
+Date: Wed, 9 Oct 2013 22:27:45 +0200
+Subject: [Buildroot] [git commit] ncftp: add license information
+Message-ID: <20131009202946.3B8719B8FF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=846bc0cf3fd1fe921960dc1dd851ea5c79207b8b
+commit: http://git.buildroot.net/buildroot/commit/?id=5d1c9f8c8068e885a614af3ad9966a7ba07f9d83
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/ebtables/ebtables.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/ncftp/ncftp.mk |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/ebtables/ebtables.mk b/package/ebtables/ebtables.mk
-index ddc1f45..116012c 100644
---- a/package/ebtables/ebtables.mk
-+++ b/package/ebtables/ebtables.mk
-@@ -7,7 +7,7 @@
- EBTABLES_VERSION = 2.0.10-4
- EBTABLES_SOURCE = ebtables-v$(EBTABLES_VERSION).tar.gz
- EBTABLES_SITE = http://downloads.sourceforge.net/project/ebtables/ebtables/ebtables-$(subst .,-,$(EBTABLES_VERSION))
--EBTABLES_LICENSE = GPLv2
-+EBTABLES_LICENSE = GPLv2+
- EBTABLES_LICENSE_FILES = COPYING
- EBTABLES_STATIC = $(if $(BR2_PREFER_STATIC_LIB),static)
+diff --git a/package/ncftp/ncftp.mk b/package/ncftp/ncftp.mk
+index a51605e..56d5d47 100644
+--- a/package/ncftp/ncftp.mk
++++ b/package/ncftp/ncftp.mk
+@@ -8,6 +8,8 @@ NCFTP_VERSION = 3.2.5
+ NCFTP_SOURCE = ncftp-$(NCFTP_VERSION)-src.tar.bz2
+ NCFTP_SITE = ftp://ftp.ncftp.com/ncftp
+ NCFTP_TARGET_BINS = ncftp
++NCFTP_LICENSE = Clarified Artistic License
++NCFTP_LICENSE_FILES = doc/LICENSE.txt
  
+ ifeq ($(BR2_PACKAGE_NCFTP_GET),y)
+ 	NCFTP_TARGET_BINS += ncftpget
