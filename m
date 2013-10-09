@@ -1,11 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 09 Oct 2013 18:38:08 +0200
-Subject: [Buildroot] [PATCH 4 of 5] libnetfilter_queue: correct license
+Date: Wed, 09 Oct 2013 18:39:02 +0200
+Subject: [Buildroot] [PATCH 5 of 5] libnetfilter_log: correct license
  GPLv2 -> GPLv2+
-In-Reply-To: <1630269b240ca4b0d123.1381319912@argentina>
+In-Reply-To: <ccb40b35e63386f0d9df.1381319913@argentina>
 References: <patchbomb.1381319908@argentina>
- <1630269b240ca4b0d123.1381319912@argentina>
-Message-ID: <52558670.9060304@mind.be>
+ <ccb40b35e63386f0d9df.1381319913@argentina>
+Message-ID: <525586A6.9020407@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,28 +17,21 @@ On 10/09/13 13:58, Thomas De Schampheleire wrote:
 
 Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-  Note that include/libnetfilter_queue/libnetfilter_queue.h doesn't 
-specify a version, but that means that any version applies according to 
-the GPL.
-
-  Regards,
-  Arnout
-
 >
 > ---
->   package/libnetfilter_queue/libnetfilter-queue.mk |  2 +-
+>   package/libnetfilter_log/libnetfilter-log.mk |  2 +-
 >   1 files changed, 1 insertions(+), 1 deletions(-)
 >
-> diff --git a/package/libnetfilter_queue/libnetfilter-queue.mk b/package/libnetfilter_queue/libnetfilter-queue.mk
-> --- a/package/libnetfilter_queue/libnetfilter-queue.mk
-> +++ b/package/libnetfilter_queue/libnetfilter-queue.mk
-> @@ -10,7 +10,7 @@ LIBNETFILTER_QUEUE_SITE = http://www.net
->   LIBNETFILTER_QUEUE_INSTALL_STAGING = YES
->   LIBNETFILTER_QUEUE_DEPENDENCIES = host-pkgconf libnfnetlink libmnl
->   LIBNETFILTER_QUEUE_AUTORECONF = YES
-> -LIBNETFILTER_QUEUE_LICENSE = GPLv2
-> +LIBNETFILTER_QUEUE_LICENSE = GPLv2+
->   LIBNETFILTER_QUEUE_LICENSE_FILES = COPYING
+> diff --git a/package/libnetfilter_log/libnetfilter-log.mk b/package/libnetfilter_log/libnetfilter-log.mk
+> --- a/package/libnetfilter_log/libnetfilter-log.mk
+> +++ b/package/libnetfilter_log/libnetfilter-log.mk
+> @@ -10,7 +10,7 @@ LIBNETFILTER_LOG_SITE = http://www.netfi
+>   LIBNETFILTER_LOG_INSTALL_STAGING = YES
+>   LIBNETFILTER_LOG_DEPENDENCIES = host-pkgconf libnfnetlink
+>   LIBNETFILTER_LOG_AUTORECONF = YES
+> -LIBNETFILTER_LOG_LICENSE = GPLv2
+> +LIBNETFILTER_LOG_LICENSE = GPLv2+
+>   LIBNETFILTER_LOG_LICENSE_FILES = COPYING
 >
 >   $(eval $(autotools-package))
 > _______________________________________________
