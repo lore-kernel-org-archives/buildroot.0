@@ -1,45 +1,45 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 09 Oct 2013 18:04:13 +0200
-Subject: [Buildroot] [PATCH 1/2] xmlstarlet: add license information
-In-Reply-To: <1381281980.27485.2.camel@phoenix>
-References: <1381281980.27485.2.camel@phoenix>
-Message-ID: <52557E7D.8060204@mind.be>
+Date: Wed, 09 Oct 2013 18:07:32 +0200
+Subject: [Buildroot] [PATCH] ccid: bump to version 1.4.12
+In-Reply-To: <1381284174.27485.9.camel@phoenix>
+References: <1381284174.27485.9.camel@phoenix>
+Message-ID: <52557F44.9070005@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 10/09/13 03:26, Axel Lin wrote:
+On 10/09/13 04:02, Axel Lin wrote:
+> Bump version and also add license information.
+>
 > Signed-off-by: Axel Lin <axel.lin@ingics.com>
 > ---
->   package/xmlstarlet/xmlstarlet.mk | 2 ++
->   1 file changed, 2 insertions(+)
+>   package/ccid/ccid.mk | 6 ++++--
+>   1 file changed, 4 insertions(+), 2 deletions(-)
 >
-> diff --git a/package/xmlstarlet/xmlstarlet.mk b/package/xmlstarlet/xmlstarlet.mk
-> index f0a26c2..4a30feb 100644
-> --- a/package/xmlstarlet/xmlstarlet.mk
-> +++ b/package/xmlstarlet/xmlstarlet.mk
-> @@ -6,6 +6,8 @@
+> diff --git a/package/ccid/ccid.mk b/package/ccid/ccid.mk
+> index a246ddd..c25b433 100644
+> --- a/package/ccid/ccid.mk
+> +++ b/package/ccid/ccid.mk
+> @@ -4,9 +4,11 @@
+>   #
+>   ################################################################################
 >
->   XMLSTARLET_VERSION = 1.3.0
->   XMLSTARLET_SITE = http://downloads.sourceforge.net/project/xmlstar/xmlstarlet/$(XMLSTARLET_VERSION)
-> +XMLSTARLET_LICENSE = MIT
-> +XMLSTARLET_LICENSE_FILES = COPYING Copyright
-
-  These two files are identical, so no need to copy both of them.
-
-  Otherwise,
+> -CCID_VERSION = 1.4.8
+> +CCID_VERSION = 1.4.12
+>   CCID_SOURCE = ccid-$(CCID_VERSION).tar.bz2
+> -CCID_SITE = http://alioth.debian.org/frs/download.php/file/3768
+> +CCID_SITE = http://alioth.debian.org/frs/download.php/file/3937
+> +CCID_LICENSE = LGPLv2.1+
+> +CCID_LICENSE_FILES = COPYING
 
 Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+(for the license only)
 
-
-  Regards,
-  Arnout
-
+>   CCID_INSTALL_STAGING = YES
+>   CCID_DEPENDENCIES = pcsc-lite host-pkgconf libusb
 >
->   XMLSTARLET_DEPENDENCIES += libxml2 libxslt \
->   	$(if $(BR2_PACKAGE_LIBICONV),libiconv)
 >
 
 
