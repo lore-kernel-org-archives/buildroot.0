@@ -1,36 +1,23 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 9 Oct 2013 13:55:48 +0200
-Subject: [Buildroot] [PATCH] New: add lava-test package
-In-Reply-To: <1381311283-3534-1-git-send-email-ludovic.desroches@atmel.com>
-References: <20131008151729.GB3599@ludovic.desroches@atmel.com>
- <1381311283-3534-1-git-send-email-ludovic.desroches@atmel.com>
-Message-ID: <20131009135548.7e50453a@skate>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Wed, 09 Oct 2013 13:58:28 +0200
+Subject: [Buildroot] [PATCH 0 of 5] more license corrections
+Message-ID: <patchbomb.1381319908@argentina>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear ludovic.desroches at atmel.com,
 
-On Wed, 9 Oct 2013 11:34:43 +0200, ludovic.desroches at atmel.com wrote:
-> From: Ludovic Desroches <ludovic.desroches@atmel.com>
-> 
-> Signed-off-by: Ludovic Desroches <ludovic.desroches@atmel.com>
-> ---
-> 
-> I have the same issues with latest release of Buildroot.
-> 
-> I have added python path replacement in install target instead of doing it in
-> the post-build script. I have added license stuff too and bump to latest
-> version.
+Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
-And with this change, does lava-test works for you?
+---
+Note: there may be many more such license annotations that declare e.g.
+GPLv2 but are GPLv2+ in reality.
 
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+ package/cifs-utils/cifs-utils.mk                         |  2 +-
+ package/libnetfilter_cthelper/libnetfilter-cthelper.mk   |  2 +-
+ package/libnetfilter_cttimeout/libnetfilter-cttimeout.mk |  2 +-
+ package/libnetfilter_log/libnetfilter-log.mk             |  2 +-
+ package/libnetfilter_queue/libnetfilter-queue.mk         |  2 +-
+ 5 files changed, 5 insertions(+), 5 deletions(-)
