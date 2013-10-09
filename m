@@ -1,44 +1,57 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 09 Oct 2013 18:07:32 +0200
-Subject: [Buildroot] [PATCH] ccid: bump to version 1.4.12
-In-Reply-To: <1381284174.27485.9.camel@phoenix>
-References: <1381284174.27485.9.camel@phoenix>
-Message-ID: <52557F44.9070005@mind.be>
+Date: Wed, 09 Oct 2013 18:15:45 +0200
+Subject: [Buildroot] [PATCH v2] i2c-tools: add license information
+In-Reply-To: <52550BEE.3000600@mind.be>
+References: <fc3b3afc1459d7a16e5b.1381302651@argentina>
+ <52550BEE.3000600@mind.be>
+Message-ID: <52558131.7080300@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 10/09/13 04:02, Axel Lin wrote:
-> Bump version and also add license information.
+On 10/09/13 09:55, Arnout Vandecappelle wrote:
+> On 10/09/13 09:10, Thomas De Schampheleire wrote:
+>> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 >
-> Signed-off-by: Axel Lin <axel.lin@ingics.com>
-> ---
->   package/ccid/ccid.mk | 6 ++++--
->   1 file changed, 4 insertions(+), 2 deletions(-)
->
-> diff --git a/package/ccid/ccid.mk b/package/ccid/ccid.mk
-> index a246ddd..c25b433 100644
-> --- a/package/ccid/ccid.mk
-> +++ b/package/ccid/ccid.mk
-> @@ -4,9 +4,11 @@
->   #
->   ################################################################################
->
-> -CCID_VERSION = 1.4.8
-> +CCID_VERSION = 1.4.12
->   CCID_SOURCE = ccid-$(CCID_VERSION).tar.bz2
-> -CCID_SITE = http://alioth.debian.org/frs/download.php/file/3768
-> +CCID_SITE = http://alioth.debian.org/frs/download.php/file/3937
-> +CCID_LICENSE = LGPLv2.1+
-> +CCID_LICENSE_FILES = COPYING
+> Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(for the license only)
+  Although on second thought: py-smbus is only built if you pass
+EXTRA="py-smbus" in the make opts. Since we don't do that, we could just 
+as well remove the license of py-smbus.
 
->   CCID_INSTALL_STAGING = YES
->   CCID_DEPENDENCIES = pcsc-lite host-pkgconf libusb
+  That said, in case someone adds py-smbus support later it's good to 
+have the license in place already.
+
+  Bottom line: I'm OK with this patch as it is
+
+  Regards,
+  Arnout
+
+>
+>>
+>> ---
+>> v2: clarify separate py-smbus license (Arnout)
+>>
+>>   package/i2c-tools/i2c-tools.mk |  2 ++
+>>   1 files changed, 2 insertions(+), 0 deletions(-)
+>>
+>> diff --git a/package/i2c-tools/i2c-tools.mk
+>> b/package/i2c-tools/i2c-tools.mk
+>> --- a/package/i2c-tools/i2c-tools.mk
+>> +++ b/package/i2c-tools/i2c-tools.mk
+>> @@ -7,6 +7,8 @@
+>>   I2C_TOOLS_VERSION = 3.1.0
+>>   I2C_TOOLS_SOURCE = i2c-tools-$(I2C_TOOLS_VERSION).tar.bz2
+>>   I2C_TOOLS_SITE = http://dl.lm-sensors.org/i2c-tools/releases
+>> +I2C_TOOLS_LICENSE = GPLv2+, GPLv2 (py-smbus)
+>> +I2C_TOOLS_LICENSE_FILES = COPYING
+>>
+>>   define I2C_TOOLS_BUILD_CMDS
+>>    $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
+>>
+>>
 >
 >
 
