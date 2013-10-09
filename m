@@ -1,37 +1,66 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed,  9 Oct 2013 09:22:36 -0300
-Subject: [Buildroot] [PATCH 2/3] linphone: fix build failure
+Date: Wed,  9 Oct 2013 09:22:37 -0300
+Subject: [Buildroot] [PATCH 3/3] mediastreamer: requires toolchain with ipv6
+	support
 In-Reply-To: <1381321357-16419-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1381321357-16419-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1381321357-16419-2-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1381321357-16419-3-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The configure script is out of sync causing deplibs linking issues so
-recreate it. Fixes:
-http://autobuild.buildroot.net/results/006/00673f04d0ce6cb0c5828e68f236a4eb8d7920db/
+Fixes:
+http://autobuild.buildroot.net/results/b16/b164b87fefac67074d45a6413386f53a8ee47843/
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/linphone/linphone.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ package/linphone/Config.in      | 6 ++++--
+ package/mediastreamer/Config.in | 6 ++++--
+ 2 files changed, 8 insertions(+), 4 deletions(-)
 
-diff --git a/package/linphone/linphone.mk b/package/linphone/linphone.mk
-index a4fc95c..e7e3de6 100644
---- a/package/linphone/linphone.mk
-+++ b/package/linphone/linphone.mk
-@@ -10,7 +10,8 @@ LINPHONE_CONF_OPT = \
- 	--enable-external-ortp \
- 	--enable-external-mediastreamer \
- 	--disable-strict
--
-+# configure is out of sync causing deplibs linking issues
-+LINPHONE_AUTORECONF = YES
- LINPHONE_DEPENDENCIES = host-pkgconf ortp mediastreamer libeXosip2 speex
- LINPHONE_LICENSE = GPLv2+
- LINPHONE_LICENSE_FILES = COPYING
+diff --git a/package/linphone/Config.in b/package/linphone/Config.in
+index bd51412..1bced0e 100644
+--- a/package/linphone/Config.in
++++ b/package/linphone/Config.in
+@@ -7,6 +7,7 @@ config BR2_PACKAGE_LINPHONE
+ 	depends on BR2_INSTALL_LIBSTDCPP # mediastreamer
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # ortp
+ 	depends on BR2_USE_MMU # libeXosip2
++	depends on BR2_INET_IPV6 # mediastreamer
+ 	help
+ 	  Linphone is an internet phone or Voice Over IP phone (VoIP).
+ 
+@@ -25,5 +26,6 @@ config BR2_PACKAGE_LINPHONE
+ 
+ 	  http://www.linphone.org/
+ 
+-comment "linphone requires a toolchain with threads and C++ support enabled"
+-	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
++comment "linphone requires a toolchain with threads, C++ and IPv6 support enabled"
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
++		!BR2_INET_IPV6
+diff --git a/package/mediastreamer/Config.in b/package/mediastreamer/Config.in
+index 477d4fa..9b20307 100644
+--- a/package/mediastreamer/Config.in
++++ b/package/mediastreamer/Config.in
+@@ -3,6 +3,7 @@ config BR2_PACKAGE_MEDIASTREAMER
+ 	select BR2_PACKAGE_ORTP
+ 	depends on BR2_INSTALL_LIBSTDCPP # until fixed
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # ortp
++	depends on BR2_INET_IPV6
+ 	help
+ 	  Mediastreamer is a powerful and lightweighted streaming
+ 	  engine specialized for voice/video telephony applications.
+@@ -13,5 +14,6 @@ config BR2_PACKAGE_MEDIASTREAMER
+ 
+ 	  http://www.linphone.org/eng/documentation/dev/mediastreamer2.html
+ 
+-comment "mediastreamer requires a toolchain with threads and C++ support"
+-	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
++comment "mediastreamer requires a toolchain with threads, C++ and IPv6 support"
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
++		!BR2_INET_IPV6
 -- 
 1.8.1.5
