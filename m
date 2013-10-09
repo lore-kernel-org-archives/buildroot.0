@@ -1,42 +1,37 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Wed, 9 Oct 2013 12:25:18 +0200
-Subject: [Buildroot] Trouble building the manual
-In-Reply-To: <20131009111405.0ca6bcf3@skate>
-References: <10469D7B3F0C4FA0BDDC951C132C8F83@JohanW7>
- <20131009111405.0ca6bcf3@skate>
-Message-ID: <CAAXf6LWaycEOPwTHELNKiq1E_Sm5gUukkgo0A5FY0Hj5qdxxNw@mail.gmail.com>
+Date: Wed, 9 Oct 2013 12:26:09 +0200
+Subject: [Buildroot] [PATCH 1/1] manual generation : python-argparse is
+ needed with older phyton releases.
+In-Reply-To: <1381311422-31077-1-git-send-email-sagaert.johan@skynet.be>
+References: <1381311422-31077-1-git-send-email-sagaert.johan@skynet.be>
+Message-ID: <CAAXf6LVX6TMMHFczEB=V790eqcTaxeN2-WO+68oCDKn2z4xWvw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Hi Johan,
 
-On Wed, Oct 9, 2013 at 11:14 AM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Dear Sagaert Johan,
+On Wed, Oct 9, 2013 at 11:37 AM, Sagaert Johan <sagaert.johan@skynet.be> wrote:
+> Signed-off-by: Sagaert Johan <sagaert.johan@skynet.be>
+> ---
+>  docs/manual/prerequisite.txt | 1 +
+>  1 file changed, 1 insertion(+)
 >
-> On Wed, 9 Oct 2013 11:04:16 +0200, Sagaert Johan wrote:
+> diff --git a/docs/manual/prerequisite.txt b/docs/manual/prerequisite.txt
+> index 78ce436..1fc1a29 100644
+> --- a/docs/manual/prerequisite.txt
+> +++ b/docs/manual/prerequisite.txt
+> @@ -77,3 +77,4 @@ development context (further details: refer to xref:download-infra[]).
 >
->> # make manual-pdf
->> >>>   Updating the manual lists...
->> Traceback (most recent call last):
->>   File "/home/buildroot12git/support/scripts/gen-manual-lists.py", line 41, in <module>
->>     from argparse import ArgumentParser
->> ImportError: No module named argparse
->> make: *** [manual-update-lists] Error 1
->
-> You need the Python argparse module. In recent versions of Python, it's
-> part of the standard library. With older versions, you need to install
-> separately.
->
-> Check if your distribution has a package called python-argparse or
-> something like that.
->
+>  * Documentation generation tools:
+>  ** +asciidoc+
+> +** +python-argparse+
+> --
 
-Note that this would have been caught with the proposed dependency check
-(http://patchwork.ozlabs.org/patch/280931/)
+Thanks for this change, however it is already part of the following patch:
+http://patchwork.ozlabs.org/patch/280931/
 
 Best regards,
 Thomas
