@@ -1,37 +1,35 @@
-From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Wed, 9 Oct 2013 10:26:56 +0200
-Subject: [Buildroot] [PATCHv3 04/20] toolchain: introduce a virtual
-	package
-In-Reply-To: <1381256237-27948-5-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1381256237-27948-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1381256237-27948-5-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <CAHkwnC_wbNa4Mg24WTPGjmmMSk2tYcNfmSzV66CVkzfmZ-2T2A@mail.gmail.com>
+From: Axel Lin <axel.lin@ingics.com>
+Date: Wed, 09 Oct 2013 16:47:05 +0800
+Subject: [Buildroot] [PATCH] redis: bump to version 2.6.16
+Message-ID: <1381308425.20719.1.camel@phoenix>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+The Redis project home page moved to redis.io, thus also update the download
+url accordingly.
 
-On Tue, Oct 8, 2013 at 8:17 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> [...]
->  prepare: $(BUILD_DIR)/buildroot-config/auto.conf
->
-> -toolchain: prepare dirs dependencies $(BASE_TARGETS)
-> -
-> -world: toolchain $(TARGETS_ALL)
-> +world: $(BASE_TARGETS) $(TARGETS_ALL)
+Signed-off-by: Axel Lin <axel.lin@ingics.com>
+---
+ package/redis/redis.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Why do you change that? It seems to me better to use the "toolchain"
-target as dependency instead of $(BASE_TARGETS)
-IMHO  $(BASE_TARGETS) is an implementation detail of the new toolchain
-virtual package so it's better to use inside the new toolchain virtual
-package.
-
-> [...]
-
-Best regards
+diff --git a/package/redis/redis.mk b/package/redis/redis.mk
+index 8b4e900..6974a35 100644
+--- a/package/redis/redis.mk
++++ b/package/redis/redis.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-REDIS_VERSION = 2.6.11
+-REDIS_SITE = http://redis.googlecode.com/files
++REDIS_VERSION = 2.6.16
++REDIS_SITE = http://download.redis.io/releases
+ REDIS_LICENSE = BSD-3c (core); MIT and BSD family licenses (Bundled components)
+ REDIS_LICENSE_FILES = COPYING
+ 
 -- 
-Fabio Porcedda
+1.8.1.2
