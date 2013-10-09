@@ -1,55 +1,120 @@
 From: Ryan Barnett <rjbarnet@rockwellcollins.com>
-Date: Tue, 8 Oct 2013 19:06:54 -0500
-Subject: [Buildroot] using a local package file : why copy it to the
-	dl	directory ?
-In-Reply-To: <801961576E844FDBBB1A98A5E954A503@JohanW7>
-References: <22B9374628844ED0809C78AC328E71C5@JohanW7>
- <20131009002331.5e89e31a@skate> <801961576E844FDBBB1A98A5E954A503@JohanW7>
-Message-ID: <OFBBD2D686.76F54A62-ON86257BFE.0083B24D-86257BFF.0000A1F0@rockwellcollins.com>
+Date: Tue, 8 Oct 2013 19:31:51 -0500
+Subject: [Buildroot] [PATCH v2 1/1] manual: update review process and
+	patchwork
+Message-ID: <1381278711-24631-1-git-send-email-rjbarnet@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Sagaert,
+Adding more documentaiton based on discussion from the mailing list
+in regards the buildroot review process and how patchworks can be
+used to pull in patches for testing purposes.
 
-Sagaert Johan <sagaert.johan@skynet.be> wrote on 
-10/08/2013 06:12:20 PM:
+Mailing list discussion:
+http://lists.busybox.net/pipermail/buildroot/2013-September/078170.html
 
-> Dear Thomas
-> 
-> Maybe I did not explain it well, I did not mean to build out of the 
-> tree, but the local package_xxx_tar.bz2 (in the case of tarred
-> bz2)
-> is already on our local system, so I tought there was no need to copy 
-> the archive to the dl directory.
+Signed-off-by: Ryan Barnett <rjbarnet@rockwellcollins.com>
 
-I believe you need to utilize the feature of specifying the DL directory
-out-of-tree (outside of the buildroot source). Please see the manual:
+---
 
-http://buildroot.uclibc.org/downloads/manual/manual.html#_location_of_downloaded_packages
+v1 -> v2
+ * Updated all references to patchwork to be Patchwork or Buildroot's
+   Patchwork instead of a few misspellings (suggested by Thomas
+   Petazzoni)
+ * Added clarification that patchwork main use is for the Buildroot
+   maintainer (suggested by Thomas Petazzoni)
 
-Finally when you specify the DL directory, copy or move the 
-package_xx_tar.bz2
-to the BR2_DL_DIR location. The reason the your tar file get copied to 
-this location
-is because buildroot's goal is to have every external file it depends on 
-in one
-location. This is an important feature because it makes it easy for us to 
-have
-all the packages in one location when we redistribute/release a system put 
-together
-using buildroot. 
+Signed-off-by: Ryan Barnett <rjbarnet@rockwellcollins.com>
+---
+ docs/manual/contribute.txt   |   12 +++++++++++-
+ docs/manual/get-involved.txt |   38 +++++++++++++++++++++++++++++++++++---
+ 2 files changed, 46 insertions(+), 4 deletions(-)
 
-> Johan 
-
-Thanks,
--Ryan
-
-------------------------------------------------------------------------------------------
-Ryan J Barnett / Software Engineer / Platform SW
-MS 137-157, 855 35th St NE, Cedar Rapids, IA, 52498-3161, US
-rjbarnet at rockwellcollins.com
-www.rockwellcollins.com
+diff --git a/docs/manual/contribute.txt b/docs/manual/contribute.txt
+index 2b2783d..201685c 100644
+--- a/docs/manual/contribute.txt
++++ b/docs/manual/contribute.txt
+@@ -132,9 +132,15 @@ $ git format-patch --subject-prefix "PATCH v4" \
+ Reviewing/Testing patches
+ -------------------------
  
++The review process for new patches is done over the mailing list. Once
++a patch is submitted to the mailing list, other developers will provide
++feedback to the patch via emails sent through the mailing list.
++
+ In the review process, do not hesitate to respond to patch submissions
+ for remarks, suggestions or anything that will help everyone to
+-understand the patches and make them better.
++understand the patches and make them better. Please use internet
++style replies in plain text emails when responding to patch
++submissions.
+ 
+ Some tags are used to help following the state of any patch posted on
+ the mailing-list:
+@@ -144,6 +150,10 @@ Acked-by:: Indicates that the patch can be committed.
+ Tested-by:: Indicates that the patch has been tested. It is useful
+   but not necessary to add a comment about what has been tested.
+ 
++Buildroot's Patchwork website can be used to pull in patches for testing
++purposes. Please see xref:apply-patches-patchwork[] for more
++information on using Buildroot's Patchwork website to apply patches.
++
+ Autobuild
+ ---------
+ 
+diff --git a/docs/manual/get-involved.txt b/docs/manual/get-involved.txt
+index 8515d34..173b0f4 100644
+--- a/docs/manual/get-involved.txt
++++ b/docs/manual/get-involved.txt
+@@ -55,11 +55,43 @@ using a code sharing website.
+ Patchwork
+ ---------
+ 
+-The Buildroot patch management interface is at
++Patchwork is a web-based patch tracking system designed to facilitate
++the contribution and management of contributions to an open-source
++project. Patches that have been sent to a mailing list are \'caught' by
++the system, and appear on a web page. Any comments posted that
++reference the patch are appended to the patch page too. For more
++information on Patchwork see
++http://jk.ozlabs.org/projects/patchwork[].
++
++Buildroot's Patchwork website is mainly for use by the Buildroot's
++maintainer to ensure patches aren't missed. The website however,
++exposes patches and their corresponding review comments in a clean
++and concise web interface.
++
++The Buildroot patch management interface is available at
+ http://patchwork.buildroot.org[].
+ 
+-All patches and comments sent through the mailing list are
+-automatically indexed in http://patchwork.buildroot.org[patchwork].
++[[apply-patches-patchwork]]
++Applying Patches from Patchwork
++~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++
++Buildroot's Patchwork website main use for a developer is for pulling
++in patches into their local git repository for testing purposes.
++
++When browsing patches in the patchwork management interface, a +mbox+
++link is provided at the top of the page. Copy this link address and
++run the following commands:
++
++---------------------
++$ git checkout -b <test-branch-name>
++$ wget -O - <mbox-url> | git am
++---------------------
++
++Another option for applying patches is to create a bundle. A bundle is
++a set of patches that you can group together using the patchwork
++interface. Once the bundle is created and the bundle is made public,
++you can copy the +mbox+ link for the bundle and apply the bundle
++using the above commands.
+ 
+ [[bugtracker]]
+ Bugtracker
+-- 
+1.7.1
