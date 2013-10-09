@@ -1,37 +1,47 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Wed, 9 Oct 2013 12:26:09 +0200
-Subject: [Buildroot] [PATCH 1/1] manual generation : python-argparse is
- needed with older phyton releases.
-In-Reply-To: <1381311422-31077-1-git-send-email-sagaert.johan@skynet.be>
-References: <1381311422-31077-1-git-send-email-sagaert.johan@skynet.be>
-Message-ID: <CAAXf6LVX6TMMHFczEB=V790eqcTaxeN2-WO+68oCDKn2z4xWvw@mail.gmail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 09 Oct 2013 12:46:08 +0200
+Subject: [Buildroot] [PATCHv3 04/20] toolchain: introduce a virtual
+	package
+In-Reply-To: <1381256237-27948-5-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Tue, 8 Oct 2013 20:17:01 +0200")
+References: <1381256237-27948-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1381256237-27948-5-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <87ob6y4t8v.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Johan,
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-On Wed, Oct 9, 2013 at 11:37 AM, Sagaert Johan <sagaert.johan@skynet.be> wrote:
-> Signed-off-by: Sagaert Johan <sagaert.johan@skynet.be>
-> ---
->  docs/manual/prerequisite.txt | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/docs/manual/prerequisite.txt b/docs/manual/prerequisite.txt
-> index 78ce436..1fc1a29 100644
-> --- a/docs/manual/prerequisite.txt
-> +++ b/docs/manual/prerequisite.txt
-> @@ -77,3 +77,4 @@ development context (further details: refer to xref:download-infra[]).
->
->  * Documentation generation tools:
->  ** +asciidoc+
-> +** +python-argparse+
-> --
+ Thomas> This commit introduces a virtual package called 'toolchain', located
+ Thomas> in 'toolchain/toolchain', which simply depends on
+ Thomas> 'toolchain-buildroot' or 'toolchain-external' depending on the
+ Thomas> selected toolchain backend.
 
-Thanks for this change, however it is already part of the following patch:
-http://patchwork.ozlabs.org/patch/280931/
+[snip]
 
-Best regards,
-Thomas
+ Thomas> @@ -317,11 +313,8 @@ include support/dependencies/dependencies.mk
+ Thomas>  # We also need the various per-package makefiles, which also add
+ Thomas>  # each selected package to TARGETS if that package was selected
+ Thomas>  # in the .config file.
+ Thomas> -ifeq ($(BR2_TOOLCHAIN_BUILDROOT),y)
+ Thomas> -include toolchain/toolchain-buildroot.mk
+ Thomas> -else ifeq ($(BR2_TOOLCHAIN_EXTERNAL),y)
+ Thomas> -include toolchain/toolchain-external.mk
+ Thomas> -endif
+ Thomas> +include toolchain/helpers.mk
+ Thomas> +include toolchain/*/*.mk
+
+That's no good. toolchain/*/*.mk doesn't pick up up
+toolchain/toolchain-{buildroot,external}.mk:
+
+>>> toolchain undefined Extracting
+>>> toolchain undefined Patching toolchain//toolchain
+make: *** No rule to make target `toolchain-buildroot', needed by `toolchain-depends'.  Stop.
+
+Did you mean to simply do 'include toolchain/*.mk' instead of those two lines?
+
+-- 
+Bye, Peter Korsgaard
