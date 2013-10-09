@@ -1,68 +1,71 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed,  9 Oct 2013 23:44:23 +0200
-Subject: [Buildroot] [PATCH 7/9] package/rpi-userland: add patch to remove
-	faulty assert()
-In-Reply-To: <cover.1381354867.git.yann.morin.1998@free.fr>
-References: <cover.1381354867.git.yann.morin.1998@free.fr>
-Message-ID: <b678145f0445d0d08b358732762e769ed8771d40.1381354867.git.yann.morin.1998@free.fr>
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Wed, 09 Oct 2013 23:54:22 +0200
+Subject: [Buildroot] [PATCH v2 1/1] ngrep: fix static linking issue with
+	libpcre
+Message-ID: <5255D08E.3000307@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-While porting wayland/weston to run on the RPi, I always tripped on
-this assert.
+Adding -lpcre in LDFLAGS place the library before object files:
+gcc ... -lpcre -L .../sysroot/usr/lib -s -o ngrep ngrep.o -lpcap
 
-Thinking there was an issue with weston, I poked the weston guys on
-IRC about the issue. 'daniels' on irc.freenode.net/#wayland suggested
-removing the assert altogether, as that's what they had pushed
-upstream in their wayland pull-request:
-    https://github.com/raspberrypi/userland/pull/92
+Makefile.in is patched to use @LIBS@ for adding -lpcre in the right place.
 
-Turns out they forgot to include this in their pull-request, but that
-they were using a patched rpi-userland without that assert.
+Fixes:
+http://autobuild.buildroot.net/results/684/684a3bed28d13ef5e5156257aade3b9aff32f180
 
-And indeed, without that assert, weston runs on the RPi. :-)
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 ---
-The weston guys will probably push this upstream soon.
-If not, then I'll take the burden to do it.
----
- .../rpi-userland-002-remove-faulty-assert.patch     | 21 +++++++++++++++++++++
- 1 file changed, 21 insertions(+)
- create mode 100644 package/rpi-userland/rpi-userland-002-remove-faulty-assert.patch
+ package/ngrep/ngrep-1.45-Makefile.in.patch | 23 +++++++++++++++++++++++
+ package/ngrep/ngrep.mk                     |  2 +-
+ 2 files changed, 24 insertions(+), 1 deletion(-)
+ create mode 100644 package/ngrep/ngrep-1.45-Makefile.in.patch
 
-diff --git a/package/rpi-userland/rpi-userland-002-remove-faulty-assert.patch b/package/rpi-userland/rpi-userland-002-remove-faulty-assert.patch
+diff --git a/package/ngrep/ngrep-1.45-Makefile.in.patch b/package/ngrep/ngrep-1.45-Makefile.in.patch
 new file mode 100644
-index 0000000..c23c43a
+index 0000000..698e001
 --- /dev/null
-+++ b/package/rpi-userland/rpi-userland-002-remove-faulty-assert.patch
-@@ -0,0 +1,21 @@
-+interface: remove faulty assert() to make weston happy at runtime
++++ b/package/ngrep/ngrep-1.45-Makefile.in.patch
+@@ -0,0 +1,23 @@
++Use LIBS for adding libraries.
 +
-+This was removed after a discussion on IRC with the weston guys
-+('daniels' on irc.freenode.net/#wayland).
-+
-+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
++Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 +---
-+Upstream status: no, will be pushed by weston guys later.
-+If not, I'll do it.
++ Makefile.in | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
 +
-+diff -durN rpi-userland-77d32cd.orig/interface/vmcs_host/vc_vchi_dispmanx.c rpi-userland-77d32cd/interface/vmcs_host/vc_vchi_dispmanx.c
-+--- rpi-userland-77d32cd.orig/interface/vmcs_host/vc_vchi_dispmanx.c	2013-10-04 17:43:44.000000000 +0200
-++++ rpi-userland-77d32cd/interface/vmcs_host/vc_vchi_dispmanx.c	2013-10-08 22:28:51.611433539 +0200
-+@@ -1187,7 +1187,6 @@
-+          continue;
-+    
-+       if(dispmanx_client.update_callback ) {
-+-         vcos_assert( dispmanx_client.pending_update_handle == (DISPMANX_UPDATE_HANDLE_T) dispmanx_client.notify_buffer[1]);
-+          dispmanx_client.update_callback((DISPMANX_UPDATE_HANDLE_T) dispmanx_client.notify_buffer[1], dispmanx_client.update_callback_param);
-+       }
-+    }
++diff --git a/Makefile.in b/Makefile.in
++index 2ae4506..3eefc0a 100644
++--- a/Makefile.in
+++++ b/Makefile.in
++@@ -11,7 +11,7 @@ CFLAGS=@CFLAGS@ -D at OS@ @DEFS@ @EXTRA_DEFINES@
++ INCLUDES=-I at srcdir@ @PCAP_INCLUDE@ @EXTRA_INCLUDES@
++
++ LDFLAGS=@LDFLAGS@ @PCAP_LINK@
++-LIBS=-lpcap @EXTRA_LIBS@
+++LIBS=@LIBS@ @EXTRA_LIBS@
++
++ STRIPFLAG=@STRIPFLAG@
++
++--
++1.8.4
++
+diff --git a/package/ngrep/ngrep.mk b/package/ngrep/ngrep.mk
+index 99b8f46..0dc6a36 100644
+--- a/package/ngrep/ngrep.mk
++++ b/package/ngrep/ngrep.mk
+@@ -8,7 +8,7 @@ NGREP_VERSION = 1.45
+ NGREP_SOURCE = ngrep-$(NGREP_VERSION).tar.bz2
+ NGREP_SITE = http://downloads.sourceforge.net/project/ngrep/ngrep/$(NGREP_VERSION)
+ NGREP_INSTALL_STAGING = YES
+-NGREP_CONF_ENV = LDFLAGS="-lpcre"
++NGREP_CONF_ENV = LIBS="-lpcre"
+ NGREP_CONF_OPT =  \
+ 	--with-pcap-includes=$(STAGING_DIR)/usr/include \
+ 	--enable-pcre \
 -- 
-1.8.1.2
+1.8.4
