@@ -1,9 +1,9 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed,  9 Oct 2013 18:30:42 -0300
-Subject: [Buildroot] [PATCH 4/8] oprofile: needs mmu
+Date: Wed,  9 Oct 2013 18:30:43 -0300
+Subject: [Buildroot] [PATCH 5/8] net-snmp: needs mmu
 In-Reply-To: <1381354246-29140-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1381354246-29140-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1381354246-29140-4-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1381354246-29140-5-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,19 +12,32 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/oprofile/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+ package/netsnmp/Config.in | 1 +
+ package/quagga/Config.in  | 1 +
+ 2 files changed, 2 insertions(+)
 
-diff --git a/package/oprofile/Config.in b/package/oprofile/Config.in
-index 0fbc87c..0d43782 100644
---- a/package/oprofile/Config.in
-+++ b/package/oprofile/Config.in
+diff --git a/package/netsnmp/Config.in b/package/netsnmp/Config.in
+index d94abb7..3d08936 100644
+--- a/package/netsnmp/Config.in
++++ b/package/netsnmp/Config.in
 @@ -1,5 +1,6 @@
- config BR2_PACKAGE_OPROFILE
- 	bool "oprofile"
+ config BR2_PACKAGE_NETSNMP
+ 	bool "netsnmp"
 +	depends on BR2_USE_MMU # fork()
- 	select BR2_PACKAGE_POPT
- 	select BR2_PACKAGE_BINUTILS
- 	select BR2_PACKAGE_LIBPFM4 if BR2_powerpc
+ 	help
+ 	  Suite of applications used to implement SNMP v1, SNMP v2c, and
+ 	  SNMP v3 using both IPv4 and IPv6.
+diff --git a/package/quagga/Config.in b/package/quagga/Config.in
+index c364ae1..90eaef4 100644
+--- a/package/quagga/Config.in
++++ b/package/quagga/Config.in
+@@ -80,6 +80,7 @@ config BR2_PACKAGE_QUAGGA_WATCHQUAGGA
+ 
+ config BR2_PACKAGE_QUAGGA_SNMP
+ 	bool "SNMP support"
++	depends on BR2_USE_MMU # net-snmp
+ 	select BR2_PACKAGE_NETSNMP
+ 	help
+ 	  Make quagga information available via SNMP SMUX.
 -- 
 1.8.1.5
