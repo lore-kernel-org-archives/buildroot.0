@@ -1,45 +1,40 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 09 Oct 2013 18:39:02 +0200
-Subject: [Buildroot] [PATCH 5 of 5] libnetfilter_log: correct license
- GPLv2 -> GPLv2+
-In-Reply-To: <ccb40b35e63386f0d9df.1381319913@argentina>
-References: <patchbomb.1381319908@argentina>
- <ccb40b35e63386f0d9df.1381319913@argentina>
-Message-ID: <525586A6.9020407@mind.be>
+Date: Wed, 09 Oct 2013 18:46:29 +0200
+Subject: [Buildroot] Some legal-info observations/problems
+In-Reply-To: <525556CE.3000308@lucaceresoli.net>
+References: <CAAXf6LXHXo2vY8ns61fxoLzD0n2yzLASZqFk75xzYQwgDHp15Q@mail.gmail.com>
+ <CAAXf6LVxoXMaBFVzc6Hd46ST8AwDOyd8PdRfJ04WKfF9po_K9w@mail.gmail.com>
+ <525556CE.3000308@lucaceresoli.net>
+Message-ID: <52558865.8070804@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 10/09/13 13:58, Thomas De Schampheleire wrote:
-> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+On 10/09/13 15:14, Luca Ceresoli wrote:
+>> Related to this is the question of a license URL. I personally think
+>> it is not legally safe to only refer to a URL from a package, because
+>> who knows someone changes the license text on the URL. They could just
+>> alter the license of existing sources.
+>> So although the feature of automatically downloading a license text
+>> from its URL looks nice, I (not a lawyer) would not recommend
+>> implementing it. I follow ThomasP's reasoning of requesting upstream
+>> to add the effective license text to the sources, and in the meantime
+>> using the magic value decided above for case (b).
+>
+> I agree with you. Regarding the legal stuff we should stay on the safe
+> side. But Arnout and Simon expressed an opposite opinion on another
+> branch of this thread...
 
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+  If the package specifies that the license is available at a specific 
+URL, then that is the license, right? It is true that the license may 
+change unexpectedly, but to make sure it stays consistent we should 
+download the license at the same time that the source is downloaded 
+(which could be tricky, I admit).
 
->
-> ---
->   package/libnetfilter_log/libnetfilter-log.mk |  2 +-
->   1 files changed, 1 insertions(+), 1 deletions(-)
->
-> diff --git a/package/libnetfilter_log/libnetfilter-log.mk b/package/libnetfilter_log/libnetfilter-log.mk
-> --- a/package/libnetfilter_log/libnetfilter-log.mk
-> +++ b/package/libnetfilter_log/libnetfilter-log.mk
-> @@ -10,7 +10,7 @@ LIBNETFILTER_LOG_SITE = http://www.netfi
->   LIBNETFILTER_LOG_INSTALL_STAGING = YES
->   LIBNETFILTER_LOG_DEPENDENCIES = host-pkgconf libnfnetlink
->   LIBNETFILTER_LOG_AUTORECONF = YES
-> -LIBNETFILTER_LOG_LICENSE = GPLv2
-> +LIBNETFILTER_LOG_LICENSE = GPLv2+
->   LIBNETFILTER_LOG_LICENSE_FILES = COPYING
->
->   $(eval $(autotools-package))
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
->
-
+  Regards,
+  Arnout
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
