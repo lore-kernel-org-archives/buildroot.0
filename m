@@ -1,33 +1,42 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 9 Oct 2013 22:27:45 +0200
-Subject: [Buildroot] [git commit] ncftp: add license information
-Message-ID: <20131009202946.3B8719B8FF@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 09 Oct 2013 18:02:28 +0200
+Subject: [Buildroot] using a local package file : why copy it to the dl
+ directory ?
+In-Reply-To: <22B9374628844ED0809C78AC328E71C5@JohanW7>
+References: <22B9374628844ED0809C78AC328E71C5@JohanW7>
+Message-ID: <52557E14.3040102@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=5d1c9f8c8068e885a614af3ad9966a7ba07f9d83
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 10/09/13 00:19, Sagaert Johan wrote:
+> Hi
+>
+>
+> I noticed when using SITE_METHOD = file, the package is copied to the download directory.
+> Is this needed, since the package is already on our local filesystem ?
 
-Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/ncftp/ncftp.mk |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+  It seems the other two repliers missed your point :-)
 
-diff --git a/package/ncftp/ncftp.mk b/package/ncftp/ncftp.mk
-index a51605e..56d5d47 100644
---- a/package/ncftp/ncftp.mk
-+++ b/package/ncftp/ncftp.mk
-@@ -8,6 +8,8 @@ NCFTP_VERSION = 3.2.5
- NCFTP_SOURCE = ncftp-$(NCFTP_VERSION)-src.tar.bz2
- NCFTP_SITE = ftp://ftp.ncftp.com/ncftp
- NCFTP_TARGET_BINS = ncftp
-+NCFTP_LICENSE = Clarified Artistic License
-+NCFTP_LICENSE_FILES = doc/LICENSE.txt
- 
- ifeq ($(BR2_PACKAGE_NCFTP_GET),y)
- 	NCFTP_TARGET_BINS += ncftpget
+  There is no fundamental need to copy it. However, it makes buildroot a 
+lot simpler. In many places there are direct references to DL_DIR (just 
+grep for that variable); in case of a file SITE_METHOD, you'd have to use 
+$(PKG)_SITE instead of DL_DIR.
+
+  It is possible to use hardlinking or symlinking instead of copying. 
+Buildroot provides the BR2_LOCALFILES config option for that (in Build 
+options -> Commands). Just set that to "ln" for hard linking or "ln -s" 
+for symlinking.
+
+  Regards,
+  Arnout
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
