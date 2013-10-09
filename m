@@ -1,21 +1,29 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 09 Oct 2013 21:24:11 +0200
-Subject: [Buildroot] [PATCH 1/3] linphone: add license
-In-Reply-To: <1381321357-16419-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Wed, 9 Oct 2013 09:22:35 -0300")
-References: <1381321357-16419-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <874n8q1c4k.fsf@dell.be.48ers.dk>
+Date: Wed, 09 Oct 2013 21:43:44 +0200
+Subject: [Buildroot] [PATCH 0 of 5] more license corrections
+In-Reply-To: <patchbomb.1381319908@argentina> (Thomas De Schampheleire's
+ message of "Wed, 09 Oct 2013 13:58:28 +0200")
+References: <patchbomb.1381319908@argentina>
+Message-ID: <87zjqiz0un.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+>>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin@gmail.com> writes:
 
- Gustavo> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+ Thomas> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
 Committed series, thanks.
+
+ Thomas> ---
+ Thomas> Note: there may be many more such license annotations that
+ Thomas> declare e.g.  GPLv2 but are GPLv2+ in reality.
+
+Patches are always welcome ;)
+
+I try to review whenever stuff is added, but I probably sometimes miss some..
 
 -- 
 Bye, Peter Korsgaard
