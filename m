@@ -1,19 +1,20 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 09 Oct 2013 22:10:54 +0200
-Subject: [Buildroot] [PATCH 1/1] poppler: bump to version 0.24.2
-In-Reply-To: <1381302125-5854-1-git-send-email-jerzy.grzegorek@trzebnica.net>
- (Jerzy Grzegorek's message of "Wed, 9 Oct 2013 09:02:04 +0200")
-References: <1381302125-5854-1-git-send-email-jerzy.grzegorek@trzebnica.net>
-Message-ID: <87li22yzld.fsf@dell.be.48ers.dk>
+Date: Wed, 09 Oct 2013 22:11:36 +0200
+Subject: [Buildroot] [PATCH v2] i2c-tools: add license information
+In-Reply-To: <fc3b3afc1459d7a16e5b.1381302651@argentina> (Thomas De
+ Schampheleire's message of "Wed, 09 Oct 2013 09:10:51 +0200")
+References: <fc3b3afc1459d7a16e5b.1381302651@argentina>
+Message-ID: <87hacqyzk7.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Jerzy" == Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net> writes:
+>>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin@gmail.com> writes:
 
- Jerzy> Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+ Thomas> Signed-off-by: Thomas De Schampheleire
+ Thomas> <thomas.de.schampheleire@gmail.com>
 
 Committed, thanks.
 
