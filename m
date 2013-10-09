@@ -1,127 +1,63 @@
-From: Ryan Barnett <rjbarnet@rockwellcollins.com>
-Date: Wed, 9 Oct 2013 15:46:15 -0500
-Subject: [Buildroot] [PATCH v4 1/1] manual: update review process and
-	patchwork
-Message-ID: <1381351575-16776-1-git-send-email-rjbarnet@rockwellcollins.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 09 Oct 2013 23:05:23 +0200
+Subject: [Buildroot] [PATCH v3 1/1] openpowerlink: new package
+In-Reply-To: <524F228E.9070602@openwide.fr> (Romain Naour's message of "Fri,
+ 04 Oct 2013 22:18:22 +0200")
+References: <524F228E.9070602@openwide.fr>
+Message-ID: <87k3hmxii4.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Adding more documentaiton based on discussion from the mailing list
-in regards the buildroot review process and how patchworks can be
-used to pull in patches for testing purposes.
+>>>>> "Romain" == Romain Naour <romain.naour@openwide.fr> writes:
 
-Mailing list discussion:
-http://lists.busybox.net/pipermail/buildroot/2013-September/078170.html
+ Romain> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+ Romain> ---
 
-Signed-off-by: Ryan Barnett <rjbarnet@rockwellcollins.com>
+ Romain> v3:
+ Romain>   - Add CPP depends
+ Romain>   - Add build fix for kernels > 3.5
+ Romain>   - Fix lib install
 
----
-v3 -> v4
- * Removed erronous 'the' (suggested by Thomas De Schampheleire)
- * Reword the sentence about the Patchwork website's main use
-   for developers (suggested by Thomas De Schampheleire)
+[snip]
 
-v2 -> v3
- * Changed 'a' to 'an' when preceeding +mbox+ (suggested by Thomas
-   De Schampheleire)
+ Romain> +++ b/package/openpowerlink/openpowerlink-0002-Fix-compilation-issue-for-kernels-3.5.patch
 
-v1 -> v2
- * Updated all references to patchwork to be Patchwork or Buildroot's
-   Patchwork instead of a few misspellings (suggested by Thomas
-   Petazzoni)
- * Added clarification that patchwork main use is for the Buildroot
-   maintainer (suggested by Thomas Petazzoni)
----
- docs/manual/contribute.txt   |   12 +++++++++++-
- docs/manual/get-involved.txt |   39 ++++++++++++++++++++++++++++++++++++---
- 2 files changed, 47 insertions(+), 4 deletions(-)
+[snip]
 
-diff --git a/docs/manual/contribute.txt b/docs/manual/contribute.txt
-index 2b2783d..201685c 100644
---- a/docs/manual/contribute.txt
-+++ b/docs/manual/contribute.txt
-@@ -132,9 +132,15 @@ $ git format-patch --subject-prefix "PATCH v4" \
- Reviewing/Testing patches
- -------------------------
- 
-+The review process for new patches is done over the mailing list. Once
-+a patch is submitted to the mailing list, other developers will provide
-+feedback to the patch via emails sent through the mailing list.
-+
- In the review process, do not hesitate to respond to patch submissions
- for remarks, suggestions or anything that will help everyone to
--understand the patches and make them better.
-+understand the patches and make them better. Please use internet
-+style replies in plain text emails when responding to patch
-+submissions.
- 
- Some tags are used to help following the state of any patch posted on
- the mailing-list:
-@@ -144,6 +150,10 @@ Acked-by:: Indicates that the patch can be committed.
- Tested-by:: Indicates that the patch has been tested. It is useful
-   but not necessary to add a comment about what has been tested.
- 
-+Buildroot's Patchwork website can be used to pull in patches for testing
-+purposes. Please see xref:apply-patches-patchwork[] for more
-+information on using Buildroot's Patchwork website to apply patches.
-+
- Autobuild
- ---------
- 
-diff --git a/docs/manual/get-involved.txt b/docs/manual/get-involved.txt
-index 8515d34..8475038 100644
---- a/docs/manual/get-involved.txt
-+++ b/docs/manual/get-involved.txt
-@@ -55,11 +55,44 @@ using a code sharing website.
- Patchwork
- ---------
- 
--The Buildroot patch management interface is at
-+Patchwork is a web-based patch tracking system designed to facilitate
-+the contribution and management of contributions to an open-source
-+project. Patches that have been sent to a mailing list are \'caught' by
-+the system, and appear on a web page. Any comments posted that
-+reference the patch are appended to the patch page too. For more
-+information on Patchwork see
-+http://jk.ozlabs.org/projects/patchwork[].
-+
-+Buildroot's Patchwork website is mainly for use by Buildroot's
-+maintainer to ensure patches aren't missed. The website however,
-+exposes patches and their corresponding review comments in a clean
-+and concise web interface.
-+
-+The Buildroot patch management interface is available at
- http://patchwork.buildroot.org[].
- 
--All patches and comments sent through the mailing list are
--automatically indexed in http://patchwork.buildroot.org[patchwork].
-+[[apply-patches-patchwork]]
-+Applying Patches from Patchwork
-+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-+
-+The main use of Buildroot's Patchwork website for a developer is for
-+pulling in patches into their local git repository for testing
-+purposes.
-+
-+When browsing patches in the patchwork management interface, an +mbox+
-+link is provided at the top of the page. Copy this link address and
-+run the following commands:
-+
-+---------------------
-+$ git checkout -b <test-branch-name>
-+$ wget -O - <mbox-url> | git am
-+---------------------
-+
-+Another option for applying patches is to create a bundle. A bundle is
-+a set of patches that you can group together using the patchwork
-+interface. Once the bundle is created and the bundle is made public,
-+you can copy the +mbox+ link for the bundle and apply the bundle
-+using the above commands.
- 
- [[bugtracker]]
- Bugtracker
+ Romain> @@ -0,0 +1,88 @@
+ Romain> +From 9990e19bc554d11c4123986692c5e0572682467a Mon Sep 17 00:00:00 2001
+ Romain> +From: Josef Baumgartner <josef.baumgartner@br-automation.com>
+ Romain> +Date: Wed, 14 Aug 2013 10:22:21 +0200
+ Romain> +Subject: [PATCH 1/1] [FIX] Fix compilation issue for kernels > 3.5
+ Romain> +
+ Romain> +@@ -1244,8 +1258,8 @@ tEplKernel      Ret = kEplSuccessful;
+ Romain> +     }
+ Romain> + #elif (TARGET_SYSTEM == _VXWORKS_)
+ Romain> +     semDelete(pCopyJob_p->m_Event.m_semCompletion);
+ Romain> +-
+ Romain> +-#else
+ Romain> ++
+ Romain> ++#else
+ Romain> + #error "OS currently not supported by EplApiProcessImage!"
+ Romain> + #endif
+ Romain> +
+ Romain> +--
+ Romain> +1.8.4
+
+Something went wrong here (your mailer ate trailing spaces?):
+
+Applying openpowerlink-0002-Fix-compilation-issue-for-kernels-3.5.patch using patch: 
+patching file EplStack/EplApiProcessImage.c
+Hunk #4 FAILED at 1258.
+1 out of 4 hunks FAILED -- saving rejects to file EplStack/EplApiProcessImage.c.rej
+Patch failed!  Please fix openpowerlink-0002-Fix-compilation-issue-for-kernels-3.5.patch!
+
+But as this last hunk was just white space changes, I simply dropped it.
+
+Committed with that fixed, thanks.
+
 -- 
-1.7.1
+Bye, Peter Korsgaard
