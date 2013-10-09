@@ -1,42 +1,24 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 9 Oct 2013 23:06:48 +0200
-Subject: [Buildroot] [git commit] package/weston: fix variable name
-Message-ID: <20131009210741.6DA749AF8C@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 09 Oct 2013 23:15:45 +0200
+Subject: [Buildroot] [PATCH v2 6/6] qt5: remove configure options from
+	module packages
+In-Reply-To: <1379655795-22429-7-git-send-email-fatih.asici@gmail.com> ("Fatih
+ =?utf-8?B?QcWfxLFjxLEiJ3M=?= message of "Fri, 20 Sep 2013 08:43:15 +0300")
+References: <1379655795-22429-1-git-send-email-fatih.asici@gmail.com>
+ <1379655795-22429-7-git-send-email-fatih.asici@gmail.com>
+Message-ID: <87y562w3ge.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=516246ddf2d7c2569ee6c0ffa4cfc80ff4ecc203
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Fatih" == Fatih A??c? <fatih.asici@gmail.com> writes:
 
-The weston package uses the $(WAYLAND_VERSION) variable instead of
-$(WESTON_VERSION).
+ Fatih> These packages do not have configure scripts.
+ Fatih> Signed-off-by: Fatih A??c? <fatih.asici@gmail.com>
 
-This went unnoticed for now, as we were using the same version for
-wayland and weston. But that's not always the case, since we have,
-for example: wayland-1.2.1 and weston-1.2.2, and no wayland-1.2.2.
+Committed, thanks.
 
-Fix this by using the correct variable.
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/weston/weston.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
-
-diff --git a/package/weston/weston.mk b/package/weston/weston.mk
-index 6f7703e..5d2c829 100644
---- a/package/weston/weston.mk
-+++ b/package/weston/weston.mk
-@@ -6,7 +6,7 @@
- 
- WESTON_VERSION = 1.1.0
- WESTON_SITE = http://wayland.freedesktop.org/releases/
--WESTON_SOURCE = weston-$(WAYLAND_VERSION).tar.xz
-+WESTON_SOURCE = weston-$(WESTON_VERSION).tar.xz
- WESTON_LICENSE = MIT
- WESTON_LICENSE_FILES = COPYING
- 
+-- 
+Bye, Peter Korsgaard
