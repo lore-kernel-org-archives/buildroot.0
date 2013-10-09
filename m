@@ -1,30 +1,40 @@
-From: Axel Lin <axel.lin@ingics.com>
-Date: Wed, 09 Oct 2013 10:18:27 +0800
-Subject: [Buildroot] [PATCH] nano: bump to version 2.3.2
-Message-ID: <1381285107.27485.10.camel@phoenix>
+From: Eric Nelson <eric.nelson@boundarydevices.com>
+Date: Tue,  8 Oct 2013 20:05:29 -0700
+Subject: [Buildroot] [PATCH V4 0/2] i.MX updates
+Message-ID: <1381287931-7070-1-git-send-email-eric.nelson@boundarydevices.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Axel Lin <axel.lin@ingics.com>
----
- package/nano/nano.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+This patch series updates Freescale packages for i.MX processors
+to use the Freescale MAD/YOCTO repository and updates the versions
+to match the latest release.
 
-diff --git a/package/nano/nano.mk b/package/nano/nano.mk
-index b1a8f44..aba4b4f 100644
---- a/package/nano/nano.mk
-+++ b/package/nano/nano.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--NANO_VERSION = 2.3.1
-+NANO_VERSION = 2.3.2
- NANO_SITE = http://www.nano-editor.org/dist/v2.3
- NANO_LICENSE = GPLv3+
- NANO_LICENSE_FILES = COPYING
+Eric Nelson (2):
+  i.MX: Use FREESCALE_IMX_SITE for Freescale packages
+  i.MX: Update versions to match latest Freescale release
+
+V2 skipped moving libfslx packages into packages/freescale-imx
+V3 incorporates gstreamer plugin patch from
+	http://patchwork.ozlabs.org/patch/279625
+   and re-works the patch into two steps as suggested by 
+   Thomas Petazzoni:
+	- rename and use FREESCALE_IMX_SITE
+	- bump revisions and change site to freescale.com
+V4 addresses comments by Arnout regarding license files
+   and comments
+
+ package/freescale-imx/firmware-imx/firmware-imx.mk |  2 +-
+ package/freescale-imx/freescale-imx.mk             |  6 ++----
+ .../gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk           |  8 +++++--
+ package/freescale-imx/imx-lib/imx-lib.mk           | 24 ++++++++++++++++++---
+ .../gstreamer/gst-fsl-plugins/gst-fsl-plugins.mk   |  5 ++---
+ package/libfslcodec/libfslcodec.mk                 |  5 ++---
+ package/libfslparser/libfslparser.mk               | 10 ++++++---
+ package/libfslvpuwrap/libfslvpuwrap.mk             | 25 ++++++++++++++++++----
+ 8 files changed, 62 insertions(+), 23 deletions(-)
+
 -- 
 1.8.1.2
