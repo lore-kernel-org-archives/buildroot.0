@@ -1,34 +1,34 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Wed, 09 Oct 2013 13:58:29 +0200
-Subject: [Buildroot] [PATCH 1 of 5] cifs-utils: correct license GPLv3 ->
-	GPLv3+
+Date: Wed, 09 Oct 2013 13:58:30 +0200
+Subject: [Buildroot] [PATCH 2 of 5] libnetfilter_cthelper: correct license
+	GPLv2 -> GPLv2+
 In-Reply-To: <patchbomb.1381319908@argentina>
 References: <patchbomb.1381319908@argentina>
-Message-ID: <32bd9d0979ff201fc926.1381319909@argentina>
+Message-ID: <56cca55a76b3065d1555.1381319910@argentina>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+The main file of this package is src/libnetfilter_cthelper.c, which states
+GPLv2+.
+
 Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
 ---
-Note: some files are GPLv2+, others are GPLv3+. There are a few headers also
-declared as LGPL. I think the right approach is to set GPLv3+ here.
-
- package/cifs-utils/cifs-utils.mk |  2 +-
+ package/libnetfilter_cthelper/libnetfilter-cthelper.mk |  2 +-
  1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/cifs-utils/cifs-utils.mk b/package/cifs-utils/cifs-utils.mk
---- a/package/cifs-utils/cifs-utils.mk
-+++ b/package/cifs-utils/cifs-utils.mk
-@@ -7,7 +7,7 @@
- CIFS_UTILS_VERSION = 6.1
- CIFS_UTILS_SOURCE  = cifs-utils-$(CIFS_UTILS_VERSION).tar.bz2
- CIFS_UTILS_SITE    = http://ftp.samba.org/pub/linux-cifs/cifs-utils
--CIFS_UTILS_LICENSE = GPLv3
-+CIFS_UTILS_LICENSE = GPLv3+
- CIFS_UTILS_LICENSE_FILES = COPYING
+diff --git a/package/libnetfilter_cthelper/libnetfilter-cthelper.mk b/package/libnetfilter_cthelper/libnetfilter-cthelper.mk
+--- a/package/libnetfilter_cthelper/libnetfilter-cthelper.mk
++++ b/package/libnetfilter_cthelper/libnetfilter-cthelper.mk
+@@ -10,7 +10,7 @@ LIBNETFILTER_CTHELPER_SITE = http://www.
+ LIBNETFILTER_CTHELPER_INSTALL_STAGING = YES
+ LIBNETFILTER_CTHELPER_DEPENDENCIES = host-pkgconf libmnl
+ LIBNETFILTER_CTHELPER_AUTORECONF = YES
+-LIBNETFILTER_CTHELPER_LICENSE = GPLv2
++LIBNETFILTER_CTHELPER_LICENSE = GPLv2+
+ LIBNETFILTER_CTHELPER_LICENSE_FILES = COPYING
  
- define CIFS_UTILS_NO_WERROR
+ $(eval $(autotools-package))
