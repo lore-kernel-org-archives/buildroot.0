@@ -1,32 +1,37 @@
 From: Axel Lin <axel.lin@ingics.com>
-Date: Wed, 09 Oct 2013 09:28:27 +0800
-Subject: [Buildroot] [PATCH 2/2] xmlstarlet: bump to version 1.5.0
-In-Reply-To: <1381281980.27485.2.camel@phoenix>
-References: <1381281980.27485.2.camel@phoenix>
-Message-ID: <1381282107.27485.4.camel@phoenix>
+Date: Wed, 09 Oct 2013 10:02:54 +0800
+Subject: [Buildroot] [PATCH] ccid: bump to version 1.4.12
+Message-ID: <1381284174.27485.9.camel@phoenix>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Bump version and also add license information.
+
 Signed-off-by: Axel Lin <axel.lin@ingics.com>
 ---
- package/xmlstarlet/xmlstarlet.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/ccid/ccid.mk | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/package/xmlstarlet/xmlstarlet.mk b/package/xmlstarlet/xmlstarlet.mk
-index 4a30feb..16f736e 100644
---- a/package/xmlstarlet/xmlstarlet.mk
-+++ b/package/xmlstarlet/xmlstarlet.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/ccid/ccid.mk b/package/ccid/ccid.mk
+index a246ddd..c25b433 100644
+--- a/package/ccid/ccid.mk
++++ b/package/ccid/ccid.mk
+@@ -4,9 +4,11 @@
  #
  ################################################################################
  
--XMLSTARLET_VERSION = 1.3.0
-+XMLSTARLET_VERSION = 1.5.0
- XMLSTARLET_SITE = http://downloads.sourceforge.net/project/xmlstar/xmlstarlet/$(XMLSTARLET_VERSION)
- XMLSTARLET_LICENSE = MIT
- XMLSTARLET_LICENSE_FILES = COPYING Copyright
+-CCID_VERSION = 1.4.8
++CCID_VERSION = 1.4.12
+ CCID_SOURCE = ccid-$(CCID_VERSION).tar.bz2
+-CCID_SITE = http://alioth.debian.org/frs/download.php/file/3768
++CCID_SITE = http://alioth.debian.org/frs/download.php/file/3937
++CCID_LICENSE = LGPLv2.1+
++CCID_LICENSE_FILES = COPYING
+ CCID_INSTALL_STAGING = YES
+ CCID_DEPENDENCIES = pcsc-lite host-pkgconf libusb
+ 
 -- 
 1.8.1.2
