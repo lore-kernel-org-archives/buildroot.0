@@ -1,30 +1,127 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 9 Oct 2013 22:35:13 +0200
-Subject: [Buildroot] [git commit] ngircd: needs mmu
-Message-ID: <20131009203638.289DD9B9A4@busybox.osuosl.org>
+From: Ryan Barnett <rjbarnet@rockwellcollins.com>
+Date: Wed, 9 Oct 2013 15:46:15 -0500
+Subject: [Buildroot] [PATCH v4 1/1] manual: update review process and
+	patchwork
+Message-ID: <1381351575-16776-1-git-send-email-rjbarnet@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=0b4308639807b98791780adb383cf20f6dad1d0b
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Adding more documentaiton based on discussion from the mailing list
+in regards the buildroot review process and how patchworks can be
+used to pull in patches for testing purposes.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Mailing list discussion:
+http://lists.busybox.net/pipermail/buildroot/2013-September/078170.html
+
+Signed-off-by: Ryan Barnett <rjbarnet@rockwellcollins.com>
+
 ---
- package/ngircd/Config.in |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+v3 -> v4
+ * Removed erronous 'the' (suggested by Thomas De Schampheleire)
+ * Reword the sentence about the Patchwork website's main use
+   for developers (suggested by Thomas De Schampheleire)
 
-diff --git a/package/ngircd/Config.in b/package/ngircd/Config.in
-index e8fc3d0..f1d8bea 100644
---- a/package/ngircd/Config.in
-+++ b/package/ngircd/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_NGIRCD
- 	bool "ngircd"
-+	depends on BR2_USE_MMU # fork()
- 	select BR2_PACKAGE_ZLIB
- 	help
- 	  Next Generation IRC server deamon.
+v2 -> v3
+ * Changed 'a' to 'an' when preceeding +mbox+ (suggested by Thomas
+   De Schampheleire)
+
+v1 -> v2
+ * Updated all references to patchwork to be Patchwork or Buildroot's
+   Patchwork instead of a few misspellings (suggested by Thomas
+   Petazzoni)
+ * Added clarification that patchwork main use is for the Buildroot
+   maintainer (suggested by Thomas Petazzoni)
+---
+ docs/manual/contribute.txt   |   12 +++++++++++-
+ docs/manual/get-involved.txt |   39 ++++++++++++++++++++++++++++++++++++---
+ 2 files changed, 47 insertions(+), 4 deletions(-)
+
+diff --git a/docs/manual/contribute.txt b/docs/manual/contribute.txt
+index 2b2783d..201685c 100644
+--- a/docs/manual/contribute.txt
++++ b/docs/manual/contribute.txt
+@@ -132,9 +132,15 @@ $ git format-patch --subject-prefix "PATCH v4" \
+ Reviewing/Testing patches
+ -------------------------
+ 
++The review process for new patches is done over the mailing list. Once
++a patch is submitted to the mailing list, other developers will provide
++feedback to the patch via emails sent through the mailing list.
++
+ In the review process, do not hesitate to respond to patch submissions
+ for remarks, suggestions or anything that will help everyone to
+-understand the patches and make them better.
++understand the patches and make them better. Please use internet
++style replies in plain text emails when responding to patch
++submissions.
+ 
+ Some tags are used to help following the state of any patch posted on
+ the mailing-list:
+@@ -144,6 +150,10 @@ Acked-by:: Indicates that the patch can be committed.
+ Tested-by:: Indicates that the patch has been tested. It is useful
+   but not necessary to add a comment about what has been tested.
+ 
++Buildroot's Patchwork website can be used to pull in patches for testing
++purposes. Please see xref:apply-patches-patchwork[] for more
++information on using Buildroot's Patchwork website to apply patches.
++
+ Autobuild
+ ---------
+ 
+diff --git a/docs/manual/get-involved.txt b/docs/manual/get-involved.txt
+index 8515d34..8475038 100644
+--- a/docs/manual/get-involved.txt
++++ b/docs/manual/get-involved.txt
+@@ -55,11 +55,44 @@ using a code sharing website.
+ Patchwork
+ ---------
+ 
+-The Buildroot patch management interface is at
++Patchwork is a web-based patch tracking system designed to facilitate
++the contribution and management of contributions to an open-source
++project. Patches that have been sent to a mailing list are \'caught' by
++the system, and appear on a web page. Any comments posted that
++reference the patch are appended to the patch page too. For more
++information on Patchwork see
++http://jk.ozlabs.org/projects/patchwork[].
++
++Buildroot's Patchwork website is mainly for use by Buildroot's
++maintainer to ensure patches aren't missed. The website however,
++exposes patches and their corresponding review comments in a clean
++and concise web interface.
++
++The Buildroot patch management interface is available at
+ http://patchwork.buildroot.org[].
+ 
+-All patches and comments sent through the mailing list are
+-automatically indexed in http://patchwork.buildroot.org[patchwork].
++[[apply-patches-patchwork]]
++Applying Patches from Patchwork
++~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++
++The main use of Buildroot's Patchwork website for a developer is for
++pulling in patches into their local git repository for testing
++purposes.
++
++When browsing patches in the patchwork management interface, an +mbox+
++link is provided at the top of the page. Copy this link address and
++run the following commands:
++
++---------------------
++$ git checkout -b <test-branch-name>
++$ wget -O - <mbox-url> | git am
++---------------------
++
++Another option for applying patches is to create a bundle. A bundle is
++a set of patches that you can group together using the patchwork
++interface. Once the bundle is created and the bundle is made public,
++you can copy the +mbox+ link for the bundle and apply the bundle
++using the above commands.
+ 
+ [[bugtracker]]
+ Bugtracker
+-- 
+1.7.1
