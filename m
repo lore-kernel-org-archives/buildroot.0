@@ -1,81 +1,79 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 9 Oct 2013 16:09:59 +0200
-Subject: [Buildroot] [git commit] toolchain-external: fix Linaro ARM
-	toolchain support
-Message-ID: <20131009143431.C9D669B970@busybox.osuosl.org>
+Date: Wed, 9 Oct 2013 16:08:30 +0200
+Subject: [Buildroot] [git commit] toolchain-external: improve target library
+	copy logic
+Message-ID: <20131009143431.BE4A09B99C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=11ec38b6950cf3337b52fb97f27c2fd7c776c5c2
+commit: http://git.buildroot.net/buildroot/commit/?id=ccc82214f654f7b9925ec172b4db2a13195b5837
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This commit fixes bug #6452 (eglibc from Linaro 2013.07 not copied to
-target correctly) by:
+The copy_toolchain_lib_root function is responsible for copying a
+given library (and its symbolic link) to the target filesystem. To do
+so, it looks for the library in various locations, and then iterates
+over the symbolic link all the way to the library, copying them as
+needed to the target filesystem.
 
- * Copying only the relevant library loader to the target on ARMhf
-   (i.e ld-linux-armhf.so and not ld.so*). This is needed since Linaro
-   toolchains provide two library loaders, one ARMv7 hf, and one ARMv4
-   soft-float.
+However, the latest Linaro toolchains bring an interesting use case:
+the lib/ directory in the toolchain is organized as follows:
 
- * Making sure a $(TARGET_DIR)/lib/arm-linux-gnueabihf/ symbolic link
-   to $(TARGET_DIR)/lib/ exists, since the dynamic loader of Linaro
-   toolchains expects libraries to be found in
-   $(TARGET_DIR)/lib/arm-linux-gnueabihf/.
+ - ld-linux.so.3 -> arm-linux-gnueabi/ld-2.17...so
+ - ld-linux-armhf.so.3 -> arm-linux-gnueabihf/ld-2.17...so
+ - arm-linux-gnueabi/
+   - all ARMv4T soft float libraries
+ - arm-linux-gnueabihf/
+   - all ARMv7 hard float libraries
+
+In order to match what we do with all other toolchains, we want all
+those libraries and symbolic links to be copied directly under
+$(TARGET_DIR)/lib. This commit does that by adjusting the copy logic.
+
+This is part of the fix for bug #6452 (eglibc from Linaro 2013.07 not
+copied to target correctly).
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- toolchain/toolchain-external/toolchain-external.mk |   17 ++++++++++++++++-
- 1 files changed, 16 insertions(+), 1 deletions(-)
+ toolchain/helpers.mk |   17 ++++++++++-------
+ 1 files changed, 10 insertions(+), 7 deletions(-)
 
-diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
-index 73a761b..b5b1ce7 100644
---- a/toolchain/toolchain-external/toolchain-external.mk
-+++ b/toolchain/toolchain-external/toolchain-external.mk
-@@ -55,7 +55,12 @@
- #  of Buildroot is handled identical for the 2 toolchain types.
- 
- ifeq ($(BR2_TOOLCHAIN_EXTERNAL_GLIBC)$(BR2_TOOLCHAIN_EXTERNAL_UCLIBC),y)
--LIB_EXTERNAL_LIBS+=ld*.so.* libc.so.* libcrypt.so.* libdl.so.* libgcc_s.so.* libm.so.* libnsl.so.* libresolv.so.* librt.so.* libutil.so.*
-+LIB_EXTERNAL_LIBS+=libc.so.* libcrypt.so.* libdl.so.* libgcc_s.so.* libm.so.* libnsl.so.* libresolv.so.* librt.so.* libutil.so.*
-+ifeq ($(BR2_ARM_EABIHF),y)
-+LIB_EXTERNAL_LIBS+=ld-linux-armhf.so.*
-+else
-+LIB_EXTERNAL_LIBS+=ld*.so.*
-+endif
- ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
- LIB_EXTERNAL_LIBS+=libpthread.so.*
- ifneq ($(BR2_PACKAGE_GDB_SERVER)$(BR2_TOOLCHAIN_EXTERNAL_GDB_SERVER_COPY),)
-@@ -216,6 +221,13 @@ TOOLCHAIN_EXTERNAL_CFLAGS += -msoft-float
- TOOLCHAIN_EXTERNAL_WRAPPER_ARGS += -DBR_SOFTFLOAT=1
- endif
- 
-+# The Linaro ARMhf toolchain expects the libraries in
-+# /lib/arm-linux-gnueabihf, but Buildroot copies them to /lib, so we
-+# need to create a symbolic link.
-+define TOOLCHAIN_EXTERNAL_LINARO_ARMHF_SYMLINK
-+	ln -sf . $(TARGET_DIR)/lib/arm-linux-gnueabihf
-+endef
-+
- ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201109),y)
- TOOLCHAIN_EXTERNAL_SITE = http://sourcery.mentor.com/public/gnu_toolchain/arm-none-linux-gnueabi/
- TOOLCHAIN_EXTERNAL_SOURCE = arm-2011.09-70-arm-none-linux-gnueabi-i686-pc-linux-gnu.tar.bz2
-@@ -242,12 +254,15 @@ endef
- else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_07),y)
- TOOLCHAIN_EXTERNAL_SITE = http://releases.linaro.org/13.07/components/toolchain/binaries/
- TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-arm-linux-gnueabihf-4.8-2013.07-1_linux.tar.xz
-+TOOLCHAIN_EXTERNAL_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_EXTERNAL_LINARO_ARMHF_SYMLINK
- else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_08),y)
- TOOLCHAIN_EXTERNAL_SITE = http://releases.linaro.org/13.08/components/toolchain/binaries/
- TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-arm-linux-gnueabihf-4.8-2013.08_linux.tar.xz
-+TOOLCHAIN_EXTERNAL_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_EXTERNAL_LINARO_ARMHF_SYMLINK
- else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_09),y)
- TOOLCHAIN_EXTERNAL_SITE = http://releases.linaro.org/13.09/components/toolchain/binaries/
- TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-arm-linux-gnueabihf-4.8-2013.09_linux.tar.xz
-+TOOLCHAIN_EXTERNAL_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_EXTERNAL_LINARO_ARMHF_SYMLINK
- else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201203),y)
- TOOLCHAIN_EXTERNAL_SITE = http://sourcery.mentor.com/public/gnu_toolchain/mips-linux-gnu/
- TOOLCHAIN_EXTERNAL_SOURCE = mips-2012.03-63-mips-linux-gnu-i686-pc-linux-gnu.tar.bz2
+diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
+index b6fe04c..95120cd 100644
+--- a/toolchain/helpers.mk
++++ b/toolchain/helpers.mk
+@@ -60,21 +60,24 @@ copy_toolchain_lib_root = \
+ 			break ; \
+ 		fi \
+ 	done ; \
++	mkdir -p $(TARGET_DIR)/$${DESTDIR}; \
+ 	for LIBPATH in $${LIBSPATH} ; do \
+-		LIBNAME=`basename $${LIBPATH}`; \
+-		LIBDIR=`dirname $${LIBPATH}` ; \
+-		while test \! -z "$${LIBNAME}" ; do \
+-			LIBPATH=$${LIBDIR}/$${LIBNAME} ; \
++		while true ; do \
++			LIBNAME=`basename $${LIBPATH}`; \
++			LIBDIR=`dirname $${LIBPATH}` ; \
++			LINKTARGET=`readlink $${LIBPATH}` ; \
+ 			rm -fr $(TARGET_DIR)/$${DESTDIR}/$${LIBNAME}; \
+-			mkdir -p $(TARGET_DIR)/$${DESTDIR}; \
+ 			if test -h $${LIBPATH} ; then \
+-				cp -d $${LIBPATH} $(TARGET_DIR)/$${DESTDIR}/; \
++				ln -sf `basename $${LINKTARGET}` $(TARGET_DIR)/$${DESTDIR}/$${LIBNAME} ; \
+ 			elif test -f $${LIBPATH}; then \
+ 				$(INSTALL) -D -m0755 $${LIBPATH} $(TARGET_DIR)/$${DESTDIR}/$${LIBNAME}; \
+ 			else \
+ 				exit -1; \
+ 			fi; \
+-			LIBNAME="`readlink $${LIBPATH}`"; \
++			if test -z "$${LINKTARGET}" ; then \
++				break ; \
++			fi ; \
++			LIBPATH="`readlink -f $${LIBPATH}`"; \
+ 		done; \
+ 	done; \
+  \
