@@ -1,31 +1,33 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 9 Oct 2013 22:21:28 +0200
-Subject: [Buildroot] [git commit] netatalk: needs mmu
-Message-ID: <20131009202220.1807F9B98A@busybox.osuosl.org>
+Date: Wed, 9 Oct 2013 22:11:08 +0200
+Subject: [Buildroot] [git commit] i2c-tools: add license information
+Message-ID: <20131009202219.DF4E29B98A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ee35a27e2207f1f82cf866172718a418088646f0
+commit: http://git.buildroot.net/buildroot/commit/?id=e8d807e3a6a65b1a26fd2110b4de826ec1a3f2a3
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/netatalk/Config.in |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+ package/i2c-tools/i2c-tools.mk |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/netatalk/Config.in b/package/netatalk/Config.in
-index 5c676e9..9bf0515 100644
---- a/package/netatalk/Config.in
-+++ b/package/netatalk/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_NETATALK
- 	bool "netatalk"
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_USE_MMU # fork()
- 	select BR2_PACKAGE_BERKELEYDB
- 	select BR2_PACKAGE_OPENSSL
- 	select BR2_PACKAGE_LIBEVENT
+diff --git a/package/i2c-tools/i2c-tools.mk b/package/i2c-tools/i2c-tools.mk
+index 1589d04..c6a967d 100644
+--- a/package/i2c-tools/i2c-tools.mk
++++ b/package/i2c-tools/i2c-tools.mk
+@@ -7,6 +7,8 @@
+ I2C_TOOLS_VERSION = 3.1.0
+ I2C_TOOLS_SOURCE = i2c-tools-$(I2C_TOOLS_VERSION).tar.bz2
+ I2C_TOOLS_SITE = http://dl.lm-sensors.org/i2c-tools/releases
++I2C_TOOLS_LICENSE = GPLv2+, GPLv2 (py-smbus)
++I2C_TOOLS_LICENSE_FILES = COPYING
+ 
+ define I2C_TOOLS_BUILD_CMDS
+  $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
