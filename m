@@ -1,217 +1,74 @@
-From: Alvaro G. M <alvaro.gamez@hazent.com>
-Date: Wed,  9 Oct 2013 15:58:39 +0200
-Subject: [Buildroot] [PATCH] libxmlrpc: new package
-In-Reply-To: <CAM+bi4ufo+fYffs-aC5T7FSymrfw-qobnSB-iJVKqB70sECwaA@mail.gmail.com>
-References: <CAM+bi4ufo+fYffs-aC5T7FSymrfw-qobnSB-iJVKqB70sECwaA@mail.gmail.com>
-Message-ID: <1381327119-7553-1-git-send-email-alvaro.gamez@hazent.com>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Wed, 9 Oct 2013 16:04:39 +0200
+Subject: [Buildroot] [PATCHv3 05/20] toolchain-buildroot: convert to the
+ package infrastructure
+In-Reply-To: <1381256237-27948-6-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1381256237-27948-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1381256237-27948-6-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <CAAXf6LUcykhJZ9UcUTB8+WSm7YMLXFwBOUnq2dOr8_i+L8ayVA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/Config.in                                  |  1 +
- package/libxmlrpc/Config.in                        | 10 ++++++++
- .../libxmlrpc-0001-fix-gennmtab-build.patch        | 25 ++++++++++++++++++
- .../libxmlrpc-0002-fix-non-cplusplus-build.patch   | 27 +++++++++++++++++++
- .../libxmlrpc/libxmlrpc-0003-non-wchar-build.patch | 24 +++++++++++++++++
- .../libxmlrpc-0004-use-correct-curl-config.patch   | 22 ++++++++++++++++
- package/libxmlrpc/libxmlrpc.mk                     | 30 ++++++++++++++++++++++
- 7 files changed, 139 insertions(+)
- create mode 100644 package/libxmlrpc/Config.in
- create mode 100644 package/libxmlrpc/libxmlrpc-0001-fix-gennmtab-build.patch
- create mode 100644 package/libxmlrpc/libxmlrpc-0002-fix-non-cplusplus-build.patch
- create mode 100644 package/libxmlrpc/libxmlrpc-0003-non-wchar-build.patch
- create mode 100644 package/libxmlrpc/libxmlrpc-0004-use-correct-curl-config.patch
- create mode 100644 package/libxmlrpc/libxmlrpc.mk
+Hi Thomas,
 
-diff --git a/package/Config.in b/package/Config.in
-index 9aa9d81..7947e8e 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -728,6 +728,7 @@ source "package/libroxml/Config.in"
- source "package/libxml-parser-perl/Config.in"
- source "package/libxml2/Config.in"
- source "package/libxmlpp/Config.in"
-+source "package/libxmlrpc/Config.in"
- source "package/libxslt/Config.in"
- source "package/libyaml/Config.in"
- source "package/mxml/Config.in"
-diff --git a/package/libxmlrpc/Config.in b/package/libxmlrpc/Config.in
-new file mode 100644
-index 0000000..26e4a52
---- /dev/null
-+++ b/package/libxmlrpc/Config.in
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_LIBXMLRPC
-+	bool "libxmlrpc"
-+	select BR2_PACKAGE_LIBCURL
-+	help
-+	  XML-RPC is a quick-and-easy way to make procedure calls over
-+	  the Internet. It converts the procedure call into an XML
-+	  document, sends it to a remote server using HTTP, and gets
-+	  back the response as XML.
-+
-+	  http://xmlrpc-c.sourceforge.net/
-diff --git a/package/libxmlrpc/libxmlrpc-0001-fix-gennmtab-build.patch b/package/libxmlrpc/libxmlrpc-0001-fix-gennmtab-build.patch
-new file mode 100644
-index 0000000..8cdd932
---- /dev/null
-+++ b/package/libxmlrpc/libxmlrpc-0001-fix-gennmtab-build.patch
-@@ -0,0 +1,25 @@
-+Fix build of host tool
-+
-+genmtab is a tool that needs to be built for the host as it is used
-+during the compilation process of libxmlrpc. Its Makefile needs a bit
-+of tuning to use the conventional CC_FOR_BUILD, CFLAGS_FOR_BUILD and
-+LDFLAGS_FOR_BUILD variables.
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+
-+Index: b/lib/expat/gennmtab/Makefile
-+===================================================================
-+--- a/lib/expat/gennmtab/Makefile
-++++ b/lib/expat/gennmtab/Makefile
-+@@ -40,9 +40,9 @@
-+ dep: dep-common
-+ 
-+ gennmtab.o:%.o:%.c
-+-	$(BUILDTOOL_CC) -c $< -o $@ $(CFLAGS_ALL) $(INCLUDES)
-++	$(CC_FOR_BUILD) -c $< -o $@ $(CFLAGS_FOR_BUILD) $(INCLUDES)
-+ 
-+ gennmtab:%:%.o
-+-	$(BUILDTOOL_CCLD) -o $@ $(LDFLAGS) $^
-++	$(CC_FOR_BUILD) -o $@ $(LDFLAGS_FOR_BUILD) $^
-+ 
-+ include depend.mk
-diff --git a/package/libxmlrpc/libxmlrpc-0002-fix-non-cplusplus-build.patch b/package/libxmlrpc/libxmlrpc-0002-fix-non-cplusplus-build.patch
-new file mode 100644
-index 0000000..efeb9cc
---- /dev/null
-+++ b/package/libxmlrpc/libxmlrpc-0002-fix-non-cplusplus-build.patch
-@@ -0,0 +1,27 @@
-+Handle builds without C++
-+
-+libxmlrpc nicely handles the fact of being built without C++ support,
-+except for one location, fixed by this patch.
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+
-+Index: b/lib/util/Makefile
-+===================================================================
-+--- a/lib/util/Makefile
-++++ b/lib/util/Makefile
-+@@ -41,11 +41,14 @@
-+ LIBOBJS = \
-+   casprintf.o \
-+   cmdline_parser.o \
-+-  cmdline_parser_cpp.o \
-+   getoptx.o \
-+   string_parser.o \
-+   stripcaseeq.o \
-+ 
-++ifeq ($(ENABLE_CPLUSPLUS),yes)
-++LIBOBJS += cmdline_parser_cpp.o
-++endif
-++
-+ .PHONY: all
-+ all: $(LIBOBJS)
-+ 
-diff --git a/package/libxmlrpc/libxmlrpc-0003-non-wchar-build.patch b/package/libxmlrpc/libxmlrpc-0003-non-wchar-build.patch
-new file mode 100644
-index 0000000..1f04353
---- /dev/null
-+++ b/package/libxmlrpc/libxmlrpc-0003-non-wchar-build.patch
-@@ -0,0 +1,24 @@
-+Disable wide-char specific code
-+
-+The vast majority of the libxmlrpc code nicely handles the absence of
-+wide char support, except at one location, which is fixed by this
-+patch.
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+
-+Index: b/src/xmlrpc_decompose.c
-+===================================================================
-+--- a/src/xmlrpc_decompose.c
-++++ b/src/xmlrpc_decompose.c
-+@@ -217,7 +217,11 @@
-+         xmlrpc_strfree(*decompRootP->store.Tstring.valueP);
-+         break;
-+     case 'w':
-++#if HAVE_UNICODE_WCHAR
-+         free((void*)*decompRootP->store.TwideString.valueP);
-++#else
-++	XMLRPC_ASSERT(false);
-++#endif
-+         break;
-+     case '6':
-+         free((void*)*decompRootP->store.TbitString.valueP);
-diff --git a/package/libxmlrpc/libxmlrpc-0004-use-correct-curl-config.patch b/package/libxmlrpc/libxmlrpc-0004-use-correct-curl-config.patch
-new file mode 100644
-index 0000000..ada0bd2
---- /dev/null
-+++ b/package/libxmlrpc/libxmlrpc-0004-use-correct-curl-config.patch
-@@ -0,0 +1,22 @@
-+Use correct curl-config program
-+
-+Instead of calling again curl-config in src/Makefile (which ends up
-+calling the wrong curl-config: the one in the PATH instead of the one
-+pointed at by the environment variables at configure time), let's use
-+the CURL_LDADD variable which was computed at configure time.
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+
-+Index: b/src/Makefile
-+===================================================================
-+--- a/src/Makefile
-++++ b/src/Makefile
-+@@ -56,7 +56,7 @@
-+   TRANSPORT_MODS += blddir/lib/curl_transport/curltransaction
-+   TRANSPORT_MODS += blddir/lib/curl_transport/curlmulti
-+   TRANSPORT_MODS += blddir/lib/curl_transport/lock_pthread
-+-  TRANSPORT_LIBDEP += $(shell curl-config --libs)
-++  TRANSPORT_LIBDEP += $(CURL_LDADD)
-+ endif
-+ ifeq ($(MUST_BUILD_LIBWWW_CLIENT),yes)
-+   TRANSPORT_MODS += blddir/lib/libwww_transport/xmlrpc_libwww_transport
-diff --git a/package/libxmlrpc/libxmlrpc.mk b/package/libxmlrpc/libxmlrpc.mk
-new file mode 100644
-index 0000000..78ba161
---- /dev/null
-+++ b/package/libxmlrpc/libxmlrpc.mk
-@@ -0,0 +1,30 @@
-+################################################################################
-+#
-+# libxmlrpc
-+#
-+################################################################################
-+
-+LIBXMLRPC_VERSION = 1.25.26
-+LIBXMLRPC_SOURCE = xmlrpc-c-$(LIBXMLRPC_VERSION).tgz
-+LIBXMLRPC_SITE = http://downloads.sourceforge.net/project/xmlrpc-c/Xmlrpc-c%20Super%20Stable/1.25.26
-+LIBXMLRPC_LICENSE = BSD-3c (xml-rpc main code and abyss web server), BSD like (lib/expat), Python 1.5.2 license (parts of xmlrpc_base64.c)
-+LIBXMLRPC_LICENSE_FILES = doc/COPYING
-+LIBXMLRPC_INSTALL_STAGING = YES
-+LIBXMLRPC_DEPENDENCIES = libcurl
-+LIBXMLRPC_CONFIG_SCRIPTS = xmlrpc-c-config
-+
-+LIBXMLRPC_CONF_OPT = \
-+	$(if $(BR2_USE_WCHAR),,ac_cv_header_wchar_h=no) \
-+	$(if $(BR2_INSTALL_LIBSTDCPP),,--disable-cplusplus) \
-+	have_curl_config=$(STAGING_DIR)/usr/bin/curl-config \
-+	CURL_CONFIG=$(STAGING_DIR)/usr/bin/curl-config
-+
-+# Our package uses autoconf, but not automake, so we need to pass
-+# those variables at compile time as well.
-+LIBXMLRPC_MAKE_ENV = \
-+	CC_FOR_BUILD="$(HOSTCC)" \
-+	LD_FOR_BUILD="$(HOSTLD)" \
-+	CFLAGS_FOR_BUILD="$(HOST_CFLAGS)" \
-+	LDFLAGS_FOR_BUILD="$(HOST_LDFLAGS)"
-+
-+$(eval $(autotools-package))
--- 
-1.8.4.rc3
+On Tue, Oct 8, 2013 at 8:17 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> This commit converts the toolchain-buildroot logic to the package
+> infrastructure. The package is fairly simple as it only defines
+> BUILDROOT_LIBC, and depends on host-gcc-final to get the overall
+> internal toolchain build logic started.
+>
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Acked-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+> ---
+>  toolchain/toolchain-buildroot.mk                     |  9 ---------
+>  toolchain/toolchain-buildroot/toolchain-buildroot.mk | 17 +++++++++++++++++
+>  2 files changed, 17 insertions(+), 9 deletions(-)
+>  delete mode 100644 toolchain/toolchain-buildroot.mk
+>  create mode 100644 toolchain/toolchain-buildroot/toolchain-buildroot.mk
+>
+> diff --git a/toolchain/toolchain-buildroot.mk b/toolchain/toolchain-buildroot.mk
+> deleted file mode 100644
+> index 3a05800..0000000
+> --- a/toolchain/toolchain-buildroot.mk
+> +++ /dev/null
+> @@ -1,9 +0,0 @@
+> -# Triggerring the build of the host-gcc-final will automaticaly do the
+> -# build of binutils, uClibc, kernel headers and all the intermediate
+> -# gcc steps.
+> -
+> -include toolchain/helpers.mk
+> -
+> -BUILDROOT_LIBC = $(call qstrip,$(BR2_TOOLCHAIN_BUILDROOT_LIBC))
+> -
+> -toolchain-buildroot: host-gcc-final
+> diff --git a/toolchain/toolchain-buildroot/toolchain-buildroot.mk b/toolchain/toolchain-buildroot/toolchain-buildroot.mk
+> new file mode 100644
+> index 0000000..ced430e
+> --- /dev/null
+> +++ b/toolchain/toolchain-buildroot/toolchain-buildroot.mk
+> @@ -0,0 +1,17 @@
+> +################################################################################
+> +#
+> +# toolchain-buildroot
+> +#
+> +################################################################################
+> +
+> +TOOLCHAIN_BUILDROOT_SOURCE =
+> +
+> +BUILDROOT_LIBC = $(call qstrip,$(BR2_TOOLCHAIN_BUILDROOT_LIBC))
+> +
+> +# Trigerring the build of the host-gcc-final will automatically do the
+> +# build of binutils, uClibc, kernel headers and all the intermediate
+> +# gcc steps.
+
+It seems you miscorrected 'triggerring' after my comment on the first
+version of your patch (and I did not yet have/take time to review v2
+and v3). It should be:
+Triggering (double g, single r instead of the other way around).
+
+Best regards,
+Thomas
