@@ -1,23 +1,32 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 09 Oct 2013 22:29:26 +0200
-Subject: [Buildroot] [PATCH 4 of 4] ebtables: correct license GPLv2 ->
-	GPLv2+
-In-Reply-To: <3d806cab04ae59f1e953.1381226818@argentina> (Thomas De
- Schampheleire's message of "Tue, 08 Oct 2013 12:06:58 +0200")
-References: <patchbomb.1381226814@argentina>
- <3d806cab04ae59f1e953.1381226818@argentina>
-Message-ID: <87txgqxk61.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 9 Oct 2013 22:27:27 +0200
+Subject: [Buildroot] [git commit] libnfnetlink: add license information
+Message-ID: <20131009202946.2FAF19B9A3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin@gmail.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=d52a3c0b0cc419ad3a79b8be2f1c91efd45b2ca4
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Thomas> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+[Peter: license is GPLv2]
+Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/libnfnetlink/libnfnetlink.mk |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/libnfnetlink/libnfnetlink.mk b/package/libnfnetlink/libnfnetlink.mk
+index de5a9d8..6f69a81 100644
+--- a/package/libnfnetlink/libnfnetlink.mk
++++ b/package/libnfnetlink/libnfnetlink.mk
+@@ -9,5 +9,7 @@ LIBNFNETLINK_SOURCE = libnfnetlink-$(LIBNFNETLINK_VERSION).tar.bz2
+ LIBNFNETLINK_SITE = http://www.netfilter.org/projects/libnfnetlink/files
+ LIBNFNETLINK_AUTORECONF = YES
+ LIBNFNETLINK_INSTALL_STAGING = YES
++LIBNFNETLINK_LICENSE = GPLv2
++LIBNFNETLINK_LICENSE_FILES = COPYING
+ 
+ $(eval $(autotools-package))
