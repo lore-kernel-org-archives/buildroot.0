@@ -1,113 +1,71 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Wed, 9 Oct 2013 08:50:57 +0200
-Subject: [Buildroot] [PATCH v2 1/1] manual: update review process and
-	patchwork
-In-Reply-To: <1381278711-24631-1-git-send-email-rjbarnet@rockwellcollins.com>
-References: <1381278711-24631-1-git-send-email-rjbarnet@rockwellcollins.com>
-Message-ID: <CAAXf6LXdEikqkXSWJywPwDXraWtnE8teYFNwMOs8oW6YP2JfgA@mail.gmail.com>
+Date: Wed, 9 Oct 2013 08:55:43 +0200
+Subject: [Buildroot] [PATCH v2] ccache: expose control interface via
+	'make ccache-options'
+In-Reply-To: <1381267913-3167-1-git-send-email-tjlee@ambarella.com>
+References: <5253AA39.1090908@mind.be>
+ <1381267913-3167-1-git-send-email-tjlee@ambarella.com>
+Message-ID: <CAAXf6LUEiqJ5L9t_nEAqDEfZQLv_0UGYv1SK4w=Ee9LX=qjEPw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Ryan,
+Hi Tzu-Jung,
 
-On Wed, Oct 9, 2013 at 2:31 AM, Ryan Barnett
-<rjbarnet@rockwellcollins.com> wrote:
-> Adding more documentaiton based on discussion from the mailing list
-> in regards the buildroot review process and how patchworks can be
-> used to pull in patches for testing purposes.
+On Tue, Oct 8, 2013 at 11:31 PM, Tzu-Jung Lee <roylee17@gmail.com> wrote:
+> usage:
+>         # set cache limit size
+>         make CCACHE_OPTIONS="--max-size=5G" ccache-options
 >
-> Mailing list discussion:
-> http://lists.busybox.net/pipermail/buildroot/2013-September/078170.html
+>         # zero statistics counters
+>         make CCACHE_OPTIONS="--zero-stats" ccache-options
 >
-> Signed-off-by: Ryan Barnett <rjbarnet@rockwellcollins.com>
->
+> Signed-off-by: Tzu-Jung Lee <tjlee@ambarella.com>
 > ---
+> Add descriptions in the manual
 >
-> v1 -> v2
->  * Updated all references to patchwork to be Patchwork or Buildroot's
->    Patchwork instead of a few misspellings (suggested by Thomas
->    Petazzoni)
->  * Added clarification that patchwork main use is for the Buildroot
->    maintainer (suggested by Thomas Petazzoni)
+>  docs/manual/ccache-support.txt | 11 +++++++++++
+>  package/ccache/ccache.mk       |  5 +++++
+>  2 files changed, 16 insertions(+)
 >
-> Signed-off-by: Ryan Barnett <rjbarnet@rockwellcollins.com>
-> ---
->  docs/manual/contribute.txt   |   12 +++++++++++-
->  docs/manual/get-involved.txt |   38 +++++++++++++++++++++++++++++++++++---
->  2 files changed, 46 insertions(+), 4 deletions(-)
+> diff --git a/docs/manual/ccache-support.txt b/docs/manual/ccache-support.txt
+> index 4969180..bdb0034 100644
+> --- a/docs/manual/ccache-support.txt
+> +++ b/docs/manual/ccache-support.txt
+> @@ -23,3 +23,14 @@ remove this directory.
 >
-> diff --git a/docs/manual/contribute.txt b/docs/manual/contribute.txt
-> index 2b2783d..201685c 100644
-> --- a/docs/manual/contribute.txt
-> +++ b/docs/manual/contribute.txt
-> @@ -132,9 +132,15 @@ $ git format-patch --subject-prefix "PATCH v4" \
->  Reviewing/Testing patches
->  -------------------------
->
-> +The review process for new patches is done over the mailing list. Once
-> +a patch is submitted to the mailing list, other developers will provide
-> +feedback to the patch via emails sent through the mailing list.
+>  You can get statistics on the cache (its size, number of hits,
+>  misses, etc.) by running +make ccache-stats+.
 > +
->  In the review process, do not hesitate to respond to patch submissions
->  for remarks, suggestions or anything that will help everyone to
-> -understand the patches and make them better.
-> +understand the patches and make them better. Please use internet
-> +style replies in plain text emails when responding to patch
-> +submissions.
->
->  Some tags are used to help following the state of any patch posted on
->  the mailing-list:
-> @@ -144,6 +150,10 @@ Acked-by:: Indicates that the patch can be committed.
->  Tested-by:: Indicates that the patch has been tested. It is useful
->    but not necessary to add a comment about what has been tested.
->
-> +Buildroot's Patchwork website can be used to pull in patches for testing
-> +purposes. Please see xref:apply-patches-patchwork[] for more
-> +information on using Buildroot's Patchwork website to apply patches.
-> +
->  Autobuild
->  ---------
->
-> diff --git a/docs/manual/get-involved.txt b/docs/manual/get-involved.txt
-> index 8515d34..173b0f4 100644
-> --- a/docs/manual/get-involved.txt
-> +++ b/docs/manual/get-involved.txt
-> @@ -55,11 +55,43 @@ using a code sharing website.
->  Patchwork
->  ---------
->
-> -The Buildroot patch management interface is at
-> +Patchwork is a web-based patch tracking system designed to facilitate
-> +the contribution and management of contributions to an open-source
-> +project. Patches that have been sent to a mailing list are \'caught' by
-> +the system, and appear on a web page. Any comments posted that
-> +reference the patch are appended to the patch page too. For more
-> +information on Patchwork see
-> +http://jk.ozlabs.org/projects/patchwork[].
-> +
-> +Buildroot's Patchwork website is mainly for use by the Buildroot's
-> +maintainer to ensure patches aren't missed. The website however,
-> +exposes patches and their corresponding review comments in a clean
-> +and concise web interface.
-> +
-> +The Buildroot patch management interface is available at
->  http://patchwork.buildroot.org[].
->
-> -All patches and comments sent through the mailing list are
-> -automatically indexed in http://patchwork.buildroot.org[patchwork].
-> +[[apply-patches-patchwork]]
-> +Applying Patches from Patchwork
-> +~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> +
-> +Buildroot's Patchwork website main use for a developer is for pulling
-> +in patches into their local git repository for testing purposes.
-> +
-> +When browsing patches in the patchwork management interface, a +mbox+
+> +The make target +cache-options+ and the +CCACHE_OPTIONS+ variable
 
-shouldn't this be 'an mbox' because you pronounce mbox as embox ?
+this should be ccache-options
+
+> +provide more generic access to the ccache. For example
+> +
+> +-----------------
+> +# set cache limit size
+> +make CCACHE_OPTIONS="--max-size=5G" ccache-options
+> +
+> +# zero statistics counters
+> +make CCACHE_OPTIONS="--zero-stats" ccache-options
+> +-----------------
+> diff --git a/package/ccache/ccache.mk b/package/ccache/ccache.mk
+> index c5e9385..663a959 100644
+> --- a/package/ccache/ccache.mk
+> +++ b/package/ccache/ccache.mk
+> @@ -45,3 +45,8 @@ ifeq ($(BR2_CCACHE),y)
+>  ccache-stats: host-ccache
+>         $(Q)$(CCACHE) -s
+>  endif
+> +
+> +ifeq ($(BR2_CCACHE),y)
+> +ccache-options: host-ccache
+> +       $(Q)$(CCACHE) $(CCACHE_OPTIONS)
+> +endif
+> --
 
 
 Best regards,
