@@ -1,32 +1,51 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 09 Oct 2013 15:25:38 +0200
-Subject: [Buildroot] [PATCHv3 11/20] toolchain: do not check largefile,
-	wchar, IPv6 and locale for glibc toolchains
-In-Reply-To: <1381256237-27948-12-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Tue, 8 Oct 2013 20:17:08 +0200")
+From: Fabio Porcedda <fabio.porcedda@gmail.com>
+Date: Wed, 9 Oct 2013 15:41:33 +0200
+Subject: [Buildroot] [PATCHv3 04/20] toolchain: introduce a virtual
+	package
+In-Reply-To: <20131009153132.4da6f79b@skate>
 References: <1381256237-27948-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1381256237-27948-12-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <87k3hm37al.fsf@dell.be.48ers.dk>
+ <1381256237-27948-5-git-send-email-thomas.petazzoni@free-electrons.com>
+ <CAHkwnC_wbNa4Mg24WTPGjmmMSk2tYcNfmSzV66CVkzfmZ-2T2A@mail.gmail.com>
+ <20131009110251.64401cb3@skate>
+ <CAHkwnC_CoxOe4HH9fUHWY1XynLAfhDoB1x7JCxZ8iHsjgWij-Q@mail.gmail.com>
+ <20131009153132.4da6f79b@skate>
+Message-ID: <CAHkwnC_grgoisMY9W5puiEQ-utojTupQGXU_6Bino5phuQ0B8A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+On Wed, Oct 9, 2013 at 3:31 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Dear Fabio Porcedda,
+>
+> On Wed, 9 Oct 2013 14:59:07 +0200, Fabio Porcedda wrote:
+>
+>> > BASE_TARGETS = toolchain, so there are exactly equivalent. I'm not sure
+>> > why you say BASE_TARGETS is an implementation detail of the new
+>> > toolchain virtual package. BASE_TARGETS now never has any other value
+>> > than just "toolchain".
+>>
+>> Sorry, I've missed that part, now I understand better.
+>
+> No problem :)
+>
+>> > Ultimately, toolchain will no longer need to be part of BASE_TARGETS as
+>> > it will be handled just as a normal package dependency (done by your
+>> > patches). But I'm trying to do things step by step, progressively.
+>> > Therefore, in the end, I believe the world rule will no even contain
+>> > "toolchain" and $(TARGETS_ALL) but just $(PACKAGES),
+>>
+>> Well about the world rule in my patches in the end it contain only the
+>> "target-post-image" because it's the last step, but that's another
+>> story.
+>
+> Yes, indeed. Seen your patches, I think they look good on principle, I
+> need to test them/have a more detailed look.
 
- Thomas> The check_glibc function contained checks to verify that the user had
- Thomas> properly enabled the largefile, IPv6, locale and wchar options, to
- Thomas> match how glibc is configured. This was useful when the support for
- Thomas> glibc external toolchains was introduced, but since then, we added the
- Thomas> BR2_TOOLCHAIN_USES_GLIBC symbol that automatically enables largefile,
- Thomas> IPv6, locale and wchar support when a glibc or eglibc external
- Thomas> toolchain is used. Therefore, many of the check_glibc checks are
- Thomas> useless now, so we can remove these.
+About those patch set I'll send a new version rebased over your latest changes.
 
- Thomas> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-
-Committed, thanks.
-
+Best regards
 -- 
-Bye, Peter Korsgaard
+Fabio Porcedda
