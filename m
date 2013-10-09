@@ -1,347 +1,143 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 9 Oct 2013 14:30:40 +0200
-Subject: [Buildroot] [git commit] toolchain-external: convert to the package
-	infrastructure
-Message-ID: <20131009143428.B77829B99C@busybox.osuosl.org>
+Date: Wed, 9 Oct 2013 16:03:22 +0200
+Subject: [Buildroot] [git commit] busybox: add patches to fix build with the
+	musl C library
+Message-ID: <20131009143431.5DD8D9B970@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d07d2bfeb208b38c9e87e97f0c1346b909ff6a6c
+commit: http://git.buildroot.net/buildroot/commit/?id=a4ffd7ca822bd02c1c62eb78c6569d1936d2d11e
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This commit converts the 'toolchain-external' logic to the package
-infrastructure.
-
-The TOOLCHAIN_EXTERNAL_DIR variable (which points to where the
-toolchain is located) is renamed to TOOLCHAIN_EXTERNAL_INSTALL_DIR,
-because the former conflicts with the package infrastructure (which
-defines the <pkg>_DIR variable for each package as pointing to its
-build directory).
-
-The new _EXTRA_DOWNLOADS mechanism is used for Blackfin toolchains.
-
-The extract, configuration and installation steps are converted inside
-the <pkg>_EXTRACT_CMDS, <pkg>_CONFIGURE_CMDS and
-<pkg>_INSTALL_STAGING_CMDS.
+Those patches have been submitted upstream.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Acked-by: Luca Ceresoli <luca@lucaceresoli.net>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- toolchain/toolchain-external.mk                    |    4 -
- .../{ext-tool.mk => toolchain-external.mk}         |  154 +++++++++-----------
- 2 files changed, 69 insertions(+), 89 deletions(-)
+ ...01-libbb-use-poll.h-instead-of-sys-poll.h.patch |   32 +++++++++++++++++
+ ...onfig-include-linux-if_slip.h-instead-of-.patch |   33 ++++++++++++++++++
+ ...libiproute-use-linux-if_packet.h-instead-.patch |   36 ++++++++++++++++++++
+ 3 files changed, 101 insertions(+), 0 deletions(-)
 
-diff --git a/toolchain/toolchain-external.mk b/toolchain/toolchain-external.mk
-deleted file mode 100644
-index 2f43db7..0000000
---- a/toolchain/toolchain-external.mk
-+++ /dev/null
-@@ -1,4 +0,0 @@
--# Required includes for the external toolchain backend
--
--include toolchain/helpers.mk
--include toolchain/toolchain-external/ext-tool.mk
-diff --git a/toolchain/toolchain-external/ext-tool.mk b/toolchain/toolchain-external/toolchain-external.mk
-similarity index 86%
-rename from toolchain/toolchain-external/ext-tool.mk
-rename to toolchain/toolchain-external/toolchain-external.mk
-index 8cfd1b1..85fc341 100644
---- a/toolchain/toolchain-external/ext-tool.mk
-+++ b/toolchain/toolchain-external/toolchain-external.mk
-@@ -1,5 +1,11 @@
-+################################################################################
- #
--# This file implements the support for external toolchains, i.e
-+# toolchain-external
-+#
-+################################################################################
+diff --git a/package/busybox/1.21.1/0001-libbb-use-poll.h-instead-of-sys-poll.h.patch b/package/busybox/1.21.1/0001-libbb-use-poll.h-instead-of-sys-poll.h.patch
+new file mode 100644
+index 0000000..089d858
+--- /dev/null
++++ b/package/busybox/1.21.1/0001-libbb-use-poll.h-instead-of-sys-poll.h.patch
+@@ -0,0 +1,32 @@
++From 676452a92d1fc4f85e8d89930d7729197c031026 Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++Date: Sat, 5 Oct 2013 15:51:56 +0200
++Subject: [PATCH 1/3] libbb: use <poll.h> instead of <sys/poll.h>
 +
-+#
-+# This package implements the support for external toolchains, i.e
- # toolchains that have not been produced by Buildroot itself and that
- # Buildroot can download from the Web or that are already available on
- # the system on which Buildroot runs. So far, we have tested this
-@@ -14,7 +20,7 @@
- # The basic principle is the following
- #
- #  1. If the toolchain is not pre-installed, download and extract it
--#  in $(TOOLCHAIN_EXTERNAL_DIR).
-+#  in $(TOOLCHAIN_EXTERNAL_INSTALL_DIR).
- #
- #  2. For all external toolchains, perform some checks on the
- #  conformity between the toolchain configuration described in the
-@@ -105,21 +111,21 @@ endif # ! no threads
- 
- TOOLCHAIN_EXTERNAL_PREFIX=$(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_PREFIX))
- ifeq ($(BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD),y)
--TOOLCHAIN_EXTERNAL_DIR=$(HOST_DIR)/opt/ext-toolchain
-+TOOLCHAIN_EXTERNAL_INSTALL_DIR=$(HOST_DIR)/opt/ext-toolchain
- else
--TOOLCHAIN_EXTERNAL_DIR=$(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_PATH))
-+TOOLCHAIN_EXTERNAL_INSTALL_DIR=$(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_PATH))
- endif
- 
--ifeq ($(TOOLCHAIN_EXTERNAL_DIR),)
-+ifeq ($(TOOLCHAIN_EXTERNAL_INSTALL_DIR),)
- ifneq ($(TOOLCHAIN_EXTERNAL_PREFIX),)
- # if no path set, figure it out from path
- TOOLCHAIN_EXTERNAL_BIN := $(shell dirname $(shell which $(TOOLCHAIN_EXTERNAL_PREFIX)-gcc))
- endif
- else
- ifeq ($(BR2_bfin),y)
--TOOLCHAIN_EXTERNAL_BIN := $(TOOLCHAIN_EXTERNAL_DIR)/$(TOOLCHAIN_EXTERNAL_PREFIX)/bin
-+TOOLCHAIN_EXTERNAL_BIN := $(TOOLCHAIN_EXTERNAL_INSTALL_DIR)/$(TOOLCHAIN_EXTERNAL_PREFIX)/bin
- else
--TOOLCHAIN_EXTERNAL_BIN := $(TOOLCHAIN_EXTERNAL_DIR)/bin
-+TOOLCHAIN_EXTERNAL_BIN := $(TOOLCHAIN_EXTERNAL_INSTALL_DIR)/bin
- endif
- endif
- 
-@@ -203,10 +209,6 @@ TOOLCHAIN_EXTERNAL_CFLAGS += -msoft-float
- TOOLCHAIN_EXTERNAL_WRAPPER_ARGS += -DBR_SOFTFLOAT=1
- endif
- 
--ifeq ($(BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD),y)
--TOOLCHAIN_EXTERNAL_DEPENDENCIES = $(TOOLCHAIN_EXTERNAL_DIR)/.extracted
--endif
--
- ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201109),y)
- TOOLCHAIN_EXTERNAL_SITE = http://sourcery.mentor.com/public/gnu_toolchain/arm-none-linux-gnueabi/
- TOOLCHAIN_EXTERNAL_SOURCE = arm-2011.09-70-arm-none-linux-gnueabi-i686-pc-linux-gnu.tar.bz2
-@@ -220,15 +222,15 @@ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_ARAGO_ARMV7A_201109),y)
- TOOLCHAIN_EXTERNAL_SITE = http://software-dl.ti.com/sdoemb/sdoemb_public_sw/arago_toolchain/2011_09/exports/
- TOOLCHAIN_EXTERNAL_SOURCE = arago-2011.09-armv7a-linux-gnueabi-sdk.tar.bz2
- define TOOLCHAIN_EXTERNAL_FIXUP_CMDS
--	mv $(@D)/arago-2011.09/armv7a/* $(@D)/
--	rm -rf $(@D)/arago-2011.09/
-+	mv $(TOOLCHAIN_EXTERNAL_INSTALL_DIR)/arago-2011.09/armv7a/* $(TOOLCHAIN_EXTERNAL_INSTALL_DIR)/
-+	rm -rf $(TOOLCHAIN_EXTERNAL_INSTALL_DIR)/arago-2011.09/
- endef
- else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_ARAGO_ARMV5TE_201109),y)
- TOOLCHAIN_EXTERNAL_SITE = http://software-dl.ti.com/sdoemb/sdoemb_public_sw/arago_toolchain/2011_09/exports/
- TOOLCHAIN_EXTERNAL_SOURCE = arago-2011.09-armv5te-linux-gnueabi-sdk.tar.bz2
- define TOOLCHAIN_EXTERNAL_FIXUP_CMDS
--	mv $(@D)/arago-2011.09/armv5te/* $(@D)/
--	rm -rf $(@D)/arago-2011.09/
-+	mv $(TOOLCHAIN_EXTERNAL_INSTALL_DIR)/arago-2011.09/armv5te/* $(TOOLCHAIN_EXTERNAL_INSTALL_DIR)/
-+	rm -rf $(TOOLCHAIN_EXTERNAL_INSTALL_DIR)/arago-2011.09/
- endef
- else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_06),y)
- TOOLCHAIN_EXTERNAL_SITE = https://releases.linaro.org/13.06/components/toolchain/binaries/
-@@ -282,17 +284,13 @@ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86_201209),y)
- TOOLCHAIN_EXTERNAL_SITE = https://sourcery.mentor.com/public/gnu_toolchain/i686-pc-linux-gnu/
- TOOLCHAIN_EXTERNAL_SOURCE = ia32-2012.09-62-i686-pc-linux-gnu-i386-linux.tar.bz2
- else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R1),y)
--TOOLCHAIN_EXTERNAL_SITE_1   = http://blackfin.uclinux.org/gf/download/frsrelease/559/9858/
--TOOLCHAIN_EXTERNAL_SOURCE_1 = blackfin-toolchain-2012R1-RC2.i386.tar.bz2
--TOOLCHAIN_EXTERNAL_SITE_2   = http://blackfin.uclinux.org/gf/download/frsrelease/559/9866/
--TOOLCHAIN_EXTERNAL_SOURCE_2 = blackfin-toolchain-uclibc-full-2012R1-RC2.i386.tar.bz2
--TOOLCHAIN_EXTERNAL_SOURCE   = $(TOOLCHAIN_EXTERNAL_SOURCE_1) $(TOOLCHAIN_EXTERNAL_SOURCE_2)
-+TOOLCHAIN_EXTERNAL_SITE = http://downloads.sourceforge.net/projects/adi-toolchain/files/2012R1-BF60X/2012R1-RC2-BF60X/i386/
-+TOOLCHAIN_EXTERNAL_SOURCE = blackfin-toolchain-2012R1-RC2.i386.tar.bz2
-+TOOLCHAIN_EXTERNAL_EXTRA_DOWNLOADS = blackfin-toolchain-uclibc-full-2012R1-RC2.i386.tar.bz2
- else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2),y)
--TOOLCHAIN_EXTERNAL_SITE_1   = http://blackfin.uclinux.org/gf/download/frsrelease/588/10139/
--TOOLCHAIN_EXTERNAL_SOURCE_1 = blackfin-toolchain-2012R2-RC2.i386.tar.bz2
--TOOLCHAIN_EXTERNAL_SITE_2   = http://blackfin.uclinux.org/gf/download/frsrelease/588/10147/
--TOOLCHAIN_EXTERNAL_SOURCE_2 = blackfin-toolchain-uclibc-full-2012R2-RC2.i386.tar.bz2
--TOOLCHAIN_EXTERNAL_SOURCE   = $(TOOLCHAIN_EXTERNAL_SOURCE_1) $(TOOLCHAIN_EXTERNAL_SOURCE_2)
-+TOOLCHAIN_EXTERNAL_SITE   = http://downloads.sourceforge.net/project/adi-toolchain/2012R2/2012R2-RC2/i386/
-+TOOLCHAIN_EXTERNAL_SOURCE = blackfin-toolchain-2012R2-RC2.i386.tar.bz2
-+TOOLCHAIN_EXTERNAL_EXTRA_DOWNLOADS = blackfin-toolchain-uclibc-full-2012R2-RC2.i386.tar.bz2
- else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_XILINX_MICROBLAZEEL_14_3),y)
- TOOLCHAIN_EXTERNAL_SITE = http://sources.buildroot.net/
- TOOLCHAIN_EXTERNAL_SOURCE = lin32-microblazeel-unknown-linux-gnu_14.3_early.tar.xz
-@@ -318,53 +316,38 @@ else
- # Custom toolchain
- TOOLCHAIN_EXTERNAL_SITE = $(dir $(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_URL)))
- TOOLCHAIN_EXTERNAL_SOURCE = $(notdir $(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_URL)))
--
--# A value must be set (even if unused), otherwise the
--# $(DL_DIR)/$(TOOLCHAIN_EXTERNAL_SOURCE) rule would override the main
--# $(DL_DIR) rule
--ifeq (,$(TOOLCHAIN_EXTERNAL_SOURCE))
--TOOLCHAIN_EXTERNAL_SOURCE = none
--endif
- endif
- 
-+TOOLCHAIN_EXTERNAL_INSTALL_STAGING = YES
++As the pol() manpage recommends, include the <poll.h> header instead
++of <sys/poll.h>. This allows to get rid of gazillions of warnings when
++building Busybox against the musl C library, which prints a warning
++when the internal header <sys/poll.h> is included directly instead of
++the <poll.h> header.
 +
-+ifeq ($(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R1)$(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2),y)
- # Special handling for Blackfin toolchain, because of the split in two
- # tarballs, and the organization of tarball contents. The tarballs
- # contain ./opt/uClinux/{bfin-uclinux,bfin-linux-uclibc} directories,
- # which themselves contain the toolchain. This is why we strip more
- # components than usual.
--ifeq ($(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R1)$(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2),y)
--$(DL_DIR)/$(TOOLCHAIN_EXTERNAL_SOURCE_1):
--	$(call DOWNLOAD,$(TOOLCHAIN_EXTERNAL_SITE_1:/=)/$(TOOLCHAIN_EXTERNAL_SOURCE_1))
--
--$(DL_DIR)/$(TOOLCHAIN_EXTERNAL_SOURCE_2):
--	$(call DOWNLOAD,$(TOOLCHAIN_EXTERNAL_SITE_2:/=)/$(TOOLCHAIN_EXTERNAL_SOURCE_2))
--
--$(TOOLCHAIN_EXTERNAL_DIR)/.extracted: $(DL_DIR)/$(TOOLCHAIN_EXTERNAL_SOURCE_1) $(DL_DIR)/$(TOOLCHAIN_EXTERNAL_SOURCE_2)
--	mkdir -p $(@D)
--	$(call suitable-extractor,$(TOOLCHAIN_EXTERNAL_SOURCE_1)) $(DL_DIR)/$(TOOLCHAIN_EXTERNAL_SOURCE_1) | \
--		$(TAR) $(TAR_STRIP_COMPONENTS)=3 --hard-dereference -C $(@D) $(TAR_OPTIONS) -
--	$(call suitable-extractor,$(TOOLCHAIN_EXTERNAL_SOURCE_2)) $(DL_DIR)/$(TOOLCHAIN_EXTERNAL_SOURCE_2) | \
--		$(TAR) $(TAR_STRIP_COMPONENTS)=3 --hard-dereference -C $(@D) $(TAR_OPTIONS) -
--	$(Q)touch $@
--else
--# Download and extraction of a toolchain
--$(DL_DIR)/$(TOOLCHAIN_EXTERNAL_SOURCE):
--	$(call DOWNLOAD,$(TOOLCHAIN_EXTERNAL_SITE)$(TOOLCHAIN_EXTERNAL_SOURCE),$(TOOLCHAIN_EXTERNAL_SOURCE))
--
--$(TOOLCHAIN_EXTERNAL_DIR)/.extracted: $(DL_DIR)/$(TOOLCHAIN_EXTERNAL_SOURCE)
--	mkdir -p $(@D)
--	$(call suitable-extractor,$(TOOLCHAIN_EXTERNAL_SOURCE)) $^ | \
--		$(TAR) $(TAR_STRIP_COMPONENTS)=1 --exclude='usr/lib/locale/*' -C $(@D) $(TAR_OPTIONS) -
-+define TOOLCHAIN_EXTERNAL_EXTRACT_CMDS
-+	mkdir -p $(TOOLCHAIN_EXTERNAL_INSTALL_DIR)
-+	$(call suitable-extractor,$(TOOLCHAIN_EXTERNAL_SOURCE)) $(DL_DIR)/$(TOOLCHAIN_EXTERNAL_SOURCE) | \
-+		$(TAR) $(TAR_STRIP_COMPONENTS)=3 --hard-dereference -C $(TOOLCHAIN_EXTERNAL_INSTALL_DIR) $(TAR_OPTIONS) -
-+	$(call suitable-extractor,$(TOOLCHAIN_EXTERNAL_EXTRA_DOWNLOADS)) $(DL_DIR)/$(TOOLCHAIN_EXTERNAL_EXTRA_DOWNLOADS) | \
-+		$(TAR) $(TAR_STRIP_COMPONENTS)=3 --hard-dereference -C $(TOOLCHAIN_EXTERNAL_INSTALL_DIR) $(TAR_OPTIONS) -
-+endef
-+else ifneq ($(TOOLCHAIN_EXTERNAL_SOURCE),)
-+# Normal handling of toolchain tarball extraction.
-+define TOOLCHAIN_EXTERNAL_EXTRACT_CMDS
-+	mkdir -p $(TOOLCHAIN_EXTERNAL_INSTALL_DIR)
-+	$(call suitable-extractor,$(TOOLCHAIN_EXTERNAL_SOURCE)) $(DL_DIR)/$(TOOLCHAIN_EXTERNAL_SOURCE) | \
-+		$(TAR) $(TAR_STRIP_COMPONENTS)=1 --exclude='usr/lib/locale/*' -C $(TOOLCHAIN_EXTERNAL_INSTALL_DIR) $(TAR_OPTIONS) -
- 	$(TOOLCHAIN_EXTERNAL_FIXUP_CMDS)
--	$(Q)touch $@
-+endef
- endif
- 
- # Checks for an already installed toolchain: check the toolchain
- # location, check that it supports sysroot, and then verify that it
- # matches the configuration provided in Buildroot: ABI, C++ support,
- # type of C library and all C library features.
--$(STAMP_DIR)/ext-toolchain-checked: $(TOOLCHAIN_EXTERNAL_DEPENDENCIES)
--	@$(call MESSAGE,"Checking external toolchain settings")
-+define TOOLCHAIN_EXTERNAL_CONFIGURE_CMDS
- 	$(Q)$(call check_cross_compiler_exists,$(TOOLCHAIN_EXTERNAL_CC))
- 	$(Q)LIBC_A_LOCATION=`readlink -f $$(LANG=C $(TOOLCHAIN_EXTERNAL_CC) -print-file-name=libc.a)` ; \
- 	SYSROOT_DIR=`echo $${LIBC_A_LOCATION} | sed -r -e 's:usr/lib(32|64)?/(.*/)?libc\.a::'` ; \
-@@ -385,7 +368,7 @@ $(STAMP_DIR)/ext-toolchain-checked: $(TOOLCHAIN_EXTERNAL_DEPENDENCIES)
- 	else \
- 		$(call check_glibc,$${SYSROOT_DIR}) ; \
- 	fi
--	$(Q)touch $@
-+endef
- 
- # Integration of the toolchain into Buildroot: find the main sysroot
- # and the variant-specific sysroot, then copy the needed libraries to
-@@ -435,7 +418,7 @@ $(STAMP_DIR)/ext-toolchain-checked: $(TOOLCHAIN_EXTERNAL_DEPENDENCIES)
- #                       considered when searching libraries for copy
- #                       to the target filesystem.
- 
--$(STAMP_DIR)/ext-toolchain-installed: $(STAMP_DIR)/ext-toolchain-checked
-+define TOOLCHAIN_EXTERNAL_INSTALL_CORE
- 	$(Q)LIBC_A_LOCATION=`readlink -f $$(LANG=C $(TOOLCHAIN_EXTERNAL_CC) -print-file-name=libc.a)` ; \
- 	SYSROOT_DIR=`echo $${LIBC_A_LOCATION} | sed -r -e 's:usr/lib(32|64)?/(.*/)?libc\.a::'` ; \
- 	if test -z "$${SYSROOT_DIR}" ; then \
-@@ -478,14 +461,15 @@ $(STAMP_DIR)/ext-toolchain-installed: $(STAMP_DIR)/ext-toolchain-checked
- 			echo "Could not find gdbserver in external toolchain" ; \
- 			exit 1 ; \
- 		fi ; \
--	fi ; \
--	touch $@
-+	fi
-+endef
- 
- # Special installation target used on the Blackfin architecture when
- # FDPIC is not the primary binary format being used, but the user has
- # nonetheless requested the installation of the FDPIC libraries to the
- # target filesystem.
--$(STAMP_DIR)/ext-toolchain-bfin-fdpic-shared-installed: $(STAMP_DIR)/ext-toolchain-checked
-+ifeq ($(BR2_BFIN_INSTALL_FDPIC_SHARED),y)
-+define TOOLCHAIN_EXTERNAL_INSTALL_BFIN_FDPIC
- 	$(Q)$(call MESSAGE,"Install external toolchain FDPIC libraries to target...") ; \
- 	FDPIC_EXTERNAL_CC=$(dir $(TOOLCHAIN_EXTERNAL_CC))/../../bfin-linux-uclibc/bin/bfin-linux-uclibc-gcc ; \
- 	FDPIC_LIBC_A_LOCATION=`readlink -f $$(LANG=C $${FDPIC_EXTERNAL_CC} $(TOOLCHAIN_EXTERNAL_CFLAGS) -print-file-name=libc.a)` ; \
-@@ -503,8 +487,9 @@ $(STAMP_DIR)/ext-toolchain-bfin-fdpic-shared-installed: $(STAMP_DIR)/ext-toolcha
- 	done ; \
- 	for libs in $(USR_LIB_EXTERNAL_LIBS); do \
- 	        $(call copy_toolchain_lib_root,$${FDPIC_SYSROOT_DIR},$${FDPIC_SUPPORT_LIB_DIR},$${FDPIC_LIB_DIR},$$libs,/usr/lib); \
--	done ; \
--	touch $@
-+	done
-+endef
-+endif
- 
- # Special installation target used on the Blackfin architecture when
- # shared FLAT is not the primary format being used, but the user has
-@@ -512,36 +497,28 @@ $(STAMP_DIR)/ext-toolchain-bfin-fdpic-shared-installed: $(STAMP_DIR)/ext-toolcha
- # to the target filesystem. The flat libraries are found and linked
- # according to the index in name "libN.so". Index 1 is reserved for
- # the standard C library. Customer libraries can use 4 and above.
--$(STAMP_DIR)/ext-toolchain-bfin-shared-flat-installed: $(STAMP_DIR)/ext-toolchain-checked
-+ifeq ($(BR2_BFIN_INSTALL_FLAT_SHARED),y)
-+define TOOLCHAIN_EXTERNAL_INSTALL_BFIN_FLAT
- 	$(Q)$(call MESSAGE,"Install external toolchain FLAT libraries to target...") ; \
- 	FLAT_EXTERNAL_CC=$(dir $(TOOLCHAIN_EXTERNAL_CC))../../bfin-uclinux/bin/bfin-uclinux-gcc ; \
- 	FLAT_LIBC_A_LOCATION=`$${FLAT_EXTERNAL_CC} $(TOOLCHAIN_EXTERNAL_CFLAGS) -mid-shared-library -print-file-name=libc`; \
- 	if [ -f $${FLAT_LIBC_A_LOCATION} -a ! -h $${FLAT_LIBC_A_LOCATION} ] ; then \
- 	        $(INSTALL) -D $${FLAT_LIBC_A_LOCATION} $(TARGET_DIR)/lib/lib1.so; \
--	fi ; \
--	touch $@
--
--TOOLCHAIN_EXTERNAL_INSTALL = $(STAMP_DIR)/ext-toolchain-installed
--
--ifeq ($(BR2_BFIN_INSTALL_FDPIC_SHARED),y)
--TOOLCHAIN_EXTERNAL_INSTALL += $(STAMP_DIR)/ext-toolchain-bfin-fdpic-shared-installed
--endif
--
--ifeq ($(BR2_BFIN_INSTALL_FLAT_SHARED),y)
--TOOLCHAIN_EXTERNAL_INSTALL += $(STAMP_DIR)/ext-toolchain-bfin-shared-flat-installed
-+	fi
-+endef
- endif
- 
- # Build toolchain wrapper for preprocessor, C and C++ compiler and setup
- # symlinks for everything else. Skip gdb symlink when we are building our
- # own gdb to prevent two gdb's in output/host/usr/bin.
--$(HOST_DIR)/usr/bin/ext-toolchain-wrapper: $(TOOLCHAIN_EXTERNAL_INSTALL)
-+define TOOLCHAIN_EXTERNAL_INSTALL_WRAPPER
- 	$(Q)$(call MESSAGE,"Building ext-toolchain wrapper")
- 	mkdir -p $(HOST_DIR)/usr/bin; cd $(HOST_DIR)/usr/bin; \
- 	for i in $(TOOLCHAIN_EXTERNAL_CROSS)*; do \
- 		base=$${i##*/}; \
- 		case "$$base" in \
- 		*cc|*cc-*|*++|*++-*|*cpp) \
--			ln -sf $(@F) $$base; \
-+			ln -sf ext-toolchain-wrapper $$base; \
- 			;; \
- 		*gdb|*gdbtui) \
- 			if test "$(BR2_PACKAGE_HOST_GDB)" != "y"; then \
-@@ -556,11 +533,18 @@ $(HOST_DIR)/usr/bin/ext-toolchain-wrapper: $(TOOLCHAIN_EXTERNAL_INSTALL)
- 	# We use --hash-style=both to increase the compatibility of
- 	# the generated binary with older platforms
- 	$(HOSTCC) $(HOST_CFLAGS) $(TOOLCHAIN_EXTERNAL_WRAPPER_ARGS) -s -Wl,--hash-style=both \
--		toolchain/toolchain-external/ext-toolchain-wrapper.c -o $@
-+		toolchain/toolchain-external/ext-toolchain-wrapper.c \
-+		-o $(HOST_DIR)/usr/bin/ext-toolchain-wrapper
-+endef
- 
--toolchain-external: dependencies $(HOST_DIR)/usr/bin/ext-toolchain-wrapper
-+# Even though we're installing things in both the staging, the host
-+# and the target directory, we do everything within the
-+# install-staging step, arbitrarily.
-+define TOOLCHAIN_EXTERNAL_INSTALL_STAGING_CMDS
-+	$(TOOLCHAIN_EXTERNAL_INSTALL_CORE)
-+	$(TOOLCHAIN_EXTERNAL_INSTALL_BFIN_FDPIC)
-+	$(TOOLCHAIN_EXTERNAL_INSTALL_BFIN_FLAT)
-+	$(TOOLCHAIN_EXTERNAL_INSTALL_WRAPPER)
-+endef
- 
--ifeq ($(BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD),y)
--# download ext toolchain if so configured
--toolchain-external-source: $(addprefix $(DL_DIR)/,$(TOOLCHAIN_EXTERNAL_SOURCE))
--endif
-+$(eval $(generic-package))
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++---
++ include/libbb.h | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/include/libbb.h b/include/libbb.h
++index e520060..f03f454 100644
++--- a/include/libbb.h
+++++ b/include/libbb.h
++@@ -37,7 +37,7 @@
++ #include <libgen.h> /* dirname,basename */
++ #undef basename
++ #define basename dont_use_basename
++-#include <sys/poll.h>
+++#include <poll.h>
++ #include <sys/ioctl.h>
++ #include <sys/mman.h>
++ #include <sys/socket.h>
++-- 
++1.8.1.2
++
+diff --git a/package/busybox/1.21.1/0002-network-ifconfig-include-linux-if_slip.h-instead-of-.patch b/package/busybox/1.21.1/0002-network-ifconfig-include-linux-if_slip.h-instead-of-.patch
+new file mode 100644
+index 0000000..ed35719
+--- /dev/null
++++ b/package/busybox/1.21.1/0002-network-ifconfig-include-linux-if_slip.h-instead-of-.patch
+@@ -0,0 +1,33 @@
++From 5eae213031a3ef88fe8d9d0a387f44264ea635cc Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++Date: Sat, 5 Oct 2013 15:53:16 +0200
++Subject: [PATCH 2/3] network/ifconfig: include <linux/if_slip.h> instead of
++ <net/if_slip.h>
++
++The musl C library doesn't provide the <net/if_slip.h> since userspace
++applications can just as well use the <linux/if_slip.h> kernel header.
++
++This commit fixes the build of the ifconfig applet with the musl C
++library.
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++---
++ networking/ifconfig.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/networking/ifconfig.c b/networking/ifconfig.c
++index 782374b..c90ed6b 100644
++--- a/networking/ifconfig.c
+++++ b/networking/ifconfig.c
++@@ -56,7 +56,7 @@
++ #endif
++ 
++ #if ENABLE_FEATURE_IFCONFIG_SLIP
++-# include <net/if_slip.h>
+++# include <linux/if_slip.h>
++ #endif
++ 
++ /* I don't know if this is needed for busybox or not.  Anyone? */
++-- 
++1.8.1.2
++
+diff --git a/package/busybox/1.21.1/0003-networking-libiproute-use-linux-if_packet.h-instead-.patch b/package/busybox/1.21.1/0003-networking-libiproute-use-linux-if_packet.h-instead-.patch
+new file mode 100644
+index 0000000..7b74656
+--- /dev/null
++++ b/package/busybox/1.21.1/0003-networking-libiproute-use-linux-if_packet.h-instead-.patch
+@@ -0,0 +1,36 @@
++From d4fec31889ad660a58dab633c511221feb66e817 Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++Date: Sat, 5 Oct 2013 15:55:06 +0200
++Subject: [PATCH 3/3] networking/libiproute: use <linux/if_packet.h> instead of
++ <net/if_packet.h>
++
++The musl C library doesn't provide the <net/if_packet.h> since the
++corresponding kernel headers <linux/if_packet.h> already provides the
++necessary definitions. Replacing <net/if_packet.h> by
++<linux/if_packet.h> also removes the need to include
++<netpacket/packet.h>
++
++This commit fixes the build of iplink with the musl C library.
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++---
++ networking/libiproute/iplink.c | 3 +--
++ 1 file changed, 1 insertion(+), 2 deletions(-)
++
++diff --git a/networking/libiproute/iplink.c b/networking/libiproute/iplink.c
++index bad2017..32ccb1c 100644
++--- a/networking/libiproute/iplink.c
+++++ b/networking/libiproute/iplink.c
++@@ -5,8 +5,7 @@
++  * Licensed under GPLv2 or later, see file LICENSE in this source tree.
++  */
++ #include <net/if.h>
++-#include <net/if_packet.h>
++-#include <netpacket/packet.h>
+++#include <linux/if_packet.h>
++ #include <netinet/if_ether.h>
++ 
++ #include "ip_common.h"  /* #include "libbb.h" is inside */
++-- 
++1.8.1.2
++
