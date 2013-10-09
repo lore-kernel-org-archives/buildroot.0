@@ -1,231 +1,30 @@
-From: Alvaro G. M <alvaro.gamez@hazent.com>
-Date: Wed,  9 Oct 2013 11:46:26 +0200
-Subject: [Buildroot] [PATCH] libxmlrpc: new package
-In-Reply-To: <4FCD4B90.3020007@mind.be>
-References: <4FCD4B90.3020007@mind.be>
-Message-ID: <1381311986-11533-1-git-send-email-alvaro.gamez@hazent.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 9 Oct 2013 11:51:05 +0200
+Subject: [Buildroot] [PATCH v2 1/1] manual: update review process and
+	patchwork
+In-Reply-To: <1381278711-24631-1-git-send-email-rjbarnet@rockwellcollins.com>
+References: <1381278711-24631-1-git-send-email-rjbarnet@rockwellcollins.com>
+Message-ID: <20131009115105.45d43b0b@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Alvaro G. M. <alvaro.gamez@hazent.com>
+Dear Ryan Barnett,
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Alvaro G. M <alvaro.gamez@hazent.com>
----
+On Tue, 8 Oct 2013 19:31:51 -0500, Ryan Barnett wrote:
+> Adding more documentaiton based on discussion from the mailing list
+> in regards the buildroot review process and how patchworks can be
+> used to pull in patches for testing purposes.
+> 
+> Mailing list discussion:
+> http://lists.busybox.net/pipermail/buildroot/2013-September/078170.html
+> 
+> Signed-off-by: Ryan Barnett <rjbarnet@rockwellcollins.com>
 
-I recovered an old patch from Thomas (http://lists.busybox.net/pipermail/buildroot/2012-June/054467.html)
-and upgraded it to the stable version of xml-rpc-c.
-Some of the original patches are not needed on this version, so I've mostly just deleted
-a patch files, upgraded download address and version and modified patch offsets so they apply
-without any warning.
-
- package/Config.in                                  |  1 +
- package/libxmlrpc/Config.in                        | 10 +++++++
- .../libxmlrpc/libxmlrpc-fix-gennmtab-build.patch   | 25 ++++++++++++++++
- .../libxmlrpc-fix-non-cplusplus-build.patch        | 27 +++++++++++++++++
- .../libxmlrpc/libxmlrpc-fix-non-wchar-build.patch  | 24 +++++++++++++++
- .../libxmlrpc-use-correct-curl-config.patch        | 22 ++++++++++++++
- package/libxmlrpc/libxmlrpc.mk                     | 34 ++++++++++++++++++++++
- 7 files changed, 143 insertions(+)
- create mode 100644 package/libxmlrpc/Config.in
- create mode 100644 package/libxmlrpc/libxmlrpc-fix-gennmtab-build.patch
- create mode 100644 package/libxmlrpc/libxmlrpc-fix-non-cplusplus-build.patch
- create mode 100644 package/libxmlrpc/libxmlrpc-fix-non-wchar-build.patch
- create mode 100644 package/libxmlrpc/libxmlrpc-use-correct-curl-config.patch
- create mode 100644 package/libxmlrpc/libxmlrpc.mk
-
-diff --git a/package/Config.in b/package/Config.in
-index 9aa9d81..3c44f67 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -727,6 +727,7 @@ source "package/libjson/Config.in"
- source "package/libroxml/Config.in"
- source "package/libxml-parser-perl/Config.in"
- source "package/libxml2/Config.in"
-+source "package/libxmlrpc/Config.in"
- source "package/libxmlpp/Config.in"
- source "package/libxslt/Config.in"
- source "package/libyaml/Config.in"
-diff --git a/package/libxmlrpc/Config.in b/package/libxmlrpc/Config.in
-new file mode 100644
-index 0000000..26e4a52
---- /dev/null
-+++ b/package/libxmlrpc/Config.in
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_LIBXMLRPC
-+	bool "libxmlrpc"
-+	select BR2_PACKAGE_LIBCURL
-+	help
-+	  XML-RPC is a quick-and-easy way to make procedure calls over
-+	  the Internet. It converts the procedure call into an XML
-+	  document, sends it to a remote server using HTTP, and gets
-+	  back the response as XML.
-+
-+	  http://xmlrpc-c.sourceforge.net/
-diff --git a/package/libxmlrpc/libxmlrpc-fix-gennmtab-build.patch b/package/libxmlrpc/libxmlrpc-fix-gennmtab-build.patch
-new file mode 100644
-index 0000000..8cdd932
---- /dev/null
-+++ b/package/libxmlrpc/libxmlrpc-fix-gennmtab-build.patch
-@@ -0,0 +1,25 @@
-+Fix build of host tool
-+
-+genmtab is a tool that needs to be built for the host as it is used
-+during the compilation process of libxmlrpc. Its Makefile needs a bit
-+of tuning to use the conventional CC_FOR_BUILD, CFLAGS_FOR_BUILD and
-+LDFLAGS_FOR_BUILD variables.
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+
-+Index: b/lib/expat/gennmtab/Makefile
-+===================================================================
-+--- a/lib/expat/gennmtab/Makefile
-++++ b/lib/expat/gennmtab/Makefile
-+@@ -40,9 +40,9 @@
-+ dep: dep-common
-+ 
-+ gennmtab.o:%.o:%.c
-+-	$(BUILDTOOL_CC) -c $< -o $@ $(CFLAGS_ALL) $(INCLUDES)
-++	$(CC_FOR_BUILD) -c $< -o $@ $(CFLAGS_FOR_BUILD) $(INCLUDES)
-+ 
-+ gennmtab:%:%.o
-+-	$(BUILDTOOL_CCLD) -o $@ $(LDFLAGS) $^
-++	$(CC_FOR_BUILD) -o $@ $(LDFLAGS_FOR_BUILD) $^
-+ 
-+ include depend.mk
-diff --git a/package/libxmlrpc/libxmlrpc-fix-non-cplusplus-build.patch b/package/libxmlrpc/libxmlrpc-fix-non-cplusplus-build.patch
-new file mode 100644
-index 0000000..efeb9cc
---- /dev/null
-+++ b/package/libxmlrpc/libxmlrpc-fix-non-cplusplus-build.patch
-@@ -0,0 +1,27 @@
-+Handle builds without C++
-+
-+libxmlrpc nicely handles the fact of being built without C++ support,
-+except for one location, fixed by this patch.
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+
-+Index: b/lib/util/Makefile
-+===================================================================
-+--- a/lib/util/Makefile
-++++ b/lib/util/Makefile
-+@@ -41,11 +41,14 @@
-+ LIBOBJS = \
-+   casprintf.o \
-+   cmdline_parser.o \
-+-  cmdline_parser_cpp.o \
-+   getoptx.o \
-+   string_parser.o \
-+   stripcaseeq.o \
-+ 
-++ifeq ($(ENABLE_CPLUSPLUS),yes)
-++LIBOBJS += cmdline_parser_cpp.o
-++endif
-++
-+ .PHONY: all
-+ all: $(LIBOBJS)
-+ 
-diff --git a/package/libxmlrpc/libxmlrpc-fix-non-wchar-build.patch b/package/libxmlrpc/libxmlrpc-fix-non-wchar-build.patch
-new file mode 100644
-index 0000000..1f04353
---- /dev/null
-+++ b/package/libxmlrpc/libxmlrpc-fix-non-wchar-build.patch
-@@ -0,0 +1,24 @@
-+Disable wide-char specific code
-+
-+The vast majority of the libxmlrpc code nicely handles the absence of
-+wide char support, except at one location, which is fixed by this
-+patch.
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+
-+Index: b/src/xmlrpc_decompose.c
-+===================================================================
-+--- a/src/xmlrpc_decompose.c
-++++ b/src/xmlrpc_decompose.c
-+@@ -217,7 +217,11 @@
-+         xmlrpc_strfree(*decompRootP->store.Tstring.valueP);
-+         break;
-+     case 'w':
-++#if HAVE_UNICODE_WCHAR
-+         free((void*)*decompRootP->store.TwideString.valueP);
-++#else
-++	XMLRPC_ASSERT(false);
-++#endif
-+         break;
-+     case '6':
-+         free((void*)*decompRootP->store.TbitString.valueP);
-diff --git a/package/libxmlrpc/libxmlrpc-use-correct-curl-config.patch b/package/libxmlrpc/libxmlrpc-use-correct-curl-config.patch
-new file mode 100644
-index 0000000..ada0bd2
---- /dev/null
-+++ b/package/libxmlrpc/libxmlrpc-use-correct-curl-config.patch
-@@ -0,0 +1,22 @@
-+Use correct curl-config program
-+
-+Instead of calling again curl-config in src/Makefile (which ends up
-+calling the wrong curl-config: the one in the PATH instead of the one
-+pointed at by the environment variables at configure time), let's use
-+the CURL_LDADD variable which was computed at configure time.
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+
-+Index: b/src/Makefile
-+===================================================================
-+--- a/src/Makefile
-++++ b/src/Makefile
-+@@ -56,7 +56,7 @@
-+   TRANSPORT_MODS += blddir/lib/curl_transport/curltransaction
-+   TRANSPORT_MODS += blddir/lib/curl_transport/curlmulti
-+   TRANSPORT_MODS += blddir/lib/curl_transport/lock_pthread
-+-  TRANSPORT_LIBDEP += $(shell curl-config --libs)
-++  TRANSPORT_LIBDEP += $(CURL_LDADD)
-+ endif
-+ ifeq ($(MUST_BUILD_LIBWWW_CLIENT),yes)
-+   TRANSPORT_MODS += blddir/lib/libwww_transport/xmlrpc_libwww_transport
-diff --git a/package/libxmlrpc/libxmlrpc.mk b/package/libxmlrpc/libxmlrpc.mk
-new file mode 100644
-index 0000000..ef41041
---- /dev/null
-+++ b/package/libxmlrpc/libxmlrpc.mk
-@@ -0,0 +1,34 @@
-+#############################################################
-+#
-+# libxmlrpc
-+#
-+#############################################################
-+LIBXMLRPC_VERSION = 1.25.26
-+LIBXMLRPC_SOURCE = xmlrpc-c-$(LIBXMLRPC_VERSION).tgz
-+LIBXMLRPC_SITE = "http://downloads.sourceforge.net/project/xmlrpc-c/Xmlrpc-c%20Super%20Stable/1.25.26"
-+LIBXMLRPC_INSTALL_STAGING = YES
-+LIBXMLRPC_DEPENDENCIES = libcurl
-+
-+LIBXMLRPC_CONF_OPT = \
-+	$(if $(BR2_USE_WCHAR),,ac_cv_header_wchar_h=no) \
-+	$(if $(BR2_INSTALL_LIBSTDCPP),,--disable-cplusplus) \
-+	have_curl_config=$(STAGING_DIR)/usr/bin/curl-config \
-+	CURL_CONFIG=$(STAGING_DIR)/usr/bin/curl-config
-+
-+# Our package uses autoconf, but not automake, so we need to pass
-+# those variables at compile time as well.
-+LIBXMLRPC_MAKE_ENV = \
-+	CC_FOR_BUILD="$(HOSTCC)" \
-+	LD_FOR_BUILD="$(HOSTLD)" \
-+	CFLAGS_FOR_BUILD="$(HOST_CFLAGS)" \
-+	LDFLAGS_FOR_BUILD="$(HOST_LDFLAGS)"
-+
-+define LIBXMLRPC_REMOVE_DEVFILE
-+	$(RM) $(TARGET_DIR)/usr/bin/xmlrpc-c-config
-+endef
-+
-+ifeq ($(BR2_HAVE_DEVFILES),)
-+LIBXMLRPC_POST_INSTALL_TARGET_HOOKS += LIBXMLRPC_REMOVE_DEVFILE
-+endif
-+
-+$(eval $(autotools-package))
+Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 -- 
-1.8.4.rc3
+Thomas Petazzoni, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
