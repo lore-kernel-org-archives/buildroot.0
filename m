@@ -1,35 +1,45 @@
-From: Axel Lin <axel.lin@ingics.com>
-Date: Wed, 09 Oct 2013 16:47:05 +0800
-Subject: [Buildroot] [PATCH] redis: bump to version 2.6.16
-Message-ID: <1381308425.20719.1.camel@phoenix>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 9 Oct 2013 10:58:54 +0200
+Subject: [Buildroot] Qt 5.0.2 with OpenSSL
+In-Reply-To: <CA+csPL6eKEBs3vT4G-Ayx7hUHeZwVvhT85UAsTUWDsmKHWt5LQ@mail.gmail.com>
+References: <CA+csPL7n8=fX7LLyLE4uS4s4uXHTYoLyNVm66b6_Dj0k3N+p-Q@mail.gmail.com>
+ <20131008104858.69c60676@skate>
+ <CA+csPL5q=rYc_-Q4enRD07Pomj9A6hossAB9cesFnMNnLQv5GA@mail.gmail.com>
+ <20131009095154.2d368292@skate>
+ <CA+csPL6eKEBs3vT4G-Ayx7hUHeZwVvhT85UAsTUWDsmKHWt5LQ@mail.gmail.com>
+Message-ID: <20131009105854.6957d8cc@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The Redis project home page moved to redis.io, thus also update the download
-url accordingly.
+Dear Espen Frimann Koren,
 
-Signed-off-by: Axel Lin <axel.lin@ingics.com>
----
- package/redis/redis.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+On Wed, 9 Oct 2013 10:23:49 +0200, Espen Frimann Koren wrote:
+> I lost the build log and when I did make clean, it worked :-)
+> 
+> The link errors did not relate to OpesSSL-libs, but to functions within Qt
+> that should have been compiled/present when OpenSSL was enabled. Maybe it
+> was a consequence of how I did the build:
+> 
+> 1. Built all without openssl
+> 2. Added openssl and built again, but without clean
+> 2.1 Qt is not rebuilt then
+> 3. Ran make qt5base-dirclean && make qt5base-build because I needed more
+> features in Qt
+> 3.1 The link error is present
+> 4. make clean && make
+> 4.1 Everything builds fine.
 
-diff --git a/package/redis/redis.mk b/package/redis/redis.mk
-index 8b4e900..6974a35 100644
---- a/package/redis/redis.mk
-+++ b/package/redis/redis.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--REDIS_VERSION = 2.6.11
--REDIS_SITE = http://redis.googlecode.com/files
-+REDIS_VERSION = 2.6.16
-+REDIS_SITE = http://download.redis.io/releases
- REDIS_LICENSE = BSD-3c (core); MIT and BSD family licenses (Bundled components)
- REDIS_LICENSE_FILES = COPYING
- 
+Indeed such sequences are not guaranteed to work, but in this specific
+case, I'm not sure to understand why it wouldn't work. I'll try to see
+if I can reproduce the problem.
+
+Thanks!
+
+Thomas
 -- 
-1.8.1.2
+Thomas Petazzoni, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
