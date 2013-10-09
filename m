@@ -1,24 +1,23 @@
-From: Sagaert Johan <sagaert.johan@skynet.be>
-Date: Wed, 9 Oct 2013 20:37:35 +0200
-Subject: [Buildroot] Building / installing kernel modules.
-Message-ID: <8DEC37E638F84029919B5EB7D735370D@JohanW7>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 09 Oct 2013 21:06:10 +0200
+Subject: [Buildroot] Site down or just me?
+In-Reply-To: <CA+T6QPmaqHaWru-3BtqCEQ5fmn-dXxV0w_6x_ZLx23BzEgWsKA@mail.gmail.com>
+ (Jason Kridner's message of "Wed, 9 Oct 2013 14:18:14 -0400")
+References: <CA+T6QPmaqHaWru-3BtqCEQ5fmn-dXxV0w_6x_ZLx23BzEgWsKA@mail.gmail.com>
+Message-ID: <878uy21cyl.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- 
-Dear Thomas
+>>>>> "Jason" == Jason Kridner <jkridner@beagleboard.org> writes:
 
-I found this post http://lists.busybox.net/pipermail/buildroot/2011-July/044690.html
+ Jason> The below from two different machines makes it looks like the site is
+ Jason> down. Didn't see any info on the list so far. Any ETA on it coming
+ Jason> back up?
 
-Has there been some infrastructure added to aid in building and installing kernel modules ?
+FYI, apache is running again.
 
-I created a generic-package makefile to build and install the kernel module.
-So far so good, but I still have to run depmod -a on my target to register the module.
-
-How can I use the post_install hook to have the module registered by buildroot,
-so I don't have to do it on my target board ?
-
-Johan
+-- 
+Bye, Peter Korsgaard
