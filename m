@@ -1,36 +1,32 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 9 Oct 2013 21:30:04 +0200
-Subject: [Buildroot] [git commit] libnetfilter_cthelper: correct license
-	GPLv2 -> GPLv2+
-Message-ID: <20131009194411.704B09B99C@busybox.osuosl.org>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed,  9 Oct 2013 16:49:33 -0300
+Subject: [Buildroot] [PATCH 1/5] gnupg: security bump to version 1.4.15
+Message-ID: <1381348177-2189-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3cd02296be5c3a1f5247fc634d98a1784313bd9f
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Fixes CVE-2013-4402.
 
-The main file of this package is src/libnetfilter_cthelper.c, which states
-GPLv2+.
-
-Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- .../libnetfilter_cthelper/libnetfilter-cthelper.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/gnupg/gnupg.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/libnetfilter_cthelper/libnetfilter-cthelper.mk b/package/libnetfilter_cthelper/libnetfilter-cthelper.mk
-index f3e892b..2cac8a2 100644
---- a/package/libnetfilter_cthelper/libnetfilter-cthelper.mk
-+++ b/package/libnetfilter_cthelper/libnetfilter-cthelper.mk
-@@ -10,7 +10,7 @@ LIBNETFILTER_CTHELPER_SITE = http://www.netfilter.org/projects/libnetfilter_cthe
- LIBNETFILTER_CTHELPER_INSTALL_STAGING = YES
- LIBNETFILTER_CTHELPER_DEPENDENCIES = host-pkgconf libmnl
- LIBNETFILTER_CTHELPER_AUTORECONF = YES
--LIBNETFILTER_CTHELPER_LICENSE = GPLv2
-+LIBNETFILTER_CTHELPER_LICENSE = GPLv2+
- LIBNETFILTER_CTHELPER_LICENSE_FILES = COPYING
+diff --git a/package/gnupg/gnupg.mk b/package/gnupg/gnupg.mk
+index 38604b5..28f1f43 100644
+--- a/package/gnupg/gnupg.mk
++++ b/package/gnupg/gnupg.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- $(eval $(autotools-package))
+-GNUPG_VERSION = 1.4.14
++GNUPG_VERSION = 1.4.15
+ GNUPG_SOURCE = gnupg-$(GNUPG_VERSION).tar.bz2
+ GNUPG_SITE = ftp://ftp.gnupg.org/gcrypt/gnupg
+ GNUPG_LICENSE = GPLv3+
+-- 
+1.8.1.5
