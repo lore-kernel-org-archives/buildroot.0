@@ -1,14 +1,13 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 09 Oct 2013 14:31:46 +0200
-Subject: [Buildroot] [PATCHv3 03/20] package: add a
-	<pkg>_EXTRA_DOWNLOADS variable
-In-Reply-To: <20131009135113.34da6eca@skate> (Thomas Petazzoni's message of
- "Wed, 9 Oct 2013 13:51:13 +0200")
+Date: Wed, 09 Oct 2013 14:33:11 +0200
+Subject: [Buildroot] [PATCHv3 04/20] toolchain: introduce a virtual
+	package
+In-Reply-To: <20131009134918.2e9e7844@skate> (Thomas Petazzoni's message of
+ "Wed, 9 Oct 2013 13:49:18 +0200")
 References: <1381256237-27948-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1381256237-27948-4-git-send-email-thomas.petazzoni@free-electrons.com>
- <87wqln4ffj.fsf@dell.be.48ers.dk> <20131008235537.102caeda@skate>
- <87siwa4wtd.fsf@dell.be.48ers.dk> <20131009135113.34da6eca@skate>
-Message-ID: <87iox64oct.fsf@dell.be.48ers.dk>
+ <1381256237-27948-5-git-send-email-thomas.petazzoni@free-electrons.com>
+ <87ob6y4t8v.fsf@dell.be.48ers.dk> <20131009134918.2e9e7844@skate>
+Message-ID: <87eh7u4oag.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -19,16 +18,19 @@ To: buildroot@busybox.net
 
 Hi,
 
- >> But I don't particulary find a special _EXTRA_DOWNLOADS any cleaner
- >> than just saying that only the first element in _SOURCE will be
- >> automatically extracted.
+ >> Did you mean to simply do 'include toolchain/*.mk' instead of those
+ >> two lines?
 
- Thomas> Well, I find it cleaner, but if you prefer to have it in
- Thomas> _SOURCE, I can certainly modify the patch to extend the
- Thomas> semantic of _SOURCE instead.  Let me know what you decide so
- Thomas> that I can respin the patch set if needed.
+ Thomas> No. The toolchain/toolchain-{buildroot,external}.mk file get
+ Thomas> removed in PATCH 5 and PATCH 6 respectively. So the problem is
+ Thomas> just a bisection problem: I haven't tested the series after
+ Thomas> each commit.
 
-Just leave it for now. _EXTRA_DOWNLOADS is ok.
+Tsk tsk ;)
+
+ Thomas> Do you want me to respin with this bisection issue fixed?
+
+No, lets just leave it as it is - Thanks.
 
 -- 
 Bye, Peter Korsgaard
