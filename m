@@ -1,37 +1,30 @@
 From: Axel Lin <axel.lin@ingics.com>
-Date: Wed, 09 Oct 2013 10:02:54 +0800
-Subject: [Buildroot] [PATCH] ccid: bump to version 1.4.12
-Message-ID: <1381284174.27485.9.camel@phoenix>
+Date: Wed, 09 Oct 2013 10:18:27 +0800
+Subject: [Buildroot] [PATCH] nano: bump to version 2.3.2
+Message-ID: <1381285107.27485.10.camel@phoenix>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bump version and also add license information.
-
 Signed-off-by: Axel Lin <axel.lin@ingics.com>
 ---
- package/ccid/ccid.mk | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ package/nano/nano.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/ccid/ccid.mk b/package/ccid/ccid.mk
-index a246ddd..c25b433 100644
---- a/package/ccid/ccid.mk
-+++ b/package/ccid/ccid.mk
-@@ -4,9 +4,11 @@
+diff --git a/package/nano/nano.mk b/package/nano/nano.mk
+index b1a8f44..aba4b4f 100644
+--- a/package/nano/nano.mk
++++ b/package/nano/nano.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--CCID_VERSION = 1.4.8
-+CCID_VERSION = 1.4.12
- CCID_SOURCE = ccid-$(CCID_VERSION).tar.bz2
--CCID_SITE = http://alioth.debian.org/frs/download.php/file/3768
-+CCID_SITE = http://alioth.debian.org/frs/download.php/file/3937
-+CCID_LICENSE = LGPLv2.1+
-+CCID_LICENSE_FILES = COPYING
- CCID_INSTALL_STAGING = YES
- CCID_DEPENDENCIES = pcsc-lite host-pkgconf libusb
- 
+-NANO_VERSION = 2.3.1
++NANO_VERSION = 2.3.2
+ NANO_SITE = http://www.nano-editor.org/dist/v2.3
+ NANO_LICENSE = GPLv3+
+ NANO_LICENSE_FILES = COPYING
 -- 
 1.8.1.2
