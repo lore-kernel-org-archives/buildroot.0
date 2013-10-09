@@ -1,13 +1,12 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 9 Oct 2013 13:51:13 +0200
-Subject: [Buildroot] [PATCHv3 03/20] package: add a
- <pkg>_EXTRA_DOWNLOADS variable
-In-Reply-To: <87siwa4wtd.fsf@dell.be.48ers.dk>
+Date: Wed, 9 Oct 2013 13:49:18 +0200
+Subject: [Buildroot] [PATCHv3 04/20] toolchain: introduce a virtual
+	package
+In-Reply-To: <87ob6y4t8v.fsf@dell.be.48ers.dk>
 References: <1381256237-27948-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1381256237-27948-4-git-send-email-thomas.petazzoni@free-electrons.com>
- <87wqln4ffj.fsf@dell.be.48ers.dk> <20131008235537.102caeda@skate>
- <87siwa4wtd.fsf@dell.be.48ers.dk>
-Message-ID: <20131009135113.34da6eca@skate>
+ <1381256237-27948-5-git-send-email-thomas.petazzoni@free-electrons.com>
+ <87ob6y4t8v.fsf@dell.be.48ers.dk>
+Message-ID: <20131009134918.2e9e7844@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,43 +15,42 @@ To: buildroot@busybox.net
 
 Dear Peter Korsgaard,
 
-On Wed, 09 Oct 2013 11:29:02 +0200, Peter Korsgaard wrote:
-
->  Thomas> This has been discussed in a prior version of this patch set. The
->  Thomas> problem is that <pkg>_SOURCE is not only about downloading, but also
->  Thomas> about extracting.
+On Wed, 09 Oct 2013 12:46:08 +0200, Peter Korsgaard wrote:
+> >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 > 
->  Thomas> So, what would <pkg>_SOURCE do? Download all the files listed,
->  Thomas> but extract only the first one? This seems like a weird
->  Thomas> semantic. I think I prefer the following clear semantic:
+>  Thomas> This commit introduces a virtual package called 'toolchain', located
+>  Thomas> in 'toolchain/toolchain', which simply depends on
+>  Thomas> 'toolchain-buildroot' or 'toolchain-external' depending on the
+>  Thomas> selected toolchain backend.
 > 
->  Thomas>  <pkg>_SOURCE is one file, that gets downloaded and then extracted into
->  Thomas>  the source directory of the package.
+> [snip]
 > 
->  Thomas>  <pkg>_PATCH is a list of files or URLs, that get downloaded and apply
->  Thomas>  as patches into the source directory
+>  Thomas> @@ -317,11 +313,8 @@ include support/dependencies/dependencies.mk
+>  Thomas>  # We also need the various per-package makefiles, which also add
+>  Thomas>  # each selected package to TARGETS if that package was selected
+>  Thomas>  # in the .config file.
+>  Thomas> -ifeq ($(BR2_TOOLCHAIN_BUILDROOT),y)
+>  Thomas> -include toolchain/toolchain-buildroot.mk
+>  Thomas> -else ifeq ($(BR2_TOOLCHAIN_EXTERNAL),y)
+>  Thomas> -include toolchain/toolchain-external.mk
+>  Thomas> -endif
+>  Thomas> +include toolchain/helpers.mk
+>  Thomas> +include toolchain/*/*.mk
 > 
->  Thomas>  <pkg>_EXTRA_DOWNLOADS is a list of files that get downloaded,
->  Thomas>  and nothing else. The package is responsible for doing
->  Thomas>  something with them.
+> That's no good. toolchain/*/*.mk doesn't pick up up
+> toolchain/toolchain-{buildroot,external}.mk:
 > 
-> Well, I don't feel strongly about it, but no matter what we do packages
-> with multple sources will be "special" (Luckily they are very uncommon),
-> so you always have to do something explicit to use (extract) the extra
-> sources.
+> >>> toolchain undefined Extracting
+> >>> toolchain undefined Patching toolchain//toolchain
+> make: *** No rule to make target `toolchain-buildroot', needed by `toolchain-depends'.  Stop.
+> 
+> Did you mean to simply do 'include toolchain/*.mk' instead of those two lines?
 
-Sure.
+No. The toolchain/toolchain-{buildroot,external}.mk file get removed in
+PATCH 5 and PATCH 6 respectively. So the problem is just a bisection
+problem: I haven't tested the series after each commit.
 
-> But I don't particulary find a special _EXTRA_DOWNLOADS any cleaner than
-> just saying that only the first element in _SOURCE will be automatically
-> extracted.
-
-Well, I find it cleaner, but if you prefer to have it in _SOURCE, I can
-certainly modify the patch to extend the semantic of _SOURCE instead.
-Let me know what you decide so that I can respin the patch set if
-needed.
-
-Best regards,
+Do you want me to respin with this bisection issue fixed?
 
 Thomas
 -- 
