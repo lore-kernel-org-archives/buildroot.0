@@ -1,51 +1,55 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 9 Oct 2013 16:02:38 +0200
-Subject: [Buildroot] [git commit] toolchain-external: improve help text of
-	some options
-Message-ID: <20131009143431.031FB9B970@busybox.osuosl.org>
+Date: Wed, 9 Oct 2013 15:24:14 +0200
+Subject: [Buildroot] [git commit] toolchain: fix the helpers.mk comment
+Message-ID: <20131009143430.248FE9B970@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=692a585d846c56d4cbf94f4a004a7e7f9f8768c7
+commit: http://git.buildroot.net/buildroot/commit/?id=2e0cd951fe864415dbcaa75e236fc4766cf1dd3d
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+This commit fixes various typos and mistakes in the comment at the top
+of the helpers.mk file:
+
+ * usefull -> useful
+
+ * The optional stripping of libraries no longer exists, so there's no
+   reason to mention it.
+
+ * Indicate that the copy_toolchain_lib_root function is also used by
+   the glibc package, not only by the external toolchain logic.
+
+ * Separate more clearly the top comment introducing the entire file,
+   from the comment introducing the first function.
+
+[Peter: reword top comment, add missing 'by']
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- toolchain/toolchain-external/Config.in |   15 +++++++++++----
- 1 files changed, 11 insertions(+), 4 deletions(-)
+ toolchain/helpers.mk |   13 +++++++------
+ 1 files changed, 7 insertions(+), 6 deletions(-)
 
-diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-index 89c799e..67f4fc7 100644
---- a/toolchain/toolchain-external/Config.in
-+++ b/toolchain/toolchain-external/Config.in
-@@ -876,15 +876,22 @@ config BR2_TOOLCHAIN_EXTERNAL_CUSTOM_UCLIBC
- 	# For the time being, we assume that all custom external
- 	# toolchains have shadow password support.
- 	select BR2_TOOLCHAIN_HAS_SHADOW_PASSWORDS
-+	help
-+	  Select this option if your external toolchain uses the
-+	  uClibc C library (available from http://www.uclibc.org/).
- 
- config BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC
- 	bool "glibc/eglibc"
- 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
- 	help
--	  Note: eglibc is a variant of glibc that (among other things) can be
--	  configured to exclude some of its features. Using a toolchain with
--	  eglibc configured to exclude key features may cause build failures to
--	  some packages.
-+	  Select this option if your external toolchain uses the GNU C
-+	  library (available from https://www.gnu.org/software/libc/)
-+	  or its variant the eglibc library (http://www.eglibc.org/).
+diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
+index 37f2cf9..0144674 100644
+--- a/toolchain/helpers.mk
++++ b/toolchain/helpers.mk
+@@ -1,9 +1,10 @@
+-# This Makefile fragment declares helper functions, usefull to handle
+-# non- buildroot-built toolchains, eg. purely external toolchains.
+-#
+-# Copy a toolchain library and its symbolic links from the sysroot
+-# directory to the target directory. Also optionaly strips the
+-# library.
++# This Makefile fragment declares toolchain related helper functions.
 +
-+	  Note: eglibc is a variant of glibc that (among other things)
-+	  can be configured to exclude some of its features. Using a
-+	  toolchain with eglibc configured to exclude key features may
-+	  cause build failures to some packages.
- 
- config BR2_TOOLCHAIN_EXTERNAL_CUSTOM_MUSL
- 	bool "musl"
++# The copy_toolchain_lib_root function copies a toolchain library and
++# its symbolic links from the sysroot directory to the target
++# directory. Note that this function is used both by the external
++# toolchain logic, and the glibc package, so care must be taken when
++# changing this function.
+ #
+ # Most toolchains (CodeSourcery ones) have their libraries either in
+ # /lib or /usr/lib relative to their ARCH_SYSROOT_DIR, so we search
