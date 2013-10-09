@@ -1,47 +1,99 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 09 Oct 2013 12:46:08 +0200
-Subject: [Buildroot] [PATCHv3 04/20] toolchain: introduce a virtual
-	package
-In-Reply-To: <1381256237-27948-5-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Tue, 8 Oct 2013 20:17:01 +0200")
-References: <1381256237-27948-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1381256237-27948-5-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <87ob6y4t8v.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 9 Oct 2013 13:43:55 +0200
+Subject: [Buildroot] [PATCH] libxmlrpc: new package
+In-Reply-To: <1381311986-11533-1-git-send-email-alvaro.gamez@hazent.com>
+References: <4FCD4B90.3020007@mind.be>
+ <1381311986-11533-1-git-send-email-alvaro.gamez@hazent.com>
+Message-ID: <20131009134355.44ae2733@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+Dear Alvaro G. M,
 
- Thomas> This commit introduces a virtual package called 'toolchain', located
- Thomas> in 'toolchain/toolchain', which simply depends on
- Thomas> 'toolchain-buildroot' or 'toolchain-external' depending on the
- Thomas> selected toolchain backend.
+On Wed,  9 Oct 2013 11:46:26 +0200, Alvaro G. M wrote:
+> From: Alvaro G. M. <alvaro.gamez@hazent.com>
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Signed-off-by: Alvaro G. M <alvaro.gamez@hazent.com>
+> ---
+> 
+> I recovered an old patch from Thomas (http://lists.busybox.net/pipermail/buildroot/2012-June/054467.html)
+> and upgraded it to the stable version of xml-rpc-c.
+> Some of the original patches are not needed on this version, so I've mostly just deleted
+> a patch files, upgraded download address and version and modified patch offsets so they apply
+> without any warning.
+> 
+>  package/Config.in                                  |  1 +
+>  package/libxmlrpc/Config.in                        | 10 +++++++
+>  .../libxmlrpc/libxmlrpc-fix-gennmtab-build.patch   | 25 ++++++++++++++++
+>  .../libxmlrpc-fix-non-cplusplus-build.patch        | 27 +++++++++++++++++
+>  .../libxmlrpc/libxmlrpc-fix-non-wchar-build.patch  | 24 +++++++++++++++
+>  .../libxmlrpc-use-correct-curl-config.patch        | 22 ++++++++++++++
 
-[snip]
+It would be good to use a number in the patch file names, such as:
 
- Thomas> @@ -317,11 +313,8 @@ include support/dependencies/dependencies.mk
- Thomas>  # We also need the various per-package makefiles, which also add
- Thomas>  # each selected package to TARGETS if that package was selected
- Thomas>  # in the .config file.
- Thomas> -ifeq ($(BR2_TOOLCHAIN_BUILDROOT),y)
- Thomas> -include toolchain/toolchain-buildroot.mk
- Thomas> -else ifeq ($(BR2_TOOLCHAIN_EXTERNAL),y)
- Thomas> -include toolchain/toolchain-external.mk
- Thomas> -endif
- Thomas> +include toolchain/helpers.mk
- Thomas> +include toolchain/*/*.mk
+	libxmlrpc-01-<something>.patch
+	libxmlrpc-02-<somethingelse>.patch
 
-That's no good. toolchain/*/*.mk doesn't pick up up
-toolchain/toolchain-{buildroot,external}.mk:
+> new file mode 100644
+> index 0000000..ef41041
+> --- /dev/null
+> +++ b/package/libxmlrpc/libxmlrpc.mk
+> @@ -0,0 +1,34 @@
+> +#############################################################
 
->>> toolchain undefined Extracting
->>> toolchain undefined Patching toolchain//toolchain
-make: *** No rule to make target `toolchain-buildroot', needed by `toolchain-depends'.  Stop.
+Those lines should have 80 #
 
-Did you mean to simply do 'include toolchain/*.mk' instead of those two lines?
+> +#
+> +# libxmlrpc
+> +#
+> +#############################################################
 
+One empty line between the header and the first variable.
+
+> +LIBXMLRPC_VERSION = 1.25.26
+> +LIBXMLRPC_SOURCE = xmlrpc-c-$(LIBXMLRPC_VERSION).tgz
+> +LIBXMLRPC_SITE = "http://downloads.sourceforge.net/project/xmlrpc-c/Xmlrpc-c%20Super%20Stable/1.25.26"
+> +LIBXMLRPC_INSTALL_STAGING = YES
+> +LIBXMLRPC_DEPENDENCIES = libcurl
+
+Can you add LIBXMLRPC_LICENSE and LIBXMLRPC_LICENSE_FILES ?
+
+> +LIBXMLRPC_CONF_OPT = \
+> +	$(if $(BR2_USE_WCHAR),,ac_cv_header_wchar_h=no) \
+> +	$(if $(BR2_INSTALL_LIBSTDCPP),,--disable-cplusplus) \
+> +	have_curl_config=$(STAGING_DIR)/usr/bin/curl-config \
+> +	CURL_CONFIG=$(STAGING_DIR)/usr/bin/curl-config
+> +
+> +# Our package uses autoconf, but not automake, so we need to pass
+> +# those variables at compile time as well.
+> +LIBXMLRPC_MAKE_ENV = \
+> +	CC_FOR_BUILD="$(HOSTCC)" \
+> +	LD_FOR_BUILD="$(HOSTLD)" \
+> +	CFLAGS_FOR_BUILD="$(HOST_CFLAGS)" \
+> +	LDFLAGS_FOR_BUILD="$(HOST_LDFLAGS)"
+> +
+> +define LIBXMLRPC_REMOVE_DEVFILE
+> +	$(RM) $(TARGET_DIR)/usr/bin/xmlrpc-c-config
+> +endef
+
+Hum, maybe this should use the <pkg>_CONFIG_SCRIPTS mechanism instead
+(if xmlrpc-c-config is a shell script).
+
+> +
+> +ifeq ($(BR2_HAVE_DEVFILES),)
+> +LIBXMLRPC_POST_INSTALL_TARGET_HOOKS += LIBXMLRPC_REMOVE_DEVFILE
+> +endif
+> +
+> +$(eval $(autotools-package))
+
+Thanks,
+
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
