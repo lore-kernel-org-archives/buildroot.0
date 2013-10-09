@@ -1,58 +1,61 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 09 Oct 2013 18:15:45 +0200
-Subject: [Buildroot] [PATCH v2] i2c-tools: add license information
-In-Reply-To: <52550BEE.3000600@mind.be>
-References: <fc3b3afc1459d7a16e5b.1381302651@argentina>
- <52550BEE.3000600@mind.be>
-Message-ID: <52558131.7080300@mind.be>
+Date: Wed, 09 Oct 2013 18:32:49 +0200
+Subject: [Buildroot] [PATCH 1 of 5] cifs-utils: correct license GPLv3 ->
+ GPLv3+
+In-Reply-To: <32bd9d0979ff201fc926.1381319909@argentina>
+References: <patchbomb.1381319908@argentina>
+ <32bd9d0979ff201fc926.1381319909@argentina>
+Message-ID: <52558531.3070609@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 10/09/13 09:55, Arnout Vandecappelle wrote:
-> On 10/09/13 09:10, Thomas De Schampheleire wrote:
->> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+On 10/09/13 13:58, Thomas De Schampheleire wrote:
+> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 >
-> Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> ---
+> Note: some files are GPLv2+, others are GPLv3+. There are a few headers also
+> declared as LGPL. I think the right approach is to set GPLv3+ here.
 
-  Although on second thought: py-smbus is only built if you pass
-EXTRA="py-smbus" in the make opts. Since we don't do that, we could just 
-as well remove the license of py-smbus.
+  Correct. This is the typical situation when a project changes from v2 
+to v3: not all files are updated, so there's a mix in the source code.
 
-  That said, in case someone adds py-smbus support later it's good to 
-have the license in place already.
+  For the LGPL files: LGPL carries a specific clause that specifies that 
+you can make copies under the GPL (same version) instead of the LGPL. 
+There's actually a requirement that you should update all license texts, 
+but that's exactly what we do here by just installing the GPLv3 license 
+(and we're anyway talking about distribution of binaries).
 
-  Bottom line: I'm OK with this patch as it is
+  Bottom line:
+
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+
 
   Regards,
   Arnout
 
 >
->>
->> ---
->> v2: clarify separate py-smbus license (Arnout)
->>
->>   package/i2c-tools/i2c-tools.mk |  2 ++
->>   1 files changed, 2 insertions(+), 0 deletions(-)
->>
->> diff --git a/package/i2c-tools/i2c-tools.mk
->> b/package/i2c-tools/i2c-tools.mk
->> --- a/package/i2c-tools/i2c-tools.mk
->> +++ b/package/i2c-tools/i2c-tools.mk
->> @@ -7,6 +7,8 @@
->>   I2C_TOOLS_VERSION = 3.1.0
->>   I2C_TOOLS_SOURCE = i2c-tools-$(I2C_TOOLS_VERSION).tar.bz2
->>   I2C_TOOLS_SITE = http://dl.lm-sensors.org/i2c-tools/releases
->> +I2C_TOOLS_LICENSE = GPLv2+, GPLv2 (py-smbus)
->> +I2C_TOOLS_LICENSE_FILES = COPYING
->>
->>   define I2C_TOOLS_BUILD_CMDS
->>    $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
->>
->>
+>   package/cifs-utils/cifs-utils.mk |  2 +-
+>   1 files changed, 1 insertions(+), 1 deletions(-)
 >
+> diff --git a/package/cifs-utils/cifs-utils.mk b/package/cifs-utils/cifs-utils.mk
+> --- a/package/cifs-utils/cifs-utils.mk
+> +++ b/package/cifs-utils/cifs-utils.mk
+> @@ -7,7 +7,7 @@
+>   CIFS_UTILS_VERSION = 6.1
+>   CIFS_UTILS_SOURCE  = cifs-utils-$(CIFS_UTILS_VERSION).tar.bz2
+>   CIFS_UTILS_SITE    = http://ftp.samba.org/pub/linux-cifs/cifs-utils
+> -CIFS_UTILS_LICENSE = GPLv3
+> +CIFS_UTILS_LICENSE = GPLv3+
+>   CIFS_UTILS_LICENSE_FILES = COPYING
+>
+>   define CIFS_UTILS_NO_WERROR
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 >
 
 
