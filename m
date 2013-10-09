@@ -1,96 +1,58 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 9 Oct 2013 13:43:55 +0200
-Subject: [Buildroot] [PATCH] libxmlrpc: new package
-In-Reply-To: <1381311986-11533-1-git-send-email-alvaro.gamez@hazent.com>
-References: <4FCD4B90.3020007@mind.be>
- <1381311986-11533-1-git-send-email-alvaro.gamez@hazent.com>
-Message-ID: <20131009134355.44ae2733@skate>
+Date: Wed, 9 Oct 2013 13:51:13 +0200
+Subject: [Buildroot] [PATCHv3 03/20] package: add a
+ <pkg>_EXTRA_DOWNLOADS variable
+In-Reply-To: <87siwa4wtd.fsf@dell.be.48ers.dk>
+References: <1381256237-27948-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1381256237-27948-4-git-send-email-thomas.petazzoni@free-electrons.com>
+ <87wqln4ffj.fsf@dell.be.48ers.dk> <20131008235537.102caeda@skate>
+ <87siwa4wtd.fsf@dell.be.48ers.dk>
+Message-ID: <20131009135113.34da6eca@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Alvaro G. M,
+Dear Peter Korsgaard,
 
-On Wed,  9 Oct 2013 11:46:26 +0200, Alvaro G. M wrote:
-> From: Alvaro G. M. <alvaro.gamez@hazent.com>
+On Wed, 09 Oct 2013 11:29:02 +0200, Peter Korsgaard wrote:
+
+>  Thomas> This has been discussed in a prior version of this patch set. The
+>  Thomas> problem is that <pkg>_SOURCE is not only about downloading, but also
+>  Thomas> about extracting.
 > 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Signed-off-by: Alvaro G. M <alvaro.gamez@hazent.com>
-> ---
+>  Thomas> So, what would <pkg>_SOURCE do? Download all the files listed,
+>  Thomas> but extract only the first one? This seems like a weird
+>  Thomas> semantic. I think I prefer the following clear semantic:
 > 
-> I recovered an old patch from Thomas (http://lists.busybox.net/pipermail/buildroot/2012-June/054467.html)
-> and upgraded it to the stable version of xml-rpc-c.
-> Some of the original patches are not needed on this version, so I've mostly just deleted
-> a patch files, upgraded download address and version and modified patch offsets so they apply
-> without any warning.
+>  Thomas>  <pkg>_SOURCE is one file, that gets downloaded and then extracted into
+>  Thomas>  the source directory of the package.
 > 
->  package/Config.in                                  |  1 +
->  package/libxmlrpc/Config.in                        | 10 +++++++
->  .../libxmlrpc/libxmlrpc-fix-gennmtab-build.patch   | 25 ++++++++++++++++
->  .../libxmlrpc-fix-non-cplusplus-build.patch        | 27 +++++++++++++++++
->  .../libxmlrpc/libxmlrpc-fix-non-wchar-build.patch  | 24 +++++++++++++++
->  .../libxmlrpc-use-correct-curl-config.patch        | 22 ++++++++++++++
+>  Thomas>  <pkg>_PATCH is a list of files or URLs, that get downloaded and apply
+>  Thomas>  as patches into the source directory
+> 
+>  Thomas>  <pkg>_EXTRA_DOWNLOADS is a list of files that get downloaded,
+>  Thomas>  and nothing else. The package is responsible for doing
+>  Thomas>  something with them.
+> 
+> Well, I don't feel strongly about it, but no matter what we do packages
+> with multple sources will be "special" (Luckily they are very uncommon),
+> so you always have to do something explicit to use (extract) the extra
+> sources.
 
-It would be good to use a number in the patch file names, such as:
+Sure.
 
-	libxmlrpc-01-<something>.patch
-	libxmlrpc-02-<somethingelse>.patch
+> But I don't particulary find a special _EXTRA_DOWNLOADS any cleaner than
+> just saying that only the first element in _SOURCE will be automatically
+> extracted.
 
-> new file mode 100644
-> index 0000000..ef41041
-> --- /dev/null
-> +++ b/package/libxmlrpc/libxmlrpc.mk
-> @@ -0,0 +1,34 @@
-> +#############################################################
+Well, I find it cleaner, but if you prefer to have it in _SOURCE, I can
+certainly modify the patch to extend the semantic of _SOURCE instead.
+Let me know what you decide so that I can respin the patch set if
+needed.
 
-Those lines should have 80 #
-
-> +#
-> +# libxmlrpc
-> +#
-> +#############################################################
-
-One empty line between the header and the first variable.
-
-> +LIBXMLRPC_VERSION = 1.25.26
-> +LIBXMLRPC_SOURCE = xmlrpc-c-$(LIBXMLRPC_VERSION).tgz
-> +LIBXMLRPC_SITE = "http://downloads.sourceforge.net/project/xmlrpc-c/Xmlrpc-c%20Super%20Stable/1.25.26"
-> +LIBXMLRPC_INSTALL_STAGING = YES
-> +LIBXMLRPC_DEPENDENCIES = libcurl
-
-Can you add LIBXMLRPC_LICENSE and LIBXMLRPC_LICENSE_FILES ?
-
-> +LIBXMLRPC_CONF_OPT = \
-> +	$(if $(BR2_USE_WCHAR),,ac_cv_header_wchar_h=no) \
-> +	$(if $(BR2_INSTALL_LIBSTDCPP),,--disable-cplusplus) \
-> +	have_curl_config=$(STAGING_DIR)/usr/bin/curl-config \
-> +	CURL_CONFIG=$(STAGING_DIR)/usr/bin/curl-config
-> +
-> +# Our package uses autoconf, but not automake, so we need to pass
-> +# those variables at compile time as well.
-> +LIBXMLRPC_MAKE_ENV = \
-> +	CC_FOR_BUILD="$(HOSTCC)" \
-> +	LD_FOR_BUILD="$(HOSTLD)" \
-> +	CFLAGS_FOR_BUILD="$(HOST_CFLAGS)" \
-> +	LDFLAGS_FOR_BUILD="$(HOST_LDFLAGS)"
-> +
-> +define LIBXMLRPC_REMOVE_DEVFILE
-> +	$(RM) $(TARGET_DIR)/usr/bin/xmlrpc-c-config
-> +endef
-
-Hum, maybe this should use the <pkg>_CONFIG_SCRIPTS mechanism instead
-(if xmlrpc-c-config is a shell script).
-
-> +
-> +ifeq ($(BR2_HAVE_DEVFILES),)
-> +LIBXMLRPC_POST_INSTALL_TARGET_HOOKS += LIBXMLRPC_REMOVE_DEVFILE
-> +endif
-> +
-> +$(eval $(autotools-package))
-
-Thanks,
+Best regards,
 
 Thomas
 -- 
