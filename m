@@ -1,21 +1,31 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 09 Oct 2013 22:36:10 +0200
-Subject: [Buildroot] [PATCH 1/7] udpcast: needs mmu
-In-Reply-To: <1381350348-25751-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Wed, 9 Oct 2013 17:25:42 -0300")
-References: <1381350348-25751-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87pprexjut.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 9 Oct 2013 22:34:58 +0200
+Subject: [Buildroot] [git commit] udpcast: needs mmu
+Message-ID: <20131009203637.C19619B9A4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=3bccd260fa96d2848a6161166ddc95fe7b5344ed
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Gustavo> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/udpcast/Config.in |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-Committed series, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/udpcast/Config.in b/package/udpcast/Config.in
+index cb817a9..cae27bd 100644
+--- a/package/udpcast/Config.in
++++ b/package/udpcast/Config.in
+@@ -2,6 +2,7 @@ config BR2_PACKAGE_UDPCAST
+ 	bool "udpcast"
+ 	depends on BR2_LARGEFILE
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_USE_MMU # fork()
+ 	help
+ 	  A multicast protocol implementation which happens to
+ 	  be very handy for imaging drives over the network.
