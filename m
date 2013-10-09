@@ -1,32 +1,29 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 9 Oct 2013 21:56:34 +0200
-Subject: [Buildroot] [git commit] nano: bump to version 2.3.2
-Message-ID: <20131009202219.A52D09B98A@busybox.osuosl.org>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed,  9 Oct 2013 17:25:42 -0300
+Subject: [Buildroot] [PATCH 1/7] udpcast: needs mmu
+Message-ID: <1381350348-25751-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=0286ed56c1d07cab85188fea68f9022925d7c4b2
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Signed-off-by: Axel Lin <axel.lin@ingics.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/nano/nano.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/udpcast/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/nano/nano.mk b/package/nano/nano.mk
-index b1a8f44..aba4b4f 100644
---- a/package/nano/nano.mk
-+++ b/package/nano/nano.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--NANO_VERSION = 2.3.1
-+NANO_VERSION = 2.3.2
- NANO_SITE = http://www.nano-editor.org/dist/v2.3
- NANO_LICENSE = GPLv3+
- NANO_LICENSE_FILES = COPYING
+diff --git a/package/udpcast/Config.in b/package/udpcast/Config.in
+index cb817a9..cae27bd 100644
+--- a/package/udpcast/Config.in
++++ b/package/udpcast/Config.in
+@@ -2,6 +2,7 @@ config BR2_PACKAGE_UDPCAST
+ 	bool "udpcast"
+ 	depends on BR2_LARGEFILE
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_USE_MMU # fork()
+ 	help
+ 	  A multicast protocol implementation which happens to
+ 	  be very handy for imaging drives over the network.
+-- 
+1.8.1.5
