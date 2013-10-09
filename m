@@ -1,37 +1,47 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 09 Oct 2013 18:02:28 +0200
-Subject: [Buildroot] using a local package file : why copy it to the dl
- directory ?
-In-Reply-To: <22B9374628844ED0809C78AC328E71C5@JohanW7>
-References: <22B9374628844ED0809C78AC328E71C5@JohanW7>
-Message-ID: <52557E14.3040102@mind.be>
+Date: Wed, 09 Oct 2013 18:04:13 +0200
+Subject: [Buildroot] [PATCH 1/2] xmlstarlet: add license information
+In-Reply-To: <1381281980.27485.2.camel@phoenix>
+References: <1381281980.27485.2.camel@phoenix>
+Message-ID: <52557E7D.8060204@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 10/09/13 00:19, Sagaert Johan wrote:
-> Hi
+On 10/09/13 03:26, Axel Lin wrote:
+> Signed-off-by: Axel Lin <axel.lin@ingics.com>
+> ---
+>   package/xmlstarlet/xmlstarlet.mk | 2 ++
+>   1 file changed, 2 insertions(+)
 >
+> diff --git a/package/xmlstarlet/xmlstarlet.mk b/package/xmlstarlet/xmlstarlet.mk
+> index f0a26c2..4a30feb 100644
+> --- a/package/xmlstarlet/xmlstarlet.mk
+> +++ b/package/xmlstarlet/xmlstarlet.mk
+> @@ -6,6 +6,8 @@
 >
-> I noticed when using SITE_METHOD = file, the package is copied to the download directory.
-> Is this needed, since the package is already on our local filesystem ?
+>   XMLSTARLET_VERSION = 1.3.0
+>   XMLSTARLET_SITE = http://downloads.sourceforge.net/project/xmlstar/xmlstarlet/$(XMLSTARLET_VERSION)
+> +XMLSTARLET_LICENSE = MIT
+> +XMLSTARLET_LICENSE_FILES = COPYING Copyright
 
-  It seems the other two repliers missed your point :-)
+  These two files are identical, so no need to copy both of them.
 
-  There is no fundamental need to copy it. However, it makes buildroot a 
-lot simpler. In many places there are direct references to DL_DIR (just 
-grep for that variable); in case of a file SITE_METHOD, you'd have to use 
-$(PKG)_SITE instead of DL_DIR.
+  Otherwise,
 
-  It is possible to use hardlinking or symlinking instead of copying. 
-Buildroot provides the BR2_LOCALFILES config option for that (in Build 
-options -> Commands). Just set that to "ln" for hard linking or "ln -s" 
-for symlinking.
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+
 
   Regards,
   Arnout
+
+>
+>   XMLSTARLET_DEPENDENCIES += libxml2 libxslt \
+>   	$(if $(BR2_PACKAGE_LIBICONV),libiconv)
+>
+
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
