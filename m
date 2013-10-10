@@ -1,52 +1,90 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Thu, 10 Oct 2013 10:44:27 +0300
-Subject: [Buildroot] [PATCH 2/2] protobuf-c: needs thread support
-In-Reply-To: <1381389916.8952.2.camel@phoenix>
-References: <1381389798.8952.0.camel@phoenix> <1381389916.8952.2.camel@phoenix>
-Message-ID: <20131010074427.GA4875@tarshish>
+From: Alvaro Gamez <alvaro.gamez@hazent.com>
+Date: Thu, 10 Oct 2013 09:47:03 +0200
+Subject: [Buildroot] [PATCH] libxmlrpc: new package
+In-Reply-To: <52564DE1.5020009@mind.be>
+References: <CAM+bi4vJbFEGdDKMjJxesqR8T=g=KQkgeZpaLNy=1L_FsDkrPA@mail.gmail.com>
+ <1381320976-948-1-git-send-email-alvaro.gamez@hazent.com>
+ <CAAXf6LUo7nVgHoRNy5aqseXEijPACxsp7NwVJSUQ-q_bQR0VMw@mail.gmail.com>
+ <52564DE1.5020009@mind.be>
+Message-ID: <CAM+bi4u9VOG5WB-n-gQRMEhgu67hLwQ-D2hoZnKcFYdCXLMFZQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Axel,
+Well, that's true (as is the case in this particular patch), but it's also
+true that it doesn't make any bad. It's just a minor inconvenience and it
+gives some consistency to the files name, I think I mostly like it.
 
-On Thu, Oct 10, 2013 at 03:25:16PM +0800, Axel Lin wrote:
-> Signed-off-by: Axel Lin <axel.lin@ingics.com>
-> ---
->  package/protobuf-c/Config.in | 5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/protobuf-c/Config.in b/package/protobuf-c/Config.in
-> index 9aff6e2..17cc8f1 100644
-> --- a/package/protobuf-c/Config.in
-> +++ b/package/protobuf-c/Config.in
-> @@ -1,6 +1,7 @@
->  config BR2_PACKAGE_PROTOBUF_C
->  	bool "protobuf-c"
->  	depends on BR2_INSTALL_LIBSTDCPP
-> +	depends on BR2_TOOLCHAIN_HAS_THREADS # protobuf
+Regards
 
-This should be squashed into the previous patch. Although strictly speaking 
-bisectability is not broken by the previous patch (build without threads is 
-broken already), it is nicer IMO.
 
-baruch
+2013/10/10 Arnout Vandecappelle <arnout@mind.be>
 
->  	select BR2_PACKAGE_PROTOBUF
->  	help
->  	  Code generator and runtime libraries to use Protocol Buffers
-> @@ -8,5 +9,5 @@ config BR2_PACKAGE_PROTOBUF_C
->  
->  	  http://code.google.com/p/protobuf-c/
->  
-> -comment "protobuf-c requires a toolchain with C++ support enabled"
-> -	depends on !BR2_INSTALL_LIBSTDCPP
-> +comment "protobuf-c requires a toolchain with C++ and thread support"
-> +	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
+> On 10/09/13 15:09, Thomas De Schampheleire wrote:
+>
+>> Hi Alvaro,
+>>
+>> On Wed, Oct 9, 2013 at 2:16 PM, Alvaro G. M<alvaro.gamez@hazent.com>
+>>  wrote:
+>>
+>>> >Signed-off-by: Thomas Petazzoni<thomas.petazzoni@**free-electrons.com<thomas.petazzoni@free-electrons.com>
+>>> >
+>>> >Signed-off-by: Alvaro G. M<alvaro.gamez@hazent.com>
+>>> >---
+>>> >  package/Config.in                                  |  1 +
+>>> >  package/libxmlrpc/Config.in                        | 10 ++++++++
+>>> >  .../libxmlrpc-01-fix-gennmtab-**build.patch          | 25
+>>> ++++++++++++++++++
+>>> >  .../libxmlrpc-02-fix-non-**cplusplus-build.patch     | 27
+>>> +++++++++++++++++++
+>>> >  .../libxmlrpc/libxmlrpc-03-**non-wchar-build.patch   | 24
+>>> +++++++++++++++++
+>>> >  .../libxmlrpc-04-use-correct-**curl-config.patch     | 22
+>>> ++++++++++++++++
+>>> >  package/libxmlrpc/libxmlrpc.mk                     | 30
+>>> ++++++++++++++++++++++
+>>> >  7 files changed, 139 insertions(+)
+>>> >  create mode 100644 package/libxmlrpc/Config.in
+>>> >  create mode 100644 package/libxmlrpc/libxmlrpc-**
+>>> 01-fix-gennmtab-build.patch
+>>> >  create mode 100644 package/libxmlrpc/libxmlrpc-**
+>>> 02-fix-non-cplusplus-build.**patch
+>>> >  create mode 100644 package/libxmlrpc/libxmlrpc-**
+>>> 03-non-wchar-build.patch
+>>> >  create mode 100644 package/libxmlrpc/libxmlrpc-**
+>>> 04-use-correct-curl-config.**patch
+>>> >  create mode 100644 package/libxmlrpc/libxmlrpc.mk
+>>>
+>> We have had a long discussion on two buildroot developer days about
+>> the format of the number in patch names. I thought we had decided to
+>> use a four-digit format to correspond to the patches generated with
+>> git. So this should be 0001, 0002, etc.
+>> However, this may be mis-remembered by me, so I'm including some of
+>> the people involved in that discussion to this mail...
+>>
+>
+>  AFAICR we concluded that it wasn't necessary to enforce four digits,
+> since very few of the patches are generated from git anyway.
+>
+>  Regards,
+>  Arnout
+>
+>
+> --
+> Arnout Vandecappelle                          arnout at mind be
+> Senior Embedded Software Architect            +32-16-286500
+> Essensium/Mind                                http://www.mind.be
+> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+> LinkedIn profile: http://www.linkedin.com/in/**arnoutvandecappelle<http://www.linkedin.com/in/arnoutvandecappelle>
+> GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+>
+
+
 
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+?lvaro G?mez Machado
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20131010/8cc1d135/attachment.html>
