@@ -1,37 +1,50 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 10 Oct 2013 23:14:38 +0200
-Subject: [Buildroot] [git commit] package/rpi-firmware: bump version
-Message-ID: <20131011082158.8CB889B9C3@busybox.osuosl.org>
+Date: Fri, 11 Oct 2013 00:08:01 +0200
+Subject: [Buildroot] [git commit] package/weston: introduce infrastructure
+	to select other compositors
+Message-ID: <20131011082158.D35F69B9C2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=883c4dc43aed75d1dc0875b0ee529d9e72c7f01e
+commit: http://git.buildroot.net/buildroot/commit/?id=8c19412415f8b7b835a52f5d396661ac17aafc80
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Fixes for de-interlacing of /unusual/ MPEG streams.
-Yes, some people seem to enjoy generating MPEG streams in
-which interlacing is not constant. That's apparently 100%
-valid, but yet very unusual, and at the very least, weird.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/rpi-firmware/rpi-firmware.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/weston/Config.in |   11 +++++++++--
+ 1 files changed, 9 insertions(+), 2 deletions(-)
 
-diff --git a/package/rpi-firmware/rpi-firmware.mk b/package/rpi-firmware/rpi-firmware.mk
-index ddb48b3..ecd9dbf 100644
---- a/package/rpi-firmware/rpi-firmware.mk
-+++ b/package/rpi-firmware/rpi-firmware.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/weston/Config.in b/package/weston/Config.in
+index 56eb135..0f168ac 100644
+--- a/package/weston/Config.in
++++ b/package/weston/Config.in
+@@ -14,8 +14,6 @@ config BR2_PACKAGE_WESTON
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # wayland
+ 	# Runtime dependency
+ 	select BR2_PACKAGE_XKEYBOARD_CONFIG
+-	# Make sure at least one backend is selected
+-	select BR2_PACKAGE_WESTON_FBDEV
+ 	help
+ 	  Weston is the reference implementation of a Wayland
+ 	  compositor, and a useful compositor in its own right.
+@@ -26,7 +24,16 @@ config BR2_PACKAGE_WESTON
  
--RPI_FIRMWARE_VERSION = e6b21d6
-+RPI_FIRMWARE_VERSION = 58036da
- RPI_FIRMWARE_SITE = http://github.com/raspberrypi/firmware/tarball/$(RPI_FIRMWARE_VERSION)
- RPI_FIRMWARE_LICENSE = BSD-3c
- RPI_FIRMWARE_LICENSE_FILES = boot/LICENCE.broadcom
+ if BR2_PACKAGE_WESTON
+ 
++# These two options make sure at least one compositor is selected.
++config BR2_PACKAGE_WESTON_HAS_COMPOSITOR
++	bool
++config BR2_PACKAGE_WESTON_NEEDS_ONE_COMPOSITOR
++	def_bool y
++	depends on ! BR2_PACKAGE_WESTON_HAS_COMPOSITOR
++	select BR2_PACKAGE_WESTON_FBDEV
++
+ config BR2_PACKAGE_WESTON_FBDEV
+ 	bool "fbdev compositor"
++	default y
+ 
+ endif
