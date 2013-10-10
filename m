@@ -1,49 +1,46 @@
-From: spdawson at gmail.com <spdawson@gmail.com>
-Date: Thu, 10 Oct 2013 11:05:45 +0100
-Subject: [Buildroot] [PATCH] uboot: support -p option for mkenvimage
-Message-ID: <1381399545-30713-1-git-send-email-spdawson@gmail.com>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Thu, 10 Oct 2013 12:10:42 +0200
+Subject: [Buildroot] [PATCH v4 1/1] manual: update review process and
+	patchwork
+In-Reply-To: <1381351575-16776-1-git-send-email-rjbarnet@rockwellcollins.com>
+References: <1381351575-16776-1-git-send-email-rjbarnet@rockwellcollins.com>
+Message-ID: <CAAXf6LU8n18JWgY_cKmK_MgR8eV3Uvbq-OCB-6XsQ32+J6v9CA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Simon Dawson <spdawson@gmail.com>
+On Wed, Oct 9, 2013 at 10:46 PM, Ryan Barnett
+<rjbarnet@rockwellcollins.com> wrote:
+> Adding more documentaiton based on discussion from the mailing list
+> in regards the buildroot review process and how patchworks can be
+> used to pull in patches for testing purposes.
+>
+> Mailing list discussion:
+> http://lists.busybox.net/pipermail/buildroot/2013-September/078170.html
+>
+> Signed-off-by: Ryan Barnett <rjbarnet@rockwellcollins.com>
+>
+> ---
+> v3 -> v4
+>  * Removed erronous 'the' (suggested by Thomas De Schampheleire)
+>  * Reword the sentence about the Patchwork website's main use
+>    for developers (suggested by Thomas De Schampheleire)
+>
+> v2 -> v3
+>  * Changed 'a' to 'an' when preceeding +mbox+ (suggested by Thomas
+>    De Schampheleire)
+>
+> v1 -> v2
+>  * Updated all references to patchwork to be Patchwork or Buildroot's
+>    Patchwork instead of a few misspellings (suggested by Thomas
+>    Petazzoni)
+>  * Added clarification that patchwork main use is for the Buildroot
+>    maintainer (suggested by Thomas Petazzoni)
+> ---
+>  docs/manual/contribute.txt   |   12 +++++++++++-
+>  docs/manual/get-involved.txt |   39 ++++++++++++++++++++++++++++++++++++---
+>  2 files changed, 47 insertions(+), 4 deletions(-)
 
-Signed-off-by: Simon Dawson <spdawson@gmail.com>
----
- boot/uboot/Config.in | 6 ++++++
- boot/uboot/uboot.mk  | 1 +
- 2 files changed, 7 insertions(+)
-
-diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
-index 998cda2..c341670 100644
---- a/boot/uboot/Config.in
-+++ b/boot/uboot/Config.in
-@@ -242,6 +242,12 @@ config BR2_TARGET_UBOOT_ENVIMAGE_SIZE
- 	  Size of envronment, can be prefixed with 0x for hexadecimal
- 	  values.
- 
-+config BR2_TARGET_UBOOT_ENVIMAGE_PADDING_BYTE
-+	string "Padding byte"
-+	default "0xff"
-+	help
-+	  Pad the image with the specified byte.
-+
- endif # BR2_TARGET_UBOOT_ENVIMAGE
- 
- endif # BR2_TARGET_UBOOT
-diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-index dc8e26f..77cad6a 100644
---- a/boot/uboot/uboot.mk
-+++ b/boot/uboot/uboot.mk
-@@ -117,6 +117,7 @@ define UBOOT_INSTALL_IMAGES_CMDS
- 		cp -dpf $(@D)/$(BR2_TARGET_UBOOT_SPL_NAME) $(BINARIES_DIR)/)
- 	$(if $(BR2_TARGET_UBOOT_ENVIMAGE),
- 		$(HOST_DIR)/usr/bin/mkenvimage -s $(BR2_TARGET_UBOOT_ENVIMAGE_SIZE) \
-+		-p $(call qstrip,$(BR2_TARGET_UBOOT_ENVIMAGE_PADDING_BYTE)) \
- 		-o $(BINARIES_DIR)/uboot-env.bin $(BR2_TARGET_UBOOT_ENVIMAGE_SOURCE))
- endef
- 
--- 
-1.8.1.2
+Acked-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
