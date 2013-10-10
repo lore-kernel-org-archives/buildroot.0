@@ -1,46 +1,30 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 10 Oct 2013 17:06:58 +0200
-Subject: [Buildroot] [PATCH] uboot: support -p option for mkenvimage
-In-Reply-To: <1381399545-30713-1-git-send-email-spdawson@gmail.com>
-References: <1381399545-30713-1-git-send-email-spdawson@gmail.com>
-Message-ID: <20131010170658.68908aae@skate>
+From: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+Date: Thu, 10 Oct 2013 17:56:58 +0200
+Subject: [Buildroot] [PATCH 1/1] boost: bump to version 1.54.0
+Message-ID: <1381420618-7389-1-git-send-email-jerzy.grzegorek@trzebnica.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Simon,
+Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+---
+ package/boost/boost.mk |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-On Thu, 10 Oct 2013 11:05:45 +0100, spdawson at gmail.com wrote:
-> From: Simon Dawson <spdawson@gmail.com>
-> 
-> Signed-off-by: Simon Dawson <spdawson@gmail.com>
-> ---
->  boot/uboot/Config.in | 6 ++++++
->  boot/uboot/uboot.mk  | 1 +
->  2 files changed, 7 insertions(+)
-> 
-> diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
-> index 998cda2..c341670 100644
-> --- a/boot/uboot/Config.in
-> +++ b/boot/uboot/Config.in
-> @@ -242,6 +242,12 @@ config BR2_TARGET_UBOOT_ENVIMAGE_SIZE
->  	  Size of envronment, can be prefixed with 0x for hexadecimal
->  	  values.
->  
-> +config BR2_TARGET_UBOOT_ENVIMAGE_PADDING_BYTE
-> +	string "Padding byte"
-> +	default "0xff"
-> +	help
-> +	  Pad the image with the specified byte.
-
-Maybe a few more words like in which cases this is useful, would be
-nice to have I believe (I myself don't know when this option should be
-used).
-
-Thomas
+diff --git a/package/boost/boost.mk b/package/boost/boost.mk
+index 160a9f1..a745ce1 100644
+--- a/package/boost/boost.mk
++++ b/package/boost/boost.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-BOOST_VERSION = 1.53.0
++BOOST_VERSION = 1.54.0
+ BOOST_FILE_VERSION = $(subst .,_,$(BOOST_VERSION))
+ BOOST_SOURCE = boost_$(BOOST_FILE_VERSION).tar.bz2
+ BOOST_SITE = http://downloads.sourceforge.net/project/boost/boost/$(BOOST_VERSION)
 -- 
-Thomas Petazzoni, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.7.9.5
