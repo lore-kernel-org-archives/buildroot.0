@@ -1,9 +1,7 @@
 From: Axel Lin <axel.lin@ingics.com>
-Date: Thu, 10 Oct 2013 09:07:32 +0800
-Subject: [Buildroot] [PATCH v2 2/2] xmlstarlet: bump to version 1.5.0
-In-Reply-To: <1381367104.4248.1.camel@phoenix>
-References: <1381367104.4248.1.camel@phoenix>
-Message-ID: <1381367252.4248.3.camel@phoenix>
+Date: Thu, 10 Oct 2013 11:01:41 +0800
+Subject: [Buildroot] [PATCH 1/2] spice-protocol: bump to version 0.12.6
+Message-ID: <1381374101.6420.1.camel@phoenix>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,21 +10,21 @@ To: buildroot@busybox.net
 
 Signed-off-by: Axel Lin <axel.lin@ingics.com>
 ---
- package/xmlstarlet/xmlstarlet.mk | 2 +-
+ package/spice-protocol/spice-protocol.mk | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/xmlstarlet/xmlstarlet.mk b/package/xmlstarlet/xmlstarlet.mk
-index 4a30feb..16f736e 100644
---- a/package/xmlstarlet/xmlstarlet.mk
-+++ b/package/xmlstarlet/xmlstarlet.mk
+diff --git a/package/spice-protocol/spice-protocol.mk b/package/spice-protocol/spice-protocol.mk
+index 62a028d..fda87b6 100644
+--- a/package/spice-protocol/spice-protocol.mk
++++ b/package/spice-protocol/spice-protocol.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XMLSTARLET_VERSION = 1.3.0
-+XMLSTARLET_VERSION = 1.5.0
- XMLSTARLET_SITE = http://downloads.sourceforge.net/project/xmlstar/xmlstarlet/$(XMLSTARLET_VERSION)
- XMLSTARLET_LICENSE = MIT
- XMLSTARLET_LICENSE_FILES = COPYING
+-SPICE_PROTOCOL_VERSION         = 0.12.2
++SPICE_PROTOCOL_VERSION         = 0.12.6
+ SPICE_PROTOCOL_SOURCE          = spice-protocol-$(SPICE_PROTOCOL_VERSION).tar.bz2
+ SPICE_PROTOCOL_SITE            = http://www.spice-space.org/download/releases/
+ SPICE_PROTOCOL_LICENSE         = BSD-3c
 -- 
 1.8.1.2
