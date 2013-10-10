@@ -1,39 +1,71 @@
-From: Axel Lin <axel.lin@ingics.com>
-Date: Thu, 10 Oct 2013 15:25:16 +0800
-Subject: [Buildroot] [PATCH 2/2] protobuf-c: needs thread support
-In-Reply-To: <1381389798.8952.0.camel@phoenix>
-References: <1381389798.8952.0.camel@phoenix>
-Message-ID: <1381389916.8952.2.camel@phoenix>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 10 Oct 2013 09:12:51 +0200
+Subject: [Buildroot] [PATCH 2 of 4] libnfnetlink: add license information
+In-Reply-To: <8738oayyue.fsf@dell.be.48ers.dk>
+References: <patchbomb.1381226814@argentina>
+ <5c8fa6d049957876145a.1381226816@argentina> <8738oayyue.fsf@dell.be.48ers.dk>
+Message-ID: <52565373.6040204@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Axel Lin <axel.lin@ingics.com>
----
- package/protobuf-c/Config.in | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+On 10/09/13 22:27, Peter Korsgaard wrote:
+>>>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin@gmail.com> writes:
+>
+>   Thomas> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+>   Thomas> ---
+>   Thomas>  package/libnfnetlink/libnfnetlink.mk |  2 ++
+>   Thomas>  1 files changed, 2 insertions(+), 0 deletions(-)
+>
+>   Thomas> diff --git a/package/libnfnetlink/libnfnetlink.mk b/package/libnfnetlink/libnfnetlink.mk
+>   Thomas> --- a/package/libnfnetlink/libnfnetlink.mk
+>   Thomas> +++ b/package/libnfnetlink/libnfnetlink.mk
+>   Thomas> @@ -9,5 +9,7 @@ LIBNFNETLINK_SOURCE = libnfnetlink-$(LIB
+>   Thomas>  LIBNFNETLINK_SITE = http://www.netfilter.org/projects/libnfnetlink/files
+>   Thomas>  LIBNFNETLINK_AUTORECONF = YES
+>   Thomas>  LIBNFNETLINK_INSTALL_STAGING = YES
+>   Thomas> +LIBNFNETLINK_LICENSE = GPLv2+
+>   Thomas> +LIBNFNETLINK_LICENSE_FILES = COPYING
+>
+> Hmm, I don't see that in any of the source files:
+>
+> grep -rls 'any later'
+> m4/libtool.m4
+> configure
+> config.sub
+> ltmain.sh
+> build-aux/compile
+> build-aux/config.sub
+> build-aux/ltmain.sh
+> build-aux/missing
+> build-aux/depcomp
+> build-aux/config.guess
+> COPYING
+> missing
+> depcomp
+> config.guess
+>
+> and src/libnfnetlink.c explicitly states:
+>
+>   * This program is free software; you can redistribute it and/or modify it
+>   * under the terms of the GNU General Public License version 2 as published
+>   * by the Free Software Foundation.
+>
+> So I dropped the '+' and committed, thanks.
 
-diff --git a/package/protobuf-c/Config.in b/package/protobuf-c/Config.in
-index 9aff6e2..17cc8f1 100644
---- a/package/protobuf-c/Config.in
-+++ b/package/protobuf-c/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_PROTOBUF_C
- 	bool "protobuf-c"
- 	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # protobuf
- 	select BR2_PACKAGE_PROTOBUF
- 	help
- 	  Code generator and runtime libraries to use Protocol Buffers
-@@ -8,5 +9,5 @@ config BR2_PACKAGE_PROTOBUF_C
- 
- 	  http://code.google.com/p/protobuf-c/
- 
--comment "protobuf-c requires a toolchain with C++ support enabled"
--	depends on !BR2_INSTALL_LIBSTDCPP
-+comment "protobuf-c requires a toolchain with C++ and thread support"
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
+  Perhaps we should report to the author that his README is inconsistent 
+with the source?
+
+  Regards,
+  Arnout
+
+
 -- 
-1.8.1.2
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
