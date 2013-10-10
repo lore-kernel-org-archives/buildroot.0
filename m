@@ -1,100 +1,86 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 11 Oct 2013 08:56:53 +0200
-Subject: [Buildroot] [git commit] package/weston: add RPi compositor
-Message-ID: <20131011082158.EAA159B6C2@busybox.osuosl.org>
+Date: Fri, 11 Oct 2013 00:07:49 +0200
+Subject: [Buildroot] [git commit] package/weston: fix configure.ac to check
+	for wayland-scanner
+Message-ID: <20131011082158.C31A19B9C2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=9f7e8f120dfeddd8b49eb4d232253cc3f9ac8efa
+commit: http://git.buildroot.net/buildroot/commit/?id=af28f7901ea2a80435714e98fb750b4c03570c96
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Procedure highly inspired by:
-    http://wayland.freedesktop.org/raspberrypi.html
+configure whines while checking for wayland-scanner.
 
-The resulting weston works almost flawlessly, but requires a bit
-of love:
-  - /boot/config.txt must include this line: dispmanx_offline=1
-  - at least 128MiB of RAM must be allocated to the GPU
-  - after 24-or-so terminal-clients are connected, the screen
-    turns black. Exiting a client restores the screen
+wayland-scanner is used to generate the protocol parser C files from
+the protocol definition XML files.
 
-It seems increasing/decreasing the amount of memory allocated to
-the GPU makes the clients limit to wobble above/below 24 clients
-at a time. YMMV, as they say...
+weston has a hard-dependency on wayland-scanner, so it can regenerate
+its shell/mouse/keyboard/... "handlers".
 
-Without dispmanx_offline=1, the limit is much below 24, at around 13.
-But changing the amount of memory allocated to the GPU does not change
-this limit in this case. YMMV, again.
+Since we're using a tarball, those protocol files are already generated
+and up-to-date, but the check is hard-coded and unconditional. If
+wayland-scanner is missing, configure fails.
 
-Anyway, there are not many different clients available, besides the
-terminal client, since all other clients are EGL-based, and there
-is (yet) no EGL support (for weston!) on the RPi. So the tests were
-made only with the terminal client.
+We could well patch away this check, but we'd have to carry and maintain
+it probably for ever.
 
-The system is rather smooth, but spwaning too many clients in a
-rapid-fire is sure to exhibit some lag. Resizing windows is a bit
-jerky, but moving them along is fine.
-
-Note: the config option has a depends on THREADS due to rpi-userland,
-even though weston itself already inherits the same dependency from
-wayland. But better be clean and safe.
+Better to fix it: add a patch from upstream weston to fix configure
+whining.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/weston/Config.in |    9 +++++++++
- package/weston/weston.mk |   14 +++++++++++++-
- 2 files changed, 22 insertions(+), 1 deletions(-)
+ ...02-fix-configure.ac-check-wayland-scanner.patch |   26 ++++++++++++++++++++
+ package/weston/weston.mk                           |    4 +++
+ 2 files changed, 30 insertions(+), 0 deletions(-)
 
-diff --git a/package/weston/Config.in b/package/weston/Config.in
-index 0f168ac..4532c28 100644
---- a/package/weston/Config.in
-+++ b/package/weston/Config.in
-@@ -36,4 +36,13 @@ config BR2_PACKAGE_WESTON_FBDEV
- 	bool "fbdev compositor"
- 	default y
- 
-+config BR2_PACKAGE_WESTON_RPI
-+	bool "RPi compositor"
-+	depends on BR2_arm                      # rpi-userland
-+	depends on BR2_INSTALL_LIBSTDCPP        # rpi-userland
-+	depends on BR2_LARGEFILE                # rpi-userland
-+	depends on BR2_TOOLCHAIN_HAS_THREADS    # rpi-userland
-+	select BR2_PACKAGE_RPI_USERLAND
-+	select BR2_PACKAGE_WESTON_HAS_COMPOSITOR
+diff --git a/package/weston/weston-0002-fix-configure.ac-check-wayland-scanner.patch b/package/weston/weston-0002-fix-configure.ac-check-wayland-scanner.patch
+new file mode 100644
+index 0000000..ca7368f
+--- /dev/null
++++ b/package/weston/weston-0002-fix-configure.ac-check-wayland-scanner.patch
+@@ -0,0 +1,26 @@
++commit 9f43cb48aac9d27aa49fe955104f5cfd204703ed
++Author: Quentin Glidic <sardemff7+git@sardemff7.net>
++Date:   Sat Aug 24 20:36:10 2013 +0200
 +
- endif
++    autotools: Fix AC_PATH_PROG call
++    
++    Signed-off-by: Quentin Glidic <sardemff7+git@sardemff7.net>
++    Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
++
++diff --git a/configure.ac b/configure.ac
++index 0129157..43e5e5c 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -424,8 +424,10 @@ if test "x$have_lcms" = xyes; then
++ fi
++ AM_CONDITIONAL(HAVE_LCMS, [test "x$have_lcms" = xyes])
++ 
++-AC_PATH_PROG([wayland_scanner], [wayland-scanner],
++-	     [AC_MSG_ERROR("wayland-scanner is needed to compile weston")])
+++AC_PATH_PROG([wayland_scanner], [wayland-scanner])
+++if test x$wayland_scanner = x; then
+++	AC_MSG_ERROR([wayland-scanner is needed to compile weston])
+++fi
++ 
++ AC_CONFIG_FILES([Makefile
++ 		 shared/Makefile
 diff --git a/package/weston/weston.mk b/package/weston/weston.mk
-index 6b4dece..c8b47a7 100644
+index 4b99dce..6b4dece 100644
 --- a/package/weston/weston.mk
 +++ b/package/weston/weston.mk
-@@ -24,8 +24,8 @@ WESTON_CONF_OPT = \
- 	--disable-drm-compositor \
- 	--disable-wayland-compositor \
- 	--disable-headless-compositor \
--	--disable-rpi-compositor \
- 	--disable-weston-launch \
-+	--disable-colord \
- 	--disable-libunwind
+@@ -12,6 +12,10 @@ WESTON_LICENSE_FILES = COPYING
  
- ifeq ($(BR2_PACKAGE_WESTON_FBDEV),y)
-@@ -34,4 +34,16 @@ else
- WESTON_CONF_OPT += --disable-fbdev-compositor
- endif
- 
-+ifeq ($(BR2_PACKAGE_WESTON_RPI),y)
-+WESTON_DEPENDENCIES += rpi-userland
-+WESTON_CONF_OPT += --enable-rpi-compositor \
-+	--disable-resize-optimization \
-+	--disable-setuid-install \
-+	--disable-xwayland-test \
-+	--disable-simple-egl-clients \
-+	WESTON_NATIVE_BACKEND=rpi-backend.so
-+else
-+WESTON_CONF_OPT += --disable-rpi-compositor
-+endif # BR2_PACKAGE_WESTON_RPI
+ WESTON_DEPENDENCIES = host-pkgconf wayland libxkbcommon pixman libpng \
+ 	jpeg mtdev udev cairo
 +
- $(eval $(autotools-package))
++# We touch configure.ac with one of our patches
++WESTON_AUTORECONF = YES
++
+ WESTON_CONF_OPT = \
+ 	--disable-egl \
+ 	--disable-simple-egl-clients \
