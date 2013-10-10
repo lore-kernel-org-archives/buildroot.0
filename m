@@ -1,37 +1,47 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 10 Oct 2013 09:16:11 +0200
-Subject: [Buildroot] [PATCH 5/7] mongoose: needs mmu
-In-Reply-To: <1381350348-25751-5-git-send-email-gustavo@zacarias.com.ar>
-References: <1381350348-25751-1-git-send-email-gustavo@zacarias.com.ar>
- <1381350348-25751-5-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <5256543B.6090005@mind.be>
+Date: Thu, 10 Oct 2013 08:49:05 +0200
+Subject: [Buildroot] [PATCH] libxmlrpc: new package
+In-Reply-To: <CAAXf6LUo7nVgHoRNy5aqseXEijPACxsp7NwVJSUQ-q_bQR0VMw@mail.gmail.com>
+References: <CAM+bi4vJbFEGdDKMjJxesqR8T=g=KQkgeZpaLNy=1L_FsDkrPA@mail.gmail.com>
+ <1381320976-948-1-git-send-email-alvaro.gamez@hazent.com>
+ <CAAXf6LUo7nVgHoRNy5aqseXEijPACxsp7NwVJSUQ-q_bQR0VMw@mail.gmail.com>
+Message-ID: <52564DE1.5020009@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 10/09/13 22:25, Gustavo Zacarias wrote:
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->   package/mongoose/Config.in | 1 +
->   1 file changed, 1 insertion(+)
+On 10/09/13 15:09, Thomas De Schampheleire wrote:
+> Hi Alvaro,
 >
-> diff --git a/package/mongoose/Config.in b/package/mongoose/Config.in
-> index 7199712..1668476 100644
-> --- a/package/mongoose/Config.in
-> +++ b/package/mongoose/Config.in
-> @@ -1,6 +1,7 @@
->   config BR2_PACKAGE_MONGOOSE
->   	bool "mongoose"
->   	depends on BR2_TOOLCHAIN_HAS_THREADS
-> +	depends on BR2_USE_MMU # fork()
->   	help
->   	  Mongoose is a small and easy to use web server
+> On Wed, Oct 9, 2013 at 2:16 PM, Alvaro G. M<alvaro.gamez@hazent.com>  wrote:
+>> >Signed-off-by: Thomas Petazzoni<thomas.petazzoni@free-electrons.com>
+>> >Signed-off-by: Alvaro G. M<alvaro.gamez@hazent.com>
+>> >---
+>> >  package/Config.in                                  |  1 +
+>> >  package/libxmlrpc/Config.in                        | 10 ++++++++
+>> >  .../libxmlrpc-01-fix-gennmtab-build.patch          | 25 ++++++++++++++++++
+>> >  .../libxmlrpc-02-fix-non-cplusplus-build.patch     | 27 +++++++++++++++++++
+>> >  .../libxmlrpc/libxmlrpc-03-non-wchar-build.patch   | 24 +++++++++++++++++
+>> >  .../libxmlrpc-04-use-correct-curl-config.patch     | 22 ++++++++++++++++
+>> >  package/libxmlrpc/libxmlrpc.mk                     | 30 ++++++++++++++++++++++
+>> >  7 files changed, 139 insertions(+)
+>> >  create mode 100644 package/libxmlrpc/Config.in
+>> >  create mode 100644 package/libxmlrpc/libxmlrpc-01-fix-gennmtab-build.patch
+>> >  create mode 100644 package/libxmlrpc/libxmlrpc-02-fix-non-cplusplus-build.patch
+>> >  create mode 100644 package/libxmlrpc/libxmlrpc-03-non-wchar-build.patch
+>> >  create mode 100644 package/libxmlrpc/libxmlrpc-04-use-correct-curl-config.patch
+>> >  create mode 100644 package/libxmlrpc/libxmlrpc.mk
+> We have had a long discussion on two buildroot developer days about
+> the format of the number in patch names. I thought we had decided to
+> use a four-digit format to correspond to the patches generated with
+> git. So this should be 0001, 0002, etc.
+> However, this may be mis-remembered by me, so I'm including some of
+> the people involved in that discussion to this mail...
 
-  Note that fork() is only needed for CGI, so you could instead build 
-with -DNO_CGI. It would be a pity to remove mongoose for NOMMU platforms 
-since it is ideally suited for them...
+  AFAICR we concluded that it wasn't necessary to enforce four digits, 
+since very few of the patches are generated from git anyway.
 
   Regards,
   Arnout
