@@ -1,127 +1,88 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Thu, 10 Oct 2013 09:59:46 +0200
-Subject: [Buildroot] [PATCH v3] ccache: expose control interface via
-	'make ccache-options'
-In-Reply-To: <1381339099-3666-1-git-send-email-tjlee@ambarella.com>
-References: <5253AA39.1090908@mind.be>
- <1381339099-3666-1-git-send-email-tjlee@ambarella.com>
-Message-ID: <CAAXf6LWg8YGG-yv3dvZjqswagBOMV8gmT1XsWz4KOygEbFUtGw@mail.gmail.com>
+Date: Thu, 10 Oct 2013 10:17:56 +0200
+Subject: [Buildroot] legal-info: multiple licenses separator
+In-Reply-To: <20131010095336.3ae384d3@skate>
+References: <CAAXf6LXusXB0QSG_EHOv8VpcEY+mpuUeW-pvnXtWNUrFfb_0Kg@mail.gmail.com>
+ <52555A15.3030504@lucaceresoli.net>
+ <CAAXf6LWnzyTKyt-b7qUxY=bJOYyaDkVMN60K9-eqRV6MC7B72g@mail.gmail.com>
+ <52564CCF.4000609@mind.be> <20131010095336.3ae384d3@skate>
+Message-ID: <CAAXf6LVCkWZTyv-__Z=gGthTzzgNdp-OsTNZCfXFCEFXO2GMgw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Tzu-Jung,
+Hi,
 
-On Wed, Oct 9, 2013 at 7:18 PM, Tzu-Jung Lee <roylee17@gmail.com> wrote:
-> usage:
->         # set cache limit size
->         make CCACHE_OPTIONS="--max-size=5G" ccache-options
+On Thu, Oct 10, 2013 at 9:53 AM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Dear Arnout Vandecappelle,
 >
->         # zero statistics counters
->         make CCACHE_OPTIONS="--zero-stats" ccache-options
+> On Thu, 10 Oct 2013 08:44:31 +0200, Arnout Vandecappelle wrote:
 >
-> Signed-off-by: Tzu-Jung Lee <tjlee@ambarella.com>
-> ---
-> Fix a typo of manual in v2
+>> > package/lttng-libust/lttng-libust.mk
+>> > -LTTNG_LIBUST_LICENSE = LGPLv2.1; GPLv2 for lttng-gen-tp and ust-ctl
+>> > +LTTNG_LIBUST_LICENSE = LGPLv2.1, GPLv2 (lttng-gen-tp, ust-ctl)
+>>
+>>   I thought you wanted to avoid commas? :-)  Anyway, I disagree with your
+>> cut argument: cut -d \" -f 6 should do the trick for you.
 >
->  docs/manual/ccache-support.txt | 11 +++++++++++
->  package/ccache/ccache.mk       |  5 +++++
->  2 files changed, 16 insertions(+)
+> No, I don't think Thomas wanted to avoid commas, on the contrary. He
+> wanted to *allow* commas in the <pkg>_LICENSE variable, and to do this,
+> was proposing to change the CSV separator from comma to something else.
 >
-> diff --git a/docs/manual/ccache-support.txt b/docs/manual/ccache-support.txt
-> index 4969180..fe06a01 100644
-> --- a/docs/manual/ccache-support.txt
-> +++ b/docs/manual/ccache-support.txt
-> @@ -23,3 +23,14 @@ remove this directory.
+>>   However, perhaps we should take a step back on the legal info ofr a
+>> minute. Considering the number of corrections we have to make to it, and
+>> taking into account that we never check if it's still valid after version
+>> bumps, I wonder how useful our license manifest really is. In the end,
+>> your legal department will still need to check the correctness of the
+>> license information... Collecting the sources and the LICENSE_FILES _is_
+>> really useful, but the specified licenses are only indicative. So I
+>> wouldn't spend too much time on formalizing it.
 >
->  You can get statistics on the cache (its size, number of hits,
->  misses, etc.) by running +make ccache-stats+.
-> +
-> +The make target +ccache-options+ and the +CCACHE_OPTIONS+ variable
-> +provide more generic access to the ccache. For example
-> +
-> +-----------------
-> +# set cache limit size
-> +make CCACHE_OPTIONS="--max-size=5G" ccache-options
-> +
-> +# zero statistics counters
-> +make CCACHE_OPTIONS="--zero-stats" ccache-options
-> +-----------------
-> diff --git a/package/ccache/ccache.mk b/package/ccache/ccache.mk
-> index c5e9385..663a959 100644
-> --- a/package/ccache/ccache.mk
-> +++ b/package/ccache/ccache.mk
-> @@ -45,3 +45,8 @@ ifeq ($(BR2_CCACHE),y)
->  ccache-stats: host-ccache
->         $(Q)$(CCACHE) -s
->  endif
-> +
-> +ifeq ($(BR2_CCACHE),y)
-> +ccache-options: host-ccache
-> +       $(Q)$(CCACHE) $(CCACHE_OPTIONS)
-> +endif
+> I do understand these arguments, but I continue to believe that the
+> license information is useful. If your legal department checks this,
+> and reports to you that there is a mistake, then you will send a patch
+> to Buildroot. If everybody does that, the licensing informations get
+> more and more correct and accurate. Pretty much like bugs in software
+> tend to progressively disappear as more and more people use the
+> software.
+>
+> As an example, the berkeleydb bump from version 5 to 6 was done without
+> the appropriate license information change. But not later than one or
+> two days later, somebody else noticed that and the situation is in the
+> process of being fixed.
+>
+> Also, remember that not all companies have legal departments. Many
+> small to medium size businesses do embedded Linux products. And for
+> them, having a license manifest that is 98% accurate is a lot better
+> than having no license manifest at all.
+>
+> There may be some inaccuracies in the license informations that we
+> have, but generally, at least the information of whether the component
+> is under a non-copyleft or a copyleft license is correct, and this is
+> what matters most in my opinion to achieve basic license compliance.
+>
+>>   Also, if we're going to formalize it more, perhaps we should consider
+>> moving to a real formal specification, e.g. spdx. That may make if
+>> possible in the future that a tool can at least verify the license
+>> information we provide.
+>
+> I do agree that having a look at SPDX is interesting. They define a
+> formal list of licenses (https://spdx.org/licenses/). However, I don't
+> know how/if they formalized how to specify which license applies to
+> which specific component inside a given package.
 
-I think this 'ifeq' block can be merged with the previous one
-containing ccache-stats.
+The SPDX specification is here:
+https://spdx.org/sites/spdx/files/spdx-1.1.pdf
 
-Also, while testing I noticed the following: if you do not specify
-CCACHE_OPTIONS, ccache gives its help message, but it is unclear to
-the user that he should put those options in CCACHE_OPTIONS. Assume
-someone knows there is a make target ccache-options but did not read
-the manual.
-Therefore, I would suggest to add a check inside the ccache-options
-recipe for a non-empty CCACHE_OPTIONS and give a warning message.
-Something like:
+It seems you can either put the file in flat format (I think most
+suitable for buildroot) and in RDF format (less readable if you ask
+me).
 
-diff --git a/package/ccache/ccache.mk b/package/ccache/ccache.mk
---- a/package/ccache/ccache.mk
-+++ b/package/ccache/ccache.mk
-@@ -48,5 +48,11 @@ endif
-
- ifeq ($(BR2_CCACHE),y)
- ccache-options: host-ccache
-+ifeq ($(CCACHE_OPTIONS),)
-+       $(Q)echo "Usage: make ccache-options CCACHE_OPTIONS=\"opts\""
-+       $(Q)echo "where 'opts' corresponds to one or more valid ccache
-options" \
-+               "(see ccache help text below)"
-+       $(Q)echo
-+endif
-        $(Q)$(CCACHE) $(CCACHE_OPTIONS)
- endif
-
-This makes the output:
-
-$ make ccache-options
-Usage: make ccache-options CCACHE_OPTIONS="opts"
-where 'opts' corresponds to one or more valid ccache options (see
-ccache help text below)
-
-Usage:
-    ccache [options]
-    ccache compiler [compiler options]
-    compiler [compiler options]          (via symbolic link)
-
-Options:
-    -c, --cleanup         delete old files and recalculate size counters
-                          (normally not needed as this is done automatically)
-    -C, --clear           clear the cache completely
-    -F, --max-files=N     set maximum number of files in cache to N (use 0 for
-                          no limit)
-    -M, --max-size=SIZE   set maximum size of cache to SIZE (use 0 for no
-                          limit; available suffixes: G, M and K; default
-                          suffix: G)
-    -s, --show-stats      show statistics summary
-    -z, --zero-stats      zero statistics counters
-
-    -h, --help            print this help text
-    -V, --version         print version and copyright information
-
-See also <http://ccache.samba.org>.
-make: *** [ccache-options] Error 1
-
+In principle I'm positive towards moving to SPDX, but I have no prior
+experience with it.
 
 Best regards,
 Thomas
