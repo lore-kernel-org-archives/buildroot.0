@@ -1,90 +1,79 @@
-From: Alvaro Gamez <alvaro.gamez@hazent.com>
-Date: Thu, 10 Oct 2013 09:47:03 +0200
-Subject: [Buildroot] [PATCH] libxmlrpc: new package
-In-Reply-To: <52564DE1.5020009@mind.be>
-References: <CAM+bi4vJbFEGdDKMjJxesqR8T=g=KQkgeZpaLNy=1L_FsDkrPA@mail.gmail.com>
- <1381320976-948-1-git-send-email-alvaro.gamez@hazent.com>
- <CAAXf6LUo7nVgHoRNy5aqseXEijPACxsp7NwVJSUQ-q_bQR0VMw@mail.gmail.com>
- <52564DE1.5020009@mind.be>
-Message-ID: <CAM+bi4u9VOG5WB-n-gQRMEhgu67hLwQ-D2hoZnKcFYdCXLMFZQ@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 10 Oct 2013 09:53:36 +0200
+Subject: [Buildroot] legal-info: multiple licenses separator
+In-Reply-To: <52564CCF.4000609@mind.be>
+References: <CAAXf6LXusXB0QSG_EHOv8VpcEY+mpuUeW-pvnXtWNUrFfb_0Kg@mail.gmail.com>
+ <52555A15.3030504@lucaceresoli.net>
+ <CAAXf6LWnzyTKyt-b7qUxY=bJOYyaDkVMN60K9-eqRV6MC7B72g@mail.gmail.com>
+ <52564CCF.4000609@mind.be>
+Message-ID: <20131010095336.3ae384d3@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Well, that's true (as is the case in this particular patch), but it's also
-true that it doesn't make any bad. It's just a minor inconvenience and it
-gives some consistency to the files name, I think I mostly like it.
+Dear Arnout Vandecappelle,
 
-Regards
+On Thu, 10 Oct 2013 08:44:31 +0200, Arnout Vandecappelle wrote:
 
+> > package/lttng-libust/lttng-libust.mk
+> > -LTTNG_LIBUST_LICENSE = LGPLv2.1; GPLv2 for lttng-gen-tp and ust-ctl
+> > +LTTNG_LIBUST_LICENSE = LGPLv2.1, GPLv2 (lttng-gen-tp, ust-ctl)
+> 
+>   I thought you wanted to avoid commas? :-)  Anyway, I disagree with your 
+> cut argument: cut -d \" -f 6 should do the trick for you.
 
-2013/10/10 Arnout Vandecappelle <arnout@mind.be>
+No, I don't think Thomas wanted to avoid commas, on the contrary. He
+wanted to *allow* commas in the <pkg>_LICENSE variable, and to do this,
+was proposing to change the CSV separator from comma to something else.
 
-> On 10/09/13 15:09, Thomas De Schampheleire wrote:
->
->> Hi Alvaro,
->>
->> On Wed, Oct 9, 2013 at 2:16 PM, Alvaro G. M<alvaro.gamez@hazent.com>
->>  wrote:
->>
->>> >Signed-off-by: Thomas Petazzoni<thomas.petazzoni@**free-electrons.com<thomas.petazzoni@free-electrons.com>
->>> >
->>> >Signed-off-by: Alvaro G. M<alvaro.gamez@hazent.com>
->>> >---
->>> >  package/Config.in                                  |  1 +
->>> >  package/libxmlrpc/Config.in                        | 10 ++++++++
->>> >  .../libxmlrpc-01-fix-gennmtab-**build.patch          | 25
->>> ++++++++++++++++++
->>> >  .../libxmlrpc-02-fix-non-**cplusplus-build.patch     | 27
->>> +++++++++++++++++++
->>> >  .../libxmlrpc/libxmlrpc-03-**non-wchar-build.patch   | 24
->>> +++++++++++++++++
->>> >  .../libxmlrpc-04-use-correct-**curl-config.patch     | 22
->>> ++++++++++++++++
->>> >  package/libxmlrpc/libxmlrpc.mk                     | 30
->>> ++++++++++++++++++++++
->>> >  7 files changed, 139 insertions(+)
->>> >  create mode 100644 package/libxmlrpc/Config.in
->>> >  create mode 100644 package/libxmlrpc/libxmlrpc-**
->>> 01-fix-gennmtab-build.patch
->>> >  create mode 100644 package/libxmlrpc/libxmlrpc-**
->>> 02-fix-non-cplusplus-build.**patch
->>> >  create mode 100644 package/libxmlrpc/libxmlrpc-**
->>> 03-non-wchar-build.patch
->>> >  create mode 100644 package/libxmlrpc/libxmlrpc-**
->>> 04-use-correct-curl-config.**patch
->>> >  create mode 100644 package/libxmlrpc/libxmlrpc.mk
->>>
->> We have had a long discussion on two buildroot developer days about
->> the format of the number in patch names. I thought we had decided to
->> use a four-digit format to correspond to the patches generated with
->> git. So this should be 0001, 0002, etc.
->> However, this may be mis-remembered by me, so I'm including some of
->> the people involved in that discussion to this mail...
->>
->
->  AFAICR we concluded that it wasn't necessary to enforce four digits,
-> since very few of the patches are generated from git anyway.
->
->  Regards,
->  Arnout
->
->
-> --
-> Arnout Vandecappelle                          arnout at mind be
-> Senior Embedded Software Architect            +32-16-286500
-> Essensium/Mind                                http://www.mind.be
-> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-> LinkedIn profile: http://www.linkedin.com/in/**arnoutvandecappelle<http://www.linkedin.com/in/arnoutvandecappelle>
-> GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
->
+>   However, perhaps we should take a step back on the legal info ofr a 
+> minute. Considering the number of corrections we have to make to it, and 
+> taking into account that we never check if it's still valid after version 
+> bumps, I wonder how useful our license manifest really is. In the end, 
+> your legal department will still need to check the correctness of the 
+> license information... Collecting the sources and the LICENSE_FILES _is_ 
+> really useful, but the specified licenses are only indicative. So I 
+> wouldn't spend too much time on formalizing it.
 
+I do understand these arguments, but I continue to believe that the
+license information is useful. If your legal department checks this,
+and reports to you that there is a mistake, then you will send a patch
+to Buildroot. If everybody does that, the licensing informations get
+more and more correct and accurate. Pretty much like bugs in software
+tend to progressively disappear as more and more people use the
+software.
 
+As an example, the berkeleydb bump from version 5 to 6 was done without
+the appropriate license information change. But not later than one or
+two days later, somebody else noticed that and the situation is in the
+process of being fixed.
 
+Also, remember that not all companies have legal departments. Many
+small to medium size businesses do embedded Linux products. And for
+them, having a license manifest that is 98% accurate is a lot better
+than having no license manifest at all.
+
+There may be some inaccuracies in the license informations that we
+have, but generally, at least the information of whether the component
+is under a non-copyleft or a copyleft license is correct, and this is
+what matters most in my opinion to achieve basic license compliance.
+
+>   Also, if we're going to formalize it more, perhaps we should consider 
+> moving to a real formal specification, e.g. spdx. That may make if 
+> possible in the future that a tool can at least verify the license 
+> information we provide.
+
+I do agree that having a look at SPDX is interesting. They define a
+formal list of licenses (https://spdx.org/licenses/). However, I don't
+know how/if they formalized how to specify which license applies to
+which specific component inside a given package.
+
+Best regards,
+
+Thomas
 -- 
-?lvaro G?mez Machado
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20131010/8cc1d135/attachment.html>
+Thomas Petazzoni, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
