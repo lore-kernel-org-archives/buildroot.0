@@ -1,62 +1,43 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 10 Oct 2013 22:41:27 +0200
-Subject: [Buildroot] [git commit] protobuf: needs thread support
-Message-ID: <20131010204222.ADDA99B98A@busybox.osuosl.org>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Thu, 10 Oct 2013 22:37:21 +0200
+Subject: [Buildroot] legal info: saving of external toolchain
+In-Reply-To: <CAAXf6LXAP+nsmMm7fp0_xvzLNT8cAYof4DECUYhpSs1RzE3Zeg@mail.gmail.com>
+References: <CAAXf6LXAP+nsmMm7fp0_xvzLNT8cAYof4DECUYhpSs1RzE3Zeg@mail.gmail.com>
+Message-ID: <52571001.5000508@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=020775b33f87fbda4e805e3f8740d312c9fc9bf5
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Thomas,
 
-Fix:
-http://autobuild.buildroot.net/results/086/08661b6bd6796c9126bcbad3245323160b182ac8/
+Thomas De Schampheleire wrote:
+> Hi Luca, all,
+>
+> The legal info infrastructure currently does not do anything for the
+> toolchain, for 'technical reasons'. I can't recall what these
+> technical reasons where. At least for external toolchains I don't see
+> a big problem to copy the toolchain also in the sources/ subdirectory.
+> The developer then still has the obligation to also provide the
+> sources that accompany this binary distribution of the toolchain
+> (which is impossible for buildroot to do), but at least the binary
+> version is already taken care of.
 
-Signed-off-by: Axel Lin <axel.lin@ingics.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/protobuf-c/Config.in |    5 +++--
- package/protobuf/Config.in   |    5 +++--
- 2 files changed, 6 insertions(+), 4 deletions(-)
+Some stuff is better than no stuff. :)
 
-diff --git a/package/protobuf-c/Config.in b/package/protobuf-c/Config.in
-index 9aff6e2..17cc8f1 100644
---- a/package/protobuf-c/Config.in
-+++ b/package/protobuf-c/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_PROTOBUF_C
- 	bool "protobuf-c"
- 	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # protobuf
- 	select BR2_PACKAGE_PROTOBUF
- 	help
- 	  Code generator and runtime libraries to use Protocol Buffers
-@@ -8,5 +9,5 @@ config BR2_PACKAGE_PROTOBUF_C
- 
- 	  http://code.google.com/p/protobuf-c/
- 
--comment "protobuf-c requires a toolchain with C++ support enabled"
--	depends on !BR2_INSTALL_LIBSTDCPP
-+comment "protobuf-c requires a toolchain with C++ and thread support"
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/protobuf/Config.in b/package/protobuf/Config.in
-index b044ef0..92e85ba 100644
---- a/package/protobuf/Config.in
-+++ b/package/protobuf/Config.in
-@@ -1,11 +1,12 @@
- config BR2_PACKAGE_PROTOBUF
- 	bool "protobuf"
- 	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	help
- 	  Protocol buffers are Google's language-neutral, platform-neutral,
- 	  extensible mechanism for serializing structured data.
- 
- 	  http://code.google.com/p/protobuf/
- 
--comment "protobuf requires a toolchain with C++ support enabled"
--	depends on !BR2_INSTALL_LIBSTDCPP
-+comment "protobuf requires a toolchain with C++ and thread support"
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
+>
+> In fact, the legal-info target already calls toolchain-legal-info, but
+> it does not do anything really.
+>
+> What do you think about implementing this for external toolchains (at
+> least)? The fact that the toolchain is now using the package
+> infrastructure probably makes that a tad easier.
+
+Indeed it should be quite straightforward. It the toolchain is 
+downloaded, then the tarball may just be copied (or hardlinked).
+Otherwise we simply have to tar the toolchain directory.
+
+
+-- 
+Luca
