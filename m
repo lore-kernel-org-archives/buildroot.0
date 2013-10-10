@@ -1,12 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 10 Oct 2013 19:20:14 +0200
-Subject: [Buildroot] [PATCH 3/9] package/wayland: install
- wayland-scanner to $(HOST)
-In-Reply-To: <20131010090530.169e7a88@skate>
+Date: Thu, 10 Oct 2013 19:22:42 +0200
+Subject: [Buildroot] [PATCH 9/9] package/weston: add option to enable EGL
+In-Reply-To: <20131010090746.51e21c34@skate>
 References: <cover.1381354867.git.yann.morin.1998@free.fr>
- <448f7432fc0b7c091413dd494e6b9d838cf51527.1381354867.git.yann.morin.1998@free.fr>
- <20131010090530.169e7a88@skate>
-Message-ID: <20131010172014.GA3230@free.fr>
+ <7e31b6ba4a2f05ab5ba1b1114863e7d102fa5a17.1381354867.git.yann.morin.1998@free.fr>
+ <20131010090746.51e21c34@skate>
+Message-ID: <20131010172242.GB3230@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,16 +14,25 @@ To: buildroot@busybox.net
 
 Thomas, All,
 
-On 2013-10-10 09:05 +0200, Thomas Petazzoni spake thusly:
-> On Wed,  9 Oct 2013 23:44:19 +0200, Yann E. MORIN wrote:
-> > +	 install -m 0755 -D wayland-scanner $(HOST_DIR)/usr/bin/wayland-scanner )
+On 2013-10-10 09:07 +0200, Thomas Petazzoni spake thusly:
+> On Wed,  9 Oct 2013 23:44:25 +0200, Yann E. MORIN wrote:
+> > +# Whether EGL support is needed
+> > +config BR2_PACKAGE_WESTON_EGL
+> > +    bool
 > 
-> 	$(INSTALL)
-> 
-> Also, that's nitpicking, but we generally don't have a space between
-> the end of the command and the closing parenthesis.
+> Indentation should be done with a tab.
 
-OK, will fix both. Thanks.
+Doh, serves me for using a 4-space tab by default here... :-/
+Will fix.
+
+> That said, I'm unsure about this patch: do we really want to add "dead"
+> code, that isn't being used for the moment? Shouldn't this wait for the
+> first EGL-based compositor to be added?
+
+I had this in my tree, so I just thought about sending it now. That's
+good since I got early review on it! ;-)
+
+I don't mind keeping it locally until we use it, indeed.
 
 Regards,
 Yann E. MORIN.
