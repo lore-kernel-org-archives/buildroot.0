@@ -1,38 +1,46 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 10 Oct 2013 19:22:42 +0200
-Subject: [Buildroot] [PATCH 9/9] package/weston: add option to enable EGL
-In-Reply-To: <20131010090746.51e21c34@skate>
-References: <cover.1381354867.git.yann.morin.1998@free.fr>
- <7e31b6ba4a2f05ab5ba1b1114863e7d102fa5a17.1381354867.git.yann.morin.1998@free.fr>
- <20131010090746.51e21c34@skate>
-Message-ID: <20131010172242.GB3230@free.fr>
+Date: Thu, 10 Oct 2013 19:29:40 +0200
+Subject: [Buildroot] make-4.0
+In-Reply-To: <87pprdwft4.fsf@dell.be.48ers.dk>
+References: <CAB0FRstfgMy3c2t1uUfdkusX8XzwF85CXodwyzVtZ4w6aN-QtQ@mail.gmail.com>
+ <87pprdwft4.fsf@dell.be.48ers.dk>
+Message-ID: <20131010172939.GC3230@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Peter, All,
 
-On 2013-10-10 09:07 +0200, Thomas Petazzoni spake thusly:
-> On Wed,  9 Oct 2013 23:44:25 +0200, Yann E. MORIN wrote:
-> > +# Whether EGL support is needed
-> > +config BR2_PACKAGE_WESTON_EGL
-> > +    bool
+On 2013-10-10 13:01 +0200, Peter Korsgaard spake thusly:
+> >>>>> "Fran?ois" == Fran?ois Perrad <francois.perrad@gadz.org> writes:
+>  Fran?ois> GNU make 4.0 has been released (see
+>  Fran?ois> http://savannah.gnu.org/forum/forum.php?forum_id=7749).
+>  Fran?ois> This version introduces only 1 backward-incompatibility (instead of 7
+>  Fran?ois> with version 3.82).
+>  Fran?ois> See below, an extracted part of the file NEWS.
 > 
-> Indentation should be done with a tab.
+>  Fran?ois>   WARNING: Backward-incompatibility!
+> 
+>  Fran?ois>   Variables ending in "!" previously defined as "variable!=
+>  Fran?ois>   value" will now be interpreted as shell assignment.  Change
+>  Fran?ois>   your assignment to add whitespace between the "!" and "=":
+>  Fran?ois>   "variable! = value"
+> 
+> We luckily don't have any of those:
+> 
+> git grep '[^ ]!=' **/*.mk
 
-Doh, serves me for using a 4-space tab by default here... :-/
-Will fix.
+Well, whoever was mental enough to use '!' in variable names deserves
+the breakage anyway! :-)
 
-> That said, I'm unsure about this patch: do we really want to add "dead"
-> code, that isn't being used for the moment? Shouldn't this wait for the
-> first EGL-based compositor to be added?
-
-I had this in my tree, so I just thought about sending it now. That's
-good since I got early review on it! ;-)
-
-I don't mind keeping it locally until we use it, indeed.
+But hopefully, make-4.0 won't be such a pain make-3.82 was. What flew in
+the GNU folks to release a highly backward-incompatible version as a
+minor release? Seriously? Even if it fixed undocumented limitations, it
+really broke more than a handfull of projects, of which high-profile
+projects like the Linux kernel or the glibc. And I don't count the
+others. Oh well... Sigh... :-(
 
 Regards,
 Yann E. MORIN.
