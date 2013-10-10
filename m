@@ -1,32 +1,37 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 10 Oct 2013 23:06:49 +0200
-Subject: [Buildroot] [git commit] gdk-pixbuf: bump to version 2.28.2
-Message-ID: <20131010211037.75CA59A139@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 10 Oct 2013 23:10:33 +0200
+Subject: [Buildroot] [PATCH] package/rpi-firmware: bump version
+Message-ID: <1381439433-12452-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c551ac4cff997c26cc8ee26ab2fe1437cbbfa3d9
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Fixes for de-interlacing of /unusual/ MPEG streams.
+Yes, some people seem to enjoy generating MPEG streams in
+which interlacing is not constant. That's apparently 100%
+valid, but yet very unusual, and at the very least, weird.
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/gdk-pixbuf/gdk-pixbuf.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/rpi-firmware/rpi-firmware.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/gdk-pixbuf/gdk-pixbuf.mk b/package/gdk-pixbuf/gdk-pixbuf.mk
-index 8bfb35d..d1d590a 100644
---- a/package/gdk-pixbuf/gdk-pixbuf.mk
-+++ b/package/gdk-pixbuf/gdk-pixbuf.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/rpi-firmware/rpi-firmware.mk b/package/rpi-firmware/rpi-firmware.mk
+index ddb48b3..ecd9dbf 100644
+--- a/package/rpi-firmware/rpi-firmware.mk
++++ b/package/rpi-firmware/rpi-firmware.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- GDK_PIXBUF_MAJOR_VERSION = 2.28
--GDK_PIXBUF_VERSION = $(GDK_PIXBUF_MAJOR_VERSION).1
-+GDK_PIXBUF_VERSION = $(GDK_PIXBUF_MAJOR_VERSION).2
- GDK_PIXBUF_SOURCE = gdk-pixbuf-$(GDK_PIXBUF_VERSION).tar.xz
- GDK_PIXBUF_SITE = http://ftp.gnome.org/pub/gnome/sources/gdk-pixbuf/$(GDK_PIXBUF_MAJOR_VERSION)
- GDK_PIXBUF_LICENSE = LGPLv2+
+-RPI_FIRMWARE_VERSION = e6b21d6
++RPI_FIRMWARE_VERSION = 58036da
+ RPI_FIRMWARE_SITE = http://github.com/raspberrypi/firmware/tarball/$(RPI_FIRMWARE_VERSION)
+ RPI_FIRMWARE_LICENSE = BSD-3c
+ RPI_FIRMWARE_LICENSE_FILES = boot/LICENCE.broadcom
+-- 
+1.8.1.2
