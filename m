@@ -1,35 +1,37 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 10 Oct 2013 07:46:38 -0300
-Subject: [Buildroot] [PATCH 5/7] mongoose: needs mmu
-In-Reply-To: <5256543B.6090005@mind.be>
-References: <1381350348-25751-1-git-send-email-gustavo@zacarias.com.ar>
- <1381350348-25751-5-git-send-email-gustavo@zacarias.com.ar>
- <5256543B.6090005@mind.be>
-Message-ID: <5256858E.9050005@zacarias.com.ar>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 10 Oct 2013 13:01:11 +0200
+Subject: [Buildroot] make-4.0
+In-Reply-To: <CAB0FRstfgMy3c2t1uUfdkusX8XzwF85CXodwyzVtZ4w6aN-QtQ@mail.gmail.com>
+ (=?utf-8?Q?=22Fran=C3=A7ois?= Perrad"'s message of "Thu, 10 Oct 2013
+ 12:11:05 +0200")
+References: <CAB0FRstfgMy3c2t1uUfdkusX8XzwF85CXodwyzVtZ4w6aN-QtQ@mail.gmail.com>
+Message-ID: <87pprdwft4.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 10/10/2013 04:16 AM, Arnout Vandecappelle wrote:
+>>>>> "Fran?ois" == Fran?ois Perrad <francois.perrad@gadz.org> writes:
 
->> --- a/package/mongoose/Config.in
->> +++ b/package/mongoose/Config.in
->> @@ -1,6 +1,7 @@
->>   config BR2_PACKAGE_MONGOOSE
->>       bool "mongoose"
->>       depends on BR2_TOOLCHAIN_HAS_THREADS
->> +    depends on BR2_USE_MMU # fork()
->>       help
->>         Mongoose is a small and easy to use web server
-> 
->  Note that fork() is only needed for CGI, so you could instead build
-> with -DNO_CGI. It would be a pity to remove mongoose for NOMMU platforms
-> since it is ideally suited for them...
+Hi,
 
-Right, but there's still a catch, it's explicitly linking to libdl which
-is a big no-no for FLAT nommu.
-You seem to be involved with it upstream, care to cook up a patch to fix
-the Makefile and maybe bump it bump a notch while at it? :)
-Regards.
+ Fran?ois> GNU make 4.0 has been released (see
+ Fran?ois> http://savannah.gnu.org/forum/forum.php?forum_id=7749).
+ Fran?ois> This version introduces only 1 backward-incompatibility (instead of 7
+ Fran?ois> with version 3.82).
+ Fran?ois> See below, an extracted part of the file NEWS.
+
+ Fran?ois>   WARNING: Backward-incompatibility!
+
+ Fran?ois>   Variables ending in "!" previously defined as "variable!=
+ Fran?ois>   value" will now be interpreted as shell assignment.  Change
+ Fran?ois>   your assignment to add whitespace between the "!" and "=":
+ Fran?ois>   "variable! = value"
+
+We luckily don't have any of those:
+
+git grep '[^ ]!=' **/*.mk
+
+-- 
+Bye, Peter Korsgaard
