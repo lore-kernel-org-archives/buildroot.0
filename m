@@ -1,83 +1,57 @@
-From: Tzu-Jung Lee <roylee17@gmail.com>
-Date: Thu, 10 Oct 2013 14:01:40 -0700
-Subject: [Buildroot] [PATCH v4] ccache: expose control interface via
-	'make ccache-options'
-In-Reply-To: <20131010225729.10b89fde@skate>
-References: <CAAXf6LWg8YGG-yv3dvZjqswagBOMV8gmT1XsWz4KOygEbFUtGw@mail.gmail.com>
- <1381427457-25627-1-git-send-email-tjlee@ambarella.com>
- <05215539-a7b2-47a5-a319-100742fdd41a@email.android.com>
- <CAEvN+1gw9BF6tcATOFJeoRLvVXrR2U7y3jO_KSMhNyz5Ka8Zmg@mail.gmail.com>
- <20131010225729.10b89fde@skate>
-Message-ID: <CAEvN+1gD-JZyhfagY8BVgDAYgKq3yHUJQNfsCE-YTqSdpCO=dQ@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 10 Oct 2013 23:04:58 +0200
+Subject: [Buildroot] legal info: saving of external toolchain
+In-Reply-To: <CAAXf6LXAP+nsmMm7fp0_xvzLNT8cAYof4DECUYhpSs1RzE3Zeg@mail.gmail.com>
+References: <CAAXf6LXAP+nsmMm7fp0_xvzLNT8cAYof4DECUYhpSs1RzE3Zeg@mail.gmail.com>
+Message-ID: <20131010230458.78e1a857@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Oct 10, 2013 at 1:57 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Dear Tzu-Jung Lee,
->
-> On Thu, 10 Oct 2013 12:51:27 -0700, Tzu-Jung Lee wrote:
->> > Did you see my other comment about combining the ifeq statements of
->> > ccache-stats and ccache-options?
->>
->> Yes, but I think it probably would be better as a separate patch,
->> which:
->>
->>   1. either remove the ccache-stats code & and manual section
->>   2. or issue warning about the obsolete usage.
->>
->> So this patch alone don't affect those are currently using
->> ccache-stats before they migrate to ccache-options.
->
-> I believe there might be a misunderstanding here. You seem to think
-> Thomas suggested to remove ccache-stats because ccache-options now
-> allows to do the same.
->
-> But in fact, Thomas only suggested to change:
->
-> """
-> ifeq ($(BR2_CCACHE),y)
-> ccache-stats:
->         ...
-> endif
->
-> ifeq ($(BR2_CCACHE),y)
-> ccache-options:
->         ...
-> endif
-> """
->
-> by
->
-> """
-> ifeq ($(BR2_CCACHE),y)
-> ccache-stats:
->         ...
->
-> ccache-options:
->         ...
-> endif
-> """
->
-> i.e, ccache-stats continues to exist, the only difference with your
-> implementation is that it sits under the same ifeq ($(BR2_CCACHE),y)
-> condition. It's just a minor nit.
+Dear Thomas De Schampheleire,
 
-Oops, my bad.
-Could you help do the inline editing when you merge it?
+On Thu, 10 Oct 2013 16:51:41 +0200, Thomas De Schampheleire wrote:
 
-thanks.
+> The legal info infrastructure currently does not do anything for the
+> toolchain, for 'technical reasons'. I can't recall what these
+> technical reasons where. At least for external toolchains I don't see
+> a big problem to copy the toolchain also in the sources/ subdirectory.
+> The developer then still has the obligation to also provide the
+> sources that accompany this binary distribution of the toolchain
+> (which is impossible for buildroot to do), but at least the binary
+> version is already taken care of.
+> 
+> In fact, the legal-info target already calls toolchain-legal-info, but
+> it does not do anything really.
+> 
+> What do you think about implementing this for external toolchains (at
+> least)? The fact that the toolchain is now using the package
+> infrastructure probably makes that a tad easier.
 
-Roy
+I do agree. The primary reason I turned the toolchain backends into
+package was precisely to be able to leverage all the goodness of the
+package infrastructure: source, external-deps and legal-info.
 
->
-> Best regards,
->
-> Thomas
-> --
-> Thomas Petazzoni, Free Electrons
-> Embedded Linux, Kernel and Android engineering
-> http://free-electrons.com
+Note that you're only mentioning external toolchains, but it also
+applies to the internal toolchain: verifying that we have proper
+licensing information on mpfr, gmp, mpc, gcc, glibc, eglibc, uclibc,
+binutils would be good.
+
+For external toolchains it's a little bit more complicated, because the
+tarballs are actually pre-compiled binaries. To comply with the
+license, we would have to add a mechanism to also download the source
+code of the external toolchain. For example, for the Sourcery CodeBench
+ARM toolchain, the source is in
+http://sourcery.mentor.com/public/gnu_toolchain/arm-none-linux-gnueabi/arm-2013.05-24-arm-none-linux-gnueabi.src.tar.bz2.
+But we don't really have a good way of encoding that in Buildroot at
+the moment, I'm afraid.
+
+Thanks,
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
