@@ -1,69 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 10 Oct 2013 22:57:29 +0200
-Subject: [Buildroot] [PATCH v4] ccache: expose control interface via
- 'make ccache-options'
-In-Reply-To: <CAEvN+1gw9BF6tcATOFJeoRLvVXrR2U7y3jO_KSMhNyz5Ka8Zmg@mail.gmail.com>
-References: <CAAXf6LWg8YGG-yv3dvZjqswagBOMV8gmT1XsWz4KOygEbFUtGw@mail.gmail.com>
- <1381427457-25627-1-git-send-email-tjlee@ambarella.com>
- <05215539-a7b2-47a5-a319-100742fdd41a@email.android.com>
- <CAEvN+1gw9BF6tcATOFJeoRLvVXrR2U7y3jO_KSMhNyz5Ka8Zmg@mail.gmail.com>
-Message-ID: <20131010225729.10b89fde@skate>
+Date: Thu, 10 Oct 2013 22:59:39 +0200
+Subject: [Buildroot] [PATCH 1/1] support/kconfig: fix compile warning
+ because of missing include.
+In-Reply-To: <1381429615-6689-1-git-send-email-ps.report@gmx.net>
+References: <1381429615-6689-1-git-send-email-ps.report@gmx.net>
+Message-ID: <20131010225939.03febe7a@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Tzu-Jung Lee,
+Dear Peter Seiderer,
 
-On Thu, 10 Oct 2013 12:51:27 -0700, Tzu-Jung Lee wrote:
-> > Did you see my other comment about combining the ifeq statements of
-> > ccache-stats and ccache-options?
+On Thu, 10 Oct 2013 20:26:55 +0200, Peter Seiderer wrote:
+> With commit b58bf60b519353e983e372f5627d639e7cc72a7a the libgen.h
+> include was removed from confdata.c, but it is needed for the dirname
+> function declaration.
 > 
-> Yes, but I think it probably would be better as a separate patch,
-> which:
+> Fixes the following compile warning:
+> ./confdata.c: In function ?conf_split_config?:
+> ./confdata.c:849:6: warning: assignment makes pointer from integer
+> without a cast
 > 
->   1. either remove the ccache-stats code & and manual section
->   2. or issue warning about the obsolete usage.
-> 
-> So this patch alone don't affect those are currently using
-> ccache-stats before they migrate to ccache-options.
+> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 
-I believe there might be a misunderstanding here. You seem to think
-Thomas suggested to remove ccache-stats because ccache-options now
-allows to do the same.
+Yes, this warning is annoying. However, we should not simply modify
+kconfig code directly, the patches in support/kconfig/patches/ have to
+be updated accordingly: they must contain *all* the changes that we
+have applied on top of the kernel version of kconfig. This is needed
+because when regularly update the kconfig code in support/kconfig/
+using the latest one from the kernel. And if we want to do this without
+losing our own changes, we must keep the patches in
+support/kconfig/patches/ accurate.
 
-But in fact, Thomas only suggested to change:
+Could you fix your patch so that it also includes a new patch in
+support/kconfig/patches/ (or modifies one of the existing patch if it
+makes more sense).
 
-"""
-ifeq ($(BR2_CCACHE),y)
-ccache-stats:
-	...
-endif
-
-ifeq ($(BR2_CCACHE),y)
-ccache-options:
-	...
-endif
-"""
-
-by
-
-"""
-ifeq ($(BR2_CCACHE),y)
-ccache-stats:
-	...
-
-ccache-options:
-	...
-endif
-"""
-
-i.e, ccache-stats continues to exist, the only difference with your
-implementation is that it sits under the same ifeq ($(BR2_CCACHE),y)
-condition. It's just a minor nit.
-
-Best regards,
+Thanks!
 
 Thomas
 -- 
