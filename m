@@ -1,39 +1,77 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Thu, 10 Oct 2013 20:26:55 +0200
-Subject: [Buildroot] [PATCH 1/1] support/kconfig: fix compile warning
-	because of missing include.
-Message-ID: <1381429615-6689-1-git-send-email-ps.report@gmx.net>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Thu, 10 Oct 2013 21:45:44 +0200
+Subject: [Buildroot] [PATCH v4] ccache: expose control interface via
+	'make ccache-options'
+In-Reply-To: <1381427457-25627-1-git-send-email-tjlee@ambarella.com>
+References: <CAAXf6LWg8YGG-yv3dvZjqswagBOMV8gmT1XsWz4KOygEbFUtGw@mail.gmail.com>
+ <1381427457-25627-1-git-send-email-tjlee@ambarella.com>
+Message-ID: <05215539-a7b2-47a5-a319-100742fdd41a@email.android.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-With commit b58bf60b519353e983e372f5627d639e7cc72a7a the libgen.h
-include was removed from confdata.c, but it is needed for the dirname
-function declaration.
+Hi Tzu-Jung,
 
-Fixes the following compile warning:
-./confdata.c: In function ?conf_split_config?:
-./confdata.c:849:6: warning: assignment makes pointer from integer
-without a cast
+Tzu-Jung Lee <roylee17@gmail.com> wrote:
+>usage:
+>	# set cache limit size
+>	make CCACHE_OPTIONS="--max-size=5G" ccache-options
+>
+>	# zero statistics counters
+>	make CCACHE_OPTIONS="--zero-stats" ccache-options
+>
+>Signed-off-by: Tzu-Jung Lee <tjlee@ambarella.com>
+>---
+>Include the useful warning message suggested by Thomas.
+>
+>We might need a separate patch to obsolete the ccache-stats later.
+>
+> docs/manual/ccache-support.txt | 11 +++++++++++
+> package/ccache/ccache.mk       | 11 +++++++++++
+> 2 files changed, 22 insertions(+)
+>
+>diff --git a/docs/manual/ccache-support.txt b/docs/manual/ccache-support.txt
+>index 4969180..fe06a01 100644
+>--- a/docs/manual/ccache-support.txt
+>+++ b/docs/manual/ccache-support.txt
+>@@ -23,3 +23,14 @@ remove this directory.
+> 
+> You can get statistics on the cache (its size, number of hits,
+> misses, etc.) by running +make ccache-stats+.
+>+
+>+The make target +ccache-options+ and the +CCACHE_OPTIONS+ variable
+>+provide more generic access to the ccache. For example
+>+
+>+-----------------
+>+# set cache limit size
+>+make CCACHE_OPTIONS="--max-size=5G" ccache-options
+>+
+>+# zero statistics counters
+>+make CCACHE_OPTIONS="--zero-stats" ccache-options
+>+-----------------
+>diff --git a/package/ccache/ccache.mk b/package/ccache/ccache.mk
+>index c5e9385..7b6155d 100644
+>--- a/package/ccache/ccache.mk
+>+++ b/package/ccache/ccache.mk
+>@@ -45,3 +45,14 @@ ifeq ($(BR2_CCACHE),y)
+> ccache-stats: host-ccache
+> 	$(Q)$(CCACHE) -s
+> endif
+>+
+>+ifeq ($(BR2_CCACHE),y)
+>+ccache-options: host-ccache
+>+ifeq ($(CCACHE_OPTIONS),)
+>+	$(Q)echo "Usage: make ccache-options CCACHE_OPTIONS=\"opts\""
+>+	$(Q)echo "where 'opts' corresponds to one or more valid ccache options" \
+>+	"(see ccache help text below)"
+>+	$(Q)echo
+>+endif
+>+	$(Q)$(CCACHE) $(CCACHE_OPTIONS)
+>+endif
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
----
- support/kconfig/confdata.c | 1 +
- 1 file changed, 1 insertion(+)
+Did you see my other comment about combining the ifeq statements of ccache-stats and ccache-options?
 
-diff --git a/support/kconfig/confdata.c b/support/kconfig/confdata.c
-index 43f08fa..db1fac5 100644
---- a/support/kconfig/confdata.c
-+++ b/support/kconfig/confdata.c
-@@ -13,6 +13,7 @@
- #include <string.h>
- #include <time.h>
- #include <unistd.h>
-+#include <libgen.h>
- 
- #include "lkc.h"
- 
--- 
-1.8.1.4
+Best regards,
+Thomas
