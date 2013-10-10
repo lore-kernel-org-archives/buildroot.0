@@ -1,102 +1,41 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 10 Oct 2013 23:05:25 +0200
-Subject: [Buildroot] [PATCH 8/8] package/weston: add RPi compositor
-In-Reply-To: <cover.1381438785.git.yann.morin.1998@free.fr>
-References: <cover.1381438785.git.yann.morin.1998@free.fr>
-Message-ID: <76866368cc2a600d5878de11146201ee7bc3b1a6.1381438785.git.yann.morin.1998@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 10 Oct 2013 23:05:53 +0200
+Subject: [Buildroot] [PATCH v4] ccache: expose control interface via
+ 'make ccache-options'
+In-Reply-To: <CAEvN+1gD-JZyhfagY8BVgDAYgKq3yHUJQNfsCE-YTqSdpCO=dQ@mail.gmail.com>
+References: <CAAXf6LWg8YGG-yv3dvZjqswagBOMV8gmT1XsWz4KOygEbFUtGw@mail.gmail.com>
+ <1381427457-25627-1-git-send-email-tjlee@ambarella.com>
+ <05215539-a7b2-47a5-a319-100742fdd41a@email.android.com>
+ <CAEvN+1gw9BF6tcATOFJeoRLvVXrR2U7y3jO_KSMhNyz5Ka8Zmg@mail.gmail.com>
+ <20131010225729.10b89fde@skate>
+ <CAEvN+1gD-JZyhfagY8BVgDAYgKq3yHUJQNfsCE-YTqSdpCO=dQ@mail.gmail.com>
+Message-ID: <20131010230553.34257465@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Dear Tzu-Jung Lee,
 
-Procedure highly inspired by:
-    http://wayland.freedesktop.org/raspberrypi.html
+On Thu, 10 Oct 2013 14:01:40 -0700, Tzu-Jung Lee wrote:
 
-The resulting weston works almost flawlessly, but requires a bit
-of love:
-  - /boot/config.txt must include this line: dispmanx_offline=1
-  - at least 128MiB of RAM must be allocated to the GPU
-  - after 24-or-so terminal-clients are connected, the screen
-    turns black. Exiting a client restores the screen
+> > i.e, ccache-stats continues to exist, the only difference with your
+> > implementation is that it sits under the same ifeq ($(BR2_CCACHE),y)
+> > condition. It's just a minor nit.
+> 
+> Oops, my bad.
+> Could you help do the inline editing when you merge it?
 
-It seems increasing/decreasing the amount of memory allocated to
-the GPU makes the clients limit to wobble above/below 24 clients
-at a time. YMMV, as they say...
+I'm not the maintainer, so I can't merge patches. But most likely,
+Peter Korsgaard can do it when merging your patch.
 
-Without dispmanx_offline=1, the limit is much below 24, at around 13.
-But changing the amount of memory allocated to the GPU does not change
-this limit in this case. YMMV, again.
+Thanks a lot for all your quick updates to this patch!
 
-Anyway, there are not many different clients available, besides the
-terminal client, since all other clients are EGL-based, and there
-is (yet) no EGL support (for weston!) on the RPi. So the tests were
-made only with the terminal client.
+Best regards,
 
-The system is rather smooth, but spwaning too many clients in a
-rapid-fire is sure to exhibit some lag. Resizing windows is a bit
-jerky, but moving them along is fine.
-
-Note: the config option has a depends on THREADS due to rpi-userland,
-even though weston itself already inherits the same dependency from
-wayland. But better be clean and safe.
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
----
- package/weston/Config.in |  9 +++++++++
- package/weston/weston.mk | 14 +++++++++++++-
- 2 files changed, 22 insertions(+), 1 deletion(-)
-
-diff --git a/package/weston/Config.in b/package/weston/Config.in
-index 0f168ac..4532c28 100644
---- a/package/weston/Config.in
-+++ b/package/weston/Config.in
-@@ -36,4 +36,13 @@ config BR2_PACKAGE_WESTON_FBDEV
- 	bool "fbdev compositor"
- 	default y
- 
-+config BR2_PACKAGE_WESTON_RPI
-+	bool "RPi compositor"
-+	depends on BR2_arm                      # rpi-userland
-+	depends on BR2_INSTALL_LIBSTDCPP        # rpi-userland
-+	depends on BR2_LARGEFILE                # rpi-userland
-+	depends on BR2_TOOLCHAIN_HAS_THREADS    # rpi-userland
-+	select BR2_PACKAGE_RPI_USERLAND
-+	select BR2_PACKAGE_WESTON_HAS_COMPOSITOR
-+
- endif
-diff --git a/package/weston/weston.mk b/package/weston/weston.mk
-index 6b4dece..c8b47a7 100644
---- a/package/weston/weston.mk
-+++ b/package/weston/weston.mk
-@@ -24,8 +24,8 @@ WESTON_CONF_OPT = \
- 	--disable-drm-compositor \
- 	--disable-wayland-compositor \
- 	--disable-headless-compositor \
--	--disable-rpi-compositor \
- 	--disable-weston-launch \
-+	--disable-colord \
- 	--disable-libunwind
- 
- ifeq ($(BR2_PACKAGE_WESTON_FBDEV),y)
-@@ -34,4 +34,16 @@ else
- WESTON_CONF_OPT += --disable-fbdev-compositor
- endif
- 
-+ifeq ($(BR2_PACKAGE_WESTON_RPI),y)
-+WESTON_DEPENDENCIES += rpi-userland
-+WESTON_CONF_OPT += --enable-rpi-compositor \
-+	--disable-resize-optimization \
-+	--disable-setuid-install \
-+	--disable-xwayland-test \
-+	--disable-simple-egl-clients \
-+	WESTON_NATIVE_BACKEND=rpi-backend.so
-+else
-+WESTON_CONF_OPT += --disable-rpi-compositor
-+endif # BR2_PACKAGE_WESTON_RPI
-+
- $(eval $(autotools-package))
+Thomas
 -- 
-1.8.1.2
+Thomas Petazzoni, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
