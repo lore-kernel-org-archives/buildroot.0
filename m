@@ -1,7 +1,7 @@
 From: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
-Date: Thu, 10 Oct 2013 17:59:43 +0200
-Subject: [Buildroot] [PATCH 1/1] ccid: bump to version 1.4.13
-Message-ID: <1381420783-7701-1-git-send-email-jerzy.grzegorek@trzebnica.net>
+Date: Thu, 10 Oct 2013 18:01:17 +0200
+Subject: [Buildroot] [PATCH 1/1] gdk-pixbuf: bump to version 2.28.2
+Message-ID: <1381420877-7862-1-git-send-email-jerzy.grzegorek@trzebnica.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,24 +10,21 @@ To: buildroot@busybox.net
 
 Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
 ---
- package/ccid/ccid.mk |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/gdk-pixbuf/gdk-pixbuf.mk |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/ccid/ccid.mk b/package/ccid/ccid.mk
-index c25b433..aabc0c0 100644
---- a/package/ccid/ccid.mk
-+++ b/package/ccid/ccid.mk
-@@ -4,9 +4,9 @@
- #
+diff --git a/package/gdk-pixbuf/gdk-pixbuf.mk b/package/gdk-pixbuf/gdk-pixbuf.mk
+index 8bfb35d..d1d590a 100644
+--- a/package/gdk-pixbuf/gdk-pixbuf.mk
++++ b/package/gdk-pixbuf/gdk-pixbuf.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--CCID_VERSION = 1.4.12
-+CCID_VERSION = 1.4.13
- CCID_SOURCE = ccid-$(CCID_VERSION).tar.bz2
--CCID_SITE = http://alioth.debian.org/frs/download.php/file/3937
-+CCID_SITE = http://alioth.debian.org/frs/download.php/file/3959
- CCID_LICENSE = LGPLv2.1+
- CCID_LICENSE_FILES = COPYING
- CCID_INSTALL_STAGING = YES
+ GDK_PIXBUF_MAJOR_VERSION = 2.28
+-GDK_PIXBUF_VERSION = $(GDK_PIXBUF_MAJOR_VERSION).1
++GDK_PIXBUF_VERSION = $(GDK_PIXBUF_MAJOR_VERSION).2
+ GDK_PIXBUF_SOURCE = gdk-pixbuf-$(GDK_PIXBUF_VERSION).tar.xz
+ GDK_PIXBUF_SITE = http://ftp.gnome.org/pub/gnome/sources/gdk-pixbuf/$(GDK_PIXBUF_MAJOR_VERSION)
+ GDK_PIXBUF_LICENSE = LGPLv2+
 -- 
 1.7.9.5
