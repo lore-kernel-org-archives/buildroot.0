@@ -1,39 +1,83 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 10 Oct 2013 23:01:30 +0200
-Subject: [Buildroot] [PATCH] xdriver_xf86-input-evdev: enable compile
- without udev dependency.
-In-Reply-To: <1381435927-7090-1-git-send-email-ps.report@gmx.net>
-References: <1381435927-7090-1-git-send-email-ps.report@gmx.net>
-Message-ID: <20131010230130.052a22a4@skate>
+From: Tzu-Jung Lee <roylee17@gmail.com>
+Date: Thu, 10 Oct 2013 14:01:40 -0700
+Subject: [Buildroot] [PATCH v4] ccache: expose control interface via
+	'make ccache-options'
+In-Reply-To: <20131010225729.10b89fde@skate>
+References: <CAAXf6LWg8YGG-yv3dvZjqswagBOMV8gmT1XsWz4KOygEbFUtGw@mail.gmail.com>
+ <1381427457-25627-1-git-send-email-tjlee@ambarella.com>
+ <05215539-a7b2-47a5-a319-100742fdd41a@email.android.com>
+ <CAEvN+1gw9BF6tcATOFJeoRLvVXrR2U7y3jO_KSMhNyz5Ka8Zmg@mail.gmail.com>
+ <20131010225729.10b89fde@skate>
+Message-ID: <CAEvN+1gD-JZyhfagY8BVgDAYgKq3yHUJQNfsCE-YTqSdpCO=dQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Peter Seiderer,
+On Thu, Oct 10, 2013 at 1:57 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Dear Tzu-Jung Lee,
+>
+> On Thu, 10 Oct 2013 12:51:27 -0700, Tzu-Jung Lee wrote:
+>> > Did you see my other comment about combining the ifeq statements of
+>> > ccache-stats and ccache-options?
+>>
+>> Yes, but I think it probably would be better as a separate patch,
+>> which:
+>>
+>>   1. either remove the ccache-stats code & and manual section
+>>   2. or issue warning about the obsolete usage.
+>>
+>> So this patch alone don't affect those are currently using
+>> ccache-stats before they migrate to ccache-options.
+>
+> I believe there might be a misunderstanding here. You seem to think
+> Thomas suggested to remove ccache-stats because ccache-options now
+> allows to do the same.
+>
+> But in fact, Thomas only suggested to change:
+>
+> """
+> ifeq ($(BR2_CCACHE),y)
+> ccache-stats:
+>         ...
+> endif
+>
+> ifeq ($(BR2_CCACHE),y)
+> ccache-options:
+>         ...
+> endif
+> """
+>
+> by
+>
+> """
+> ifeq ($(BR2_CCACHE),y)
+> ccache-stats:
+>         ...
+>
+> ccache-options:
+>         ...
+> endif
+> """
+>
+> i.e, ccache-stats continues to exist, the only difference with your
+> implementation is that it sits under the same ifeq ($(BR2_CCACHE),y)
+> condition. It's just a minor nit.
 
-On Thu, 10 Oct 2013 22:12:07 +0200, Peter Seiderer wrote:
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> ---
->  package/x11r7/xdriver_xf86-input-evdev/Config.in   |  4 --
->  ...01-Enable-compile-wihtout-udev-dependency.patch | 58 ++++++++++++++++++++++
->  .../xdriver_xf86-input-evdev.mk                    | 10 +++-
->  3 files changed, 67 insertions(+), 5 deletions(-)
->  create mode 100644 package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev-0001-Enable-compile-wihtout-udev-dependency.patch
+Oops, my bad.
+Could you help do the inline editing when you merge it?
 
-Thanks. Have you submitted this patch upstream? This is more-and-less a
-feature patch, and in Buildroot, we don't like too much carrying
-feature patches if we don't believe they will be merged upstream.
+thanks.
 
-Of course, if it has been submitted upstream and received what seems
-like a positive feedback, it's perfectly fine to take it in Buildroot
-until upstream makes a new release.
+Roy
 
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+>
+> Best regards,
+>
+> Thomas
+> --
+> Thomas Petazzoni, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
