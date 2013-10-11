@@ -1,50 +1,35 @@
-From: Spenser Gilliland <spenser@gillilanding.com>
-Date: Fri, 11 Oct 2013 09:33:18 -0500
-Subject: [Buildroot] [PATCH 3/5] glibc: add microblaze internal toolchain
-In-Reply-To: <1381502000-1995-1-git-send-email-spenser@gillilanding.com>
-References: <1381502000-1995-1-git-send-email-spenser@gillilanding.com>
-Message-ID: <1381502000-1995-4-git-send-email-spenser@gillilanding.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 11 Oct 2013 16:31:33 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2013-10-10
+In-Reply-To: <CAAXf6LWPcf3LSouCznvD_R=s33OL2SyidjFSob20k-PRGczWzg@mail.gmail.com>
+References: <20131011063009.335B352C1A0@lolut.humanoidz.org>
+ <CAKAx1chC4oz0iJRed6_koLNiMR=HhOSF_K__DYGhvGZXa2UrNw@mail.gmail.com>
+ <CAAXf6LWPcf3LSouCznvD_R=s33OL2SyidjFSob20k-PRGczWzg@mail.gmail.com>
+Message-ID: <20131011163133.7755b2c0@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Dear Thomas De Schampheleire,
 
-Signed-off-by: Spenser Gilliland <spenser@gillilanding.com>
----
- package/glibc/glibc.mk |   12 ++++++++++++
- 1 files changed, 12 insertions(+), 0 deletions(-)
+On Fri, 11 Oct 2013 16:30:33 +0200, Thomas De Schampheleire wrote:
 
-diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
-index 4dd2e63..f4ac466 100644
---- a/package/glibc/glibc.mk
-+++ b/package/glibc/glibc.mk
-@@ -4,6 +4,17 @@
- #
- ################################################################################
- 
-+ifeq ($(BR2_microblaze),y)
-+ifeq ($(BR2_TOOLCHAIN_BUILDROOT_EGLIBC),y)
-+GLIBC_VERSION = 7f0bcce417c47aefad06ddfec7cd4ced3a4e10ff
-+GLIBC_SITE = http://github.com/Xilinx/eglibc/tarball/$(GLIBC_VERSION)
-+GLIBC_SRC_SUBDIR = .
-+else
-+GLIBC_VERSION = b86835ca92a1942ed08d8b5ee47498e711feaddb
-+GLIBC_SITE = http://github.com/Xilinx/glibc/tarball/$(GLIBC_VERSION)
-+GLIBC_SRC_SUBDIR = .
-+endif
-+else
- ifeq ($(BR2_TOOLCHAIN_BUILDROOT_EGLIBC),y)
- GLIBC_VERSION = 2.17-svnr22064
- GLIBC_SITE = http://downloads.yoctoproject.org/releases/eglibc/
-@@ -15,6 +26,7 @@ GLIBC_SITE = $(BR2_GNU_MIRROR)/libc
- GLIBC_SOURCE = glibc-$(GLIBC_VERSION).tar.xz
- GLIBC_SRC_SUBDIR = .
- endif
-+endif
- 
- GLIBC_LICENSE = GPLv2+ (programs), LGPLv2.1+, BSD-3c, MIT (library)
- GLIBC_LICENSE_FILES = $(addprefix $(GLIBC_SRC_SUBDIR)/,COPYING COPYING.LIB LICENSES)
+> Thanks for this suggestion.
+> Based on this, I was able to fix the build error using:
+> 
+> RUBY_CONF_ENV = CFLAGS="$(TARGET_CFLAGS) -O2"
+> 
+> Now my question: would you like to send a patch for this, or would you
+> like me to do it?
+
+Should this be done only for the SuperH architecture? Only for the
+affected external toolchains?
+
+Thomas
 -- 
-1.7.1
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
