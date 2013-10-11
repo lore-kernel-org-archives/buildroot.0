@@ -1,61 +1,100 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 11 Oct 2013 08:56:17 +0200
-Subject: [Buildroot] [git commit] package/rpi-userland: add patch to remove
-	faulty assert()
-Message-ID: <20131011082158.DE33C9B9C2@busybox.osuosl.org>
+Date: Fri, 11 Oct 2013 08:56:53 +0200
+Subject: [Buildroot] [git commit] package/weston: add RPi compositor
+Message-ID: <20131011082158.EAA159B6C2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a863451c395b60912c9007fc36e74b0751bc0b8d
+commit: http://git.buildroot.net/buildroot/commit/?id=9f7e8f120dfeddd8b49eb4d232253cc3f9ac8efa
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-While porting wayland/weston to run on the RPi, I always tripped on
-this assert.
+Procedure highly inspired by:
+    http://wayland.freedesktop.org/raspberrypi.html
 
-Thinking there was an issue with weston, I poked the weston guys on
-IRC about the issue. 'daniels' on irc.freenode.net/#wayland suggested
-removing the assert altogether, as that's what they had pushed
-upstream in their wayland pull-request:
-    https://github.com/raspberrypi/userland/pull/92
+The resulting weston works almost flawlessly, but requires a bit
+of love:
+  - /boot/config.txt must include this line: dispmanx_offline=1
+  - at least 128MiB of RAM must be allocated to the GPU
+  - after 24-or-so terminal-clients are connected, the screen
+    turns black. Exiting a client restores the screen
 
-Turns out they forgot to include this in their pull-request, but that
-they were using a patched rpi-userland without that assert.
+It seems increasing/decreasing the amount of memory allocated to
+the GPU makes the clients limit to wobble above/below 24 clients
+at a time. YMMV, as they say...
 
-And indeed, without that assert, weston runs on the RPi. :-)
+Without dispmanx_offline=1, the limit is much below 24, at around 13.
+But changing the amount of memory allocated to the GPU does not change
+this limit in this case. YMMV, again.
+
+Anyway, there are not many different clients available, besides the
+terminal client, since all other clients are EGL-based, and there
+is (yet) no EGL support (for weston!) on the RPi. So the tests were
+made only with the terminal client.
+
+The system is rather smooth, but spwaning too many clients in a
+rapid-fire is sure to exhibit some lag. Resizing windows is a bit
+jerky, but moving them along is fine.
+
+Note: the config option has a depends on THREADS due to rpi-userland,
+even though weston itself already inherits the same dependency from
+wayland. But better be clean and safe.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../rpi-userland-002-remove-faulty-assert.patch    |   21 ++++++++++++++++++++
- 1 files changed, 21 insertions(+), 0 deletions(-)
+ package/weston/Config.in |    9 +++++++++
+ package/weston/weston.mk |   14 +++++++++++++-
+ 2 files changed, 22 insertions(+), 1 deletions(-)
 
-diff --git a/package/rpi-userland/rpi-userland-002-remove-faulty-assert.patch b/package/rpi-userland/rpi-userland-002-remove-faulty-assert.patch
-new file mode 100644
-index 0000000..c23c43a
---- /dev/null
-+++ b/package/rpi-userland/rpi-userland-002-remove-faulty-assert.patch
-@@ -0,0 +1,21 @@
-+interface: remove faulty assert() to make weston happy at runtime
+diff --git a/package/weston/Config.in b/package/weston/Config.in
+index 0f168ac..4532c28 100644
+--- a/package/weston/Config.in
++++ b/package/weston/Config.in
+@@ -36,4 +36,13 @@ config BR2_PACKAGE_WESTON_FBDEV
+ 	bool "fbdev compositor"
+ 	default y
+ 
++config BR2_PACKAGE_WESTON_RPI
++	bool "RPi compositor"
++	depends on BR2_arm                      # rpi-userland
++	depends on BR2_INSTALL_LIBSTDCPP        # rpi-userland
++	depends on BR2_LARGEFILE                # rpi-userland
++	depends on BR2_TOOLCHAIN_HAS_THREADS    # rpi-userland
++	select BR2_PACKAGE_RPI_USERLAND
++	select BR2_PACKAGE_WESTON_HAS_COMPOSITOR
 +
-+This was removed after a discussion on IRC with the weston guys
-+('daniels' on irc.freenode.net/#wayland).
+ endif
+diff --git a/package/weston/weston.mk b/package/weston/weston.mk
+index 6b4dece..c8b47a7 100644
+--- a/package/weston/weston.mk
++++ b/package/weston/weston.mk
+@@ -24,8 +24,8 @@ WESTON_CONF_OPT = \
+ 	--disable-drm-compositor \
+ 	--disable-wayland-compositor \
+ 	--disable-headless-compositor \
+-	--disable-rpi-compositor \
+ 	--disable-weston-launch \
++	--disable-colord \
+ 	--disable-libunwind
+ 
+ ifeq ($(BR2_PACKAGE_WESTON_FBDEV),y)
+@@ -34,4 +34,16 @@ else
+ WESTON_CONF_OPT += --disable-fbdev-compositor
+ endif
+ 
++ifeq ($(BR2_PACKAGE_WESTON_RPI),y)
++WESTON_DEPENDENCIES += rpi-userland
++WESTON_CONF_OPT += --enable-rpi-compositor \
++	--disable-resize-optimization \
++	--disable-setuid-install \
++	--disable-xwayland-test \
++	--disable-simple-egl-clients \
++	WESTON_NATIVE_BACKEND=rpi-backend.so
++else
++WESTON_CONF_OPT += --disable-rpi-compositor
++endif # BR2_PACKAGE_WESTON_RPI
 +
-+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-+---
-+Upstream status: no, will be pushed by weston guys later.
-+If not, I'll do it.
-+
-+diff -durN rpi-userland-77d32cd.orig/interface/vmcs_host/vc_vchi_dispmanx.c rpi-userland-77d32cd/interface/vmcs_host/vc_vchi_dispmanx.c
-+--- rpi-userland-77d32cd.orig/interface/vmcs_host/vc_vchi_dispmanx.c	2013-10-04 17:43:44.000000000 +0200
-++++ rpi-userland-77d32cd/interface/vmcs_host/vc_vchi_dispmanx.c	2013-10-08 22:28:51.611433539 +0200
-+@@ -1187,7 +1187,6 @@
-+          continue;
-+    
-+       if(dispmanx_client.update_callback ) {
-+-         vcos_assert( dispmanx_client.pending_update_handle == (DISPMANX_UPDATE_HANDLE_T) dispmanx_client.notify_buffer[1]);
-+          dispmanx_client.update_callback((DISPMANX_UPDATE_HANDLE_T) dispmanx_client.notify_buffer[1], dispmanx_client.update_callback_param);
-+       }
-+    }
+ $(eval $(autotools-package))
