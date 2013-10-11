@@ -1,56 +1,44 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Fri, 11 Oct 2013 16:13:50 +0200
-Subject: [Buildroot] Some legal-info observations/problems
-In-Reply-To: <52558865.8070804@mind.be>
-References: <CAAXf6LXHXo2vY8ns61fxoLzD0n2yzLASZqFk75xzYQwgDHp15Q@mail.gmail.com>
- <CAAXf6LVxoXMaBFVzc6Hd46ST8AwDOyd8PdRfJ04WKfF9po_K9w@mail.gmail.com>
- <525556CE.3000308@lucaceresoli.net> <52558865.8070804@mind.be>
-Message-ID: <CAAXf6LWh4pO-x37LdqhtxTTL=H_exF=xYQfUkZ46Sq=-n1fORA@mail.gmail.com>
+Date: Fri, 11 Oct 2013 16:30:33 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+	2013-10-10
+In-Reply-To: <CAKAx1chC4oz0iJRed6_koLNiMR=HhOSF_K__DYGhvGZXa2UrNw@mail.gmail.com>
+References: <20131011063009.335B352C1A0@lolut.humanoidz.org>
+ <CAKAx1chC4oz0iJRed6_koLNiMR=HhOSF_K__DYGhvGZXa2UrNw@mail.gmail.com>
+Message-ID: <CAAXf6LWPcf3LSouCznvD_R=s33OL2SyidjFSob20k-PRGczWzg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Oct 9, 2013 at 6:46 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
-> On 10/09/13 15:14, Luca Ceresoli wrote:
->>>
->>> Related to this is the question of a license URL. I personally think
->>> it is not legally safe to only refer to a URL from a package, because
->>> who knows someone changes the license text on the URL. They could just
->>> alter the license of existing sources.
->>> So although the feature of automatically downloading a license text
->>> from its URL looks nice, I (not a lawyer) would not recommend
->>> implementing it. I follow ThomasP's reasoning of requesting upstream
->>> to add the effective license text to the sources, and in the meantime
->>> using the magic value decided above for case (b).
->>
->>
->> I agree with you. Regarding the legal stuff we should stay on the safe
->> side. But Arnout and Simon expressed an opposite opinion on another
->> branch of this thread...
+Hi Lionel,
+
+On Fri, Oct 11, 2013 at 9:59 AM, Lionel Orry <lionel.orry@gmail.com> wrote:
+
+>>       sh4a |                ruby-1.9.3-p448 | NOK | http://autobuild.buildroot.net/results/bc36e051e06f596c2fafdd3cc3745bb34b73ace3/
 >
+> I suspect the failed build above (ruby / sh4a) can be solved by either
+> using a more recent gcc version (which one is used ? I can't know from
+> the logs...), or to get maximum compliance over all gcc versions, use
+> '-O2' instead of '-Os' in CFLAGS. But I don't know the best way to
+> change the optimisation in ruby.mk so I cannot cook a patch for
+> this...
 >
->  If the package specifies that the license is available at a specific URL,
-> then that is the license, right? It is true that the license may change
-> unexpectedly, but to make sure it stays consistent we should download the
-> license at the same time that the source is downloaded (which could be
-> tricky, I admit).
+> This suggestion is the result of several investigations about the
+> "pcrel too far" issue, none of them being directly related to the ruby
+> source code but most of the time, the solution was to ease the
+> optimisation a little.
+>
 
-So here we have a choice between:
-a. adding a feature in buildroot to download the license from a URL,
-working around an upstream problem
-b. warning the user at the time of legal-info, and at the same time
-contacting upstream and asking them to fix their source package
-(including the license text).
+Thanks for this suggestion.
+Based on this, I was able to fix the build error using:
 
-While a. may seem nice for the buildroot user, it is not really
-solving the bigger problem, IMO.
+RUBY_CONF_ENV = CFLAGS="$(TARGET_CFLAGS) -O2"
 
-In fact, there are so many open-source projects that don't properly indicate:
-- which license the project falls under
-- what the authors really expect with respect to licensing
-So ideally we try to change that for some of these projects.
+
+Now my question: would you like to send a patch for this, or would you
+like me to do it?
 
 Best regards,
 Thomas
