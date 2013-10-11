@@ -1,10 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 11 Oct 2013 23:10:53 +0200
-Subject: [Buildroot] [PATCH 2/3] weston: add missing toolchain comments
-In-Reply-To: <1381525213-14034-2-git-send-email-arnout@mind.be>
+Date: Fri, 11 Oct 2013 23:17:43 +0200
+Subject: [Buildroot] [PATCH 3/3] weston: add help text for compositor
+ backends
+In-Reply-To: <1381525213-14034-3-git-send-email-arnout@mind.be>
 References: <1381525213-14034-1-git-send-email-arnout@mind.be>
- <1381525213-14034-2-git-send-email-arnout@mind.be>
-Message-ID: <20131011211053.GA29458@free.fr>
+ <1381525213-14034-3-git-send-email-arnout@mind.be>
+Message-ID: <20131011211743.GB29458@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,40 +17,41 @@ Arnout, All,
 On 2013-10-11 23:00 +0200, Arnout Vandecappelle (Essensium/Mind) spake thusly:
 > Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 > ---
->  package/weston/Config.in | 8 ++++++--
->  1 file changed, 6 insertions(+), 2 deletions(-)
+>  package/weston/Config.in | 4 ++++
+>  1 file changed, 4 insertions(+)
 > 
 > diff --git a/package/weston/Config.in b/package/weston/Config.in
-> index fd48fb3..ea0e87e 100644
+> index ea0e87e..4322aaa 100644
 > --- a/package/weston/Config.in
 > +++ b/package/weston/Config.in
-> @@ -1,5 +1,5 @@
-> -comment "weston requires udev"
-> -	depends on !BR2_PACKAGE_UDEV
-> +comment "weston needs udev and a toolchain w/ threads"
-> +	depends on !BR2_PACKAGE_UDEV || !BR2_TOOLCHAIN_HAS_THREADS
-
-Doh, I just forgot about this... Thanks! :-)
-
->  config BR2_PACKAGE_WESTON
->  	bool "weston"
-> @@ -30,6 +30,10 @@ if BR2_PACKAGE_WESTON
->  config BR2_PACKAGE_WESTON_HAS_COMPOSITOR
->  	bool
+> @@ -42,8 +42,12 @@ config BR2_PACKAGE_WESTON_RPI
+>  	depends on BR2_TOOLCHAIN_HAS_THREADS    # rpi-userland
+>  	select BR2_PACKAGE_RPI_USERLAND
+>  	select BR2_PACKAGE_WESTON_HAS_COMPOSITOR
+> +	help
+> +	  Compositor backend for the Raspberry Pi.
 >  
-> +comment "RPi compositor needs a toolchain w/ C++, largefile, threads
+>  config BR2_PACKAGE_WESTON_FBDEV
+>  	bool "fbdev compositor"
+> +	help
+> +	  Compositor backend for the Linux framebuffer.
 
-Missing terminating double-quotes.
+I am not sure adding such terse help entries is helpfull.
 
-> +	depends on BR2_arm
-> +	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS
-> +
->  config BR2_PACKAGE_WESTON_RPI
->  	bool "RPi compositor"
->  	depends on BR2_arm                      # rpi-userland
+Surely "RPi compositor" is no less explicit than "Compositor backend for
+the Raspberry Pi". Arguably, the prompt oculd be changed to "Raspberry Pi
+compositor", which would be as much descriptive as the help entry.
 
-Otherwise:
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Ditto for fbdev: the prompt is explicit enough, the help entry does not
+add any value.
+
+If I have to read a help entry, I expect to find more information than
+the prompt provides. Just repeating the prompt (even in other trerms) is
+just deceiving IMHO.
+
+So, either we provide hepl entries that actually provide information
+that can not fit in the prompt, or we do not provide help entries at
+all.
 
 Regards,
 Yann E. MORIN.
