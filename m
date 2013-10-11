@@ -1,47 +1,76 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 11 Oct 2013 14:22:35 +0200
-Subject: [Buildroot] [git commit] toolchain-external: update Linaro ARM
- toolchain
-In-Reply-To: <CAAXf6LU22crjgist0QpFxAGP=DECKjzRj-+2xccBgyxDtWTUfA@mail.gmail.com>
-References: <20131009143431.9A85B9B970@busybox.osuosl.org>
- <52564EFD.10506@mind.be> <20131010095744.5690a242@skate>
- <5257BE84.5020901@lucaceresoli.net>
- <CAAXf6LXMvV4rrxbcAozT69PsEVp2CgpgDNhZXnQ6ytdWZz+SvA@mail.gmail.com>
- <20131011112938.16a751d7@skate> <878uy0un36.fsf@dell.be.48ers.dk>
- <20131011122355.791e8810@skate>
- <CAAXf6LVKr0DPT1U2GuTqdSGAyMGEAdDGF6Uo0PYeb4gGLmg9wQ@mail.gmail.com>
- <874n8ouivj.fsf@dell.be.48ers.dk> <20131011141119.7d87610d@skate>
- <CAAXf6LU22crjgist0QpFxAGP=DECKjzRj-+2xccBgyxDtWTUfA@mail.gmail.com>
-Message-ID: <20131011142235.1b446183@skate>
+From: ludovic.desroches at atmel.com <ludovic.desroches@atmel.com>
+Date: Fri, 11 Oct 2013 13:58:50 +0200
+Subject: [Buildroot] [RFC PATCH 4/7] python-json-schema-validator: new
+	package
+In-Reply-To: <1381492733-24280-1-git-send-email-ludovic.desroches@atmel.com>
+References: <1381492733-24280-1-git-send-email-ludovic.desroches@atmel.com>
+Message-ID: <1381492733-24280-5-git-send-email-ludovic.desroches@atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas De Schampheleire,
+From: Ludovic Desroches <ludovic.desroches@atmel.com>
 
-On Fri, 11 Oct 2013 14:15:57 +0200, Thomas De Schampheleire wrote:
+Signed-off-by: Ludovic Desroches <ludovic.desroches@atmel.com>
+---
+ package/Config.in                                    |  1 +
+ package/python-json-schema-validator/Config.in       |  6 ++++++
+ .../python-json-schema-validator.mk                  | 20 ++++++++++++++++++++
+ 3 files changed, 27 insertions(+)
+ create mode 100644 package/python-json-schema-validator/Config.in
+ create mode 100644 package/python-json-schema-validator/python-json-schema-validator.mk
 
-> It wouldn't solve that case, but maybe it doesn't matter to us. If the
-> Linaro project co-names their toolchains based on date + gcc, then we
-> can limit us to that. We then accept whatever eglibc version they
-> select for that release.
-> 
-> If a user wants to stick to a given eglibc and gcc version, and Linaro
-> updates eglibc without updating gcc, then that user will have to do
-> something special. I think it's not realistic for us to handle this in
-> a clearer way than Linaro does, except by providing a 'custom version'
-> option.
-
-Ok. From an user perspective, I'm not quite convinced that it makes more
-sense to index according to the gcc release than the binutils, gdb, or
-eglibc version, or the EABI, or something else, but ok, fair enough.
-
-Best regards,
-
-Thomas
+diff --git a/package/Config.in b/package/Config.in
+index 4c95b58..115a1c5 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -355,6 +355,7 @@ menu "external python modules"
+ source "package/python-bottle/Config.in"
+ source "package/python-dpkt/Config.in"
+ source "package/python-id3/Config.in"
++source "package/python-json-schema-validator/Config.in"
+ source "package/python-keyring/Config.in"
+ source "package/python-mad/Config.in"
+ source "package/python-meld3/Config.in"
+diff --git a/package/python-json-schema-validator/Config.in b/package/python-json-schema-validator/Config.in
+new file mode 100644
+index 0000000..8acf327
+--- /dev/null
++++ b/package/python-json-schema-validator/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_PYTHON_JSON_SCHEMA_VALIDATOR
++	bool "python-json-schema-validator"
++	depends on BR2_PACKAGE_PYTHON
++	select BR2_PACKAGE_PYTHON_SETUPTOOLS
++	help
++	  JSON Schema Validator
+diff --git a/package/python-json-schema-validator/python-json-schema-validator.mk b/package/python-json-schema-validator/python-json-schema-validator.mk
+new file mode 100644
+index 0000000..74ebb3b
+--- /dev/null
++++ b/package/python-json-schema-validator/python-json-schema-validator.mk
+@@ -0,0 +1,20 @@
++PYTHON_JSON_SCHEMA_VALIDATOR_VERSION = 2.3
++PYTHON_JSON_SCHEMA_VALIDATOR_SOURCE  = json-schema-validator-$(PYTHON_JSON_SCHEMA_VALIDATOR_VERSION).tar.gz
++PYTHON_JSON_SCHEMA_VALIDATOR_SITE = http://pypi.python.org/packages/source/j/json-schema-validator/
++PYTHON_JSON_SCHEMA_VALIDATOR_LICENSE = LGPL
++PYTHON_JSON_SCHEMA_VALIDATOR_LICENSE_FILES = LICENSE.txt
++PYTHON_JSON_SCHEMA_VALIDATOR_DEPENDENCIES = python python-setuptools
++
++define PYTHON_JSON_SCHEMA_VALIDATOR_BUILD_CMDS
++	(cd $(@D); \
++	PYTHONPATH="$(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages" \
++	$(HOST_DIR)/usr/bin/python setup.py build)
++endef
++
++define PYTHON_JSON_SCHEMA_VALIDATOR_INSTALL_TARGET_CMDS
++	(cd $(@D); \
++	PYTHONPATH="$(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages" \
++	$(HOST_DIR)/usr/bin/python setup.py install --prefix=/usr --root=$(TARGET_DIR))
++endef
++
++$(eval $(generic-package))
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.7.11.3
