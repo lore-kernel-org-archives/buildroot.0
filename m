@@ -1,50 +1,57 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 11 Oct 2013 00:07:50 +0200
-Subject: [Buildroot] [git commit] package/weston: fix configure.ac for fbdev
-	compositor
-Message-ID: <20131011082158.CBE749B9C3@busybox.osuosl.org>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Fri, 11 Oct 2013 11:01:56 +0200
+Subject: [Buildroot] [git commit] toolchain-external: update Linaro ARM
+ toolchain
+In-Reply-To: <20131010095744.5690a242@skate>
+References: <20131009143431.9A85B9B970@busybox.osuosl.org>
+ <52564EFD.10506@mind.be> <20131010095744.5690a242@skate>
+Message-ID: <5257BE84.5020901@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=6614f38411aecdc5d5d0ba5c849b195df874b1d6
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Thomas, Arnout,
 
-Apply patch from upstream.
+Thomas Petazzoni wrote:
+> Dear Arnout Vandecappelle,
+>
+> On Thu, 10 Oct 2013 08:53:49 +0200, Arnout Vandecappelle wrote:
+>
+>>    I believe I asked this before: do we really want to remove external
+>> toolchains without going through a deprecation cycle? Why do we offer in
+>> a released buildroot three different Linaro toolchain versions that are
+>> all gcc 4.8 and that you cannot use anymore three months later?
+>
+> Linaro toolchains are released every month, so they are moving quickly.
+> What are you proposing to do to handle this?
+>
+> Have just a BR2_TOOLCHAIN_EXTERNAL_LINARO_ARM option, which maps
+> automatically to the latest version of the toolchain, like we do for
+> packages?
+>
+> Or do you suggest to preserve toolchains? For how long?
+>
+> Until now, the arbitrarily chosen policy was to keep only three
+> versions of a given toolchain. For Sourcery CodeBench toolchains, I
+> believe it works quite well because the frequency of releases is not
+> too high. However, it's true that for Linaro toolchains, it may not be
+> appropriate, but I'm not sure what to do exactly.
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...ompositor-fbdev-drop-dependency-on-libdrm.patch |   22 ++++++++++++++++++++
- 1 files changed, 22 insertions(+), 0 deletions(-)
+I also would like toolchains to be maintained in BR a little longer, at 
+least one year.
 
-diff --git a/package/weston/weston-0003-compositor-fbdev-drop-dependency-on-libdrm.patch b/package/weston/weston-0003-compositor-fbdev-drop-dependency-on-libdrm.patch
-new file mode 100644
-index 0000000..dfc20de
---- /dev/null
-+++ b/package/weston/weston-0003-compositor-fbdev-drop-dependency-on-libdrm.patch
-@@ -0,0 +1,22 @@
-+commit 7b8e970ad1f1ef96db23b379a41edeb40ef1e8b6
-+Author: Adrian Negreanu <adrian.m.negreanu@intel.com>
-+Date:   Thu Sep 26 19:31:32 2013 +0300
-+
-+    compositor-fbdev: drop dependency on libdrm
-+    
-+    Signed-off-by: Adrian Negreanu <adrian.m.negreanu@intel.com>
-+    Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-+
-+diff --git a/configure.ac b/configure.ac
-+index 7c2da44..a43bf5b 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -190,7 +190,7 @@ AM_CONDITIONAL([ENABLE_FBDEV_COMPOSITOR],
-+                [test x$enable_fbdev_compositor = xyes])
-+ AS_IF([test x$enable_fbdev_compositor = xyes], [
-+   AC_DEFINE([BUILD_FBDEV_COMPOSITOR], [1], [Build the fbdev compositor])
-+-  PKG_CHECK_MODULES([FBDEV_COMPOSITOR], [libudev >= 136 mtdev >= 1.1.0 libdrm >= 2.4.30])
-++  PKG_CHECK_MODULES([FBDEV_COMPOSITOR], [libudev >= 136 mtdev >= 1.1.0])
-+ ])
-+ 
-+ AC_ARG_ENABLE([rdp-compositor], [  --enable-rdp-compositor],,
+Of course maintaining 12 Linaro toolchains would be quite annoying and 
+probably useless.
+
+So we may want to add only those Linaro toolchains that have relevant 
+changes, say they upgrade gcc or provide some shiny new feature. But 
+this may be risky: a newly introduced feature is more likely to be 
+buggy. So... how about the 2nd or 3rd release after a relevant change? 
+Uhm, quite fuzzy indeed.
+
+Or, more simply, add only one Linaro toolchain per each Buildroot release.
+
+-- 
+Luca
