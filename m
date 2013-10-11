@@ -1,39 +1,30 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Fri, 11 Oct 2013 06:52:33 +0200
-Subject: [Buildroot] [PATCH v4] ccache: expose control interface via
-	'make ccache-options'
-In-Reply-To: <20131010230553.34257465@skate>
-References: <CAAXf6LWg8YGG-yv3dvZjqswagBOMV8gmT1XsWz4KOygEbFUtGw@mail.gmail.com>
- <1381427457-25627-1-git-send-email-tjlee@ambarella.com>
- <05215539-a7b2-47a5-a319-100742fdd41a@email.android.com>
- <CAEvN+1gw9BF6tcATOFJeoRLvVXrR2U7y3jO_KSMhNyz5Ka8Zmg@mail.gmail.com>
- <20131010225729.10b89fde@skate>
- <CAEvN+1gD-JZyhfagY8BVgDAYgKq3yHUJQNfsCE-YTqSdpCO=dQ@mail.gmail.com>
- <20131010230553.34257465@skate>
-Message-ID: <2c3a1cf7-4515-4b8f-b5c1-d99b078f6dec@email.android.com>
+From: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+Date: Fri, 11 Oct 2013 07:48:08 +0200
+Subject: [Buildroot] [PATCH 1/1] fdk-aac: bump to version 0.1.2
+Message-ID: <1381470488-5264-1-git-send-email-jerzy.grzegorek@trzebnica.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
->Dear Tzu-Jung Lee,
->
->On Thu, 10 Oct 2013 14:01:40 -0700, Tzu-Jung Lee wrote:
->
->> > i.e, ccache-stats continues to exist, the only difference with your
->> > implementation is that it sits under the same ifeq ($(BR2_CCACHE),y)
->> > condition. It's just a minor nit.
->> 
->> Oops, my bad.
->> Could you help do the inline editing when you merge it?
->
->I'm not the maintainer, so I can't merge patches. But most likely,
->Peter Korsgaard can do it when merging your patch.
->
->Thanks a lot for all your quick updates to this patch!
+Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+---
+ package/fdk-aac/fdk-aac.mk |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Yes, I certainly agree with that!
-
-Acked-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+diff --git a/package/fdk-aac/fdk-aac.mk b/package/fdk-aac/fdk-aac.mk
+index 325267a..dde3e7e 100644
+--- a/package/fdk-aac/fdk-aac.mk
++++ b/package/fdk-aac/fdk-aac.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-FDK_AAC_VERSION = 0.1.1
++FDK_AAC_VERSION = 0.1.2
+ FDK_AAC_SITE = http://downloads.sourceforge.net/project/opencore-amr/fdk-aac
+ FDK_AAC_LICENSE = fdk-aac license
+ FDK_AAC_LICENSE_FILES = NOTICE
+-- 
+1.7.9.5
