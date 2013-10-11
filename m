@@ -1,71 +1,47 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 11 Oct 2013 14:48:36 +0200
-Subject: [Buildroot] Xineramaproto
-In-Reply-To: <233A67DA67A045DF84F76ABF9CA04635@tux.local>
-References: <233A67DA67A045DF84F76ABF9CA04635@tux.local>
-Message-ID: <20131011144836.6a22ca05@skate>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 11 Oct 2013 15:05:35 +0200
+Subject: [Buildroot] [git commit] toolchain-external: update Linaro ARM
+	toolchain
+In-Reply-To: <20131011142235.1b446183@skate> (Thomas Petazzoni's message of
+ "Fri, 11 Oct 2013 14:22:35 +0200")
+References: <20131009143431.9A85B9B970@busybox.osuosl.org>
+ <52564EFD.10506@mind.be> <20131010095744.5690a242@skate>
+ <5257BE84.5020901@lucaceresoli.net>
+ <CAAXf6LXMvV4rrxbcAozT69PsEVp2CgpgDNhZXnQ6ytdWZz+SvA@mail.gmail.com>
+ <20131011112938.16a751d7@skate> <878uy0un36.fsf@dell.be.48ers.dk>
+ <20131011122355.791e8810@skate>
+ <CAAXf6LVKr0DPT1U2GuTqdSGAyMGEAdDGF6Uo0PYeb4gGLmg9wQ@mail.gmail.com>
+ <874n8ouivj.fsf@dell.be.48ers.dk> <20131011141119.7d87610d@skate>
+ <CAAXf6LU22crjgist0QpFxAGP=DECKjzRj-+2xccBgyxDtWTUfA@mail.gmail.com>
+ <20131011142235.1b446183@skate>
+Message-ID: <87zjqgt0tc.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gwyll Gwyllin,
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-On Thu, 10 Oct 2013 14:16:14 +0200, Gwyll Gwyllin wrote:
+Hi,
 
-> i?m trying to cross compile (for MIPS) but i?m stucked at xserver_xorg-xserver-1.5.2
+ >> If a user wants to stick to a given eglibc and gcc version, and Linaro
+ >> updates eglibc without updating gcc, then that user will have to do
+ >> something special. I think it's not realistic for us to handle this in
+ >> a clearer way than Linaro does, except by providing a 'custom version'
+ >> option.
 
-Hum, which version of Buildroot are you using? 1.5.2 was the X.org
-server packaged in Buildroot before July 2009 or something like that.
-Maybe you should upgrade to benefit from all the testing and
-improvements we've done since then. In 2009, we didn't had the
-autobuilders that we have today, and since we have that, the amount of
-testing Buildroot receives has increased significantly.
+ Thomas> Ok. From an user perspective, I'm not quite convinced that it
+ Thomas> makes more sense to index according to the gcc release than the
+ Thomas> binutils, gdb, or eglibc version, or the EABI, or something
+ Thomas> else, but ok, fair enough.
 
-> The compiler error says:
-> 
-> checking for a useful monotonic clock ...... cross compiling
-> checking for strcasecmp... yes
-> checking for strncasecmp... yes
-> checking for strcasestr... (cached) yes
-> checking for XDMCP... yes
-> checking for XdmcpWrap in -lXdmcp... yes
-> checking for XSERVERCFLAGS... configure: error: Package requirements (randrproto >= 1.2 renderproto fixesproto >= 4.0 damageproto >= 1.1 xcmiscproto xextproto xproto >= 7.0.9 xtrans scrnsaverproto >= 1.1 bigreqsproto resourceproto fontsproto inputproto >= 1.4.4 kbproto >= 1.0.3 videoproto compositeproto >= 0.4 resourceproto xineramaproto evieproto xkbfile xfont xau fontenc pixman-1 >= 0.9.5 dbus-1 xdmcp) were not met:
-> 
-> No package 'xineramaproto' found
-> 
-> Consider adjusting the PKG_CONFIG_PATH environment variable if you
-> installed software in a non-standard prefix.
-> 
-> Alternatively, you may set the environment variables XSERVERCFLAGS_CFLAGS
-> and XSERVERCFLAGS_LIBS to avoid the need to call pkg-config.
-> See the pkg-config man page for more details.
-> 
-> pkg-config ?modversion xineramaproto says 1.1.2
+Well, I would argue that the gcc version in general is more important /
+has higher impact than the binutils or gdb versions. hard/softfloat
+means seperate toolchains (or multilib), so that leaves the eglibc
+version.
 
-Yes, if you're using the pkg-config from your host machine, it will
-tell you that xineramaproto is installed on your host machine. But that
-doesn't tell anything about whether it's available for your target.
+I agree that ignoring the eglibc version is probably good enough.
 
-It seems like there is a missing dependency in the X server
-Buildroot .mk file on the xinerama proto package, or a missing
---disable-xinerama in the X server configuration options.
-
-> I tried to set PKG_CONFIG_PATH to /usr/lib/pkg-config, the result was the same.
-
-That's plain wrong. /usr/lib/pkg-config contains the description of
-libraries built for your host. Using them for your target is just going
-to make the build fail even more.
-
-I would definitely recommend upgrading your Buildroot version. An
-open-source community unfortunately cannot afford supporting users that
-use such old version: we've fixed gazillions of problems since 2009.
-
-Best regards,
-
-Thomas Petazzoni
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
