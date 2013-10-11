@@ -1,77 +1,71 @@
-From: ludovic.desroches at atmel.com <ludovic.desroches@atmel.com>
-Date: Fri, 11 Oct 2013 13:58:49 +0200
-Subject: [Buildroot] [RFC PATCH 3/7] python-simplejson: new package
-In-Reply-To: <1381492733-24280-1-git-send-email-ludovic.desroches@atmel.com>
-References: <1381492733-24280-1-git-send-email-ludovic.desroches@atmel.com>
-Message-ID: <1381492733-24280-4-git-send-email-ludovic.desroches@atmel.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 11 Oct 2013 14:48:36 +0200
+Subject: [Buildroot] Xineramaproto
+In-Reply-To: <233A67DA67A045DF84F76ABF9CA04635@tux.local>
+References: <233A67DA67A045DF84F76ABF9CA04635@tux.local>
+Message-ID: <20131011144836.6a22ca05@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Ludovic Desroches <ludovic.desroches@atmel.com>
+Dear Gwyll Gwyllin,
 
-Signed-off-by: Ludovic Desroches <ludovic.desroches@atmel.com>
----
- package/Config.in                              |  1 +
- package/python-simplejson/Config.in            |  6 ++++++
- package/python-simplejson/python-simplejson.mk | 22 ++++++++++++++++++++++
- 3 files changed, 29 insertions(+)
- create mode 100644 package/python-simplejson/Config.in
- create mode 100644 package/python-simplejson/python-simplejson.mk
+On Thu, 10 Oct 2013 14:16:14 +0200, Gwyll Gwyllin wrote:
 
-diff --git a/package/Config.in b/package/Config.in
-index c0f7601..4c95b58 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -366,6 +366,7 @@ source "package/python-pyparsing/Config.in"
- source "package/python-pyro/Config.in"
- source "package/python-serial/Config.in"
- source "package/python-setuptools/Config.in"
-+source "package/python-simplejson/Config.in"
- source "package/python-thrift/Config.in"
- source "package/python-versiontools/Config.in"
- endmenu
-diff --git a/package/python-simplejson/Config.in b/package/python-simplejson/Config.in
-new file mode 100644
-index 0000000..77bf835
---- /dev/null
-+++ b/package/python-simplejson/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_PYTHON_SIMPLEJSON
-+	bool "python-simplejson"
-+	depends on BR2_PACKAGE_PYTHON
-+	select BR2_PACKAGE_PYTHON_SETUPTOOLS
-+	help
-+	  Simple, fast, extensible JSON encoder/decoder for Python
-diff --git a/package/python-simplejson/python-simplejson.mk b/package/python-simplejson/python-simplejson.mk
-new file mode 100644
-index 0000000..d034e14
---- /dev/null
-+++ b/package/python-simplejson/python-simplejson.mk
-@@ -0,0 +1,22 @@
-+PYTHON_SIMPLEJSON_VERSION = 3.3.1
-+PYTHON_SIMPLEJSON_SOURCE  = simplejson-$(PYTHON_SIMPLEJSON_VERSION).tar.gz
-+PYTHON_SIMPLEJSON_SITE = http://pypi.python.org/packages/source/s/simplejson/
-+PYTHON_SIMPLEJSON_LICENSE = MIT
-+PYTHON_SIMPLEJSON_LICENSE_FILES = LICENSE.txt
-+PYTHON_SIMPLEJSON_DEPENDENCIES = python python-setuptools
-+
-+define PYTHON_SIMPLEJSON_BUILD_CMDS
-+	(cd $(@D); \
-+	CC="$(TARGET_CC)" LD="$(TARGET_LD)" CFLAGS="" \
-+	PYTHONPATH="$(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages" \
-+	$(HOST_DIR)/usr/bin/python setup.py build)
-+endef
-+
-+define PYTHON_SIMPLEJSON_INSTALL_TARGET_CMDS
-+	(cd $(@D); \
-+	CC="$(TARGET_CC)" LD="$(TARGET_LD)" CFLAGS="" \
-+	PYTHONPATH="$(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages" \
-+	$(HOST_DIR)/usr/bin/python setup.py install --prefix=/usr --root=$(TARGET_DIR))
-+endef
-+
-+$(eval $(generic-package))
+> i?m trying to cross compile (for MIPS) but i?m stucked at xserver_xorg-xserver-1.5.2
+
+Hum, which version of Buildroot are you using? 1.5.2 was the X.org
+server packaged in Buildroot before July 2009 or something like that.
+Maybe you should upgrade to benefit from all the testing and
+improvements we've done since then. In 2009, we didn't had the
+autobuilders that we have today, and since we have that, the amount of
+testing Buildroot receives has increased significantly.
+
+> The compiler error says:
+> 
+> checking for a useful monotonic clock ...... cross compiling
+> checking for strcasecmp... yes
+> checking for strncasecmp... yes
+> checking for strcasestr... (cached) yes
+> checking for XDMCP... yes
+> checking for XdmcpWrap in -lXdmcp... yes
+> checking for XSERVERCFLAGS... configure: error: Package requirements (randrproto >= 1.2 renderproto fixesproto >= 4.0 damageproto >= 1.1 xcmiscproto xextproto xproto >= 7.0.9 xtrans scrnsaverproto >= 1.1 bigreqsproto resourceproto fontsproto inputproto >= 1.4.4 kbproto >= 1.0.3 videoproto compositeproto >= 0.4 resourceproto xineramaproto evieproto xkbfile xfont xau fontenc pixman-1 >= 0.9.5 dbus-1 xdmcp) were not met:
+> 
+> No package 'xineramaproto' found
+> 
+> Consider adjusting the PKG_CONFIG_PATH environment variable if you
+> installed software in a non-standard prefix.
+> 
+> Alternatively, you may set the environment variables XSERVERCFLAGS_CFLAGS
+> and XSERVERCFLAGS_LIBS to avoid the need to call pkg-config.
+> See the pkg-config man page for more details.
+> 
+> pkg-config ?modversion xineramaproto says 1.1.2
+
+Yes, if you're using the pkg-config from your host machine, it will
+tell you that xineramaproto is installed on your host machine. But that
+doesn't tell anything about whether it's available for your target.
+
+It seems like there is a missing dependency in the X server
+Buildroot .mk file on the xinerama proto package, or a missing
+--disable-xinerama in the X server configuration options.
+
+> I tried to set PKG_CONFIG_PATH to /usr/lib/pkg-config, the result was the same.
+
+That's plain wrong. /usr/lib/pkg-config contains the description of
+libraries built for your host. Using them for your target is just going
+to make the build fail even more.
+
+I would definitely recommend upgrading your Buildroot version. An
+open-source community unfortunately cannot afford supporting users that
+use such old version: we've fixed gazillions of problems since 2009.
+
+Best regards,
+
+Thomas Petazzoni
 -- 
-1.7.11.3
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
