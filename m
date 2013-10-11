@@ -1,43 +1,70 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 11 Oct 2013 23:23:07 +0200
-Subject: [Buildroot] [PATCH] Compile static versions of gcc libraries
-In-Reply-To: <1381398042-6925-1-git-send-email-jezz@sysmic.org>
-References: <1381398042-6925-1-git-send-email-jezz@sysmic.org>
-Message-ID: <20131011232307.7301b5d6@skate>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 11 Oct 2013 23:23:40 +0200
+Subject: [Buildroot] [PATCH 1/3] weston: improve selection of compositor
+In-Reply-To: <1381525213-14034-1-git-send-email-arnout@mind.be>
+References: <1381525213-14034-1-git-send-email-arnout@mind.be>
+Message-ID: <20131011212340.GC29458@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear J?r?me Pouiller,
+Arnout, All,
 
-On Thu, 10 Oct 2013 11:40:42 +0200, J?r?me Pouiller wrote:
+On 2013-10-11 23:00 +0200, Arnout Vandecappelle (Essensium/Mind) spake thusly:
+> The way the compositor was selected in Config.in was counter-intuitive,
+> because the fbdev backend is selected by default even if a different one
+> is available.
+> 
+> Instead, select the fbdev backend only if no other one was selected by
+> the user.
 
-> +define  HOST_GCC_FINAL_CONFIGURE_CMDS
-> +        (cd $(HOST_GCC_FINAL_SRCDIR) && rm -rf config.cache; \
-> +                $(HOST_CONFIGURE_OPTS) \
-> +                CFLAGS="$(HOST_CFLAGS)" \
-> +                LDFLAGS="$(HOST_LDFLAGS)" \
-> +                $(HOST_GCC_FINAL_CONF_ENV) \
-> +                ./configure \
-> +                --prefix="$(HOST_DIR)/usr" \
-> +                --sysconfdir="$(HOST_DIR)/etc" \
-> +                --enable-shared --enable-static \
-> +                $(QUIET) $(HOST_GCC_FINAL_CONF_OPT) \
-> +        )
+Well, that was explictly what I wanted we I did the patch:
+  - always have at least one compositor
+  - have fbdev enabled by default, even if another one is selected.
 
-Why aren't you simply doing:
+But I agree this can be counter-intuitive to some, so I won't bar this
+change.
 
-HOST_GCC_FINAL_CONF_OPT += \
-	--enable-shared --enable-static
+> Also re-ordered the compositor options, putting fbdev last. This is more
+> natural when the user wants to select both backends: after selecting the
+> RPi backend, the fbdev is automatically unselected but the user can move
+> one line down to select it again.
 
-instead ?
+We usually put menu entries in alphabetical order. I understand what
+you're trying to achieve here, but I'd prefer we be consistent in the
+menu ordering.
 
-Thanks,
+> 
+> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> ---
+>  package/weston/Config.in | 15 ++++++---------
+>  1 file changed, 6 insertions(+), 9 deletions(-)
+> 
+> diff --git a/package/weston/Config.in b/package/weston/Config.in
+> index 4532c28..fd48fb3 100644
+> --- a/package/weston/Config.in
+> +++ b/package/weston/Config.in
+> @@ -14,6 +14,8 @@ config BR2_PACKAGE_WESTON
+>  	depends on BR2_TOOLCHAIN_HAS_THREADS # wayland
+>  	# Runtime dependency
+>  	select BR2_PACKAGE_XKEYBOARD_CONFIG
+> +	# Make sure at least one compositor is selected.
+> +	select BR2_PACKAGE_WESTON_FBDEV if !BR2_PACKAGE_WESTON_HAS_COMPOSITOR
 
-Thomas
+Indeed, BR2_PACKAGE_WESTON_NEEDS_ONE_COMPOSITOR is not needed, since we
+can re-use BR2_PACKAGE_WESTON for the same purpose.
+
+Except for the re-ordering, no problem for me.
+
+Regards,
+Yann E. MORIN.
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
