@@ -1,48 +1,30 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 11 Oct 2013 16:57:40 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2013-10-10
-In-Reply-To: <CAAXf6LUAR7P6mEwFEoeCHMq0KX_8P3LQVQvte_VvN=OTCr9T=g@mail.gmail.com>
-References: <20131011063009.335B352C1A0@lolut.humanoidz.org>
- <CAKAx1chC4oz0iJRed6_koLNiMR=HhOSF_K__DYGhvGZXa2UrNw@mail.gmail.com>
- <CAAXf6LWPcf3LSouCznvD_R=s33OL2SyidjFSob20k-PRGczWzg@mail.gmail.com>
- <20131011163133.7755b2c0@skate>
- <CAAXf6LUAR7P6mEwFEoeCHMq0KX_8P3LQVQvte_VvN=OTCr9T=g@mail.gmail.com>
-Message-ID: <20131011165740.0ab665cc@skate>
+From: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+Date: Fri, 11 Oct 2013 18:29:16 +0200
+Subject: [Buildroot] [PATCH 1/1] jansson: bump to version 2.5
+Message-ID: <1381508957-5129-1-git-send-email-jerzy.grzegorek@trzebnica.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas De Schampheleire,
+Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+---
+ package/jansson/jansson.mk |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-On Fri, 11 Oct 2013 16:51:29 +0200, Thomas De Schampheleire wrote:
-
-> > Should this be done only for the SuperH architecture? Only for the
-> > affected external toolchains?
-> 
-> Not sure what the best approach is. Checking just for the architecture
-> is the simplest.
-> 
-> Checking on the toolchain is complex:
-> - for the Sourcery toolchains: the problem shows with the most recent
-> SuperH toolchain we support at the moment, so I don't think it's worth
-> trying to avoid -O2 on older toolchains than that.
-> 
-> - for other external, or internal toolchains, we can't predict whether
-> the problem would show (I don't know which combinations of gcc, libc,
-> ... are the killer)
-> 
-> What do you think?
-
-Just do it for SuperH as a whole, with a nice comment on top of this
-line. That's the easiest way.
-
-Best regards,
-
-Thomas
+diff --git a/package/jansson/jansson.mk b/package/jansson/jansson.mk
+index 49e8571..bb3240f 100644
+--- a/package/jansson/jansson.mk
++++ b/package/jansson/jansson.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-JANSSON_VERSION = 2.4
++JANSSON_VERSION = 2.5
+ JANSSON_SITE = http://www.digip.org/jansson/releases
+ JANSSON_LICENSE = MIT
+ JANSSON_LICENSE_FILES = LICENSE
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.7.9.5
