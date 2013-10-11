@@ -1,36 +1,53 @@
-From: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
-Date: Fri, 11 Oct 2013 18:35:44 +0200
-Subject: [Buildroot] [PATCH 1/1] apr-util: bump to version 1.5.2
-Message-ID: <1381509345-5904-1-git-send-email-jerzy.grzegorek@trzebnica.net>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Fri, 11 Oct 2013 20:54:21 +0200 (CEST)
+Subject: [Buildroot] [PATCH] xdriver_xf86-input-evdev: enable compile
+ without udev dependency.
+In-Reply-To: <20131010230130.052a22a4@skate>
+References: <1381435927-7090-1-git-send-email-ps.report@gmx.net>,
+ <20131010230130.052a22a4@skate>
+Message-ID: <trinity-81c35678-ff25-4e16-86ef-0899681ee5af-1381517661336@3capp-gmx-bs41>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
----
- ...apr.patch => apr-util-01-remove-checkapr.patch} |    0
- package/apr-util/apr-util.mk                       |    2 +-
- 2 files changed, 1 insertion(+), 1 deletion(-)
- rename package/apr-util/{apr-util-1.4.1-remove-checkapr.patch => apr-util-01-remove-checkapr.patch} (100%)
+Hello Thomas,
 
-diff --git a/package/apr-util/apr-util-1.4.1-remove-checkapr.patch b/package/apr-util/apr-util-01-remove-checkapr.patch
-similarity index 100%
-rename from package/apr-util/apr-util-1.4.1-remove-checkapr.patch
-rename to package/apr-util/apr-util-01-remove-checkapr.patch
-diff --git a/package/apr-util/apr-util.mk b/package/apr-util/apr-util.mk
-index 11551d6..51852e4 100644
---- a/package/apr-util/apr-util.mk
-+++ b/package/apr-util/apr-util.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--APR_UTIL_VERSION = 1.4.1
-+APR_UTIL_VERSION = 1.5.2
- APR_UTIL_SITE = http://archive.apache.org/dist/apr
- APR_UTIL_LICENSE = Apache-2.0
- APR_UTIL_LICENSE_FILES = LICENSE
--- 
-1.7.9.5
+On Thu, Oct 10, 2013 at 11:01:30PM +0200, Thomas Petazzoni wrote:
+> Dear Peter Seiderer,
+> 
+> On Thu, 10 Oct 2013 22:12:07 +0200, Peter Seiderer wrote:
+> > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> > ---
+> >  package/x11r7/xdriver_xf86-input-evdev/Config.in   |  4 --
+> >  ...01-Enable-compile-wihtout-udev-dependency.patch | 58 ++++++++++++++++++++++
+> >  .../xdriver_xf86-input-evdev.mk                    | 10 +++-
+> >  3 files changed, 67 insertions(+), 5 deletions(-)
+> >  create mode 100644 package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev-0001-Enable-compile-wihtout-udev-dependency.patch
+> 
+> Thanks. Have you submitted this patch upstream? This is more-and-less a
+> feature patch, and in Buildroot, we don't like too much carrying
+> feature patches if we don't believe they will be merged upstream.
+>
+
+Yes, patch already proposed upstream, see https://bugs.freedesktop.org/show_bug.cgi?id=70356
+
+> Of course, if it has been submitted upstream and received what seems
+> like a positive feedback, it's perfectly fine to take it in Buildroot
+> until upstream makes a new release.
+
+Let's wait awhile for upstream comments...
+
+Thanks,
+
+Peter
+
+> 
+> Thanks!
+> 
+> Thomas
+> -- 
+> Thomas Petazzoni, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
