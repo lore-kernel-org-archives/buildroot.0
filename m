@@ -1,33 +1,52 @@
-From: Simon Dawson <spdawson@gmail.com>
-Date: Fri, 11 Oct 2013 08:47:20 +0100
-Subject: [Buildroot] [PATCH] uboot: support -p option for mkenvimage
-In-Reply-To: <20131010170658.68908aae@skate>
-References: <1381399545-30713-1-git-send-email-spdawson@gmail.com>
- <20131010170658.68908aae@skate>
-Message-ID: <CAHt8ZCNgAtSnbHZGv21Qw=OZZvBWUHRztOsFNNLAOHYfxu32Tw@mail.gmail.com>
+From: spdawson at gmail.com <spdawson@gmail.com>
+Date: Fri, 11 Oct 2013 08:57:49 +0100
+Subject: [Buildroot] [PATCH] uboot: support -r option for mkenvimage
+Message-ID: <1381478269-29943-1-git-send-email-spdawson@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 10 October 2013 16:06, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Maybe a few more words like in which cases this is useful, would be
-> nice to have I believe (I myself don't know when this option should be
-> used).
+From: Simon Dawson <spdawson@gmail.com>
 
-I have been using a crappy script to generate a u-boot environment
-image, and that script was padding with 0x00 bytes instead of 0xff
-(which is the default used by the mkenvimage tool). Having looked into
-this a bit more, it appears that the 0xff padding works just fine in
-my particular use case.
+Some boards are configured in u-boot to store multiple redundant copies of
+the environment image in flash. For these boards, it is required to pass the -r
+flag, when generating a boot environment image using mkenvimage.
 
-So, I no longer consider this patch necessary, and cannot provide a
-justification for it.
+Signed-off-by: Simon Dawson <spdawson@gmail.com>
+---
+ boot/uboot/Config.in | 5 +++++
+ boot/uboot/uboot.mk  | 1 +
+ 2 files changed, 6 insertions(+)
 
-I have, however, found that I need to pass the -r (redundant
-environment) flag to mkenvimage; so I propose exposing that flag in
-the Buildroot menu.
-
-Simon.
+diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
+index 998cda2..d33e8e1 100644
+--- a/boot/uboot/Config.in
++++ b/boot/uboot/Config.in
+@@ -242,6 +242,11 @@ config BR2_TARGET_UBOOT_ENVIMAGE_SIZE
+ 	  Size of envronment, can be prefixed with 0x for hexadecimal
+ 	  values.
+ 
++config BR2_TARGET_UBOOT_ENVIMAGE_REDUNDANT
++	bool "Redundant environment"
++	help
++	  The environment has multiple copies in flash.
++
+ endif # BR2_TARGET_UBOOT_ENVIMAGE
+ 
+ endif # BR2_TARGET_UBOOT
+diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
+index dc8e26f..330c177 100644
+--- a/boot/uboot/uboot.mk
++++ b/boot/uboot/uboot.mk
+@@ -117,6 +117,7 @@ define UBOOT_INSTALL_IMAGES_CMDS
+ 		cp -dpf $(@D)/$(BR2_TARGET_UBOOT_SPL_NAME) $(BINARIES_DIR)/)
+ 	$(if $(BR2_TARGET_UBOOT_ENVIMAGE),
+ 		$(HOST_DIR)/usr/bin/mkenvimage -s $(BR2_TARGET_UBOOT_ENVIMAGE_SIZE) \
++		$(if $(BR2_TARGET_UBOOT_ENVIMAGE_REDUNDANT),-r) \
+ 		-o $(BINARIES_DIR)/uboot-env.bin $(BR2_TARGET_UBOOT_ENVIMAGE_SOURCE))
+ endef
+ 
+-- 
+1.8.1.2
