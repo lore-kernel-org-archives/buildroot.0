@@ -1,61 +1,47 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 11 Oct 2013 12:23:55 +0200
-Subject: [Buildroot] [git commit] toolchain-external: update Linaro ARM
-	toolchain
-In-Reply-To: <878uy0un36.fsf@dell.be.48ers.dk>
-References: <20131009143431.9A85B9B970@busybox.osuosl.org>
- <52564EFD.10506@mind.be> <20131010095744.5690a242@skate>
- <5257BE84.5020901@lucaceresoli.net>
- <CAAXf6LXMvV4rrxbcAozT69PsEVp2CgpgDNhZXnQ6ytdWZz+SvA@mail.gmail.com>
- <20131011112938.16a751d7@skate> <878uy0un36.fsf@dell.be.48ers.dk>
-Message-ID: <20131011122355.791e8810@skate>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri, 11 Oct 2013 11:11:51 +0000 (UTC)
+Subject: [Buildroot] [Bug 6542] New: external python modules fail to compile
+ to pyc if \\N escapes are used
+Message-ID: <bug-6542-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Peter Korsgaard,
+https://bugs.busybox.net/show_bug.cgi?id=6542
 
-On Fri, 11 Oct 2013 12:19:09 +0200, Peter Korsgaard wrote:
+           Summary: external python modules fail to compile to pyc if \\N
+                    escapes are used
+           Product: buildroot
+           Version: unspecified
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: minor
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: gvormayr at gmail.com
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
->  >> So, this proposal would for example have (fictional)
->  >> Linaro 2012.11 (based on gcc 4.4)
->  >> Linaro 2013.02 (gcc 4.4 but new glibc)
->  >> Linaro 2013.08 (gcc 4.8)
-> 
->  Thomas> Ok. So a bit like the Sourcery CodeBench toolchains are updated to
->  Thomas> their latest patch level, but we keep several "major version" with
->  Thomas> their latest patch level.
-> 
->  Thomas> But in the case of Sourcery CodeBench toolchain, we do those patch
->  Thomas> level version bumps without changing the Config.in option name, so
->  Thomas> the bump is transparent to users.
-> 
->  Thomas> For the Linaro toolchains, the Config.in option name contain the
->  Thomas> precise version. So, what happens when we bump Linaro 2013.08 to Linaro
->  Thomas> 2012.09 (which also uses gcc 4.8, and therefore should replace Linaro
->  Thomas> 2012.08) ?
-> 
-> If we want to key off gcc version then we should presumably name the
-> Config sysmbol similar - E.G.:
-> 
-> config BR2_TOOLCHAIN_EXTERNAL_LINARY_GCC_4_8
->        bool "Linaro GCC 4.8 (2013.08)"
 
-Problem is that in the example above, Thomas was keying on the gcc
-version, or the glibc version. But maybe at some point it's not the gcc
-version or glibc version that changed, but the fact that they switched
-for EABI to EABIhf.
+Created attachment 5066
+  --> https://bugs.busybox.net/attachment.cgi?id=5066
+Change always disabled unicodedata to conditionally disabled for python-host
 
-config BR2_TOOLCHAIN_EXTERNAL_LINARO_VARIANT_1
-config BR2_TOOLCHAIN_EXTERNAL_LINARO_VARIANT_2
-config BR2_TOOLCHAIN_EXTERNAL_LINARO_VARIANT_3
+The Host python used to bytecompile modules is always compiled with
+disable-unicodedata regardless of the BR2_PACKAGE_PYTHON_UNICODEDATA setting.
+If a python-module is compiled to a pyc-file and the py file contains \N{name}
+escapes this compilation will fail with:
+"\\N escapes not supported (can't load unicodedata module)"
+Which further leads to missing files if pycs are used in the target-image.
 
- ? :-)
+Attached changes always disabled to conditionally disabled depending on
+BR2_PACKAGE_PYTHON_UNICODEDATA.
 
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
