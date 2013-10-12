@@ -1,11 +1,13 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 12 Oct 2013 16:56:39 +0200
+Date: Sat, 12 Oct 2013 17:41:02 +0200
 Subject: [Buildroot] buildroot requires a password
-In-Reply-To: <72BD24884B4745F4BE4A855D78178642@M58p>
+In-Reply-To: <DE9772AAEF4F4E35B1CA8F3B5A7C7865@M58p>
 References: <0F793FF065914549A7D55A219164CACB@M58p>
  <20131012145021.02d468e4@skate>
  <72BD24884B4745F4BE4A855D78178642@M58p>
-Message-ID: <20131012165639.0bc4a78d@skate>
+ <20131012165639.0bc4a78d@skate>
+ <DE9772AAEF4F4E35B1CA8F3B5A7C7865@M58p>
+Message-ID: <20131012174102.26bfa3b2@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,28 +16,22 @@ To: buildroot@busybox.net
 
 Dear Sabri Altunbas,
 
-Please keep the list in Cc.
+I believe I asked you to keep the Buildroot list in Cc. Please do it.
 
-On Sat, 12 Oct 2013 15:47:50 +0200, Sabri Altunbas wrote:
+On Sat, 12 Oct 2013 17:35:15 +0200, Sabri Altunbas wrote:
 
-> BR2_PREFER_STATIC_LIB=y
+> Perfectly, i deactivated BR2_PREFER_STATIC_LIB and perform "make clean and
+> make all" only "make all" doesn't work (why not ?)
 
-This,
+See http://buildroot.org/downloads/manual/manual.html#full-rebuild.
 
-> BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201305=y
+> But I think (as you). It must be safely that a faulty operation can not
+> happen.
 
-together with this cannot work. The Sourcery CodeBench toolchains use
-the glibc C library, which simply doesn't work for static linking. Even
-if you statically link Busybox, it will still need some of the shared
-libraries, loaded dynamically at runtime.
+I agree. As I said, I'll send a patch to make sure this situation
+cannot happen.
 
-So, switch to use shared libraries, or use a C library that works
-properly with static linking: uClibc.
-
-I'll send a patch to ensure that glibc toolchains aren't used when
-static linking is selected.
-
-Best regards,
+Thanks,
 
 Thomas
 -- 
