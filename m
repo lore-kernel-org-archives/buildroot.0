@@ -1,7 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 13 Oct 2013 00:46:14 +0200
-Subject: [Buildroot] [pull request v2] Pull request for branch yem/misc
-Message-ID: <cover.1381617928.git.yann.morin.1998@free.fr>
+Date: Sun, 13 Oct 2013 00:46:15 +0200
+Subject: [Buildroot] [PATCH 1/2] package/rpi-userland: install all of our
+	.pc files the same way
+In-Reply-To: <cover.1381617928.git.yann.morin.1998@free.fr>
+References: <cover.1381617928.git.yann.morin.1998@free.fr>
+Message-ID: <5645e6b2333182bc055b2c6777af9780362aa87d.1381617928.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,45 +13,105 @@ To: buildroot@busybox.net
 
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Hello All!
+Install bcm_host the same way we install egl.pc and glesv2.pc, using
+the cmake lists.
 
-Here is a small series to clean up rpi-userland wrt .pc files.
-
-Regards,
-Yann E. MORIN.
-
-
-Changes v1 -> v2:
-  - remove bundled bcm_host.pc
-
-
-The following changes since commit 9f7e8f120dfeddd8b49eb4d232253cc3f9ac8efa:
-
-  package/weston: add RPi compositor (2013-10-11 08:56:53 +0200)
-
-are available in the git repository at:
-
-  git://gitorious.org/buildroot/buildroot.git yem/misc
-
-for you to fetch changes up to 843868f55c7fddce02d5cd45525fe36bbbca5e76:
-
-  package/rpi-userland: expose appropriate EGL version (2013-10-13 00:30:40 +0200)
-
-----------------------------------------------------------------
-Yann E. MORIN (2):
-      package/rpi-userland: install all of our .pc files the same way
-      package/rpi-userland: expose appropriate EGL version
-
- package/rpi-userland/bcm_host.pc                   | 11 -------
- .../rpi-userland-000-add-pkgconfig-files.patch     | 34 ++++++++++++++++++++--
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/rpi-userland/bcm_host.pc                   | 11 --------
+ .../rpi-userland-000-add-pkgconfig-files.patch     | 32 ++++++++++++++++++++--
  package/rpi-userland/rpi-userland.mk               |  6 ----
- 3 files changed, 31 insertions(+), 20 deletions(-)
+ 3 files changed, 30 insertions(+), 19 deletions(-)
  delete mode 100644 package/rpi-userland/bcm_host.pc
 
+diff --git a/package/rpi-userland/bcm_host.pc b/package/rpi-userland/bcm_host.pc
+deleted file mode 100644
+index 28bbe96..0000000
+--- a/package/rpi-userland/bcm_host.pc
++++ /dev/null
+@@ -1,11 +0,0 @@
+-prefix=/usr
+-exec_prefix=${prefix}
+-libdir=${exec_prefix}/lib
+-includedir=${prefix}/include
+-
+-Name: bcm_host
+-Description: Broadcom VideoCore host API library
+-Version: 1
+-Libs: -L${libdir} -lbcm_host -lvcos -lvchiq_arm
+-Cflags: -I${includedir} -I${includedir}/interface/vmcs_host/linux -I${includedir}/interface/vcos/pthreads -DUSE_VCHIQ_ARM
+-
+diff --git a/package/rpi-userland/rpi-userland-000-add-pkgconfig-files.patch b/package/rpi-userland/rpi-userland-000-add-pkgconfig-files.patch
+index 4ffc2b0..d7984ff 100644
+--- a/package/rpi-userland/rpi-userland-000-add-pkgconfig-files.patch
++++ b/package/rpi-userland/rpi-userland-000-add-pkgconfig-files.patch
+@@ -1,9 +1,10 @@
+-Add .pc files for the OpenGLESv2 and EGL libraries
++Add .pc files for the OpenGLESv2, EGL and bcm_host libraries
+ 
+ Those pkg-config files make it easier for Qt5 to find those libraries
+ and the appropriate link flags.
+ 
+ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ 
+ Index: b/interface/khronos/egl/egl.pc.in
+ ===================================================================
+@@ -25,7 +26,7 @@ Index: b/interface/khronos/CMakeLists.txt
+ ===================================================================
+ --- a/interface/khronos/CMakeLists.txt
+ +++ b/interface/khronos/CMakeLists.txt
+-@@ -73,3 +73,11 @@
++@@ -74,3 +74,11 @@
+  
+  install(TARGETS EGL GLESv2 OpenVG WFC khrn_client DESTINATION lib)
+  install(TARGETS EGL_static GLESv2_static khrn_static DESTINATION lib)
+@@ -52,3 +53,30 @@ Index: b/interface/khronos/glxx/glesv2.pc.in
+ +Version: 2.0
+ +Libs: -L${libdir} -lGLESv2
+ +Cflags: -I${includedir}/
++Index: b/host_applications/linux/libs/bcm_host/CMakeLists.txt
++===================================================================
++--- a/host_applications/linux/libs/bcm_host/CMakeLists.txt
+++++ b/host_applications/linux/libs/bcm_host/CMakeLists.txt
++@@ -20,3 +20,7 @@
++ 
++ install(TARGETS bcm_host DESTINATION lib)
++ 
+++configure_file("${CMAKE_CURRENT_SOURCE_DIR}/bcm_host.pc.in"
+++  "${CMAKE_CURRENT_BINARY_DIR}/bcm_host.pc" @ONLY)
+++install(FILES "${CMAKE_CURRENT_BINARY_DIR}/bcm_host.pc"
+++  DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/pkgconfig")
++Index: b/host_applications/linux/libs/bcm_host/bcm_host.pc.in
++===================================================================
++--- /dev/null
+++++ b/host_applications/linux/libs/bcm_host/bcm_host.pc.in
++@@ -0,0 +1,10 @@
+++prefix=/usr
+++exec_prefix=${prefix}
+++libdir=${exec_prefix}/lib
+++includedir=${prefix}/include
+++
+++Name: bcm_host
+++Description: Broadcom VideoCore host API library
+++Version: 1
+++Libs: -L${libdir} -lbcm_host -lvcos -lvchiq_arm
+++Cflags: -I${includedir} -I${includedir}/interface/vmcs_host/linux -I${includedir}/interface/vcos/pthreads -DUSE_VCHIQ_ARM
+diff --git a/package/rpi-userland/rpi-userland.mk b/package/rpi-userland/rpi-userland.mk
+index cc032bf..8b5794f 100644
+--- a/package/rpi-userland/rpi-userland.mk
++++ b/package/rpi-userland/rpi-userland.mk
+@@ -16,10 +16,4 @@ define RPI_USERLAND_POST_TARGET_CLEANUP
+ endef
+ RPI_USERLAND_POST_INSTALL_TARGET_HOOKS += RPI_USERLAND_POST_TARGET_CLEANUP
+ 
+-define RPI_USERLAND_POST_STAGING_PC_FILE
+-	install -D -m 0644 package/rpi-userland/bcm_host.pc \
+-		$(STAGING_DIR)/usr/lib/pkgconfig/bcm_host.pc
+-endef
+-RPI_USERLAND_POST_INSTALL_STAGING_HOOKS += RPI_USERLAND_POST_STAGING_PC_FILE
+-
+ $(eval $(cmake-package))
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.8.1.2
