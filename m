@@ -1,59 +1,47 @@
-From: angelo70 at gmail.com <angelo70@gmail.com>
-Date: Sat, 12 Oct 2013 22:46:17 +0200
-Subject: [Buildroot] [PATCH] package/makedevs: add "l" type for symlinks
-	ownership change
-Message-ID: <1381610777-10239-1-git-send-email-angelo70@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 13 Oct 2013 00:20:06 +0200
+Subject: [Buildroot] [pull request] Pull request for branch yem/misc
+Message-ID: <cover.1381616359.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Angelo Dureghello <angelo@barix.com>
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
- Add to makedevs the 'l' type, to allow symlinks ownership change. 
- Add related change on the makedevs doc.
+Hello All!
 
-Singed-off-by: Angelo Dureghello <angelo@barix.com>
----
- docs/manual/makedev-syntax.txt |  1 +
- package/makedevs/makedevs.c    | 12 ++++++++++++
- 2 files changed, 13 insertions(+)
+Here is a small series to clean up rpi-userland wrt .pc files.
 
-diff --git a/docs/manual/makedev-syntax.txt b/docs/manual/makedev-syntax.txt
-index 2c98531..2392dc1 100644
---- a/docs/manual/makedev-syntax.txt
-+++ b/docs/manual/makedev-syntax.txt
-@@ -27,6 +27,7 @@ There are a few non-trivial blocks here:
-   * c: a character device file
-   * b: a block device file
-   * p: a named pipe
-+  * l: a symbolic link, for ownership changes only
- - +mode+, +uid+ and +gid+ are the usual permissions settings
- - +major+ and +minor+ are here for device files - set to - for other
-   files
-diff --git a/package/makedevs/makedevs.c b/package/makedevs/makedevs.c
-index ab90b93..026533e 100644
---- a/package/makedevs/makedevs.c
-+++ b/package/makedevs/makedevs.c
-@@ -474,6 +474,18 @@ int main(int argc, char **argv)
- 				ret = EXIT_FAILURE;
- 				goto loop;
- 			}
-+		} else if (type == 'l') {
-+			struct stat st;
-+			if ((lstat(full_name, &st) < 0 || !S_ISLNK(st.st_mode))) {
-+				bb_perror_msg("line %d: invalid link for %s", linenum, full_name);
-+				ret = EXIT_FAILURE;
-+				goto loop;
-+			}
-+			if (lchown(full_name, uid, gid) == -1) {
-+				bb_perror_msg("line %d: chown failed for %s", linenum, full_name);
-+				ret = EXIT_FAILURE;
-+				goto loop;
-+			}
- 		} else
- 		{
- 			dev_t rdev;
+Regards,
+Yann E. MORIN.
+
+
+The following changes since commit 9f7e8f120dfeddd8b49eb4d232253cc3f9ac8efa:
+
+  package/weston: add RPi compositor (2013-10-11 08:56:53 +0200)
+
+are available in the git repository at:
+
+  git://gitorious.org/buildroot/buildroot.git yem/misc
+
+for you to fetch changes up to 291be0994d2be580cc266c53b85f3d380b35ad3d:
+
+  package/rpi-userland: expose appropriate EGL version (2013-10-13 00:06:34 +0200)
+
+----------------------------------------------------------------
+Yann E. MORIN (2):
+      package/rpi-userland: install all of our .pc files the same way
+      package/rpi-userland: expose appropriate EGL version
+
+ .../rpi-userland-000-add-pkgconfig-files.patch     | 34 ++++++++++++++++++++--
+ 1 file changed, 31 insertions(+), 3 deletions(-)
+
 -- 
-1.8.4.rc3
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
