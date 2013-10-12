@@ -1,70 +1,97 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 12 Oct 2013 12:23:13 +0200
-Subject: [Buildroot] [PATCH v2] uboot: support -r option for mkenvimage
-In-Reply-To: <1381572339-3232-1-git-send-email-spdawson@gmail.com>
-References: <1381572339-3232-1-git-send-email-spdawson@gmail.com>
-Message-ID: <20131012122313.44d65734@skate>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 12 Oct 2013 12:19:26 +0200
+Subject: [Buildroot] [PATCH] toolchain-external: add a specific check to
+ avoid Angstrom toolchains
+In-Reply-To: <1381572882-22592-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1381572882-22592-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20131012101926.GA3262@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Simon,
+Thomas, All,
 
-On Sat, 12 Oct 2013 11:05:39 +0100, spdawson at gmail.com wrote:
-> From: Simon Dawson <spdawson@gmail.com>
+On 2013-10-12 12:14 +0200, Thomas Petazzoni spake thusly:
+> The Angstrom toolchains available at
+> http://www.angstrom-distribution.org/toolchains/ are not usable as
+> external toolchains in Buildroot, because they are not pure toolchains
+> with just the C library, but instead complete SDKs with many
+> cross-compiled libraries (Gtk, Qt, glib, neon, sqlite, X.org, and many
+> more, approximately 200 MB of libraries).
 > 
-> Some boards are configured in u-boot to store multiple redundant copies of
-> the environment image in flash. For these boards, it is required to pass the -r
-> flag, when generating a boot environment image using mkenvimage.
+> Buildroot cannot use such toolchains, and while this is documented in
+> our manual, some users still try to do this. Today, one such user came
+> on the IRC channel, reporting a build problem, which we started
+> investigating, only to realize after a long time that he was using an
+> Angstrom toolchain.
 > 
-> Signed-off-by: Simon Dawson <spdawson@gmail.com>
+> To avoid this problem in the future, we explicitly check if the
+> toolchain is from Angstrom by looking at the vendor part of the tuple
+> exposed by the toolchain: as soon as it is
+> <something>-angstrom-<something-else>, we reject the toolchain with an
+> explanation.
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
 > ---
->  v2: Change configuration menu text and help text, in response to feedback
->      from Arnout Vandecappelle and Thomas Petazzoni
+>  toolchain/helpers.mk                               | 18 ++++++++++++++++++
+>  toolchain/toolchain-external/toolchain-external.mk |  1 +
+>  2 files changed, 19 insertions(+)
 > 
->  boot/uboot/Config.in | 8 ++++++++
->  boot/uboot/uboot.mk  | 1 +
->  2 files changed, 9 insertions(+)
-> 
-> diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
-> index 998cda2..b750c77 100644
-> --- a/boot/uboot/Config.in
-> +++ b/boot/uboot/Config.in
-> @@ -242,6 +242,14 @@ config BR2_TARGET_UBOOT_ENVIMAGE_SIZE
->  	  Size of envronment, can be prefixed with 0x for hexadecimal
->  	  values.
->  
-> +config BR2_TARGET_UBOOT_ENVIMAGE_REDUNDANT
-> +	bool "Environment has two copies"
-> +	help
-> +	  There are two copies of the environment in flash.
+> diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
+> index 95120cd..d81e561 100644
+> --- a/toolchain/helpers.mk
+> +++ b/toolchain/helpers.mk
+> @@ -324,3 +324,21 @@ check_cross_compiler_exists = \
+>  		echo "Cannot execute cross-compiler '$${__CROSS_CC}'" ; \
+>  		exit 1 ; \
+>  	fi
 > +
-> +	  Check your u-boot configuration for the CONFIG_ENV_ADDR_REDUND and
-> +	  CONFIG_ENV_SIZE_REDUND settings.
+> +#
+> +# Check for toolchains known to not work with Buildroot. To check for
+> +# Angstrom toolchains, we're taking the "Target: " line in the output
+> +# of gcc -v, and look at the vendor part of the tuple.
+> +#
+> +# $1: cross-gcc path
+> +#
+> +check_wrong_toolchain = \
+> +	__CROSS_CC=$(strip $1) ; \
+> +	vendor=`$${__CROSS_CC} -v 2>&1 | sed -n '/^Target/s/Target: [^-]*-\([^-]*\)-.*/\1/p'` ; \
+> +	if test $${vendor} = "angstrom" ; then \
+> +		echo "Angstrom toolchains are not pure toolchains: they contain" ; \
+> +		echo "many other libraries than just the C library, which makes" ; \
+> +		echo "them unsuitable as external toolchains for build systems" ; \
+> +		echo "such as Buildroot" ; \
+> +		exit 1 ; \
+> +	fi
+> diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
+> index b5b1ce7..102bcfd 100644
+> --- a/toolchain/toolchain-external/toolchain-external.mk
+> +++ b/toolchain/toolchain-external/toolchain-external.mk
+> @@ -371,6 +371,7 @@ endif
+>  # type of C library and all C library features.
+>  define TOOLCHAIN_EXTERNAL_CONFIGURE_CMDS
+>  	$(Q)$(call check_cross_compiler_exists,$(TOOLCHAIN_EXTERNAL_CC))
+> +	$(Q)$(call check_wrong_toolchain,$(TOOLCHAIN_EXTERNAL_CC))
+>  	$(Q)LIBC_A_LOCATION=`readlink -f $$(LANG=C $(TOOLCHAIN_EXTERNAL_CC) -print-file-name=libc.a)` ; \
+>  	SYSROOT_DIR=`echo $${LIBC_A_LOCATION} | sed -r -e 's:(usr/)?lib(32|64)?/(.*/)?libc\.a::'` ; \
+>  	if test -z "$${SYSROOT_DIR}" ; then \
+> -- 
+> 1.8.1.2
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-I'm sorry but I'm still unhappy with the help text, especially since
-your commit log is in fact better :-)
-
-	  Some platforms define in their U-Boot configuration that the
-	  U-Boot environment should be duplicated in two locations (for
-	  extra safety). Check your U-Boot configuration for the
-	  CONFIG_ENV_ADDR_REDUND and CONFIG_ENV_SIZE_REDUND settings to
-	  see if it is the case for your platform.
-
-	  If it is the case, then you should enable this option to
-	  ensure that the U-Boot environment image generated by
-	  Buildroot is compatible with this "redundant environment"
-	  mechanism of U-Boot.
-
-Or something along those lines (don't hesitate to fix the broken
-english if needed).
-
-Best regards,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
