@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 13 Oct 2013 00:46:15 +0200
-Subject: [Buildroot] [PATCH 1/2] package/rpi-userland: install all of our
-	.pc files the same way
+Date: Sun, 13 Oct 2013 00:46:16 +0200
+Subject: [Buildroot] [PATCH 2/2] package/rpi-userland: expose appropriate
+	EGL version
 In-Reply-To: <cover.1381617928.git.yann.morin.1998@free.fr>
 References: <cover.1381617928.git.yann.morin.1998@free.fr>
-Message-ID: <5645e6b2333182bc055b2c6777af9780362aa87d.1381617928.git.yann.morin.1998@free.fr>
+Message-ID: <843868f55c7fddce02d5cd45525fe36bbbca5e76.1381617928.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,105 +13,34 @@ To: buildroot@busybox.net
 
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Install bcm_host the same way we install egl.pc and glesv2.pc, using
-the cmake lists.
+The egl.pc file installed exposes version 1.0, while it really is a
+much higher version.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/rpi-userland/bcm_host.pc                   | 11 --------
- .../rpi-userland-000-add-pkgconfig-files.patch     | 32 ++++++++++++++++++++--
- package/rpi-userland/rpi-userland.mk               |  6 ----
- 3 files changed, 30 insertions(+), 19 deletions(-)
- delete mode 100644 package/rpi-userland/bcm_host.pc
 
-diff --git a/package/rpi-userland/bcm_host.pc b/package/rpi-userland/bcm_host.pc
-deleted file mode 100644
-index 28bbe96..0000000
---- a/package/rpi-userland/bcm_host.pc
-+++ /dev/null
-@@ -1,11 +0,0 @@
--prefix=/usr
--exec_prefix=${prefix}
--libdir=${exec_prefix}/lib
--includedir=${prefix}/include
--
--Name: bcm_host
--Description: Broadcom VideoCore host API library
--Version: 1
--Libs: -L${libdir} -lbcm_host -lvcos -lvchiq_arm
--Cflags: -I${includedir} -I${includedir}/interface/vmcs_host/linux -I${includedir}/interface/vcos/pthreads -DUSE_VCHIQ_ARM
--
+---
+Note: version 1.0 causes build failures for weston, which fails at
+./configure with this error message:
+    Package 'egl' has version '1.0', required version is '>= 7.10'
+
+Do as the Collabora guys do, and expose version 10:
+    http://cgit.collabora.com/git/user/pq/android-pc-files.git/tree/pkgconfig/egl.pc?h=raspberrypi
+---
+ package/rpi-userland/rpi-userland-000-add-pkgconfig-files.patch | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
 diff --git a/package/rpi-userland/rpi-userland-000-add-pkgconfig-files.patch b/package/rpi-userland/rpi-userland-000-add-pkgconfig-files.patch
-index 4ffc2b0..d7984ff 100644
+index d7984ff..848e49d 100644
 --- a/package/rpi-userland/rpi-userland-000-add-pkgconfig-files.patch
 +++ b/package/rpi-userland/rpi-userland-000-add-pkgconfig-files.patch
-@@ -1,9 +1,10 @@
--Add .pc files for the OpenGLESv2 and EGL libraries
-+Add .pc files for the OpenGLESv2, EGL and bcm_host libraries
- 
- Those pkg-config files make it easier for Qt5 to find those libraries
- and the appropriate link flags.
- 
- Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
- 
- Index: b/interface/khronos/egl/egl.pc.in
- ===================================================================
-@@ -25,7 +26,7 @@ Index: b/interface/khronos/CMakeLists.txt
- ===================================================================
- --- a/interface/khronos/CMakeLists.txt
- +++ b/interface/khronos/CMakeLists.txt
--@@ -73,3 +73,11 @@
-+@@ -74,3 +74,11 @@
-  
-  install(TARGETS EGL GLESv2 OpenVG WFC khrn_client DESTINATION lib)
-  install(TARGETS EGL_static GLESv2_static khrn_static DESTINATION lib)
-@@ -52,3 +53,30 @@ Index: b/interface/khronos/glxx/glesv2.pc.in
- +Version: 2.0
- +Libs: -L${libdir} -lGLESv2
- +Cflags: -I${includedir}/
-+Index: b/host_applications/linux/libs/bcm_host/CMakeLists.txt
-+===================================================================
-+--- a/host_applications/linux/libs/bcm_host/CMakeLists.txt
-++++ b/host_applications/linux/libs/bcm_host/CMakeLists.txt
-+@@ -20,3 +20,7 @@
-+ 
-+ install(TARGETS bcm_host DESTINATION lib)
-+ 
-++configure_file("${CMAKE_CURRENT_SOURCE_DIR}/bcm_host.pc.in"
-++  "${CMAKE_CURRENT_BINARY_DIR}/bcm_host.pc" @ONLY)
-++install(FILES "${CMAKE_CURRENT_BINARY_DIR}/bcm_host.pc"
-++  DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/pkgconfig")
-+Index: b/host_applications/linux/libs/bcm_host/bcm_host.pc.in
-+===================================================================
-+--- /dev/null
-++++ b/host_applications/linux/libs/bcm_host/bcm_host.pc.in
-+@@ -0,0 +1,10 @@
-++prefix=/usr
-++exec_prefix=${prefix}
-++libdir=${exec_prefix}/lib
-++includedir=${prefix}/include
-++
-++Name: bcm_host
-++Description: Broadcom VideoCore host API library
-++Version: 1
-++Libs: -L${libdir} -lbcm_host -lvcos -lvchiq_arm
-++Cflags: -I${includedir} -I${includedir}/interface/vmcs_host/linux -I${includedir}/interface/vcos/pthreads -DUSE_VCHIQ_ARM
-diff --git a/package/rpi-userland/rpi-userland.mk b/package/rpi-userland/rpi-userland.mk
-index cc032bf..8b5794f 100644
---- a/package/rpi-userland/rpi-userland.mk
-+++ b/package/rpi-userland/rpi-userland.mk
-@@ -16,10 +16,4 @@ define RPI_USERLAND_POST_TARGET_CLEANUP
- endef
- RPI_USERLAND_POST_INSTALL_TARGET_HOOKS += RPI_USERLAND_POST_TARGET_CLEANUP
- 
--define RPI_USERLAND_POST_STAGING_PC_FILE
--	install -D -m 0644 package/rpi-userland/bcm_host.pc \
--		$(STAGING_DIR)/usr/lib/pkgconfig/bcm_host.pc
--endef
--RPI_USERLAND_POST_INSTALL_STAGING_HOOKS += RPI_USERLAND_POST_STAGING_PC_FILE
--
- $(eval $(cmake-package))
+@@ -18,7 +18,7 @@ Index: b/interface/khronos/egl/egl.pc.in
+ +
+ +Name: egl
+ +Description: RasberryPi implementation of EGL
+-+Version: 1.0
+++Version: 10
+ +Libs: -L${libdir} -lEGL -lGLESv2 -lbcm_host
+ +Cflags: -I${includedir}/ -I${includedir}/interface/vcos/pthreads/ \
+ +        -I${includedir}/interface/vmcs_host/linux/
 -- 
 1.8.1.2
