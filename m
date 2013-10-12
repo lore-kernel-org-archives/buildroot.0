@@ -1,40 +1,54 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 12 Oct 2013 17:41:02 +0200
-Subject: [Buildroot] buildroot requires a password
-In-Reply-To: <DE9772AAEF4F4E35B1CA8F3B5A7C7865@M58p>
-References: <0F793FF065914549A7D55A219164CACB@M58p>
- <20131012145021.02d468e4@skate>
- <72BD24884B4745F4BE4A855D78178642@M58p>
- <20131012165639.0bc4a78d@skate>
- <DE9772AAEF4F4E35B1CA8F3B5A7C7865@M58p>
-Message-ID: <20131012174102.26bfa3b2@skate>
+From: Angelo Dureghello <angelo70@gmail.com>
+Date: Sat, 12 Oct 2013 22:26:02 +0200
+Subject: [Buildroot] [PATCH] package/makedevs: add "l" type for symlink
+	ownership
+Message-ID: <5259B05A.20005@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Sabri Altunbas,
+     Add to makedevs the 'l' type, to allow symlinks ownership change.
+     Add related change on the makedevs doc.
 
-I believe I asked you to keep the Buildroot list in Cc. Please do it.
+     Singed-off-by: Angelo Dureghello <angelo@barix.com>
 
-On Sat, 12 Oct 2013 17:35:15 +0200, Sabri Altunbas wrote:
-
-> Perfectly, i deactivated BR2_PREFER_STATIC_LIB and perform "make clean and
-> make all" only "make all" doesn't work (why not ?)
-
-See http://buildroot.org/downloads/manual/manual.html#full-rebuild.
-
-> But I think (as you). It must be safely that a faulty operation can not
-> happen.
-
-I agree. As I said, I'll send a patch to make sure this situation
-cannot happen.
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/docs/manual/makedev-syntax.txt b/docs/manual/makedev-syntax.txt
+index 2c98531..2392dc1 100644
+--- a/docs/manual/makedev-syntax.txt
++++ b/docs/manual/makedev-syntax.txt
+@@ -27,6 +27,7 @@ There are a few non-trivial blocks here:
+    * c: a character device file
+    * b: a block device file
+    * p: a named pipe
++  * l: a symbolic link, for ownership changes only
+  - +mode+, +uid+ and +gid+ are the usual permissions settings
+  - +major+ and +minor+ are here for device files - set to - for other
+    files
+diff --git a/package/makedevs/makedevs.c b/package/makedevs/makedevs.c
+index ab90b93..026533e 100644
+--- a/package/makedevs/makedevs.c
++++ b/package/makedevs/makedevs.c
+@@ -474,6 +474,18 @@ int main(int argc, char **argv)
+                                 ret = EXIT_FAILURE;
+                                 goto loop;
+                         }
++               } else if (type == 'l') {
++                       struct stat st;
++                       if ((lstat(full_name, &st) < 0 || 
+!S_ISLNK(st.st_mode))) {
++                               bb_perror_msg("line %d: invalid link for 
+%s", linenum, full_name);
++                               ret = EXIT_FAILURE;
++                               goto loop;
++                       }
++                       if (lchown(full_name, uid, gid) == -1) {
++                               bb_perror_msg("line %d: chown failed for 
+%s", linenum, full_name);
++                               ret = EXIT_FAILURE;
++                               goto loop;
++                       }
+                 } else
+                 {
+                         dev_t rdev;
