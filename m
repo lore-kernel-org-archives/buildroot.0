@@ -1,35 +1,33 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 12 Oct 2013 00:39:13 +0200
-Subject: [Buildroot] [PATCH 1/3] weston: improve selection of compositor
-In-Reply-To: <1381525213-14034-1-git-send-email-arnout@mind.be>
-References: <1381525213-14034-1-git-send-email-arnout@mind.be>
-Message-ID: <20131011223913.GD29458@free.fr>
+From: Axel Lin <axel.lin@ingics.com>
+Date: Sat, 12 Oct 2013 10:15:25 +0800
+Subject: [Buildroot] [PATCH] pcsc-lite: bump to version 1.8.8
+Message-ID: <1381544125.10020.1.camel@phoenix>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout, All,
+Signed-off-by: Axel Lin <axel.lin@ingics.com>
+---
+ package/pcsc-lite/pcsc-lite.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-I have more wayland/weston changes locally that I'll push over the
-course of the WE.
-
-So I'll take patches 1 (without the reordering) and 2 (with the quote
-fix) in my branch.
-
-Depending on further discussion on those three patches, I'll grab
-whatever we end up settling on.
-
-Thanks you!
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/pcsc-lite/pcsc-lite.mk b/package/pcsc-lite/pcsc-lite.mk
+index c126b3f..4cc628f 100644
+--- a/package/pcsc-lite/pcsc-lite.mk
++++ b/package/pcsc-lite/pcsc-lite.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PCSC_LITE_VERSION = 1.8.6
++PCSC_LITE_VERSION = 1.8.8
+ PCSC_LITE_SOURCE = pcsc-lite-$(PCSC_LITE_VERSION).tar.bz2
+-PCSC_LITE_SITE = http://alioth.debian.org/frs/download.php/file/3757
++PCSC_LITE_SITE = http://alioth.debian.org/frs/download.php/file/3862
+ PCSC_LITE_INSTALL_STAGING = YES
+ PCSC_LITE_DEPENDENCIES = host-pkgconf
+ PCSC_LITE_LICENSE = BSD-3c
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.8.1.2
