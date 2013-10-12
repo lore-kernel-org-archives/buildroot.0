@@ -1,52 +1,25 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 12 Oct 2013 14:50:21 +0200
-Subject: [Buildroot] buildroot requires a password
-In-Reply-To: <0F793FF065914549A7D55A219164CACB@M58p>
-References: <0F793FF065914549A7D55A219164CACB@M58p>
-Message-ID: <20131012145021.02d468e4@skate>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sat, 12 Oct 2013 14:20:45 +0000 (UTC)
+Subject: [Buildroot] [Bug 6506] Help!!!
+In-Reply-To: <bug-6506-163@https.bugs.busybox.net/>
+References: <bug-6506-163@https.bugs.busybox.net/>
+Message-ID: <20131012142045.C54A49B9DA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Sabri Altunbas,
+https://bugs.busybox.net/show_bug.cgi?id=6506
 
-On Sat, 12 Oct 2013 14:11:10 +0200, Sabri Altunbas wrote:
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
 
-> I created a initramfs with buildroot.
-> I attach my config
-> 
-> It works. But it requires a password which I have not configured and I wanna
-> have no password.
-> 
-> I investigate in forums and find out 
->  
-> http://buildroot-busybox.2317881.n4.nabble.com/Console-login-root-needing-a-
-> password-td15155.html
-> 
-> http://buildroot-busybox.2317881.n4.nabble.com/Bug-5366-New-can-t-login-root
-> -or-default-td30020.html
-> 
-> I followed all recommendations
-> 
-> - taking output/images/rootfs.cpio
-> -  BR2_PACKAGE_UTIL_LINUX_LOGIN_UTILS not defined
-> 
-> but only the following solution worked
-> 
-> #ttyS0::respawn:/sbin/getty -L ttyS0 115200 vt100 # GENERIC_SERIAL
-> ttyS0::respawn:/bin/sh  # GENERIC_SERIAL
-> 
-> overlooked something ?
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|                            |INVALID
 
-By default, there is no password. Can you share your Buildroot .config
-file so we can see if something might be causing problems?
-
-Thanks,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
