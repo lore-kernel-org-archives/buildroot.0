@@ -1,46 +1,34 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Sun, 13 Oct 2013 13:45:04 +0200
-Subject: [Buildroot] [PATCH v3] ruby: fix 'pcrel too far' build problem on
- SuperH architectures
-Message-ID: <2d4efe7ec3764c2fe072.1381664704@argentina>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 13 Oct 2013 15:33:55 +0200
+Subject: [Buildroot] [PATCH] Compile static versions of gcc libraries
+In-Reply-To: <1381398042-6925-1-git-send-email-jezz@sysmic.org>
+References: <1381398042-6925-1-git-send-email-jezz@sysmic.org>
+Message-ID: <20131013153355.3839117b@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The 'pcrel too far' problem detected in the autobuild on SuperH
-architectures, seems to be caused by the -Os optimization flag. Using
-standard optimization fixes the problem.
+Dear J?r?me Pouiller,
 
-Fixes http://autobuild.buildroot.net/results/bc36e051e06f596c2fafdd3cc3745bb34b73ace3/
+On Thu, 10 Oct 2013 11:40:42 +0200, J?r?me Pouiller wrote:
+> Since default configure options for host packages include
+> --disable-static, gcc was not configured to build static version of its
+> libraries (libgcc.a, libstdc++.a, ...).
 
-Investigated-by: Lionel Orry <lionel.orry@gmail.com>
-Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+I'm a bit confused, the toolchains I have here definitely do have
+libgcc.a :
 
----
-v3: use intermediate RUBY_CFLAGS variable (thanks ThomasP)
-v2: don't try to be smarter than you are (don't change TARGET_CFLAGS)
+$ find . -name 'libgcc.a'
+./host/usr/lib/gcc/sh4-buildroot-linux-uclibc/4.7.3/libgcc.a
 
- package/ruby/ruby.mk |  9 +++++++++
- 1 files changed, 9 insertions(+), 0 deletions(-)
+What practical issue are you seeing?
 
-diff --git a/package/ruby/ruby.mk b/package/ruby/ruby.mk
---- a/package/ruby/ruby.mk
-+++ b/package/ruby/ruby.mk
-@@ -15,6 +15,15 @@ HOST_RUBY_CONF_OPT = --disable-install-d
- RUBY_LICENSE = Ruby or BSD-2c, BSD-3c, others
- RUBY_LICENSE_FILES = LEGAL COPYING BSDL
- 
-+RUBY_CFLAGS = $(TARGET_CFLAGS)
-+# With some SuperH toolchains (like Sourcery CodeBench 2012.09), ruby fails to
-+# build with 'pcrel too far'. This seems to be caused by the -Os option we pass
-+# by default. To fix the problem, use standard -O2 optimization instead.
-+ifeq ($(BR2_sh)$(BR2_sh64),y)
-+RUBY_CFLAGS += -O2
-+endif
-+RUBY_CONF_ENV = CFLAGS="$(RUBY_CFLAGS)"
-+
- # Force optionals to build before we do
- ifeq ($(BR2_PACKAGE_BERKELEYDB),y)
- 	RUBY_DEPENDENCIES += berkeleydb
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
