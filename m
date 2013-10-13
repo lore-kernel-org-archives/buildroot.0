@@ -1,74 +1,79 @@
-From: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
-Date: Sun, 13 Oct 2013 23:04:47 +0200
-Subject: [Buildroot] Bumping packages: some comments/suggestions
-In-Reply-To: <20131013114246.440c3831@skate>
-References: <20131013114246.440c3831@skate>
-Message-ID: <525B0AEF.9030406@trzebnica.net>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sun, 13 Oct 2013 23:12:06 +0200
+Subject: [Buildroot] Kernel module compiled but not found
+In-Reply-To: <525AB9F0.3020708@gmail.com>
+References: <525AAE63.3060601@gmail.com>	<20131013145124.GA16563@free.fr>	<525AB5F9.8090907@gmail.com>
+ <20131013170541.398d8907@skate> <525AB9F0.3020708@gmail.com>
+Message-ID: <525B0CA6.6000103@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-
-
-Hi Thomas,
-
-
-> Hello Jerzy and Axel,
+On 13/10/13 17:19, Marco Trapanese wrote:
+> Il 13/10/2013 17:05, Thomas Petazzoni ha scritto:
+>> Macro, can you post your current package (.mk file and Config.in files,
+>> or even better, a patch against Buildroot), so that we can potentially
+>> reproduce your issue and help you solve it?
 >
-> Recently, both of you have worked on and contributed a number of
-> patches bumping a significant number of Buildroot packages. This is of
-> course really great, and I'd like to thank you for those contributions.
 >
-> That being said, I would have two suggestions:
+> Thomas,
+> I don't know how to post a patch against Buildroot (please, may you
+> provide a link where is explained how to?) but I can post here the
+> content of the two files for sure:
 >
->   *) It would be great if you could check that the reverse dependencies
->      of the package you're bumping still continue to build. For example,
->      Axel bumped 'ortp', but didn't realize bumping it would break
->      the linphone and mediastreamer. While we certainly cannot expect
->      contributors to test package bumps in all possible configurations
->      (especially for packages having a large number of
->      reverse dependencies), checking at least a few of them is a good
->      idea. Also, when bumping from one major release to another (such as
->      berkeleydb 5.x to berkeleydb 6.x), even more care should be taken.
+> Config.in
+> config BR2_PACKAGE_SENSORAY2253
+>      bool "sensoray2253"
+>      depends on BR2_LINUX_KERNEL
+>      help
+>        Kernel module for Sensoray 2253
 >
->   *) To make this "bumping" effort a bit more systematic, I believe it
->      would be useful to introduce an infrastructure in Buildroot to
->      automatically check if upstream has a new package. In many cases,
->      the upstream site has a directory with all the different versions
->      of the tarball, so checking if there's a newer one in an automated
->      way would be possible. If we do this for many packages, then we can
->      run a script every day, and check if there are new upstream
->      releases available. Debian has such a mechanism with the 'watch'
->      mechanism (see https://wiki.debian.org/debian/watch/). Gentoo has
->      the euscan utility (see https://github.com/iksaif/euscan). It would
->      be nice having something like this, that we could integrate in the
->      Buildroot per-package stats at
->      http://autobuild.buildroot.org/stats/ to get a clear vision of
->      which packages need to be upgraded. If one of you is interested in
->      doing this, it'd be great!
-
-Thanks for your suggestions.
-Do you mean something like this ?
-
-Package name        Current version       New upstream releases Reverse 
-dependencies
-======================================================================================= 
-
-...
-apr ............... 1.4.6 ........................................ 
-apr-util log4cxx
-apr ..................................... 1.4.8
-apr-util .......... 1.4.1
-apr-util ................................ 1.5.1
-apr-util ................................ 1.5.2
-...
-
-Regards,
-Jerzy
-
-
-> Best regards,
+>        http://it.sensoray.com/products/2253.htm
 >
-> Thomas
+>
+> sensoray2253.mk
+> ################################################################################
+>
+> #
+> # sensoray2253
+> #
+> ################################################################################
+>
+>
+> SENSORAY2253_VERSION = 1.2.6
+> SENSORAY2253_SOURCE = sdk_x53_linux_$(SENSORAY2253_VERSION).tar.bz2
+> SENSORAY2253_SITE = http://it.sensoray.com/downloads/
+> SENSORAY2253_DEPENDENCIES = linux
+>
+> define SENSORAY2253_BUILD_CMDS
+>      $(MAKE) $(LINUX_MAKE_FLAGS) -C $(LINUX_DIR) M=$(@D) modules
+
+  The module is in the driver directory, so I guess this should be 
+M=$(@D)/driver
+
+  Regards,
+  Arnout
+
+> endef
+>
+> define SENSORAY2253_INSTALL_TARGET_CMDS
+>      $(MAKE) $(LINUX_MAKE_FLAGS) -C $(LINUX_DIR) M=$(@D) modules_install
+> endef
+>
+> $(eval $(generic-package))
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+>
+
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
