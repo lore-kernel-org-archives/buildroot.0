@@ -1,30 +1,63 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 14 Oct 2013 00:39:41 +0200
-Subject: [Buildroot] Buildroot Developpers' Day 2013
-Message-ID: <20131013223941.GD16563@free.fr>
+Date: Mon, 14 Oct 2013 01:11:24 +0200
+Subject: [Buildroot] [pull request] [RFC] Pull request for branch
+	yem/instrument-build
+Message-ID: <cover.1381705600.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
 Hello All!
 
-The date for the next Buildroot Developpers' Days (BDD) is getting closer
-with each passing minute. ;-)
+This is an RFC about instrumenting the build process.
 
-Adding items to the list is not limited to participants. Even if you do
-not intend to be present, or can not be, and if you have ideas about
-things we can discuss during this session, please feel free to complete
-the list.
+It works as thus:
+  - we register a set of hooks
+  - hooks are called before and after each steps
 
-I have started adding a few items to the list of topics to address
-during this event, list which you may find there (needs registration
-to the Wiki first):
-    http://elinux.org/Buildroot:DeveloperDaysELCE2013
+There are currently two hooks defined:
+  - log steps with timings
+  - call a user-supplied script
+
+This is just a RFC for now, new hooks can be defined later on.
+
+I'm planning on adding at least one other hook, that runs all scripts
+present in support/step-hooks/ (or whatever its name). Eventually,
+the user-supplied hook could be made to accept a directory instead of
+a file, and run all scripts in that directory, too.
+
+Open for comments! ;-)
 
 Regards,
 Yann E. MORIN.
+
+
+The following changes since commit 9f7e8f120dfeddd8b49eb4d232253cc3f9ac8efa:
+
+  package/weston: add RPi compositor (2013-10-11 08:56:53 +0200)
+
+are available in the git repository at:
+
+  git://gitorious.org/buildroot/buildroot.git yem/instrument-build
+
+for you to fetch changes up to 3f8ce54570cde2f93d5f61c80a1b28af046b4926:
+
+  pkg-infra: add user-supplied step-hooks (2013-10-14 00:58:46 +0200)
+
+----------------------------------------------------------------
+Yann E. MORIN (4):
+      pkg-infra: introduce pre/post-step hooks
+      pkg-infra: add hook to log timing of steps
+      Makefile: export BUILD_DIR
+      pkg-infra: add user-supplied step-hooks
+
+ Makefile               |  1 +
+ package/pkg-generic.mk | 68 ++++++++++++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 69 insertions(+)
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
