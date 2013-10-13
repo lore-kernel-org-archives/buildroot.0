@@ -1,55 +1,81 @@
-From: Marco Trapanese <marcotrapanese@gmail.com>
-Date: Sun, 13 Oct 2013 17:19:12 +0200
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 13 Oct 2013 17:56:20 +0200
 Subject: [Buildroot] Kernel module compiled but not found
-In-Reply-To: <20131013170541.398d8907@skate>
-References: <525AAE63.3060601@gmail.com>	<20131013145124.GA16563@free.fr>	<525AB5F9.8090907@gmail.com>
- <20131013170541.398d8907@skate>
-Message-ID: <525AB9F0.3020708@gmail.com>
+In-Reply-To: <525AAE63.3060601@gmail.com>
+References: <525AAE63.3060601@gmail.com>
+Message-ID: <20131013155620.GB16563@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Il 13/10/2013 17:05, Thomas Petazzoni ha scritto:
-> Macro, can you post your current package (.mk file and Config.in files,
-> or even better, a patch against Buildroot), so that we can potentially
-> reproduce your issue and help you solve it?
+Marco,
 
+On 2013-10-13 16:29 +0200, Marco Trapanese spake thusly:
+> Hello,
+> I read the official documentation and this tutorial:
+> 
+> http://blog.willygroup.org/buildroot-aggiungere-modulo-al-kernel.html#fn-729-1
+> 
+> to add a custom kernel module.
+> It seems it is successfully compiled but I cannot find the .ko file in the
+> Buildroot tree.
+> This is the relevant output:
+> 
+> >>> sensoray2253 1.2.6 Building
+> /usr/bin/make -j5
+> HOSTCC="/home/mark/dev/rpiqt5/buildroot-rpi/output/host/usr/bin/ccache
+> /usr/bin/gcc" HOSTCFLAGS="" ARCH=arm
+> INSTALL_MOD_PATH=/home/mark/dev/rpiqt5/buildroot-rpi/output/target
+> CROSS_COMPILE="/home/mark/dev/rpiqt5/buildroot-rpi/output/host/usr/bin/ccache /home/mark/dev/rpiqt5/buildroot-rpi/output/host/usr/bin/arm-buildroot-linux-gnueabi-"
+> DEPMOD=/home/mark/dev/rpiqt5/buildroot-rpi/output/host/usr/sbin/depmod -C
+> /home/mark/dev/rpiqt5/buildroot-rpi/output/build/linux-custom
+> M=/home/mark/dev/rpiqt5/buildroot-rpi/output/build/sensoray2253-1.2.6
+> modules
+> make[1]: Entering directory
+> `/home/mark/dev/rpiqt5/buildroot-rpi/output/build/linux-custom'
+>   Building modules, stage 2.
+>   MODPOST 0 modules
+> make[1]: Leaving directory
+> `/home/mark/dev/rpiqt5/buildroot-rpi/output/build/linux-custom'
+> >>> sensoray2253 1.2.6 Installing to target
+> /usr/bin/make -j5
+> HOSTCC="/home/mark/dev/rpiqt5/buildroot-rpi/output/host/usr/bin/ccache
+> /usr/bin/gcc" HOSTCFLAGS="" ARCH=arm
+> INSTALL_MOD_PATH=/home/mark/dev/rpiqt5/buildroot-rpi/output/target
+> CROSS_COMPILE="/home/mark/dev/rpiqt5/buildroot-rpi/output/host/usr/bin/ccache /home/mark/dev/rpiqt5/buildroot-rpi/output/host/usr/bin/arm-buildroot-linux-gnueabi-"
+> DEPMOD=/home/mark/dev/rpiqt5/buildroot-rpi/output/host/usr/sbin/depmod -C
+> /home/mark/dev/rpiqt5/buildroot-rpi/output/build/linux-custom
+> M=/home/mark/dev/rpiqt5/buildroot-rpi/output/build/sensoray2253-1.2.6
+> modules_install
+> make[1]: Entering directory
+> `/home/mark/dev/rpiqt5/buildroot-rpi/output/build/linux-custom'
+>   DEPMOD  3.9.11
+> make[1]: Leaving directory
+> `/home/mark/dev/rpiqt5/buildroot-rpi/output/build/linux-custom'
+> mkdir -p /home/mark/dev/rpiqt5/buildroot-rpi/output/target/etc
+> echo "rpi" > /home/mark/dev/rpiqt5/buildroot-rpi/output/target/etc/hostname
+> 
+> 
+> As you can see, there are no errors but I'm not sure the module is correctly
+> installed!
+> According to the tutorial I should find it in:
+> 
+> buildroot_folder/output/target/lib/modules/kernel_version/extra/
+> 
+> but mine is empty.
 
-Thomas,
-I don't know how to post a patch against Buildroot (please, may you 
-provide a link where is explained how to?) but I can post here the 
-content of the two files for sure:
+Have you checked it does not end in another directory beside 'extra'?
+    find output/target/lib/modules/kernel_version/extra/ |grep 'your-module.ko'
 
-Config.in
-config BR2_PACKAGE_SENSORAY2253
-     bool "sensoray2253"
-     depends on BR2_LINUX_KERNEL
-     help
-       Kernel module for Sensoray 2253
+Regards,
+Yann E. MORIN.
 
-       http://it.sensoray.com/products/2253.htm
-
-
-sensoray2253.mk
-################################################################################
-#
-# sensoray2253
-#
-################################################################################
-
-SENSORAY2253_VERSION = 1.2.6
-SENSORAY2253_SOURCE = sdk_x53_linux_$(SENSORAY2253_VERSION).tar.bz2
-SENSORAY2253_SITE = http://it.sensoray.com/downloads/
-SENSORAY2253_DEPENDENCIES = linux
-
-define SENSORAY2253_BUILD_CMDS
-     $(MAKE) $(LINUX_MAKE_FLAGS) -C $(LINUX_DIR) M=$(@D) modules
-endef
-
-define SENSORAY2253_INSTALL_TARGET_CMDS
-     $(MAKE) $(LINUX_MAKE_FLAGS) -C $(LINUX_DIR) M=$(@D) modules_install
-endef
-
-$(eval $(generic-package))
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
