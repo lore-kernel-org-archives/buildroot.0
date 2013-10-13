@@ -1,51 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 13 Oct 2013 17:05:41 +0200
-Subject: [Buildroot] Kernel module compiled but not found
-In-Reply-To: <525AB5F9.8090907@gmail.com>
-References: <525AAE63.3060601@gmail.com> <20131013145124.GA16563@free.fr>
- <525AB5F9.8090907@gmail.com>
-Message-ID: <20131013170541.398d8907@skate>
+Date: Sun, 13 Oct 2013 17:06:24 +0200
+Subject: [Buildroot] Bumping packages: some comments/suggestions
+In-Reply-To: <CAAXf6LXQ4Tv3QGsx2atT=C6yg-HDGoRHDKpJBKyzC4g8-phbDw@mail.gmail.com>
+References: <20131013114246.440c3831@skate>
+ <CAFRkauCECxjxqB5=ufBW5Sve+2aGyMBKSOY+9vpPe0gueV7S1Q@mail.gmail.com>
+ <20131013154229.36a438c9@skate>
+ <CAAXf6LXQ4Tv3QGsx2atT=C6yg-HDGoRHDKpJBKyzC4g8-phbDw@mail.gmail.com>
+Message-ID: <20131013170624.43960a83@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Marco Trapanese,
+Dear Thomas De Schampheleire,
 
-On Sun, 13 Oct 2013 17:02:17 +0200, Marco Trapanese wrote:
-> Il 13/10/2013 16:51, Yann E. MORIN ha scritto:
-> > You're missing INSTALL_MOD_PATH=$(TARGET_DIR) on this command line 
-> > (the make line for 'MYKMOD_INSTALL_TARGET_CMDS' ). Regards, Yann E. 
-> > MORIN. 
+On Sun, 13 Oct 2013 17:01:48 +0200, Thomas De Schampheleire wrote:
+
+> > Any opinion about this? I believe it would make more sense to invest
+> > time doing this than doing many many bumps on all packages.
 > 
-> Yann,
-> thank you for your quick answer. I changed the command line (in 
-> sensoray2253/sensoray2253.mk) in this way:
-> 
-> define SENSORAY2253_INSTALL_TARGET_CMDS
->      $(MAKE) $(LINUX_MAKE_FLAGS) -C $(LINUX_DIR) M=$(@D) 
-> INSTALL_MOD_PATH=$(TARGET_DIR) modules_install
-> endef
-> 
-> Is it correct?
+> I assume you're only talking about a way to automatically _detect_
+> that there are new versions of a given package, and the actual update
+> in buildroot is still done manually, right?
 
-Adding INSTALL_MOD_PATH should normally not be necessary, since
-LINUX_MAKE_FLAGS already contains INSTALL_MOD_PATH.
-
-From linux/linux.mk:
-
-LINUX_MAKE_FLAGS = \
-        HOSTCC="$(HOSTCC)" \
-        HOSTCFLAGS="$(HOSTCFLAGS)" \
-        ARCH=$(KERNEL_ARCH) \
-        INSTALL_MOD_PATH=$(TARGET_DIR) \
-        CROSS_COMPILE="$(CCACHE) $(TARGET_CROSS)" \
-        DEPMOD=$(HOST_DIR)/sbin/depmod
-
-Macro, can you post your current package (.mk file and Config.in files,
-or even better, a patch against Buildroot), so that we can potentially
-reproduce your issue and help you solve it?
+Of course. But this way, we would have some kind of "dashboard" showing
+us which packages might benefit from a bump.
 
 Best regards,
 
