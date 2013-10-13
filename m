@@ -1,376 +1,148 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Sun, 13 Oct 2013 16:55:30 +0200
-Subject: [Buildroot] [PATCH 0 of 2 v3] Unification of comments on toolchain
- option dependencies
-Message-ID: <patchbomb.1381676130@argentina>
+Date: Sun, 13 Oct 2013 16:55:31 +0200
+Subject: [Buildroot] [PATCH 1 of 2 v3] manual: add section about depending
+ on target and toolchain options
+In-Reply-To: <patchbomb.1381676130@argentina>
+References: <patchbomb.1381676130@argentina>
+Message-ID: <21b9bd1f7132d7e17e8a.1381676131@argentina>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter, all,
+Currently, the comments in Config.in files when depending on toolchain options
+are not at all lined up. This patch adds a section to the documentation that
+explains which format is to be used.
 
-This is supposed to be the last version of this series, it should be ready
-to be merged now. It has been rebased with current master.
-
-All new patches adding comments about toolchain options should follow the
-new wording strategy.
-
-Best regards,
-Thomas
+Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
 ---
-v3: update documentation with comments Arnout
-v2: update documentation with comments from ThomasP and Arnout
+v3:
+- incorporate Arnout's comments
+- add (e)glibc text to documentation (previously mentioned as 'to be
+  decided')
+
+v2:
+- explicitly add parts on target architecture and MMU support (no comment
+  needed) (comment ThomasP)
+- remove 'without scrolling' text (comment Arnout)
 
 
- docs/manual/adding-packages-directory.txt      |  90 ++++++++++++++++++++-
- linux/Config.ext.in                            |   2 +-
- package/acl/Config.in                          |   2 +-
- package/aiccu/Config.in                        |   2 +-
- package/aircrack-ng/Config.in                  |   2 +-
- package/alsa-lib/Config.in                     |   2 +-
- package/alsa-utils/Config.in                   |   4 +-
- package/alsamixergui/Config.in                 |   2 +-
- package/atk/Config.in                          |   2 +-
- package/attr/Config.in                         |   2 +-
- package/audiofile/Config.in                    |   2 +-
- package/avahi/Config.in                        |   2 +-
- package/axel/Config.in                         |   2 +-
- package/bcusdk/Config.in                       |   2 +-
- package/beecrypt/Config.in                     |   4 +-
- package/bellagio/Config.in                     |   2 +-
- package/bind/Config.in                         |   2 +-
- package/bison/Config.in                        |   2 +-
- package/blackbox/Config.in                     |   2 +-
- package/bluez_utils/Config.in                  |   4 +-
- package/bmon/Config.in                         |   2 +-
- package/bonnie/Config.in                       |   2 +-
- package/boost/Config.in                        |   4 +-
- package/bootutils/Config.in                    |   2 +-
- package/bustle/Config.in                       |   2 +-
- package/ccid/Config.in                         |   2 +-
- package/cdrkit/Config.in                       |   2 +-
- package/cegui06/Config.in                      |   2 +-
- package/civetweb/Config.in                     |   4 +-
- package/classpath/Config.in                    |   2 +-
- package/collectd/Config.in                     |   4 +-
- package/connman/Config.in                      |   2 +-
- package/conntrack-tools/Config.in              |   2 +-
- package/coreutils/Config.in                    |   2 +-
- package/cppcms/Config.in                       |   2 +-
- package/cppzmq/Config.in                       |   2 +-
- package/crda/Config.in                         |   2 +-
- package/cryptsetup/Config.in                   |   2 +-
- package/ctorrent/Config.in                     |   2 +-
- package/cups/Config.in                         |   2 +-
- package/curlftpfs/Config.in                    |   2 +-
- package/cvs/Config.in                          |   2 +-
- package/czmq/Config.in                         |   2 +-
- package/dbus-glib/Config.in                    |   2 +-
- package/dbus-python/Config.in                  |   2 +-
- package/dbus/Config.in                         |   2 +-
- package/dhcpcd/Config.in                       |   2 +-
- package/diffutils/Config.in                    |   2 +-
- package/directfb/Config.in                     |   2 +-
- package/dmraid/Config.in                       |   2 +-
- package/dnsmasq/Config.in                      |   2 +-
- package/docker/Config.in                       |   2 +-
- package/dosfstools/Config.in                   |   2 +-
- package/dropwatch/Config.in                    |   2 +-
- package/dstat/Config.in                        |   2 +-
- package/duma/Config.in                         |   2 +-
- package/dvb-apps/Config.in                     |   2 +-
- package/dvbsnoop/Config.in                     |   2 +-
- package/e2fsprogs/Config.in                    |   2 +-
- package/ebtables/Config.in                     |   2 +-
- package/efl/Config.in                          |   2 +-
- package/efl/expedite/Config.in                 |   2 +-
- package/efl/libedbus/Config.in                 |   4 +-
- package/efl/libevas-generic-loaders/Config.in  |   2 +-
- package/elfutils/Config.in                     |   2 +-
- package/enchant/Config.in                      |   2 +-
- package/enlightenment/Config.in                |   2 +-
- package/exfat-utils/Config.in                  |   2 +-
- package/exfat/Config.in                        |   2 +-
- package/f2fs-tools/Config.in                   |   2 +-
- package/fbterm/Config.in                       |   2 +-
- package/fdk-aac/Config.in                      |   2 +-
- package/ffmpeg/Config.in                       |   2 +-
- package/filemq/Config.in                       |   2 +-
- package/findutils/Config.in                    |   2 +-
- package/flashbench/Config.in                   |   2 +-
- package/flex/Config.in                         |   2 +-
- package/fltk/Config.in                         |   2 +-
- package/fluxbox/Config.in                      |   2 +-
- package/foomatic-filters/Config.in             |   2 +-
- package/gadgetfs-test/Config.in                |   2 +-
- package/gamin/Config.in                        |   2 +-
- package/gawk/Config.in                         |   2 +-
- package/gdb/Config.in                          |   4 +-
- package/gdk-pixbuf/Config.in                   |   2 +-
- package/genext2fs/Config.in                    |   2 +-
- package/gesftpserver/Config.in                 |   2 +-
- package/gettext/Config.in                      |   2 +-
- package/git/Config.in                          |   2 +-
- package/glib-networking/Config.in              |   2 +-
- package/glibmm/Config.in                       |   2 +-
- package/gmpc/Config.in                         |   2 +-
- package/gnuchess/Config.in                     |   2 +-
- package/gnutls/Config.in                       |   2 +-
- package/gob2/Config.in                         |   2 +-
- package/gperf/Config.in                        |   2 +-
- package/gpsd/Config.in                         |   2 +-
- package/gptfdisk/Config.in                     |   2 +-
- package/grep/Config.in                         |   2 +-
- package/gstreamer/gst-ffmpeg/Config.in         |   2 +-
- package/gstreamer/gst-plugins-bad/Config.in    |   8 +-
- package/gstreamer/gst-plugins-base/Config.in   |   2 +-
- package/gstreamer/gst-plugins-good/Config.in   |   6 +-
- package/gstreamer/gstreamer/Config.in          |   2 +-
- package/gstreamer1/gst1-plugins-bad/Config.in  |  10 +-
- package/gstreamer1/gst1-plugins-base/Config.in |   2 +-
- package/gstreamer1/gst1-plugins-good/Config.in |   6 +-
- package/gstreamer1/gst1-plugins-ugly/Config.in |   2 +-
- package/gstreamer1/gstreamer1/Config.in        |   2 +-
- package/gtest/Config.in                        |   2 +-
- package/gutenprint/Config.in                   |   2 +-
- package/gvfs/Config.in                         |   2 +-
- package/gzip/Config.in                         |   2 +-
- package/harfbuzz/Config.in                     |   2 +-
- package/hdparm/Config.in                       |   2 +-
- package/hiawatha/Config.in                     |   2 +-
- package/hostapd/Config.in                      |   2 +-
- package/hplip/Config.in                        |   2 +-
- package/icu/Config.in                          |   2 +-
- package/iftop/Config.in                        |   2 +-
- package/igmpproxy/Config.in                    |   2 +-
- package/inotify-tools/Config.in                |   2 +-
- package/iperf/Config.in                        |   2 +-
- package/ipset/Config.in                        |   2 +-
- package/iw/Config.in                           |   2 +-
- package/jamvm/Config.in                        |   2 +-
- package/jhead/Config.in                        |   2 +-
- package/json-glib/Config.in                    |   2 +-
- package/kismet/Config.in                       |   2 +-
- package/latencytop/Config.in                   |   2 +-
- package/lcdapi/Config.in                       |   2 +-
- package/libarchive/Config.in                   |   2 +-
- package/libbsd/Config.in                       |   2 +-
- package/libcec/Config.in                       |   2 +-
- package/libcgicc/Config.in                     |   2 +-
- package/libcgroup/Config.in                    |   2 +-
- package/libdrm/Config.in                       |   2 +-
- package/libdvbsi/Config.in                     |   2 +-
- package/libdvdnav/Config.in                    |   2 +-
- package/libdvdread/Config.in                   |   2 +-
- package/libebml/Config.in                      |   2 +-
- package/libedit/Config.in                      |   2 +-
- package/libfreefare/Config.in                  |   2 +-
- package/libftdi/Config.in                      |   2 +-
- package/libfuse/Config.in                      |   2 +-
- package/libgail/Config.in                      |   2 +-
- package/libglade/Config.in                     |   2 +-
- package/libglib2/Config.in                     |   2 +-
- package/libgtk2/Config.in                      |   2 +-
- package/libhid/Config.in                       |   2 +-
- package/libical/Config.in                      |   2 +-
- package/libiqrf/Config.in                      |   2 +-
- package/libjson/Config.in                      |   2 +-
- package/liblo/Config.in                        |   2 +-
- package/libmatroska/Config.in                  |   2 +-
- package/libmicrohttpd/Config.in                |   4 +-
- package/libmms/Config.in                       |   2 +-
- package/libmnl/Config.in                       |   2 +-
- package/libmpd/Config.in                       |   2 +-
- package/libnetfilter_acct/Config.in            |   2 +-
- package/libnetfilter_conntrack/Config.in       |   2 +-
- package/libnetfilter_cthelper/Config.in        |   2 +-
- package/libnetfilter_cttimeout/Config.in       |   2 +-
- package/libnetfilter_queue/Config.in           |   2 +-
- package/libnfc/Config.in                       |   2 +-
- package/libnl/Config.in                        |   2 +-
- package/libnspr/Config.in                      |   2 +-
- package/libnss/Config.in                       |   2 +-
- package/liboping/Config.in                     |   2 +-
- package/libplayer/Config.in                    |   4 +-
- package/libqmi/Config.in                       |   2 +-
- package/libraw/Config.in                       |   2 +-
- package/libroxml/Config.in                     |   2 +-
- package/librsvg/Config.in                      |   2 +-
- package/libsecret/Config.in                    |   2 +-
- package/libserial/Config.in                    |   2 +-
- package/libsigc/Config.in                      |   2 +-
- package/libsndfile/Config.in                   |   2 +-
- package/libsoc/Config.in                       |   2 +-
- package/libsoup/Config.in                      |   2 +-
- package/libtirpc/Config.in                     |   2 +-
- package/libtorrent/Config.in                   |   2 +-
- package/libunwind/Config.in                    |   2 +-
- package/libupnp/Config.in                      |   2 +-
- package/liburcu/Config.in                      |   2 +-
- package/libusb/Config.in                       |   2 +-
- package/libv4l/Config.in                       |   8 +-
- package/libxmlpp/Config.in                     |   2 +-
- package/linknx/Config.in                       |   2 +-
- package/linphone/Config.in                     |   2 +-
- package/linux-pam/Config.in                    |   2 +-
- package/live555/Config.in                      |   2 +-
- package/lmbench/Config.in                      |   2 +-
- package/log4cxx/Config.in                      |   2 +-
- package/logrotate/Config.in                    |   2 +-
- package/lshw/Config.in                         |   2 +-
- package/ltp-testsuite/Config.in                |   2 +-
- package/lttng-babeltrace/Config.in             |   2 +-
- package/lttng-libust/Config.in                 |   4 +-
- package/lttng-tools/Config.in                  |   2 +-
- package/lvm2/Config.in                         |   2 +-
- package/lxc/Config.in                          |   2 +-
- package/lzma/Config.in                         |   2 +-
- package/m4/Config.in                           |   2 +-
- package/mediastreamer/Config.in                |   2 +-
- package/memtester/Config.in                    |   2 +-
- package/midori/Config.in                       |   2 +-
- package/minicom/Config.in                      |   2 +-
- package/minidlna/Config.in                     |   2 +-
- package/mongoose/Config.in                     |   2 +-
- package/monit/Config.in                        |   2 +-
- package/mpd/Config.in                          |   6 +-
- package/mplayer/Config.in                      |   2 +-
- package/msgpack/Config.in                      |   2 +-
- package/mtd/Config.in                          |   4 +-
- package/mtdev2tuio/Config.in                   |   2 +-
- package/mutt/Config.in                         |   2 +-
- package/mysql_client/Config.in                 |   2 +-
- package/nbd/Config.in                          |   2 +-
- package/ndisc6/Config.in                       |   2 +-
- package/neard/Config.in                        |   2 +-
- package/neardal/Config.in                      |   2 +-
- package/netatalk/Config.in                     |   2 +-
- package/netkitbase/Config.in                   |   2 +-
- package/netkittelnet/Config.in                 |   2 +-
- package/network-manager/Config.in              |   2 +-
- package/nfacct/Config.in                       |   2 +-
- package/nfs-utils/Config.in                    |   2 +-
- package/nmap/Config.in                         |   2 +-
- package/nodejs/Config.in                       |   2 +-
- package/ntfs-3g/Config.in                      |   2 +-
- package/numactl/Config.in                      |   2 +-
- package/ocrad/Config.in                        |   2 +-
- package/ofono/Config.in                        |   2 +-
- package/ola/Config.in                          |   2 +-
- package/olsr/Config.in                         |   2 +-
- package/omniorb/Config.in                      |   2 +-
- package/opencv/Config.in                       |   8 +-
- package/openobex/Config.in                     |   6 +-
- package/openocd/Config.in                      |   2 +-
- package/openpgm/Config.in                      |   2 +-
- package/openpowerlink/Config.in                |   2 +-
- package/openvpn/Config.in                      |   2 +-
- package/oprofile/Config.in                     |   2 +-
- package/orc/Config.in                          |   2 +-
- package/ortp/Config.in                         |   2 +-
- package/p11-kit/Config.in                      |   2 +-
- package/pango/Config.in                        |   2 +-
- package/parted/Config.in                       |   2 +-
- package/patch/Config.in                        |   2 +-
- package/pcmanfm/Config.in                      |   2 +-
- package/pcsc-lite/Config.in                    |   2 +-
- package/perf/Config.in                         |   2 +-
- package/php/Config.ext                         |   6 +-
- package/pkg-config/Config.in                   |   2 +-
- package/poco/Config.in                         |   2 +-
- package/polkit/Config.in                       |   2 +-
- package/poppler/Config.in                      |   2 +-
- package/portaudio/Config.in                    |   2 +-
- package/portmap/Config.in                      |   2 +-
- package/pppd/Config.in                         |   2 +-
- package/protobuf-c/Config.in                   |   2 +-
- package/protobuf/Config.in                     |   2 +-
- package/proxychains-ng/Config.in               |   2 +-
- package/psplash/Config.in                      |   2 +-
- package/pulseaudio/Config.in                   |   2 +-
- package/python-nfc/Config.in                   |   2 +-
- package/python-pyzmq/Config.in                 |   2 +-
- package/python/Config.in                       |   2 +-
- package/python3/Config.in                      |   2 +-
- package/qt/Config.in                           |   4 +-
- package/qt5/Config.in                          |   2 +-
- package/quagga/Config.in                       |   2 +-
- package/quota/Config.in                        |   2 +-
- package/radvd/Config.in                        |   2 +-
- package/redis/Config.in                        |   2 +-
- package/rpcbind/Config.in                      |   2 +-
- package/rpi-userland/Config.in                 |   2 +-
- package/rpm/Config.in                          |   4 +-
- package/rrdtool/Config.in                      |   2 +-
- package/rt-tests/Config.in                     |   2 +-
- package/rtorrent/Config.in                     |   2 +-
- package/ruby/Config.in                         |   2 +-
- package/samba/Config.in                        |   2 +-
- package/schifra/Config.in                      |   2 +-
- package/sconeserver/Config.in                  |   2 +-
- package/sed/Config.in                          |   2 +-
- package/ser2net/Config.in                      |   2 +-
- package/sg3_utils/Config.in                    |   2 +-
- package/shared-mime-info/Config.in             |   2 +-
- package/smartmontools/Config.in                |   2 +-
- package/snappy/Config.in                       |   2 +-
- package/snowball-init/Config.in                |   2 +-
- package/socat/Config.in                        |   2 +-
- package/socketcand/Config.in                   |   2 +-
- package/spice/Config.in                        |   2 +-
- package/sqlcipher/Config.in                    |   2 +-
- package/squashfs/Config.in                     |   2 +-
- package/squashfs3/Config.in                    |   2 +-
- package/squid/Config.in                        |   2 +-
- package/sshfs/Config.in                        |   2 +-
- package/strongswan/Config.in                   |   2 +-
- package/synergy/Config.in                      |   2 +-
- package/sysklogd/Config.in                     |   2 +-
- package/sysprof/Config.in                      |   2 +-
- package/systemd/Config.in                      |   2 +-
- package/taglib/Config.in                       |   2 +-
- package/tar/Config.in                          |   2 +-
- package/ti-utils/Config.in                     |   2 +-
- package/trace-cmd/Config.in                    |   2 +-
- package/transmission/Config.in                 |   6 +-
- package/tree/Config.in                         |   2 +-
- package/tstools/Config.in                      |   2 +-
- package/tvheadend/Config.in                    |   2 +-
- package/udev/Config.in                         |   2 +-
- package/udisks/Config.in                       |   2 +-
- package/udpcast/Config.in                      |   2 +-
- package/ulogd/Config.in                        |   2 +-
- package/unionfs/Config.in                      |   2 +-
- package/urg/Config.in                          |   2 +-
- package/usb_modeswitch/Config.in               |   2 +-
- package/usb_modeswitch_data/Config.in          |   2 +-
- package/usbredir/Config.in                     |   2 +-
- package/usbutils/Config.in                     |   2 +-
- package/ushare/Config.in                       |   2 +-
- package/ussp-push/Config.in                    |   2 +-
- package/util-linux/Config.in                   |   4 +-
- package/vala/Config.in                         |   2 +-
- package/wayland/Config.in                      |   2 +-
- package/webkit/Config.in                       |   2 +-
- package/webrtc-audio-processing/Config.in      |   2 +-
- package/wget/Config.in                         |   2 +-
- package/wireshark/Config.in                    |   2 +-
- package/wvdial/Config.in                       |   2 +-
- package/wvstreams/Config.in                    |   2 +-
- package/x11r7/Config.in                        |   2 +-
- package/x11r7/xapp_xinput-calibrator/Config.in |   2 +-
- package/x11r7/xlib_libpciaccess/Config.in      |   2 +-
- package/x11r7/xserver_xorg-server/Config.in    |   2 +-
- package/xenomai/Config.in                      |   2 +-
- package/xerces/Config.in                       |   2 +-
- package/xfsprogs/Config.in                     |   2 +-
- package/xscreensaver/Config.in                 |   2 +-
- package/zeromq/Config.in                       |   2 +-
- package/zmqpp/Config.in                        |   4 +-
- package/zxing/Config.in                        |   2 +-
- package/zyre/Config.in                         |   2 +-
- system/Config.in                               |   4 +-
- 348 files changed, 471 insertions(+), 397 deletions(-)
+ docs/manual/adding-packages-directory.txt |  90 ++++++++++++++++++++++++--
+ 1 files changed, 82 insertions(+), 8 deletions(-)
+
+diff --git a/docs/manual/adding-packages-directory.txt b/docs/manual/adding-packages-directory.txt
+--- a/docs/manual/adding-packages-directory.txt
++++ b/docs/manual/adding-packages-directory.txt
+@@ -70,13 +70,9 @@ rules:
+ 
+ * Use a +depends on+ type of dependency when the user really needs to
+   be aware of the dependency. Typically, Buildroot uses this type of
+-  dependency for dependencies on toolchain options (target
+-  architecture, MMU support, C library, C++ support, large file
+-  support, thread support, RPC support, IPV6 support, WCHAR support),
+-  or for dependencies on "big" things, such as the X.org system. For
+-  dependencies on toolchain options, there should be a +comment+ that
+-  is displayed when the option is not
+-  enabled, so that the user knows why the package is not available.
++  dependency for dependencies on target architecture, MMU support and
++  toolchain options (see xref:dependencies-target-toolchain-options[]),
++  or for dependencies on "big" things, such as the X.org system.
+   The +depends on+ keyword expresses the dependency with a forward
+   semantic.
+ 
+@@ -101,7 +97,7 @@ config BR2_PACKAGE_ACL
+ 
+           http://savannah.nongnu.org/projects/acl
+ 
+-comment "acl requires a toolchain with LARGEFILE support"
++comment "acl needs a toolchain w/ largefile"
+         depends on !BR2_LARGEFILE
+ --------------------------
+ 
+@@ -167,6 +163,84 @@ package.
+ Further formatting details: see xref:writing-rules-config-in[the
+ coding style].
+ 
++[[dependencies-target-toolchain-options]]
++Dependencies on target and toolchain options
++^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
++Many packages depend on certain options of the toolchain: the choice of
++C library, C++ support, largefile support, thread support, RPC support,
++IPv6 support, wchar support, or dynamic library support. Some packages
++can only be built on certain target architectures, or if an MMU is
++available in the processor.
++These dependencies have to expressed with the appropriate 'depends on'
++statements in the Config.in file. Additionally, for dependencies on
++toolchain options, a +comment+ should be displayed when the option is
++not enabled, so that the user knows why the package is not available.
++Dependencies on target architecture or MMU support should not be
++made visible in a comment: since it is unlikely that the user can
++freely choose another target, it makes little sense to show these
++dependencies explicitly.
++
++The general format of a dependency +comment+ for package foo is:
++--------------------------
++foo needs a toolchain w/ featA, featB, featC
++--------------------------
++
++for example:
++--------------------------
++aircrack-ng needs a toolchain w/ largefile, threads
++--------------------------
++
++Note that this text is kept brief on purpose, so that it will fit on a
++80-character terminal.
++
++The rest of this section enumerates the different target and toolchain
++options, the corresponding config symbols to depend on, and the text to
++use in the comment.
++
++* Target architecture
++** Dependency symbol: +BR2_powerpc+, +BR2_mips+, ... (see +arch/Config.in+)
++** Comment string: no comment to be added
++
++* MMU support
++** Dependency symbol: +BR2_USE_MMU+
++** Comment string: no comment to be added
++
++* C library
++** Dependency symbol: +BR2_TOOLCHAIN_USES_GLIBC+,
+++BR2_TOOLCHAIN_USES_UCLIBC+
++** Comment string: for the C library, a slightly different comment text
++   is used: +foo needs an (e)glibc toolchain+, or `foo needs an (e)glibc
++   toolchain w/ C++ support`
++
++* C++ support
++** Dependency symbol: +BR2_INSTALL_LIBSTDCPP+
++** Comment string: `C++`
++
++* largefile support
++** Dependency symbol: +BR2_LARGEFILE+
++** Comment string: +largefile+
++
++* thread support
++** Dependency symbol: +BR2_TOOLCHAIN_HAS_THREADS+
++** Comment string: +threads+
++
++* RPC support
++** Dependency symbol: +BR2_TOOLCHAIN_HAS_NATIVE_RPC+
++** Comment string: +RPC+
++
++* IPv6 support
++** Dependency symbol: +BR2_INET_IPV6+
++** Comment string: +IPv6+ (lowercase v)
++
++* wchar support
++** Dependency symbol: +BR2_USE_WCHAR+
++** Comment string: +wchar+
++
++* dynamic library
++** Dependency symbol: +!BR2_PREFER_STATIC_LIB+
++** Comment string: +dynamic library+
++
++
+ The +.mk+ file
+ ~~~~~~~~~~~~~~
+ [[adding-packages-mk]]
