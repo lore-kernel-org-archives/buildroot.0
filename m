@@ -1,51 +1,83 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 13 Oct 2013 10:25:26 +0200
-Subject: [Buildroot] [PATCH] ruby: fix 'pcrel too far' build problem on
- SuperH architectures
-In-Reply-To: <CAAXf6LXA-UK2EcGnmRvhfA8cT_+-GsZTQ1o2ubjbFGnGAL4k2w@mail.gmail.com>
-References: <873298952161de3ed5aa.1381650276@argentina>
- <20131013095140.7a9e70e5@skate>
- <CAAXf6LXA-UK2EcGnmRvhfA8cT_+-GsZTQ1o2ubjbFGnGAL4k2w@mail.gmail.com>
-Message-ID: <20131013102526.56152a76@skate>
+Date: Sun, 13 Oct 2013 10:28:20 +0200
+Subject: [Buildroot] [PATCHv2] toolchain-external: add a specific check to
+	avoid Angstrom toolchains
+Message-ID: <1381652900-12516-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas De Schampheleire,
+The Angstrom toolchains available at
+http://www.angstrom-distribution.org/toolchains/ are not usable as
+external toolchains in Buildroot, because they are not pure toolchains
+with just the C library, but instead complete SDKs with many
+cross-compiled libraries (Gtk, Qt, glib, neon, sqlite, X.org, and many
+more, approximately 200 MB of libraries).
 
-On Sun, 13 Oct 2013 09:58:05 +0200, Thomas De Schampheleire wrote:
+Buildroot cannot use such toolchains, and while this is documented in
+our manual, some users still try to do this. Today, one such user came
+on the IRC channel, reporting a build problem, which we started
+investigating, only to realize after a long time that he was using an
+Angstrom toolchain.
 
-> > I don't think it's the right way of fixing the problem. This is going to
-> > affect the CFLAGS of *all* packages. You shouldn't change
-> > TARGET_CFLAGS, but instead do:
-> >
-> > RUBY_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -O2"
-> 
-> Ah yes, you're right. The above was what I proposed initially, but I
-> tried to be too smart.
-> I was looking for a way to avoid duplicating TARGET_CFLAGS, because if
-> someone needs to add a new cflag for ruby specifically, they now need
-> to explicitly take the superh case into account.
-> 
-> I'll send a new version.
+To avoid this problem in the future, we explicitly check if the
+toolchain is from Angstrom by looking at the vendor part of the tuple
+exposed by the toolchain: as soon as it is
+<something>-angstrom-<something-else>, we reject the toolchain with an
+explanation.
 
-The way we usually do this is:
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+Changes since v1:
 
-RUBY_CFLAGS = $(TARGET_CFLAGS)
+ * Fix typos in the comments (Thomas DS)
+ * Rename function to check_unusable_toolchain (Thomas DS)
+ * Use -dumpmachine instead of -v and some nasty sed'ing (Thomas DS)
+ * Add quotes around $${vendor} (Thomas DS)
 
-ifeq ($(BR2_sh)$(BR2_sh64),y)
-RUBY_CFLAGS += -O2
-endif
+ toolchain/helpers.mk                               | 18 ++++++++++++++++++
+ toolchain/toolchain-external/toolchain-external.mk |  1 +
+ 2 files changed, 19 insertions(+)
 
-RUBY_CONF_ENV += CFLAGS="$(RUBY_CFLAGS)"
-
-This way, someone else can easily add another RUBY_CFLAGS +=, and not
-worry about the SuperH thing.
-
-Thomas
+diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
+index 95120cd..a8944ce 100644
+--- a/toolchain/helpers.mk
++++ b/toolchain/helpers.mk
+@@ -324,3 +324,21 @@ check_cross_compiler_exists = \
+ 		echo "Cannot execute cross-compiler '$${__CROSS_CC}'" ; \
+ 		exit 1 ; \
+ 	fi
++
++#
++# Check for toolchains known not to work with Buildroot. For now, we
++# only check for Angstrom toolchains, by looking at the vendor part of
++# the host tuple.
++#
++# $1: cross-gcc path
++#
++check_unusable_toolchain = \
++	__CROSS_CC=$(strip $1) ; \
++	vendor=`$${__CROSS_CC} -dumpmachine | cut -f2 -d'-'` ; \
++	if test "$${vendor}" = "angstrom" ; then \
++		echo "Angstrom toolchains are not pure toolchains: they contain" ; \
++		echo "many other libraries than just the C library, which makes" ; \
++		echo "them unsuitable as external toolchains for build systems" ; \
++		echo "such as Buildroot." ; \
++		exit 1 ; \
++	fi
+diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
+index b5b1ce7..d41cc7c 100644
+--- a/toolchain/toolchain-external/toolchain-external.mk
++++ b/toolchain/toolchain-external/toolchain-external.mk
+@@ -371,6 +371,7 @@ endif
+ # type of C library and all C library features.
+ define TOOLCHAIN_EXTERNAL_CONFIGURE_CMDS
+ 	$(Q)$(call check_cross_compiler_exists,$(TOOLCHAIN_EXTERNAL_CC))
++	$(Q)$(call check_unusable_toolchain,$(TOOLCHAIN_EXTERNAL_CC))
+ 	$(Q)LIBC_A_LOCATION=`readlink -f $$(LANG=C $(TOOLCHAIN_EXTERNAL_CC) -print-file-name=libc.a)` ; \
+ 	SYSROOT_DIR=`echo $${LIBC_A_LOCATION} | sed -r -e 's:(usr/)?lib(32|64)?/(.*/)?libc\.a::'` ; \
+ 	if test -z "$${SYSROOT_DIR}" ; then \
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.8.1.2
