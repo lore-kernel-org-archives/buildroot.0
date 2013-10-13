@@ -1,9 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 14 Oct 2013 01:11:27 +0200
-Subject: [Buildroot] [PATCH 3/4] Makefile: export BUILD_DIR
+Date: Mon, 14 Oct 2013 01:11:28 +0200
+Subject: [Buildroot] [PATCH 4/4] pkg-infra: add user-supplied step-hooks
 In-Reply-To: <cover.1381705600.git.yann.morin.1998@free.fr>
 References: <cover.1381705600.git.yann.morin.1998@free.fr>
-Message-ID: <834cf660ddc6216e486f97195f464f0e6125774e.1381705600.git.yann.morin.1998@free.fr>
+Message-ID: <3f8ce54570cde2f93d5f61c80a1b28af046b4926.1381705600.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,28 +12,37 @@ To: buildroot@busybox.net
 
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-$(BUILD_DIR) is a nice place to put files generated during the build.
-With the advent of user-supplied step-hooks, they may want to store
-some information on the build.
+Allow user to supply their own step-hooks by passing a variable
+on the make command-line:
+    make BR2_STEP_USER_HOOK=/path/to/my/script
 
-Export BUILD_DIR to that effect.
+This can be usefull to run site-specific actions at each step of the
+build process, such as logging installed, removed or modified files,
+do sanity checks on installed files...
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- Makefile | 1 +
- 1 file changed, 1 insertion(+)
+ package/pkg-generic.mk | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/Makefile b/Makefile
-index f266e2d..9528703 100644
---- a/Makefile
-+++ b/Makefile
-@@ -291,6 +291,7 @@ export STAGING_DIR
- export HOST_DIR
- export BINARIES_DIR
- export BASE_DIR
-+export BUILD_DIR
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 162c9ed..f5c33b2 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -42,6 +42,14 @@ define step_time
+ endef
+ STEP_HOOKS += step_time
  
++# User-supplied script
++define step_user
++	"$(BR2_STEP_USER_HOOK)" "$(1)" "$(2)" "$($(PKG)_NAME)"
++endef
++ifneq ($(BR2_STEP_USER_HOOK),)
++STEP_HOOKS += step_user
++endif
++
  ################################################################################
- #
+ # Implicit targets -- produce a stamp file for each step of a package build
+ ################################################################################
 -- 
 1.8.1.2
