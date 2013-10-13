@@ -1,43 +1,51 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Sun, 13 Oct 2013 10:04:07 +0200
-Subject: [Buildroot] [PATCH v2] ruby: fix 'pcrel too far' build problem on
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 13 Oct 2013 10:25:26 +0200
+Subject: [Buildroot] [PATCH] ruby: fix 'pcrel too far' build problem on
  SuperH architectures
-Message-ID: <7afb0883e9e4c6d1ac65.1381651447@argentina>
+In-Reply-To: <CAAXf6LXA-UK2EcGnmRvhfA8cT_+-GsZTQ1o2ubjbFGnGAL4k2w@mail.gmail.com>
+References: <873298952161de3ed5aa.1381650276@argentina>
+ <20131013095140.7a9e70e5@skate>
+ <CAAXf6LXA-UK2EcGnmRvhfA8cT_+-GsZTQ1o2ubjbFGnGAL4k2w@mail.gmail.com>
+Message-ID: <20131013102526.56152a76@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The 'pcrel too far' problem detected in the autobuild on SuperH
-architectures, seems to be caused by the -Os optimization flag. Using
-standard optimization fixes the problem.
+Dear Thomas De Schampheleire,
 
-Fixes http://autobuild.buildroot.net/results/bc36e051e06f596c2fafdd3cc3745bb34b73ace3/
+On Sun, 13 Oct 2013 09:58:05 +0200, Thomas De Schampheleire wrote:
 
-Investigated-by: Lionel Orry <lionel.orry@gmail.com>
-Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+> > I don't think it's the right way of fixing the problem. This is going to
+> > affect the CFLAGS of *all* packages. You shouldn't change
+> > TARGET_CFLAGS, but instead do:
+> >
+> > RUBY_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -O2"
+> 
+> Ah yes, you're right. The above was what I proposed initially, but I
+> tried to be too smart.
+> I was looking for a way to avoid duplicating TARGET_CFLAGS, because if
+> someone needs to add a new cflag for ruby specifically, they now need
+> to explicitly take the superh case into account.
+> 
+> I'll send a new version.
 
----
-v2: don't try to be smarter than you are (don't change TARGET_CFLAGS)
+The way we usually do this is:
 
- package/ruby/ruby.mk |  7 +++++++
- 1 files changed, 7 insertions(+), 0 deletions(-)
+RUBY_CFLAGS = $(TARGET_CFLAGS)
 
-diff --git a/package/ruby/ruby.mk b/package/ruby/ruby.mk
---- a/package/ruby/ruby.mk
-+++ b/package/ruby/ruby.mk
-@@ -15,6 +15,13 @@ HOST_RUBY_CONF_OPT = --disable-install-d
- RUBY_LICENSE = Ruby or BSD-2c, BSD-3c, others
- RUBY_LICENSE_FILES = LEGAL COPYING BSDL
- 
-+# With some SuperH toolchains (like Sourcery CodeBench 2012.09), ruby fails to
-+# build with 'pcrel too far'. This seems to be caused by the -Os option we pass
-+# by default. To fix the problem, use standard -O2 optimization instead.
-+ifeq ($(BR2_sh)$(BR2_sh64),y)
-+RUBY_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -O2"
-+endif
-+
- # Force optionals to build before we do
- ifeq ($(BR2_PACKAGE_BERKELEYDB),y)
- 	RUBY_DEPENDENCIES += berkeleydb
+ifeq ($(BR2_sh)$(BR2_sh64),y)
+RUBY_CFLAGS += -O2
+endif
+
+RUBY_CONF_ENV += CFLAGS="$(RUBY_CFLAGS)"
+
+This way, someone else can easily add another RUBY_CFLAGS +=, and not
+worry about the SuperH thing.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
