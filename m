@@ -1,35 +1,74 @@
-From: =?ISO-8859-1?Q?Ciar=E1n?= Rehill <cir.vfi@gmail.com>
-Date: Sun, 13 Oct 2013 21:11:34 +0100
-Subject: [Buildroot] Kernel module compiled but not found
-In-Reply-To: <525AAE63.3060601@gmail.com>
-References: <525AAE63.3060601@gmail.com>
-Message-ID: <1381695094.2543.10.camel@cabbage>
+From: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+Date: Sun, 13 Oct 2013 23:04:47 +0200
+Subject: [Buildroot] Bumping packages: some comments/suggestions
+In-Reply-To: <20131013114246.440c3831@skate>
+References: <20131013114246.440c3831@skate>
+Message-ID: <525B0AEF.9030406@trzebnica.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Marco Trapanese wrote:
+
+
+Hi Thomas,
+
+
+> Hello Jerzy and Axel,
+>
+> Recently, both of you have worked on and contributed a number of
+> patches bumping a significant number of Buildroot packages. This is of
+> course really great, and I'd like to thank you for those contributions.
+>
+> That being said, I would have two suggestions:
+>
+>   *) It would be great if you could check that the reverse dependencies
+>      of the package you're bumping still continue to build. For example,
+>      Axel bumped 'ortp', but didn't realize bumping it would break
+>      the linphone and mediastreamer. While we certainly cannot expect
+>      contributors to test package bumps in all possible configurations
+>      (especially for packages having a large number of
+>      reverse dependencies), checking at least a few of them is a good
+>      idea. Also, when bumping from one major release to another (such as
+>      berkeleydb 5.x to berkeleydb 6.x), even more care should be taken.
+>
+>   *) To make this "bumping" effort a bit more systematic, I believe it
+>      would be useful to introduce an infrastructure in Buildroot to
+>      automatically check if upstream has a new package. In many cases,
+>      the upstream site has a directory with all the different versions
+>      of the tarball, so checking if there's a newer one in an automated
+>      way would be possible. If we do this for many packages, then we can
+>      run a script every day, and check if there are new upstream
+>      releases available. Debian has such a mechanism with the 'watch'
+>      mechanism (see https://wiki.debian.org/debian/watch/). Gentoo has
+>      the euscan utility (see https://github.com/iksaif/euscan). It would
+>      be nice having something like this, that we could integrate in the
+>      Buildroot per-package stats at
+>      http://autobuild.buildroot.org/stats/ to get a clear vision of
+>      which packages need to be upgraded. If one of you is interested in
+>      doing this, it'd be great!
+
+Thanks for your suggestions.
+Do you mean something like this ?
+
+Package name        Current version       New upstream releases Reverse 
+dependencies
+======================================================================================= 
+
 ...
->  >>> sensoray2253 1.2.6 Building
-> /usr/bin/make -j5 
-> HOSTCC="/home/mark/dev/rpiqt5/buildroot-rpi/output/host/usr/bin/ccache 
-> /usr/bin/gcc" HOSTCFLAGS="" ARCH=arm 
-> INSTALL_MOD_PATH=/home/mark/dev/rpiqt5/buildroot-rpi/output/target 
-> CROSS_COMPILE="/home/mark/dev/rpiqt5/buildroot-rpi/output/host/usr/bin/ccache 
-> /home/mark/dev/rpiqt5/buildroot-rpi/output/host/usr/bin/arm-buildroot-linux-gnueabi-" 
-> DEPMOD=/home/mark/dev/rpiqt5/buildroot-rpi/output/host/usr/sbin/depmod 
-> -C /home/mark/dev/rpiqt5/buildroot-rpi/output/build/linux-custom 
-> M=/home/mark/dev/rpiqt5/buildroot-rpi/output/build/sensoray2253-1.2.6 
-> modules
-> make[1]: Entering directory 
-> `/home/mark/dev/rpiqt5/buildroot-rpi/output/build/linux-custom'
->    Building modules, stage 2.
->    MODPOST 0 modules
+apr ............... 1.4.6 ........................................ 
+apr-util log4cxx
+apr ..................................... 1.4.8
+apr-util .......... 1.4.1
+apr-util ................................ 1.5.1
+apr-util ................................ 1.5.2
+...
 
-Zero modules makes me think that there's something up with your source
-makefile (the one in output/build/sensoray...)  You should probably post
-it.
+Regards,
+Jerzy
 
-As you say, no errors - but nothing done either.
+
+> Best regards,
+>
+> Thomas
