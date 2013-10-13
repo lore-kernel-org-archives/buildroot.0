@@ -1,48 +1,54 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Sun, 13 Oct 2013 12:37:50 +0200
-Subject: [Buildroot] [PATCHv2] toolchain-external: add a specific check
- to avoid Angstrom toolchains
-In-Reply-To: <1381652900-12516-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1381652900-12516-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <CAAXf6LW+hio2zjRy5LaxRPyKQ2bXeNKdVPB8zgQONmBn04YD-Q@mail.gmail.com>
+Date: Sun, 13 Oct 2013 12:38:52 +0200
+Subject: [Buildroot] [PATCH] ruby: fix 'pcrel too far' build problem on
+ SuperH architectures
+In-Reply-To: <20131013102526.56152a76@skate>
+References: <873298952161de3ed5aa.1381650276@argentina>
+ <20131013095140.7a9e70e5@skate>
+ <CAAXf6LXA-UK2EcGnmRvhfA8cT_+-GsZTQ1o2ubjbFGnGAL4k2w@mail.gmail.com>
+ <20131013102526.56152a76@skate>
+Message-ID: <CAAXf6LWU4aLJqi2_Sj_vjhaAwgN+9L0mCiBESMtbidtjVsxX3Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, Oct 13, 2013 at 10:28 AM, Thomas Petazzoni
+On Sun, Oct 13, 2013 at 10:25 AM, Thomas Petazzoni
 <thomas.petazzoni@free-electrons.com> wrote:
-> The Angstrom toolchains available at
-> http://www.angstrom-distribution.org/toolchains/ are not usable as
-> external toolchains in Buildroot, because they are not pure toolchains
-> with just the C library, but instead complete SDKs with many
-> cross-compiled libraries (Gtk, Qt, glib, neon, sqlite, X.org, and many
-> more, approximately 200 MB of libraries).
+> Dear Thomas De Schampheleire,
 >
-> Buildroot cannot use such toolchains, and while this is documented in
-> our manual, some users still try to do this. Today, one such user came
-> on the IRC channel, reporting a build problem, which we started
-> investigating, only to realize after a long time that he was using an
-> Angstrom toolchain.
+> On Sun, 13 Oct 2013 09:58:05 +0200, Thomas De Schampheleire wrote:
 >
-> To avoid this problem in the future, we explicitly check if the
-> toolchain is from Angstrom by looking at the vendor part of the tuple
-> exposed by the toolchain: as soon as it is
-> <something>-angstrom-<something-else>, we reject the toolchain with an
-> explanation.
+>> > I don't think it's the right way of fixing the problem. This is going to
+>> > affect the CFLAGS of *all* packages. You shouldn't change
+>> > TARGET_CFLAGS, but instead do:
+>> >
+>> > RUBY_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -O2"
+>>
+>> Ah yes, you're right. The above was what I proposed initially, but I
+>> tried to be too smart.
+>> I was looking for a way to avoid duplicating TARGET_CFLAGS, because if
+>> someone needs to add a new cflag for ruby specifically, they now need
+>> to explicitly take the superh case into account.
+>>
+>> I'll send a new version.
 >
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
-> Changes since v1:
+> The way we usually do this is:
 >
->  * Fix typos in the comments (Thomas DS)
->  * Rename function to check_unusable_toolchain (Thomas DS)
->  * Use -dumpmachine instead of -v and some nasty sed'ing (Thomas DS)
->  * Add quotes around $${vendor} (Thomas DS)
+> RUBY_CFLAGS = $(TARGET_CFLAGS)
 >
->  toolchain/helpers.mk                               | 18 ++++++++++++++++++
->  toolchain/toolchain-external/toolchain-external.mk |  1 +
->  2 files changed, 19 insertions(+)
+> ifeq ($(BR2_sh)$(BR2_sh64),y)
+> RUBY_CFLAGS += -O2
+> endif
+>
+> RUBY_CONF_ENV += CFLAGS="$(RUBY_CFLAGS)"
+>
+> This way, someone else can easily add another RUBY_CFLAGS +=, and not
+> worry about the SuperH thing.
 
-Reviewed-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+
+Ok, that indeed looks better. I'll send a third version later.
+
+Thanks for your feedback,
+Thomas
