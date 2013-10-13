@@ -1,28 +1,46 @@
-From: Eric =?ISO-8859-1?B?QuluYXJk?= <eric@eukrea.com>
-Date: Sun, 13 Oct 2013 12:48:03 +0200
-Subject: [Buildroot] [PATCH] toolchain-external: add a specific check to
- avoid Angstrom toolchains
-In-Reply-To: <1381572882-22592-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1381572882-22592-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20131013124803.2044e4c3@e6520eb>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Sun, 13 Oct 2013 13:45:04 +0200
+Subject: [Buildroot] [PATCH v3] ruby: fix 'pcrel too far' build problem on
+ SuperH architectures
+Message-ID: <2d4efe7ec3764c2fe072.1381664704@argentina>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+The 'pcrel too far' problem detected in the autobuild on SuperH
+architectures, seems to be caused by the -Os optimization flag. Using
+standard optimization fixes the problem.
 
-Le Sat, 12 Oct 2013 12:14:42 +0200,
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> a ?crit :
-> To avoid this problem in the future, we explicitly check if the
-> toolchain is from Angstrom by looking at the vendor part of the tuple
-> exposed by the toolchain: as soon as it is
-> <something>-angstrom-<something-else>, we reject the toolchain with an
-> explanation.
-> 
-maybe you should also check for at least "oe" and "poky" as these are
-the vendor part of toolchains generated with plain OE-Core or
-Yocto/Poky.
+Fixes http://autobuild.buildroot.net/results/bc36e051e06f596c2fafdd3cc3745bb34b73ace3/
 
-Eric
+Investigated-by: Lionel Orry <lionel.orry@gmail.com>
+Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+
+---
+v3: use intermediate RUBY_CFLAGS variable (thanks ThomasP)
+v2: don't try to be smarter than you are (don't change TARGET_CFLAGS)
+
+ package/ruby/ruby.mk |  9 +++++++++
+ 1 files changed, 9 insertions(+), 0 deletions(-)
+
+diff --git a/package/ruby/ruby.mk b/package/ruby/ruby.mk
+--- a/package/ruby/ruby.mk
++++ b/package/ruby/ruby.mk
+@@ -15,6 +15,15 @@ HOST_RUBY_CONF_OPT = --disable-install-d
+ RUBY_LICENSE = Ruby or BSD-2c, BSD-3c, others
+ RUBY_LICENSE_FILES = LEGAL COPYING BSDL
+ 
++RUBY_CFLAGS = $(TARGET_CFLAGS)
++# With some SuperH toolchains (like Sourcery CodeBench 2012.09), ruby fails to
++# build with 'pcrel too far'. This seems to be caused by the -Os option we pass
++# by default. To fix the problem, use standard -O2 optimization instead.
++ifeq ($(BR2_sh)$(BR2_sh64),y)
++RUBY_CFLAGS += -O2
++endif
++RUBY_CONF_ENV = CFLAGS="$(RUBY_CFLAGS)"
++
+ # Force optionals to build before we do
+ ifeq ($(BR2_PACKAGE_BERKELEYDB),y)
+ 	RUBY_DEPENDENCIES += berkeleydb
