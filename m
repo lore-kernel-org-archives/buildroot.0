@@ -1,36 +1,55 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 13 Oct 2013 17:06:24 +0200
-Subject: [Buildroot] Bumping packages: some comments/suggestions
-In-Reply-To: <CAAXf6LXQ4Tv3QGsx2atT=C6yg-HDGoRHDKpJBKyzC4g8-phbDw@mail.gmail.com>
-References: <20131013114246.440c3831@skate>
- <CAFRkauCECxjxqB5=ufBW5Sve+2aGyMBKSOY+9vpPe0gueV7S1Q@mail.gmail.com>
- <20131013154229.36a438c9@skate>
- <CAAXf6LXQ4Tv3QGsx2atT=C6yg-HDGoRHDKpJBKyzC4g8-phbDw@mail.gmail.com>
-Message-ID: <20131013170624.43960a83@skate>
+From: Marco Trapanese <marcotrapanese@gmail.com>
+Date: Sun, 13 Oct 2013 17:19:12 +0200
+Subject: [Buildroot] Kernel module compiled but not found
+In-Reply-To: <20131013170541.398d8907@skate>
+References: <525AAE63.3060601@gmail.com>	<20131013145124.GA16563@free.fr>	<525AB5F9.8090907@gmail.com>
+ <20131013170541.398d8907@skate>
+Message-ID: <525AB9F0.3020708@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas De Schampheleire,
+Il 13/10/2013 17:05, Thomas Petazzoni ha scritto:
+> Macro, can you post your current package (.mk file and Config.in files,
+> or even better, a patch against Buildroot), so that we can potentially
+> reproduce your issue and help you solve it?
 
-On Sun, 13 Oct 2013 17:01:48 +0200, Thomas De Schampheleire wrote:
 
-> > Any opinion about this? I believe it would make more sense to invest
-> > time doing this than doing many many bumps on all packages.
-> 
-> I assume you're only talking about a way to automatically _detect_
-> that there are new versions of a given package, and the actual update
-> in buildroot is still done manually, right?
+Thomas,
+I don't know how to post a patch against Buildroot (please, may you 
+provide a link where is explained how to?) but I can post here the 
+content of the two files for sure:
 
-Of course. But this way, we would have some kind of "dashboard" showing
-us which packages might benefit from a bump.
+Config.in
+config BR2_PACKAGE_SENSORAY2253
+     bool "sensoray2253"
+     depends on BR2_LINUX_KERNEL
+     help
+       Kernel module for Sensoray 2253
 
-Best regards,
+       http://it.sensoray.com/products/2253.htm
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+
+sensoray2253.mk
+################################################################################
+#
+# sensoray2253
+#
+################################################################################
+
+SENSORAY2253_VERSION = 1.2.6
+SENSORAY2253_SOURCE = sdk_x53_linux_$(SENSORAY2253_VERSION).tar.bz2
+SENSORAY2253_SITE = http://it.sensoray.com/downloads/
+SENSORAY2253_DEPENDENCIES = linux
+
+define SENSORAY2253_BUILD_CMDS
+     $(MAKE) $(LINUX_MAKE_FLAGS) -C $(LINUX_DIR) M=$(@D) modules
+endef
+
+define SENSORAY2253_INSTALL_TARGET_CMDS
+     $(MAKE) $(LINUX_MAKE_FLAGS) -C $(LINUX_DIR) M=$(@D) modules_install
+endef
+
+$(eval $(generic-package))
