@@ -1,83 +1,51 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 13 Oct 2013 10:28:20 +0200
-Subject: [Buildroot] [PATCHv2] toolchain-external: add a specific check to
-	avoid Angstrom toolchains
-Message-ID: <1381652900-12516-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Sun, 13 Oct 2013 11:42:46 +0200
+Subject: [Buildroot] Bumping packages: some comments/suggestions
+Message-ID: <20131013114246.440c3831@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The Angstrom toolchains available at
-http://www.angstrom-distribution.org/toolchains/ are not usable as
-external toolchains in Buildroot, because they are not pure toolchains
-with just the C library, but instead complete SDKs with many
-cross-compiled libraries (Gtk, Qt, glib, neon, sqlite, X.org, and many
-more, approximately 200 MB of libraries).
+Hello Jerzy and Axel,
 
-Buildroot cannot use such toolchains, and while this is documented in
-our manual, some users still try to do this. Today, one such user came
-on the IRC channel, reporting a build problem, which we started
-investigating, only to realize after a long time that he was using an
-Angstrom toolchain.
+Recently, both of you have worked on and contributed a number of
+patches bumping a significant number of Buildroot packages. This is of
+course really great, and I'd like to thank you for those contributions.
 
-To avoid this problem in the future, we explicitly check if the
-toolchain is from Angstrom by looking at the vendor part of the tuple
-exposed by the toolchain: as soon as it is
-<something>-angstrom-<something-else>, we reject the toolchain with an
-explanation.
+That being said, I would have two suggestions:
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
-Changes since v1:
+ *) It would be great if you could check that the reverse dependencies
+    of the package you're bumping still continue to build. For example,
+    Axel bumped 'ortp', but didn't realize bumping it would break
+    the linphone and mediastreamer. While we certainly cannot expect
+    contributors to test package bumps in all possible configurations
+    (especially for packages having a large number of
+    reverse dependencies), checking at least a few of them is a good
+    idea. Also, when bumping from one major release to another (such as
+    berkeleydb 5.x to berkeleydb 6.x), even more care should be taken.
 
- * Fix typos in the comments (Thomas DS)
- * Rename function to check_unusable_toolchain (Thomas DS)
- * Use -dumpmachine instead of -v and some nasty sed'ing (Thomas DS)
- * Add quotes around $${vendor} (Thomas DS)
+ *) To make this "bumping" effort a bit more systematic, I believe it
+    would be useful to introduce an infrastructure in Buildroot to
+    automatically check if upstream has a new package. In many cases,
+    the upstream site has a directory with all the different versions
+    of the tarball, so checking if there's a newer one in an automated
+    way would be possible. If we do this for many packages, then we can
+    run a script every day, and check if there are new upstream
+    releases available. Debian has such a mechanism with the 'watch'
+    mechanism (see https://wiki.debian.org/debian/watch/). Gentoo has
+    the euscan utility (see https://github.com/iksaif/euscan). It would
+    be nice having something like this, that we could integrate in the
+    Buildroot per-package stats at
+    http://autobuild.buildroot.org/stats/ to get a clear vision of
+    which packages need to be upgraded. If one of you is interested in
+    doing this, it'd be great!
 
- toolchain/helpers.mk                               | 18 ++++++++++++++++++
- toolchain/toolchain-external/toolchain-external.mk |  1 +
- 2 files changed, 19 insertions(+)
+Best regards,
 
-diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
-index 95120cd..a8944ce 100644
---- a/toolchain/helpers.mk
-+++ b/toolchain/helpers.mk
-@@ -324,3 +324,21 @@ check_cross_compiler_exists = \
- 		echo "Cannot execute cross-compiler '$${__CROSS_CC}'" ; \
- 		exit 1 ; \
- 	fi
-+
-+#
-+# Check for toolchains known not to work with Buildroot. For now, we
-+# only check for Angstrom toolchains, by looking at the vendor part of
-+# the host tuple.
-+#
-+# $1: cross-gcc path
-+#
-+check_unusable_toolchain = \
-+	__CROSS_CC=$(strip $1) ; \
-+	vendor=`$${__CROSS_CC} -dumpmachine | cut -f2 -d'-'` ; \
-+	if test "$${vendor}" = "angstrom" ; then \
-+		echo "Angstrom toolchains are not pure toolchains: they contain" ; \
-+		echo "many other libraries than just the C library, which makes" ; \
-+		echo "them unsuitable as external toolchains for build systems" ; \
-+		echo "such as Buildroot." ; \
-+		exit 1 ; \
-+	fi
-diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
-index b5b1ce7..d41cc7c 100644
---- a/toolchain/toolchain-external/toolchain-external.mk
-+++ b/toolchain/toolchain-external/toolchain-external.mk
-@@ -371,6 +371,7 @@ endif
- # type of C library and all C library features.
- define TOOLCHAIN_EXTERNAL_CONFIGURE_CMDS
- 	$(Q)$(call check_cross_compiler_exists,$(TOOLCHAIN_EXTERNAL_CC))
-+	$(Q)$(call check_unusable_toolchain,$(TOOLCHAIN_EXTERNAL_CC))
- 	$(Q)LIBC_A_LOCATION=`readlink -f $$(LANG=C $(TOOLCHAIN_EXTERNAL_CC) -print-file-name=libc.a)` ; \
- 	SYSROOT_DIR=`echo $${LIBC_A_LOCATION} | sed -r -e 's:(usr/)?lib(32|64)?/(.*/)?libc\.a::'` ; \
- 	if test -z "$${SYSROOT_DIR}" ; then \
+Thomas
 -- 
-1.8.1.2
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
