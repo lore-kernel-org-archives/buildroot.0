@@ -1,114 +1,48 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 14 Oct 2013 12:59:17 +0200
-Subject: [Buildroot] [git commit] package/rpi-userland: install all of our
-	.pc files the same way
-Message-ID: <20131014112355.27D709B74D@busybox.osuosl.org>
+Date: Mon, 14 Oct 2013 12:50:11 +0200
+Subject: [Buildroot] [git commit] manual: rename section name of package
+	lists
+Message-ID: <20131014112355.1DA499B9FB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7b57bef618afb0f830abd4f854fe811b8978d7ff
+commit: http://git.buildroot.net/buildroot/commit/?id=127c9bcc136969d6c715441e563e9deb0db6f37f
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Install bcm_host the same way we install egl.pc and glesv2.pc, using
-the cmake lists.
+The original titles did no longer correspond with the actual menu names.
+Additionally, choose a name that better reflects the fact that this is a
+list.
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+Acked-by: "Samuel Martin" <s.martin49@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/rpi-userland/bcm_host.pc                   |   11 -------
- .../rpi-userland-000-add-pkgconfig-files.patch     |   32 ++++++++++++++++++-
- package/rpi-userland/rpi-userland.mk               |    6 ----
- 3 files changed, 30 insertions(+), 19 deletions(-)
+ docs/manual/appendix.txt |    8 ++++----
+ 1 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/rpi-userland/bcm_host.pc b/package/rpi-userland/bcm_host.pc
-deleted file mode 100644
-index 28bbe96..0000000
---- a/package/rpi-userland/bcm_host.pc
-+++ /dev/null
-@@ -1,11 +0,0 @@
--prefix=/usr
--exec_prefix=${prefix}
--libdir=${exec_prefix}/lib
--includedir=${prefix}/include
--
--Name: bcm_host
--Description: Broadcom VideoCore host API library
--Version: 1
--Libs: -L${libdir} -lbcm_host -lvcos -lvchiq_arm
--Cflags: -I${includedir} -I${includedir}/interface/vmcs_host/linux -I${includedir}/interface/vcos/pthreads -DUSE_VCHIQ_ARM
--
-diff --git a/package/rpi-userland/rpi-userland-000-add-pkgconfig-files.patch b/package/rpi-userland/rpi-userland-000-add-pkgconfig-files.patch
-index 4ffc2b0..d7984ff 100644
---- a/package/rpi-userland/rpi-userland-000-add-pkgconfig-files.patch
-+++ b/package/rpi-userland/rpi-userland-000-add-pkgconfig-files.patch
-@@ -1,9 +1,10 @@
--Add .pc files for the OpenGLESv2 and EGL libraries
-+Add .pc files for the OpenGLESv2, EGL and bcm_host libraries
+diff --git a/docs/manual/appendix.txt b/docs/manual/appendix.txt
+index 721c96c..74ee8fd 100644
+--- a/docs/manual/appendix.txt
++++ b/docs/manual/appendix.txt
+@@ -11,14 +11,14 @@ include::makeusers-syntax.txt[]
+ // Automatically generated lists:
  
- Those pkg-config files make it easier for Qt5 to find those libraries
- and the appropriate link flags.
+ [[package-list]]
+-Package Selection for the target
+---------------------------------
++List of target packages available in Buildroot
++----------------------------------------------
  
- Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ include::package-list.txt[]
  
- Index: b/interface/khronos/egl/egl.pc.in
- ===================================================================
-@@ -25,7 +26,7 @@ Index: b/interface/khronos/CMakeLists.txt
- ===================================================================
- --- a/interface/khronos/CMakeLists.txt
- +++ b/interface/khronos/CMakeLists.txt
--@@ -73,3 +73,11 @@
-+@@ -74,3 +74,11 @@
-  
-  install(TARGETS EGL GLESv2 OpenVG WFC khrn_client DESTINATION lib)
-  install(TARGETS EGL_static GLESv2_static khrn_static DESTINATION lib)
-@@ -52,3 +53,30 @@ Index: b/interface/khronos/glxx/glesv2.pc.in
- +Version: 2.0
- +Libs: -L${libdir} -lGLESv2
- +Cflags: -I${includedir}/
-+Index: b/host_applications/linux/libs/bcm_host/CMakeLists.txt
-+===================================================================
-+--- a/host_applications/linux/libs/bcm_host/CMakeLists.txt
-++++ b/host_applications/linux/libs/bcm_host/CMakeLists.txt
-+@@ -20,3 +20,7 @@
-+ 
-+ install(TARGETS bcm_host DESTINATION lib)
-+ 
-++configure_file("${CMAKE_CURRENT_SOURCE_DIR}/bcm_host.pc.in"
-++  "${CMAKE_CURRENT_BINARY_DIR}/bcm_host.pc" @ONLY)
-++install(FILES "${CMAKE_CURRENT_BINARY_DIR}/bcm_host.pc"
-++  DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/pkgconfig")
-+Index: b/host_applications/linux/libs/bcm_host/bcm_host.pc.in
-+===================================================================
-+--- /dev/null
-++++ b/host_applications/linux/libs/bcm_host/bcm_host.pc.in
-+@@ -0,0 +1,10 @@
-++prefix=/usr
-++exec_prefix=${prefix}
-++libdir=${exec_prefix}/lib
-++includedir=${prefix}/include
-++
-++Name: bcm_host
-++Description: Broadcom VideoCore host API library
-++Version: 1
-++Libs: -L${libdir} -lbcm_host -lvcos -lvchiq_arm
-++Cflags: -I${includedir} -I${includedir}/interface/vmcs_host/linux -I${includedir}/interface/vcos/pthreads -DUSE_VCHIQ_ARM
-diff --git a/package/rpi-userland/rpi-userland.mk b/package/rpi-userland/rpi-userland.mk
-index cc032bf..8b5794f 100644
---- a/package/rpi-userland/rpi-userland.mk
-+++ b/package/rpi-userland/rpi-userland.mk
-@@ -16,10 +16,4 @@ define RPI_USERLAND_POST_TARGET_CLEANUP
- endef
- RPI_USERLAND_POST_INSTALL_TARGET_HOOKS += RPI_USERLAND_POST_TARGET_CLEANUP
+ [[host-package-list]]
+-Host utilities
+---------------
++List of host utilities available in Buildroot
++---------------------------------------------
  
--define RPI_USERLAND_POST_STAGING_PC_FILE
--	install -D -m 0644 package/rpi-userland/bcm_host.pc \
--		$(STAGING_DIR)/usr/lib/pkgconfig/bcm_host.pc
--endef
--RPI_USERLAND_POST_INSTALL_STAGING_HOOKS += RPI_USERLAND_POST_STAGING_PC_FILE
--
- $(eval $(cmake-package))
+ The following packages are all available in the menu +Host utilities+.
+ 
