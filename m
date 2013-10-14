@@ -1,39 +1,49 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 14 Oct 2013 15:56:04 +0200
-Subject: [Buildroot] Bumping packages: some comments/suggestions
-In-Reply-To: <CACjG4B+OX=r-g2bMsjM4zNYY2DuOo4pfmY51aoNL7402z4EJtQ@mail.gmail.com>
-References: <20131014113000.73ca82bf@skate>
- <1642454622.8785613.1381743494806.JavaMail.root@openwide.fr>
- <CAAXf6LX7cHRZyGcA5KgYaL7iUuw_JhBxTAzsWrptAa9y10353w@mail.gmail.com>
- <20131014120410.1b4c05fb@skate>
- <CACjG4B+OX=r-g2bMsjM4zNYY2DuOo4pfmY51aoNL7402z4EJtQ@mail.gmail.com>
-Message-ID: <20131014155604.35644c62@skate>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Mon, 14 Oct 2013 16:02:48 +0200
+Subject: [Buildroot] Help with selecting package
+In-Reply-To: <525BED56.5030704@gmail.com>
+References: <525BAB59.4020105@gmail.com> <20131014114754.12f56017@skate>
+ <525BCC9C.9020602@gmail.com> <20131014134753.33a41074@skate>
+ <525BED56.5030704@gmail.com>
+Message-ID: <CAAXf6LXB8+5bjhZ3Y0ftNR0aQVK8Rvge_YDq-KvhfpORO8LPMw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnaud,
+Hi Marco,
 
-On Mon, 14 Oct 2013 14:58:19 +0200, arnaud aujon wrote:
+On Mon, Oct 14, 2013 at 3:10 PM, Marco Trapanese
+<marcotrapanese@gmail.com> wrote:
+> Il 14/10/2013 13:47, Thomas Petazzoni ha scritto:
+>
+>> make linux-menuconfig See
+>> http://buildroot.org/downloads/manual/manual.html#kernel-custom.
+>
+>
+>
+> Ok, but as far as I know the linux.config file contains all the available
+> parameters.The active ones are set to "y" otherwise are commented out.
+> In the current linux.config there is no CONFIG_VIDEOBUF_GEN item at all.
 
-> I'm interested in developing an automatic way to know if a package needs to
-> be bumped.
-> I'm a new contributor to buildroot (just sent a patch to add a new
-> package,  well 3 patches because I had trouble with git send-email...), if
-> no one else have time to do it, I'll be happy to help Buildroot this way.
+Not all available options are present in .config. It is possible that
+CONFIG_VIDEOBUF_GEN depends on another option that is not selected.
 
-Until now, nobody has volunteered to work on this, so if you're
-interested, feel free to start prototyping things. I believe a helper
-script (in Python?), called from the Buildroot makefiles, is probably
-the best way: doing all this logic purely in make might be too
-complicated.
+>
+> Anyway I searched for suitable items in linux-menuconfig but the name of the
+> menu could be different... Is there a table where each CONFIG_ item is
+> translated into the linux-menuconfig one? There are so many options one
+> cannot try in a random way :-)
+
+The best way in this case is to open the linux-menuconfig, type /
+(slash) followed by a search string, for example VIDEOBUF_GEN. It
+should show you at least one match, along with more details about:
+- where is it in the menu structure
+- which options does it depend on (and what is the current value of
+these options, indicated with [=y], [=n] etc.
+
+This should give you enough info to be able to select the option correctly.
 
 Best regards,
-
 Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
