@@ -1,42 +1,70 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 14 Oct 2013 22:12:14 +0200
-Subject: [Buildroot] [git commit] support/kconfig: Fix typo in
-	README.buildroot.
-Message-ID: <20131014203036.BC30B9A384@busybox.osuosl.org>
+Date: Mon, 14 Oct 2013 22:00:38 +0200
+Subject: [Buildroot] [git commit] autossh: new package
+Message-ID: <20131014203036.AA9F69A384@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1c5ff4981c44bd933bf620f2c761133e14abe6dc
+commit: http://git.buildroot.net/buildroot/commit/?id=05d59aa2689acb86e72052418fe85b186b0a39e7
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fix typo in README.buildroot (s/config/kconfig/).
-
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- support/kconfig/README.buildroot |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ package/Config.in          |    1 +
+ package/autossh/Config.in  |    8 ++++++++
+ package/autossh/autossh.mk |   17 +++++++++++++++++
+ 3 files changed, 26 insertions(+), 0 deletions(-)
 
-diff --git a/support/kconfig/README.buildroot b/support/kconfig/README.buildroot
-index d3d8613..0e16e81 100644
---- a/support/kconfig/README.buildroot
-+++ b/support/kconfig/README.buildroot
-@@ -3,12 +3,12 @@ to suit Buildroot.
- 
- To update:
- 	cp -r /usr/src/linux/scripts/kconfig support/kconfig.new
--	cd support/config.new
-+	cd support/kconfig.new
- 	cp -a ../kconfig/patches ../kconfig/README.buildroot .
- 	quilt push -a
- 	# Fix any conflict
- 	cd ..
--	rm -rf config
-+	rm -rf kconfig
- 	mv kconfig.new kconfig
- 
- Then verify the toplevel targets work:
+diff --git a/package/Config.in b/package/Config.in
+index 41d828a..7af6d42 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -760,6 +760,7 @@ source "package/aiccu/Config.in"
+ source "package/aircrack-ng/Config.in"
+ source "package/argus/Config.in"
+ source "package/arptables/Config.in"
++source "package/autossh/Config.in"
+ source "package/avahi/Config.in"
+ source "package/axel/Config.in"
+ source "package/bcusdk/Config.in"
+diff --git a/package/autossh/Config.in b/package/autossh/Config.in
+new file mode 100644
+index 0000000..e3acd8a
+--- /dev/null
++++ b/package/autossh/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_AUTOSSH
++	bool "autossh"
++	depends on BR2_USE_MMU # fork()
++	help
++	  autossh is a program to start a copy of ssh and monitor it,
++	  restarting it as necessary should it die or stop passing traffic.
++
++	  http://www.harding.motd.ca/autossh/
+diff --git a/package/autossh/autossh.mk b/package/autossh/autossh.mk
+new file mode 100644
+index 0000000..75d7892
+--- /dev/null
++++ b/package/autossh/autossh.mk
+@@ -0,0 +1,17 @@
++################################################################################
++#
++# autossh
++#
++################################################################################
++
++AUTOSSH_VERSION = 1.4c
++AUTOSSH_SITE = http://www.harding.motd.ca/autossh
++AUTOSSH_SOURCE = autossh-$(AUTOSSH_VERSION).tgz
++AUTOSSH_LICENSE = Modified BSD
++AUTOSSH_LICENSE_FILES = autossh.c
++
++define AUTOSSH_INSTALL_TARGET_CMDS
++	$(INSTALL) -m 755 -D $(@D)/autossh $(TARGET_DIR)/usr/bin/autossh
++endef
++
++$(eval $(autotools-package))
