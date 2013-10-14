@@ -1,39 +1,39 @@
-From: arnaud aujon <arnaud.aujon@gmail.com>
-Date: Mon, 14 Oct 2013 20:07:44 +0200
-Subject: [Buildroot] [PATCH v5] espeak: new package
-In-Reply-To: <20131014195835.4e87ee20@skate>
-References: <1381770929-13754-1-git-send-email-arnaud.aujon@gmail.com>
- <20131014194050.6f0db457@skate>
- <CACjG4BJKxk6=y7iAyBxsw3E5HA=x4kxM+GWXCqbn8Z4Tx6XH-A@mail.gmail.com>
- <20131014195835.4e87ee20@skate>
-Message-ID: <CACjG4BKaBE9tE1N+i4hPUJ5vzg6sjk6y5-QgorykTOD4aRSmSA@mail.gmail.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Mon, 14 Oct 2013 20:24:31 +0200
+Subject: [Buildroot] [PATCH 1/1] support/kconfig: Fix typo in
+	README.buildroot.
+Message-ID: <1381775071-14556-1-git-send-email-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2013/10/14 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Fix typo in README.buildroot (s/config/kconfig/).
 
-> Dear arnaud aujon,
->
-> On Mon, 14 Oct 2013 19:49:09 +0200, arnaud aujon wrote:
->
-> > I will send a new patch shortly.
-> > About the licence, the file Licence.txt say GPLv3 but you're right in the
-> > source code we can find GPLv3+, what do you do in this case ?
->
-> It's very often the case: the COPYING or License file provides the
-> license text for a given version of the GPL license, and the code
-> itself precises whether it's only this version, or this version or
-> later. And since the FSF recommends using the "or later" wording, many
-> projects do this.
->
-> In this case, the <pkg>_LICENSE should really be GPLv3+, because that's
-> what the source code says.
->
->
-Thanks for your explanation.
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20131014/98e4b369/attachment.html>
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+---
+ support/kconfig/README.buildroot | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/support/kconfig/README.buildroot b/support/kconfig/README.buildroot
+index d3d8613..0e16e81 100644
+--- a/support/kconfig/README.buildroot
++++ b/support/kconfig/README.buildroot
+@@ -3,12 +3,12 @@ to suit Buildroot.
+ 
+ To update:
+ 	cp -r /usr/src/linux/scripts/kconfig support/kconfig.new
+-	cd support/config.new
++	cd support/kconfig.new
+ 	cp -a ../kconfig/patches ../kconfig/README.buildroot .
+ 	quilt push -a
+ 	# Fix any conflict
+ 	cd ..
+-	rm -rf config
++	rm -rf kconfig
+ 	mv kconfig.new kconfig
+ 
+ Then verify the toplevel targets work:
+-- 
+1.8.1.4
