@@ -1,45 +1,51 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 14 Oct 2013 19:05:40 +0200
-Subject: [Buildroot] [PATCH 3/4] Makefile: export BUILD_DIR
-In-Reply-To: <87y55wruki.fsf@dell.be.48ers.dk>
-References: <cover.1381705600.git.yann.morin.1998@free.fr>
- <cover.1381705600.git.yann.morin.1998@free.fr>
- <834cf660ddc6216e486f97195f464f0e6125774e.1381705600.git.yann.morin.1998@free.fr>
- <87y55wruki.fsf@dell.be.48ers.dk>
-Message-ID: <20131014170540.GB3491@free.fr>
+From: arnaud aujon <arnaud.aujon@gmail.com>
+Date: Mon, 14 Oct 2013 19:11:24 +0200
+Subject: [Buildroot] Bumping packages: some comments/suggestions
+In-Reply-To: <20131014155604.35644c62@skate>
+References: <20131014113000.73ca82bf@skate>
+ <1642454622.8785613.1381743494806.JavaMail.root@openwide.fr>
+ <CAAXf6LX7cHRZyGcA5KgYaL7iUuw_JhBxTAzsWrptAa9y10353w@mail.gmail.com>
+ <20131014120410.1b4c05fb@skate>
+ <CACjG4B+OX=r-g2bMsjM4zNYY2DuOo4pfmY51aoNL7402z4EJtQ@mail.gmail.com>
+ <20131014155604.35644c62@skate>
+Message-ID: <CACjG4BJix3m_pwFVSboa2ccE0Wy0v8Jmf5Kuyyd75iWFu34kFw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter, All,
+All right, I will start working on a python script. I keep you in touch.
 
-On 2013-10-14 12:54 +0200, Peter Korsgaard spake thusly:
-> >>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
-> 
->  Yann> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
->  Yann> $(BUILD_DIR) is a nice place to put files generated during the build.
->  Yann> With the advent of user-supplied step-hooks, they may want to store
->  Yann> some information on the build.
-> 
->  Yann> Export BUILD_DIR to that effect.
-> 
-> Looks good, but please also update the documentation in
-> docs/manual/customize-rootfs.txt.
 
-Ah, yes. Done. Thanks!
+2013/10/14 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-Don't forget this pull-request is only an RFC from my point-of-view,
-aimed at a starting point for further discussion.
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+> Arnaud,
+>
+> On Mon, 14 Oct 2013 14:58:19 +0200, arnaud aujon wrote:
+>
+> > I'm interested in developing an automatic way to know if a package needs
+> to
+> > be bumped.
+> > I'm a new contributor to buildroot (just sent a patch to add a new
+> > package,  well 3 patches because I had trouble with git send-email...),
+> if
+> > no one else have time to do it, I'll be happy to help Buildroot this way.
+>
+> Until now, nobody has volunteered to work on this, so if you're
+> interested, feel free to start prototyping things. I believe a helper
+> script (in Python?), called from the Buildroot makefiles, is probably
+> the best way: doing all this logic purely in make might be too
+> complicated.
+>
+> Best regards,
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20131014/07b83ec6/attachment.html>
