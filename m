@@ -1,40 +1,56 @@
-From: Axel Lin <axel.lin@ingics.com>
-Date: Mon, 14 Oct 2013 15:14:52 +0800
-Subject: [Buildroot] [PATCH] poppler: needs thread support
-Message-ID: <1381734892.13723.0.camel@phoenix>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 14 Oct 2013 09:16:09 +0200
+Subject: [Buildroot] [PATCH 1/4] pkg-infra: introduce pre/post-step hooks
+In-Reply-To: <f6240fcb39c5dcbfe7a74cc74da3089e3c982ae5.1381705600.git.yann.morin.1998@free.fr>
+References: <cover.1381705600.git.yann.morin.1998@free.fr>
+ <f6240fcb39c5dcbfe7a74cc74da3089e3c982ae5.1381705600.git.yann.morin.1998@free.fr>
+Message-ID: <20131014091609.06dcc63c@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fix:
-http://autobuild.buildroot.net/results/daa/daa18f112ddd08644b4149025899cea2b511a9da/
+Dear Yann E. MORIN,
 
-Signed-off-by: Axel Lin <axel.lin@ingics.com>
----
- package/poppler/Config.in | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+On Mon, 14 Oct 2013 01:11:25 +0200, Yann E. MORIN wrote:
+> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> 
+> This hooks will let us instrument the build process in many ways:
+>   - log current step to see what broke
+>   - time each step to see what is worth optimising
+>   - sanity-check installed files (rpath, overwritten files...)
+>   - call user-provided script
+>   - ...
+> 
+> The steps are fine-grain, and all have a 'start' and a 'end' hooks.
+> Here is the list of available steps (19 total):
+>   - extract, post-extract
+>   - pre-patch, patch, post-patch
+>   - pre-configure, configure, post-configure
+>   - build, post-build
+>   - install-host, post-install-host
+>   - install-staging, post-install-staging, pkg-config-staging
+>   - install-image, post-install-image
+>   - install-target, post-install-target
+> 
+> The download, clean, uninstall steps are not instrumented on purpose.
+> 
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-diff --git a/package/poppler/Config.in b/package/poppler/Config.in
-index 6a9e1fd..876601e 100644
---- a/package/poppler/Config.in
-+++ b/package/poppler/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_POPPLER
- 	bool "poppler"
- 	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	select BR2_PACKAGE_FONTCONFIG
- 	select BR2_PACKAGE_XLIB_LIBX11 if BR2_PACKAGE_XORG7
- 	select BR2_PACKAGE_XLIB_LIBXEXT if BR2_PACKAGE_XORG7
-@@ -9,5 +10,5 @@ config BR2_PACKAGE_POPPLER
- 
- 	   http://poppler.freedesktop.org/
- 
--comment "poppler requires a toolchain with C++ support enabled"
--	depends on !BR2_INSTALL_LIBSTDCPP
-+comment "poppler requires a toolchain with C++ and thread support enabled"
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
+I am not sure to follow why we're introducing additional hooks here.
+Why don't we generalize the existing pre/post hooks mechanism to *all*
+steps (by all I mean the steps you are interested in instrumenting),
+and use that to hook the different things you introduce in patch 2, 3,
+4 ?
+
+Also, do we really need to have hook points for the pre-hooks and
+post-hooks each time?
+
+Best regards,
+
+Thomas
 -- 
-1.8.1.2
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
