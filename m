@@ -1,22 +1,22 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 14 Oct 2013 13:50:45 +0200
-Subject: [Buildroot] [PATCH] poppler: needs thread support
-In-Reply-To: <1381734892.13723.0.camel@phoenix> (Axel Lin's message of "Mon,
- 14 Oct 2013 15:14:52 +0800")
-References: <1381734892.13723.0.camel@phoenix>
-Message-ID: <87y55wqdey.fsf@dell.be.48ers.dk>
+Date: Mon, 14 Oct 2013 14:08:00 +0200
+Subject: [Buildroot] [PATCH 1/2] linux-headers: bump 3.{0, 4, 10,
+	11}.x stable versions
+In-Reply-To: <1381750764-26873-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Mon, 14 Oct 2013 08:39:23 -0300")
+References: <1381750764-26873-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87txgkqcm7.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Axel" == Axel Lin <axel.lin@ingics.com> writes:
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
- Axel> Fix:
- Axel> http://autobuild.buildroot.net/results/daa/daa18f112ddd08644b4149025899cea2b511a9da/
+ Gustavo> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
-Committed, thanks.
+Committed both, thanks.
 
 -- 
 Bye, Peter Korsgaard
