@@ -1,41 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 14 Oct 2013 13:51:20 +0200
-Subject: [Buildroot] [git commit] linux: bump 3.11.x stable version
-Message-ID: <20131014120816.D19539B9FB@busybox.osuosl.org>
+Date: Mon, 14 Oct 2013 13:49:55 +0200
+Subject: [Buildroot] [git commit] poppler: needs thread support
+Message-ID: <20131014120816.AB33E9B9FC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3137186ba983c6dc0888df5fafff559082096cb0
+commit: http://git.buildroot.net/buildroot/commit/?id=5e0613aa8eadf16383410eb764f10ca99e549fb8
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Fix:
+http://autobuild.buildroot.net/results/daa/daa18f112ddd08644b4149025899cea2b511a9da/
+
+Signed-off-by: Axel Lin <axel.lin@ingics.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- linux/Config.in |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ package/poppler/Config.in |    5 +++--
+ 1 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 6c642ef..4fcb128 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -21,7 +21,7 @@ choice
- 	prompt "Kernel version"
+diff --git a/package/poppler/Config.in b/package/poppler/Config.in
+index 6a9e1fd..876601e 100644
+--- a/package/poppler/Config.in
++++ b/package/poppler/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_POPPLER
+ 	bool "poppler"
+ 	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_PACKAGE_FONTCONFIG
+ 	select BR2_PACKAGE_XLIB_LIBX11 if BR2_PACKAGE_XORG7
+ 	select BR2_PACKAGE_XLIB_LIBXEXT if BR2_PACKAGE_XORG7
+@@ -9,5 +10,5 @@ config BR2_PACKAGE_POPPLER
  
- config BR2_LINUX_KERNEL_LATEST_VERSION
--	bool "3.11.4"
-+	bool "3.11.5"
+ 	   http://poppler.freedesktop.org/
  
- config BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	bool "Same as toolchain kernel headers"
-@@ -75,7 +75,7 @@ config BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION
- 
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "3.11.4" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "3.11.5" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default BR2_DEFAULT_KERNEL_HEADERS if BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE if BR2_LINUX_KERNEL_CUSTOM_VERSION
- 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
+-comment "poppler requires a toolchain with C++ support enabled"
+-	depends on !BR2_INSTALL_LIBSTDCPP
++comment "poppler requires a toolchain with C++ and thread support enabled"
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
