@@ -1,36 +1,35 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 14 Oct 2013 12:59:54 +0200
-Subject: [Buildroot] [git commit] package/rpi-userland: expose appropriate
-	EGL version
-Message-ID: <20131014112355.347009B9F3@busybox.osuosl.org>
+Date: Mon, 14 Oct 2013 13:13:19 +0200
+Subject: [Buildroot] [git commit] pcsc-lite: bump to version 1.8.8
+Message-ID: <20131014112355.65A149B74D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f8938bf47d06e445c86d02403122c39926f1d036
+commit: http://git.buildroot.net/buildroot/commit/?id=a97d711d8ab1742cbc734abb39e89319ae24c39b
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The egl.pc file installed exposes version 1.0, while it really is a
-much higher version.
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Axel Lin <axel.lin@ingics.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../rpi-userland-000-add-pkgconfig-files.patch     |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/pcsc-lite/pcsc-lite.mk |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/rpi-userland/rpi-userland-000-add-pkgconfig-files.patch b/package/rpi-userland/rpi-userland-000-add-pkgconfig-files.patch
-index d7984ff..848e49d 100644
---- a/package/rpi-userland/rpi-userland-000-add-pkgconfig-files.patch
-+++ b/package/rpi-userland/rpi-userland-000-add-pkgconfig-files.patch
-@@ -18,7 +18,7 @@ Index: b/interface/khronos/egl/egl.pc.in
- +
- +Name: egl
- +Description: RasberryPi implementation of EGL
--+Version: 1.0
-++Version: 10
- +Libs: -L${libdir} -lEGL -lGLESv2 -lbcm_host
- +Cflags: -I${includedir}/ -I${includedir}/interface/vcos/pthreads/ \
- +        -I${includedir}/interface/vmcs_host/linux/
+diff --git a/package/pcsc-lite/pcsc-lite.mk b/package/pcsc-lite/pcsc-lite.mk
+index c126b3f..4cc628f 100644
+--- a/package/pcsc-lite/pcsc-lite.mk
++++ b/package/pcsc-lite/pcsc-lite.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PCSC_LITE_VERSION = 1.8.6
++PCSC_LITE_VERSION = 1.8.8
+ PCSC_LITE_SOURCE = pcsc-lite-$(PCSC_LITE_VERSION).tar.bz2
+-PCSC_LITE_SITE = http://alioth.debian.org/frs/download.php/file/3757
++PCSC_LITE_SITE = http://alioth.debian.org/frs/download.php/file/3862
+ PCSC_LITE_INSTALL_STAGING = YES
+ PCSC_LITE_DEPENDENCIES = host-pkgconf
+ PCSC_LITE_LICENSE = BSD-3c
