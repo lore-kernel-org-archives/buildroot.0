@@ -1,36 +1,25 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 14 Oct 2013 12:26:55 +0200
-Subject: [Buildroot] [PATCH] ext-toolchain: MIPS: Select correct
- endianness for the target
-In-Reply-To: <525BC5C1.3050705@imgtec.com>
-References: <1381744345-8306-1-git-send-email-markos.chandras@imgtec.com>
- <20131014120543.267c23a7@skate> <525BC5C1.3050705@imgtec.com>
-Message-ID: <20131014122655.76c12547@skate>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 14 Oct 2013 12:50:24 +0200
+Subject: [Buildroot] [PATCH] manual: rename section name of package lists
+In-Reply-To: <ab29385dc7907035d6d7.1381735358@argentina> (Thomas De
+ Schampheleire's message of "Mon, 14 Oct 2013 09:22:38 +0200")
+References: <ab29385dc7907035d6d7.1381735358@argentina>
+Message-ID: <877gdgt9cf.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Markos Chandras,
+>>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin@gmail.com> writes:
 
-On Mon, 14 Oct 2013 11:21:53 +0100, Markos Chandras wrote:
+ Thomas> The original titles did no longer correspond with the actual
+ Thomas> menu names.  Additionally, choose a name that better reflects
+ Thomas> the fact that this is a list.
 
-> > Should we do it for -EB as well? Or do we consider because the Sourcery
-> > toolchain defaults to big endian we don't need to explicit -EB ?
-> 
-> It's not necessary because the default is for big endian. But if you 
-> prefer to do that for the sake of consinstency I am fine with it :)
-> 
-> Peter can you fix this patch before you commit it or should I send a v2?
+ Thomas> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
-I have a bunch of other external toolchain / toolchain patches, so I
-can take your patch as well and send a global patch series to Peter.
+Committed, thanks.
 
-Thanks!
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
