@@ -1,89 +1,86 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 14 Oct 2013 08:58:03 +0200
-Subject: [Buildroot] [PATCH 1/1] trace-cmd: use pkg-config instead of
- python-config
-In-Reply-To: <525B1E2E.2040209@openwide.fr>
-References: <525B1E2E.2040209@openwide.fr>
-Message-ID: <20131014085803.4c139478@skate>
+Date: Mon, 14 Oct 2013 09:09:04 +0200
+Subject: [Buildroot] Bumping packages: some comments/suggestions
+In-Reply-To: <525B0AEF.9030406@trzebnica.net>
+References: <20131013114246.440c3831@skate>
+	<525B0AEF.9030406@trzebnica.net>
+Message-ID: <20131014090904.1f20fcf4@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Romain Naour,
+Dear Jerzy Grzegorek,
 
-On Mon, 14 Oct 2013 00:26:54 +0200, Romain Naour wrote:
+On Sun, 13 Oct 2013 23:04:47 +0200, Jerzy Grzegorek wrote:
 > 
-> Add missing python dependency.
-> Makefile use host's python-config, which seems breaks powerpc and arm build.
-> Replaces python-config with pkg-config.
-> Add pkg-config as dependency.
 > 
-> Fixes:
-> http://autobuild.buildroot.net/results/980/980875810528ac1dee34b8c268d9b3c40b2e35ec/
+> Hi Thomas,
 > 
-> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-
-Interesting, this looks simpler than what I have done.
-
-> ---
-> Note: Makefile use swig which is not available in buildroot.
-
-swig is definitely available, in package/swig/.
-
 > 
->  package/trace-cmd/Config.in                        |  2 ++
->  ...e-use-pkg-config-instead-of-python-config.patch | 34 ++++++++++++++++++++++
->  package/trace-cmd/trace-cmd.mk                     |  2 ++
->  3 files changed, 38 insertions(+)
->  create mode 100644 package/trace-cmd/trace-cmd-0001-Makefile-use-pkg-config-instead-of-python-config.patch
+> > Hello Jerzy and Axel,
+> >
+> > Recently, both of you have worked on and contributed a number of
+> > patches bumping a significant number of Buildroot packages. This is of
+> > course really great, and I'd like to thank you for those contributions.
+> >
+> > That being said, I would have two suggestions:
+> >
+> >   *) It would be great if you could check that the reverse dependencies
+> >      of the package you're bumping still continue to build. For example,
+> >      Axel bumped 'ortp', but didn't realize bumping it would break
+> >      the linphone and mediastreamer. While we certainly cannot expect
+> >      contributors to test package bumps in all possible configurations
+> >      (especially for packages having a large number of
+> >      reverse dependencies), checking at least a few of them is a good
+> >      idea. Also, when bumping from one major release to another (such as
+> >      berkeleydb 5.x to berkeleydb 6.x), even more care should be taken.
+> >
+> >   *) To make this "bumping" effort a bit more systematic, I believe it
+> >      would be useful to introduce an infrastructure in Buildroot to
+> >      automatically check if upstream has a new package. In many cases,
+> >      the upstream site has a directory with all the different versions
+> >      of the tarball, so checking if there's a newer one in an automated
+> >      way would be possible. If we do this for many packages, then we can
+> >      run a script every day, and check if there are new upstream
+> >      releases available. Debian has such a mechanism with the 'watch'
+> >      mechanism (see https://wiki.debian.org/debian/watch/). Gentoo has
+> >      the euscan utility (see https://github.com/iksaif/euscan). It would
+> >      be nice having something like this, that we could integrate in the
+> >      Buildroot per-package stats at
+> >      http://autobuild.buildroot.org/stats/ to get a clear vision of
+> >      which packages need to be upgraded. If one of you is interested in
+> >      doing this, it'd be great!
 > 
-> diff --git a/package/trace-cmd/Config.in b/package/trace-cmd/Config.in
-> index 8d79304..96ed63a 100644
-> --- a/package/trace-cmd/Config.in
-> +++ b/package/trace-cmd/Config.in
-> @@ -2,6 +2,8 @@ config BR2_PACKAGE_TRACE_CMD
->  	bool "trace-cmd"
->  	depends on BR2_LARGEFILE
->  	depends on BR2_TOOLCHAIN_HAS_THREADS
-> +	select BR2_PACKAGE_PYTHON
-
-No, Python support is optional in trace-cmd. We should keep optional,
-by doing:
-
-ifeq ($(BR2_PACKAGE_PYTHON),)
-TRACE_CMD_MAKE_FLAGS += -NO_PYTHON=1
-else
-TRACE_CMD_DEPENDENCIES += python
-endif
-
-> +	select BR2_PACKAGE_PKG_CONFIG
-
-No, this is wrong. The pkg-config you're using is not the target
-pkg-config, but the host pkg-config. There is no need to add a
-Config.in dependency for that.
-
-> diff --git a/package/trace-cmd/trace-cmd.mk b/package/trace-cmd/trace-cmd.mk
-> index 7a750f9..cd6ba20 100644
-> --- a/package/trace-cmd/trace-cmd.mk
-> +++ b/package/trace-cmd/trace-cmd.mk
-> @@ -11,6 +11,8 @@ TRACE_CMD_INSTALL_STAGING = YES
->  TRACE_CMD_LICENSE = GPLv2 LGPLv2.1
->  TRACE_CMD_LICENSE_FILES = COPYING COPYING.LIB
+> Thanks for your suggestions.
+> Do you mean something like this ?
 > 
-> +TRACE_CMD_DEPENDENCIES = python pkg-config
+> Package name        Current version       New upstream releases Reverse 
+> dependencies
+> ======================================================================================= 
+> 
+> ...
+> apr ............... 1.4.6 ........................................ 
+> apr-util log4cxx
+> apr ..................................... 1.4.8
+> apr-util .......... 1.4.1
+> apr-util ................................ 1.5.1
+> apr-util ................................ 1.5.2
 
-Python dependency should be optional. The pkg-config dependency should
-be on host-pkg-config.
+I'm not sure listing all reverse dependencies will actually be useful
+and/or possible. But yet, the idea is to add a mechanism that allows to
+automatically check, for a given package, if there is a new upstream
+version available.
 
-See also the patch set I had posted to fix the same issue (in a
-different way, which required changing python2 and python3 config
-scripts):
+Also, I believe there is no need to list multiple "new" upstream
+releases (as you did for apr-util above), listing the latest one
+available is fine.
 
-  http://patchwork.ozlabs.org/patch/279267/
-  http://patchwork.ozlabs.org/patch/279265/
-  http://patchwork.ozlabs.org/patch/279269/
+Again, for now, the core of the problem is to be able to *detect* when
+an upstream version is available for a given package. Once that is
+done, we will see at integrating that into the statistics page I
+mentioned earlier, and do all the automated execution.
 
 Best regards,
 
