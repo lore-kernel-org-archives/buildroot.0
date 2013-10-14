@@ -1,39 +1,45 @@
-From: Jeremy Rosen <jeremy.rosen@openwide.fr>
-Date: Mon, 14 Oct 2013 11:38:14 +0200 (CEST)
-Subject: [Buildroot] Bumping packages: some comments/suggestions
-In-Reply-To: <20131014113000.73ca82bf@skate>
-Message-ID: <1642454622.8785613.1381743494806.JavaMail.root@openwide.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 14 Oct 2013 11:47:54 +0200
+Subject: [Buildroot] Help with selecting package
+In-Reply-To: <525BAB59.4020105@gmail.com>
+References: <525BAB59.4020105@gmail.com>
+Message-ID: <20131014114754.12f56017@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> 
-> I must say I'm not a big fan of the automatic build, which may
-> encourage people to do "careless" bump, i.e version bumps without
-> looking at least a little bit at what changed, and taking a set back
-> by
-> looking at the version number, or the project web site, to see if the
-> version bump is small, or major.
-> 
+Dear Marco Trapanese,
 
-yeah, that's the "might not be a good idea" part... I was more thinking
-on the line of "this is a minor release and it compiles correctly, it's
-probably an easy job to test and bump" i.e for the case of minor/security
-releases upstream. It's a balance between helping maintainers work fast,
-helping project managers see low hanging fruites and making sure people
-are not too lazy...
+On Mon, 14 Oct 2013 10:29:13 +0200, Marco Trapanese wrote:
 
-> For the second one, I agree. We have discussed a few times having the
-> notion of package maintainers. Probably something that will be worth
-> discussing at this time.
+> I receive a lot of warning during the compilation of a kernel module, 
+> like this:
 > 
-> Best regards,
+> WARNING: "videobuf_read_stream" 
+> [/home/mark/dev/rpiqt5/buildroot-rpi/output/build/sensoray2253-1.2.6/driver/s2253.ko] 
+> undefined!
 > 
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux, Kernel and Android engineering
-> http://free-electrons.com
+> "videobuf_read_stream" is defined in media/videobuf-core.h.
 > 
+> How to find which package I have to add to "depends on" and to 
+> "PACKAGE_DEPENDENCIES" ?
+> I've already added libv4l.
+
+It's not a dependency on an userspace library, it's a dependency on a
+kernel option, and there's no way to ensure this option is enabled by
+mean of Buildroot dependencies. You should just make sure your kernel
+configuration has the right option enabled.
+
+Make sure you have CONFIG_VIDEOBUF_GEN enabled in your kernel, which
+seems to be the option that ensures videobuf_read_stream() is provided
+by the kernel.
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
