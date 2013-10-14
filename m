@@ -1,70 +1,54 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 14 Oct 2013 22:00:38 +0200
-Subject: [Buildroot] [git commit] autossh: new package
-Message-ID: <20131014203036.AA9F69A384@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 14 Oct 2013 22:32:17 +0200
+Subject: [Buildroot] [PATCH 4/4] package/weston: bump to 1.3.0
+In-Reply-To: <87r4bnoats.fsf@dell.be.48ers.dk>
+References: <cover.1381770790.git.yann.morin.1998@free.fr>
+ <cover.1381770790.git.yann.morin.1998@free.fr>
+ <7abd572f6a4cf8a560199ddab748ca1dcc3cbd7c.1381770790.git.yann.morin.1998@free.fr>
+ <87r4bnoats.fsf@dell.be.48ers.dk>
+Message-ID: <20131014203217.GD3491@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=05d59aa2689acb86e72052418fe85b186b0a39e7
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Peter, All,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/Config.in          |    1 +
- package/autossh/Config.in  |    8 ++++++++
- package/autossh/autossh.mk |   17 +++++++++++++++++
- 3 files changed, 26 insertions(+), 0 deletions(-)
+On 2013-10-14 22:29 +0200, Peter Korsgaard spake thusly:
+> >>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+> 
+>  Yann> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+>  Yann> Needs three patches from upstream.
+> 
+> Thanks, but there still seems to be some fbdev / GLES issues:
+> 
+> make[4]: Entering directory `/home/peko/source/buildroot/output/build/weston-1.3.0/tests'
+>   CC       weston_test_la-weston-test.lo
+>   CC       weston_test_la-wayland-test-protocol.lo
+>   CC       surface-test.lo
+>   CC       surface-global-test.lo
+>   CC       config-parser-test.o
+>   CC       libshared_test_la-weston-test-runner.lo
+>   CC       vertex-clip-test.o
+>   CC       vertex-clipping.o
+> In file included from vertex-clip-test.c:30:0:
+> ../src/vertex-clipping.h:25:23: fatal error: GLES2/gl2.h: No such file or directory
+> compilation terminated.
 
-diff --git a/package/Config.in b/package/Config.in
-index 41d828a..7af6d42 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -760,6 +760,7 @@ source "package/aiccu/Config.in"
- source "package/aircrack-ng/Config.in"
- source "package/argus/Config.in"
- source "package/arptables/Config.in"
-+source "package/autossh/Config.in"
- source "package/avahi/Config.in"
- source "package/axel/Config.in"
- source "package/bcusdk/Config.in"
-diff --git a/package/autossh/Config.in b/package/autossh/Config.in
-new file mode 100644
-index 0000000..e3acd8a
---- /dev/null
-+++ b/package/autossh/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_AUTOSSH
-+	bool "autossh"
-+	depends on BR2_USE_MMU # fork()
-+	help
-+	  autossh is a program to start a copy of ssh and monitor it,
-+	  restarting it as necessary should it die or stop passing traffic.
-+
-+	  http://www.harding.motd.ca/autossh/
-diff --git a/package/autossh/autossh.mk b/package/autossh/autossh.mk
-new file mode 100644
-index 0000000..75d7892
---- /dev/null
-+++ b/package/autossh/autossh.mk
-@@ -0,0 +1,17 @@
-+################################################################################
-+#
-+# autossh
-+#
-+################################################################################
-+
-+AUTOSSH_VERSION = 1.4c
-+AUTOSSH_SITE = http://www.harding.motd.ca/autossh
-+AUTOSSH_SOURCE = autossh-$(AUTOSSH_VERSION).tgz
-+AUTOSSH_LICENSE = Modified BSD
-+AUTOSSH_LICENSE_FILES = autossh.c
-+
-+define AUTOSSH_INSTALL_TARGET_CMDS
-+	$(INSTALL) -m 755 -D $(@D)/autossh $(TARGET_DIR)/usr/bin/autossh
-+endef
-+
-+$(eval $(autotools-package))
+Doh. It did not occur here.
+
+> Perhaps we can just disable building the tests?
+
+Will see to it. thanks.
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
