@@ -1,114 +1,194 @@
-From: arnaud aujon <arnaud.aujon@gmail.com>
-Date: Mon, 14 Oct 2013 19:49:09 +0200
-Subject: [Buildroot] [PATCH v5] espeak: new package
-In-Reply-To: <20131014194050.6f0db457@skate>
-References: <1381770929-13754-1-git-send-email-arnaud.aujon@gmail.com>
- <20131014194050.6f0db457@skate>
-Message-ID: <CACjG4BJKxk6=y7iAyBxsw3E5HA=x4kxM+GWXCqbn8Z4Tx6XH-A@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 14 Oct 2013 19:50:21 +0200
+Subject: [Buildroot] [PATCH 1/1] new package : jquery-mobile
+In-Reply-To: <1381771331-386-1-git-send-email-sagaert.johan@skynet.be>
+References: <1381771331-386-1-git-send-email-sagaert.johan@skynet.be>
+Message-ID: <20131014195021.326ef74d@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas,
+Dear Sagaert Johan,
 
-I will send a new patch shortly.
-About the licence, the file Licence.txt say GPLv3 but you're right in the
-source code we can find GPLv3+, what do you do in this case ?
+On Mon, 14 Oct 2013 19:22:11 +0200, Sagaert Johan wrote:
+> diff --git a/package/Config.in b/package/Config.in
+> index 142454d..857ae9e 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -576,6 +576,7 @@ source "package/explorercanvas/Config.in"
+>  source "package/flot/Config.in"
+>  source "package/jquery/Config.in"
+>  source "package/jquery-keyboard/Config.in"
+> +source "package/jquery-mobile/Config.in"
+>  source "package/jquery-sparkline/Config.in"
+>  source "package/jquery-ui/Config.in"
+>  source "package/jquery-ui-themes/Config.in"
+> diff --git a/package/jquery-mobile/Config.in b/package/jquery-mobile/Config.in
+> new file mode 100644
+> index 0000000..2b96d5f
+> --- /dev/null
+> +++ b/package/jquery-mobile/Config.in
+> @@ -0,0 +1,26 @@
+> +config BR2_PACKAGE_JQUERY_MOBILE
+> +	bool "jQuery-Mobile"
 
+Since it is based on JQuery, shouldn't it select it, like some other
+JQuery modules do? (Just asking, I have no idea how this jQuery-Mobile
+stuff interacts with jQuery).
 
-2013/10/14 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> +	help
+> +	  jQuery-Mobile is a A unified, HTML5-based user interface system
 
-> Dear Arnaud Aujon,
->
-> > +if BR2_PACKAGE_ESPEAK
-> > +choice
-> > +     prompt "choose audio backend"
-> > +     default BR2_PACKAGE_ESPEAK_AUDIO_BACKEND_NONE
-> > +
-> > +     config BR2_PACKAGE_ESPEAK_AUDIO_BACKEND_NONE
-> > +             bool "No sound backend, only produce wav files"
-> > +
-> > +     comment "ALSA backend requires a toolchain with threads support"
-> > +     depends on !BR2_TOOLCHAIN_HAS_THREADS
-> > +
-> > +     config BR2_PACKAGE_ESPEAK_AUDIO_BACKEND_ALSA
-> > +             bool "ALSA via Portaudio"
-> > +             select BR2_PACKAGE_PORTAUDIO
-> > +             select BR2_PACKAGE_PORTAUDIO_CXX
-> > +             depends on BR2_TOOLCHAIN_HAS_THREADS #portaudio
-> > +
-> > +     comment "Pulseaudio backend requires a toolchain with WCHAR,
-> LARGEFILE and threads support"
-> > +     depends on !(BR2_TOOLCHAIN_HAS_THREADS && BR2_USE_WCHAR &&
-> BR2_LARGEFILE)
-> > +
-> > +     config BR2_PACKAGE_ESPEAK_AUDIO_BACKEND_PULSEAUDIO
-> > +             bool "pulseaudio"
-> > +             select BR2_PACKAGE_PULSEAUDIO
-> > +             depends on BR2_TOOLCHAIN_HAS_THREADS # pulseaudio
-> > +             depends on BR2_USE_WCHAR # pulseaudio
-> > +             depends on BR2_LARGEFILE # pulseaudio
->
-> Throughout the Buildroot tree, I don't think we have the habit of
-> indenting things inside a choice, so I would remove one tab from this
-> entire block. However, the "depends on" for the comments should be
-> intended.
->
-> > +
-> > +endchoice
-> > +endif #BR2_PACKAGE_ESPEAK
->
-> Nit pick: one space between # and BR2_...
->
-> > diff --git a/package/espeak/espeak-1-do-not-compil-when-install.patch
-> b/package/espeak/espeak-1-do-not-compil-when-install.patch
->
-> Even we have agreed on the number of digits we should use, I believe 1
-> digit is really too short. We don't even notice it's the patch number.
-> So if you could replace that by espeak-01-....patch it would be great.
->
-> > +ESPEAK_VERSION = 1.47.11
-> > +ESPEAK_SOURCE = espeak-$(ESPEAK_VERSION)-source.zip
-> > +ESPEAK_SITE =
-> http://downloads.sourceforge.net/project/espeak/espeak/espeak-1.47
-> > +ESPEAK_LICENSE = GPLv3
->
-> License is actually GPLv3+, as the source code states:
->
->  *   This program is free software; you can redistribute it and/or modify
->  *
->  *   it under the terms of the GNU General Public License as published by
->  *
->  *   the Free Software Foundation; either version 3 of the License, or
-> *
->  *   (at your option) any later version.
-> *
->
->
-> > +define ESPEAK_BUILD_CMDS
-> > +     $(MAKE) $(TARGET_CONFIGURE_OPTS)\
-> > +             AUDIO="$(ESPEAK_AUDIO_BACKEND)"\
->
-> One space before backslashes.
->
-> > +             -C $(@D)/src all
-> > +endef
-> > +
-> > +define ESPEAK_INSTALL_TARGET_CMDS
-> > +     $(MAKE) install DESTDIR="$(TARGET_DIR)" -C $(@D)/src
-> > +endef
->
-> Other than that, looks good to me. Thanks a lot for the quick
-> turnaround of new versions!
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux, Kernel and Android engineering
-> http://free-electrons.com
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20131014/6957be57/attachment.html>
+"is a A unified" ?
+
+> +	  for all popular mobile device platforms, built on the rock-solid
+> +	  jQuery and jQuery UI foundation.
+> +	  Its lightweight code is built with progressive enhancement,
+> +	  and has a flexible, easily themeable design.
+> +
+> +	  http://jquerymobile.com
+> +	  
+> +config BR2_PACKAGE_JQUERY_MOBILE_FULL
+> +	bool "jquery mobile development files"
+> +	depends on BR2_PACKAGE_JQUERY_MOBILE
+
+Replace this depends on here and in the option below by enclosing both
+inside a if BR2_PACKAGE_JQUERY_MOBILE .. endif
+
+> +	help
+> +		Installs the development versions.
+> +		
+> +		http://jquerymobile.com
+
+Indentation for help text is one tab + two spaces (like you did
+correctly above). No need to repeat the upstream URL here.
+
+> +		
+> +config BR2_PACKAGE_JQUERY_MOBILE_DEMOS
+> +	bool "jquery mobile demo files"
+> +	depends on BR2_PACKAGE_JQUERY_MOBILE
+> +	help
+> +		Installs the demo files.
+> +		
+> +		http://jquerymobile.com
+
+Same comments.
+
+> diff --git a/package/jquery-mobile/jquery-mobile.mk b/package/jquery-mobile/jquery-mobile.mk
+> new file mode 100644
+> index 0000000..8f2ba91
+> --- /dev/null
+> +++ b/package/jquery-mobile/jquery-mobile.mk
+> @@ -0,0 +1,59 @@
+> +################################################################################
+> +#
+> +# jquery-mobile
+> +#
+> +################################################################################
+> +
+> +JQUERY_MOBILE_VERSION = 1.3.2
+> +JQUERY_MOBILE_SITE = http://jquerymobile.com/resources/download
+> +JQUERY_MOBILE_SOURCE = jquery.mobile-$(JQUERY_MOBILE_VERSION).zip
+> +JQUERY_MOBILE_LICENSE = MIT
+> +
+> +ifeq ($(BR2_PACKAGE_JQUERY_MOBILE_FULL),y)
+> +	JQUERY_MOBILE_FULL_INSTALL +=$(INSTALL) -m 0644 -D \
+> +		$(@D)/jquery.mobile.structure-$(JQUERY_MOBILE_VERSION).css \
+> +		$(TARGET_DIR)/var/www/jquery.mobile.structure-$(JQUERY_MOBILE_VERSION).css ;
+> +	JQUERY_MOBILE_FULL_INSTALL +=$(INSTALL) -m 0644 -D \
+> +		$(@D)/jquery.mobile.theme-$(JQUERY_MOBILE_VERSION).css \
+> +		$(TARGET_DIR)/var/www/jquery.mobile.theme-$(JQUERY_MOBILE_VERSION).css ;
+> +	JQUERY_MOBILE_FULL_INSTALL +=$(INSTALL) -m 0644 -D \
+> +		$(@D)/jquery.mobile-$(JQUERY_MOBILE_VERSION).css \
+> +		$(TARGET_DIR)/var/www/jquery.mobile-$(JQUERY_MOBILE_VERSION).css ;
+> +	JQUERY_MOBILE_FULL_INSTALL +=$(INSTALL) -m 0644 -D \
+> +		$(@D)/jquery.mobile-$(JQUERY_MOBILE_VERSION).js \
+> +		$(TARGET_DIR)/var/www/jquery.mobile-$(JQUERY_MOBILE_VERSION).js
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_JQUERY_MOBILE_DEMOS),y)
+> +	JQUERY_MOBILE_DEMOS_INSTALL +=mkdir -p $(TARGET_DIR)/var/www/demos ;
+> +	JQUERY_MOBILE_DEMOS_INSTALL +=cp -r $(@D)/demos/* $(TARGET_DIR)/var/www/demos ;
+> +	JQUERY_MOBILE_DEMOS_INSTALL +=$(INSTALL) -m 0644 -D $(@D)/index.html $(TARGET_DIR)/var/www/demo.html
+> +endif
+> +
+> +define JQUERY_MOBILE_EXTRACT_CMDS
+> +	unzip -d $(@D) $(DL_DIR)/$(JQUERY_MOBILE_SOURCE)
+> +endef
+> +
+> +define JQUERY_MOBILE_INSTALL_TARGET_CMDS
+> +	mkdir -p $(TARGET_DIR)/var/www
+> +	mkdir -p $(TARGET_DIR)/var/www/images
+> +	$(INSTALL) -m 0644 -D $(@D)/images/* $(TARGET_DIR)/var/www/images
+> +	$(INSTALL) -m 0644 -D $(@D)/jquery.mobile.structure-$(JQUERY_MOBILE_VERSION).min.css \
+> +		$(TARGET_DIR)/var/www/jquery.mobile.structure-$(JQUERY_MOBILE_VERSION).min.css
+> +	$(INSTALL) -m 0644 -D $(@D)/jquery.mobile.theme-$(JQUERY_MOBILE_VERSION).min.css \
+> +		$(TARGET_DIR)/var/www/jquery.mobile.theme-$(JQUERY_MOBILE_VERSION).min.css
+> +	$(INSTALL) -m 0644 -D $(@D)/jquery.mobile-$(JQUERY_MOBILE_VERSION).min.css \
+> +		$(TARGET_DIR)/var/www/jquery.mobile-$(JQUERY_MOBILE_VERSION).min.css
+> +	$(INSTALL) -m 0644 -D $(@D)/jquery.mobile-$(JQUERY_MOBILE_VERSION).min.map \
+> +		$(TARGET_DIR)/var/www/jquery.mobile-$(JQUERY_MOBILE_VERSION).min.map
+> +	$(INSTALL) -m 0644 -D $(@D)/jquery.mobile-$(JQUERY_MOBILE_VERSION).min.js \
+> +		$(TARGET_DIR)/var/www/jquery.mobile-$(JQUERY_MOBILE_VERSION).min.js
+> +	$(JQUERY_MOBILE_FULL_INSTALL)
+> +	$(JQUERY_MOBILE_DEMOS_INSTALL)
+> +endef
+
+This looks a bit complicated. What about:
+
+JQUERY_MOBILE_INSTALLED_FILES = \
+	jquery.mobile.structure-$(JQUERY_MOBILE_VERSION).min.css \
+	jquery.mobile.theme-$(JQUERY_MOBILE_VERSION).min.css \
+	jquery.mobile-$(JQUERY_MOBILE_VERSION).min.css \
+	jquery.mobile-$(JQUERY_MOBILE_VERSION).min.map \
+	jquery.mobile-$(JQUERY_MOBILE_VERSION).min.js
+
+ifeq ($(BR2_PACKAGE_JQUERY_MOBILE_FULL),y)
+JQUERY_MOBILE_INSTALLED_FILES += \
+	jquery.mobile.structure-$(JQUERY_MOBILE_VERSION).css \
+	jquery.mobile.theme-$(JQUERY_MOBILE_VERSION).css \
+	jquery.mobile-$(JQUERY_MOBILE_VERSION).css \
+	jquery.mobile-$(JQUERY_MOBILE_VERSION).js
+endif
+
+ifeq ($(BR2_PACKAGE_JQUERY_MOBILE_DEMOS),y)
+define JQUERY_MOBILE_INSTALL_DEMOS
+	mkdir -p $(TARGET_DIR)/var/www/demos
+	cp -r $(@D)/demos/* $(TARGET_DIR)/var/www/demos
+	$(INSTALL) -m 0644 -D $(@D)/index.html $(TARGET_DIR)/var/www/demo.html
+endef
+endif
+
+define JQUERY_MOBILE_INSTALL_TARGET_CMDS
+	for f in $(JQUERY_MOBILE_INSTALLED_FILES) ; do \
+		$(INSTALL) -D - m 0644 $(@D)/$$f $(TARGET_DIR)/var/www/$$f || break ; \
+	done
+	mkdir -p $(TARGET_DIR)/var/www/images
+	cp -r $(@D)/images/* $(TARGET_DIR)/var/www/images
+	$(JQUERY_MOBILE_INSTALL_DEMOS)
+endef
+
+Not much different from what you did, except:
+
+ (1) Usage of the JQUERY_MOBILE_INSTALLED_FILES variable to list files
+     to be installed. Maybe the name I've suggested is not the best one.
+
+ (2) Use a define ... endef for JQUERY_MOBILE_INSTALL_DEMOS, which is
+     much cleaner to add multi-line values to a variable.
+
+> +
+> +define JQUERY_MOBILE_UNINSTALL_TARGET_CMDS
+> +	rm -rf $(TARGET_DIR)/var/www/demos
+> +endef
+
+Not needed, you can remove this.
+
+Thanks,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
