@@ -1,51 +1,69 @@
-From: arnaud aujon <arnaud.aujon@gmail.com>
-Date: Mon, 14 Oct 2013 19:11:24 +0200
-Subject: [Buildroot] Bumping packages: some comments/suggestions
-In-Reply-To: <20131014155604.35644c62@skate>
-References: <20131014113000.73ca82bf@skate>
- <1642454622.8785613.1381743494806.JavaMail.root@openwide.fr>
- <CAAXf6LX7cHRZyGcA5KgYaL7iUuw_JhBxTAzsWrptAa9y10353w@mail.gmail.com>
- <20131014120410.1b4c05fb@skate>
- <CACjG4B+OX=r-g2bMsjM4zNYY2DuOo4pfmY51aoNL7402z4EJtQ@mail.gmail.com>
- <20131014155604.35644c62@skate>
-Message-ID: <CACjG4BJix3m_pwFVSboa2ccE0Wy0v8Jmf5Kuyyd75iWFu34kFw@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 14 Oct 2013 19:13:26 +0200
+Subject: [Buildroot] [pull request] Pull request for branch yem/wayland-bump
+Message-ID: <cover.1381770790.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-All right, I will start working on a python script. I keep you in touch.
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+Hello All!
+
+This series bumps the couple wayland/weston to the latest released
+version 1.3.0. It also includes two fixes/enhancements by Arnout.
+
+Regards,
+Yann E. MORIN.
 
 
-2013/10/14 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+The following changes since commit 3137186ba983c6dc0888df5fafff559082096cb0:
 
-> Arnaud,
->
-> On Mon, 14 Oct 2013 14:58:19 +0200, arnaud aujon wrote:
->
-> > I'm interested in developing an automatic way to know if a package needs
-> to
-> > be bumped.
-> > I'm a new contributor to buildroot (just sent a patch to add a new
-> > package,  well 3 patches because I had trouble with git send-email...),
-> if
-> > no one else have time to do it, I'll be happy to help Buildroot this way.
->
-> Until now, nobody has volunteered to work on this, so if you're
-> interested, feel free to start prototyping things. I believe a helper
-> script (in Python?), called from the Buildroot makefiles, is probably
-> the best way: doing all this logic purely in make might be too
-> complicated.
->
-> Best regards,
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux, Kernel and Android engineering
-> http://free-electrons.com
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20131014/07b83ec6/attachment.html>
+  linux: bump 3.11.x stable version (2013-10-14 13:51:20 +0200)
+
+are available in the git repository at:
+
+  git://gitorious.org/buildroot/buildroot.git yem/wayland-bump
+
+for you to fetch changes up to 7abd572f6a4cf8a560199ddab748ca1dcc3cbd7c:
+
+  package/weston: bump to 1.3.0 (2013-10-14 18:35:25 +0200)
+
+----------------------------------------------------------------
+Tag base for branch "yem/wayland-egl"
+
+----------------------------------------------------------------
+Arnout Vandecappelle (Essensium/Mind) (2):
+      weston: improve selection of compositor
+      weston: add missing toolchain comments
+
+Yann E. MORIN (2):
+      package/wayland: bump to 1.3.0
+      package/weston: bump to 1.3.0
+
+ package/wayland/wayland.mk                         |  2 +-
+ package/weston/Config.in                           | 17 ++---
+ ...eston-0000-dont-leak-fd-on-launcher-error.patch | 77 ++++++++++++++++++++++
+ ...pendent-code-only-when-the-DRM-compositor.patch | 47 -------------
+ .../weston-0001-enable-build-without-libdrm.patch  | 45 +++++++++++++
+ ...on-0002-fbdev-fix-compilation-without-EGL.patch | 29 ++++++++
+ ...02-fix-configure.ac-check-wayland-scanner.patch | 26 --------
+ ...ompositor-fbdev-drop-dependency-on-libdrm.patch | 22 -------
+ package/weston/weston.mk                           |  5 +-
+ 9 files changed, 162 insertions(+), 108 deletions(-)
+ create mode 100644 package/weston/weston-0000-dont-leak-fd-on-launcher-error.patch
+ delete mode 100644 package/weston/weston-0001-Pull-DRM-dependent-code-only-when-the-DRM-compositor.patch
+ create mode 100644 package/weston/weston-0001-enable-build-without-libdrm.patch
+ create mode 100644 package/weston/weston-0002-fbdev-fix-compilation-without-EGL.patch
+ delete mode 100644 package/weston/weston-0002-fix-configure.ac-check-wayland-scanner.patch
+ delete mode 100644 package/weston/weston-0003-compositor-fbdev-drop-dependency-on-libdrm.patch
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
