@@ -1,35 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 14 Oct 2013 12:04:10 +0200
-Subject: [Buildroot] Bumping packages: some comments/suggestions
-In-Reply-To: <CAAXf6LX7cHRZyGcA5KgYaL7iUuw_JhBxTAzsWrptAa9y10353w@mail.gmail.com>
-References: <20131014113000.73ca82bf@skate>
- <1642454622.8785613.1381743494806.JavaMail.root@openwide.fr>
- <CAAXf6LX7cHRZyGcA5KgYaL7iUuw_JhBxTAzsWrptAa9y10353w@mail.gmail.com>
-Message-ID: <20131014120410.1b4c05fb@skate>
+Date: Mon, 14 Oct 2013 12:05:43 +0200
+Subject: [Buildroot] [PATCH] ext-toolchain: MIPS: Select correct
+ endianness for the target
+In-Reply-To: <1381744345-8306-1-git-send-email-markos.chandras@imgtec.com>
+References: <1381744345-8306-1-git-send-email-markos.chandras@imgtec.com>
+Message-ID: <20131014120543.267c23a7@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas De Schampheleire,
+Dear Markos Chandras,
 
-On Mon, 14 Oct 2013 12:02:35 +0200, Thomas De Schampheleire wrote:
+On Mon, 14 Oct 2013 10:52:25 +0100, Markos Chandras wrote:
+> +ifeq ($(BR2_mipsel)$(BR2_mips64el),y)
+> +ifeq ($(BR2_ENDIAN),"LITTLE")
 
-> What I wanted to add in this discussion is this: if there are people
-> out there that have time for some buildroot development but they have
-> no clear goal of their own, they can among others choose between
-> package bumps and fixing autobuild failures.
-> While there certainly is value in package bumping, I hope that not all
-> of these people jump onto the bump-train and instead help with the
-> autobuild failures. We still hope to get to 0 failures at some point,
-> and bumping packages all the time will most of the time only add new
-> problems.
+If we're on mipsel or mips64el, we're always little endian, right? So
+maybe the test on BR2_ENDIAN isn't that useful? :-)
 
-I definitely agree that looking and fixing autobuilder failures is also
-a very important goal. Contributions in this area are very very welcome.
+> +TOOLCHAIN_EXTERNAL_WRAPPER_ARGS += -DBR_MIPS_TARGET_LITTLE_ENDIAN
+> +TOOLCHAIN_EXTERNAL_CFLAGS += -EL
+> +endif
+> +endif
 
-Best regards,
+Should we do it for -EB as well? Or do we consider because the Sourcery
+toolchain defaults to big endian we don't need to explicit -EB ?
+
+Thanks,
 
 Thomas
 -- 
