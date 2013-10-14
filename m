@@ -1,48 +1,19 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 14 Oct 2013 01:11:28 +0200
-Subject: [Buildroot] [PATCH 4/4] pkg-infra: add user-supplied step-hooks
-In-Reply-To: <cover.1381705600.git.yann.morin.1998@free.fr>
-References: <cover.1381705600.git.yann.morin.1998@free.fr>
-Message-ID: <3f8ce54570cde2f93d5f61c80a1b28af046b4926.1381705600.git.yann.morin.1998@free.fr>
+From: Tal Lubko <tallubko@yahoo.com>
+Date: Sun, 13 Oct 2013 21:07:38 -0700 (PDT)
+Subject: [Buildroot] How to find a package
+Message-ID: <1381723658.10819.YahooMailNeo@web160804.mail.bf1.yahoo.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
-Allow user to supply their own step-hooks by passing a variable
-on the make command-line:
-    make BR2_STEP_USER_HOOK=/path/to/my/script
-
-This can be usefull to run site-specific actions at each step of the
-build process, such as logging installed, removed or modified files,
-do sanity checks on installed files...
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
----
- package/pkg-generic.mk | 8 ++++++++
- 1 file changed, 8 insertions(+)
-
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 162c9ed..f5c33b2 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -42,6 +42,14 @@ define step_time
- endef
- STEP_HOOKS += step_time
- 
-+# User-supplied script
-+define step_user
-+	"$(BR2_STEP_USER_HOOK)" "$(1)" "$(2)" "$($(PKG)_NAME)"
-+endef
-+ifneq ($(BR2_STEP_USER_HOOK),)
-+STEP_HOOKS += step_user
-+endif
-+
- ################################################################################
- # Implicit targets -- produce a stamp file for each step of a package build
- ################################################################################
--- 
-1.8.1.2
+Hello Everyone
+?
+I'm new to buildroot and I would like to know what's the easiest way to search for a package in buildroot menus?
+?
+Thanks,
+Tal
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20131013/e6b8f9f0/attachment.html>
