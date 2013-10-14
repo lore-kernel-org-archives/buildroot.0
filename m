@@ -1,44 +1,60 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 14 Oct 2013 22:13:40 +0200
-Subject: [Buildroot] [git commit] weston: add missing toolchain comments
-Message-ID: <20131014203036.CEC559A384@busybox.osuosl.org>
+Date: Mon, 14 Oct 2013 22:13:05 +0200
+Subject: [Buildroot] [git commit] weston: improve selection of compositor
+Message-ID: <20131014203036.C4E739A384@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1d56d8a7f55442eeacad73c2085c7b3003d97be8
+commit: http://git.buildroot.net/buildroot/commit/?id=6d8998033fdbbcb513120f6ca5a1c9d2daf026ff
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+The way the compositor was selected in Config.in was counter-intuitive,
+because the fbdev backend is selected by default even if a different one
+is available.
+
+Instead, select the fbdev backend only if no other one was selected by
+the user.
+
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-[yann.morin.1998 at free.fr: fix missing double-quote at end of comment]
+[yann.morin.1998 at free.fr: don't reorder entries, keep alphabetical sort]
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/weston/Config.in |    8 ++++++--
- 1 files changed, 6 insertions(+), 2 deletions(-)
+ package/weston/Config.in |    9 +++------
+ 1 files changed, 3 insertions(+), 6 deletions(-)
 
 diff --git a/package/weston/Config.in b/package/weston/Config.in
-index 2cd5ced..b7f8468 100644
+index 4532c28..2cd5ced 100644
 --- a/package/weston/Config.in
 +++ b/package/weston/Config.in
-@@ -1,5 +1,5 @@
--comment "weston requires udev"
--	depends on !BR2_PACKAGE_UDEV
-+comment "weston needs udev and a toolchain w/ threads"
-+	depends on !BR2_PACKAGE_UDEV || !BR2_TOOLCHAIN_HAS_THREADS
+@@ -14,6 +14,8 @@ config BR2_PACKAGE_WESTON
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # wayland
+ 	# Runtime dependency
+ 	select BR2_PACKAGE_XKEYBOARD_CONFIG
++	# Make sure at least one compositor is selected.
++	select BR2_PACKAGE_WESTON_FBDEV if !BR2_PACKAGE_WESTON_HAS_COMPOSITOR
+ 	help
+ 	  Weston is the reference implementation of a Wayland
+ 	  compositor, and a useful compositor in its own right.
+@@ -24,17 +26,12 @@ config BR2_PACKAGE_WESTON
  
- config BR2_PACKAGE_WESTON
- 	bool "weston"
-@@ -33,6 +33,10 @@ config BR2_PACKAGE_WESTON_HAS_COMPOSITOR
+ if BR2_PACKAGE_WESTON
+ 
+-# These two options make sure at least one compositor is selected.
++# Helper to make sure at least one compositor is selected.
+ config BR2_PACKAGE_WESTON_HAS_COMPOSITOR
+ 	bool
+-config BR2_PACKAGE_WESTON_NEEDS_ONE_COMPOSITOR
+-	def_bool y
+-	depends on ! BR2_PACKAGE_WESTON_HAS_COMPOSITOR
+-	select BR2_PACKAGE_WESTON_FBDEV
+ 
  config BR2_PACKAGE_WESTON_FBDEV
  	bool "fbdev compositor"
+-	default y
  
-+comment "RPi compositor needs a toolchain w/ C++, largefile, threads"
-+	depends on BR2_arm
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS
-+
  config BR2_PACKAGE_WESTON_RPI
  	bool "RPi compositor"
- 	depends on BR2_arm                      # rpi-userland
