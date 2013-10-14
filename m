@@ -1,41 +1,114 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 14 Oct 2013 13:23:08 +0200
-Subject: [Buildroot] [PATCHv2] toolchain-external: add a specific check
-	to avoid Angstrom toolchains
-In-Reply-To: <1381652900-12516-1-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Sun, 13 Oct 2013 10:28:20 +0200")
-References: <1381652900-12516-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <878uxwrt9f.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 14 Oct 2013 12:59:17 +0200
+Subject: [Buildroot] [git commit] package/rpi-userland: install all of our
+	.pc files the same way
+Message-ID: <20131014112355.27D709B74D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=7b57bef618afb0f830abd4f854fe811b8978d7ff
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Thomas> The Angstrom toolchains available at
- Thomas> http://www.angstrom-distribution.org/toolchains/ are not usable as
- Thomas> external toolchains in Buildroot, because they are not pure toolchains
- Thomas> with just the C library, but instead complete SDKs with many
- Thomas> cross-compiled libraries (Gtk, Qt, glib, neon, sqlite, X.org, and many
- Thomas> more, approximately 200 MB of libraries).
+Install bcm_host the same way we install egl.pc and glesv2.pc, using
+the cmake lists.
 
- Thomas> Buildroot cannot use such toolchains, and while this is documented in
- Thomas> our manual, some users still try to do this. Today, one such user came
- Thomas> on the IRC channel, reporting a build problem, which we started
- Thomas> investigating, only to realize after a long time that he was using an
- Thomas> Angstrom toolchain.
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/rpi-userland/bcm_host.pc                   |   11 -------
+ .../rpi-userland-000-add-pkgconfig-files.patch     |   32 ++++++++++++++++++-
+ package/rpi-userland/rpi-userland.mk               |    6 ----
+ 3 files changed, 30 insertions(+), 19 deletions(-)
 
- Thomas> To avoid this problem in the future, we explicitly check if the
- Thomas> toolchain is from Angstrom by looking at the vendor part of the tuple
- Thomas> exposed by the toolchain: as soon as it is
- Thomas> <something>-angstrom-<something-else>, we reject the toolchain with an
- Thomas> explanation.
-
- Thomas> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/rpi-userland/bcm_host.pc b/package/rpi-userland/bcm_host.pc
+deleted file mode 100644
+index 28bbe96..0000000
+--- a/package/rpi-userland/bcm_host.pc
++++ /dev/null
+@@ -1,11 +0,0 @@
+-prefix=/usr
+-exec_prefix=${prefix}
+-libdir=${exec_prefix}/lib
+-includedir=${prefix}/include
+-
+-Name: bcm_host
+-Description: Broadcom VideoCore host API library
+-Version: 1
+-Libs: -L${libdir} -lbcm_host -lvcos -lvchiq_arm
+-Cflags: -I${includedir} -I${includedir}/interface/vmcs_host/linux -I${includedir}/interface/vcos/pthreads -DUSE_VCHIQ_ARM
+-
+diff --git a/package/rpi-userland/rpi-userland-000-add-pkgconfig-files.patch b/package/rpi-userland/rpi-userland-000-add-pkgconfig-files.patch
+index 4ffc2b0..d7984ff 100644
+--- a/package/rpi-userland/rpi-userland-000-add-pkgconfig-files.patch
++++ b/package/rpi-userland/rpi-userland-000-add-pkgconfig-files.patch
+@@ -1,9 +1,10 @@
+-Add .pc files for the OpenGLESv2 and EGL libraries
++Add .pc files for the OpenGLESv2, EGL and bcm_host libraries
+ 
+ Those pkg-config files make it easier for Qt5 to find those libraries
+ and the appropriate link flags.
+ 
+ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ 
+ Index: b/interface/khronos/egl/egl.pc.in
+ ===================================================================
+@@ -25,7 +26,7 @@ Index: b/interface/khronos/CMakeLists.txt
+ ===================================================================
+ --- a/interface/khronos/CMakeLists.txt
+ +++ b/interface/khronos/CMakeLists.txt
+-@@ -73,3 +73,11 @@
++@@ -74,3 +74,11 @@
+  
+  install(TARGETS EGL GLESv2 OpenVG WFC khrn_client DESTINATION lib)
+  install(TARGETS EGL_static GLESv2_static khrn_static DESTINATION lib)
+@@ -52,3 +53,30 @@ Index: b/interface/khronos/glxx/glesv2.pc.in
+ +Version: 2.0
+ +Libs: -L${libdir} -lGLESv2
+ +Cflags: -I${includedir}/
++Index: b/host_applications/linux/libs/bcm_host/CMakeLists.txt
++===================================================================
++--- a/host_applications/linux/libs/bcm_host/CMakeLists.txt
+++++ b/host_applications/linux/libs/bcm_host/CMakeLists.txt
++@@ -20,3 +20,7 @@
++ 
++ install(TARGETS bcm_host DESTINATION lib)
++ 
+++configure_file("${CMAKE_CURRENT_SOURCE_DIR}/bcm_host.pc.in"
+++  "${CMAKE_CURRENT_BINARY_DIR}/bcm_host.pc" @ONLY)
+++install(FILES "${CMAKE_CURRENT_BINARY_DIR}/bcm_host.pc"
+++  DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/pkgconfig")
++Index: b/host_applications/linux/libs/bcm_host/bcm_host.pc.in
++===================================================================
++--- /dev/null
+++++ b/host_applications/linux/libs/bcm_host/bcm_host.pc.in
++@@ -0,0 +1,10 @@
+++prefix=/usr
+++exec_prefix=${prefix}
+++libdir=${exec_prefix}/lib
+++includedir=${prefix}/include
+++
+++Name: bcm_host
+++Description: Broadcom VideoCore host API library
+++Version: 1
+++Libs: -L${libdir} -lbcm_host -lvcos -lvchiq_arm
+++Cflags: -I${includedir} -I${includedir}/interface/vmcs_host/linux -I${includedir}/interface/vcos/pthreads -DUSE_VCHIQ_ARM
+diff --git a/package/rpi-userland/rpi-userland.mk b/package/rpi-userland/rpi-userland.mk
+index cc032bf..8b5794f 100644
+--- a/package/rpi-userland/rpi-userland.mk
++++ b/package/rpi-userland/rpi-userland.mk
+@@ -16,10 +16,4 @@ define RPI_USERLAND_POST_TARGET_CLEANUP
+ endef
+ RPI_USERLAND_POST_INSTALL_TARGET_HOOKS += RPI_USERLAND_POST_TARGET_CLEANUP
+ 
+-define RPI_USERLAND_POST_STAGING_PC_FILE
+-	install -D -m 0644 package/rpi-userland/bcm_host.pc \
+-		$(STAGING_DIR)/usr/lib/pkgconfig/bcm_host.pc
+-endef
+-RPI_USERLAND_POST_INSTALL_STAGING_HOOKS += RPI_USERLAND_POST_STAGING_PC_FILE
+-
+ $(eval $(cmake-package))
