@@ -1,60 +1,32 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 14 Oct 2013 22:13:05 +0200
-Subject: [Buildroot] [git commit] weston: improve selection of compositor
-Message-ID: <20131014203036.C4E739A384@busybox.osuosl.org>
+Date: Mon, 14 Oct 2013 21:25:09 +0200
+Subject: [Buildroot] [git commit] jpeg-turbo: bump to version 1.3.0
+Message-ID: <20131014203036.2F0019A384@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=6d8998033fdbbcb513120f6ca5a1c9d2daf026ff
+commit: http://git.buildroot.net/buildroot/commit/?id=020faffd1a4b71b520251924f91119a5cb716c3a
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The way the compositor was selected in Config.in was counter-intuitive,
-because the fbdev backend is selected by default even if a different one
-is available.
-
-Instead, select the fbdev backend only if no other one was selected by
-the user.
-
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-[yann.morin.1998 at free.fr: don't reorder entries, keep alphabetical sort]
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/weston/Config.in |    9 +++------
- 1 files changed, 3 insertions(+), 6 deletions(-)
+ package/jpeg-turbo/jpeg-turbo.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/weston/Config.in b/package/weston/Config.in
-index 4532c28..2cd5ced 100644
---- a/package/weston/Config.in
-+++ b/package/weston/Config.in
-@@ -14,6 +14,8 @@ config BR2_PACKAGE_WESTON
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # wayland
- 	# Runtime dependency
- 	select BR2_PACKAGE_XKEYBOARD_CONFIG
-+	# Make sure at least one compositor is selected.
-+	select BR2_PACKAGE_WESTON_FBDEV if !BR2_PACKAGE_WESTON_HAS_COMPOSITOR
- 	help
- 	  Weston is the reference implementation of a Wayland
- 	  compositor, and a useful compositor in its own right.
-@@ -24,17 +26,12 @@ config BR2_PACKAGE_WESTON
+diff --git a/package/jpeg-turbo/jpeg-turbo.mk b/package/jpeg-turbo/jpeg-turbo.mk
+index c19959c..e6a0b24 100644
+--- a/package/jpeg-turbo/jpeg-turbo.mk
++++ b/package/jpeg-turbo/jpeg-turbo.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- if BR2_PACKAGE_WESTON
- 
--# These two options make sure at least one compositor is selected.
-+# Helper to make sure at least one compositor is selected.
- config BR2_PACKAGE_WESTON_HAS_COMPOSITOR
- 	bool
--config BR2_PACKAGE_WESTON_NEEDS_ONE_COMPOSITOR
--	def_bool y
--	depends on ! BR2_PACKAGE_WESTON_HAS_COMPOSITOR
--	select BR2_PACKAGE_WESTON_FBDEV
- 
- config BR2_PACKAGE_WESTON_FBDEV
- 	bool "fbdev compositor"
--	default y
- 
- config BR2_PACKAGE_WESTON_RPI
- 	bool "RPi compositor"
+-JPEG_TURBO_VERSION = 1.2.1
++JPEG_TURBO_VERSION = 1.3.0
+ JPEG_TURBO_SOURCE = libjpeg-turbo-$(JPEG_TURBO_VERSION).tar.gz
+ JPEG_TURBO_SITE = http://downloads.sourceforge.net/project/libjpeg-turbo/$(JPEG_TURBO_VERSION)
+ JPEG_TURBO_INSTALL_STAGING = YES
