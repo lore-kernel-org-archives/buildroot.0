@@ -1,19 +1,21 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 14 Oct 2013 21:45:55 +0200
-Subject: [Buildroot] [PATCH 1/1] apr: bump to version 1.4.8
-In-Reply-To: <1381509158-5571-1-git-send-email-jerzy.grzegorek@trzebnica.net>
- (Jerzy Grzegorek's message of "Fri, 11 Oct 2013 18:32:38 +0200")
-References: <1381509158-5571-1-git-send-email-jerzy.grzegorek@trzebnica.net>
-Message-ID: <87wqlfprf0.fsf@dell.be.48ers.dk>
+Date: Mon, 14 Oct 2013 21:48:15 +0200
+Subject: [Buildroot] [PATCH] boost: Fix compilation of Boost.Variants
+	move assignment
+In-Reply-To: <1381523863-5285-1-git-send-email-luca@lucaceresoli.net> (Luca
+ Ceresoli's message of "Fri, 11 Oct 2013 22:37:43 +0200")
+References: <1381523863-5285-1-git-send-email-luca@lucaceresoli.net>
+Message-ID: <87siw3prb4.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Jerzy" == Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net> writes:
+>>>>> "Luca" == Luca Ceresoli <luca@lucaceresoli.net> writes:
 
- Jerzy> Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+ Luca> Fix compilation of Boost.Variants move assignment for situations when one of the variant template classes has nothrow copy constructor and throwing move constructor (refs #8772)
+ Luca> Fixes compilation error:
 
 Committed, thanks.
 
