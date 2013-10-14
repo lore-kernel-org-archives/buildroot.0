@@ -1,62 +1,45 @@
-From: =?ISO-8859-1?Q?Ezequiel_Garc=EDa?= <ezequiel@vanguardiasur.com.ar>
-Date: Mon, 14 Oct 2013 14:02:08 -0300
-Subject: [Buildroot] [PATCH 2/2] qt5base: add an option to build and
- install examples
-In-Reply-To: <20131014184207.024e8383@skate>
-References: <1381007796-20031-1-git-send-email-fatih.asici@gmail.com>
- <1381007796-20031-2-git-send-email-fatih.asici@gmail.com>
- <CAAEAJfDKwZ-EtAO61h=ZOE4QoAr75fZsw7s8aXhQjJm9VVBQwQ@mail.gmail.com>
- <20131014184207.024e8383@skate>
-Message-ID: <CAAEAJfAX3yKCUiJ9hvTQXjmfbwZXx8F1EwwMp6GTR3WFpgLAYw@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 14 Oct 2013 19:05:40 +0200
+Subject: [Buildroot] [PATCH 3/4] Makefile: export BUILD_DIR
+In-Reply-To: <87y55wruki.fsf@dell.be.48ers.dk>
+References: <cover.1381705600.git.yann.morin.1998@free.fr>
+ <cover.1381705600.git.yann.morin.1998@free.fr>
+ <834cf660ddc6216e486f97195f464f0e6125774e.1381705600.git.yann.morin.1998@free.fr>
+ <87y55wruki.fsf@dell.be.48ers.dk>
+Message-ID: <20131014170540.GB3491@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 14 October 2013 13:42, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Dear Ezequiel Garc?a,
->
-> On Mon, 14 Oct 2013 11:11:14 -0300, Ezequiel Garc?a wrote:
->
->> > +ifeq ($(BR2_PACKAGE_QT5BASE_EXAMPLES),y)
->> > +QT5BASE_CONFIGURE_OPTS += -make examples -compile-examples
->> > +else
->> > +QT5BASE_CONFIGURE_OPTS += -nomake examples
->> > +endif
->> > +
->>
->> Any reason why this is not with the rest of the options
->> and using the simpler:
->>
->> QT5BASE_CONFIGURE_OPTS += $(if $(BR2_PACKAGE_QT5BASE_EXAMPLES), \
->>         -make examples -compile-examples, \
->>         -nomake examples)
->>
->> ?
->
-> I agree with your first point (it should be with the other configure
-> option), but I disagree with your second point. The choice Fatih has
-> made is the one we make everywhere in Buildroot whenever the "if"
-> becomes multiline. I'd very much prefer Fatih to keep its original
-> proposal.
->
-> We use $(if ...) only when it can be done like this:
->
-> FOO_SOMETHING = $(if $(BR2_BLEH),foo,bar)
->
-> when it becomes more complicated than that, we use ifeq ... else ...
-> endif blocks on several lines.
->
+Peter, All,
 
-Sure, no objections on my side.
+On 2013-10-14 12:54 +0200, Peter Korsgaard spake thusly:
+> >>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+> 
+>  Yann> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+>  Yann> $(BUILD_DIR) is a nice place to put files generated during the build.
+>  Yann> With the advent of user-supplied step-hooks, they may want to store
+>  Yann> some information on the build.
+> 
+>  Yann> Export BUILD_DIR to that effect.
+> 
+> Looks good, but please also update the documentation in
+> docs/manual/customize-rootfs.txt.
 
-Fatih: if you re-submit this, you can add my:
+Ah, yes. Done. Thanks!
 
-Tested-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+Don't forget this pull-request is only an RFC from my point-of-view,
+aimed at a starting point for further discussion.
 
-It's great to see the Qt5 support is moving forward!
+Regards,
+Yann E. MORIN.
+
 -- 
-Ezequiel Garc?a, VanguardiaSur
-www.vanguardiasur.com.ar
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
