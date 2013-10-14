@@ -1,39 +1,41 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 14 Oct 2013 13:20:12 +0200
-Subject: [Buildroot] [PATCH] xdriver_xf86-input-evdev: enable compile
-	without udev dependency.
-In-Reply-To: <trinity-81c35678-ff25-4e16-86ef-0899681ee5af-1381517661336@3capp-gmx-bs41>
- (Peter Seiderer's message of "Fri, 11 Oct 2013 20:54:21 +0200 (CEST)")
-References: <1381435927-7090-1-git-send-email-ps.report@gmx.net>
- <20131010230130.052a22a4@skate>
- <trinity-81c35678-ff25-4e16-86ef-0899681ee5af-1381517661336@3capp-gmx-bs41>
-Message-ID: <87d2n8rteb.fsf@dell.be.48ers.dk>
+Date: Mon, 14 Oct 2013 13:23:08 +0200
+Subject: [Buildroot] [PATCHv2] toolchain-external: add a specific check
+	to avoid Angstrom toolchains
+In-Reply-To: <1381652900-12516-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Sun, 13 Oct 2013 10:28:20 +0200")
+References: <1381652900-12516-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <878uxwrt9f.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Seiderer <ps.report@gmx.net> writes:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-Hi,
+ Thomas> The Angstrom toolchains available at
+ Thomas> http://www.angstrom-distribution.org/toolchains/ are not usable as
+ Thomas> external toolchains in Buildroot, because they are not pure toolchains
+ Thomas> with just the C library, but instead complete SDKs with many
+ Thomas> cross-compiled libraries (Gtk, Qt, glib, neon, sqlite, X.org, and many
+ Thomas> more, approximately 200 MB of libraries).
 
- >> Thanks. Have you submitted this patch upstream? This is more-and-less a
- >> feature patch, and in Buildroot, we don't like too much carrying
- >> feature patches if we don't believe they will be merged upstream.
- >> 
+ Thomas> Buildroot cannot use such toolchains, and while this is documented in
+ Thomas> our manual, some users still try to do this. Today, one such user came
+ Thomas> on the IRC channel, reporting a build problem, which we started
+ Thomas> investigating, only to realize after a long time that he was using an
+ Thomas> Angstrom toolchain.
 
- Peter> Yes, patch already proposed upstream, see https://bugs.freedesktop.org/show_bug.cgi?id=70356
+ Thomas> To avoid this problem in the future, we explicitly check if the
+ Thomas> toolchain is from Angstrom by looking at the vendor part of the tuple
+ Thomas> exposed by the toolchain: as soon as it is
+ Thomas> <something>-angstrom-<something-else>, we reject the toolchain with an
+ Thomas> explanation.
 
- >> Of course, if it has been submitted upstream and received what seems
- >> like a positive feedback, it's perfectly fine to take it in Buildroot
- >> until upstream makes a new release.
+ Thomas> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
- Peter> Let's wait awhile for upstream comments...
-
-In the mean time Peter (there's too many Peters in this discussion)
-Hutterer has closed it as WONTFIX, so I'm afraid I'll have to disappoint
-and say no..
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
