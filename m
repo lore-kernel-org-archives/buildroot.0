@@ -1,21 +1,23 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 14 Oct 2013 22:11:31 +0200
-Subject: [Buildroot] [PATCH] snmppp: new package
-In-Reply-To: <1381758435-13669-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Mon, 14 Oct 2013 10:47:15 -0300")
-References: <1381758435-13669-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87bo2rpq8c.fsf@dell.be.48ers.dk>
+Date: Mon, 14 Oct 2013 22:12:51 +0200
+Subject: [Buildroot] [PATCH 1/1] support/kconfig: Fix typo in
+	README.buildroot.
+In-Reply-To: <1381775071-14556-1-git-send-email-ps.report@gmx.net> (Peter
+ Seiderer's message of "Mon, 14 Oct 2013 20:24:31 +0200")
+References: <1381775071-14556-1-git-send-email-ps.report@gmx.net>
+Message-ID: <877gdfpq64.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+>>>>> "Peter" == Peter Seiderer <ps.report@gmx.net> writes:
 
- Gustavo> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+ Peter> Fix typo in README.buildroot (s/config/kconfig/).
+ Peter> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 
-Committed with a comment about why we need AUTORECONF added, thanks.
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
