@@ -1,73 +1,39 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 14 Oct 2013 10:47:15 -0300
-Subject: [Buildroot] [PATCH] snmppp: new package
-Message-ID: <1381758435-13669-1-git-send-email-gustavo@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 14 Oct 2013 15:56:04 +0200
+Subject: [Buildroot] Bumping packages: some comments/suggestions
+In-Reply-To: <CACjG4B+OX=r-g2bMsjM4zNYY2DuOo4pfmY51aoNL7402z4EJtQ@mail.gmail.com>
+References: <20131014113000.73ca82bf@skate>
+ <1642454622.8785613.1381743494806.JavaMail.root@openwide.fr>
+ <CAAXf6LX7cHRZyGcA5KgYaL7iUuw_JhBxTAzsWrptAa9y10353w@mail.gmail.com>
+ <20131014120410.1b4c05fb@skate>
+ <CACjG4B+OX=r-g2bMsjM4zNYY2DuOo4pfmY51aoNL7402z4EJtQ@mail.gmail.com>
+Message-ID: <20131014155604.35644c62@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/Config.in        |  1 +
- package/snmppp/Config.in | 12 ++++++++++++
- package/snmppp/snmppp.mk | 16 ++++++++++++++++
- 3 files changed, 29 insertions(+)
- create mode 100644 package/snmppp/Config.in
- create mode 100644 package/snmppp/snmppp.mk
+Arnaud,
 
-diff --git a/package/Config.in b/package/Config.in
-index df53587..16cb36d 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -638,6 +638,7 @@ source "package/omniorb/Config.in"
- source "package/openpgm/Config.in"
- source "package/ortp/Config.in"
- source "package/slirp/Config.in"
-+source "package/snmppp/Config.in"
- source "package/usbredir/Config.in"
- source "package/wvstreams/Config.in"
- source "package/zeromq/Config.in"
-diff --git a/package/snmppp/Config.in b/package/snmppp/Config.in
-new file mode 100644
-index 0000000..9757814
---- /dev/null
-+++ b/package/snmppp/Config.in
-@@ -0,0 +1,12 @@
-+config BR2_PACKAGE_SNMPPP
-+	bool "snmp++"
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	select BR2_PACKAGE_OPENSSL
-+	help
-+	  SNMP++v3.x is a C++ API which supports SNMP v1, v2c, and v3.
-+
-+	  http://www.agentpp.com/snmp_pp3_x/snmp_pp3_x.html
-+
-+comment "snmp++ requires a toolchain with threads and C++ support enabled"
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/snmppp/snmppp.mk b/package/snmppp/snmppp.mk
-new file mode 100644
-index 0000000..ea99967
---- /dev/null
-+++ b/package/snmppp/snmppp.mk
-@@ -0,0 +1,16 @@
-+################################################################################
-+#
-+# snmp++
-+#
-+################################################################################
-+
-+SNMPPP_VERSION = 3.3.0
-+SNMPPP_SOURCE = snmp++v$(SNMPPP_VERSION).tar.gz
-+SNMPPP_SITE = http://www.agentpp.com
-+SNMPPP_DEPENDENCIES = openssl host-pkgconf
-+SNMPPP_INSTALL_STAGING = YES
-+SNMPPP_AUTORECONF = YES
-+SNMPPP_LICENSE = SNMP++
-+SNMPPP_LICENSE_FILES = snmp_pp/snmp_pp.cpp
-+
-+$(eval $(autotools-package))
+On Mon, 14 Oct 2013 14:58:19 +0200, arnaud aujon wrote:
+
+> I'm interested in developing an automatic way to know if a package needs to
+> be bumped.
+> I'm a new contributor to buildroot (just sent a patch to add a new
+> package,  well 3 patches because I had trouble with git send-email...), if
+> no one else have time to do it, I'll be happy to help Buildroot this way.
+
+Until now, nobody has volunteered to work on this, so if you're
+interested, feel free to start prototyping things. I believe a helper
+script (in Python?), called from the Buildroot makefiles, is probably
+the best way: doing all this logic purely in make might be too
+complicated.
+
+Best regards,
+
+Thomas
 -- 
-1.8.1.5
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
