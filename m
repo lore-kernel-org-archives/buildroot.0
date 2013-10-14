@@ -1,112 +1,123 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 14 Oct 2013 23:16:22 +0200
-Subject: [Buildroot] [git commit] manual: update review process and patchwork
-Message-ID: <20131014212316.709389B9FC@busybox.osuosl.org>
+From: Sagaert Johan <sagaert.johan@skynet.be>
+Date: Mon, 14 Oct 2013 23:23:56 +0200
+Subject: [Buildroot] [PATCH 1/1] new package : jquery-mobile
+Message-ID: <1381785836-14583-1-git-send-email-sagaert.johan@skynet.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=75c01bf213075b8972393bdc5b37c233db817cff
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Jquery mobile is a unified, HTML5-based user interface system for
+all popular mobile device platforms, built on the rock-solid
+jQuery and jQuery UI foundation.
+Its lightweight code is built with progressive enhancement,
+and has a flexible, easily themeable design.
 
-Adding more documentaiton based on discussion from the mailing list
-in regards the buildroot review process and how patchworks can be
-used to pull in patches for testing purposes.
-
-Mailing list discussion:
-http://lists.busybox.net/pipermail/buildroot/2013-September/078170.html
-
-Signed-off-by: Ryan Barnett <rjbarnet@rockwellcollins.com>
-Acked-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Sagaert Johan <sagaert.johan@skynet.be>
 ---
- docs/manual/contribute.txt   |   12 +++++++++++-
- docs/manual/get-involved.txt |   39 ++++++++++++++++++++++++++++++++++++---
- 2 files changed, 47 insertions(+), 4 deletions(-)
+ package/Config.in                      |  1 +
+ package/jquery-mobile/Config.in        | 24 +++++++++++++++++
+ package/jquery-mobile/jquery-mobile.mk | 48 ++++++++++++++++++++++++++++++++++
+ 3 files changed, 73 insertions(+)
+ create mode 100644 package/jquery-mobile/Config.in
+ create mode 100644 package/jquery-mobile/jquery-mobile.mk
 
-diff --git a/docs/manual/contribute.txt b/docs/manual/contribute.txt
-index 2b2783d..201685c 100644
---- a/docs/manual/contribute.txt
-+++ b/docs/manual/contribute.txt
-@@ -132,9 +132,15 @@ $ git format-patch --subject-prefix "PATCH v4" \
- Reviewing/Testing patches
- -------------------------
- 
-+The review process for new patches is done over the mailing list. Once
-+a patch is submitted to the mailing list, other developers will provide
-+feedback to the patch via emails sent through the mailing list.
+diff --git a/package/Config.in b/package/Config.in
+index 142454d..857ae9e 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -576,6 +576,7 @@ source "package/explorercanvas/Config.in"
+ source "package/flot/Config.in"
+ source "package/jquery/Config.in"
+ source "package/jquery-keyboard/Config.in"
++source "package/jquery-mobile/Config.in"
+ source "package/jquery-sparkline/Config.in"
+ source "package/jquery-ui/Config.in"
+ source "package/jquery-ui-themes/Config.in"
+diff --git a/package/jquery-mobile/Config.in b/package/jquery-mobile/Config.in
+new file mode 100644
+index 0000000..2f2e30f
+--- /dev/null
++++ b/package/jquery-mobile/Config.in
+@@ -0,0 +1,24 @@
++config BR2_PACKAGE_JQUERY_MOBILE
++	bool "jQuery-Mobile"
++	help
++	  jQuery-Mobile is a unified, HTML5-based user interface system
++	  for all popular mobile device platforms, built on the rock-solid
++	  jQuery and jQuery UI foundation.
++	  Its lightweight code is built with progressive enhancement,
++	  and has a flexible, easily themeable design.
 +
- In the review process, do not hesitate to respond to patch submissions
- for remarks, suggestions or anything that will help everyone to
--understand the patches and make them better.
-+understand the patches and make them better. Please use internet
-+style replies in plain text emails when responding to patch
-+submissions.
- 
- Some tags are used to help following the state of any patch posted on
- the mailing-list:
-@@ -144,6 +150,10 @@ Acked-by:: Indicates that the patch can be committed.
- Tested-by:: Indicates that the patch has been tested. It is useful
-   but not necessary to add a comment about what has been tested.
- 
-+Buildroot's Patchwork website can be used to pull in patches for testing
-+purposes. Please see xref:apply-patches-patchwork[] for more
-+information on using Buildroot's Patchwork website to apply patches.
++	  http://jquerymobile.com
++	  
++if BR2_PACKAGE_JQUERY_MOBILE
++config BR2_PACKAGE_JQUERY_MOBILE_FULL
++	bool "jquery mobile development files"
++	help
++		Installs the development versions.
 +
- Autobuild
- ---------
- 
-diff --git a/docs/manual/get-involved.txt b/docs/manual/get-involved.txt
-index 8515d34..8475038 100644
---- a/docs/manual/get-involved.txt
-+++ b/docs/manual/get-involved.txt
-@@ -55,11 +55,44 @@ using a code sharing website.
- Patchwork
- ---------
- 
--The Buildroot patch management interface is at
-+Patchwork is a web-based patch tracking system designed to facilitate
-+the contribution and management of contributions to an open-source
-+project. Patches that have been sent to a mailing list are \'caught' by
-+the system, and appear on a web page. Any comments posted that
-+reference the patch are appended to the patch page too. For more
-+information on Patchwork see
-+http://jk.ozlabs.org/projects/patchwork[].
++config BR2_PACKAGE_JQUERY_MOBILE_DEMOS
++	bool "jquery mobile demo files"
++	help
++		Installs the demo files.
++		The main demo page is http://hostname/demo.html	
++endif
++	  
+diff --git a/package/jquery-mobile/jquery-mobile.mk b/package/jquery-mobile/jquery-mobile.mk
+new file mode 100644
+index 0000000..e0dcf91
+--- /dev/null
++++ b/package/jquery-mobile/jquery-mobile.mk
+@@ -0,0 +1,48 @@
++################################################################################
++#
++# jquery-mobile
++#
++################################################################################
 +
-+Buildroot's Patchwork website is mainly for use by Buildroot's
-+maintainer to ensure patches aren't missed. The website however,
-+exposes patches and their corresponding review comments in a clean
-+and concise web interface.
++JQUERY_MOBILE_VERSION = 1.3.2
++JQUERY_MOBILE_SITE = http://jquerymobile.com/resources/download
++JQUERY_MOBILE_SOURCE = jquery.mobile-$(JQUERY_MOBILE_VERSION).zip
++JQUERY_MOBILE_LICENSE = MIT
 +
-+The Buildroot patch management interface is available at
- http://patchwork.buildroot.org[].
- 
--All patches and comments sent through the mailing list are
--automatically indexed in http://patchwork.buildroot.org[patchwork].
-+[[apply-patches-patchwork]]
-+Applying Patches from Patchwork
-+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++define JQUERY_MOBILE_EXTRACT_CMDS
++	unzip -d $(@D) $(DL_DIR)/$(JQUERY_MOBILE_SOURCE)
++endef
 +
-+The main use of Buildroot's Patchwork website for a developer is for
-+pulling in patches into their local git repository for testing
-+purposes.
++JQUERY_MOBILE_INSTALLED_FILES = \
++	jquery.mobile.structure-$(JQUERY_MOBILE_VERSION).min.css \
++	jquery.mobile.theme-$(JQUERY_MOBILE_VERSION).min.css \
++	jquery.mobile-$(JQUERY_MOBILE_VERSION).min.css \
++	jquery.mobile-$(JQUERY_MOBILE_VERSION).min.map \
++	jquery.mobile-$(JQUERY_MOBILE_VERSION).min.js
 +
-+When browsing patches in the patchwork management interface, an +mbox+
-+link is provided at the top of the page. Copy this link address and
-+run the following commands:
++ifeq ($(BR2_PACKAGE_JQUERY_MOBILE_FULL),y)
++JQUERY_MOBILE_INSTALLED_FILES += \
++	jquery.mobile.structure-$(JQUERY_MOBILE_VERSION).css \
++	jquery.mobile.theme-$(JQUERY_MOBILE_VERSION).css \
++	jquery.mobile-$(JQUERY_MOBILE_VERSION).css \
++	jquery.mobile-$(JQUERY_MOBILE_VERSION).js
++endif
 +
-+---------------------
-+$ git checkout -b <test-branch-name>
-+$ wget -O - <mbox-url> | git am
-+---------------------
++ifeq ($(BR2_PACKAGE_JQUERY_MOBILE_DEMOS),y)
++define JQUERY_MOBILE_INSTALL_DEMOS
++	mkdir -p $(TARGET_DIR)/opt/www/demos
++	cp -r $(@D)/demos/* $(TARGET_DIR)/opt/www/demos
++	$(INSTALL) -m 0644 -D $(@D)/index.html $(TARGET_DIR)/opt/www/demo.html
++endef
++endif
 +
-+Another option for applying patches is to create a bundle. A bundle is
-+a set of patches that you can group together using the patchwork
-+interface. Once the bundle is created and the bundle is made public,
-+you can copy the +mbox+ link for the bundle and apply the bundle
-+using the above commands.
- 
- [[bugtracker]]
- Bugtracker
++define JQUERY_MOBILE_INSTALL_TARGET_CMDS
++	for f in $(JQUERY_MOBILE_INSTALLED_FILES) ; do \
++		$(INSTALL) -m 0644 -D $(@D)/$$f $(TARGET_DIR)/opt/www/$$f || break ; \
++	done
++	mkdir -p $(TARGET_DIR)/opt/www/images
++	cp -r $(@D)/images/* $(TARGET_DIR)/opt/www/images
++	$(JQUERY_MOBILE_INSTALL_DEMOS)
++endef
++
++$(eval $(generic-package))
+-- 
+1.8.4.474.g128a96c
