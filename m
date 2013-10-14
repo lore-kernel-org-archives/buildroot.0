@@ -1,31 +1,29 @@
-From: Phil Eichinger <phil.eichinger@gmail.com>
-Date: Mon, 14 Oct 2013 14:25:04 +0200
-Subject: [Buildroot] [PATCH 2/3] systemd: add license information
-Message-ID: <1381753505-13119-1-git-send-email-phil@zankapfel.net>
+From: arnaud aujon <arnaud.aujon@gmail.com>
+Date: Mon, 14 Oct 2013 14:58:19 +0200
+Subject: [Buildroot] Bumping packages: some comments/suggestions
+In-Reply-To: <20131014120410.1b4c05fb@skate>
+References: <20131014113000.73ca82bf@skate>
+ <1642454622.8785613.1381743494806.JavaMail.root@openwide.fr>
+ <CAAXf6LX7cHRZyGcA5KgYaL7iUuw_JhBxTAzsWrptAa9y10353w@mail.gmail.com>
+ <20131014120410.1b4c05fb@skate>
+Message-ID: <CACjG4B+OX=r-g2bMsjM4zNYY2DuOo4pfmY51aoNL7402z4EJtQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hi,
 
-Signed-off-by: Phil Eichinger <phil@zankapfel.net>
----
- package/systemd/systemd.mk |    2 ++
- 1 file changed, 2 insertions(+)
+I'm interested in developing an automatic way to know if a package needs to
+be bumped.
+I'm a new contributor to buildroot (just sent a patch to add a new
+package,  well 3 patches because I had trouble with git send-email...), if
+no one else have time to do it, I'll be happy to help Buildroot this way.
 
-diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-index 1bb429c..4e4955e 100644
---- a/package/systemd/systemd.mk
-+++ b/package/systemd/systemd.mk
-@@ -7,6 +7,8 @@
- SYSTEMD_VERSION = 44
- SYSTEMD_SITE = http://www.freedesktop.org/software/systemd/
- SYSTEMD_SOURCE = systemd-$(SYSTEMD_VERSION).tar.xz
-+SYSTEMD_LICENSE = GPLv2+
-+SYSTEMD_LICENSE_FILES = LICENSE
- SYSTEMD_INSTALL_STAGING = YES
- SYSTEMD_DEPENDENCIES = \
- 	host-intltool \
--- 
-1.7.10.4
+Regards,
+
+Arnaud
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20131014/f2598ab2/attachment.html>
