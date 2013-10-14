@@ -1,54 +1,70 @@
-From: rjbarnet at rockwellcollins.com <rjbarnet@rockwellcollins.com>
-Date: Mon, 14 Oct 2013 08:45:18 -0500
-Subject: [Buildroot] Bumping packages: some comments/suggestions
-In-Reply-To: <20131014113000.73ca82bf@skate>
-References: <20131014090904.1f20fcf4@skate>
- <1959407319.8772723.1381736446742.JavaMail.root@openwide.fr>
- <20131014113000.73ca82bf@skate>
-Message-ID: <OF429160ED.AF03B337-ON86257C04.004B70CD-86257C04.004B8F4A@rockwellcollins.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon, 14 Oct 2013 10:46:11 -0300
+Subject: [Buildroot] [PATCH] autossh: new package
+Message-ID: <1381758371-13587-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas P, Jeremy R, All,
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/Config.in          |  1 +
+ package/autossh/Config.in  |  8 ++++++++
+ package/autossh/autossh.mk | 17 +++++++++++++++++
+ 3 files changed, 26 insertions(+)
+ create mode 100644 package/autossh/Config.in
+ create mode 100644 package/autossh/autossh.mk
 
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote on 
-10/14/2013 04:30:00 AM:
-
-> Dear Jeremy Rosen,
-> 
-> On Mon, 14 Oct 2013 09:40:46 +0200 (CEST), Jeremy Rosen wrote:
-> 
-> > two ideas that might or might not be good ideas but are worth 
-discussing
-> > early :
-> > 
-> > * try to automatically build the new version to see if it is an "easy
-> > bump" or a "hard bump" and document the result
-> > 
-> > * ping the last person(s) that touch the package (git has facilities 
-to
-> > find them, I think it's called git-contribute) when a new version is
-> > available
-> > 
-> > both have good and bad sides, thus worth discussing...
-> 
-> Agreed. But all of this first requires the ability to detect that a new
-> version is available.
-> 
-> I must say I'm not a big fan of the automatic build, which may
-> encourage people to do "careless" bump, i.e version bumps without
-> looking at least a little bit at what changed, and taking a set back by
-> looking at the version number, or the project web site, to see if the
-> version bump is small, or major.
-> 
-> For the second one, I agree. We have discussed a few times having the
-> notion of package maintainers. Probably something that will be worth
-> discussing at this time.
-
-Sounds like a good topic for the Buildroot Developer Days...
-
-Thanks,
--Ryan
+diff --git a/package/Config.in b/package/Config.in
+index 7f6931a..df53587 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -762,6 +762,7 @@ source "package/aiccu/Config.in"
+ source "package/aircrack-ng/Config.in"
+ source "package/argus/Config.in"
+ source "package/arptables/Config.in"
++source "package/autossh/Config.in"
+ source "package/avahi/Config.in"
+ source "package/axel/Config.in"
+ source "package/bcusdk/Config.in"
+diff --git a/package/autossh/Config.in b/package/autossh/Config.in
+new file mode 100644
+index 0000000..e3acd8a
+--- /dev/null
++++ b/package/autossh/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_AUTOSSH
++	bool "autossh"
++	depends on BR2_USE_MMU # fork()
++	help
++	  autossh is a program to start a copy of ssh and monitor it,
++	  restarting it as necessary should it die or stop passing traffic.
++
++	  http://www.harding.motd.ca/autossh/
+diff --git a/package/autossh/autossh.mk b/package/autossh/autossh.mk
+new file mode 100644
+index 0000000..75d7892
+--- /dev/null
++++ b/package/autossh/autossh.mk
+@@ -0,0 +1,17 @@
++################################################################################
++#
++# autossh
++#
++################################################################################
++
++AUTOSSH_VERSION = 1.4c
++AUTOSSH_SITE = http://www.harding.motd.ca/autossh
++AUTOSSH_SOURCE = autossh-$(AUTOSSH_VERSION).tgz
++AUTOSSH_LICENSE = Modified BSD
++AUTOSSH_LICENSE_FILES = autossh.c
++
++define AUTOSSH_INSTALL_TARGET_CMDS
++	$(INSTALL) -m 755 -D $(@D)/autossh $(TARGET_DIR)/usr/bin/autossh
++endef
++
++$(eval $(autotools-package))
+-- 
+1.8.1.5
