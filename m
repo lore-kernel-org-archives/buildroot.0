@@ -1,9 +1,7 @@
 From: Phil Eichinger <phil.eichinger@gmail.com>
-Date: Mon, 14 Oct 2013 14:25:05 +0200
-Subject: [Buildroot] [PATCH 3/3] sysvinit: add license information
-In-Reply-To: <1381753505-13119-1-git-send-email-phil@zankapfel.net>
-References: <1381753505-13119-1-git-send-email-phil@zankapfel.net>
-Message-ID: <1381753505-13119-2-git-send-email-phil@zankapfel.net>
+Date: Mon, 14 Oct 2013 14:25:04 +0200
+Subject: [Buildroot] [PATCH 2/3] systemd: add license information
+Message-ID: <1381753505-13119-1-git-send-email-phil@zankapfel.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,21 +11,21 @@ To: buildroot@busybox.net
 
 Signed-off-by: Phil Eichinger <phil@zankapfel.net>
 ---
- package/sysvinit/sysvinit.mk |    2 ++
+ package/systemd/systemd.mk |    2 ++
  1 file changed, 2 insertions(+)
 
-diff --git a/package/sysvinit/sysvinit.mk b/package/sysvinit/sysvinit.mk
-index bf05d73..131c63f 100644
---- a/package/sysvinit/sysvinit.mk
-+++ b/package/sysvinit/sysvinit.mk
-@@ -8,6 +8,8 @@ SYSVINIT_VERSION = 2.88
- SYSVINIT_SOURCE  = sysvinit_$(SYSVINIT_VERSION)dsf.orig.tar.gz
- SYSVINIT_PATCH   = sysvinit_$(SYSVINIT_VERSION)dsf-13.1.diff.gz
- SYSVINIT_SITE    = $(BR2_DEBIAN_MIRROR)/debian/pool/main/s/sysvinit
-+SYSVINIT_LICENSE = GPLv2+
-+SYSVINIT_LICENSE_FILES = COPYING
- 
- # Override Busybox implementations if Busybox is enabled.
- ifeq ($(BR2_PACKAGE_BUSYBOX),y)
+diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+index 1bb429c..4e4955e 100644
+--- a/package/systemd/systemd.mk
++++ b/package/systemd/systemd.mk
+@@ -7,6 +7,8 @@
+ SYSTEMD_VERSION = 44
+ SYSTEMD_SITE = http://www.freedesktop.org/software/systemd/
+ SYSTEMD_SOURCE = systemd-$(SYSTEMD_VERSION).tar.xz
++SYSTEMD_LICENSE = GPLv2+
++SYSTEMD_LICENSE_FILES = LICENSE
+ SYSTEMD_INSTALL_STAGING = YES
+ SYSTEMD_DEPENDENCIES = \
+ 	host-intltool \
 -- 
 1.7.10.4
