@@ -1,189 +1,62 @@
-From: Ryan Barnett <rjbarnet@rockwellcollins.com>
-Date: Mon, 14 Oct 2013 11:52:41 -0500
-Subject: [Buildroot] [PATCH v4] espeak: new package
-In-Reply-To: <1381766095-7446-1-git-send-email-arnaud.aujon@gmail.com>
-References: <1381766095-7446-1-git-send-email-arnaud.aujon@gmail.com>
-Message-ID: <OF2AF19FBA.60B3F37F-ON86257C04.005C5B9D-86257C04.005CB72C@rockwellcollins.com>
+From: =?ISO-8859-1?Q?Ezequiel_Garc=EDa?= <ezequiel@vanguardiasur.com.ar>
+Date: Mon, 14 Oct 2013 14:02:08 -0300
+Subject: [Buildroot] [PATCH 2/2] qt5base: add an option to build and
+ install examples
+In-Reply-To: <20131014184207.024e8383@skate>
+References: <1381007796-20031-1-git-send-email-fatih.asici@gmail.com>
+ <1381007796-20031-2-git-send-email-fatih.asici@gmail.com>
+ <CAAEAJfDKwZ-EtAO61h=ZOE4QoAr75fZsw7s8aXhQjJm9VVBQwQ@mail.gmail.com>
+ <20131014184207.024e8383@skate>
+Message-ID: <CAAEAJfAX3yKCUiJ9hvTQXjmfbwZXx8F1EwwMp6GTR3WFpgLAYw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnaud,
+On 14 October 2013 13:42, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Dear Ezequiel Garc?a,
+>
+> On Mon, 14 Oct 2013 11:11:14 -0300, Ezequiel Garc?a wrote:
+>
+>> > +ifeq ($(BR2_PACKAGE_QT5BASE_EXAMPLES),y)
+>> > +QT5BASE_CONFIGURE_OPTS += -make examples -compile-examples
+>> > +else
+>> > +QT5BASE_CONFIGURE_OPTS += -nomake examples
+>> > +endif
+>> > +
+>>
+>> Any reason why this is not with the rest of the options
+>> and using the simpler:
+>>
+>> QT5BASE_CONFIGURE_OPTS += $(if $(BR2_PACKAGE_QT5BASE_EXAMPLES), \
+>>         -make examples -compile-examples, \
+>>         -nomake examples)
+>>
+>> ?
+>
+> I agree with your first point (it should be with the other configure
+> option), but I disagree with your second point. The choice Fatih has
+> made is the one we make everywhere in Buildroot whenever the "if"
+> becomes multiline. I'd very much prefer Fatih to keep its original
+> proposal.
+>
+> We use $(if ...) only when it can be done like this:
+>
+> FOO_SOMETHING = $(if $(BR2_BLEH),foo,bar)
+>
+> when it becomes more complicated than that, we use ifeq ... else ...
+> endif blocks on several lines.
+>
 
-Looks good to me other than one minor issue related to removing 
-a commented out line. Care to fix and resubmit?
+Sure, no objections on my side.
 
-Arnaud Aujon <arnaud.aujon@gmail.com> wrote on 10/14/2013 10:54:55 AM:
+Fatih: if you re-submit this, you can add my:
 
-> Signed-off-by: Arnaud Aujon <arnaud.aujon@gmail.com>
-> ---
-> Changes v3 -> v4:
->    - remove extre new lines
->    - remove useless help
->    - remove -source from ESPEAK_VERSION
->    - update extract command to remove -source
-> ---
->  package/Config.in                                  |  1 +
->  package/espeak/Config.in                           | 41 
-++++++++++++++++++++
->  .../espeak-1-do-not-compil-when-install.patch      | 15 ++++++++
->  package/espeak/espeak.mk                           | 44 
-++++++++++++++++++++++
->  4 files changed, 101 insertions(+)
->  create mode 100644 package/espeak/Config.in
->  create mode 100644 
-package/espeak/espeak-1-do-not-compil-when-install.patch
->  create mode 100644 package/espeak/espeak.mk
-> 
-> diff --git a/package/Config.in b/package/Config.in
-> index 41d828a..31f6274 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -6,6 +6,7 @@ menu "Audio and video applications"
->  source "package/alsa-utils/Config.in"
->  source "package/aumix/Config.in"
->  source "package/bellagio/Config.in"
-> +source "package/espeak/Config.in"
->  source "package/faad2/Config.in"
->  source "package/ffmpeg/Config.in"
->  source "package/flac/Config.in"
-> diff --git a/package/espeak/Config.in b/package/espeak/Config.in
-> new file mode 100644
-> index 0000000..926c5f0
-> --- /dev/null
-> +++ b/package/espeak/Config.in
-> @@ -0,0 +1,41 @@
-> +comment "eSpeak requires a toolchain with C++ and WCHAR support"
-> +   depends on !(BR2_INSTALL_LIBSTDCPP && BR2_USE_WCHAR)
-> +
-> +config BR2_PACKAGE_ESPEAK
-> +   bool "eSpeak"
-> +   depends on BR2_INSTALL_LIBSTDCPP
-> +   depends on BR2_USE_WCHAR
-> +   help
-> +     eSpeak is a speech synthesizer software for English and other 
-languages.
-> +
-> +     http://espeak.sourceforge.net/
-> +
-> +if BR2_PACKAGE_ESPEAK
-> +choice
-> +   prompt "choose audio backend"
-> +   default BR2_PACKAGE_ESPEAK_AUDIO_BACKEND_NONE
-> +
-> +   config BR2_PACKAGE_ESPEAK_AUDIO_BACKEND_NONE
-> +      bool "No sound backend, only produce wav files"
-> +
-> +   comment "ALSA backend requires a toolchain with threads support"
-> +   depends on !BR2_TOOLCHAIN_HAS_THREADS
-> +
-> +   config BR2_PACKAGE_ESPEAK_AUDIO_BACKEND_ALSA
-> +      bool "ALSA via Portaudio"
-> +      select BR2_PACKAGE_PORTAUDIO
-> +      select BR2_PACKAGE_PORTAUDIO_CXX
-> +      depends on BR2_TOOLCHAIN_HAS_THREADS #portaudio
-> +
-> +   comment "Pulseaudio backend requires a toolchain with WCHAR, 
-> LARGEFILE and threads support"
-> +   depends on !(BR2_TOOLCHAIN_HAS_THREADS && BR2_USE_WCHAR && 
-BR2_LARGEFILE)
-> +
-> +   config BR2_PACKAGE_ESPEAK_AUDIO_BACKEND_PULSEAUDIO
-> +      bool "pulseaudio"
-> +      select BR2_PACKAGE_PULSEAUDIO
-> +      depends on BR2_TOOLCHAIN_HAS_THREADS # pulseaudio
-> +      depends on BR2_USE_WCHAR # pulseaudio
-> +      depends on BR2_LARGEFILE # pulseaudio
-> +
-> +endchoice
-> +endif #BR2_PACKAGE_ESPEAK
-> diff --git a/package/espeak/espeak-1-do-not-compil-when-install.patch 
-> b/package/espeak/espeak-1-do-not-compil-when-install.patch
-> new file mode 100644
-> index 0000000..983cd1c
-> --- /dev/null
-> +++ b/package/espeak/espeak-1-do-not-compil-when-install.patch
-> @@ -0,0 +1,15 @@
-> +Makefile: do not execute the rule "all" when executing "install"
-> +
-> +signed-off-by: Arnaud Aujon <arnaud.aujon@gmail.com>
-> +===================================================================
-> +--- espeak-1.47.11-source.orig/src/Makefile
-> ++++ espeak-1.47.11-source/src/Makefile
-> +@@ -131,7 +131,7 @@
-> +    rm -f $(BIN2_NAME)
-> +    rm -f $(LIB_NAME)*
-> + 
-> +-install: all
-> ++install:
-> +    # Create directories
-> +    rm -rf $(DESTDIR)$(DATADIR)
-> +    $(MKDIR) $(DESTDIR)$(BINDIR)
-> diff --git a/package/espeak/espeak.mk b/package/espeak/espeak.mk
-> new file mode 100644
-> index 0000000..3914850
-> --- /dev/null
-> +++ b/package/espeak/espeak.mk
-> @@ -0,0 +1,44 @@
-> 
-+###############################################################################
-> +#
-> +# espeak
-> +#
-> 
-+###############################################################################
-> +
-> +ESPEAK_VERSION = 1.47.11
-> +ESPEAK_SOURCE = espeak-$(ESPEAK_VERSION)-source.zip
-> +ESPEAK_SITE = http://downloads.sourceforge.net/project/espeak/espeak/
-> espeak-1.47
-> +ESPEAK_LICENSE = GPLv3
-> +ESPEAK_LICENSE_FILES = Licence.txt
-> +
-> +ifeq ($(BR2_PACKAGE_ESPEAK_AUDIO_BACKEND_ALSA),y)
-> +ESPEAK_AUDIO_BACKEND = portaudio
-> +ESPEAK_DEPENDENCIES = portaudio
-> +endif
-> +ifeq ($(BR2_PACKAGE_ESPEAK_AUDIO_BACKEND_PULSEAUDIO),y)
-> +ESPEAK_AUDIO_BACKEND = pulseaudio
-> +ESPEAK_DEPENDENCIES = pulseaudio
-> +endif
-> +
-> +define ESPEAK_EXTRACT_CMDS
-> +   unzip -d $(@D) $(DL_DIR)/$(ESPEAK_SOURCE)
-> +   mv $(@D)/espeak-$(ESPEAK_VERSION)-source/* $(@D)
-> +   $(RM) -r $(@D)/espeak-$(ESPEAK_VERSION)-source
-> +endef
-> +
-> +define ESPEAK_CONFIGURE_CMDS
-> +   # Buildroot provides portaudio V19, see ReadMe file for more 
-details.
-> +   cp $(@D)/src/portaudio19.h $(@D)/src/portaudio.h
-> +endef
-> +
-> +define ESPEAK_BUILD_CMDS
-> +   $(MAKE) $(TARGET_CONFIGURE_OPTS)\
-> +      AUDIO="$(ESPEAK_AUDIO_BACKEND)"\
-> +      -C $(@D)/src all
+Tested-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
 
-Can you please remove this comment line below? I missed this before
-sorry.
-
-> +#   $(MAKE) CXX="$(TARGET_CXX)" LD="$(TARGET_LD)" AUDIO="$
-> (ESPEAK_AUDIO_BACKEND)" -C $(@D)/src all
-> +endef
-> +
-> +define ESPEAK_INSTALL_TARGET_CMDS
-> +   $(MAKE) install DESTDIR="$(TARGET_DIR)" -C $(@D)/src
-> +endef
-> +
-> +$(eval $(generic-package))
-> -- 
-> 1.8.3.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+It's great to see the Qt5 support is moving forward!
+-- 
+Ezequiel Garc?a, VanguardiaSur
+www.vanguardiasur.com.ar
