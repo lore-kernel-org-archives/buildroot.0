@@ -1,27 +1,25 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 14 Oct 2013 22:00:28 +0200
-Subject: [Buildroot] [PATCH 1/3] ncftp: specify ln -sf to remove
-	existing destination files
-In-Reply-To: <1381756890.15266.1.camel@phoenix> (Axel Lin's message of "Mon,
- 14 Oct 2013 21:21:30 +0800")
-References: <1381756890.15266.1.camel@phoenix>
-Message-ID: <87k3hfpqqr.fsf@dell.be.48ers.dk>
+Date: Mon, 14 Oct 2013 22:02:58 +0200
+Subject: [Buildroot] [PATCH] autossh: new package
+In-Reply-To: <1381758371-13587-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Mon, 14 Oct 2013 10:46:11 -0300")
+References: <1381758371-13587-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87fvs3pqml.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Axel" == Axel Lin <axel.lin@ingics.com> writes:
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
- Axel> This fixes below build error when executing "make ncftp-dirclean; make".
- Axel> ln -s /usr/bin/ncftpbatch /opt/test/br-x86/buildroot/output/target/usr/bin/ncftpspooler
- Axel> ln: failed to create symbolic link '/opt/test/br-x86/buildroot/output/target/usr/bin/ncftpspooler': File exists
- Axel> make: *** [/opt/test/br-x86/buildroot/output/build/ncftp-3.2.5/.stamp_target_installed] Error 1
+ Gustavo> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
- Axel> Signed-off-by: Axel Lin <axel.lin@ingics.com>
+Committed, thanks.
 
-Committed all 3, thanks.
+Have you used it with dropbear? I think I recall some discussion about
+it using openssh specific options. If so, then it should probably depend
+on BR2_PACKAGE_OPENSSH
 
 -- 
 Bye, Peter Korsgaard
