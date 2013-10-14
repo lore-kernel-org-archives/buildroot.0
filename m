@@ -1,40 +1,54 @@
-From: Axel Lin <axel.lin@ingics.com>
-Date: Mon, 14 Oct 2013 21:23:02 +0800
-Subject: [Buildroot] [PATCH 3/3] tcl: specify ln -sf to remove existing
-	destination file
-In-Reply-To: <1381756890.15266.1.camel@phoenix>
-References: <1381756890.15266.1.camel@phoenix>
-Message-ID: <1381756982.15266.3.camel@phoenix>
+From: rjbarnet at rockwellcollins.com <rjbarnet@rockwellcollins.com>
+Date: Mon, 14 Oct 2013 08:45:18 -0500
+Subject: [Buildroot] Bumping packages: some comments/suggestions
+In-Reply-To: <20131014113000.73ca82bf@skate>
+References: <20131014090904.1f20fcf4@skate>
+ <1959407319.8772723.1381736446742.JavaMail.root@openwide.fr>
+ <20131014113000.73ca82bf@skate>
+Message-ID: <OF429160ED.AF03B337-ON86257C04.004B70CD-86257C04.004B8F4A@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This fixes below build error when executing
-"make tcl-dirclean; make tcl-rebuild".
+Thomas P, Jeremy R, All,
 
-ln -s tclsh8.4 /opt/test/br-x86/buildroot/output/target/usr/bin/tclsh
-ln: failed to create symbolic link '/opt/test/br-x86/buildroot/output/target/usr/bin/tclsh': File exists
-make: *** [/opt/test/br-x86/buildroot/output/build/tcl-8.4.19/.stamp_target_installed] Error 1
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote on 
+10/14/2013 04:30:00 AM:
 
-Signed-off-by: Axel Lin <axel.lin@ingics.com>
----
- package/tcl/tcl.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> Dear Jeremy Rosen,
+> 
+> On Mon, 14 Oct 2013 09:40:46 +0200 (CEST), Jeremy Rosen wrote:
+> 
+> > two ideas that might or might not be good ideas but are worth 
+discussing
+> > early :
+> > 
+> > * try to automatically build the new version to see if it is an "easy
+> > bump" or a "hard bump" and document the result
+> > 
+> > * ping the last person(s) that touch the package (git has facilities 
+to
+> > find them, I think it's called git-contribute) when a new version is
+> > available
+> > 
+> > both have good and bad sides, thus worth discussing...
+> 
+> Agreed. But all of this first requires the ability to detect that a new
+> version is available.
+> 
+> I must say I'm not a big fan of the automatic build, which may
+> encourage people to do "careless" bump, i.e version bumps without
+> looking at least a little bit at what changed, and taking a set back by
+> looking at the version number, or the project web site, to see if the
+> version bump is small, or major.
+> 
+> For the second one, I agree. We have discussed a few times having the
+> notion of package maintainers. Probably something that will be worth
+> discussing at this time.
 
-diff --git a/package/tcl/tcl.mk b/package/tcl/tcl.mk
-index 3291c1b..58f085a 100644
---- a/package/tcl/tcl.mk
-+++ b/package/tcl/tcl.mk
-@@ -37,7 +37,7 @@ endef
- TCL_POST_INSTALL_TARGET_HOOKS += TCL_REMOVE_TCLSH
- else
- define TCL_SYMLINK_TCLSH
--	ln -s tclsh$(TCL_VERSION_MAJOR) $(TARGET_DIR)/usr/bin/tclsh
-+	ln -sf tclsh$(TCL_VERSION_MAJOR) $(TARGET_DIR)/usr/bin/tclsh
- endef
- TCL_POST_INSTALL_TARGET_HOOKS += TCL_SYMLINK_TCLSH
- endif
--- 
-1.8.1.2
+Sounds like a good topic for the Buildroot Developer Days...
+
+Thanks,
+-Ryan
