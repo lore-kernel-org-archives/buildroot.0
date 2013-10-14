@@ -1,127 +1,54 @@
-From: Sagaert Johan <sagaert.johan@skynet.be>
-Date: Mon, 14 Oct 2013 23:38:59 +0200
-Subject: [Buildroot] [PATCH 1/1 V2] new package : jquery-mobile
-Message-ID: <1381786739-15234-1-git-send-email-sagaert.johan@skynet.be>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 14 Oct 2013 23:55:17 +0200
+Subject: [Buildroot] Bumping packages: some comments/suggestions
+In-Reply-To: <CAAXf6LX7cHRZyGcA5KgYaL7iUuw_JhBxTAzsWrptAa9y10353w@mail.gmail.com>
+References: <20131014113000.73ca82bf@skate>
+ <1642454622.8785613.1381743494806.JavaMail.root@openwide.fr>
+ <CAAXf6LX7cHRZyGcA5KgYaL7iUuw_JhBxTAzsWrptAa9y10353w@mail.gmail.com>
+Message-ID: <525C6845.50803@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On 14/10/13 12:02, Thomas De Schampheleire wrote:
+> On Mon, Oct 14, 2013 at 11:38 AM, Jeremy Rosen <jeremy.rosen@openwide.fr> wrote:
+> [..]
+>>
+>> yeah, that's the "might not be a good idea" part... I was more thinking
+>> on the line of "this is a minor release and it compiles correctly, it's
+>> probably an easy job to test and bump" i.e for the case of minor/security
+>> releases upstream. It's a balance between helping maintainers work fast,
+>> helping project managers see low hanging fruites and making sure people
+>> are not too lazy...
+>>
+> [..]
+>
+> What I wanted to add in this discussion is this: if there are people
+> out there that have time for some buildroot development but they have
+> no clear goal of their own, they can among others choose between
+> package bumps and fixing autobuild failures.
+> While there certainly is value in package bumping, I hope that not all
+> of these people jump onto the bump-train and instead help with the
+> autobuild failures. We still hope to get to 0 failures at some point,
+> and bumping packages all the time will most of the time only add new
+> problems.
 
-V2 : simplified file copying. 
-Thanks for the hints Thomas !
+  I'm also not too hot on version bumping just for the sake of bumping. 
+Version bumps should be done when they're useful for someone, e.g. 
+because a feature or bugfix is added. If it's useful to you, then you'll 
+obviously test if it still works correctly.
 
-Jquery mobile is a unified, HTML5-based user interface system for
-all popular mobile device platforms, built on the rock-solid
-jQuery and jQuery UI foundation.
-Its lightweight code is built with progressive enhancement,
-and has a flexible, easily themeable design.
 
-Signed-off-by: Sagaert Johan <sagaert.johan@skynet.be>
----
- package/Config.in                      |  1 +
- package/jquery-mobile/Config.in        | 24 +++++++++++++++++
- package/jquery-mobile/jquery-mobile.mk | 48 ++++++++++++++++++++++++++++++++++
- 3 files changed, 73 insertions(+)
- create mode 100644 package/jquery-mobile/Config.in
- create mode 100644 package/jquery-mobile/jquery-mobile.mk
+  Regards,
+  Arnout
 
-diff --git a/package/Config.in b/package/Config.in
-index 142454d..857ae9e 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -576,6 +576,7 @@ source "package/explorercanvas/Config.in"
- source "package/flot/Config.in"
- source "package/jquery/Config.in"
- source "package/jquery-keyboard/Config.in"
-+source "package/jquery-mobile/Config.in"
- source "package/jquery-sparkline/Config.in"
- source "package/jquery-ui/Config.in"
- source "package/jquery-ui-themes/Config.in"
-diff --git a/package/jquery-mobile/Config.in b/package/jquery-mobile/Config.in
-new file mode 100644
-index 0000000..2f2e30f
---- /dev/null
-+++ b/package/jquery-mobile/Config.in
-@@ -0,0 +1,24 @@
-+config BR2_PACKAGE_JQUERY_MOBILE
-+	bool "jQuery-Mobile"
-+	help
-+	  jQuery-Mobile is a unified, HTML5-based user interface system
-+	  for all popular mobile device platforms, built on the rock-solid
-+	  jQuery and jQuery UI foundation.
-+	  Its lightweight code is built with progressive enhancement,
-+	  and has a flexible, easily themeable design.
-+
-+	  http://jquerymobile.com
-+	  
-+if BR2_PACKAGE_JQUERY_MOBILE
-+config BR2_PACKAGE_JQUERY_MOBILE_FULL
-+	bool "jquery mobile development files"
-+	help
-+		Installs the development versions.
-+
-+config BR2_PACKAGE_JQUERY_MOBILE_DEMOS
-+	bool "jquery mobile demo files"
-+	help
-+		Installs the demo files.
-+		The main demo page is http://hostname/demo.html	
-+endif
-+	  
-diff --git a/package/jquery-mobile/jquery-mobile.mk b/package/jquery-mobile/jquery-mobile.mk
-new file mode 100644
-index 0000000..e0dcf91
---- /dev/null
-+++ b/package/jquery-mobile/jquery-mobile.mk
-@@ -0,0 +1,48 @@
-+################################################################################
-+#
-+# jquery-mobile
-+#
-+################################################################################
-+
-+JQUERY_MOBILE_VERSION = 1.3.2
-+JQUERY_MOBILE_SITE = http://jquerymobile.com/resources/download
-+JQUERY_MOBILE_SOURCE = jquery.mobile-$(JQUERY_MOBILE_VERSION).zip
-+JQUERY_MOBILE_LICENSE = MIT
-+
-+define JQUERY_MOBILE_EXTRACT_CMDS
-+	unzip -d $(@D) $(DL_DIR)/$(JQUERY_MOBILE_SOURCE)
-+endef
-+
-+JQUERY_MOBILE_INSTALLED_FILES = \
-+	jquery.mobile.structure-$(JQUERY_MOBILE_VERSION).min.css \
-+	jquery.mobile.theme-$(JQUERY_MOBILE_VERSION).min.css \
-+	jquery.mobile-$(JQUERY_MOBILE_VERSION).min.css \
-+	jquery.mobile-$(JQUERY_MOBILE_VERSION).min.map \
-+	jquery.mobile-$(JQUERY_MOBILE_VERSION).min.js
-+
-+ifeq ($(BR2_PACKAGE_JQUERY_MOBILE_FULL),y)
-+JQUERY_MOBILE_INSTALLED_FILES += \
-+	jquery.mobile.structure-$(JQUERY_MOBILE_VERSION).css \
-+	jquery.mobile.theme-$(JQUERY_MOBILE_VERSION).css \
-+	jquery.mobile-$(JQUERY_MOBILE_VERSION).css \
-+	jquery.mobile-$(JQUERY_MOBILE_VERSION).js
-+endif
-+
-+ifeq ($(BR2_PACKAGE_JQUERY_MOBILE_DEMOS),y)
-+define JQUERY_MOBILE_INSTALL_DEMOS
-+	mkdir -p $(TARGET_DIR)/var/www/demos
-+	cp -r $(@D)/demos/* $(TARGET_DIR)/var/www/demos
-+	$(INSTALL) -m 0644 -D $(@D)/index.html $(TARGET_DIR)/var/www/demo.html
-+endef
-+endif
-+
-+define JQUERY_MOBILE_INSTALL_TARGET_CMDS
-+	for f in $(JQUERY_MOBILE_INSTALLED_FILES) ; do \
-+		$(INSTALL) -m 0644 -D $(@D)/$$f $(TARGET_DIR)/var/www/$$f || break ; \
-+	done
-+	mkdir -p $(TARGET_DIR)/var/www/images
-+	cp -r $(@D)/images/* $(TARGET_DIR)/var/www/images
-+	$(JQUERY_MOBILE_INSTALL_DEMOS)
-+endef
-+
-+$(eval $(generic-package))
+
 -- 
-1.8.4.474.g128a96c
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
