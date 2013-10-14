@@ -1,34 +1,26 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 14 Oct 2013 21:59:12 +0200
-Subject: [Buildroot] [PATCH] package: fix 'local' site method for host
-	packages
-In-Reply-To: <1381572908-22696-1-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Sat, 12 Oct 2013 12:15:08 +0200")
-References: <1381572908-22696-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <87ob6rpqsv.fsf@dell.be.48ers.dk>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon, 14 Oct 2013 17:08:54 -0300
+Subject: [Buildroot] [PATCH] autossh: new package
+In-Reply-To: <87fvs3pqml.fsf@dell.be.48ers.dk>
+References: <1381758371-13587-1-git-send-email-gustavo@zacarias.com.ar>
+ <87fvs3pqml.fsf@dell.be.48ers.dk>
+Message-ID: <525C4F56.8010101@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+On 10/14/2013 05:02 PM, Peter Korsgaard wrote:
 
- Thomas> Using the 'local' site method works just fine for target
- Thomas> packages. However, for host packages, when HOST_<pkg>_SITE is
- Thomas> automatically defined by the package infrastructure to be equal to
- Thomas> <pkg>_SITE, when defining the <pkg>_OVERRIDE_SRCDIR, the $($(2)_SITE)
- Thomas> is empty, due to a missing additional dollar sign.
+> Committed, thanks.
+> 
+> Have you used it with dropbear? I think I recall some discussion about
+> it using openssh specific options. If so, then it should probably depend
+> on BR2_PACKAGE_OPENSSH
 
- Thomas> This patch ensures that the <pkg>_OVERRIDE_SRCDIR gets the correct
- Thomas> value, regardless of whether the HOST_<pkg>_SITE variable has been
- Thomas> defined by the package itself, or inferred by the package
- Thomas> infrastructure using the <pkg>_SITE value.
-
- Thomas> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
- Thomas> Reported-by: http://stackoverflow.com/questions/19311747/buildroot-cant-use-local-site-method-for-custom-host-packages
-
-Heh, odd place to report such issues. Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+It can be used with a wrapper script, that's the reason i didn't want to
+hardcode openssh into it.
+There's also a patch for autossh to allow dropbear-specific options.
+I'm unsure which would be preferred to "automagicallize" it for users :)
+Regards.
