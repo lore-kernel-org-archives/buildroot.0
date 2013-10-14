@@ -1,28 +1,18 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 14 Oct 2013 18:39:33 +0200
-Subject: [Buildroot] [PATCH 2/3] boost: add host variant
-In-Reply-To: <1381760111-1271-2-git-send-email-gustavo@zacarias.com.ar>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon, 14 Oct 2013 13:40:28 -0300
+Subject: [Buildroot] [PATCH 1/3] libevent: add host variant
+In-Reply-To: <20131014183922.75e02953@skate>
 References: <1381760111-1271-1-git-send-email-gustavo@zacarias.com.ar>
- <1381760111-1271-2-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20131014183933.01b40ccc@skate>
+ <20131014183922.75e02953@skate>
+Message-ID: <525C1E7C.2090604@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+On 10/14/2013 01:39 PM, Thomas Petazzoni wrote:
+> Why?
 
-On Mon, 14 Oct 2013 11:15:10 -0300, Gustavo Zacarias wrote:
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  package/boost/boost.mk | 33 +++++++++++++++++++++++++++++++++
->  1 file changed, 33 insertions(+)
-
-Why?
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Apache thrift, upcoming package, same as host-boost.
+Regards.
