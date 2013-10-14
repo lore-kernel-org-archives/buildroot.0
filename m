@@ -1,70 +1,26 @@
-From: =?ISO-8859-1?Q?Ezequiel_Garc=EDa?= <ezequiel@vanguardiasur.com.ar>
-Date: Mon, 14 Oct 2013 11:08:25 -0300
-Subject: [Buildroot] [PATCH 1/2] qt5base: fix build when PNG support is
-	disabled
-In-Reply-To: <1381007796-20031-1-git-send-email-fatih.asici@gmail.com>
-References: <1381007796-20031-1-git-send-email-fatih.asici@gmail.com>
-Message-ID: <CAAEAJfCXf=w-S7tfS7JviLmnjjxYoej9oq+jX9Sgviz4mSMv1g@mail.gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon, 14 Oct 2013 11:15:09 -0300
+Subject: [Buildroot] [PATCH 1/3] libevent: add host variant
+Message-ID: <1381760111-1271-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 5 October 2013 18:16, Fatih A??c? <fatih.asici@gmail.com> wrote:
-> Signed-off-by: Fatih A??c? <fatih.asici@gmail.com>
-> ---
->  ...correct-path-for-private-header-inclusion.patch | 32 ++++++++++++++++++++++
->  1 file changed, 32 insertions(+)
->  create mode 100644 package/qt5/qt5base/qt5base-0005-Use-the-correct-path-for-private-header-inclusion.patch
->
-> diff --git a/package/qt5/qt5base/qt5base-0005-Use-the-correct-path-for-private-header-inclusion.patch b/package/qt5/qt5base/qt5base-0005-Use-the-correct-path-for-private-header-inclusion.patch
-> new file mode 100644
-> index 0000000..85c2714
-> --- /dev/null
-> +++ b/package/qt5/qt5base/qt5base-0005-Use-the-correct-path-for-private-header-inclusion.patch
-> @@ -0,0 +1,32 @@
-> +From 4a5fa73c7c65f2b58da5288199f6af993a737273 Mon Sep 17 00:00:00 2001
-> +From: =?UTF-8?q?Fatih=20A=C5=9F=C4=B1c=C4=B1?= <fatih.asici@gmail.com>
-> +Date: Sat, 5 Oct 2013 13:39:44 +0300
-> +Subject: [PATCH] Use the correct path for private header inclusion
-> +MIME-Version: 1.0
-> +Content-Type: text/plain; charset=UTF-8
-> +Content-Transfer-Encoding: 8bit
-> +
-> +Fixes the build when PNG support is disabled.
-> +
-> +Reported-Upstream: https://bugreports.qt-project.org/browse/QTBUG-33496
-> +Signed-off-by: Fatih A??c? <fatih.asici@gmail.com>
-> +---
-> + src/gui/kernel/qplatformtheme.cpp | 2 +-
-> + 1 file changed, 1 insertion(+), 1 deletion(-)
-> +
-> +diff --git a/src/gui/kernel/qplatformtheme.cpp b/src/gui/kernel/qplatformtheme.cpp
-> +index 02b69bc..46b59b5 100644
-> +--- a/src/gui/kernel/qplatformtheme.cpp
-> ++++ b/src/gui/kernel/qplatformtheme.cpp
-> +@@ -48,7 +48,7 @@
-> + #include <QtCore/qfileinfo.h>
-> + #include <qpalette.h>
-> + #include <qtextformat.h>
-> +-#include <qiconloader_p.h>
-> ++#include "private/qiconloader_p.h"
-> +
-> + QT_BEGIN_NAMESPACE
-> +
-> +--
-> +1.8.4.rc3
-> +
-> --
-> 1.8.4.rc3
->
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/libevent/libevent.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-This one lacks my Reported-by I think. Anyway:
-
-Tested-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-
-Nice job!
+diff --git a/package/libevent/libevent.mk b/package/libevent/libevent.mk
+index a6def1a..14ebf72 100644
+--- a/package/libevent/libevent.mk
++++ b/package/libevent/libevent.mk
+@@ -20,3 +20,4 @@ LIBEVENT_POST_INSTALL_TARGET_HOOKS += LIBEVENT_REMOVE_PYSCRIPT
+ endif
+ 
+ $(eval $(autotools-package))
++$(eval $(host-autotools-package))
 -- 
-Ezequiel Garc?a, VanguardiaSur
-www.vanguardiasur.com.ar
+1.8.1.5
