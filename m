@@ -1,42 +1,33 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 14 Oct 2013 13:49:55 +0200
-Subject: [Buildroot] [git commit] poppler: needs thread support
-Message-ID: <20131014120816.AB33E9B9FC@busybox.osuosl.org>
+From: Phil Eichinger <phil.eichinger@gmail.com>
+Date: Mon, 14 Oct 2013 14:25:05 +0200
+Subject: [Buildroot] [PATCH 3/3] sysvinit: add license information
+In-Reply-To: <1381753505-13119-1-git-send-email-phil@zankapfel.net>
+References: <1381753505-13119-1-git-send-email-phil@zankapfel.net>
+Message-ID: <1381753505-13119-2-git-send-email-phil@zankapfel.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=5e0613aa8eadf16383410eb764f10ca99e549fb8
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fix:
-http://autobuild.buildroot.net/results/daa/daa18f112ddd08644b4149025899cea2b511a9da/
-
-Signed-off-by: Axel Lin <axel.lin@ingics.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Phil Eichinger <phil@zankapfel.net>
 ---
- package/poppler/Config.in |    5 +++--
- 1 files changed, 3 insertions(+), 2 deletions(-)
+ package/sysvinit/sysvinit.mk |    2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/poppler/Config.in b/package/poppler/Config.in
-index 6a9e1fd..876601e 100644
---- a/package/poppler/Config.in
-+++ b/package/poppler/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_POPPLER
- 	bool "poppler"
- 	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	select BR2_PACKAGE_FONTCONFIG
- 	select BR2_PACKAGE_XLIB_LIBX11 if BR2_PACKAGE_XORG7
- 	select BR2_PACKAGE_XLIB_LIBXEXT if BR2_PACKAGE_XORG7
-@@ -9,5 +10,5 @@ config BR2_PACKAGE_POPPLER
+diff --git a/package/sysvinit/sysvinit.mk b/package/sysvinit/sysvinit.mk
+index bf05d73..131c63f 100644
+--- a/package/sysvinit/sysvinit.mk
++++ b/package/sysvinit/sysvinit.mk
+@@ -8,6 +8,8 @@ SYSVINIT_VERSION = 2.88
+ SYSVINIT_SOURCE  = sysvinit_$(SYSVINIT_VERSION)dsf.orig.tar.gz
+ SYSVINIT_PATCH   = sysvinit_$(SYSVINIT_VERSION)dsf-13.1.diff.gz
+ SYSVINIT_SITE    = $(BR2_DEBIAN_MIRROR)/debian/pool/main/s/sysvinit
++SYSVINIT_LICENSE = GPLv2+
++SYSVINIT_LICENSE_FILES = COPYING
  
- 	   http://poppler.freedesktop.org/
- 
--comment "poppler requires a toolchain with C++ support enabled"
--	depends on !BR2_INSTALL_LIBSTDCPP
-+comment "poppler requires a toolchain with C++ and thread support enabled"
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
+ # Override Busybox implementations if Busybox is enabled.
+ ifeq ($(BR2_PACKAGE_BUSYBOX),y)
+-- 
+1.7.10.4
