@@ -1,37 +1,87 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 14 Oct 2013 21:37:47 +0200
-Subject: [Buildroot] [git commit] apr-util: bump to version 1.5.2
-Message-ID: <20131014203036.52B069B9FA@busybox.osuosl.org>
+Date: Mon, 14 Oct 2013 21:48:03 +0200
+Subject: [Buildroot] [git commit] boost: Fix compilation of Boost.Variants
+	move assignment
+Message-ID: <20131014203036.697E49A384@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3b388653d21fd46f5f5511570972e87c149da898
+commit: http://git.buildroot.net/buildroot/commit/?id=43ccbec68f63f2a169aafd187b5e24d6ac52b093
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+Fix compilation of Boost.Variants move assignment for situations when one of the variant template classes has nothrow copy constructor and throwing move constructor (refs #8772)
+
+Fixes compilation error:
+
+.../output/host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/include/boost/variant/variant.hpp: In member function 'void boost::variant<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19>::move_assigner::internal_visit(RhsT&, int) [with RhsT = boost::shared_ptr<void>, T0_ = boost::shared_ptr<void>, T1 = boost::signals2::detail::foreign_void_shared_ptr, T2 = boost::detail::variant::void_, ..., T18 = boost::detail::variant::void_, T19 = boost::detail::variant::void_]':
+...
+.../output/host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/include/boost/variant/variant.hpp:2058:13: error: no matching function for call to 'boost::variant<boost::shared_ptr<void>, boost::signals2::detail::foreign_void_shared_ptr>::move_assigner::assign_impl(boost::shared_ptr<void>&, nothrow_copy, nothrow_move_constructor, boost::variant<boost::shared_ptr<void>, boost::signals2::detail::foreign_void_shared_ptr>::has_fallback_type_)'
+
+Reported here: https://svn.boost.org/trac/boost/ticket/8772
+
+Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+Backported-from: https://svn.boost.org/trac/boost/changeset/85080
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...apr.patch => apr-util-01-remove-checkapr.patch} |    0
- package/apr-util/apr-util.mk                       |    2 +-
- 2 files changed, 1 insertions(+), 1 deletions(-)
+ ...ilation-of-Boost.Variants-move-assignment.patch |   50 ++++++++++++++++++++
+ 1 files changed, 50 insertions(+), 0 deletions(-)
 
-diff --git a/package/apr-util/apr-util-1.4.1-remove-checkapr.patch b/package/apr-util/apr-util-01-remove-checkapr.patch
-similarity index 100%
-rename from package/apr-util/apr-util-1.4.1-remove-checkapr.patch
-rename to package/apr-util/apr-util-01-remove-checkapr.patch
-diff --git a/package/apr-util/apr-util.mk b/package/apr-util/apr-util.mk
-index 11551d6..51852e4 100644
---- a/package/apr-util/apr-util.mk
-+++ b/package/apr-util/apr-util.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--APR_UTIL_VERSION = 1.4.1
-+APR_UTIL_VERSION = 1.5.2
- APR_UTIL_SITE = http://archive.apache.org/dist/apr
- APR_UTIL_LICENSE = Apache-2.0
- APR_UTIL_LICENSE_FILES = LICENSE
+diff --git a/package/boost/boost-0002-Fix-compilation-of-Boost.Variants-move-assignment.patch b/package/boost/boost-0002-Fix-compilation-of-Boost.Variants-move-assignment.patch
+new file mode 100644
+index 0000000..00dc7c6
+--- /dev/null
++++ b/package/boost/boost-0002-Fix-compilation-of-Boost.Variants-move-assignment.patch
+@@ -0,0 +1,50 @@
++Fix compilation of Boost.Variants move assignment for situations when one of the variant template classes has nothrow copy constructor and throwing move constructor (refs #8772)
++
++Fixes compilation error:
++
++.../output/host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/include/boost/variant/variant.hpp: In member function 'void boost::variant<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19>::move_assigner::internal_visit(RhsT&, int) [with RhsT = boost::shared_ptr<void>, T0_ = boost::shared_ptr<void>, T1 = boost::signals2::detail::foreign_void_shared_ptr, T2 = boost::detail::variant::void_, ..., T18 = boost::detail::variant::void_, T19 = boost::detail::variant::void_]':
++...
++.../output/host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/include/boost/variant/variant.hpp:2058:13: error: no matching function for call to 'boost::variant<boost::shared_ptr<void>, boost::signals2::detail::foreign_void_shared_ptr>::move_assigner::assign_impl(boost::shared_ptr<void>&, nothrow_copy, nothrow_move_constructor, boost::variant<boost::shared_ptr<void>, boost::signals2::detail::foreign_void_shared_ptr>::has_fallback_type_)'
++
++Reported here: https://svn.boost.org/trac/boost/ticket/8772
++
++Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
++Backported-from: https://svn.boost.org/trac/boost/changeset/85080
++
++--- a/boost/variant/variant.hpp	(revision 85079)
+++++ b/boost/variant/variant.hpp	(revision 85080)
++@@ -1981,5 +1981,5 @@
++     private: // helpers, for internal visitor interface (below)
++ 
++-        template <typename RhsT, typename B1, typename B2>
+++        template <typename RhsT, typename B2>
++         void assign_impl(
++               RhsT& rhs_content
++--- a/libs/variant/test/rvalue_test.cpp	(revision 85079)
+++++ b/libs/variant/test/rvalue_test.cpp	(revision 85080)
++@@ -197,4 +197,19 @@
++ #endif
++ 
+++struct nothrow_copyable_throw_movable {
+++    nothrow_copyable_throw_movable(){}
+++    nothrow_copyable_throw_movable(const nothrow_copyable_throw_movable&) BOOST_NOEXCEPT {}
+++#ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
+++    nothrow_copyable_throw_movable(nothrow_copyable_throw_movable&&) BOOST_NOEXCEPT_IF(false) {}
+++#endif
+++};
+++
+++// This test is created to cover the following situation:
+++// https://svn.boost.org/trac/boost/ticket/8772
+++void run_tricky_compilation_test()
+++{
+++    boost::variant<int, nothrow_copyable_throw_movable> v;
+++    v = nothrow_copyable_throw_movable();
+++}
++ 
++ int test_main(int , char* [])
++@@ -204,4 +219,5 @@
++    run_move_only();
++    run_moves_are_noexcept();
+++   run_tricky_compilation_test();
++    return 0;
++ }
