@@ -1,50 +1,48 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 15 Oct 2013 19:03:52 +0200
-Subject: [Buildroot] [PATCH 2/2] package/weston: bump to 1.3.0
-In-Reply-To: <87li1vkph2.fsf@dell.be.48ers.dk>
-References: <cover.1381785903.git.yann.morin.1998@free.fr>
- <cover.1381785903.git.yann.morin.1998@free.fr>
- <801b3c42bed982f8296db2f8227dfcbbdecf5f48.1381785903.git.yann.morin.1998@free.fr>
- <87li1vkph2.fsf@dell.be.48ers.dk>
-Message-ID: <20131015170352.GA3490@free.fr>
+From: Michael Rommel <rommel@layer-7.net>
+Date: Tue, 15 Oct 2013 19:16:16 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+	2013-10-14
+In-Reply-To: <20131015063009.2086B52C1A0@lolut.humanoidz.org>
+References: <20131015063009.2086B52C1A0@lolut.humanoidz.org>
+Message-ID: <A9D235D0-F376-428F-A49F-E315294C4B5D@layer-7.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter, All,
+Hi,
 
-On 2013-10-15 08:39 +0200, Peter Korsgaard spake thusly:
-> >>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
-> 
->  Yann> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
->  Yann> Needs three patches from upstream, plus a custom patch to disable tests.
->  Yann> Drop old patches, all applied upstream or no longer needed.
-> 
->  Yann> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> 
-> [snip]
-> 
->  Yann> +++ b/package/weston/weston-0003-dont-build-tests.patch
->  Yann> @@ -0,0 +1,18 @@
->  Yann> +MAkefile: do not build tests
-> 
-> I dropped the upper case 'A' and committed, thanks.
+On Oct 15, 2013, at 8:30 , Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
 
-Doh.
+> Build statistics for 2013-10-14
+>     nios2 |                 aiccu-20070115 | NOK | http://autobuild.buildroot.net/results/f04e2ff7ef02fab1e350e1152145050c79f0b7cf/
 
-/me has to train his pinky to be faster... ;-)
 
-Thanks!
+/home/test/test/2/output/host/usr/bin/nios2-linux-gnu-gcc -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -pipe -Os  -W -Wall -Wshadow -Wpointer-arith -Wcast-align -Wwrite-strings -Waggregate-return -Wstrict-prototypes -Wmissing-prototypes -Wmissing-declarations -Wredundant-decls -Wnested-externs -Winline -Wbad-function-cast -fshort-enums -fstrict-aliasing -fno-common -Wpadded -pedantic -D_REENTRANT -D_GNU_SOURCE -D AICCU_CONSOLE -D AICCU_GNUTLS -D_LINUX -D HAS_IFHEAD -D AICCU_TYPE="\"linux\"" -o aiccu main.o ../common/tun.o ../common/aiccu.o ../common/hash_md5.o ../common/hash_sha1.o ../common/common.o ../common/heartbeat.o ../common/tic.o ../common/ayiya.o ../common/aiccu_test.o ../common/resolver.o ../common/aiccu_linux.o  -lgnutls -lpthread -lresolv
+/home/test/test/2/output/host/opt/ext-toolchain/bin/../lib/gcc/nios2-linux-gnu/4.7.3/../../../../nios2-linux-gnu/bin/ld: /home/test/test/2/output/host/usr/nios2-buildroot-linux-gnu/sysroot/usr/lib/crt1.o: undefined reference to symbol '_gp'
+/home/test/test/2/output/host/opt/ext-toolchain/bin/../lib/gcc/nios2-linux-gnu/4.7.3/../../../../nios2-linux-gnu/bin/ld: note: '_gp' is defined in DSO /home/test/test/2/output/host/usr/nios2-buildroot-linux-gnu/sysroot/usr/lib/libpcre.so.1 so try adding it to the linker command line
+/home/test/test/2/output/host/usr/nios2-buildroot-linux-gnu/sysroot/usr/lib/libpcre.so.1: could not read symbols: Invalid operation
+collect2: error: ld returned 1 exit status
 
-Regards,
-Yann E. MORIN.
+I had a look at this error and tried to compare that with currently running builds. As far as I can see, a default build on a i586 with the included toolchain works fine and does not need linking with libpcre. Also a nm on the mentioned file (sysroot/usr/lib/crt1.o) reveals no _gp symbol on an i586 whereas with the external nios toolchain, _gp is referenced as symbol.
+
+rommel at pelican:/var/nfs/software/initrds/uclibc/buildroot-clean-i586/host/usr/i586-buildroot-linux-uclibc/sysroot/usr/lib$ nm crt1.o
+00000000 D __data_start
+         U __uClibc_main
+         U _fini
+         U _init
+00000000 T _start
+00000000 W data_start
+         U main
+
+Yes, if I include -lpcre on the linker line, the nios2 compile completes, but I have no way of testing, whether the result works. I also could not find any direct dependency from aiccu to the pcre, neither a function call that starts with pcre_, nor an inclusion of a pcre.h header file. And, yes, If I include -lpcre on the commandline, also the resulting i586 binary works, but unless someone convinces me that his is really a missing dependency of aiccu, I am hesitant to change anything right now, as most other builds went okay.
+
+I tend to think, that this is a problem not related to aiccu, but if anyone else can confirm this, I fell better :-)
+
+Cheers,
+
+  Michael.
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Michael Rommel, Erlangen, Germany
