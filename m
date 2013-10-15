@@ -1,56 +1,84 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 15 Oct 2013 13:07:49 -0300
-Subject: [Buildroot] [PATCH 2/2] python-thrift: bump to version 0.9.1 and
-	switch to apache
-In-Reply-To: <1381853269-25617-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1381853269-25617-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1381853269-25617-2-git-send-email-gustavo@zacarias.com.ar>
+From: mlweber1 at rockwellcollins.com <mlweber1@rockwellcollins.com>
+Date: Tue, 15 Oct 2013 11:17:40 -0500
+Subject: [Buildroot] [git commit] omniorb: cleanup autobuild failure,
+ CFLAGS issue
+In-Reply-To: <20131015162239.2e45fb44@skate>
+References: <20131002222257.646829B8DF@busybox.osuosl.org>
+ <20131015162239.2e45fb44@skate>
+Message-ID: <OFA637F5CC.BF9F3F0D-ON86257C05.005970E7-86257C05.0059821A@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Switch away from the PyPI subset version since it has a great filename
-clash with the full upstream apache version.
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote on 10/15/2013 
+09:22:39 AM:
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/python-thrift/python-thrift.mk | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+> From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> To: Matt Weber <mlweber1@rockwellcollins.com>
+> Cc: Peter Korsgaard <peter@korsgaard.com>, buildroot at busybox.net
+> Date: 10/15/2013 09:23 AM
+> Subject: Re: [Buildroot] [git commit] omniorb: cleanup autobuild 
+> failure, CFLAGS issue
+> 
+> Dear Peter Korsgaard,
+> 
+> On Wed, 2 Oct 2013 23:54:41 +0200, Peter Korsgaard wrote:
+> > commit: http://git.buildroot.net/buildroot/commit/?
+> id=dd7981bfd22b1c0af8a0fd3c12673294f66eadb5
+> > branch: 
+http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+> > 
+> > Fixed:
+> > http://autobuild.buildroot.net/results/
+> a08baf8821e3ee1fb9c36c8f74c4ced466af167b/
+> > http://autobuild.buildroot.net/results/
+> f0c7379c1f405385d3a64c0349c3d9565065e8a7/
+> > http://autobuild.buildroot.net/results/
+> c3de25ca52fdb8ffda7472cf9f7b64514954cbb1/
+> > 
+> > Change Log:
+> > The target CFLAGS were getting mixed in during a manual build of some
+> > omniorb pkg tools that could be viewed as host tools.
+> > This manual build was a dirty workaround and created some bad
+> > cornercases. So I converted the package over to actually using the
+> > host pkg build and removed the need for a patch and custom mods inthe 
+build.
+> > 
+> > Also there wasn't a dependency on the target having python, just
+> > host-python for performing the initial build.  So depends were 
+adjusted
+> > accordingly. If python bindings are required, they can be found in
+> a different
+> > package called omniORBpy.  The omniORB package only uses python for
+> > the build process.
+> > 
+> > Fixed a bug with long double support.  Currently leaving it disabled
+> > as most targets won't use it.  This allows greater toolchain 
+compatibility.
+> > 
+> > Signed-off-by: Matt Weber <mlweber1@rockwellcollins.com>
+> > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+> 
+> It seems the problem isn't entirely fixed, see
+> http://autobuild.buildroot.org/results/915/
+> 915e5ad9f888f3a26741315b7a5f1358726cf1c1/build-end.log.
+> The native g++ gets called with target compiler flags (specific to
+> PowerPC).
+> 
+> Best regards,
+> 
+> Thomas
+> -- 
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
 
-diff --git a/package/python-thrift/python-thrift.mk b/package/python-thrift/python-thrift.mk
-index 4e86ece..75f379f 100644
---- a/package/python-thrift/python-thrift.mk
-+++ b/package/python-thrift/python-thrift.mk
-@@ -4,15 +4,15 @@
- #
- ################################################################################
- 
--PYTHON_THRIFT_VERSION = 0.9.0
-+PYTHON_THRIFT_VERSION = 0.9.1
- PYTHON_THRIFT_SOURCE = thrift-$(PYTHON_THRIFT_VERSION).tar.gz
--PYTHON_THRIFT_SITE = http://pypi.python.org/packages/source/t/thrift
-+PYTHON_THRIFT_SITE = http://www.us.apache.org/dist/thrift/$(PYTHON_THRIFT_VERSION)
- PYTHON_THRIFT_LICENSE = Apache-2.0
--PYTHON_THRIFT_LICENSE_FILES = README
-+PYTHON_THRIFT_LICENSE_FILES = LICENSE
- PYTHON_THRIFT_DEPENDENCIES = python
- 
- define PYTHON_THRIFT_BUILD_CMDS
--	(cd $(@D); \
-+	(cd $(@D)/lib/py; \
- 		CC="$(TARGET_CC)"					\
- 		CFLAGS="$(TARGET_CFLAGS)"				\
- 		LDSHARED="$(TARGET_CROSS)gcc -shared"			\
-@@ -28,7 +28,7 @@ endef
- # the installation directory is in python's load path. For host-python,
- # it is not, so add it explicitly while installing to target.
- define PYTHON_THRIFT_INSTALL_TARGET_CMDS
--	(cd $(@D); PYTHONPATH=$(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages \
-+	(cd $(@D)/lib/py; PYTHONPATH=$(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages \
- 		$(HOST_DIR)/usr/bin/python setup.py install --prefix=$(TARGET_DIR)/usr)
- endef
- 
--- 
-1.8.1.5
+Thanks for the heads up, I'll take a look this week and get it cleaned up.
+
+
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20131015/08b2df13/attachment-0001.html>
