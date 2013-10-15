@@ -1,57 +1,38 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 15 Oct 2013 19:31:07 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2013-10-14
-In-Reply-To: <A9D235D0-F376-428F-A49F-E315294C4B5D@layer-7.net>
-References: <20131015063009.2086B52C1A0@lolut.humanoidz.org>
- <A9D235D0-F376-428F-A49F-E315294C4B5D@layer-7.net>
-Message-ID: <20131015193107.33e234f5@skate>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Tue, 15 Oct 2013 21:37:27 +0200
+Subject: [Buildroot] [PATCH 1/2] python-thrift: fix cross building
+In-Reply-To: <OFF9519787.DE83E1FB-ON86257C05.0059A05A-86257C05.005B1951@rockwellcollins.com>
+References: <1381853269-25617-1-git-send-email-gustavo@zacarias.com.ar>
+ <OFF9519787.DE83E1FB-ON86257C05.0059A05A-86257C05.005B1951@rockwellcollins.com>
+Message-ID: <CAAXf6LW9SfFYQjDdxc91tYYML3qAjypeDbR5Vuk6gdpd1U9ohg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Michael Rommel,
+Hi Ryan,
 
-On Tue, 15 Oct 2013 19:16:16 +0200, Michael Rommel wrote:
+On Tue, Oct 15, 2013 at 6:35 PM, Ryan Barnett
+<rjbarnet@rockwellcollins.com> wrote:
+[..]
+>
+> If this way ensures that setup.py does correctly cross-compile python
+> modules, I would like to see this be the standard way we python modules
+> are done. As you mentioned on the IRC channel, creating a PYTHON_MAKE_ENV
+> variable would be useful which would do the above defines. This way we
+> could standardize the way python libraries are build to help ensure
+> cross compiling is done correctly.
+>
+> It seems that every python module does things just a little bit
+> differently.
 
-> I had a look at this error and tried to compare that with currently
-> running builds. As far as I can see, a default build on a i586 with
-> the included toolchain works fine and does not need linking with
-> libpcre. Also a nm on the mentioned file (sysroot/usr/lib/crt1.o)
-> reveals no _gp symbol on an i586 whereas with the external nios
-> toolchain, _gp is referenced as symbol.
-> 
-> rommel at pelican:/var/nfs/software/initrds/uclibc/buildroot-clean-i586/host/usr/i586-buildroot-linux-uclibc/sysroot/usr/lib$
-> nm crt1.o 00000000 D __data_start
->          U __uClibc_main
->          U _fini
->          U _init
-> 00000000 T _start
-> 00000000 W data_start
->          U main
-> 
-> Yes, if I include -lpcre on the linker line, the nios2 compile
-> completes, but I have no way of testing, whether the result works. I
-> also could not find any direct dependency from aiccu to the pcre,
-> neither a function call that starts with pcre_, nor an inclusion of a
-> pcre.h header file. And, yes, If I include -lpcre on the commandline,
-> also the resulting i586 binary works, but unless someone convinces me
-> that his is really a missing dependency of aiccu, I am hesitant to
-> change anything right now, as most other builds went okay.
-> 
-> I tend to think, that this is a problem not related to aiccu, but if
-> anyone else can confirm this, I fell better :-)
+While trying to help someone on IRC with a python module, I also noticed this.
+I would definitively be in favor of lining up the different python
+modules, either directly or with some kind of infrastructure.
 
-I do agree that blindly linking with pcre does not seem like a good
-option. A quick Google search about NIOS and gp indicates that gp is a
-special register used to access global data. So I believe this _gp
-symbol is more likely related to some toolchain internals rather than
-to pcre.
+If someone wants to step up and propose something like that, that
+would be great!
 
+Best regards,
 Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
