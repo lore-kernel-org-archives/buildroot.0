@@ -1,58 +1,73 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 15 Oct 2013 21:55:42 +0200
-Subject: [Buildroot] Bumping packages: some comments/suggestions
-In-Reply-To: <20131015093444.4ef3fa17@skate>
-References: <20131014113000.73ca82bf@skate>
- <1642454622.8785613.1381743494806.JavaMail.root@openwide.fr>
- <CAAXf6LX7cHRZyGcA5KgYaL7iUuw_JhBxTAzsWrptAa9y10353w@mail.gmail.com>
- <525C6845.50803@mind.be> <20131015093444.4ef3fa17@skate>
-Message-ID: <525D9DBE.7040802@mind.be>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Tue, 15 Oct 2013 22:27:14 +0200
+Subject: [Buildroot] [PATCH 9/9] manual: rework Deploying images chapter
+In-Reply-To: <52546B18.7010207@mind.be>
+References: <cover.1381002281.git.s.martin49@gmail.com>
+ <a2cb1b7caaa580f341abbb3788d18323c3e2e7c3.1381002281.git.s.martin49@gmail.com>
+ <52546B18.7010207@mind.be>
+Message-ID: <CAAXf6LUspWfQkggfq2_+vmuDHUcPQUUAa6D3_-J7jxG8-0svBg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 15/10/13 09:34, Thomas Petazzoni wrote:
-> Dear Arnout Vandecappelle,
->
-> On Mon, 14 Oct 2013 23:55:17 +0200, Arnout Vandecappelle wrote:
->
->>> What I wanted to add in this discussion is this: if there are people
->>> out there that have time for some buildroot development but they have
->>> no clear goal of their own, they can among others choose between
->>> package bumps and fixing autobuild failures.
->>> While there certainly is value in package bumping, I hope that not all
->>> of these people jump onto the bump-train and instead help with the
->>> autobuild failures. We still hope to get to 0 failures at some point,
->>> and bumping packages all the time will most of the time only add new
->>> problems.
+Hi Samuel, Arnout,
+
+On Tue, Oct 8, 2013 at 10:29 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
+> On 10/05/13 21:49, Samuel Martin wrote:
 >>
->>    I'm also not too hot on version bumping just for the sake of bumping.
->> Version bumps should be done when they're useful for someone, e.g.
->> because a feature or bugfix is added. If it's useful to you, then you'll
->> obviously test if it still works correctly.
+[..]
+>> +flashing and/or booting the given platform.
+>> +
+>> +Although, deploying the generated images on the actual hardware
+>> +(flashing and booting the hardware) is very tight to the target
+>> +hardware and can differ a lot from one target to another.
+>> +Buildroot cannot provide information on this part.
+>> +
+>> +For deploying images on the actual target, refer to the hardware
+>> +vendor instructions, or the readme file in the _board_ directory if
+>> +any.
 >
-> I understand this point of view, but on the other hand, it's not really
-> nice to have packages that have very old versions. For "core" stuff
-> that isn't necessarily very easy to bump (think Qt, Gtk, X.org and
-> things like that), it's quite important that the core Buildroot
-> community keeps that up to date, because this is difficult to do for
-> newcomers, and this is what people will look at to see if Buildroot is
-> well-maintained and active.
+>
+>  I don't like how these two paragraphs are formulated, but I can't readily
+> think of an improvement.
+>
 
-  Yes of course. The version detection idea is certainly useful. I just 
-wanted to concur with Thomas DS that this shouldn't distract people from 
-fixing autobuilder failures.
+Maybe:
+Nevertheless, how to deploy the generated images on actual hardware is
+very board-specific. Buildroot cannot provide instructions for all
+boards, or even provide complete instructions for a single board.
+Please refer to the instructions provided by the target vendor.
 
-  Regards,
-  Arnout
+[..]
 
 
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+
+Regarding the section names, currently you have:
+4. Deploying target images built with Buildroot
+4.1. Deploying images on the target hardware
+4.2. Booting images in emulators
+4.3. Preparing a raw disk image for customized target layout
+4.4. Preparing a bootable raw disk file for virtualization
+4.5. Booting the generated image over the network
+4.6. Chroot into generated image
+
+While 4 and 4.1 talk about 'deploying' the other sections start using
+other terminology. Here is a suggestion:
+4. Deploying target images built with Buildroot
+4.1. Deploying images on the target hardware
+4.2. Deploying images in emulators
+4.3. Preparing a raw disk image for customized target layout
+4.4. Preparing a bootable raw disk file for virtualization
+4.5. Deploying images over the network
+4.6. Chroot into generated image
+
+In fact, 4.5 also talks about target hardware, so should probably be
+moved above, or even a subsection of 4.1.
+I'm not yet a big fan of the names of 4.3, 4.4 and 4.6 (it's unclear
+to me what they really do based on the title) but I don't have good
+suggestions.
+
+Best regards,
+Thomas
