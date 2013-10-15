@@ -1,145 +1,40 @@
-From: Sagaert Johan <sagaert.johan@skynet.be>
-Date: Tue, 15 Oct 2013 13:57:55 +0200
-Subject: [Buildroot] [PATCH 1/1 V2] new package : jquery-mobile
-In-Reply-To: <20131015113041.2f1125b4@skate>
-References: <1381786739-15234-1-git-send-email-sagaert.johan@skynet.be>
- <20131015113041.2f1125b4@skate>
-Message-ID: <39EC4E6059564DE2896AC0540EC217BD@JohanW7>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 15 Oct 2013 13:59:06 +0200
+Subject: [Buildroot] Ncurses wide support
+In-Reply-To: <525D2D6E.9000108@zacarias.com.ar>
+References: <CAAEAJfCkpC6-ZnpcxYCgTiZN8=QJNY+wZg83Jjyzs8-e7jPkkw@mail.gmail.com>
+ <525D1693.3010509@zacarias.com.ar>
+ <CAAEAJfD_YaKXY5cMn9H7DcUe3fyJ8L7wJ+RkmaOy40D0KmSZtw@mail.gmail.com>
+ <20131015133626.180de72d@skate> <525D2D6E.9000108@zacarias.com.ar>
+Message-ID: <20131015135906.10b43a4a@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- 
-Dear Thomas;
+Dear Gustavo Zacarias,
 
-Ok will make it lower-case name and send it as V3 patch.
+On Tue, 15 Oct 2013 08:56:30 -0300, Gustavo Zacarias wrote:
 
-Jquery-mobile is based on Jquery, I have installed the demos on a local http server to check it
-(with no other jquery tools installed.)
-I see that the example pages are working.So it can rbe used standalone.
-
-Regards ,Johan
-
------Oorspronkelijk bericht-----
-Van: Thomas Petazzoni [mailto:thomas.petazzoni at free-electrons.com] 
-Verzonden: dinsdag 15 oktober 2013 11:31
-Aan: Sagaert Johan
-CC: buildroot at busybox.net
-Onderwerp: Re: [Buildroot] [PATCH 1/1 V2] new package : jquery-mobile
-
-Dear Sagaert Johan,
-
-On Mon, 14 Oct 2013 23:38:59 +0200, Sagaert Johan wrote:
+> > Not sure to follow the original problem. If nano needs ncursesw, why
+> > don't you enable wchar support in your toolchain so that ncursesw gets
+> > built?
 > 
-> V2 : simplified file copying. 
-> Thanks for the hints Thomas !
+> Because ncurses (upstream) just builds the narrow or wide versions, not
+> both. Currently we build only the narrow version no matter what.
+> And IIRC some packages don't expect the wide version even if the
+> toolchain is WCHAR.
 
-This "personal" comment and changelog should go below the "---" so it doesn't become part of the git history. See
-http://buildroot.org/downloads/manual/manual.html#_patch_revision_changelog.
+ncurses is crap :)
 
-Also, you sent many versions of this patch, without changing the title to contain a version number. It'd be great to avoid that in
-the future :-)
-
-> diff --git a/package/jquery-mobile/Config.in 
-> b/package/jquery-mobile/Config.in new file mode 100644 index 
-> 0000000..2f2e30f
-> --- /dev/null
-> +++ b/package/jquery-mobile/Config.in
-> @@ -0,0 +1,24 @@
-> +config BR2_PACKAGE_JQUERY_MOBILE
-> +	bool "jQuery-Mobile"
-
-All lower-case for the prompt, I suggest.
-
-Also, still no select BR2_PACKAGE_JQUERY ? You don't need jquery to be installed? jquery-mobile is completely standalone?
-
-> +	help
-> +	  jQuery-Mobile is a unified, HTML5-based user interface system
-> +	  for all popular mobile device platforms, built on the rock-solid
-> +	  jQuery and jQuery UI foundation.
-> +	  Its lightweight code is built with progressive enhancement,
-> +	  and has a flexible, easily themeable design.
-> +
-> +	  http://jquerymobile.com
-> +	  
-> +if BR2_PACKAGE_JQUERY_MOBILE
-> +config BR2_PACKAGE_JQUERY_MOBILE_FULL
-> +	bool "jquery mobile development files"
-> +	help
-> +		Installs the development versions.
-
-Wrong indentation. See my previous review.
-
-> +
-> +config BR2_PACKAGE_JQUERY_MOBILE_DEMOS
-> +	bool "jquery mobile demo files"
-> +	help
-> +		Installs the demo files.
-> +		The main demo page is http://hostname/demo.html	
-
-Wrong indentation. See my previous review.
-
-> +endif
-> +	  
-> diff --git a/package/jquery-mobile/jquery-mobile.mk 
-> b/package/jquery-mobile/jquery-mobile.mk
-> new file mode 100644
-> index 0000000..e0dcf91
-> --- /dev/null
-> +++ b/package/jquery-mobile/jquery-mobile.mk
-> @@ -0,0 +1,48 @@
-> +#####################################################################
-> +###########
-> +#
-> +# jquery-mobile
-> +#
-> +#####################################################################
-> +###########
-> +
-> +JQUERY_MOBILE_VERSION = 1.3.2
-> +JQUERY_MOBILE_SITE = http://jquerymobile.com/resources/download
-> +JQUERY_MOBILE_SOURCE = jquery.mobile-$(JQUERY_MOBILE_VERSION).zip
-> +JQUERY_MOBILE_LICENSE = MIT
-> +
-> +define JQUERY_MOBILE_EXTRACT_CMDS
-> +	unzip -d $(@D) $(DL_DIR)/$(JQUERY_MOBILE_SOURCE) endef
-> +
-> +JQUERY_MOBILE_INSTALLED_FILES = \
-> +	jquery.mobile.structure-$(JQUERY_MOBILE_VERSION).min.css \
-> +	jquery.mobile.theme-$(JQUERY_MOBILE_VERSION).min.css \
-> +	jquery.mobile-$(JQUERY_MOBILE_VERSION).min.css \
-> +	jquery.mobile-$(JQUERY_MOBILE_VERSION).min.map \
-> +	jquery.mobile-$(JQUERY_MOBILE_VERSION).min.js
-> +
-> +ifeq ($(BR2_PACKAGE_JQUERY_MOBILE_FULL),y)
-> +JQUERY_MOBILE_INSTALLED_FILES += \
-> +	jquery.mobile.structure-$(JQUERY_MOBILE_VERSION).css \
-> +	jquery.mobile.theme-$(JQUERY_MOBILE_VERSION).css \
-> +	jquery.mobile-$(JQUERY_MOBILE_VERSION).css \
-> +	jquery.mobile-$(JQUERY_MOBILE_VERSION).js
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_JQUERY_MOBILE_DEMOS),y)
-> +define JQUERY_MOBILE_INSTALL_DEMOS
-> +	mkdir -p $(TARGET_DIR)/var/www/demos
-> +	cp -r $(@D)/demos/* $(TARGET_DIR)/var/www/demos
-> +	$(INSTALL) -m 0644 -D $(@D)/index.html 
-> +$(TARGET_DIR)/var/www/demo.html endef endif
-> +
-> +define JQUERY_MOBILE_INSTALL_TARGET_CMDS
-> +	for f in $(JQUERY_MOBILE_INSTALLED_FILES) ; do \
-> +		$(INSTALL) -m 0644 -D $(@D)/$$f $(TARGET_DIR)/var/www/$$f || break ; \
-> +	done
-> +	mkdir -p $(TARGET_DIR)/var/www/images
-> +	cp -r $(@D)/images/* $(TARGET_DIR)/var/www/images
-> +	$(JQUERY_MOBILE_INSTALL_DEMOS)
-> +endef
-> +
-> +$(eval $(generic-package))
+A possible solution would be to have a package/ncursesw/ in Buildroot,
+that does the same thing as package/ncurses/, but builds the ncursesw
+library. This way, packages who want one or the other variant of the
+library can have proper dependencies.
 
 Thomas
---
+-- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering http://free-electrons.com
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
