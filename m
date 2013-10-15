@@ -1,33 +1,36 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 15 Oct 2013 15:13:28 +0200
-Subject: [Buildroot] [git commit] ngrep: add license information
-Message-ID: <20131015131536.52C689B2A3@busybox.osuosl.org>
+From: Jeremy Rosen <jeremy.rosen@openwide.fr>
+Date: Tue, 15 Oct 2013 15:16:23 +0200 (CEST)
+Subject: [Buildroot] About user support and the mailing list
+In-Reply-To: <CAAXf6LXWKnMXXb1HP+-7rXPgtaiWN3no2=hyGcFdSkXJqu+NAw@mail.gmail.com>
+Message-ID: <872799982.8879164.1381842983831.JavaMail.root@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f87f067c027261eb8c0ac8ad120fe845570aaae3
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-[Peter: use BSD-4c-like for license]
-Signed-off-by: Phil Eichinger <phil@zankapfel.net>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/ngrep/ngrep.mk |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+> 
+> One of the advantages of a unified list is that new users also are
+> 'exposed' to development, and are hopefully more likely to contribute
+> too. There is no 'development elite' in this model.
+> At the same time, a unified list also encourages developers to help
+> users. It's not possible to subscribe to 'only the developer list'.
+> 
 
-diff --git a/package/ngrep/ngrep.mk b/package/ngrep/ngrep.mk
-index 99b8f46..6a9b42f 100644
---- a/package/ngrep/ngrep.mk
-+++ b/package/ngrep/ngrep.mk
-@@ -7,6 +7,8 @@
- NGREP_VERSION = 1.45
- NGREP_SOURCE = ngrep-$(NGREP_VERSION).tar.bz2
- NGREP_SITE = http://downloads.sourceforge.net/project/ngrep/ngrep/$(NGREP_VERSION)
-+NGREP_LICENSE = BSD-4c-like
-+NGREP_LICENSE_FILES = LICENSE.txt
- NGREP_INSTALL_STAGING = YES
- NGREP_CONF_ENV = LDFLAGS="-lpcre"
- NGREP_CONF_OPT =  \
+hmm, compared to most FOSS projects I know buildroot is a bit special...
+
+There is no clear separation between users and developers as far as 
+knowledge is concerned. All users should be able to compile stuff
+know about cross compilers and installing firmwares. So doing a 
+separate -user vs -dev mailing list makes less sense her.
+
+However I would like to have a separate -discuss an -patch mailing 
+list, one of them being for patch+reviews+commit messages and the 
+other one being for actual discussions. 
+
+That would separate the high traffic/fast reading parts from the 
+low traffic/philosophical discussion parts.
+
+The important part is that mose people (everybody?) should logically
+subscribe to both, but mail filtering etc... would be much simpler.
