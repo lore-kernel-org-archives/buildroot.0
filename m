@@ -1,44 +1,50 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Tue, 15 Oct 2013 15:10:36 +0200
-Subject: [Buildroot] [PATCH 1 of 2 v3] manual: add section about
- depending on target and toolchain options
-In-Reply-To: <87d2n7o9ys.fsf@dell.be.48ers.dk>
-References: <patchbomb.1381676130@argentina>
- <21b9bd1f7132d7e17e8a.1381676131@argentina>
- <87d2n7o9ys.fsf@dell.be.48ers.dk>
-Message-ID: <CAAXf6LX2ZxkvndMJE4DAX8bBoMMvPhko256bLSHQn2wpT5isiA@mail.gmail.com>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Tue, 15 Oct 2013 15:10:41 +0200
+Subject: [Buildroot] [PATCH 4/4] ngrep: add license information
+In-Reply-To: <CAAXf6LVuGCNUoN_WxEpuTvwhJ3t-FY7QfPh_rkYrSb9fgCpYBg@mail.gmail.com>
+References: <1381759541-15243-1-git-send-email-phil@zankapfel.net>
+ <1381759541-15243-4-git-send-email-phil@zankapfel.net>
+ <CAAXf6LWpHP+6=8-+564hLFuwt9VJKXBJxTa8UV8pKeNHMezFyw@mail.gmail.com>
+ <87vc0zmuq0.fsf@dell.be.48ers.dk>
+ <CAAXf6LVuGCNUoN_WxEpuTvwhJ3t-FY7QfPh_rkYrSb9fgCpYBg@mail.gmail.com>
+Message-ID: <525D3ED1.1050408@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter,
+Hi Thomas,
 
-On Mon, Oct 14, 2013 at 10:48 PM, Peter Korsgaard <jacmet@uclibc.org> wrote:
->>>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin@gmail.com> writes:
+Thomas De Schampheleire:
+> Hi,
 >
->  Thomas> Currently, the comments in Config.in files when depending on
->  Thomas> toolchain options are not at all lined up. This patch adds a
->  Thomas> section to the documentation that explains which format is to
->  Thomas> be used.
+> On Mon, Oct 14, 2013 at 11:02 PM, Peter Korsgaard <jacmet@uclibc.org> wrote:
+>>>>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin@gmail.com> writes:
+>>
+>> Hi,
+>>
+>>   >> NGREP_SITE = http://downloads.sourceforge.net/project/ngrep/ngrep/$(NGREP_VERSION)
+>>   >> +NGREP_LICENSE = BSD-Style
+>>
+>>   Thomas> Is it possible to map this onto any of the standard abbreviations as
+>>   Thomas> specified here:
+>>   Thomas> http://buildroot.uclibc.org/downloads/manual/manual.html#legal-info-list-licenses
+>>
+>>   Thomas> i.e. BSD-2c, BSD-3c, or BSD-4c ?
+>>
+>> The closest match is BSD-4c as it contains the dreaded advertising
+>> clause, but it isn't a perfect match:
+>>
+>> http://lists.debian.org/debian-legal/2000/11/msg00087.html
+>>
+>> Maybe we should use 'BSD-4c-like'?
 >
-> Committed series, thanks!
-
-Thanks a lot!
-
 >
-> Just a small reminder about keeping your commit message lines <= ~70
-> chars.
+> That sounds ok to me.
 
-Aargh, I did effectively set up my mercurial for this after your first
-comment, but as this series already existed before that it didn't have
-any effect and I failed to check it manually.
+To me as well. It clearly expresses it's similar to BSD-4c but not
+equal.
 
-Shouldn't happen again in the future. I'm not sure about some of the
-patches already in the queue though, like the Mercurial series.
-Probably same problem there. Do you prefer me to resubmit, or is it
-unnecessary noise in this case?
-
-Thanks,
-Thomas
+-- 
+Luca
