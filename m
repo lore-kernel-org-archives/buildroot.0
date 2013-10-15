@@ -1,55 +1,53 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 15 Oct 2013 16:22:39 +0200
-Subject: [Buildroot] [git commit] omniorb: cleanup autobuild failure,
- CFLAGS issue
-In-Reply-To: <20131002222257.646829B8DF@busybox.osuosl.org>
-References: <20131002222257.646829B8DF@busybox.osuosl.org>
-Message-ID: <20131015162239.2e45fb44@skate>
+From: Ryan Barnett <rjbarnet@rockwellcollins.com>
+Date: Tue, 15 Oct 2013 09:30:50 -0500
+Subject: [Buildroot] About user support and the mailing list
+In-Reply-To: <872799982.8879164.1381842983831.JavaMail.root@openwide.fr>
+References: <CAAXf6LXWKnMXXb1HP+-7rXPgtaiWN3no2=hyGcFdSkXJqu+NAw@mail.gmail.com>
+ <872799982.8879164.1381842983831.JavaMail.root@openwide.fr>
+Message-ID: <OFDD0F9057.4C7C6699-ON86257C05.004EDB95-86257C05.004FBAAE@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Peter Korsgaard,
+Jeremy, Thomas P and D, All,
 
-On Wed, 2 Oct 2013 23:54:41 +0200, Peter Korsgaard wrote:
-> commit: http://git.buildroot.net/buildroot/commit/?id=dd7981bfd22b1c0af8a0fd3c12673294f66eadb5
-> branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-> 
-> Fixed:
-> http://autobuild.buildroot.net/results/a08baf8821e3ee1fb9c36c8f74c4ced466af167b/
-> http://autobuild.buildroot.net/results/f0c7379c1f405385d3a64c0349c3d9565065e8a7/
-> http://autobuild.buildroot.net/results/c3de25ca52fdb8ffda7472cf9f7b64514954cbb1/
-> 
-> Change Log:
-> The target CFLAGS were getting mixed in during a manual build of some
-> omniorb pkg tools that could be viewed as host tools.
-> This manual build was a dirty workaround and created some bad
-> cornercases. So I converted the package over to actually using the
-> host pkg build and removed the need for a patch and custom mods in the build.
-> 
-> Also there wasn't a dependency on the target having python, just
-> host-python for performing the initial build.  So depends were adjusted
-> accordingly. If python bindings are required, they can be found in a different
-> package called omniORBpy.  The omniORB package only uses python for
-> the build process.
-> 
-> Fixed a bug with long double support.  Currently leaving it disabled
-> as most targets won't use it.  This allows greater toolchain compatibility.
-> 
-> Signed-off-by: Matt Weber <mlweber1@rockwellcollins.com>
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Jeremy Rosen <jeremy.rosen@openwide.fr> wrote on 10/15/2013 08:16:23 AM:
 
-It seems the problem isn't entirely fixed, see
-http://autobuild.buildroot.org/results/915/915e5ad9f888f3a26741315b7a5f1358726cf1c1/build-end.log.
-The native g++ gets called with target compiler flags (specific to
-PowerPC).
+> > One of the advantages of a unified list is that new users also are
+> > 'exposed' to development, and are hopefully more likely to contribute
+> > too. There is no 'development elite' in this model.
+> > At the same time, a unified list also encourages developers to help
+> > users. It's not possible to subscribe to 'only the developer list'.
+> > 
+> 
+> hmm, compared to most FOSS projects I know buildroot is a bit special...
+> 
+> There is no clear separation between users and developers as far as 
+> knowledge is concerned. All users should be able to compile stuff
+> know about cross compilers and installing firmwares. So doing a 
+> separate -user vs -dev mailing list makes less sense her.
+> 
+> However I would like to have a separate -discuss an -patch mailing 
+> list, one of them being for patch+reviews+commit messages and the 
+> other one being for actual discussions. 
+> 
+> That would separate the high traffic/fast reading parts from the 
+> low traffic/philosophical discussion parts.
 
-Best regards,
+I really like this idea as I believe it fits well with how this FOSS
+project works. The majority of the emails are related to patches and
+discussion surrounding them. I usually glance through these emails
+since I don't necessarily have time to read through all of the patches.
+So by having this separation would be nice as that way I don't 
+accidentally glance over a philosophical discussion such as this.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+> The important part is that mose people (everybody?) should logically
+> subscribe to both, but mail filtering etc... would be much simpler.
+ 
+Thanks,
+-Ryan
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20131015/3725fc1e/attachment-0001.html>
