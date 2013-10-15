@@ -1,35 +1,50 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 15 Oct 2013 18:07:51 +0200
-Subject: [Buildroot] About user support and the mailing list
-In-Reply-To: <OFDD0F9057.4C7C6699-ON86257C05.004EDB95-86257C05.004FBAAE@rockwellcollins.com>
- (Ryan Barnett's message of "Tue, 15 Oct 2013 09:30:50 -0500")
-References: <CAAXf6LXWKnMXXb1HP+-7rXPgtaiWN3no2=hyGcFdSkXJqu+NAw@mail.gmail.com>
- <872799982.8879164.1381842983831.JavaMail.root@openwide.fr>
- <OFDD0F9057.4C7C6699-ON86257C05.004EDB95-86257C05.004FBAAE@rockwellcollins.com>
-Message-ID: <874n8ijz54.fsf@dell.be.48ers.dk>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 15 Oct 2013 19:03:52 +0200
+Subject: [Buildroot] [PATCH 2/2] package/weston: bump to 1.3.0
+In-Reply-To: <87li1vkph2.fsf@dell.be.48ers.dk>
+References: <cover.1381785903.git.yann.morin.1998@free.fr>
+ <cover.1381785903.git.yann.morin.1998@free.fr>
+ <801b3c42bed982f8296db2f8227dfcbbdecf5f48.1381785903.git.yann.morin.1998@free.fr>
+ <87li1vkph2.fsf@dell.be.48ers.dk>
+Message-ID: <20131015170352.GA3490@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Ryan" == Ryan Barnett <rjbarnet@rockwellcollins.com> writes:
+Peter, All,
 
-Hi,
+On 2013-10-15 08:39 +0200, Peter Korsgaard spake thusly:
+> >>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+> 
+>  Yann> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+>  Yann> Needs three patches from upstream, plus a custom patch to disable tests.
+>  Yann> Drop old patches, all applied upstream or no longer needed.
+> 
+>  Yann> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> 
+> [snip]
+> 
+>  Yann> +++ b/package/weston/weston-0003-dont-build-tests.patch
+>  Yann> @@ -0,0 +1,18 @@
+>  Yann> +MAkefile: do not build tests
+> 
+> I dropped the upper case 'A' and committed, thanks.
 
- >> That would separate the high traffic/fast reading parts from the
- >> low traffic/philosophical discussion parts.
+Doh.
 
- Ryan> I really like this idea as I believe it fits well with how this
- Ryan> FOSS project works. The majority of the emails are related to
- Ryan> patches and discussion surrounding them. I usually glance through
- Ryan> these emails since I don't necessarily have time to read through
- Ryan> all of the patches.  So by having this separation would be nice
- Ryan> as that way I don't accidentally glance over a philosophical
- Ryan> discussion such as this.
+/me has to train his pinky to be faster... ;-)
 
-The problem is that these things are rarely nicely seperated. This
-thread started as a reply to a patch submission.
+Thanks!
+
+Regards,
+Yann E. MORIN.
 
 -- 
-Bye, Peter Korsgaard
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
