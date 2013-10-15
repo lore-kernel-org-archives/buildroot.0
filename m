@@ -1,75 +1,68 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Tue, 15 Oct 2013 15:21:47 +0200
-Subject: [Buildroot] [PATCH 1/1 V3] new package : jquery-mobile
-In-Reply-To: <1381839602-22797-1-git-send-email-sagaert.johan@skynet.be>
-References: <1381839602-22797-1-git-send-email-sagaert.johan@skynet.be>
-Message-ID: <7b32c0d7-601f-4a3d-8b10-cc454cff75e7@email.android.com>
+From: Andrew Ruder <andrew.ruder@elecsyscorp.com>
+Date: Tue, 15 Oct 2013 08:16:33 -0500
+Subject: [Buildroot] [PATCH] wget: Fix error in texi2pod on Perl 5.18
+Message-ID: <20131015131633.GA20069@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Johan,
+This gets around the following build errors that occurs on a system with
+perl 5.18:
 
-Sagaert Johan <sagaert.johan@skynet.be> wrote:
->jQuery-Mobile is a unified, HTML5-based user interface system
->for all popular mobile device platforms, built on the rock-solid
->jQuery and jQuery UI foundation.
->Its lightweight code is built with progressive enhancement,
->and has a flexible, easily themeable design.
->
->Signed-off-by: Sagaert Johan <sagaert.johan@skynet.be>
->---
->Changes V1->V2 :
->	simplified file copying.
->	
->Changes V2->V3 :
->	used lowercase for the menu entry.
->
-> package/Config.in                      |  1 +
-> package/jquery-mobile/Config.in        | 23 ++++++++++++++++
-> package/jquery-mobile/jquery-mobile.mk | 48 ++++++++++++++++++++++++++++++++++
-> 3 files changed, 72 insertions(+)
-> create mode 100644 package/jquery-mobile/Config.in
-> create mode 100644 package/jquery-mobile/jquery-mobile.mk
->
->diff --git a/package/Config.in b/package/Config.in
->index 142454d..857ae9e 100644
->--- a/package/Config.in
->+++ b/package/Config.in
->@@ -576,6 +576,7 @@ source "package/explorercanvas/Config.in"
-> source "package/flot/Config.in"
-> source "package/jquery/Config.in"
-> source "package/jquery-keyboard/Config.in"
->+source "package/jquery-mobile/Config.in"
-> source "package/jquery-sparkline/Config.in"
-> source "package/jquery-ui/Config.in"
-> source "package/jquery-ui-themes/Config.in"
->diff --git a/package/jquery-mobile/Config.in b/package/jquery-mobile/Config.in
->new file mode 100644
->index 0000000..776becf
->--- /dev/null
->+++ b/package/jquery-mobile/Config.in
->@@ -0,0 +1,23 @@
->+config BR2_PACKAGE_JQUERY_MOBILE
->+	bool "jquery-mobile"
->+	help
->+	  jQuery-Mobile is a unified, HTML5-based user interface system
->+	  for all popular mobile device platforms, built on the rock-solid
->+	  jQuery and jQuery UI foundation.
->+	  Its lightweight code is built with progressive enhancement,
->+	  and has a flexible, easily themeable design.
->+
->+	  http://jquerymobile.com
->+	  
->+if BR2_PACKAGE_JQUERY_MOBILE
->+config BR2_PACKAGE_JQUERY_MOBILE_FULL
->+	bool "jquery-mobile development files"
->+	help
->+		Installs the development versions.
+[...]
+wget.pod around line 2151: Expected text after =item, not a number
+wget.pod around line 2156: Expected text after =item, not a number
+wget.pod around line 2162: Expected text after =item, not a number
+[...]
 
-ThomasP already mentioned this wrong indentation in the previous version of your patch. I think you missed that..
+This is already committed upstream and this patch will be unnecessary in
+wget 1.15 when it is released:
 
-Best regards,
-Thomas
+commit 7f43748544f26008d0dd337704f02a6ed3200aaf
+Author: Dave Reisner <dreisner@archlinux.org>
+Date:   Mon Jun 17 23:31:46 2013 +0530
+
+    Fix error in texi2pod intriduced with Perl 5.18
+
+Signed-off-by: Andrew Ruder <andrew.ruder@elecsyscorp.com>
+---
+ ...ror-in-texi2pod-intriduced-with-Perl-5.18.patch | 26 ++++++++++++++++++++++
+ 1 file changed, 26 insertions(+)
+ create mode 100644 package/wget/0001-Fix-error-in-texi2pod-intriduced-with-Perl-5.18.patch
+
+diff --git a/package/wget/0001-Fix-error-in-texi2pod-intriduced-with-Perl-5.18.patch b/package/wget/0001-Fix-error-in-texi2pod-intriduced-with-Perl-5.18.patch
+new file mode 100644
+index 0000000..cf423a3
+--- /dev/null
++++ b/package/wget/0001-Fix-error-in-texi2pod-intriduced-with-Perl-5.18.patch
+@@ -0,0 +1,26 @@
++From 7f43748544f26008d0dd337704f02a6ed3200aaf Mon Sep 17 00:00:00 2001
++From: Dave Reisner <dreisner@archlinux.org>
++Date: Mon, 17 Jun 2013 23:31:46 +0530
++Subject: [PATCH] Fix error in texi2pod intriduced with Perl 5.18
++
++---
++ doc/ChangeLog   | 5 +++++
++ doc/texi2pod.pl | 2 +-
++ 2 files changed, 6 insertions(+), 1 deletion(-)
++
++diff --git a/doc/texi2pod.pl b/doc/texi2pod.pl
++index 86c4b18..9db6de1 100755
++--- a/doc/texi2pod.pl
+++++ b/doc/texi2pod.pl
++@@ -291,7 +291,7 @@ while(<$inf>) {
++ 	if (defined $1) {
++             my $thing = $1;
++             if ($ic =~ /\@asis/) {
++-                $_ = "\n=item $thing\n";
+++                $_ = "\n=item C<$thing>\n";
++             } else {
++                 # Entity escapes prevent munging by the <> processing below.
++                 $_ = "\n=item $ic\&LT;$thing\&GT;\n";
++-- 
++1.8.4.rc3
++
+-- 
+1.8.4.rc3
