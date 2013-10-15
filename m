@@ -1,31 +1,50 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 15 Oct 2013 09:50:31 -0300
-Subject: [Buildroot] [PATCH] autossh: add ssh client/server depends
-Message-ID: <1381841431-24324-1-git-send-email-gustavo@zacarias.com.ar>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Tue, 15 Oct 2013 14:51:59 +0200
+Subject: [Buildroot] Ncurses wide support
+In-Reply-To: <20131015140430.6886d63e@skate>
+References: <CAAEAJfCkpC6-ZnpcxYCgTiZN8=QJNY+wZg83Jjyzs8-e7jPkkw@mail.gmail.com>
+ <525D1693.3010509@zacarias.com.ar>
+ <CAAEAJfD_YaKXY5cMn9H7DcUe3fyJ8L7wJ+RkmaOy40D0KmSZtw@mail.gmail.com>
+ <20131015133626.180de72d@skate> <525D2D6E.9000108@zacarias.com.ar>
+ <20131015135906.10b43a4a@skate> <525D2EC3.5010600@zacarias.com.ar>
+ <20131015140430.6886d63e@skate>
+Message-ID: <CAAXf6LW8oeUCt-Lt1RM0wt3M7mMJKsh56bUS32b4vr+qFE+8Bg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-It's not very useful without them.
+Hi,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/autossh/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+On Tue, Oct 15, 2013 at 2:04 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Dear Gustavo Zacarias,
+>
+> On Tue, 15 Oct 2013 09:02:11 -0300, Gustavo Zacarias wrote:
+>> On 10/15/2013 08:59 AM, Thomas Petazzoni wrote:
+>>
+>> > ncurses is crap :)
+>> >
+>> > A possible solution would be to have a package/ncursesw/ in Buildroot,
+>> > that does the same thing as package/ncurses/, but builds the ncursesw
+>> > library. This way, packages who want one or the other variant of the
+>> > library can have proper dependencies.
+>>
+>> But that would require auditing which packages want/benefit from the
+>> wide version and add some workarounds about that.
+>
+> For those who "want" ncursesw, the autobuilders will notice. For those
+> who would "benefit", then it can just be progressively improved as
+> users notice such cases.
+>
 
-diff --git a/package/autossh/Config.in b/package/autossh/Config.in
-index e3acd8a..6d1a085 100644
---- a/package/autossh/Config.in
-+++ b/package/autossh/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_AUTOSSH
- 	bool "autossh"
- 	depends on BR2_USE_MMU # fork()
-+	depends on BR2_PACKAGE_DROPBEAR || BR2_PACKAGE_OPENSSH
- 	help
- 	  autossh is a program to start a copy of ssh and monitor it,
- 	  restarting it as necessary should it die or stop passing traffic.
--- 
-1.8.1.5
+If we are to provide two versions of ncurses (narrow, wide) then I
+would propose to follow the same principle as for gcc: have one
+top-level directory package/ncurses, and inside that provide
+ncurses/ncursesw. There will be one common file with the common parts,
+and two separate .mk files for the actual packages. This will limit
+the amount of code duplication.
+
+Best regards,
+Thomas
