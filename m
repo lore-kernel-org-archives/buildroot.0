@@ -1,53 +1,132 @@
-From: Ryan Barnett <rjbarnet@rockwellcollins.com>
-Date: Tue, 15 Oct 2013 09:30:50 -0500
-Subject: [Buildroot] About user support and the mailing list
-In-Reply-To: <872799982.8879164.1381842983831.JavaMail.root@openwide.fr>
-References: <CAAXf6LXWKnMXXb1HP+-7rXPgtaiWN3no2=hyGcFdSkXJqu+NAw@mail.gmail.com>
- <872799982.8879164.1381842983831.JavaMail.root@openwide.fr>
-Message-ID: <OFDD0F9057.4C7C6699-ON86257C05.004EDB95-86257C05.004FBAAE@rockwellcollins.com>
+From: Sagaert Johan <sagaert.johan@skynet.be>
+Date: Tue, 15 Oct 2013 16:51:56 +0200
+Subject: [Buildroot] [PATCH 1/1 V4] jquery-mobile : new package
+Message-ID: <1381848716-15161-1-git-send-email-sagaert.johan@skynet.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Jeremy, Thomas P and D, All,
 
-Jeremy Rosen <jeremy.rosen@openwide.fr> wrote on 10/15/2013 08:16:23 AM:
+jQuery-Mobile is a unified, HTML5-based user interface system for all
+popular mobile device platforms, built on the rock-solid jQuery and
+jQuery UI foundation.
+Its lightweight code is built with progressive enhancement, and has a
+flexible, easily themeable design.
 
-> > One of the advantages of a unified list is that new users also are
-> > 'exposed' to development, and are hopefully more likely to contribute
-> > too. There is no 'development elite' in this model.
-> > At the same time, a unified list also encourages developers to help
-> > users. It's not possible to subscribe to 'only the developer list'.
-> > 
-> 
-> hmm, compared to most FOSS projects I know buildroot is a bit special...
-> 
-> There is no clear separation between users and developers as far as 
-> knowledge is concerned. All users should be able to compile stuff
-> know about cross compilers and installing firmwares. So doing a 
-> separate -user vs -dev mailing list makes less sense her.
-> 
-> However I would like to have a separate -discuss an -patch mailing 
-> list, one of them being for patch+reviews+commit messages and the 
-> other one being for actual discussions. 
-> 
-> That would separate the high traffic/fast reading parts from the 
-> low traffic/philosophical discussion parts.
+Signed-off-by: Sagaert Johan <sagaert.johan@skynet.be>
+---
+Changes V1->V2 :
+	simplified file copying.
+	
+Changes V2->V3 :
+	used lowercase for the menu entry.
+	
+Changes V3->V4 :
+	Corrected indentation in Config.in .
 
-I really like this idea as I believe it fits well with how this FOSS
-project works. The majority of the emails are related to patches and
-discussion surrounding them. I usually glance through these emails
-since I don't necessarily have time to read through all of the patches.
-So by having this separation would be nice as that way I don't 
-accidentally glance over a philosophical discussion such as this.
+ package/Config.in                      |  1 +
+ package/jquery-mobile/Config.in        | 23 ++++++++++++++++
+ package/jquery-mobile/jquery-mobile.mk | 48 ++++++++++++++++++++++++++++++++++
+ 3 files changed, 72 insertions(+)
+ create mode 100644 package/jquery-mobile/Config.in
+ create mode 100644 package/jquery-mobile/jquery-mobile.mk
 
-> The important part is that mose people (everybody?) should logically
-> subscribe to both, but mail filtering etc... would be much simpler.
- 
-Thanks,
--Ryan
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20131015/3725fc1e/attachment-0001.html>
+diff --git a/package/Config.in b/package/Config.in
+index 142454d..857ae9e 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -576,6 +576,7 @@ source "package/explorercanvas/Config.in"
+ source "package/flot/Config.in"
+ source "package/jquery/Config.in"
+ source "package/jquery-keyboard/Config.in"
++source "package/jquery-mobile/Config.in"
+ source "package/jquery-sparkline/Config.in"
+ source "package/jquery-ui/Config.in"
+ source "package/jquery-ui-themes/Config.in"
+diff --git a/package/jquery-mobile/Config.in b/package/jquery-mobile/Config.in
+new file mode 100644
+index 0000000..ab47fb5
+--- /dev/null
++++ b/package/jquery-mobile/Config.in
+@@ -0,0 +1,23 @@
++config BR2_PACKAGE_JQUERY_MOBILE
++	bool "jquery-mobile"
++	help
++	  jQuery-Mobile is a unified, HTML5-based user interface system
++	  for all popular mobile device platforms, built on the rock-solid
++	  jQuery and jQuery UI foundation.
++	  Its lightweight code is built with progressive enhancement,
++	  and has a flexible, easily themeable design.
++
++	  http://jquerymobile.com
++	  
++if BR2_PACKAGE_JQUERY_MOBILE
++config BR2_PACKAGE_JQUERY_MOBILE_FULL
++	bool "jquery-mobile development files"
++	help
++	  Installs the development versions.
++
++config BR2_PACKAGE_JQUERY_MOBILE_DEMOS
++	bool "jquery-mobile demo files"
++	help
++	  Installs the demo files.
++	  The main demo page is http://hostname/demo.html	
++endif
+diff --git a/package/jquery-mobile/jquery-mobile.mk b/package/jquery-mobile/jquery-mobile.mk
+new file mode 100644
+index 0000000..8deaad9
+--- /dev/null
++++ b/package/jquery-mobile/jquery-mobile.mk
+@@ -0,0 +1,48 @@
++################################################################################
++#
++# jquery-mobile
++#
++################################################################################
++
++JQUERY_MOBILE_VERSION = 1.3.2
++JQUERY_MOBILE_SITE = http://jquerymobile.com/resources/download
++JQUERY_MOBILE_SOURCE = jquery.mobile-$(JQUERY_MOBILE_VERSION).zip
++JQUERY_MOBILE_LICENSE = MIT
++
++define JQUERY_MOBILE_EXTRACT_CMDS
++	unzip -d $(@D) $(DL_DIR)/$(JQUERY_MOBILE_SOURCE)
++endef
++
++JQUERY_MOBILE_INSTALLED_FILES = \
++	jquery.mobile.structure-$(JQUERY_MOBILE_VERSION).min.css \
++	jquery.mobile.theme-$(JQUERY_MOBILE_VERSION).min.css \
++	jquery.mobile-$(JQUERY_MOBILE_VERSION).min.css \
++	jquery.mobile-$(JQUERY_MOBILE_VERSION).min.map \
++	jquery.mobile-$(JQUERY_MOBILE_VERSION).min.js
++
++ifeq ($(BR2_PACKAGE_JQUERY_MOBILE_FULL),y)
++JQUERY_MOBILE_INSTALLED_FILES += \
++	jquery.mobile.structure-$(JQUERY_MOBILE_VERSION).css \
++	jquery.mobile.theme-$(JQUERY_MOBILE_VERSION).css \
++	jquery.mobile-$(JQUERY_MOBILE_VERSION).css \
++	jquery.mobile-$(JQUERY_MOBILE_VERSION).js
++endif
++
++ifeq ($(BR2_PACKAGE_JQUERY_MOBILE_DEMOS),y)
++define JQUERY_MOBILE_INSTALL_DEMOS
++	mkdir -p $(TARGET_DIR)/var/www/demos
++	cp -r $(@D)/demos/* $(TARGET_DIR)/var/www/demos
++	$(INSTALL) -m 0644 -D $(@D)/index.html $(TARGET_DIR)/var/www/demo.html
++endef
++endif
++
++define JQUERY_MOBILE_INSTALL_TARGET_CMDS
++	for f in $(JQUERY_MOBILE_INSTALLED_FILES) ; do \
++		$(INSTALL) -m 0644 -D $(@D)/$$f $(TARGET_DIR)/var/www/$$f || break ; \
++	done
++	mkdir -p $(TARGET_DIR)/var/www/images
++	cp -r $(@D)/images/* $(TARGET_DIR)/var/www/images
++	$(JQUERY_MOBILE_INSTALL_DEMOS)
++endef
++
++$(eval $(generic-package))
+-- 
+1.8.4.474.g128a96c
