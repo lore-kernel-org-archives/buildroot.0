@@ -1,458 +1,142 @@
-From: Jason Kridner <jkridner@beagleboard.org>
-Date: Mon, 14 Oct 2013 21:57:58 -0400
-Subject: [Buildroot] [PATCHv3] beaglebone: add BeagleBone Black support
-In-Reply-To: <525C728A.6030808@mind.be>
-References: <1381522187-16334-1-git-send-email-jkridner@beagleboard.org>
- <525C728A.6030808@mind.be>
-Message-ID: <CA+T6QPmZ+yHux9soJg+GaaZciac=9vp7OwAwhwJeRK+NNsFafQ@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 15 Oct 2013 08:30:09 +0200 (CEST)
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2013-10-14
+Message-ID: <20131015063009.2086B52C1A0@lolut.humanoidz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Oct 14, 2013 at 6:39 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
->  Hi Jason,
->
->
-> On 11/10/13 22:09, Jason Kridner wrote:
->>
->> From: Jason Kridner <jdk@ti.com>
->>
->> * Update BeagleBone to 3.8.13-beagleboard kernel
->> * Update to u-boot 2013.07
->> * Add BeagleBone Black device tree
->> * Remove M3 firmware loading until debugged
->> * Remove BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_DEVTMPFS because it is the
->> default
->>
->> Just to make sure this is documented well, here are the steps I used to
->> test
->> the output images:
->
->
->  This kind of information should go into board/beaglebone/readme.txt.
+Build statistics for 2013-10-14
+===============================
 
-k.
+        success : 104
+       failures : 67 
+       timeouts : 0  
+          TOTAL : 171
 
->
->>   # gzip rootfs.ext2
->
->
->  If you set BR2_TARGET_ROOTFS_EXT2_GZIP you don't need to do this.
->
->  However, using ext2 for a ramdisk image is horribly inefficient. You'd
-> normally use a cpio image. Also, lzma (smaller size) or lzop (larger but
-> faster uncompression) are better choices than gzip.
+Classification of failures by reason
+====================================
 
-I thought I had pushback on using initramfs, which is what I'd prefer
-to have as the default. I'm simply trying to minimize the patch to get
-Black in there in the defaults.
+                  boost-1.54.0 | 7 
+    trace-cmd-trace-cmd-v2.2.1 | 6 
+               alsa-lib-1.0.26 | 3 
+                  nettle-2.7.1 | 2 
+             alsa-utils-1.0.26 | 2 
+                beecrypt-4.2.1 | 2 
+     xlib_libpthread-stubs-0.3 | 2 
+              cryptsetup-1.6.2 | 2 
+                sqlite-3080002 | 2 
+                 cairo-1.12.10 | 2 
+                    nano-2.3.2 | 2 
+                 lvm2-2.02.103 | 1 
+                 mplayer-1.1.1 | 1 
+                     pv-1.4.12 | 1 
+                elfutils-0.155 | 1 
+                      icu-51.2 | 1 
+                busybox-1.21.1 | 1 
+                     rpm-5.2.0 | 1 
+          host-protobuf-c-0.15 | 1 
+                     m4-1.4.17 | 1 
+                    php-5.3.27 | 1 
+                  aespipe-2.4c | 1 
+                     apr-1.4.6 | 1 
+                      qt-4.8.5 | 1 
+              e2fsprogs-1.42.8 | 1 
+               audiofile-0.3.6 | 1 
+                 libffi-3.0.13 | 1 
+           host-cmake-2.8.10.2 | 1 
+                 libnspr-4.9.6 | 1 
+                libiscsi-1.6.0 | 1 
+                 qt5base-5.0.2 | 1 
+              buildroot-config | 1 
+               logrotate-3.8.6 | 1 
+                    crda-1.1.3 | 1 
+                   attr-2.4.47 | 1 
+                aiccu-20070115 | 1 
+               w_scan-20130331 | 1 
+           imagemagick-6.8.7-0 | 1 
+        liblog4c-localtime-1.0 | 1 
+               qt5webkit-5.0.2 | 1 
+              gstreamer1-1.2.0 | 1 
+                 fdk-aac-0.1.1 | 1 
+              gettext-0.18.3.1 | 1 
+                 dropwatch-1.4 | 1 
+                  libnl-3.2.21 | 1 
+                 wayland-1.2.1 | 1 
 
->
->
->>   # mkimage -A arm -O linux -T ramdisk -C gzip -a 0x81000000 -d
->> rootfs.ext2.gz ramdisk.gz
->
->
->  Ideally, you should make a post-image script (BR2_ROOTFS_POST_IMAGE_SCRIPT)
-> in the board/beaglebone directory that does these steps automatically. And
-> since this script uses mkimage, I'd also explicitly enable
-> BR2_PACKAGE_HOST_UBOOT_TOOLS (even though it is implicitly build for the
-> kernel uImage).
+Detail of failures
+===================
 
-Thanks for pointing this out and I'll certainly make personal use of
-it. I'm doubtful if including it would help get my patch accepted.
+       arm |                   aespipe-2.4c | NOK | http://autobuild.buildroot.net/results/ba85db5cddb763ffaf346986ecdadb958e2cb0b3/
+     nios2 |                 aiccu-20070115 | NOK | http://autobuild.buildroot.net/results/f04e2ff7ef02fab1e350e1152145050c79f0b7cf/
+       sh4 |                alsa-lib-1.0.26 | NOK | http://autobuild.buildroot.net/results/ceea51bdb5b1d8287f0e88cb6aca887b7b0e3d56/
+       arm |                alsa-lib-1.0.26 | NOK | http://autobuild.buildroot.net/results/a4e94e27c9b949d79b88513d25267e577b1da67e/
+   powerpc |                alsa-lib-1.0.26 | NOK | http://autobuild.buildroot.net/results/201004ad326541fb92cbc2c3489b77b5045c9754/
+      bfin |              alsa-utils-1.0.26 | NOK | http://autobuild.buildroot.net/results/8507dd085027d709dedd61d0471d2d67c9b71306/
+      bfin |              alsa-utils-1.0.26 | NOK | http://autobuild.buildroot.net/results/c1f2fe60b6c5a729320609a420aa1f9cb9352b4d/
+       arm |                      apr-1.4.6 | NOK | http://autobuild.buildroot.net/results/c5eb1808c3aadee7268a5ea7d6cbc50543316034/
+       arm |                    attr-2.4.47 | NOK | http://autobuild.buildroot.net/results/ff1bdf3fe465457026c70823b867f9991d646627/
+      sh4a |                audiofile-0.3.6 | NOK | http://autobuild.buildroot.net/results/d61a7933599a99fb3227ba7a18d8e6dc443426bc/
+microblaze |                 beecrypt-4.2.1 | NOK | http://autobuild.buildroot.net/results/ee32099e4bda51f1ef255bad28c3b48ae633ed1b/
+microblaze |                 beecrypt-4.2.1 | NOK | http://autobuild.buildroot.net/results/98cc8e3d1c348ef3e849fff2da81fb369d205d93/
+  mips64el |                   boost-1.54.0 | NOK | http://autobuild.buildroot.net/results/88268789993e904611440e23146cc6f1b711f2ab/
+       sh4 |                   boost-1.54.0 | NOK | http://autobuild.buildroot.net/results/09ed8486113af161be3682e3d8b95877ef4c4c3f/
+       sh4 |                   boost-1.54.0 | NOK | http://autobuild.buildroot.net/results/570b091702763b29843d9207bc14dea67085fea0/
+  mips64el |                   boost-1.54.0 | NOK | http://autobuild.buildroot.net/results/b8950b86ecbb05a03ab9036cad97cea917c66fe4/
+  mips64el |                   boost-1.54.0 | NOK | http://autobuild.buildroot.net/results/aff2b2ff0d81a6004ce1a0d40a7066ddc7927c74/
+    xtensa |                   boost-1.54.0 | NOK | http://autobuild.buildroot.net/results/e47f97e32c6e32111d79050721ce879b83530438/
+   aarch64 |                   boost-1.54.0 | NOK | http://autobuild.buildroot.net/results/c26498f1a4e6bcbc3a2dfce6a51fa7d21b72f21f/
+           |               buildroot-config | NOK | http://autobuild.buildroot.net/results/08da468ab5fcdd0ba6081f3c18302cf900dadeb9/
+       arm |                 busybox-1.21.1 | NOK | http://autobuild.buildroot.net/results/687421ff35cf239e7219933fa9bff15e5593a567/
+     avr32 |                  cairo-1.12.10 | NOK | http://autobuild.buildroot.net/results/b973811a147905ce8e0a0647a2be87b3035f833e/
+      bfin |                  cairo-1.12.10 | NOK | http://autobuild.buildroot.net/results/7f7985a6797e019c5b89d965f04ae8e80225b1f5/
+       arm |                     crda-1.1.3 | NOK | http://autobuild.buildroot.net/results/7f13b6f81fdce19044eb62c3f9f0001f843a40ec/
+   powerpc |               cryptsetup-1.6.2 | NOK | http://autobuild.buildroot.net/results/95b3e2d30896b9885cdd1f8b6a33cf0e8e8c36d8/
+   powerpc |               cryptsetup-1.6.2 | NOK | http://autobuild.buildroot.net/results/c0128b5981baf721fab648d07dba43db50ca702d/
+  mips64el |                  dropwatch-1.4 | NOK | http://autobuild.buildroot.net/results/76b63b12cdad0729ea1e317c6eacc566488b0266/
+    xtensa |               e2fsprogs-1.42.8 | NOK | http://autobuild.buildroot.net/results/a6f8ca48c76a85ee6767e1731bb8c97d5fefbcb1/
+      bfin |                 elfutils-0.155 | NOK | http://autobuild.buildroot.net/results/0f06276d0a3a601beb63918796ac6b9dc0bc69bc/
+    mipsel |                  fdk-aac-0.1.1 | NOK | http://autobuild.buildroot.net/results/010e04d0b084c2cf509b57ec37753a10449b861e/
+       arm |               gettext-0.18.3.1 | NOK | http://autobuild.buildroot.net/results/934c06576bbd92cba9fccf9e79110b7ac6c4225d/
+    xtensa |               gstreamer1-1.2.0 | NOK | http://autobuild.buildroot.net/results/4d9f1656e37f8f776210f9895f41b001699ba20e/
+   powerpc |            host-cmake-2.8.10.2 | NOK | http://autobuild.buildroot.net/results/e21a867f0fa07aa0fc71a656e64d119b487b5469/
+     avr32 |           host-protobuf-c-0.15 | NOK | http://autobuild.buildroot.net/results/1671fb321b000e5f852a690cd2e92fd11b74759a/
+      bfin |                       icu-51.2 | NOK | http://autobuild.buildroot.net/results/06d94d036b7c046549f18bf9148dd949e360bfd9/
+      i686 |            imagemagick-6.8.7-0 | NOK | http://autobuild.buildroot.net/results/013fcec1b79e5f909988c25a4a03d5fdad28d78e/
+     nios2 |                  libffi-3.0.13 | NOK | http://autobuild.buildroot.net/results/42b57c215a8a82e0deb3ecdd9e5039911169a156/
+  mips64el |                 libiscsi-1.6.0 | NOK | http://autobuild.buildroot.net/results/eeb46831ada5c726100ec30452c8243bd4201c91/
+       arm |         liblog4c-localtime-1.0 | NOK | http://autobuild.buildroot.net/results/d91f399c2177df0d6b6672654a63ec3091318a37/
+      bfin |                   libnl-3.2.21 | NOK | http://autobuild.buildroot.net/results/d0e59dcd5b0b2be726dffd25972c7054109bf70b/
+    xtensa |                  libnspr-4.9.6 | NOK | http://autobuild.buildroot.net/results/e05229768cba543d3a1f70db365c0dd3391f410e/
+     avr32 |                logrotate-3.8.6 | NOK | http://autobuild.buildroot.net/results/c3dd428591d08f671aa1fffb10eddf9edd7e7a53/
+   aarch64 |                  lvm2-2.02.103 | NOK | http://autobuild.buildroot.net/results/26dca1f8623b64a207831115b953f2e8cadfe6a1/
+       arc |                      m4-1.4.17 | NOK | http://autobuild.buildroot.net/results/7f62e4cbdf31c85ece3bb7cc907b62c219f735e2/
+       arm |                  mplayer-1.1.1 | NOK | http://autobuild.buildroot.net/results/45283be738e13c20db55da2840841953401f1e3a/
+       arm |                     nano-2.3.2 | NOK | http://autobuild.buildroot.net/results/e4ffb73980416a19694fbb421aef199b0b0fadd7/
+       arm |                     nano-2.3.2 | NOK | http://autobuild.buildroot.net/results/b2aa8e52b973cff6b1167de180e713c844930703/
+microblaze |                   nettle-2.7.1 | NOK | http://autobuild.buildroot.net/results/50fdd28ab429968e0142a5d934b84fde2ad97be7/
+   powerpc |                   nettle-2.7.1 | NOK | http://autobuild.buildroot.net/results/3ad688322adabe3ac16e1adaf4b9eb6d92b14a16/
+      i686 |                     php-5.3.27 | NOK | http://autobuild.buildroot.net/results/076eef34ff2bd38200e71766d3ea31afe812de2f/
+       arm |                      pv-1.4.12 | NOK | http://autobuild.buildroot.net/results/523d96b58d8bfc0b433d171451f09d51abf2c691/
+       arm |                       qt-4.8.5 | NOK | http://autobuild.buildroot.net/results/0ffbed7fd741ce868a8ed92a0c0a422acb52f28e/
+    mipsel |                  qt5base-5.0.2 | NOK | http://autobuild.buildroot.net/results/02a08cfa57aa48450ea924a6c7db198850eca99c/
+   powerpc |                qt5webkit-5.0.2 | NOK | http://autobuild.buildroot.net/results/8534fef7063d845d57eba6a99fcaa3107f346e54/
+   powerpc |                      rpm-5.2.0 | NOK | http://autobuild.buildroot.net/results/853f8ec53d22a8970036d225265407786d0da007/
+       arc |                 sqlite-3080002 | NOK | http://autobuild.buildroot.net/results/a646ec7d4d074b66c85b747d222cd207737df1f8/
+       arc |                 sqlite-3080002 | NOK | http://autobuild.buildroot.net/results/25a0923e58c53e4dd614eef1b313332f41d88699/
+   powerpc |     trace-cmd-trace-cmd-v2.2.1 | NOK | http://autobuild.buildroot.net/results/e5ab978c29a0069180116033927b5752ebe6467f/
+   powerpc |     trace-cmd-trace-cmd-v2.2.1 | NOK | http://autobuild.buildroot.net/results/4b4ff17b66c20de49db7b683db68121c40500fae/
+       arm |     trace-cmd-trace-cmd-v2.2.1 | NOK | http://autobuild.buildroot.net/results/74cf3f323ef84e8f3f2161c47ef4370844a6c1bc/
+   powerpc |     trace-cmd-trace-cmd-v2.2.1 | NOK | http://autobuild.buildroot.net/results/2f7b389e154cb5cffe3cd285d62ad60f05ce4b79/
+       arm |     trace-cmd-trace-cmd-v2.2.1 | NOK | http://autobuild.buildroot.net/results/88232ad11c96b885745609a1fb992571053e54b1/
+   powerpc |     trace-cmd-trace-cmd-v2.2.1 | NOK | http://autobuild.buildroot.net/results/f021a98273df4c4eb99c29d33acc7d586d1d75e6/
+       arm |                  wayland-1.2.1 | NOK | http://autobuild.buildroot.net/results/ad883c0301c791b00a600a4bf3515d010e2859eb/
+   powerpc |                w_scan-20130331 | NOK | http://autobuild.buildroot.net/results/b710dba46fa76c328eeb7bcee5cc257edf5a1fbf/
+       arm |      xlib_libpthread-stubs-0.3 | NOK | http://autobuild.buildroot.net/results/918bb39b16207a981c649997e51b364a57267162/
+       arm |      xlib_libpthread-stubs-0.3 | NOK | http://autobuild.buildroot.net/results/53138727674a524be38b979886a0cadd00ef5195/
 
->
->
->>   # The URL is where I stored the ouptut of 'make beaglebone_defconfig;
->> make'
->>   $ wget -r
->> https://s3.amazonaws.com/beagle/buildroot/2013-10-11-16%3A52%3A21/index.html
->>   $ cd s3.amazonaws.com/beagle/buildroot/2013-10-11-16:52:21
->>   $ cat >uEnv.txt <<EOF
->>   bootpart=0:1
->>   bootdir=
->>   uenvcmd=run loaduimage;run loadramdisk;run findfdt;run loadfdt;run
->> ramboot
->>   EOF
->
->
->  You can add uEnv.txt to board/beaglebone and copy it to images/ in the
-> post-image script.
 
-k, but again, I'm not sure if it is desired upstream. If I add it to
-v4, will it get accepted?
-
->
->
->>   # With /mnt being a FAT formatted uSD card with partition marked as
->> bootable
->>   $ cp MLO u-boot.img uImage ramdisk.gz uEnv.txt *.dtb /mnt
->>   # eject /mnt
->>   # Insert uSD card into BeagleBone Black
->>   # Hold "BOOT" button
->>   # Apply power and release "BOOT" button
->>   # Serial log at screenlog.0
->
->
->  With the post-image script, the readme can be limited to these 7 lines :-)
->
->
->>
->> Ideally for me, I'd switch to an initramfs and patch u-boot to avoid
->> uEnv.txt,
->> but I'll do that separately.
->
->
->  I'm not a fan of initramfs because every rootfs change requires a slow
-> re-link of the kernel... And I don't see the harm in uEnv.txt.
-
-k, but you want a cpio image instead of a ramdisk? I guess I'll take a
-look at how to use a cpio image as an initrd.
-
-What I'd like to know is what will be accepted upstream. I feel like I
-am wasting my time right switching approaches that don't have that
-much to do with BeagleBone Black when what I most fundamentally want
-to introduce is a pointer to a different kernel and the combination of
-.dtb files for BeagleBone and BeagleBone Black.
-
->
->
->>
->> Changes since v2
->> (http://lists.busybox.net/pipermail/buildroot/2013-September/079136.html):
->
->
->  The patch changelog should be preceded by --- (on a line by itself). This
-> separator tells git that what follows it doesn't have to be included in the
-> commit log.
->
->
->> * Moved back to ext2/ramdisk and eliminated u-boot customizations
->> * Removed host tool customizations
->>
->> Changes since v1
->> (http://lists.busybox.net/pipermail/buildroot/2013-September/079046.html):
->> * Added BeagleBone Black to single config for BeagleBone and BeagleBone
->> Black,
->>    rather than having two configs
->> * Used 'make ARCH=arm savedefconfig' to create Linux config file
->> * Dropped setting of DEVTMPFS, since it is default now
->> * Switched to u-boot 2013.07 from 2013.04
->> * Patched u-boot to work with initramfs by default without uEnv.txt
->> * Removed wake-up M3 firmware loading for now, until debugged
->>
->> Signed-off-by: Jason Kridner <jdk@ti.com>
->
->
->  The Signoff line should of course come before the ---
-
-k
-
->
->
->> ---
->>   board/beaglebone/linux-3.8.config | 1035
->> ++++++++++++++++++++++++++++++++++---
->>   configs/beaglebone_defconfig      |   13 +-
->>   2 files changed, 975 insertions(+), 73 deletions(-)
->>
->> diff --git a/board/beaglebone/linux-3.8.config
->> b/board/beaglebone/linux-3.8.config
->> index 4242771..08ab221 100644
->> --- a/board/beaglebone/linux-3.8.config
->> +++ b/board/beaglebone/linux-3.8.config
->> @@ -1,103 +1,409 @@
->>   CONFIG_EXPERIMENTAL=y
->> -CONFIG_DEFAULT_HOSTNAME="beaglebone"
->> +CONFIG_KERNEL_LZO=y
->>   CONFIG_SYSVIPC=y
->>   CONFIG_POSIX_MQUEUE=y
->>   CONFIG_NO_HZ=y
->>   CONFIG_HIGH_RES_TIMERS=y
->>   CONFIG_BSD_PROCESS_ACCT=y
->> +CONFIG_BSD_PROCESS_ACCT_V3=y
->> +CONFIG_TASKSTATS=y
->> +CONFIG_TASK_DELAY_ACCT=y
->> +CONFIG_TASK_XACCT=y
->> +CONFIG_TASK_IO_ACCOUNTING=y
->
->
->  You're adding a lot of kernel features here that were not enabled before.
-> We generally prefer the kernel configs to be pretty minimal (except that all
-> drivers for hardware that is present on the board should be included, of
-> course. What's the history of this kernel config? You don't mention it at
-> all in the commit message.
-
-This comes from the kernel config we use in the demo image shipped
-with the boards.
-
-https://github.com/beagleboard/kernel/commits/3.8/configs/beaglebone
-
-Should I include a link like this?
-
-I can use something more minimal, but the idea was to try to provide
-something that showed off as much capability as possible. I'll see
-what I can cut out.
-
->
->
->>   CONFIG_IKCONFIG=y
->>   CONFIG_IKCONFIG_PROC=y
->> -CONFIG_LOG_BUF_SHIFT=16
->> +CONFIG_CGROUP_CPUACCT=y
->> +CONFIG_RESOURCE_COUNTERS=y
->> +CONFIG_MEMCG=y
->> +CONFIG_BLK_CGROUP=y
->> +CONFIG_NAMESPACES=y
->> +CONFIG_SCHED_AUTOGROUP=y
->>   CONFIG_BLK_DEV_INITRD=y
->>   CONFIG_CC_OPTIMIZE_FOR_SIZE=y
->> -CONFIG_EMBEDDED=y
->> +CONFIG_EXPERT=y
->> +CONFIG_KALLSYMS_ALL=y
->>   CONFIG_SLAB=y
->>   CONFIG_PROFILING=y
->>   CONFIG_OPROFILE=m
->> -CONFIG_KPROBES=y
->>   CONFIG_MODULES=y
->>   CONFIG_MODULE_FORCE_LOAD=y
->>   CONFIG_MODULE_UNLOAD=y
->>   CONFIG_MODULE_FORCE_UNLOAD=y
->>   CONFIG_MODVERSIONS=y
->> -# CONFIG_BLK_DEV_BSG is not set
->> +CONFIG_MODULE_SRCVERSION_ALL=y
->> +CONFIG_BLK_DEV_BSGLIB=y
->> +CONFIG_BLK_DEV_INTEGRITY=y
->> +CONFIG_PARTITION_ADVANCED=y
->> +CONFIG_MAC_PARTITION=y
->>   CONFIG_ARCH_OMAP=y
->>   CONFIG_OMAP_RESET_CLOCKS=y
->>   CONFIG_OMAP_MUX_DEBUG=y
->> +CONFIG_OMAP_MBOX_FWK=y
->> +CONFIG_OMAP_32K_TIMER_HZ=512
->>   # CONFIG_ARCH_OMAP2 is not set
->> -# CONFIG_ARCH_OMAP3 is not set
->> -# CONFIG_ARCH_OMAP4 is not set
->> +# CONFIG_SOC_TI81XX is not set
->> +# CONFIG_MACH_DEVKIT8000 is not set
->> +# CONFIG_MACH_OMAP_LDP is not set
->> +# CONFIG_MACH_OMAP3530_LV_SOM is not set
->> +# CONFIG_MACH_OMAP3_TORPEDO is not set
->> +# CONFIG_MACH_OVERO is not set
->> +# CONFIG_MACH_OMAP3EVM is not set
->> +# CONFIG_MACH_OMAP3517EVM is not set
->> +# CONFIG_MACH_OMAP3_PANDORA is not set
->> +# CONFIG_MACH_TOUCHBOOK is not set
->> +# CONFIG_MACH_OMAP_3430SDP is not set
->> +# CONFIG_MACH_NOKIA_RM680 is not set
->> +# CONFIG_MACH_NOKIA_RX51 is not set
->> +# CONFIG_MACH_OMAP_ZOOM2 is not set
->> +# CONFIG_MACH_OMAP_ZOOM3 is not set
->> +# CONFIG_MACH_CM_T35 is not set
->> +# CONFIG_MACH_CM_T3517 is not set
->> +# CONFIG_MACH_IGEP0030 is not set
->> +# CONFIG_MACH_SBC3530 is not set
->> +# CONFIG_MACH_OMAP_3630SDP is not set
->> +# CONFIG_MACH_OMAP_4430SDP is not set
->>   CONFIG_ARM_THUMBEE=y
->> -CONFIG_ARM_ERRATA_720789=y
->> -CONFIG_ARM_ARCH_TIMER=y
->> +CONFIG_SMP=y
->
->
->  SMP???
-
-Good point.
-
->
->
->> +CONFIG_PREEMPT_VOLUNTARY=y
->> +CONFIG_THUMB2_KERNEL=y
->> +# CONFIG_COMPACTION is not set
->>   CONFIG_ZBOOT_ROM_TEXT=0x0
->>   CONFIG_ZBOOT_ROM_BSS=0x0
->> -CONFIG_CMDLINE="root=/dev/mmcblk0p2 rootwait console=ttyO2,115200"
->> -CONFIG_KEXEC=y
->> -CONFIG_AUTO_ZRELADDR=y
->> +CONFIG_ARM_APPENDED_DTB=y
->
->
->  You're not using appended DTB, right?
-
-True.
-
->
->> +CONFIG_ARM_ATAG_DTB_COMPAT=y
->>   CONFIG_CPU_FREQ=y
->
-> [snip a lot of deviations from defaults]
->>
->> +CONFIG_MTD=y
->
->
->  Beaglebones don't even have any flash, right?
-
-They have eMMC, which isn't the same as MTD, so, right, there isn't
-any MTD flash built-in. However, with add-on board it is possible to
-add it. Many of the things added are for being able to support add-on
-boards.
-
->
->
->> +CONFIG_MTD_CMDLINE_PARTS=y
->> +CONFIG_MTD_CHAR=y
->> +CONFIG_MTD_BLOCK=y
->> +CONFIG_MTD_CFI=y
->> +CONFIG_MTD_CFI_INTELEXT=y
->> +CONFIG_MTD_NAND=y
->> +CONFIG_MTD_NAND_OMAP2=y
->> +CONFIG_MTD_ONENAND=y
->> +CONFIG_MTD_ONENAND_VERIFY_WRITE=y
->> +CONFIG_MTD_ONENAND_OMAP2=y
->> +CONFIG_MTD_UBI=y
->> +CONFIG_MTD_UBI_FASTMAP=y
->
-> [snip more fatness]
->>
->> +CONFIG_MEDIA_USB_SUPPORT=y
->
->
->  Yeah, for USB devices you could consider that it's always possible to plug
-> them in, but most of them are anyway useless without any userspace
-> support... I would keep mass storage and vfat, though.
-
-Agree there are many that simply don't have the userspace support. I'll trim.
-
-Note: I haven't included the cape firmware .dtbo files that are needed
-for those. It is a good TODO to add those.
-
->
-> [snip 100s of modules]
->
->>   CONFIG_EXT2_FS=y
->>   CONFIG_EXT3_FS=y
->>   # CONFIG_EXT3_FS_XATTR is not set
->>   CONFIG_EXT4_FS=y
->> +CONFIG_REISERFS_FS=m
->
->
->  Keeping all possible extfses makes sense, but all the rest should go IMHO.
-> Perhaps NFS can stay.
-
-k. I'll avoid the '+' on the file systems that aren't likely to be
-used. FUSE is the only one I might try to defend.
-
->
->
->> +CONFIG_JFS_FS=m
->> +CONFIG_XFS_FS=m
->> +CONFIG_XFS_QUOTA=y
->> +CONFIG_XFS_POSIX_ACL=y
->> +CONFIG_XFS_RT=y
->> +CONFIG_GFS2_FS=m
->> +CONFIG_BTRFS_FS=m
->> +CONFIG_NILFS2_FS=m
->> +CONFIG_FANOTIFY=y
->> +CONFIG_FANOTIFY_ACCESS_PERMISSIONS=y
->>   CONFIG_QUOTA=y
->>   CONFIG_QFMT_V2=y
->> +CONFIG_AUTOFS4_FS=m
->> +CONFIG_FUSE_FS=m
->> +CONFIG_CUSE=m
->>   CONFIG_MSDOS_FS=y
->>   CONFIG_VFAT_FS=y
->>   CONFIG_TMPFS=y
->> -# CONFIG_MISC_FILESYSTEMS is not set
->> +CONFIG_TMPFS_POSIX_ACL=y
->> +CONFIG_JFFS2_FS=y
->
->
->  Definitely flash filesystems shouldn't be there.
-
-k. If flash add-on board support isn't needed, I'll leave the added
-flash file systems out.
-
->
-> [snip]
->
->> diff --git a/configs/beaglebone_defconfig b/configs/beaglebone_defconfig
->> index d6b5c31..47cd0c4 100644
->> --- a/configs/beaglebone_defconfig
->> +++ b/configs/beaglebone_defconfig
->> @@ -5,24 +5,22 @@ BR2_ARM_EABIHF=y
->>
->>   # system
->>   BR2_TARGET_GENERIC_HOSTNAME="beaglebone"
->> -BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_DEVTMPFS=y
->>   BR2_TARGET_GENERIC_GETTY_PORT="ttyO0"
->>   # BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW is not set
->>
->>   # filesystem
->> -BR2_PACKAGE_AM33X_CM3=y
->
->
->  We normally don't keep things in comments, but here I think it makes sense
-> to keep this package in a comment and mention that it is not included for
-> the time being due to instability. That will invite a future version bumper
-> to re-include it.
-
-k.
-
->
->
->  Sorry for the large number of comments so long after you posted the
-> patch...
->
->
->  Regards,
->  Arnout
->
->
->>   BR2_TARGET_ROOTFS_EXT2=y
->>   # BR2_TARGET_ROOTFS_TAR is not set
->>
->>   # lock down headers to avoid breaking with new defaults
->>   BR2_KERNEL_HEADERS_VERSION=y
->> -BR2_DEFAULT_KERNEL_VERSION="3.8.12"
->> +BR2_DEFAULT_KERNEL_VERSION="3.8.13"
->>
->>   # bootloader
->>   BR2_TARGET_UBOOT=y
->>   BR2_TARGET_UBOOT_BOARDNAME="am335x_evm"
->>   BR2_TARGET_UBOOT_CUSTOM_VERSION=y
->> -BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2013.04"
->> +BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2013.07"
->>   BR2_TARGET_UBOOT_FORMAT_IMG=y
->>   BR2_TARGET_UBOOT_SPL=y
->>   BR2_TARGET_UBOOT_SPL_NAME="MLO"
->> @@ -30,9 +28,10 @@ BR2_TARGET_UBOOT_SPL_NAME="MLO"
->>   # kernel
->>   BR2_LINUX_KERNEL=y
->>   BR2_LINUX_KERNEL_CUSTOM_GIT=y
->>
->> -BR2_LINUX_KERNEL_CUSTOM_GIT_REPO_URL="git://git.ti.com/ti-linux-kernel/ti-linux-kernel.git"
->>
->> -BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION="935f6c2f82056d538b528272e2bdbb5c08d69a58"
->>
->> +BR2_LINUX_KERNEL_CUSTOM_GIT_REPO_URL="git://github.com/beagleboard/linux.git"
->>
->> +BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION="ddd36e546e53d3c493075bbebd6188ee843208f9"
->>   BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
->>   BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/beaglebone/linux-3.8.config"
->>   BR2_LINUX_KERNEL_DTS_SUPPORT=y
->> -BR2_LINUX_KERNEL_INTREE_DTS_NAME="am335x-bone"
->> +BR2_LINUX_KERNEL_USE_INTREE_DTS=y
->> +BR2_LINUX_KERNEL_INTREE_DTS_NAME="am335x-bone am335x-boneblack"
->>
->
->
-> --
-> Arnout Vandecappelle                          arnout at mind be
-> Senior Embedded Software Architect            +32-16-286500
-> Essensium/Mind                                http://www.mind.be
-> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-> GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+-- 
+http://autobuild.buildroot.net
