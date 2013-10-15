@@ -1,40 +1,52 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 15 Oct 2013 21:53:39 +0200
-Subject: [Buildroot] [PATCH 1/1] nuttcp: add license information
-In-Reply-To: <1381820374-21537-1-git-send-email-phil@zankapfel.net>
-References: <1381820374-21537-1-git-send-email-phil@zankapfel.net>
-Message-ID: <525D9D43.2050205@mind.be>
+Date: Tue, 15 Oct 2013 21:55:42 +0200
+Subject: [Buildroot] Bumping packages: some comments/suggestions
+In-Reply-To: <20131015093444.4ef3fa17@skate>
+References: <20131014113000.73ca82bf@skate>
+ <1642454622.8785613.1381743494806.JavaMail.root@openwide.fr>
+ <CAAXf6LX7cHRZyGcA5KgYaL7iUuw_JhBxTAzsWrptAa9y10353w@mail.gmail.com>
+ <525C6845.50803@mind.be> <20131015093444.4ef3fa17@skate>
+Message-ID: <525D9DBE.7040802@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 15/10/13 08:59, Phil Eichinger wrote:
+On 15/10/13 09:34, Thomas Petazzoni wrote:
+> Dear Arnout Vandecappelle,
 >
-> Signed-off-by: Phil Eichinger <phil@zankapfel.net>
+> On Mon, 14 Oct 2013 23:55:17 +0200, Arnout Vandecappelle wrote:
+>
+>>> What I wanted to add in this discussion is this: if there are people
+>>> out there that have time for some buildroot development but they have
+>>> no clear goal of their own, they can among others choose between
+>>> package bumps and fixing autobuild failures.
+>>> While there certainly is value in package bumping, I hope that not all
+>>> of these people jump onto the bump-train and instead help with the
+>>> autobuild failures. We still hope to get to 0 failures at some point,
+>>> and bumping packages all the time will most of the time only add new
+>>> problems.
+>>
+>>    I'm also not too hot on version bumping just for the sake of bumping.
+>> Version bumps should be done when they're useful for someone, e.g.
+>> because a feature or bugfix is added. If it's useful to you, then you'll
+>> obviously test if it still works correctly.
+>
+> I understand this point of view, but on the other hand, it's not really
+> nice to have packages that have very old versions. For "core" stuff
+> that isn't necessarily very easy to bump (think Qt, Gtk, X.org and
+> things like that), it's quite important that the core Buildroot
+> community keeps that up to date, because this is difficult to do for
+> newcomers, and this is what people will look at to see if Buildroot is
+> well-maintained and active.
 
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+  Yes of course. The version detection idea is certainly useful. I just 
+wanted to concur with Thomas DS that this shouldn't distract people from 
+fixing autobuilder failures.
 
-
-> ---
->   package/nuttcp/nuttcp.mk |    2 ++
->   1 file changed, 2 insertions(+)
->
-> diff --git a/package/nuttcp/nuttcp.mk b/package/nuttcp/nuttcp.mk
-> index 406219d..8a99ce3 100644
-> --- a/package/nuttcp/nuttcp.mk
-> +++ b/package/nuttcp/nuttcp.mk
-> @@ -7,6 +7,8 @@
->   NUTTCP_VERSION = 6.1.2
->   NUTTCP_SITE = http://www.lcp.nrl.navy.mil/nuttcp/
->   NUTTCP_SOURCE = nuttcp-$(NUTTCP_VERSION).tar.bz2
-> +NUTTCP_LICENSE = GPLv2
-> +NUTTCP_LICENSE_FILES = LICENSE
->
->   define NUTTCP_BUILD_CMDS
->   	$(MAKE1) CC="$(TARGET_CC) $(TARGET_CFLAGS) $(TARGET_LDFLAGS)" \
->
+  Regards,
+  Arnout
 
 
 -- 
