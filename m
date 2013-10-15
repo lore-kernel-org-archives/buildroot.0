@@ -1,132 +1,91 @@
-From: Sagaert Johan <sagaert.johan@skynet.be>
-Date: Tue, 15 Oct 2013 16:51:56 +0200
-Subject: [Buildroot] [PATCH 1/1 V4] jquery-mobile : new package
-Message-ID: <1381848716-15161-1-git-send-email-sagaert.johan@skynet.be>
+From: Arnaud Aujon <arnaud.aujon@gmail.com>
+Date: Tue, 15 Oct 2013 17:37:20 +0200
+Subject: [Buildroot] [PATCH 1/1] libnet-* rename .mk files according to
+	package name
+Message-ID: <1381851440-23347-1-git-send-email-arnaud.aujon@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-
-jQuery-Mobile is a unified, HTML5-based user interface system for all
-popular mobile device platforms, built on the rock-solid jQuery and
-jQuery UI foundation.
-Its lightweight code is built with progressive enhancement, and has a
-flexible, easily themeable design.
-
-Signed-off-by: Sagaert Johan <sagaert.johan@skynet.be>
+Signed-off-by: Arnaud Aujon <arnaud.aujon@gmail.com>
 ---
-Changes V1->V2 :
-	simplified file copying.
-	
-Changes V2->V3 :
-	used lowercase for the menu entry.
-	
-Changes V3->V4 :
-	Corrected indentation in Config.in .
+According to the documentation, .mk name should be the same as package folder name.
+---
+ ...netfilter-acct-01-uclinux.patch => libnetfilter_acct-01-uclinux.patch} | 0
+ package/libnetfilter_acct/{libnetfilter-acct.mk => libnetfilter_acct.mk}  | 0
+ ...conntrack-01-uclinux.patch => libnetfilter_conntrack-01-uclinux.patch} | 0
+ .../{libnetfilter-conntrack.mk => libnetfilter_conntrack.mk}              | 0
+ ...r-cthelper-01-uclinux.patch => libnetfilter_cthelper-01-uclinux.patch} | 0
+ .../{libnetfilter-cthelper.mk => libnetfilter_cthelper.mk}                | 0
+ ...cttimeout-01-uclinux.patch => libnetfilter_cttimeout-01-uclinux.patch} | 0
+ .../{libnetfilter-cttimeout.mk => libnetfilter_cttimeout.mk}              | 0
+ ...ibnetfilter-log-01-uclinux.patch => libnetfilter_log-01-uclinux.patch} | 0
+ package/libnetfilter_log/{libnetfilter-log.mk => libnetfilter_log.mk}     | 0
+ ...tfilter-queue-01-uclinux.patch => libnetfilter_queue-01-uclinux.patch} | 0
+ .../libnetfilter_queue/{libnetfilter-queue.mk => libnetfilter_queue.mk}   | 0
+ 12 files changed, 0 insertions(+), 0 deletions(-)
+ rename package/libnetfilter_acct/{libnetfilter-acct-01-uclinux.patch => libnetfilter_acct-01-uclinux.patch} (100%)
+ rename package/libnetfilter_acct/{libnetfilter-acct.mk => libnetfilter_acct.mk} (100%)
+ rename package/libnetfilter_conntrack/{libnetfilter-conntrack-01-uclinux.patch => libnetfilter_conntrack-01-uclinux.patch} (100%)
+ rename package/libnetfilter_conntrack/{libnetfilter-conntrack.mk => libnetfilter_conntrack.mk} (100%)
+ rename package/libnetfilter_cthelper/{libnetfilter-cthelper-01-uclinux.patch => libnetfilter_cthelper-01-uclinux.patch} (100%)
+ rename package/libnetfilter_cthelper/{libnetfilter-cthelper.mk => libnetfilter_cthelper.mk} (100%)
+ rename package/libnetfilter_cttimeout/{libnetfilter-cttimeout-01-uclinux.patch => libnetfilter_cttimeout-01-uclinux.patch} (100%)
+ rename package/libnetfilter_cttimeout/{libnetfilter-cttimeout.mk => libnetfilter_cttimeout.mk} (100%)
+ rename package/libnetfilter_log/{libnetfilter-log-01-uclinux.patch => libnetfilter_log-01-uclinux.patch} (100%)
+ rename package/libnetfilter_log/{libnetfilter-log.mk => libnetfilter_log.mk} (100%)
+ rename package/libnetfilter_queue/{libnetfilter-queue-01-uclinux.patch => libnetfilter_queue-01-uclinux.patch} (100%)
+ rename package/libnetfilter_queue/{libnetfilter-queue.mk => libnetfilter_queue.mk} (100%)
 
- package/Config.in                      |  1 +
- package/jquery-mobile/Config.in        | 23 ++++++++++++++++
- package/jquery-mobile/jquery-mobile.mk | 48 ++++++++++++++++++++++++++++++++++
- 3 files changed, 72 insertions(+)
- create mode 100644 package/jquery-mobile/Config.in
- create mode 100644 package/jquery-mobile/jquery-mobile.mk
-
-diff --git a/package/Config.in b/package/Config.in
-index 142454d..857ae9e 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -576,6 +576,7 @@ source "package/explorercanvas/Config.in"
- source "package/flot/Config.in"
- source "package/jquery/Config.in"
- source "package/jquery-keyboard/Config.in"
-+source "package/jquery-mobile/Config.in"
- source "package/jquery-sparkline/Config.in"
- source "package/jquery-ui/Config.in"
- source "package/jquery-ui-themes/Config.in"
-diff --git a/package/jquery-mobile/Config.in b/package/jquery-mobile/Config.in
-new file mode 100644
-index 0000000..ab47fb5
---- /dev/null
-+++ b/package/jquery-mobile/Config.in
-@@ -0,0 +1,23 @@
-+config BR2_PACKAGE_JQUERY_MOBILE
-+	bool "jquery-mobile"
-+	help
-+	  jQuery-Mobile is a unified, HTML5-based user interface system
-+	  for all popular mobile device platforms, built on the rock-solid
-+	  jQuery and jQuery UI foundation.
-+	  Its lightweight code is built with progressive enhancement,
-+	  and has a flexible, easily themeable design.
-+
-+	  http://jquerymobile.com
-+	  
-+if BR2_PACKAGE_JQUERY_MOBILE
-+config BR2_PACKAGE_JQUERY_MOBILE_FULL
-+	bool "jquery-mobile development files"
-+	help
-+	  Installs the development versions.
-+
-+config BR2_PACKAGE_JQUERY_MOBILE_DEMOS
-+	bool "jquery-mobile demo files"
-+	help
-+	  Installs the demo files.
-+	  The main demo page is http://hostname/demo.html	
-+endif
-diff --git a/package/jquery-mobile/jquery-mobile.mk b/package/jquery-mobile/jquery-mobile.mk
-new file mode 100644
-index 0000000..8deaad9
---- /dev/null
-+++ b/package/jquery-mobile/jquery-mobile.mk
-@@ -0,0 +1,48 @@
-+################################################################################
-+#
-+# jquery-mobile
-+#
-+################################################################################
-+
-+JQUERY_MOBILE_VERSION = 1.3.2
-+JQUERY_MOBILE_SITE = http://jquerymobile.com/resources/download
-+JQUERY_MOBILE_SOURCE = jquery.mobile-$(JQUERY_MOBILE_VERSION).zip
-+JQUERY_MOBILE_LICENSE = MIT
-+
-+define JQUERY_MOBILE_EXTRACT_CMDS
-+	unzip -d $(@D) $(DL_DIR)/$(JQUERY_MOBILE_SOURCE)
-+endef
-+
-+JQUERY_MOBILE_INSTALLED_FILES = \
-+	jquery.mobile.structure-$(JQUERY_MOBILE_VERSION).min.css \
-+	jquery.mobile.theme-$(JQUERY_MOBILE_VERSION).min.css \
-+	jquery.mobile-$(JQUERY_MOBILE_VERSION).min.css \
-+	jquery.mobile-$(JQUERY_MOBILE_VERSION).min.map \
-+	jquery.mobile-$(JQUERY_MOBILE_VERSION).min.js
-+
-+ifeq ($(BR2_PACKAGE_JQUERY_MOBILE_FULL),y)
-+JQUERY_MOBILE_INSTALLED_FILES += \
-+	jquery.mobile.structure-$(JQUERY_MOBILE_VERSION).css \
-+	jquery.mobile.theme-$(JQUERY_MOBILE_VERSION).css \
-+	jquery.mobile-$(JQUERY_MOBILE_VERSION).css \
-+	jquery.mobile-$(JQUERY_MOBILE_VERSION).js
-+endif
-+
-+ifeq ($(BR2_PACKAGE_JQUERY_MOBILE_DEMOS),y)
-+define JQUERY_MOBILE_INSTALL_DEMOS
-+	mkdir -p $(TARGET_DIR)/var/www/demos
-+	cp -r $(@D)/demos/* $(TARGET_DIR)/var/www/demos
-+	$(INSTALL) -m 0644 -D $(@D)/index.html $(TARGET_DIR)/var/www/demo.html
-+endef
-+endif
-+
-+define JQUERY_MOBILE_INSTALL_TARGET_CMDS
-+	for f in $(JQUERY_MOBILE_INSTALLED_FILES) ; do \
-+		$(INSTALL) -m 0644 -D $(@D)/$$f $(TARGET_DIR)/var/www/$$f || break ; \
-+	done
-+	mkdir -p $(TARGET_DIR)/var/www/images
-+	cp -r $(@D)/images/* $(TARGET_DIR)/var/www/images
-+	$(JQUERY_MOBILE_INSTALL_DEMOS)
-+endef
-+
-+$(eval $(generic-package))
+diff --git a/package/libnetfilter_acct/libnetfilter-acct-01-uclinux.patch b/package/libnetfilter_acct/libnetfilter_acct-01-uclinux.patch
+similarity index 100%
+rename from package/libnetfilter_acct/libnetfilter-acct-01-uclinux.patch
+rename to package/libnetfilter_acct/libnetfilter_acct-01-uclinux.patch
+diff --git a/package/libnetfilter_acct/libnetfilter-acct.mk b/package/libnetfilter_acct/libnetfilter_acct.mk
+similarity index 100%
+rename from package/libnetfilter_acct/libnetfilter-acct.mk
+rename to package/libnetfilter_acct/libnetfilter_acct.mk
+diff --git a/package/libnetfilter_conntrack/libnetfilter-conntrack-01-uclinux.patch b/package/libnetfilter_conntrack/libnetfilter_conntrack-01-uclinux.patch
+similarity index 100%
+rename from package/libnetfilter_conntrack/libnetfilter-conntrack-01-uclinux.patch
+rename to package/libnetfilter_conntrack/libnetfilter_conntrack-01-uclinux.patch
+diff --git a/package/libnetfilter_conntrack/libnetfilter-conntrack.mk b/package/libnetfilter_conntrack/libnetfilter_conntrack.mk
+similarity index 100%
+rename from package/libnetfilter_conntrack/libnetfilter-conntrack.mk
+rename to package/libnetfilter_conntrack/libnetfilter_conntrack.mk
+diff --git a/package/libnetfilter_cthelper/libnetfilter-cthelper-01-uclinux.patch b/package/libnetfilter_cthelper/libnetfilter_cthelper-01-uclinux.patch
+similarity index 100%
+rename from package/libnetfilter_cthelper/libnetfilter-cthelper-01-uclinux.patch
+rename to package/libnetfilter_cthelper/libnetfilter_cthelper-01-uclinux.patch
+diff --git a/package/libnetfilter_cthelper/libnetfilter-cthelper.mk b/package/libnetfilter_cthelper/libnetfilter_cthelper.mk
+similarity index 100%
+rename from package/libnetfilter_cthelper/libnetfilter-cthelper.mk
+rename to package/libnetfilter_cthelper/libnetfilter_cthelper.mk
+diff --git a/package/libnetfilter_cttimeout/libnetfilter-cttimeout-01-uclinux.patch b/package/libnetfilter_cttimeout/libnetfilter_cttimeout-01-uclinux.patch
+similarity index 100%
+rename from package/libnetfilter_cttimeout/libnetfilter-cttimeout-01-uclinux.patch
+rename to package/libnetfilter_cttimeout/libnetfilter_cttimeout-01-uclinux.patch
+diff --git a/package/libnetfilter_cttimeout/libnetfilter-cttimeout.mk b/package/libnetfilter_cttimeout/libnetfilter_cttimeout.mk
+similarity index 100%
+rename from package/libnetfilter_cttimeout/libnetfilter-cttimeout.mk
+rename to package/libnetfilter_cttimeout/libnetfilter_cttimeout.mk
+diff --git a/package/libnetfilter_log/libnetfilter-log-01-uclinux.patch b/package/libnetfilter_log/libnetfilter_log-01-uclinux.patch
+similarity index 100%
+rename from package/libnetfilter_log/libnetfilter-log-01-uclinux.patch
+rename to package/libnetfilter_log/libnetfilter_log-01-uclinux.patch
+diff --git a/package/libnetfilter_log/libnetfilter-log.mk b/package/libnetfilter_log/libnetfilter_log.mk
+similarity index 100%
+rename from package/libnetfilter_log/libnetfilter-log.mk
+rename to package/libnetfilter_log/libnetfilter_log.mk
+diff --git a/package/libnetfilter_queue/libnetfilter-queue-01-uclinux.patch b/package/libnetfilter_queue/libnetfilter_queue-01-uclinux.patch
+similarity index 100%
+rename from package/libnetfilter_queue/libnetfilter-queue-01-uclinux.patch
+rename to package/libnetfilter_queue/libnetfilter_queue-01-uclinux.patch
+diff --git a/package/libnetfilter_queue/libnetfilter-queue.mk b/package/libnetfilter_queue/libnetfilter_queue.mk
+similarity index 100%
+rename from package/libnetfilter_queue/libnetfilter-queue.mk
+rename to package/libnetfilter_queue/libnetfilter_queue.mk
 -- 
-1.8.4.474.g128a96c
+1.8.3.1
