@@ -1,61 +1,42 @@
-From: Denis Mingulov <denis@mingulov.com>
-Date: Wed, 16 Oct 2013 16:13:37 +0300
-Subject: [Buildroot] [PATCH v2] rsync: use system zlib and popt,
-	also do not lose debug options
-In-Reply-To: <1381923631-26549-1-git-send-email-denis@mingulov.com>
-References: <1381923631-26549-1-git-send-email-denis@mingulov.com>
-Message-ID: <1381929217-13399-1-git-send-email-denis@mingulov.com>
+From: Bernhard Schuster <schuster.bernhard@googlemail.com>
+Date: Wed, 16 Oct 2013 15:50:51 +0002
+Subject: [Buildroot] glib-networking when using gtlsconnection fails
+Message-ID: <525eb564.c664cc0a.66a5.6cee@mx.google.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-rsync by default compiles statically its own zlib and popt
-libraries, it is better to use system wide libraries instead -
-both for disk and memory consumption. Change rsync package
-accordingly.
+Hi,
 
-Also previously a debug configure option has been lost, as
-overwritten by '--with-included-popt' option - fixed.
+I am trying to cross compile a application which works just fine on my 
+x86_64 machine for a ARMv5TE "gadget". Unfortunately something really 
+weird happens: Altough having selected gnutls in order to use TLS with 
+glib-networking (GTlsConnection), I always get an error as soon as the 
+combined cert/key pem file is read (it exists, has proper permissions, 
+all tripple checked). The error always contains "TLS unsupported" or 
+"no TLS support" (can not recall, currently away from that machine) 
+altough the config.h of glib-networking says the opposite. The binary 
+is statically compiled (which worked fine so far).
 
-For example, on ARMv5 rsync binary size is reduced by about 25%.
+I am puzzled on how to fix my issue, I already tried to fix it by 
+adding a couple of commandline opts explicitly (though they say that 
+they are enabled by default, thus - as expected - nothing changed).
 
-Signed-off-by: Denis Mingulov <denis@mingulov.com>
----
- package/rsync/Config.in | 2 ++
- package/rsync/rsync.mk  | 7 +++++--
- 2 files changed, 7 insertions(+), 2 deletions(-)
+Also note that I have a similar issue with pcre (required for GRegex), 
+where I pass --enable-utf8 but it still did not fix anything.
 
-diff --git a/package/rsync/Config.in b/package/rsync/Config.in
-index be95a7c..b952974 100644
---- a/package/rsync/Config.in
-+++ b/package/rsync/Config.in
-@@ -2,6 +2,8 @@ config BR2_PACKAGE_RSYNC
- 	bool "rsync"
- 	# fork()
- 	depends on BR2_USE_MMU
-+	select BR2_PACKAGE_ZLIB
-+	select BR2_PACKAGE_POPT
- 	help
- 	  File transfer program to keep remote files in sync.
- 
-diff --git a/package/rsync/rsync.mk b/package/rsync/rsync.mk
-index d8e5f3f..35f128c 100644
---- a/package/rsync/rsync.mk
-+++ b/package/rsync/rsync.mk
-@@ -8,7 +8,10 @@ RSYNC_VERSION = 3.1.0
- RSYNC_SITE = http://rsync.samba.org/ftp/rsync/src
- RSYNC_LICENSE = GPLv3+
- RSYNC_LICENSE_FILES = COPYING
--RSYNC_CONF_OPT = $(if $(BR2_ENABLE_DEBUG),--enable-debug,--disable-debug)
--RSYNC_CONF_OPT = --with-included-popt
-+RSYNC_DEPENDENCIES = zlib popt
-+RSYNC_CONF_OPT = \
-+	$(if $(BR2_ENABLE_DEBUG),--enable-debug,--disable-debug) \
-+	--with-included-zlib=no \
-+	--with-included-popt=no
- 
- $(eval $(autotools-package))
--- 
-1.8.4
+Any help, hint, tip is appreciated.
+
+Buildroot 2013.08 is used together with the code sourcery 2011/2013 
+toolchain
+
+Best
+
+Bernhard
+
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20131016/f53289b7/attachment.html>
