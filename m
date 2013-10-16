@@ -1,41 +1,57 @@
-From: Markos Chandras <Markos.Chandras@imgtec.com>
-Date: Wed, 16 Oct 2013 10:40:17 +0100
-Subject: [Buildroot] [PATCH] ext-toolchain: MIPS: Select correct
- endianness for the target
-In-Reply-To: <20131014122655.76c12547@skate>
-References: <1381744345-8306-1-git-send-email-markos.chandras@imgtec.com>	<20131014120543.267c23a7@skate>	<525BC5C1.3050705@imgtec.com>
- <20131014122655.76c12547@skate>
-Message-ID: <525E5F01.3000006@imgtec.com>
+From: Denis Mingulov <denis@mingulov.com>
+Date: Wed, 16 Oct 2013 14:40:31 +0300
+Subject: [Buildroot] [PATCH] rsync: use system zlib and popt,
+	also do not lose debug options
+Message-ID: <1381923631-26549-1-git-send-email-denis@mingulov.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 10/14/13 11:26, Thomas Petazzoni wrote:
-> Dear Markos Chandras,
->
-> On Mon, 14 Oct 2013 11:21:53 +0100, Markos Chandras wrote:
->
->>> Should we do it for -EB as well? Or do we consider because the Sourcery
->>> toolchain defaults to big endian we don't need to explicit -EB ?
->>
->> It's not necessary because the default is for big endian. But if you
->> prefer to do that for the sake of consinstency I am fine with it :)
->>
->> Peter can you fix this patch before you commit it or should I send a v2?
->
-> I have a bunch of other external toolchain / toolchain patches, so I
-> can take your patch as well and send a global patch series to Peter.
->
-> Thanks!
->
-> Thomas
->
-Hi Thomas,
+rsync by default compiles statically its own zlib and popt
+libraries, it is better to use system wide libraries instead -
+both for disk and memory consumption. Change rsync package
+accordingly.
 
-Oh that would be great! Would you be able to remove the redundant
-"ifeq ($(BR2_ENDIAN),"LITTLE")" or should I send a new patch? :)
+Also previously a debug configure option has been lost, as
+overwritten by '--with-included-popt' option - fixed.
 
+For example, on ARMv5 rsync binary size is reduced by about 25%.
+
+Signed-off-by: Denis Mingulov <denis@mingulov.com>
+---
+ package/rsync/Config.in | 2 ++
+ package/rsync/rsync.mk  | 4 +++-
+ 2 files changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/package/rsync/Config.in b/package/rsync/Config.in
+index be95a7c..b952974 100644
+--- a/package/rsync/Config.in
++++ b/package/rsync/Config.in
+@@ -2,6 +2,8 @@ config BR2_PACKAGE_RSYNC
+ 	bool "rsync"
+ 	# fork()
+ 	depends on BR2_USE_MMU
++	select BR2_PACKAGE_ZLIB
++	select BR2_PACKAGE_POPT
+ 	help
+ 	  File transfer program to keep remote files in sync.
+ 
+diff --git a/package/rsync/rsync.mk b/package/rsync/rsync.mk
+index d8e5f3f..4f336bc 100644
+--- a/package/rsync/rsync.mk
++++ b/package/rsync/rsync.mk
+@@ -8,7 +8,9 @@ RSYNC_VERSION = 3.1.0
+ RSYNC_SITE = http://rsync.samba.org/ftp/rsync/src
+ RSYNC_LICENSE = GPLv3+
+ RSYNC_LICENSE_FILES = COPYING
++RSYNC_DEPENDENCIES = zlib popt
+ RSYNC_CONF_OPT = $(if $(BR2_ENABLE_DEBUG),--enable-debug,--disable-debug)
+-RSYNC_CONF_OPT = --with-included-popt
++RSYNC_CONF_OPT += --with-included-zlib=no
++RSYNC_CONF_OPT += --with-included-popt=no
+ 
+ $(eval $(autotools-package))
 -- 
-markos
+1.8.4
