@@ -1,93 +1,55 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 16 Oct 2013 23:47:02 +0200
-Subject: [Buildroot] [PATCH] rsync: use system zlib and popt,
- also do not lose debug options
-In-Reply-To: <1381923631-26549-1-git-send-email-denis@mingulov.com>
-References: <1381923631-26549-1-git-send-email-denis@mingulov.com>
-Message-ID: <525F0956.1040406@mind.be>
+Date: Wed, 16 Oct 2013 23:56:18 +0200
+Subject: [Buildroot] About user support and the mailing list
+In-Reply-To: <CAAXf6LXtbwTCy_ZWVSsgTjefP2qrHkob0Oia2qN8fd-7sez5Ng@mail.gmail.com>
+References: <CAAXf6LXWKnMXXb1HP+-7rXPgtaiWN3no2=hyGcFdSkXJqu+NAw@mail.gmail.com>
+ <872799982.8879164.1381842983831.JavaMail.root@openwide.fr>
+ <OFDD0F9057.4C7C6699-ON86257C05.004EDB95-86257C05.004FBAAE@rockwellcollins.com>
+ <874n8ijz54.fsf@dell.be.48ers.dk>
+ <CAAXf6LXtbwTCy_ZWVSsgTjefP2qrHkob0Oia2qN8fd-7sez5Ng@mail.gmail.com>
+Message-ID: <525F0B82.1050709@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 16/10/13 13:40, Denis Mingulov wrote:
-> rsync by default compiles statically its own zlib and popt
-> libraries, it is better to use system wide libraries instead -
-> both for disk and memory consumption. Change rsync package
-> accordingly.
->
-> Also previously a debug configure option has been lost, as
-> overwritten by '--with-included-popt' option - fixed.
->
-> For example, on ARMv5 rsync binary size is reduced by about 25%.
+On 15/10/13 21:44, Thomas De Schampheleire wrote:
+> On Tue, Oct 15, 2013 at 6:07 PM, Peter Korsgaard<jacmet@uclibc.org>  wrote:
+>>>>>>> >>>>>>"Ryan" == Ryan Barnett<rjbarnet@rockwellcollins.com>  writes:
+>> >
+>> >Hi,
+>> >
+>> >  >> That would separate the high traffic/fast reading parts from the
+>> >  >> low traffic/philosophical discussion parts.
+>> >
+>> >  Ryan> I really like this idea as I believe it fits well with how this
+>> >  Ryan> FOSS project works. The majority of the emails are related to
+>> >  Ryan> patches and discussion surrounding them. I usually glance through
+>> >  Ryan> these emails since I don't necessarily have time to read through
+>> >  Ryan> all of the patches.  So by having this separation would be nice
+>> >  Ryan> as that way I don't accidentally glance over a philosophical
+>> >  Ryan> discussion such as this.
+>> >
+>> >The problem is that these things are rarely nicely seperated. This
+>> >thread started as a reply to a patch submission.
+> This is not necessarily a big problem. If a discussion occurs on the
+> 'patch' mailing list that is no longer directly related with the
+> actual patch, we should at least put the 'discussion' mailing list in
+> copy (or use only that list). In the beginning this can be odd, but
+> it's something we can learn.
 
-  I just did a check by building only rsync before and after your patch, 
-and although the binary becomes smaller with your patch, the overall 
-filesystem becomes larger. I'd therefore propose to only use the system 
-library if it is anyway selected. So:
+  I was first against the -patch / -discuss split for the same reasons as 
+Peter's, but as you say, it's easy to add -discuss to a reply.
 
+  If this split goes through, I'd keep buildroot at busybox.net as the 
+-discuss list and create a new one for patches.
 
->
-> Signed-off-by: Denis Mingulov <denis@mingulov.com>
-> ---
->   package/rsync/Config.in | 2 ++
->   package/rsync/rsync.mk  | 4 +++-
->   2 files changed, 5 insertions(+), 1 deletion(-)
->
-> diff --git a/package/rsync/Config.in b/package/rsync/Config.in
-> index be95a7c..b952974 100644
-> --- a/package/rsync/Config.in
-> +++ b/package/rsync/Config.in
-> @@ -2,6 +2,8 @@ config BR2_PACKAGE_RSYNC
->   	bool "rsync"
->   	# fork()
->   	depends on BR2_USE_MMU
-> +	select BR2_PACKAGE_ZLIB
-> +	select BR2_PACKAGE_POPT
-
-  Remove this.
-
->   	help
->   	  File transfer program to keep remote files in sync.
->
-> diff --git a/package/rsync/rsync.mk b/package/rsync/rsync.mk
-> index d8e5f3f..4f336bc 100644
-> --- a/package/rsync/rsync.mk
-> +++ b/package/rsync/rsync.mk
-> @@ -8,7 +8,9 @@ RSYNC_VERSION = 3.1.0
->   RSYNC_SITE = http://rsync.samba.org/ftp/rsync/src
->   RSYNC_LICENSE = GPLv3+
->   RSYNC_LICENSE_FILES = COPYING
-> +RSYNC_DEPENDENCIES = zlib popt
-
-  Remove this.
-
->   RSYNC_CONF_OPT = $(if $(BR2_ENABLE_DEBUG),--enable-debug,--disable-debug)
-> -RSYNC_CONF_OPT = --with-included-popt
-> +RSYNC_CONF_OPT += --with-included-zlib=no
-> +RSYNC_CONF_OPT += --with-included-popt=no
-
-  Replace this with something like:
-
-ifeq($(BR2_PACKAGE_ZLIB),y)
-RSYNC_CONF_OPT += --with-included-zlib=no
-RSYNC_DEPENDENCIES += zlib
-else
-RSYNC_CONF_OPT += --with-included-zlib=yes
-endif
-
-And similar for popt.
-
-  Of course, this is untested and YMMV.
+  Patchwork should probably listen to both, since people will (certainly 
+in the beginning) still send patches to the normal list.
 
   Regards,
   Arnout
-
->
->   $(eval $(autotools-package))
->
-
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
