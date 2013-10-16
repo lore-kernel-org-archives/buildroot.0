@@ -1,77 +1,57 @@
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Wed, 16 Oct 2013 17:49:58 +0200
-Subject: [Buildroot] [PATCH] boost: fix build on 64-bit target after bump to
-	1.54.0
-Message-ID: <1381938598-19420-1-git-send-email-luca@lucaceresoli.net>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 16 Oct 2013 17:56:07 +0200
+Subject: [Buildroot] glib-networking when using gtlsconnection fails
+In-Reply-To: <525eb564.c664cc0a.66a5.6cee@mx.google.com>
+References: <525eb564.c664cc0a.66a5.6cee@mx.google.com>
+Message-ID: <20131016175607.51b57e4b@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes compilation error with aarch64 target:
+Dear Bernhard Schuster,
 
-./boost/atomic/atomic.hpp: At global scope:
-./boost/atomic/atomic.hpp:202:16: error: 'uintptr_t' was not declared in this scope
- typedef atomic<uintptr_t> atomic_uintptr_t;
-                ^
-./boost/atomic/atomic.hpp:202:25: error: template argument 1 is invalid
- typedef atomic<uintptr_t> atomic_uintptr_t;
-                         ^
-./boost/atomic/atomic.hpp:202:43: error: invalid type in declaration before ';' token
- typedef atomic<uintptr_t> atomic_uintptr_t;
-                                           ^
+On Wed, 16 Oct 2013 15:50:51 +0002, Bernhard Schuster wrote:
 
-Fixes http://autobuild.buildroot.net/results/0b69d7b33dc16ea27e395a949cefbd0a35c92f61/
+> I am trying to cross compile a application which works just fine on my 
+> x86_64 machine for a ARMv5TE "gadget". Unfortunately something really 
+> weird happens: Altough having selected gnutls in order to use TLS with 
+> glib-networking (GTlsConnection), I always get an error as soon as the 
+> combined cert/key pem file is read (it exists, has proper permissions, 
+> all tripple checked). The error always contains "TLS unsupported" or 
+> "no TLS support" (can not recall, currently away from that machine) 
+> altough the config.h of glib-networking says the opposite. The binary 
+> is statically compiled (which worked fine so far).
+> 
+> I am puzzled on how to fix my issue, I already tried to fix it by 
+> adding a couple of commandline opts explicitly (though they say that 
+> they are enabled by default, thus - as expected - nothing changed).
+> 
+> Also note that I have a similar issue with pcre (required for GRegex), 
+> where I pass --enable-utf8 but it still did not fix anything.
+> 
+> Any help, hint, tip is appreciated.
+> 
+> Buildroot 2013.08 is used together with the code sourcery 2011/2013 
+> toolchain
 
-Reported here: https://svn.boost.org/trac/boost/ticket/8973
-Fix reported here: https://svn.boost.org/trac/boost/ticket/8731
+Just to be sure: did you do a complete "make clean all" cycle after
+adjusting your configuration to enable gnutls, or after adding
+--enable-utf8 to pcre?
 
-Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
-Backported-from: https://svn.boost.org/trac/boost/changeset/84950
----
- ...oost-0003-fix-64bit-build-with-recent-gcc.patch | 33 ++++++++++++++++++++++
- 1 file changed, 33 insertions(+)
- create mode 100644 package/boost/boost-0003-fix-64bit-build-with-recent-gcc.patch
+Remember that Buildroot does not automatically rebuild packages: if you
+enable gnutls, it will build gnutls, but it will not rebuild
+glib-networking automatically.
 
-diff --git a/package/boost/boost-0003-fix-64bit-build-with-recent-gcc.patch b/package/boost/boost-0003-fix-64bit-build-with-recent-gcc.patch
-new file mode 100644
-index 0000000..5fdfb01
---- /dev/null
-+++ b/package/boost/boost-0003-fix-64bit-build-with-recent-gcc.patch
-@@ -0,0 +1,33 @@
-+Patch for recent versions of glibc which always assume int64_t support.
-+
-+Fixes compilation error with aarch64 target:
-+
-+./boost/atomic/atomic.hpp: At global scope:
-+./boost/atomic/atomic.hpp:202:16: error: 'uintptr_t' was not declared in this scope
-+ typedef atomic<uintptr_t> atomic_uintptr_t;
-+                ^
-+./boost/atomic/atomic.hpp:202:25: error: template argument 1 is invalid
-+ typedef atomic<uintptr_t> atomic_uintptr_t;
-+                         ^
-+./boost/atomic/atomic.hpp:202:43: error: invalid type in declaration before ';' token
-+ typedef atomic<uintptr_t> atomic_uintptr_t;
-+                                           ^
-+
-+Reported here: https://svn.boost.org/trac/boost/ticket/8973
-+Fix reported here: https://svn.boost.org/trac/boost/ticket/8731
-+
-+Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
-+Backported-from: https://svn.boost.org/trac/boost/changeset/84950
-+
-+--- a/boost/cstdint.hpp	(revision 84805)
-++++ b/boost/cstdint.hpp	(revision 84950)
-+@@ -42,5 +42,8 @@
-+ // See https://svn.boost.org/trac/boost/ticket/3548 and http://sources.redhat.com/bugzilla/show_bug.cgi?id=10990
-+ //
-+-#if defined(BOOST_HAS_STDINT_H) && (!defined(__GLIBC__) || defined(__GLIBC_HAVE_LONG_LONG))
-++#if defined(BOOST_HAS_STDINT_H)					\
-++  && (!defined(__GLIBC__)					\
-++      || defined(__GLIBC_HAVE_LONG_LONG)			\
-++      || (defined(__GLIBC__) && ((__GLIBC__ > 2) || ((__GLIBC__ == 2) && (__GLIBC_MINOR__ >= 17)))))
-+ 
-+ // The following #include is an implementation artifact; not part of interface.
+If you can provide a simple test case (or maybe even an existing test
+application for glib-networking) to reproduce the problem, it would
+definitely be helpful. Same for the pcre / GRegex problem.
+
+Best regards,
+
+Thomas
 -- 
-1.8.1.2
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
