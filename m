@@ -1,34 +1,34 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 16 Oct 2013 09:40:37 +0200
-Subject: [Buildroot] Help with selecting package
-In-Reply-To: <525E4115.5080703@gmail.com>
-References: <525BAB59.4020105@gmail.com> <20131014114754.12f56017@skate>
- <525BCC9C.9020602@gmail.com> <20131014134753.33a41074@skate>
- <525BED56.5030704@gmail.com>
- <CAAXf6LXB8+5bjhZ3Y0ftNR0aQVK8Rvge_YDq-KvhfpORO8LPMw@mail.gmail.com>
- <525C0C82.6090801@gmail.com> <525C1100.9040608@gmail.com>
- <20131014184341.6ba6e0c4@skate> <525E4115.5080703@gmail.com>
-Message-ID: <20131016094037.39becd64@skate>
+From: Phil Eichinger <phil.eichinger@gmail.com>
+Date: Wed, 16 Oct 2013 10:39:52 +0200
+Subject: [Buildroot] [PATCH 1/1] scons: bump version
+Message-ID: <1381912792-30029-1-git-send-email-phil@zankapfel.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Marco Trapanese,
 
-On Wed, 16 Oct 2013 09:32:37 +0200, Marco Trapanese wrote:
+Signed-off-by: Phil Eichinger <phil@zankapfel.net>
+---
+Packages currently depending on SCons (exfat, exfat-utils, gpsd) still 
+build fine with the new version.
 
-> config BR2_PACKAGE_SENSORAY2253
->      bool "sensoray2253"
->      depends on BR2_LINUX_KERNEL
->      depends on BR2_LIBV4L
+ package/scons/scons.mk |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-This Config.in option does not exist, so there is no chance for it to
-ever be enabled, and therefore your package will never be visible.
-
-Thomas
+diff --git a/package/scons/scons.mk b/package/scons/scons.mk
+index aee0af1..a7747d5 100644
+--- a/package/scons/scons.mk
++++ b/package/scons/scons.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SCONS_VERSION = 2.2.0
++SCONS_VERSION = 2.3.0
+ SCONS_SITE = http://downloads.sourceforge.net/project/scons/scons/$(SCONS_VERSION)
+ SCONS_LICENSE = MIT
+ SCONS_LICENSE_FILES = LICENSE.txt
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.7.10.4
