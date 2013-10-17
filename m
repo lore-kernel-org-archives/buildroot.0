@@ -1,43 +1,39 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 17 Oct 2013 22:00:29 +0200
-Subject: [Buildroot] Buildroot Developpers' Day 2013
-In-Reply-To: <CACG401oZUdHo7GV2ApRcVarGA2J=uD0iDcOwTuhaE1Ehg-gYjg@mail.gmail.com>
-References: <20131013223941.GD16563@free.fr> <20131017143209.036bb603@skate>
- <OF53A5EA25.AF5C7EBF-ON86257C07.004A718E-86257C07.004C0FF5@rockwellcollins.com>
- <20131017171754.2354c3a3@skate>
- <CACG401oZUdHo7GV2ApRcVarGA2J=uD0iDcOwTuhaE1Ehg-gYjg@mail.gmail.com>
-Message-ID: <20131017200029.GB3376@free.fr>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu, 17 Oct 2013 17:10:52 -0300
+Subject: [Buildroot] [PATCH 1/2] u-boot: bump to version 2013.10
+Message-ID: <1382040653-17972-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Jesse, All,
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ boot/uboot/Config.in | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-On 2013-10-17 11:28 -0400, Jesse Cobra spake thusly:
-> I would not mind joining hangouts to see Yann's presentation.
-
-He! I was not planning on doing an actual presentation with slides or
-anything like that! :-)
-
-But since it seems a few people are actually interested in br.config,
-I'll try to prepare something more-or-less structured as an intro.
-But don't expect top-of-the-class slides! ;-)
-
-> That said I am -5 EST so I could only watch if it is later in the day in
-> Edinburgh, my morning...
-
-With you and Ryan being UTC-5, it looks like we can arrange the schedule
-to meet your TZ offset.
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
+index 998cda2..7a20d06 100644
+--- a/boot/uboot/Config.in
++++ b/boot/uboot/Config.in
+@@ -18,7 +18,7 @@ choice
+ 	  Select the specific U-Boot version you want to use
+ 
+ config BR2_TARGET_UBOOT_LATEST_VERSION
+-	bool "2013.07"
++	bool "2013.10"
+ 
+ config BR2_TARGET_UBOOT_CUSTOM_VERSION
+        bool "Custom version"
+@@ -46,7 +46,7 @@ endif
+ 
+ config BR2_TARGET_UBOOT_VERSION
+ 	string
+-	default "2013.07"	if BR2_TARGET_UBOOT_LATEST_VERSION
++	default "2013.10"	if BR2_TARGET_UBOOT_LATEST_VERSION
+ 	default $BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE if BR2_TARGET_UBOOT_CUSTOM_VERSION
+ 	default "custom"	if BR2_TARGET_UBOOT_CUSTOM_TARBALL
+ 	default $BR2_TARGET_UBOOT_CUSTOM_GIT_VERSION if BR2_TARGET_UBOOT_CUSTOM_GIT
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.8.1.5
