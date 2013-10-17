@@ -1,32 +1,49 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 17 Oct 2013 17:10:53 -0300
-Subject: [Buildroot] [PATCH 2/2] uboot-tools: bump to version 2013.10
-In-Reply-To: <1382040653-17972-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1382040653-17972-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1382040653-17972-2-git-send-email-gustavo@zacarias.com.ar>
+From: Ryan Barnett <rjbarnet@rockwellcollins.com>
+Date: Thu, 17 Oct 2013 15:17:53 -0500
+Subject: [Buildroot] Buildroot Developpers' Day 2013
+In-Reply-To: <20131017200029.GB3376@free.fr>
+References: <20131013223941.GD16563@free.fr> <20131017143209.036bb603@skate>
+ <OF53A5EA25.AF5C7EBF-ON86257C07.004A718E-86257C07.004C0FF5@rockwellcollins.com>
+ <20131017171754.2354c3a3@skate>
+ <CACG401oZUdHo7GV2ApRcVarGA2J=uD0iDcOwTuhaE1Ehg-gYjg@mail.gmail.com>
+ <20131017200029.GB3376@free.fr>
+Message-ID: <OFF964CAED.C794AC1F-ON86257C07.006F28F0-86257C07.006F7AE2@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/uboot-tools/uboot-tools.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Yann,
 
-diff --git a/package/uboot-tools/uboot-tools.mk b/package/uboot-tools/uboot-tools.mk
-index f8935af..e19372a 100644
---- a/package/uboot-tools/uboot-tools.mk
-+++ b/package/uboot-tools/uboot-tools.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+"Yann E. MORIN" <yann.morin.1998@free.fr> wrote on
+10/17/2013 03:00:29 PM:
+
+> Jesse, All,
+> 
+> On 2013-10-17 11:28 -0400, Jesse Cobra spake thusly:
+> > I would not mind joining hangouts to see Yann's presentation.
+> 
+> He! I was not planning on doing an actual presentation with slides or
+> anything like that! :-)
+>
+> But since it seems a few people are actually interested in br.config,
+> I'll try to prepare something more-or-less structured as an intro.
+> But don't expect top-of-the-class slides! ;-)
+
+Wasn't expect anything formal, just would like to be a part of the
+conversation surrounding it and to hear your idea around the project
+(more of idea) instead of getting it from a README file :)
  
--UBOOT_TOOLS_VERSION = 2013.07
-+UBOOT_TOOLS_VERSION = 2013.10
- UBOOT_TOOLS_SOURCE  = u-boot-$(UBOOT_TOOLS_VERSION).tar.bz2
- UBOOT_TOOLS_SITE    = ftp://ftp.denx.de/pub/u-boot
- UBOOT_TOOLS_LICENSE = GPLv2+
--- 
-1.8.1.5
+> > That said I am -5 EST so I could only watch if it is later in the day 
+in
+> > Edinburgh, my morning...
+> 
+> With you and Ryan being UTC-5, it looks like we can arrange the schedule
+> to meet your TZ offset.
+> 
+> Regards,
+> Yann E. MORIN.
+
+Thanks,
+-Ryan
