@@ -1,71 +1,61 @@
-From: Ryan Barnett <rjbarnet@rockwellcollins.com>
-Date: Thu, 17 Oct 2013 14:45:24 -0500
-Subject: [Buildroot] Buildroot Developpers' Day 2013
-In-Reply-To: <20131017171754.2354c3a3@skate>
-References: <20131013223941.GD16563@free.fr>	<20131017143209.036bb603@skate>	<OF53A5EA25.AF5C7EBF-ON86257C07.004A718E-86257C07.004C0FF5@rockwellcollins.com>
- <20131017171754.2354c3a3@skate>
-Message-ID: <OFE97C47DA.36C45F2D-ON86257C07.006B1C57-86257C07.006C817E@rockwellcollins.com>
+From: Bernhard Schuster <schuster.bernhard@googlemail.com>
+Date: Thu, 17 Oct 2013 19:50:55 +0002
+Subject: [Buildroot] glib-networking when using gtlsconnection fails
+In-Reply-To: <525eb564.c664cc0a.66a5.6cee@mx.google.com>
+References: <525eb564.c664cc0a.66a5.6cee@mx.google.com>
+Message-ID: <52603fa7.45680e0a.32e2.67d3@mx.google.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas P,
+The issue consisted of two issues:
 
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote 
-on 10/17/2013 10:17:54 AM:
+pcre actually lacked the --enable-utf8 --enable-unicode-properties, 
+after adding them GRegex worked fine again.
 
-> Dear Ryan Barnett,
+The second issue is (most likely) related to how glib-networking is 
+loaded at runtime (dlopen?) and thus static linkage is doomed to fail, 
+though I have yet to prove this. Dynamic linking just works out of the 
+box.
+
+Cheers
+
+Bernhard
+
+On Wed, Oct 16, 2013 at 5:48 PM, Bernhard Schuster 
+<schuster.bernhard@googlemail.com> wrote:
+> Hi,
 > 
-> On Thu, 17 Oct 2013 08:51:02 -0500, Ryan Barnett wrote:
+> I am trying to cross compile a application which works just fine on 
+> my x86_64 machine for a ARMv5TE "gadget". Unfortunately something 
+> really weird happens: Altough having selected gnutls in order to use 
+> TLS with glib-networking (GTlsConnection), I always get an error as 
+> soon as the combined cert/key pem file is read (it exists, has proper 
+> permissions, all tripple checked). The error always contains "TLS 
+> unsupported" or "no TLS support" (can not recall, currently away from 
+> that machine) altough the config.h of glib-networking says the 
+> opposite. The binary is statically compiled (which worked fine so 
+> far).
 > 
-> > > > I have started adding a few items to the list of topics to address
-> > > > during this event, list which you may find there (needs 
-registration
-> > > > to the Wiki first):
-> > > >     http://elinux.org/Buildroot:DeveloperDaysELCE2013
-> > 
-> > I see that our SELinux patchsets have now made the list of topic 
-> > discussions.
+> I am puzzled on how to fix my issue, I already tried to fix it by 
+> adding a couple of commandline opts explicitly (though they say that 
+> they are enabled by default, thus - as expected - nothing changed).
 > 
-> Yes. However, I am not sure the discussion at the Buildroot meeting
-> will really lead to something special. Up to now, there is nothing
-> controversial / problematic about these patches. They just need to be
-> reviewed, and progressively merged. The most "controversial" issues
-> will probably arise when we start working on the real SELinux
-> integration, not just the packages themselves. But we have another
-> Buildroot meeting at FOSDEM for this :-)
-
-Understood.
- 
-> > I would be interested in this, however, discussion that happens early
-> > in the day will be difficult for me to attend since it would 3:30am 
-CDT 
-> > (UTC-05:00) when the meeting begins at 9:30 am (Edinburgh Time). 
-However,
-> > I could join later. I would probably be able to join around 6am to 
-> > 6:30am CDT. So if discussion surrounding BR2_EXTERNAL, SELinux Related 
-
-> > Packages and Yann's buildroot.config could hold off until then I would
-> > be willing to participate via a Google Hangout. If we setup a specific
-> > time for the SELinux related packages, I can probably see if I can't
-> > convince Clayton Shotwell to also attend.
+> Also note that I have a similar issue with pcre (required for 
+> GRegex), where I pass --enable-utf8 but it still did not fix anything.
 > 
-> Let's see what happens with the agenda over the course of the WE, and
-> if it makes sense, we'll try to schedule a specific time for SELinux
-> discussion.
-
-That sounds good, I'm more interested in being able to listen in on Yann's
-buildroot.config and being a part of the discussion for BR2_EXTERNAL.
-We (Rockwell Collins) have been starting to use the patchset on some new
-projects so I could probably put together something about our experience. 
-Would there be interest in hearing about how we are using and how it has
-changed our approach to development? So it would be nice if these could be
-later or at least have a rough estimate of when they will start.
-
-Thanks,
--Ryan
+> Any help, hint, tip is appreciated.
+> 
+> Buildroot 2013.08 is used together with the code sourcery 2011/2013 
+> toolchain
+> 
+> Best
+> 
+> Bernhard
+> 
+> 
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20131017/00396e28/attachment.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20131017/bdba5cb8/attachment.html>
