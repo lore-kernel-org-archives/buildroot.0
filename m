@@ -1,65 +1,71 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 17 Oct 2013 18:18:26 +0200
-Subject: [Buildroot] [PATCH] rsync: use system zlib and popt,
+Date: Thu, 17 Oct 2013 18:19:00 +0200
+Subject: [Buildroot] [PATCH v2] rsync: use system zlib and popt,
  also do not lose debug options
-In-Reply-To: <CAB++i-LMOO8owKF2V9eJdi_vX5W6LETLF-ywJ+x5bUMiGeoU+w@mail.gmail.com>
+In-Reply-To: <1381929217-13399-1-git-send-email-denis@mingulov.com>
 References: <1381923631-26549-1-git-send-email-denis@mingulov.com>
- <525F0956.1040406@mind.be>
- <CAB++i-LMOO8owKF2V9eJdi_vX5W6LETLF-ywJ+x5bUMiGeoU+w@mail.gmail.com>
-Message-ID: <52600DD2.1000502@mind.be>
+ <1381929217-13399-1-git-send-email-denis@mingulov.com>
+Message-ID: <52600DF4.4070800@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 17/10/13 08:05, Denis Mingulov wrote:
-> Hi,
+On 16/10/13 15:13, Denis Mingulov wrote:
+> rsync by default compiles statically its own zlib and popt
+> libraries, it is better to use system wide libraries instead -
+> both for disk and memory consumption. Change rsync package
+> accordingly.
 >
->  > building only rsync before and after your patch, and although the
-> binary becomes smaller with your patch, the overall filesystem becomes
-> larger.
+> Also previously a debug configure option has been lost, as
+> overwritten by '--with-included-popt' option - fixed.
 >
-> Yes, in case of the only selected package it will be so. Due to overhead
-> of shared library / not removed unused components.
-> But for this particular case - you most probably have openssh (depends to
-> zlib) or dropbear (depends to zlib if not 'small' version is selected
-> separately) also already.
+> For example, on ARMv5 rsync binary size is reduced by about 25%.
 >
->  > I'd therefore propose to only use the system library if it is anyway
-> selected.
->
-> Sorry I am disagree, even without considering the security issue, just
-> because zlib/popt for rsync are not optional libraries, they are
-> mandatory, and will be compiled in any case.
-> In the current buildroot .mk files such 'if' use case might be useful for
-> optional components only, something like 'nice to have, will be supported
-> if already present'. Otherwise there might be tens of components
-> compiling its own 'zlib' version (tens different versions) - and the
-> Buildroot user must somehow found FAQ or understand himself, that he must
-> 'include zlib to the package manually' (zlib or tens of other libraries).
->
-> Also it will be opposite to the current Buildroot configuration. In the
-> latest master there are 9 packages with 'select BR2_PACKAGE_POPT'
-> (cryptsetup, gptfdisk, libiscsi, librsync, logrotate, lttng-tools,
-> oprofile, rpm, samba) and 50 packages with the same for zlib (of course
-> not every one has its own zlib/popt).
->
-> Might be, later it would be nice to have something like
-> 'select_if_multiple' in Config files, to select other package if more
-> than 1 component is selecting it, but it will do Configs more complex,
-> and the use case is quite rare.
+> Signed-off-by: Denis Mingulov <denis@mingulov.com>
 
-  Yeah, you're right.
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+(tested with Sourcery ARM toolchain)
 
-  It was the "binary size is reduced by 25%" thing in your commit message 
-that triggered me. That difference is probably irrelevant, because it 
-hardly affects the overall filesystem size (rsync binary is relatively 
-small).
+> ---
+>   package/rsync/Config.in | 2 ++
+>   package/rsync/rsync.mk  | 7 +++++--
+>   2 files changed, 7 insertions(+), 2 deletions(-)
+>
+> diff --git a/package/rsync/Config.in b/package/rsync/Config.in
+> index be95a7c..b952974 100644
+> --- a/package/rsync/Config.in
+> +++ b/package/rsync/Config.in
+> @@ -2,6 +2,8 @@ config BR2_PACKAGE_RSYNC
+>   	bool "rsync"
+>   	# fork()
+>   	depends on BR2_USE_MMU
+> +	select BR2_PACKAGE_ZLIB
+> +	select BR2_PACKAGE_POPT
+>   	help
+>   	  File transfer program to keep remote files in sync.
+>
+> diff --git a/package/rsync/rsync.mk b/package/rsync/rsync.mk
+> index d8e5f3f..35f128c 100644
+> --- a/package/rsync/rsync.mk
+> +++ b/package/rsync/rsync.mk
+> @@ -8,7 +8,10 @@ RSYNC_VERSION = 3.1.0
+>   RSYNC_SITE = http://rsync.samba.org/ftp/rsync/src
+>   RSYNC_LICENSE = GPLv3+
+>   RSYNC_LICENSE_FILES = COPYING
+> -RSYNC_CONF_OPT = $(if $(BR2_ENABLE_DEBUG),--enable-debug,--disable-debug)
+> -RSYNC_CONF_OPT = --with-included-popt
+> +RSYNC_DEPENDENCIES = zlib popt
+> +RSYNC_CONF_OPT = \
+> +	$(if $(BR2_ENABLE_DEBUG),--enable-debug,--disable-debug) \
+> +	--with-included-zlib=no \
+> +	--with-included-popt=no
+>
+>   $(eval $(autotools-package))
+>
 
 
-  Regards,
-  Arnout
 -- 
 Arnout Vandecappelle                          arnout at mind be
 Senior Embedded Software Architect            +32-16-286500
