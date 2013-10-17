@@ -1,73 +1,69 @@
-From: Jesse Cobra <jessecobra@gmail.com>
-Date: Thu, 17 Oct 2013 11:28:29 -0400
-Subject: [Buildroot] Buildroot Developpers' Day 2013
-In-Reply-To: <20131017171754.2354c3a3@skate>
-References: <20131013223941.GD16563@free.fr> <20131017143209.036bb603@skate>
- <OF53A5EA25.AF5C7EBF-ON86257C07.004A718E-86257C07.004C0FF5@rockwellcollins.com>
- <20131017171754.2354c3a3@skate>
-Message-ID: <CACG401oZUdHo7GV2ApRcVarGA2J=uD0iDcOwTuhaE1Ehg-gYjg@mail.gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 17 Oct 2013 18:18:26 +0200
+Subject: [Buildroot] [PATCH] rsync: use system zlib and popt,
+ also do not lose debug options
+In-Reply-To: <CAB++i-LMOO8owKF2V9eJdi_vX5W6LETLF-ywJ+x5bUMiGeoU+w@mail.gmail.com>
+References: <1381923631-26549-1-git-send-email-denis@mingulov.com>
+ <525F0956.1040406@mind.be>
+ <CAB++i-LMOO8owKF2V9eJdi_vX5W6LETLF-ywJ+x5bUMiGeoU+w@mail.gmail.com>
+Message-ID: <52600DD2.1000502@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I would not mind joining hangouts to see Yann's presentation.
-That said I am -5 EST so I could only watch if it is later in the day in
-Edinburgh, my morning...
+On 17/10/13 08:05, Denis Mingulov wrote:
+> Hi,
+>
+>  > building only rsync before and after your patch, and although the
+> binary becomes smaller with your patch, the overall filesystem becomes
+> larger.
+>
+> Yes, in case of the only selected package it will be so. Due to overhead
+> of shared library / not removed unused components.
+> But for this particular case - you most probably have openssh (depends to
+> zlib) or dropbear (depends to zlib if not 'small' version is selected
+> separately) also already.
+>
+>  > I'd therefore propose to only use the system library if it is anyway
+> selected.
+>
+> Sorry I am disagree, even without considering the security issue, just
+> because zlib/popt for rsync are not optional libraries, they are
+> mandatory, and will be compiled in any case.
+> In the current buildroot .mk files such 'if' use case might be useful for
+> optional components only, something like 'nice to have, will be supported
+> if already present'. Otherwise there might be tens of components
+> compiling its own 'zlib' version (tens different versions) - and the
+> Buildroot user must somehow found FAQ or understand himself, that he must
+> 'include zlib to the package manually' (zlib or tens of other libraries).
+>
+> Also it will be opposite to the current Buildroot configuration. In the
+> latest master there are 9 packages with 'select BR2_PACKAGE_POPT'
+> (cryptsetup, gptfdisk, libiscsi, librsync, logrotate, lttng-tools,
+> oprofile, rpm, samba) and 50 packages with the same for zlib (of course
+> not every one has its own zlib/popt).
+>
+> Might be, later it would be nice to have something like
+> 'select_if_multiple' in Config files, to select other package if more
+> than 1 component is selecting it, but it will do Configs more complex,
+> and the use case is quite rare.
 
--Jesse
+  Yeah, you're right.
+
+  It was the "binary size is reduced by 25%" thing in your commit message 
+that triggered me. That difference is probably irrelevant, because it 
+hardly affects the overall filesystem size (rsync binary is relatively 
+small).
 
 
-On Thu, Oct 17, 2013 at 11:17 AM, Thomas Petazzoni <
-thomas.petazzoni@free-electrons.com> wrote:
-
-> Dear Ryan Barnett,
->
-> On Thu, 17 Oct 2013 08:51:02 -0500, Ryan Barnett wrote:
->
-> > > > I have started adding a few items to the list of topics to address
-> > > > during this event, list which you may find there (needs registration
-> > > > to the Wiki first):
-> > > >     http://elinux.org/Buildroot:DeveloperDaysELCE2013
-> >
-> > I see that our SELinux patchsets have now made the list of topic
-> > discussions.
->
-> Yes. However, I am not sure the discussion at the Buildroot meeting
-> will really lead to something special. Up to now, there is nothing
-> controversial / problematic about these patches. They just need to be
-> reviewed, and progressively merged. The most "controversial" issues
-> will probably arise when we start working on the real SELinux
-> integration, not just the packages themselves. But we have another
-> Buildroot meeting at FOSDEM for this :-)
->
-> > I would be interested in this, however, discussion that happens early
-> > in the day will be difficult for me to attend since it would 3:30am CDT
-> > (UTC-05:00) when the meeting begins at 9:30 am (Edinburgh Time). However,
-> > I could join later. I would probably be able to join around 6am to
-> > 6:30am CDT. So if discussion surrounding BR2_EXTERNAL, SELinux Related
-> > Packages and Yann's buildroot.config could hold off until then I would
-> > be willing to participate via a Google Hangout. If we setup a specific
-> > time for the SELinux related packages, I can probably see if I can't
-> > convince Clayton Shotwell to also attend.
->
-> Let's see what happens with the agenda over the course of the WE, and
-> if it makes sense, we'll try to schedule a specific time for SELinux
-> discussion.
->
-> Best regards,
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux, Kernel and Android engineering
-> http://free-electrons.com
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20131017/1a3bd226/attachment.html>
+  Regards,
+  Arnout
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
