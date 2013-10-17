@@ -1,69 +1,70 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 17 Oct 2013 18:19:00 +0200
-Subject: [Buildroot] [PATCH v2] rsync: use system zlib and popt,
- also do not lose debug options
-In-Reply-To: <1381929217-13399-1-git-send-email-denis@mingulov.com>
-References: <1381923631-26549-1-git-send-email-denis@mingulov.com>
- <1381929217-13399-1-git-send-email-denis@mingulov.com>
-Message-ID: <52600DF4.4070800@mind.be>
+Date: Thu, 17 Oct 2013 18:24:29 +0200
+Subject: [Buildroot] [PATCH 9/9] manual: rework Deploying images chapter
+In-Reply-To: <CAHXCMMKzwCJbHJG-zx_7r8LavH0sJT71e12zq3p_J+GFuf8fqQ@mail.gmail.com>
+References: <cover.1381002281.git.s.martin49@gmail.com>
+ <a2cb1b7caaa580f341abbb3788d18323c3e2e7c3.1381002281.git.s.martin49@gmail.com>
+ <52546B18.7010207@mind.be>
+ <CAHXCMMKzwCJbHJG-zx_7r8LavH0sJT71e12zq3p_J+GFuf8fqQ@mail.gmail.com>
+Message-ID: <52600F3D.6020401@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 16/10/13 15:13, Denis Mingulov wrote:
-> rsync by default compiles statically its own zlib and popt
-> libraries, it is better to use system wide libraries instead -
-> both for disk and memory consumption. Change rsync package
-> accordingly.
+On 17/10/13 10:40, Samuel Martin wrote:
+> Arnout,
 >
-> Also previously a debug configure option has been lost, as
-> overwritten by '--with-included-popt' option - fixed.
 >
-> For example, on ARMv5 rsync binary size is reduced by about 25%.
+> 2013/10/8 Arnout Vandecappelle <arnout at mind.be <mailto:arnout@mind.be>>
 >
-> Signed-off-by: Denis Mingulov <denis@mingulov.com>
+>     On 10/05/13 21:49, Samuel Martin wrote:
+>
+>         [...]
+>
+>         +
+>         +[WARNING]
+>         +Be careful, *the _board's_ readme files coming within Buildroot are
+>         +provided without warranty of any kind*.
+>         +They are contributions from Buildroot users, but Buildroot
+>         developers
+>         +do not ensure their correctness, nor maintain them.
+>
+>
+>       Is this warning really necessary? Most readme.txt files use
+>     removable media (or emulation), and the few that do write to flash
+>     have warnings already. The only exception is the Telit EVK-PRO3, so
+>     maybe we should just add a warning there.
+>
+> Well, the few boards we are talking about here are:
+> - Telit EVK-PRO3
+> - avnet s6lx9_microboard
+> - freescale mpc8315erdb
+> - freescale p1010rdb
+> For the 2 later, there is a warning about the bootloader in the
+> readme.txt files,
+> for the 2 others, it is not so obvious...
 
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(tested with Sourcery ARM toolchain)
+  For the s6lx9 the danger isn't so big because you don't overwrite the 
+bootloader.
 
-> ---
->   package/rsync/Config.in | 2 ++
->   package/rsync/rsync.mk  | 7 +++++--
->   2 files changed, 7 insertions(+), 2 deletions(-)
 >
-> diff --git a/package/rsync/Config.in b/package/rsync/Config.in
-> index be95a7c..b952974 100644
-> --- a/package/rsync/Config.in
-> +++ b/package/rsync/Config.in
-> @@ -2,6 +2,8 @@ config BR2_PACKAGE_RSYNC
->   	bool "rsync"
->   	# fork()
->   	depends on BR2_USE_MMU
-> +	select BR2_PACKAGE_ZLIB
-> +	select BR2_PACKAGE_POPT
->   	help
->   	  File transfer program to keep remote files in sync.
+> Anyway, I don't mind adding the warning in the readme files.
+> Having it close to the flashing instruction makes sense;
+> having it in the documentation (as a genreric warning) makes sense too imho.
+
+  I just don't like scaring people off... But I guess the warning doesn't 
+really hurt.
+
+  Regards,
+  Arnout
+
 >
-> diff --git a/package/rsync/rsync.mk b/package/rsync/rsync.mk
-> index d8e5f3f..35f128c 100644
-> --- a/package/rsync/rsync.mk
-> +++ b/package/rsync/rsync.mk
-> @@ -8,7 +8,10 @@ RSYNC_VERSION = 3.1.0
->   RSYNC_SITE = http://rsync.samba.org/ftp/rsync/src
->   RSYNC_LICENSE = GPLv3+
->   RSYNC_LICENSE_FILES = COPYING
-> -RSYNC_CONF_OPT = $(if $(BR2_ENABLE_DEBUG),--enable-debug,--disable-debug)
-> -RSYNC_CONF_OPT = --with-included-popt
-> +RSYNC_DEPENDENCIES = zlib popt
-> +RSYNC_CONF_OPT = \
-> +	$(if $(BR2_ENABLE_DEBUG),--enable-debug,--disable-debug) \
-> +	--with-included-zlib=no \
-> +	--with-included-popt=no
+> Regards,
 >
->   $(eval $(autotools-package))
->
+> --
+> Samuel
 
 
 -- 
