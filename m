@@ -1,39 +1,54 @@
-From: Matthias Hardt <matthias.hardt@gmail.com>
-Date: Thu, 17 Oct 2013 10:26:33 +0200
-Subject: [Buildroot] qt5webkit and bison 3.0
-Message-ID: <20131017082633.GA13085@riot>
+From: Markos Chandras <markos.chandras@imgtec.com>
+Date: Thu, 17 Oct 2013 09:33:25 +0100
+Subject: [Buildroot] [PATCH] dropwatch: Remove -Werror from CFLAGS
+Message-ID: <1381998805-6732-1-git-send-email-markos.chandras@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+-Werror shouldn't be used in released code since it can
+cause random build failures on moderate warnings. It also
+depends on the used toolchain since different toolchains may
+or may not print the same warnings.
 
-the current buildroot-repository uses bison 3.0. When building qt5webkit,
-there is a known incompatibility to this bison version [1].
-For now I fixed this by using bison 2.7.1 when qt5webkit is chosen. Maybe this
-should be done in the repository as well (at least while waiting for the 
-qt5webkit 5.1.2 release which will fix this issue).
+Fixes the following build problem on MIPS64/n64:
 
-And some other minor inconvenience. qt5webkit needs dependencies to host-flex
-and host-bison.
+main.c: In function handle_dm_alert_msg:
+main.c:336:5: error: format %llx expects argument of
+type long long unsigned int, but argument 4 has
+type __u64 [-Werror=format=]
 
-I can provide a patch for both issues, if needed.
+Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
+---
+ package/dropwatch/dropwatch-03-remove-werror.patch | 18 ++++++++++++++++++
+ 1 file changed, 18 insertions(+)
+ create mode 100644 package/dropwatch/dropwatch-03-remove-werror.patch
 
-Best regards,
-Matthias
-
-[1] https://bugreports.qt-project.org/browse/QTBUG-32913
-
+diff --git a/package/dropwatch/dropwatch-03-remove-werror.patch b/package/dropwatch/dropwatch-03-remove-werror.patch
+new file mode 100644
+index 0000000..97b26b7
+--- /dev/null
++++ b/package/dropwatch/dropwatch-03-remove-werror.patch
+@@ -0,0 +1,18 @@
++-Werror shouldn't be used in released code since it can
++cause random build failures on moderate warnings. It also
++depends on the used toolchain since different toolchains may
++or may not print the same warnings.
++
++Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
++
++Index: dropwatch-1.4/src/Makefile
++===================================================================
++--- dropwatch-1.4.orig/src/Makefile
+++++ dropwatch-1.4/src/Makefile
++@@ -1,5 +1,5 @@
++ all: dropwatch
++-CFLAGS+=-c -g -D_GNU_SOURCE -Wall -Werror `pkg-config --cflags libnl-3.0`
+++CFLAGS+=-c -g -D_GNU_SOURCE -Wall `pkg-config --cflags libnl-3.0`
++ LDFLAGS=-lbfd -lreadline -lnl-3 -lnl-genl-3
++ OBJFILES := main.o lookup.o\
++ 	 lookup_bfd.o lookup_kas.o
 -- 
-Matthias Hardt
-Software Developer
-
-BerLinux Solutions GmbH
-Torellstr. 7
-10243 Berlin
-Germany
-
-E-Mail: mhardt at berlinux-solutions.de
-Phone:  +49 30/86437990
+1.8.4
