@@ -1,25 +1,31 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Fri, 18 Oct 2013 16:01:19 +0200
-Subject: [Buildroot] [PATCH] tslib: needs dynamic library for dlopen
-In-Reply-To: <a0f5079cb28446c5d278.1382078683@argentina>
-References: <a0f5079cb28446c5d278.1382078683@argentina>
-Message-ID: <CAAXf6LX-5yWxuPS1xyv1L0fMoaW3SsY0KDdq0xHu+uWtkH-oMQ@mail.gmail.com>
+From: Axel Lin <axel.lin@ingics.com>
+Date: Fri, 18 Oct 2013 23:44:19 +0800
+Subject: [Buildroot] [PATCH v2 1/2] spice-protocol: bump to version 0.12.6
+Message-ID: <1382111059.30247.1.camel@phoenix>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Oct 18, 2013 at 8:44 AM, Thomas De Schampheleire
-<patrickdepinguin@gmail.com> wrote:
-> Fixes
-> http://autobuild.buildroot.net/results/1242cbea015e5a24a6621d1bd5569d2a1a819bb4/
->
-> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
->
-> ---
-> v2: - propagate dependency to selectors of tslib (ThomasP)
->     - shared library -> dynamic library (shame on me)
->
+Signed-off-by: Axel Lin <axel.lin@ingics.com>
+---
+v2: no change, just make version number consistent in this patch serial.
+ package/spice-protocol/spice-protocol.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Sorry by the way that the subject line does not correctly mention v2.
+diff --git a/package/spice-protocol/spice-protocol.mk b/package/spice-protocol/spice-protocol.mk
+index 62a028d..fda87b6 100644
+--- a/package/spice-protocol/spice-protocol.mk
++++ b/package/spice-protocol/spice-protocol.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SPICE_PROTOCOL_VERSION         = 0.12.2
++SPICE_PROTOCOL_VERSION         = 0.12.6
+ SPICE_PROTOCOL_SOURCE          = spice-protocol-$(SPICE_PROTOCOL_VERSION).tar.bz2
+ SPICE_PROTOCOL_SITE            = http://www.spice-space.org/download/releases/
+ SPICE_PROTOCOL_LICENSE         = BSD-3c
+-- 
+1.8.1.2
