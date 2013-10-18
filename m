@@ -1,90 +1,115 @@
 From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Fri, 18 Oct 2013 11:27:08 +0200
-Subject: [Buildroot] [PATCH v8 0/8] Add support for top-level parallel make
-Message-ID: <1382088437-30393-1-git-send-email-fabio.porcedda@gmail.com>
+Date: Fri, 18 Oct 2013 11:27:13 +0200
+Subject: [Buildroot] [PATCH v8 4/8] Makefile: add support for top-level
+	parallel make
+In-Reply-To: <1382088437-30393-1-git-send-email-fabio.porcedda@gmail.com>
+References: <1382088437-30393-1-git-send-email-fabio.porcedda@gmail.com>
+Message-ID: <1382088437-30393-6-git-send-email-fabio.porcedda@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
-this is a patch set for adding support for top-level parallel make in
-buildroot, the common problem scattered in buildroot's top-level
-makefiles is that in the rules it relies on the order of evaluation of
-the prerequisites, to be able to use top-level parallel make instead
-of reling on the left to right ordering of evaluation of the
-prerequisites we must add an explicit rule to describe the
-dependencies.
+To be able to use top-level parallel make we must not depend in a rule
+on the order of evaluation of the prerequisites, so instead of relyng on
+the left to right ordering of evaluation of the prerequisites add an
+explicit rule to describe the dependencies.
 
-With this patch set the top-level parallel make seems to work fine,
-example:
-	make clean
-	make BR2_JLEVEL= -j$((`getconf _NPROCESSORS_ONLN` + 1))
+Add explicit rules to describe the following dependency chain:
+$(TARGETS) -> target-finalize -> rootfs-* -> target-post-image
 
-On my quad core system the building time for qemu_x86_defconfig
-is 13m versus 11m.
+Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+---
+ Makefile     | 15 ++++++---------
+ fs/common.mk |  4 ++--
+ 2 files changed, 8 insertions(+), 11 deletions(-)
 
-I've tested the qemu_x86_defconfig uclibc/eglibc/glibc.
-
-Best regards
-Fabio Porcedda
-
-v8:
- - rebased over master
- - added patche for for base dependency
- - added patche for for glibc package
- - added patche for for uclibc package
- - removed patch already merged
- - changed some descriptions
- - modified the patch for toolchain dependency to prevent circular dependency
-v7:
- - add the latest patch
- - add to the first patch the <pkgname>_TOOLCHAIN variable
- - improve the fifth patch
-v6:
- - added the fifth patch
- - updated the fourth patch adding the install targets
- - updated the second patch to remove TARGETS_ALL
-v5:
- - added the fourth patch
- - fixed some typos
- - rewrited the second patch to use only $$($(2)_TARGET_*) in the rules
- - add support for top-level parallel make for the glibc package
-v4:
- - rebased over master
- - add Acked-by: Thomas Petazzoni on the third patch
- - changed the orderd of the patches
-v3:
- - add back the patch "package: add toolchain dependency to
-    inner-generic-package" because now is working fine.
- - add Acked-by: Arnout Vandecappelle to the third patch.
- - reworked the second patch following Arnout suggestions.
-v2:
- - remove patch "package: add toolchain dependency to inner-generic-package"
-   because was not working fine against recent toolchain changes.
-
-Fabio Porcedda (8):
-  package: add base dependency to every package
-  package: add toolchain dependency to every target package
-  package: add support for top-level parallel make
-  Makefile: add support for top-level parallel make
-  glibc: add support for top-level parallel make
-  uclibc: add support for top-level parallel make
-  package: enable jobserver for recursive make
-  Makefile: enable top-level parallel make
-
- Makefile                                           | 22 +++-----
- fs/common.mk                                       |  4 +-
- package/glibc/glibc.mk                             |  7 ++-
- package/linux-headers/linux-headers.mk             |  3 ++
- package/pkg-autotools.mk                           |  3 +-
- package/pkg-generic.mk                             | 60 +++++++++++++---------
- package/uclibc/uclibc.mk                           |  7 ++-
- .../toolchain-buildroot/toolchain-buildroot.mk     |  2 +
- toolchain/toolchain-external/toolchain-external.mk |  2 +
- toolchain/toolchain/toolchain.mk                   |  5 +-
- 10 files changed, 69 insertions(+), 46 deletions(-)
-
+diff --git a/Makefile b/Makefile
+index ebecec4..299d34b 100644
+--- a/Makefile
++++ b/Makefile
+@@ -329,8 +329,6 @@ include boot/common.mk
+ include linux/linux.mk
+ include system/system.mk
+ 
+-TARGETS+=target-finalize
+-
+ ifeq ($(BR2_ENABLE_LOCALE_PURGE),y)
+ TARGETS+=target-purgelocales
+ endif
+@@ -347,8 +345,6 @@ endif
+ 
+ include fs/common.mk
+ 
+-TARGETS+=target-post-image
+-
+ TARGETS_CLEAN:=$(patsubst %,%-clean,$(TARGETS))
+ TARGETS_SOURCE:=$(patsubst %,%-source,$(TARGETS) $(BASE_TARGETS))
+ TARGETS_DIRCLEAN:=$(patsubst %,%-dirclean,$(TARGETS))
+@@ -382,11 +378,12 @@ $(BUILD_DIR)/buildroot-config/auto.conf: $(BUILDROOT_CONFIG)
+ 
+ prepare: $(BUILD_DIR)/buildroot-config/auto.conf
+ 
+-world: $(TARGETS)
++world: target-post-image
+ 
+ .PHONY: all world toolchain dirs clean distclean source outputmakefile \
+ 	legal-info legal-info-prepare legal-info-clean printvars \
+-	$(BASE_TARGETS) $(TARGETS) \
++	target-finalize target-post-image \
++	$(BASE_TARGETS) $(TARGETS) $(TARGETS_ROOTFS) \
+ 	$(TARGETS_CLEAN) $(TARGETS_DIRCLEAN) $(TARGETS_SOURCE) $(TARGETS_LEGAL_INFO) \
+ 	$(BUILD_DIR) $(STAGING_DIR) $(TARGET_DIR) \
+ 	$(HOST_DIR) $(BINARIES_DIR) $(STAMP_DIR)
+@@ -443,7 +440,7 @@ endif
+ STRIP_FIND_CMD += -type f -perm /111
+ STRIP_FIND_CMD += -not \( $(call findfileclauses,libpthread*.so* $(call qstrip,$(BR2_STRIP_EXCLUDE_FILES))) \) -print
+ 
+-target-finalize:
++target-finalize: $(TARGETS)
+ 	rm -rf $(TARGET_DIR)/usr/include $(TARGET_DIR)/usr/share/aclocal \
+ 		$(TARGET_DIR)/usr/lib/pkgconfig $(TARGET_DIR)/usr/share/pkgconfig \
+ 		$(TARGET_DIR)/usr/lib/cmake $(TARGET_DIR)/usr/share/cmake
+@@ -550,7 +547,7 @@ target-generatelocales: host-localedef
+ 	done
+ endif
+ 
+-target-post-image:
++target-post-image: target-finalize $(TARGETS_ROOTFS)
+ 	@$(foreach s, $(call qstrip,$(BR2_ROOTFS_POST_IMAGE_SCRIPT)), \
+ 		$(call MESSAGE,"Executing post-image script $(s)"); \
+ 		$(s) $(BINARIES_DIR) $(call qstrip,$(BR2_ROOTFS_POST_SCRIPT_ARGS))$(sep))
+@@ -586,7 +583,7 @@ legal-info: dirs legal-info-clean legal-info-prepare $(REDIST_SOURCES_DIR) \
+ 	@rm -f $(LEGAL_WARNINGS)
+ 
+ show-targets:
+-	@echo $(TARGETS)
++	@echo $(TARGETS) $(TARGETS_ROOTFS)
+ 
+ else # ifeq ($(BR2_HAVE_DOT_CONFIG),y)
+ 
+diff --git a/fs/common.mk b/fs/common.mk
+index 4dab7ea..7698c53 100644
+--- a/fs/common.mk
++++ b/fs/common.mk
+@@ -42,7 +42,7 @@ define ROOTFS_TARGET_INTERNAL
+ # extra deps
+ ROOTFS_$(2)_DEPENDENCIES += host-fakeroot host-makedevs $$(if $$(BR2_TARGET_ROOTFS_$(2)_LZMA),host-lzma) $$(if $$(BR2_TARGET_ROOTFS_$(2)_LZO),host-lzop) $$(if $$(BR2_TARGET_ROOTFS_$(2)_XZ),host-xz)
+ 
+-$$(BINARIES_DIR)/rootfs.$(1): $$(ROOTFS_$(2)_DEPENDENCIES)
++$$(BINARIES_DIR)/rootfs.$(1): target-finalize $$(ROOTFS_$(2)_DEPENDENCIES)
+ 	@$$(call MESSAGE,"Generating root filesystem image rootfs.$(1)")
+ 	$$(foreach hook,$$(ROOTFS_$(2)_PRE_GEN_HOOKS),$$(call $$(hook))$$(sep))
+ 	rm -f $$(FAKEROOT_SCRIPT)
+@@ -86,7 +86,7 @@ rootfs-$(1)-show-depends:
+ rootfs-$(1): $$(BINARIES_DIR)/rootfs.$(1) $$(ROOTFS_$(2)_POST_TARGETS)
+ 
+ ifeq ($$(BR2_TARGET_ROOTFS_$(2)),y)
+-TARGETS += rootfs-$(1)
++TARGETS_ROOTFS += rootfs-$(1)
+ endif
+ endef
+ 
 -- 
 1.8.4
