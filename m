@@ -1,41 +1,38 @@
 From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Fri, 18 Oct 2013 11:34:20 +0200
-Subject: [Buildroot] [PATCH v8 RESEND 8/8] Makefile: enable top-level
+Date: Fri, 18 Oct 2013 11:27:14 +0200
+Subject: [Buildroot] [PATCH v8 5/8] glibc: add support for top-level
 	parallel make
-In-Reply-To: <1382088860-30524-1-git-send-email-fabio.porcedda@gmail.com>
-References: <1382088860-30524-1-git-send-email-fabio.porcedda@gmail.com>
-Message-ID: <1382088860-30524-9-git-send-email-fabio.porcedda@gmail.com>
+In-Reply-To: <1382088437-30393-1-git-send-email-fabio.porcedda@gmail.com>
+References: <1382088437-30393-1-git-send-email-fabio.porcedda@gmail.com>
+Message-ID: <1382088437-30393-7-git-send-email-fabio.porcedda@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Enable top-level parallel make because the previous patches have fixed
-all the know issue about top-level parallel make.
+To be able to use top-level parallel make we must not depend in a rule
+on the order of evaluation of the prerequisites, so instead of relyng on
+the left to right ordering of evaluation of the prerequisites add
+an explicit rule to describe the dependencies.
 
-Example:
-	make <board>_defconfig
-	make BR2_JLEVEL= -j$((`getconf _NPROCESSORS_ONLN`+1))
+The glibc-install-target depends on glibc-install-staging so add a rule
+for it.
 
 Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
 ---
- Makefile | 3 ---
- 1 file changed, 3 deletions(-)
+ package/glibc/glibc.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/Makefile b/Makefile
-index 299d34b..9752f96 100644
---- a/Makefile
-+++ b/Makefile
-@@ -42,9 +42,6 @@ export HOSTARCH := $(shell uname -m | \
- 	    -e s/macppc/powerpc/\
- 	    -e s/sh.*/sh/)
+diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
+index e89c12a..838fb8c 100644
+--- a/package/glibc/glibc.mk
++++ b/package/glibc/glibc.mk
+@@ -130,3 +130,5 @@ define GLIBC_INSTALL_TARGET_CMDS
+ endef
  
--# This top-level Makefile can *not* be executed in parallel
--.NOTPARALLEL:
--
- # absolute path
- TOPDIR:=$(shell pwd)
- CONFIG_CONFIG_IN=Config.in
+ $(eval $(autotools-package))
++
++$(GLIBC_TARGET_INSTALL_TARGET): $(GLIBC_TARGET_INSTALL_STAGING)
 -- 
 1.8.4
