@@ -1,10 +1,10 @@
 From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Fri, 18 Oct 2013 11:27:12 +0200
-Subject: [Buildroot] [PATCH v8 3/8] package: add support for top-level
+Date: Fri, 18 Oct 2013 11:27:15 +0200
+Subject: [Buildroot] [PATCH v8 6/8] uclibc: add support for top-level
 	parallel make
 In-Reply-To: <1382088437-30393-1-git-send-email-fabio.porcedda@gmail.com>
 References: <1382088437-30393-1-git-send-email-fabio.porcedda@gmail.com>
-Message-ID: <1382088437-30393-5-git-send-email-fabio.porcedda@gmail.com>
+Message-ID: <1382088437-30393-8-git-send-email-fabio.porcedda@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,140 +15,24 @@ To be able to use top-level parallel make we must not depend in a rule
 on the order of evaluation of the prerequisites, so instead of relyng on
 the left to right ordering of evaluation of the prerequisites add an
 explicit rule to describe the dependencies.
-So add explicit dependencies for the following stamp files:
-   %/.stamp_extracted
-   %/.stamp_patched
-   %/.stamp_configured
-   %/.stamp_built
-   %/.stamp_host_installed
-   %/.stamp_staging_installed
-   %/.stamp_images_installed
-   %/.stamp_target_installed
 
-Because the %-build target is not anymore part of the dependency chain,
-add a new variable <pkgname>_BUILD_DEPENDENCIES to be used instead.
-This new variable is used only by uclibc and glibc packages.
+The uclibc-install-target depends on uclibc-install-staging so add a
+rule for it.
 
 Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
 ---
- package/glibc/glibc.mk   |  2 +-
- package/pkg-generic.mk   | 38 +++++++++++++++++++++-----------------
- package/uclibc/uclibc.mk |  2 +-
- 3 files changed, 23 insertions(+), 19 deletions(-)
+ package/uclibc/uclibc.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
-index 68b98a9..e89c12a 100644
---- a/package/glibc/glibc.mk
-+++ b/package/glibc/glibc.mk
-@@ -27,7 +27,7 @@ GLIBC_ADD_TOOLCHAIN_DEPENDENCY = NO
- GLIBC_DEPENDENCIES = host-gcc-initial linux-headers host-gawk
- 
- # Before (e)glibc is built, we must have the second stage cross-compiler
--glibc-build: host-gcc-intermediate
-+GLIBC_BUILD_DEPENDENCIES = host-gcc-intermediate
- 
- GLIBC_SUBDIR = build
- 
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 3f19aea..094868c 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -317,6 +317,7 @@ $(2)_DEPENDENCIES ?= $(filter-out  host-toolchain $(1),\
- ifeq ($$($(2)_TYPE)-$$($(2)_ADD_TOOLCHAIN_DEPENDENCY),target-YES)
- $(2)_DEPENDENCIES += toolchain
- endif
-+$(2)_BUILD_DEPENDENCIES		?=
- 
- $(2)_INSTALL_STAGING		?= NO
- $(2)_INSTALL_IMAGES		?= NO
-@@ -368,30 +369,34 @@ $(1)-install:		$(1)-install-staging $(1)-install-target $(1)-install-images
- endif
- 
- ifeq ($$($(2)_INSTALL_TARGET),YES)
--$(1)-install-target:	$(1)-build \
--			$$($(2)_TARGET_INSTALL_TARGET)
-+$(1)-install-target:	$$($(2)_TARGET_INSTALL_TARGET)
- else
- $(1)-install-target:
- endif
- 
- ifeq ($$($(2)_INSTALL_STAGING),YES)
--$(1)-install-staging:	$(1)-build \
--			$$($(2)_TARGET_INSTALL_STAGING)
-+$(1)-install-staging:	$$($(2)_TARGET_INSTALL_STAGING)
- else
- $(1)-install-staging:
- endif
- 
- ifeq ($$($(2)_INSTALL_IMAGES),YES)
--$(1)-install-images:	$(1)-build \
--			$$($(2)_TARGET_INSTALL_IMAGES)
-+$(1)-install-images:	$$($(2)_TARGET_INSTALL_IMAGES)
- else
- $(1)-install-images:
- endif
- 
--$(1)-install-host:      $(1)-build $$($(2)_TARGET_INSTALL_HOST)
-+$(1)-install-host:      $$($(2)_TARGET_INSTALL_HOST)
- 
--$(1)-build:		$(1)-configure \
--			$$($(2)_TARGET_BUILD)
-+$$($(2)_TARGET_INSTALL_TARGET) $$($(2)_TARGET_INSTALL_STAGING) \
-+$$($(2)_TARGET_INSTALL_IMAGES) $$($(2)_TARGET_INSTALL_HOST): \
-+	$$($(2)_TARGET_BUILD)
-+
-+$(1)-build:		$$($(2)_TARGET_BUILD)
-+$$($(2)_TARGET_BUILD):	$$($(2)_TARGET_CONFIGURE) | $$($(2)_BUILD_DEPENDENCIES)
-+
-+$(1)-configure:			$$($(2)_TARGET_CONFIGURE)
-+$$($(2)_TARGET_CONFIGURE):	| $$($(2)_DEPENDENCIES)
- 
- $$($(2)_TARGET_SOURCE) $$($(2)_TARGET_RSYNC): | dependencies dirs prepare
- 
-@@ -402,13 +407,13 @@ ifeq ($$($(2)_OVERRIDE_SRCDIR),)
- #  extract
- #  patch
- #  configure
--$(1)-configure:		$(1)-patch $(1)-depends \
--			$$($(2)_TARGET_CONFIGURE)
-+$$($(2)_TARGET_CONFIGURE):	$$($(2)_TARGET_PATCH)
- 
--$(1)-patch:		$(1)-extract $$($(2)_TARGET_PATCH)
-+$(1)-patch:		$$($(2)_TARGET_PATCH)
-+$$($(2)_TARGET_PATCH):	$$($(2)_TARGET_EXTRACT)
- 
--$(1)-extract:		$(1)-source \
--			$$($(2)_TARGET_EXTRACT)
-+$(1)-extract:			$$($(2)_TARGET_EXTRACT)
-+$$($(2)_TARGET_EXTRACT):	$$($(2)_TARGET_SOURCE)
- 
- $(1)-depends:		$$($(2)_DEPENDENCIES)
- 
-@@ -418,10 +423,9 @@ else
- #  source, by rsyncing
- #  depends
- #  configure
--$(1)-configure:		$(1)-depends \
--			$$($(2)_TARGET_CONFIGURE)
-+$$($(2)_TARGET_CONFIGURE):	$$($(2)_TARGET_RSYNC)
- 
--$(1)-depends:		$(1)-rsync $$($(2)_DEPENDENCIES)
-+$(1)-depends:		$$($(2)_DEPENDENCIES)
- 
- $(1)-patch:		$(1)-rsync
- $(1)-extract:		$(1)-rsync
 diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
-index 0d12afd..dea36e7 100644
+index dea36e7..c8eeb3d 100644
 --- a/package/uclibc/uclibc.mk
 +++ b/package/uclibc/uclibc.mk
-@@ -26,7 +26,7 @@ UCLIBC_ADD_TOOLCHAIN_DEPENDENCY = NO
- UCLIBC_DEPENDENCIES = host-gcc-initial linux-headers
+@@ -559,3 +559,5 @@ uclibc-menuconfig: dirs uclibc-patch
+ 	rm -f $(UCLIBC_DIR)/.stamp_{configured,built,target_installed,staging_installed}
  
- # Before uClibc is built, we must have the second stage cross-compiler
--uclibc-build: host-gcc-intermediate
-+UCLIBC_BUILD_DEPENDENCIES = host-gcc-intermediate
- 
- # specifying UCLIBC_CONFIG_FILE on the command-line overrides the .config
- # setting.
+ $(eval $(generic-package))
++
++$(UCLIBC_TARGET_INSTALL_TARGET): $(UCLIBC_TARGET_INSTALL_STAGING)
 -- 
 1.8.4
