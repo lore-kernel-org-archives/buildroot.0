@@ -1,22 +1,55 @@
-From: arnaud aujon <arnaud.aujon@gmail.com>
-Date: Fri, 18 Oct 2013 13:23:56 +0200
-Subject: [Buildroot] package libfreefare: site url question
-Message-ID: <CACjG4BLNti1J9rH0Ks1jJnyGX=JztNJteMXp62x-zg43XHyeWw@mail.gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Fri, 18 Oct 2013 10:45:34 -0300
+Subject: [Buildroot] [PATCH 1/2] configs/p1010rdb: bump to the latest and
+	greatest versions
+Message-ID: <1382103935-21473-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ .../p1010rdb/{linux-3.10.config => linux-3.11.config}         |  0
+ configs/freescale_p1010rdb_defconfig                          | 11 ++++++-----
+ 2 files changed, 6 insertions(+), 5 deletions(-)
+ rename board/freescale/p1010rdb/{linux-3.10.config => linux-3.11.config} (100%)
 
-I noticed that libfreefare package refers to the site
-nfc-tools.googlecode.com, even if the current archive (libfreefare-0.3.4)
-is present in nfc-tools repository, it seems better to use the libfreefare
-repository (libfreefare.googlecode.com).
-Is there a reason for that ?
-As i'm working on a script to automatically check updates, it would be way
-easier for me :)
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20131018/13ebc740/attachment-0001.html>
+diff --git a/board/freescale/p1010rdb/linux-3.10.config b/board/freescale/p1010rdb/linux-3.11.config
+similarity index 100%
+rename from board/freescale/p1010rdb/linux-3.10.config
+rename to board/freescale/p1010rdb/linux-3.11.config
+diff --git a/configs/freescale_p1010rdb_defconfig b/configs/freescale_p1010rdb_defconfig
+index 21554d5..76a0be2 100644
+--- a/configs/freescale_p1010rdb_defconfig
++++ b/configs/freescale_p1010rdb_defconfig
+@@ -9,15 +9,16 @@ BR2_TARGET_ROOTFS_JFFS2_CUSTOM=y
+ BR2_TARGET_ROOTFS_JFFS2_CUSTOM_PAGESIZE=0x20
+ BR2_TARGET_ROOTFS_JFFS2_CUSTOM_EBSIZE=0x20000
+ 
+-# Lock to 3.8 headers to avoid breaking with newer kernels
+-BR2_KERNEL_HEADERS_3_8=y
++# Lock headers version to match and avoid breakage
++BR2_KERNEL_HEADERS_VERSION=y
++BR2_DEFAULT_KERNEL_VERSION="3.11.5"
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.10.7"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.11.5"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+-BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/freescale/p1010rdb/linux-3.10.config"
++BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/freescale/p1010rdb/linux-3.11.config"
+ BR2_LINUX_KERNEL_UIMAGE=y
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="p1010rdb"
+@@ -30,4 +31,4 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BOARDNAME="P1010RDB_NOR"
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2013.07"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2013.10"
+-- 
+1.8.1.5
