@@ -1,96 +1,45 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Fri, 18 Oct 2013 22:31:36 +0200
-Subject: [Buildroot] [PATCH 12/12] board: add warning to readme files
-	explaining how to flash the target
-In-Reply-To: <cover.1382127504.git.s.martin49@gmail.com>
-References: <cover.1382127504.git.s.martin49@gmail.com>
-Message-ID: <b67f14903e6e33f2790ff7ee8c82c658f8c12b01.1382127504.git.s.martin49@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 18 Oct 2013 22:49:20 +0200
+Subject: [Buildroot] [RFC PATCH] fs/common.mk: Add support for fakeroot
+ script
+In-Reply-To: <20131018202323.GA23065@gmail.com>
+References: <20131015132102.GA20116@gmail.com> <20131015161941.5d7ffd45@skate>
+ <20131018202323.GA23065@gmail.com>
+Message-ID: <20131018204920.GA4019@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Only add a warning message in readme.txt files giving intructions to
-flash the target memory device.
+Andrew, All,
 
-All others boards coming with a readme.txt files explain how to
-prepare a removable media or how to use the emulator.
+On 2013-10-18 15:23 -0500, Andrew Ruder spake thusly:
+> On Tue, Oct 15, 2013 at 04:19:41PM +0200, Thomas Petazzoni wrote:
+> > Well, the conventional way would be to have those directories created
+> > by packages (and they can use the <pkg>_PERMISSIONS mechanism to get
+> > proper ownership or permissions). Or, if they really don't belong to
+> > any package, create them in the post build script, and have a device
+> > table assign the permission and ownership.
+> 
+> I didn't realize the device table functionality could modify arbitrary
+> file/directory ownerships but looking through the makedevs source code
+> that DOES appear to be true.
 
-Signed-off-by: Samuel Martin <s.martin49@gmail.com>
----
- board/avnet/s6lx9_microboard/readme.txt | 10 ++++++++++
- board/freescale/mpc8315erdb/readme.txt  |  8 ++++++++
- board/freescale/p1010rdb/readme.txt     |  8 ++++++++
- board/telit/evk-pro3/readme.txt         |  9 +++++++++
- 4 files changed, 35 insertions(+)
+Or you could have had a look at the manual:
+    http://buildroot.net/downloads/manual/manual.html#makedev-syntax
 
-diff --git a/board/avnet/s6lx9_microboard/readme.txt b/board/avnet/s6lx9_microboard/readme.txt
-index 3cb2ce9..2195d72 100644
---- a/board/avnet/s6lx9_microboard/readme.txt
-+++ b/board/avnet/s6lx9_microboard/readme.txt
-@@ -1,3 +1,13 @@
-+*************************  /!\ WARNING /!\  *************************
-+The following information are given without warranty of any kind.
-+
-+Please refer to the the instructions provided by the target vendor.
-+
-+They are contributions from Buildroot users, but Buildroot developers
-+do not ensure their correctness, nor maintain them.
-+*************************  /!\ WARNING /!\  *************************
-+
-+
- This is the buildroot board support for the Avnet Spartan6 LX9 MicroBoard.
- 
- The Avnet S6LX9 Microboard is a small USB-Stick sized module containing
-diff --git a/board/freescale/mpc8315erdb/readme.txt b/board/freescale/mpc8315erdb/readme.txt
-index f7f9c94..bb8d255 100644
---- a/board/freescale/mpc8315erdb/readme.txt
-+++ b/board/freescale/mpc8315erdb/readme.txt
-@@ -1,3 +1,11 @@
-+*************************  /!\ WARNING /!\  *************************
-+The following information are given without warranty of any kind.
-+
-+Please refer to the the instructions provided by the target vendor.
-+
-+They are contributions from Buildroot users, but Buildroot developers
-+do not ensure their correctness, nor maintain them.
-+*************************  /!\ WARNING /!\  *************************
- 
- ******************** WARNING ********************
- The compiled U-Boot binary is intended for NAND flash only!
-diff --git a/board/freescale/p1010rdb/readme.txt b/board/freescale/p1010rdb/readme.txt
-index 5b56873..2af088f 100644
---- a/board/freescale/p1010rdb/readme.txt
-+++ b/board/freescale/p1010rdb/readme.txt
-@@ -1,3 +1,11 @@
-+*************************  /!\ WARNING /!\  *************************
-+The following information are given without warranty of any kind.
-+
-+Please refer to the the instructions provided by the target vendor.
-+
-+They are contributions from Buildroot users, but Buildroot developers
-+do not ensure their correctness, nor maintain them.
-+*************************  /!\ WARNING /!\  *************************
- 
- ******************** WARNING ********************
- The compiled U-Boot binary is intended for NOR flash only!
-diff --git a/board/telit/evk-pro3/readme.txt b/board/telit/evk-pro3/readme.txt
-index ace9dd4..c5b0cf3 100644
---- a/board/telit/evk-pro3/readme.txt
-+++ b/board/telit/evk-pro3/readme.txt
-@@ -1,3 +1,12 @@
-+*************************  /!\ WARNING /!\  *************************
-+The following information are given without warranty of any kind.
-+
-+Please refer to the the instructions provided by the target vendor.
-+
-+They are contributions from Buildroot users, but Buildroot developers
-+do not ensure their correctness, nor maintain them.
-+*************************  /!\ WARNING /!\  *************************
-+
- Buildroot board support for Telit EVK-PRO3 with Telit GE863-PRO3
- 
- Official site:
+The first sentence in this section reads:
+    The makedev syntax is used in several places in Buildroot to define
+    changes to be made for permissions. [...]
+
+Regards,
+Yann E. MORIN.
+
 -- 
-1.8.4.1
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
