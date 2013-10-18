@@ -1,10 +1,10 @@
 From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Fri, 18 Oct 2013 11:27:10 +0200
+Date: Fri, 18 Oct 2013 11:27:11 +0200
 Subject: [Buildroot] [PATCH v8 2/8] package: add toolchain dependency to
-	every target package
+	inner-generic-package
 In-Reply-To: <1382088437-30393-1-git-send-email-fabio.porcedda@gmail.com>
 References: <1382088437-30393-1-git-send-email-fabio.porcedda@gmail.com>
-Message-ID: <1382088437-30393-3-git-send-email-fabio.porcedda@gmail.com>
+Message-ID: <1382088437-30393-4-git-send-email-fabio.porcedda@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -23,20 +23,17 @@ dependency so it's superseded by this commit.
 To prevent circular dependency add the new variable <pkgname>_TOOLCHAIN
 for not adding the toolchain dependency for toolchain packages.
 
-This is also a step forward supporting top-level parallel make.
+This is a step forward top-level parallel make.
 
 Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
 ---
- Makefile                                             |  8 ++------
- package/glibc/glibc.mk                               |  3 +++
- package/linux-headers/linux-headers.mk               |  3 +++
- package/pkg-autotools.mk                             |  3 ++-
- package/pkg-generic.mk                               | 12 ++++++++++--
- package/uclibc/uclibc.mk                             |  3 +++
- toolchain/toolchain-buildroot/toolchain-buildroot.mk |  2 ++
- toolchain/toolchain-external/toolchain-external.mk   |  2 ++
- toolchain/toolchain/toolchain.mk                     |  2 ++
- 9 files changed, 29 insertions(+), 9 deletions(-)
+ Makefile                               |  8 ++------
+ package/glibc/glibc.mk                 |  3 +++
+ package/linux-headers/linux-headers.mk |  3 +++
+ package/pkg-autotools.mk               |  3 ++-
+ package/pkg-generic.mk                 | 12 ++++++++++--
+ package/uclibc/uclibc.mk               |  3 +++
+ 6 files changed, 23 insertions(+), 9 deletions(-)
 
 diff --git a/Makefile b/Makefile
 index f266e2d..ebecec4 100644
@@ -75,7 +72,7 @@ index f266e2d..ebecec4 100644
  	$(BUILD_DIR) $(STAGING_DIR) $(TARGET_DIR) \
  	$(HOST_DIR) $(BINARIES_DIR) $(STAMP_DIR)
 diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
-index 0dab492..68b98a9 100644
+index 0dab492..2d46476 100644
 --- a/package/glibc/glibc.mk
 +++ b/package/glibc/glibc.mk
 @@ -19,6 +19,9 @@ endif
@@ -83,13 +80,13 @@ index 0dab492..68b98a9 100644
  GLIBC_LICENSE_FILES = $(addprefix $(GLIBC_SRC_SUBDIR)/,COPYING COPYING.LIB LICENSES)
  
 +# glibc is part of the toolchain so disable the toolchain dependency
-+GLIBC_ADD_TOOLCHAIN_DEPENDENCY = NO
++GLIBC_TOOLCHAIN_DEPENDENCY = NO
 +
  # Before (e)glibc is configured, we must have the first stage
  # cross-compiler and the kernel headers
  GLIBC_DEPENDENCIES = host-gcc-initial linux-headers host-gawk
 diff --git a/package/linux-headers/linux-headers.mk b/package/linux-headers/linux-headers.mk
-index 30d3076..6dac9e3 100644
+index 30d3076..31206a1 100644
 --- a/package/linux-headers/linux-headers.mk
 +++ b/package/linux-headers/linux-headers.mk
 @@ -17,6 +17,9 @@ LINUX_HEADERS_SOURCE = linux-$(LINUX_HEADERS_VERSION).tar.xz
@@ -97,7 +94,7 @@ index 30d3076..6dac9e3 100644
  LINUX_HEADERS_INSTALL_STAGING = YES
  
 +# linux-headers is part of the toolchain so disable the toolchain dependency
-+LINUX_HEADERS_ADD_TOOLCHAIN_DEPENDENCY = NO
++LINUX_HEADERS_TOOLCHAIN_DEPENDENCY = NO
 +
  define LINUX_HEADERS_INSTALL_STAGING_CMDS
  	(cd $(@D); \
@@ -117,7 +114,7 @@ index 9523529..f58570d 100644
  
  
 diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 1e7154e..3f19aea 100644
+index 1e7154e..86e0166 100644
 --- a/package/pkg-generic.mk
 +++ b/package/pkg-generic.mk
 @@ -307,8 +307,16 @@ endif
@@ -129,18 +126,18 @@ index 1e7154e..3f19aea 100644
 +# When a target package is a toolchain dependency set this variable to
 +# 'NO' so the 'toolchain' dependency is not added to prevent a circular
 +# dependency
-+$(2)_ADD_TOOLCHAIN_DEPENDENCY	?= YES
++$(2)_TOOLCHAIN_DEPENDENCY	?= YES
 +
 +$(2)_DEPENDENCIES ?= $(filter-out  host-toolchain $(1),\
 +	$(patsubst host-host-%,host-%,$(addprefix host-,$($(3)_DEPENDENCIES))))
-+ifeq ($$($(2)_TYPE)-$$($(2)_ADD_TOOLCHAIN_DEPENDENCY),target-YES)
++ifeq ($$($(2)_TYPE)-$$($(2)_TOOLCHAIN_DEPENDENCY),target-YES)
 +$(2)_DEPENDENCIES += toolchain
 +endif
  
  $(2)_INSTALL_STAGING		?= NO
  $(2)_INSTALL_IMAGES		?= NO
 diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
-index 20d3bb6..0d12afd 100644
+index 20d3bb6..f4baf7c 100644
 --- a/package/uclibc/uclibc.mk
 +++ b/package/uclibc/uclibc.mk
 @@ -18,6 +18,9 @@ endif
@@ -148,47 +145,10 @@ index 20d3bb6..0d12afd 100644
  UCLIBC_INSTALL_STAGING = YES
  
 +# uclibc is part of the toolchain so disable the toolchain dependency
-+UCLIBC_ADD_TOOLCHAIN_DEPENDENCY = NO
++UCLIBC_TOOLCHAIN_DEPENDENCY = NO
 +
  # Before uClibc is configured, we must have the first stage
  # cross-compiler and the kernel headers
  UCLIBC_DEPENDENCIES = host-gcc-initial linux-headers
-diff --git a/toolchain/toolchain-buildroot/toolchain-buildroot.mk b/toolchain/toolchain-buildroot/toolchain-buildroot.mk
-index f1f07a9..d941854 100644
---- a/toolchain/toolchain-buildroot/toolchain-buildroot.mk
-+++ b/toolchain/toolchain-buildroot/toolchain-buildroot.mk
-@@ -14,4 +14,6 @@ BUILDROOT_LIBC = $(call qstrip,$(BR2_TOOLCHAIN_BUILDROOT_LIBC))
- 
- TOOLCHAIN_BUILDROOT_DEPENDENCIES = host-gcc-final
- 
-+TOOLCHAIN_BUILDROOT_ADD_TOOLCHAIN_DEPENDENCY = NO
-+
- $(eval $(generic-package))
-diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
-index d41cc7c..2076cf7 100644
---- a/toolchain/toolchain-external/toolchain-external.mk
-+++ b/toolchain/toolchain-external/toolchain-external.mk
-@@ -340,6 +340,8 @@ TOOLCHAIN_EXTERNAL_SITE = $(dir $(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_URL)))
- TOOLCHAIN_EXTERNAL_SOURCE = $(notdir $(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_URL)))
- endif
- 
-+TOOLCHAIN_EXTERNAL_ADD_TOOLCHAIN_DEPENDENCY = NO
-+
- TOOLCHAIN_EXTERNAL_INSTALL_STAGING = YES
- 
- ifeq ($(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R1)$(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2),y)
-diff --git a/toolchain/toolchain/toolchain.mk b/toolchain/toolchain/toolchain.mk
-index 8559ac9..7241fe7 100644
---- a/toolchain/toolchain/toolchain.mk
-+++ b/toolchain/toolchain/toolchain.mk
-@@ -12,6 +12,8 @@ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL),y)
- TOOLCHAIN_DEPENDENCIES += toolchain-external
- endif
- 
-+TOOLCHAIN_ADD_TOOLCHAIN_DEPENDENCY = NO
-+
- $(eval $(generic-package))
- 
- toolchain: $(HOST_DIR)/usr/share/buildroot/toolchainfile.cmake
 -- 
 1.8.4
