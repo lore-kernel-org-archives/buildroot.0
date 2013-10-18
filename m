@@ -1,79 +1,155 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Fri, 18 Oct 2013 22:31:24 +0200
-Subject: [Buildroot] [pull request] Pull request for branch sma/doc-update
-Message-ID: <cover.1382127504.git.s.martin49@gmail.com>
+Date: Fri, 18 Oct 2013 22:31:25 +0200
+Subject: [Buildroot] [PATCH 01/12] manual generation: check dependencies
+	first
+In-Reply-To: <cover.1382127504.git.s.martin49@gmail.com>
+References: <cover.1382127504.git.s.martin49@gmail.com>
+Message-ID: <da8529f44c695510df029619274c00bb85cee096.1382127504.git.s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-All,
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
 
+To generate the manual, you need a few tools. If these are not present,
+pretty cryptic error messages are given.
+This patch adds a simple check for these dependencies, before attempting to
+build the manual.
 
-Another round for the manual update patch series.
-This time, I also integrate the pending patches from Thomas DS.
-
-BTW, can someone (who has enough patchwork privileges) mark the
-following patch as superseded:
-http://patchwork.ozlabs.org/patch/214943/
-
-
-Yours,
-
---
-Samuel
-
-
-The following changes since commit f87f067c027261eb8c0ac8ad120fe845570aaae3:
-
-  ngrep: add license information (2013-10-15 15:13:28 +0200)
-
-are available in the git repository at:
-
-  git at github.com:tSed/buildroot.git sma/doc-update
-
-for you to fetch changes up to b67f14903e6e33f2790ff7ee8c82c658f8c12b01:
-
-  board: add warning to readme files explaining how to flash the target (2013-10-18 21:34:54 +0200)
-
-----------------------------------------------------------------
-Samuel Martin (10):
-      support: trivial fixes (typos and minor rewording) in gen-manual-lists.py
-      manual: move the manual rsync directory under $(O)/build/
-      manual: developer-guide.txt: cleanup non-existing source
-      manual: introduction.txt: enhance Buildroot presentation
-      manual: get-involved.txt: fix event order
-      manual: update get-involved section
-      manual: rework Deploying images chapter
-      manual: customize-toolchain.txt: update internal backend section
-      manual: faq-troubleshooting.txt: add tips to avoid toolchain build
-      board: add warning to readme files explaining how to flash the target
-
-Thomas De Schampheleire (2):
-      manual generation: check dependencies first
-      manual generation: rename manual-txt into manual-text
-
- Makefile                                    |   4 +-
- board/avnet/s6lx9_microboard/readme.txt     |  10 +
- board/freescale/mpc8315erdb/readme.txt      |   8 +
- board/freescale/p1010rdb/readme.txt         |   8 +
- board/telit/evk-pro3/readme.txt             |   9 +
- docs/manual/beyond-buildroot.txt            |  41 ----
- docs/manual/customize-toolchain.txt         |  13 +-
- docs/manual/deploying-images.txt            | 291 ++++++++++++++++++++++++++++
- docs/manual/developer-guide.txt             |   2 -
- docs/manual/faq-troubleshooting.txt         |  67 +++++++
- docs/manual/get-involved.txt                | 164 +++++++++++++++-
- docs/manual/introduction.txt                |  45 +++++
- docs/manual/make-tips.txt                   |   3 +-
- docs/manual/manual.mk                       |  47 ++++-
- docs/manual/manual.txt                      |   4 +-
- docs/manual/prerequisite.txt                |   5 +-
- docs/manual/using.txt                       |   3 +-
- support/dependencies/check-host-asciidoc.sh |  36 ++++
- support/scripts/gen-manual-lists.py         |   9 +-
- 19 files changed, 691 insertions(+), 78 deletions(-)
- delete mode 100644 docs/manual/beyond-buildroot.txt
- create mode 100644 docs/manual/deploying-images.txt
+Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+---
+ docs/manual/make-tips.txt                   |  3 +--
+ docs/manual/manual.mk                       | 32 ++++++++++++++++++++++++-
+ docs/manual/prerequisite.txt                |  5 +++-
+ support/dependencies/check-host-asciidoc.sh | 36 +++++++++++++++++++++++++++++
+ 4 files changed, 72 insertions(+), 4 deletions(-)
  create mode 100755 support/dependencies/check-host-asciidoc.sh
+
+diff --git a/docs/manual/make-tips.txt b/docs/manual/make-tips.txt
+index 31a88bf..0159ffe 100644
+--- a/docs/manual/make-tips.txt
++++ b/docs/manual/make-tips.txt
+@@ -64,9 +64,8 @@ To generate the manual:
+ The manual outputs will be generated in 'output/docs/manual'.
+ 
+ .Notes
+-- +asciidoc+ is required to build the documentation (see:
++- A few tools are required to build the documentation (see:
+   xref:requirement-optional[]).
+-- There is a known issue that you can't build it under Debian Squeeze.
+ 
+ .Reseting Buildroot for a new target:
+ 
+diff --git a/docs/manual/manual.mk b/docs/manual/manual.mk
+index d092d3f..fcfe47b 100644
+--- a/docs/manual/manual.mk
++++ b/docs/manual/manual.mk
+@@ -1,8 +1,34 @@
+-manual-update-lists:
++manual-update-lists: manual-check-dependencies-lists
+ 	$(Q)$(call MESSAGE,"Updating the manual lists...")
+ 	$(Q)BR2_DEFCONFIG="" TOPDIR=$(TOPDIR) O=$(O)/docs/manual/.build \
+ 		$(TOPDIR)/support/scripts/gen-manual-lists.py
+ 
++# we can't use suitable-host-package here because that's not available in
++# the context of 'make release'
++manual-check-dependencies:
++	$(Q)if [ -z "$(shell support/dependencies/check-host-asciidoc.sh)" ]; then \
++		echo "You need a sufficiently recent asciidoc on your host" \
++			"to generate the manual"; \
++		exit 1; \
++	fi
++	$(Q)if [ -z "`which w3m 2>/dev/null`" ]; then \
++		echo "You need w3m on your host to generate the manual"; \
++		exit 1; \
++	fi
++
++manual-check-dependencies-pdf:
++	$(Q)if [ -z "`which dblatex 2>/dev/null`" ]; then \
++		echo "You need dblatex on your host to generate the pdf manual"; \
++		exit 1; \
++	fi
++
++manual-check-dependencies-lists:
++	$(Q)if ! python -c "import argparse" >/dev/null 2>&1 ; then \
++		echo "You need python with argparse on your host to generate" \
++			"the list of packages in the manual"; \
++		exit 1; \
++	fi
++
+ ################################################################################
+ # GENDOC -- generates the make targets needed to build a specific type of
+ #           asciidoc documentation.
+@@ -22,8 +48,12 @@ $(1): $(1)-$(3)
+ .PHONY: $(1)-$(3)
+ $(1)-$(3): $$(O)/docs/$(1)/$(1).$(4)
+ 
++manual-check-dependencies-$(3):
++
+ $$(O)/docs/$(1)/$(1).$(4): docs/$(1)/$(1).txt \
+ 			   $$($(call UPPERCASE,$(1))_SOURCES) \
++			   manual-check-dependencies \
++			   manual-check-dependencies-$(3) \
+ 			   manual-update-lists
+ 	$(Q)$(call MESSAGE,"Generating $(5) $(1)...")
+ 	$(Q)mkdir -p $$(@D)/.build
+diff --git a/docs/manual/prerequisite.txt b/docs/manual/prerequisite.txt
+index 78ce436..729d64c 100644
+--- a/docs/manual/prerequisite.txt
++++ b/docs/manual/prerequisite.txt
+@@ -76,4 +76,7 @@ development context (further details: refer to xref:download-infra[]).
+ ** The +jar+ tool
+ 
+ * Documentation generation tools:
+-** +asciidoc+
++** +asciidoc+, version 8.6.3 or higher
++** +w3m+
++** +python+ with the +argparse+ module (automatically present in 2.7+ and 3.2+)
++** +dblatex+ (required for the pdf manual only)
+diff --git a/support/dependencies/check-host-asciidoc.sh b/support/dependencies/check-host-asciidoc.sh
+new file mode 100755
+index 0000000..fc5fcba
+--- /dev/null
++++ b/support/dependencies/check-host-asciidoc.sh
+@@ -0,0 +1,36 @@
++#!/bin/sh
++
++candidate="$1" #ignored
++
++asciidoc=`which asciidoc`
++if [ ! -x "$asciidoc" ]; then
++	# echo nothing: no suitable asciidoc found
++	exit 1
++fi
++
++# Output of 'asciidoc --version' examples:
++# asciidoc 8.6.7
++version=`$asciidoc --version | cut -d\  -f2`
++major=`echo "$version" | cut -d. -f1`
++minor=`echo "$version" | cut -d. -f2`
++bugfix=`echo "$version" | cut -d. -f3`
++
++# To generate the manual, we need asciidoc >= 8.6.3
++major_min=8
++minor_min=6
++bugfix_min=3
++if [ $major -gt $major_min ]; then
++	echo $asciidoc
++else
++	if [ $major -eq $major_min -a $minor -ge $minor_min ]; then
++		echo $asciidoc
++	else
++		if [ $major -eq $major_min -a $minor -eq $minor_min \
++			-a $bugfix -ge $bugfix_min ]; then
++			echo $asciidoc
++		else
++			# echo nothing: no suitable asciidoc found
++			exit 1
++		fi
++	fi
++fi
+-- 
+1.8.4.1
