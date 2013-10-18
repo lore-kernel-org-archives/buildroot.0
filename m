@@ -1,81 +1,91 @@
 From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Fri, 18 Oct 2013 11:27:16 +0200
-Subject: [Buildroot] [PATCH v8 7/8] package: enable jobserver for recursive
-	make
-In-Reply-To: <1382088437-30393-1-git-send-email-fabio.porcedda@gmail.com>
-References: <1382088437-30393-1-git-send-email-fabio.porcedda@gmail.com>
-Message-ID: <1382088437-30393-9-git-send-email-fabio.porcedda@gmail.com>
+Date: Fri, 18 Oct 2013 11:34:12 +0200
+Subject: [Buildroot] [PATCH v8 RESEND 0/8] Add support for top-level
+	parallel make
+Message-ID: <1382088860-30524-1-git-send-email-fabio.porcedda@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add '+' prefix to the $($(PKG)_BUILD_CMDS) and $($(PKG)_INSTALL*_CMDS)
-commands to enable jobserver for the sub-make.
+Hi all,
+this is a patch set for adding support for top-level parallel make in
+buildroot, the common problem scattered in buildroot's top-level
+makefiles is that in the rules it relies on the order of evaluation of
+the prerequisites, to be able to use top-level parallel make instead
+of reling on the left to right ordering of evaluation of the
+prerequisites we must add an explicit rule to describe the
+dependencies.
 
-Without the '+' prefix GNU make does not detect the sub-make so it
-disable the jobserver for the sub-make.
+With this patch set the top-level parallel make seems to work fine,
+example:
+	make clean
+	make BR2_JLEVEL= -j$((`getconf _NPROCESSORS_ONLN` + 1))
 
-From GNU make documentation:
-Using the MAKE variable has the same effect as using a ?+? character
-at the beginning of the recipe line.  This special feature is only
-enabled if the MAKE variable appears directly in the recipe: it does
-not apply if the MAKE variable is referenced through expansion of
-another variable. In the latter case you must use the ?+? token to get
-these special effects.
+On my quad core system the building time for qemu_x86_defconfig
+is 13m versus 11m.
 
-Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
----
- package/pkg-generic.mk | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+I've tested the qemu_x86_defconfig uclibc/eglibc/glibc.
 
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 094868c..122b4f9 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -118,21 +118,21 @@ $(BUILD_DIR)/%/.stamp_configured:
- # Build
- $(BUILD_DIR)/%/.stamp_built::
- 	@$(call MESSAGE,"Building")
--	$($(PKG)_BUILD_CMDS)
-+	+$($(PKG)_BUILD_CMDS)
- 	$(foreach hook,$($(PKG)_POST_BUILD_HOOKS),$(call $(hook))$(sep))
- 	$(Q)touch $@
- 
- # Install to host dir
- $(BUILD_DIR)/%/.stamp_host_installed:
- 	@$(call MESSAGE,"Installing to host directory")
--	$($(PKG)_INSTALL_CMDS)
-+	+$($(PKG)_INSTALL_CMDS)
- 	$(foreach hook,$($(PKG)_POST_INSTALL_HOOKS),$(call $(hook))$(sep))
- 	$(Q)touch $@
- 
- # Install to staging dir
- $(BUILD_DIR)/%/.stamp_staging_installed:
- 	@$(call MESSAGE,"Installing to staging directory")
--	$($(PKG)_INSTALL_STAGING_CMDS)
-+	+$($(PKG)_INSTALL_STAGING_CMDS)
- 	$(foreach hook,$($(PKG)_POST_INSTALL_STAGING_HOOKS),$(call $(hook))$(sep))
- 	$(Q)if test -n "$($(PKG)_CONFIG_SCRIPTS)" ; then \
- 		$(call MESSAGE,"Fixing package configuration files") ;\
-@@ -146,7 +146,7 @@ $(BUILD_DIR)/%/.stamp_staging_installed:
- # Install to images dir
- $(BUILD_DIR)/%/.stamp_images_installed:
- 	@$(call MESSAGE,"Installing to images directory")
--	$($(PKG)_INSTALL_IMAGES_CMDS)
-+	+$($(PKG)_INSTALL_IMAGES_CMDS)
- 	$(foreach hook,$($(PKG)_POST_INSTALL_IMAGES_HOOKS),$(call $(hook))$(sep))
- 	$(Q)touch $@
- 
-@@ -157,7 +157,7 @@ $(BUILD_DIR)/%/.stamp_target_installed:
- 		$($(PKG)_INSTALL_INIT_SYSTEMD))
- 	$(if $(BR2_INIT_SYSV)$(BR2_INIT_BUSYBOX),\
- 		$($(PKG)_INSTALL_INIT_SYSV))
--	$($(PKG)_INSTALL_TARGET_CMDS)
-+	+$($(PKG)_INSTALL_TARGET_CMDS)
- 	$(foreach hook,$($(PKG)_POST_INSTALL_TARGET_HOOKS),$(call $(hook))$(sep))
- 	$(Q)if test -n "$($(PKG)_CONFIG_SCRIPTS)" ; then \
- 		$(RM) -f $(addprefix $(TARGET_DIR)/usr/bin/,$($(PKG)_CONFIG_SCRIPTS)) ; \
+Best regards
+Fabio Porcedda
+
+v8:
+ - rebased over master
+ - added patche for for base dependency
+ - added patche for for glibc package
+ - added patche for for uclibc package
+ - removed patch already merged
+ - changed some descriptions
+ - modified the patch for toolchain dependency to prevent circular dependency
+v7:
+ - add the latest patch
+ - add to the first patch the <pkgname>_TOOLCHAIN variable
+ - improve the fifth patch
+v6:
+ - added the fifth patch
+ - updated the fourth patch adding the install targets
+ - updated the second patch to remove TARGETS_ALL
+v5:
+ - added the fourth patch
+ - fixed some typos
+ - rewrited the second patch to use only $$($(2)_TARGET_*) in the rules
+ - add support for top-level parallel make for the glibc package
+v4:
+ - rebased over master
+ - add Acked-by: Thomas Petazzoni on the third patch
+ - changed the orderd of the patches
+v3:
+ - add back the patch "package: add toolchain dependency to
+    inner-generic-package" because now is working fine.
+ - add Acked-by: Arnout Vandecappelle to the third patch.
+ - reworked the second patch following Arnout suggestions.
+v2:
+ - remove patch "package: add toolchain dependency to inner-generic-package"
+   because was not working fine against recent toolchain changes.
+
+Fabio Porcedda (8):
+  package: add base dependency to every package
+  package: add toolchain dependency to every target package
+  package: add support for top-level parallel make
+  Makefile: add support for top-level parallel make
+  glibc: add support for top-level parallel make
+  uclibc: add support for top-level parallel make
+  package: enable jobserver for recursive make
+  Makefile: enable top-level parallel make
+
+ Makefile                                           | 22 +++-----
+ fs/common.mk                                       |  4 +-
+ package/glibc/glibc.mk                             |  7 ++-
+ package/linux-headers/linux-headers.mk             |  3 ++
+ package/pkg-autotools.mk                           |  3 +-
+ package/pkg-generic.mk                             | 60 +++++++++++++---------
+ package/uclibc/uclibc.mk                           |  7 ++-
+ .../toolchain-buildroot/toolchain-buildroot.mk     |  2 +
+ toolchain/toolchain-external/toolchain-external.mk |  2 +
+ toolchain/toolchain/toolchain.mk                   |  5 +-
+ 10 files changed, 69 insertions(+), 46 deletions(-)
+
 -- 
 1.8.4
