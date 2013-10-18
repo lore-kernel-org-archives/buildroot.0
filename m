@@ -1,534 +1,139 @@
-From: sergey kostanbaev <sergey.kostanbaev@gmail.com>
-Date: Fri, 18 Oct 2013 10:26:58 +0400
-Subject: [Buildroot] [PATCH] Add packages sip and PyQt
-In-Reply-To: <526079B7.4060502@mind.be>
-References: <1382009228-25988-1-git-send-email-sergey.kostanbaev@gmail.com>
- <526079B7.4060502@mind.be>
-Message-ID: <CAGtNMfMrEx0xLvNWAMVgFnS4K7-qrjp9cbSrr=hD5iYLFdWJXA@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 18 Oct 2013 08:30:06 +0200 (CEST)
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2013-10-17
+Message-ID: <20131018063006.B6A2952C1A0@lolut.humanoidz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Arnout,
+Build statistics for 2013-10-17
+===============================
 
-Thank you for your detailed comments and fast review.
+        success : 97 
+       failures : 67 
+       timeouts : 0  
+          TOTAL : 164
 
-On Fri, Oct 18, 2013 at 3:58 AM, Arnout Vandecappelle <arnout@mind.be> wrote:
->  Hi Sergey,
->
->  Thank you for your contribution! I have quite a few comments on your patch,
-> though, so hopefully you can modify it and resend.
->
->
-> On 17/10/13 13:27, Sergey Kostanbaev wrote:
->>
->> Add support for sip-4.15.3 and pyqt-4.9.6 to work with qt-4.8.x. Tested on
->> arm platform.
->
->
->  Two packages should come in two separate patches: the first one adding sip,
-> the second one adding pyqt. Such patches normally have a subject like:
->
-> sip: new package
->
->  Also, we prefix python-related packages with 'python-'. So the packages
-> should be called python-sip and python-pyqt.
+Classification of failures by reason
+====================================
 
-Ok
+    trace-cmd-trace-cmd-v2.2.1 | 11
+               libglib2-2.36.3 | 4 
+                    php-5.3.27 | 3 
+                 libvpx-v1.2.0 | 2 
+          enlightenment-0.17.3 | 2 
+                 binutils-2.21 | 2 
+                 libffi-3.0.13 | 2 
+                 qt5base-5.0.2 | 2 
+                    nano-2.3.2 | 2 
+                     rpm-5.2.0 | 2 
+                 rt-tests-0.83 | 2 
+                 libfuse-2.9.3 | 2 
+                directfb-1.6.3 | 1 
+               alsa-lib-1.0.26 | 1 
+                 webkit-1.11.5 | 1 
+                  poco-1.4.6p1 | 1 
+                  udisks-1.0.4 | 1 
+              e2fsprogs-1.42.8 | 1 
+                 libnspr-4.9.6 | 1 
+                     gmp-5.1.3 | 1 
+                    zlib-1.2.8 | 1 
+                openssl-1.0.1e | 1 
+                 fdk-aac-0.1.1 | 1 
+                  nettle-2.7.1 | 1 
+                  boost-1.54.0 | 1 
+                 binutils-2.22 | 1 
+                 libpfm4-4.3.0 | 1 
+                   squid-3.3.9 | 1 
+        host-gcc-initial-4.7.3 | 1 
+             bluez_utils-4.101 | 1 
+                     m4-1.4.17 | 1 
+                libiscsi-1.6.0 | 1 
+                 libevas-1.7.7 | 1 
+                 mplayer-1.1.1 | 1 
+              cryptsetup-1.6.2 | 1 
+             tvheadend-2b64995 | 1 
+                    ola-0.8.31 | 1 
+               libsigsegv-2.10 | 1 
+                 libfcgi-2.4.0 | 1 
+                  libnl-3.2.21 | 1 
+             uclibc-0.9.33-arc | 1 
+                  zeromq-3.2.4 | 1 
+               w_scan-20130331 | 1 
 
->
->
->>
->> Signed-off-by: Sergey Kostanbaev <sergey.kostanbaev@gmail.com>
->> ---
->>   Config.in                         |    5
->>   pyqt/Config.in                    |    6
->>   pyqt/pyqt-4.9.6-configure.patch   |  924
->> ++++++++++++++++++++++++++++++++++++
->>   pyqt/pyqt-4.9.6-full.patch        |  949
->> ++++++++++++++++++++++++++++++++++++++
->
->
->  Patches shouldn't have a version number, but should be numbered. So
->
-> python-pyqt-0001-configure.patch
-> python-pyqt-0002-full.patch
+Detail of failures
+===================
 
-Ok
->
->
->>   pyqt/pyqt.mk                      |   63 ++
->>   sip/Config.in                     |    5
->>   sip/sip-4.15.3-configure.py.patch |   38 +
->>   sip/sip.mk                        |   71 ++
->>   8 files changed, 2061 insertions(+)
->>
->> diff --git a/package/Config.in b/package/Config.in
->> index a94cb62..9c9ee19 100644
->> --- a/package/Config.in
->> +++ b/package/Config.in
->> @@ -157,6 +157,11 @@ source "package/qextserialport/Config.in"
->>   source "package/qjson/Config.in"
->>   source "package/qtuio/Config.in"
->>   source "package/qwt/Config.in"
->> +
->> +comment "PyQT libraries"
->
->
->  I don't think this comment is needed.
->
->
->> +source "package/sip/Config.in"
->> +source "package/pyqt/Config.in"
->> +
->>   endif
->>
->>   source "package/qt5/Config.in"
->> diff --git a/package/sip/Config.in b/package/sip/Config.in
->> new file mode 100644
->> index 0000000..bbdb943
->> --- /dev/null
->> +++ b/package/sip/Config.in
->> @@ -0,0 +1,5 @@
->> +config BR2_PACKAGE_SIP
->> +       bool "sip"
->> +       depends on BR2_PACKAGE_PYTHON
->> +       help
->> +           SIP for PyQt4
->> \ No newline at end of file
->
->
->  I don't think we really need sip on the target. sip is needed to build
-> pyqt, but we're not going to build it on the target. So you also don't need
-> a Config.in for it then.
-
-Actually the target uses it. I just tried:
-
-# ls /usr/lib/python2.7/site-packages/PyQt4/
-Qt.so            QtMultimedia.so  QtTest.so        __init__.pyc
-QtCore.so        QtNetwork.so     QtXml.so         uic
-QtGui.so         QtSql.so         __init__.py
-# ls /usr/lib/python2.7/site-packages/
-PyQt4   README  sip.so
-# mv /usr/lib/python2.7/site-packages/sip.so __sip__so__
-
-# cat /root/test.py
-
-#!/usr/bin/python
-import sys
-from PyQt4 import QtGui
-
-app = QtGui.QApplication(sys.argv)
-
-widget = QtGui.QWidget()
-widget.resize(640, 400)
-widget.setWindowTitle('Simple')
-widget.show()
-sys.exit(app.exec_())
-
-# /root/test.py
-Traceback (most recent call last):
-  File "/root/test.py", line 5, in <module>
-    from PyQt4 import QtGui
-ImportError: No module named sip
-
-so it uses it somehow internally. I haven't dig deep enough why it's
-used on target, though it has small size (~84K on arm) compared to the
-just PyQt4.QtGui library, so I left it
-
-
->
->
->> diff --git a/package/sip/sip-4.15.3-configure.py.patch
->> b/package/sip/sip-4.15.3-configure.py.patch
->> new file mode 100644
->> index 0000000..06591c0
->> --- /dev/null
->> +++ b/package/sip/sip-4.15.3-configure.py.patch
->
->
->  Patches should have a description, similar to a commit message. They should
-> also have a Signed-off-by tag. See
-> http://buildroot.net/downloads/manual/manual.html#_format_and_licensing_of_the_package_patches
->
->  However, this patch is probably not needed if cross-compilation is not
-> needed.
-
-Ok, but see above.
-
->
->
->> @@ -0,0 +1,38 @@
->> +--- a/configure.py     2013-04-24 12:41:35.382000017 +0400
->> ++++ b/configure.py     2013-04-24 13:09:30.000000000 +0400
->> +@@ -273,9 +273,9 @@
->> +         "default_mod_dir":  plat_py_site_dir,
->> +         "default_sip_dir":  opts.sipsipdir,
->> +         "py_version":       py_version,
->> +-        "py_inc_dir":       plat_py_inc_dir,
->> +-        "py_conf_inc_dir":  plat_py_conf_inc_dir,
->> +-        "py_lib_dir":       plat_py_lib_dir,
->> ++        "py_inc_dir":       opts.py_inc_dir,
->> ++        "py_conf_inc_dir":  opts.py_conf_inc_dir,
->> ++        "py_lib_dir":       opts.py_lib_dir,
->> +         "universal":        opts.universal,
->> +         "arch":             opts.arch,
->> +         "deployment_target":    opts.deployment_target
->> +@@ -399,6 +399,22 @@
->> +             "macros")
->> +     p.add_option_group(g)
->> +
->> ++    # Python configuration
->> ++    g = optparse.OptionGroup(p, title="Python include path")
->> ++    g.add_option("-i", "--py_inc_dir", action="callback",
->> ++          default=plat_py_inc_dir, type="string", metavar="DIR",
->> ++          dest="py_inc_dir", callback=store_abspath, help="where the
->> Python "
->> ++          "include directory located [default: %s]" % plat_py_inc_dir)
->> ++    g.add_option("-c", "--py_conf_inc_dir", action="callback",
->> ++          default=plat_py_conf_inc_dir, type="string", metavar="DIR",
->> ++          dest="py_conf_inc_dir", callback=store_abspath, help="where
->> the Python "
->> ++          "Configuration include directory located [default: %s]" %
->> plat_py_conf_inc_dir)
->> ++    g.add_option("-l", "--py_lib_dir", action="callback",
->> ++          default=plat_py_conf_inc_dir, type="string", metavar="DIR",
->> ++          dest="py_lib_dir", callback=store_abspath, help="where the
->> Python "
->> ++          "library located [default: %s]" % plat_py_lib_dir)
->> ++
->> ++
->> +     # Installation.
->> +     g = optparse.OptionGroup(p, title="Installation")
->> +     g.add_option("-b", "--bindir", action="callback",
->> diff --git a/package/sip/sip.mk b/package/sip/sip.mk
->> new file mode 100644
->> index 0000000..2a4254c
->> --- /dev/null
->> +++ b/package/sip/sip.mk
->> @@ -0,0 +1,71 @@
->> +#############################################################
->> +#
->> +# sip
->> +#
->> +#############################################################
->
->
->  That should be 80 #'s
->
->
->> +SIP_VERSION = 4.15.3
->> +SIP_SOURCE = sip-$(SIP_VERSION).tar.gz
->> +SIP_SITE =
->> http://sourceforge.net/projects/pyqt/files/sip/sip-$(SIP_VERSION)
->
->
->  We use the direct download links on sourceforge:
->
-> http://downloads.sourceforge.net/project/pyqt/sip/sip-$(SIP_VERSION)
->
->> +
->> +################################################
->> +# HOST
->
->
->  This is not needed.
->
->
->> +
->> +HOST_SIP_DEPENDENCIES = host-python
->> +define HOST_SIP_CONFIGURE_CMDS
->> +    (cd $(@D); \
->> +       echo "Host Configuring DIR=$(PWD)"; \
->
->
->  This echo is not needed.
->
->> +       LD_LIBRARY_PATH=$(HOST_DIR)/lib $(HOST_DIR)/usr/bin/python
->> configure.py; \
->
->
->  You should also pass HOST_CONFIGURE_OPTS in the environment. And this
-> already contains (a better) LD_LIBRARY_PATH definition.
-Ok
-
->
->> +    )
->> +endef
->> +
->
-> [snip target definitions which are not needed IMO]
->>
->> +$(eval $(host-autotools-package))
->
->
->  This is not an autotools package, so you shouldn't use the autotools rules.
-> That does some additional things that may not apply here.
->
->
->> diff --git a/package/pyqt/Config.in b/package/pyqt/Config.in
->> new file mode 100644
->> index 0000000..4e4ff07
->> --- /dev/null
->> +++ b/package/pyqt/Config.in
->> @@ -0,0 +1,6 @@
->> +config BR2_PACKAGE_PYQT
->> +       bool "pyqt"
->> +       depends on BR2_PACKAGE_QT
->
->
->  It's already in an if BR2_PACKAGE_QT, so this is not needed.
->
->> +       depends on BR2_PACKAGE_SIP
->
->
->  This is not needed IMO. It requires the host sip, but not the target sip.
-see above
-
->
->
->> +       help
->> +           PyQT4 for Qt Embedded 4
->
->
->  There should be an upstream URL, i.e.
-> http://www.riverbankcomputing.com/software/pyqt/
->
->  Also, help text indentation should be one tab + two spaces, not four
-> spaces.
->
->
->> \ No newline at end of file
->
->
->  There should be a newline at the end of the file.
->
-> [snip 2 patches]
->
->  These patches are suspiciously large. They lack a description, but I guess
-> they are needed for cross-compilation. Upstream says that configure-ng will
-> support cross-compilation in the future [1] so I think you should probably
-> start with that script. And check in upstream's mercurial repository what is
-> already possible. Or perhaps even ask upstream for help.
->
-> [1] http://pyqt.sourceforge.net/Docs/PyQt4/installation.html
-
-Yes that was needed for cross-compilation and mostly for Embedded Qt
-(aka QWS) . I'll check with upstream.
-
->
->
->  If you do need such large patches, try to split them up a little more and
-> certainly give a good comment, so we can try to review them. Also, if
-> possible, try to send them upstream. Upstream can give much more valuable
-> comments on the patches.
->
-
-Ok
-
->
->
->> diff --git a/package/pyqt/pyqt.mk b/package/pyqt/pyqt.mk
->> new file mode 100644
->> index 0000000..6c3ccfb
->> --- /dev/null
->> +++ b/package/pyqt/pyqt.mk
->> @@ -0,0 +1,63 @@
->> +#############################################################
->
->
->  80 #'s
->
->
->> +#
->> +# PyQT Open Source Edition for Qt Embedded (QWS)
->
->
->  Just
->
-> # python-pyqt
->
-Ok
-
->
->> +#
->> +#############################################################
->> +PYQT_VERSION = 4.9.6
->> +PYQT_SOURCE = PyQt-x11-gpl-$(PYQT_VERSION).tar.gz
->> +PYQT_SITE =
->> http://sourceforge.net/projects/pyqt/files/PyQt4/PyQt-$(PYQT_VERSION)
->
->
->  Use downloads.sourceforge.net
->
->
->> +
->> +################################################
->> +# TARGET
->> +
->> +PYQT_DEPENDENCIES = sip qt
->
->
->  host-sip
-see above
-
->
->
->> +
->> +define PYQT_CONFIGURE_CMDS
->> +    echo "Construting qtdirs"
->
->
->  echo is not needed.
-Yes that echos was my debug outputs. I forget to clean it up.
-
->
->
->> +    echo $(STAGING_DIR)/usr             > $(@D)/qtdirs.out
->> +    echo $(STAGING_DIR)/usr/include    >> $(@D)/qtdirs.out
->> +    echo $(STAGING_DIR)/usr/lib        >> $(@D)/qtdirs.out
->> +    echo $(HOST_DIR)/usr/bin           >> $(@D)/qtdirs.out
->> +    echo $(STAGING_DIR)/usr            >> $(@D)/qtdirs.out
->> +    echo $(STAGING_DIR)/usr/plugins    >> $(@D)/qtdirs.out
->> +
->> +    echo 264196                >> $(@D)/qtdirs.out
->> +    echo 8                     >> $(@D)/qtdirs.out
->> +    echo Open Source           >> $(@D)/qtdirs.out
->> +    echo shared                >> $(@D)/qtdirs.out
->> +    echo PyQt_Accessibility    >> $(@D)/qtdirs.out
->> +    echo PyQt_SessionManager   >> $(@D)/qtdirs.out
->> +    echo PyQt_qreal_double     >> $(@D)/qtdirs.out
->> +    echo PyQt_OpenSSL          >> $(@D)/qtdirs.out
->> +    echo PyQt_Shortcut         >> $(@D)/qtdirs.out
->> +    echo PyQt_ButtonGroup      >> $(@D)/qtdirs.out
->> +    echo PyQt_RawFont          >> $(@D)/qtdirs.out
->> +    echo WS_MACX               >> $(@D)/qtdirs.out
->> +    echo WS_WIN                >> $(@D)/qtdirs.out
->
->
->  This really needs some comments to explain what it does.
-Ok, I'll add comments. That file qtdirs.out originally generates
-running and compiling C++ programs on target (AFAIK), so we can't do
-it. So I add generation of it here with the specific for Qt Embedded
-(QWS). Also I found a python script that analysis directories and
-generates it, but it was quite huge and it was far away from upstream,
-so I did simple generation.
+       arm |                alsa-lib-1.0.26 | NOK | http://autobuild.buildroot.net/results/c415f57d7a4b46440161ad56bc2b81a1079d1996/
+   powerpc |                  binutils-2.21 | NOK | http://autobuild.buildroot.net/results/8d949ef07e8525d384bfc37ea9bbe3793b95e568/
+       arm |                  binutils-2.21 | NOK | http://autobuild.buildroot.net/results/4bccf4e5b9e25f0497cb67289fb1857cf32ed944/
+    xtensa |                  binutils-2.22 | NOK | http://autobuild.buildroot.net/results/cfbbae2f39385582fcd4dcf3d7a6f8d065208ff3/
+       arm |              bluez_utils-4.101 | NOK | http://autobuild.buildroot.net/results/2f61f3a553c058ea00a4b0ec8faf5e96749f8c19/
+   aarch64 |                   boost-1.54.0 | NOK | http://autobuild.buildroot.net/results/7c7c793c16320cf4f897c1f8aa4c9fe18696c920/
+       arm |               cryptsetup-1.6.2 | NOK | http://autobuild.buildroot.net/results/05bf6d20cff90e2370689ae83f88a8039c17147d/
+      bfin |                 directfb-1.6.3 | NOK | http://autobuild.buildroot.net/results/81855fa02b20a9070a7e1c698a3fc11299e0e755/
+       arm |               e2fsprogs-1.42.8 | NOK | http://autobuild.buildroot.net/results/bbc377c1a63a39c6024c90fadcab4ef6ce7e8e3e/
+   powerpc |           enlightenment-0.17.3 | NOK | http://autobuild.buildroot.net/results/ad50f55456c2421831a042715499a54c6baa72a9/
+   powerpc |           enlightenment-0.17.3 | NOK | http://autobuild.buildroot.net/results/4fa1835c22e69d9fa1e7430627af455c081ece44/
+    mipsel |                  fdk-aac-0.1.1 | NOK | http://autobuild.buildroot.net/results/46aa1a4b6805159fcc070aea1b52cb2cdf20fd70/
+       arm |                      gmp-5.1.3 | NOK | http://autobuild.buildroot.net/results/f5b4ded1ca8c880c936bf03fce875839b85edb01/
+       arm |         host-gcc-initial-4.7.3 | NOK | http://autobuild.buildroot.net/results/93f0e4fdbb519c96cb3e3f40a276ef552c792add/
+       arm |                  libevas-1.7.7 | NOK | http://autobuild.buildroot.net/results/6887005633809caba3513bb255153d36b3ab30b8/
+      bfin |                  libfcgi-2.4.0 | NOK | http://autobuild.buildroot.net/results/ed6beb6ed760dddc05dab7386f4f3ef089b94bc5/
+     nios2 |                  libffi-3.0.13 | NOK | http://autobuild.buildroot.net/results/f78f2b19bf28c2b6bb52521e35838467d153b60a/
+     nios2 |                  libffi-3.0.13 | NOK | http://autobuild.buildroot.net/results/baebfcd1fc14ff11d80be8c5f5eeeb11fcafd62d/
+microblaze |                  libfuse-2.9.3 | NOK | http://autobuild.buildroot.net/results/fd0e489ea6404464d40d1eb7b52a7c7f019ec3c6/
+microblaze |                  libfuse-2.9.3 | NOK | http://autobuild.buildroot.net/results/86063bcf3cb14c02e91bde1a04911b08676aa740/
+      bfin |                libglib2-2.36.3 | NOK | http://autobuild.buildroot.net/results/0c6b1e7761f9df096bbd2c2b4fc3a1a5c735a382/
+      bfin |                libglib2-2.36.3 | NOK | http://autobuild.buildroot.net/results/77273597cc86f729a0197b8e78517a38f0e42e2f/
+      bfin |                libglib2-2.36.3 | NOK | http://autobuild.buildroot.net/results/eacd2c38ad2c8347b607be3ceac1b0723bbda555/
+      bfin |                libglib2-2.36.3 | NOK | http://autobuild.buildroot.net/results/68be87e4f48132128a38881f29f3be2900c131c6/
+  mips64el |                 libiscsi-1.6.0 | NOK | http://autobuild.buildroot.net/results/eea3805728fd607fb552af15ae41834490381eb8/
+      bfin |                   libnl-3.2.21 | NOK | http://autobuild.buildroot.net/results/48bfe4e4da81555559ffcf6d194d7749702132f3/
+    xtensa |                  libnspr-4.9.6 | NOK | http://autobuild.buildroot.net/results/5c3677af03d9c3458164c53780f6214c01fdf132/
+    xtensa |                  libpfm4-4.3.0 | NOK | http://autobuild.buildroot.net/results/c1747809fdf9b751097d79e64867205f0c3d17bb/
+    xtensa |                libsigsegv-2.10 | NOK | http://autobuild.buildroot.net/results/43339f55144ff318574979977db543419bc55201/
+       arm |                  libvpx-v1.2.0 | NOK | http://autobuild.buildroot.net/results/459e21b65a256760c7065a62414b981b454edff4/
+       arm |                  libvpx-v1.2.0 | NOK | http://autobuild.buildroot.net/results/f06ac7ec226af1b0db38c0a39153c0aae38f58d8/
+    xtensa |                      m4-1.4.17 | NOK | http://autobuild.buildroot.net/results/d8922e67f1c8497bfa991e6f0eb7f64f45e17467/
+       arm |                  mplayer-1.1.1 | NOK | http://autobuild.buildroot.net/results/d709f93fc5a9141ed91f16da5305e351cb1cf032/
+   powerpc |                     nano-2.3.2 | NOK | http://autobuild.buildroot.net/results/b860dffd19fa3802ef0a3a537baeb87adb46e9b6/
+       arm |                     nano-2.3.2 | NOK | http://autobuild.buildroot.net/results/c416732d6a18b081bd00ad3b946c4ec73a2dae70/
+microblaze |                   nettle-2.7.1 | NOK | http://autobuild.buildroot.net/results/5d1e1075211c25a31af6586c5aca973f9820b02b/
+   aarch64 |                     ola-0.8.31 | NOK | http://autobuild.buildroot.net/results/acc43dfa868e9d5deaafb7547446236d1fecb875/
+microblaze |                 openssl-1.0.1e | NOK | http://autobuild.buildroot.net/results/eb196ea1f533b6af5f1b1ce44345bcdef5cd2557/
+      i686 |                     php-5.3.27 | NOK | http://autobuild.buildroot.net/results/2cf660bac3702989f5b15e07c7523488e1cabfd6/
+   powerpc |                     php-5.3.27 | NOK | http://autobuild.buildroot.net/results/279367e9d06af9946372e5be3ba72978a669758e/
+      i686 |                     php-5.3.27 | NOK | http://autobuild.buildroot.net/results/e6d7b7697dc03414a2ef593bcbbed32a6dafc676/
+      sh4a |                   poco-1.4.6p1 | NOK | http://autobuild.buildroot.net/results/71ca4e38b0f172b78dae1cb2838010946125f17a/
+       arm |                  qt5base-5.0.2 | NOK | http://autobuild.buildroot.net/results/4f38e41973002bcfdb2d2947a4ed510e759b6371/
+    mipsel |                  qt5base-5.0.2 | NOK | http://autobuild.buildroot.net/results/85c22c4ea56930b049fa282a6de1012b2dc0e1d7/
+      mips |                      rpm-5.2.0 | NOK | http://autobuild.buildroot.net/results/7c9e7f146bf33b802aa271ec12059121798d212b/
+      mips |                      rpm-5.2.0 | NOK | http://autobuild.buildroot.net/results/c15611fbb7205aba31e0cc9a37e64e0338f5e25d/
+    mipsel |                  rt-tests-0.83 | NOK | http://autobuild.buildroot.net/results/e1e63230403df819a6937b1415615cc0b3612dd8/
+    mipsel |                  rt-tests-0.83 | NOK | http://autobuild.buildroot.net/results/5875d714f4ee166ed78f98374c6f0be8cd8d9667/
+       arm |                    squid-3.3.9 | NOK | http://autobuild.buildroot.net/results/93cf3ac08c1b0c3d2ca5b8250d9f4338e3b348e8/
+   powerpc |     trace-cmd-trace-cmd-v2.2.1 | NOK | http://autobuild.buildroot.net/results/335d2599ad5b20800236eff475f8fea37a9c319d/
+   powerpc |     trace-cmd-trace-cmd-v2.2.1 | NOK | http://autobuild.buildroot.net/results/e9f3f37f4f929e695b87fff9099f0b9fd7c9512e/
+   powerpc |     trace-cmd-trace-cmd-v2.2.1 | NOK | http://autobuild.buildroot.net/results/68d695f367edefee451b54291c3fa591101d55d2/
+   powerpc |     trace-cmd-trace-cmd-v2.2.1 | NOK | http://autobuild.buildroot.net/results/441ec173ce69728a65ddebb23e3160c29432e7d9/
+       arm |     trace-cmd-trace-cmd-v2.2.1 | NOK | http://autobuild.buildroot.net/results/0ee69d5a1a0574e891b6512d65cb1b178c7988cd/
+       arm |     trace-cmd-trace-cmd-v2.2.1 | NOK | http://autobuild.buildroot.net/results/9be0b48becb6acfec1c29c5989b54b37df34e2df/
+   powerpc |     trace-cmd-trace-cmd-v2.2.1 | NOK | http://autobuild.buildroot.net/results/37aa76c4754d8d59734e198a7f11f8ff97b9cc71/
+   powerpc |     trace-cmd-trace-cmd-v2.2.1 | NOK | http://autobuild.buildroot.net/results/0519283943c9b305518ecc0cbdafba5eaba756f3/
+   powerpc |     trace-cmd-trace-cmd-v2.2.1 | NOK | http://autobuild.buildroot.net/results/849ffcb5805e8092b48935b0a9588560819ce541/
+   powerpc |     trace-cmd-trace-cmd-v2.2.1 | NOK | http://autobuild.buildroot.net/results/af4fe345f6a9dfee94da4c443d852de3d612aba5/
+   powerpc |     trace-cmd-trace-cmd-v2.2.1 | NOK | http://autobuild.buildroot.net/results/912b032b987bcaadc88d22ab08b9258a52e9ac3f/
+  mips64el |              tvheadend-2b64995 | NOK | http://autobuild.buildroot.net/results/686c41eeb3879edfb081b34a9fbf539f0dc0dc48/
+       arc |              uclibc-0.9.33-arc | NOK | http://autobuild.buildroot.net/results/8b8081c541deb3bccb25ec29dcf49835705db763/
+    x86_64 |                   udisks-1.0.4 | NOK | http://autobuild.buildroot.net/results/6fc3ae40cd4ac92f12071ca6531704cd68829b06/
+      sh4a |                  webkit-1.11.5 | NOK | http://autobuild.buildroot.net/results/cea5a5f847cc7881406aa022a4ae2174870e524e/
+   powerpc |                w_scan-20130331 | NOK | http://autobuild.buildroot.net/results/e5c3aed6a3e258842f292a41a197db527548a82f/
+       arm |                   zeromq-3.2.4 | NOK | http://autobuild.buildroot.net/results/cef83d8d70ce5815714f2d13b29196fa5c6a3c01/
+       arm |                     zlib-1.2.8 | NOK | http://autobuild.buildroot.net/results/75a37aaf35215824afc52be6be64f33822c1d257/
 
 
->
->  Also, it's nicer to keep a template in package/python-pyqt and sed-ing it
-> to the build directory.
->
->
->> +
->> +    ( cd $(@D); \
->> +       echo "TARGET_DIR=$(TARGET_DIR)" \
->> +       echo "HOST_DIR=$(HOST_DIR)" \
->> +       echo "BUILD_DIR=$(BUILD_DIR)" \
->> +       echo "PyQT Configuring Target DIR=`pwd`"; \
->
->
->  That's a pretty weird echo... And anyway not needed.
-Yes. That was debug.
-
->
->> +       PATH=$$PATH:$(HOST_DIR)/usr/bin \
->
->
->  Use TARGET_CONFIGURE_OPTS.
->
->> +       CROSS_SIPCONFIG=$(BUILD_DIR)/sip-$(SIP_VERSION)/ \
->
->
->  Hm, we don't like referring to another build dir. Is it possible to install
-> whatever is needed somewhere in $(HOST_DIR) and refer to that?
-I'll try
-
->
->
->> +
->> QMAKESPEC=$(BUILD_DIR)/qt-$(QT_VERSION)/mkspecs/qws/linux-$(QT_EMB_PLATFORM)-g++
->> \
->> +       LD_LIBRARY_PATH=$(HOST_DIR)/lib $(HOST_DIR)/usr/bin/python
->> configure.py \
->
->
->  Is LD_LIBRARY_PATH really needed?
-Will try without it
-
->
->
->> +               -b $(TARGET_DIR)/usr/bin \
->> +               -d
->> $(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages \
->> +               -l
->> $(STAGING_DIR)/usr/include/python$(PYTHON_VERSION_MAJOR)  \
->> +               -m
->> $(STAGING_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/config \
->> +               -q $(HOST_DIR)/usr/bin/qmake \
->> +               -v $(TARGET_DIR)/usr/share/sip/PyQt4 \
->> +               -w --confirm-license \
->> +    )
->> +endef
->> +
->> +define PYQT_INSTALL_TARGET_CMDS
->> +# TODO copy only needed files  DESTDIR=
->
->
->  Don't leave comments from your drafts lingering around. If there are todos,
-> mention them in your commit message.
-Ok
-
->
->
->> +    PATH="$(PATH):$(HOST_DIR)/usr/bin"  $(MAKE1) install -C $(@D)
->
->
->  Use the same environment as above.
->
->> +    touch
->> $(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages/PyQt4/__init__.py
->
->
->  Why is this needed?
-
-Without this dummy file I get
-# /root/test.py
-Traceback (most recent call last):
-  File "/root/test.py", line 5, in <module>
-    from PyQt4 import QtGui
-ImportError: No module named PyQt4
-
-May be there's a solution how to avoid it but haven't figured it out
-
->
->> +endef
->> +
->> +$(eval $(autotools-package))
->
->
->  Again, it's not really an autotools package.
->
->
->  Regards,
->  Arnout
->
->> --
->> 1.8.3.2
->> _______________________________________________
->> buildroot mailing list
->> buildroot at busybox.net
->> http://lists.busybox.net/mailman/listinfo/buildroot
->>
->>
->
->
-> --
-> Arnout Vandecappelle                          arnout at mind be
-> Senior Embedded Software Architect            +32-16-286500
-> Essensium/Mind                                http://www.mind.be
-> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-> GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+-- 
+http://autobuild.buildroot.net
