@@ -1,72 +1,55 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Fri, 18 Oct 2013 08:44:43 +0200
-Subject: [Buildroot] [PATCH] tslib: needs dynamic library for dlopen
-Message-ID: <a0f5079cb28446c5d278.1382078683@argentina>
+From: Fabio Porcedda <fabio.porcedda@gmail.com>
+Date: Fri, 18 Oct 2013 11:27:09 +0200
+Subject: [Buildroot] [PATCH v8 1/8] package: add base dependency to every
+	package
+In-Reply-To: <1382088437-30393-1-git-send-email-fabio.porcedda@gmail.com>
+References: <1382088437-30393-1-git-send-email-fabio.porcedda@gmail.com>
+Message-ID: <1382088437-30393-2-git-send-email-fabio.porcedda@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes
-http://autobuild.buildroot.net/results/1242cbea015e5a24a6621d1bd5569d2a1a819bb4/
+Move "dependencies" "dirs" "prepare" dependencies from "toolchain" to
+every package.
+This way we can build correctly every package right after the clean
+stage.
+As example with this commit we can build successfully the glibc right
+after the clean stage:
+	make clean glibc
 
-Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+This is also a step forward supporting top-level parallel make.
 
+Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
 ---
-v2: - propagate dependency to selectors of tslib (ThomasP)
-    - shared library -> dynamic library (shame on me)
+ package/pkg-generic.mk           | 2 ++
+ toolchain/toolchain/toolchain.mk | 3 +--
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
- package/directfb/Config.in                       |  4 ++++
- package/tslib/Config.in                          |  4 ++++
- package/x11r7/xdriver_xf86-input-tslib/Config.in |  4 ++++
- 3 files changed, 12 insertions(+), 0 deletions(-)
-
-diff --git a/package/directfb/Config.in b/package/directfb/Config.in
---- a/package/directfb/Config.in
-+++ b/package/directfb/Config.in
-@@ -93,9 +93,13 @@ config BR2_PACKAGE_DIRECTFB_SERIALMOUSE
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 4bba4b5..1e7154e 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -385,6 +385,8 @@ $(1)-install-host:      $(1)-build $$($(2)_TARGET_INSTALL_HOST)
+ $(1)-build:		$(1)-configure \
+ 			$$($(2)_TARGET_BUILD)
  
- config BR2_PACKAGE_DIRECTFB_TSLIB
- 	bool "enable touchscreen support"
-+	depends on !BR2_PREFER_STATIC_LIB # tslib
- 	default y
- 	select BR2_PACKAGE_TSLIB
- 
-+comment "touchscreen support needs a toolchain w/ dynamic library"
-+	depends on BR2_PREFER_STATIC_LIB
++$$($(2)_TARGET_SOURCE) $$($(2)_TARGET_RSYNC): | dependencies dirs prepare
 +
- config BR2_PACKAGE_DIRECTFB_GIF
- 	bool "enable GIF support"
- 	default y
-diff --git a/package/tslib/Config.in b/package/tslib/Config.in
---- a/package/tslib/Config.in
-+++ b/package/tslib/Config.in
-@@ -1,6 +1,10 @@
- config BR2_PACKAGE_TSLIB
- 	bool "tslib"
-+	depends on !BR2_PREFER_STATIC_LIB # dlopen
- 	help
- 	  Tslib is an abstraction layer for touchscreen panel events.
+ ifeq ($$($(2)_OVERRIDE_SRCDIR),)
+ # In the normal case (no package override), the sequence of steps is
+ #  source, by downloading
+diff --git a/toolchain/toolchain/toolchain.mk b/toolchain/toolchain/toolchain.mk
+index 44ed629..8559ac9 100644
+--- a/toolchain/toolchain/toolchain.mk
++++ b/toolchain/toolchain/toolchain.mk
+@@ -14,5 +14,4 @@ endif
  
- 	  http://tslib.berlios.de/
-+
-+comment "tslib needs a toolchain w/ dynamic library"
-+	depends on BR2_PREFER_STATIC_LIB
-diff --git a/package/x11r7/xdriver_xf86-input-tslib/Config.in b/package/x11r7/xdriver_xf86-input-tslib/Config.in
---- a/package/x11r7/xdriver_xf86-input-tslib/Config.in
-+++ b/package/x11r7/xdriver_xf86-input-tslib/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_XDRIVER_XF86_INPUT_TSLIB
- 	bool "xf86-input-tslib"
-+	depends on !BR2_PREFER_STATIC_LIB # tslib
- 	select BR2_PACKAGE_XPROTO_INPUTPROTO
- 	select BR2_PACKAGE_XPROTO_RANDRPROTO
- 	select BR2_PACKAGE_XPROTO_XPROTO
-@@ -8,3 +9,6 @@ config BR2_PACKAGE_XDRIVER_XF86_INPUT_TS
- 	  Touch screen library input driver
+ $(eval $(generic-package))
  
- 	  http://www.ptxdist.org/software/xf86-input-tslib/index_en.html
-+
-+comment "xf86-input-tslib needs a toolchain w/ dynamic library"
-+	depends on BR2_PREFER_STATIC_LIB
+-toolchain-source: prepare dirs dependencies $(HOST_DIR)/usr/share/buildroot/toolchainfile.cmake
+-
++toolchain: $(HOST_DIR)/usr/share/buildroot/toolchainfile.cmake
+-- 
+1.8.4
