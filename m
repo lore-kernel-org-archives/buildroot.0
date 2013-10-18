@@ -1,32 +1,27 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri, 18 Oct 2013 16:45:15 -0300
-Subject: [Buildroot] [PATCH] lxc: needs mmu
-Message-ID: <1382125515-10894-1-git-send-email-gustavo@zacarias.com.ar>
+From: Andrew Ruder <andrew.ruder@elecsyscorp.com>
+Date: Fri, 18 Oct 2013 15:23:23 -0500
+Subject: [Buildroot] [RFC PATCH] fs/common.mk: Add support for fakeroot
+ script
+In-Reply-To: <20131015161941.5d7ffd45@skate>
+References: <20131015132102.GA20116@gmail.com> <20131015161941.5d7ffd45@skate>
+Message-ID: <20131018202323.GA23065@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-http://autobuild.buildroot.net/results/602/60289dae59650847e6d32c7ab3be7973a86a25c7/
+On Tue, Oct 15, 2013 at 04:19:41PM +0200, Thomas Petazzoni wrote:
+> Well, the conventional way would be to have those directories created
+> by packages (and they can use the <pkg>_PERMISSIONS mechanism to get
+> proper ownership or permissions). Or, if they really don't belong to
+> any package, create them in the post build script, and have a device
+> table assign the permission and ownership.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/lxc/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+I didn't realize the device table functionality could modify arbitrary
+file/directory ownerships but looking through the makedevs source code
+that DOES appear to be true.  I guess let's just consider this thread as
+a question disguised as a poorly spelled patch. :)
 
-diff --git a/package/lxc/Config.in b/package/lxc/Config.in
-index ad463b1..f8c1fb9 100644
---- a/package/lxc/Config.in
-+++ b/package/lxc/Config.in
-@@ -3,6 +3,7 @@ config BR2_PACKAGE_LXC
- 	select BR2_PACKAGE_LIBCAP
- 	depends on BR2_INET_IPV6
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_USE_MMU # fork()
- 	help
- 	  Linux Containers (LXC), provides the ability to group and isolate
- 	  of a set of processes in a jail by virtualizing and accounting the
--- 
-1.8.1.5
+Cheers,
+Andy
