@@ -1,41 +1,61 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sat, 19 Oct 2013 13:35:08 -0300
-Subject: [Buildroot] [PATCH 2/2] linux: bump 3.11.x stable version
-In-Reply-To: <1382200508-20743-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1382200508-20743-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1382200508-20743-2-git-send-email-gustavo@zacarias.com.ar>
+From: Ryan Barnett <rjbarnet@rockwellcollins.com>
+Date: Sat, 19 Oct 2013 14:42:57 -0500
+Subject: [Buildroot] Buildroot Developpers' Day 2013
+In-Reply-To: <20131019095649.5493a6be@skate>
+References: <20131013223941.GD16563@free.fr>	<20131017143209.036bb603@skate>	<OF53A5EA25.AF5C7EBF-ON86257C07.004A718E-86257C07.004C0FF5@rockwellcollins.com>
+ <20131017171754.2354c3a3@skate>	<OFE97C47DA.36C45F2D-ON86257C07.006B1C57-86257C07.006C817E@rockwellcollins.com>
+ <20131019095649.5493a6be@skate>
+Message-ID: <OFF473144A.E31AF45C-ON86257C09.00633AB9-86257C09.006C4958@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- linux/Config.in | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Thomas P,
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 4fcb128..f7c5330 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -21,7 +21,7 @@ choice
- 	prompt "Kernel version"
- 
- config BR2_LINUX_KERNEL_LATEST_VERSION
--	bool "3.11.5"
-+	bool "3.11.6"
- 
- config BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	bool "Same as toolchain kernel headers"
-@@ -75,7 +75,7 @@ config BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION
- 
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "3.11.5" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "3.11.6" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default BR2_DEFAULT_KERNEL_HEADERS if BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE if BR2_LINUX_KERNEL_CUSTOM_VERSION
- 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
--- 
-1.8.1.5
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote on 10/19/2013 
+02:56:49 AM:
+
+> Dear Ryan Barnett,
+> 
+> On Thu, 17 Oct 2013 14:45:24 -0500, Ryan Barnett wrote:
+> 
+> > > Let's see what happens with the agenda over the course of the WE, 
+and
+> > > if it makes sense, we'll try to schedule a specific time for SELinux
+> > > discussion.
+> > 
+> > That sounds good, I'm more interested in being able to listen in on 
+Yann's
+> > buildroot.config and being a part of the discussion for BR2_EXTERNAL.
+> > We (Rockwell Collins) have been starting to use the patchset on some 
+new
+> > projects so I could probably put together something about our 
+experience. 
+> > Would there be interest in hearing about how we are using and how it 
+has
+> > changed our approach to development? So it would be nice if these 
+could be
+> > later or at least have a rough estimate of when they will start.
+> 
+> Ok. Seems like there are at least two interested persons. Let's say
+> we're going to schedule those two topics (Yann's presentation, and
+> BR2_EXTERNAL discussion) at 3:00 PM UTC (which is local time in
+> Edinburgh), which would be 10:00 AM EST I believe.
+> 
+> Would this be ok?
+
+That should work. I will be using my personal GMail account to use the
+Google Hangout feature so I will email outside of the mailing list with
+this information.
+
+I've also CC'd my co-worker - Clayton Shotwell - as he has expressed 
+interest
+as well.
+
+> Thomas
+> -- 
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
