@@ -1,8 +1,8 @@
 From: Romain Naour <romain.naour@openwide.fr>
-Date: Sun, 20 Oct 2013 23:30:05 +0200
+Date: Sun, 20 Oct 2013 23:36:14 +0200
 Subject: [Buildroot] [PATCH v3 1/1] trace-cmd: use pkg-config instead of
 	python-config
-Message-ID: <52644B5D.7090704@openwide.fr>
+Message-ID: <52644CCE.1040307@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -24,6 +24,8 @@ http://autobuild.buildroot.net/results/980/980875810528ac1dee34b8c268d9b3c40b2e3
 
 Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 ---
+v3: Fix trace-cmd.mk
+
 v2: Add python3 support
 
 v1: rework python dependency
@@ -31,7 +33,6 @@ v1: rework python dependency
     disable python support if python package is not selected
 
 v0: initial review
-
  ...e-use-pkg-config-instead-of-python-config.patch | 43 ++++++++++++++++++++++
  package/trace-cmd/trace-cmd.mk                     | 13 +++++++
  2 files changed, 56 insertions(+)
@@ -88,7 +89,7 @@ index 0000000..e44a4f4
 +1.8.4
 +
 diff --git a/package/trace-cmd/trace-cmd.mk b/package/trace-cmd/trace-cmd.mk
-index 7a750f9..c248bfc 100644
+index 7a750f9..69e0e69 100644
 --- a/package/trace-cmd/trace-cmd.mk
 +++ b/package/trace-cmd/trace-cmd.mk
 @@ -11,6 +11,18 @@ TRACE_CMD_INSTALL_STAGING = YES
@@ -99,10 +100,10 @@ index 7a750f9..c248bfc 100644
 +
 +ifeq ($(BR2_PACKAGE_PYTHON),y)
 +TRACE_CMD_DEPENDENCIES += python host-swig
-+TRACE_CMD_MAKE_OPTS = PYTHON_LIB=python
++TRACE_CMD_MAKE_OPTS = PYTHON_VERS=python
 +else ifeq ($(BR2_PACKAGE_PYTHON3),y)
 +TRACE_CMD_DEPENDENCIES += python3 host-swig
-+TRACE_CMD_MAKE_OPTS = PYTHON_LIB=python3
++TRACE_CMD_MAKE_OPTS = PYTHON_VERS=python3
 +else
 +TRACE_CMD_MAKE_OPTS += NO_PYTHON=1
 +endif
