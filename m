@@ -1,123 +1,69 @@
-From: Romain Naour <romain.naour@openwide.fr>
-Date: Sun, 20 Oct 2013 23:36:14 +0200
-Subject: [Buildroot] [PATCH v3 1/1] trace-cmd: use pkg-config instead of
-	python-config
-Message-ID: <52644CCE.1040307@openwide.fr>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Mon, 21 Oct 2013 00:14:51 +0200
+Subject: [Buildroot] Buildroot Developpers' Day 2013
+In-Reply-To: <20131019095649.5493a6be@skate>
+References: <20131013223941.GD16563@free.fr> <20131017143209.036bb603@skate>
+ <OF53A5EA25.AF5C7EBF-ON86257C07.004A718E-86257C07.004C0FF5@rockwellcollins.com>
+ <20131017171754.2354c3a3@skate>
+ <OFE97C47DA.36C45F2D-ON86257C07.006B1C57-86257C07.006C817E@rockwellcollins.com>
+ <20131019095649.5493a6be@skate>
+Message-ID: <526455DB.4040102@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hi Thomas,
 
-trace-cmd use python-config to find out which headers
-and libraries should be used to link against the Python libraries.
-By default, python-config returns paths that are inappropriate for
-cross-compilation.
+Thomas Petazzoni wrote:
+> Dear Ryan Barnett,
+>
+> On Thu, 17 Oct 2013 14:45:24 -0500, Ryan Barnett wrote:
+>
+>>> Let's see what happens with the agenda over the course of the WE, and
+>>> if it makes sense, we'll try to schedule a specific time for SELinux
+>>> discussion.
+>>
+>> That sounds good, I'm more interested in being able to listen in on Yann's
+>> buildroot.config and being a part of the discussion for BR2_EXTERNAL.
+>> We (Rockwell Collins) have been starting to use the patchset on some new
+>> projects so I could probably put together something about our experience.
+>> Would there be interest in hearing about how we are using and how it has
+>> changed our approach to development? So it would be nice if these could be
+>> later or at least have a rough estimate of when they will start.
+>
+> Ok. Seems like there are at least two interested persons. Let's say
+> we're going to schedule those two topics (Yann's presentation, and
+> BR2_EXTERNAL discussion) at 3:00 PM UTC (which is local time in
+> Edinburgh), which would be 10:00 AM EST I believe.
 
-This patch replaces python-config with pkg-config as a workaround.
+Sure? On Saturday 26 Edinburgh time will still be BST (British Summer 
+Time), which is UTC+1, not UTC. That's for DST (daylight saving time) 
+which ends one day later, on Sunday 27.
 
-Add PYTHON_VERS to build trace-cmd with python2 or python3
+So I guess you really meant:
 
-Fixes:
-http://autobuild.buildroot.net/results/980/980875810528ac1dee34b8c268d9b3c40b2e35ec/
+Edinburgh (BST = UTC+1):   3:00 PM
+Rome/Paris (CEST = UTC+2): 4:00 PM (me)
+Chicago (CDT = UTC-5):     9:00 AM (Ryan timezone, correct?)
 
-Signed-off-by: Romain Naour <romain.naour@openwide.fr>
----
-v3: Fix trace-cmd.mk
+Am I correct?
 
-v2: Add python3 support
+Oh, look here, that should explain much better: 
+http://www.timeanddate.com/worldclock/fixedtime.html?msg=BDD+Hangout&iso=20131026T15&p1=304&ah=1
 
-v1: rework python dependency
-    add host-swig dependency
-    disable python support if python package is not selected
+>
+> Would this be ok?
 
-v0: initial review
- ...e-use-pkg-config-instead-of-python-config.patch | 43 ++++++++++++++++++++++
- package/trace-cmd/trace-cmd.mk                     | 13 +++++++
- 2 files changed, 56 insertions(+)
- create mode 100644 package/trace-cmd/trace-cmd-0001-Makefile-use-pkg-config-instead-of-python-config.patch
+Under the above asumptions, it will.
 
-diff --git a/package/trace-cmd/trace-cmd-0001-Makefile-use-pkg-config-instead-of-python-config.patch
-b/package/trace-cmd/trace-cmd-0001-Makefile-use-pkg-config-instead-of-python-config.patch
-new file mode 100644
-index 0000000..e44a4f4
---- /dev/null
-+++ b/package/trace-cmd/trace-cmd-0001-Makefile-use-pkg-config-instead-of-python-config.patch
-@@ -0,0 +1,43 @@
-+
-+trace-cmd use python-config to find out which headers
-+and libraries should be used to link against the Python libraries.
-+By default, python-config returns paths that are inappropriate for
-+cross-compilation.
-+
-+Add PYTHON_VERS to build trace-cmd with python2 or python3
-+
-+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-+---
-+ Makefile | 8 +++++---
-+ 1 file changed, 5 insertions(+), 3 deletions(-)
-+
-+diff --git a/Makefile b/Makefile
-+index 83329ca..23b70d8 100644
-+--- a/Makefile
-++++ b/Makefile
-+@@ -80,8 +80,10 @@ ifndef NO_PYTHON
-+ PYTHON		:= ctracecmd.so
-+ PYTHON_GUI	:= ctracecmd.so ctracecmdgui.so
-+
-++PYTHON_VERS ?= python
-++
-+ # Can build python?
-+-ifeq ($(shell sh -c "python-config --includes > /dev/null 2>&1 && echo y"), y)
-++ifeq ($(shell sh -c "pkg-config --cflags $(PYTHON_VERS) > /dev/null 2>&1 && echo y"), y)
-+ 	PYTHON_PLUGINS := plugin_python.so
-+ 	BUILD_PYTHON := $(PYTHON) $(PYTHON_PLUGINS)
-+ 	PYTHON_SO_INSTALL := ctracecmd.install
-+@@ -546,8 +548,8 @@ clean:
-+
-+ ##### PYTHON STUFF #####
-+
-+-PYTHON_INCLUDES = `python-config --includes`
-+-PYTHON_LDFLAGS = `python-config --ldflags` \
-++PYTHON_INCLUDES = `pkg-config --cflags $(PYTHON_VERS)`
-++PYTHON_LDFLAGS = `pkg-config --libs $(PYTHON_VERS)` \
-+ 		$(shell python -c "import distutils.sysconfig; print distutils.sysconfig.get_config_var('LINKFORSHARED')")
-+ PYGTK_CFLAGS = `pkg-config --cflags pygtk-2.0`
-+
-+--
-+1.8.4
-+
-diff --git a/package/trace-cmd/trace-cmd.mk b/package/trace-cmd/trace-cmd.mk
-index 7a750f9..69e0e69 100644
---- a/package/trace-cmd/trace-cmd.mk
-+++ b/package/trace-cmd/trace-cmd.mk
-@@ -11,6 +11,18 @@ TRACE_CMD_INSTALL_STAGING = YES
- TRACE_CMD_LICENSE = GPLv2 LGPLv2.1
- TRACE_CMD_LICENSE_FILES = COPYING COPYING.LIB
+I'll be available between 3:00 PM and 5:00 PM CEST (Italy/France), 
+meaning 2:00 PM to 4:00 PM BST (Edinburgh).
 
-+TRACE_CMD_DEPENDENCIES = host-pkgconf
-+
-+ifeq ($(BR2_PACKAGE_PYTHON),y)
-+TRACE_CMD_DEPENDENCIES += python host-swig
-+TRACE_CMD_MAKE_OPTS = PYTHON_VERS=python
-+else ifeq ($(BR2_PACKAGE_PYTHON3),y)
-+TRACE_CMD_DEPENDENCIES += python3 host-swig
-+TRACE_CMD_MAKE_OPTS = PYTHON_VERS=python3
-+else
-+TRACE_CMD_MAKE_OPTS += NO_PYTHON=1
-+endif
-+
- # trace-cmd already defines _LARGEFILE64_SOURCE when necessary,
- # redefining it on the command line causes build problems.
- TRACE_CMD_CFLAGS=$(filter-out -D_LARGEFILE64_SOURCE,$(TARGET_CFLAGS)) -D_GNU_SOURCE
-@@ -18,6 +30,7 @@ TRACE_CMD_CFLAGS=$(filter-out -D_LARGEFILE64_SOURCE,$(TARGET_CFLAGS)) -D_GNU_SOU
- define TRACE_CMD_BUILD_CMDS
- 	$(MAKE) $(TARGET_CONFIGURE_OPTS) \
- 		CFLAGS="$(TRACE_CMD_CFLAGS)" \
-+		$(TRACE_CMD_MAKE_OPTS) \
- 		-C $(@D) all
- endef
+Under the above assumptions, that means I'll have a 1 hour time window 
+since the starting time, and leave you at 4:00 PM Edinburgh Time (5:00 
+PM Italian time).
 
 -- 
-1.8.4
+Luca
