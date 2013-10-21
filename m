@@ -1,115 +1,223 @@
-From: Ryan Barnett <rjbarnet@rockwellcollins.com>
-Date: Mon, 21 Oct 2013 17:17:12 -0500
-Subject: [Buildroot] Buildroot Developpers' Day 2013
-In-Reply-To: <20131021220321.GB3466@free.fr>
-References: <20131013223941.GD16563@free.fr> <20131017143209.036bb603@skate>
- <OF53A5EA25.AF5C7EBF-ON86257C07.004A718E-86257C07.004C0FF5@rockwellcollins.com>
- <20131017171754.2354c3a3@skate>
- <OFE97C47DA.36C45F2D-ON86257C07.006B1C57-86257C07.006C817E@rockwellcollins.com>
- <20131019095649.5493a6be@skate> <526455DB.4040102@lucaceresoli.net>
- <20131021220321.GB3466@free.fr>
-Message-ID: <OFDFDF0CA9.9A29C177-ON86257C0B.007A14F7-86257C0B.007A6621@rockwellcollins.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 22 Oct 2013 00:56:04 +0200
+Subject: [Buildroot] [PATCH] add no-mmu support for libglib-2.36.3
+In-Reply-To: <1382375763-4150-1-git-send-email-aaron.wu@analog.com>
+References: <1382375763-4150-1-git-send-email-aaron.wu@analog.com>
+Message-ID: <5265B104.9010209@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yann, Luca, Thomas P, All
+  Hi Aaron,
 
-"Yann E. MORIN" <yann.morin.1998@gmail.com> wrote on 10/21/2013 05:03:21 
-PM:
+On 21/10/13 19:16, Aaron Wu wrote:
+> Signed-off-by: Aaron Wu <aaron.wu@analog.com>
+>
+> add no-mmu support for libglib-2.36.3
+> ---
+>   package/libglib2/glib2.36.3_nommu.patch |  354 +++++++++++++++++++++++++++++++
+>   1 file changed, 354 insertions(+)
+>   create mode 100644 package/libglib2/glib2.36.3_nommu.patch
+>
+> diff --git a/package/libglib2/glib2.36.3_nommu.patch b/package/libglib2/glib2.36.3_nommu.patch
+> new file mode 100644
+> index 0000000..192e8af
+> --- /dev/null
+> +++ b/package/libglib2/glib2.36.3_nommu.patch
+> @@ -0,0 +1,354 @@
+> +diff -Nur glib-2.36.3/configure.ac glib-2.36.3_new/configure.ac
+> +--- glib-2.36.3/configure.ac	2013-06-10 06:53:13.000000000 +0800
+> ++++ glib-2.36.3_new/configure.ac	2013-10-21 19:25:28.806513398 +0800
+> +@@ -580,7 +580,7 @@
+> + # Checks for library functions.
+> + AC_FUNC_VPRINTF
+> + AC_FUNC_ALLOCA
+> +-AC_CHECK_FUNCS(mmap posix_memalign memalign valloc fsync pipe2 issetugid)
+> ++AC_CHECK_FUNCS(mmap posix_memalign memalign valloc fsync pipe2 issetugid fork)
+> + AC_CHECK_FUNCS(atexit on_exit timegm gmtime_r)
+> +
+> + AC_CACHE_CHECK([for __libc_enable_secure], glib_cv_have_libc_enable_secure,
+> +diff -Nur glib-2.36.3/gio/gtestdbus.c glib-2.36.3_new/gio/gtestdbus.c
+> +--- glib-2.36.3/gio/gtestdbus.c	2013-06-03 07:20:49.000000000 +0800
+> ++++ glib-2.36.3_new/gio/gtestdbus.c	2013-10-21 21:23:04.350552212 +0800
+> +@@ -245,7 +245,11 @@
+> +           g_assert_not_reached ();
+> +         }
+> +
+> ++#ifdef HAVE_FORK
+> +       switch (fork ())
+> ++#else
+> ++      switch (vfork ())
 
-> Luca, All,
-> 
-> On 2013-10-21 00:14 +0200, Luca Ceresoli spake thusly:
-> > Hi Thomas,
-> > 
-> > Thomas Petazzoni wrote:
-> > >Dear Ryan Barnett,
-> > >
-> > >On Thu, 17 Oct 2013 14:45:24 -0500, Ryan Barnett wrote:
-> > >
-> > >>>Let's see what happens with the agenda over the course of the WE, 
-and
-> > >>>if it makes sense, we'll try to schedule a specific time for 
-SELinux
-> > >>>discussion.
-> > >>
-> > >>That sounds good, I'm more interested in being able to listen in on 
-Yann's
-> > >>buildroot.config and being a part of the discussion for 
-BR2_EXTERNAL.
-> > >>We (Rockwell Collins) have been starting to use the patchset on some 
-new
-> > >>projects so I could probably put together something about our 
-experience.
-> > >>Would there be interest in hearing about how we are using and how it 
-has
-> > >>changed our approach to development? So it would be nice if these 
-could be
-> > >>later or at least have a rough estimate of when they will start.
-> > >
-> > >Ok. Seems like there are at least two interested persons. Let's say
-> > >we're going to schedule those two topics (Yann's presentation, and
-> > >BR2_EXTERNAL discussion) at 3:00 PM UTC (which is local time in
-> > >Edinburgh), which would be 10:00 AM EST I believe.
-> > 
-> > Sure? On Saturday 26 Edinburgh time will still be BST (British Summer 
-Time),
-> > which is UTC+1, not UTC. That's for DST (daylight saving time) which 
-ends
-> > one day later, on Sunday 27.
-> > 
-> > So I guess you really meant:
-> > 
-> > Edinburgh (BST = UTC+1):   3:00 PM
-> > Rome/Paris (CEST = UTC+2): 4:00 PM (me)
-> > Chicago (CDT = UTC-5):     9:00 AM (Ryan timezone, correct?)
+  Have you checked if this still works? The child closes some fds, which 
+is normally not allowed after vfork. Also, the child seems to wait for 
+input for the parent, but with vfork the parent is suspended until the 
+child exec's or exits.
 
-Yes CDT/Chicago
+> ++#endif
+> +         {
+> +         case -1:
+> +           g_warning ("fork() failed: %m");
+> +diff -Nur glib-2.36.3/gio/tests/gdbus-non-socket.c glib-2.36.3_new/gio/tests/gdbus-non-socket.c
+> +--- glib-2.36.3/gio/tests/gdbus-non-socket.c	2013-06-10 06:03:17.000000000 +0800
+> ++++ glib-2.36.3_new/gio/tests/gdbus-non-socket.c	2013-10-22 00:07:55.686606621 +0800
 
-> > 
-> > Am I correct?
-> > 
-> > Oh, look here, that should explain much better: 
-http://www.timeanddate.com/worldclock/fixedtime.html?msg=BDD+Hangout&iso=20131026T15&p1=304&ah=1
+  For tests, we normally prefer to disable them rather than fixing fork 
+calls.
 
-> > 
-> > >
-> > >Would this be ok?
-> > 
-> > Under the above asumptions, it will.
-> > 
-> > I'll be available between 3:00 PM and 5:00 PM CEST (Italy/France), 
-meaning
-> > 2:00 PM to 4:00 PM BST (Edinburgh).
-> > 
-> > Under the above assumptions, that means I'll have a 1 hour time window 
-since
-> > the starting time, and leave you at 4:00 PM Edinburgh Time (5:00 PM 
-Italian
-> > time).
-> 
-> I guess your time calculations are correct. The time change occurs the
-> night from Saturday to Sunday, so we'll still be Summer Time on
-> Saturday, but Winter Time on Sunday (which means we get to sleep one
-> hour more. Woohoo!).
+> +@@ -151,7 +151,11 @@
+> +   g_assert (G_IS_INPUT_STREAM (g_io_stream_get_input_stream (streams[1])));
+> +   g_assert (G_IS_OUTPUT_STREAM (g_io_stream_get_output_stream (streams[1])));
+> +
+> ++#ifdef HAVE_FORK
+> +   switch ((first_child = fork ()))
+> ++#else
+> ++  switch ((first_child = vfork ()))
+> ++#endif
+> +     {
+> +     case -1:
+> +       g_assert_not_reached ();
+> +@@ -271,7 +275,11 @@
+> +
+> +   g_object_unref (connection);
+> +   g_main_loop_unref (loop);
+> ++#ifdef HAVE_FORK
+> +   exit (0);
+> ++#else
+> ++  _exit (0);
+> ++#endif
+> + }
+> +
+> + #else /* G_OS_UNIX */
+> +diff -Nur glib-2.36.3/gio/tests/socket.c glib-2.36.3_new/gio/tests/socket.c
+> +--- glib-2.36.3/gio/tests/socket.c	2013-06-03 07:20:53.000000000 +0800
+> ++++ glib-2.36.3_new/gio/tests/socket.c	2013-10-21 23:54:59.222602354 +0800
+> +@@ -756,7 +756,11 @@
+> +   status = socketpair (PF_UNIX, SOCK_STREAM, 0, sv);
+> +   g_assert_cmpint (status, ==, 0);
+> +
+> ++#ifdef HAVE_FORK
+> +   pid = fork ();
+> ++#else
+> ++  pid = vfork ();
+> ++#endif
+> +   g_assert_cmpint (pid, >=, 0);
+> +
+> +   /* Child: close its copy of the write end of the pipe, receive it
+> +@@ -787,7 +791,11 @@
+> + 	len = write (fd, TEST_DATA, sizeof (TEST_DATA));
+> +       while (len == -1 && errno == EINTR);
+> +       g_assert_cmpint (len, ==, sizeof (TEST_DATA));
+> ++#ifdef HAVE_FORK
+> +       exit (0);
+> ++#else
+> ++      _exit (0);
+> ++#endif
+> +     }
+> +   else
+> +     {
+> +diff -Nur glib-2.36.3/glib/gbacktrace.c glib-2.36.3_new/glib/gbacktrace.c
+> +--- glib-2.36.3/glib/gbacktrace.c	2013-06-03 07:20:49.000000000 +0800
+> ++++ glib-2.36.3_new/glib/gbacktrace.c	2013-10-21 20:55:48.758543214 +0800
+> +@@ -242,7 +242,11 @@
+> +   args[1] = (gchar*) prg_name;
+> +   args[2] = buf;
+> +
+> ++#ifdef HAVE_FORK
+> +   pid = fork ();
+> ++#else
+> ++  pid = vfork ();
 
-Moving it to coincide with Luca's availability would be fine with me.
+  This also looks like one that can't be replaced with vfork.
 
-> Regards,
-> Yann E. MORIN.
-> 
-> -- 
-> 
-.-----------------.--------------------.------------------.--------------------.
-> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' 
-conspiracy: |
-> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___       |
-> | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There 
-is no  |
-> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v 
-conspiracy.  |
-> 
-'------------------------------^-------^------------------^--------------------'
+> ++#endif
+> +   if (pid == 0)
+> +     {
+> +       stack_trace (args);
+> +@@ -295,7 +299,11 @@
+> +       _exit (0);
+> +     }
+> +
+> ++#ifdef HAVE_FORK
+> +   pid = fork ();
+> ++#else
+> ++  pid = vfork ();
+
+  Same here.
+
+> ++#endif
+> +   if (pid == 0)
+> +     {
+> +       close (0); dup (in_fd[0]);   /* set the stdin to the in pipe */
+> +diff -Nur glib-2.36.3/glib/gspawn.c glib-2.36.3_new/glib/gspawn.c
+> +--- glib-2.36.3/glib/gspawn.c	2013-06-10 06:03:18.000000000 +0800
+> ++++ glib-2.36.3_new/glib/gspawn.c	2013-10-21 19:39:13.410517935 +0800
+> +@@ -1332,7 +1332,11 @@
+> +   if (standard_error && !make_pipe (stderr_pipe, error))
+> +     goto cleanup_and_fail;
+> +
+> ++#ifdef HAVE_FORK
+> +   pid = fork ();
+> ++#else
+> ++  pid = vfork ();
+> ++#endif
+> +
+> +   if (pid < 0)
+> +     {
+> +@@ -1382,7 +1386,11 @@
+> +            */
+> +           GPid grandchild_pid;
+> +
+> ++#ifdef HAVE_FORK
+> +           grandchild_pid = fork ();
+> ++#else
+> ++          grandchild_pid = vfork ();
+
+  This looks like one that may work, but it really should be tested 
+extensively...
+
+> ++#endif
+> +
+> +           if (grandchild_pid < 0)
+> +             {
+> +diff -Nur glib-2.36.3/glib/gtestutils.c glib-2.36.3_new/glib/gtestutils.c
+> +--- glib-2.36.3/glib/gtestutils.c	2013-06-10 06:03:18.000000000 +0800
+> ++++ glib-2.36.3_new/glib/gtestutils.c	2013-10-21 19:40:56.330518502 +0800
+> +@@ -2204,7 +2204,11 @@
+> +   if (pipe (stdout_pipe) < 0 || pipe (stderr_pipe) < 0 || pipe (stdtst_pipe) < 0)
+> +     g_error ("failed to create pipes to fork test program: %s", g_strerror (errno));
+> +   signal (SIGCHLD, SIG_DFL);
+> ++#ifdef HAVE_FORK
+> +   test_trap_last_pid = fork ();
+> ++#else
+> ++  test_trap_last_pid = vfork ();
+
+  This one also does fd manipulation in the child so probably won't work.
+
+> ++#endif
+> +   if (test_trap_last_pid < 0)
+> +     g_error ("failed to fork test program: %s", g_strerror (errno));
+> +   if (test_trap_last_pid == 0)  /* child */
+[snip]
+
+  Bottom line: you're going to have to work with upstream to fix these 
+things in a proper way. And I think it's going to take quite a bit of effort.
+
+  One possible work-around would be to disable the functions that rely on 
+fork, i.e. assert on entry. If possible, check with upstream what they 
+think of such a scenario, but this is something that may be acceptable 
+for us even if upstream doesn't like it.
+
+  Regards,
+  Arnout
+
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
