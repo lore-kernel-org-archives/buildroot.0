@@ -1,35 +1,33 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 21 Oct 2013 15:29:55 -0300
-Subject: [Buildroot] [PATCH] nano: fix ncursesw build failure
-Message-ID: <1382380195-7094-1-git-send-email-gustavo@zacarias.com.ar>
+From: Ryan Barnett <rjbarnet@rockwellcollins.com>
+Date: Mon, 21 Oct 2013 14:15:00 -0500
+Subject: [Buildroot] Buildroot Package Mirror Script
+Message-ID: <OF57CE4CB6.E374A8CA-ON86257C0B.0069B646-86257C0B.0069B7CF@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-After the latest version bump ncursesw5-config is automatically detected
-if it's present in the build machine (almost always because we need full
-ncurses support with headers for Kconfig's menuconfig).
-Since we don't have ncursesw support in buildroot just say no. Fixes:
-http://autobuild.buildroot.net/results/89d/89d7ec7306411b15f9ffbc2051d0d316237b4c07/
+Thomas P and/or Peter,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/nano/nano.mk | 1 +
- 1 file changed, 1 insertion(+)
+I was wondering if it would be possible to get a hold of the scripts that
+are used to populate sources.buildroot.net mirror. Our build server
+resides behind a very restrictive firewall and we would like to automate
+(nightly) the pulling of new packages from the most recent version
+of buildroot source. We've attempted to implement our own script to do 
+this
+with 'make allyespackageconfig' followed by 'make source', however, we
+are running into a few gotchas so we were hoping that we could 
+potentially piggy back off the work that has been done for the
+sources.buildroot.net.
 
-diff --git a/package/nano/nano.mk b/package/nano/nano.mk
-index aba4b4f..3707e77 100644
---- a/package/nano/nano.mk
-+++ b/package/nano/nano.mk
-@@ -10,6 +10,7 @@ NANO_LICENSE = GPLv3+
- NANO_LICENSE_FILES = COPYING
- NANO_MAKE_ENV = CURSES_LIB="-lncurses"
- NANO_CONF_OPT = --without-slang
-+NANO_CONF_ENV = ac_cv_prog_NCURSESW_CONFIG=false
- NANO_DEPENDENCIES = ncurses
- 
- ifeq ($(BR2_PACKAGE_NANO_TINY),y)
--- 
-1.8.1.5
+Please let me know if you are able to help.
+
+Thanks,
+-Ryan
+
+------------------------------------------------------------
+Ryan J Barnett / Software Engineer / Platform SW
+MS 137-157, 855 35th St NE, Cedar Rapids, IA, 52498-3161, US
+rjbarnet at rockwellcollins.com
+www.rockwellcollins.com 
