@@ -1,37 +1,59 @@
-From: spdawson at gmail.com <spdawson@gmail.com>
-Date: Mon, 21 Oct 2013 14:25:29 +0100
-Subject: [Buildroot] [PATCH] webkit: fix target install
-Message-ID: <1382361929-11261-1-git-send-email-spdawson@gmail.com>
+From: Matt Weber <mlweber1@rockwellcollins.com>
+Date: Mon, 21 Oct 2013 08:39:17 -0500
+Subject: [Buildroot] [PATCH 1/1] omniorb: fix autobuilder failure
+Message-ID: <1382362757-24499-1-git-send-email-mlweber1@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Simon Dawson <spdawson@gmail.com>
+http://autobuild.buildroot.net/results/e3244abc550a95eb69e63b8db203f39b27f3288e/
 
-Commit 33a9d34ff375ec0c0389c9af6bc499a8dd7ccbc9 fixed the staging
-install for webkit, which was hanging due to deadlock during parallel
-make install.
+Turns out omniorb isn't building because of an old cross compile patch.
+The last patchset was missing the delete.
 
-This problem also afflicts the target install, which is fixed by this patch.
-
-Signed-off-by: Simon Dawson <spdawson@gmail.com>
+Signed-off-by: Matt Weber <mlweber1@rockwellcollins.com>
 ---
- package/webkit/webkit.mk | 1 +
- 1 file changed, 1 insertion(+)
+ .../omniorb-0001-crosscompile-tool-export.patch    |   30 --------------------
+ 1 files changed, 0 insertions(+), 30 deletions(-)
+ delete mode 100644 package/omniorb/omniorb-0001-crosscompile-tool-export.patch
 
-diff --git a/package/webkit/webkit.mk b/package/webkit/webkit.mk
-index eb1547b..21b535f 100644
---- a/package/webkit/webkit.mk
-+++ b/package/webkit/webkit.mk
-@@ -17,6 +17,7 @@ WEBKIT_AUTORECONF_OPT = -I $(@D)/Source/autotools
- 
- # parallel make install deadlocks with make 3.81
- WEBKIT_INSTALL_STAGING_OPT = -j1 DESTDIR=$(STAGING_DIR) install
-+WEBKIT_INSTALL_TARGET_OPT = -j1 DESTDIR=$(TARGET_DIR) install
- 
- # Does not build and it's disabled by default
- # in newer releases
+diff --git a/package/omniorb/omniorb-0001-crosscompile-tool-export.patch b/package/omniorb/omniorb-0001-crosscompile-tool-export.patch
+deleted file mode 100644
+index 260d86f..0000000
+--- a/package/omniorb/omniorb-0001-crosscompile-tool-export.patch
++++ /dev/null
+@@ -1,30 +0,0 @@
+-beforeauto.mk.in: added support for overriding the configure time
+-defined CC/CXX/RANLIB/CPP variables so that a couple pkg tools could be
+-built which generate code during the cross compile build.
+-
+-http://www.omniorb-support.com/pipermail/omniorb-list/2013-September/031473.html
+-
+-Signed-off-by: Matt Weber <mlweber1@rockwellcollins.com>
+-
+---- omniorb-4.1.6.orig/mk/beforeauto.mk.in	2013-09-12 12:49:55.668708148 -0500
+-+++ omniorb-4.1.6/mk/beforeauto.mk.in	2013-09-12 12:51:22.707928579 -0500
+-@@ -672,15 +672,15 @@
+- #
+- 
+- AR              = ar cq
+--CC              = @CC@
+--CXX             = @CXX@
+--RANLIB		= @RANLIB@
+-+CC		?= @CC@
+-+CXX		?= @CXX@
+-+RANLIB		?= @RANLIB@
+- MKDIRHIER	= $(BASE_OMNI_TREE)/bin/scripts/omkdirhier
+- INSTLIBFLAGS	= -m 0644
+- INSTEXEFLAGS	= -m 0755
+- CP		= cp
+- MV		= mv -f
+--CPP		= @CPP@
+-+CPP		?= @CPP@
+- OMKDEPEND	= $(TOOLBINDIR)/omkdepend
+- RMDIRHIER	= $(RM) -rf
+- 
 -- 
-1.8.3.2
+1.7.1
