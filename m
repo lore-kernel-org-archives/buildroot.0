@@ -1,46 +1,37 @@
-From: Anirudha Bose <ani07nov@gmail.com>
-Date: Mon, 21 Oct 2013 18:30:03 +0530
-Subject: [Buildroot] Reproducing Autobuild errors
-Message-ID: <CA+XvPyxsJ==djC78T2VeP=eFPHSLLfoXxbNerAYSj2i0SPaaKg@mail.gmail.com>
+From: spdawson at gmail.com <spdawson@gmail.com>
+Date: Mon, 21 Oct 2013 14:25:29 +0100
+Subject: [Buildroot] [PATCH] webkit: fix target install
+Message-ID: <1382361929-11261-1-git-send-email-spdawson@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello everyone.
+From: Simon Dawson <spdawson@gmail.com>
 
-This is the first time I am posting in this mailing list so I would like to
-introduce myself first. My name is Anirudha Bose, and I am an undergraduate
-student doing my major in Computer Science. I am specifically interested in
-contributing to Buildroot because I have done some similar work using M
-Cross Environment (MXE) during Google Summer of Code 2013.
+Commit 33a9d34ff375ec0c0389c9af6bc499a8dd7ccbc9 fixed the staging
+install for webkit, which was hanging due to deadlock during parallel
+make install.
 
-For a start I am trying to fix some Autobuild errors. For example if I am
-trying to fix this error [1]. Here are the steps I did to reproduce the
-error on my machine.
+This problem also afflicts the target install, which is fixed by this patch.
 
-1. Downloaded the config file and saved it as .config in my buildroot dir.
-2. Downloaded the Power PC 603e toolchain from this [2] link.
-*3.* I still don't know where to extract and keep this tarball; and what
-should be the path in the .config file. I also do not know what to do with
-the defconfig file. Should I save it as .defconfig in the buildroot dir?
-4. make
+Signed-off-by: Simon Dawson <spdawson@gmail.com>
+---
+ package/webkit/webkit.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-After this I expect to get the same error which I see in the log of
-autobuild. I intend to fix this by compiling the package which failed with
-an extra CFLAG. So, where am I supposed to make this change?
-
-[1]
-http://autobuild.buildroot.org/results/912/91289fc77e7dc7ed6342414df91c35d78d7eabc2/build-end.log
-
-[2] http://autobuild.buildroot.org/toolchains/tarballs/
-
-
-I hope someone helps me out. I tried asking in the IRC channel, but my
-timezone is very different so I never got any reply.
-
-- Anirudha
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20131021/468c24ec/attachment.html>
+diff --git a/package/webkit/webkit.mk b/package/webkit/webkit.mk
+index eb1547b..21b535f 100644
+--- a/package/webkit/webkit.mk
++++ b/package/webkit/webkit.mk
+@@ -17,6 +17,7 @@ WEBKIT_AUTORECONF_OPT = -I $(@D)/Source/autotools
+ 
+ # parallel make install deadlocks with make 3.81
+ WEBKIT_INSTALL_STAGING_OPT = -j1 DESTDIR=$(STAGING_DIR) install
++WEBKIT_INSTALL_TARGET_OPT = -j1 DESTDIR=$(TARGET_DIR) install
+ 
+ # Does not build and it's disabled by default
+ # in newer releases
+-- 
+1.8.3.2
