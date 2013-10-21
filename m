@@ -1,39 +1,32 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 21 Oct 2013 10:44:55 +0000 (UTC)
-Subject: [Buildroot] [Bug 6578] udisks package broken
-In-Reply-To: <bug-6578-163@https.bugs.busybox.net/>
-References: <bug-6578-163@https.bugs.busybox.net/>
-Message-ID: <20131021104455.6D1719BAC0@busybox.osuosl.org>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Mon, 21 Oct 2013 12:49:15 +0200
+Subject: [Buildroot] [PATCH] snmppp: new package
+In-Reply-To: <CACytpF9mL-7wVs_kD37rGgo5Dge7AEXFTykJ2E0E1S-Kz0GDwg@mail.gmail.com>
+References: <1381758435-13669-1-git-send-email-gustavo@zacarias.com.ar>
+ <CAAXf6LU9vZRc1B1MeO717yutvHHeZVv7hrYAC22XDrwY8JzPxA@mail.gmail.com>
+ <87mwmboap7.fsf@dell.be.48ers.dk>
+ <CACytpF9mL-7wVs_kD37rGgo5Dge7AEXFTykJ2E0E1S-Kz0GDwg@mail.gmail.com>
+Message-ID: <526506AB.4060008@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=6578
+Hi SPC,
 
-Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> changed:
+SPC wrote:
+> Hello. Is this package already available with Buildroot ? I sould like
+> to check it with one real device that I have.
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|                            |WORKSFORME
+The patch adding SNMPPP to Buildroot has been merged about one week ago 
+in the git repository. This means you can start using it a) cloning the 
+up-to-date git repository, b) downloading a daily snapshot or c) 
+downloading the latest release tarball (2013.08.1) and applying by 
+yourself the patch on top of it.
 
---- Comment #1 from Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> 2013-10-21 10:44:54 UTC ---
-I tried on the latest master and udisks builds fine here. 
-The 'gudev' version that is being checked is specified in package/udev/udev.mk.
-Current buildroot has udev-182, and udisks (1.0.4) needs udev-147 or later.
-
-What version of buildroot are you using? Since buildroot was already at
-udev-173 in version 2011.08, I think you are using a very old version. 
-You should either upgrade buildroot, or manually fix the problem by bumping
-udev (and any possible dependency).
-
-If you are using a recent version of buildroot and udev is at a sufficiently
-recent version, there may be another problem. In this case, please reopen this
-bug and provide more information.
+If you need info on how to obtain Buildroot, have a look at the manual:
+http://buildroot.net/downloads/manual/manual.html#getting-buildroot
 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Luca
