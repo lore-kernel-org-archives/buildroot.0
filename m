@@ -1,33 +1,45 @@
-From: Sergey Alyoshin <alyoshin.s@gmail.com>
-Date: Mon, 21 Oct 2013 20:33:22 +0400
-Subject: [Buildroot] [PATCH] kobs-ng: check Linux version for mtd enum
-	redefine
-Message-ID: <CAOxVtSRpiU5wOFJdzSMDtZvcCro583eugwroCu0BdYNaeYhu7A@mail.gmail.com>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Mon, 21 Oct 2013 19:33:07 +0200
+Subject: [Buildroot] Reproducing Autobuild errors
+In-Reply-To: <CA+XvPyyZkmrbXLW_nAn+0zw9g+oNfPg8ewoqGvf=HZ-uxX2Z2Q@mail.gmail.com>
+References: <CA+XvPyxsJ==djC78T2VeP=eFPHSLLfoXxbNerAYSj2i0SPaaKg@mail.gmail.com>
+ <CAAXf6LX=3wjYrQvYuCNX4m7hkkR2-bQPO-bThMLRGDyRE8gJ9g@mail.gmail.com>
+ <CA+XvPyyZkmrbXLW_nAn+0zw9g+oNfPg8ewoqGvf=HZ-uxX2Z2Q@mail.gmail.com>
+Message-ID: <d7ea8853-2bca-4781-9bd7-055cbbd87696@email.android.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-With current  package/kobs-ng/kobs-ng-fix-mtd-defines.patch
-kobs-ng failed to build with 2.6.26, because enum tested with #ifndef
+Anirudha Bose <ani07nov@gmail.com> wrote:
+>On Mon, Oct 21, 2013 at 7:16 PM, Thomas De Schampheleire <
+>patrickdepinguin at gmail.com> wrote:
+snip
+>
+>Thanks a lot for the detailed explanation.
+>
+>I am however facing some problems getting the right toolchain. Here is what
+>I did:
+>
+>1. Downloaded the toolchain from
+>http://autobuild.buildroot.net/toolchains/tarballs/
+>2. Extracted it to the location
+>/home/ani/Downloads/br-powerpc-603e-basic-cpp-2013.05-1/
+>3. In the .config file I edited this:
+>BR2_TOOLCHAIN_EXTERNAL_PATH="/home/ani/Downloads/br-powerpc-603e-basic-cpp-2013.05-1"
+>4. make toolchain trace-cmd
+>
+>After this I get the following error:
+>
+>>>> toolchain-external undefined Configuring
+>Cannot execute cross-compiler
+>'/home/ani/Downloads/br-powerpc-603e-basic-cpp-2013.05-1/bin/powerpc-linux-gcc'
+>
+>I think I am using the wrong toolchain. Can you tell me what is the problem?
 
-mtd.c: In function 'mtd_open':
-mtd.c:696:42: error: 'MTD_FILE_MODE_NORMAL' undeclared (first use in
-this function)
-mtd.c:696:42: note: each undeclared identifier is reported only once
-for each function it appears in
-mtd.c: In function 'mtd_set_ecc_mode':
-mtd.c:896:43: error: 'MTD_FILE_MODE_NORMAL' undeclared (first use in
-this function)
-mtd.c:914:43: error: 'MTD_FILE_MODE_RAW' undeclared (first use in this function)
+Can you check whether that file is present? Can you execute it manually (without options)?
+One possible cause of this problem is that the toolchain is built on a 64bit machine and your machine is only 32 bit. In this case it is impossible to run the toolchain, and you'll have to rebuild it yourself (if you have the configuration) or try to use another toolchain (like the CodeSourcery ones, that are selectable in menuconfig) and hope that the problem is not toolchain dependent. 
 
-Updated package/kobs-ng/kobs-ng-fix-mtd-defines_v2.patch is attached.
-Test built with Linux 2.6.36
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: kobs-ng-fix-mtd-defines_v2.patch
-Type: application/octet-stream
-Size: 2006 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20131021/f956e494/attachment.obj>
+Best regards,
+Thomas
