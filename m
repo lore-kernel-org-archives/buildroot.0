@@ -1,29 +1,41 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 22 Oct 2013 14:50:48 -0300
-Subject: [Buildroot] [PATCH] uboot-tools: fix license issues
-In-Reply-To: <80f8029e-950e-4229-88fe-9096d2f78718@email.android.com>
-References: <1382452676-2514-1-git-send-email-gustavo@zacarias.com.ar>
- <87iowpb6q3.fsf@dell.be.48ers.dk>
- <80f8029e-950e-4229-88fe-9096d2f78718@email.android.com>
-Message-ID: <5266BAF8.1080808@zacarias.com.ar>
+Date: Tue, 22 Oct 2013 14:51:57 -0300
+Subject: [Buildroot] [PATCH] linux-headers: bump 3.{0, 4}.x stable versions
+Message-ID: <1382464317-2004-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 10/22/2013 02:01 PM, Thomas De Schampheleire wrote:
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ ...headers-headers_install-fix-__packed-in-exported-kernel-head.patch | 0
+ package/linux-headers/Config.in.host                                  | 4 ++--
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+ rename package/linux-headers/{3.0.100 => 3.0.101}/linux-headers-headers_install-fix-__packed-in-exported-kernel-head.patch (100%)
 
->> Ehh, we do support multiple versions of u-boot, but only a single
->> version of uboot-tools, so it makes sense to just change it to
->> Licenses/..
-> 
-> 
-> Sure, but the mentioned problem remains for uboot proper right?
-
-The problem is a bit more complicated for uboot proper.
-The README says the u-boot part is GPL, but some extras (preloaders,
-etc) might not be, so even if we fail silently to cover the different
-uboot versions that might not be enough (i.e. GPL won't be enough
-depending on the target).
-Regards.
+diff --git a/package/linux-headers/3.0.100/linux-headers-headers_install-fix-__packed-in-exported-kernel-head.patch b/package/linux-headers/3.0.101/linux-headers-headers_install-fix-__packed-in-exported-kernel-head.patch
+similarity index 100%
+rename from package/linux-headers/3.0.100/linux-headers-headers_install-fix-__packed-in-exported-kernel-head.patch
+rename to package/linux-headers/3.0.101/linux-headers-headers_install-fix-__packed-in-exported-kernel-head.patch
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 124a68f..a32f665 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -76,11 +76,11 @@ config BR2_DEFAULT_KERNEL_VERSION
+ 
+ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+-	default "3.0.100"	if BR2_KERNEL_HEADERS_3_0
++	default "3.0.101"	if BR2_KERNEL_HEADERS_3_0
+ 	default "3.1.10"	if BR2_KERNEL_HEADERS_3_1
+ 	default "3.2.51"	if BR2_KERNEL_HEADERS_3_2
+ 	default "3.3.8"		if BR2_KERNEL_HEADERS_3_3
+-	default "3.4.66"	if BR2_KERNEL_HEADERS_3_4
++	default "3.4.67"	if BR2_KERNEL_HEADERS_3_4
+ 	default "3.5.7"		if BR2_KERNEL_HEADERS_3_5
+ 	default "3.6.11"	if BR2_KERNEL_HEADERS_3_6
+ 	default "3.7.10"	if BR2_KERNEL_HEADERS_3_7
+-- 
+1.8.1.5
