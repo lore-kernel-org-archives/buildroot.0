@@ -1,41 +1,35 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 22 Oct 2013 14:51:57 -0300
-Subject: [Buildroot] [PATCH] linux-headers: bump 3.{0, 4}.x stable versions
-Message-ID: <1382464317-2004-1-git-send-email-gustavo@zacarias.com.ar>
+From: Naitik Amin <Naitik.Amin@ametek.com>
+Date: Tue, 22 Oct 2013 15:30:48 -0400
+Subject: [Buildroot] No proc mounted
+Message-ID: <OFE26C9A8F.E4D8CD49-ON85257C0C.006AEB60-85257C0C.006B3127@ametek.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- ...headers-headers_install-fix-__packed-in-exported-kernel-head.patch | 0
- package/linux-headers/Config.in.host                                  | 4 ++--
- 2 files changed, 2 insertions(+), 2 deletions(-)
- rename package/linux-headers/{3.0.100 => 3.0.101}/linux-headers-headers_install-fix-__packed-in-exported-kernel-head.patch (100%)
+Hi there,
 
-diff --git a/package/linux-headers/3.0.100/linux-headers-headers_install-fix-__packed-in-exported-kernel-head.patch b/package/linux-headers/3.0.101/linux-headers-headers_install-fix-__packed-in-exported-kernel-head.patch
-similarity index 100%
-rename from package/linux-headers/3.0.100/linux-headers-headers_install-fix-__packed-in-exported-kernel-head.patch
-rename to package/linux-headers/3.0.101/linux-headers-headers_install-fix-__packed-in-exported-kernel-head.patch
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 124a68f..a32f665 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -76,11 +76,11 @@ config BR2_DEFAULT_KERNEL_VERSION
- 
- config BR2_DEFAULT_KERNEL_HEADERS
- 	string
--	default "3.0.100"	if BR2_KERNEL_HEADERS_3_0
-+	default "3.0.101"	if BR2_KERNEL_HEADERS_3_0
- 	default "3.1.10"	if BR2_KERNEL_HEADERS_3_1
- 	default "3.2.51"	if BR2_KERNEL_HEADERS_3_2
- 	default "3.3.8"		if BR2_KERNEL_HEADERS_3_3
--	default "3.4.66"	if BR2_KERNEL_HEADERS_3_4
-+	default "3.4.67"	if BR2_KERNEL_HEADERS_3_4
- 	default "3.5.7"		if BR2_KERNEL_HEADERS_3_5
- 	default "3.6.11"	if BR2_KERNEL_HEADERS_3_6
- 	default "3.7.10"	if BR2_KERNEL_HEADERS_3_7
--- 
-1.8.1.5
+I have been generating the rootfs using buildroot. Then dd'ing the 
+rootfs.ext3 to the rootfs partition on my sdcard. After inserting the 
+sdcard into my target, it comes up with no /proc, /sys etc...
+
+In fstab, I do see the line which should mount /proc, but doesnt seem to 
+happen..
+
+Any ideas..
+
+$ cat /etc/fstab
+# /etc/fstab: static file system information.
+#
+# <file system> <mount pt>     <type>   <options>         <dump> <pass>
+/dev/root       /              ext2     rw,noauto         0      1
+proc            /proc          proc     defaults          0      0
+devpts          /dev/pts       devpts   defaults,gid=5,mode=620   0      0
+tmpfs           /dev/shm       tmpfs    mode=0777         0      0
+tmpfs           /tmp           tmpfs    defaults          0      0
+sysfs           /sys           sysfs    defaults          0      0
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20131022/a2d1ddf3/attachment.html>
