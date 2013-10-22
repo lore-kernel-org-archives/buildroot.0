@@ -1,43 +1,37 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 22 Oct 2013 23:13:09 +0200
-Subject: [Buildroot] [git commit] linux-headers: bump 3.{0,
-	4}.x stable versions
-Message-ID: <20131022220914.2576A9BB4D@busybox.osuosl.org>
+Date: Tue, 22 Oct 2013 23:58:22 +0200
+Subject: [Buildroot] [git commit] nano: fix ncursesw build failure
+Message-ID: <20131022220914.564F29BB4E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=deec0dbc844ff827aacd009d1c96ceaa5b7914c6
+commit: http://git.buildroot.net/buildroot/commit/?id=f0801fa2f3e1cbd617bacef3b442da6914caae0a
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+After the latest version bump ncursesw5-config is automatically detected
+if it's present in the build machine (almost always because we need full
+ncurses support with headers for Kconfig's menuconfig).
+Since we don't have ncursesw support in buildroot just say no. Fixes:
+http://autobuild.buildroot.net/results/89d/89d7ec7306411b15f9ffbc2051d0d316237b4c07/
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...tall-fix-__packed-in-exported-kernel-head.patch |    0
- package/linux-headers/Config.in.host               |    4 ++--
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/nano/nano.mk |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-diff --git a/package/linux-headers/3.0.100/linux-headers-headers_install-fix-__packed-in-exported-kernel-head.patch b/package/linux-headers/3.0.101/linux-headers-headers_install-fix-__packed-in-exported-kernel-head.patch
-similarity index 100%
-rename from package/linux-headers/3.0.100/linux-headers-headers_install-fix-__packed-in-exported-kernel-head.patch
-rename to package/linux-headers/3.0.101/linux-headers-headers_install-fix-__packed-in-exported-kernel-head.patch
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 124a68f..a32f665 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -76,11 +76,11 @@ config BR2_DEFAULT_KERNEL_VERSION
+diff --git a/package/nano/nano.mk b/package/nano/nano.mk
+index aba4b4f..3707e77 100644
+--- a/package/nano/nano.mk
++++ b/package/nano/nano.mk
+@@ -10,6 +10,7 @@ NANO_LICENSE = GPLv3+
+ NANO_LICENSE_FILES = COPYING
+ NANO_MAKE_ENV = CURSES_LIB="-lncurses"
+ NANO_CONF_OPT = --without-slang
++NANO_CONF_ENV = ac_cv_prog_NCURSESW_CONFIG=false
+ NANO_DEPENDENCIES = ncurses
  
- config BR2_DEFAULT_KERNEL_HEADERS
- 	string
--	default "3.0.100"	if BR2_KERNEL_HEADERS_3_0
-+	default "3.0.101"	if BR2_KERNEL_HEADERS_3_0
- 	default "3.1.10"	if BR2_KERNEL_HEADERS_3_1
- 	default "3.2.51"	if BR2_KERNEL_HEADERS_3_2
- 	default "3.3.8"		if BR2_KERNEL_HEADERS_3_3
--	default "3.4.66"	if BR2_KERNEL_HEADERS_3_4
-+	default "3.4.67"	if BR2_KERNEL_HEADERS_3_4
- 	default "3.5.7"		if BR2_KERNEL_HEADERS_3_5
- 	default "3.6.11"	if BR2_KERNEL_HEADERS_3_6
- 	default "3.7.10"	if BR2_KERNEL_HEADERS_3_7
+ ifeq ($(BR2_PACKAGE_NANO_TINY),y)
