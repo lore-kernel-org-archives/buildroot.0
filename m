@@ -1,21 +1,36 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 22 Oct 2013 16:30:45 +0200
-Subject: [Buildroot] [PATCH] openssh: bump to version 6.3p1
-In-Reply-To: <1382451797-27697-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Tue, 22 Oct 2013 11:23:17 -0300")
-References: <1382451797-27697-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87mwm1bcoa.fsf@dell.be.48ers.dk>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue, 22 Oct 2013 11:37:56 -0300
+Subject: [Buildroot] [PATCH] uboot-tools: fix license issues
+Message-ID: <1382452676-2514-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+U-Boot 2013.10 moved licenses into the Licenses/ directory.
+However since we target many versions of u-boot (even non-upstream
+versions) we can't point UBOOT_TOOLS_LICENSE_FILES to the proper place
+without making mistakes.
+So just remove it unforunately. Fixes:
+http://autobuild.buildroot.net/results/8c9/8c94c81fe74399c854de335329cf4942f8356fbe/
 
- > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/uboot-tools/uboot-tools.mk | 1 -
+ 1 file changed, 1 deletion(-)
 
-Committed, thanks.
-
+diff --git a/package/uboot-tools/uboot-tools.mk b/package/uboot-tools/uboot-tools.mk
+index e19372a..96d2c8d 100644
+--- a/package/uboot-tools/uboot-tools.mk
++++ b/package/uboot-tools/uboot-tools.mk
+@@ -8,7 +8,6 @@ UBOOT_TOOLS_VERSION = 2013.10
+ UBOOT_TOOLS_SOURCE  = u-boot-$(UBOOT_TOOLS_VERSION).tar.bz2
+ UBOOT_TOOLS_SITE    = ftp://ftp.denx.de/pub/u-boot
+ UBOOT_TOOLS_LICENSE = GPLv2+
+-UBOOT_TOOLS_LICENSE_FILES = COPYING
+ 
+ define UBOOT_TOOLS_BUILD_CMDS
+ 	$(MAKE) -C $(@D) 			\
 -- 
-Bye, Peter Korsgaard
+1.8.1.5
