@@ -1,36 +1,39 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 22 Oct 2013 11:37:56 -0300
-Subject: [Buildroot] [PATCH] uboot-tools: fix license issues
-Message-ID: <1382452676-2514-1-git-send-email-gustavo@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 22 Oct 2013 16:38:46 +0200
+Subject: [Buildroot] glib-networking when using gtlsconnection fails
+In-Reply-To: <52603fa7.45680e0a.32e2.67d3@mx.google.com>
+References: <525eb564.c664cc0a.66a5.6cee@mx.google.com>
+ <52603fa7.45680e0a.32e2.67d3@mx.google.com>
+Message-ID: <20131022163846.2d51ca1a@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-U-Boot 2013.10 moved licenses into the Licenses/ directory.
-However since we target many versions of u-boot (even non-upstream
-versions) we can't point UBOOT_TOOLS_LICENSE_FILES to the proper place
-without making mistakes.
-So just remove it unforunately. Fixes:
-http://autobuild.buildroot.net/results/8c9/8c94c81fe74399c854de335329cf4942f8356fbe/
+Dear Bernhard Schuster,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/uboot-tools/uboot-tools.mk | 1 -
- 1 file changed, 1 deletion(-)
+On Thu, 17 Oct 2013 19:50:55 +0002, Bernhard Schuster wrote:
+> The issue consisted of two issues:
+> 
+> pcre actually lacked the --enable-utf8 --enable-unicode-properties, 
+> after adding them GRegex worked fine again.
 
-diff --git a/package/uboot-tools/uboot-tools.mk b/package/uboot-tools/uboot-tools.mk
-index e19372a..96d2c8d 100644
---- a/package/uboot-tools/uboot-tools.mk
-+++ b/package/uboot-tools/uboot-tools.mk
-@@ -8,7 +8,6 @@ UBOOT_TOOLS_VERSION = 2013.10
- UBOOT_TOOLS_SOURCE  = u-boot-$(UBOOT_TOOLS_VERSION).tar.bz2
- UBOOT_TOOLS_SITE    = ftp://ftp.denx.de/pub/u-boot
- UBOOT_TOOLS_LICENSE = GPLv2+
--UBOOT_TOOLS_LICENSE_FILES = COPYING
- 
- define UBOOT_TOOLS_BUILD_CMDS
- 	$(MAKE) -C $(@D) 			\
+Can you provide a patch that fixes that?
+
+> The second issue is (most likely) related to how glib-networking is 
+> loaded at runtime (dlopen?) and thus static linkage is doomed to fail, 
+> though I have yet to prove this. Dynamic linking just works out of the 
+> box.
+
+Interesting. Could you investigate this a bit more, and if it turns out
+to be true, ensure the packages get the proper "depends
+on !BR2_PREFER_STATIC_LIB" dependencies?
+
+Thanks!
+
+Thomas
 -- 
-1.8.1.5
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
