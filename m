@@ -1,78 +1,75 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 22 Oct 2013 16:19:25 +0200
-Subject: [Buildroot] [git commit] boost: fix build on 64-bit target after
-	bump to 1.54.0
-Message-ID: <20131022142610.D15AB9BAB9@busybox.osuosl.org>
+Date: Tue, 22 Oct 2013 16:24:52 +0200
+Subject: [Buildroot] [git commit] tslib: needs dynamic library for dlopen
+Message-ID: <20131022142611.4D5709BAEF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3f4b08697b84f7d7eb1682a576bbcbe57af70945
+commit: http://git.buildroot.net/buildroot/commit/?id=f826e851c870039189d1a4d2b8074a0aa9de01e6
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes compilation error with aarch64 target:
+Fixes
+http://autobuild.buildroot.net/results/1242cbea015e5a24a6621d1bd5569d2a1a819bb4/
 
-./boost/atomic/atomic.hpp: At global scope:
-./boost/atomic/atomic.hpp:202:16: error: 'uintptr_t' was not declared in this scope
- typedef atomic<uintptr_t> atomic_uintptr_t;
-                ^
-./boost/atomic/atomic.hpp:202:25: error: template argument 1 is invalid
- typedef atomic<uintptr_t> atomic_uintptr_t;
-                         ^
-./boost/atomic/atomic.hpp:202:43: error: invalid type in declaration before ';' token
- typedef atomic<uintptr_t> atomic_uintptr_t;
-                                           ^
-
-Fixes http://autobuild.buildroot.net/results/0b69d7b33dc16ea27e395a949cefbd0a35c92f61/
-
-Reported here: https://svn.boost.org/trac/boost/ticket/8973
-Fix reported here: https://svn.boost.org/trac/boost/ticket/8731
-
-Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
-Backported-from: https://svn.boost.org/trac/boost/changeset/84950
+Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...oost-0003-fix-64bit-build-with-recent-gcc.patch |   33 ++++++++++++++++++++
- 1 files changed, 33 insertions(+), 0 deletions(-)
+ package/directfb/Config.in                       |    4 ++++
+ package/tslib/Config.in                          |    4 ++++
+ package/x11r7/xdriver_xf86-input-tslib/Config.in |    4 ++++
+ 3 files changed, 12 insertions(+), 0 deletions(-)
 
-diff --git a/package/boost/boost-0003-fix-64bit-build-with-recent-gcc.patch b/package/boost/boost-0003-fix-64bit-build-with-recent-gcc.patch
-new file mode 100644
-index 0000000..5fdfb01
---- /dev/null
-+++ b/package/boost/boost-0003-fix-64bit-build-with-recent-gcc.patch
-@@ -0,0 +1,33 @@
-+Patch for recent versions of glibc which always assume int64_t support.
+diff --git a/package/directfb/Config.in b/package/directfb/Config.in
+index 38daa3a..fa108b7 100644
+--- a/package/directfb/Config.in
++++ b/package/directfb/Config.in
+@@ -93,9 +93,13 @@ config BR2_PACKAGE_DIRECTFB_SERIALMOUSE
+ 
+ config BR2_PACKAGE_DIRECTFB_TSLIB
+ 	bool "enable touchscreen support"
++	depends on !BR2_PREFER_STATIC_LIB # tslib
+ 	default y
+ 	select BR2_PACKAGE_TSLIB
+ 
++comment "touchscreen support needs a toolchain w/ dynamic library"
++	depends on BR2_PREFER_STATIC_LIB
 +
-+Fixes compilation error with aarch64 target:
+ config BR2_PACKAGE_DIRECTFB_GIF
+ 	bool "enable GIF support"
+ 	default y
+diff --git a/package/tslib/Config.in b/package/tslib/Config.in
+index 95ee897..ef03f90 100644
+--- a/package/tslib/Config.in
++++ b/package/tslib/Config.in
+@@ -1,6 +1,10 @@
+ config BR2_PACKAGE_TSLIB
+ 	bool "tslib"
++	depends on !BR2_PREFER_STATIC_LIB # dlopen
+ 	help
+ 	  Tslib is an abstraction layer for touchscreen panel events.
+ 
+ 	  http://tslib.berlios.de/
 +
-+./boost/atomic/atomic.hpp: At global scope:
-+./boost/atomic/atomic.hpp:202:16: error: 'uintptr_t' was not declared in this scope
-+ typedef atomic<uintptr_t> atomic_uintptr_t;
-+                ^
-+./boost/atomic/atomic.hpp:202:25: error: template argument 1 is invalid
-+ typedef atomic<uintptr_t> atomic_uintptr_t;
-+                         ^
-+./boost/atomic/atomic.hpp:202:43: error: invalid type in declaration before ';' token
-+ typedef atomic<uintptr_t> atomic_uintptr_t;
-+                                           ^
++comment "tslib needs a toolchain w/ dynamic library"
++	depends on BR2_PREFER_STATIC_LIB
+diff --git a/package/x11r7/xdriver_xf86-input-tslib/Config.in b/package/x11r7/xdriver_xf86-input-tslib/Config.in
+index f0ea132..7cf5926 100644
+--- a/package/x11r7/xdriver_xf86-input-tslib/Config.in
++++ b/package/x11r7/xdriver_xf86-input-tslib/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_XDRIVER_XF86_INPUT_TSLIB
+ 	bool "xf86-input-tslib"
++	depends on !BR2_PREFER_STATIC_LIB # tslib
+ 	select BR2_PACKAGE_XPROTO_INPUTPROTO
+ 	select BR2_PACKAGE_XPROTO_RANDRPROTO
+ 	select BR2_PACKAGE_XPROTO_XPROTO
+@@ -8,3 +9,6 @@ config BR2_PACKAGE_XDRIVER_XF86_INPUT_TSLIB
+ 	  Touch screen library input driver
+ 
+ 	  http://www.ptxdist.org/software/xf86-input-tslib/index_en.html
 +
-+Reported here: https://svn.boost.org/trac/boost/ticket/8973
-+Fix reported here: https://svn.boost.org/trac/boost/ticket/8731
-+
-+Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
-+Backported-from: https://svn.boost.org/trac/boost/changeset/84950
-+
-+--- a/boost/cstdint.hpp	(revision 84805)
-++++ b/boost/cstdint.hpp	(revision 84950)
-+@@ -42,5 +42,8 @@
-+ // See https://svn.boost.org/trac/boost/ticket/3548 and http://sources.redhat.com/bugzilla/show_bug.cgi?id=10990
-+ //
-+-#if defined(BOOST_HAS_STDINT_H) && (!defined(__GLIBC__) || defined(__GLIBC_HAVE_LONG_LONG))
-++#if defined(BOOST_HAS_STDINT_H)					\
-++  && (!defined(__GLIBC__)					\
-++      || defined(__GLIBC_HAVE_LONG_LONG)			\
-++      || (defined(__GLIBC__) && ((__GLIBC__ > 2) || ((__GLIBC__ == 2) && (__GLIBC_MINOR__ >= 17)))))
-+ 
-+ // The following #include is an implementation artifact; not part of interface.
++comment "xf86-input-tslib needs a toolchain w/ dynamic library"
++	depends on BR2_PREFER_STATIC_LIB
