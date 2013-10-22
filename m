@@ -1,10 +1,10 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 22 Oct 2013 10:29:17 +0200
-Subject: [Buildroot] [PATCH] gcc: bump 4.8.x series to version 4.8.2
-In-Reply-To: <1382017076-29788-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Thu, 17 Oct 2013 10:37:56 -0300")
-References: <1382017076-29788-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <871u3dg142.fsf@dell.be.48ers.dk>
+Date: Tue, 22 Oct 2013 10:35:24 +0200
+Subject: [Buildroot] [PATCH] mpd: bump to version 0.17.6
+In-Reply-To: <1382051153-5074-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Thu, 17 Oct 2013 20:05:53 -0300")
+References: <1382051153-5074-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87wql5em9f.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
