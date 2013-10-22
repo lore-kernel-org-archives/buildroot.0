@@ -1,35 +1,22 @@
-From: Naitik Amin <Naitik.Amin@ametek.com>
-Date: Tue, 22 Oct 2013 15:30:48 -0400
-Subject: [Buildroot] No proc mounted
-Message-ID: <OFE26C9A8F.E4D8CD49-ON85257C0C.006AEB60-85257C0C.006B3127@ametek.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 22 Oct 2013 23:13:22 +0200
+Subject: [Buildroot] [PATCH] linux-headers: bump 3.{0,
+	4}.x stable versions
+In-Reply-To: <1382464317-2004-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Tue, 22 Oct 2013 14:51:57 -0300")
+References: <1382464317-2004-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <8761spau19.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi there,
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-I have been generating the rootfs using buildroot. Then dd'ing the 
-rootfs.ext3 to the rootfs partition on my sdcard. After inserting the 
-sdcard into my target, it comes up with no /proc, /sys etc...
+ > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
-In fstab, I do see the line which should mount /proc, but doesnt seem to 
-happen..
+Committed, thanks.
 
-Any ideas..
-
-$ cat /etc/fstab
-# /etc/fstab: static file system information.
-#
-# <file system> <mount pt>     <type>   <options>         <dump> <pass>
-/dev/root       /              ext2     rw,noauto         0      1
-proc            /proc          proc     defaults          0      0
-devpts          /dev/pts       devpts   defaults,gid=5,mode=620   0      0
-tmpfs           /dev/shm       tmpfs    mode=0777         0      0
-tmpfs           /tmp           tmpfs    defaults          0      0
-sysfs           /sys           sysfs    defaults          0      0
-
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20131022/a2d1ddf3/attachment.html>
+-- 
+Bye, Peter Korsgaard
