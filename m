@@ -1,28 +1,29 @@
-From: arnaud aujon <arnaud.aujon@gmail.com>
-Date: Tue, 22 Oct 2013 19:06:41 +0200
-Subject: [Buildroot] Tool to check packages updates
-Message-ID: <CACjG4BJq5TXvpMAoU7w3JgTVrOGHpeKng88HU03Rf_=XunPKAQ@mail.gmail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 22 Oct 2013 19:49:40 +0200
+Subject: [Buildroot] [PATCH] uboot-tools: fix license issues
+In-Reply-To: <80f8029e-950e-4229-88fe-9096d2f78718@email.android.com> (Thomas
+ De Schampheleire's message of "Tue, 22 Oct 2013 19:01:37 +0200")
+References: <1382452676-2514-1-git-send-email-gustavo@zacarias.com.ar>
+ <87iowpb6q3.fsf@dell.be.48ers.dk>
+ <80f8029e-950e-4229-88fe-9096d2f78718@email.android.com>
+Message-ID: <87a9i1b3gr.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin@gmail.com> writes:
+
 Hi,
 
-As we talk earlier in the mailing list, I started working on a python
-script to automatically check if a package can be updated.
+ >> Ehh, we do support multiple versions of u-boot, but only a single
+ >> version of uboot-tools, so it makes sense to just change it to
+ >> Licenses/..
 
-For now, the result of the script is : 837 packages (115 up to date, 154
-old and 568 unknown)
-So the script is able to check that 115 packages are up to dates and that
-154 have newer version or that the script is wrong.
-There is still a lot of work to have something usefull, I will post the
-script as soon as it's ready to be reviewed.
+ > Sure, but the mentioned problem remains for uboot proper right?
 
-Cheers,
+Indeed, it does.
 
-Arnaud
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20131022/85f2bfc4/attachment-0001.html>
+-- 
+Bye, Peter Korsgaard
