@@ -1,11 +1,10 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 22 Oct 2013 15:56:05 +0200
-Subject: [Buildroot] [PATCH 3/3] sysvinit: add license information
-In-Reply-To: <1381753505-13119-2-git-send-email-phil@zankapfel.net> (Phil
- Eichinger's message of "Mon, 14 Oct 2013 14:25:05 +0200")
-References: <1381753505-13119-1-git-send-email-phil@zankapfel.net>
- <1381753505-13119-2-git-send-email-phil@zankapfel.net>
-Message-ID: <87vc0pcsui.fsf@dell.be.48ers.dk>
+Date: Tue, 22 Oct 2013 15:58:33 +0200
+Subject: [Buildroot] [PATCH 1/4] mutt: add license information
+In-Reply-To: <1381759541-15243-1-git-send-email-phil@zankapfel.net> (Phil
+ Eichinger's message of "Mon, 14 Oct 2013 16:05:38 +0200")
+References: <1381759541-15243-1-git-send-email-phil@zankapfel.net>
+Message-ID: <87r4bdcsqe.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
