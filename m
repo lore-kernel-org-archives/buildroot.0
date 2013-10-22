@@ -1,41 +1,26 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Tue, 22 Oct 2013 10:44:45 +0200
-Subject: [Buildroot] [PATCH] kobs-ng: check Linux version for mtd enum
-	redefine
-In-Reply-To: <CAOxVtSTUG=bsv8WvfrH2WF5UwvG04w+YRJkH4QTN4YS_D3k_WA@mail.gmail.com>
-References: <CAOxVtSRpiU5wOFJdzSMDtZvcCro583eugwroCu0BdYNaeYhu7A@mail.gmail.com>
- <CAAXf6LXhJCTSZ+CkFEhWuCpYBU1AmDNava6duSuLQ1mdpbVnCw@mail.gmail.com>
- <CAOxVtSTUG=bsv8WvfrH2WF5UwvG04w+YRJkH4QTN4YS_D3k_WA@mail.gmail.com>
-Message-ID: <CAAXf6LUs7ekL17ea53VEAFhEx9qDUhGLPfbhd2RwQLsJgeMeUw@mail.gmail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 22 Oct 2013 10:58:08 +0200
+Subject: [Buildroot] [PATCH] dropwatch: Remove -Werror from CFLAGS
+In-Reply-To: <1381998805-6732-1-git-send-email-markos.chandras@imgtec.com>
+ (Markos Chandras's message of "Thu, 17 Oct 2013 09:33:25 +0100")
+References: <1381998805-6732-1-git-send-email-markos.chandras@imgtec.com>
+Message-ID: <87fvrtel7j.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Oct 22, 2013 at 10:20 AM, Sergey Alyoshin <alyoshin.s@gmail.com> wrote:
-> On Tue, Oct 22, 2013 at 10:38 AM, Thomas De Schampheleire
-> <patrickdepinguin@gmail.com> wrote:
->> Take into account that patches in package/foo/ should be named
->> 'foo-0001-description.patch'.
->
-> Is modified patch 'package/kobs-ng/kobs-ng-fix-mtd-defines.patch' file
-> should be renamed to 'foo-0001-description.patch' style, or I should make
-> new patch for the 'package/kobs-ng/kobs-ng-fix-mtd-defines.patch'?
+>>>>> "Markos" == Markos Chandras <markos.chandras@imgtec.com> writes:
 
-I didn't realize that there already was a kobs-ng-fix-mtd-defines.patch, sorry.
-Then there are actually two things that should happen:
-1. rename the patch according to our convention:
-package/kobs-ng/kobs-ng-0001-fix-mtd-defines.patch
-2. update the patch with your changes.
+ > -Werror shouldn't be used in released code since it can
+ > cause random build failures on moderate warnings. It also
+ > depends on the used toolchain since different toolchains may
+ > or may not print the same warnings.
 
-Both changes should be sent as a separate patch against buildroot
-(meaning that we can apply it directly to a buildroot tree), either
-created with git-format-patch+git-send-email (recommended), or
-manually. The manual explains how to handle this:
-http://buildroot.uclibc.org/downloads/manual/manual.html#_contributing_to_buildroot
+ > Fixes the following build problem on MIPS64/n64:
 
-Please let us know if something is unclear.
+Committed, thanks.
 
-Best regards,
-Thomas
+-- 
+Bye, Peter Korsgaard
