@@ -1,21 +1,32 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 22 Oct 2013 11:33:26 +0200
-Subject: [Buildroot] [PATCH] libsoup: add license info
-In-Reply-To: <1381968697-1748-1-git-send-email-danomimanchego123@gmail.com>
- (Danomi Manchego's message of "Wed, 16 Oct 2013 20:11:37 -0400")
-References: <1381968697-1748-1-git-send-email-danomimanchego123@gmail.com>
-Message-ID: <8761spejkp.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 22 Oct 2013 11:30:44 +0200
+Subject: [Buildroot] [git commit] libsoup: add license info
+Message-ID: <20131022093346.EBA579B7E9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Danomi" == Danomi Manchego <danomimanchego123@gmail.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=916b1b6acd2b480fc64d1219dead2e9b64a72b1c
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
+Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/libsoup/libsoup.mk |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/libsoup/libsoup.mk b/package/libsoup/libsoup.mk
+index d57960c..d847f24 100644
+--- a/package/libsoup/libsoup.mk
++++ b/package/libsoup/libsoup.mk
+@@ -9,6 +9,8 @@ LIBSOUP_MINOR_VERSION = 1
+ LIBSOUP_VERSION = $(LIBSOUP_MAJOR_VERSION).$(LIBSOUP_MINOR_VERSION)
+ LIBSOUP_SOURCE = libsoup-$(LIBSOUP_VERSION).tar.xz
+ LIBSOUP_SITE = http://ftp.gnome.org/pub/gnome/sources/libsoup/$(LIBSOUP_MAJOR_VERSION)
++LIBSOUP_LICENSE = LGPLv2+
++LIBSOUP_LICENSE_FILES = COPYING
+ LIBSOUP_INSTALL_STAGING = YES
+ 
+ LIBSOUP_CONF_ENV = ac_cv_path_GLIB_GENMARSHAL=$(LIBGLIB2_HOST_BINARY)
