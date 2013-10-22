@@ -1,22 +1,21 @@
-From: Sergey Alyoshin <alyoshin.s@gmail.com>
-Date: Tue, 22 Oct 2013 12:20:30 +0400
-Subject: [Buildroot] [PATCH] kobs-ng: check Linux version for mtd enum
-	redefine
-In-Reply-To: <CAAXf6LXhJCTSZ+CkFEhWuCpYBU1AmDNava6duSuLQ1mdpbVnCw@mail.gmail.com>
-References: <CAOxVtSRpiU5wOFJdzSMDtZvcCro583eugwroCu0BdYNaeYhu7A@mail.gmail.com>
- <CAAXf6LXhJCTSZ+CkFEhWuCpYBU1AmDNava6duSuLQ1mdpbVnCw@mail.gmail.com>
-Message-ID: <CAOxVtSTUG=bsv8WvfrH2WF5UwvG04w+YRJkH4QTN4YS_D3k_WA@mail.gmail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 22 Oct 2013 10:29:17 +0200
+Subject: [Buildroot] [PATCH] gcc: bump 4.8.x series to version 4.8.2
+In-Reply-To: <1382017076-29788-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Thu, 17 Oct 2013 10:37:56 -0300")
+References: <1382017076-29788-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <871u3dg142.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Oct 22, 2013 at 10:38 AM, Thomas De Schampheleire
-<patrickdepinguin@gmail.com> wrote:
-> Take into account that patches in package/foo/ should be named
-> 'foo-0001-description.patch'.
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-Is modified patch 'package/kobs-ng/kobs-ng-fix-mtd-defines.patch' file
-should be renamed to 'foo-0001-description.patch' style, or I should make
-new patch for the 'package/kobs-ng/kobs-ng-fix-mtd-defines.patch'?
+ > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
