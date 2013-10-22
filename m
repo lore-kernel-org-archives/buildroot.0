@@ -1,35 +1,28 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 22 Oct 2013 12:22:07 -0300
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 22 Oct 2013 18:39:16 +0200
 Subject: [Buildroot] [PATCH] uboot-tools: fix license issues
-In-Reply-To: <CAAXf6LW3ob7ev6VBpG3ajRR=aMSdgN0mM=O7a7wX2+cLd6fRBA@mail.gmail.com>
+In-Reply-To: <1382452676-2514-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Tue, 22 Oct 2013 11:37:56 -0300")
 References: <1382452676-2514-1-git-send-email-gustavo@zacarias.com.ar>
- <CAAXf6LW3ob7ev6VBpG3ajRR=aMSdgN0mM=O7a7wX2+cLd6fRBA@mail.gmail.com>
-Message-ID: <5266981F.4030906@zacarias.com.ar>
+Message-ID: <87iowpb6q3.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 10/22/2013 11:57 AM, Thomas De Schampheleire wrote:
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-> Maybe the legal-info target should warn for non-existing files, rather
-> than error out.
-> It seems more logical to support the latest versions than to support
-> none, with respect to _LICENSE_FILES.
-> Those who build older versions of u-boot should see the warning and
-> handle it appropriately.
+ > U-Boot 2013.10 moved licenses into the Licenses/ directory.
+ > However since we target many versions of u-boot (even non-upstream
+ > versions) we can't point UBOOT_TOOLS_LICENSE_FILES to the proper place
+ > without making mistakes.
+ > So just remove it unforunately. Fixes:
+ > http://autobuild.buildroot.net/results/8c9/8c94c81fe74399c854de335329cf4942f8356fbe/
 
-Yes, that's what i thought, this is the quick fix but maybe not the
-desired one.
+Ehh, we do support multiple versions of u-boot, but only a single
+version of uboot-tools, so it makes sense to just change it to
+Licenses/..
 
-> Note that in either case, we can't trust the _LICENSE directive
-> either: a project could change license along the way, and if buildroot
-> allows to select an arbitrary version in the config, the specified
-> LICENSE may be wrong.
-
-Looking at Licenses/README in 2013.10 it seems there was some licensing
-cleanup done and not all the code is guaranteed to be GPLv2*.
-It's mostly accurate for uboot-tools but may not be so for target u-boot
-(which isn't covered by this issue, just bringing up the details here).
-Regards.
+-- 
+Bye, Peter Korsgaard
