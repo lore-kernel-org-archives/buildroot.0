@@ -1,32 +1,21 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 22 Oct 2013 10:39:34 +0200
-Subject: [Buildroot] [git commit] uboot-tools: bump to version 2013.10
-Message-ID: <20131022091810.9121F9BAD2@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 22 Oct 2013 11:30:30 +0200
+Subject: [Buildroot] [PATCH] dropbear: bump to version 2013.60
+In-Reply-To: <1381962711-6118-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Wed, 16 Oct 2013 19:31:51 -0300")
+References: <1381962711-6118-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87a9i1ejpl.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=456b257e814d93080e171fd87d6a7189f6ee686f
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/uboot-tools/uboot-tools.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
-diff --git a/package/uboot-tools/uboot-tools.mk b/package/uboot-tools/uboot-tools.mk
-index f8935af..e19372a 100644
---- a/package/uboot-tools/uboot-tools.mk
-+++ b/package/uboot-tools/uboot-tools.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--UBOOT_TOOLS_VERSION = 2013.07
-+UBOOT_TOOLS_VERSION = 2013.10
- UBOOT_TOOLS_SOURCE  = u-boot-$(UBOOT_TOOLS_VERSION).tar.bz2
- UBOOT_TOOLS_SITE    = ftp://ftp.denx.de/pub/u-boot
- UBOOT_TOOLS_LICENSE = GPLv2+
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
