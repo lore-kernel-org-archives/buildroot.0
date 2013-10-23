@@ -1,21 +1,32 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 24 Oct 2013 00:24:46 +0200
-Subject: [Buildroot] [PATCH 1/1] fdk-aac: bump to version 0.1.2
-In-Reply-To: <1381470488-5264-1-git-send-email-jerzy.grzegorek@trzebnica.net>
- (Jerzy Grzegorek's message of "Fri, 11 Oct 2013 07:48:08 +0200")
-References: <1381470488-5264-1-git-send-email-jerzy.grzegorek@trzebnica.net>
-Message-ID: <877gd3aamp.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 24 Oct 2013 00:07:39 +0200
+Subject: [Buildroot] [git commit] ola: bump to version 0.8.32
+Message-ID: <20131023222547.DDD619BB7A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Jerzy" == Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=945468045fe1a0b67fd67f3674f29cacfdce0c24
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+Signed-off-by: Axel Lin <axel.lin@ingics.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/ola/ola.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/ola/ola.mk b/package/ola/ola.mk
+index d7ddab7..835ca4e 100644
+--- a/package/ola/ola.mk
++++ b/package/ola/ola.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-OLA_VERSION = 0.8.31
++OLA_VERSION = 0.8.32
+ OLA_SITE = https://open-lighting.googlecode.com/files
+ 
+ OLA_LICENSE = LGPLv2.1+ (libola, libolacommon, Python bindings), GPLv2+ (libolaserver, olad, Python examples and tests)
