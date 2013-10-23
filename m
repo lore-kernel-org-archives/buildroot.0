@@ -1,38 +1,36 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Thu, 24 Oct 2013 01:28:01 +0200
-Subject: [Buildroot] [PATCH] perf: disable documentation
-Message-ID: <1382570881-18589-1-git-send-email-arnout@mind.be>
+Date: Thu, 24 Oct 2013 01:43:22 +0200
+Subject: [Buildroot] [PATCH] stress: disable documentation
+Message-ID: <1382571802-23306-1-git-send-email-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-perf uses asciidoc to generate documentation, but /usr/bin/asciidoc will
-try to use buildroot's host-python which doesn't have the required
-unicodedata. Recent kernels always try to build the man pages when
-installing. To avoid that, define ASCIIDOC as an empty string so the
-Makefile can't find the executable and skips the documentation
-generation.
+It fails to build with my makeinfo version. Note that the autobuilders don't
+see this, probably because they don't have makeinfo installed.
 
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/perf/perf.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ package/stress/stress.mk | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/package/perf/perf.mk b/package/perf/perf.mk
-index 120353f..d7898d0 100644
---- a/package/perf/perf.mk
-+++ b/package/perf/perf.mk
-@@ -19,7 +19,8 @@ PERF_MAKE_FLAGS = \
- 	NO_LIBPYTHON=1 \
- 	DESTDIR=$(TARGET_DIR) \
- 	prefix=/usr \
--	WERROR=0
-+	WERROR=0 \
-+	ASCIIDOC=
+diff --git a/package/stress/stress.mk b/package/stress/stress.mk
+index 63efb66..b058031 100644
+--- a/package/stress/stress.mk
++++ b/package/stress/stress.mk
+@@ -17,7 +17,10 @@ STRESS_AUTORECONF = YES
+ #
+ # If the BR2_PREFER_STATIC_LIB is not defined, we have to specify
+ # --disable-static explicitly to get stress linked dynamically.
++#
++# Also, disable documentation by undefining makeinfo
+ STRESS_CONF_OPT = \
+-	$(if $(BR2_PREFER_STATIC_LIB),,--disable-static)
++	$(if $(BR2_PREFER_STATIC_LIB),,--disable-static) \
++	MAKEINFO=:
  
- ifeq ($(BR2_PACKAGE_ELFUTILS),y)
- 	PERF_DEPENDENCIES += elfutils
+ $(eval $(autotools-package))
 -- 
 1.8.4.rc3
