@@ -1,39 +1,37 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Wed, 23 Oct 2013 13:21:59 +0200
-Subject: [Buildroot] Tool to check packages updates
-In-Reply-To: <CACjG4BJq5TXvpMAoU7w3JgTVrOGHpeKng88HU03Rf_=XunPKAQ@mail.gmail.com>
-References: <CACjG4BJq5TXvpMAoU7w3JgTVrOGHpeKng88HU03Rf_=XunPKAQ@mail.gmail.com>
-Message-ID: <CAAXf6LW1c32E_BFwbD6JKMCRKWtCw4r7pc9xuj3_DPsGyjL=SA@mail.gmail.com>
+Date: Wed, 23 Oct 2013 13:54:01 +0200
+Subject: [Buildroot] git packages and revision number length
+Message-ID: <CAAXf6LUjx9RjkCQDbO+O3EZfFPPYNW-5hQUpANG9jCgekokbpw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Arnaud,
+Hi,
 
-On Tue, Oct 22, 2013 at 7:06 PM, arnaud aujon <arnaud.aujon@gmail.com> wrote:
-> Hi,
->
-> As we talk earlier in the mailing list, I started working on a python script
-> to automatically check if a package can be updated.
->
-> For now, the result of the script is : 837 packages (115 up to date, 154 old
-> and 568 unknown)
+The buildroot manual says:
+http://buildroot.uclibc.org/downloads/manual/manual.html#github-download-url
 
-The autobuild server seems to have a different package count:
-http://autobuild.buildroot.org/stats/
+"When using a commit ID as version, usually the first 7 characters of
+the SHA1 are enough."
 
-Packages using the generic infrastructure 306
-Packages using the cmake infrastructure 19
-Packages using the autotools infrastructure 807
-Packages not using any infrastructure 0
 
-Since your script only sees 837 packages, I think you may be missing
-some, unless the difference is only due to the duplicate counting of
-host and target packages...
+I disagree with that. The first 7 characters do not guarantee that a
+few years from now their will not be an ambiguity in that project,
+where two revisions have the same 7 initial characters.
 
-The above data is generated using support/scripts/pkg-stats
+Shortened revision numbers are great in communication (verbal, mail,
+IRC, ...) but should not be committed in a build system that is
+supposed to create reproducible builds over a long-term lifespan.
+
+We can start discussing statistics, about how many years it takes on
+average for a clash to occur with a given revision number length, but
+the fact is that it is possible to have a clash by tomorrow. Only the
+chances are much smaller with increasing lengths.
+
+So I propose to change that recommendation (and the packages that use
+it) and use the full 40-hex-char revision numbers.
 
 Best regards,
 Thomas
