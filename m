@@ -1,11 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 24 Oct 2013 00:48:56 +0200
-Subject: [Buildroot] [PATCH v8 RESEND 5/8] glibc: add support for
+Date: Thu, 24 Oct 2013 00:49:22 +0200
+Subject: [Buildroot] [PATCH v8 RESEND 6/8] uclibc: add support for
  top-level parallel make
-In-Reply-To: <1382088860-30524-6-git-send-email-fabio.porcedda@gmail.com>
+In-Reply-To: <1382088860-30524-7-git-send-email-fabio.porcedda@gmail.com>
 References: <1382088860-30524-1-git-send-email-fabio.porcedda@gmail.com>
- <1382088860-30524-6-git-send-email-fabio.porcedda@gmail.com>
-Message-ID: <52685258.1030807@mind.be>
+ <1382088860-30524-7-git-send-email-fabio.porcedda@gmail.com>
+Message-ID: <52685272.5070507@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,37 +15,36 @@ To: buildroot@busybox.net
 On 18/10/13 11:34, Fabio Porcedda wrote:
 > To be able to use top-level parallel make we must not depend in a rule
 > on the order of evaluation of the prerequisites, so instead of relyng on
-> the left to right ordering of evaluation of the prerequisites add
-> an explicit rule to describe the dependencies.
+> the left to right ordering of evaluation of the prerequisites add an
+> explicit rule to describe the dependencies.
 >
-> The glibc-install-target depends on glibc-install-staging so add a rule
-> for it.
+> The uclibc-install-target depends on uclibc-install-staging so add a
+> rule for it.
 >
 > Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
 
 Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
 > ---
->   package/glibc/glibc.mk | 2 ++
+>   package/uclibc/uclibc.mk | 2 ++
 >   1 file changed, 2 insertions(+)
 >
-> diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
-> index e89c12a..838fb8c 100644
-> --- a/package/glibc/glibc.mk
-> +++ b/package/glibc/glibc.mk
-> @@ -130,3 +130,5 @@ define GLIBC_INSTALL_TARGET_CMDS
->   endef
+> diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
+> index dea36e7..c8eeb3d 100644
+> --- a/package/uclibc/uclibc.mk
+> +++ b/package/uclibc/uclibc.mk
+> @@ -559,3 +559,5 @@ uclibc-menuconfig: dirs uclibc-patch
+>   	rm -f $(UCLIBC_DIR)/.stamp_{configured,built,target_installed,staging_installed}
 >
->   $(eval $(autotools-package))
+>   $(eval $(generic-package))
 > +
-> +$(GLIBC_TARGET_INSTALL_TARGET): $(GLIBC_TARGET_INSTALL_STAGING)
+> +$(UCLIBC_TARGET_INSTALL_TARGET): $(UCLIBC_TARGET_INSTALL_STAGING)
 >
 
-  Nitpick: I would have added a comment why this is needed.
+  Same nitpick :-)
 
   Regards,
   Arnout
-
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
