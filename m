@@ -1,24 +1,60 @@
 From: Sergey Alyoshin <alyoshin.s@gmail.com>
-Date: Wed, 23 Oct 2013 12:56:59 +0400
-Subject: [Buildroot] [PATCH 1/2] kobs-ng: rename patch to comply to
-	convention
-Message-ID: <1382518620-26320-1-git-send-email-alyoshin.s@gmail.com>
+Date: Wed, 23 Oct 2013 12:57:00 +0400
+Subject: [Buildroot] [PATCH 2/2] kobs-ng: test kernel version for redefines
+In-Reply-To: <1382518620-26320-1-git-send-email-alyoshin.s@gmail.com>
+References: <1382518620-26320-1-git-send-email-alyoshin.s@gmail.com>
+Message-ID: <1382518620-26320-2-git-send-email-alyoshin.s@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+kobs-ng failed to build with 2.6.36, because enum tested with #ifndef
+
+mtd.c: In function 'mtd_open':
+mtd.c:696:42: error: 'MTD_FILE_MODE_NORMAL' undeclared (first use in this
+function)
+mtd.c:696:42: note: each undeclared identifier is reported only once for each
+function it appears in
+mtd.c: In function 'mtd_set_ecc_mode':
+mtd.c:896:43: error: 'MTD_FILE_MODE_NORMAL' undeclared (first use in this
+function)
+mtd.c:914:43: error: 'MTD_FILE_MODE_RAW' undeclared (first use in this
+function)
+
+Do kernel version test before enum redefines.
 
 Signed-off-by: Sergey Alyoshin <alyoshin.s@gmail.com>
 ---
- ...obs-ng-fix-mtd-defines.patch => kobs-ng-0001-fix-mtd-defines.patch} |    0
- 1 file changed, 0 insertions(+), 0 deletions(-)
- rename package/kobs-ng/{kobs-ng-fix-mtd-defines.patch => kobs-ng-0001-fix-mtd-defines.patch} (100%)
+ package/kobs-ng/kobs-ng-0001-fix-mtd-defines.patch |   11 +++++------
+ 1 file changed, 5 insertions(+), 6 deletions(-)
 
-diff --git a/package/kobs-ng/kobs-ng-fix-mtd-defines.patch b/package/kobs-ng/kobs-ng-0001-fix-mtd-defines.patch
-similarity index 100%
-rename from package/kobs-ng/kobs-ng-fix-mtd-defines.patch
-rename to package/kobs-ng/kobs-ng-0001-fix-mtd-defines.patch
+diff --git a/package/kobs-ng/kobs-ng-0001-fix-mtd-defines.patch b/package/kobs-ng/kobs-ng-0001-fix-mtd-defines.patch
+index 39d7474..4a9a626 100644
+--- a/package/kobs-ng/kobs-ng-0001-fix-mtd-defines.patch
++++ b/package/kobs-ng/kobs-ng-0001-fix-mtd-defines.patch
+@@ -56,16 +56,15 @@ diff -u -r kobs-ng-3.0.35-4.0.0-orig/src/mtd.c kobs-ng-3.0.35-4.0.0/src/mtd.c
+ diff -u -r kobs-ng-3.0.35-4.0.0-orig/src/mtd.h kobs-ng-3.0.35-4.0.0/src/mtd.h
+ --- kobs-ng-3.0.35-4.0.0-orig/src/mtd.h	2012-12-17 22:37:40.000000000 -0800
+ +++ kobs-ng-3.0.35-4.0.0/src/mtd.h	2013-07-28 19:33:57.000000000 -0700
+-@@ -31,6 +31,14 @@
++@@ -31,6 +31,13 @@
+  #include "BootControlBlocks.h"
+  #include "rom_nand_hamming_code_ecc.h"
+  
+ +// Newer kernel headers renamed define
+-+#ifndef MTD_MODE_NORMAL
+-+#define MTD_MODE_NORMAL MTD_FILE_MODE_NORMAL
+-+#endif
+-+#ifndef MTD_MODE_RAW
+-+#define MTD_MODE_RAW MTD_FILE_MODE_RAW
+++#include <linux/version.h>
+++#if LINUX_VERSION_CODE >= KERNEL_VERSION(3, 1, 0)
+++# define MTD_MODE_NORMAL MTD_FILE_MODE_NORMAL
+++# define MTD_MODE_RAW MTD_FILE_MODE_RAW
+ +#endif
+ +
+  //------------------------------------------------------------------------------
 -- 
 1.7.10.4
