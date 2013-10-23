@@ -1,36 +1,50 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Wed, 23 Oct 2013 21:23:34 +0200
-Subject: [Buildroot] Tool to check packages updates
-In-Reply-To: <CACjG4BJtk-JxzUGmJn9urrMGMjkcwtmMxRys_FGrY761H1zQzA@mail.gmail.com>
-References: <CACjG4BJq5TXvpMAoU7w3JgTVrOGHpeKng88HU03Rf_=XunPKAQ@mail.gmail.com>
- <CAAXf6LW1c32E_BFwbD6JKMCRKWtCw4r7pc9xuj3_DPsGyjL=SA@mail.gmail.com>
- <CACjG4B+7riHKmXG0Oo3cZxrWFygTBojSTHRktuYvz0eeMJ0ttQ@mail.gmail.com>
- <526809E4.30203@mind.be>
- <CACjG4BJtk-JxzUGmJn9urrMGMjkcwtmMxRys_FGrY761H1zQzA@mail.gmail.com>
-Message-ID: <CAAXf6LV9pBCwsqrtm6LJxiO1oaYX4afBv0tHPgOqVReV058GTA@mail.gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 23 Oct 2013 21:58:18 +0200
+Subject: [Buildroot] package libfreefare: site url question
+In-Reply-To: <CACjG4BLNti1J9rH0Ks1jJnyGX=JztNJteMXp62x-zg43XHyeWw@mail.gmail.com>
+References: <CACjG4BLNti1J9rH0Ks1jJnyGX=JztNJteMXp62x-zg43XHyeWw@mail.gmail.com>
+Message-ID: <52682A5A.1000708@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+On 18/10/13 13:23, arnaud aujon wrote:
+> Hi,
+>
+> I noticed that libfreefare package refers to the site
+> nfc-tools.googlecode.com <http://nfc-tools.googlecode.com>, even if the
+> current archive (libfreefare-0.3.4) is present in nfc-tools repository,
+> it seems better to use the libfreefare repository
+> (libfreefare.googlecode.com <http://libfreefare.googlecode.com>).
+> Is there a reason for that ?
 
-On Wed, Oct 23, 2013 at 8:58 PM, arnaud aujon <arnaud.aujon@gmail.com> wrote:
-> Well, you're right, see the script bellow.
-> What need to be done is evaluate variable PACKAGE_SITE and PACKAGE_VERSION,
-> for the moment it doesn't evalute things like
-> PACKAGE_VERSION = $(VERSION_MAJOR).xx so I need to write a small recursive
-> function to retrieve the real value.
-> I also need to work on package source hosted with a CVS (mainly git and
-> svn).
+  Given that nobody has answered yet: I don't think there's a specific 
+reason for that. The two packages were added to buildroot at the same 
+time; maybe libfreerare didn't exist yet as a separate project.
+
+  You'll probably find other cases where the upstream site is no longer 
+accurate.
+
+  Regards,
+  Arnout
+
+> As i'm working on a script to automatically check updates, it would be
+> way easier for me :)
+>
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 >
 
-make knows exactly how to evaluate such variables, so instead of
-trying to do this from a script, isn't it possible to use the output
-of 'make printvars' ? This prints _all_ the relevant variables but you
-could filter on _SOURCE or _SITE to get what you need and base your
-script on that.
 
-Best regards,
-Thomas
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
