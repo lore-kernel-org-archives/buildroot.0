@@ -1,35 +1,71 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Wed, 23 Oct 2013 22:26:12 +0200
-Subject: [Buildroot] [PATCH 2/2] docker: add license info
-In-Reply-To: <1382559972-24299-1-git-send-email-arnout@mind.be>
-References: <1382559972-24299-1-git-send-email-arnout@mind.be>
-Message-ID: <1382559972-24299-2-git-send-email-arnout@mind.be>
+From: arnaud aujon <arnaud.aujon@gmail.com>
+Date: Wed, 23 Oct 2013 22:26:55 +0200
+Subject: [Buildroot] package libfreefare: site url question
+In-Reply-To: <52682A5A.1000708@mind.be>
+References: <CACjG4BLNti1J9rH0Ks1jJnyGX=JztNJteMXp62x-zg43XHyeWw@mail.gmail.com>
+ <52682A5A.1000708@mind.be>
+Message-ID: <CACjG4BJRacJsDEv-xeiNMm4mzrAgaY6Ta9BawtNw3MUd6X5Nkg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- package/docker/docker.mk | 5 +++++
- 1 file changed, 5 insertions(+)
+Ok that's what I was thinking, just wanted to be sure before posting a
+patch.
 
-diff --git a/package/docker/docker.mk b/package/docker/docker.mk
-index 168ee94..3708abf 100644
---- a/package/docker/docker.mk
-+++ b/package/docker/docker.mk
-@@ -7,6 +7,11 @@
- DOCKER_VERSION = 1.5
- DOCKER_SITE = http://icculus.org/openbox/2/docker
- 
-+DOCKER_DEPENDENCIES = host-pkgconf libglib2 xlib_libX11
-+DOCKER_LICENSE = GPLv2+
-+# The 'or later' is specified at the end of the README, so include that one too.
-+DOCKER_LICENSE_FILES = COPYING README
-+
- define DOCKER_BUILD_CMDS
- 	$(TARGET_CONFIGURE_OPTS) $(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
- 		XLIBPATH=$(STAGING_DIR)/usr/lib
--- 
-1.8.4.rc3
+Thanks,
+
+Arnaud
+
+
+2013/10/23 Arnout Vandecappelle <arnout@mind.be>
+
+> On 18/10/13 13:23, arnaud aujon wrote:
+>
+>> Hi,
+>>
+>> I noticed that libfreefare package refers to the site
+>> nfc-tools.googlecode.com <http://nfc-tools.googlecode.**com<http://nfc-tools.googlecode.com>>,
+>> even if the
+>>
+>> current archive (libfreefare-0.3.4) is present in nfc-tools repository,
+>> it seems better to use the libfreefare repository
+>> (libfreefare.googlecode.com <http://libfreefare.**googlecode.com<http://libfreefare.googlecode.com>
+>> >).
+>>
+>> Is there a reason for that ?
+>>
+>
+>  Given that nobody has answered yet: I don't think there's a specific
+> reason for that. The two packages were added to buildroot at the same time;
+> maybe libfreerare didn't exist yet as a separate project.
+>
+>  You'll probably find other cases where the upstream site is no longer
+> accurate.
+>
+>  Regards,
+>  Arnout
+>
+>  As i'm working on a script to automatically check updates, it would be
+>> way easier for me :)
+>>
+>>
+>> ______________________________**_________________
+>> buildroot mailing list
+>> buildroot at busybox.net
+>> http://lists.busybox.net/**mailman/listinfo/buildroot<http://lists.busybox.net/mailman/listinfo/buildroot>
+>>
+>>
+>
+> --
+> Arnout Vandecappelle                          arnout at mind be
+> Senior Embedded Software Architect            +32-16-286500
+> Essensium/Mind                                http://www.mind.be
+> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+> LinkedIn profile: http://www.linkedin.com/in/**arnoutvandecappelle<http://www.linkedin.com/in/arnoutvandecappelle>
+> GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20131023/9b022554/attachment.html>
