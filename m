@@ -1,30 +1,56 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 23 Oct 2013 22:46:13 +0000 (UTC)
-Subject: [Buildroot] [Bug 6566] PHP segfault when crosscompiled to mips64 -
- patch included
-In-Reply-To: <bug-6566-163@https.bugs.busybox.net/>
-References: <bug-6566-163@https.bugs.busybox.net/>
-Message-ID: <20131023224613.A0D7F9B6E3@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 24 Oct 2013 00:48:56 +0200
+Subject: [Buildroot] [PATCH v8 RESEND 5/8] glibc: add support for
+ top-level parallel make
+In-Reply-To: <1382088860-30524-6-git-send-email-fabio.porcedda@gmail.com>
+References: <1382088860-30524-1-git-send-email-fabio.porcedda@gmail.com>
+ <1382088860-30524-6-git-send-email-fabio.porcedda@gmail.com>
+Message-ID: <52685258.1030807@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=6566
+On 18/10/13 11:34, Fabio Porcedda wrote:
+> To be able to use top-level parallel make we must not depend in a rule
+> on the order of evaluation of the prerequisites, so instead of relyng on
+> the left to right ordering of evaluation of the prerequisites add
+> an explicit rule to describe the dependencies.
+>
+> The glibc-install-target depends on glibc-install-staging so add a rule
+> for it.
+>
+> Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
 
-Peter Korsgaard <jacmet@uclibc.org> changed:
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|                            |FIXED
+> ---
+>   package/glibc/glibc.mk | 2 ++
+>   1 file changed, 2 insertions(+)
+>
+> diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
+> index e89c12a..838fb8c 100644
+> --- a/package/glibc/glibc.mk
+> +++ b/package/glibc/glibc.mk
+> @@ -130,3 +130,5 @@ define GLIBC_INSTALL_TARGET_CMDS
+>   endef
+>
+>   $(eval $(autotools-package))
+> +
+> +$(GLIBC_TARGET_INSTALL_TARGET): $(GLIBC_TARGET_INSTALL_STAGING)
+>
 
---- Comment #1 from Peter Korsgaard <jacmet@uclibc.org> 2013-10-23 22:46:13 UTC ---
-Thanks, I've committed a slightly tweaked patch (use our existing BR2_ENDIAN
-symbol instead) as 21a4a9003e3.
+  Nitpick: I would have added a comment why this is needed.
+
+  Regards,
+  Arnout
+
 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
