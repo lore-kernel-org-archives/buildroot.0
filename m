@@ -1,39 +1,44 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 23 Oct 2013 19:39:48 +0200
-Subject: [Buildroot] Tool to check packages updates
-In-Reply-To: <CACjG4B+7riHKmXG0Oo3cZxrWFygTBojSTHRktuYvz0eeMJ0ttQ@mail.gmail.com>
-References: <CACjG4BJq5TXvpMAoU7w3JgTVrOGHpeKng88HU03Rf_=XunPKAQ@mail.gmail.com>
- <CAAXf6LW1c32E_BFwbD6JKMCRKWtCw4r7pc9xuj3_DPsGyjL=SA@mail.gmail.com>
- <CACjG4B+7riHKmXG0Oo3cZxrWFygTBojSTHRktuYvz0eeMJ0ttQ@mail.gmail.com>
-Message-ID: <526809E4.30203@mind.be>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Wed, 23 Oct 2013 20:29:59 +0200
+Subject: [Buildroot] [PATCH 2/2] kobs-ng: test kernel version for
+	redefines
+In-Reply-To: <1382532900-18456-1-git-send-email-alyoshin.s@gmail.com>
+References: <1382518620-26320-2-git-send-email-alyoshin.s@gmail.com>
+ <1382532900-18456-1-git-send-email-alyoshin.s@gmail.com>
+Message-ID: <CAAXf6LUFSvTsX0HOsjmTcz-n-36qj0h-rT6BjK2MHee=kpsByg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 23/10/13 17:43, arnaud aujon wrote:
+On Wed, Oct 23, 2013 at 2:55 PM, Sergey Alyoshin <alyoshin.s@gmail.com> wrote:
+> kobs-ng failed to build with 2.6.36, because enum tested with #ifndef
 >
->     Please post your script when you
->     think it's ok, but don't wait to much: the earlier the better, so that
->     you can get early feedback, and maybe help/testing from others.
+> mtd.c: In function 'mtd_open':
+> mtd.c:696:42: error: 'MTD_FILE_MODE_NORMAL' undeclared (first use in this
+> function)
+> mtd.c:696:42: note: each undeclared identifier is reported only once for each
+> function it appears in
+> mtd.c: In function 'mtd_set_ecc_mode':
+> mtd.c:896:43: error: 'MTD_FILE_MODE_NORMAL' undeclared (first use in this
+> function)
+> mtd.c:914:43: error: 'MTD_FILE_MODE_RAW' undeclared (first use in this
+> function)
 >
+> Do kernel version test before enum redefines.
 >
-> I will do it as soon as possible, but I want to make it easy to read
-> first. As I'm far to be a python expert, it will take me some time to get
-> used to the right way to code in python.
+> Signed-off-by: Sergey Alyoshin <alyoshin.s@gmail.com>
+> ---
+>  package/kobs-ng/kobs-ng-0001-fix-mtd-defines.patch |   12 ++++++------
+>  1 file changed, 6 insertions(+), 6 deletions(-)
+>
 
-  Even so you can get feedback from the list already. In particular, it 
-is useful to post something while it is still small - the larger the 
-script, the less likely you get useful feedback.
+Normally, when you send a new version of a patch, one would mark it as
+'v2' in the subject, and provide a quick summary of the changes with
+the previous version (below the '---' line).
 
-  Regards,
-  Arnout
+But as for the actual patch:
 
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+Tested-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+(compile-tested with 2.6.36, 3.1.11 and 3.2 kernel headers)
