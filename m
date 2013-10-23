@@ -1,39 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 23 Oct 2013 11:39:44 +0200
-Subject: [Buildroot] [PATCH] uboot-tools: fix license issues
-In-Reply-To: <CAAXf6LW3ob7ev6VBpG3ajRR=aMSdgN0mM=O7a7wX2+cLd6fRBA@mail.gmail.com>
-References: <1382452676-2514-1-git-send-email-gustavo@zacarias.com.ar>
- <CAAXf6LW3ob7ev6VBpG3ajRR=aMSdgN0mM=O7a7wX2+cLd6fRBA@mail.gmail.com>
-Message-ID: <20131023113944.2e370a3b@skate>
+Date: Wed, 23 Oct 2013 11:42:28 +0200
+Subject: [Buildroot] Tool to check packages updates
+In-Reply-To: <CACjG4BJq5TXvpMAoU7w3JgTVrOGHpeKng88HU03Rf_=XunPKAQ@mail.gmail.com>
+References: <CACjG4BJq5TXvpMAoU7w3JgTVrOGHpeKng88HU03Rf_=XunPKAQ@mail.gmail.com>
+Message-ID: <20131023114228.619fedd9@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas De Schampheleire,
+Arnaud,
 
-On Tue, 22 Oct 2013 16:57:31 +0200, Thomas De Schampheleire wrote:
+On Tue, 22 Oct 2013 19:06:41 +0200, arnaud aujon wrote:
 
-> Maybe the legal-info target should warn for non-existing files, rather
-> than error out.
+> As we talk earlier in the mailing list, I started working on a python
+> script to automatically check if a package can be updated.
+> 
+> For now, the result of the script is : 837 packages (115 up to date, 154
+> old and 568 unknown)
+> So the script is able to check that 115 packages are up to dates and that
+> 154 have newer version or that the script is wrong.
+> There is still a lot of work to have something usefull, I will post the
+> script as soon as it's ready to be reviewed.
 
-I disagree. Before 376c3aad61dbeb8e2126e13658fd150b70746afb
-("legal-info: fail trying to copy a non-existent license file"), what
-was happening is exactly what you're suggesting.
-
-The problem is that we didn't notice when legal information were wrong,
-because nobody looks at warnings, and because autobuilders result were
-saying "OK" even though the legal info wasn't ok. So at the time (back
-in May this year), we discussed that, and we agreed that legal-info
-should error out if it cannot find a license file referenced by
-<pkg>_LICENSE_FILES, so that autobuilder results loudly say that
-something failed.
-
-And interestingly, the precise reason why we noticed the legal-info
-were wrong was because the autobuilder build failed, and we fixed it. I
-very much prefer that than having the <pkg>_LICENSE_FILES remain wrong
-for many weeks/months without anybody noticing.
+Thanks, definitely looks interesting. Please post your script when you
+think it's ok, but don't wait to much: the earlier the better, so that
+you can get early feedback, and maybe help/testing from others.
 
 Best regards,
 
