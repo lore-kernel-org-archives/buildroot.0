@@ -1,42 +1,48 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Wed, 23 Oct 2013 16:52:23 +0200
-Subject: [Buildroot] [PATCH] packages/Config.in: more alphabetical
-	sorting
-In-Reply-To: <CAGduivwuBD2G2pA7r++d9eFfPE+hFhAWzGA=TOS0riE4nBgr-w@mail.gmail.com>
-References: <1382349586-8197-1-git-send-email-maxime.hadjinlian@gmail.com>
- <CAAXf6LWoi82w_eyJuvm3=8+6Xkvr32BxqmtbrWT=0yC4oovocQ@mail.gmail.com>
- <CAGduivwuBD2G2pA7r++d9eFfPE+hFhAWzGA=TOS0riE4nBgr-w@mail.gmail.com>
-Message-ID: <CAAXf6LU1qvKCFA8dz5t2j_du=599xGwkFoQpEHj09vtCY3advg@mail.gmail.com>
+From: arnaud aujon <arnaud.aujon@gmail.com>
+Date: Wed, 23 Oct 2013 17:43:15 +0200
+Subject: [Buildroot] Tool to check packages updates
+In-Reply-To: <CAAXf6LW1c32E_BFwbD6JKMCRKWtCw4r7pc9xuj3_DPsGyjL=SA@mail.gmail.com>
+References: <CACjG4BJq5TXvpMAoU7w3JgTVrOGHpeKng88HU03Rf_=XunPKAQ@mail.gmail.com>
+ <CAAXf6LW1c32E_BFwbD6JKMCRKWtCw4r7pc9xuj3_DPsGyjL=SA@mail.gmail.com>
+Message-ID: <CACjG4B+7riHKmXG0Oo3cZxrWFygTBojSTHRktuYvz0eeMJ0ttQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Maxime,
+Both Thomas,
 
-On Wed, Oct 23, 2013 at 4:25 PM, Maxime Hadjinlian
-<maxime.hadjinlian@gmail.com> wrote:
-> On Wed, Oct 23, 2013 at 3:24 PM, Thomas De Schampheleire
-> <patrickdepinguin@gmail.com> wrote:
->> Anyway, I don't think we should sort on the full line, but rather on
->> the package name, hence gstreamer < gstreamer1.
-> Since the full line is the same for every packages, it should not
-> matter during the sort if the locale used is C, should it ?
+2013/10/23 Thomas De Schampheleire <patrickdepinguin@gmail.com>
 
-It does. Consider this:
+>
+>
+> The autobuild server seems to have a different package count:
+> http://autobuild.buildroot.org/stats/
+>
+> Packages using the generic infrastructure 306
+> Packages using the cmake infrastructure 19
+> Packages using the autotools infrastructure 807
+> Packages not using any infrastructure 0
+>
+> Since your script only sees 837 packages, I think you may be missing
+> some, unless the difference is only due to the duplicate counting of
+> host and target packages...
+>
+>
+>
+You're right, my count isn't accurate, I intentionally skip some packages
+that are not well handled by the script. The other difference is as you
+said, I only count target packages.
 
-$ echo -e 'gstreamer/Config\ngstreamer1/Config' | sort
-gstreamer1/Config
-gstreamer/Config
-$ echo -e 'gstreamer/Config\ngstreamer1/Config' | LC_ALL=C sort
-gstreamer/Config
-gstreamer1/Config
+Please post your script when you
+> think it's ok, but don't wait to much: the earlier the better, so that
+> you can get early feedback, and maybe help/testing from others.
 
-If you don't use C locale, sort ignores the slash, while with C locale
-the slash is taken into account.
-So in the first case, you compare 1 with C, while in the second case,
-you compare 1 with /.
 
-Best regards,
-Thomas
+I will do it as soon as possible, but I want to make it easy to read first.
+As I'm far to be a python expert, it will take me some time to get used to
+the right way to code in python.
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20131023/f36d10cf/attachment.html>
