@@ -1,57 +1,34 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 24 Oct 2013 21:29:32 +0200
-Subject: [Buildroot] [PATCH] uboot-tools: fix license issues
-In-Reply-To: <526913FC.7070905@zacarias.com.ar>
-References: <1382452676-2514-1-git-send-email-gustavo@zacarias.com.ar>
- <CAAXf6LW3ob7ev6VBpG3ajRR=aMSdgN0mM=O7a7wX2+cLd6fRBA@mail.gmail.com>
- <20131023113944.2e370a3b@skate>
- <CAAXf6LVeND62F7qgxLhcYcqw-QDy6QO+7+A7CZHB5gonp+AsTA@mail.gmail.com>
- <2e6a07b0-2c59-47f7-a320-9f4ba3ddffe2@email.android.com>
- <52691180.9070908@mind.be> <526913FC.7070905@zacarias.com.ar>
-Message-ID: <5269751C.1000207@mind.be>
+Date: Thu, 24 Oct 2013 21:53:03 +0200
+Subject: [Buildroot] [PATCH] Added initial support for Freescale i.mx6
+ sabreauto board
+In-Reply-To: <BLU0-SMTP3860F7C844E630CB0FCC659F70C0@phx.gbl>
+References: <BLU0-SMTP3860F7C844E630CB0FCC659F70C0@phx.gbl>
+Message-ID: <52697A9F.3000707@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 24/10/13 14:35, Gustavo Zacarias wrote:
-> On 10/24/2013 09:24 AM, Arnout Vandecappelle wrote:
->>   Now, for the specific case of U-Boot, we can do better: if _VERSION is
->> 2013.10 or larger, we can use the new license specification, else the
->> old one (and due to U-Boot's versioning policy we can just use sort;
->> custom has to be handled separately anyway).
->
-> We don't use version choices any more, just a recommended version
-> string, so matching might not be that easy.
+On 24/10/13 19:28, Abdul Hussain wrote:
+> Signed-off-by: Abdul Hussain<hussain.abdul@outlook.com>
+> ---
+>   configs/imx6qsabreauto_defconfig | 1132 ++++++++++++++++++++++++++++++++++++++
 
-  We don't? Then what does BR2_TARGET_UBOOT_CUSTOM_VERSION do?
+  Please use a defconfig, not a full config. The easiest way to generate 
+it is to set BR2_DEFCONFIG to configs/imx6qsabreauto_defconfig, and then 
+run 'make savedefconfig'.
 
-> And there's custom tarball / git repo / etc too.
+>   system/device_table_dev.txt      |    2 +-
 
-  Exactly, for these the other considerations still apply.
-
->
->>   But another issue is that the license that we specify is just plain
->> wrong (as so often): all the U-Boot versions contain code that is GPLv2
->> without + and that is BSD-3c, some also contain code that is eCos-2.0,
->> IBM-pibs, LGPL. So we should probably fix the license spec for U-Boot
->> regardless of where it comes from.
->
-> The U-Boot licenses that apply rely on the selected target too which
-> complicates things.
-> I don't think we want to become license police here other than "one or
-> more of X, Y, ..., please do your homework".
-
-  I agree completely. But currently it just says GPLv2+, which is plain 
-wrong.
+  You should mention in the commit message that you did this change and why.
 
   Regards,
   Arnout
 
-> Regards.
->
->
+>   2 files changed, 1133 insertions(+), 1 deletion(-)
+>   create mode 100644 configs/imx6qsabreauto_defconfig
 
 
 -- 
