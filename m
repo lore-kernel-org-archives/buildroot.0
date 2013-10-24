@@ -1,63 +1,110 @@
-From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Thu, 24 Oct 2013 12:31:12 +0200
-Subject: [Buildroot] ccache problem when compiling with different
- toolchains in different projects
-In-Reply-To: <5175AB06.8090101@mind.be>
-References: <CANxTyt7OWfG1U7yoTtRomKm2ECpC_cnxrGFbD8KVXFty==j7ig@mail.gmail.com>
- <CADzL+YjA_Zx0BCmWESKYnna=dGyf=3BY9pd00m-BhAbw-HG9TQ@mail.gmail.com>
- <5171AF1B.4010806@mind.be>
- <CANxTyt7N+cKyvksZLSgUADMmgmhdfLBqYd=oRSxCVpKaWYEH1w@mail.gmail.com>
- <5171D63D.7050705@mind.be>
- <CANxTyt7EftWCmO25-reSsJJybTkzbB3srsrmZSwjKpadfQNt3w@mail.gmail.com>
- <5174D1DE.6000902@mind.be>
- <CANxTyt7JzGaq0pirMDDUrEn_XTUxK-4CbaPP00Rn0O709eL50w@mail.gmail.com>
- <5175AB06.8090101@mind.be>
-Message-ID: <CAAXf6LWAmfRswP0oCj--iZ+xxrKCYvYQeODCcaJQFx_d_BraOQ@mail.gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 24 Oct 2013 12:37:21 +0200
+Subject: [Buildroot] [PATCH v8 RESEND 1/8] package: add base dependency
+ to every package
+In-Reply-To: <CAHkwnC_3oA+DKkUxVweB0Xt5wqWt11epFujXvmStEu25hGQNOA@mail.gmail.com>
+References: <1382088860-30524-1-git-send-email-fabio.porcedda@gmail.com>
+ <1382088860-30524-2-git-send-email-fabio.porcedda@gmail.com>
+ <52683BBC.7070506@mind.be>
+ <CAHkwnC_3oA+DKkUxVweB0Xt5wqWt11epFujXvmStEu25hGQNOA@mail.gmail.com>
+Message-ID: <5268F861.6050803@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Apr 22, 2013 at 11:26 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
-> On 22/04/13 14:32, Danomi Manchego wrote:
->>
->> On Mon, Apr 22, 2013 at 1:59 AM, Arnout Vandecappelle <arnout@mind.be
->> <mailto:arnout@mind.be>> wrote:
+On 24/10/13 09:41, Fabio Porcedda wrote:
+> Hi Arnout,
+> thanks for reviewing the patch set.
 >
-> [snip]
+> On Wed, Oct 23, 2013 at 11:12 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
+>> On 18/10/13 11:34, Fabio Porcedda wrote:
+>>>
+>>> Move "dependencies" "dirs" "prepare" dependencies from "toolchain" to
+>>> every package.
+>>> This way we can build correctly every package right after the clean
+>>> stage.
+>>> As example with this commit we can build successfully the glibc right
+>>> after the clean stage:
+>>>          make clean glibc
+>>>
+>>> This is also a step forward supporting top-level parallel make.
+>>>
+>>> Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+>>
+>>
+>>   Although this is one of the most useful patches of the series, it is also
+>> the one that introduces the circular dependency. So although it looks good,
+>> I'm not ready to ack it.
 >
->>       Actually, after thinking a bit harder about it: the following
->>     should work:
->>
->>     sed -n '/^# Toolchain/,/^# System configuration/' $(BUILDROOT_CONFIG)
->> \
->>              | md5sum -
->>
->>       So there's no need to rename stuff or anything.
->>
->>
->> That would also use the GDB and ECLIPSE lines too.  But then, if it
->> accounts for everything outside of the "%compiler% -v" info (wrappers,
->> C-library), then it's worth it.
->>
->> I suppose that we could drop the these lines with an inverse grep:
->>
->> sed -n '/^# Toolchain/,/^# System configuration/p' .config | \
->>      grep -v -e '^#' -e GDG -e ECLIPSE | \
->>      md5sum
->>
->> Too much?
+> I've found a work around:
 >
+> $$($(2)_TARGET_SOURCE) $$($(2)_TARGET_RSYNC): | dirs prepare
 >
->  Too much, yes :-) But perhaps we could change the order of the toolchain
-> options.
+> # to prevent circular dependency
+> ifneq ($(1),$(DEPENDENCIES_HOST_PREREQ))
+> $$($(2)_TARGET_SOURCE) $$($(2)_TARGET_RSYNC): | dependencies
+> endif
 >
+> What do you think about that?
 
-Reviving this thread...
-http://lists.busybox.net/pipermail/buildroot/2013-April/070819.html
+  Looks good except that it's incorrect :-) If HOST_PREREQ contains both 
+ccache and sstrip (not to mention tar or xz), the condition won't match. 
+You can try something like:
 
-Is there any specific reason why there was no further evolution on this?
+ifeq ($(filter $(1),$(DEPENDENCIES_HOST_PREREQ)),)
 
-Best regards,
-Thomas
+
+  [Just noticed now that Thomas gave the same answer.]
+
+>
+>>
+>>> ---
+>>>    package/pkg-generic.mk           | 2 ++
+>>>    toolchain/toolchain/toolchain.mk | 3 +--
+>>>    2 files changed, 3 insertions(+), 2 deletions(-)
+>>>
+>>> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+>>> index 4bba4b5..1e7154e 100644
+>>> --- a/package/pkg-generic.mk
+>>> +++ b/package/pkg-generic.mk
+>>> @@ -385,6 +385,8 @@ $(1)-install-host:      $(1)-build
+>>> $$($(2)_TARGET_INSTALL_HOST)
+>>>    $(1)-build:           $(1)-configure \
+>>>                          $$($(2)_TARGET_BUILD)
+>>>
+>>> +$$($(2)_TARGET_SOURCE) $$($(2)_TARGET_RSYNC): | dependencies dirs prepare
+>>
+>>
+>>   Is there any reason why you changed the order here?
+>
+> The order whit top-level parallel make does not matter, it's just that
+> i was thinking that it's the right logical order:
+> 1: dependencies: requisite
+> 2: dirs: create empty directories
+> 3. prepare: add something to the empty directories
+>
+> But now i understand that is "dirs prepare dependencies" or "dirs
+> dependencies prepare" because dirs can require host-ccache and so
+
+  You mean dependencies can require host-ccache, right? And host-ccache 
+depends on both dirs and prepare itself...  So I do think the original 
+order is more logical.
+
+  Regards,
+  Arnout
+
+> directories,
+> nevertheless this does not matter anymore.
+
+[snip]
+
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
