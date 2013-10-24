@@ -1,40 +1,59 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 24 Oct 2013 08:39:10 +0200
-Subject: [Buildroot] [git commit] perf: disable documentation
-Message-ID: <20131024064829.EE02C9BB90@busybox.osuosl.org>
+Date: Thu, 24 Oct 2013 08:47:16 +0200
+Subject: [Buildroot] [git commit] Makefile: export BUILD_DIR
+Message-ID: <20131024064830.61FC19BB90@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ba0d86215ec8f3b6dbddd751d595bf64d5bc8a11
+commit: http://git.buildroot.net/buildroot/commit/?id=feb0877015cc0c644129e69276b3000c83742750
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-perf uses asciidoc to generate documentation, but /usr/bin/asciidoc will
-try to use buildroot's host-python which doesn't have the required
-unicodedata. Recent kernels always try to build the man pages when
-installing. To avoid that, define ASCIIDOC as an empty string so the
-Makefile can't find the executable and skips the documentation
-generation.
+$(BUILD_DIR) is a nice place to put files generated during the build.
+With the advent of user-supplied step-hooks, they may want to store
+some information on the build.
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Export BUILD_DIR to that effect; update manual accordingly.
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/perf/perf.mk |    3 ++-
- 1 files changed, 2 insertions(+), 1 deletions(-)
+ Makefile                         |    1 +
+ docs/manual/customize-rootfs.txt |    3 ++-
+ 2 files changed, 3 insertions(+), 1 deletions(-)
 
-diff --git a/package/perf/perf.mk b/package/perf/perf.mk
-index 120353f..d7898d0 100644
---- a/package/perf/perf.mk
-+++ b/package/perf/perf.mk
-@@ -19,7 +19,8 @@ PERF_MAKE_FLAGS = \
- 	NO_LIBPYTHON=1 \
- 	DESTDIR=$(TARGET_DIR) \
- 	prefix=/usr \
--	WERROR=0
-+	WERROR=0 \
-+	ASCIIDOC=
+diff --git a/Makefile b/Makefile
+index f266e2d..9528703 100644
+--- a/Makefile
++++ b/Makefile
+@@ -291,6 +291,7 @@ export STAGING_DIR
+ export HOST_DIR
+ export BINARIES_DIR
+ export BASE_DIR
++export BUILD_DIR
  
- ifeq ($(BR2_PACKAGE_ELFUTILS),y)
- 	PERF_DEPENDENCIES += elfutils
+ ################################################################################
+ #
+diff --git a/docs/manual/customize-rootfs.txt b/docs/manual/customize-rootfs.txt
+index 49a6b4b..158389c 100644
+--- a/docs/manual/customize-rootfs.txt
++++ b/docs/manual/customize-rootfs.txt
+@@ -41,6 +41,7 @@ there are a few ways to customize the resulting target filesystem.
+     - +BUILDROOT_CONFIG+: the path to the Buildroot .config file
+     - +HOST_DIR+, +STAGING_DIR+, +TARGET_DIR+: see
+       xref:generic-package-reference[]
++    - +BUILD_DIR+: the directory where packages are extracted and built
+     - +BINARIES_DIR+: the place where all binary files (aka images) are
+       stored
+     - +BASE_DIR+: the base output directory
+@@ -79,7 +80,7 @@ in one of these _post-image scripts_ will require special handling
+ Just like for the _post-build scripts_ mentioned above, you also have
+ access to the following environment variables from your _post-image
+ scripts_: +BUILDROOT_CONFIG+, +HOST_DIR+, +STAGING_DIR+, +TARGET_DIR+,
+-+BINARIES_DIR+ and +BASE_DIR+.
+++BUILD_DIR+, +BINARIES_DIR+ and +BASE_DIR+.
+ 
+ Additionally, each of the +BR2_ROOTFS_POST_BUILD_SCRIPT+ and
+ +BR2_ROOTFS_POST_IMAGE_SCRIPT+ scripts will be passed the arguments
