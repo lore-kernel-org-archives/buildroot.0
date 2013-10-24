@@ -1,75 +1,82 @@
-From: Sagaert Johan <sagaert.johan@skynet.be>
-Date: Thu, 24 Oct 2013 16:53:28 +0200
-Subject: [Buildroot] [git commit] Makefile: export BUILD_DIR
-In-Reply-To: <20131024064830.61FC19BB90@busybox.osuosl.org>
-References: <20131024064830.61FC19BB90@busybox.osuosl.org>
-Message-ID: <7EC43AD3B54844BEAC908529E9E57748@JohanW7>
+From: Danomi Manchego <danomimanchego123@gmail.com>
+Date: Thu, 24 Oct 2013 10:55:38 -0400
+Subject: [Buildroot] ccache problem when compiling with different
+ toolchains in different projects
+In-Reply-To: <CAAXf6LWAmfRswP0oCj--iZ+xxrKCYvYQeODCcaJQFx_d_BraOQ@mail.gmail.com>
+References: <CANxTyt7OWfG1U7yoTtRomKm2ECpC_cnxrGFbD8KVXFty==j7ig@mail.gmail.com>
+ <CADzL+YjA_Zx0BCmWESKYnna=dGyf=3BY9pd00m-BhAbw-HG9TQ@mail.gmail.com>
+ <5171AF1B.4010806@mind.be>
+ <CANxTyt7N+cKyvksZLSgUADMmgmhdfLBqYd=oRSxCVpKaWYEH1w@mail.gmail.com>
+ <5171D63D.7050705@mind.be>
+ <CANxTyt7EftWCmO25-reSsJJybTkzbB3srsrmZSwjKpadfQNt3w@mail.gmail.com>
+ <5174D1DE.6000902@mind.be>
+ <CANxTyt7JzGaq0pirMDDUrEn_XTUxK-4CbaPP00Rn0O709eL50w@mail.gmail.com>
+ <5175AB06.8090101@mind.be>
+ <CAAXf6LWAmfRswP0oCj--iZ+xxrKCYvYQeODCcaJQFx_d_BraOQ@mail.gmail.com>
+Message-ID: <CANxTyt5Mrm9ZLBYhCn62pLJBL11zaXBJox6VBWsYJvshFA8i7g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- 
-Hi All
+Thomas,
 
-What is the difference between TOPDIR and BASE_DIR variables?
+On Thu, Oct 24, 2013 at 6:31 AM, Thomas De Schampheleire
+<patrickdepinguin+buildroot@gmail.com> wrote:
+> On Mon, Apr 22, 2013 at 11:26 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
+>> On 22/04/13 14:32, Danomi Manchego wrote:
+>>>
+>>> On Mon, Apr 22, 2013 at 1:59 AM, Arnout Vandecappelle <arnout@mind.be
+>>> <mailto:arnout@mind.be>> wrote:
+>>
+>> [snip]
+>>
+>>>       Actually, after thinking a bit harder about it: the following
+>>>     should work:
+>>>
+>>>     sed -n '/^# Toolchain/,/^# System configuration/' $(BUILDROOT_CONFIG)
+>>> \
+>>>              | md5sum -
+>>>
+>>>       So there's no need to rename stuff or anything.
+>>>
+>>>
+>>> That would also use the GDB and ECLIPSE lines too.  But then, if it
+>>> accounts for everything outside of the "%compiler% -v" info (wrappers,
+>>> C-library), then it's worth it.
+>>>
+>>> I suppose that we could drop the these lines with an inverse grep:
+>>>
+>>> sed -n '/^# Toolchain/,/^# System configuration/p' .config | \
+>>>      grep -v -e '^#' -e GDG -e ECLIPSE | \
+>>>      md5sum
+>>>
+>>> Too much?
+>>
+>>
+>>  Too much, yes :-) But perhaps we could change the order of the toolchain
+>> options.
+>>
+>
+> Reviving this thread...
+> http://lists.busybox.net/pipermail/buildroot/2013-April/070819.html
+>
+> Is there any specific reason why there was no further evolution on this?
 
-Johan
+The conversation was dropped on my end because I actually came up with
+a mod to ccache.mk as described above (GDB and ECPLIPSE filter
+included), and have been using it ever since.  (Initially "testing",
+of course, then just forgotten.)
 
------Oorspronkelijk bericht-----
-Van: buildroot-bounces at busybox.net [mailto:buildroot-bounces at busybox.net] Namens Peter Korsgaard
-Verzonden: donderdag 24 oktober 2013 8:47
-Aan: buildroot at busybox.net
-Onderwerp: [Buildroot] [git commit] Makefile: export BUILD_DIR
+I didn't submit a patch because the "%compiler% -v" portion of the
+additional hash content could have the effect of introducing a path to
+the individual's build directory (for built toolchains, I think - I
+only use external or downloaded toolchains, so not sure) - which would
+be bad for groups that use a shared cache directory.
 
-commit: http://git.buildroot.net/buildroot/commit/?id=feb0877015cc0c644129e69276b3000c83742750
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+But if you like, I can separate my ccache.mk changes into two or three
+patches (since I did a couple other things too), and send as RFC.  But
+I don't have too much time to do rework for the built toolchains.
 
-$(BUILD_DIR) is a nice place to put files generated during the build.
-With the advent of user-supplied step-hooks, they may want to store some information on the build.
-
-Export BUILD_DIR to that effect; update manual accordingly.
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- Makefile                         |    1 +
- docs/manual/customize-rootfs.txt |    3 ++-
- 2 files changed, 3 insertions(+), 1 deletions(-)
-
-diff --git a/Makefile b/Makefile
-index f266e2d..9528703 100644
---- a/Makefile
-+++ b/Makefile
-@@ -291,6 +291,7 @@ export STAGING_DIR
- export HOST_DIR
- export BINARIES_DIR
- export BASE_DIR
-+export BUILD_DIR
- 
- ################################################################################
- #
-diff --git a/docs/manual/customize-rootfs.txt b/docs/manual/customize-rootfs.txt
-index 49a6b4b..158389c 100644
---- a/docs/manual/customize-rootfs.txt
-+++ b/docs/manual/customize-rootfs.txt
-@@ -41,6 +41,7 @@ there are a few ways to customize the resulting target filesystem.
-     - +BUILDROOT_CONFIG+: the path to the Buildroot .config file
-     - +HOST_DIR+, +STAGING_DIR+, +TARGET_DIR+: see
-       xref:generic-package-reference[]
-+    - +BUILD_DIR+: the directory where packages are extracted and built
-     - +BINARIES_DIR+: the place where all binary files (aka images) are
-       stored
-     - +BASE_DIR+: the base output directory @@ -79,7 +80,7 @@ in one of these _post-image scripts_ will require special handling
-Just like for the _post-build scripts_ mentioned above, you also have  access to the following environment variables from your
-_post-image
- scripts_: +BUILDROOT_CONFIG+, +HOST_DIR+, +STAGING_DIR+, +TARGET_DIR+,
--+BINARIES_DIR+ and +BASE_DIR+.
-++BUILD_DIR+, +BINARIES_DIR+ and +BASE_DIR+.
- 
- Additionally, each of the +BR2_ROOTFS_POST_BUILD_SCRIPT+ and  +BR2_ROOTFS_POST_IMAGE_SCRIPT+ scripts will be passed the arguments
-_______________________________________________
-buildroot mailing list
-buildroot at busybox.net
-http://lists.busybox.net/mailman/listinfo/buildroot
+Danomi -
