@@ -1,33 +1,47 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 24 Oct 2013 08:46:12 -0300
-Subject: [Buildroot] [PATCH] libcgroup: needs host-bison and host-flex
-Message-ID: <1382615172-12993-1-git-send-email-gustavo@zacarias.com.ar>
+From: Arnaud Aujon <arnaud.aujon@gmail.com>
+Date: Thu, 24 Oct 2013 13:58:43 +0200
+Subject: [Buildroot]  [PATCH] openobex: use sourceforge repository
+Message-ID: <1382615923-16924-1-git-send-email-arnaud.aujon@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-http://autobuild.buildroot.net/results/a77/a7738d6f99ba8189e6ffbd9fe245b1af7d28e3d9/
-
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Arnaud Aujon <arnaud.aujon@gmail.com>
 ---
- package/libcgroup/libcgroup.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/openobex/openobex.mk | 12 ++++++++++--
+ 1 file changed, 10 insertions(+), 2 deletions(-)
 
-diff --git a/package/libcgroup/libcgroup.mk b/package/libcgroup/libcgroup.mk
-index c2392e0..6d7ae54 100644
---- a/package/libcgroup/libcgroup.mk
-+++ b/package/libcgroup/libcgroup.mk
-@@ -9,7 +9,7 @@ LIBCGROUP_SOURCE = libcgroup-$(LIBCGROUP_VERSION).tar.bz2
- LIBCGROUP_SITE = http://downloads.sourceforge.net/project/libcg/libcgroup/v.038
- LIBCGROUP_LICENSE = LGPLv2.1
- LIBCGROUP_LICENSE_FILES = COPYING
--
-+LIBCGROUP_DEPENDENCIES = host-bison host-flex
- LIBCGROUP_INSTALL_STAGING = YES
+diff --git a/package/openobex/openobex.mk b/package/openobex/openobex.mk
+index 7195a26..4f383c8 100644
+--- a/package/openobex/openobex.mk
++++ b/package/openobex/openobex.mk
+@@ -4,8 +4,10 @@
+ #
+ ################################################################################
  
- # Undefining _FILE_OFFSET_BITS here because of a "bug" with glibc fts.h
+-OPENOBEX_VERSION = 1.5
+-OPENOBEX_SITE = http://ftp.osuosl.org/pub/linux/bluetooth
++OPENOBEX_VERSION_MAJOR = 1.5
++OPENOBEX_VERSION = $(OPENOBEX_VERSION_MAJOR).0
++OPENOBEX_SOURCE = openobex-$(OPENOBEX_VERSION)-Source.zip
++OPENOBEX_SITE = http://downloads.sourceforge.net/project/openobex/openobex/$(OPENOBEX_VERSION_MAJOR)
+ # Libraries seems to be released under LGPLv2.1+,
+ # while other material is under GPLv2+.
+ OPENOBEX_LICENSE = GPLv2+/LGPLv2.1+
+@@ -15,6 +17,12 @@ OPENOBEX_DEPENDENCIES = host-pkgconf
+ OPENOBEX_AUTORECONF = YES
+ OPENOBEX_INSTALL_STAGING = YES
+ 
++define OPENOBEX_EXTRACT_CMDS
+++       unzip -d $(@D) $(DL_DIR)/$(OPENOBEX_SOURCE)
+++       mv $(@D)/openobex-$(OPENOBEX_VERSION)-Source/* $(@D)
+++       $(RM) -r $(@D)/openobex-$(OPENOBEX_VERSION)-Source
++endef
++
+ OPENOBEX_CONF_OPT += \
+ 	$(if $(BR2_ENABLE_DEBUG),--enable-debug) \
+ 	$(if $(BR2_PACKAGE_OPENOBEX_APPS),--enable-apps) \
 -- 
-1.8.1.5
+1.8.3.1
