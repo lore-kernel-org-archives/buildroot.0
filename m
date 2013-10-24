@@ -1,31 +1,40 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 24 Oct 2013 08:47:49 +0200
-Subject: [Buildroot] [PATCH] Makefile: export BUILD_DIR
-In-Reply-To: <1382566309-11943-1-git-send-email-yann.morin.1998@free.fr> (Yann
- E. MORIN's message of "Wed, 23 Oct 2013 23:11:49 +0100")
-References: <1382566309-11943-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <87li1j88ru.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 24 Oct 2013 08:39:10 +0200
+Subject: [Buildroot] [git commit] perf: disable documentation
+Message-ID: <20131024064829.EE02C9BB90@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=ba0d86215ec8f3b6dbddd751d595bf64d5bc8a11
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > From: "Yann E. MORIN" <yann.morin.1998@free.fr>
- > $(BUILD_DIR) is a nice place to put files generated during the build.
- > With the advent of user-supplied step-hooks, they may want to store
- > some information on the build.
+perf uses asciidoc to generate documentation, but /usr/bin/asciidoc will
+try to use buildroot's host-python which doesn't have the required
+unicodedata. Recent kernels always try to build the man pages when
+installing. To avoid that, define ASCIIDOC as an empty string so the
+Makefile can't find the executable and skips the documentation
+generation.
 
- > Export BUILD_DIR to that effect; update manual accordingly.
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/perf/perf.mk |    3 ++-
+ 1 files changed, 2 insertions(+), 1 deletions(-)
 
- > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
- > ---
- > v2: update documentation (Peter)
-
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/perf/perf.mk b/package/perf/perf.mk
+index 120353f..d7898d0 100644
+--- a/package/perf/perf.mk
++++ b/package/perf/perf.mk
+@@ -19,7 +19,8 @@ PERF_MAKE_FLAGS = \
+ 	NO_LIBPYTHON=1 \
+ 	DESTDIR=$(TARGET_DIR) \
+ 	prefix=/usr \
+-	WERROR=0
++	WERROR=0 \
++	ASCIIDOC=
+ 
+ ifeq ($(BR2_PACKAGE_ELFUTILS),y)
+ 	PERF_DEPENDENCIES += elfutils
