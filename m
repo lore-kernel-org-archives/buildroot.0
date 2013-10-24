@@ -1,65 +1,65 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 24 Oct 2013 14:25:43 +0200
-Subject: [Buildroot] [PATCH] libfreefare: new repository
-In-Reply-To: <CACjG4B+r7YBsnVYLPWER1fW9j2UNQOtd0zTBsjduGto-574e3Q@mail.gmail.com>
-References: <1382605205-7965-1-git-send-email-arnaud.aujon@gmail.com>
- <CACjG4B+r7YBsnVYLPWER1fW9j2UNQOtd0zTBsjduGto-574e3Q@mail.gmail.com>
-Message-ID: <526911C7.7080803@mind.be>
+Date: Thu, 24 Oct 2013 14:32:46 +0200
+Subject: [Buildroot] [PATCH v2] openobex: use sourceforge repository
+In-Reply-To: <1382616130-17139-1-git-send-email-arnaud.aujon@gmail.com>
+References: <1382616130-17139-1-git-send-email-arnaud.aujon@gmail.com>
+Message-ID: <5269136E.5040202@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 24/10/13 11:02, arnaud aujon wrote:
-> Sorry I miss the patch description but I guess the title is self explaining.
+On 24/10/13 14:02, Arnaud Aujon wrote:
+> openobex releases are now available on sourceforge, add VERSION_MAJOR
+> to be able to bump it more easily if necessary.
 
-  Yes, it's good enough.
-
+  Why sourceforge? The source is hosted on gitorious, so it would be 
+better to grab a tarball there I'd think. There's a tag for 1.5 so you 
+can get the tarball from
+https://gitorious.org/openobex/mainline/archive/1.5.tar.gz
 
   Regards,
   Arnout
 
 >
-> Regards,
+> Signed-off-by: Arnaud Aujon <arnaud.aujon@gmail.com>
+> ---
+> Changes v1 -> v2: just add patch comment
+> ---
+>   package/openobex/openobex.mk | 12 ++++++++++--
+>   1 file changed, 10 insertions(+), 2 deletions(-)
 >
-> Arnaud
+> diff --git a/package/openobex/openobex.mk b/package/openobex/openobex.mk
+> index 7195a26..4f383c8 100644
+> --- a/package/openobex/openobex.mk
+> +++ b/package/openobex/openobex.mk
+> @@ -4,8 +4,10 @@
+>   #
+>   ################################################################################
 >
+> -OPENOBEX_VERSION = 1.5
+> -OPENOBEX_SITE = http://ftp.osuosl.org/pub/linux/bluetooth
+> +OPENOBEX_VERSION_MAJOR = 1.5
+> +OPENOBEX_VERSION = $(OPENOBEX_VERSION_MAJOR).0
+> +OPENOBEX_SOURCE = openobex-$(OPENOBEX_VERSION)-Source.zip
+> +OPENOBEX_SITE = http://downloads.sourceforge.net/project/openobex/openobex/$(OPENOBEX_VERSION_MAJOR)
+>   # Libraries seems to be released under LGPLv2.1+,
+>   # while other material is under GPLv2+.
+>   OPENOBEX_LICENSE = GPLv2+/LGPLv2.1+
+> @@ -15,6 +17,12 @@ OPENOBEX_DEPENDENCIES = host-pkgconf
+>   OPENOBEX_AUTORECONF = YES
+>   OPENOBEX_INSTALL_STAGING = YES
 >
-> 2013/10/24 Arnaud Aujon <arnaud.aujon@gmail.com
-> <mailto:arnaud.aujon@gmail.com>>
->
->     Signed-off-by: Arnaud Aujon <arnaud.aujon@gmail.com
->     <mailto:arnaud.aujon@gmail.com>>
->     ---
->       package/libfreefare/libfreefare.mk <http://libfreefare.mk> | 2 +-
->       1 file changed, 1 insertion(+), 1 deletion(-)
->
->     diff --git a/package/libfreefare/libfreefare.mk
->     <http://libfreefare.mk> b/package/libfreefare/libfreefare.mk
->     <http://libfreefare.mk>
->     index 859b5e3..8dcd6b8 100644
->     --- a/package/libfreefare/libfreefare.mk <http://libfreefare.mk>
->     +++ b/package/libfreefare/libfreefare.mk <http://libfreefare.mk>
->     @@ -5,7 +5,7 @@
->       ################################################################################
->
->       LIBFREEFARE_VERSION = 0.3.4
->     -LIBFREEFARE_SITE = http://nfc-tools.googlecode.com/files
->     +LIBFREEFARE_SITE = http://libfreefare.googlecode.com/files
->       LIBFREEFARE_DEPENDENCIES = libnfc openssl
->
->       $(eval $(autotools-package))
->     --
->     1.8.3.1
->
->
->
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> +define OPENOBEX_EXTRACT_CMDS
+> ++       unzip -d $(@D) $(DL_DIR)/$(OPENOBEX_SOURCE)
+> ++       mv $(@D)/openobex-$(OPENOBEX_VERSION)-Source/* $(@D)
+> ++       $(RM) -r $(@D)/openobex-$(OPENOBEX_VERSION)-Source
+> +endef
+> +
+>   OPENOBEX_CONF_OPT += \
+>   	$(if $(BR2_ENABLE_DEBUG),--enable-debug) \
+>   	$(if $(BR2_PACKAGE_OPENOBEX_APPS),--enable-apps) \
 >
 
 
