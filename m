@@ -1,34 +1,203 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Thu, 24 Oct 2013 15:13:46 +0200
-Subject: [Buildroot] [PATCH] stress: disable documentation
-In-Reply-To: <526907E3.5020409@mind.be>
-References: <1382571802-23306-1-git-send-email-arnout@mind.be>
- <CAAXf6LXmuFppc4473+KC73LZmUjgk4h32p9Lx_6hANKmudRdDw@mail.gmail.com>
- <526907E3.5020409@mind.be>
-Message-ID: <CAAXf6LWq=8cCaFMggQLJqwuiSHAH3+xE0F6LxGXHCYQNkLHXrA@mail.gmail.com>
+From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Date: Thu, 24 Oct 2013 15:16:26 +0200
+Subject: [Buildroot] [PATCH 1/2] packages/Config.in: Alphabetical entries
+	sorting
+Message-ID: <1382620587-22563-1-git-send-email-maxime.hadjinlian@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Oct 24, 2013 at 1:43 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
-> On 24/10/13 09:10, Thomas De Schampheleire wrote:
->>> +# Also, disable documentation by undefining makeinfo
->>>   STRESS_CONF_OPT = \
->>> -       $(if $(BR2_PREFER_STATIC_LIB),,--disable-static)
->>> +       $(if $(BR2_PREFER_STATIC_LIB),,--disable-static) \
->>> +       MAKEINFO=:
->>
->>
->> What is the significance of this colon?
->
->
->  It's just an empty command. I could have used 'true' as well. In practice,
-> they're the same. However, POSIX defines 'true' to take no arguments, while
-> ':' ignores its arguments, so ':' is more pedantically correct.
+This patch moves :
+  "Filesystem and flash utilities" menu
+  "X applications" category
+  "Misc devices firmwares" menu
+  "JSON/XML" menu
+so they are in alphabetical order with the rest of the file.
+---
+ package/Config.in | 132 +++++++++++++++++++++++++++---------------------------
+ 1 file changed, 66 insertions(+), 66 deletions(-)
 
-This is new to me, thanks!
-
-Best regards,
-Thomas
+diff --git a/package/Config.in b/package/Config.in
+index 0e6f86c..ebbdeb5 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -129,6 +129,32 @@ source "package/vala/Config.in"
+ source "package/yasm/Config.in"
+ endmenu
+ 
++menu "Filesystem and flash utilities"
++source "package/cifs-utils/Config.in"
++source "package/cramfs/Config.in"
++source "package/curlftpfs/Config.in"
++source "package/dosfstools/Config.in"
++source "package/e2fsprogs/Config.in"
++source "package/ecryptfs-utils/Config.in"
++source "package/exfat/Config.in"
++source "package/exfat-utils/Config.in"
++source "package/f2fs-tools/Config.in"
++source "package/flashbench/Config.in"
++source "package/genext2fs/Config.in"
++source "package/genromfs/Config.in"
++source "package/kobs-ng/Config.in"
++source "package/makedevs/Config.in"
++source "package/mtd/Config.in"
++source "package/nfs-utils/Config.in"
++source "package/ntfs-3g/Config.in"
++source "package/squashfs/Config.in"
++source "package/squashfs3/Config.in"
++source "package/sshfs/Config.in"
++source "package/sunxi-tools/Config.in"
++source "package/unionfs/Config.in"
++source "package/xfsprogs/Config.in"
++endmenu
++
+ menu "Games"
+ source "package/doom-wad/Config.in"
+ source "package/gnuchess/Config.in"
+@@ -187,18 +213,6 @@ source "package/qt5/Config.in"
+ source "package/x11r7/Config.in"
+ source "package/weston/Config.in"
+ 
+-comment "X libraries and helper libraries"
+-source "package/liberation/Config.in"
+-source "package/libsexy/Config.in"
+-source "package/x11r7/xkeyboard-config/Config.in"
+-
+-comment "X Window managers"
+-source "package/blackbox/Config.in"
+-source "package/enlightenment/Config.in"
+-source "package/fluxbox/Config.in"
+-source "package/matchbox/Config.in"
+-source "package/metacity/Config.in"
+-
+ comment "X applications"
+ source "package/alsamixergui/Config.in"
+ source "package/docker/Config.in"
+@@ -222,42 +236,19 @@ source "package/xterm/Config.in"
+ source "package/xvkbd/Config.in"
+ endmenu
+ 
+-menu "Filesystem and flash utilities"
+-source "package/cifs-utils/Config.in"
+-source "package/cramfs/Config.in"
+-source "package/curlftpfs/Config.in"
+-source "package/dosfstools/Config.in"
+-source "package/e2fsprogs/Config.in"
+-source "package/ecryptfs-utils/Config.in"
+-source "package/exfat/Config.in"
+-source "package/exfat-utils/Config.in"
+-source "package/f2fs-tools/Config.in"
+-source "package/flashbench/Config.in"
+-source "package/genext2fs/Config.in"
+-source "package/genromfs/Config.in"
+-source "package/kobs-ng/Config.in"
+-source "package/makedevs/Config.in"
+-source "package/mtd/Config.in"
+-source "package/nfs-utils/Config.in"
+-source "package/ntfs-3g/Config.in"
+-source "package/squashfs/Config.in"
+-source "package/squashfs3/Config.in"
+-source "package/sshfs/Config.in"
+-source "package/sunxi-tools/Config.in"
+-source "package/unionfs/Config.in"
+-source "package/xfsprogs/Config.in"
+-endmenu
++comment "X libraries and helper libraries"
++source "package/liberation/Config.in"
++source "package/libsexy/Config.in"
++source "package/x11r7/xkeyboard-config/Config.in"
++
++comment "X Window managers"
++source "package/blackbox/Config.in"
++source "package/enlightenment/Config.in"
++source "package/fluxbox/Config.in"
++source "package/matchbox/Config.in"
++source "package/metacity/Config.in"
+ 
+ menu "Hardware handling"
+-menu "Misc devices firmwares"
+-source "package/am33x-cm3/Config.in"
+-source "package/b43-firmware/Config.in"
+-source "package/linux-firmware/Config.in"
+-source "package/rpi-firmware/Config.in"
+-source "package/sunxi-boards/Config.in"
+-source "package/ux500-firmware/Config.in"
+-source "package/zd1211-firmware/Config.in"
+-endmenu
+ source "package/a10disp/Config.in"
+ source "package/acpid/Config.in"
+ source "package/cdrkit/Config.in"
+@@ -304,6 +295,15 @@ source "package/mdadm/Config.in"
+ source "package/media-ctl/Config.in"
+ source "package/memtester/Config.in"
+ source "package/minicom/Config.in"
++menu "Misc devices firmwares"
++source "package/am33x-cm3/Config.in"
++source "package/b43-firmware/Config.in"
++source "package/linux-firmware/Config.in"
++source "package/rpi-firmware/Config.in"
++source "package/sunxi-boards/Config.in"
++source "package/ux500-firmware/Config.in"
++source "package/zd1211-firmware/Config.in"
++endmenu
+ source "package/nanocom/Config.in"
+ source "package/neard/Config.in"
+ source "package/ofono/Config.in"
+@@ -575,6 +575,26 @@ source "package/jsmin/Config.in"
+ source "package/json-javascript/Config.in"
+ endmenu
+ 
++menu "JSON/XML"
++source "package/cjson/Config.in"
++source "package/expat/Config.in"
++source "package/ezxml/Config.in"
++source "package/jansson/Config.in"
++source "package/json-c/Config.in"
++source "package/json-glib/Config.in"
++source "package/libjson/Config.in"
++source "package/libroxml/Config.in"
++source "package/libxml-parser-perl/Config.in"
++source "package/libxml2/Config.in"
++source "package/libxmlpp/Config.in"
++source "package/libxslt/Config.in"
++source "package/libyaml/Config.in"
++source "package/mxml/Config.in"
++source "package/rapidjson/Config.in"
++source "package/xerces/Config.in"
++source "package/yajl/Config.in"
++endmenu
++
+ menu "Multimedia"
+ source "package/libdvbsi/Config.in"
+ source "package/libdvdnav/Config.in"
+@@ -720,26 +740,6 @@ source "package/readline/Config.in"
+ source "package/slang/Config.in"
+ endmenu
+ 
+-menu "JSON/XML"
+-source "package/cjson/Config.in"
+-source "package/expat/Config.in"
+-source "package/ezxml/Config.in"
+-source "package/jansson/Config.in"
+-source "package/json-c/Config.in"
+-source "package/json-glib/Config.in"
+-source "package/libjson/Config.in"
+-source "package/libroxml/Config.in"
+-source "package/libxml-parser-perl/Config.in"
+-source "package/libxml2/Config.in"
+-source "package/libxmlpp/Config.in"
+-source "package/libxslt/Config.in"
+-source "package/libyaml/Config.in"
+-source "package/mxml/Config.in"
+-source "package/rapidjson/Config.in"
+-source "package/xerces/Config.in"
+-source "package/yajl/Config.in"
+-endmenu
+-
+ endmenu
+ 
+ menu "Miscellaneous"
+-- 
+1.8.4.rc3
