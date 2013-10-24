@@ -1,59 +1,46 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 24 Oct 2013 08:47:16 +0200
-Subject: [Buildroot] [git commit] Makefile: export BUILD_DIR
-Message-ID: <20131024064830.61FC19BB90@busybox.osuosl.org>
+Date: Thu, 24 Oct 2013 08:43:28 +0200
+Subject: [Buildroot] [git commit] ifplugd: ensure directories exist before
+	installing to them
+Message-ID: <20131024064830.55B9399B2D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=feb0877015cc0c644129e69276b3000c83742750
+commit: http://git.buildroot.net/buildroot/commit/?id=cfea3556422e92969bedbde95d32af4c3dc25c83
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-$(BUILD_DIR) is a nice place to put files generated during the build.
-With the advent of user-supplied step-hooks, they may want to store
-some information on the build.
+Add the -D to install commands to ensure that all the necessary
+installation directories exist.
 
-Export BUILD_DIR to that effect; update manual accordingly.
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- Makefile                         |    1 +
- docs/manual/customize-rootfs.txt |    3 ++-
- 2 files changed, 3 insertions(+), 1 deletions(-)
+ package/ifplugd/ifplugd.mk |    9 ++++-----
+ 1 files changed, 4 insertions(+), 5 deletions(-)
 
-diff --git a/Makefile b/Makefile
-index f266e2d..9528703 100644
---- a/Makefile
-+++ b/Makefile
-@@ -291,6 +291,7 @@ export STAGING_DIR
- export HOST_DIR
- export BINARIES_DIR
- export BASE_DIR
-+export BUILD_DIR
+diff --git a/package/ifplugd/ifplugd.mk b/package/ifplugd/ifplugd.mk
+index ee5bd25..837e016 100644
+--- a/package/ifplugd/ifplugd.mk
++++ b/package/ifplugd/ifplugd.mk
+@@ -21,14 +21,13 @@ ifeq ($(BR2_PACKAGE_BUSYBOX),y)
+ endif
  
- ################################################################################
- #
-diff --git a/docs/manual/customize-rootfs.txt b/docs/manual/customize-rootfs.txt
-index 49a6b4b..158389c 100644
---- a/docs/manual/customize-rootfs.txt
-+++ b/docs/manual/customize-rootfs.txt
-@@ -41,6 +41,7 @@ there are a few ways to customize the resulting target filesystem.
-     - +BUILDROOT_CONFIG+: the path to the Buildroot .config file
-     - +HOST_DIR+, +STAGING_DIR+, +TARGET_DIR+: see
-       xref:generic-package-reference[]
-+    - +BUILD_DIR+: the directory where packages are extracted and built
-     - +BINARIES_DIR+: the place where all binary files (aka images) are
-       stored
-     - +BASE_DIR+: the base output directory
-@@ -79,7 +80,7 @@ in one of these _post-image scripts_ will require special handling
- Just like for the _post-build scripts_ mentioned above, you also have
- access to the following environment variables from your _post-image
- scripts_: +BUILDROOT_CONFIG+, +HOST_DIR+, +STAGING_DIR+, +TARGET_DIR+,
--+BINARIES_DIR+ and +BASE_DIR+.
-++BUILD_DIR+, +BINARIES_DIR+ and +BASE_DIR+.
- 
- Additionally, each of the +BR2_ROOTFS_POST_BUILD_SCRIPT+ and
- +BR2_ROOTFS_POST_IMAGE_SCRIPT+ scripts will be passed the arguments
+ define IFPLUGD_INSTALL_FIXUP
+-	$(INSTALL) -d $(TARGET_DIR)/etc/ifplugd
+ 	@if [ ! -f $(TARGET_DIR)/etc/ifplugd/ifplugd.conf ]; then \
+-		$(INSTALL) $(@D)/conf/ifplugd.conf $(TARGET_DIR)/etc/ifplugd/; \
++		$(INSTALL) -D $(@D)/conf/ifplugd.conf $(TARGET_DIR)/etc/ifplugd/ifplugd.conf; \
+ 		$(SED) 's^\(ARGS=.*\)w^\1^' $(TARGET_DIR)/etc/ifplugd/ifplugd.conf; \
+ 	fi
+-	$(INSTALL) -m 0755 $(@D)/conf/ifplugd.action \
+-		$(TARGET_DIR)/etc/ifplugd/
+-	$(INSTALL) -m 0755 $(@D)/conf/ifplugd.init \
++	$(INSTALL) -D -m 0755 $(@D)/conf/ifplugd.action \
++		$(TARGET_DIR)/etc/ifplugd/ifplugd.action
++	$(INSTALL) -D -m 0755 $(@D)/conf/ifplugd.init \
+ 		$(TARGET_DIR)/etc/init.d/S45ifplugd
+ 	# don't use bash for init script
+ 	$(SED) 's^/bin/bash^/bin/sh^g' $(TARGET_DIR)/etc/init.d/S45ifplugd
