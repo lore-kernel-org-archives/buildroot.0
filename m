@@ -1,51 +1,39 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Thu, 24 Oct 2013 15:26:31 +0200
-Subject: [Buildroot] [PATCH 2/2] packages/Config.in: Fix case on entries
-	titles
-In-Reply-To: <1382620587-22563-2-git-send-email-maxime.hadjinlian@gmail.com>
-References: <1382620587-22563-1-git-send-email-maxime.hadjinlian@gmail.com>
- <1382620587-22563-2-git-send-email-maxime.hadjinlian@gmail.com>
-Message-ID: <CAAXf6LUHPB41sQNxAEt3mE0vMmyqr7DTUtU-akgMU9dSbZuY0A@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 24 Oct 2013 15:34:42 +0200
+Subject: [Buildroot] [PATCH] Rename netkitbase and netkittelnet
+In-Reply-To: <1382604917-7742-1-git-send-email-arnaud.aujon@gmail.com>
+References: <1382604917-7742-1-git-send-email-arnaud.aujon@gmail.com>
+Message-ID: <20131024153442.56a9157d@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Maxime,
+Dear Arnaud Aujon,
 
-On Thu, Oct 24, 2013 at 3:16 PM, Maxime Hadjinlian
-<maxime.hadjinlian@gmail.com> wrote:
-> ---
->  package/Config.in | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/package/Config.in b/package/Config.in
-> index ebbdeb5..b1ceb16 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -169,7 +169,7 @@ source "package/gnuplot/Config.in"
->  source "package/jhead/Config.in"
->  source "package/rrdtool/Config.in"
->
-> -comment "graphic libraries"
-> +comment "Graphic libraries"
->  source "package/cegui06/Config.in"
->  source "package/directfb/Config.in"
->  source "package/directfb-examples/Config.in"
-> @@ -241,7 +241,7 @@ source "package/liberation/Config.in"
->  source "package/libsexy/Config.in"
->  source "package/x11r7/xkeyboard-config/Config.in"
->
-> -comment "X Window managers"
-> +comment "X window managers"
->  source "package/blackbox/Config.in"
->  source "package/enlightenment/Config.in"
->  source "package/fluxbox/Config.in"
-> --
+On Thu, 24 Oct 2013 10:55:17 +0200, Arnaud Aujon wrote:
+> Rename netkitbase and netkittelnet according to naming policy.
+> Updates package/Config.in and busybox.mk accordingly.
+> 
+> Signed-off-by: Arnaud Aujon <arnaud.aujon@gmail.com>
 
-There is also a 'other GUIs' entry. Any reason why you did not change
-that to 'Other GUIs' ?
+Both of these packages have been marked deprecated since almost a year
+(November 2013). See 442765fe3d8767956eb26d4bcbaa62ce1e1782ca and
+5a457ff6cc3129af97f2fdcaa5f88bd5ff02b500.
+
+So many it's simpler better to remove them completely?
+
+Because what your patch is missing is that it's renaming the Config.in
+options for those two packages, but it's not adding the necessary
+compatibility informations in Config.in.legacy. And I don't think it's
+really worth doing that for packages that have been deprecated a year
+ago. What do you think?
 
 Best regards,
+
 Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
