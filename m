@@ -1,57 +1,75 @@
-From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Thu, 24 Oct 2013 16:13:51 +0200
-Subject: [Buildroot] [PATCH 2/2] packages/Config.in: Fix case on entries
-	titles
-In-Reply-To: <CAAXf6LUHPB41sQNxAEt3mE0vMmyqr7DTUtU-akgMU9dSbZuY0A@mail.gmail.com>
-References: <1382620587-22563-1-git-send-email-maxime.hadjinlian@gmail.com>
- <1382620587-22563-2-git-send-email-maxime.hadjinlian@gmail.com>
- <CAAXf6LUHPB41sQNxAEt3mE0vMmyqr7DTUtU-akgMU9dSbZuY0A@mail.gmail.com>
-Message-ID: <CAGduivxzJhfu4ROtyGdN97+-2DJFj0PRZL4Ky3rEYXcgAXqQQg@mail.gmail.com>
+From: Sagaert Johan <sagaert.johan@skynet.be>
+Date: Thu, 24 Oct 2013 16:53:28 +0200
+Subject: [Buildroot] [git commit] Makefile: export BUILD_DIR
+In-Reply-To: <20131024064830.61FC19BB90@busybox.osuosl.org>
+References: <20131024064830.61FC19BB90@busybox.osuosl.org>
+Message-ID: <7EC43AD3B54844BEAC908529E9E57748@JohanW7>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Oct 24, 2013 at 3:26 PM, Thomas De Schampheleire
-<patrickdepinguin@gmail.com> wrote:
-> Hi Maxime,
-Hi Thomas,
->
-> On Thu, Oct 24, 2013 at 3:16 PM, Maxime Hadjinlian
-> <maxime.hadjinlian@gmail.com> wrote:
->> ---
->>  package/Config.in | 4 ++--
->>  1 file changed, 2 insertions(+), 2 deletions(-)
->>
->> diff --git a/package/Config.in b/package/Config.in
->> index ebbdeb5..b1ceb16 100644
->> --- a/package/Config.in
->> +++ b/package/Config.in
->> @@ -169,7 +169,7 @@ source "package/gnuplot/Config.in"
->>  source "package/jhead/Config.in"
->>  source "package/rrdtool/Config.in"
->>
->> -comment "graphic libraries"
->> +comment "Graphic libraries"
->>  source "package/cegui06/Config.in"
->>  source "package/directfb/Config.in"
->>  source "package/directfb-examples/Config.in"
->> @@ -241,7 +241,7 @@ source "package/liberation/Config.in"
->>  source "package/libsexy/Config.in"
->>  source "package/x11r7/xkeyboard-config/Config.in"
->>
->> -comment "X Window managers"
->> +comment "X window managers"
->>  source "package/blackbox/Config.in"
->>  source "package/enlightenment/Config.in"
->>  source "package/fluxbox/Config.in"
->> --
->
-> There is also a 'other GUIs' entry. Any reason why you did not change
-> that to 'Other GUIs' ?
->
-I missed it. I'll fix this and send this patch alone again.
+ 
+Hi All
 
-> Best regards,
-> Thomas
+What is the difference between TOPDIR and BASE_DIR variables?
+
+Johan
+
+-----Oorspronkelijk bericht-----
+Van: buildroot-bounces at busybox.net [mailto:buildroot-bounces at busybox.net] Namens Peter Korsgaard
+Verzonden: donderdag 24 oktober 2013 8:47
+Aan: buildroot at busybox.net
+Onderwerp: [Buildroot] [git commit] Makefile: export BUILD_DIR
+
+commit: http://git.buildroot.net/buildroot/commit/?id=feb0877015cc0c644129e69276b3000c83742750
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+$(BUILD_DIR) is a nice place to put files generated during the build.
+With the advent of user-supplied step-hooks, they may want to store some information on the build.
+
+Export BUILD_DIR to that effect; update manual accordingly.
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ Makefile                         |    1 +
+ docs/manual/customize-rootfs.txt |    3 ++-
+ 2 files changed, 3 insertions(+), 1 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index f266e2d..9528703 100644
+--- a/Makefile
++++ b/Makefile
+@@ -291,6 +291,7 @@ export STAGING_DIR
+ export HOST_DIR
+ export BINARIES_DIR
+ export BASE_DIR
++export BUILD_DIR
+ 
+ ################################################################################
+ #
+diff --git a/docs/manual/customize-rootfs.txt b/docs/manual/customize-rootfs.txt
+index 49a6b4b..158389c 100644
+--- a/docs/manual/customize-rootfs.txt
++++ b/docs/manual/customize-rootfs.txt
+@@ -41,6 +41,7 @@ there are a few ways to customize the resulting target filesystem.
+     - +BUILDROOT_CONFIG+: the path to the Buildroot .config file
+     - +HOST_DIR+, +STAGING_DIR+, +TARGET_DIR+: see
+       xref:generic-package-reference[]
++    - +BUILD_DIR+: the directory where packages are extracted and built
+     - +BINARIES_DIR+: the place where all binary files (aka images) are
+       stored
+     - +BASE_DIR+: the base output directory @@ -79,7 +80,7 @@ in one of these _post-image scripts_ will require special handling
+Just like for the _post-build scripts_ mentioned above, you also have  access to the following environment variables from your
+_post-image
+ scripts_: +BUILDROOT_CONFIG+, +HOST_DIR+, +STAGING_DIR+, +TARGET_DIR+,
+-+BINARIES_DIR+ and +BASE_DIR+.
+++BUILD_DIR+, +BINARIES_DIR+ and +BASE_DIR+.
+ 
+ Additionally, each of the +BR2_ROOTFS_POST_BUILD_SCRIPT+ and  +BR2_ROOTFS_POST_IMAGE_SCRIPT+ scripts will be passed the arguments
+_______________________________________________
+buildroot mailing list
+buildroot at busybox.net
+http://lists.busybox.net/mailman/listinfo/buildroot
