@@ -1,44 +1,32 @@
-From: Ryan Barnett <rjbarnet@rockwellcollins.com>
-Date: Thu, 24 Oct 2013 16:09:08 -0500
-Subject: [Buildroot] uboot host tools 2013.10 mkimage does not exist
-In-Reply-To: <A96AA0A8EE3542B9971D20A3266209BA@JohanW7>
-References: <A96AA0A8EE3542B9971D20A3266209BA@JohanW7>
-Message-ID: <OF4A13E92C.01E15163-ON86257C0E.0073C87E-86257C0E.00742BE8@rockwellcollins.com>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Fri, 25 Oct 2013 00:04:47 +0200
+Subject: [Buildroot] [PATCH] libcgroup: depends on host-bison
+Message-ID: <1382652287-13384-1-git-send-email-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Sagaert,
+Fixes http://autobuild.buildroot.net/results/73d/73dddcc1aa68999ea496de148497f80bdb02c874
 
-"Sagaert Johan" <sagaert.johan@skynet.be> wrote on 10/24/2013 03:58:01 PM:
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ package/libcgroup/libcgroup.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> Hi
-> 
-> make[1]: Leaving directory `/home/buildroot12git'
-> >>> host-uboot-tools 2013.10 Installing to host directory
-> /usr/bin/install -m 0755 -D 
-/home/buildroot12git/output/build/host-uboot-tools-2013.10/tools/mkimage
-> /home/buildroot12git/output/host/usr/bin/mkimage
-> /usr/bin/install: cannot stat 
-`/home/buildroot12git/output/build/host-uboot-tools-2013.10/tools/mkimage': 
-No such file or directory
-> 
-> If i look into the host-uboot build dir , i find no mkimage.
-> Maybe it needs te be explicit enabled ?
-
-Please see Gustavo Zacarias patch to fix this issue:
-
-http://patchwork.ozlabs.org/patch/285999/
-
-Also see an email that I sent early today explaining the issue related to
-u-boot.
-
-http://lists.busybox.net/pipermail/buildroot/2013-October/081076.html
-
-In the interim, you could revert the commit mentioned in the email
-that I linked to above. 
-
-Thanks,
--Ryan
+diff --git a/package/libcgroup/libcgroup.mk b/package/libcgroup/libcgroup.mk
+index c2392e0..339deb3 100644
+--- a/package/libcgroup/libcgroup.mk
++++ b/package/libcgroup/libcgroup.mk
+@@ -9,7 +9,7 @@ LIBCGROUP_SOURCE = libcgroup-$(LIBCGROUP_VERSION).tar.bz2
+ LIBCGROUP_SITE = http://downloads.sourceforge.net/project/libcg/libcgroup/v.038
+ LIBCGROUP_LICENSE = LGPLv2.1
+ LIBCGROUP_LICENSE_FILES = COPYING
+-
++LIBCGROUP_DEPENDENCIES = host-bison
+ LIBCGROUP_INSTALL_STAGING = YES
+ 
+ # Undefining _FILE_OFFSET_BITS here because of a "bug" with glibc fts.h
+-- 
+1.8.4.rc3
