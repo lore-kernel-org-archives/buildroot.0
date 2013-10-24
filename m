@@ -1,58 +1,54 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Thu, 24 Oct 2013 11:46:11 +0200
-Subject: [Buildroot] [PATCH 1/2] webkit: number the patches
-Message-ID: <1382607972-30863-1-git-send-email-arnout@mind.be>
+Date: Thu, 24 Oct 2013 11:46:12 +0200
+Subject: [Buildroot] [PATCH 2/2] webkit: fix build with bison 3.0
+In-Reply-To: <1382607972-30863-1-git-send-email-arnout@mind.be>
+References: <1382607972-30863-1-git-send-email-arnout@mind.be>
+Message-ID: <1382607972-30863-2-git-send-email-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Apply a patch from upstream.
+
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- ...t-autotools.patch => webkit-0001-build-fix-for-32-bit-autotools.patch} | 0
- ...-for-gtklauncher.patch => webkit-0002-build-fix-for-gtklauncher.patch} | 0
- ...it-detect-harfbuzz-icu.patch => webkit-0003-detect-harfbuzz-icu.patch} | 0
- ...webkit-disable-docrebase.patch => webkit-0004-disable-docrebase.patch} | 0
- .../{webkit-disable-tests.patch => webkit-0005-disable-tests.patch}       | 0
- package/webkit/{webkit-execinfo_h.patch => webkit-0006-execinfo_h.patch}  | 0
- package/webkit/{webkit-mips-dfg.patch => webkit-0007-mips-dfg.patch}      | 0
- 7 files changed, 0 insertions(+), 0 deletions(-)
- rename package/webkit/{webkit-build-fix-for-32-bit-autotools.patch => webkit-0001-build-fix-for-32-bit-autotools.patch} (100%)
- rename package/webkit/{webkit-build-fix-for-gtklauncher.patch => webkit-0002-build-fix-for-gtklauncher.patch} (100%)
- rename package/webkit/{webkit-detect-harfbuzz-icu.patch => webkit-0003-detect-harfbuzz-icu.patch} (100%)
- rename package/webkit/{webkit-disable-docrebase.patch => webkit-0004-disable-docrebase.patch} (100%)
- rename package/webkit/{webkit-disable-tests.patch => webkit-0005-disable-tests.patch} (100%)
- rename package/webkit/{webkit-execinfo_h.patch => webkit-0006-execinfo_h.patch} (100%)
- rename package/webkit/{webkit-mips-dfg.patch => webkit-0007-mips-dfg.patch} (100%)
+I don't understand why this doesn't show up in autobuilders...
 
-diff --git a/package/webkit/webkit-build-fix-for-32-bit-autotools.patch b/package/webkit/webkit-0001-build-fix-for-32-bit-autotools.patch
-similarity index 100%
-rename from package/webkit/webkit-build-fix-for-32-bit-autotools.patch
-rename to package/webkit/webkit-0001-build-fix-for-32-bit-autotools.patch
-diff --git a/package/webkit/webkit-build-fix-for-gtklauncher.patch b/package/webkit/webkit-0002-build-fix-for-gtklauncher.patch
-similarity index 100%
-rename from package/webkit/webkit-build-fix-for-gtklauncher.patch
-rename to package/webkit/webkit-0002-build-fix-for-gtklauncher.patch
-diff --git a/package/webkit/webkit-detect-harfbuzz-icu.patch b/package/webkit/webkit-0003-detect-harfbuzz-icu.patch
-similarity index 100%
-rename from package/webkit/webkit-detect-harfbuzz-icu.patch
-rename to package/webkit/webkit-0003-detect-harfbuzz-icu.patch
-diff --git a/package/webkit/webkit-disable-docrebase.patch b/package/webkit/webkit-0004-disable-docrebase.patch
-similarity index 100%
-rename from package/webkit/webkit-disable-docrebase.patch
-rename to package/webkit/webkit-0004-disable-docrebase.patch
-diff --git a/package/webkit/webkit-disable-tests.patch b/package/webkit/webkit-0005-disable-tests.patch
-similarity index 100%
-rename from package/webkit/webkit-disable-tests.patch
-rename to package/webkit/webkit-0005-disable-tests.patch
-diff --git a/package/webkit/webkit-execinfo_h.patch b/package/webkit/webkit-0006-execinfo_h.patch
-similarity index 100%
-rename from package/webkit/webkit-execinfo_h.patch
-rename to package/webkit/webkit-0006-execinfo_h.patch
-diff --git a/package/webkit/webkit-mips-dfg.patch b/package/webkit/webkit-0007-mips-dfg.patch
-similarity index 100%
-rename from package/webkit/webkit-mips-dfg.patch
-rename to package/webkit/webkit-0007-mips-dfg.patch
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ package/webkit/webkit-0008-support-bison-3.0.patch | 22 ++++++++++++++++++++++
+ 1 file changed, 22 insertions(+)
+ create mode 100644 package/webkit/webkit-0008-support-bison-3.0.patch
+
+diff --git a/package/webkit/webkit-0008-support-bison-3.0.patch b/package/webkit/webkit-0008-support-bison-3.0.patch
+new file mode 100644
+index 0000000..2b392a2
+--- /dev/null
++++ b/package/webkit/webkit-0008-support-bison-3.0.patch
+@@ -0,0 +1,22 @@
++ANGLE doesn't build with bison 3.0
++
++Author: allan.jensen at digia.com
++?https://bugs.webkit.org/show_bug.cgi?id=119798
++Reviewed by Antti Koivisto.
++Make glslang.y compatible with bison 3.0, by using %lex-param
++to set YYLEX_PARAM and getting rid of useless YYID macro.
++
++From upstream: http://trac.webkit.org/changeset/154109
++[Arnout: adapted to our older webkit version]
++Signed-off-by: Arnout Vandecaeppelle (Essensium/Mind) <arnout@mind.be>
++---
++Index: trunk/Source/ThirdParty/ANGLE/src/compiler/glslang.y
++===================================================================
++--- trunk/Source/ThirdParty/ANGLE/src/compiler/glslang.y	(revision 154108)
+++++ trunk/Source/ThirdParty/ANGLE/src/compiler/glslang.y	(revision 154109)
++@@ -48,4 +48,5 @@
++ %pure-parser
++ %parse-param {TParseContext* context}
+++%lex-param {YYLEX_PARAM}
++ 
++ %union {
 -- 
 1.8.4.rc3
