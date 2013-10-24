@@ -1,72 +1,38 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 24 Oct 2013 14:32:46 +0200
-Subject: [Buildroot] [PATCH v2] openobex: use sourceforge repository
-In-Reply-To: <1382616130-17139-1-git-send-email-arnaud.aujon@gmail.com>
-References: <1382616130-17139-1-git-send-email-arnaud.aujon@gmail.com>
-Message-ID: <5269136E.5040202@mind.be>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu, 24 Oct 2013 09:35:08 -0300
+Subject: [Buildroot] [PATCH] uboot-tools: fix license issues
+In-Reply-To: <52691180.9070908@mind.be>
+References: <1382452676-2514-1-git-send-email-gustavo@zacarias.com.ar>
+ <CAAXf6LW3ob7ev6VBpG3ajRR=aMSdgN0mM=O7a7wX2+cLd6fRBA@mail.gmail.com>
+ <20131023113944.2e370a3b@skate>
+ <CAAXf6LVeND62F7qgxLhcYcqw-QDy6QO+7+A7CZHB5gonp+AsTA@mail.gmail.com>
+ <2e6a07b0-2c59-47f7-a320-9f4ba3ddffe2@email.android.com>
+ <52691180.9070908@mind.be>
+Message-ID: <526913FC.7070905@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 24/10/13 14:02, Arnaud Aujon wrote:
-> openobex releases are now available on sourceforge, add VERSION_MAJOR
-> to be able to bump it more easily if necessary.
+On 10/24/2013 09:24 AM, Arnout Vandecappelle wrote:
+>  Now, for the specific case of U-Boot, we can do better: if _VERSION is
+> 2013.10 or larger, we can use the new license specification, else the
+> old one (and due to U-Boot's versioning policy we can just use sort;
+> custom has to be handled separately anyway).
 
-  Why sourceforge? The source is hosted on gitorious, so it would be 
-better to grab a tarball there I'd think. There's a tag for 1.5 so you 
-can get the tarball from
-https://gitorious.org/openobex/mainline/archive/1.5.tar.gz
+We don't use version choices any more, just a recommended version
+string, so matching might not be that easy.
+And there's custom tarball / git repo / etc too.
 
-  Regards,
-  Arnout
+>  But another issue is that the license that we specify is just plain
+> wrong (as so often): all the U-Boot versions contain code that is GPLv2
+> without + and that is BSD-3c, some also contain code that is eCos-2.0,
+> IBM-pibs, LGPL. So we should probably fix the license spec for U-Boot
+> regardless of where it comes from.
 
->
-> Signed-off-by: Arnaud Aujon <arnaud.aujon@gmail.com>
-> ---
-> Changes v1 -> v2: just add patch comment
-> ---
->   package/openobex/openobex.mk | 12 ++++++++++--
->   1 file changed, 10 insertions(+), 2 deletions(-)
->
-> diff --git a/package/openobex/openobex.mk b/package/openobex/openobex.mk
-> index 7195a26..4f383c8 100644
-> --- a/package/openobex/openobex.mk
-> +++ b/package/openobex/openobex.mk
-> @@ -4,8 +4,10 @@
->   #
->   ################################################################################
->
-> -OPENOBEX_VERSION = 1.5
-> -OPENOBEX_SITE = http://ftp.osuosl.org/pub/linux/bluetooth
-> +OPENOBEX_VERSION_MAJOR = 1.5
-> +OPENOBEX_VERSION = $(OPENOBEX_VERSION_MAJOR).0
-> +OPENOBEX_SOURCE = openobex-$(OPENOBEX_VERSION)-Source.zip
-> +OPENOBEX_SITE = http://downloads.sourceforge.net/project/openobex/openobex/$(OPENOBEX_VERSION_MAJOR)
->   # Libraries seems to be released under LGPLv2.1+,
->   # while other material is under GPLv2+.
->   OPENOBEX_LICENSE = GPLv2+/LGPLv2.1+
-> @@ -15,6 +17,12 @@ OPENOBEX_DEPENDENCIES = host-pkgconf
->   OPENOBEX_AUTORECONF = YES
->   OPENOBEX_INSTALL_STAGING = YES
->
-> +define OPENOBEX_EXTRACT_CMDS
-> ++       unzip -d $(@D) $(DL_DIR)/$(OPENOBEX_SOURCE)
-> ++       mv $(@D)/openobex-$(OPENOBEX_VERSION)-Source/* $(@D)
-> ++       $(RM) -r $(@D)/openobex-$(OPENOBEX_VERSION)-Source
-> +endef
-> +
->   OPENOBEX_CONF_OPT += \
->   	$(if $(BR2_ENABLE_DEBUG),--enable-debug) \
->   	$(if $(BR2_PACKAGE_OPENOBEX_APPS),--enable-apps) \
->
-
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+The U-Boot licenses that apply rely on the selected target too which
+complicates things.
+I don't think we want to become license police here other than "one or
+more of X, Y, ..., please do your homework".
+Regards.
