@@ -1,33 +1,36 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 25 Oct 2013 00:37:50 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
-	2013-10-23
-In-Reply-To: <20131024063007.59F8452C5D6@lolut.humanoidz.org>
-References: <20131024063007.59F8452C5D6@lolut.humanoidz.org>
-Message-ID: <5269A13E.2060905@mind.be>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Fri, 25 Oct 2013 00:50:55 +0200
+Subject: [Buildroot] [PATCH] xdriver_xf86-video-geode: only build on i386
+Message-ID: <1382655055-3520-1-git-send-email-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-  Thomas,
+This package builds with -m32. In buildroot, we don't have multilib
+support so only the 64-bit libraries are available, which can't be
+linked against these 32-bit object files.
 
-On 24/10/13 08:30, Thomas Petazzoni wrote:
->         arm |                      apr-1.4.8 | NOK |http://autobuild.buildroot.net/results/d033ffcbf8d18fc1d1916f892062869e86ae3453/
+I've tested this with the Sourcery and buildroot toolchains - neither
+works.
 
-  This one is doing BR2_SOFT_FLOAT=y with a hardfloat toolchain... Is 
-that a mistake in the autobuilder setup or is it a reminder that the 
-external toolchain infrastructure should get a test of the floating point 
-support?
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ package/x11r7/xdriver_xf86-video-geode/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-  Regards,
-  Arnout
-
+diff --git a/package/x11r7/xdriver_xf86-video-geode/Config.in b/package/x11r7/xdriver_xf86-video-geode/Config.in
+index 2b868d0..0b45fb1 100644
+--- a/package/x11r7/xdriver_xf86-video-geode/Config.in
++++ b/package/x11r7/xdriver_xf86-video-geode/Config.in
+@@ -5,6 +5,6 @@ config BR2_PACKAGE_XDRIVER_XF86_VIDEO_GEODE
+ 	select BR2_PACKAGE_XPROTO_RENDERPROTO
+ 	select BR2_PACKAGE_XPROTO_VIDEOPROTO
+ 	select BR2_PACKAGE_XPROTO_XPROTO
+-	depends on (BR2_i386 || BR2_x86_64)
++	depends on BR2_i386
+ 	help
+ 	  video driver for geode device
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+1.8.4.rc3
