@@ -1,32 +1,30 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 24 Oct 2013 13:13:57 -0300
-Subject: [Buildroot] [PATCH] ebtables: install ethertypes
-Message-ID: <1382631237-1826-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Thu, 24 Oct 2013 14:10:58 -0300
+Subject: [Buildroot] [PATCH] dosfstools: bump to version 3.0.23
+Message-ID: <1382634658-23893-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-It's handy and closes bug #6608.
-Thanks to Cassiano Martin <cassiano@idbinfo.com.br> for pointing it out.
-
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/ebtables/ebtables.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/dosfstools/dosfstools.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/ebtables/ebtables.mk b/package/ebtables/ebtables.mk
-index 116012c..c401f30 100644
---- a/package/ebtables/ebtables.mk
-+++ b/package/ebtables/ebtables.mk
-@@ -31,6 +31,7 @@ define EBTABLES_INSTALL_TARGET_CMDS
- 	done
- 	$(INSTALL) -m 0755 -D $(@D)/$(EBTABLES_SUBDIR)/ebtables \
- 		$(TARGET_DIR)/sbin/ebtables
-+	cp -f $(@D)/ethertypes $(TARGET_DIR)/etc/ethertypes
- endef
- endif
+diff --git a/package/dosfstools/dosfstools.mk b/package/dosfstools/dosfstools.mk
+index c94f680..6b27e80 100644
+--- a/package/dosfstools/dosfstools.mk
++++ b/package/dosfstools/dosfstools.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
+-DOSFSTOOLS_VERSION = 3.0.22
++DOSFSTOOLS_VERSION = 3.0.23
+ DOSFSTOOLS_SOURCE = dosfstools-$(DOSFSTOOLS_VERSION).tar.xz
+ DOSFSTOOLS_SITE = http://daniel-baumann.ch/files/software/dosfstools
+ DOSFSTOOLS_LICENSE = GPLv3+
 -- 
 1.8.1.5
