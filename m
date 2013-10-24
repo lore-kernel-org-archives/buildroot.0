@@ -1,14 +1,19 @@
 From: Arnaud Aujon <arnaud.aujon@gmail.com>
-Date: Thu, 24 Oct 2013 13:58:43 +0200
-Subject: [Buildroot]  [PATCH] openobex: use sourceforge repository
-Message-ID: <1382615923-16924-1-git-send-email-arnaud.aujon@gmail.com>
+Date: Thu, 24 Oct 2013 14:02:10 +0200
+Subject: [Buildroot]  [PATCH v2] openobex: use sourceforge repository
+Message-ID: <1382616130-17139-1-git-send-email-arnaud.aujon@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+openobex releases are now available on sourceforge, add VERSION_MAJOR
+to be able to bump it more easily if necessary.
+
 Signed-off-by: Arnaud Aujon <arnaud.aujon@gmail.com>
+---
+Changes v1 -> v2: just add patch comment
 ---
  package/openobex/openobex.mk | 12 ++++++++++--
  1 file changed, 10 insertions(+), 2 deletions(-)
