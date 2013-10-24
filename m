@@ -1,27 +1,35 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 24 Oct 2013 19:59:51 -0300
-Subject: [Buildroot] [PATCH] xdriver_xf86-video-geode: only build on i386
-In-Reply-To: <1382655055-3520-1-git-send-email-arnout@mind.be>
-References: <1382655055-3520-1-git-send-email-arnout@mind.be>
-Message-ID: <5269A667.8050800@zacarias.com.ar>
+Date: Thu, 24 Oct 2013 20:01:23 -0300
+Subject: [Buildroot] [PATCH] package/uclibc: fixup e500mc support
+Message-ID: <1382655683-17369-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 10/24/2013 07:50 PM, Arnout Vandecappelle (Essensium/Mind) wrote:
+The e500mc core has a classic FPU, SPE is a bad word.
+See: http://en.wikipedia.org/wiki/PowerPC_e500#e500mc
 
-> This package builds with -m32. In buildroot, we don't have multilib
-> support so only the 64-bit libraries are available, which can't be
-> linked against these 32-bit object files.
-> 
-> I've tested this with the Sourcery and buildroot toolchains - neither
-> works.
-> 
-> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/uclibc/Config.in | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Acked-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-
-(The geode is NSC's old embedded x86 chip with on-chip video so no
-64-bit variant and no standalone cards).
+diff --git a/package/uclibc/Config.in b/package/uclibc/Config.in
+index acf736a..2de0270 100644
+--- a/package/uclibc/Config.in
++++ b/package/uclibc/Config.in
+@@ -244,8 +244,8 @@ config BR2_UCLIBC_SPARC_TYPE
+ config BR2_UCLIBC_POWERPC_TYPE
+ 	string
+ 	depends on BR2_UCLIBC_TARGET_ARCH = "powerpc"
+-	default CLASSIC if !BR2_powerpc_8540 && !BR2_powerpc_8548 && !BR2_powerpc_e500mc
+-	default E500    if BR2_powerpc_8540 || BR2_powerpc_8548 || BR2_powerpc_e500mc
++	default CLASSIC if !BR2_powerpc_8540 && !BR2_powerpc_8548
++	default E500    if BR2_powerpc_8540 || BR2_powerpc_8548
+ 
+ config BR2_UCLIBC_X86_TYPE
+ 	string
+-- 
+1.8.1.5
