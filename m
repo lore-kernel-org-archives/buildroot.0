@@ -1,56 +1,33 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 24 Oct 2013 13:43:31 +0200
-Subject: [Buildroot] [PATCH] stress: disable documentation
-In-Reply-To: <CAAXf6LXmuFppc4473+KC73LZmUjgk4h32p9Lx_6hANKmudRdDw@mail.gmail.com>
-References: <1382571802-23306-1-git-send-email-arnout@mind.be>
- <CAAXf6LXmuFppc4473+KC73LZmUjgk4h32p9Lx_6hANKmudRdDw@mail.gmail.com>
-Message-ID: <526907E3.5020409@mind.be>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu, 24 Oct 2013 08:46:12 -0300
+Subject: [Buildroot] [PATCH] libcgroup: needs host-bison and host-flex
+Message-ID: <1382615172-12993-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 24/10/13 09:10, Thomas De Schampheleire wrote:
-> On Thu, Oct 24, 2013 at 1:43 AM, Arnout Vandecappelle (Essensium/Mind)
-> <arnout@mind.be> wrote:
->> It fails to build with my makeinfo version. Note that the autobuilders don't
->> see this, probably because they don't have makeinfo installed.
->>
->> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
->> ---
->>   package/stress/stress.mk | 5 ++++-
->>   1 file changed, 4 insertions(+), 1 deletion(-)
->>
->> diff --git a/package/stress/stress.mk b/package/stress/stress.mk
->> index 63efb66..b058031 100644
->> --- a/package/stress/stress.mk
->> +++ b/package/stress/stress.mk
->> @@ -17,7 +17,10 @@ STRESS_AUTORECONF = YES
->>   #
->>   # If the BR2_PREFER_STATIC_LIB is not defined, we have to specify
->>   # --disable-static explicitly to get stress linked dynamically.
->> +#
->> +# Also, disable documentation by undefining makeinfo
->>   STRESS_CONF_OPT = \
->> -       $(if $(BR2_PREFER_STATIC_LIB),,--disable-static)
->> +       $(if $(BR2_PREFER_STATIC_LIB),,--disable-static) \
->> +       MAKEINFO=:
->
-> What is the significance of this colon?
+Fixes:
+http://autobuild.buildroot.net/results/a77/a7738d6f99ba8189e6ffbd9fe245b1af7d28e3d9/
 
-  It's just an empty command. I could have used 'true' as well. In 
-practice, they're the same. However, POSIX defines 'true' to take no 
-arguments, while ':' ignores its arguments, so ':' is more pedantically 
-correct.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/libcgroup/libcgroup.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-
-  Regards,
-  Arnout
+diff --git a/package/libcgroup/libcgroup.mk b/package/libcgroup/libcgroup.mk
+index c2392e0..6d7ae54 100644
+--- a/package/libcgroup/libcgroup.mk
++++ b/package/libcgroup/libcgroup.mk
+@@ -9,7 +9,7 @@ LIBCGROUP_SOURCE = libcgroup-$(LIBCGROUP_VERSION).tar.bz2
+ LIBCGROUP_SITE = http://downloads.sourceforge.net/project/libcg/libcgroup/v.038
+ LIBCGROUP_LICENSE = LGPLv2.1
+ LIBCGROUP_LICENSE_FILES = COPYING
+-
++LIBCGROUP_DEPENDENCIES = host-bison host-flex
+ LIBCGROUP_INSTALL_STAGING = YES
+ 
+ # Undefining _FILE_OFFSET_BITS here because of a "bug" with glibc fts.h
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+1.8.1.5
