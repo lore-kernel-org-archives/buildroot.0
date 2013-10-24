@@ -1,203 +1,41 @@
 From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Thu, 24 Oct 2013 15:16:26 +0200
-Subject: [Buildroot] [PATCH 1/2] packages/Config.in: Alphabetical entries
-	sorting
-Message-ID: <1382620587-22563-1-git-send-email-maxime.hadjinlian@gmail.com>
+Date: Thu, 24 Oct 2013 15:16:27 +0200
+Subject: [Buildroot] [PATCH 2/2] packages/Config.in: Fix case on entries
+	titles
+In-Reply-To: <1382620587-22563-1-git-send-email-maxime.hadjinlian@gmail.com>
+References: <1382620587-22563-1-git-send-email-maxime.hadjinlian@gmail.com>
+Message-ID: <1382620587-22563-2-git-send-email-maxime.hadjinlian@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch moves :
-  "Filesystem and flash utilities" menu
-  "X applications" category
-  "Misc devices firmwares" menu
-  "JSON/XML" menu
-so they are in alphabetical order with the rest of the file.
 ---
- package/Config.in | 132 +++++++++++++++++++++++++++---------------------------
- 1 file changed, 66 insertions(+), 66 deletions(-)
+ package/Config.in | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/package/Config.in b/package/Config.in
-index 0e6f86c..ebbdeb5 100644
+index ebbdeb5..b1ceb16 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -129,6 +129,32 @@ source "package/vala/Config.in"
- source "package/yasm/Config.in"
- endmenu
+@@ -169,7 +169,7 @@ source "package/gnuplot/Config.in"
+ source "package/jhead/Config.in"
+ source "package/rrdtool/Config.in"
  
-+menu "Filesystem and flash utilities"
-+source "package/cifs-utils/Config.in"
-+source "package/cramfs/Config.in"
-+source "package/curlftpfs/Config.in"
-+source "package/dosfstools/Config.in"
-+source "package/e2fsprogs/Config.in"
-+source "package/ecryptfs-utils/Config.in"
-+source "package/exfat/Config.in"
-+source "package/exfat-utils/Config.in"
-+source "package/f2fs-tools/Config.in"
-+source "package/flashbench/Config.in"
-+source "package/genext2fs/Config.in"
-+source "package/genromfs/Config.in"
-+source "package/kobs-ng/Config.in"
-+source "package/makedevs/Config.in"
-+source "package/mtd/Config.in"
-+source "package/nfs-utils/Config.in"
-+source "package/ntfs-3g/Config.in"
-+source "package/squashfs/Config.in"
-+source "package/squashfs3/Config.in"
-+source "package/sshfs/Config.in"
-+source "package/sunxi-tools/Config.in"
-+source "package/unionfs/Config.in"
-+source "package/xfsprogs/Config.in"
-+endmenu
-+
- menu "Games"
- source "package/doom-wad/Config.in"
- source "package/gnuchess/Config.in"
-@@ -187,18 +213,6 @@ source "package/qt5/Config.in"
- source "package/x11r7/Config.in"
- source "package/weston/Config.in"
+-comment "graphic libraries"
++comment "Graphic libraries"
+ source "package/cegui06/Config.in"
+ source "package/directfb/Config.in"
+ source "package/directfb-examples/Config.in"
+@@ -241,7 +241,7 @@ source "package/liberation/Config.in"
+ source "package/libsexy/Config.in"
+ source "package/x11r7/xkeyboard-config/Config.in"
  
--comment "X libraries and helper libraries"
--source "package/liberation/Config.in"
--source "package/libsexy/Config.in"
--source "package/x11r7/xkeyboard-config/Config.in"
--
 -comment "X Window managers"
--source "package/blackbox/Config.in"
--source "package/enlightenment/Config.in"
--source "package/fluxbox/Config.in"
--source "package/matchbox/Config.in"
--source "package/metacity/Config.in"
--
- comment "X applications"
- source "package/alsamixergui/Config.in"
- source "package/docker/Config.in"
-@@ -222,42 +236,19 @@ source "package/xterm/Config.in"
- source "package/xvkbd/Config.in"
- endmenu
- 
--menu "Filesystem and flash utilities"
--source "package/cifs-utils/Config.in"
--source "package/cramfs/Config.in"
--source "package/curlftpfs/Config.in"
--source "package/dosfstools/Config.in"
--source "package/e2fsprogs/Config.in"
--source "package/ecryptfs-utils/Config.in"
--source "package/exfat/Config.in"
--source "package/exfat-utils/Config.in"
--source "package/f2fs-tools/Config.in"
--source "package/flashbench/Config.in"
--source "package/genext2fs/Config.in"
--source "package/genromfs/Config.in"
--source "package/kobs-ng/Config.in"
--source "package/makedevs/Config.in"
--source "package/mtd/Config.in"
--source "package/nfs-utils/Config.in"
--source "package/ntfs-3g/Config.in"
--source "package/squashfs/Config.in"
--source "package/squashfs3/Config.in"
--source "package/sshfs/Config.in"
--source "package/sunxi-tools/Config.in"
--source "package/unionfs/Config.in"
--source "package/xfsprogs/Config.in"
--endmenu
-+comment "X libraries and helper libraries"
-+source "package/liberation/Config.in"
-+source "package/libsexy/Config.in"
-+source "package/x11r7/xkeyboard-config/Config.in"
-+
-+comment "X Window managers"
-+source "package/blackbox/Config.in"
-+source "package/enlightenment/Config.in"
-+source "package/fluxbox/Config.in"
-+source "package/matchbox/Config.in"
-+source "package/metacity/Config.in"
- 
- menu "Hardware handling"
--menu "Misc devices firmwares"
--source "package/am33x-cm3/Config.in"
--source "package/b43-firmware/Config.in"
--source "package/linux-firmware/Config.in"
--source "package/rpi-firmware/Config.in"
--source "package/sunxi-boards/Config.in"
--source "package/ux500-firmware/Config.in"
--source "package/zd1211-firmware/Config.in"
--endmenu
- source "package/a10disp/Config.in"
- source "package/acpid/Config.in"
- source "package/cdrkit/Config.in"
-@@ -304,6 +295,15 @@ source "package/mdadm/Config.in"
- source "package/media-ctl/Config.in"
- source "package/memtester/Config.in"
- source "package/minicom/Config.in"
-+menu "Misc devices firmwares"
-+source "package/am33x-cm3/Config.in"
-+source "package/b43-firmware/Config.in"
-+source "package/linux-firmware/Config.in"
-+source "package/rpi-firmware/Config.in"
-+source "package/sunxi-boards/Config.in"
-+source "package/ux500-firmware/Config.in"
-+source "package/zd1211-firmware/Config.in"
-+endmenu
- source "package/nanocom/Config.in"
- source "package/neard/Config.in"
- source "package/ofono/Config.in"
-@@ -575,6 +575,26 @@ source "package/jsmin/Config.in"
- source "package/json-javascript/Config.in"
- endmenu
- 
-+menu "JSON/XML"
-+source "package/cjson/Config.in"
-+source "package/expat/Config.in"
-+source "package/ezxml/Config.in"
-+source "package/jansson/Config.in"
-+source "package/json-c/Config.in"
-+source "package/json-glib/Config.in"
-+source "package/libjson/Config.in"
-+source "package/libroxml/Config.in"
-+source "package/libxml-parser-perl/Config.in"
-+source "package/libxml2/Config.in"
-+source "package/libxmlpp/Config.in"
-+source "package/libxslt/Config.in"
-+source "package/libyaml/Config.in"
-+source "package/mxml/Config.in"
-+source "package/rapidjson/Config.in"
-+source "package/xerces/Config.in"
-+source "package/yajl/Config.in"
-+endmenu
-+
- menu "Multimedia"
- source "package/libdvbsi/Config.in"
- source "package/libdvdnav/Config.in"
-@@ -720,26 +740,6 @@ source "package/readline/Config.in"
- source "package/slang/Config.in"
- endmenu
- 
--menu "JSON/XML"
--source "package/cjson/Config.in"
--source "package/expat/Config.in"
--source "package/ezxml/Config.in"
--source "package/jansson/Config.in"
--source "package/json-c/Config.in"
--source "package/json-glib/Config.in"
--source "package/libjson/Config.in"
--source "package/libroxml/Config.in"
--source "package/libxml-parser-perl/Config.in"
--source "package/libxml2/Config.in"
--source "package/libxmlpp/Config.in"
--source "package/libxslt/Config.in"
--source "package/libyaml/Config.in"
--source "package/mxml/Config.in"
--source "package/rapidjson/Config.in"
--source "package/xerces/Config.in"
--source "package/yajl/Config.in"
--endmenu
--
- endmenu
- 
- menu "Miscellaneous"
++comment "X window managers"
+ source "package/blackbox/Config.in"
+ source "package/enlightenment/Config.in"
+ source "package/fluxbox/Config.in"
 -- 
 1.8.4.rc3
