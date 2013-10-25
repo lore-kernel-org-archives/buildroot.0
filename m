@@ -1,34 +1,32 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 25 Oct 2013 09:27:42 +0200
-Subject: [Buildroot] [git commit] libcgroup: depends on host-bison
-Message-ID: <20131025073058.20BC69BB67@busybox.osuosl.org>
+Date: Fri, 25 Oct 2013 09:15:27 +0200
+Subject: [Buildroot] [git commit] dosfstools: bump to version 3.0.23
+Message-ID: <20131025073057.0C8009BBAD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=45ff7712f390843b63e4899a476adfed759fa4a8
+commit: http://git.buildroot.net/buildroot/commit/?id=9f6b39bc420215ee2520991a3081f799bbd157ec
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes http://autobuild.buildroot.net/results/73d/73dddcc1aa68999ea496de148497f80bdb02c874
-
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libcgroup/libcgroup.mk |    2 +-
+ package/dosfstools/dosfstools.mk |    2 +-
  1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/libcgroup/libcgroup.mk b/package/libcgroup/libcgroup.mk
-index c2392e0..339deb3 100644
---- a/package/libcgroup/libcgroup.mk
-+++ b/package/libcgroup/libcgroup.mk
-@@ -9,7 +9,7 @@ LIBCGROUP_SOURCE = libcgroup-$(LIBCGROUP_VERSION).tar.bz2
- LIBCGROUP_SITE = http://downloads.sourceforge.net/project/libcg/libcgroup/v.038
- LIBCGROUP_LICENSE = LGPLv2.1
- LIBCGROUP_LICENSE_FILES = COPYING
--
-+LIBCGROUP_DEPENDENCIES = host-bison
- LIBCGROUP_INSTALL_STAGING = YES
+diff --git a/package/dosfstools/dosfstools.mk b/package/dosfstools/dosfstools.mk
+index c94f680..6b27e80 100644
+--- a/package/dosfstools/dosfstools.mk
++++ b/package/dosfstools/dosfstools.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- # Undefining _FILE_OFFSET_BITS here because of a "bug" with glibc fts.h
+-DOSFSTOOLS_VERSION = 3.0.22
++DOSFSTOOLS_VERSION = 3.0.23
+ DOSFSTOOLS_SOURCE = dosfstools-$(DOSFSTOOLS_VERSION).tar.xz
+ DOSFSTOOLS_SITE = http://daniel-baumann.ch/files/software/dosfstools
+ DOSFSTOOLS_LICENSE = GPLv3+
