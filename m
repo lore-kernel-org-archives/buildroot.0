@@ -1,69 +1,43 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Fri, 25 Oct 2013 18:50:35 +0200
-Subject: [Buildroot] [PATCH 1/1] Added pyusb as a package
-In-Reply-To: <1382705646-20583-1-git-send-email-wzab01@gmail.com>
-References: <1382705646-20583-1-git-send-email-wzab01@gmail.com>
-Message-ID: <1256826d-31b9-4b85-8834-35694e372fac@email.android.com>
+Date: Fri, 25 Oct 2013 18:46:35 +0200
+Subject: [Buildroot] [RFC] pkg-python infrastructure
+In-Reply-To: <OFCFB88498.0047424B-ON86257C0F.0057371F-86257C0F.0057386F@rockwellcollins.com>
+References: <OFCFB88498.0047424B-ON86257C0F.0057371F-86257C0F.0057386F@rockwellcollins.com>
+Message-ID: <f4e75980-2ff3-4edf-88a3-866abaad9ad1@email.android.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-"Wojciech M. Zabolotny" <wzab01@gmail.com> wrote:
->Signed-off-by: Wojciech M. Zabolotny <wzab01@gmail.com>
->---
-> package/Config.in       |  1 +
-> package/pyusb/Config.in | 10 ++++++++++
-> package/pyusb/pyusb.mk  | 22 ++++++++++++++++++++++
-> 3 files changed, 33 insertions(+)
-> create mode 100644 package/pyusb/Config.in
-> create mode 100644 package/pyusb/pyusb.mk
+Ryan Barnett <rjbarnet@rockwellcollins.com> wrote:
+>A while back (about a week ago) - Gustavoz Zacarias, Thomas Petazzoni, and 
+>myself - were having a conversation on the IRC about creating a new 
+>package type for handling the builds of python packages. If I recall 
+>correctly, this is what we discussed. I would like to just have some 
+>record on how we want to handle building python packages.
 >
->diff --git a/package/Config.in b/package/Config.in
->index 0e6f86c..591cc04 100644
->--- a/package/Config.in
->+++ b/package/Config.in
->@@ -404,6 +404,7 @@ source "package/python-pyzmq/Config.in"
-> source "package/python-serial/Config.in"
-> source "package/python-setuptools/Config.in"
-> source "package/python-thrift/Config.in"
->+source "package/pyusb/Config.in"
-> endmenu
-> endif
-> source "package/python3/Config.in"
->diff --git a/package/pyusb/Config.in b/package/pyusb/Config.in
->new file mode 100644
->index 0000000..b0c714a
->--- /dev/null
->+++ b/package/pyusb/Config.in
->@@ -0,0 +1,10 @@
->+config BR2_PACKAGE_PYUSB
->+	bool "pyusb"
->+	depends on BR2_PACKAGE_PYTHON
->+	select BR2_PACKAGE_LIBUSB
->+	help
->+          The PyUSB module provides for Python easy access to the host
->+          machine's Universal Serial Bus (USB) system.
->+
->+	  http://sourceforge.net/apps/trac/pyusb/
->+
->diff --git a/package/pyusb/pyusb.mk b/package/pyusb/pyusb.mk
->new file mode 100644
->index 0000000..fde10c9
->--- /dev/null
->+++ b/package/pyusb/pyusb.mk
->@@ -0,0 +1,22 @@
->+################################################################################
->+#
->+# pyusb
->+#
->+################################################################################
->+
->+PYUSB_VERSION = 0546cad8980783c39f96db717005a550059b730f
->+PYUSB_SITE = git://github.com/walac/pyusb/
+>Thomas P and Gustavoz - please correct/expand on any points that I may be 
+>missing.
+>
+>pkg-python infrastructure
+>-------------------------
+>
+> * Would add a new makefile defining generic build steps for python 
+>packages under package/pkg-python.mk.
+>
+> * Would support building for Python 2.7 and Python 3+.
+>
+> * Would ensure that cross-compiling of python packages is handled 
+>correctly.
+>
+> * Would support setup.py and setuptools packages.
+>
+>I don't know when I will be able to get around to doing this but I would 
+>like to at least capture the points that were made. Also anyone else is 
+>welcome to pick up this work too :)
 
-Packages that come from github can be downloaded directly as a tarball. This has the advantage of not needing git. Please refer to the buildroot manual for instructions on this.
+FWIW, I'm definitely in favor of such an infrastructure...
 
 Best regards,
 Thomas
