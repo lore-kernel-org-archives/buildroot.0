@@ -1,29 +1,40 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 25 Oct 2013 09:14:57 +0200
-Subject: [Buildroot] Buildroot talk at ELCE
-Message-ID: <87ob6d7rf2.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 25 Oct 2013 09:18:47 +0200
+Subject: [Buildroot] Buildroot Developpers' Day 2013
+In-Reply-To: <CAAXf6LUH86pioWLURGEfETkanHOj3iF9n2yo2EaxtK2bjLs8Sg@mail.gmail.com>
+References: <20131013223941.GD16563@free.fr> <20131017143209.036bb603@skate>
+ <CAAXf6LUH86pioWLURGEfETkanHOj3iF9n2yo2EaxtK2bjLs8Sg@mail.gmail.com>
+Message-ID: <20131025091847.3f3b6e6b@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-FYI,
+Dear Thomas De Schampheleire,
 
-As you might be aware, I'm doing a talk titled 'Buildroot: What is new'
-this afternoon at the Embedded Linux Conference Europe. See the link
-below for the slides:
+On Fri, 25 Oct 2013 08:38:28 +0200, Thomas De Schampheleire wrote:
 
-http://peter.korsgaard.com/buildroot-whats-new-elce2013.pdf
+> > Also, do we want to start a Google Hangout session during the meeting,
+> > to allow people to follow the discussions remotely? Is there any
+> > interest in doing that, from the perspective of people that would be
+> > interested in participating remotely?
+> 
+> If I have some time, I will certainly join the Hangout, but I cannot
+> make any promises about if and when this happens.
+> How does this work, are hangouts 'open' all the time? Is there an
+> invite needed? Where will you post the reference?
 
-I'm trying to make it clear that Buildroot is very much alive, with lots
-of activity.
+So far, I've only done "private" hangouts by inviting a bunch of
+people. Maybe there is something to make "public" hangouts, but I've
+never tried. So what I believe we're going to do is that the people who
+want to join the hangout should say so on IRC, and I'll invite them. I
+will just name their Google account e-mail to do so.
 
-Most items in the slides have already been discussed, but I would very
-much appreciate if you could take a quick look and let me know if I
-missed something important or said anything stupid.
+Best regards,
 
-Thanks!
-
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
