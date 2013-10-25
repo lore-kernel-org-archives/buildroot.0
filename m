@@ -1,10 +1,10 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 25 Oct 2013 09:22:53 +0200
-Subject: [Buildroot] [PATCH] libedit: needs mmu
-In-Reply-To: <1382634876-7742-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Thu, 24 Oct 2013 14:14:36 -0300")
-References: <1382634876-7742-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87bo2d7r1u.fsf@dell.be.48ers.dk>
+Date: Fri, 25 Oct 2013 09:27:03 +0200
+Subject: [Buildroot] [PATCH] package/uclibc: fixup e500mc support
+In-Reply-To: <1382655683-17369-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Thu, 24 Oct 2013 20:01:23 -0300")
+References: <1382655683-17369-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <877gd17quw.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,9 +13,8 @@ To: buildroot@busybox.net
 
 >>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
- > Fixes:
- > http://autobuild.buildroot.net/results/211/2116ffb8e74073fd415bfdea748731b5b8a876d7/
- > (Not just the examples, also vi.c)
+ > The e500mc core has a classic FPU, SPE is a bad word.
+ > See: http://en.wikipedia.org/wiki/PowerPC_e500#e500mc
 
  > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
