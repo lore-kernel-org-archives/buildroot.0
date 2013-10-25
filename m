@@ -1,30 +1,29 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri, 25 Oct 2013 07:33:57 +0000 (UTC)
-Subject: [Buildroot] [Bug 6608] ebtables missing ethertypes - fix included
-In-Reply-To: <bug-6608-163@https.bugs.busybox.net/>
-References: <bug-6608-163@https.bugs.busybox.net/>
-Message-ID: <20131025073357.6DC6F9BBAC@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 25 Oct 2013 09:41:41 +0200
+Subject: [Buildroot] Buildroot talk at ELCE
+In-Reply-To: <20131025072957.GY4164@tarshish> (Baruch Siach's message of "Fri, 
+ 25 Oct 2013 10:29:57 +0300")
+References: <87ob6d7rf2.fsf@dell.be.48ers.dk> <20131025072957.GY4164@tarshish>
+Message-ID: <87ppqt6bm2.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=6608
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
-Peter Korsgaard <jacmet@uclibc.org> changed:
+Hi,
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|                            |FIXED
+ >> Most items in the slides have already been discussed, but I would very
+ >> much appreciate if you could take a quick look and let me know if I
+ >> missed something important or said anything stupid.
 
---- Comment #1 from Peter Korsgaard <jacmet@uclibc.org> 2013-10-25 07:33:56 UTC ---
-Fixed in git, thanks:
+ > Just a small nit. Since you mention Tensilica in the slides I thought
+ > it's worth mentioning that Tensilica is no fully merged into Cadence,
+ > just like ARC is merged into Synosys.
 
-http://git.buildroot.net/buildroot/commit/?id=d19e39ca25f0e7
+Ahh, ok - Will change. Thanks!
 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Bye, Peter Korsgaard
