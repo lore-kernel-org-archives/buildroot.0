@@ -1,61 +1,55 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 25 Oct 2013 08:10:23 +0200
-Subject: [Buildroot] [git commit] Makefile: revert BUILD_DIR export
-Message-ID: <20131025061146.214CC9BB9A@busybox.osuosl.org>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Fri, 25 Oct 2013 08:22:38 +0200
+Subject: [Buildroot] [PATCH 1/2] packages/Config.in: Alphabetical
+	entries sorting
+In-Reply-To: <CAGduivyTD7r7PWt4CpNAAdmhgh_O8Y0hJBatTLcsajGa8gPz5w@mail.gmail.com>
+References: <1382620587-22563-1-git-send-email-maxime.hadjinlian@gmail.com>
+ <CAAXf6LWFbCs8VTFyn_jzbW-EPcx8Waz10Ue0Cuug0VCQVqFHMA@mail.gmail.com>
+ <CAGduivyTD7r7PWt4CpNAAdmhgh_O8Y0hJBatTLcsajGa8gPz5w@mail.gmail.com>
+Message-ID: <CAAXf6LURr3b-4faaxpRTiR1=jTakx6n16EWGa6Mn88R==UOCAg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=4513d785156f87707687081aeb8582c56b684cc5
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Maxime,
 
-Revert commit feb0877015cc0c644129e69276b3000c83742750
-U-Boot uses $(BUILD_DIR) and causes issues, other packages might as
-well. Fixes:
-http://autobuild.buildroot.net/results/1f6/1f65289d5c284caa82a4e9137613f792797ee08a/
-http://autobuild.buildroot.net/results/6a5/6a5f77483e908dc96d08824cf9113402431bace7/
+On Thu, Oct 24, 2013 at 4:11 PM, Maxime Hadjinlian
+<maxime.hadjinlian@gmail.com> wrote:
+> On Thu, Oct 24, 2013 at 3:36 PM, Thomas De Schampheleire
+> <patrickdepinguin@gmail.com> wrote:
+>>
+>> I can follow all changes, except this one: the 'Misc devices
+>> firmwares' menu is a submenu, between normal packages. Moving that in
+>> alphabetical order between normal packages seems very odd to me.
+> I did it after looking at the "Interpreter languages and scripting"
+> menu where the "Lua libraries/modules" would appear in order.
 
-It should probably be named somewhat more uniquely.
+There it makes sense: the 'Lua libraries/modules' submenu comes
+immediately after the 'lua' package (that appears in alpabetical order
+with the other packages in that menu). Moving the Lua libraries menu
+away from the lua package is not logical.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- Makefile                         |    1 -
- docs/manual/customize-rootfs.txt |    3 +--
- 2 files changed, 1 insertions(+), 3 deletions(-)
+>
+>> Especially because the name 'Misc' does not carry a real meaning.
+>>
+>> By the way, I don't think that 'firmwares' is correct English, the
+>> '-ware' already is plural, so it should be 'Misc devices firmware' or
+>> maybe plain 'Firmware' (are there other firmware packages in buildroot
+>> that are not part of this menu?).
+> After a very quick search, it seems you are right about the 's' of firmware.
+> About the naming of the menu, we already are in Hardware menu, so
+> talking about "devices" may seem redundant, and the Misc is maybe too
+> cumbersome. Although, a simple "Firmware" would not be very friendly.
+> How about settling on "Firmware's Devices" ? Give or take the casing.
 
-diff --git a/Makefile b/Makefile
-index 9528703..f266e2d 100644
---- a/Makefile
-+++ b/Makefile
-@@ -291,7 +291,6 @@ export STAGING_DIR
- export HOST_DIR
- export BINARIES_DIR
- export BASE_DIR
--export BUILD_DIR
- 
- ################################################################################
- #
-diff --git a/docs/manual/customize-rootfs.txt b/docs/manual/customize-rootfs.txt
-index 158389c..49a6b4b 100644
---- a/docs/manual/customize-rootfs.txt
-+++ b/docs/manual/customize-rootfs.txt
-@@ -41,7 +41,6 @@ there are a few ways to customize the resulting target filesystem.
-     - +BUILDROOT_CONFIG+: the path to the Buildroot .config file
-     - +HOST_DIR+, +STAGING_DIR+, +TARGET_DIR+: see
-       xref:generic-package-reference[]
--    - +BUILD_DIR+: the directory where packages are extracted and built
-     - +BINARIES_DIR+: the place where all binary files (aka images) are
-       stored
-     - +BASE_DIR+: the base output directory
-@@ -80,7 +79,7 @@ in one of these _post-image scripts_ will require special handling
- Just like for the _post-build scripts_ mentioned above, you also have
- access to the following environment variables from your _post-image
- scripts_: +BUILDROOT_CONFIG+, +HOST_DIR+, +STAGING_DIR+, +TARGET_DIR+,
--+BUILD_DIR+, +BINARIES_DIR+ and +BASE_DIR+.
-++BINARIES_DIR+ and +BASE_DIR+.
- 
- Additionally, each of the +BR2_ROOTFS_POST_BUILD_SCRIPT+ and
- +BR2_ROOTFS_POST_IMAGE_SCRIPT+ scripts will be passed the arguments
+Then this should be 'Device firmware'
+because "Firmware's Devices" means "The devices of firmware" which is
+not what you intend to say.
+
+I'm not convinced there exists firmware for something else than a
+device though. For me 'Firmware' or 'Device firmware' are both ok.
+
+Best regards,
+Thomas
