@@ -1,45 +1,181 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Fri, 25 Oct 2013 10:48:21 +0200
-Subject: [Buildroot] [PATCH 1/2] packages/Config.in: Alphabetical
-	entries sorting
-In-Reply-To: <CAGduivyywHPHmCz-F9U_axK5Joz2jrdrd=Ssc14jnhWZFNwyng@mail.gmail.com>
-References: <1382620587-22563-1-git-send-email-maxime.hadjinlian@gmail.com>
- <CAAXf6LWFbCs8VTFyn_jzbW-EPcx8Waz10Ue0Cuug0VCQVqFHMA@mail.gmail.com>
- <CAGduivyTD7r7PWt4CpNAAdmhgh_O8Y0hJBatTLcsajGa8gPz5w@mail.gmail.com>
- <CAAXf6LURr3b-4faaxpRTiR1=jTakx6n16EWGa6Mn88R==UOCAg@mail.gmail.com>
- <CAGduivyywHPHmCz-F9U_axK5Joz2jrdrd=Ssc14jnhWZFNwyng@mail.gmail.com>
-Message-ID: <CAAXf6LU-7FuKBUeb+T8XdusNwma0B_Y6Vp8cbnCQk9oJ=An6PQ@mail.gmail.com>
+From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Date: Fri, 25 Oct 2013 11:12:43 +0200
+Subject: [Buildroot] [PATCH v2 1/2] packages/Config.in: Alphabetical entries
+	sorting
+Message-ID: <1382692364-25912-1-git-send-email-maxime.hadjinlian@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Oct 25, 2013 at 10:32 AM, Maxime Hadjinlian
-<maxime.hadjinlian@gmail.com> wrote:
-> On Fri, Oct 25, 2013 at 8:22 AM, Thomas De Schampheleire
+This patch moves :
+  "Filesystem and flash utilities" menu
+  "X applications" category
+  "JSON/XML" menu
+so they are in alphabetical order with the rest of the file.
 
->>>> By the way, I don't think that 'firmwares' is correct English, the
->>>> '-ware' already is plural, so it should be 'Misc devices firmware' or
->>>> maybe plain 'Firmware' (are there other firmware packages in buildroot
->>>> that are not part of this menu?).
->>> After a very quick search, it seems you are right about the 's' of firmware.
->>> About the naming of the menu, we already are in Hardware menu, so
->>> talking about "devices" may seem redundant, and the Misc is maybe too
->>> cumbersome. Although, a simple "Firmware" would not be very friendly.
->>> How about settling on "Firmware's Devices" ? Give or take the casing.
->>
->> Then this should be 'Device firmware'
->> because "Firmware's Devices" means "The devices of firmware" which is
->> not what you intend to say.
->>
->> I'm not convinced there exists firmware for something else than a
->> device though. For me 'Firmware' or 'Device firmware' are both ok.
-> I just though "Firmware" to be a bit blunt, but I am not really good
-> at wordings as you may have seen so I am OK with whatever is wanted.
+Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+---
+Changes v1 -> v2:
+  - Remove the move of "Misc devices firmwares" (suggested by Thomas De
+    Schampheleire)
+---
+ package/Config.in | 114 +++++++++++++++++++++++++++---------------------------
+ 1 file changed, 57 insertions(+), 57 deletions(-)
 
-I'm looking forward to the opinion of others. I am just one of the
-developers, like you.
-
-Best regards,
-Thomas
+diff --git a/package/Config.in b/package/Config.in
+index 0e6f86c..7147a0f 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -129,6 +129,32 @@ source "package/vala/Config.in"
+ source "package/yasm/Config.in"
+ endmenu
+ 
++menu "Filesystem and flash utilities"
++source "package/cifs-utils/Config.in"
++source "package/cramfs/Config.in"
++source "package/curlftpfs/Config.in"
++source "package/dosfstools/Config.in"
++source "package/e2fsprogs/Config.in"
++source "package/ecryptfs-utils/Config.in"
++source "package/exfat/Config.in"
++source "package/exfat-utils/Config.in"
++source "package/f2fs-tools/Config.in"
++source "package/flashbench/Config.in"
++source "package/genext2fs/Config.in"
++source "package/genromfs/Config.in"
++source "package/kobs-ng/Config.in"
++source "package/makedevs/Config.in"
++source "package/mtd/Config.in"
++source "package/nfs-utils/Config.in"
++source "package/ntfs-3g/Config.in"
++source "package/squashfs/Config.in"
++source "package/squashfs3/Config.in"
++source "package/sshfs/Config.in"
++source "package/sunxi-tools/Config.in"
++source "package/unionfs/Config.in"
++source "package/xfsprogs/Config.in"
++endmenu
++
+ menu "Games"
+ source "package/doom-wad/Config.in"
+ source "package/gnuchess/Config.in"
+@@ -187,18 +213,6 @@ source "package/qt5/Config.in"
+ source "package/x11r7/Config.in"
+ source "package/weston/Config.in"
+ 
+-comment "X libraries and helper libraries"
+-source "package/liberation/Config.in"
+-source "package/libsexy/Config.in"
+-source "package/x11r7/xkeyboard-config/Config.in"
+-
+-comment "X Window managers"
+-source "package/blackbox/Config.in"
+-source "package/enlightenment/Config.in"
+-source "package/fluxbox/Config.in"
+-source "package/matchbox/Config.in"
+-source "package/metacity/Config.in"
+-
+ comment "X applications"
+ source "package/alsamixergui/Config.in"
+ source "package/docker/Config.in"
+@@ -222,31 +236,17 @@ source "package/xterm/Config.in"
+ source "package/xvkbd/Config.in"
+ endmenu
+ 
+-menu "Filesystem and flash utilities"
+-source "package/cifs-utils/Config.in"
+-source "package/cramfs/Config.in"
+-source "package/curlftpfs/Config.in"
+-source "package/dosfstools/Config.in"
+-source "package/e2fsprogs/Config.in"
+-source "package/ecryptfs-utils/Config.in"
+-source "package/exfat/Config.in"
+-source "package/exfat-utils/Config.in"
+-source "package/f2fs-tools/Config.in"
+-source "package/flashbench/Config.in"
+-source "package/genext2fs/Config.in"
+-source "package/genromfs/Config.in"
+-source "package/kobs-ng/Config.in"
+-source "package/makedevs/Config.in"
+-source "package/mtd/Config.in"
+-source "package/nfs-utils/Config.in"
+-source "package/ntfs-3g/Config.in"
+-source "package/squashfs/Config.in"
+-source "package/squashfs3/Config.in"
+-source "package/sshfs/Config.in"
+-source "package/sunxi-tools/Config.in"
+-source "package/unionfs/Config.in"
+-source "package/xfsprogs/Config.in"
+-endmenu
++comment "X libraries and helper libraries"
++source "package/liberation/Config.in"
++source "package/libsexy/Config.in"
++source "package/x11r7/xkeyboard-config/Config.in"
++
++comment "X Window managers"
++source "package/blackbox/Config.in"
++source "package/enlightenment/Config.in"
++source "package/fluxbox/Config.in"
++source "package/matchbox/Config.in"
++source "package/metacity/Config.in"
+ 
+ menu "Hardware handling"
+ menu "Misc devices firmwares"
+@@ -575,6 +575,26 @@ source "package/jsmin/Config.in"
+ source "package/json-javascript/Config.in"
+ endmenu
+ 
++menu "JSON/XML"
++source "package/cjson/Config.in"
++source "package/expat/Config.in"
++source "package/ezxml/Config.in"
++source "package/jansson/Config.in"
++source "package/json-c/Config.in"
++source "package/json-glib/Config.in"
++source "package/libjson/Config.in"
++source "package/libroxml/Config.in"
++source "package/libxml-parser-perl/Config.in"
++source "package/libxml2/Config.in"
++source "package/libxmlpp/Config.in"
++source "package/libxslt/Config.in"
++source "package/libyaml/Config.in"
++source "package/mxml/Config.in"
++source "package/rapidjson/Config.in"
++source "package/xerces/Config.in"
++source "package/yajl/Config.in"
++endmenu
++
+ menu "Multimedia"
+ source "package/libdvbsi/Config.in"
+ source "package/libdvdnav/Config.in"
+@@ -720,26 +740,6 @@ source "package/readline/Config.in"
+ source "package/slang/Config.in"
+ endmenu
+ 
+-menu "JSON/XML"
+-source "package/cjson/Config.in"
+-source "package/expat/Config.in"
+-source "package/ezxml/Config.in"
+-source "package/jansson/Config.in"
+-source "package/json-c/Config.in"
+-source "package/json-glib/Config.in"
+-source "package/libjson/Config.in"
+-source "package/libroxml/Config.in"
+-source "package/libxml-parser-perl/Config.in"
+-source "package/libxml2/Config.in"
+-source "package/libxmlpp/Config.in"
+-source "package/libxslt/Config.in"
+-source "package/libyaml/Config.in"
+-source "package/mxml/Config.in"
+-source "package/rapidjson/Config.in"
+-source "package/xerces/Config.in"
+-source "package/yajl/Config.in"
+-endmenu
+-
+ endmenu
+ 
+ menu "Miscellaneous"
+-- 
+1.8.4.rc3
