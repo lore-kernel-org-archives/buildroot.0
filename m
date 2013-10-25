@@ -1,72 +1,77 @@
-From: =?ISO-8859-1?Q?J=E9r=F4me?= Pouiller <jezz@sysmic.org>
-Date: Fri, 25 Oct 2013 14:46:49 +0200
-Subject: [Buildroot] [RFC] Continuous integration
-Message-ID: <1464774.i3ScgRtXEf@sagittae>
+From: Wojciech M. Zabolotny <wzab01@gmail.com>
+Date: Fri, 25 Oct 2013 14:54:06 +0200
+Subject: [Buildroot] [PATCH 1/1] Added pyusb as a package
+Message-ID: <1382705646-20583-1-git-send-email-wzab01@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Signed-off-by: Wojciech M. Zabolotny <wzab01@gmail.com>
+---
+ package/Config.in       |  1 +
+ package/pyusb/Config.in | 10 ++++++++++
+ package/pyusb/pyusb.mk  | 22 ++++++++++++++++++++++
+ 3 files changed, 33 insertions(+)
+ create mode 100644 package/pyusb/Config.in
+ create mode 100644 package/pyusb/pyusb.mk
 
-Unfortunately, I am really not sure to be able to follow Buildroot 
-Developpers' Day (even with Google Hangout). However, I would like to 
-expose one my ideas about patch integration scalability problem.
-
-IMHO, current autobuilder is great to find corner cases, but for simple 
-case, I think we can do better. I suggest to build ALL packages with a 
-selection of representative reference configurations (uclibc, glibc, 
-static, w/o IPv6, w/o MMU...). To make sense, this autobuilder should 
-pool git changes and compile in priority new packages, modified package 
-and packages which depends (directly or indirectly) from modified 
-packages. 
-
-Ideally, it should be able to give test results for branches before they 
-would be merged.
-
-It should also detect regression and send necessary alert. It would be 
-better if it may identify commit and author of a regression.
-
-I begin to wrote an autobuilder that would looks like that. You can sees
-results there : http://sysmic.org/~jezz/autobuilder/ (at beginning, it 
-was mainly for my personal needs)
-
-It use a set of reference configurations which normally include all 
-packages (at least as much as possible). It compute list of packages and 
-their directories, list of targets for each configuration and 
-dependencies of of each packages for each configuration. It is able to 
-compute reverse dependencies and recursive dependencies.
-
-Next, it ask to git modification time for each package directory. It is 
-able to detect couple of packages/configuration which build time is 
-older than package directory modification time.
-
-It compute list of packages/configuration couple and sort it : never 
-built first, modified next, a dependency modified after and finally 
-other packages, ordered by last build time. Job queue is available 
-there: http://sysmic.org/~jezz/autobuilder/jobqueue.html (/!\ 4Mo).
-
-It build elements of job list until change is detected on git repository 
-(in this case, it rebuild job queue).
-
-For performance reasons, I don't run make clean between each package. I 
-know it may be problematic for reproducibility. However, script will run 
-make clean when it is about to rebuild a package that was not modified 
-since last build and output directory had not been cleaned since last 
-build (= same package with same output directory).
-
-Finally, it dump result. It is able to detect when a package has 
-compiled correctly, or it has failed or if a dependency has failed (and 
-in this case, it shows problematic package).
-
-Code is available there: 
-   https://github.com/jerome-pouiller/br-continuous
-
-
-
-
+diff --git a/package/Config.in b/package/Config.in
+index 0e6f86c..591cc04 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -404,6 +404,7 @@ source "package/python-pyzmq/Config.in"
+ source "package/python-serial/Config.in"
+ source "package/python-setuptools/Config.in"
+ source "package/python-thrift/Config.in"
++source "package/pyusb/Config.in"
+ endmenu
+ endif
+ source "package/python3/Config.in"
+diff --git a/package/pyusb/Config.in b/package/pyusb/Config.in
+new file mode 100644
+index 0000000..b0c714a
+--- /dev/null
++++ b/package/pyusb/Config.in
+@@ -0,0 +1,10 @@
++config BR2_PACKAGE_PYUSB
++	bool "pyusb"
++	depends on BR2_PACKAGE_PYTHON
++	select BR2_PACKAGE_LIBUSB
++	help
++          The PyUSB module provides for Python easy access to the host
++          machine's Universal Serial Bus (USB) system.
++
++	  http://sourceforge.net/apps/trac/pyusb/
++
+diff --git a/package/pyusb/pyusb.mk b/package/pyusb/pyusb.mk
+new file mode 100644
+index 0000000..fde10c9
+--- /dev/null
++++ b/package/pyusb/pyusb.mk
+@@ -0,0 +1,22 @@
++################################################################################
++#
++# pyusb
++#
++################################################################################
++
++PYUSB_VERSION = 0546cad8980783c39f96db717005a550059b730f
++PYUSB_SITE = git://github.com/walac/pyusb/
++PYUSB_LICENSE_FILES = LICENSE
++
++PYUSB_DEPENDENCIES = python libusb
++
++define PYUSB_INSTALL_TARGET_CMDS
++	(cd $(@D); $(HOST_DIR)/usr/bin/python setup.py install \
++		--prefix=$(TARGET_DIR)/usr)
++endef
++
++define PYUSB_UNINSTALL_TARGET_CMDS
++	rm -rf $(TARGET_DIR)/usr/lib/python*/site-packages/pyusb*
++endef
++
++$(eval $(generic-package))
 -- 
-J?r?me Pouiller, Sysmic
-Embedded Linux specialist
-http://www.sysmic.fr
+1.8.4.rc3
