@@ -1,34 +1,62 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 25 Oct 2013 12:22:54 +0200
-Subject: [Buildroot] [git commit] gnutls: security bump to version 3.2.5
-Message-ID: <20131025103122.91C569BBB5@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 25 Oct 2013 12:47:46 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2013-10-24
+In-Reply-To: <526A26EB.7010804@mind.be>
+References: <20131025063005.51B7752C609@lolut.humanoidz.org>
+ <526A26EB.7010804@mind.be>
+Message-ID: <20131025124746.0dbffd63@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=71af8d275c87812e295f1772dc8183a5ae96f989
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Arnout Vandecappelle,
 
-Fix for GNUTLS-SA-2013-3.
+On Fri, 25 Oct 2013 10:08:11 +0200, Arnout Vandecappelle wrote:
+> On 25/10/13 08:30, Thomas Petazzoni wrote:
+> >                      mpd-0.17.6 | 11
+> 
+>   This is a download failure of the package source. The weird thing is 
+> that I could get it from here yesterday evening, so I expected this error 
+> to go away...
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/gnutls/gnutls.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+Something weird going on: I get a connection refused when I access the
+musicpd.org web server from my build server, but not from other
+locations:
 
-diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
-index 5a05f65..1e3e267 100644
---- a/package/gnutls/gnutls.mk
-+++ b/package/gnutls/gnutls.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GNUTLS_VERSION = 3.2.4
-+GNUTLS_VERSION = 3.2.5
- GNUTLS_SOURCE = gnutls-$(GNUTLS_VERSION).tar.xz
- GNUTLS_SITE = ftp://ftp.gnutls.org/gcrypt/gnutls/v3.2
- GNUTLS_LICENSE = GPLv3+ LGPLv2.1+
+# From machine 1 (Linux Foundation network)
+
+$ telnet 78.46.162.86 80
+Trying 78.46.162.86...
+Connected to 78.46.162.86.
+Escape character is '^]'.
+GET /
+[...]
+
+# From machine 2 (somewhere on the Net)
+
+$ telnet 78.46.162.86 80
+Trying 78.46.162.86...
+Connected to 78.46.162.86.
+Escape character is '^]'.
+GET /
+[...]
+
+# From build server
+
+$ telnet 78.46.162.86 80
+Trying 78.46.162.86...
+telnet: Unable to connect to remote host: Connection refused
+
+Not sure what's going on... They blacklisted the build server IP address
+because I'm downloading things too many times?
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
