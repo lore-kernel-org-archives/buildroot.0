@@ -1,77 +1,54 @@
-From: Wojciech M. Zabolotny <wzab01@gmail.com>
-Date: Fri, 25 Oct 2013 14:54:06 +0200
-Subject: [Buildroot] [PATCH 1/1] Added pyusb as a package
-Message-ID: <1382705646-20583-1-git-send-email-wzab01@gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Fri, 25 Oct 2013 10:10:22 -0300
+Subject: [Buildroot] [PATCH 1/2] arch/Config.in: introduce
+	BR2_KERNEL_64_USERLAND_32 symbol
+Message-ID: <1382706623-5593-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Wojciech M. Zabolotny <wzab01@gmail.com>
----
- package/Config.in       |  1 +
- package/pyusb/Config.in | 10 ++++++++++
- package/pyusb/pyusb.mk  | 22 ++++++++++++++++++++++
- 3 files changed, 33 insertions(+)
- create mode 100644 package/pyusb/Config.in
- create mode 100644 package/pyusb/pyusb.mk
+On some architectures one can be running a 64-bit kernel with a 32-bit
+userland.
+Such is the case for sparc64 (unsupported) for example and mips64 with
+n32 ABI.
+Some tools that interface directly with the kernel need to be built
+specially for this, so introduce this symbol to tweak their build in one
+central kludge to be future-proof.
+Example: bug #6602.
 
-diff --git a/package/Config.in b/package/Config.in
-index 0e6f86c..591cc04 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -404,6 +404,7 @@ source "package/python-pyzmq/Config.in"
- source "package/python-serial/Config.in"
- source "package/python-setuptools/Config.in"
- source "package/python-thrift/Config.in"
-+source "package/pyusb/Config.in"
- endmenu
- endif
- source "package/python3/Config.in"
-diff --git a/package/pyusb/Config.in b/package/pyusb/Config.in
-new file mode 100644
-index 0000000..b0c714a
---- /dev/null
-+++ b/package/pyusb/Config.in
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_PYUSB
-+	bool "pyusb"
-+	depends on BR2_PACKAGE_PYTHON
-+	select BR2_PACKAGE_LIBUSB
-+	help
-+          The PyUSB module provides for Python easy access to the host
-+          machine's Universal Serial Bus (USB) system.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ arch/Config.in      | 3 +++
+ arch/Config.in.mips | 1 +
+ 2 files changed, 4 insertions(+)
+
+diff --git a/arch/Config.in b/arch/Config.in
+index 3fd8c1c..bc81dac 100644
+--- a/arch/Config.in
++++ b/arch/Config.in
+@@ -3,6 +3,9 @@ menu "Target options"
+ config BR2_ARCH_IS_64
+ 	bool
+ 
++config BR2_KERNEL_64_USERLAND_32
++	bool
 +
-+	  http://sourceforge.net/apps/trac/pyusb/
-+
-diff --git a/package/pyusb/pyusb.mk b/package/pyusb/pyusb.mk
-new file mode 100644
-index 0000000..fde10c9
---- /dev/null
-+++ b/package/pyusb/pyusb.mk
-@@ -0,0 +1,22 @@
-+################################################################################
-+#
-+# pyusb
-+#
-+################################################################################
-+
-+PYUSB_VERSION = 0546cad8980783c39f96db717005a550059b730f
-+PYUSB_SITE = git://github.com/walac/pyusb/
-+PYUSB_LICENSE_FILES = LICENSE
-+
-+PYUSB_DEPENDENCIES = python libusb
-+
-+define PYUSB_INSTALL_TARGET_CMDS
-+	(cd $(@D); $(HOST_DIR)/usr/bin/python setup.py install \
-+		--prefix=$(TARGET_DIR)/usr)
-+endef
-+
-+define PYUSB_UNINSTALL_TARGET_CMDS
-+	rm -rf $(TARGET_DIR)/usr/lib/python*/site-packages/pyusb*
-+endef
-+
-+$(eval $(generic-package))
+ config BR2_SOFT_FLOAT
+ 	bool
+ 
+diff --git a/arch/Config.in.mips b/arch/Config.in.mips
+index 6242bcc..ca8b87f 100644
+--- a/arch/Config.in.mips
++++ b/arch/Config.in.mips
+@@ -47,6 +47,7 @@ config BR2_MIPS_OABI32
+ config BR2_MIPS_NABI32
+ 	bool "n32"
+ 	depends on BR2_ARCH_IS_64
++	select BR2_KERNEL_64_USERLAND_32
+ config BR2_MIPS_NABI64
+ 	bool "n64"
+ 	depends on BR2_ARCH_IS_64
 -- 
-1.8.4.rc3
+1.8.1.5
