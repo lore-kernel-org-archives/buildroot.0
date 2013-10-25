@@ -1,7 +1,9 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri, 25 Oct 2013 08:34:38 -0300
-Subject: [Buildroot] [PATCH 1/4] freetype: bump to version 2.5.0.1
-Message-ID: <1382700881-28336-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Fri, 25 Oct 2013 08:34:39 -0300
+Subject: [Buildroot] [PATCH 2/4] libpng: bump to version 1.6.6
+In-Reply-To: <1382700881-28336-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1382700881-28336-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1382700881-28336-2-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,41 +12,32 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/freetype/freetype.mk | 14 ++++++++++++--
- 1 file changed, 12 insertions(+), 2 deletions(-)
+ package/libpng/libpng.mk | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/package/freetype/freetype.mk b/package/freetype/freetype.mk
-index 177adf5..1ca779e 100644
---- a/package/freetype/freetype.mk
-+++ b/package/freetype/freetype.mk
-@@ -4,9 +4,11 @@
+diff --git a/package/libpng/libpng.mk b/package/libpng/libpng.mk
+index f5bf956..5ce828e 100644
+--- a/package/libpng/libpng.mk
++++ b/package/libpng/libpng.mk
+@@ -4,15 +4,16 @@
  #
  ################################################################################
  
--FREETYPE_VERSION = 2.4.12
-+FREETYPE_VERSION_MAJOR = 2.5.0
-+FREETYPE_VERSION_MINOR = 1
-+FREETYPE_VERSION = $(FREETYPE_VERSION_MAJOR).$(FREETYPE_VERSION_MINOR)
- FREETYPE_SOURCE = freetype-$(FREETYPE_VERSION).tar.bz2
--FREETYPE_SITE = http://downloads.sourceforge.net/project/freetype/freetype2/$(FREETYPE_VERSION)
-+FREETYPE_SITE = http://downloads.sourceforge.net/project/freetype/freetype2/$(FREETYPE_VERSION_MAJOR)
- FREETYPE_INSTALL_STAGING = YES
- FREETYPE_MAKE_OPT = CCexe="$(HOSTCC)"
- FREETYPE_LICENSE = Dual FTL/GPLv2+
-@@ -18,6 +20,14 @@ FREETYPE_CONFIG_SCRIPTS = freetype-config
+-LIBPNG_VERSION = 1.4.12
+-LIBPNG_SERIES = 14
+-LIBPNG_SOURCE = libpng-$(LIBPNG_VERSION).tar.bz2
++LIBPNG_VERSION = 1.6.6
++LIBPNG_SERIES = 16
++LIBPNG_SOURCE = libpng-$(LIBPNG_VERSION).tar.xz
+ LIBPNG_SITE = http://downloads.sourceforge.net/project/libpng/libpng${LIBPNG_SERIES}/$(LIBPNG_VERSION)
+ LIBPNG_LICENSE = libpng license
+ LIBPNG_LICENSE_FILES = LICENSE
+ LIBPNG_INSTALL_STAGING = YES
+ LIBPNG_DEPENDENCIES = host-pkgconf zlib
+ LIBPNG_CONFIG_SCRIPTS = libpng$(LIBPNG_SERIES)-config libpng-config
++LIBPNG_CONF_OPT = $(if $(BR2_ARM_CPU_HAS_NEON),--enable-arm-neon=yes,--enable-arm-neon=no)
  
- HOST_FREETYPE_DEPENDENCIES = host-pkgconf
- 
-+ifeq ($(BR2_PACKAGE_LIBPNG),y)
-+FREETYPE_DEPENDENCIES += libpng
-+FREETYPE_CONF_OPT += LIBPNG_CFLAGS="`$(STAGING_DIR)/usr/bin/libpng-config --cflags`" \
-+	LIBPNG_LDFLAGS="`$(STAGING_DIR)/usr/bin/libpng-config --ldflags`"
-+else
-+FREETYPE_CONF_OPT += --without-png
-+endif
-+
- # Extra fixing since includedir and libdir are expanded from configure values
- define FREETYPE_FIX_CONFIG_FILE
- 	$(SED) 's:^includedir=.*:includedir="$${prefix}/include":' \
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
 -- 
 1.8.1.5
