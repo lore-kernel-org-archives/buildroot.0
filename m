@@ -1,37 +1,34 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 25 Oct 2013 09:26:56 +0200
-Subject: [Buildroot] [git commit] package/uclibc: fixup e500mc support
-Message-ID: <20131025073057.EA3409BBAC@busybox.osuosl.org>
+Date: Fri, 25 Oct 2013 09:27:42 +0200
+Subject: [Buildroot] [git commit] libcgroup: depends on host-bison
+Message-ID: <20131025073058.20BC69BB67@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=6f3575c3ac4b28c64aa44058866a648bf555f036
+commit: http://git.buildroot.net/buildroot/commit/?id=45ff7712f390843b63e4899a476adfed759fa4a8
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The e500mc core has a classic FPU, SPE is a bad word.
-See: http://en.wikipedia.org/wiki/PowerPC_e500#e500mc
+Fixes http://autobuild.buildroot.net/results/73d/73dddcc1aa68999ea496de148497f80bdb02c874
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/uclibc/Config.in |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ package/libcgroup/libcgroup.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/uclibc/Config.in b/package/uclibc/Config.in
-index acf736a..2de0270 100644
---- a/package/uclibc/Config.in
-+++ b/package/uclibc/Config.in
-@@ -244,8 +244,8 @@ config BR2_UCLIBC_SPARC_TYPE
- config BR2_UCLIBC_POWERPC_TYPE
- 	string
- 	depends on BR2_UCLIBC_TARGET_ARCH = "powerpc"
--	default CLASSIC if !BR2_powerpc_8540 && !BR2_powerpc_8548 && !BR2_powerpc_e500mc
--	default E500    if BR2_powerpc_8540 || BR2_powerpc_8548 || BR2_powerpc_e500mc
-+	default CLASSIC if !BR2_powerpc_8540 && !BR2_powerpc_8548
-+	default E500    if BR2_powerpc_8540 || BR2_powerpc_8548
+diff --git a/package/libcgroup/libcgroup.mk b/package/libcgroup/libcgroup.mk
+index c2392e0..339deb3 100644
+--- a/package/libcgroup/libcgroup.mk
++++ b/package/libcgroup/libcgroup.mk
+@@ -9,7 +9,7 @@ LIBCGROUP_SOURCE = libcgroup-$(LIBCGROUP_VERSION).tar.bz2
+ LIBCGROUP_SITE = http://downloads.sourceforge.net/project/libcg/libcgroup/v.038
+ LIBCGROUP_LICENSE = LGPLv2.1
+ LIBCGROUP_LICENSE_FILES = COPYING
+-
++LIBCGROUP_DEPENDENCIES = host-bison
+ LIBCGROUP_INSTALL_STAGING = YES
  
- config BR2_UCLIBC_X86_TYPE
- 	string
+ # Undefining _FILE_OFFSET_BITS here because of a "bug" with glibc fts.h
