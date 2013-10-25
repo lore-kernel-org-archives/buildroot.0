@@ -1,40 +1,35 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Fri, 25 Oct 2013 10:29:57 +0300
-Subject: [Buildroot] Buildroot talk at ELCE
-In-Reply-To: <87ob6d7rf2.fsf@dell.be.48ers.dk>
-References: <87ob6d7rf2.fsf@dell.be.48ers.dk>
-Message-ID: <20131025072957.GY4164@tarshish>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 25 Oct 2013 09:22:21 +0200
+Subject: [Buildroot] [git commit] libedit: needs mmu
+Message-ID: <20131025073057.E722C9BB82@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter,
+commit: http://git.buildroot.net/buildroot/commit/?id=c96a0cc9077001b4bdea20c3fcf2e03b69aeb30a
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, Oct 25, 2013 at 09:14:57AM +0200, Peter Korsgaard wrote:
-> FYI,
-> 
-> As you might be aware, I'm doing a talk titled 'Buildroot: What is new'
-> this afternoon at the Embedded Linux Conference Europe. See the link
-> below for the slides:
-> 
-> http://peter.korsgaard.com/buildroot-whats-new-elce2013.pdf
-> 
-> I'm trying to make it clear that Buildroot is very much alive, with lots
-> of activity.
-> 
-> Most items in the slides have already been discussed, but I would very
-> much appreciate if you could take a quick look and let me know if I
-> missed something important or said anything stupid.
+Fixes:
+http://autobuild.buildroot.net/results/211/2116ffb8e74073fd415bfdea748731b5b8a876d7/
+(Not just the examples, also vi.c)
 
-Just a small nit. Since you mention Tensilica in the slides I thought it's 
-worth mentioning that Tensilica is no fully merged into Cadence, just like ARC 
-is merged into Synosys.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/libedit/Config.in |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-baruch
-
--- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+diff --git a/package/libedit/Config.in b/package/libedit/Config.in
+index 5158744..683eb6b 100644
+--- a/package/libedit/Config.in
++++ b/package/libedit/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_LIBEDIT
+ 	bool "libedit"
+ 	depends on BR2_USE_WCHAR
++	depends on BR2_USE_MMU # fork()
+ 	select BR2_PACKAGE_NCURSES
+ 	help
+ 	  The editline library (from BSD) provides generic line editing
