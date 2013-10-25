@@ -1,93 +1,48 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri, 25 Oct 2013 09:15:20 -0300
-Subject: [Buildroot] [PATCH 2/5] boost: add host variant
+Date: Fri, 25 Oct 2013 09:15:21 -0300
+Subject: [Buildroot] [PATCH 3/5] python-thrift: fix cross building
 In-Reply-To: <1382703323-31038-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1382703323-31038-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1382703323-31038-2-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1382703323-31038-3-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+The C code (fastbinary.so) wasn't built using the cross compiler, hence
+it was unusable. Fix it.
+
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/boost/boost.mk | 33 +++++++++++++++++++++++++++++++++
- 1 file changed, 33 insertions(+)
+ package/python-thrift/python-thrift.mk | 11 ++++++++---
+ 1 file changed, 8 insertions(+), 3 deletions(-)
 
-diff --git a/package/boost/boost.mk b/package/boost/boost.mk
-index b0b3352..8a1a8f7 100644
---- a/package/boost/boost.mk
-+++ b/package/boost/boost.mk
-@@ -11,11 +11,19 @@ BOOST_SITE = http://downloads.sourceforge.net/project/boost/boost/$(BOOST_VERSIO
- BOOST_INSTALL_STAGING = YES
+diff --git a/package/python-thrift/python-thrift.mk b/package/python-thrift/python-thrift.mk
+index 4cd35e5..65733d4 100644
+--- a/package/python-thrift/python-thrift.mk
++++ b/package/python-thrift/python-thrift.mk
+@@ -9,13 +9,18 @@ PYTHON_THRIFT_SOURCE = thrift-$(PYTHON_THRIFT_VERSION).tar.gz
+ PYTHON_THRIFT_SITE = http://pypi.python.org/packages/source/t/thrift
+ PYTHON_THRIFT_LICENSE = Apache-2.0
+ PYTHON_THRIFT_LICENSE_FILES = README
+-
+ PYTHON_THRIFT_DEPENDENCIES = python
  
- TARGET_CC_VERSION = $(shell $(TARGET_CC) -dumpversion)
-+HOST_CC_VERSION = $(shell $(HOSTCC) -dumpversion)
- 
- BOOST_DEPENDENCIES =
- 
- BOOST_FLAGS =
- 
-+# keep host variant as minimal as possible
-+HOST_BOOST_FLAGS = --without-icu \
-+	--without-libraries=$(subst $(space),$(comma),atomic chrono context \
-+	coroutine date_time exception filesystem graph graph_parallel \
-+	iostreams locale log math mpi program_options python random regex \
-+	serialization signals system test thread timer wave)
-+
- # atomic library compile only with upstream version, wait for next release
- # coroutine breaks on some weak toolchains and it's new for 1.54+
- # log breaks with some toolchain combinations and it's new for 1.54+
-@@ -54,6 +62,9 @@ ifeq ($(BR2_PACKAGE_BOOST_IOSTREAMS),y)
- BOOST_DEPENDENCIES += bzip2 zlib
- endif
- 
-+HOST_BOOST_OPT += toolset=gcc threading=multi variant=release link=shared \
-+	runtime-link=shared
-+
- BOOST_OPT += toolset=gcc \
- 	     threading=multi \
- 	     variant=$(if $(BR2_ENABLE_DEBUG),debug,release) \
-@@ -78,6 +89,12 @@ define BOOST_CONFIGURE_CMDS
- 	echo "" >> $(@D)/user-config.jam
+ define PYTHON_THRIFT_BUILD_CMDS
+ 	(cd $(@D); \
+-		PYTHONXCPREFIX="$(STAGING_DIR)/usr/" \
+-		LDFLAGS="-L$(STAGING_DIR)/lib -L$(STAGING_DIR)/usr/lib" \
++		CC="$(TARGET_CC)" \
++		CFLAGS="$(TARGET_CFLAGS)" \
++		LDSHARED="$(TARGET_CROSS)gcc -shared" \
++		CROSS_COMPILING=yes \
++		_python_sysroot=$(STAGING_DIR) \
++		_python_srcdir=$(BUILD_DIR)/python$(PYTHON_VERSION) \
++		_python_prefix=/usr \
++		_python_exec_prefix=/usr \
+ 		$(HOST_DIR)/usr/bin/python setup.py build)
  endef
  
-+define HOST_BOOST_CONFIGURE_CMDS
-+	(cd $(@D) && ./bootstrap.sh $(HOST_BOOST_FLAGS))
-+	echo "using gcc : $(HOST_CC_VERSION) : $(HOSTCXX) : <cxxflags>\"$(HOST_CXXFLAGS)\" <linkflags>\"$(HOST_LDFLAGS)\" ;" > $(@D)/user-config.jam
-+	echo "" >> $(@D)/user-config.jam
-+endef
-+
- define BOOST_INSTALL_TARGET_CMDS
- 	(cd $(@D) && ./b2 -j$(PARALLEL_JOBS) -q -d+1 \
- 	--user-config=$(@D)/user-config.jam \
-@@ -86,6 +103,21 @@ define BOOST_INSTALL_TARGET_CMDS
- 	--layout=system install )
- endef
- 
-+define HOST_BOOST_BUILD_CMDS
-+	(cd $(@D) && ./b2 -j$(PARALLEL_JOBS) -q -d+1 \
-+	--user-config=$(@D)/user-config.jam \
-+	$(HOST_BOOST_OPT) \
-+	--prefix=$(HOST_DIR)/usr )
-+endef
-+
-+define HOST_BOOST_INSTALL_CMDS
-+	(cd $(@D) && ./b2 -j$(PARALLEL_JOBS) -q -d+1 \
-+	--user-config=$(@D)/user-config.jam \
-+	$(HOST_BOOST_OPT) \
-+	--prefix=$(HOST_DIR)/usr \
-+	--layout=system install )
-+endef
-+
- define BOOST_INSTALL_STAGING_CMDS
- 	(cd $(@D) && ./bjam -j$(PARALLEL_JOBS) -d+1 \
- 	--user-config=$(@D)/user-config.jam \
-@@ -95,3 +127,4 @@ define BOOST_INSTALL_STAGING_CMDS
- endef
- 
- $(eval $(generic-package))
-+$(eval $(host-autotools-package))
 -- 
 1.8.1.5
