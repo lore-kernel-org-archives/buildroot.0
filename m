@@ -1,32 +1,48 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 25 Oct 2013 09:47:55 +0200
-Subject: [Buildroot] Buildroot talk at ELCE
-In-Reply-To: <CAAXf6LXHnNWY-wT7hzRb5LgbBDboXR+5EtWfYNyJxJUpx6agJw@mail.gmail.com>
- (Thomas De Schampheleire's message of "Fri, 25 Oct 2013 09:42:29
- +0200")
-References: <87ob6d7rf2.fsf@dell.be.48ers.dk>
- <CAAXf6LXHnNWY-wT7hzRb5LgbBDboXR+5EtWfYNyJxJUpx6agJw@mail.gmail.com>
-Message-ID: <87hac56bbo.fsf@dell.be.48ers.dk>
+From: yegorslists at googlemail.com <yegorslists@googlemail.com>
+Date: Fri, 25 Oct 2013 09:56:55 +0200
+Subject: [Buildroot] [PATCH 1/2] pcre: add UTF support option
+Message-ID: <1382687816-14336-1-git-send-email-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin@gmail.com> writes:
+From: Yegor Yefremov <yegorslists@googlemail.com>
 
-Hi,
+Add BR2_PACKAGE_PCRE_UTF option, that activates
+--enable-unicode-properties for UTF-8/16/32.
 
- > Did you bring your construction helmet for the talk?
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+---
+ package/pcre/Config.in |    5 +++++
+ package/pcre/pcre.mk   |    1 +
+ 2 files changed, 6 insertions(+), 0 deletions(-)
 
-No, but I did bring my Buildroot tshirt ;)
-
- > Page 6: depencies --> dependencies
- > Page 11: 200-300 patches gets --> get
- > Page 17: should we mention something about musl support?
-
-Thanks, fixed all. I added '- musl libc support' under the external
-toolchain support heading.
-
+diff --git a/package/pcre/Config.in b/package/pcre/Config.in
+index dc92274..3ca27c0 100644
+--- a/package/pcre/Config.in
++++ b/package/pcre/Config.in
+@@ -19,4 +19,9 @@ config BR2_PACKAGE_PCRE_32
+ 	help
+ 	  This option builds the 32-bits pcre library, i.e 'libpcre32'
+ 
++config BR2_PACKAGE_PCRE_UTF
++	bool "UTF support"
++	help
++	  This option enables UTF support
++
+ endif
+diff --git a/package/pcre/pcre.mk b/package/pcre/pcre.mk
+index bf86a3d..0d1d66b 100644
+--- a/package/pcre/pcre.mk
++++ b/package/pcre/pcre.mk
+@@ -19,5 +19,6 @@ endif
+ PCRE_CONF_OPT += --enable-pcre8
+ PCRE_CONF_OPT += $(if $(BR2_PACKAGE_PCRE_16),--enable-pcre16,--disable-pcre16)
+ PCRE_CONF_OPT += $(if $(BR2_PACKAGE_PCRE_32),--enable-pcre32,--disable-pcre32)
++PCRE_CONF_OPT += $(if $(BR2_PACKAGE_PCRE_UTF),--enable-unicode-properties,--disable-unicode-properties)
+ 
+ $(eval $(autotools-package))
 -- 
-Bye, Peter Korsgaard
+1.7.7
