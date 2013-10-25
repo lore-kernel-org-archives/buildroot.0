@@ -1,47 +1,34 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 25 Oct 2013 12:30:27 +0200
-Subject: [Buildroot] [git commit] libfreefare: new repository
-Message-ID: <20131025103122.AA3C59BB4C@busybox.osuosl.org>
+Date: Fri, 25 Oct 2013 12:22:54 +0200
+Subject: [Buildroot] [git commit] gnutls: security bump to version 3.2.5
+Message-ID: <20131025103122.91C569BBB5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d4f839248d2d57406db85803ab041d03cbaaffda
+commit: http://git.buildroot.net/buildroot/commit/?id=71af8d275c87812e295f1772dc8183a5ae96f989
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-[Peter: also adjust upstream URL]
-Signed-off-by: Arnaud Aujon <arnaud.aujon@gmail.com>
+Fix for GNUTLS-SA-2013-3.
+
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libfreefare/Config.in      |    2 +-
- package/libfreefare/libfreefare.mk |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/gnutls/gnutls.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/libfreefare/Config.in b/package/libfreefare/Config.in
-index bc11b8b..2bb0c93 100644
---- a/package/libfreefare/Config.in
-+++ b/package/libfreefare/Config.in
-@@ -6,7 +6,7 @@ config BR2_PACKAGE_LIBFREEFARE
- 	help
- 	  Library for high level manipulation of MIFARE cards.
- 
--	  http://code.google.com/p/nfc-tools/wiki/libfreefare
-+	  http://nfc-tools.org/index.php?title=Libfreefare
- 
- comment "libfreefare needs a toolchain w/ threads"
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/libfreefare/libfreefare.mk b/package/libfreefare/libfreefare.mk
-index 859b5e3..8dcd6b8 100644
---- a/package/libfreefare/libfreefare.mk
-+++ b/package/libfreefare/libfreefare.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
+index 5a05f65..1e3e267 100644
+--- a/package/gnutls/gnutls.mk
++++ b/package/gnutls/gnutls.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- LIBFREEFARE_VERSION = 0.3.4
--LIBFREEFARE_SITE = http://nfc-tools.googlecode.com/files
-+LIBFREEFARE_SITE = http://libfreefare.googlecode.com/files
- LIBFREEFARE_DEPENDENCIES = libnfc openssl
- 
- $(eval $(autotools-package))
+-GNUTLS_VERSION = 3.2.4
++GNUTLS_VERSION = 3.2.5
+ GNUTLS_SOURCE = gnutls-$(GNUTLS_VERSION).tar.xz
+ GNUTLS_SITE = ftp://ftp.gnutls.org/gcrypt/gnutls/v3.2
+ GNUTLS_LICENSE = GPLv3+ LGPLv2.1+
