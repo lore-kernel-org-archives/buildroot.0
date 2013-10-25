@@ -1,106 +1,37 @@
-From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Fri, 25 Oct 2013 12:28:18 +0200
-Subject: [Buildroot] [PATCH v2 2/2] ModemManager: add new package
-In-Reply-To: <1382696898-1901-1-git-send-email-yegorslists@googlemail.com>
-References: <1382696898-1901-1-git-send-email-yegorslists@googlemail.com>
-Message-ID: <1382696898-1901-2-git-send-email-yegorslists@googlemail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 25 Oct 2013 12:31:10 +0200
+Subject: [Buildroot] [PATCH] libfreefare: new repository
+In-Reply-To: <1382605205-7965-1-git-send-email-arnaud.aujon@gmail.com> (Arnaud
+ Aujon's message of "Thu, 24 Oct 2013 11:00:05 +0200")
+References: <1382605205-7965-1-git-send-email-arnaud.aujon@gmail.com>
+Message-ID: <874n8563rl.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Yegor Yefremov <yegorslists@googlemail.com>
+>>>>> "Arnaud" == Arnaud Aujon <arnaud.aujon@gmail.com> writes:
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
----
-Changes:
-	v2: typos, add select QMI to the config option, don't install to staging
+ > Signed-off-by: Arnaud Aujon <arnaud.aujon@gmail.com>
+ > ---
+ >  package/libfreefare/libfreefare.mk | 2 +-
+ >  1 file changed, 1 insertion(+), 1 deletion(-)
 
- package/Config.in                      |    1 +
- package/modem-manager/Config.in        |   33 ++++++++++++++++++++++++++++++++
- package/modem-manager/modem-manager.mk |   21 ++++++++++++++++++++
- 3 files changed, 55 insertions(+), 0 deletions(-)
- create mode 100644 package/modem-manager/Config.in
- create mode 100644 package/modem-manager/modem-manager.mk
+ > diff --git a/package/libfreefare/libfreefare.mk b/package/libfreefare/libfreefare.mk
+ > index 859b5e3..8dcd6b8 100644
+ > --- a/package/libfreefare/libfreefare.mk
+ > +++ b/package/libfreefare/libfreefare.mk
+ > @@ -5,7 +5,7 @@
+ >  ################################################################################
+ 
+ >  LIBFREEFARE_VERSION = 0.3.4
+ > -LIBFREEFARE_SITE = http://nfc-tools.googlecode.com/files
+ > +LIBFREEFARE_SITE = http://libfreefare.googlecode.com/files
+ >  LIBFREEFARE_DEPENDENCIES = libnfc openssl
 
-diff --git a/package/Config.in b/package/Config.in
-index 0e6f86c..34c0e7b 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -820,6 +820,7 @@ source "package/lrzsz/Config.in"
- source "package/macchanger/Config.in"
- source "package/mii-diag/Config.in"
- source "package/minidlna/Config.in"
-+source "package/modem-manager/Config.in"
- source "package/mongoose/Config.in"
- source "package/mongrel2/Config.in"
- source "package/mrouted/Config.in"
-diff --git a/package/modem-manager/Config.in b/package/modem-manager/Config.in
-new file mode 100644
-index 0000000..202d846
---- /dev/null
-+++ b/package/modem-manager/Config.in
-@@ -0,0 +1,33 @@
-+config BR2_PACKAGE_MODEM_MANAGER
-+	bool "ModemManager"
-+	depends on BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_UDEV
-+	select BR2_PACKAGE_DBUS
-+	depends on BR2_INET_IPV6
-+	depends on BR2_LARGEFILE # acl
-+	depends on BR2_USE_WCHAR # libglib2 and gnutls
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus, libglib2
-+	depends on BR2_USE_MMU # dbus
-+	select BR2_PACKAGE_DBUS_GLIB
-+	select BR2_PACKAGE_UDEV
-+	select BR2_PACKAGE_UDEV_ALL_EXTRAS
-+	select BR2_PACKAGE_PCRE
-+	select BR2_PACKAGE_PCRE_UTF
-+	help
-+	  ModemManager is a DBus-activated daemon which controls mobile
-+	  broadband (2G/3G/4G) devices and connections.
-+
-+	  http://www.freedesktop.org/wiki/Software/ModemManager/
-+
-+if BR2_PACKAGE_MODEM_MANAGER
-+
-+config BR2_PACKAGE_MODEM_MANAGER_LIBQMI
-+	bool "QMI support"
-+	select BR2_PACKAGE_LIBQMI
-+	help
-+	  This option enables support for QMI protocol
-+endif
-+
-+comment "ModemkManager requires a toolchain with IPV6, LARGEFILE, WCHAR and thread support"
-+	depends on !BR2_INET_IPV6 || !BR2_LARGEFILE || !BR2_USE_WCHAR || \
-+		!BR2_TOOLCHAIN_HAS_THREADS
-+
-diff --git a/package/modem-manager/modem-manager.mk b/package/modem-manager/modem-manager.mk
-new file mode 100644
-index 0000000..ebf2617
---- /dev/null
-+++ b/package/modem-manager/modem-manager.mk
-@@ -0,0 +1,21 @@
-+################################################################################
-+#
-+# modem-manager
-+#
-+################################################################################
-+
-+MODEM_MANAGER_VERSION = 1.0.0
-+MODEM_MANAGER_SOURCE = ModemManager-$(MODEM_MANAGER_VERSION).tar.xz
-+MODEM_MANAGER_SITE = http://www.freedesktop.org/software/ModemManager/
-+MODEM_MANAGER_DEPENDENCIES = host-pkgconf udev dbus-glib host-intltool
-+
-+MODEM_MANAGER_CONF_OPT = \
-+		--without-mbim
-+
-+ifeq ($(BR2_PACKAGE_MODEM_MANAGER_LIBQMI),y)
-+	MODEM_MANAGER_DEPENDENCIES += libqmi
-+else
-+	MODEM_MANAGER_CONF_OPT += --without-qmi
-+endif
-+
-+$(eval $(autotools-package))
+We should also adjust the upstream URL in Config.in, as the old one no
+longer works. Committed with that fixed, thanks.
+
 -- 
-1.7.7
+Bye, Peter Korsgaard
