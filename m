@@ -1,58 +1,92 @@
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Sat, 26 Oct 2013 00:38:51 +0200
-Subject: [Buildroot] Buildroot Developpers' Day 2013
-In-Reply-To: <OF9DE40725.A99AAF8D-ON86257C0F.0078CD97-86257C0F.007997AD@rockwellcollins.com>
-References: <20131013223941.GD16563@free.fr> <20131017143209.036bb603@skate>
- <CAAXf6LUH86pioWLURGEfETkanHOj3iF9n2yo2EaxtK2bjLs8Sg@mail.gmail.com>
- <20131025091847.3f3b6e6b@skate>
- <OF9DE40725.A99AAF8D-ON86257C0F.0078CD97-86257C0F.007997AD@rockwellcollins.com>
-Message-ID: <526AF2FB.4020601@lucaceresoli.net>
+From: Wojciech M. Zabolotny <wzab01@gmail.com>
+Date: Sat, 26 Oct 2013 01:05:25 +0200
+Subject: [Buildroot] [PATCH 1/1] Package python-pyusb added.
+Message-ID: <1382742325-11435-1-git-send-email-wzab01@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Ryan, All,
+Signed-off-by: Wojciech M. Zabolotny <wzab01@gmail.com>
+---
+ package/Config.in                    |  1 +
+ package/python-pyusb/Config.in       | 10 ++++++++++
+ package/python-pyusb/python-pyusb.mk | 37 ++++++++++++++++++++++++++++++++++++
+ 3 files changed, 48 insertions(+)
+ create mode 100644 package/python-pyusb/Config.in
+ create mode 100644 package/python-pyusb/python-pyusb.mk
 
-Ryan Barnett wrote:
-> Thomas P,
->
-> Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote on 10/25/2013
-> 02:18:47 AM:
->
->> Dear Thomas De Schampheleire,
->>
->> On Fri, 25 Oct 2013 08:38:28 +0200, Thomas De Schampheleire wrote:
->>
->>>> Also, do we want to start a Google Hangout session during the
-> meeting,
->>>> to allow people to follow the discussions remotely? Is there any
->>>> interest in doing that, from the perspective of people that would be
->>>> interested in participating remotely?
->>> If I have some time, I will certainly join the Hangout, but I cannot
->>> make any promises about if and when this happens.
->>> How does this work, are hangouts 'open' all the time? Is there an
->>> invite needed? Where will you post the reference?
->> So far, I've only done "private" hangouts by inviting a bunch of
->> people. Maybe there is something to make "public" hangouts, but I've
->> never tried. So what I believe we're going to do is that the people who
->> want to join the hangout should say so on IRC, and I'll invite them. I
->> will just name their Google account e-mail to do so.
->   
-> So have we decided upon an exact time? Also I haven't seen any google
-> hangout invite requests yet. I'm going to assume that we are going to do
-> it during Luca's availablity window. This means that it will take place
-> around.
-
-The idea is that the session will start as soon as there is people.
-
->
-> 3:00 PM to 5:00 PM CEST
-> 2:00 PM to 4:00 PM BST
-> 8:00 AM to 10:00 AM CDT
-
-I may be there a bit later, but more or less it is correct.
-
+diff --git a/package/Config.in b/package/Config.in
+index 0e6f86c..40dba0c 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -400,6 +400,7 @@ source "package/python-protobuf/Config.in"
+ source "package/python-pygame/Config.in"
+ source "package/python-pyparsing/Config.in"
+ source "package/python-pyro/Config.in"
++source "package/python-pyusb/Config.in"
+ source "package/python-pyzmq/Config.in"
+ source "package/python-serial/Config.in"
+ source "package/python-setuptools/Config.in"
+diff --git a/package/python-pyusb/Config.in b/package/python-pyusb/Config.in
+new file mode 100644
+index 0000000..3a1242a
+--- /dev/null
++++ b/package/python-pyusb/Config.in
+@@ -0,0 +1,10 @@
++config BR2_PACKAGE_PYTHON_PYUSB
++	bool "python-pyusb"
++	depends on BR2_PACKAGE_PYTHON
++	select BR2_PACKAGE_LIBUSB
++	help
++	  The PyUSB module provides for Python easy access to the host
++	  machine's Universal Serial Bus (USB) system.
++	  
++	  http://sourceforge.net/apps/trac/pyusb/
++
+diff --git a/package/python-pyusb/python-pyusb.mk b/package/python-pyusb/python-pyusb.mk
+new file mode 100644
+index 0000000..80609af
+--- /dev/null
++++ b/package/python-pyusb/python-pyusb.mk
+@@ -0,0 +1,37 @@
++################################################################################
++#
++# python-pyusb
++#
++################################################################################
++
++PYTHON_PYUSB_VERSION = 0546cad8980783c39f96db717005a550059b730f
++PYTHON_PYUSB_SITE = http://github.com/walac/pyusb/tarball/$(PYTHON_PYUSB_VERSION)
++PYTHON_PYUSB_LICENSE = BSD-3c
++PYTHON_PYUSB_LICENSE_FILES = LICENSE
++
++PYTHON_PYUSB_DEPENDENCIES = python libusb
++
++# Copied from python-pyparsing, based on python-pygame
++define PYTHON_PYUSB_BUILD_CMDS
++	(cd $(@D);                                              \
++	 CC="$(TARGET_CC)"                                      \
++	 CFLAGS="$(TARGET_CFLAGS)"                              \
++	 LDSHARED="$(TARGET_CROSS)gcc -shared"                  \
++	 CROSS_COMPILING=yes                                    \
++	 _python_sysroot=$(STAGING_DIR)                         \
++	 _python_srcdir=$(BUILD_DIR)/python$(PYTHON_VERSION)    \
++	 _python_prefix=/usr                                    \
++	 _python_exec_prefix=/usr                               \
++	 $(HOST_DIR)/usr/bin/python setup.py build              \
++	)
++endef
++
++# Copied from python-pyparsing, based on python-pygame
++define PYTHON_PYUSB_INSTALL_TARGET_CMDS
++	(cd $(@D);                                              \
++	 $(HOST_DIR)/usr/bin/python setup.py install            \
++	                            --prefix=$(TARGET_DIR)/usr  \
++	)
++endef
++
++$(eval $(generic-package))
 -- 
-Luca
+1.8.4.rc3
