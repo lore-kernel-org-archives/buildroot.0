@@ -1,71 +1,58 @@
-From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Fri, 25 Oct 2013 11:12:44 +0200
-Subject: [Buildroot] [PATCH v2 2/2] packages/Config.in: Change entries titles
-In-Reply-To: <1382692364-25912-1-git-send-email-maxime.hadjinlian@gmail.com>
-References: <1382692364-25912-1-git-send-email-maxime.hadjinlian@gmail.com>
-Message-ID: <1382692364-25912-2-git-send-email-maxime.hadjinlian@gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Fri, 25 Oct 2013 11:58:01 +0200
+Subject: [Buildroot] [PATCH 1/2] packages/Config.in: Alphabetical
+ entries sorting
+In-Reply-To: <CAAXf6LU-7FuKBUeb+T8XdusNwma0B_Y6Vp8cbnCQk9oJ=An6PQ@mail.gmail.com>
+References: <1382620587-22563-1-git-send-email-maxime.hadjinlian@gmail.com>
+ <CAAXf6LWFbCs8VTFyn_jzbW-EPcx8Waz10Ue0Cuug0VCQVqFHMA@mail.gmail.com>
+ <CAGduivyTD7r7PWt4CpNAAdmhgh_O8Y0hJBatTLcsajGa8gPz5w@mail.gmail.com>
+ <CAAXf6LURr3b-4faaxpRTiR1=jTakx6n16EWGa6Mn88R==UOCAg@mail.gmail.com>
+ <CAGduivyywHPHmCz-F9U_axK5Joz2jrdrd=Ssc14jnhWZFNwyng@mail.gmail.com>
+ <CAAXf6LU-7FuKBUeb+T8XdusNwma0B_Y6Vp8cbnCQk9oJ=An6PQ@mail.gmail.com>
+Message-ID: <526A40A9.3050800@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch mostly fix the casing on different entries titles.
-It also changes the name of "Misc devices firmwares" to a simpler
-"Firmware".
+On 25/10/13 10:48, Thomas De Schampheleire wrote:
+> On Fri, Oct 25, 2013 at 10:32 AM, Maxime Hadjinlian
+> <maxime.hadjinlian@gmail.com> wrote:
+>> On Fri, Oct 25, 2013 at 8:22 AM, Thomas De Schampheleire
+>
+>>>>> By the way, I don't think that 'firmwares' is correct English, the
+>>>>> '-ware' already is plural, so it should be 'Misc devices firmware' or
+>>>>> maybe plain 'Firmware' (are there other firmware packages in buildroot
+>>>>> that are not part of this menu?).
+>>>> After a very quick search, it seems you are right about the 's' of firmware.
+>>>> About the naming of the menu, we already are in Hardware menu, so
+>>>> talking about "devices" may seem redundant, and the Misc is maybe too
+>>>> cumbersome. Although, a simple "Firmware" would not be very friendly.
+>>>> How about settling on "Firmware's Devices" ? Give or take the casing.
+>>>
+>>> Then this should be 'Device firmware'
+>>> because "Firmware's Devices" means "The devices of firmware" which is
+>>> not what you intend to say.
+>>>
+>>> I'm not convinced there exists firmware for something else than a
+>>> device though. For me 'Firmware' or 'Device firmware' are both ok.
+>> I just though "Firmware" to be a bit blunt, but I am not really good
+>> at wordings as you may have seen so I am OK with whatever is wanted.
+>
+> I'm looking forward to the opinion of others. I am just one of the
+> developers, like you.
 
-Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
----
-Changes v2 -> v3:
-  - Add the rename of Misc devices firmwares to Firmware (suggested by
-    Thomas De Schampheleire)
-Changes v1 -> v2:
-  - Fix Other GUIs casing (suggested by Thomas De Schampheleire)
+  Firmware blobs?
 
-Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
----
- package/Config.in | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+  Regards,
+  Arnout
 
-diff --git a/package/Config.in b/package/Config.in
-index 7147a0f..150619d 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -169,7 +169,7 @@ source "package/gnuplot/Config.in"
- source "package/jhead/Config.in"
- source "package/rrdtool/Config.in"
- 
--comment "graphic libraries"
-+comment "Graphic libraries"
- source "package/cegui06/Config.in"
- source "package/directfb/Config.in"
- source "package/directfb-examples/Config.in"
-@@ -196,7 +196,7 @@ source "package/sdl_net/Config.in"
- source "package/sdl_sound/Config.in"
- source "package/sdl_ttf/Config.in"
- 
--comment "other GUIs"
-+comment "Other GUIs"
- source "package/efl/Config.in"
- source "package/qt/Config.in"
- 
-@@ -241,7 +241,7 @@ source "package/liberation/Config.in"
- source "package/libsexy/Config.in"
- source "package/x11r7/xkeyboard-config/Config.in"
- 
--comment "X Window managers"
-+comment "X window managers"
- source "package/blackbox/Config.in"
- source "package/enlightenment/Config.in"
- source "package/fluxbox/Config.in"
-@@ -249,7 +249,7 @@ source "package/matchbox/Config.in"
- source "package/metacity/Config.in"
- 
- menu "Hardware handling"
--menu "Misc devices firmwares"
-+menu "Firmware"
- source "package/am33x-cm3/Config.in"
- source "package/b43-firmware/Config.in"
- source "package/linux-firmware/Config.in"
+
 -- 
-1.8.4.rc3
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
