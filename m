@@ -1,54 +1,39 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri, 25 Oct 2013 10:10:22 -0300
-Subject: [Buildroot] [PATCH 1/2] arch/Config.in: introduce
-	BR2_KERNEL_64_USERLAND_32 symbol
-Message-ID: <1382706623-5593-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Fri, 25 Oct 2013 10:10:23 -0300
+Subject: [Buildroot] [PATCH 2/2] ebtables: build fix for 64-bit kernel with
+	32-bit userland
+In-Reply-To: <1382706623-5593-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1382706623-5593-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1382706623-5593-2-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On some architectures one can be running a 64-bit kernel with a 32-bit
-userland.
-Such is the case for sparc64 (unsupported) for example and mips64 with
-n32 ABI.
-Some tools that interface directly with the kernel need to be built
-specially for this, so introduce this symbol to tweak their build in one
-central kludge to be future-proof.
-Example: bug #6602.
+Fixes bug #6602.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- arch/Config.in      | 3 +++
- arch/Config.in.mips | 1 +
- 2 files changed, 4 insertions(+)
+ package/ebtables/ebtables.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/arch/Config.in b/arch/Config.in
-index 3fd8c1c..bc81dac 100644
---- a/arch/Config.in
-+++ b/arch/Config.in
-@@ -3,6 +3,9 @@ menu "Target options"
- config BR2_ARCH_IS_64
- 	bool
+diff --git a/package/ebtables/ebtables.mk b/package/ebtables/ebtables.mk
+index edb5d42..612cf83 100644
+--- a/package/ebtables/ebtables.mk
++++ b/package/ebtables/ebtables.mk
+@@ -10,10 +10,11 @@ EBTABLES_SITE = http://downloads.sourceforge.net/project/ebtables/ebtables/ebtab
+ EBTABLES_LICENSE = GPLv2+
+ EBTABLES_LICENSE_FILES = COPYING
+ EBTABLES_STATIC = $(if $(BR2_PREFER_STATIC_LIB),static)
++EBTABLES_K64U32 = $(if $(BR2_KERNEL_64_USERLAND_32),CFLAGS+="-DKERNEL_64_USERSPACE_32")
  
-+config BR2_KERNEL_64_USERLAND_32
-+	bool
-+
- config BR2_SOFT_FLOAT
- 	bool
+ define EBTABLES_BUILD_CMDS
+ 	$(MAKE) $(TARGET_CONFIGURE_OPTS) LIBDIR=/lib/ebtables $(EBTABLES_STATIC) \
+-		-C $(@D)
++		$(EBTABLES_K64U32) -C $(@D)
+ endef
  
-diff --git a/arch/Config.in.mips b/arch/Config.in.mips
-index 6242bcc..ca8b87f 100644
---- a/arch/Config.in.mips
-+++ b/arch/Config.in.mips
-@@ -47,6 +47,7 @@ config BR2_MIPS_OABI32
- config BR2_MIPS_NABI32
- 	bool "n32"
- 	depends on BR2_ARCH_IS_64
-+	select BR2_KERNEL_64_USERLAND_32
- config BR2_MIPS_NABI64
- 	bool "n64"
- 	depends on BR2_ARCH_IS_64
+ ifeq ($(BR2_PREFER_STATIC_LIB),y)
 -- 
 1.8.1.5
