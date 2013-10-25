@@ -1,30 +1,57 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 25 Oct 2013 10:08:11 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
-	2013-10-24
-In-Reply-To: <20131025063005.51B7752C609@lolut.humanoidz.org>
-References: <20131025063005.51B7752C609@lolut.humanoidz.org>
-Message-ID: <526A26EB.7010804@mind.be>
+From: Fabio Porcedda <fabio.porcedda@gmail.com>
+Date: Fri, 25 Oct 2013 10:09:06 +0200
+Subject: [Buildroot] [PATCH v8 RESEND 1/8] package: add base dependency
+ to every package
+In-Reply-To: <CAAXf6LUznsz6=BJi=6i_GAe0YmFOfmXVLJzELgmdFoCV3NQy-Q@mail.gmail.com>
+References: <1382088860-30524-1-git-send-email-fabio.porcedda@gmail.com>
+ <1382088860-30524-2-git-send-email-fabio.porcedda@gmail.com>
+ <52683BBC.7070506@mind.be>
+ <CAHkwnC_3oA+DKkUxVweB0Xt5wqWt11epFujXvmStEu25hGQNOA@mail.gmail.com>
+ <CAAXf6LUznsz6=BJi=6i_GAe0YmFOfmXVLJzELgmdFoCV3NQy-Q@mail.gmail.com>
+Message-ID: <CAHkwnC9WU5VtdtCNRKx_V88xODAnjj9qPkuymnJaZua8kJOUPQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 25/10/13 08:30, Thomas Petazzoni wrote:
->                      mpd-0.17.6 | 11
+On Thu, Oct 24, 2013 at 10:22 AM, Thomas De Schampheleire
+<patrickdepinguin@gmail.com> wrote:
+> Hi,
+>
+> On Thu, Oct 24, 2013 at 9:41 AM, Fabio Porcedda
+> <fabio.porcedda@gmail.com> wrote:
+>>>
+>>>
+>>>  Although this is one of the most useful patches of the series, it is also
+>>> the one that introduces the circular dependency. So although it looks good,
+>>> I'm not ready to ack it.
+>>
+>> I've found a work around:
+>>
+>> $$($(2)_TARGET_SOURCE) $$($(2)_TARGET_RSYNC): | dirs prepare
+>>
+>> # to prevent circular dependency
+>> ifneq ($(1),$(DEPENDENCIES_HOST_PREREQ))
+>> $$($(2)_TARGET_SOURCE) $$($(2)_TARGET_RSYNC): | dependencies
+>> endif
+>>
+>> What do you think about that?
+>>
+>
+> I don't think this will work if there are more than one prerequisite:
+> $(1) will be one of them, and DEPENDENCIES_HOST_PREREQ will be the
+> entire list, so that 'ifneq' will always be true.
+> I think you need 'filter' here.
+> http://www.gnu.org/software/make/manual/make.html#index-filter-587
 
-  This is a download failure of the package source. The weird thing is 
-that I could get it from here yesterday evening, so I expected this error 
-to go away...
+Yes it works fine with filter, thanks for suggesting it.
 
-  Regards,
-  Arnout
 
+> Best regards,
+> Thomas
+
+
+Thanks and regards
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+Fabio Porcedda
