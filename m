@@ -1,93 +1,141 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 25 Oct 2013 10:06:17 +0200
-Subject: [Buildroot] [PATCH] packages/Config.in: Fix case on entries
-	titles
-In-Reply-To: <CAAXf6LXQn-Ssw13BC3VxCqQLP-c0--5RD-ZduBhZ_64LWiodgQ@mail.gmail.com>
-References: <1382628930-23665-1-git-send-email-maxime.hadjinlian@gmail.com>
- <CAAXf6LXQn-Ssw13BC3VxCqQLP-c0--5RD-ZduBhZ_64LWiodgQ@mail.gmail.com>
-Message-ID: <526A2679.1010606@mind.be>
+From: Fabio Porcedda <fabio.porcedda@gmail.com>
+Date: Fri, 25 Oct 2013 10:07:38 +0200
+Subject: [Buildroot] [PATCH v8 RESEND 1/8] package: add base dependency
+ to every package
+In-Reply-To: <5268F861.6050803@mind.be>
+References: <1382088860-30524-1-git-send-email-fabio.porcedda@gmail.com>
+ <1382088860-30524-2-git-send-email-fabio.porcedda@gmail.com>
+ <52683BBC.7070506@mind.be>
+ <CAHkwnC_3oA+DKkUxVweB0Xt5wqWt11epFujXvmStEu25hGQNOA@mail.gmail.com>
+ <5268F861.6050803@mind.be>
+Message-ID: <CAHkwnC9s0ZqVoE-5pZFwxb4adFw0hD3+SxrF4ri7jStbxypjTA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 25/10/13 08:27, Thomas De Schampheleire wrote:
-> Hi Maxime,
->
-> On Thu, Oct 24, 2013 at 5:35 PM, Maxime Hadjinlian
-> <maxime.hadjinlian@gmail.com> wrote:
->> ---
->>   package/Config.in | 6 +++---
->>   1 file changed, 3 insertions(+), 3 deletions(-)
+On Thu, Oct 24, 2013 at 12:37 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
+> On 24/10/13 09:41, Fabio Porcedda wrote:
 >>
->> diff --git a/package/Config.in b/package/Config.in
->> index ebbdeb5..8519f45 100644
->> --- a/package/Config.in
->> +++ b/package/Config.in
->> @@ -169,7 +169,7 @@ source "package/gnuplot/Config.in"
->>   source "package/jhead/Config.in"
->>   source "package/rrdtool/Config.in"
+>> Hi Arnout,
+>> thanks for reviewing the patch set.
 >>
->> -comment "graphic libraries"
->> +comment "Graphic libraries"
->>   source "package/cegui06/Config.in"
->>   source "package/directfb/Config.in"
->>   source "package/directfb-examples/Config.in"
->> @@ -196,7 +196,7 @@ source "package/sdl_net/Config.in"
->>   source "package/sdl_sound/Config.in"
->>   source "package/sdl_ttf/Config.in"
+>> On Wed, Oct 23, 2013 at 11:12 PM, Arnout Vandecappelle <arnout@mind.be>
+>> wrote:
+>>>
+>>> On 18/10/13 11:34, Fabio Porcedda wrote:
+>>>>
+>>>>
+>>>> Move "dependencies" "dirs" "prepare" dependencies from "toolchain" to
+>>>> every package.
+>>>> This way we can build correctly every package right after the clean
+>>>> stage.
+>>>> As example with this commit we can build successfully the glibc right
+>>>> after the clean stage:
+>>>>          make clean glibc
+>>>>
+>>>> This is also a step forward supporting top-level parallel make.
+>>>>
+>>>> Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+>>>
+>>>
+>>>
+>>>   Although this is one of the most useful patches of the series, it is
+>>> also
+>>> the one that introduces the circular dependency. So although it looks
+>>> good,
+>>> I'm not ready to ack it.
 >>
->> -comment "other GUIs"
->> +comment "Other GUIs"
->>   source "package/efl/Config.in"
->>   source "package/qt/Config.in"
 >>
->> @@ -241,7 +241,7 @@ source "package/liberation/Config.in"
->>   source "package/libsexy/Config.in"
->>   source "package/x11r7/xkeyboard-config/Config.in"
+>> I've found a work around:
 >>
->> -comment "X Window managers"
->> +comment "X window managers"
->>   source "package/blackbox/Config.in"
->>   source "package/enlightenment/Config.in"
->>   source "package/fluxbox/Config.in"
+>> $$($(2)_TARGET_SOURCE) $$($(2)_TARGET_RSYNC): | dirs prepare
+>>
+>> # to prevent circular dependency
+>> ifneq ($(1),$(DEPENDENCIES_HOST_PREREQ))
+>> $$($(2)_TARGET_SOURCE) $$($(2)_TARGET_RSYNC): | dependencies
+>> endif
+>>
+>> What do you think about that?
 >
-> Acked-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 >
-> Maxime, when you send multiple versions of a patch, could you use v2,
-> v3, ... in the subject line (PATCH v2) to make it easier for reviewers
-
-  Note that you can do this with git-send-email (or format-patch):
-
-git send-email -v2   # Send out PATCH v2, requires git >= 1.8.something
-git send-email --subject-prefix 'PATCH v2'
-
-
-  Regards,
-  Arnout
-
-> to distinghuish the different versions? Also below the changelog you
-> should put a description of the changes compared to the previous
-> version.
-> See http://buildroot.uclibc.org/downloads/manual/manual.html#_patch_revision_changelog
+>  Looks good except that it's incorrect :-) If HOST_PREREQ contains both
+> ccache and sstrip (not to mention tar or xz), the condition won't match. You
+> can try something like:
 >
-> Also, I believe it is customary to resend the entire series when there
-> is a revision of one of its patches.
+> ifeq ($(filter $(1),$(DEPENDENCIES_HOST_PREREQ)),)
+
+Ok good, I've updated the patch according.
+
 >
-> Thanks,
-> Thomas
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+>  [Just noticed now that Thomas gave the same answer.]
 >
+>
+>>
+>>>
+>>>> ---
+>>>>    package/pkg-generic.mk           | 2 ++
+>>>>    toolchain/toolchain/toolchain.mk | 3 +--
+>>>>    2 files changed, 3 insertions(+), 2 deletions(-)
+>>>>
+>>>> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+>>>> index 4bba4b5..1e7154e 100644
+>>>> --- a/package/pkg-generic.mk
+>>>> +++ b/package/pkg-generic.mk
+>>>> @@ -385,6 +385,8 @@ $(1)-install-host:      $(1)-build
+>>>> $$($(2)_TARGET_INSTALL_HOST)
+>>>>    $(1)-build:           $(1)-configure \
+>>>>                          $$($(2)_TARGET_BUILD)
+>>>>
+>>>> +$$($(2)_TARGET_SOURCE) $$($(2)_TARGET_RSYNC): | dependencies dirs
+>>>> prepare
+>>>
+>>>
+>>>
+>>>   Is there any reason why you changed the order here?
+>>
+>>
+>> The order whit top-level parallel make does not matter, it's just that
+>> i was thinking that it's the right logical order:
+>> 1: dependencies: requisite
+>> 2: dirs: create empty directories
+>> 3. prepare: add something to the empty directories
+>>
+>> But now i understand that is "dirs prepare dependencies" or "dirs
+>> dependencies prepare" because dirs can require host-ccache and so
+>
+>
+>  You mean dependencies can require host-ccache, right? And host-ccache
+> depends on both dirs and prepare itself...  So I do think the original order
+> is more logical.
+
+Yes the final order is this: dirs prepare dependencies.
+
+I moved dirs in front because i think creating directories it's the
+first thing to do.
+
+>  Regards,
+>  Arnout
+>
+>
+>> directories,
+>> nevertheless this does not matter anymore.
+>
+>
+> [snip]
+>
+>
+>
+> --
+> Arnout Vandecappelle                          arnout at mind be
+> Senior Embedded Software Architect            +32-16-286500
+> Essensium/Mind                                http://www.mind.be
+> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+> GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
 
 
+Thanks and regards
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+Fabio Porcedda
