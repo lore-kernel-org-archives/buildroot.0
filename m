@@ -1,31 +1,58 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri, 25 Oct 2013 19:23:28 -0300
-Subject: [Buildroot] [PATCH 2/5] boost: add host variant
-In-Reply-To: <OFD1D9DF7F.3A82BA27-ON86257C0F.006A97BA-86257C0F.007833C7@rockwellcollins.com>
-References: <1382703323-31038-1-git-send-email-gustavo@zacarias.com.ar>
- <1382703323-31038-2-git-send-email-gustavo@zacarias.com.ar>
- <OFD1D9DF7F.3A82BA27-ON86257C0F.006A97BA-86257C0F.007833C7@rockwellcollins.com>
-Message-ID: <526AEF60.4080400@zacarias.com.ar>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Sat, 26 Oct 2013 00:38:51 +0200
+Subject: [Buildroot] Buildroot Developpers' Day 2013
+In-Reply-To: <OF9DE40725.A99AAF8D-ON86257C0F.0078CD97-86257C0F.007997AD@rockwellcollins.com>
+References: <20131013223941.GD16563@free.fr> <20131017143209.036bb603@skate>
+ <CAAXf6LUH86pioWLURGEfETkanHOj3iF9n2yo2EaxtK2bjLs8Sg@mail.gmail.com>
+ <20131025091847.3f3b6e6b@skate>
+ <OF9DE40725.A99AAF8D-ON86257C0F.0078CD97-86257C0F.007997AD@rockwellcollins.com>
+Message-ID: <526AF2FB.4020601@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 10/25/2013 06:53 PM, Ryan Barnett wrote:
+Hi Ryan, All,
 
-> Gustavo,
-> 
-> Please see my comment below, otherwise looks good.
-> 
-> Gustavo Zacarias <gustavo@zacarias.com.ar> wrote on 10/25/2013 07:15:20 
-> AM:
-> 
->> +# keep host variant as minimal as possible
-> 
-> Could you expand more on what you are leaving enabled and why?
+Ryan Barnett wrote:
+> Thomas P,
+>
+> Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote on 10/25/2013
+> 02:18:47 AM:
+>
+>> Dear Thomas De Schampheleire,
+>>
+>> On Fri, 25 Oct 2013 08:38:28 +0200, Thomas De Schampheleire wrote:
+>>
+>>>> Also, do we want to start a Google Hangout session during the
+> meeting,
+>>>> to allow people to follow the discussions remotely? Is there any
+>>>> interest in doing that, from the perspective of people that would be
+>>>> interested in participating remotely?
+>>> If I have some time, I will certainly join the Hangout, but I cannot
+>>> make any promises about if and when this happens.
+>>> How does this work, are hangouts 'open' all the time? Is there an
+>>> invite needed? Where will you post the reference?
+>> So far, I've only done "private" hangouts by inviting a bunch of
+>> people. Maybe there is something to make "public" hangouts, but I've
+>> never tried. So what I believe we're going to do is that the people who
+>> want to join the hangout should say so on IRC, and I'll invite them. I
+>> will just name their Google account e-mail to do so.
+>   
+> So have we decided upon an exact time? Also I haven't seen any google
+> hangout invite requests yet. I'm going to assume that we are going to do
+> it during Luca's availablity window. This means that it will take place
+> around.
 
-Just the barebones is enough for host-thrift (the tool) hence there's
-nothing to gain from a full host-boost other than longer build times.
-If the need arises it can be expanded in the future for other host-* users.
-Regards.
+The idea is that the session will start as soon as there is people.
+
+>
+> 3:00 PM to 5:00 PM CEST
+> 2:00 PM to 4:00 PM BST
+> 8:00 AM to 10:00 AM CDT
+
+I may be there a bit later, but more or less it is correct.
+
+-- 
+Luca
