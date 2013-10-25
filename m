@@ -1,7 +1,11 @@
 From: Abdul Hussain <hussain.abdul@outlook.com>
-Date: Fri, 25 Oct 2013 22:33:18 +0530
-Subject: [Buildroot] [PATCH 1/2] Initial support for I.MX6 SabreAuto board
-Message-ID: <BLU0-SMTP40FAFEA0B28C550B66412BF70D0@phx.gbl>
+Date: Fri, 25 Oct 2013 22:33:19 +0530
+Subject: [Buildroot] [PATCH 2/2] /dev/ttymxc count is changed to 4 in
+	system/device_table_dev.txt since debug uart in imx6
+	sabreauto board is ttymxc3
+In-Reply-To: <1382720599-16239-1-git-send-email-hussain.abdul@outlook.com>
+References: <1382720599-16239-1-git-send-email-hussain.abdul@outlook.com>
+Message-ID: <BLU0-SMTP409B21DB710B158C741EA4F70D0@phx.gbl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,31 +14,21 @@ To: buildroot@busybox.net
 
 Signed-off-by: Abdul Hussain <hussain.abdul@outlook.com>
 ---
- configs/imx6qsabreauto_defconfig |   16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
- create mode 100644 configs/imx6qsabreauto_defconfig
+ system/device_table_dev.txt |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/configs/imx6qsabreauto_defconfig b/configs/imx6qsabreauto_defconfig
-new file mode 100644
-index 0000000..1a3647a
---- /dev/null
-+++ b/configs/imx6qsabreauto_defconfig
-@@ -0,0 +1,16 @@
-+BR2_arm=y
-+BR2_cortex_a9=y
-+BR2_TOOLCHAIN_EXTERNAL=y
-+BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201109=y
-+BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_UDEV=y
-+BR2_TARGET_GENERIC_GETTY_PORT="ttymxc3"
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_GIT=y
-+BR2_LINUX_KERNEL_CUSTOM_GIT_REPO_URL="git://git.freescale.com/imx/linux-2.6-imx.git"
-+BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION="imx_3.0.35_4.1.0"
-+BR2_LINUX_KERNEL_DEFCONFIG="imx6"
-+BR2_TARGET_UBOOT=y
-+BR2_TARGET_UBOOT_BOARDNAME="mx6qsabreauto"
-+BR2_TARGET_UBOOT_CUSTOM_GIT=y
-+BR2_TARGET_UBOOT_CUSTOM_GIT_REPO_URL="git://git.denx.de/u-boot-imx.git"
-+BR2_TARGET_UBOOT_CUSTOM_GIT_VERSION="77b0e2239a13fa83a745ea9b03994bf780a9738a"
+diff --git a/system/device_table_dev.txt b/system/device_table_dev.txt
+index a93a2c8..9507939 100644
+--- a/system/device_table_dev.txt
++++ b/system/device_table_dev.txt
+@@ -35,7 +35,7 @@
+ /dev/ttySC	c	666	0	0	204	8	0	1	8
+ /dev/ttyPSC	c	666	0	0	204	148	0	1	4
+ /dev/ttyUL	c	666	0	0	204	187	0	1	4
+-/dev/ttymxc	c	666	0	0	207	16	0	1	3
++/dev/ttymxc	c	666	0	0	207	16	0	1	4
+ 
+ # Input stuff
+ /dev/input		d	755	0	0	-	-	-	-	-
 -- 
 1.7.9.5
