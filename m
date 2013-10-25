@@ -1,39 +1,28 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri, 25 Oct 2013 10:10:23 -0300
-Subject: [Buildroot] [PATCH 2/2] ebtables: build fix for 64-bit kernel with
-	32-bit userland
-In-Reply-To: <1382706623-5593-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1382706623-5593-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1382706623-5593-2-git-send-email-gustavo@zacarias.com.ar>
+From: Jan Viktorin <xvikto03@stud.fit.vutbr.cz>
+Date: Fri, 25 Oct 2013 16:05:24 +0200
+Subject: [Buildroot] Name of downloaded archive, conflicts
+Message-ID: <20131025160524.4f8e922a@pcviktorin.fit.vutbr.cz>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes bug #6602.
+Hello,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/ebtables/ebtables.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+I have encountred a problem when downloading custom kernel together
+with a custom (e.g.) u-boot. Both are downloaded from GitHub from a
+master branch. The URLs are (in case of using master branches):
 
-diff --git a/package/ebtables/ebtables.mk b/package/ebtables/ebtables.mk
-index edb5d42..612cf83 100644
---- a/package/ebtables/ebtables.mk
-+++ b/package/ebtables/ebtables.mk
-@@ -10,10 +10,11 @@ EBTABLES_SITE = http://downloads.sourceforge.net/project/ebtables/ebtables/ebtab
- EBTABLES_LICENSE = GPLv2+
- EBTABLES_LICENSE_FILES = COPYING
- EBTABLES_STATIC = $(if $(BR2_PREFER_STATIC_LIB),static)
-+EBTABLES_K64U32 = $(if $(BR2_KERNEL_64_USERLAND_32),CFLAGS+="-DKERNEL_64_USERSPACE_32")
- 
- define EBTABLES_BUILD_CMDS
- 	$(MAKE) $(TARGET_CONFIGURE_OPTS) LIBDIR=/lib/ebtables $(EBTABLES_STATIC) \
--		-C $(@D)
-+		$(EBTABLES_K64U32) -C $(@D)
- endef
- 
- ifeq ($(BR2_PREFER_STATIC_LIB),y)
--- 
-1.8.1.5
+ https://github.com/Xilinx/u-boot-xlnx/archive/master.tar.gz
+ https://github.com/Xilinx/linux-xlnx/archive/master.tar.gz
+
+and that leads to a file name conflict in the dl/ directory. I end
+with linux kernel extracted in the u-boot build directory...
+
+Is there a way in buildroot how to specify a different name after
+download is done or another way how to avoid the conflict? I tried to
+google a bit, however, without a success.
+
+Regards
+Jan Viktorin
