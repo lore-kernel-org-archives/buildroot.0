@@ -1,44 +1,93 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Fri, 25 Oct 2013 10:02:13 +0200
-Subject: [Buildroot] Buildroot talk at ELCE
-In-Reply-To: <526A2370.6020503@mind.be>
-References: <87ob6d7rf2.fsf@dell.be.48ers.dk>
-	<526A2370.6020503@mind.be>
-Message-ID: <CAAXf6LVK008Oz_WXtqL7rd+6v6sQ1JJJA+DuDw=H3hYcBb=wjw@mail.gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Fri, 25 Oct 2013 10:06:17 +0200
+Subject: [Buildroot] [PATCH] packages/Config.in: Fix case on entries
+	titles
+In-Reply-To: <CAAXf6LXQn-Ssw13BC3VxCqQLP-c0--5RD-ZduBhZ_64LWiodgQ@mail.gmail.com>
+References: <1382628930-23665-1-git-send-email-maxime.hadjinlian@gmail.com>
+ <CAAXf6LXQn-Ssw13BC3VxCqQLP-c0--5RD-ZduBhZ_64LWiodgQ@mail.gmail.com>
+Message-ID: <526A2679.1010606@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Oct 25, 2013 at 9:53 AM, Arnout Vandecappelle <arnout@mind.be> wrote:
-> On 25/10/13 09:14, Peter Korsgaard wrote:
->>
->> FYI,
->>
->> As you might be aware, I'm doing a talk titled 'Buildroot: What is new'
->> this afternoon at the Embedded Linux Conference Europe. See the link
->> below for the slides:
->>
->> http://peter.korsgaard.com/buildroot-whats-new-elce2013.pdf
->>
->> I'm trying to make it clear that Buildroot is very much alive, with lots
->> of activity.
->>
->> Most items in the slides have already been discussed, but I would very
->> much appreciate if you could take a quick look and let me know if I
->> missed something important or said anything stupid.
->>
->> Thanks!
+On 25/10/13 08:27, Thomas De Schampheleire wrote:
+> Hi Maxime,
 >
+> On Thu, Oct 24, 2013 at 5:35 PM, Maxime Hadjinlian
+> <maxime.hadjinlian@gmail.com> wrote:
+>> ---
+>>   package/Config.in | 6 +++---
+>>   1 file changed, 3 insertions(+), 3 deletions(-)
+>>
+>> diff --git a/package/Config.in b/package/Config.in
+>> index ebbdeb5..8519f45 100644
+>> --- a/package/Config.in
+>> +++ b/package/Config.in
+>> @@ -169,7 +169,7 @@ source "package/gnuplot/Config.in"
+>>   source "package/jhead/Config.in"
+>>   source "package/rrdtool/Config.in"
+>>
+>> -comment "graphic libraries"
+>> +comment "Graphic libraries"
+>>   source "package/cegui06/Config.in"
+>>   source "package/directfb/Config.in"
+>>   source "package/directfb-examples/Config.in"
+>> @@ -196,7 +196,7 @@ source "package/sdl_net/Config.in"
+>>   source "package/sdl_sound/Config.in"
+>>   source "package/sdl_ttf/Config.in"
+>>
+>> -comment "other GUIs"
+>> +comment "Other GUIs"
+>>   source "package/efl/Config.in"
+>>   source "package/qt/Config.in"
+>>
+>> @@ -241,7 +241,7 @@ source "package/liberation/Config.in"
+>>   source "package/libsexy/Config.in"
+>>   source "package/x11r7/xkeyboard-config/Config.in"
+>>
+>> -comment "X Window managers"
+>> +comment "X window managers"
+>>   source "package/blackbox/Config.in"
+>>   source "package/enlightenment/Config.in"
+>>   source "package/fluxbox/Config.in"
 >
->  slide 3: There are at least 4 Pengutronix guys at the conference, so I
-> guess you should mention PTXdist :-)
+> Acked-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 >
->  slide 4: No single company steering: actually, no company at all is
-> steering - though most of us use buildroot professionally, our buildroot
-> work is mostly on a volunteer basis. Right?
+> Maxime, when you send multiple versions of a patch, could you use v2,
+> v3, ... in the subject line (PATCH v2) to make it easier for reviewers
 
-How I read it was "there's not a single company steering buildroot",
-not as "buildroot is not steered by one company alone but by several".
-I can see how one can misread it though...
+  Note that you can do this with git-send-email (or format-patch):
+
+git send-email -v2   # Send out PATCH v2, requires git >= 1.8.something
+git send-email --subject-prefix 'PATCH v2'
+
+
+  Regards,
+  Arnout
+
+> to distinghuish the different versions? Also below the changelog you
+> should put a description of the changes compared to the previous
+> version.
+> See http://buildroot.uclibc.org/downloads/manual/manual.html#_patch_revision_changelog
+>
+> Also, I believe it is customary to resend the entire series when there
+> is a revision of one of its patches.
+>
+> Thanks,
+> Thomas
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+>
+
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
