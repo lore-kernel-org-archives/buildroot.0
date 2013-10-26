@@ -1,80 +1,97 @@
-From: Wojciech Zabolotny <wzab01@gmail.com>
-Date: Sat, 26 Oct 2013 17:30:16 +0200
-Subject: [Buildroot] Problems with Python ctypes on Raspberry Pi platfform -
- Was: Re: [PATCH v2 1/1] python-pyusb: new package
-Message-ID: <CAMduVEcp4u0Xb5tSK=LV_s5E2jGF501R_eKjWFnOUWtcTZ4URw@mail.gmail.com>
+From: Peter Sanford <psanford@nearbuysystems.com>
+Date: Sat, 26 Oct 2013 09:42:18 -0700
+Subject: [Buildroot] [PATCH 1/1] Update /etc/protocols from Debian Jessie.
+Message-ID: <1382805738-26352-1-git-send-email-psanford@nearbuysystems.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Testing the newly created python-pyusb on a Raspberry Pi platform, I
-have found, that it doesn't work.
-Investigating the problem more thoroughly, I have found that it is
-associated with Python ctypes package, which is not able to locate the
-libraries.
-Analyzing the Python-2.7.3/Lib/ctypes/util.py file, I have found, that
-on that platform, when neither gcc nor binutils are installed on
-target (which is typical for small systems), locating of the library
-relies on output of the "ldconfig -p" command.
-Unfortunately, this command returns simply:
+This update adds IP protocols created in the last 20 years.
 
-# /sbin/ldconfig -p
-Library cache disabled
+Signed-off-by: Peter Sanford <psanford@nearbuysystems.com>
+---
+ system/skeleton/etc/protocols |   54 ++++++++++++++++++++++++++++++++---------
+ 1 file changed, 42 insertions(+), 12 deletions(-)
 
-I'm afraid that this problem may affect many other programs and
-packages relying on Python ctypes... (and probably not only on
-Raspberry Pi platform)
-
-I have solved this problem by doing
-make uclibc-menuconfig
-and here: General Library Settings->[*]   Enable library loader cache
-(ld.so.conf)
-
-However I don't know if that can be somehow included in package dependencies?
-It is also unclear how can it affect systems with unwritable /etc (my
-test system runs from initramfs,
-so that's not a problem)
-
-Additionally in the Python-2.7.3/Lib/ctypes/util.py it is necessary to
-set the abi_type to 'libc0' for Raspberry Pi in the function below
-(lines 185-210):
-
-        def _findSoname_ldconfig(name):
-            import struct
-            if struct.calcsize('l') == 4:
-                machine = os.uname()[4] + '-32'
-            else:
-                machine = os.uname()[4] + '-64'
-            mach_map = {
-                'x86_64-64': 'libc6,x86-64',
-                'ppc64-64': 'libc6,64bit',
-                'sparc64-64': 'libc6,64bit',
-                's390x-64': 'libc6,64bit',
-                'ia64-64': 'libc6,IA-64',
-                'armv6l','libc0', # Added by WZab for ctypes support
-on Raspberry Pi
-                }
-            abi_type = mach_map.get(machine, 'libc6')
-
-            # XXX assuming GLIBC's ldconfig (with option -p)
-            expr = r'\s+(lib%s\.[^\s]+)\s+\(%s' % (re.escape(name), abi_type)
-            f = os.popen('/sbin/ldconfig -p 2>/dev/null')
-            try:
-                data = f.read()
-            finally:
-                f.close()
-            res = re.search(expr, data)
-            if not res:
-                return None
-            return res.group(1)
-
-It is also not clear how it will work with other embedded platforms :-(.
-
-So even though the python-pyusb package seems to be ready, there is a
-bigger problem with ctypes module in Python itself...
-
+diff --git a/system/skeleton/etc/protocols b/system/skeleton/etc/protocols
+index 1ac8a40..cfdd5ad 100644
+--- a/system/skeleton/etc/protocols
++++ b/system/skeleton/etc/protocols
+@@ -1,13 +1,10 @@
+-# /etc/protocols:
+-# $Id: protocols,v 1.1 2004/10/09 02:49:18 andersen Exp $
+-#
+ # Internet (IP) protocols
+ #
+-#	from: @(#)protocols	5.1 (Berkeley) 4/17/89
+-#
+-# Updated for NetBSD based on RFC 1340, Assigned Numbers (July 1992).
++# Updated from http://www.iana.org/assignments/protocol-numbers and other
++# sources.
+ 
+ ip	0	IP		# internet protocol, pseudo protocol number
++hopopt	0	HOPOPT		# IPv6 Hop-by-Hop Option [RFC1883]
+ icmp	1	ICMP		# internet control message protocol
+ igmp	2	IGMP		# Internet Group Management
+ ggp	3	GGP		# gateway-gateway protocol
+@@ -15,17 +12,50 @@ ipencap	4	IP-ENCAP	# IP encapsulated in IP (officially ``IP'')
+ st	5	ST		# ST datagram mode
+ tcp	6	TCP		# transmission control protocol
+ egp	8	EGP		# exterior gateway protocol
++igp	9	IGP		# any private interior gateway (Cisco)
+ pup	12	PUP		# PARC universal packet protocol
+ udp	17	UDP		# user datagram protocol
+ hmp	20	HMP		# host monitoring protocol
+ xns-idp	22	XNS-IDP		# Xerox NS IDP
+ rdp	27	RDP		# "reliable datagram" protocol
+-iso-tp4	29	ISO-TP4		# ISO Transport Protocol class 4
+-xtp	36	XTP		# Xpress Tranfer Protocol
++iso-tp4	29	ISO-TP4		# ISO Transport Protocol class 4 [RFC905]
++dccp	33	DCCP		# Datagram Congestion Control Prot. [RFC4340]
++xtp	36	XTP		# Xpress Transfer Protocol
+ ddp	37	DDP		# Datagram Delivery Protocol
+-idpr-cmtp	39	IDPR-CMTP	# IDPR Control Message Transport
+-rspf	73	RSPF		#Radio Shortest Path First.
++idpr-cmtp 38	IDPR-CMTP	# IDPR Control Message Transport
++ipv6	41	IPv6		# Internet Protocol, version 6
++ipv6-route 43	IPv6-Route	# Routing Header for IPv6
++ipv6-frag 44	IPv6-Frag	# Fragment Header for IPv6
++idrp	45	IDRP		# Inter-Domain Routing Protocol
++rsvp	46	RSVP		# Reservation Protocol
++gre	47	GRE		# General Routing Encapsulation
++esp	50	IPSEC-ESP	# Encap Security Payload [RFC2406]
++ah	51	IPSEC-AH	# Authentication Header [RFC2402]
++skip	57	SKIP		# SKIP
++ipv6-icmp 58	IPv6-ICMP	# ICMP for IPv6
++ipv6-nonxt 59	IPv6-NoNxt	# No Next Header for IPv6
++ipv6-opts 60	IPv6-Opts	# Destination Options for IPv6
++rspf	73	RSPF CPHB	# Radio Shortest Path First (officially CPHB)
+ vmtp	81	VMTP		# Versatile Message Transport
++eigrp	88	EIGRP		# Enhanced Interior Routing Protocol (Cisco)
+ ospf	89	OSPFIGP		# Open Shortest Path First IGP
+-ipip	94	IPIP		# Yet Another IP encapsulation
+-encap	98	ENCAP		# Yet Another IP encapsulation
++ax.25	93	AX.25		# AX.25 frames
++ipip	94	IPIP		# IP-within-IP Encapsulation Protocol
++etherip	97	ETHERIP		# Ethernet-within-IP Encapsulation [RFC3378]
++encap	98	ENCAP		# Yet Another IP encapsulation [RFC1241]
++#	99			# any private encryption scheme
++pim	103	PIM		# Protocol Independent Multicast
++ipcomp	108	IPCOMP		# IP Payload Compression Protocol
++vrrp	112	VRRP		# Virtual Router Redundancy Protocol [RFC5798]
++l2tp	115	L2TP		# Layer Two Tunneling Protocol [RFC2661]
++isis	124	ISIS		# IS-IS over IPv4
++sctp	132	SCTP		# Stream Control Transmission Protocol
++fc	133	FC		# Fibre Channel
++mobility-header 135 Mobility-Header # Mobility Support for IPv6 [RFC3775]
++udplite	136	UDPLite		# UDP-Lite [RFC3828]
++mpls-in-ip 137	MPLS-in-IP	# MPLS-in-IP [RFC4023]
++manet	138			# MANET Protocols [RFC5498]
++hip	139	HIP		# Host Identity Protocol
++shim6	140	Shim6		# Shim6 Protocol [RFC5533]
++wesp	141	WESP		# Wrapped Encapsulating Security Payload
++rohc	142	ROHC		# Robust Header Compression
 -- 
-TIA & Regards,
-Wojtek
+1.7.9.5
