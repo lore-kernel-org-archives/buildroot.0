@@ -1,33 +1,51 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 26 Oct 2013 08:47:41 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2013-10-24
-In-Reply-To: <526A4D39.3040106@zacarias.com.ar>
-References: <20131025063005.51B7752C609@lolut.humanoidz.org>
- <526A26EB.7010804@mind.be> <20131025124746.0dbffd63@skate>
- <526A4D39.3040106@zacarias.com.ar>
-Message-ID: <20131026084741.5cab8678@skate>
+Date: Sat, 26 Oct 2013 08:51:07 +0200
+Subject: [Buildroot] [RFC] pkg-python infrastructure
+In-Reply-To: <OFCFB88498.0047424B-ON86257C0F.0057371F-86257C0F.0057386F@rockwellcollins.com>
+References: <OFCFB88498.0047424B-ON86257C0F.0057371F-86257C0F.0057386F@rockwellcollins.com>
+Message-ID: <20131026085107.40230e6b@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+Dear Ryan Barnett,
 
-On Fri, 25 Oct 2013 07:51:37 -0300, Gustavo Zacarias wrote:
-> On 10/25/2013 07:47 AM, Thomas Petazzoni wrote:
-> > Not sure what's going on... They blacklisted the build server IP address
-> > because I'm downloading things too many times?
+On Fri, 25 Oct 2013 10:52:54 -0500, Ryan Barnett wrote:
+
+> A while back (about a week ago) - Gustavoz Zacarias, Thomas Petazzoni, and 
+> myself - were having a conversation on the IRC about creating a new 
+> package type for handling the builds of python packages. If I recall 
+> correctly, this is what we discussed. I would like to just have some 
+> record on how we want to handle building python packages.
 > 
-> Very likely.
+> Thomas P and Gustavoz - please correct/expand on any points that I may be 
+> missing.
+> 
+> pkg-python infrastructure
+> -------------------------
+> 
+>  * Would add a new makefile defining generic build steps for python 
+> packages under package/pkg-python.mk.
+> 
+>  * Would support building for Python 2.7 and Python 3+.
+> 
+>  * Would ensure that cross-compiling of python packages is handled 
+> correctly.
+> 
+>  * Would support setup.py and setuptools packages.
+> 
+> I don't know when I will be able to get around to doing this but I would 
+> like to at least capture the points that were made. Also anyone else is 
+> welcome to pick up this work too :)
 
-Interestingly, Yann E. Morin also reported the same problem (Connection
-refused) when connecting from one of his machine, which has (as far as
-I know) is not used as a build server that could cause repeated
-downloads of the mpd tarball. So it seems like it's not such my build
-server that has been blacklisted. Maybe something we should report to
-the musicpd people.
+I definitely confirm that the number of Python modules packages has
+grown quite significantly, and that it is certainly time to look at
+creating a common infrastructure for those that are based on
+setup.py/setuptools. If anyone is interested in working on this, it'd
+be great. I just want to warn that it doesn't look like an easy task,
+as cross-compilation with Python can be a bit tricky.
 
 Best regards,
 
