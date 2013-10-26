@@ -1,261 +1,151 @@
-From: Ryan Barnett <rjbarnet@rockwellcollins.com>
-Date: Fri, 25 Oct 2013 22:12:09 -0500
-Subject: [Buildroot] [PATCH 5/5] thrift: new package
-In-Reply-To: <1382703323-31038-5-git-send-email-gustavo@zacarias.com.ar>
-References: <1382703323-31038-1-git-send-email-gustavo@zacarias.com.ar>
- <1382703323-31038-5-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <OFFFC3A740.7C7B430A-ON86257C10.000F397E-86257C10.001197E6@rockwellcollins.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 26 Oct 2013 08:30:08 +0200 (CEST)
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2013-10-25
+Message-ID: <20131026063008.7174752C609@lolut.humanoidz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Gustavo,
+Build statistics for 2013-10-25
+===============================
 
-Please see my comments below.
+        success : 42 
+       failures : 81 
+       timeouts : 0  
+          TOTAL : 123
 
-Gustavo Zacarias <gustavo@zacarias.com.ar> wrote on 10/25/2013 07:15:23 
-AM:
+Classification of failures by reason
+====================================
 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  package/Config.in                             |  1 +
->  package/thrift/Config.in                      | 22 +++++++++++
->  package/thrift/thrift-01-libevent-cross.patch | 16 ++++++++
->  package/thrift/thrift-02-autoreconf.patch     | 22 +++++++++++
->  package/thrift/thrift-03-zlib-cross.patch     | 16 ++++++++
->  package/thrift/thrift.mk                      | 54 
-+++++++++++++++++++++++++++
->  6 files changed, 131 insertions(+)
->  create mode 100644 package/thrift/Config.in
->  create mode 100644 package/thrift/thrift-01-libevent-cross.patch
->  create mode 100644 package/thrift/thrift-02-autoreconf.patch
->  create mode 100644 package/thrift/thrift-03-zlib-cross.patch
->  create mode 100644 package/thrift/thrift.mk
-> 
-> diff --git a/package/Config.in b/package/Config.in
-> index 16cb36d..319b7d5 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -639,6 +639,7 @@ source "package/openpgm/Config.in"
->  source "package/ortp/Config.in"
->  source "package/slirp/Config.in"
->  source "package/snmppp/Config.in"
-> +source "package/thrift/Config.in"
->  source "package/usbredir/Config.in"
->  source "package/wvstreams/Config.in"
->  source "package/zeromq/Config.in"
-> diff --git a/package/thrift/Config.in b/package/thrift/Config.in
-> new file mode 100644
-> index 0000000..38a8897
-> --- /dev/null
-> +++ b/package/thrift/Config.in
-> @@ -0,0 +1,22 @@
-> +config BR2_PACKAGE_THRIFT
-> +   bool "thrift"
-> +   depends on BR2_INSTALL_LIBSTDCPP
-> +   depends on BR2_USE_WCHAR
-> +   depends on BR2_LARGEFILE
-> +   depends on BR2_TOOLCHAIN_HAS_THREADS
-> +   select BR2_PACKAGE_BOOST
-> +   select BR2_PACKAGE_LIBEVENT
-> +   select BR2_PACKAGE_OPENSSL
-> +   help
-> +     The Apache Thrift software framework, for scalable cross-language
-> +     services development, combines a software stack with a
-> +     code generation engine to build services that work
-> +     efficiently and seamlessly between C++, Java, Python, PHP, Ruby,
-> +     Erlang, Perl, Haskell, C#, Cocoa, JavaScript, Node.js, Smalltalk,
-> +     OCaml and Delphi and other languages.
-> +
-> +     http://thrift.apache.org/
-> +
-> +comment "thrift needs a toolchain w/ C++, largefile, wchar, threads"
-> +   depends on !BR2_LARGEFILE || !BR2_USE_WCHAR || \
-> +      !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP
-> diff --git a/package/thrift/thrift-01-libevent-cross.patch 
-b/package/thrift/thrift-01-libevent-cross.patch
-> new file mode 100644
-> index 0000000..f07caa7
-> --- /dev/null
-> +++ b/package/thrift/thrift-01-libevent-cross.patch
-> @@ -0,0 +1,16 @@
-> +Make it cross-compile happy the hard way, there's no clean way.
-> +
-> +Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> +
-> +diff -Nura thrift-0.9.1.orig/aclocal/ax_lib_event.m4 
-thrift-0.9.1/aclocal/ax_lib_event.m4
-> +--- thrift-0.9.1.orig/aclocal/ax_lib_event.m4   2013-08-15 
-11:04:29.000000000 -0300
-> ++++ thrift-0.9.1/aclocal/ax_lib_event.m4   2013-10-07 
-20:40:44.076435613 -0300
-> +@@ -75,7 +75,7 @@
-> +           AC_LANG_PUSH([C])
-> +           dnl This can be changed to AC_LINK_IFELSE if you are 
-cross-compiling,
-> +           dnl but then the version cannot be checked.
-> +-          AC_RUN_IFELSE([AC_LANG_PROGRAM([[
-> ++          AC_LINK_IFELSE([AC_LANG_PROGRAM([[
-> +           #include <sys/types.h>
-> +           #include <event.h>
-> +           ]], [[
-> diff --git a/package/thrift/thrift-02-autoreconf.patch 
-b/package/thrift/thrift-02-autoreconf.patch
-> new file mode 100644
-> index 0000000..d56212a
-> --- /dev/null
-> +++ b/package/thrift/thrift-02-autoreconf.patch
-> @@ -0,0 +1,22 @@
-> +Fillers to make autoreconf (automake) happy.
-> +
-> +Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> +
-> +diff -Nura thrift-0.9.1.orig/AUTHORS thrift-0.9.1/AUTHORS
-> +--- thrift-0.9.1.orig/AUTHORS   1969-12-31 21:00:00.000000000 -0300
-> ++++ thrift-0.9.1/AUTHORS   2013-10-07 20:45:15.745315148 -0300
-> +@@ -0,0 +1,2 @@
-> ++
-> ++
-> +diff -Nura thrift-0.9.1.orig/ChangeLog thrift-0.9.1/ChangeLog
-> +--- thrift-0.9.1.orig/ChangeLog   1969-12-31 21:00:00.000000000 -0300
-> ++++ thrift-0.9.1/ChangeLog   2013-10-07 20:45:23.078554836 -0300
-> +@@ -0,0 +1,2 @@
-> ++
-> ++
-> +diff -Nura thrift-0.9.1.orig/NEWS thrift-0.9.1/NEWS
-> +--- thrift-0.9.1.orig/NEWS   1969-12-31 21:00:00.000000000 -0300
-> ++++ thrift-0.9.1/NEWS   2013-10-07 20:45:20.351465699 -0300
-> +@@ -0,0 +1,2 @@
-> ++
-> ++
-> diff --git a/package/thrift/thrift-03-zlib-cross.patch 
-b/package/thrift/thrift-03-zlib-cross.patch
-> new file mode 100644
-> index 0000000..3af39c4
-> --- /dev/null
-> +++ b/package/thrift/thrift-03-zlib-cross.patch
-> @@ -0,0 +1,16 @@
-> +Make zlib version detection cross-compile happy.
-> +
-> +Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> +
-> +diff -Nura thrift-0.9.1.orig/aclocal/ax_lib_zlib.m4 
-thrift-0.9.1/aclocal/ax_lib_zlib.m4
-> +--- thrift-0.9.1.orig/aclocal/ax_lib_zlib.m4   2013-08-15 
-11:04:29.000000000 -0300
-> ++++ thrift-0.9.1/aclocal/ax_lib_zlib.m4   2013-10-07 20:47:44.523177973 
--0300
-> +@@ -73,7 +73,7 @@
-> +           #   (defined in the library).
-> +           AC_LANG_PUSH([C])
-> +           dnl This can be changed to AC_LINK_IFELSE if you are 
-cross-compiling.
-> +-          AC_RUN_IFELSE([AC_LANG_PROGRAM([[
-> ++          AC_LINK_IFELSE([AC_LANG_PROGRAM([[
-> +           #include <zlib.h>
-> +           #if ZLIB_VERNUM >= 0x$WANT_ZLIB_VERSION
-> +           #else
-> diff --git a/package/thrift/thrift.mk b/package/thrift/thrift.mk
-> new file mode 100644
-> index 0000000..53e1b97
-> --- /dev/null
-> +++ b/package/thrift/thrift.mk
-> @@ -0,0 +1,54 @@
-> 
-+################################################################################
-> +#
-> +# thrift
-> +#
-> 
-+################################################################################
-> +
-> +THRIFT_VERSION = 0.9.1
-> +THRIFT_SITE = http://www.us.apache.org/dist/thrift/$(THRIFT_VERSION)
-> +THRIFT_DEPENDENCIES = host-pkgconf host-thrift boost libevent openssl
-> +HOST_THRIFT_DEPENDENCIES = host-boost host-libevent host-openssl 
-host-pkgconf
-> +THRIFT_CONF_OPT = --with-sysroot=$(STAGING_DIR) --with-tests=no \
-> +   --with-boost=$(STAGING_DIR)
-> +HOST_THRIFT_CONF_OPT = --with-sysroot=$(HOST_DIR) --with-tests=no
-> +THRIFT_AUTORECONF = YES
+                    mpd-0.17.6 | 10
+    trace-cmd-trace-cmd-v2.2.1 | 9 
+make: *** [uboot-tools-lega... | 6 
+           uboot-tools-2013.10 | 5 
+      host-uboot-tools-2013.10 | 4 
+               alsa-lib-1.0.26 | 4 
+                libiscsi-1.6.0 | 3 
+                 binutils-2.22 | 3 
+               libglib2-2.36.3 | 2 
+                valgrind-3.8.1 | 2 
+                  gnupg-1.4.15 | 2 
+                   attr-2.4.47 | 2 
+                  tstools-1_11 | 1 
+                beecrypt-4.2.1 | 1 
+          host-protobuf-c-0.15 | 1 
+                sqlite-3080002 | 1 
+                 cairo-1.12.10 | 1 
+                 ffmpeg-0.8.15 | 1 
+                  bustle-0.4.2 | 1 
+               qt5webkit-5.0.2 | 1 
+                 libnspr-4.9.6 | 1 
+                    php-5.3.27 | 1 
+                  connman-1.12 | 1 
+     xlib_libpthread-stubs-0.3 | 1 
+        liblog4c-localtime-1.0 | 1 
+                  udisks-1.0.4 | 1 
+             alsa-utils-1.0.26 | 1 
+                 fdk-aac-0.1.2 | 1 
+             tinymembench-v0.2 | 1 
+                  ne10-88c18f0 | 1 
+                 libffi-3.0.13 | 1 
+                   cvs-1.12.13 | 1 
+             make: write error | 1 
+               w_scan-20130331 | 1 
+               uclibc-0.9.33.2 | 1 
+                 rt-tests-0.83 | 1 
+               audiofile-0.3.6 | 1 
+                     m4-1.4.17 | 1 
+               czmq-cb9839cf90 | 1 
+                  libnl-3.2.21 | 1 
+                sdl_ttf-2.0.11 | 1 
 
-Could you move the license to right below the site? It doesn't really 
-matter but I guess I like to see version, site, license as the first 
-things in a package. I guess there isn't any official standard to the way 
-a package makefile should be in but I guess that is just my person 
-preference. 
+Detail of failures
+===================
 
-> +THRIFT_LICENSE = Apache 2.0
-> +THRIFT_LICENSE_FILES = LICENSE
-> +
-> +ifeq ($(BR2_PREFER_STATIC_LIB),y)
-> +# openssl uses zlib, so we need to explicitly link with it when static
-> +THRIFT_CONF_ENV += LIBS=-lz
+       arm |                alsa-lib-1.0.26 | NOK | http://autobuild.buildroot.net/results/f96950ccf77873dbce7a73bc2e15e275699ff257/
+      bfin |                alsa-lib-1.0.26 | NOK | http://autobuild.buildroot.net/results/d140fca741693b0f93d10aa24973c01e8b2b2f2d/
+      bfin |                alsa-lib-1.0.26 | NOK | http://autobuild.buildroot.net/results/a15917c47325f875ea23953e81905680f3f03739/
+    x86_64 |                alsa-lib-1.0.26 | NOK | http://autobuild.buildroot.net/results/ed164866a3d02a66017f63756d6b6fdc9d761bb9/
+      bfin |              alsa-utils-1.0.26 | NOK | http://autobuild.buildroot.net/results/ce92bd5ac77728c43ae0dac302d45d6de67970a8/
+       arm |                    attr-2.4.47 | NOK | http://autobuild.buildroot.net/results/dd7084df68dd41b515ab5cacfa07a58038e189aa/
+       arm |                    attr-2.4.47 | NOK | http://autobuild.buildroot.net/results/03c103adf42217908994397daa3737d519c4531c/
+      sh4a |                audiofile-0.3.6 | NOK | http://autobuild.buildroot.net/results/bce1b3a2a99d0dddeddff98af39342c1476ebf2d/
+microblaze |                 beecrypt-4.2.1 | NOK | http://autobuild.buildroot.net/results/4a4709dfa46cc15b0e2890078481e31f4328f4ae/
+    xtensa |                  binutils-2.22 | NOK | http://autobuild.buildroot.net/results/f3f9fedfc92b125fa2dbe10c5e3f72db3fdfb7a9/
+    xtensa |                  binutils-2.22 | NOK | http://autobuild.buildroot.net/results/d232d06b5ab9a7b1c5a4d76a79b3794cde8e2274/
+    xtensa |                  binutils-2.22 | NOK | http://autobuild.buildroot.net/results/687a233c574de8c95ddb9187b8fdd72be0d07902/
+   powerpc |                   bustle-0.4.2 | NOK | http://autobuild.buildroot.net/results/b34408340292b60596d127dd83741d2bbe11eac7/
+      bfin |                  cairo-1.12.10 | NOK | http://autobuild.buildroot.net/results/488955661999b6564afe1ce5759daae5980b6532/
+     avr32 |                   connman-1.12 | NOK | http://autobuild.buildroot.net/results/a8269a379eae7e75884ceec79a815ca9503d171d/
+  mips64el |                    cvs-1.12.13 | NOK | http://autobuild.buildroot.net/results/5b70534de7e6138e95227417887bb68fb4b92745/
+       arm |                czmq-cb9839cf90 | NOK | http://autobuild.buildroot.net/results/367b135b6d79983d45cb87ebfc841949bfeff29c/
+    mipsel |                  fdk-aac-0.1.2 | NOK | http://autobuild.buildroot.net/results/de8968ebf6496d568808c3892de6f35fae76c034/
+       arc |                  ffmpeg-0.8.15 | NOK | http://autobuild.buildroot.net/results/70cdb7fabde52bc2337b626d93f60cdc1e8bd485/
+       arc |                   gnupg-1.4.15 | NOK | http://autobuild.buildroot.net/results/e933c3bf643779439a3264d2165fedd25415cc12/
+       arc |                   gnupg-1.4.15 | NOK | http://autobuild.buildroot.net/results/124c1193f4ba333818a86542cb97024764d35c0b/
+      i686 |           host-protobuf-c-0.15 | NOK | http://autobuild.buildroot.net/results/d4029dd430a52f8c68e4859f380f36ec0b519ea5/
+       arm |       host-uboot-tools-2013.10 | NOK | http://autobuild.buildroot.net/results/07c56f2f9ff17cd2f72bcad87446cef88e4428af/
+   powerpc |       host-uboot-tools-2013.10 | NOK | http://autobuild.buildroot.net/results/fb0bafdabb4cd0dc9648cb5468b09a5215fde2db/
+   powerpc |       host-uboot-tools-2013.10 | NOK | http://autobuild.buildroot.net/results/409ac94817a55b19fb810dd2322075b2c2840d5e/
+       arm |       host-uboot-tools-2013.10 | NOK | http://autobuild.buildroot.net/results/fd5b0837d4e8754baa714e3ad33decd9908bea94/
+       arm |                  libffi-3.0.13 | NOK | http://autobuild.buildroot.net/results/0039c8fa62dcef54353161a0351a21e62686cda4/
+      bfin |                libglib2-2.36.3 | NOK | http://autobuild.buildroot.net/results/b40161e2ce5d75e5ffdac7e96040c11c144412a5/
+microblaze |                libglib2-2.36.3 | NOK | http://autobuild.buildroot.net/results/43208b15f70bec9b3125b711a2d6e71eb22e5299/
+  mips64el |                 libiscsi-1.6.0 | NOK | http://autobuild.buildroot.net/results/e727e88e818365fa451b46476b8173dbf4fcf4b4/
+  mips64el |                 libiscsi-1.6.0 | NOK | http://autobuild.buildroot.net/results/da5ab6903f235e2e7bfe93183b46f7a496631f5b/
+  mips64el |                 libiscsi-1.6.0 | NOK | http://autobuild.buildroot.net/results/58b2b6ad150dad63d739ff117b94671ab37d85d3/
+       arm |         liblog4c-localtime-1.0 | NOK | http://autobuild.buildroot.net/results/2f16f7e88e21ccd6a0c4373cc90d1eaa9e45798a/
+      bfin |                   libnl-3.2.21 | NOK | http://autobuild.buildroot.net/results/54d552576cdce201be3ef0d51cd84bcc6d397425/
+       arm |                  libnspr-4.9.6 | NOK | http://autobuild.buildroot.net/results/ed1343116e305284e724323a91cded628a635b4e/
+       arc |                      m4-1.4.17 | NOK | http://autobuild.buildroot.net/results/58277501b5483e9f0a373a353231f59a2e874496/
+   powerpc | make: *** [uboot-tools-lega... | NOK | http://autobuild.buildroot.net/results/ecb6301f5c8b927344ee1146b35d15f07a3c2e49/
+    mipsel | make: *** [uboot-tools-lega... | NOK | http://autobuild.buildroot.net/results/0699b804d8e3016025f791868aa9f44b54f0cecc/
+    x86_64 | make: *** [uboot-tools-lega... | NOK | http://autobuild.buildroot.net/results/51e9b2d68d31a62b54cb54397fe7a393c45ce28a/
+   powerpc | make: *** [uboot-tools-lega... | NOK | http://autobuild.buildroot.net/results/6fce6c431c70130d9bea1dd80243a32392e5539d/
+   powerpc | make: *** [uboot-tools-lega... | NOK | http://autobuild.buildroot.net/results/e5cd258fe3f48b7c64dec7beef4d27a8169ec7a7/
+   powerpc | make: *** [uboot-tools-lega... | NOK | http://autobuild.buildroot.net/results/756e3be973bc4fdba36a3f150130b275163ce248/
+       arm |              make: write error | NOK | http://autobuild.buildroot.net/results/41543962d6fc7f7fe16532e59647189f782d8915/
+    x86_64 |                     mpd-0.17.6 | NOK | http://autobuild.buildroot.net/results/657b947554ef44b845fad871e9cc7ab384eec47b/
+       arm |                     mpd-0.17.6 | NOK | http://autobuild.buildroot.net/results/6ddcf6569d2830a3312da0365a3cda8c8556ddc5/
+    x86_64 |                     mpd-0.17.6 | NOK | http://autobuild.buildroot.net/results/83852fe3d3c6b494a17f17b1ca89d99df555dd29/
+       arm |                     mpd-0.17.6 | NOK | http://autobuild.buildroot.net/results/94596b24477c7ec9bfa0c010938f9af3ac183563/
+       arm |                     mpd-0.17.6 | NOK | http://autobuild.buildroot.net/results/27e0d334449d7023e5aee5b61b667d0fc995fba1/
+       arm |                     mpd-0.17.6 | NOK | http://autobuild.buildroot.net/results/d562718663888b8f08fa4dc6b192397dbb261a6e/
+       arm |                     mpd-0.17.6 | NOK | http://autobuild.buildroot.net/results/e5030f7da0f86e0a66142192f2d4858d76e727f9/
+   powerpc |                     mpd-0.17.6 | NOK | http://autobuild.buildroot.net/results/e15f12893c829db694084e7965d5c450b314831b/
+    x86_64 |                     mpd-0.17.6 | NOK | http://autobuild.buildroot.net/results/9730cf7f47bf83cd62068ecfc2f208afec08e8bc/
+       arm |                     mpd-0.17.6 | NOK | http://autobuild.buildroot.net/results/c4ae4ab3364165c1deac38f7b8c08565c719669a/
+       arm |                   ne10-88c18f0 | NOK | http://autobuild.buildroot.net/results/297fac06c0481719e4a6571d08aeaecd3bc30bb7/
+       arm |                     php-5.3.27 | NOK | http://autobuild.buildroot.net/results/4c341263ccd59ec09c3818040c48490cbbae40ea/
+      sh4a |                qt5webkit-5.0.2 | NOK | http://autobuild.buildroot.net/results/ad4d07efaf76c5146eeb711b4d2d9937a8b86835/
+    mipsel |                  rt-tests-0.83 | NOK | http://autobuild.buildroot.net/results/51030f76b4e609693f184a26ccfa2453d294e7d4/
+       arm |                 sdl_ttf-2.0.11 | NOK | http://autobuild.buildroot.net/results/6313fafd1c01b180acbceb9d166aa9cd8abf4b64/
+       arc |                 sqlite-3080002 | NOK | http://autobuild.buildroot.net/results/2af97c4a0f0176d9c173db764d6d0205546f9a08/
+  mips64el |              tinymembench-v0.2 | NOK | http://autobuild.buildroot.net/results/268bdaf121fe4621f840e042afa86b88e863e5ac/
+       arm |     trace-cmd-trace-cmd-v2.2.1 | NOK | http://autobuild.buildroot.net/results/baa563238871cd8d4a5ec6b75f7ef8f9ffa57fc0/
+   powerpc |     trace-cmd-trace-cmd-v2.2.1 | NOK | http://autobuild.buildroot.net/results/27b0e698b37d8cfc40a3b2c31f410a92367e2697/
+   powerpc |     trace-cmd-trace-cmd-v2.2.1 | NOK | http://autobuild.buildroot.net/results/fb640e768a5c7ab0fa5fe71618f27cee8716ccec/
+   powerpc |     trace-cmd-trace-cmd-v2.2.1 | NOK | http://autobuild.buildroot.net/results/cb84119b5164bd09d1779d7d38b21bae659edf51/
+   powerpc |     trace-cmd-trace-cmd-v2.2.1 | NOK | http://autobuild.buildroot.net/results/30a4b60a70288d0b84ca90be726096b76dddcaa3/
+   powerpc |     trace-cmd-trace-cmd-v2.2.1 | NOK | http://autobuild.buildroot.net/results/ccae9e2d06164ba9a09c921df22f7844449e58f3/
+   powerpc |     trace-cmd-trace-cmd-v2.2.1 | NOK | http://autobuild.buildroot.net/results/d8c1219e786d998c4822ef93b13cb283f574c068/
+   powerpc |     trace-cmd-trace-cmd-v2.2.1 | NOK | http://autobuild.buildroot.net/results/1cdd9438548d840b49b36793231930f4f1b31e30/
+   powerpc |     trace-cmd-trace-cmd-v2.2.1 | NOK | http://autobuild.buildroot.net/results/8e87939d7bb376f623b03276a4f13d24ccc4354d/
+  mips64el |                   tstools-1_11 | NOK | http://autobuild.buildroot.net/results/34c9eb0544ea483001f61ea1b5124674e9872ae9/
+   powerpc |            uboot-tools-2013.10 | NOK | http://autobuild.buildroot.net/results/18986401a53de5e170b71eb5f552b429a0c0a311/
+   powerpc |            uboot-tools-2013.10 | NOK | http://autobuild.buildroot.net/results/41ce71daf8432a1c414fcad1b9a69f1a93de3761/
+       arm |            uboot-tools-2013.10 | NOK | http://autobuild.buildroot.net/results/8c87009cd0230930e29836db69050d0dcb916bfc/
+       arm |            uboot-tools-2013.10 | NOK | http://autobuild.buildroot.net/results/bd878285dcb1e68bfc464edaa957592394c02896/
+       arm |            uboot-tools-2013.10 | NOK | http://autobuild.buildroot.net/results/1b0d7dc6a68d1449709fe441aa8950428e7d7501/
+       arm |                uclibc-0.9.33.2 | NOK | http://autobuild.buildroot.net/results/902fd34ebb41619bcd61d498ec2b22fcbab3c53e/
+   powerpc |                   udisks-1.0.4 | NOK | http://autobuild.buildroot.net/results/bbece0b0ebac3909b956a1867514a8e6c3fb3bd4/
+       arm |                 valgrind-3.8.1 | NOK | http://autobuild.buildroot.net/results/21eaadeb0af07ee343e8a5add7c918e62f57ac4d/
+       arm |                 valgrind-3.8.1 | NOK | http://autobuild.buildroot.net/results/c39fceb4be5d422a7453f14d89e824ca0a1105f7/
+   powerpc |                w_scan-20130331 | NOK | http://autobuild.buildroot.net/results/c3326143d3f6425b7a72e598b3384f42e2e42129/
+       arm |      xlib_libpthread-stubs-0.3 | NOK | http://autobuild.buildroot.net/results/a793d701d43fce1316697e21b592f50468724811/
 
-Shouldn't you add a dependancy on libz then?
 
-THRIFT_DEPENDCIES += zlib
-
-> +endif
-> +
-> +# Language selection
-> +# The generator (host tool) works with all of them regardless
-> +# This is just for the libraries / bindings
-> +THRIFT_LANG_CONF_OPT += --without-csharp --without-java 
---without-erlang \
-> +   --without-python --without-perl --without-php 
---without-php_extension \
-> +   --without-ruby --without-haskell --without-go --without-d
-> +HOST_THRIFT_CONF_OPT += $(THRIFT_LANG_CONF_OPT) --without-c_glib
-> +THRIFT_CONF_OPT += $(THRIFT_LANG_CONF_OPT)
-> +
-> +# C bindings
-> +ifeq ($(BR2_PACKAGE_LIBGLIB2),y)
-> +THRIFT_DEPENDENCIES += libglib2
-> +else
-> +THRIFT_CONF_OPT += --without-c_glib
-> +endif
-> +
-> +# De-hardcode THRIFT for cross compiling
-> +define THRIFT_BUILD_CMDS
-> +   for f in `find $(@D) -name Makefile -type f`; do \
-> +      $(SED) "/^THRIFT =/d" $$f; \
-> +   done
-> +   $(SED) "s:top_builddir)/compiler/cpp/thrift:THRIFT):" 
-$(@D)/tutorial/Makefile
-> +   $(TARGET_MAKE_ENV) $(MAKE) THRIFT=$(HOST_DIR)/usr/bin/thrift -C 
-$(@D)
-> +endef
-> +
-
-I haven't tested this so I don't fully understand what exactly what you 
-are doing here. I see that this is an autotools package but it doesn't 
-appear to be building or installing using the autotools infrastructure. 
-Could you please elaborate a little bit more of why exactly you can't use 
-autotoools to build for this? I believe I understand what you are doing 
-here but I guess I would like a few more details from you. 
-
-Also it looks like thrift is a compiler, so wouldn't we want to have this 
-available as a host tool because presumably there would be a need to to 
-add custom user packages that utilize Thrift to compile their application. 
-Again I haven't had time to read further what exactly thrift does but 
-these are just the few things that are coming to my mind tonight.
-
-I will try to investigate this a little bit more in the coming days (next 
-week) but for now this are my initial reaction comments.
-
-> +# Install runtime only
-> +define THRIFT_INSTALL_TARGET_CMDS
-> +   $(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/lib DESTDIR=$(TARGET_DIR) 
-install
-> +endef
-> +
-> +$(eval $(autotools-package))
-> +$(eval $(host-autotools-package))
-> -- 
-> 1.8.1.5
-
-Thanks,
--Ryan
+-- 
+http://autobuild.buildroot.net
