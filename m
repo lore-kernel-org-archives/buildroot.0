@@ -1,24 +1,38 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sat, 26 Oct 2013 07:01:26 -0300
-Subject: [Buildroot] [RFC] pkg-python infrastructure
-In-Reply-To: <OFCFB88498.0047424B-ON86257C0F.0057371F-86257C0F.0057386F@rockwellcollins.com>
-References: <OFCFB88498.0047424B-ON86257C0F.0057371F-86257C0F.0057386F@rockwellcollins.com>
-Message-ID: <526B92F6.20205@zacarias.com.ar>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sat, 26 Oct 2013 12:13:38 +0200
+Subject: [Buildroot] [PATCH v3 1/2] docker: change into generic-package
+In-Reply-To: <1382567059-30569-1-git-send-email-arnout@mind.be> (Arnout
+ Vandecappelle's message of "Thu, 24 Oct 2013 00:24:18 +0200")
+References: <1382567059-30569-1-git-send-email-arnout@mind.be>
+Message-ID: <87mwlw2vcd.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 10/25/2013 12:52 PM, Ryan Barnett wrote:
+>>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
 
-> pkg-python infrastructure
-> -------------------------
+ > docker is using autotools-package while it is in fact just a plain make
+ > package.
 
-* Packages should declare if they're python2 and/or python3 compatible.
+ > Remove docker-1.5-skip-configure.patch which was just a hack to avoid
+ > calling the non-existent configure script.
 
-Right now packages are only for one or the other but not both, this
-should be fixed when packages are happy about it (two build/install
-phases if enabled).
+ > Remove docker-1.5-pkgconfig.patch which is not needed when PATH is set
+ > appropriately.
 
-Regards.
+ > Add a XLIBPATH option to the command line to avoid linking with
+ > /usr/X11R6/lib.
+
+ > Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ > ---
+ > I discovered this while testing Fabio's parallel make patches: the
+ > changed dependency on .stamp_configured made the build fail.
+
+ > v3: fixed splitting of the patches.
+
+Committed both, thanks.
+
+-- 
+Bye, Peter Korsgaard
