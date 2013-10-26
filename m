@@ -1,33 +1,47 @@
-From: Peter Sanford <psanford@nearbuysystems.com>
-Date: Fri, 25 Oct 2013 17:19:37 -0700
-Subject: [Buildroot] Updating /etc/protocols
-In-Reply-To: <526B0698.4010400@zacarias.com.ar>
-References: <CANGB_5aEjRq1=5mwPdJ8R9Q20aRdZ2JGpy2giGvz9QhMUoAfdQ@mail.gmail.com>
- <526B0698.4010400@zacarias.com.ar>
-Message-ID: <CANGB_5aKYOo2hH+t5yGG5-34-uBNiLHnNHh5Ur_LEAPYEomq-A@mail.gmail.com>
+From: Ryan Barnett <rjbarnet@rockwellcollins.com>
+Date: Fri, 25 Oct 2013 21:29:45 -0500
+Subject: [Buildroot] [PATCH 2/5] boost: add host variant
+In-Reply-To: <526AEF60.4080400@zacarias.com.ar>
+References: <1382703323-31038-1-git-send-email-gustavo@zacarias.com.ar>
+ <1382703323-31038-2-git-send-email-gustavo@zacarias.com.ar>
+ <OFD1D9DF7F.3A82BA27-ON86257C0F.006A97BA-86257C0F.007833C7@rockwellcollins.com>
+ <526AEF60.4080400@zacarias.com.ar>
+Message-ID: <OF41991DE0.8D31D68E-ON86257C10.000D8BE2-86257C10.000DB5E9@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Oct 25, 2013 at 5:02 PM, Gustavo Zacarias
-<gustavo@zacarias.com.ar>wrote:
+Gustavo,
 
->
-> The updated NetBSD protocols has a lot of comments/emails addresses that
-> would take up space [1]. You could just use some linux distribution
-> /etc/protocols or trim it down and send a patch.
-> For that matter /etc/services could be updated too.
+Gustavo Zacarias <gustavo@zacarias.com.ar> wrote on 10/25/2013 05:23:28 
+PM:
 
+> On 10/25/2013 06:53 PM, Ryan Barnett wrote:
+> 
+> > Gustavo,
+> > 
+> > Please see my comment below, otherwise looks good.
+> > 
+> > Gustavo Zacarias <gustavo@zacarias.com.ar> wrote on 10/25/2013 
+07:15:20 
+> > AM:
+> > 
+> >> +# keep host variant as minimal as possible
+> > 
+> > Could you expand more on what you are leaving enabled and why?
+> 
+> Just the barebones is enough for host-thrift (the tool) hence there's
+> nothing to gain from a full host-boost other than longer build times.
+> If the need arises it can be expanded in the future for other host-* 
+users.
 
-Yeah that was basically why I was asking. I also wanted to verify that
-there wasn't any licencing reasons for using a BSD source originally.  If
-that's the case I will probably just grab the Debian version[1] which is
-quite a bit more concise than the NetBSD one.
+Mind adding a small comment along these lines - minimal configuration for 
+host-thrift?
 
-[1] -
-http://bazaar.launchpad.net/~ubuntu-branches/debian/jessie/netbase/jessie/view/head:/etc-protocols
+Thanks,
+-Ryan
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20131025/b16c3ea1/attachment.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20131025/d34488e8/attachment-0001.html>
