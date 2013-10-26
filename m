@@ -1,102 +1,95 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 26 Oct 2013 15:40:53 +0200
-Subject: [Buildroot] [git commit] qt5quickcontrols: new package
-Message-ID: <20131027072650.7971B9BB81@busybox.osuosl.org>
+Date: Sat, 26 Oct 2013 16:40:18 +0200
+Subject: [Buildroot] [git commit] qt5x11extras: new package
+Message-ID: <20131027072650.8DB9F9BBD7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b12ec639ebd3c209d5b5a2d25b50dc2e9fd84656
+commit: http://git.buildroot.net/buildroot/commit/?id=b601a07165fddeaf496f2b89266fce3a7c66cd2d
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Fatih A????c?? <fatih.asici@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/qt5/Config.in                            |    1 +
- package/qt5/qt5quickcontrols/Config.in           |   20 ++++++++++++
- package/qt5/qt5quickcontrols/qt5quickcontrols.mk |   37 ++++++++++++++++++++++
- 3 files changed, 58 insertions(+), 0 deletions(-)
+ package/qt5/Config.in                    |    1 +
+ package/qt5/qt5x11extras/Config.in       |   11 ++++++++
+ package/qt5/qt5x11extras/qt5x11extras.mk |   40 ++++++++++++++++++++++++++++++
+ 3 files changed, 52 insertions(+), 0 deletions(-)
 
 diff --git a/package/qt5/Config.in b/package/qt5/Config.in
-index 84060d0..2b54bb6 100644
+index 6c953f1..30f4ac8 100644
 --- a/package/qt5/Config.in
 +++ b/package/qt5/Config.in
-@@ -22,6 +22,7 @@ source "package/qt5/qt5imageformats/Config.in"
- source "package/qt5/qt5jsbackend/Config.in"
- source "package/qt5/qt5multimedia/Config.in"
- source "package/qt5/qt5quick1/Config.in"
-+source "package/qt5/qt5quickcontrols/Config.in"
- source "package/qt5/qt5script/Config.in"
+@@ -28,5 +28,6 @@ source "package/qt5/qt5sensors/Config.in"
+ source "package/qt5/qt5serialport/Config.in"
  source "package/qt5/qt5svg/Config.in"
  source "package/qt5/qt5webkit/Config.in"
-diff --git a/package/qt5/qt5quickcontrols/Config.in b/package/qt5/qt5quickcontrols/Config.in
++source "package/qt5/qt5x11extras/Config.in"
+ source "package/qt5/qt5xmlpatterns/Config.in"
+ endif
+diff --git a/package/qt5/qt5x11extras/Config.in b/package/qt5/qt5x11extras/Config.in
 new file mode 100644
-index 0000000..3d80630
+index 0000000..79ff9b9
 --- /dev/null
-+++ b/package/qt5/qt5quickcontrols/Config.in
-@@ -0,0 +1,20 @@
-+config BR2_PACKAGE_QT5QUICKCONTROLS
-+	bool "qt5quickcontrols"
-+	select BR2_PACKAGE_QT5BASE
-+	select BR2_PACKAGE_QT5BASE_NETWORK
-+	select BR2_PACKAGE_QT5DECLARATIVE
-+	# qt5declarative -> qt5jsbackend
-+	depends on BR2_PACKAGE_QT5JSBACKEND_AVAILABLE
-+	depends on BR2_PACKAGE_HAS_OPENGL_EGL
-+	depends on BR2_PACKAGE_HAS_OPENGL_ES
++++ b/package/qt5/qt5x11extras/Config.in
+@@ -0,0 +1,11 @@
++config BR2_PACKAGE_QT5X11EXTRAS
++	bool "qt5x11extras"
++	select BR2_PACKAGE_QT5BASE_WIDGETS
++	depends on BR2_PACKAGE_QT5BASE_XCB
 +	help
 +	  Qt is a cross-platform application and UI framework for
 +	  developers using C++.
 +
-+	  This package corresponds to the qt5quickcontrols module.
++	  This package corresponds to the qt5x11extras module.
 +
 +	  http://qt-project.org
-+
-+comment "qt5quickcontrols requires an OpenGL-capable backend"
-+	depends on (!BR2_PACKAGE_HAS_OPENGL_EGL || !BR2_PACKAGE_HAS_OPENGL_ES) && \
-+		BR2_PACKAGE_QT5JSBACKEND_AVAILABLE
-diff --git a/package/qt5/qt5quickcontrols/qt5quickcontrols.mk b/package/qt5/qt5quickcontrols/qt5quickcontrols.mk
+diff --git a/package/qt5/qt5x11extras/qt5x11extras.mk b/package/qt5/qt5x11extras/qt5x11extras.mk
 new file mode 100644
-index 0000000..f9008b4
+index 0000000..237fe32
 --- /dev/null
-+++ b/package/qt5/qt5quickcontrols/qt5quickcontrols.mk
-@@ -0,0 +1,37 @@
++++ b/package/qt5/qt5x11extras/qt5x11extras.mk
+@@ -0,0 +1,40 @@
 +################################################################################
 +#
-+# qt5quickcontrols
++# qt5x11extras
 +#
 +################################################################################
 +
-+QT5QUICKCONTROLS_VERSION = $(QT5_VERSION)
-+QT5QUICKCONTROLS_SITE = $(QT5_SITE)
-+QT5QUICKCONTROLS_SOURCE = qtquickcontrols-opensource-src-$(QT5QUICKCONTROLS_VERSION).tar.xz
-+QT5QUICKCONTROLS_DEPENDENCIES = qt5base qt5declarative
-+QT5QUICKCONTROLS_INSTALL_STAGING = YES
++QT5X11EXTRAS_VERSION = $(QT5_VERSION)
++QT5X11EXTRAS_SITE = $(QT5_SITE)
++QT5X11EXTRAS_SOURCE = qtx11extras-opensource-src-$(QT5X11EXTRAS_VERSION).tar.xz
++QT5X11EXTRAS_DEPENDENCIES = qt5base
++QT5X11EXTRAS_INSTALL_STAGING = YES
 +
 +ifeq ($(BR2_PACKAGE_QT5BASE_LICENSE_APPROVED),y)
-+QT5QUICKCONTROLS_LICENSE = LGPLv2.1 or GPLv3.0
-+QT5QUICKCONTROLS_LICENSE_FILES = LICENSE.GPL LICENSE.LGPL LGPL_EXCEPTION.txt
++QT5X11EXTRAS_LICENSE = LGPLv2.1 or GPLv3.0
++QT5X11EXTRAS_LICENSE_FILES = LICENSE.GPL LICENSE.LGPL LGPL_EXCEPTION.txt
 +else
-+QT5QUICKCONTROLS_LICENSE = Commercial license
-+QT5QUICKCONTROLS_REDISTRIBUTE = NO
++QT5X11EXTRAS_LICENSE = Commercial license
++QT5X11EXTRAS_REDISTRIBUTE = NO
 +endif
 +
-+define QT5QUICKCONTROLS_CONFIGURE_CMDS
++define QT5X11EXTRAS_CONFIGURE_CMDS
 +	(cd $(@D); $(HOST_DIR)/usr/bin/qmake)
 +endef
 +
-+define QT5QUICKCONTROLS_BUILD_CMDS
++define QT5X11EXTRAS_BUILD_CMDS
 +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
 +endef
 +
-+define QT5QUICKCONTROLS_INSTALL_STAGING_CMDS
++define QT5X11EXTRAS_INSTALL_STAGING_CMDS
 +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install
++	$(QT5_LA_PRL_FILES_FIXUP)
 +endef
 +
-+define QT5QUICKCONTROLS_INSTALL_TARGET_CMDS
-+	cp -dpfr $(STAGING_DIR)/usr/qml/QtQuick $(TARGET_DIR)/usr/qml
++ifeq ($(BR2_PREFER_STATIC_LIB),)
++define QT5X11EXTRAS_INSTALL_TARGET_CMDS
++	cp -dpf $(STAGING_DIR)/usr/lib/libQt5X11Extras.so.* $(TARGET_DIR)/usr/lib
 +endef
++endif
 +
 +$(eval $(generic-package))
