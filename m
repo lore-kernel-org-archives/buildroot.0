@@ -1,66 +1,38 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sat, 26 Oct 2013 06:48:28 -0300
-Subject: [Buildroot] [PATCH 5/5] thrift: new package
-In-Reply-To: <OFFFC3A740.7C7B430A-ON86257C10.000F397E-86257C10.001197E6@rockwellcollins.com>
-References: <1382703323-31038-1-git-send-email-gustavo@zacarias.com.ar>
- <1382703323-31038-5-git-send-email-gustavo@zacarias.com.ar>
- <OFFFC3A740.7C7B430A-ON86257C10.000F397E-86257C10.001197E6@rockwellcollins.com>
-Message-ID: <526B8FEC.2000607@zacarias.com.ar>
+Date: Sat, 26 Oct 2013 06:58:15 -0300
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+	2013-10-24
+In-Reply-To: <20131026084741.5cab8678@skate>
+References: <20131025063005.51B7752C609@lolut.humanoidz.org>	<526A26EB.7010804@mind.be>	<20131025124746.0dbffd63@skate>	<526A4D39.3040106@zacarias.com.ar>
+ <20131026084741.5cab8678@skate>
+Message-ID: <526B9237.8030602@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 10/26/2013 12:12 AM, Ryan Barnett wrote:
-> Could you move the license to right below the site? It doesn't really 
-> matter but I guess I like to see version, site, license as the first 
-> things in a package. I guess there isn't any official standard to the way 
-> a package makefile should be in but I guess that is just my person 
-> preference. 
+On 10/26/2013 03:47 AM, Thomas Petazzoni wrote:
+> Interestingly, Yann E. Morin also reported the same problem (Connection
+> refused) when connecting from one of his machine, which has (as far as
+> I know) is not used as a build server that could cause repeated
+> downloads of the mpd tarball. So it seems like it's not such my build
+> server that has been blacklisted. Maybe something we should report to
+> the musicpd people.
 
-Huh, that's very OCD :)
-There are several packages that don't keep them ordered, specially those
+Interesting indeed.
+Testing from an IPv6-capable host i'm seeing the same problem, but it's
+not IPv6-related, the DNS resolves just fine, tries IPv6 and fails, then
+tries IPv4 and fails too.
+If wget is forced to IPv4 is still fails.
+The interesting part is that said machine is in germany, looks like
+europe is having issues with musicpd.org ?!?
+The funniest part is this:
 
->> +ifeq ($(BR2_PREFER_STATIC_LIB),y)
->> +# openssl uses zlib, so we need to explicitly link with it when static
->> +THRIFT_CONF_ENV += LIBS=-lz
-> 
-> Shouldn't you add a dependancy on libz then?
-> 
-> THRIFT_DEPENDCIES += zlib
+www.musicpd.org -> 78.46.162.86 -> hetzner-hosted
+my machine -> 78.46.79.162 -> hetzner-hosted
 
-It's implicit from openssl, we don't build openssl without zlib (it's
-possible to do so, but not really that useful and would complicate other
-packages).
-
-> I haven't tested this so I don't fully understand what exactly what you 
-> are doing here. I see that this is an autotools package but it doesn't 
-> appear to be building or installing using the autotools infrastructure. 
-> Could you please elaborate a little bit more of why exactly you can't use 
-> autotoools to build for this? I believe I understand what you are doing 
-> here but I guess I would like a few more details from you. 
-> 
-> Also it looks like thrift is a compiler, so wouldn't we want to have this 
-> available as a host tool because presumably there would be a need to to 
-> add custom user packages that utilize Thrift to compile their application. 
-> Again I haven't had time to read further what exactly thrift does but 
-> these are just the few things that are coming to my mind tonight.
-> 
-> I will try to investigate this a little bit more in the coming days (next 
-> week) but for now this are my initial reaction comments.
-
-A quick overlook then.
-Thrift is basically a compiler and runtime libs.
-The compiler component is only useful for the host because we don't do
-development on the target any more, that would be host-boost, which IS
-actually using autotools infra (no defines overriding HOST_THRIFT_*_CMDS).
-For the target the INSTALL phase has an override to just install the
-runtime libraries and avoid the compiler, tests and examples.
-The target BUILD override patches the thrift makefiles to use $(THRIFT)
-rather than hardcode it (the for-SED loop), and builds passing $(THRIFT)
-to the appropiate host-compiled one (since it's hell bent on using it's
-own built one which would be cross and wouldn't run).
-This is a double catch though, i wanted to build examples as a sane way
-to test it that things are ok but not install them.
+WTF? (and it's working just fine from .ar at exactly the same time).
+I'll try contacting hetzner about it since i can ping it, but not http
+to it.
 Regards.
