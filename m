@@ -1,36 +1,50 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 27 Oct 2013 08:24:40 +0100
-Subject: [Buildroot] [PATCH 1 of 9 v4] Config.in.legacy: update
-	description for developers
-In-Reply-To: <da9c19eca655653a9e82.1378152470@argentina> (Thomas De
- Schampheleire's message of "Mon, 02 Sep 2013 22:07:50 +0200")
-References: <patchbomb.1378152469@argentina>
- <da9c19eca655653a9e82.1378152470@argentina>
-Message-ID: <874n83yy4n.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 26 Oct 2013 19:05:10 +0200
+Subject: [Buildroot] [git commit] Config.in.legacy: add separator to
+	description for users
+Message-ID: <20131027072650.B3D909BBC3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=a25e4a4c4c01bf55177d2716b6adeb4ce4ac376e
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Hi,
+When legacy symbols are selected, the menuconfig shows the explanation for
+users, immediately followed by the line "Legacy options removed in 2013.08".
+In order to visually keep these apart, we introduce a separator.
 
- > The existing comments in Config.in.legacy are not entirely in-line with
- > current practice. The comments implies that BR2_LEGACY should not be set when
- > the conversion from old-to-new symbol can be done automatically using the
- > appropriate 'select' statements. However, none of the existing legacy options
- > does it this way. Moreover, I think it's intentional that the user is notified
- > of the change, so that the removal of the legacy options in later buildroot
- > versions no longer poses a problem.
- > Additionally, the comments now describe how to handle string options.
+Note that a line with all spaces is not correctly shown by menuconfig (the
+width will not be kept at 80 characters, so the output is '***   ***').
+A dashed line seemed a logical alternative, and with another dashed line on
+top, the description becomes a block.
 
- > Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
- > Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ Config.in.legacy |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-(Finally) committed series with some minor fixups to get them to apply,
-thanks!
-
--- 
-Bye, Peter Korsgaard
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 237b8d0..6cdd4e3 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -68,6 +68,7 @@ comment "Legacy detected: check the content of the menu below"
+ menu "Legacy config options"
+ 
+ if BR2_LEGACY
++comment "----------------------------------------------------"
+ comment "Your old configuration uses legacy options that no  "
+ comment "longer exist in buildroot, as indicated in the menu "
+ comment "below. As long as these options stay selected, or in"
+@@ -94,6 +95,7 @@ comment "Note: at some point in the future, the oldest legacy"
+ comment "options will be removed, and configuration files    "
+ comment "that still have those options set, will fail to     "
+ comment "build, or run, in unpredictable ways.               "
++comment "----------------------------------------------------"
+ endif
+ 
+ ###############################################################################
