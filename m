@@ -1,100 +1,32 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 27 Oct 2013 08:27:38 +0100
-Subject: [Buildroot] [git commit] skeleton: Update /etc/protocols from
-	Debian Jessie
-Message-ID: <20131027073002.9DFA39BBA9@busybox.osuosl.org>
+Date: Sun, 27 Oct 2013 08:27:16 +0100
+Subject: [Buildroot] [git commit] bind: bump to version 9.6-ESV-R10
+Message-ID: <20131027073002.533739BBB7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=9332e26125685c8ba3682516727af96e43e33617
+commit: http://git.buildroot.net/buildroot/commit/?id=33be28d1700a5301e49d916fa1ec7143a1f49df3
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This update adds IP protocols created in the last 20 years.
-
-Signed-off-by: Peter Sanford <psanford@nearbuysystems.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- system/skeleton/etc/protocols |   54 +++++++++++++++++++++++++++++++---------
- 1 files changed, 42 insertions(+), 12 deletions(-)
+ package/bind/bind.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/system/skeleton/etc/protocols b/system/skeleton/etc/protocols
-index 1ac8a40..cfdd5ad 100644
---- a/system/skeleton/etc/protocols
-+++ b/system/skeleton/etc/protocols
-@@ -1,13 +1,10 @@
--# /etc/protocols:
--# $Id: protocols,v 1.1 2004/10/09 02:49:18 andersen Exp $
--#
- # Internet (IP) protocols
+diff --git a/package/bind/bind.mk b/package/bind/bind.mk
+index 306284b..2e01e8b 100644
+--- a/package/bind/bind.mk
++++ b/package/bind/bind.mk
+@@ -4,7 +4,7 @@
  #
--#	from: @(#)protocols	5.1 (Berkeley) 4/17/89
--#
--# Updated for NetBSD based on RFC 1340, Assigned Numbers (July 1992).
-+# Updated from http://www.iana.org/assignments/protocol-numbers and other
-+# sources.
+ ################################################################################
  
- ip	0	IP		# internet protocol, pseudo protocol number
-+hopopt	0	HOPOPT		# IPv6 Hop-by-Hop Option [RFC1883]
- icmp	1	ICMP		# internet control message protocol
- igmp	2	IGMP		# Internet Group Management
- ggp	3	GGP		# gateway-gateway protocol
-@@ -15,17 +12,50 @@ ipencap	4	IP-ENCAP	# IP encapsulated in IP (officially ``IP'')
- st	5	ST		# ST datagram mode
- tcp	6	TCP		# transmission control protocol
- egp	8	EGP		# exterior gateway protocol
-+igp	9	IGP		# any private interior gateway (Cisco)
- pup	12	PUP		# PARC universal packet protocol
- udp	17	UDP		# user datagram protocol
- hmp	20	HMP		# host monitoring protocol
- xns-idp	22	XNS-IDP		# Xerox NS IDP
- rdp	27	RDP		# "reliable datagram" protocol
--iso-tp4	29	ISO-TP4		# ISO Transport Protocol class 4
--xtp	36	XTP		# Xpress Tranfer Protocol
-+iso-tp4	29	ISO-TP4		# ISO Transport Protocol class 4 [RFC905]
-+dccp	33	DCCP		# Datagram Congestion Control Prot. [RFC4340]
-+xtp	36	XTP		# Xpress Transfer Protocol
- ddp	37	DDP		# Datagram Delivery Protocol
--idpr-cmtp	39	IDPR-CMTP	# IDPR Control Message Transport
--rspf	73	RSPF		#Radio Shortest Path First.
-+idpr-cmtp 38	IDPR-CMTP	# IDPR Control Message Transport
-+ipv6	41	IPv6		# Internet Protocol, version 6
-+ipv6-route 43	IPv6-Route	# Routing Header for IPv6
-+ipv6-frag 44	IPv6-Frag	# Fragment Header for IPv6
-+idrp	45	IDRP		# Inter-Domain Routing Protocol
-+rsvp	46	RSVP		# Reservation Protocol
-+gre	47	GRE		# General Routing Encapsulation
-+esp	50	IPSEC-ESP	# Encap Security Payload [RFC2406]
-+ah	51	IPSEC-AH	# Authentication Header [RFC2402]
-+skip	57	SKIP		# SKIP
-+ipv6-icmp 58	IPv6-ICMP	# ICMP for IPv6
-+ipv6-nonxt 59	IPv6-NoNxt	# No Next Header for IPv6
-+ipv6-opts 60	IPv6-Opts	# Destination Options for IPv6
-+rspf	73	RSPF CPHB	# Radio Shortest Path First (officially CPHB)
- vmtp	81	VMTP		# Versatile Message Transport
-+eigrp	88	EIGRP		# Enhanced Interior Routing Protocol (Cisco)
- ospf	89	OSPFIGP		# Open Shortest Path First IGP
--ipip	94	IPIP		# Yet Another IP encapsulation
--encap	98	ENCAP		# Yet Another IP encapsulation
-+ax.25	93	AX.25		# AX.25 frames
-+ipip	94	IPIP		# IP-within-IP Encapsulation Protocol
-+etherip	97	ETHERIP		# Ethernet-within-IP Encapsulation [RFC3378]
-+encap	98	ENCAP		# Yet Another IP encapsulation [RFC1241]
-+#	99			# any private encryption scheme
-+pim	103	PIM		# Protocol Independent Multicast
-+ipcomp	108	IPCOMP		# IP Payload Compression Protocol
-+vrrp	112	VRRP		# Virtual Router Redundancy Protocol [RFC5798]
-+l2tp	115	L2TP		# Layer Two Tunneling Protocol [RFC2661]
-+isis	124	ISIS		# IS-IS over IPv4
-+sctp	132	SCTP		# Stream Control Transmission Protocol
-+fc	133	FC		# Fibre Channel
-+mobility-header 135 Mobility-Header # Mobility Support for IPv6 [RFC3775]
-+udplite	136	UDPLite		# UDP-Lite [RFC3828]
-+mpls-in-ip 137	MPLS-in-IP	# MPLS-in-IP [RFC4023]
-+manet	138			# MANET Protocols [RFC5498]
-+hip	139	HIP		# Host Identity Protocol
-+shim6	140	Shim6		# Shim6 Protocol [RFC5533]
-+wesp	141	WESP		# Wrapped Encapsulating Security Payload
-+rohc	142	ROHC		# Robust Header Compression
+-BIND_VERSION = 9.6-ESV-R9-P1
++BIND_VERSION = 9.6-ESV-R10
+ BIND_SITE = ftp://ftp.isc.org/isc/bind9/$(BIND_VERSION)
+ BIND_MAKE = $(MAKE1)
+ BIND_INSTALL_STAGING = YES
