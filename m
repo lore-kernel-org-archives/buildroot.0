@@ -1,53 +1,140 @@
-From: Spenser Gilliland <spenser@gillilanding.com>
-Date: Sun, 27 Oct 2013 15:43:59 -0500
-Subject: [Buildroot] [PATCH 2/2] beagle-capes: new package
-In-Reply-To: <526CF766.6070001@mind.be>
-References: <1373239866-18076-1-git-send-email-spenser@gillilanding.com>
- <1373239866-18076-2-git-send-email-spenser@gillilanding.com>
- <526CF766.6070001@mind.be>
-Message-ID: <CAEBucnDqkZAzSLicRqYgW8wTi6h_5STK12EDPQJ14joaODqABg@mail.gmail.com>
+From: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+Date: Sun, 27 Oct 2013 21:44:26 +0100
+Subject: [Buildroot] [PATCH 1/1] docs/manual: update information about
+ how to add a package from github
+In-Reply-To: <CAHXCMMKWFAnN3xA94+NBsC4pYku2=AOdVUL4PTfdCpVFuuCkaQ@mail.gmail.com>
+References: <1380527536-23694-1-git-send-email-jerzy.grzegorek@trzebnica.net>
+ <CAHXCMMKWFAnN3xA94+NBsC4pYku2=AOdVUL4PTfdCpVFuuCkaQ@mail.gmail.com>
+Message-ID: <526D7B2A.7080607@trzebnica.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Arnout,
 
->  We had a discussion at the Buildroot developer meeting, and finally
-> found a solution which may be better...
->
->  Instead of doing the firmware_install from the linux package, you can
-> do it from the beagle-capes package, i.e.:
->
-> define BEAGLE_CAPES_BUILD_CMDS
->         $(TARGET_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(LINUX_DIR) \
->                 firmware_install INSTALL_FW_PATH=$(@D)
-> endef
->
-> define BEAGLE_CAPES_INSTALL_TARGET_CMDS
->         $(INSTALL) -m 644 $(@D)/*.dtbo $(TARGET_DIR)/lib/firmware/
-> endef
->
->
->  We don't expect that this 'install firmware to staging' feature would
-> ever be used by any other package, that's why we prefer not to have it
-> in the linux.mk.
+Hi Samuel,
 
-I agree.  I'll create a new patch and resubmit.
+
+> Jerzy,
+>
+> 2013/9/30 Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net 
+> <mailto:jerzy.grzegorek@trzebnica.net>>
+>
+>     Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net
+>     <mailto:jerzy.grzegorek@trzebnica.net>>
+>     ---
+>      docs/manual/adding-packages-tips.txt |   62
+>     +++++++++++++++++++++++++++++++---
+>      1 file changed, 57 insertions(+), 5 deletions(-)
+>
+>     diff --git a/docs/manual/adding-packages-tips.txt
+>     b/docs/manual/adding-packages-tips.txt
+>     index 8b27c61..67a8610 100644
+>     --- a/docs/manual/adding-packages-tips.txt
+>     +++ b/docs/manual/adding-packages-tips.txt
+>     @@ -41,17 +41,69 @@ How to add a package from github
+>
+>      Packages on github often don't have a download area with release
+>     tarballs.
+>      However, it is possible to download tarballs directly from the
+>     repository
+>     -on github.
+>     +on github. There are two possibilities:
+>     +
+>     +1. Using (abbreviated) commit ID
+>     +
+>     +------------------------
+>     +FOO_VERSION = 1234567
+>     +FOO_SITE = https://github.com/<user>/<package>/tarball/$(FOO_VERSION)
+>     +------------------------
+>     +
+>     +tarball name downloaded by Buildroot: foo-1234567.tar.gz
+>     +
+>     +example:
+>     +package: cpuload
+>     +abbreviated commit ID: 96ac037
+>     +CPULOAD_VERSION = 96ac037
+>     +CPULOAD_SITE =
+>     https://github.com/kelvincheung/cpuload/tarball/$(CPULOAD_VERSION)
+>     <https://github.com/kelvincheung/cpuload/tarball/$%28CPULOAD_VERSION%29>
+>     +tarball name downloaded by Buildroot: cpuload-96ac037.tar.gz
+>     +
+>     +
+>     +2. Using tag
+>     +
+>     +a) tag without prefix
+>     +
+>     +------------------------
+>     +FOO_VERSION = 1.0
+>     +FOO_SITE = https://github.com/<user>/<package>/tarball/$(FOO_VERSION)
+>     +------------------------
+>     +
+>     +tarball name downloaded by Buildroot: foo-1.0.tar.gz
+>     +
+>     +example:
+>     +package: luacrypto
+>     +tag: 0.3.2
+>     +LUACRYPTO_VERSION = 0.3.2
+>     +LUACRYPTO_SITE =
+>     https://github.com/mkottman/luacrypto/tarball/$(LUACRYPTO_VERSION)
+>     <https://github.com/mkottman/luacrypto/tarball/$%28LUACRYPTO_VERSION%29>
+>     +tarball name downloaded by Buildroot: luacrypto-0.3.2.tar.gz
+>     +
+>     +b) tag with prefix
+>
+>      ------------------------
+>     -FOO_VERSION = v1.0 # tag or (abbreviated) commit ID
+>     -FOO_SITE = http://github.com/<user>/<package>/tarball/$(FOO_VERSION)
+>     +FOO_VERSION = 1.0
+>     +FOO_SITE =
+>     https://github.com/<user>/<package>/tarball/<prefix>$(FOO_VERSION)
+>      ------------------------
+>
+>     +tarball name downloaded by Buildroot: foo-1.0.tar.gz
+>     +
+>     +examples:
+>     +package: cpuload
+>     +tag: v0.3
+>     +CPULOAD_VERSION = 0.3
+>     +CPULOAD_SITE =
+>     https://github.com/kelvincheung/cpuload/tarball/v$(CPULOAD_VERSION) <https://github.com/kelvincheung/cpuload/tarball/v$%28CPULOAD_VERSION%29>
+>     +tarball name downloaded by Buildroot: cpuload-0.3.tar.gz
+>     +
+>     +package: libcec
+>     +tag: libcec-2.1.1
+>     +LIBCEC_VERSION = 2.1.1
+>     +LIBCEC_SITE =
+>     https://github.com/Pulse-Eight/libcec/tarball/libcec-$(LIBCEC_VERSION)
+>     <https://github.com/Pulse-Eight/libcec/tarball/libcec-$%28LIBCEC_VERSION%29>
+>     +tarball name downloaded by Buildroot: libcec-2.1.1.tar.gz
+>     +
+>      .Notes
+>     -- The FOO_VERSION can either be a tag or a commit ID.
+>      - The tarball name generated by github matches the default one from
+>     -  Buildroot (e.g.: +foo-1234567.tar.gz+),
+>     +  Buildroot (e.g.: +foo-1234567.tar.gz+ or +foo-1.0.tar.gz+)
+>        so it is not necessary to specify it in the +.mk+ file.
+>      - When using a commit ID as version, usually the first 7
+>     characters of
+>        the SHA1 are enough.
+>     +- https vs http avoids redirection
+>
+>
+>
+> Since the following patch 
+> http://patchwork.ozlabs.org/patch/278164/ has been rejected,
+> there is no reason to update the manual.
+
+Agree.
+
+
+Regards,
+Jerzy
+
 
 >
->  By the way, this will only work for a beaglebone-specific kernel, of
-> course. Is there any way to check for that and error out with a clear error
-> message?
-
-We can check if any dts files exist in the firmware dir of the kernel.
- I'll write up a patch.
-
-Thanks,
-Spenser
-
--- 
-Spenser Gilliland
-Computer Engineer
-Doctoral Candidate
+> Regards,
+>
+> -- 
+> Samuel
