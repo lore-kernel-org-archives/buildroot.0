@@ -1,30 +1,31 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun, 27 Oct 2013 09:33:03 +0000 (UTC)
-Subject: [Buildroot] [Bug 5678] linux.mk: linux-menuconfig fails
-In-Reply-To: <bug-5678-163@https.bugs.busybox.net/>
-References: <bug-5678-163@https.bugs.busybox.net/>
-Message-ID: <20131027093303.436B89B8D0@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 27 Oct 2013 10:34:40 +0100
+Subject: [Buildroot] [PATCH v4] ccache: expose control interface via
+	'make ccache-options'
+In-Reply-To: <1381427457-25627-1-git-send-email-tjlee@ambarella.com> (Tzu-Jung
+ Lee's message of "Thu, 10 Oct 2013 10:50:57 -0700")
+References: <CAAXf6LWg8YGG-yv3dvZjqswagBOMV8gmT1XsWz4KOygEbFUtGw@mail.gmail.com>
+ <1381427457-25627-1-git-send-email-tjlee@ambarella.com>
+Message-ID: <87hac3xdjj.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=5678
+>>>>> "Tzu-Jung" == Tzu-Jung Lee <roylee17@gmail.com> writes:
 
-Samuel Martin <s.martin49@gmail.com> changed:
+ > usage:
+ > 	# set cache limit size
+ > 	make CCACHE_OPTIONS="--max-size=5G" ccache-options
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|REOPENED                    |RESOLVED
-         Resolution|                            |FIXED
+ > 	# zero statistics counters
+ > 	make CCACHE_OPTIONS="--zero-stats" ccache-options
 
---- Comment #2 from Samuel Martin <s.martin49@gmail.com> 2013-10-27 09:33:01 UTC ---
-Fixed.
+ > Signed-off-by: Tzu-Jung Lee <tjlee@ambarella.com>
 
-commit db443f263a6d51ce6da6557d825a453676f6c664
+Committed with the redundant ifeq removed as pointed out by Thomas,
+thanks.
 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Bye, Peter Korsgaard
