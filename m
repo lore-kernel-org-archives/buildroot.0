@@ -1,59 +1,770 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 27 Oct 2013 12:35:19 +0100
-Subject: [Buildroot] [PATCH] Fix compilation of systemd with uclibc
-In-Reply-To: <1380627492-25380-1-git-send-email-jezz@sysmic.org>
-References: <1380627492-25380-1-git-send-email-jezz@sysmic.org>
-Message-ID: <526CFA77.6010609@mind.be>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Sun, 27 Oct 2013 12:51:05 +0100
+Subject: [Buildroot] [PATCH v2] Update config.guess and config.sub scripts
+	to latest versions.
+In-Reply-To: <1380259107-6531-1-git-send-email-jouko.nikula@espotel.com>
+References: <1380259107-6531-1-git-send-email-jouko.nikula@espotel.com>
+Message-ID: <1382874665-4711-1-git-send-email-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 01/10/13 13:38, J?r?me Pouiller wrote:
-> systemd-uclibc-fix.patch was applied to systemd to provide execvpe function
-> when compiled with uclibc. However, this function is now provided by
-> libc-add-non-standard-execvpe-function.patch in uclibc package.
->
-> These two patchs are now in conflict. This commit remove
-> systemd/systemd-uclibc-fix.patch.
->
-> Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
+Current version of config.guess may fail to detect host libc version,
+which results in problems with configure when building gcc. Current patches
+are removed. Patch to add support for ps2 is removed as it was discussed on
+buildroot mailing list that it is no longer needed.
 
-  Hi J?r?me, Eric,
+[Arnout: drop the 'improve uClibc' patch, update commit message.]
+Signed-off-by: Jouko Nikula <jouko.nikula@espotel.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+v3: drop the 'improve uClibc' patch.
 
-  After a long discussion at the Buildroot developer meeting, we decided 
-that there really is no good solution for this situation. So we decided 
-that the best solution is to just remove uClibc support for systemd: 
-upstream will never accept patches that fixes it in a proper way, and 
-people who have the systemd bloat will probably not care about saving a 
-few 100K by using uClibc.
+This patch turns out not to be needed. It was an experimental uClibc
+feature of 9 years ago which never made it into a release. That's
+why this change didn't make it into upstream gnuconfig.
 
-  So, Eric, could you include in your systemd bump a
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ support/gnuconfig/README.buildroot                 |   3 +-
+ support/gnuconfig/config.guess                     | 113 +++++++------
+ support/gnuconfig/config.sub                       |  92 +++++------
+ .../0001-config-add-support-for-uClibc.patch       | 184 ---------------------
+ .../patches/0002-config-add-support-for-ps2.patch  |  60 -------
+ 5 files changed, 101 insertions(+), 351 deletions(-)
+ delete mode 100644 support/gnuconfig/patches/0001-config-add-support-for-uClibc.patch
+ delete mode 100644 support/gnuconfig/patches/0002-config-add-support-for-ps2.patch
 
-depends on !BR2_TOOLCHAIN_USES_UCLIBC
-
-(with appropriate comment).
-
-  We'll see if it succeeds with musl, but that's less important for the 
-time being.
-
-
-  Regards,
-  Arnout
-
-> ---
->   package/systemd/systemd-uclibc-fix.patch |   59 ------------------------------
->   1 file changed, 59 deletions(-)
->   delete mode 100644 package/systemd/systemd-uclibc-fix.patch
->
-[snip]
-
-
+diff --git a/support/gnuconfig/README.buildroot b/support/gnuconfig/README.buildroot
+index 5f96b3c..85ccd42 100644
+--- a/support/gnuconfig/README.buildroot
++++ b/support/gnuconfig/README.buildroot
+@@ -25,4 +25,5 @@ have to make sure they're still needed.  The patches are broken
+ out in the patches/ dir to keep things simple.
+ 
+ The current Buildroot version is based on the Git commit
+-9582436dfae5755279f96898ce30bde28e4e69ea of the config.git repository.
++16a0cbc5e35e639ed7a46c3b28daab12c8bf2060 of the config.git repository.
++
+diff --git a/support/gnuconfig/config.guess b/support/gnuconfig/config.guess
+index 9509179..0d9679e 100755
+--- a/support/gnuconfig/config.guess
++++ b/support/gnuconfig/config.guess
+@@ -1,14 +1,12 @@
+ #! /bin/sh
+ # Attempt to guess a canonical system name.
+-#   Copyright (C) 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999,
+-#   2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010,
+-#   2011, 2012 Free Software Foundation, Inc.
++#   Copyright 1992-2013 Free Software Foundation, Inc.
+ 
+-timestamp='2012-09-25'
++timestamp='2013-06-10'
+ 
+ # This file is free software; you can redistribute it and/or modify it
+ # under the terms of the GNU General Public License as published by
+-# the Free Software Foundation; either version 2 of the License, or
++# the Free Software Foundation; either version 3 of the License, or
+ # (at your option) any later version.
+ #
+ # This program is distributed in the hope that it will be useful, but
+@@ -22,19 +20,17 @@ timestamp='2012-09-25'
+ # As a special exception to the GNU General Public License, if you
+ # distribute this file as part of a program that contains a
+ # configuration script generated by Autoconf, you may include it under
+-# the same distribution terms that you use for the rest of that program.
+-
+-
+-# Originally written by Per Bothner.  Please send patches (context
+-# diff format) to <config-patches@gnu.org> and include a ChangeLog
+-# entry.
++# the same distribution terms that you use for the rest of that
++# program.  This Exception is an additional permission under section 7
++# of the GNU General Public License, version 3 ("GPLv3").
+ #
+-# This script attempts to guess a canonical system name similar to
+-# config.sub.  If it succeeds, it prints the system name on stdout, and
+-# exits with 0.  Otherwise, it exits with 1.
++# Originally written by Per Bothner.
+ #
+ # You can get the latest version of this script from:
+ # http://git.savannah.gnu.org/gitweb/?p=config.git;a=blob_plain;f=config.guess;hb=HEAD
++#
++# Please send patches with a ChangeLog entry to config-patches at gnu.org.
++
+ 
+ me=`echo "$0" | sed -e 's,.*/,,'`
+ 
+@@ -54,9 +50,7 @@ version="\
+ GNU config.guess ($timestamp)
+ 
+ Originally written by Per Bothner.
+-Copyright (C) 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999, 2000,
+-2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012
+-Free Software Foundation, Inc.
++Copyright 1992-2013 Free Software Foundation, Inc.
+ 
+ This is free software; see the source for copying conditions.  There is NO
+ warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE."
+@@ -138,22 +132,30 @@ UNAME_RELEASE=`(uname -r) 2>/dev/null` || UNAME_RELEASE=unknown
+ UNAME_SYSTEM=`(uname -s) 2>/dev/null`  || UNAME_SYSTEM=unknown
+ UNAME_VERSION=`(uname -v) 2>/dev/null` || UNAME_VERSION=unknown
+ 
+-if [ "${UNAME_SYSTEM}" = "Linux" ] ; then
++case "${UNAME_SYSTEM}" in
++Linux|GNU|GNU/*)
++	# If the system lacks a compiler, then just pick glibc.
++	# We could probably try harder.
++	LIBC=gnu
++
+ 	eval $set_cc_for_build
+-	cat << EOF > $dummy.c
++	cat <<-EOF > $dummy.c
+ 	#include <features.h>
+-	#ifdef __UCLIBC__
++	#if defined(__UCLIBC__)
+ 	# ifdef __UCLIBC_CONFIG_VERSION__
+ 	LIBC=uclibc __UCLIBC_CONFIG_VERSION__
+ 	# else
+ 	LIBC=uclibc
+ 	# endif
++	#elif defined(__dietlibc__)
++	LIBC=dietlibc
+ 	#else
+ 	LIBC=gnu
+ 	#endif
+-EOF
+-	eval `$CC_FOR_BUILD -E $dummy.c 2>/dev/null | grep LIBC= | sed -e 's: ::g'`
+-fi
++	EOF
++	eval `$CC_FOR_BUILD -E $dummy.c 2>/dev/null | grep '^LIBC=' | sed -e 's: ::g'`
++	;;
++esac
+ 
+ # Note: order is significant - the case branches are not exclusive.
+ 
+@@ -876,11 +878,11 @@ EOF
+ 	exit ;;
+     *:GNU:*:*)
+ 	# the GNU system
+-	echo `echo ${UNAME_MACHINE}|sed -e 's,[-/].*$,,'`-unknown-gnu`echo ${UNAME_RELEASE}|sed -e 's,/.*$,,'`
++	echo `echo ${UNAME_MACHINE}|sed -e 's,[-/].*$,,'`-unknown-${LIBC}`echo ${UNAME_RELEASE}|sed -e 's,/.*$,,'`
+ 	exit ;;
+     *:GNU/*:*:*)
+ 	# other systems with GNU libc and userland
+-	echo ${UNAME_MACHINE}-unknown-`echo ${UNAME_SYSTEM} | sed 's,^[^/]*/,,' | tr '[A-Z]' '[a-z]'``echo ${UNAME_RELEASE}|sed -e 's/[-(].*//'`-gnu
++	echo ${UNAME_MACHINE}-unknown-`echo ${UNAME_SYSTEM} | sed 's,^[^/]*/,,' | tr '[A-Z]' '[a-z]'``echo ${UNAME_RELEASE}|sed -e 's/[-(].*//'`-${LIBC}
+ 	exit ;;
+     i*86:Minix:*:*)
+ 	echo ${UNAME_MACHINE}-pc-minix
+@@ -906,6 +908,9 @@ EOF
+ 	if test "$?" = 0 ; then LIBC="gnulibc1" ; fi
+ 	echo ${UNAME_MACHINE}-unknown-linux-${LIBC}
+ 	exit ;;
++    arc:Linux:*:* | arceb:Linux:*:*)
++	echo ${UNAME_MACHINE}-unknown-linux-${LIBC}
++	exit ;;
+     arm*:Linux:*:*)
+ 	eval $set_cc_for_build
+ 	if echo __ARM_EABI__ | $CC_FOR_BUILD -E - 2>/dev/null \
+@@ -916,9 +921,9 @@ EOF
+ 	    if echo __ARM_PCS_VFP | $CC_FOR_BUILD -E - 2>/dev/null \
+ 		| grep -q __ARM_PCS_VFP
+ 	    then
+-		echo ${UNAME_MACHINE}-unknown-linux-gnueabi
++		echo ${UNAME_MACHINE}-unknown-linux-${LIBC}eabi
+ 	    else
+-		echo ${UNAME_MACHINE}-unknown-linux-gnueabihf
++		echo ${UNAME_MACHINE}-unknown-linux-${LIBC}eabihf
+ 	    fi
+ 	fi
+ 	exit ;;
+@@ -938,14 +943,7 @@ EOF
+ 	echo ${UNAME_MACHINE}-unknown-linux-${LIBC}
+ 	exit ;;
+     i*86:Linux:*:*)
+-	eval $set_cc_for_build
+-	sed 's/^	//' << EOF >$dummy.c
+-	#ifdef __dietlibc__
+-	LIBC=dietlibc
+-	#endif
+-EOF
+-	eval `$CC_FOR_BUILD -E $dummy.c 2>/dev/null | grep '^LIBC'`
+-	echo "${UNAME_MACHINE}-pc-linux-${LIBC}"
++	echo ${UNAME_MACHINE}-pc-linux-${LIBC}
+ 	exit ;;
+     ia64:Linux:*:*)
+ 	echo ${UNAME_MACHINE}-unknown-linux-${LIBC}
+@@ -975,14 +973,17 @@ EOF
+ 	eval `$CC_FOR_BUILD -E $dummy.c 2>/dev/null | grep '^CPU'`
+ 	test x"${CPU}" != x && { echo "${CPU}-unknown-linux-${LIBC}"; exit; }
+ 	;;
++    or1k:Linux:*:*)
++	echo ${UNAME_MACHINE}-unknown-linux-${LIBC}
++	exit ;;
+     or32:Linux:*:*)
+ 	echo ${UNAME_MACHINE}-unknown-linux-${LIBC}
+ 	exit ;;
+     padre:Linux:*:*)
+-	echo sparc-unknown-linux-gnu
++	echo sparc-unknown-linux-${LIBC}
+ 	exit ;;
+     parisc64:Linux:*:* | hppa64:Linux:*:*)
+-	echo hppa64-unknown-linux-gnu
++	echo hppa64-unknown-linux-${LIBC}
+ 	exit ;;
+     parisc:Linux:*:* | hppa:Linux:*:*)
+ 	# Look for CPU level
+@@ -998,8 +999,14 @@ EOF
+     ppc:Linux:*:*)
+ 	echo powerpc-unknown-linux-${LIBC}
+ 	exit ;;
++    ppc64le:Linux:*:*)
++	echo powerpc64le-unknown-linux-${LIBC}
++	exit ;;
++    ppcle:Linux:*:*)
++	echo powerpcle-unknown-linux-${LIBC}
++	exit ;;
+     s390:Linux:*:* | s390x:Linux:*:*)
+-	echo ${UNAME_MACHINE}-ibm-linux
++	echo ${UNAME_MACHINE}-ibm-linux-${LIBC}
+ 	exit ;;
+     sh64*:Linux:*:*)
+ 	echo ${UNAME_MACHINE}-unknown-linux-${LIBC}
+@@ -1011,7 +1018,7 @@ EOF
+ 	echo ${UNAME_MACHINE}-unknown-linux-${LIBC}
+ 	exit ;;
+     tile*:Linux:*:*)
+-	echo ${UNAME_MACHINE}-unknown-linux-gnu
++	echo ${UNAME_MACHINE}-unknown-linux-${LIBC}
+ 	exit ;;
+     vax:Linux:*:*)
+ 	echo ${UNAME_MACHINE}-dec-linux-${LIBC}
+@@ -1253,19 +1260,21 @@ EOF
+ 	exit ;;
+     *:Darwin:*:*)
+ 	UNAME_PROCESSOR=`uname -p` || UNAME_PROCESSOR=unknown
+-	case $UNAME_PROCESSOR in
+-	    i386)
+-		eval $set_cc_for_build
+-		if [ "$CC_FOR_BUILD" != 'no_compiler_found' ]; then
+-		  if (echo '#ifdef __LP64__'; echo IS_64BIT_ARCH; echo '#endif') | \
+-		      (CCOPTS= $CC_FOR_BUILD -E - 2>/dev/null) | \
+-		      grep IS_64BIT_ARCH >/dev/null
+-		  then
+-		      UNAME_PROCESSOR="x86_64"
+-		  fi
+-		fi ;;
+-	    unknown) UNAME_PROCESSOR=powerpc ;;
+-	esac
++	eval $set_cc_for_build
++	if test "$UNAME_PROCESSOR" = unknown ; then
++	    UNAME_PROCESSOR=powerpc
++	fi
++	if [ "$CC_FOR_BUILD" != 'no_compiler_found' ]; then
++	    if (echo '#ifdef __LP64__'; echo IS_64BIT_ARCH; echo '#endif') | \
++		(CCOPTS= $CC_FOR_BUILD -E - 2>/dev/null) | \
++		grep IS_64BIT_ARCH >/dev/null
++	    then
++		case $UNAME_PROCESSOR in
++		    i386) UNAME_PROCESSOR=x86_64 ;;
++		    powerpc) UNAME_PROCESSOR=powerpc64 ;;
++		esac
++	    fi
++	fi
+ 	echo ${UNAME_PROCESSOR}-apple-darwin${UNAME_RELEASE}
+ 	exit ;;
+     *:procnto*:*:* | *:QNX:[0123456789]*:*)
+diff --git a/support/gnuconfig/config.sub b/support/gnuconfig/config.sub
+index b2958ad..85a159e 100755
+--- a/support/gnuconfig/config.sub
++++ b/support/gnuconfig/config.sub
+@@ -1,24 +1,18 @@
+ #! /bin/sh
+ # Configuration validation subroutine script.
+-#   Copyright (C) 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999,
+-#   2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010,
+-#   2011, 2012 Free Software Foundation, Inc.
++#   Copyright 1992-2013 Free Software Foundation, Inc.
+ 
+-timestamp='2012-10-10'
++timestamp='2013-09-05'
+ 
+-# This file is (in principle) common to ALL GNU software.
+-# The presence of a machine in this file suggests that SOME GNU software
+-# can handle that machine.  It does not imply ALL GNU software can.
+-#
+-# This file is free software; you can redistribute it and/or modify
+-# it under the terms of the GNU General Public License as published by
+-# the Free Software Foundation; either version 2 of the License, or
++# This file is free software; you can redistribute it and/or modify it
++# under the terms of the GNU General Public License as published by
++# the Free Software Foundation; either version 3 of the License, or
+ # (at your option) any later version.
+ #
+-# This program is distributed in the hope that it will be useful,
+-# but WITHOUT ANY WARRANTY; without even the implied warranty of
+-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+-# GNU General Public License for more details.
++# This program is distributed in the hope that it will be useful, but
++# WITHOUT ANY WARRANTY; without even the implied warranty of
++# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++# General Public License for more details.
+ #
+ # You should have received a copy of the GNU General Public License
+ # along with this program; if not, see <http://www.gnu.org/licenses/>.
+@@ -26,11 +20,12 @@ timestamp='2012-10-10'
+ # As a special exception to the GNU General Public License, if you
+ # distribute this file as part of a program that contains a
+ # configuration script generated by Autoconf, you may include it under
+-# the same distribution terms that you use for the rest of that program.
++# the same distribution terms that you use for the rest of that
++# program.  This Exception is an additional permission under section 7
++# of the GNU General Public License, version 3 ("GPLv3").
+ 
+ 
+-# Please send patches to <config-patches@gnu.org>.  Submit a context
+-# diff and a properly formatted GNU ChangeLog entry.
++# Please send patches with a ChangeLog entry to config-patches at gnu.org.
+ #
+ # Configuration subroutine to validate and canonicalize a configuration type.
+ # Supply the specified configuration type as an argument.
+@@ -73,9 +68,7 @@ Report bugs and patches to <config-patches@gnu.org>."
+ version="\
+ GNU config.sub ($timestamp)
+ 
+-Copyright (C) 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999, 2000,
+-2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012
+-Free Software Foundation, Inc.
++Copyright 1992-2013 Free Software Foundation, Inc.
+ 
+ This is free software; see the source for copying conditions.  There is NO
+ warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE."
+@@ -264,8 +257,8 @@ case $basic_machine in
+ 	| avr | avr32 \
+ 	| be32 | be64 \
+ 	| bfin \
+-	| c4x | clipper \
+-	| d10v | d30v | dlx | dsp16xx | dvp \
++	| c4x | c8051 | clipper \
++	| d10v | d30v | dlx | dsp16xx \
+ 	| epiphany \
+ 	| fido | fr30 | frv \
+ 	| h8300 | h8500 | hppa | hppa1.[01] | hppa2.0 | hppa2.0[nw] | hppa64 \
+@@ -293,16 +286,17 @@ case $basic_machine in
+ 	| mipsisa64r2 | mipsisa64r2el \
+ 	| mipsisa64sb1 | mipsisa64sb1el \
+ 	| mipsisa64sr71k | mipsisa64sr71kel \
++	| mipsr5900 | mipsr5900el \
+ 	| mipstx39 | mipstx39el \
+ 	| mn10200 | mn10300 \
+ 	| moxie \
+ 	| mt \
+ 	| msp430 \
+ 	| nds32 | nds32le | nds32be \
+-	| nios | nios2 \
++	| nios | nios2 | nios2eb | nios2el \
+ 	| ns16k | ns32k \
+ 	| open8 \
+-	| or32 \
++	| or1k | or32 \
+ 	| pdp10 | pdp11 | pj | pjl \
+ 	| powerpc | powerpc64 | powerpc64le | powerpcle \
+ 	| pyramid \
+@@ -330,7 +324,7 @@ case $basic_machine in
+ 	c6x)
+ 		basic_machine=tic6x-unknown
+ 		;;
+-	m6811 | m68hc11 | m6812 | m68hc12 | m68hcs12x | picochip)
++	m6811 | m68hc11 | m6812 | m68hc12 | m68hcs12x | nvptx | picochip)
+ 		basic_machine=$basic_machine-unknown
+ 		os=-none
+ 		;;
+@@ -378,7 +372,7 @@ case $basic_machine in
+ 	| be32-* | be64-* \
+ 	| bfin-* | bs2000-* \
+ 	| c[123]* | c30-* | [cjt]90-* | c4x-* \
+-	| clipper-* | craynv-* | cydra-* \
++	| c8051-* | clipper-* | craynv-* | cydra-* \
+ 	| d10v-* | d30v-* | dlx-* \
+ 	| elxsi-* \
+ 	| f30[01]-* | f700-* | fido-* | fr30-* | frv-* | fx80-* \
+@@ -410,12 +404,13 @@ case $basic_machine in
+ 	| mipsisa64r2-* | mipsisa64r2el-* \
+ 	| mipsisa64sb1-* | mipsisa64sb1el-* \
+ 	| mipsisa64sr71k-* | mipsisa64sr71kel-* \
++	| mipsr5900-* | mipsr5900el-* \
+ 	| mipstx39-* | mipstx39el-* \
+ 	| mmix-* \
+ 	| mt-* \
+ 	| msp430-* \
+ 	| nds32-* | nds32le-* | nds32be-* \
+-	| nios-* | nios2-* \
++	| nios-* | nios2-* | nios2eb-* | nios2el-* \
+ 	| none-* | np1-* | ns16k-* | ns32k-* \
+ 	| open8-* \
+ 	| orion-* \
+@@ -799,7 +794,7 @@ case $basic_machine in
+ 		os=-mingw64
+ 		;;
+ 	mingw32)
+-		basic_machine=i386-pc
++		basic_machine=i686-pc
+ 		os=-mingw32
+ 		;;
+ 	mingw32ce)
+@@ -813,24 +808,6 @@ case $basic_machine in
+ 		basic_machine=m68k-atari
+ 		os=-mint
+ 		;;
+-	mipsEE* | ee | ps2)
+-		basic_machine=mips64r5900el-scei
+-		case $os in
+-		    -linux*)
+-			;;
+-		    *)
+-			os=-elf
+-			;;
+-		esac
+-		;;
+-	iop)
+-		basic_machine=mipsel-scei
+-		os=-irx
+-		;;
+-	dvp)
+-		basic_machine=dvp-scei
+-		os=-elf
+-		;;
+ 	mips3*-*)
+ 		basic_machine=`echo $basic_machine | sed -e 's/mips3/mips64/'`
+ 		;;
+@@ -853,7 +830,7 @@ case $basic_machine in
+ 		basic_machine=`echo $basic_machine | sed -e 's/ms1-/mt-/'`
+ 		;;
+ 	msys)
+-		basic_machine=i386-pc
++		basic_machine=i686-pc
+ 		os=-msys
+ 		;;
+ 	mvs)
+@@ -1044,7 +1021,11 @@ case $basic_machine in
+ 		basic_machine=i586-unknown
+ 		os=-pw32
+ 		;;
+-	rdos)
++	rdos | rdos64)
++		basic_machine=x86_64-pc
++		os=-rdos
++		;;
++	rdos32)
+ 		basic_machine=i386-pc
+ 		os=-rdos
+ 		;;
+@@ -1371,7 +1352,7 @@ case $os in
+ 	-gnu* | -bsd* | -mach* | -minix* | -genix* | -ultrix* | -irix* \
+ 	      | -*vms* | -sco* | -esix* | -isc* | -aix* | -cnk* | -sunos | -sunos[34]*\
+ 	      | -hpux* | -unos* | -osf* | -luna* | -dgux* | -auroraux* | -solaris* \
+-	      | -sym* | -kopensolaris* \
++	      | -sym* | -kopensolaris* | -plan9* \
+ 	      | -amigaos* | -amigados* | -msdos* | -newsos* | -unicos* | -aof* \
+ 	      | -aos* | -aros* \
+ 	      | -nindy* | -vxsim* | -vxworks* | -ebmon* | -hms* | -mvs* \
+@@ -1393,7 +1374,7 @@ case $os in
+ 	      | -os2* | -vos* | -palmos* | -uclinux* | -nucleus* \
+ 	      | -morphos* | -superux* | -rtmk* | -rtmk-nova* | -windiss* \
+ 	      | -powermax* | -dnix* | -nx6 | -nx7 | -sei* | -dragonfly* \
+-	      | -skyos* | -haiku* | -rdos* | -toppers* | -drops* | -es* | -irx*)
++	      | -skyos* | -haiku* | -rdos* | -toppers* | -drops* | -es*)
+ 	# Remember, each alternative MUST END IN *, to match a version number.
+ 		;;
+ 	-qnx*)
+@@ -1517,9 +1498,6 @@ case $os in
+ 	-aros*)
+ 		os=-aros
+ 		;;
+-	-kaos*)
+-		os=-kaos
+-		;;
+ 	-zvmoe)
+ 		os=-zvmoe
+ 		;;
+@@ -1568,6 +1546,9 @@ case $basic_machine in
+ 	c4x-* | tic4x-*)
+ 		os=-coff
+ 		;;
++	c8051-*)
++		os=-elf
++		;;
+ 	hexagon-*)
+ 		os=-elf
+ 		;;
+@@ -1611,6 +1592,9 @@ case $basic_machine in
+ 	mips*-*)
+ 		os=-elf
+ 		;;
++	or1k-*)
++		os=-elf
++		;;
+ 	or32-*)
+ 		os=-coff
+ 		;;
+diff --git a/support/gnuconfig/patches/0001-config-add-support-for-uClibc.patch b/support/gnuconfig/patches/0001-config-add-support-for-uClibc.patch
+deleted file mode 100644
+index 3627e8e..0000000
+--- a/support/gnuconfig/patches/0001-config-add-support-for-uClibc.patch
++++ /dev/null
+@@ -1,184 +0,0 @@
+-From eee83aa62993b15b7f460cca9583cd69a15b5357 Mon Sep 17 00:00:00 2001
+-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-Date: Thu, 15 Nov 2012 17:01:13 +0100
+-Subject: [PATCH 1/2] config: add support for uClibc
+-
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+----
+- config.guess |   70 ++++++++++++++++++++++++++++++++++++----------------------
+- 1 file changed, 43 insertions(+), 27 deletions(-)
+-
+-diff --git a/config.guess b/config.guess
+-index 872b96a..9509179 100755
+---- a/config.guess
+-+++ b/config.guess
+-@@ -138,6 +138,23 @@ UNAME_RELEASE=`(uname -r) 2>/dev/null` || UNAME_RELEASE=unknown
+- UNAME_SYSTEM=`(uname -s) 2>/dev/null`  || UNAME_SYSTEM=unknown
+- UNAME_VERSION=`(uname -v) 2>/dev/null` || UNAME_VERSION=unknown
+- 
+-+if [ "${UNAME_SYSTEM}" = "Linux" ] ; then
+-+	eval $set_cc_for_build
+-+	cat << EOF > $dummy.c
+-+	#include <features.h>
+-+	#ifdef __UCLIBC__
+-+	# ifdef __UCLIBC_CONFIG_VERSION__
+-+	LIBC=uclibc __UCLIBC_CONFIG_VERSION__
+-+	# else
+-+	LIBC=uclibc
+-+	# endif
+-+	#else
+-+	LIBC=gnu
+-+	#endif
+-+EOF
+-+	eval `$CC_FOR_BUILD -E $dummy.c 2>/dev/null | grep LIBC= | sed -e 's: ::g'`
+-+fi
+-+
+- # Note: order is significant - the case branches are not exclusive.
+- 
+- case "${UNAME_MACHINE}:${UNAME_SYSTEM}:${UNAME_RELEASE}:${UNAME_VERSION}" in
+-@@ -869,11 +886,11 @@ EOF
+- 	echo ${UNAME_MACHINE}-pc-minix
+- 	exit ;;
+-     aarch64:Linux:*:*)
+--	echo ${UNAME_MACHINE}-unknown-linux-gnu
+-+	echo ${UNAME_MACHINE}-unknown-linux-${LIBC}
+- 	exit ;;
+-     aarch64_be:Linux:*:*)
+- 	UNAME_MACHINE=aarch64_be
+--	echo ${UNAME_MACHINE}-unknown-linux-gnu
+-+	echo ${UNAME_MACHINE}-unknown-linux-${LIBC}
+- 	exit ;;
+-     alpha:Linux:*:*)
+- 	case `sed -n '/^cpu model/s/^.*: \(.*\)/\1/p' < /proc/cpuinfo` in
+-@@ -886,15 +903,15 @@ EOF
+- 	  EV68*) UNAME_MACHINE=alphaev68 ;;
+- 	esac
+- 	objdump --private-headers /bin/sh | grep -q ld.so.1
+--	if test "$?" = 0 ; then LIBC="libc1" ; else LIBC="" ; fi
+--	echo ${UNAME_MACHINE}-unknown-linux-gnu${LIBC}
+-+	if test "$?" = 0 ; then LIBC="gnulibc1" ; fi
+-+	echo ${UNAME_MACHINE}-unknown-linux-${LIBC}
+- 	exit ;;
+-     arm*:Linux:*:*)
+- 	eval $set_cc_for_build
+- 	if echo __ARM_EABI__ | $CC_FOR_BUILD -E - 2>/dev/null \
+- 	    | grep -q __ARM_EABI__
+- 	then
+--	    echo ${UNAME_MACHINE}-unknown-linux-gnu
+-+	    echo ${UNAME_MACHINE}-unknown-linux-${LIBC}
+- 	else
+- 	    if echo __ARM_PCS_VFP | $CC_FOR_BUILD -E - 2>/dev/null \
+- 		| grep -q __ARM_PCS_VFP
+-@@ -906,22 +923,21 @@ EOF
+- 	fi
+- 	exit ;;
+-     avr32*:Linux:*:*)
+--	echo ${UNAME_MACHINE}-unknown-linux-gnu
+-+	echo ${UNAME_MACHINE}-unknown-linux-${LIBC}
+- 	exit ;;
+-     cris:Linux:*:*)
+--	echo ${UNAME_MACHINE}-axis-linux-gnu
+-+	echo ${UNAME_MACHINE}-axis-linux-${LIBC}
+- 	exit ;;
+-     crisv32:Linux:*:*)
+--	echo ${UNAME_MACHINE}-axis-linux-gnu
+-+	echo ${UNAME_MACHINE}-axis-linux-${LIBC}
+- 	exit ;;
+-     frv:Linux:*:*)
+--	echo ${UNAME_MACHINE}-unknown-linux-gnu
+-+	echo ${UNAME_MACHINE}-unknown-linux-${LIBC}
+- 	exit ;;
+-     hexagon:Linux:*:*)
+--	echo ${UNAME_MACHINE}-unknown-linux-gnu
+-+	echo ${UNAME_MACHINE}-unknown-linux-${LIBC}
+- 	exit ;;
+-     i*86:Linux:*:*)
+--	LIBC=gnu
+- 	eval $set_cc_for_build
+- 	sed 's/^	//' << EOF >$dummy.c
+- 	#ifdef __dietlibc__
+-@@ -932,13 +948,13 @@ EOF
+- 	echo "${UNAME_MACHINE}-pc-linux-${LIBC}"
+- 	exit ;;
+-     ia64:Linux:*:*)
+--	echo ${UNAME_MACHINE}-unknown-linux-gnu
+-+	echo ${UNAME_MACHINE}-unknown-linux-${LIBC}
+- 	exit ;;
+-     m32r*:Linux:*:*)
+--	echo ${UNAME_MACHINE}-unknown-linux-gnu
+-+	echo ${UNAME_MACHINE}-unknown-linux-${LIBC}
+- 	exit ;;
+-     m68*:Linux:*:*)
+--	echo ${UNAME_MACHINE}-unknown-linux-gnu
+-+	echo ${UNAME_MACHINE}-unknown-linux-${LIBC}
+- 	exit ;;
+-     mips:Linux:*:* | mips64:Linux:*:*)
+- 	eval $set_cc_for_build
+-@@ -957,10 +973,10 @@ EOF
+- 	#endif
+- EOF
+- 	eval `$CC_FOR_BUILD -E $dummy.c 2>/dev/null | grep '^CPU'`
+--	test x"${CPU}" != x && { echo "${CPU}-unknown-linux-gnu"; exit; }
+-+	test x"${CPU}" != x && { echo "${CPU}-unknown-linux-${LIBC}"; exit; }
+- 	;;
+-     or32:Linux:*:*)
+--	echo ${UNAME_MACHINE}-unknown-linux-gnu
+-+	echo ${UNAME_MACHINE}-unknown-linux-${LIBC}
+- 	exit ;;
+-     padre:Linux:*:*)
+- 	echo sparc-unknown-linux-gnu
+-@@ -971,40 +987,40 @@ EOF
+-     parisc:Linux:*:* | hppa:Linux:*:*)
+- 	# Look for CPU level
+- 	case `grep '^cpu[^a-z]*:' /proc/cpuinfo 2>/dev/null | cut -d' ' -f2` in
+--	  PA7*) echo hppa1.1-unknown-linux-gnu ;;
+--	  PA8*) echo hppa2.0-unknown-linux-gnu ;;
+--	  *)    echo hppa-unknown-linux-gnu ;;
+-+	  PA7*) echo hppa1.1-unknown-linux-${LIBC} ;;
+-+	  PA8*) echo hppa2.0-unknown-linux-${LIBC} ;;
+-+	  *)    echo hppa-unknown-linux-${LIBC} ;;
+- 	esac
+- 	exit ;;
+-     ppc64:Linux:*:*)
+--	echo powerpc64-unknown-linux-gnu
+-+	echo powerpc64-unknown-linux-${LIBC}
+- 	exit ;;
+-     ppc:Linux:*:*)
+--	echo powerpc-unknown-linux-gnu
+-+	echo powerpc-unknown-linux-${LIBC}
+- 	exit ;;
+-     s390:Linux:*:* | s390x:Linux:*:*)
+- 	echo ${UNAME_MACHINE}-ibm-linux
+- 	exit ;;
+-     sh64*:Linux:*:*)
+--	echo ${UNAME_MACHINE}-unknown-linux-gnu
+-+	echo ${UNAME_MACHINE}-unknown-linux-${LIBC}
+- 	exit ;;
+-     sh*:Linux:*:*)
+--	echo ${UNAME_MACHINE}-unknown-linux-gnu
+-+	echo ${UNAME_MACHINE}-unknown-linux-${LIBC}
+- 	exit ;;
+-     sparc:Linux:*:* | sparc64:Linux:*:*)
+--	echo ${UNAME_MACHINE}-unknown-linux-gnu
+-+	echo ${UNAME_MACHINE}-unknown-linux-${LIBC}
+- 	exit ;;
+-     tile*:Linux:*:*)
+- 	echo ${UNAME_MACHINE}-unknown-linux-gnu
+- 	exit ;;
+-     vax:Linux:*:*)
+--	echo ${UNAME_MACHINE}-dec-linux-gnu
+-+	echo ${UNAME_MACHINE}-dec-linux-${LIBC}
+- 	exit ;;
+-     x86_64:Linux:*:*)
+--	echo ${UNAME_MACHINE}-unknown-linux-gnu
+-+	echo ${UNAME_MACHINE}-unknown-linux-${LIBC}
+- 	exit ;;
+-     xtensa*:Linux:*:*)
+--	echo ${UNAME_MACHINE}-unknown-linux-gnu
+-+	echo ${UNAME_MACHINE}-unknown-linux-${LIBC}
+- 	exit ;;
+-     i*86:DYNIX/ptx:4*:*)
+- 	# ptx 4.0 does uname -s correctly, with DYNIX/ptx in there.
+--- 
+-1.7.9.5
+-
+diff --git a/support/gnuconfig/patches/0002-config-add-support-for-ps2.patch b/support/gnuconfig/patches/0002-config-add-support-for-ps2.patch
+deleted file mode 100644
+index 781b958..0000000
+--- a/support/gnuconfig/patches/0002-config-add-support-for-ps2.patch
++++ /dev/null
+@@ -1,60 +0,0 @@
+-From 144194fe916a14b630324c19f7b098109122bca2 Mon Sep 17 00:00:00 2001
+-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-Date: Thu, 15 Nov 2012 17:01:25 +0100
+-Subject: [PATCH 2/2] config: add support for ps2
+-
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+----
+- config.sub |   22 ++++++++++++++++++++--
+- 1 file changed, 20 insertions(+), 2 deletions(-)
+-
+-diff --git a/config.sub b/config.sub
+-index 89b1286..8509813 100755
+---- a/config.sub
+-+++ b/config.sub
+-@@ -265,7 +265,7 @@ case $basic_machine in
+- 	| be32 | be64 \
+- 	| bfin \
+- 	| c4x | clipper \
+--	| d10v | d30v | dlx | dsp16xx \
+-+	| d10v | d30v | dlx | dsp16xx | dvp \
+- 	| epiphany \
+- 	| fido | fr30 | frv \
+- 	| h8300 | h8500 | hppa | hppa1.[01] | hppa2.0 | hppa2.0[nw] | hppa64 \
+-@@ -813,6 +813,24 @@ case $basic_machine in
+- 		basic_machine=m68k-atari
+- 		os=-mint
+- 		;;
+-+	mipsEE* | ee | ps2)
+-+		basic_machine=mips64r5900el-scei
+-+		case $os in
+-+		    -linux*)
+-+			;;
+-+		    *)
+-+			os=-elf
+-+			;;
+-+		esac
+-+		;;
+-+	iop)
+-+		basic_machine=mipsel-scei
+-+		os=-irx
+-+		;;
+-+	dvp)
+-+		basic_machine=dvp-scei
+-+		os=-elf
+-+		;;
+- 	mips3*-*)
+- 		basic_machine=`echo $basic_machine | sed -e 's/mips3/mips64/'`
+- 		;;
+-@@ -1375,7 +1393,7 @@ case $os in
+- 	      | -os2* | -vos* | -palmos* | -uclinux* | -nucleus* \
+- 	      | -morphos* | -superux* | -rtmk* | -rtmk-nova* | -windiss* \
+- 	      | -powermax* | -dnix* | -nx6 | -nx7 | -sei* | -dragonfly* \
+--	      | -skyos* | -haiku* | -rdos* | -toppers* | -drops* | -es*)
+-+	      | -skyos* | -haiku* | -rdos* | -toppers* | -drops* | -es* | -irx*)
+- 	# Remember, each alternative MUST END IN *, to match a version number.
+- 		;;
+- 	-qnx*)
+--- 
+-1.7.9.5
+-
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+1.8.4.rc3
