@@ -1,17 +1,16 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sun, 27 Oct 2013 14:51:19 +0100
-Subject: [Buildroot] [PATCH v2] Update config.guess and config.sub scripts
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 27 Oct 2013 15:29:38 +0100
+Subject: [Buildroot] [git commit] Update config.guess and config.sub scripts
 	to latest versions.
-In-Reply-To: <1382874665-4711-1-git-send-email-arnout@mind.be>
-References: <1382874665-4711-1-git-send-email-arnout@mind.be>
-Message-ID: <1382881879-18169-1-git-send-email-arnout@mind.be>
+Message-ID: <20131027143128.5F3409BB98@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Jouko Nikula <jouko.nikula@espotel.com>
+commit: http://git.buildroot.net/buildroot/commit/?id=200bf74e8e4686c3f132a6600ae6803eda8b588a
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Current version of config.guess may fail to detect host libc version,
 which results in problems with configure when building gcc. Current patches
@@ -22,28 +21,14 @@ buildroot mailing list that it is no longer needed.
 more recent version, update README.]
 Signed-off-by: Jouko Nikula <jouko.nikula@espotel.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
-v3: Now actually update the config.guess as well. And while I'm at
-    it, I've also updated to the current latest git version of gnuconfig.
-
-    Also I reset the Author to Jouko now.
-
-v2: drop the 'improve uClibc' patch.
-
-This patch turns out not to be needed. It was an experimental uClibc
-feature of 9 years ago which never made it into a release. That's
-why this change didn't make it into upstream gnuconfig.
-
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- support/gnuconfig/README.buildroot                 |   7 +-
- support/gnuconfig/config.guess                     | 117 ++++++-------
- support/gnuconfig/config.sub                       |  94 +++++------
- .../0001-config-add-support-for-uClibc.patch       | 184 ---------------------
- .../patches/0002-config-add-support-for-ps2.patch  |  60 -------
+ support/gnuconfig/README.buildroot                 |    7 +-
+ support/gnuconfig/config.guess                     |  117 +++++++------
+ support/gnuconfig/config.sub                       |   94 +++++------
+ .../0001-config-add-support-for-uClibc.patch       |  184 --------------------
+ .../patches/0002-config-add-support-for-ps2.patch  |   60 -------
  5 files changed, 104 insertions(+), 358 deletions(-)
- delete mode 100644 support/gnuconfig/patches/0001-config-add-support-for-uClibc.patch
- delete mode 100644 support/gnuconfig/patches/0002-config-add-support-for-ps2.patch
 
 diff --git a/support/gnuconfig/README.buildroot b/support/gnuconfig/README.buildroot
 index 5f96b3c..0898cb5 100644
@@ -795,5 +780,3 @@ index 781b958..0000000
 --- 
 -1.7.9.5
 -
--- 
-1.8.4.rc3
