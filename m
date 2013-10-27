@@ -1,43 +1,70 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 27 Oct 2013 18:55:20 +0100
-Subject: [Buildroot] [PATCH v8 RESEND 2/8] package: add toolchain
- dependency to every target package
-In-Reply-To: <5268455D.10106@mind.be>
-References: <1382088860-30524-1-git-send-email-fabio.porcedda@gmail.com>
- <1382088860-30524-3-git-send-email-fabio.porcedda@gmail.com>
- <5268455D.10106@mind.be>
-Message-ID: <20131027185520.4ec5e1b0@skate>
+From: Karim Yaghmour <karim.yaghmour@opersys.com>
+Date: Sun, 27 Oct 2013 13:50:42 -0400
+Subject: [Buildroot] Android.mk file for integration into AOSP build
+Message-ID: <526D5272.6010909@opersys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Arnout Vandecappelle,
 
-On Wed, 23 Oct 2013 23:53:33 +0200, Arnout Vandecappelle wrote:
+I've been meaning to post this for a while. With the help of Thomas and
+Maxime from Free Electrons, I created an Android.mk to have the AOSP
+merge Buildroot's output into the final Android images. The whole thing
+took us like 10 minutes at the last ABS/ELC in SFO; 10 min *without*
+Android's build time.
 
->   What I would prefer is to move glibc, linux-headers and uclibc back 
-> under the toolchain directory (why did they ever move out, Thomas?) and 
-> to filter on $(pkgparentdir)
+Here's how it works - instructions for 2.3.7 (see below for 4.x):
 
-Well, the idea is that gcc, uclibc, glibc, linux-headers and so on are
-now real, normal, packages. The only thing we keep in toolchain/ are
-the "entry" point of toolchain backends: toolchain-buildroot and
-toolchain-external.
+1- Setup:
+- Create a "buildroot" directory at the top of the AOSP
+- Untar a buildroot in there
+- Configure and build buildroot
+- Create a symlink to buidroot's output:
+$ cd buildroot/
+$ ln -s buildroot-2012.11.1/output/images/rootfs.tar .
+- Put the attached Android.mk in [aosp]/buildroot/
 
-Moreover, it would be strange to have glibc, uclibc and linux-headers
-in toolchain/, but not gcc and binutils, for example. I do understand
-that these two packages are host packages, so they don't get the
-automatic dependency on the toolchain added, but that's an internal
-detail. From an external point of view, all those components are part
-of the toolchain, so it would be weird to have some of them in
-toolchain/, and some of them in package/.
+2- Build AOSP
 
-Best regards,
+3- Profit
 
-Thomas
+If all goes well, you'll have a /bin/ and /lib/ in the Android rootfs
+that will contain all the Buildroot stuff. And it won't overlap with
+Android since the latter uses /system/bin/ and /system/lib/.
+
+Note: you need to use a separate toolchain to build Buildroot than the
+one provided in the AOSP.
+
+In 4.x, the "ALL_PREBUILT" in the Android.mk is no longer supported "out
+of the box". So you need to "help" the AOSP a little. Edit the
+build/core/legacy_prebuilts.mk and add "buildroot" to the list of
+items in "GRANDFATHERED_ALL_PREBUILT":
+GRANDFATHERED_ALL_PREBUILT := \
+	akmd2 \
+	am \
+...
+	zoneinfo.idx \
+	zoneinfo.version \
+	buildroot
+
+Enjoy!
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Karim Yaghmour
+CEO - Opersys inc. / www.opersys.com
+http://twitter.com/karimyaghmour
+-------------- next part --------------
+LOCAL_PATH:= $(call my-dir)
+include $(CLEAR_VARS)
+
+# This part is a hack, we're doing "addprefix" because if we don't,
+# this dependency will be stripped out by the build system
+BUILDROOT_ROOTFS := $(addprefix $(TARGET_ROOT_OUT)/, buildroot)
+
+$(BUILDROOT_ROOTFS):
+	mkdir -p $(TARGET_ROOT_OUT)
+	tar --exclude="dev" -xvf $(TOPDIR)buildroot/rootfs.tar -C $(TARGET_ROOT_OUT)
+
+ALL_PREBUILT += $(BUILDROOT_ROOTFS)
