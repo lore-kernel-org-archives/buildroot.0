@@ -1,52 +1,77 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 27 Oct 2013 17:40:45 +0100
-Subject: [Buildroot] RFC: make export-sysroot
-In-Reply-To: <OF3447DAE1.89CC3270-ON86257C0E.004C5FFB@rockwellcollins.com>
-References: <OF3447DAE1.89CC3270-ON86257C0E.004C5FFB@rockwellcollins.com>
-Message-ID: <20131027174045.5f9115c2@skate>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 27 Oct 2013 17:08:02 +0000
+Subject: [Buildroot] [pull request v2] Pull request for branch
+	yem/instrument-build
+Message-ID: <cover.1382893172.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Matt,
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-On Thu, 24 Oct 2013 08:54:13 -0500, mlweber1 at rockwellcollins.com wrote:
+Hello All!
 
-> I'm curious to see if there would be any traction to add a 'make
-> export-sysroot' option that functions like the WindRiver workbench
-> sysroot export.  We've been manually doing something like this where
-> we tar up the output/host folder to distribute to other users.  Since
-> we can't maintain the original output/host location (ran into symlink
-> errors if we moved the host folder after it was built), we also
-> provide the original toolchain archive.  This results in the user
-> needing to use the --sysroot when they build (seems like an ok
-> approach so far).
-> 
-> Thoughts?  Maybe I'm missing an approach to actually make use of the
-> generated host folder toolchain outside of its original buildroot
-> path...  Which would then simplify this to just a archiving of the
-> output/host into a tarball placed in the images folder.
+This series is an RFC to add support for instrumenting the build process,
+reworked after discussion both on the ML and during the developpers' day.
 
-In Buildroot, the contents of output/host are what we call the "SDK",
-as it contains all the host tools (including the cross compiler) and
-the target libraries and headers for application developers.
+It works as thus;
+  - we register a set of hooks
+  - hooks are called before and after each steps
 
-It is indeed part of the plans to provide a mechanism to generate a
-tarball out of this, but I believe we thought it would be better to
-make this SDK relocatable (i.e installable and usable in any location)
-before providing a feature to tarball this SDK. We have items in the
-TODO list at
-http://elinux.org/Buildroot#Core_Buildroot_infrastructure (see "Make the
-HOST-directory a relocatable SDK").
+There are currently two hooks defined:
+  - log steps with timings  (as an example of hos to do a hook)
+  - call a user-supplied script
 
-Contributions to solve items of this TODO list are welcome.
+This is just a RFC for now, and if it is accepted, new hooks can be
+defined later on.
 
-Best regards,
+I'm planning on adding at least one other hook, that runs all scripts
+present in support/step-hooks/ (or whatever its name).
 
-Thomas
+Open for comments! ;-)
+
+Changes v1 -> v2:
+  - removed the intra-steps instrumentation  (Thomas, Peter)
+  - accept a list of user-supplied hooks, not only one hook  (Thomas)
+
+Regards,
+Yann E. MORIN.
+
+
+The following changes since commit 200bf74e8e4686c3f132a6600ae6803eda8b588a:
+
+  Update config.guess and config.sub scripts to latest versions. (2013-10-27 15:29:38 +0100)
+
+are available in the git repository at:
+
+  git://gitorious.org/buildroot/buildroot.git yem/instrument-build
+
+for you to fetch changes up to a4b9a0c71f89f16b00a75ba0b37f19c71c0300c3:
+
+  pkg-infra: add user-supplied step-hooks (2013-10-27 16:51:34 +0000)
+
+----------------------------------------------------------------
+Yann E. MORIN (4):
+      post-{build,images} hooks: export BUILD_DIR too
+      pkg-infra: introduce pre/post-step hooks
+      pkg-infra: add hook to log timing of steps
+      pkg-infra: add user-supplied step-hooks
+
+ Makefile                            |  4 +--
+ docs/manual/customize-rootfs.txt    |  5 ++--
+ docs/manual/debugging-buildroot.txt | 33 +++++++++++++++++++++
+ docs/manual/developer-guide.txt     |  2 ++
+ package/Makefile.in                 |  5 ++++
+ package/pkg-generic.mk              | 59 +++++++++++++++++++++++++++++++++++++
+ 6 files changed, 104 insertions(+), 4 deletions(-)
+ create mode 100644 docs/manual/debugging-buildroot.txt
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
