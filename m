@@ -1,25 +1,26 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 27 Oct 2013 11:13:45 +0100
-Subject: [Buildroot] [git commit] kobs-ng: rename patch to comply to
-	convention
-Message-ID: <20131027101616.225749BBED@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 27 Oct 2013 11:19:19 +0100
+Subject: [Buildroot] [PATCH v3 1/2] packages/Config.in: Alphabetical
+	entries sorting
+In-Reply-To: <1382713552-29095-1-git-send-email-maxime.hadjinlian@gmail.com>
+ (Maxime Hadjinlian's message of "Fri, 25 Oct 2013 17:05:51 +0200")
+References: <1382713552-29095-1-git-send-email-maxime.hadjinlian@gmail.com>
+Message-ID: <87li1fvwwo.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3c933c5e3095f8b33b16762a69d66e41e6913803
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Maxime" == Maxime Hadjinlian <maxime.hadjinlian@gmail.com> writes:
 
-Signed-off-by: Sergey Alyoshin <alyoshin.s@gmail.com>
-Acked-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...es.patch => kobs-ng-0001-fix-mtd-defines.patch} |    0
- 1 files changed, 0 insertions(+), 0 deletions(-)
+ > This patch moves :
+ >   "Filesystem and flash utilities" menu
+ >   "X applications" category
+ >   "JSON/XML" menu
+ > so they are in alphabetical order with the rest of the file.
 
-diff --git a/package/kobs-ng/kobs-ng-fix-mtd-defines.patch b/package/kobs-ng/kobs-ng-0001-fix-mtd-defines.patch
-similarity index 100%
-rename from package/kobs-ng/kobs-ng-fix-mtd-defines.patch
-rename to package/kobs-ng/kobs-ng-0001-fix-mtd-defines.patch
+Committed both, thanks.
+
+-- 
+Bye, Peter Korsgaard
