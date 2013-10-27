@@ -1,37 +1,31 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 27 Oct 2013 15:31:24 +0100
-Subject: [Buildroot] [PATCH v2] Update config.guess and config.sub
-	scripts to latest versions.
-In-Reply-To: <1382881879-18169-1-git-send-email-arnout@mind.be> (Arnout
- Vandecappelle's message of "Sun, 27 Oct 2013 14:51:19 +0100")
-References: <1382874665-4711-1-git-send-email-arnout@mind.be>
- <1382881879-18169-1-git-send-email-arnout@mind.be>
-Message-ID: <87wqkyu6o3.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 27 Oct 2013 17:31:45 +0100
+Subject: [Buildroot] [git commit] Makefile: export BUILD_DIR
+In-Reply-To: <7EC43AD3B54844BEAC908529E9E57748@JohanW7>
+References: <20131024064830.61FC19BB90@busybox.osuosl.org>
+ <7EC43AD3B54844BEAC908529E9E57748@JohanW7>
+Message-ID: <20131027173145.2a3c931f@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
+Dear Sagaert Johan,
 
- > From: Jouko Nikula <jouko.nikula@espotel.com>
- > Current version of config.guess may fail to detect host libc version,
- > which results in problems with configure when building gcc. Current patches
- > are removed. Patch to add support for ps2 is removed as it was discussed on
- > buildroot mailing list that it is no longer needed.
+On Thu, 24 Oct 2013 16:53:28 +0200, Sagaert Johan wrote:
 
- > [Arnout: drop the 'improve uClibc' patch, update commit message, update to
- > more recent version, update README.]
- > Signed-off-by: Jouko Nikula <jouko.nikula@espotel.com>
- > Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
- > ---
- > v3: Now actually update the config.guess as well. And while I'm at
- >     it, I've also updated to the current latest git version of gnuconfig.
+> What is the difference between TOPDIR and BASE_DIR variables?
 
- >     Also I reset the Author to Jouko now.
+TOPDIR is the root of the Buildroot source tree.
 
-Committed, thanks.
+BASE_DIR is the root of where we do the build (i.e output/ by default,
+but can be overridden with O=).
 
+Best regards,
+
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
