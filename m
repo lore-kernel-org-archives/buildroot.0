@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 27 Oct 2013 18:24:40 +0100
-Subject: [Buildroot] [PATCH v2 1/2] pcre: add UTF support option
-In-Reply-To: <1382696898-1901-1-git-send-email-yegorslists@googlemail.com>
+Date: Sun, 27 Oct 2013 18:42:27 +0100
+Subject: [Buildroot] [PATCH v2 2/2] ModemManager: add new package
+In-Reply-To: <1382696898-1901-2-git-send-email-yegorslists@googlemail.com>
 References: <1382696898-1901-1-git-send-email-yegorslists@googlemail.com>
-Message-ID: <20131027182440.507e4c6f@skate>
+ <1382696898-1901-2-git-send-email-yegorslists@googlemail.com>
+Message-ID: <20131027184227.71ab4f03@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,17 +13,80 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Fri, 25 Oct 2013 12:28:17 +0200, yegorslists at googlemail.com wrote:
+On Fri, 25 Oct 2013 12:28:18 +0200, yegorslists at googlemail.com wrote:
+> diff --git a/package/modem-manager/Config.in b/package/modem-manager/Config.in
+> new file mode 100644
+> index 0000000..202d846
+> --- /dev/null
+> +++ b/package/modem-manager/Config.in
+> @@ -0,0 +1,33 @@
+> +config BR2_PACKAGE_MODEM_MANAGER
+> +	bool "ModemManager"
 
-> +config BR2_PACKAGE_PCRE_UTF
-> +	bool "UTF support"
+I think we want all the package names to be lower case.
+
+> +	depends on BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_UDEV
+> +	select BR2_PACKAGE_DBUS
+> +	depends on BR2_INET_IPV6
+> +	depends on BR2_LARGEFILE # acl
+> +	depends on BR2_USE_WCHAR # libglib2 and gnutls
+> +	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus, libglib2
+> +	depends on BR2_USE_MMU # dbus
+> +	select BR2_PACKAGE_DBUS_GLIB
+> +	select BR2_PACKAGE_UDEV
+> +	select BR2_PACKAGE_UDEV_ALL_EXTRAS
+> +	select BR2_PACKAGE_PCRE
+> +	select BR2_PACKAGE_PCRE_UTF
 > +	help
-> +	  This option enables UTF support
+> +	  ModemManager is a DBus-activated daemon which controls mobile
+> +	  broadband (2G/3G/4G) devices and connections.
+> +
+> +	  http://www.freedesktop.org/wiki/Software/ModemManager/
+> +
+> +if BR2_PACKAGE_MODEM_MANAGER
+> +
+> +config BR2_PACKAGE_MODEM_MANAGER_LIBQMI
+> +	bool "QMI support"
+> +	select BR2_PACKAGE_LIBQMI
+> +	help
+> +	  This option enables support for QMI protocol
+> +endif
+> +
+> +comment "ModemkManager requires a toolchain with IPV6, LARGEFILE, WCHAR and thread support"
 
-I would maybe change this to UTF-8/16/32 support, which is what
-the ./configure help text says.
+typo on ModemManager (which should be lower case as well here).
 
-Thanks,
+> +	depends on !BR2_INET_IPV6 || !BR2_LARGEFILE || !BR2_USE_WCHAR || \
+> +		!BR2_TOOLCHAIN_HAS_THREADS
+
+Shouldn't we have a comment about the udev dependency?
+
+
+> +MODEM_MANAGER_VERSION = 1.0.0
+> +MODEM_MANAGER_SOURCE = ModemManager-$(MODEM_MANAGER_VERSION).tar.xz
+> +MODEM_MANAGER_SITE = http://www.freedesktop.org/software/ModemManager/
+> +MODEM_MANAGER_DEPENDENCIES = host-pkgconf udev dbus-glib host-intltool
+
+You don't depend on pcre?
+
+Also, as you mentioned in a reply, please add the licensing
+information. Note that it seems to be GPLv2+ and not GPLv2.
+
+> +MODEM_MANAGER_CONF_OPT = \
+> +		--without-mbim
+
+One too many tabs in this indentation.
+
+> +ifeq ($(BR2_PACKAGE_MODEM_MANAGER_LIBQMI),y)
+> +	MODEM_MANAGER_DEPENDENCIES += libqmi
+
+	MODEM_MANAGER_CONF_OPT += --with-qmi
+
+> +else
+> +	MODEM_MANAGER_CONF_OPT += --without-qmi
+> +endif
+
+Best regards,
 
 Thomas
 -- 
