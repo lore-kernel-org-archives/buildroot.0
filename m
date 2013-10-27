@@ -1,21 +1,26 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 27 Oct 2013 10:56:33 +0100
-Subject: [Buildroot] [PATCH 1/2] webkit: number the patches
-In-Reply-To: <1382607972-30863-1-git-send-email-arnout@mind.be> (Arnout
- Vandecappelle's message of "Thu, 24 Oct 2013 11:46:11 +0200")
-References: <1382607972-30863-1-git-send-email-arnout@mind.be>
-Message-ID: <8761sjxcj2.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 27 Oct 2013 10:52:14 +0100
+Subject: [Buildroot] [git commit] webkit: number the patches
+Message-ID: <20131027095653.1EAB39BBEE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=5bc39dcf41cca2faabba72f41540a653afc9c836
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ ...bkit-0001-build-fix-for-32-bit-autotools.patch} |    0
+ ...=> webkit-0002-build-fix-for-gtklauncher.patch} |    0
+ ...patch => webkit-0003-detect-harfbuzz-icu.patch} |    0
+ ...e.patch => webkit-0004-disable-docrebase.patch} |    0
+ ...tests.patch => webkit-0005-disable-tests.patch} |    0
+ ...ecinfo_h.patch => webkit-0006-execinfo_h.patch} |    0
+ ...t-mips-dfg.patch => webkit-0007-mips-dfg.patch} |    0
+ 7 files changed, 0 insertions(+), 0 deletions(-)
 
-Committed both, thanks.
-
--- 
-Bye, Peter Korsgaard
+Patch is too large, so refusing to show it
