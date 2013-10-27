@@ -1,26 +1,64 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 27 Oct 2013 11:19:19 +0100
-Subject: [Buildroot] [PATCH v3 1/2] packages/Config.in: Alphabetical
-	entries sorting
-In-Reply-To: <1382713552-29095-1-git-send-email-maxime.hadjinlian@gmail.com>
- (Maxime Hadjinlian's message of "Fri, 25 Oct 2013 17:05:51 +0200")
-References: <1382713552-29095-1-git-send-email-maxime.hadjinlian@gmail.com>
-Message-ID: <87li1fvwwo.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 27 Oct 2013 11:18:32 +0100
+Subject: [Buildroot] [git commit] packages/Config.in: Change entries titles
+Message-ID: <20131027101944.8C5C69BB98@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Maxime" == Maxime Hadjinlian <maxime.hadjinlian@gmail.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=3b68e8735ecb4099bbb6fc90da0fdf8f4d6217d0
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > This patch moves :
- >   "Filesystem and flash utilities" menu
- >   "X applications" category
- >   "JSON/XML" menu
- > so they are in alphabetical order with the rest of the file.
+This patch mostly fix the casing on different entries titles.
+It also changes the name of "Misc devices firmwares" to a simpler
+"Firmware".
 
-Committed both, thanks.
+Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Acked-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/Config.in |    8 ++++----
+ 1 files changed, 4 insertions(+), 4 deletions(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/Config.in b/package/Config.in
+index e40fa31..32be4d9 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -169,7 +169,7 @@ source "package/gnuplot/Config.in"
+ source "package/jhead/Config.in"
+ source "package/rrdtool/Config.in"
+ 
+-comment "graphic libraries"
++comment "Graphic libraries"
+ source "package/cegui06/Config.in"
+ source "package/directfb/Config.in"
+ source "package/directfb-examples/Config.in"
+@@ -196,7 +196,7 @@ source "package/sdl_net/Config.in"
+ source "package/sdl_sound/Config.in"
+ source "package/sdl_ttf/Config.in"
+ 
+-comment "other GUIs"
++comment "Other GUIs"
+ source "package/efl/Config.in"
+ source "package/qt/Config.in"
+ 
+@@ -240,7 +240,7 @@ source "package/liberation/Config.in"
+ source "package/libsexy/Config.in"
+ source "package/x11r7/xkeyboard-config/Config.in"
+ 
+-comment "X Window managers"
++comment "X window managers"
+ source "package/blackbox/Config.in"
+ source "package/enlightenment/Config.in"
+ source "package/fluxbox/Config.in"
+@@ -249,7 +249,7 @@ source "package/metacity/Config.in"
+ endmenu
+ 
+ menu "Hardware handling"
+-menu "Misc devices firmwares"
++menu "Firmware"
+ source "package/am33x-cm3/Config.in"
+ source "package/b43-firmware/Config.in"
+ source "package/linux-firmware/Config.in"
