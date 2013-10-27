@@ -1,113 +1,59 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 27 Oct 2013 12:30:14 +0100
-Subject: [Buildroot] [git commit] trace-cmd: use pkg-config instead of
-	python-config
-Message-ID: <20131027113159.1325D9BC08@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sun, 27 Oct 2013 12:35:19 +0100
+Subject: [Buildroot] [PATCH] Fix compilation of systemd with uclibc
+In-Reply-To: <1380627492-25380-1-git-send-email-jezz@sysmic.org>
+References: <1380627492-25380-1-git-send-email-jezz@sysmic.org>
+Message-ID: <526CFA77.6010609@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ff0367008c683362f422751644237218b1c45def
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 01/10/13 13:38, J?r?me Pouiller wrote:
+> systemd-uclibc-fix.patch was applied to systemd to provide execvpe function
+> when compiled with uclibc. However, this function is now provided by
+> libc-add-non-standard-execvpe-function.patch in uclibc package.
+>
+> These two patchs are now in conflict. This commit remove
+> systemd/systemd-uclibc-fix.patch.
+>
+> Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
 
-trace-cmd use python-config to find out which headers
-and libraries should be used to link against the Python libraries.
-By default, python-config returns paths that are inappropriate for
-cross-compilation.
+  Hi J?r?me, Eric,
 
-This patch replaces python-config with pkg-config as a workaround.
+  After a long discussion at the Buildroot developer meeting, we decided 
+that there really is no good solution for this situation. So we decided 
+that the best solution is to just remove uClibc support for systemd: 
+upstream will never accept patches that fixes it in a proper way, and 
+people who have the systemd bloat will probably not care about saving a 
+few 100K by using uClibc.
 
-Add PYTHON_VERS to build trace-cmd with python2 or python3
+  So, Eric, could you include in your systemd bump a
 
-Fixes:
-http://autobuild.buildroot.net/results/980/980875810528ac1dee34b8c268d9b3c40b2e35ec/
+depends on !BR2_TOOLCHAIN_USES_UCLIBC
 
-Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...e-use-pkg-config-instead-of-python-config.patch |   43 ++++++++++++++++++++
- package/trace-cmd/trace-cmd.mk                     |   13 ++++++
- 2 files changed, 56 insertions(+), 0 deletions(-)
+(with appropriate comment).
 
-diff --git a/package/trace-cmd/trace-cmd-0001-Makefile-use-pkg-config-instead-of-python-config.patch b/package/trace-cmd/trace-cmd-0001-Makefile-use-pkg-config-instead-of-python-config.patch
-new file mode 100644
-index 0000000..6fed42c
---- /dev/null
-+++ b/package/trace-cmd/trace-cmd-0001-Makefile-use-pkg-config-instead-of-python-config.patch
-@@ -0,0 +1,43 @@
-+
-+trace-cmd use python-config to find out which headers
-+and libraries should be used to link against the Python libraries.
-+By default, python-config returns paths that are inappropriate for
-+cross-compilation.
-+
-+Add PYTHON_VERS to build trace-cmd with python2 or python3
-+
-+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-+---
-+ Makefile | 8 +++++---
-+ 1 file changed, 5 insertions(+), 3 deletions(-)
-+
-+diff --git a/Makefile b/Makefile
-+index 83329ca..23b70d8 100644
-+--- a/Makefile
-++++ b/Makefile
-+@@ -80,8 +80,10 @@ ifndef NO_PYTHON
-+ PYTHON		:= ctracecmd.so
-+ PYTHON_GUI	:= ctracecmd.so ctracecmdgui.so
-+
-++PYTHON_VERS ?= python
-++
-+ # Can build python?
-+-ifeq ($(shell sh -c "python-config --includes > /dev/null 2>&1 && echo y"), y)
-++ifeq ($(shell sh -c "pkg-config --cflags $(PYTHON_VERS) > /dev/null 2>&1 && echo y"), y)
-+ 	PYTHON_PLUGINS := plugin_python.so
-+ 	BUILD_PYTHON := $(PYTHON) $(PYTHON_PLUGINS)
-+ 	PYTHON_SO_INSTALL := ctracecmd.install
-+@@ -546,8 +548,8 @@ clean:
-+
-+ ##### PYTHON STUFF #####
-+
-+-PYTHON_INCLUDES = `python-config --includes`
-+-PYTHON_LDFLAGS = `python-config --ldflags` \
-++PYTHON_INCLUDES = `pkg-config --cflags $(PYTHON_VERS)`
-++PYTHON_LDFLAGS = `pkg-config --libs $(PYTHON_VERS)` \
-+ 		$(shell python -c "import distutils.sysconfig; print distutils.sysconfig.get_config_var('LINKFORSHARED')")
-+ PYGTK_CFLAGS = `pkg-config --cflags pygtk-2.0`
-+
-+--
-+1.8.4
-+
-diff --git a/package/trace-cmd/trace-cmd.mk b/package/trace-cmd/trace-cmd.mk
-index 7a750f9..69e0e69 100644
---- a/package/trace-cmd/trace-cmd.mk
-+++ b/package/trace-cmd/trace-cmd.mk
-@@ -11,6 +11,18 @@ TRACE_CMD_INSTALL_STAGING = YES
- TRACE_CMD_LICENSE = GPLv2 LGPLv2.1
- TRACE_CMD_LICENSE_FILES = COPYING COPYING.LIB
- 
-+TRACE_CMD_DEPENDENCIES = host-pkgconf
-+
-+ifeq ($(BR2_PACKAGE_PYTHON),y)
-+TRACE_CMD_DEPENDENCIES += python host-swig
-+TRACE_CMD_MAKE_OPTS = PYTHON_VERS=python
-+else ifeq ($(BR2_PACKAGE_PYTHON3),y)
-+TRACE_CMD_DEPENDENCIES += python3 host-swig
-+TRACE_CMD_MAKE_OPTS = PYTHON_VERS=python3
-+else
-+TRACE_CMD_MAKE_OPTS += NO_PYTHON=1
-+endif
-+
- # trace-cmd already defines _LARGEFILE64_SOURCE when necessary,
- # redefining it on the command line causes build problems.
- TRACE_CMD_CFLAGS=$(filter-out -D_LARGEFILE64_SOURCE,$(TARGET_CFLAGS)) -D_GNU_SOURCE
-@@ -18,6 +30,7 @@ TRACE_CMD_CFLAGS=$(filter-out -D_LARGEFILE64_SOURCE,$(TARGET_CFLAGS)) -D_GNU_SOU
- define TRACE_CMD_BUILD_CMDS
- 	$(MAKE) $(TARGET_CONFIGURE_OPTS) \
- 		CFLAGS="$(TRACE_CMD_CFLAGS)" \
-+		$(TRACE_CMD_MAKE_OPTS) \
- 		-C $(@D) all
- endef
- 
+  We'll see if it succeeds with musl, but that's less important for the 
+time being.
+
+
+  Regards,
+  Arnout
+
+> ---
+>   package/systemd/systemd-uclibc-fix.patch |   59 ------------------------------
+>   1 file changed, 59 deletions(-)
+>   delete mode 100644 package/systemd/systemd-uclibc-fix.patch
+>
+[snip]
+
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
