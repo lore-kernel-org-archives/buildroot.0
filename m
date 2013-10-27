@@ -1,37 +1,35 @@
-From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Sun, 27 Oct 2013 09:10:52 +0100
-Subject: [Buildroot] [PATCH 1 of 9 v4] Config.in.legacy: update
-	description for developers
-In-Reply-To: <874n83yy4n.fsf@dell.be.48ers.dk>
-References: <patchbomb.1378152469@argentina>
- <da9c19eca655653a9e82.1378152470@argentina>
- <874n83yy4n.fsf@dell.be.48ers.dk>
-Message-ID: <CAAXf6LWmbOx=kU0=gE2P-H0FaCE2KSx1euHrj+QTTk-mkEjXGA@mail.gmail.com>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Sun, 27 Oct 2013 09:26:25 +0100
+Subject: [Buildroot] [PATCH v3 2/2] packages/Config.in: Change entries
+	titles
+In-Reply-To: <1382713552-29095-2-git-send-email-maxime.hadjinlian@gmail.com>
+References: <1382713552-29095-1-git-send-email-maxime.hadjinlian@gmail.com>
+ <1382713552-29095-2-git-send-email-maxime.hadjinlian@gmail.com>
+Message-ID: <CAAXf6LUnFXFD1KO0JnKHGnbvDE3H+q-C1XPgWT+ErZkfUGiO9Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, Oct 27, 2013 at 8:24 AM, Peter Korsgaard <jacmet@uclibc.org> wrote:
->>>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> writes:
+On Fri, Oct 25, 2013 at 5:05 PM, Maxime Hadjinlian
+<maxime.hadjinlian@gmail.com> wrote:
+> This patch mostly fix the casing on different entries titles.
+> It also changes the name of "Misc devices firmwares" to a simpler
+> "Firmware".
 >
-> Hi,
+> Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+> ---
+> Changes v2 -> v3:
+>   - Add the rename of Misc devices firmwares to Firmware (suggested by
+>     Thomas De Schampheleire)
+> Changes v1 -> v2:
+>   - Fix Other GUIs casing (suggested by Thomas De Schampheleire)
 >
->  > The existing comments in Config.in.legacy are not entirely in-line with
->  > current practice. The comments implies that BR2_LEGACY should not be set when
->  > the conversion from old-to-new symbol can be done automatically using the
->  > appropriate 'select' statements. However, none of the existing legacy options
->  > does it this way. Moreover, I think it's intentional that the user is notified
->  > of the change, so that the removal of the legacy options in later buildroot
->  > versions no longer poses a problem.
->  > Additionally, the comments now describe how to handle string options.
+> Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+> ---
+>  package/Config.in | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
 >
->  > Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
->  > Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
->
-> (Finally) committed series with some minor fixups to get them to apply,
-> thanks!
 
-Thanks Peter! (and also thanks to the other fabulous people present at
-the Buildroot Developer Days :-) )
+Acked-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
