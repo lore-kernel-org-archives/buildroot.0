@@ -1,66 +1,58 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Sun, 27 Oct 2013 22:40:09 +0100
-Subject: [Buildroot] [PATCH 2/4] pkg-infra: introduce pre/post-step hooks
-In-Reply-To: <a89033d9a1639d8899191cae05b772b1646b6ddd.1382894622.git.yann.morin.1998@free.fr>
-References: <a356a9112eac610a00a35e48fa9a04a81a460fe0.1382894622.git.yann.morin.1998@free.fr><cover.1382894622.git.yann.morin.1998@free.fr>
- <a89033d9a1639d8899191cae05b772b1646b6ddd.1382894622.git.yann.morin.1998@free.fr>
-Message-ID: <867c8550-360d-40e7-96d1-9391ed121afc@email.android.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Sun, 27 Oct 2013 19:54:17 -0300
+Subject: [Buildroot] [PATCH 1/3] libpng: disable tools
+Message-ID: <1382914459-30545-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
->From: "Yann E. MORIN" <yann.morin.1998@free.fr>
->
->This hooks will let us instrument the build process in many ways:
->  - log current step to see what broke
->  - time each step to see what is worth optimising
->  - sanity-check installed files (rpath, overwritten files...)
->  - call user-provided script
->  - ...
->
->The steps are coarse-grain, and all have a 'start' and a 'end' hooks.
->Here is the list of available steps (8 total):
->  - extract
->  - patch
->  - configure
->  - build
->  - install-host
->  - install-staging
->  - install-image
->  - install-target
->
->The download, clean and uninstall steps are not instrumented on purpose.
->
->Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
->---
-> package/pkg-generic.mk | 39 +++++++++++++++++++++++++++++++++++++++
-> 1 file changed, 39 insertions(+)
->
->diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
->index 4bba4b5..799555c 100644
->--- a/package/pkg-generic.mk
->+++ b/package/pkg-generic.mk
->@@ -21,6 +21,29 @@
-> ################################################################################
-> 
-> ################################################################################
->+# Helper functions to catch start/end of each steps
+They can fail on some odd toolchain configurations because of
+buildsystem shortcomings and aren't expected to be used in normal
+scenarios.
 
-each step
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/libpng/libpng-01-disable-tools.patch | 30 ++++++++++++++++++++++++++++
+ 1 file changed, 30 insertions(+)
+ create mode 100644 package/libpng/libpng-01-disable-tools.patch
 
->+################################################################################
->+
->+# Those two functions are called by each steps below.
-
-each step
-
->+# They are responsible for calling all hooks defined in $(STEP_HOOKS)
-
-I personally find the name STEP_HOOKS pretty vague, if you don't know the context you have no clue what it could be. The other hooks POST_EXTRACT etc are clear from their name.
-Maybe, GLOBAL_INSTRUMENTATION_HOOKS?
-
-Best regards,
-Thomas
+diff --git a/package/libpng/libpng-01-disable-tools.patch b/package/libpng/libpng-01-disable-tools.patch
+new file mode 100644
+index 0000000..cd7040c
+--- /dev/null
++++ b/package/libpng/libpng-01-disable-tools.patch
+@@ -0,0 +1,30 @@
++Disable the new pngfix and png-fix-itxt tools: they take up space, fail to
++build on some oddball toolchain configurations and aren't expected/needed
++in a non-interactive embedded system.
++
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++
++diff -Nura libpng-1.6.6.orig/Makefile.am libpng-1.6.6/Makefile.am
++--- libpng-1.6.6.orig/Makefile.am	2013-10-27 19:13:39.183376955 -0300
+++++ libpng-1.6.6/Makefile.am	2013-10-27 19:13:50.388744191 -0300
++@@ -10,7 +10,7 @@
++ check_PROGRAMS= pngtest pngunknown pngstest pngvalid
++ 
++ # Utilities - installed
++-bin_PROGRAMS= pngfix png-fix-itxt
+++bin_PROGRAMS=
++ 
++ pngtest_SOURCES = pngtest.c
++ pngtest_LDADD = libpng at PNGLIB_MAJOR@@PNGLIB_MINOR at .la
++diff -Nura libpng-1.6.6.orig/Makefile.in libpng-1.6.6/Makefile.in
++--- libpng-1.6.6.orig/Makefile.in	2013-10-27 19:13:39.180376856 -0300
+++++ libpng-1.6.6/Makefile.in	2013-10-27 19:14:55.332872643 -0300
++@@ -59,7 +59,7 @@
++ host_triplet = @host@
++ check_PROGRAMS = pngtest$(EXEEXT) pngunknown$(EXEEXT) \
++ 	pngstest$(EXEEXT) pngvalid$(EXEEXT)
++-bin_PROGRAMS = pngfix$(EXEEXT) png-fix-itxt$(EXEEXT)
+++bin_PROGRAMS =
++ @PNG_ARM_NEON_TRUE at am__append_1 = arm/arm_init.c\
++ @PNG_ARM_NEON_TRUE@	arm/filter_neon.S
++ 
+-- 
+1.8.1.5
