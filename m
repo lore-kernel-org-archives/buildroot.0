@@ -1,95 +1,90 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 26 Oct 2013 16:37:37 +0200
-Subject: [Buildroot] [git commit] qt5serialport: new package
-Message-ID: <20131027072650.84C2D9BBC7@busybox.osuosl.org>
+Date: Sun, 27 Oct 2013 08:09:01 +0100
+Subject: [Buildroot] [git commit] linux/uboot: line-up repository-related
+	configuration options
+Message-ID: <20131027072650.D99F29BB81@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=cdeb17590848d6869451bb9784fb6887130e795e
+commit: http://git.buildroot.net/buildroot/commit/?id=4bff614528a189db82e6388604328c3dfdf4a62c
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Fatih A????c?? <fatih.asici@gmail.com>
+Although the configuration options for custom repository locations and
+versions are very similar between the linux and uboot packages, there are
+some minor differences. This patch lines up both packages.
+
+Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/qt5/Config.in                      |    1 +
- package/qt5/qt5serialport/Config.in        |   10 +++++++
- package/qt5/qt5serialport/qt5serialport.mk |   40 ++++++++++++++++++++++++++++
- 3 files changed, 51 insertions(+), 0 deletions(-)
+ boot/uboot/Config.in |   32 ++++++++++++++++----------------
+ linux/Config.in      |    2 +-
+ 2 files changed, 17 insertions(+), 17 deletions(-)
 
-diff --git a/package/qt5/Config.in b/package/qt5/Config.in
-index 6f7073c..6c953f1 100644
---- a/package/qt5/Config.in
-+++ b/package/qt5/Config.in
-@@ -25,6 +25,7 @@ source "package/qt5/qt5quick1/Config.in"
- source "package/qt5/qt5quickcontrols/Config.in"
- source "package/qt5/qt5script/Config.in"
- source "package/qt5/qt5sensors/Config.in"
-+source "package/qt5/qt5serialport/Config.in"
- source "package/qt5/qt5svg/Config.in"
- source "package/qt5/qt5webkit/Config.in"
- source "package/qt5/qt5xmlpatterns/Config.in"
-diff --git a/package/qt5/qt5serialport/Config.in b/package/qt5/qt5serialport/Config.in
-new file mode 100644
-index 0000000..772de88
---- /dev/null
-+++ b/package/qt5/qt5serialport/Config.in
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_QT5SERIALPORT
-+	bool "qt5serialport"
-+	select BR2_PACKAGE_QT5BASE
+diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
+index 8e71886..af9ccab 100644
+--- a/boot/uboot/Config.in
++++ b/boot/uboot/Config.in
+@@ -40,10 +40,24 @@ config BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE
+ 	string "U-Boot version"
+ 	depends on BR2_TARGET_UBOOT_CUSTOM_VERSION
+ 
+-if BR2_TARGET_UBOOT_CUSTOM_TARBALL
+-
+ config BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION
+ 	string "URL of custom U-Boot tarball"
++	depends on BR2_TARGET_UBOOT_CUSTOM_TARBALL
++
++if BR2_TARGET_UBOOT_CUSTOM_GIT || BR2_TARGET_UBOOT_CUSTOM_HG
++
++config BR2_TARGET_UBOOT_CUSTOM_REPO_URL
++	string "URL of custom repository"
++	default BR2_TARGET_UBOOT_CUSTOM_GIT_REPO_URL \
++		if BR2_TARGET_UBOOT_CUSTOM_GIT_REPO_URL != ""  # legacy
++
++config BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION
++	string "Custom repository version"
++	default BR2_TARGET_UBOOT_CUSTOM_GIT_VERSION \
++		if BR2_TARGET_UBOOT_CUSTOM_GIT_VERSION != ""  # legacy
 +	help
-+	  Qt is a cross-platform application and UI framework for
-+	  developers using C++.
-+
-+	  This package corresponds to the qt5serialport module.
-+
-+	  http://qt-project.org
-diff --git a/package/qt5/qt5serialport/qt5serialport.mk b/package/qt5/qt5serialport/qt5serialport.mk
-new file mode 100644
-index 0000000..0328ef8
---- /dev/null
-+++ b/package/qt5/qt5serialport/qt5serialport.mk
-@@ -0,0 +1,40 @@
-+################################################################################
-+#
-+# qt5serialport
-+#
-+################################################################################
-+
-+QT5SERIALPORT_VERSION = $(QT5_VERSION)
-+QT5SERIALPORT_SITE = $(QT5_SITE)
-+QT5SERIALPORT_SOURCE = qtserialport-opensource-src-$(QT5SERIALPORT_VERSION).tar.xz
-+QT5SERIALPORT_DEPENDENCIES = qt5base
-+QT5SERIALPORT_INSTALL_STAGING = YES
-+
-+ifeq ($(BR2_PACKAGE_QT5BASE_LICENSE_APPROVED),y)
-+QT5SERIALPORT_LICENSE = LGPLv2.1 or GPLv3.0
-+QT5SERIALPORT_LICENSE_FILES = LICENSE.GPL LICENSE.LGPL LGPL_EXCEPTION.txt
-+else
-+QT5SERIALPORT_LICENSE = Commercial license
-+QT5SERIALPORT_REDISTRIBUTE = NO
-+endif
-+
-+define QT5SERIALPORT_CONFIGURE_CMDS
-+	(cd $(@D); $(HOST_DIR)/usr/bin/qmake)
-+endef
-+
-+define QT5SERIALPORT_BUILD_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
-+endef
-+
-+define QT5SERIALPORT_INSTALL_STAGING_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install
-+	$(QT5_LA_PRL_FILES_FIXUP)
-+endef
-+
-+ifeq ($(BR2_PREFER_STATIC_LIB),)
-+define QT5SERIALPORT_INSTALL_TARGET_CMDS
-+	cp -dpf $(STAGING_DIR)/usr/lib/libQt5SerialPort.so.* $(TARGET_DIR)/usr/lib
-+endef
-+endif
-+
-+$(eval $(generic-package))
++	  Revision to use in the typical format used by Git/Mercurial
++	  E.G. a sha id, a tag, branch, ..
+ 
+ endif
+ 
+@@ -65,20 +79,6 @@ config BR2_TARGET_UBOOT_CUSTOM_PATCH_DIR
+ 
+ 	  Most users may leave this empty
+ 
+-if BR2_TARGET_UBOOT_CUSTOM_GIT || BR2_TARGET_UBOOT_CUSTOM_HG
+-
+-config BR2_TARGET_UBOOT_CUSTOM_REPO_URL
+-	string "URL of custom repository"
+-	default BR2_TARGET_UBOOT_CUSTOM_GIT_REPO_URL \
+-		if BR2_TARGET_UBOOT_CUSTOM_GIT_REPO_URL != ""  # legacy
+-
+-config BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION
+-	string "Custom repository version"
+-	default BR2_TARGET_UBOOT_CUSTOM_GIT_VERSION \
+-		if BR2_TARGET_UBOOT_CUSTOM_GIT_VERSION != ""  # legacy
+-
+-endif
+-
+ choice
+ 	prompt "U-Boot binary format"
+ 	default BR2_TARGET_UBOOT_FORMAT_BIN
+diff --git a/linux/Config.in b/linux/Config.in
+index a12102a..32426a3 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -47,7 +47,7 @@ config BR2_LINUX_KERNEL_CUSTOM_TARBALL
+ 	  specific kernel source tarball
+ 
+ config BR2_LINUX_KERNEL_CUSTOM_GIT
+-	bool "Custom Git tree"
++	bool "Custom Git repository"
+ 	help
+ 	  This option allows Buildroot to get the Linux kernel source
+ 	  code from a Git repository.
