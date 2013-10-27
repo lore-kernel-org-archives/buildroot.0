@@ -1,31 +1,25 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 27 Oct 2013 10:34:40 +0100
-Subject: [Buildroot] [PATCH v4] ccache: expose control interface via
-	'make ccache-options'
-In-Reply-To: <1381427457-25627-1-git-send-email-tjlee@ambarella.com> (Tzu-Jung
- Lee's message of "Thu, 10 Oct 2013 10:50:57 -0700")
-References: <CAAXf6LWg8YGG-yv3dvZjqswagBOMV8gmT1XsWz4KOygEbFUtGw@mail.gmail.com>
- <1381427457-25627-1-git-send-email-tjlee@ambarella.com>
-Message-ID: <87hac3xdjj.fsf@dell.be.48ers.dk>
+Date: Sun, 27 Oct 2013 10:38:38 +0100
+Subject: [Buildroot] [PATCH] Revert "berkeleydb: bump to version 6.0.20"
+In-Reply-To: <1381174561-22507-1-git-send-email-jezz@sysmic.org>
+ (=?utf-8?B?IkrDqXLDtG1l?=
+ Pouiller"'s message of "Mon, 7 Oct 2013 21:36:01 +0200")
+References: <1381174561-22507-1-git-send-email-jezz@sysmic.org>
+Message-ID: <87d2mrxdcx.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Tzu-Jung" == Tzu-Jung Lee <roylee17@gmail.com> writes:
+>>>>> "J?r?me" == J?r?me Pouiller <jezz@sysmic.org> writes:
 
- > usage:
- > 	# set cache limit size
- > 	make CCACHE_OPTIONS="--max-size=5G" ccache-options
+ > BerkeleyDB has changed its license since version 6. New license (AGPL) may
+ > be incompatible with some packages. So we prefer to stick to version 5
 
- > 	# zero statistics counters
- > 	make CCACHE_OPTIONS="--zero-stats" ccache-options
+ > This reverts commit 4c478de2e76ffc1d0a6dc413475307fd44a0a595.
 
- > Signed-off-by: Tzu-Jung Lee <tjlee@ambarella.com>
-
-Committed with the redundant ifeq removed as pointed out by Thomas,
-thanks.
+Committed with the comment text adjusted as suggested by Yann, thanks.
 
 -- 
 Bye, Peter Korsgaard
