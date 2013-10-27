@@ -1,140 +1,93 @@
-From: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
-Date: Sun, 27 Oct 2013 21:44:26 +0100
-Subject: [Buildroot] [PATCH 1/1] docs/manual: update information about
- how to add a package from github
-In-Reply-To: <CAHXCMMKWFAnN3xA94+NBsC4pYku2=AOdVUL4PTfdCpVFuuCkaQ@mail.gmail.com>
-References: <1380527536-23694-1-git-send-email-jerzy.grzegorek@trzebnica.net>
- <CAHXCMMKWFAnN3xA94+NBsC4pYku2=AOdVUL4PTfdCpVFuuCkaQ@mail.gmail.com>
-Message-ID: <526D7B2A.7080607@trzebnica.net>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Sun, 27 Oct 2013 22:12:34 +0100
+Subject: [Buildroot] [PATCH 1/4] post-{build,
+	images} hooks: export BUILD_DIR too
+In-Reply-To: <a356a9112eac610a00a35e48fa9a04a81a460fe0.1382894622.git.yann.morin.1998@free.fr>
+References: <cover.1382894622.git.yann.morin.1998@free.fr>
+ <a356a9112eac610a00a35e48fa9a04a81a460fe0.1382894622.git.yann.morin.1998@free.fr>
+Message-ID: <a4300dc9-2aa9-4d40-9b79-26ec5b317c52@email.android.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+>From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+>
+>Also export BUILD_DIR for post-{build,images} hooks, so they do have
+>a place to store generated files.
+>
+>Note: this will be more einteresting for the instrumentation of steps,
+>to come in a later patch.
+>
+>Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+>---
+> Makefile                         | 4 ++--
+> docs/manual/customize-rootfs.txt | 5 +++--
+> package/Makefile.in              | 5 +++++
+> 3 files changed, 10 insertions(+), 4 deletions(-)
+>
+>diff --git a/Makefile b/Makefile
+>index f266e2d..0113f75 100644
+>--- a/Makefile
+>+++ b/Makefile
+>@@ -511,7 +511,7 @@ endif
+> 
+> 	@$(foreach s, $(call qstrip,$(BR2_ROOTFS_POST_BUILD_SCRIPT)), \
+> 		$(call MESSAGE,"Executing post-build script $(s)"); \
+>-		$(s) $(TARGET_DIR) $(call qstrip,$(BR2_ROOTFS_POST_SCRIPT_ARGS))$(sep))
+>+		$(USER_HOOKS_EXTRA_ENV) $(s) $(TARGET_DIR) $(call qstrip,$(BR2_ROOTFS_POST_SCRIPT_ARGS))$(sep))
+> 
+> ifeq ($(BR2_ENABLE_LOCALE_PURGE),y)
+> LOCALE_WHITELIST=$(BUILD_DIR)/locales.nopurge
+>@@ -557,7 +557,7 @@ endif
+> target-post-image:
+> 	@$(foreach s, $(call qstrip,$(BR2_ROOTFS_POST_IMAGE_SCRIPT)), \
+> 		$(call MESSAGE,"Executing post-image script $(s)"); \
+>-		$(s) $(BINARIES_DIR) $(call qstrip,$(BR2_ROOTFS_POST_SCRIPT_ARGS))$(sep))
+>+		$(USER_HOOKS_EXTRA_ENV) $(s) $(BINARIES_DIR) $(call qstrip,$(BR2_ROOTFS_POST_SCRIPT_ARGS))$(sep))
+> 
+> toolchain-eclipse-register:
+> 	./support/scripts/eclipse-register-toolchain `readlink -f $(O)` $(notdir $(TARGET_CROSS)) $(BR2_ARCH)
+>diff --git a/docs/manual/customize-rootfs.txt b/docs/manual/customize-rootfs.txt
+>index 49a6b4b..450b3d5 100644
+>--- a/docs/manual/customize-rootfs.txt
+>+++ b/docs/manual/customize-rootfs.txt
+>@@ -41,6 +41,7 @@ there are a few ways to customize the resulting target filesystem.
+>     - +BUILDROOT_CONFIG+: the path to the Buildroot .config file
+>     - +HOST_DIR+, +STAGING_DIR+, +TARGET_DIR+: see
+>       xref:generic-package-reference[]
+>+    - +BUILD_DIR+: the directory where packages are extracted and built
+>     - +BINARIES_DIR+: the place where all binary files (aka images) are
+>       stored
+>     - +BASE_DIR+: the base output directory
+>@@ -78,8 +79,8 @@ in one of these _post-image scripts_ will require special handling
+> 
+> Just like for the _post-build scripts_ mentioned above, you also have
+> access to the following environment variables from your _post-image
+>-scripts_: +BUILDROOT_CONFIG+, +HOST_DIR+, +STAGING_DIR+, +TARGET_DIR+,
+>-+BINARIES_DIR+ and +BASE_DIR+.
+>+scripts_: +BUILDROOT_CONFIG+, +BUILD_DIR+, +HOST_DIR+, +STAGING_DIR+,
+>++TARGET_DIR+, +BINARIES_DIR+ and +BASE_DIR+.
+> 
+> Additionally, each of the +BR2_ROOTFS_POST_BUILD_SCRIPT+ and
+> +BR2_ROOTFS_POST_IMAGE_SCRIPT+ scripts will be passed the arguments
+>diff --git a/package/Makefile.in b/package/Makefile.in
+>index 612f3c7..2224f27 100644
+>--- a/package/Makefile.in
+>+++ b/package/Makefile.in
+>@@ -275,6 +275,11 @@ HOST_MAKE_ENV=PATH=$(HOST_PATH) \
+> 		PKG_CONFIG_LIBDIR="$(HOST_DIR)/usr/lib/pkgconfig" \
+> 		PERLLIB="$(HOST_DIR)/usr/lib/perl"
+> 
+>+# This extra environment we can not export ourselves, so we have
+>+# to expicitly pass it to user-supplied external hooks (eg.
+>+# post-build, post-images)
+>+USER_HOOKS_EXTRA_ENV=\
+>+	BUILD_DIR=$(BUILD_DIR)
 
-Hi Samuel,
+I'd add a bit more info here: we cannot export BUILD_DIR globally  because some packages, like uboot, also use this same variable for another purpose.
 
-
-> Jerzy,
->
-> 2013/9/30 Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net 
-> <mailto:jerzy.grzegorek@trzebnica.net>>
->
->     Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net
->     <mailto:jerzy.grzegorek@trzebnica.net>>
->     ---
->      docs/manual/adding-packages-tips.txt |   62
->     +++++++++++++++++++++++++++++++---
->      1 file changed, 57 insertions(+), 5 deletions(-)
->
->     diff --git a/docs/manual/adding-packages-tips.txt
->     b/docs/manual/adding-packages-tips.txt
->     index 8b27c61..67a8610 100644
->     --- a/docs/manual/adding-packages-tips.txt
->     +++ b/docs/manual/adding-packages-tips.txt
->     @@ -41,17 +41,69 @@ How to add a package from github
->
->      Packages on github often don't have a download area with release
->     tarballs.
->      However, it is possible to download tarballs directly from the
->     repository
->     -on github.
->     +on github. There are two possibilities:
->     +
->     +1. Using (abbreviated) commit ID
->     +
->     +------------------------
->     +FOO_VERSION = 1234567
->     +FOO_SITE = https://github.com/<user>/<package>/tarball/$(FOO_VERSION)
->     +------------------------
->     +
->     +tarball name downloaded by Buildroot: foo-1234567.tar.gz
->     +
->     +example:
->     +package: cpuload
->     +abbreviated commit ID: 96ac037
->     +CPULOAD_VERSION = 96ac037
->     +CPULOAD_SITE =
->     https://github.com/kelvincheung/cpuload/tarball/$(CPULOAD_VERSION)
->     <https://github.com/kelvincheung/cpuload/tarball/$%28CPULOAD_VERSION%29>
->     +tarball name downloaded by Buildroot: cpuload-96ac037.tar.gz
->     +
->     +
->     +2. Using tag
->     +
->     +a) tag without prefix
->     +
->     +------------------------
->     +FOO_VERSION = 1.0
->     +FOO_SITE = https://github.com/<user>/<package>/tarball/$(FOO_VERSION)
->     +------------------------
->     +
->     +tarball name downloaded by Buildroot: foo-1.0.tar.gz
->     +
->     +example:
->     +package: luacrypto
->     +tag: 0.3.2
->     +LUACRYPTO_VERSION = 0.3.2
->     +LUACRYPTO_SITE =
->     https://github.com/mkottman/luacrypto/tarball/$(LUACRYPTO_VERSION)
->     <https://github.com/mkottman/luacrypto/tarball/$%28LUACRYPTO_VERSION%29>
->     +tarball name downloaded by Buildroot: luacrypto-0.3.2.tar.gz
->     +
->     +b) tag with prefix
->
->      ------------------------
->     -FOO_VERSION = v1.0 # tag or (abbreviated) commit ID
->     -FOO_SITE = http://github.com/<user>/<package>/tarball/$(FOO_VERSION)
->     +FOO_VERSION = 1.0
->     +FOO_SITE =
->     https://github.com/<user>/<package>/tarball/<prefix>$(FOO_VERSION)
->      ------------------------
->
->     +tarball name downloaded by Buildroot: foo-1.0.tar.gz
->     +
->     +examples:
->     +package: cpuload
->     +tag: v0.3
->     +CPULOAD_VERSION = 0.3
->     +CPULOAD_SITE =
->     https://github.com/kelvincheung/cpuload/tarball/v$(CPULOAD_VERSION) <https://github.com/kelvincheung/cpuload/tarball/v$%28CPULOAD_VERSION%29>
->     +tarball name downloaded by Buildroot: cpuload-0.3.tar.gz
->     +
->     +package: libcec
->     +tag: libcec-2.1.1
->     +LIBCEC_VERSION = 2.1.1
->     +LIBCEC_SITE =
->     https://github.com/Pulse-Eight/libcec/tarball/libcec-$(LIBCEC_VERSION)
->     <https://github.com/Pulse-Eight/libcec/tarball/libcec-$%28LIBCEC_VERSION%29>
->     +tarball name downloaded by Buildroot: libcec-2.1.1.tar.gz
->     +
->      .Notes
->     -- The FOO_VERSION can either be a tag or a commit ID.
->      - The tarball name generated by github matches the default one from
->     -  Buildroot (e.g.: +foo-1234567.tar.gz+),
->     +  Buildroot (e.g.: +foo-1234567.tar.gz+ or +foo-1.0.tar.gz+)
->        so it is not necessary to specify it in the +.mk+ file.
->      - When using a commit ID as version, usually the first 7
->     characters of
->        the SHA1 are enough.
->     +- https vs http avoids redirection
->
->
->
-> Since the following patch 
-> http://patchwork.ozlabs.org/patch/278164/ has been rejected,
-> there is no reason to update the manual.
-
-Agree.
-
-
-Regards,
-Jerzy
-
-
->
-> Regards,
->
-> -- 
-> Samuel
+Best regards,
+Thomas
