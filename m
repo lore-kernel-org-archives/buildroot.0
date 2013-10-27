@@ -1,31 +1,71 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sun, 27 Oct 2013 20:18:19 -0300
-Subject: [Buildroot] [PATCH] nano: needs wchar
-Message-ID: <1382915899-9041-1-git-send-email-gustavo@zacarias.com.ar>
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Mon, 28 Oct 2013 00:16:35 +0100
+Subject: [Buildroot] [PATCH 1/1] trace-cmd: overwrite CFLAGS
+Message-ID: <526D9ED3.4000401@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+
+Ptrace support detection is ignored when CFLAGS is set by buildroot.
+
+Use override in Makefile to add -DWARN_NO_PTRACE and -DNO_PTRACE in CFLAGS
+if ptrace is not available.
+
 Fixes:
-http://autobuild.buildroot.net/results/317/3177b7d6168eec0620e4a1ade9166c9c84929e6e/
+http://autobuild.buildroot.net/results/60e/60ed317d52d93ba2c087aa6ff4f422d760806d89//
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Romain <romain.naour@openwide.fr>
 ---
- package/nano/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+  .../trace-cmd-0002-Makefile-overwrite-CFLAGS.patch | 33 
+++++++++++++++++++++++
+  1 file changed, 33 insertions(+)
+  create mode 100644 
+package/trace-cmd/trace-cmd-0002-Makefile-overwrite-CFLAGS.patch
 
-diff --git a/package/nano/Config.in b/package/nano/Config.in
-index 9546fe7..80a3304 100644
---- a/package/nano/Config.in
-+++ b/package/nano/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_NANO
- 	bool "nano"
-+	depends on BR2_USE_WCHAR
- 	# full version uses fork()
- 	select BR2_PACKAGE_NANO_TINY if !BR2_USE_MMU
- 	select BR2_PACKAGE_NCURSES
+diff --git 
+a/package/trace-cmd/trace-cmd-0002-Makefile-overwrite-CFLAGS.patch 
+b/package/trace-cmd/trace-cmd-0002-Makefile-overwrite-CFLAGS.patch
+new file mode 100644
+index 0000000..f4afa53
+--- /dev/null
++++ b/package/trace-cmd/trace-cmd-0002-Makefile-overwrite-CFLAGS.patch
+@@ -0,0 +1,33 @@
++
++Ptrace support detection is ignored when CFLAGS is set in command 
+arguments.
++
++Use override in Makefile to add -DWARN_NO_PTRACE and -DNO_PTRACE in CFLAGS
++if ptrace is not available.
++
++Signed-off-by: Romain <romain.naour@openwide.fr>
++---
++ Makefile | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/Makefile b/Makefile
++index 2f862ec..51b0df3 100644
++--- a/Makefile
+++++ b/Makefile
++@@ -229,12 +229,12 @@ CFLAGS += -D_GNU_SOURCE
++ ifndef NO_PTRACE
++ ifneq ($(call try-cc,$(SOURCE_PTRACE),),y)
++     NO_PTRACE = 1
++-    CFLAGS += -DWARN_NO_PTRACE
+++    override CFLAGS += -DWARN_NO_PTRACE
++ endif
++ endif
++
++ ifdef NO_PTRACE
++-CFLAGS += -DNO_PTRACE
+++override CFLAGS += -DNO_PTRACE
++ endif
++
++ # Append required CFLAGS
++--
++1.8.1.4
++
 -- 
-1.8.1.5
+1.8.1.4
