@@ -1,48 +1,42 @@
-From: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-Date: Sun, 27 Oct 2013 21:29:27 -0300
-Subject: [Buildroot] [PATCH] qt5base: add tslib plugin
-Message-ID: <1382920167-3336-1-git-send-email-ezequiel@vanguardiasur.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 28 Oct 2013 06:17:08 +0100
+Subject: [Buildroot] [PATCH 1/4] post-{build,
+ images} hooks: export BUILD_DIR too
+In-Reply-To: <a4300dc9-2aa9-4d40-9b79-26ec5b317c52@email.android.com>
+References: <cover.1382894622.git.yann.morin.1998@free.fr>
+ <a356a9112eac610a00a35e48fa9a04a81a460fe0.1382894622.git.yann.morin.1998@free.fr>
+ <a4300dc9-2aa9-4d40-9b79-26ec5b317c52@email.android.com>
+Message-ID: <20131028061708.5e69ab8e@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add support for Tslib plugin.
+Dear Thomas De Schampheleire,
 
-Signed-off-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
----
- package/qt5/qt5base/Config.in  | 5 +++++
- package/qt5/qt5base/qt5base.mk | 3 +++
- 2 files changed, 8 insertions(+)
+On Sun, 27 Oct 2013 22:12:34 +0100, Thomas De Schampheleire wrote:
 
-diff --git a/package/qt5/qt5base/Config.in b/package/qt5/qt5base/Config.in
-index e433373..cfe8f02 100644
---- a/package/qt5/qt5base/Config.in
-+++ b/package/qt5/qt5base/Config.in
-@@ -185,4 +185,9 @@ config BR2_PACKAGE_QT5BASE_ICU
- 	  This option enables ICU support in Qt5. This is for example
- 	  needed for Qt5Webkit.
- 
-+config BR2_PACKAGE_QT5BASE_TSLIB
-+	bool "Enable Tslib support"
-+	select BR2_PACKAGE_TSLIB
-+	help
-+	  This options enables the Tslib plugin
- endif
-diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
-index 0106c2c..ce78d31 100644
---- a/package/qt5/qt5base/qt5base.mk
-+++ b/package/qt5/qt5base/qt5base.mk
-@@ -128,6 +128,9 @@ QT5BASE_DEPENDENCIES   += $(if $(BR2_PACKAGE_QT5BASE_PNG),libpng)
- QT5BASE_CONFIGURE_OPTS += $(if $(BR2_PACKAGE_QT5BASE_DBUS),-dbus,-no-dbus)
- QT5BASE_DEPENDENCIES   += $(if $(BR2_PACKAGE_QT5BASE_DBUS),dbus)
- 
-+QT5BASE_CONFIGURE_OPTS += $(if $(BR2_PACKAGE_QT5BASE_TSLIB),-tslib,-no-tslib)
-+QT5BASE_DEPENDENCIES   += $(if $(BR2_PACKAGE_QT5BASE_TSLIB),tslib)
-+
- QT5BASE_CONFIGURE_OPTS += $(if $(BR2_PACKAGE_LIBGLIB2),-glib,-no-glib)
- QT5BASE_DEPENDENCIES   += $(if $(BR2_PACKAGE_LIBGLIB2),libglib2)
- 
+> >+# This extra environment we can not export ourselves, so we have
+> >+# to expicitly pass it to user-supplied external hooks (eg.
+> >+# post-build, post-images)
+> >+USER_HOOKS_EXTRA_ENV=\
+> >+	BUILD_DIR=$(BUILD_DIR)
+> 
+> I'd add a bit more info here: we cannot export BUILD_DIR globally  because some packages, like uboot, also use this same variable for another purpose.
+
+(Unfortunately, we've asked you to not wrapped patches you reply to,
+but now, it has the consequence that you no longer wrap what you write.
+Well, I guess with K9 it's hard to get both).
+
+Regarding BUILD_DIR and other variables being exported, is it really
+safe to export other variables with a relatively generic name such as
+TARGET_DIR, BASE_DIR, HOST_DIR, BINARIES_DIR, etc. ? Should we instead
+expose them to post-build/post-image scripts as BR2_<something> ? But
+well, of course, it means breaking the existing API, which isn't nice.
+
+Thomas
 -- 
-1.8.1.5
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
