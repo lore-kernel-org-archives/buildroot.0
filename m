@@ -1,37 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 28 Oct 2013 20:40:36 +0100
-Subject: [Buildroot] SCSI / SAS / FC support
-In-Reply-To: <CAK9Ae0P0gJ+cLYR96mz7Xddy4_zpdS6zXqg4ak3nbemTqVR9Yw@mail.gmail.com>
-References: <CAK9Ae0P0gJ+cLYR96mz7Xddy4_zpdS6zXqg4ak3nbemTqVR9Yw@mail.gmail.com>
-Message-ID: <20131028204036.74e46ef8@skate>
+Date: Mon, 28 Oct 2013 20:47:23 +0100
+Subject: [Buildroot] Problems with Python ctypes on Raspberry Pi
+ platfform - Was: Re: [PATCH v2 1/1] python-pyusb: new package
+In-Reply-To: <CAMduVEcp4u0Xb5tSK=LV_s5E2jGF501R_eKjWFnOUWtcTZ4URw@mail.gmail.com>
+References: <CAMduVEcp4u0Xb5tSK=LV_s5E2jGF501R_eKjWFnOUWtcTZ4URw@mail.gmail.com>
+Message-ID: <20131028204723.458fbe10@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Beren Scott,
+Dear Wojciech Zabolotny,
 
-On Sun, 27 Oct 2013 14:00:37 +1100, Beren Scott wrote:
+On Sat, 26 Oct 2013 17:30:16 +0200, Wojciech Zabolotny wrote:
+> Testing the newly created python-pyusb on a Raspberry Pi platform, I
+> have found, that it doesn't work.
+> Investigating the problem more thoroughly, I have found that it is
+> associated with Python ctypes package, which is not able to locate the
+> libraries.
+> Analyzing the Python-2.7.3/Lib/ctypes/util.py file, I have found, that
+> on that platform, when neither gcc nor binutils are installed on
+> target (which is typical for small systems), locating of the library
+> relies on output of the "ldconfig -p" command.
+> Unfortunately, this command returns simply:
+> 
+> # /sbin/ldconfig -p
+> Library cache disabled
+> 
+> I'm afraid that this problem may affect many other programs and
+> packages relying on Python ctypes... (and probably not only on
+> Raspberry Pi platform)
 
-> I am trying to create a buildroot setup where a wide variety of hard drives
-> can be detected and accessed. I have a working solution at the moment,
-> which seems to only detect IDE and SATA hard drives, and I am thinking
-> along the lines of there not being controller driver support in my current
-> setup. So, I am asking, how do I add that into my project? I cannot seem to
-> find any option for it.
+Interesting. Can you post a simple example of ctypes usage that
+exhibits the problem?
 
-What you're looking for are drivers for specific pieces of hardware.
-Such drivers are typically part of the Linux kernel itself, and
-therefore the configuration options to enable/disable them are not
-exposed in Buildroot 'make menuconfig'.
-
-However, if you build your kernel with Buildroot, you can run 'make
-linux-menuconfig' to adjust the kernel configuration. If you're
-building the kernel separately, then it's up to you to adjust your
-kernel configuration.
-
-Best regards,
+Thanks!
 
 Thomas
 -- 
