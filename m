@@ -1,60 +1,78 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 28 Oct 2013 07:58:31 +0100
-Subject: [Buildroot] Name of downloaded archive, conflicts
-In-Reply-To: <20131025160524.4f8e922a@pcviktorin.fit.vutbr.cz>
-References: <20131025160524.4f8e922a@pcviktorin.fit.vutbr.cz>
-Message-ID: <526E0B17.8020402@mind.be>
+Date: Mon, 28 Oct 2013 08:09:38 +0100
+Subject: [Buildroot] [PATCH 1/2] Initial support for I.MX6 SabreAuto
+	board
+In-Reply-To: <BLU0-SMTP40FAFEA0B28C550B66412BF70D0@phx.gbl>
+References: <BLU0-SMTP40FAFEA0B28C550B66412BF70D0@phx.gbl>
+Message-ID: <526E0DB2.7000905@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 25/10/13 16:05, Jan Viktorin wrote:
-> Hello,
+  Hi Abdul,
+
+  Thank you for your contribution. Even on this very small defconfig I 
+have a few comments :-)
+
+On 25/10/13 19:03, Abdul Hussain wrote:
+> Signed-off-by: Abdul Hussain <hussain.abdul@outlook.com>
+> ---
+>   configs/imx6qsabreauto_defconfig |   16 ++++++++++++++++
+>   1 file changed, 16 insertions(+)
+>   create mode 100644 configs/imx6qsabreauto_defconfig
 >
-> I have encountred a problem when downloading custom kernel together
-> with a custom (e.g.) u-boot. Both are downloaded from GitHub from a
-> master branch. The URLs are (in case of using master branches):
->
->   https://github.com/Xilinx/u-boot-xlnx/archive/master.tar.gz
->   https://github.com/Xilinx/linux-xlnx/archive/master.tar.gz
->
-> and that leads to a file name conflict in the dl/ directory. I end
-> with linux kernel extracted in the u-boot build directory...
->
-> Is there a way in buildroot how to specify a different name after
-> download is done or another way how to avoid the conflict? I tried to
-> google a bit, however, without a success.
+> diff --git a/configs/imx6qsabreauto_defconfig b/configs/imx6qsabreauto_defconfig
+> new file mode 100644
+> index 0000000..1a3647a
+> --- /dev/null
+> +++ b/configs/imx6qsabreauto_defconfig
+> @@ -0,0 +1,16 @@
+> +BR2_arm=y
+> +BR2_cortex_a9=y
+> +BR2_TOOLCHAIN_EXTERNAL=y
+> +BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201109=y
 
-  This is a known issue, and we don't have a good solution for it.
+  We prefer to use the internal toolchain for minimal defconfigs.
 
-  We have considered prepending the package name to every archive that is 
-downloaded, but this has two important problems:
+  I do realize that that means you won't be able to use this defconfig as 
+a basis for adding the codec and GPU libraries. As a solution, we have 
+decided to also accept 'demo' defconfigs in the future that create a more 
+extensive configuration that shows more of a board's capabilities.
 
-  1. You can't use the download directory as a BR2_PRIMARY_SITE anymore.
+> +BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_UDEV=y
 
-  2. If the same source is used by two packages (e.g. kernel-headers and 
-linux), then it will also be downloaded twice.
+  Why udev and not the default devtmpfs? udev adds a lot of bloat...
 
-  We haven't found a good solution for these problems. Ideas are welcome, 
-though.
+> +BR2_TARGET_GENERIC_GETTY_PORT="ttymxc3"
 
+  Minor nit: the /dev/ttymxc count patch should come first in the series.
 
-  Fortunately, for your use case, there's an easy solution. Don't use 
-'master', but instead use an explicit sha1 of the version you want to 
-download. Your .config should really be reproducible, so that you can 
-give it to a colleague and they'll build the _same_ kernel as you.
+> +BR2_LINUX_KERNEL=y
+> +BR2_LINUX_KERNEL_CUSTOM_GIT=y
+> +BR2_LINUX_KERNEL_CUSTOM_GIT_REPO_URL="git://git.freescale.com/imx/linux-2.6-imx.git"
+> +BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION="imx_3.0.35_4.1.0"
 
-  While you're developing linux and/or U-Boot, you can use the 
-_OVERRIDE_SRCDIR mechanism (which admittedly isn't very well documented 
-at the moment), which is a more explicit way of making 'local' changes to 
-the .config.
+  Better to download a tarball from
+
+http://git.freescale.com/git/cgit.cgi/imx/linux-2.6-imx.git/snapshot/imx_3.0.35_4.1.0.tar.bz2
+
+That goes about 10 times faster.
+
+> +BR2_LINUX_KERNEL_DEFCONFIG="imx6"
+> +BR2_TARGET_UBOOT=y
+> +BR2_TARGET_UBOOT_BOARDNAME="mx6qsabreauto"
+> +BR2_TARGET_UBOOT_CUSTOM_GIT=y
+> +BR2_TARGET_UBOOT_CUSTOM_GIT_REPO_URL="git://git.denx.de/u-boot-imx.git"
+> +BR2_TARGET_UBOOT_CUSTOM_GIT_VERSION="77b0e2239a13fa83a745ea9b03994bf780a9738a"
+
+  Why a custom git? AFAICS there are no relevant differences between this 
+version and the released uboot-2013.10?
+
 
   Regards,
   Arnout
-
-
 -- 
 Arnout Vandecappelle                          arnout at mind be
 Senior Embedded Software Architect            +32-16-286500
