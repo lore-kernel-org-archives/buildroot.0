@@ -1,66 +1,40 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Mon, 28 Oct 2013 11:03:22 +0200
-Subject: [Buildroot] [PATCH 1/1] python-pyusb: new package
-In-Reply-To: <526E2495.5070008@mind.be>
-References: <OF7CA7B8E3.5FD89345-ON86257C0F.0052857B-86257C0F.0054D5D3@rockwellcollins.com>
- <1256826d-31b9-4b85-8834-35694e372fac@email.android.com>
- <1382742930-11510-1-git-send-email-wzab01@gmail.com>
- <526B018E.9080206@mind.be>
- <CAMduVEc4LUGPXPoNmQR0_+pYf9_Pd2BUeFQG0xrWZyScbHJNNw@mail.gmail.com>
- <526E0E55.8060005@mind.be>
- <20131028081046.GA30640@sapphire.tkos.co.il>
- <526E1F5B.2020104@mind.be>
- <20131028084025.GB30640@sapphire.tkos.co.il>
- <526E2495.5070008@mind.be>
-Message-ID: <20131028090322.GC30640@sapphire.tkos.co.il>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 28 Oct 2013 10:04:36 +0100
+Subject: [Buildroot] [PATCH] nano: needs wchar
+In-Reply-To: <1382915899-9041-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Sun, 27 Oct 2013 20:18:19 -0300")
+References: <1382915899-9041-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87a9htu5p7.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Arnout,
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-On Mon, Oct 28, 2013 at 09:47:17AM +0100, Arnout Vandecappelle wrote:
-> On 28/10/13 09:40, Baruch Siach wrote:
-> >On Mon, Oct 28, 2013 at 09:24:59AM +0100, Arnout Vandecappelle wrote:
-> >>On 28/10/13 09:10, Baruch Siach wrote:
-> >>>On Mon, Oct 28, 2013 at 08:12:21AM +0100, Arnout Vandecappelle wrote:
-> >>>>On 26/10/13 09:33, Wojciech Zabolotny wrote:
-> >>>>>On Sat, Oct 26, 2013 at 1:41 AM, Arnout Vandecappelle <arnout@mind.be> wrote:
-> >>>>>>  Also, when sending an update, it is customary to add v2 to the subject
-> >>>>>>  so
-> >>>>>>people can see which version is the latest one. You can do that by calling
-> >>>>>>git send-email -v2 # Since git 1.8.x
-> >>>>>>or
-> >>>>>>git send-email --subject-prefix='PATCH v2'
-> >>>>>
-> >>>>>It seems, that the above should be applied to git format-patch, not
-> >>>>>git send-email?
-> >>>>
-> >>>>  You're right, but git send-email takes (almost) all of the options
-> >>>>of git format-patch if you let it generate patches directly (e.g.
-> >>>>with 'git send-email -1). Normally I don't bother with generating
-> >>>>the patches separately and just mail them immediately - and I
-> >>>>assumed that the rest of the world does the same :-).
-> >>
-> >>>How do you add patch version changelog then?
-> >>
-> >>  Manually with git commit --amend.
-> >
-> >But with 'commit --amend' you can only edit the log message itself, not the
-> >part below the '---' separator where patches changelog usually go.
-> 
->  Sure you can. The --- separator is only interpreted by git-am
-> (well, actually the plumbing tool that is called by git-am). So you
-> can update the things below the --- separator while doing git commit
-> --amend or git rebase -i.
+ > Fixes:
+ > http://autobuild.buildroot.net/results/317/3177b7d6168eec0620e4a1ade9166c9c84929e6e/
 
-Nice trick. Should save me a lot of time. Thanks.
+ > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+ > ---
+ >  package/nano/Config.in | 1 +
+ >  1 file changed, 1 insertion(+)
 
-baruch
+ > diff --git a/package/nano/Config.in b/package/nano/Config.in
+ > index 9546fe7..80a3304 100644
+ > --- a/package/nano/Config.in
+ > +++ b/package/nano/Config.in
+ > @@ -1,5 +1,6 @@
+ >  config BR2_PACKAGE_NANO
+ >  	bool "nano"
+ > +	depends on BR2_USE_WCHAR
+ >  	# full version uses fork()
+ >  	select BR2_PACKAGE_NANO_TINY if !BR2_USE_MMU
+ >  	select BR2_PACKAGE_NCURSES
+
+You forgot the comment when not available. Committed with that fixed,
+thanks.
 
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+Bye, Peter Korsgaard
