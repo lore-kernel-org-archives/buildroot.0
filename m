@@ -1,42 +1,41 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 28 Oct 2013 08:12:21 +0100
-Subject: [Buildroot] [PATCH 1/1] python-pyusb: new package
-In-Reply-To: <CAMduVEc4LUGPXPoNmQR0_+pYf9_Pd2BUeFQG0xrWZyScbHJNNw@mail.gmail.com>
-References: <CAMduVEegwCNSu2cBGbTOjUhBUtD5kv1F14eViyj+y9M29wwngQ@mail.gmail.com>
- <1382742325-11435-1-git-send-email-wzab01@gmail.com>
- <OF7CA7B8E3.5FD89345-ON86257C0F.0052857B-86257C0F.0054D5D3@rockwellcollins.com>
- <1256826d-31b9-4b85-8834-35694e372fac@email.android.com>
- <1382742930-11510-1-git-send-email-wzab01@gmail.com>
- <526B018E.9080206@mind.be>
- <CAMduVEc4LUGPXPoNmQR0_+pYf9_Pd2BUeFQG0xrWZyScbHJNNw@mail.gmail.com>
-Message-ID: <526E0E55.8060005@mind.be>
+Date: Mon, 28 Oct 2013 08:09:56 +0100
+Subject: [Buildroot] [PATCH 2/2] /dev/ttymxc count is changed to 4 in
+ system/device_table_dev.txt since debug uart in imx6 sabreauto board is
+ ttymxc3
+In-Reply-To: <BLU0-SMTP409B21DB710B158C741EA4F70D0@phx.gbl>
+References: <1382720599-16239-1-git-send-email-hussain.abdul@outlook.com>
+ <BLU0-SMTP409B21DB710B158C741EA4F70D0@phx.gbl>
+Message-ID: <526E0DC4.7060704@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 26/10/13 09:33, Wojciech Zabolotny wrote:
-> On Sat, Oct 26, 2013 at 1:41 AM, Arnout Vandecappelle <arnout@mind.be> wrote:
->
->>   Also, when sending an update, it is customary to add v2 to the subject so
->> people can see which version is the latest one. You can do that by calling
->> git send-email -v2 # Since git 1.8.x
->> or
->> git send-email --subject-prefix='PATCH v2'
->>
->
-> It seems, that the above should be applied to git format-patch, not
-> git send-email?
+On 25/10/13 19:03, Abdul Hussain wrote:
+> Signed-off-by: Abdul Hussain <hussain.abdul@outlook.com>
 
-  You're right, but git send-email takes (almost) all of the options of 
-git format-patch if you let it generate patches directly (e.g. with 'git 
-send-email -1). Normally I don't bother with generating the patches 
-separately and just mail them immediately - and I assumed that the rest 
-of the world does the same :-).
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-  Regards,
-  Arnout
+> ---
+>   system/device_table_dev.txt |    2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/system/device_table_dev.txt b/system/device_table_dev.txt
+> index a93a2c8..9507939 100644
+> --- a/system/device_table_dev.txt
+> +++ b/system/device_table_dev.txt
+> @@ -35,7 +35,7 @@
+>   /dev/ttySC	c	666	0	0	204	8	0	1	8
+>   /dev/ttyPSC	c	666	0	0	204	148	0	1	4
+>   /dev/ttyUL	c	666	0	0	204	187	0	1	4
+> -/dev/ttymxc	c	666	0	0	207	16	0	1	3
+> +/dev/ttymxc	c	666	0	0	207	16	0	1	4
+>
+>   # Input stuff
+>   /dev/input		d	755	0	0	-	-	-	-	-
+>
 
 
 -- 
