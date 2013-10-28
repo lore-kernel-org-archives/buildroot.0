@@ -1,45 +1,65 @@
-From: Romain Naour <romain.naour@openwide.fr>
-Date: Mon, 28 Oct 2013 00:16:45 +0100
-Subject: [Buildroot] [PATCH v3 1/1] trace-cmd: use pkg-config instead of
-	python-config
-In-Reply-To: <871u37uezx.fsf@dell.be.48ers.dk>
-References: <52644CCE.1040307@openwide.fr> <871u37uezx.fsf@dell.be.48ers.dk>
-Message-ID: <526D9EDD.3070104@openwide.fr>
+From: =?ISO-8859-1?Q?Ezequiel_Garc=EDa?= <ezequiel@vanguardiasur.com.ar>
+Date: Sun, 27 Oct 2013 22:09:15 -0200
+Subject: [Buildroot] [git commit] qt5base: fix QtGUI build without PNG
+	support
+In-Reply-To: <20131027072650.994C89BB81@busybox.osuosl.org>
+References: <20131027072650.994C89BB81@busybox.osuosl.org>
+Message-ID: <CAAEAJfDV+Q+6fGM41L9ddckkJaFzOsc5AGWN447bm01fi5FR+Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le 27/10/2013 12:31, Peter Korsgaard a ?crit :
->>>>>> "Romain" == Romain Naour <romain.naour@openwide.fr> writes:
->   > trace-cmd use python-config to find out which headers
->   > and libraries should be used to link against the Python libraries.
->   > By default, python-config returns paths that are inappropriate for
->   > cross-compilation.
->
->   > This patch replaces python-config with pkg-config as a workaround.
->
->   > Add PYTHON_VERS to build trace-cmd with python2 or python3
->
->   > Fixes:
->   > http://autobuild.buildroot.net/results/980/980875810528ac1dee34b8c268d9b3c40b2e35ec/
->
-> Committed, thanks. Did you send the patch upstream? If not, please try
-> to do so?
->
-Hi,
+Peter,
 
-Not yet, but it would be better to fix python-config directly instead of 
-replacing it.
-The RFC about the new pkg-python infrastructure is interesting.
-If I understand correctly it may also fixes this issue without replacing 
-python-config.
+On 26 October 2013 12:58, Peter Korsgaard <peter@korsgaard.com> wrote:
+> commit: http://git.buildroot.net/buildroot/commit/?id=0764b1cf4573f7fdae9faa280898a7a9950da100
+> branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>
+> Patch from upstream bug report:
+> https://bugreports.qt-project.org/browse/QTBUG-33496
+>
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+> ---
+>  .../qt5base-0005-fix-gui-build-without-png.patch   |   22 ++++++++++++++++++++
+>  1 files changed, 22 insertions(+), 0 deletions(-)
+>
+> diff --git a/package/qt5/qt5base/qt5base-0005-fix-gui-build-without-png.patch b/package/qt5/qt5base/qt5base-0005-fix-gui-build-without-png.patch
+> new file mode 100644
+> index 0000000..ea0a7e3
+> --- /dev/null
+> +++ b/package/qt5/qt5base/qt5base-0005-fix-gui-build-without-png.patch
+> @@ -0,0 +1,22 @@
+> +[PATCH] fix QtGUI build without PNG support
+> +
+> +Upstream bug: https://bugreports.qt-project.org/browse/QTBUG-33496
+> +
+> +Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+> +---
+> + src/gui/kernel/qplatformtheme.cpp |    2 +-
+> + 1 file changed, 1 insertion(+), 1 deletion(-)
+> +
+> +Index: qt5base-5.1.1/src/gui/kernel/qplatformtheme.cpp
+> +===================================================================
+> +--- qt5base-5.1.1.orig/src/gui/kernel/qplatformtheme.cpp
+> ++++ qt5base-5.1.1/src/gui/kernel/qplatformtheme.cpp
+> +@@ -48,7 +48,7 @@
+> + #include <QtCore/qfileinfo.h>
+> + #include <qpalette.h>
+> + #include <qtextformat.h>
+> +-#include <qiconloader_p.h>
+> ++#include <private/qiconloader_p.h>
+> +
+> + QT_BEGIN_NAMESPACE
+> +
 
-I will still send this patch upstream.
+Unless I'm missing something, I think Fatih sent a fix with the same
+upstream patch for this issue a long while ago:
 
-We have a new issue with trace-cmd if ptrace support is not available...
-A new patch is coming for review :)
+http://patchwork.ozlabs.org/patch/280804/
 
-Best regards,
-Romain
+Thanks!
+-- 
+Ezequiel Garc?a, VanguardiaSur
+www.vanguardiasur.com.ar
