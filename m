@@ -1,95 +1,97 @@
-From: Phil Eichinger <phil.eichinger@gmail.com>
-Date: Mon, 28 Oct 2013 10:47:27 +0100
-Subject: [Buildroot] [PATCH v2 1/1] valgrind: add support for glibc 2.17 and
-	2.18
-Message-ID: <1382953647-10451-1-git-send-email-phil@zankapfel.net>
+From: =?ISO-8859-1?Q?J=E9r=F4me?= Pouiller <jezz@sysmic.org>
+Date: Mon, 28 Oct 2013 10:47:03 +0100
+Subject: [Buildroot] [RFC] Continuous integration
+In-Reply-To: <526E0937.1070902@mind.be>
+References: <1464774.i3ScgRtXEf@sagittae> <526E0937.1070902@mind.be>
+Message-ID: <3123747.79B3Y367BF@sagittae>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes: http://autobuild.buildroot.net/results/f086e65aca220bc9a5869f8fc8c1dca4d87ada7d/
+On Monday 28 October 2013 07:50:31 Arnout Vandecappelle wrote:
+> On 25/10/13 14:46, J?r?me Pouiller wrote:
+[...]
+>   This idea sounds good. Unfortunately, it looks like nobody read your
+> mail before the developer days so we didn't discuss this subject...
+It my fault, I was late.
 
-Signed-off-by: Phil Eichinger <phil@zankapfel.net>
----
-Changes from v1:
-* added reference to upstream revisions in patch
-* fixed commit log
+> > Ideally, it should be able to give test results for branches before
+> > they would be merged.
+> 
+>   We'd like to keep the current workflow of committing each patch
+> individually - it gives cleaner history than with merges. 
+I mean before they would be committed. We are agree.
 
- ...grind-add-support-for-glibc-2.17-and-2.18.patch |   50 ++++++++++++++++++++
- package/valgrind/valgrind.mk                       |    2 +-
- 2 files changed, 51 insertions(+), 1 deletion(-)
- create mode 100644 package/valgrind/valgrind-add-support-for-glibc-2.17-and-2.18.patch
+> But that's
+> not really relevant, because these test builds could run for each
+> patch individually and report success, which indicates that it can be
+> applied by Peter.
+Current implementation run tests when a commit is done. You suggest to 
+run test as soon as patch is sent to ML. 
 
-diff --git a/package/valgrind/valgrind-add-support-for-glibc-2.17-and-2.18.patch b/package/valgrind/valgrind-add-support-for-glibc-2.17-and-2.18.patch
-new file mode 100644
-index 0000000..c07dda2
---- /dev/null
-+++ b/package/valgrind/valgrind-add-support-for-glibc-2.17-and-2.18.patch
-@@ -0,0 +1,50 @@
-+From bca21896dbdba12963aa7991d7f1b732b6a709a8 Mon Sep 17 00:00:00 2001
-+From: Phil Eichinger <phil@zankapfel.net>
-+Date: Wed, 23 Oct 2013 18:28:15 +0200
-+Subject: [PATCH 1/1] Add support for glibc 2.17 and 2.18.
-+
-+
-+Signed-off-by: Phil Eichinger <phil@zankapfel.net>
-+---
-+Status: fixed in upstream r13228 & r13504, not yet released.
-+
-+ configure.in |   16 +++++++++++++++-
-+ 1 file changed, 15 insertions(+), 1 deletion(-)
-+
-+diff --git a/configure.in b/configure.in
-+index 1da3a2c..ccc60a0 100644
-+--- a/configure.in
-++++ b/configure.in
-+@@ -906,6 +906,20 @@ case "${GLIBC_VERSION}" in
-+ 	DEFAULT_SUPP="glibc-2.34567-NPTL-helgrind.supp ${DEFAULT_SUPP}"
-+ 	DEFAULT_SUPP="glibc-2.X-drd.supp ${DEFAULT_SUPP}"
-+ 	;;
-++     2.17)
-++	AC_MSG_RESULT(2.17 family)
-++	AC_DEFINE([GLIBC_2_17], 1, [Define to 1 if you're using glibc 2.17.x])
-++	DEFAULT_SUPP="glibc-2.X.supp ${DEFAULT_SUPP}"
-++	DEFAULT_SUPP="glibc-2.34567-NPTL-helgrind.supp ${DEFAULT_SUPP}"
-++	DEFAULT_SUPP="glibc-2.X-drd.supp ${DEFAULT_SUPP}"
-++	;;
-++     2.18)
-++	AC_MSG_RESULT(2.18 family)
-++	AC_DEFINE([GLIBC_2_18], 1, [Define to 1 if you're using glibc 2.18.x])
-++	DEFAULT_SUPP="glibc-2.X.supp ${DEFAULT_SUPP}"
-++	DEFAULT_SUPP="glibc-2.34567-NPTL-helgrind.supp ${DEFAULT_SUPP}"
-++	DEFAULT_SUPP="glibc-2.X-drd.supp ${DEFAULT_SUPP}"
-++	;;
-+      darwin)
-+ 	AC_MSG_RESULT(Darwin)
-+ 	AC_DEFINE([DARWIN_LIBC], 1, [Define to 1 if you're using Darwin])
-+@@ -919,7 +933,7 @@ case "${GLIBC_VERSION}" in
-+ 
-+      *)
-+ 	AC_MSG_RESULT([unsupported version ${GLIBC_VERSION}])
-+-	AC_MSG_ERROR([Valgrind requires glibc version 2.2 - 2.16])
-++	AC_MSG_ERROR([Valgrind requires glibc version 2.2 - 2.18])
-+ 	AC_MSG_ERROR([or Darwin libc])
-+ 	;;
-+ esac
-+-- 
-+1.7.10.4
-+
-diff --git a/package/valgrind/valgrind.mk b/package/valgrind/valgrind.mk
-index f40784e..953f929 100644
---- a/package/valgrind/valgrind.mk
-+++ b/package/valgrind/valgrind.mk
-@@ -9,7 +9,7 @@ VALGRIND_SITE    = http://valgrind.org/downloads/
- VALGRIND_SOURCE  = valgrind-$(VALGRIND_VERSION).tar.bz2
- VALGRIND_LICENSE = GPLv2 GFDLv1.2
- VALGRIND_LICENSE_FILES = COPYING COPYING.DOCS
--
-+VALGRIND_AUTORECONF = YES
- VALGRIND_CONF_OPT = --disable-tls
- 
- # On ARM, Valgrind only supports ARMv7, and uses the arch part of the
+It is a good idea but very different than current implementation. I will 
+need a little more time to implement this.
+
+
+> > It should also detect regression and send necessary alert. It would
+> > be better if it may identify commit and author of a regression.
+> > 
+> > I begin to wrote an autobuilder that would looks like that. You can
+> > sees results there : http://sysmic.org/~jezz/autobuilder/ (at
+> > beginning, it was mainly for my personal needs)
+> > 
+> > It use a set of reference configurations which normally include all
+> > packages (at least as much as possible). It compute list of packages
+> > and their directories, list of targets for each configuration and
+> > dependencies of of each packages for each configuration. It is able
+> > to compute reverse dependencies and recursive dependencies.
+> 
+>   Why all packages? If it's about testing new packages, then it should
+> be tested with only the new package selected (+ any dependencies). If
+> it's about testing infrastructural changes, then it should be done on
+> a clean tree (which you mention below that you don't do).
+Idea was to rebuild in priority new/modified packages. When there is 
+nothing more to do. Rebuild a package that was not modified.
+
+
+> > Next, it ask to git modification time for each package directory. It
+> > is able to detect couple of packages/configuration which build time
+> > is older than package directory modification time.
+> > 
+> > It compute list of packages/configuration couple and sort it : never
+> > built first, modified next, a dependency modified after and finally
+> > other packages, ordered by last build time. Job queue is available
+> > there: http://sysmic.org/~jezz/autobuilder/jobqueue.html (/!\ 4Mo).
+> > 
+> > It build elements of job list until change is detected on git
+> > repository (in this case, it rebuild job queue).
+> > 
+> > For performance reasons, I don't run make clean between each
+> > package. I know it may be problematic for reproducibility. However,
+> > script will run make clean when it is about to rebuild a package
+> > that was not modified since last build and output directory had not
+> > been cleaned since last build (= same package with same output
+> > directory).
+> > 
+> > Finally, it dump result. It is able to detect when a package has
+> > compiled correctly, or it has failed or if a dependency has failed
+> > (and in this case, it shows problematic package).
+> > 
+> > Code is available there:
+> >     https://github.com/jerome-pouiller/br-continuous
+> 
+>   Do you also have a server on which to run this? Could it send out
+> success/failure reports to the list (or maybe first to the author and
+> a few key developers, until we're sure it works well)?
+Normally, http://sysmic.org/~jezz/autobuilder/ should work, isn't? You 
+may also look at http://sysmic.org/~jezz/autobuilder/jobqueue.html for 
+job list . 
+
+
+
 -- 
-1.7.10.4
+J?r?me Pouiller, Sysmic
+Embedded Linux specialist
+http://www.sysmic.fr
