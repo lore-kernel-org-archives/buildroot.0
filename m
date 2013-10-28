@@ -1,99 +1,47 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 28 Oct 2013 08:24:54 +0100
-Subject: [Buildroot] [PATCH 5/5] thrift: new package
-In-Reply-To: <526B8FEC.2000607@zacarias.com.ar>
-References: <1382703323-31038-1-git-send-email-gustavo@zacarias.com.ar>
- <1382703323-31038-5-git-send-email-gustavo@zacarias.com.ar>
- <OFFFC3A740.7C7B430A-ON86257C10.000F397E-86257C10.001197E6@rockwellcollins.com>
- <526B8FEC.2000607@zacarias.com.ar>
-Message-ID: <526E1146.2070902@mind.be>
+Date: Mon, 28 Oct 2013 09:01:51 +0100
+Subject: [Buildroot] [PATCH v8 RESEND 2/8] package: add toolchain
+ dependency to every target package
+In-Reply-To: <20131027185520.4ec5e1b0@skate>
+References: <1382088860-30524-1-git-send-email-fabio.porcedda@gmail.com>
+ <1382088860-30524-3-git-send-email-fabio.porcedda@gmail.com>
+ <5268455D.10106@mind.be> <20131027185520.4ec5e1b0@skate>
+Message-ID: <526E19EF.6060107@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 26/10/13 11:48, Gustavo Zacarias wrote:
-> On 10/26/2013 12:12 AM, Ryan Barnett wrote:
->> Could you move the license to right below the site? It doesn't really
->> matter but I guess I like to see version, site, license as the first
->> things in a package. I guess there isn't any official standard to the way
->> a package makefile should be in but I guess that is just my person
->> preference.
+On 27/10/13 18:55, Thomas Petazzoni wrote:
+> Dear Arnout Vandecappelle,
 >
-> Huh, that's very OCD :)
-
-  But not as much as requiring 80 hashes in the header :-)
-
-> There are several packages that don't keep them ordered, specially those
-
-  It's not because it wasn't done right in the past that it shouldn't be 
-done right now :-)
-
-
-  I agree with Ryan that it would be a good idea to standardize on some 
-order of the variable definitions. But since there is not standard at the 
-moment, we have to wait for an edict from Peter before we can enforce it.
-
-
-[snip]
->>> +ifeq ($(BR2_PREFER_STATIC_LIB),y)
->>> +# openssl uses zlib, so we need to explicitly link with it when static
->>> +THRIFT_CONF_ENV += LIBS=-lz
->>
->> Shouldn't you add a dependancy on libz then?
->>
->> THRIFT_DEPENDCIES += zlib
+> On Wed, 23 Oct 2013 23:53:33 +0200, Arnout Vandecappelle wrote:
 >
-> It's implicit from openssl, we don't build openssl without zlib (it's
-> possible to do so, but not really that useful and would complicate other
-> packages).
-
-  That it's implicit from openssl is not really relevant - if the 
-dependency is ever removed from openssl (OK, this will not happen, but 
-just imagine) then we'd like to keep the correct dependency here.
-
+>>    What I would prefer is to move glibc, linux-headers and uclibc back
+>> under the toolchain directory (why did they ever move out, Thomas?) and
+>> to filter on $(pkgparentdir)
 >
->> I haven't tested this so I don't fully understand what exactly what you
->> are doing here. I see that this is an autotools package but it doesn't
->> appear to be building or installing using the autotools infrastructure.
->> Could you please elaborate a little bit more of why exactly you can't use
->> autotoools to build for this? I believe I understand what you are doing
->> here but I guess I would like a few more details from you.
->>
->> Also it looks like thrift is a compiler, so wouldn't we want to have this
->> available as a host tool because presumably there would be a need to to
->> add custom user packages that utilize Thrift to compile their application.
->> Again I haven't had time to read further what exactly thrift does but
->> these are just the few things that are coming to my mind tonight.
->>
->> I will try to investigate this a little bit more in the coming days (next
->> week) but for now this are my initial reaction comments.
+> Well, the idea is that gcc, uclibc, glibc, linux-headers and so on are
+> now real, normal, packages. The only thing we keep in toolchain/ are
+> the "entry" point of toolchain backends: toolchain-buildroot and
+> toolchain-external.
 >
-> A quick overlook then.
-> Thrift is basically a compiler and runtime libs.
-> The compiler component is only useful for the host because we don't do
-> development on the target any more, that would be host-boost, which IS
-> actually using autotools infra (no defines overriding HOST_THRIFT_*_CMDS).
-> For the target the INSTALL phase has an override to just install the
-> runtime libraries and avoid the compiler, tests and examples.
-> The target BUILD override patches the thrift makefiles to use $(THRIFT)
-> rather than hardcode it (the for-SED loop), and builds passing $(THRIFT)
-> to the appropiate host-compiled one (since it's hell bent on using it's
-> own built one which would be cross and wouldn't run).
-> This is a double catch though, i wanted to build examples as a sane way
-> to test it that things are ok but not install them.
+> Moreover, it would be strange to have glibc, uclibc and linux-headers
+> in toolchain/, but not gcc and binutils, for example. I do understand
+> that these two packages are host packages, so they don't get the
+> automatic dependency on the toolchain added, but that's an internal
+> detail. From an external point of view, all those components are part
+> of the toolchain, so it would be weird to have some of them in
+> toolchain/, and some of them in package/.
 
-  It would be nicer though if that could be done with an upstreamable 
-patch, but I think you said before that it wasn't going to happen.
+  So what's your conclusion now? Move all toolchain-related packages back 
+to the toolchain directory, or find another solution for circumventing 
+the toolchain circular dependency?
 
-  I do think that your sed magic should be done in POST_PATCH_HOOKS on 
-the Makefile.am, though. Patching up the generated Makefiles just feels 
-icky to me.
 
   Regards,
   Arnout
-
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
