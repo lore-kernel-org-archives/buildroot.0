@@ -1,95 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 28 Oct 2013 20:27:48 +0100
-Subject: [Buildroot] [PATCH v2 1/1] jack2: new package
-In-Reply-To: <1382903456-5996-1-git-send-email-wzab01@gmail.com>
-References: <1256826d-31b9-4b85-8834-35694e372fac@email.android.com>
- <1382658143-3850-1-git-send-email-wzab01@gmail.com>
- <1382744168-14259-1-git-send-email-wzab01@gmail.com>
- <20131027181024.14201db4@skate>
- <1382903456-5996-1-git-send-email-wzab01@gmail.com>
-Message-ID: <20131028202748.3d03c78f@skate>
+Date: Mon, 28 Oct 2013 20:40:36 +0100
+Subject: [Buildroot] SCSI / SAS / FC support
+In-Reply-To: <CAK9Ae0P0gJ+cLYR96mz7Xddy4_zpdS6zXqg4ak3nbemTqVR9Yw@mail.gmail.com>
+References: <CAK9Ae0P0gJ+cLYR96mz7Xddy4_zpdS6zXqg4ak3nbemTqVR9Yw@mail.gmail.com>
+Message-ID: <20131028204036.74e46ef8@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Wojciech M. Zabolotny,
+Dear Beren Scott,
 
-On Sun, 27 Oct 2013 20:50:56 +0100, Wojciech M. Zabolotny wrote:
-> Signed-off-by: Wojciech M. Zabolotny <wzab01@gmail.com>
-> ---
-> I have modified patch introducing the new "jack2" package, according
-> to suggestions received from Thomas De Schampheleire and Thomas Petazzoni
-> (corrections of formatting, dependencies and downloading of source form git).
+On Sun, 27 Oct 2013 14:00:37 +1100, Beren Scott wrote:
 
-Thanks for the followup patch. Some comments below.
+> I am trying to create a buildroot setup where a wide variety of hard drives
+> can be detected and accessed. I have a working solution at the moment,
+> which seems to only detect IDE and SATA hard drives, and I am thinking
+> along the lines of there not being controller driver support in my current
+> setup. So, I am asking, how do I add that into my project? I cannot seem to
+> find any option for it.
 
-> new file mode 100644
-> index 0000000..0fb6ca2
-> --- /dev/null
-> +++ b/package/jack2/Config.in
-> @@ -0,0 +1,23 @@
-> +config BR2_PACKAGE_JACK2
-> +	bool "jack2"
-> +	depends on BR2_LARGEFILE
-> +	depends on BR2_TOOLCHAIN_HAS_THREADS
-> +	select BR2_PACKAGE_LIBSAMPLERATE
-> +	select BR2_PACKAGE_LIBSNDFILE
-> +	select BR2_PACKAGE_ALSA_LIB
-> +	help
-> +	  JACK Audio Connection Kit (server and example clients)
-> +	  JACK is a low-latency sound server, allowing multiple applications to
-> +	  connect to one audio device, and to share audio between themselves.
-> + 	  This package contains the daemon jackd as well as some example clients.
-> +
-> +	  http://jackaudio.org/
-> +
-> +comment "jack2 uses libsndfile which requires a toolchain with LARGEFILE support"
-> +        depends on !BR2_LARGEFILE
-> +
-> +comment "jack2 uses alsa-lib which requires a toolchain with threads support"
-> +        depends on !BR2_TOOLCHAIN_HAS_THREADS
+What you're looking for are drivers for specific pieces of hardware.
+Such drivers are typically part of the Linux kernel itself, and
+therefore the configuration options to enable/disable them are not
+exposed in Buildroot 'make menuconfig'.
 
-These comments should be only one comment. See also the recent commit
-c3a832a7fb26fed8fd7834e96f09e3565b637f69, which updated the manual to
-explain how such comments should be written.
+However, if you build your kernel with Buildroot, you can run 'make
+linux-menuconfig' to adjust the kernel configuration. If you're
+building the kernel separately, then it's up to you to adjust your
+kernel configuration.
 
-> +
-> +
-> +
-
-These empty new lines are not needed.
-
-> diff --git a/package/jack2/jack2.mk b/package/jack2/jack2.mk
-> new file mode 100644
-> index 0000000..5ab751f
-> --- /dev/null
-> +++ b/package/jack2/jack2.mk
-> @@ -0,0 +1,31 @@
-> +################################################################################
-> +#
-> +# jack2
-> +#
-> +################################################################################
-> +
-> +JACK2_VERSION = 37976441044d69b91d61d8f6278949a39cf1b7b7
-> +JACK2_SITE = http://github.com/jackaudio/jack2/tarball/$(JACK2_VERSION)
-> +JACK2_LICENSE = LGPLv2.1+
-> +JACK2_DEPENDENCIES = \
-> +      libsamplerate \
-> +      libsndfile
-
-You have selected BR2_PACKAGE_ALSA_LIB above, but you don't depend on
-them. Unless alsa-lib is a runtime-only dependency, and not a
-build-dependency, this is wrong.
-
-Also, I believe that since the dependency list is not too long, putting
-it on one line is ok:
-
-JACK2_DEPENDENCIES = libsamplerate libsndfile alsa-lib
-
-Thanks!
+Best regards,
 
 Thomas
 -- 
