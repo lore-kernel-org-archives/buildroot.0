@@ -1,51 +1,54 @@
-From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Mon, 28 Oct 2013 13:09:50 +0100
-Subject: [Buildroot] [PATCH v3 1/2] pcre: add UTF-8/16/32 support option
-Message-ID: <1382962191-6274-1-git-send-email-yegorslists@googlemail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 28 Oct 2013 13:46:14 +0100
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2013-10-24
+In-Reply-To: <526E468C.7080008@zacarias.com.ar>
+References: <20131025063005.51B7752C609@lolut.humanoidz.org>
+ <526A26EB.7010804@mind.be> <20131025124746.0dbffd63@skate>
+ <526A4D39.3040106@zacarias.com.ar> <20131026084741.5cab8678@skate>
+ <526B9237.8030602@zacarias.com.ar>
+ <526E468C.7080008@zacarias.com.ar>
+Message-ID: <20131028134614.1d9a41e2@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Yegor Yefremov <yegorslists@googlemail.com>
+Dear Gustavo Zacarias,
 
-Add BR2_PACKAGE_PCRE_UTF option, that activates
---enable-unicode-properties for UTF-8/16/32.
+On Mon, 28 Oct 2013 08:12:12 -0300, Gustavo Zacarias wrote:
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
----
-Changes:
-	v3: change option to "UTF-8/16/32 support"
+> Hetzner reached back and their opinion is that they're firewall rules
+> (because ping+trace work and http doesn't).
+> I don't know their networking setup but it sounds reasonable (some odd
+> balancer setup might show these symptoms).
+> I guess the server admin is a bit aggresive on recurrent fetchers.
+> Which moves me to the question, shouldn't the autobuilders just build?
+> Checking the sources is great but it shouldn't be so aggresive on
+> upstream servers, small projects might not be so happy about it.
+> I know this has to be coded but maybe it's time.
 
- package/pcre/Config.in |    5 +++++
- package/pcre/pcre.mk   |    1 +
- 2 files changed, 6 insertions(+), 0 deletions(-)
+Originally, the autobuilders had a cache on a per build thread basis
+(my build server runs 3 builds in parallel). So it meant that a given
+tarball what at the maximum downloaded three times.
 
-diff --git a/package/pcre/Config.in b/package/pcre/Config.in
-index dc92274..e49d693 100644
---- a/package/pcre/Config.in
-+++ b/package/pcre/Config.in
-@@ -19,4 +19,9 @@ config BR2_PACKAGE_PCRE_32
- 	help
- 	  This option builds the 32-bits pcre library, i.e 'libpcre32'
- 
-+config BR2_PACKAGE_PCRE_UTF
-+	bool "UTF-8/16/32 support"
-+	help
-+	  This option enables UTF support
-+
- endif
-diff --git a/package/pcre/pcre.mk b/package/pcre/pcre.mk
-index bf86a3d..0d1d66b 100644
---- a/package/pcre/pcre.mk
-+++ b/package/pcre/pcre.mk
-@@ -19,5 +19,6 @@ endif
- PCRE_CONF_OPT += --enable-pcre8
- PCRE_CONF_OPT += $(if $(BR2_PACKAGE_PCRE_16),--enable-pcre16,--disable-pcre16)
- PCRE_CONF_OPT += $(if $(BR2_PACKAGE_PCRE_32),--enable-pcre32,--disable-pcre32)
-+PCRE_CONF_OPT += $(if $(BR2_PACKAGE_PCRE_UTF),--enable-unicode-properties,--disable-unicode-properties)
- 
- $(eval $(autotools-package))
+However, since some time, I have changed this to remove 5 random
+tarballs after each build, so that the cache gets progressively
+refreshed, and the autobuilders also check upstream URLs. I've done
+that after we had realized that several of our upstream URLs in
+Buildroot were broken, which directly affects new users (but wasn't
+visible in the autobuilders).
+
+I can certainly adjust the policy by reducing the number of removed
+tarballs to 1 or 2 after each build, for example. But I still believe
+that doing this allows us to verify the upstream URLs thanks to the
+autobuilders.
+
+Best regards,
+
+Thomas
 -- 
-1.7.7
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
