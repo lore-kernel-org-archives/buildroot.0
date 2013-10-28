@@ -1,68 +1,48 @@
-From: =?ISO-8859-1?Q?Ezequiel_Garc=EDa?= <ezequiel@vanguardiasur.com.ar>
-Date: Sun, 27 Oct 2013 22:11:28 -0200
-Subject: [Buildroot] [PATCH 2/2] qt5base: add an option to build and
- install examples
-In-Reply-To: <CAAEAJfAX3yKCUiJ9hvTQXjmfbwZXx8F1EwwMp6GTR3WFpgLAYw@mail.gmail.com>
-References: <1381007796-20031-1-git-send-email-fatih.asici@gmail.com>
- <1381007796-20031-2-git-send-email-fatih.asici@gmail.com>
- <CAAEAJfDKwZ-EtAO61h=ZOE4QoAr75fZsw7s8aXhQjJm9VVBQwQ@mail.gmail.com>
- <20131014184207.024e8383@skate>
- <CAAEAJfAX3yKCUiJ9hvTQXjmfbwZXx8F1EwwMp6GTR3WFpgLAYw@mail.gmail.com>
-Message-ID: <CAAEAJfBY4VcUY_OR=kr6ZXoKMtBCFSB8MoOudZG1d2K11BNcFg@mail.gmail.com>
+From: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+Date: Sun, 27 Oct 2013 21:29:27 -0300
+Subject: [Buildroot] [PATCH] qt5base: add tslib plugin
+Message-ID: <1382920167-3336-1-git-send-email-ezequiel@vanguardiasur.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fatih, Peter:
+Add support for Tslib plugin.
 
-On 14 October 2013 14:02, Ezequiel Garc?a <ezequiel@vanguardiasur.com.ar> wrote:
-> On 14 October 2013 13:42, Thomas Petazzoni
-> <thomas.petazzoni@free-electrons.com> wrote:
->> Dear Ezequiel Garc?a,
->>
->> On Mon, 14 Oct 2013 11:11:14 -0300, Ezequiel Garc?a wrote:
->>
->>> > +ifeq ($(BR2_PACKAGE_QT5BASE_EXAMPLES),y)
->>> > +QT5BASE_CONFIGURE_OPTS += -make examples -compile-examples
->>> > +else
->>> > +QT5BASE_CONFIGURE_OPTS += -nomake examples
->>> > +endif
->>> > +
->>>
->>> Any reason why this is not with the rest of the options
->>> and using the simpler:
->>>
->>> QT5BASE_CONFIGURE_OPTS += $(if $(BR2_PACKAGE_QT5BASE_EXAMPLES), \
->>>         -make examples -compile-examples, \
->>>         -nomake examples)
->>>
->>> ?
->>
->> I agree with your first point (it should be with the other configure
->> option), but I disagree with your second point. The choice Fatih has
->> made is the one we make everywhere in Buildroot whenever the "if"
->> becomes multiline. I'd very much prefer Fatih to keep its original
->> proposal.
->>
->> We use $(if ...) only when it can be done like this:
->>
->> FOO_SOMETHING = $(if $(BR2_BLEH),foo,bar)
->>
->> when it becomes more complicated than that, we use ifeq ... else ...
->> endif blocks on several lines.
->>
->
-> Sure, no objections on my side.
->
-> Fatih: if you re-submit this, you can add my:
->
-> Tested-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
->
+Signed-off-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+---
+ package/qt5/qt5base/Config.in  | 5 +++++
+ package/qt5/qt5base/qt5base.mk | 3 +++
+ 2 files changed, 8 insertions(+)
 
-Peter: Will you take this as it is, or would you prefer a re-submit
-reordering as agreed above?
+diff --git a/package/qt5/qt5base/Config.in b/package/qt5/qt5base/Config.in
+index e433373..cfe8f02 100644
+--- a/package/qt5/qt5base/Config.in
++++ b/package/qt5/qt5base/Config.in
+@@ -185,4 +185,9 @@ config BR2_PACKAGE_QT5BASE_ICU
+ 	  This option enables ICU support in Qt5. This is for example
+ 	  needed for Qt5Webkit.
+ 
++config BR2_PACKAGE_QT5BASE_TSLIB
++	bool "Enable Tslib support"
++	select BR2_PACKAGE_TSLIB
++	help
++	  This options enables the Tslib plugin
+ endif
+diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
+index 0106c2c..ce78d31 100644
+--- a/package/qt5/qt5base/qt5base.mk
++++ b/package/qt5/qt5base/qt5base.mk
+@@ -128,6 +128,9 @@ QT5BASE_DEPENDENCIES   += $(if $(BR2_PACKAGE_QT5BASE_PNG),libpng)
+ QT5BASE_CONFIGURE_OPTS += $(if $(BR2_PACKAGE_QT5BASE_DBUS),-dbus,-no-dbus)
+ QT5BASE_DEPENDENCIES   += $(if $(BR2_PACKAGE_QT5BASE_DBUS),dbus)
+ 
++QT5BASE_CONFIGURE_OPTS += $(if $(BR2_PACKAGE_QT5BASE_TSLIB),-tslib,-no-tslib)
++QT5BASE_DEPENDENCIES   += $(if $(BR2_PACKAGE_QT5BASE_TSLIB),tslib)
++
+ QT5BASE_CONFIGURE_OPTS += $(if $(BR2_PACKAGE_LIBGLIB2),-glib,-no-glib)
+ QT5BASE_DEPENDENCIES   += $(if $(BR2_PACKAGE_LIBGLIB2),libglib2)
+ 
 -- 
-Ezequiel Garc?a, VanguardiaSur
-www.vanguardiasur.com.ar
+1.8.1.5
