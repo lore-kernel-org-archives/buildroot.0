@@ -1,65 +1,68 @@
 From: =?ISO-8859-1?Q?Ezequiel_Garc=EDa?= <ezequiel@vanguardiasur.com.ar>
-Date: Sun, 27 Oct 2013 22:09:15 -0200
-Subject: [Buildroot] [git commit] qt5base: fix QtGUI build without PNG
-	support
-In-Reply-To: <20131027072650.994C89BB81@busybox.osuosl.org>
-References: <20131027072650.994C89BB81@busybox.osuosl.org>
-Message-ID: <CAAEAJfDV+Q+6fGM41L9ddckkJaFzOsc5AGWN447bm01fi5FR+Q@mail.gmail.com>
+Date: Sun, 27 Oct 2013 22:11:28 -0200
+Subject: [Buildroot] [PATCH 2/2] qt5base: add an option to build and
+ install examples
+In-Reply-To: <CAAEAJfAX3yKCUiJ9hvTQXjmfbwZXx8F1EwwMp6GTR3WFpgLAYw@mail.gmail.com>
+References: <1381007796-20031-1-git-send-email-fatih.asici@gmail.com>
+ <1381007796-20031-2-git-send-email-fatih.asici@gmail.com>
+ <CAAEAJfDKwZ-EtAO61h=ZOE4QoAr75fZsw7s8aXhQjJm9VVBQwQ@mail.gmail.com>
+ <20131014184207.024e8383@skate>
+ <CAAEAJfAX3yKCUiJ9hvTQXjmfbwZXx8F1EwwMp6GTR3WFpgLAYw@mail.gmail.com>
+Message-ID: <CAAEAJfBY4VcUY_OR=kr6ZXoKMtBCFSB8MoOudZG1d2K11BNcFg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter,
+Fatih, Peter:
 
-On 26 October 2013 12:58, Peter Korsgaard <peter@korsgaard.com> wrote:
-> commit: http://git.buildroot.net/buildroot/commit/?id=0764b1cf4573f7fdae9faa280898a7a9950da100
-> branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 14 October 2013 14:02, Ezequiel Garc?a <ezequiel@vanguardiasur.com.ar> wrote:
+> On 14 October 2013 13:42, Thomas Petazzoni
+> <thomas.petazzoni@free-electrons.com> wrote:
+>> Dear Ezequiel Garc?a,
+>>
+>> On Mon, 14 Oct 2013 11:11:14 -0300, Ezequiel Garc?a wrote:
+>>
+>>> > +ifeq ($(BR2_PACKAGE_QT5BASE_EXAMPLES),y)
+>>> > +QT5BASE_CONFIGURE_OPTS += -make examples -compile-examples
+>>> > +else
+>>> > +QT5BASE_CONFIGURE_OPTS += -nomake examples
+>>> > +endif
+>>> > +
+>>>
+>>> Any reason why this is not with the rest of the options
+>>> and using the simpler:
+>>>
+>>> QT5BASE_CONFIGURE_OPTS += $(if $(BR2_PACKAGE_QT5BASE_EXAMPLES), \
+>>>         -make examples -compile-examples, \
+>>>         -nomake examples)
+>>>
+>>> ?
+>>
+>> I agree with your first point (it should be with the other configure
+>> option), but I disagree with your second point. The choice Fatih has
+>> made is the one we make everywhere in Buildroot whenever the "if"
+>> becomes multiline. I'd very much prefer Fatih to keep its original
+>> proposal.
+>>
+>> We use $(if ...) only when it can be done like this:
+>>
+>> FOO_SOMETHING = $(if $(BR2_BLEH),foo,bar)
+>>
+>> when it becomes more complicated than that, we use ifeq ... else ...
+>> endif blocks on several lines.
+>>
 >
-> Patch from upstream bug report:
-> https://bugreports.qt-project.org/browse/QTBUG-33496
+> Sure, no objections on my side.
 >
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-> ---
->  .../qt5base-0005-fix-gui-build-without-png.patch   |   22 ++++++++++++++++++++
->  1 files changed, 22 insertions(+), 0 deletions(-)
+> Fatih: if you re-submit this, you can add my:
 >
-> diff --git a/package/qt5/qt5base/qt5base-0005-fix-gui-build-without-png.patch b/package/qt5/qt5base/qt5base-0005-fix-gui-build-without-png.patch
-> new file mode 100644
-> index 0000000..ea0a7e3
-> --- /dev/null
-> +++ b/package/qt5/qt5base/qt5base-0005-fix-gui-build-without-png.patch
-> @@ -0,0 +1,22 @@
-> +[PATCH] fix QtGUI build without PNG support
-> +
-> +Upstream bug: https://bugreports.qt-project.org/browse/QTBUG-33496
-> +
-> +Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-> +---
-> + src/gui/kernel/qplatformtheme.cpp |    2 +-
-> + 1 file changed, 1 insertion(+), 1 deletion(-)
-> +
-> +Index: qt5base-5.1.1/src/gui/kernel/qplatformtheme.cpp
-> +===================================================================
-> +--- qt5base-5.1.1.orig/src/gui/kernel/qplatformtheme.cpp
-> ++++ qt5base-5.1.1/src/gui/kernel/qplatformtheme.cpp
-> +@@ -48,7 +48,7 @@
-> + #include <QtCore/qfileinfo.h>
-> + #include <qpalette.h>
-> + #include <qtextformat.h>
-> +-#include <qiconloader_p.h>
-> ++#include <private/qiconloader_p.h>
-> +
-> + QT_BEGIN_NAMESPACE
-> +
+> Tested-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+>
 
-Unless I'm missing something, I think Fatih sent a fix with the same
-upstream patch for this issue a long while ago:
-
-http://patchwork.ozlabs.org/patch/280804/
-
-Thanks!
+Peter: Will you take this as it is, or would you prefer a re-submit
+reordering as agreed above?
 -- 
 Ezequiel Garc?a, VanguardiaSur
 www.vanguardiasur.com.ar
