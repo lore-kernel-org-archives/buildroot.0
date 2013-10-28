@@ -1,36 +1,43 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 28 Oct 2013 09:54:34 +0100
-Subject: [Buildroot] [git commit] device_table_dev.txt: Increase /dev/ttymxc
-	count
-Message-ID: <20131028090448.174F19BC19@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 28 Oct 2013 10:11:02 +0100
+Subject: [Buildroot] [PATCH] qt5base: add tslib plugin
+In-Reply-To: <1382920167-3336-1-git-send-email-ezequiel@vanguardiasur.com.ar>
+ (Ezequiel Garcia's message of "Sun, 27 Oct 2013 21:29:27 -0300")
+References: <1382920167-3336-1-git-send-email-ezequiel@vanguardiasur.com.ar>
+Message-ID: <8761shu5eh.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=01fb86332e9030167011fc27753d148cc712452f
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Ezequiel" == Ezequiel Garcia <ezequiel@vanguardiasur.com.ar> writes:
 
-Since debug uart on imx6 sabreauto board is ttymxc3.
+ > Add support for Tslib plugin.
+ > Signed-off-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+ > ---
+ >  package/qt5/qt5base/Config.in  | 5 +++++
+ >  package/qt5/qt5base/qt5base.mk | 3 +++
+ >  2 files changed, 8 insertions(+)
 
-Signed-off-by: Abdul Hussain <hussain.abdul@outlook.com>
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- system/device_table_dev.txt |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
-
-diff --git a/system/device_table_dev.txt b/system/device_table_dev.txt
-index a93a2c8..9507939 100644
---- a/system/device_table_dev.txt
-+++ b/system/device_table_dev.txt
-@@ -35,7 +35,7 @@
- /dev/ttySC	c	666	0	0	204	8	0	1	8
- /dev/ttyPSC	c	666	0	0	204	148	0	1	4
- /dev/ttyUL	c	666	0	0	204	187	0	1	4
--/dev/ttymxc	c	666	0	0	207	16	0	1	3
-+/dev/ttymxc	c	666	0	0	207	16	0	1	4
+ > diff --git a/package/qt5/qt5base/Config.in b/package/qt5/qt5base/Config.in
+ > index e433373..cfe8f02 100644
+ > --- a/package/qt5/qt5base/Config.in
+ > +++ b/package/qt5/qt5base/Config.in
+ > @@ -185,4 +185,9 @@ config BR2_PACKAGE_QT5BASE_ICU
+ >  	  This option enables ICU support in Qt5. This is for example
+ >  	  needed for Qt5Webkit.
  
- # Input stuff
- /dev/input		d	755	0	0	-	-	-	-	-
+ > +config BR2_PACKAGE_QT5BASE_TSLIB
+ > +	bool "Enable Tslib support"
+ > +	select BR2_PACKAGE_TSLIB
+ > +	help
+ > +	  This options enables the Tslib plugin
+
+Tslib depends on !BR2_PREFER_STATIC_LIB, so you need to propagate that
+dependency and show a comment line if not available.
+
+Committed with that fixed, thanks.
+
+-- 
+Bye, Peter Korsgaard
