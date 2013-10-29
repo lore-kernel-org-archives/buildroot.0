@@ -1,75 +1,30 @@
-From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Tue, 29 Oct 2013 09:36:11 +0100
-Subject: [Buildroot] [PATCH v8 RESEND 1/8] package: add base dependency
- to every package
-In-Reply-To: <CAHkwnC9z_ySjX_dW3cfj-zDS1rz2_NDeh43n7YTk_JLgrAGJ=A@mail.gmail.com>
-References: <1382088860-30524-1-git-send-email-fabio.porcedda@gmail.com>
- <1382088860-30524-2-git-send-email-fabio.porcedda@gmail.com>
- <52683BBC.7070506@mind.be>
- <CAHkwnC_3oA+DKkUxVweB0Xt5wqWt11epFujXvmStEu25hGQNOA@mail.gmail.com>
- <5268F861.6050803@mind.be>
- <CAHkwnC9s0ZqVoE-5pZFwxb4adFw0hD3+SxrF4ri7jStbxypjTA@mail.gmail.com>
- <526A27FA.10602@mind.be>
- <CAHkwnC9z_ySjX_dW3cfj-zDS1rz2_NDeh43n7YTk_JLgrAGJ=A@mail.gmail.com>
-Message-ID: <CAHkwnC-aOXqGYFmurSNGRmRw60KJWSPc2upe66QjC+Mz6SX50g@mail.gmail.com>
+From: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+Date: Tue, 29 Oct 2013 10:21:10 +0100
+Subject: [Buildroot] [PATCH 1/1] imagemagick: bump to version 6.8.7-3
+Message-ID: <1383038470-8500-1-git-send-email-jerzy.grzegorek@trzebnica.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Oct 25, 2013 at 10:45 AM, Fabio Porcedda
-<fabio.porcedda@gmail.com> wrote:
-> On Fri, Oct 25, 2013 at 10:12 AM, Arnout Vandecappelle <arnout@mind.be> wrote:
->> On 25/10/13 10:07, Fabio Porcedda wrote:
->>>
->>> On Thu, Oct 24, 2013 at 12:37 PM, Arnout Vandecappelle<arnout@mind.be>
->>> wrote:
->>>>
->>>> >On 24/10/13 09:41, Fabio Porcedda wrote:
->>>>>
->>>>> >>
->>
->> [snip]
->>
->>>>> >>I've found a work around:
->>>>> >>
->>>>> >>$$($(2)_TARGET_SOURCE) $$($(2)_TARGET_RSYNC): | dirs prepare
->>>>> >>
->>>>> >># to prevent circular dependency
->>>>> >>ifneq ($(1),$(DEPENDENCIES_HOST_PREREQ))
->>>>> >>$$($(2)_TARGET_SOURCE) $$($(2)_TARGET_RSYNC): | dependencies
->>>>> >>endif
->>>>> >>
->>>>> >>What do you think about that?
->>>>
->>>> >
->>>> >
->>>> >  Looks good except that it's incorrect:-)  If HOST_PREREQ contains both
->>>> >ccache and sstrip (not to mention tar or xz), the condition won't match.
->>>> > You
->>>> >can try something like:
->>>> >
->>>> >ifeq ($(filter $(1),$(DEPENDENCIES_HOST_PREREQ)),)
->>>
->>> Ok good, I've updated the patch according.
->>>
->>
->>  Have you tested it with various combinations of dependencies?
->
-> I've tested enabling "BR2_CCACHE" and "BR2_STRIP_sstrip" with
-> qemu_x86_defconfig and seems works fine.
-> The circular dependencies are gone.
-> I think the patch now does not introduce any regression.
->
-> I'm testing the whole patch set with top-level parallel make and
-> enabling "BR2_CCACHE" and "BR2_STRIP_sstrip".
+Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+---
+ package/imagemagick/imagemagick.mk |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-The update patch seems to works fine.
-I found only an issue when enabling top-level parallel make and
-disabling /usr/bin/xz,
-but that is not a regression and it's an issue to solve with another patch.
-
-Regards
+diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
+index 4b58148..a31e799 100644
+--- a/package/imagemagick/imagemagick.mk
++++ b/package/imagemagick/imagemagick.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ IMAGEMAGICK_MAJOR = 6.8.7
+-IMAGEMAGICK_VERSION = $(IMAGEMAGICK_MAJOR)-1
++IMAGEMAGICK_VERSION = $(IMAGEMAGICK_MAJOR)-3
+ IMAGEMAGICK_SOURCE = ImageMagick-$(IMAGEMAGICK_VERSION).tar.xz
+ # The official ImageMagick site only keeps the latest versions
+ # available, which is annoying. Use an alternate site that keeps all
 -- 
-Fabio Porcedda
+1.7.9.5
