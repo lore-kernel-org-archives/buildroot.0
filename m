@@ -1,57 +1,28 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 29 Oct 2013 21:56:21 +0100
-Subject: [Buildroot] [PATCH 2/4] pkg-infra: introduce pre/post-step hooks
-In-Reply-To: <CAAXf6LX2vwh4EhxbD+ois1-3tCXgSGbGmmw+e9nP2D=09CzOZg@mail.gmail.com>
-References: <a356a9112eac610a00a35e48fa9a04a81a460fe0.1382894622.git.yann.morin.1998@free.fr>
- <cover.1382894622.git.yann.morin.1998@free.fr>
- <a89033d9a1639d8899191cae05b772b1646b6ddd.1382894622.git.yann.morin.1998@free.fr>
- <867c8550-360d-40e7-96d1-9391ed121afc@email.android.com>
- <20131029184331.GG3411@free.fr>
- <CAAXf6LX2vwh4EhxbD+ois1-3tCXgSGbGmmw+e9nP2D=09CzOZg@mail.gmail.com>
-Message-ID: <20131029205620.GH3411@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 29 Oct 2013 21:56:50 +0100
+Subject: [Buildroot] [PATCH] docs: document dhcpcd build problem on Blackfin
+Message-ID: <1383080210-6155-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas DS, All,
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ docs/manual/known-issues.txt | 3 +++
+ 1 file changed, 3 insertions(+)
 
-On 2013-10-29 21:03 +0100, Thomas De Schampheleire spake thusly:
-> Hi Yann, Ryan,
-> 
-> On Tue, Oct 29, 2013 at 7:43 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> > On 2013-10-27 22:40 +0100, Thomas De Schampheleire spake thusly:
-> 
-> >> I personally find the name STEP_HOOKS pretty vague, if you don't know
-> >> the context you have no clue what it could be. The other hooks
-> >> POST_EXTRACT etc are clear from their name.
-> >> Maybe, GLOBAL_INSTRUMENTATION_HOOKS?
-> >
-> > I'm on the side of Ryan here: it is way too long. :-p
-> > I'll try to see if I can come with a better name, though.
-> >
-> 
-> I'm fine with looking at other names, of course, but I don't see how
-> GLOBAL_INSTRUMENTATION_HOOKS
-> is longer than
-> FOO_POST_INSTALL_STAGING_HOOKS
-> FOO_POST_INSTALL_TARGET_HOOKS
-> or
-> CONNTRACK_TOOLS_PRE_CONFIGURE_HOOKS
-> 
-> Besides, it's not that you're writing this so regularly that the
-> length is really so important, IMHO.
-
-Yeah, yeah, right. :-)
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/docs/manual/known-issues.txt b/docs/manual/known-issues.txt
+index 22710fb..d390b93 100644
+--- a/docs/manual/known-issues.txt
++++ b/docs/manual/known-issues.txt
+@@ -30,3 +30,6 @@ Known issues
+ * The +prboom+ package triggers a compiler failure with the SuperH 4
+   compiler from Sourcery CodeBench, version 2012.09.
+ 
++* The +dhcpcd+ package doesn't build with the Blackfin toolchains
++  provided by Analog Devices, because they lack the
++  +UCLIBC_SUPPORT_AI_ADDRCONFIG+ option.
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.8.1.2
