@@ -1,30 +1,45 @@
-From: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
-Date: Tue, 29 Oct 2013 10:21:10 +0100
-Subject: [Buildroot] [PATCH 1/1] imagemagick: bump to version 6.8.7-3
-Message-ID: <1383038470-8500-1-git-send-email-jerzy.grzegorek@trzebnica.net>
+From: Sven Neumann <neumann@teufel.de>
+Date: Tue, 29 Oct 2013 10:24:50 +0100
+Subject: [Buildroot] Samba 4.1 in buildroot
+Message-ID: <1383038690.12630.7.camel@sven>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
----
- package/imagemagick/imagemagick.mk |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Hi,
 
-diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
-index 4b58148..a31e799 100644
---- a/package/imagemagick/imagemagick.mk
-+++ b/package/imagemagick/imagemagick.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- IMAGEMAGICK_MAJOR = 6.8.7
--IMAGEMAGICK_VERSION = $(IMAGEMAGICK_MAJOR)-1
-+IMAGEMAGICK_VERSION = $(IMAGEMAGICK_MAJOR)-3
- IMAGEMAGICK_SOURCE = ImageMagick-$(IMAGEMAGICK_VERSION).tar.xz
- # The official ImageMagick site only keeps the latest versions
- # available, which is annoying. Use an alternate site that keeps all
+the recently released version 4.1 of the Samba suite finally supports
+the SMB2 und SMB3 protocols on the server and client side. This is a
+feature that we are in desperate need of and thus I would like to get
+Samba 4 into buildroot.
+
+So my questions are:
+
+(1) Is anyone already working on this?
+
+(2) Would you prefer if the samba package was just ported to the latest
+    stable samba 4 version or would you prefer if a new package called
+    samba4 was added? In case that you prefer the latter, should the
+    existing samba package be renamed to samba3?
+
+
+Regards,
+Sven
+
 -- 
-1.7.9.5
+Sven Neumann
+Senior System Architect
+
+Lautsprecher Teufel GmbH
+Gewerbehof B?lowbogen - Aufgang D1
+B?lowstr. 66 - 10783 Berlin - Germany
+
+Registernummer HRB 20271 beim Amtsgericht Berlin-Charlottenburg
+Gesch?ftsf?hrer: Edgar van Velzen
+
+Tel. +49 (0)30 - 300 930 - 0, Direkt -153
+neumann at teufel.de  
+
+www.teufel.de  www.teufelaudio.com  http://blog.teufel.de
