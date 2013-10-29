@@ -1,35 +1,68 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Tue, 29 Oct 2013 21:08:36 +0100
-Subject: [Buildroot] [PATCH 1/4] post-{build,
- images} hooks: export BUILD_DIR too
-In-Reply-To: <20131028061708.5e69ab8e@skate>
-References: <cover.1382894622.git.yann.morin.1998@free.fr>
- <a356a9112eac610a00a35e48fa9a04a81a460fe0.1382894622.git.yann.morin.1998@free.fr>
- <a4300dc9-2aa9-4d40-9b79-26ec5b317c52@email.android.com>
- <20131028061708.5e69ab8e@skate>
-Message-ID: <CAAXf6LUAwdfteBNh2YPuijUqjqO9CteoqV_2emQFcD+PFuPVJw@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 29 Oct 2013 21:16:22 +0100
+Subject: [Buildroot] Architecture build statistics
+In-Reply-To: <52701682.2040208@zankel.net>
+References: <20131029204108.5d707d09@skate>
+	<52701682.2040208@zankel.net>
+Message-ID: <20131029211622.62459eef@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Dear Chris Zankel,
 
-On Mon, Oct 28, 2013 at 6:17 AM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-[..]
->
-> (Unfortunately, we've asked you to not wrapped patches you reply to,
-> but now, it has the consequence that you no longer wrap what you write.
-> Well, I guess with K9 it's hard to get both).
->
+On Tue, 29 Oct 2013 13:11:46 -0700, Chris Zankel wrote:
 
-Hmm :-o
-I'm not sure if I can easily fix this with K9. My earlier bug report
-and even partial patch on the k9 mailing list didn't get any response.
-I'll check the source but I'll try not to write long sentences in the
-mean time ;-)
+> Great statistics. Xtensa definitely needs some work here ;-)
 
-Best regards,
+It seems yes :-)
+
+Are you interested in receiving a daily e-mail with the Xtensa build
+failures, if any?
+
+> I looked into the failures a while ago and started to create patches. 
+
+Please submit them, then :)
+
+> However, one major issue was lacking NPTL support in uClibc. We are 
+> currently working on it and are getting close to support it. This 
+> already should push the pct columns higher :-)
+
+Unfortunately, seeing the absolute desert of release activity the
+uClibc project is showing, I am not sure when any feature of this size
+can be merged, and even worse released :-(
+
+In the mean time, it would be good if we could identify such packages,
+and add the appropriate dependencies to avoid autobuilder failures. Can
+you point us which packages need NPTL support?
+
+For the record, the 10 packages causing the highest number of problems
+since July, 1st 2013, are:
+
++-------------------+-----+
+| reason            | cnt |
++-------------------+-----+
+| binutils-2.21.1   |  96 |
+| m4-1.4.16         |  37 |
+| binutils-2.22     |  30 |
+| libnspr-4.9.6     |  21 |
+| m4-1.4.17         |  17 |
+| cdrkit-1.1.11     |  14 |
+| ffmpeg-0.8.12     |   8 |
+| iozone-3_414      |   8 |
+| gstreamer-0.10.36 |   6 |
+| libpfm4-4.3.0     |   6 |
++-------------------+-----+
+
+Looks like fixing binutils is a good thing to do in the very near
+future. Can you send a patch for that?
+
+Thanks!
+
 Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
