@@ -1,42 +1,30 @@
-From: Alvaro Gamez <alvaro.gamez@hazent.com>
-Date: Tue, 29 Oct 2013 23:02:29 +0100
+From: Chris Zankel <chris@zankel.net>
+Date: Tue, 29 Oct 2013 13:11:46 -0700
 Subject: [Buildroot] Architecture build statistics
 In-Reply-To: <20131029204108.5d707d09@skate>
 References: <20131029204108.5d707d09@skate>
-Message-ID: <CAM+bi4vODTx=Yerh+n=dBkAEf1N3H576rP=dp1X3Lw2Sw3_g0w@mail.gmail.com>
+Message-ID: <52701682.2040208@zankel.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all, hi Thomas
+Hi Thomas,
 
-This is kind of an apology, for I am yet to review those few errors
-compiling openssl for microblaze you noticed a couple of weeks ago.
+Great statistics. Xtensa definitely needs some work here ;-)
 
-I can currently spend about a 10% of my paid time to make sure the software
-we code at our compay is cross platform and for that I use buildroot.
-Little by little, I will be facing those bugs (specifically for arm,
-powerpc microblaze, and maybe x86_64 and i686) and also will encounter the
-need to build some new packages (such as libxmlrpc I sent a few days ago).
+I looked into the failures a while ago and started to create patches. 
+However, one major issue was lacking NPTL support in uClibc. We are 
+currently working on it and are getting close to support it. This 
+already should push the pct columns higher :-)
 
-I can't promise any specific amount of direct effort to solve any specific
-issue, but I just want you all to know that I keep them in mind and will
-try to help out with them during the little time I can dedicate to
-buildroot.
-
-Hopefully, some of those bugs will be blocking my cross porting work and
-then I'll be able to explain my boss why I spent my time solving them. I
-wish I could spend more time to buildroot outside job, but for now that'll
-be it.
-
-Thank you all, regards
+Thanks,
+-Chris
 
 
 
-2013/10/29 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-
+On 10/29/13, 12:41 PM, Thomas Petazzoni wrote:
 > Hello all,
 >
 > This e-mail is intentionally Cc'ed to a number of people who are
@@ -76,16 +64,3 @@ Thank you all, regards
 > Thanks,
 >
 > Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux, Kernel and Android engineering
-> http://free-electrons.com
->
-
-
-
--- 
-?lvaro G?mez Machado
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20131029/ad1590fa/attachment.html>
