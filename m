@@ -1,43 +1,35 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Tue, 29 Oct 2013 21:03:18 +0100
-Subject: [Buildroot] [PATCH 2/4] pkg-infra: introduce pre/post-step hooks
-In-Reply-To: <20131029184331.GG3411@free.fr>
-References: <a356a9112eac610a00a35e48fa9a04a81a460fe0.1382894622.git.yann.morin.1998@free.fr>
- <cover.1382894622.git.yann.morin.1998@free.fr>
- <a89033d9a1639d8899191cae05b772b1646b6ddd.1382894622.git.yann.morin.1998@free.fr>
- <867c8550-360d-40e7-96d1-9391ed121afc@email.android.com>
- <20131029184331.GG3411@free.fr>
-Message-ID: <CAAXf6LX2vwh4EhxbD+ois1-3tCXgSGbGmmw+e9nP2D=09CzOZg@mail.gmail.com>
+Date: Tue, 29 Oct 2013 21:08:36 +0100
+Subject: [Buildroot] [PATCH 1/4] post-{build,
+ images} hooks: export BUILD_DIR too
+In-Reply-To: <20131028061708.5e69ab8e@skate>
+References: <cover.1382894622.git.yann.morin.1998@free.fr>
+ <a356a9112eac610a00a35e48fa9a04a81a460fe0.1382894622.git.yann.morin.1998@free.fr>
+ <a4300dc9-2aa9-4d40-9b79-26ec5b317c52@email.android.com>
+ <20131028061708.5e69ab8e@skate>
+Message-ID: <CAAXf6LUAwdfteBNh2YPuijUqjqO9CteoqV_2emQFcD+PFuPVJw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann, Ryan,
+Hi Thomas,
 
-On Tue, Oct 29, 2013 at 7:43 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> On 2013-10-27 22:40 +0100, Thomas De Schampheleire spake thusly:
-
->> I personally find the name STEP_HOOKS pretty vague, if you don't know
->> the context you have no clue what it could be. The other hooks
->> POST_EXTRACT etc are clear from their name.
->> Maybe, GLOBAL_INSTRUMENTATION_HOOKS?
+On Mon, Oct 28, 2013 at 6:17 AM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+[..]
 >
-> I'm on the side of Ryan here: it is way too long. :-p
-> I'll try to see if I can come with a better name, though.
+> (Unfortunately, we've asked you to not wrapped patches you reply to,
+> but now, it has the consequence that you no longer wrap what you write.
+> Well, I guess with K9 it's hard to get both).
 >
 
-I'm fine with looking at other names, of course, but I don't see how
-GLOBAL_INSTRUMENTATION_HOOKS
-is longer than
-FOO_POST_INSTALL_STAGING_HOOKS
-FOO_POST_INSTALL_TARGET_HOOKS
-or
-CONNTRACK_TOOLS_PRE_CONFIGURE_HOOKS
-
-Besides, it's not that you're writing this so regularly that the
-length is really so important, IMHO.
+Hmm :-o
+I'm not sure if I can easily fix this with K9. My earlier bug report
+and even partial patch on the k9 mailing list didn't get any response.
+I'll check the source but I'll try not to write long sentences in the
+mean time ;-)
 
 Best regards,
 Thomas
