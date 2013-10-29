@@ -1,60 +1,54 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 29 Oct 2013 19:41:14 +0100
-Subject: [Buildroot] [PATCH 1/4] post-{build,
- images} hooks: export BUILD_DIR too
-In-Reply-To: <20131028061708.5e69ab8e@skate>
-References: <cover.1382894622.git.yann.morin.1998@free.fr>
- <a356a9112eac610a00a35e48fa9a04a81a460fe0.1382894622.git.yann.morin.1998@free.fr>
- <a4300dc9-2aa9-4d40-9b79-26ec5b317c52@email.android.com>
- <20131028061708.5e69ab8e@skate>
-Message-ID: <20131029184114.GF3411@free.fr>
+Date: Tue, 29 Oct 2013 19:43:31 +0100
+Subject: [Buildroot] [PATCH 2/4] pkg-infra: introduce pre/post-step hooks
+In-Reply-To: <867c8550-360d-40e7-96d1-9391ed121afc@email.android.com>
+References: <a356a9112eac610a00a35e48fa9a04a81a460fe0.1382894622.git.yann.morin.1998@free.fr>
+ <cover.1382894622.git.yann.morin.1998@free.fr>
+ <a89033d9a1639d8899191cae05b772b1646b6ddd.1382894622.git.yann.morin.1998@free.fr>
+ <867c8550-360d-40e7-96d1-9391ed121afc@email.android.com>
+Message-ID: <20131029184331.GG3411@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas P, All,
-
-On 2013-10-28 06:17 +0100, Thomas Petazzoni spake thusly:
-> Dear Thomas De Schampheleire,
-> 
-> On Sun, 27 Oct 2013 22:12:34 +0100, Thomas De Schampheleire wrote:
-> 
-> > >+# This extra environment we can not export ourselves, so we have
-> > >+# to expicitly pass it to user-supplied external hooks (eg.
-> > >+# post-build, post-images)
-> > >+USER_HOOKS_EXTRA_ENV=\
-> > >+	BUILD_DIR=$(BUILD_DIR)
+On 2013-10-27 22:40 +0100, Thomas De Schampheleire spake thusly:
+> "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+> >From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> >This hooks will let us instrument the build process in many ways:
 [--SNIP--]
-> Regarding BUILD_DIR and other variables being exported, is it really
-> safe to export other variables with a relatively generic name such as
-> TARGET_DIR, BASE_DIR, HOST_DIR, BINARIES_DIR, etc. ? Should we instead
-> expose them to post-build/post-image scripts as BR2_<something> ? But
-> well, of course, it means breaking the existing API, which isn't nice.
+> >diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+> >index 4bba4b5..799555c 100644
+> >--- a/package/pkg-generic.mk
+> >+++ b/package/pkg-generic.mk
+> >@@ -21,6 +21,29 @@
+> > ################################################################################
+> > 
+> > ################################################################################
+> >+# Helper functions to catch start/end of each steps
+> 
+> each step
+> 
+> >+################################################################################
+> >+
+> >+# Those two functions are called by each steps below.
+> 
+> each step
 
-If we export all of those variables with this mechanism rathe than with
-the make's 'export', then we again dwell on the sagfe side, and we need
-not rename them.
+Both: OK.
 
-We should have named them BR2_something from the beginning, even for our
-internal use, to avoid any name-clashing with the calling environment.
-For example:
+> >+# They are responsible for calling all hooks defined in $(STEP_HOOKS)
+> 
+> I personally find the name STEP_HOOKS pretty vague, if you don't know
+> the context you have no clue what it could be. The other hooks
+> POST_EXTRACT etc are clear from their name.
+> Maybe, GLOBAL_INSTRUMENTATION_HOOKS?
 
-    $ export BUILD_DIR=/path/to/my/project/build.dir
-    $ mkdir -p "${BUILD_DIR}/buildroot.output"
-    $ make -C "${BUILD_DIR}//buildroot.output"
+I'm on the side of Ryan here: it is way too long. :-p
+I'll try to see if I can come with a better name, though.
 
-Suppose the user has post-{build,image} or other rsource files (eg.
-kernel .config) in its ${BUILD_DIR}, then his/her configuration is
-broken.
-
-But that's the way story goes, we fscked up at the beginning, we have to
-live with them, now... :-(
-
-Anyway, I'll keep this change as-is, and make a new cset that export all
-these variables to using this new mechanism, so they only get exported
-for post-{build,image} scripts (and the new steps-user-hook).
+Thanks for the review!
 
 Regards,
 Yann E. MORIN.
