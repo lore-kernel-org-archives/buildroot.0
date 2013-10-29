@@ -1,53 +1,43 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 29 Oct 2013 20:41:08 +0100
-Subject: [Buildroot] Architecture build statistics
-Message-ID: <20131029204108.5d707d09@skate>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Tue, 29 Oct 2013 21:03:18 +0100
+Subject: [Buildroot] [PATCH 2/4] pkg-infra: introduce pre/post-step hooks
+In-Reply-To: <20131029184331.GG3411@free.fr>
+References: <a356a9112eac610a00a35e48fa9a04a81a460fe0.1382894622.git.yann.morin.1998@free.fr>
+ <cover.1382894622.git.yann.morin.1998@free.fr>
+ <a89033d9a1639d8899191cae05b772b1646b6ddd.1382894622.git.yann.morin.1998@free.fr>
+ <867c8550-360d-40e7-96d1-9391ed121afc@email.android.com>
+ <20131029184331.GG3411@free.fr>
+Message-ID: <CAAXf6LX2vwh4EhxbD+ois1-3tCXgSGbGmmw+e9nP2D=09CzOZg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello all,
+Hi Yann, Ryan,
 
-This e-mail is intentionally Cc'ed to a number of people who are
-working on specific architectures in Buildroot, and specifically the
-architectures having the highest number of problems in the autobuilders.
+On Tue, Oct 29, 2013 at 7:43 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> On 2013-10-27 22:40 +0100, Thomas De Schampheleire spake thusly:
 
-I generated some statistics of the number of failed builds vs.
-successful builds since July, 1st 2013, and here are the results
-(ordered from the worst architecture to the best one) :
+>> I personally find the name STEP_HOOKS pretty vague, if you don't know
+>> the context you have no clue what it could be. The other hooks
+>> POST_EXTRACT etc are clear from their name.
+>> Maybe, GLOBAL_INSTRUMENTATION_HOOKS?
+>
+> I'm on the side of Ryan here: it is way too long. :-p
+> I'll try to see if I can come with a better name, though.
+>
 
-+------------+---------+----------+-------+------------+------------+
-| arch       | success | failures | total | pctsuccess | pctfailure |
-+------------+---------+----------+-------+------------+------------+
-| bfin       |      10 |      607 |   617 |     1.6207 |    98.3793 |
-| microblaze |       6 |      308 |   314 |     1.9108 |    98.0892 |
-| nios2      |       2 |       49 |    51 |     3.9216 |    96.0784 |
-| xtensa     |      13 |      314 |   327 |     3.9755 |    96.0245 |
-| avr32      |      34 |      305 |   339 |    10.0295 |    89.9705 |
-| mips64el   |     162 |      498 |   660 |    24.5455 |    75.4545 |
-| aarch64    |      82 |      243 |   325 |    25.2308 |    74.7692 |
-| arc        |      95 |      234 |   329 |    28.8754 |    71.1246 |
-| sh4a       |     158 |      171 |   330 |    47.8788 |    51.8182 |
-| mipsel     |     172 |      168 |   340 |    50.5882 |    49.4118 |
-| mips       |     172 |      165 |   337 |    51.0386 |    48.9614 |
-| arm        |    2302 |     1788 |  4097 |    56.1875 |    43.6417 |
-| powerpc    |    2794 |     1616 |  4411 |    63.3416 |    36.6357 |
-| sh4        |     208 |      120 |   328 |    63.4146 |    36.5854 |
-| x86_64     |     874 |      412 |  1288 |    67.8571 |    31.9876 |
-| i686       |    2369 |      572 |  2943 |    80.4961 |    19.4359 |
-+------------+---------+----------+-------+------------+------------+
+I'm fine with looking at other names, of course, but I don't see how
+GLOBAL_INSTRUMENTATION_HOOKS
+is longer than
+FOO_POST_INSTALL_STAGING_HOOKS
+FOO_POST_INSTALL_TARGET_HOOKS
+or
+CONNTRACK_TOOLS_PRE_CONFIGURE_HOOKS
 
-It would be really nice if the people working on those architectures in
-Buildroot could contribute a little bit more to fix the autobuilders
-failures, or at least get in touch with us to discuss how to solve
-them, or if they have no clue how to solve them.
+Besides, it's not that you're writing this so regularly that the
+length is really so important, IMHO.
 
-Thanks,
-
+Best regards,
 Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
