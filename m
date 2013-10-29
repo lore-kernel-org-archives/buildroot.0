@@ -1,50 +1,55 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 29 Oct 2013 21:54:01 +0100
-Subject: [Buildroot] [PATCH 2/3] toolchain-external: fix visibility and
-	length of Linaro toolchain comment
+Date: Tue, 29 Oct 2013 21:54:02 +0100
+Subject: [Buildroot] [PATCH 3/3] glibc,
+	toolchain-external: copy libthread_db when gdb is enabled
 In-Reply-To: <1383080042-5827-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1383080042-5827-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1383080042-5827-3-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1383080042-5827-4-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Maxime Ripard reported that the Linaro toolchains were not visible
-when selecting a Cortex-A, but forgetting to set the EABI to
-EABIhf. While this is expected, Buildroot should normally should a
-comment in this case. However, the comment is only visible when the
-selected ARM architecture is not ARMv7 *and* the EABI is not
-EABIhf. Instead, make the comment visible when either the selected
-architecture is not ARMv7 *or* when the selected EABI is not EABIhf.
-
-While we're at it, reword the comment text so that it actually fits
-within the limits of the menuconfig screen.
+As Samuel Martin noticed, libthread_db is not only needed when
+cross-gdb+gdbserver is used, but also when the native gdb is used on
+the target. As a consequence, this patch modifies the glibc package
+and the external toolchain logic to ensure that libthread_db is copied
+to the target either when the native gdb or gdbserver is enabled, by
+relying on the BR2_PACKAGE_GDB option, which is enabled when native
+gdb and/or gdbserver are enabled.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Reported-by: Maxime Ripard <maxime.ripard@free-electrons.com>
-Cc: Maxime Ripard <maxime.ripard@free-electrons.com>
 ---
- toolchain/toolchain-external/Config.in | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ package/glibc/glibc.mk                             | 2 +-
+ toolchain/toolchain-external/toolchain-external.mk | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-index 48b5865..ad35dc7 100644
---- a/toolchain/toolchain-external/Config.in
-+++ b/toolchain/toolchain-external/Config.in
-@@ -66,10 +66,9 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_07
+diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
+index 0dab492..2e7fe82 100644
+--- a/package/glibc/glibc.mk
++++ b/package/glibc/glibc.mk
+@@ -116,7 +116,7 @@ GLIBC_LIBS_LIB = \
+ 	libnsl.so.* libpthread.so.* libresolv.so.* librt.so.* libutil.so.*   \
+ 	libnss_files.so.* libnss_dns.so.*
  
- 	  To use this toolchain, you must disable soft float usage.
+-ifeq ($(BR2_PACKAGE_GDB_SERVER),y)
++ifeq ($(BR2_PACKAGE_GDB),y)
+ GLIBC_LIBS_LIB += libthread_db.so.*
+ endif
  
--comment "Linaro toolchains available for Cortex-A{5,7,8,9,15} and the EABIhf ABI"
-+comment "Linaro toolchains available for Cortex-A + EABIhf"
- 	depends on BR2_arm
--	depends on BR2_GCC_TARGET_ARCH != "armv7-a"
--	depends on !BR2_ARM_EABIHF
-+	depends on BR2_GCC_TARGET_ARCH != "armv7-a" || !BR2_ARM_EABIHF
- 
- config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201305
- 	bool "Sourcery CodeBench ARM 2013.05"
+diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
+index 771f69a..9f53a34 100644
+--- a/toolchain/toolchain-external/toolchain-external.mk
++++ b/toolchain/toolchain-external/toolchain-external.mk
+@@ -63,7 +63,7 @@ LIB_EXTERNAL_LIBS+=ld*.so.*
+ endif
+ ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
+ LIB_EXTERNAL_LIBS+=libpthread.so.*
+-ifneq ($(BR2_PACKAGE_GDB_SERVER)$(BR2_TOOLCHAIN_EXTERNAL_GDB_SERVER_COPY),)
++ifneq ($(BR2_PACKAGE_GDB)$(BR2_TOOLCHAIN_EXTERNAL_GDB_SERVER_COPY),)
+ LIB_EXTERNAL_LIBS+=libthread_db.so.*
+ endif # gdbserver
+ endif # ! no threads
 -- 
 1.8.1.2
