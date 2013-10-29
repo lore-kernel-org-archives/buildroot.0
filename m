@@ -1,51 +1,55 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 29 Oct 2013 21:54:00 +0100
-Subject: [Buildroot] [PATCH 1/3] toolchain-external: add missing symlink for
-	Linaro toolchains
-In-Reply-To: <1383080042-5827-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1383080042-5827-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1383080042-5827-2-git-send-email-thomas.petazzoni@free-electrons.com>
+From: rjbarnet at rockwellcollins.com <rjbarnet@rockwellcollins.com>
+Date: Tue, 29 Oct 2013 16:14:21 -0500
+Subject: [Buildroot] [RFC] Continuous integration
+In-Reply-To: <1464774.i3ScgRtXEf@sagittae>
+References: <1464774.i3ScgRtXEf@sagittae>
+Message-ID: <OF67614B25.FA9C8BC6-ON86257C13.00702AA5-86257C13.0074AB06@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-In 11ec38b6950 ("toolchain-external: fix Linaro ARM toolchain
-support"), we fixed the support for Linaro EABIhf toolchains by adding
-a /lib/arm-linux-gnueabihf -> /lib symbolic link. This is needed
-because the dynamic loader looks for libraries in
-/lib/arm-linux-gnueabihf rather than the usual /lib, but Buildroot
-installs all libraries in /lib.
+J?r?me, Thomas P, All,
 
-However, we forgot that the dynamic loader also loads libraries from
-/usr/lib/arm-linux-gnueabihf rather than /usr/lib, so this patch fixes
-that by adding the necessary symbolic link.
+I don't know what Jerome's plans are for his autobuilder, but I like the 
+way that results are displayed on the links you provided below. It has 
+colors and has nice features for sorting the results which make it easy 
+for me to see the information I'm interested in rather quickly.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Reported-by: Maxime Ripard <maxime.ripard@free-electrons.com>
-Cc: Maxime Ripard <maxime.ripard@free-electrons.com>
----
- toolchain/toolchain-external/toolchain-external.mk | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+Thomas P - in your email entitled - Architecture build statistics - it 
+would be nice to see a page where these statistics could displayed 
+continuously. One idea that comes to be mind is that it would be nice if 
+this autobuild site could aggregate the results from the current build 
+infrastructure (maybe it already does). The website would then be able to 
+provide these architecture statistic and package statistic break.
 
-diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
-index d41cc7c..771f69a 100644
---- a/toolchain/toolchain-external/toolchain-external.mk
-+++ b/toolchain/toolchain-external/toolchain-external.mk
-@@ -222,10 +222,11 @@ TOOLCHAIN_EXTERNAL_WRAPPER_ARGS += -DBR_SOFTFLOAT=1
- endif
- 
- # The Linaro ARMhf toolchain expects the libraries in
--# /lib/arm-linux-gnueabihf, but Buildroot copies them to /lib, so we
--# need to create a symbolic link.
-+# {/usr,}/lib/arm-linux-gnueabihf, but Buildroot copies them to
-+# {/usr,}/lib, so we need to create a symbolic link.
- define TOOLCHAIN_EXTERNAL_LINARO_ARMHF_SYMLINK
- 	ln -sf . $(TARGET_DIR)/lib/arm-linux-gnueabihf
-+	ln -sf . $(TARGET_DIR)/usr/lib/arm-linux-gnueabihf
- endef
- 
- ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201109),y)
--- 
-1.8.1.2
+J?r?me Pouiller <jezz@sysmic.org> wrote on 10/25/2013 07:46:49 AM:
+
+> I begin to wrote an autobuilder that would looks like that. You can sees
+> results there : http://sysmic.org/~jezz/autobuilder/ (at beginning, it 
+> was mainly for my personal needs)
+> 
+> It use a set of reference configurations which normally include all 
+> packages (at least as much as possible). It compute list of packages and 
+
+> their directories, list of targets for each configuration and 
+> dependencies of of each packages for each configuration. It is able to 
+> compute reverse dependencies and recursive dependencies.
+> 
+> Next, it ask to git modification time for each package directory. It is 
+> able to detect couple of packages/configuration which build time is 
+> older than package directory modification time.
+> 
+> It compute list of packages/configuration couple and sort it : never 
+> built first, modified next, a dependency modified after and finally 
+> other packages, ordered by last build time. Job queue is available 
+> there: http://sysmic.org/~jezz/autobuilder/jobqueue.html (/!\ 4Mo).
+
+I like the website and I know some of my colleagues are intrigued by this 
+as this might provide an way to continuously test our changes across 
+different architectures. Hopefully we have some time soon to investigate 
+this.
+
+Thanks,
+-Ryan
