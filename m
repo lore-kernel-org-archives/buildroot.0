@@ -1,47 +1,52 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 29 Oct 2013 10:37:05 +0100
-Subject: [Buildroot] Samba 4.1 in buildroot
-In-Reply-To: <1383038690.12630.7.camel@sven>
-References: <1383038690.12630.7.camel@sven>
-Message-ID: <20131029103705.2813a190@skate>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Tue, 29 Oct 2013 10:35:39 +0100
+Subject: [Buildroot] [PATCH v8 RESEND 1/8] package: add base dependency
+ to every package
+In-Reply-To: <CAHkwnC-aOXqGYFmurSNGRmRw60KJWSPc2upe66QjC+Mz6SX50g@mail.gmail.com>
+References: <1382088860-30524-1-git-send-email-fabio.porcedda@gmail.com>
+ <1382088860-30524-2-git-send-email-fabio.porcedda@gmail.com>
+ <52683BBC.7070506@mind.be>
+ <CAHkwnC_3oA+DKkUxVweB0Xt5wqWt11epFujXvmStEu25hGQNOA@mail.gmail.com>
+ <5268F861.6050803@mind.be>
+ <CAHkwnC9s0ZqVoE-5pZFwxb4adFw0hD3+SxrF4ri7jStbxypjTA@mail.gmail.com>
+ <526A27FA.10602@mind.be>
+ <CAHkwnC9z_ySjX_dW3cfj-zDS1rz2_NDeh43n7YTk_JLgrAGJ=A@mail.gmail.com>
+ <CAHkwnC-aOXqGYFmurSNGRmRw60KJWSPc2upe66QjC+Mz6SX50g@mail.gmail.com>
+Message-ID: <CAAXf6LVCHQQrheFikG=dS+xGdPgPBXQq4hJbQEKJ6GQY817OMA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Sven Neumann,
+Hi Fabio,
 
-On Tue, 29 Oct 2013 10:24:50 +0100, Sven Neumann wrote:
+On Tue, Oct 29, 2013 at 9:36 AM, Fabio Porcedda
+<fabio.porcedda@gmail.com> wrote:
+[..]
+>>>  Have you tested it with various combinations of dependencies?
+>>
+>> I've tested enabling "BR2_CCACHE" and "BR2_STRIP_sstrip" with
+>> qemu_x86_defconfig and seems works fine.
+>> The circular dependencies are gone.
+>> I think the patch now does not introduce any regression.
+>>
+>> I'm testing the whole patch set with top-level parallel make and
+>> enabling "BR2_CCACHE" and "BR2_STRIP_sstrip".
+>
+> The update patch seems to works fine.
+> I found only an issue when enabling top-level parallel make and
+> disabling /usr/bin/xz,
+> but that is not a regression and it's an issue to solve with another patch.
+>
 
-> the recently released version 4.1 of the Samba suite finally supports
-> the SMB2 und SMB3 protocols on the server and client side. This is a
-> feature that we are in desperate need of and thus I would like to get
-> Samba 4 into buildroot.
-> 
-> So my questions are:
-> 
-> (1) Is anyone already working on this?
+Can you elaborate on this? What is the problem you're seeing exactly,
+and how did you 'disable /usr/bin/xz' ?
+When buildroot cannot find a working xzcat version, it builds one
+itself through host-xz. This should still work in case of parallel
+builds.
+The same principle applies when the 'tar' version on host is
+non-existing or too old.
 
-Maxime Ripard had started an effort, but since Samba4 is now based on
-'waf', the number of cross-compilation issues is important, and they
-are not necessarily easy to fix. We might have some opportunity to work
-on this in the near future, but it's not exactly clear when.
-
-> (2) Would you prefer if the samba package was just ported to the latest
->     stable samba 4 version or would you prefer if a new package called
->     samba4 was added? In case that you prefer the latter, should the
->     existing samba package be renamed to samba3?
-
-I believe it should be a different package. We can keep the existing
-package named 'samba', and have the new one named 'samba4', I don't
-think renaming the old one from samba to samba3 is really worth the
-effort.
-
-Best regards,
-
+Thanks,
 Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
