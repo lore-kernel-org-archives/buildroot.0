@@ -1,43 +1,26 @@
-From: Ezequiel Garcia <ezequiel.garcia@free-electrons.com>
-Date: Tue, 29 Oct 2013 20:41:04 -0300
-Subject: [Buildroot] Architecture build statistics
-In-Reply-To: <20131029204108.5d707d09@skate>
-References: <20131029204108.5d707d09@skate>
-Message-ID: <20131029234103.GA2527@localhost>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 30 Oct 2013 00:42:03 +0100
+Subject: [Buildroot] [PATCH] docs: document dhcpcd build problem on
+ Blackfin
+In-Reply-To: <1383080210-6155-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1383080210-6155-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20131030004203.220fd292@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Oct 29, 2013 at 08:41:08PM +0100, Thomas Petazzoni wrote:
-> 
-> This e-mail is intentionally Cc'ed to a number of people who are
-> working on specific architectures in Buildroot, and specifically the
-> architectures having the highest number of problems in the autobuilders.
-> 
-> I generated some statistics of the number of failed builds vs.
-> successful builds since July, 1st 2013, and here are the results
-> (ordered from the worst architecture to the best one) :
-> 
-> +------------+---------+----------+-------+------------+------------+
-> | arch       | success | failures | total | pctsuccess | pctfailure |
-> +------------+---------+----------+-------+------------+------------+
-> | bfin       |      10 |      607 |   617 |     1.6207 |    98.3793 |
-> | microblaze |       6 |      308 |   314 |     1.9108 |    98.0892 |
-> | nios2      |       2 |       49 |    51 |     3.9216 |    96.0784 |
+Dear Thomas Petazzoni,
 
-Mind sharing what's breaking in nios2? If it's related to either libffi
-or the internal toolchain, then we'll have to wait until proper support
-is added upstream.
+On Tue, 29 Oct 2013 21:56:50 +0100, Thomas Petazzoni wrote:
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-As a side note, wouldn't it be nice to have per-arch-filtering in the
-autobuild status site? Going through the code quickly, I think it's just
-a matter of adding a parameter to the SQL query, right?
+This patch is useless. dhcpcd uses fork(), so there is no chance for it
+to work on Blackfin. I'm marking the patch as rejected in patchwork.
 
-Maybe this would help arch-maintainers to focus in what's relevant for
-them?
+Thomas
 -- 
-Ezequiel Garc?a, Free Electrons
-Embedded Linux, Kernel and Android Engineering
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
 http://free-electrons.com
