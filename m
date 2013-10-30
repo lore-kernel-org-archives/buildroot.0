@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 30 Oct 2013 22:14:59 +0100
-Subject: [Buildroot] ubuntu 13.10 prerequisites
-In-Reply-To: <CALdGskJ6kQnW2GrRxoojk5Og_sOwrm9bmCOVX2nk7bkFp-nadw@mail.gmail.com>
-References: <CALdGskJ6kQnW2GrRxoojk5Og_sOwrm9bmCOVX2nk7bkFp-nadw@mail.gmail.com>
-Message-ID: <20131030221459.474bc3eb@skate>
+Date: Wed, 30 Oct 2013 22:16:44 +0100
+Subject: [Buildroot] [PATCH 1/1] hplip: bump to version 3.13.10
+In-Reply-To: <1383165435-14305-1-git-send-email-olivier.schonken@gmail.com>
+References: <1383165435-14305-1-git-send-email-olivier.schonken@gmail.com>
+Message-ID: <20131030221644.28f0d77a@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,23 +12,57 @@ To: buildroot@busybox.net
 
 Dear Olivier Schonken,
 
-On Wed, 30 Oct 2013 22:44:05 +0200, Olivier Schonken wrote:
+On Wed, 30 Oct 2013 22:37:15 +0200, Olivier Schonken wrote:
 
-> I installed ubuntu 13.10 after its release, a 64-bit version.  Before I
-> could get buildroot working, i had to install the 32-bit compatible libc,
-> gcc, g++ etc.
-> Apparently ubuntu 13.10 doesn't support ia32-libs any more.  Thus, you have
-> to manually install the required 32-bit packages as follows
+>   # ui (qt3)
+> -@@ -564,26 +564,26 @@ endif
+> - 
+> - install-dist_hplip_LogDATA:
+> - if FULL_BUILD
+> --	test -z "$(DESTDIR)$(hplip_Logdir)" || mkdir -p $(DESTDIR)$(hplip_Logdir)
+> --	chgrp "lp" -R $(DESTDIR)$(hplip_Logdir)
+> --	chmod 775 $(DESTDIR)$(hplip_Logdir)
+> -+#	test -z "$(DESTDIR)$(hplip_Logdir)" || mkdir -p $(DESTDIR)$(hplip_Logdir)
+> -+#	chgrp "lp" -R $(DESTDIR)$(hplip_Logdir)
+> -+#	chmod 775 $(DESTDIR)$(hplip_Logdir)
+> - endif	#FULL_BUILD
+> - if HPLIP_BUILD
+> --	test -z "$(DESTDIR)$(hplip_Logdir)" || mkdir -p $(DESTDIR)$(hplip_Logdir)
+> --	chgrp "lp" -R $(DESTDIR)$(hplip_Logdir)
+> --	chmod 775 $(DESTDIR)$(hplip_Logdir)
+> -+#	test -z "$(DESTDIR)$(hplip_Logdir)" || mkdir -p $(DESTDIR)$(hplip_Logdir)
+> -+#	chgrp "lp" -R $(DESTDIR)$(hplip_Logdir)
+> -+#	chmod 775 $(DESTDIR)$(hplip_Logdir)
+> - endif	#FULL_BUILD
+> - 
+> - install-dist_hplip_tmpDATA:
+> - if FULL_BUILD
+> --	test -z "$(DESTDIR)$(hplip_tmpdir)" || mkdir -p $(DESTDIR)$(hplip_tmpdir)
+> --	chgrp "lp" -R $(DESTDIR)$(hplip_tmpdir)
+> --	chmod 1775 $(DESTDIR)$(hplip_tmpdir)
+> -+#	test -z "$(DESTDIR)$(hplip_tmpdir)" || mkdir -p $(DESTDIR)$(hplip_tmpdir)
+> -+#	chgrp "lp" -R $(DESTDIR)$(hplip_tmpdir)
+> -+#	chmod 1775 $(DESTDIR)$(hplip_tmpdir)
+> - endif	#FULL_BUILD
+> - if HPLIP_BUILD
+> --	test -z "$(DESTDIR)$(hplip_tmpdir)" || mkdir -p $(DESTDIR)$(hplip_tmpdir)
+> --	chgrp "lp" -R $(DESTDIR)$(hplip_tmpdir)
+> --	chmod 1775 $(DESTDIR)$(hplip_tmpdir)
+> -+#	test -z "$(DESTDIR)$(hplip_tmpdir)" || mkdir -p $(DESTDIR)$(hplip_tmpdir)
+> -+#	chgrp "lp" -R $(DESTDIR)$(hplip_tmpdir)
+> -+#	chmod 1775 $(DESTDIR)$(hplip_tmpdir)
+> - endif	#FULL_BUILD
+> - 
+> - install-dist_cronDATA:$(dist_cron_DATA)
 
-Hum, I am not sure why you would have to install the 32 bits version of
-those packages. Of course, if you use external toolchains that are
-compiled for 32 bits machine (most are), then you need libc:i386, but I
-don't see why you would need the other packages for 32 bits.
+Thanks for this patch. Would you mind giving a few more details on the
+reason for removing those lines? They are no longer present in the
+upstream Makefile? Something else?
 
-Can you expand on the problems you had? Maybe I'm missing something
-obvious here.
+Generally speaking, when a version bump comes with other changes (like
+changes to patches), it's good to describe them a little bit.
 
-Best regards,
+Thanks a lot!
 
 Thomas
 -- 
