@@ -1,31 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 30 Oct 2013 18:52:56 +0100
-Subject: [Buildroot] [PATCH] ext-toolchain: MIPS: Select correct
- endianness for the target
-In-Reply-To: <1381744345-8306-1-git-send-email-markos.chandras@imgtec.com>
-References: <1381744345-8306-1-git-send-email-markos.chandras@imgtec.com>
-Message-ID: <20131030185256.1bea8d50@skate>
+Date: Wed, 30 Oct 2013 19:01:32 +0100
+Subject: [Buildroot] [PATCH v2 resend] support/kconfig: fix compile
+ warning because of missing include.
+In-Reply-To: <1383083612-9871-1-git-send-email-ps.report@gmx.net>
+References: <1383083612-9871-1-git-send-email-ps.report@gmx.net>
+Message-ID: <20131030190132.4eecbb7b@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Markos Chandras,
+Dear Peter Seiderer,
 
-On Mon, 14 Oct 2013 10:52:25 +0100, Markos Chandras wrote:
-> Previously, an external-toolchain on a mipsel/mips64el target
-> didn't select the appriopriate endianness but
-> it asked the user to set the correct CFLAGS on his/her own.
-> We fix this by appending "-EL" to the toolchain wrapper options
-> if the user has selected a mipsel/mips64el target.
+On Tue, 29 Oct 2013 22:53:32 +0100, Peter Seiderer wrote:
+> With commit b58bf60b519353e983e372f5627d639e7cc72a7a the libgen.h
+> include was removed from confdata.c, but it is needed for the dirname
+> function declaration.
 > 
-> Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
+> Fixes the following compile warning:
+> ./confdata.c: In function ?conf_split_config?:
+> ./confdata.c:849:6: warning: assignment makes pointer from integer
+> without a cast
+> 
+> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 
-Applied to for-peter-2013.11, after making a few fixes (remove the
-BR2_ENDIAN test, addition of the big endian case).
-
-Thanks!
+Thanks, applied to for-peter-2013.11.
 
 Thomas
 -- 
