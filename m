@@ -1,36 +1,33 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 30 Oct 2013 19:11:06 +0100
-Subject: [Buildroot] [PATCH 0/3] Misc toolchain fixes
-In-Reply-To: <1383080042-5827-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1383080042-5827-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20131030191106.43e00205@skate>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed, 30 Oct 2013 15:12:02 -0300
+Subject: [Buildroot] [PATCH] libcgroup: also needs host-flex
+Message-ID: <1383156722-15998-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Fixes:
+http://autobuild.buildroot.net/results/b43/b43ef442facd5aa136a77db99e57e02cc7e39a94/
 
-On Tue, 29 Oct 2013 21:53:59 +0100, Thomas Petazzoni wrote:
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/libcgroup/libcgroup.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> Here is a small set of misc toolchain fixes: fix for Linaro toolchain
-> usage and comment, fix to install libthread_db in more cases (i.e when
-> gdb native is installed on the target).
-> 
-> Thomas
-> 
-> Thomas Petazzoni (3):
->   toolchain-external: add missing symlink for Linaro toolchains
->   toolchain-external: fix visibility and length of Linaro toolchain
->     comment
->   glibc, toolchain-external: copy libthread_db when gdb is enabled
-
-I have applied those three patches to for-peter-2013.11.
-
-Thanks,
-
-Thomas
+diff --git a/package/libcgroup/libcgroup.mk b/package/libcgroup/libcgroup.mk
+index 339deb3..6d7ae54 100644
+--- a/package/libcgroup/libcgroup.mk
++++ b/package/libcgroup/libcgroup.mk
+@@ -9,7 +9,7 @@ LIBCGROUP_SOURCE = libcgroup-$(LIBCGROUP_VERSION).tar.bz2
+ LIBCGROUP_SITE = http://downloads.sourceforge.net/project/libcg/libcgroup/v.038
+ LIBCGROUP_LICENSE = LGPLv2.1
+ LIBCGROUP_LICENSE_FILES = COPYING
+-LIBCGROUP_DEPENDENCIES = host-bison
++LIBCGROUP_DEPENDENCIES = host-bison host-flex
+ LIBCGROUP_INSTALL_STAGING = YES
+ 
+ # Undefining _FILE_OFFSET_BITS here because of a "bug" with glibc fts.h
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.8.1.5
