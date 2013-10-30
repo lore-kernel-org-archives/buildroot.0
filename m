@@ -1,28 +1,39 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 30 Oct 2013 09:08:57 +0100
-Subject: [Buildroot] [PATCH 1/1] trace-cmd: overwrite CFLAGS
-In-Reply-To: <526FEAD0.7090908@mind.be>
-References: <526D9ED3.4000401@openwide.fr>
-	<526FEAD0.7090908@mind.be>
-Message-ID: <20131030090857.0b9555e6@skate>
+From: Christophe Vu-Brugier <cvubrugier@lacie.com>
+Date: Wed, 30 Oct 2013 09:14:16 +0100
+Subject: [Buildroot] Architecture build statistics
+In-Reply-To: <20131030011250.65f01b8d@skate>
+References: <20131029204108.5d707d09@skate> <20131029234103.GA2527@localhost>
+ <20131030011250.65f01b8d@skate>
+Message-ID: <20131030091416.16020070@grp-cvubrugier.lacie.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Arnout Vandecappelle,
+Hi Thomas,
 
-On Tue, 29 Oct 2013 18:05:20 +0100, Arnout Vandecappelle wrote:
+On Wed, 30 Oct 2013 01:12:50 +0100, Thomas Petazzoni wrote :
+> > As a side note, wouldn't it be nice to have per-arch-filtering in the
+> > autobuild status site? Going through the code quickly, I think it's just
+> > a matter of adding a parameter to the SQL query, right?
+> 
+> It wasn't implemented until I received your e-mail, but it's now done.
+> Enjoy:
+> 
+>    http://autobuild.buildroot.org/?arch=nios2
+>    http://autobuild.buildroot.org/?arch=nios2&status=OK
+>    http://autobuild.buildroot.org/?arch=nios2&status=NOK
 
->   However, we should also add NO_PTRACE to TRACE_CMD_MAKE_OPTS if 
-> BR2_PACKAGE_PTRACE is not selected, and add ptrace to the dependencies if 
-> it is.
+Great!
 
-Huh? ptrace is not a package, it's a libc function. See man ptrace(2).
+It seems that filtering by architecture does not work for x86_64. The
+following URL displays build statuses of all architectures, not only
+x86_64:
 
-Thomas
+  http://autobuild.buildroot.org/?arch=x86_64
+
+Best regards,
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Christophe Vu-Brugier
