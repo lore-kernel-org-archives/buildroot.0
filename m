@@ -1,29 +1,24 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 30 Oct 2013 18:45:34 +0100
-Subject: [Buildroot] [PATCH] arch/mips: Set BR2_GCC_TARGET_ARCH for MIPS
-In-Reply-To: <1382970069-16449-1-git-send-email-markos.chandras@imgtec.com>
-References: <1382970069-16449-1-git-send-email-markos.chandras@imgtec.com>
-Message-ID: <20131030184534.7bf2477b@skate>
+Date: Wed, 30 Oct 2013 18:46:33 +0100
+Subject: [Buildroot] [PATCH v2 1/1] valgrind: add support for glibc 2.17
+ and 2.18
+In-Reply-To: <1382953647-10451-1-git-send-email-phil@zankapfel.net>
+References: <1382953647-10451-1-git-send-email-phil@zankapfel.net>
+Message-ID: <20131030184633.27c21505@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Markos Chandras,
+Dear Phil Eichinger,
 
-On Mon, 28 Oct 2013 14:21:09 +0000, Markos Chandras wrote:
-> Set --with-arch instead of --with-tune for MIPS so that the
-> generated code will be optimal for the given MIPS ISA.
+On Mon, 28 Oct 2013 10:47:27 +0100, Phil Eichinger wrote:
+> Fixes: http://autobuild.buildroot.net/results/f086e65aca220bc9a5869f8fc8c1dca4d87ada7d/
 > 
-> Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
+> Signed-off-by: Phil Eichinger <phil@zankapfel.net>
 
-Applied to for-peter-2013.11, a branch that I will ask Peter to pull
-when he comes back. I will mark such patches as Accepted in patchwork,
-making the (maybe optimistic) assumption that Peter will pull my entire
-branch.
-
-Best regards,
+Applied to for-peter-2013.11, thanks!
 
 Thomas
 -- 
