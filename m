@@ -1,68 +1,53 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 30 Oct 2013 22:39:52 +0100
-Subject: [Buildroot] [git commit] trace-cmd: fix ptrace detection
-Message-ID: <20131104211054.6C7B59BC97@busybox.osuosl.org>
+Date: Wed, 30 Oct 2013 22:46:18 +0100
+Subject: [Buildroot] [git commit] cjson: link with libm,
+	unavailable for static
+Message-ID: <20131104211054.740579BC97@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=9b0e9c83022deac95c85d8f7526b16e420f0b6c8
+commit: http://git.buildroot.net/buildroot/commit/?id=339a4880821d8a574deb5f3c490411d9dd4a29e7
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Ptrace support detection is ignored when CFLAGS is set by
-buildroot. Use override in Makefile to add -DWARN_NO_PTRACE and
--DNO_PTRACE in CFLAGS if ptrace is not available.
+Link with libm as stated in the README, fixes:
+http://autobuild.buildroot.net/results/57f/57fc124e14263ee2447e20a5b910ed3ae0a5b7db/
 
-Fixes:
-  http://autobuild.buildroot.net/results/60e/60ed317d52d93ba2c087aa6ff4f422d760806d89//
+Also disable the package for static builds since it doesn't work that
+way.
 
-Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../trace-cmd-0002-Fix-ptrace-detection.patch      |   36 ++++++++++++++++++++
- 1 files changed, 36 insertions(+), 0 deletions(-)
+ package/cjson/Config.in |    2 ++
+ package/cjson/cjson.mk  |    3 ++-
+ 2 files changed, 4 insertions(+), 1 deletions(-)
 
-diff --git a/package/trace-cmd/trace-cmd-0002-Fix-ptrace-detection.patch b/package/trace-cmd/trace-cmd-0002-Fix-ptrace-detection.patch
-new file mode 100644
-index 0000000..b17d7df
---- /dev/null
-+++ b/package/trace-cmd/trace-cmd-0002-Fix-ptrace-detection.patch
-@@ -0,0 +1,36 @@
-+From 0070081ffe65a4fbe442044ddfcc818593c98e33 Mon Sep 17 00:00:00 2001
-+From: Romain Naour <romain.naour@openwide.fr>
-+Date: Wed, 30 Oct 2013 22:35:34 +0100
-+Subject: [PATCH] Fix ptrace detection
-+
-+Ptrace support detection is ignored when CFLAGS is set in command
-+arguments. Use override in Makefile to add -DWARN_NO_PTRACE and
-+-DNO_PTRACE in CFLAGS if ptrace is not available.
-+
-+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-+---
-+ Makefile | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/Makefile b/Makefile
-+index 83329ca..01b4f45 100644
-+--- a/Makefile
-++++ b/Makefile
-+@@ -223,12 +223,12 @@ LDFLAGS ?=
-+ ifndef NO_PTRACE
-+ ifneq ($(call try-cc,$(SOURCE_PTRACE),),y)
-+ 	NO_PTRACE = 1
-+-	CFLAGS += -DWARN_NO_PTRACE
-++	override CFLAGS += -DWARN_NO_PTRACE
-+ endif
-+ endif
-+ 
-+ ifdef NO_PTRACE
-+-CFLAGS += -DNO_PTRACE
-++override CFLAGS += -DNO_PTRACE
-+ endif
-+ 
-+ # Append required CFLAGS
-+-- 
-+1.8.1.2
-+
+diff --git a/package/cjson/Config.in b/package/cjson/Config.in
+index ff90074..fed61d7 100644
+--- a/package/cjson/Config.in
++++ b/package/cjson/Config.in
+@@ -1,5 +1,7 @@
+ config BR2_PACKAGE_CJSON
+ 	bool "cJSON"
++	# For static build with cJSON.c directly see README
++	depends on !BR2_PREFER_STATIC_LIB
+ 	help
+ 	  An ultra-lightweight, portable, single-file, simple-as-can-be ANSI-C
+ 	  compliant JSON parser, under MIT license.
+diff --git a/package/cjson/cjson.mk b/package/cjson/cjson.mk
+index 7e1d72d..2093b02 100644
+--- a/package/cjson/cjson.mk
++++ b/package/cjson/cjson.mk
+@@ -12,7 +12,8 @@ CJSON_LICENSE         = MIT
+ CJSON_LICENSE_FILES   = LICENSE
+ 
+ define CJSON_BUILD_CMDS
+-	cd $(@D) && $(TARGET_CC) $(TARGET_CFLAGS) -shared -fPIC cJSON.c -o libcJSON.so
++	cd $(@D) && $(TARGET_CC) $(TARGET_CFLAGS) -shared -fPIC -lm \
++		cJSON.c -o libcJSON.so
+ endef
+ 
+ define CJSON_INSTALL_STAGING_CMDS
