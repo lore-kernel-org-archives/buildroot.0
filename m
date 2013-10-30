@@ -1,41 +1,36 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 30 Oct 2013 15:09:10 -0300
-Subject: [Buildroot] [PATCH 2/2] iptables: add support for connlabel match
-	and nfnl_osf
-In-Reply-To: <1383156550-15805-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1383156550-15805-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1383156550-15805-2-git-send-email-gustavo@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 30 Oct 2013 19:11:06 +0100
+Subject: [Buildroot] [PATCH 0/3] Misc toolchain fixes
+In-Reply-To: <1383080042-5827-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1383080042-5827-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20131030191106.43e00205@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/iptables/iptables.mk | 10 ++++++++++
- 1 file changed, 10 insertions(+)
 
-diff --git a/package/iptables/iptables.mk b/package/iptables/iptables.mk
-index 13ad0ca..6547069 100644
---- a/package/iptables/iptables.mk
-+++ b/package/iptables/iptables.mk
-@@ -16,6 +16,16 @@ IPTABLES_CONF_OPT = --libexecdir=/usr/lib --with-kernel=$(STAGING_DIR)/usr
- # Because of iptables-01-fix-static-link.patch
- IPTABLES_AUTORECONF = YES
- 
-+# For connlabel match
-+ifeq ($(BR2_PACKAGE_LIBNETFILTER_CONNTRACK),y)
-+IPTABLES_DEPENDENCIES += libnetfilter_conntrack
-+endif
-+
-+# For nfnl_osf
-+ifeq ($(BR2_PACKAGE_LIBNFNETLINK),y)
-+IPTABLES_DEPENDENCIES += libnfnetlink
-+endif
-+
- define IPTABLES_TARGET_SYMLINK_CREATE
- 	ln -sf xtables-multi $(TARGET_DIR)/usr/sbin/iptables
- 	ln -sf xtables-multi $(TARGET_DIR)/usr/sbin/iptables-save
+On Tue, 29 Oct 2013 21:53:59 +0100, Thomas Petazzoni wrote:
+
+> Here is a small set of misc toolchain fixes: fix for Linaro toolchain
+> usage and comment, fix to install libthread_db in more cases (i.e when
+> gdb native is installed on the target).
+> 
+> Thomas
+> 
+> Thomas Petazzoni (3):
+>   toolchain-external: add missing symlink for Linaro toolchains
+>   toolchain-external: fix visibility and length of Linaro toolchain
+>     comment
+>   glibc, toolchain-external: copy libthread_db when gdb is enabled
+
+I have applied those three patches to for-peter-2013.11.
+
+Thanks,
+
+Thomas
 -- 
-1.8.1.5
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
