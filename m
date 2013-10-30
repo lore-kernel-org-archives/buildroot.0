@@ -1,117 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 30 Oct 2013 18:54:55 +0100
-Subject: [Buildroot] [git commit] support/kconfig: fix compile warning
-	because of missing include.
-Message-ID: <20131104211054.4BC279BC99@busybox.osuosl.org>
+Date: Wed, 30 Oct 2013 19:10:23 +0100
+Subject: [Buildroot] [git commit] toolchain-external: fix visibility and
+	length of Linaro toolchain comment
+Message-ID: <20131104211054.5AC219BC97@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1690fca4648347979d00512891982e4eed74b843
+commit: http://git.buildroot.net/buildroot/commit/?id=1e0b97d166ad7414081231148e82c53cd2950cc5
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-With commit b58bf60b519353e983e372f5627d639e7cc72a7a the libgen.h
-include was removed from confdata.c, but it is needed for the dirname
-function declaration.
+Maxime Ripard reported that the Linaro toolchains were not visible
+when selecting a Cortex-A, but forgetting to set the EABI to
+EABIhf. While this is expected, Buildroot should normally should a
+comment in this case. However, the comment is only visible when the
+selected ARM architecture is not ARMv7 *and* the EABI is not
+EABIhf. Instead, make the comment visible when either the selected
+architecture is not ARMv7 *or* when the selected EABI is not EABIhf.
 
-Fixes the following compile warning:
-./confdata.c: In function ???conf_split_config???:
-./confdata.c:849:6: warning: assignment makes pointer from integer
-without a cast
+While we're at it, reword the comment text so that it actually fits
+within the limits of the menuconfig screen.
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Reported-by: Maxime Ripard <maxime.ripard@free-electrons.com>
+Cc: Maxime Ripard <maxime.ripard@free-electrons.com>
 ---
- support/kconfig/confdata.c                         |    1 +
- .../patches/14-support-out-of-tree-config.patch    |   22 +++++++++++++------
- 2 files changed, 16 insertions(+), 7 deletions(-)
+ toolchain/toolchain-external/Config.in |    5 ++---
+ 1 files changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/support/kconfig/confdata.c b/support/kconfig/confdata.c
-index 43f08fa..db1fac5 100644
---- a/support/kconfig/confdata.c
-+++ b/support/kconfig/confdata.c
-@@ -13,6 +13,7 @@
- #include <string.h>
- #include <time.h>
- #include <unistd.h>
-+#include <libgen.h>
+diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
+index 646f918..7f9b40a 100644
+--- a/toolchain/toolchain-external/Config.in
++++ b/toolchain/toolchain-external/Config.in
+@@ -66,10 +66,9 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_07
  
- #include "lkc.h"
+ 	  To use this toolchain, you must disable soft float usage.
  
-diff --git a/support/kconfig/patches/14-support-out-of-tree-config.patch b/support/kconfig/patches/14-support-out-of-tree-config.patch
-index 9e3f93d..e764fb2 100644
---- a/support/kconfig/patches/14-support-out-of-tree-config.patch
-+++ b/support/kconfig/patches/14-support-out-of-tree-config.patch
-@@ -20,7 +20,15 @@ Index: b/confdata.c
- ===================================================================
- --- a/confdata.c
- +++ b/confdata.c
--@@ -70,9 +70,7 @@
-+@@ -13,6 +13,7 @@
-+ #include <string.h>
-+ #include <time.h>
-+ #include <unistd.h>
-++#include <libgen.h>
-+ 
-+ #include "lkc.h"
-+ 
-+@@ -70,9 +71,7 @@
-  
-  const char *conf_get_autoconfig_name(void)
-  {
-@@ -31,7 +39,7 @@ Index: b/confdata.c
-  }
-  
-  static char *conf_expand_value(const char *in)
--@@ -737,6 +735,9 @@
-+@@ -737,6 +736,9 @@
-  	char dirname[PATH_MAX+1], tmpname[PATH_MAX+1], newname[PATH_MAX+1];
-  	char *env;
-  
-@@ -41,7 +49,7 @@ Index: b/confdata.c
-  	dirname[0] = 0;
-  	if (name && name[0]) {
-  		struct stat st;
--@@ -831,6 +832,7 @@
-+@@ -831,6 +833,7 @@
-  {
-  	const char *name;
-  	char path[PATH_MAX+1];
-@@ -49,7 +57,7 @@ Index: b/confdata.c
-  	char *s, *d, c;
-  	struct symbol *sym;
-  	struct stat sb;
--@@ -839,8 +841,20 @@
-+@@ -839,8 +842,20 @@
-  	name = conf_get_autoconfig_name();
-  	conf_read_simple(name, S_DEF_AUTO);
-  
-@@ -72,7 +80,7 @@ Index: b/confdata.c
-  
-  	res = 0;
-  	for_all_symbols(i, sym) {
--@@ -933,9 +947,11 @@
-+@@ -933,9 +948,11 @@
-  		close(fd);
-  	}
-  out:
-@@ -87,7 +95,7 @@ Index: b/confdata.c
-  	return res;
-  }
-  
--@@ -945,25 +961,38 @@
-+@@ -945,25 +962,38 @@
-  	const char *name;
-  	FILE *out, *tristate, *out_h;
-  	int i;
-@@ -130,7 +138,7 @@ Index: b/confdata.c
-  	if (!out_h) {
-  		fclose(out);
-  		fclose(tristate);
--@@ -995,19 +1024,22 @@
-+@@ -995,19 +1025,22 @@
-  	name = getenv("KCONFIG_AUTOHEADER");
-  	if (!name)
-  		name = "include/generated/autoconf.h";
+-comment "Linaro toolchains available for Cortex-A{5,7,8,9,15} and the EABIhf ABI"
++comment "Linaro toolchains available for Cortex-A + EABIhf"
+ 	depends on BR2_arm
+-	depends on BR2_GCC_TARGET_ARCH != "armv7-a"
+-	depends on !BR2_ARM_EABIHF
++	depends on BR2_GCC_TARGET_ARCH != "armv7-a" || !BR2_ARM_EABIHF
+ 
+ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201305
+ 	bool "Sourcery CodeBench ARM 2013.05"
