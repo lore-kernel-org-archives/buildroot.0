@@ -1,36 +1,76 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 30 Oct 2013 15:21:58 +0000 (UTC)
-Subject: [Buildroot] [Bug 6638] pkgconf doesn't download
-In-Reply-To: <bug-6638-163@https.bugs.busybox.net/>
-References: <bug-6638-163@https.bugs.busybox.net/>
-Message-ID: <20131030152158.681A29BC28@busybox.osuosl.org>
+From: Ezequiel Garcia <ezequiel.garcia@free-electrons.com>
+Date: Wed, 30 Oct 2013 12:22:25 -0300
+Subject: [Buildroot] [PATCH] fio: new package
+Message-ID: <1383146545-9594-1-git-send-email-ezequiel.garcia@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=6638
+Signed-off-by: Ezequiel Garcia <ezequiel.garcia@free-electrons.com>
+---
+ package/Config.in     |  1 +
+ package/fio/Config.in |  6 ++++++
+ package/fio/fio.mk    | 25 +++++++++++++++++++++++++
+ 3 files changed, 32 insertions(+)
+ create mode 100644 package/fio/Config.in
+ create mode 100644 package/fio/fio.mk
 
---- Comment #2 from masrur.macece at gmail.com 2013-10-30 15:21:58 UTC ---
-Oops, error in the diff tool. Should be:
-http://rabbit.dereferenced.org/~nenolod/distfiles instead of 
-http://rabbitdereferenced.org/~nenolod/distfiles
-
---- package/pkgconf/pkgconf.mk    2013-09-17 07:42:07.000000000 -0400
-+++ package/pkgconf/pkgconf.mk    2013-10-30 10:40:06.919994396 -0400
-@@ -5,7 +5,7 @@
-
-################################################################################
-
- PKGCONF_VERSION = 0.8.9
--PKGCONF_SITE = http://tortois.es/~nenolod/distfiles
-+PKGCONF_SITE = http://rabbit.dereferenced.org/~nenolod/distfiles
- PKGCONF_SOURCE = pkgconf-$(PKGCONF_VERSION).tar.bz2
- PKGCONF_LICENSE = pkgconf license
- PKGCONF_LICENSE_FILES = COPYING
-
+diff --git a/package/Config.in b/package/Config.in
+index 4c4da51..7cb46aa 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -47,6 +47,7 @@ source "package/dmalloc/Config.in"
+ source "package/dropwatch/Config.in"
+ source "package/dstat/Config.in"
+ source "package/duma/Config.in"
++source "package/fio/Config.in"
+ source "package/gdb/Config.in"
+ source "package/iozone/Config.in"
+ source "package/kexec/Config.in"
+diff --git a/package/fio/Config.in b/package/fio/Config.in
+new file mode 100644
+index 0000000..263e7f5
+--- /dev/null
++++ b/package/fio/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_FIO
++	bool "fio"
++	depends on BR2_USE_MMU # fork()
++	help
++	  fio is an I/O tool meant to be used both for benchmark
++	  and stress/hardware verification.
+diff --git a/package/fio/fio.mk b/package/fio/fio.mk
+new file mode 100644
+index 0000000..60cd14f
+--- /dev/null
++++ b/package/fio/fio.mk
+@@ -0,0 +1,25 @@
++################################################################################
++#
++# fio
++#
++################################################################################
++
++FIO_VERSION = 2.1.3
++FIO_SITE = $(BR2_DEBIAN_MIRROR)/debian/pool/main/f/fio
++FIO_SOURCE = fio_$(FIO_VERSION).orig.tar.gz
++FIO_LICENSE = GPLv2
++FIO_LICENSE_FILES = LICENSE
++
++define FIO_CONFIGURE_CMDS
++	(cd $(@D); ./configure --cc="$(TARGET_CC)" --extra-cflags="$(TARGET_CFLAGS)")
++endef
++
++define FIO_BUILD_CMDS
++	$(MAKE) -C $(@D)
++endef
++
++define FIO_INSTALL_TARGET_CMDS
++	$(INSTALL) -D $(@D)/fio $(TARGET_DIR)/usr/bin/fio
++endef
++
++$(eval $(generic-package))
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+1.8.1.5
