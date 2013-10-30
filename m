@@ -1,26 +1,50 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 30 Oct 2013 18:53:01 +0000 (UTC)
-Subject: [Buildroot] [Bug 6470] If the build directory is a child of /usr,
- the build can fail
-In-Reply-To: <bug-6470-163@https.bugs.busybox.net/>
-References: <bug-6470-163@https.bugs.busybox.net/>
-Message-ID: <20131030185301.356939BBA9@busybox.osuosl.org>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed, 30 Oct 2013 16:03:31 -0300
+Subject: [Buildroot] [PATCH] cjson: link with libm, unavailable for static
+Message-ID: <1383159811-16038-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=6470
+Link with libm as stated in the README, fixes:
+http://autobuild.buildroot.net/results/57f/57fc124e14263ee2447e20a5b910ed3ae0a5b7db/
 
-Ben Stoltz <benstoltz@gmail.com> changed:
+Also disable the package for static builds since it doesn't work that
+way.
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-           See Also|https://bugs.busybox.net/sh |
-                   |ow_bug.cgi?id=6470          |
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/cjson/Config.in | 2 ++
+ package/cjson/cjson.mk  | 3 ++-
+ 2 files changed, 4 insertions(+), 1 deletion(-)
 
+diff --git a/package/cjson/Config.in b/package/cjson/Config.in
+index ff90074..fed61d7 100644
+--- a/package/cjson/Config.in
++++ b/package/cjson/Config.in
+@@ -1,5 +1,7 @@
+ config BR2_PACKAGE_CJSON
+ 	bool "cJSON"
++	# For static build with cJSON.c directly see README
++	depends on !BR2_PREFER_STATIC_LIB
+ 	help
+ 	  An ultra-lightweight, portable, single-file, simple-as-can-be ANSI-C
+ 	  compliant JSON parser, under MIT license.
+diff --git a/package/cjson/cjson.mk b/package/cjson/cjson.mk
+index 7e1d72d..2093b02 100644
+--- a/package/cjson/cjson.mk
++++ b/package/cjson/cjson.mk
+@@ -12,7 +12,8 @@ CJSON_LICENSE         = MIT
+ CJSON_LICENSE_FILES   = LICENSE
+ 
+ define CJSON_BUILD_CMDS
+-	cd $(@D) && $(TARGET_CC) $(TARGET_CFLAGS) -shared -fPIC cJSON.c -o libcJSON.so
++	cd $(@D) && $(TARGET_CC) $(TARGET_CFLAGS) -shared -fPIC -lm \
++		cJSON.c -o libcJSON.so
+ endef
+ 
+ define CJSON_INSTALL_STAGING_CMDS
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+1.8.1.5
