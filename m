@@ -1,9 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 30 Oct 2013 22:16:44 +0100
-Subject: [Buildroot] [PATCH 1/1] hplip: bump to version 3.13.10
-In-Reply-To: <1383165435-14305-1-git-send-email-olivier.schonken@gmail.com>
-References: <1383165435-14305-1-git-send-email-olivier.schonken@gmail.com>
-Message-ID: <20131030221644.28f0d77a@skate>
+Date: Wed, 30 Oct 2013 22:18:59 +0100
+Subject: [Buildroot] [PATCH 5/5] util-linux: Fix cross-compile for
+ host-util-linux when ncurses not selected
+In-Reply-To: <1383164412-20657-5-git-send-email-olivier.schonken@gmail.com>
+References: <1383164412-20657-1-git-send-email-olivier.schonken@gmail.com>
+ <1383164412-20657-5-git-send-email-olivier.schonken@gmail.com>
+Message-ID: <20131030221859.0e7f43f6@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,55 +14,26 @@ To: buildroot@busybox.net
 
 Dear Olivier Schonken,
 
-On Wed, 30 Oct 2013 22:37:15 +0200, Olivier Schonken wrote:
+On Wed, 30 Oct 2013 22:20:12 +0200, Olivier Schonken wrote:
 
->   # ui (qt3)
-> -@@ -564,26 +564,26 @@ endif
-> - 
-> - install-dist_hplip_LogDATA:
-> - if FULL_BUILD
-> --	test -z "$(DESTDIR)$(hplip_Logdir)" || mkdir -p $(DESTDIR)$(hplip_Logdir)
-> --	chgrp "lp" -R $(DESTDIR)$(hplip_Logdir)
-> --	chmod 775 $(DESTDIR)$(hplip_Logdir)
-> -+#	test -z "$(DESTDIR)$(hplip_Logdir)" || mkdir -p $(DESTDIR)$(hplip_Logdir)
-> -+#	chgrp "lp" -R $(DESTDIR)$(hplip_Logdir)
-> -+#	chmod 775 $(DESTDIR)$(hplip_Logdir)
-> - endif	#FULL_BUILD
-> - if HPLIP_BUILD
-> --	test -z "$(DESTDIR)$(hplip_Logdir)" || mkdir -p $(DESTDIR)$(hplip_Logdir)
-> --	chgrp "lp" -R $(DESTDIR)$(hplip_Logdir)
-> --	chmod 775 $(DESTDIR)$(hplip_Logdir)
-> -+#	test -z "$(DESTDIR)$(hplip_Logdir)" || mkdir -p $(DESTDIR)$(hplip_Logdir)
-> -+#	chgrp "lp" -R $(DESTDIR)$(hplip_Logdir)
-> -+#	chmod 775 $(DESTDIR)$(hplip_Logdir)
-> - endif	#FULL_BUILD
-> - 
-> - install-dist_hplip_tmpDATA:
-> - if FULL_BUILD
-> --	test -z "$(DESTDIR)$(hplip_tmpdir)" || mkdir -p $(DESTDIR)$(hplip_tmpdir)
-> --	chgrp "lp" -R $(DESTDIR)$(hplip_tmpdir)
-> --	chmod 1775 $(DESTDIR)$(hplip_tmpdir)
-> -+#	test -z "$(DESTDIR)$(hplip_tmpdir)" || mkdir -p $(DESTDIR)$(hplip_tmpdir)
-> -+#	chgrp "lp" -R $(DESTDIR)$(hplip_tmpdir)
-> -+#	chmod 1775 $(DESTDIR)$(hplip_tmpdir)
-> - endif	#FULL_BUILD
-> - if HPLIP_BUILD
-> --	test -z "$(DESTDIR)$(hplip_tmpdir)" || mkdir -p $(DESTDIR)$(hplip_tmpdir)
-> --	chgrp "lp" -R $(DESTDIR)$(hplip_tmpdir)
-> --	chmod 1775 $(DESTDIR)$(hplip_tmpdir)
-> -+#	test -z "$(DESTDIR)$(hplip_tmpdir)" || mkdir -p $(DESTDIR)$(hplip_tmpdir)
-> -+#	chgrp "lp" -R $(DESTDIR)$(hplip_tmpdir)
-> -+#	chmod 1775 $(DESTDIR)$(hplip_tmpdir)
-> - endif	#FULL_BUILD
-> - 
-> - install-dist_cronDATA:$(dist_cron_DATA)
+> +ifeq ($(BR2_PACKAGE_NCURSES),y)
+> +HOST_UTIL_LINUX_DEPENDENCIES += ncurses
+> +else
+> +HOST_UTIL_LINUX_CONF_OPT += --without-ncurses
+> +endif
 
-Thanks for this patch. Would you mind giving a few more details on the
-reason for removing those lines? They are no longer present in the
-upstream Makefile? Something else?
+This cannot be correct. BR2_PACKAGE_NCURSES tells whether ncurses is
+enabled for the target, but you're using that to decide how to
+configure the host util-linux.
 
-Generally speaking, when a version bump comes with other changes (like
-changes to patches), it's good to describe them a little bit.
+Since I believe we most likely don't need ncurses support at all in the
+host util-linux, we can unconditionally add a --without-ncurses to
+HOST_UTIL_LINUX_CONF_OPT. Could you resend an updated patch that
+implements this?
+
+Also, it would be good if you could improve the commit log by adding
+the relevant piece of build log containing the util-linux configure
+error.
 
 Thanks a lot!
 
