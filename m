@@ -1,34 +1,28 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 30 Oct 2013 22:51:29 +0100
-Subject: [Buildroot] [PATCH] pkgconf: fix upstream URL
-In-Reply-To: <1383169829-31827-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1383169829-31827-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20131030225129.0ebf245d@skate>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed, 30 Oct 2013 21:51:51 +0000 (UTC)
+Subject: [Buildroot] [Bug 6638] pkgconf doesn't download
+In-Reply-To: <bug-6638-163@https.bugs.busybox.net/>
+References: <bug-6638-163@https.bugs.busybox.net/>
+Message-ID: <20131030215151.E945D9BC3E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+https://bugs.busybox.net/show_bug.cgi?id=6638
 
-On Wed, 30 Oct 2013 22:50:29 +0100, Thomas Petazzoni wrote:
-> The upstream URL has changed to
-> http://rabbit.dereferenced.org/~nenolod/distfiles/, updated the
-> Buildroot pkgconf package accordingly.
-> 
-> Fixes #6638.
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Reported-by: <masrur.macece@gmail.com>
-> Cc: <masrur.macece@gmail.com>
-> ---
->  package/pkgconf/pkgconf.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
 
-Applied to for-peter-2013.11.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|                            |FIXED
 
-Thomas
+--- Comment #3 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> 2013-10-30 21:51:51 UTC ---
+Fixed by 9e7d7b3cd422affad5976a4013bcb8626a079491 in for-peter-2013.11.
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
