@@ -1,35 +1,37 @@
-From: Olivier Schonken <olivier.schonken@gmail.com>
-Date: Wed, 30 Oct 2013 22:44:05 +0200
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 30 Oct 2013 22:14:59 +0100
 Subject: [Buildroot] ubuntu 13.10 prerequisites
-Message-ID: <CALdGskJ6kQnW2GrRxoojk5Og_sOwrm9bmCOVX2nk7bkFp-nadw@mail.gmail.com>
+In-Reply-To: <CALdGskJ6kQnW2GrRxoojk5Og_sOwrm9bmCOVX2nk7bkFp-nadw@mail.gmail.com>
+References: <CALdGskJ6kQnW2GrRxoojk5Og_sOwrm9bmCOVX2nk7bkFp-nadw@mail.gmail.com>
+Message-ID: <20131030221459.474bc3eb@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi
+Dear Olivier Schonken,
 
-I installed ubuntu 13.10 after its release, a 64-bit version.  Before I
-could get buildroot working, i had to install the 32-bit compatible libc,
-gcc, g++ etc.
-Apparently ubuntu 13.10 doesn't support ia32-libs any more.  Thus, you have
-to manually install the required 32-bit packages as follows
+On Wed, 30 Oct 2013 22:44:05 +0200, Olivier Schonken wrote:
 
-sudo apt-get install libc:i386
-sudo apt-get install cpp-4.8:i386
-sudo apt-get install gcc-4.8:i386
-sudo apt-get install binutils:i386
-sudo apt-get install cpp:i386
-sudo apt-get install gcc:i386
-sudo apt-get install g++:i386
+> I installed ubuntu 13.10 after its release, a 64-bit version.  Before I
+> could get buildroot working, i had to install the 32-bit compatible libc,
+> gcc, g++ etc.
+> Apparently ubuntu 13.10 doesn't support ia32-libs any more.  Thus, you have
+> to manually install the required 32-bit packages as follows
 
-This list is by no means exhaustive, and is only intended to help anyone
-out there scratching their heads due to this change in ubuntu 13.10.
+Hum, I am not sure why you would have to install the 32 bits version of
+those packages. Of course, if you use external toolchains that are
+compiled for 32 bits machine (most are), then you need libc:i386, but I
+don't see why you would need the other packages for 32 bits.
 
-Regards
+Can you expand on the problems you had? Maybe I'm missing something
+obvious here.
 
-Olivier Schonken
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20131030/10f075fc/attachment.html>
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
