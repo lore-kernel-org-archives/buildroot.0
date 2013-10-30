@@ -1,9 +1,9 @@
 From: Olivier Schonken <olivier.schonken@gmail.com>
-Date: Wed, 30 Oct 2013 22:20:10 +0200
-Subject: [Buildroot] [PATCH 3/5] lttng-modules: bump to version 2.3.2
+Date: Wed, 30 Oct 2013 22:20:11 +0200
+Subject: [Buildroot] [PATCH 4/5] lttng-libust: bump to version 2.3.0
 In-Reply-To: <1383164412-20657-1-git-send-email-olivier.schonken@gmail.com>
 References: <1383164412-20657-1-git-send-email-olivier.schonken@gmail.com>
-Message-ID: <1383164412-20657-3-git-send-email-olivier.schonken@gmail.com>
+Message-ID: <1383164412-20657-4-git-send-email-olivier.schonken@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,21 +12,21 @@ To: buildroot@busybox.net
 
 Signed-off-by: Olivier Schonken <olivier.schonken@gmail.com>
 ---
- package/lttng-modules/lttng-modules.mk | 2 +-
+ package/lttng-libust/lttng-libust.mk | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/lttng-modules/lttng-modules.mk b/package/lttng-modules/lttng-modules.mk
-index baa421e..22a33cd 100644
---- a/package/lttng-modules/lttng-modules.mk
-+++ b/package/lttng-modules/lttng-modules.mk
-@@ -4,7 +4,7 @@
- #
+diff --git a/package/lttng-libust/lttng-libust.mk b/package/lttng-libust/lttng-libust.mk
+index b0ebd3f..14e2852 100644
+--- a/package/lttng-libust/lttng-libust.mk
++++ b/package/lttng-libust/lttng-libust.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--LTTNG_MODULES_VERSION = 2.2.0
-+LTTNG_MODULES_VERSION = 2.3.2
- LTTNG_MODULES_SITE    = http://lttng.org/files/lttng-modules/
- LTTNG_MODULES_SOURCE  = lttng-modules-$(LTTNG_MODULES_VERSION).tar.bz2
- LTTNG_MODULES_LICENSE = LGPLv2.1/GPLv2 for kernel modules; MIT for lib/bitfield.h and lib/prio_heap/*
+ LTTNG_LIBUST_SITE    = http://lttng.org/files/lttng-ust/
+-LTTNG_LIBUST_VERSION = 2.2.0
++LTTNG_LIBUST_VERSION = 2.3.0
+ LTTNG_LIBUST_SOURCE  = lttng-ust-$(LTTNG_LIBUST_VERSION).tar.bz2
+ LTTNG_LIBUST_LICENSE = LGPLv2.1; GPLv2 for lttng-gen-tp and ust-ctl
+ LTTNG_LIBUST_LICENSE_FILES = COPYING
 -- 
 1.8.3.2
