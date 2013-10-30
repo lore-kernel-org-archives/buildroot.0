@@ -1,28 +1,26 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 30 Oct 2013 22:02:45 +0000 (UTC)
-Subject: [Buildroot] [Bug 5408] qt build failure with Sourcery CodeBench ARM
-	2010.09
-In-Reply-To: <bug-5408-163@https.bugs.busybox.net/>
-References: <bug-5408-163@https.bugs.busybox.net/>
-Message-ID: <20131030220245.BA92A9BC3F@busybox.osuosl.org>
+Date: Wed, 30 Oct 2013 22:05:24 +0000 (UTC)
+Subject: [Buildroot] [Bug 5780] spurious build failure because it cannot
+ remove ubinize.cfg
+In-Reply-To: <bug-5780-163@https.bugs.busybox.net/>
+References: <bug-5780-163@https.bugs.busybox.net/>
+Message-ID: <20131030220524.5FA4B9BC3F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=5408
+https://bugs.busybox.net/show_bug.cgi?id=5780
 
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
+--- Comment #1 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> 2013-10-30 22:05:24 UTC ---
+This would be fixed if we decide to commit:
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|                            |WONTFIX
+Subject: [Buildroot] [PATCH v2] fs/ubi: add option to use custom ubinize config
+file
+Date: Sun, 15 Sep 2013 21:04:07 -0400
 
---- Comment #5 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> 2013-10-30 22:02:45 UTC ---
-We've removed the support for ARM CS 2010.09 since a long time, so this bug
-cannot occur anymore with the existing toolchain profiles.
+http://patchwork.ozlabs.org/patch/275088/
 
 -- 
 Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
