@@ -1,83 +1,42 @@
-From: Ezequiel Garcia <ezequiel.garcia@free-electrons.com>
-Date: Tue, 29 Oct 2013 21:27:44 -0300
-Subject: [Buildroot] Architecture build statistics
-In-Reply-To: <20131030011250.65f01b8d@skate>
-References: <20131029204108.5d707d09@skate> <20131029234103.GA2527@localhost>
- <20131030011250.65f01b8d@skate>
-Message-ID: <20131030002743.GC2527@localhost>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue, 29 Oct 2013 21:28:31 -0300
+Subject: [Buildroot] [PATCHv2 0/5] Add apache thrift
+Message-ID: <1383092916-4293-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Oct 30, 2013 at 01:12:50AM +0100, Thomas Petazzoni wrote:
-> Dear Ezequiel Garcia,
-> 
-> On Tue, 29 Oct 2013 20:41:04 -0300, Ezequiel Garcia wrote:
-> 
-> > > +------------+---------+----------+-------+------------+------------+
-> > > | arch       | success | failures | total | pctsuccess | pctfailure |
-> > > +------------+---------+----------+-------+------------+------------+
-> > > | bfin       |      10 |      607 |   617 |     1.6207 |    98.3793 |
-> > > | microblaze |       6 |      308 |   314 |     1.9108 |    98.0892 |
-> > > | nios2      |       2 |       49 |    51 |     3.9216 |    96.0784 |
-> > 
-> > Mind sharing what's breaking in nios2? If it's related to either libffi
-> > or the internal toolchain, then we'll have to wait until proper support
-> > is added upstream.
-> 
-> Internal toolchain is never used for nios2:
-> 
->  config BR2_TOOLCHAIN_BUILDROOT
->         bool "Buildroot toolchain"
-> -       depends on !BR2_microblaze && !BR2_aarch64
-> +       depends on !BR2_microblaze && !BR2_aarch64 && !BR2_nios2
-> 
-> this was in 830205c0361c751c39fabeb1366100e2a94a27a4, which comes from
-> you :-)
-> 
+Add the apache thrift runtime and host tool.
 
-:)
+Changes for v2:
+* Fix indentation in python-thrift cross building
+* Explicitly select/depend on zlib in thrift
+* Patch Makefile.am instead of Makefile in thrift
 
-> Indeed most of the issues are caused by the lack of libffi support:
-> 
-> +--------------------------+-----+
-> | reason                   | cnt |
-> +--------------------------+-----+
-> | libffi-3.0.13            |  28 |
-> | aiccu-20070115           |  10 |
-> | binutils-2.21            |   9 |
-> | libnspr-4.9.6            |   1 |
-> | e2fsprogs-1.42.8         |   1 |
-> | libnetfilter_queue-1.0.2 |   1 |
-> +--------------------------+-----+
-> 
-> but there's also a bunch of other problems as you can see.
+Gustavo Zacarias (5):
+  libevent: add host variant
+  boost: add host variant
+  python-thrift: fix cross building
+  python-thrift: bump to version 0.9.1 and switch to apache
+  thrift: new package
 
-Yup. Let me take a look...
+ package/Config.in                             |  1 +
+ package/boost/boost.mk                        | 33 +++++++++++++++
+ package/libevent/libevent.mk                  |  1 +
+ package/python-thrift/python-thrift.mk        | 21 ++++++----
+ package/thrift/Config.in                      | 23 ++++++++++
+ package/thrift/thrift-01-libevent-cross.patch | 16 +++++++
+ package/thrift/thrift-02-autoreconf.patch     | 22 ++++++++++
+ package/thrift/thrift-03-zlib-cross.patch     | 16 +++++++
+ package/thrift/thrift.mk                      | 60 +++++++++++++++++++++++++++
+ 9 files changed, 185 insertions(+), 8 deletions(-)
+ create mode 100644 package/thrift/Config.in
+ create mode 100644 package/thrift/thrift-01-libevent-cross.patch
+ create mode 100644 package/thrift/thrift-02-autoreconf.patch
+ create mode 100644 package/thrift/thrift-03-zlib-cross.patch
+ create mode 100644 package/thrift/thrift.mk
 
-> > As a side note, wouldn't it be nice to have per-arch-filtering in the
-> > autobuild status site? Going through the code quickly, I think it's just
-> > a matter of adding a parameter to the SQL query, right?
-> 
-> It wasn't implemented until I received your e-mail, but it's now done.
-> Enjoy:
-> 
->    http://autobuild.buildroot.org/?arch=nios2
->    http://autobuild.buildroot.org/?arch=nios2&status=OK
->    http://autobuild.buildroot.org/?arch=nios2&status=NOK
-> 
-> See:
-> 
->    http://git.buildroot.net/buildroot-test/commit/?id=4840eec19648172b6fc9e83fe2c2f1dea550c1cf
->    http://git.buildroot.net/buildroot-test/commit/?id=823c2408414899a6b4fc82bc409eb14e76fefa48
-> 
-
-Awesome! You can add my:
-
-Trolled-by: Ezequiel Garcia <ezequiel.garcia@free-electrons.com>
 -- 
-Ezequiel Garc?a, Free Electrons
-Embedded Linux, Kernel and Android Engineering
-http://free-electrons.com
+1.8.1.5
