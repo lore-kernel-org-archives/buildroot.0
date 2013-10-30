@@ -1,16 +1,17 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 30 Oct 2013 22:28:55 +0000 (UTC)
-Subject: [Buildroot] [Bug 6392] Extended ARM uImage kernel options
-In-Reply-To: <bug-6392-163@https.bugs.busybox.net/>
-References: <bug-6392-163@https.bugs.busybox.net/>
-Message-ID: <20131030222855.E152F9BC02@busybox.osuosl.org>
+Date: Wed, 30 Oct 2013 22:30:53 +0000 (UTC)
+Subject: [Buildroot] [Bug 6404] Buildroot's coreutils 'uname -p' reports
+ 'Unknown' on recent ARM kernels
+In-Reply-To: <bug-6404-163@https.bugs.busybox.net/>
+References: <bug-6404-163@https.bugs.busybox.net/>
+Message-ID: <20131030223054.07AAC9BC02@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=6392
+https://bugs.busybox.net/show_bug.cgi?id=6404
 
 Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
 
@@ -19,24 +20,13 @@ Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
              Status|NEW                         |RESOLVED
          Resolution|                            |WONTFIX
 
---- Comment #4 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> 2013-10-30 22:28:55 UTC ---
-The contributor, Philipp Rahns, proposed the addition of a
-BR2_LINUX_KERNEL_MAKE_FLAGS configuration option, to add custom make flags when
-building the kernel. However, Philipp hasn't given details on the specific use
-case for this, so it's hard to understand why we would want to add that.
+--- Comment #1 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> 2013-10-30 22:30:53 UTC ---
+This really is a coreutils upstream problem. Could you report this directly to
+the coreutils developers? On Buildroot side, I believe we should drop
+coreutils-uname.patch since it's really a feature patch, and it apparently has
+no chance of making its way to the upstream.
 
-The second proposal of Philipp is to add BR2_LINUX_KERNEL_NATIVE_CONFIG, which
-tells the Buildroot kernel building logic to use the .config file present
-within the kernel tarball as the configuration file. However, this is not a
-standard practice, and if people want to store a kernel configuration within
-the kernel tree, they should rather store it into arch/<ARCH>/configs/, as a
-minimal defconfig. This is the standard practice and is already supported by
-Buildroot.
-
-Due to those two reasons, I am not convinced the patch is actually needed. Of
-course Philipp, if you disagree, feel free to reopen the bug and provide
-additional details about those use cases. It is still possible to convince us!
-:-)
+Another option is to look for an updated version of this patch somewhere.
 
 -- 
 Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
