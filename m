@@ -1,34 +1,64 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 30 Oct 2013 19:01:32 +0100
-Subject: [Buildroot] [PATCH v2 resend] support/kconfig: fix compile
- warning because of missing include.
-In-Reply-To: <1383083612-9871-1-git-send-email-ps.report@gmx.net>
-References: <1383083612-9871-1-git-send-email-ps.report@gmx.net>
-Message-ID: <20131030190132.4eecbb7b@skate>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed, 30 Oct 2013 15:09:09 -0300
+Subject: [Buildroot] [PATCH 1/2] ipset: bump to version 6.20.1
+Message-ID: <1383156550-15805-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Peter Seiderer,
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/ipset/ipset-01-uclinux.patch | 26 --------------------------
+ package/ipset/ipset.mk               |  2 +-
+ 2 files changed, 1 insertion(+), 27 deletions(-)
+ delete mode 100644 package/ipset/ipset-01-uclinux.patch
 
-On Tue, 29 Oct 2013 22:53:32 +0100, Peter Seiderer wrote:
-> With commit b58bf60b519353e983e372f5627d639e7cc72a7a the libgen.h
-> include was removed from confdata.c, but it is needed for the dirname
-> function declaration.
-> 
-> Fixes the following compile warning:
-> ./confdata.c: In function ?conf_split_config?:
-> ./confdata.c:849:6: warning: assignment makes pointer from integer
-> without a cast
-> 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-
-Thanks, applied to for-peter-2013.11.
-
-Thomas
+diff --git a/package/ipset/ipset-01-uclinux.patch b/package/ipset/ipset-01-uclinux.patch
+deleted file mode 100644
+index db8e3fe..0000000
+--- a/package/ipset/ipset-01-uclinux.patch
++++ /dev/null
+@@ -1,26 +0,0 @@
+-From 8ec2a85a29817f5aa3f6fb680753d331e2af3591 Mon Sep 17 00:00:00 2001
+-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+-Date: Tue, 10 Sep 2013 15:28:49 -0300
+-Subject: [PATCH] configure: uclinux is also linux
+-
+-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+----
+- configure.ac | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/configure.ac b/configure.ac
+-index 6b64576..6d06ef5 100644
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -14,7 +14,7 @@ LTDL_INIT([nonrecursive])
+- 
+- dnl Shortcut: Linux supported alone
+- case "$host" in
+--*-*-linux*) ;;
+-+*-*-linux* | *-*-uclinux*) ;;
+- *) AC_MSG_ERROR([Linux systems supported exclusively!]);;
+- esac
+- 
+--- 
+-1.8.1.5
+-
+diff --git a/package/ipset/ipset.mk b/package/ipset/ipset.mk
+index d55d81d..b075a53 100644
+--- a/package/ipset/ipset.mk
++++ b/package/ipset/ipset.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-IPSET_VERSION = 6.19
++IPSET_VERSION = 6.20.1
+ IPSET_SOURCE = ipset-$(IPSET_VERSION).tar.bz2
+ IPSET_SITE = http://ipset.netfilter.org
+ IPSET_DEPENDENCIES = libmnl host-pkgconf
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.8.1.5
