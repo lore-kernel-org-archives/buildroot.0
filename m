@@ -1,47 +1,55 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 29 Oct 2013 21:28:34 -0300
-Subject: [Buildroot] [PATCHv2 3/5] python-thrift: fix cross building
+Date: Tue, 29 Oct 2013 21:28:35 -0300
+Subject: [Buildroot] [PATCHv2 4/5] python-thrift: bump to version 0.9.1 and
+	switch to apache
 In-Reply-To: <1383092916-4293-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1383092916-4293-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1383092916-4293-4-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1383092916-4293-5-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The C code (fastbinary.so) wasn't built using the cross compiler, hence
-it was unusable. Fix it.
+Switch away from the PyPI subset version since it has a great filename
+clash with the full upstream apache version.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/python-thrift/python-thrift.mk | 11 ++++++++---
- 1 file changed, 8 insertions(+), 3 deletions(-)
+ package/python-thrift/python-thrift.mk | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
 diff --git a/package/python-thrift/python-thrift.mk b/package/python-thrift/python-thrift.mk
-index 4cd35e5..65733d4 100644
+index 65733d4..91e14e5 100644
 --- a/package/python-thrift/python-thrift.mk
 +++ b/package/python-thrift/python-thrift.mk
-@@ -9,13 +9,18 @@ PYTHON_THRIFT_SOURCE = thrift-$(PYTHON_THRIFT_VERSION).tar.gz
- PYTHON_THRIFT_SITE = http://pypi.python.org/packages/source/t/thrift
+@@ -4,15 +4,15 @@
+ #
+ ################################################################################
+ 
+-PYTHON_THRIFT_VERSION = 0.9.0
++PYTHON_THRIFT_VERSION = 0.9.1
+ PYTHON_THRIFT_SOURCE = thrift-$(PYTHON_THRIFT_VERSION).tar.gz
+-PYTHON_THRIFT_SITE = http://pypi.python.org/packages/source/t/thrift
++PYTHON_THRIFT_SITE = http://www.us.apache.org/dist/thrift/$(PYTHON_THRIFT_VERSION)
  PYTHON_THRIFT_LICENSE = Apache-2.0
- PYTHON_THRIFT_LICENSE_FILES = README
--
+-PYTHON_THRIFT_LICENSE_FILES = README
++PYTHON_THRIFT_LICENSE_FILES = LICENSE
  PYTHON_THRIFT_DEPENDENCIES = python
  
  define PYTHON_THRIFT_BUILD_CMDS
- 	(cd $(@D); \
--		PYTHONXCPREFIX="$(STAGING_DIR)/usr/" \
--		LDFLAGS="-L$(STAGING_DIR)/lib -L$(STAGING_DIR)/usr/lib" \
-+		CC="$(TARGET_CC)" \
-+		CFLAGS="$(TARGET_CFLAGS)" \
-+		LDSHARED="$(TARGET_CROSS)gcc -shared" \
-+		CROSS_COMPILING=yes \
-+		_python_sysroot=$(STAGING_DIR) \
-+		_python_srcdir=$(BUILD_DIR)/python$(PYTHON_VERSION) \
-+		_python_prefix=/usr \
-+		_python_exec_prefix=/usr \
- 		$(HOST_DIR)/usr/bin/python setup.py build)
+-	(cd $(@D); \
++	(cd $(@D)/lib/py; \
+ 		CC="$(TARGET_CC)" \
+ 		CFLAGS="$(TARGET_CFLAGS)" \
+ 		LDSHARED="$(TARGET_CROSS)gcc -shared" \
+@@ -28,7 +28,7 @@ endef
+ # the installation directory is in python's load path. For host-python,
+ # it is not, so add it explicitly while installing to target.
+ define PYTHON_THRIFT_INSTALL_TARGET_CMDS
+-	(cd $(@D); PYTHONPATH=$(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages \
++	(cd $(@D)/lib/py; PYTHONPATH=$(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages \
+ 		$(HOST_DIR)/usr/bin/python setup.py install --prefix=$(TARGET_DIR)/usr)
  endef
  
 -- 
