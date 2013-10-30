@@ -1,35 +1,93 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 30 Oct 2013 22:47:03 +0100
-Subject: [Buildroot] [git commit] libcgroup: also needs host-flex
-Message-ID: <20131104211054.7B98E9BC97@busybox.osuosl.org>
+Date: Wed, 30 Oct 2013 18:46:04 +0100
+Subject: [Buildroot] [git commit] valgrind: add support for glibc 2.17 and
+	2.18
+Message-ID: <20131104211054.396239BB81@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=fd427bbabb4fff62d076db9e57bbd743fa54bf60
+commit: http://git.buildroot.net/buildroot/commit/?id=260d708c8916f9b681f2e97453470c43c05a67b6
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
-http://autobuild.buildroot.net/results/b43/b43ef442facd5aa136a77db99e57e02cc7e39a94/
+Fixes: http://autobuild.buildroot.net/results/f086e65aca220bc9a5869f8fc8c1dca4d87ada7d/
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Phil Eichinger <phil@zankapfel.net>
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libcgroup/libcgroup.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ ...grind-add-support-for-glibc-2.17-and-2.18.patch |   50 ++++++++++++++++++++
+ package/valgrind/valgrind.mk                       |    2 +-
+ 2 files changed, 51 insertions(+), 1 deletions(-)
 
-diff --git a/package/libcgroup/libcgroup.mk b/package/libcgroup/libcgroup.mk
-index 339deb3..6d7ae54 100644
---- a/package/libcgroup/libcgroup.mk
-+++ b/package/libcgroup/libcgroup.mk
-@@ -9,7 +9,7 @@ LIBCGROUP_SOURCE = libcgroup-$(LIBCGROUP_VERSION).tar.bz2
- LIBCGROUP_SITE = http://downloads.sourceforge.net/project/libcg/libcgroup/v.038
- LIBCGROUP_LICENSE = LGPLv2.1
- LIBCGROUP_LICENSE_FILES = COPYING
--LIBCGROUP_DEPENDENCIES = host-bison
-+LIBCGROUP_DEPENDENCIES = host-bison host-flex
- LIBCGROUP_INSTALL_STAGING = YES
+diff --git a/package/valgrind/valgrind-add-support-for-glibc-2.17-and-2.18.patch b/package/valgrind/valgrind-add-support-for-glibc-2.17-and-2.18.patch
+new file mode 100644
+index 0000000..c07dda2
+--- /dev/null
++++ b/package/valgrind/valgrind-add-support-for-glibc-2.17-and-2.18.patch
+@@ -0,0 +1,50 @@
++From bca21896dbdba12963aa7991d7f1b732b6a709a8 Mon Sep 17 00:00:00 2001
++From: Phil Eichinger <phil@zankapfel.net>
++Date: Wed, 23 Oct 2013 18:28:15 +0200
++Subject: [PATCH 1/1] Add support for glibc 2.17 and 2.18.
++
++
++Signed-off-by: Phil Eichinger <phil@zankapfel.net>
++---
++Status: fixed in upstream r13228 & r13504, not yet released.
++
++ configure.in |   16 +++++++++++++++-
++ 1 file changed, 15 insertions(+), 1 deletion(-)
++
++diff --git a/configure.in b/configure.in
++index 1da3a2c..ccc60a0 100644
++--- a/configure.in
+++++ b/configure.in
++@@ -906,6 +906,20 @@ case "${GLIBC_VERSION}" in
++ 	DEFAULT_SUPP="glibc-2.34567-NPTL-helgrind.supp ${DEFAULT_SUPP}"
++ 	DEFAULT_SUPP="glibc-2.X-drd.supp ${DEFAULT_SUPP}"
++ 	;;
+++     2.17)
+++	AC_MSG_RESULT(2.17 family)
+++	AC_DEFINE([GLIBC_2_17], 1, [Define to 1 if you're using glibc 2.17.x])
+++	DEFAULT_SUPP="glibc-2.X.supp ${DEFAULT_SUPP}"
+++	DEFAULT_SUPP="glibc-2.34567-NPTL-helgrind.supp ${DEFAULT_SUPP}"
+++	DEFAULT_SUPP="glibc-2.X-drd.supp ${DEFAULT_SUPP}"
+++	;;
+++     2.18)
+++	AC_MSG_RESULT(2.18 family)
+++	AC_DEFINE([GLIBC_2_18], 1, [Define to 1 if you're using glibc 2.18.x])
+++	DEFAULT_SUPP="glibc-2.X.supp ${DEFAULT_SUPP}"
+++	DEFAULT_SUPP="glibc-2.34567-NPTL-helgrind.supp ${DEFAULT_SUPP}"
+++	DEFAULT_SUPP="glibc-2.X-drd.supp ${DEFAULT_SUPP}"
+++	;;
++      darwin)
++ 	AC_MSG_RESULT(Darwin)
++ 	AC_DEFINE([DARWIN_LIBC], 1, [Define to 1 if you're using Darwin])
++@@ -919,7 +933,7 @@ case "${GLIBC_VERSION}" in
++ 
++      *)
++ 	AC_MSG_RESULT([unsupported version ${GLIBC_VERSION}])
++-	AC_MSG_ERROR([Valgrind requires glibc version 2.2 - 2.16])
+++	AC_MSG_ERROR([Valgrind requires glibc version 2.2 - 2.18])
++ 	AC_MSG_ERROR([or Darwin libc])
++ 	;;
++ esac
++-- 
++1.7.10.4
++
+diff --git a/package/valgrind/valgrind.mk b/package/valgrind/valgrind.mk
+index f40784e..953f929 100644
+--- a/package/valgrind/valgrind.mk
++++ b/package/valgrind/valgrind.mk
+@@ -9,7 +9,7 @@ VALGRIND_SITE    = http://valgrind.org/downloads/
+ VALGRIND_SOURCE  = valgrind-$(VALGRIND_VERSION).tar.bz2
+ VALGRIND_LICENSE = GPLv2 GFDLv1.2
+ VALGRIND_LICENSE_FILES = COPYING COPYING.DOCS
+-
++VALGRIND_AUTORECONF = YES
+ VALGRIND_CONF_OPT = --disable-tls
  
- # Undefining _FILE_OFFSET_BITS here because of a "bug" with glibc fts.h
+ # On ARM, Valgrind only supports ARMv7, and uses the arch part of the
