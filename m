@@ -1,28 +1,51 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Wed, 30 Oct 2013 08:48:36 +0100
-Subject: [Buildroot] [PATCH v3 2/2] ModemManager: add new package
-In-Reply-To: <526FEBDB.80307@mind.be>
-References: <1382962191-6274-1-git-send-email-yegorslists@googlemail.com>
- <1382962191-6274-2-git-send-email-yegorslists@googlemail.com>
- <526FEBDB.80307@mind.be>
-Message-ID: <CAGm1_ktbWjiVGGj=TmWstFB=MsMqb9A0+LV2p6G2S7iEWWeBdQ@mail.gmail.com>
+From: yegorslists at googlemail.com <yegorslists@googlemail.com>
+Date: Wed, 30 Oct 2013 09:00:13 +0100
+Subject: [Buildroot] [PATCH v4 1/2] pcre: add UTF-8/16/32 support option
+Message-ID: <1383120014-4127-1-git-send-email-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Oct 29, 2013 at 6:09 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
-> On 28/10/13 13:09, yegorslists at googlemail.com wrote:
-> [snip]
->> +comment "modemmanager requires a toolchain with IPV6, LARGEFILE, WCHAR and thread support and the udev infrastructure"
->> +     depends on !BR2_INET_IPV6 || !BR2_LARGEFILE || !BR2_USE_WCHAR || \
->> +             !BR2_TOOLCHAIN_HAS_THREADS || !BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_UDEV
->
->  We've standardized this type of comment into
->
-> comment "modemmanager needs udev and a toolchain w/ largefile, wchar, threads, IPv6"
+From: Yegor Yefremov <yegorslists@googlemail.com>
 
-Thanks. Will send v4
+Add BR2_PACKAGE_PCRE_UTF option, that activates
+--enable-unicode-properties for UTF-8/16/32.
 
-Yegor
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+---
+Changes:
+	v3: change option to "UTF-8/16/32 support"
+
+ package/pcre/Config.in |    5 +++++
+ package/pcre/pcre.mk   |    1 +
+ 2 files changed, 6 insertions(+), 0 deletions(-)
+
+diff --git a/package/pcre/Config.in b/package/pcre/Config.in
+index dc92274..e49d693 100644
+--- a/package/pcre/Config.in
++++ b/package/pcre/Config.in
+@@ -19,4 +19,9 @@ config BR2_PACKAGE_PCRE_32
+ 	help
+ 	  This option builds the 32-bits pcre library, i.e 'libpcre32'
+ 
++config BR2_PACKAGE_PCRE_UTF
++	bool "UTF-8/16/32 support"
++	help
++	  This option enables UTF support
++
+ endif
+diff --git a/package/pcre/pcre.mk b/package/pcre/pcre.mk
+index bf86a3d..0d1d66b 100644
+--- a/package/pcre/pcre.mk
++++ b/package/pcre/pcre.mk
+@@ -19,5 +19,6 @@ endif
+ PCRE_CONF_OPT += --enable-pcre8
+ PCRE_CONF_OPT += $(if $(BR2_PACKAGE_PCRE_16),--enable-pcre16,--disable-pcre16)
+ PCRE_CONF_OPT += $(if $(BR2_PACKAGE_PCRE_32),--enable-pcre32,--disable-pcre32)
++PCRE_CONF_OPT += $(if $(BR2_PACKAGE_PCRE_UTF),--enable-unicode-properties,--disable-unicode-properties)
+ 
+ $(eval $(autotools-package))
+-- 
+1.7.7
