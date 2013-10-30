@@ -1,45 +1,43 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 30 Oct 2013 09:46:48 +0000 (UTC)
-Subject: [Buildroot] [Bug 6632] New: CMake use host pkg-config
-Message-ID: <bug-6632-163@https.bugs.busybox.net/>
+From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Date: Wed, 30 Oct 2013 10:53:39 +0100
+Subject: [Buildroot] Github URL used to fetch packages
+Message-ID: <CAGduivwP_AykQSnspeAWqSxxNbMRLwRja_h0BDLYRX3scmDCTQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=6632
+Hi everyone,
 
-           Summary: CMake use host pkg-config
-           Product: buildroot
-           Version: 2013.02
-          Platform: PC
-        OS/Version: Linux
-            Status: NEW
-          Severity: minor
-          Priority: P5
-         Component: Other
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: damien at zeetim.com
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
+Buildroot is currently using this method to get packages from Github:
+http://buildroot.uclibc.org/downloads/manual/manual.html#github-download-url
 
+As you may know, Github released a feature called "Release" which
+basically, create a tag for you and associate that tag with a zip and
+a tarball, example:
+https://github.com/nandra/libiqrf/releases
 
-Dear All,
+This doesn't change much with the URL we use to grab the package.
 
-I try to add cairo-dock in buildroot but I have a problem with CMAKE based
-package.
+Current : http://github.com/<user>/<package>/tarball/$(FOO_VERSION)
+Release: http://github.com/<user>/<package>/archive/$(FOO_VERSION)
 
-When I try to compile a CMAKE based package, cmake use the /usr/bin/pkg-config
-instead of the one compiled by buildroot.
-So pkg-config look for package on host and not in buildroot directory.
+With the second one, FOO_VERSION is the tag name (which can be
+anything, it's a string, that's all the constraints on it).
 
-Is there any solution to force cmake to use the correct pkg-config and find
-dependencies ?
+Github supports both way so everything is great, nothing is broken.
+But if they stop allowing the uses of our current way, we would have
+to change one bit of the URL for ALL the packages. Which is a pain.
 
-Best regards
+Github has already changed the way to fetch package in the past and
+deprecated the old method, and this might happen over and over.
 
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+What about a way to standardize the way to grab package from github, like:
+github://<user>/<package>/$(FOO_VERSION)
+
+We could then expand the URL to whatever is the best way of fetching
+the packages.
+
+This would be a good way for Buildroot to prevent breakage would a
+provider such as Github changes the way to fetch data.
