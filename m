@@ -1,41 +1,81 @@
 From: Olivier Schonken <olivier.schonken@gmail.com>
-Date: Wed, 30 Oct 2013 22:20:12 +0200
-Subject: [Buildroot] [PATCH 5/5] util-linux: Fix cross-compile for
-	host-util-linux when ncurses not selected
-In-Reply-To: <1383164412-20657-1-git-send-email-olivier.schonken@gmail.com>
-References: <1383164412-20657-1-git-send-email-olivier.schonken@gmail.com>
-Message-ID: <1383164412-20657-5-git-send-email-olivier.schonken@gmail.com>
+Date: Wed, 30 Oct 2013 22:37:15 +0200
+Subject: [Buildroot] [PATCH 1/1] hplip: bump to version 3.13.10
+Message-ID: <1383165435-14305-1-git-send-email-olivier.schonken@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-If util-linux is being cross-compiled with Codesourcery, and ncurses is not
-selected, compilation of host-util-linux stops at the configuration script,
-unable to locate host-ncurses.
-
 Signed-off-by: Olivier Schonken <olivier.schonken@gmail.com>
 ---
- package/util-linux/util-linux.mk | 6 ++++++
- 1 file changed, 6 insertions(+)
+ package/hplip/hplip-fix-make.patch | 39 --------------------------------------
+ package/hplip/hplip.mk             |  2 +-
+ 2 files changed, 1 insertion(+), 40 deletions(-)
 
-diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
-index 4db1e52..f6ad93f 100644
---- a/package/util-linux/util-linux.mk
-+++ b/package/util-linux/util-linux.mk
-@@ -86,6 +86,12 @@ HOST_UTIL_LINUX_CONF_OPT += \
- 	--disable-su --disable-switch_root --disable-unshare \
- 	--disable-uuidd --disable-wall
+diff --git a/package/hplip/hplip-fix-make.patch b/package/hplip/hplip-fix-make.patch
+index b26277d..da05d03 100644
+--- a/package/hplip/hplip-fix-make.patch
++++ b/package/hplip/hplip-fix-make.patch
+@@ -30,45 +30,6 @@ index 16ea902..b22f46a 100644
+  endif
+  
+  # ui (qt3)
+-@@ -564,26 +564,26 @@ endif
+- 
+- install-dist_hplip_LogDATA:
+- if FULL_BUILD
+--	test -z "$(DESTDIR)$(hplip_Logdir)" || mkdir -p $(DESTDIR)$(hplip_Logdir)
+--	chgrp "lp" -R $(DESTDIR)$(hplip_Logdir)
+--	chmod 775 $(DESTDIR)$(hplip_Logdir)
+-+#	test -z "$(DESTDIR)$(hplip_Logdir)" || mkdir -p $(DESTDIR)$(hplip_Logdir)
+-+#	chgrp "lp" -R $(DESTDIR)$(hplip_Logdir)
+-+#	chmod 775 $(DESTDIR)$(hplip_Logdir)
+- endif	#FULL_BUILD
+- if HPLIP_BUILD
+--	test -z "$(DESTDIR)$(hplip_Logdir)" || mkdir -p $(DESTDIR)$(hplip_Logdir)
+--	chgrp "lp" -R $(DESTDIR)$(hplip_Logdir)
+--	chmod 775 $(DESTDIR)$(hplip_Logdir)
+-+#	test -z "$(DESTDIR)$(hplip_Logdir)" || mkdir -p $(DESTDIR)$(hplip_Logdir)
+-+#	chgrp "lp" -R $(DESTDIR)$(hplip_Logdir)
+-+#	chmod 775 $(DESTDIR)$(hplip_Logdir)
+- endif	#FULL_BUILD
+- 
+- install-dist_hplip_tmpDATA:
+- if FULL_BUILD
+--	test -z "$(DESTDIR)$(hplip_tmpdir)" || mkdir -p $(DESTDIR)$(hplip_tmpdir)
+--	chgrp "lp" -R $(DESTDIR)$(hplip_tmpdir)
+--	chmod 1775 $(DESTDIR)$(hplip_tmpdir)
+-+#	test -z "$(DESTDIR)$(hplip_tmpdir)" || mkdir -p $(DESTDIR)$(hplip_tmpdir)
+-+#	chgrp "lp" -R $(DESTDIR)$(hplip_tmpdir)
+-+#	chmod 1775 $(DESTDIR)$(hplip_tmpdir)
+- endif	#FULL_BUILD
+- if HPLIP_BUILD
+--	test -z "$(DESTDIR)$(hplip_tmpdir)" || mkdir -p $(DESTDIR)$(hplip_tmpdir)
+--	chgrp "lp" -R $(DESTDIR)$(hplip_tmpdir)
+--	chmod 1775 $(DESTDIR)$(hplip_tmpdir)
+-+#	test -z "$(DESTDIR)$(hplip_tmpdir)" || mkdir -p $(DESTDIR)$(hplip_tmpdir)
+-+#	chgrp "lp" -R $(DESTDIR)$(hplip_tmpdir)
+-+#	chmod 1775 $(DESTDIR)$(hplip_tmpdir)
+- endif	#FULL_BUILD
+- 
+- install-dist_cronDATA:$(dist_cron_DATA)
+ -- 
+ 1.7.10.4
  
-+ifeq ($(BR2_PACKAGE_NCURSES),y)
-+HOST_UTIL_LINUX_DEPENDENCIES += ncurses
-+else
-+HOST_UTIL_LINUX_CONF_OPT += --without-ncurses
-+endif
-+
- # Avoid building the tools if they are disabled since we can't install on
- # a per-directory basis.
- ifeq ($(BR2_PACKAGE_UTIL_LINUX_BINARIES),)
+diff --git a/package/hplip/hplip.mk b/package/hplip/hplip.mk
+index b3b798d..704bc4b 100644
+--- a/package/hplip/hplip.mk
++++ b/package/hplip/hplip.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-HPLIP_VERSION = 3.13.3
++HPLIP_VERSION = 3.13.10
+ HPLIP_SITE = http://downloads.sourceforge.net/hplip/hplip
+ HPLIP_AUTORECONF = YES
+ HPLIP_DEPENDENCIES = cups libusb jpeg
 -- 
 1.8.3.2
