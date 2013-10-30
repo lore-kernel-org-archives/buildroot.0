@@ -1,33 +1,26 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 30 Oct 2013 15:12:02 -0300
-Subject: [Buildroot] [PATCH] libcgroup: also needs host-flex
-Message-ID: <1383156722-15998-1-git-send-email-gustavo@zacarias.com.ar>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed, 30 Oct 2013 18:52:23 +0000 (UTC)
+Subject: [Buildroot] [Bug 6470] If the build directory is a child of /usr,
+ the build can fail
+In-Reply-To: <bug-6470-163@https.bugs.busybox.net/>
+References: <bug-6470-163@https.bugs.busybox.net/>
+Message-ID: <20131030185223.B93839BB67@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-http://autobuild.buildroot.net/results/b43/b43ef442facd5aa136a77db99e57e02cc7e39a94/
+https://bugs.busybox.net/show_bug.cgi?id=6470
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/libcgroup/libcgroup.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Ben Stoltz <benstoltz@gmail.com> changed:
 
-diff --git a/package/libcgroup/libcgroup.mk b/package/libcgroup/libcgroup.mk
-index 339deb3..6d7ae54 100644
---- a/package/libcgroup/libcgroup.mk
-+++ b/package/libcgroup/libcgroup.mk
-@@ -9,7 +9,7 @@ LIBCGROUP_SOURCE = libcgroup-$(LIBCGROUP_VERSION).tar.bz2
- LIBCGROUP_SITE = http://downloads.sourceforge.net/project/libcg/libcgroup/v.038
- LIBCGROUP_LICENSE = LGPLv2.1
- LIBCGROUP_LICENSE_FILES = COPYING
--LIBCGROUP_DEPENDENCIES = host-bison
-+LIBCGROUP_DEPENDENCIES = host-bison host-flex
- LIBCGROUP_INSTALL_STAGING = YES
- 
- # Undefining _FILE_OFFSET_BITS here because of a "bug" with glibc fts.h
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+           See Also|                            |https://bugs.busybox.net/sh
+                   |                            |ow_bug.cgi?id=6470
+
 -- 
-1.8.1.5
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
