@@ -1,29 +1,38 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 30 Oct 2013 22:00:40 +0000 (UTC)
-Subject: [Buildroot] [Bug 6602] ebtables 64 bit kernel + 32 bit userland
- alignment error - fix included
-In-Reply-To: <bug-6602-163@https.bugs.busybox.net/>
-References: <bug-6602-163@https.bugs.busybox.net/>
-Message-ID: <20131030220040.A7C129BB67@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 30 Oct 2013 23:00:42 +0100
+Subject: [Buildroot] [PATCH 1/2] arch/Config.in: introduce
+ BR2_KERNEL_64_USERLAND_32 symbol
+In-Reply-To: <1382706623-5593-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1382706623-5593-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20131030230042.19f3faae@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=6602
+Dear Gustavo Zacarias,
 
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
+On Fri, 25 Oct 2013 10:10:22 -0300, Gustavo Zacarias wrote:
+> On some architectures one can be running a 64-bit kernel with a 32-bit
+> userland.
+> Such is the case for sparc64 (unsupported) for example and mips64 with
+> n32 ABI.
+> Some tools that interface directly with the kernel need to be built
+> specially for this, so introduce this symbol to tweak their build in one
+> central kludge to be future-proof.
+> Example: bug #6602.
+> 
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> ---
+>  arch/Config.in      | 3 +++
+>  arch/Config.in.mips | 1 +
+>  2 files changed, 4 insertions(+)
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|ASSIGNED                    |RESOLVED
-         Resolution|                            |FIXED
+Applied both patches to for-peter-2013.11, thanks!
 
---- Comment #3 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> 2013-10-30 22:00:40 UTC ---
-Fix applied to for-peter-2013.11.
-
+Thomas
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
