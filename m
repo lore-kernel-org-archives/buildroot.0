@@ -1,76 +1,58 @@
-From: Ezequiel Garcia <ezequiel.garcia@free-electrons.com>
-Date: Wed, 30 Oct 2013 12:22:25 -0300
-Subject: [Buildroot] [PATCH] fio: new package
-Message-ID: <1383146545-9594-1-git-send-email-ezequiel.garcia@free-electrons.com>
+From: Ryan Barnett <rjbarnet@rockwellcollins.com>
+Date: Wed, 30 Oct 2013 10:34:36 -0500
+Subject: [Buildroot] [PATCHv2 0/5] Add apache thrift
+In-Reply-To: <52711A1C.3090006@zacarias.com.ar>
+References: <1383092916-4293-1-git-send-email-gustavo@zacarias.com.ar>
+ <OFFDA9CD4F.D79FA1A1-ON86257C14.0003E215-86257C14.0004BF76@rockwellcollins.com>
+ <52711A1C.3090006@zacarias.com.ar>
+Message-ID: <OF846496E2.197638BA-ON86257C14.00532388-86257C14.00558FBD@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Ezequiel Garcia <ezequiel.garcia@free-electrons.com>
----
- package/Config.in     |  1 +
- package/fio/Config.in |  6 ++++++
- package/fio/fio.mk    | 25 +++++++++++++++++++++++++
- 3 files changed, 32 insertions(+)
- create mode 100644 package/fio/Config.in
- create mode 100644 package/fio/fio.mk
+Gustavo,
 
-diff --git a/package/Config.in b/package/Config.in
-index 4c4da51..7cb46aa 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -47,6 +47,7 @@ source "package/dmalloc/Config.in"
- source "package/dropwatch/Config.in"
- source "package/dstat/Config.in"
- source "package/duma/Config.in"
-+source "package/fio/Config.in"
- source "package/gdb/Config.in"
- source "package/iozone/Config.in"
- source "package/kexec/Config.in"
-diff --git a/package/fio/Config.in b/package/fio/Config.in
-new file mode 100644
-index 0000000..263e7f5
---- /dev/null
-+++ b/package/fio/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_FIO
-+	bool "fio"
-+	depends on BR2_USE_MMU # fork()
-+	help
-+	  fio is an I/O tool meant to be used both for benchmark
-+	  and stress/hardware verification.
-diff --git a/package/fio/fio.mk b/package/fio/fio.mk
-new file mode 100644
-index 0000000..60cd14f
---- /dev/null
-+++ b/package/fio/fio.mk
-@@ -0,0 +1,25 @@
-+################################################################################
-+#
-+# fio
-+#
-+################################################################################
-+
-+FIO_VERSION = 2.1.3
-+FIO_SITE = $(BR2_DEBIAN_MIRROR)/debian/pool/main/f/fio
-+FIO_SOURCE = fio_$(FIO_VERSION).orig.tar.gz
-+FIO_LICENSE = GPLv2
-+FIO_LICENSE_FILES = LICENSE
-+
-+define FIO_CONFIGURE_CMDS
-+	(cd $(@D); ./configure --cc="$(TARGET_CC)" --extra-cflags="$(TARGET_CFLAGS)")
-+endef
-+
-+define FIO_BUILD_CMDS
-+	$(MAKE) -C $(@D)
-+endef
-+
-+define FIO_INSTALL_TARGET_CMDS
-+	$(INSTALL) -D $(@D)/fio $(TARGET_DIR)/usr/bin/fio
-+endef
-+
-+$(eval $(generic-package))
--- 
-1.8.1.5
+Gustavo Zacarias <gustavo@zacarias.com.ar> wrote on 10/30/2013 09:39:24 
+AM:
+
+> On 10/29/2013 09:51 PM, rjbarnet at rockwellcollins.com wrote:
+
+> FOO_DEPENDENCIES = thrift
+> You'll need the runtime libs which implement all the networking stack
+> besides the host tool to compile.
+> A thrift definition file assembles into target source code with the tool
+> with the chosen language. This could ostensibly be done outside
+> buildroot, but very few distributions ship the thrift tool.
+> Coarsely speaking it would fit in a build process like bison or flex.
+
+Ok, thanks for the insight and yes of course I forgot about the target 
+version.
+ 
+> > define FOO_BUILD_CMDS
+> >         # This assumes that the package's Makefile uses THRIFT for the
+> > compiler
+> >         $(TARGET_MAKE_ENV) $(MAKE) THRIFT=$(HOST_DIR)/usr/bin/thrift 
+-C
+> > $(@D)
+> > endif
+> 
+> Not really, for a package/project with a proper Makefile you'd just
+> point THRIFT=$(HOST_DIR)/usr/bin/thrift to it and be handled internally
+> as part of the overall build process.
+> 
+> > Granted there is more each of the packages but this covers the thrift
+> > specific parts. Please correct me if I have made incorrect assumptions
+> > with how you envisioned utilizing THRIFT.
+> 
+> We can always define $(THRIFT) to make it handy for developers like it's
+> done for QT_QMAKE for example - but being generally used with specific
+> parameters (target language mostly) it would just point to the binary
+> since it's pretty much self-contained.
+
+Thank for you clarifying this for me. I will try to get around to testing 
+out your patches here by the end of the week.
+
+Thanks,
+-Ryan 
