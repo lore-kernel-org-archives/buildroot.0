@@ -1,38 +1,30 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 30 Oct 2013 23:00:42 +0100
-Subject: [Buildroot] [PATCH 1/2] arch/Config.in: introduce
- BR2_KERNEL_64_USERLAND_32 symbol
-In-Reply-To: <1382706623-5593-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1382706623-5593-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20131030230042.19f3faae@skate>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed, 30 Oct 2013 22:02:45 +0000 (UTC)
+Subject: [Buildroot] [Bug 5408] qt build failure with Sourcery CodeBench ARM
+	2010.09
+In-Reply-To: <bug-5408-163@https.bugs.busybox.net/>
+References: <bug-5408-163@https.bugs.busybox.net/>
+Message-ID: <20131030220245.BA92A9BC3F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+https://bugs.busybox.net/show_bug.cgi?id=5408
 
-On Fri, 25 Oct 2013 10:10:22 -0300, Gustavo Zacarias wrote:
-> On some architectures one can be running a 64-bit kernel with a 32-bit
-> userland.
-> Such is the case for sparc64 (unsupported) for example and mips64 with
-> n32 ABI.
-> Some tools that interface directly with the kernel need to be built
-> specially for this, so introduce this symbol to tweak their build in one
-> central kludge to be future-proof.
-> Example: bug #6602.
-> 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  arch/Config.in      | 3 +++
->  arch/Config.in.mips | 1 +
->  2 files changed, 4 insertions(+)
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
 
-Applied both patches to for-peter-2013.11, thanks!
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|                            |WONTFIX
 
-Thomas
+--- Comment #5 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> 2013-10-30 22:02:45 UTC ---
+We've removed the support for ARM CS 2010.09 since a long time, so this bug
+cannot occur anymore with the existing toolchain profiles.
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
