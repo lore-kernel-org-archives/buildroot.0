@@ -1,26 +1,32 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 30 Oct 2013 22:05:24 +0000 (UTC)
-Subject: [Buildroot] [Bug 5780] spurious build failure because it cannot
- remove ubinize.cfg
-In-Reply-To: <bug-5780-163@https.bugs.busybox.net/>
-References: <bug-5780-163@https.bugs.busybox.net/>
-Message-ID: <20131030220524.5FA4B9BC3F@busybox.osuosl.org>
+Date: Wed, 30 Oct 2013 22:21:24 +0000 (UTC)
+Subject: [Buildroot] [Bug 5978] Erlang does not build for arm in 2013.02-rc3
+In-Reply-To: <bug-5978-163@https.bugs.busybox.net/>
+References: <bug-5978-163@https.bugs.busybox.net/>
+Message-ID: <20131030222124.5B7B89BC02@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=5780
+https://bugs.busybox.net/show_bug.cgi?id=5978
 
---- Comment #1 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> 2013-10-30 22:05:24 UTC ---
-This would be fixed if we decide to commit:
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
 
-Subject: [Buildroot] [PATCH v2] fs/ubi: add option to use custom ubinize config
-file
-Date: Sun, 15 Sep 2013 21:04:07 -0400
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|                            |WORKSFORME
 
-http://patchwork.ozlabs.org/patch/275088/
+--- Comment #10 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> 2013-10-30 22:21:24 UTC ---
+The bug report never provided the .config, and I've again tested that Erlang
+builds fine for ARM. Moreover, it's been a while since we haven't had an
+autobuilder failure on erlang, as far as I can remember.
+
+While there might probably be an issue, the bug report hasn't provided enough
+detail to investigate. Feel free to reopen with more details (at the minimum
+the tested Buildroot version *and* configuration file). Thanks!
 
 -- 
 Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
