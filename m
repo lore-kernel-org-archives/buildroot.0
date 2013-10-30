@@ -1,34 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 30 Oct 2013 22:45:43 +0100
-Subject: [Buildroot] [PATCH 1/1] trace-cmd: overwrite CFLAGS
-In-Reply-To: <526D9ED3.4000401@openwide.fr>
-References: <526D9ED3.4000401@openwide.fr>
-Message-ID: <20131030224543.5fd2a90d@skate>
+Date: Wed, 30 Oct 2013 22:46:42 +0100
+Subject: [Buildroot] [PATCH] cjson: link with libm,
+ unavailable for static
+In-Reply-To: <1383159811-16038-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1383159811-16038-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20131030224642.09feff1b@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Romain Naour,
+Dear Gustavo Zacarias,
 
-On Mon, 28 Oct 2013 00:16:35 +0100, Romain Naour wrote:
+On Wed, 30 Oct 2013 16:03:31 -0300, Gustavo Zacarias wrote:
+> Link with libm as stated in the README, fixes:
+> http://autobuild.buildroot.net/results/57f/57fc124e14263ee2447e20a5b910ed3ae0a5b7db/
 > 
-> Ptrace support detection is ignored when CFLAGS is set by buildroot.
+> Also disable the package for static builds since it doesn't work that
+> way.
 > 
-> Use override in Makefile to add -DWARN_NO_PTRACE and -DNO_PTRACE in CFLAGS
-> if ptrace is not available.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/60e/60ed317d52d93ba2c087aa6ff4f422d760806d89//
-> 
-> Signed-off-by: Romain <romain.naour@openwide.fr>
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
-Applied to for-peter-2013.11, thanks. However, your patch was badly
-line-wrapped. Could you use 'git send-email' for your next patches,
-instead of Thunderbird?
-
-Thanks!
+Applied to for-peter-2013.11, thanks!
 
 Thomas
 -- 
