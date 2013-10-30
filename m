@@ -1,43 +1,30 @@
-From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Wed, 30 Oct 2013 10:53:39 +0100
-Subject: [Buildroot] Github URL used to fetch packages
-Message-ID: <CAGduivwP_AykQSnspeAWqSxxNbMRLwRja_h0BDLYRX3scmDCTQ@mail.gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed, 30 Oct 2013 10:03:33 +0000 (UTC)
+Subject: [Buildroot] [Bug 6632] CMake use host pkg-config
+In-Reply-To: <bug-6632-163@https.bugs.busybox.net/>
+References: <bug-6632-163@https.bugs.busybox.net/>
+Message-ID: <20131030100333.9055E9BC3E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi everyone,
+https://bugs.busybox.net/show_bug.cgi?id=6632
 
-Buildroot is currently using this method to get packages from Github:
-http://buildroot.uclibc.org/downloads/manual/manual.html#github-download-url
+--- Comment #1 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> 2013-10-30 10:03:33 UTC ---
+1/ Make sure your package depends on 'host-pkgconf', by doing something like
+<pkg>_DEPENDENCIES = host-pkgconf
 
-As you may know, Github released a feature called "Release" which
-basically, create a tag for you and associate that tag with a zip and
-a tarball, example:
-https://github.com/nandra/libiqrf/releases
+2/ Make sure your package uses the cmake-package infrastructure, as described
+at
+http://buildroot.org/downloads/manual/manual.html#_infrastructure_for_cmake_based_packages.
+This will ensure that the directory where our cross pkg-config is installed is
+in the PATH, and before /usr/bin where the native pkg-config is.
 
-This doesn't change much with the URL we use to grab the package.
+Let us know if that fixes the problem for you.
 
-Current : http://github.com/<user>/<package>/tarball/$(FOO_VERSION)
-Release: http://github.com/<user>/<package>/archive/$(FOO_VERSION)
-
-With the second one, FOO_VERSION is the tag name (which can be
-anything, it's a string, that's all the constraints on it).
-
-Github supports both way so everything is great, nothing is broken.
-But if they stop allowing the uses of our current way, we would have
-to change one bit of the URL for ALL the packages. Which is a pain.
-
-Github has already changed the way to fetch package in the past and
-deprecated the old method, and this might happen over and over.
-
-What about a way to standardize the way to grab package from github, like:
-github://<user>/<package>/$(FOO_VERSION)
-
-We could then expand the URL to whatever is the best way of fetching
-the packages.
-
-This would be a good way for Buildroot to prevent breakage would a
-provider such as Github changes the way to fetch data.
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
