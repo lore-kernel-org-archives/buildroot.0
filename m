@@ -1,50 +1,69 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 30 Oct 2013 16:03:31 -0300
-Subject: [Buildroot] [PATCH] cjson: link with libm, unavailable for static
-Message-ID: <1383159811-16038-1-git-send-email-gustavo@zacarias.com.ar>
+From: Olivier Schonken <olivier.schonken@gmail.com>
+Date: Wed, 30 Oct 2013 22:20:08 +0200
+Subject: [Buildroot] [PATCH 1/5] liburcu: bump to version 0.8.0
+Message-ID: <1383164412-20657-1-git-send-email-olivier.schonken@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Link with libm as stated in the README, fixes:
-http://autobuild.buildroot.net/results/57f/57fc124e14263ee2447e20a5b910ed3ae0a5b7db/
+Also added a patch to keep liburcu from trying to build examples in doc directory,
+which breaks cross-compilation when enabled.
 
-Also disable the package for static builds since it doesn't work that
-way.
-
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Olivier Schonken <olivier.schonken@gmail.com>
 ---
- package/cjson/Config.in | 2 ++
- package/cjson/cjson.mk  | 3 ++-
- 2 files changed, 4 insertions(+), 1 deletion(-)
+ .../liburcu/0001-Removed-Examples-from-doc.patch   | 22 ++++++++++++++++++++++
+ package/liburcu/liburcu.mk                         |  3 ++-
+ 2 files changed, 24 insertions(+), 1 deletion(-)
+ create mode 100644 package/liburcu/0001-Removed-Examples-from-doc.patch
 
-diff --git a/package/cjson/Config.in b/package/cjson/Config.in
-index ff90074..fed61d7 100644
---- a/package/cjson/Config.in
-+++ b/package/cjson/Config.in
-@@ -1,5 +1,7 @@
- config BR2_PACKAGE_CJSON
- 	bool "cJSON"
-+	# For static build with cJSON.c directly see README
-+	depends on !BR2_PREFER_STATIC_LIB
- 	help
- 	  An ultra-lightweight, portable, single-file, simple-as-can-be ANSI-C
- 	  compliant JSON parser, under MIT license.
-diff --git a/package/cjson/cjson.mk b/package/cjson/cjson.mk
-index 7e1d72d..2093b02 100644
---- a/package/cjson/cjson.mk
-+++ b/package/cjson/cjson.mk
-@@ -12,7 +12,8 @@ CJSON_LICENSE         = MIT
- CJSON_LICENSE_FILES   = LICENSE
+diff --git a/package/liburcu/0001-Removed-Examples-from-doc.patch b/package/liburcu/0001-Removed-Examples-from-doc.patch
+new file mode 100644
+index 0000000..7df05b8
+--- /dev/null
++++ b/package/liburcu/0001-Removed-Examples-from-doc.patch
+@@ -0,0 +1,22 @@
++From 3f8b92364d39df34b327f50e93ab9350a0adb981 Mon Sep 17 00:00:00 2001
++From: Olivier Schonken <olivier.schonken@gmail.com>
++Date: Wed, 9 Oct 2013 16:36:03 +0200
++Subject: [PATCH] Removed Examples subdir - breaks crosscompilation
++
++Signed-off-by: Olivier Schonken <olivier.schonken@gmail.com>
++---
++ doc/Makefile.am |    2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/doc/Makefile.am b/doc/Makefile.am
++index d98f16b..821cc19 100644
++--- a/doc/Makefile.am
+++++ b/doc/Makefile.am
++@@ -1,3 +1,3 @@
++-SUBDIRS = examples
+++SUBDIRS = 
++ 
++ dist_doc_DATA = rcu-api.txt cds-api.txt uatomic-api.txt
++-- 
++1.7.9.5
++
+diff --git a/package/liburcu/liburcu.mk b/package/liburcu/liburcu.mk
+index a586382..fa14a14 100644
+--- a/package/liburcu/liburcu.mk
++++ b/package/liburcu/liburcu.mk
+@@ -4,12 +4,13 @@
+ #
+ ################################################################################
  
- define CJSON_BUILD_CMDS
--	cd $(@D) && $(TARGET_CC) $(TARGET_CFLAGS) -shared -fPIC cJSON.c -o libcJSON.so
-+	cd $(@D) && $(TARGET_CC) $(TARGET_CFLAGS) -shared -fPIC -lm \
-+		cJSON.c -o libcJSON.so
- endef
+-LIBURCU_VERSION = 0.7.7
++LIBURCU_VERSION = 0.8.0
+ LIBURCU_SITE    = http://lttng.org/files/urcu/
+ LIBURCU_SOURCE  = userspace-rcu-$(LIBURCU_VERSION).tar.bz2
+ LIBURCU_LICENSE = LGPLv2.1+ for the library; MIT-like license for few source files listed in LICENSE
+ LIBURCU_LICENSE_FILES = lgpl-2.1.txt lgpl-relicensing.txt LICENSE
  
- define CJSON_INSTALL_STAGING_CMDS
+ LIBURCU_INSTALL_STAGING = YES
++LIBURCU_AUTORECONF = YES
+ 
+ $(eval $(autotools-package))
 -- 
-1.8.1.5
+1.8.3.2
