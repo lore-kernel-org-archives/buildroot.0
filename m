@@ -1,26 +1,35 @@
-From: Jan Pohanka <xhpohanka@gmail.com>
-Date: Thu, 31 Oct 2013 13:50:42 +0100
-Subject: [Buildroot] iconv: additional encodings
-Message-ID: <52725222.9050503@gmail.com>
+From: yegorslists at googlemail.com <yegorslists@googlemail.com>
+Date: Thu, 31 Oct 2013 14:16:44 +0100
+Subject: [Buildroot] [PATCH] libmodbus: bump version and change download
+	location
+Message-ID: <1383225404-7782-1-git-send-email-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
+From: Yegor Yefremov <yegorslists@googlemail.com>
 
-I'm using buildroot for creating a filesystem on armhf target. Target is 
-selected as external and it is Linaro 2013.04. iconv is a part of glibc 
-in such configuration as far as I know. I have also selected "Copy GCONV 
-libraries to target" option and "Generate locale data" for cs_CZ.CP1250 
-cs_CZ.UTF-8 cs_CZ.ISO-8859-2 - I'm interested mainly in these encodings.
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+---
+ package/libmodbus/libmodbus.mk |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-Unfortunately in such case iconv -l still shows only a few basic 
-encodings but ISO-8859-2 nor CP1250 are present. (CP1250.so and 
-ISO8859-2.so exists in /usr/lib/gconv)
-
-Is it possible to add required encodings iconv support somehow, please?
-
-with best regards
-Jan
+diff --git a/package/libmodbus/libmodbus.mk b/package/libmodbus/libmodbus.mk
+index 8f93c2b..ef25724 100644
+--- a/package/libmodbus/libmodbus.mk
++++ b/package/libmodbus/libmodbus.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-LIBMODBUS_VERSION = 3.0.3
+-LIBMODBUS_SITE = http://github.com/downloads/stephane/libmodbus
++LIBMODBUS_VERSION = 3.0.5
++LIBMODBUS_SITE = http://libmodbus.org/site_media/build/
+ LIBMODBUS_INSTALL_STAGING = YES
+ 
+ $(eval $(autotools-package))
+-- 
+1.7.7
