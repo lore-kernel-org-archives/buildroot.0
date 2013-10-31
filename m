@@ -1,84 +1,64 @@
 From: Olivier Schonken <olivier.schonken@gmail.com>
-Date: Thu, 31 Oct 2013 08:30:49 +0200
-Subject: [Buildroot] [PATCHv2,1/1] hplip: bump to version 3.13.10
-Message-ID: <1383201049-12968-1-git-send-email-olivier.schonken@gmail.com>
+Date: Thu, 31 Oct 2013 08:32:30 +0200
+Subject: [Buildroot] Fwd:  ubuntu 13.10 prerequisites
+In-Reply-To: <CALdGskJMhqCFkORg5zRf7rVWnt6irH5me=2utHOptA+221-03Q@mail.gmail.com>
+References: <CALdGskJ6kQnW2GrRxoojk5Og_sOwrm9bmCOVX2nk7bkFp-nadw@mail.gmail.com>
+ <20131030221459.474bc3eb@skate>
+ <CALdGskJMhqCFkORg5zRf7rVWnt6irH5me=2utHOptA+221-03Q@mail.gmail.com>
+Message-ID: <CALdGskJvKLuV_uhq+pHBS8QgUydnOe6NuZ=0ao7=ANjJBMVH-A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Sections of the hplip-fix-make.patch patch file were removed, because they
-no longer appear in the Makefile.am file.
+Hi Thomas
 
-Signed-off-by: Olivier Schonken <olivier.schonken@gmail.com>
----
- package/hplip/hplip-fix-make.patch | 39 --------------------------------------
- package/hplip/hplip.mk             |  2 +-
- 2 files changed, 1 insertion(+), 40 deletions(-)
+You are correct, only the libc:i386 is necessary to start a build. (If the
+64-bit versions of gcc, binutils and g++ are installed)
 
-diff --git a/package/hplip/hplip-fix-make.patch b/package/hplip/hplip-fix-make.patch
-index b26277d..da05d03 100644
---- a/package/hplip/hplip-fix-make.patch
-+++ b/package/hplip/hplip-fix-make.patch
-@@ -30,45 +30,6 @@ index 16ea902..b22f46a 100644
-  endif
-  
-  # ui (qt3)
--@@ -564,26 +564,26 @@ endif
-- 
-- install-dist_hplip_LogDATA:
-- if FULL_BUILD
---	test -z "$(DESTDIR)$(hplip_Logdir)" || mkdir -p $(DESTDIR)$(hplip_Logdir)
---	chgrp "lp" -R $(DESTDIR)$(hplip_Logdir)
---	chmod 775 $(DESTDIR)$(hplip_Logdir)
--+#	test -z "$(DESTDIR)$(hplip_Logdir)" || mkdir -p $(DESTDIR)$(hplip_Logdir)
--+#	chgrp "lp" -R $(DESTDIR)$(hplip_Logdir)
--+#	chmod 775 $(DESTDIR)$(hplip_Logdir)
-- endif	#FULL_BUILD
-- if HPLIP_BUILD
---	test -z "$(DESTDIR)$(hplip_Logdir)" || mkdir -p $(DESTDIR)$(hplip_Logdir)
---	chgrp "lp" -R $(DESTDIR)$(hplip_Logdir)
---	chmod 775 $(DESTDIR)$(hplip_Logdir)
--+#	test -z "$(DESTDIR)$(hplip_Logdir)" || mkdir -p $(DESTDIR)$(hplip_Logdir)
--+#	chgrp "lp" -R $(DESTDIR)$(hplip_Logdir)
--+#	chmod 775 $(DESTDIR)$(hplip_Logdir)
-- endif	#FULL_BUILD
-- 
-- install-dist_hplip_tmpDATA:
-- if FULL_BUILD
---	test -z "$(DESTDIR)$(hplip_tmpdir)" || mkdir -p $(DESTDIR)$(hplip_tmpdir)
---	chgrp "lp" -R $(DESTDIR)$(hplip_tmpdir)
---	chmod 1775 $(DESTDIR)$(hplip_tmpdir)
--+#	test -z "$(DESTDIR)$(hplip_tmpdir)" || mkdir -p $(DESTDIR)$(hplip_tmpdir)
--+#	chgrp "lp" -R $(DESTDIR)$(hplip_tmpdir)
--+#	chmod 1775 $(DESTDIR)$(hplip_tmpdir)
-- endif	#FULL_BUILD
-- if HPLIP_BUILD
---	test -z "$(DESTDIR)$(hplip_tmpdir)" || mkdir -p $(DESTDIR)$(hplip_tmpdir)
---	chgrp "lp" -R $(DESTDIR)$(hplip_tmpdir)
---	chmod 1775 $(DESTDIR)$(hplip_tmpdir)
--+#	test -z "$(DESTDIR)$(hplip_tmpdir)" || mkdir -p $(DESTDIR)$(hplip_tmpdir)
--+#	chgrp "lp" -R $(DESTDIR)$(hplip_tmpdir)
--+#	chmod 1775 $(DESTDIR)$(hplip_tmpdir)
-- endif	#FULL_BUILD
-- 
-- install-dist_cronDATA:$(dist_cron_DATA)
- -- 
- 1.7.10.4
- 
-diff --git a/package/hplip/hplip.mk b/package/hplip/hplip.mk
-index b3b798d..704bc4b 100644
---- a/package/hplip/hplip.mk
-+++ b/package/hplip/hplip.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--HPLIP_VERSION = 3.13.3
-+HPLIP_VERSION = 3.13.10
- HPLIP_SITE = http://downloads.sourceforge.net/hplip/hplip
- HPLIP_AUTORECONF = YES
- HPLIP_DEPENDENCIES = cups libusb jpeg
--- 
-1.8.3.2
+The rest of the packages were added as the 32-bit counterparts buildroot
+would need, if the 64-bit versions were not installed by default.
+
+Sorry for the ambiguity
+
+Regards
+
+Olivier
+
+
+
+
+On Wed, Oct 30, 2013 at 11:14 PM, Thomas Petazzoni <
+thomas.petazzoni@free-electrons.com> wrote:
+
+> Dear Olivier Schonken,
+>
+> On Wed, 30 Oct 2013 22:44:05 +0200, Olivier Schonken wrote:
+>
+> > I installed ubuntu 13.10 after its release, a 64-bit version.  Before I
+> > could get buildroot working, i had to install the 32-bit compatible libc,
+> > gcc, g++ etc.
+> > Apparently ubuntu 13.10 doesn't support ia32-libs any more.  Thus, you
+> have
+> > to manually install the required 32-bit packages as follows
+>
+> Hum, I am not sure why you would have to install the 32 bits version of
+> those packages. Of course, if you use external toolchains that are
+> compiled for 32 bits machine (most are), then you need libc:i386, but I
+> don't see why you would need the other packages for 32 bits.
+>
+> Can you expand on the problems you had? Maybe I'm missing something
+> obvious here.
+>
+> Best regards,
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20131031/6c66747e/attachment.html>
