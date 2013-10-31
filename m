@@ -1,67 +1,155 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Thu, 31 Oct 2013 18:10:36 +0100
-Subject: [Buildroot] [PATCH] arch/mips: Set BR2_GCC_TARGET_ARCH for MIPS
-In-Reply-To: <20131031155521.7c17a702@skate>
-References: <1382970069-16449-1-git-send-email-markos.chandras@imgtec.com>
- <20131030184534.7bf2477b@skate>
- <CAAXf6LVCOqiCdQfy+S_YRiA2c1fzGpip36=hM4c6M+cV=S47og@mail.gmail.com>
- <20131031102253.1aeaea28@skate>
- <CAAXf6LVZW++12ECLBa0MoHUdjFKXdYy0ueoSk4a6WpvxYuAyJA@mail.gmail.com>
- <52722E32.7050307@mind.be> <20131031114727.681766bb@skate>
- <CAAXf6LVY7YE0ZmtT7EFouvnvRpja4sqdWV+ceYU_e9-iHVQyqw@mail.gmail.com>
- <20131031155521.7c17a702@skate>
-Message-ID: <CAAXf6LW4angtN30SpTaU=gOXP0r9YWHBug1-uVVgejnHcm1U=g@mail.gmail.com>
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Thu, 31 Oct 2013 18:20:26 +0100
+Subject: [Buildroot] [PATCH 1/1] openpowerlink: bump to version 1.8.4
+Message-ID: <1383240026-10300-1-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+---
+ ...Fix-Linux-Powerlink-user-lib-add-INSTALL.patch} |  0
+ .../openpowerlink-0001-fix-demo-mn-qt.patch        | 22 ------
+ ...002-Fix-compilation-issue-for-kernels-3.5.patch | 78 ----------------------
+ package/openpowerlink/openpowerlink.mk             |  4 +-
+ 4 files changed, 2 insertions(+), 102 deletions(-)
+ rename package/openpowerlink/{openpowerlink-0003-Fix-Linux-Powerlink-user-lib-add-INSTALL.patch => openpowerlink-0001-Fix-Linux-Powerlink-user-lib-add-INSTALL.patch} (100%)
+ delete mode 100644 package/openpowerlink/openpowerlink-0001-fix-demo-mn-qt.patch
+ delete mode 100644 package/openpowerlink/openpowerlink-0002-Fix-compilation-issue-for-kernels-3.5.patch
 
-On Thu, Oct 31, 2013 at 3:55 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Dear Thomas De Schampheleire,
->
-> On Thu, 31 Oct 2013 13:45:43 +0100, Thomas De Schampheleire wrote:
->
->> I think we need a single strategy to be used by all maintainer-proxies.
->> The problem with not resending the patches is that the
->> maintainer-proxy (or whatever you want to call it) needs to have a git
->> tree accessible by Peter. Although not impossible, I'm not really fond
->> of it.
->>
->> Also, consider this scenario: a developer submits a patch on day 1, a
->> maintainer-proxy adds the patch to his branch on day 2. However,
->> another contributer gives some remarks on the patch and expects it to
->> be reworked. The maintainer-proxy could forget about this when v2 of
->> that patch is sent. In this case, v2 is pending in patchwork, and v1
->> is on a branch for which a pull request is sent. The actual contents
->> of the branch is not visible on the list. This opens a window for
->> errors. By sending the patches to the list, there is a bit more
->> visibility. The downside is that the list gets additional mails.
->>
->> An additional question is: is there a policy on who takes which
->> patches, if certain actions need to be taken on these patches, etc.?
->> At this moment, I still don't really see the difference between
->> providing an Acked-by: and adding a patch to a for-peter branch,
->> except for the fact that incoming patches are prearranged in batches
->> for Peter.
->
-> What I merely intended to do with the for-peter-2013.11 is to act
-> more-or-less as an interim maintainer during the short period Peter is
-> not available. I've done this before (i.e not having commit access to
-> the official repository, but gathering relevant patches in a branch,
-> until Peter comes back). The idea here is that there would be only one
-> such 'interim maintainer' at a given point in time.
-
-Ah, I had interpreted this branch according to the strategy discussed
-at last BDD regarding the community organization. In that discussion,
-such aggregation of submitted patches was also proposed. I thought you
-were acting in that mode.
-
-In that more general case, where there would me more than one
-maintainer-proxy, the exact strategy is still somewhat unclear to me.
-
-Best regards,
-Thomas
+diff --git a/package/openpowerlink/openpowerlink-0003-Fix-Linux-Powerlink-user-lib-add-INSTALL.patch b/package/openpowerlink/openpowerlink-0001-Fix-Linux-Powerlink-user-lib-add-INSTALL.patch
+similarity index 100%
+rename from package/openpowerlink/openpowerlink-0003-Fix-Linux-Powerlink-user-lib-add-INSTALL.patch
+rename to package/openpowerlink/openpowerlink-0001-Fix-Linux-Powerlink-user-lib-add-INSTALL.patch
+diff --git a/package/openpowerlink/openpowerlink-0001-fix-demo-mn-qt.patch b/package/openpowerlink/openpowerlink-0001-fix-demo-mn-qt.patch
+deleted file mode 100644
+index c573662..0000000
+--- a/package/openpowerlink/openpowerlink-0001-fix-demo-mn-qt.patch
++++ /dev/null
+@@ -1,22 +0,0 @@
+-commit 8658075bd7c49a7481e8f6d0d7a13b0651e1dfd7
+-Author: Romain Naour <romain.naour@openwide.fr>
+-Date:   Wed Sep 18 23:33:04 2013 +0200
+-
+-    [FIX] demo_mn_qt: add EplDebug.c in demo_sources list
+-
+-    demo_mn_qt use EplGetEmergErrCodeStr()
+-
+-    Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+-
+-diff --git a/Examples/X86/Generic/demo_mn_qt/CMakeLists.txt b/Examples/X86/Generic/demo_mn_qt/CMakeLists.txt
+-index 9db2f7f..48ae9eb 100644
+---- a/Examples/X86/Generic/demo_mn_qt/CMakeLists.txt
+-+++ b/Examples/X86/Generic/demo_mn_qt/CMakeLists.txt
+-@@ -78,6 +78,7 @@ SET(DEMO_SOURCES src/EplApi.cpp
+-                  src/MainWindow.cpp
+-                  src/NodeState.cpp
+-                  ${POWERLINK_SOURCE_DIR}/ObjDicts/${OBJDICT}/EplApiProcessImageSetup.c
+-+                 ${POWERLINK_SOURCE_DIR}/EplStack/EplDebug.c
+-     )
+-
+- # The TRACE macros need trace.c on the Windows platform
+diff --git a/package/openpowerlink/openpowerlink-0002-Fix-compilation-issue-for-kernels-3.5.patch b/package/openpowerlink/openpowerlink-0002-Fix-compilation-issue-for-kernels-3.5.patch
+deleted file mode 100644
+index 064a6f0..0000000
+--- a/package/openpowerlink/openpowerlink-0002-Fix-compilation-issue-for-kernels-3.5.patch
++++ /dev/null
+@@ -1,78 +0,0 @@
+-From 9990e19bc554d11c4123986692c5e0572682467a Mon Sep 17 00:00:00 2001
+-From: Josef Baumgartner <josef.baumgartner@br-automation.com>
+-Date: Wed, 14 Aug 2013 10:22:21 +0200
+-Subject: [PATCH 1/1] [FIX] Fix compilation issue for kernels > 3.5
+-
+-With kernel version 3.5 the interface of kmap_atomic() and
+-kunmap_atomic is changed. The fix adapts to the new interface.
+-
+-Change-Id: I0885b87dc594bf48d1ff4eaeaf188268ceb3b112
+-Reviewed-on: http://brateggevoat1/gerrit/1261
+-Tested-by: Jenkins <jenkins@brateggevoat1.br-automation.co.at>
+-Reviewed-by: Josef Baumgartner <josef.baumgartner@br-automation.com>
+----
+- EplStack/EplApiProcessImage.c | 24 +++++++++++++++++++-----
+- 1 file changed, 19 insertions(+), 5 deletions(-)
+-
+-diff --git a/EplStack/EplApiProcessImage.c b/EplStack/EplApiProcessImage.c
+-index a1a049f..02907bc 100644
+---- a/EplStack/EplApiProcessImage.c
+-+++ b/EplStack/EplApiProcessImage.c
+-@@ -573,7 +573,7 @@ tEplApiProcessImageCopyJobInt   IntCopyJob;
+- #elif (TARGET_SYSTEM == _WIN32_)
+-     if (EplApiProcessImageInstance_g.m_dwCurrentThreadId == GetCurrentThreadId())
+- #elif (TARGET_SYSTEM == _VXWORKS_)
+--    if (EplApiProcessImageInstance_g.m_currentThreadId == taskIdSelf())    	
+-+    if (EplApiProcessImageInstance_g.m_currentThreadId == taskIdSelf())
+- #else
+- #error "OS currently not supported by EplApiProcessImage!"
+- #endif
+-@@ -1018,13 +1018,20 @@ void*           pVirtUserPart;
+-             }
+-
+-             ulSize = min ((PAGE_SIZE - ulOffset), pPart->m_uiSize - ulLength);
+-+#if LINUX_VERSION_CODE < KERNEL_VERSION(3,5,0)
+-             pVirtUserPart = kmap_atomic(ppPage[nIndex], KM_USER0);
+-+#else
+-+            pVirtUserPart = kmap_atomic(ppPage[nIndex]);
+-+#endif
+-
+-             EPL_MEMCPY(pPIVar,
+-                 pVirtUserPart + ulOffset,
+-                 ulSize);
+--
+-+#if LINUX_VERSION_CODE < KERNEL_VERSION(3,5,0)
+-             kunmap_atomic(pVirtUserPart, KM_USER0);
+-+#else
+-+            kunmap_atomic(pVirtUserPart);
+-+#endif
+-
+-             pPIVar += ulSize;
+-             ulLength += ulSize;
+-@@ -1063,14 +1070,21 @@ void*           pVirtUserPart;
+-             }
+-
+-             ulSize = min ((PAGE_SIZE - ulOffset), pPart->m_uiSize - ulLength);
+-+#if LINUX_VERSION_CODE < KERNEL_VERSION(3,5,0)
+-             pVirtUserPart = kmap_atomic(ppPage[nIndex], KM_USER0);
+-+#else
+-+            pVirtUserPart = kmap_atomic(ppPage[nIndex]);
+-+#endif
+-
+-             EPL_MEMCPY(pVirtUserPart + ulOffset,
+-                 pPIVar,
+-                 ulSize);
+-
+-+#if LINUX_VERSION_CODE < KERNEL_VERSION(3,5,0)
+-             kunmap_atomic(pVirtUserPart, KM_USER0);
+--
+-+#else
+-+            kunmap_atomic(pVirtUserPart);
+-+#endif
+-             pPIVar += ulSize;
+-             ulLength += ulSize;
+-             ulOffset = 0;
+-
+---
+-1.8.4
+-
+diff --git a/package/openpowerlink/openpowerlink.mk b/package/openpowerlink/openpowerlink.mk
+index 5babdd6..3a60478 100644
+--- a/package/openpowerlink/openpowerlink.mk
++++ b/package/openpowerlink/openpowerlink.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-OPENPOWERLINK_VERSION = V1.08.3
++OPENPOWERLINK_VERSION = V1.08.4
+ OPENPOWERLINK_SOURCE = openPOWERLINK-$(OPENPOWERLINK_VERSION).zip
+-OPENPOWERLINK_SITE = http://downloads.sourceforge.net/project/openpowerlink/openPOWERLINK/V1.8.3
++OPENPOWERLINK_SITE = http://downloads.sourceforge.net/project/openpowerlink/openPOWERLINK/V1.8.4
+ 
+ OPENPOWERLINK_LICENSE = BSD-2c, GPLv2
+ OPENPOWERLINK_LICENSE_FILES = license.txt
+-- 
+1.8.1.4
