@@ -1,57 +1,75 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Thu, 31 Oct 2013 11:13:33 +0100
-Subject: [Buildroot] [PATCH] arch/mips: Set BR2_GCC_TARGET_ARCH for MIPS
-In-Reply-To: <20131031102253.1aeaea28@skate>
-References: <1382970069-16449-1-git-send-email-markos.chandras@imgtec.com>
- <20131030184534.7bf2477b@skate>
- <CAAXf6LVCOqiCdQfy+S_YRiA2c1fzGpip36=hM4c6M+cV=S47og@mail.gmail.com>
- <20131031102253.1aeaea28@skate>
-Message-ID: <CAAXf6LVZW++12ECLBa0MoHUdjFKXdYy0ueoSk4a6WpvxYuAyJA@mail.gmail.com>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Thu, 31 Oct 2013 11:16:07 +0100
+Subject: [Buildroot] [pkg-luarocks infra 0/5] a package infrastructure for
+	Lua modules
+Message-ID: <1383214572-8216-1-git-send-email-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Oct 31, 2013 at 10:22 AM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Dear Thomas De Schampheleire,
->
-> On Thu, 31 Oct 2013 10:19:01 +0100, Thomas De Schampheleire wrote:
->
->> > Applied to for-peter-2013.11, a branch that I will ask Peter to pull
->> > when he comes back. I will mark such patches as Accepted in patchwork,
->> > making the (maybe optimistic) assumption that Peter will pull my entire
->> > branch.
->>
->> Why not use the 'Delegated to' field in patchwork instead? It will
->> keep the patch as New, until being applied, and it is clear whose
->> branch it is in.
->
-> Could be a possibility indeed, but it means that I continue to see
-> these patches in patchwork. Admittedly with a different state, but it's
-> not as nice as not having them anymore.
+LuaRocks is a deployment and management system for Lua modules.
+(see http://luarocks.org/)
 
-It would be great if we could add extra states to the patchwork
-configuration. I looked at the patchwork sources, which has an xml
-file with the different states, but it was unclear to me where this
-file is read, and whether it is project specific or patchwork-global.
+I write a package infrastructure with it.
+luarocks is used by 3 steps :
+ - download
+ - extract
+ - target build/install
 
-Do note that it is possible to change the search filter, and specify
-'Nobody' in the Delegate field. Since the search is HTTP/GET based,
-you can add this URL as a bookmark.
-http://patchwork.ozlabs.org/project/buildroot/list/?delegate=-
+This current implementation needs 2 small patches for LuaRocks, and works only with pure Lua modules.
+I plan future works for :
+ - split build & install step
+ - support of native modules (C cross-compilation)
+but I think that they need more intrusive changes in LuaRock.
 
->
-> I've been quite conservative on the patches I've taken (i.e no new
-> packages or version bumps), so I'm pretty confident that Peter should
-> take all of them.
+So, I think what community feedback are wellcome at this stage.
 
-I have no doubt on your good judgement here. I'm only considering what
-will happen if several people start acting as a maintainer-proxy. In
-patchwork, it will not be visible at all who has taken a given patch.
-Suppose that for some reason the maintainer-proxy forgets about the
-patch, then it will be lost unless the submitter notices it and pings.
+Francois Perrad (5):
+  lua*: restore version in module paths
+  lua: remove too invasive patch
+  luarocks: new package
+  add luarocks infrastructure
+  refactor with luarocks infrastructure
 
-Best regards,
-Thomas
+ Makefile                                         |    1 +
+ package/Makefile.in                              |    1 +
+ package/cgilua/cgilua.mk                         |   15 +---
+ package/copas/copas.mk                           |   15 +---
+ package/coxpcall/coxpcall.mk                     |    4 +-
+ package/lbase64/lbase64.mk                       |    4 +-
+ package/lua-ev/lua-ev.mk                         |    2 +-
+ package/lua-msgpack-native/lua-msgpack-native.mk |    4 +-
+ package/lua/lua-01-root-path.patch               |   21 +----
+ package/lua/lua-03-shared-libs-for-luac.patch    |   97 ----------------------
+ package/luabitop/luabitop.mk                     |    5 +-
+ package/luacjson/luacjson.mk                     |    4 +-
+ package/luaexpat/luaexpat.mk                     |   10 +--
+ package/luaexpatutils/luaexpatutils.mk           |    4 +-
+ package/luafilesystem/luafilesystem.mk           |    4 +-
+ package/luajit/luajit-01-root-path.patch         |   22 -----
+ package/luaposix/luaposix.mk                     |    2 +-
+ package/luarocks/luarocks-build-minimal.patch    |   17 ++++
+ package/luarocks/luarocks-unpack.patch           |   24 ++++++
+ package/luarocks/luarocks.mk                     |   29 +++++++
+ package/luasec/luasec.mk                         |   12 ++-
+ package/luasocket/luasocket.mk                   |   16 ++--
+ package/luasql/luasql.mk                         |    7 +-
+ package/orbit/orbit-01-fix-installation.patch    |   26 ------
+ package/orbit/orbit.mk                           |   13 +--
+ package/pkg-luarocks.mk                          |   76 +++++++++++++++++
+ package/rings/rings.mk                           |    7 +-
+ package/wsapi/wsapi.mk                           |   16 +---
+ package/xavante/xavante.mk                       |   18 +---
+ 29 files changed, 207 insertions(+), 269 deletions(-)
+ delete mode 100644 package/lua/lua-03-shared-libs-for-luac.patch
+ delete mode 100644 package/luajit/luajit-01-root-path.patch
+ create mode 100644 package/luarocks/luarocks-build-minimal.patch
+ create mode 100644 package/luarocks/luarocks-unpack.patch
+ create mode 100644 package/luarocks/luarocks.mk
+ delete mode 100644 package/orbit/orbit-01-fix-installation.patch
+ create mode 100644 package/pkg-luarocks.mk
+
+-- 
+1.7.9.5
