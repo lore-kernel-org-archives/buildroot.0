@@ -1,42 +1,52 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 31 Oct 2013 10:22:53 +0100
-Subject: [Buildroot] [PATCH] arch/mips: Set BR2_GCC_TARGET_ARCH for MIPS
-In-Reply-To: <CAAXf6LVCOqiCdQfy+S_YRiA2c1fzGpip36=hM4c6M+cV=S47og@mail.gmail.com>
-References: <1382970069-16449-1-git-send-email-markos.chandras@imgtec.com>
- <20131030184534.7bf2477b@skate>
- <CAAXf6LVCOqiCdQfy+S_YRiA2c1fzGpip36=hM4c6M+cV=S47og@mail.gmail.com>
-Message-ID: <20131031102253.1aeaea28@skate>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu, 31 Oct 2013 10:12:31 +0000 (UTC)
+Subject: [Buildroot] [Bug 6650] New: Segmentation fault when trying to build
+ latest buildroot
+Message-ID: <bug-6650-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas De Schampheleire,
+https://bugs.busybox.net/show_bug.cgi?id=6650
 
-On Thu, 31 Oct 2013 10:19:01 +0100, Thomas De Schampheleire wrote:
+           Summary: Segmentation fault when trying to build latest
+                    buildroot
+           Product: buildroot
+           Version: unspecified
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: major
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: daniel.karlsson at scanreco.se
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
-> > Applied to for-peter-2013.11, a branch that I will ask Peter to pull
-> > when he comes back. I will mark such patches as Accepted in patchwork,
-> > making the (maybe optimistic) assumption that Peter will pull my entire
-> > branch.
-> 
-> Why not use the 'Delegated to' field in patchwork instead? It will
-> keep the patch as New, until being applied, and it is clear whose
-> branch it is in.
 
-Could be a possibility indeed, but it means that I continue to see
-these patches in patchwork. Admittedly with a different state, but it's
-not as nice as not having them anymore.
+Created attachment 5114
+  --> https://bugs.busybox.net/attachment.cgi?id=5114
+Log output when bug occured
 
-I've been quite conservative on the patches I've taken (i.e no new
-packages or version bumps), so I'm pretty confident that Peter should
-take all of them.
+When trying to compile latest buildroot (checked out from git repo 2013-10-31)
+with the sama5d3ekdemo_defconfig, I get the following error:
 
-Best regards,
+/home/daniel/buildroot-at91/output/toolchain/gcc-4.7.2/libgcc/libgcc2.c: In
+function '__absvdi2':
+/home/daniel/buildroot-at91/output/toolchain/gcc-4.7.2/libgcc/libgcc2.c:273:1
+internal compiler error: Segmentation fault
+Please submit a full bug report,
+with preprocessed source if appropriate.
+See <http://bugs.buildroot.net/> for instructions.
+make[2]: *** [_absvdi2.o] Error 1
 
-Thomas
+There are more error of the sam type that follows, but this is the first error
+detected (see attachment, sorry for some words being in swedish).
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
