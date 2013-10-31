@@ -1,42 +1,32 @@
-From: Clayton Shotwell <clshotwe@rockwellcollins.com>
-Date: Thu, 31 Oct 2013 12:48:44 -0700
-Subject: [Buildroot] [PATCH v2 1/1] cryptsetup: Add libintl for UCLIBC
-	toolchain
-Message-ID: <1383248924-426-1-git-send-email-clshotwe@rockwellcollins.com>
+From: Jan Pohanka <xhpohanka@gmail.com>
+Date: Thu, 31 Oct 2013 21:23:35 +0100
+Subject: [Buildroot] iconv: additional encodings
+In-Reply-To: <52725222.9050503@gmail.com>
+References: <52725222.9050503@gmail.com>
+Message-ID: <CABMiYf_=RK0UJyZLNkW5JU3xSXKMcNxL9-VRxjNpFqtZ3ye50g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes autobuild error
-http://autobuild.buildroot.net/results/cc1a65b9554bc2ece1b3ea8b51cd805b9bda7e86/
+I will answer myself: GCONV_PATH variable is the solution. It must
+point into /usr/lib/gconv!
 
-Adding libintl to the libraries list for cryptsetup when using a
-uclibc toolchain.
-
-Signed-off-by: Clayton Shotwell <clshotwe@rockwellcollins.com>
----
-Realized an error in original commit.  Here is the fix.
-
-Changes v1 -> v2:
-  - Adding TARGET_LDFLAGS to make sure they are not dropped
-
- package/cryptsetup/cryptsetup.mk |    4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/package/cryptsetup/cryptsetup.mk b/package/cryptsetup/cryptsetup.mk
-index 48d37f6..46e75ad 100644
---- a/package/cryptsetup/cryptsetup.mk
-+++ b/package/cryptsetup/cryptsetup.mk
-@@ -12,4 +12,8 @@ CRYPTSETUP_DEPENDENCIES = lvm2 popt e2fsprogs libgcrypt host-pkgconf
- CRYPTSETUP_LICENSE = GPLv2+ (programs), LGPLv2.1+ (library)
- CRYPTSETUP_LICENSE_FILES = COPYING COPYING.LGPL
- 
-+ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),y)
-+CRYPTSETUP_CONF_ENV += LDFLAGS="$(TARGET_LDFLAGS) -lintl"
-+endif
-+
- $(eval $(autotools-package))
--- 
-1.7.9.5
+2013/10/31 Jan Pohanka <xhpohanka@gmail.com>:
+> Hi all,
+>
+> I'm using buildroot for creating a filesystem on armhf target. Target is
+> selected as external and it is Linaro 2013.04. iconv is a part of glibc in
+> such configuration as far as I know. I have also selected "Copy GCONV
+> libraries to target" option and "Generate locale data" for cs_CZ.CP1250
+> cs_CZ.UTF-8 cs_CZ.ISO-8859-2 - I'm interested mainly in these encodings.
+>
+> Unfortunately in such case iconv -l still shows only a few basic encodings
+> but ISO-8859-2 nor CP1250 are present. (CP1250.so and ISO8859-2.so exists in
+> /usr/lib/gconv)
+>
+> Is it possible to add required encodings iconv support somehow, please?
+>
+> with best regards
+> Jan
