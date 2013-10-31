@@ -1,43 +1,65 @@
-From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Thu, 31 Oct 2013 14:29:05 +0100
-Subject: [Buildroot] [PATCH v2] libmodbus: bump version and change download
-	location
-Message-ID: <1383226145-12195-1-git-send-email-yegorslists@googlemail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 31 Oct 2013 15:55:21 +0100
+Subject: [Buildroot] [PATCH] arch/mips: Set BR2_GCC_TARGET_ARCH for MIPS
+In-Reply-To: <CAAXf6LVY7YE0ZmtT7EFouvnvRpja4sqdWV+ceYU_e9-iHVQyqw@mail.gmail.com>
+References: <1382970069-16449-1-git-send-email-markos.chandras@imgtec.com>
+ <20131030184534.7bf2477b@skate>
+ <CAAXf6LVCOqiCdQfy+S_YRiA2c1fzGpip36=hM4c6M+cV=S47og@mail.gmail.com>
+ <20131031102253.1aeaea28@skate>
+ <CAAXf6LVZW++12ECLBa0MoHUdjFKXdYy0ueoSk4a6WpvxYuAyJA@mail.gmail.com>
+ <52722E32.7050307@mind.be> <20131031114727.681766bb@skate>
+ <CAAXf6LVY7YE0ZmtT7EFouvnvRpja4sqdWV+ceYU_e9-iHVQyqw@mail.gmail.com>
+Message-ID: <20131031155521.7c17a702@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Yegor Yefremov <yegorslists@googlemail.com>
+Dear Thomas De Schampheleire,
 
-The license of libmodbus is LGPL v2.1 or later and the
-licence of programs in tests directory is GPL v3. So
-specify only LGPL v2.1.
+On Thu, 31 Oct 2013 13:45:43 +0100, Thomas De Schampheleire wrote:
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
----
-Changes:
-	v2: add licence info
- package/libmodbus/libmodbus.mk |    6 ++++--
- 1 files changed, 4 insertions(+), 2 deletions(-)
+> I think we need a single strategy to be used by all maintainer-proxies.
+> The problem with not resending the patches is that the
+> maintainer-proxy (or whatever you want to call it) needs to have a git
+> tree accessible by Peter. Although not impossible, I'm not really fond
+> of it.
+> 
+> Also, consider this scenario: a developer submits a patch on day 1, a
+> maintainer-proxy adds the patch to his branch on day 2. However,
+> another contributer gives some remarks on the patch and expects it to
+> be reworked. The maintainer-proxy could forget about this when v2 of
+> that patch is sent. In this case, v2 is pending in patchwork, and v1
+> is on a branch for which a pull request is sent. The actual contents
+> of the branch is not visible on the list. This opens a window for
+> errors. By sending the patches to the list, there is a bit more
+> visibility. The downside is that the list gets additional mails.
+> 
+> An additional question is: is there a policy on who takes which
+> patches, if certain actions need to be taken on these patches, etc.?
+> At this moment, I still don't really see the difference between
+> providing an Acked-by: and adding a patch to a for-peter branch,
+> except for the fact that incoming patches are prearranged in batches
+> for Peter.
 
-diff --git a/package/libmodbus/libmodbus.mk b/package/libmodbus/libmodbus.mk
-index 8f93c2b..8aa3cd7 100644
---- a/package/libmodbus/libmodbus.mk
-+++ b/package/libmodbus/libmodbus.mk
-@@ -4,8 +4,10 @@
- #
- ################################################################################
- 
--LIBMODBUS_VERSION = 3.0.3
--LIBMODBUS_SITE = http://github.com/downloads/stephane/libmodbus
-+LIBMODBUS_VERSION = 3.0.5
-+LIBMODBUS_SITE = http://libmodbus.org/site_media/build/
-+LIBMODBUS_LICENSE = LGPLv2.1+
-+LIBMODBUS_LICENSE_FILES = COPYING.LESSER
- LIBMODBUS_INSTALL_STAGING = YES
- 
- $(eval $(autotools-package))
+What I merely intended to do with the for-peter-2013.11 is to act
+more-or-less as an interim maintainer during the short period Peter is
+not available. I've done this before (i.e not having commit access to
+the official repository, but gathering relevant patches in a branch,
+until Peter comes back). The idea here is that there would be only one
+such 'interim maintainer' at a given point in time.
+
+And yes, the only difference between the for-peter-2013.11 branch and
+Acked-by is simply that the batch of patches is already prepared for
+Peter to review and pull, he doesn't have to go in the list and/or
+patchwork and filter out which patches he should have a look right now,
+and which patches are anyway delayed to 2014.02.
+
+Best regards,
+
+Thomas
 -- 
-1.7.7
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
