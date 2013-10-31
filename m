@@ -1,32 +1,27 @@
-From: =?UTF-8?q?Arnaud=20R=C3=A9billout?= <rebillout@syscom.ch>
-Date: Thu, 31 Oct 2013 11:39:48 +0100
-Subject: [Buildroot] [PATCH] uemacs: fix package source
-Message-ID: <1383215988-28993-1-git-send-email-rebillout@syscom.ch>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu, 31 Oct 2013 10:46:23 +0000 (UTC)
+Subject: [Buildroot] [Bug 6650] Segmentation fault when trying to build
+	latest buildroot
+In-Reply-To: <bug-6650-163@https.bugs.busybox.net/>
+References: <bug-6650-163@https.bugs.busybox.net/>
+Message-ID: <20131031104624.10AE49BC02@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-There is no bz2 archive for uemacs on kernel.org, only a gz archive.
+https://bugs.busybox.net/show_bug.cgi?id=6650
 
-Signed-off-by: Arnaud R?billout <rebillout@syscom.ch>
----
- package/uemacs/uemacs.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+--- Comment #1 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> 2013-10-31 10:46:23 UTC ---
+As you can see in http://git.buildroot.net/buildroot/tree/configs, we don't
+have a sama5d3ekdemo_defconfig in the mainline Buildroot.
 
-diff --git a/package/uemacs/uemacs.mk b/package/uemacs/uemacs.mk
-index 9452062..0cd38e0 100644
---- a/package/uemacs/uemacs.mk
-+++ b/package/uemacs/uemacs.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- UEMACS_VERSION = 4.0.15-lt
--UEMACS_SOURCE = em-$(UEMACS_VERSION).tar.bz2
-+UEMACS_SOURCE = em-$(UEMACS_VERSION).tar.gz
- UEMACS_SITE = $(BR2_KERNEL_MIRROR)/software/editors/uemacs/
- UEMACS_DEPENDENCIES = ncurses
- 
+Are you sure you are using the mainline Buildroot version? We unfortunately
+cannot support the numerous Buildroot forks that are made by various
+people/organizations.
+
 -- 
-1.8.4.rc3
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
