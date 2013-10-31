@@ -1,11 +1,12 @@
 From: Olivier Schonken <olivier.schonken@gmail.com>
-Date: Thu, 31 Oct 2013 08:32:30 +0200
-Subject: [Buildroot] Fwd:  ubuntu 13.10 prerequisites
-In-Reply-To: <CALdGskJMhqCFkORg5zRf7rVWnt6irH5me=2utHOptA+221-03Q@mail.gmail.com>
-References: <CALdGskJ6kQnW2GrRxoojk5Og_sOwrm9bmCOVX2nk7bkFp-nadw@mail.gmail.com>
- <20131030221459.474bc3eb@skate>
- <CALdGskJMhqCFkORg5zRf7rVWnt6irH5me=2utHOptA+221-03Q@mail.gmail.com>
-Message-ID: <CALdGskJvKLuV_uhq+pHBS8QgUydnOe6NuZ=0ao7=ANjJBMVH-A@mail.gmail.com>
+Date: Thu, 31 Oct 2013 09:29:53 +0200
+Subject: [Buildroot] [PATCH 5/5] util-linux: Fix cross-compile for
+ host-util-linux when ncurses not selected
+In-Reply-To: <20131030221859.0e7f43f6@skate>
+References: <1383164412-20657-1-git-send-email-olivier.schonken@gmail.com>
+ <1383164412-20657-5-git-send-email-olivier.schonken@gmail.com>
+ <20131030221859.0e7f43f6@skate>
+Message-ID: <CALdGsk+LHVm_bVsHbAz2zZguxKXpHxcrmNPKjsyrd30J_HihjQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,44 +15,46 @@ To: buildroot@busybox.net
 
 Hi Thomas
 
-You are correct, only the libc:i386 is necessary to start a build. (If the
-64-bit versions of gcc, binutils and g++ are installed)
-
-The rest of the packages were added as the 32-bit counterparts buildroot
-would need, if the 64-bit versions were not installed by default.
-
-Sorry for the ambiguity
+I have again tried to reproduce the build failure, but I am unable.  My
+only guess is that something went wrong while linking host-util-linux with
+the installed ncurses-dev (64-bit) using the 32-bit gcc and g++ tools that
+were installed at the time.  Will try to reproduce, but I might have to do
+a clean install of ubuntu 13.10, and follow my exact steps.  Will remove
+this patch from patchwork for now, and either resubmit, or report back once
+I hit the issue again.
 
 Regards
 
-Olivier
+Olivier Schonken
 
 
-
-
-On Wed, Oct 30, 2013 at 11:14 PM, Thomas Petazzoni <
+On Wed, Oct 30, 2013 at 11:18 PM, Thomas Petazzoni <
 thomas.petazzoni@free-electrons.com> wrote:
 
 > Dear Olivier Schonken,
 >
-> On Wed, 30 Oct 2013 22:44:05 +0200, Olivier Schonken wrote:
+> On Wed, 30 Oct 2013 22:20:12 +0200, Olivier Schonken wrote:
 >
-> > I installed ubuntu 13.10 after its release, a 64-bit version.  Before I
-> > could get buildroot working, i had to install the 32-bit compatible libc,
-> > gcc, g++ etc.
-> > Apparently ubuntu 13.10 doesn't support ia32-libs any more.  Thus, you
-> have
-> > to manually install the required 32-bit packages as follows
+> > +ifeq ($(BR2_PACKAGE_NCURSES),y)
+> > +HOST_UTIL_LINUX_DEPENDENCIES += ncurses
+> > +else
+> > +HOST_UTIL_LINUX_CONF_OPT += --without-ncurses
+> > +endif
 >
-> Hum, I am not sure why you would have to install the 32 bits version of
-> those packages. Of course, if you use external toolchains that are
-> compiled for 32 bits machine (most are), then you need libc:i386, but I
-> don't see why you would need the other packages for 32 bits.
+> This cannot be correct. BR2_PACKAGE_NCURSES tells whether ncurses is
+> enabled for the target, but you're using that to decide how to
+> configure the host util-linux.
 >
-> Can you expand on the problems you had? Maybe I'm missing something
-> obvious here.
+> Since I believe we most likely don't need ncurses support at all in the
+> host util-linux, we can unconditionally add a --without-ncurses to
+> HOST_UTIL_LINUX_CONF_OPT. Could you resend an updated patch that
+> implements this?
 >
-> Best regards,
+> Also, it would be good if you could improve the commit log by adding
+> the relevant piece of build log containing the util-linux configure
+> error.
+>
+> Thanks a lot!
 >
 > Thomas
 > --
@@ -61,4 +64,4 @@ thomas.petazzoni@free-electrons.com> wrote:
 >
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20131031/6c66747e/attachment.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20131031/4f8c1ca7/attachment.html>
