@@ -1,51 +1,46 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 31 Oct 2013 18:07:17 -0300
-Subject: [Buildroot] [PATCH v2 1/1] cryptsetup: Add libintl for UCLIBC
- toolchain
-In-Reply-To: <1383248924-426-1-git-send-email-clshotwe@rockwellcollins.com>
-References: <1383248924-426-1-git-send-email-clshotwe@rockwellcollins.com>
-Message-ID: <5272C685.70901@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 31 Oct 2013 22:54:07 +0100
+Subject: [Buildroot] [PATCH] arch/mips: Set BR2_GCC_TARGET_ARCH for MIPS
+In-Reply-To: <CAAXf6LW4angtN30SpTaU=gOXP0r9YWHBug1-uVVgejnHcm1U=g@mail.gmail.com>
+References: <1382970069-16449-1-git-send-email-markos.chandras@imgtec.com>
+ <20131030184534.7bf2477b@skate>
+ <CAAXf6LVCOqiCdQfy+S_YRiA2c1fzGpip36=hM4c6M+cV=S47og@mail.gmail.com>
+ <20131031102253.1aeaea28@skate>
+ <CAAXf6LVZW++12ECLBa0MoHUdjFKXdYy0ueoSk4a6WpvxYuAyJA@mail.gmail.com>
+ <52722E32.7050307@mind.be> <20131031114727.681766bb@skate>
+ <CAAXf6LVY7YE0ZmtT7EFouvnvRpja4sqdWV+ceYU_e9-iHVQyqw@mail.gmail.com>
+ <20131031155521.7c17a702@skate>
+ <CAAXf6LW4angtN30SpTaU=gOXP0r9YWHBug1-uVVgejnHcm1U=g@mail.gmail.com>
+Message-ID: <20131031225407.5e5e2e40@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 10/31/2013 04:48 PM, Clayton Shotwell wrote:
+Dear Thomas De Schampheleire,
 
-> Fixes autobuild error
-> http://autobuild.buildroot.net/results/cc1a65b9554bc2ece1b3ea8b51cd805b9bda7e86/
-> 
-> Adding libintl to the libraries list for cryptsetup when using a
-> uclibc toolchain.
-> 
-> Signed-off-by: Clayton Shotwell <clshotwe@rockwellcollins.com>
-> ---
-> Realized an error in original commit.  Here is the fix.
-> 
-> Changes v1 -> v2:
->   - Adding TARGET_LDFLAGS to make sure they are not dropped
-> 
->  package/cryptsetup/cryptsetup.mk |    4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/package/cryptsetup/cryptsetup.mk b/package/cryptsetup/cryptsetup.mk
-> index 48d37f6..46e75ad 100644
-> --- a/package/cryptsetup/cryptsetup.mk
-> +++ b/package/cryptsetup/cryptsetup.mk
-> @@ -12,4 +12,8 @@ CRYPTSETUP_DEPENDENCIES = lvm2 popt e2fsprogs libgcrypt host-pkgconf
->  CRYPTSETUP_LICENSE = GPLv2+ (programs), LGPLv2.1+ (library)
->  CRYPTSETUP_LICENSE_FILES = COPYING COPYING.LGPL
->  
-> +ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),y)
-> +CRYPTSETUP_CONF_ENV += LDFLAGS="$(TARGET_LDFLAGS) -lintl"
-> +endif
-> +
->  $(eval $(autotools-package))
+On Thu, 31 Oct 2013 18:10:36 +0100, Thomas De Schampheleire wrote:
 
-You're using libintl without selecting it or adding it to DEPENDENCIES.
-See docs/manual/adding-packages-gettext.txt for the correct way to do
-this (libintl is part of gettext and built when there's no libc
-implementation).
-It's probably working because some other dependency is pulling it in.
-Regards.
+> Ah, I had interpreted this branch according to the strategy discussed
+> at last BDD regarding the community organization. In that discussion,
+> such aggregation of submitted patches was also proposed. I thought you
+> were acting in that mode.
+> 
+> In that more general case, where there would me more than one
+> maintainer-proxy, the exact strategy is still somewhat unclear to me.
+
+I think the strategy for multiple maintainer-proxy hasn't been really
+defined precisely. I believe that the thing we really believed in was
+the addition of Acked-by/Tested-by information in the list of patches
+in patchwork (both command line and web). This way Peter can much more
+easily see which patches have received Acked-by/Tested-by, and look at
+these with an higher priority. This would make the Acked-by/Tested-by
+more useful, and potentially encourage us and others to do more of
+those Acked-by/Tested-by.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
