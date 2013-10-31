@@ -1,27 +1,47 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 31 Oct 2013 10:46:23 +0000 (UTC)
-Subject: [Buildroot] [Bug 6650] Segmentation fault when trying to build
-	latest buildroot
-In-Reply-To: <bug-6650-163@https.bugs.busybox.net/>
-References: <bug-6650-163@https.bugs.busybox.net/>
-Message-ID: <20131031104624.10AE49BC02@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 31 Oct 2013 11:47:27 +0100
+Subject: [Buildroot] [PATCH] arch/mips: Set BR2_GCC_TARGET_ARCH for MIPS
+In-Reply-To: <52722E32.7050307@mind.be>
+References: <1382970069-16449-1-git-send-email-markos.chandras@imgtec.com>
+ <20131030184534.7bf2477b@skate>
+ <CAAXf6LVCOqiCdQfy+S_YRiA2c1fzGpip36=hM4c6M+cV=S47og@mail.gmail.com>
+ <20131031102253.1aeaea28@skate>
+ <CAAXf6LVZW++12ECLBa0MoHUdjFKXdYy0ueoSk4a6WpvxYuAyJA@mail.gmail.com>
+ <52722E32.7050307@mind.be>
+Message-ID: <20131031114727.681766bb@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=6650
+Dear Arnout Vandecappelle,
 
---- Comment #1 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> 2013-10-31 10:46:23 UTC ---
-As you can see in http://git.buildroot.net/buildroot/tree/configs, we don't
-have a sama5d3ekdemo_defconfig in the mainline Buildroot.
+On Thu, 31 Oct 2013 11:17:22 +0100, Arnout Vandecappelle wrote:
 
-Are you sure you are using the mainline Buildroot version? We unfortunately
-cannot support the numerous Buildroot forks that are made by various
-people/organizations.
+> >> Could be a possibility indeed, but it means that I continue to see
+> >> these patches in patchwork. Admittedly with a different state, but it's
+> >> not as nice as not having them anymore.
+> 
+>   I would set it as Superseded, instead of Accepted. The assumption is 
+> that you'll repost the series on the list, not send an empty pull 
+> request, right? Then Superseded is actually the correct state, or 
+> eventually it will be.
 
+No, I was not necessarily thinking of resending each patch to the list:
+all those patches have been on the list, and I've made little to no
+changes to them. I have also been careful to post my own patches on the
+list, and only afterwards apply them, so that all patches have been
+made visible to the list.
+
+Of course, if the general opinion is that I should resend all of the
+patches to the list, then I'm fine with doing that once Peter is back
+from vacations.
+
+Best regards,
+
+Thomas
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
