@@ -1,58 +1,62 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 4 Nov 2013 21:55:54 +0100
-Subject: [Buildroot] [git commit] cryptsetup: Add libintl for UCLIBC
-	toolchain
-Message-ID: <20131104211055.371949BC99@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 1 Nov 2013 17:12:51 +0100
+Subject: [Buildroot] [git commit] rsync: use system zlib and popt,
+	also do not lose debug options
+Message-ID: <20131104211055.0308C9BC97@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=cd00a9d9eb72d921e43e231622bcc2accc34e1d8
+commit: http://git.buildroot.net/buildroot/commit/?id=6eac08192d8dceaba992d11d8874ea3af93011b5
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes autobuild error
-http://autobuild.buildroot.net/results/cc1a65b9554bc2ece1b3ea8b51cd805b9bda7e86/
+rsync by default compiles statically its own zlib and popt
+libraries, it is better to use system wide libraries instead -
+both for disk and memory consumption. Change rsync package
+accordingly.
 
-Adding libintl to the libraries list for cryptsetup when using a
-uclibc toolchain and locale support is enabled.
+Also previously a debug configure option has been lost, as
+overwritten by '--with-included-popt' option - fixed.
 
-Signed-off-by: Clayton Shotwell <clshotwe@rockwellcollins.com>
+For example, on ARMv5 rsync binary size is reduced by about 25%.
+
+Signed-off-by: Denis Mingulov <denis@mingulov.com>
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/cryptsetup/Config.in     |    1 +
- package/cryptsetup/cryptsetup.mk |    7 ++++++-
- 2 files changed, 7 insertions(+), 1 deletions(-)
+ package/rsync/Config.in |    2 ++
+ package/rsync/rsync.mk  |    7 +++++--
+ 2 files changed, 7 insertions(+), 2 deletions(-)
 
-diff --git a/package/cryptsetup/Config.in b/package/cryptsetup/Config.in
-index 71faa48..3b9ba54 100644
---- a/package/cryptsetup/Config.in
-+++ b/package/cryptsetup/Config.in
-@@ -4,6 +4,7 @@ config BR2_PACKAGE_CRYPTSETUP
- 	select BR2_PACKAGE_POPT
- 	select BR2_PACKAGE_LVM2
- 	select BR2_PACKAGE_E2FSPROGS
-+	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE 
- 	depends on BR2_LARGEFILE # lvm2, util-linux
- 	depends on BR2_USE_MMU # lvm2
- 	depends on BR2_USE_WCHAR # util-linux
-diff --git a/package/cryptsetup/cryptsetup.mk b/package/cryptsetup/cryptsetup.mk
-index 48d37f6..a65f841 100644
---- a/package/cryptsetup/cryptsetup.mk
-+++ b/package/cryptsetup/cryptsetup.mk
-@@ -8,8 +8,13 @@ CRYPTSETUP_VERSION = 1.6.2
- CRYPTSETUP_SOURCE = cryptsetup-$(CRYPTSETUP_VERSION).tar.bz2
- CRYPTSETUP_SITE = http://cryptsetup.googlecode.com/files
- CRYPTSETUP_CONF_ENV += LIBGCRYPT_CONFIG=$(STAGING_DIR)/usr/bin/libgcrypt-config
--CRYPTSETUP_DEPENDENCIES = lvm2 popt e2fsprogs libgcrypt host-pkgconf
-+CRYPTSETUP_DEPENDENCIES = lvm2 popt e2fsprogs libgcrypt host-pkgconf \
-+	$(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext)
- CRYPTSETUP_LICENSE = GPLv2+ (programs), LGPLv2.1+ (library)
- CRYPTSETUP_LICENSE_FILES = COPYING COPYING.LGPL
+diff --git a/package/rsync/Config.in b/package/rsync/Config.in
+index be95a7c..b952974 100644
+--- a/package/rsync/Config.in
++++ b/package/rsync/Config.in
+@@ -2,6 +2,8 @@ config BR2_PACKAGE_RSYNC
+ 	bool "rsync"
+ 	# fork()
+ 	depends on BR2_USE_MMU
++	select BR2_PACKAGE_ZLIB
++	select BR2_PACKAGE_POPT
+ 	help
+ 	  File transfer program to keep remote files in sync.
  
-+ifeq ($(BR2_NEEDS_GETTEXT_IF_LOCALE),y)
-+CRYPTSETUP_CONF_ENV += LDFLAGS="$(TARGET_LDFLAGS) -lintl"
-+endif
-+
+diff --git a/package/rsync/rsync.mk b/package/rsync/rsync.mk
+index d8e5f3f..35f128c 100644
+--- a/package/rsync/rsync.mk
++++ b/package/rsync/rsync.mk
+@@ -8,7 +8,10 @@ RSYNC_VERSION = 3.1.0
+ RSYNC_SITE = http://rsync.samba.org/ftp/rsync/src
+ RSYNC_LICENSE = GPLv3+
+ RSYNC_LICENSE_FILES = COPYING
+-RSYNC_CONF_OPT = $(if $(BR2_ENABLE_DEBUG),--enable-debug,--disable-debug)
+-RSYNC_CONF_OPT = --with-included-popt
++RSYNC_DEPENDENCIES = zlib popt
++RSYNC_CONF_OPT = \
++	$(if $(BR2_ENABLE_DEBUG),--enable-debug,--disable-debug) \
++	--with-included-zlib=no \
++	--with-included-popt=no
+ 
  $(eval $(autotools-package))
