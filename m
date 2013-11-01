@@ -1,82 +1,159 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Fri, 01 Nov 2013 17:06:47 +0100
-Subject: [Buildroot] [PATCH 2 of 4] infra: centralize rsync exclude list for
-	VCS files
+Date: Fri, 01 Nov 2013 17:06:48 +0100
+Subject: [Buildroot] [PATCH 3 of 4] manual: split info on hooks to a
+	separate section/file
 In-Reply-To: <patchbomb.1383322005@argentina>
 References: <patchbomb.1383322005@argentina>
-Message-ID: <cfdff3fa0098be5319f7.1383322007@argentina>
+Message-ID: <5c6b13a01d904a47ea33.1383322008@argentina>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Buildroot has three places where rsync is used:
-1. to copy the target skeleton
-2. to copy the rootfs overlay(s)
-3. to copy overridden package sources
-
-In all of these cases, we want to exclude version control files by default.
-Place 1 and 2 used an identical set of explicit --exclude options, while
-place 3 used the option --cvs-exclude. This last option, however, not only
-excludes version control files, but also binary files (.o, .so) and any file
-or directory named 'core' (a problem for the linux kernel that has several
-directories with this name). Moreover, the exact list of excluded files when
-using --cvs-exclude depends on the version of rsync.
-
-This patch creates one global variable RSYNC_VCS_EXCLUSIONS that can be used
-by the various rsync commands. It excludes the version control files of
-svn, git, hg, cvs and bzr.
+Split out the information on hooks to a separate section (and source file).
+Not only because the hooks are useful for all infrastructures (and thus
+don't really fit specifically in the generic infrastructure section), but
+also for clarity when the info on hooks will be expanded in later patches.
 
 Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
 ---
- Makefile               |  14 ++++++++------
- package/pkg-generic.mk |   2 +-
- 2 files changed, 9 insertions(+), 7 deletions(-)
+ docs/manual/adding-packages-autotools.txt |   3 +-
+ docs/manual/adding-packages-cmake.txt     |   3 +-
+ docs/manual/adding-packages-generic.txt   |  40 +-------------------------
+ docs/manual/adding-packages-hooks.txt     |  41 +++++++++++++++++++++++++++
+ docs/manual/adding-packages.txt           |   2 +
+ 5 files changed, 46 insertions(+), 43 deletions(-)
 
-diff --git a/Makefile b/Makefile
---- a/Makefile
-+++ b/Makefile
-@@ -426,11 +426,14 @@ ifeq ($(BR2_ROOTFS_SKELETON_CUSTOM),y)
- TARGET_SKELETON=$(BR2_ROOTFS_SKELETON_CUSTOM_PATH)
- endif
+diff --git a/docs/manual/adding-packages-autotools.txt b/docs/manual/adding-packages-autotools.txt
+--- a/docs/manual/adding-packages-autotools.txt
++++ b/docs/manual/adding-packages-autotools.txt
+@@ -162,8 +162,7 @@ well for most autotools-based packages. 
+ still possible to customize what is done in any particular step:
  
-+RSYNC_VCS_EXCLUSIONS = \
-+	--exclude .svn --exclude .git --exclude .hg --exclude .bzr \
-+	--exclude CVS
+ * By adding a post-operation hook (after extract, patch, configure,
+-  build or install). See the reference documentation of the generic
+-  infrastructure for details.
++  build or install). See xref:hooks[] for details.
+ 
+ * By overriding one of the steps. For example, even if the autotools
+   infrastructure is used, if the package +.mk+ file defines its
+diff --git a/docs/manual/adding-packages-cmake.txt b/docs/manual/adding-packages-cmake.txt
+--- a/docs/manual/adding-packages-cmake.txt
++++ b/docs/manual/adding-packages-cmake.txt
+@@ -135,8 +135,7 @@ for most CMake-based packages. However, 
+ possible to customize what is done in any particular step:
+ 
+ * By adding a post-operation hook (after extract, patch, configure,
+-  build or install). See the reference documentation of the generic
+-  infrastructure for details.
++  build or install). See xref:hooks[] for details.
+ 
+ * By overriding one of the steps. For example, even if the CMake
+   infrastructure is used, if the package +.mk+ file defines its own
+diff --git a/docs/manual/adding-packages-generic.txt b/docs/manual/adding-packages-generic.txt
+--- a/docs/manual/adding-packages-generic.txt
++++ b/docs/manual/adding-packages-generic.txt
+@@ -451,42 +451,4 @@ In the action definitions, you can use t
+ * Of course the +$(HOST_DIR)+, +$(STAGING_DIR)+ and +$(TARGET_DIR)+
+   variables to install the packages properly.
+ 
+-The last feature of the generic infrastructure is the ability to add
+-hooks. These define further actions to perform after existing steps.
+-Most hooks aren't really useful for generic packages, since the +.mk+
+-file already has full control over the actions performed in each step
+-of the package construction. The hooks are more useful for packages
+-using the autotools infrastructure described below.  However, since
+-they are provided by the generic infrastructure, they are documented
+-here. The exception is +LIBFOO_POST_PATCH_HOOKS+.  Patching the
+-package and producing legal info are not user definable, so
+-+LIBFOO_POST_PATCH_HOOKS+ and +LIBFOO_POST_LEGAL_INFO_HOOKS+ are
+-useful for generic packages.
+-
+-The following hook points are available:
+-
+-* +LIBFOO_POST_DOWNLOAD_HOOKS+
+-* +LIBFOO_POST_EXTRACT_HOOKS+
+-* +LIBFOO_POST_RSYNC_HOOKS+
+-* +LIBFOO_PRE_PATCH_HOOKS+
+-* +LIBFOO_POST_PATCH_HOOKS+
+-* +LIBFOO_PRE_CONFIGURE_HOOKS+
+-* +LIBFOO_POST_CONFIGURE_HOOKS+
+-* +LIBFOO_POST_BUILD_HOOKS+
+-* +LIBFOO_POST_INSTALL_HOOKS+ (for host packages only)
+-* +LIBFOO_POST_INSTALL_STAGING_HOOKS+ (for target packages only)
+-* +LIBFOO_POST_INSTALL_TARGET_HOOKS+ (for target packages only)
+-* +LIBFOO_POST_LEGAL_INFO_HOOKS+
+-
+-These variables are 'lists' of variable names containing actions to be
+-performed at this hook point. This allows several hooks to be
+-registered at a given hook point. Here is an example:
+-
+-----------------------
+-define LIBFOO_POST_PATCH_FIXUP
+-	action1
+-	action2
+-endef
+-
+-LIBFOO_POST_PATCH_HOOKS += LIBFOO_POST_PATCH_FIXUP
+-----------------------
++Finally, you can also use hooks. See xref:hooks[] for more information.
+diff --git a/docs/manual/adding-packages-hooks.txt b/docs/manual/adding-packages-hooks.txt
+new file mode 100644
+--- /dev/null
++++ b/docs/manual/adding-packages-hooks.txt
+@@ -0,0 +1,41 @@
++// -*- mode:doc; -*-
++// vim: set syntax=asciidoc:
 +
- $(BUILD_DIR)/.root:
- 	mkdir -p $(TARGET_DIR)
--	rsync -a \
--		--exclude .empty --exclude .svn --exclude .git \
--		--exclude .hg --exclude=CVS --exclude '*~' \
-+	rsync -a $(RSYNC_VCS_EXCLUSIONS) \
-+		--exclude .empty --exclude '*~' \
- 		$(TARGET_SKELETON)/ $(TARGET_DIR)/
- 	cp support/misc/target-dir-warning.txt $(TARGET_DIR_WARNING_FILE)
- 	@ln -snf lib $(TARGET_DIR)/$(LIB_SYMLINK)
-@@ -504,9 +507,8 @@ endif
++[[hooks]]
++Hooks available in the various build steps
++~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++
++The generic infrastructure (and as a result also the derived autotools
++and cmake infrastructures) allow packages to specify hooks.
++These define further actions to perform after existing steps.
++Most hooks aren't really useful for generic packages, since the +.mk+
++file already has full control over the actions performed in each step
++of the package construction.
++
++The following hook points are available:
++
++* +LIBFOO_POST_DOWNLOAD_HOOKS+
++* +LIBFOO_POST_EXTRACT_HOOKS+
++* +LIBFOO_POST_RSYNC_HOOKS+
++* +LIBFOO_PRE_PATCH_HOOKS+
++* +LIBFOO_POST_PATCH_HOOKS+
++* +LIBFOO_PRE_CONFIGURE_HOOKS+
++* +LIBFOO_POST_CONFIGURE_HOOKS+
++* +LIBFOO_POST_BUILD_HOOKS+
++* +LIBFOO_POST_INSTALL_HOOKS+ (for host packages only)
++* +LIBFOO_POST_INSTALL_STAGING_HOOKS+ (for target packages only)
++* +LIBFOO_POST_INSTALL_TARGET_HOOKS+ (for target packages only)
++* +LIBFOO_POST_LEGAL_INFO_HOOKS+
++
++These variables are 'lists' of variable names containing actions to be
++performed at this hook point. This allows several hooks to be
++registered at a given hook point. Here is an example:
++
++----------------------
++define LIBFOO_POST_PATCH_FIXUP
++	action1
++	action2
++endef
++
++LIBFOO_POST_PATCH_HOOKS += LIBFOO_POST_PATCH_FIXUP
++----------------------
+diff --git a/docs/manual/adding-packages.txt b/docs/manual/adding-packages.txt
+--- a/docs/manual/adding-packages.txt
++++ b/docs/manual/adding-packages.txt
+@@ -18,6 +18,8 @@ include::adding-packages-autotools.txt[]
  
- 	@$(foreach d, $(call qstrip,$(BR2_ROOTFS_OVERLAY)), \
- 		$(call MESSAGE,"Copying overlay $(d)"); \
--		rsync -a \
--			--exclude .empty --exclude .svn --exclude .git \
--			--exclude .hg --exclude=CVS --exclude '*~' \
-+		rsync -a $(RSYNC_VCS_EXCLUSIONS) \
-+			--exclude .empty --exclude '*~' \
- 			$(d)/ $(TARGET_DIR)$(sep))
+ include::adding-packages-cmake.txt[]
  
- 	@$(foreach s, $(call qstrip,$(BR2_ROOTFS_POST_BUILD_SCRIPT)), \
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -68,7 +68,7 @@ endif
- $(BUILD_DIR)/%/.stamp_rsynced:
- 	@$(call MESSAGE,"Syncing from source dir $(SRCDIR)")
- 	@test -d $(SRCDIR) || (echo "ERROR: $(SRCDIR) does not exist" ; exit 1)
--	rsync -au --cvs-exclude --include core $(SRCDIR)/ $(@D)
-+	rsync -au $(RSYNC_VCS_EXCLUSIONS) $(SRCDIR)/ $(@D)
- 	$(foreach hook,$($(PKG)_POST_RSYNC_HOOKS),$(call $(hook))$(sep))
- 	$(Q)touch $@
++include::adding-packages-hooks.txt[]
++
+ include::adding-packages-gettext.txt[]
  
+ include::adding-packages-tips.txt[]
