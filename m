@@ -1,37 +1,43 @@
-From: Alexander Lukichev <alexander.lukichev@gmail.com>
-Date: Fri, 1 Nov 2013 22:21:08 +0200
-Subject: [Buildroot] [PATCH v2 1/1] openpgm: disable on AVR32
-In-Reply-To: <20131101192027.1ea4c1bc@skate>
-References: <1383329548-8528-1-git-send-email-alexander.lukichev@gmail.com>
- <20131101192027.1ea4c1bc@skate>
-Message-ID: <CAAHaz6GXiQAMuoK2eo0=EjmE509P98zuuAuN7f_T5TYeK6W1QA@mail.gmail.com>
+From: Stanislav Vasic <svlasic@gmail.com>
+Date: Fri, 1 Nov 2013 20:10:33 +0000 (UTC)
+Subject: [Buildroot] iconv: additional encodings
+References: <52725222.9050503@gmail.com> <
+ CABMiYf_=RK0UJyZLNkW5JU3xSXKMcNxL9-VRxjNpFqtZ3ye50g@mail.gmail.com> <
+ 0e99777a-09bf-4414-9769-cbfdd10aa040@email.android.com> <52734FA0.3060508@
+ gmail.com> <20131101131557.232faaa6@skate> <
+ CABMiYf9+4TujbLF8UM7-argbVtmquqgL9we6HRorGEMVA=Qx_w@mail.gmail.com> <
+ 20131101175255.162ae15b@skate>
+Message-ID: <l511rp$p7$1@ger.gmane.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas, Simon,
+Hi Thomas,
 
-The compiler (that particular toolchain) has those intrinsic functions but
-is able to generate them only if the exact CPU sub architecture is
-specified, not just AVR32 (their implementations differ for each of the two
-sub architectures). This is impossible to specify unless we introduce it in
-the buildroot configuration system (like several flavors of ARM). And this,
-in turn, seems too much to make just one package happy.
+I believe Jan is talking about my patch:
 
-I tried to disable using them in the package code by playing with
-configure.ac but unsuccessfully: the code used instead some thread
-functions that were not provided by the toolchain (at least, not with the
-constants defined in configure). In the end, it seemed too much trouble
-since nobody showed interest in the package, especially on this
-architecture, and it breaks builds for AVR32.
+https://github.com/Stane1983/buildroot-mx/
+commit/8be22b0db136403ee55c84bf093366808d65dc3f
 
-I did not know how to explain all this concisely in openpgm's Config.in,
-sorry :-)
+It works for Linaro toolchains.
 
-Best regards,
-  Alexander Lukichev
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20131101/51569260/attachment.html>
+In this patch I had to export GCONV_PATH because of XBMC. Otherwise, XBMC 
+is not aware of gconv libs existence.
+
+On Fri, 01 Nov 2013 17:52:55 +0100, Thomas Petazzoni wrote:
+
+> Dear Jan Pohanka,
+> 
+> On Fri, 1 Nov 2013 17:44:31 +0100, Jan Pohanka wrote:
+> 
+>> I will prepare a patch with this feature. Can you please confirm
+>> whether /etc/environment file can be used to set variables for whole
+>> system in Busybox? Or it is better to use eg. profile file, etc.
+> 
+> Why is setting an environment variable necessary? Isn't glibc always
+> looking for gconv modules in a standard place, in which we could install
+> those modules?
+> 
+> Thomas
