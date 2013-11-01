@@ -1,71 +1,37 @@
-From: Stanislav Vlasic <svlasic@gmail.com>
-Date: Fri, 1 Nov 2013 20:26:09 +0100
-Subject: [Buildroot] Introducing new package type,
-	side to side with generic-package
-Message-ID: <CADYw_JLHofB+VQ2rktw_reWCvAWU9rj7VJ95tgVnW5OujYisow@mail.gmail.com>
+From: Alexander Lukichev <alexander.lukichev@gmail.com>
+Date: Fri, 1 Nov 2013 22:21:08 +0200
+Subject: [Buildroot] [PATCH v2 1/1] openpgm: disable on AVR32
+In-Reply-To: <20131101192027.1ea4c1bc@skate>
+References: <1383329548-8528-1-git-send-email-alexander.lukichev@gmail.com>
+ <20131101192027.1ea4c1bc@skate>
+Message-ID: <CAAHaz6GXiQAMuoK2eo0=EjmE509P98zuuAuN7f_T5TYeK6W1QA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi to all,
+Hi Thomas, Simon,
 
-this is my first mail to list, so I'll write short introduction... I'm
-Stanislav Vlasic, Croatian developer, some of you might know me as
-Stane1983 from contributions to XBMC, Amlogic buildroot, firmwares to
-Amlogic devices.... Thats pretty much it :)
+The compiler (that particular toolchain) has those intrinsic functions but
+is able to generate them only if the exact CPU sub architecture is
+specified, not just AVR32 (their implementations differ for each of the two
+sub architectures). This is impossible to specify unless we introduce it in
+the buildroot configuration system (like several flavors of ARM). And this,
+in turn, seems too much to make just one package happy.
 
-Here's short story of what I did with my custom buildroot:
-- included package/pkg-xbmc-addon.mk with xbmc-addon and inner-xbmc-addon
-macros. Change I did in this make file is one line: $(2)_KCONFIG_VAR =
-BR2_PACKAGE_XBMC_ADDON_$(2)
-- I tried to rearrange of adding xbmc addons by creating makefile similar
-to this:
+I tried to disable using them in the package code by playing with
+configure.ac but unsuccessfully: the code used instead some thread
+functions that were not provided by the toolchain (at least, not with the
+constants defined in configure). In the end, it seemed too much trouble
+since nobody showed interest in the package, especially on this
+architecture, and it breaks builds for AVR32.
 
-ADDON_NAME = YOUTUBE
-ADDON_PATH = plugin.video.youtube
+I did not know how to explain all this concisely in openpgm's Config.in,
+sorry :-)
 
-$(ADDON_NAME)_VERSION = 0a8aa83df0786f5401307ca12080bbc4aefd76f6
-$(ADDON_NAME)_SITE_METHOD = git
-$(ADDON_NAME)_SITE = https://github.com/HenrikDK/youtube-xbmc-plugin.git
-$(ADDON_NAME)_INSTALL_STAGING = YES
-$(ADDON_NAME)_INSTALL_TARGET = YES
-$(ADDON_NAME)_DEPENDENCIES = xbmc
-
-define $(ADDON_NAME)_INSTALL_STAGING_CMDS
-# Commands for install to staging
-endef
-
-define $(ADDON_NAME)_INSTALL_TARGET_CMDS
-# Comands for install to target
-endef
-
-$(eval $(call xbmc-addon,package/thirdparty/xbmcaddons,$(call
-lc,$(ADDON_NAME))))
-
-This actually works. What's not working - if I add another package the same
-way....
-Version, site_method, site.... all these variables are OK and second
-package downloads correctly.
-
-Problem comes when I try to install it to target or staging folder. Example
-of install:
-
-define $(ADDON_NAME)_INSTALL_STAGING_CMDS
-        # Here in first line I check if folder already exists, if it does i
-delete all content and folder itself
-        mkdir -p $(STAGING_DIR)/usr/share/xbmc/addons/$(ADDON_PATH)
-        cp -rf $(@D)/* $(STAGING_DIR)/usr/share/xbmc/addons/$(ADDON_PATH)/
-endef
-
-Now when buildroot hits install to staging, ADDON_PATH becomes
-'plugin.video.youtube', which it has in another makefile??
-
-Does this have any sense to anybody here? :)
-
-Thanx and best regards,
-Stane1983
+Best regards,
+  Alexander Lukichev
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20131101/626c2c7b/attachment.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20131101/51569260/attachment.html>
