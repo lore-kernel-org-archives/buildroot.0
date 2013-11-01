@@ -1,61 +1,78 @@
-From: Clayton Shotwell <clshotwe@rockwellcollins.com>
-Date: Fri, 1 Nov 2013 07:48:25 -0700
-Subject: [Buildroot] [PATCH v3] cryptsetup: Add libintl for UCLIBC toolchain
-Message-ID: <1383317305-10180-1-git-send-email-clshotwe@rockwellcollins.com>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Fri, 1 Nov 2013 16:09:05 +0100
+Subject: [Buildroot] Patchwork oldest patches cleanup #2 (deadline November
+	17)
+Message-ID: <CAAXf6LV_kM18mt8h5yQScnhOPfJZ2PMNg3tvF=mBLCi8bFem2A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes autobuild error
-http://autobuild.buildroot.net/results/cc1a65b9554bc2ece1b3ea8b51cd805b9bda7e86/
+All,
 
-Adding libintl to the libraries list for cryptsetup when using a
-uclibc toolchain and locale support is enabled.
+For those who haven't seen the first patchwork cleanup session, here is
+a quick recap: every session we'll be posting the list of the 10 oldest
+patches, with the original patch contributors in copy. During two weeks,
+we have the opportunity to discuss the patch, whether it is still
+necessary or not, how it should be changed to be merged.
 
-Signed-off-by: Clayton Shotwell <clshotwe@rockwellcollins.com>
----
-Changes v2 -> v3:
-  - Adding BR2_NEEDS_GETTEXT_IF_LOCALE checks per the buildroot
-    manual (suggested by Gustavo)
-Changes v1 -> v2:
-  - Adding TARGET_LDFLAGS to make sure they are not dropped
----
- package/cryptsetup/Config.in     |    1 +
- package/cryptsetup/cryptsetup.mk |    7 ++++++-
- 2 files changed, 7 insertions(+), 1 deletion(-)
+In particular, I'm interested in knowing if the original contributor is
+still interested by the patch, or if someone else is interested in
+adopting the patch and sending an updated version, or if the patch no
+longer makes sense due to other changes made in Buildroot.
 
-diff --git a/package/cryptsetup/Config.in b/package/cryptsetup/Config.in
-index 71faa48..3b9ba54 100644
---- a/package/cryptsetup/Config.in
-+++ b/package/cryptsetup/Config.in
-@@ -4,6 +4,7 @@ config BR2_PACKAGE_CRYPTSETUP
- 	select BR2_PACKAGE_POPT
- 	select BR2_PACKAGE_LVM2
- 	select BR2_PACKAGE_E2FSPROGS
-+	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE 
- 	depends on BR2_LARGEFILE # lvm2, util-linux
- 	depends on BR2_USE_MMU # lvm2
- 	depends on BR2_USE_WCHAR # util-linux
-diff --git a/package/cryptsetup/cryptsetup.mk b/package/cryptsetup/cryptsetup.mk
-index 48d37f6..a65f841 100644
---- a/package/cryptsetup/cryptsetup.mk
-+++ b/package/cryptsetup/cryptsetup.mk
-@@ -8,8 +8,13 @@ CRYPTSETUP_VERSION = 1.6.2
- CRYPTSETUP_SOURCE = cryptsetup-$(CRYPTSETUP_VERSION).tar.bz2
- CRYPTSETUP_SITE = http://cryptsetup.googlecode.com/files
- CRYPTSETUP_CONF_ENV += LIBGCRYPT_CONFIG=$(STAGING_DIR)/usr/bin/libgcrypt-config
--CRYPTSETUP_DEPENDENCIES = lvm2 popt e2fsprogs libgcrypt host-pkgconf
-+CRYPTSETUP_DEPENDENCIES = lvm2 popt e2fsprogs libgcrypt host-pkgconf \
-+	$(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext)
- CRYPTSETUP_LICENSE = GPLv2+ (programs), LGPLv2.1+ (library)
- CRYPTSETUP_LICENSE_FILES = COPYING COPYING.LGPL
- 
-+ifeq ($(BR2_NEEDS_GETTEXT_IF_LOCALE),y)
-+CRYPTSETUP_CONF_ENV += LDFLAGS="$(TARGET_LDFLAGS) -lintl"
-+endif
-+
- $(eval $(autotools-package))
--- 
-1.7.9.5
+All patches that have not received any comment or attention before the
+deadline will be removed from patchwork. This is aggressive, but we have
+many 'dead' patches sitting in patchwork, and this cannot work.
+
+For this second session, I set the deadline to November 17. Below are the
+10 oldest patches (obtained with a slightly modified version of pwclient):
+[ pwclient list -s New -n 10 ]
+
+
+Add support for the HABA-KNX-LITE
+Gregory Hermant <gregory.hermant@calao-systems.com>
+http://patchwork.ozlabs.org/patch/180241
+
+upx: high-performance executable packer with in-place decompression support
+Stefan Fr?berg <stefan.froberg@petroprogram.com>
+http://patchwork.ozlabs.org/patch/180285
+
+Add custom boards support for Atmel SAM-BA software
+Gregory Hermant <gregory.hermant@calao-systems.com>
+http://patchwork.ozlabs.org/patch/180668
+
+linux: add default defconfig
+Arnout Vandecappelle <arnout@mind.be>
+http://patchwork.ozlabs.org/patch/181185
+
+[1/4] If linux-pam is built, enable dbm functionality in Berkeley DB
+Dimitry Golubovsky <golubovsky@gmail.com>
+http://patchwork.ozlabs.org/patch/182497
+
+[2/4] Make Berkeley DB a dependency of linux-pam and make sure it is selected
+Dimitry Golubovsky <golubovsky@gmail.com>
+http://patchwork.ozlabs.org/patch/182498
+
+[3/4] Provide PAM default configuration files when building linux-pam package
+Dimitry Golubovsky <golubovsky@gmail.com>
+http://patchwork.ozlabs.org/patch/182499
+
+[4/4] PAM support in Busybox if linux-pam is built
+Dimitry Golubovsky <golubovsky@gmail.com>
+http://patchwork.ozlabs.org/patch/182500
+
+Fixing linux-pam build failures
+Stefan Fr?berg <stefan.froberg@petroprogram.com>
+http://patchwork.ozlabs.org/patch/182537
+
+[RFC] patches-from-git.sh: new support script
+Arnout Vandecappelle <arnout@mind.be>
+http://patchwork.ozlabs.org/patch/182856
+
+
+Thanks all for your input,
+
+Best regards,
+Thomas
