@@ -1,32 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 1 Nov 2013 19:20:27 +0100
-Subject: [Buildroot] [PATCH v2 1/1] openpgm: disable on AVR32
-In-Reply-To: <1383329548-8528-1-git-send-email-alexander.lukichev@gmail.com>
-References: <1383329548-8528-1-git-send-email-alexander.lukichev@gmail.com>
-Message-ID: <20131101192027.1ea4c1bc@skate>
+Date: Fri, 1 Nov 2013 19:24:10 +0100
+Subject: [Buildroot] [PATCH 2/5] gcc: add microblaze internal toolchain
+In-Reply-To: <CAEBucnAb7nqvgqTMv9s0HJYSL5R_GRBS+Gz2HHDo31G7fsvPAg@mail.gmail.com>
+References: <1381502000-1995-1-git-send-email-spenser@gillilanding.com>
+ <1381502000-1995-3-git-send-email-spenser@gillilanding.com>
+ <20131013124010.58b2977f@skate>
+ <CAEBucnAb7nqvgqTMv9s0HJYSL5R_GRBS+Gz2HHDo31G7fsvPAg@mail.gmail.com>
+Message-ID: <20131101192410.6a7875a3@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Alexander Lukichev,
+Dear Spenser Gilliland,
 
-On Fri,  1 Nov 2013 20:12:28 +0200, Alexander Lukichev wrote:
+On Mon, 14 Oct 2013 17:55:17 -0500, Spenser Gilliland wrote:
 
-> +	depends on !BR2_avr32 # incorrectly configures for the toolchain
+> > On Fri, 11 Oct 2013 09:33:17 -0500, Spenser Gilliland wrote:
+> >
+> > > @@ -102,6 +108,7 @@ config BR2_GCC_VERSION
+> > >       default "4.7.3"     if BR2_GCC_VERSION_4_7_X
+> > >       default "4.8.1"     if BR2_GCC_VERSION_4_8_X
+> > >       default "4.8-arc"   if BR2_GCC_VERSION_4_8_ARC
+> > > +     default "4.9-microblaze" if BR2_GCC_VERSION_4_9_MICROBLAZE
+> > >       default $BR2_GCC_SNAP_DATE if BR2_GCC_VERSION_SNAP
+> >
+> > I'm getting a build failure while testing this patch set:
+> >
+> > >>> host-gcc-final 4.9-microblaze Patching package/gcc//gcc-final
+> > support/scripts/apply-patches.sh
+> /home/test/outputs/microblaze-glibc/build/host-gcc-final-4.9-microblaze
+> package/gcc/4.9-microblaze \*.patch
+> > Aborting.  'package/gcc/4.9-microblaze' is not a directory.
+> >
+> > I believe we should have a few patches, at least the ones that are also
+> > in package/gcc/4.8-arc.
+> >
+> > Is this something you are willing to fix, or should I take your patches
+> > and fix those problems?
+> 
+> Yes, I'll take a look at it tomorrow.
 
-This comment is somewhat misleading. What really happens is that
-openpgm uses compiler intrinsics that did not exist in gcc 4.2. So
-maybe the test should actually be on BR2_GCC_VERSION_4_2_2_AVR32_2_1_5
-instead of BR2_avr32 (even though it's admittedly quite the same thing,
-since AVR32 will never use any other version that this heavily patched
-gcc 4.2).
+Any news?
 
-I've added Simon Dawson in the CC list, who is the main contributor to
-the AVR32 support in Buildroot.
-
-Best regards,
+Thanks,
 
 Thomas
 -- 
