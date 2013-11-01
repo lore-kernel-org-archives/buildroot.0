@@ -1,40 +1,51 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 1 Nov 2013 17:41:54 +0100
-Subject: [Buildroot] [PATCH v2] rsync: use system zlib and popt,
- also do not lose debug options
-In-Reply-To: <1381929217-13399-1-git-send-email-denis@mingulov.com>
-References: <1381923631-26549-1-git-send-email-denis@mingulov.com>
- <1381929217-13399-1-git-send-email-denis@mingulov.com>
-Message-ID: <20131101174154.39d2c0d4@skate>
+From: Jan Pohanka <xhpohanka@gmail.com>
+Date: Fri, 1 Nov 2013 17:44:31 +0100
+Subject: [Buildroot] iconv: additional encodings
+In-Reply-To: <20131101131557.232faaa6@skate>
+References: <52725222.9050503@gmail.com>
+ <CABMiYf_=RK0UJyZLNkW5JU3xSXKMcNxL9-VRxjNpFqtZ3ye50g@mail.gmail.com>
+ <0e99777a-09bf-4414-9769-cbfdd10aa040@email.android.com>
+ <52734FA0.3060508@gmail.com> <20131101131557.232faaa6@skate>
+Message-ID: <CABMiYf9+4TujbLF8UM7-argbVtmquqgL9we6HRorGEMVA=Qx_w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Denis Mingulov,
+> Do you think you could send a patch to implement this in Buildroot?
 
-On Wed, 16 Oct 2013 16:13:37 +0300, Denis Mingulov wrote:
-> rsync by default compiles statically its own zlib and popt
-> libraries, it is better to use system wide libraries instead -
-> both for disk and memory consumption. Change rsync package
-> accordingly.
-> 
-> Also previously a debug configure option has been lost, as
-> overwritten by '--with-included-popt' option - fixed.
-> 
-> For example, on ARMv5 rsync binary size is reduced by about 25%.
-> 
-> Signed-off-by: Denis Mingulov <denis@mingulov.com>
-> ---
->  package/rsync/Config.in | 2 ++
->  package/rsync/rsync.mk  | 7 +++++--
->  2 files changed, 7 insertions(+), 2 deletions(-)
+Hi Thomas,
 
-Applied to for-peter-2013.11, thanks!
+I will prepare a patch with this feature. Can you please confirm
+whether /etc/environment file can be used to set variables for whole
+system in Busybox? Or it is better to use eg. profile file, etc.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+thanks
+Jan
+
+2013/11/1 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>:
+> Dear Jan Pohanka,
+>
+> On Fri, 01 Nov 2013 07:52:16 +0100, Jan Pohanka wrote:
+>
+>> I have realized that external toolchain support is a bit patched in the
+>> fork that I'm using compared to original one. There is an option to copy
+>> files gconv-modules, gconv-modules.cache, CP1250.so, and all other
+>> encodings shared libraries to target/usr/lib/gconv directory. I thought
+>> that it is a standard directory which the glibc iconv implementation
+>> would search shared encodings for. This is not truth because GCONV_PATH
+>> has to be set and point there, to make iconv work with all encodings.
+>>
+>> Maybe something similar could be added to standard Buildroot. It took me
+>> a day to realize where is the problem.
+>
+> Do you think you could send a patch to implement this in Buildroot?
+>
+> Thanks,
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
