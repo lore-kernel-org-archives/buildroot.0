@@ -1,33 +1,125 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 1 Nov 2013 13:17:53 +0100
-Subject: [Buildroot] [PATCH 1/1] cryptsetup: Fix autobuild error
- http://autobuild.buildroot.net/results/cc1a65b9554bc2ece1b3ea8b51cd805b9bda7e86/
-In-Reply-To: <1383247852-32199-1-git-send-email-clshotwe@rockwellcollins.com>
-References: <1383247852-32199-1-git-send-email-clshotwe@rockwellcollins.com>
-Message-ID: <20131101131753.3afa675a@skate>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Fri,  1 Nov 2013 10:54:27 -0300
+Subject: [Buildroot] [PATCH] strongswan: add security patches
+Message-ID: <1383314067-26982-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Clayton Shotwell,
+Security patches to fix CVE-2013-5018, CVE-2013-6075 and CVE-2013-6076.
 
-On Thu, 31 Oct 2013 12:30:52 -0700, Clayton Shotwell wrote:
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ .../strongswan-0003-CVE-2013-5018-fix.patch        | 29 ++++++++++++++++++++++
+ .../strongswan-0004-CVE-2013-6075-fix.patch        | 27 ++++++++++++++++++++
+ .../strongswan-0005-CVE-2013-6076-fix.patch        | 27 ++++++++++++++++++++
+ 3 files changed, 83 insertions(+)
+ create mode 100644 package/strongswan/strongswan-0003-CVE-2013-5018-fix.patch
+ create mode 100644 package/strongswan/strongswan-0004-CVE-2013-6075-fix.patch
+ create mode 100644 package/strongswan/strongswan-0005-CVE-2013-6076-fix.patch
 
-> +ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),y)
-> +CRYPTSETUP_CONF_ENV += LDFLAGS="-lintl"
-> +endif
-
-I don't think BR2_TOOLCHAIN_USES_UCLIBC is the right thing to use here.
-You should use either BR2_NEEDS_GETTEXT_IF_LOCALE or BR2_NEEDS_GETTEXT,
-depending on whether intl is needed unconditionally, or only when
-locale support is enabled (which is most likely the case).
-
-Best regards,
-
-Thomas
+diff --git a/package/strongswan/strongswan-0003-CVE-2013-5018-fix.patch b/package/strongswan/strongswan-0003-CVE-2013-5018-fix.patch
+new file mode 100644
+index 0000000..e30ac31
+--- /dev/null
++++ b/package/strongswan/strongswan-0003-CVE-2013-5018-fix.patch
+@@ -0,0 +1,29 @@
++From 057265e0183ddf52d56f21adaf0db0f3dc6585a4 Mon Sep 17 00:00:00 2001
++From: Tobias Brunner <tobias@strongswan.org>
++Date: Mon, 29 Jul 2013 23:45:38 +0200
++Subject: [PATCH] asn1: Fix handling of invalid ASN.1 length in is_asn1()
++
++Fixes CVE-2013-5018.
++---
++ src/libstrongswan/asn1/asn1.c |    5 +++++
++ 1 file changed, 5 insertions(+)
++
++diff --git a/src/libstrongswan/asn1/asn1.c b/src/libstrongswan/asn1/asn1.c
++index 68f37f4..d860ad9 100644
++--- a/src/libstrongswan/asn1/asn1.c
+++++ b/src/libstrongswan/asn1/asn1.c
++@@ -642,6 +642,11 @@ bool is_asn1(chunk_t blob)
++ 
++ 	len = asn1_length(&blob);
++ 
+++	if (len == ASN1_INVALID_LENGTH)
+++	{
+++		return FALSE;
+++	}
+++
++ 	/* exact match */
++ 	if (len == blob.len)
++ 	{
++-- 
++1.7.10.4
++
+diff --git a/package/strongswan/strongswan-0004-CVE-2013-6075-fix.patch b/package/strongswan/strongswan-0004-CVE-2013-6075-fix.patch
+new file mode 100644
+index 0000000..be3279a
+--- /dev/null
++++ b/package/strongswan/strongswan-0004-CVE-2013-6075-fix.patch
+@@ -0,0 +1,27 @@
++From aa277adfc204b6bda2c3792710138f9a8723a8f1 Mon Sep 17 00:00:00 2001
++From: Martin Willi <martin@revosec.ch>
++Date: Mon, 7 Oct 2013 14:21:57 +0200
++Subject: [PATCH] identification: Properly check length before comparing for
++ binary DN equality
++
++Fixes CVE-2013-6075.
++---
++ src/libstrongswan/utils/identification.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/src/libstrongswan/utils/identification.c b/src/libstrongswan/utils/identification.c
++index 5df3e5f..9c43ad5 100644
++--- a/src/libstrongswan/utils/identification.c
+++++ b/src/libstrongswan/utils/identification.c
++@@ -602,7 +602,7 @@ static bool compare_dn(chunk_t t_dn, chunk_t o_dn, int *wc)
++ 		}
++ 	}
++ 	/* try a binary compare */
++-	if (memeq(t_dn.ptr, o_dn.ptr, t_dn.len))
+++	if (chunk_equals(t_dn, o_dn))
++ 	{
++ 		return TRUE;
++ 	}
++-- 
++1.8.1.2
++
+diff --git a/package/strongswan/strongswan-0005-CVE-2013-6076-fix.patch b/package/strongswan/strongswan-0005-CVE-2013-6076-fix.patch
+new file mode 100644
+index 0000000..40b1793
+--- /dev/null
++++ b/package/strongswan/strongswan-0005-CVE-2013-6076-fix.patch
+@@ -0,0 +1,27 @@
++From d8867a8452eece3fffab29605f48e6bed47c42d4 Mon Sep 17 00:00:00 2001
++From: =?UTF-8?q?Volker=20R=C3=BCmelin?= <vr_strongswan@t-online.de>
++Date: Fri, 11 Oct 2013 09:38:24 +0200
++Subject: [PATCH] ikev1: Properly initialize list of fragments in case fragment
++ ID is 0
++
++Fixes CVE-2013-6076.
++---
++ src/libcharon/sa/ikev1/task_manager_v1.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/src/libcharon/sa/ikev1/task_manager_v1.c b/src/libcharon/sa/ikev1/task_manager_v1.c
++index 6d4ef14..597416e 100644
++--- a/src/libcharon/sa/ikev1/task_manager_v1.c
+++++ b/src/libcharon/sa/ikev1/task_manager_v1.c
++@@ -1273,7 +1273,7 @@ static status_t handle_fragment(private_task_manager_t *this, message_t *msg)
++ 		return FAILED;
++ 	}
++ 
++-	if (this->frag.id != payload->get_id(payload))
+++	if (!this->frag.list || this->frag.id != payload->get_id(payload))
++ 	{
++ 		clear_fragments(this, payload->get_id(payload));
++ 		this->frag.list = linked_list_create();
++-- 
++1.8.1.2
++
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.8.1.5
