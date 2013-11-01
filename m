@@ -1,30 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 1 Nov 2013 17:52:55 +0100
-Subject: [Buildroot] iconv: additional encodings
-In-Reply-To: <CABMiYf9+4TujbLF8UM7-argbVtmquqgL9we6HRorGEMVA=Qx_w@mail.gmail.com>
-References: <52725222.9050503@gmail.com>
- <CABMiYf_=RK0UJyZLNkW5JU3xSXKMcNxL9-VRxjNpFqtZ3ye50g@mail.gmail.com>
- <0e99777a-09bf-4414-9769-cbfdd10aa040@email.android.com>
- <52734FA0.3060508@gmail.com> <20131101131557.232faaa6@skate>
- <CABMiYf9+4TujbLF8UM7-argbVtmquqgL9we6HRorGEMVA=Qx_w@mail.gmail.com>
-Message-ID: <20131101175255.162ae15b@skate>
+Date: Fri, 1 Nov 2013 17:59:57 +0100
+Subject: [Buildroot] [PATCH v2 1/1] ngrep: fix static linking issue with
+ libpcre
+In-Reply-To: <5255D08E.3000307@openwide.fr>
+References: <5255D08E.3000307@openwide.fr>
+Message-ID: <20131101175957.689162a5@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Jan Pohanka,
+Dear Romain Naour,
 
-On Fri, 1 Nov 2013 17:44:31 +0100, Jan Pohanka wrote:
+On Wed, 09 Oct 2013 23:54:22 +0200, Romain Naour wrote:
+> 
+> Adding -lpcre in LDFLAGS place the library before object files:
+> gcc ... -lpcre -L .../sysroot/usr/lib -s -o ngrep ngrep.o -lpcap
+> 
+> Makefile.in is patched to use @LIBS@ for adding -lpcre in the right place.
+> 
+> Fixes:
+> http://autobuild.buildroot.net/results/684/684a3bed28d13ef5e5156257aade3b9aff32f180
+> 
+> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 
-> I will prepare a patch with this feature. Can you please confirm
-> whether /etc/environment file can be used to set variables for whole
-> system in Busybox? Or it is better to use eg. profile file, etc.
+Thanks, but this patch no longer applies on top of master, and more
+importantly, the ngrep-1.45-Makefile.in.patch doesn't apply to the
+ngrep sources. Could you rename the ngrep patches to use numbers, i.e
+ngrep-01-<foo>.patch, and use a more descriptive name than
+ngrep-1.45-Makefile.in.patch?
 
-Why is setting an environment variable necessary? Isn't glibc always
-looking for gconv modules in a standard place, in which we could
-install those modules?
+(Should be done in two patches: one renaming the existing patches, one
+adding the pcre static link fix).
+
+Thanks a lot!
 
 Thomas
 -- 
