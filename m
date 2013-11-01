@@ -1,78 +1,51 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Fri, 1 Nov 2013 16:09:05 +0100
-Subject: [Buildroot] Patchwork oldest patches cleanup #2 (deadline November
-	17)
-Message-ID: <CAAXf6LV_kM18mt8h5yQScnhOPfJZ2PMNg3tvF=mBLCi8bFem2A@mail.gmail.com>
+From: Mirek Frajkowski <kerim.fryer@gmail.com>
+Date: Fri, 1 Nov 2013 15:29:31 +0000
+Subject: [Buildroot] Mono package
+Message-ID: <CA+R-mPPYzHxdfxvfcmo=bzEhd9A4rs1Gsf9=onaYxjh74VAmLA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-All,
+Hi all,
 
-For those who haven't seen the first patchwork cleanup session, here is
-a quick recap: every session we'll be posting the list of the 10 oldest
-patches, with the original patch contributors in copy. During two weeks,
-we have the opportunity to discuss the patch, whether it is still
-necessary or not, how it should be changed to be merged.
+I would like to contribute to buildroot by sending Mono package, which I
+believe many people will find useful.
 
-In particular, I'm interested in knowing if the original contributor is
-still interested by the patch, or if someone else is interested in
-adopting the patch and sending an updated version, or if the patch no
-longer makes sense due to other changes made in Buildroot.
+Mono has to be cross compiled in two steps:
 
-All patches that have not received any comment or attention before the
-deadline will be removed from patchwork. This is aggressive, but we have
-many 'dead' patches sitting in patchwork, and this cannot work.
+1. Native code - for the virtual execution system, garbage collector and
+other unmanaged bits
+2. Managed code - this includes C# compiler, assembler, class libraries and
+so on
 
-For this second session, I set the deadline to November 17. Below are the
-10 oldest patches (obtained with a slightly modified version of pwclient):
-[ pwclient list -s New -n 10 ]
+Due to this fact it is divided into two sub-folders/sub-packages. The build
+configuration itself is not very complicated, however one thing is worth
+pointing out.
 
+Mono signs its binary files and thus we have to disable stripping of the
+binaries in the buildroot, which is done through "Config.in" file.
 
-Add support for the HABA-KNX-LITE
-Gregory Hermant <gregory.hermant@calao-systems.com>
-http://patchwork.ozlabs.org/patch/180241
+Everything else is pretty much straight forward and self explanatory.
 
-upx: high-performance executable packer with in-place decompression support
-Stefan Fr?berg <stefan.froberg@petroprogram.com>
-http://patchwork.ozlabs.org/patch/180285
+Package is also installed in staging directory, just in case someone needs
+to compile other packages which depend on Mono.
 
-Add custom boards support for Atmel SAM-BA software
-Gregory Hermant <gregory.hermant@calao-systems.com>
-http://patchwork.ozlabs.org/patch/180668
+Please find the Mono package attached.
 
-linux: add default defconfig
-Arnout Vandecappelle <arnout@mind.be>
-http://patchwork.ozlabs.org/patch/181185
+Any comments and suggestions are more than welcome. If you find it not
+working or failing to build let me know as well.
 
-[1/4] If linux-pam is built, enable dbm functionality in Berkeley DB
-Dimitry Golubovsky <golubovsky@gmail.com>
-http://patchwork.ozlabs.org/patch/182497
-
-[2/4] Make Berkeley DB a dependency of linux-pam and make sure it is selected
-Dimitry Golubovsky <golubovsky@gmail.com>
-http://patchwork.ozlabs.org/patch/182498
-
-[3/4] Provide PAM default configuration files when building linux-pam package
-Dimitry Golubovsky <golubovsky@gmail.com>
-http://patchwork.ozlabs.org/patch/182499
-
-[4/4] PAM support in Busybox if linux-pam is built
-Dimitry Golubovsky <golubovsky@gmail.com>
-http://patchwork.ozlabs.org/patch/182500
-
-Fixing linux-pam build failures
-Stefan Fr?berg <stefan.froberg@petroprogram.com>
-http://patchwork.ozlabs.org/patch/182537
-
-[RFC] patches-from-git.sh: new support script
-Arnout Vandecappelle <arnout@mind.be>
-http://patchwork.ozlabs.org/patch/182856
-
-
-Thanks all for your input,
-
-Best regards,
-Thomas
+Regards,
+Mirek
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20131101/eb0a6c78/attachment.html>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: buildroot-package-mono.tar.bz2
+Type: application/x-bzip2
+Size: 1062 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20131101/eb0a6c78/attachment.bz2>
