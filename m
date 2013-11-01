@@ -1,60 +1,34 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 4 Nov 2013 21:56:26 +0100
-Subject: [Buildroot] [git commit] libnl: simplify makefile by using
-	--{enable, disable}-cli
-Message-ID: <20131104211055.4C2539BB81@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 1 Nov 2013 15:34:04 +0100
+Subject: [Buildroot] [git commit] uemacs: fix package source
+Message-ID: <20131104211054.B2B279BC97@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=250af24dbd8c6902c0b92c95daa5b8cced947806
+commit: http://git.buildroot.net/buildroot/commit/?id=77de13ba5525f4efbfed6e3f30ab5e4b18ca3980
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The libnl configure script has a --{enable,disable}-cli options that
-allows to enable or disable the compilation of the libnl tools. Use
-this option instead of compiling everything and then removing the
-installed programs.
+There is no bz2 archive for uemacs on kernel.org, only a gz archive.
 
-Note that we also get rid of the uninstall command, which is planned
-to be globally removed in Buildroot.
-
+Signed-off-by: Arnaud R??billout <rebillout@syscom.ch>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Reviewed-by: Samuel Martin <s.martin49@gmail.com>
 ---
- package/libnl/libnl.mk |   19 ++++---------------
- 1 files changed, 4 insertions(+), 15 deletions(-)
+ package/uemacs/uemacs.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/libnl/libnl.mk b/package/libnl/libnl.mk
-index 5c884d7..3b56bc8 100644
---- a/package/libnl/libnl.mk
-+++ b/package/libnl/libnl.mk
-@@ -10,22 +10,11 @@ LIBNL_LICENSE = LGPLv2.1+
- LIBNL_LICENSE_FILES = COPYING
- LIBNL_INSTALL_STAGING = YES
- LIBNL_DEPENDENCIES = host-bison host-flex
--LIBNL_BINARIES = class-add class-delete class-list classid-lookup cls-add \
--	cls-delete cls-list link-list pktloc-lookup qdisc-add qdisc-delete \
--	qdisc-list
+diff --git a/package/uemacs/uemacs.mk b/package/uemacs/uemacs.mk
+index 9452062..0cd38e0 100644
+--- a/package/uemacs/uemacs.mk
++++ b/package/uemacs/uemacs.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
  
--define LIBNL_UNINSTALL_TARGET_CMDS
--	rm -r $(TARGET_DIR)/usr/lib/libnl.* $(TARGET_DIR)/usr/lib/libnl-*.*
--	rm -rf $(TARGET_DIR)/usr/lib/libnl
--endef
--
--define LIBNL_REMOVE_TOOLS
--	rm -rf $(addprefix $(TARGET_DIR)/usr/sbin/nl-, $(LIBNL_BINARIES))
--	rm -rf $(TARGET_DIR)/usr/sbin/genl-ctrl-list
--endef
--
--ifneq ($(BR2_PACKAGE_LIBNL_TOOLS),y)
--LIBNL_POST_INSTALL_TARGET_HOOKS += LIBNL_REMOVE_TOOLS
-+ifeq ($(BR2_PACKAGE_LIBNL_TOOLS),y)
-+LIBNL_CONF_OPT += --enable-cli
-+else
-+LIBNL_CONF_OPT += --disable-cli
- endif
+ UEMACS_VERSION = 4.0.15-lt
+-UEMACS_SOURCE = em-$(UEMACS_VERSION).tar.bz2
++UEMACS_SOURCE = em-$(UEMACS_VERSION).tar.gz
+ UEMACS_SITE = $(BR2_KERNEL_MIRROR)/software/editors/uemacs/
+ UEMACS_DEPENDENCIES = ncurses
  
- $(eval $(autotools-package))
