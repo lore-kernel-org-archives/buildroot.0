@@ -1,43 +1,52 @@
-From: Stanislav Vasic <svlasic@gmail.com>
-Date: Fri, 1 Nov 2013 20:10:33 +0000 (UTC)
-Subject: [Buildroot] iconv: additional encodings
-References: <52725222.9050503@gmail.com> <
- CABMiYf_=RK0UJyZLNkW5JU3xSXKMcNxL9-VRxjNpFqtZ3ye50g@mail.gmail.com> <
- 0e99777a-09bf-4414-9769-cbfdd10aa040@email.android.com> <52734FA0.3060508@
- gmail.com> <20131101131557.232faaa6@skate> <
- CABMiYf9+4TujbLF8UM7-argbVtmquqgL9we6HRorGEMVA=Qx_w@mail.gmail.com> <
- 20131101175255.162ae15b@skate>
-Message-ID: <l511rp$p7$1@ger.gmane.org>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Fri, 1 Nov 2013 22:08:40 +0100
+Subject: [Buildroot] [PATCH 0 of 4] Add POST_RSYNC hook
+In-Reply-To: <patchbomb.1383322005@argentina>
+References: <patchbomb.1383322005@argentina>
+Message-ID: <CAHXCMM+X9F+H21EZSS2+L+aRha+1KZ3q+Jo=ePZ8m4MbcthvQw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Hi Thomas, all,
 
-I believe Jan is talking about my patch:
+2013/11/1 Thomas De Schampheleire <patrickdepinguin@gmail.com>
 
-https://github.com/Stane1983/buildroot-mx/
-commit/8be22b0db136403ee55c84bf093366808d65dc3f
+> This patch series adopts the POST_RSYNC hook patch by Tzu-Jung Lee and
+> changes the default rsync exclusion list, as discussed on the Buildroot
+> developer days.
+> The other rsync-related patch submitted by Tzu-Jung Lee (custom rsync
+> command) should not be needed anymore as its use case is covered by
+> the second patch in this series.
+>
+> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+>
 
-It works for Linaro toolchains.
+> ---
+>  Makefile                                  |  14 +++--
+>  docs/manual/adding-packages-autotools.txt |   3 +-
+>  docs/manual/adding-packages-cmake.txt     |   3 +-
+>  docs/manual/adding-packages-generic.txt   |  39 +-----------------
+>  docs/manual/adding-packages-hooks.txt     |  60
+> +++++++++++++++++++++++++++
+>  docs/manual/adding-packages.txt           |   2 +
+>  package/pkg-generic.mk                    |   4 +-
+>  7 files changed, 76 insertions(+), 49 deletions(-)
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+>
 
-In this patch I had to export GCONV_PATH because of XBMC. Otherwise, XBMC 
-is not aware of gconv libs existence.
+For the whole series:
+Acked-by: Samuel Martin <s.martin49@gmail.com>
 
-On Fri, 01 Nov 2013 17:52:55 +0100, Thomas Petazzoni wrote:
+Regards,
 
-> Dear Jan Pohanka,
-> 
-> On Fri, 1 Nov 2013 17:44:31 +0100, Jan Pohanka wrote:
-> 
->> I will prepare a patch with this feature. Can you please confirm
->> whether /etc/environment file can be used to set variables for whole
->> system in Busybox? Or it is better to use eg. profile file, etc.
-> 
-> Why is setting an environment variable necessary? Isn't glibc always
-> looking for gconv modules in a standard place, in which we could install
-> those modules?
-> 
-> Thomas
+-- 
+Samuel
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20131101/ef0689dd/attachment.html>
