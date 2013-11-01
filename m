@@ -1,30 +1,33 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri, 01 Nov 2013 06:57:49 -0300
-Subject: [Buildroot] Buildroot patchwork: decision on the 10 oldest
- patches, week 1
-In-Reply-To: <CAAXf6LVSr65gz+JSR6ar+KtzT=RawSWDTDpk=Gp+hEa0-Z4-hg@mail.gmail.com>
-References: <20131006164227.0ab2a172@skate>	<CAAXf6LVkmwRhw2TGyGtjts1ePNkCj=5pGgTk00GWJFaECq-k7Q@mail.gmail.com>
- <CAAXf6LVSr65gz+JSR6ar+KtzT=RawSWDTDpk=Gp+hEa0-Z4-hg@mail.gmail.com>
-Message-ID: <52737B1D.2070404@zacarias.com.ar>
+From: Olivier Schonken <olivier.schonken@gmail.com>
+Date: Fri,  1 Nov 2013 13:59:01 +0200
+Subject: [Buildroot] [PATCH 1/1] util-linux: Add --without-ncurses to
+	host-util-linux config
+Message-ID: <1383307141-27007-1-git-send-email-olivier.schonken@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 11/01/2013 05:07 AM, Thomas De Schampheleire wrote:
+Ncurses not necessary when building host-util-linux.
 
->>>  4 [V2] p910nd: Add p910nd lightweight printserver
->>>    http://patchwork.ozlabs.org/patch/165542/
->>>    david.c.purdy at gmail.com
->>
->> No feedback yet.
->> In patchwork this is indicated as 'delegated to gustavoz'. Gustavo:
->> does this mean you are working on this, or plan on working this?
-> 
-> Gustavo said he would take this up. Marked as 'Changes requested' in patchwork.
+Signed-off-by: Olivier Schonken <olivier.schonken@gmail.com>
+---
+ package/util-linux/util-linux.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-I've got this in my git repo already, i just need to flash it in some
-board and plug a printer to it to test the conf/initscript (qemu doesn't
-seem to do printer emulation right?).
-Regards.
+diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
+index 4db1e52..a694f3d 100644
+--- a/package/util-linux/util-linux.mk
++++ b/package/util-linux/util-linux.mk
+@@ -84,7 +84,7 @@ HOST_UTIL_LINUX_CONF_OPT += \
+ 	--disable-login --disable-mount --disable-partx \
+ 	--disable-pivot_root --disable-rename --disable-schedutils \
+ 	--disable-su --disable-switch_root --disable-unshare \
+-	--disable-uuidd --disable-wall
++	--disable-uuidd --disable-wall --without-ncurses
+ 
+ # Avoid building the tools if they are disabled since we can't install on
+ # a per-directory basis.
+-- 
+1.8.3.2
