@@ -1,34 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 1 Nov 2013 16:37:38 +0100
-Subject: [Buildroot] [PATCH v2 1/1] sysvinit: install new cmds and fix
- inittab
-In-Reply-To: <1383173732-19980-1-git-send-email-rjbarnet@rockwellcollins.com>
-References: <1383173732-19980-1-git-send-email-rjbarnet@rockwellcollins.com>
-Message-ID: <20131101163738.5ed1c20b@skate>
+Date: Fri, 1 Nov 2013 16:39:45 +0100
+Subject: [Buildroot] [PATCH] cppzmq/czmq: Update comment for needs
+ threads support
+In-Reply-To: <1382334782.6613.0.camel@phoenix>
+References: <1382334782.6613.0.camel@phoenix>
+Message-ID: <20131101163945.36fca8da@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Ryan Barnett,
+Dear Axel Lin,
 
-On Wed, 30 Oct 2013 17:55:32 -0500, Ryan Barnett wrote:
-> Adding support for sysvinit to install reboot, poweroff, and pidof
-> commands available in /sbin.
+On Mon, 21 Oct 2013 13:53:02 +0800, Axel Lin wrote:
+> Comment 7e37d235f "zeromq: needs threads" adds BR2_TOOLCHAIN_HAS_THREADS
+> dependency but forgot to add corresponding comment for cppzmq and czmq. Fix it.
 > 
-> Fixes bug #6620
-> 
-> Removed uninstall commands since they aren't used.
-> 
-> There is an error with sysvinit that will prevent the system from booting
-> if "dshm::sysinit:/bin/mkdir -p /dev/shm" is not present in the inittab.
-> 
-> Signed-off-by: Ryan Barnett <rjbarnet@rockwellcollins.com>
+> Signed-off-by: Axel Lin <axel.lin@ingics.com>
 > ---
->  package/sysvinit/inittab     |    1 +
->  package/sysvinit/sysvinit.mk |   11 ++++-------
->  2 files changed, 5 insertions(+), 7 deletions(-)
+>  package/cppzmq/Config.in | 2 +-
+>  package/czmq/Config.in   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
 Applied to for-peter-2013.11, thanks!
 
