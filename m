@@ -1,33 +1,39 @@
-From: Olivier Schonken <olivier.schonken@gmail.com>
-Date: Fri,  1 Nov 2013 13:59:01 +0200
-Subject: [Buildroot] [PATCH 1/1] util-linux: Add --without-ncurses to
-	host-util-linux config
-Message-ID: <1383307141-27007-1-git-send-email-olivier.schonken@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 1 Nov 2013 13:15:57 +0100
+Subject: [Buildroot] iconv: additional encodings
+In-Reply-To: <52734FA0.3060508@gmail.com>
+References: <52725222.9050503@gmail.com>
+ <CABMiYf_=RK0UJyZLNkW5JU3xSXKMcNxL9-VRxjNpFqtZ3ye50g@mail.gmail.com>
+ <0e99777a-09bf-4414-9769-cbfdd10aa040@email.android.com>
+ <52734FA0.3060508@gmail.com>
+Message-ID: <20131101131557.232faaa6@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Ncurses not necessary when building host-util-linux.
+Dear Jan Pohanka,
 
-Signed-off-by: Olivier Schonken <olivier.schonken@gmail.com>
----
- package/util-linux/util-linux.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On Fri, 01 Nov 2013 07:52:16 +0100, Jan Pohanka wrote:
 
-diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
-index 4db1e52..a694f3d 100644
---- a/package/util-linux/util-linux.mk
-+++ b/package/util-linux/util-linux.mk
-@@ -84,7 +84,7 @@ HOST_UTIL_LINUX_CONF_OPT += \
- 	--disable-login --disable-mount --disable-partx \
- 	--disable-pivot_root --disable-rename --disable-schedutils \
- 	--disable-su --disable-switch_root --disable-unshare \
--	--disable-uuidd --disable-wall
-+	--disable-uuidd --disable-wall --without-ncurses
- 
- # Avoid building the tools if they are disabled since we can't install on
- # a per-directory basis.
+> I have realized that external toolchain support is a bit patched in the 
+> fork that I'm using compared to original one. There is an option to copy 
+> files gconv-modules, gconv-modules.cache, CP1250.so, and all other 
+> encodings shared libraries to target/usr/lib/gconv directory. I thought 
+> that it is a standard directory which the glibc iconv implementation 
+> would search shared encodings for. This is not truth because GCONV_PATH 
+> has to be set and point there, to make iconv work with all encodings.
+> 
+> Maybe something similar could be added to standard Buildroot. It took me 
+> a day to realize where is the problem.
+
+Do you think you could send a patch to implement this in Buildroot?
+
+Thanks,
+
+Thomas
 -- 
-1.8.3.2
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
