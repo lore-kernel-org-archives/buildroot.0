@@ -1,32 +1,28 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 1 Nov 2013 16:39:45 +0100
-Subject: [Buildroot] [PATCH] cppzmq/czmq: Update comment for needs
- threads support
-In-Reply-To: <1382334782.6613.0.camel@phoenix>
-References: <1382334782.6613.0.camel@phoenix>
-Message-ID: <20131101163945.36fca8da@skate>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Fri, 01 Nov 2013 17:06:45 +0100
+Subject: [Buildroot] [PATCH 0 of 4] Add POST_RSYNC hook
+Message-ID: <patchbomb.1383322005@argentina>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Axel Lin,
+This patch series adopts the POST_RSYNC hook patch by Tzu-Jung Lee and
+changes the default rsync exclusion list, as discussed on the Buildroot
+developer days.
+The other rsync-related patch submitted by Tzu-Jung Lee (custom rsync
+command) should not be needed anymore as its use case is covered by
+the second patch in this series.
 
-On Mon, 21 Oct 2013 13:53:02 +0800, Axel Lin wrote:
-> Comment 7e37d235f "zeromq: needs threads" adds BR2_TOOLCHAIN_HAS_THREADS
-> dependency but forgot to add corresponding comment for cppzmq and czmq. Fix it.
-> 
-> Signed-off-by: Axel Lin <axel.lin@ingics.com>
-> ---
->  package/cppzmq/Config.in | 2 +-
->  package/czmq/Config.in   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
-Applied to for-peter-2013.11, thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+---
+ Makefile                                  |  14 +++--
+ docs/manual/adding-packages-autotools.txt |   3 +-
+ docs/manual/adding-packages-cmake.txt     |   3 +-
+ docs/manual/adding-packages-generic.txt   |  39 +-----------------
+ docs/manual/adding-packages-hooks.txt     |  60 +++++++++++++++++++++++++++
+ docs/manual/adding-packages.txt           |   2 +
+ package/pkg-generic.mk                    |   4 +-
+ 7 files changed, 76 insertions(+), 49 deletions(-)
