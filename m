@@ -1,35 +1,71 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 1 Nov 2013 19:33:02 +0100
-Subject: [Buildroot] [PATCH] add no-mmu support for libglib-2.36.3
-In-Reply-To: <1382375763-4150-1-git-send-email-aaron.wu@analog.com>
-References: <1382375763-4150-1-git-send-email-aaron.wu@analog.com>
-Message-ID: <20131101193302.0b7cb1b3@skate>
+From: Stanislav Vlasic <svlasic@gmail.com>
+Date: Fri, 1 Nov 2013 20:26:09 +0100
+Subject: [Buildroot] Introducing new package type,
+	side to side with generic-package
+Message-ID: <CADYw_JLHofB+VQ2rktw_reWCvAWU9rj7VJ95tgVnW5OujYisow@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Aaron Wu,
+Hi to all,
 
-On Tue, 22 Oct 2013 01:16:03 +0800, Aaron Wu wrote:
-> Signed-off-by: Aaron Wu <aaron.wu@analog.com>
-> 
-> add no-mmu support for libglib-2.36.3
-> ---
->  package/libglib2/glib2.36.3_nommu.patch |  354 +++++++++++++++++++++++++++++++
->  1 file changed, 354 insertions(+)
->  create mode 100644 package/libglib2/glib2.36.3_nommu.patch
+this is my first mail to list, so I'll write short introduction... I'm
+Stanislav Vlasic, Croatian developer, some of you might know me as
+Stane1983 from contributions to XBMC, Amlogic buildroot, firmwares to
+Amlogic devices.... Thats pretty much it :)
 
-You received some feedback from Arnout on October, 22nd, but have not
-responded to it. However, fixing the libglib build on Blackfin is
-really important. Can you take into account Arnout's feedback and post
-an updated version of the patch as appropriate?
+Here's short story of what I did with my custom buildroot:
+- included package/pkg-xbmc-addon.mk with xbmc-addon and inner-xbmc-addon
+macros. Change I did in this make file is one line: $(2)_KCONFIG_VAR =
+BR2_PACKAGE_XBMC_ADDON_$(2)
+- I tried to rearrange of adding xbmc addons by creating makefile similar
+to this:
 
-Thanks a lot!
+ADDON_NAME = YOUTUBE
+ADDON_PATH = plugin.video.youtube
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+$(ADDON_NAME)_VERSION = 0a8aa83df0786f5401307ca12080bbc4aefd76f6
+$(ADDON_NAME)_SITE_METHOD = git
+$(ADDON_NAME)_SITE = https://github.com/HenrikDK/youtube-xbmc-plugin.git
+$(ADDON_NAME)_INSTALL_STAGING = YES
+$(ADDON_NAME)_INSTALL_TARGET = YES
+$(ADDON_NAME)_DEPENDENCIES = xbmc
+
+define $(ADDON_NAME)_INSTALL_STAGING_CMDS
+# Commands for install to staging
+endef
+
+define $(ADDON_NAME)_INSTALL_TARGET_CMDS
+# Comands for install to target
+endef
+
+$(eval $(call xbmc-addon,package/thirdparty/xbmcaddons,$(call
+lc,$(ADDON_NAME))))
+
+This actually works. What's not working - if I add another package the same
+way....
+Version, site_method, site.... all these variables are OK and second
+package downloads correctly.
+
+Problem comes when I try to install it to target or staging folder. Example
+of install:
+
+define $(ADDON_NAME)_INSTALL_STAGING_CMDS
+        # Here in first line I check if folder already exists, if it does i
+delete all content and folder itself
+        mkdir -p $(STAGING_DIR)/usr/share/xbmc/addons/$(ADDON_PATH)
+        cp -rf $(@D)/* $(STAGING_DIR)/usr/share/xbmc/addons/$(ADDON_PATH)/
+endef
+
+Now when buildroot hits install to staging, ADDON_PATH becomes
+'plugin.video.youtube', which it has in another makefile??
+
+Does this have any sense to anybody here? :)
+
+Thanx and best regards,
+Stane1983
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20131101/626c2c7b/attachment.html>
