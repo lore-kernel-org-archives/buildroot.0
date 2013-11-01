@@ -1,44 +1,34 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 04 Nov 2013 22:09:26 +0100
-Subject: [Buildroot] [PATCH v3 2/2] ngrep: fix static linking issue with
-	libpcre
-In-Reply-To: <1383407472-2898-1-git-send-email-romain.naour@openwide.fr>
- (Romain Naour's message of "Sat, 2 Nov 2013 16:51:12 +0100")
-References: <1383407472-2898-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <87li13q3g9.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 1 Nov 2013 17:07:10 +0100
+Subject: [Buildroot] [git commit] manual: developer-guide.txt: cleanup
+	non-existing source
+Message-ID: <20131104211054.EA5D29BC97@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Romain" == Romain Naour <romain.naour@openwide.fr> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=1e4d9eb2d337341690fced3316ff8c81bd8df564
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Adding -lpcre in LDFLAGS place the library before object files:
- > gcc ... -lpcre -L.../sysroot/usr/lib -s -o ngrep ngrep.o -lpcap
+[Thomas: Added ThomasDS Acked-by, which was given on an earlier
+version of the same patch.]
 
- > Makefile.in is patched to use @LIBS@ for adding -lpcre in the right place.
+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Acked-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+---
+ docs/manual/developer-guide.txt |    2 --
+ 1 files changed, 0 insertions(+), 2 deletions(-)
 
- > Fixes:
- > http://autobuild.buildroot.net/results/684/684a3bed28d13ef5e5156257aade3b9aff32f180
-
- > Signed-off-by: Romain Naour <romain.naour@openwide.fr>
- > ---
- >  package/ngrep/ngrep-0003-fix-static-link.patch | 22 ++++++++++++++++++++++
- >  package/ngrep/ngrep.mk                         |  2 +-
- >  2 files changed, 23 insertions(+), 1 deletion(-)
- >  create mode 100644 package/ngrep/ngrep-0003-fix-static-link.patch
-
- > diff --git a/package/ngrep/ngrep-0003-fix-static-link.patch b/package/ngrep/ngrep-0003-fix-static-link.patch
- > new file mode 100644
- > index 0000000..6d70778
- > --- /dev/null
- > +++ b/package/ngrep/ngrep-0003-fix-static-link.patch
- > @@ -0,0 +1,22 @@
- > +fix static link
- > +Libraries must be placed before object files.
-
-I guess you mean AFTER.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/docs/manual/developer-guide.txt b/docs/manual/developer-guide.txt
+index 43272f5..8125ad5 100644
+--- a/docs/manual/developer-guide.txt
++++ b/docs/manual/developer-guide.txt
+@@ -11,5 +11,3 @@ include::adding-packages.txt[]
+ include::patch-policy.txt[]
+ 
+ include::download-infra.txt[]
+-
+-include::board-support.txt[]
