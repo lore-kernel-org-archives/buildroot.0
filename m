@@ -1,34 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 1 Nov 2013 18:48:24 +0100
-Subject: [Buildroot] [PATCH 1/1] libcap: fix static linking issue
-In-Reply-To: <5251C3B0.7090105@openwide.fr>
-References: <5251C3B0.7090105@openwide.fr>
-Message-ID: <20131101184824.52140c8c@skate>
+Date: Fri,  1 Nov 2013 18:47:26 +0100
+Subject: [Buildroot] [PATCH 1/2] libcap: rename existing patch
+Message-ID: <1383328047-28945-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Romain Naour,
+libcap currently has one patch, but it is named using the old naming
+strategy, which includes the package version, but not a patch
+number. This commit switches this to use the new patch naming
+strategy.
 
-On Sun, 06 Oct 2013 22:10:24 +0200, Romain Naour wrote:
-> Add -fPIC flag
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/619bceb3491ecd2ed4e1ae552fdb237a0ed2fa47/
-> 
-> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ .../{libcap-2.22-build-system.patch => libcap-01-build-system.patch}      | 0
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+ rename package/libcap/{libcap-2.22-build-system.patch => libcap-01-build-system.patch} (100%)
 
-I've just sent a patch which I believe is a better fix than this one.
-The problem was that libcap was building the shared library
-unconditionally. By adjusting the libcap build system, we can make it
-build only the static library, and therefore make things work properly.
-
-Best regards,
-
-Thomas
+diff --git a/package/libcap/libcap-2.22-build-system.patch b/package/libcap/libcap-01-build-system.patch
+similarity index 100%
+rename from package/libcap/libcap-2.22-build-system.patch
+rename to package/libcap/libcap-01-build-system.patch
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.8.1.2
