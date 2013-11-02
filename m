@@ -1,35 +1,58 @@
-From: Simon Dawson <spdawson@gmail.com>
-Date: Sat, 2 Nov 2013 08:03:51 +0000
-Subject: [Buildroot] [PATCH v2 1/1] openpgm: disable on AVR32
-In-Reply-To: <CAAHaz6GXiQAMuoK2eo0=EjmE509P98zuuAuN7f_T5TYeK6W1QA@mail.gmail.com>
-References: <1383329548-8528-1-git-send-email-alexander.lukichev@gmail.com>
- <20131101192027.1ea4c1bc@skate>
- <CAAHaz6GXiQAMuoK2eo0=EjmE509P98zuuAuN7f_T5TYeK6W1QA@mail.gmail.com>
-Message-ID: <CAHt8ZCO2OEtWe8NrDYSTkmu7uqQGpQbWjAEJg+jHVGzsWsF9Mg@mail.gmail.com>
+From: Sven Neumann <neumann@teufel.de>
+Date: Sat, 02 Nov 2013 09:13:19 +0100
+Subject: [Buildroot] Default target file system permissions
+Message-ID: <1383379999.4041.2.camel@bender>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Alexander.
+Hi,
 
-On 1 November 2013 20:21, Alexander Lukichev
-<alexander.lukichev@gmail.com> wrote:
-> The compiler (that particular toolchain) has those intrinsic functions but
-> is able to generate them only if the exact CPU sub architecture is
-> specified, not just AVR32 (their implementations differ for each of the two
-> sub architectures). This is impossible to specify unless we introduce it in
-> the buildroot configuration system (like several flavors of ARM). And this,
-> in turn, seems too much to make just one package happy.
+I've been debugging some problems with our buildroot builds lately and
+found them to be caused by too restrictive permissions on the target
+file system. Pretty much all files and directories, unless specified
+explicitly in system/device_table.txt are only readable by the owner
+(root). This causes problems with samba (/var/nmbd not accessible by
+nmbd), dbus services (dbus daemon can not access the service files) and
+so on. Basically only services that are running as root can work
+correctly, because for other users the system is pretty much
+inaccessible. I've come across this mail on the mailing-list which seems
+related, but couldn't find an answer:
+http://buildroot-busybox.2317881.n4.nabble.com/Default-target-file-system-permissions-td39088.html
+I've also tried changing the umask on our buildslaves but that didn't
+help.
 
-I might be wrong, but is it not the case that only one of the two
-micro-architectures --- specifically, avr32b as used by the ap7 core
---- is relevant for Buildroot? (I'm not aware of a Linux port for the
-avr32a architecture, as used by the uc3 core.)
+Here's how the root folder on our target file-system looks like: 
 
-If so, then it seems to me that it would be well worth calling the
-compiler with the precise micro-architecture specified. This might be
-expected to have a positive impact beyond just the openpgm package.
+drwxr-xr-x   20 root     root          4096 Dec  7  1999 .
+drwxr-xr-x   20 root     root          4096 Dec  7  1999 ..
+drwx------    2 root     root          4096 Dec  7  1999 bin
+drwxr-xr-x    2 root     root          4096 Nov 30  1999 boot
+drwxr-xr-x    5 root     root          4096 Dec 30  1999 data
+drwxr-xr-x   10 root     root         12600 Dec  7  1999 dev
+drwxr-xr-x   15 root     root          4096 Dec  7  1999 etc
+drwx------    3 root     root          4096 Dec  7  1999 home
+drwx------    4 root     root          4096 Dec  7  1999 lib
+lrwxrwxrwx    1 root     root            11 Oct 31 20:26 linuxrc ->
+bin/busybox
+drwx------    2 root     root          4096 Dec  7  1999 media
+drwx------    2 root     root          4096 Dec  7  1999 mnt
+drwx------    2 root     root          4096 Dec  7  1999 opt
+dr-xr-xr-x   62 root     root             0 Dec  7  1999 proc
+drwx------    2 root     root          4096 Oct 31 22:09 root
+lrwxrwxrwx    1 root     root             3 Oct 31 18:39 run -> tmp
+drwx------    2 root     root          4096 Dec  7  1999 sbin
+dr-xr-xr-x   11 root     root             0 Dec  7  1999 sys
+drwxrwxrwt   12 root     root           800 Oct 31 21:51 tmp
+drwx------    7 root     root          4096 Dec  7  1999 usr
+drwxr-xr-x    7 root     root          4096 Dec  7  1999 var
 
-Simon.
+
+So are the restrictive permissions on the target file-system intentional
+and how I can change this situation?
+
+
+Regards,
+Sven
