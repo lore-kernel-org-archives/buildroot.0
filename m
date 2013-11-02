@@ -1,30 +1,43 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Sat, 2 Nov 2013 19:01:18 +0100
-Subject: [Buildroot] [PATCH 1/2] libcap: rename existing patch
-In-Reply-To: <1383328047-28945-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1383328047-28945-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <CAHXCMM+2D0a7RgmV-wMfVSQxQBFb83GiAG4ciONhpSj=7LaFCg@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 2 Nov 2013 19:10:22 +0100
+Subject: [Buildroot] [PATCH v2 4/6] systemd: set correct firmware search
+ path
+In-Reply-To: <1379679847-16141-5-git-send-email-eric.le.bihan.dev@free.fr>
+References: <1379679847-16141-1-git-send-email-eric.le.bihan.dev@free.fr>
+ <1379679847-16141-5-git-send-email-eric.le.bihan.dev@free.fr>
+Message-ID: <20131102191022.58ba5830@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2013/11/1 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Dear Eric Le Bihan,
 
-> libcap currently has one patch, but it is named using the old naming
-> strategy, which includes the package version, but not a patch
-> number. This commit switches this to use the new patch naming
-> strategy.
->
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
->
-Acked-by: Samuel Martin <s.martin49@gmail.com>
+On Fri, 20 Sep 2013 14:24:05 +0200, Eric Le Bihan wrote:
+> Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+> ---
+>  package/systemd/systemd.mk |    1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+> index d371711..1afceed 100644
+> --- a/package/systemd/systemd.mk
+> +++ b/package/systemd/systemd.mk
+> @@ -34,6 +34,7 @@ SYSTEMD_CONF_OPT += \
+>  	--with-dbussessionservicedir=/usr/share/dbus-1/services \
+>  	--with-dbussystemservicedir=/usr/share/dbus-1/system-services \
+>  	--with-dbusinterfacedir=/usr/share/dbus-1/interfaces \
+> +	--with-firmware-path=/lib/firmware \
+>  	--enable-split-usr \
+>  	--enable-introspection=no \
+>  	--disable-efi \
 
-Regards,
+This should be squashed into the patch updating systemd, I don't really
+a reason to have this separately.
 
+Thomas
 -- 
-Samuel
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20131102/368a36b3/attachment.html>
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
