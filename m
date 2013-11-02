@@ -1,37 +1,26 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 2 Nov 2013 16:24:29 +0100
-Subject: [Buildroot] Architecture build statistics
-In-Reply-To: <CAAEAJfC44UjLPNEemSEFSJEQAFazyXiFORAE1N82O1DWgcETsQ@mail.gmail.com>
-References: <20131029204108.5d707d09@skate> <20131101193153.04cdd643@skate>
- <CAAEAJfC44UjLPNEemSEFSJEQAFazyXiFORAE1N82O1DWgcETsQ@mail.gmail.com>
-Message-ID: <20131102162429.544d8a5f@skate>
+Date: Sat, 2 Nov 2013 16:24:47 +0100
+Subject: [Buildroot] [PATCH 0 of 2 v3] Use full revision ID for git
+ packages
+In-Reply-To: <patchbomb.1383404246@argentina>
+References: <patchbomb.1383404246@argentina>
+Message-ID: <20131102162447.7acb9307@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Ezequiel Garc?a,
+Dear Thomas De Schampheleire,
 
-On Sat, 2 Nov 2013 13:16:54 -0200, Ezequiel Garc?a wrote:
-
-> Thanks! I'm already looking at them :-)
-
-Great!
-
-> I've been doing some experiments and I expect *lots*
-> of broken packages. Unfortunately, these breaks
-> are either related to nios2 being an unsupported arch
-> (e.g. ltrace, strace) or some toolchain issues (e.g. Qt).
+On Sat, 02 Nov 2013 15:57:26 +0100, Thomas De Schampheleire wrote:
 > 
-> I'd like to take care of this, but as you can imagine, these
-> are pretty challenging problems.
+> As discussed recently, we should use full git commit IDs instead of
+> abbreviated ones. 
+> 
+> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
-Note that we don't need to support everything on all platforms. If some
-package doesn't have support for NIOS 2, then we can simply add a
-'depends on !BR2_nios2' to it.
-
-Best regards,
+Both patches applied to for-peter-2013.11, thanks!
 
 Thomas
 -- 
