@@ -1,79 +1,49 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Sat, 2 Nov 2013 15:54:31 +0100
-Subject: [Buildroot] [PATCH 07/12] manual: get-involved.txt: fix event
-	order
-In-Reply-To: <20131101171807.5cfde0a3@skate>
-References: <cover.1382127504.git.s.martin49@gmail.com>
- <0be01182dae35745ef4bdd7a19d5c94397f1c68b.1382127504.git.s.martin49@gmail.com>
- <20131101171807.5cfde0a3@skate>
-Message-ID: <CAHXCMM+LHY_m=jUkH3u7df_S-h6H1fqxH2kMmtxO8FawJr0azg@mail.gmail.com>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Sat, 02 Nov 2013 15:57:26 +0100
+Subject: [Buildroot] [PATCH 0 of 2 v3] Use full revision ID for git packages
+Message-ID: <patchbomb.1383404246@argentina>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas,
 
-2013/11/1 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+As discussed recently, we should use full git commit IDs instead of
+abbreviated ones. 
 
-> Dear Samuel Martin,
->
-> On Fri, 18 Oct 2013 22:31:31 +0200, Samuel Martin wrote:
-> > Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-> > ---
-> >  docs/manual/get-involved.txt | 10 ++++++----
-> >  1 file changed, 6 insertions(+), 4 deletions(-)
-> >
-> > diff --git a/docs/manual/get-involved.txt b/docs/manual/get-involved.txt
-> > index 8475038..9e492e6 100644
-> > --- a/docs/manual/get-involved.txt
-> > +++ b/docs/manual/get-involved.txt
-> > @@ -117,6 +117,12 @@ Currently, this page is mainly used as a
-> _todo-list_.
-> >  Events
-> >  ------
-> >
-> > +Buildroot Developer Days aside FOSDEM 2012 (February 3, 2012 - Brussels)
-> > +~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> > +
-> > +* Announcement & agenda thread:
-> http://lists.busybox.net/pipermail/buildroot/2012-January/049340.html[]
-> > +* Report:
-> http://lists.busybox.net/pipermail/buildroot/2012-February/050371.html[]
-> > +
-> >  Buildroot Developer Days aside ELC-E 2012 (November 3-4, 2012 -
-> Barcelona)
-> >
->  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> >
-> > @@ -127,8 +133,4 @@ Buildroot presentation at LSM 2012 (July 12-14, 2012
-> - Geneva)
-> >
-> >  * Announcement:
-> http://lists.busybox.net/pipermail/buildroot/2012-May/053845.html[]
-> >
-> > -Buildroot Developer Days aside FOSDEM 2012 (February 3, 2012 - Brussels)
-> > -~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> >
-> > -* Announcement & agenda thread:
-> http://lists.busybox.net/pipermail/buildroot/2012-January/049340.html[]
-> > -* Report:
-> http://lists.busybox.net/pipermail/buildroot/2012-February/050371.html[]
->
-> So you make the oldest event appear first? This seems weird: we
-> generally want the most recent event to appear first, because it's most
-> likely the one containing the most interesting piece of information for
-> the current version of Buildroot.
->
-Yup, my bad!
-My intention was to list them in a reverse chronological order. I somehow
-messed up! :(
+Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
-Regards,
+---
+v3: update documentation with forgotten comment from Samuel
+v2: update documentation with comment from Samuel
 
--- 
-Samuel
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20131102/1dd21ee7/attachment.html>
+ docs/manual/adding-packages-tips.txt             |  7 +++----
+ package/a10disp/a10disp.mk                       |  2 +-
+ package/cppzmq/cppzmq.mk                         |  2 +-
+ package/czmq/czmq.mk                             |  2 +-
+ package/filemq/filemq.mk                         |  2 +-
+ package/jsmin/jsmin.mk                           |  2 +-
+ package/knock/knock.mk                           |  2 +-
+ package/libnfc/libnfc.mk                         |  2 +-
+ package/linenoise/linenoise.mk                   |  2 +-
+ package/lua-ev/lua-ev.mk                         |  2 +-
+ package/lua-msgpack-native/lua-msgpack-native.mk |  2 +-
+ package/luaexpatutils/luaexpatutils.mk           |  2 +-
+ package/mtdev2tuio/mtdev2tuio.mk                 |  2 +-
+ package/ne10/ne10.mk                             |  2 +-
+ package/omap-u-boot-utils/omap-u-boot-utils.mk   |  2 +-
+ package/on2-8170-modules/on2-8170-modules.mk     |  2 +-
+ package/qextserialport/qextserialport.mk         |  2 +-
+ package/qtuio/qtuio.mk                           |  2 +-
+ package/rpi-firmware/rpi-firmware.mk             |  2 +-
+ package/rpi-userland/rpi-userland.mk             |  2 +-
+ package/socketcand/socketcand.mk                 |  2 +-
+ package/sunxi-cedarx/sunxi-cedarx.mk             |  2 +-
+ package/sunxi-mali-prop/sunxi-mali-prop.mk       |  2 +-
+ package/sunxi-mali/sunxi-mali.mk                 |  2 +-
+ package/ti-utils/ti-utils.mk                     |  2 +-
+ package/tvheadend/tvheadend.mk                   |  2 +-
+ package/zmqpp/zmqpp.mk                           |  2 +-
+ package/zyre/zyre.mk                             |  2 +-
+ 28 files changed, 30 insertions(+), 31 deletions(-)
