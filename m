@@ -1,44 +1,28 @@
 From: Romain Naour <romain.naour@openwide.fr>
-Date: Sat, 02 Nov 2013 16:46:18 +0100
-Subject: [Buildroot] [PATCH v2 1/1] ngrep: fix static linking issue with
- libpcre
-In-Reply-To: <20131101175957.689162a5@skate>
-References: <5255D08E.3000307@openwide.fr> <20131101175957.689162a5@skate>
-Message-ID: <52751E4A.1070808@openwide.fr>
+Date: Sat,  2 Nov 2013 16:46:57 +0100
+Subject: [Buildroot] [PATCH v3 1/2] ngrep: rename existing patch
+Message-ID: <1383407218-2770-1-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le 01/11/2013 17:59, Thomas Petazzoni a ?crit :
-> Dear Romain Naour,
->
-> On Wed, 09 Oct 2013 23:54:22 +0200, Romain Naour wrote:
->> Adding -lpcre in LDFLAGS place the library before object files:
->> gcc ... -lpcre -L .../sysroot/usr/lib -s -o ngrep ngrep.o -lpcap
->>
->> Makefile.in is patched to use @LIBS@ for adding -lpcre in the right place.
->>
->> Fixes:
->> http://autobuild.buildroot.net/results/684/684a3bed28d13ef5e5156257aade3b9aff32f180
->>
->> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-> Thanks, but this patch no longer applies on top of master, and more
-> importantly, the ngrep-1.45-Makefile.in.patch doesn't apply to the
-> ngrep sources. Could you rename the ngrep patches to use numbers, i.e
-> ngrep-01-<foo>.patch, and use a more descriptive name than
-> ngrep-1.45-Makefile.in.patch?
->
-> (Should be done in two patches: one renaming the existing patches, one
-> adding the pcre static link fix).
->
-> Thanks a lot!
->
-> Thomas
-Hi Thomas,
+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+---
+ package/ngrep/{ngrep-1.45-make-objs.patch => ngrep-0001-make-objs.patch}  | 0
+ .../ngrep/{ngrep-1.45-pcre-header.patch => ngrep-0002-pcre-header.patch}  | 0
+ 2 files changed, 0 insertions(+), 0 deletions(-)
+ rename package/ngrep/{ngrep-1.45-make-objs.patch => ngrep-0001-make-objs.patch} (100%)
+ rename package/ngrep/{ngrep-1.45-pcre-header.patch => ngrep-0002-pcre-header.patch} (100%)
 
-Ok, I'll send two patches to fix this issue.
-
-Best regards,
-Romain
+diff --git a/package/ngrep/ngrep-1.45-make-objs.patch b/package/ngrep/ngrep-0001-make-objs.patch
+similarity index 100%
+rename from package/ngrep/ngrep-1.45-make-objs.patch
+rename to package/ngrep/ngrep-0001-make-objs.patch
+diff --git a/package/ngrep/ngrep-1.45-pcre-header.patch b/package/ngrep/ngrep-0002-pcre-header.patch
+similarity index 100%
+rename from package/ngrep/ngrep-1.45-pcre-header.patch
+rename to package/ngrep/ngrep-0002-pcre-header.patch
+-- 
+1.8.1.4
