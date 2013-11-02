@@ -1,11 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 2 Nov 2013 18:57:26 +0100
-Subject: [Buildroot] [PATCH 2/2] libnl: do not allow to build tools on
- static lib configs
-In-Reply-To: <1383387986-9508-2-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1383387986-9508-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1383387986-9508-2-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20131102175726.GG3542@free.fr>
+Date: Sat, 2 Nov 2013 18:59:14 +0100
+Subject: [Buildroot] [PATCHv2] dhcpcd: needs MMU
+In-Reply-To: <1383400021-16905-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1383400021-16905-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20131102175914.GH3542@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,49 +12,55 @@ To: buildroot@busybox.net
 
 Thomas, All,
 
-On 2013-11-02 11:26 +0100, Thomas Petazzoni spake thusly:
-> Building the libnl tools requires the <dlfcn.h> header, which is not
-> compatible with static only builds. Therefore, this commit makes the
-> libnl tools option depend on !BR2_PREFER_STATIC_LIB.
+On 2013-11-02 14:47 +0100, Thomas Petazzoni spake thusly:
+> dhcpcd fails to build on non-MMU platforms, even with the
+> --disable-fork option:
 > 
-> Fixes:
+>   bind.o: In function `_daemonise':
+>   bind.c:(.text+0x62): undefined reference to `_fork'
+>   collect2: ld returned 1 exit status
 > 
->    http://autobuild.buildroot.org/results/573/57340b9bd2db3a523836e02e01cba6f7c17c8ca7/build-end.log
+> Therefore, we make dhcpcd depend on MMU support, and remove the
+> non-MMU condition in the .mk file. More recent versions of dhcpcd do
+> support non-MMU properly, but this commit intends to be only a fix.
 > 
 > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
 Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 > ---
->  package/libnl/Config.in | 13 ++++++++++---
->  1 file changed, 10 insertions(+), 3 deletions(-)
+> v1 -> v2: remove non-MMU condition in .mk file, mentionned by Gustavo.
+> ---
+>  package/dhcpcd/Config.in | 1 +
+>  package/dhcpcd/dhcpcd.mk | 4 ----
+>  2 files changed, 1 insertion(+), 4 deletions(-)
 > 
-> diff --git a/package/libnl/Config.in b/package/libnl/Config.in
-> index fec10d3..be41b07 100644
-> --- a/package/libnl/Config.in
-> +++ b/package/libnl/Config.in
-> @@ -6,11 +6,18 @@ config BR2_PACKAGE_LIBNL
->  
->  	  http://people.suug.ch/~tgr/libnl/
->  
-> +comment "libnl needs a toolchain w/ threads"
-> +	depends on !BR2_TOOLCHAIN_HAS_THREADS
-> +
-> +if BR2_PACKAGE_LIBNL
-> +
->  config BR2_PACKAGE_LIBNL_TOOLS
->  	bool "install tools"
-> -	depends on BR2_PACKAGE_LIBNL
-> +	# uses <dlfcn.h>
-> +	depends on !BR2_PREFER_STATIC_LIB
+> diff --git a/package/dhcpcd/Config.in b/package/dhcpcd/Config.in
+> index dbde548..ddbc6f4 100644
+> --- a/package/dhcpcd/Config.in
+> +++ b/package/dhcpcd/Config.in
+> @@ -1,5 +1,6 @@
+>  config BR2_PACKAGE_DHCPCD
+>  	depends on BR2_INET_IPV6
+> +	depends on BR2_USE_MMU # fork()
+>  	bool "dhcpcd"
 >  	help
->  	  Install binary tools.
+>  	  An RFC2131 compliant DHCP client
+> diff --git a/package/dhcpcd/dhcpcd.mk b/package/dhcpcd/dhcpcd.mk
+> index 5296db8..13810f3 100644
+> --- a/package/dhcpcd/dhcpcd.mk
+> +++ b/package/dhcpcd/dhcpcd.mk
+> @@ -9,10 +9,6 @@ DHCPCD_SOURCE = dhcpcd-$(DHCPCD_VERSION).tar.bz2
+>  DHCPCD_SITE = http://roy.marples.name/downloads/dhcpcd/
+>  DHCPCD_LICENSE = BSD-2c
 >  
-> -comment "libnl needs a toolchain w/ threads"
-> -	depends on !BR2_TOOLCHAIN_HAS_THREADS
-> +comment "libnl tools need a toolchain w/ dynamic library"
-> +
-> +endif
+> -ifeq ($(BR2_USE_MMU),)
+> -	DHCPCD_CONFIG_OPT += --disable-fork
+> -endif
+> -
+>  define DHCPCD_CONFIGURE_CMDS
+>  	(cd $(@D); \
+>  	./configure \
 > -- 
 > 1.8.1.2
 > 
