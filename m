@@ -1,33 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 2 Nov 2013 18:35:35 +0100
-Subject: [Buildroot] [PATCH v3 1/2] ngrep: rename existing patch
-In-Reply-To: <1383407218-2770-1-git-send-email-romain.naour@openwide.fr>
-References: <1383407218-2770-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <20131102183535.31789609@skate>
+Date: Sat, 2 Nov 2013 18:38:53 +0100
+Subject: [Buildroot] [PATCH] uboot-tools: fix license issues
+In-Reply-To: <20131102173258.GC3542@free.fr>
+References: <1382460400-3205-1-git-send-email-gustavo@zacarias.com.ar>
+ <20131102144355.0a980960@skate> <52752722.5060107@zacarias.com.ar>
+ <20131102174350.05deaa50@skate> <20131102173258.GC3542@free.fr>
+Message-ID: <20131102183853.34b34d7d@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Romain Naour,
+Dear Yann E. MORIN,
 
-On Sat,  2 Nov 2013 16:46:57 +0100, Romain Naour wrote:
-> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-> ---
->  package/ngrep/{ngrep-1.45-make-objs.patch => ngrep-0001-make-objs.patch}  | 0
->  .../ngrep/{ngrep-1.45-pcre-header.patch => ngrep-0002-pcre-header.patch}  | 0
->  2 files changed, 0 insertions(+), 0 deletions(-)
->  rename package/ngrep/{ngrep-1.45-make-objs.patch => ngrep-0001-make-objs.patch} (100%)
->  rename package/ngrep/{ngrep-1.45-pcre-header.patch => ngrep-0002-pcre-header.patch} (100%)
+On Sat, 2 Nov 2013 18:32:58 +0100, Yann E. MORIN wrote:
 
-Thanks, applied to for-peter-2013.11, as well as PATCH 2/2.
+> On 2013-11-02 17:43 +0100, Thomas Petazzoni spake thusly:
+> > However, a patch not committed and not visible in patchwork is a bit
+> > weird (except for patches that only rename files, because the patch
+> > contents are empty and patchwork doesn't understand that).
+> 
+> Actually, this last part is now wrong: patchwork should now recognise
+> renames-only patches (since about two weeks now).
 
-Note that in PATCH 2/2, you had forgotten to add your Signed-off-by to
-the new ngrep patch, so I've added it for you, since you had anyway
-Signed-off-by the entire patch.
+Aaah, and this is actually true! The ngrep patches renaming patch was
+recognized by patchwork.
 
-Thanks,
+My bad,
 
 Thomas
 -- 
