@@ -1,43 +1,74 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 2 Nov 2013 19:10:22 +0100
-Subject: [Buildroot] [PATCH v2 4/6] systemd: set correct firmware search
- path
-In-Reply-To: <1379679847-16141-5-git-send-email-eric.le.bihan.dev@free.fr>
-References: <1379679847-16141-1-git-send-email-eric.le.bihan.dev@free.fr>
- <1379679847-16141-5-git-send-email-eric.le.bihan.dev@free.fr>
-Message-ID: <20131102191022.58ba5830@skate>
+From: Sven Neumann <neumann@teufel.de>
+Date: Sat, 02 Nov 2013 19:30:58 +0100
+Subject: [Buildroot] Default target file system permissions
+In-Reply-To: <20131102110658.779bbcb5@skate>
+References: <1383379999.4041.2.camel@bender> <20131102110658.779bbcb5@skate>
+Message-ID: <1383417058.5894.5.camel@bender>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Eric Le Bihan,
+Hi,
 
-On Fri, 20 Sep 2013 14:24:05 +0200, Eric Le Bihan wrote:
-> Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-> ---
->  package/systemd/systemd.mk |    1 +
->  1 file changed, 1 insertion(+)
+On Sat, 2013-11-02 at 11:06 +0100, Thomas Petazzoni wrote:
+
+> > Here's how the root folder on our target file-system looks like: 
+> > 
+> > drwxr-xr-x   20 root     root          4096 Dec  7  1999 .
+> > drwxr-xr-x   20 root     root          4096 Dec  7  1999 ..
+> > drwx------    2 root     root          4096 Dec  7  1999 bin
+> > drwxr-xr-x    2 root     root          4096 Nov 30  1999 boot
+> > drwxr-xr-x    5 root     root          4096 Dec 30  1999 data
+> > drwxr-xr-x   10 root     root         12600 Dec  7  1999 dev
+> > drwxr-xr-x   15 root     root          4096 Dec  7  1999 etc
+> > drwx------    3 root     root          4096 Dec  7  1999 home
+> > drwx------    4 root     root          4096 Dec  7  1999 lib
+> > lrwxrwxrwx    1 root     root            11 Oct 31 20:26 linuxrc ->
+> > bin/busybox
+> > drwx------    2 root     root          4096 Dec  7  1999 media
+> > drwx------    2 root     root          4096 Dec  7  1999 mnt
+> > drwx------    2 root     root          4096 Dec  7  1999 opt
+> > dr-xr-xr-x   62 root     root             0 Dec  7  1999 proc
+> > drwx------    2 root     root          4096 Oct 31 22:09 root
+> > lrwxrwxrwx    1 root     root             3 Oct 31 18:39 run -> tmp
+> > drwx------    2 root     root          4096 Dec  7  1999 sbin
+> > dr-xr-xr-x   11 root     root             0 Dec  7  1999 sys
+> > drwxrwxrwt   12 root     root           800 Oct 31 21:51 tmp
+> > drwx------    7 root     root          4096 Dec  7  1999 usr
+> > drwxr-xr-x    7 root     root          4096 Dec  7  1999 var
 > 
-> diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-> index d371711..1afceed 100644
-> --- a/package/systemd/systemd.mk
-> +++ b/package/systemd/systemd.mk
-> @@ -34,6 +34,7 @@ SYSTEMD_CONF_OPT += \
->  	--with-dbussessionservicedir=/usr/share/dbus-1/services \
->  	--with-dbussystemservicedir=/usr/share/dbus-1/system-services \
->  	--with-dbusinterfacedir=/usr/share/dbus-1/interfaces \
-> +	--with-firmware-path=/lib/firmware \
->  	--enable-split-usr \
->  	--enable-introspection=no \
->  	--disable-efi \
+> Interesting, because here I don't have the same behavior:
+> 
+> drwxrwxr-x 2 root root 1420 nov.   1 13:24 bin
+> drwxr-xr-x 3 root root  100 nov.   1 13:24 dev
+> drwxr-xr-x 5 root root  500 nov.   1 13:24 etc
+> drwxrwxr-x 4 root root   80 nov.   1 13:24 home
+> drwxrwxr-x 2 root root  540 nov.   1 13:24 lib
+> lrwxrwxrwx 1 root root    3 nov.   1 13:22 lib32 -> lib
+> lrwxrwxrwx 1 root root   11 nov.   1 13:24 linuxrc -> bin/busybox
+> drwxrwxr-x 2 root root   40 oct.  27 12:37 media
+> drwxrwxr-x 2 root root   40 oct.  27 12:37 mnt
+> drwxrwxr-x 2 root root   40 oct.  27 12:37 opt
+> drwxrwxr-x 2 root root   40 oct.  27 12:37 proc
+> drwx------ 2 root root  100 oct.  27 12:37 root
+> lrwxrwxrwx 1 root root    3 oct.  27 12:37 run -> tmp
+> drwxrwxr-x 2 root root  940 nov.   1 13:24 sbin
+> drwxrwxr-x 2 root root   40 oct.  27 12:37 sys
+> drwxrwxrwt 3 root root   60 nov.   1 13:24 tmp
+> drwxrwxr-x 6 root root  140 nov.   1 13:24 usr
+> drwxrwxr-x 4 root root  220 nov.   1 13:24 var
+> 
+> How are the permissions of the directories/files in system/skeleton/ in
+> your Buildroot sources?
 
-This should be squashed into the patch updating systemd, I don't really
-a reason to have this separately.
+OK, that made me think and I've now checked the contents of the
+rootfs.tar created by buildroot instead of looking at the deployed
+filesystem on the target device. It appears that this is a bug in the
+way that we deploy the rootfs and has nothing to do with buildroot. I am
+very sorry for bothering you with this. Thanks for your attempt to help,
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+
+Regards,
+Sven
