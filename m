@@ -1,99 +1,95 @@
-From: Stanislav Vasic <svlasic@gmail.com>
-Date: Sat,  2 Nov 2013 22:37:16 +0100
-Subject: [Buildroot] [PATCH 1/1] Option to copy Linaro gconv libs to target
-Message-ID: <1383428236-3842-1-git-send-email-svlasic@gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sat, 02 Nov 2013 23:23:49 +0100
+Subject: [Buildroot] Default target file system permissions
+In-Reply-To: <1383259334.10813.7.camel@bender>
+References: <1383259334.10813.7.camel@bender>
+Message-ID: <52757B75.2040907@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch adds an option for external Linaro toolchains
-which allows buildroot to copy gconv libs to target.
+On 31/10/13 23:42, Sven Neumann wrote:
+> Hi,
+>
+> I've been debugging some problems with our buildroot builds lately and
+> found them to be caused by too restrictive permissions on the target
+> file system. Pretty much all files and directories, unless specified
+> explicitly in system/device_table.txt are only readable by the owner
+> (root). This causes problems with samba (/var/nmbd not accessible by
+> nmbd), dbus services (dbus daemon can not access the service files) and
+> so on. Basically only services that are running as root can work
+> correctly, because for other users the system is pretty much
+> inaccessible. I've come across this mail on the mailing-list which seems
+> related, but couldn't find an answer:
+> http://buildroot-busybox.2317881.n4.nabble.com/Default-target-file-system-permissions-td39088.html
 
-Also exports GCONV_PATH if folder exists on target.
-That is needed because some programs (eg. XBMC) dont
-see gconv libs if GCONV_PATH is not exported.
+  As mentioned in that mail, the problem is that you have a restrictive 
+umask set. Therefore, all files that are created by buildroot get this 
+umask applied.
 
-Signed-off-by: Stanislav Vasic <svlasic@gmail.com>
----
- system/skeleton/etc/profile                        |  6 ++++++
- toolchain/helpers.mk                               | 12 ++++++++++++
- toolchain/toolchain-external/Config.in             |  6 ++++++
- toolchain/toolchain-external/toolchain-external.mk |  4 ++++
- 4 files changed, 28 insertions(+)
+  I don't really see a solution. For starters, your filesystem skeleton 
+(in system/skeleton) probably already has wrong permissions. So even if 
+we'd reset the umask within the buildroot build, the skeleton would still 
+be installed with the wrong permissions.
 
-diff --git a/system/skeleton/etc/profile b/system/skeleton/etc/profile
-index 31d3180..d7fef65 100644
---- a/system/skeleton/etc/profile
-+++ b/system/skeleton/etc/profile
-@@ -8,6 +8,12 @@ export PATH=\
- /usr/bin/X11:\
- /usr/local/bin
- 
-+# If gconv folder exists, export GCONV_PATH
-+
-+if [ -d /usr/lib/gconv ]; then
-+    export GCONV_PATH = /usr/lib/gconv
-+fi
-+
- # If running interactively, then:
- if [ "$PS1" ]; then
- 
-diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
-index a8944ce..a778cef 100644
---- a/toolchain/helpers.mk
-+++ b/toolchain/helpers.mk
-@@ -83,6 +83,18 @@ copy_toolchain_lib_root = \
-  \
- 	echo -n
- 
-+# Function for Linaro toolchains (EABIhf) that copies gconv libs to target
-+# Expects 1 param:
-+# $1: toolchain root
-+copy_toolchain_gconv = \
-+    BASE_DIR="$(strip $1)"; \
-+    if [ -d $${BASE_DIR}usr/lib/arm-linux-gnueabihf/gconv ] ; then \
-+	mkdir -p $(TARGET_DIR)/usr/lib/gconv ; \
-+	cp -r $${BASE_DIR}usr/lib/arm-linux-gnueabihf/gconv/* $(TARGET_DIR)/usr/lib/gconv ; \
-+    fi; \
-+ \
-+    echo -n
-+
- #
- # Copy the full external toolchain sysroot directory to the staging
- # dir. The operation of this function is rendered a little bit
-diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-index 48b5865..fc328b1 100644
---- a/toolchain/toolchain-external/Config.in
-+++ b/toolchain/toolchain-external/Config.in
-@@ -864,6 +864,12 @@ config BR2_TOOLCHAIN_EXTERNAL_MUSL
- 	bool
- 	select BR2_TOOLCHAIN_USES_MUSL
- 
-+config BR2_TOOLCHAIN_EXTERNAL_LINARO_GCONV
-+	bool "Copy GCONV libraries to target"
-+	depends on BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_07 \
-+	    || BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_08 \
-+	    || BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_09
-+
- if BR2_TOOLCHAIN_EXTERNAL_CUSTOM
- 
- choice
-diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
-index d41cc7c..c1a3dc7 100644
---- a/toolchain/toolchain-external/toolchain-external.mk
-+++ b/toolchain/toolchain-external/toolchain-external.mk
-@@ -496,6 +496,10 @@ define TOOLCHAIN_EXTERNAL_INSTALL_CORE
- 			echo "Could not find gdbserver in external toolchain" ; \
- 			exit 1 ; \
- 		fi ; \
-+	fi; \
-+	if test "$(BR2_TOOLCHAIN_EXTERNAL_LINARO_GCONV)" = "y" ; then \
-+		$(call MESSAGE,"Copying external toolchain gconv to target...") ; \
-+		$(call copy_toolchain_gconv,$${SYSROOT_DIR}) ; \
- 	fi
- endef
- 
+  I think the only thing we can do is to add a faq entry to the 
+documentation.
+
+  Regards,
+  Arnout
+
+
+>
+>
+> Here's how the root folder on our target file-system looks like:
+>
+> drwxr-xr-x   20 root     root          4096 Dec  7  1999 .
+> drwxr-xr-x   20 root     root          4096 Dec  7  1999 ..
+> drwx------    2 root     root          4096 Dec  7  1999 bin
+> drwxr-xr-x    2 root     root          4096 Nov 30  1999 boot
+> drwxr-xr-x    5 root     root          4096 Dec 30  1999 data
+> drwxr-xr-x   10 root     root         12600 Dec  7  1999 dev
+> drwxr-xr-x   15 root     root          4096 Dec  7  1999 etc
+> drwx------    3 root     root          4096 Dec  7  1999 home
+> drwx------    4 root     root          4096 Dec  7  1999 lib
+> lrwxrwxrwx    1 root     root            11 Oct 31 20:26 linuxrc ->
+> bin/busybox
+> drwx------    2 root     root          4096 Dec  7  1999 media
+> drwx------    2 root     root          4096 Dec  7  1999 mnt
+> drwx------    2 root     root          4096 Dec  7  1999 opt
+> dr-xr-xr-x   62 root     root             0 Dec  7  1999 proc
+> drwx------    2 root     root          4096 Oct 31 22:09 root
+> lrwxrwxrwx    1 root     root             3 Oct 31 18:39 run -> tmp
+> drwx------    2 root     root          4096 Dec  7  1999 sbin
+> dr-xr-xr-x   11 root     root             0 Dec  7  1999 sys
+> drwxrwxrwt   12 root     root           800 Oct 31 21:51 tmp
+> drwx------    7 root     root          4096 Dec  7  1999 usr
+> drwxr-xr-x    7 root     root          4096 Dec  7  1999 var
+>
+>
+> So are the restrictive permissions on the target file-system intentional
+> and how I can change this situation?
+>
+>
+> Regards,
+> Sven
+>
+>
+>
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+>
+
+
 -- 
-1.8.3.2
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
