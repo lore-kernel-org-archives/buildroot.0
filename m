@@ -1,58 +1,108 @@
-From: Sven Neumann <neumann@teufel.de>
-Date: Sat, 02 Nov 2013 09:13:19 +0100
-Subject: [Buildroot] Default target file system permissions
-Message-ID: <1383379999.4041.2.camel@bender>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 2 Nov 2013 11:05:29 +0100
+Subject: [Buildroot] Architecture build statistics
+In-Reply-To: <52749C54.8080601@writeme.com>
+References: <20131029204108.5d707d09@skate> <20131101193153.04cdd643@skate>
+ <52749C54.8080601@writeme.com>
+Message-ID: <20131102110529.4e98755d@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Dear Sinan Akman,
 
-I've been debugging some problems with our buildroot builds lately and
-found them to be caused by too restrictive permissions on the target
-file system. Pretty much all files and directories, unless specified
-explicitly in system/device_table.txt are only readable by the owner
-(root). This causes problems with samba (/var/nmbd not accessible by
-nmbd), dbus services (dbus daemon can not access the service files) and
-so on. Basically only services that are running as root can work
-correctly, because for other users the system is pretty much
-inaccessible. I've come across this mail on the mailing-list which seems
-related, but couldn't find an answer:
-http://buildroot-busybox.2317881.n4.nabble.com/Default-target-file-system-permissions-td39088.html
-I've also tried changing the umask on our buildslaves but that didn't
-help.
+On Sat, 02 Nov 2013 02:31:48 -0400, Sinan Akman wrote:
 
-Here's how the root folder on our target file-system looks like: 
+>    I don't know if I would qualify well as a maintainer but
+> I have quite a number of powerpc boards that I build and use
+> buildroot almost regularly.
 
-drwxr-xr-x   20 root     root          4096 Dec  7  1999 .
-drwxr-xr-x   20 root     root          4096 Dec  7  1999 ..
-drwx------    2 root     root          4096 Dec  7  1999 bin
-drwxr-xr-x    2 root     root          4096 Nov 30  1999 boot
-drwxr-xr-x    5 root     root          4096 Dec 30  1999 data
-drwxr-xr-x   10 root     root         12600 Dec  7  1999 dev
-drwxr-xr-x   15 root     root          4096 Dec  7  1999 etc
-drwx------    3 root     root          4096 Dec  7  1999 home
-drwx------    4 root     root          4096 Dec  7  1999 lib
-lrwxrwxrwx    1 root     root            11 Oct 31 20:26 linuxrc ->
-bin/busybox
-drwx------    2 root     root          4096 Dec  7  1999 media
-drwx------    2 root     root          4096 Dec  7  1999 mnt
-drwx------    2 root     root          4096 Dec  7  1999 opt
-dr-xr-xr-x   62 root     root             0 Dec  7  1999 proc
-drwx------    2 root     root          4096 Oct 31 22:09 root
-lrwxrwxrwx    1 root     root             3 Oct 31 18:39 run -> tmp
-drwx------    2 root     root          4096 Dec  7  1999 sbin
-dr-xr-xr-x   11 root     root             0 Dec  7  1999 sys
-drwxrwxrwt   12 root     root           800 Oct 31 21:51 tmp
-drwx------    7 root     root          4096 Dec  7  1999 usr
-drwxr-xr-x    7 root     root          4096 Dec  7  1999 var
+Sure. I know Gustavo also has a number of PowerPC platforms. Feel free
+to pick some PowerPC related issues in the autobuilder results and send
+fixes for them.
 
+Here is the list of packages that were causing the highest number of
+problems on PowerPC since October, 1st 2013. Note that looking at the
+trace-cmd problem is useless, we already have a fix for this one (it
+just hasn't been applied to Buildroot yet), and that some of the
+problems below may have already been fixed, or may not necessarily be
+related to PowerPC specific issues.
 
-So are the restrictive permissions on the target file-system intentional
-and how I can change this situation?
++--------------------------------------------+-----+
+| reason                                     | cnt |
++--------------------------------------------+-----+
+| trace-cmd-trace-cmd-v2.2.1                 | 219 |
+| host-util-linux-2.23.2                     |  41 |
+| gstreamer-0.10.36                          |  33 |
+| php-5.3.27                                 |  18 |
+| make: *** [uboot-tools-legal-info] Error 1 |  16 |
+| w_scan-20130331                            |  16 |
+| bison-3.0                                  |  14 |
+| nano-2.3.2                                 |  11 |
+| omniorb-4.1.6                              |  10 |
+| mpd-0.17.6                                 |  10 |
+| cryptsetup-1.6.2                           |  10 |
+| webkit-1.11.5                              |   8 |
+| qt-4.8.5                                   |   8 |
+| minidlna-1.0.26                            |   7 |
+| mediastreamer-2.8.2                        |   6 |
+| rpm-5.2.0                                  |   6 |
+| uboot-tools-2013.10                        |   6 |
+| binutils-2.21                              |   5 |
+| alsa-lib-1.0.26                            |   4 |
+| qt5base-5.1.1                              |   4 |
+| gst1-plugins-bad-1.2.0                     |   4 |
+| nettle-2.7.1                               |   3 |
+| uclibc-0.9.33.2                            |   3 |
+| host-uboot-tools-2013.10                   |   3 |
+| enlightenment-0.17.3                       |   3 |
+| sysklogd-1.5                               |   2 |
+| imagemagick-6.8.6-2                        |   2 |
+| audiofile-0.3.6                            |   2 |
+| alsa-utils-1.0.26                          |   2 |
+| python-2.7.3                               |   2 |
+| gettext-0.18.3.1                           |   2 |
+| mediastreamer-2.9.0                        |   2 |
+| host-cmake-2.8.10.2                        |   2 |
+| cairo-1.12.10                              |   1 |
+| matchbox-keyboard-0.1                      |   1 |
+| cdrkit-1.1.11                              |   1 |
+| fltk-1.1.7                                 |   1 |
+| imagemagick-6.8.7-0                        |   1 |
+| libargtable2-13                            |   1 |
+| make: write error                          |   1 |
+| libwebsockets-v1.22-chrome26-firefox18     |   1 |
+| host-expat-2.1.0                           |   1 |
+| host-gettext-0.18.3.1                      |   1 |
+| dbus-1.4.26                                |   1 |
+| weston-1.1.0                               |   1 |
+| protobuf-2.4.1                             |   1 |
+| httping-2.2.1                              |   1 |
+| mtdev2tuio-e1e7378                         |   1 |
+| systemd-44                                 |   1 |
+| libcgroup-0.38                             |   1 |
+| host-ruby-1.9.3-p448                       |   1 |
+| tn5250-0.17.4                              |   1 |
+| netsnmp-5.7.2                              |   1 |
+| usbredir-0.6                               |   1 |
+| udisks-1.0.4                               |   1 |
+| libsvgtiny-12121                           |   1 |
+| bustle-0.4.2                               |   1 |
+| host-libglib2-2.36.3                       |   1 |
+| host-protobuf-c-0.15                       |   1 |
+| libiconv-1.14                              |   1 |
+| xlib_libpthread-stubs-0.3                  |   1 |
+| collectd-5.4.0                             |   1 |
+| qt5webkit-5.0.2                            |   1 |
+| pcsc-lite-1.8.6                            |   1 |
++--------------------------------------------+-----+
 
+Best regards,
 
-Regards,
-Sven
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
