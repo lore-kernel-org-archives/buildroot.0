@@ -1,44 +1,46 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sat, 02 Nov 2013 09:03:32 -0300
-Subject: [Buildroot] [PATCH] dhcpcd: needs MMU
-In-Reply-To: <1383391862-13252-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1383391862-13252-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <5274EA14.1040903@zacarias.com.ar>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Sat, 02 Nov 2013 13:11:56 +0100
+Subject: [Buildroot] [PATCH 0 of 2] Use full revision ID for git packages
+Message-ID: <patchbomb.1383394316@argentina>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 11/02/2013 08:31 AM, Thomas Petazzoni wrote:
 
-> dhcpcd fails to build on non-MMU platforms:
-> 
->   bind.o: In function `_daemonise':
->   bind.c:(.text+0x62): undefined reference to `_fork'
->   collect2: ld returned 1 exit status
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
->  package/dhcpcd/Config.in | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/package/dhcpcd/Config.in b/package/dhcpcd/Config.in
-> index dbde548..ddbc6f4 100644
-> --- a/package/dhcpcd/Config.in
-> +++ b/package/dhcpcd/Config.in
-> @@ -1,5 +1,6 @@
->  config BR2_PACKAGE_DHCPCD
->  	depends on BR2_INET_IPV6
-> +	depends on BR2_USE_MMU # fork()
->  	bool "dhcpcd"
->  	help
->  	  An RFC2131 compliant DHCP client
+As discussed recently, we should use full git commit IDs instead of
+abbreviated ones. 
 
-Hi.
-You could remove the MMU kludge in the mk file too since it's useless.
-On related news version 6.1.0 can be built on nommu, however at the
-moment the upstream site has been unreachable for the last couple of
-days so fetching from some mirror is the only option [the mk file needs
-a few tweaks too].
-Regards.
+Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+
+---
+ docs/manual/adding-packages-tips.txt             |  5 ++---
+ package/a10disp/a10disp.mk                       |  2 +-
+ package/cppzmq/cppzmq.mk                         |  2 +-
+ package/czmq/czmq.mk                             |  2 +-
+ package/filemq/filemq.mk                         |  2 +-
+ package/jsmin/jsmin.mk                           |  2 +-
+ package/knock/knock.mk                           |  2 +-
+ package/libnfc/libnfc.mk                         |  2 +-
+ package/linenoise/linenoise.mk                   |  2 +-
+ package/lua-ev/lua-ev.mk                         |  2 +-
+ package/lua-msgpack-native/lua-msgpack-native.mk |  2 +-
+ package/luaexpatutils/luaexpatutils.mk           |  2 +-
+ package/mtdev2tuio/mtdev2tuio.mk                 |  2 +-
+ package/ne10/ne10.mk                             |  2 +-
+ package/omap-u-boot-utils/omap-u-boot-utils.mk   |  2 +-
+ package/on2-8170-modules/on2-8170-modules.mk     |  2 +-
+ package/qextserialport/qextserialport.mk         |  2 +-
+ package/qtuio/qtuio.mk                           |  2 +-
+ package/rpi-firmware/rpi-firmware.mk             |  2 +-
+ package/rpi-userland/rpi-userland.mk             |  2 +-
+ package/socketcand/socketcand.mk                 |  2 +-
+ package/sunxi-cedarx/sunxi-cedarx.mk             |  2 +-
+ package/sunxi-mali-prop/sunxi-mali-prop.mk       |  2 +-
+ package/sunxi-mali/sunxi-mali.mk                 |  2 +-
+ package/ti-utils/ti-utils.mk                     |  2 +-
+ package/tvheadend/tvheadend.mk                   |  2 +-
+ package/zmqpp/zmqpp.mk                           |  2 +-
+ package/zyre/zyre.mk                             |  2 +-
+ 28 files changed, 29 insertions(+), 30 deletions(-)
