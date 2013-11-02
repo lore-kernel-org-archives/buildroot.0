@@ -1,91 +1,75 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 02 Nov 2013 20:45:33 +0100
-Subject: [Buildroot] Problems with Python ctypes is not limited to
- Raspberry Pi platfform - tested on qemu vexpress
-In-Reply-To: <CAMduVEdzrDhzbXv6buXJTXxB19fHbmee0Q4+qoA4Fsw3ECRmaQ@mail.gmail.com>
-References: <CAMduVEdzrDhzbXv6buXJTXxB19fHbmee0Q4+qoA4Fsw3ECRmaQ@mail.gmail.com>
-Message-ID: <5275565D.4060304@mind.be>
+From: Stanislav Vasic <svlasic@gmail.com>
+Date: Sat, 2 Nov 2013 20:49:51 +0000 (UTC)
+Subject: [Buildroot] [PATCH 2 of 2] Introduction of Amlogic platform to
+	buildroot
+References: <l53633$d6q$3@ger.gmane.org> <20131102165459.09a35044@skate> <
+ l53858$d6q$4@ger.gmane.org> <20131102172023.6a8bc642@skate>
+Message-ID: <l53ohf$69i$1@ger.gmane.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 30/10/13 23:53, Wojciech Zabolotny wrote:
-[snip]
-> 4. I have compiled the system with "make" (well, "make -j 12" doesn't
-> work for current version of buildroot - it fails with following error
-> messages:
-> $ make -j 12
-> [...]
->>>> host-automake 1.12.6 Building
-> PATH=/tmp/rr/buildroot/output/host/bin:/tmp/rr/buildroot/output/host/usr/bin:/home/wzab/bin:/usr/local/bin:/usr/bin:/bin:/usr/local/games:/usr/games
-> LD_LIBRARY_PATH="/tmp/rr/buildroot/output/host/usr/lib:"
-> PKG_CONFIG="/tmp/rr/buildroot/output/host/usr/bin/pkg-config"
-> PKG_CONFIG_SYSROOT_DIR="/"
-> PKG_CONFIG_LIBDIR="/tmp/rr/buildroot/output/host/usr/lib/pkgconfig"
-> PERLLIB="/tmp/rr/buildroot/output/host/usr/lib/perl"  /usr/bin/make
-> -j9  -C /tmp/rr/buildroot/output/build/host-automake-1.12.6/
-> make[1]: Entering directory
-> `/tmp/rr/buildroot/output/build/host-automake-1.12.6'
-> make[1]: warning: -jN forced in submake: disabling jobserver mode.
-> make[1]: *** read jobs pipe: No such file or directory.  Stop.
-> make[1]: *** Waiting for unfinished jobs....
->    GEN      automake
->    GEN      t/ax/shell-no-trail-bslash
-> make: *** [/tmp/rr/buildroot/output/build/host-automake-1.12.6/.stamp_built]
-> Broken pipe
-> )
+On Sat, 02 Nov 2013 17:20:23 +0100, Thomas Petazzoni wrote:
 
-  That's weird... The top-level Makefile has .NOTPARALLEL, so your -j12 
-should be ignored...
+> Dear Stanislav Vasic,
+> 
+> On Sat, 2 Nov 2013 16:10:16 +0000 (UTC), Stanislav Vasic wrote:
+> 
+>> That is what I was told yesterday (about adding it). Amlogic buildroot
+>> is too complicated and it's used mainly for running XBMC on top of
+>> buildroot.
+>> I agree there are too many things (such as non-standard opengl drivers,
+>> Amlogic property a/v libraries...).
+> 
+> That's not a problem. We already have a number of packages with OpenGL
+> drivers for specific platforms:
+> 
+>  package/freescale-imx/gpu-viv-bin-mx6q/ (for i.MX6)
+>  package/rpi-userland/ (for Rasberry Pi) package/sunxi-mali/ (for
+>  Allwinner) package/ti-gfx/ (for TI OMAP)
+> 
+>> Patch is needed so we know we're building for Amlogic SoC, and for
+>> other packages to know which eg. opengl or a/v libs to include in
+>> build.
+> 
+> Just do it the way we do it for all of the platforms mentioned above:
+> add a package in Buildroot, and make it depend on BR2_arm. This way it
+> will only be visible on ARM platforms, and from this point, users are
+> expected to know which OpenGL implementation they need for their
+> platform.
+> 
+> We are also considering adding "demo" defconfigs in Buildroot so that
+> users could easily find a configuration that enables OpenGL for a given
+> platform.
+> 
+>> > For all other ARM platforms, the user simply has to choose the
+>> > appropriate ARM core (Cortex-A8, Cortex-A9, Cortex-A15, etc.), and
+>> > that's it. We also provide default configurations (see the configs/
+>> > directory) for various well-known hardware platforms, and those
+>> > configurations correctly define which ARM core should be used.
+>> 
+>> See above, at this point it's not so simple for Amlogic.
+> 
+> See above. Amlogic is not exceptional: it's just like several other SoCs
+> we already support in Buildroot :-)
+> 
+> Best regards,
+> 
+> Thomas
 
-[snip]
-> # vi /usr/lib/python2.7/ctypes/util.py
->
-> changing the mach_map dictionary:
->
->              mach_map = {
->                  'x86_64-64': 'libc6,x86-64',
->                  'ppc64-64': 'libc6,64bit',
->                  'sparc64-64': 'libc6,64bit',
->                  's390x-64': 'libc6,64bit',
->                  'ia64-64': 'libc6,IA-64',
->                  'armv7l-32':'libc0',
->                  }
->              abi_type = mach_map.get(machine, 'libc6')
+Hi,
 
-  The problem with this, of course, is that it should be libc0 for uClibc 
-but libc6 for glibc, and that what you have here only works for armv7l so 
-something similar should be added for all other architectures.
+I see your point. At the moment I don't have time to toy with it because 
+lot of work, but if noone else is interested in doing such a thing, I'll 
+do it but don't have any ETA on this one.
 
-  Instead, I think it's better to add a third fallback option (in case 
-neither ldconfig nor gcc produce a result) that uses glob.glob to find a 
-matching library in /usr/lib or /lib.
+I did not follow since yesterday, but if not available, I can submit 
+patch of extracting Linaro's gconv libs and copying it to target (option 
+in toolchain configuration).
 
+This patch works for all Linaros (oldest tested is 2012.03).
 
-  Regards,
-  Arnout
-
->
-> and run Python again:
-> # python
-> Python 2.7.3 (default, Oct 30 2013, 23:17:05)
-> [GCC 4.7.3] on linux2
-> Type "help", "copyright", "credits" or "license" for more information.
->>>> import ctypes.util
->>>> ctypes.util.find_library('m')
-> 'libm.so.0'
->>>>
->
-> So after the above modification, find_library works.
->
-
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+Regards,
+Stan
