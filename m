@@ -1,92 +1,45 @@
-From: Sinan Akman <sinan@writeme.com>
-Date: Sat, 02 Nov 2013 02:31:48 -0400
-Subject: [Buildroot] Architecture build statistics
-In-Reply-To: <20131101193153.04cdd643@skate>
-References: <20131029204108.5d707d09@skate> <20131101193153.04cdd643@skate>
-Message-ID: <52749C54.8080601@writeme.com>
+From: Alexander Lukichev <alexander.lukichev@gmail.com>
+Date: Sat, 2 Nov 2013 09:16:46 +0200
+Subject: [Buildroot] [PATCH v2 1/1] openpgm: disable on AVR32
+In-Reply-To: <CAAHaz6GXiQAMuoK2eo0=EjmE509P98zuuAuN7f_T5TYeK6W1QA@mail.gmail.com>
+References: <1383329548-8528-1-git-send-email-alexander.lukichev@gmail.com>
+ <20131101192027.1ea4c1bc@skate>
+ <CAAHaz6GXiQAMuoK2eo0=EjmE509P98zuuAuN7f_T5TYeK6W1QA@mail.gmail.com>
+Message-ID: <CAAHaz6H+eqGoMKgp5bweXcq6KJdmvaM7O6ycpzY9=yun2CyOMA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 11/01/2013 02:31 PM, Thomas Petazzoni wrote:
-> Hello all,
->
-> Following to this e-mail, I've just added a bunch of architecture
-> "maintainers" that will receive each day an e-mail with list of the
-> build failures related to the architecture they take care of in
-> Buildroot. See below for the detail.
->
-> On Tue, 29 Oct 2013 20:41:08 +0100, Thomas Petazzoni wrote:
->
->> +------------+---------+----------+-------+------------+------------+
->> | arch       | success | failures | total | pctsuccess | pctfailure |
->> +------------+---------+----------+-------+------------+------------+
->> | bfin       |      10 |      607 |   617 |     1.6207 |    98.3793 |
->
-> E-mail sent to Aaron Wu and Sonic Zhang from Analog Devices.
->
->> | microblaze |       6 |      308 |   314 |     1.9108 |    98.0892 |
->
-> E-mail sent to Spenser Gilliland.
->
->> | nios2      |       2 |       49 |    51 |     3.9216 |    96.0784 |
->
-> E-mail sent to Ezequiel Garcia.
->
->> | xtensa     |      13 |      314 |   327 |     3.9755 |    96.0245 |
->
-> E-mail sent to Chris Zankel.
->
->> | avr32      |      34 |      305 |   339 |    10.0295 |    89.9705 |
->
-> E-mail sent to Simon Dawson.
->
->> | mips64el   |     162 |      498 |   660 |    24.5455 |    75.4545 |
->
-> E-mail sent to Markos Chandras, from Imagination Technologies.
->
->> | aarch64    |      82 |      243 |   325 |    25.2308 |    74.7692 |
->
-> No specific maintainer (I'm mainly taking care of aarch64 issues)
->
->> | arc        |      95 |      234 |   329 |    28.8754 |    71.1246 |
->
-> E-mail sent to Mischa Jonker, from Synopsis.
->
->> | sh4a       |     158 |      171 |   330 |    47.8788 |    51.8182 |
->
-> No specific maintainer. Who anyone be interested?
->
->> | mipsel     |     172 |      168 |   340 |    50.5882 |    49.4118 |
->
-> E-mail sent to Markos Chandras, from Imagination Technologies.
->
->> | mips       |     172 |      165 |   337 |    51.0386 |    48.9614 |
->
-> E-mail sent to Markos Chandras, from Imagination Technologies.
->
->> | arm        |    2302 |     1788 |  4097 |    56.1875 |    43.6417 |
->> | powerpc    |    2794 |     1616 |  4411 |    63.3416 |    36.6357 |
+Hi,
 
-   Hi Thomas
+2013/11/1 Alexander Lukichev <alexander.lukichev@gmail.com>
 
-   I don't know if I would qualify well as a maintainer but
-I have quite a number of powerpc boards that I build and use
-buildroot almost regularly.
+> The compiler (that particular toolchain) has those intrinsic functions
 
-   Let me know if this can be of any help.
+> but is able to generate them only if the exact CPU sub architecture
 
-   Regards
+> is specified, not just AVR32 (their implementations differ for each of
 
-   Sinan Akman
+> the two sub architectures)
+....
+> I tried to disable using them in the package code by playing with
+> configure.ac but unsuccessfully: the code used instead some thread
+> functions that were not provided by the toolchain (at least, not with
+> the constants defined in configure). In the end, it seemed too much
+...
+> I did not know how to explain all this concisely in openpgm's Config.in,
+> sorry :-)
 
->> | sh4        |     208 |      120 |   328 |    63.4146 |    36.5854 |
->> | x86_64     |     874 |      412 |  1288 |    67.8571 |    31.9876 |
->> | i686       |    2369 |      572 |  2943 |    80.4961 |    19.4359 |
->
-> No specific maintainers for these architectures.
->
-> Thomas
->
+So, since in both cases the project was configured incorrectly for building
+by
+that toolchain, the comment I have put in Config.in did not seem misleading
+to me.
+
+--
+Best regards,
+  Alexander Lukichev
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20131102/0f799aa4/attachment.html>
