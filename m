@@ -1,37 +1,48 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Sat, 2 Nov 2013 18:59:50 +0100
-Subject: [Buildroot] [PATCH 2/2] libcap: fix static link
-In-Reply-To: <1383328047-28945-2-git-send-email-thomas.petazzoni@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 2 Nov 2013 18:55:22 +0100
+Subject: [Buildroot] [PATCH 1/2] libcap: rename existing patch
+In-Reply-To: <1383328047-28945-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1383328047-28945-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1383328047-28945-2-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <CAHXCMM+fX66CtsTjiM8KwgNDsz53QGKBH4Y2w8-e4xUtCEETCA@mail.gmail.com>
+Message-ID: <20131102175522.GE3542@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2013/11/1 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Thomas, All,
 
-> With BR2_PREFER_STATIC_LINK, libcap fails to build:
->
->
-> http://autobuild.buildroot.net/results/619bceb3491ecd2ed4e1ae552fdb237a0ed2fa47/build-end.log
->
-> This is due to the fact that it still tries to build a shared
-> library. This commit fixes that by adding a patch that makes libcap
-> provide install-shared/install-static targets. We also now only build
-> the $(@D)/libcap subdirectory, so removing the build of the progs
-> subdirectory is no longer needed.
->
+On 2013-11-01 18:47 +0100, Thomas Petazzoni spake thusly:
+> libcap currently has one patch, but it is named using the old naming
+> strategy, which includes the package version, but not a patch
+> number. This commit switches this to use the new patch naming
+> strategy.
+> 
 > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
->
-Reviewed-by: Samuel Martin <s.martin49@gmail.com>
 
-Regards,
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+> ---
+>  .../{libcap-2.22-build-system.patch => libcap-01-build-system.patch}      | 0
+>  1 file changed, 0 insertions(+), 0 deletions(-)
+>  rename package/libcap/{libcap-2.22-build-system.patch => libcap-01-build-system.patch} (100%)
+> 
+> diff --git a/package/libcap/libcap-2.22-build-system.patch b/package/libcap/libcap-01-build-system.patch
+> similarity index 100%
+> rename from package/libcap/libcap-2.22-build-system.patch
+> rename to package/libcap/libcap-01-build-system.patch
+> -- 
+> 1.8.1.2
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
-Samuel
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20131102/0359c586/attachment.html>
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
