@@ -1,75 +1,99 @@
 From: Stanislav Vasic <svlasic@gmail.com>
-Date: Sat, 2 Nov 2013 20:49:51 +0000 (UTC)
-Subject: [Buildroot] [PATCH 2 of 2] Introduction of Amlogic platform to
-	buildroot
-References: <l53633$d6q$3@ger.gmane.org> <20131102165459.09a35044@skate> <
- l53858$d6q$4@ger.gmane.org> <20131102172023.6a8bc642@skate>
-Message-ID: <l53ohf$69i$1@ger.gmane.org>
+Date: Sat,  2 Nov 2013 22:37:16 +0100
+Subject: [Buildroot] [PATCH 1/1] Option to copy Linaro gconv libs to target
+Message-ID: <1383428236-3842-1-git-send-email-svlasic@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, 02 Nov 2013 17:20:23 +0100, Thomas Petazzoni wrote:
+This patch adds an option for external Linaro toolchains
+which allows buildroot to copy gconv libs to target.
 
-> Dear Stanislav Vasic,
-> 
-> On Sat, 2 Nov 2013 16:10:16 +0000 (UTC), Stanislav Vasic wrote:
-> 
->> That is what I was told yesterday (about adding it). Amlogic buildroot
->> is too complicated and it's used mainly for running XBMC on top of
->> buildroot.
->> I agree there are too many things (such as non-standard opengl drivers,
->> Amlogic property a/v libraries...).
-> 
-> That's not a problem. We already have a number of packages with OpenGL
-> drivers for specific platforms:
-> 
->  package/freescale-imx/gpu-viv-bin-mx6q/ (for i.MX6)
->  package/rpi-userland/ (for Rasberry Pi) package/sunxi-mali/ (for
->  Allwinner) package/ti-gfx/ (for TI OMAP)
-> 
->> Patch is needed so we know we're building for Amlogic SoC, and for
->> other packages to know which eg. opengl or a/v libs to include in
->> build.
-> 
-> Just do it the way we do it for all of the platforms mentioned above:
-> add a package in Buildroot, and make it depend on BR2_arm. This way it
-> will only be visible on ARM platforms, and from this point, users are
-> expected to know which OpenGL implementation they need for their
-> platform.
-> 
-> We are also considering adding "demo" defconfigs in Buildroot so that
-> users could easily find a configuration that enables OpenGL for a given
-> platform.
-> 
->> > For all other ARM platforms, the user simply has to choose the
->> > appropriate ARM core (Cortex-A8, Cortex-A9, Cortex-A15, etc.), and
->> > that's it. We also provide default configurations (see the configs/
->> > directory) for various well-known hardware platforms, and those
->> > configurations correctly define which ARM core should be used.
->> 
->> See above, at this point it's not so simple for Amlogic.
-> 
-> See above. Amlogic is not exceptional: it's just like several other SoCs
-> we already support in Buildroot :-)
-> 
-> Best regards,
-> 
-> Thomas
+Also exports GCONV_PATH if folder exists on target.
+That is needed because some programs (eg. XBMC) dont
+see gconv libs if GCONV_PATH is not exported.
 
-Hi,
+Signed-off-by: Stanislav Vasic <svlasic@gmail.com>
+---
+ system/skeleton/etc/profile                        |  6 ++++++
+ toolchain/helpers.mk                               | 12 ++++++++++++
+ toolchain/toolchain-external/Config.in             |  6 ++++++
+ toolchain/toolchain-external/toolchain-external.mk |  4 ++++
+ 4 files changed, 28 insertions(+)
 
-I see your point. At the moment I don't have time to toy with it because 
-lot of work, but if noone else is interested in doing such a thing, I'll 
-do it but don't have any ETA on this one.
-
-I did not follow since yesterday, but if not available, I can submit 
-patch of extracting Linaro's gconv libs and copying it to target (option 
-in toolchain configuration).
-
-This patch works for all Linaros (oldest tested is 2012.03).
-
-Regards,
-Stan
+diff --git a/system/skeleton/etc/profile b/system/skeleton/etc/profile
+index 31d3180..d7fef65 100644
+--- a/system/skeleton/etc/profile
++++ b/system/skeleton/etc/profile
+@@ -8,6 +8,12 @@ export PATH=\
+ /usr/bin/X11:\
+ /usr/local/bin
+ 
++# If gconv folder exists, export GCONV_PATH
++
++if [ -d /usr/lib/gconv ]; then
++    export GCONV_PATH = /usr/lib/gconv
++fi
++
+ # If running interactively, then:
+ if [ "$PS1" ]; then
+ 
+diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
+index a8944ce..a778cef 100644
+--- a/toolchain/helpers.mk
++++ b/toolchain/helpers.mk
+@@ -83,6 +83,18 @@ copy_toolchain_lib_root = \
+  \
+ 	echo -n
+ 
++# Function for Linaro toolchains (EABIhf) that copies gconv libs to target
++# Expects 1 param:
++# $1: toolchain root
++copy_toolchain_gconv = \
++    BASE_DIR="$(strip $1)"; \
++    if [ -d $${BASE_DIR}usr/lib/arm-linux-gnueabihf/gconv ] ; then \
++	mkdir -p $(TARGET_DIR)/usr/lib/gconv ; \
++	cp -r $${BASE_DIR}usr/lib/arm-linux-gnueabihf/gconv/* $(TARGET_DIR)/usr/lib/gconv ; \
++    fi; \
++ \
++    echo -n
++
+ #
+ # Copy the full external toolchain sysroot directory to the staging
+ # dir. The operation of this function is rendered a little bit
+diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
+index 48b5865..fc328b1 100644
+--- a/toolchain/toolchain-external/Config.in
++++ b/toolchain/toolchain-external/Config.in
+@@ -864,6 +864,12 @@ config BR2_TOOLCHAIN_EXTERNAL_MUSL
+ 	bool
+ 	select BR2_TOOLCHAIN_USES_MUSL
+ 
++config BR2_TOOLCHAIN_EXTERNAL_LINARO_GCONV
++	bool "Copy GCONV libraries to target"
++	depends on BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_07 \
++	    || BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_08 \
++	    || BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_09
++
+ if BR2_TOOLCHAIN_EXTERNAL_CUSTOM
+ 
+ choice
+diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
+index d41cc7c..c1a3dc7 100644
+--- a/toolchain/toolchain-external/toolchain-external.mk
++++ b/toolchain/toolchain-external/toolchain-external.mk
+@@ -496,6 +496,10 @@ define TOOLCHAIN_EXTERNAL_INSTALL_CORE
+ 			echo "Could not find gdbserver in external toolchain" ; \
+ 			exit 1 ; \
+ 		fi ; \
++	fi; \
++	if test "$(BR2_TOOLCHAIN_EXTERNAL_LINARO_GCONV)" = "y" ; then \
++		$(call MESSAGE,"Copying external toolchain gconv to target...") ; \
++		$(call copy_toolchain_gconv,$${SYSROOT_DIR}) ; \
+ 	fi
+ endef
+ 
+-- 
+1.8.3.2
