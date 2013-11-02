@@ -1,37 +1,49 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 2 Nov 2013 18:41:45 +0100
-Subject: [Buildroot] [PATCH 1/5] liburcu: bump to version 0.8.0
-In-Reply-To: <1383164412-20657-1-git-send-email-olivier.schonken@gmail.com>
-References: <1383164412-20657-1-git-send-email-olivier.schonken@gmail.com>
-Message-ID: <20131102184145.1846e69a@skate>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 2 Nov 2013 18:45:40 +0100
+Subject: [Buildroot] [PATCH 1/2] qt: remove the
+ BR2_PACKAGE_QT_JAVASCRIPTCORE option
+In-Reply-To: <1383409024-17839-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1383409024-17839-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20131102174540.GD3542@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Olivier Schonken,
+Thomas, All,
 
-On Wed, 30 Oct 2013 22:20:08 +0200, Olivier Schonken wrote:
-> Also added a patch to keep liburcu from trying to build examples in doc directory,
-> which breaks cross-compilation when enabled.
+On 2013-11-02 17:17 +0100, Thomas Petazzoni spake thusly:
+> The BR2_PACKAGE_QT_JAVASCRIPTCORE option was incorrectly used in
+> Buildroot: it's help text and name was pretending it's here to
+> enable/disable the JavaScriptCore, but what it did in fact is force
+> enable or force disable the usage of the JIT mechanism for the
+> JavaScript support in Qt.
 > 
-> Signed-off-by: Olivier Schonken <olivier.schonken@gmail.com>
-> ---
->  .../liburcu/0001-Removed-Examples-from-doc.patch   | 22 ++++++++++++++++++++++
->  package/liburcu/liburcu.mk                         |  3 ++-
->  2 files changed, 24 insertions(+), 1 deletion(-)
->  create mode 100644 package/liburcu/0001-Removed-Examples-from-doc.patch
+> However, the JIT mechanism is architecture-specific, and therefore not
+> available for all architectures, and Qt already knows on which
+> architectures it is appropriate to enable JIT and on which
+> architectures it is not.
+> 
+> Therefore, this commit simply removes the
+> BR2_PACKAGE_QT_JAVASCRIPTCORE option. We don't add it to
+> Config.in.legacy, because the feature is still available, it's just
+> that Qt will know automatically decide whether JIT should be used or
+> not.
 
-Can you instead integrate the upstream fix for the examples build
-problem? See
-http://git.lttng.org/?p=userspace-rcu.git;a=commitdiff;h=3343c545bbc5154d42dd37cd3ae869ef97555e00
-for the patch.
+In fact, I think we should include it in legacy options, just so the
+user is informed that this option is no longer available.
 
-Thanks,
+Your little blurb above would make a good help entry for that new legacy
+option, BTW.
 
-Thomas
+Regards,
+Yann E. MORIN.
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
