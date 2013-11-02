@@ -1,109 +1,92 @@
-From: Stanislav Vlasic <svlasic@gmail.com>
-Date: Sat, 2 Nov 2013 02:46:06 +0100
-Subject: [Buildroot] Introducing new package type,
-	side to side with generic-package
-In-Reply-To: <ca3a5174-c804-48b7-ad60-720f3926223c@email.android.com>
-References: <CADYw_JLHofB+VQ2rktw_reWCvAWU9rj7VJ95tgVnW5OujYisow@mail.gmail.com>
- <ca3a5174-c804-48b7-ad60-720f3926223c@email.android.com>
-Message-ID: <CADYw_JJuE71mqxSmQtT1JKLN7d0apTS=DAz+KD7of7n3sVsWnw@mail.gmail.com>
+From: Sinan Akman <sinan@writeme.com>
+Date: Sat, 02 Nov 2013 02:31:48 -0400
+Subject: [Buildroot] Architecture build statistics
+In-Reply-To: <20131101193153.04cdd643@skate>
+References: <20131029204108.5d707d09@skate> <20131101193153.04cdd643@skate>
+Message-ID: <52749C54.8080601@writeme.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
-
-thanx for answering my question.
-
-Not sure if you noticed, but currently in my buildroot, xbmc stuff is
-tightened to Amlogic ARM platform, as well as xbmc itself. It does not
-follow mainline xbmc and also depends on some other amlogic related
-packages. Some of these packages (like libamplayerm6) are not hosted on my
-github. Reason for that is simple - they have to be rewritten and parts of
-it needs to be published as compiled libraries because of license issue
-with Amlogic. Your question still stands? :)
-
-Regards,
-Stan
-
-
-On Fri, Nov 1, 2013 at 10:09 PM, Thomas De Schampheleire <
-patrickdepinguin@gmail.com> wrote:
-
-> Hi Stanislav,
+On 11/01/2013 02:31 PM, Thomas Petazzoni wrote:
+> Hello all,
 >
-> Stanislav Vlasic <svlasic@gmail.com> wrote:
-> >Hi to all,
-> >
-> >this is my first mail to list, so I'll write short introduction... I'm
-> >Stanislav Vlasic, Croatian developer, some of you might know me as
-> >Stane1983 from contributions to XBMC, Amlogic buildroot, firmwares to
-> >Amlogic devices.... Thats pretty much it :)
-> >
-> >Here's short story of what I did with my custom buildroot:
-> >- included package/pkg-xbmc-addon.mk with xbmc-addon and inner-xbmc-addon
-> >macros. Change I did in this make file is one line: $(2)_KCONFIG_VAR =
-> >BR2_PACKAGE_XBMC_ADDON_$(2)
-> >- I tried to rearrange of adding xbmc addons by creating makefile similar
-> >to this:
-> >
-> >ADDON_NAME = YOUTUBE
-> >ADDON_PATH = plugin.video.youtube
-> >
-> >$(ADDON_NAME)_VERSION = 0a8aa83df0786f5401307ca12080bbc4aefd76f6
-> >$(ADDON_NAME)_SITE_METHOD = git
-> >$(ADDON_NAME)_SITE = https://github.com/HenrikDK/youtube-xbmc-plugin.git
-> >$(ADDON_NAME)_INSTALL_STAGING = YES
-> >$(ADDON_NAME)_INSTALL_TARGET = YES
-> >$(ADDON_NAME)_DEPENDENCIES = xbmc
-> >
-> >define $(ADDON_NAME)_INSTALL_STAGING_CMDS
-> ># Commands for install to staging
-> >endef
-> >
-> >define $(ADDON_NAME)_INSTALL_TARGET_CMDS
-> ># Comands for install to target
-> >endef
-> >
-> >$(eval $(call xbmc-addon,package/thirdparty/xbmcaddons,$(call
-> >lc,$(ADDON_NAME))))
-> >
-> >This actually works. What's not working - if I add another package the
-> same
-> >way....
-> >Version, site_method, site.... all these variables are OK and second
-> >package downloads correctly.
-> >
-> >Problem comes when I try to install it to target or staging folder.
-> Example
-> >of install:
-> >
-> >define $(ADDON_NAME)_INSTALL_STAGING_CMDS
-> >        # Here in first line I check if folder already exists, if it does
-> i
-> >delete all content and folder itself
-> >        mkdir -p $(STAGING_DIR)/usr/share/xbmc/addons/$(ADDON_PATH)
-> >        cp -rf $(@D)/* $(STAGING_DIR)/usr/share/xbmc/addons/$(ADDON_PATH)/
-> >endef
-> >
-> >Now when buildroot hits install to staging, ADDON_PATH becomes
-> >'plugin.video.youtube', which it has in another makefile??
-> >
-> >Does this have any sense to anybody here? :)
+> Following to this e-mail, I've just added a bunch of architecture
+> "maintainers" that will receive each day an e-mail with list of the
+> build failures related to the architecture they take care of in
+> Buildroot. See below for the detail.
 >
-> The various .mk files are all flat included from the top level Makefile,
-> so the last definition of this variable survives. That's why all variable
-> names in .mk files have to be unique and the shortcut you tried to save
-> typing doesn't work.
+> On Tue, 29 Oct 2013 20:41:08 +0100, Thomas Petazzoni wrote:
 >
-> Will you submit xbmc support to mainline buildroot?
-> Note that you seem to be using an older buildroot version at the moment...
+>> +------------+---------+----------+-------+------------+------------+
+>> | arch       | success | failures | total | pctsuccess | pctfailure |
+>> +------------+---------+----------+-------+------------+------------+
+>> | bfin       |      10 |      607 |   617 |     1.6207 |    98.3793 |
 >
-> Best regards,
+> E-mail sent to Aaron Wu and Sonic Zhang from Analog Devices.
+>
+>> | microblaze |       6 |      308 |   314 |     1.9108 |    98.0892 |
+>
+> E-mail sent to Spenser Gilliland.
+>
+>> | nios2      |       2 |       49 |    51 |     3.9216 |    96.0784 |
+>
+> E-mail sent to Ezequiel Garcia.
+>
+>> | xtensa     |      13 |      314 |   327 |     3.9755 |    96.0245 |
+>
+> E-mail sent to Chris Zankel.
+>
+>> | avr32      |      34 |      305 |   339 |    10.0295 |    89.9705 |
+>
+> E-mail sent to Simon Dawson.
+>
+>> | mips64el   |     162 |      498 |   660 |    24.5455 |    75.4545 |
+>
+> E-mail sent to Markos Chandras, from Imagination Technologies.
+>
+>> | aarch64    |      82 |      243 |   325 |    25.2308 |    74.7692 |
+>
+> No specific maintainer (I'm mainly taking care of aarch64 issues)
+>
+>> | arc        |      95 |      234 |   329 |    28.8754 |    71.1246 |
+>
+> E-mail sent to Mischa Jonker, from Synopsis.
+>
+>> | sh4a       |     158 |      171 |   330 |    47.8788 |    51.8182 |
+>
+> No specific maintainer. Who anyone be interested?
+>
+>> | mipsel     |     172 |      168 |   340 |    50.5882 |    49.4118 |
+>
+> E-mail sent to Markos Chandras, from Imagination Technologies.
+>
+>> | mips       |     172 |      165 |   337 |    51.0386 |    48.9614 |
+>
+> E-mail sent to Markos Chandras, from Imagination Technologies.
+>
+>> | arm        |    2302 |     1788 |  4097 |    56.1875 |    43.6417 |
+>> | powerpc    |    2794 |     1616 |  4411 |    63.3416 |    36.6357 |
+
+   Hi Thomas
+
+   I don't know if I would qualify well as a maintainer but
+I have quite a number of powerpc boards that I build and use
+buildroot almost regularly.
+
+   Let me know if this can be of any help.
+
+   Regards
+
+   Sinan Akman
+
+>> | sh4        |     208 |      120 |   328 |    63.4146 |    36.5854 |
+>> | x86_64     |     874 |      412 |  1288 |    67.8571 |    31.9876 |
+>> | i686       |    2369 |      572 |  2943 |    80.4961 |    19.4359 |
+>
+> No specific maintainers for these architectures.
+>
 > Thomas
 >
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20131102/937e2ae7/attachment-0001.html>
