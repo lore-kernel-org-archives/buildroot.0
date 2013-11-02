@@ -1,69 +1,43 @@
-From: Romain Naour <romain.naour@openwide.fr>
-Date: Sat,  2 Nov 2013 16:51:12 +0100
-Subject: [Buildroot] [PATCH v3 2/2] ngrep: fix static linking issue with
-	libpcre
-Message-ID: <1383407472-2898-1-git-send-email-romain.naour@openwide.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 2 Nov 2013 16:54:59 +0100
+Subject: [Buildroot] [PATCH 2 of 2] Introduction of Amlogic platform to
+ buildroot
+In-Reply-To: <l53633$d6q$3@ger.gmane.org>
+References: <CADYw_J+dw+E6xCosXu=hOo172ZPu1QJgtVTrHmJEQ2eVa6BWWg@mail.gmail.
+ com> <l53633$d6q$3@ger.gmane.org>
+Message-ID: <20131102165459.09a35044@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Adding -lpcre in LDFLAGS place the library before object files:
-gcc ... -lpcre -L.../sysroot/usr/lib -s -o ngrep ngrep.o -lpcap
+Dear Stanislav Vasic,
 
-Makefile.in is patched to use @LIBS@ for adding -lpcre in the right place.
+On Sat, 2 Nov 2013 15:35:00 +0000 (UTC), Stanislav Vasic wrote:
+> From 674615f2986c928cadd122377bbb4254192f5923 Mon Sep 17 00:00:00 2001
+> From: Stanislav Vasic <svlasic@gmail.com>
+> Date: Sat, 2 Nov 2013 16:07:38 +0100
+> Subject: [PATCH] Introduce Amlogic MX platform to buildroot
+> 
+> Target platform options submenu added, currently used
+> only for setting up proper configuration of buildroot
+> for Amlogic MX platform.
 
-Fixes:
-http://autobuild.buildroot.net/results/684/684a3bed28d13ef5e5156257aade3b9aff32f180
+I'm afraid, but we don't want to have per-SoC options in Buildroot. We
+have discussed this in the past, and there are way too many ARM SoC to
+make this reasonable. Why is this patch needed at all?
 
-Signed-off-by: Romain Naour <romain.naour@openwide.fr>
----
- package/ngrep/ngrep-0003-fix-static-link.patch | 22 ++++++++++++++++++++++
- package/ngrep/ngrep.mk                         |  2 +-
- 2 files changed, 23 insertions(+), 1 deletion(-)
- create mode 100644 package/ngrep/ngrep-0003-fix-static-link.patch
+For all other ARM platforms, the user simply has to choose the
+appropriate ARM core (Cortex-A8, Cortex-A9, Cortex-A15, etc.), and
+that's it. We also provide default configurations (see the configs/
+directory) for various well-known hardware platforms, and those
+configurations correctly define which ARM core should be used.
 
-diff --git a/package/ngrep/ngrep-0003-fix-static-link.patch b/package/ngrep/ngrep-0003-fix-static-link.patch
-new file mode 100644
-index 0000000..6d70778
---- /dev/null
-+++ b/package/ngrep/ngrep-0003-fix-static-link.patch
-@@ -0,0 +1,22 @@
-+fix static link
-+Libraries must be placed before object files.
-+---
-+ Makefile.in | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/Makefile.in b/Makefile.in
-+index 2ae4506..761d7d9 100644
-+--- a/Makefile.in
-++++ b/Makefile.in
-+@@ -11,7 +11,7 @@ CFLAGS=@CFLAGS@ -D at OS@ @DEFS@ @EXTRA_DEFINES@
-+ INCLUDES=-I at srcdir@ @PCAP_INCLUDE@ @EXTRA_INCLUDES@
-+ 
-+ LDFLAGS=@LDFLAGS@ @PCAP_LINK@
-+-LIBS=-lpcap @EXTRA_LIBS@ 
-++LIBS=@LIBS@ @EXTRA_LIBS@
-+ 
-+ STRIPFLAG=@STRIPFLAG@
-+ 
-+-- 
-+1.8.1.4
-+
-diff --git a/package/ngrep/ngrep.mk b/package/ngrep/ngrep.mk
-index 6a9b42f..0bb5d7e 100644
---- a/package/ngrep/ngrep.mk
-+++ b/package/ngrep/ngrep.mk
-@@ -10,7 +10,7 @@ NGREP_SITE = http://downloads.sourceforge.net/project/ngrep/ngrep/$(NGREP_VERSIO
- NGREP_LICENSE = BSD-4c-like
- NGREP_LICENSE_FILES = LICENSE.txt
- NGREP_INSTALL_STAGING = YES
--NGREP_CONF_ENV = LDFLAGS="-lpcre"
-+NGREP_CONF_ENV = LIBS="-lpcre"
- NGREP_CONF_OPT =  \
- 	--with-pcap-includes=$(STAGING_DIR)/usr/include \
- 	--enable-pcre \
+Best regards,
+
+Thomas
 -- 
-1.8.1.4
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
