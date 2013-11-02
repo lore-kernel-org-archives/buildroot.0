@@ -1,30 +1,27 @@
-From: Simon Dawson <spdawson@gmail.com>
-Date: Sat, 2 Nov 2013 16:51:19 +0000
-Subject: [Buildroot] [PATCH v2 1/1] openpgm: disable on AVR32
-In-Reply-To: <20131102122618.18eb2f00@skate>
-References: <1383329548-8528-1-git-send-email-alexander.lukichev@gmail.com>
- <20131101192027.1ea4c1bc@skate>
- <CAAHaz6GXiQAMuoK2eo0=EjmE509P98zuuAuN7f_T5TYeK6W1QA@mail.gmail.com>
- <CAHt8ZCO2OEtWe8NrDYSTkmu7uqQGpQbWjAEJg+jHVGzsWsF9Mg@mail.gmail.com>
- <20131102122618.18eb2f00@skate>
-Message-ID: <CAHt8ZCOVSKMynxFe9WQuei-FKuB8BAJE2+dtEQreqwZokkTWdw@mail.gmail.com>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Sat, 2 Nov 2013 17:53:26 +0100
+Subject: [Buildroot] github tarball urls: http vs https
+Message-ID: <CAAXf6LUToDknEUmXgK-z2LkXG6oxZ9-0WwNfq6Ub_w7Lq_TjHQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas, Alexander.
+Hi,
 
-On 2 November 2013 11:26, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> I did a minimal test case, and even by specifying -march and -mpart,
-> sync_add_and_fetch_2 remains an undefined symbol. Interestingly, if you
-> use sync_add_and_fetch() on a pointer to a 4 bytes value, there's no
-> problem, but if it's a pointer to a 2 bytes value, then the intrinsics
-> uses sync_add_and_fetch_2, which doesn't work.
+Packages that are hosted on github and downloaded with the tarball
+method, can either have a http or https URL. It seems that a download
+from http is redirected to the corresponding https URL. To avoid such
+an unnecessary redirect, we could update all github .mk files to use
+https directly.
 
-Interesting. Alexander: are we missing a trick here? How did you get
-the compiler to use the correct intrinsics?
+I vaguely recall a discussion on the mailing list about this, but I
+don't know what the outcome was. Was there a problem using the https
+URLs with respect to certificates?
 
-Simon.
+If we can clarify this point, we can cleanup and update the manual
+(which talks about http).
+
+Thanks,
+Thomas
