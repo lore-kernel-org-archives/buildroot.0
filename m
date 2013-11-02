@@ -1,33 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 2 Nov 2013 18:38:53 +0100
-Subject: [Buildroot] [PATCH] uboot-tools: fix license issues
-In-Reply-To: <20131102173258.GC3542@free.fr>
-References: <1382460400-3205-1-git-send-email-gustavo@zacarias.com.ar>
- <20131102144355.0a980960@skate> <52752722.5060107@zacarias.com.ar>
- <20131102174350.05deaa50@skate> <20131102173258.GC3542@free.fr>
-Message-ID: <20131102183853.34b34d7d@skate>
+Date: Sat, 2 Nov 2013 18:41:45 +0100
+Subject: [Buildroot] [PATCH 1/5] liburcu: bump to version 0.8.0
+In-Reply-To: <1383164412-20657-1-git-send-email-olivier.schonken@gmail.com>
+References: <1383164412-20657-1-git-send-email-olivier.schonken@gmail.com>
+Message-ID: <20131102184145.1846e69a@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+Dear Olivier Schonken,
 
-On Sat, 2 Nov 2013 18:32:58 +0100, Yann E. MORIN wrote:
-
-> On 2013-11-02 17:43 +0100, Thomas Petazzoni spake thusly:
-> > However, a patch not committed and not visible in patchwork is a bit
-> > weird (except for patches that only rename files, because the patch
-> > contents are empty and patchwork doesn't understand that).
+On Wed, 30 Oct 2013 22:20:08 +0200, Olivier Schonken wrote:
+> Also added a patch to keep liburcu from trying to build examples in doc directory,
+> which breaks cross-compilation when enabled.
 > 
-> Actually, this last part is now wrong: patchwork should now recognise
-> renames-only patches (since about two weeks now).
+> Signed-off-by: Olivier Schonken <olivier.schonken@gmail.com>
+> ---
+>  .../liburcu/0001-Removed-Examples-from-doc.patch   | 22 ++++++++++++++++++++++
+>  package/liburcu/liburcu.mk                         |  3 ++-
+>  2 files changed, 24 insertions(+), 1 deletion(-)
+>  create mode 100644 package/liburcu/0001-Removed-Examples-from-doc.patch
 
-Aaah, and this is actually true! The ngrep patches renaming patch was
-recognized by patchwork.
+Can you instead integrate the upstream fix for the examples build
+problem? See
+http://git.lttng.org/?p=userspace-rcu.git;a=commitdiff;h=3343c545bbc5154d42dd37cd3ae869ef97555e00
+for the patch.
 
-My bad,
+Thanks,
 
 Thomas
 -- 
