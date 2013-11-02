@@ -1,56 +1,53 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat,  2 Nov 2013 17:04:57 +0100
-Subject: [Buildroot] [PATCH] libvpx: needs thread support
-Message-ID: <1383408297-17438-1-git-send-email-thomas.petazzoni@free-electrons.com>
+From: Stanislav Vasic <svlasic@gmail.com>
+Date: Sat, 2 Nov 2013 16:10:16 +0000 (UTC)
+Subject: [Buildroot] [PATCH 2 of 2] Introduction of Amlogic platform to
+	buildroot
+References: <l53633$d6q$3@ger.gmane.org> <20131102165459.09a35044@skate>
+Message-ID: <l53858$d6q$4@ger.gmane.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
+On Sat, 02 Nov 2013 16:54:59 +0100, Thomas Petazzoni wrote:
 
-  http://autobuild.buildroot.org/results/8de/8def7e54e4fecb7df350443824c00b53d1c61c01/build-end.log
+> Dear Stanislav Vasic,
+> 
+> On Sat, 2 Nov 2013 15:35:00 +0000 (UTC), Stanislav Vasic wrote:
+>> From 674615f2986c928cadd122377bbb4254192f5923 Mon Sep 17 00:00:00 2001
+>> From: Stanislav Vasic <svlasic@gmail.com>
+>> Date: Sat, 2 Nov 2013 16:07:38 +0100 Subject: [PATCH] Introduce Amlogic
+>> MX platform to buildroot
+>> 
+>> Target platform options submenu added, currently used only for setting
+>> up proper configuration of buildroot for Amlogic MX platform.
+> 
+> I'm afraid, but we don't want to have per-SoC options in Buildroot. We
+> have discussed this in the past, and there are way too many ARM SoC to
+> make this reasonable. Why is this patch needed at all?
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/gstreamer1/gst1-plugins-good/Config.in | 4 ++++
- package/libvpx/Config.in                       | 4 ++++
- 2 files changed, 8 insertions(+)
+Hi,
 
-diff --git a/package/gstreamer1/gst1-plugins-good/Config.in b/package/gstreamer1/gst1-plugins-good/Config.in
-index 3342208..a9308c7 100644
---- a/package/gstreamer1/gst1-plugins-good/Config.in
-+++ b/package/gstreamer1/gst1-plugins-good/Config.in
-@@ -335,9 +335,13 @@ comment "taglib needs a toolchain w/ C++"
- config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_VPX
- 	bool "vpx (webm)"
- 	select BR2_PACKAGE_LIBVPX
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # libvpx
- 	help
- 	  VP8 plugin
- 
-+comment "libvpx needs a toolchain w/ threads"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS
-+
- config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_WAVPACK
- 	bool "wavpack (*.wv audio)"
- 	select BR2_PACKAGE_WAVPACK
-diff --git a/package/libvpx/Config.in b/package/libvpx/Config.in
-index 1332c56..0ed3e1a 100644
---- a/package/libvpx/Config.in
-+++ b/package/libvpx/Config.in
-@@ -1,7 +1,11 @@
- config BR2_PACKAGE_LIBVPX
- 	bool "libvpx"
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	help
- 	  A high-quality, open video format that's freely available to
- 	  everyone.
- 
- 	  http://webmproject.org
-+
-+comment "libvpx needs a toolchain w/ threads"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS
--- 
-1.8.1.2
+That is what I was told yesterday (about adding it). Amlogic buildroot is 
+too complicated and it's used mainly for running XBMC on top of buildroot. 
+I agree there are too many things (such as non-standard opengl drivers, 
+Amlogic property a/v libraries...).
+
+Patch is needed so we know we're building for Amlogic SoC, and for other 
+packages to know which eg. opengl or a/v libs to include in build.
+
+> For all other ARM platforms, the user simply has to choose the
+> appropriate ARM core (Cortex-A8, Cortex-A9, Cortex-A15, etc.), and
+> that's it. We also provide default configurations (see the configs/
+> directory) for various well-known hardware platforms, and those
+> configurations correctly define which ARM core should be used.
+
+See above, at this point it's not so simple for Amlogic.
+
+> Best regards,
+> 
+> Thomas
+
+Regards,
+Stan
