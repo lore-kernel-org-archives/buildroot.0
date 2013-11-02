@@ -1,49 +1,43 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 2 Nov 2013 18:45:40 +0100
-Subject: [Buildroot] [PATCH 1/2] qt: remove the
- BR2_PACKAGE_QT_JAVASCRIPTCORE option
-In-Reply-To: <1383409024-17839-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1383409024-17839-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20131102174540.GD3542@free.fr>
+From: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+Date: Sat, 02 Nov 2013 18:47:34 +0100
+Subject: [Buildroot] github tarball urls: http vs https
+In-Reply-To: <CAAXf6LUToDknEUmXgK-z2LkXG6oxZ9-0WwNfq6Ub_w7Lq_TjHQ@mail.gmail.com>
+References: <CAAXf6LUToDknEUmXgK-z2LkXG6oxZ9-0WwNfq6Ub_w7Lq_TjHQ@mail.gmail.com>
+Message-ID: <52753AB6.20904@trzebnica.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
 
-On 2013-11-02 17:17 +0100, Thomas Petazzoni spake thusly:
-> The BR2_PACKAGE_QT_JAVASCRIPTCORE option was incorrectly used in
-> Buildroot: it's help text and name was pretending it's here to
-> enable/disable the JavaScriptCore, but what it did in fact is force
-> enable or force disable the usage of the JIT mechanism for the
-> JavaScript support in Qt.
-> 
-> However, the JIT mechanism is architecture-specific, and therefore not
-> available for all architectures, and Qt already knows on which
-> architectures it is appropriate to enable JIT and on which
-> architectures it is not.
-> 
-> Therefore, this commit simply removes the
-> BR2_PACKAGE_QT_JAVASCRIPTCORE option. We don't add it to
-> Config.in.legacy, because the feature is still available, it's just
-> that Qt will know automatically decide whether JIT should be used or
-> not.
 
-In fact, I think we should include it in legacy options, just so the
-user is informed that this option is no longer available.
+Hi Thomas,
 
-Your little blurb above would make a good help entry for that new legacy
-option, BTW.
+
+> Hi,
+>
+> Packages that are hosted on github and downloaded with the tarball
+> method, can either have a http or https URL. It seems that a download
+> from http is redirected to the corresponding https URL. To avoid such
+> an unnecessary redirect, we could update all github .mk files to use
+> https directly.
+>
+> I vaguely recall a discussion on the mailing list about this, but I
+> don't know what the outcome was. Was there a problem using the https
+> URLs with respect to certificates?
+
+It was my proposal.
+Please look here:
+http://lists.busybox.net/pipermail/buildroot/2013-October/079209.html
 
 Regards,
-Yann E. MORIN.
+Jerzy
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+
+> If we can clarify this point, we can cleanup and update the manual
+> (which talks about http).
+>
+> Thanks,
+> Thomas
+>
