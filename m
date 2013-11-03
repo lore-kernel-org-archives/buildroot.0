@@ -1,7 +1,7 @@
 From: spdawson at gmail.com <spdawson@gmail.com>
-Date: Sun,  3 Nov 2013 09:30:53 +0000
-Subject: [Buildroot] [PATCH] dropwatch: fix avr32 build failure
-Message-ID: <1383471053-8243-1-git-send-email-spdawson@gmail.com>
+Date: Sun,  3 Nov 2013 09:53:28 +0000
+Subject: [Buildroot] [PATCH] libcap-ng: disable_on_avr32
+Message-ID: <1383472408-1598-1-git-send-email-spdawson@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,40 +10,26 @@ To: buildroot@busybox.net
 
 From: Simon Dawson <spdawson@gmail.com>
 
-On avr32, dropwatch needs libiberty to avoid build failures such as
+Thread-local storage is not available in the avr32 toolchain, so libcap-ng
+must be disabled on avr32. Fixed build failures such as the following.
 
-  http://autobuild.buildroot.net/results/cd5/cd5e22fb5c9b0fc5d396bc85a5e253a1a65054da/
-
-Also test built on ARM.
+  http://autobuild.buildroot.net/results/05f/05f73cb74ee7bfb1c337100312726de034366a7d/
 
 Signed-off-by: Simon Dawson <spdawson@gmail.com>
 ---
- package/dropwatch/dropwatch-04-avr32-build.patch | 17 +++++++++++++++++
- 1 file changed, 17 insertions(+)
- create mode 100644 package/dropwatch/dropwatch-04-avr32-build.patch
+ package/libcap-ng/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/dropwatch/dropwatch-04-avr32-build.patch b/package/dropwatch/dropwatch-04-avr32-build.patch
-new file mode 100644
-index 0000000..e83e405
---- /dev/null
-+++ b/package/dropwatch/dropwatch-04-avr32-build.patch
-@@ -0,0 +1,17 @@
-+On avr32, dropwatch needs libiberty to avoid build failures such as
-+
-+  http://autobuild.buildroot.net/results/cd5/cd5e22fb5c9b0fc5d396bc85a5e253a1a65054da/
-+
-+Signed-off-by: Simon Dawson <spdawson@gmail.com>
-+
-+diff -Nurp a/src/Makefile b/src/Makefile
-+--- a/src/Makefile	2013-11-03 09:22:16.713210025 +0000
-++++ b/src/Makefile	2013-11-03 09:22:59.465126490 +0000
-+@@ -1,6 +1,6 @@
-+ all: dropwatch
-+ CFLAGS+=-c -g -D_GNU_SOURCE -Wall `pkg-config --cflags libnl-3.0`
-+-LDFLAGS=-lbfd -lreadline -lnl-3 -lnl-genl-3
-++LDFLAGS=-lbfd -liberty -lreadline -lnl-3 -lnl-genl-3
-+ OBJFILES := main.o lookup.o\
-+ 	 lookup_bfd.o lookup_kas.o
-+ 
+diff --git a/package/libcap-ng/Config.in b/package/libcap-ng/Config.in
+index d1663cd..008bf51 100644
+--- a/package/libcap-ng/Config.in
++++ b/package/libcap-ng/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_LIBCAP_NG
+ 	bool "libcap-ng"
++	depends on !BR2_avr32 # TLS not available
+ 	help
+ 	  The libcap-ng library is intended to make programming with
+ 	  posix capabilities much easier than the traditional libcap
 -- 
 1.8.3.2
