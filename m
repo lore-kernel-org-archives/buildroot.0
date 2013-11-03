@@ -1,41 +1,73 @@
-From: Alexander Lukichev <alexander.lukichev@gmail.com>
-Date: Sun, 03 Nov 2013 13:10:27 +0200
-Subject: [Buildroot] [PATCH 1/1] openpgm: disable on AVR32
-In-Reply-To: <527295EE.9030801@mind.be>
-References: <1383209956-31840-1-git-send-email-alexander.lukichev@gmail.com>
- <527295EE.9030801@mind.be>
-Message-ID: <52762F23.9010202@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 3 Nov 2013 12:17:11 +0100
+Subject: [Buildroot] [PATCH] util-linux: disable fallocate for avr32
+In-Reply-To: <20131103110613.GB3615@free.fr>
+References: <1383472585-1876-1-git-send-email-spdawson@gmail.com>
+ <20131103113407.2b5cf76c@skate> <20131103110613.GB3615@free.fr>
+Message-ID: <20131103121711.4c67418f@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Arnout,
+Dear Yann E. MORIN,
 
-10/31/2013 07:39 PM, Arnout Vandecappelle wrote:
->> +comment "openpgm is BROKEN on AVR32"
->> +    depends on BR2_avr32
->  This comment isn't needed. We don't do it for other packages, and
-> adding it would make it even more work to disable architectures.
-Understood. I was angry at openpgm :)
+On Sun, 3 Nov 2013 12:06:13 +0100, Yann E. MORIN wrote:
 
->>   config BR2_PACKAGE_ZEROMQ_PGM
->>       bool "PGM/EPGM support"
->>       depends on BR2_PACKAGE_ZEROMQ
->> +    depends on !BR2_avr32
->  zeromq has a lot of reverse dependencies: cppzmq, czmq, filemq,
-> mongrel2, [python-pyzmq not necessary because python needs MMU], [zmqpp
-> already disabled for avr32]. And there's one more transitive dependency
-> to zyre. So all these should also be disabled.
+> > I'm Cc'ing Arnout, Peter, Yann and Thomas DS on this one, because we
+> > really need to define a policy on this topic.
+> 
+> Our stance has always been 'no feature-patch in Buildroot'.
+> OTOH, I can understand that fallocate is really required (being in
+> POSIX).
+> 
+> But since uClibc is highly configurable, it could happen that an
+> external toolchain would have fallocate disabled (being in Advanced
+> RT in POSIX).
 
-I do not understand. Why should they be disabled? This patch does not
-disable the zeromq library, merely PGM support in it. I may be mistaken
-but "users" of zeromq that we have in Buildroot do not actually require
-this feature (PGM support). Or am I missing the point?
+True, but our position on the matter has more or less always been: the
+external uClibc toolchain should have a uClibc configuration similar to
+the one we have in Buildroot. We cannot support any random uClibc
+configuration.
 
-Thanks for your comments!
+But it's hard to require external toolchains to have uClibc features
+that are not even part of a uClibc stable release.
 
---
+> So, I'm a bit fuzzy as to what we should do here.
+> 
+> The best approach would be to push all of our changes upstream uClibc,
+> and hope for a release soon, so we can bump. But it looks like upstream
+> is not really alive those days.
+
+All the feature patches we have for uClibc are already upstream: they
+are precisely backported from upstream... waiting for an upstream
+release to occur.
+
+> Another approach would be to add yet one more toolchain knob that tells
+> whether the toolchain has fallocate (defaults to 'y' for (e)glibc and
+> internal, prompts for external uClibc).
+
+True, but that doesn't scale really nicely to the crazy number of
+features. For example, systemd needs execvpe(), which is not in uClibc
+0.9.33, but is available in our uClibc thanks to a backported patch.
+Should we also add another config know for execvpe() ?
+
+> My preference would be to remove feature-patches, but that is really
+> gonna hurt newcomers (and may bite long-timers as well).
+
+I believe the only reasonable solutions are (alternatively, and the
+choice can be made differently per-package) :
+
+ (1) Add patches to the package to avoid usage of unimplemented uClibc
+     features (when possible)
+
+ (2) Mark the packages as depends on !UCLIBC
+
 Best regards,
-  Alexander Lukichev
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
