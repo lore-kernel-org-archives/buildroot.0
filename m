@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 3 Nov 2013 11:27:39 +0100
-Subject: [Buildroot] [PATCH] libcap-ng: disable_on_avr32
-In-Reply-To: <1383472408-1598-1-git-send-email-spdawson@gmail.com>
-References: <1383472408-1598-1-git-send-email-spdawson@gmail.com>
-Message-ID: <20131103112739.4f5c6505@skate>
+Date: Sun, 3 Nov 2013 11:34:07 +0100
+Subject: [Buildroot] [PATCH] util-linux: disable fallocate for avr32
+In-Reply-To: <1383472585-1876-1-git-send-email-spdawson@gmail.com>
+References: <1383472585-1876-1-git-send-email-spdawson@gmail.com>
+Message-ID: <20131103113407.2b5cf76c@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,46 +12,63 @@ To: buildroot@busybox.net
 
 Simon,
 
-On Sun,  3 Nov 2013 09:53:28 +0000, spdawson at gmail.com wrote:
+On Sun,  3 Nov 2013 09:56:25 +0000, spdawson at gmail.com wrote:
 > From: Simon Dawson <spdawson@gmail.com>
 > 
-> Thread-local storage is not available in the avr32 toolchain, so libcap-ng
-> must be disabled on avr32. Fixed build failures such as the following.
+> The fallocate syscall is not implemented in the avr32 toolchain.
 > 
->   http://autobuild.buildroot.net/results/05f/05f73cb74ee7bfb1c337100312726de034366a7d/
+> Fixes build failures such as the following.
+> 
+>   http://autobuild.buildroot.net/results/bc4/bc41a3fea20181526eb247ac910244aa2aa4c4c0/
 > 
 > Signed-off-by: Simon Dawson <spdawson@gmail.com>
 > ---
->  package/libcap-ng/Config.in | 1 +
+>  package/util-linux/Config.in | 1 +
 >  1 file changed, 1 insertion(+)
 > 
-> diff --git a/package/libcap-ng/Config.in b/package/libcap-ng/Config.in
-> index d1663cd..008bf51 100644
-> --- a/package/libcap-ng/Config.in
-> +++ b/package/libcap-ng/Config.in
-> @@ -1,5 +1,6 @@
->  config BR2_PACKAGE_LIBCAP_NG
->  	bool "libcap-ng"
-> +	depends on !BR2_avr32 # TLS not available
+> diff --git a/package/util-linux/Config.in b/package/util-linux/Config.in
+> index 41e0986..d56e631 100644
+> --- a/package/util-linux/Config.in
+> +++ b/package/util-linux/Config.in
+> @@ -72,6 +72,7 @@ config BR2_PACKAGE_UTIL_LINUX_EJECT
+>  
+>  config BR2_PACKAGE_UTIL_LINUX_FALLOCATE
+>  	bool "fallocate"
+> +	depends on !BR2_avr32 # fallocate not implemented
 >  	help
->  	  The libcap-ng library is intended to make programming with
->  	  posix capabilities much easier than the traditional libcap
+>  	  Preallocate space to a file
+>  
 
-Thanks! I already sent a somewhat similar patch at
-http://patchwork.ozlabs.org/patch/280889/, but Peter complained that
-the problem was really related to the absence of TLS support rather
-than AVR32, and that the TLS support could also be disabled on other
-architectures using the BR2_GCC_ENABLE_TLS option. However, the problem
-is that this option only exists for internal toolchains: for external
-toolchains, we have absolutely no idea whether they have TLS support or
-not.
+Situation is a bit fuzzy here.
 
-My own point of view would be to remove the possibility of configuring
-out TLS support, and simply assume TLS support is always enabled when
-thread support is available. What do others think about this?
+We have added a patch to uClibc that implements fallocate support:
+package/uclibc/0.9.33.2/uclibc-0041-libc-add-posix_fallocate.patch. So
+internal toolchains based on 0.9.33.2 should now have fallocate support.
 
-Also, you forgot to propagate the dependency to the 'ofono' package,
-which selects libcap-ng.
+However:
+
+ * The AVR32 toolchain used in the autobuilders predates the addition
+   of this patch, and therefore does not have the fallocate support
+   (the autobuilders uses a Buildroot generated toolchain, but
+   generated with Buildroot 2013.05).
+
+ * The AVR32 support at the moment is using 0.9.33.2, but you told us
+   that 0.9.33.2 is basically not working properly on AVR32, and that
+   reverting to 0.9.31 was the only solution to get a working AVR32
+   system. This would indeed mean that fallocate support would not be
+   available on AVR32 (but it would more be related to the uClibc
+   version rather than the architecture).
+
+ * A larger problem that I have already raised several times is that
+   adding feature patches to the uClibc package in Buildroot is causing
+   issues with external toolchain support for uClibc toolchains. These
+   external toolchains are very unlikely to carry the same backported
+   feature patches as we do, and therefore the build will break with
+   those external toolchains if Buildroot relies on uClibc having those
+   features.
+
+I'm Cc'ing Arnout, Peter, Yann and Thomas DS on this one, because we
+really need to define a policy on this topic.
 
 Best regards,
 
