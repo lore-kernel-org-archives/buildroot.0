@@ -1,37 +1,56 @@
-From: spdawson at gmail.com <spdawson@gmail.com>
-Date: Sun,  3 Nov 2013 09:56:25 +0000
-Subject: [Buildroot] [PATCH] util-linux: disable fallocate for avr32
-Message-ID: <1383472585-1876-1-git-send-email-spdawson@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun,  3 Nov 2013 11:18:22 +0100
+Subject: [Buildroot] [PATCH] Makefile: fix out-of-tree builds with multiple
+	targets with 'all'
+Message-ID: <1383473902-27845-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Simon Dawson <spdawson@gmail.com>
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-The fallocate syscall is not implemented in the avr32 toolchain.
+For out-of-tree builds, this use-case fails to build:
+    $ make clean all
 
-Fixes build failures such as the following.
+This is because 'all' is filtered-out in the Makefile wrapper, since
+the wrapper itself has a 'all' target.
 
-  http://autobuild.buildroot.net/results/bc4/bc41a3fea20181526eb247ac910244aa2aa4c4c0/
+The 'all' target is just the usual naming for the default target in a
+Makefile. In fact, the first target is the default one, so we can name
+it whatever we want.
 
-Signed-off-by: Simon Dawson <spdawson@gmail.com>
+Rename the Makefile wrapper 'all' target to avoid name-clashing.
+
+Reported-by: Ryan Barnett <rjbarnet@rockwellcollins.com>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Ryan Barnett <rjbarnet@rockwellcollins.com>
 ---
- package/util-linux/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+ support/scripts/mkmakefile | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/util-linux/Config.in b/package/util-linux/Config.in
-index 41e0986..d56e631 100644
---- a/package/util-linux/Config.in
-+++ b/package/util-linux/Config.in
-@@ -72,6 +72,7 @@ config BR2_PACKAGE_UTIL_LINUX_EJECT
+diff --git a/support/scripts/mkmakefile b/support/scripts/mkmakefile
+index cef2ec7..89dc649 100755
+--- a/support/scripts/mkmakefile
++++ b/support/scripts/mkmakefile
+@@ -32,14 +32,14 @@ MAKEFLAGS += --no-print-directory
  
- config BR2_PACKAGE_UTIL_LINUX_FALLOCATE
- 	bool "fallocate"
-+	depends on !BR2_avr32 # fallocate not implemented
- 	help
- 	  Preallocate space to a file
+ .PHONY: all \$(MAKECMDGOALS)
  
+-all	:= \$(filter-out all Makefile,\$(MAKECMDGOALS))
++all	:= \$(filter-out Makefile,\$(MAKECMDGOALS))
+ 
+-all:
++_all:
+ 	\$(MAKE) \$(MAKEARGS) \$(all)
+ 
+ Makefile:;
+ 
+-\$(all): all
++\$(all): _all
+ 	@:
+ 
+ %/: all
 -- 
-1.8.3.2
+1.8.1.2
