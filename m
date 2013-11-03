@@ -1,75 +1,62 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 3 Nov 2013 11:24:04 +0100
-Subject: [Buildroot] [PATCH] Makefile: fix out-of-tree builds with
- multiple targets with 'all'
-In-Reply-To: <1383473902-27845-1-git-send-email-yann.morin.1998@free.fr>
-References: <1383473902-27845-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <20131103102404.GA3615@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 3 Nov 2013 11:27:39 +0100
+Subject: [Buildroot] [PATCH] libcap-ng: disable_on_avr32
+In-Reply-To: <1383472408-1598-1-git-send-email-spdawson@gmail.com>
+References: <1383472408-1598-1-git-send-email-spdawson@gmail.com>
+Message-ID: <20131103112739.4f5c6505@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello All,
+Simon,
 
-On 2013-11-03 11:18 +0100, Yann E. MORIN spake thusly:
-> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+On Sun,  3 Nov 2013 09:53:28 +0000, spdawson at gmail.com wrote:
+> From: Simon Dawson <spdawson@gmail.com>
 > 
-> For out-of-tree builds, this use-case fails to build:
->     $ make clean all
+> Thread-local storage is not available in the avr32 toolchain, so libcap-ng
+> must be disabled on avr32. Fixed build failures such as the following.
 > 
-> This is because 'all' is filtered-out in the Makefile wrapper, since
-> the wrapper itself has a 'all' target.
+>   http://autobuild.buildroot.net/results/05f/05f73cb74ee7bfb1c337100312726de034366a7d/
 > 
-> The 'all' target is just the usual naming for the default target in a
-> Makefile. In fact, the first target is the default one, so we can name
-> it whatever we want.
-> 
-> Rename the Makefile wrapper 'all' target to avoid name-clashing.
-
-Sorry, I forgot one occurence of 'all'. New patch on its way...
-
-Regards,
-Yann E. MORIN.
-
-> Reported-by: Ryan Barnett <rjbarnet@rockwellcollins.com>
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Ryan Barnett <rjbarnet@rockwellcollins.com>
+> Signed-off-by: Simon Dawson <spdawson@gmail.com>
 > ---
->  support/scripts/mkmakefile | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
+>  package/libcap-ng/Config.in | 1 +
+>  1 file changed, 1 insertion(+)
 > 
-> diff --git a/support/scripts/mkmakefile b/support/scripts/mkmakefile
-> index cef2ec7..89dc649 100755
-> --- a/support/scripts/mkmakefile
-> +++ b/support/scripts/mkmakefile
-> @@ -32,14 +32,14 @@ MAKEFLAGS += --no-print-directory
->  
->  .PHONY: all \$(MAKECMDGOALS)
->  
-> -all	:= \$(filter-out all Makefile,\$(MAKECMDGOALS))
-> +all	:= \$(filter-out Makefile,\$(MAKECMDGOALS))
->  
-> -all:
-> +_all:
->  	\$(MAKE) \$(MAKEARGS) \$(all)
->  
->  Makefile:;
->  
-> -\$(all): all
-> +\$(all): _all
->  	@:
->  
->  %/: all
-> -- 
-> 1.8.1.2
-> 
+> diff --git a/package/libcap-ng/Config.in b/package/libcap-ng/Config.in
+> index d1663cd..008bf51 100644
+> --- a/package/libcap-ng/Config.in
+> +++ b/package/libcap-ng/Config.in
+> @@ -1,5 +1,6 @@
+>  config BR2_PACKAGE_LIBCAP_NG
+>  	bool "libcap-ng"
+> +	depends on !BR2_avr32 # TLS not available
+>  	help
+>  	  The libcap-ng library is intended to make programming with
+>  	  posix capabilities much easier than the traditional libcap
 
+Thanks! I already sent a somewhat similar patch at
+http://patchwork.ozlabs.org/patch/280889/, but Peter complained that
+the problem was really related to the absence of TLS support rather
+than AVR32, and that the TLS support could also be disabled on other
+architectures using the BR2_GCC_ENABLE_TLS option. However, the problem
+is that this option only exists for internal toolchains: for external
+toolchains, we have absolutely no idea whether they have TLS support or
+not.
+
+My own point of view would be to remove the possibility of configuring
+out TLS support, and simply assume TLS support is always enabled when
+thread support is available. What do others think about this?
+
+Also, you forgot to propagate the dependency to the 'ofono' package,
+which selects libcap-ng.
+
+Best regards,
+
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
