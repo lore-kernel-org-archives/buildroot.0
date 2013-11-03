@@ -1,41 +1,25 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 3 Nov 2013 12:18:51 +0100
-Subject: [Buildroot] [PATCH 1/1] openpgm: disable on AVR32
-In-Reply-To: <52762F23.9010202@gmail.com>
-References: <1383209956-31840-1-git-send-email-alexander.lukichev@gmail.com>
- <527295EE.9030801@mind.be> <52762F23.9010202@gmail.com>
-Message-ID: <20131103121851.2d2cc3b0@skate>
+From: Alexander Lukichev <alexander.lukichev@gmail.com>
+Date: Sun, 03 Nov 2013 13:24:55 +0200
+Subject: [Buildroot] [PATCH v2 1/1] openpgm: disable on AVR32
+In-Reply-To: <CAHt8ZCOVSKMynxFe9WQuei-FKuB8BAJE2+dtEQreqwZokkTWdw@mail.gmail.com>
+References: <1383329548-8528-1-git-send-email-alexander.lukichev@gmail.com>	<20131101192027.1ea4c1bc@skate>	<CAAHaz6GXiQAMuoK2eo0=EjmE509P98zuuAuN7f_T5TYeK6W1QA@mail.gmail.com>	<CAHt8ZCO2OEtWe8NrDYSTkmu7uqQGpQbWjAEJg+jHVGzsWsF9Mg@mail.gmail.com>	<20131102122618.18eb2f00@skate>
+ <CAHt8ZCOVSKMynxFe9WQuei-FKuB8BAJE2+dtEQreqwZokkTWdw@mail.gmail.com>
+Message-ID: <52763287.1070700@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Alexander Lukichev,
+Hi Simon, Thomas,
 
-On Sun, 03 Nov 2013 13:10:27 +0200, Alexander Lukichev wrote:
+11/02/2013 06:51 PM, Simon Dawson wrote:
+> Interesting. Alexander: are we missing a trick here? How did you get
+> the compiler to use the correct intrinsics?
 
-> >>   config BR2_PACKAGE_ZEROMQ_PGM
-> >>       bool "PGM/EPGM support"
-> >>       depends on BR2_PACKAGE_ZEROMQ
-> >> +    depends on !BR2_avr32
-> >  zeromq has a lot of reverse dependencies: cppzmq, czmq, filemq,
-> > mongrel2, [python-pyzmq not necessary because python needs MMU], [zmqpp
-> > already disabled for avr32]. And there's one more transitive dependency
-> > to zyre. So all these should also be disabled.
-> 
-> I do not understand. Why should they be disabled? This patch does not
-> disable the zeromq library, merely PGM support in it. I may be mistaken
-> but "users" of zeromq that we have in Buildroot do not actually require
-> this feature (PGM support). Or am I missing the point?
+I do not remember. I'll take a look tomorrow on my faster laptop. It
+may even be that I have mixed myself up then.
 
-You're correct, I believe Arnout missed the fact that the dependency is
-added on a sub-option of the ZeroMQ package, and not on the ZeroMQ
-package itself, and there is nothing that selects
-BR2_PACKAGE_ZEROMQ_PGM.
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Best regards,
+  Alexander Lukichev
