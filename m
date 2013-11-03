@@ -1,8 +1,8 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun,  3 Nov 2013 11:18:22 +0100
-Subject: [Buildroot] [PATCH] Makefile: fix out-of-tree builds with multiple
-	targets with 'all'
-Message-ID: <1383473902-27845-1-git-send-email-yann.morin.1998@free.fr>
+Date: Sun,  3 Nov 2013 11:23:01 +0100
+Subject: [Buildroot] [PATCH v2] Makefile: fix out-of-tree builds with
+	multiple targets with 'all'
+Message-ID: <1383474181-4372-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -27,14 +27,18 @@ Reported-by: Ryan Barnett <rjbarnet@rockwellcollins.com>
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Ryan Barnett <rjbarnet@rockwellcollins.com>
 ---
- support/scripts/mkmakefile | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+Changes v1->v2:
+  - fix one missed 'all' occurence
+
+---
+ support/scripts/mkmakefile | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
 diff --git a/support/scripts/mkmakefile b/support/scripts/mkmakefile
-index cef2ec7..89dc649 100755
+index cef2ec7..27b1507 100755
 --- a/support/scripts/mkmakefile
 +++ b/support/scripts/mkmakefile
-@@ -32,14 +32,14 @@ MAKEFLAGS += --no-print-directory
+@@ -32,16 +32,16 @@ MAKEFLAGS += --no-print-directory
  
  .PHONY: all \$(MAKECMDGOALS)
  
@@ -51,6 +55,9 @@ index cef2ec7..89dc649 100755
 +\$(all): _all
  	@:
  
- %/: all
+-%/: all
++%/: _all
+ 	@:
+ EOF
 -- 
 1.8.1.2
