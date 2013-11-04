@@ -1,60 +1,75 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 4 Nov 2013 22:20:35 +0100
-Subject: [Buildroot] [PATCH v2] Makefile: fix out-of-tree builds with
- multiple targets with 'all'
-In-Reply-To: <OF6D0F4B79.3FF51701-ON86257C19.004D284E-86257C19.004EA170@rockwellcollins.com>
-References: <1383474181-4372-1-git-send-email-yann.morin.1998@free.fr>
- <OF6D0F4B79.3FF51701-ON86257C19.004D284E-86257C19.004EA170@rockwellcollins.com>
-Message-ID: <20131104212035.GD32603@free.fr>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Mon, 4 Nov 2013 22:26:11 +0100
+Subject: [Buildroot] [PATCH] manual: clarify that Config.in comments
+ should have correct dependencies
+In-Reply-To: <94085e779250785b8986.1383597255@argentina>
+References: <94085e779250785b8986.1383597255@argentina>
+Message-ID: <CAHXCMM+xVzgujFzU7=3YQpuu=2YvJyWWc0bvy3ncG=aA4-RwqQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Ryan, All,
+Hi Thomas,
 
-On 2013-11-04 08:18 -0600, Ryan Barnett spake thusly:
-> Yann,
-> 
-> "Yann E. MORIN" <yann.morin.1998@gmail.com> wrote on 11/03/2013 04:23:01 
-> AM:
-> 
-> > From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> > 
-> > For out-of-tree builds, this use-case fails to build:
-> >     $ make clean all
-> > 
-> > This is because 'all' is filtered-out in the Makefile wrapper, since
-> > the wrapper itself has a 'all' target.
-> > 
-> > The 'all' target is just the usual naming for the default target in a
-> > Makefile. In fact, the first target is the default one, so we can name
-> > it whatever we want.
-> > 
-> > Rename the Makefile wrapper 'all' target to avoid name-clashing.
-> 
-> Could you please add a comment about fixing the bug I reported? I'll even 
-> make it easy for you with having the comment below so you can copy and 
-> paste :)
-> 
-> Fixes bug #6644 
+2013/11/4 Thomas De Schampheleire <patrickdepinguin@gmail.com>
 
-Doh, yes, I'll repost with commit message fixed.
+> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+>
+> ---
+> Note: this documentation patch accompanies my earlier patch of today to add
+> missing dependencies on such comments [1]. These two should have been sent
+> as one series, sorry for that.
+> [1] http://patchwork.ozlabs.org/patch/288125/
+>
+>  docs/manual/adding-packages-directory.txt |  9 +++++++++
+>  1 files changed, 9 insertions(+), 0 deletions(-)
+>
+> diff --git a/docs/manual/adding-packages-directory.txt
+> b/docs/manual/adding-packages-directory.txt
+> --- a/docs/manual/adding-packages-directory.txt
+> +++ b/docs/manual/adding-packages-directory.txt
+> @@ -171,6 +171,7 @@ C library, C++ support, largefile suppor
+>  IPv6 support, wchar support, or dynamic library support. Some packages
+>  can only be built on certain target architectures, or if an MMU is
+>  available in the processor.
+> +
+>  These dependencies have to expressed with the appropriate 'depends on'
+>
+s/have to expressed/have to be expressed/
 
-> If you add the comment above, I will give you this:
-> 
-> Tested-by: Ryan Barnett <rjbarnet@rockwellcollins.com>
+ statements in the Config.in file. Additionally, for dependencies on
+>  toolchain options, a +comment+ should be displayed when the option is
+> @@ -180,6 +181,14 @@ made visible in a comment: since it is u
+>  freely choose another target, it makes little sense to show these
+>  dependencies explicitly.
+>
+> +The +comment+ should only be visible if the +config+ option itself would
+> +be visible when the toolchain option dependencies are met. This means
+> +that all other dependencies of the package (including dependencies on
+> +target architecture and MMU support) have to be repeated on the
+> ++comment+ definition. To keep it clear, the +depends on+ statement for
+> +these non-toolchain option should be kept separate from the +depends on+
+> +statement for the toolchain options.
+> +
+>  The general format of a dependency +comment+ for package foo is:
+>  --------------------------
+>  foo needs a toolchain w/ featA, featB, featC
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+>
 
-Thanks!
+Acked-by: Samuel Martin <s.martin49@gmail.com>
+(with this little fix ;))
+
 
 Regards,
-Yann E. MORIN.
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Samuel
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20131104/caa9d1e2/attachment.html>
