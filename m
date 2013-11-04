@@ -1,57 +1,60 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 4 Nov 2013 22:00:00 +0100
-Subject: [Buildroot] [git commit] libnl: do not allow to build tools on
-	static lib configs
-Message-ID: <20131104211055.53D7E9BCBA@busybox.osuosl.org>
+Date: Mon, 4 Nov 2013 21:56:26 +0100
+Subject: [Buildroot] [git commit] libnl: simplify makefile by using
+	--{enable, disable}-cli
+Message-ID: <20131104211055.4C2539BB81@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=337a59d9e47772c89ecd1e4523e300e5e3c642ce
+commit: http://git.buildroot.net/buildroot/commit/?id=250af24dbd8c6902c0b92c95daa5b8cced947806
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Building the libnl tools requires the <dlfcn.h> header, which is not
-compatible with static only builds. Therefore, this commit makes the
-libnl tools option depend on !BR2_PREFER_STATIC_LIB.
+The libnl configure script has a --{enable,disable}-cli options that
+allows to enable or disable the compilation of the libnl tools. Use
+this option instead of compiling everything and then removing the
+installed programs.
 
-Fixes:
+Note that we also get rid of the uninstall command, which is planned
+to be globally removed in Buildroot.
 
-   http://autobuild.buildroot.org/results/573/57340b9bd2db3a523836e02e01cba6f7c17c8ca7/build-end.log
-
-[Peter: fix tools comment dependency]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Acked-by: Samuel Martin <s.martin49@gmail.com>
+Reviewed-by: Samuel Martin <s.martin49@gmail.com>
 ---
- package/libnl/Config.in |   14 +++++++++++---
- 1 files changed, 11 insertions(+), 3 deletions(-)
+ package/libnl/libnl.mk |   19 ++++---------------
+ 1 files changed, 4 insertions(+), 15 deletions(-)
 
-diff --git a/package/libnl/Config.in b/package/libnl/Config.in
-index fec10d3..1173278 100644
---- a/package/libnl/Config.in
-+++ b/package/libnl/Config.in
-@@ -6,11 +6,19 @@ config BR2_PACKAGE_LIBNL
+diff --git a/package/libnl/libnl.mk b/package/libnl/libnl.mk
+index 5c884d7..3b56bc8 100644
+--- a/package/libnl/libnl.mk
++++ b/package/libnl/libnl.mk
+@@ -10,22 +10,11 @@ LIBNL_LICENSE = LGPLv2.1+
+ LIBNL_LICENSE_FILES = COPYING
+ LIBNL_INSTALL_STAGING = YES
+ LIBNL_DEPENDENCIES = host-bison host-flex
+-LIBNL_BINARIES = class-add class-delete class-list classid-lookup cls-add \
+-	cls-delete cls-list link-list pktloc-lookup qdisc-add qdisc-delete \
+-	qdisc-list
  
- 	  http://people.suug.ch/~tgr/libnl/
+-define LIBNL_UNINSTALL_TARGET_CMDS
+-	rm -r $(TARGET_DIR)/usr/lib/libnl.* $(TARGET_DIR)/usr/lib/libnl-*.*
+-	rm -rf $(TARGET_DIR)/usr/lib/libnl
+-endef
+-
+-define LIBNL_REMOVE_TOOLS
+-	rm -rf $(addprefix $(TARGET_DIR)/usr/sbin/nl-, $(LIBNL_BINARIES))
+-	rm -rf $(TARGET_DIR)/usr/sbin/genl-ctrl-list
+-endef
+-
+-ifneq ($(BR2_PACKAGE_LIBNL_TOOLS),y)
+-LIBNL_POST_INSTALL_TARGET_HOOKS += LIBNL_REMOVE_TOOLS
++ifeq ($(BR2_PACKAGE_LIBNL_TOOLS),y)
++LIBNL_CONF_OPT += --enable-cli
++else
++LIBNL_CONF_OPT += --disable-cli
+ endif
  
-+comment "libnl needs a toolchain w/ threads"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS
-+
-+if BR2_PACKAGE_LIBNL
-+
- config BR2_PACKAGE_LIBNL_TOOLS
- 	bool "install tools"
--	depends on BR2_PACKAGE_LIBNL
-+	# uses <dlfcn.h>
-+	depends on !BR2_PREFER_STATIC_LIB
- 	help
- 	  Install binary tools.
- 
--comment "libnl needs a toolchain w/ threads"
--	depends on !BR2_TOOLCHAIN_HAS_THREADS
-+comment "libnl tools need a toolchain w/ dynamic library"
-+	depends on BR2_PREFER_STATIC_LIB
-+
-+endif
+ $(eval $(autotools-package))
