@@ -1,42 +1,51 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Mon, 4 Nov 2013 09:28:11 +0100
-Subject: [Buildroot] Github URL used to fetch packages
-In-Reply-To: <20131104092646.743d423e@skate>
-References: <CAGduivwP_AykQSnspeAWqSxxNbMRLwRja_h0BDLYRX3scmDCTQ@mail.gmail.com>
- <5277484F.4070402@mind.be> <20131104092646.743d423e@skate>
-Message-ID: <CAAXf6LXv=0OGYGgdNynKegwXNmSj=s0mYG1ZpinAAhY94fDdvQ@mail.gmail.com>
+Date: Mon, 4 Nov 2013 09:30:40 +0100
+Subject: [Buildroot] Patchwork oldest patches cleanup #2 (deadline
+	November 17)
+In-Reply-To: <527746D2.5000802@mind.be>
+References: <CAAXf6LV_kM18mt8h5yQScnhOPfJZ2PMNg3tvF=mBLCi8bFem2A@mail.gmail.com>
+ <527746D2.5000802@mind.be>
+Message-ID: <CAAXf6LV4BsU2=LAz7b87qhxASkEh8X=uS9OM+kOp5tiLGBLzZw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Hi Arnout,
 
-On Mon, Nov 4, 2013 at 9:26 AM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Dear Arnout Vandecappelle,
->
-> On Mon, 04 Nov 2013 08:10:07 +0100, Arnout Vandecappelle wrote:
->
->>   I like the idea. We would typically do this with some auxiliary
->> variables instead of a new download method, but maybe the download method
->> isn't such a bad idea. It would add even more complexity to the horrible
->> pkg-download.mk, though...
->>
->>   Bottom line: the idea is good, but let's see if the implementation can
->> be acceptable.
->
-> Instead of a new download method, can it simply be a helper function,
-> like:
->
-> FOO_SITE = $(call github,<user>,<package>,<version>)
->
-> or something like that. This way we don't clutter the core of the
-> download infrastructure with another site method that isn't really a
-> site method.
+Thanks for your feedback.
 
-I'm ok with this suggestion.
+On Mon, Nov 4, 2013 at 8:03 AM, Arnout Vandecappelle <arnout@mind.be> wrote:
+> On 01/11/13 16:09, Thomas De Schampheleire wrote:
+> [snip]
+>
+>> linux: add default defconfig
+>> Arnout Vandecappelle <arnout@mind.be>
+>> http://patchwork.ozlabs.org/patch/181185
+>
+>
+>  This one didn't receive positive feedback, so I guess it's rejected. Short
+> recap: it allows you to build the kernel with the architecture's default
+> defconfig, which is typically a bloaty configuration that supports many
+> boards (if an appropriate device tree is present). IIRC the feedback was
+> that this wasn't usually appropriate for buildroot use cases.
+>
+>
+> [snip]
+>
+>> [RFC] patches-from-git.sh: new support script
+>> Arnout Vandecappelle <arnout@mind.be>
+>> http://patchwork.ozlabs.org/patch/182856
+>
+>
+>  This one can definitely be rejected, since it was RFC and didn't receive
+> comments AFAICR.
+
+But you're also no longer interested in that feature right? What I
+mean is: it's not that there was no feedback at the time that you
+couldn't get feedback now. If you still think the script is useful,
+you could resubmit the patch to revive the discussion.
 
 Best regards,
 Thomas
