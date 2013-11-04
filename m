@@ -1,62 +1,59 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 1 Nov 2013 17:12:51 +0100
-Subject: [Buildroot] [git commit] rsync: use system zlib and popt,
-	also do not lose debug options
-Message-ID: <20131104211055.0308C9BC97@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 4 Nov 2013 22:00:19 +0100
+Subject: [Buildroot] [git commit] libvpx: needs thread support
+Message-ID: <20131104211055.6335A9BCBC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=6eac08192d8dceaba992d11d8874ea3af93011b5
+commit: http://git.buildroot.net/buildroot/commit/?id=5702d2f3b7f12882d4e33d26606732290e442324
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-rsync by default compiles statically its own zlib and popt
-libraries, it is better to use system wide libraries instead -
-both for disk and memory consumption. Change rsync package
-accordingly.
+Fixes:
 
-Also previously a debug configure option has been lost, as
-overwritten by '--with-included-popt' option - fixed.
+  http://autobuild.buildroot.org/results/8de/8def7e54e4fecb7df350443824c00b53d1c61c01/build-end.log
 
-For example, on ARMv5 rsync binary size is reduced by about 25%.
-
-Signed-off-by: Denis Mingulov <denis@mingulov.com>
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Acked-by: Samuel Martin <s.martin49@gmail.com>
 ---
- package/rsync/Config.in |    2 ++
- package/rsync/rsync.mk  |    7 +++++--
- 2 files changed, 7 insertions(+), 2 deletions(-)
+ package/gstreamer1/gst1-plugins-good/Config.in |    4 ++++
+ package/libvpx/Config.in                       |    4 ++++
+ 2 files changed, 8 insertions(+), 0 deletions(-)
 
-diff --git a/package/rsync/Config.in b/package/rsync/Config.in
-index be95a7c..b952974 100644
---- a/package/rsync/Config.in
-+++ b/package/rsync/Config.in
-@@ -2,6 +2,8 @@ config BR2_PACKAGE_RSYNC
- 	bool "rsync"
- 	# fork()
- 	depends on BR2_USE_MMU
-+	select BR2_PACKAGE_ZLIB
-+	select BR2_PACKAGE_POPT
+diff --git a/package/gstreamer1/gst1-plugins-good/Config.in b/package/gstreamer1/gst1-plugins-good/Config.in
+index 3342208..a9308c7 100644
+--- a/package/gstreamer1/gst1-plugins-good/Config.in
++++ b/package/gstreamer1/gst1-plugins-good/Config.in
+@@ -335,9 +335,13 @@ comment "taglib needs a toolchain w/ C++"
+ config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_VPX
+ 	bool "vpx (webm)"
+ 	select BR2_PACKAGE_LIBVPX
++	depends on BR2_TOOLCHAIN_HAS_THREADS # libvpx
  	help
- 	  File transfer program to keep remote files in sync.
+ 	  VP8 plugin
  
-diff --git a/package/rsync/rsync.mk b/package/rsync/rsync.mk
-index d8e5f3f..35f128c 100644
---- a/package/rsync/rsync.mk
-+++ b/package/rsync/rsync.mk
-@@ -8,7 +8,10 @@ RSYNC_VERSION = 3.1.0
- RSYNC_SITE = http://rsync.samba.org/ftp/rsync/src
- RSYNC_LICENSE = GPLv3+
- RSYNC_LICENSE_FILES = COPYING
--RSYNC_CONF_OPT = $(if $(BR2_ENABLE_DEBUG),--enable-debug,--disable-debug)
--RSYNC_CONF_OPT = --with-included-popt
-+RSYNC_DEPENDENCIES = zlib popt
-+RSYNC_CONF_OPT = \
-+	$(if $(BR2_ENABLE_DEBUG),--enable-debug,--disable-debug) \
-+	--with-included-zlib=no \
-+	--with-included-popt=no
++comment "libvpx needs a toolchain w/ threads"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS
++
+ config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_WAVPACK
+ 	bool "wavpack (*.wv audio)"
+ 	select BR2_PACKAGE_WAVPACK
+diff --git a/package/libvpx/Config.in b/package/libvpx/Config.in
+index 1332c56..0ed3e1a 100644
+--- a/package/libvpx/Config.in
++++ b/package/libvpx/Config.in
+@@ -1,7 +1,11 @@
+ config BR2_PACKAGE_LIBVPX
+ 	bool "libvpx"
++	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	help
+ 	  A high-quality, open video format that's freely available to
+ 	  everyone.
  
- $(eval $(autotools-package))
+ 	  http://webmproject.org
++
++comment "libvpx needs a toolchain w/ threads"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS
