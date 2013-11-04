@@ -1,28 +1,53 @@
-From: Dallas Clement <dallas.a.clement@gmail.com>
-Date: Mon, 4 Nov 2013 14:11:24 -0600
-Subject: [Buildroot] Speeding up builds
-In-Reply-To: <CAAXf6LW1TJ5oXRYBMBMC3O91653rmuP87wUbVike=9nGZANtsQ@mail.gmail.com>
-References: <CAE9DZUT-G8g5cwWamULZ2ppUSOHjNf1O35diTno-uZj1_tCggA@mail.gmail.com>
- <5d58cf72-cd29-4f75-b348-4b59b4941a2f@email.android.com>
- <CAE9DZUTgeeZTveEYUdHrDwpEP_iqqcd=JrPp6qWaVP_Huti3_w@mail.gmail.com>
- <CAAXf6LW1TJ5oXRYBMBMC3O91653rmuP87wUbVike=9nGZANtsQ@mail.gmail.com>
-Message-ID: <CAE9DZURjHTfx+sYDazhnJPdXOYZe8ye9Ue=bBOJo5_3_V6521g@mail.gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 04 Nov 2013 20:35:20 +0100
+Subject: [Buildroot] [PATCH v2] netperf: enable demo mode.
+In-Reply-To: <1383531561-5550-1-git-send-email-keguang.zhang@gmail.com>
+References: <1383531561-5550-1-git-send-email-keguang.zhang@gmail.com>
+Message-ID: <5277F6F8.4030500@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+On 04/11/13 03:19, Kelvin Cheung wrote:
+> Enable demo mode for netperf to activates a global "-D" <interval> option.
+> This option will display interim results at least every time interval.
+>
+> Signed-off-by: Kelvin Cheung <keguang.zhang@gmail.com>
 
-> Are you using an external toolchain, or are you rebuilding that one
-> from scratch as well?
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-Unfortunately, no gains to be had there.  I am using an external toolchain.
+  On x86_64 with glibc, this makes a difference of 3K (<2%) on the 
+netperf and netserver executables. So I think it's OK to enable it 
+unconditionally.
 
-Thanks,
+  Regards,
+  Arnout
 
-Dallas
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20131104/bc5b46e7/attachment.html>
+> ---
+>   package/netperf/netperf.mk |    1 +
+>   1 file changed, 1 insertion(+)
+>
+> diff --git a/package/netperf/netperf.mk b/package/netperf/netperf.mk
+> index 2bd11f3..455f27e 100644
+> --- a/package/netperf/netperf.mk
+> +++ b/package/netperf/netperf.mk
+> @@ -7,6 +7,7 @@
+>   NETPERF_VERSION = 2.6.0
+>   NETPERF_SITE = ftp://ftp.netperf.org/netperf
+>   NETPERF_CONF_ENV = ac_cv_func_setpgrp_void=set
+> +NETPERF_CONF_OPT = --enable-demo=yes
+>   NETPERF_LICENSE = netperf license
+>   NETPERF_LICENSE_FILES = COPYING
+>
+>
+
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
