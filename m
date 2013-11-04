@@ -1,48 +1,32 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Mon, 04 Nov 2013 21:34:15 +0100
-Subject: [Buildroot] [PATCH] manual: clarify that Config.in comments should
- have correct dependencies
-Message-ID: <94085e779250785b8986.1383597255@argentina>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 04 Nov 2013 22:03:22 +0100
+Subject: [Buildroot] [pull request] Branch for-peter-2013.11
+In-Reply-To: <20131104201458.5856222e@skate> (Thomas Petazzoni's message of
+ "Mon, 4 Nov 2013 20:14:58 +0100")
+References: <20131104201458.5856222e@skate>
+Message-ID: <8738nbriat.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
----
-Note: this documentation patch accompanies my earlier patch of today to add
-missing dependencies on such comments [1]. These two should have been sent
-as one series, sorry for that.
-[1] http://patchwork.ozlabs.org/patch/288125/
+ > Hello Peter,
+ > While you have been away, I've accumulated a bunch of patches into a
+ > for-peter-2013.11 branch, to ease their integration into the master
+ > branch now that you're back from holidays.
 
- docs/manual/adding-packages-directory.txt |  9 +++++++++
- 1 files changed, 9 insertions(+), 0 deletions(-)
+ > I've been very conservative on the changes I've taken: no version bump,
+ > no new packages, only fixes or minor improvements. Typically patches
+ > that would generally have been taken after -rc1 is released.
 
-diff --git a/docs/manual/adding-packages-directory.txt b/docs/manual/adding-packages-directory.txt
---- a/docs/manual/adding-packages-directory.txt
-+++ b/docs/manual/adding-packages-directory.txt
-@@ -171,6 +171,7 @@ C library, C++ support, largefile suppor
- IPv6 support, wchar support, or dynamic library support. Some packages
- can only be built on certain target architectures, or if an MMU is
- available in the processor.
-+
- These dependencies have to expressed with the appropriate 'depends on'
- statements in the Config.in file. Additionally, for dependencies on
- toolchain options, a +comment+ should be displayed when the option is
-@@ -180,6 +181,14 @@ made visible in a comment: since it is u
- freely choose another target, it makes little sense to show these
- dependencies explicitly.
- 
-+The +comment+ should only be visible if the +config+ option itself would
-+be visible when the toolchain option dependencies are met. This means
-+that all other dependencies of the package (including dependencies on
-+target architecture and MMU support) have to be repeated on the
-++comment+ definition. To keep it clear, the +depends on+ statement for
-+these non-toolchain option should be kept separate from the +depends on+
-+statement for the toolchain options.
-+
- The general format of a dependency +comment+ for package foo is:
- --------------------------
- foo needs a toolchain w/ featA, featB, featC
+ > Note that I've marked those patches as "Accepted" in patchwork, so if
+ > you don't merge them, please let me know so that I can mark them again
+ > as "New".
+
+Thanks, committed with minor fixups.
+
+-- 
+Bye, Peter Korsgaard
