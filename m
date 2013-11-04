@@ -1,48 +1,43 @@
-From: Romain Naour <romain.naour@openwide.fr>
-Date: Tue, 05 Nov 2013 00:05:06 +0100
-Subject: [Buildroot] [PATCH v3 2/2] ngrep: fix static linking issue with
-	libpcre
-In-Reply-To: <87li13q3g9.fsf@dell.be.48ers.dk>
-References: <1383407472-2898-1-git-send-email-romain.naour@openwide.fr>
- <87li13q3g9.fsf@dell.be.48ers.dk>
-Message-ID: <52782822.90900@openwide.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 5 Nov 2013 00:07:28 +0100
+Subject: [Buildroot] Patchwork oldest patches cleanup #2 (deadline
+ November 17)
+In-Reply-To: <5278143A.5070505@mind.be>
+References: <CAAXf6LV_kM18mt8h5yQScnhOPfJZ2PMNg3tvF=mBLCi8bFem2A@mail.gmail.com>
+ <527746D2.5000802@mind.be>
+ <CAAXf6LXQ_1pYTCyr2nLwDa1J7kJUsSZCcbs03gr3OFaDPmX6gw@mail.gmail.com>
+ <5278143A.5070505@mind.be>
+Message-ID: <20131105000728.49c0d1a6@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le 04/11/2013 22:09, Peter Korsgaard a ?crit :
->>>>>> "Romain" == Romain Naour <romain.naour@openwide.fr> writes:
-> 
->  > Adding -lpcre in LDFLAGS place the library before object files:
->  > gcc ... -lpcre -L.../sysroot/usr/lib -s -o ngrep ngrep.o -lpcap
-> 
->  > Makefile.in is patched to use @LIBS@ for adding -lpcre in the right place.
-> 
->  > Fixes:
->  > http://autobuild.buildroot.net/results/684/684a3bed28d13ef5e5156257aade3b9aff32f180
-> 
->  > Signed-off-by: Romain Naour <romain.naour@openwide.fr>
->  > ---
->  >  package/ngrep/ngrep-0003-fix-static-link.patch | 22 ++++++++++++++++++++++
->  >  package/ngrep/ngrep.mk                         |  2 +-
->  >  2 files changed, 23 insertions(+), 1 deletion(-)
->  >  create mode 100644 package/ngrep/ngrep-0003-fix-static-link.patch
-> 
->  > diff --git a/package/ngrep/ngrep-0003-fix-static-link.patch b/package/ngrep/ngrep-0003-fix-static-link.patch
->  > new file mode 100644
->  > index 0000000..6d70778
->  > --- /dev/null
->  > +++ b/package/ngrep/ngrep-0003-fix-static-link.patch
->  > @@ -0,0 +1,22 @@
->  > +fix static link
->  > +Libraries must be placed before object files.
-> 
-> I guess you mean AFTER.
-> 
+Dear Arnout Vandecappelle,
 
-Yes, copy and past error...
-Thanks
+On Mon, 04 Nov 2013 22:40:10 +0100, Arnout Vandecappelle wrote:
 
-Romain
+>   I completely agree, that was the reason that I created the patch in
+> the first place.
+> 
+>   Unfortunately, the x86_defconfig is _huge_. And as mentioned by 
+> ThomasP, the other architecture's defconfigs aren't worth much. So I 
+> don't think this patch is really valuable after all.
+
+I agree. For anyone sane, x86_defconfig is basically unusable due to
+the enormous number of options that it enables.
+
+And for other architectures, a default defconfig doesn't make much
+sense, since there usually isn't any "sane" default. I very much prefer
+users to be asked loudly to provide a proper defconfig rather than
+having Buildroot pick the kernel default one, and then have users
+wonder why the kernel doesn't boot on their platform.
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
