@@ -1,35 +1,25 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 4 Nov 2013 22:36:12 +0100
-Subject: [Buildroot] [git commit] netperf: enable demo mode
-Message-ID: <20131104214740.BDBA1818B1@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 04 Nov 2013 23:49:12 +0100
+Subject: [Buildroot] [PATCH 1/1] omniorb: fix autobuilder failure
+In-Reply-To: <1382362757-24499-1-git-send-email-mlweber1@rockwellcollins.com>
+ (Matt Weber's message of "Mon, 21 Oct 2013 08:39:17 -0500")
+References: <1382362757-24499-1-git-send-email-mlweber1@rockwellcollins.com>
+Message-ID: <87zjpjok9j.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c4ea640455a67ff4e355c286462ae15e7eb13f74
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Matt" == Matt Weber <mlweber1@rockwellcollins.com> writes:
 
-Enable demo mode for netperf to activates a global "-D" <interval> option.
-This option will display interim results at least every time interval.
+ > http://autobuild.buildroot.net/results/e3244abc550a95eb69e63b8db203f39b27f3288e/
+ > Turns out omniorb isn't building because of an old cross compile patch.
+ > The last patchset was missing the delete.
 
-Signed-off-by: Kelvin Cheung <keguang.zhang@gmail.com>
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/netperf/netperf.mk |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+ > Signed-off-by: Matt Weber <mlweber1@rockwellcollins.com>
 
-diff --git a/package/netperf/netperf.mk b/package/netperf/netperf.mk
-index 2bd11f3..455f27e 100644
---- a/package/netperf/netperf.mk
-+++ b/package/netperf/netperf.mk
-@@ -7,6 +7,7 @@
- NETPERF_VERSION = 2.6.0
- NETPERF_SITE = ftp://ftp.netperf.org/netperf
- NETPERF_CONF_ENV = ac_cv_func_setpgrp_void=set
-+NETPERF_CONF_OPT = --enable-demo=yes
- NETPERF_LICENSE = netperf license
- NETPERF_LICENSE_FILES = COPYING
- 
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
