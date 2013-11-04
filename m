@@ -1,58 +1,46 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 4 Nov 2013 22:00:19 +0100
-Subject: [Buildroot] [git commit] dhcpcd: needs MMU
-Message-ID: <20131104211055.5B66E9BCBB@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 04 Nov 2013 22:05:09 +0100
+Subject: [Buildroot] [PATCH] libvpx: needs thread support
+In-Reply-To: <1383408297-17438-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Sat, 2 Nov 2013 17:04:57 +0100")
+References: <1383408297-17438-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <87y553q3ne.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=55227475957af0a6a9d1377bc9e2e6103febedba
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-dhcpcd fails to build on non-MMU platforms, even with the
---disable-fork option:
+ > Fixes:
+ >   http://autobuild.buildroot.org/results/8de/8def7e54e4fecb7df350443824c00b53d1c61c01/build-end.log
 
-  bind.o: In function `_daemonise':
-  bind.c:(.text+0x62): undefined reference to `_fork'
-  collect2: ld returned 1 exit status
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ > ---
+ >  package/gstreamer1/gst1-plugins-good/Config.in | 4 ++++
+ >  package/libvpx/Config.in                       | 4 ++++
+ >  2 files changed, 8 insertions(+)
 
-Therefore, we make dhcpcd depend on MMU support, and remove the
-non-MMU condition in the .mk file. More recent versions of dhcpcd do
-support non-MMU properly, but this commit intends to be only a fix.
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Acked-by: Samuel Martin <s.martin49@gmail.com>
----
- package/dhcpcd/Config.in |    1 +
- package/dhcpcd/dhcpcd.mk |    4 ----
- 2 files changed, 1 insertions(+), 4 deletions(-)
-
-diff --git a/package/dhcpcd/Config.in b/package/dhcpcd/Config.in
-index dbde548..ddbc6f4 100644
---- a/package/dhcpcd/Config.in
-+++ b/package/dhcpcd/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_DHCPCD
- 	depends on BR2_INET_IPV6
-+	depends on BR2_USE_MMU # fork()
- 	bool "dhcpcd"
- 	help
- 	  An RFC2131 compliant DHCP client
-diff --git a/package/dhcpcd/dhcpcd.mk b/package/dhcpcd/dhcpcd.mk
-index 5296db8..13810f3 100644
---- a/package/dhcpcd/dhcpcd.mk
-+++ b/package/dhcpcd/dhcpcd.mk
-@@ -9,10 +9,6 @@ DHCPCD_SOURCE = dhcpcd-$(DHCPCD_VERSION).tar.bz2
- DHCPCD_SITE = http://roy.marples.name/downloads/dhcpcd/
- DHCPCD_LICENSE = BSD-2c
+ > diff --git a/package/gstreamer1/gst1-plugins-good/Config.in b/package/gstreamer1/gst1-plugins-good/Config.in
+ > index 3342208..a9308c7 100644
+ > --- a/package/gstreamer1/gst1-plugins-good/Config.in
+ > +++ b/package/gstreamer1/gst1-plugins-good/Config.in
+ > @@ -335,9 +335,13 @@ comment "taglib needs a toolchain w/ C++"
+ >  config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_VPX
+ >  	bool "vpx (webm)"
+ >  	select BR2_PACKAGE_LIBVPX
+ > +	depends on BR2_TOOLCHAIN_HAS_THREADS # libvpx
+ >  	help
+ >  	  VP8 plugin
  
--ifeq ($(BR2_USE_MMU),)
--	DHCPCD_CONFIG_OPT += --disable-fork
--endif
--
- define DHCPCD_CONFIGURE_CMDS
- 	(cd $(@D); \
- 	./configure \
+ > +comment "libvpx needs a toolchain w/ threads"
+ > +	depends on !BR2_TOOLCHAIN_HAS_THREADS
+ > +
+
+Gstreamer1 itself is a heavy user of threads (and therefor depends on
+BR2_TOOLCHAIN_HAS_THREADS), so this comment is never going to be
+visible, but ok.
+
+-- 
+Bye, Peter Korsgaard
