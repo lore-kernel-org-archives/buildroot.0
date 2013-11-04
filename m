@@ -1,51 +1,60 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Mon, 04 Nov 2013 22:18:06 +0100
-Subject: [Buildroot] [git commit] dhcpcd: needs MMU
-In-Reply-To: <20131104211055.5B66E9BCBB@busybox.osuosl.org>
-References: <20131104211055.5B66E9BCBB@busybox.osuosl.org>
-Message-ID: <13236810-f671-4327-928a-07590af9abfe@email.android.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 4 Nov 2013 22:20:35 +0100
+Subject: [Buildroot] [PATCH v2] Makefile: fix out-of-tree builds with
+ multiple targets with 'all'
+In-Reply-To: <OF6D0F4B79.3FF51701-ON86257C19.004D284E-86257C19.004EA170@rockwellcollins.com>
+References: <1383474181-4372-1-git-send-email-yann.morin.1998@free.fr>
+ <OF6D0F4B79.3FF51701-ON86257C19.004D284E-86257C19.004EA170@rockwellcollins.com>
+Message-ID: <20131104212035.GD32603@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter Korsgaard <peter@korsgaard.com> wrote:
->commit: http://git.buildroot.net/buildroot/commit/?id=55227475957af0a6a9d1377bc9e2e6103febedba
->branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
->
->dhcpcd fails to build on non-MMU platforms, even with the
->--disable-fork option:
->
->  bind.o: In function `_daemonise':
->  bind.c:(.text+0x62): undefined reference to `_fork'
->  collect2: ld returned 1 exit status
->
->Therefore, we make dhcpcd depend on MMU support, and remove the
->non-MMU condition in the .mk file. More recent versions of dhcpcd do
->support non-MMU properly, but this commit intends to be only a fix.
->
->Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
->Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
->Acked-by: Samuel Martin <s.martin49@gmail.com>
->---
-> package/dhcpcd/Config.in |    1 +
-> package/dhcpcd/dhcpcd.mk |    4 ----
-> 2 files changed, 1 insertions(+), 4 deletions(-)
->
->diff --git a/package/dhcpcd/Config.in b/package/dhcpcd/Config.in
->index dbde548..ddbc6f4 100644
->--- a/package/dhcpcd/Config.in
->+++ b/package/dhcpcd/Config.in
->@@ -1,5 +1,6 @@
-> config BR2_PACKAGE_DHCPCD
-> 	depends on BR2_INET_IPV6
->+	depends on BR2_USE_MMU # fork()
-> 	bool "dhcpcd"
-> 	help
-> 	  An RFC2131 compliant DHCP client
+Ryan, All,
 
-If you agree with my latest two patches about adding the necessary dependencies on the comments as well, then we should also added this mmu dependency on the comment.
+On 2013-11-04 08:18 -0600, Ryan Barnett spake thusly:
+> Yann,
+> 
+> "Yann E. MORIN" <yann.morin.1998@gmail.com> wrote on 11/03/2013 04:23:01 
+> AM:
+> 
+> > From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> > 
+> > For out-of-tree builds, this use-case fails to build:
+> >     $ make clean all
+> > 
+> > This is because 'all' is filtered-out in the Makefile wrapper, since
+> > the wrapper itself has a 'all' target.
+> > 
+> > The 'all' target is just the usual naming for the default target in a
+> > Makefile. In fact, the first target is the default one, so we can name
+> > it whatever we want.
+> > 
+> > Rename the Makefile wrapper 'all' target to avoid name-clashing.
+> 
+> Could you please add a comment about fixing the bug I reported? I'll even 
+> make it easy for you with having the comment below so you can copy and 
+> paste :)
+> 
+> Fixes bug #6644 
 
-Best regards,
-Thomas
+Doh, yes, I'll repost with commit message fixed.
+
+> If you add the comment above, I will give you this:
+> 
+> Tested-by: Ryan Barnett <rjbarnet@rockwellcollins.com>
+
+Thanks!
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
