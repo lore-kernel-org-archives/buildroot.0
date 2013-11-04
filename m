@@ -1,56 +1,57 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 4 Nov 2013 09:49:12 +0100
-Subject: [Buildroot] [PATCH] libnl: FLAT: Avoid build feature cli when
- flat binary format is selected.
-In-Reply-To: <1383554490-10749-1-git-send-email-sonic.zhang@analog.com>
-References: <1383554490-10749-1-git-send-email-sonic.zhang@analog.com>
-Message-ID: <20131104094912.62a7648d@skate>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Mon, 4 Nov 2013 10:31:11 +0100
+Subject: [Buildroot] Github URL used to fetch packages
+In-Reply-To: <CAAXf6LXv=0OGYGgdNynKegwXNmSj=s0mYG1ZpinAAhY94fDdvQ@mail.gmail.com>
+References: <CAGduivwP_AykQSnspeAWqSxxNbMRLwRja_h0BDLYRX3scmDCTQ@mail.gmail.com>
+ <5277484F.4070402@mind.be> <20131104092646.743d423e@skate>
+ <CAAXf6LXv=0OGYGgdNynKegwXNmSj=s0mYG1ZpinAAhY94fDdvQ@mail.gmail.com>
+Message-ID: <CAHXCMMKZW1-=aurEzt3wSJH0G0fFTgsvoPzKq-PW_fKYUxmXWg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Sonic Zhang,
+All,
 
-On Mon,  4 Nov 2013 16:41:30 +0800, Sonic Zhang wrote:
-> From: Sonic Zhang <sonic.zhang@analog.com>
-> 
-> Feature cli depends on runtime library loader head dlfcn.h.
-> 
-> Signed-off-by: Sonic Zhang <sonic.zhang@analog.com>
-> ---
->  package/libnl/libnl.mk |    4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/package/libnl/libnl.mk b/package/libnl/libnl.mk
-> index 5c884d7..90e588b 100644
-> --- a/package/libnl/libnl.mk
-> +++ b/package/libnl/libnl.mk
-> @@ -14,6 +14,10 @@ LIBNL_BINARIES = class-add class-delete class-list classid-lookup cls-add \
->  	cls-delete cls-list link-list pktloc-lookup qdisc-add qdisc-delete \
->  	qdisc-list
->  
-> +ifeq ($(BR2_BINFMT_FLAT),y)
-> +LIBNL_CONF_OPT = --disable-cli
-> +endif
-> +
->  define LIBNL_UNINSTALL_TARGET_CMDS
->  	rm -r $(TARGET_DIR)/usr/lib/libnl.* $(TARGET_DIR)/usr/lib/libnl-*.*
->  	rm -rf $(TARGET_DIR)/usr/lib/libnl
 
-Thanks but this has already been fixed by the patches I have sent this
-week-end:
+2013/11/4 Thomas De Schampheleire <patrickdepinguin@gmail.com>
 
- http://lists.busybox.net/pipermail/buildroot/2013-November/081595.html
- http://lists.busybox.net/pipermail/buildroot/2013-November/081596.html
+> Hi,
+>
+> On Mon, Nov 4, 2013 at 9:26 AM, Thomas Petazzoni
+> <thomas.petazzoni@free-electrons.com> wrote:
+> > Dear Arnout Vandecappelle,
+> >
+> > On Mon, 04 Nov 2013 08:10:07 +0100, Arnout Vandecappelle wrote:
+> >
+> >>   I like the idea. We would typically do this with some auxiliary
+> >> variables instead of a new download method, but maybe the download
+> method
+> >> isn't such a bad idea. It would add even more complexity to the horrible
+> >> pkg-download.mk, though...
+> >>
+> >>   Bottom line: the idea is good, but let's see if the implementation can
+> >> be acceptable.
+> >
+> > Instead of a new download method, can it simply be a helper function,
+> > like:
+> >
+> > FOO_SITE = $(call github,<user>,<package>,<version>)
+> >
+> > or something like that. This way we don't clutter the core of the
+> > download infrastructure with another site method that isn't really a
+> > site method.
+>
+> I'm ok with this suggestion.
+>
 
-Thanks a lot!
+I like this too.
 
-Best regards,
+Regards,
 
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Samuel
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20131104/979d44f3/attachment.html>
