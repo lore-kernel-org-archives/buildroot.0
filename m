@@ -1,75 +1,62 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Mon, 4 Nov 2013 22:26:11 +0100
-Subject: [Buildroot] [PATCH] manual: clarify that Config.in comments
- should have correct dependencies
-In-Reply-To: <94085e779250785b8986.1383597255@argentina>
-References: <94085e779250785b8986.1383597255@argentina>
-Message-ID: <CAHXCMM+xVzgujFzU7=3YQpuu=2YvJyWWc0bvy3ncG=aA4-RwqQ@mail.gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon,  4 Nov 2013 18:32:44 -0300
+Subject: [Buildroot] [PATCH 1/2] linux-headers: bump 3. {2, 4, 10,
+	11}.x versions and add 3.12.x
+Message-ID: <1383600765-16907-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/linux-headers/Config.in.host | 14 +++++++++-----
+ 1 file changed, 9 insertions(+), 5 deletions(-)
 
-2013/11/4 Thomas De Schampheleire <patrickdepinguin@gmail.com>
-
-> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
->
-> ---
-> Note: this documentation patch accompanies my earlier patch of today to add
-> missing dependencies on such comments [1]. These two should have been sent
-> as one series, sorry for that.
-> [1] http://patchwork.ozlabs.org/patch/288125/
->
->  docs/manual/adding-packages-directory.txt |  9 +++++++++
->  1 files changed, 9 insertions(+), 0 deletions(-)
->
-> diff --git a/docs/manual/adding-packages-directory.txt
-> b/docs/manual/adding-packages-directory.txt
-> --- a/docs/manual/adding-packages-directory.txt
-> +++ b/docs/manual/adding-packages-directory.txt
-> @@ -171,6 +171,7 @@ C library, C++ support, largefile suppor
->  IPv6 support, wchar support, or dynamic library support. Some packages
->  can only be built on certain target architectures, or if an MMU is
->  available in the processor.
-> +
->  These dependencies have to expressed with the appropriate 'depends on'
->
-s/have to expressed/have to be expressed/
-
- statements in the Config.in file. Additionally, for dependencies on
->  toolchain options, a +comment+ should be displayed when the option is
-> @@ -180,6 +181,14 @@ made visible in a comment: since it is u
->  freely choose another target, it makes little sense to show these
->  dependencies explicitly.
->
-> +The +comment+ should only be visible if the +config+ option itself would
-> +be visible when the toolchain option dependencies are met. This means
-> +that all other dependencies of the package (including dependencies on
-> +target architecture and MMU support) have to be repeated on the
-> ++comment+ definition. To keep it clear, the +depends on+ statement for
-> +these non-toolchain option should be kept separate from the +depends on+
-> +statement for the toolchain options.
-> +
->  The general format of a dependency +comment+ for package foo is:
->  --------------------------
->  foo needs a toolchain w/ featA, featB, featC
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
->
-
-Acked-by: Samuel Martin <s.martin49@gmail.com>
-(with this little fix ;))
-
-
-Regards,
-
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 88aa7e5..2bd8b02 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -5,7 +5,7 @@ comment "Kernel Header Options"
+ 
+ choice
+ 	prompt "Kernel Headers"
+-	default BR2_KERNEL_HEADERS_3_11
++	default BR2_KERNEL_HEADERS_3_12
+ 	help
+ 	  Select the version of kernel header files you wish to use.
+ 	  You must select the correct set of header files to match
+@@ -60,6 +60,9 @@ choice
+ 	config BR2_KERNEL_HEADERS_3_11
+ 		bool "Linux 3.11.x kernel headers"
+ 
++	config BR2_KERNEL_HEADERS_3_12
++		bool "Linux 3.12.x kernel headers"
++
+ 	config BR2_KERNEL_HEADERS_VERSION
+ 		bool "Manually specified Linux version"
+ 
+@@ -78,15 +81,16 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+ 	default "3.0.101"	if BR2_KERNEL_HEADERS_3_0
+ 	default "3.1.10"	if BR2_KERNEL_HEADERS_3_1
+-	default "3.2.51"	if BR2_KERNEL_HEADERS_3_2
++	default "3.2.52"	if BR2_KERNEL_HEADERS_3_2
+ 	default "3.3.8"		if BR2_KERNEL_HEADERS_3_3
+-	default "3.4.67"	if BR2_KERNEL_HEADERS_3_4
++	default "3.4.68"	if BR2_KERNEL_HEADERS_3_4
+ 	default "3.5.7"		if BR2_KERNEL_HEADERS_3_5
+ 	default "3.6.11"	if BR2_KERNEL_HEADERS_3_6
+ 	default "3.7.10"	if BR2_KERNEL_HEADERS_3_7
+ 	default "3.8.13"	if BR2_KERNEL_HEADERS_3_8
+ 	default "3.9.11"	if BR2_KERNEL_HEADERS_3_9
+-	default "3.10.17"	if BR2_KERNEL_HEADERS_3_10
+-	default "3.11.6"	if BR2_KERNEL_HEADERS_3_11
++	default "3.10.18"	if BR2_KERNEL_HEADERS_3_10
++	default "3.11.7"	if BR2_KERNEL_HEADERS_3_11
++	default "3.12"		if BR2_KERNEL_HEADERS_3_12
+ 	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
 -- 
-Samuel
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20131104/caa9d1e2/attachment.html>
+1.8.1.5
