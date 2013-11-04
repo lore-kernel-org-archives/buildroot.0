@@ -1,57 +1,31 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon,  4 Nov 2013 18:14:05 +0000 (UTC)
-Subject: [Buildroot] [Bug 6656] New: Build Qt5 with ccache
-Message-ID: <bug-6656-163@https.bugs.busybox.net/>
+From: Dallas Clement <dallas.a.clement@gmail.com>
+Date: Mon, 4 Nov 2013 13:00:54 -0600
+Subject: [Buildroot] Speeding up builds
+Message-ID: <CAE9DZUT-G8g5cwWamULZ2ppUSOHjNf1O35diTno-uZj1_tCggA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=6656
+Hi All,
 
-           Summary: Build Qt5 with ccache
-           Product: buildroot
-           Version: unspecified
-          Platform: PC
-        OS/Version: Linux
-            Status: NEW
-          Severity: minor
-          Priority: P5
-         Component: Other
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: espenfk at gmail.com
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
+I'm just looking for some tips on how to speed up my build times.  My
+rootfs contains many packages with lots of dependencies.  Even with 8 fast
+Xeon cores, 64GB of RAM, SSDs, and SAS drives, my builds are taking 1 hour
+and 50 minutes.
 
+When I observe CPU utilization with htop, I rarely see more than one CPU
+core getting worked hard.  Occasionally, I will see all 8 cores maxed at
+100%.
 
-Hello.
+make -j 16 seems to make little difference.
 
-I have tried to get Buildroot (latest from git) to build Qt5 with ccache. Some
-of the packages (at least) does it by defining the compiler to be something
-like "$(CCACHE) $(TARGET_CROSS)". I tried to change the
-package/qt/qt5base/qt5base.mk file to change the
-output/build/qt5base-5.1.1/mkspecs/devices/linux-buildroot-g++/qmake.conf file
-in such a way that ccache will work, but it fails.
+What can I do to get all my CPU cores working all the time?
 
-It fails with:
-Running configuration tests...
-Failed to process makespec for platform 'devices/linux-buildroot-g++'
-Project ERROR: CROSS_COMPILE needs to be set via -device-option
-CROSS_COMPILE=<path>
-Could not read qmake configuration file
-/home/espenfk/imx6/buildroot/output/build/qt5base-5.1.1/mkspecs/devices/linux-buildroot-g++/qmake.conf.
-Error processing project file: /dev/null
+Thanks,
 
-I have tried many things from the most obious and easy: patch line 230 in
-package/qt/qt5base/qt5base.mk to:
-$(call QT5BASE_CONFIG_SET,BUILDROOT_CROSS_COMPILE,$(CCACHE) $(TARGET_CROSS))
-
-to use $(notdir $(TARGET_CROSS)) and adding $(dir $(TARGET_CROSS)) to the path
-(also without ccache). But the only thing that seems to work is to have the
-original setup and that does not work with ccache.
-
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Dallas
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20131104/1e04a278/attachment.html>
