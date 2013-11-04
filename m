@@ -1,57 +1,48 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 4 Nov 2013 23:59:17 +0100
-Subject: [Buildroot] [git commit] qt: don't allow building WebKit on some
-	architectures
-Message-ID: <20131104230139.13A7599526@busybox.osuosl.org>
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Tue, 05 Nov 2013 00:05:06 +0100
+Subject: [Buildroot] [PATCH v3 2/2] ngrep: fix static linking issue with
+	libpcre
+In-Reply-To: <87li13q3g9.fsf@dell.be.48ers.dk>
+References: <1383407472-2898-1-git-send-email-romain.naour@openwide.fr>
+ <87li13q3g9.fsf@dell.be.48ers.dk>
+Message-ID: <52782822.90900@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=01f99d284fd51bd149e7a92d0e9e7fc368cd0e99
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Le 04/11/2013 22:09, Peter Korsgaard a ?crit :
+>>>>>> "Romain" == Romain Naour <romain.naour@openwide.fr> writes:
+> 
+>  > Adding -lpcre in LDFLAGS place the library before object files:
+>  > gcc ... -lpcre -L.../sysroot/usr/lib -s -o ngrep ngrep.o -lpcap
+> 
+>  > Makefile.in is patched to use @LIBS@ for adding -lpcre in the right place.
+> 
+>  > Fixes:
+>  > http://autobuild.buildroot.net/results/684/684a3bed28d13ef5e5156257aade3b9aff32f180
+> 
+>  > Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+>  > ---
+>  >  package/ngrep/ngrep-0003-fix-static-link.patch | 22 ++++++++++++++++++++++
+>  >  package/ngrep/ngrep.mk                         |  2 +-
+>  >  2 files changed, 23 insertions(+), 1 deletion(-)
+>  >  create mode 100644 package/ngrep/ngrep-0003-fix-static-link.patch
+> 
+>  > diff --git a/package/ngrep/ngrep-0003-fix-static-link.patch b/package/ngrep/ngrep-0003-fix-static-link.patch
+>  > new file mode 100644
+>  > index 0000000..6d70778
+>  > --- /dev/null
+>  > +++ b/package/ngrep/ngrep-0003-fix-static-link.patch
+>  > @@ -0,0 +1,22 @@
+>  > +fix static link
+>  > +Libraries must be placed before object files.
+> 
+> I guess you mean AFTER.
+> 
 
-WebKit has some architecture specific support, and therefore is not
-necessarily available for all architectures. Make sure the Qt WebKit
-option cannot be selected on those architectures that are not
-supported.
+Yes, copy and past error...
+Thanks
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/qt/Config.in |    9 +++++++++
- 1 files changed, 9 insertions(+), 0 deletions(-)
-
-diff --git a/package/qt/Config.in b/package/qt/Config.in
-index 8801308..ea9e787 100644
---- a/package/qt/Config.in
-+++ b/package/qt/Config.in
-@@ -344,17 +344,26 @@ config BR2_PACKAGE_QT_NETWORK
- 	  Install the Network module.
- 	  if unsure, say y
- 
-+config BR2_PACKAGE_QT_ARCH_SUPPORTS_WEBKIT
-+	bool
-+	# see src/3rdparty/webkit/Source/JavaScriptCore/wtf/Platform.h
-+	default y if BR2_arm || BR2_armeb || BR2_i386 || BR2_mips || \
-+		BR2_mipsel || BR2_powerpc || BR2_sh4 || BR2_sh4eb || \
-+		BR2_sh4a || BR2_sh4aeb || BR2_sparc || BR2_x86_64
-+
- config BR2_PACKAGE_QT_WEBKIT
- 	bool "WebKit Module"
- 	depends on BR2_PACKAGE_QT_SHARED
- 	depends on BR2_PACKAGE_QT_GUI_MODULE
- 	depends on BR2_PACKAGE_QT_NETWORK
-+	depends on BR2_PACKAGE_QT_ARCH_SUPPORTS_WEBKIT
- 	help
- 	  Build the WebKit module.
- 	  If unsure, say n.
- 
- comment "WebKit needs shared library/gui/network support"
- 	depends on !(BR2_PACKAGE_QT_SHARED && BR2_PACKAGE_QT_GUI_MODULE && BR2_PACKAGE_QT_NETWORK)
-+	depends on BR2_PACKAGE_QT_ARCH_SUPPORTS_WEBKIT
- 
- config BR2_PACKAGE_QT_JAVASCRIPTCORE
- 	bool "JavaScriptCore JIT compiler"
+Romain
