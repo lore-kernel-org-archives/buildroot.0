@@ -1,43 +1,73 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 04 Nov 2013 08:03:46 +0100
-Subject: [Buildroot] Patchwork oldest patches cleanup #2 (deadline
-	November 17)
-In-Reply-To: <CAAXf6LV_kM18mt8h5yQScnhOPfJZ2PMNg3tvF=mBLCi8bFem2A@mail.gmail.com>
-References: <CAAXf6LV_kM18mt8h5yQScnhOPfJZ2PMNg3tvF=mBLCi8bFem2A@mail.gmail.com>
-Message-ID: <527746D2.5000802@mind.be>
+Date: Mon, 04 Nov 2013 07:34:20 +0100
+Subject: [Buildroot] [PATCH] libcap-ng: disable_on_avr32
+In-Reply-To: <20131103112739.4f5c6505@skate>
+References: <1383472408-1598-1-git-send-email-spdawson@gmail.com>
+ <20131103112739.4f5c6505@skate>
+Message-ID: <52773FEC.7010503@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 01/11/13 16:09, Thomas De Schampheleire wrote:
-[snip]
-> linux: add default defconfig
-> Arnout Vandecappelle <arnout@mind.be>
-> http://patchwork.ozlabs.org/patch/181185
+On 03/11/13 11:27, Thomas Petazzoni wrote:
+> Simon,
+>
+> On Sun,  3 Nov 2013 09:53:28 +0000, spdawson at gmail.com wrote:
+>> From: Simon Dawson <spdawson@gmail.com>
+>>
+>> Thread-local storage is not available in the avr32 toolchain, so libcap-ng
+>> must be disabled on avr32. Fixed build failures such as the following.
+>>
+>>    http://autobuild.buildroot.net/results/05f/05f73cb74ee7bfb1c337100312726de034366a7d/
+>>
+>> Signed-off-by: Simon Dawson <spdawson@gmail.com>
+>> ---
+>>   package/libcap-ng/Config.in | 1 +
+>>   1 file changed, 1 insertion(+)
+>>
+>> diff --git a/package/libcap-ng/Config.in b/package/libcap-ng/Config.in
+>> index d1663cd..008bf51 100644
+>> --- a/package/libcap-ng/Config.in
+>> +++ b/package/libcap-ng/Config.in
+>> @@ -1,5 +1,6 @@
+>>   config BR2_PACKAGE_LIBCAP_NG
+>>   	bool "libcap-ng"
+>> +	depends on !BR2_avr32 # TLS not available
+>>   	help
+>>   	  The libcap-ng library is intended to make programming with
+>>   	  posix capabilities much easier than the traditional libcap
+>
+> Thanks! I already sent a somewhat similar patch at
+> http://patchwork.ozlabs.org/patch/280889/, but Peter complained that
+> the problem was really related to the absence of TLS support rather
+> than AVR32, and that the TLS support could also be disabled on other
+> architectures using the BR2_GCC_ENABLE_TLS option. However, the problem
+> is that this option only exists for internal toolchains: for external
+> toolchains, we have absolutely no idea whether they have TLS support or
+> not.
+>
+> My own point of view would be to remove the possibility of configuring
+> out TLS support, and simply assume TLS support is always enabled when
+> thread support is available. What do others think about this?
 
-  This one didn't receive positive feedback, so I guess it's rejected. 
-Short recap: it allows you to build the kernel with the architecture's 
-default defconfig, which is typically a bloaty configuration that 
-supports many boards (if an appropriate device tree is present). IIRC the 
-feedback was that this wasn't usually appropriate for buildroot use cases.
+  Fine by me.
 
-
-[snip]
-> [RFC] patches-from-git.sh: new support script
-> Arnout Vandecappelle <arnout@mind.be>
-> http://patchwork.ozlabs.org/patch/182856
-
-  This one can definitely be rejected, since it was RFC and didn't 
-receive comments AFAICR.
-
-  Note: I'd to the rejects myself but as usual I'm reading this without 
-internet access.
+  However, IIRC TLS is only available for NPTL, and this is not available 
+for all architectures. So it is just moving the problem around.
 
   Regards,
   Arnout
 
+>
+> Also, you forgot to propagate the dependency to the 'ofono' package,
+> which selects libcap-ng.
+>
+> Best regards,
+>
+> Thomas
+>
 
 
 -- 
