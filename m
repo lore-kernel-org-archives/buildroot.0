@@ -1,52 +1,49 @@
-From: Matthew Weber <mlweber1@rockwellcollins.com>
-Date: Mon, 4 Nov 2013 08:01:41 -0600
-Subject: [Buildroot] About the "for-peter-2013.11" branch
-In-Reply-To: <20131102165912.2ca8a0d4@skate>
-References: <20131102165912.2ca8a0d4@skate>
-Message-ID: <OFFF48CF4E.F53803E3-ON86257C19.004CCE27-86257C19.004D0F22@rockwellcollins.com>
+From: Ryan Barnett <rjbarnet@rockwellcollins.com>
+Date: Mon, 4 Nov 2013 08:18:54 -0600
+Subject: [Buildroot] [PATCH v2] Makefile: fix out-of-tree builds with
+ multiple targets with 'all'
+In-Reply-To: <1383474181-4372-1-git-send-email-yann.morin.1998@free.fr>
+References: <1383474181-4372-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <OF6D0F4B79.3FF51701-ON86257C19.004D284E-86257C19.004EA170@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-buildroot-bounces at busybox.net wrote on 11/02/2013 10:59:12 AM:
+Yann,
 
-> From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> To: buildroot at uclibc.org <buildroot@uclibc.org>
-> Date: 11/02/2013 10:59 AM
-> Subject: [Buildroot] About the "for-peter-2013.11" branch
-> Sent by: buildroot-bounces at busybox.net
-> 
-> Hello,
-> 
-> As you have noticed, I've accumulated many of the pending patches doing
-> minor improvements or fixes into a branch called "for-peter-2013.11".
-> 
-> Peter is on holidays until Monday, and in his absence, I thought it
-> would be a good idea to gather all those changes to make it easier from
-> him to get all of them when he comes back.
-> 
-> I'm only taking patches that I'm almost 100% sure Peter will accept, so
-> that I can mark the corresponding patches as "Accepted" in Patchwork.
-> 
-> The for-peter-2013.11 branch can be found at:
-> 
->   http://git.free-electrons.com/users/thomas-petazzoni/buildroot/
-> log/?h=for-peter-2013.11
-> 
-> Do not hesitate to let me know if you think other fixes should be
-> integrated on this branch.
-> 
-> At the time of this writing, it contains the following patches:
-> 
-<snip>
+"Yann E. MORIN" <yann.morin.1998@gmail.com> wrote on 11/03/2013 04:23:01 
+AM:
 
-Would you consider the patch to resolve the omniorb autobuilder 
-failure(s)?
-It consists of one change that fixes a patch delete that my previous 
-patch set missed.  http://patchwork.ozlabs.org/patch/285194/
+> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> 
+> For out-of-tree builds, this use-case fails to build:
+>     $ make clean all
+> 
+> This is because 'all' is filtered-out in the Makefile wrapper, since
+> the wrapper itself has a 'all' target.
+> 
+> The 'all' target is just the usual naming for the default target in a
+> Makefile. In fact, the first target is the default one, so we can name
+> it whatever we want.
+> 
+> Rename the Makefile wrapper 'all' target to avoid name-clashing.
 
-Thanks,
-Matthew L Weber / Sr Software Engineer / Platform SW 
-mlweber1 at rockwellcollins.com
+Could you please add a comment about fixing the bug I reported? I'll even 
+make it easy for you with having the comment below so you can copy and 
+paste :)
+
+Fixes bug #6644 
+
+If you add the comment above, I will give you this:
+
+Tested-by: Ryan Barnett <rjbarnet@rockwellcollins.com>
+
+> Reported-by: Ryan Barnett <rjbarnet@rockwellcollins.com>
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Ryan Barnett <rjbarnet@rockwellcollins.com>
+> ---
+> Changes v1->v2:
+>   - fix one missed 'all' occurence
+> 
