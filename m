@@ -1,73 +1,60 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 04 Nov 2013 07:34:20 +0100
-Subject: [Buildroot] [PATCH] libcap-ng: disable_on_avr32
-In-Reply-To: <20131103112739.4f5c6505@skate>
-References: <1383472408-1598-1-git-send-email-spdawson@gmail.com>
- <20131103112739.4f5c6505@skate>
-Message-ID: <52773FEC.7010503@mind.be>
+Date: Mon, 04 Nov 2013 08:10:07 +0100
+Subject: [Buildroot] Github URL used to fetch packages
+In-Reply-To: <CAGduivwP_AykQSnspeAWqSxxNbMRLwRja_h0BDLYRX3scmDCTQ@mail.gmail.com>
+References: <CAGduivwP_AykQSnspeAWqSxxNbMRLwRja_h0BDLYRX3scmDCTQ@mail.gmail.com>
+Message-ID: <5277484F.4070402@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 03/11/13 11:27, Thomas Petazzoni wrote:
-> Simon,
+On 30/10/13 10:53, Maxime Hadjinlian wrote:
+> Hi everyone,
 >
-> On Sun,  3 Nov 2013 09:53:28 +0000, spdawson at gmail.com wrote:
->> From: Simon Dawson <spdawson@gmail.com>
->>
->> Thread-local storage is not available in the avr32 toolchain, so libcap-ng
->> must be disabled on avr32. Fixed build failures such as the following.
->>
->>    http://autobuild.buildroot.net/results/05f/05f73cb74ee7bfb1c337100312726de034366a7d/
->>
->> Signed-off-by: Simon Dawson <spdawson@gmail.com>
->> ---
->>   package/libcap-ng/Config.in | 1 +
->>   1 file changed, 1 insertion(+)
->>
->> diff --git a/package/libcap-ng/Config.in b/package/libcap-ng/Config.in
->> index d1663cd..008bf51 100644
->> --- a/package/libcap-ng/Config.in
->> +++ b/package/libcap-ng/Config.in
->> @@ -1,5 +1,6 @@
->>   config BR2_PACKAGE_LIBCAP_NG
->>   	bool "libcap-ng"
->> +	depends on !BR2_avr32 # TLS not available
->>   	help
->>   	  The libcap-ng library is intended to make programming with
->>   	  posix capabilities much easier than the traditional libcap
+> Buildroot is currently using this method to get packages from Github:
+> http://buildroot.uclibc.org/downloads/manual/manual.html#github-download-url
 >
-> Thanks! I already sent a somewhat similar patch at
-> http://patchwork.ozlabs.org/patch/280889/, but Peter complained that
-> the problem was really related to the absence of TLS support rather
-> than AVR32, and that the TLS support could also be disabled on other
-> architectures using the BR2_GCC_ENABLE_TLS option. However, the problem
-> is that this option only exists for internal toolchains: for external
-> toolchains, we have absolutely no idea whether they have TLS support or
-> not.
+> As you may know, Github released a feature called "Release" which
+> basically, create a tag for you and associate that tag with a zip and
+> a tarball, example:
+> https://github.com/nandra/libiqrf/releases
 >
-> My own point of view would be to remove the possibility of configuring
-> out TLS support, and simply assume TLS support is always enabled when
-> thread support is available. What do others think about this?
+> This doesn't change much with the URL we use to grab the package.
+>
+> Current : http://github.com/<user>/<package>/tarball/$(FOO_VERSION)
+> Release: http://github.com/<user>/<package>/archive/$(FOO_VERSION)
+>
+> With the second one, FOO_VERSION is the tag name (which can be
+> anything, it's a string, that's all the constraints on it).
+>
+> Github supports both way so everything is great, nothing is broken.
+> But if they stop allowing the uses of our current way, we would have
+> to change one bit of the URL for ALL the packages. Which is a pain.
+>
+> Github has already changed the way to fetch package in the past and
+> deprecated the old method, and this might happen over and over.
+>
+> What about a way to standardize the way to grab package from github, like:
+> github://<user>/<package>/$(FOO_VERSION)
+>
+> We could then expand the URL to whatever is the best way of fetching
+> the packages.
+>
+> This would be a good way for Buildroot to prevent breakage would a
+> provider such as Github changes the way to fetch data.
 
-  Fine by me.
+  I like the idea. We would typically do this with some auxiliary 
+variables instead of a new download method, but maybe the download method 
+isn't such a bad idea. It would add even more complexity to the horrible 
+pkg-download.mk, though...
 
-  However, IIRC TLS is only available for NPTL, and this is not available 
-for all architectures. So it is just moving the problem around.
+  Bottom line: the idea is good, but let's see if the implementation can 
+be acceptable.
 
   Regards,
   Arnout
-
->
-> Also, you forgot to propagate the dependency to the 'ofono' package,
-> which selects libcap-ng.
->
-> Best regards,
->
-> Thomas
->
 
 
 -- 
