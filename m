@@ -1,36 +1,54 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Tue, 05 Nov 2013 18:48:10 +0100
-Subject: [Buildroot] Speeding up builds
-In-Reply-To: <CAE9DZUT64x1L4jSzmD84GDwRxftajOSrjLS+O0v-u25w8EkyHw@mail.gmail.com>
-References: <CAE9DZUT-G8g5cwWamULZ2ppUSOHjNf1O35diTno-uZj1_tCggA@mail.gmail.com>
- <20131105002042.704dabfe@skate> <87mwljohj5.fsf@dell.be.48ers.dk>
- <CAE9DZUT64x1L4jSzmD84GDwRxftajOSrjLS+O0v-u25w8EkyHw@mail.gmail.com>
-Message-ID: <154ec9a4-5a4b-42c6-8f73-9bcf40236cc0@email.android.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue,  5 Nov 2013 19:28:03 +0100
+Subject: [Buildroot] [pull request] Pull request for branch yem/bumps
+Message-ID: <cover.1383675996.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Dallas,
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Please don't top-post...
+Hello All!
 
-Dallas Clement <dallas.a.clement@gmail.com> wrote:
->Apart from makefile -j during C file compilation, it seems that building is
->very serialized.  A lot of time is spent in ./configure script execution,
->and quite a bit in installation of files.  All of this appears to be very
->serial in nature.  I realize there is not much that can be done about
->autoconf / automake to avoid this serialization.
->
->It would be great if buildroot could build multiple packages in parallel.
->That way, multiple cores could at least be performing activities like
->./configure which tend to be serial.   Has there ever been any discussion
->about this?
+Here are a few bumps:
+  - rpi: bump firmware and userland for misc fixes
+  - tzdata: bump for new TZ definitions and new TZ compiler
 
-Yes, definitely. There is at least one unsolved problem though. Some packages have optional dependencies: if the dependency is present when the package is built, it is used, otherwise it isn't (but compilation happily proceeds). This means that the package order is relevant in this case, and the end result will differ if the order is swapped due to parallel building. Expressing all these potential dependencies is unrealistic.
+Regards,
+Yann E. MORIN.
 
-Have a look in the recent buildroot mailing list archives for the patches from Fabio Porcedda and the discussion around it. He has been working on this topic.
 
-Best regards,
-Thomas
+The following changes since commit da1ca5c0a24e12bff1157fbd9275b5150f2ab620:
+
+  dropwatch: fix avr32 build failure (2013-11-05 14:25:51 +0100)
+
+are available in the git repository at:
+
+  git://gitorious.org/buildroot/buildroot.git yem/bumps
+
+for you to fetch changes up to 8be57551e01d1a692be7ef343b3a0939645c6f17:
+
+  package/zic: bump (2013-11-05 19:25:15 +0100)
+
+----------------------------------------------------------------
+Yann E. MORIN (4):
+      package/rpi-firmware: bump
+      package/rpi-userland: bump
+      package/tzdata: bump
+      package/zic: bump
+
+ package/rpi-firmware/rpi-firmware.mk | 2 +-
+ package/rpi-userland/rpi-userland.mk | 2 +-
+ package/tzdata/tzdata.mk             | 2 +-
+ package/zic/zic.mk                   | 2 +-
+ 4 files changed, 4 insertions(+), 4 deletions(-)
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
