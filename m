@@ -1,76 +1,49 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Tue, 05 Nov 2013 19:39:54 +0100
-Subject: [Buildroot] [PATCH] Makefile: fix out-of-tree builds with
-	multiple	targets with 'all'
-In-Reply-To: <1383676405-25536-1-git-send-email-yann.morin.1998@free.fr>
-References: <1383676405-25536-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <b1481f89-f6b5-4d9e-bdc4-ae572b3c48ff@email.android.com>
+From: Chris Zankel <chris@zankel.net>
+Date: Tue, 05 Nov 2013 10:36:48 -0800
+Subject: [Buildroot] Architecture build statistics
+In-Reply-To: <20131029211622.62459eef@skate>
+References: <20131029204108.5d707d09@skate> <52701682.2040208@zankel.net>
+ <20131029211622.62459eef@skate>
+Message-ID: <52793AC0.4090306@zankel.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
->From: "Yann E. MORIN" <yann.morin.1998@free.fr>
->
->For out-of-tree builds, this use-case fails to build:
->    $ make clean all
->
->This is because 'all' is filtered-out in the Makefile wrapper, since
->the wrapper itself has a 'all' target.
->
->The 'all' target is just the usual naming for the default target in a
->Makefile. In fact, the first target is the default one, so we can name
->it whatever we want.
->
->Rename the Makefile wrapper 'all' target to avoid name-clashing.
->
->Fixes #6644.
->
->Reported-by: Ryan Barnett <rjbarnet@rockwellcollins.com>
->Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
->Cc: Ryan Barnett <rjbarnet@rockwellcollins.com>
->Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
->Tested-by: Ryan Barnett <rjbarnet@rockwellcollins.com>
->---
->Changes v2->v3:
->  - add bug reference  (Ryan)
->
->Changes v1->v2
->  - fix one missed 'all' occurence
->
->---
-> support/scripts/mkmakefile | 8 ++++----
-> 1 file changed, 4 insertions(+), 4 deletions(-)
->
->diff --git a/support/scripts/mkmakefile b/support/scripts/mkmakefile
->index cef2ec7..27b1507 100755
->--- a/support/scripts/mkmakefile
->+++ b/support/scripts/mkmakefile
->@@ -32,16 +32,16 @@ MAKEFLAGS += --no-print-directory
-> 
-> .PHONY: all \$(MAKECMDGOALS)
-> 
->-all	:= \$(filter-out all Makefile,\$(MAKECMDGOALS))
->+all	:= \$(filter-out Makefile,\$(MAKECMDGOALS))
-> 
->-all:
->+_all:
-> 	\$(MAKE) \$(MAKEARGS) \$(all)
-> 
-> Makefile:;
-> 
->-\$(all): all
->+\$(all): _all
-> 	@:
-> 
->-%/: all
->+%/: _all
-> 	@:
-> EOF
+Hi Thomas,
 
-Just curious: if you now type 'make all', which of the above rules gets executed? Can you explain what is going on here?
+Just a quick update on binutils. There seems to be an issue with uClibc 
+(_obstack_* symbols are not exported). I also tried a similar build for 
+ARM with the same result (same error). Do you have any test builds using 
+a uClibc snapshot for other architectures that pass binutils?
+
+There was a discussion about it on the uClibc mailing list a while ago.
 
 Thanks,
-Thomas
+-Chris
+
+
+
+On 10/29/13, 1:16 PM, Thomas Petazzoni wrote:
+
+> For the record, the 10 packages causing the highest number of problems
+> since July, 1st 2013, are:
+>
+> +-------------------+-----+
+> | reason            | cnt |
+> +-------------------+-----+
+> | binutils-2.21.1   |  96 |
+> | m4-1.4.16         |  37 |
+> | binutils-2.22     |  30 |
+> | libnspr-4.9.6     |  21 |
+> | m4-1.4.17         |  17 |
+> | cdrkit-1.1.11     |  14 |
+> | ffmpeg-0.8.12     |   8 |
+> | iozone-3_414      |   8 |
+> | gstreamer-0.10.36 |   6 |
+> | libpfm4-4.3.0     |   6 |
+> +-------------------+-----+
+>
+> Looks like fixing binutils is a good thing to do in the very near
+> future. Can you send a patch for that?
