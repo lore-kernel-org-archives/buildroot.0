@@ -1,30 +1,66 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 05 Nov 2013 00:48:14 +0100
-Subject: [Buildroot] Speeding up builds
-In-Reply-To: <20131105002042.704dabfe@skate> (Thomas Petazzoni's message of
- "Tue, 5 Nov 2013 00:20:42 +0100")
-References: <CAE9DZUT-G8g5cwWamULZ2ppUSOHjNf1O35diTno-uZj1_tCggA@mail.gmail.com>
- <20131105002042.704dabfe@skate>
-Message-ID: <87mwljohj5.fsf@dell.be.48ers.dk>
+From: Spenser Gilliland <spenser@gillilanding.com>
+Date: Mon, 4 Nov 2013 20:48:47 -0600
+Subject: [Buildroot] [PATCH 2/5] gcc: add microblaze internal toolchain
+In-Reply-To: <20131101192410.6a7875a3@skate>
+References: <1381502000-1995-1-git-send-email-spenser@gillilanding.com>
+ <1381502000-1995-3-git-send-email-spenser@gillilanding.com>
+ <20131013124010.58b2977f@skate>
+ <CAEBucnAb7nqvgqTMv9s0HJYSL5R_GRBS+Gz2HHDo31G7fsvPAg@mail.gmail.com>
+ <20131101192410.6a7875a3@skate>
+Message-ID: <CAEBucnDUOOkqgY0n3whZBRb+wqNabm-BvU_L3FUaxiAZ-LmadA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+Thomas,
 
- > Dear Dallas Clement,
- > On Mon, 4 Nov 2013 13:00:54 -0600, Dallas Clement wrote:
+Haven't had a chance to work on this yet but should have time this week.
 
- >> I'm just looking for some tips on how to speed up my build times.  My
- >> rootfs contains many packages with lots of dependencies.  Even with 8
- >> fast Xeon cores, 64GB of RAM, SSDs, and SAS drives, my builds are
- >> taking 1 hour and 50 minutes.
+Spenser
+On Nov 1, 2013 11:24 AM, "Thomas Petazzoni" <
+thomas.petazzoni@free-electrons.com> wrote:
 
-~2h sounds quite long indeed. I don't use as many packages as you, but a
-fairly big config (123 packages, including Qt and Gstreamer1) takes <
-20mins on a pretty normal quad haswell (E3-1240) / 32G RAM / SSDs.
-
--- 
-Bye, Peter Korsgaard
+> Dear Spenser Gilliland,
+>
+> On Mon, 14 Oct 2013 17:55:17 -0500, Spenser Gilliland wrote:
+>
+> > > On Fri, 11 Oct 2013 09:33:17 -0500, Spenser Gilliland wrote:
+> > >
+> > > > @@ -102,6 +108,7 @@ config BR2_GCC_VERSION
+> > > >       default "4.7.3"     if BR2_GCC_VERSION_4_7_X
+> > > >       default "4.8.1"     if BR2_GCC_VERSION_4_8_X
+> > > >       default "4.8-arc"   if BR2_GCC_VERSION_4_8_ARC
+> > > > +     default "4.9-microblaze" if BR2_GCC_VERSION_4_9_MICROBLAZE
+> > > >       default $BR2_GCC_SNAP_DATE if BR2_GCC_VERSION_SNAP
+> > >
+> > > I'm getting a build failure while testing this patch set:
+> > >
+> > > >>> host-gcc-final 4.9-microblaze Patching package/gcc//gcc-final
+> > > support/scripts/apply-patches.sh
+> > /home/test/outputs/microblaze-glibc/build/host-gcc-final-4.9-microblaze
+> > package/gcc/4.9-microblaze \*.patch
+> > > Aborting.  'package/gcc/4.9-microblaze' is not a directory.
+> > >
+> > > I believe we should have a few patches, at least the ones that are also
+> > > in package/gcc/4.8-arc.
+> > >
+> > > Is this something you are willing to fix, or should I take your patches
+> > > and fix those problems?
+> >
+> > Yes, I'll take a look at it tomorrow.
+>
+> Any news?
+>
+> Thanks,
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20131104/9cdb87c8/attachment.html>
