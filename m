@@ -1,64 +1,37 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 5 Nov 2013 08:57:52 +0100
-Subject: [Buildroot] [git commit] linux-headers: bump 3. {2, 4, 10,
-	11}.x versions and add 3.12.x
-Message-ID: <20131105132710.D388C9B36C@busybox.osuosl.org>
+From: Andi Shyti <andi@etezian.org>
+Date: Tue,  5 Nov 2013 15:06:27 +0100
+Subject: [Buildroot] [PATCH] perf: libelf is required to compile perf
+Message-ID: <1383660387-31193-1-git-send-email-andi@etezian.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a3c27d24ac2dfd5f0e21e751b358456964cdef49
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Point this out in the related Config.in in the perf directory.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Mute the following error by selecting BR2_PACKAGE_LIBELF:
+
+The perf tool in your kernel cannot be built without libelf.
+Either upgrade your kernel to >= 3.7, or enable the elfutils package.
+make: *** [/home/andi/repo/buildroot-snowball/output/build/perf-stable-linux-ux500-3.4/.stamp_built] Error 1
+
+Signed-off-by: Andi Shyti <andi@etezian.org>
 ---
- package/linux-headers/Config.in.host |   14 +++++++++-----
- 1 files changed, 9 insertions(+), 5 deletions(-)
+ package/perf/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 88aa7e5..2bd8b02 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -5,7 +5,7 @@ comment "Kernel Header Options"
- 
- choice
- 	prompt "Kernel Headers"
--	default BR2_KERNEL_HEADERS_3_11
-+	default BR2_KERNEL_HEADERS_3_12
+diff --git a/package/perf/Config.in b/package/perf/Config.in
+index 88dce93..4b651b3 100644
+--- a/package/perf/Config.in
++++ b/package/perf/Config.in
+@@ -2,6 +2,7 @@ config BR2_PACKAGE_PERF
+ 	bool "perf"
+ 	depends on BR2_LINUX_KERNEL
+ 	depends on BR2_LARGEFILE
++	depends on BR2_PACKAGE_LIBELF
  	help
- 	  Select the version of kernel header files you wish to use.
- 	  You must select the correct set of header files to match
-@@ -60,6 +60,9 @@ choice
- 	config BR2_KERNEL_HEADERS_3_11
- 		bool "Linux 3.11.x kernel headers"
- 
-+	config BR2_KERNEL_HEADERS_3_12
-+		bool "Linux 3.12.x kernel headers"
-+
- 	config BR2_KERNEL_HEADERS_VERSION
- 		bool "Manually specified Linux version"
- 
-@@ -78,15 +81,16 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	string
- 	default "3.0.101"	if BR2_KERNEL_HEADERS_3_0
- 	default "3.1.10"	if BR2_KERNEL_HEADERS_3_1
--	default "3.2.51"	if BR2_KERNEL_HEADERS_3_2
-+	default "3.2.52"	if BR2_KERNEL_HEADERS_3_2
- 	default "3.3.8"		if BR2_KERNEL_HEADERS_3_3
--	default "3.4.67"	if BR2_KERNEL_HEADERS_3_4
-+	default "3.4.68"	if BR2_KERNEL_HEADERS_3_4
- 	default "3.5.7"		if BR2_KERNEL_HEADERS_3_5
- 	default "3.6.11"	if BR2_KERNEL_HEADERS_3_6
- 	default "3.7.10"	if BR2_KERNEL_HEADERS_3_7
- 	default "3.8.13"	if BR2_KERNEL_HEADERS_3_8
- 	default "3.9.11"	if BR2_KERNEL_HEADERS_3_9
--	default "3.10.17"	if BR2_KERNEL_HEADERS_3_10
--	default "3.11.6"	if BR2_KERNEL_HEADERS_3_11
-+	default "3.10.18"	if BR2_KERNEL_HEADERS_3_10
-+	default "3.11.7"	if BR2_KERNEL_HEADERS_3_11
-+	default "3.12"		if BR2_KERNEL_HEADERS_3_12
- 	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+ 	  perf (sometimes "Perf Events" or perf tools, originally
+ 	  "Performance Counters for Linux") - is a performance
+-- 
+1.8.4.2
