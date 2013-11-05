@@ -1,7 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 Date: Tue,  5 Nov 2013 19:28:03 +0100
-Subject: [Buildroot] [pull request] Pull request for branch yem/bumps
-Message-ID: <cover.1383675996.git.yann.morin.1998@free.fr>
+Subject: [Buildroot] [PATCH 1/4] package/rpi-firmware: bump
+In-Reply-To: <cover.1383675996.git.yann.morin.1998@free.fr>
+References: <cover.1383675996.git.yann.morin.1998@free.fr>
+Message-ID: <adecc0f0703ed14aa2fe65c3d2c37a15dbaeccce.1383675996.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,45 +12,25 @@ To: buildroot@busybox.net
 
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Hello All!
+Further fixes for de-interlacing.
 
-Here are a few bumps:
-  - rpi: bump firmware and userland for misc fixes
-  - tzdata: bump for new TZ definitions and new TZ compiler
-
-Regards,
-Yann E. MORIN.
-
-
-The following changes since commit da1ca5c0a24e12bff1157fbd9275b5150f2ab620:
-
-  dropwatch: fix avr32 build failure (2013-11-05 14:25:51 +0100)
-
-are available in the git repository at:
-
-  git://gitorious.org/buildroot/buildroot.git yem/bumps
-
-for you to fetch changes up to 8be57551e01d1a692be7ef343b3a0939645c6f17:
-
-  package/zic: bump (2013-11-05 19:25:15 +0100)
-
-----------------------------------------------------------------
-Yann E. MORIN (4):
-      package/rpi-firmware: bump
-      package/rpi-userland: bump
-      package/tzdata: bump
-      package/zic: bump
-
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+---
  package/rpi-firmware/rpi-firmware.mk | 2 +-
- package/rpi-userland/rpi-userland.mk | 2 +-
- package/tzdata/tzdata.mk             | 2 +-
- package/zic/zic.mk                   | 2 +-
- 4 files changed, 4 insertions(+), 4 deletions(-)
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
+diff --git a/package/rpi-firmware/rpi-firmware.mk b/package/rpi-firmware/rpi-firmware.mk
+index a7574f2..e6763af 100644
+--- a/package/rpi-firmware/rpi-firmware.mk
++++ b/package/rpi-firmware/rpi-firmware.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-RPI_FIRMWARE_VERSION = 58036da500d936a98156d703fa220dc7db175762
++RPI_FIRMWARE_VERSION = 5343d029a5f2f09bd9801914eac0d4bf95cadc1f
+ RPI_FIRMWARE_SITE = http://github.com/raspberrypi/firmware/tarball/$(RPI_FIRMWARE_VERSION)
+ RPI_FIRMWARE_LICENSE = BSD-3c
+ RPI_FIRMWARE_LICENSE_FILES = boot/LICENCE.broadcom
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.8.1.2
