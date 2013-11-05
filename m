@@ -1,51 +1,64 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 5 Nov 2013 14:25:51 +0100
-Subject: [Buildroot] [git commit] dropwatch: fix avr32 build failure
-Message-ID: <20131105132710.F1327994C7@busybox.osuosl.org>
+Date: Tue, 5 Nov 2013 08:57:52 +0100
+Subject: [Buildroot] [git commit] linux-headers: bump 3. {2, 4, 10,
+	11}.x versions and add 3.12.x
+Message-ID: <20131105132710.D388C9B36C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=da1ca5c0a24e12bff1157fbd9275b5150f2ab620
+commit: http://git.buildroot.net/buildroot/commit/?id=a3c27d24ac2dfd5f0e21e751b358456964cdef49
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On avr32, dropwatch needs libiberty to avoid build failures such as
-
-  http://autobuild.buildroot.net/results/cd5/cd5e22fb5c9b0fc5d396bc85a5e253a1a65054da/
-
-Also test built on ARM.
-
-[Peter: pass TARGET_LDFLAGS as well, append -lintl in gettext case]
-Signed-off-by: Simon Dawson <spdawson@gmail.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/dropwatch/dropwatch.mk |    9 +++++++--
- 1 files changed, 7 insertions(+), 2 deletions(-)
+ package/linux-headers/Config.in.host |   14 +++++++++-----
+ 1 files changed, 9 insertions(+), 5 deletions(-)
 
-diff --git a/package/dropwatch/dropwatch.mk b/package/dropwatch/dropwatch.mk
-index 5d65d86..6bbcb23 100644
---- a/package/dropwatch/dropwatch.mk
-+++ b/package/dropwatch/dropwatch.mk
-@@ -13,13 +13,18 @@ DROPWATCH_LICENSE_FILES = COPYING
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 88aa7e5..2bd8b02 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -5,7 +5,7 @@ comment "Kernel Header Options"
  
- # libbfd may be linked to libintl
- # Ugly... but LDFLAGS are hardcoded anyway
-+#
-+# Also: always need to add -liberty to hardcoded LDFLAGS for avr32
-+DROPWATCH_LDFLAGS = \
-+	$(TARGET_LDFLAGS) -lbfd -liberty -lreadline -lnl-3 -lnl-genl-3
+ choice
+ 	prompt "Kernel Headers"
+-	default BR2_KERNEL_HEADERS_3_11
++	default BR2_KERNEL_HEADERS_3_12
+ 	help
+ 	  Select the version of kernel header files you wish to use.
+ 	  You must select the correct set of header files to match
+@@ -60,6 +60,9 @@ choice
+ 	config BR2_KERNEL_HEADERS_3_11
+ 		bool "Linux 3.11.x kernel headers"
+ 
++	config BR2_KERNEL_HEADERS_3_12
++		bool "Linux 3.12.x kernel headers"
 +
- ifeq ($(BR2_NEEDS_GETTEXT_IF_LOCALE),y)
--DROPWATCH_LDFLAGS = LDFLAGS="-lintl -lbfd -lreadline -lnl-3 -lnl-genl-3"
-+DROPWATCH_LDFLAGS += -lintl
- endif
+ 	config BR2_KERNEL_HEADERS_VERSION
+ 		bool "Manually specified Linux version"
  
- define DROPWATCH_BUILD_CMDS
- 	$(TARGET_CONFIGURE_OPTS) $(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
--		$(DROPWATCH_LDFLAGS) build
-+		LDFLAGS="$(DROPWATCH_LDFLAGS)" build
- endef
- 
- define DROPWATCH_CLEAN_CMDS
+@@ -78,15 +81,16 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+ 	default "3.0.101"	if BR2_KERNEL_HEADERS_3_0
+ 	default "3.1.10"	if BR2_KERNEL_HEADERS_3_1
+-	default "3.2.51"	if BR2_KERNEL_HEADERS_3_2
++	default "3.2.52"	if BR2_KERNEL_HEADERS_3_2
+ 	default "3.3.8"		if BR2_KERNEL_HEADERS_3_3
+-	default "3.4.67"	if BR2_KERNEL_HEADERS_3_4
++	default "3.4.68"	if BR2_KERNEL_HEADERS_3_4
+ 	default "3.5.7"		if BR2_KERNEL_HEADERS_3_5
+ 	default "3.6.11"	if BR2_KERNEL_HEADERS_3_6
+ 	default "3.7.10"	if BR2_KERNEL_HEADERS_3_7
+ 	default "3.8.13"	if BR2_KERNEL_HEADERS_3_8
+ 	default "3.9.11"	if BR2_KERNEL_HEADERS_3_9
+-	default "3.10.17"	if BR2_KERNEL_HEADERS_3_10
+-	default "3.11.6"	if BR2_KERNEL_HEADERS_3_11
++	default "3.10.18"	if BR2_KERNEL_HEADERS_3_10
++	default "3.11.7"	if BR2_KERNEL_HEADERS_3_11
++	default "3.12"		if BR2_KERNEL_HEADERS_3_12
+ 	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
