@@ -1,95 +1,60 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 5 Nov 2013 19:48:38 +0100
-Subject: [Buildroot] [PATCH] Makefile: fix out-of-tree builds with
- multiple	targets with 'all'
-In-Reply-To: <b1481f89-f6b5-4d9e-bdc4-ae572b3c48ff@email.android.com>
-References: <1383676405-25536-1-git-send-email-yann.morin.1998@free.fr>
- <b1481f89-f6b5-4d9e-bdc4-ae572b3c48ff@email.android.com>
-Message-ID: <20131105184837.GA3337@free.fr>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 05 Nov 2013 19:51:38 +0100
+Subject: [Buildroot] [PATCH] scripts: apply-patches: don't stop if no
+ patch is found for a package
+In-Reply-To: <1383656430-29160-1-git-send-email-andi@etezian.org>
+References: <1383656430-29160-1-git-send-email-andi@etezian.org>
+Message-ID: <52793E3A.5060802@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas DS, All,
+On 05/11/13 14:00, Andi Shyti wrote:
+> If no patch is available for a specific package it doesn't mean
+> that is necessarily an error, perhaps there is no need to apply
+> any patches. Therefore, don't stop the build by returning '1',
+> but go ahead.
 
-On 2013-11-05 19:39 +0100, Thomas De Schampheleire spake thusly:
-> "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
-> >From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> >
-> >For out-of-tree builds, this use-case fails to build:
-> >    $ make clean all
-> >
-> >This is because 'all' is filtered-out in the Makefile wrapper, since
-> >the wrapper itself has a 'all' target.
-> >
-> >The 'all' target is just the usual naming for the default target in a
-> >Makefile. In fact, the first target is the default one, so we can name
-> >it whatever we want.
-> >
-> >Rename the Makefile wrapper 'all' target to avoid name-clashing.
+  This is in fact intentional, because it indicates that there is 
+something wrong with the configuration. When you specify in your 
+configuration that some specific patch directory should be used, but that 
+directory doesn't exist, then it probably means you made a mistake in 
+your configuration.
 
+  Can you give an example of a specific situation where you had a problem 
+with this check?
 
-[moved the question here, it's easier to answer below]
-> Just curious: if you now type 'make all', which of the above rules 
-> gets executed? Can you explain what is going on here?
+  Regards,
+  Arnout
 
-Please, follow the numbers, below:
+>
+> Signed-off-by: Andi Shyti <andi@etezian.org>
+> ---
+>   support/scripts/apply-patches.sh | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/support/scripts/apply-patches.sh b/support/scripts/apply-patches.sh
+> index ff72b45..aabab4f 100755
+> --- a/support/scripts/apply-patches.sh
+> +++ b/support/scripts/apply-patches.sh
+> @@ -43,7 +43,7 @@ if [ ! -d "${builddir}" ] ; then
+>   fi
+>   if [ ! -d "${patchdir}" ] ; then
+>       echo "Aborting.  '${patchdir}' is not a directory."
+> -    exit 1
+> +    exit
+>   fi
+>
+>   # Remove any rejects present BEFORE patching - Because if there are
+>
 
-> >diff --git a/support/scripts/mkmakefile b/support/scripts/mkmakefile
-> >index cef2ec7..27b1507 100755
-> >--- a/support/scripts/mkmakefile
-> >+++ b/support/scripts/mkmakefile
-> >@@ -32,16 +32,16 @@ MAKEFLAGS += --no-print-directory
-> > 
-> > .PHONY: all \$(MAKECMDGOALS)
-> > 
-> >-all	:= \$(filter-out all Makefile,\$(MAKECMDGOALS))
-> >+all	:= \$(filter-out Makefile,\$(MAKECMDGOALS))
-
-(1)
-With 'make all', the variable $(MAKECMDGOALS) is the string "all"
-(without the quotes). So the variable $(all) is assigned the string
-"all" (still without quotes).
-
-> > 
-> >-all:
-> >+_all:
-> > 	\$(MAKE) \$(MAKEARGS) \$(all)
-
-(3)
-And finally here, the rulle is:
-    make -C /path/to/buildroot O=$(pwd) all
-         `----------------------------' `-'
-                $(MAKEARGS)             $(all)
-
-> > 
-> > Makefile:;
-> > 
-
-> >-\$(all): all
-> >+\$(all): _all
-
-(2)
-And here the variable $(all) ix expanded, and as it depends on _all, the
-rulle _all above is executed
-
-> > 	@:
-> > 
-> >-%/: all
-> >+%/: _all
-> > 	@:
-> > EOF
-> 
-
-Regards,
-Yann E. MORIN.
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
