@@ -1,41 +1,36 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue,  5 Nov 2013 16:32:08 +0000 (UTC)
-Subject: [Buildroot] [Bug 6668] New: iptables limit module alignment problem
-	on mips64
-Message-ID: <bug-6668-163@https.bugs.busybox.net/>
+From: Andi Shyti <andi@etezian.org>
+Date: Tue, 5 Nov 2013 18:10:03 +0100
+Subject: [Buildroot] [PATCH] perf: libelf is required to compile perf
+In-Reply-To: <CAAXf6LVJ7r6mK40v=az-h5p8g8ykwaOsC0RXCZSY6wT9Dh9gmw@mail.gmail.com>
+References: <1383660387-31193-1-git-send-email-andi@etezian.org>
+ <CAAXf6LVJ7r6mK40v=az-h5p8g8ykwaOsC0RXCZSY6wT9Dh9gmw@mail.gmail.com>
+Message-ID: <20131105171003.GA17791@jack.whiskey>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=6668
+Hi Thomas,
 
-           Summary: iptables limit module alignment problem on mips64
-           Product: buildroot
-           Version: unspecified
-          Platform: Other
-        OS/Version: Linux
-            Status: NEW
-          Severity: critical
-          Priority: P5
-         Component: Other
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: cassiano at idbinfo.com.br
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
+> > Point this out in the related Config.in in the perf directory.
+> >
+> > Mute the following error by selecting BR2_PACKAGE_LIBELF:
+> >
+> > The perf tool in your kernel cannot be built without libelf.
+> > Either upgrade your kernel to >= 3.7, or enable the elfutils package.
+> > make: *** [/home/andi/repo/buildroot-snowball/output/build/perf-stable-linux-ux500-3.4/.stamp_built] Error 1
+> 
+> This doesn't look right. As the error indicates, if your kernel is
+> recent enough you don't need libelf.
 
+I was compiling for snowball which has an old Kernel as default,
+that's why I got the error.
 
-iptables limit module causes an alignment error on a 64-bit kernel and 32-bit
-userland. After inserting a rule containing limit, any other operation results
-in the following message on kernel dmesg:
+> Have you tried enabling libelf manually?
 
-x_tables: ip_tables: limit.0 match: invalid size 40 (kernel) != (user) 48
+By enabling it manually it works. If the patch doesn't look
+right, feel free to ignore it.
 
-looking at the limit code, its the only one module that uses CONFIG_COMPAT for
-legacy code.
-
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Thanks,
+Andi
