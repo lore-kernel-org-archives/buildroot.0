@@ -1,9 +1,8 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue,  5 Nov 2013 19:28:06 +0100
-Subject: [Buildroot] [PATCH 4/4] package/zic: bump
-In-Reply-To: <cover.1383675996.git.yann.morin.1998@free.fr>
-References: <cover.1383675996.git.yann.morin.1998@free.fr>
-Message-ID: <8be57551e01d1a692be7ef343b3a0939645c6f17.1383675996.git.yann.morin.1998@free.fr>
+Date: Tue,  5 Nov 2013 19:33:25 +0100
+Subject: [Buildroot] [PATCH] Makefile: fix out-of-tree builds with multiple
+	targets with 'all'
+Message-ID: <1383676405-25536-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,25 +11,60 @@ To: buildroot@busybox.net
 
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-This bump to allign with the tzdata bump in previous commit.
+For out-of-tree builds, this use-case fails to build:
+    $ make clean all
 
+This is because 'all' is filtered-out in the Makefile wrapper, since
+the wrapper itself has a 'all' target.
+
+The 'all' target is just the usual naming for the default target in a
+Makefile. In fact, the first target is the default one, so we can name
+it whatever we want.
+
+Rename the Makefile wrapper 'all' target to avoid name-clashing.
+
+Fixes #6644.
+
+Reported-by: Ryan Barnett <rjbarnet@rockwellcollins.com>
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Ryan Barnett <rjbarnet@rockwellcollins.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Tested-by: Ryan Barnett <rjbarnet@rockwellcollins.com>
 ---
- package/zic/zic.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Changes v2->v3:
+  - add bug reference  (Ryan)
 
-diff --git a/package/zic/zic.mk b/package/zic/zic.mk
-index 3d56df1..780643b 100644
---- a/package/zic/zic.mk
-+++ b/package/zic/zic.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+Changes v1->v2
+  - fix one missed 'all' occurence
+
+---
+ support/scripts/mkmakefile | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/support/scripts/mkmakefile b/support/scripts/mkmakefile
+index cef2ec7..27b1507 100755
+--- a/support/scripts/mkmakefile
++++ b/support/scripts/mkmakefile
+@@ -32,16 +32,16 @@ MAKEFLAGS += --no-print-directory
  
--ZIC_VERSION = 2013c
-+ZIC_VERSION = 2013h
- ZIC_SOURCE = tzcode$(ZIC_VERSION).tar.gz
- ZIC_SITE = ftp://ftp.iana.org/tz/releases
- ZIC_LICENSE = Public domain
+ .PHONY: all \$(MAKECMDGOALS)
+ 
+-all	:= \$(filter-out all Makefile,\$(MAKECMDGOALS))
++all	:= \$(filter-out Makefile,\$(MAKECMDGOALS))
+ 
+-all:
++_all:
+ 	\$(MAKE) \$(MAKEARGS) \$(all)
+ 
+ Makefile:;
+ 
+-\$(all): all
++\$(all): _all
+ 	@:
+ 
+-%/: all
++%/: _all
+ 	@:
+ EOF
 -- 
 1.8.1.2
