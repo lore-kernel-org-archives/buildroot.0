@@ -1,42 +1,62 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Tue, 5 Nov 2013 09:06:07 +0100
-Subject: [Buildroot] Patchwork oldest patches cleanup #2 (deadline
- November 17)
-In-Reply-To: <20131105000728.49c0d1a6@skate>
-References: <CAAXf6LV_kM18mt8h5yQScnhOPfJZ2PMNg3tvF=mBLCi8bFem2A@mail.gmail.com>
- <527746D2.5000802@mind.be>
- <CAAXf6LXQ_1pYTCyr2nLwDa1J7kJUsSZCcbs03gr3OFaDPmX6gw@mail.gmail.com>
- <5278143A.5070505@mind.be> <20131105000728.49c0d1a6@skate>
-Message-ID: <CAAXf6LUtr-XUkxGYP4jZZG3DfychiXYFOwSudgtQeYw_8uzu_w@mail.gmail.com>
+Date: Tue, 5 Nov 2013 09:11:24 +0100
+Subject: [Buildroot] github tarball urls: http vs https
+In-Reply-To: <52781189.1030401@mind.be>
+References: <CAAXf6LUToDknEUmXgK-z2LkXG6oxZ9-0WwNfq6Ub_w7Lq_TjHQ@mail.gmail.com>
+ <52753AB6.20904@trzebnica.net>
+ <CAAXf6LUsvpTG1-tNk5aWgR5qNgBYFu0h6a50VkrZ3r4YVviCxQ@mail.gmail.com>
+ <527742F3.6070405@mind.be>
+ <CAAXf6LVNCTivN=SwA7YzCzrN7QPxBsDXVG3kvLecmnswmSzqNw@mail.gmail.com>
+ <52781189.1030401@mind.be>
+Message-ID: <CAAXf6LVidCiakHjVzAY-sjLHCTfwLrGgP5JcbMKPWWChxQ5X0g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Nov 5, 2013 at 12:07 AM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Dear Arnout Vandecappelle,
->
-> On Mon, 04 Nov 2013 22:40:10 +0100, Arnout Vandecappelle wrote:
->
->>   I completely agree, that was the reason that I created the patch in
->> the first place.
+Hi Arnout, all,
+
+On Mon, Nov 4, 2013 at 10:28 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
+> On 04/11/13 09:33, Thomas De Schampheleire wrote:
 >>
->>   Unfortunately, the x86_defconfig is _huge_. And as mentioned by
->> ThomasP, the other architecture's defconfigs aren't worth much. So I
->> don't think this patch is really valuable after all.
+
+>>>   IIRC, at some point there was a problem that a download site used a
+>>> certificate signed by a recent CA that was not included in the
+>>> autobuilder's
+>>> trusted certificate list, so wget would not accept it. It was discussed
+>>> that
+>>> an option was to run wget with --no-check-certificate, but this would
+>>> defeat
+>>> the purpose of https so was rejected. Of course, using an http URL
+>>> instead
+>>> of an https has the same result.
+>>
+>>
+>> But this seems to be a temporary problem only.
 >
-> I agree. For anyone sane, x86_defconfig is basically unusable due to
-> the enormous number of options that it enables.
 >
-> And for other architectures, a default defconfig doesn't make much
-> sense, since there usually isn't any "sane" default. I very much prefer
-> users to be asked loudly to provide a proper defconfig rather than
-> having Buildroot pick the kernel default one, and then have users
-> wonder why the kernel doesn't boot on their platform.
+>  "Temporary" until the autobuilder's CA certificates are updated, you mean?
 >
 
-Ok, fair enough. I have marked the patch as rejected.
+Yes, that's what I meant.
 
-2 down, 8 to go...
+>
+>> Besides, what happens in that scenario if you try http, and the server
+>> redirects it to https? I would expect the certificate to fail, or does
+>> wget pass an implicit --no-check-certificate in this case?
+>
+>
+>  If it redirects, it will still fail. That's why using the https URL is
+> better in that case, as I mentioned above.
+>
+
+Ok, great, so it looks like we have a plan: we implement a github
+helper, and have that use https directly.
+
+Now we need a volunteer to do this. I have no problem in doing it but
+it would end up on my todo list first, so if there is anyone else who
+has time, then please be my guest.
+
+Best regards,
+Thomas
