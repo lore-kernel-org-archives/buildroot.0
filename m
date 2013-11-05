@@ -1,32 +1,32 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 06 Nov 2013 00:34:45 +0100
-Subject: [Buildroot] [PATCH 1/1] sqlcipher: fix download url
-In-Reply-To: <52797FB4.3060103@openwide.fr> (Romain Naour's message of "Wed,
- 06 Nov 2013 00:31:00 +0100")
-References: <1383692357-1519-1-git-send-email-romain.naour@openwide.fr>
- <87li12mo4i.fsf@dell.be.48ers.dk> <52797FB4.3060103@openwide.fr>
-Message-ID: <87d2memnhm.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 6 Nov 2013 00:34:00 +0100
+Subject: [Buildroot] [git commit] sqlcipher: fix download url
+Message-ID: <20131105233457.B75F59BA95@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Romain" == Romain Naour <romain.naour@openwide.fr> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=f72755c7e11e35188152c6ddb3e1ebd7d74eab4b
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Hi,
- > Le 06/11/2013 00:21, Peter Korsgaard a ?crit :
- >>>>>>> "Romain" == Romain Naour <romain.naour@openwide.fr> writes:
- >> 
- >> > Signed-off-by: Romain Naour <romain.naour@openwide.fr>
- >> 
- >> Fix in what way?
+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/sqlcipher/sqlcipher.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
- > Just update the other part of the url :)
- > - http://github.com/sjlombardo/
- > + http://github.com/sqlcipher/
-
-Ahh, sorry - It's late here. Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/sqlcipher/sqlcipher.mk b/package/sqlcipher/sqlcipher.mk
+index 3ade403..e93d24d 100644
+--- a/package/sqlcipher/sqlcipher.mk
++++ b/package/sqlcipher/sqlcipher.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ SQLCIPHER_VERSION = v1.1.9
+-SQLCIPHER_SITE = http://github.com/sjlombardo/sqlcipher/tarball/$(SQLCIPHER_VERSION)
++SQLCIPHER_SITE = http://github.com/sqlcipher/sqlcipher/archive/$(SQLCIPHER_VERSION)
+ SQLCIPHER_DEPENDENCIES = openssl host-tcl
+ SQLCIPHER_INSTALL_STAGING = YES
+ 
