@@ -1,41 +1,51 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 5 Nov 2013 08:57:59 +0100
-Subject: [Buildroot] [git commit] linux: bump version to 3.12
-Message-ID: <20131105132710.DAF77994C7@busybox.osuosl.org>
+Date: Tue, 5 Nov 2013 14:25:51 +0100
+Subject: [Buildroot] [git commit] dropwatch: fix avr32 build failure
+Message-ID: <20131105132710.F1327994C7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=602bbb73430d95e53b6f64ab95a61f0a032e6d81
+commit: http://git.buildroot.net/buildroot/commit/?id=da1ca5c0a24e12bff1157fbd9275b5150f2ab620
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+On avr32, dropwatch needs libiberty to avoid build failures such as
+
+  http://autobuild.buildroot.net/results/cd5/cd5e22fb5c9b0fc5d396bc85a5e253a1a65054da/
+
+Also test built on ARM.
+
+[Peter: pass TARGET_LDFLAGS as well, append -lintl in gettext case]
+Signed-off-by: Simon Dawson <spdawson@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- linux/Config.in |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ package/dropwatch/dropwatch.mk |    9 +++++++--
+ 1 files changed, 7 insertions(+), 2 deletions(-)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index e44d788..84de134 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -21,7 +21,7 @@ choice
- 	prompt "Kernel version"
+diff --git a/package/dropwatch/dropwatch.mk b/package/dropwatch/dropwatch.mk
+index 5d65d86..6bbcb23 100644
+--- a/package/dropwatch/dropwatch.mk
++++ b/package/dropwatch/dropwatch.mk
+@@ -13,13 +13,18 @@ DROPWATCH_LICENSE_FILES = COPYING
  
- config BR2_LINUX_KERNEL_LATEST_VERSION
--	bool "3.11.6"
-+	bool "3.12"
+ # libbfd may be linked to libintl
+ # Ugly... but LDFLAGS are hardcoded anyway
++#
++# Also: always need to add -liberty to hardcoded LDFLAGS for avr32
++DROPWATCH_LDFLAGS = \
++	$(TARGET_LDFLAGS) -lbfd -liberty -lreadline -lnl-3 -lnl-genl-3
++
+ ifeq ($(BR2_NEEDS_GETTEXT_IF_LOCALE),y)
+-DROPWATCH_LDFLAGS = LDFLAGS="-lintl -lbfd -lreadline -lnl-3 -lnl-genl-3"
++DROPWATCH_LDFLAGS += -lintl
+ endif
  
- config BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	bool "Same as toolchain kernel headers"
-@@ -87,7 +87,7 @@ endif
+ define DROPWATCH_BUILD_CMDS
+ 	$(TARGET_CONFIGURE_OPTS) $(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
+-		$(DROPWATCH_LDFLAGS) build
++		LDFLAGS="$(DROPWATCH_LDFLAGS)" build
+ endef
  
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "3.11.6" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "3.12" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default BR2_DEFAULT_KERNEL_HEADERS if BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
- 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
+ define DROPWATCH_CLEAN_CMDS
