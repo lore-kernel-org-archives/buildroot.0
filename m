@@ -1,30 +1,32 @@
-From: Romain Naour <romain.naour@openwide.fr>
-Date: Tue,  5 Nov 2013 23:59:17 +0100
-Subject: [Buildroot] [PATCH 1/1] sqlcipher: fix download url
-Message-ID: <1383692357-1519-1-git-send-email-romain.naour@openwide.fr>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 06 Nov 2013 00:09:09 +0100
+Subject: [Buildroot] [PATCH v2] sconeserver: Can't be built with uClibc.
+In-Reply-To: <1383665533-2430-1-git-send-email-sonic.adi@gmail.com> (Sonic
+ Zhang's message of "Tue, 5 Nov 2013 23:32:13 +0800")
+References: <1383665533-2430-1-git-send-email-sonic.adi@gmail.com>
+Message-ID: <87ppqemooa.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Romain Naour <romain.naour@openwide.fr>
----
- package/sqlcipher/sqlcipher.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+>>>>> "Sonic" == Sonic Zhang <sonic.adi@gmail.com> writes:
 
-diff --git a/package/sqlcipher/sqlcipher.mk b/package/sqlcipher/sqlcipher.mk
-index 3ade403..e93d24d 100644
---- a/package/sqlcipher/sqlcipher.mk
-+++ b/package/sqlcipher/sqlcipher.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- SQLCIPHER_VERSION = v1.1.9
--SQLCIPHER_SITE = http://github.com/sjlombardo/sqlcipher/tarball/$(SQLCIPHER_VERSION)
-+SQLCIPHER_SITE = http://github.com/sqlcipher/sqlcipher/archive/$(SQLCIPHER_VERSION)
- SQLCIPHER_DEPENDENCIES = openssl host-tcl
- SQLCIPHER_INSTALL_STAGING = YES
- 
+ > From: Sonic Zhang <sonic.zhang@analog.com>
+
+ > General shadow password file API such as getspnam is not supported in
+ > uClibc.
+
+Ehh, they are?
+
+./output/host/usr/bin/arm-linux-nm -D \
+  output/target/lib/libuClibc-0.9.33.2.so | grep getspnam
+0002a6c0 T getspnam
+0002a6f0 T getspnam_r
+
+They do require you to enable UCLIBC_HAS_SHADOW, but that option
+defaults to y and our default config has it enabled.
+
 -- 
-1.8.4
+Bye, Peter Korsgaard
