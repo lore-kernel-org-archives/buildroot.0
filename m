@@ -1,34 +1,38 @@
-From: Frank Hunleth <fhunleth@troodon-software.com>
-Date: Tue,  5 Nov 2013 15:12:31 -0500
-Subject: [Buildroot] [PATCH] dependencies.sh: update i386 package names
-Message-ID: <1383682351-14610-1-git-send-email-fhunleth@troodon-software.com>
+From: Andi Shyti <andi@etezian.org>
+Date: Tue, 5 Nov 2013 21:17:53 +0100
+Subject: [Buildroot] [PATCH] scripts: apply-patches: don't stop if no
+ patch is found for a package
+In-Reply-To: <52793E3A.5060802@mind.be>
+References: <1383656430-29160-1-git-send-email-andi@etezian.org>
+ <52793E3A.5060802@mind.be>
+Message-ID: <20131105201752.GC17791@jack.whiskey>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This is the list needed to run the Linaro pre-built toolchain
-on a 64-bit Ubuntu 13.10 system.
+Hi Arnout,
 
-Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
----
- support/dependencies/dependencies.sh | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+> >If no patch is available for a specific package it doesn't mean
+> >that is necessarily an error, perhaps there is no need to apply
+> >any patches. Therefore, don't stop the build by returning '1',
+> >but go ahead.
+> 
+>  This is in fact intentional, because it indicates that there is
+> something wrong with the configuration. When you specify in your
+> configuration that some specific patch directory should be used, but
+> that directory doesn't exist, then it probably means you made a
+> mistake in your configuration.
+> 
+>  Can you give an example of a specific situation where you had a
+> problem with this check?
 
-diff --git a/support/dependencies/dependencies.sh b/support/dependencies/dependencies.sh
-index bce5cc6..b563f60 100755
---- a/support/dependencies/dependencies.sh
-+++ b/support/dependencies/dependencies.sh
-@@ -178,7 +178,8 @@ if grep -q ^BR2_HOSTARCH_NEEDS_IA32_LIBS=y $BUILDROOT_CONFIG ; then
- 	/bin/echo -e "\nYour Buildroot configuration uses pre-built tools for the x86 architecture,"
- 	/bin/echo -e "but your build machine uses the x86-64 architecture without the 32 bits compatibility"
- 	/bin/echo -e "library."
--	/bin/echo -e "If you're running a Debian/Ubuntu distribution, install the libc:i386 package."
-+	/bin/echo -e "If you're running a Debian/Ubuntu distribution, install the libc6:i386,"
-+	/bin/echo -e "libstdc++6:i386, and zlib1g:i386 packages."
- 	/bin/echo -e "For other distributions, refer to the documentation on how to install the 32 bits"
- 	/bin/echo -e "compatibility libraries."
- 	exit 1
--- 
-1.8.3.2
+this happens when for example you want to get as cross compiler
+the daily snapshot instead of a specific version.
+
+The build stops with an error because of that 'exit 1' since it
+doesn't find any gcc-20131105 patch directory (i think the
+snapshot is called so).
+
+Andi
