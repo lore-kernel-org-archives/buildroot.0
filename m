@@ -1,90 +1,77 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 06 Nov 2013 00:21:01 +0100
-Subject: [Buildroot] [PATCH 1/1] sqlcipher: fix download url
-In-Reply-To: <1383692357-1519-1-git-send-email-romain.naour@openwide.fr>
- (Romain Naour's message of "Tue, 5 Nov 2013 23:59:17 +0100")
-References: <1383692357-1519-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <87li12mo4i.fsf@dell.be.48ers.dk>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed,  6 Nov 2013 00:28:02 +0100
+Subject: [Buildroot] [pull request] Pull request for branch yem/misc
+Message-ID: <cover.1383693880.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Romain" == Romain Naour <romain.naour@openwide.fr> writes:
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
- > Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+Hello All!
 
-Fix in what way?
+Here are a few patches I've been assigned to massage into shape, during
+the last devday:
+  - 186840 (nut)
+  - 241511 (ser2net)
+  - 242998 + 242999  (rpi)
 
-wget http://github.com/sqlcipher/sqlcipher/tarball/v1.1.9/sqlcipher-v1.1.9.tar.gz
---2013-11-06 00:17:11--  http://github.com/sqlcipher/sqlcipher/tarball/v1.1.9/sqlcipher-v1.1.9.tar.gz
-Resolving github.com (github.com)... 192.30.252.128
-Connecting to github.com (github.com)|192.30.252.128|:80... connected.
-HTTP request sent, awaiting response... 301 Moved Permanently
-Location: https://github.com/sqlcipher/sqlcipher/tarball/v1.1.9/sqlcipher-v1.1.9.tar.gz [following]
---2013-11-06 00:17:11--  https://github.com/sqlcipher/sqlcipher/tarball/v1.1.9/sqlcipher-v1.1.9.tar.gz
-Connecting to github.com (github.com)|192.30.252.128|:443... connected.
-HTTP request sent, awaiting response... 302 Found
-Location: https://codeload.github.com/sqlcipher/sqlcipher/legacy.tar.gz/v1.1.9 [following]
---2013-11-06 00:17:12--  https://codeload.github.com/sqlcipher/sqlcipher/legacy.tar.gz/v1.1.9
-Resolving codeload.github.com (codeload.github.com)... 192.30.252.145
-Connecting to codeload.github.com (codeload.github.com)|192.30.252.145|:443... connected.
-HTTP request sent, awaiting response... 200 OK
-Length: unspecified [application/x-gzip]
-Saving to: `sqlcipher-v1.1.9.tar.gz'
+I'll mark those patchwork IDs as superseded in a moment.
 
-wget http://github.com/sqlcipher/sqlcipher/archive/v1.1.9/sqlcipher-v1.1.9.tar.gz                                                                                                                                      /tmp
---2013-11-06 00:18:32--  http://github.com/sqlcipher/sqlcipher/archive/v1.1.9/sqlcipher-v1.1.9.tar.gz
-Resolving github.com (github.com)... 192.30.252.128
-Connecting to github.com (github.com)|192.30.252.128|:80... connected.
-HTTP request sent, awaiting response... 301 Moved Permanently
-Location: https://github.com/sqlcipher/sqlcipher/archive/v1.1.9/sqlcipher-v1.1.9.tar.gz [following]
---2013-11-06 00:18:32--  https://github.com/sqlcipher/sqlcipher/archive/v1.1.9/sqlcipher-v1.1.9.tar.gz
-Connecting to github.com (github.com)|192.30.252.128|:443... connected.
-HTTP request sent, awaiting response... 302 Found
-Location: https://codeload.github.com/sqlcipher/sqlcipher/tar.gz/v1.1.9 [following]
---2013-11-06 00:18:33--  https://codeload.github.com/sqlcipher/sqlcipher/tar.gz/v1.1.9
-Resolving codeload.github.com (codeload.github.com)... 192.30.252.146
-Connecting to codeload.github.com (codeload.github.com)|192.30.252.146|:443... connected.
-HTTP request sent, awaiting response... 200 OK
-Length: 4032588 (3.8M) [application/x-gzip]
-Saving to: `sqlcipher-v1.1.9.tar.gz.1'
+It also includes the OOT Makefile fix since it was in the same branch,
+sorry for the duplication... :-/
 
-So both works. We seem to mainly use the tarball version:
-
-git grep 'github.*tarball' package | wc -l
-44
-
-git grep 'github.*archive' package | wc -l
-4
+Regards,
+Yann E. MORIN.
 
 
- > ---
- >  package/sqlcipher/sqlcipher.mk | 2 +-
- >  1 file changed, 1 insertion(+), 1 deletion(-)
+The following changes since commit 615881ff5e1a15e99396dd2615bb4ce8c415e0dc:
 
- > diff --git a/package/sqlcipher/sqlcipher.mk b/package/sqlcipher/sqlcipher.mk
- > index 3ade403..e93d24d 100644
- > --- a/package/sqlcipher/sqlcipher.mk
- > +++ b/package/sqlcipher/sqlcipher.mk
- > @@ -5,7 +5,7 @@
- >  ################################################################################
- 
- >  SQLCIPHER_VERSION = v1.1.9
- > -SQLCIPHER_SITE = http://github.com/sjlombardo/sqlcipher/tarball/$(SQLCIPHER_VERSION)
- > +SQLCIPHER_SITE = http://github.com/sqlcipher/sqlcipher/archive/$(SQLCIPHER_VERSION)
- >  SQLCIPHER_DEPENDENCIES = openssl host-tcl
- >  SQLCIPHER_INSTALL_STAGING = YES
- 
- > -- 
- > 1.8.4
+  package/zic: bump (2013-11-05 23:56:46 +0100)
 
- > _______________________________________________
- > buildroot mailing list
- > buildroot at busybox.net
- > http://lists.busybox.net/mailman/listinfo/buildroot
+are available in the git repository at:
 
+  git://gitorious.org/buildroot/buildroot.git yem/misc
+
+for you to fetch changes up to 155f4535a09b1cdce293c75108211da899c3a0a8:
+
+  Makefile: fix out-of-tree builds with multiple targets with 'all' (2013-11-06 00:19:16 +0100)
+
+----------------------------------------------------------------
+Yann E. MORIN (3):
+      package/nut: new package
+      package/ser2net: add startup script and template config file
+      Makefile: fix out-of-tree builds with multiple targets with 'all'
+
+mathieu benoit (2):
+      rpi: improve documentation
+      rpi: rename board folder for consistency
+
+ board/raspberrypi/readme.txt          | 127 ---------------------------------
+ board/rpi/readme.txt                  | 128 ++++++++++++++++++++++++++++++++++
+ package/Config.in                     |   1 +
+ package/nut/Config.in                 |  20 ++++++
+ package/nut/nut-0001-foo-config.patch |  72 +++++++++++++++++++
+ package/nut/nut.mk                    |  79 +++++++++++++++++++++
+ package/ser2net/S50ser2net            |  48 +++++++++++++
+ package/ser2net/ser2net.conf          |   3 +
+ package/ser2net/ser2net.mk            |   9 +++
+ support/scripts/mkmakefile            |   8 +--
+ 10 files changed, 364 insertions(+), 131 deletions(-)
+ delete mode 100644 board/raspberrypi/readme.txt
+ create mode 100644 board/rpi/readme.txt
+ create mode 100644 package/nut/Config.in
+ create mode 100644 package/nut/nut-0001-foo-config.patch
+ create mode 100644 package/nut/nut.mk
+ create mode 100644 package/ser2net/S50ser2net
+ create mode 100644 package/ser2net/ser2net.conf
 
 -- 
-Bye, Peter Korsgaard
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
