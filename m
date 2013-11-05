@@ -1,38 +1,65 @@
-From: Andi Shyti <andi@etezian.org>
-Date: Tue, 5 Nov 2013 21:17:53 +0100
-Subject: [Buildroot] [PATCH] scripts: apply-patches: don't stop if no
- patch is found for a package
-In-Reply-To: <52793E3A.5060802@mind.be>
-References: <1383656430-29160-1-git-send-email-andi@etezian.org>
- <52793E3A.5060802@mind.be>
-Message-ID: <20131105201752.GC17791@jack.whiskey>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 5 Nov 2013 22:24:14 +0100
+Subject: [Buildroot] [git commit] collectd: add option for sensors plugin
+Message-ID: <20131105212426.DC48D9BA6B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Arnout,
+commit: http://git.buildroot.net/buildroot/commit/?id=7c611d5b527505c896fdf181218b1c728f2ceaf9
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> >If no patch is available for a specific package it doesn't mean
-> >that is necessarily an error, perhaps there is no need to apply
-> >any patches. Therefore, don't stop the build by returning '1',
-> >but go ahead.
-> 
->  This is in fact intentional, because it indicates that there is
-> something wrong with the configuration. When you specify in your
-> configuration that some specific patch directory should be used, but
-> that directory doesn't exist, then it probably means you made a
-> mistake in your configuration.
-> 
->  Can you give an example of a specific situation where you had a
-> problem with this check?
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/collectd/Config.in   |    6 ++++++
+ package/collectd/collectd.mk |    4 +++-
+ 2 files changed, 9 insertions(+), 1 deletions(-)
 
-this happens when for example you want to get as cross compiler
-the daily snapshot instead of a specific version.
-
-The build stops with an error because of that 'exit 1' since it
-doesn't find any gcc-20131105 patch directory (i think the
-snapshot is called so).
-
-Andi
+diff --git a/package/collectd/Config.in b/package/collectd/Config.in
+index 2059198..8123162 100644
+--- a/package/collectd/Config.in
++++ b/package/collectd/Config.in
+@@ -277,6 +277,12 @@ config BR2_PACKAGE_COLLECTD_PROTOCOLS
+ 	help
+ 	  Collects information about the network protocols.
+ 
++config BR2_PACKAGE_COLLECTD_SENSORS
++	bool "sensors"
++	select BR2_PACKAGE_LM_SENSORS
++	help
++	  Collects data from lm-sensors.
++
+ config BR2_PACKAGE_COLLECTD_SERIAL
+ 	bool "serial"
+ 	help
+diff --git a/package/collectd/collectd.mk b/package/collectd/collectd.mk
+index 55a388c..e7dc093 100644
+--- a/package/collectd/collectd.mk
++++ b/package/collectd/collectd.mk
+@@ -18,7 +18,7 @@ COLLECTD_PLUGINS_DISABLE = amqp apple_sensors aquaero ascent dbi email \
+ 		memcachec modbus multimeter netapp netlink nginx \
+ 		notify_desktop notify_email numa nut onewire oracle perl pf \
+ 		pinba postgresql powerdns python redis routeros rrdcached \
+-		sensors sigrok tape target_v5upgrade teamspeak2 ted \
++		sigrok tape target_v5upgrade teamspeak2 ted \
+ 		tokyotyrant uuid varnish vserver write_mongodb write_redis \
+ 		xmms zfs_arc
+ 
+@@ -74,6 +74,7 @@ COLLECTD_CONF_OPT += --with-nan-emulation --with-fp-layout=nothing \
+ 	$(if $(BR2_PACKAGE_COLLECTD_RIEMANN),--enable-write_riemann,--disable-write_riemann) \
+ 	$(if $(BR2_PACKAGE_COLLECTD_RRDTOOL),--enable-rrdtool,--disable-rrdtool) \
+ 	$(if $(BR2_PACKAGE_COLLECTD_SCALE),--enable-target_scale,--disable-target_scale) \
++	$(if $(BR2_PACKAGE_COLLECTD_SENSORS),--enable-sensors,--disable-sensors) \
+ 	$(if $(BR2_PACKAGE_COLLECTD_SERIAL),--enable-serial,--disable-serial) \
+ 	$(if $(BR2_PACKAGE_COLLECTD_STATSD),--enable-statsd,--disable-statsd) \
+ 	$(if $(BR2_PACKAGE_COLLECTD_SET),--enable-target_set,--disable-target_set) \
+@@ -108,6 +109,7 @@ COLLECTD_DEPENDENCIES = host-pkgconf \
+ 	$(if $(BR2_PACKAGE_COLLECTD_PING),liboping) \
+ 	$(if $(BR2_PACKAGE_COLLECTD_RIEMANN),protobuf-c) \
+ 	$(if $(BR2_PACKAGE_COLLECTD_RRDTOOL),rrdtool) \
++	$(if $(BR2_PACKAGE_COLLECTD_SENSORS),lm-sensors) \
+ 	$(if $(BR2_PACKAGE_COLLECTD_SNMP),netsnmp) \
+ 	$(if $(BR2_PACKAGE_COLLECTD_WRITEHTTP),libcurl)
+ 
