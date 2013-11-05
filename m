@@ -1,65 +1,109 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed,  6 Nov 2013 00:28:20 +0100
-Subject: [Buildroot] [PATCH 5/5] Makefile: fix out-of-tree builds with
-	multiple targets with 'all'
-In-Reply-To: <cover.1383693880.git.yann.morin.1998@free.fr>
-References: <cover.1383693880.git.yann.morin.1998@free.fr>
-Message-ID: <155f4535a09b1cdce293c75108211da899c3a0a8.1383693880.git.yann.morin.1998@free.fr>
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Wed, 06 Nov 2013 00:31:00 +0100
+Subject: [Buildroot] [PATCH 1/1] sqlcipher: fix download url
+In-Reply-To: <87li12mo4i.fsf@dell.be.48ers.dk>
+References: <1383692357-1519-1-git-send-email-romain.naour@openwide.fr>
+ <87li12mo4i.fsf@dell.be.48ers.dk>
+Message-ID: <52797FB4.3060103@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Hi,
 
-For out-of-tree builds, this use-case fails to build:
-    $ make clean all
+Le 06/11/2013 00:21, Peter Korsgaard a ?crit :
+>>>>>> "Romain" == Romain Naour <romain.naour@openwide.fr> writes:
+> 
+>  > Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+> 
+> Fix in what way?
 
-This is because 'all' is filtered-out in the Makefile wrapper, since
-the wrapper itself has a 'all' target.
+Just update the other part of the url :)
+- http://github.com/sjlombardo/
++ http://github.com/sqlcipher/
 
-The 'all' target is just the usual naming for the default target in a
-Makefile. In fact, the first target is the default one, so we can name
-it whatever we want.
+Best regards
+Romain
 
-Rename the Makefile wrapper 'all' target to avoid name-clashing.
+> 
+> wget http://github.com/sqlcipher/sqlcipher/tarball/v1.1.9/sqlcipher-v1.1.9.tar.gz
+> --2013-11-06 00:17:11--  http://github.com/sqlcipher/sqlcipher/tarball/v1.1.9/sqlcipher-v1.1.9.tar.gz
+> Resolving github.com (github.com)... 192.30.252.128
+> Connecting to github.com (github.com)|192.30.252.128|:80... connected.
+> HTTP request sent, awaiting response... 301 Moved Permanently
+> Location: https://github.com/sqlcipher/sqlcipher/tarball/v1.1.9/sqlcipher-v1.1.9.tar.gz [following]
+> --2013-11-06 00:17:11--  https://github.com/sqlcipher/sqlcipher/tarball/v1.1.9/sqlcipher-v1.1.9.tar.gz
+> Connecting to github.com (github.com)|192.30.252.128|:443... connected.
+> HTTP request sent, awaiting response... 302 Found
+> Location: https://codeload.github.com/sqlcipher/sqlcipher/legacy.tar.gz/v1.1.9 [following]
+> --2013-11-06 00:17:12--  https://codeload.github.com/sqlcipher/sqlcipher/legacy.tar.gz/v1.1.9
+> Resolving codeload.github.com (codeload.github.com)... 192.30.252.145
+> Connecting to codeload.github.com (codeload.github.com)|192.30.252.145|:443... connected.
+> HTTP request sent, awaiting response... 200 OK
+> Length: unspecified [application/x-gzip]
+> Saving to: `sqlcipher-v1.1.9.tar.gz'
+> 
+> wget http://github.com/sqlcipher/sqlcipher/archive/v1.1.9/sqlcipher-v1.1.9.tar.gz                                                                                                                                      /tmp
+> --2013-11-06 00:18:32--  http://github.com/sqlcipher/sqlcipher/archive/v1.1.9/sqlcipher-v1.1.9.tar.gz
+> Resolving github.com (github.com)... 192.30.252.128
+> Connecting to github.com (github.com)|192.30.252.128|:80... connected.
+> HTTP request sent, awaiting response... 301 Moved Permanently
+> Location: https://github.com/sqlcipher/sqlcipher/archive/v1.1.9/sqlcipher-v1.1.9.tar.gz [following]
+> --2013-11-06 00:18:32--  https://github.com/sqlcipher/sqlcipher/archive/v1.1.9/sqlcipher-v1.1.9.tar.gz
+> Connecting to github.com (github.com)|192.30.252.128|:443... connected.
+> HTTP request sent, awaiting response... 302 Found
+> Location: https://codeload.github.com/sqlcipher/sqlcipher/tar.gz/v1.1.9 [following]
+> --2013-11-06 00:18:33--  https://codeload.github.com/sqlcipher/sqlcipher/tar.gz/v1.1.9
+> Resolving codeload.github.com (codeload.github.com)... 192.30.252.146
+> Connecting to codeload.github.com (codeload.github.com)|192.30.252.146|:443... connected.
+> HTTP request sent, awaiting response... 200 OK
+> Length: 4032588 (3.8M) [application/x-gzip]
+> Saving to: `sqlcipher-v1.1.9.tar.gz.1'
+> 
+> So both works. We seem to mainly use the tarball version:
+> 
+> git grep 'github.*tarball' package | wc -l
+> 44
+> 
+> git grep 'github.*archive' package | wc -l
+> 4
+> 
+> 
+>  > ---
+>  >  package/sqlcipher/sqlcipher.mk | 2 +-
+>  >  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+>  > diff --git a/package/sqlcipher/sqlcipher.mk b/package/sqlcipher/sqlcipher.mk
+>  > index 3ade403..e93d24d 100644
+>  > --- a/package/sqlcipher/sqlcipher.mk
+>  > +++ b/package/sqlcipher/sqlcipher.mk
+>  > @@ -5,7 +5,7 @@
+>  >  ################################################################################
+>  
+>  >  SQLCIPHER_VERSION = v1.1.9
+>  > -SQLCIPHER_SITE = http://github.com/sjlombardo/sqlcipher/tarball/$(SQLCIPHER_VERSION)
+>  > +SQLCIPHER_SITE = http://github.com/sqlcipher/sqlcipher/archive/$(SQLCIPHER_VERSION)
+>  >  SQLCIPHER_DEPENDENCIES = openssl host-tcl
+>  >  SQLCIPHER_INSTALL_STAGING = YES
+>  
+>  > -- 
+>  > 1.8.4
+> 
+>  > _______________________________________________
+>  > buildroot mailing list
+>  > buildroot at busybox.net
+>  > http://lists.busybox.net/mailman/listinfo/buildroot
+> 
+> 
 
-Fixes #6644.
-
-Reported-by: Ryan Barnett <rjbarnet@rockwellcollins.com>
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Ryan Barnett <rjbarnet@rockwellcollins.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Tested-by: Ryan Barnett <rjbarnet@rockwellcollins.com>
----
- support/scripts/mkmakefile | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/support/scripts/mkmakefile b/support/scripts/mkmakefile
-index cef2ec7..27b1507 100755
---- a/support/scripts/mkmakefile
-+++ b/support/scripts/mkmakefile
-@@ -32,16 +32,16 @@ MAKEFLAGS += --no-print-directory
- 
- .PHONY: all \$(MAKECMDGOALS)
- 
--all	:= \$(filter-out all Makefile,\$(MAKECMDGOALS))
-+all	:= \$(filter-out Makefile,\$(MAKECMDGOALS))
- 
--all:
-+_all:
- 	\$(MAKE) \$(MAKEARGS) \$(all)
- 
- Makefile:;
- 
--\$(all): all
-+\$(all): _all
- 	@:
- 
--%/: all
-+%/: _all
- 	@:
- EOF
 -- 
-1.8.1.2
+Romain Naour
+
+OPEN WIDE Ing?nierie - Paris
+23/25, rue Daviel 75013 PARIS
+http://ingenierie.openwide.fr
+
+Le blog des technologies libres et embarqu?es :
+http://www.linuxembedded.fr
