@@ -1,36 +1,48 @@
-From: Andi Shyti <andi@etezian.org>
-Date: Tue, 5 Nov 2013 18:10:03 +0100
-Subject: [Buildroot] [PATCH] perf: libelf is required to compile perf
-In-Reply-To: <CAAXf6LVJ7r6mK40v=az-h5p8g8ykwaOsC0RXCZSY6wT9Dh9gmw@mail.gmail.com>
-References: <1383660387-31193-1-git-send-email-andi@etezian.org>
- <CAAXf6LVJ7r6mK40v=az-h5p8g8ykwaOsC0RXCZSY6wT9Dh9gmw@mail.gmail.com>
-Message-ID: <20131105171003.GA17791@jack.whiskey>
+From: Dallas Clement <dallas.a.clement@gmail.com>
+Date: Tue, 5 Nov 2013 11:29:22 -0600
+Subject: [Buildroot] Speeding up builds
+In-Reply-To: <87mwljohj5.fsf@dell.be.48ers.dk>
+References: <CAE9DZUT-G8g5cwWamULZ2ppUSOHjNf1O35diTno-uZj1_tCggA@mail.gmail.com>
+ <20131105002042.704dabfe@skate> <87mwljohj5.fsf@dell.be.48ers.dk>
+Message-ID: <CAE9DZUT64x1L4jSzmD84GDwRxftajOSrjLS+O0v-u25w8EkyHw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Apart from makefile -j during C file compilation, it seems that building is
+very serialized.  A lot of time is spent in ./configure script execution,
+and quite a bit in installation of files.  All of this appears to be very
+serial in nature.  I realize there is not much that can be done about
+autoconf / automake to avoid this serialization.
 
-> > Point this out in the related Config.in in the perf directory.
-> >
-> > Mute the following error by selecting BR2_PACKAGE_LIBELF:
-> >
-> > The perf tool in your kernel cannot be built without libelf.
-> > Either upgrade your kernel to >= 3.7, or enable the elfutils package.
-> > make: *** [/home/andi/repo/buildroot-snowball/output/build/perf-stable-linux-ux500-3.4/.stamp_built] Error 1
-> 
-> This doesn't look right. As the error indicates, if your kernel is
-> recent enough you don't need libelf.
+It would be great if buildroot could build multiple packages in parallel.
+That way, multiple cores could at least be performing activities like
+./configure which tend to be serial.   Has there ever been any discussion
+about this?
 
-I was compiling for snowball which has an old Kernel as default,
-that's why I got the error.
 
-> Have you tried enabling libelf manually?
+On Mon, Nov 4, 2013 at 5:48 PM, Peter Korsgaard <jacmet@uclibc.org> wrote:
 
-By enabling it manually it works. If the patch doesn't look
-right, feel free to ignore it.
-
-Thanks,
-Andi
+> >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> writes:
+>
+>  > Dear Dallas Clement,
+>  > On Mon, 4 Nov 2013 13:00:54 -0600, Dallas Clement wrote:
+>
+>  >> I'm just looking for some tips on how to speed up my build times.  My
+>  >> rootfs contains many packages with lots of dependencies.  Even with 8
+>  >> fast Xeon cores, 64GB of RAM, SSDs, and SAS drives, my builds are
+>  >> taking 1 hour and 50 minutes.
+>
+> ~2h sounds quite long indeed. I don't use as many packages as you, but a
+> fairly big config (123 packages, including Qt and Gstreamer1) takes <
+> 20mins on a pretty normal quad haswell (E3-1240) / 32G RAM / SSDs.
+>
+> --
+> Bye, Peter Korsgaard
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20131105/f96ec5c0/attachment.html>
