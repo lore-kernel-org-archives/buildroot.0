@@ -1,50 +1,68 @@
-From: Ryan Barnett <rjbarnet@rockwellcollins.com>
-Date: Tue, 5 Nov 2013 10:27:38 -0600
-Subject: [Buildroot] [PATCH] perf: libelf is required to compile perf
-In-Reply-To: <20131105161846.GC20511@tarshish>
-References: <1383660387-31193-1-git-send-email-andi@etezian.org>
- <OFB695B6D2.ECE9BEB8-ON86257C1A.004FD92A-86257C1A.005239BF@rockwellcollins.com>
- <20131105161846.GC20511@tarshish>
-Message-ID: <OF64ABF457.FAD0C9B3-ON86257C1A.005A407F-86257C1A.005A6AFC@rockwellcollins.com>
+From: Matt Weber <mlweber1@rockwellcollins.com>
+Date: Tue, 5 Nov 2013 10:29:52 -0600
+Subject: [Buildroot] [RFC] Continuous integration
+In-Reply-To: <1464774.i3ScgRtXEf@sagittae>
+References: <1464774.i3ScgRtXEf@sagittae>
+Message-ID: <CAC2S8khWpEpUZiYOrzE2agTXehwW+g5Pkncqdp2PRsc25bT-cw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Baruch Siach,
+On Fri, Oct 25, 2013 at 7:46 AM, J?r?me Pouiller <jezz@sysmic.org> wrote:
+> Hello,
+>
 
-Baruch Siach <baruch@tkos.co.il> wrote on 11/05/2013 10:18:46 AM:
- 
-> On Tue, Nov 05, 2013 at 08:58:10AM -0600, rjbarnet at rockwellcollins.com 
-wrote:
-> > Andi Shyti <andi@etezian.org> wrote on 11/05/2013 08:06:27 AM:
-> > > diff --git a/package/perf/Config.in b/package/perf/Config.in
-> > > index 88dce93..4b651b3 100644
-> > > --- a/package/perf/Config.in
-> > > +++ b/package/perf/Config.in
-> > > @@ -2,6 +2,7 @@ config BR2_PACKAGE_PERF
-> > >     bool "perf"
-> > >     depends on BR2_LINUX_KERNEL
-> > >     depends on BR2_LARGEFILE
-> > > +   depends on BR2_PACKAGE_LIBELF
-> > 
-> > Wouldn't you want this to be a select since LIBELF is required by this 
+<snip>
 
-> > package? Also in the perf.mk you want to ensure that the libelf 
-package is 
-> > built before by adding a dependancy to the makefile.
-> > 
-> > ifeq ($(BR2_PACKAGE_LIBELF),y)
-> > PERF_DEPENDENCIES += libelf
-> > endif
-> 
-> When you select BR2_PACKAGE_LIBELF in Config.in there should be no need 
-for 
-> the 'ifeq' condition. Just add 'libelf' to PERF_DEPENDENCIES 
-unconditionally.
- 
-You are correct. Its just habit that I do things like that.
+>
+> Code is available there:
+>    https://github.com/jerome-pouiller/br-continuous
+>
+
+We've been giving your script a try and made some updates.  So I went
+ahead and created a (github)fork (should have a few updates checked in
+tonight).
+I fixed a couple items that may have been bugs (or possibly just how I
+used the script).  I current have been running into an issue where
+after git updates are detected, previously built pkgs try to rebuild
+without doing a clean.  I see where the conditional is that should be
+executing the clean but haven't tracked down why I'm not hitting that
+path yet.
+I also noticed that once the script processes all jobs it gets into a
+loop, I added a fix for that that prevents running the jobs unless
+there are still jobs to execute in the job list.
+
+I noticed there isn't a good way to restart the script after you stop
+it, is my understanding correct?  I (temporarily) added a cleanup
+sequence before the mainloop executes to remove history and each cfgs
+build before proceeding.
+
+I think there might be a bug with detecting when a package fails to
+build, I'll see if I can resolve this and let you know.  I haven't had
+a package actually error yet, but have had some that never built
+because of host dependency error or download error
+
+I was wondering what your thoughts were for the report?  I'm guessing
+what's currently committed was the start of something based on this
+thread of discussion.  I could see gathering a list of package err,
+git id, and list to build output (similarly to the autobuilder
+results).
 
 Thanks,
--Ryan
+Matt Weber
+mlweber1 at rockwellcollins.com
+
+
+>
+>
+>
+> --
+> J?r?me Pouiller, Sysmic
+> Embedded Linux specialist
+> http://www.sysmic.fr
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
