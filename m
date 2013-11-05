@@ -1,61 +1,571 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 5 Nov 2013 23:55:06 +0100
-Subject: [Buildroot] [git commit] configs/p1010rdb: bump to the latest and
-	greatest versions
-Message-ID: <20131105231347.742EF7F922@busybox.osuosl.org>
+Date: Tue, 5 Nov 2013 23:49:16 +0100
+Subject: [Buildroot] [git commit] configs/qemu: bump relevant config versions
+Message-ID: <20131105231347.4BDEF9BA7B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=2fb436660c07c1d6eb0d189b1778c2e573be1b63
+commit: http://git.buildroot.net/buildroot/commit/?id=1c7b9de8e08c7c851381037fed9e80d3f31c4881
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
+ board/qemu/arm-nuri/readme.txt                     |    2 +-
  .../{linux-3.11.config => linux-3.12.config}       |    0
- board/freescale/p1010rdb/readme.txt                |    2 +-
- configs/freescale_p1010rdb_defconfig               |    6 +++---
- 3 files changed, 4 insertions(+), 4 deletions(-)
+ board/qemu/arm-versatile/readme.txt                |    2 +-
+ board/qemu/arm-vexpress/readme.txt                 |    2 +-
+ .../{linux-3.11.config => linux-3.12.config}       |    0
+ board/qemu/microblazebe-mmu/readme.txt             |    2 +-
+ .../{linux-3.11.config => linux-3.12.config}       |    0
+ board/qemu/microblazeel-mmu/readme.txt             |    2 +-
+ .../{linux-3.11.config => linux-3.12.config}       |    0
+ board/qemu/mips-malta/readme.txt                   |    2 +-
+ .../{linux-3.11.config => linux-3.12.config}       |    0
+ board/qemu/mips64-malta/readme.txt                 |    2 +-
+ .../{linux-3.11.config => linux-3.12.config}       |    0
+ board/qemu/mipsel-malta/readme.txt                 |    2 +-
+ .../{linux-3.11.config => linux-3.12.config}       |    0
+ board/qemu/powerpc-g3beige/readme.txt              |    2 +-
+ board/qemu/powerpc-mpc8544ds/readme.txt            |    2 +-
+ board/qemu/powerpc-virtex-ml507/readme.txt         |    2 +-
+ board/qemu/sh4-r2d/readme.txt                      |    2 +-
+ board/qemu/sparc-ss10/readme.txt                   |    2 +-
+ .../x86/{linux-3.11.config => linux-3.12.config}   |    0
+ board/qemu/x86/readme.txt                          |    2 +-
+ .../{linux-3.11.config => linux-3.12.config}       |    0
+ board/qemu/x86_64/readme.txt                       |    2 +-
+ configs/qemu_arm_nuri_defconfig                    |    4 ++--
+ configs/qemu_arm_versatile_defconfig               |    8 ++++----
+ configs/qemu_arm_vexpress_defconfig                |    6 +++---
+ configs/qemu_microblazebe_mmu_defconfig            |    4 ++--
+ configs/qemu_microblazeel_mmu_defconfig            |    4 ++--
+ configs/qemu_mips64_malta_defconfig                |    8 ++++----
+ configs/qemu_mips_malta_defconfig                  |    8 ++++----
+ configs/qemu_mipsel_malta_defconfig                |    8 ++++----
+ configs/qemu_ppc_g3beige_defconfig                 |    8 ++++----
+ configs/qemu_ppc_mpc8544ds_defconfig               |    6 +++---
+ configs/qemu_ppc_virtex_ml507_defconfig            |    6 +++---
+ configs/qemu_sh4_r2d_defconfig                     |    4 ++--
+ configs/qemu_sparc_ss10_defconfig                  |    6 +++---
+ configs/qemu_x86_64_defconfig                      |    8 ++++----
+ configs/qemu_x86_defconfig                         |    8 ++++----
+ 39 files changed, 63 insertions(+), 63 deletions(-)
 
-diff --git a/board/freescale/p1010rdb/linux-3.11.config b/board/freescale/p1010rdb/linux-3.12.config
+diff --git a/board/qemu/arm-nuri/readme.txt b/board/qemu/arm-nuri/readme.txt
+index 0fed2f7..6fdba81 100644
+--- a/board/qemu/arm-nuri/readme.txt
++++ b/board/qemu/arm-nuri/readme.txt
+@@ -7,4 +7,4 @@ graphical window is the framebuffer.
+ 
+ Startup time is slow because of the SMP CPU emulation so be patient.
+ 
+-Tested with QEMU 1.6.0
++Tested with QEMU 1.6.1
+diff --git a/board/qemu/arm-versatile/linux-3.11.config b/board/qemu/arm-versatile/linux-3.12.config
 similarity index 100%
-rename from board/freescale/p1010rdb/linux-3.11.config
-rename to board/freescale/p1010rdb/linux-3.12.config
-diff --git a/board/freescale/p1010rdb/readme.txt b/board/freescale/p1010rdb/readme.txt
-index 5b56873..42706fd 100644
---- a/board/freescale/p1010rdb/readme.txt
-+++ b/board/freescale/p1010rdb/readme.txt
-@@ -6,7 +6,7 @@ It won't work for NAND or SPI and will brick those bootloaders!
- Also don't go playing around with different U-boot versions or flash targets
- unless you've got the necessary hardware and/or know-how to unbrick your kit.
+rename from board/qemu/arm-versatile/linux-3.11.config
+rename to board/qemu/arm-versatile/linux-3.12.config
+diff --git a/board/qemu/arm-versatile/readme.txt b/board/qemu/arm-versatile/readme.txt
+index 4902c54..7d0745f 100644
+--- a/board/qemu/arm-versatile/readme.txt
++++ b/board/qemu/arm-versatile/readme.txt
+@@ -5,4 +5,4 @@ Run the emulation with:
+ The login prompt will appear in the terminal that started Qemu. The
+ graphical window is the framebuffer.
  
--2013.04 is known good for NOR.
-+2013.10 is known good for NOR.
- ******************** WARNING ********************
+-Tested with QEMU 1.6.0
++Tested with QEMU 1.6.1
+diff --git a/board/qemu/arm-vexpress/readme.txt b/board/qemu/arm-vexpress/readme.txt
+index 65d1996..9a4694d 100644
+--- a/board/qemu/arm-vexpress/readme.txt
++++ b/board/qemu/arm-vexpress/readme.txt
+@@ -5,4 +5,4 @@ Run the emulation with:
+ The login prompt will appear in the terminal that started Qemu. The
+ graphical window is the framebuffer.
  
- You'll need to program the files created by buildroot into the flash.
-diff --git a/configs/freescale_p1010rdb_defconfig b/configs/freescale_p1010rdb_defconfig
-index 76a0be2..0a727c4 100644
---- a/configs/freescale_p1010rdb_defconfig
-+++ b/configs/freescale_p1010rdb_defconfig
-@@ -11,14 +11,14 @@ BR2_TARGET_ROOTFS_JFFS2_CUSTOM_EBSIZE=0x20000
+-Tested with QEMU 1.6.0
++Tested with QEMU 1.6.1
+diff --git a/board/qemu/microblazebe-mmu/linux-3.11.config b/board/qemu/microblazebe-mmu/linux-3.12.config
+similarity index 100%
+rename from board/qemu/microblazebe-mmu/linux-3.11.config
+rename to board/qemu/microblazebe-mmu/linux-3.12.config
+diff --git a/board/qemu/microblazebe-mmu/readme.txt b/board/qemu/microblazebe-mmu/readme.txt
+index 473a934..8ade434 100644
+--- a/board/qemu/microblazebe-mmu/readme.txt
++++ b/board/qemu/microblazebe-mmu/readme.txt
+@@ -4,4 +4,4 @@ Run the emulation with:
  
- # Lock headers version to match and avoid breakage
+ The login prompt will appear in the terminal that started Qemu.
+ 
+-Tested with QEMU 1.6.0
++Tested with QEMU 1.6.1
+diff --git a/board/qemu/microblazeel-mmu/linux-3.11.config b/board/qemu/microblazeel-mmu/linux-3.12.config
+similarity index 100%
+rename from board/qemu/microblazeel-mmu/linux-3.11.config
+rename to board/qemu/microblazeel-mmu/linux-3.12.config
+diff --git a/board/qemu/microblazeel-mmu/readme.txt b/board/qemu/microblazeel-mmu/readme.txt
+index baddc7a..9ac55db 100644
+--- a/board/qemu/microblazeel-mmu/readme.txt
++++ b/board/qemu/microblazeel-mmu/readme.txt
+@@ -4,4 +4,4 @@ Run the emulation with:
+ 
+ The login prompt will appear in the terminal that started Qemu.
+ 
+-Tested with QEMU 1.6.0
++Tested with QEMU 1.6.1
+diff --git a/board/qemu/mips-malta/linux-3.11.config b/board/qemu/mips-malta/linux-3.12.config
+similarity index 100%
+rename from board/qemu/mips-malta/linux-3.11.config
+rename to board/qemu/mips-malta/linux-3.12.config
+diff --git a/board/qemu/mips-malta/readme.txt b/board/qemu/mips-malta/readme.txt
+index 33764ea..b367927 100644
+--- a/board/qemu/mips-malta/readme.txt
++++ b/board/qemu/mips-malta/readme.txt
+@@ -6,4 +6,4 @@ The login prompt will appear in the terminal that started Qemu. The
+ graphical window is the framebuffer. No keyboard support has been
+ enabled.
+ 
+-Tested with QEMU 1.6.0
++Tested with QEMU 1.6.1
+diff --git a/board/qemu/mips64-malta/linux-3.11.config b/board/qemu/mips64-malta/linux-3.12.config
+similarity index 100%
+rename from board/qemu/mips64-malta/linux-3.11.config
+rename to board/qemu/mips64-malta/linux-3.12.config
+diff --git a/board/qemu/mips64-malta/readme.txt b/board/qemu/mips64-malta/readme.txt
+index 23b85ab..4fa8a19 100644
+--- a/board/qemu/mips64-malta/readme.txt
++++ b/board/qemu/mips64-malta/readme.txt
+@@ -8,4 +8,4 @@ enabled.
+ 
+ This configuration is known to be flaky.
+ 
+-Tested with QEMU 1.6.0
++Tested with QEMU 1.6.1
+diff --git a/board/qemu/mipsel-malta/linux-3.11.config b/board/qemu/mipsel-malta/linux-3.12.config
+similarity index 100%
+rename from board/qemu/mipsel-malta/linux-3.11.config
+rename to board/qemu/mipsel-malta/linux-3.12.config
+diff --git a/board/qemu/mipsel-malta/readme.txt b/board/qemu/mipsel-malta/readme.txt
+index 1e17828..b77cc84 100644
+--- a/board/qemu/mipsel-malta/readme.txt
++++ b/board/qemu/mipsel-malta/readme.txt
+@@ -6,4 +6,4 @@ The login prompt will appear in the terminal that started Qemu. The
+ graphical window is the framebuffer. No keyboard support has been
+ enabled.
+ 
+-Tested with QEMU 1.6.0
++Tested with QEMU 1.6.1
+diff --git a/board/qemu/powerpc-g3beige/linux-3.11.config b/board/qemu/powerpc-g3beige/linux-3.12.config
+similarity index 100%
+rename from board/qemu/powerpc-g3beige/linux-3.11.config
+rename to board/qemu/powerpc-g3beige/linux-3.12.config
+diff --git a/board/qemu/powerpc-g3beige/readme.txt b/board/qemu/powerpc-g3beige/readme.txt
+index 4c0bf8a..07cb660 100644
+--- a/board/qemu/powerpc-g3beige/readme.txt
++++ b/board/qemu/powerpc-g3beige/readme.txt
+@@ -5,4 +5,4 @@ Run the emulation with:
+ The login prompt will appear in the terminal that started Qemu. The
+ graphical window is the framebuffer.
+ 
+-Tested with QEMU 1.6.0
++Tested with QEMU 1.6.1
+diff --git a/board/qemu/powerpc-mpc8544ds/readme.txt b/board/qemu/powerpc-mpc8544ds/readme.txt
+index 8c57ead..cd56ddd 100644
+--- a/board/qemu/powerpc-mpc8544ds/readme.txt
++++ b/board/qemu/powerpc-mpc8544ds/readme.txt
+@@ -4,4 +4,4 @@ Run the emulation with:
+ 
+ The login prompt will appear in the terminal that started Qemu.
+ 
+-Tested with QEMU 1.6.0
++Tested with QEMU 1.6.1
+diff --git a/board/qemu/powerpc-virtex-ml507/readme.txt b/board/qemu/powerpc-virtex-ml507/readme.txt
+index e958d49..a9a6378 100644
+--- a/board/qemu/powerpc-virtex-ml507/readme.txt
++++ b/board/qemu/powerpc-virtex-ml507/readme.txt
+@@ -5,4 +5,4 @@ Run the emulation with:
+ 
+ The login prompt will appear in the terminal that started Qemu.
+ 
+-Tested with QEMU 1.6.0
++Tested with QEMU 1.6.1
+diff --git a/board/qemu/sh4-r2d/readme.txt b/board/qemu/sh4-r2d/readme.txt
+index 45fca86..2a963eb 100644
+--- a/board/qemu/sh4-r2d/readme.txt
++++ b/board/qemu/sh4-r2d/readme.txt
+@@ -5,4 +5,4 @@ Run the emulation with:
+ The login prompt will appear in the terminal that started Qemu.
+ The graphical window is the framebuffer.
+ 
+-Tested with QEMU 1.6.0
++Tested with QEMU 1.6.1
+diff --git a/board/qemu/sparc-ss10/readme.txt b/board/qemu/sparc-ss10/readme.txt
+index dab4028..725ab30 100644
+--- a/board/qemu/sparc-ss10/readme.txt
++++ b/board/qemu/sparc-ss10/readme.txt
+@@ -5,4 +5,4 @@ Run the emulation with:
+ The login prompt will appear in the terminal that started Qemu.
+ The graphical window is the framebuffer.
+ 
+-Tested with QEMU 1.6.0
++Tested with QEMU 1.6.1
+diff --git a/board/qemu/x86/linux-3.11.config b/board/qemu/x86/linux-3.12.config
+similarity index 100%
+rename from board/qemu/x86/linux-3.11.config
+rename to board/qemu/x86/linux-3.12.config
+diff --git a/board/qemu/x86/readme.txt b/board/qemu/x86/readme.txt
+index 5f3af40..c07000c 100644
+--- a/board/qemu/x86/readme.txt
++++ b/board/qemu/x86/readme.txt
+@@ -4,4 +4,4 @@ Run the emulation with:
+ 
+ The login prompt will appear in the graphical window.
+ 
+-Tested with QEMU 1.6.0
++Tested with QEMU 1.6.1
+diff --git a/board/qemu/x86_64/linux-3.11.config b/board/qemu/x86_64/linux-3.12.config
+similarity index 100%
+rename from board/qemu/x86_64/linux-3.11.config
+rename to board/qemu/x86_64/linux-3.12.config
+diff --git a/board/qemu/x86_64/readme.txt b/board/qemu/x86_64/readme.txt
+index d9eaf56..3c344f9 100644
+--- a/board/qemu/x86_64/readme.txt
++++ b/board/qemu/x86_64/readme.txt
+@@ -4,4 +4,4 @@ Run the emulation with:
+ 
+ The login prompt will appear in the graphical window.
+ 
+-Tested with QEMU 1.6.0
++Tested with QEMU 1.6.1
+diff --git a/configs/qemu_arm_nuri_defconfig b/configs/qemu_arm_nuri_defconfig
+index 20b825a..965f55d 100644
+--- a/configs/qemu_arm_nuri_defconfig
++++ b/configs/qemu_arm_nuri_defconfig
+@@ -15,11 +15,11 @@ BR2_TARGET_ROOTFS_INITRAMFS=y
+ 
+ # Lock to 3.10 headers to avoid breaking with newer kernels
  BR2_KERNEL_HEADERS_VERSION=y
--BR2_DEFAULT_KERNEL_VERSION="3.11.5"
+-BR2_DEFAULT_KERNEL_VERSION="3.10.15"
++BR2_DEFAULT_KERNEL_VERSION="3.10.18"
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.10.15"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.10.18"
+ BR2_LINUX_KERNEL_DEFCONFIG="exynos4"
+ BR2_LINUX_KERNEL_ZIMAGE=y
+diff --git a/configs/qemu_arm_versatile_defconfig b/configs/qemu_arm_versatile_defconfig
+index 322fc18..88df6c8 100644
+--- a/configs/qemu_arm_versatile_defconfig
++++ b/configs/qemu_arm_versatile_defconfig
+@@ -10,14 +10,14 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
+ BR2_TARGET_ROOTFS_EXT2=y
+ # BR2_TARGET_ROOTFS_TAR is not set
+ 
+-# Lock to 3.11 headers to avoid breaking with newer kernels
++# Lock to 3.12 headers to avoid breaking with newer kernels
+ BR2_KERNEL_HEADERS_VERSION=y
+-BR2_DEFAULT_KERNEL_VERSION="3.11.4"
 +BR2_DEFAULT_KERNEL_VERSION="3.12"
  
  # Kernel
  BR2_LINUX_KERNEL=y
  BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.11.5"
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.11.4"
 +BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.12"
  BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
--BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/freescale/p1010rdb/linux-3.11.config"
-+BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/freescale/p1010rdb/linux-3.12.config"
- BR2_LINUX_KERNEL_UIMAGE=y
+-BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/arm-versatile/linux-3.11.config"
++BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/arm-versatile/linux-3.12.config"
+ BR2_LINUX_KERNEL_ZIMAGE=y
+diff --git a/configs/qemu_arm_vexpress_defconfig b/configs/qemu_arm_vexpress_defconfig
+index 8bd12af..324a811 100644
+--- a/configs/qemu_arm_vexpress_defconfig
++++ b/configs/qemu_arm_vexpress_defconfig
+@@ -13,13 +13,13 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
+ BR2_TARGET_ROOTFS_EXT2=y
+ # BR2_TARGET_ROOTFS_TAR is not set
+ 
+-# Lock to 3.11 headers to avoid breaking with newer kernels
++# Lock to 3.12 headers to avoid breaking with newer kernels
+ BR2_KERNEL_HEADERS_VERSION=y
+-BR2_DEFAULT_KERNEL_VERSION="3.11.4"
++BR2_DEFAULT_KERNEL_VERSION="3.12"
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.11.4"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.12"
+ BR2_LINUX_KERNEL_DEFCONFIG="vexpress"
+ BR2_LINUX_KERNEL_ZIMAGE=y
+diff --git a/configs/qemu_microblazebe_mmu_defconfig b/configs/qemu_microblazebe_mmu_defconfig
+index adc7074..0a621b1 100644
+--- a/configs/qemu_microblazebe_mmu_defconfig
++++ b/configs/qemu_microblazebe_mmu_defconfig
+@@ -19,9 +19,9 @@ BR2_TARGET_ROOTFS_INITRAMFS=y
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.11.4"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.12"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+-BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/microblazebe-mmu/linux-3.11.config"
++BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/microblazebe-mmu/linux-3.12.config"
+ BR2_LINUX_KERNEL_LINUX_BIN=y
+ BR2_LINUX_KERNEL_USE_CUSTOM_DTS=y
+ BR2_LINUX_KERNEL_CUSTOM_DTS_PATH="board/qemu/microblazebe-mmu/system.dts"
+diff --git a/configs/qemu_microblazeel_mmu_defconfig b/configs/qemu_microblazeel_mmu_defconfig
+index 7920505..51d58c6 100644
+--- a/configs/qemu_microblazeel_mmu_defconfig
++++ b/configs/qemu_microblazeel_mmu_defconfig
+@@ -19,9 +19,9 @@ BR2_TARGET_ROOTFS_INITRAMFS=y
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.11.4"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.12"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+-BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/microblazeel-mmu/linux-3.11.config"
++BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/microblazeel-mmu/linux-3.12.config"
+ BR2_LINUX_KERNEL_LINUX_BIN=y
+ BR2_LINUX_KERNEL_USE_CUSTOM_DTS=y
+ BR2_LINUX_KERNEL_CUSTOM_DTS_PATH="board/qemu/microblazeel-mmu/system.dts"
+diff --git a/configs/qemu_mips64_malta_defconfig b/configs/qemu_mips64_malta_defconfig
+index 0fde6c6..c0904b5 100644
+--- a/configs/qemu_mips64_malta_defconfig
++++ b/configs/qemu_mips64_malta_defconfig
+@@ -10,16 +10,16 @@ BR2_PREFER_STATIC_LIB=y
+ BR2_TARGET_ROOTFS_EXT2=y
+ # BR2_TARGET_ROOTFS_TAR is not set
+ 
+-# Lock to 3.11 headers to avoid breaking with newer kernels
++# Lock to 3.12 headers to avoid breaking with newer kernels
+ BR2_KERNEL_HEADERS_VERSION=y
+-BR2_DEFAULT_KERNEL_VERSION="3.11.4"
++BR2_DEFAULT_KERNEL_VERSION="3.12"
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.11.4"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.12"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+-BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mips64-malta/linux-3.11.config"
++BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mips64-malta/linux-3.12.config"
+ BR2_LINUX_KERNEL_VMLINUX=y
+ 
+ # Serial port config
+diff --git a/configs/qemu_mips_malta_defconfig b/configs/qemu_mips_malta_defconfig
+index 6b952de..6e2c601 100644
+--- a/configs/qemu_mips_malta_defconfig
++++ b/configs/qemu_mips_malta_defconfig
+@@ -6,16 +6,16 @@ BR2_mips_32r2=y
+ BR2_TARGET_ROOTFS_EXT2=y
+ # BR2_TARGET_ROOTFS_TAR is not set
+ 
+-# Lock to 3.11 headers to avoid breaking with newer kernels
++# Lock to 3.12 headers to avoid breaking with newer kernels
+ BR2_KERNEL_HEADERS_VERSION=y
+-BR2_DEFAULT_KERNEL_VERSION="3.11.4"
++BR2_DEFAULT_KERNEL_VERSION="3.12"
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.11.4"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.12"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+-BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mips-malta/linux-3.11.config"
++BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mips-malta/linux-3.12.config"
+ BR2_LINUX_KERNEL_VMLINUX=y
+ 
+ # Serial port config
+diff --git a/configs/qemu_mipsel_malta_defconfig b/configs/qemu_mipsel_malta_defconfig
+index 0b9137a..ff640a1 100644
+--- a/configs/qemu_mipsel_malta_defconfig
++++ b/configs/qemu_mipsel_malta_defconfig
+@@ -6,16 +6,16 @@ BR2_mips_32r2=y
+ BR2_TARGET_ROOTFS_EXT2=y
+ # BR2_TARGET_ROOTFS_TAR is not set
+ 
+-# Lock to 3.11 headers to avoid breaking with newer kernels
++# Lock to 3.12 headers to avoid breaking with newer kernels
+ BR2_KERNEL_HEADERS_VERSION=y
+-BR2_DEFAULT_KERNEL_VERSION="3.11.4"
++BR2_DEFAULT_KERNEL_VERSION="3.12"
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.11.4"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.12"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+-BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mipsel-malta/linux-3.11.config"
++BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mipsel-malta/linux-3.12.config"
+ BR2_LINUX_KERNEL_VMLINUX=y
+ 
+ # Serial port config
+diff --git a/configs/qemu_ppc_g3beige_defconfig b/configs/qemu_ppc_g3beige_defconfig
+index 513c49e..bd0bc03 100644
+--- a/configs/qemu_ppc_g3beige_defconfig
++++ b/configs/qemu_ppc_g3beige_defconfig
+@@ -6,16 +6,16 @@ BR2_powerpc_750=y
+ BR2_TARGET_ROOTFS_EXT2=y
+ # BR2_TARGET_ROOTFS_TAR is not set
+ 
+-# Lock to 3.11 headers to avoid breaking with newer kernels
++# Lock to 3.12 headers to avoid breaking with newer kernels
+ BR2_KERNEL_HEADERS_VERSION=y
+-BR2_DEFAULT_KERNEL_VERSION="3.11.4"
++BR2_DEFAULT_KERNEL_VERSION="3.12"
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.11.4"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.12"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+-BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/powerpc-g3beige/linux-3.11.config"
++BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/powerpc-g3beige/linux-3.12.config"
+ BR2_LINUX_KERNEL_VMLINUX=y
+ 
+ # Serial port config
+diff --git a/configs/qemu_ppc_mpc8544ds_defconfig b/configs/qemu_ppc_mpc8544ds_defconfig
+index 5396cfa..687b537 100644
+--- a/configs/qemu_ppc_mpc8544ds_defconfig
++++ b/configs/qemu_ppc_mpc8544ds_defconfig
+@@ -6,14 +6,14 @@ BR2_powerpc_8548=y
+ # BR2_TARGET_ROOTFS_TAR is not set
+ BR2_TARGET_ROOTFS_INITRAMFS=y
+ 
+-# Lock to 3.11 headers to avoid breaking with newer kernels
++# Lock to 3.12 headers to avoid breaking with newer kernels
+ BR2_KERNEL_HEADERS_VERSION=y
+-BR2_DEFAULT_KERNEL_VERSION="3.11.4"
++BR2_DEFAULT_KERNEL_VERSION="3.12"
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.11.4"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.12"
+ BR2_LINUX_KERNEL_DEFCONFIG="mpc85xx"
+ BR2_LINUX_KERNEL_VMLINUX=y
+ 
+diff --git a/configs/qemu_ppc_virtex_ml507_defconfig b/configs/qemu_ppc_virtex_ml507_defconfig
+index 62dd741..a0dc674 100644
+--- a/configs/qemu_ppc_virtex_ml507_defconfig
++++ b/configs/qemu_ppc_virtex_ml507_defconfig
+@@ -6,9 +6,9 @@ BR2_powerpc_440=y
+ # BR2_TARGET_ROOTFS_TAR is not set
+ BR2_TARGET_ROOTFS_INITRAMFS=y
+ 
+-# Lock to 3.11 headers to avoid breaking with newer kernels
++# Lock to 3.12 headers to avoid breaking with newer kernels
+ BR2_KERNEL_HEADERS_VERSION=y
+-BR2_DEFAULT_KERNEL_VERSION="3.11.4"
++BR2_DEFAULT_KERNEL_VERSION="3.12"
+ 
+ # Use soft float
+ BR2_SOFT_FLOAT=y
+@@ -16,7 +16,7 @@ BR2_SOFT_FLOAT=y
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.11.4"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.12"
+ BR2_LINUX_KERNEL_DEFCONFIG="44x/virtex5"
+ BR2_LINUX_KERNEL_VMLINUX=y
  BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="p1010rdb"
+diff --git a/configs/qemu_sh4_r2d_defconfig b/configs/qemu_sh4_r2d_defconfig
+index 99743a1..f7671d1 100644
+--- a/configs/qemu_sh4_r2d_defconfig
++++ b/configs/qemu_sh4_r2d_defconfig
+@@ -12,7 +12,7 @@ BR2_TARGET_ROOTFS_EXT2=y
+ 
+ # Lock to 3.2 headers to avoid breaking with newer kernels
+ BR2_KERNEL_HEADERS_VERSION=y
+-BR2_DEFAULT_KERNEL_VERSION="3.2.51"
++BR2_DEFAULT_KERNEL_VERSION="3.2.52"
+ 
+ # The kernel wants to use the -m4-nofpu option to make sure that it
+ # doesn't use floating point operations.
+@@ -21,7 +21,7 @@ BR2_EXTRA_GCC_CONFIG_OPTIONS="--with-multilib-list=m4,m4-nofpu"
+ # Linux kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.2.51"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.2.52"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/sh4-r2d/linux-3.2.config"
+ BR2_LINUX_KERNEL_ZIMAGE=y
+diff --git a/configs/qemu_sparc_ss10_defconfig b/configs/qemu_sparc_ss10_defconfig
+index 37c40c4..67bffbd 100644
+--- a/configs/qemu_sparc_ss10_defconfig
++++ b/configs/qemu_sparc_ss10_defconfig
+@@ -6,13 +6,13 @@ BR2_sparc_v8=y
+ BR2_TARGET_ROOTFS_EXT2=y
+ # BR2_TARGET_ROOTFS_TAR is not set
+ 
+-# Lock to 3.11 headers to avoid breaking with newer kernels
++# Lock to 3.12 headers to avoid breaking with newer kernels
+ BR2_KERNEL_HEADERS_VERSION=y
+-BR2_DEFAULT_KERNEL_VERSION="3.11.4"
++BR2_DEFAULT_KERNEL_VERSION="3.12"
+ 
+ # Linux kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.11.4"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.12"
+ BR2_LINUX_KERNEL_DEFCONFIG="sparc32"
+ BR2_LINUX_KERNEL_ZIMAGE=y
+diff --git a/configs/qemu_x86_64_defconfig b/configs/qemu_x86_64_defconfig
+index 520fcf1..816cef1 100644
+--- a/configs/qemu_x86_64_defconfig
++++ b/configs/qemu_x86_64_defconfig
+@@ -9,13 +9,13 @@ BR2_TARGET_GENERIC_GETTY_PORT="tty1"
+ BR2_TARGET_ROOTFS_EXT2=y
+ # BR2_TARGET_ROOTFS_TAR is not set
+ 
+-# Lock to 3.11 headers to avoid breaking with newer kernels
++# Lock to 3.12 headers to avoid breaking with newer kernels
+ BR2_KERNEL_HEADERS_VERSION=y
+-BR2_DEFAULT_KERNEL_VERSION="3.11.4"
++BR2_DEFAULT_KERNEL_VERSION="3.12"
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.11.4"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.12"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+-BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/x86_64/linux-3.11.config"
++BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/x86_64/linux-3.12.config"
+diff --git a/configs/qemu_x86_defconfig b/configs/qemu_x86_defconfig
+index 7609cde..ccccfa2 100644
+--- a/configs/qemu_x86_defconfig
++++ b/configs/qemu_x86_defconfig
+@@ -10,13 +10,13 @@ BR2_TARGET_GENERIC_GETTY_PORT="tty1"
+ BR2_TARGET_ROOTFS_EXT2=y
+ # BR2_TARGET_ROOTFS_TAR is not set
+ 
+-# Lock to 3.11 headers to avoid breaking with newer kernels
++# Lock to 3.12 headers to avoid breaking with newer kernels
+ BR2_KERNEL_HEADERS_VERSION=y
+-BR2_DEFAULT_KERNEL_VERSION="3.11.4"
++BR2_DEFAULT_KERNEL_VERSION="3.12"
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.11.4"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.12"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+-BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/x86/linux-3.11.config"
++BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/x86/linux-3.12.config"
