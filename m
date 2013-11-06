@@ -1,37 +1,55 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Wed, 6 Nov 2013 12:54:00 +0100
-Subject: [Buildroot] [PATCH] libevas: disable on avr32
-In-Reply-To: <CAHt8ZCM6t1qPEOCaTpDOe1ESTF1ZdvNU1CrEkZC5hABzpKf+fg@mail.gmail.com>
-References: <1383735243-18910-1-git-send-email-spdawson@gmail.com>
- <CAAXf6LV6GFk27s8fpEbcDVKmrkipiKA_FGFEt-wcdXMutkwBoA@mail.gmail.com>
- <CAHt8ZCM6t1qPEOCaTpDOe1ESTF1ZdvNU1CrEkZC5hABzpKf+fg@mail.gmail.com>
-Message-ID: <CAAXf6LWSZa6hNgqqYgM07ER4t_iF3b26e6O1-jMivBeRnu4RXg@mail.gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed,  6 Nov 2013 09:06:34 -0300
+Subject: [Buildroot] [PATCH] polarssl: bump to version 1.2.10
+Message-ID: <1383739594-2568-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Simon,
+Fixes a memory leak in RSA blinding.
 
-On Wed, Nov 6, 2013 at 12:09 PM, Simon Dawson <spdawson@gmail.com> wrote:
-> Hi Thomas, thanks for the feedback.
->
-> On 6 November 2013 11:05, Thomas De Schampheleire
-> <patrickdepinguin@gmail.com> wrote:
->> In all these places, the new 'depends on' should be repeated on the
->> comment that is shown when one of the toolchain options is missing.
->
-> Okay. I thought the policy was not to mention architecture
-> dependencies on the comments...
->
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/polarssl/polarssl-shared-and-static-library.patch | 4 ++--
+ package/polarssl/polarssl.mk                              | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-This is still correct, the comment should not mention the architecture
-dependency.
-But, the comment should only be _visible_ when it is relevant. Since
-the package itself is not relevant on avr32, it makes no sense to show
-the comment. Hence, the comment should get an extra 'depends on
-!avr32'.
-
-Best regards,
-Thomas
+diff --git a/package/polarssl/polarssl-shared-and-static-library.patch b/package/polarssl/polarssl-shared-and-static-library.patch
+index 47511b2..7e41745 100644
+--- a/package/polarssl/polarssl-shared-and-static-library.patch
++++ b/package/polarssl/polarssl-shared-and-static-library.patch
+@@ -9,7 +9,7 @@ This patch adds the USE_STATIC_POLARSSL_LIBRARY (which defaults to ON)
+ in addition to the existing USE_SHARED_POLARSSL_LIBRARY (which
+ defaults to OFF). Both options can be manipulated independently.
+ 
+-[Gustavo: update for polarssl 1.2.9]
++[Gustavo: update for polarssl 1.2.10]
+ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+ 
+@@ -34,7 +34,7 @@ diff -Nura polarssl-1.2.3.orig/library/CMakeLists.txt polarssl-1.2.3/library/CMa
+ +if(USE_SHARED_POLARSSL_LIBRARY)
+  
+  add_library(polarssl SHARED ${src})
+- set_target_properties(polarssl PROPERTIES VERSION 1.2.9 SOVERSION 3)
++ set_target_properties(polarssl PROPERTIES VERSION 1.2.10 SOVERSION 3)
+ +set_target_properties(polarssl PROPERTIES OUTPUT_NAME polarssl)
+ +
+ +endif(USE_SHARED_POLARSSL_LIBRARY)
+diff --git a/package/polarssl/polarssl.mk b/package/polarssl/polarssl.mk
+index deb2252..20486e3 100644
+--- a/package/polarssl/polarssl.mk
++++ b/package/polarssl/polarssl.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ POLARSSL_SITE = https://polarssl.org/code/releases
+-POLARSSL_VERSION = 1.2.9
++POLARSSL_VERSION = 1.2.10
+ POLARSSL_SOURCE = polarssl-$(POLARSSL_VERSION)-gpl.tgz
+ POLARSSL_CONF_OPT = \
+ 	-DUSE_SHARED_POLARSSL_LIBRARY=ON \
+-- 
+1.8.1.5
