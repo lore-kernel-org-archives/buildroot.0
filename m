@@ -1,39 +1,55 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 07 Nov 2013 00:29:00 +0100
-Subject: [Buildroot] [RFC] core: Download all package sources
-In-Reply-To: <OFAD27391D.CFE95723-ON86257C1B.007F5691-86257C1B.007F8A75@rockwellcollins.com>
- (clshotwe@rockwellcollins.com's message of "Wed, 6 Nov 2013 17:14:34
- -0600")
-References: <1383587286-18094-1-git-send-email-clshotwe@rockwellcollins.com>
- <87eh6tkxuk.fsf@dell.be.48ers.dk> <20131106231048.67cf2d52@skate>
- <87k3gljh5d.fsf@dell.be.48ers.dk> <20131106225332.GB3482@free.fr>
- <8738n9jfim.fsf@dell.be.48ers.dk>
- <OFAD27391D.CFE95723-ON86257C1B.007F5691-86257C1B.007F8A75@rockwellcollins.com>
-Message-ID: <87txfphzyb.fsf@dell.be.48ers.dk>
+From: Andi Shyti <andi@etezian.org>
+Date: Thu, 7 Nov 2013 00:40:13 +0100
+Subject: [Buildroot] [PATCH] scripts: apply-patches: don't stop if no
+ patch is found for a package
+In-Reply-To: <527AB58A.9050506@mind.be>
+References: <1383656430-29160-1-git-send-email-andi@etezian.org>
+ <52793E3A.5060802@mind.be> <20131105201752.GC17791@jack.whiskey>
+ <527AB58A.9050506@mind.be>
+Message-ID: <20131106234013.GA9149@jack.whiskey>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "clshotwe" == clshotwe  <clshotwe@rockwellcollins.com> writes:
+> >this happens when for example you want to get as cross compiler
+> >the daily snapshot instead of a specific version.
+> >
+> >The build stops with an error because of that 'exit 1' since it
+> >doesn't find any gcc-20131105 patch directory (i think the
+> >snapshot is called so).
+> 
+>  That's a bug in the gcc package then :-)
+> 
+>  It should actually be converted to using the default patch strategy
+> instead of post-patch hooks. Let me look into it...
 
- >> Sure, but that's what we have 'make source' (for specific
- >> configurations) or sources.buildroot.net (for local mirror of
- >> everything) for, right?
+Thanks for looking into it, please add me in CC when you come to
+a solution.
 
- > I don't know what all configurations are being used so I would
- > rather be safe and pull down all of the packages. This would make
- > it easier than running make source on a bunch of different configurations.
+Anyway one solution could be to check whether the gcc chosen is a
+snapshot or not, something similar:
 
-But you still only download a single version per package, so you might
-not get all the needed sources (and you most likely download a lot more
-than you need).
+diff --git a/support/scripts/apply-patches.sh
+b/support/scripts/apply-patches.sh
+index ff72b45..12f384c 100755
+--- a/support/scripts/apply-patches.sh
++++ b/support/scripts/apply-patches.sh
+@@ -42,6 +42,11 @@ if [ ! -d "${builddir}" ] ; then
+     exit 1
+ fi
+ if [ ! -d "${patchdir}" ] ; then
++    if grep -q BR2_GCC_VERSION_SNAP=y .config; then
++       echo "Warning: no patch can be applied to the daily snapshot."
++        exit
++    fi
++
+     echo "Aborting.  '${patchdir}' is not a directory."
+     exit 1
+ fi
 
-I personally dislike the patch as it's a bit of a hack, but if there's
-really a need for something like this then perhaps - But wouldn't it
-make more sense if we instead tried harder to ensure all the package
-versions we support were available on our mirror?
+looks like a hack, but it's the fastest thing that comes to my
+mind :)
 
--- 
-Bye, Peter Korsgaard
+Andi
