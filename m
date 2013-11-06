@@ -1,125 +1,42 @@
-From: spdawson at gmail.com <spdawson@gmail.com>
-Date: Wed,  6 Nov 2013 13:56:20 +0000
-Subject: [Buildroot] [PATCH v2] libevas: disable on avr32
-Message-ID: <1383746180-14202-1-git-send-email-spdawson@gmail.com>
+From: Laurent GONZALEZ <br2@gezedo.com>
+Date: Wed, 06 Nov 2013 11:40:06 +0100
+Subject: [Buildroot] [PATCH 1/1] Avoid toolchain download when it is
+	preinstalled
+Message-ID: <527A1C86.8030909@gezedo.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Simon Dawson <spdawson@gmail.com>
+For configurations using a toolchain that is preinstalled on
+the host, <pkg>_SITE and <pkg>_SOURCE variables must be kept
+empty to avoid downloading any toolchain package.
 
-Neither epoll_create1 nor inotify_init1 is available on avr32. Fixes build
-failures such as the following.
-
-  http://autobuild.buildroot.net/results/4d435a5fc608936362d605aca696c01023be9723
-
-Signed-off-by: Simon Dawson <spdawson@gmail.com>
+Signed-off-by: GONZALEZ Laurent <br2@gezedo.com>
 ---
- v2: Improve layout and hide comments on avr32, as suggested by
-     Thomas De Schampheleire.
+ toolchain/toolchain-external/toolchain-external.mk |    2 ++
+ 1 file changed, 2 insertions(+)
 
- package/efl/expedite/Config.in      | 2 ++
- package/efl/libecore/Config.in      | 1 +
- package/efl/libedje/Config.in       | 1 +
- package/efl/libelementary/Config.in | 1 +
- package/efl/libethumb/Config.in     | 1 +
- package/efl/libevas/Config.in       | 1 +
- package/enlightenment/Config.in     | 2 ++
- 7 files changed, 9 insertions(+)
-
-diff --git a/package/efl/expedite/Config.in b/package/efl/expedite/Config.in
-index 466fd7d..918c34e 100644
---- a/package/efl/expedite/Config.in
-+++ b/package/efl/expedite/Config.in
-@@ -4,6 +4,7 @@ config BR2_PACKAGE_EXPEDITE
- 	select BR2_PACKAGE_LIBEVAS
- 	select BR2_PACKAGE_LIBEET
- 	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on !BR2_avr32 # libevas
- 	help
- 	  Expedite is the official Evas benchmark tool. It can test different
- 	  engines, such as X11, XRender, OpenGL (also ES variant), SDL,
-@@ -12,3 +13,4 @@ config BR2_PACKAGE_EXPEDITE
+diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
+index 2722600..6f4feb5 100644
+--- a/toolchain/toolchain-external/toolchain-external.mk
++++ b/toolchain/toolchain-external/toolchain-external.mk
+@@ -236,6 +236,7 @@ define TOOLCHAIN_EXTERNAL_LINARO_ARMHF_SYMLINK
+ 	ln -sf . $(TARGET_DIR)/usr/lib/arm-linux-gnueabihf
+ endef
  
- comment "expedite needs a toolchain w/ C++"
- 	depends on !BR2_INSTALL_LIBSTDCPP
-+	depends on !BR2_avr32
-diff --git a/package/efl/libecore/Config.in b/package/efl/libecore/Config.in
-index 6c887f5..41a16f9 100644
---- a/package/efl/libecore/Config.in
-+++ b/package/efl/libecore/Config.in
-@@ -38,5 +38,6 @@ config BR2_PACKAGE_LIBECORE_X_XCB
- config BR2_PACKAGE_LIBECORE_EVAS
- 	bool "libecore Evas support"
- 	select BR2_PACKAGE_LIBEVAS
-+	depends on !BR2_avr32 # libevas
++ifeq ($(BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD),y)
+ ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201109),y)
+ TOOLCHAIN_EXTERNAL_SITE = http://sourcery.mentor.com/public/gnu_toolchain/arm-none-linux-gnueabi/
+ TOOLCHAIN_EXTERNAL_SOURCE = arm-2011.09-70-arm-none-linux-gnueabi-i686-pc-linux-gnu.tar.bz2
+@@ -347,6 +348,7 @@ else
+ TOOLCHAIN_EXTERNAL_SITE = $(dir $(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_URL)))
+ TOOLCHAIN_EXTERNAL_SOURCE = $(notdir $(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_URL)))
+ endif
++endif
  
- endif # BR2_PACKAGE_LIBECORE
-diff --git a/package/efl/libedje/Config.in b/package/efl/libedje/Config.in
-index f0985dd..4c30274 100644
---- a/package/efl/libedje/Config.in
-+++ b/package/efl/libedje/Config.in
-@@ -7,6 +7,7 @@ config BR2_PACKAGE_LIBEDJE
- 	select BR2_PACKAGE_LIBEMBRYO
- 	select BR2_PACKAGE_LIBEVAS
- 	select BR2_PACKAGE_LUA
-+	depends on !BR2_avr32 # libevas
- 	help
- 	  A graphical layout and animation library for animated
- 	  resizable, compressed and scalable themes.
-diff --git a/package/efl/libelementary/Config.in b/package/efl/libelementary/Config.in
-index 59af80e..d4584e8 100644
---- a/package/efl/libelementary/Config.in
-+++ b/package/efl/libelementary/Config.in
-@@ -4,6 +4,7 @@ config BR2_PACKAGE_LIBELEMENTARY
- 	select BR2_PACKAGE_LIBEVAS
- 	select BR2_PACKAGE_LIBECORE
- 	select BR2_PACKAGE_LIBEDJE
-+	depends on !BR2_avr32 # libevas
- 	help
- 	  Elementary is a widget toolkit and EFL wrapper and convenience
- 	  library to make it easy to build applications and tools with UIs
-diff --git a/package/efl/libethumb/Config.in b/package/efl/libethumb/Config.in
-index fb0032a..3a2f3dc 100644
---- a/package/efl/libethumb/Config.in
-+++ b/package/efl/libethumb/Config.in
-@@ -5,6 +5,7 @@ config BR2_PACKAGE_LIBETHUMB
- 	select BR2_PACKAGE_LIBECORE
- 	select BR2_PACKAGE_LIBECORE_EVAS
- 	select BR2_PACKAGE_LIBEDJE
-+	depends on !BR2_avr32 # libevas
- 	help
- 	  Ethumb is a library for generating thumbnail images of documents.
+ TOOLCHAIN_EXTERNAL_INSTALL_STAGING = YES
  
-diff --git a/package/efl/libevas/Config.in b/package/efl/libevas/Config.in
-index f73376b..8c4193f 100644
---- a/package/efl/libevas/Config.in
-+++ b/package/efl/libevas/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_LIBEVAS
- 	bool "libevas"
-+	depends on !BR2_avr32 # no epoll_create1 or inotify_init1
- 	select BR2_PACKAGE_FREETYPE
- 	select BR2_PACKAGE_LIBEINA
- 	# required to build so far
-diff --git a/package/enlightenment/Config.in b/package/enlightenment/Config.in
-index 54c0ac6..5df817b 100644
---- a/package/enlightenment/Config.in
-+++ b/package/enlightenment/Config.in
-@@ -26,6 +26,7 @@ config BR2_PACKAGE_ENLIGHTENMENT
- 	# libedbus -> dbus
- 	depends on BR2_USE_MMU
- 	depends on BR2_PACKAGE_XORG7
-+	depends on !BR2_avr32 # libevas
- 	help
- 	  Enlightenment, also known simply as E, is a stacking window
- 	  manager for the X Window System which can be used alone or
-@@ -38,3 +39,4 @@ config BR2_PACKAGE_ENLIGHTENMENT
- comment "enlightenment needs a toolchain w/ wchar, C++, threads"
- 	depends on BR2_PACKAGE_XORG7
- 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP
-+	depends on !BR2_avr32
 -- 
-1.8.3.2
+1.7.10.4
