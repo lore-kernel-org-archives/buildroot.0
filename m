@@ -1,77 +1,88 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 6 Nov 2013 19:29:59 +0100
-Subject: [Buildroot] [PATCH v2 1/1] openpgm: disable on AVR32
-In-Reply-To: <CAAHaz6GeH4p99WBpgESL0LKaL9R-ey4Tzx8FdUOTOqs6gGyxCQ@mail.gmail.com>
-References: <1383329548-8528-1-git-send-email-alexander.lukichev@gmail.com>
- <20131101192027.1ea4c1bc@skate>
- <CAAHaz6GXiQAMuoK2eo0=EjmE509P98zuuAuN7f_T5TYeK6W1QA@mail.gmail.com>
- <CAHt8ZCO2OEtWe8NrDYSTkmu7uqQGpQbWjAEJg+jHVGzsWsF9Mg@mail.gmail.com>
- <20131102122618.18eb2f00@skate>
- <CAHt8ZCOVSKMynxFe9WQuei-FKuB8BAJE2+dtEQreqwZokkTWdw@mail.gmail.com>
- <CAAHaz6HvxQR0g9CpfvRTJN2FAoGmgR_z6uWVar93AXjENH-vbQ@mail.gmail.com>
- <20131106183947.0b078df7@skate>
- <CAAHaz6GeH4p99WBpgESL0LKaL9R-ey4Tzx8FdUOTOqs6gGyxCQ@mail.gmail.com>
-Message-ID: <20131106192959.184c208e@skate>
+From: Charles Krinke <charles.krinke@gmail.com>
+Date: Wed, 6 Nov 2013 11:08:22 -0800
+Subject: [Buildroot] Qt5 puzzle
+In-Reply-To: <CAAXf6LUaGLQh8h7Ujnpaciyq4dz3PM43S7spOcpi08Wd83PUtA@mail.gmail.com>
+References: <CALo-6+gmYsfcV1yU2oEAfkbCHCqi2YHSwp6CtvkTX8+bmfXYUw@mail.gmail.com>
+ <CAAXf6LUaGLQh8h7Ujnpaciyq4dz3PM43S7spOcpi08Wd83PUtA@mail.gmail.com>
+Message-ID: <CALo-6+g+cuLUjWi5+PC+Y1+MUcuENnv3etVT3FXrk3Yqf_vF5Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Alexander Lukichev,
+I think I see what is going on. It looks like Qt sets USE_EABI_HARDFLOAT=0
+when I need it to be USE_EABI_HARDFLOAG=1.
 
-(Your e-mail wrapping is weird: it leaves one word alone on some lines.
-Strange. Maybe some GMail craziness.)
+This is done in qt5jsbackend-5.0.2/src/vi/v8.pri as a consequence of
 
-On Wed, 6 Nov 2013 20:21:31 +0200, Alexander Lukichev wrote:
+config_hardfloat {
+  DEFINES += USE_EABI_HARDFLOAT=1
+} else {
+  DEFINES += USE_EABI_HARDFLOAT=0
+}
 
-> Another option would be to build openpgm without fancy code that uses those
-> intrinsics. If I disable some constants defined in configure script when
-> intrinsics
-> are expected from the toolchain, the code does not use them but instead
-> tries to use pthread_spin_{lock,trylock,unlock}() functions. Curiously, my
-> toolchain,
-> built with "linuxthreads (stable/old)", does not have them. Should it? I
-> have
-> attached defconfig I use.
+Where config_hardfloat is always undefined.
 
-There is no implementation of pthread_spin_*() in the linuxthreads.old
-thread implementation in uClibc. You should use NPTL instead when
-available.
+This may bring up a larger question in that some embedded systems will wish
+to use softfloat and some hardfloat
 
-> I have tried to rebuild the toolchain with "linuxthreads" but it complained
-> somewhere in uClibc:
 
-Yes, I believe linuxthreads is known to be broken for a number of
-architectures. From the Config.in help text in uClibc:
 
-          The new version has not been tested much, and lacks ports for
-          arches which glibc does not support (like bfin/frv/etc...),
-          but is based on the latest code from glibc, so it may be the
-          only choice for the newer ports (like alpha/amd64/64bit
-          arches and hppa).
 
-> ./libpthread/linuxthreads/sysdeps/pthread/bits/libc-tsd.h:24,
->                  from libc/inet/rpc/rpc_thread.c:16:
-> ./include/tls.h:6:22: error: tls.h: No such file or directory
-> make[1]: *** [libc/inet/rpc/rpc_thread.oS] Error 1
-> 
-> Could I fix this somehow?
+On Wed, Nov 6, 2013 at 9:28 AM, Thomas De Schampheleire <
+patrickdepinguin@gmail.com> wrote:
 
-I don't think fixing linuxthreads in uClibc is really worth it, to be
-honest.
+> Hi Charles,
+>
+> On Wed, Nov 6, 2013 at 5:57 PM, Charles Krinke <charles.krinke@gmail.com>
+> wrote:
+> > Recently one of our app engineers moved to QtQuick 2.0 and all of a
+> sudden
+> > with the buildroot built binaries from Qt-5.0.2, I am seeing this error
+> when
+> > a qml-style program is run.
+> >
+> > ERROR: Binary compiled with -mfloat-abi=hard but without
+> > -DUSE_EABI_HARDFLOAT
+> >
+> > In searching this, I can see mention of this on the buildroot mailing
+> list
+> > from June, but no hints or resolution. The archive of the mailing list is
+> > this page:
+> >
+> >
+> http://buildroot-busybox.2317881.n4.nabble.com/ERROR-Binary-compiled-with-mfloat-abi-hard-but-without-DUSE-EABI-HARDFLOAT-td49130.html
+> >
+> > Although I am using the TI AM3517 and not Raspberry Pi, the error seems
+> to
+> > be the same.
+> >
+> > I am assuming this has something to do with make options. This morning, I
+> > tried adding "-DUSE-EABI_HARDFLAT" to the Makefile for libQt5V8 where the
+> > offending message is coming from, but the cheap shot doesnt work.
+> >
+> > I am working with a buildroot from the end of July, so am not using the
+> > experimental Qt-5.1 stuff (yet) and am hoping not to move forward in a
+> > crisis if I can help it.
+> >
+> > So, ... as usual, I am hoping for a clue or two to let me understand how
+> to
+> > get QtQuick back to functionality with Qt-5.0.2.
+>
+> Although I have no experience whatsoever with qt (and will not be able
+> to help you myself), I suggest to send a (def)config file that
+> exhibits the problem. This may help others in trying to reproduce the
+> problem...
+>
+> Best regards,
+> Thomas
+>
 
-Moreover, Simon said that while uClibc 0.9.33 does build fine for
-AVR32, it doesn't work properly on the target, and he is still using
-uClibc 0.9.31 + a good stack of patches on top of it.
 
-I think we should just disable OpenPGM on AVR32. If somebody ever cares
-about this, he will be in charge of fixing it :)
 
-Best regards,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Charles Krinke
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20131106/a0247754/attachment.html>
