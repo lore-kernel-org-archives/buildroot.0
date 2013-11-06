@@ -1,46 +1,46 @@
-From: spdawson at gmail.com <spdawson@gmail.com>
-Date: Wed,  6 Nov 2013 13:08:03 +0000
-Subject: [Buildroot] [PATCH v2] connman: disable on avr32
-Message-ID: <1383743283-13069-1-git-send-email-spdawson@gmail.com>
+From: Ryan Barnett <rjbarnet@rockwellcollins.com>
+Date: Wed, 6 Nov 2013 07:14:20 -0600
+Subject: [Buildroot] [PATCH 4/5] rpi: rename board folder for consistency
+In-Reply-To: <201311061126.20888.yann.morin.1998@free.fr>
+References: <cover.1383693880.git.yann.morin.1998@free.fr>
+ <5db8e0c38bc04628a5286eb3c90ab0c0ee543b53.1383693880.git.yann.morin.1998@free.fr>
+ <20131106111103.1a1f1d13@skate> <201311061126.20888.yann.morin.1998@free.fr>
+Message-ID: <OFA793A731.4E0B0EEB-ON86257C1B.0047E822-86257C1B.0048B8F9@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Simon Dawson <spdawson@gmail.com>
+Yann, Thomas, All,
 
-The inotify_init1 syscall is not available on avr32. Fixes build failures
-such as the following.
+"Yann E. MORIN" <yann.morin.1998@free.fr> wrote on 11/06/2013 04:26:20 AM:
 
-  http://autobuild.buildroot.net/results/0d8/0d8e7bd8bd3f227fabfb0d5feb59a5d316026d3f
+> Thomas, All,
+> 
+> On Wednesday 06 November 2013 11:11:03 Thomas Petazzoni wrote:
+> > I'm not sure I agree with this one. I find "rasberrypi" a lot more
+> > obvious for the new comer. Maybe our defconfig should also be called
+> > rasberrypi_defconfig.
+> 
+> Well, 'rpi' is a very common nickname for the Raspberry Pi, so I don't
+> think there will be confusion for a newcomer (to Buildroot).
 
-Signed-off-by: Simon Dawson <spdawson@gmail.com>
----
- v2: Disable comment on avr32, as suggested by Thomas De Schampheleire
+I disagree, I was one who didn't really know what rpi stood for because to 
+me that acronym has a completely different meaning. I believe I asked you 
+to clarify what rpi stood for on the IRC. In order to make the leap to 
+what rpi stood for I had to go to the git logs for the board/rpi 
+directory. I guess the point being, I agree with Thomas (not that there is 
+anything to argue here) and we should assume people are dumb (me included 
+:) ) and we should try to eliminate potential confusion.
 
- package/connman/Config.in | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+Thanks,
+-Ryan
 
-diff --git a/package/connman/Config.in b/package/connman/Config.in
-index c74618a..e0a6782 100644
---- a/package/connman/Config.in
-+++ b/package/connman/Config.in
-@@ -4,6 +4,7 @@ config BR2_PACKAGE_CONNMAN
- 	select BR2_PACKAGE_LIBGLIB2
- 	select BR2_PACKAGE_IPTABLES
- 	select BR2_PACKAGE_GNUTLS
-+	depends on !BR2_avr32 # no inotify_init1
- 	depends on !BR2_UCLIBC_VERSION_0_9_32
- 	depends on BR2_USE_WCHAR # libglib2 and gnutls
- 	depends on BR2_INET_IPV6
-@@ -50,5 +51,6 @@ config BR2_PACKAGE_CONNMAN_CLIENT
- endif # BR2_PACKAGE_CONNMAN
- 
- comment "connman needs a toolchain w/ IPv6, wchar, threads, resolver"
--	depends on BR2_UCLIBC_VERSION_0_9_32 || \
-+	depends on !BR2_avr32 && \
-+		BR2_UCLIBC_VERSION_0_9_32 || \
- 		!BR2_USE_WCHAR || !BR2_INET_IPV6 || !BR2_TOOLCHAIN_HAS_THREADS
--- 
-1.8.3.2
+> On the other hand, all our other boards are using the full name, not a
+> shortname/nickname, neither in board/ nor in configs/
+> 
+> So, in hindsight, I agree with Thomas here: we should use raspberrypi,
+> not rpi.
+> 
+> I'll fix and resubmit.
