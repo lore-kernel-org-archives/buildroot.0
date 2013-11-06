@@ -1,49 +1,63 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Wed, 6 Nov 2013 18:28:00 +0100
-Subject: [Buildroot] Qt5 puzzle
-In-Reply-To: <CALo-6+gmYsfcV1yU2oEAfkbCHCqi2YHSwp6CtvkTX8+bmfXYUw@mail.gmail.com>
-References: <CALo-6+gmYsfcV1yU2oEAfkbCHCqi2YHSwp6CtvkTX8+bmfXYUw@mail.gmail.com>
-Message-ID: <CAAXf6LUaGLQh8h7Ujnpaciyq4dz3PM43S7spOcpi08Wd83PUtA@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 6 Nov 2013 18:39:47 +0100
+Subject: [Buildroot] [PATCH v2 1/1] openpgm: disable on AVR32
+In-Reply-To: <CAAHaz6HvxQR0g9CpfvRTJN2FAoGmgR_z6uWVar93AXjENH-vbQ@mail.gmail.com>
+References: <1383329548-8528-1-git-send-email-alexander.lukichev@gmail.com>
+ <20131101192027.1ea4c1bc@skate>
+ <CAAHaz6GXiQAMuoK2eo0=EjmE509P98zuuAuN7f_T5TYeK6W1QA@mail.gmail.com>
+ <CAHt8ZCO2OEtWe8NrDYSTkmu7uqQGpQbWjAEJg+jHVGzsWsF9Mg@mail.gmail.com>
+ <20131102122618.18eb2f00@skate>
+ <CAHt8ZCOVSKMynxFe9WQuei-FKuB8BAJE2+dtEQreqwZokkTWdw@mail.gmail.com>
+ <CAAHaz6HvxQR0g9CpfvRTJN2FAoGmgR_z6uWVar93AXjENH-vbQ@mail.gmail.com>
+Message-ID: <20131106183947.0b078df7@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Charles,
+Alexander, Simon,
 
-On Wed, Nov 6, 2013 at 5:57 PM, Charles Krinke <charles.krinke@gmail.com> wrote:
-> Recently one of our app engineers moved to QtQuick 2.0 and all of a sudden
-> with the buildroot built binaries from Qt-5.0.2, I am seeing this error when
-> a qml-style program is run.
->
-> ERROR: Binary compiled with -mfloat-abi=hard but without
-> -DUSE_EABI_HARDFLOAT
->
-> In searching this, I can see mention of this on the buildroot mailing list
-> from June, but no hints or resolution. The archive of the mailing list is
-> this page:
->
-> http://buildroot-busybox.2317881.n4.nabble.com/ERROR-Binary-compiled-with-mfloat-abi-hard-but-without-DUSE-EABI-HARDFLOAT-td49130.html
->
-> Although I am using the TI AM3517 and not Raspberry Pi, the error seems to
-> be the same.
->
-> I am assuming this has something to do with make options. This morning, I
-> tried adding "-DUSE-EABI_HARDFLAT" to the Makefile for libQt5V8 where the
-> offending message is coming from, but the cheap shot doesnt work.
->
-> I am working with a buildroot from the end of July, so am not using the
-> experimental Qt-5.1 stuff (yet) and am hoping not to move forward in a
-> crisis if I can help it.
->
-> So, ... as usual, I am hoping for a clue or two to let me understand how to
-> get QtQuick back to functionality with Qt-5.0.2.
+On Wed, 6 Nov 2013 19:27:46 +0200, Alexander Lukichev wrote:
+> Hi Simon, Thomas,
 
-Although I have no experience whatsoever with qt (and will not be able
-to help you myself), I suggest to send a (def)config file that
-exhibits the problem. This may help others in trying to reproduce the
-problem...
+> In addition, the document http://www.atmel.com/Images/doc32074.pdf on page 8
+> indeed claims to support 4-byte (int) versions of those functions, saying
+> nothing
+> about other data types.
+> 
+> I apologize both for the delay and for making other people wasting time on
+> this.
 
-Best regards,
+Well, I believe your original patch remains almost good then: openpgm
+cannot be built on avr32 because the AVR32 compiler doesn't provide the
+required compiler intrinsics.
+
+I think I would just turn the dependency from a !BR2_avr32 into
+a !BR2_GCC_VERSION_4_2_2_AVR32_2_1_5, with a comment that explains that
+it lacks some required intrinsics.
+
+However, as Simon said, maybe it would anyway be useful to pass
+-march=ap when building things, since that's the only AVR32 processor
+variant that ever had Linux support. So something like the following
+change would maybe be good to have. Simon, if you're interested in
+picking this up, giving it a test and submitting it, it would be great!
+
+diff --git a/arch/Config.in.avr32 b/arch/Config.in.avr32
+index 199c150..8429589 100644
+--- a/arch/Config.in.avr32
++++ b/arch/Config.in.avr32
+@@ -3,3 +3,6 @@ config BR2_ARCH
+ 
+ config BR2_ENDIAN
+        default "BIG"
++
++config BR2_GCC_TARGET_ARCH
++       default "ap"
+
+
 Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
