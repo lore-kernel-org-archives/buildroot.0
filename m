@@ -1,45 +1,24 @@
-From: Laurent GONZALEZ <br2@gezedo.com>
-Date: Wed, 06 Nov 2013 16:37:32 +0100
-Subject: [Buildroot] [PATCH v2 1/1] Avoid toolchain download when it is
-	preinstalled
-Message-ID: <527A623C.7090007@gezedo.com>
+From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Date: Wed, 6 Nov 2013 16:42:31 +0100
+Subject: [Buildroot] [PATCH v3 0/5] udev is now provided by systemd or
+ eudev
+In-Reply-To: <1383752078-25315-1-git-send-email-eric.le.bihan.dev@free.fr>
+References: <1383752078-25315-1-git-send-email-eric.le.bihan.dev@free.fr>
+Message-ID: <20131106154231.GA11795@pc-eric>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-For configurations using a toolchain that is preinstalled on
-the host, <pkg>_SITE and <pkg>_SOURCE variables must be kept
-empty to avoid downloading any toolchain package.
+Hi!
 
-Signed-off-by: GONZALEZ Laurent <br2@gezedo.com>
----
- toolchain/toolchain-external/toolchain-external.mk |    5 +++++
- 1 file changed, 5 insertions(+)
+Configuration files to build kernel and file system (for QEMU x86 and ARM)
+with support for systemd or eudev are available in the 'systemd-eudev-v2'
+branch of https://github.com/elebihan/buildroot/:
 
-diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
-index 2722600..5eb86c7 100644
---- a/toolchain/toolchain-external/toolchain-external.mk
-+++ b/toolchain/toolchain-external/toolchain-external.mk
-@@ -236,6 +236,7 @@ define TOOLCHAIN_EXTERNAL_LINARO_ARMHF_SYMLINK
- 	ln -sf . $(TARGET_DIR)/usr/lib/arm-linux-gnueabihf
- endef
- 
-+ifeq ($(BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD),y)
- ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201109),y)
- TOOLCHAIN_EXTERNAL_SITE = http://sourcery.mentor.com/public/gnu_toolchain/arm-none-linux-gnueabi/
- TOOLCHAIN_EXTERNAL_SOURCE = arm-2011.09-70-arm-none-linux-gnueabi-i686-pc-linux-gnu.tar.bz2
-@@ -347,6 +348,10 @@ else
- TOOLCHAIN_EXTERNAL_SITE = $(dir $(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_URL)))
- TOOLCHAIN_EXTERNAL_SOURCE = $(notdir $(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_URL)))
- endif
-+else
-+TOOLCHAIN_EXTERNAL_SITE =
-+TOOLCHAIN_EXTERNAL_SOURCE =
-+endif
- 
- TOOLCHAIN_EXTERNAL_INSTALL_STAGING = YES
- 
--- 
-1.7.10.4
+- elebihan_demo_systemd_{arm,x86}_defconfig
+- elebihan_demo_eudev_{arm,x86}_defconfig.
+
+Best Regards,
+ELB
