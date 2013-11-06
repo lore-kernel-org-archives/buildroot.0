@@ -1,27 +1,22 @@
-From: Simon Dawson <spdawson@gmail.com>
-Date: Wed, 6 Nov 2013 12:19:24 +0000
-Subject: [Buildroot] [PATCH] libevas: disable on avr32
-In-Reply-To: <CAAXf6LWSZa6hNgqqYgM07ER4t_iF3b26e6O1-jMivBeRnu4RXg@mail.gmail.com>
-References: <1383735243-18910-1-git-send-email-spdawson@gmail.com>
- <CAAXf6LV6GFk27s8fpEbcDVKmrkipiKA_FGFEt-wcdXMutkwBoA@mail.gmail.com>
- <CAHt8ZCM6t1qPEOCaTpDOe1ESTF1ZdvNU1CrEkZC5hABzpKf+fg@mail.gmail.com>
- <CAAXf6LWSZa6hNgqqYgM07ER4t_iF3b26e6O1-jMivBeRnu4RXg@mail.gmail.com>
-Message-ID: <CAHt8ZCMcVujE=nPgBdnxw_g50+H=TJcmj6x5rOz6ru4T16sm6A@mail.gmail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 06 Nov 2013 13:32:49 +0100
+Subject: [Buildroot] [PATCH] polarssl: bump to version 1.2.10
+In-Reply-To: <1383739594-2568-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Wed, 6 Nov 2013 09:06:34 -0300")
+References: <1383739594-2568-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87r4atlngu.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 6 November 2013 11:54, Thomas De Schampheleire
-<patrickdepinguin@gmail.com> wrote:
-> This is still correct, the comment should not mention the architecture
-> dependency.
-> But, the comment should only be _visible_ when it is relevant. Since
-> the package itself is not relevant on avr32, it makes no sense to show
-> the comment. Hence, the comment should get an extra 'depends on
-> !avr32'.
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-Okay, I understand. Thanks for the clarification.
+ > Fixes a memory leak in RSA blinding.
+ > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
-Simon.
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
