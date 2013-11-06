@@ -1,39 +1,32 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 06 Nov 2013 23:42:58 +0100
-Subject: [Buildroot] [RFC] core: Download all package sources
-In-Reply-To: <OFF4942D87.38E368D2-ON86257C1B.007BE83F-86257C1B.007C242E@rockwellcollins.com>
- (clshotwe@rockwellcollins.com's message of "Wed, 6 Nov 2013 16:37:26
- -0600")
-References: <1383587286-18094-1-git-send-email-clshotwe@rockwellcollins.com>
- <87eh6tkxuk.fsf@dell.be.48ers.dk> <20131106231048.67cf2d52@skate>
- <OFB958AF8A.71CC6ECD-ON86257C1B.007ADE85-86257C1B.007B965F@rockwellcollins.com>
- <87fvr9jh2h.fsf@dell.be.48ers.dk>
- <OFF4942D87.38E368D2-ON86257C1B.007BE83F-86257C1B.007C242E@rockwellcollins.com>
-Message-ID: <87bo1xjgnh.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 6 Nov 2013 23:53:22 +0100
+Subject: [Buildroot] Qt5 puzzle
+In-Reply-To: <CALo-6+jmQbZDBSLBbR5mbDYnD=rECMnw=vg8n=ihT7=C5EKW2Q@mail.gmail.com>
+References: <CALo-6+gmYsfcV1yU2oEAfkbCHCqi2YHSwp6CtvkTX8+bmfXYUw@mail.gmail.com>
+ <20131106191859.2c4d295c@skate>
+ <CALo-6+gh9ZL4prfb2kVUgzFi=DZGuL7GrB4zmyqW7VL9GBgOLQ@mail.gmail.com>
+ <20131106230653.70d1fe41@skate>
+ <CALo-6+jmQbZDBSLBbR5mbDYnD=rECMnw=vg8n=ihT7=C5EKW2Q@mail.gmail.com>
+Message-ID: <20131106235322.5e1952a4@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "clshotwe" == clshotwe  <clshotwe@rockwellcollins.com> writes:
+Dear Charles Krinke,
 
-Hi,
+On Wed, 6 Nov 2013 14:27:58 -0800, Charles Krinke wrote:
 
- >> I still don't quite get why you want to download the sources of all
- >> package(-versions) we have in Buildroot. Can you explain in more detail?
+> Hmm. You are right, sir. I need to look into that a bit more. I believe I
+> added a patch to the mkspec to enable neon a while back and maybe that
+> patch is confusing some of the build logic.
 
- > I do all of my builds behind a very restrictive firewall that does not
- > allow me to download the packages.  I am able to download them from
- > another computer and serve up the files behind the firewall.  It is
- > difficult to keep the sources up to date while tracking the Buildroot
- > mainline. 
+Ah, if you don't tell us the whole truth about the changes you made to
+Buildroot and/or the Qt5 build system, we can hardly help you :/
 
-So you have git access but not generic http access? An alternative could
-be to grab the sources from sources.buildroot.net instead (but I only
-update that one every wednesday).
-
-You can get the needed tarball names using 'make external-deps'.
-
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
