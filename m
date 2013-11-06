@@ -1,29 +1,29 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 06 Nov 2013 23:23:00 +0100
-Subject: [Buildroot] [PATCH 3/5] rpi: improve documentation
-In-Reply-To: <a4bb307478ee6e7acb38a24d714cb99396fe6af2.1383693880.git.yann.morin.1998@free.fr>
- (Yann E. MORIN's message of "Wed, 6 Nov 2013 00:28:18 +0100")
-References: <cover.1383693880.git.yann.morin.1998@free.fr>
- <a4bb307478ee6e7acb38a24d714cb99396fe6af2.1383693880.git.yann.morin.1998@free.fr>
-Message-ID: <87siv9jhkr.fsf@dell.be.48ers.dk>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed,  6 Nov 2013 22:27:43 +0000 (UTC)
+Subject: [Buildroot] [Bug 6644] "all" target doesn't work in out-of-tree
+	builds
+In-Reply-To: <bug-6644-163@https.bugs.busybox.net/>
+References: <bug-6644-163@https.bugs.busybox.net/>
+Message-ID: <20131106222743.583D09BAE9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+https://bugs.busybox.net/show_bug.cgi?id=6644
 
- > From: mathieu benoit <mathieu.benoit@savoirfairelinux.com>
- > Signed-off-by: Mathieu Benoit <mathieu.benoit@savoirfairelinux.com>
- > [yann.morin.1998 at free.fr: further improvements for readability and
- >     completeness]
- > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
- > ---
- >  board/raspberrypi/readme.txt | 167 ++++++++++++++++++++++---------------------
- >  1 file changed, 84 insertions(+), 83 deletions(-)
+Peter Korsgaard <jacmet@uclibc.org> changed:
 
-Committed, thanks.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|                            |FIXED
+
+--- Comment #2 from Peter Korsgaard <jacmet@uclibc.org> 2013-11-06 22:27:42 UTC ---
+Fixed by Yann in 971faf828d8d2, thanks
 
 -- 
-Bye, Peter Korsgaard
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
