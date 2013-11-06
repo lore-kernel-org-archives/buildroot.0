@@ -1,57 +1,50 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 6 Nov 2013 13:31:41 +0100
-Subject: [Buildroot] [git commit] polarssl: bump to version 1.2.10
-Message-ID: <20131106123311.2FAB79BAE0@busybox.osuosl.org>
+Date: Wed, 6 Nov 2013 13:32:18 +0100
+Subject: [Buildroot] [git commit] aircrack-ng: add security patch for
+	CVE-2010-1159
+Message-ID: <20131106123311.39FC08F6F9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=6f05d5ac8f34b30f87408132775dac74648d5b33
+commit: http://git.buildroot.net/buildroot/commit/?id=ac147527e2681737ed096466b4f773d9a39bef2d
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Fixes a memory leak in RSA blinding.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../polarssl-shared-and-static-library.patch       |    4 ++--
- package/polarssl/polarssl.mk                       |    2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ .../aircrack-ng/aircrack-ng-01-CVE-2010-1159.patch |   24 ++++++++++++++++++++
+ 1 files changed, 24 insertions(+), 0 deletions(-)
 
-diff --git a/package/polarssl/polarssl-shared-and-static-library.patch b/package/polarssl/polarssl-shared-and-static-library.patch
-index 47511b2..7e41745 100644
---- a/package/polarssl/polarssl-shared-and-static-library.patch
-+++ b/package/polarssl/polarssl-shared-and-static-library.patch
-@@ -9,7 +9,7 @@ This patch adds the USE_STATIC_POLARSSL_LIBRARY (which defaults to ON)
- in addition to the existing USE_SHARED_POLARSSL_LIBRARY (which
- defaults to OFF). Both options can be manipulated independently.
- 
--[Gustavo: update for polarssl 1.2.9]
-+[Gustavo: update for polarssl 1.2.10]
- Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
- Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
- 
-@@ -34,7 +34,7 @@ diff -Nura polarssl-1.2.3.orig/library/CMakeLists.txt polarssl-1.2.3/library/CMa
- +if(USE_SHARED_POLARSSL_LIBRARY)
-  
-  add_library(polarssl SHARED ${src})
-- set_target_properties(polarssl PROPERTIES VERSION 1.2.9 SOVERSION 3)
-+ set_target_properties(polarssl PROPERTIES VERSION 1.2.10 SOVERSION 3)
- +set_target_properties(polarssl PROPERTIES OUTPUT_NAME polarssl)
- +
- +endif(USE_SHARED_POLARSSL_LIBRARY)
-diff --git a/package/polarssl/polarssl.mk b/package/polarssl/polarssl.mk
-index deb2252..20486e3 100644
---- a/package/polarssl/polarssl.mk
-+++ b/package/polarssl/polarssl.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- POLARSSL_SITE = https://polarssl.org/code/releases
--POLARSSL_VERSION = 1.2.9
-+POLARSSL_VERSION = 1.2.10
- POLARSSL_SOURCE = polarssl-$(POLARSSL_VERSION)-gpl.tgz
- POLARSSL_CONF_OPT = \
- 	-DUSE_SHARED_POLARSSL_LIBRARY=ON \
+diff --git a/package/aircrack-ng/aircrack-ng-01-CVE-2010-1159.patch b/package/aircrack-ng/aircrack-ng-01-CVE-2010-1159.patch
+new file mode 100644
+index 0000000..634a01e
+--- /dev/null
++++ b/package/aircrack-ng/aircrack-ng-01-CVE-2010-1159.patch
+@@ -0,0 +1,24 @@
++Fix for buffer overflow CVE-2010-1159.
++
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++
++--- a/src/airodump-ng.c
+++++ b/src/airodump-ng.c
++@@ -2126,7 +2126,7 @@
++                     st_cur->wpa.eapol_size = ( h80211[z + 2] << 8 )
++                             +   h80211[z + 3] + 4;
++ 
++-                    if ((int)pkh.len - z < st_cur->wpa.eapol_size  || st_cur->wpa.eapol_size == 0)
+++                    if (caplen - z < st_cur->wpa.eapol_size  || st_cur->wpa.eapol_size == 0 || caplen - z < 81 + 16 || st_cur->wpa.eapol_size > 256)
++ 					{
++ 						// Ignore the packet trying to crash us.
++                     	goto write_packet;
++@@ -2158,7 +2158,7 @@
++                     st_cur->wpa.eapol_size = ( h80211[z + 2] << 8 )
++                             +   h80211[z + 3] + 4;
++ 
++-                    if ((int)pkh.len - z < st_cur->wpa.eapol_size  || st_cur->wpa.eapol_size == 0)
+++		    if (caplen - z < st_cur->wpa.eapol_size  || st_cur->wpa.eapol_size == 0 || caplen - z < 81 + 16 || st_cur->wpa.eapol_size > 256)
++ 					{
++ 						// Ignore the packet trying to crash us.
++                     	goto write_packet;
