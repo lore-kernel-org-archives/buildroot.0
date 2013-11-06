@@ -1,70 +1,42 @@
-From: Laurent GONZALEZ <br2@gezedo.com>
-Date: Wed, 06 Nov 2013 16:33:22 +0100
-Subject: [Buildroot] [PATCH 1/1] Avoid toolchain download when it is
-	preinstalled
-In-Reply-To: <20131106161903.2b28e917@skate>
-References: <527A1C86.8030909@gezedo.com> <20131106161903.2b28e917@skate>
-Message-ID: <527A6142.4070608@gezedo.com>
+From: Charles Krinke <charles.krinke@gmail.com>
+Date: Wed, 6 Nov 2013 08:57:45 -0800
+Subject: [Buildroot] Qt5 puzzle
+Message-ID: <CALo-6+gmYsfcV1yU2oEAfkbCHCqi2YHSwp6CtvkTX8+bmfXYUw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 06/11/2013 16:19, Thomas Petazzoni wrote:
-> Dear Laurent GONZALEZ,
-> 
-> On Wed, 06 Nov 2013 11:40:06 +0100, Laurent GONZALEZ wrote:
->> For configurations using a toolchain that is preinstalled on
->> the host, <pkg>_SITE and <pkg>_SOURCE variables must be kept
->> empty to avoid downloading any toolchain package.
->>
->> Signed-off-by: GONZALEZ Laurent <br2@gezedo.com>
->> ---
->>  toolchain/toolchain-external/toolchain-external.mk |    2 ++
->>  1 file changed, 2 insertions(+)
->>
->> diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
->> index 2722600..6f4feb5 100644
->> --- a/toolchain/toolchain-external/toolchain-external.mk
->> +++ b/toolchain/toolchain-external/toolchain-external.mk
->> @@ -236,6 +236,7 @@ define TOOLCHAIN_EXTERNAL_LINARO_ARMHF_SYMLINK
->>  	ln -sf . $(TARGET_DIR)/usr/lib/arm-linux-gnueabihf
->>  endef
->>  
->> +ifeq ($(BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD),y)
->>  ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201109),y)
->>  TOOLCHAIN_EXTERNAL_SITE = http://sourcery.mentor.com/public/gnu_toolchain/arm-none-linux-gnueabi/
->>  TOOLCHAIN_EXTERNAL_SOURCE = arm-2011.09-70-arm-none-linux-gnueabi-i686-pc-linux-gnu.tar.bz2
->> @@ -347,6 +348,7 @@ else
->>  TOOLCHAIN_EXTERNAL_SITE = $(dir $(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_URL)))
->>  TOOLCHAIN_EXTERNAL_SOURCE = $(notdir $(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_URL)))
->>  endif
->> +endif
->>  
->>  TOOLCHAIN_EXTERNAL_INSTALL_STAGING = YES
->>  
-> 
-> I think the right fix would be something like:
-> 
-> ifeq ($(...codesourcery..),y)
-> ...
-> else ifeq ($(...some other toolchain),y)
-> ....
-> - else
-> + else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD),y)
-> # Custom toolchain
-> TOOLCHAIN_EXTERNAL_SITE = $(dir $(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_URL)))
-> TOOLCHAIN_EXTERNAL_SOURCE = $(notdir $(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_URL)))
-> - endif
-> + else
-> TOOLCHAIN_EXTERNAL_SOURCE =
-> endif
-> 
-> So that TOOLCHAIN_EXTERNAL_SOURCE is empty when the external toolchain
-> is locally installed. Having an empty <pkg>_SOURCE is what tells the
-> package infrastructure to not download the thing.
-> 
+Recently one of our app engineers moved to QtQuick 2.0 and all of a sudden
+with the buildroot built binaries from Qt-5.0.2, I am seeing this error
+when a qml-style program is run.
 
-I am afraid this won't work, because I really want to choose some 'codesourcery' toolchain *and* avoid download. Preinstalled toolchain has larger scope than custom toolchain.
-By the way my patch had another issue, that i will fix and resubmit soon.
+ERROR: Binary compiled with -mfloat-abi=hard but without
+-DUSE_EABI_HARDFLOAT
+
+In searching this, I can see mention of this on the buildroot mailing list
+from June, but no hints or resolution. The archive of the mailing list is
+this page:
+
+http://buildroot-busybox.2317881.n4.nabble.com/ERROR-Binary-compiled-with-mfloat-abi-hard-but-without-DUSE-EABI-HARDFLOAT-td49130.html
+
+Although I am using the TI AM3517 and not Raspberry Pi, the error seems to
+be the same.
+
+I am assuming this has something to do with make options. This morning, I
+tried adding "-DUSE-EABI_HARDFLAT" to the Makefile for libQt5V8 where the
+offending message is coming from, but the cheap shot doesnt work.
+
+I am working with a buildroot from the end of July, so am not using the
+experimental Qt-5.1 stuff (yet) and am hoping not to move forward in a
+crisis if I can help it.
+
+So, ... as usual, I am hoping for a clue or two to let me understand how to
+get QtQuick back to functionality with Qt-5.0.2.
+
+-- 
+Charles Krinke
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20131106/8a0bd9c4/attachment.html>
