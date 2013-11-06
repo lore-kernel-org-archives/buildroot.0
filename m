@@ -1,50 +1,49 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 6 Nov 2013 20:52:33 +0100
-Subject: [Buildroot] Qt5 puzzle
-In-Reply-To: <CALo-6+g+cuLUjWi5+PC+Y1+MUcuENnv3etVT3FXrk3Yqf_vF5Q@mail.gmail.com>
-References: <CALo-6+gmYsfcV1yU2oEAfkbCHCqi2YHSwp6CtvkTX8+bmfXYUw@mail.gmail.com>
- <CAAXf6LUaGLQh8h7Ujnpaciyq4dz3PM43S7spOcpi08Wd83PUtA@mail.gmail.com>
- <CALo-6+g+cuLUjWi5+PC+Y1+MUcuENnv3etVT3FXrk3Yqf_vF5Q@mail.gmail.com>
-Message-ID: <20131106205233.28e38d06@skate>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Wed, 06 Nov 2013 20:56:18 +0100
+Subject: [Buildroot] [PATCH v3 1/1] Avoid toolchain download when it
+	is	preinstalled
+In-Reply-To: <527A962E.4090402@gezedo.com>
+References: <527A962E.4090402@gezedo.com>
+Message-ID: <da65cfab-4ae4-4ee4-86c4-60e3e9ba3d60@email.android.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Charles Krinke,
-
-On Wed, 6 Nov 2013 11:08:22 -0800, Charles Krinke wrote:
-
-> I think I see what is going on. It looks like Qt sets USE_EABI_HARDFLOAT=0
-> when I need it to be USE_EABI_HARDFLOAG=1.
+Laurent GONZALEZ <br2@gezedo.com> wrote:
+>For configurations using a toolchain that is preinstalled on
+>the host, <pkg>_SITE and <pkg>_SOURCE variables must be kept
+>empty to avoid downloading any toolchain package.
+>The actual implementation has been proposed by Thomas Petazzoni.
+>
+>Signed-off-by: GONZALEZ Laurent <br2@gezedo.com>
+>---
+> toolchain/toolchain-external/toolchain-external.mk |    8 ++++++++
+> 1 file changed, 8 insertions(+)
+>
+>diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
+>index 2722600..e2e9953 100644
+>--- a/toolchain/toolchain-external/toolchain-external.mk
+>+++ b/toolchain/toolchain-external/toolchain-external.mk
+>@@ -348,6 +348,14 @@ TOOLCHAIN_EXTERNAL_SITE = $(dir $(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_URL)))
+> TOOLCHAIN_EXTERNAL_SOURCE = $(notdir $(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_URL)))
+> endif
 > 
-> This is done in qt5jsbackend-5.0.2/src/vi/v8.pri as a consequence of
+>+# In fact, we don't need to download the toolchain, since it is already
+>+# available on the system, so force the site and source to be empty so
+>+# that nothing will be downloaded/extracted.
+>+ifeq ($(BR2_TOOLCHAIN_EXTERNAL_PREINSTALLED),y)
+>+TOOLCHAIN_EXTERNAL_SITE =
+>+TOOLCHAIN_EXTERNAL_SOURCE =
+>+endif
+>+
+> TOOLCHAIN_EXTERNAL_INSTALL_STAGING = YES
 > 
-> config_hardfloat {
->   DEFINES += USE_EABI_HARDFLOAT=1
-> } else {
->   DEFINES += USE_EABI_HARDFLOAT=0
-> }
-> 
-> Where config_hardfloat is always undefined.
+> ifeq ($(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R1)$(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2),y)
 
-See my reply to your e-mail.
+In the previous thread you said there was still a problem with v2...
+What was that problem? I tested v2 and seemed to work fine...
 
-> This may bring up a larger question in that some embedded systems will wish
-> to use softfloat and some hardfloat
-
-I don't understand what you mean here. We have options in Buildroot to
-allow the user to configure whether (s)he wants a soft float or hard
-float system.
-
-As I said in my other e-mail, what you should investigate is precisely
-why the config_hardfloat test is returning the wrong result.
-
-Best regards,
-
+Thanks,
 Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
