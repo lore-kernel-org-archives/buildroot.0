@@ -1,36 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 6 Nov 2013 11:08:30 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2013-11-05
-In-Reply-To: <5279FC67.3050706@imgtec.com>
-References: <20131106073025.DACCA52C609@lolut.humanoidz.org>
- <5279FC67.3050706@imgtec.com>
-Message-ID: <20131106110830.48fac0d9@skate>
+Date: Wed, 6 Nov 2013 11:11:03 +0100
+Subject: [Buildroot] [PATCH 4/5] rpi: rename board folder for consistency
+In-Reply-To: <5db8e0c38bc04628a5286eb3c90ab0c0ee543b53.1383693880.git.yann.morin.1998@free.fr>
+References: <cover.1383693880.git.yann.morin.1998@free.fr>
+ <5db8e0c38bc04628a5286eb3c90ab0c0ee543b53.1383693880.git.yann.morin.1998@free.fr>
+Message-ID: <20131106111103.1a1f1d13@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Markos Chandras,
+Dear Yann E. MORIN,
 
-On Wed, 6 Nov 2013 08:23:03 +0000, Markos Chandras wrote:
-> On 11/06/2013 07:30 AM, Thomas Petazzoni wrote:
-> >    mips64el |                 libiscsi-1.6.0 | NOK |
-> > http://autobuild.buildroot.net/results/6dfe7b0d0a2e3c64743755d58729522d24948f1f/
+On Wed,  6 Nov 2013 00:28:19 +0100, Yann E. MORIN wrote:
+> From: mathieu benoit <mathieu.benoit@savoirfairelinux.com>
 > 
-> This is yet another MIPS64/n64 failure. This is a libtool problem and 
-> has been fixed in the upstream libtool.
+> All the Raspberry Pi files (packages and config) are prefix with
+> "rpi", so rename the board directory to "rpi" for consistency.
 > 
-> http://git.savannah.gnu.org/cgit/libtool.git/commit/?id=5f7f7d9615bf650cf99d581a33b3e18357f79951
-> 
-> It might take a while for the fix to propagate to packages
+> Signed-off-by: Mathieu Benoit <mathieu.benoit@savoirfairelinux.com>
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> ---
+>  board/{raspberrypi => rpi}/readme.txt | 0
+>  1 file changed, 0 insertions(+), 0 deletions(-)
+>  rename board/{raspberrypi => rpi}/readme.txt (100%)
 
-Well, this can be fixed today by using "gcc" instead of "ld" to do the
-link step, as we did with some other packages.
-
-Of course, the problem here is that it uses partial linking (ld -r)
-which you can't do from gcc, as far as I know...
+I'm not sure I agree with this one. I find "rasberrypi" a lot more
+obvious for the new comer. Maybe our defconfig should also be called
+rasberrypi_defconfig.
 
 Thomas
 -- 
