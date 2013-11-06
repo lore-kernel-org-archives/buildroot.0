@@ -1,24 +1,37 @@
-From: Simon Dawson <spdawson@gmail.com>
-Date: Wed, 6 Nov 2013 11:10:00 +0000
-Subject: [Buildroot] [PATCH] connman: disable on avr32
-In-Reply-To: <CAAXf6LXx5AR6ELq+=+f6M2Rb9Mue_8hoKvKWenKBGb+DFiBQRQ@mail.gmail.com>
-References: <1383735672-24550-1-git-send-email-spdawson@gmail.com>
- <CAAXf6LXx5AR6ELq+=+f6M2Rb9Mue_8hoKvKWenKBGb+DFiBQRQ@mail.gmail.com>
-Message-ID: <CAHt8ZCN1-L0puV5+qTgicZn42xZb=PhCYvo57x-t81O-OxGq-g@mail.gmail.com>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Wed, 6 Nov 2013 12:54:00 +0100
+Subject: [Buildroot] [PATCH] libevas: disable on avr32
+In-Reply-To: <CAHt8ZCM6t1qPEOCaTpDOe1ESTF1ZdvNU1CrEkZC5hABzpKf+fg@mail.gmail.com>
+References: <1383735243-18910-1-git-send-email-spdawson@gmail.com>
+ <CAAXf6LV6GFk27s8fpEbcDVKmrkipiKA_FGFEt-wcdXMutkwBoA@mail.gmail.com>
+ <CAHt8ZCM6t1qPEOCaTpDOe1ESTF1ZdvNU1CrEkZC5hABzpKf+fg@mail.gmail.com>
+Message-ID: <CAAXf6LWSZa6hNgqqYgM07ER4t_iF3b26e6O1-jMivBeRnu4RXg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thanks for the feedback Thomas.
+Hi Simon,
 
-On 6 November 2013 11:03, Thomas De Schampheleire
-<patrickdepinguin@gmail.com> wrote:
-> This dependency should also be added to the comment, on a separate
-> 'depends on' statement.
-> (see also my patch in the queue, that I have to rework)
+On Wed, Nov 6, 2013 at 12:09 PM, Simon Dawson <spdawson@gmail.com> wrote:
+> Hi Thomas, thanks for the feedback.
+>
+> On 6 November 2013 11:05, Thomas De Schampheleire
+> <patrickdepinguin@gmail.com> wrote:
+>> In all these places, the new 'depends on' should be repeated on the
+>> comment that is shown when one of the toolchain options is missing.
+>
+> Okay. I thought the policy was not to mention architecture
+> dependencies on the comments...
+>
 
-Okay. I'll fix my patch.
+This is still correct, the comment should not mention the architecture
+dependency.
+But, the comment should only be _visible_ when it is relevant. Since
+the package itself is not relevant on avr32, it makes no sense to show
+the comment. Hence, the comment should get an extra 'depends on
+!avr32'.
 
-Simon.
+Best regards,
+Thomas
