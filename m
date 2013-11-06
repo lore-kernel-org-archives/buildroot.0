@@ -1,338 +1,179 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Wed,  6 Nov 2013 23:59:55 +0100
-Subject: [Buildroot] [PATCH] gcc: use generic infrastructure for patches
-In-Reply-To: <527AB58A.9050506@mind.be>
-References: <527AB58A.9050506@mind.be>
-Message-ID: <1383778795-15262-1-git-send-email-arnout@mind.be>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 07 Nov 2013 00:05:48 +0100
+Subject: [Buildroot] [PATCH v4] uclibc: reinstate support for version
+	0.9.31
+In-Reply-To: <1383772178-3193-1-git-send-email-spdawson@gmail.com>
+ (spdawson@gmail.com's message of "Wed, 6 Nov 2013 21:09:38 +0000")
+References: <1383772178-3193-1-git-send-email-spdawson@gmail.com>
+Message-ID: <877gcljflf.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This solves the patch error for gcc snapshots.
+>>>>> "spdawson" == spdawson  <spdawson@gmail.com> writes:
 
-Also sneak in an extra condition when applying the powerpc softfloat patch,
-so that the error is really fixed.
+ > From: Simon Dawson <spdawson@gmail.com>
+ > This patch reinstates support for uClibc version 0.9.31, which was removed
+ > from Buildroot in commit 8abb5b33c1aae035cf48b1c81104b433ff884c64
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
-The powerpc patch could be converted to link-with-math-lib.patch.powerpc,
-but since we're deprecating the *.patch.$(ARCH) pattern I choose to keep
-this special treatment.
+ > Signed-off-by: Simon Dawson <spdawson@gmail.com>
 
-I didn't want to bother with splitting this patch for the powerpc stuff.
+We'll presumably get a bunch of autobuilder failures if we go back to
+0.9.31 for avr32. Are you willing to fix (annotate) all those packages?
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- package/gcc/gcc-final/4.2.2-avr32-2.1.5          | 1 +
- package/gcc/gcc-final/4.3.6                      | 1 +
- package/gcc/gcc-final/4.4.7                      | 1 +
- package/gcc/gcc-final/4.5.4                      | 1 +
- package/gcc/gcc-final/4.6.4                      | 1 +
- package/gcc/gcc-final/4.7.3                      | 1 +
- package/gcc/gcc-final/4.8-arc                    | 1 +
- package/gcc/gcc-final/4.8.2                      | 1 +
- package/gcc/gcc-final/gcc-final.mk               | 2 +-
- package/gcc/gcc-initial/4.2.2-avr32-2.1.5        | 1 +
- package/gcc/gcc-initial/4.3.6                    | 1 +
- package/gcc/gcc-initial/4.4.7                    | 1 +
- package/gcc/gcc-initial/4.5.4                    | 1 +
- package/gcc/gcc-initial/4.6.4                    | 1 +
- package/gcc/gcc-initial/4.7.3                    | 1 +
- package/gcc/gcc-initial/4.8-arc                  | 1 +
- package/gcc/gcc-initial/4.8.2                    | 1 +
- package/gcc/gcc-initial/gcc-initial.mk           | 2 +-
- package/gcc/gcc-intermediate/4.2.2-avr32-2.1.5   | 1 +
- package/gcc/gcc-intermediate/4.3.6               | 1 +
- package/gcc/gcc-intermediate/4.4.7               | 1 +
- package/gcc/gcc-intermediate/4.5.4               | 1 +
- package/gcc/gcc-intermediate/4.6.4               | 1 +
- package/gcc/gcc-intermediate/4.7.3               | 1 +
- package/gcc/gcc-intermediate/4.8-arc             | 1 +
- package/gcc/gcc-intermediate/4.8.2               | 1 +
- package/gcc/gcc-intermediate/gcc-intermediate.mk | 2 +-
- package/gcc/gcc.mk                               | 9 +++------
- 28 files changed, 30 insertions(+), 9 deletions(-)
- create mode 120000 package/gcc/gcc-final/4.2.2-avr32-2.1.5
- create mode 120000 package/gcc/gcc-final/4.3.6
- create mode 120000 package/gcc/gcc-final/4.4.7
- create mode 120000 package/gcc/gcc-final/4.5.4
- create mode 120000 package/gcc/gcc-final/4.6.4
- create mode 120000 package/gcc/gcc-final/4.7.3
- create mode 120000 package/gcc/gcc-final/4.8-arc
- create mode 120000 package/gcc/gcc-final/4.8.2
- create mode 120000 package/gcc/gcc-initial/4.2.2-avr32-2.1.5
- create mode 120000 package/gcc/gcc-initial/4.3.6
- create mode 120000 package/gcc/gcc-initial/4.4.7
- create mode 120000 package/gcc/gcc-initial/4.5.4
- create mode 120000 package/gcc/gcc-initial/4.6.4
- create mode 120000 package/gcc/gcc-initial/4.7.3
- create mode 120000 package/gcc/gcc-initial/4.8-arc
- create mode 120000 package/gcc/gcc-initial/4.8.2
- create mode 120000 package/gcc/gcc-intermediate/4.2.2-avr32-2.1.5
- create mode 120000 package/gcc/gcc-intermediate/4.3.6
- create mode 120000 package/gcc/gcc-intermediate/4.4.7
- create mode 120000 package/gcc/gcc-intermediate/4.5.4
- create mode 120000 package/gcc/gcc-intermediate/4.6.4
- create mode 120000 package/gcc/gcc-intermediate/4.7.3
- create mode 120000 package/gcc/gcc-intermediate/4.8-arc
- create mode 120000 package/gcc/gcc-intermediate/4.8.2
+ > diff --git a/package/connman/Config.in b/package/connman/Config.in
+ > index c74618a..f231689 100644
+ > --- a/package/connman/Config.in
+ > +++ b/package/connman/Config.in
+ > @@ -4,7 +4,7 @@ config BR2_PACKAGE_CONNMAN
+ >  	select BR2_PACKAGE_LIBGLIB2
+ >  	select BR2_PACKAGE_IPTABLES
+ >  	select BR2_PACKAGE_GNUTLS
+ > -	depends on !BR2_UCLIBC_VERSION_0_9_32
+ > +	depends on !(BR2_UCLIBC_VERSION_0_9_31 || BR2_UCLIBC_VERSION_0_9_32)
+ >  	depends on BR2_USE_WCHAR # libglib2 and gnutls
+ >  	depends on BR2_INET_IPV6
+ >  	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus, libglib2
 
-diff --git a/package/gcc/gcc-final/4.2.2-avr32-2.1.5 b/package/gcc/gcc-final/4.2.2-avr32-2.1.5
-new file mode 120000
-index 0000000..032c9e3
---- /dev/null
-+++ b/package/gcc/gcc-final/4.2.2-avr32-2.1.5
-@@ -0,0 +1 @@
-+../4.2.2-avr32-2.1.5
-\ No newline at end of file
-diff --git a/package/gcc/gcc-final/4.3.6 b/package/gcc/gcc-final/4.3.6
-new file mode 120000
-index 0000000..e1c481e
---- /dev/null
-+++ b/package/gcc/gcc-final/4.3.6
-@@ -0,0 +1 @@
-+../4.3.6
-\ No newline at end of file
-diff --git a/package/gcc/gcc-final/4.4.7 b/package/gcc/gcc-final/4.4.7
-new file mode 120000
-index 0000000..a7ca0e2
---- /dev/null
-+++ b/package/gcc/gcc-final/4.4.7
-@@ -0,0 +1 @@
-+../4.4.7
-\ No newline at end of file
-diff --git a/package/gcc/gcc-final/4.5.4 b/package/gcc/gcc-final/4.5.4
-new file mode 120000
-index 0000000..b758df2
---- /dev/null
-+++ b/package/gcc/gcc-final/4.5.4
-@@ -0,0 +1 @@
-+../4.5.4
-\ No newline at end of file
-diff --git a/package/gcc/gcc-final/4.6.4 b/package/gcc/gcc-final/4.6.4
-new file mode 120000
-index 0000000..d4c8b47
---- /dev/null
-+++ b/package/gcc/gcc-final/4.6.4
-@@ -0,0 +1 @@
-+../4.6.4
-\ No newline at end of file
-diff --git a/package/gcc/gcc-final/4.7.3 b/package/gcc/gcc-final/4.7.3
-new file mode 120000
-index 0000000..6c32215
---- /dev/null
-+++ b/package/gcc/gcc-final/4.7.3
-@@ -0,0 +1 @@
-+../4.7.3
-\ No newline at end of file
-diff --git a/package/gcc/gcc-final/4.8-arc b/package/gcc/gcc-final/4.8-arc
-new file mode 120000
-index 0000000..4f63276
---- /dev/null
-+++ b/package/gcc/gcc-final/4.8-arc
-@@ -0,0 +1 @@
-+../4.8-arc
-\ No newline at end of file
-diff --git a/package/gcc/gcc-final/4.8.2 b/package/gcc/gcc-final/4.8.2
-new file mode 120000
-index 0000000..27736e8
---- /dev/null
-+++ b/package/gcc/gcc-final/4.8.2
-@@ -0,0 +1 @@
-+../4.8.2
-\ No newline at end of file
-diff --git a/package/gcc/gcc-final/gcc-final.mk b/package/gcc/gcc-final/gcc-final.mk
-index b396382..409ac97 100644
---- a/package/gcc/gcc-final/gcc-final.mk
-+++ b/package/gcc/gcc-final/gcc-final.mk
-@@ -18,7 +18,7 @@ ifneq ($(call qstrip, $(BR2_XTENSA_CORE_NAME)),)
- HOST_GCC_FINAL_POST_EXTRACT_CMDS += HOST_GCC_FINAL_XTENSA_OVERLAY_EXTRACT
- endif
+I've already applied your patch to make connman unavailable on avr32, so
+this can be dropped.
+
+
+ > diff --git a/package/uclibc/0.9.31.1/uClibc-0002-add-inotify-init1.patch b/package/uclibc/0.9.31.1/uClibc-0002-add-inotify-init1.patch
+ > new file mode 100644
+ > index 0000000..cbec426
+ > --- /dev/null
+ > +++ b/package/uclibc/0.9.31.1/uClibc-0002-add-inotify-init1.patch
+ > @@ -0,0 +1,64 @@
+ > +From a2e5630af426f85fdd8721b2820786d9bd2aa695 Mon Sep 17 00:00:00 2001
+ > +From: Vladimir Zapolskiy <vzapolskiy@gmail.com>
+ > +Date: Tue, 1 Jun 2010 20:02:54 +0400
+ > +Subject: [PATCH] inotify: add inotify_init1 system call support
+ > +
+ > +This patch introduces support for inotify_init1 system call, found
+ > +since Linux 2.6.27.
+
+Hmm, are you now adding support for inotify on avr32?
+
+
+ > +++ b/package/uclibc/0.9.31.1/uClibc-0007-fix-fcntl64-for-64-bit-targets.patch
+ > @@ -0,0 +1,34 @@
+ > +From 6f1daaaf2d94c1e6184add44eda38b0781b88cf0 Mon Sep 17 00:00:00 2001
+ > +From: Rob Landley <rob@landley.net>
+ > +Date: Sun, 16 May 2010 21:41:36 +0000
+ > +Subject: Fix fcntl64 for 64 bit targets.
+ > +
+ > +64 bit targets often don't have a separate fcntl64() system call,
+ >  because they don't need one.
+
+That doesn't sound important for avr32?
+
+
+ > diff --git a/package/uclibc/0.9.31.1/uClibc-0010-powerpc-ptrace-fix.patch b/package/uclibc/0.9.31.1/uClibc-0010-powerpc-ptrace-fix.patch
+ > new file mode 100644
+ > index 0000000..a5cceca
+ > --- /dev/null
+ > +++ b/package/uclibc/0.9.31.1/uClibc-0010-powerpc-ptrace-fix.patch
+ > @@ -0,0 +1,62 @@
+ > +[PATCH] powerpc: add PTRACE_EVENT_ defines needed by ltrace
+ > +
+ > +Equivalent to the common version and kernel headers.
+ > +
+ > +Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+
+Tsk tsk, who is this guy? ;) Anyway, that also doesn't sound like
+something we need for avr32.
+
+
+ > diff --git a/package/uclibc/0.9.31.1/uClibc-0011-quad-routines.patch b/package/uclibc/0.9.31.1/uClibc-0011-quad-routines.patch
+ > new file mode 100644
+ > index 0000000..de37c30
+ > --- /dev/null
+ > +++ b/package/uclibc/0.9.31.1/uClibc-0011-quad-routines.patch
+ > @@ -0,0 +1,7393 @@
+ > +diff -Naur uClibc-0.9.31.ori/libc/sysdeps/linux/sparc/Makefile.arch uClibc-0.9.31/libc/sysdeps/linux/sparc/Makefile.arch
+
+This looks sparc specific?
+
+
+ > ++#if _FP_W_TYPE_SIZE < 32
+ > ++#error "Here's a nickel kid.  Go buy yourself a real computer."
+ > ++#endif
+
+Heh ;)
+
+
+ > diff --git a/package/uclibc/0.9.31.1/uClibc-0012-sparc-errno-fix.patch b/package/uclibc/0.9.31.1/uClibc-0012-sparc-errno-fix.patch
+ > new file mode 100644
+ > index 0000000..44d06cb
+ > --- /dev/null
+ > +++ b/package/uclibc/0.9.31.1/uClibc-0012-sparc-errno-fix.patch
+
+This one as well.
+
+
+ > +++ b/package/uclibc/Config.in
+ > @@ -8,13 +8,17 @@ choice
+ >  	help
+ >  	  Select the version of uClibc you wish to use.
  
--HOST_GCC_FINAL_POST_PATCH_HOOKS += HOST_GCC_APPLY_PATCHES
-+HOST_GCC_FINAL_POST_PATCH_HOOKS += HOST_GCC_APPLY_POWERPC_PATCH
+ > +	config BR2_UCLIBC_VERSION_0_9_31
+ > +		bool "uClibc 0.9.31.x"
+ > +		depends on BR2_avr32
+ > +
+ >  	config BR2_UCLIBC_VERSION_0_9_32
+ >  		bool "uClibc 0.9.32.x"
+ >  		depends on !(BR2_arc || BR2_avr32 || BR2_sh || BR2_xtensa)
  
- # gcc doesn't support in-tree build, so we create a 'build'
- # subdirectory in the gcc sources, and build from there.
-diff --git a/package/gcc/gcc-initial/4.2.2-avr32-2.1.5 b/package/gcc/gcc-initial/4.2.2-avr32-2.1.5
-new file mode 120000
-index 0000000..032c9e3
---- /dev/null
-+++ b/package/gcc/gcc-initial/4.2.2-avr32-2.1.5
-@@ -0,0 +1 @@
-+../4.2.2-avr32-2.1.5
-\ No newline at end of file
-diff --git a/package/gcc/gcc-initial/4.3.6 b/package/gcc/gcc-initial/4.3.6
-new file mode 120000
-index 0000000..e1c481e
---- /dev/null
-+++ b/package/gcc/gcc-initial/4.3.6
-@@ -0,0 +1 @@
-+../4.3.6
-\ No newline at end of file
-diff --git a/package/gcc/gcc-initial/4.4.7 b/package/gcc/gcc-initial/4.4.7
-new file mode 120000
-index 0000000..a7ca0e2
---- /dev/null
-+++ b/package/gcc/gcc-initial/4.4.7
-@@ -0,0 +1 @@
-+../4.4.7
-\ No newline at end of file
-diff --git a/package/gcc/gcc-initial/4.5.4 b/package/gcc/gcc-initial/4.5.4
-new file mode 120000
-index 0000000..b758df2
---- /dev/null
-+++ b/package/gcc/gcc-initial/4.5.4
-@@ -0,0 +1 @@
-+../4.5.4
-\ No newline at end of file
-diff --git a/package/gcc/gcc-initial/4.6.4 b/package/gcc/gcc-initial/4.6.4
-new file mode 120000
-index 0000000..d4c8b47
---- /dev/null
-+++ b/package/gcc/gcc-initial/4.6.4
-@@ -0,0 +1 @@
-+../4.6.4
-\ No newline at end of file
-diff --git a/package/gcc/gcc-initial/4.7.3 b/package/gcc/gcc-initial/4.7.3
-new file mode 120000
-index 0000000..6c32215
---- /dev/null
-+++ b/package/gcc/gcc-initial/4.7.3
-@@ -0,0 +1 @@
-+../4.7.3
-\ No newline at end of file
-diff --git a/package/gcc/gcc-initial/4.8-arc b/package/gcc/gcc-initial/4.8-arc
-new file mode 120000
-index 0000000..4f63276
---- /dev/null
-+++ b/package/gcc/gcc-initial/4.8-arc
-@@ -0,0 +1 @@
-+../4.8-arc
-\ No newline at end of file
-diff --git a/package/gcc/gcc-initial/4.8.2 b/package/gcc/gcc-initial/4.8.2
-new file mode 120000
-index 0000000..27736e8
---- /dev/null
-+++ b/package/gcc/gcc-initial/4.8.2
-@@ -0,0 +1 @@
-+../4.8.2
-\ No newline at end of file
-diff --git a/package/gcc/gcc-initial/gcc-initial.mk b/package/gcc/gcc-initial/gcc-initial.mk
-index 0eb492f..6a1ec3c 100644
---- a/package/gcc/gcc-initial/gcc-initial.mk
-+++ b/package/gcc/gcc-initial/gcc-initial.mk
-@@ -16,7 +16,7 @@ ifneq ($(call qstrip, $(BR2_XTENSA_CORE_NAME)),)
- HOST_GCC_INITIAL_POST_EXTRACT_CMDS += HOST_GCC_XTENSA_OVERLAY_EXTRACT
- endif
+ >  	config BR2_UCLIBC_VERSION_0_9_33
+ >  		bool "uClibc 0.9.33.x"
+ > -		depends on !(BR2_arc || BR2_xtensa)
+ > +		depends on !(BR2_arc || BR2_avr32 || BR2_xtensa)
  
--HOST_GCC_INITIAL_POST_PATCH_HOOKS += HOST_GCC_APPLY_PATCHES
-+HOST_GCC_INITIAL_POST_PATCH_HOOKS += HOST_GCC_APPLY_POWERPC_PATCH
+ >  	config BR2_UCLIBC_VERSION_0_9_33_ARC
+ >  		bool "uClibc 0.9.33.x-arc"
+ > @@ -34,6 +38,7 @@ config BR2_USE_UCLIBC_SNAPSHOT
  
- # gcc doesn't support in-tree build, so we create a 'build'
- # subdirectory in the gcc sources, and build from there.
-diff --git a/package/gcc/gcc-intermediate/4.2.2-avr32-2.1.5 b/package/gcc/gcc-intermediate/4.2.2-avr32-2.1.5
-new file mode 120000
-index 0000000..032c9e3
---- /dev/null
-+++ b/package/gcc/gcc-intermediate/4.2.2-avr32-2.1.5
-@@ -0,0 +1 @@
-+../4.2.2-avr32-2.1.5
-\ No newline at end of file
-diff --git a/package/gcc/gcc-intermediate/4.3.6 b/package/gcc/gcc-intermediate/4.3.6
-new file mode 120000
-index 0000000..e1c481e
---- /dev/null
-+++ b/package/gcc/gcc-intermediate/4.3.6
-@@ -0,0 +1 @@
-+../4.3.6
-\ No newline at end of file
-diff --git a/package/gcc/gcc-intermediate/4.4.7 b/package/gcc/gcc-intermediate/4.4.7
-new file mode 120000
-index 0000000..a7ca0e2
---- /dev/null
-+++ b/package/gcc/gcc-intermediate/4.4.7
-@@ -0,0 +1 @@
-+../4.4.7
-\ No newline at end of file
-diff --git a/package/gcc/gcc-intermediate/4.5.4 b/package/gcc/gcc-intermediate/4.5.4
-new file mode 120000
-index 0000000..b758df2
---- /dev/null
-+++ b/package/gcc/gcc-intermediate/4.5.4
-@@ -0,0 +1 @@
-+../4.5.4
-\ No newline at end of file
-diff --git a/package/gcc/gcc-intermediate/4.6.4 b/package/gcc/gcc-intermediate/4.6.4
-new file mode 120000
-index 0000000..d4c8b47
---- /dev/null
-+++ b/package/gcc/gcc-intermediate/4.6.4
-@@ -0,0 +1 @@
-+../4.6.4
-\ No newline at end of file
-diff --git a/package/gcc/gcc-intermediate/4.7.3 b/package/gcc/gcc-intermediate/4.7.3
-new file mode 120000
-index 0000000..6c32215
---- /dev/null
-+++ b/package/gcc/gcc-intermediate/4.7.3
-@@ -0,0 +1 @@
-+../4.7.3
-\ No newline at end of file
-diff --git a/package/gcc/gcc-intermediate/4.8-arc b/package/gcc/gcc-intermediate/4.8-arc
-new file mode 120000
-index 0000000..4f63276
---- /dev/null
-+++ b/package/gcc/gcc-intermediate/4.8-arc
-@@ -0,0 +1 @@
-+../4.8-arc
-\ No newline at end of file
-diff --git a/package/gcc/gcc-intermediate/4.8.2 b/package/gcc/gcc-intermediate/4.8.2
-new file mode 120000
-index 0000000..27736e8
---- /dev/null
-+++ b/package/gcc/gcc-intermediate/4.8.2
-@@ -0,0 +1 @@
-+../4.8.2
-\ No newline at end of file
-diff --git a/package/gcc/gcc-intermediate/gcc-intermediate.mk b/package/gcc/gcc-intermediate/gcc-intermediate.mk
-index f47e4be..c0bf6fc 100644
---- a/package/gcc/gcc-intermediate/gcc-intermediate.mk
-+++ b/package/gcc/gcc-intermediate/gcc-intermediate.mk
-@@ -18,7 +18,7 @@ ifneq ($(call qstrip, $(BR2_XTENSA_CORE_NAME)),)
- HOST_GCC_INTERMEDIATE_POST_EXTRACT_CMDS += HOST_GCC_XTENSA_OVERLAY_EXTRACT
- endif
+ >  config BR2_UCLIBC_VERSION_STRING
+ >  	string
+ > +	default 0.9.31.1	if BR2_UCLIBC_VERSION_0_9_31
+ >  	default 0.9.32.1	if BR2_UCLIBC_VERSION_0_9_32
+ >  	default 0.9.33.2	if BR2_UCLIBC_VERSION_0_9_33
+ >  	default 0.9.33-arc	if BR2_UCLIBC_VERSION_0_9_33_ARC
+ > @@ -41,6 +46,7 @@ config BR2_UCLIBC_VERSION_STRING
  
--HOST_GCC_INTERMEDIATE_POST_PATCH_HOOKS += HOST_GCC_APPLY_PATCHES
-+HOST_GCC_INTERMEDIATE_POST_PATCH_HOOKS += HOST_GCC_APPLY_POWERPC_PATCH
+ >  config BR2_UCLIBC_CONFIG
+ >  	string "uClibc configuration file to use?"
+ > +	default "package/uclibc/uClibc-0.9.31.config" if BR2_UCLIBC_VERSION_0_9_31
+ >  	default "package/uclibc/uClibc-0.9.32.config" if BR2_UCLIBC_VERSION_0_9_32
+ >  	default "package/uclibc/uClibc-0.9.33.config" if BR2_UCLIBC_VERSION_0_9_33
+ >  	default "package/uclibc/uClibc-snapshot.config" if BR2_UCLIBC_VERSION_0_9_33_ARC
+ > @@ -90,7 +96,7 @@ config BR2_TOOLCHAIN_BUILDROOT_LOCALE
  
- # gcc doesn't support in-tree build, so we create a 'build'
- # subdirectory in the gcc sources, and build from there.
-diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
-index 0c0cc99..bddceba 100644
---- a/package/gcc/gcc.mk
-+++ b/package/gcc/gcc.mk
-@@ -43,16 +43,13 @@ endef
- ifeq ($(ARCH),powerpc)
- ifneq ($(BR2_SOFT_FLOAT),)
- define HOST_GCC_APPLY_POWERPC_PATCH
--	support/scripts/apply-patches.sh $(@D) package/gcc/$(GCC_VERSION) powerpc-link-with-math-lib.patch.conditional
-+	if [ -e package/gcc/$(GCC_VERSION)/powerpc-link-with-math-lib.patch.conditional ]; then \
-+		support/scripts/apply-patches.sh $(@D) package/gcc/$(GCC_VERSION) powerpc-link-with-math-lib.patch.conditional; \
-+	fi
- endef
- endif
- endif
- 
--define HOST_GCC_APPLY_PATCHES
--	support/scripts/apply-patches.sh $(@D) package/gcc/$(GCC_VERSION) \*.patch
--	$(HOST_GCC_APPLY_POWERPC_PATCH)
--endef
--
- #
- # Custom extract command to save disk space
- #
+ >  choice
+ >  	prompt "Thread library implementation"
+ > -	default BR2_PTHREADS_NATIVE if !(BR2_avr32 || BR2_xtensa)
+ > +	default BR2_PTHREADS_NATIVE if (!BR2_UCLIBC_VERSION_0_9_31) && !(BR2_avr32 || BR2_xtensa)
+
+It already depends on !BR2_avr32, so you can drop this.
+
+
+ >  	default BR2_PTHREADS_OLD
+ >  	help
+ >  	  Use this option to select the thread library implementation
+ > @@ -115,6 +121,7 @@ choice
+ >  	config BR2_PTHREADS_NATIVE
+ >  		bool "Native POSIX Threading (NPTL)"
+ >  		select BR2_TOOLCHAIN_HAS_THREADS
+ > +		depends on !BR2_UCLIBC_VERSION_0_9_31
+ >  		depends on !BR2_arc
+ >  		depends on !BR2_avr32
+
+And here as well.
+
+Care to resend with those issues fixed? Thanks.
+
 -- 
-1.8.4.rc3
+Bye, Peter Korsgaard
