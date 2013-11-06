@@ -1,62 +1,46 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Wed, 6 Nov 2013 15:35:46 +0100
-Subject: [Buildroot] [PATCH 1/1] Avoid toolchain download when it is
-	preinstalled
-In-Reply-To: <527A1C86.8030909@gezedo.com>
-References: <527A1C86.8030909@gezedo.com>
-Message-ID: <CAAXf6LX=VxrdM8oC4DEOYLo2wMhAriAiQDopUftb+FKnOvg_sQ@mail.gmail.com>
+From: spdawson at gmail.com <spdawson@gmail.com>
+Date: Wed,  6 Nov 2013 14:38:23 +0000
+Subject: [Buildroot] [PATCH v3] connman: disable on avr32
+Message-ID: <1383748703-15545-1-git-send-email-spdawson@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Laurent,
+From: Simon Dawson <spdawson@gmail.com>
 
-On Wed, Nov 6, 2013 at 11:40 AM, Laurent GONZALEZ <br2@gezedo.com> wrote:
-> For configurations using a toolchain that is preinstalled on
-> the host, <pkg>_SITE and <pkg>_SOURCE variables must be kept
-> empty to avoid downloading any toolchain package.
->
-> Signed-off-by: GONZALEZ Laurent <br2@gezedo.com>
-> ---
->  toolchain/toolchain-external/toolchain-external.mk |    2 ++
->  1 file changed, 2 insertions(+)
->
-> diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
-> index 2722600..6f4feb5 100644
-> --- a/toolchain/toolchain-external/toolchain-external.mk
-> +++ b/toolchain/toolchain-external/toolchain-external.mk
-> @@ -236,6 +236,7 @@ define TOOLCHAIN_EXTERNAL_LINARO_ARMHF_SYMLINK
->         ln -sf . $(TARGET_DIR)/usr/lib/arm-linux-gnueabihf
->  endef
->
-> +ifeq ($(BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD),y)
->  ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201109),y)
->  TOOLCHAIN_EXTERNAL_SITE = http://sourcery.mentor.com/public/gnu_toolchain/arm-none-linux-gnueabi/
->  TOOLCHAIN_EXTERNAL_SOURCE = arm-2011.09-70-arm-none-linux-gnueabi-i686-pc-linux-gnu.tar.bz2
-> @@ -347,6 +348,7 @@ else
->  TOOLCHAIN_EXTERNAL_SITE = $(dir $(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_URL)))
->  TOOLCHAIN_EXTERNAL_SOURCE = $(notdir $(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_URL)))
->  endif
-> +endif
->
->  TOOLCHAIN_EXTERNAL_INSTALL_STAGING = YES
->
+The inotify_init1 syscall is not available on avr32. Fixes build failures
+such as the following.
 
-Can you be a bit more specific about the configuration you see this
-problem with?
-Although I can confirm that there is an attempted download when you
-configure a pre-installed codesourcery toolchain, I can't fix the
-problem completely with your patch:
+  http://autobuild.buildroot.net/results/0d8/0d8e7bd8bd3f227fabfb0d5feb59a5d316026d3f
 
-$ make toolchain
->>> toolchain undefined Extracting
->>> toolchain undefined Patching toolchain//toolchain
->>> toolchain-external undefined Downloading
-/toolchain-external-undefined.tar.gz: Scheme missing.
---2013-11-06 15:33:31--
-http://sources.buildroot.net//toolchain-external-undefined.tar.gz
+Signed-off-by: Simon Dawson <spdawson@gmail.com>
+---
+ v3: Tidied up comment dependency, as suggested by Thomas De Schampheleire
+ v2: Disable comment on avr32, as suggested by Thomas De Schampheleire
 
-Thanks,
-Thomas
+ package/connman/Config.in | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/package/connman/Config.in b/package/connman/Config.in
+index c74618a..c8b640f 100644
+--- a/package/connman/Config.in
++++ b/package/connman/Config.in
+@@ -4,6 +4,7 @@ config BR2_PACKAGE_CONNMAN
+ 	select BR2_PACKAGE_LIBGLIB2
+ 	select BR2_PACKAGE_IPTABLES
+ 	select BR2_PACKAGE_GNUTLS
++	depends on !BR2_avr32 # no inotify_init1
+ 	depends on !BR2_UCLIBC_VERSION_0_9_32
+ 	depends on BR2_USE_WCHAR # libglib2 and gnutls
+ 	depends on BR2_INET_IPV6
+@@ -50,5 +51,6 @@ config BR2_PACKAGE_CONNMAN_CLIENT
+ endif # BR2_PACKAGE_CONNMAN
+ 
+ comment "connman needs a toolchain w/ IPv6, wchar, threads, resolver"
++	depends on !BR2_avr32
+ 	depends on BR2_UCLIBC_VERSION_0_9_32 || \
+ 		!BR2_USE_WCHAR || !BR2_INET_IPV6 || !BR2_TOOLCHAIN_HAS_THREADS
+-- 
+1.8.3.2
