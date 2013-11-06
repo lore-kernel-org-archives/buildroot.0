@@ -1,93 +1,42 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu,  7 Nov 2013 00:08:03 +0100
-Subject: [Buildroot] [PATCH 3/3] toolchain-external: factorize regular
-	expressions
-In-Reply-To: <1383779283-19725-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1383779283-19725-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1383779283-19725-3-git-send-email-thomas.petazzoni@free-electrons.com>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Thu,  7 Nov 2013 00:12:28 +0100
+Subject: [Buildroot] rootfs: add U-Boot image support for cpio + lots of
+	refactoring
+Message-ID: <1383779555-9222-1-git-send-email-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Based on a suggestion from Peter, this commit factorizes the logic and
-regular expressions that are used to find the sysroot and libdir for a
-given compiler. It reduces a bit the duplication of code, and
-centralizes the most bizarre part of this logic in one place.
+ This patch series is based on Spenser Gilliland's patch that adds U-Boot
+image support to the root filesystem images. It was decided at the BR
+developer meeting that this is only ever going to be useful for cpio
+images (to be used as an initramfs), so I rewrote the patch to that end.
+But then I saw lots and lots of refactoring opportunities, which in the
+end led to this 7-patch series.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- toolchain/toolchain-external/toolchain-external.mk | 32 +++++++++++++++-------
- 1 file changed, 22 insertions(+), 10 deletions(-)
+ I have only compile-tested the cpio image, Spenser can you do a runtime
+test on the Zedboard? Your defconfig should still work.
 
-diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
-index a423f75..aaa4380 100644
---- a/toolchain/toolchain-external/toolchain-external.mk
-+++ b/toolchain/toolchain-external/toolchain-external.mk
-@@ -379,6 +379,22 @@ define TOOLCHAIN_EXTERNAL_EXTRACT_CMDS
- endef
- endif
- 
-+# Returns the location of the libc.a file for the given compiler + flags
-+define toolchain_find_libc_a
-+$$(readlink -f $$(LANG=C $(1) -print-file-name=libc.a))
-+endef
-+
-+# Returns the sysroot location for the given compiler + flags
-+define toolchain_find_sysroot
-+$$(echo -n $(call toolchain_find_libc_a,$(1)) | sed -r -e 's:(usr/)?lib(32|64)?/([^/]*/)?libc\.a::')
-+endef
-+
-+# Returns the lib subdirectory for the given compiler + flags (i.e
-+# typically lib32 or lib64 for some toolchains)
-+define toolchain_find_libdir
-+$$(echo -n $(call toolchain_find_libc_a,$(1)) | sed -r -e 's:.*/(usr/)?(lib(32|64)?)/([^/]*/)?libc.a:\2:')
-+endef
-+
- # Checks for an already installed toolchain: check the toolchain
- # location, check that it supports sysroot, and then verify that it
- # matches the configuration provided in Buildroot: ABI, C++ support,
-@@ -386,8 +402,7 @@ endif
- define TOOLCHAIN_EXTERNAL_CONFIGURE_CMDS
- 	$(Q)$(call check_cross_compiler_exists,$(TOOLCHAIN_EXTERNAL_CC))
- 	$(Q)$(call check_unusable_toolchain,$(TOOLCHAIN_EXTERNAL_CC))
--	$(Q)LIBC_A_LOCATION=`readlink -f $$(LANG=C $(TOOLCHAIN_EXTERNAL_CC) -print-file-name=libc.a)` ; \
--	SYSROOT_DIR=`echo $${LIBC_A_LOCATION} | sed -r -e 's:(usr/)?lib(32|64)?/([^/]*/)?libc\.a::'` ; \
-+	$(Q)SYSROOT_DIR="$(call toolchain_find_sysroot,$(TOOLCHAIN_EXTERNAL_CC))" ; \
- 	if test -z "$${SYSROOT_DIR}" ; then \
- 		@echo "External toolchain doesn't support --sysroot. Cannot use." ; \
- 		exit 1 ; \
-@@ -468,15 +483,13 @@ endif
- #                       to the target filesystem.
- 
- define TOOLCHAIN_EXTERNAL_INSTALL_CORE
--	$(Q)LIBC_A_LOCATION=`readlink -f $$(LANG=C $(TOOLCHAIN_EXTERNAL_CC) -print-file-name=libc.a)` ; \
--	SYSROOT_DIR=`echo $${LIBC_A_LOCATION} | sed -r -e 's:(usr/)?lib(32|64)?/([^/]*/)?libc\.a::'` ; \
-+	$(Q)SYSROOT_DIR="$(call toolchain_find_sysroot,$(TOOLCHAIN_EXTERNAL_CC))" ; \
- 	if test -z "$${SYSROOT_DIR}" ; then \
- 		@echo "External toolchain doesn't support --sysroot. Cannot use." ; \
- 		exit 1 ; \
- 	fi ; \
--	ARCH_LIBC_A_LOCATION=`readlink -f $$(LANG=C $(TOOLCHAIN_EXTERNAL_CC) $(TOOLCHAIN_EXTERNAL_CFLAGS) -print-file-name=libc.a)` ; \
--	ARCH_SYSROOT_DIR=`echo $${ARCH_LIBC_A_LOCATION} | sed -r -e 's:(usr/)?lib(32|64)?/([^/]*/)?libc\.a::'` ; \
--	ARCH_LIB_DIR=`echo $${ARCH_LIBC_A_LOCATION} | sed -r -e 's:.*/(usr/)?(lib(32|64)?)/([^/]*/)?libc.a:\2:'` ; \
-+	ARCH_SYSROOT_DIR="$(call toolchain_find_sysroot,$(TOOLCHAIN_EXTERNAL_CC) $(TOOLCHAIN_EXTERNAL_CFLAGS))" ; \
-+	ARCH_LIB_DIR="$(call toolchain_find_libdir,$(TOOLCHAIN_EXTERNAL_CC) $(TOOLCHAIN_EXTERNAL_CFLAGS))" ; \
- 	SUPPORT_LIB_DIR="" ; \
- 	if test `find $${ARCH_SYSROOT_DIR} -name 'libstdc++.a' | wc -l` -eq 0 ; then \
- 		LIBSTDCPP_A_LOCATION=$$(LANG=C $(TOOLCHAIN_EXTERNAL_CC) $(TOOLCHAIN_EXTERNAL_CFLAGS) -print-file-name=libstdc++.a) ; \
-@@ -521,9 +534,8 @@ ifeq ($(BR2_BFIN_INSTALL_FDPIC_SHARED),y)
- define TOOLCHAIN_EXTERNAL_INSTALL_BFIN_FDPIC
- 	$(Q)$(call MESSAGE,"Install external toolchain FDPIC libraries to target...") ; \
- 	FDPIC_EXTERNAL_CC=$(dir $(TOOLCHAIN_EXTERNAL_CC))/../../bfin-linux-uclibc/bin/bfin-linux-uclibc-gcc ; \
--	FDPIC_LIBC_A_LOCATION=`readlink -f $$(LANG=C $${FDPIC_EXTERNAL_CC} $(TOOLCHAIN_EXTERNAL_CFLAGS) -print-file-name=libc.a)` ; \
--	FDPIC_SYSROOT_DIR=`echo $${FDPIC_LIBC_A_LOCATION} | sed -r -e 's:(usr/)?lib(32|64)?/([^/]*/)?libc\.a::'` ; \
--	FDPIC_LIB_DIR=`echo $${FDPIC_LIBC_A_LOCATION} | sed -r -e 's:.*/(usr/)?(lib(32|64)?)/([^/]*/)?libc.a:\2:'` ; \
-+	FDPIC_SYSROOT_DIR="$(call toolchain_find_sysroot,$${FDPIC_EXTERNAL_CC} $(TOOLCHAIN_EXTERNAL_CFLAGS))" ; \
-+	FDPIC_LIB_DIR="$(call toolchain_find_libdir,$${FDPIC_EXTERNAL_CC} $(TOOLCHAIN_EXTERNAL_CFLAGS))" ; \
- 	FDPIC_SUPPORT_LIB_DIR="" ; \
- 	if test `find $${FDPIC_SYSROOT_DIR} -name 'libstdc++.a' | wc -l` -eq 0 ; then \
- 	        FDPIC_LIBSTDCPP_A_LOCATION=$$(LANG=C $${FDPIC_EXTERNAL_CC} $(TOOLCHAIN_EXTERNAL_CFLAGS) -print-file-name=libstdc++.a) ; \
--- 
-1.8.1.2
+ Regards,
+ Arnout
+
+----------------------------------------------------------------
+Arnout Vandecappelle (Essensium/Mind) (7):
+      rootfs-ext2: make the symlink as a _POST_TARGET
+      rootfs-common: remove the now unused ROOTFS_<PKG>_POST_GEN_HOOKS
+      rootfs-cpio: whitespace cleanup in Config.in
+      rootfs-common: refactor the common compression commands
+      rootfs-ext2: symlink with the compressed rootfs
+      rootfs-cpio: add U-Boot image support
+      uboot-tools: factor out common mkimage infrastructure
+
+ fs/common.mk                       | 46 +++++++++++++++++++++++++++-------------------
+ fs/cpio/Config.in                  | 51 +++++++++++++++++++++++++++++++--------------------
+ fs/cpio/cpio.mk                    |  8 ++++++++
+ fs/ext2/ext2.mk                    |  8 ++++----
+ fs/iso9660/iso9660.mk              |  6 +-----
+ linux/linux.mk                     |  4 ++--
+ package/uboot-tools/uboot-tools.mk | 18 ++++++++++++++++++
+ 7 files changed, 91 insertions(+), 50 deletions(-)
