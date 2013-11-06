@@ -1,33 +1,24 @@
 From: Simon Dawson <spdawson@gmail.com>
-Date: Wed, 6 Nov 2013 11:09:16 +0000
-Subject: [Buildroot] [PATCH] libevas: disable on avr32
-In-Reply-To: <CAAXf6LV6GFk27s8fpEbcDVKmrkipiKA_FGFEt-wcdXMutkwBoA@mail.gmail.com>
-References: <1383735243-18910-1-git-send-email-spdawson@gmail.com>
- <CAAXf6LV6GFk27s8fpEbcDVKmrkipiKA_FGFEt-wcdXMutkwBoA@mail.gmail.com>
-Message-ID: <CAHt8ZCM6t1qPEOCaTpDOe1ESTF1ZdvNU1CrEkZC5hABzpKf+fg@mail.gmail.com>
+Date: Wed, 6 Nov 2013 11:10:00 +0000
+Subject: [Buildroot] [PATCH] connman: disable on avr32
+In-Reply-To: <CAAXf6LXx5AR6ELq+=+f6M2Rb9Mue_8hoKvKWenKBGb+DFiBQRQ@mail.gmail.com>
+References: <1383735672-24550-1-git-send-email-spdawson@gmail.com>
+ <CAAXf6LXx5AR6ELq+=+f6M2Rb9Mue_8hoKvKWenKBGb+DFiBQRQ@mail.gmail.com>
+Message-ID: <CAHt8ZCN1-L0puV5+qTgicZn42xZb=PhCYvo57x-t81O-OxGq-g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas, thanks for the feedback.
+Thanks for the feedback Thomas.
 
-On 6 November 2013 11:05, Thomas De Schampheleire
+On 6 November 2013 11:03, Thomas De Schampheleire
 <patrickdepinguin@gmail.com> wrote:
-> In all these places, the new 'depends on' should be repeated on the
-> comment that is shown when one of the toolchain options is missing.
+> This dependency should also be added to the comment, on a separate
+> 'depends on' statement.
+> (see also my patch in the queue, that I have to rework)
 
-Okay. I thought the policy was not to mention architecture
-dependencies on the comments...
-
-> Regarding the structure:
->        # libevas
->        depends on !BR2_avr32
->
-> I find it more clear to use:
->        depends on !BR2_avr32  # libevas
-
-Okay. I'll tidy this up.
+Okay. I'll fix my patch.
 
 Simon.
