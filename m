@@ -1,55 +1,118 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 6 Nov 2013 11:26:20 +0100
-Subject: [Buildroot] [PATCH 4/5] rpi: rename board folder for consistency
-In-Reply-To: <20131106111103.1a1f1d13@skate>
-References: <cover.1383693880.git.yann.morin.1998@free.fr>
- <5db8e0c38bc04628a5286eb3c90ab0c0ee543b53.1383693880.git.yann.morin.1998@free.fr>
- <20131106111103.1a1f1d13@skate>
-Message-ID: <201311061126.20888.yann.morin.1998@free.fr>
+From: spdawson at gmail.com <spdawson@gmail.com>
+Date: Wed,  6 Nov 2013 10:54:03 +0000
+Subject: [Buildroot] [PATCH] libevas: disable on avr32
+Message-ID: <1383735243-18910-1-git-send-email-spdawson@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+From: Simon Dawson <spdawson@gmail.com>
 
-On Wednesday 06 November 2013 11:11:03 Thomas Petazzoni wrote:
-> On Wed,  6 Nov 2013 00:28:19 +0100, Yann E. MORIN wrote:
-> > From: mathieu benoit <mathieu.benoit@savoirfairelinux.com>
-> > 
-> > All the Raspberry Pi files (packages and config) are prefix with
-> > "rpi", so rename the board directory to "rpi" for consistency.
-> > 
-> > Signed-off-by: Mathieu Benoit <mathieu.benoit@savoirfairelinux.com>
-> > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> > ---
-> >  board/{raspberrypi => rpi}/readme.txt | 0
-> >  1 file changed, 0 insertions(+), 0 deletions(-)
-> >  rename board/{raspberrypi => rpi}/readme.txt (100%)
-> 
-> I'm not sure I agree with this one. I find "rasberrypi" a lot more
-> obvious for the new comer. Maybe our defconfig should also be called
-> rasberrypi_defconfig.
+Neither epoll_create1 nor inotify_init1 is available on avr32. Fixes build
+failures such as the following.
 
-Well, 'rpi' is a very common nickname for the Raspberry Pi, so I don't
-think there will be confusion for a newcomer (to Buildroot).
+  http://autobuild.buildroot.net/results/4d435a5fc608936362d605aca696c01023be9723
 
-On the other hand, all our other boards are using the full name, not a
-shortname/nickname, neither in board/ nor in configs/
+Signed-off-by: Simon Dawson <spdawson@gmail.com>
+---
+ package/efl/expedite/Config.in      | 2 ++
+ package/efl/libecore/Config.in      | 2 ++
+ package/efl/libedje/Config.in       | 2 ++
+ package/efl/libelementary/Config.in | 2 ++
+ package/efl/libethumb/Config.in     | 2 ++
+ package/efl/libevas/Config.in       | 1 +
+ package/enlightenment/Config.in     | 2 ++
+ 7 files changed, 13 insertions(+)
 
-So, in hindsight, I agree with Thomas here: we should use raspberrypi,
-not rpi.
-
-I'll fix and resubmit.
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/efl/expedite/Config.in b/package/efl/expedite/Config.in
+index 466fd7d..5f6e97f 100644
+--- a/package/efl/expedite/Config.in
++++ b/package/efl/expedite/Config.in
+@@ -4,6 +4,8 @@ config BR2_PACKAGE_EXPEDITE
+ 	select BR2_PACKAGE_LIBEVAS
+ 	select BR2_PACKAGE_LIBEET
+ 	depends on BR2_INSTALL_LIBSTDCPP
++	# libevas
++	depends on !BR2_avr32
+ 	help
+ 	  Expedite is the official Evas benchmark tool. It can test different
+ 	  engines, such as X11, XRender, OpenGL (also ES variant), SDL,
+diff --git a/package/efl/libecore/Config.in b/package/efl/libecore/Config.in
+index 6c887f5..77b5283 100644
+--- a/package/efl/libecore/Config.in
++++ b/package/efl/libecore/Config.in
+@@ -38,5 +38,7 @@ config BR2_PACKAGE_LIBECORE_X_XCB
+ config BR2_PACKAGE_LIBECORE_EVAS
+ 	bool "libecore Evas support"
+ 	select BR2_PACKAGE_LIBEVAS
++	# libevas
++	depends on !BR2_avr32
+ 
+ endif # BR2_PACKAGE_LIBECORE
+diff --git a/package/efl/libedje/Config.in b/package/efl/libedje/Config.in
+index f0985dd..d142268 100644
+--- a/package/efl/libedje/Config.in
++++ b/package/efl/libedje/Config.in
+@@ -7,6 +7,8 @@ config BR2_PACKAGE_LIBEDJE
+ 	select BR2_PACKAGE_LIBEMBRYO
+ 	select BR2_PACKAGE_LIBEVAS
+ 	select BR2_PACKAGE_LUA
++	# libevas
++	depends on !BR2_avr32
+ 	help
+ 	  A graphical layout and animation library for animated
+ 	  resizable, compressed and scalable themes.
+diff --git a/package/efl/libelementary/Config.in b/package/efl/libelementary/Config.in
+index 59af80e..c43d80d 100644
+--- a/package/efl/libelementary/Config.in
++++ b/package/efl/libelementary/Config.in
+@@ -4,6 +4,8 @@ config BR2_PACKAGE_LIBELEMENTARY
+ 	select BR2_PACKAGE_LIBEVAS
+ 	select BR2_PACKAGE_LIBECORE
+ 	select BR2_PACKAGE_LIBEDJE
++	# libevas
++	depends on !BR2_avr32
+ 	help
+ 	  Elementary is a widget toolkit and EFL wrapper and convenience
+ 	  library to make it easy to build applications and tools with UIs
+diff --git a/package/efl/libethumb/Config.in b/package/efl/libethumb/Config.in
+index fb0032a..e85aa1d 100644
+--- a/package/efl/libethumb/Config.in
++++ b/package/efl/libethumb/Config.in
+@@ -5,6 +5,8 @@ config BR2_PACKAGE_LIBETHUMB
+ 	select BR2_PACKAGE_LIBECORE
+ 	select BR2_PACKAGE_LIBECORE_EVAS
+ 	select BR2_PACKAGE_LIBEDJE
++	# libevas
++	depends on !BR2_avr32
+ 	help
+ 	  Ethumb is a library for generating thumbnail images of documents.
+ 
+diff --git a/package/efl/libevas/Config.in b/package/efl/libevas/Config.in
+index f73376b..8c4193f 100644
+--- a/package/efl/libevas/Config.in
++++ b/package/efl/libevas/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_LIBEVAS
+ 	bool "libevas"
++	depends on !BR2_avr32 # no epoll_create1 or inotify_init1
+ 	select BR2_PACKAGE_FREETYPE
+ 	select BR2_PACKAGE_LIBEINA
+ 	# required to build so far
+diff --git a/package/enlightenment/Config.in b/package/enlightenment/Config.in
+index 54c0ac6..5ec85a5 100644
+--- a/package/enlightenment/Config.in
++++ b/package/enlightenment/Config.in
+@@ -26,6 +26,8 @@ config BR2_PACKAGE_ENLIGHTENMENT
+ 	# libedbus -> dbus
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_PACKAGE_XORG7
++	# libevas
++	depends on !BR2_avr32
+ 	help
+ 	  Enlightenment, also known simply as E, is a stacking window
+ 	  manager for the X Window System which can be used alone or
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +0/33 662376056 | Software  Designer | \ / CAMPAIGN     |   ^                |
-| --==< O_o >==-- '------------.-------:  X  AGAINST      |  /e\  There is no  |
-| http://ymorin.is-a-geek.org/ | (*_*) | / \ HTML MAIL    |  """  conspiracy.  |
-'------------------------------'-------'------------------'--------------------'
+1.8.3.2
