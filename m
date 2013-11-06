@@ -1,37 +1,36 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 6 Nov 2013 11:11:03 +0100
-Subject: [Buildroot] [PATCH 4/5] rpi: rename board folder for consistency
-In-Reply-To: <5db8e0c38bc04628a5286eb3c90ab0c0ee543b53.1383693880.git.yann.morin.1998@free.fr>
-References: <cover.1383693880.git.yann.morin.1998@free.fr>
- <5db8e0c38bc04628a5286eb3c90ab0c0ee543b53.1383693880.git.yann.morin.1998@free.fr>
-Message-ID: <20131106111103.1a1f1d13@skate>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed,  6 Nov 2013 07:11:37 -0300
+Subject: [Buildroot] [PATCH] wireshark: security bump to version 1.8.11
+Message-ID: <1383732697-29282-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+Fixes CVE-2013-6336, CVE-2013-6337, CVE-2013-6338, CVE-2013-6339,
+CVE-2013-6340, CVE-2013-4927, CVE-2013-4929, CVE-2013-4930,
+CVE-2013-4931, CVE-2013-4932, CVE-2013-4933, CVE-2013-4934,
+CVE-2013-4935, CVE-2013-5718, CVE-2013-5719, CVE-2013-5720,
+CVE-2013-5721 and CVE-2013-5722.
 
-On Wed,  6 Nov 2013 00:28:19 +0100, Yann E. MORIN wrote:
-> From: mathieu benoit <mathieu.benoit@savoirfairelinux.com>
-> 
-> All the Raspberry Pi files (packages and config) are prefix with
-> "rpi", so rename the board directory to "rpi" for consistency.
-> 
-> Signed-off-by: Mathieu Benoit <mathieu.benoit@savoirfairelinux.com>
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> ---
->  board/{raspberrypi => rpi}/readme.txt | 0
->  1 file changed, 0 insertions(+), 0 deletions(-)
->  rename board/{raspberrypi => rpi}/readme.txt (100%)
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/wireshark/wireshark.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-I'm not sure I agree with this one. I find "rasberrypi" a lot more
-obvious for the new comer. Maybe our defconfig should also be called
-rasberrypi_defconfig.
-
-Thomas
+diff --git a/package/wireshark/wireshark.mk b/package/wireshark/wireshark.mk
+index a105e52..9f968fd 100644
+--- a/package/wireshark/wireshark.mk
++++ b/package/wireshark/wireshark.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-WIRESHARK_VERSION = 1.8.8
++WIRESHARK_VERSION = 1.8.11
+ WIRESHARK_SOURCE = wireshark-$(WIRESHARK_VERSION).tar.bz2
+ WIRESHARK_SITE = http://www.wireshark.org/download/src/all-versions
+ WIRESHARK_LICENSE = wireshark license
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.8.1.5
