@@ -1,48 +1,33 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 06 Nov 2013 23:32:14 +0100
+Date: Wed, 06 Nov 2013 23:33:58 +0100
 Subject: [Buildroot] [RFC] core: Download all package sources
-In-Reply-To: <20131106231048.67cf2d52@skate> (Thomas Petazzoni's message of
- "Wed, 6 Nov 2013 23:10:48 +0100")
+In-Reply-To: <OFB958AF8A.71CC6ECD-ON86257C1B.007ADE85-86257C1B.007B965F@rockwellcollins.com>
+ (clshotwe@rockwellcollins.com's message of "Wed, 6 Nov 2013 16:31:23
+ -0600")
 References: <1383587286-18094-1-git-send-email-clshotwe@rockwellcollins.com>
  <87eh6tkxuk.fsf@dell.be.48ers.dk> <20131106231048.67cf2d52@skate>
-Message-ID: <87k3gljh5d.fsf@dell.be.48ers.dk>
+ <OFB958AF8A.71CC6ECD-ON86257C1B.007ADE85-86257C1B.007B965F@rockwellcollins.com>
+Message-ID: <87fvr9jh2h.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+>>>>> "clshotwe" == clshotwe  <clshotwe@rockwellcollins.com> writes:
 
- > Dear Peter Korsgaard,
- > On Wed, 06 Nov 2013 22:46:11 +0100, Peter Korsgaard wrote:
+ >> Same thing for architecture dependent packages: grub depends on i386
+ >> or x86-64, but ti-gfx depends on arm.
 
- >> > Signed-off-by: Clayton Shotwell <clshotwe@rockwellcollins.com>
- >> 
- >> Sorry, how is this different than make allpackageyesconfig; make source?
+ > That is exactly the problem I was running into. As for the grep
+ > concern, I have not found another way to implement it. I needed to
+ > have a full list of all of the packages but I was not able to find
+ > said variable. I spent some time digging through the Kconfig stuff to
+ > see if there way a way to get around all of the dependencies but I
+ > could not find an easy way.
 
- > I'd really like allyespackageconfig to be the solution, because I don't
- > really like the idea of dumping all make variables, grepping in there,
- > and using that to download everything.
-
- > However, the big problem with allyespackageconfig is that it doesn't
- > download everything. As soon as you have a "choice" in Config.in (be it
- > for the package version, whether you want full X.org or KDrive X.org,
- > or Busybox init vs. sysvinit vs. systemd), then your
- > allyespackageconfig configuration is only going to contain the packages
- > that correspond to *one* possible choice selection. That leaves a large
- > number of packages that will not be downloaded.
-
- > Same thing for architecture dependent packages: grub depends on i386 or
- > x86-64, but ti-gfx depends on arm.
-
-Yes, and thats the problem I have with keeping sources.buildroot.net
-uptodate. Currently I "work around it" by doing a bunch of randconfig;
-make source and hoping I will sooner or later catch them all.
-
-But does this matter for USERS? I would guess users are only interested
-in a subset of all the packages (E.G. the ones for the arch they use or
-the ones enabled in their .config).
+I still don't quite get why you want to download the sources of all
+package(-versions) we have in Buildroot. Can you explain in more detail?
 
 -- 
 Bye, Peter Korsgaard
