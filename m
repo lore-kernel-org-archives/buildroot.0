@@ -1,36 +1,32 @@
-From: spdawson at gmail.com <spdawson@gmail.com>
-Date: Wed,  6 Nov 2013 11:01:12 +0000
-Subject: [Buildroot] [PATCH] connman: disable on avr32
-Message-ID: <1383735672-24550-1-git-send-email-spdawson@gmail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 06 Nov 2013 12:03:02 +0100
+Subject: [Buildroot] [PATCH] busybox: minor fixes to S01logging
+	bootscript
+In-Reply-To: <1383732056-39746-1-git-send-email-javier.viguera@digi.com>
+ (Javier Viguera's message of "Wed, 6 Nov 2013 11:00:56 +0100")
+References: <1383732056-39746-1-git-send-email-javier.viguera@digi.com>
+Message-ID: <87zjphlrmh.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Simon Dawson <spdawson@gmail.com>
+>>>>> "Javier" == Javier Viguera <javier.viguera@digi.com> writes:
 
-The inotify_init1 syscall is not available on avr32. Fixes build failures
-such as the following.
+ > * The PID file is not created unless the '-m' option is passed to
+ >   start-stop-daemon.
 
-  http://autobuild.buildroot.net/results/0d8/0d8e7bd8bd3f227fabfb0d5feb59a5d316026d3f
+ > * Remove the mark '-m 0' option as it's not supported by busybox's
+ >   syslogd.
 
-Signed-off-by: Simon Dawson <spdawson@gmail.com>
----
- package/connman/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+ > * Syslogd and Klogd forks to background by default giving as a result
+ >   that the pid stored in the PID file is not correct. Let the
+ >   background job be done by 'start-stop-daemon' by passing '-n'
+ >   (foreground) to the daemons and '-b' to start-stop-daemon. This
+ >   way the pid stored in the PID files is correct.
 
-diff --git a/package/connman/Config.in b/package/connman/Config.in
-index c74618a..efb2486 100644
---- a/package/connman/Config.in
-+++ b/package/connman/Config.in
-@@ -4,6 +4,7 @@ config BR2_PACKAGE_CONNMAN
- 	select BR2_PACKAGE_LIBGLIB2
- 	select BR2_PACKAGE_IPTABLES
- 	select BR2_PACKAGE_GNUTLS
-+	depends on !BR2_avr32 # no inotify_init1
- 	depends on !BR2_UCLIBC_VERSION_0_9_32
- 	depends on BR2_USE_WCHAR # libglib2 and gnutls
- 	depends on BR2_INET_IPV6
+Committed, thanks.
+
 -- 
-1.8.3.2
+Bye, Peter Korsgaard
