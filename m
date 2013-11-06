@@ -1,77 +1,80 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 6 Nov 2013 19:18:59 +0100
-Subject: [Buildroot] Qt5 puzzle
-In-Reply-To: <CALo-6+gmYsfcV1yU2oEAfkbCHCqi2YHSwp6CtvkTX8+bmfXYUw@mail.gmail.com>
-References: <CALo-6+gmYsfcV1yU2oEAfkbCHCqi2YHSwp6CtvkTX8+bmfXYUw@mail.gmail.com>
-Message-ID: <20131106191859.2c4d295c@skate>
+From: Alexander Lukichev <alexander.lukichev@gmail.com>
+Date: Wed, 6 Nov 2013 20:21:31 +0200
+Subject: [Buildroot] [PATCH v2 1/1] openpgm: disable on AVR32
+In-Reply-To: <20131106183947.0b078df7@skate>
+References: <1383329548-8528-1-git-send-email-alexander.lukichev@gmail.com>
+ <20131101192027.1ea4c1bc@skate>
+ <CAAHaz6GXiQAMuoK2eo0=EjmE509P98zuuAuN7f_T5TYeK6W1QA@mail.gmail.com>
+ <CAHt8ZCO2OEtWe8NrDYSTkmu7uqQGpQbWjAEJg+jHVGzsWsF9Mg@mail.gmail.com>
+ <20131102122618.18eb2f00@skate>
+ <CAHt8ZCOVSKMynxFe9WQuei-FKuB8BAJE2+dtEQreqwZokkTWdw@mail.gmail.com>
+ <CAAHaz6HvxQR0g9CpfvRTJN2FAoGmgR_z6uWVar93AXjENH-vbQ@mail.gmail.com>
+ <20131106183947.0b078df7@skate>
+Message-ID: <CAAHaz6GeH4p99WBpgESL0LKaL9R-ey4Tzx8FdUOTOqs6gGyxCQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Charles Krinke,
+Hi,
 
-On Wed, 6 Nov 2013 08:57:45 -0800, Charles Krinke wrote:
+2013/11/6 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-> Recently one of our app engineers moved to QtQuick 2.0 and all of a sudden
-> with the buildroot built binaries from Qt-5.0.2, I am seeing this error
-> when a qml-style program is run.
-> 
-> ERROR: Binary compiled with -mfloat-abi=hard but without
-> -DUSE_EABI_HARDFLOAT
-> 
-> In searching this, I can see mention of this on the buildroot mailing list
-> from June, but no hints or resolution. The archive of the mailing list is
-> this page:
-> 
-> http://buildroot-busybox.2317881.n4.nabble.com/ERROR-Binary-compiled-with-mfloat-abi-hard-but-without-DUSE-EABI-HARDFLOAT-td49130.html
-> 
-> Although I am using the TI AM3517 and not Raspberry Pi, the error seems to
-> be the same.
-> 
-> I am assuming this has something to do with make options. This morning, I
-> tried adding "-DUSE-EABI_HARDFLAT" to the Makefile for libQt5V8 where the
-> offending message is coming from, but the cheap shot doesnt work.
-> 
-> I am working with a buildroot from the end of July, so am not using the
-> experimental Qt-5.1 stuff (yet) and am hoping not to move forward in a
-> crisis if I can help it.
-> 
-> So, ... as usual, I am hoping for a clue or two to let me understand how to
-> get QtQuick back to functionality with Qt-5.0.2.
+> Well, I believe your original patch remains almost good then: openpgm
+> cannot be built on avr32 because the AVR32 compiler doesn't provide the
+> required compiler intrinsics.
+> <http://free-electrons.com>
+>
 
-Interesting. I had a look at this, in Qt 5.0.2, as packaged in
-Buildroot 2013.08. Normally, the USE_EABI_HARDFLOAT flag should
-automatically be set to 1 by Qt. From src/v8/v8.pri:
+Another option would be to build openpgm without fancy code that uses those
+intrinsics. If I disable some constants defined in configure script when
+intrinsics
+are expected from the toolchain, the code does not use them but instead
+tries to use pthread_spin_{lock,trylock,unlock}() functions. Curiously, my
+toolchain,
+built with "linuxthreads (stable/old)", does not have them. Should it? I
+have
+attached defconfig I use.
 
-equals(V8_TARGET_ARCH, arm) {
-DEFINES += V8_TARGET_ARCH_ARM
-config_hardfloat {
-    DEFINES += USE_EABI_HARDFLOAT=1
-} else {
-    DEFINES += USE_EABI_HARDFLOAT=0
-}
-...
+I have tried to rebuild the toolchain with "linuxthreads" but it complained
+somewhere
+in uClibc:
 
-config_hardfloat is I believe decided from the test executed from the
-main qtjsbackend.pro:
+  CC libc/unistd/confstr.os
+  CC libc/unistd/usleep.os
+  CC libpthread/linuxthreads/forward.oS
+  CC libpthread/linuxthreads/libc-cancellation.oS
+  CC libpthread/linuxthreads/libc_pthread_init.oS
+  CC libc/misc/elf/dl-iterate-phdr.oS
+  CC libc/misc/internals/__uClibc_main.oS
+  CC libc/inet/rpc/rpc_thread.oS
+In file included from
+./libpthread/linuxthreads/sysdeps/pthread/bits/libc-tsd.h:24,
+                 from libc/inet/rpc/rpc_thread.c:16:
+./include/tls.h:6:22: error: tls.h: No such file or directory
+make[1]: *** [libc/inet/rpc/rpc_thread.oS] Error 1
 
-qtCompileTest(hardfloat)
+Could I fix this somehow?
 
-and there is indeed a config.tests/hardfloat/, which builds a program,
-and then looks up with readelf if it's built hard float or not. Most
-likely this test is failing, for some reason, and therefore believes
-that the toolchain is not hardfp, while it actually is. I had a quick
-read of the test and it seems to be testing something correct.
+I will send a disabling patch, of course, but I was just interested why my
+toolchain
+does not have spinlock support (POSIX [1] does not say that this is
+restricted to
+some extension).
 
-Can you post your .config so we can see what your toolchain is and what
-is your Buildroot configuration?
+[1] http://pubs.opengroup.org/onlinepubs/9699919799/basedefs/pthread.h.html
 
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+--
+Best regards,
+  Alexander Lukichev
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20131106/62d5cf9b/attachment-0001.html>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: pthreads_stable_avr32_defconfig
+Type: application/octet-stream
+Size: 7718 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20131106/62d5cf9b/attachment-0001.obj>
