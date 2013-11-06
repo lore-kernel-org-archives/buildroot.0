@@ -1,42 +1,67 @@
-From: Laurent GONZALEZ <br2@gezedo.com>
-Date: Wed, 06 Nov 2013 11:40:06 +0100
-Subject: [Buildroot] [PATCH 1/1] Avoid toolchain download when it is
-	preinstalled
-Message-ID: <527A1C86.8030909@gezedo.com>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Wed, 6 Nov 2013 15:26:20 +0100
+Subject: [Buildroot] [PATCH v2] connman: disable on avr32
+In-Reply-To: <1383743283-13069-1-git-send-email-spdawson@gmail.com>
+References: <1383743283-13069-1-git-send-email-spdawson@gmail.com>
+Message-ID: <CAAXf6LUdSVF8SMyZ5J=udYB_XSrWgZqOu97zWZ1X2z42Cc3H2A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-For configurations using a toolchain that is preinstalled on
-the host, <pkg>_SITE and <pkg>_SOURCE variables must be kept
-empty to avoid downloading any toolchain package.
+Hi Simon,
 
-Signed-off-by: GONZALEZ Laurent <br2@gezedo.com>
----
- toolchain/toolchain-external/toolchain-external.mk |    2 ++
- 1 file changed, 2 insertions(+)
+On Wed, Nov 6, 2013 at 2:08 PM,  <spdawson@gmail.com> wrote:
+> From: Simon Dawson <spdawson@gmail.com>
+>
+> The inotify_init1 syscall is not available on avr32. Fixes build failures
+> such as the following.
+>
+>   http://autobuild.buildroot.net/results/0d8/0d8e7bd8bd3f227fabfb0d5feb59a5d316026d3f
+>
+> Signed-off-by: Simon Dawson <spdawson@gmail.com>
+> ---
+>  v2: Disable comment on avr32, as suggested by Thomas De Schampheleire
+>
+>  package/connman/Config.in | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+>
+> diff --git a/package/connman/Config.in b/package/connman/Config.in
+> index c74618a..e0a6782 100644
+> --- a/package/connman/Config.in
+> +++ b/package/connman/Config.in
+> @@ -4,6 +4,7 @@ config BR2_PACKAGE_CONNMAN
+>         select BR2_PACKAGE_LIBGLIB2
+>         select BR2_PACKAGE_IPTABLES
+>         select BR2_PACKAGE_GNUTLS
+> +       depends on !BR2_avr32 # no inotify_init1
+>         depends on !BR2_UCLIBC_VERSION_0_9_32
+>         depends on BR2_USE_WCHAR # libglib2 and gnutls
+>         depends on BR2_INET_IPV6
+> @@ -50,5 +51,6 @@ config BR2_PACKAGE_CONNMAN_CLIENT
+>  endif # BR2_PACKAGE_CONNMAN
+>
+>  comment "connman needs a toolchain w/ IPv6, wchar, threads, resolver"
+> -       depends on BR2_UCLIBC_VERSION_0_9_32 || \
+> +       depends on !BR2_avr32 && \
+> +               BR2_UCLIBC_VERSION_0_9_32 || \
+>                 !BR2_USE_WCHAR || !BR2_INET_IPV6 || !BR2_TOOLCHAIN_HAS_THREADS
 
-diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
-index 2722600..6f4feb5 100644
---- a/toolchain/toolchain-external/toolchain-external.mk
-+++ b/toolchain/toolchain-external/toolchain-external.mk
-@@ -236,6 +236,7 @@ define TOOLCHAIN_EXTERNAL_LINARO_ARMHF_SYMLINK
- 	ln -sf . $(TARGET_DIR)/usr/lib/arm-linux-gnueabihf
- endef
- 
-+ifeq ($(BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD),y)
- ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201109),y)
- TOOLCHAIN_EXTERNAL_SITE = http://sourcery.mentor.com/public/gnu_toolchain/arm-none-linux-gnueabi/
- TOOLCHAIN_EXTERNAL_SOURCE = arm-2011.09-70-arm-none-linux-gnueabi-i686-pc-linux-gnu.tar.bz2
-@@ -347,6 +348,7 @@ else
- TOOLCHAIN_EXTERNAL_SITE = $(dir $(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_URL)))
- TOOLCHAIN_EXTERNAL_SOURCE = $(notdir $(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_URL)))
- endif
-+endif
- 
- TOOLCHAIN_EXTERNAL_INSTALL_STAGING = YES
- 
--- 
-1.7.10.4
+In my patches
+http://patchwork.ozlabs.org/patch/288125/
+http://patchwork.ozlabs.org/patch/288250/
+
+I have used two separate depends on statements, to separate the base
+dependencies (that are common for the comment and its corresponding
+config) from the toolchain options (that are the inverse on the
+comment compared to the config option).
+
+So in case of connman this would be:
+comment "connman needs a toolchain w/ IPv6, wchar, threads, resolver"
+       depends on !BR2_avr32
+       depends on BR2_UCLIBC_VERSION_0_9_32 || \
+               !BR2_USE_WCHAR || !BR2_INET_IPV6 || !BR2_TOOLCHAIN_HAS_THREADS
+
+Best regards,
+Thomas
