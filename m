@@ -1,42 +1,34 @@
-From: Laurent GONZALEZ <br2@gezedo.com>
-Date: Wed, 06 Nov 2013 20:19:10 +0100
-Subject: [Buildroot] [PATCH v3 1/1] Avoid toolchain download when it is
-	preinstalled
-Message-ID: <527A962E.4090402@gezedo.com>
+From: spdawson at gmail.com <spdawson@gmail.com>
+Date: Wed,  6 Nov 2013 19:45:10 +0000
+Subject: [Buildroot] [PATCH] avr32: pass target arch to gcc
+Message-ID: <1383767110-32444-1-git-send-email-spdawson@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-For configurations using a toolchain that is preinstalled on
-the host, <pkg>_SITE and <pkg>_SOURCE variables must be kept
-empty to avoid downloading any toolchain package.
-The actual implementation has been proposed by Thomas Petazzoni.
+From: Simon Dawson <spdawson@gmail.com>
 
-Signed-off-by: GONZALEZ Laurent <br2@gezedo.com>
+As suggested with Alexander Lukichev and Thomas Petazzoni on the mailing list,
+only one of the two avr32 microarchitectures is relevant for Buildroot: avr32
+Linux implies the avr32b microarchitecure, as used in the ap7000.
+
+Signed-off-by: Simon Dawson <spdawson@gmail.com>
 ---
- toolchain/toolchain-external/toolchain-external.mk |    8 ++++++++
- 1 file changed, 8 insertions(+)
+ arch/Config.in.avr32 | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
-index 2722600..e2e9953 100644
---- a/toolchain/toolchain-external/toolchain-external.mk
-+++ b/toolchain/toolchain-external/toolchain-external.mk
-@@ -348,6 +348,14 @@ TOOLCHAIN_EXTERNAL_SITE = $(dir $(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_URL)))
- TOOLCHAIN_EXTERNAL_SOURCE = $(notdir $(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_URL)))
- endif
+diff --git a/arch/Config.in.avr32 b/arch/Config.in.avr32
+index 199c150..8429589 100644
+--- a/arch/Config.in.avr32
++++ b/arch/Config.in.avr32
+@@ -3,3 +3,6 @@ config BR2_ARCH
  
-+# In fact, we don't need to download the toolchain, since it is already
-+# available on the system, so force the site and source to be empty so
-+# that nothing will be downloaded/extracted.
-+ifeq ($(BR2_TOOLCHAIN_EXTERNAL_PREINSTALLED),y)
-+TOOLCHAIN_EXTERNAL_SITE =
-+TOOLCHAIN_EXTERNAL_SOURCE =
-+endif
+ config BR2_ENDIAN
+ 	default "BIG"
 +
- TOOLCHAIN_EXTERNAL_INSTALL_STAGING = YES
- 
- ifeq ($(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R1)$(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2),y)
++config BR2_GCC_TARGET_ARCH
++	default "ap"
 -- 
-1.7.10.4
+1.8.3.2
