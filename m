@@ -1,134 +1,38 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Wed, 6 Nov 2013 12:05:48 +0100
-Subject: [Buildroot] [PATCH] libevas: disable on avr32
-In-Reply-To: <1383735243-18910-1-git-send-email-spdawson@gmail.com>
-References: <1383735243-18910-1-git-send-email-spdawson@gmail.com>
-Message-ID: <CAAXf6LV6GFk27s8fpEbcDVKmrkipiKA_FGFEt-wcdXMutkwBoA@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 6 Nov 2013 11:58:58 +0100
+Subject: [Buildroot] [git commit] wireshark: security bump to version 1.8.11
+Message-ID: <20131106110601.185AA9BAE2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Nov 6, 2013 at 11:54 AM,  <spdawson@gmail.com> wrote:
-> From: Simon Dawson <spdawson@gmail.com>
->
-> Neither epoll_create1 nor inotify_init1 is available on avr32. Fixes build
-> failures such as the following.
->
->   http://autobuild.buildroot.net/results/4d435a5fc608936362d605aca696c01023be9723
->
-> Signed-off-by: Simon Dawson <spdawson@gmail.com>
-> ---
->  package/efl/expedite/Config.in      | 2 ++
->  package/efl/libecore/Config.in      | 2 ++
->  package/efl/libedje/Config.in       | 2 ++
->  package/efl/libelementary/Config.in | 2 ++
->  package/efl/libethumb/Config.in     | 2 ++
->  package/efl/libevas/Config.in       | 1 +
->  package/enlightenment/Config.in     | 2 ++
->  7 files changed, 13 insertions(+)
->
-> diff --git a/package/efl/expedite/Config.in b/package/efl/expedite/Config.in
-> index 466fd7d..5f6e97f 100644
-> --- a/package/efl/expedite/Config.in
-> +++ b/package/efl/expedite/Config.in
-> @@ -4,6 +4,8 @@ config BR2_PACKAGE_EXPEDITE
->         select BR2_PACKAGE_LIBEVAS
->         select BR2_PACKAGE_LIBEET
->         depends on BR2_INSTALL_LIBSTDCPP
-> +       # libevas
-> +       depends on !BR2_avr32
->         help
->           Expedite is the official Evas benchmark tool. It can test different
->           engines, such as X11, XRender, OpenGL (also ES variant), SDL,
-> diff --git a/package/efl/libecore/Config.in b/package/efl/libecore/Config.in
-> index 6c887f5..77b5283 100644
-> --- a/package/efl/libecore/Config.in
-> +++ b/package/efl/libecore/Config.in
-> @@ -38,5 +38,7 @@ config BR2_PACKAGE_LIBECORE_X_XCB
->  config BR2_PACKAGE_LIBECORE_EVAS
->         bool "libecore Evas support"
->         select BR2_PACKAGE_LIBEVAS
-> +       # libevas
-> +       depends on !BR2_avr32
->
->  endif # BR2_PACKAGE_LIBECORE
-> diff --git a/package/efl/libedje/Config.in b/package/efl/libedje/Config.in
-> index f0985dd..d142268 100644
-> --- a/package/efl/libedje/Config.in
-> +++ b/package/efl/libedje/Config.in
-> @@ -7,6 +7,8 @@ config BR2_PACKAGE_LIBEDJE
->         select BR2_PACKAGE_LIBEMBRYO
->         select BR2_PACKAGE_LIBEVAS
->         select BR2_PACKAGE_LUA
-> +       # libevas
-> +       depends on !BR2_avr32
->         help
->           A graphical layout and animation library for animated
->           resizable, compressed and scalable themes.
-> diff --git a/package/efl/libelementary/Config.in b/package/efl/libelementary/Config.in
-> index 59af80e..c43d80d 100644
-> --- a/package/efl/libelementary/Config.in
-> +++ b/package/efl/libelementary/Config.in
-> @@ -4,6 +4,8 @@ config BR2_PACKAGE_LIBELEMENTARY
->         select BR2_PACKAGE_LIBEVAS
->         select BR2_PACKAGE_LIBECORE
->         select BR2_PACKAGE_LIBEDJE
-> +       # libevas
-> +       depends on !BR2_avr32
->         help
->           Elementary is a widget toolkit and EFL wrapper and convenience
->           library to make it easy to build applications and tools with UIs
-> diff --git a/package/efl/libethumb/Config.in b/package/efl/libethumb/Config.in
-> index fb0032a..e85aa1d 100644
-> --- a/package/efl/libethumb/Config.in
-> +++ b/package/efl/libethumb/Config.in
-> @@ -5,6 +5,8 @@ config BR2_PACKAGE_LIBETHUMB
->         select BR2_PACKAGE_LIBECORE
->         select BR2_PACKAGE_LIBECORE_EVAS
->         select BR2_PACKAGE_LIBEDJE
-> +       # libevas
-> +       depends on !BR2_avr32
->         help
->           Ethumb is a library for generating thumbnail images of documents.
->
-> diff --git a/package/efl/libevas/Config.in b/package/efl/libevas/Config.in
-> index f73376b..8c4193f 100644
-> --- a/package/efl/libevas/Config.in
-> +++ b/package/efl/libevas/Config.in
-> @@ -1,5 +1,6 @@
->  config BR2_PACKAGE_LIBEVAS
->         bool "libevas"
-> +       depends on !BR2_avr32 # no epoll_create1 or inotify_init1
->         select BR2_PACKAGE_FREETYPE
->         select BR2_PACKAGE_LIBEINA
->         # required to build so far
-> diff --git a/package/enlightenment/Config.in b/package/enlightenment/Config.in
-> index 54c0ac6..5ec85a5 100644
-> --- a/package/enlightenment/Config.in
-> +++ b/package/enlightenment/Config.in
-> @@ -26,6 +26,8 @@ config BR2_PACKAGE_ENLIGHTENMENT
->         # libedbus -> dbus
->         depends on BR2_USE_MMU
->         depends on BR2_PACKAGE_XORG7
-> +       # libevas
-> +       depends on !BR2_avr32
->         help
->           Enlightenment, also known simply as E, is a stacking window
->           manager for the X Window System which can be used alone or
-> --
+commit: http://git.buildroot.net/buildroot/commit/?id=20540184937888f4c3ddb01c33cfa72b29d621b0
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-In all these places, the new 'depends on' should be repeated on the
-comment that is shown when one of the toolchain options is missing.
+Fixes CVE-2013-6336, CVE-2013-6337, CVE-2013-6338, CVE-2013-6339,
+CVE-2013-6340, CVE-2013-4927, CVE-2013-4929, CVE-2013-4930,
+CVE-2013-4931, CVE-2013-4932, CVE-2013-4933, CVE-2013-4934,
+CVE-2013-4935, CVE-2013-5718, CVE-2013-5719, CVE-2013-5720,
+CVE-2013-5721 and CVE-2013-5722.
 
-Regarding the structure:
-       # libevas
-       depends on !BR2_avr32
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/wireshark/wireshark.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-I find it more clear to use:
-       depends on !BR2_avr32  # libevas
-
-
-Best regards,
-Thomas
+diff --git a/package/wireshark/wireshark.mk b/package/wireshark/wireshark.mk
+index a105e52..9f968fd 100644
+--- a/package/wireshark/wireshark.mk
++++ b/package/wireshark/wireshark.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-WIRESHARK_VERSION = 1.8.8
++WIRESHARK_VERSION = 1.8.11
+ WIRESHARK_SOURCE = wireshark-$(WIRESHARK_VERSION).tar.bz2
+ WIRESHARK_SITE = http://www.wireshark.org/download/src/all-versions
+ WIRESHARK_LICENSE = wireshark license
