@@ -1,64 +1,61 @@
-From: clshotwe at rockwellcollins.com <clshotwe@rockwellcollins.com>
-Date: Wed, 6 Nov 2013 17:14:34 -0600
-Subject: [Buildroot] [RFC] core: Download all package sources
-In-Reply-To: <8738n9jfim.fsf@dell.be.48ers.dk>
-References: <1383587286-18094-1-git-send-email-clshotwe@rockwellcollins.com>
- <87eh6tkxuk.fsf@dell.be.48ers.dk> <20131106231048.67cf2d52@skate>
- <87k3gljh5d.fsf@dell.be.48ers.dk> <20131106225332.GB3482@free.fr>
- <8738n9jfim.fsf@dell.be.48ers.dk>
-Message-ID: <OFAD27391D.CFE95723-ON86257C1B.007F5691-86257C1B.007F8A75@rockwellcollins.com>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Thu,  7 Nov 2013 00:12:29 +0100
+Subject: [Buildroot] [PATCH 1/7] rootfs-ext2: make the symlink as a
+	_POST_TARGET
+In-Reply-To: <1383779555-9222-1-git-send-email-arnout@mind.be>
+References: <1383779555-9222-1-git-send-email-arnout@mind.be>
+Message-ID: <1383779555-9222-2-git-send-email-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter, Yann, Thomas, All,
+This will allow us to remove the unused ROOTFS_$(FSTYPE)_POST_GEN_HOOKS.
 
-buildroot-bounces at busybox.net wrote on 11/06/2013 05:07:29 PM:
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+v2:
+- Initial revision. This patch was introduced to enable the U-Boot image
+  of the cpio rootfs.
 
->  >> But does this matter for USERS? I would guess users are only 
-interested
->  >> in a subset of all the packages (E.G. the ones for the arch they use 
-or
->  >> the ones enabled in their .config).
-> 
->  > Yes, it does.
-> 
->  > Some companies are using a very restrictive firewall, that does not
->  > allow anything but plain http and https (sometime even with MITM), 
-and
->  > no cvs, git, or even ftp...
-> 
->  > So, some like to get a computer to another network, do the downloads, 
-and
->  > serve them on the LAN from a mirror.
-> 
->  > Sometime, the network is really slow (eg. low BW, or high latency), 
-so
->  > this is also usefull to be able to make a complete mirror.
-> 
->  > Of course, that needs resyncing from time to time, but easier done 
-than
->  > coping with a bunch of cursing angry users irrupting in one's office
->  > every now and then! :-)
-> 
-> Sure, but that's what we have 'make source' (for specific
-> configurations) or sources.buildroot.net (for local mirror of
-> everything) for, right?
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ fs/common.mk    | 2 +-
+ fs/ext2/ext2.mk | 6 +++---
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-I don't know what all configurations are being used so I would
-rather be safe and pull down all of the packages. This would make
-it easier than running make source on a bunch of different configurations.
-
-Thanks,
-Clayton
-
-Clayton Shotwell
-Software Engineer
-clshotwe at rockwellcollins.com
-www.rockwellcollins.com 
-
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20131106/d15d0a46/attachment.html>
+diff --git a/fs/common.mk b/fs/common.mk
+index 4dab7ea..01d2c00 100644
+--- a/fs/common.mk
++++ b/fs/common.mk
+@@ -17,7 +17,7 @@
+ #  generating the filesystem image
+ #
+ #  ROOTFS_$(FSTYPE)_POST_GEN_HOOKS, a list of hooks to call after
+-#  generating the filesystem image
++#  generating and compressing the filesystem image
+ #
+ #  ROOTFS_$(FSTYPE)_POST_TARGETS, the list of targets that should be
+ #  run after running the main filesystem target. This is useful for
+diff --git a/fs/ext2/ext2.mk b/fs/ext2/ext2.mk
+index cad5b42..b4280aa 100644
+--- a/fs/ext2/ext2.mk
++++ b/fs/ext2/ext2.mk
+@@ -27,11 +27,11 @@ define ROOTFS_EXT2_CMD
+ 	PATH=$(TARGET_PATH) $(EXT2_ENV) fs/ext2/genext2fs.sh -d $(TARGET_DIR) $(EXT2_OPTS) $@
+ endef
+ 
+-define ROOTFS_EXT2_HOOK_SYMLINK
++rootfs-ext2-symlink:
+ 	ln -sf rootfs.ext2 $(BINARIES_DIR)/rootfs.ext$(BR2_TARGET_ROOTFS_EXT2_GEN)
+-endef
++
+ ifneq ($(BR2_TARGET_ROOTFS_EXT2_GEN),2)
+-ROOTFS_EXT2_POST_GEN_HOOKS += ROOTFS_EXT2_HOOK_SYMLINK
++ROOTFS_EXT2_POST_TARGETS += rootfs-ext2-symlink
+ endif
+ 
+ $(eval $(call ROOTFS_TARGET,ext2))
+-- 
+1.8.4.rc3
