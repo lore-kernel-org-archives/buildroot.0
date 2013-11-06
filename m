@@ -1,46 +1,125 @@
-From: Ryan Barnett <rjbarnet@rockwellcollins.com>
-Date: Wed, 6 Nov 2013 07:14:20 -0600
-Subject: [Buildroot] [PATCH 4/5] rpi: rename board folder for consistency
-In-Reply-To: <201311061126.20888.yann.morin.1998@free.fr>
-References: <cover.1383693880.git.yann.morin.1998@free.fr>
- <5db8e0c38bc04628a5286eb3c90ab0c0ee543b53.1383693880.git.yann.morin.1998@free.fr>
- <20131106111103.1a1f1d13@skate> <201311061126.20888.yann.morin.1998@free.fr>
-Message-ID: <OFA793A731.4E0B0EEB-ON86257C1B.0047E822-86257C1B.0048B8F9@rockwellcollins.com>
+From: spdawson at gmail.com <spdawson@gmail.com>
+Date: Wed,  6 Nov 2013 13:56:20 +0000
+Subject: [Buildroot] [PATCH v2] libevas: disable on avr32
+Message-ID: <1383746180-14202-1-git-send-email-spdawson@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yann, Thomas, All,
+From: Simon Dawson <spdawson@gmail.com>
 
-"Yann E. MORIN" <yann.morin.1998@free.fr> wrote on 11/06/2013 04:26:20 AM:
+Neither epoll_create1 nor inotify_init1 is available on avr32. Fixes build
+failures such as the following.
 
-> Thomas, All,
-> 
-> On Wednesday 06 November 2013 11:11:03 Thomas Petazzoni wrote:
-> > I'm not sure I agree with this one. I find "rasberrypi" a lot more
-> > obvious for the new comer. Maybe our defconfig should also be called
-> > rasberrypi_defconfig.
-> 
-> Well, 'rpi' is a very common nickname for the Raspberry Pi, so I don't
-> think there will be confusion for a newcomer (to Buildroot).
+  http://autobuild.buildroot.net/results/4d435a5fc608936362d605aca696c01023be9723
 
-I disagree, I was one who didn't really know what rpi stood for because to 
-me that acronym has a completely different meaning. I believe I asked you 
-to clarify what rpi stood for on the IRC. In order to make the leap to 
-what rpi stood for I had to go to the git logs for the board/rpi 
-directory. I guess the point being, I agree with Thomas (not that there is 
-anything to argue here) and we should assume people are dumb (me included 
-:) ) and we should try to eliminate potential confusion.
+Signed-off-by: Simon Dawson <spdawson@gmail.com>
+---
+ v2: Improve layout and hide comments on avr32, as suggested by
+     Thomas De Schampheleire.
 
-Thanks,
--Ryan
+ package/efl/expedite/Config.in      | 2 ++
+ package/efl/libecore/Config.in      | 1 +
+ package/efl/libedje/Config.in       | 1 +
+ package/efl/libelementary/Config.in | 1 +
+ package/efl/libethumb/Config.in     | 1 +
+ package/efl/libevas/Config.in       | 1 +
+ package/enlightenment/Config.in     | 2 ++
+ 7 files changed, 9 insertions(+)
 
-> On the other hand, all our other boards are using the full name, not a
-> shortname/nickname, neither in board/ nor in configs/
-> 
-> So, in hindsight, I agree with Thomas here: we should use raspberrypi,
-> not rpi.
-> 
-> I'll fix and resubmit.
+diff --git a/package/efl/expedite/Config.in b/package/efl/expedite/Config.in
+index 466fd7d..918c34e 100644
+--- a/package/efl/expedite/Config.in
++++ b/package/efl/expedite/Config.in
+@@ -4,6 +4,7 @@ config BR2_PACKAGE_EXPEDITE
+ 	select BR2_PACKAGE_LIBEVAS
+ 	select BR2_PACKAGE_LIBEET
+ 	depends on BR2_INSTALL_LIBSTDCPP
++	depends on !BR2_avr32 # libevas
+ 	help
+ 	  Expedite is the official Evas benchmark tool. It can test different
+ 	  engines, such as X11, XRender, OpenGL (also ES variant), SDL,
+@@ -12,3 +13,4 @@ config BR2_PACKAGE_EXPEDITE
+ 
+ comment "expedite needs a toolchain w/ C++"
+ 	depends on !BR2_INSTALL_LIBSTDCPP
++	depends on !BR2_avr32
+diff --git a/package/efl/libecore/Config.in b/package/efl/libecore/Config.in
+index 6c887f5..41a16f9 100644
+--- a/package/efl/libecore/Config.in
++++ b/package/efl/libecore/Config.in
+@@ -38,5 +38,6 @@ config BR2_PACKAGE_LIBECORE_X_XCB
+ config BR2_PACKAGE_LIBECORE_EVAS
+ 	bool "libecore Evas support"
+ 	select BR2_PACKAGE_LIBEVAS
++	depends on !BR2_avr32 # libevas
+ 
+ endif # BR2_PACKAGE_LIBECORE
+diff --git a/package/efl/libedje/Config.in b/package/efl/libedje/Config.in
+index f0985dd..4c30274 100644
+--- a/package/efl/libedje/Config.in
++++ b/package/efl/libedje/Config.in
+@@ -7,6 +7,7 @@ config BR2_PACKAGE_LIBEDJE
+ 	select BR2_PACKAGE_LIBEMBRYO
+ 	select BR2_PACKAGE_LIBEVAS
+ 	select BR2_PACKAGE_LUA
++	depends on !BR2_avr32 # libevas
+ 	help
+ 	  A graphical layout and animation library for animated
+ 	  resizable, compressed and scalable themes.
+diff --git a/package/efl/libelementary/Config.in b/package/efl/libelementary/Config.in
+index 59af80e..d4584e8 100644
+--- a/package/efl/libelementary/Config.in
++++ b/package/efl/libelementary/Config.in
+@@ -4,6 +4,7 @@ config BR2_PACKAGE_LIBELEMENTARY
+ 	select BR2_PACKAGE_LIBEVAS
+ 	select BR2_PACKAGE_LIBECORE
+ 	select BR2_PACKAGE_LIBEDJE
++	depends on !BR2_avr32 # libevas
+ 	help
+ 	  Elementary is a widget toolkit and EFL wrapper and convenience
+ 	  library to make it easy to build applications and tools with UIs
+diff --git a/package/efl/libethumb/Config.in b/package/efl/libethumb/Config.in
+index fb0032a..3a2f3dc 100644
+--- a/package/efl/libethumb/Config.in
++++ b/package/efl/libethumb/Config.in
+@@ -5,6 +5,7 @@ config BR2_PACKAGE_LIBETHUMB
+ 	select BR2_PACKAGE_LIBECORE
+ 	select BR2_PACKAGE_LIBECORE_EVAS
+ 	select BR2_PACKAGE_LIBEDJE
++	depends on !BR2_avr32 # libevas
+ 	help
+ 	  Ethumb is a library for generating thumbnail images of documents.
+ 
+diff --git a/package/efl/libevas/Config.in b/package/efl/libevas/Config.in
+index f73376b..8c4193f 100644
+--- a/package/efl/libevas/Config.in
++++ b/package/efl/libevas/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_LIBEVAS
+ 	bool "libevas"
++	depends on !BR2_avr32 # no epoll_create1 or inotify_init1
+ 	select BR2_PACKAGE_FREETYPE
+ 	select BR2_PACKAGE_LIBEINA
+ 	# required to build so far
+diff --git a/package/enlightenment/Config.in b/package/enlightenment/Config.in
+index 54c0ac6..5df817b 100644
+--- a/package/enlightenment/Config.in
++++ b/package/enlightenment/Config.in
+@@ -26,6 +26,7 @@ config BR2_PACKAGE_ENLIGHTENMENT
+ 	# libedbus -> dbus
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_PACKAGE_XORG7
++	depends on !BR2_avr32 # libevas
+ 	help
+ 	  Enlightenment, also known simply as E, is a stacking window
+ 	  manager for the X Window System which can be used alone or
+@@ -38,3 +39,4 @@ config BR2_PACKAGE_ENLIGHTENMENT
+ comment "enlightenment needs a toolchain w/ wchar, C++, threads"
+ 	depends on BR2_PACKAGE_XORG7
+ 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP
++	depends on !BR2_avr32
+-- 
+1.8.3.2
