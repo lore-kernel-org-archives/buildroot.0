@@ -1,88 +1,42 @@
-From: Charles Krinke <charles.krinke@gmail.com>
-Date: Wed, 6 Nov 2013 11:08:22 -0800
-Subject: [Buildroot] Qt5 puzzle
-In-Reply-To: <CAAXf6LUaGLQh8h7Ujnpaciyq4dz3PM43S7spOcpi08Wd83PUtA@mail.gmail.com>
-References: <CALo-6+gmYsfcV1yU2oEAfkbCHCqi2YHSwp6CtvkTX8+bmfXYUw@mail.gmail.com>
- <CAAXf6LUaGLQh8h7Ujnpaciyq4dz3PM43S7spOcpi08Wd83PUtA@mail.gmail.com>
-Message-ID: <CALo-6+g+cuLUjWi5+PC+Y1+MUcuENnv3etVT3FXrk3Yqf_vF5Q@mail.gmail.com>
+From: Simon Dawson <spdawson@gmail.com>
+Date: Wed, 6 Nov 2013 19:18:19 +0000
+Subject: [Buildroot] [PATCH v2 1/1] openpgm: disable on AVR32
+In-Reply-To: <20131106183947.0b078df7@skate>
+References: <1383329548-8528-1-git-send-email-alexander.lukichev@gmail.com>
+ <20131101192027.1ea4c1bc@skate>
+ <CAAHaz6GXiQAMuoK2eo0=EjmE509P98zuuAuN7f_T5TYeK6W1QA@mail.gmail.com>
+ <CAHt8ZCO2OEtWe8NrDYSTkmu7uqQGpQbWjAEJg+jHVGzsWsF9Mg@mail.gmail.com>
+ <20131102122618.18eb2f00@skate>
+ <CAHt8ZCOVSKMynxFe9WQuei-FKuB8BAJE2+dtEQreqwZokkTWdw@mail.gmail.com>
+ <CAAHaz6HvxQR0g9CpfvRTJN2FAoGmgR_z6uWVar93AXjENH-vbQ@mail.gmail.com>
+ <20131106183947.0b078df7@skate>
+Message-ID: <CAHt8ZCOAy7vcbfUC9eg1AETz7D=9HR1=it8ZgjvNxX-3Q+R0cw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I think I see what is going on. It looks like Qt sets USE_EABI_HARDFLOAT=0
-when I need it to be USE_EABI_HARDFLOAG=1.
-
-This is done in qt5jsbackend-5.0.2/src/vi/v8.pri as a consequence of
-
-config_hardfloat {
-  DEFINES += USE_EABI_HARDFLOAT=1
-} else {
-  DEFINES += USE_EABI_HARDFLOAT=0
-}
-
-Where config_hardfloat is always undefined.
-
-This may bring up a larger question in that some embedded systems will wish
-to use softfloat and some hardfloat
-
-
-
-
-On Wed, Nov 6, 2013 at 9:28 AM, Thomas De Schampheleire <
-patrickdepinguin@gmail.com> wrote:
-
-> Hi Charles,
+On 6 November 2013 17:39, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> However, as Simon said, maybe it would anyway be useful to pass
+> -march=ap when building things, since that's the only AVR32 processor
+> variant that ever had Linux support. So something like the following
+> change would maybe be good to have. Simon, if you're interested in
+> picking this up, giving it a test and submitting it, it would be great!
 >
-> On Wed, Nov 6, 2013 at 5:57 PM, Charles Krinke <charles.krinke@gmail.com>
-> wrote:
-> > Recently one of our app engineers moved to QtQuick 2.0 and all of a
-> sudden
-> > with the buildroot built binaries from Qt-5.0.2, I am seeing this error
-> when
-> > a qml-style program is run.
-> >
-> > ERROR: Binary compiled with -mfloat-abi=hard but without
-> > -DUSE_EABI_HARDFLOAT
-> >
-> > In searching this, I can see mention of this on the buildroot mailing
-> list
-> > from June, but no hints or resolution. The archive of the mailing list is
-> > this page:
-> >
-> >
-> http://buildroot-busybox.2317881.n4.nabble.com/ERROR-Binary-compiled-with-mfloat-abi-hard-but-without-DUSE-EABI-HARDFLOAT-td49130.html
-> >
-> > Although I am using the TI AM3517 and not Raspberry Pi, the error seems
-> to
-> > be the same.
-> >
-> > I am assuming this has something to do with make options. This morning, I
-> > tried adding "-DUSE-EABI_HARDFLAT" to the Makefile for libQt5V8 where the
-> > offending message is coming from, but the cheap shot doesnt work.
-> >
-> > I am working with a buildroot from the end of July, so am not using the
-> > experimental Qt-5.1 stuff (yet) and am hoping not to move forward in a
-> > crisis if I can help it.
-> >
-> > So, ... as usual, I am hoping for a clue or two to let me understand how
-> to
-> > get QtQuick back to functionality with Qt-5.0.2.
+> diff --git a/arch/Config.in.avr32 b/arch/Config.in.avr32
+> index 199c150..8429589 100644
+> --- a/arch/Config.in.avr32
+> +++ b/arch/Config.in.avr32
+> @@ -3,3 +3,6 @@ config BR2_ARCH
 >
-> Although I have no experience whatsoever with qt (and will not be able
-> to help you myself), I suggest to send a (def)config file that
-> exhibits the problem. This may help others in trying to reproduce the
-> problem...
->
-> Best regards,
-> Thomas
->
+>  config BR2_ENDIAN
+>         default "BIG"
+> +
+> +config BR2_GCC_TARGET_ARCH
+> +       default "ap"
 
+Okay; I think this is worth doing --- will submit a patch.
 
-
--- 
-Charles Krinke
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20131106/a0247754/attachment.html>
+Simon.
