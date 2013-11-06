@@ -1,32 +1,43 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 06 Nov 2013 12:03:02 +0100
-Subject: [Buildroot] [PATCH] busybox: minor fixes to S01logging
-	bootscript
-In-Reply-To: <1383732056-39746-1-git-send-email-javier.viguera@digi.com>
- (Javier Viguera's message of "Wed, 6 Nov 2013 11:00:56 +0100")
-References: <1383732056-39746-1-git-send-email-javier.viguera@digi.com>
-Message-ID: <87zjphlrmh.fsf@dell.be.48ers.dk>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Wed, 6 Nov 2013 12:03:32 +0100
+Subject: [Buildroot] [PATCH] connman: disable on avr32
+In-Reply-To: <1383735672-24550-1-git-send-email-spdawson@gmail.com>
+References: <1383735672-24550-1-git-send-email-spdawson@gmail.com>
+Message-ID: <CAAXf6LXx5AR6ELq+=+f6M2Rb9Mue_8hoKvKWenKBGb+DFiBQRQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Javier" == Javier Viguera <javier.viguera@digi.com> writes:
+Hi,
 
- > * The PID file is not created unless the '-m' option is passed to
- >   start-stop-daemon.
+On Wed, Nov 6, 2013 at 12:01 PM,  <spdawson@gmail.com> wrote:
+> From: Simon Dawson <spdawson@gmail.com>
+>
+> The inotify_init1 syscall is not available on avr32. Fixes build failures
+> such as the following.
+>
+>   http://autobuild.buildroot.net/results/0d8/0d8e7bd8bd3f227fabfb0d5feb59a5d316026d3f
+>
+> Signed-off-by: Simon Dawson <spdawson@gmail.com>
+> ---
+>  package/connman/Config.in | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/package/connman/Config.in b/package/connman/Config.in
+> index c74618a..efb2486 100644
+> --- a/package/connman/Config.in
+> +++ b/package/connman/Config.in
+> @@ -4,6 +4,7 @@ config BR2_PACKAGE_CONNMAN
+>         select BR2_PACKAGE_LIBGLIB2
+>         select BR2_PACKAGE_IPTABLES
+>         select BR2_PACKAGE_GNUTLS
+> +       depends on !BR2_avr32 # no inotify_init1
+>         depends on !BR2_UCLIBC_VERSION_0_9_32
+>         depends on BR2_USE_WCHAR # libglib2 and gnutls
+>         depends on BR2_INET_IPV6
 
- > * Remove the mark '-m 0' option as it's not supported by busybox's
- >   syslogd.
-
- > * Syslogd and Klogd forks to background by default giving as a result
- >   that the pid stored in the PID file is not correct. Let the
- >   background job be done by 'start-stop-daemon' by passing '-n'
- >   (foreground) to the daemons and '-b' to start-stop-daemon. This
- >   way the pid stored in the PID files is correct.
-
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+This dependency should also be added to the comment, on a separate
+'depends on' statement.
+(see also my patch in the queue, that I have to rework)
