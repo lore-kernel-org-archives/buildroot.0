@@ -1,67 +1,59 @@
-From: Laurent GONZALEZ <br2@gezedo.com>
-Date: Wed, 06 Nov 2013 18:27:48 +0100
-Subject: [Buildroot] [PATCH v2 1/1] Avoid toolchain download when it is
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 6 Nov 2013 19:08:59 +0100
+Subject: [Buildroot] [PATCH 1/1] Avoid toolchain download when it is
  preinstalled
-In-Reply-To: <20131106165202.550da041@skate>
-References: <527A623C.7090007@gezedo.com> <20131106165202.550da041@skate>
-Message-ID: <527A7C14.1070607@gezedo.com>
+In-Reply-To: <527A6142.4070608@gezedo.com>
+References: <527A1C86.8030909@gezedo.com> <20131106161903.2b28e917@skate>
+ <527A6142.4070608@gezedo.com>
+Message-ID: <20131106190859.6ab00fdc@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 06/11/2013 16:52, Thomas Petazzoni wrote:
-> Dear Laurent GONZALEZ,
-> 
-> On Wed, 06 Nov 2013 16:37:32 +0100, Laurent GONZALEZ wrote:
->> For configurations using a toolchain that is preinstalled on
->> the host, <pkg>_SITE and <pkg>_SOURCE variables must be kept
->> empty to avoid downloading any toolchain package.
->>
->> Signed-off-by: GONZALEZ Laurent <br2@gezedo.com>
->> ---
->>  toolchain/toolchain-external/toolchain-external.mk |    5 +++++
->>  1 file changed, 5 insertions(+)
->>
->> diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
->> index 2722600..5eb86c7 100644
->> --- a/toolchain/toolchain-external/toolchain-external.mk
->> +++ b/toolchain/toolchain-external/toolchain-external.mk
->> @@ -236,6 +236,7 @@ define TOOLCHAIN_EXTERNAL_LINARO_ARMHF_SYMLINK
->>  	ln -sf . $(TARGET_DIR)/usr/lib/arm-linux-gnueabihf
->>  endef
->>  
->> +ifeq ($(BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD),y)
->>  ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201109),y)
->>  TOOLCHAIN_EXTERNAL_SITE = http://sourcery.mentor.com/public/gnu_toolchain/arm-none-linux-gnueabi/
->>  TOOLCHAIN_EXTERNAL_SOURCE = arm-2011.09-70-arm-none-linux-gnueabi-i686-pc-linux-gnu.tar.bz2
->> @@ -347,6 +348,10 @@ else
->>  TOOLCHAIN_EXTERNAL_SITE = $(dir $(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_URL)))
->>  TOOLCHAIN_EXTERNAL_SOURCE = $(notdir $(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_URL)))
->>  endif
->> +else
->> +TOOLCHAIN_EXTERNAL_SITE =
->> +TOOLCHAIN_EXTERNAL_SOURCE =
->> +endif
->>  
->>  TOOLCHAIN_EXTERNAL_INSTALL_STAGING = YES
-> 
-> As I suggested, I don't think enclosing all of the toolchain profiles
-> in ifeq ($(BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD),y) is useful.
-> 
+Dear Laurent GONZALEZ,
 
-IHMO, it is useful.
-Consider a configuration, where a have a CS toolchain already installed somewhere on my host, I want to use it, but I want to avoid an extra download.
+(Please fix your e-mail client to wrap lines at around 80 columns,
+except of course when you send patches!).
 
-BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201305=y
-# BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201203 is not set
-# BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201109 is not set
-# BR2_TOOLCHAIN_EXTERNAL_ARAGO_ARMV5TE_201109 is not set
-# BR2_TOOLCHAIN_EXTERNAL_CUSTOM is not set
-# BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD is not set
-BR2_TOOLCHAIN_EXTERNAL_PREINSTALLED=y
-BR2_TOOLCHAIN_EXTERNAL_PATH="/path/to/toolchain/usr"
-BR2_TOOLCHAIN_EXTERNAL_PREFIX="arm-none-linux-gnueabi"
+On Wed, 06 Nov 2013 16:33:22 +0100, Laurent GONZALEZ wrote:
 
-That's why the global enclosing is required. Generally it does not look to be a bad idea to prevent download when BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD is not set !
+> > So that TOOLCHAIN_EXTERNAL_SOURCE is empty when the external toolchain
+> > is locally installed. Having an empty <pkg>_SOURCE is what tells the
+> > package infrastructure to not download the thing.
+> > 
+> 
+> I am afraid this won't work, because I really want to choose some 'codesourcery' toolchain *and* avoid download. Preinstalled toolchain has larger scope than custom toolchain.
+> By the way my patch had another issue, that i will fix and resubmit soon.
+
+Aaah, yes, indeed. In this case, I think I'd prefer to have something
+like:
+
+ifeq ($(codesourcery...),y)
+...
+else ifeq ($(someothertoolchain...),y)
+...
+else
+... custom toolchain origin
+endif
+
+# In fact, we don't need to download the toolchain, since it is already
+# available on the system, so force the site and source to be empty so
+# that nothing will be downloaded/extracted.
+ifeq ($(BR2_TOOLCHAIN_EXTERNAL_PREINSTALLED),y)
+TOOLCHAIN_EXTERNAL_SITE =
+TOOLCHAIN_EXTERNAL_SOURCE =
+endif
+
+It's just that I find the big enclosing ifeq
+($(BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD),y) condition a little bit difficult
+to follow.
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
