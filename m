@@ -1,34 +1,30 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 6 Nov 2013 22:37:42 +0100
-Subject: [Buildroot] [git commit] avr32: pass target arch to gcc
-Message-ID: <20131106214737.1FC799BAEE@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 06 Nov 2013 22:50:15 +0100
+Subject: [Buildroot] [PATCH v3] connman: disable on avr32
+In-Reply-To: <1383748703-15545-1-git-send-email-spdawson@gmail.com>
+ (spdawson@gmail.com's message of "Wed, 6 Nov 2013 14:38:23 +0000")
+References: <1383748703-15545-1-git-send-email-spdawson@gmail.com>
+Message-ID: <87a9hhkxns.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d7ec9463e2b3e440ae13bdc86dddde459f320587
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "spdawson" == spdawson  <spdawson@gmail.com> writes:
 
-As suggested by Alexander Lukichev and Thomas Petazzoni on the mailing list,
-only one of the two avr32 microarchitectures is relevant for Buildroot:
-avr32 Linux implies the avr32b microarchitecure, as used in the ap7000.
+ > From: Simon Dawson <spdawson@gmail.com>
+ > The inotify_init1 syscall is not available on avr32. Fixes build failures
+ > such as the following.
 
-Signed-off-by: Simon Dawson <spdawson@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- arch/Config.in.avr32 |    3 +++
- 1 files changed, 3 insertions(+), 0 deletions(-)
+ >   http://autobuild.buildroot.net/results/0d8/0d8e7bd8bd3f227fabfb0d5feb59a5d316026d3f
 
-diff --git a/arch/Config.in.avr32 b/arch/Config.in.avr32
-index 199c150..8429589 100644
---- a/arch/Config.in.avr32
-+++ b/arch/Config.in.avr32
-@@ -3,3 +3,6 @@ config BR2_ARCH
- 
- config BR2_ENDIAN
- 	default "BIG"
-+
-+config BR2_GCC_TARGET_ARCH
-+	default "ap"
+ > Signed-off-by: Simon Dawson <spdawson@gmail.com>
+ > ---
+ >  v3: Tidied up comment dependency, as suggested by Thomas De Schampheleire
+ >  v2: Disable comment on avr32, as suggested by Thomas De Schampheleire
+
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
