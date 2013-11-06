@@ -1,75 +1,338 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 6 Nov 2013 23:53:32 +0100
-Subject: [Buildroot] [RFC] core: Download all package sources
-In-Reply-To: <87k3gljh5d.fsf@dell.be.48ers.dk>
-References: <1383587286-18094-1-git-send-email-clshotwe@rockwellcollins.com>
- <87eh6tkxuk.fsf@dell.be.48ers.dk> <20131106231048.67cf2d52@skate>
- <87k3gljh5d.fsf@dell.be.48ers.dk>
-Message-ID: <20131106225332.GB3482@free.fr>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Wed,  6 Nov 2013 23:59:55 +0100
+Subject: [Buildroot] [PATCH] gcc: use generic infrastructure for patches
+In-Reply-To: <527AB58A.9050506@mind.be>
+References: <527AB58A.9050506@mind.be>
+Message-ID: <1383778795-15262-1-git-send-email-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter, All,
+This solves the patch error for gcc snapshots.
 
-On 2013-11-06 23:32 +0100, Peter Korsgaard spake thusly:
-> >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
-> 
->  > Dear Peter Korsgaard,
->  > On Wed, 06 Nov 2013 22:46:11 +0100, Peter Korsgaard wrote:
-> 
->  >> > Signed-off-by: Clayton Shotwell <clshotwe@rockwellcollins.com>
->  >> 
->  >> Sorry, how is this different than make allpackageyesconfig; make source?
-> 
->  > I'd really like allyespackageconfig to be the solution, because I don't
->  > really like the idea of dumping all make variables, grepping in there,
->  > and using that to download everything.
-> 
->  > However, the big problem with allyespackageconfig is that it doesn't
->  > download everything. As soon as you have a "choice" in Config.in (be it
->  > for the package version, whether you want full X.org or KDrive X.org,
->  > or Busybox init vs. sysvinit vs. systemd), then your
->  > allyespackageconfig configuration is only going to contain the packages
->  > that correspond to *one* possible choice selection. That leaves a large
->  > number of packages that will not be downloaded.
-> 
->  > Same thing for architecture dependent packages: grub depends on i386 or
->  > x86-64, but ti-gfx depends on arm.
-> 
-> Yes, and thats the problem I have with keeping sources.buildroot.net
-> uptodate. Currently I "work around it" by doing a bunch of randconfig;
-> make source and hoping I will sooner or later catch them all.
-> 
-> But does this matter for USERS? I would guess users are only interested
-> in a subset of all the packages (E.G. the ones for the arch they use or
-> the ones enabled in their .config).
+Also sneak in an extra condition when applying the powerpc softfloat patch,
+so that the error is really fixed.
 
-Yes, it does.
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+The powerpc patch could be converted to link-with-math-lib.patch.powerpc,
+but since we're deprecating the *.patch.$(ARCH) pattern I choose to keep
+this special treatment.
 
-Some companies are using a very restrictive firewall, that does not
-allow anything but plain http and https (sometime even with MITM), and
-no cvs, git, or even ftp...
+I didn't want to bother with splitting this patch for the powerpc stuff.
 
-So, some like to get a computer to another network, do the downloads, and
-serve them on the LAN from a mirror.
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ package/gcc/gcc-final/4.2.2-avr32-2.1.5          | 1 +
+ package/gcc/gcc-final/4.3.6                      | 1 +
+ package/gcc/gcc-final/4.4.7                      | 1 +
+ package/gcc/gcc-final/4.5.4                      | 1 +
+ package/gcc/gcc-final/4.6.4                      | 1 +
+ package/gcc/gcc-final/4.7.3                      | 1 +
+ package/gcc/gcc-final/4.8-arc                    | 1 +
+ package/gcc/gcc-final/4.8.2                      | 1 +
+ package/gcc/gcc-final/gcc-final.mk               | 2 +-
+ package/gcc/gcc-initial/4.2.2-avr32-2.1.5        | 1 +
+ package/gcc/gcc-initial/4.3.6                    | 1 +
+ package/gcc/gcc-initial/4.4.7                    | 1 +
+ package/gcc/gcc-initial/4.5.4                    | 1 +
+ package/gcc/gcc-initial/4.6.4                    | 1 +
+ package/gcc/gcc-initial/4.7.3                    | 1 +
+ package/gcc/gcc-initial/4.8-arc                  | 1 +
+ package/gcc/gcc-initial/4.8.2                    | 1 +
+ package/gcc/gcc-initial/gcc-initial.mk           | 2 +-
+ package/gcc/gcc-intermediate/4.2.2-avr32-2.1.5   | 1 +
+ package/gcc/gcc-intermediate/4.3.6               | 1 +
+ package/gcc/gcc-intermediate/4.4.7               | 1 +
+ package/gcc/gcc-intermediate/4.5.4               | 1 +
+ package/gcc/gcc-intermediate/4.6.4               | 1 +
+ package/gcc/gcc-intermediate/4.7.3               | 1 +
+ package/gcc/gcc-intermediate/4.8-arc             | 1 +
+ package/gcc/gcc-intermediate/4.8.2               | 1 +
+ package/gcc/gcc-intermediate/gcc-intermediate.mk | 2 +-
+ package/gcc/gcc.mk                               | 9 +++------
+ 28 files changed, 30 insertions(+), 9 deletions(-)
+ create mode 120000 package/gcc/gcc-final/4.2.2-avr32-2.1.5
+ create mode 120000 package/gcc/gcc-final/4.3.6
+ create mode 120000 package/gcc/gcc-final/4.4.7
+ create mode 120000 package/gcc/gcc-final/4.5.4
+ create mode 120000 package/gcc/gcc-final/4.6.4
+ create mode 120000 package/gcc/gcc-final/4.7.3
+ create mode 120000 package/gcc/gcc-final/4.8-arc
+ create mode 120000 package/gcc/gcc-final/4.8.2
+ create mode 120000 package/gcc/gcc-initial/4.2.2-avr32-2.1.5
+ create mode 120000 package/gcc/gcc-initial/4.3.6
+ create mode 120000 package/gcc/gcc-initial/4.4.7
+ create mode 120000 package/gcc/gcc-initial/4.5.4
+ create mode 120000 package/gcc/gcc-initial/4.6.4
+ create mode 120000 package/gcc/gcc-initial/4.7.3
+ create mode 120000 package/gcc/gcc-initial/4.8-arc
+ create mode 120000 package/gcc/gcc-initial/4.8.2
+ create mode 120000 package/gcc/gcc-intermediate/4.2.2-avr32-2.1.5
+ create mode 120000 package/gcc/gcc-intermediate/4.3.6
+ create mode 120000 package/gcc/gcc-intermediate/4.4.7
+ create mode 120000 package/gcc/gcc-intermediate/4.5.4
+ create mode 120000 package/gcc/gcc-intermediate/4.6.4
+ create mode 120000 package/gcc/gcc-intermediate/4.7.3
+ create mode 120000 package/gcc/gcc-intermediate/4.8-arc
+ create mode 120000 package/gcc/gcc-intermediate/4.8.2
 
-Sometime, the network is really slow (eg. low BW, or high latency), so
-this is also usefull to be able to make a complete mirror.
-
-Of course, that needs resyncing from time to time, but easier done than
-coping with a bunch of cursing angry users irrupting in one's office
-every now and then! :-)
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/gcc/gcc-final/4.2.2-avr32-2.1.5 b/package/gcc/gcc-final/4.2.2-avr32-2.1.5
+new file mode 120000
+index 0000000..032c9e3
+--- /dev/null
++++ b/package/gcc/gcc-final/4.2.2-avr32-2.1.5
+@@ -0,0 +1 @@
++../4.2.2-avr32-2.1.5
+\ No newline at end of file
+diff --git a/package/gcc/gcc-final/4.3.6 b/package/gcc/gcc-final/4.3.6
+new file mode 120000
+index 0000000..e1c481e
+--- /dev/null
++++ b/package/gcc/gcc-final/4.3.6
+@@ -0,0 +1 @@
++../4.3.6
+\ No newline at end of file
+diff --git a/package/gcc/gcc-final/4.4.7 b/package/gcc/gcc-final/4.4.7
+new file mode 120000
+index 0000000..a7ca0e2
+--- /dev/null
++++ b/package/gcc/gcc-final/4.4.7
+@@ -0,0 +1 @@
++../4.4.7
+\ No newline at end of file
+diff --git a/package/gcc/gcc-final/4.5.4 b/package/gcc/gcc-final/4.5.4
+new file mode 120000
+index 0000000..b758df2
+--- /dev/null
++++ b/package/gcc/gcc-final/4.5.4
+@@ -0,0 +1 @@
++../4.5.4
+\ No newline at end of file
+diff --git a/package/gcc/gcc-final/4.6.4 b/package/gcc/gcc-final/4.6.4
+new file mode 120000
+index 0000000..d4c8b47
+--- /dev/null
++++ b/package/gcc/gcc-final/4.6.4
+@@ -0,0 +1 @@
++../4.6.4
+\ No newline at end of file
+diff --git a/package/gcc/gcc-final/4.7.3 b/package/gcc/gcc-final/4.7.3
+new file mode 120000
+index 0000000..6c32215
+--- /dev/null
++++ b/package/gcc/gcc-final/4.7.3
+@@ -0,0 +1 @@
++../4.7.3
+\ No newline at end of file
+diff --git a/package/gcc/gcc-final/4.8-arc b/package/gcc/gcc-final/4.8-arc
+new file mode 120000
+index 0000000..4f63276
+--- /dev/null
++++ b/package/gcc/gcc-final/4.8-arc
+@@ -0,0 +1 @@
++../4.8-arc
+\ No newline at end of file
+diff --git a/package/gcc/gcc-final/4.8.2 b/package/gcc/gcc-final/4.8.2
+new file mode 120000
+index 0000000..27736e8
+--- /dev/null
++++ b/package/gcc/gcc-final/4.8.2
+@@ -0,0 +1 @@
++../4.8.2
+\ No newline at end of file
+diff --git a/package/gcc/gcc-final/gcc-final.mk b/package/gcc/gcc-final/gcc-final.mk
+index b396382..409ac97 100644
+--- a/package/gcc/gcc-final/gcc-final.mk
++++ b/package/gcc/gcc-final/gcc-final.mk
+@@ -18,7 +18,7 @@ ifneq ($(call qstrip, $(BR2_XTENSA_CORE_NAME)),)
+ HOST_GCC_FINAL_POST_EXTRACT_CMDS += HOST_GCC_FINAL_XTENSA_OVERLAY_EXTRACT
+ endif
+ 
+-HOST_GCC_FINAL_POST_PATCH_HOOKS += HOST_GCC_APPLY_PATCHES
++HOST_GCC_FINAL_POST_PATCH_HOOKS += HOST_GCC_APPLY_POWERPC_PATCH
+ 
+ # gcc doesn't support in-tree build, so we create a 'build'
+ # subdirectory in the gcc sources, and build from there.
+diff --git a/package/gcc/gcc-initial/4.2.2-avr32-2.1.5 b/package/gcc/gcc-initial/4.2.2-avr32-2.1.5
+new file mode 120000
+index 0000000..032c9e3
+--- /dev/null
++++ b/package/gcc/gcc-initial/4.2.2-avr32-2.1.5
+@@ -0,0 +1 @@
++../4.2.2-avr32-2.1.5
+\ No newline at end of file
+diff --git a/package/gcc/gcc-initial/4.3.6 b/package/gcc/gcc-initial/4.3.6
+new file mode 120000
+index 0000000..e1c481e
+--- /dev/null
++++ b/package/gcc/gcc-initial/4.3.6
+@@ -0,0 +1 @@
++../4.3.6
+\ No newline at end of file
+diff --git a/package/gcc/gcc-initial/4.4.7 b/package/gcc/gcc-initial/4.4.7
+new file mode 120000
+index 0000000..a7ca0e2
+--- /dev/null
++++ b/package/gcc/gcc-initial/4.4.7
+@@ -0,0 +1 @@
++../4.4.7
+\ No newline at end of file
+diff --git a/package/gcc/gcc-initial/4.5.4 b/package/gcc/gcc-initial/4.5.4
+new file mode 120000
+index 0000000..b758df2
+--- /dev/null
++++ b/package/gcc/gcc-initial/4.5.4
+@@ -0,0 +1 @@
++../4.5.4
+\ No newline at end of file
+diff --git a/package/gcc/gcc-initial/4.6.4 b/package/gcc/gcc-initial/4.6.4
+new file mode 120000
+index 0000000..d4c8b47
+--- /dev/null
++++ b/package/gcc/gcc-initial/4.6.4
+@@ -0,0 +1 @@
++../4.6.4
+\ No newline at end of file
+diff --git a/package/gcc/gcc-initial/4.7.3 b/package/gcc/gcc-initial/4.7.3
+new file mode 120000
+index 0000000..6c32215
+--- /dev/null
++++ b/package/gcc/gcc-initial/4.7.3
+@@ -0,0 +1 @@
++../4.7.3
+\ No newline at end of file
+diff --git a/package/gcc/gcc-initial/4.8-arc b/package/gcc/gcc-initial/4.8-arc
+new file mode 120000
+index 0000000..4f63276
+--- /dev/null
++++ b/package/gcc/gcc-initial/4.8-arc
+@@ -0,0 +1 @@
++../4.8-arc
+\ No newline at end of file
+diff --git a/package/gcc/gcc-initial/4.8.2 b/package/gcc/gcc-initial/4.8.2
+new file mode 120000
+index 0000000..27736e8
+--- /dev/null
++++ b/package/gcc/gcc-initial/4.8.2
+@@ -0,0 +1 @@
++../4.8.2
+\ No newline at end of file
+diff --git a/package/gcc/gcc-initial/gcc-initial.mk b/package/gcc/gcc-initial/gcc-initial.mk
+index 0eb492f..6a1ec3c 100644
+--- a/package/gcc/gcc-initial/gcc-initial.mk
++++ b/package/gcc/gcc-initial/gcc-initial.mk
+@@ -16,7 +16,7 @@ ifneq ($(call qstrip, $(BR2_XTENSA_CORE_NAME)),)
+ HOST_GCC_INITIAL_POST_EXTRACT_CMDS += HOST_GCC_XTENSA_OVERLAY_EXTRACT
+ endif
+ 
+-HOST_GCC_INITIAL_POST_PATCH_HOOKS += HOST_GCC_APPLY_PATCHES
++HOST_GCC_INITIAL_POST_PATCH_HOOKS += HOST_GCC_APPLY_POWERPC_PATCH
+ 
+ # gcc doesn't support in-tree build, so we create a 'build'
+ # subdirectory in the gcc sources, and build from there.
+diff --git a/package/gcc/gcc-intermediate/4.2.2-avr32-2.1.5 b/package/gcc/gcc-intermediate/4.2.2-avr32-2.1.5
+new file mode 120000
+index 0000000..032c9e3
+--- /dev/null
++++ b/package/gcc/gcc-intermediate/4.2.2-avr32-2.1.5
+@@ -0,0 +1 @@
++../4.2.2-avr32-2.1.5
+\ No newline at end of file
+diff --git a/package/gcc/gcc-intermediate/4.3.6 b/package/gcc/gcc-intermediate/4.3.6
+new file mode 120000
+index 0000000..e1c481e
+--- /dev/null
++++ b/package/gcc/gcc-intermediate/4.3.6
+@@ -0,0 +1 @@
++../4.3.6
+\ No newline at end of file
+diff --git a/package/gcc/gcc-intermediate/4.4.7 b/package/gcc/gcc-intermediate/4.4.7
+new file mode 120000
+index 0000000..a7ca0e2
+--- /dev/null
++++ b/package/gcc/gcc-intermediate/4.4.7
+@@ -0,0 +1 @@
++../4.4.7
+\ No newline at end of file
+diff --git a/package/gcc/gcc-intermediate/4.5.4 b/package/gcc/gcc-intermediate/4.5.4
+new file mode 120000
+index 0000000..b758df2
+--- /dev/null
++++ b/package/gcc/gcc-intermediate/4.5.4
+@@ -0,0 +1 @@
++../4.5.4
+\ No newline at end of file
+diff --git a/package/gcc/gcc-intermediate/4.6.4 b/package/gcc/gcc-intermediate/4.6.4
+new file mode 120000
+index 0000000..d4c8b47
+--- /dev/null
++++ b/package/gcc/gcc-intermediate/4.6.4
+@@ -0,0 +1 @@
++../4.6.4
+\ No newline at end of file
+diff --git a/package/gcc/gcc-intermediate/4.7.3 b/package/gcc/gcc-intermediate/4.7.3
+new file mode 120000
+index 0000000..6c32215
+--- /dev/null
++++ b/package/gcc/gcc-intermediate/4.7.3
+@@ -0,0 +1 @@
++../4.7.3
+\ No newline at end of file
+diff --git a/package/gcc/gcc-intermediate/4.8-arc b/package/gcc/gcc-intermediate/4.8-arc
+new file mode 120000
+index 0000000..4f63276
+--- /dev/null
++++ b/package/gcc/gcc-intermediate/4.8-arc
+@@ -0,0 +1 @@
++../4.8-arc
+\ No newline at end of file
+diff --git a/package/gcc/gcc-intermediate/4.8.2 b/package/gcc/gcc-intermediate/4.8.2
+new file mode 120000
+index 0000000..27736e8
+--- /dev/null
++++ b/package/gcc/gcc-intermediate/4.8.2
+@@ -0,0 +1 @@
++../4.8.2
+\ No newline at end of file
+diff --git a/package/gcc/gcc-intermediate/gcc-intermediate.mk b/package/gcc/gcc-intermediate/gcc-intermediate.mk
+index f47e4be..c0bf6fc 100644
+--- a/package/gcc/gcc-intermediate/gcc-intermediate.mk
++++ b/package/gcc/gcc-intermediate/gcc-intermediate.mk
+@@ -18,7 +18,7 @@ ifneq ($(call qstrip, $(BR2_XTENSA_CORE_NAME)),)
+ HOST_GCC_INTERMEDIATE_POST_EXTRACT_CMDS += HOST_GCC_XTENSA_OVERLAY_EXTRACT
+ endif
+ 
+-HOST_GCC_INTERMEDIATE_POST_PATCH_HOOKS += HOST_GCC_APPLY_PATCHES
++HOST_GCC_INTERMEDIATE_POST_PATCH_HOOKS += HOST_GCC_APPLY_POWERPC_PATCH
+ 
+ # gcc doesn't support in-tree build, so we create a 'build'
+ # subdirectory in the gcc sources, and build from there.
+diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
+index 0c0cc99..bddceba 100644
+--- a/package/gcc/gcc.mk
++++ b/package/gcc/gcc.mk
+@@ -43,16 +43,13 @@ endef
+ ifeq ($(ARCH),powerpc)
+ ifneq ($(BR2_SOFT_FLOAT),)
+ define HOST_GCC_APPLY_POWERPC_PATCH
+-	support/scripts/apply-patches.sh $(@D) package/gcc/$(GCC_VERSION) powerpc-link-with-math-lib.patch.conditional
++	if [ -e package/gcc/$(GCC_VERSION)/powerpc-link-with-math-lib.patch.conditional ]; then \
++		support/scripts/apply-patches.sh $(@D) package/gcc/$(GCC_VERSION) powerpc-link-with-math-lib.patch.conditional; \
++	fi
+ endef
+ endif
+ endif
+ 
+-define HOST_GCC_APPLY_PATCHES
+-	support/scripts/apply-patches.sh $(@D) package/gcc/$(GCC_VERSION) \*.patch
+-	$(HOST_GCC_APPLY_POWERPC_PATCH)
+-endef
+-
+ #
+ # Custom extract command to save disk space
+ #
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.8.4.rc3
