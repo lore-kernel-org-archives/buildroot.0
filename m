@@ -1,32 +1,55 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed,  6 Nov 2013 07:21:34 -0300
-Subject: [Buildroot] [PATCH] curl: fix homepage
-Message-ID: <1383733294-20038-1-git-send-email-gustavo@zacarias.com.ar>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 6 Nov 2013 11:26:20 +0100
+Subject: [Buildroot] [PATCH 4/5] rpi: rename board folder for consistency
+In-Reply-To: <20131106111103.1a1f1d13@skate>
+References: <cover.1383693880.git.yann.morin.1998@free.fr>
+ <5db8e0c38bc04628a5286eb3c90ab0c0ee543b53.1383693880.git.yann.morin.1998@free.fr>
+ <20131106111103.1a1f1d13@skate>
+Message-ID: <201311061126.20888.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-cURL's homepage is curl.haxx.se and not curl.haxx.nu
+Thomas, All,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/libcurl/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On Wednesday 06 November 2013 11:11:03 Thomas Petazzoni wrote:
+> On Wed,  6 Nov 2013 00:28:19 +0100, Yann E. MORIN wrote:
+> > From: mathieu benoit <mathieu.benoit@savoirfairelinux.com>
+> > 
+> > All the Raspberry Pi files (packages and config) are prefix with
+> > "rpi", so rename the board directory to "rpi" for consistency.
+> > 
+> > Signed-off-by: Mathieu Benoit <mathieu.benoit@savoirfairelinux.com>
+> > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> > ---
+> >  board/{raspberrypi => rpi}/readme.txt | 0
+> >  1 file changed, 0 insertions(+), 0 deletions(-)
+> >  rename board/{raspberrypi => rpi}/readme.txt (100%)
+> 
+> I'm not sure I agree with this one. I find "rasberrypi" a lot more
+> obvious for the new comer. Maybe our defconfig should also be called
+> rasberrypi_defconfig.
 
-diff --git a/package/libcurl/Config.in b/package/libcurl/Config.in
-index 1d6d08e..8e2953e 100644
---- a/package/libcurl/Config.in
-+++ b/package/libcurl/Config.in
-@@ -4,7 +4,7 @@ config BR2_PACKAGE_LIBCURL
- 	  cURL is a tool for getting files from FTP, HTTP, Gopher, Telnet,
- 	  and Dict servers, using any of the supported protocols.
- 
--	  http://curl.haxx.nu/
-+	  http://curl.haxx.se/
- 
- config BR2_PACKAGE_CURL
- 	bool "curl binary"
+Well, 'rpi' is a very common nickname for the Raspberry Pi, so I don't
+think there will be confusion for a newcomer (to Buildroot).
+
+On the other hand, all our other boards are using the full name, not a
+shortname/nickname, neither in board/ nor in configs/
+
+So, in hindsight, I agree with Thomas here: we should use raspberrypi,
+not rpi.
+
+I'll fix and resubmit.
+
+Regards,
+Yann E. MORIN.
+
 -- 
-1.8.1.5
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +0/33 662376056 | Software  Designer | \ / CAMPAIGN     |   ^                |
+| --==< O_o >==-- '------------.-------:  X  AGAINST      |  /e\  There is no  |
+| http://ymorin.is-a-geek.org/ | (*_*) | / \ HTML MAIL    |  """  conspiracy.  |
+'------------------------------'-------'------------------'--------------------'
