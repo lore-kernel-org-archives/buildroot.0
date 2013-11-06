@@ -1,43 +1,44 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Wed, 6 Nov 2013 12:03:32 +0100
-Subject: [Buildroot] [PATCH] connman: disable on avr32
-In-Reply-To: <1383735672-24550-1-git-send-email-spdawson@gmail.com>
-References: <1383735672-24550-1-git-send-email-spdawson@gmail.com>
-Message-ID: <CAAXf6LXx5AR6ELq+=+f6M2Rb9Mue_8hoKvKWenKBGb+DFiBQRQ@mail.gmail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 06 Nov 2013 12:05:26 +0100
+Subject: [Buildroot] [PATCH v2] sconeserver: Can't be built with uClibc.
+In-Reply-To: <CAJxxZ0NgjUKnAuLK22wmgztrCnBaRxBXCJzQF_YFexPVFZEBgg@mail.gmail.com>
+ (Sonic Zhang's message of "Wed, 6 Nov 2013 11:33:15 +0800")
+References: <1383665533-2430-1-git-send-email-sonic.adi@gmail.com>
+ <87ppqemooa.fsf@dell.be.48ers.dk>
+ <CAJxxZ0NgjUKnAuLK22wmgztrCnBaRxBXCJzQF_YFexPVFZEBgg@mail.gmail.com>
+Message-ID: <87vc05lrih.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+>>>>> "Sonic" == Sonic Zhang <sonic.adi@gmail.com> writes:
 
-On Wed, Nov 6, 2013 at 12:01 PM,  <spdawson@gmail.com> wrote:
-> From: Simon Dawson <spdawson@gmail.com>
->
-> The inotify_init1 syscall is not available on avr32. Fixes build failures
-> such as the following.
->
->   http://autobuild.buildroot.net/results/0d8/0d8e7bd8bd3f227fabfb0d5feb59a5d316026d3f
->
-> Signed-off-by: Simon Dawson <spdawson@gmail.com>
-> ---
->  package/connman/Config.in | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/package/connman/Config.in b/package/connman/Config.in
-> index c74618a..efb2486 100644
-> --- a/package/connman/Config.in
-> +++ b/package/connman/Config.in
-> @@ -4,6 +4,7 @@ config BR2_PACKAGE_CONNMAN
->         select BR2_PACKAGE_LIBGLIB2
->         select BR2_PACKAGE_IPTABLES
->         select BR2_PACKAGE_GNUTLS
-> +       depends on !BR2_avr32 # no inotify_init1
->         depends on !BR2_UCLIBC_VERSION_0_9_32
->         depends on BR2_USE_WCHAR # libglib2 and gnutls
->         depends on BR2_INET_IPV6
+ >> > General shadow password file API such as getspnam is not supported in
+ >> > uClibc.
+ >> 
+ >> Ehh, they are?
+ >> 
+ >> ./output/host/usr/bin/arm-linux-nm -D \
+ >> output/target/lib/libuClibc-0.9.33.2.so | grep getspnam
+ >> 0002a6c0 T getspnam
+ >> 0002a6f0 T getspnam_r
+ >> 
+ >> They do require you to enable UCLIBC_HAS_SHADOW, but that option
+ >> defaults to y and our default config has it enabled.
+ >> 
 
-This dependency should also be added to the comment, on a separate
-'depends on' statement.
-(see also my patch in the queue, that I have to rework)
+ > In the case the UCLIBC_HAS_SHADOW is not supported in the GNU
+ > toolchain release for some architecture such as Blackfin, how should
+ > the building failure be dealt with?
+
+For external toolchains you mean? We can do a few things:
+
+- Mention the dependency in the Config.in help text
+- If it's a preconfigured / well known toolchain in buildroot we can:
+  - Disable the combination in the autobuilders
+  - Explicitly make the package depend on !<specific-toolchain>
+
+-- 
+Bye, Peter Korsgaard
