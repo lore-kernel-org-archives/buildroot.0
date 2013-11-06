@@ -1,42 +1,39 @@
-From: Javier Viguera <javier.viguera@digi.com>
-Date: Wed, 6 Nov 2013 11:00:56 +0100
-Subject: [Buildroot] [PATCH] busybox: minor fixes to S01logging bootscript
-Message-ID: <1383732056-39746-1-git-send-email-javier.viguera@digi.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 6 Nov 2013 11:08:30 +0100
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2013-11-05
+In-Reply-To: <5279FC67.3050706@imgtec.com>
+References: <20131106073025.DACCA52C609@lolut.humanoidz.org>
+ <5279FC67.3050706@imgtec.com>
+Message-ID: <20131106110830.48fac0d9@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-* The PID file is not created unless the '-m' option is passed to
-  start-stop-daemon.
+Dear Markos Chandras,
 
-* Remove the mark '-m 0' option as it's not supported by busybox's
-  syslogd.
+On Wed, 6 Nov 2013 08:23:03 +0000, Markos Chandras wrote:
+> On 11/06/2013 07:30 AM, Thomas Petazzoni wrote:
+> >    mips64el |                 libiscsi-1.6.0 | NOK |
+> > http://autobuild.buildroot.net/results/6dfe7b0d0a2e3c64743755d58729522d24948f1f/
+> 
+> This is yet another MIPS64/n64 failure. This is a libtool problem and 
+> has been fixed in the upstream libtool.
+> 
+> http://git.savannah.gnu.org/cgit/libtool.git/commit/?id=5f7f7d9615bf650cf99d581a33b3e18357f79951
+> 
+> It might take a while for the fix to propagate to packages
 
-* Syslogd and Klogd forks to background by default giving as a result
-  that the pid stored in the PID file is not correct. Let the
-  background job be done by 'start-stop-daemon' by passing '-n'
-  (foreground) to the daemons and '-b' to start-stop-daemon. This
-  way the pid stored in the PID files is correct.
+Well, this can be fixed today by using "gcc" instead of "ld" to do the
+link step, as we did with some other packages.
 
-Signed-off-by: Javier Viguera <javier.viguera@digi.com>
----
- package/busybox/S01logging | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Of course, the problem here is that it uses partial linking (ld -r)
+which you can't do from gcc, as far as I know...
 
-diff --git a/package/busybox/S01logging b/package/busybox/S01logging
-index 37a2c11..b7af2a7 100644
---- a/package/busybox/S01logging
-+++ b/package/busybox/S01logging
-@@ -6,8 +6,8 @@
- case "$1" in
-   start)
- 	echo -n "Starting logging: "
--	start-stop-daemon -S -q -p /var/run/syslogd.pid --exec /sbin/syslogd -- -m 0
--	start-stop-daemon -S -q -p /var/run/klogd.pid --exec /sbin/klogd
-+	start-stop-daemon -b -S -q -m -p /var/run/syslogd.pid --exec /sbin/syslogd -- -n
-+	start-stop-daemon -b -S -q -m -p /var/run/klogd.pid --exec /sbin/klogd -- -n
- 	echo "OK"
- 	;;
-   stop)
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
