@@ -1,49 +1,27 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed,  6 Nov 2013 09:15:23 -0300
-Subject: [Buildroot] [PATCH] aircrack-ng: add security patch for
-	CVE-2010-1159
-Message-ID: <1383740123-24381-1-git-send-email-gustavo@zacarias.com.ar>
+From: Simon Dawson <spdawson@gmail.com>
+Date: Wed, 6 Nov 2013 12:19:24 +0000
+Subject: [Buildroot] [PATCH] libevas: disable on avr32
+In-Reply-To: <CAAXf6LWSZa6hNgqqYgM07ER4t_iF3b26e6O1-jMivBeRnu4RXg@mail.gmail.com>
+References: <1383735243-18910-1-git-send-email-spdawson@gmail.com>
+ <CAAXf6LV6GFk27s8fpEbcDVKmrkipiKA_FGFEt-wcdXMutkwBoA@mail.gmail.com>
+ <CAHt8ZCM6t1qPEOCaTpDOe1ESTF1ZdvNU1CrEkZC5hABzpKf+fg@mail.gmail.com>
+ <CAAXf6LWSZa6hNgqqYgM07ER4t_iF3b26e6O1-jMivBeRnu4RXg@mail.gmail.com>
+Message-ID: <CAHt8ZCMcVujE=nPgBdnxw_g50+H=TJcmj6x5rOz6ru4T16sm6A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- .../aircrack-ng/aircrack-ng-01-CVE-2010-1159.patch | 24 ++++++++++++++++++++++
- 1 file changed, 24 insertions(+)
- create mode 100644 package/aircrack-ng/aircrack-ng-01-CVE-2010-1159.patch
+On 6 November 2013 11:54, Thomas De Schampheleire
+<patrickdepinguin@gmail.com> wrote:
+> This is still correct, the comment should not mention the architecture
+> dependency.
+> But, the comment should only be _visible_ when it is relevant. Since
+> the package itself is not relevant on avr32, it makes no sense to show
+> the comment. Hence, the comment should get an extra 'depends on
+> !avr32'.
 
-diff --git a/package/aircrack-ng/aircrack-ng-01-CVE-2010-1159.patch b/package/aircrack-ng/aircrack-ng-01-CVE-2010-1159.patch
-new file mode 100644
-index 0000000..634a01e
---- /dev/null
-+++ b/package/aircrack-ng/aircrack-ng-01-CVE-2010-1159.patch
-@@ -0,0 +1,24 @@
-+Fix for buffer overflow CVE-2010-1159.
-+
-+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+
-+--- a/src/airodump-ng.c
-++++ b/src/airodump-ng.c
-+@@ -2126,7 +2126,7 @@
-+                     st_cur->wpa.eapol_size = ( h80211[z + 2] << 8 )
-+                             +   h80211[z + 3] + 4;
-+ 
-+-                    if ((int)pkh.len - z < st_cur->wpa.eapol_size  || st_cur->wpa.eapol_size == 0)
-++                    if (caplen - z < st_cur->wpa.eapol_size  || st_cur->wpa.eapol_size == 0 || caplen - z < 81 + 16 || st_cur->wpa.eapol_size > 256)
-+ 					{
-+ 						// Ignore the packet trying to crash us.
-+                     	goto write_packet;
-+@@ -2158,7 +2158,7 @@
-+                     st_cur->wpa.eapol_size = ( h80211[z + 2] << 8 )
-+                             +   h80211[z + 3] + 4;
-+ 
-+-                    if ((int)pkh.len - z < st_cur->wpa.eapol_size  || st_cur->wpa.eapol_size == 0)
-++		    if (caplen - z < st_cur->wpa.eapol_size  || st_cur->wpa.eapol_size == 0 || caplen - z < 81 + 16 || st_cur->wpa.eapol_size > 256)
-+ 					{
-+ 						// Ignore the packet trying to crash us.
-+                     	goto write_packet;
--- 
-1.8.1.5
+Okay, I understand. Thanks for the clarification.
+
+Simon.
