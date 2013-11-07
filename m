@@ -1,26 +1,59 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Thu, 07 Nov 2013 17:26:50 +0100
-Subject: [Buildroot] [PATCH 0 of 3] infra: misc. changes related to
-	pkgparentdir
-Message-ID: <patchbomb.1383841610@argentina>
+Date: Thu, 07 Nov 2013 17:26:51 +0100
+Subject: [Buildroot] [PATCH 1 of 3] infra: remove trailing slash from
+	pkgparentdir function
+In-Reply-To: <patchbomb.1383841610@argentina>
+References: <patchbomb.1383841610@argentina>
+Message-ID: <cc1dc749ee6ca65ff90c.1383841611@argentina>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This series was driven by the observation that the 'Patching' message
-contained a double slash which annoyed me:
+For a package located in package/foo/foo.mk, the pkgparentdir function
+returns "package/". For a package located in boot/barebox/barebox.mk, it
+returns "boot/". For linux/linux.mk, it returns the empty string.
 
+There is actually no reason for the trailing slash in this function.
+In the package 'Patching' message, it causes a double slash:
 >>> host-lzop 1.03 Patching package//lzop
+due to:
+@$(call MESSAGE,"Patching $($(PKG)_DIR_PREFIX)/$(RAWNAME)")
+(FOO_DIR_PREFIX is populated from pkgparentdir)
 
-While fixing this (pkgparentdir change), I bumped into FOO_DIR_PREFIX which
-had an incorrect default, and the realization that the Patching message
-didn't really need that directory anyway.
+While the printing of 'package//lzop' in the message above is not useful,
+and will be removed in a subsequent following patch, this patch removes
+the unnecessary trailing slash in pkgparentdir anyhow
 
 Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
 ---
- package/pkg-generic.mk |  6 +++---
+ package/pkg-generic.mk |  2 +-
  package/pkg-utils.mk   |  2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -473,7 +473,7 @@ endif
+ # kernel case, the bootloaders case, and the normal packages case.
+ ifeq ($(1),linux)
+ $(2)_KCONFIG_VAR = BR2_LINUX_KERNEL
+-else ifeq ($(4),boot/)
++else ifeq ($(4),boot)
+ $(2)_KCONFIG_VAR = BR2_TARGET_$(2)
+ else
+ $(2)_KCONFIG_VAR = BR2_PACKAGE_$(2)
+diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
+--- a/package/pkg-utils.mk
++++ b/package/pkg-utils.mk
+@@ -52,7 +52,7 @@ endef
+ # package, for which the package directory is an empty string.
+ pkgdir       = $(dir $(lastword $(MAKEFILE_LIST)))
+ pkgname      = $(lastword $(subst /, ,$(call pkgdir)))
+-pkgparentdir = $(patsubst %$(call pkgname)/,%,$(call pkgdir))
++pkgparentdir = $(patsubst %/,%,$(patsubst %$(call pkgname)/,%,$(call pkgdir)))
+ 
+ # Define extractors for different archive suffixes
+ INFLATE.bz2  = $(BZCAT)
