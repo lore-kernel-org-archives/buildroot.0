@@ -1,48 +1,74 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Thu, 07 Nov 2013 11:41:24 +0100
-Subject: [Buildroot] [PATCH 4 of 4 v2] manual: add some info on the
-	POST_RSYNC hook
-In-Reply-To: <patchbomb.1383820880@argentina>
-References: <patchbomb.1383820880@argentina>
-Message-ID: <5373a0083b692806e5b6.1383820884@argentina>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Thu, 7 Nov 2013 11:43:41 +0100
+Subject: [Buildroot] [PATCH 1 of 2 v2] manual: clarify that Config.in
+ comments should have correct dependencies
+In-Reply-To: <183a0e4a7cdbbf115726.1383812676@argentina>
+References: <patchbomb.1383812675@argentina>
+ <183a0e4a7cdbbf115726.1383812676@argentina>
+Message-ID: <CAHXCMMLpXvpVd1dM+17R3YcD5jS4Z7iuAY-MyEM2+nkAfQTKNw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+2013/11/7 Thomas De Schampheleire <patrickdepinguin@gmail.com>
 
----
-v2: rsync is also used for site method 'local' (comment ThomasP on IRC)
+> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+>
+Acked-by: "Samuel Martin" <s.martin49@gmail.com>
 
- docs/manual/adding-packages-hooks.txt |  20 ++++++++++++++++++++
- 1 files changed, 20 insertions(+), 0 deletions(-)
 
-diff --git a/docs/manual/adding-packages-hooks.txt b/docs/manual/adding-packages-hooks.txt
---- a/docs/manual/adding-packages-hooks.txt
-+++ b/docs/manual/adding-packages-hooks.txt
-@@ -39,3 +39,23 @@ endef
- 
- LIBFOO_POST_PATCH_HOOKS += LIBFOO_POST_PATCH_FIXUP
- ----------------------
-+
-+Using the +POST_RSYNC+ hook
-+^^^^^^^^^^^^^^^^^^^^^^^^^^^
-+The +POST_RSYNC+ hook is run only for packages that use a local source,
-+either through the +local+ site method or the +OVERRIDE_SRCDIR+
-+mechanism. In this case, package sources are copied using +rsync+ from
-+the local location into the buildroot build directory. The +rsync+
-+command does not copy all files from the source directory, though.
-+Files belonging to a version control system, like the directories
-++.git+, +.hg+, etc. are not copied. For most packages this is
-+sufficient, but a given package can perform additional actions using
-+the +POST_RSYNC+ hook.
-+
-+In principle, the hook can contain any command you want. One specific
-+use case, though, is the intentional copying of the version control
-+directory using +rsync+. The +rsync+ command you use in the hook can, among
-+others, use the following variables:
-+
-+* +$(SRCDIR)+: the path to the overridden source directory
-+* +$(@D)+: the path to the build directory
+>
+> ---
+> v2:
+> - fix typo 'to be expressed' in this section (Samuel)
+> - add comment on preferred if...endif construct
+>
+>  docs/manual/adding-packages-directory.txt |  17 +++++++++++++++--
+>  1 files changed, 15 insertions(+), 2 deletions(-)
+>
+> diff --git a/docs/manual/adding-packages-directory.txt
+> b/docs/manual/adding-packages-directory.txt
+> --- a/docs/manual/adding-packages-directory.txt
+> +++ b/docs/manual/adding-packages-directory.txt
+> @@ -171,8 +171,9 @@ C library, C++ support, largefile suppor
+>  IPv6 support, wchar support, or dynamic library support. Some packages
+>  can only be built on certain target architectures, or if an MMU is
+>  available in the processor.
+> -These dependencies have to expressed with the appropriate 'depends on'
+> -statements in the Config.in file. Additionally, for dependencies on
+> +
+> +These dependencies have to be expressed with the appropriate 'depends
+> +on' statements in the Config.in file. Additionally, for dependencies on
+>  toolchain options, a +comment+ should be displayed when the option is
+>  not enabled, so that the user knows why the package is not available.
+>  Dependencies on target architecture or MMU support should not be
+> @@ -180,6 +181,18 @@ made visible in a comment: since it is u
+>  freely choose another target, it makes little sense to show these
+>  dependencies explicitly.
+>
+> +The +comment+ should only be visible if the +config+ option itself would
+> +be visible when the toolchain option dependencies are met. This means
+> +that all other dependencies of the package (including dependencies on
+> +target architecture and MMU support) have to be repeated on the
+> ++comment+ definition. To keep it clear, the +depends on+ statement for
+> +these non-toolchain option should be kept separate from the +depends on+
+> +statement for the toolchain options.
+> +If there is a dependency on a config option in that same file (typically
+> +the main package) it is preferable to have a global +if ... endif+
+> +construct rather than repeating the +depends on+ statement on the
+> +comment and other config options.
+> +
+>  The general format of a dependency +comment+ for package foo is:
+>  --------------------------
+>  foo needs a toolchain w/ featA, featB, featC
+>
+
+
+
+-- 
+Samuel
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20131107/ac79858b/attachment.html>
