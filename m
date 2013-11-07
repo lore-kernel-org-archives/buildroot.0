@@ -1,95 +1,35 @@
-From: Simon Dawson <spdawson@gmail.com>
-Date: Thu, 7 Nov 2013 08:53:22 +0000
-Subject: [Buildroot] [PATCH v4] uclibc: reinstate support for version
-	0.9.31
-In-Reply-To: <877gcljflf.fsf@dell.be.48ers.dk>
-References: <1383772178-3193-1-git-send-email-spdawson@gmail.com>
- <877gcljflf.fsf@dell.be.48ers.dk>
-Message-ID: <CAHt8ZCNbg_w27WPMh=3e7TAXsLanST8exqLb5Vgs4EVv12630A@mail.gmail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 07 Nov 2013 09:57:14 +0100
+Subject: [Buildroot] [PATCH v3 1/1] openpgm: disable on AVR32
+In-Reply-To: <1383805921-31909-1-git-send-email-alexander.lukichev@gmail.com>
+ (Alexander Lukichev's message of "Thu, 7 Nov 2013 08:32:01 +0200")
+References: <1383805921-31909-1-git-send-email-alexander.lukichev@gmail.com>
+Message-ID: <87ppqcio7p.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter. Thanks for the feedback.
+>>>>> "Alexander" == Alexander Lukichev <alexander.lukichev@gmail.com> writes:
 
-On 6 November 2013 23:05, Peter Korsgaard <jacmet@uclibc.org> wrote:
-> We'll presumably get a bunch of autobuilder failures if we go back to
-> 0.9.31 for avr32. Are you willing to fix (annotate) all those packages?
+ > openpgm doesn't build correctly on AVR32 using
+ > gcc-4.2.2-avr32-2.1.5 toolchain: it is configured to call
+ > intrinsic atomic functions not provided by the toolchain,
+ > so they are propagated as unresolved external symbols in the
+ > built openpgm libraries. This breaks programs that try to link
+ > openpgm, because they do not know where to get those either. For
+ > instance, it breaks building zeromq tests when PGM support is
+ > selected.
 
-Yes, I'm happy to fix any problems that arise. I actually don't
-anticipate that 0.9.31 will cause significantly more failures than
-0.9.32.
+ > This commit disables openpgm on AVR32 due to apparent absence of
+ > interest in this package on that architecture and it breaking too
+ > many test builds.
 
-> I've already applied your patch to make connman unavailable on avr32, so
-> this can be dropped.
+ > Fixes http://autobuild.buildroot.net/results/5a3261109ea63ba17375003eabd8b5d88757865f/
+ > (at least)
 
-Okay.
+Committed, thanks.
 
-> Hmm, are you now adding support for inotify on avr32?
-
-The set of patches for 0.9.31 --- including the patch to add inotify
-support --- is the set that used to be in Buildroot prior to commit
-8abb5b33c1aae035cf48b1c81104b433ff884c64. I don't believe I'm adding
-anything "new" here...
-
->  > +64 bit targets often don't have a separate fcntl64() system call,
->  >  because they don't need one.
->
-> That doesn't sound important for avr32?
-
-Agreed; I'll remove this.
-
->  > +[PATCH] powerpc: add PTRACE_EVENT_ defines needed by ltrace
->  > +
->  > +Equivalent to the common version and kernel headers.
->  > +
->  > +Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
->
-> Tsk tsk, who is this guy? ;) Anyway, that also doesn't sound like
-> something we need for avr32.
-
-Right; I'll remove that one too.
-
->  > +diff -Naur uClibc-0.9.31.ori/libc/sysdeps/linux/sparc/Makefile.arch uClibc-0.9.31/libc/sysdeps/linux/sparc/Makefile.arch
->
-> This looks sparc specific?
-
-Okay.
-
->  > diff --git a/package/uclibc/0.9.31.1/uClibc-0012-sparc-errno-fix.patch b/package/uclibc/0.9.31.1/uClibc-0012-sparc-errno-fix.patch
->  > new file mode 100644
->  > index 0000000..44d06cb
->  > --- /dev/null
->  > +++ b/package/uclibc/0.9.31.1/uClibc-0012-sparc-errno-fix.patch
->
-> This one as well.
-
-Okay.
-
->  >      prompt "Thread library implementation"
->  > -    default BR2_PTHREADS_NATIVE if !(BR2_avr32 || BR2_xtensa)
->  > +    default BR2_PTHREADS_NATIVE if (!BR2_UCLIBC_VERSION_0_9_31) && !(BR2_avr32 || BR2_xtensa)
->
-> It already depends on !BR2_avr32, so you can drop this.
-
-Okay.
-
->  > @@ -115,6 +121,7 @@ choice
->  >      config BR2_PTHREADS_NATIVE
->  >              bool "Native POSIX Threading (NPTL)"
->  >              select BR2_TOOLCHAIN_HAS_THREADS
->  > +            depends on !BR2_UCLIBC_VERSION_0_9_31
->  >              depends on !BR2_arc
->  >              depends on !BR2_avr32
->
-> And here as well.
-
-Okay.
-
-> Care to resend with those issues fixed? Thanks.
-
-Of course. I'll rework the patch.
-
-Simon.
+-- 
+Bye, Peter Korsgaard
