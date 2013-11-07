@@ -1,36 +1,106 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Thu, 07 Nov 2013 17:26:53 +0100
-Subject: [Buildroot] [PATCH 3 of 3] infra: clean up 'Patching' message
-In-Reply-To: <patchbomb.1383841610@argentina>
-References: <patchbomb.1383841610@argentina>
-Message-ID: <0f8364943e3955dbed38.1383841613@argentina>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu,  7 Nov 2013 20:07:21 +0100
+Subject: [Buildroot] [PATCHv2] qt: remove the BR2_PACKAGE_QT_JAVASCRIPTCORE
+	option
+Message-ID: <1383851241-28276-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The 'Patching' message in the generic infrastructure prints not only the
-package name, but also a reference to the assumed package directory, based
-on FOO_DIR_PREFIX/FOO_RAWNAME. This doesn't really add value, as the name
-of the package is already apparent from the message and its location should
-be obvious. Hence, this patch simply reduces the print to "Patching".
+The BR2_PACKAGE_QT_JAVASCRIPTCORE option was available to force the
+activation or disabling of the JIT compiler in the Qt Javascript
+interpreter. However, the JIT compiler is not available for all
+architectures, so forcing its activation does not always
+work. Moreover, Qt knows by itself for which architectures JIT support
+is possible, and will automatically enable it if possible.
 
-Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+Therefore, this option was in fact useless, and causing build problems
+when enabled on architectures for which the JIT support was not
+available. This commit removes this option and there is no
+replacement: Qt will enable JIT at compile time when possible.
 
+Fixes:
+
+  http://autobuild.buildroot.org/results/aae/aaeb82753b7654eeca679ded5d0211ceebda3ea2/build-end.log
+  http://autobuild.buildroot.org/results/367/3670e4f03ff0ce114c90bd7139243d82c427b52a/build-end.log
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/pkg-generic.mk |  2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+v1 -> v2:
+ * As suggested by Yann, add the Config.in.legacy option even if the
+   removal of the option should normally be transparent to the user.
+ * Reword the commit log to provide a better description of what's
+   happening.
+---
+ Config.in.legacy     | 18 ++++++++++++++++++
+ package/qt/Config.in |  6 ------
+ package/qt/qt.mk     |  6 ------
+ 3 files changed, 18 insertions(+), 12 deletions(-)
 
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -90,7 +90,7 @@ endif
- $(BUILD_DIR)/%/.stamp_patched: NAMEVER = $(RAWNAME)-$($(PKG)_VERSION)
- $(BUILD_DIR)/%/.stamp_patched: PATCH_BASE_DIRS = $($(PKG)_DIR_PREFIX)/$(RAWNAME) $(call qstrip,$(BR2_GLOBAL_PATCH_DIR))/$(RAWNAME)
- $(BUILD_DIR)/%/.stamp_patched:
--	@$(call MESSAGE,"Patching $($(PKG)_DIR_PREFIX)/$(RAWNAME)")
-+	@$(call MESSAGE,"Patching")
- 	$(foreach hook,$($(PKG)_PRE_PATCH_HOOKS),$(call $(hook))$(sep))
- 	$(foreach p,$($(PKG)_PATCH),support/scripts/apply-patches.sh $(@D) $(DL_DIR) $(notdir $(p))$(sep))
- 	$(Q)( \
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 588cd8b..d02f0a6 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -101,6 +101,24 @@ endif
+ ###############################################################################
+ comment "Legacy options removed in 2013.11"
+ 
++config BR2_PACKAGE_QT_JAVASCRIPTCORE
++	bool "qt javascriptcore option removed"
++	select BR2_LEGACY
++	help
++	  The BR2_PACKAGE_QT_JAVASCRIPTCORE option was available to
++	  force the activation or disabling of the JIT compiler in the
++	  Qt Javascript interpreter. However, the JIT compiler is not
++	  available for all architectures, so forcing its activation
++	  does not always work. Moreover, Qt knows by itself for which
++	  architectures JIT support is possible, and will
++	  automatically enable it if possible.
++
++	  Therefore, this option was in fact useless, and causing
++	  build problems when enabled on architectures for which the
++	  JIT support was not available. It has been removed, and
++	  there is no replacement: Qt will enable JIT at compile time
++	  when possible.
++
+ config BR2_PACKAGE_MODULE_INIT_TOOLS
+ 	bool "module-init-tools replaced by kmod"
+ 	select BR2_PACKAGE_KMOD
+diff --git a/package/qt/Config.in b/package/qt/Config.in
+index ea9e787..b1a2207 100644
+--- a/package/qt/Config.in
++++ b/package/qt/Config.in
+@@ -365,12 +365,6 @@ comment "WebKit needs shared library/gui/network support"
+ 	depends on !(BR2_PACKAGE_QT_SHARED && BR2_PACKAGE_QT_GUI_MODULE && BR2_PACKAGE_QT_NETWORK)
+ 	depends on BR2_PACKAGE_QT_ARCH_SUPPORTS_WEBKIT
+ 
+-config BR2_PACKAGE_QT_JAVASCRIPTCORE
+-	bool "JavaScriptCore JIT compiler"
+-	help
+-	  Build the JavaScriptCore JIT compiler
+-	  If unsure, say y
+-
+ config BR2_PACKAGE_QT_STL
+ 	bool "STL support"
+ 	help
+diff --git a/package/qt/qt.mk b/package/qt/qt.mk
+index 48d39fc..82ce51d 100644
+--- a/package/qt/qt.mk
++++ b/package/qt/qt.mk
+@@ -415,12 +415,6 @@ else
+ QT_CONFIGURE_OPTS += -no-scripttools
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_QT_JAVASCRIPTCORE),y)
+-QT_CONFIGURE_OPTS += -javascript-jit
+-else
+-QT_CONFIGURE_OPTS += -no-javascript-jit
+-endif
+-
+ ifeq ($(BR2_PACKAGE_QT_STL),y)
+ QT_CONFIGURE_OPTS += -stl
+ else
+-- 
+1.8.1.2
