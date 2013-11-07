@@ -1,106 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu,  7 Nov 2013 20:07:21 +0100
-Subject: [Buildroot] [PATCHv2] qt: remove the BR2_PACKAGE_QT_JAVASCRIPTCORE
-	option
-Message-ID: <1383851241-28276-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Thu,  7 Nov 2013 20:09:48 +0100
+Subject: [Buildroot] [PATCH] Config.in.legacy: select BR2_LEGACY for
+	module-init-tools legacy option
+Message-ID: <1383851388-28586-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The BR2_PACKAGE_QT_JAVASCRIPTCORE option was available to force the
-activation or disabling of the JIT compiler in the Qt Javascript
-interpreter. However, the JIT compiler is not available for all
-architectures, so forcing its activation does not always
-work. Moreover, Qt knows by itself for which architectures JIT support
-is possible, and will automatically enable it if possible.
+Commit 94c72087f3 ("module-init-tools: remove package") removed the
+module-init-tools package and therefore added the corresponding config
+option in Config.in.legacy. However, the commit forgot to add the
+"select BR2_LEGACY" that ensures the build cannot proceed until the
+user has acknowledged the change (i.e kmod replacing
+module-init-tools).
 
-Therefore, this option was in fact useless, and causing build problems
-when enabled on architectures for which the JIT support was not
-available. This commit removes this option and there is no
-replacement: Qt will enable JIT at compile time when possible.
-
-Fixes:
-
-  http://autobuild.buildroot.org/results/aae/aaeb82753b7654eeca679ded5d0211ceebda3ea2/build-end.log
-  http://autobuild.buildroot.org/results/367/3670e4f03ff0ce114c90bd7139243d82c427b52a/build-end.log
+This commit adds this missing "select BR2_LEGACY".
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
-v1 -> v2:
- * As suggested by Yann, add the Config.in.legacy option even if the
-   removal of the option should normally be transparent to the user.
- * Reword the commit log to provide a better description of what's
-   happening.
----
- Config.in.legacy     | 18 ++++++++++++++++++
- package/qt/Config.in |  6 ------
- package/qt/qt.mk     |  6 ------
- 3 files changed, 18 insertions(+), 12 deletions(-)
+ Config.in.legacy | 1 +
+ 1 file changed, 1 insertion(+)
 
 diff --git a/Config.in.legacy b/Config.in.legacy
-index 588cd8b..d02f0a6 100644
+index d02f0a6..587afe1 100644
 --- a/Config.in.legacy
 +++ b/Config.in.legacy
-@@ -101,6 +101,24 @@ endif
- ###############################################################################
- comment "Legacy options removed in 2013.11"
- 
-+config BR2_PACKAGE_QT_JAVASCRIPTCORE
-+	bool "qt javascriptcore option removed"
-+	select BR2_LEGACY
-+	help
-+	  The BR2_PACKAGE_QT_JAVASCRIPTCORE option was available to
-+	  force the activation or disabling of the JIT compiler in the
-+	  Qt Javascript interpreter. However, the JIT compiler is not
-+	  available for all architectures, so forcing its activation
-+	  does not always work. Moreover, Qt knows by itself for which
-+	  architectures JIT support is possible, and will
-+	  automatically enable it if possible.
-+
-+	  Therefore, this option was in fact useless, and causing
-+	  build problems when enabled on architectures for which the
-+	  JIT support was not available. It has been removed, and
-+	  there is no replacement: Qt will enable JIT at compile time
-+	  when possible.
-+
- config BR2_PACKAGE_MODULE_INIT_TOOLS
+@@ -123,6 +123,7 @@ config BR2_PACKAGE_MODULE_INIT_TOOLS
  	bool "module-init-tools replaced by kmod"
  	select BR2_PACKAGE_KMOD
-diff --git a/package/qt/Config.in b/package/qt/Config.in
-index ea9e787..b1a2207 100644
---- a/package/qt/Config.in
-+++ b/package/qt/Config.in
-@@ -365,12 +365,6 @@ comment "WebKit needs shared library/gui/network support"
- 	depends on !(BR2_PACKAGE_QT_SHARED && BR2_PACKAGE_QT_GUI_MODULE && BR2_PACKAGE_QT_NETWORK)
- 	depends on BR2_PACKAGE_QT_ARCH_SUPPORTS_WEBKIT
- 
--config BR2_PACKAGE_QT_JAVASCRIPTCORE
--	bool "JavaScriptCore JIT compiler"
--	help
--	  Build the JavaScriptCore JIT compiler
--	  If unsure, say y
--
- config BR2_PACKAGE_QT_STL
- 	bool "STL support"
+ 	select BR2_PACKAGE_KMOD_TOOLS
++	select BR2_LEGACY
  	help
-diff --git a/package/qt/qt.mk b/package/qt/qt.mk
-index 48d39fc..82ce51d 100644
---- a/package/qt/qt.mk
-+++ b/package/qt/qt.mk
-@@ -415,12 +415,6 @@ else
- QT_CONFIGURE_OPTS += -no-scripttools
- endif
- 
--ifeq ($(BR2_PACKAGE_QT_JAVASCRIPTCORE),y)
--QT_CONFIGURE_OPTS += -javascript-jit
--else
--QT_CONFIGURE_OPTS += -no-javascript-jit
--endif
--
- ifeq ($(BR2_PACKAGE_QT_STL),y)
- QT_CONFIGURE_OPTS += -stl
- else
+ 	  The 'module-init-tools' package has been removed, since it
+ 	  has been depracated upstream and replaced by 'kmod'.
 -- 
 1.8.1.2
