@@ -1,59 +1,40 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Thu, 07 Nov 2013 17:26:51 +0100
-Subject: [Buildroot] [PATCH 1 of 3] infra: remove trailing slash from
-	pkgparentdir function
+Date: Thu, 07 Nov 2013 17:26:52 +0100
+Subject: [Buildroot] [PATCH 2 of 3] infra: remove incorrect default for
+	FOO_DIR_PREFIX
 In-Reply-To: <patchbomb.1383841610@argentina>
 References: <patchbomb.1383841610@argentina>
-Message-ID: <cc1dc749ee6ca65ff90c.1383841611@argentina>
+Message-ID: <d03022b206c995b8b942.1383841612@argentina>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-For a package located in package/foo/foo.mk, the pkgparentdir function
-returns "package/". For a package located in boot/barebox/barebox.mk, it
-returns "boot/". For linux/linux.mk, it returns the empty string.
-
-There is actually no reason for the trailing slash in this function.
-In the package 'Patching' message, it causes a double slash:
->>> host-lzop 1.03 Patching package//lzop
-due to:
-@$(call MESSAGE,"Patching $($(PKG)_DIR_PREFIX)/$(RAWNAME)")
-(FOO_DIR_PREFIX is populated from pkgparentdir)
-
-While the printing of 'package//lzop' in the message above is not useful,
-and will be removed in a subsequent following patch, this patch removes
-the unnecessary trailing slash in pkgparentdir anyhow
+Variable FOO_DIR_PREFIX is populated from pkgparentdir by the various
+package infrastructures. However, if that would be empty (which in fact is
+the case for the linux package), FOO_DIR_PREFIX would be set to
+'$(TOP_SRCDIR)/package'.
+Not only does this make no sense (LINUX_DIR_PREFIX becomes /package/linux,
+and for all other packages pkgparentdir is not-empty anyway), but it is also
+using a non-existing variable TOP_SRCDIR.
+This patch therefore removes the incorrect default.
 
 Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
 ---
  package/pkg-generic.mk |  2 +-
- package/pkg-utils.mk   |  2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
 diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
 --- a/package/pkg-generic.mk
 +++ b/package/pkg-generic.mk
-@@ -473,7 +473,7 @@ endif
- # kernel case, the bootloaders case, and the normal packages case.
- ifeq ($(1),linux)
- $(2)_KCONFIG_VAR = BR2_LINUX_KERNEL
--else ifeq ($(4),boot/)
-+else ifeq ($(4),boot)
- $(2)_KCONFIG_VAR = BR2_TARGET_$(2)
- else
- $(2)_KCONFIG_VAR = BR2_PACKAGE_$(2)
-diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
---- a/package/pkg-utils.mk
-+++ b/package/pkg-utils.mk
-@@ -52,7 +52,7 @@ endef
- # package, for which the package directory is an empty string.
- pkgdir       = $(dir $(lastword $(MAKEFILE_LIST)))
- pkgname      = $(lastword $(subst /, ,$(call pkgdir)))
--pkgparentdir = $(patsubst %$(call pkgname)/,%,$(call pkgdir))
-+pkgparentdir = $(patsubst %/,%,$(patsubst %$(call pkgname)/,%,$(call pkgdir)))
+@@ -313,7 +313,7 @@ endif
+ $(2)_INSTALL_STAGING		?= NO
+ $(2)_INSTALL_IMAGES		?= NO
+ $(2)_INSTALL_TARGET		?= YES
+-$(2)_DIR_PREFIX			= $(if $(4),$(4),$(TOP_SRCDIR)/package)
++$(2)_DIR_PREFIX			= $(4)
  
- # Define extractors for different archive suffixes
- INFLATE.bz2  = $(BZCAT)
+ # define sub-target stamps
+ $(2)_TARGET_INSTALL_TARGET =	$$($(2)_DIR)/.stamp_target_installed
