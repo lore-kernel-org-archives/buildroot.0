@@ -1,74 +1,103 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Thu,  7 Nov 2013 22:27:28 +0100
-Subject: [Buildroot] [PATCH] log4cplus: new package
-Message-ID: <1383859648-13759-1-git-send-email-ps.report@gmx.net>
+From: spdawson at gmail.com <spdawson@gmail.com>
+Date: Thu,  7 Nov 2013 21:30:43 +0000
+Subject: [Buildroot] [PATCH] avr32: disable kernel headers
+Message-ID: <1383859843-3549-1-git-send-email-spdawson@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
----
- package/Config.in              |  1 +
- package/log4cplus/Config.in    | 15 +++++++++++++++
- package/log4cplus/log4cplus.mk | 14 ++++++++++++++
- 3 files changed, 30 insertions(+)
- create mode 100644 package/log4cplus/Config.in
- create mode 100644 package/log4cplus/log4cplus.mk
+From: Simon Dawson <spdawson@gmail.com>
 
-diff --git a/package/Config.in b/package/Config.in
-index c0a3f20..7c0eb94 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -706,6 +706,7 @@ source "package/libtpl/Config.in"
- source "package/libunwind/Config.in"
- source "package/liburcu/Config.in"
- source "package/linux-pam/Config.in"
-+source "package/log4cplus/Config.in"
- source "package/log4cxx/Config.in"
- source "package/lttng-libust/Config.in"
- source "package/mpc/Config.in"
-diff --git a/package/log4cplus/Config.in b/package/log4cplus/Config.in
-new file mode 100644
-index 0000000..8a112a4
---- /dev/null
-+++ b/package/log4cplus/Config.in
-@@ -0,0 +1,15 @@
-+config BR2_PACKAGE_LOG4CPLUS
-+	bool "log4cplus"
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_USE_WCHAR
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	help
-+	  log4cplus is a simple to use C++ logging API providing
-+	  thread-safe, flexible, and arbitrarily granular control
-+	  over log management and configuration. It is modelled
-+	  after the Java log4j API.
-+
-+	  http://sourceforge.net/projects/log4cplus
-+
-+comment "log4cplus needs a toolchain w/ C++, wchar, threads"
-+	depends on !(BR2_INSTALL_LIBSTDCPP && BR2_USE_WCHAR && BR2_TOOLCHAIN_HAS_THREADS)
-diff --git a/package/log4cplus/log4cplus.mk b/package/log4cplus/log4cplus.mk
-new file mode 100644
-index 0000000..292fa66
---- /dev/null
-+++ b/package/log4cplus/log4cplus.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# log4cplus
-+#
-+################################################################################
-+
-+LOG4CPLUS_VERSION = 1.1.2
-+LOG4CPLUS_SOURCE = log4cplus-$(LOG4CPLUS_VERSION).tar.xz
-+LOG4CPLUS_SITE = http://downloads.sourceforge.net/project/log4cplus/log4cplus-stable/$(LOG4CPLUS_VERSION)
-+LOG4CPLUS_LICENSE = Apache-2.0
-+LOG4CPLUS_LICENSE_FILES = LICENSE
-+LOG4CPLUS_INSTALL_STAGING = YES
-+
-+$(eval $(autotools-package))
+Using kernel headers newer than 3.6.x, uclibc fails to build:
+
+  In file included from output/host/usr/avr32-buildroot-linux-uclibc/sysroot/usr/include/linux/rtnetlink.h:6,
+                 from libc/inet/netlinkaccess.h:34,
+                 from libc/inet/if_index.c:36:
+  output/host/usr/avr32-buildroot-linux-uclibc/sysroot/usr/include/linux/if_link.h:314: error: expected specifier-qualifier-list before '__be16'
+  make[1]: *** [libc/inet/if_index.os] Error 1
+  make[1]: Leaving directory `output/build/uclibc-0.9.31.1'
+  make: *** [output/build/uclibc-0.9.31.1/.stamp_built] Error 2
+
+Disable kernel headers newer than 3.6.x on avr32, and update atngw100 and
+atstk100x defconfigs to use kernel headers that avoid the uclibc build
+problem.
+
+Signed-off-by: Simon Dawson <spdawson@gmail.com>
+---
+ configs/atngw100_defconfig           | 5 ++---
+ configs/atstk100x_defconfig          | 4 ++--
+ package/linux-headers/Config.in.host | 9 ++++++---
+ 3 files changed, 10 insertions(+), 8 deletions(-)
+
+diff --git a/configs/atngw100_defconfig b/configs/atngw100_defconfig
+index 5490241..bcb0073 100644
+--- a/configs/atngw100_defconfig
++++ b/configs/atngw100_defconfig
+@@ -1,10 +1,9 @@
+ # Architecture
+ BR2_avr32=y
+ 
+-# Lock down kernel headers version, to match the kernel version used
+-# below.
++# Lock down kernel headers to a version for which uclibc will build.
+ BR2_KERNEL_HEADERS_VERSION=y
+-BR2_DEFAULT_KERNEL_VERSION="3.9.11"
++BR2_DEFAULT_KERNEL_VERSION="3.4.68"
+ 
+ # Filesystems
+ BR2_TARGET_ROOTFS_JFFS2=y
+diff --git a/configs/atstk100x_defconfig b/configs/atstk100x_defconfig
+index f73497c..b35c9f4 100644
+--- a/configs/atstk100x_defconfig
++++ b/configs/atstk100x_defconfig
+@@ -1,9 +1,9 @@
+ # Architecture
+ BR2_avr32=y
+ 
+-# Lock to same version as kernel
++# Lock down kernel headers to a version for which uclibc will build.
+ BR2_KERNEL_HEADERS_VERSION=y
+-BR2_DEFAULT_KERNEL_VERSION="3.9.11"
++BR2_DEFAULT_KERNEL_VERSION="3.4.68"
+ 
+ # U-Boot
+ BR2_TARGET_UBOOT=y
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 2bd8b02..e9690de 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -44,24 +44,27 @@ choice
+ 
+ 	config BR2_KERNEL_HEADERS_3_7
+ 		bool "Linux 3.7.x kernel headers"
+-		depends on BR2_DEPRECATED && !BR2_arc
++		depends on BR2_DEPRECATED && !BR2_arc && !BR2_avr32
+ 
+ 	config BR2_KERNEL_HEADERS_3_8
+ 		bool "Linux 3.8.x kernel headers"
+-		depends on BR2_DEPRECATED && !BR2_arc
++		depends on BR2_DEPRECATED && !BR2_arc && !BR2_avr32
+ 
+ 	config BR2_KERNEL_HEADERS_3_9
+ 		bool "Linux 3.9.x kernel headers"
+-		depends on BR2_DEPRECATED
++		depends on BR2_DEPRECATED && !BR2_avr32
+ 
+ 	config BR2_KERNEL_HEADERS_3_10
+ 		bool "Linux 3.10.x kernel headers"
++		depends on !BR2_avr32
+ 
+ 	config BR2_KERNEL_HEADERS_3_11
+ 		bool "Linux 3.11.x kernel headers"
++		depends on !BR2_avr32
+ 
+ 	config BR2_KERNEL_HEADERS_3_12
+ 		bool "Linux 3.12.x kernel headers"
++		depends on !BR2_avr32
+ 
+ 	config BR2_KERNEL_HEADERS_VERSION
+ 		bool "Manually specified Linux version"
 -- 
-1.8.1.4
+1.8.3.2
