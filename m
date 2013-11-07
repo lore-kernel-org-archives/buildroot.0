@@ -1,70 +1,33 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Thu, 7 Nov 2013 11:54:47 +0100
-Subject: [Buildroot] [PATCH 4 of 4 v2] manual: add some info on the
- POST_RSYNC hook
-In-Reply-To: <5373a0083b692806e5b6.1383820884@argentina>
-References: <patchbomb.1383820880@argentina>
- <5373a0083b692806e5b6.1383820884@argentina>
-Message-ID: <CAHXCMMJKhah7joiqbNeKCmTFSujvhXxS3NRAfUX2=+px+OK2gg@mail.gmail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 07 Nov 2013 12:21:19 +0100
+Subject: [Buildroot] [PATCH v5] uclibc: reinstate support for version
+	0.9.31
+In-Reply-To: <1383816289-4899-1-git-send-email-spdawson@gmail.com>
+ (spdawson@gmail.com's message of "Thu, 7 Nov 2013 09:24:49 +0000")
+References: <1383816289-4899-1-git-send-email-spdawson@gmail.com>
+Message-ID: <87li10ihjk.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2013/11/7 Thomas De Schampheleire <patrickdepinguin@gmail.com>
+>>>>> "spdawson" == spdawson  <spdawson@gmail.com> writes:
 
-> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
->
-Acked-by: "Samuel Martin" <s.martin49@gmail.com>
+ > From: Simon Dawson <spdawson@gmail.com>
+ > This patch reinstates support for uClibc version 0.9.31, which was removed
+ > from Buildroot in commit 8abb5b33c1aae035cf48b1c81104b433ff884c64
 
+ > Signed-off-by: Simon Dawson <spdawson@gmail.com>
+ > ---
+ >  v5: Various improvements suggested by Peter Korsgaard, including a reduction
+ >      of the 0.9.31 uClibc patch set
+ >  v4: As suggested by Thomas Petazzoni, make 0.9.31 avr32-only, and disable
+ >      other uClibc versions for avr32
+ >  v3: Rebase on top of current master
+ >  v2: Resend original RFC patch, no changes
 
->
-> ---
-> v2: rsync is also used for site method 'local' (comment ThomasP on IRC)
->
->  docs/manual/adding-packages-hooks.txt |  20 ++++++++++++++++++++
->  1 files changed, 20 insertions(+), 0 deletions(-)
->
-> diff --git a/docs/manual/adding-packages-hooks.txt
-> b/docs/manual/adding-packages-hooks.txt
-> --- a/docs/manual/adding-packages-hooks.txt
-> +++ b/docs/manual/adding-packages-hooks.txt
-> @@ -39,3 +39,23 @@ endef
->
->  LIBFOO_POST_PATCH_HOOKS += LIBFOO_POST_PATCH_FIXUP
->  ----------------------
-> +
-> +Using the +POST_RSYNC+ hook
-> +^^^^^^^^^^^^^^^^^^^^^^^^^^^
-> +The +POST_RSYNC+ hook is run only for packages that use a local source,
-> +either through the +local+ site method or the +OVERRIDE_SRCDIR+
-> +mechanism. In this case, package sources are copied using +rsync+ from
-> +the local location into the buildroot build directory. The +rsync+
-> +command does not copy all files from the source directory, though.
-> +Files belonging to a version control system, like the directories
-> ++.git+, +.hg+, etc. are not copied. For most packages this is
-> +sufficient, but a given package can perform additional actions using
-> +the +POST_RSYNC+ hook.
-> +
-> +In principle, the hook can contain any command you want. One specific
-> +use case, though, is the intentional copying of the version control
-> +directory using +rsync+. The +rsync+ command you use in the hook can,
-> among
-> +others, use the following variables:
-> +
-> +* +$(SRCDIR)+: the path to the overridden source directory
-> +* +$(@D)+: the path to the build directory
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
->
-
-
+Committed, thanks.
 
 -- 
-Samuel
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20131107/ed00a074/attachment.html>
+Bye, Peter Korsgaard
