@@ -1,30 +1,28 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Thu, 07 Nov 2013 11:29:09 +0100
-Subject: [Buildroot] [PATCH] trivial: pcmanfm: fix typo in config help
-Message-ID: <58e3db422853edd9b6fa.1383820149@argentina>
+Date: Thu, 07 Nov 2013 11:41:20 +0100
+Subject: [Buildroot] [PATCH 0 of 4 v2] Add POST_RSYNC hook
+Message-ID: <patchbomb.1383820880@argentina>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+This patch series adopts the POST_RSYNC hook patch by Tzu-Jung Lee and
+changes the default rsync exclusion list, as discussed on the Buildroot
+developer days.
+The other rsync-related patch submitted by Tzu-Jung Lee (custom rsync
+command) should not be needed anymore as its use case is covered by
+the second patch in this series.
+
 Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
 ---
- package/pcmanfm/Config.in |  4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/pcmanfm/Config.in b/package/pcmanfm/Config.in
---- a/package/pcmanfm/Config.in
-+++ b/package/pcmanfm/Config.in
-@@ -8,8 +8,8 @@ config BR2_PACKAGE_PCMANFM
- 	select BR2_PACKAGE_XLIB_LIBX11
- 	depends on BR2_PACKAGE_LIBGTK2
- 	help
--	  An extremly fast and lightweight file manager which features
--	  tabbed browsing and user-friendly interface.
-+	  An extremely fast and lightweight file manager which features
-+	  tabbed browsing and a user-friendly interface.
- 
- 	  http://internap.dl.sourceforge.net/sourceforge/pcmanfm
- 
+ Makefile                                  |  14 ++++++++------
+ docs/manual/adding-packages-autotools.txt |   3 +--
+ docs/manual/adding-packages-cmake.txt     |   3 +--
+ docs/manual/adding-packages-generic.txt   |  39 +--------------------------------------
+ docs/manual/adding-packages-hooks.txt     |  61 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ docs/manual/adding-packages.txt           |   2 ++
+ package/pkg-generic.mk                    |   4 +++-
+ 7 files changed, 77 insertions(+), 49 deletions(-)
