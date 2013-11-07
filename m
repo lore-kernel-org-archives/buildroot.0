@@ -1,27 +1,74 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Thu, 7 Nov 2013 20:35:50 +0100
-Subject: [Buildroot] [PATCH] Config.in.legacy: select BR2_LEGACY for
- module-init-tools legacy option
-In-Reply-To: <1383851388-28586-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1383851388-28586-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <CAAXf6LWoB5VznwZhChKQJHkr93A+582bJWG6gmuKw+xDPexb0w@mail.gmail.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Thu,  7 Nov 2013 22:27:28 +0100
+Subject: [Buildroot] [PATCH] log4cplus: new package
+Message-ID: <1383859648-13759-1-git-send-email-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Nov 7, 2013 at 8:09 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Commit 94c72087f3 ("module-init-tools: remove package") removed the
-> module-init-tools package and therefore added the corresponding config
-> option in Config.in.legacy. However, the commit forgot to add the
-> "select BR2_LEGACY" that ensures the build cannot proceed until the
-> user has acknowledged the change (i.e kmod replacing
-> module-init-tools).
->
-> This commit adds this missing "select BR2_LEGACY".
->
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+---
+ package/Config.in              |  1 +
+ package/log4cplus/Config.in    | 15 +++++++++++++++
+ package/log4cplus/log4cplus.mk | 14 ++++++++++++++
+ 3 files changed, 30 insertions(+)
+ create mode 100644 package/log4cplus/Config.in
+ create mode 100644 package/log4cplus/log4cplus.mk
 
-Acked-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+diff --git a/package/Config.in b/package/Config.in
+index c0a3f20..7c0eb94 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -706,6 +706,7 @@ source "package/libtpl/Config.in"
+ source "package/libunwind/Config.in"
+ source "package/liburcu/Config.in"
+ source "package/linux-pam/Config.in"
++source "package/log4cplus/Config.in"
+ source "package/log4cxx/Config.in"
+ source "package/lttng-libust/Config.in"
+ source "package/mpc/Config.in"
+diff --git a/package/log4cplus/Config.in b/package/log4cplus/Config.in
+new file mode 100644
+index 0000000..8a112a4
+--- /dev/null
++++ b/package/log4cplus/Config.in
+@@ -0,0 +1,15 @@
++config BR2_PACKAGE_LOG4CPLUS
++	bool "log4cplus"
++	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_USE_WCHAR
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	help
++	  log4cplus is a simple to use C++ logging API providing
++	  thread-safe, flexible, and arbitrarily granular control
++	  over log management and configuration. It is modelled
++	  after the Java log4j API.
++
++	  http://sourceforge.net/projects/log4cplus
++
++comment "log4cplus needs a toolchain w/ C++, wchar, threads"
++	depends on !(BR2_INSTALL_LIBSTDCPP && BR2_USE_WCHAR && BR2_TOOLCHAIN_HAS_THREADS)
+diff --git a/package/log4cplus/log4cplus.mk b/package/log4cplus/log4cplus.mk
+new file mode 100644
+index 0000000..292fa66
+--- /dev/null
++++ b/package/log4cplus/log4cplus.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# log4cplus
++#
++################################################################################
++
++LOG4CPLUS_VERSION = 1.1.2
++LOG4CPLUS_SOURCE = log4cplus-$(LOG4CPLUS_VERSION).tar.xz
++LOG4CPLUS_SITE = http://downloads.sourceforge.net/project/log4cplus/log4cplus-stable/$(LOG4CPLUS_VERSION)
++LOG4CPLUS_LICENSE = Apache-2.0
++LOG4CPLUS_LICENSE_FILES = LICENSE
++LOG4CPLUS_INSTALL_STAGING = YES
++
++$(eval $(autotools-package))
+-- 
+1.8.1.4
