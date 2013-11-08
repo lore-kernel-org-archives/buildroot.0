@@ -1,30 +1,78 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 08 Nov 2013 13:26:50 +0100
-Subject: [Buildroot] running gtk programs fail
-In-Reply-To: <527CB831.7060806@rosho.de> (Frank Bergmann's message of "Fri, 08
- Nov 2013 11:08:49 +0100")
-References: <52330AFB.1050204@rosho.de> <527CB831.7060806@rosho.de>
-Message-ID: <877gcjf59x.fsf@dell.be.48ers.dk>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Fri,  8 Nov 2013 09:26:52 -0300
+Subject: [Buildroot] [PATCH] dhcpcd: bump to version 6.1.0
+Message-ID: <1383913612-16418-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Frank" == Frank Bergmann <bergmann@rosho.de> writes:
+Now has proper support for nommu and non-IPv6.
 
-Hi,
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/dhcpcd/Config.in |  8 +++-----
+ package/dhcpcd/dhcpcd.mk | 17 ++++++++++++-----
+ 2 files changed, 15 insertions(+), 10 deletions(-)
 
- > I did a step down and wrote a small glib program (in attachment). But
- > it does not work in buildroot-2013.08.1 ! The glib main loop seems to
- > get no events from timer nor from input source. On my host system the
- > program works with no issues.
-
-If you're using uClibc, then it might be because of the eventfd bug. You
-could try adding
-uclibc-0013-eventfd-Implement-eventfd2-and-fix-eventfd.patch and rebuild:
-
-http://git.buildroot.net/buildroot/commit/?id=055f1c02d35068d0b0
-
+diff --git a/package/dhcpcd/Config.in b/package/dhcpcd/Config.in
+index ddbc6f4..ac20615 100644
+--- a/package/dhcpcd/Config.in
++++ b/package/dhcpcd/Config.in
+@@ -1,11 +1,9 @@
+ config BR2_PACKAGE_DHCPCD
+-	depends on BR2_INET_IPV6
+-	depends on BR2_USE_MMU # fork()
+ 	bool "dhcpcd"
++	# No support for AI_ADDRCONFIG
++	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2 && \
++		!BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R1
+ 	help
+ 	  An RFC2131 compliant DHCP client
+ 
+ 	  http://roy.marples.name/downloads/dhcpcd
+-
+-comment "dhcpcd needs a toolchain w/ IPv6"
+-	depends on !BR2_INET_IPV6
+diff --git a/package/dhcpcd/dhcpcd.mk b/package/dhcpcd/dhcpcd.mk
+index 13810f3..8037706 100644
+--- a/package/dhcpcd/dhcpcd.mk
++++ b/package/dhcpcd/dhcpcd.mk
+@@ -4,22 +4,29 @@
+ #
+ ################################################################################
+ 
+-DHCPCD_VERSION = 5.6.7
++DHCPCD_VERSION = 6.1.0
+ DHCPCD_SOURCE = dhcpcd-$(DHCPCD_VERSION).tar.bz2
+-DHCPCD_SITE = http://roy.marples.name/downloads/dhcpcd/
++DHCPCD_SITE = http://roy.marples.name/downloads/dhcpcd
+ DHCPCD_LICENSE = BSD-2c
+ 
++ifeq ($(BR2_INET_IPV6),)
++	DHCPCD_CONFIG_OPT += --disable-ipv6
++endif
++
++ifeq ($(BR2_USE_MMU),)
++	DHCPCD_CONFIG_OPT += --disable-fork
++endif
++
+ define DHCPCD_CONFIGURE_CMDS
+ 	(cd $(@D); \
+-	./configure \
++	$(TARGET_CONFIGURE_OPTS) ./configure \
+ 		--target=$(BR2_GCC_TARGET_ARCH) \
+ 		--os=linux \
+ 		$(DHCPCD_CONFIG_OPT) )
+ endef
+ 
+ define DHCPCD_BUILD_CMDS
+-	$(MAKE) \
+-		$(TARGET_CONFIGURE_OPTS) \
++	$(TARGET_MAKE_ENV) $(MAKE) \
+ 		-C $(@D) all
+ endef
+ 
 -- 
-Bye, Peter Korsgaard
+1.8.1.5
