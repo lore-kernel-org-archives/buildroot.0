@@ -1,39 +1,39 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 08 Nov 2013 09:37:55 +0100
-Subject: [Buildroot] [RFC] core: Download all package sources
-In-Reply-To: <87txfphzyb.fsf@dell.be.48ers.dk> (Peter Korsgaard's message of
- "Thu, 07 Nov 2013 00:29:00 +0100")
-References: <1383587286-18094-1-git-send-email-clshotwe@rockwellcollins.com>
- <87eh6tkxuk.fsf@dell.be.48ers.dk> <20131106231048.67cf2d52@skate>
- <87k3gljh5d.fsf@dell.be.48ers.dk> <20131106225332.GB3482@free.fr>
- <8738n9jfim.fsf@dell.be.48ers.dk>
- <OFAD27391D.CFE95723-ON86257C1B.007F5691-86257C1B.007F8A75@rockwellcollins.com>
- <87txfphzyb.fsf@dell.be.48ers.dk>
-Message-ID: <87bo1vffvg.fsf@dell.be.48ers.dk>
+From: Simon Dawson <spdawson@gmail.com>
+Date: Fri, 8 Nov 2013 09:26:41 +0000
+Subject: [Buildroot] [PATCH] avr32: disable kernel headers
+In-Reply-To: <20131108082243.1a889fee@skate>
+References: <1383859843-3549-1-git-send-email-spdawson@gmail.com>
+ <20131108082243.1a889fee@skate>
+Message-ID: <CAHt8ZCM+eWqdsfoXQ1qe9bsyph58NyjN06fRqdOfKPn33nsvxA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <jacmet@uclibc.org> writes:
+Hi Thomas.
 
-Hi,
+On 8 November 2013 07:22, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> How much effort is it to instead fix uClibc to not break with more
+> recent kernel headers? It seems a little bit annoying to me that we
+> need to carry this !BR2_avr32 dependency for all new kernel headers
+> version. If the fix is one or two simple patches for uClibc 0.9.31, it
+> might be worthwhile.
 
- > I personally dislike the patch as it's a bit of a hack, but if there's
- > really a need for something like this then perhaps - But wouldn't it
- > make more sense if we instead tried harder to ensure all the package
- > versions we support were available on our mirror?
+I did actually submit a patch to fix this some time ago; see
 
-FYI, I've changed sources.buildroot.net to simply do:
+  http://patchwork.ozlabs.org/patch/213384/
 
-make -k \
- $(find package -name \*.mk|sed 's|.*/\([^/]*\)\.mk|\1-source host-\1-source|'
+However, the patch was not accepted, and the discussion degenerated
+into a debate about gcc versions. I can revive that patch if you think
+it appropriate...?
 
-E.G. foo-source + host-foo-source for all .mk files under package. It
-also doesn't cover everything (E.G. packages with version selection),
-but it gets the host packages and doesn't need any changes to buildroot
-itself.
+> And if it's not the case, I believe I'd prefer the dependency to be on
+> the uClibc version (i.e 'depends on !BR2_PACKAGE_UCLIBC_0_9_31')
+> instead of on the architecture, because the problem seem more related
+> to the uClibc version rather than the architecture.
 
--- 
-Bye, Peter Korsgaard
+Yes, agreed.
+
+Simon.
