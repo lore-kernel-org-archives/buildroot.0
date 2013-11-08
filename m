@@ -1,42 +1,54 @@
-From: Frank Bergmann <bergmann@rosho.de>
-Date: Fri, 08 Nov 2013 15:09:51 +0100
-Subject: [Buildroot] running gtk programs fail
-In-Reply-To: <20131108111148.640ce383@skate>
-References: <52330AFB.1050204@rosho.de>	<527CB831.7060806@rosho.de>
- <20131108111148.640ce383@skate>
-Message-ID: <527CF0AF.5070306@rosho.de>
+From: arnaud aujon <arnaud.aujon@gmail.com>
+Date: Fri, 8 Nov 2013 15:29:27 +0100
+Subject: [Buildroot] Tool to check packages updates
+In-Reply-To: <CACjG4BJ0Qzv=GevE3rNHvc3n-YxOTg7FpWHmz1sAz4Q6+Q3wyg@mail.gmail.com>
+References: <CACjG4BJq5TXvpMAoU7w3JgTVrOGHpeKng88HU03Rf_=XunPKAQ@mail.gmail.com>
+ <CAAXf6LW1c32E_BFwbD6JKMCRKWtCw4r7pc9xuj3_DPsGyjL=SA@mail.gmail.com>
+ <CACjG4B+7riHKmXG0Oo3cZxrWFygTBojSTHRktuYvz0eeMJ0ttQ@mail.gmail.com>
+ <526809E4.30203@mind.be>
+ <CACjG4BJtk-JxzUGmJn9urrMGMjkcwtmMxRys_FGrY761H1zQzA@mail.gmail.com>
+ <CAAXf6LV9pBCwsqrtm6LJxiO1oaYX4afBv0tHPgOqVReV058GTA@mail.gmail.com>
+ <CACjG4BJ0Qzv=GevE3rNHvc3n-YxOTg7FpWHmz1sAz4Q6+Q3wyg@mail.gmail.com>
+Message-ID: <CACjG4BKXOp8oD1_j2ERCzn=ZUGj_G--Putxq0GrA4eHWG0VFwQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am 08.11.2013 11:11, schrieb Thomas Petazzoni:
-> Dear Frank Bergmann,
->
-> On Fri, 08 Nov 2013 11:08:49 +0100, Frank Bergmann wrote:
->
->>> Did I miss something or is libgtk broken ?
->>
->> I did a step down and wrote a small glib program (in attachment). But
->> it does not work in buildroot-2013.08.1 ! The glib main loop seems to
->> get no events from timer nor from input source. On my host system the
->> program works with no issues.
->>
->> Can anybody verify this behaviour or have a working example for me ?
->>
->> In attachment I send the source of the test program and my buildroot
->> config.
->
-> Are you testing against uClibc? If so, can you test against (e)glibc?
+Hi,
 
-I tested against (out-of-the-box selected) uClibc.
+Some news about the update checking script.
+The results are now : 839 packages (this is not the real package number
+because I don't check some of them), 294 are up-to-date, 323 can be bumped
+and 222 unknown.
+You can find the script (check-updates.py) and the result (out.html) here :
+http://intelibre.fr/buildroot/
 
-So as you suggested I tested against eglibc and it seems to work. I also 
-did a test against buildroot git-repository. The git version seems also 
-to work even with uClibc. It has the same version of uClibc but more 
-patches than 2013.08.1. So I guess one (or more) of these patches make 
-glib2 happy.
+What's next :
+  - check git packages
+  - speed up the script
+  - improve detection (there is still some false detection)
 
-Thanks,
-Frank.
+Cheers,
+
+Arnaud Aujon
+
+
+2013/10/23 arnaud aujon <arnaud.aujon@gmail.com>
+
+> 2013/10/23 Thomas De Schampheleire <patrickdepinguin@gmail.com>
+>
+>> make knows exactly how to evaluate such variables, so instead of
+>> trying to do this from a script, isn't it possible to use the output
+>> of 'make printvars' ? This prints _all_ the relevant variables but you
+>> could filter on _SOURCE or _SITE to get what you need and base your
+>> script on that.
+>>
+>>
+> Great ! I looked for something like that but I probably missed it, thanks
+> for the tip.
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20131108/4208bdf6/attachment-0001.html>
