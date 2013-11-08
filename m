@@ -1,95 +1,68 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 08 Nov 2013 01:38:36 +0100
-Subject: [Buildroot] [PATCH] log4cplus: new package
-In-Reply-To: <1383859648-13759-1-git-send-email-ps.report@gmx.net>
-References: <1383859648-13759-1-git-send-email-ps.report@gmx.net>
-Message-ID: <527C328C.7010006@mind.be>
+From: Danomi Manchego <danomimanchego123@gmail.com>
+Date: Thu,  7 Nov 2013 22:10:39 -0500
+Subject: [Buildroot] [PATCH 1/1] libqrencode: select libpng only when tools
+	are selected
+Message-ID: <1383880239-2002-1-git-send-email-danomimanchego123@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 07/11/13 22:27, Peter Seiderer wrote:
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+As stated on the libqrencode web site, PNG (or SDL) is only
+needed for the test and utility programs; the library itself
+has no dependencies.
 
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+While we are here, remove spaces in the ifeq clause, to match
+the examples in the buildroot manual.
 
-> ---
->   package/Config.in              |  1 +
->   package/log4cplus/Config.in    | 15 +++++++++++++++
->   package/log4cplus/log4cplus.mk | 14 ++++++++++++++
->   3 files changed, 30 insertions(+)
->   create mode 100644 package/log4cplus/Config.in
->   create mode 100644 package/log4cplus/log4cplus.mk
->
-> diff --git a/package/Config.in b/package/Config.in
-> index c0a3f20..7c0eb94 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -706,6 +706,7 @@ source "package/libtpl/Config.in"
->   source "package/libunwind/Config.in"
->   source "package/liburcu/Config.in"
->   source "package/linux-pam/Config.in"
-> +source "package/log4cplus/Config.in"
->   source "package/log4cxx/Config.in"
+Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
+---
+ package/libqrencode/Config.in      |    2 +-
+ package/libqrencode/libqrencode.mk |    6 +++---
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-  Does log4cplus replace log4cxx? The API looks a bit similar at first sight.
-
-
-  Regards,
-  Arnout
-
->   source "package/lttng-libust/Config.in"
->   source "package/mpc/Config.in"
-> diff --git a/package/log4cplus/Config.in b/package/log4cplus/Config.in
-> new file mode 100644
-> index 0000000..8a112a4
-> --- /dev/null
-> +++ b/package/log4cplus/Config.in
-> @@ -0,0 +1,15 @@
-> +config BR2_PACKAGE_LOG4CPLUS
-> +	bool "log4cplus"
-> +	depends on BR2_INSTALL_LIBSTDCPP
-> +	depends on BR2_USE_WCHAR
-> +	depends on BR2_TOOLCHAIN_HAS_THREADS
-> +	help
-> +	  log4cplus is a simple to use C++ logging API providing
-> +	  thread-safe, flexible, and arbitrarily granular control
-> +	  over log management and configuration. It is modelled
-> +	  after the Java log4j API.
-> +
-> +	  http://sourceforge.net/projects/log4cplus
-> +
-> +comment "log4cplus needs a toolchain w/ C++, wchar, threads"
-> +	depends on !(BR2_INSTALL_LIBSTDCPP && BR2_USE_WCHAR && BR2_TOOLCHAIN_HAS_THREADS)
-> diff --git a/package/log4cplus/log4cplus.mk b/package/log4cplus/log4cplus.mk
-> new file mode 100644
-> index 0000000..292fa66
-> --- /dev/null
-> +++ b/package/log4cplus/log4cplus.mk
-> @@ -0,0 +1,14 @@
-> +################################################################################
-> +#
-> +# log4cplus
-> +#
-> +################################################################################
-> +
-> +LOG4CPLUS_VERSION = 1.1.2
-> +LOG4CPLUS_SOURCE = log4cplus-$(LOG4CPLUS_VERSION).tar.xz
-> +LOG4CPLUS_SITE = http://downloads.sourceforge.net/project/log4cplus/log4cplus-stable/$(LOG4CPLUS_VERSION)
-> +LOG4CPLUS_LICENSE = Apache-2.0
-> +LOG4CPLUS_LICENSE_FILES = LICENSE
-> +LOG4CPLUS_INSTALL_STAGING = YES
-> +
-> +$(eval $(autotools-package))
->
-
-
+diff --git a/package/libqrencode/Config.in b/package/libqrencode/Config.in
+index e8fc1d4..b866626 100644
+--- a/package/libqrencode/Config.in
++++ b/package/libqrencode/Config.in
+@@ -1,6 +1,5 @@
+ config BR2_PACKAGE_LIBQRENCODE
+ 	bool "libqrencode"
+-	select BR2_PACKAGE_LIBPNG
+ 	help
+ 	  libqrencode is a C library for encoding data in a QR Code
+ 	  symbol, a kind of 2D symbology that can be scanned by handy
+@@ -14,6 +13,7 @@ if BR2_PACKAGE_LIBQRENCODE
+ 
+ config BR2_PACKAGE_LIBQRENCODE_TOOLS
+ 	bool "libqrencode tools"
++	select BR2_PACKAGE_LIBPNG
+ 	help
+ 	  Build command-line tools
+ 
+diff --git a/package/libqrencode/libqrencode.mk b/package/libqrencode/libqrencode.mk
+index e1f2362..d445763 100644
+--- a/package/libqrencode/libqrencode.mk
++++ b/package/libqrencode/libqrencode.mk
+@@ -7,15 +7,15 @@
+ LIBQRENCODE_VERSION = 3.4.2
+ LIBQRENCODE_SOURCE = qrencode-$(LIBQRENCODE_VERSION).tar.gz
+ LIBQRENCODE_SITE = http://fukuchi.org/works/qrencode
+-LIBQRENCODE_DEPENDENCIES = libpng
+ LIBQRENCODE_INSTALL_STAGING = YES
+ LIBQRENCODE_LICENSE = LGPLv2.1+
+ LIBQRENCODE_LICENSE_FILES = COPYING
+ 
+ ifeq ($(BR2_PACKAGE_LIBQRENCODE_TOOLS),y)
+-        LIBQRENCODE_CONF_OPT += --with-tools=yes
++LIBQRENCODE_CONF_OPT += --with-tools=yes
++LIBQRENCODE_DEPENDENCIES += libpng
+ else
+-        LIBQRENCODE_CONF_OPT += --with-tools=no
++LIBQRENCODE_CONF_OPT += --with-tools=no
+ endif
+ 
+ $(eval $(autotools-package))
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+1.7.9.5
