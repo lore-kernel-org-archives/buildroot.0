@@ -1,75 +1,52 @@
-From: spdawson at gmail.com <spdawson@gmail.com>
-Date: Fri,  8 Nov 2013 09:42:03 +0000
-Subject: [Buildroot] [PATCH] avr32: fix uclibc build using recent kernel
-	headers
-Message-ID: <1383903723-7705-1-git-send-email-spdawson@gmail.com>
+From: Peter Katzmann <peter.katzmann@edag.de>
+Date: Fri, 08 Nov 2013 11:04:10 +0100
+Subject: [Buildroot] Problems to build udev on 2013.08.1
+In-Reply-To: <20131108093330.5d32ce2c@skate>
+References: <527C9EF1.1020905@edag.de> <20131108093330.5d32ce2c@skate>
+Message-ID: <527CB71A.4050303@edag.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Simon Dawson <spdawson@gmail.com>
+Hello Thomas,
+thank you for your fast answer.
+I started immediately a  testbuild with the advised  patch and it is now 
+working as expected.
 
-Using kernel headers newer than 3.6.x, uclibc 0.9.31.1 fails to build:
+Thanks again
 
-  In file included from output/host/usr/avr32-buildroot-linux-uclibc/sysroot/usr/include/linux/rtnetlink.h:6,
-                 from libc/inet/netlinkaccess.h:34,
-                 from libc/inet/if_index.c:36:
-  output/host/usr/avr32-buildroot-linux-uclibc/sysroot/usr/include/linux/if_link.h:314: error: expected specifier-qualifier-list before '__be16'
-  make[1]: *** [libc/inet/if_index.os] Error 1
-  make[1]: Leaving directory `output/build/uclibc-0.9.31.1'
-  make: *** [output/build/uclibc-0.9.31.1/.stamp_built] Error 2
+peter
 
-This patch adjusts the system type definitions in the netlinkaccess.h
-header, updating the types to match those used in uClibc 0.9.33.2.
-
-Signed-off-by: Simon Dawson <spdawson@gmail.com>
----
- ...ibc-0012-netlinkaccess-header-types.patch.avr32 | 35 ++++++++++++++++++++++
- 1 file changed, 35 insertions(+)
- create mode 100644 package/uclibc/0.9.31.1/uClibc-0012-netlinkaccess-header-types.patch.avr32
-
-diff --git a/package/uclibc/0.9.31.1/uClibc-0012-netlinkaccess-header-types.patch.avr32 b/package/uclibc/0.9.31.1/uClibc-0012-netlinkaccess-header-types.patch.avr32
-new file mode 100644
-index 0000000..bc981a4
---- /dev/null
-+++ b/package/uclibc/0.9.31.1/uClibc-0012-netlinkaccess-header-types.patch.avr32
-@@ -0,0 +1,35 @@
-+Using kernel headers newer than 3.6.x, uclibc 0.9.31.1 fails to build:
-+
-+  In file included from output/host/usr/avr32-buildroot-linux-uclibc/sysroot/usr/include/linux/rtnetlink.h:6,
-+                 from libc/inet/netlinkaccess.h:34,
-+                 from libc/inet/if_index.c:36:
-+  output/host/usr/avr32-buildroot-linux-uclibc/sysroot/usr/include/linux/if_link.h:314: error: expected specifier-qualifier-list before '__be16'
-+  make[1]: *** [libc/inet/if_index.os] Error 1
-+  make[1]: Leaving directory `output/build/uclibc-0.9.31.1'
-+  make: *** [output/build/uclibc-0.9.31.1/.stamp_built] Error 2
-+
-+This patch adjusts the system type definitions in the netlinkaccess.h
-+header, updating the types to match those used in uClibc 0.9.33.2.
-+
-+Signed-off-by: Simon Dawson <spdawson@gmail.com>
-+
-+diff -Nurp a/libc/inet/netlinkaccess.h b/libc/inet/netlinkaccess.h
-+--- a/libc/inet/netlinkaccess.h	2011-06-08 19:58:40.000000000 +0100
-++++ b/libc/inet/netlinkaccess.h	2012-12-20 12:16:34.251965672 +0000
-+@@ -22,15 +22,8 @@
-+ #include <features.h>
-+ #include <stdint.h>
-+ #include <unistd.h>
-+-#include <sys/types.h>
-+-
-+ #if defined __ASSUME_NETLINK_SUPPORT || defined __UCLIBC_USE_NETLINK__
-+-#define _LINUX_TYPES_H
-+-typedef uint8_t __u8;
-+-typedef uint16_t __u16;
-+-typedef uint32_t __u32;
-+-typedef uint64_t __u64;
-+-typedef int32_t __s32;
-++#include <asm/types.h>
-+ #include <linux/rtnetlink.h>
-+ #include <linux/netlink.h>
-+ 
--- 
-1.8.3.2
+Thomas Petazzoni wrote:
+> Dear Peter Katzmann,
+>
+> On Fri, 08 Nov 2013 09:21:05 +0100, Peter Katzmann wrote:
+>
+>> i have two buildroot projects. One requires udev.
+>> I get always the same error (at the end).
+>> So i took my second project, enabled udev there also and the same
+>> error. One project is with linaroo and the other one with eglibc/gcc.
+>> I also tried the build on different Platforms (Opensuse 12.3/13.1
+>> Ubuntu 10.04/12.04/13.10), always the same problem.
+>>
+>> It seems that somewhere a wrong link or duplicating of the path leads
+>> to the error.
+>>
+>> Attached is the config of the eglibc project.
+>>
+>> peter
+>>
+>>     CCLD   collect
+>> libtool: link: warning: library
+>> `/usr2/new/Source-guru/buildroot/project_build_arm/usr/arm-buildroot-linux-gnueabi/sysroot/usr/lib/libblkid.la'
+>> was moved.
+> Building from a path that starts with /usr is not supported. This is
+> something we have to fix, but it hasn't been done so far.
+>
+> See https://bugs.busybox.net/show_bug.cgi?id=6470.
+>
+> Best regards,
+>
+> Thomas
