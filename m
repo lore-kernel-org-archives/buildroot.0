@@ -1,48 +1,46 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 08 Nov 2013 01:25:57 +0100
-Subject: [Buildroot] [PATCH 3 of 3] infra: clean up 'Patching' message
-In-Reply-To: <0f8364943e3955dbed38.1383841613@argentina>
-References: <patchbomb.1383841610@argentina>
- <0f8364943e3955dbed38.1383841613@argentina>
-Message-ID: <527C2F95.5080305@mind.be>
+Date: Fri, 08 Nov 2013 01:27:54 +0100
+Subject: [Buildroot] [PATCH] Config.in.legacy: select BR2_LEGACY for
+ module-init-tools legacy option
+In-Reply-To: <1383851388-28586-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1383851388-28586-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <527C300A.4050809@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 07/11/13 17:26, Thomas De Schampheleire wrote:
-> The 'Patching' message in the generic infrastructure prints not only the
-> package name, but also a reference to the assumed package directory, based
-> on FOO_DIR_PREFIX/FOO_RAWNAME. This doesn't really add value, as the name
-> of the package is already apparent from the message and its location should
-> be obvious. Hence, this patch simply reduces the print to "Patching".
+On 07/11/13 20:09, Thomas Petazzoni wrote:
+> Commit 94c72087f3 ("module-init-tools: remove package") removed the
+> module-init-tools package and therefore added the corresponding config
+> option in Config.in.legacy. However, the commit forgot to add the
+> "select BR2_LEGACY" that ensures the build cannot proceed until the
+> user has acknowledged the change (i.e kmod replacing
+> module-init-tools).
 >
-> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+> This commit adds this missing "select BR2_LEGACY".
+>
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
 Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
->
 > ---
->   package/pkg-generic.mk |  2 +-
->   1 files changed, 1 insertions(+), 1 deletions(-)
+>   Config.in.legacy | 1 +
+>   1 file changed, 1 insertion(+)
 >
-> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-> --- a/package/pkg-generic.mk
-> +++ b/package/pkg-generic.mk
-> @@ -90,7 +90,7 @@ endif
->   $(BUILD_DIR)/%/.stamp_patched: NAMEVER = $(RAWNAME)-$($(PKG)_VERSION)
->   $(BUILD_DIR)/%/.stamp_patched: PATCH_BASE_DIRS = $($(PKG)_DIR_PREFIX)/$(RAWNAME) $(call qstrip,$(BR2_GLOBAL_PATCH_DIR))/$(RAWNAME)
->   $(BUILD_DIR)/%/.stamp_patched:
-> -	@$(call MESSAGE,"Patching $($(PKG)_DIR_PREFIX)/$(RAWNAME)")
-> +	@$(call MESSAGE,"Patching")
->   	$(foreach hook,$($(PKG)_PRE_PATCH_HOOKS),$(call $(hook))$(sep))
->   	$(foreach p,$($(PKG)_PATCH),support/scripts/apply-patches.sh $(@D) $(DL_DIR) $(notdir $(p))$(sep))
->   	$(Q)( \
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> diff --git a/Config.in.legacy b/Config.in.legacy
+> index d02f0a6..587afe1 100644
+> --- a/Config.in.legacy
+> +++ b/Config.in.legacy
+> @@ -123,6 +123,7 @@ config BR2_PACKAGE_MODULE_INIT_TOOLS
+>   	bool "module-init-tools replaced by kmod"
+>   	select BR2_PACKAGE_KMOD
+>   	select BR2_PACKAGE_KMOD_TOOLS
+> +	select BR2_LEGACY
+>   	help
+>   	  The 'module-init-tools' package has been removed, since it
+>   	  has been depracated upstream and replaced by 'kmod'.
 >
 
 
