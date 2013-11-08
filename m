@@ -1,39 +1,75 @@
-From: Simon Dawson <spdawson@gmail.com>
-Date: Fri, 8 Nov 2013 09:26:41 +0000
-Subject: [Buildroot] [PATCH] avr32: disable kernel headers
-In-Reply-To: <20131108082243.1a889fee@skate>
-References: <1383859843-3549-1-git-send-email-spdawson@gmail.com>
- <20131108082243.1a889fee@skate>
-Message-ID: <CAHt8ZCM+eWqdsfoXQ1qe9bsyph58NyjN06fRqdOfKPn33nsvxA@mail.gmail.com>
+From: spdawson at gmail.com <spdawson@gmail.com>
+Date: Fri,  8 Nov 2013 09:42:03 +0000
+Subject: [Buildroot] [PATCH] avr32: fix uclibc build using recent kernel
+	headers
+Message-ID: <1383903723-7705-1-git-send-email-spdawson@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas.
+From: Simon Dawson <spdawson@gmail.com>
 
-On 8 November 2013 07:22, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> How much effort is it to instead fix uClibc to not break with more
-> recent kernel headers? It seems a little bit annoying to me that we
-> need to carry this !BR2_avr32 dependency for all new kernel headers
-> version. If the fix is one or two simple patches for uClibc 0.9.31, it
-> might be worthwhile.
+Using kernel headers newer than 3.6.x, uclibc 0.9.31.1 fails to build:
 
-I did actually submit a patch to fix this some time ago; see
+  In file included from output/host/usr/avr32-buildroot-linux-uclibc/sysroot/usr/include/linux/rtnetlink.h:6,
+                 from libc/inet/netlinkaccess.h:34,
+                 from libc/inet/if_index.c:36:
+  output/host/usr/avr32-buildroot-linux-uclibc/sysroot/usr/include/linux/if_link.h:314: error: expected specifier-qualifier-list before '__be16'
+  make[1]: *** [libc/inet/if_index.os] Error 1
+  make[1]: Leaving directory `output/build/uclibc-0.9.31.1'
+  make: *** [output/build/uclibc-0.9.31.1/.stamp_built] Error 2
 
-  http://patchwork.ozlabs.org/patch/213384/
+This patch adjusts the system type definitions in the netlinkaccess.h
+header, updating the types to match those used in uClibc 0.9.33.2.
 
-However, the patch was not accepted, and the discussion degenerated
-into a debate about gcc versions. I can revive that patch if you think
-it appropriate...?
+Signed-off-by: Simon Dawson <spdawson@gmail.com>
+---
+ ...ibc-0012-netlinkaccess-header-types.patch.avr32 | 35 ++++++++++++++++++++++
+ 1 file changed, 35 insertions(+)
+ create mode 100644 package/uclibc/0.9.31.1/uClibc-0012-netlinkaccess-header-types.patch.avr32
 
-> And if it's not the case, I believe I'd prefer the dependency to be on
-> the uClibc version (i.e 'depends on !BR2_PACKAGE_UCLIBC_0_9_31')
-> instead of on the architecture, because the problem seem more related
-> to the uClibc version rather than the architecture.
-
-Yes, agreed.
-
-Simon.
+diff --git a/package/uclibc/0.9.31.1/uClibc-0012-netlinkaccess-header-types.patch.avr32 b/package/uclibc/0.9.31.1/uClibc-0012-netlinkaccess-header-types.patch.avr32
+new file mode 100644
+index 0000000..bc981a4
+--- /dev/null
++++ b/package/uclibc/0.9.31.1/uClibc-0012-netlinkaccess-header-types.patch.avr32
+@@ -0,0 +1,35 @@
++Using kernel headers newer than 3.6.x, uclibc 0.9.31.1 fails to build:
++
++  In file included from output/host/usr/avr32-buildroot-linux-uclibc/sysroot/usr/include/linux/rtnetlink.h:6,
++                 from libc/inet/netlinkaccess.h:34,
++                 from libc/inet/if_index.c:36:
++  output/host/usr/avr32-buildroot-linux-uclibc/sysroot/usr/include/linux/if_link.h:314: error: expected specifier-qualifier-list before '__be16'
++  make[1]: *** [libc/inet/if_index.os] Error 1
++  make[1]: Leaving directory `output/build/uclibc-0.9.31.1'
++  make: *** [output/build/uclibc-0.9.31.1/.stamp_built] Error 2
++
++This patch adjusts the system type definitions in the netlinkaccess.h
++header, updating the types to match those used in uClibc 0.9.33.2.
++
++Signed-off-by: Simon Dawson <spdawson@gmail.com>
++
++diff -Nurp a/libc/inet/netlinkaccess.h b/libc/inet/netlinkaccess.h
++--- a/libc/inet/netlinkaccess.h	2011-06-08 19:58:40.000000000 +0100
+++++ b/libc/inet/netlinkaccess.h	2012-12-20 12:16:34.251965672 +0000
++@@ -22,15 +22,8 @@
++ #include <features.h>
++ #include <stdint.h>
++ #include <unistd.h>
++-#include <sys/types.h>
++-
++ #if defined __ASSUME_NETLINK_SUPPORT || defined __UCLIBC_USE_NETLINK__
++-#define _LINUX_TYPES_H
++-typedef uint8_t __u8;
++-typedef uint16_t __u16;
++-typedef uint32_t __u32;
++-typedef uint64_t __u64;
++-typedef int32_t __s32;
+++#include <asm/types.h>
++ #include <linux/rtnetlink.h>
++ #include <linux/netlink.h>
++ 
+-- 
+1.8.3.2
