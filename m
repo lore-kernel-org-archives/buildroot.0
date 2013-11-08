@@ -1,77 +1,37 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Fri, 8 Nov 2013 20:45:53 +0100 (CET)
-Subject: [Buildroot] [PATCH] log4cplus: new package
-Message-ID: <trinity-a54d5ae6-011d-4b81-964e-4e8328e929cd-1383939953450@3capp-gmx-bs33>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 08 Nov 2013 21:11:26 +0100
+Subject: [Buildroot] [RFC] core: Download all package sources
+In-Reply-To: <cc6d9da1-5657-4412-aa94-4e5b3d8b4eab@email.android.com> (Thomas
+ De Schampheleire's message of "Fri, 08 Nov 2013 19:35:39 +0100")
+References: <1383587286-18094-1-git-send-email-clshotwe@rockwellcollins.com>
+ <87eh6tkxuk.fsf@dell.be.48ers.dk> <20131106231048.67cf2d52@skate>
+ <87k3gljh5d.fsf@dell.be.48ers.dk> <20131106225332.GB3482@free.fr>
+ <8738n9jfim.fsf@dell.be.48ers.dk>
+ <OFAD27391D.CFE95723-ON86257C1B.007F5691-86257C1B.007F8A75@rockwellcollins.com>
+ <87txfphzyb.fsf@dell.be.48ers.dk> <87bo1vffvg.fsf@dell.be.48ers.dk>
+ <cc6d9da1-5657-4412-aa94-4e5b3d8b4eab@email.android.com>
+Message-ID: <8738n6fyc1.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Arnout,
+>>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin@gmail.com> writes:
 
-On Fri, Nov 08, 2013 at 01:38:36AM +0100, Arnout Vandecappelle wrote:
-> On 07/11/13 22:27, Peter Seiderer wrote:
-> >Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> 
-> Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Hi,
 
-thank you very much...
+ >> E.G. foo-source + host-foo-source for all .mk files under package. It
+ >> also doesn't cover everything (E.G. packages with version selection),
+ >> but it gets the host packages and doesn't need any changes to buildroot
+ >> itself.
+ >> 
 
-> 
-> >---
-> >  package/Config.in              |  1 +
-> >  package/log4cplus/Config.in    | 15 +++++++++++++++
-> >  package/log4cplus/log4cplus.mk | 14 ++++++++++++++
-> >  3 files changed, 30 insertions(+)
-> >  create mode 100644 package/log4cplus/Config.in
-> >  create mode 100644 package/log4cplus/log4cplus.mk
-> >
-> >diff --git a/package/Config.in b/package/Config.in
-> >index c0a3f20..7c0eb94 100644
-> >--- a/package/Config.in
-> >+++ b/package/Config.in
-> >@@ -706,6 +706,7 @@ source "package/libtpl/Config.in"
-> >  source "package/libunwind/Config.in"
-> >  source "package/liburcu/Config.in"
-> >  source "package/linux-pam/Config.in"
-> >+source "package/log4cplus/Config.in"
-> >  source "package/log4cxx/Config.in"
-> 
->  Does log4cplus replace log4cxx? The API looks a bit similar at first sight.
+ > You should probably add boot/ there as well.
 
-Yes, both try to implement log4j style.
+True. We have version selection options for most of our bootloaders, but
+it cannot hurt to try atleast. I'll simply drop 'package' and try all
+.mk files.
 
-log4cxx development seems to be stalled (latest release 0.10.0 from 2008-04-03, release 0.11.0
-(many bug fixes) announced for 2010..., see http://logging.apache.org/log4cxx/changes-report.html
-
-log4cplus is more selfcontained (no dependencies like log4cxx on apr/apr-util), see
-http://sourceforge.net/p/log4cplus/wiki/Home
-
-'The aim of this project is to develop log4j-like logging framework for use in (primarily) C++.
- One of the major design goals is to avoid huge dependencies (like Boost) in the core functionality
- and to use as standard C++ facilities instead.'
-
-And log4cplus is much smaller:
-
-276K    target/usr/lib/liblog4cplus-1.1.so.9.0.0
-
-vs.
-
-1.3M    target/usr/lib/liblog4cxx.so.10.0.0
-112K    target/usr/lib/libaprutil-1.so.0.5.2
-120K    target/usr/lib/libapr-1.so.0.4.8
-104K    target/usr/lib/libexpat.so.0.5.0
-68K     target/usr/lib/libneon.so.27.3.0
-1.9M    total
-
-And log4cplus is in active development, latest relese 1.1.2 from 2013-10-22...
-
-Regards,
-Peter
-
-> 
-> 
->  Regards,
->  Arnout
-> 
+-- 
+Bye, Peter Korsgaard
