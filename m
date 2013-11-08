@@ -1,49 +1,39 @@
-From: Thierry Bultel <thierry.bultel@wanadoo.fr>
-Date: Fri,  8 Nov 2013 17:25:16 +0100
-Subject: [Buildroot] [PATCH 1/1] Generation of locales: made call to tr more
-	robust
-Message-ID: <1383927916-27001-1-git-send-email-thierry.bultel@wanadoo.fr>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Fri, 08 Nov 2013 19:35:39 +0100
+Subject: [Buildroot] [RFC] core: Download all package sources
+In-Reply-To: <87bo1vffvg.fsf@dell.be.48ers.dk>
+References: <1383587286-18094-1-git-send-email-clshotwe@rockwellcollins.com>
+ <87eh6tkxuk.fsf@dell.be.48ers.dk> <20131106231048.67cf2d52@skate>
+ <87k3gljh5d.fsf@dell.be.48ers.dk> <20131106225332.GB3482@free.fr>
+ <8738n9jfim.fsf@dell.be.48ers.dk>
+ <OFAD27391D.CFE95723-ON86257C1B.007F5691-86257C1B.007F8A75@rockwellcollins.com>
+ <87txfphzyb.fsf@dell.be.48ers.dk> <87bo1vffvg.fsf@dell.be.48ers.dk>
+Message-ID: <cc6d9da1-5657-4412-aa94-4e5b3d8b4eab@email.android.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: tbultel <tbultel@basystemes.fr>
+Peter Korsgaard <peter@korsgaard.com> wrote:
+>>>>>> "Peter" == Peter Korsgaard <jacmet@uclibc.org> writes:
+>
+>Hi,
+>
+> > I personally dislike the patch as it's a bit of a hack, but if there's
+> > really a need for something like this then perhaps - But wouldn't it
+> > make more sense if we instead tried harder to ensure all the package
+> > versions we support were available on our mirror?
+>
+>FYI, I've changed sources.buildroot.net to simply do:
+>
+>make -k \
+> $(find package -name \*.mk|sed 's|.*/\([^/]*\)\.mk|\1-source host-\1-source|'
+>
+>E.G. foo-source + host-foo-source for all .mk files under package. It
+>also doesn't cover everything (E.G. packages with version selection),
+>but it gets the host packages and doesn't need any changes to buildroot
+>itself.
+>
 
-When calling 'tr' without quoting braces, bash can make really weird things
-if there are existing 'single-letter-named' directories
-eg:
-tbultel at laois:~/test$ echo AAA | tr [A-Z] [a-z]
-aaa
-tbultel at laois:~/test$ echo AAA | tr [A-Z] [a-z]
-AAA
-
-The (quick) analysis is that the callee (tr) argvs then
-contain 'm' thus the translation does not work
-
-Using quotes works around it
-tbultel at laois:~/test$ echo AAA | tr '[A-Z]' '[a-z]'
-aaa
-
-
-Signed-off-by: tbultel <tbultel@basystemes.fr>
----
- Makefile |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
-
-diff --git a/Makefile b/Makefile
-index 1496bd7..7f835c0 100644
---- a/Makefile
-+++ b/Makefile
-@@ -548,7 +548,7 @@ target-generatelocales: host-localedef
- 		I18NPATH=$(STAGING_DIR)/usr/share/i18n:/usr/share/i18n \
- 		$(HOST_DIR)/usr/bin/localedef \
- 			--prefix=$(TARGET_DIR) \
--			--`echo $(BR2_ENDIAN) | tr [A-Z] [a-z]`-endian \
-+			--`echo $(BR2_ENDIAN) | tr '[A-Z]' '[a-z]'`-endian \
- 			-i $${inputfile} -f $${charmap} \
- 			$${locale} ; \
- 	done
--- 
-1.7.0.4
+You should probably add boot/ there as well.
