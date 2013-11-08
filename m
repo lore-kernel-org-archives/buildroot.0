@@ -1,37 +1,55 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 08 Nov 2013 21:11:26 +0100
-Subject: [Buildroot] [RFC] core: Download all package sources
-In-Reply-To: <cc6d9da1-5657-4412-aa94-4e5b3d8b4eab@email.android.com> (Thomas
- De Schampheleire's message of "Fri, 08 Nov 2013 19:35:39 +0100")
-References: <1383587286-18094-1-git-send-email-clshotwe@rockwellcollins.com>
- <87eh6tkxuk.fsf@dell.be.48ers.dk> <20131106231048.67cf2d52@skate>
- <87k3gljh5d.fsf@dell.be.48ers.dk> <20131106225332.GB3482@free.fr>
- <8738n9jfim.fsf@dell.be.48ers.dk>
- <OFAD27391D.CFE95723-ON86257C1B.007F5691-86257C1B.007F8A75@rockwellcollins.com>
- <87txfphzyb.fsf@dell.be.48ers.dk> <87bo1vffvg.fsf@dell.be.48ers.dk>
- <cc6d9da1-5657-4412-aa94-4e5b3d8b4eab@email.android.com>
-Message-ID: <8738n6fyc1.fsf@dell.be.48ers.dk>
+From: Pierre Ficheux <pierre.ficheux@openwide.fr>
+Date: Sat, 9 Nov 2013 00:28:44 +0100 (CET)
+Subject: [Buildroot] [FOSDEM] [CFP] Embedded and mobile devroom
+In-Reply-To: <20131108163320.331b9609@skate>
+Message-ID: <436948988.12251792.1383953324472.JavaMail.root@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin@gmail.com> writes:
+Hi Thomas,
 
-Hi,
+Should be fine as we use BR for lots of customer projects. I will try to send an abstract next week.
 
- >> E.G. foo-source + host-foo-source for all .mk files under package. It
- >> also doesn't cover everything (E.G. packages with version selection),
- >> but it gets the host packages and doesn't need any changes to buildroot
- >> itself.
- >> 
+regards,
 
- > You should probably add boot/ there as well.
 
-True. We have version selection options for most of our bootloaders, but
-it cannot hurt to try atleast. I'll simply drop 'package' and try all
-.mk files.
+----- Mail original -----
+> De: "Thomas Petazzoni" <thomas.petazzoni@free-electrons.com>
+> ?: buildroot at uclibc.org
+> Envoy?: Vendredi 8 Novembre 2013 16:33:20
+> Objet: [Buildroot] [FOSDEM] [CFP] Embedded and mobile devroom
+> 
+> 
+> Every year there is a special dedicated track for embedded and mobile
+> projects at Fosdem (see: http://www.fosdem.org).
+> 
+> FOSDEM will be held the 1st and 2nd of February 2014 in Brussels,
+> Belgium.
+> 
+> It would be nice if people proposed some Buildroot related talks.
+> This
+> year, there are slots of 20 minutes or 60 minutes, so people can also
+> propose "short" topics, such as an experience feedback in using
+> Buildroot for a real product, or talking about new Buildroot
+> features,
+> etc.
+> 
+> 
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
 
 -- 
-Bye, Peter Korsgaard
+Pierre FICHEUX -/- CTO OW/OWI, France -\- pierre.ficheux at openwide.fr
+                                         http://ingenierie.openwide.fr
+                                         http://www.linuxembedded.fr
+I would love to change the world, but they won't give me the source code
