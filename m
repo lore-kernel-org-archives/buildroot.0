@@ -1,54 +1,12 @@
-From: arnaud aujon <arnaud.aujon@gmail.com>
-Date: Fri, 8 Nov 2013 15:29:27 +0100
-Subject: [Buildroot] Tool to check packages updates
-In-Reply-To: <CACjG4BJ0Qzv=GevE3rNHvc3n-YxOTg7FpWHmz1sAz4Q6+Q3wyg@mail.gmail.com>
-References: <CACjG4BJq5TXvpMAoU7w3JgTVrOGHpeKng88HU03Rf_=XunPKAQ@mail.gmail.com>
- <CAAXf6LW1c32E_BFwbD6JKMCRKWtCw4r7pc9xuj3_DPsGyjL=SA@mail.gmail.com>
- <CACjG4B+7riHKmXG0Oo3cZxrWFygTBojSTHRktuYvz0eeMJ0ttQ@mail.gmail.com>
- <526809E4.30203@mind.be>
- <CACjG4BJtk-JxzUGmJn9urrMGMjkcwtmMxRys_FGrY761H1zQzA@mail.gmail.com>
- <CAAXf6LV9pBCwsqrtm6LJxiO1oaYX4afBv0tHPgOqVReV058GTA@mail.gmail.com>
- <CACjG4BJ0Qzv=GevE3rNHvc3n-YxOTg7FpWHmz1sAz4Q6+Q3wyg@mail.gmail.com>
-Message-ID: <CACjG4BKXOp8oD1_j2ERCzn=ZUGj_G--Putxq0GrA4eHWG0VFwQ@mail.gmail.com>
+From: universeII at gmx.de <universeII@gmx.de>
+Date: Fri, 8 Nov 2013 15:32:05 +0100 (CET)
+Subject: [Buildroot] Patch for re-activating rshd and rlogind build
+Message-ID: <trinity-4957780b-fc6b-4034-a1cf-56fff1642edd-1383921125839@3capp-gmx-bs05>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
-
-Some news about the update checking script.
-The results are now : 839 packages (this is not the real package number
-because I don't check some of them), 294 are up-to-date, 323 can be bumped
-and 222 unknown.
-You can find the script (check-updates.py) and the result (out.html) here :
-http://intelibre.fr/buildroot/
-
-What's next :
-  - check git packages
-  - speed up the script
-  - improve detection (there is still some false detection)
-
-Cheers,
-
-Arnaud Aujon
-
-
-2013/10/23 arnaud aujon <arnaud.aujon@gmail.com>
-
-> 2013/10/23 Thomas De Schampheleire <patrickdepinguin@gmail.com>
->
->> make knows exactly how to evaluate such variables, so instead of
->> trying to do this from a script, isn't it possible to use the output
->> of 'make printvars' ? This prints _all_ the relevant variables but you
->> could filter on _SOURCE or _SITE to get what you need and base your
->> script on that.
->>
->>
-> Great ! I looked for something like that but I probably missed it, thanks
-> for the tip.
->
--------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20131108/4208bdf6/attachment-0001.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20131108/b2ff8cd2/attachment.html>
