@@ -1,47 +1,39 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 8 Nov 2013 09:33:30 +0100
-Subject: [Buildroot] Problems to build udev on 2013.08.1
-In-Reply-To: <527C9EF1.1020905@edag.de>
-References: <527C9EF1.1020905@edag.de>
-Message-ID: <20131108093330.5d32ce2c@skate>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 08 Nov 2013 09:37:55 +0100
+Subject: [Buildroot] [RFC] core: Download all package sources
+In-Reply-To: <87txfphzyb.fsf@dell.be.48ers.dk> (Peter Korsgaard's message of
+ "Thu, 07 Nov 2013 00:29:00 +0100")
+References: <1383587286-18094-1-git-send-email-clshotwe@rockwellcollins.com>
+ <87eh6tkxuk.fsf@dell.be.48ers.dk> <20131106231048.67cf2d52@skate>
+ <87k3gljh5d.fsf@dell.be.48ers.dk> <20131106225332.GB3482@free.fr>
+ <8738n9jfim.fsf@dell.be.48ers.dk>
+ <OFAD27391D.CFE95723-ON86257C1B.007F5691-86257C1B.007F8A75@rockwellcollins.com>
+ <87txfphzyb.fsf@dell.be.48ers.dk>
+Message-ID: <87bo1vffvg.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Peter Katzmann,
+>>>>> "Peter" == Peter Korsgaard <jacmet@uclibc.org> writes:
 
-On Fri, 08 Nov 2013 09:21:05 +0100, Peter Katzmann wrote:
+Hi,
 
-> i have two buildroot projects. One requires udev.
-> I get always the same error (at the end).
-> So i took my second project, enabled udev there also and the same
-> error. One project is with linaroo and the other one with eglibc/gcc.
-> I also tried the build on different Platforms (Opensuse 12.3/13.1
-> Ubuntu 10.04/12.04/13.10), always the same problem.
-> 
-> It seems that somewhere a wrong link or duplicating of the path leads
-> to the error.
-> 
-> Attached is the config of the eglibc project.
-> 
-> peter
-> 
->    CCLD   collect
-> libtool: link: warning: library 
-> `/usr2/new/Source-guru/buildroot/project_build_arm/usr/arm-buildroot-linux-gnueabi/sysroot/usr/lib/libblkid.la' 
-> was moved.
+ > I personally dislike the patch as it's a bit of a hack, but if there's
+ > really a need for something like this then perhaps - But wouldn't it
+ > make more sense if we instead tried harder to ensure all the package
+ > versions we support were available on our mirror?
 
-Building from a path that starts with /usr is not supported. This is
-something we have to fix, but it hasn't been done so far.
+FYI, I've changed sources.buildroot.net to simply do:
 
-See https://bugs.busybox.net/show_bug.cgi?id=6470.
+make -k \
+ $(find package -name \*.mk|sed 's|.*/\([^/]*\)\.mk|\1-source host-\1-source|'
 
-Best regards,
+E.G. foo-source + host-foo-source for all .mk files under package. It
+also doesn't cover everything (E.G. packages with version selection),
+but it gets the host packages and doesn't need any changes to buildroot
+itself.
 
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
