@@ -1,55 +1,74 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 9 Nov 2013 16:42:56 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2013-11-08
-In-Reply-To: <CAFbHwiQn4A9bBVNqJZwJyfNZsurx618CtUpENAZ3ATis62qNyQ@mail.gmail.com>
-References: <20131109073028.B3C2E52C614@lolut.humanoidz.org>
- <CAFbHwiQn4A9bBVNqJZwJyfNZsurx618CtUpENAZ3ATis62qNyQ@mail.gmail.com>
-Message-ID: <20131109164256.6bd02bbd@skate>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Sat,  9 Nov 2013 16:59:48 +0100
+Subject: [Buildroot] [PATCH 1/2] qt5base: fix rpi/egl support
+	(vc_dispmanx_element_change_attributes proto mismatch)
+Message-ID: <1384012789-13716-1-git-send-email-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Will Newton,
+Patch from upstream already included in the next 5.2 release
 
-On Sat, 9 Nov 2013 14:53:00 +0000, Will Newton wrote:
+Fixes:
+	http://autobuild.buildroot.net/results/347/347577bf1dee0fec3302a45f278eb253118a5b6f/build-end.log
 
-> >        arm |                alsa-lib-1.0.26 | NOK | http://autobuild.buildroot.net/results/983828bd27a521020e42e58cce9393e6b8d23502/
-> 
-> Hi Thomas,
-> 
-> Do you know what is going on with the binary arm toolchain above? It
-> looks like the toolchain is configured wrongly, it also has "linaro"
-> and "uclibc" in the tarball name which is a strange combination. ;-)
+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+---
+ ...ate-vc_dispmanx_element_change_attributes.patch | 44 ++++++++++++++++++++++
+ 1 file changed, 44 insertions(+)
+ create mode 100644 package/qt5/qt5base/qt5base-0006-qeglfshooksrpi-update-vc_dispmanx_element_change_attributes.patch
 
-It has both uclibc and Linaro in the tarball name because this
-toolchain uses gcc-linaro, but the uClibc library. So having both in
-the same tarball name makes sense in this situation :-)
-
-Regarding the toolchain, it is indeed funky. The compiler was built
-with --with-float=hard, so it should be EABIhf, but the corresponding
-Buildroot configuration was declaring it as being EABI.
-
-However, switching to EABIhf in the Buildroot configuration doesn't
-work either: Buildroot checks whether the crt1.o of the toolchain is
-indeed built hard-float as a way of verifying that the toolchain is
-indeed EABIhf. And it turns out that it's not the case for this
-toolchain.
-
-Moreover, while it was built --with-float=hard, the tuple contains
-gnueabi and not gnueabihf. I guess this is all due to the fact that
-this toolchain was built with the old 1.15.2 Crosstool-NG, and it's
-probably time to update my ct-ng toolchains.
-
-For the timing being, I've simply removed this toolchain from the
-autobuilders.
-
-Thanks for the report!
-
-Thomas
+diff --git a/package/qt5/qt5base/qt5base-0006-qeglfshooksrpi-update-vc_dispmanx_element_change_attributes.patch b/package/qt5/qt5base/qt5base-0006-qeglfshooksrpi-update-vc_dispmanx_element_change_attributes.patch
+new file mode 100644
+index 0000000..417970d
+--- /dev/null
++++ b/package/qt5/qt5base/qt5base-0006-qeglfshooksrpi-update-vc_dispmanx_element_change_attributes.patch
+@@ -0,0 +1,44 @@
++From 90005fae17acc994948aa5a79fc262fd07b69865 Mon Sep 17 00:00:00 2001
++From: Dario Freddi <dario.freddi@ispirata.com>
++Date: Fri, 13 Sep 2013 12:10:03 +0200
++Subject: [PATCH] qeglfshooksrpi: update vc_dispmanx_element_change_attributes
++
++Remove the extern prototype as it's now defined in latest
++firmware headers correctly. Moreover, the signature of the function
++changed. This patch fixes both issues.
++
++Change-Id: I0114b436dbaf5a171e6429a1e3760e292c7152cf
++Reviewed-by: Andy Nichols <andy.nichols@digia.com>
++---
++ .../devices/linux-rasp-pi-g++/qeglfshooks_pi.cpp   |    8 +-------
++ 1 files changed, 1 insertions(+), 7 deletions(-)
++
++diff --git a/mkspecs/devices/linux-rasp-pi-g++/qeglfshooks_pi.cpp b/mkspecs/devices/linux-rasp-pi-g++/qeglfshooks_pi.cpp
++index 9b48113..add96bf 100644
++--- a/mkspecs/devices/linux-rasp-pi-g++/qeglfshooks_pi.cpp
+++++ b/mkspecs/devices/linux-rasp-pi-g++/qeglfshooks_pi.cpp
++@@ -88,12 +88,6 @@ static EGLNativeWindowType createDispmanxLayer(const QPoint &pos, const QSize &s
++     return eglWindow;
++ }
++ 
++-// this function is not part of debian squeeze headers
++-extern "C" int VCHPOST_ vc_dispmanx_element_change_attributes(DISPMANX_UPDATE_HANDLE_T update,
++-    DISPMANX_ELEMENT_HANDLE_T element, uint32_t change_flags, int32_t layer,
++-    uint8_t opacity, const VC_RECT_T *dest_rect, const VC_RECT_T *src_rect,
++-    DISPMANX_RESOURCE_HANDLE_T mask, VC_IMAGE_TRANSFORM_T transform);
++-
++ // these constants are not in any headers (yet)
++ #define ELEMENT_CHANGE_LAYER          (1<<0)
++ #define ELEMENT_CHANGE_OPACITY        (1<<1)
++@@ -128,7 +122,7 @@ static void moveDispmanxLayer(EGLNativeWindowType window, const QPoint &pos)
++                                           &dst_rect,
++                                           NULL,
++                                           0,
++-                                          (VC_IMAGE_TRANSFORM_T)0);
+++                                          (DISPMANX_TRANSFORM_T)0);
++ 
++     vc_dispmanx_update_submit_sync(dispman_update);
++ }
++-- 
++1.7.1
++
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.8.4.2
