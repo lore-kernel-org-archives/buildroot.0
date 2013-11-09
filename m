@@ -1,35 +1,41 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sat,  9 Nov 2013 17:57:37 -0300
-Subject: [Buildroot] [PATCH] mplayer: disable for anything lower than ARMv5
-Message-ID: <1384030657-18543-1-git-send-email-gustavo@zacarias.com.ar>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sat,  9 Nov 2013 21:55:41 +0000 (UTC)
+Subject: [Buildroot] [Bug 6668] iptables limit module alignment problem on
+	mips64
+In-Reply-To: <bug-6668-163@https.bugs.busybox.net/>
+References: <bug-6668-163@https.bugs.busybox.net/>
+Message-ID: <20131109215541.E7B8C8F6F9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Disable mplayer for anything lower than a v5 ARM core.
-The support is broken and it's kind of pointless anyway. Fixes:
-http://autobuild.buildroot.net/results/8f946e28b11b2ab1ba0d9688286c665488de0486/
+https://bugs.busybox.net/show_bug.cgi?id=6668
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/mplayer/Config.in | 3 +++
- 1 file changed, 3 insertions(+)
+Gustavo Zacarias <gustavo@zacarias.com.ar> changed:
 
-diff --git a/package/mplayer/Config.in b/package/mplayer/Config.in
-index 7cee87d..b930cb5 100644
---- a/package/mplayer/Config.in
-+++ b/package/mplayer/Config.in
-@@ -3,6 +3,9 @@ config BR2_PACKAGE_MPLAYER
- 	# Those architectures are not supported by MPlayer
- 	depends on !(BR2_sh2 || BR2_sh2a || BR2_sh4a || BR2_sh4aeb \
- 			|| BR2_microblaze || BR2_aarch64)
-+	# Broken support for <ARMv5
-+	depends on !(BR2_arm7tdmi || BR2_arm720t || BR2_arm920t \
-+		|| BR2_arm920t || BR2_arm922t || BR2_fa526 || BR2_strongarm)
- 	depends on BR2_LARGEFILE
- 	help
- 	  MPlayer is a movie player which runs on many systems and supports
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|                            |WONTFIX
+           Severity|critical                    |normal
+
+--- Comment #1 from Gustavo Zacarias <gustavo@zacarias.com.ar> 2013-11-09 21:55:41 UTC ---
+1) This isn't critical - if you want something fixed then you should at least
+be polite and don't think about your little corner only.
+Critical would be something minimal not building, for example a basic root
+filesystem with just busybox with a default configuration.
+Iptables is just one package among many, and the failure is a subset of the
+functionality of iptables on a subset of many architectures.
+
+2) This is an upstream bug, unless there's a patch or knob to signal the
+iptables build about mixed 64/32 kernel/userland (which was present several
+releases ago IIRC) or fixing this issue then there's nothing we can do on our
+side alone - you should contact the netfilter devels about this issue since
+it's a bug.
+
 -- 
-1.8.3.2
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
