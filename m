@@ -1,55 +1,40 @@
-From: Pierre Ficheux <pierre.ficheux@openwide.fr>
-Date: Sat, 9 Nov 2013 00:28:44 +0100 (CET)
-Subject: [Buildroot] [FOSDEM] [CFP] Embedded and mobile devroom
-In-Reply-To: <20131108163320.331b9609@skate>
-Message-ID: <436948988.12251792.1383953324472.JavaMail.root@openwide.fr>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Sat,  9 Nov 2013 01:21:20 +0100
+Subject: [Buildroot] [PATCH v2 1/2] xlib_libpthread-stubs: needs -pthread
+	when linking statically
+Message-ID: <1383956481-16389-1-git-send-email-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Fixes e.g. http://autobuild.buildroot.net/results/1eaa694263b74313b0c90c510abcb11d490a3773/
 
-Should be fine as we use BR for lots of customer projects. I will try to send an abstract next week.
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+My gcc manual only documents the -pthread option for some architectures,
+but it seems to work for x86, sh and arm as well.
 
-regards,
+v2: resend
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ package/x11r7/xlib_libpthread-stubs/xlib_libpthread-stubs.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-
------ Mail original -----
-> De: "Thomas Petazzoni" <thomas.petazzoni@free-electrons.com>
-> ?: buildroot at uclibc.org
-> Envoy?: Vendredi 8 Novembre 2013 16:33:20
-> Objet: [Buildroot] [FOSDEM] [CFP] Embedded and mobile devroom
-> 
-> 
-> Every year there is a special dedicated track for embedded and mobile
-> projects at Fosdem (see: http://www.fosdem.org).
-> 
-> FOSDEM will be held the 1st and 2nd of February 2014 in Brussels,
-> Belgium.
-> 
-> It would be nice if people proposed some Buildroot related talks.
-> This
-> year, there are slots of 20 minutes or 60 minutes, so people can also
-> propose "short" topics, such as an experience feedback in using
-> Buildroot for a real product, or talking about new Buildroot
-> features,
-> etc.
-> 
-> 
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux, Kernel and Android engineering
-> http://free-electrons.com
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
-
+diff --git a/package/x11r7/xlib_libpthread-stubs/xlib_libpthread-stubs.mk b/package/x11r7/xlib_libpthread-stubs/xlib_libpthread-stubs.mk
+index 5ea02e9..6343691 100644
+--- a/package/x11r7/xlib_libpthread-stubs/xlib_libpthread-stubs.mk
++++ b/package/x11r7/xlib_libpthread-stubs/xlib_libpthread-stubs.mk
+@@ -12,5 +12,9 @@ XLIB_LIBPTHREAD_STUBS_LICENSE_FILES = COPYING
+ 
+ XLIB_LIBPTHREAD_STUBS_INSTALL_STAGING = YES
+ 
++ifeq ($(BR2_PREFER_STATIC_LIB),y)
++XLIB_LIBPTHREAD_STUBS_CONF_ENV += LDFLAGS="$(TARGET_LDFLAGS) -pthread"
++endif
++
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
 -- 
-Pierre FICHEUX -/- CTO OW/OWI, France -\- pierre.ficheux at openwide.fr
-                                         http://ingenierie.openwide.fr
-                                         http://www.linuxembedded.fr
-I would love to change the world, but they won't give me the source code
+1.8.4.2
