@@ -1,74 +1,85 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Sat,  9 Nov 2013 16:59:48 +0100
-Subject: [Buildroot] [PATCH 1/2] qt5base: fix rpi/egl support
-	(vc_dispmanx_element_change_attributes proto mismatch)
-Message-ID: <1384012789-13716-1-git-send-email-s.martin49@gmail.com>
+Date: Sat,  9 Nov 2013 16:59:49 +0100
+Subject: [Buildroot] [PATCH 2/2] qt5webkit: fix build with bison-3.0
+In-Reply-To: <1384012789-13716-1-git-send-email-s.martin49@gmail.com>
+References: <1384012789-13716-1-git-send-email-s.martin49@gmail.com>
+Message-ID: <1384012789-13716-2-git-send-email-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Patch from upstream already included in the next 5.2 release
+- Add host-bison dependency
+- Fetch patch from upstream fixing build with bison-3.0
+  (already included in the next 5.2 release)
 
 Fixes:
-	http://autobuild.buildroot.net/results/347/347577bf1dee0fec3302a45f278eb253118a5b6f/build-end.log
+	http://autobuild.buildroot.net/results/283/2831c0d859b035f7d2786f51885833a711b46b80/build-end.log
 
 Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 ---
- ...ate-vc_dispmanx_element_change_attributes.patch | 44 ++++++++++++++++++++++
- 1 file changed, 44 insertions(+)
- create mode 100644 package/qt5/qt5base/qt5base-0006-qeglfshooksrpi-update-vc_dispmanx_element_change_attributes.patch
+ ...t-0002-ANGLE-doesn-t-build-with-bison-3.0.patch | 38 ++++++++++++++++++++++
+ package/qt5/qt5webkit/qt5webkit.mk                 |  2 +-
+ 2 files changed, 39 insertions(+), 1 deletion(-)
+ create mode 100644 package/qt5/qt5webkit/qt5webkit-0002-ANGLE-doesn-t-build-with-bison-3.0.patch
 
-diff --git a/package/qt5/qt5base/qt5base-0006-qeglfshooksrpi-update-vc_dispmanx_element_change_attributes.patch b/package/qt5/qt5base/qt5base-0006-qeglfshooksrpi-update-vc_dispmanx_element_change_attributes.patch
+diff --git a/package/qt5/qt5webkit/qt5webkit-0002-ANGLE-doesn-t-build-with-bison-3.0.patch b/package/qt5/qt5webkit/qt5webkit-0002-ANGLE-doesn-t-build-with-bison-3.0.patch
 new file mode 100644
-index 0000000..417970d
+index 0000000..e69e137
 --- /dev/null
-+++ b/package/qt5/qt5base/qt5base-0006-qeglfshooksrpi-update-vc_dispmanx_element_change_attributes.patch
-@@ -0,0 +1,44 @@
-+From 90005fae17acc994948aa5a79fc262fd07b69865 Mon Sep 17 00:00:00 2001
-+From: Dario Freddi <dario.freddi@ispirata.com>
-+Date: Fri, 13 Sep 2013 12:10:03 +0200
-+Subject: [PATCH] qeglfshooksrpi: update vc_dispmanx_element_change_attributes
++++ b/package/qt5/qt5webkit/qt5webkit-0002-ANGLE-doesn-t-build-with-bison-3.0.patch
+@@ -0,0 +1,38 @@
++From 60ba8bd5b3575d0c7740571fbb4e681b21a49a82 Mon Sep 17 00:00:00 2001
++From: Allan Sandfeld Jensen <allan.jensen@digia.com>
++Date: Fri, 16 Aug 2013 18:27:07 +0200
++Subject: [PATCH] ANGLE doesn't build with bison 3.0
 +
-+Remove the extern prototype as it's now defined in latest
-+firmware headers correctly. Moreover, the signature of the function
-+changed. This patch fixes both issues.
++https://bugs.webkit.org/show_bug.cgi?id=119798
 +
-+Change-Id: I0114b436dbaf5a171e6429a1e3760e292c7152cf
-+Reviewed-by: Andy Nichols <andy.nichols@digia.com>
++Reviewed by Antti Koivisto.
++
++Make glslang.y compatible with bison 3.0
++by using %lex-param to set YYLEX_PARAM.
++
++* src/compiler/glslang.y:
++
++git-svn-id: http://svn.webkit.org/repository/webkit/trunk at 154109 268f45cc-cd09-0410-ab3c-d52691b4dbfc
++
++Task-number: QTBUG-32913
++Change-Id: I15505d31f0588c4d558b73befdb9d2358e29c1a3
++Reviewed-by: Jocelyn Turcotte <jocelyn.turcotte@digia.com>
 +---
-+ .../devices/linux-rasp-pi-g++/qeglfshooks_pi.cpp   |    8 +-------
-+ 1 files changed, 1 insertions(+), 7 deletions(-)
++ Source/ThirdParty/ANGLE/src/compiler/glslang.y | 1 +
++ 1 file changed, 1 insertion(+)
 +
-+diff --git a/mkspecs/devices/linux-rasp-pi-g++/qeglfshooks_pi.cpp b/mkspecs/devices/linux-rasp-pi-g++/qeglfshooks_pi.cpp
-+index 9b48113..add96bf 100644
-+--- a/mkspecs/devices/linux-rasp-pi-g++/qeglfshooks_pi.cpp
-++++ b/mkspecs/devices/linux-rasp-pi-g++/qeglfshooks_pi.cpp
-+@@ -88,12 +88,6 @@ static EGLNativeWindowType createDispmanxLayer(const QPoint &pos, const QSize &s
-+     return eglWindow;
-+ }
++diff --git a/Source/ThirdParty/ANGLE/src/compiler/glslang.y b/Source/ThirdParty/ANGLE/src/compiler/glslang.y
++index 3cad335..b41e95a 100644
++--- a/Source/ThirdParty/ANGLE/src/compiler/glslang.y
+++++ b/Source/ThirdParty/ANGLE/src/compiler/glslang.y
++@@ -47,6 +47,7 @@ WHICH GENERATES THE GLSL ES PARSER (glslang_tab.cpp AND glslang_tab.h).
++ %expect 1 /* One shift reduce conflict because of if | else */
++ %pure-parser
++ %parse-param {TParseContext* context}
+++%lex-param {YYLEX_PARAM}
 + 
-+-// this function is not part of debian squeeze headers
-+-extern "C" int VCHPOST_ vc_dispmanx_element_change_attributes(DISPMANX_UPDATE_HANDLE_T update,
-+-    DISPMANX_ELEMENT_HANDLE_T element, uint32_t change_flags, int32_t layer,
-+-    uint8_t opacity, const VC_RECT_T *dest_rect, const VC_RECT_T *src_rect,
-+-    DISPMANX_RESOURCE_HANDLE_T mask, VC_IMAGE_TRANSFORM_T transform);
-+-
-+ // these constants are not in any headers (yet)
-+ #define ELEMENT_CHANGE_LAYER          (1<<0)
-+ #define ELEMENT_CHANGE_OPACITY        (1<<1)
-+@@ -128,7 +122,7 @@ static void moveDispmanxLayer(EGLNativeWindowType window, const QPoint &pos)
-+                                           &dst_rect,
-+                                           NULL,
-+                                           0,
-+-                                          (VC_IMAGE_TRANSFORM_T)0);
-++                                          (DISPMANX_TRANSFORM_T)0);
-+ 
-+     vc_dispmanx_update_submit_sync(dispman_update);
-+ }
++ %union {
++     struct {
 +-- 
-+1.7.1
++1.8.4.2
 +
+diff --git a/package/qt5/qt5webkit/qt5webkit.mk b/package/qt5/qt5webkit/qt5webkit.mk
+index 87b15a9..300b9d9 100644
+--- a/package/qt5/qt5webkit/qt5webkit.mk
++++ b/package/qt5/qt5webkit/qt5webkit.mk
+@@ -7,7 +7,7 @@
+ QT5WEBKIT_VERSION = $(QT5_VERSION)
+ QT5WEBKIT_SITE = $(QT5_SITE)
+ QT5WEBKIT_SOURCE = qtwebkit-opensource-src-$(QT5WEBKIT_VERSION).tar.xz
+-QT5WEBKIT_DEPENDENCIES = qt5base sqlite host-ruby host-gperf
++QT5WEBKIT_DEPENDENCIES = qt5base sqlite host-ruby host-gperf host-bison
+ QT5WEBKIT_INSTALL_STAGING = YES
+ 
+ ifeq ($(BR2_PACKAGE_QT5BASE_LICENSE_APPROVED),y)
 -- 
 1.8.4.2
