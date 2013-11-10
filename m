@@ -1,37 +1,86 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 11 Nov 2013 01:09:15 +0100
-Subject: [Buildroot] [PATCH 2/2] package/rpi-userland: bump version
-In-Reply-To: <cover.1384128473.git.yann.morin.1998@free.fr>
-References: <cover.1384128473.git.yann.morin.1998@free.fr>
-Message-ID: <86c9bc7befd010cc2b4c60ee5e4607d28f90d861.1384128473.git.yann.morin.1998@free.fr>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 11 Nov 2013 00:55:02 +0100
+Subject: [Buildroot] [git commit] hplip: bump to version 3.13.10
+Message-ID: <20131111001018.036109A131@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+commit: http://git.buildroot.net/buildroot/commit/?id=2b0d870ce57dc92373788fb8cf7dd1add621c6eb
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Bump for a few more options (eg. setting the palette in 4- or 8bpp,
-and rendering camera preview with GL).
+Sections of the hplip-fix-make.patch patch file were removed, because they
+no longer appear in the Makefile.am file.
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Olivier Schonken <olivier.schonken@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/rpi-userland/rpi-userland.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/hplip/hplip-fix-make.patch |   39 ------------------------------------
+ package/hplip/hplip.mk             |    2 +-
+ 2 files changed, 1 insertions(+), 40 deletions(-)
 
-diff --git a/package/rpi-userland/rpi-userland.mk b/package/rpi-userland/rpi-userland.mk
-index 9320ecf..1741153 100644
---- a/package/rpi-userland/rpi-userland.mk
-+++ b/package/rpi-userland/rpi-userland.mk
+diff --git a/package/hplip/hplip-fix-make.patch b/package/hplip/hplip-fix-make.patch
+index b26277d..da05d03 100644
+--- a/package/hplip/hplip-fix-make.patch
++++ b/package/hplip/hplip-fix-make.patch
+@@ -30,45 +30,6 @@ index 16ea902..b22f46a 100644
+  endif
+  
+  # ui (qt3)
+-@@ -564,26 +564,26 @@ endif
+- 
+- install-dist_hplip_LogDATA:
+- if FULL_BUILD
+--	test -z "$(DESTDIR)$(hplip_Logdir)" || mkdir -p $(DESTDIR)$(hplip_Logdir)
+--	chgrp "lp" -R $(DESTDIR)$(hplip_Logdir)
+--	chmod 775 $(DESTDIR)$(hplip_Logdir)
+-+#	test -z "$(DESTDIR)$(hplip_Logdir)" || mkdir -p $(DESTDIR)$(hplip_Logdir)
+-+#	chgrp "lp" -R $(DESTDIR)$(hplip_Logdir)
+-+#	chmod 775 $(DESTDIR)$(hplip_Logdir)
+- endif	#FULL_BUILD
+- if HPLIP_BUILD
+--	test -z "$(DESTDIR)$(hplip_Logdir)" || mkdir -p $(DESTDIR)$(hplip_Logdir)
+--	chgrp "lp" -R $(DESTDIR)$(hplip_Logdir)
+--	chmod 775 $(DESTDIR)$(hplip_Logdir)
+-+#	test -z "$(DESTDIR)$(hplip_Logdir)" || mkdir -p $(DESTDIR)$(hplip_Logdir)
+-+#	chgrp "lp" -R $(DESTDIR)$(hplip_Logdir)
+-+#	chmod 775 $(DESTDIR)$(hplip_Logdir)
+- endif	#FULL_BUILD
+- 
+- install-dist_hplip_tmpDATA:
+- if FULL_BUILD
+--	test -z "$(DESTDIR)$(hplip_tmpdir)" || mkdir -p $(DESTDIR)$(hplip_tmpdir)
+--	chgrp "lp" -R $(DESTDIR)$(hplip_tmpdir)
+--	chmod 1775 $(DESTDIR)$(hplip_tmpdir)
+-+#	test -z "$(DESTDIR)$(hplip_tmpdir)" || mkdir -p $(DESTDIR)$(hplip_tmpdir)
+-+#	chgrp "lp" -R $(DESTDIR)$(hplip_tmpdir)
+-+#	chmod 1775 $(DESTDIR)$(hplip_tmpdir)
+- endif	#FULL_BUILD
+- if HPLIP_BUILD
+--	test -z "$(DESTDIR)$(hplip_tmpdir)" || mkdir -p $(DESTDIR)$(hplip_tmpdir)
+--	chgrp "lp" -R $(DESTDIR)$(hplip_tmpdir)
+--	chmod 1775 $(DESTDIR)$(hplip_tmpdir)
+-+#	test -z "$(DESTDIR)$(hplip_tmpdir)" || mkdir -p $(DESTDIR)$(hplip_tmpdir)
+-+#	chgrp "lp" -R $(DESTDIR)$(hplip_tmpdir)
+-+#	chmod 1775 $(DESTDIR)$(hplip_tmpdir)
+- endif	#FULL_BUILD
+- 
+- install-dist_cronDATA:$(dist_cron_DATA)
+ -- 
+ 1.7.10.4
+ 
+diff --git a/package/hplip/hplip.mk b/package/hplip/hplip.mk
+index b3b798d..704bc4b 100644
+--- a/package/hplip/hplip.mk
++++ b/package/hplip/hplip.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--RPI_USERLAND_VERSION = 0d25e71ea558f32cd72b8d46cd51767c92a81d01
-+RPI_USERLAND_VERSION = 0d486513f56453f8203c270fcad0b04f8e4f1fee
- RPI_USERLAND_SITE = http://github.com/raspberrypi/userland/tarball/$(RPI_USERLAND_VERSION)
- RPI_USERLAND_LICENSE = BSD-3c
- RPI_USERLAND_LICENSE_FILES = LICENCE
--- 
-1.8.1.2
+-HPLIP_VERSION = 3.13.3
++HPLIP_VERSION = 3.13.10
+ HPLIP_SITE = http://downloads.sourceforge.net/hplip/hplip
+ HPLIP_AUTORECONF = YES
+ HPLIP_DEPENDENCIES = cups libusb jpeg
