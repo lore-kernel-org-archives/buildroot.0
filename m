@@ -1,26 +1,43 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 10 Nov 2013 23:49:39 +0100
-Subject: [Buildroot] [PATCH 1/2] qt5base: fix rpi/egl support
-	(vc_dispmanx_element_change_attributes proto mismatch)
-In-Reply-To: <1384012789-13716-1-git-send-email-s.martin49@gmail.com> (Samuel
- Martin's message of "Sat, 9 Nov 2013 16:59:48 +0100")
-References: <1384012789-13716-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <87ob5rc1oc.fsf@dell.be.48ers.dk>
+Date: Sun, 10 Nov 2013 23:56:32 +0100
+Subject: [Buildroot] Analysis of build failures
+In-Reply-To: <20131110114639.0d648555@skate> (Thomas Petazzoni's message of
+ "Sun, 10 Nov 2013 11:46:39 +0100")
+References: <20131109073028.B3C2E52C614@lolut.humanoidz.org>
+ <20131109191543.414f5694@skate>
+ <CAHt8ZCP5zMXZfPo8EFpdVCFX0zq7DvJu=GoNcYGWo=frHdFpZA@mail.gmail.com>
+ <20131110114639.0d648555@skate>
+Message-ID: <87k3gfc1cv.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Samuel" == Samuel Martin <s.martin49@gmail.com> writes:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-> Patch from upstream already included in the next 5.2 release
-> Fixes:
-> 	http://autobuild.buildroot.net/results/347/347577bf1dee0fec3302a45f278eb253118a5b6f/build-end.log
+Hi,
 
-> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+>> > The missing TLS problem on AVR32. We still haven't found the solution
+>> > to handle this one. As I've suggested previously, I would simply make
+>> > TLS support unconditional in Buildroot as soon as thread support is
+>> > enabled, and then mark libcap-ng as not available on AVR32. Of course,
+>> > if you have an external toolchain without TLS support, you're on your
+>> > own.
+>> 
+>> As you say, we still don't appear to have reached a consensus of
+>> opinion on how to solve this.
 
-Committed both, thanks.
+> Peter, can we agree on the following solution for this:
+
+>  (1) Remove BR2_GCC_ENABLE_TLS, and enable TLS support unconditionally,
+>      except when thread support is not enabled.
+
+>  (2) Everywhere, assume that TLS support is always available when we
+>      have thread support. If it's not the case (such as AVR32), mark
+>      the package as "depends on !<architecture>".
+
+Yes, sounds sensible.
 
 -- 
 Bye, Peter Korsgaard
