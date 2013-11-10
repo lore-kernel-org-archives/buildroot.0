@@ -1,83 +1,44 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Sun, 10 Nov 2013 21:33:32 +0100
-Subject: [Buildroot] [PATCH 1/1] Generation of locales: made call to tr
- more robust and added LOWERCASE macro
-In-Reply-To: <1384104772-30097-1-git-send-email-thierry.bultel@wanadoo.fr>
-References: <1384104772-30097-1-git-send-email-thierry.bultel@wanadoo.fr>
-Message-ID: <CAAXf6LVniLhJMD6e0gJnaVZ6N-g8b=TAOghG9ydAhm0wHEkmWg@mail.gmail.com>
+From: spdawson at gmail.com <spdawson@gmail.com>
+Date: Sun, 10 Nov 2013 20:58:33 +0000
+Subject: [Buildroot] [PATCH] zmqpp: fix build failure
+Message-ID: <1384117113-6710-1-git-send-email-spdawson@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thierry,
+From: Simon Dawson <spdawson@gmail.com>
 
-On Sun, Nov 10, 2013 at 6:32 PM, Thierry Bultel
-<thierry.bultel@wanadoo.fr> wrote:
-> When calling 'tr' without quoting braces, bash can make really weird things
-> if there are existing 'single-letter-named' directories
-> eg:
-> thierry at thierry-desktop:~$ echo AAA | tr [A-Z] [a-z]
-> aaa
-> thierry at thierry-desktop:~$ mkdir m
-> thierry at thierry-desktop:~$ echo AAA | tr [A-Z] [a-z]
-> AAA
->
->
-> The (quick) analysis is that the callee (tr) argvs then
-> contain 'm' thus the translation does not work
->
-> Using quotes works around it:
-> thierry at thierry-desktop:~$ echo AAA | tr '[A-Z]' '[a-z]'
-> aaa
->
->
-> Changes v1->v2
->   - Added the LOWERCASE macro, following Thomas De Schampheleire's advice
->
+The zmqpp client needs a little help to link against libpthread. Fix build
+failures such as the following.
 
-This 'Changes' text should be below the --- line, otherwise it ends up
-in the commit log which is not supposed to happen.
+  http://autobuild.buildroot.net/results/d0a/d0a740d4d5414844ca7f2de266fc92223d3d20c8
 
->
-> Signed-off-by: Thierry Bultel <thierry.bultel@wanadoo.fr>
-> ---
->  Makefile             |    2 +-
->  package/pkg-utils.mk |    8 ++++++++
->  2 files changed, 9 insertions(+), 1 deletions(-)
->
-> diff --git a/Makefile b/Makefile
-> index 1496bd7..a006615 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -548,7 +548,7 @@ target-generatelocales: host-localedef
->                 I18NPATH=$(STAGING_DIR)/usr/share/i18n:/usr/share/i18n \
->                 $(HOST_DIR)/usr/bin/localedef \
->                         --prefix=$(TARGET_DIR) \
-> -                       --`echo $(BR2_ENDIAN) | tr [A-Z] [a-z]`-endian \
-> +                       --$(call LOWERCASE,$(BR2_ENDIAN))-endian \
->                         -i $${inputfile} -f $${charmap} \
->                         $${locale} ; \
->         done
-> diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
-> index 5930f2c..0ef433d 100644
-> --- a/package/pkg-utils.mk
-> +++ b/package/pkg-utils.mk
-> @@ -23,6 +23,14 @@ UPPERCASE = $(strip $(eval __tmp := $1) \
->         $(__tmp)))) \
->         $(__tmp))
->
-> +# LOWERCASE macro -- transforms its arguments to lowercase
-> +# The above non-tr implementation is not needed, because LOWERCASE is not
-> +# called very often
-> +
-> +define LOWERCASE
-> +$(shell echo $1 | tr '[:upper:]' '[:lower:]')
-> +endef
-> +
+Signed-off-by: Simon Dawson <spdawson@gmail.com>
+---
+ package/zmqpp/zmqpp.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Not sure if a 'define' was needed here (compared to a simple
-assignment), but I have no strong feelings about that.
-
-Reviewed-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+diff --git a/package/zmqpp/zmqpp.mk b/package/zmqpp/zmqpp.mk
+index 83e088f..4c8417f 100644
+--- a/package/zmqpp/zmqpp.mk
++++ b/package/zmqpp/zmqpp.mk
+@@ -12,6 +12,7 @@ ZMQPP_LICENSE = MIT
+ ZMQPP_LICENSE_FILES = LICENSE
+ 
+ ZMQPP_MAKE_OPT = LD="$(TARGET_CXX)" BUILD_PATH=./build PREFIX=/usr
++ZMQPP_LDFLAGS = $(TARGET_LDFLAGS) -lpthread
+ 
+ ifeq ($(BR2_PACKAGE_ZMQPP_CLIENT),y)
+ ZMQPP_DEPENDENCIES += boost
+@@ -19,6 +20,7 @@ endif
+ 
+ define ZMQPP_BUILD_CMDS
+ 	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) \
++		LDFLAGS="$(ZMQPP_LDFLAGS)" \
+ 		$(ZMQPP_MAKE_OPT) $(if $(BR2_PACKAGE_ZMQPP_CLIENT),all) -C $(@D)
+ endef
+ 
+-- 
+1.8.3.2
