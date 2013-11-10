@@ -1,34 +1,31 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 10 Nov 2013 12:36:53 +0100
-Subject: [Buildroot] Analysis of build failures
-In-Reply-To: <CAHt8ZCMG8uj2_vn=18gX0QQvte4RjO+R4OwY1jG6sEzbJUcGDA@mail.gmail.com>
-References: <20131109073028.B3C2E52C614@lolut.humanoidz.org>
- <20131109191543.414f5694@skate>
- <CAHt8ZCP5zMXZfPo8EFpdVCFX0zq7DvJu=GoNcYGWo=frHdFpZA@mail.gmail.com>
- <20131110114639.0d648555@skate>
- <CAHt8ZCMG8uj2_vn=18gX0QQvte4RjO+R4OwY1jG6sEzbJUcGDA@mail.gmail.com>
-Message-ID: <20131110123653.13bb8d6e@skate>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 10 Nov 2013 12:35:02 +0100
+Subject: [Buildroot] [PATCH] Config.in.legacy: select BR2_LEGACY for
+	module-init-tools legacy option
+In-Reply-To: <1383851388-28586-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Thu, 7 Nov 2013 20:09:48 +0100")
+References: <1383851388-28586-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <87zjpccwwp.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Simon Dawson,
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-On Sun, 10 Nov 2013 11:21:14 +0000, Simon Dawson wrote:
+ > Commit 94c72087f3 ("module-init-tools: remove package") removed the
+ > module-init-tools package and therefore added the corresponding config
+ > option in Config.in.legacy. However, the commit forgot to add the
+ > "select BR2_LEGACY" that ensures the build cannot proceed until the
+ > user has acknowledged the change (i.e kmod replacing
+ > module-init-tools).
 
-> Unfortunately, there is no fallocate syscall on avr32. So I think I'll
-> have to revert to my original plan to disable fallocate in the
-> util-linux package for avr32.
+ > This commit adds this missing "select BR2_LEGACY".
 
-Ok. I guess there will be a bunch of packages that use fallocate(), so
-we'll have to mark them !BR2_avr32, or find some other trick.
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-Thanks,
+Committed, thanks.
 
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
