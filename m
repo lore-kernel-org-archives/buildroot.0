@@ -1,41 +1,32 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 11 Nov 2013 00:56:37 +0100
-Subject: [Buildroot] [git commit] libmodbus: bump version and change
-	download location
-Message-ID: <20131111001018.0F0D29A131@busybox.osuosl.org>
+Date: Mon, 11 Nov 2013 00:51:22 +0100
+Subject: [Buildroot] [git commit] imagemagick: bump to version 6.8.7-3
+Message-ID: <20131111001017.D12939BB30@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=8639afc6f097337241d1ebb88bd7ae0b97606372
+commit: http://git.buildroot.net/buildroot/commit/?id=42cd7395b01644de43a49078b4d4be49907767a5
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The license of libmodbus is LGPL v2.1 or later and the
-licence of programs in tests directory is GPL v3. So
-specify only LGPL v2.1.
-
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libmodbus/libmodbus.mk |    6 ++++--
- 1 files changed, 4 insertions(+), 2 deletions(-)
+ package/imagemagick/imagemagick.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/libmodbus/libmodbus.mk b/package/libmodbus/libmodbus.mk
-index 8f93c2b..8aa3cd7 100644
---- a/package/libmodbus/libmodbus.mk
-+++ b/package/libmodbus/libmodbus.mk
-@@ -4,8 +4,10 @@
- #
+diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
+index 4b58148..a31e799 100644
+--- a/package/imagemagick/imagemagick.mk
++++ b/package/imagemagick/imagemagick.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--LIBMODBUS_VERSION = 3.0.3
--LIBMODBUS_SITE = http://github.com/downloads/stephane/libmodbus
-+LIBMODBUS_VERSION = 3.0.5
-+LIBMODBUS_SITE = http://libmodbus.org/site_media/build/
-+LIBMODBUS_LICENSE = LGPLv2.1+
-+LIBMODBUS_LICENSE_FILES = COPYING.LESSER
- LIBMODBUS_INSTALL_STAGING = YES
- 
- $(eval $(autotools-package))
+ IMAGEMAGICK_MAJOR = 6.8.7
+-IMAGEMAGICK_VERSION = $(IMAGEMAGICK_MAJOR)-1
++IMAGEMAGICK_VERSION = $(IMAGEMAGICK_MAJOR)-3
+ IMAGEMAGICK_SOURCE = ImageMagick-$(IMAGEMAGICK_VERSION).tar.xz
+ # The official ImageMagick site only keeps the latest versions
+ # available, which is annoying. Use an alternate site that keeps all
