@@ -1,55 +1,109 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 11 Nov 2013 00:29:44 +0100
-Subject: [Buildroot] [git commit] rootfs-ext2: make the symlink as a
-	_POST_TARGET
-Message-ID: <20131110233747.342E19BB23@busybox.osuosl.org>
+Date: Mon, 11 Nov 2013 00:32:46 +0100
+Subject: [Buildroot] [git commit] rootfs-common: refactor the common
+	compression commands
+Message-ID: <20131110233747.6F4EE9BB0A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=75b6303a9a5bf1b7e62b69bb8ddc7e138ef9775f
+commit: http://git.buildroot.net/buildroot/commit/?id=bd8ef7a01c0db004334cd48ce798e6aab5bd34df
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This will allow us to remove the unused ROOTFS_$(FSTYPE)_POST_GEN_HOOKS.
+This makes the compression extension available in a variable, so it
+can be used by the fs-specific commands. In this patch, it is used
+by iso9660. Following patches show more use cases.
 
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- fs/common.mk    |    2 +-
- fs/ext2/ext2.mk |    6 +++---
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ fs/common.mk          |   42 +++++++++++++++++++++++++++---------------
+ fs/iso9660/iso9660.mk |    6 +-----
+ 2 files changed, 28 insertions(+), 20 deletions(-)
 
 diff --git a/fs/common.mk b/fs/common.mk
-index 4dab7ea..01d2c00 100644
+index f22fb61..aa9d961 100644
 --- a/fs/common.mk
 +++ b/fs/common.mk
-@@ -17,7 +17,7 @@
- #  generating the filesystem image
- #
- #  ROOTFS_$(FSTYPE)_POST_GEN_HOOKS, a list of hooks to call after
--#  generating the filesystem image
-+#  generating and compressing the filesystem image
- #
- #  ROOTFS_$(FSTYPE)_POST_TARGETS, the list of targets that should be
- #  run after running the main filesystem target. This is useful for
-diff --git a/fs/ext2/ext2.mk b/fs/ext2/ext2.mk
-index cad5b42..b4280aa 100644
---- a/fs/ext2/ext2.mk
-+++ b/fs/ext2/ext2.mk
-@@ -27,11 +27,11 @@ define ROOTFS_EXT2_CMD
- 	PATH=$(TARGET_PATH) $(EXT2_ENV) fs/ext2/genext2fs.sh -d $(TARGET_DIR) $(EXT2_OPTS) $@
- endef
+@@ -37,7 +37,31 @@ USERS_TABLE = $(BUILD_DIR)/_users_table.txt
+ define ROOTFS_TARGET_INTERNAL
  
--define ROOTFS_EXT2_HOOK_SYMLINK
-+rootfs-ext2-symlink:
- 	ln -sf rootfs.ext2 $(BINARIES_DIR)/rootfs.ext$(BR2_TARGET_ROOTFS_EXT2_GEN)
--endef
+ # extra deps
+-ROOTFS_$(2)_DEPENDENCIES += host-fakeroot host-makedevs $$(if $$(BR2_TARGET_ROOTFS_$(2)_LZMA),host-lzma) $$(if $$(BR2_TARGET_ROOTFS_$(2)_LZO),host-lzop) $$(if $$(BR2_TARGET_ROOTFS_$(2)_XZ),host-xz)
++ROOTFS_$(2)_DEPENDENCIES += host-fakeroot host-makedevs
 +
- ifneq ($(BR2_TARGET_ROOTFS_EXT2_GEN),2)
--ROOTFS_EXT2_POST_GEN_HOOKS += ROOTFS_EXT2_HOOK_SYMLINK
-+ROOTFS_EXT2_POST_TARGETS += rootfs-ext2-symlink
++ifeq ($$(BR2_TARGET_ROOTFS_$(2)_GZIP),y)
++ROOTFS_$(2)_COMPRESS_EXT = .gz
++ROOTFS_$(2)_COMPRESS_CMD = gzip -9 -c
++endif
++ifeq ($$(BR2_TARGET_ROOTFS_$(2)_BZIP2),y)
++ROOTFS_$(2)_COMPRESS_EXT = .bz2
++ROOTFS_$(2)_COMPRESS_CMD = bzip2 -9 -c
++endif
++ifeq ($$(BR2_TARGET_ROOTFS_$(2)_LZMA),y)
++ROOTFS_$(2)_DEPENDENCIES += host-lzma
++ROOTFS_$(2)_COMPRESS_EXT = .lzma
++ROOTFS_$(2)_COMPRESS_CMD = $$(LZMA) -9 -c
++endif
++ifeq ($$(BR2_TARGET_ROOTFS_$(2)_LZO),y)
++ROOTFS_$(2)_DEPENDENCIES += host-lzop
++ROOTFS_$(2)_COMPRESS_EXT = .lzo
++ROOTFS_$(2)_COMPRESS_CMD = $$(LZOP) -9 -c
++endif
++ifeq ($$(BR2_TARGET_ROOTFS_$(2)_XZ),y)
++ROOTFS_$(2)_DEPENDENCIES += host-xz
++ROOTFS_$(2)_COMPRESS_EXT = .xz
++ROOTFS_$(2)_COMPRESS_CMD = $$(XZ) -9 -C crc32 -c
++endif
+ 
+ $$(BINARIES_DIR)/rootfs.$(1): $$(ROOTFS_$(2)_DEPENDENCIES)
+ 	@$$(call MESSAGE,"Generating root filesystem image rootfs.$(1)")
+@@ -60,20 +84,8 @@ endif
+ 	$$(HOST_DIR)/usr/bin/fakeroot -- $$(FAKEROOT_SCRIPT)
+ 	cp support/misc/target-dir-warning.txt $$(TARGET_DIR_WARNING_FILE)
+ 	- at rm -f $$(FAKEROOT_SCRIPT) $$(FULL_DEVICE_TABLE)
+-ifeq ($$(BR2_TARGET_ROOTFS_$(2)_GZIP),y)
+-	gzip -9 -c $$@ > $$@.gz
+-endif
+-ifeq ($$(BR2_TARGET_ROOTFS_$(2)_BZIP2),y)
+-	bzip2 -9 -c $$@ > $$@.bz2
+-endif
+-ifeq ($$(BR2_TARGET_ROOTFS_$(2)_LZMA),y)
+-	$$(LZMA) -9 -c $$@ > $$@.lzma
+-endif
+-ifeq ($$(BR2_TARGET_ROOTFS_$(2)_LZO),y)
+-	$$(LZOP) -9 -c $$@ > $$@.lzo
+-endif
+-ifeq ($$(BR2_TARGET_ROOTFS_$(2)_XZ),y)
+-	$(XZ) -9 -C crc32 -c $$@ > $$@.xz
++ifneq ($$(ROOTFS_$(2)_COMPRESS_CMD),)
++	$$(ROOTFS_$(2)_COMPRESS_CMD) $$@ > $$@$$(ROOTFS_$(2)_COMPRESS_EXT)
  endif
  
- $(eval $(call ROOTFS_TARGET,ext2))
+ rootfs-$(1)-show-depends:
+diff --git a/fs/iso9660/iso9660.mk b/fs/iso9660/iso9660.mk
+index 317314a..979a0b2 100644
+--- a/fs/iso9660/iso9660.mk
++++ b/fs/iso9660/iso9660.mk
+@@ -10,10 +10,6 @@
+ ISO9660_TARGET_DIR = $(BUILD_DIR)/iso9660
+ ISO9660_BOOT_MENU := $(call qstrip,$(BR2_TARGET_ROOTFS_ISO9660_BOOT_MENU))
+ 
+-ISO9660_CPIO_EXT-$(BR2_TARGET_ROOTFS_CPIO_GZIP)  = .gz
+-ISO9660_CPIO_EXT-$(BR2_TARGET_ROOTFS_CPIO_BZIP2) = .bz2
+-ISO9660_CPIO_EXT-$(BR2_TARGET_ROOTFS_CPIO_LZMA)  = .lzma
+-
+ $(BINARIES_DIR)/rootfs.iso9660: host-cdrkit host-fakeroot linux rootfs-cpio grub
+ 	@$(call MESSAGE,"Generating root filesystem image rootfs.iso9660")
+ 	mkdir -p $(ISO9660_TARGET_DIR)
+@@ -21,7 +17,7 @@ $(BINARIES_DIR)/rootfs.iso9660: host-cdrkit host-fakeroot linux rootfs-cpio grub
+ 	cp $(GRUB_DIR)/stage2/stage2_eltorito $(ISO9660_TARGET_DIR)/boot/grub/
+ 	cp $(ISO9660_BOOT_MENU) $(ISO9660_TARGET_DIR)/boot/grub/menu.lst
+ 	cp $(LINUX_IMAGE_PATH) $(ISO9660_TARGET_DIR)/kernel
+-	cp $(BINARIES_DIR)/rootfs.cpio$(ISO9660_CPIO_EXT-y) $(ISO9660_TARGET_DIR)/initrd
++	cp $(BINARIES_DIR)/rootfs.cpio$(ROOTFS_CPIO_COMPRESS_EXT) $(ISO9660_TARGET_DIR)/initrd
+ 	# Use fakeroot to pretend all target binaries are owned by root
+ 	rm -f $(FAKEROOT_SCRIPT)
+ 	echo "chown -R 0:0 $(ISO9660_TARGET_DIR)" >> $(FAKEROOT_SCRIPT)
