@@ -1,75 +1,36 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 10 Nov 2013 23:48:39 +0100
-Subject: [Buildroot] [git commit] qt5base: fix rpi/egl support
-	(vc_dispmanx_element_change_attributes proto mismatch)
-Message-ID: <20131110225806.B46069BB60@busybox.osuosl.org>
+Date: Sun, 10 Nov 2013 23:45:15 +0100
+Subject: [Buildroot] [git commit] xlib_libpthread-stubs: needs -pthread when
+	linking statically
+Message-ID: <20131110225806.960309BB60@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d90d48ecae7107b9bdab2c78282c63e2d39acc6b
+commit: http://git.buildroot.net/buildroot/commit/?id=79afe8e70ff806eaaebc263bcd00ebcc88960493
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Patch from upstream already included in the next 5.2 release
+Fixes e.g. http://autobuild.buildroot.net/results/1eaa694263b74313b0c90c510abcb11d490a3773/
 
-Fixes:
-	http://autobuild.buildroot.net/results/347/347577bf1dee0fec3302a45f278eb253118a5b6f/build-end.log
-
-Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...ate-vc_dispmanx_element_change_attributes.patch |   44 ++++++++++++++++++++
- 1 files changed, 44 insertions(+), 0 deletions(-)
+ .../xlib_libpthread-stubs/xlib_libpthread-stubs.mk |    4 ++++
+ 1 files changed, 4 insertions(+), 0 deletions(-)
 
-diff --git a/package/qt5/qt5base/qt5base-0006-qeglfshooksrpi-update-vc_dispmanx_element_change_attributes.patch b/package/qt5/qt5base/qt5base-0006-qeglfshooksrpi-update-vc_dispmanx_element_change_attributes.patch
-new file mode 100644
-index 0000000..417970d
---- /dev/null
-+++ b/package/qt5/qt5base/qt5base-0006-qeglfshooksrpi-update-vc_dispmanx_element_change_attributes.patch
-@@ -0,0 +1,44 @@
-+From 90005fae17acc994948aa5a79fc262fd07b69865 Mon Sep 17 00:00:00 2001
-+From: Dario Freddi <dario.freddi@ispirata.com>
-+Date: Fri, 13 Sep 2013 12:10:03 +0200
-+Subject: [PATCH] qeglfshooksrpi: update vc_dispmanx_element_change_attributes
+diff --git a/package/x11r7/xlib_libpthread-stubs/xlib_libpthread-stubs.mk b/package/x11r7/xlib_libpthread-stubs/xlib_libpthread-stubs.mk
+index 5ea02e9..6343691 100644
+--- a/package/x11r7/xlib_libpthread-stubs/xlib_libpthread-stubs.mk
++++ b/package/x11r7/xlib_libpthread-stubs/xlib_libpthread-stubs.mk
+@@ -12,5 +12,9 @@ XLIB_LIBPTHREAD_STUBS_LICENSE_FILES = COPYING
+ 
+ XLIB_LIBPTHREAD_STUBS_INSTALL_STAGING = YES
+ 
++ifeq ($(BR2_PREFER_STATIC_LIB),y)
++XLIB_LIBPTHREAD_STUBS_CONF_ENV += LDFLAGS="$(TARGET_LDFLAGS) -pthread"
++endif
 +
-+Remove the extern prototype as it's now defined in latest
-+firmware headers correctly. Moreover, the signature of the function
-+changed. This patch fixes both issues.
-+
-+Change-Id: I0114b436dbaf5a171e6429a1e3760e292c7152cf
-+Reviewed-by: Andy Nichols <andy.nichols@digia.com>
-+---
-+ .../devices/linux-rasp-pi-g++/qeglfshooks_pi.cpp   |    8 +-------
-+ 1 files changed, 1 insertions(+), 7 deletions(-)
-+
-+diff --git a/mkspecs/devices/linux-rasp-pi-g++/qeglfshooks_pi.cpp b/mkspecs/devices/linux-rasp-pi-g++/qeglfshooks_pi.cpp
-+index 9b48113..add96bf 100644
-+--- a/mkspecs/devices/linux-rasp-pi-g++/qeglfshooks_pi.cpp
-++++ b/mkspecs/devices/linux-rasp-pi-g++/qeglfshooks_pi.cpp
-+@@ -88,12 +88,6 @@ static EGLNativeWindowType createDispmanxLayer(const QPoint &pos, const QSize &s
-+     return eglWindow;
-+ }
-+ 
-+-// this function is not part of debian squeeze headers
-+-extern "C" int VCHPOST_ vc_dispmanx_element_change_attributes(DISPMANX_UPDATE_HANDLE_T update,
-+-    DISPMANX_ELEMENT_HANDLE_T element, uint32_t change_flags, int32_t layer,
-+-    uint8_t opacity, const VC_RECT_T *dest_rect, const VC_RECT_T *src_rect,
-+-    DISPMANX_RESOURCE_HANDLE_T mask, VC_IMAGE_TRANSFORM_T transform);
-+-
-+ // these constants are not in any headers (yet)
-+ #define ELEMENT_CHANGE_LAYER          (1<<0)
-+ #define ELEMENT_CHANGE_OPACITY        (1<<1)
-+@@ -128,7 +122,7 @@ static void moveDispmanxLayer(EGLNativeWindowType window, const QPoint &pos)
-+                                           &dst_rect,
-+                                           NULL,
-+                                           0,
-+-                                          (VC_IMAGE_TRANSFORM_T)0);
-++                                          (DISPMANX_TRANSFORM_T)0);
-+ 
-+     vc_dispmanx_update_submit_sync(dispman_update);
-+ }
-+-- 
-+1.7.1
-+
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
