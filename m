@@ -1,42 +1,87 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 11 Nov 2013 00:30:21 +0100
-Subject: [Buildroot] [git commit] rootfs-common: remove the now unused
-	ROOTFS_<PKG>_POST_GEN_HOOKS
-Message-ID: <20131110233747.531849BB0A@busybox.osuosl.org>
+Date: Mon, 11 Nov 2013 00:34:31 +0100
+Subject: [Buildroot] [git commit] rootfs-cpio: add U-Boot image support
+Message-ID: <20131110233747.8D5059BB31@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=053d678a6c8667b2dd8f4e1940a34cba31f338d3
+commit: http://git.buildroot.net/buildroot/commit/?id=3970ebf837aa7ac52528d3afc8c1701015a024b0
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Adds U-Boot image support for cpio root filesystems. This allows you to
+use the bootm command in U-Boot to load the rootfs. It makes it possible to
+verify the CRC of the initramfs before booting the kernel.
+
+[Spenser: wrote first version of the patch.]
+Signed-off-by: Spenser Gilliland <spenser@gillilanding.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- fs/common.mk |    4 ----
- 1 files changed, 0 insertions(+), 4 deletions(-)
+ fs/cpio/Config.in |   13 ++++++++++++-
+ fs/cpio/cpio.mk   |   21 +++++++++++++++++++++
+ 2 files changed, 33 insertions(+), 1 deletions(-)
 
-diff --git a/fs/common.mk b/fs/common.mk
-index 01d2c00..f22fb61 100644
---- a/fs/common.mk
-+++ b/fs/common.mk
-@@ -16,9 +16,6 @@
- #  ROOTFS_$(FSTYPE)_PRE_GEN_HOOKS, a list of hooks to call before
- #  generating the filesystem image
- #
--#  ROOTFS_$(FSTYPE)_POST_GEN_HOOKS, a list of hooks to call after
--#  generating and compressing the filesystem image
--#
- #  ROOTFS_$(FSTYPE)_POST_TARGETS, the list of targets that should be
- #  run after running the main filesystem target. This is useful for
- #  initramfs, to rebuild the kernel once the initramfs is generated.
-@@ -63,7 +60,6 @@ endif
- 	$$(HOST_DIR)/usr/bin/fakeroot -- $$(FAKEROOT_SCRIPT)
- 	cp support/misc/target-dir-warning.txt $$(TARGET_DIR_WARNING_FILE)
- 	- at rm -f $$(FAKEROOT_SCRIPT) $$(FULL_DEVICE_TABLE)
--	$$(foreach hook,$$(ROOTFS_$(2)_POST_GEN_HOOKS),$$(call $$(hook))$$(sep))
- ifeq ($$(BR2_TARGET_ROOTFS_$(2)_GZIP),y)
- 	gzip -9 -c $$@ > $$@.gz
- endif
+diff --git a/fs/cpio/Config.in b/fs/cpio/Config.in
+index fd85d29..206baca 100644
+--- a/fs/cpio/Config.in
++++ b/fs/cpio/Config.in
+@@ -5,10 +5,11 @@ config BR2_TARGET_ROOTFS_CPIO
+ 	  used for an initial RAM filesystem that is passed to the kernel
+ 	  by the bootloader.
+ 
++if BR2_TARGET_ROOTFS_CPIO
++
+ choice
+ 	prompt "Compression method"
+ 	default BR2_TARGET_ROOTFS_CPIO_NONE
+-	depends on BR2_TARGET_ROOTFS_CPIO
+ 	help
+ 	  Select compressor for cpio filesystem of the root filesystem.
+ 	  If you use the cpio archive as an initial RAM filesystem, make
+@@ -47,3 +48,13 @@ config BR2_TARGET_ROOTFS_CPIO_XZ
+ 
+ endchoice
+ 
++config BR2_TARGET_ROOTFS_CPIO_UIMAGE
++	bool "Create U-Boot image of the root filesystem"
++	select BR2_PACKAGE_HOST_UBOOT_TOOLS
++	help
++	  Add a U-Boot header to the cpio root filesystem. This allows
++	  the initramfs to be loaded with the bootm command in U-Boot.
++
++	  The U-Boot image will be called rootfs.cpio.uboot
++
++endif # BR2_TARGET_ROOTFS_CPIO
+diff --git a/fs/cpio/cpio.mk b/fs/cpio/cpio.mk
+index 0df2378..e39e215 100644
+--- a/fs/cpio/cpio.mk
++++ b/fs/cpio/cpio.mk
+@@ -31,4 +31,25 @@ define ROOTFS_CPIO_CMD
+ 	cd $(TARGET_DIR) && find . | cpio --quiet -o -H newc > $@
+ endef
+ 
++# mkimage supports arm avr32 blackfin m68k microblaze mips mips64 nios2 powerpc ppc sh sparc sparc64 x86
++# KERNEL_ARCH can be arm64 arc arm avr32 blackfin m68k microblaze mips nios2 powerpc sh sparc i386 x86_64 xtensa
++# For arm64, arc, xtensa we'll just keep KERNEL_ARCH
++# For mips64, we'll just keep mips
++# For i386 and x86_64, we need to convert
++ifeq ($(KERNEL_ARCH),x86_64)
++UIMAGE_ARCH = x86
++else ifeq ($(KERNEL_ARCH),i386)
++UIMAGE_ARCH = x86
++else
++UIMAGE_ARCH = $(KERNEL_ARCH)
++endif
++
++$(BINARIES_DIR)/rootfs.cpio.uboot: $(BINARIES_DIR)/rootfs.cpio host-uboot-tools
++	$(HOST_DIR)/usr/bin/mkimage -A $(UIMAGE_ARCH) -T ramdisk \
++		-C none -d $<$(ROOTFS_CPIO_COMPRESS_EXT) $@
++
++ifeq ($(BR2_TARGET_ROOTFS_CPIO_UIMAGE),y)
++ROOTFS_CPIO_POST_TARGETS += $(BINARIES_DIR)/rootfs.cpio.uboot
++endif
++
+ $(eval $(call ROOTFS_TARGET,cpio))
