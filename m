@@ -1,91 +1,100 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Sun, 10 Nov 2013 17:18:55 +0100
-Subject: [Buildroot] Patchwork oldest patches cleanup #2 (deadline
-	November 17)
-In-Reply-To: <CAAXf6LV_kM18mt8h5yQScnhOPfJZ2PMNg3tvF=mBLCi8bFem2A@mail.gmail.com>
-References: <CAAXf6LV_kM18mt8h5yQScnhOPfJZ2PMNg3tvF=mBLCi8bFem2A@mail.gmail.com>
-Message-ID: <CAAXf6LXNrRKU5dvc8DqXdrgS-L1nZQ7GC4YNceFSpbkbz+2XeA@mail.gmail.com>
+From: Thierry Bultel <thierry.bultel@wanadoo.fr>
+Date: Sun, 10 Nov 2013 17:36:25 +0100
+Subject: [Buildroot] [PATCH 1/1] Generation of locales: made call to tr
+ more	robust
+In-Reply-To: <527FB10C.603@mind.be>
+References: <1383927916-27001-1-git-send-email-thierry.bultel@wanadoo.fr>
+ <c8339166-9470-405a-ad3f-6f8b4a6e6159@email.android.com>
+ <527F56D9.8060809@wanadoo.fr>
+ <ca01f976-f93a-496a-9b4b-9b02c81c940a@email.android.com>
+ <527FB10C.603@mind.be>
+Message-ID: <527FB609.8020908@wanadoo.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-All,
+Le 10/11/2013 17:15, Arnout Vandecappelle a ?crit :
+> On 10/11/13 11:17, Thomas De Schampheleire wrote:
+>> Thierry Bultel <thierry.bultel@wanadoo.fr> wrote:
+>>> Le 09/11/2013 14:47, Thomas De Schampheleire a ?crit :
+>>>> Thierry Bultel <thierry.bultel@wanadoo.fr> wrote:
+>>>>> From: tbultel <tbultel@basystemes.fr>
+>>>>>
+>>>>> When calling 'tr' without quoting braces, bash can make really
+>>>>> weird things
+>>>>> if there are existing 'single-letter-named' directories
+>>>>> eg:
+>>>>> tbultel at laois:~/test$ echo AAA | tr [A-Z] [a-z]
+>>>>> aaa
+>>>>> tbultel at laois:~/test$ echo AAA | tr [A-Z] [a-z]
+>>>>> AAA
+>>>>>
+>>>>> The (quick) analysis is that the callee (tr) argvs then
+>>>>> contain 'm' thus the translation does not work
+>>>>>
+>>>>> Using quotes works around it
+>>>>> tbultel at laois:~/test$ echo AAA | tr '[A-Z]' '[a-z]'
+>>>>> aaa
+>>>>>
+>>>>>
+>>>>> Signed-off-by: tbultel <tbultel@basystemes.fr>
+>>>>
+>>>> This should be real name, not a username.
+>>>>
+>>>>> ---
+>>>>> Makefile |    2 +-
+>>>>> 1 files changed, 1 insertions(+), 1 deletions(-)
+>>>>>
+>>>>> diff --git a/Makefile b/Makefile
+>>>>> index 1496bd7..7f835c0 100644
+>>>>> --- a/Makefile
+>>>>> +++ b/Makefile
+>>>>> @@ -548,7 +548,7 @@ target-generatelocales: host-localedef
+>>>>>         I18NPATH=$(STAGING_DIR)/usr/share/i18n:/usr/share/i18n \
+>>>>>         $(HOST_DIR)/usr/bin/localedef \
+>>>>>             --prefix=$(TARGET_DIR) \
+>>>>> -            --`echo $(BR2_ENDIAN) | tr [A-Z] [a-z]`-endian \
+>>>>> +            --`echo $(BR2_ENDIAN) | tr '[A-Z]' '[a-z]'`-endian \
+>>>>>             -i $${inputfile} -f $${charmap} \
+>>>>>             $${locale} ; \
+>>>>>     done
+>>>>
+>>>> While there's nothing wrong with your fix itself, I wonder why this
+>>>> isn't using the UPPERCASE and LOWERCASE macros we have defined in
+>>>> package/pkg-utils.mak...
+>>>>
+>>>> Best regards,
+>>>> Thomas
+>>>>
+>>>>
+>>>>
+>>>
+>>> The LOWERCASE macro does not seem to exist
+>>>
+>>
+>> It should be straightforward to implement it based on the existing
+>> UPPERCASE macro. I justfind odd there'd be two ways of converting
+>> case. One with direct tr and the other with a make macro...
+>
+>   The UPPERCASE macro is actually really really ugly - it's only reason
+> of existing is that it's much faster than calling tr 40K times, which
+> would be required because UPPERCASE is called so often.
+>
+>   Bottom line: I think using tr for this one situation is a better idea
+> than adding another ugly lowercase macro.
+>
+>   Regards,
+>   Arnout
+>
+>
 
-On Fri, Nov 1, 2013 at 4:09 PM, Thomas De Schampheleire
-<patrickdepinguin@gmail.com> wrote:
-> All,
->
-> For those who haven't seen the first patchwork cleanup session, here is
-> a quick recap: every session we'll be posting the list of the 10 oldest
-> patches, with the original patch contributors in copy. During two weeks,
-> we have the opportunity to discuss the patch, whether it is still
-> necessary or not, how it should be changed to be merged.
->
-> In particular, I'm interested in knowing if the original contributor is
-> still interested by the patch, or if someone else is interested in
-> adopting the patch and sending an updated version, or if the patch no
-> longer makes sense due to other changes made in Buildroot.
->
-> All patches that have not received any comment or attention before the
-> deadline will be removed from patchwork. This is aggressive, but we have
-> many 'dead' patches sitting in patchwork, and this cannot work.
->
-> For this second session, I set the deadline to November 17. Below are the
-> 10 oldest patches (obtained with a slightly modified version of pwclient):
-> [ pwclient list -s New -n 10 ]
->
+Yes indeed, one annoying point would have been the non symetric 
+implementation, since UPPERCASE handles dots and hyphens specially.
 
-Time for an intermediate reminder. Following patches are still unanswered:
+I then re-submit my patch with just my name instead my user name.
+Sorry about that, this is because I have several work locations.
 
->
-> Add support for the HABA-KNX-LITE
-> Gregory Hermant <gregory.hermant@calao-systems.com>
-> http://patchwork.ozlabs.org/patch/180241
->
-> Add custom boards support for Atmel SAM-BA software
-> Gregory Hermant <gregory.hermant@calao-systems.com>
-> http://patchwork.ozlabs.org/patch/180668
->
-
-Gregory: are these common boards used by other people than yourself?
-If so, are you still interested in getting this support in buildroot?
-
-> upx: high-performance executable packer with in-place decompression support
-> Stefan Fr?berg <stefan.froberg@petroprogram.com>
-> http://patchwork.ozlabs.org/patch/180285
-
-Stefan: are you still interested in getting this package in mainline buildroot?
-
->
-> [1/4] If linux-pam is built, enable dbm functionality in Berkeley DB
-> Dimitry Golubovsky <golubovsky@gmail.com>
-> http://patchwork.ozlabs.org/patch/182497
->
-> [2/4] Make Berkeley DB a dependency of linux-pam and make sure it is selected
-> Dimitry Golubovsky <golubovsky@gmail.com>
-> http://patchwork.ozlabs.org/patch/182498
->
-> [3/4] Provide PAM default configuration files when building linux-pam package
-> Dimitry Golubovsky <golubovsky@gmail.com>
-> http://patchwork.ozlabs.org/patch/182499
->
-> [4/4] PAM support in Busybox if linux-pam is built
-> Dimitry Golubovsky <golubovsky@gmail.com>
-> http://patchwork.ozlabs.org/patch/182500
->
-> Fixing linux-pam build failures
-> Stefan Fr?berg <stefan.froberg@petroprogram.com>
-> http://patchwork.ozlabs.org/patch/182537
->
-
-All the above patches are related to PAM. If anyone is interested in
-better linux-pam support in buildroot, I'd suggest to have a look at
-the above patches. I don't personally need it, and I also don't know
-how common PAM usage is in embedded systems.
-
-Any input is appreciated...
-
-Thanks,
-Thomas
+Regards,
+Thierry
