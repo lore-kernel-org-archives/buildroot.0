@@ -1,66 +1,91 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 10 Nov 2013 16:21:30 +0100
-Subject: [Buildroot] Analysis of build failures
-In-Reply-To: <20131110103235.GE19852@sapphire.tkos.co.il>
-References: <20131109073028.B3C2E52C614@lolut.humanoidz.org>
- <20131109191543.414f5694@skate>
- <20131110062525.GB1030@sapphire.tkos.co.il>
- <20131110094319.4494c56a@skate>
- <20131110103235.GE19852@sapphire.tkos.co.il>
-Message-ID: <20131110162130.73358e89@skate>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sun, 10 Nov 2013 17:15:08 +0100
+Subject: [Buildroot] [PATCH 1/1] Generation of locales: made call to tr
+ more	robust
+In-Reply-To: <ca01f976-f93a-496a-9b4b-9b02c81c940a@email.android.com>
+References: <1383927916-27001-1-git-send-email-thierry.bultel@wanadoo.fr>
+ <c8339166-9470-405a-ad3f-6f8b4a6e6159@email.android.com>
+ <527F56D9.8060809@wanadoo.fr>
+ <ca01f976-f93a-496a-9b4b-9b02c81c940a@email.android.com>
+Message-ID: <527FB10C.603@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Baruch Siach,
+On 10/11/13 11:17, Thomas De Schampheleire wrote:
+> Thierry Bultel <thierry.bultel@wanadoo.fr> wrote:
+>> Le 09/11/2013 14:47, Thomas De Schampheleire a ?crit :
+>>> Thierry Bultel <thierry.bultel@wanadoo.fr> wrote:
+>>>> From: tbultel <tbultel@basystemes.fr>
+>>>>
+>>>> When calling 'tr' without quoting braces, bash can make really weird things
+>>>> if there are existing 'single-letter-named' directories
+>>>> eg:
+>>>> tbultel at laois:~/test$ echo AAA | tr [A-Z] [a-z]
+>>>> aaa
+>>>> tbultel at laois:~/test$ echo AAA | tr [A-Z] [a-z]
+>>>> AAA
+>>>>
+>>>> The (quick) analysis is that the callee (tr) argvs then
+>>>> contain 'm' thus the translation does not work
+>>>>
+>>>> Using quotes works around it
+>>>> tbultel at laois:~/test$ echo AAA | tr '[A-Z]' '[a-z]'
+>>>> aaa
+>>>>
+>>>>
+>>>> Signed-off-by: tbultel <tbultel@basystemes.fr>
+>>>
+>>> This should be real name, not a username.
+>>>
+>>>> ---
+>>>> Makefile |    2 +-
+>>>> 1 files changed, 1 insertions(+), 1 deletions(-)
+>>>>
+>>>> diff --git a/Makefile b/Makefile
+>>>> index 1496bd7..7f835c0 100644
+>>>> --- a/Makefile
+>>>> +++ b/Makefile
+>>>> @@ -548,7 +548,7 @@ target-generatelocales: host-localedef
+>>>> 		I18NPATH=$(STAGING_DIR)/usr/share/i18n:/usr/share/i18n \
+>>>> 		$(HOST_DIR)/usr/bin/localedef \
+>>>> 			--prefix=$(TARGET_DIR) \
+>>>> -			--`echo $(BR2_ENDIAN) | tr [A-Z] [a-z]`-endian \
+>>>> +			--`echo $(BR2_ENDIAN) | tr '[A-Z]' '[a-z]'`-endian \
+>>>> 			-i $${inputfile} -f $${charmap} \
+>>>> 			$${locale} ; \
+>>>> 	done
+>>>
+>>> While there's nothing wrong with your fix itself, I wonder why this isn't using the UPPERCASE and LOWERCASE macros we have defined in package/pkg-utils.mak...
+>>>
+>>> Best regards,
+>>> Thomas
+>>>
+>>>
+>>>
+>>
+>> The LOWERCASE macro does not seem to exist
+>>
+>
+> It should be straightforward to implement it based on the existing UPPERCASE macro. I justfind odd there'd be two ways of converting case. One with direct tr and the other with a make macro...
 
-On Sun, 10 Nov 2013 12:32:35 +0200, Baruch Siach wrote:
+  The UPPERCASE macro is actually really really ugly - it's only reason 
+of existing is that it's much faster than calling tr 40K times, which 
+would be required because UPPERCASE is called so often.
 
-> > Yes. The UCLIBC_SUSV2_LEGACY symbol was added after 0.9.33.2, so it
-> > explains why only Xtensa (which uses the uClibc snapshot version) is
-> > affected.
-> 
-> I see if I can cook up a patch.
-> 
-> > Maybe we can replace the valloc() call with posix_memalign()
-> > and send the patch upstream to cdrkit?
-> 
-> cdrkit has not see a release in more than 3 years. There are probably other 
-> packages making use of the obsolete valloc() routine, so I guess we want to 
-> enable UCLIBC_SUSV2_LEGACY anyway.
+  Bottom line: I think using tr for this one situation is a better idea 
+than adding another ugly lowercase macro.
 
-Fine with me.
+  Regards,
+  Arnout
 
-> > Also, can you sync up with Chris to provide a patch that makes Xtensa
-> > not use a snapshot version, but a fixed version of uClibc (based on a
-> > git commit, for example) ? The snapshot version we currently use is
-> > really bad, because depending on when you run the build, you will get
-> > different build results. This is really not how Buildroot should work:
-> > snapshot versions are only provided for expert users who want to test
-> > the latest versions of uClibc, such versions shouldn't be used as the
-> > default.
-> 
-> The original patch of Chris adding xtensa support (75720db3, xtensa: add 
-> support for the Xtensa architecture) just disabled all other uClibc version 
-> for xtensa. The uClibc snapshot just became the version of choice by default.  
-> As far as I know any recent master branch commit id could reasonably be used.  
-> Should we add an "xtensa only" uClibc version, like the "avr32 only (0.9.31)" 
-> version that we now have? Hasn't Bernhard Reutner-Fischer declared some kind 
-> of -rc in the uclibc mailing list 
-> (http://lists.uclibc.org/pipermail/uclibc/2013-November/048069.html)?
 
-Well, seeing the activity of uClibc, I wouldn't expect an -rc version
-or a stable reason any time soon.
-
-Therefore, adding a Xtensa specific uClibc version, pinned to a
-specific Git commit, seems like the best option for now.
-
-Thanks,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
