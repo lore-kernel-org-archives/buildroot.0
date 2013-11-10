@@ -1,41 +1,35 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sat,  9 Nov 2013 21:55:41 +0000 (UTC)
-Subject: [Buildroot] [Bug 6668] iptables limit module alignment problem on
-	mips64
-In-Reply-To: <bug-6668-163@https.bugs.busybox.net/>
-References: <bug-6668-163@https.bugs.busybox.net/>
-Message-ID: <20131109215541.E7B8C8F6F9@busybox.osuosl.org>
+From: Stanislav Vlasic <svlasic@gmail.com>
+Date: Sun, 10 Nov 2013 05:17:28 +0100
+Subject: [Buildroot] Buildroot 2013.08.1, Linaro 2013.04 as toolchain,
+ kernel 3.0.101, wakeup from standby issue
+Message-ID: <CADYw_JJOEj-uO2yPF3BXo4wzUopvVha+wbH5=dNLHBU0CkBPEQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=6668
+Hi,
 
-Gustavo Zacarias <gustavo@zacarias.com.ar> changed:
+little help needed.
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|                            |WONTFIX
-           Severity|critical                    |normal
+Here are my steps I perform to suspend ARM based device:
 
---- Comment #1 from Gustavo Zacarias <gustavo@zacarias.com.ar> 2013-11-09 21:55:41 UTC ---
-1) This isn't critical - if you want something fixed then you should at least
-be polite and don't think about your little corner only.
-Critical would be something minimal not building, for example a basic root
-filesystem with just busybox with a default configuration.
-Iptables is just one package among many, and the failure is a subset of the
-functionality of iptables on a subset of many architectures.
+- close all running apps (eg. XBMC)
+- sync command to save all cached data
+- issue mem to /sys/power/state sysfs node
+- after that power indicator led turns off
 
-2) This is an upstream bug, unless there's a patch or knob to signal the
-iptables build about mixed 64/32 kernel/userland (which was present several
-releases ago IIRC) or fixing this issue then there's nothing we can do on our
-side alone - you should contact the netfilter devels about this issue since
-it's a bug.
+That all works just fine.
 
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+After interrupt (IR remote in my case handled by uboot and ARC), kernel
+wakes up, resumes all drivers, puts power led in ON state and ends up with
+unknown_wakeups message.
+
+Any help or hint would be appreciated :) Android JellyBean 4.2.2 on same
+platform works way it should (it wakes up).
+
+Thanx
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20131110/ccaa03c2/attachment.html>
