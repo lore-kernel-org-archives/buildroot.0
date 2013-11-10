@@ -1,41 +1,65 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 11 Nov 2013 00:53:48 +0100
-Subject: [Buildroot] [git commit] iptables: add support for connlabel match
-	and nfnl_osf
-Message-ID: <20131111001017.ED3F79BB7F@busybox.osuosl.org>
+Date: Mon, 11 Nov 2013 00:53:35 +0100
+Subject: [Buildroot] [git commit] ipset: bump to version 6.20.1
+Message-ID: <20131111001017.DB9FA9A131@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b835171cf9db23095c669b872dbaa15fc1e99898
+commit: http://git.buildroot.net/buildroot/commit/?id=26baab06ad46ec51aa6e965fc6a0af5d2ddaabe1
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/iptables/iptables.mk |   10 ++++++++++
- 1 files changed, 10 insertions(+), 0 deletions(-)
+ package/ipset/ipset-01-uclinux.patch |   26 --------------------------
+ package/ipset/ipset.mk               |    2 +-
+ 2 files changed, 1 insertions(+), 27 deletions(-)
 
-diff --git a/package/iptables/iptables.mk b/package/iptables/iptables.mk
-index 13ad0ca..6547069 100644
---- a/package/iptables/iptables.mk
-+++ b/package/iptables/iptables.mk
-@@ -16,6 +16,16 @@ IPTABLES_CONF_OPT = --libexecdir=/usr/lib --with-kernel=$(STAGING_DIR)/usr
- # Because of iptables-01-fix-static-link.patch
- IPTABLES_AUTORECONF = YES
+diff --git a/package/ipset/ipset-01-uclinux.patch b/package/ipset/ipset-01-uclinux.patch
+deleted file mode 100644
+index db8e3fe..0000000
+--- a/package/ipset/ipset-01-uclinux.patch
++++ /dev/null
+@@ -1,26 +0,0 @@
+-From 8ec2a85a29817f5aa3f6fb680753d331e2af3591 Mon Sep 17 00:00:00 2001
+-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+-Date: Tue, 10 Sep 2013 15:28:49 -0300
+-Subject: [PATCH] configure: uclinux is also linux
+-
+-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+----
+- configure.ac | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/configure.ac b/configure.ac
+-index 6b64576..6d06ef5 100644
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -14,7 +14,7 @@ LTDL_INIT([nonrecursive])
+- 
+- dnl Shortcut: Linux supported alone
+- case "$host" in
+--*-*-linux*) ;;
+-+*-*-linux* | *-*-uclinux*) ;;
+- *) AC_MSG_ERROR([Linux systems supported exclusively!]);;
+- esac
+- 
+--- 
+-1.8.1.5
+-
+diff --git a/package/ipset/ipset.mk b/package/ipset/ipset.mk
+index d55d81d..b075a53 100644
+--- a/package/ipset/ipset.mk
++++ b/package/ipset/ipset.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+# For connlabel match
-+ifeq ($(BR2_PACKAGE_LIBNETFILTER_CONNTRACK),y)
-+IPTABLES_DEPENDENCIES += libnetfilter_conntrack
-+endif
-+
-+# For nfnl_osf
-+ifeq ($(BR2_PACKAGE_LIBNFNETLINK),y)
-+IPTABLES_DEPENDENCIES += libnfnetlink
-+endif
-+
- define IPTABLES_TARGET_SYMLINK_CREATE
- 	ln -sf xtables-multi $(TARGET_DIR)/usr/sbin/iptables
- 	ln -sf xtables-multi $(TARGET_DIR)/usr/sbin/iptables-save
+-IPSET_VERSION = 6.19
++IPSET_VERSION = 6.20.1
+ IPSET_SOURCE = ipset-$(IPSET_VERSION).tar.bz2
+ IPSET_SITE = http://ipset.netfilter.org
+ IPSET_DEPENDENCIES = libmnl host-pkgconf
