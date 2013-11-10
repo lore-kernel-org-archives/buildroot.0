@@ -1,45 +1,43 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 10 Nov 2013 09:43:19 +0100
-Subject: [Buildroot] Analysis of build failures
-In-Reply-To: <20131110062525.GB1030@sapphire.tkos.co.il>
-References: <20131109073028.B3C2E52C614@lolut.humanoidz.org>
- <20131109191543.414f5694@skate>
- <20131110062525.GB1030@sapphire.tkos.co.il>
-Message-ID: <20131110094319.4494c56a@skate>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 10 Nov 2013 10:06:06 +0100
+Subject: [Buildroot] [PATCH] gutenprint: fix download url
+In-Reply-To: <1383912716-31202-1-git-send-email-arnaud.aujon@gmail.com>
+ (Arnaud Aujon's message of "Fri, 8 Nov 2013 13:11:56 +0100")
+References: <1383912716-31202-1-git-send-email-arnaud.aujon@gmail.com>
+Message-ID: <87habkeidd.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Baruch Siach,
+>>>>> "Arnaud" == Arnaud Aujon <arnaud.aujon@gmail.com> writes:
 
-On Sun, 10 Nov 2013 08:25:25 +0200, Baruch Siach wrote:
+ > Signed-off-by: Arnaud Aujon <arnaud.aujon@gmail.com>
+ > ---
+ >  package/gutenprint/gutenprint.mk | 2 +-
+ >  1 file changed, 1 insertion(+), 1 deletion(-)
 
-> > Chris, can you have a look at this one, since it's apparently a
-> > Xtensa-specific problem?
-> 
-> uClibc valloc() depends on UCLIBC_SUSV2_LEGACY which is not enabled in the 
-> default uClibc config. Should we enable it?
+ > diff --git a/package/gutenprint/gutenprint.mk b/package/gutenprint/gutenprint.mk
+ > index 33abf48..0924cb6 100644
+ > --- a/package/gutenprint/gutenprint.mk
+ > +++ b/package/gutenprint/gutenprint.mk
+ > @@ -5,7 +5,7 @@
+ >  ################################################################################
+ 
+ >  GUTENPRINT_VERSION = 5.2.9
+ > -GUTENPRINT_SITE = http://downloads.sourceforge.net/gimp-print/gutenprint-5.2/$(GUTENPRINT_VERSION)
+ > +GUTENPRINT_SITE = http://downloads.sourceforge.net/project/gimp-print/gutenprint-5.2/$(GUTENPRINT_VERSION)
 
-Yes. The UCLIBC_SUSV2_LEGACY symbol was added after 0.9.33.2, so it
-explains why only Xtensa (which uses the uClibc snapshot version) is
-affected. Maybe we can replace the valloc() call with posix_memalign()
-and send the patch upstream to cdrkit?
+The old address still works (redirects), but OK:
 
-Also, can you sync up with Chris to provide a patch that makes Xtensa
-not use a snapshot version, but a fixed version of uClibc (based on a
-git commit, for example) ? The snapshot version we currently use is
-really bad, because depending on when you run the build, you will get
-different build results. This is really not how Buildroot should work:
-snapshot versions are only provided for expert users who want to test
-the latest versions of uClibc, such versions shouldn't be used as the
-default.
+http://downloads.sourceforge.net/gimp-print/gutenprint-5.2/5.2.9/gutenprint-5.2.9.tar.bz2
+Resolving downloads.sourceforge.net (downloads.sourceforge.net)... 216.34.181.59
+Connecting to downloads.sourceforge.net (downloads.sourceforge.net)|216.34.181.59|:80... connected.
+HTTP request sent, awaiting response... 302 Found
+Location: http://kent.dl.sourceforge.net/project/gimp-print/gutenprint-5.2/5.2.9/gutenprint-5.2.9.tar.bz2 [following]
 
-Thanks!
+Committed, thanks.
 
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
