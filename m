@@ -1,10 +1,12 @@
-From: Simon Dawson <spdawson@gmail.com>
-Date: Sun, 10 Nov 2013 10:32:29 +0000
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Sun, 10 Nov 2013 12:32:35 +0200
 Subject: [Buildroot] Analysis of build failures
-In-Reply-To: <20131109191543.414f5694@skate>
+In-Reply-To: <20131110094319.4494c56a@skate>
 References: <20131109073028.B3C2E52C614@lolut.humanoidz.org>
  <20131109191543.414f5694@skate>
-Message-ID: <CAHt8ZCP5zMXZfPo8EFpdVCFX0zq7DvJu=GoNcYGWo=frHdFpZA@mail.gmail.com>
+ <20131110062525.GB1030@sapphire.tkos.co.il>
+ <20131110094319.4494c56a@skate>
+Message-ID: <20131110103235.GE19852@sapphire.tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,41 +15,45 @@ To: buildroot@busybox.net
 
 Hi Thomas,
 
-On 9 November 2013 18:15, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
->>      avr32 |                libcap-ng-0.7.3 | NOK | http://autobuild.buildroot.net/results/3df16d60f6bbb679129cd568df4440be6f35cd9f/
->
-> The missing TLS problem on AVR32. We still haven't found the solution
-> to handle this one. As I've suggested previously, I would simply make
-> TLS support unconditional in Buildroot as soon as thread support is
-> enabled, and then mark libcap-ng as not available on AVR32. Of course,
-> if you have an external toolchain without TLS support, you're on your
-> own.
+On Sun, Nov 10, 2013 at 09:43:19AM +0100, Thomas Petazzoni wrote:
+> On Sun, 10 Nov 2013 08:25:25 +0200, Baruch Siach wrote:
+> > uClibc valloc() depends on UCLIBC_SUSV2_LEGACY which is not enabled in the 
+> > default uClibc config. Should we enable it?
+> 
+> Yes. The UCLIBC_SUSV2_LEGACY symbol was added after 0.9.33.2, so it
+> explains why only Xtensa (which uses the uClibc snapshot version) is
+> affected.
 
-As you say, we still don't appear to have reached a consensus of
-opinion on how to solve this.
+I see if I can cook up a patch.
 
->>      avr32 |              util-linux-2.23.2 | NOK | http://autobuild.buildroot.net/results/2ba1bd78f4303ef2f543a4e4fa65d1b68ba3a765/
->
-> Missing fallocate on avr32. Simon, what is the proposal to solve this?
-> Add fallocate support to 0.9.31 ?
+> Maybe we can replace the valloc() call with posix_memalign()
+> and send the patch upstream to cdrkit?
 
-Yes, I'm working on backporting fallocate support to 0.9.31 now.
+cdrkit has not see a release in more than 3 years. There are probably other 
+packages making use of the obsolete valloc() routine, so I guess we want to 
+enable UCLIBC_SUSV2_LEGACY anyway.
 
->>      avr32 |                   zeromq-3.2.4 | NOK | http://autobuild.buildroot.net/results/5cdf3e58df0df184f2ae1f2896c44f3f0f41c94d/
->
-> Missing compiler intrinsics on AVR32. Problem already in the process of
-> being solved (Simon, Alexander).
+> Also, can you sync up with Chris to provide a patch that makes Xtensa
+> not use a snapshot version, but a fixed version of uClibc (based on a
+> git commit, for example) ? The snapshot version we currently use is
+> really bad, because depending on when you run the build, you will get
+> different build results. This is really not how Buildroot should work:
+> snapshot versions are only provided for expert users who want to test
+> the latest versions of uClibc, such versions shouldn't be used as the
+> default.
 
-I think Alexander's patches have been applied now.
+The original patch of Chris adding xtensa support (75720db3, xtensa: add 
+support for the Xtensa architecture) just disabled all other uClibc version 
+for xtensa. The uClibc snapshot just became the version of choice by default.  
+As far as I know any recent master branch commit id could reasonably be used.  
+Should we add an "xtensa only" uClibc version, like the "avr32 only (0.9.31)" 
+version that we now have? Hasn't Bernhard Reutner-Fischer declared some kind 
+of -rc in the uclibc mailing list 
+(http://lists.uclibc.org/pipermail/uclibc/2013-November/048069.html)?
 
->>        arm | zmqpp-31220ca4a0fb43a0848d7... | NOK | http://autobuild.buildroot.net/results/64494152b75037a1194312a2a408eb7ecb6b56c8/
->>        arm | zmqpp-31220ca4a0fb43a0848d7... | NOK | http://autobuild.buildroot.net/results/75f2cc531892e649599681433f62a1d76e5736c9/
->>        arm | zmqpp-31220ca4a0fb43a0848d7... | NOK | http://autobuild.buildroot.net/results/65783df07ebb447f7561cb84b1bcf581a3084748/
->>        arm | zmqpp-31220ca4a0fb43a0848d7... | NOK | http://autobuild.buildroot.net/results/14d441c5f3a50f61cd5a872711d09fda4e5f8bbd/
->
-> Forgets to link against pthread. Simon, can you link into this?
+baruch
 
-Yes, I'll have a look when I get a chance.
-
-Simon.
+-- 
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
