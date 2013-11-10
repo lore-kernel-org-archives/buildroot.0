@@ -1,73 +1,31 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 10 Nov 2013 11:46:39 +0100
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Sun, 10 Nov 2013 07:57:07 -0300
 Subject: [Buildroot] Analysis of build failures
-In-Reply-To: <CAHt8ZCP5zMXZfPo8EFpdVCFX0zq7DvJu=GoNcYGWo=frHdFpZA@mail.gmail.com>
+In-Reply-To: <20131109191543.414f5694@skate>
 References: <20131109073028.B3C2E52C614@lolut.humanoidz.org>
  <20131109191543.414f5694@skate>
- <CAHt8ZCP5zMXZfPo8EFpdVCFX0zq7DvJu=GoNcYGWo=frHdFpZA@mail.gmail.com>
-Message-ID: <20131110114639.0d648555@skate>
+Message-ID: <527F6683.4000103@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Simon Dawson,
+On 11/09/2013 03:15 PM, Thomas Petazzoni wrote:
 
-On Sun, 10 Nov 2013 10:32:29 +0000, Simon Dawson wrote:
-
-> > The missing TLS problem on AVR32. We still haven't found the solution
-> > to handle this one. As I've suggested previously, I would simply make
-> > TLS support unconditional in Buildroot as soon as thread support is
-> > enabled, and then mark libcap-ng as not available on AVR32. Of course,
-> > if you have an external toolchain without TLS support, you're on your
-> > own.
+>>     mipsel |                  fdk-aac-0.1.2 | NOK | http://autobuild.buildroot.net/results/cb87635832f4a1128f174a25c264f716399c52d4/
 > 
-> As you say, we still don't appear to have reached a consensus of
-> opinion on how to solve this.
-
-Peter, can we agree on the following solution for this:
-
- (1) Remove BR2_GCC_ENABLE_TLS, and enable TLS support unconditionally,
-     except when thread support is not enabled.
-
- (2) Everywhere, assume that TLS support is always available when we
-     have thread support. If it's not the case (such as AVR32), mark
-     the package as "depends on !<architecture>".
-
-Another solution is to add a config knob for the external toolchains.
-
-> >>      avr32 |              util-linux-2.23.2 | NOK | http://autobuild.buildroot.net/results/2ba1bd78f4303ef2f543a4e4fa65d1b68ba3a765/
-> >
-> > Missing fallocate on avr32. Simon, what is the proposal to solve this?
-> > Add fallocate support to 0.9.31 ?
+> MIPS specific problem. We're building for mips1, but fdk-aac uses some
+> instructions not available on mips1. Maybe we should only enable
+> fdk-aac for some more capable variant of MIPS instruction sets.
 > 
-> Yes, I'm working on backporting fallocate support to 0.9.31 now.
+> Markos, can you have a look at this one?
 
-Great.
-
-> >>      avr32 |                   zeromq-3.2.4 | NOK | http://autobuild.buildroot.net/results/5cdf3e58df0df184f2ae1f2896c44f3f0f41c94d/
-> >
-> > Missing compiler intrinsics on AVR32. Problem already in the process of
-> > being solved (Simon, Alexander).
-> 
-> I think Alexander's patches have been applied now.
-
-Yes.
-
-> >>        arm | zmqpp-31220ca4a0fb43a0848d7... | NOK | http://autobuild.buildroot.net/results/64494152b75037a1194312a2a408eb7ecb6b56c8/
-> >>        arm | zmqpp-31220ca4a0fb43a0848d7... | NOK | http://autobuild.buildroot.net/results/75f2cc531892e649599681433f62a1d76e5736c9/
-> >>        arm | zmqpp-31220ca4a0fb43a0848d7... | NOK | http://autobuild.buildroot.net/results/65783df07ebb447f7561cb84b1bcf581a3084748/
-> >>        arm | zmqpp-31220ca4a0fb43a0848d7... | NOK | http://autobuild.buildroot.net/results/14d441c5f3a50f61cd5a872711d09fda4e5f8bbd/
-> >
-> > Forgets to link against pthread. Simon, can you link into this?
-> 
-> Yes, I'll have a look when I get a chance.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Why not just ditch MIPS1 & MIPS2 ISAs like we did with generic ARM?
+AFAIK (and Markos feel free to chime in) those aren't used in anything
+modern these days, just in very very old SGI machines that didn't run
+linux as far as i know.
+Even MIPS3's usefulness is doubtful.
+I've looked into the source and the asm optimizations are so messy that
+it hurts to look at, and don't seem to be easily disabled.
+Regards.
