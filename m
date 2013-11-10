@@ -1,27 +1,45 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 10 Nov 2013 09:37:06 +0100
-Subject: [Buildroot] [PATCH 1/1] openpgm: disable for AVR32,
-	not its Buildroot-built toolchain
-In-Reply-To: <1383916159-1551-1-git-send-email-alexander.lukichev@gmail.com>
- (Alexander Lukichev's message of "Fri, 8 Nov 2013 15:09:19 +0200")
-References: <1383916159-1551-1-git-send-email-alexander.lukichev@gmail.com>
-Message-ID: <87li0wejpp.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 10 Nov 2013 09:48:02 +0100
+Subject: [Buildroot] Buildroot 2013.08.1, Linaro 2013.04 as toolchain,
+ kernel 3.0.101, wakeup from standby issue
+In-Reply-To: <CADYw_JJOEj-uO2yPF3BXo4wzUopvVha+wbH5=dNLHBU0CkBPEQ@mail.gmail.com>
+References: <CADYw_JJOEj-uO2yPF3BXo4wzUopvVha+wbH5=dNLHBU0CkBPEQ@mail.gmail.com>
+Message-ID: <20131110094802.029c72fe@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Alexander" == Alexander Lukichev <alexander.lukichev@gmail.com> writes:
+Dear Stanislav Vlasic,
 
- > OpenPGM builds incorrectly on AVR32 with gcc-4.2.2-avr32-2.1.5.
- > Since it is presumed to be the only GCC version used by Buildroot
- > for AVR32, this patch disables openpgm for all cases when AVR32
- > is selected as the target architecture, including when a toolchain
- > is downloaded or preinstalled (this is what Buildroot autobuilders
- > do).
+On Sun, 10 Nov 2013 05:17:28 +0100, Stanislav Vlasic wrote:
 
-Committed, thanks.
+> Here are my steps I perform to suspend ARM based device:
+> 
+> - close all running apps (eg. XBMC)
+> - sync command to save all cached data
+> - issue mem to /sys/power/state sysfs node
+> - after that power indicator led turns off
+> 
+> That all works just fine.
+> 
+> After interrupt (IR remote in my case handled by uboot and ARC), kernel
+> wakes up, resumes all drivers, puts power led in ON state and ends up with
+> unknown_wakeups message.
+> 
+> Any help or hint would be appreciated :) Android JellyBean 4.2.2 on same
+> platform works way it should (it wakes up).
 
+What makes you think this is a Buildroot problem? It seems like a
+kernel problem, so I would suggest to contact the people who did the
+kernel support for your hardware platform (which you forgot to mention,
+BTW).
+
+Best regards,
+
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
