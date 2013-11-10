@@ -1,47 +1,55 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 10 Nov 2013 12:07:34 +0100
-Subject: [Buildroot] Analysis of build failures
-In-Reply-To: <527F6683.4000103@zacarias.com.ar>
-References: <20131109073028.B3C2E52C614@lolut.humanoidz.org>
- <20131109191543.414f5694@skate> <527F6683.4000103@zacarias.com.ar>
-Message-ID: <20131110120734.00d97a16@skate>
+From: Maxime Ripard <maxime.ripard@free-electrons.com>
+Date: Sun, 10 Nov 2013 12:18:11 +0100
+Subject: [Buildroot] [RFC] Continuous integration
+In-Reply-To: <OF5D58F4C2.77D4F569-ON86257C1D.005A57B4-86257C1D.006BA51B@rockwellcollins.com>
+References: <1464774.i3ScgRtXEf@sagittae>
+ <CAC2S8khWpEpUZiYOrzE2agTXehwW+g5Pkncqdp2PRsc25bT-cw@mail.gmail.com>
+ <1649802.VKqnEsp2qV@sagittae>
+ <OF5D58F4C2.77D4F569-ON86257C1D.005A57B4-86257C1D.006BA51B@rockwellcollins.com>
+Message-ID: <20131110111811.GM26440@lukather>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+Hi Matthew,
 
-On Sun, 10 Nov 2013 07:57:07 -0300, Gustavo Zacarias wrote:
+On Fri, Nov 08, 2013 at 01:35:46PM -0600, Matthew Weber wrote:
+> We might have a fourth semi-continuous integration scenario that prevents 
+> server thrashing at each check-in. 
+> - We run the script every night processing the current GIT tip at that 
+> time. 
+> - We clean each of the full cfg builds and let the script do a complete 
+> re-build.  (We do this because the individual pkg  cleans aren't 
+> guaranteed 
+> to cleanup the pkg installs)
+> - Once all jobs complete we terminate the script and eventually will send
+> the report with status.
+> (I'll clean-up what I changed and get it committed.  Would you be up for 
+> optional runtime config options?  One might be to enable continuous 
+> or a one-stop script execution.)
 
-> >>     mipsel |                  fdk-aac-0.1.2 | NOK | http://autobuild.buildroot.net/results/cb87635832f4a1128f174a25c264f716399c52d4/
-> > 
-> > MIPS specific problem. We're building for mips1, but fdk-aac uses some
-> > instructions not available on mips1. Maybe we should only enable
-> > fdk-aac for some more capable variant of MIPS instruction sets.
-> > 
-> > Markos, can you have a look at this one?
-> 
-> Why not just ditch MIPS1 & MIPS2 ISAs like we did with generic ARM?
-> AFAIK (and Markos feel free to chime in) those aren't used in anything
-> modern these days, just in very very old SGI machines that didn't run
-> linux as far as i know.
-> Even MIPS3's usefulness is doubtful.
+It's pretty much what I've setup here already:
+http://jenkins.free-electrons.com/job/buildroot/
 
-I don't have a very good vision of the MIPS space, but if Markos
-agrees, I'm definitely fine with not supporting old MIPS processors
-that are never used with Linux.
+It runs every night and start a clean build of all the configuration
+we have if a new commit has been merged.
 
-> I've looked into the source and the asm optimizations are so messy that
-> it hurts to look at, and don't seem to be easily disabled.
+The only thing missing here is that the emails get only send to Peter,
+Thomas P. and I because I didn't want to spam the list, but this can
+easily be changed.
 
-Well, my idea was certainly not to fix fdk-aac itself, but simply add a
-bunch of 'depends on !BR2_mips<something>' to avoid the problematic
-platforms.
+Maxime
 
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
+Maxime Ripard, Free Electrons
 Embedded Linux, Kernel and Android engineering
 http://free-electrons.com
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 836 bytes
+Desc: Digital signature
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20131110/6a991dc4/attachment.asc>
