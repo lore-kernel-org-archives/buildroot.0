@@ -1,57 +1,83 @@
-From: spdawson at gmail.com <spdawson@gmail.com>
-Date: Sun, 10 Nov 2013 20:33:15 +0000
-Subject: [Buildroot] [PATCH] libmicrohttpd: disable on avr32
-Message-ID: <1384115595-13780-1-git-send-email-spdawson@gmail.com>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Sun, 10 Nov 2013 21:33:32 +0100
+Subject: [Buildroot] [PATCH 1/1] Generation of locales: made call to tr
+ more robust and added LOWERCASE macro
+In-Reply-To: <1384104772-30097-1-git-send-email-thierry.bultel@wanadoo.fr>
+References: <1384104772-30097-1-git-send-email-thierry.bultel@wanadoo.fr>
+Message-ID: <CAAXf6LVniLhJMD6e0gJnaVZ6N-g8b=TAOghG9ydAhm0wHEkmWg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Simon Dawson <spdawson@gmail.com>
+Hi Thierry,
 
-The epoll_create1 syscall is not available on avr32. Fixes build failures
-such as the following.
+On Sun, Nov 10, 2013 at 6:32 PM, Thierry Bultel
+<thierry.bultel@wanadoo.fr> wrote:
+> When calling 'tr' without quoting braces, bash can make really weird things
+> if there are existing 'single-letter-named' directories
+> eg:
+> thierry at thierry-desktop:~$ echo AAA | tr [A-Z] [a-z]
+> aaa
+> thierry at thierry-desktop:~$ mkdir m
+> thierry at thierry-desktop:~$ echo AAA | tr [A-Z] [a-z]
+> AAA
+>
+>
+> The (quick) analysis is that the callee (tr) argvs then
+> contain 'm' thus the translation does not work
+>
+> Using quotes works around it:
+> thierry at thierry-desktop:~$ echo AAA | tr '[A-Z]' '[a-z]'
+> aaa
+>
+>
+> Changes v1->v2
+>   - Added the LOWERCASE macro, following Thomas De Schampheleire's advice
+>
 
-  http://autobuild.buildroot.net/results/dbd/dbdc86321c6c85703dd9aed3f974843203124d92
+This 'Changes' text should be below the --- line, otherwise it ends up
+in the commit log which is not supposed to happen.
 
-Signed-off-by: Simon Dawson <spdawson@gmail.com>
----
- package/libmicrohttpd/Config.in | 3 +++
- package/ola/Config.in           | 1 +
- 2 files changed, 4 insertions(+)
+>
+> Signed-off-by: Thierry Bultel <thierry.bultel@wanadoo.fr>
+> ---
+>  Makefile             |    2 +-
+>  package/pkg-utils.mk |    8 ++++++++
+>  2 files changed, 9 insertions(+), 1 deletions(-)
+>
+> diff --git a/Makefile b/Makefile
+> index 1496bd7..a006615 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -548,7 +548,7 @@ target-generatelocales: host-localedef
+>                 I18NPATH=$(STAGING_DIR)/usr/share/i18n:/usr/share/i18n \
+>                 $(HOST_DIR)/usr/bin/localedef \
+>                         --prefix=$(TARGET_DIR) \
+> -                       --`echo $(BR2_ENDIAN) | tr [A-Z] [a-z]`-endian \
+> +                       --$(call LOWERCASE,$(BR2_ENDIAN))-endian \
+>                         -i $${inputfile} -f $${charmap} \
+>                         $${locale} ; \
+>         done
+> diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
+> index 5930f2c..0ef433d 100644
+> --- a/package/pkg-utils.mk
+> +++ b/package/pkg-utils.mk
+> @@ -23,6 +23,14 @@ UPPERCASE = $(strip $(eval __tmp := $1) \
+>         $(__tmp)))) \
+>         $(__tmp))
+>
+> +# LOWERCASE macro -- transforms its arguments to lowercase
+> +# The above non-tr implementation is not needed, because LOWERCASE is not
+> +# called very often
+> +
+> +define LOWERCASE
+> +$(shell echo $1 | tr '[:upper:]' '[:lower:]')
+> +endef
+> +
 
-diff --git a/package/libmicrohttpd/Config.in b/package/libmicrohttpd/Config.in
-index 15e3762..c0293f0 100644
---- a/package/libmicrohttpd/Config.in
-+++ b/package/libmicrohttpd/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_LIBMICROHTTPD
- 	bool "libmicrohttpd"
-+	depends on !BR2_avr32 # no epoll_create1
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	help
- 	  GNU libmicrohttpd is a small C library that makes it easy to
-@@ -18,6 +19,8 @@ config BR2_PACKAGE_LIBMICROHTTPD_SSL
- 
- comment "libmicrohttpd needs a toolchain w/ threads"
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_avr32
- 
- comment "libmicrohttpd https support needs a toolchain w/ wchar"
- 	depends on BR2_PACKAGE_LIBMICROHTTPD && !BR2_USE_WCHAR
-+	depends on !BR2_avr32
-diff --git a/package/ola/Config.in b/package/ola/Config.in
-index eb24a3a..7c5e0fe 100644
---- a/package/ola/Config.in
-+++ b/package/ola/Config.in
-@@ -23,6 +23,7 @@ menu "bindings and interface"
- 
- config BR2_PACKAGE_OLA_WEB
- 	bool "http interface"
-+	depends on !BR2_avr32 # libmicrohttpd
- 	select BR2_PACKAGE_LIBMICROHTTPD
- 	help
- 	  Build OLA with browser interface.
--- 
-1.8.3.2
+Not sure if a 'define' was needed here (compared to a simple
+assignment), but I have no strong feelings about that.
+
+Reviewed-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
