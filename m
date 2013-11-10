@@ -1,40 +1,65 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 10 Nov 2013 10:07:41 +0100
-Subject: [Buildroot] [git commit] uclibc-snapshot: enable option
-	UCLIBC_HAS_OBSTACK
-Message-ID: <20131110093323.97AB79BB5E@busybox.osuosl.org>
+From: Thierry Bultel <thierry.bultel@wanadoo.fr>
+Date: Sun, 10 Nov 2013 10:50:17 +0100
+Subject: [Buildroot] [PATCH 1/1] Generation of locales: made call to tr
+ more	robust
+In-Reply-To: <c8339166-9470-405a-ad3f-6f8b4a6e6159@email.android.com>
+References: <1383927916-27001-1-git-send-email-thierry.bultel@wanadoo.fr>
+ <c8339166-9470-405a-ad3f-6f8b4a6e6159@email.android.com>
+Message-ID: <527F56D9.8060809@wanadoo.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=38dbd33b91adb4543e922e644b09430fa3836068
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Le 09/11/2013 14:47, Thomas De Schampheleire a ?crit :
+> Thierry Bultel <thierry.bultel@wanadoo.fr> wrote:
+>> From: tbultel <tbultel@basystemes.fr>
+>>
+>> When calling 'tr' without quoting braces, bash can make really weird things
+>> if there are existing 'single-letter-named' directories
+>> eg:
+>> tbultel at laois:~/test$ echo AAA | tr [A-Z] [a-z]
+>> aaa
+>> tbultel at laois:~/test$ echo AAA | tr [A-Z] [a-z]
+>> AAA
+>>
+>> The (quick) analysis is that the callee (tr) argvs then
+>> contain 'm' thus the translation does not work
+>>
+>> Using quotes works around it
+>> tbultel at laois:~/test$ echo AAA | tr '[A-Z]' '[a-z]'
+>> aaa
+>>
+>>
+>> Signed-off-by: tbultel <tbultel@basystemes.fr>
+>
+> This should be real name, not a username.
+>
+>> ---
+>> Makefile |    2 +-
+>> 1 files changed, 1 insertions(+), 1 deletions(-)
+>>
+>> diff --git a/Makefile b/Makefile
+>> index 1496bd7..7f835c0 100644
+>> --- a/Makefile
+>> +++ b/Makefile
+>> @@ -548,7 +548,7 @@ target-generatelocales: host-localedef
+>> 		I18NPATH=$(STAGING_DIR)/usr/share/i18n:/usr/share/i18n \
+>> 		$(HOST_DIR)/usr/bin/localedef \
+>> 			--prefix=$(TARGET_DIR) \
+>> -			--`echo $(BR2_ENDIAN) | tr [A-Z] [a-z]`-endian \
+>> +			--`echo $(BR2_ENDIAN) | tr '[A-Z]' '[a-z]'`-endian \
+>> 			-i $${inputfile} -f $${charmap} \
+>> 			$${locale} ; \
+>> 	done
+>
+> While there's nothing wrong with your fix itself, I wonder why this isn't using the UPPERCASE and LOWERCASE macros we have defined in package/pkg-utils.mak...
+>
+> Best regards,
+> Thomas
+>
+>
+>
 
-Prior to uClibc commit f143f920694c, uClibc used to always include the
-gnu obstack extension, which is used and required by many tools, such as
-binutils.
-
-Because of the change mentioned above, obstack is now optional, and got
-disabled per default, so enable it in the uClibc snapshot configuration file.
-
-Signed-off-by: Chris Zankel <chris@zankel.net>
-Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/uclibc/uClibc-snapshot.config |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
-
-diff --git a/package/uclibc/uClibc-snapshot.config b/package/uclibc/uClibc-snapshot.config
-index cb6258d..145f709 100644
---- a/package/uclibc/uClibc-snapshot.config
-+++ b/package/uclibc/uClibc-snapshot.config
-@@ -113,6 +113,7 @@ UCLIBC_HAS_LFS=y
- # MALLOC_SIMPLE is not set
- MALLOC_STANDARD=y
- MALLOC_GLIBC_COMPAT=y
-+UCLIBC_HAS_OBSTACK=y
- UCLIBC_DYNAMIC_ATEXIT=y
- # COMPAT_ATEXIT is not set
- UCLIBC_SUSV3_LEGACY=y
+The LOWERCASE macro does not seem to exist
