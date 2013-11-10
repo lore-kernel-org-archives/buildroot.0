@@ -1,80 +1,59 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 10 Nov 2013 09:15:53 +0100
-Subject: [Buildroot] [git commit] dhcpcd: bump to version 6.1.0
-Message-ID: <20131110090700.782FE9AFA0@busybox.osuosl.org>
+Date: Sun, 10 Nov 2013 09:36:47 +0100
+Subject: [Buildroot] [git commit] openpgm: disable for AVR32,
+	not its Buildroot-built toolchain
+Message-ID: <20131110090700.7E79B9BB45@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f8c07f2e72ba4faea6e66b40f9b4881aecb2e509
+commit: http://git.buildroot.net/buildroot/commit/?id=9589efff1bebe2d068bf4d6caf1c5e7cd0171abb
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Now has proper support for nommu and non-IPv6.
+OpenPGM builds incorrectly on AVR32 with gcc-4.2.2-avr32-2.1.5.
+Since it is presumed to be the only GCC version used by Buildroot
+for AVR32, this patch disables openpgm for all cases when AVR32
+is selected as the target architecture, including when a toolchain
+is downloaded or preinstalled (this is what Buildroot autobuilders
+do).
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Alexander Lukichev <alexander.lukichev@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/dhcpcd/Config.in |    8 +++-----
- package/dhcpcd/dhcpcd.mk |   17 ++++++++++++-----
- 2 files changed, 15 insertions(+), 10 deletions(-)
+ package/openpgm/Config.in |    4 ++--
+ package/zeromq/Config.in  |    2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/dhcpcd/Config.in b/package/dhcpcd/Config.in
-index ddbc6f4..ac20615 100644
---- a/package/dhcpcd/Config.in
-+++ b/package/dhcpcd/Config.in
-@@ -1,11 +1,9 @@
- config BR2_PACKAGE_DHCPCD
--	depends on BR2_INET_IPV6
--	depends on BR2_USE_MMU # fork()
- 	bool "dhcpcd"
-+	# No support for AI_ADDRCONFIG
-+	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2 && \
-+		!BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R1
+diff --git a/package/openpgm/Config.in b/package/openpgm/Config.in
+index e34740c..8d67639 100644
+--- a/package/openpgm/Config.in
++++ b/package/openpgm/Config.in
+@@ -1,6 +1,6 @@
+ config BR2_PACKAGE_OPENPGM
+ 	bool "openpgm"
+-	depends on !BR2_GCC_VERSION_4_2_2_AVR32_2_1_5 # lacks required builtins
++	depends on !BR2_avr32 # toolchain lacks required intrinsics
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_INET_IPV6
+ 	depends on BR2_USE_WCHAR
+@@ -15,4 +15,4 @@ config BR2_PACKAGE_OPENPGM
+ 
+ comment "openpgm needs a toolchain w/ wchar, threads, IPv6"
+ 	depends on !(BR2_TOOLCHAIN_HAS_THREADS && BR2_INET_IPV6 && BR2_USE_WCHAR)
+-	depends on !BR2_GCC_VERSION_4_2_2_AVR32_2_1_5
++	depends on !BR2_avr32
+diff --git a/package/zeromq/Config.in b/package/zeromq/Config.in
+index dad1dd4..a74ce88 100644
+--- a/package/zeromq/Config.in
++++ b/package/zeromq/Config.in
+@@ -30,7 +30,7 @@ config BR2_PACKAGE_ZEROMQ
+ config BR2_PACKAGE_ZEROMQ_PGM
+ 	bool "PGM/EPGM support"
+ 	depends on BR2_PACKAGE_ZEROMQ
+-	depends on !BR2_GCC_VERSION_4_2_2_AVR32_2_1_5 # openpgm
++	depends on !BR2_avr32 # openpgm
+ 	select BR2_PACKAGE_OPENPGM
  	help
- 	  An RFC2131 compliant DHCP client
- 
- 	  http://roy.marples.name/downloads/dhcpcd
--
--comment "dhcpcd needs a toolchain w/ IPv6"
--	depends on !BR2_INET_IPV6
-diff --git a/package/dhcpcd/dhcpcd.mk b/package/dhcpcd/dhcpcd.mk
-index 13810f3..8037706 100644
---- a/package/dhcpcd/dhcpcd.mk
-+++ b/package/dhcpcd/dhcpcd.mk
-@@ -4,22 +4,29 @@
- #
- ################################################################################
- 
--DHCPCD_VERSION = 5.6.7
-+DHCPCD_VERSION = 6.1.0
- DHCPCD_SOURCE = dhcpcd-$(DHCPCD_VERSION).tar.bz2
--DHCPCD_SITE = http://roy.marples.name/downloads/dhcpcd/
-+DHCPCD_SITE = http://roy.marples.name/downloads/dhcpcd
- DHCPCD_LICENSE = BSD-2c
- 
-+ifeq ($(BR2_INET_IPV6),)
-+	DHCPCD_CONFIG_OPT += --disable-ipv6
-+endif
-+
-+ifeq ($(BR2_USE_MMU),)
-+	DHCPCD_CONFIG_OPT += --disable-fork
-+endif
-+
- define DHCPCD_CONFIGURE_CMDS
- 	(cd $(@D); \
--	./configure \
-+	$(TARGET_CONFIGURE_OPTS) ./configure \
- 		--target=$(BR2_GCC_TARGET_ARCH) \
- 		--os=linux \
- 		$(DHCPCD_CONFIG_OPT) )
- endef
- 
- define DHCPCD_BUILD_CMDS
--	$(MAKE) \
--		$(TARGET_CONFIGURE_OPTS) \
-+	$(TARGET_MAKE_ENV) $(MAKE) \
- 		-C $(@D) all
- endef
- 
+ 	  Add support for Pragmatic General Multicast protocol (RFC 3208)
