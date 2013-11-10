@@ -1,59 +1,38 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 10 Nov 2013 09:36:47 +0100
-Subject: [Buildroot] [git commit] openpgm: disable for AVR32,
-	not its Buildroot-built toolchain
-Message-ID: <20131110090700.7E79B9BB45@busybox.osuosl.org>
+Date: Sun, 10 Nov 2013 09:14:24 +0100
+Subject: [Buildroot] [git commit] mplayer: disable for anything lower than
+	ARMv5
+Message-ID: <20131110090700.753789BB46@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=9589efff1bebe2d068bf4d6caf1c5e7cd0171abb
+commit: http://git.buildroot.net/buildroot/commit/?id=af616db359fd0811736821f23971094c6600f5bf
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-OpenPGM builds incorrectly on AVR32 with gcc-4.2.2-avr32-2.1.5.
-Since it is presumed to be the only GCC version used by Buildroot
-for AVR32, this patch disables openpgm for all cases when AVR32
-is selected as the target architecture, including when a toolchain
-is downloaded or preinstalled (this is what Buildroot autobuilders
-do).
+Disable mplayer for anything lower than a v5 ARM core.
+The support is broken and it's kind of pointless anyway. Fixes:
+http://autobuild.buildroot.net/results/8f946e28b11b2ab1ba0d9688286c665488de0486/
 
-Signed-off-by: Alexander Lukichev <alexander.lukichev@gmail.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/openpgm/Config.in |    4 ++--
- package/zeromq/Config.in  |    2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/mplayer/Config.in |    3 +++
+ 1 files changed, 3 insertions(+), 0 deletions(-)
 
-diff --git a/package/openpgm/Config.in b/package/openpgm/Config.in
-index e34740c..8d67639 100644
---- a/package/openpgm/Config.in
-+++ b/package/openpgm/Config.in
-@@ -1,6 +1,6 @@
- config BR2_PACKAGE_OPENPGM
- 	bool "openpgm"
--	depends on !BR2_GCC_VERSION_4_2_2_AVR32_2_1_5 # lacks required builtins
-+	depends on !BR2_avr32 # toolchain lacks required intrinsics
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_INET_IPV6
- 	depends on BR2_USE_WCHAR
-@@ -15,4 +15,4 @@ config BR2_PACKAGE_OPENPGM
- 
- comment "openpgm needs a toolchain w/ wchar, threads, IPv6"
- 	depends on !(BR2_TOOLCHAIN_HAS_THREADS && BR2_INET_IPV6 && BR2_USE_WCHAR)
--	depends on !BR2_GCC_VERSION_4_2_2_AVR32_2_1_5
-+	depends on !BR2_avr32
-diff --git a/package/zeromq/Config.in b/package/zeromq/Config.in
-index dad1dd4..a74ce88 100644
---- a/package/zeromq/Config.in
-+++ b/package/zeromq/Config.in
-@@ -30,7 +30,7 @@ config BR2_PACKAGE_ZEROMQ
- config BR2_PACKAGE_ZEROMQ_PGM
- 	bool "PGM/EPGM support"
- 	depends on BR2_PACKAGE_ZEROMQ
--	depends on !BR2_GCC_VERSION_4_2_2_AVR32_2_1_5 # openpgm
-+	depends on !BR2_avr32 # openpgm
- 	select BR2_PACKAGE_OPENPGM
+diff --git a/package/mplayer/Config.in b/package/mplayer/Config.in
+index 7cee87d..b930cb5 100644
+--- a/package/mplayer/Config.in
++++ b/package/mplayer/Config.in
+@@ -3,6 +3,9 @@ config BR2_PACKAGE_MPLAYER
+ 	# Those architectures are not supported by MPlayer
+ 	depends on !(BR2_sh2 || BR2_sh2a || BR2_sh4a || BR2_sh4aeb \
+ 			|| BR2_microblaze || BR2_aarch64)
++	# Broken support for <ARMv5
++	depends on !(BR2_arm7tdmi || BR2_arm720t || BR2_arm920t \
++		|| BR2_arm920t || BR2_arm922t || BR2_fa526 || BR2_strongarm)
+ 	depends on BR2_LARGEFILE
  	help
- 	  Add support for Pragmatic General Multicast protocol (RFC 3208)
+ 	  MPlayer is a movie player which runs on many systems and supports
