@@ -1,45 +1,53 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 10 Nov 2013 12:34:25 +0100
-Subject: [Buildroot] [PATCHv2] qt: remove the
-	BR2_PACKAGE_QT_JAVASCRIPTCORE option
-In-Reply-To: <1383851241-28276-1-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Thu, 7 Nov 2013 20:07:21 +0100")
-References: <1383851241-28276-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <874n7kebi6.fsf@dell.be.48ers.dk>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Sun, 10 Nov 2013 11:03:09 -0300
+Subject: [Buildroot] [PATCH] freetype: add libpng to freetype-config and
+	freetype2.pc
+Message-ID: <1384092189-4590-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+Add libpng libraries to freetype-config and freetype2.pc when they're
+needed to avoid build breakage for other packages.
 
- > The BR2_PACKAGE_QT_JAVASCRIPTCORE option was available to force the
- > activation or disabling of the JIT compiler in the Qt Javascript
- > interpreter. However, the JIT compiler is not available for all
- > architectures, so forcing its activation does not always
- > work. Moreover, Qt knows by itself for which architectures JIT support
- > is possible, and will automatically enable it if possible.
+Patch in a different form is already upstream.
 
- > Therefore, this option was in fact useless, and causing build problems
- > when enabled on architectures for which the JIT support was not
- > available. This commit removes this option and there is no
- > replacement: Qt will enable JIT at compile time when possible.
+Fixing configure & friends is not so good since autoreconf busts things
+up because of the odd way things are done (upstream fixed too it seems).
 
- > Fixes:
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/freetype/freetype.mk | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
- >   http://autobuild.buildroot.org/results/aae/aaeb82753b7654eeca679ded5d0211ceebda3ea2/build-end.log
- >   http://autobuild.buildroot.org/results/367/3670e4f03ff0ce114c90bd7139243d82c427b52a/build-end.log
-
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
- > ---
- > v1 -> v2:
- >  * As suggested by Yann, add the Config.in.legacy option even if the
- >    removal of the option should normally be transparent to the user.
- >  * Reword the commit log to provide a better description of what's
- >    happening.
-
-Committed, thanks.
-
+diff --git a/package/freetype/freetype.mk b/package/freetype/freetype.mk
+index cc5fbf8..1e378d3 100644
+--- a/package/freetype/freetype.mk
++++ b/package/freetype/freetype.mk
+@@ -37,6 +37,7 @@ ifeq ($(BR2_PACKAGE_LIBPNG),y)
+ FREETYPE_DEPENDENCIES += libpng
+ FREETYPE_CONF_OPT += LIBPNG_CFLAGS="`$(STAGING_DIR)/usr/bin/libpng-config --cflags`" \
+ 	LIBPNG_LDFLAGS="`$(STAGING_DIR)/usr/bin/libpng-config --ldflags`"
++FREETYPE_LIBPNG_LIBS = "`$(STAGING_DIR)/usr/bin/libpng-config --libs`"
+ else
+ FREETYPE_CONF_OPT += --without-png
+ endif
+@@ -49,5 +50,14 @@ define FREETYPE_FIX_CONFIG_FILE
+ endef
+ FREETYPE_POST_INSTALL_STAGING_HOOKS += FREETYPE_FIX_CONFIG_FILE
+ 
++# libpng isn't included in freetype-config & freetype2.pc :-/
++define FREETYPE_FIX_CONFIG_FILE_LIBS
++	$(SED) "s,^Libs.private:,& $(FREETYPE_LIBPNG_LIBS)," \
++		$(STAGING_DIR)/usr/lib/pkgconfig/freetype2.pc
++	$(SED) "s,-lfreetype,& $(FREETYPE_LIBPNG_LIBS)," \
++		$(STAGING_DIR)/usr/bin/freetype-config
++endef
++FREETYPE_POST_INSTALL_STAGING_HOOKS += FREETYPE_FIX_CONFIG_FILE_LIBS
++
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
 -- 
-Bye, Peter Korsgaard
+1.8.3.2
