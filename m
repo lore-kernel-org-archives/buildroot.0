@@ -1,26 +1,37 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 11 Nov 2013 00:41:28 +0100
-Subject: [Buildroot] [PATCH] util-linux: disable fallocate for avr32
-In-Reply-To: <1383472585-1876-1-git-send-email-spdawson@gmail.com>
- (spdawson@gmail.com's message of "Sun, 3 Nov 2013 09:56:25 +0000")
-References: <1383472585-1876-1-git-send-email-spdawson@gmail.com>
-Message-ID: <87li0vakpj.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 11 Nov 2013 00:41:06 +0100
+Subject: [Buildroot] [git commit] util-linux: disable fallocate for avr32
+Message-ID: <20131110234140.CFCF09BB23@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "spdawson" == spdawson  <spdawson@gmail.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=a0353409933429058e04adf8f5d3f34d33c5697c
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> From: Simon Dawson <spdawson@gmail.com>
-> The fallocate syscall is not implemented in the avr32 toolchain.
+The fallocate syscall is not implemented in the avr32 toolchain.
 
-> Fixes build failures such as the following.
+Fixes build failures such as the following.
 
->   http://autobuild.buildroot.net/results/bc4/bc41a3fea20181526eb247ac910244aa2aa4c4c0/
+  http://autobuild.buildroot.net/results/bc4/bc41a3fea20181526eb247ac910244aa2aa4c4c0/
 
-Committed, thanks.
+Signed-off-by: Simon Dawson <spdawson@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/util-linux/Config.in |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/util-linux/Config.in b/package/util-linux/Config.in
+index 41e0986..d56e631 100644
+--- a/package/util-linux/Config.in
++++ b/package/util-linux/Config.in
+@@ -72,6 +72,7 @@ config BR2_PACKAGE_UTIL_LINUX_EJECT
+ 
+ config BR2_PACKAGE_UTIL_LINUX_FALLOCATE
+ 	bool "fallocate"
++	depends on !BR2_avr32 # fallocate not implemented
+ 	help
+ 	  Preallocate space to a file
+ 
