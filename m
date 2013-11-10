@@ -1,23 +1,74 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 10 Nov 2013 10:06:39 +0100
-Subject: [Buildroot] [PATCH] avr32: fix uclibc build using recent kernel
-	headers
-In-Reply-To: <1383903723-7705-1-git-send-email-spdawson@gmail.com>
- (spdawson@gmail.com's message of "Fri, 8 Nov 2013 09:42:03 +0000")
-References: <1383903723-7705-1-git-send-email-spdawson@gmail.com>
-Message-ID: <87d2m8eicg.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 10 Nov 2013 10:06:28 +0100
+Subject: [Buildroot] [git commit] avr32: fix uclibc build using recent
+	kernel headers
+Message-ID: <20131110090700.929209AFA0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "spdawson" == spdawson  <spdawson@gmail.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=cad987f4cbb37727aa0dbf62f2ed5fee5a057468
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > From: Simon Dawson <spdawson@gmail.com>
- > Using kernel headers newer than 3.6.x, uclibc 0.9.31.1 fails to build:
+Using kernel headers newer than 3.6.x, uclibc 0.9.31.1 fails to build:
 
-Committed, thanks.
+  In file included from output/host/usr/avr32-buildroot-linux-uclibc/sysroot/usr/include/linux/rtnetlink.h:6,
+                 from libc/inet/netlinkaccess.h:34,
+                 from libc/inet/if_index.c:36:
+  output/host/usr/avr32-buildroot-linux-uclibc/sysroot/usr/include/linux/if_link.h:314: error: expected specifier-qualifier-list before '__be16'
+  make[1]: *** [libc/inet/if_index.os] Error 1
+  make[1]: Leaving directory `output/build/uclibc-0.9.31.1'
+  make: *** [output/build/uclibc-0.9.31.1/.stamp_built] Error 2
 
--- 
-Bye, Peter Korsgaard
+This patch adjusts the system type definitions in the netlinkaccess.h
+header, updating the types to match those used in uClibc 0.9.33.2.
+
+Signed-off-by: Simon Dawson <spdawson@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ ...ibc-0012-netlinkaccess-header-types.patch.avr32 |   35 ++++++++++++++++++++
+ 1 files changed, 35 insertions(+), 0 deletions(-)
+
+diff --git a/package/uclibc/0.9.31.1/uClibc-0012-netlinkaccess-header-types.patch.avr32 b/package/uclibc/0.9.31.1/uClibc-0012-netlinkaccess-header-types.patch.avr32
+new file mode 100644
+index 0000000..bc981a4
+--- /dev/null
++++ b/package/uclibc/0.9.31.1/uClibc-0012-netlinkaccess-header-types.patch.avr32
+@@ -0,0 +1,35 @@
++Using kernel headers newer than 3.6.x, uclibc 0.9.31.1 fails to build:
++
++  In file included from output/host/usr/avr32-buildroot-linux-uclibc/sysroot/usr/include/linux/rtnetlink.h:6,
++                 from libc/inet/netlinkaccess.h:34,
++                 from libc/inet/if_index.c:36:
++  output/host/usr/avr32-buildroot-linux-uclibc/sysroot/usr/include/linux/if_link.h:314: error: expected specifier-qualifier-list before '__be16'
++  make[1]: *** [libc/inet/if_index.os] Error 1
++  make[1]: Leaving directory `output/build/uclibc-0.9.31.1'
++  make: *** [output/build/uclibc-0.9.31.1/.stamp_built] Error 2
++
++This patch adjusts the system type definitions in the netlinkaccess.h
++header, updating the types to match those used in uClibc 0.9.33.2.
++
++Signed-off-by: Simon Dawson <spdawson@gmail.com>
++
++diff -Nurp a/libc/inet/netlinkaccess.h b/libc/inet/netlinkaccess.h
++--- a/libc/inet/netlinkaccess.h	2011-06-08 19:58:40.000000000 +0100
+++++ b/libc/inet/netlinkaccess.h	2012-12-20 12:16:34.251965672 +0000
++@@ -22,15 +22,8 @@
++ #include <features.h>
++ #include <stdint.h>
++ #include <unistd.h>
++-#include <sys/types.h>
++-
++ #if defined __ASSUME_NETLINK_SUPPORT || defined __UCLIBC_USE_NETLINK__
++-#define _LINUX_TYPES_H
++-typedef uint8_t __u8;
++-typedef uint16_t __u16;
++-typedef uint32_t __u32;
++-typedef uint64_t __u64;
++-typedef int32_t __s32;
+++#include <asm/types.h>
++ #include <linux/rtnetlink.h>
++ #include <linux/netlink.h>
++ 
