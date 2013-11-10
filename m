@@ -1,49 +1,53 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 11 Nov 2013 00:12:05 +0100
-Subject: [Buildroot] [git commit] manual: add some info on the POST_RSYNC
-	hook
-Message-ID: <20131110231541.AD7669BB0A@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 11 Nov 2013 00:27:21 +0100
+Subject: [Buildroot] [PATCH 1/3] toolchain-external: fix the SYSROOT_DIR
+	mangling logic
+In-Reply-To: <1383779283-19725-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Thu, 7 Nov 2013 00:08:01 +0100")
+References: <1383779283-19725-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <87txfjald2.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=fcdbeba035796c019348a7ac4ffdd32825ad4669
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-Acked-by: "Samuel Martin" <s.martin49@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- docs/manual/adding-packages-hooks.txt |   20 ++++++++++++++++++++
- 1 files changed, 20 insertions(+), 0 deletions(-)
+> In a1d94aaa3a21911 ('toolchain-external: add support for musl C
+> library'), we made the following change to the SYSROOT_DIR mangling
+> logic:
 
-diff --git a/docs/manual/adding-packages-hooks.txt b/docs/manual/adding-packages-hooks.txt
-index 8ab3f56..d96c991 100644
---- a/docs/manual/adding-packages-hooks.txt
-+++ b/docs/manual/adding-packages-hooks.txt
-@@ -39,3 +39,23 @@ endef
- 
- LIBFOO_POST_PATCH_HOOKS += LIBFOO_POST_PATCH_FIXUP
- ----------------------
-+
-+Using the +POST_RSYNC+ hook
-+^^^^^^^^^^^^^^^^^^^^^^^^^^^
-+The +POST_RSYNC+ hook is run only for packages that use a local source,
-+either through the +local+ site method or the +OVERRIDE_SRCDIR+
-+mechanism. In this case, package sources are copied using +rsync+ from
-+the local location into the buildroot build directory. The +rsync+
-+command does not copy all files from the source directory, though.
-+Files belonging to a version control system, like the directories
-++.git+, +.hg+, etc. are not copied. For most packages this is
-+sufficient, but a given package can perform additional actions using
-+the +POST_RSYNC+ hook.
-+
-+In principle, the hook can contain any command you want. One specific
-+use case, though, is the intentional copying of the version control
-+directory using +rsync+. The +rsync+ command you use in the hook can, among
-+others, use the following variables:
-+
-+* +$(SRCDIR)+: the path to the overridden source directory
-+* +$(@D)+: the path to the build directory
+> -       SYSROOT_DIR=`echo $${LIBC_A_LOCATION} | sed -r -e 's:usr/lib(32|64)?/(.*/)?libc\.a::'` ; \
+> +       SYSROOT_DIR=`echo $${LIBC_A_LOCATION} | sed -r -e 's:(usr/)?lib(32|64)?/(.*/)?libc\.a::'` ; \
+
+> This was needed to accomodate for musl based toolchains that don't
+> have libc.a in usr/lib/..., but directory in lib/... Basically, the
+> change makes the usr/ at the beginning optional.
+
+> However, with the very permissive (.*) matching in the middle of the
+> path, the change above had an unexpected consequence: any path contain
+> '/lib' would be truncated before this lib. As an example, Peter
+> reported that his builds, running from /var/lib/buildbot/ were no
+> longer working because the SYSROOT_DIR was decided to be /var instead
+> of something like
+> /var/lib/buildbot/buildroot/output/host/opt/ext-toolchain/arm-linux-gnueabihf/libc/.
+
+> So, this commit changes (again!) this regexp by changing (.*) to
+> ([^/]*), the idea being that it will match only *one* path
+> component. Note that this intermediate (.*) directory was added in
+> e6e60becb008 ('external-toolchain: add support for Linaro 2012.01') to
+> accomodate for Linaro toolchains that have a subdirectory in their
+> sysroot named after the target tuple:
+
+> $ ./output/host/opt/ext-toolchain/bin/arm-linux-gnueabihf-gcc -print-file-name=libc.a
+> /home/thomas/projets/buildroot/output/host/opt/ext-toolchain/bin/../arm-linux-gnueabihf/libc/usr/lib/arm-linux-gnueabihf/libc.a
+
+> In addition to this, this commit also makes sure that the change
+> making usr/ optional is properly reported on all the instances of this
+> regular expression.
+
+Committed series, thanks.
+
+-- 
+Bye, Peter Korsgaard
