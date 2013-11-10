@@ -1,100 +1,49 @@
-From: Thierry Bultel <thierry.bultel@wanadoo.fr>
-Date: Sun, 10 Nov 2013 17:36:25 +0100
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Sun, 10 Nov 2013 18:01:51 +0100
 Subject: [Buildroot] [PATCH 1/1] Generation of locales: made call to tr
- more	robust
+ more robust
 In-Reply-To: <527FB10C.603@mind.be>
 References: <1383927916-27001-1-git-send-email-thierry.bultel@wanadoo.fr>
  <c8339166-9470-405a-ad3f-6f8b4a6e6159@email.android.com>
  <527F56D9.8060809@wanadoo.fr>
  <ca01f976-f93a-496a-9b4b-9b02c81c940a@email.android.com>
  <527FB10C.603@mind.be>
-Message-ID: <527FB609.8020908@wanadoo.fr>
+Message-ID: <CAAXf6LVpmji=fgU2Qj7BZLp8MV87oFjcnjDENPt1BNm=ps2fTg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le 10/11/2013 17:15, Arnout Vandecappelle a ?crit :
+On Sun, Nov 10, 2013 at 5:15 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
 > On 10/11/13 11:17, Thomas De Schampheleire wrote:
+>>
 >> Thierry Bultel <thierry.bultel@wanadoo.fr> wrote:
->>> Le 09/11/2013 14:47, Thomas De Schampheleire a ?crit :
->>>> Thierry Bultel <thierry.bultel@wanadoo.fr> wrote:
->>>>> From: tbultel <tbultel@basystemes.fr>
->>>>>
->>>>> When calling 'tr' without quoting braces, bash can make really
->>>>> weird things
->>>>> if there are existing 'single-letter-named' directories
->>>>> eg:
->>>>> tbultel at laois:~/test$ echo AAA | tr [A-Z] [a-z]
->>>>> aaa
->>>>> tbultel at laois:~/test$ echo AAA | tr [A-Z] [a-z]
->>>>> AAA
->>>>>
->>>>> The (quick) analysis is that the callee (tr) argvs then
->>>>> contain 'm' thus the translation does not work
->>>>>
->>>>> Using quotes works around it
->>>>> tbultel at laois:~/test$ echo AAA | tr '[A-Z]' '[a-z]'
->>>>> aaa
->>>>>
->>>>>
->>>>> Signed-off-by: tbultel <tbultel@basystemes.fr>
->>>>
->>>> This should be real name, not a username.
->>>>
->>>>> ---
->>>>> Makefile |    2 +-
->>>>> 1 files changed, 1 insertions(+), 1 deletions(-)
->>>>>
->>>>> diff --git a/Makefile b/Makefile
->>>>> index 1496bd7..7f835c0 100644
->>>>> --- a/Makefile
->>>>> +++ b/Makefile
->>>>> @@ -548,7 +548,7 @@ target-generatelocales: host-localedef
->>>>>         I18NPATH=$(STAGING_DIR)/usr/share/i18n:/usr/share/i18n \
->>>>>         $(HOST_DIR)/usr/bin/localedef \
->>>>>             --prefix=$(TARGET_DIR) \
->>>>> -            --`echo $(BR2_ENDIAN) | tr [A-Z] [a-z]`-endian \
->>>>> +            --`echo $(BR2_ENDIAN) | tr '[A-Z]' '[a-z]'`-endian \
->>>>>             -i $${inputfile} -f $${charmap} \
->>>>>             $${locale} ; \
->>>>>     done
->>>>
->>>> While there's nothing wrong with your fix itself, I wonder why this
->>>> isn't using the UPPERCASE and LOWERCASE macros we have defined in
->>>> package/pkg-utils.mak...
->>>>
->>>> Best regards,
->>>> Thomas
->>>>
->>>>
->>>>
->>>
+[..]
 >>> The LOWERCASE macro does not seem to exist
 >>>
 >>
 >> It should be straightforward to implement it based on the existing
->> UPPERCASE macro. I justfind odd there'd be two ways of converting
->> case. One with direct tr and the other with a make macro...
->
->   The UPPERCASE macro is actually really really ugly - it's only reason
-> of existing is that it's much faster than calling tr 40K times, which
-> would be required because UPPERCASE is called so often.
->
->   Bottom line: I think using tr for this one situation is a better idea
-> than adding another ugly lowercase macro.
->
->   Regards,
->   Arnout
+>> UPPERCASE macro. I justfind odd there'd be two ways of converting case. One
+>> with direct tr and the other with a make macro...
 >
 >
+>  The UPPERCASE macro is actually really really ugly - it's only reason of
+> existing is that it's much faster than calling tr 40K times, which would be
+> required because UPPERCASE is called so often.
+>
+>  Bottom line: I think using tr for this one situation is a better idea than
+> adding another ugly lowercase macro.
 
-Yes indeed, one annoying point would have been the non symetric 
-implementation, since UPPERCASE handles dots and hyphens specially.
+It's also to create a lowercase macro that does $(shell tr '[A-Z]'
+'[a-z]'), explaining that the 'ugly' non-tr implementation is not
+needed because lowercase isn't called that often.
+The reason that I like the centralization is that you can make one
+correct implementation, and other people won't make the
+forgotten-quote mistake a second time.
 
-I then re-submit my patch with just my name instead my user name.
-Sorry about that, this is because I have several work locations.
+Also, I think [A-Z] should be replaced by [:upper:] and [a-z] by
+[:lower:] as this is more generally correct.
 
-Regards,
-Thierry
+Best regards,
+Thomas
