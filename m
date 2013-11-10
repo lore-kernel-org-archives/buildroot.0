@@ -1,23 +1,39 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 10 Nov 2013 23:36:57 +0100
-Subject: [Buildroot] [PATCH] zmqpp: fix build failure
-In-Reply-To: <1384117113-6710-1-git-send-email-spdawson@gmail.com>
- (spdawson@gmail.com's message of "Sun, 10 Nov 2013 20:58:33 +0000")
-References: <1384117113-6710-1-git-send-email-spdawson@gmail.com>
-Message-ID: <871u2ndgty.fsf@dell.be.48ers.dk>
+Date: Sun, 10 Nov 2013 23:42:03 +0100
+Subject: [Buildroot] [PATCH 1/1] Generation of locales: made call to tr
+	more robust and added LOWERCASE macro
+In-Reply-To: <1384104772-30097-1-git-send-email-thierry.bultel@wanadoo.fr>
+ (Thierry Bultel's message of "Sun, 10 Nov 2013 18:32:52 +0100")
+References: <1384104772-30097-1-git-send-email-thierry.bultel@wanadoo.fr>
+Message-ID: <87wqkfc210.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "spdawson" == spdawson  <spdawson@gmail.com> writes:
+>>>>> "Thierry" == Thierry Bultel <thierry.bultel@wanadoo.fr> writes:
 
-> From: Simon Dawson <spdawson@gmail.com>
-> The zmqpp client needs a little help to link against libpthread. Fix build
-> failures such as the following.
+> When calling 'tr' without quoting braces, bash can make really weird things
+> if there are existing 'single-letter-named' directories
+> eg:
+> thierry at thierry-desktop:~$ echo AAA | tr [A-Z] [a-z] 
+> aaa
+> thierry at thierry-desktop:~$ mkdir m
+> thierry at thierry-desktop:~$ echo AAA | tr [A-Z] [a-z] 
+> AAA
 
->   http://autobuild.buildroot.net/results/d0a/d0a740d4d5414844ca7f2de266fc92223d3d20c8
+
+> The (quick) analysis is that the callee (tr) argvs then
+> contain 'm' thus the translation does not work
+
+> Using quotes works around it:
+> thierry at thierry-desktop:~$ echo AAA | tr '[A-Z]' '[a-z]' 
+> aaa
+
+
+> Changes v1->v2
+>   - Added the LOWERCASE macro, following Thomas De Schampheleire's advice
 
 Committed, thanks.
 
