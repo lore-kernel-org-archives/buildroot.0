@@ -1,70 +1,53 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Sun, 10 Nov 2013 11:17:12 +0100
-Subject: [Buildroot] [PATCH 1/1] Generation of locales: made call to tr
-	more	robust
-In-Reply-To: <527F56D9.8060809@wanadoo.fr>
-References: <1383927916-27001-1-git-send-email-thierry.bultel@wanadoo.fr>
- <c8339166-9470-405a-ad3f-6f8b4a6e6159@email.android.com>
- <527F56D9.8060809@wanadoo.fr>
-Message-ID: <ca01f976-f93a-496a-9b4b-9b02c81c940a@email.android.com>
+From: Simon Dawson <spdawson@gmail.com>
+Date: Sun, 10 Nov 2013 10:32:29 +0000
+Subject: [Buildroot] Analysis of build failures
+In-Reply-To: <20131109191543.414f5694@skate>
+References: <20131109073028.B3C2E52C614@lolut.humanoidz.org>
+ <20131109191543.414f5694@skate>
+Message-ID: <CAHt8ZCP5zMXZfPo8EFpdVCFX0zq7DvJu=GoNcYGWo=frHdFpZA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thierry Bultel <thierry.bultel@wanadoo.fr> wrote:
->Le 09/11/2013 14:47, Thomas De Schampheleire a ?crit :
->> Thierry Bultel <thierry.bultel@wanadoo.fr> wrote:
->>> From: tbultel <tbultel@basystemes.fr>
->>>
->>> When calling 'tr' without quoting braces, bash can make really weird things
->>> if there are existing 'single-letter-named' directories
->>> eg:
->>> tbultel at laois:~/test$ echo AAA | tr [A-Z] [a-z]
->>> aaa
->>> tbultel at laois:~/test$ echo AAA | tr [A-Z] [a-z]
->>> AAA
->>>
->>> The (quick) analysis is that the callee (tr) argvs then
->>> contain 'm' thus the translation does not work
->>>
->>> Using quotes works around it
->>> tbultel at laois:~/test$ echo AAA | tr '[A-Z]' '[a-z]'
->>> aaa
->>>
->>>
->>> Signed-off-by: tbultel <tbultel@basystemes.fr>
->>
->> This should be real name, not a username.
->>
->>> ---
->>> Makefile |    2 +-
->>> 1 files changed, 1 insertions(+), 1 deletions(-)
->>>
->>> diff --git a/Makefile b/Makefile
->>> index 1496bd7..7f835c0 100644
->>> --- a/Makefile
->>> +++ b/Makefile
->>> @@ -548,7 +548,7 @@ target-generatelocales: host-localedef
->>> 		I18NPATH=$(STAGING_DIR)/usr/share/i18n:/usr/share/i18n \
->>> 		$(HOST_DIR)/usr/bin/localedef \
->>> 			--prefix=$(TARGET_DIR) \
->>> -			--`echo $(BR2_ENDIAN) | tr [A-Z] [a-z]`-endian \
->>> +			--`echo $(BR2_ENDIAN) | tr '[A-Z]' '[a-z]'`-endian \
->>> 			-i $${inputfile} -f $${charmap} \
->>> 			$${locale} ; \
->>> 	done
->>
->> While there's nothing wrong with your fix itself, I wonder why this isn't using the UPPERCASE and LOWERCASE macros we have defined in package/pkg-utils.mak...
->>
->> Best regards,
->> Thomas
->>
->>
->>
->
->The LOWERCASE macro does not seem to exist
->
+Hi Thomas,
 
-It should be straightforward to implement it based on the existing UPPERCASE macro. I justfind odd there'd be two ways of converting case. One with direct tr and the other with a make macro...
+On 9 November 2013 18:15, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+>>      avr32 |                libcap-ng-0.7.3 | NOK | http://autobuild.buildroot.net/results/3df16d60f6bbb679129cd568df4440be6f35cd9f/
+>
+> The missing TLS problem on AVR32. We still haven't found the solution
+> to handle this one. As I've suggested previously, I would simply make
+> TLS support unconditional in Buildroot as soon as thread support is
+> enabled, and then mark libcap-ng as not available on AVR32. Of course,
+> if you have an external toolchain without TLS support, you're on your
+> own.
+
+As you say, we still don't appear to have reached a consensus of
+opinion on how to solve this.
+
+>>      avr32 |              util-linux-2.23.2 | NOK | http://autobuild.buildroot.net/results/2ba1bd78f4303ef2f543a4e4fa65d1b68ba3a765/
+>
+> Missing fallocate on avr32. Simon, what is the proposal to solve this?
+> Add fallocate support to 0.9.31 ?
+
+Yes, I'm working on backporting fallocate support to 0.9.31 now.
+
+>>      avr32 |                   zeromq-3.2.4 | NOK | http://autobuild.buildroot.net/results/5cdf3e58df0df184f2ae1f2896c44f3f0f41c94d/
+>
+> Missing compiler intrinsics on AVR32. Problem already in the process of
+> being solved (Simon, Alexander).
+
+I think Alexander's patches have been applied now.
+
+>>        arm | zmqpp-31220ca4a0fb43a0848d7... | NOK | http://autobuild.buildroot.net/results/64494152b75037a1194312a2a408eb7ecb6b56c8/
+>>        arm | zmqpp-31220ca4a0fb43a0848d7... | NOK | http://autobuild.buildroot.net/results/75f2cc531892e649599681433f62a1d76e5736c9/
+>>        arm | zmqpp-31220ca4a0fb43a0848d7... | NOK | http://autobuild.buildroot.net/results/65783df07ebb447f7561cb84b1bcf581a3084748/
+>>        arm | zmqpp-31220ca4a0fb43a0848d7... | NOK | http://autobuild.buildroot.net/results/14d441c5f3a50f61cd5a872711d09fda4e5f8bbd/
+>
+> Forgets to link against pthread. Simon, can you link into this?
+
+Yes, I'll have a look when I get a chance.
+
+Simon.
