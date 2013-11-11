@@ -1,26 +1,33 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 11 Nov 2013 01:34:08 +0100
-Subject: [Buildroot] [PATCH v2 1/2] xmlstarlet: add license information
-In-Reply-To: <1381367104.4248.1.camel@phoenix> (Axel Lin's message of "Thu, 10
- Oct 2013 09:05:04 +0800")
-References: <1381367104.4248.1.camel@phoenix>
-Message-ID: <87fvr393pb.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 11 Nov 2013 01:32:06 +0100
+Subject: [Buildroot] [git commit] xmlstarlet: add license information
+Message-ID: <20131111003655.8985F9BB60@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Axel" == Axel Lin <axel.lin@ingics.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=270db93d7bf5dc8c2f742b4238253aea8591ec49
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Signed-off-by: Axel Lin <axel.lin@ingics.com>
-> Acked-by: Arnout Vandecappelle <arnout@mind.be>
-> ---
-> v2: Address Arnout's comment:
-> The COPYING and Copyright files are identical, so no need to copy both
-> of them.
+Signed-off-by: Axel Lin <axel.lin@ingics.com>
+Acked-by: Arnout Vandecappelle <arnout@mind.be>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/xmlstarlet/xmlstarlet.mk |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-Committed both, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/xmlstarlet/xmlstarlet.mk b/package/xmlstarlet/xmlstarlet.mk
+index f0a26c2..4a30feb 100644
+--- a/package/xmlstarlet/xmlstarlet.mk
++++ b/package/xmlstarlet/xmlstarlet.mk
+@@ -6,6 +6,8 @@
+ 
+ XMLSTARLET_VERSION = 1.3.0
+ XMLSTARLET_SITE = http://downloads.sourceforge.net/project/xmlstar/xmlstarlet/$(XMLSTARLET_VERSION)
++XMLSTARLET_LICENSE = MIT
++XMLSTARLET_LICENSE_FILES = COPYING
+ 
+ XMLSTARLET_DEPENDENCIES += libxml2 libxslt \
+ 	$(if $(BR2_PACKAGE_LIBICONV),libiconv)
