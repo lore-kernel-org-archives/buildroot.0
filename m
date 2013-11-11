@@ -1,38 +1,51 @@
-From: spdawson at gmail.com <spdawson@gmail.com>
-Date: Mon, 11 Nov 2013 10:20:34 +0000
-Subject: [Buildroot] [PATCH] iozone: depends on threads
-Message-ID: <1384165234-18705-1-git-send-email-spdawson@gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Mon, 11 Nov 2013 12:20:50 +0200
+Subject: [Buildroot] Analysis of build failures
+In-Reply-To: <20131111111546.2d9d7544@skate>
+References: <20131109073028.B3C2E52C614@lolut.humanoidz.org>
+ <20131109191543.414f5694@skate> <52806C1C.7010206@zankel.net>
+ <20131111105830.67b0a602@skate> <20131111101053.GO4581@tarshish>
+ <20131111111546.2d9d7544@skate>
+Message-ID: <20131111102050.GP4581@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Simon Dawson <spdawson@gmail.com>
+Hi Thomas,
 
-Signed-off-by: Simon Dawson <spdawson@gmail.com>
----
- package/iozone/Config.in | 6 ++++++
- 1 file changed, 6 insertions(+)
+On Mon, Nov 11, 2013 at 11:15:46AM +0100, Thomas Petazzoni wrote:
+> On Mon, 11 Nov 2013 12:10:53 +0200, Baruch Siach wrote:
+> > On Mon, Nov 11, 2013 at 10:58:30AM +0100, Thomas Petazzoni wrote:
+> > > On Sun, 10 Nov 2013 21:33:16 -0800, Chris Zankel wrote:
+> > > > (I'm a bit surprised to get all those errors as binutils currently doesn't 
+> > > > build. Are you using an older toolchain, or are these packages not 
+> > > > dependent on the final binutils build?)
+> > > 
+> > > The binutils issues you're seeing are while building native binutils
+> > > for the target, not when building cross-binutils for the cross
+> > > compilation toolchain. Building the cross-binutils works ok, because
+> > > they are built against the build machine C library, which is glibc and
+> > > therefore has obstack stuff.
+> > 
+> > Why do we need binutils on target?
+> 
+> $ git grep "select BR2_PACKAGE_BINUTILS"
+> package/dropwatch/Config.in:	select BR2_PACKAGE_BINUTILS
+> package/oprofile/Config.in:	select BR2_PACKAGE_BINUTILS
+> 
+> So we need it for dropwatch and oprofile. In fact, what is needed is
+> not the full binutils (i.e the binutils programs), but the libbfd
+> library which is part of the binutils tarball.
 
-diff --git a/package/iozone/Config.in b/package/iozone/Config.in
-index 33e12ca..6638b7c 100644
---- a/package/iozone/Config.in
-+++ b/package/iozone/Config.in
-@@ -2,8 +2,14 @@ config BR2_PACKAGE_IOZONE
- 	bool "iozone"
- 	depends on BR2_USE_MMU # fork()
- 	depends on !BR2_UCLIBC_VERSION_0_9_31 # no pthread_setaffinity_np
-+	depends on BR2_PTHREADS_NATIVE || BR2_TOOLCHAIN_BUILDROOT_EGLIBC || BR2_TOOLCHAIN_BUILDROOT_GLIBC
- 	help
- 	  IOzone is a filesystem benchmark tool.
- 	  The benchmark generates and measures a variety of file operations
- 
- 	  http://www.iozone.org/
-+
-+comment "iozone needs a toolchain w/ threads"
-+	depends on BR2_USE_MMU
-+	depends on !BR2_UCLIBC_VERSION_0_9_31
-+	depends on !(BR2_PTHREADS_NATIVE || BR2_TOOLCHAIN_BUILDROOT_EGLIBC || BR2_TOOLCHAIN_BUILDROOT_GLIBC)
+This is strange. More than half of xtensa autobuilds used to fail on target 
+binutils before Chris' obstack fix. Does this mean that all failing configs 
+had dropwatch or oprofile enabled?
+
+baruch
+
 -- 
-1.8.3.2
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
