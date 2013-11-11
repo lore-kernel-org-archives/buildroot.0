@@ -1,11 +1,11 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Mon, 11 Nov 2013 12:56:17 +0100
-Subject: [Buildroot] [PATCH 1 of 6 v2] legal info: fix saving of host
-	package licenses
-In-Reply-To: <e07dc5f55104adb4a171.1381151708@argentina>
+Date: Mon, 11 Nov 2013 12:57:33 +0100
+Subject: [Buildroot] [PATCH 6 of 6 v2] legal info: update documentation
+ with split target/host output
+In-Reply-To: <80513bfceb0f901ca09a.1381151713@argentina>
 References: <patchbomb.1381151707@argentina>
- <e07dc5f55104adb4a171.1381151708@argentina>
-Message-ID: <CAAXf6LUguN-zQ6P9Lp7FutyDaw4u__3wEw0NrJqSF-gKo-mJuA@mail.gmail.com>
+ <80513bfceb0f901ca09a.1381151713@argentina>
+Message-ID: <CAAXf6LWZRQ-nbQJN4EqKdLwEADw4myFkFRqHLT12qZBvd6ehbw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,84 +14,59 @@ To: buildroot@busybox.net
 
 On Mon, Oct 7, 2013 at 3:15 PM, Thomas De Schampheleire
 <patrickdepinguin@gmail.com> wrote:
-> Due to some tricky make behavior, the license texts of host packages that
-> did not provide an explicit HOST_FOO_LICENSE_FILES definition was not saved.
-> The problem is that you cannot correctly use a variable defined/updated
-> inside a call'ed block as input to a foreach statement. If you try to use
-> $(FOO) then only the original value of FOO is used for foreach, any update
-> inside the call'ed block is ignored. However, if you use $$(FOO), the entire
-> contents of FOO (typically a list of items) is passed as one item to
-> foreach, thus causing just one iteration instead of several.
->
-> To fix the problem, one should only use values in foreach that have not
-> changed inside the call'ed block. In the case of (HOST_)FOO_LICENSE_FILES,
-> this means repeating the checks for a valid HOST_FOO_X and using FOO_X as
-> fallback.
->
-> Additionally, a few empty lines have been added to the legal-info-foo block
-> for clarity, as the amount of nested ifdef/ifeq statements have become very
-> high.
->
 > Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 >
 > ---
-> v2:
-> - implement a solution for packages that have multiple license files.
-> - fix accidental mixup of code from another patch
+> v2: new patch
 >
->  package/pkg-generic.mk |  23 ++++++++++++++++++++---
->  1 files changed, 20 insertions(+), 3 deletions(-)
+>  docs/manual/legal-notice.txt |  15 +++++++++------
+>  1 files changed, 9 insertions(+), 6 deletions(-)
 >
-> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-> --- a/package/pkg-generic.mk
-> +++ b/package/pkg-generic.mk
-> @@ -499,26 +499,43 @@ endif
->  $(1)-legal-info:
->  # Packages without a source are assumed to be part of Buildroot, skip them.
->  ifneq ($(call qstrip,$$($(2)_SOURCE)),)
-> +
->  ifeq ($$($(2)_SITE_METHOD),local)
->  # Packages without a tarball: don't save and warn
->         @$(call legal-warning-pkg-savednothing,$$($(2)_RAWNAME),local)
-> +
->  else ifneq ($$($(2)_OVERRIDE_SRCDIR),)
->         @$(call legal-warning-pkg-savednothing,$$($(2)_RAWNAME),override)
-> +
->  else
->  # Other packages
-> +
->  # Save license files if defined
->  ifeq ($(call qstrip,$$($(2)_LICENSE_FILES)),)
->         @$(call legal-license-nofiles,$$($(2)_RAWNAME))
->         @$(call legal-warning-pkg,$$($(2)_RAWNAME),cannot save license ($(2)_LICENSE_FILES not defined))
->  else
-> +# We cannot use $$($(2)_LICENSE_FILES) in the foreach below because it fails
-> +# for host packages that have no explicit HOST_FOO_LICENSE_FILES set. We have
-> +# to explicitly repeat the check for HOST_FOO_X and FOO_X.
-> +ifeq ($($(2)_LICENSE_FILES),)
-> +ifneq ($($(3)_LICENSE_FILES),)
-> +# Host package with no explicit HOST_FOO_LICENSE_FILES
-> +       @$(foreach F,$($(3)_LICENSE_FILES),$(call legal-license-file,$$($(2)_RAWNAME),$(F),$$($(2)_DIR)/$(F))$$(sep))
-> +endif
-> +else
-> +# Target package, or host package with explicit HOST_FOO_LICENSE_FILES
->         @$(foreach F,$($(2)_LICENSE_FILES),$(call legal-license-file,$$($(2)_RAWNAME),$(F),$$($(2)_DIR)/$(F))$$(sep))
-> -endif
-> +endif # host/target distinction
-> +endif # license files
-> +
->  ifeq ($$($(2)_REDISTRIBUTE),YES)
->  # Copy the source tarball (just hardlink if possible)
->         @cp -l $(DL_DIR)/$$($(2)_SOURCE) $(REDIST_SOURCES_DIR) 2>/dev/null || \
->            cp $(DL_DIR)/$$($(2)_SOURCE) $(REDIST_SOURCES_DIR)
-> -endif
-> -endif
-> +endif # redistribute
-> +
-> +endif # other packages
->         @$(call legal-manifest,$$($(2)_RAWNAME),$$($(2)_VERSION),$$($(2)_LICENSE),$$($(2)_MANIFEST_LICENSE_FILES),$$($(2)_MANIFEST_TARBALL))
->  endif # ifneq ($(call qstrip,$$($(2)_SOURCE)),)
->         $(foreach hook,$($(2)_POST_LEGAL_INFO_HOOKS),$(call $(hook))$(sep))
+> diff --git a/docs/manual/legal-notice.txt b/docs/manual/legal-notice.txt
+> --- a/docs/manual/legal-notice.txt
+> +++ b/docs/manual/legal-notice.txt
+> @@ -39,16 +39,19 @@ There you will find:
+>  * +buildroot.config+: this is the Buildroot configuration file that is usually
+>    produced with +make menuconfig+, and which is necessary to reproduce the
+>    build.
+> -* The source code for all packages; this is saved in the +sources/+
+> -  subdirectory (except for proprietary packages, whose source code is not
+> -  saved);
+> -  patches applied to some packages by Buildroot are distributed with the
+> -  Buildroot sources and are not duplicated in the +sources/+ subdirectory.
+> -* A manifest file listing the configured packages, their version, license and
+> -  related information.
+> +* The source code for all packages; this is saved in the +sources/+ and
+> +  +host-sources/+ subdirectories for target and host packages respectively.
+> +  The source code for packages that set +<PKG>_REDISTRIBUTE = NO+ will not be
+> +  saved.
+> +  Patches applied to some packages by Buildroot are distributed with the
+> +  Buildroot sources and are not duplicated in the +sources/+ and +host-sources/+
+> +  subdirectories.
+> +* A manifest file (one for host and one for target packages) listing the
+> +  configured packages, their version, license and related information.
+>    Some of this information might not be defined in Buildroot; such items are
+>    marked as "unknown".
+> -* A +licenses/+ subdirectory, which contains the license text of packages.
+> +* The license texts of all packages, in the +licenses/+ and +host-licenses/+
+> +  subdirectories for target and host packages respectively.
+>    If the license file(s) are not defined in Buildroot, the file is not produced
+>    and a warning in the +README+ indicates this.
+>
+> @@ -72,7 +75,7 @@ License abbreviations
+>  ---------------------
+>
+>  Here is a list of the licenses that are most widely used by packages in
+> -Buildroot, with the name used in the manifest file:
+> +Buildroot, with the name used in the manifest files:
+>
+>  * `GPLv2`:
+>    http://www.gnu.org/licenses/old-licenses/gpl-2.0.html[
 
+This patch, together with the first one in this series, are the only
+ones that still need a review, all others have been Acked by Luca.
 
-ping?
+It would be great if this could get in 2013.11...
+
+Thanks a lot,
+Thomas
