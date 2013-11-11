@@ -1,49 +1,44 @@
-From: Will Newton <will.newton@gmail.com>
-Date: Mon, 11 Nov 2013 10:25:27 +0000
-Subject: [Buildroot] Analysis of build failures
-In-Reply-To: <20131111111718.0c539360@skate>
-References: <20131109073028.B3C2E52C614@lolut.humanoidz.org>
- <20131109191543.414f5694@skate>
- <CAFbHwiRbF9E=7st0wu+WesxSnWayQjjKWKuEb+n4QqvbNk21ww@mail.gmail.com>
- <20131111111718.0c539360@skate>
-Message-ID: <CAFbHwiSvfDnHS1ovy2QTsA1t4-yJ_fwW+TwUhwK=N8z6T0-vYg@mail.gmail.com>
+From: sonic.adi at gmail.com <sonic.adi@gmail.com>
+Date: Mon, 11 Nov 2013 18:24:22 +0800
+Subject: [Buildroot] [PATCH v2] alsa-lib: FLAT: Disable alsa lib when FLAT
+	bianry is selected.
+Message-ID: <1384165462-22255-1-git-send-email-Sonic.adi@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Nov 11, 2013 at 10:17 AM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Dear Will Newton,
->
-> On Mon, 11 Nov 2013 10:01:17 +0000, Will Newton wrote:
->
->> >>        arm |                 valgrind-3.8.1 | NOK | http://autobuild.buildroot.net/results/f174541ac06aeeac82b8399686a8d4371532760d/
->> >
->> > /tmp/cceJNtCh.s: Assembler messages:
->> > /tmp/cceJNtCh.s:200: Error: r15 not allowed here -- `str r15,[r3,#+0]'
->> > make[4]: *** [libcoregrind_arm_linux_a-m_libcassert.o] Error 1
->> > make[4]: *** Waiting for unfinished jobs....
->> >
->> > Not sure what's going on here. Anyone to have a look?
->>
->> valgrind uses inline assembly that is not Thumb compatible. It seems
->> it isn't expected to build it in Thumb mode (although it emulates
->> Thumb mode). It might be quite simple to fix but would need
->> coordination with upstream etc.
->
-> Are you talking about Thumb, or Thumb-2 ? Because here the
-> configuration has:
->
-> BR2_arm=y
-> BR2_cortex_a8=y
-> BR2_TARGET_OPTIMIZATION="-mthumb"
->
-> so it's an ARMv7-A with -mthumb, so that means Thumb-2, right?
+From: Sonic Zhang <sonic.zhang@analog.com>
 
-Yes, Thumb-2. Only those crazy microcontroller guys care about Thumb-1. ;-)
+Alsa lib depends on the runtime library loader.
 
-ARM ARM A8.8.203 is the relevant page, Thumb-2 cannot store pc/r15
-directly. It should be possible to use a temporary to achieve the same
-effect but it would need thorough testing.
+Signed-off-by: Sonic Zhang <sonic.zhang@analog.com>
+---
+ package/alsa-lib/Config.in | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/package/alsa-lib/Config.in b/package/alsa-lib/Config.in
+index df05240..170a563 100644
+--- a/package/alsa-lib/Config.in
++++ b/package/alsa-lib/Config.in
+@@ -9,14 +9,15 @@ config BR2_PACKAGE_ALSA_LIB
+ 	# the usage of alsa-lib on no-thread systems is pretty
+ 	# unlikely, just require thread support globally for alsa-lib.
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_BINFMT_FLAT
+ 	help
+ 	  The Advanced Linux Sound Architecture (ALSA) provides audio and MIDI
+ 	  functionality to the Linux operating system.
+ 
+ 	  http://www.alsa-project.org/
+ 
+-comment "alsa-lib needs a toolchain w/ threads"
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS
++comment "alsa-lib needs a toolchain w/ threads and none FLAT binary format"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_BINFMT_FLAT
+ 
+ if BR2_PACKAGE_ALSA_LIB
+ 
+-- 
+1.8.2.3
