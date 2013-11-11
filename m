@@ -1,33 +1,37 @@
-From: sonic.adi at gmail.com <sonic.adi@gmail.com>
-Date: Mon, 11 Nov 2013 18:36:13 +0800
-Subject: [Buildroot] [PATCH] e2fsprogs: Disable elf shared library when
-	BR2_PREFER_STATIC_LIB is selected.
-Message-ID: <1384166173-23883-1-git-send-email-Sonic.adi@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 11 Nov 2013 11:43:07 +0100
+Subject: [Buildroot] Analysis of build failures
+In-Reply-To: <CAFbHwiSvfDnHS1ovy2QTsA1t4-yJ_fwW+TwUhwK=N8z6T0-vYg@mail.gmail.com>
+References: <20131109073028.B3C2E52C614@lolut.humanoidz.org>
+ <20131109191543.414f5694@skate>
+ <CAFbHwiRbF9E=7st0wu+WesxSnWayQjjKWKuEb+n4QqvbNk21ww@mail.gmail.com>
+ <20131111111718.0c539360@skate>
+ <CAFbHwiSvfDnHS1ovy2QTsA1t4-yJ_fwW+TwUhwK=N8z6T0-vYg@mail.gmail.com>
+Message-ID: <20131111114307.61ad4e63@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Sonic Zhang <sonic.zhang@analog.com>
+Dear Will Newton,
 
-Signed-off-by: Sonic Zhang <sonic.zhang@analog.com>
----
- package/e2fsprogs/e2fsprogs.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On Mon, 11 Nov 2013 10:25:27 +0000, Will Newton wrote:
 
-diff --git a/package/e2fsprogs/e2fsprogs.mk b/package/e2fsprogs/e2fsprogs.mk
-index 0670c74..cdca906 100644
---- a/package/e2fsprogs/e2fsprogs.mk
-+++ b/package/e2fsprogs/e2fsprogs.mk
-@@ -11,7 +11,7 @@ E2FSPROGS_LICENSE_FILES = COPYING lib/uuid/COPYING lib/ss/mit-sipb-copyright.h l
- 
- E2FSPROGS_CONF_OPT = \
- 	--disable-tls \
--	--enable-elf-shlibs \
-+	$(if $(BR2_PREFER_STATIC_LIB),,--enable-elf-shlibs) \
- 	$(if $(BR2_PACKAGE_E2FSPROGS_DEBUGFS),,--disable-debugfs) \
- 	$(if $(BR2_PACKAGE_E2FSPROGS_E2IMAGE),,--disable-imager) \
- 	$(if $(BR2_PACKAGE_E2FSPROGS_E4DEFRAG),,--disable-defrag) \
+> Yes, Thumb-2. Only those crazy microcontroller guys care about Thumb-1. ;-)
+> 
+> ARM ARM A8.8.203 is the relevant page, Thumb-2 cannot store pc/r15
+> directly. It should be possible to use a temporary to achieve the same
+> effect but it would need thorough testing.
+
+So I guess we need to disable valgrind on Thumb-2, or make it build
+with ARM instructions even on Thumb-2 builds. Or bump Valgrind and see
+if the new version is fixed for Thumb-2.
+
+Best regards,
+
+Thomas
 -- 
-1.8.2.3
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
