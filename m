@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 11 Nov 2013 17:47:38 +0100
-Subject: [Buildroot] [PATCH 14/15] board: add support for the MinnowBoard
+Date: Mon, 11 Nov 2013 17:47:39 +0100
+Subject: [Buildroot] [PATCH 15/15] board: add support for the Fri2 board
 In-Reply-To: <1384188459-1332-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1384188459-1332-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1384188459-1332-15-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1384188459-1332-16-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,37 +12,38 @@ To: buildroot@busybox.net
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- board/minnowboard/grub.cfg         |   6 ++
- board/minnowboard/linux-3.8.config | 172 +++++++++++++++++++++++++++++++++++++
- board/minnowboard/post-build.sh    |   2 +
- board/minnowboard/readme.txt       |  40 +++++++++
- configs/minnowboard_defconfig      |  12 +++
- 5 files changed, 232 insertions(+)
- create mode 100644 board/minnowboard/grub.cfg
- create mode 100644 board/minnowboard/linux-3.8.config
- create mode 100755 board/minnowboard/post-build.sh
- create mode 100644 board/minnowboard/readme.txt
- create mode 100644 configs/minnowboard_defconfig
+ board/fri2/grub.cfg         |   6 +
+ board/fri2/linux-3.8.config | 336 ++++++++++++++++++++++++++++++++++++++++++++
+ board/fri2/post-build.sh    |   2 +
+ board/fri2/readme.txt       |  40 ++++++
+ configs/fri2_defconfig      |  12 ++
+ 5 files changed, 396 insertions(+)
+ create mode 100644 board/fri2/grub.cfg
+ create mode 100644 board/fri2/linux-3.8.config
+ create mode 100755 board/fri2/post-build.sh
+ create mode 100644 board/fri2/readme.txt
+ create mode 100644 configs/fri2_defconfig
 
-diff --git a/board/minnowboard/grub.cfg b/board/minnowboard/grub.cfg
+diff --git a/board/fri2/grub.cfg b/board/fri2/grub.cfg
 new file mode 100644
-index 0000000..33a0f4a
+index 0000000..f762714
 --- /dev/null
-+++ b/board/minnowboard/grub.cfg
++++ b/board/fri2/grub.cfg
 @@ -0,0 +1,6 @@
 +set default="0"
 +set timeout="5"
 +
 +menuentry "Buildroot" {
-+	linux /bzImage root=/dev/mmcblk0p2 rootwait console=ttyPCH0,115200
++	linux /bzImage root=/dev/mmcblk0p2 rootwait console=ttyPCH1,115200
 +}
-diff --git a/board/minnowboard/linux-3.8.config b/board/minnowboard/linux-3.8.config
+diff --git a/board/fri2/linux-3.8.config b/board/fri2/linux-3.8.config
 new file mode 100644
-index 0000000..460aa2d
+index 0000000..5bb2da0
 --- /dev/null
-+++ b/board/minnowboard/linux-3.8.config
-@@ -0,0 +1,172 @@
++++ b/board/fri2/linux-3.8.config
+@@ -0,0 +1,336 @@
 +CONFIG_EXPERIMENTAL=y
++CONFIG_LOCALVERSION="-yocto-standard"
 +# CONFIG_LOCALVERSION_AUTO is not set
 +CONFIG_SYSVIPC=y
 +CONFIG_POSIX_MQUEUE=y
@@ -89,17 +90,20 @@ index 0000000..460aa2d
 +CONFIG_PM_DEBUG=y
 +CONFIG_PM_ADVANCED_DEBUG=y
 +CONFIG_CPU_FREQ=y
-+CONFIG_CPU_FREQ_GOV_ONDEMAND=y
++CONFIG_CPU_FREQ_DEFAULT_GOV_ONDEMAND=y
 +CONFIG_X86_ACPI_CPUFREQ=y
 +CONFIG_INTEL_IDLE=y
 +CONFIG_PCI_MMCONFIG=y
 +CONFIG_PCIEPORTBUS=y
 +CONFIG_PCI_MSI=y
 +CONFIG_HOTPLUG_PCI=y
++CONFIG_BINFMT_MISC=m
 +CONFIG_NET=y
 +CONFIG_PACKET=y
 +CONFIG_UNIX=y
++CONFIG_XFRM_USER=m
 +CONFIG_XFRM_SUB_POLICY=y
++CONFIG_NET_KEY=m
 +CONFIG_NET_KEY_MIGRATE=y
 +CONFIG_INET=y
 +CONFIG_IP_MULTICAST=y
@@ -111,125 +115,285 @@ index 0000000..460aa2d
 +CONFIG_IP_PNP_DHCP=y
 +CONFIG_IP_PNP_BOOTP=y
 +CONFIG_IP_PNP_RARP=y
++CONFIG_NET_IPIP=m
++CONFIG_IP_MROUTE=y
++CONFIG_IP_PIMSM_V1=y
++CONFIG_IP_PIMSM_V2=y
++CONFIG_SYN_COOKIES=y
++CONFIG_INET_AH=m
++CONFIG_INET_ESP=m
++CONFIG_INET_IPCOMP=m
++CONFIG_IPV6=y
++CONFIG_IPV6_ROUTER_PREF=y
++CONFIG_INET6_AH=y
++CONFIG_INET6_ESP=y
++CONFIG_INET6_IPCOMP=m
++CONFIG_IPV6_TUNNEL=m
++CONFIG_NETFILTER=y
++CONFIG_IP_NF_QUEUE=m
++CONFIG_IP_NF_IPTABLES=m
++CONFIG_IP_NF_MATCH_ECN=m
++CONFIG_IP_NF_MATCH_TTL=m
++CONFIG_IP_NF_FILTER=m
++CONFIG_IP_NF_TARGET_REJECT=m
++CONFIG_IP_NF_TARGET_ULOG=m
++CONFIG_IP_NF_MANGLE=m
++CONFIG_IP_NF_TARGET_ECN=m
++CONFIG_IP_NF_RAW=m
++CONFIG_IP_NF_ARPTABLES=m
++CONFIG_IP_NF_ARPFILTER=m
++CONFIG_IP_NF_ARP_MANGLE=m
++CONFIG_IP6_NF_IPTABLES=m
++CONFIG_IP6_NF_MATCH_EUI64=m
++CONFIG_IP6_NF_MATCH_FRAG=m
++CONFIG_IP6_NF_MATCH_OPTS=m
++CONFIG_IP6_NF_MATCH_HL=m
++CONFIG_IP6_NF_MATCH_IPV6HEADER=m
++CONFIG_IP6_NF_MATCH_RT=m
++CONFIG_IP6_NF_FILTER=m
++CONFIG_IP6_NF_MANGLE=m
++CONFIG_IP6_NF_RAW=m
++CONFIG_IP_SCTP=m
++CONFIG_TIPC=m
++CONFIG_BRIDGE=m
++CONFIG_VLAN_8021Q=m
++CONFIG_IEEE802154=y
++CONFIG_IEEE802154_6LOWPAN=y
++CONFIG_NET_SCHED=y
++CONFIG_NET_SCH_CBQ=m
++CONFIG_NET_SCH_HTB=m
++CONFIG_NET_SCH_HFSC=m
++CONFIG_NET_SCH_PRIO=m
++CONFIG_NET_SCH_RED=m
++CONFIG_NET_SCH_SFQ=m
++CONFIG_NET_SCH_TEQL=m
++CONFIG_NET_SCH_TBF=m
++CONFIG_NET_SCH_GRED=m
++CONFIG_NET_SCH_DSMARK=m
++CONFIG_NET_SCH_NETEM=m
++CONFIG_NET_SCH_CODEL=m
++CONFIG_NET_SCH_INGRESS=m
++CONFIG_NET_CLS_BASIC=y
++CONFIG_NET_CLS_CGROUP=y
++CONFIG_NET_CLS_ACT=y
++CONFIG_NET_PKTGEN=m
++CONFIG_CAN=y
++CONFIG_PCH_CAN=y
++CONFIG_BT=y
++CONFIG_CFG80211=m
++CONFIG_MAC80211=m
 +CONFIG_DEVTMPFS=y
 +CONFIG_DEVTMPFS_MOUNT=y
 +CONFIG_FW_LOADER=m
 +CONFIG_BLK_DEV_LOOP=y
 +CONFIG_BLK_DEV_CRYPTOLOOP=m
++CONFIG_BLK_DEV_NBD=m
 +CONFIG_BLK_DEV_RAM=y
-+CONFIG_PCH_PHUB=m
++CONFIG_PCH_PHUB=y
 +CONFIG_BLK_DEV_SD=y
 +CONFIG_BLK_DEV_SR=y
 +CONFIG_CHR_DEV_SG=y
 +CONFIG_ATA=y
 +CONFIG_SATA_AHCI=y
++CONFIG_MD=y
++CONFIG_BLK_DEV_MD=y
++CONFIG_MD_LINEAR=y
++CONFIG_MD_RAID0=y
++CONFIG_MD_RAID1=y
++CONFIG_MD_RAID10=y
++CONFIG_MD_MULTIPATH=y
++CONFIG_MD_FAULTY=y
++CONFIG_BLK_DEV_DM=y
++CONFIG_DM_CRYPT=y
++CONFIG_DM_SNAPSHOT=y
++CONFIG_DM_MIRROR=y
++CONFIG_DM_ZERO=y
 +CONFIG_NETDEVICES=y
++CONFIG_BONDING=m
 +CONFIG_DUMMY=m
 +CONFIG_NETCONSOLE=y
 +CONFIG_TUN=m
-+CONFIG_PCH_GBE=m
-+CONFIG_INPUT_EVDEV=y
-+# CONFIG_KEYBOARD_ATKBD is not set
-+CONFIG_KEYBOARD_GPIO_POLLED=y
-+# CONFIG_MOUSE_PS2 is not set
-+# CONFIG_SERIO_I8042 is not set
-+CONFIG_SERIAL_8250=y
-+CONFIG_SERIAL_8250_CONSOLE=y
++CONFIG_PCH_GBE=y
++CONFIG_PPP=m
++CONFIG_PPP_BSDCOMP=m
++CONFIG_PPP_DEFLATE=m
++CONFIG_PPP_FILTER=y
++CONFIG_PPP_MULTILINK=y
++CONFIG_PPPOE=m
++CONFIG_PPP_ASYNC=m
++CONFIG_PPP_SYNC_TTY=m
++CONFIG_SLIP=m
++CONFIG_SLIP_COMPRESSED=y
++CONFIG_SLIP_SMART=y
++CONFIG_SLIP_MODE_SLIP6=y
++CONFIG_USB_KAWETH=y
++CONFIG_USB_PEGASUS=y
++CONFIG_USB_USBNET=y
++CONFIG_USB_NET_CDC_NCM=m
++CONFIG_USB_NET_DM9601=y
++CONFIG_USB_NET_SMSC75XX=y
++CONFIG_USB_NET_SMSC95XX=y
++CONFIG_USB_NET_MCS7830=y
++CONFIG_USB_ALI_M5632=y
++CONFIG_USB_AN2720=y
++CONFIG_USB_KC2190=y
++CONFIG_USB_NET_INT51X1=y
++CONFIG_IWLWIFI=m
 +CONFIG_SERIAL_PCH_UART=y
 +CONFIG_SERIAL_PCH_UART_CONSOLE=y
-+CONFIG_GEN_RTC=y
-+CONFIG_GEN_RTC_X=y
 +CONFIG_HPET=y
-+CONFIG_I2C=y
-+CONFIG_I2C_CHARDEV=m
-+CONFIG_I2C_EG20T=m
++CONFIG_I2C_EG20T=y
 +CONFIG_SPI=y
-+CONFIG_SPI_GPIO=m
-+CONFIG_SPI_TOPCLIFF_PCH=m
-+CONFIG_SPI_SPIDEV=m
++CONFIG_SPI_GPIO=y
++CONFIG_SPI_TOPCLIFF_PCH=y
 +CONFIG_GPIOLIB=y
-+CONFIG_DEBUG_GPIO=y
-+CONFIG_GPIO_SYSFS=y
-+CONFIG_GPIO_GENERIC_PLATFORM=y
-+CONFIG_GPIO_SCH=y
 +CONFIG_GPIO_PCH=y
 +CONFIG_WATCHDOG=y
 +CONFIG_SOFT_WATCHDOG=m
-+CONFIG_AGP=m
-+CONFIG_DRM=m
++CONFIG_MEDIA_SUPPORT=y
++CONFIG_AGP=y
++CONFIG_DRM=y
 +CONFIG_FB=y
++CONFIG_FB_MODE_HELPERS=y
++CONFIG_FB_VESA=y
 +CONFIG_FB_EFI=y
 +CONFIG_BACKLIGHT_LCD_SUPPORT=y
 +CONFIG_BACKLIGHT_CLASS_DEVICE=y
 +CONFIG_FRAMEBUFFER_CONSOLE=y
 +CONFIG_FRAMEBUFFER_CONSOLE_DETECT_PRIMARY=y
-+CONFIG_SOUND=m
-+CONFIG_SND=m
-+CONFIG_SND_HDA_INTEL=m
++CONFIG_SOUND=y
++CONFIG_SND=y
++CONFIG_SND_HDA_INTEL=y
 +CONFIG_USB=y
 +CONFIG_USB_SUSPEND=y
 +CONFIG_USB_EHCI_HCD=y
 +CONFIG_USB_EHCI_ROOT_HUB_TT=y
 +CONFIG_USB_OHCI_HCD=y
++CONFIG_USB_ACM=m
++CONFIG_USB_WDM=m
 +CONFIG_USB_STORAGE=y
-+CONFIG_USB_GADGET=m
-+CONFIG_USB_EG20T=m
++CONFIG_USB_GADGET=y
++CONFIG_USB_EG20T=y
 +CONFIG_MMC=y
 +CONFIG_MMC_SDHCI=y
 +CONFIG_MMC_SDHCI_PCI=y
-+CONFIG_NEW_LEDS=y
-+CONFIG_LEDS_CLASS=y
-+CONFIG_LEDS_GPIO=y
-+CONFIG_LEDS_TRIGGERS=y
-+CONFIG_LEDS_TRIGGER_TIMER=y
-+CONFIG_LEDS_TRIGGER_ONESHOT=y
-+CONFIG_LEDS_TRIGGER_HEARTBEAT=y
-+CONFIG_LEDS_TRIGGER_BACKLIGHT=y
-+CONFIG_LEDS_TRIGGER_CPU=y
-+CONFIG_LEDS_TRIGGER_GPIO=y
-+CONFIG_LEDS_TRIGGER_DEFAULT_ON=y
 +CONFIG_DMADEVICES=y
 +CONFIG_PCH_DMA=y
-+CONFIG_MINNOWBOARD=y
-+CONFIG_MINNOWBOARD_GPIO=m
-+CONFIG_MINNOWBOARD_KEYS=m
 +CONFIG_EFI_VARS=y
++CONFIG_EXT2_FS=y
++CONFIG_EXT2_FS_XATTR=y
++CONFIG_EXT2_FS_POSIX_ACL=y
++CONFIG_EXT3_FS=y
++CONFIG_EXT3_FS_POSIX_ACL=y
++CONFIG_EXT3_FS_SECURITY=y
 +CONFIG_EXT4_FS=y
 +CONFIG_EXT4_FS_POSIX_ACL=y
 +CONFIG_EXT4_FS_SECURITY=y
-+CONFIG_FANOTIFY=y
-+CONFIG_FANOTIFY_ACCESS_PERMISSIONS=y
++CONFIG_REISERFS_FS=m
++CONFIG_REISERFS_FS_XATTR=y
++CONFIG_REISERFS_FS_POSIX_ACL=y
++CONFIG_BTRFS_FS=y
++CONFIG_BTRFS_FS_POSIX_ACL=y
++CONFIG_AUTOFS4_FS=m
++CONFIG_FUSE_FS=m
++CONFIG_CUSE=m
 +CONFIG_ISO9660_FS=y
 +CONFIG_MSDOS_FS=y
 +CONFIG_VFAT_FS=y
 +CONFIG_PROC_KCORE=y
 +CONFIG_TMPFS=y
-+CONFIG_TMPFS_POSIX_ACL=y
 +CONFIG_CONFIGFS_FS=m
++CONFIG_MINIX_FS=m
++CONFIG_ROMFS_FS=m
 +CONFIG_NFS_FS=y
 +CONFIG_NFS_V4=y
 +CONFIG_ROOT_NFS=y
-+CONFIG_PRINTK_TIME=y
++CONFIG_CIFS=m
++CONFIG_CIFS_XATTR=y
++CONFIG_CIFS_POSIX=y
++CONFIG_NLS_CODEPAGE_437=y
++CONFIG_NLS_CODEPAGE_737=m
++CONFIG_NLS_CODEPAGE_775=m
++CONFIG_NLS_CODEPAGE_850=m
++CONFIG_NLS_CODEPAGE_852=m
++CONFIG_NLS_CODEPAGE_855=m
++CONFIG_NLS_CODEPAGE_857=m
++CONFIG_NLS_CODEPAGE_860=m
++CONFIG_NLS_CODEPAGE_861=m
++CONFIG_NLS_CODEPAGE_862=m
++CONFIG_NLS_CODEPAGE_863=m
++CONFIG_NLS_CODEPAGE_864=m
++CONFIG_NLS_CODEPAGE_865=m
++CONFIG_NLS_CODEPAGE_866=m
++CONFIG_NLS_CODEPAGE_869=m
++CONFIG_NLS_CODEPAGE_936=m
++CONFIG_NLS_CODEPAGE_950=m
++CONFIG_NLS_CODEPAGE_932=m
++CONFIG_NLS_CODEPAGE_949=m
++CONFIG_NLS_CODEPAGE_874=m
++CONFIG_NLS_ISO8859_8=m
++CONFIG_NLS_CODEPAGE_1250=m
++CONFIG_NLS_CODEPAGE_1251=m
++CONFIG_NLS_ASCII=m
++CONFIG_NLS_ISO8859_1=y
++CONFIG_NLS_ISO8859_2=m
++CONFIG_NLS_ISO8859_3=m
++CONFIG_NLS_ISO8859_4=m
++CONFIG_NLS_ISO8859_5=m
++CONFIG_NLS_ISO8859_6=m
++CONFIG_NLS_ISO8859_7=m
++CONFIG_NLS_ISO8859_9=m
++CONFIG_NLS_ISO8859_13=m
++CONFIG_NLS_ISO8859_14=m
++CONFIG_NLS_ISO8859_15=m
++CONFIG_NLS_KOI8_R=m
++CONFIG_NLS_KOI8_U=m
++CONFIG_NLS_UTF8=m
 +CONFIG_FRAME_WARN=1024
 +CONFIG_TIMER_STATS=y
++CONFIG_DEBUG_INFO=y
 +CONFIG_LATENCYTOP=y
++CONFIG_FUNCTION_TRACER=y
++CONFIG_FTRACE_SYSCALLS=y
 +CONFIG_BLK_DEV_IO_TRACE=y
-diff --git a/board/minnowboard/post-build.sh b/board/minnowboard/post-build.sh
++CONFIG_UPROBE_EVENT=y
++CONFIG_KGDB=y
++CONFIG_KGDB_LOW_LEVEL_TRAP=y
++CONFIG_KGDB_KDB=y
++CONFIG_KDB_KEYBOARD=y
++CONFIG_SECURITY=y
++CONFIG_CRYPTO_NULL=m
++CONFIG_CRYPTO_TEST=m
++CONFIG_CRYPTO_CTR=m
++CONFIG_CRYPTO_XCBC=m
++CONFIG_CRYPTO_MICHAEL_MIC=m
++CONFIG_CRYPTO_SHA512=m
++CONFIG_CRYPTO_WP512=m
++CONFIG_CRYPTO_ANUBIS=m
++CONFIG_CRYPTO_BLOWFISH=m
++CONFIG_CRYPTO_CAMELLIA=m
++CONFIG_CRYPTO_CAST5=m
++CONFIG_CRYPTO_CAST6=m
++CONFIG_CRYPTO_KHAZAD=m
++CONFIG_CRYPTO_SERPENT=m
++CONFIG_CRYPTO_TEA=m
++CONFIG_CRYPTO_TWOFISH=m
+diff --git a/board/fri2/post-build.sh b/board/fri2/post-build.sh
 new file mode 100755
-index 0000000..e3f4a92
+index 0000000..02b103a
 --- /dev/null
-+++ b/board/minnowboard/post-build.sh
++++ b/board/fri2/post-build.sh
 @@ -0,0 +1,2 @@
 +#!/bin/sh
-+cp board/minnowboard/grub.cfg ${BINARIES_DIR}/efi-part/EFI/BOOT/grub.cfg
-diff --git a/board/minnowboard/readme.txt b/board/minnowboard/readme.txt
++cp board/fri2/grub.cfg ${BINARIES_DIR}/efi-part/EFI/BOOT/grub.cfg
+diff --git a/board/fri2/readme.txt b/board/fri2/readme.txt
 new file mode 100644
-index 0000000..28ae1cd
+index 0000000..c6fa7df
 --- /dev/null
-+++ b/board/minnowboard/readme.txt
++++ b/board/fri2/readme.txt
 @@ -0,0 +1,40 @@
-+Prepare the SD card for the Minnow Board
-+========================================
++Prepare the SD card for the FRI2 Board
++======================================
 +
 + 1. Partition the SD card with a GPT partition table
 +
@@ -267,23 +431,23 @@ index 0000000..28ae1cd
 + 4. Enjoy
 +
 +Additional informations about this board can be found at
-+http://www.minnowboard.org/.
-diff --git a/configs/minnowboard_defconfig b/configs/minnowboard_defconfig
++http://us.kontron.com/products/systems+and+platforms/m2m/m2m+smart+services+developer+kit.html.
+diff --git a/configs/fri2_defconfig b/configs/fri2_defconfig
 new file mode 100644
-index 0000000..ce4a1b1
+index 0000000..f0ee75d
 --- /dev/null
-+++ b/configs/minnowboard_defconfig
++++ b/configs/fri2_defconfig
 @@ -0,0 +1,12 @@
 +BR2_x86_64=y
 +BR2_x86_atom=y
-+BR2_TARGET_GENERIC_GETTY_PORT="ttyPCH0"
-+BR2_ROOTFS_POST_BUILD_SCRIPT="board/minnowboard/post-build.sh"
++BR2_TARGET_GENERIC_GETTY_PORT="ttyPCH1"
++BR2_ROOTFS_POST_BUILD_SCRIPT="board/fri2/post-build.sh"
 +BR2_LINUX_KERNEL=y
 +BR2_LINUX_KERNEL_CUSTOM_GIT=y
 +BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://git.yoctoproject.org/linux-yocto-3.8"
-+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="ba1587b9b62c801d161897303aa6d22809485f9b"
++BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="f20047520a57322f05d95a18a5fbd082fb15cb87"
 +BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
-+BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/minnowboard/linux-3.8.config"
++BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/fri2/linux-3.8.config"
 +BR2_TARGET_GRUB2=y
 +BR2_TARGET_GRUB2_I386_EFI=y
 -- 
