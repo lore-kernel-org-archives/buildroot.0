@@ -1,152 +1,151 @@
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Mon, 11 Nov 2013 23:53:04 +0100
-Subject: [Buildroot] [PATCH] dhcpcd: add option to override dbdir
-In-Reply-To: <52720014.5040602@mind.be>
-References: <1380548426-26780-1-git-send-email-luca@lucaceresoli.net>
- <526CDF68.8050409@mind.be> <5270C3DC.3060804@lucaceresoli.net>
- <52720014.5040602@mind.be>
-Message-ID: <52815FD0.50302@lucaceresoli.net>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 12 Nov 2013 00:15:53 +0100
+Subject: [Buildroot] [PATCH 2 of 2] infra: remove usage of pkgparentdir
+ in favor of pkgdir
+In-Reply-To: <8953db252a5816d2e988.1384170792@argentina>
+References: <patchbomb.1384170790@argentina>
+ <8953db252a5816d2e988.1384170792@argentina>
+Message-ID: <52816529.9010704@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter,
+On 11/11/13 12:53, Thomas De Schampheleire wrote:
+> As Arnout suggested, pkgparentdir is no longer really needed. Its usage can
+> be replaced with pkgdir. This patch makes that change, and removes the
+> definition of pkgparentdir.
+>
+> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+>
+> ---
+> Note: as a consequence of this change, the definition of FOO_DIR_PREFIX
+> slightly changed. I could have renamed the variable, but FOO_DIR was already
+> taken, and it's still more or less a prefix.
 
-do you have a judgement about which is the best way to fix this issue?
+  I think it's a better idea to choose a new name - if only to help 
+people who are using this variable in custom packages. Or better yet, 
+remove it completely - it's anyway not used anymore.
 
-I hope we can have this sorted out in time for 2013.11.
 
-Arnout Vandecappelle wrote:
->   Hi Luca,
 >
->   [@Peter: there's a request for a judgement call below]
+>   package/pkg-autotools.mk |   6 +++---
+>   package/pkg-cmake.mk     |   6 +++---
+>   package/pkg-generic.mk   |  10 +++++-----
+>   package/pkg-utils.mk     |   1 -
+>   4 files changed, 11 insertions(+), 12 deletions(-)
 >
-> On 30/10/13 09:31, Luca Ceresoli wrote:
->> Arnout, All,
->>
->> Arnout Vandecappelle wrote:
->>> On 30/09/13 15:40, Luca Ceresoli wrote:
->>>> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
->>>> ---
->>>>   package/dhcpcd/Config.in | 14 ++++++++++++++
->>>>   package/dhcpcd/dhcpcd.mk |  1 +
->>>>   2 files changed, 15 insertions(+)
->>>>
->>>> diff --git a/package/dhcpcd/Config.in b/package/dhcpcd/Config.in
->>>> index a06a973..c144dd3 100644
->>>> --- a/package/dhcpcd/Config.in
->>>> +++ b/package/dhcpcd/Config.in
->>>> @@ -6,5 +6,19 @@ config BR2_PACKAGE_DHCPCD
->>>>
->>>>         http://roy.marples.name/downloads/dhcpcd
->>>>
->>>> +if BR2_PACKAGE_DHCPCD
->>>> +
->>>> +config BR2_PACKAGE_DHCPCD_DBDIR
->>>> +    string "database directory"
->>>> +    default "/var/db"
->>>> +    help
->>>> +      By default dhcpcd stores obtained DHCP leases and other info in
->>>> +      /var/db. Set this to any other directory you wish to use. This
->>>> must
->>>> +      be on a read-write filesystem, otherwise dhcpcd will not work.
->>>> +      For example, you may want to change this directory if /var is
->>>> on a
->>>> +      read-only filesystem in your embedded system.
->>>> +
->>>> +endif
->>>
->>>   Hi Luca,
->>>
->>>   After discussion on the buildroot developer day, we decided that this
->>> should not be configurable. Instead it should be hard-coded to some
->>> fixed path in /run, e.g. /run/db or something else that makes sense.
->>> (Note that /run is a symlink to /var/run which is a symlink to /tmp. We
->>> should use /run, not /var/run, because that conforms to the FHS.)
->>>
->>>   Since you probably use this package, can you test this and send a
->>> patch?
->>
->> While this would likely fix the problem, this is not the correct way to
->> do so, and would introduce another problem.
->>
->> According the FHS version 3.0-draft1 /run is a volatile storage, cleared
->> upon reboot. It may then be a tmpfs as well.
->>
->> However, one of the purposes for dhcpcd to store an IP lease obtained
->> from a DHCP server is to request the same address at the next reboot. So
->> it is meant to be persistent, and /var is the correct place for the lease
->> files, not /run. In fact dhcpcd by default uses /var/db, which is ok.
+> diff --git a/package/pkg-autotools.mk b/package/pkg-autotools.mk
+> --- a/package/pkg-autotools.mk
+> +++ b/package/pkg-autotools.mk
+> @@ -48,7 +48,7 @@ endef
+>   #             for host packages
+>   #  argument 3 is the uppercase package name, without the HOST_ prefix
+>   #             for host packages
+> -#  argument 4 is the package directory prefix
+> +#  argument 4 is the package directory
+>   #  argument 5 is the type (target or host)
+>   ################################################################################
 >
->   OK, we didn't realize that.
+> @@ -311,5 +311,5 @@ endef
+>   # autotools-package -- the target generator macro for autotools packages
+>   ################################################################################
 >
->>
->> In other words, things are fine in current BR without any patch, provided
->> that the rootfs is writable.
->>
->> If the rootfs is read-only (which is not uncommon on small embedded
->> systems), dhcpcd fails trying to create the "db" dir under /var. This is
->> because in the default Buildroot skeleton /var is a regular directory,
->> not a tmpfs.
->>
->> In a system whose rootfs is read-only there is no directory in the
->> default skeleton that is both persistent and writable.
+> -autotools-package = $(call inner-autotools-package,$(call pkgname),$(call UPPERCASE,$(call pkgname)),$(call UPPERCASE,$(call pkgname)),$(call pkgparentdir),target)
+> -host-autotools-package = $(call inner-autotools-package,host-$(call pkgname),$(call UPPERCASE,host-$(call pkgname)),$(call UPPERCASE,$(call pkgname)),$(call pkgparentdir),host)
+> +autotools-package = $(call inner-autotools-package,$(call pkgname),$(call UPPERCASE,$(call pkgname)),$(call UPPERCASE,$(call pkgname)),$(call pkgdir),target)
+> +host-autotools-package = $(call inner-autotools-package,host-$(call pkgname),$(call UPPERCASE,host-$(call pkgname)),$(call UPPERCASE,$(call pkgname)),$(call pkgdir),host)
+> diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
+> --- a/package/pkg-cmake.mk
+> +++ b/package/pkg-cmake.mk
+> @@ -31,7 +31,7 @@
+>   #             for host packages
+>   #  argument 3 is the uppercase package name, without the HOST_ prefix
+>   #             for host packages
+> -#  argument 4 is the package directory prefix
+> +#  argument 4 is the package directory
+>   #  argument 5 is the type (target or host)
+>   ################################################################################
 >
->   Of course not, because that may not be possible.
+> @@ -179,8 +179,8 @@ endef
+>   # cmake-package -- the target generator macro for CMake packages
+>   ################################################################################
 >
->>
->> In this case I devise two possible solutions:
->>   * create /var/db in system/skeleton as yet another symlink to /tmp;
->>   * let any user select the directory they wish (what my patch does).
->>
->> In the first case we don't need a new config option and dhcpcd will
->> generally work. But leases won't be persistent and the cause may be not
->> so obvious to the user.
+> -cmake-package = $(call inner-cmake-package,$(call pkgname),$(call UPPERCASE,$(call pkgname)),$(call UPPERCASE,$(call pkgname)),$(call pkgparentdir),target)
+> -host-cmake-package = $(call inner-cmake-package,host-$(call pkgname),$(call UPPERCASE,host-$(call pkgname)),$(call UPPERCASE,$(call pkgname)),$(call pkgparentdir),host)
+> +cmake-package = $(call inner-cmake-package,$(call pkgname),$(call UPPERCASE,$(call pkgname)),$(call UPPERCASE,$(call pkgname)),$(call pkgdir),target)
+> +host-cmake-package = $(call inner-cmake-package,host-$(call pkgname),$(call UPPERCASE,host-$(call pkgname)),$(call UPPERCASE,$(call pkgname)),$(call pkgdir),host)
 >
->   But we can add to the dhcpd help text that you need to replace the
-> /var/db symlink to point to a persistent location if you want persistence.
+>   ################################################################################
+>   # Generation of the CMake toolchain file
+> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+> --- a/package/pkg-generic.mk
+> +++ b/package/pkg-generic.mk
+> @@ -89,7 +89,7 @@ endif
+>   # find the package directory (typically package/<pkgname>) and the
+>   # prefix of the patches
+>   $(BUILD_DIR)/%/.stamp_patched: NAMEVER = $(RAWNAME)-$($(PKG)_VERSION)
+> -$(BUILD_DIR)/%/.stamp_patched: PATCH_BASE_DIRS = $($(PKG)_DIR_PREFIX)/$(RAWNAME) $(call qstrip,$(BR2_GLOBAL_PATCH_DIR))/$(RAWNAME)
+> +$(BUILD_DIR)/%/.stamp_patched: PATCH_BASE_DIRS = $($(PKG)_DIR_PREFIX) $(call qstrip,$(BR2_GLOBAL_PATCH_DIR))/$(RAWNAME)
+>   $(BUILD_DIR)/%/.stamp_patched:
+>   	@$(call MESSAGE,"Patching")
+>   	$(foreach hook,$($(PKG)_PRE_PATCH_HOOKS),$(call $(hook))$(sep))
+> @@ -197,7 +197,7 @@ endif
+>   #             for host packages
+>   #  argument 3 is the uppercase package name, without the HOST_ prefix
+>   #             for host packages
+> -#  argument 4 is the package directory prefix
+> +#  argument 4 is the package directory
+>   #  argument 5 is the type (target or host)
+>   ################################################################################
 >
->   But then again, adding the configure option does have the same effect,
-> just a little more obvious to the user.
+> @@ -475,7 +475,7 @@ endif
+>   # kernel case, the bootloaders case, and the normal packages case.
+>   ifeq ($(1),linux)
+>   $(2)_KCONFIG_VAR = BR2_LINUX_KERNEL
+> -else ifeq ($(4),boot/)
+> +else ifneq ($(filter boot/%,$(4)),)
+
+  Since this is the only place where $(4) is used, we could use $(pkgdir) 
+directly and drop the 4th parameter. (I just tested and it seems to work.)
+
+
+  Regards,
+  Arnout
+
+>   $(2)_KCONFIG_VAR = BR2_TARGET_$(2)
+>   else
+>   $(2)_KCONFIG_VAR = BR2_PACKAGE_$(2)
+> @@ -565,8 +565,8 @@ endef # inner-generic-package
+>   ################################################################################
 >
->   At the Buildroot developer meeting, we also asked Peter to play a bit
-> more the role of the benevolent dictator and make rulings. So here goes:
+>   # In the case of target packages, keep the package name "pkg"
+> -generic-package = $(call inner-generic-package,$(call pkgname),$(call UPPERCASE,$(call pkgname)),$(call UPPERCASE,$(call pkgname)),$(call pkgparentdir),target)
+> +generic-package = $(call inner-generic-package,$(call pkgname),$(call UPPERCASE,$(call pkgname)),$(call UPPERCASE,$(call pkgname)),$(call pkgdir),target)
+>   # In the case of host packages, turn the package name "pkg" into "host-pkg"
+> -host-generic-package = $(call inner-generic-package,host-$(call pkgname),$(call UPPERCASE,host-$(call pkgname)),$(call UPPERCASE,$(call pkgname)),$(call pkgparentdir),host)
+> +host-generic-package = $(call inner-generic-package,host-$(call pkgname),$(call UPPERCASE,host-$(call pkgname)),$(call UPPERCASE,$(call pkgname)),$(call pkgdir),host)
 >
->   Peter, do you prefer a /var/db symlink that the user should override
-> in the fs overlay, or do you prefer an explicit configure option?
+>   # :mode=makefile:
+> diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
+> --- a/package/pkg-utils.mk
+> +++ b/package/pkg-utils.mk
+> @@ -60,7 +60,6 @@ endef
+>   # package, for which the package directory is an empty string.
+>   pkgdir       = $(dir $(lastword $(MAKEFILE_LIST)))
+>   pkgname      = $(lastword $(subst /, ,$(call pkgdir)))
+> -pkgparentdir = $(patsubst %$(call pkgname)/,%,$(call pkgdir))
 >
->
->   If we do go for the configure option, however, the default should be
-> /tmp or /tmp/db, so that at least the default works with a read-only
-> rootfs.
->
->
->> In the second case anyone can point to some device-specific persistent
->> storage, thus making dhcpcd work 100% as expected.
->>
->> It may be a small read-write partition for storing user-configurable
->> data, as is already available on some embedded products. But there is no
->> way for Buildroot to know where that is going to be mounted, so we let
->> the user tell us via the config option.
->>
->> As a side-effect, the presence of a config knob makes the user aware of
->> the problem with a suitable help text.
->>
->> Actually the former change may be applied anyway as it partially fixes
->> dhcpcd and is minimally invasive. For the latter one I look forward to
->> hear your comments.
->
->   Yes, if it is not configurable, then buildroot should create the
-> symlink. However, I wouldn't put it in the skeleton, but instead put it
-> in the INSTALL_TARGET_CMDS.
->
->   Regards,
->   Arnout
->
+>   # Define extractors for different archive suffixes
+>   INFLATE.bz2  = $(BZCAT)
 >
 
 
 -- 
-Luca
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
