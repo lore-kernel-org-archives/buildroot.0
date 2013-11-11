@@ -1,59 +1,53 @@
-From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Mon, 11 Nov 2013 13:50:57 +0100
-Subject: [Buildroot] [PATCH v8 RESEND 6/8] uclibc: add support for
- top-level parallel make
-In-Reply-To: <52685272.5070507@mind.be>
-References: <1382088860-30524-1-git-send-email-fabio.porcedda@gmail.com>
- <1382088860-30524-7-git-send-email-fabio.porcedda@gmail.com>
- <52685272.5070507@mind.be>
-Message-ID: <CAHkwnC_s=M=enmeVMkD+EGbo2jg0JBw4bYj=k4FzEypXYmZ3OQ@mail.gmail.com>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Mon, 11 Nov 2013 14:30:42 +0100
+Subject: [Buildroot] [PATCH] log4cxx: needs threads
+In-Reply-To: <1384175690-24573-1-git-send-email-spdawson@gmail.com>
+References: <1384175690-24573-1-git-send-email-spdawson@gmail.com>
+Message-ID: <CAAXf6LURqB88HA3_Pv9R9d_-Xn8RQbbeMyfhcKth5ip0OYFWXw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Oct 24, 2013 at 12:49 AM, Arnout Vandecappelle <arnout@mind.be> wrote:
-> On 18/10/13 11:34, Fabio Porcedda wrote:
->>
->> To be able to use top-level parallel make we must not depend in a rule
->> on the order of evaluation of the prerequisites, so instead of relyng on
->> the left to right ordering of evaluation of the prerequisites add an
->> explicit rule to describe the dependencies.
->>
->> The uclibc-install-target depends on uclibc-install-staging so add a
->> rule for it.
->>
->> Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
->
->
-> Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Hi Simon,
 
-Added, thanks.
-
+On Mon, Nov 11, 2013 at 2:14 PM,  <spdawson@gmail.com> wrote:
+> From: Simon Dawson <spdawson@gmail.com>
 >
->> ---
->>   package/uclibc/uclibc.mk | 2 ++
->>   1 file changed, 2 insertions(+)
->>
->> diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
->> index dea36e7..c8eeb3d 100644
->> --- a/package/uclibc/uclibc.mk
->> +++ b/package/uclibc/uclibc.mk
->> @@ -559,3 +559,5 @@ uclibc-menuconfig: dirs uclibc-patch
->>         rm -f
->> $(UCLIBC_DIR)/.stamp_{configured,built,target_installed,staging_installed}
->>
->>   $(eval $(generic-package))
->> +
->> +$(UCLIBC_TARGET_INSTALL_TARGET): $(UCLIBC_TARGET_INSTALL_STAGING)
->>
+> Fixes build failures such as the following.
 >
->  Same nitpick :-)
+>   http://autobuild.buildroot.net/results/7b73901d9e8b5098cd96b54d292bb3ffffb3fe37/
+>
+> Signed-off-by: Simon Dawson <spdawson@gmail.com>
+> ---
+>  package/log4cxx/Config.in | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
+>
+> diff --git a/package/log4cxx/Config.in b/package/log4cxx/Config.in
+> index 86d6a1d..1785232 100644
+> --- a/package/log4cxx/Config.in
+> +++ b/package/log4cxx/Config.in
+> @@ -5,11 +5,12 @@ config BR2_PACKAGE_LOG4CXX
+>         # apr really needs shared library support
+>         depends on !BR2_PREFER_STATIC_LIB
+>         depends on BR2_INSTALL_LIBSTDCPP
+> +       depends on BR2_TOOLCHAIN_HAS_THREADS
+>         help
+>           Apache log4cxx is a logging framework for C++ patterned
+>           after Apache log4j.
+>
+>           http://apache.linux-mirror.org/logging/log4cxx/0.10.0
+>
+> -comment "log4cxx needs a toolchain w/ C++"
+> -       depends on !BR2_INSTALL_LIBSTDCPP
+> +comment "log4cxx needs a toolchain w/ C++, threads"
+> +       depends on !(BR2_INSTALL_LIBSTDCPP && BR2_TOOLCHAIN_HAS_THREADS)
+> --
 
-Same comment:
-# The uclibc-install-target use files from uclibc-install-staging
+Maybe you could take the opportunity to update the comment for the
+dynamic library support needed. See the buildroot manual (git version)
+for details.
 
-Thanks and best regards
--- 
-Fabio Porcedda
+Thanks,
+Thomas
