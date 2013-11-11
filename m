@@ -1,32 +1,40 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Mon, 11 Nov 2013 22:00:07 +0100
-Subject: [Buildroot] [PATCH 1/7] cmake: bump to version 2.8.12.1
+Date: Mon, 11 Nov 2013 22:00:08 +0100
+Subject: [Buildroot] [PATCH 2/7] eigen: add C++ toolchain dependency
 In-Reply-To: <1384203613-17871-1-git-send-email-s.martin49@gmail.com>
 References: <1384203613-17871-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <1384203613-17871-2-git-send-email-s.martin49@gmail.com>
+Message-ID: <1384203613-17871-3-git-send-email-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+As said in its help text, eigen heavily uses C++ features.
+So, explicit this dependency in the Config.in.
+
 Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 ---
- package/cmake/cmake.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/eigen/Config.in | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/cmake/cmake.mk b/package/cmake/cmake.mk
-index fd1cdd2..cd98ed3 100644
---- a/package/cmake/cmake.mk
-+++ b/package/cmake/cmake.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/eigen/Config.in b/package/eigen/Config.in
+index c7fcde2..e94f9a3 100644
+--- a/package/eigen/Config.in
++++ b/package/eigen/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_EIGEN
+ 	bool "eigen"
++	depends on BR2_INSTALL_LIBSTDCPP
+ 	help
+ 	  Eigen is a C++ template library for linear algebra: vectors,
+ 	  matrices, and related algorithms. It is versatile, fast, elegant
+@@ -11,3 +12,6 @@ config BR2_PACKAGE_EIGEN
+ 	  template library defined in the headers.
  
--CMAKE_VERSION = 2.8.10.2
-+CMAKE_VERSION = 2.8.12.1
- CMAKE_SITE = http://www.cmake.org/files/v2.8/
- CMAKE_LICENSE = BSD-3c
- CMAKE_LICENSE_FILES = Copyright.txt
+ 	  http://eigen.tuxfamily.org/
++
++comment "eigen needs a toolchain w/ C++"
++	depends on !BR2_INSTALL_LIBSTDCPP
 -- 
 1.8.4.2
