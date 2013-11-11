@@ -1,36 +1,40 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 11 Nov 2013 15:06:34 +0100
-Subject: [Buildroot] [git commit] docs/manual: Add version number to perl in
-	prerequisites
-Message-ID: <20131111140726.F0D6C9BBCF@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 11 Nov 2013 15:06:20 +0100
+Subject: [Buildroot] [PATCH] pciutils: bump version
+In-Reply-To: <1384178128-27587-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Mon, 11 Nov 2013 14:55:28 +0100")
+References: <1384178128-27587-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <87fvr36nj7.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b3766198db3a0f52db8e8ea53edb9321a33efe34
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-Building host-bison needs perl 5.8.7+, as it uses the "-f" option
-for site customization scripts. This feature was added in 5.8.7.
+>> From the release announcement e-mail:
+> I have just released version 3.2.1 of the pciutils. It's purely
+> a maintenance release with a couple of minor bug fixes and minor
+> improvements. Thus quoth the changelog:
 
-Signed-off-by: Mischa Jonker <mjonker@synopsys.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- docs/manual/prerequisite.txt |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+> 2013-11-10  Martin Mares <mj@ucw.cz>
 
-diff --git a/docs/manual/prerequisite.txt b/docs/manual/prerequisite.txt
-index 729d64c..adc23ee 100644
---- a/docs/manual/prerequisite.txt
-+++ b/docs/manual/prerequisite.txt
-@@ -33,7 +33,7 @@ Mandatory packages
- ** +patch+
- ** +gzip+
- ** +bzip2+
--** +perl+
-+** +perl+ (version 5.8.7 or any later)
- ** +tar+
- ** +cpio+
- ** +python+ (version 2.6 or 2.7)
+> 	* Released as 3.2.1.
+
+> 	* CardBus bridge capabilities are displayed.
+
+> 	* PCIe L1 PM substates are decoded.
+
+> 	* Various bugs were fixed in decoding of PCIe capabilities.
+
+> 	* The sysfs back-end does not spit out unnecessary warnings when
+> 	  empty slots report only a partial device address. This actually
+> 	  happens on IBM pSeries.
+
+> 	* Updated pci.ids to the today's snapshot of the database.
+
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
