@@ -1,44 +1,33 @@
-From: sonic.adi at gmail.com <sonic.adi@gmail.com>
-Date: Mon, 11 Nov 2013 18:24:22 +0800
-Subject: [Buildroot] [PATCH v2] alsa-lib: FLAT: Disable alsa lib when FLAT
-	bianry is selected.
-Message-ID: <1384165462-22255-1-git-send-email-Sonic.adi@gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon, 11 Nov 2013 04:31:37 -0300
+Subject: [Buildroot] [PATCH] alsa-lib: FLAT: Disable alsa lib when FLAT
+ bianry is selected.
+In-Reply-To: <20131111112128.60a4a348@skate>
+References: <1384146177-6020-1-git-send-email-Sonic.adi@gmail.com>
+ <20131111112128.60a4a348@skate>
+Message-ID: <528087D9.9060900@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Sonic Zhang <sonic.zhang@analog.com>
+On 11/11/2013 07:21 AM, Thomas Petazzoni wrote:
+> I am not sure this is the right dependency. Shouldn't this instead be a:
+> 
+> 	depends on !BR2_PREFER_STATIC_LIB
+> 
+>  ?
+> 
+> The problem is really that we need shared library support, no that
+> specifically the FLAT binary format is causing problems. If another
+> binary format doesn't support shared libraries, then we would have to
+> exclude it as well.
+> 
+> Also, the configure script of alsa-lib has a check to verify if dlfcn.h
+> is available or not, so I guess it is supposed to fallback gracefully
+> to another solution if shared library support is not available.
 
-Alsa lib depends on the runtime library loader.
-
-Signed-off-by: Sonic Zhang <sonic.zhang@analog.com>
----
- package/alsa-lib/Config.in | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
-
-diff --git a/package/alsa-lib/Config.in b/package/alsa-lib/Config.in
-index df05240..170a563 100644
---- a/package/alsa-lib/Config.in
-+++ b/package/alsa-lib/Config.in
-@@ -9,14 +9,15 @@ config BR2_PACKAGE_ALSA_LIB
- 	# the usage of alsa-lib on no-thread systems is pretty
- 	# unlikely, just require thread support globally for alsa-lib.
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_BINFMT_FLAT
- 	help
- 	  The Advanced Linux Sound Architecture (ALSA) provides audio and MIDI
- 	  functionality to the Linux operating system.
- 
- 	  http://www.alsa-project.org/
- 
--comment "alsa-lib needs a toolchain w/ threads"
--	depends on !BR2_TOOLCHAIN_HAS_THREADS
-+comment "alsa-lib needs a toolchain w/ threads and none FLAT binary format"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_BINFMT_FLAT
- 
- if BR2_PACKAGE_ALSA_LIB
- 
--- 
-1.8.2.3
+And with that being said this depend should also propagate to all the
+packages that select alsa-lib too.
+Regards.
