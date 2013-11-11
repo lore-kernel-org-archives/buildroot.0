@@ -1,98 +1,43 @@
-From: Mischa Jonker <Mischa.Jonker@synopsys.com>
-Date: Mon, 11 Nov 2013 17:10:53 +0100
-Subject: [Buildroot] [PATCH v2] icu: Doesn't work on ARC yet
-Message-ID: <1384186253-5968-1-git-send-email-mjonker@synopsys.com>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Mon, 11 Nov 2013 17:11:11 +0100
+Subject: [Buildroot] [PATCH 2/4] pkg-infra: introduce pre/post-step hooks
+In-Reply-To: <45a2fcd241df87a109cc7ca1044217788f407c02.1384182040.git.yann.morin.1998@free.fr>
+References: <cover.1384182040.git.yann.morin.1998@free.fr>
+ <45a2fcd241df87a109cc7ca1044217788f407c02.1384182040.git.yann.morin.1998@free.fr>
+Message-ID: <CAAXf6LULdQO4m__yTpKGxc0GOKBERMvDQiOw-KqHT6sDZbQ=zQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-icu depends on __sync_sub_and_fetch and other atomic primitives that
-don't exist in the ARC toolchain yet.
+On Mon, Nov 11, 2013 at 4:03 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+>
+> This hooks will let us instrument the build process in many ways:
+>   - log current step to see what broke
+>   - time each step to see what is worth optimising
+>   - sanity-check installed files (rpath, overwritten files...)
+>   - call user-provided script
+>   - ...
+>
+> The steps are coarse-grain, and all have a 'start' and a 'end' hooks.
+> Here is the list of available steps (8 total):
+>   - extract
+>   - patch
+>   - configure
+>   - build
+>   - install-host
+>   - install-staging
+>   - install-image
+>   - install-target
+>
+> The download, clean and uninstall steps are not instrumented on purpose.
+>
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+> ---
+>  package/pkg-generic.mk | 40 ++++++++++++++++++++++++++++++++++++++++
+>  1 file changed, 40 insertions(+)
 
-Signed-off-by: Mischa Jonker <mjonker@synopsys.com>
----
-v2:
- Added !arc dependency to comment line
- Propagated dependency to icu's reverse dependencies, except for webkit
-  (webkit already cannot be selected for ARC)
-
- package/beecrypt/Config.in    |    3 ++-
- package/cppcms/Config.in      |    1 +
- package/icu/Config.in         |    5 +++--
- package/php/Config.ext        |    1 +
- package/qt5/qt5base/Config.in |    1 +
- 5 files changed, 8 insertions(+), 3 deletions(-)
-
-diff --git a/package/beecrypt/Config.in b/package/beecrypt/Config.in
-index caa6d17..83cbf96 100644
---- a/package/beecrypt/Config.in
-+++ b/package/beecrypt/Config.in
-@@ -1,7 +1,8 @@
- config BR2_PACKAGE_BEECRYPT
- 	bool "beecrypt"
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
--	select BR2_PACKAGE_ICU if BR2_INSTALL_LIBSTDCPP && BR2_USE_WCHAR
-+	select BR2_PACKAGE_ICU if BR2_INSTALL_LIBSTDCPP && BR2_USE_WCHAR && \
-+	       !BR2_arc
- 	help
- 	  Beecrypt is a general-purpose cryptography library.
- 
-diff --git a/package/cppcms/Config.in b/package/cppcms/Config.in
-index 11daf7c..d07dc76 100644
---- a/package/cppcms/Config.in
-+++ b/package/cppcms/Config.in
-@@ -23,6 +23,7 @@ config BR2_PACKAGE_CPPCMS
- config BR2_PACKAGE_CPPCMS_ICU
- 	bool "enable icu support"
- 	depends on BR2_PACKAGE_CPPCMS
-+	depends on !BR2_arc # icu -> atomic builtins
- 	select BR2_PACKAGE_ICU
- 	help
- 	  Using ICU allows advanced localization features into CppCMS,
-diff --git a/package/icu/Config.in b/package/icu/Config.in
-index 585bffb..b1c23f8 100644
---- a/package/icu/Config.in
-+++ b/package/icu/Config.in
-@@ -3,11 +3,12 @@ config BR2_PACKAGE_ICU
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_USE_WCHAR
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_arc # atomic builtins
- 	help
- 	  International Components for Unicode.
- 
- 	  http://site.icu-project.org/
- 
--comment "icu needs a toolchain w/ C++, wchar, threads"
-+comment "icu needs a toolchain w/ C++, wchar, threads, atomic builtins"
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
--		!BR2_TOOLCHAIN_HAS_THREADS
-+		!BR2_TOOLCHAIN_HAS_THREADS || BR2_arc
-diff --git a/package/php/Config.ext b/package/php/Config.ext
-index c0c85f1..380c3cf 100644
---- a/package/php/Config.ext
-+++ b/package/php/Config.ext
-@@ -172,6 +172,7 @@ config BR2_PACKAGE_PHP_EXT_INTL
- 	select BR2_PACKAGE_ICU
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_USE_WCHAR
-+	depends on !BR2_arc # icu -> atomic builtins
- 	help
- 	  Internationalization support
- 
-diff --git a/package/qt5/qt5base/Config.in b/package/qt5/qt5base/Config.in
-index 83f17e3..e932e24 100644
---- a/package/qt5/qt5base/Config.in
-+++ b/package/qt5/qt5base/Config.in
-@@ -181,6 +181,7 @@ config BR2_PACKAGE_QT5BASE_DBUS
- config BR2_PACKAGE_QT5BASE_ICU
- 	bool "Enable ICU support"
- 	select BR2_PACKAGE_ICU
-+	depends on !BR2_arc # icu -> atomic builtins
- 	help
- 	  This option enables ICU support in Qt5. This is for example
- 	  needed for Qt5Webkit.
--- 
-1.7.9.5
+Reviewed-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
