@@ -1,33 +1,32 @@
-From: Mischa Jonker <Mischa.Jonker@synopsys.com>
-Date: Mon, 11 Nov 2013 16:07:22 +0000
-Subject: [Buildroot] [PATCH] icu: Doesn't work on ARC yet
-In-Reply-To: <8738n36ipf.fsf@dell.be.48ers.dk>
-References: <1384182468-18493-1-git-send-email-mjonker@synopsys.com>
- <8738n36ipf.fsf@dell.be.48ers.dk>
-Message-ID: <E6BF041E97966E4DB955F0DF883AD2D685F1709A@de02wembxa.internal.synopsys.com>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Mon, 11 Nov 2013 17:10:22 +0100
+Subject: [Buildroot] [PATCH 1/4] post-{build,
+	images} hooks: export BUILD_DIR too
+In-Reply-To: <69596da8e2ef280699e061b824ed41c00dee0426.1384182040.git.yann.morin.1998@free.fr>
+References: <cover.1384182040.git.yann.morin.1998@free.fr>
+ <69596da8e2ef280699e061b824ed41c00dee0426.1384182040.git.yann.morin.1998@free.fr>
+Message-ID: <CAAXf6LVVKwOEzT0XVc3hL9q6kOYQRLa3XLz4+VYbzQs6x2gMMQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> > icu depends on __sync_sub_and_fetch and other atomic primitives that
-> > don't exist in the ARC toolchain yet.
-> 
-> Thanks, but you also need to:
-> 
-> - Add the !arc dependency to the comment line belo
-> - Propagate the dependency to icu's reverse dependencies:
-> git grep -l 'select BR2_PACKAGE_ICU'
-> package/beecrypt/Config.in
-> package/cppcms/Config.in
-> package/php/Config.ext
-> package/qt5/qt5base/Config.in
-> package/webkit/Config.in
-> 
-> Care to fix that and resend?
-> 
+On Mon, Nov 11, 2013 at 4:03 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+>
+> Also export BUILD_DIR for post-{build,images} hooks, so they do have
+> a place to store generated files.
+>
+> Note: this will be more einteresting for the instrumentation of steps,
+> to come in a later patch.
+>
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+> ---
+>  Makefile                         | 4 ++--
+>  docs/manual/customize-rootfs.txt | 5 +++--
+>  package/Makefile.in              | 6 ++++++
+>  3 files changed, 11 insertions(+), 4 deletions(-)
 
-Thanks for the feedback. A new patch is coming up. I haven't changed package/webkit/Config.in as it cannot be selected for ARC already.
-
-Mischa
+Reviewed-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
