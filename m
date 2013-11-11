@@ -1,92 +1,74 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Mon, 11 Nov 2013 09:04:56 +0100
-Subject: [Buildroot] [PATCH 1/4] post-{build,
-	images} hooks: export BUILD_DIR too
-In-Reply-To: <f501c03f20dea517efacfa6a9d98cdb66a2b0d88.1384127173.git.yann.morin.1998@free.fr>
+Date: Mon, 11 Nov 2013 09:16:42 +0100
+Subject: [Buildroot] [PATCH 2/4] pkg-infra: introduce pre/post-step hooks
+In-Reply-To: <8fad5e960285a79ff9ff75467cd3e595fa16cd4d.1384127173.git.yann.morin.1998@free.fr>
 References: <cover.1384127173.git.yann.morin.1998@free.fr>
- <f501c03f20dea517efacfa6a9d98cdb66a2b0d88.1384127173.git.yann.morin.1998@free.fr>
-Message-ID: <6e62793a-d603-4dcb-8d1b-40580c45f028@email.android.com>
+ <8fad5e960285a79ff9ff75467cd3e595fa16cd4d.1384127173.git.yann.morin.1998@free.fr>
+Message-ID: <CAAXf6LXM5zj2xaEEzGOwrV2dj4RNM2jcjiLBh1DRAZYh4pFOsA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
->From: "Yann E. MORIN" <yann.morin.1998@free.fr>
->
->Also export BUILD_DIR for post-{build,images} hooks, so they do have
->a place to store generated files.
->
->Note: this will be more einteresting for the instrumentation of steps,
->to come in a later patch.
->
->Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
->---
-> Makefile                         | 4 ++--
-> docs/manual/customize-rootfs.txt | 5 +++--
-> package/Makefile.in              | 6 ++++++
-> 3 files changed, 11 insertions(+), 4 deletions(-)
->
->diff --git a/Makefile b/Makefile
->index 2f7db59..634151c 100644
->--- a/Makefile
->+++ b/Makefile
->@@ -513,7 +513,7 @@ endif
-> 
-> 	@$(foreach s, $(call qstrip,$(BR2_ROOTFS_POST_BUILD_SCRIPT)), \
-> 		$(call MESSAGE,"Executing post-build script $(s)"); \
->-		$(s) $(TARGET_DIR) $(call qstrip,$(BR2_ROOTFS_POST_SCRIPT_ARGS))$(sep))
->+		$(USER_HOOKS_EXTRA_ENV) $(s) $(TARGET_DIR) $(call qstrip,$(BR2_ROOTFS_POST_SCRIPT_ARGS))$(sep))
-> 
-> ifeq ($(BR2_ENABLE_LOCALE_PURGE),y)
-> LOCALE_WHITELIST=$(BUILD_DIR)/locales.nopurge
->@@ -559,7 +559,7 @@ endif
-> target-post-image:
-> 	@$(foreach s, $(call qstrip,$(BR2_ROOTFS_POST_IMAGE_SCRIPT)), \
-> 		$(call MESSAGE,"Executing post-image script $(s)"); \
->-		$(s) $(BINARIES_DIR) $(call qstrip,$(BR2_ROOTFS_POST_SCRIPT_ARGS))$(sep))
->+		$(USER_HOOKS_EXTRA_ENV) $(s) $(BINARIES_DIR) $(call qstrip,$(BR2_ROOTFS_POST_SCRIPT_ARGS))$(sep))
-> 
-> toolchain-eclipse-register:
-> 	./support/scripts/eclipse-register-toolchain `readlink -f $(O)` $(notdir $(TARGET_CROSS)) $(BR2_ARCH)
->diff --git a/docs/manual/customize-rootfs.txt b/docs/manual/customize-rootfs.txt
->index 49a6b4b..450b3d5 100644
->--- a/docs/manual/customize-rootfs.txt
->+++ b/docs/manual/customize-rootfs.txt
->@@ -41,6 +41,7 @@ there are a few ways to customize the resulting target filesystem.
->     - +BUILDROOT_CONFIG+: the path to the Buildroot .config file
->     - +HOST_DIR+, +STAGING_DIR+, +TARGET_DIR+: see
->       xref:generic-package-reference[]
->+    - +BUILD_DIR+: the directory where packages are extracted and built
->     - +BINARIES_DIR+: the place where all binary files (aka images) are
->       stored
->     - +BASE_DIR+: the base output directory
->@@ -78,8 +79,8 @@ in one of these _post-image scripts_ will require special handling
-> 
-> Just like for the _post-build scripts_ mentioned above, you also have
-> access to the following environment variables from your _post-image
->-scripts_: +BUILDROOT_CONFIG+, +HOST_DIR+, +STAGING_DIR+, +TARGET_DIR+,
->-+BINARIES_DIR+ and +BASE_DIR+.
->+scripts_: +BUILDROOT_CONFIG+, +BUILD_DIR+, +HOST_DIR+, +STAGING_DIR+,
->++TARGET_DIR+, +BINARIES_DIR+ and +BASE_DIR+.
-> 
-> Additionally, each of the +BR2_ROOTFS_POST_BUILD_SCRIPT+ and
-> +BR2_ROOTFS_POST_IMAGE_SCRIPT+ scripts will be passed the arguments
->diff --git a/package/Makefile.in b/package/Makefile.in
->index 612f3c7..b4a51fa 100644
->--- a/package/Makefile.in
->+++ b/package/Makefile.in
->@@ -275,6 +275,12 @@ HOST_MAKE_ENV=PATH=$(HOST_PATH) \
-> 		PKG_CONFIG_LIBDIR="$(HOST_DIR)/usr/lib/pkgconfig" \
-> 		PERLLIB="$(HOST_DIR)/usr/lib/perl"
-> 
->+# This extra environment we can not export ourselves (eg. because some
->+# packages use that variable internally, eg. uboot), so we have to
->+# expicitly pass it to user-supplied external hooks (eg. post-build,
+Hi Yann,
 
-explicitly
+On Mon, Nov 11, 2013 at 12:51 AM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+>
+> This hooks will let us instrument the build process in many ways:
+>   - log current step to see what broke
+>   - time each step to see what is worth optimising
+>   - sanity-check installed files (rpath, overwritten files...)
+>   - call user-provided script
+>   - ...
+>
+> The steps are coarse-grain, and all have a 'start' and a 'end' hooks.
+> Here is the list of available steps (8 total):
+>   - extract
+>   - patch
+>   - configure
+>   - build
+>   - install-host
+>   - install-staging
+>   - install-image
+>   - install-target
+>
+> The download, clean and uninstall steps are not instrumented on purpose.
+>
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+> ---
+>  package/pkg-generic.mk | 39 +++++++++++++++++++++++++++++++++++++++
+>  1 file changed, 39 insertions(+)
+>
+> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+> index 75fda02..02ab8a3 100644
+> --- a/package/pkg-generic.mk
+> +++ b/package/pkg-generic.mk
+> @@ -21,6 +21,29 @@
+>  ################################################################################
+>
+>  ################################################################################
+> +# Helper functions to catch start/end of each step
+> +################################################################################
+> +
+> +# Those two functions are called by each step below.
+> +# They are responsible for calling all hooks defined in $(STEP_HOOKS)
 
+This comment should match the new name.
+
+> +# and pass each of them two arguments:
+> +#   $1: either 'start' or 'end'
+> +#   $2: the name of the step
+> +#   $3: the name of the package
+> +
+> +# Start step
+> +# $1: step name
+> +define step_start
+> +       $(foreach hook,$(GLOBAL_INSTRUMENTATION_HOOKS),$(call $(hook),start,$(1),$($(PKG)_NAME))$(sep))
+
+What a great name you picked ;-)
 
 Best regards,
 Thomas
