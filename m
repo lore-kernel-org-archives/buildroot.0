@@ -1,46 +1,38 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 11 Nov 2013 11:17:18 +0100
-Subject: [Buildroot] Analysis of build failures
-In-Reply-To: <CAFbHwiRbF9E=7st0wu+WesxSnWayQjjKWKuEb+n4QqvbNk21ww@mail.gmail.com>
-References: <20131109073028.B3C2E52C614@lolut.humanoidz.org>
- <20131109191543.414f5694@skate>
- <CAFbHwiRbF9E=7st0wu+WesxSnWayQjjKWKuEb+n4QqvbNk21ww@mail.gmail.com>
-Message-ID: <20131111111718.0c539360@skate>
+From: spdawson at gmail.com <spdawson@gmail.com>
+Date: Mon, 11 Nov 2013 10:20:34 +0000
+Subject: [Buildroot] [PATCH] iozone: depends on threads
+Message-ID: <1384165234-18705-1-git-send-email-spdawson@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Will Newton,
+From: Simon Dawson <spdawson@gmail.com>
 
-On Mon, 11 Nov 2013 10:01:17 +0000, Will Newton wrote:
+Signed-off-by: Simon Dawson <spdawson@gmail.com>
+---
+ package/iozone/Config.in | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-> >>        arm |                 valgrind-3.8.1 | NOK | http://autobuild.buildroot.net/results/f174541ac06aeeac82b8399686a8d4371532760d/
-> >
-> > /tmp/cceJNtCh.s: Assembler messages:
-> > /tmp/cceJNtCh.s:200: Error: r15 not allowed here -- `str r15,[r3,#+0]'
-> > make[4]: *** [libcoregrind_arm_linux_a-m_libcassert.o] Error 1
-> > make[4]: *** Waiting for unfinished jobs....
-> >
-> > Not sure what's going on here. Anyone to have a look?
-> 
-> valgrind uses inline assembly that is not Thumb compatible. It seems
-> it isn't expected to build it in Thumb mode (although it emulates
-> Thumb mode). It might be quite simple to fix but would need
-> coordination with upstream etc.
-
-Are you talking about Thumb, or Thumb-2 ? Because here the
-configuration has:
-
-BR2_arm=y
-BR2_cortex_a8=y
-BR2_TARGET_OPTIMIZATION="-mthumb"
-
-so it's an ARMv7-A with -mthumb, so that means Thumb-2, right?
-
-Thomas
+diff --git a/package/iozone/Config.in b/package/iozone/Config.in
+index 33e12ca..6638b7c 100644
+--- a/package/iozone/Config.in
++++ b/package/iozone/Config.in
+@@ -2,8 +2,14 @@ config BR2_PACKAGE_IOZONE
+ 	bool "iozone"
+ 	depends on BR2_USE_MMU # fork()
+ 	depends on !BR2_UCLIBC_VERSION_0_9_31 # no pthread_setaffinity_np
++	depends on BR2_PTHREADS_NATIVE || BR2_TOOLCHAIN_BUILDROOT_EGLIBC || BR2_TOOLCHAIN_BUILDROOT_GLIBC
+ 	help
+ 	  IOzone is a filesystem benchmark tool.
+ 	  The benchmark generates and measures a variety of file operations
+ 
+ 	  http://www.iozone.org/
++
++comment "iozone needs a toolchain w/ threads"
++	depends on BR2_USE_MMU
++	depends on !BR2_UCLIBC_VERSION_0_9_31
++	depends on !(BR2_PTHREADS_NATIVE || BR2_TOOLCHAIN_BUILDROOT_EGLIBC || BR2_TOOLCHAIN_BUILDROOT_GLIBC)
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.8.3.2
