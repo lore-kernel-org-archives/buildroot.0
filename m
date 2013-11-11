@@ -1,50 +1,34 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Mon, 11 Nov 2013 22:59:18 +0100
-Subject: [Buildroot] [PATCH 4/4] pkg-infra: add user-supplied step-hooks
-In-Reply-To: <CAAXf6LWTb50WrAJybtH-=cJ-+UJb6FrQ=9+EKr6M=U2eJbjfqA@mail.gmail.com>
-References: <cover.1384182040.git.yann.morin.1998@free.fr>
- <8e74486ebbb0c14cd011d2143b988d261f592f7a.1384182040.git.yann.morin.1998@free.fr>
- <CAAXf6LWTb50WrAJybtH-=cJ-+UJb6FrQ=9+EKr6M=U2eJbjfqA@mail.gmail.com>
-Message-ID: <CAHXCMM+GOmMkwcE+L9pZBLnjJCu_hgpRyc4OsDsha3p=ref=Cw@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 11 Nov 2013 22:46:13 +0100
+Subject: [Buildroot] [git commit] docs/about.html: we support internal
+	(e)glibc toolchains as well now
+Message-ID: <20131111220328.5AA259BBE3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2013/11/11 Thomas De Schampheleire <patrickdepinguin@gmail.com>
+commit: http://git.buildroot.net/buildroot/commit/?id=439f48736b35e59262d97078ad904dbe3ef51f46
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> On Mon, Nov 11, 2013 at 4:03 PM, Yann E. MORIN <yann.morin.1998@free.fr>
-> wrote:
-> > From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> >
-> > Allow user to supply their own step-hooks by passing a variable
-> > on the make command-line:
-> >     make BR2_INSTRUMENTATION_SCRIPTS=/path/to/my/script
-> >
-> > This can be usefull to run site-specific actions at each step of the
-> > build process, such as logging installed, removed or modified files,
-> > do sanity checks on installed files...
-> >
-> > It is possible to call more than one script, by passing a space-separated
-> > lists of scripts to call.
-> >
-> > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> > Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-> > ---
-> >  docs/manual/debugging-buildroot.txt | 33
-> +++++++++++++++++++++++++++++++++
-> >  docs/manual/developer-guide.txt     |  2 ++
-> >  package/pkg-generic.mk              |  9 +++++++++
-> >  3 files changed, 44 insertions(+)
-> >  create mode 100644 docs/manual/debugging-buildroot.txt
->
-> Reviewed-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
->
-Reviewed-by: Samuel Martin <s.martin49@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ docs/about.html |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
--- 
-Samuel
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20131111/9fafa53d/attachment.html>
+diff --git a/docs/about.html b/docs/about.html
+index bf78db3..ae409fc 100644
+--- a/docs/about.html
++++ b/docs/about.html
+@@ -45,8 +45,8 @@ cross-compilation process.</p>
+   filesystem image: JFFS2, UBIFS, tarballs, romfs, cramfs, squashfs
+   and more.</li>
+ 
+-  <li>Can generate an uClibc cross-compilation toolchain, or re-use
+-  your existing glibc, eglibc or uClibc cross-compilation
++  <li>Can generate an (e)glibc or uClibc cross-compilation toolchain,
++  or re-use your existing glibc, eglibc or uClibc cross-compilation
+   toolchain</li>
+ 
+   <li>Has a <b>simple structure</b> that makes it easy to understand
