@@ -1,46 +1,58 @@
-From: spdawson at gmail.com <spdawson@gmail.com>
-Date: Mon, 11 Nov 2013 13:37:09 +0000
-Subject: [Buildroot] [PATCH v2] log4cxx: needs threads
-Message-ID: <1384177029-25518-1-git-send-email-spdawson@gmail.com>
+From: Ryan Barnett <rjbarnet@rockwellcollins.com>
+Date: Mon, 11 Nov 2013 07:50:26 -0600
+Subject: [Buildroot] Patchwork oldest patches cleanup #2
+	(deadline	November 17)
+In-Reply-To: <CAAXf6LXNrRKU5dvc8DqXdrgS-L1nZQ7GC4YNceFSpbkbz+2XeA@mail.gmail.com>
+References: <CAAXf6LV_kM18mt8h5yQScnhOPfJZ2PMNg3tvF=mBLCi8bFem2A@mail.gmail.com>
+ <CAAXf6LXNrRKU5dvc8DqXdrgS-L1nZQ7GC4YNceFSpbkbz+2XeA@mail.gmail.com>
+Message-ID: <OFB8654BDF.8F87209F-ON86257C20.004B9357-86257C20.004BFC8C@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Simon Dawson <spdawson@gmail.com>
+Thomas, All,
 
-Fixes build failures such as the following.
+Thomas De Schampheleire <patrickdepinguin@gmail.com> wrote on 11/10/2013 
+10:18:55 AM:
 
-  http://autobuild.buildroot.net/results/7b73901d9e8b5098cd96b54d292bb3ffffb3fe37/
+[...]
 
-Signed-off-by: Simon Dawson <spdawson@gmail.com>
----
- v2: At the suggestion of Thomas De Schampheleire, update the comment to
- explain that dynamic library support is required
+> > [1/4] If linux-pam is built, enable dbm functionality in Berkeley DB
+> > Dimitry Golubovsky <golubovsky@gmail.com>
+> > http://patchwork.ozlabs.org/patch/182497
+> >
+> > [2/4] Make Berkeley DB a dependency of linux-pam and make sure it is 
+selected
+> > Dimitry Golubovsky <golubovsky@gmail.com>
+> > http://patchwork.ozlabs.org/patch/182498
+> >
+> > [3/4] Provide PAM default configuration files when building linux-pam 
+package
+> > Dimitry Golubovsky <golubovsky@gmail.com>
+> > http://patchwork.ozlabs.org/patch/182499
+> >
+> > [4/4] PAM support in Busybox if linux-pam is built
+> > Dimitry Golubovsky <golubovsky@gmail.com>
+> > http://patchwork.ozlabs.org/patch/182500
+> >
+> > Fixing linux-pam build failures
+> > Stefan Fr?berg <stefan.froberg@petroprogram.com>
+> > http://patchwork.ozlabs.org/patch/182537
+> >
+> 
+> All the above patches are related to PAM. If anyone is interested in
+> better linux-pam support in buildroot, I'd suggest to have a look at
+> the above patches. I don't personally need it, and I also don't know
+> how common PAM usage is in embedded systems.
 
- package/log4cxx/Config.in | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+linux-pam will be used more once SELinux (at least that is where we use 
+it) related packages are merged in. However, I don't know how applicable 
+these patches since I know the version has been bumped since these patches 
+were submitted. I don't have time to investigate whether these patches 
+still apply, so if you haven't heard anything back on them, I would say we 
+just mark them deprecated.
 
-diff --git a/package/log4cxx/Config.in b/package/log4cxx/Config.in
-index 86d6a1d..8791b8c 100644
---- a/package/log4cxx/Config.in
-+++ b/package/log4cxx/Config.in
-@@ -5,11 +5,13 @@ config BR2_PACKAGE_LOG4CXX
- 	# apr really needs shared library support
- 	depends on !BR2_PREFER_STATIC_LIB
- 	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	help
- 	  Apache log4cxx is a logging framework for C++ patterned
- 	  after Apache log4j.
- 
- 	  http://apache.linux-mirror.org/logging/log4cxx/0.10.0
- 
--comment "log4cxx needs a toolchain w/ C++"
--	depends on !BR2_INSTALL_LIBSTDCPP
-+comment "log4cxx needs a toolchain w/ C++, threads, dynamic library"
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
-+		BR2_PREFER_STATIC_LIB
--- 
-1.8.3.2
+Thanks,
+-Ryan
