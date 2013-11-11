@@ -1,41 +1,33 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 11 Nov 2013 10:39:54 +0100
-Subject: [Buildroot] [PATCH] alsa-lib: FLAT: Disable alsa lib when
-	FLAT	bianry is selected.
-In-Reply-To: <407de4ef-b785-4cac-a661-f90b2b8556f4@email.android.com> (Thomas
- De Schampheleire's message of "Mon, 11 Nov 2013 08:48:23 +0100")
-References: <1384146177-6020-1-git-send-email-Sonic.adi@gmail.com>
- <407de4ef-b785-4cac-a661-f90b2b8556f4@email.android.com>
-Message-ID: <871u2n8efp.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 11 Nov 2013 10:36:23 +0100
+Subject: [Buildroot] [git commit] imagemagick: bump version
+Message-ID: <20131111094007.A6F809BBC6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin@gmail.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=c344ec0205178b98c9502f1eb62cf0b151aff3aa
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
->> The Advanced Linux Sound Architecture (ALSA) provides audio and MIDI
->> functionality to the Linux operating system.
+The -3 version is no longer available at the upstream URL.
 
-> This dependency should also be added to the comment that checks for
-> threads. It's txt should not be changed, we should only make sure that
-> the comment is only visible when relevant (!flat).
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/imagemagick/imagemagick.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-And the dependency should also get propagated to alsa-lib's reverse
-dependencies:
-
-git grep -l 'select BR2_PACKAGE_ALSA_LIB'
-package/alsa-lib/Config.in
-package/alsa-utils/Config.in
-package/alsamixergui/Config.in
-package/bluez_utils/Config.in
-package/gstreamer/gst-plugins-base/Config.in
-package/gstreamer1/gst1-plugins-base/Config.in
-package/mpd/Config.in
-package/portaudio/Config.in
-package/qt/Config.in
-package/spice/Config.in
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
+index a31e799..c8f3a56 100644
+--- a/package/imagemagick/imagemagick.mk
++++ b/package/imagemagick/imagemagick.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ IMAGEMAGICK_MAJOR = 6.8.7
+-IMAGEMAGICK_VERSION = $(IMAGEMAGICK_MAJOR)-3
++IMAGEMAGICK_VERSION = $(IMAGEMAGICK_MAJOR)-5
+ IMAGEMAGICK_SOURCE = ImageMagick-$(IMAGEMAGICK_VERSION).tar.xz
+ # The official ImageMagick site only keeps the latest versions
+ # available, which is annoying. Use an alternate site that keeps all
