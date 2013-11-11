@@ -1,35 +1,106 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 11 Nov 2013 22:33:03 +0100
-Subject: [Buildroot] [PATCH 0/3] Minor toolchain improvements
-In-Reply-To: <1384192652-4203-1-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Mon, 11 Nov 2013 18:57:29 +0100")
-References: <1384192652-4203-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <87li0u62uo.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 11 Nov 2013 22:27:25 +0100
+Subject: [Buildroot] [git commit] icu: Doesn't work on ARC yet
+Message-ID: <20131111213334.EBFE49BB28@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=9b6c5e9c989f4a099efe8d438a47dd465bdcffc8
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Hello,
-> Three minor toolchain patches, which I think are good for 2013.11,
-> that:
+icu depends on __sync_sub_and_fetch and other atomic primitives that
+don't exist in the ARC toolchain yet.
 
->  * Remove the 'experimental' marker from glibc/eglibc support in the
->    internal toolchain backend. I don't think issues have been raised
->    so far with the glibc/eglibc support, so it's time to encourage
->    users to test them :-)
+[Peter: adjust beecrypt/php comment dependency, don't mention atomic builtins]
+Signed-off-by: Mischa Jonker <mjonker@synopsys.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/beecrypt/Config.in    |    4 +++-
+ package/cppcms/Config.in      |    1 +
+ package/icu/Config.in         |    2 ++
+ package/php/Config.ext        |    2 ++
+ package/qt5/qt5base/Config.in |    1 +
+ 5 files changed, 9 insertions(+), 1 deletions(-)
 
->  * Ensure glibc or eglibc are not chosen with static only builds,
->    since glibc and eglibc are known not to work for a pure static
->    system. An user even had the not-so-nice experience of debugging
->    why he couldn't log into his system: it was due to glibc/eglibc
->    needing some shared library for authentication, and he had selected
->    static library only.
-
-Committed series, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/beecrypt/Config.in b/package/beecrypt/Config.in
+index caa6d17..033742c 100644
+--- a/package/beecrypt/Config.in
++++ b/package/beecrypt/Config.in
+@@ -1,7 +1,8 @@
+ config BR2_PACKAGE_BEECRYPT
+ 	bool "beecrypt"
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_PACKAGE_ICU if BR2_INSTALL_LIBSTDCPP && BR2_USE_WCHAR
++	select BR2_PACKAGE_ICU if BR2_INSTALL_LIBSTDCPP && BR2_USE_WCHAR && \
++	       !BR2_arc
+ 	help
+ 	  Beecrypt is a general-purpose cryptography library.
+ 
+@@ -11,4 +12,5 @@ comment "beecrypt needs a toolchain w/ threads"
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS
+ 
+ comment "beecrypt C++ support needs a toolchain w/ wchar"
++	depends on !BR2_arc
+ 	depends on BR2_INSTALL_LIBSTDCPP && !BR2_USE_WCHAR && BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/cppcms/Config.in b/package/cppcms/Config.in
+index e13e076..c5d64ce 100644
+--- a/package/cppcms/Config.in
++++ b/package/cppcms/Config.in
+@@ -23,6 +23,7 @@ config BR2_PACKAGE_CPPCMS
+ config BR2_PACKAGE_CPPCMS_ICU
+ 	bool "enable icu support"
+ 	depends on BR2_PACKAGE_CPPCMS
++	depends on !BR2_arc # icu -> atomic builtins
+ 	select BR2_PACKAGE_ICU
+ 	help
+ 	  Using ICU allows advanced localization features into CppCMS,
+diff --git a/package/icu/Config.in b/package/icu/Config.in
+index 585bffb..b736b43 100644
+--- a/package/icu/Config.in
++++ b/package/icu/Config.in
+@@ -3,11 +3,13 @@ config BR2_PACKAGE_ICU
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_USE_WCHAR
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_arc # atomic builtins
+ 	help
+ 	  International Components for Unicode.
+ 
+ 	  http://site.icu-project.org/
+ 
+ comment "icu needs a toolchain w/ C++, wchar, threads"
++	depends on !BR2_arc
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
+ 		!BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/php/Config.ext b/package/php/Config.ext
+index c0c85f1..23d2306 100644
+--- a/package/php/Config.ext
++++ b/package/php/Config.ext
+@@ -172,10 +172,12 @@ config BR2_PACKAGE_PHP_EXT_INTL
+ 	select BR2_PACKAGE_ICU
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_USE_WCHAR
++	depends on !BR2_arc # icu -> atomic builtins
+ 	help
+ 	  Internationalization support
+ 
+ comment "intl support needs a toolchain w/ C++, wchar"
++	depends on !BR2_arc
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR
+ 
+ comment "Image processing"
+diff --git a/package/qt5/qt5base/Config.in b/package/qt5/qt5base/Config.in
+index 83f17e3..e932e24 100644
+--- a/package/qt5/qt5base/Config.in
++++ b/package/qt5/qt5base/Config.in
+@@ -181,6 +181,7 @@ config BR2_PACKAGE_QT5BASE_DBUS
+ config BR2_PACKAGE_QT5BASE_ICU
+ 	bool "Enable ICU support"
+ 	select BR2_PACKAGE_ICU
++	depends on !BR2_arc # icu -> atomic builtins
+ 	help
+ 	  This option enables ICU support in Qt5. This is for example
+ 	  needed for Qt5Webkit.
