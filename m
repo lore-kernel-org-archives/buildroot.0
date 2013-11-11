@@ -1,33 +1,79 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 11 Nov 2013 11:28:04 +0100
-Subject: [Buildroot] [git commit] gst1-plugins-base: bump version
-Message-ID: <20131111110425.E1A5B9B9A7@busybox.osuosl.org>
+Date: Mon, 11 Nov 2013 11:30:33 +0100
+Subject: [Buildroot] [git commit] gst1-plugins-bad: bump version
+Message-ID: <20131111110426.052969BBCA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=df3c6ee6245de10b6f60add7c8581bc46244e287
+commit: http://git.buildroot.net/buildroot/commit/?id=8746b3d072091199a73dc0fb3775e8606dcc4cae
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Bugfix release.
+Bugfix release. Patch is now upstream.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../gst1-plugins-base/gst1-plugins-base.mk         |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ ...uez-Fix-compilation-on-big-endian-systems.patch |   39 --------------------
+ .../gst1-plugins-bad/gst1-plugins-bad.mk           |    2 +-
+ 2 files changed, 1 insertions(+), 40 deletions(-)
 
-diff --git a/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk b/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk
-index 223af2f..3c1d826 100644
---- a/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk
-+++ b/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk
+diff --git a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad-bluez-Fix-compilation-on-big-endian-systems.patch b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad-bluez-Fix-compilation-on-big-endian-systems.patch
+deleted file mode 100644
+index 1bcdeff..0000000
+--- a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad-bluez-Fix-compilation-on-big-endian-systems.patch
++++ /dev/null
+@@ -1,39 +0,0 @@
+-From 1ab90f259fee4fa9a7c10dac0a1e85799a15881b Mon Sep 17 00:00:00 2001
+-From: =?UTF-8?q?Sebastian=20Dr=C3=B6ge?= <slomo@circular-chaos.org>
+-Date: Wed, 25 Sep 2013 20:25:03 +0200
+-Subject: [PATCH] bluez: Fix compilation on big endian systems
+-
+----
+- sys/bluez/gstavdtputil.c |    6 +++---
+- 1 file changed, 3 insertions(+), 3 deletions(-)
+-
+-diff --git a/sys/bluez/gstavdtputil.c b/sys/bluez/gstavdtputil.c
+-index dea803a..ed5c276 100644
+---- a/sys/bluez/gstavdtputil.c
+-+++ b/sys/bluez/gstavdtputil.c
+-@@ -611,11 +611,11 @@ gst_avdtp_util_parse_aac_raw (void *config)
+-   GValue value = G_VALUE_INIT;
+-   GValue value_str = G_VALUE_INIT;
+-   GValue list = G_VALUE_INIT;
+-+  a2dp_aac_t aac_local = { 0 };
+-+  a2dp_aac_t *aac = &aac_local;
+- 
+- #if G_BYTE_ORDER == G_LITTLE_ENDIAN
+-   uint8_t *raw = (uint8_t *) config;
+--  a2dp_aac_t aac_local = { 0 };
+--  a2dp_aac_t *aac = &aac_local;
+-   aac->object_type = raw[0];
+-   aac->frequency = (raw[1] << 4) | ((raw[2] & 0xFF) >> 4);
+-   aac->channels = (raw[2] >> 2) & 0x3;
+-@@ -624,7 +624,7 @@ gst_avdtp_util_parse_aac_raw (void *config)
+-   aac->bitrate = (raw[4] << 16) | (raw[3] << 8) | raw[4];
+-   aac->bitrate &= ~0x800000;
+- #elif G_BYTE_ORDER == G_BIG_ENDIAN
+--  *aac = (a2dp_aac_t *) config;
+-+  *aac = *((a2dp_aac_t *) config);
+- #else
+- #error "Unknown byte order"
+- #endif
+--- 
+-1.7.10.4
+-
+diff --git a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
+index e3f3bf3..f6fdc81 100644
+--- a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
++++ b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GST1_PLUGINS_BASE_VERSION = 1.2.0
-+GST1_PLUGINS_BASE_VERSION = 1.2.1
- GST1_PLUGINS_BASE_SOURCE = gst-plugins-base-$(GST1_PLUGINS_BASE_VERSION).tar.xz
- GST1_PLUGINS_BASE_SITE = http://gstreamer.freedesktop.org/src/gst-plugins-base
- GST1_PLUGINS_BASE_INSTALL_STAGING = YES
+-GST1_PLUGINS_BAD_VERSION = 1.2.0
++GST1_PLUGINS_BAD_VERSION = 1.2.1
+ GST1_PLUGINS_BAD_SOURCE = gst-plugins-bad-$(GST1_PLUGINS_BAD_VERSION).tar.xz
+ GST1_PLUGINS_BAD_SITE = http://gstreamer.freedesktop.org/src/gst-plugins-bad
+ GST1_PLUGINS_BAD_LICENSE_FILES = COPYING COPYING.LIB
