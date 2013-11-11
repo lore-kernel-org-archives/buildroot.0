@@ -1,10 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 11 Nov 2013 16:03:26 +0100
-Subject: [Buildroot] [PATCH 1/4] post-{build,
-	images} hooks: export BUILD_DIR too
+Date: Mon, 11 Nov 2013 16:03:27 +0100
+Subject: [Buildroot] [PATCH 2/4] pkg-infra: introduce pre/post-step hooks
 In-Reply-To: <cover.1384182040.git.yann.morin.1998@free.fr>
 References: <cover.1384182040.git.yann.morin.1998@free.fr>
-Message-ID: <69596da8e2ef280699e061b824ed41c00dee0426.1384182040.git.yann.morin.1998@free.fr>
+Message-ID: <45a2fcd241df87a109cc7ca1044217788f407c02.1384182040.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,81 +12,159 @@ To: buildroot@busybox.net
 
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Also export BUILD_DIR for post-{build,images} hooks, so they do have
-a place to store generated files.
+This hooks will let us instrument the build process in many ways:
+  - log current step to see what broke
+  - time each step to see what is worth optimising
+  - sanity-check installed files (rpath, overwritten files...)
+  - call user-provided script
+  - ...
 
-Note: this will be more einteresting for the instrumentation of steps,
-to come in a later patch.
+The steps are coarse-grain, and all have a 'start' and a 'end' hooks.
+Here is the list of available steps (8 total):
+  - extract
+  - patch
+  - configure
+  - build
+  - install-host
+  - install-staging
+  - install-image
+  - install-target
+
+The download, clean and uninstall steps are not instrumented on purpose.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
 ---
- Makefile                         | 4 ++--
- docs/manual/customize-rootfs.txt | 5 +++--
- package/Makefile.in              | 6 ++++++
- 3 files changed, 11 insertions(+), 4 deletions(-)
+ package/pkg-generic.mk | 40 ++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 40 insertions(+)
 
-diff --git a/Makefile b/Makefile
-index 2f7db59..634151c 100644
---- a/Makefile
-+++ b/Makefile
-@@ -513,7 +513,7 @@ endif
- 
- 	@$(foreach s, $(call qstrip,$(BR2_ROOTFS_POST_BUILD_SCRIPT)), \
- 		$(call MESSAGE,"Executing post-build script $(s)"); \
--		$(s) $(TARGET_DIR) $(call qstrip,$(BR2_ROOTFS_POST_SCRIPT_ARGS))$(sep))
-+		$(USER_HOOKS_EXTRA_ENV) $(s) $(TARGET_DIR) $(call qstrip,$(BR2_ROOTFS_POST_SCRIPT_ARGS))$(sep))
- 
- ifeq ($(BR2_ENABLE_LOCALE_PURGE),y)
- LOCALE_WHITELIST=$(BUILD_DIR)/locales.nopurge
-@@ -559,7 +559,7 @@ endif
- target-post-image:
- 	@$(foreach s, $(call qstrip,$(BR2_ROOTFS_POST_IMAGE_SCRIPT)), \
- 		$(call MESSAGE,"Executing post-image script $(s)"); \
--		$(s) $(BINARIES_DIR) $(call qstrip,$(BR2_ROOTFS_POST_SCRIPT_ARGS))$(sep))
-+		$(USER_HOOKS_EXTRA_ENV) $(s) $(BINARIES_DIR) $(call qstrip,$(BR2_ROOTFS_POST_SCRIPT_ARGS))$(sep))
- 
- toolchain-eclipse-register:
- 	./support/scripts/eclipse-register-toolchain `readlink -f $(O)` $(notdir $(TARGET_CROSS)) $(BR2_ARCH)
-diff --git a/docs/manual/customize-rootfs.txt b/docs/manual/customize-rootfs.txt
-index 49a6b4b..450b3d5 100644
---- a/docs/manual/customize-rootfs.txt
-+++ b/docs/manual/customize-rootfs.txt
-@@ -41,6 +41,7 @@ there are a few ways to customize the resulting target filesystem.
-     - +BUILDROOT_CONFIG+: the path to the Buildroot .config file
-     - +HOST_DIR+, +STAGING_DIR+, +TARGET_DIR+: see
-       xref:generic-package-reference[]
-+    - +BUILD_DIR+: the directory where packages are extracted and built
-     - +BINARIES_DIR+: the place where all binary files (aka images) are
-       stored
-     - +BASE_DIR+: the base output directory
-@@ -78,8 +79,8 @@ in one of these _post-image scripts_ will require special handling
- 
- Just like for the _post-build scripts_ mentioned above, you also have
- access to the following environment variables from your _post-image
--scripts_: +BUILDROOT_CONFIG+, +HOST_DIR+, +STAGING_DIR+, +TARGET_DIR+,
--+BINARIES_DIR+ and +BASE_DIR+.
-+scripts_: +BUILDROOT_CONFIG+, +BUILD_DIR+, +HOST_DIR+, +STAGING_DIR+,
-++TARGET_DIR+, +BINARIES_DIR+ and +BASE_DIR+.
- 
- Additionally, each of the +BR2_ROOTFS_POST_BUILD_SCRIPT+ and
- +BR2_ROOTFS_POST_IMAGE_SCRIPT+ scripts will be passed the arguments
-diff --git a/package/Makefile.in b/package/Makefile.in
-index 612f3c7..5d52fbd 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -275,6 +275,12 @@ HOST_MAKE_ENV=PATH=$(HOST_PATH) \
- 		PKG_CONFIG_LIBDIR="$(HOST_DIR)/usr/lib/pkgconfig" \
- 		PERLLIB="$(HOST_DIR)/usr/lib/perl"
- 
-+# This extra environment we can not export ourselves (eg. because some
-+# packages use that variable internally, eg. uboot), so we have to
-+# explicitly pass it to user-supplied external hooks (eg. post-build,
-+# post-images)
-+USER_HOOKS_EXTRA_ENV=\
-+	BUILD_DIR=$(BUILD_DIR)
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 75fda02..4519223 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -21,6 +21,30 @@
+ ################################################################################
  
  ################################################################################
- # settings we need to pass to configure
++# Helper functions to catch start/end of each step
++################################################################################
++
++# Those two functions are called by each step below.
++# They are responsible for calling all hooks defined in
++# $(GLOBAL_INSTRUMENTATION_HOOKS) and pass each of them
++# three arguments:
++#   $1: either 'start' or 'end'
++#   $2: the name of the step
++#   $3: the name of the package
++
++# Start step
++# $1: step name
++define step_start
++	$(foreach hook,$(GLOBAL_INSTRUMENTATION_HOOKS),$(call $(hook),start,$(1),$($(PKG)_NAME))$(sep))
++endef
++
++# End step
++# $1: step name
++define step_end
++	$(foreach hook,$(GLOBAL_INSTRUMENTATION_HOOKS),$(call $(hook),end,$(1),$($(PKG)_NAME))$(sep))
++endef
++
++################################################################################
+ # Implicit targets -- produce a stamp file for each step of a package build
+ ################################################################################
+ 
+@@ -55,6 +79,7 @@ endif
+ 
+ # Unpack the archive
+ $(BUILD_DIR)/%/.stamp_extracted:
++	@$(call step_start,extract)
+ 	@$(call MESSAGE,"Extracting")
+ 	$(Q)mkdir -p $(@D)
+ 	$($(PKG)_EXTRACT_CMDS)
+@@ -62,6 +87,7 @@ $(BUILD_DIR)/%/.stamp_extracted:
+ 	$(Q)chmod -R +rw $(@D)
+ 	$(foreach hook,$($(PKG)_POST_EXTRACT_HOOKS),$(call $(hook))$(sep))
+ 	$(Q)touch $@
++	@$(call step_end,extract)
+ 
+ # Rsync the source directory if the <pkg>_OVERRIDE_SRCDIR feature is
+ # used.
+@@ -91,6 +117,7 @@ endif
+ $(BUILD_DIR)/%/.stamp_patched: NAMEVER = $(RAWNAME)-$($(PKG)_VERSION)
+ $(BUILD_DIR)/%/.stamp_patched: PATCH_BASE_DIRS = $($(PKG)_DIR_PREFIX)/$(RAWNAME) $(call qstrip,$(BR2_GLOBAL_PATCH_DIR))/$(RAWNAME)
+ $(BUILD_DIR)/%/.stamp_patched:
++	@$(call step_start,patch)
+ 	@$(call MESSAGE,"Patching")
+ 	$(foreach hook,$($(PKG)_PRE_PATCH_HOOKS),$(call $(hook))$(sep))
+ 	$(foreach p,$($(PKG)_PATCH),support/scripts/apply-patches.sh $(@D) $(DL_DIR) $(notdir $(p))$(sep))
+@@ -107,31 +134,39 @@ $(BUILD_DIR)/%/.stamp_patched:
+ 	)
+ 	$(foreach hook,$($(PKG)_POST_PATCH_HOOKS),$(call $(hook))$(sep))
+ 	$(Q)touch $@
++	@$(call step_end,patch)
+ 
+ # Configure
+ $(BUILD_DIR)/%/.stamp_configured:
++	@$(call step_start,configure)
+ 	$(foreach hook,$($(PKG)_PRE_CONFIGURE_HOOKS),$(call $(hook))$(sep))
+ 	@$(call MESSAGE,"Configuring")
+ 	$($(PKG)_CONFIGURE_CMDS)
+ 	$(foreach hook,$($(PKG)_POST_CONFIGURE_HOOKS),$(call $(hook))$(sep))
+ 	$(Q)touch $@
++	@$(call step_end,configure)
+ 
+ # Build
+ $(BUILD_DIR)/%/.stamp_built::
++	@$(call step_start,build)
+ 	@$(call MESSAGE,"Building")
+ 	$($(PKG)_BUILD_CMDS)
+ 	$(foreach hook,$($(PKG)_POST_BUILD_HOOKS),$(call $(hook))$(sep))
+ 	$(Q)touch $@
++	@$(call step_end,build)
+ 
+ # Install to host dir
+ $(BUILD_DIR)/%/.stamp_host_installed:
++	@$(call step_start,install-host)
+ 	@$(call MESSAGE,"Installing to host directory")
+ 	$($(PKG)_INSTALL_CMDS)
+ 	$(foreach hook,$($(PKG)_POST_INSTALL_HOOKS),$(call $(hook))$(sep))
+ 	$(Q)touch $@
++	@$(call step_end,install-host)
+ 
+ # Install to staging dir
+ $(BUILD_DIR)/%/.stamp_staging_installed:
++	@$(call step_start,install-staging)
+ 	@$(call MESSAGE,"Installing to staging directory")
+ 	$($(PKG)_INSTALL_STAGING_CMDS)
+ 	$(foreach hook,$($(PKG)_POST_INSTALL_STAGING_HOOKS),$(call $(hook))$(sep))
+@@ -143,16 +178,20 @@ $(BUILD_DIR)/%/.stamp_staging_installed:
+ 				$(addprefix $(STAGING_DIR)/usr/bin/,$($(PKG)_CONFIG_SCRIPTS)) ;\
+ 	fi
+ 	$(Q)touch $@
++	@$(call step_end,install-staging)
+ 
+ # Install to images dir
+ $(BUILD_DIR)/%/.stamp_images_installed:
++	@$(call step_start,install-image)
+ 	@$(call MESSAGE,"Installing to images directory")
+ 	$($(PKG)_INSTALL_IMAGES_CMDS)
+ 	$(foreach hook,$($(PKG)_POST_INSTALL_IMAGES_HOOKS),$(call $(hook))$(sep))
+ 	$(Q)touch $@
++	@$(call step_end,install-image)
+ 
+ # Install to target dir
+ $(BUILD_DIR)/%/.stamp_target_installed:
++	@$(call step_start,install-target)
+ 	@$(call MESSAGE,"Installing to target")
+ 	$(if $(BR2_INIT_SYSTEMD),\
+ 		$($(PKG)_INSTALL_INIT_SYSTEMD))
+@@ -164,6 +203,7 @@ $(BUILD_DIR)/%/.stamp_target_installed:
+ 		$(RM) -f $(addprefix $(TARGET_DIR)/usr/bin/,$($(PKG)_CONFIG_SCRIPTS)) ; \
+ 	fi
+ 	$(Q)touch $@
++	@$(call step_end,install-target)
+ 
+ # Clean package
+ $(BUILD_DIR)/%/.stamp_cleaned:
 -- 
 1.8.1.2
