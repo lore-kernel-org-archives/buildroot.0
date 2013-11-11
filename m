@@ -1,9 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 11 Nov 2013 18:45:16 +0100
-Subject: [Buildroot] [PATCH 1/2] target: ensure target/ dir is writable
+Date: Mon, 11 Nov 2013 18:45:17 +0100
+Subject: [Buildroot] [PATCH 2/2] busybox: ensure $(BUSYBOX_BUILD_CONFIG) is
+	writable
 In-Reply-To: <cover.1384191560.git.yann.morin.1998@free.fr>
 References: <cover.1384191560.git.yann.morin.1998@free.fr>
-Message-ID: <eb18aa1f5f3ba9939deb9ba922a1e83f8a951f1f.1384191560.git.yann.morin.1998@free.fr>
+Message-ID: <0b4acecdd3e9fb7d9510c206338ebbdfa483ca9e.1384191560.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,43 +13,29 @@ To: buildroot@busybox.net
 
 From: Nathan Lynch <ntl@pobox.com>
 
-If the source target skeleton is read-only (eg. because Buildroot's
-source dir is), modifications to the output target (such as creating
-/etc/hostname and /etc/issue) fail.
-
-(This can happen if the Buildroot source dir is NFS-mounted read-only
-to be shared between different machines, for example).
+If $(BUSYBOX_CONFIG_FILE) is read-only (eg. because Buildroot's
+source dir is), the sed fixups to $(BUSYBOX_BUILD_CONFIG) fail.
 
 Signed-off-by: Nathan Lynch <ntl@pobox.com>
-[yann.morin.1998 at free.fr: we use rsync now, not cp; --chmod=Du+w
- suggested by Arnout; clarify commit log]
+[yann.morin.1998 at free.fr: use $(INSTALL) instead of cp]
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Arnout Vandecappelle <arnout@mind.be>
 ---
- Makefile | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/busybox/busybox.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/Makefile b/Makefile
-index 2f7db59..b821b2e 100644
---- a/Makefile
-+++ b/Makefile
-@@ -433,7 +433,7 @@ RSYNC_VCS_EXCLUSIONS = \
- $(BUILD_DIR)/.root:
- 	mkdir -p $(TARGET_DIR)
- 	rsync -a $(RSYNC_VCS_EXCLUSIONS) \
--		--exclude .empty --exclude '*~' \
-+		--chmod=Du+w --exclude .empty --exclude '*~' \
- 		$(TARGET_SKELETON)/ $(TARGET_DIR)/
- 	cp support/misc/target-dir-warning.txt $(TARGET_DIR_WARNING_FILE)
- 	@ln -snf lib $(TARGET_DIR)/$(LIB_SYMLINK)
-@@ -508,7 +508,7 @@ endif
- 	@$(foreach d, $(call qstrip,$(BR2_ROOTFS_OVERLAY)), \
- 		$(call MESSAGE,"Copying overlay $(d)"); \
- 		rsync -a $(RSYNC_VCS_EXCLUSIONS) \
--			--exclude .empty --exclude '*~' \
-+			--chmod=Du+w --exclude .empty --exclude '*~' \
- 			$(d)/ $(TARGET_DIR)$(sep))
+diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
+index ad8bdaf..8d40bca 100644
+--- a/package/busybox/busybox.mk
++++ b/package/busybox/busybox.mk
+@@ -135,7 +135,7 @@ endef
+ endif
  
- 	@$(foreach s, $(call qstrip,$(BR2_ROOTFS_POST_BUILD_SCRIPT)), \
+ define BUSYBOX_COPY_CONFIG
+-	cp -f $(BUSYBOX_CONFIG_FILE) $(BUSYBOX_BUILD_CONFIG)
++	$(INSTALL) -D -m 0644 $(BUSYBOX_CONFIG_FILE) $(BUSYBOX_BUILD_CONFIG)
+ endef
+ 
+ # Disable shadow passwords support if unsupported by the C library
 -- 
 1.8.1.2
