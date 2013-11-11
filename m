@@ -1,25 +1,27 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 11 Nov 2013 22:55:59 +0100
-Subject: [Buildroot] Report of buildroot developer meeting (Oct 26-27
-	2013, Edinburgh)
-In-Reply-To: <52814F7B.4050409@mind.be> (Arnout Vandecappelle's message of
- "Mon, 11 Nov 2013 22:43:23 +0100")
-References: <52814F7B.4050409@mind.be>
-Message-ID: <87habi61sg.fsf@dell.be.48ers.dk>
+Date: Mon, 11 Nov 2013 22:59:03 +0100
+Subject: [Buildroot] [PATCH] gcc: don't patch gcc if there are no
+	patches to apply
+In-Reply-To: <1384180596-15125-1-git-send-email-mjonker@synopsys.com> (Mischa
+ Jonker's message of "Mon, 11 Nov 2013 15:36:36 +0100")
+References: <1384180596-15125-1-git-send-email-mjonker@synopsys.com>
+Message-ID: <87d2m661nc.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+>>>>> "Mischa" == Mischa Jonker <Mischa.Jonker@synopsys.com> writes:
 
->  Hi all,
->  I finally added the report of the BR developer meeting to the
-> wiki. You can find it at
-> http://elinux.org/Buildroot:DeveloperDaysELCE2013
+> While the generic package handler checks for a directory with patches
+> before starting apply-patches.sh, this is not the case for gcc: the
+> script is called, even if there is no directory with patches. This results
+> into a build failure, as apply-patches exits with error code 1 if the
+> directory doesn't exist.
 
-Thanks! I've added a link to it on the website.
+Arnout already posted another patch solving the same issue, but I prefer
+this one for 2013.11 - So committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
