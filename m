@@ -1,43 +1,36 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 11 Nov 2013 14:38:51 +0100
-Subject: [Buildroot] [git commit] log4cxx: needs threads
-Message-ID: <20131111140726.DAD869BBCE@busybox.osuosl.org>
+Date: Mon, 11 Nov 2013 15:06:34 +0100
+Subject: [Buildroot] [git commit] docs/manual: Add version number to perl in
+	prerequisites
+Message-ID: <20131111140726.F0D6C9BBCF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=5f6dd5eb73f6e60916fea8b4a78787f270d95e65
+commit: http://git.buildroot.net/buildroot/commit/?id=b3766198db3a0f52db8e8ea53edb9321a33efe34
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes build failures such as the following.
+Building host-bison needs perl 5.8.7+, as it uses the "-f" option
+for site customization scripts. This feature was added in 5.8.7.
 
-  http://autobuild.buildroot.net/results/7b73901d9e8b5098cd96b54d292bb3ffffb3fe37/
-
-Signed-off-by: Simon Dawson <spdawson@gmail.com>
+Signed-off-by: Mischa Jonker <mjonker@synopsys.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/log4cxx/Config.in |    6 ++++--
- 1 files changed, 4 insertions(+), 2 deletions(-)
+ docs/manual/prerequisite.txt |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/log4cxx/Config.in b/package/log4cxx/Config.in
-index 86d6a1d..8791b8c 100644
---- a/package/log4cxx/Config.in
-+++ b/package/log4cxx/Config.in
-@@ -5,11 +5,13 @@ config BR2_PACKAGE_LOG4CXX
- 	# apr really needs shared library support
- 	depends on !BR2_PREFER_STATIC_LIB
- 	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	help
- 	  Apache log4cxx is a logging framework for C++ patterned
- 	  after Apache log4j.
- 
- 	  http://apache.linux-mirror.org/logging/log4cxx/0.10.0
- 
--comment "log4cxx needs a toolchain w/ C++"
--	depends on !BR2_INSTALL_LIBSTDCPP
-+comment "log4cxx needs a toolchain w/ C++, threads, dynamic library"
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
-+		BR2_PREFER_STATIC_LIB
+diff --git a/docs/manual/prerequisite.txt b/docs/manual/prerequisite.txt
+index 729d64c..adc23ee 100644
+--- a/docs/manual/prerequisite.txt
++++ b/docs/manual/prerequisite.txt
+@@ -33,7 +33,7 @@ Mandatory packages
+ ** +patch+
+ ** +gzip+
+ ** +bzip2+
+-** +perl+
++** +perl+ (version 5.8.7 or any later)
+ ** +tar+
+ ** +cpio+
+ ** +python+ (version 2.6 or 2.7)
