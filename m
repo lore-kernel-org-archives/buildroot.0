@@ -1,46 +1,56 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 11 Nov 2013 18:57:30 +0100
-Subject: [Buildroot] [PATCH 1/3] toolchain-buildroot: glibc and eglibc
-	support is no longer experimental
+Date: Mon, 11 Nov 2013 18:57:31 +0100
+Subject: [Buildroot] [PATCH 2/3] toolchain-buildroot: make sure glibc isn't
+	chosen when BR2_PREFER_STATIC_LIB=y
 In-Reply-To: <1384192652-4203-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1384192652-4203-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1384192652-4203-2-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1384192652-4203-3-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The glibc and eglibc support has been introduced since a little bit of
-time now, I believe we can remove the "experimental" statement next to
-it.
+(e)glibc doesn't support a fully statically linked userspace. Even a
+basic program such as Busybox fails to do authentication due to glibc
+loading some libraries dynamically. Therefore, we disable the
+possibility of building a glibc toolchain when
+BR2_PREFER_STATIC_LIB=y.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- toolchain/toolchain-buildroot/Config.in | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ toolchain/toolchain-buildroot/Config.in | 5 +++++
+ 1 file changed, 5 insertions(+)
 
 diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
-index 0ebbd6c..5111c74 100644
+index 5111c74..8b37127 100644
 --- a/toolchain/toolchain-buildroot/Config.in
 +++ b/toolchain/toolchain-buildroot/Config.in
-@@ -16,7 +16,7 @@ config BR2_TOOLCHAIN_BUILDROOT_UCLIBC
- 	  http://uclibc.org
+@@ -23,6 +23,7 @@ config BR2_TOOLCHAIN_BUILDROOT_EGLIBC
+ 		   BR2_sh     || BR2_sh64     || BR2_sparc   || \
+ 		   BR2_x86_64
+ 	depends on BR2_USE_MMU
++	depends on !BR2_PREFER_STATIC_LIB
+ 	select BR2_TOOLCHAIN_USES_GLIBC
+ 	# our eglibc.mk enables RPC support
+ 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
+@@ -43,6 +44,7 @@ config BR2_TOOLCHAIN_BUILDROOT_GLIBC
+ 		   BR2_sh     || BR2_sh64     || BR2_sparc   || \
+ 		   BR2_x86_64
+ 	select BR2_TOOLCHAIN_USES_GLIBC
++	depends on !BR2_PREFER_STATIC_LIB
+ 	# our glibc.mk enables RPC support
+ 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
+ 	help
+@@ -54,6 +56,9 @@ config BR2_TOOLCHAIN_BUILDROOT_GLIBC
  
- config BR2_TOOLCHAIN_BUILDROOT_EGLIBC
--	bool "eglibc (experimental)"
-+	bool "eglibc"
- 	depends on BR2_arm    || BR2_armeb    || BR2_aarch64 || \
- 		   BR2_i386   || BR2_mips     || BR2_mipsel  || \
- 		   BR2_mips64 || BR2_mips64el || BR2_powerpc || \
-@@ -36,7 +36,7 @@ config BR2_TOOLCHAIN_BUILDROOT_EGLIBC
- 	  http://eglibc.org
+ 	  http://www.gnu.org/software/libc/
  
- config BR2_TOOLCHAIN_BUILDROOT_GLIBC
--	bool "glibc (experimental)"
-+	bool "glibc"
- 	depends on BR2_arm    || BR2_armeb    || BR2_aarch64 || \
- 		   BR2_i386   || BR2_mips     || BR2_mipsel  || \
- 		   BR2_mips64 || BR2_mips64el || BR2_powerpc || \
++comment "(e)glibc only available with shared lib support"
++	depends on BR2_PREFER_STATIC_LIB
++
+ endchoice
+ 
+ config BR2_TOOLCHAIN_BUILDROOT_LIBC
 -- 
 1.8.1.2
