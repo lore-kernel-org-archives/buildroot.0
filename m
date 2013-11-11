@@ -1,32 +1,37 @@
-From: Mischa Jonker <Mischa.Jonker@synopsys.com>
-Date: Mon, 11 Nov 2013 16:07:48 +0100
-Subject: [Buildroot] [PATCH] icu: Doesn't work on ARC yet
-Message-ID: <1384182468-18493-1-git-send-email-mjonker@synopsys.com>
+From: spdawson at gmail.com <spdawson@gmail.com>
+Date: Mon, 11 Nov 2013 15:43:47 +0000
+Subject: [Buildroot] [PATCH] libqmi: fix autobuild failures
+Message-ID: <1384184627-8102-1-git-send-email-spdawson@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-icu depends on __sync_sub_and_fetch and other atomic primitives that
-don't exist in the ARC toolchain yet.
+From: Simon Dawson <spdawson@gmail.com>
 
-Signed-off-by: Mischa Jonker <mjonker@synopsys.com>
+The libqmi build specifies -Werror in the CFLAGS by default. This causes
+build failures such as the following.
+
+  http://autobuild.buildroot.net/results/070/070449299aa9025c4bc6769524a6e22d66c92a65/
+
+The -Werror flag can be disabled using a configuration switch.
+
+Signed-off-by: Simon Dawson <spdawson@gmail.com>
 ---
- package/icu/Config.in |    1 +
- 1 file changed, 1 insertion(+)
+ package/libqmi/libqmi.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/icu/Config.in b/package/icu/Config.in
-index 585bffb..3c041bb 100644
---- a/package/icu/Config.in
-+++ b/package/icu/Config.in
-@@ -3,6 +3,7 @@ config BR2_PACKAGE_ICU
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_USE_WCHAR
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_arc # atomic builtins
- 	help
- 	  International Components for Unicode.
+diff --git a/package/libqmi/libqmi.mk b/package/libqmi/libqmi.mk
+index 911b1a7..8bd4577 100644
+--- a/package/libqmi/libqmi.mk
++++ b/package/libqmi/libqmi.mk
+@@ -13,4 +13,6 @@ LIBQMI_INSTALL_STAGING = YES
  
+ LIBQMI_DEPENDENCIES = libglib2
+ 
++LIBQMI_CONF_OPT = --enable-more-warnings=yes
++
+ $(eval $(autotools-package))
 -- 
-1.7.9.5
+1.8.3.2
