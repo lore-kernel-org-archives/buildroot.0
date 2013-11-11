@@ -1,53 +1,37 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 11 Nov 2013 22:54:35 +0100
-Subject: [Buildroot] Make Acked/Reviewd/Tested-by tags visible
-Message-ID: <20131111215435.GC3510@free.fr>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Mon, 11 Nov 2013 22:55:03 +0100
+Subject: [Buildroot] [PATCH 3/4] pkg-infra: add hook to log timing of
+	steps
+In-Reply-To: <CAAXf6LV8E5CFGUnxNE2w5HuTMMSixLHn34iz1381dqn2nGWf=A@mail.gmail.com>
+References: <cover.1384182040.git.yann.morin.1998@free.fr>
+ <e7bea6b2655562e1df5e1b73a139ca6b9c9966ca.1384182040.git.yann.morin.1998@free.fr>
+ <CAAXf6LV8E5CFGUnxNE2w5HuTMMSixLHn34iz1381dqn2nGWf=A@mail.gmail.com>
+Message-ID: <CAHXCMMJZk02xsR4StJtSM0GKzWrDLZSDJ5-w-3+LfiRp+cScRg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello All!
+2013/11/11 Thomas De Schampheleire <patrickdepinguin@gmail.com>
 
-In the Buildroot community, we make heavy use of patchwork to track the
-patches that we still have pending. The maintainer (Peter, CCed) almost
-exclusively use pwclient to get that list of patches to apply.
-
-Since we also use the Linux-like tags Acked-by, Reviewed-by and
-Tested-by, this is an indication to Peter that a patch is ready to be
-applied.
-
-Unfortunately, it is not easy to know at a glance what patches have such
-tags, without checking the mailing list, so for each patch.
-
-We would like to suggest that the web GUI and the pwclient CLI both
-display such tags besides each patch, a bit like (hypotetical output of
-pwclient):
-
-    ID     Tags State       Subject
-    123456 ART  New         Wonderfull patch to apply quickly
-
-Where each of 'A', 'R', and 'T' would mean Acked-by, Reviewed-by and
-Tested-by, respectively. An uppercase letter would mean two of more of
-such tag, while a lower-case letter would mean a single such tag.
-
-This way, it is easy to quickly sort high-profile patches that can be
-easily handled by Peter without too much work (patches with tags), and
-to the other contributors (some in Cc too) as a list of patches to look
-at (patches without a tag).
-
-Since patchwork already inserts those tags to the commit log (eg.
-pwclient view PATCH-ID), I hope it would be easy enough to also display
-it in the patch list.
-
-Regards,
-Yann E. MORIN.
+> On Mon, Nov 11, 2013 at 4:03 PM, Yann E. MORIN <yann.morin.1998@free.fr>
+> wrote:
+> > From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> >
+> > The timing information is stored in the file $(O)/build-time.log
+> >
+> > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> > ---
+> >  package/pkg-generic.mk | 11 +++++++++++
+> >  1 file changed, 11 insertions(+)
+>
+> Reviewed-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+>
+Reviewed-by: Samuel Martin <s.martin49@gmail.com>
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Samuel
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20131111/7f5e82f3/attachment.html>
