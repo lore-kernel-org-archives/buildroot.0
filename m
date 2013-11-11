@@ -1,40 +1,30 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 11 Nov 2013 15:06:20 +0100
-Subject: [Buildroot] [PATCH] pciutils: bump version
-In-Reply-To: <1384178128-27587-1-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Mon, 11 Nov 2013 14:55:28 +0100")
-References: <1384178128-27587-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <87fvr36nj7.fsf@dell.be.48ers.dk>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon, 11 Nov 2013 11:25:19 -0300
+Subject: [Buildroot] [PATCH 1/4] squid: bump to version 3.3.10
+Message-ID: <1384179922-14765-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/squid/squid.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
->> From the release announcement e-mail:
-> I have just released version 3.2.1 of the pciutils. It's purely
-> a maintenance release with a couple of minor bug fixes and minor
-> improvements. Thus quoth the changelog:
-
-> 2013-11-10  Martin Mares <mj@ucw.cz>
-
-> 	* Released as 3.2.1.
-
-> 	* CardBus bridge capabilities are displayed.
-
-> 	* PCIe L1 PM substates are decoded.
-
-> 	* Various bugs were fixed in decoding of PCIe capabilities.
-
-> 	* The sysfs back-end does not spit out unnecessary warnings when
-> 	  empty slots report only a partial device address. This actually
-> 	  happens on IBM pSeries.
-
-> 	* Updated pci.ids to the today's snapshot of the database.
-
-Committed, thanks.
-
+diff --git a/package/squid/squid.mk b/package/squid/squid.mk
+index 8324ba8..c0678ce 100644
+--- a/package/squid/squid.mk
++++ b/package/squid/squid.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SQUID_VERSION = 3.3.9
++SQUID_VERSION = 3.3.10
+ SQUID_SOURCE = squid-$(SQUID_VERSION).tar.xz
+ SQUID_SITE = http://www.squid-cache.org/Versions/v3/3.3
+ SQUID_LICENSE = GPLv2+
 -- 
-Bye, Peter Korsgaard
+1.8.3.2
