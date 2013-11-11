@@ -1,49 +1,33 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Mon, 11 Nov 2013 17:47:49 +0200
-Subject: [Buildroot] [PATCH] libqmi: fix autobuild failures
-In-Reply-To: <1384184627-8102-1-git-send-email-spdawson@gmail.com>
-References: <1384184627-8102-1-git-send-email-spdawson@gmail.com>
-Message-ID: <20131111154749.GT4581@tarshish>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 11 Nov 2013 16:50:36 +0100
+Subject: [Buildroot] [PATCH] icu: Doesn't work on ARC yet
+In-Reply-To: <1384182468-18493-1-git-send-email-mjonker@synopsys.com> (Mischa
+ Jonker's message of "Mon, 11 Nov 2013 16:07:48 +0100")
+References: <1384182468-18493-1-git-send-email-mjonker@synopsys.com>
+Message-ID: <8738n36ipf.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Simon,
+>>>>> "Mischa" == Mischa Jonker <Mischa.Jonker@synopsys.com> writes:
 
-On Mon, Nov 11, 2013 at 03:43:47PM +0000, spdawson at gmail.com wrote:
-> From: Simon Dawson <spdawson@gmail.com>
-> 
-> The libqmi build specifies -Werror in the CFLAGS by default. This causes
-> build failures such as the following.
-> 
->   http://autobuild.buildroot.net/results/070/070449299aa9025c4bc6769524a6e22d66c92a65/
-> 
-> The -Werror flag can be disabled using a configuration switch.
-> 
-> Signed-off-by: Simon Dawson <spdawson@gmail.com>
-> ---
->  package/libqmi/libqmi.mk | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/package/libqmi/libqmi.mk b/package/libqmi/libqmi.mk
-> index 911b1a7..8bd4577 100644
-> --- a/package/libqmi/libqmi.mk
-> +++ b/package/libqmi/libqmi.mk
-> @@ -13,4 +13,6 @@ LIBQMI_INSTALL_STAGING = YES
->  
->  LIBQMI_DEPENDENCIES = libglib2
->  
-> +LIBQMI_CONF_OPT = --enable-more-warnings=yes
+> icu depends on __sync_sub_and_fetch and other atomic primitives that
+> don't exist in the ARC toolchain yet.
 
-A comment would be nice. Something like:
+Thanks, but you also need to:
 
-# Disable -Werror
+- Add the !arc dependency to the comment line belo
+- Propagate the dependency to icu's reverse dependencies:
+git grep -l 'select BR2_PACKAGE_ICU'
+package/beecrypt/Config.in
+package/cppcms/Config.in
+package/php/Config.ext
+package/qt5/qt5base/Config.in
+package/webkit/Config.in
 
-baruch
+Care to fix that and resend?
 
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+Bye, Peter Korsgaard
