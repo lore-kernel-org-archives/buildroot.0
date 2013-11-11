@@ -1,40 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 11 Nov 2013 22:56:28 +0100
-Subject: [Buildroot] [git commit] docs/news.html: announce dev meeting report
-Message-ID: <20131111220328.6B7BC9BBE5@busybox.osuosl.org>
+Date: Mon, 11 Nov 2013 22:44:08 +0100
+Subject: [Buildroot] [git commit] gcc: don't patch gcc if there are no
+	patches to apply
+Message-ID: <20131111220328.526929BBE7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=eb04ed8e87d025e2a6496fc1e99a0bc869470a72
+commit: http://git.buildroot.net/buildroot/commit/?id=86a48c33b0f5cf7376c1fa1758ad1de5ec75380f
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+While the generic package handler checks for a directory with patches
+before starting apply-patches.sh, this is not the case for gcc: the
+script is called, even if there is no directory with patches. This results
+into a build failure, as apply-patches exits with error code 1 if the
+directory doesn't exist.
+
+Signed-off-by: Mischa Jonker <mjonker@synopsys.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- docs/news.html |   11 +++++++++++
- 1 files changed, 11 insertions(+), 0 deletions(-)
+ package/gcc/gcc.mk |    4 +++-
+ 1 files changed, 3 insertions(+), 1 deletions(-)
 
-diff --git a/docs/news.html b/docs/news.html
-index cf81411..2560227 100644
---- a/docs/news.html
-+++ b/docs/news.html
-@@ -5,6 +5,17 @@
- <p>
+diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
+index 0c0cc99..41600ef 100644
+--- a/package/gcc/gcc.mk
++++ b/package/gcc/gcc.mk
+@@ -49,7 +49,9 @@ endif
+ endif
  
- <ul>
-+  <li><b>11 November 2013 -- Report from Buildroot Developers Meeting</b>
-+
-+    <p>A report from the recent
-+    <a href="http://elinux.org/Buildroot:DeveloperDaysELCE2013">
-+    Buildroot Developers Meeting</a> is now
-+    <a href="http://lists.busybox.net/pipermail/buildroot/2013-November/082401.html">available</a>.</p>
-+
-+    <p>Once again, thanks to all the participants and to
-+    <a href="http://www.imgtec.com/">Imagination Technologies</a>
-+    for sponsoring the event.</p>
-+
-   <li><b>17 September 2013 -- 2013.08.1 released</b>
+ define HOST_GCC_APPLY_PATCHES
+-	support/scripts/apply-patches.sh $(@D) package/gcc/$(GCC_VERSION) \*.patch
++	if test -d package/gcc/$(GCC_VERSION); then \
++	  support/scripts/apply-patches.sh $(@D) package/gcc/$(GCC_VERSION) \*.patch ; \
++	fi;
+ 	$(HOST_GCC_APPLY_POWERPC_PATCH)
+ endef
  
-     <p>The 2013.08.1 bugfix release is out - Thanks to everyone
