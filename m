@@ -1,37 +1,58 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 11 Nov 2013 12:12:46 +0000 (UTC)
-Subject: [Buildroot] [Bug 6668] iptables limit module alignment problem on
-	mips64
-In-Reply-To: <bug-6668-163@https.bugs.busybox.net/>
-References: <bug-6668-163@https.bugs.busybox.net/>
-Message-ID: <20131111121246.D34B69BAFF@busybox.osuosl.org>
+From: Fatih =?utf-8?q?A=C5=9F=C4=B1c=C4=B1?= <fatih.asici@gmail.com>
+Date: Mon, 11 Nov 2013 14:26:33 +0200
+Subject: [Buildroot] Analysis of build failures
+In-Reply-To: <20131111110906.7585ca0e@skate>
+References: <20131109073028.B3C2E52C614@lolut.humanoidz.org>
+ <201311111114.51686.fatih.asici@gmail.com> <20131111110906.7585ca0e@skate>
+Message-ID: <201311111426.34194.fatih.asici@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=6668
+On Monday 11 November 2013 12:09:06 Thomas Petazzoni wrote:
+> Dear Fatih A??c?,
+> 
+> On Mon, 11 Nov 2013 11:14:51 +0200, Fatih A??c? wrote:
+> > >   http://autobuild.buildroot.net/results/555278227680e90737e6dbe0a6dcc0
+> > >   35507150aa/build-end.log (sqlite problem)
+> > 
+> > Needs posix_fallocate() which is not available in the test toolchain.
+> 
+> Except that posix_fallocate() is not available in uClibc. It is indeed
+> available in the internal toolchain backend, due to a patch that we
+> have added, but we cannot assume it will be available in external
+> uClibc toolchains that may not have the same of patches applied.
+> 
+> Moreover, the sqlite3.c code in Qt seems to have some code to handle
+> the absence of posix_fallocate():
+> 
+> #if defined(HAVE_POSIX_FALLOCATE) && HAVE_POSIX_FALLOCATE
+>   { "fallocate",    (sqlite3_syscall_ptr)posix_fallocate,  0 },
+> #else
+>   { "fallocate",    (sqlite3_syscall_ptr)0,                0 },
+> #endif
+> 
+> It would be nice to have a look at why HAVE_POSIX_FALLOCATE is defined
+> even though posix_fallocate() is not available.
 
---- Comment #3 from Gustavo Zacarias <gustavo@zacarias.com.ar> 2013-11-11 12:12:46 UTC ---
-On a second look i was somewhat rude, so sorry about that.
+Probably the following change will fix it:
 
-This is a volunteer effort and people labeling problems as critical when they
-aren't is sometimes very draining, it's like people going all "me me me" and
-wanting to be the center of the universe or something - when in fact it'll
-probably get them ignored on a perpetual basis when they do that too much.
+--- a/src/3rdparty/sqlite/sqlite3.c
++++ b/src/3rdparty/sqlite/sqlite3.c
+@@ -22938,7 +22938,8 @@ SQLITE_PRIVATE const char *sqlite3OpcodeName(int i){
+ /* Use posix_fallocate() if it is available
+ */
+ #if !defined(HAVE_POSIX_FALLOCATE) \
+-      && (_XOPEN_SOURCE >= 600 || _POSIX_C_SOURCE >= 200112L)
++      && (_XOPEN_SOURCE >= 600 || _POSIX_C_SOURCE >= 200112L) \
++      && !defined(__UCLIBC__)
+ # define HAVE_POSIX_FALLOCATE 1
+ #endif
+ 
 
-Taking that into consideration most of the contributors don't have mips64
-boards to test things on and the qemu emulation is mostly broken so only basic
-things can be tested (bare shell, can't do much), and only mips64 N32 ABI uses
-mixed 64/32-bit kernel/userspace from all the combinations supported at the
-moment, so we can't even reproduce this issue.
 
-Again, sorry, and i suggest you take it up with the netfilter dev team at their
-bugzilla or their mailing list (probably better).
-And please do provide them with details including kernel & iptables version.
-
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+sqlite3's own build system (which is not available in qt) checks if 
+posix_fallocate() is available. I wonder if there is a special reason for 
+providing an option to use the built-in sqlite.
