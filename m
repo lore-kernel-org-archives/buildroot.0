@@ -1,58 +1,45 @@
-From: Ryan Barnett <rjbarnet@rockwellcollins.com>
-Date: Mon, 11 Nov 2013 07:50:26 -0600
-Subject: [Buildroot] Patchwork oldest patches cleanup #2
-	(deadline	November 17)
-In-Reply-To: <CAAXf6LXNrRKU5dvc8DqXdrgS-L1nZQ7GC4YNceFSpbkbz+2XeA@mail.gmail.com>
-References: <CAAXf6LV_kM18mt8h5yQScnhOPfJZ2PMNg3tvF=mBLCi8bFem2A@mail.gmail.com>
- <CAAXf6LXNrRKU5dvc8DqXdrgS-L1nZQ7GC4YNceFSpbkbz+2XeA@mail.gmail.com>
-Message-ID: <OFB8654BDF.8F87209F-ON86257C20.004B9357-86257C20.004BFC8C@rockwellcollins.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 11 Nov 2013 14:49:53 +0100
+Subject: [Buildroot] [PATCH v8 RESEND 0/8] Add support for top-level
+ parallel make
+In-Reply-To: <1382088860-30524-1-git-send-email-fabio.porcedda@gmail.com>
+References: <1382088860-30524-1-git-send-email-fabio.porcedda@gmail.com>
+Message-ID: <20131111144953.43bd80b0@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Fabio, Arnout,
 
-Thomas De Schampheleire <patrickdepinguin@gmail.com> wrote on 11/10/2013 
-10:18:55 AM:
+On Fri, 18 Oct 2013 11:34:12 +0200, Fabio Porcedda wrote:
 
-[...]
+> this is a patch set for adding support for top-level parallel make in
+> buildroot, the common problem scattered in buildroot's top-level
+> makefiles is that in the rules it relies on the order of evaluation of
+> the prerequisites, to be able to use top-level parallel make instead
+> of reling on the left to right ordering of evaluation of the
+> prerequisites we must add an explicit rule to describe the
+> dependencies.
 
-> > [1/4] If linux-pam is built, enable dbm functionality in Berkeley DB
-> > Dimitry Golubovsky <golubovsky@gmail.com>
-> > http://patchwork.ozlabs.org/patch/182497
-> >
-> > [2/4] Make Berkeley DB a dependency of linux-pam and make sure it is 
-selected
-> > Dimitry Golubovsky <golubovsky@gmail.com>
-> > http://patchwork.ozlabs.org/patch/182498
-> >
-> > [3/4] Provide PAM default configuration files when building linux-pam 
-package
-> > Dimitry Golubovsky <golubovsky@gmail.com>
-> > http://patchwork.ozlabs.org/patch/182499
-> >
-> > [4/4] PAM support in Busybox if linux-pam is built
-> > Dimitry Golubovsky <golubovsky@gmail.com>
-> > http://patchwork.ozlabs.org/patch/182500
-> >
-> > Fixing linux-pam build failures
-> > Stefan Fr?berg <stefan.froberg@petroprogram.com>
-> > http://patchwork.ozlabs.org/patch/182537
-> >
-> 
-> All the above patches are related to PAM. If anyone is interested in
-> better linux-pam support in buildroot, I'd suggest to have a look at
-> the above patches. I don't personally need it, and I also don't know
-> how common PAM usage is in embedded systems.
+I'd like to agree on a plan with this patch series. At the latest
+Buildroot Developer Day in Edinburgh, I think we agreed that:
 
-linux-pam will be used more once SELinux (at least that is where we use 
-it) related packages are merged in. However, I don't know how applicable 
-these patches since I know the version has been bumped since these patches 
-were submitted. I don't have time to investigate whether these patches 
-still apply, so if you haven't heard anything back on them, I would say we 
-just mark them deprecated.
+ (1) Enabling top-level parallel without having per-package sysroot was
+     not desirable, as it would make the builds non-reproducible.
 
-Thanks,
--Ryan
+ (2) That being said, Fabio's patches have anyway a merit on their own
+     since they make things cleaner, and that therefore, patches 1 to 6
+     can be merged. Maybe patch 7 even if I'm not sure it makes sense
+     to have it without the top-level parallel build.
+
+What do you think?
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
