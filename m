@@ -1,55 +1,53 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Mon, 11 Nov 2013 22:43:40 +0100
-Subject: [Buildroot] [PATCH 2/4] pkg-infra: introduce pre/post-step hooks
-In-Reply-To: <CAAXf6LULdQO4m__yTpKGxc0GOKBERMvDQiOw-KqHT6sDZbQ=zQ@mail.gmail.com>
-References: <cover.1384182040.git.yann.morin.1998@free.fr>
- <45a2fcd241df87a109cc7ca1044217788f407c02.1384182040.git.yann.morin.1998@free.fr>
- <CAAXf6LULdQO4m__yTpKGxc0GOKBERMvDQiOw-KqHT6sDZbQ=zQ@mail.gmail.com>
-Message-ID: <CAHXCMMKcdG3oZOXuC3EzA6jtnBB4ithdBm+_TJ0Zv3FpBJhspw@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 11 Nov 2013 22:54:35 +0100
+Subject: [Buildroot] Make Acked/Reviewd/Tested-by tags visible
+Message-ID: <20131111215435.GC3510@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2013/11/11 Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Hello All!
 
-> On Mon, Nov 11, 2013 at 4:03 PM, Yann E. MORIN <yann.morin.1998@free.fr>
-> wrote:
-> > From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> >
-> > This hooks will let us instrument the build process in many ways:
-> >   - log current step to see what broke
-> >   - time each step to see what is worth optimising
-> >   - sanity-check installed files (rpath, overwritten files...)
-> >   - call user-provided script
-> >   - ...
-> >
-> > The steps are coarse-grain, and all have a 'start' and a 'end' hooks.
-> > Here is the list of available steps (8 total):
-> >   - extract
-> >   - patch
-> >   - configure
-> >   - build
-> >   - install-host
-> >   - install-staging
-> >   - install-image
-> >   - install-target
-> >
-> > The download, clean and uninstall steps are not instrumented on purpose.
-> >
-> > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> > Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-> > ---
-> >  package/pkg-generic.mk | 40 ++++++++++++++++++++++++++++++++++++++++
-> >  1 file changed, 40 insertions(+)
->
-> Reviewed-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+In the Buildroot community, we make heavy use of patchwork to track the
+patches that we still have pending. The maintainer (Peter, CCed) almost
+exclusively use pwclient to get that list of patches to apply.
 
-Reviewed-by: Samuel Martin <s.martin49@gmail.com>
+Since we also use the Linux-like tags Acked-by, Reviewed-by and
+Tested-by, this is an indication to Peter that a patch is ready to be
+applied.
+
+Unfortunately, it is not easy to know at a glance what patches have such
+tags, without checking the mailing list, so for each patch.
+
+We would like to suggest that the web GUI and the pwclient CLI both
+display such tags besides each patch, a bit like (hypotetical output of
+pwclient):
+
+    ID     Tags State       Subject
+    123456 ART  New         Wonderfull patch to apply quickly
+
+Where each of 'A', 'R', and 'T' would mean Acked-by, Reviewed-by and
+Tested-by, respectively. An uppercase letter would mean two of more of
+such tag, while a lower-case letter would mean a single such tag.
+
+This way, it is easy to quickly sort high-profile patches that can be
+easily handled by Peter without too much work (patches with tags), and
+to the other contributors (some in Cc too) as a list of patches to look
+at (patches without a tag).
+
+Since patchwork already inserts those tags to the commit log (eg.
+pwclient view PATCH-ID), I hope it would be easy enough to also display
+it in the patch list.
+
+Regards,
+Yann E. MORIN.
 
 -- 
-Samuel
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20131111/172daead/attachment.html>
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
