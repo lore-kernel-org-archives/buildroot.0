@@ -1,58 +1,54 @@
-From: Fatih =?utf-8?q?A=C5=9F=C4=B1c=C4=B1?= <fatih.asici@gmail.com>
-Date: Mon, 11 Nov 2013 14:26:33 +0200
-Subject: [Buildroot] Analysis of build failures
-In-Reply-To: <20131111110906.7585ca0e@skate>
-References: <20131109073028.B3C2E52C614@lolut.humanoidz.org>
- <201311111114.51686.fatih.asici@gmail.com> <20131111110906.7585ca0e@skate>
-Message-ID: <201311111426.34194.fatih.asici@gmail.com>
+From: Fabio Porcedda <fabio.porcedda@gmail.com>
+Date: Mon, 11 Nov 2013 13:26:37 +0100
+Subject: [Buildroot] [PATCH v8 RESEND 4/8] Makefile: add support for
+ top-level parallel make
+In-Reply-To: <52685078.5090207@mind.be>
+References: <1382088860-30524-1-git-send-email-fabio.porcedda@gmail.com>
+ <1382088860-30524-5-git-send-email-fabio.porcedda@gmail.com>
+ <52685078.5090207@mind.be>
+Message-ID: <CAHkwnC9Btt6Ogr=5TFLYipGfAf1e-UGXcN-tSVrRn-CaDDA+Hw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Monday 11 November 2013 12:09:06 Thomas Petazzoni wrote:
-> Dear Fatih A??c?,
-> 
-> On Mon, 11 Nov 2013 11:14:51 +0200, Fatih A??c? wrote:
-> > >   http://autobuild.buildroot.net/results/555278227680e90737e6dbe0a6dcc0
-> > >   35507150aa/build-end.log (sqlite problem)
-> > 
-> > Needs posix_fallocate() which is not available in the test toolchain.
-> 
-> Except that posix_fallocate() is not available in uClibc. It is indeed
-> available in the internal toolchain backend, due to a patch that we
-> have added, but we cannot assume it will be available in external
-> uClibc toolchains that may not have the same of patches applied.
-> 
-> Moreover, the sqlite3.c code in Qt seems to have some code to handle
-> the absence of posix_fallocate():
-> 
-> #if defined(HAVE_POSIX_FALLOCATE) && HAVE_POSIX_FALLOCATE
->   { "fallocate",    (sqlite3_syscall_ptr)posix_fallocate,  0 },
-> #else
->   { "fallocate",    (sqlite3_syscall_ptr)0,                0 },
-> #endif
-> 
-> It would be nice to have a look at why HAVE_POSIX_FALLOCATE is defined
-> even though posix_fallocate() is not available.
+On Thu, Oct 24, 2013 at 12:40 AM, Arnout Vandecappelle <arnout@mind.be> wrote:
+> On 18/10/13 11:34, Fabio Porcedda wrote:
+>>
+>> diff --git a/fs/common.mk b/fs/common.mk
+>> index 4dab7ea..7698c53 100644
+>> --- a/fs/common.mk
+>> +++ b/fs/common.mk
+>> @@ -42,7 +42,7 @@ define ROOTFS_TARGET_INTERNAL
+>>   # extra deps
+>>   ROOTFS_$(2)_DEPENDENCIES += host-fakeroot host-makedevs $$(if
+>> $$(BR2_TARGET_ROOTFS_$(2)_LZMA),host-lzma) $$(if
+>> $$(BR2_TARGET_ROOTFS_$(2)_LZO),host-lzop) $$(if
+>> $$(BR2_TARGET_ROOTFS_$(2)_XZ),host-xz)
+>>
+>> -$$(BINARIES_DIR)/rootfs.$(1): $$(ROOTFS_$(2)_DEPENDENCIES)
+>> +$$(BINARIES_DIR)/rootfs.$(1): target-finalize
+>> $$(ROOTFS_$(2)_DEPENDENCIES)
+>>         @$$(call MESSAGE,"Generating root filesystem image rootfs.$(1)")
+>>         $$(foreach hook,$$(ROOTFS_$(2)_PRE_GEN_HOOKS),$$(call
+>> $$(hook))$$(sep))
+>>         rm -f $$(FAKEROOT_SCRIPT)
+>> @@ -86,7 +86,7 @@ rootfs-$(1)-show-depends:
+>>   rootfs-$(1): $$(BINARIES_DIR)/rootfs.$(1) $$(ROOTFS_$(2)_POST_TARGETS)
+>>
+>>   ifeq ($$(BR2_TARGET_ROOTFS_$(2)),y)
+>> -TARGETS += rootfs-$(1)
+>> +TARGETS_ROOTFS += rootfs-$(1)
+>>   endif
+>>   endef
+>
+>
+>  Oh I forgot: you should also fix up initramfs and iso9660. They add
+> themselves to TARGETS manually.
 
-Probably the following change will fix it:
+Done, thanks.
 
---- a/src/3rdparty/sqlite/sqlite3.c
-+++ b/src/3rdparty/sqlite/sqlite3.c
-@@ -22938,7 +22938,8 @@ SQLITE_PRIVATE const char *sqlite3OpcodeName(int i){
- /* Use posix_fallocate() if it is available
- */
- #if !defined(HAVE_POSIX_FALLOCATE) \
--      && (_XOPEN_SOURCE >= 600 || _POSIX_C_SOURCE >= 200112L)
-+      && (_XOPEN_SOURCE >= 600 || _POSIX_C_SOURCE >= 200112L) \
-+      && !defined(__UCLIBC__)
- # define HAVE_POSIX_FALLOCATE 1
- #endif
- 
-
-
-sqlite3's own build system (which is not available in qt) checks if 
-posix_fallocate() is available. I wonder if there is a special reason for 
-providing an option to use the built-in sqlite.
+Best regards
+-- 
+Fabio Porcedda
