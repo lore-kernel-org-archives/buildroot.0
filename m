@@ -1,10 +1,10 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Mon, 11 Nov 2013 09:16:42 +0100
-Subject: [Buildroot] [PATCH 2/4] pkg-infra: introduce pre/post-step hooks
-In-Reply-To: <8fad5e960285a79ff9ff75467cd3e595fa16cd4d.1384127173.git.yann.morin.1998@free.fr>
+Date: Mon, 11 Nov 2013 09:30:50 +0100
+Subject: [Buildroot] [PATCH 4/4] pkg-infra: add user-supplied step-hooks
+In-Reply-To: <1be7266b22b1c6104d2050be1b1f5e75cbf0e362.1384127173.git.yann.morin.1998@free.fr>
 References: <cover.1384127173.git.yann.morin.1998@free.fr>
- <8fad5e960285a79ff9ff75467cd3e595fa16cd4d.1384127173.git.yann.morin.1998@free.fr>
-Message-ID: <CAAXf6LXM5zj2xaEEzGOwrV2dj4RNM2jcjiLBh1DRAZYh4pFOsA@mail.gmail.com>
+ <1be7266b22b1c6104d2050be1b1f5e75cbf0e362.1384127173.git.yann.morin.1998@free.fr>
+Message-ID: <CAAXf6LXzb-EcdYHLKWeEH1=GQweqKaFg44mG__+sdO3HRGwUMg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,59 +16,64 @@ Hi Yann,
 On Mon, Nov 11, 2013 at 12:51 AM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
 > From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 >
-> This hooks will let us instrument the build process in many ways:
->   - log current step to see what broke
->   - time each step to see what is worth optimising
->   - sanity-check installed files (rpath, overwritten files...)
->   - call user-provided script
->   - ...
+> Allow user to supply their own step-hooks by passing a variable
+> on the make command-line:
+>     make BR2_STEP_USER_HOOK=/path/to/my/script
 >
-> The steps are coarse-grain, and all have a 'start' and a 'end' hooks.
-> Here is the list of available steps (8 total):
->   - extract
->   - patch
->   - configure
->   - build
->   - install-host
->   - install-staging
->   - install-image
->   - install-target
+> This can be usefull to run site-specific actions at each step of the
+
+useful
+
+> build process, such as logging installed, removed or modified files,
+> do sanity checks on installed files...
 >
-> The download, clean and uninstall steps are not instrumented on purpose.
+> It is possible to call more than one script, by passing a space-separated
+> lists of scripts to call.
 >
 > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
 > ---
->  package/pkg-generic.mk | 39 +++++++++++++++++++++++++++++++++++++++
->  1 file changed, 39 insertions(+)
+>  docs/manual/debugging-buildroot.txt | 33 +++++++++++++++++++++++++++++++++
+>  docs/manual/developer-guide.txt     |  2 ++
+>  package/pkg-generic.mk              |  9 +++++++++
+>  3 files changed, 44 insertions(+)
+>  create mode 100644 docs/manual/debugging-buildroot.txt
 >
-> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-> index 75fda02..02ab8a3 100644
-> --- a/package/pkg-generic.mk
-> +++ b/package/pkg-generic.mk
-> @@ -21,6 +21,29 @@
->  ################################################################################
->
->  ################################################################################
-> +# Helper functions to catch start/end of each step
-> +################################################################################
+> diff --git a/docs/manual/debugging-buildroot.txt b/docs/manual/debugging-buildroot.txt
+> new file mode 100644
+> index 0000000..7e66208
+> --- /dev/null
+> +++ b/docs/manual/debugging-buildroot.txt
+> @@ -0,0 +1,33 @@
+> +// -*- mode:doc; -*-
+> +// vim: set syntax=asciidoc:
 > +
-> +# Those two functions are called by each step below.
-> +# They are responsible for calling all hooks defined in $(STEP_HOOKS)
-
-This comment should match the new name.
-
-> +# and pass each of them two arguments:
-> +#   $1: either 'start' or 'end'
-> +#   $2: the name of the step
-> +#   $3: the name of the package
+> +[[debugging-buildroot]]
 > +
-> +# Start step
-> +# $1: step name
-> +define step_start
-> +       $(foreach hook,$(GLOBAL_INSTRUMENTATION_HOOKS),$(call $(hook),start,$(1),$($(PKG)_NAME))$(sep))
+> +Debugging Buildroot
+> +-------------------
+> +
+> +It is possible to instrument the steps +Buildroot+ does when building
+> +packages. Define the variable +BR2_STEPS_USER_HOOKS+ to contain the path
+> +of one or more scripts (or other executables), in a space-separated list,
+> +you want called before and after each step. The script is called with
+> +three parameters:
+> +
+> +  - +start+ or +end+ to denote the start (resp. the end) of a step;
+> +  - the name of the step about to be started, or which just ended.
+> +  - the name of the package
+> +
+> +For example :
+> +
+> +----
+> +make BR2_STEPS_USER_HOOKS="/path/to/my/script1 /path/to/my/script2"
+> +----
 
-What a great name you picked ;-)
+I think this variable should be named more in accordance with the name
+GLOBAL_INSTRUMENTATION_HOOKS. For example:
+BR2_USER_INSTRUMENTATION_HOOKS
+or plainly:
+BR2_INSTRUMENTATION_HOOKS
+(or something else)
 
 Best regards,
 Thomas
