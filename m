@@ -1,50 +1,92 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Mon, 11 Nov 2013 08:50:11 +0100
-Subject: [Buildroot] [git commit] cppdb: new package
-In-Reply-To: <20131111005852.635979BBAE@busybox.osuosl.org>
-References: <20131111005852.635979BBAE@busybox.osuosl.org>
-Message-ID: <abe97ff0-f147-45a4-ac15-ce0802dc12f6@email.android.com>
+Date: Mon, 11 Nov 2013 09:04:56 +0100
+Subject: [Buildroot] [PATCH 1/4] post-{build,
+	images} hooks: export BUILD_DIR too
+In-Reply-To: <f501c03f20dea517efacfa6a9d98cdb66a2b0d88.1384127173.git.yann.morin.1998@free.fr>
+References: <cover.1384127173.git.yann.morin.1998@free.fr>
+ <f501c03f20dea517efacfa6a9d98cdb66a2b0d88.1384127173.git.yann.morin.1998@free.fr>
+Message-ID: <6e62793a-d603-4dcb-8d1b-40580c45f028@email.android.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter Korsgaard <peter@korsgaard.com> wrote:
->commit: http://git.buildroot.net/buildroot/commit/?id=0c14b6c9a66900e427e82326108ac63fe46dd483
->branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+>From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 >
->Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
->Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+>Also export BUILD_DIR for post-{build,images} hooks, so they do have
+>a place to store generated files.
+>
+>Note: this will be more einteresting for the instrumentation of steps,
+>to come in a later patch.
+>
+>Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 >---
-> package/Config.in       |    1 +
-> package/cppdb/Config.in |   15 +++++++++++++++
-> package/cppdb/cppdb.mk  |   20 ++++++++++++++++++++
-> 3 files changed, 36 insertions(+), 0 deletions(-)
+> Makefile                         | 4 ++--
+> docs/manual/customize-rootfs.txt | 5 +++--
+> package/Makefile.in              | 6 ++++++
+> 3 files changed, 11 insertions(+), 4 deletions(-)
 >
->diff --git a/package/Config.in b/package/Config.in
->index d0db7d6..311cc6c 100644
->--- a/package/Config.in
->+++ b/package/Config.in
->@@ -472,6 +472,7 @@ endmenu
+>diff --git a/Makefile b/Makefile
+>index 2f7db59..634151c 100644
+>--- a/Makefile
+>+++ b/Makefile
+>@@ -513,7 +513,7 @@ endif
 > 
-> menu "Database"
-> source "package/berkeleydb/Config.in"
->+source "package/cppdb/Config.in"
-> source "package/gdbm/Config.in"
-> source "package/mysql_client/Config.in"
-> source "package/redis/Config.in"
->diff --git a/package/cppdb/Config.in b/package/cppdb/Config.in
->new file mode 100644
->index 0000000..f0c48e3
->--- /dev/null
->+++ b/package/cppdb/Config.in
->@@ -0,0 +1,15 @@
->+config BR2_PACKAGE_CPPDB
->+	bool "cppdb"
->+	depends on BR2_INSTALL_LIBSTDCPP
->+	depends on BR2_TOOLCHAIN_HAS_THREADS
->+	# Can be built without them but it's useless
->+	depends on BR2_PACKAGE_MYSQL_CLIENT || BR2_PACKAGE_SQLITE
+> 	@$(foreach s, $(call qstrip,$(BR2_ROOTFS_POST_BUILD_SCRIPT)), \
+> 		$(call MESSAGE,"Executing post-build script $(s)"); \
+>-		$(s) $(TARGET_DIR) $(call qstrip,$(BR2_ROOTFS_POST_SCRIPT_ARGS))$(sep))
+>+		$(USER_HOOKS_EXTRA_ENV) $(s) $(TARGET_DIR) $(call qstrip,$(BR2_ROOTFS_POST_SCRIPT_ARGS))$(sep))
+> 
+> ifeq ($(BR2_ENABLE_LOCALE_PURGE),y)
+> LOCALE_WHITELIST=$(BUILD_DIR)/locales.nopurge
+>@@ -559,7 +559,7 @@ endif
+> target-post-image:
+> 	@$(foreach s, $(call qstrip,$(BR2_ROOTFS_POST_IMAGE_SCRIPT)), \
+> 		$(call MESSAGE,"Executing post-image script $(s)"); \
+>-		$(s) $(BINARIES_DIR) $(call qstrip,$(BR2_ROOTFS_POST_SCRIPT_ARGS))$(sep))
+>+		$(USER_HOOKS_EXTRA_ENV) $(s) $(BINARIES_DIR) $(call qstrip,$(BR2_ROOTFS_POST_SCRIPT_ARGS))$(sep))
+> 
+> toolchain-eclipse-register:
+> 	./support/scripts/eclipse-register-toolchain `readlink -f $(O)` $(notdir $(TARGET_CROSS)) $(BR2_ARCH)
+>diff --git a/docs/manual/customize-rootfs.txt b/docs/manual/customize-rootfs.txt
+>index 49a6b4b..450b3d5 100644
+>--- a/docs/manual/customize-rootfs.txt
+>+++ b/docs/manual/customize-rootfs.txt
+>@@ -41,6 +41,7 @@ there are a few ways to customize the resulting target filesystem.
+>     - +BUILDROOT_CONFIG+: the path to the Buildroot .config file
+>     - +HOST_DIR+, +STAGING_DIR+, +TARGET_DIR+: see
+>       xref:generic-package-reference[]
+>+    - +BUILD_DIR+: the directory where packages are extracted and built
+>     - +BINARIES_DIR+: the place where all binary files (aka images) are
+>       stored
+>     - +BASE_DIR+: the base output directory
+>@@ -78,8 +79,8 @@ in one of these _post-image scripts_ will require special handling
+> 
+> Just like for the _post-build scripts_ mentioned above, you also have
+> access to the following environment variables from your _post-image
+>-scripts_: +BUILDROOT_CONFIG+, +HOST_DIR+, +STAGING_DIR+, +TARGET_DIR+,
+>-+BINARIES_DIR+ and +BASE_DIR+.
+>+scripts_: +BUILDROOT_CONFIG+, +BUILD_DIR+, +HOST_DIR+, +STAGING_DIR+,
+>++TARGET_DIR+, +BINARIES_DIR+ and +BASE_DIR+.
+> 
+> Additionally, each of the +BR2_ROOTFS_POST_BUILD_SCRIPT+ and
+> +BR2_ROOTFS_POST_IMAGE_SCRIPT+ scripts will be passed the arguments
+>diff --git a/package/Makefile.in b/package/Makefile.in
+>index 612f3c7..b4a51fa 100644
+>--- a/package/Makefile.in
+>+++ b/package/Makefile.in
+>@@ -275,6 +275,12 @@ HOST_MAKE_ENV=PATH=$(HOST_PATH) \
+> 		PKG_CONFIG_LIBDIR="$(HOST_DIR)/usr/lib/pkgconfig" \
+> 		PERLLIB="$(HOST_DIR)/usr/lib/perl"
+> 
+>+# This extra environment we can not export ourselves (eg. because some
+>+# packages use that variable internally, eg. uboot), so we have to
+>+# expicitly pass it to user-supplied external hooks (eg. post-build,
 
-This dependency should also have been added on the comment, to make sure it is only shown when relevant...
+explicitly
+
+
+Best regards,
+Thomas
