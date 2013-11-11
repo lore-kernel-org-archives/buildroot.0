@@ -1,23 +1,34 @@
-From: Simon Dawson <spdawson@gmail.com>
-Date: Mon, 11 Nov 2013 09:55:06 +0000
-Subject: [Buildroot] [PATCH] iozone: disable for uClibc 0.9.31
-In-Reply-To: <87siv36z7u.fsf@dell.be.48ers.dk>
-References: <1384163348-17932-1-git-send-email-spdawson@gmail.com>
- <87siv36z7u.fsf@dell.be.48ers.dk>
-Message-ID: <CAHt8ZCMDzCeuTC+pFXWUy_dtTG4E7Sq7Pjc4JSaDO43s9Bc+AA@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 11 Nov 2013 10:58:30 +0100
+Subject: [Buildroot] Analysis of build failures
+In-Reply-To: <52806C1C.7010206@zankel.net>
+References: <20131109073028.B3C2E52C614@lolut.humanoidz.org>
+ <20131109191543.414f5694@skate> <52806C1C.7010206@zankel.net>
+Message-ID: <20131111105830.67b0a602@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter,
+Dear Chris Zankel,
 
-On 11 November 2013 09:53, Peter Korsgaard <jacmet@uclibc.org> wrote:
-> Committed, thanks. It sounds like it also needs to depend on
-> BR2_TOOLCHAIN_HAS_THREADS. Care to send a patch adding that dependency
-> and a comment line?
+On Sun, 10 Nov 2013 21:33:16 -0800, Chris Zankel wrote:
 
-Yes, okay.
+> (I'm a bit surprised to get all those errors as binutils currently 
+> doesn't build. Are you using an older toolchain, or are these packages 
+> not dependent on the final binutils build?)
 
-Simon.
+The binutils issues you're seeing are while building native binutils
+for the target, not when building cross-binutils for the cross
+compilation toolchain. Building the cross-binutils works ok, because
+they are built against the build machine C library, which is glibc and
+therefore has obstack stuff.
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
