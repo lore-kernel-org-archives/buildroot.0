@@ -1,43 +1,76 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Mon, 11 Nov 2013 22:00:06 +0100
-Subject: [Buildroot] [PATCH 0/7] OpenCV bump
-Message-ID: <1384203613-17871-1-git-send-email-s.martin49@gmail.com>
+Date: Mon, 11 Nov 2013 22:00:12 +0100
+Subject: [Buildroot] [PATCH 6/7] opencv: rework V4L/libv4l support
+In-Reply-To: <1384203613-17871-1-git-send-email-s.martin49@gmail.com>
+References: <1384203613-17871-1-git-send-email-s.martin49@gmail.com>
+Message-ID: <1384203613-17871-7-git-send-email-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-All,
+Starting with the 2.4.7 release, for V4L support, OpenCV does not
+requires a libv4l dependency for its V4L support.
 
-Here is a couple packages bumps and fixes related to OpenCV.
+SO, it now provides 2 distincts knobs for this: WITH_V4L and a new
+one: WITH_LIBV4L.
 
-- Patches 1 and 2 are fairly independent of the rest, though still
-  related.
+This patch takes advantage of this new knob and libv4l support is
+now automatically enabled if only the libv4l package is enabled.
 
-- Patches 3 and 4 are coupled: the new dependency in opencv requires
-  the install rules fix in eigen.
+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+---
+ package/opencv/Config.in | 11 ++++++-----
+ package/opencv/opencv.mk | 10 +++++++---
+ 2 files changed, 13 insertions(+), 8 deletions(-)
 
-- Patches 5 to 7 just bumps opencv and update a few dependencies.
-
-Yours,
-Samuel
-
-Samuel Martin (7):
-  cmake: bump to version 2.8.12.1
-  eigen: add C++ toolchain dependency
-  eigen: fix install rules
-  opencv: add eigen dependency
-  opencv: bump to version 2.4.7
-  opencv: rework V4L/libv4l support
-  opencv: add Qt5 support
-
- package/cmake/cmake.mk   |  2 +-
- package/eigen/Config.in  |  4 ++++
- package/eigen/eigen.mk   | 10 ++++++++--
- package/opencv/Config.in | 52 +++++++++++++++++++++++++++++++++++++-----------
- package/opencv/opencv.mk | 33 ++++++++++++++++++++----------
- 5 files changed, 76 insertions(+), 25 deletions(-)
-
---
+diff --git a/package/opencv/Config.in b/package/opencv/Config.in
+index bd466ca..a4342da 100644
+--- a/package/opencv/Config.in
++++ b/package/opencv/Config.in
+@@ -193,14 +193,15 @@ config BR2_PACKAGE_OPENCV_WITH_TIFF
+ 
+ config BR2_PACKAGE_OPENCV_WITH_V4L
+ 	bool "v4l support"
+-	depends on BR2_LARGEFILE
+-	depends on BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_PACKAGE_LIBV4L
+ 	help
+ 	  Enable Video 4 Linux support.
+ 
+-comment "v4l support needs a toolchain w/ largefile, threads"
+-	depends on !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS
++	  If the package libv4l is enabled, its support is automatically enabled.
++
++if BR2_PACKAGE_OPENCV_WITH_V4L && !(BR2_LARGEFILE && BR2_TOOLCHAIN_HAS_THREADS)
++comment "libv4l support will be disabled."
++comment "libv4l support needs a toolchain w/ largefile, threads"
++endif
+ 
+ comment "Install options"
+ 
+diff --git a/package/opencv/opencv.mk b/package/opencv/opencv.mk
+index c53d984..bbaba72 100644
+--- a/package/opencv/opencv.mk
++++ b/package/opencv/opencv.mk
+@@ -164,10 +164,14 @@ OPENCV_CONF_OPT += -DWITH_TIFF=OFF
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_OPENCV_WITH_V4L),y)
+-OPENCV_CONF_OPT += -DWITH_V4L=ON -DWITH_LIBV4L=ON
+-OPENCV_DEPENDENCIES += libv4l
++OPENCV_CONF_OPT += \
++	-DWITH_V4L=ON \
++	-DWITH_LIBV4L=$(if $(BR2_PACKAGE_LIBV4L),ON,OFF)
++OPENCV_DEPENDENCIES += $(if $(BR2_PACKAGE_LIBV4L),libv4l)
+ else
+-OPENCV_CONF_OPT += -DWITH_V4L=OFF -DWITH_LIBV4L=OFF
++OPENCV_CONF_OPT += \
++	-DWITH_V4L=OFF \
++	-DWITH_LIBV4L=OFF
+ endif
+ 
+ # Installation hooks:
+-- 
 1.8.4.2
