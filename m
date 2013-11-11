@@ -1,50 +1,43 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 11 Nov 2013 15:06:57 +0100
-Subject: [Buildroot] [git commit] ethtool: bump version to 3.12.1
-Message-ID: <20131111140727.04B019BBCE@busybox.osuosl.org>
+Date: Mon, 11 Nov 2013 14:38:51 +0100
+Subject: [Buildroot] [git commit] log4cxx: needs threads
+Message-ID: <20131111140726.DAD869BBCE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=6d93f061eccad3b81a27e8cf02cb8b29e9dba44e
+commit: http://git.buildroot.net/buildroot/commit/?id=5f6dd5eb73f6e60916fea8b4a78787f270d95e65
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-3.12 release notes:
+Fixes build failures such as the following.
 
-	* Fix: Remove alternate method to check for VLAN tag offload on Linux
-	  < 2.6.37 (-k/-K options)
-	* Fix: Hide state of VLAN tag offload and LRO if the kernel is too old
-	  for us to reliably detect them (-k option)
-	* Feature: Add register dump support for Solarflare SFC9100 family
-	  (-d option)
+  http://autobuild.buildroot.net/results/7b73901d9e8b5098cd96b54d292bb3ffffb3fe37/
 
-3.12.1 release notes:
-
-This includes a couple of changes that should have gone into 3.12.
-
-	* Fix: Memory corruption when applying external calibration to
-	  SFF-8472 module diagnostics (-m option)
-	* Feature: Add Intel 82599 and x540 DCB registers to dump
-	  (-d option)
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Simon Dawson <spdawson@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/ethtool/ethtool.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/log4cxx/Config.in |    6 ++++--
+ 1 files changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/package/ethtool/ethtool.mk b/package/ethtool/ethtool.mk
-index 7c22269..32b39e8 100644
---- a/package/ethtool/ethtool.mk
-+++ b/package/ethtool/ethtool.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/log4cxx/Config.in b/package/log4cxx/Config.in
+index 86d6a1d..8791b8c 100644
+--- a/package/log4cxx/Config.in
++++ b/package/log4cxx/Config.in
+@@ -5,11 +5,13 @@ config BR2_PACKAGE_LOG4CXX
+ 	# apr really needs shared library support
+ 	depends on !BR2_PREFER_STATIC_LIB
+ 	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	help
+ 	  Apache log4cxx is a logging framework for C++ patterned
+ 	  after Apache log4j.
  
--ETHTOOL_VERSION = 3.11
-+ETHTOOL_VERSION = 3.12.1
- ETHTOOL_SOURCE = ethtool-$(ETHTOOL_VERSION).tar.xz
- ETHTOOL_SITE = $(BR2_KERNEL_MIRROR)/software/network/ethtool
- ETHTOOL_LICENSE = GPLv2
+ 	  http://apache.linux-mirror.org/logging/log4cxx/0.10.0
+ 
+-comment "log4cxx needs a toolchain w/ C++"
+-	depends on !BR2_INSTALL_LIBSTDCPP
++comment "log4cxx needs a toolchain w/ C++, threads, dynamic library"
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
++		BR2_PREFER_STATIC_LIB
