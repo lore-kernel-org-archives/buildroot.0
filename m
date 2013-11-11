@@ -1,48 +1,65 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 11 Nov 2013 17:47:32 +0100
-Subject: [Buildroot] [PATCH 08/15] grub: adjust splashimage in menu.lst
-	depending on configuration
+Date: Mon, 11 Nov 2013 17:47:34 +0100
+Subject: [Buildroot] [PATCH 10/15] grub: improve help text with detailed
+	instructions to install grub
 In-Reply-To: <1384188459-1332-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1384188459-1332-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1384188459-1332-9-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1384188459-1332-11-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Make the splashimage line in menu.lst only active when splashimage
-support has really been enabled in the Grub configuration.
+These instructions should probaby go in the Buildroot manual, but at
+this point, it's not clear in which section they should go. So in
+order to not loose those notes, add them to the Grub help text.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- boot/grub/grub.mk  | 1 +
- boot/grub/menu.lst | 2 +-
- 2 files changed, 2 insertions(+), 1 deletion(-)
+ boot/grub/Config.in | 30 ++++++++++++++++++++++++++++++
+ 1 file changed, 30 insertions(+)
 
-diff --git a/boot/grub/grub.mk b/boot/grub/grub.mk
-index 0c2c035..f15d915 100644
---- a/boot/grub/grub.mk
-+++ b/boot/grub/grub.mk
-@@ -66,6 +66,7 @@ GRUB_CONF_OPT = \
- ifeq ($(BR2_TARGET_GRUB_SPLASH),y)
- define GRUB_INSTALL_SPLASH
- 	cp boot/grub/splash.xpm.gz $(TARGET_DIR)/boot/grub/
-+	$(SED) 's/^#splashimage/splashimage/' $(TARGET_DIR)/boot/grub/menu.lst
- endef
- endif
+diff --git a/boot/grub/Config.in b/boot/grub/Config.in
+index 65b95e1..c90770f 100644
+--- a/boot/grub/Config.in
++++ b/boot/grub/Config.in
+@@ -5,6 +5,36 @@ config BR2_TARGET_GRUB
+ 	help
+ 	  The GRand Unified Bootloader for x86 systems.
  
-diff --git a/boot/grub/menu.lst b/boot/grub/menu.lst
-index 41e9b62..7845fee 100644
---- a/boot/grub/menu.lst
-+++ b/boot/grub/menu.lst
-@@ -1,6 +1,6 @@
- default=0
- timeout=5
--splashimage=(hd0,0)/boot/grub/splash.xpm.gz
-+#splashimage=(hd0,0)/boot/grub/splash.xpm.gz
- hiddenmenu
- title Buildroot
- 	root (hd0,0)
++	  Some notes on creating a disk image with Grub installed:
++	    1. Create an empty disk image
++	       dd if=/dev/zero of=disk.img bs=1M count=32
++	    2. Create one primary partition
++	       cfdisk -h 16 -s 63 disk.img
++	    3. Set up a loop device
++	       sudo losetup -f disk.img
++	    4. Set up loop devices per partitions
++	       sudo partx -a /dev/loop0
++	    5. Create the ext2 filesystem
++	       sudo mkfs.ext2 -L root /dev/loop0p1
++	    6. Mount the filesystem
++	       mount /dev/loop0p1 /mnt
++	    7. Extract the root filesystem
++	       sudo tar -C /mnt -xf output/images/rootfs.tar
++	    8. Unmount the filesystem, clean up loop device
++	       sudo umount /mnt
++	       sudo partx -d /dev/loop0
++	       sudo losetup -d /dev/loop0
++	    9. Install grub
++	       output/host/sbin/grub --device-map=/dev/null
++	       and in the grub shell, enter:
++		device (hd0) disk.img
++		geometry (hd0) <cylinders> 16 63
++		root (hd0,0)
++		setup (hd0)
++	    10. Image is ready
++		Can be tested in Qemu, with:
++		  qemu-system-{i386,x86-64} -hda disk.img
++
+ if BR2_TARGET_GRUB
+ 
+ config BR2_TARGET_GRUB_SPLASH
 -- 
 1.8.1.2
