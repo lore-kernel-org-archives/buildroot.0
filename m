@@ -1,294 +1,1879 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 11 Nov 2013 22:29:50 +0100
-Subject: [Buildroot] [git commit] toolchain-external: make sure (e)glibc
-	isn't chosen when BR2_PREFER_STATIC_LIB=y
-Message-ID: <20131111213335.0843E9BBE8@busybox.osuosl.org>
+Date: Mon, 11 Nov 2013 22:19:30 +0100
+Subject: [Buildroot] [git commit] Config.in files: whitespace cleanup
+Message-ID: <20131111213334.DAFC39BBE5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ed3f3e433f146a093750905a3c578ae2ec83c1c3
+commit: http://git.buildroot.net/buildroot/commit/?id=bed4e27868aaefb3b82dca9ba076415bec368557
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-(e)glibc doesn't support a fully statically linked userspace. Even a
-basic program such as Busybox fails to do authentication due to glibc
-loading some libraries dynamically. Therefore, we disable the
-possibility of using a (e)glibc toolchain when
-BR2_PREFER_STATIC_LIB=y.
+This patch fixes the following whitespace problems in Config.in files:
+- trailing whitespace
+- spaces instead of tabs for indentation
+- help text not indented with tab + 2 spaces
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- toolchain/toolchain-external/Config.in |   37 ++++++++++++++++++++++++++++++++
- 1 files changed, 37 insertions(+), 0 deletions(-)
+ Config.in                                        |    2 +-
+ boot/at91dataflashboot/Config.in                 |    4 +-
+ boot/mxs-bootlets/Config.in                      |   20 ++--
+ boot/uboot/Config.in                             |    2 +-
+ fs/squashfs/Config.in                            |   14 ++--
+ linux/Config.ext.in                              |   16 ++--
+ linux/Config.in                                  |   20 ++--
+ package/at/Config.in                             |    6 +-
+ package/busybox/Config.in                        |    2 +-
+ package/cegui06/Config.in                        |    2 +-
+ package/celt051/Config.in                        |    6 +-
+ package/cppcms/Config.in                         |    6 +-
+ package/cramfs/Config.in                         |   10 +-
+ package/cryptsetup/Config.in                     |    2 +-
+ package/cups/Config.in                           |    8 +-
+ package/dfu-util/Config.in.host                  |    4 +-
+ package/divine/Config.in                         |   14 ++--
+ package/dvb-apps/Config.in                       |    2 +-
+ package/dvbsnoop/Config.in                       |    2 +-
+ package/e2fsprogs/Config.in.host                 |    2 +-
+ package/efl/libevas/Config.in                    |    4 +-
+ package/ffmpeg/Config.in                         |   98 +++++++++++-----------
+ package/flac/Config.in                           |    2 +-
+ package/freescale-imx/gpu-viv-bin-mx6q/Config.in |    2 +-
+ package/gd/Config.in                             |   38 ++++----
+ package/genimage/Config.in.host                  |    4 +-
+ package/genpart/Config.in.host                   |    2 +-
+ package/genromfs/Config.in                       |    8 +-
+ package/httping/Config.in                        |   18 ++--
+ package/input-tools/Config.in                    |   24 +++---
+ package/intltool/Config.in                       |   14 ++--
+ package/keyutils/Config.in                       |    2 +-
+ package/libcap/Config.in                         |   10 +-
+ package/libdvdnav/Config.in                      |    2 +-
+ package/libeXosip2/Config.in                     |    2 +-
+ package/libgeotiff/Config.in                     |   12 ++--
+ package/libiscsi/Config.in                       |    4 +-
+ package/libmms/Config.in                         |   10 +-
+ package/libseccomp/Config.in                     |    4 +-
+ package/libv4l/Config.in                         |    2 +-
+ package/libxml-parser-perl/Config.in             |   16 ++--
+ package/linux-firmware/Config.in                 |   18 ++--
+ package/lite/Config.in                           |    2 +-
+ package/lttng-babeltrace/Config.in               |    2 +-
+ package/makedevs/Config.in                       |    8 +-
+ package/memtester/Config.in                      |    2 +-
+ package/monit/Config.in                          |    2 +-
+ package/mtools/Config.in.host                    |    2 +-
+ package/php/Config.in                            |   20 ++--
+ package/python-pyparsing/Config.in               |    2 +-
+ package/sawman/Config.in                         |   12 ++--
+ package/slirp/Config.in                          |    6 +-
+ package/snowball-hdmiservice/Config.in           |    6 +-
+ package/speex/Config.in                          |    6 +-
+ package/spice-protocol/Config.in                 |    4 +-
+ package/spice/Config.in                          |    4 +-
+ package/squashfs/Config.in                       |   34 ++++----
+ package/sysstat/Config.in                        |   62 +++++++-------
+ package/taglib/Config.in                         |    6 +-
+ package/ti-gfx/Config.in                         |    2 +-
+ package/tremor/Config.in                         |    6 +-
+ package/usbredir/Config.in                       |    6 +-
+ package/util-linux/Config.in                     |    2 +-
+ package/x11r7/Config.in                          |    2 +-
+ package/x11r7/xdriver_xf86-input-evdev/Config.in |    2 +-
+ package/x11r7/xserver_xorg-server/Config.in      |   18 ++--
+ package/xenomai/Config.in                        |   66 +++++++-------
+ package/xfsprogs/Config.in                       |    2 +-
+ system/Config.in                                 |   22 +++---
+ toolchain/toolchain-external/Config.in           |   66 +++++++-------
+ 70 files changed, 407 insertions(+), 407 deletions(-)
 
+diff --git a/Config.in b/Config.in
+index af720ec..d87e0f0 100644
+--- a/Config.in
++++ b/Config.in
+@@ -410,7 +410,7 @@ config BR2_ENABLE_SSP
+ 	  -fstack-protector-all option.
+ 
+ 	  See http://www.linuxfromscratch.org/hints/downloads/files/ssp.txt
+-          for details.
++	  for details.
+ 
+ 	  Note that this requires the toolchain to have SSP
+ 	  support. This is always the case for glibc and eglibc
+diff --git a/boot/at91dataflashboot/Config.in b/boot/at91dataflashboot/Config.in
+index 7537548..80b57a4 100644
+--- a/boot/at91dataflashboot/Config.in
++++ b/boot/at91dataflashboot/Config.in
+@@ -1,3 +1,3 @@
+ config BR2_TARGET_AT91DATAFLASHBOOT
+-       depends on BR2_arm926t
+-       bool "AT91 DataFlashBoot"
++	depends on BR2_arm926t
++	bool "AT91 DataFlashBoot"
+diff --git a/boot/mxs-bootlets/Config.in b/boot/mxs-bootlets/Config.in
+index 2222ff6..4bb07a0 100644
+--- a/boot/mxs-bootlets/Config.in
++++ b/boot/mxs-bootlets/Config.in
+@@ -43,16 +43,16 @@ choice
+ 	  Select which bootstream to generate
+ 
+ config BR2_TARGET_MXS_BOOTLETS_BAREBOX
+-       depends on BR2_TARGET_BAREBOX
+-       bool "Barebox Bootloader"
++	depends on BR2_TARGET_BAREBOX
++	bool "Barebox Bootloader"
+ 
+ config BR2_TARGET_MXS_BOOTLETS_LINUX
+-       depends on BR2_LINUX_KERNEL
+-       bool "Linux Kernel"
++	depends on BR2_LINUX_KERNEL
++	bool "Linux Kernel"
+ 
+ config BR2_TARGET_MXS_BOOTLETS_UBOOT
+-       depends on BR2_TARGET_UBOOT
+-       bool "U-boot bootloader"
++	depends on BR2_TARGET_UBOOT
++	bool "U-boot bootloader"
+ 
+ endchoice
+ 
+@@ -82,9 +82,9 @@ config BR2_TARGET_MXS_BOOTLETS_CUSTOM_BOARD
+ endchoice
+ 
+ config BR2_TARGET_MXS_BOOTLETS_CUSTOM_BOARD_NAME
+-       string "Custom board name"
+-       depends on BR2_TARGET_MXS_BOOTLETS_CUSTOM_BOARD
+-       help
+-         Name of the board to build the bootlets for
++	string "Custom board name"
++	depends on BR2_TARGET_MXS_BOOTLETS_CUSTOM_BOARD
++	help
++	  Name of the board to build the bootlets for
+ 
+ endif
+diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
+index af9ccab..77553c1 100644
+--- a/boot/uboot/Config.in
++++ b/boot/uboot/Config.in
+@@ -21,7 +21,7 @@ config BR2_TARGET_UBOOT_LATEST_VERSION
+ 	bool "2013.10"
+ 
+ config BR2_TARGET_UBOOT_CUSTOM_VERSION
+-       bool "Custom version"
++	bool "Custom version"
+ 	help
+ 	  This option allows to use a specific official versions
+ 
+diff --git a/fs/squashfs/Config.in b/fs/squashfs/Config.in
+index f13410a..fb696bd 100644
+--- a/fs/squashfs/Config.in
++++ b/fs/squashfs/Config.in
+@@ -12,11 +12,11 @@ choice
+ 	  root filesystem.
+ 
+ config BR2_TARGET_ROOTFS_SQUASHFS4
+-       bool "4.x"
++	bool "4.x"
+ 
+ config BR2_TARGET_ROOTFS_SQUASHFS3
+-       depends on BR2_DEPRECATED
+-       bool "3.x"
++	depends on BR2_DEPRECATED
++	bool "3.x"
+ 
+ endchoice
+ 
+@@ -29,16 +29,16 @@ choice
+ 	  generating the filesystem.
+ 
+ config BR2_TARGET_ROOTFS_SQUASHFS4_GZIP
+-       bool "gzip"
++	bool "gzip"
+ 
+ config BR2_TARGET_ROOTFS_SQUASHFS4_LZMA
+-       bool "lzma"
++	bool "lzma"
+ 
+ config BR2_TARGET_ROOTFS_SQUASHFS4_LZO
+-       bool "lzo"
++	bool "lzo"
+ 
+ config BR2_TARGET_ROOTFS_SQUASHFS4_XZ
+-       bool "xz"
++	bool "xz"
+ 
+ endchoice
+ endif
+diff --git a/linux/Config.ext.in b/linux/Config.ext.in
+index 2b0092a..40c4684 100644
+--- a/linux/Config.ext.in
++++ b/linux/Config.ext.in
+@@ -31,15 +31,15 @@ config BR2_LINUX_KERNEL_EXT_XENOMAI_ADEOS_PATCH
+ 
+ # RTAI
+ config BR2_LINUX_KERNEL_EXT_RTAI
+-       bool "RTAI Real-time patch"
+-       select BR2_PACKAGE_RTAI
+-       help
+-         RTAI Kernel part.
++	bool "RTAI Real-time patch"
++	select BR2_PACKAGE_RTAI
++	help
++	  RTAI Kernel part.
+ 
+ config BR2_LINUX_KERNEL_EXT_RTAI_PATCH
+-       depends on BR2_LINUX_KERNEL_EXT_RTAI
+-       string "Path for RTAI patch file"
+-       help
+-         Optionally, explicitly specify the RTAI patch to use.
++	depends on BR2_LINUX_KERNEL_EXT_RTAI
++	string "Path for RTAI patch file"
++	help
++	  Optionally, explicitly specify the RTAI patch to use.
+ 
+ endmenu
+diff --git a/linux/Config.in b/linux/Config.in
+index 84de134..9b2025c 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -127,9 +127,9 @@ config BR2_LINUX_KERNEL_DEFCONFIG
+ 	string "Defconfig name"
+ 	depends on BR2_LINUX_KERNEL_USE_DEFCONFIG
+ 	help
+-	 Name of the kernel defconfig file to use, without the
+-	 trailing _defconfig.  The defconfig is located in
+-	 arch/<arch>/configs in the kernel tree.
++	  Name of the kernel defconfig file to use, without the
++	  trailing _defconfig.  The defconfig is located in
++	  arch/<arch>/configs in the kernel tree.
+ 
+ config BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE
+ 	string "Configuration file path"
+@@ -142,7 +142,7 @@ config BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE
+ #
+ 
+ config BR2_LINUX_KERNEL_UBOOT_IMAGE
+-       bool
++	bool
+ 
+ choice
+ 	prompt "Kernel binary format"
+@@ -274,9 +274,9 @@ choice
+ config BR2_LINUX_KERNEL_USE_INTREE_DTS
+ 	bool "Use a device tree present in the kernel."
+ 	help
+-	   Use a device tree source distributed with
+-	   the kernel sources. The dts files are located
+-           in the arch/<arch>/boot/dts folder.
++	  Use a device tree source distributed with
++	  the kernel sources. The dts files are located
++	  in the arch/<arch>/boot/dts folder.
+ 
+ config BR2_LINUX_KERNEL_USE_CUSTOM_DTS
+ 	bool "Use a custom device tree file"
+@@ -290,9 +290,9 @@ config BR2_LINUX_KERNEL_INTREE_DTS_NAME
+ 	string "Device Tree Source file names"
+ 	depends on BR2_LINUX_KERNEL_USE_INTREE_DTS
+ 	help
+-	 Name of the device tree source file, without
+-	 the trailing .dts. You can provide a list of
+-	 dts files to build, separated by spaces.
++	  Name of the device tree source file, without
++	  the trailing .dts. You can provide a list of
++	  dts files to build, separated by spaces.
+ 
+ config BR2_LINUX_KERNEL_CUSTOM_DTS_PATH
+ 	string "Device Tree Source file path"
+diff --git a/package/at/Config.in b/package/at/Config.in
+index d4ddcb2..17fabf7 100644
+--- a/package/at/Config.in
++++ b/package/at/Config.in
+@@ -2,9 +2,9 @@ config BR2_PACKAGE_AT
+ 	bool "at"
+ 	depends on BR2_USE_MMU
+ 	help
+-	 At and batch read shell commands from standard input and
+-	 store them as jobs to be scheduled for execution in the
+-	 future.
++	  At and batch read shell commands from standard input and
++	  store them as jobs to be scheduled for execution in the
++	  future.
+ 
+ 	  at    - run the job at a specified time
+ 	  batch - run the job when system load levels permit
+diff --git a/package/busybox/Config.in b/package/busybox/Config.in
+index ba521e1..2d55aa6 100644
+--- a/package/busybox/Config.in
++++ b/package/busybox/Config.in
+@@ -81,5 +81,5 @@ if !BR2_PACKAGE_BUSYBOX # kconfig doesn't support else
+ # add dummy config so the stuff with busybox alternatives are shown
+ # when busybox is disabled
+ config BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+-       default y
++	default y
+ endif
+diff --git a/package/cegui06/Config.in b/package/cegui06/Config.in
+index 4104472..92bbb70 100644
+--- a/package/cegui06/Config.in
++++ b/package/cegui06/Config.in
+@@ -15,5 +15,5 @@ config BR2_PACKAGE_CEGUI06
+ 	  orientated, written in C++, and targeted at games developers who
+ 	  should be spending their time creating great games, not building
+ 	  GUI sub-systems!
+-	  
++
+ 	  http://www.cegui.org.uk/
+diff --git a/package/celt051/Config.in b/package/celt051/Config.in
+index 50ed069..035e262 100644
+--- a/package/celt051/Config.in
++++ b/package/celt051/Config.in
+@@ -3,13 +3,13 @@ config BR2_PACKAGE_CELT051
+ 	select BR2_PACKAGE_LIBOGG
+ 	help
+ 	  The CELT ultra-low delay audio codec
+-	  
++
+ 	  The CELT codec is a compression algorithm for audio. Like MP3,
+ 	  Vorbis, and AAC it is suitable for transmitting music with high
+ 	  quality. Unlike these formats CELT imposes very little delay on
+ 	  the signal, even less than is typical for speech centric formats
+ 	  like Speex, GSM, or G.729.
+-	  
++
+ 	  Note: this is version 0.5.1.3 of celt.
+-	  
++
+ 	  http://www.celt-codec.org/
+diff --git a/package/cppcms/Config.in b/package/cppcms/Config.in
+index 11daf7c..e13e076 100644
+--- a/package/cppcms/Config.in
++++ b/package/cppcms/Config.in
+@@ -12,11 +12,11 @@ config BR2_PACKAGE_CPPCMS
+ 	  differs from most of other web development frameworks like:
+ 	  Python Django or Java Servlets on  the following aspects:
+ 
+-           - It is designed and tuned to handle extremely high loads.
++	   - It is designed and tuned to handle extremely high loads.
+ 	   - It uses modern C++ as primary development language in
+ 	     order to achieve the above goal.
+-           - It is aimed on development of both Web Sites and Web
+-             Services.
++	   - It is aimed on development of both Web Sites and Web
++	     Services.
+ 
+ 	  http://cppcms.com
+ 
+diff --git a/package/cramfs/Config.in b/package/cramfs/Config.in
+index a5c73a8..daf6e6d 100644
+--- a/package/cramfs/Config.in
++++ b/package/cramfs/Config.in
+@@ -1,7 +1,7 @@
+ config BR2_PACKAGE_CRAMFS
+-       bool "cramfs"
+-       help
+-         cramfs is a compressed read-only filesystem. This package
+-         contains the tools to generate and check a cramfs filesystem.
++	bool "cramfs"
++	help
++	  cramfs is a compressed read-only filesystem. This package
++	  contains the tools to generate and check a cramfs filesystem.
+ 
+-	 http://sourceforge.net/projects/cramfs/
++	  http://sourceforge.net/projects/cramfs/
+diff --git a/package/cryptsetup/Config.in b/package/cryptsetup/Config.in
+index 7b0e7ca..28073f4 100644
+--- a/package/cryptsetup/Config.in
++++ b/package/cryptsetup/Config.in
+@@ -4,7 +4,7 @@ config BR2_PACKAGE_CRYPTSETUP
+ 	select BR2_PACKAGE_POPT
+ 	select BR2_PACKAGE_LVM2
+ 	select BR2_PACKAGE_E2FSPROGS
+-	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE 
++	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
+ 	depends on BR2_LARGEFILE # lvm2, util-linux
+ 	depends on BR2_USE_MMU # lvm2
+ 	depends on BR2_USE_WCHAR # util-linux
+diff --git a/package/cups/Config.in b/package/cups/Config.in
+index 3703d4e..ea1f003 100644
+--- a/package/cups/Config.in
++++ b/package/cups/Config.in
+@@ -10,10 +10,10 @@ config BR2_PACKAGE_CUPS
+ if BR2_PACKAGE_CUPS
+ 
+ config BR2_PACKAGE_CUPS_PDFTOPS
+-       bool "pdftops support"
+-       depends on BR2_INSTALL_LIBSTDCPP
+-       help
+-         Enable pdftops support
++	bool "pdftops support"
++	depends on BR2_INSTALL_LIBSTDCPP
++	help
++	  Enable pdftops support
+ 
+ comment "pdftops support needs a toolchain w/ C++"
+ 	depends on !BR2_INSTALL_LIBSTDCPP
+diff --git a/package/dfu-util/Config.in.host b/package/dfu-util/Config.in.host
+index cfeebdc..b2a8f82 100644
+--- a/package/dfu-util/Config.in.host
++++ b/package/dfu-util/Config.in.host
+@@ -1,8 +1,8 @@
+ config BR2_PACKAGE_HOST_DFU_UTIL
+ 	bool "host dfu-util"
+ 	help
+-	  Dfu-util is the host side implementation of the DFU 1.0 
++	  Dfu-util is the host side implementation of the DFU 1.0
+ 	  specification of the USB forum. DFU is intended to download
+-	  and upload firmware to devices connected over USB. 
++	  and upload firmware to devices connected over USB.
+ 
+ 	  http://dfu-util.gnumonks.org/
+diff --git a/package/divine/Config.in b/package/divine/Config.in
+index 8202292..7909004 100644
+--- a/package/divine/Config.in
++++ b/package/divine/Config.in
+@@ -1,8 +1,8 @@
+ config BR2_PACKAGE_DIVINE
+-       bool "directfb virtual input extension"
+-       depends on BR2_PACKAGE_DIRECTFB
+-       help
+-         DiVine provides a DirectFB input driver that reads input
+-         events from a pipe and dispatches them via a virtual input
+-         device. It also installs the tool 'spooky' that allows to
+-         send input events to DirectFB applications.
++	bool "directfb virtual input extension"
++	depends on BR2_PACKAGE_DIRECTFB
++	help
++	  DiVine provides a DirectFB input driver that reads input
++	  events from a pipe and dispatches them via a virtual input
++	  device. It also installs the tool 'spooky' that allows to
++	  send input events to DirectFB applications.
+diff --git a/package/dvb-apps/Config.in b/package/dvb-apps/Config.in
+index 393ee5b..ba3ce45 100644
+--- a/package/dvb-apps/Config.in
++++ b/package/dvb-apps/Config.in
+@@ -2,7 +2,7 @@ config BR2_PACKAGE_DVB_APPS
+ 	bool "dvb-apps (transponders data)"
+ 	help
+ 	  Install the DVB-C, DVB-S, DVB-T and ATSC transponders data.
+-	  
++
+ 	  http://linuxtv.org/projects.php
+ 	  http://linuxtv.org/hg/dvb-apps
+ 
+diff --git a/package/dvbsnoop/Config.in b/package/dvbsnoop/Config.in
+index 9ead941..09a3c4d 100644
+--- a/package/dvbsnoop/Config.in
++++ b/package/dvbsnoop/Config.in
+@@ -22,4 +22,4 @@ config BR2_PACKAGE_DVBSNOOP
+ 	  http://en.wikipedia.org/wiki/DBox2
+ 
+ comment "dvbsnoop needs a toolchain w/ largefile"
+-        depends on !BR2_LARGEFILE
++	depends on !BR2_LARGEFILE
+diff --git a/package/e2fsprogs/Config.in.host b/package/e2fsprogs/Config.in.host
+index 0c001c2..bc0c71c 100644
+--- a/package/e2fsprogs/Config.in.host
++++ b/package/e2fsprogs/Config.in.host
+@@ -2,5 +2,5 @@ config BR2_PACKAGE_HOST_E2FSPROGS
+ 	bool "host e2fsprogs"
+ 	help
+ 	  The EXT2/3/4 file system utilities.
+-	  
++
+ 	  http://e2fsprogs.sf.net
+diff --git a/package/efl/libevas/Config.in b/package/efl/libevas/Config.in
+index 8c4193f..b14a319 100644
+--- a/package/efl/libevas/Config.in
++++ b/package/efl/libevas/Config.in
+@@ -142,10 +142,10 @@ config BR2_PACKAGE_LIBEVAS_GL
+ 	select BR2_PACKAGE_LIBEET
+ 
+ config BR2_PACKAGE_LIBEVAS_GLES_SGX
+-       bool "OpenGL-ES SGX"
++	bool "OpenGL-ES SGX"
+ 
+ config BR2_PACKAGE_LIBEVAS_GLES_S3C6410
+-       bool "OpenGL-ES S3C6410"
++	bool "OpenGL-ES S3C6410"
+ endchoice
+ 
+ 
+diff --git a/package/ffmpeg/Config.in b/package/ffmpeg/Config.in
+index 1c8c34f..20d5231 100644
+--- a/package/ffmpeg/Config.in
++++ b/package/ffmpeg/Config.in
+@@ -6,48 +6,48 @@ menuconfig BR2_PACKAGE_FFMPEG
+ 	depends on BR2_LARGEFILE
+ 	depends on BR2_INET_IPV6
+ 	help
+-         FFmpeg is a complete, cross-platform solution to record, convert
+-         and stream audio and video.
++	  FFmpeg is a complete, cross-platform solution to record, convert
++	  and stream audio and video.
+ 
+-	 http://www.ffmpeg.org
++	  http://www.ffmpeg.org
+ 
+ if BR2_PACKAGE_FFMPEG
+ 
+ config BR2_PACKAGE_FFMPEG_GPL
+ 	bool "Enable GPL code"
+ 	help
+-         allow use of GPL code, the resulting libs and binaries will
+-         be under GPL
++	  allow use of GPL code, the resulting libs and binaries will
++	  be under GPL
+ 
+ config BR2_PACKAGE_FFMPEG_NONFREE
+ 	bool "Enable nonfree code"
+ 	help
+-         allow use of nonfree code, the resulting libs and binaries
+-         will be unredistributable
++	  allow use of nonfree code, the resulting libs and binaries
++	  will be unredistributable
+ 
+ config BR2_PACKAGE_FFMPEG_FFMPEG
+ 	bool "Build ffmpeg (the command line application)"
+ 	select BR2_PACKAGE_FFMPEG_SWSCALE
+ 	default y
+ 	help
+-         FFmpeg is a very fast video and audio converter.
+-         It can also grab from a live audio/video source.
++	  FFmpeg is a very fast video and audio converter.
++	  It can also grab from a live audio/video source.
+ 
+-         It is not needed if you want to link the FFmpeg libraries
+-         to your application.
++	  It is not needed if you want to link the FFmpeg libraries
++	  to your application.
+ 
+ config BR2_PACKAGE_FFMPEG_FFPLAY
+ 	bool "Build ffplay"
+ 	select BR2_PACKAGE_SDL
+ 	help
+-         FFplay is a very simple and portable media player using the
+-         FFmpeg libraries and the SDL library.
+-         It is mostly used as a testbed for the various FFmpeg APIs.
++	  FFplay is a very simple and portable media player using the
++	  FFmpeg libraries and the SDL library.
++	  It is mostly used as a testbed for the various FFmpeg APIs.
+ 
+ config BR2_PACKAGE_FFMPEG_FFSERVER
+ 	bool "Build ffserver"
+ 	help
+-         FFserver is a streaming server for both audio and video.
++	  FFserver is a streaming server for both audio and video.
+ 
+ config BR2_PACKAGE_FFMPEG_POSTPROC
+ 	bool "Build libpostproc"
+@@ -64,81 +64,81 @@ config BR2_PACKAGE_FFMPEG_ENCODERS
+ 	string "Enabled encoders"
+ 	default "all"
+ 	help
+-	 Space-separated list of encoders to build in FFmpeg,
+-	 or "all" to build all of them.
++	  Space-separated list of encoders to build in FFmpeg,
++	  or "all" to build all of them.
+ 
+-	 Run ./configure --list-encoders in the ffmpeg sources
+-	 directory to know the available options.
++	  Run ./configure --list-encoders in the ffmpeg sources
++	  directory to know the available options.
+ 
+ config BR2_PACKAGE_FFMPEG_DECODERS
+ 	string "Enabled decoders"
+ 	default "all"
+ 	help
+-	 Space-separated list of decoders to build in FFmpeg,
+-	 or "all" to build all of them.
++	  Space-separated list of decoders to build in FFmpeg,
++	  or "all" to build all of them.
+ 
+-	 Run ./configure --list-decoders in the ffmpeg sources
+-	 directory to know the available options.
++	  Run ./configure --list-decoders in the ffmpeg sources
++	  directory to know the available options.
+ 
+ config BR2_PACKAGE_FFMPEG_MUXERS
+ 	string "Enabled muxers"
+ 	default "all"
+ 	help
+-	 Space-separated list of muxers to build in FFmpeg,
+-	 or "all" to build all of them.
++	  Space-separated list of muxers to build in FFmpeg,
++	  or "all" to build all of them.
+ 
+-	 Run ./configure --list-muxers in the ffmpeg sources
+-	 directory to know the available options.
++	  Run ./configure --list-muxers in the ffmpeg sources
++	  directory to know the available options.
+ 
+ config BR2_PACKAGE_FFMPEG_DEMUXERS
+ 	string "Enabled demuxers"
+ 	default "all"
+ 	help
+-	 Space-separated list of demuxers to build in FFmpeg,
+-	 or "all" to build all of them.
++	  Space-separated list of demuxers to build in FFmpeg,
++	  or "all" to build all of them.
+ 
+-	 Run ./configure --list-demuxers in the ffmpeg sources
+-	 directory to know the available options.
++	  Run ./configure --list-demuxers in the ffmpeg sources
++	  directory to know the available options.
+ 
+ config BR2_PACKAGE_FFMPEG_PARSERS
+ 	string "Enabled parsers"
+ 	default "all"
+ 	help
+-	 Space-separated list of parsers to build in FFmpeg,
+-	 or "all" to build all of them.
++	  Space-separated list of parsers to build in FFmpeg,
++	  or "all" to build all of them.
+ 
+-	 Run ./configure --list-parsers in the ffmpeg sources
+-	 directory to know the available options.
++	  Run ./configure --list-parsers in the ffmpeg sources
++	  directory to know the available options.
+ 
+ config BR2_PACKAGE_FFMPEG_BSFS
+ 	string "Enabled bitstreams"
+ 	default "all"
+ 	help
+-	 Space-separated list of bitstream filters to build in FFmpeg,
+-	 or "all" to build all of them.
++	  Space-separated list of bitstream filters to build in FFmpeg,
++	  or "all" to build all of them.
+ 
+-	 Run ./configure --list-bsfs in the ffmpeg sources
+-	 directory to know the available options.
++	  Run ./configure --list-bsfs in the ffmpeg sources
++	  directory to know the available options.
+ 
+ config BR2_PACKAGE_FFMPEG_PROTOCOLS
+ 	string "Enabled protocols"
+ 	default "all"
+ 	help
+-	 Space-separated list of protocols to build in FFmpeg,
+-	 or "all" to build all of them.
++	  Space-separated list of protocols to build in FFmpeg,
++	  or "all" to build all of them.
+ 
+-	 Run ./configure --list-protocols in the ffmpeg sources
+-	 directory to know the available options.
++	  Run ./configure --list-protocols in the ffmpeg sources
++	  directory to know the available options.
+ 
+ config BR2_PACKAGE_FFMPEG_FILTERS
+ 	string "Enabled filters"
+ 	default "all"
+ 	help
+-	 Space-separated list of filters to build in FFmpeg,
+-	 or "all" to build all of them.
++	  Space-separated list of filters to build in FFmpeg,
++	  or "all" to build all of them.
+ 
+-	 Run ./configure --list-filters in the ffmpeg sources
+-	 directory to know the available options.
++	  Run ./configure --list-filters in the ffmpeg sources
++	  directory to know the available options.
+ 
+ config BR2_PACKAGE_FFMPEG_INDEVS
+ 	bool "Enable input devices"
+@@ -152,7 +152,7 @@ config BR2_PACKAGE_FFMPEG_EXTRACONF
+ 	string "Additional parameters for ./configure"
+ 	default ""
+ 	help
+-	 Extra parameters that will be appended to FFmpeg's
+-	 ./configure commandline.
++	  Extra parameters that will be appended to FFmpeg's
++	  ./configure commandline.
+ 
+ endif
+diff --git a/package/flac/Config.in b/package/flac/Config.in
+index 357e24f..06f170b 100644
+--- a/package/flac/Config.in
++++ b/package/flac/Config.in
+@@ -1,6 +1,6 @@
+ config BR2_PACKAGE_FLAC
+ 	bool "flac"
+ 	help
+-          FLAC is an Open Source lossless audio codec.
++	  FLAC is an Open Source lossless audio codec.
+ 
+ 	  http://flac.sourceforge.net/
+diff --git a/package/freescale-imx/gpu-viv-bin-mx6q/Config.in b/package/freescale-imx/gpu-viv-bin-mx6q/Config.in
+index 244bebb..64e42ba 100644
+--- a/package/freescale-imx/gpu-viv-bin-mx6q/Config.in
++++ b/package/freescale-imx/gpu-viv-bin-mx6q/Config.in
+@@ -9,7 +9,7 @@ config BR2_PACKAGE_GPU_VIV_BIN_MX6Q
+ 	select BR2_PACKAGE_XLIB_LIBXDAMAGE if BR2_PACKAGE_XORG7
+ 	select BR2_PACKAGE_XLIB_LIBXEXT if BR2_PACKAGE_XORG7
+ 	depends on BR2_arm # Only relevant for i.MX6
+-	 # Library binaries are linked against libc.so.6
++	# Library binaries are linked against libc.so.6
+ 	depends on BR2_TOOLCHAIN_USES_GLIBC
+ 	help
+ 	  Userspace libraries for Vivante GPU on i.MX6 platforms
+diff --git a/package/gd/Config.in b/package/gd/Config.in
+index efac21d..ba6f326 100644
+--- a/package/gd/Config.in
++++ b/package/gd/Config.in
+@@ -15,47 +15,47 @@ if BR2_PACKAGE_GD
+ menu "gd tools"
+ 
+ config BR2_PACKAGE_GD_ANNOTATE
+-       bool "annotate"
++	bool "annotate"
+ 
+ config BR2_PACKAGE_GD_BDFTOGD
+-       bool "bdftogd"
+-       depends on BR2_PACKAGE_PERL
++	bool "bdftogd"
++	depends on BR2_PACKAGE_PERL
+ 
+ config BR2_PACKAGE_GD_GD2COPYPAL
+-       bool "gd2copypal"
++	bool "gd2copypal"
+ 
+ config BR2_PACKAGE_GD_GD2TOGIF
+-       bool "gd2togif"
++	bool "gd2togif"
+ 
+ config BR2_PACKAGE_GD_GD2TOPNG
+-       bool "gd2topng"
+-       select BR2_PACKAGE_LIBPNG
++	bool "gd2topng"
++	select BR2_PACKAGE_LIBPNG
+ 
+ config BR2_PACKAGE_GD_GDCMPGIF
+-       bool "gdcmpgif"
++	bool "gdcmpgif"
+ 
+ config BR2_PACKAGE_GD_GDPARTTOPNG
+-       bool "gdparttopng"
+-       select BR2_PACKAGE_LIBPNG
++	bool "gdparttopng"
++	select BR2_PACKAGE_LIBPNG
+ 
+ config BR2_PACKAGE_GD_GDTOPNG
+-       bool "gdtopng"
+-       select BR2_PACKAGE_LIBPNG
++	bool "gdtopng"
++	select BR2_PACKAGE_LIBPNG
+ 
+ config BR2_PACKAGE_GD_GIFTOGD2
+-       bool "giftogd2"
++	bool "giftogd2"
+ 
+ config BR2_PACKAGE_GD_PNGTOGD
+-       bool "pngtogd"
+-       select BR2_PACKAGE_LIBPNG
++	bool "pngtogd"
++	select BR2_PACKAGE_LIBPNG
+ 
+ config BR2_PACKAGE_GD_PNGTOGD2
+-       bool "pngtogd2"
+-       select BR2_PACKAGE_LIBPNG
++	bool "pngtogd2"
++	select BR2_PACKAGE_LIBPNG
+ 
+ config BR2_PACKAGE_GD_WEBPNG
+-       bool "webpng"
+-       select BR2_PACKAGE_LIBPNG
++	bool "webpng"
++	select BR2_PACKAGE_LIBPNG
+ 
+ endmenu
+ 
+diff --git a/package/genimage/Config.in.host b/package/genimage/Config.in.host
+index 697dcda..acf777c 100644
+--- a/package/genimage/Config.in.host
++++ b/package/genimage/Config.in.host
+@@ -4,10 +4,10 @@ config BR2_PACKAGE_HOST_GENIMAGE
+ 	  genimage is a tool to generate multiple filesystem and flash
+ 	  images from a given root filesystem tree. genimage is
+ 	  intended to be run in a fakeroot environment.
+-	  
++
+ 	  Configuration is done is a config file parsed by
+ 	  libconfuse. Options like the path to tools can be given in
+ 	  environment variables, the config file or commandline
+ 	  switches.
+-	  
++
+ 	  http://www.pengutronix.de/software/genimage/
+diff --git a/package/genpart/Config.in.host b/package/genpart/Config.in.host
+index f986504..6cc2a59 100644
+--- a/package/genpart/Config.in.host
++++ b/package/genpart/Config.in.host
+@@ -4,5 +4,5 @@ config BR2_PACKAGE_HOST_GENPART
+ 	  Generate a 16 byte partition table entry defined by command line
+ 	  arguments and dump it to stdout. No CHS magic is done, only lba
+ 	  entries are filled out.
+-	  
++
+ 	  http://www.pengutronix.de/software/genpart/index_en.html
+diff --git a/package/genromfs/Config.in b/package/genromfs/Config.in
+index 2caf2a4..e4eba9f 100644
+--- a/package/genromfs/Config.in
++++ b/package/genromfs/Config.in
+@@ -1,6 +1,6 @@
+ config BR2_PACKAGE_GENROMFS
+-       bool "genromfs"
+-       help
+-         Tool to generate a ROMFS filesystem.
++	bool "genromfs"
++	help
++	  Tool to generate a ROMFS filesystem.
+ 
+-	 http://romfs.sourceforge.net/
+\ No newline at end of file
++	  http://romfs.sourceforge.net/
+diff --git a/package/httping/Config.in b/package/httping/Config.in
+index dca68f3..92c7a20 100644
+--- a/package/httping/Config.in
++++ b/package/httping/Config.in
+@@ -1,17 +1,17 @@
+ config BR2_PACKAGE_HTTPING
+-       bool "httping"
+-       help
+-         Httping is like 'ping' but for http-requests.
+-         Give it an url, and it'll show you how long it takes to connect,
+-         send a request and retrieve the reply (only the headers).
+-         Be aware that the transmission across the network also takes time!
+-         So it measures the latency of the webserver + network.
++	bool "httping"
++	help
++	  Httping is like 'ping' but for http-requests.
++	  Give it an url, and it'll show you how long it takes to connect,
++	  send a request and retrieve the reply (only the headers).
++	  Be aware that the transmission across the network also takes time!
++	  So it measures the latency of the webserver + network.
+ 
+-         http://www.vanheusden.com/httping/
++	  http://www.vanheusden.com/httping/
+ 
+ if BR2_PACKAGE_HTTPING
+ 
+ config BR2_PACKAGE_HTTPING_TFO
+-       bool "TCP Fast Open (TFO) support"
++	bool "TCP Fast Open (TFO) support"
+ 
+ endif
+diff --git a/package/input-tools/Config.in b/package/input-tools/Config.in
+index 08b3cbe..a2dfe28 100644
+--- a/package/input-tools/Config.in
++++ b/package/input-tools/Config.in
+@@ -5,22 +5,22 @@ config BR2_PACKAGE_INPUT_TOOLS
+ 	  http://linuxconsole.sourceforge.net/
+ 
+ config BR2_PACKAGE_INPUT_TOOLS_INPUTATTACH
+-        bool "inputattach"
+-        depends on BR2_PACKAGE_INPUT_TOOLS
+-        default y
+-        help
++	bool "inputattach"
++	depends on BR2_PACKAGE_INPUT_TOOLS
++	default y
++	help
+ 	  Inputattach is used for attaching a serial line to the input layer.
+ 
+ config BR2_PACKAGE_INPUT_TOOLS_JSCAL
+-        bool "jscal"
+-        depends on BR2_PACKAGE_INPUT_TOOLS
+-        default y
+-        help
++	bool "jscal"
++	depends on BR2_PACKAGE_INPUT_TOOLS
++	default y
++	help
+ 	  Joystick calibration program.
+ 
+ config BR2_PACKAGE_INPUT_TOOLS_JSTEST
+-        bool "jstest"
+-        depends on BR2_PACKAGE_INPUT_TOOLS
+-        default y
+-        help
++	bool "jstest"
++	depends on BR2_PACKAGE_INPUT_TOOLS
++	default y
++	help
+ 	  Joystick test program.
+diff --git a/package/intltool/Config.in b/package/intltool/Config.in
+index 990a227..4643a89 100644
+--- a/package/intltool/Config.in
++++ b/package/intltool/Config.in
+@@ -1,9 +1,9 @@
+ config BR2_PACKAGE_INTLTOOL
+-       bool "intltool"
+-       # Hide from configuration as we only support the host package
+-       # for the moment
+-       depends on BR2_HOST_ONLY
+-       help
+-         Utility scripts for internationalizing XML
++	bool "intltool"
++	# Hide from configuration as we only support the host package
++	# for the moment
++	depends on BR2_HOST_ONLY
++	help
++	  Utility scripts for internationalizing XML
+ 
+-	 http://www.freedesktop.org/wiki/Software/intltool
+\ No newline at end of file
++	  http://www.freedesktop.org/wiki/Software/intltool
+diff --git a/package/keyutils/Config.in b/package/keyutils/Config.in
+index 6978687..bae8568 100644
+--- a/package/keyutils/Config.in
++++ b/package/keyutils/Config.in
+@@ -5,5 +5,5 @@ config BR2_PACKAGE_KEYUTILS
+ 	help
+ 	  These tools are used to control the key management system
+ 	  built into the Linux kernel.
+-	  
++
+ 	  http://people.redhat.com/~dhowells/keyutils/
+diff --git a/package/libcap/Config.in b/package/libcap/Config.in
+index f1fc8fa..59300af 100644
+--- a/package/libcap/Config.in
++++ b/package/libcap/Config.in
+@@ -1,10 +1,10 @@
+ config BR2_PACKAGE_LIBCAP
+ 	bool "libcap"
+ 	help
+-	 This library implements the user-space interfaces to the
+-	 POSIX 1003.1e capabilities available in Linux kernels. These
+-	 capabilities are a partitioning of the all powerful root
+-	 privilege into a set of distinct privileges.
++	  This library implements the user-space interfaces to the
++	  POSIX 1003.1e capabilities available in Linux kernels. These
++	  capabilities are a partitioning of the all powerful root
++	  privilege into a set of distinct privileges.
+ 
+-	 http://sites.google.com/site/fullycapable/
++	  http://sites.google.com/site/fullycapable/
+ 
+diff --git a/package/libdvdnav/Config.in b/package/libdvdnav/Config.in
+index b3f6dd3..6378382 100644
+--- a/package/libdvdnav/Config.in
++++ b/package/libdvdnav/Config.in
+@@ -2,7 +2,7 @@ config BR2_PACKAGE_LIBDVDNAV
+ 	bool "libdvdnav"
+ 	depends on BR2_LARGEFILE # libdvdread
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+-        select BR2_PACKAGE_LIBDVDREAD
++	select BR2_PACKAGE_LIBDVDREAD
+ 	help
+ 	  libdvdnav is a library that allows easy use of sophisticated
+ 	  DVD navigation features such as DVD menus, multiangle
+diff --git a/package/libeXosip2/Config.in b/package/libeXosip2/Config.in
+index 3fe9c96..4cb8218 100644
+--- a/package/libeXosip2/Config.in
++++ b/package/libeXosip2/Config.in
+@@ -8,7 +8,7 @@ config BR2_PACKAGE_LIBEXOSIP2
+ 	  This protocol is mainly to be used by VoIP telephony
+ 	  applications (endpoints or conference server) but might be
+ 	  also usefull for any application that wish to establish
+-	  sessions like multiplayer games. 
++	  sessions like multiplayer games.
+ 	  eXosip is based in libosip.
+ 
+ 	  http://savannah.nongnu.org/projects/exosip/
+diff --git a/package/libgeotiff/Config.in b/package/libgeotiff/Config.in
+index 7489a47..530cd45 100644
+--- a/package/libgeotiff/Config.in
++++ b/package/libgeotiff/Config.in
+@@ -1,8 +1,8 @@
+ config BR2_PACKAGE_LIBGEOTIFF
+-       bool "libgeotiff"
+-       select BR2_PACKAGE_TIFF
+-       help
+-         Libgeotiff is an open source library normally hosted on top of
+-         libtiff for reading, and writing GeoTIFF information tags.
++	bool "libgeotiff"
++	select BR2_PACKAGE_TIFF
++	help
++	  Libgeotiff is an open source library normally hosted on top of
++	  libtiff for reading, and writing GeoTIFF information tags.
+ 
+-         http://geotiff.osgeo.org
++	  http://geotiff.osgeo.org
+diff --git a/package/libiscsi/Config.in b/package/libiscsi/Config.in
+index f3fc29e..3ec184a 100644
+--- a/package/libiscsi/Config.in
++++ b/package/libiscsi/Config.in
+@@ -4,9 +4,9 @@ config BR2_PACKAGE_LIBISCSI
+ 	help
+ 	  Libiscsi is a client-side library to implement the iSCSI protocol
+ 	  that can be used to access resource of an iSCSI Target.
+-	  
++
+ 	  The library is fully async with regards to iscsi commands and scsi
+ 	  tasks, but a sync layer is also provided for ease of use for simpler
+ 	  applications.
+-	  
++
+ 	  https://github.com/sahlberg/libiscsi  (no proper homepage)
+diff --git a/package/libmms/Config.in b/package/libmms/Config.in
+index 8137d48..50e98d8 100644
+--- a/package/libmms/Config.in
++++ b/package/libmms/Config.in
+@@ -4,11 +4,11 @@ config BR2_PACKAGE_LIBMMS
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # glib2
+ 	select BR2_PACKAGE_LIBGLIB2
+ 	help
+-          LibMMS is a common library for parsing mms:// and mmsh://
+-          type network streams. These are commonly used to stream
+-          Windows Media Video content over the web. LibMMS itself is
+-          only for receiving MMS stream, it doesn't handle sending at
+-          all.
++	  LibMMS is a common library for parsing mms:// and mmsh://
++	  type network streams. These are commonly used to stream
++	  Windows Media Video content over the web. LibMMS itself is
++	  only for receiving MMS stream, it doesn't handle sending at
++	  all.
+ 
+ 	  http://launchpad.net/libmms
+ 
+diff --git a/package/libseccomp/Config.in b/package/libseccomp/Config.in
+index 9ee1697..e851011 100644
+--- a/package/libseccomp/Config.in
++++ b/package/libseccomp/Config.in
+@@ -3,12 +3,12 @@ config BR2_PACKAGE_LIBSECCOMP
+ 	depends on BR2_i386 || BR2_x86_64
+ 	help
+ 	  High level interface to the Linux Kernel's seccomp filter
+-	  
++
+ 	  The libseccomp library provides an easy to use, platform independent,
+ 	  interface to the Linux Kernel's syscall filtering mechanism: seccomp.
+ 	  The libseccomp API is designed to abstract away the underlying BPF
+ 	  based syscall filter language and present a more conventional
+ 	  function-call based filtering interface that should be familiar to,
+ 	  and easily adopted by application developers.
+-	  
++
+ 	  http://sourceforge.net/projects/libseccomp/
+diff --git a/package/libv4l/Config.in b/package/libv4l/Config.in
+index 9dc8cdd..9d04921 100644
+--- a/package/libv4l/Config.in
++++ b/package/libv4l/Config.in
+@@ -60,4 +60,4 @@ comment "v4l2-dbg needs a toolchain w/ C++"
+ endif
+ 
+ comment "libv4l needs a toolchain w/ largefile, threads"
+-        depends on !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/libxml-parser-perl/Config.in b/package/libxml-parser-perl/Config.in
+index e90e50e..2a81086 100644
+--- a/package/libxml-parser-perl/Config.in
++++ b/package/libxml-parser-perl/Config.in
+@@ -1,11 +1,11 @@
+ config BR2_PACKAGE_LIBXML_PARSER_PERL
+-       bool "libxml-parser-perl"
+-       select BR2_PACKAGE_EXPAT
+-       # Hide from configuration as we only support the host package
+-       # for the moment
+-       depends on BR2_HOST_ONLY
+-       help
+-         The Perl XML::Parser module.
++	bool "libxml-parser-perl"
++	select BR2_PACKAGE_EXPAT
++	# Hide from configuration as we only support the host package
++	# for the moment
++	depends on BR2_HOST_ONLY
++	help
++	  The Perl XML::Parser module.
+ 
+-	 http://www.cpan.org/modules/by-module/XML/
++	  http://www.cpan.org/modules/by-module/XML/
+ 
+diff --git a/package/linux-firmware/Config.in b/package/linux-firmware/Config.in
+index 01fe90f..da37b12 100644
+--- a/package/linux-firmware/Config.in
++++ b/package/linux-firmware/Config.in
+@@ -32,19 +32,19 @@ config BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_5000
+ 	  the iwlwifi kernel driver.
+ 
+ config BR2_PACKAGE_LINUX_FIRMWARE_LIBERTAS_SD8686_V8
+-       bool "Libertas SD 8686 v8"
+-       help
+-         Firmware files (version 8) for the Marvell SD8686 module
++	bool "Libertas SD 8686 v8"
++	help
++	  Firmware files (version 8) for the Marvell SD8686 module
+ 
+ config BR2_PACKAGE_LINUX_FIRMWARE_LIBERTAS_SD8686_V9
+-       bool "Libertas SD 8686 v9"
+-       help
+-         Firmware files (version 9) for the Marvell SD8686 module
++	bool "Libertas SD 8686 v9"
++	help
++	  Firmware files (version 9) for the Marvell SD8686 module
+ 
+ config BR2_PACKAGE_LINUX_FIRMWARE_LIBERTAS_SD8688
+-       bool "Libertas SD 8688"
+-       help
+-         Firmware files for the Marvell SD8688 module
++	bool "Libertas SD 8688"
++	help
++	  Firmware files for the Marvell SD8688 module
+ 
+ config BR2_PACKAGE_LINUX_FIRMWARE_MWIFIEX_SD8787
+ 	bool "Marvell Wifi-Ex SD 8787"
+diff --git a/package/lite/Config.in b/package/lite/Config.in
+index 8840fe4..398b9e1 100644
+--- a/package/lite/Config.in
++++ b/package/lite/Config.in
+@@ -2,7 +2,7 @@ config BR2_PACKAGE_LITE
+ 	bool "LiTE (toolbox engine)"
+ 	depends on BR2_PACKAGE_DIRECTFB
+ 	help
+-	   LiTE stands for LiTE is a Toolbox Engine. 
++	   LiTE stands for LiTE is a Toolbox Engine.
+ 	   Its role is to facilitate the functions of DirectFB so that a
+ 	   toolbox could be written on top of DirectFB with less effort.
+ 	   As such LiTE has abstractions for the underlying graphics and
+diff --git a/package/lttng-babeltrace/Config.in b/package/lttng-babeltrace/Config.in
+index f1e341d..3429e11 100644
+--- a/package/lttng-babeltrace/Config.in
++++ b/package/lttng-babeltrace/Config.in
+@@ -4,7 +4,7 @@ config BR2_PACKAGE_LTTNG_BABELTRACE
+ 	select BR2_PACKAGE_UTIL_LINUX
+ 	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
+ 	select BR2_PACKAGE_LIBGLIB2
+-	# libglib2 needs thread support and gettext which needs wchar support, and 
++	# libglib2 needs thread support and gettext which needs wchar support, and
+ 	# we also depends on util-linux which needs wchar
+ 	depends on BR2_USE_WCHAR
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/makedevs/Config.in b/package/makedevs/Config.in
+index 4f8c38d..923150d 100644
+--- a/package/makedevs/Config.in
++++ b/package/makedevs/Config.in
+@@ -1,5 +1,5 @@
+ config BR2_PACKAGE_MAKEDEVS
+-       bool "makedevs"
+-       help
+-         The makedevs utility allows to create a set of device files
+-         according to a configuration file.
+\ No newline at end of file
++	bool "makedevs"
++	help
++	  The makedevs utility allows to create a set of device files
++	  according to a configuration file.
+diff --git a/package/memtester/Config.in b/package/memtester/Config.in
+index dbd8ce1..b04dcd1 100644
+--- a/package/memtester/Config.in
++++ b/package/memtester/Config.in
+@@ -7,4 +7,4 @@ config BR2_PACKAGE_MEMTESTER
+ 	  http://pyropus.ca/software/memtester/
+ 
+ comment "memtester needs a toolchain w/ largefile"
+-       depends on !BR2_LARGEFILE
++	depends on !BR2_LARGEFILE
+diff --git a/package/monit/Config.in b/package/monit/Config.in
+index 014e10b..b5d4b52 100644
+--- a/package/monit/Config.in
++++ b/package/monit/Config.in
+@@ -11,4 +11,4 @@ config BR2_PACKAGE_MONIT
+ 	  http://mmonit.com/monit/
+ 
+ comment "monit needs a toolchain w/ threads"
+-       depends on !BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/mtools/Config.in.host b/package/mtools/Config.in.host
+index d534b5e..96f11d1 100644
+--- a/package/mtools/Config.in.host
++++ b/package/mtools/Config.in.host
+@@ -5,5 +5,5 @@ config BR2_PACKAGE_HOST_MTOOLS
+ 	  Unix without mounting them. It supports Win'95 style long file
+ 	  names, OS/2 Xdf disks and 2m disks (store up to 1992k on a high
+ 	  density 3 1/2 disk).
+-	  
++
+ 	  http://www.tux.org/pub/tux/mtools/
+diff --git a/package/php/Config.in b/package/php/Config.in
+index 6d15da5..46444a5 100644
+--- a/package/php/Config.in
++++ b/package/php/Config.in
+@@ -12,16 +12,16 @@ if BR2_PACKAGE_PHP
+ source "package/php/Config.ext"
+ 
+ config BR2_PACKAGE_PHP_CLI
+-       bool
++	bool
+ 
+ config BR2_PACKAGE_PHP_CGI
+-       bool
++	bool
+ 
+ choice
+-        prompt "Interface"
+-        default BR2_PACKAGE_PHP_SAPI_CGI
+-        help
+-          Select the PHP interface(s).
++	prompt "Interface"
++	default BR2_PACKAGE_PHP_SAPI_CGI
++	help
++	  Select the PHP interface(s).
+ 
+ config BR2_PACKAGE_PHP_SAPI_CGI
+ 	bool "CGI"
+@@ -32,13 +32,13 @@ config BR2_PACKAGE_PHP_SAPI_CGI
+ 	  Common Gateway Interface
+ 
+ config BR2_PACKAGE_PHP_SAPI_CLI
+-        bool "CLI"
++	bool "CLI"
+ 	select BR2_PACKAGE_PHP_CLI
+-        help
+-          Command Line Interface
++	help
++	  Command Line Interface
+ 
+ config BR2_PACKAGE_PHP_SAPI_CLI_CGI
+-        bool "CGI and CLI"
++	bool "CGI and CLI"
+ 	# CGI uses fork()
+ 	depends on BR2_USE_MMU
+ 	select BR2_PACKAGE_PHP_CLI
+diff --git a/package/python-pyparsing/Config.in b/package/python-pyparsing/Config.in
+index 126dd0e..378119a 100644
+--- a/package/python-pyparsing/Config.in
++++ b/package/python-pyparsing/Config.in
+@@ -7,5 +7,5 @@ config BR2_PACKAGE_PYTHON_PYPARSING
+ 	  or the use of regular expressions. The pyparsing module provides
+ 	  a library of classes that client code uses to construct the grammar
+ 	  directly in Python code.
+-	  
++
+ 	  http://pyparsing.wikispaces.com/
+diff --git a/package/sawman/Config.in b/package/sawman/Config.in
+index 8dd3ace..2c53dc4 100644
+--- a/package/sawman/Config.in
++++ b/package/sawman/Config.in
+@@ -2,11 +2,11 @@ config BR2_PACKAGE_SAWMAN
+ 	bool "SawMan (Window Manager)"
+ 	depends on BR2_PACKAGE_DIRECTFB
+ 	help
+-	  SaWMan is a new window manager module for use with DirectFB. 
+-          Its main difference to the default module is that it allows 
+-          one process to be an application and window manager, 
+-          implementing all kinds of diversity, while SaWMan is only the 
+-          working horse.
++	  SaWMan is a new window manager module for use with DirectFB.
++	  Its main difference to the default module is that it allows
++	  one process to be an application and window manager,
++	  implementing all kinds of diversity, while SaWMan is only the
++	  working horse.
+ 
+-	   See http://www.directfb.org/downloads/Extras/README.SaWMan
++	  See http://www.directfb.org/downloads/Extras/README.SaWMan
+ 
+diff --git a/package/slirp/Config.in b/package/slirp/Config.in
+index dedded3..ecd492d 100644
+--- a/package/slirp/Config.in
++++ b/package/slirp/Config.in
+@@ -6,12 +6,12 @@ config BR2_PACKAGE_SLIRP
+ 	  The Spice project deals with both the virtualized devices
+ 	  and the front-end. Interaction between front-end and
+ 	  back-end is done using VD-Interfaces.
+-	  
++
+ 	  This package implements the slirp-part for Spice.
+ 	  Slirp emulates a PPP or SLIP connection over a normal terminal.
+-	  
++
+ 	  http://www.spice-space.org/
+-	  
++
+ 	  NOTE:
+ 	  This package has some history of a unique kind:
+ 	    - originally developped as 'slirp' by Danny Gasparovski, and
+diff --git a/package/snowball-hdmiservice/Config.in b/package/snowball-hdmiservice/Config.in
+index 0ea7c81..a22797f 100644
+--- a/package/snowball-hdmiservice/Config.in
++++ b/package/snowball-hdmiservice/Config.in
+@@ -1,10 +1,10 @@
+ config BR2_PACKAGE_SNOWBALL_HDMISERVICE
+ 	bool "snowball-hdmiservice"
+-	depends on BR2_TOOLCHAIN_HAS_THREADS	
++	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	help
+ 	  HDMI userspace control daemon
+ 
+-	  This package contains the HDMI userspace control daemon for the 
++	  This package contains the HDMI userspace control daemon for the
+ 	  snowball board
+-	  
++
+ 	  http://www.igloocommunity.org
+diff --git a/package/speex/Config.in b/package/speex/Config.in
+index 7e87566..a4f0a9e 100644
+--- a/package/speex/Config.in
++++ b/package/speex/Config.in
+@@ -9,9 +9,9 @@ config BR2_PACKAGE_SPEEX
+ 	  http://www.speex.org/
+ 
+ config BR2_PACKAGE_SPEEX_ARM4
+-       bool
+-       default y
+-       depends on BR2_PACKAGE_SPEEX && (BR2_arm7tdmi || BR2_arm720t || BR2_arm920t || BR2_arm922t || BR2_strongarm || BR2_fa526)
++	bool
++	default y
++	depends on BR2_PACKAGE_SPEEX && (BR2_arm7tdmi || BR2_arm720t || BR2_arm920t || BR2_arm922t || BR2_strongarm || BR2_fa526)
+ 
+ config BR2_PACKAGE_SPEEX_ARM5E
+ 	default y
+diff --git a/package/spice-protocol/Config.in b/package/spice-protocol/Config.in
+index b354361..63b08aa 100644
+--- a/package/spice-protocol/Config.in
++++ b/package/spice-protocol/Config.in
+@@ -6,7 +6,7 @@ config BR2_PACKAGE_SPICE_PROTOCOL
+ 	  The Spice project deals with both the virtualized devices
+ 	  and the front-end. Interaction between front-end and
+ 	  back-end is done using VD-Interfaces.
+-	  
++
+ 	  This package implements the protocol-part of Spice.
+-	  
++
+ 	  http://www.spice-space.org/
+diff --git a/package/spice/Config.in b/package/spice/Config.in
+index e9fd639..efcc5d7 100644
+--- a/package/spice/Config.in
++++ b/package/spice/Config.in
+@@ -19,9 +19,9 @@ config BR2_PACKAGE_SPICE
+ 	  The Spice project deals with both the virtualized devices
+ 	  and the front-end. Interaction between front-end and
+ 	  back-end is done using VD-Interfaces.
+-	  
++
+ 	  This package implements the server-part of Spice.
+-	  
++
+ 	  http://www.spice-space.org/
+ 
+ if BR2_PACKAGE_SPICE
+diff --git a/package/squashfs/Config.in b/package/squashfs/Config.in
+index 2f80eb1..b091856 100644
+--- a/package/squashfs/Config.in
++++ b/package/squashfs/Config.in
+@@ -11,29 +11,29 @@ config BR2_PACKAGE_SQUASHFS
+ if BR2_PACKAGE_SQUASHFS
+ 
+ config BR2_PACKAGE_SQUASHFS_GZIP
+-       bool "gzip support"
+-       default y
+-       select BR2_PACKAGE_ZLIB
+-       help
+-         Support GZIP compression algorithm
++	bool "gzip support"
++	default y
++	select BR2_PACKAGE_ZLIB
++	help
++	  Support GZIP compression algorithm
+ 
+ config BR2_PACKAGE_SQUASHFS_LZMA
+-       bool "lzma support"
+-       select BR2_PACKAGE_XZ
+-       help
+-         Support LZMA compression algorithm
++	bool "lzma support"
++	select BR2_PACKAGE_XZ
++	help
++	  Support LZMA compression algorithm
+ 
+ config BR2_PACKAGE_SQUASHFS_LZO
+-       bool "lzo support"
+-       select BR2_PACKAGE_LZO
+-       help
+-         Support LZO compression algorithm
++	bool "lzo support"
++	select BR2_PACKAGE_LZO
++	help
++	  Support LZO compression algorithm
+ 
+ config BR2_PACKAGE_SQUASHFS_XZ
+-       bool "xz support"
+-       select BR2_PACKAGE_XZ
+-       help
+-         Support XZ compression algorithm
++	bool "xz support"
++	select BR2_PACKAGE_XZ
++	help
++	  Support XZ compression algorithm
+ 
+ endif
+ 
+diff --git a/package/sysstat/Config.in b/package/sysstat/Config.in
+index ceba503..c262799 100644
+--- a/package/sysstat/Config.in
++++ b/package/sysstat/Config.in
+@@ -4,38 +4,38 @@ config BR2_PACKAGE_SYSSTAT
+ 	# Uses fork()
+ 	depends on BR2_USE_MMU
+ 	help
+-          The sysstat utilities are a collection of performance
+-          monitoring tools for Linux. These include sar, sadf, mpstat,
+-          iostat, pidstat and sa tools.
++	  The sysstat utilities are a collection of performance
++	  monitoring tools for Linux. These include sar, sadf, mpstat,
++	  iostat, pidstat and sa tools.
+ 
+-          Some Features :
++	  Some Features :
+ 
+-           * Input / Output and transfer rate statistics (global, per
+-             device, per partition, per network filesystem and per
+-             Linux task / PID)
+-           * CPU statistics (global, per CPU and per Linux task /
+-             PID), including support for virtualization architectures
+-           * Memory and swap space utilization statistics
+-           * Virtual memory, paging and fault statistics
+-           * Per-task (per-PID) memory and page fault statistics
+-           * Global CPU and page fault statistics for tasks and all
+-             their children
+-           * Process creation activity
+-           * Interrupt statistics (global, per CPU and per interrupt,
+-             including potential APIC interrupt sources)
+-           * Extensive network statistics: network interface activity
+-             (number of packets and kB received and transmitted per
+-             second, etc.) including failures from network devices;
+-             network traffic statistics for IP, TCP, ICMP and UDP
+-             protocols based on SNMPv2 standards; support for
+-             IPv6-related protocols.
+-           * NFS server and client activity
+-           * Socket statistics
+-           * Run queue and system load statistics
+-           * Kernel internal tables utilization statistics
+-           * System and per Linux task switching activity
+-           * Swapping statistics
+-           * TTY device activity
+-           * Power management statistics
++	   * Input / Output and transfer rate statistics (global, per
++	     device, per partition, per network filesystem and per
++	     Linux task / PID)
++	   * CPU statistics (global, per CPU and per Linux task /
++	     PID), including support for virtualization architectures
++	   * Memory and swap space utilization statistics
++	   * Virtual memory, paging and fault statistics
++	   * Per-task (per-PID) memory and page fault statistics
++	   * Global CPU and page fault statistics for tasks and all
++	     their children
++	   * Process creation activity
++	   * Interrupt statistics (global, per CPU and per interrupt,
++	     including potential APIC interrupt sources)
++	   * Extensive network statistics: network interface activity
++	     (number of packets and kB received and transmitted per
++	     second, etc.) including failures from network devices;
++	     network traffic statistics for IP, TCP, ICMP and UDP
++	     protocols based on SNMPv2 standards; support for
++	     IPv6-related protocols.
++	   * NFS server and client activity
++	   * Socket statistics
++	   * Run queue and system load statistics
++	   * Kernel internal tables utilization statistics
++	   * System and per Linux task switching activity
++	   * Swapping statistics
++	   * TTY device activity
++	   * Power management statistics
+ 
+ 	  http://pagesperso-orange.fr/sebastien.godard/
+diff --git a/package/taglib/Config.in b/package/taglib/Config.in
+index 1edf582..b96a9bf 100644
+--- a/package/taglib/Config.in
++++ b/package/taglib/Config.in
+@@ -4,9 +4,9 @@ config BR2_PACKAGE_TAGLIB
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	help
+ 	  TagLib is a library for reading and editing the meta-data of
+-          several popular audio formats. Currently it supports both ID3v1
+-          and ID3v2 for MP3 files, Ogg Vorbis comments and ID3 tags and
+-          Vorbis comments in FLAC, MPC, Speex, WavPack and TrueAudio files.
++	  several popular audio formats. Currently it supports both ID3v1
++	  and ID3v2 for MP3 files, Ogg Vorbis comments and ID3 tags and
++	  Vorbis comments in FLAC, MPC, Speex, WavPack and TrueAudio files.
+ 
+ 	  http://taglib.github.com
+ 
+diff --git a/package/ti-gfx/Config.in b/package/ti-gfx/Config.in
+index 9387b57..c349471 100644
+--- a/package/ti-gfx/Config.in
++++ b/package/ti-gfx/Config.in
+@@ -39,7 +39,7 @@ choice
+ config BR2_PACKAGE_TI_GFX_ES3
+ 	bool "es3.x (OMAP35xx, AM35xx Rev 3.1+)"
+ 	help
+-	 OMAP35xx, AM35xx Rev 3.1+
++	  OMAP35xx, AM35xx Rev 3.1+
+ 
+ config BR2_PACKAGE_TI_GFX_ES5
+ 	bool "es5.x (AM37xx, DM37xx)"
+diff --git a/package/tremor/Config.in b/package/tremor/Config.in
+index 2e58e09..6125926 100644
+--- a/package/tremor/Config.in
++++ b/package/tremor/Config.in
+@@ -2,6 +2,6 @@ config BR2_PACKAGE_TREMOR
+ 	bool "tremor (fixed point vorbis decoder)"
+ 	help
+ 	  Tremor is a fixed point implementation of an Ogg Vorbis
+-          decoder. It provides a decoding API similar to libvorbis,
+-          but gives much better performance on systems without a
+-          floating-point unit.
++	  decoder. It provides a decoding API similar to libvorbis,
++	  but gives much better performance on systems without a
++	  floating-point unit.
+diff --git a/package/usbredir/Config.in b/package/usbredir/Config.in
+index c57014a..2157f9c 100644
+--- a/package/usbredir/Config.in
++++ b/package/usbredir/Config.in
+@@ -10,10 +10,10 @@ config BR2_PACKAGE_USBREDIR
+ 	  traffic over a network connection. It is also the name of the
+ 	  software package offering a parsing library, a usbredirhost library
+ 	  and several utilities implementing this protocol.
+-	  
++
+ 	  Note: only the library is installed, not the utilities. Say 'y'
+ 	  below if you want the server too.
+-	  
++
+ 	  http://www.spice-space.org/page/UsbRedir
+ 
+ if BR2_PACKAGE_USBREDIR
+@@ -23,7 +23,7 @@ config BR2_PACKAGE_USBREDIR_SERVER
+ 	help
+ 	  If you want to serve usbredir requests on your target, say 'y'
+ 	  here to have the usbredir server on the target.
+-	  
++
+ 	  Note: the server is not required to use the library.
+ 
+ endif
+diff --git a/package/util-linux/Config.in b/package/util-linux/Config.in
+index d56e631..8c8fd7a 100644
+--- a/package/util-linux/Config.in
++++ b/package/util-linux/Config.in
+@@ -154,7 +154,7 @@ config BR2_PACKAGE_UTIL_LINUX_UTMPDUMP
+ config BR2_PACKAGE_UTIL_LINUX_UUIDD
+ 	bool "uuidd"
+ 	help
+-	 UUID generation daemon
++	  UUID generation daemon
+ 
+ config BR2_PACKAGE_UTIL_LINUX_WALL
+ 	bool "wall"
+diff --git a/package/x11r7/Config.in b/package/x11r7/Config.in
+index 94cf7c6..a534df9 100644
+--- a/package/x11r7/Config.in
++++ b/package/x11r7/Config.in
+@@ -263,4 +263,4 @@ if BR2_PACKAGE_XORG7
+ endif
+ 
+ comment "X.org needs a toolchain w/ wchar, threads"
+-        depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/x11r7/xdriver_xf86-input-evdev/Config.in b/package/x11r7/xdriver_xf86-input-evdev/Config.in
+index cc159c9..88d3e6e 100644
+--- a/package/x11r7/xdriver_xf86-input-evdev/Config.in
++++ b/package/x11r7/xdriver_xf86-input-evdev/Config.in
+@@ -8,4 +8,4 @@ config BR2_PACKAGE_XDRIVER_XF86_INPUT_EVDEV
+ 	  Generic Linux input driver
+ 
+ comment "xf86-input-evdev requires udev to be enabled"
+-        depends on !BR2_PACKAGE_UDEV
++	depends on !BR2_PACKAGE_UDEV
+diff --git a/package/x11r7/xserver_xorg-server/Config.in b/package/x11r7/xserver_xorg-server/Config.in
+index aab9e80..5f0c2d8 100644
+--- a/package/x11r7/xserver_xorg-server/Config.in
++++ b/package/x11r7/xserver_xorg-server/Config.in
+@@ -90,14 +90,14 @@ config BR2_PACKAGE_XSERVER_XORG_SERVER_KDRIVE
+ endchoice
+ 
+ config BR2_PACKAGE_XSERVER_XORG_SERVER_NULL_CURSOR
+-    bool "Null root cursor"
+-    help
+-        Don't display root cursor.
++	bool "Null root cursor"
++	help
++	  Don't display root cursor.
+ 
+ config BR2_PACKAGE_XSERVER_XORG_SERVER_AIGLX
+-    bool "Enable AIGLX Extension"
+-    help
+-        Enable/Use AIGLX extension.
++	bool "Enable AIGLX Extension"
++	help
++	  Enable/Use AIGLX extension.
+ 
+ if BR2_PACKAGE_XSERVER_XORG_SERVER_KDRIVE
+ 
+@@ -131,8 +131,8 @@ endif
+ comment "Optional Servers"
+ 
+ config BR2_PACKAGE_XSERVER_XORG_SERVER_XVFB
+-    bool "Xvfb server"
+-    help
+-        Virtual frame buffer X server.
++	bool "Xvfb server"
++	help
++	  Virtual frame buffer X server.
+ 
+ endif
+diff --git a/package/xenomai/Config.in b/package/xenomai/Config.in
+index 0d5f494..02b6d0f 100644
+--- a/package/xenomai/Config.in
++++ b/package/xenomai/Config.in
+@@ -46,56 +46,56 @@ config BR2_PACKAGE_XENOMAI_VERSION
+ 	  Kernel -> Linux Kernel Extensions menu.
+ 
+ config BR2_PACKAGE_XENOMAI_TESTSUITE
+-       bool "Install testsuite"
+-       help
+-         This option allows to install the Xenomai test programs.
++	bool "Install testsuite"
++	help
++	  This option allows to install the Xenomai test programs.
+ 
+ config BR2_PACKAGE_XENOMAI_RTCAN
+-       bool "RTCan utilities"
+-       help
+-         This option allows to install the Xenomai RT-CAN utilities.
++	bool "RTCan utilities"
++	help
++	  This option allows to install the Xenomai RT-CAN utilities.
+ 
+ config BR2_PACKAGE_XENOMAI_ANALOGY
+-       bool "Analogy libs and utils"
+-       help
+-         This option allows to install the Xenomai Analogy utilities
+-         and libraries
++	bool "Analogy libs and utils"
++	help
++	  This option allows to install the Xenomai Analogy utilities
++	  and libraries
+ 
+ config BR2_PACKAGE_XENOMAI_NATIVE_SKIN
+-       bool "Native skin library"
+-       default y
+-       help
+-	 This option allows to install the Native Xenomai skin
++	bool "Native skin library"
++	default y
++	help
++	  This option allows to install the Native Xenomai skin
+ 
+ config BR2_PACKAGE_XENOMAI_POSIX_SKIN
+-       bool "POSIX skin library"
+-       default y
+-       help
+-	 This option allows to install the POSIX Xenomai skin
++	bool "POSIX skin library"
++	default y
++	help
++	  This option allows to install the POSIX Xenomai skin
+ 
+ config BR2_PACKAGE_XENOMAI_VXWORKS_SKIN
+-       bool "VX-Works skin library"
+-       help
+-	 This option allows to install the VX-Works Xenomai skin
++	bool "VX-Works skin library"
++	help
++	  This option allows to install the VX-Works Xenomai skin
+ 
+ config BR2_PACKAGE_XENOMAI_PSOS_SKIN
+-       bool "PSOS skin library"
+-       help
+-	 This option allows to install the PSOS Xenomai skin
++	bool "PSOS skin library"
++	help
++	  This option allows to install the PSOS Xenomai skin
+ 
+ config BR2_PACKAGE_XENOMAI_RTAI_SKIN
+-       bool "RTAI skin library"
+-       help
+-	 This option allows to install the RTAI Xenomai skin
++	bool "RTAI skin library"
++	help
++	  This option allows to install the RTAI Xenomai skin
+ 
+ config BR2_PACKAGE_XENOMAI_UITRON_SKIN
+-       bool "uiTron skin library"
+-       help
+-	 This option allows to install the uiTron Xenomai skin
++	bool "uiTron skin library"
++	help
++	  This option allows to install the uiTron Xenomai skin
+ 
+ config BR2_PACKAGE_XENOMAI_VRTX_SKIN
+-       bool "VRTX skin library"
+-       help
+-	 This option allows to install the VRTX Xenomai skin
++	bool "VRTX skin library"
++	help
++	  This option allows to install the VRTX Xenomai skin
+ 
+ endif
+diff --git a/package/xfsprogs/Config.in b/package/xfsprogs/Config.in
+index 0bd4199..2df72ad 100644
+--- a/package/xfsprogs/Config.in
++++ b/package/xfsprogs/Config.in
+@@ -3,7 +3,7 @@ comment "Note that xfsprogs needs a toolchain with UCLIBC_SV4_DEPRECATED and UCL
+ 	depends on BR2_PACKAGE_XFSPROGS
+ 
+ comment "xfsprogs needs a toolchain w/ largefile, wchar"
+-        depends on !(BR2_LARGEFILE && BR2_USE_WCHAR)
++	depends on !(BR2_LARGEFILE && BR2_USE_WCHAR)
+ 
+ config BR2_PACKAGE_XFSPROGS
+ 	bool "xfsprogs"
+diff --git a/system/Config.in b/system/Config.in
+index 266e709..c8f2758 100644
+--- a/system/Config.in
++++ b/system/Config.in
+@@ -1,16 +1,16 @@
+ menu "System configuration"
+ 
+ config BR2_TARGET_GENERIC_HOSTNAME
+-       string "System hostname"
+-       default "buildroot"
+-       help
+-         Select system hostname to be stored in /etc/hostname.
++	string "System hostname"
++	default "buildroot"
++	help
++	  Select system hostname to be stored in /etc/hostname.
+ 
+ config BR2_TARGET_GENERIC_ISSUE
+-       string "System banner"
+-       default "Welcome to Buildroot"
+-       help
+-         Select system banner (/etc/issue) to be displayed at login.
++	string "System banner"
++	default "Welcome to Buildroot"
++	help
++	  Select system banner (/etc/issue) to be displayed at login.
+ 
+ choice
+ 	bool "Passwords encoding"
+@@ -200,8 +200,8 @@ config BR2_TARGET_GENERIC_ROOT_PASSWD
+ 	  .config file or the build log may be distributed!
+ 
+ config BR2_TARGET_GENERIC_GETTY
+-       bool "Run a getty (login prompt) after boot"
+-       default y
++	bool "Run a getty (login prompt) after boot"
++	default y
+ 
+ if BR2_TARGET_GENERIC_GETTY
+ menu "getty options"
+@@ -218,7 +218,7 @@ choice
+ 	  Select a baudrate to use.
+ 
+ config BR2_TARGET_GENERIC_GETTY_BAUDRATE_KEEP
+-       bool "keep kernel default"
++	bool "keep kernel default"
+ config BR2_TARGET_GENERIC_GETTY_BAUDRATE_9600
+ 	bool "9600"
+ config BR2_TARGET_GENERIC_GETTY_BAUDRATE_19200
 diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-index a7fcca7..22e3fb2 100644
+index 7f9b40a..a7fcca7 100644
 --- a/toolchain/toolchain-external/Config.in
 +++ b/toolchain/toolchain-external/Config.in
-@@ -3,12 +3,16 @@ if BR2_TOOLCHAIN_EXTERNAL
- choice
- 	prompt "Toolchain"
+@@ -478,14 +478,14 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH201209
+ 	  from Mentor Graphics. It uses gcc 4.7.2, binutils 2.23.51,
+ 	  glibc 2.16, uClibc 0.9.30, gdb 7.4.50 and kernel headers
+ 	  3.5.4. It has support for the following variants:
+-            - SH4A, glibc, little endian
+-              Default.
+-            - SH4A, glibc, big endian
+-              Add -mb to BR2_TARGET_OPTIMIZATION
+-            - SH4A, uClibc, little endian
+-              Not usable in Buildroot yet.
+-            - SH4A, uClibc, big endian
+-              Not usable in Buildroot yet.
++	    - SH4A, glibc, little endian
++	      Default.
++	    - SH4A, glibc, big endian
++	      Add -mb to BR2_TARGET_OPTIMIZATION
++	    - SH4A, uClibc, little endian
++	      Not usable in Buildroot yet.
++	    - SH4A, uClibc, big endian
++	      Not usable in Buildroot yet.
  
-+comment "(e)glibc toolchains only available with shared lib support"
-+	depends on BR2_PREFER_STATIC_LIB
-+
- config BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_09
- 	bool "Linaro 2013.09"
- 	depends on BR2_arm
- 	depends on BR2_GCC_TARGET_ARCH = "armv7-a"
- 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
- 	depends on BR2_ARM_EABIHF
-+	depends on !BR2_PREFER_STATIC_LIB
- 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
- 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	select BR2_INSTALL_LIBSTDCPP
-@@ -30,6 +34,7 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_08
- 	depends on BR2_GCC_TARGET_ARCH = "armv7-a"
- 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
- 	depends on BR2_ARM_EABIHF
-+	depends on !BR2_PREFER_STATIC_LIB
- 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
- 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	select BR2_INSTALL_LIBSTDCPP
-@@ -51,6 +56,7 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_07
- 	depends on BR2_GCC_TARGET_ARCH = "armv7-a"
- 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
- 	depends on BR2_ARM_EABIHF
-+	depends on !BR2_PREFER_STATIC_LIB
- 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
- 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	select BR2_INSTALL_LIBSTDCPP
-@@ -69,12 +75,14 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_07
- comment "Linaro toolchains available for Cortex-A + EABIhf"
- 	depends on BR2_arm
- 	depends on BR2_GCC_TARGET_ARCH != "armv7-a" || !BR2_ARM_EABIHF
-+	depends on !BR2_PREFER_STATIC_LIB
- 
- config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201305
- 	bool "Sourcery CodeBench ARM 2013.05"
- 	depends on BR2_arm
- 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
- 	depends on BR2_ARM_EABI
-+	depends on !BR2_PREFER_STATIC_LIB
- 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
- 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	select BR2_INSTALL_LIBSTDCPP
-@@ -100,6 +108,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201203
- 	depends on BR2_arm
- 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
- 	depends on BR2_ARM_EABI
-+	depends on !BR2_PREFER_STATIC_LIB
- 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
- 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	select BR2_INSTALL_LIBSTDCPP
-@@ -125,6 +134,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201109
- 	depends on BR2_arm
- 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
- 	depends on BR2_ARM_EABI
-+	depends on !BR2_PREFER_STATIC_LIB
- 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
- 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	select BR2_INSTALL_LIBSTDCPP
-@@ -148,6 +158,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201109
- comment "Sourcery CodeBench toolchains available for the EABI ABI"
- 	depends on BR2_arm
- 	depends on !BR2_ARM_EABI
-+	depends on !BR2_PREFER_STATIC_LIB
- 
- config BR2_TOOLCHAIN_EXTERNAL_ARAGO_ARMV7A_201109
- 	bool "Arago ARMv7 2011.09"
-@@ -156,6 +167,7 @@ config BR2_TOOLCHAIN_EXTERNAL_ARAGO_ARMV7A_201109
- 	depends on BR2_GCC_TARGET_ARCH = "armv7-a"
- 	depends on BR2_ARM_EABI
- 	depends on BR2_ARM_CPU_HAS_VFPV3 || BR2_ARM_CPU_MAYBE_HAS_VFPV3
-+	depends on !BR2_PREFER_STATIC_LIB
- 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
- 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	select BR2_INSTALL_LIBSTDCPP
-@@ -178,6 +190,7 @@ config BR2_TOOLCHAIN_EXTERNAL_ARAGO_ARMV5TE_201109
- 		BR2_GCC_TARGET_ARCH != "armv4" && \
- 		BR2_GCC_TARGET_ARCH != "armv5t"
- 	depends on BR2_ARM_EABI
-+	depends on !BR2_PREFER_STATIC_LIB
- 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
- 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	select BR2_INSTALL_LIBSTDCPP
-@@ -193,6 +206,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201305
- 	depends on BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el
- 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
- 	depends on !BR2_MIPS_NABI32
-+	depends on !BR2_PREFER_STATIC_LIB
- 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
- 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	select BR2_INSTALL_LIBSTDCPP
-@@ -260,6 +274,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201209
- 	depends on BR2_mips || BR2_mipsel
- 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
- 	depends on !BR2_MIPS_NABI32
-+	depends on !BR2_PREFER_STATIC_LIB
- 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
- 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	select BR2_INSTALL_LIBSTDCPP
-@@ -327,6 +342,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201203
- 	depends on BR2_mips || BR2_mipsel
- 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
- 	depends on !BR2_MIPS_NABI32
-+	depends on !BR2_PREFER_STATIC_LIB
- 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
- 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	select BR2_INSTALL_LIBSTDCPP
-@@ -391,11 +407,13 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201203
- 
- comment "Sourcery CodeBench toolchains are only available for MIPS/MIPS64 o32 and n64"
- 	depends on BR2_MIPS_NABI32
-+	depends on !BR2_PREFER_STATIC_LIB
- 
- config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201305
- 	bool "Sourcery CodeBench Nios-II 2013.05"
- 	depends on BR2_nios2
- 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
-+	depends on !BR2_PREFER_STATIC_LIB
- 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
- 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	select BR2_INSTALL_LIBSTDCPP
-@@ -409,6 +427,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201103
- 	bool "Sourcery CodeBench PowerPC 2011.03"
- 	depends on BR2_powerpc
- 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
-+	depends on !BR2_PREFER_STATIC_LIB
- 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
- 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	select BR2_INSTALL_LIBSTDCPP
-@@ -439,6 +458,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201009
- 	bool "Sourcery CodeBench PowerPC 2010.09"
- 	depends on BR2_powerpc
- 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
-+	depends on !BR2_PREFER_STATIC_LIB
- 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
- 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	select BR2_INSTALL_LIBSTDCPP
-@@ -469,6 +489,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH201209
- 	bool "Sourcery CodeBench SH 2012.09"
- 	depends on BR2_sh4a || BR2_sh4aeb
- 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
-+	depends on !BR2_PREFER_STATIC_LIB
- 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
- 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	select BR2_INSTALL_LIBSTDCPP
-@@ -491,6 +512,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH201203
+ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH201203
  	bool "Sourcery CodeBench SH 2012.03"
- 	depends on BR2_sh4a || BR2_sh4aeb
- 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
-+	depends on !BR2_PREFER_STATIC_LIB
- 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
- 	select BR2_INSTALL_LIBSTDCPP
- 	select BR2_HOSTARCH_NEEDS_IA32_LIBS
-@@ -512,6 +534,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH201103
+@@ -499,14 +499,14 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH201203
+ 	  from Mentor Graphics. It uses gcc 4.6.3, binutils 2.21.53,
+ 	  glibc 2.15, uClibc 0.9.30, gdb 7.2.50 and kernel headers
+ 	  3.2.10. It has support for the following variants:
+-            - SH4A, glibc, little endian
+-              Default.
+-            - SH4A, glibc, big endian
+-              Add -mb to BR2_TARGET_OPTIMIZATION
+-            - SH4A, uClibc, little endian
+-              Not usable in Buildroot yet.
+-            - SH4A, uClibc, big endian
+-              Not usable in Buildroot yet.
++	    - SH4A, glibc, little endian
++	      Default.
++	    - SH4A, glibc, big endian
++	      Add -mb to BR2_TARGET_OPTIMIZATION
++	    - SH4A, uClibc, little endian
++	      Not usable in Buildroot yet.
++	    - SH4A, uClibc, big endian
++	      Not usable in Buildroot yet.
+ 
+ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH201103
  	bool "Sourcery CodeBench SH 2011.03"
- 	depends on BR2_sh4a || BR2_sh4aeb
- 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
-+	depends on !BR2_PREFER_STATIC_LIB
- 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
- 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	select BR2_INSTALL_LIBSTDCPP
-@@ -572,6 +595,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86_201209
- 	bool "Sourcery CodeBench x86/x86_64 2012.09"
- 	depends on BR2_i386 || BR2_x86_64
- 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
-+	depends on !BR2_PREFER_STATIC_LIB
- 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
- 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	select BR2_INSTALL_LIBSTDCPP
-@@ -596,6 +620,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86_201203
- 	bool "Sourcery CodeBench x86/x86_64 2012.03"
- 	depends on BR2_i386 || BR2_x86_64
- 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
-+	depends on !BR2_PREFER_STATIC_LIB
- 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
- 	select BR2_INSTALL_LIBSTDCPP
- 	select BR2_HOSTARCH_NEEDS_IA32_LIBS
-@@ -619,6 +644,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86_201109
- 	bool "Sourcery CodeBench x86/x86_64 2011.09"
- 	depends on BR2_i386 || BR2_x86_64
- 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
-+	depends on !BR2_PREFER_STATIC_LIB
- 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
- 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	select BR2_INSTALL_LIBSTDCPP
-@@ -677,6 +703,7 @@ config BR2_TOOLCHAIN_EXTERNAL_XILINX_MICROBLAZEEL_14_3
- 	bool "Xilinx Little Endian Microblaze GNU Tools 14.3"
- 	depends on BR2_microblazeel
- 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
-+	depends on !BR2_PREFER_STATIC_LIB
- 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
- 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	select BR2_HOSTARCH_NEEDS_IA32_LIBS
-@@ -689,6 +716,7 @@ config BR2_TOOLCHAIN_EXTERNAL_XILINX_MICROBLAZEEL_V2
- 	bool "Xilinx Little Endian Microblaze GNU Tools v2"
- 	depends on BR2_microblazeel
- 	depends on BR2_HOSTARCH = "x86_64"
-+	depends on !BR2_PREFER_STATIC_LIB
- 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
- 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	help
-@@ -699,6 +727,7 @@ config BR2_TOOLCHAIN_EXTERNAL_XILINX_MICROBLAZEBE_14_3
- 	bool "Xilinx Big Endian Microblaze GNU Tools"
- 	depends on BR2_microblazebe
- 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
-+	depends on !BR2_PREFER_STATIC_LIB
- 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
- 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	select BR2_HOSTARCH_NEEDS_IA32_LIBS
-@@ -711,6 +740,7 @@ config BR2_TOOLCHAIN_EXTERNAL_XILINX_MICROBLAZEBE_V2
- 	bool "Xilinx Big Endian Microblaze GNU Tools"
- 	depends on BR2_microblazebe
- 	depends on BR2_HOSTARCH = "x86_64"
-+	depends on !BR2_PREFER_STATIC_LIB
- 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
- 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	help
-@@ -721,6 +751,7 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64_13_09
- 	bool "Linaro AArch64 13.09"
- 	depends on BR2_aarch64
- 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
-+	depends on !BR2_PREFER_STATIC_LIB
- 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
- 	select BR2_INSTALL_LIBSTDCPP
- 	select BR2_HOSTARCH_NEEDS_IA32_LIBS
-@@ -733,6 +764,7 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64_13_08
- 	bool "Linaro AArch64 13.08"
- 	depends on BR2_aarch64
- 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
-+	depends on !BR2_PREFER_STATIC_LIB
- 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
- 	select BR2_INSTALL_LIBSTDCPP
- 	select BR2_HOSTARCH_NEEDS_IA32_LIBS
-@@ -745,6 +777,7 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64_13_07
- 	bool "Linaro AArch64 13.07"
- 	depends on BR2_aarch64
- 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
-+	depends on !BR2_PREFER_STATIC_LIB
- 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
- 	select BR2_INSTALL_LIBSTDCPP
- 	select BR2_HOSTARCH_NEEDS_IA32_LIBS
-@@ -869,6 +902,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CUSTOM_UCLIBC
+@@ -993,28 +993,28 @@ config BR2_TOOLCHAIN_EXTERNAL_GDB_SERVER_COPY
+ # always installed. When a different binary format is used, we offer the option
+ # of installing the FDPIC shared libraries.
+ config BR2_BFIN_INSTALL_FDPIC_SHARED
+-       bool "Install FDPIC shared libraries"
+-       depends on BR2_bfin && !BR2_BINFMT_FDPIC
+-       help
+-         The Linux kernel supports running both FDPIC and FLAT applications
+-         concurrently if the binary format specific libraries are installed
+-         properly. This option allows developer to install FDPIC libraries
+-         into a buildroot rootfs image built with binary format that is not
+-         FDPIC.
++	bool "Install FDPIC shared libraries"
++	depends on BR2_bfin && !BR2_BINFMT_FDPIC
++	help
++	  The Linux kernel supports running both FDPIC and FLAT applications
++	  concurrently if the binary format specific libraries are installed
++	  properly. This option allows developer to install FDPIC libraries
++	  into a buildroot rootfs image built with binary format that is not
++	  FDPIC.
  
- config BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC
- 	bool "glibc/eglibc"
-+	depends on !BR2_PREFER_STATIC_LIB
- 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
- 	help
- 	  Select this option if your external toolchain uses the GNU C
-@@ -880,6 +914,9 @@ config BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC
- 	  toolchain with eglibc configured to exclude key features may
- 	  cause build failures to some packages.
+ # When the FLAT shared binary format is used, we force the installation
+ # of the corresponding libraries. When a different binary format is
+ # used, we offer the option of installing the FLAT shared libraries.
+ config BR2_BFIN_INSTALL_FLAT_SHARED
+-       bool "Install FLAT shared libraries" if !BR2_BINFMT_FLAT_SHARED
+-       depends on BR2_bfin
+-       default y if BR2_BINFMT_FLAT_SHARED
+-       help
+-         The Linux kernel supports running both FDPIC and FLAT applications
+-         concurrently if the binary format specific libraries are installed
+-         properly. This option allows developer to install FLAT libraries
+-         into a buildroot rootfs image built with binary format that is not
+-         shared FLAT.
++	bool "Install FLAT shared libraries" if !BR2_BINFMT_FLAT_SHARED
++	depends on BR2_bfin
++	default y if BR2_BINFMT_FLAT_SHARED
++	help
++	  The Linux kernel supports running both FDPIC and FLAT applications
++	  concurrently if the binary format specific libraries are installed
++	  properly. This option allows developer to install FLAT libraries
++	  into a buildroot rootfs image built with binary format that is not
++	  shared FLAT.
  
-+comment "(e)glibc only available with shared lib support"
-+	depends on BR2_PREFER_STATIC_LIB
-+
- config BR2_TOOLCHAIN_EXTERNAL_CUSTOM_MUSL
- 	bool "musl"
- 	select BR2_TOOLCHAIN_EXTERNAL_MUSL
+ endif # BR2_TOOLCHAIN_EXTERNAL
+ 
