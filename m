@@ -1,48 +1,29 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 11 Nov 2013 14:58:46 +0100
-Subject: [Buildroot] [PATCH] ethtool: bump version to 3.12.1
-Message-ID: <1384178326-29222-1-git-send-email-thomas.petazzoni@free-electrons.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 11 Nov 2013 15:05:52 +0100
+Subject: [Buildroot] [PATCH v2] log4cxx: needs threads
+In-Reply-To: <1384177029-25518-1-git-send-email-spdawson@gmail.com>
+ (spdawson@gmail.com's message of "Mon, 11 Nov 2013 13:37:09 +0000")
+References: <1384177029-25518-1-git-send-email-spdawson@gmail.com>
+Message-ID: <87k3gf6njz.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-3.12 release notes:
+>>>>> "spdawson" == spdawson  <spdawson@gmail.com> writes:
 
-	* Fix: Remove alternate method to check for VLAN tag offload on Linux
-	  < 2.6.37 (-k/-K options)
-	* Fix: Hide state of VLAN tag offload and LRO if the kernel is too old
-	  for us to reliably detect them (-k option)
-	* Feature: Add register dump support for Solarflare SFC9100 family
-	  (-d option)
+> From: Simon Dawson <spdawson@gmail.com>
+> Fixes build failures such as the following.
 
-3.12.1 release notes:
+>   http://autobuild.buildroot.net/results/7b73901d9e8b5098cd96b54d292bb3ffffb3fe37/
 
-This includes a couple of changes that should have gone into 3.12.
+> Signed-off-by: Simon Dawson <spdawson@gmail.com>
+> ---
+>  v2: At the suggestion of Thomas De Schampheleire, update the comment to
+>  explain that dynamic library support is required
 
-	* Fix: Memory corruption when applying external calibration to
-	  SFF-8472 module diagnostics (-m option)
-	* Feature: Add Intel 82599 and x540 DCB registers to dump
-	  (-d option)
+Committed, thanks.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/ethtool/ethtool.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/package/ethtool/ethtool.mk b/package/ethtool/ethtool.mk
-index 7c22269..32b39e8 100644
---- a/package/ethtool/ethtool.mk
-+++ b/package/ethtool/ethtool.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--ETHTOOL_VERSION = 3.11
-+ETHTOOL_VERSION = 3.12.1
- ETHTOOL_SOURCE = ethtool-$(ETHTOOL_VERSION).tar.xz
- ETHTOOL_SITE = $(BR2_KERNEL_MIRROR)/software/network/ethtool
- ETHTOOL_LICENSE = GPLv2
 -- 
-1.8.1.2
+Bye, Peter Korsgaard
