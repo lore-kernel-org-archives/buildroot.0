@@ -1,72 +1,37 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Mon, 11 Nov 2013 12:57:33 +0100
-Subject: [Buildroot] [PATCH 6 of 6 v2] legal info: update documentation
- with split target/host output
-In-Reply-To: <80513bfceb0f901ca09a.1381151713@argentina>
-References: <patchbomb.1381151707@argentina>
- <80513bfceb0f901ca09a.1381151713@argentina>
-Message-ID: <CAAXf6LWZRQ-nbQJN4EqKdLwEADw4myFkFRqHLT12qZBvd6ehbw@mail.gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon, 11 Nov 2013 12:12:46 +0000 (UTC)
+Subject: [Buildroot] [Bug 6668] iptables limit module alignment problem on
+	mips64
+In-Reply-To: <bug-6668-163@https.bugs.busybox.net/>
+References: <bug-6668-163@https.bugs.busybox.net/>
+Message-ID: <20131111121246.D34B69BAFF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Oct 7, 2013 at 3:15 PM, Thomas De Schampheleire
-<patrickdepinguin@gmail.com> wrote:
-> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
->
-> ---
-> v2: new patch
->
->  docs/manual/legal-notice.txt |  15 +++++++++------
->  1 files changed, 9 insertions(+), 6 deletions(-)
->
-> diff --git a/docs/manual/legal-notice.txt b/docs/manual/legal-notice.txt
-> --- a/docs/manual/legal-notice.txt
-> +++ b/docs/manual/legal-notice.txt
-> @@ -39,16 +39,19 @@ There you will find:
->  * +buildroot.config+: this is the Buildroot configuration file that is usually
->    produced with +make menuconfig+, and which is necessary to reproduce the
->    build.
-> -* The source code for all packages; this is saved in the +sources/+
-> -  subdirectory (except for proprietary packages, whose source code is not
-> -  saved);
-> -  patches applied to some packages by Buildroot are distributed with the
-> -  Buildroot sources and are not duplicated in the +sources/+ subdirectory.
-> -* A manifest file listing the configured packages, their version, license and
-> -  related information.
-> +* The source code for all packages; this is saved in the +sources/+ and
-> +  +host-sources/+ subdirectories for target and host packages respectively.
-> +  The source code for packages that set +<PKG>_REDISTRIBUTE = NO+ will not be
-> +  saved.
-> +  Patches applied to some packages by Buildroot are distributed with the
-> +  Buildroot sources and are not duplicated in the +sources/+ and +host-sources/+
-> +  subdirectories.
-> +* A manifest file (one for host and one for target packages) listing the
-> +  configured packages, their version, license and related information.
->    Some of this information might not be defined in Buildroot; such items are
->    marked as "unknown".
-> -* A +licenses/+ subdirectory, which contains the license text of packages.
-> +* The license texts of all packages, in the +licenses/+ and +host-licenses/+
-> +  subdirectories for target and host packages respectively.
->    If the license file(s) are not defined in Buildroot, the file is not produced
->    and a warning in the +README+ indicates this.
->
-> @@ -72,7 +75,7 @@ License abbreviations
->  ---------------------
->
->  Here is a list of the licenses that are most widely used by packages in
-> -Buildroot, with the name used in the manifest file:
-> +Buildroot, with the name used in the manifest files:
->
->  * `GPLv2`:
->    http://www.gnu.org/licenses/old-licenses/gpl-2.0.html[
+https://bugs.busybox.net/show_bug.cgi?id=6668
 
-This patch, together with the first one in this series, are the only
-ones that still need a review, all others have been Acked by Luca.
+--- Comment #3 from Gustavo Zacarias <gustavo@zacarias.com.ar> 2013-11-11 12:12:46 UTC ---
+On a second look i was somewhat rude, so sorry about that.
 
-It would be great if this could get in 2013.11...
+This is a volunteer effort and people labeling problems as critical when they
+aren't is sometimes very draining, it's like people going all "me me me" and
+wanting to be the center of the universe or something - when in fact it'll
+probably get them ignored on a perpetual basis when they do that too much.
 
-Thanks a lot,
-Thomas
+Taking that into consideration most of the contributors don't have mips64
+boards to test things on and the qemu emulation is mostly broken so only basic
+things can be tested (bare shell, can't do much), and only mips64 N32 ABI uses
+mixed 64/32-bit kernel/userspace from all the combinations supported at the
+moment, so we can't even reproduce this issue.
+
+Again, sorry, and i suggest you take it up with the netfilter dev team at their
+bugzilla or their mailing list (probably better).
+And please do provide them with details including kernel & iptables version.
+
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
