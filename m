@@ -1,77 +1,41 @@
-From: Spenser Gilliland <spenser@gillilanding.com>
-Date: Tue, 12 Nov 2013 11:31:44 -0600
-Subject: [Buildroot] [PATCH v2 4/5] gdb: add microblaze internal toolchain
-In-Reply-To: <1384277505-11503-1-git-send-email-spenser@gillilanding.com>
-References: <1384277505-11503-1-git-send-email-spenser@gillilanding.com>
-Message-ID: <1384277505-11503-5-git-send-email-spenser@gillilanding.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 12 Nov 2013 18:42:47 +0100
+Subject: [Buildroot] [PATCH 2/2] busybox: ensure $(BUSYBOX_BUILD_CONFIG)
+ is writable
+In-Reply-To: <CANxTyt5qCLXrOCnp5hrxwTkzfoH3DORs6uoDiBr5Jr1w3+0R2A@mail.gmail.com>
+References: <cover.1384191560.git.yann.morin.1998@free.fr>
+ <0b4acecdd3e9fb7d9510c206338ebbdfa483ca9e.1384191560.git.yann.morin.1998@free.fr>
+ <CANxTyt5qCLXrOCnp5hrxwTkzfoH3DORs6uoDiBr5Jr1w3+0R2A@mail.gmail.com>
+Message-ID: <20131112174247.GA3434@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Danomi, All,
 
-Signed-off-by: Spenser Gilliland <spenser@gillilanding.com>
----
- package/gdb/Config.in.host |    4 ++++
- package/gdb/gdb.mk         |    9 ++++++++-
- 2 files changed, 12 insertions(+), 1 deletions(-)
+On 2013-11-11 15:22 -0500, Danomi Manchego spake thusly:
+> On Mon, Nov 11, 2013 at 12:45 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> > From: Nathan Lynch <ntl@pobox.com>
+> >
+> > If $(BUSYBOX_CONFIG_FILE) is read-only (eg. because Buildroot's
+> > source dir is), the sed fixups to $(BUSYBOX_BUILD_CONFIG) fail.
+> 
+> These share the same issue:
+> 
+> - linux.mk:  $(KERNEL_ARCH_PATH)/configs/buildroot_defconfig
+> - uclibc,mk:  $(UCLIBC_DIR)/.oldconfig
 
-diff --git a/package/gdb/Config.in.host b/package/gdb/Config.in.host
-index 128aed9..aae0109 100644
---- a/package/gdb/Config.in.host
-+++ b/package/gdb/Config.in.host
-@@ -18,6 +18,7 @@ choice
- 	depends on !BR2_arc
- 	default BR2_GDB_VERSION_6_6 if BR2_bfin
- 	default BR2_GDB_VERSION_6_7_1_AVR32_2_1_5 if BR2_avr32
-+	default BR2_GDB_VERSION_7_6_MICROBLAZE if BR2_microblaze
- 	default BR2_GDB_VERSION_7_5
- 	help
- 	  Select the version of gdb you wish to use.
-@@ -48,6 +49,8 @@ choice
- 		bool "gdb 7.5.x"
- 		depends on !BR2_bfin
- 
-+	config BR2_GDB_VERSION_7_6_MICROBLAZE
-+		bool "gdb 7.6-microblaze"
- endchoice
- 
- config BR2_GDB_VERSION
-@@ -59,5 +62,6 @@ config BR2_GDB_VERSION
- 	default "7.4.1"    if BR2_GDB_VERSION_7_4
- 	default "7.5.1"    if BR2_GDB_VERSION_7_5
- 	default "7.5.1-arc" if BR2_arc
-+	default "7.6-microblaze" if BR2_microblaze
- 
- endif
-diff --git a/package/gdb/gdb.mk b/package/gdb/gdb.mk
-index 9cf90e3..65485da 100644
---- a/package/gdb/gdb.mk
-+++ b/package/gdb/gdb.mk
-@@ -21,15 +21,22 @@ GDB_VERSION = 7.5.1
- endif
- endif
- 
-+GDB_SOURCE = gdb-$(GDB_VERSION).tar.bz2
-+
- ifeq ($(BR2_arc),y)
- GDB_SITE = $(BR2_ARC_SITE)
- endif
- 
-+ifeq ($(BR2_microblaze),y)
-+GDB_VERSION = 6be65fb56ea6694a9260733a536a023a1e2d4d57
-+GDB_SITE = http://github.com/Xilinx/gdb/tarball/$(GDB_VERSION)
-+GDB_SOURCE = gdb-$(GDB_VERSION).tar.gz
-+endif
-+
- ifeq ($(GDB_VERSION),6.7.1-avr32-2.1.5)
- GDB_SITE = ftp://www.at91.com/pub/buildroot/
- endif
- 
--GDB_SOURCE = gdb-$(GDB_VERSION).tar.bz2
- GDB_LICENSE = GPLv2+ LGPLv2+ GPLv3+ LGPLv3+
- GDB_LICENSE_FILES = COPYING COPYING.LIB COPYING3 COPYING3.LIB
- 
+Indeed, I'll add them to the series. Thanks! :-)
+
+Regards,
+Yann E. MORIN.
+
 -- 
-1.7.1
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
