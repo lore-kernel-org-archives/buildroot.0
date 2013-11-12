@@ -1,47 +1,79 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Tue, 12 Nov 2013 21:54:50 +0100
-Subject: [Buildroot] [PATCH 1/1] omniorb: add COS Naming Service
-In-Reply-To: <1384288305-4945-1-git-send-email-mlweber1@rockwellcollins.com>
-References: <1384288305-4945-1-git-send-email-mlweber1@rockwellcollins.com>
-Message-ID: <9e8746c1-8e33-4c55-b4e2-b2b1e6181f86@email.android.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 12 Nov 2013 22:07:52 +0100
+Subject: [Buildroot] [PATCH v2 2/5] gcc: add microblaze internal
+ toolchain
+In-Reply-To: <1384277505-11503-3-git-send-email-spenser@gillilanding.com>
+References: <1384277505-11503-1-git-send-email-spenser@gillilanding.com>
+ <1384277505-11503-3-git-send-email-spenser@gillilanding.com>
+Message-ID: <20131112220752.6fea927d@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Matt,
+Dear Spenser Gilliland,
 
-Matt Weber <mlweber1@rockwellcollins.com> wrote:
->
->Signed-off-by: Matt Weber <mlweber1@rockwellcollins.com>
->---
-> package/omniorb/Config.in  |    9 +++++++++
-> package/omniorb/omniorb.mk |    8 ++++++++
-> 2 files changed, 17 insertions(+), 0 deletions(-)
->
->diff --git a/package/omniorb/Config.in b/package/omniorb/Config.in
->index 6326688..22527fc 100644
->--- a/package/omniorb/Config.in
->+++ b/package/omniorb/Config.in
->@@ -10,5 +10,14 @@ config BR2_PACKAGE_OMNIORB
-> 
-> 	  http://omniorb.sourceforge.net/
-> 
->+if BR2_PACKAGE_OMNIORB
->+
->+config BR2_PACKAGE_OMNIORB_WITH_SERVICES
->+        bool "COS Naming Service"
->+        default y
->+        help
->+          omniORB COS Naming Service
->+endif
->+
-> comment "omniORB needs a toolchain w/ C++"
-> 	depends on !BR2_INSTALL_LIBSTDCPP
+On Tue, 12 Nov 2013 11:31:42 -0600, Spenser Gilliland wrote:
 
-I think it makes more sense to keep this comment close to the config option it applies to, thus moving the new cos option below it.
-I know that many packages do not follow this, but I'm planning on fixing that...
+> +# Until gcc 4.7, a three stage build process was needed when using
+> +# NPTL. This hidden option tells whether gcc is a version that
+> +# requires this three stage build process.
+> +config BR2_GCC_VERSION_NEEDS_THREE_STAGE_BUILD
+> +	bool
 
-Best regards,
+Hum, is this really meant to be part of your patch? :-)
+
+
+> @@ -16,39 +23,44 @@ choice
+>  	config BR2_GCC_VERSION_4_2_2_AVR32_2_1_5
+>  		depends on BR2_avr32
+>  		bool "gcc 4.2.2-avr32-2.1.5"
+> +		select BR2_GCC_VERSION_NEEDS_THREE_STAGE_BUILD
+
+and this (and all the other occurrences).
+
+> +GCC_SOURCE = gcc-$(GCC_VERSION).tar.bz2
+> +else ifeq ($(findstring microblaze,$(GCC_VERSION)),microblaze)
+> +MBGCC_VERSION = b93bb009e021aba64dd4b8cdb0bbc5a176c55543
+
+MBGCC_VERSION ?
+
+> +GCC_SITE = http://github.com/Xilinx/gcc/tarball/$(MBGCC_VERSION)
+> +GCC_SOURCE = gcc-$(GCC_VERSION).tar.gz
+>  else
+>  GCC_SITE = $(BR2_GNU_MIRROR:/=)/gcc/gcc-$(GCC_VERSION)
+> -endif
+> -
+>  GCC_SOURCE = gcc-$(GCC_VERSION).tar.bz2
+> +endif
+>  
+>  #
+>  # Xtensa special hook
+> @@ -60,7 +66,7 @@ endef
+>  #
+>  
+>  define HOST_GCC_EXTRACT_CMDS
+> -	$(BZCAT) $(DL_DIR)/$(GCC_SOURCE) | \
+> +	$(call suitable-extractor,$(GCC_SOURCE),$(BZCAT)) $(DL_DIR)/$(GCC_SOURCE) | \
+
+The suitable-extractor macro doesn't take a second argument, so
+the ,$(BZCAT) here is useless.
+
+>  		$(TAR) $(TAR_STRIP_COMPONENTS)=1 -C $(@D) \
+>  		--exclude='libjava/*' \
+>  		--exclude='libgo/*' \
+
+Another issue is that this series is going to conflict quite badly with
+the series posted by Mischa to add specific binutils/gcc/gdb/uClibc
+versions for ARC.
+
+It would probably be good if you could sync up on these two series.
+
+Thanks!
+
 Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
