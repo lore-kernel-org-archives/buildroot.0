@@ -1,182 +1,30 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 12 Nov 2013 09:48:57 +0100
-Subject: [Buildroot] [git commit] qt5base: detect posix_fallocate() at
-	configure time
-Message-ID: <20131112114305.DF1A89BBF4@busybox.osuosl.org>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue, 12 Nov 2013 08:56:20 -0300
+Subject: [Buildroot] [PATCH] audiofile: needs dynamic library
+In-Reply-To: <87ob5p4zix.fsf@dell.be.48ers.dk>
+References: <1384244924-31625-1-git-send-email-spdawson@gmail.com>
+ <87ob5p4zix.fsf@dell.be.48ers.dk>
+Message-ID: <52821764.5060109@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=68a48f02850bb9edf252feab4db90aff84a58849
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 11/12/2013 08:42 AM, Peter Korsgaard wrote:
+> Looking at the build log, the only reason why it fails is that libtool
+> is acting up. It wants to link with libstdc++.so instead of libstdc++.a.
+> 
+> A quick test shows that you can fix it by passing -static instead of
+> --static in LDFLAGS, but that effectively reverts 0a4bd19f4a136930c:
+> 
+> http://git.buildroot.net/buildroot/commit/?id=0a4bd19f4a136930c
+> 
+> Does anybody know what the right solution is?
 
-Fixes http://autobuild.buildroot.net/results/555278227680e90737e6dbe0a6dcc035507150aa/
-
-Signed-off-by: Fatih A????c?? <fatih.asici@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...-detect-posix_fallocate-at-configure-time.patch |  154 ++++++++++++++++++++
- 1 files changed, 154 insertions(+), 0 deletions(-)
-
-diff --git a/package/qt5/qt5base/qt5base-0007-detect-posix_fallocate-at-configure-time.patch b/package/qt5/qt5base/qt5base-0007-detect-posix_fallocate-at-configure-time.patch
-new file mode 100644
-index 0000000..7c45696
---- /dev/null
-+++ b/package/qt5/qt5base/qt5base-0007-detect-posix_fallocate-at-configure-time.patch
-@@ -0,0 +1,154 @@
-+From 6fe9c6b8a2815dc5d412c1714be0adaa9681a129 Mon Sep 17 00:00:00 2001
-+From: =?UTF-8?q?Fatih=20A=C5=9F=C4=B1c=C4=B1?= <fatih.asici@gmail.com>
-+Date: Mon, 11 Nov 2013 17:04:46 +0200
-+Subject: [PATCH] Detect posix_fallocate at configure time
-+
-+Testing feature macros is not enough for uclibc. Fixes build of the built-in
-+sqlite3 with uclibc <= 0.9.33.2. Later versions will have posix_fallocate().
-+
-+Change-Id: I918a52777ac63624635802221effc6b86fa2269c
-+Signed-off-by: Fatih A????c?? <fatih.asici@gmail.com>
-+Reported-Upstream: https://codereview.qt-project.org/70935
-+---
-+ .../unix/posix_fallocate/posix_fallocate.cpp       | 53 ++++++++++++++++++++++
-+ .../unix/posix_fallocate/posix_fallocate.pro       |  2 +
-+ configure                                          | 14 ++++++
-+ src/3rdparty/sqlite/sqlite3.c                      |  7 ---
-+ 4 files changed, 69 insertions(+), 7 deletions(-)
-+ create mode 100644 config.tests/unix/posix_fallocate/posix_fallocate.cpp
-+ create mode 100644 config.tests/unix/posix_fallocate/posix_fallocate.pro
-+
-+diff --git a/config.tests/unix/posix_fallocate/posix_fallocate.cpp b/config.tests/unix/posix_fallocate/posix_fallocate.cpp
-+new file mode 100644
-+index 0000000..5acd45a
-+--- /dev/null
-++++ b/config.tests/unix/posix_fallocate/posix_fallocate.cpp
-+@@ -0,0 +1,53 @@
-++/****************************************************************************
-++**
-++** Copyright (C) 2013 Digia Plc and/or its subsidiary(-ies).
-++** Contact: http://www.qt-project.org/legal
-++**
-++** This file is part of the config.tests of the Qt Toolkit.
-++**
-++** $QT_BEGIN_LICENSE:LGPL$
-++** Commercial License Usage
-++** Licensees holding valid commercial Qt licenses may use this file in
-++** accordance with the commercial license agreement provided with the
-++** Software or, alternatively, in accordance with the terms contained in
-++** a written agreement between you and Digia.  For licensing terms and
-++** conditions see http://qt.digia.com/licensing.  For further information
-++** use the contact form at http://qt.digia.com/contact-us.
-++**
-++** GNU Lesser General Public License Usage
-++** Alternatively, this file may be used under the terms of the GNU Lesser
-++** General Public License version 2.1 as published by the Free Software
-++** Foundation and appearing in the file LICENSE.LGPL included in the
-++** packaging of this file.  Please review the following information to
-++** ensure the GNU Lesser General Public License version 2.1 requirements
-++** will be met: http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html.
-++**
-++** In addition, as a special exception, Digia gives you certain additional
-++** rights.  These rights are described in the Digia Qt LGPL Exception
-++** version 1.1, included in the file LGPL_EXCEPTION.txt in this package.
-++**
-++** GNU General Public License Usage
-++** Alternatively, this file may be used under the terms of the GNU
-++** General Public License version 3.0 as published by the Free Software
-++** Foundation and appearing in the file LICENSE.GPL included in the
-++** packaging of this file.  Please review the following information to
-++** ensure the GNU General Public License version 3.0 requirements will be
-++** met: http://www.gnu.org/copyleft/gpl.html.
-++**
-++**
-++** $QT_END_LICENSE$
-++**
-++****************************************************************************/
-++
-++#include <fcntl.h>
-++
-++int main(int, char **)
-++{
-++#if _XOPEN_SOURCE >= 600 || _POSIX_C_SOURCE >= 200112L
-++    return ::posix_fallocate(0, 0, 0);
-++#else
-++#  error posix_fallocate not available
-++    // MIPSpro doesn't understand #error, so force a compiler error
-++    force_compiler_error = true;
-++#endif
-++}
-+diff --git a/config.tests/unix/posix_fallocate/posix_fallocate.pro b/config.tests/unix/posix_fallocate/posix_fallocate.pro
-+new file mode 100644
-+index 0000000..f01b15f
-+--- /dev/null
-++++ b/config.tests/unix/posix_fallocate/posix_fallocate.pro
-+@@ -0,0 +1,2 @@
-++SOURCES = posix_fallocate.cpp
-++CONFIG -= qt dylib
-+diff --git a/configure b/configure
-+index 81e2a93..b67ed89 100755
-+--- a/configure
-++++ b/configure
-+@@ -968,6 +968,7 @@ CFG_MIPS_DSP=auto
-+ CFG_MIPS_DSPR2=auto
-+ CFG_CLOCK_GETTIME=auto
-+ CFG_CLOCK_MONOTONIC=auto
-++CFG_POSIX_FALLOCATE=auto
-+ CFG_MREMAP=auto
-+ CFG_GETADDRINFO=auto
-+ CFG_IPV6IFNAME=auto
-+@@ -5653,6 +5654,15 @@ elif [ "$CFG_CLOCK_GETTIME" = "no" ]; then
-+     CFG_CLOCK_MONOTONIC=no
-+ fi
-+ 
-++# detect posix_fallocate
-++if [ "$CFG_POSIX_FALLOCATE" = "auto" ]; then
-++    if compileTest unix/posix_fallocate "posix_fallocate"; then
-++        CFG_POSIX_FALLOCATE=yes
-++    else
-++        CFG_POSIX_FALLOCATE=no
-++    fi
-++fi
-++
-+ # detect mremap
-+ if [ "$CFG_MREMAP" = "auto" ]; then
-+     if compileTest unix/mremap "mremap"; then
-+@@ -5970,6 +5980,9 @@ fi
-+ if [ "$CFG_CLOCK_MONOTONIC" = "yes" ]; then
-+     QT_CONFIG="$QT_CONFIG clock-monotonic"
-+ fi
-++if [ "$CFG_POSIX_FALLOCATE" = "yes" ]; then
-++    QT_CONFIG="$QT_CONFIG posix_fallocate"
-++fi
-+ if [ "$CFG_MREMAP" = "yes" ]; then
-+     QT_CONFIG="$QT_CONFIG mremap"
-+ fi
-+@@ -6449,6 +6462,7 @@ QMakeVar set sql-plugins "$SQL_PLUGINS"
-+ [ "$CFG_GLIB" != "yes" ]     && QCONFIG_FLAGS="$QCONFIG_FLAGS QT_NO_GLIB"
-+ [ "$CFG_QGTKSTYLE" != "yes" ] && QCONFIG_FLAGS="$QCONFIG_FLAGS QT_NO_STYLE_GTK"
-+ [ "$CFG_CLOCK_MONOTONIC" = "no" ] && QCONFIG_FLAGS="$QCONFIG_FLAGS QT_NO_CLOCK_MONOTONIC"
-++[ "$CFG_POSIX_FALLOCATE" = "no" ] && QCONFIG_FLAGS="$QCONFIG_FLAGS QT_NO_POSIX_FALLOCATE"
-+ [ "$CFG_MREMAP" = "no" ]     && QCONFIG_FLAGS="$QCONFIG_FLAGS QT_NO_MREMAP"
-+ [ "$CFG_GETADDRINFO" = "no" ]&& QCONFIG_FLAGS="$QCONFIG_FLAGS QT_NO_GETADDRINFO"
-+ [ "$CFG_IPV6IFNAME" = "no" ] && QCONFIG_FLAGS="$QCONFIG_FLAGS QT_NO_IPV6IFNAME"
-+diff --git a/src/3rdparty/sqlite/sqlite3.c b/src/3rdparty/sqlite/sqlite3.c
-+index 03fa649..1ae9be2 100644
-+--- a/src/3rdparty/sqlite/sqlite3.c
-++++ b/src/3rdparty/sqlite/sqlite3.c
-+@@ -22935,13 +22935,6 @@ SQLITE_PRIVATE const char *sqlite3OpcodeName(int i){
-+ */
-+ #if SQLITE_OS_UNIX              /* This file is used on unix only */
-+ 
-+-/* Use posix_fallocate() if it is available
-+-*/
-+-#if !defined(HAVE_POSIX_FALLOCATE) \
-+-      && (_XOPEN_SOURCE >= 600 || _POSIX_C_SOURCE >= 200112L)
-+-# define HAVE_POSIX_FALLOCATE 1
-+-#endif
-+-
-+ /*
-+ ** There are various methods for file locking used for concurrency
-+ ** control:
-+-- 
-+1.8.4.rc3
-+
+I think this is related to the nettle failure i've mentioned, after the
+gcc conversion host-gcc-final isn't installing libstdc++.a, and after an
+extra look it isn't even building it because of --disable-static in the
+default CONFIGURE_CMDS.
+So it'll never find a libstdc++.a for the internal toolchain in staging.
+Regards.
