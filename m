@@ -1,42 +1,48 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 12 Nov 2013 23:20:16 +0100
-Subject: [Buildroot] [PATCH] tstools: fix build (link) error
-In-Reply-To: <1384208964-29099-1-git-send-email-tjlee@ambarella.com> (Tzu-Jung
- Lee's message of "Mon, 11 Nov 2013 14:29:24 -0800")
-References: <20131109191543.414f5694@skate>
- <1384208964-29099-1-git-send-email-tjlee@ambarella.com>
-Message-ID: <8738n145zz.fsf@dell.be.48ers.dk>
+Date: Tue, 12 Nov 2013 23:21:30 +0100
+Subject: [Buildroot] [PATCH 1 of 6 v3] legal info: fix saving of host
+	package licenses
+In-Reply-To: <ceeae60921411209ff53.1384246076@argentina> (Thomas De
+ Schampheleire's message of "Tue, 12 Nov 2013 09:47:56 +0100")
+References: <patchbomb.1384246075@argentina>
+ <ceeae60921411209ff53.1384246076@argentina>
+Message-ID: <87y54t2rdh.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Tzu-Jung" == Tzu-Jung Lee <roylee17@gmail.com> writes:
+>>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin@gmail.com> writes:
 
-> Signed-off-by: Tzu-Jung Lee <tjlee@ambarella.com>
+> Due to some tricky make behavior, the license texts of host packages that
+> did not provide an explicit HOST_FOO_LICENSE_FILES definition was not saved.
+> The problem is that it is not straightforward to use a variable
+> defined/updated inside an evaluated block as input to a foreach statement.
+> If you try to use $(FOO) then only the original value of FOO is used for
+> foreach, any update inside the block is ignored. However, if you use
+> $$(FOO), the entire contents of FOO (typically a list of items) is passed
+> as one item to foreach, thus causing just one iteration instead of several.
+
+>> From Arnout Vandecapelle's explanation:
+> Any variable referenced with a single $ inside the inner-generic-package
+> macro is expanded before the resulting contents are eval'ed. Therefore, it
+> is not possible to refer to variables defined by the inner-generic-package
+> macro from within a single-$ function call.
+
+> To fix the problem, one should defer the evaluation of the entire block
+> using double dollar signs.
+
+> Additionally, a few empty lines have been added to the legal-info-foo block
+> for clarity.
+
+> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+
 > ---
->  ...x-a-build-error-linking-of-shared-library.patch | 23 ++++++++++++++++++++++
->  1 file changed, 23 insertions(+)
->  create mode 100644 package/tstools/tstools-003-build-fix-a-build-error-linking-of-shared-library.patch
+> v3:
+> - simplify solution based on Arnout's insight
 
-> diff --git a/package/tstools/tstools-003-build-fix-a-build-error-linking-of-shared-library.patch b/package/tstools/tstools-003-build-fix-a-build-error-linking-of-shared-library.patch
-> new file mode 100644
-> index 0000000..e87413f
-> --- /dev/null
-> +++ b/package/tstools/tstools-003-build-fix-a-build-error-linking-of-shared-library.patch
-> @@ -0,0 +1,23 @@
-> +From 1f83d1aa7f3abc75faeb31f169f1162e11168e16 Mon Sep 17 00:00:00 2001
-> +From: Tzu-Jung Lee <tjlee@ambarella.com>
-> +Date: Mon, 11 Nov 2013 14:16:11 -0800
-> +Subject: [PATCH] build: fix a build error (linking of shared library)
-
-It would be good to explain in more detail (and/or add a link to an
-autobuild failure).
-
-For this kind of issue we normally just pass LD="$(TARGET_CC)" to make
-instead of patching the Makefile, so I've committed a fix doing that,
-thanks.
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
