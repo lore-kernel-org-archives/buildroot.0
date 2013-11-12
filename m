@@ -1,63 +1,156 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Tue, 12 Nov 2013 09:48:01 +0100
-Subject: [Buildroot] [PATCH 6 of 6 v3] legal info: update documentation with
- split target/host output
-In-Reply-To: <patchbomb.1384246075@argentina>
-References: <patchbomb.1384246075@argentina>
-Message-ID: <2efc09c25b2482a0d232.1384246081@argentina>
+Date: Tue, 12 Nov 2013 09:56:37 +0100
+Subject: [Buildroot] [PATCH 2 of 2] infra: remove usage of pkgparentdir
+	in favor of pkgdir
+In-Reply-To: <52816529.9010704@mind.be>
+References: <patchbomb.1384170790@argentina>
+ <8953db252a5816d2e988.1384170792@argentina>
+ <52816529.9010704@mind.be>
+Message-ID: <CAAXf6LVMJ-EQemvYkvujm+zypQO_cufQq5=z7zz_tto2hug=Aw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-Acked-by: Samuel Martin <s.martin49@gmail.com>
+On Tue, Nov 12, 2013 at 12:15 AM, Arnout Vandecappelle <arnout@mind.be> wrote:
+> On 11/11/13 12:53, Thomas De Schampheleire wrote:
+>>
+>> As Arnout suggested, pkgparentdir is no longer really needed. Its usage
+>> can
+>> be replaced with pkgdir. This patch makes that change, and removes the
+>> definition of pkgparentdir.
+>>
+>> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+>>
+>> ---
+>> Note: as a consequence of this change, the definition of FOO_DIR_PREFIX
+>> slightly changed. I could have renamed the variable, but FOO_DIR was
+>> already
+>> taken, and it's still more or less a prefix.
+>
+>
+>  I think it's a better idea to choose a new name - if only to help people
+> who are using this variable in custom packages. Or better yet, remove it
+> completely - it's anyway not used anymore.
 
----
-v3: no changes
-v2: new patch
+The only remaining place is in the foo-patch block, to get the
+location of patches for that package.
+That is outside the inner-generic-package, so we cannot use $(4)
+anymore. How do you propose to solve that?
 
- docs/manual/legal-notice.txt |  15 +++++++++------
- 1 files changed, 9 insertions(+), 6 deletions(-)
+>
+>
+>
+>>
+>>   package/pkg-autotools.mk |   6 +++---
+>>   package/pkg-cmake.mk     |   6 +++---
+>>   package/pkg-generic.mk   |  10 +++++-----
+>>   package/pkg-utils.mk     |   1 -
+>>   4 files changed, 11 insertions(+), 12 deletions(-)
+>>
+>> diff --git a/package/pkg-autotools.mk b/package/pkg-autotools.mk
+>> --- a/package/pkg-autotools.mk
+>> +++ b/package/pkg-autotools.mk
+>> @@ -48,7 +48,7 @@ endef
+>>   #             for host packages
+>>   #  argument 3 is the uppercase package name, without the HOST_ prefix
+>>   #             for host packages
+>> -#  argument 4 is the package directory prefix
+>> +#  argument 4 is the package directory
+>>   #  argument 5 is the type (target or host)
+>>
+>> ################################################################################
+>>
+>> @@ -311,5 +311,5 @@ endef
+>>   # autotools-package -- the target generator macro for autotools packages
+>>
+>> ################################################################################
+>>
+>> -autotools-package = $(call inner-autotools-package,$(call pkgname),$(call
+>> UPPERCASE,$(call pkgname)),$(call UPPERCASE,$(call pkgname)),$(call
+>> pkgparentdir),target)
+>> -host-autotools-package = $(call inner-autotools-package,host-$(call
+>> pkgname),$(call UPPERCASE,host-$(call pkgname)),$(call UPPERCASE,$(call
+>> pkgname)),$(call pkgparentdir),host)
+>> +autotools-package = $(call inner-autotools-package,$(call pkgname),$(call
+>> UPPERCASE,$(call pkgname)),$(call UPPERCASE,$(call pkgname)),$(call
+>> pkgdir),target)
+>> +host-autotools-package = $(call inner-autotools-package,host-$(call
+>> pkgname),$(call UPPERCASE,host-$(call pkgname)),$(call UPPERCASE,$(call
+>> pkgname)),$(call pkgdir),host)
+>> diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
+>> --- a/package/pkg-cmake.mk
+>> +++ b/package/pkg-cmake.mk
+>> @@ -31,7 +31,7 @@
+>>   #             for host packages
+>>   #  argument 3 is the uppercase package name, without the HOST_ prefix
+>>   #             for host packages
+>> -#  argument 4 is the package directory prefix
+>> +#  argument 4 is the package directory
+>>   #  argument 5 is the type (target or host)
+>>
+>> ################################################################################
+>>
+>> @@ -179,8 +179,8 @@ endef
+>>   # cmake-package -- the target generator macro for CMake packages
+>>
+>> ################################################################################
+>>
+>> -cmake-package = $(call inner-cmake-package,$(call pkgname),$(call
+>> UPPERCASE,$(call pkgname)),$(call UPPERCASE,$(call pkgname)),$(call
+>> pkgparentdir),target)
+>> -host-cmake-package = $(call inner-cmake-package,host-$(call
+>> pkgname),$(call UPPERCASE,host-$(call pkgname)),$(call UPPERCASE,$(call
+>> pkgname)),$(call pkgparentdir),host)
+>> +cmake-package = $(call inner-cmake-package,$(call pkgname),$(call
+>> UPPERCASE,$(call pkgname)),$(call UPPERCASE,$(call pkgname)),$(call
+>> pkgdir),target)
+>> +host-cmake-package = $(call inner-cmake-package,host-$(call
+>> pkgname),$(call UPPERCASE,host-$(call pkgname)),$(call UPPERCASE,$(call
+>> pkgname)),$(call pkgdir),host)
+>>
+>>
+>> ################################################################################
+>>   # Generation of the CMake toolchain file
+>> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+>> --- a/package/pkg-generic.mk
+>> +++ b/package/pkg-generic.mk
+>> @@ -89,7 +89,7 @@ endif
+>>   # find the package directory (typically package/<pkgname>) and the
+>>   # prefix of the patches
+>>   $(BUILD_DIR)/%/.stamp_patched: NAMEVER = $(RAWNAME)-$($(PKG)_VERSION)
+>> -$(BUILD_DIR)/%/.stamp_patched: PATCH_BASE_DIRS =
+>> $($(PKG)_DIR_PREFIX)/$(RAWNAME) $(call
+>> qstrip,$(BR2_GLOBAL_PATCH_DIR))/$(RAWNAME)
+>> +$(BUILD_DIR)/%/.stamp_patched: PATCH_BASE_DIRS = $($(PKG)_DIR_PREFIX)
+>> $(call qstrip,$(BR2_GLOBAL_PATCH_DIR))/$(RAWNAME)
+>>   $(BUILD_DIR)/%/.stamp_patched:
+>>         @$(call MESSAGE,"Patching")
+>>         $(foreach hook,$($(PKG)_PRE_PATCH_HOOKS),$(call $(hook))$(sep))
+>> @@ -197,7 +197,7 @@ endif
+>>   #             for host packages
+>>   #  argument 3 is the uppercase package name, without the HOST_ prefix
+>>   #             for host packages
+>> -#  argument 4 is the package directory prefix
+>> +#  argument 4 is the package directory
+>>   #  argument 5 is the type (target or host)
+>>
+>> ################################################################################
+>>
+>> @@ -475,7 +475,7 @@ endif
+>>   # kernel case, the bootloaders case, and the normal packages case.
+>>   ifeq ($(1),linux)
+>>   $(2)_KCONFIG_VAR = BR2_LINUX_KERNEL
+>> -else ifeq ($(4),boot/)
+>> +else ifneq ($(filter boot/%,$(4)),)
+>
+>
+>  Since this is the only place where $(4) is used, we could use $(pkgdir)
+> directly and drop the 4th parameter. (I just tested and it seems to work.)
 
-diff --git a/docs/manual/legal-notice.txt b/docs/manual/legal-notice.txt
---- a/docs/manual/legal-notice.txt
-+++ b/docs/manual/legal-notice.txt
-@@ -39,16 +39,19 @@ There you will find:
- * +buildroot.config+: this is the Buildroot configuration file that is usually
-   produced with +make menuconfig+, and which is necessary to reproduce the
-   build.
--* The source code for all packages; this is saved in the +sources/+
--  subdirectory (except for proprietary packages, whose source code is not
--  saved);
--  patches applied to some packages by Buildroot are distributed with the
--  Buildroot sources and are not duplicated in the +sources/+ subdirectory.
--* A manifest file listing the configured packages, their version, license and
--  related information.
-+* The source code for all packages; this is saved in the +sources/+ and
-+  +host-sources/+ subdirectories for target and host packages respectively.
-+  The source code for packages that set +<PKG>_REDISTRIBUTE = NO+ will not be
-+  saved.
-+  Patches applied to some packages by Buildroot are distributed with the
-+  Buildroot sources and are not duplicated in the +sources/+ and +host-sources/+
-+  subdirectories.
-+* A manifest file (one for host and one for target packages) listing the
-+  configured packages, their version, license and related information.
-   Some of this information might not be defined in Buildroot; such items are
-   marked as "unknown".
--* A +licenses/+ subdirectory, which contains the license text of packages.
-+* The license texts of all packages, in the +licenses/+ and +host-licenses/+
-+  subdirectories for target and host packages respectively.
-   If the license file(s) are not defined in Buildroot, the file is not produced
-   and a warning in the +README+ indicates this.
- 
-@@ -72,7 +75,7 @@ License abbreviations
- ---------------------
- 
- Here is a list of the licenses that are most widely used by packages in
--Buildroot, with the name used in the manifest file:
-+Buildroot, with the name used in the manifest files:
- 
- * `GPLv2`:
-   http://www.gnu.org/licenses/old-licenses/gpl-2.0.html[
+If we can find a solution for the patching commands, then it's
+probably possible...
+
+Best regards,
+Thomas
