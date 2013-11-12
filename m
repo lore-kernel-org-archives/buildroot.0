@@ -1,57 +1,92 @@
-From: Matt Weber <mlweber1@rockwellcollins.com>
-Date: Tue, 12 Nov 2013 14:31:45 -0600
-Subject: [Buildroot] [PATCH 1/1] omniorb: add COS Naming Service
-Message-ID: <1384288305-4945-1-git-send-email-mlweber1@rockwellcollins.com>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Tue, 12 Nov 2013 21:51:07 +0100
+Subject: [Buildroot] Init not handling signals
+In-Reply-To: <5282583a.e630420a.3bfb.507aSMTPIN_ADDED_BROKEN@mx.google.com>
+References: <5282583a.e630420a.3bfb.507aSMTPIN_ADDED_BROKEN@mx.google.com>
+Message-ID: <c8762b7d-2a0c-4efc-84c6-747f0849d12f@email.android.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+John OSullivan <john.osullivan@cloudiumsystems.com> wrote:
+>Hi,
+>
+>I'm not sure if this is the correct forum to ask this question but I have
+>seen a few buildroot/busybox references to this problem but none with a
+>clear solution.
+>
+>I am running buildroot-2012-05 with busybox 1.19, using the busybox init
+>with an inittab based on the default one provided.
+>
+>In the init tab there is a trap for ctrlaltdel
+>
+>::ctrlaltdel:/sbin/reboot
+>
+> 
+>
+>This line is never called after hitting ctrl alt del on a keyboard
+>
+>Instead we get a signal pending on the init task
+>
+>Cat /proc/1/status
+>
+>---------------------------
+>
+>Name:   swapper
+>
+>State:    R (running)
+>
+>Tgid:      1
+>
+>Pid:        1
+>
+>PPid:      0
+>
+>TracerPid:            0
+>
+>Uid:        0             0             0             0
+>
+>Gid:        0             0             0             0
+>
+>FDSize:  32
+>
+>Groups: 
+>
+>Threads:              1
+>
+>SigQ:      1/938
+>
+>SigPnd:  0000000000000100
+>
+>ShdPnd: 0000000000000002
+>
+>SigBlk:   0000000000000000
+>
+>SigIgn:   0000000000000000
+>
+>SigCgt:  0000000000000000
+>
+>CapInh: 0000000000000000
+>
+> 
+>
+>After the init process is signalled the Swapper task assumes 100% processor
+>occupancy and system performance degenerates. (as evidenced by top)
+>
+>The kernel version is 2.6.33.3 (I also tried 2.6.39.4). This happens on a
+>minimal system built from buildroot without any other processes running, the
+>only way to recover the situation is with a reboot.
+>
+>Any ideas or suggestions on what the issue might be?
+>
+>I was going to try a non-busybox init but before I do that I want to make
+>sure that there is not an available explanation for the behaviour I am
+>observing.
+>
 
-Signed-off-by: Matt Weber <mlweber1@rockwellcollins.com>
----
- package/omniorb/Config.in  |    9 +++++++++
- package/omniorb/omniorb.mk |    8 ++++++++
- 2 files changed, 17 insertions(+), 0 deletions(-)
+At first sight, I think the busybox mailing list is more appropriate... As far as I know, buildroot doesn't do anything special in this regard.
 
-diff --git a/package/omniorb/Config.in b/package/omniorb/Config.in
-index 6326688..22527fc 100644
---- a/package/omniorb/Config.in
-+++ b/package/omniorb/Config.in
-@@ -10,5 +10,14 @@ config BR2_PACKAGE_OMNIORB
- 
- 	  http://omniorb.sourceforge.net/
- 
-+if BR2_PACKAGE_OMNIORB
-+
-+config BR2_PACKAGE_OMNIORB_WITH_SERVICES
-+        bool "COS Naming Service"
-+        default y
-+        help
-+          omniORB COS Naming Service
-+endif
-+
- comment "omniORB needs a toolchain w/ C++"
- 	depends on !BR2_INSTALL_LIBSTDCPP
-diff --git a/package/omniorb/omniorb.mk b/package/omniorb/omniorb.mk
-index 490ff93..cad50f8 100644
---- a/package/omniorb/omniorb.mk
-+++ b/package/omniorb/omniorb.mk
-@@ -24,6 +24,14 @@ OMNIORB_INSTALL_TARGET = YES
- OMNIORB_CONF_OPT += --disable-longdouble
- HOST_OMNIORB_CONF_OPT += --disable-longdouble
- 
-+define OMNIORB_ENABLE_SERVICES
-+	$(SED) 's:SUBDIRS += lib:SUBDIRS += lib services:g' $(@D)/src/dir.mk
-+endef
-+
-+ifeq ($(BR2_PACKAGE_OMNIORB_WITH_SERVICES),y)
-+	OMNIORB_POST_CONFIGURE_HOOKS += OMNIORB_ENABLE_SERVICES
-+endif
-+
- # omniORB is not completely cross-compile friendly and has some
- # assumptions where a couple host tools must be built and then
- # used by the target build.  The host tools generate code from
--- 
-1.7.1
+Best regards 
+Thomas
