@@ -1,58 +1,32 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 13 Nov 2013 00:28:58 +0100
-Subject: [Buildroot] [pull request v4] Pull request for branch
-	yem/instrument-build
-In-Reply-To: <cover.1384182040.git.yann.morin.1998@free.fr> (Yann E. MORIN's
- message of "Mon, 11 Nov 2013 16:03:25 +0100")
-References: <cover.1384182040.git.yann.morin.1998@free.fr>
-Message-ID: <87habh2o91.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 13 Nov 2013 00:23:44 +0100
+Subject: [Buildroot] [git commit branch/next] cifs-utils: bump to version 6.2
+Message-ID: <20131112233229.A99CC9B9BF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=8552d8cd8fa6b4ebd314d97e45b522e93ef0a620
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Hello All!
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/cifs-utils/cifs-utils.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-> This series adds support for instrumenting the build process, reworked
-> after discussion both on the ML and during the developpers' day.
-
-> It works as thus:
->   - we register a set of hooks
->   - hooks are called before and after each steps
-
-> There are currently two hooks defined:
->   - log steps with timings (as an example of how to do a hook)
->   - call a user-supplied scripts
-
-> More hooks can be added later on. Specifically, we may want to add a
-> script (in support/scripts or wherever) that runs some verifications
-> after packages are installed (in target/ and staging/), for example
-> to check for RPATH, or to check scripts do not have build-dir paths
-> in them (eg python scripts)...
-
-> I'm planning on adding at least one other hook, that runs all scripts
-> present in support/step-hooks/ (or whatever its name).
-
-> Changes v3 -> v4:
->   - rename user-supplied hook  (Thomas DS)
->   - typoes  (Thomas DS)
-
-> Changes v2 -> v3:
->   - rename the internal variable that holds the hooks  (Thomas DS)
->   - misc typo fixes  (Thomas DS)
-
-> Changes v1 -> v2:
->   - removed the intra-steps instrumentation  (Thomas, Peter)
->   - accept a list of user-supplied hooks, not only one hook  (Thomas)
-
-> Regards,
-> Yann E. MORIN.
-
-Committed series to next, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/cifs-utils/cifs-utils.mk b/package/cifs-utils/cifs-utils.mk
+index f715e36..4115d4e 100644
+--- a/package/cifs-utils/cifs-utils.mk
++++ b/package/cifs-utils/cifs-utils.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-CIFS_UTILS_VERSION = 6.1
++CIFS_UTILS_VERSION = 6.2
+ CIFS_UTILS_SOURCE  = cifs-utils-$(CIFS_UTILS_VERSION).tar.bz2
+ CIFS_UTILS_SITE    = http://ftp.samba.org/pub/linux-cifs/cifs-utils
+ CIFS_UTILS_LICENSE = GPLv3+
