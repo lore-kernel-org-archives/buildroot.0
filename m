@@ -1,43 +1,61 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 12 Nov 2013 13:17:57 +0100
-Subject: [Buildroot] [PATCH] audiofile: needs dynamic library
-In-Reply-To: <52821764.5060109@zacarias.com.ar>
-References: <1384244924-31625-1-git-send-email-spdawson@gmail.com>
- <87ob5p4zix.fsf@dell.be.48ers.dk>
- <52821764.5060109@zacarias.com.ar>
-Message-ID: <20131112131757.21f166df@skate>
+From: =?UTF-8?q?Fatih=20A=C5=9F=C4=B1c=C4=B1?= <fatih.asici@gmail.com>
+Date: Tue, 12 Nov 2013 14:17:06 +0200
+Subject: [Buildroot] [PATCH] qt5base: add missing hunk in posix_fallocate
+	patch
+Message-ID: <1384258626-30216-1-git-send-email-fatih.asici@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+Signed-off-by: Fatih A??c? <fatih.asici@gmail.com>
+---
+Sorry, I have just noticed a missing hunk. Without it, sqlite will not
+use posix_fallocate() even it is available.
+---
+ ...-0007-detect-posix_fallocate-at-configure-time.patch | 17 +++++++++++++++--
+ 1 file changed, 15 insertions(+), 2 deletions(-)
 
-On Tue, 12 Nov 2013 08:56:20 -0300, Gustavo Zacarias wrote:
-> On 11/12/2013 08:42 AM, Peter Korsgaard wrote:
-> > Looking at the build log, the only reason why it fails is that
-> > libtool is acting up. It wants to link with libstdc++.so instead of
-> > libstdc++.a.
-> > 
-> > A quick test shows that you can fix it by passing -static instead of
-> > --static in LDFLAGS, but that effectively reverts 0a4bd19f4a136930c:
-> > 
-> > http://git.buildroot.net/buildroot/commit/?id=0a4bd19f4a136930c
-> > 
-> > Does anybody know what the right solution is?
-> 
-> I think this is related to the nettle failure i've mentioned, after
-> the gcc conversion host-gcc-final isn't installing libstdc++.a, and
-> after an extra look it isn't even building it because of
-> --disable-static in the default CONFIGURE_CMDS.
-> So it'll never find a libstdc++.a for the internal toolchain in
-> staging. Regards.
-
-I'll try to have a look at this issue tonight.
-
-Thomas
+diff --git a/package/qt5/qt5base/qt5base-0007-detect-posix_fallocate-at-configure-time.patch b/package/qt5/qt5base/qt5base-0007-detect-posix_fallocate-at-configure-time.patch
+index 7c45696..b0011f6 100644
+--- a/package/qt5/qt5base/qt5base-0007-detect-posix_fallocate-at-configure-time.patch
++++ b/package/qt5/qt5base/qt5base-0007-detect-posix_fallocate-at-configure-time.patch
+@@ -1,4 +1,4 @@
+-From 6fe9c6b8a2815dc5d412c1714be0adaa9681a129 Mon Sep 17 00:00:00 2001
++From 46e632e2555b6b8abe6b8d8ad7d255e27c128e25 Mon Sep 17 00:00:00 2001
+ From: =?UTF-8?q?Fatih=20A=C5=9F=C4=B1c=C4=B1?= <fatih.asici@gmail.com>
+ Date: Mon, 11 Nov 2013 17:04:46 +0200
+ Subject: [PATCH] Detect posix_fallocate at configure time
+@@ -13,8 +13,9 @@ Reported-Upstream: https://codereview.qt-project.org/70935
+  .../unix/posix_fallocate/posix_fallocate.cpp       | 53 ++++++++++++++++++++++
+  .../unix/posix_fallocate/posix_fallocate.pro       |  2 +
+  configure                                          | 14 ++++++
++ src/3rdparty/sqlite.pri                            |  1 +
+  src/3rdparty/sqlite/sqlite3.c                      |  7 ---
+- 4 files changed, 69 insertions(+), 7 deletions(-)
++ 5 files changed, 70 insertions(+), 7 deletions(-)
+  create mode 100644 config.tests/unix/posix_fallocate/posix_fallocate.cpp
+  create mode 100644 config.tests/unix/posix_fallocate/posix_fallocate.pro
+ 
+@@ -131,6 +132,18 @@ index 81e2a93..b67ed89 100755
+  [ "$CFG_MREMAP" = "no" ]     && QCONFIG_FLAGS="$QCONFIG_FLAGS QT_NO_MREMAP"
+  [ "$CFG_GETADDRINFO" = "no" ]&& QCONFIG_FLAGS="$QCONFIG_FLAGS QT_NO_GETADDRINFO"
+  [ "$CFG_IPV6IFNAME" = "no" ] && QCONFIG_FLAGS="$QCONFIG_FLAGS QT_NO_IPV6IFNAME"
++diff --git a/src/3rdparty/sqlite.pri b/src/3rdparty/sqlite.pri
++index 58d4ddd..072502c 100644
++--- a/src/3rdparty/sqlite.pri
+++++ b/src/3rdparty/sqlite.pri
++@@ -1,6 +1,7 @@
++ CONFIG(release, debug|release):DEFINES *= NDEBUG
++ DEFINES += SQLITE_OMIT_LOAD_EXTENSION SQLITE_OMIT_COMPLETE SQLITE_ENABLE_FTS3 SQLITE_ENABLE_FTS3_PARENTHESIS SQLITE_ENABLE_RTREE
++ !contains(CONFIG, largefile):DEFINES += SQLITE_DISABLE_LFS
+++contains(QT_CONFIG, posix_fallocate):DEFINES += HAVE_POSIX_FALLOCATE=1
++ winrt: DEFINES += SQLITE_OS_WINRT
++ INCLUDEPATH +=  $$PWD/sqlite
++ SOURCES +=      $$PWD/sqlite/sqlite3.c
+ diff --git a/src/3rdparty/sqlite/sqlite3.c b/src/3rdparty/sqlite/sqlite3.c
+ index 03fa649..1ae9be2 100644
+ --- a/src/3rdparty/sqlite/sqlite3.c
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.8.4.rc3
