@@ -1,32 +1,46 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 13 Nov 2013 00:23:46 +0100
-Subject: [Buildroot] [git commit branch/next] gnutls: bump to version 3.2.6
-Message-ID: <20131112233229.B452C9B9BF@busybox.osuosl.org>
+Date: Wed, 13 Nov 2013 00:26:27 +0100
+Subject: [Buildroot] [git commit branch/next] pkg-infra: add hook to log
+	timing of steps
+Message-ID: <20131112233230.86AC49BC19@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=56034b1c9fbfeb7d39a7f83e2d064a159c96d116
+commit: http://git.buildroot.net/buildroot/commit/?id=17d4eb1e0261793a9f89e4a2253602c7ab926d2e
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+The timing information is stored in the file $(O)/build-time.log
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Reviewed-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+Reviewed-by: Samuel Martin <s.martin49@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gnutls/gnutls.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/pkg-generic.mk |   11 +++++++++++
+ 1 files changed, 11 insertions(+), 0 deletions(-)
 
-diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
-index 1e3e267..8ab0665 100644
---- a/package/gnutls/gnutls.mk
-+++ b/package/gnutls/gnutls.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 073cff3..619974e 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -44,6 +44,17 @@ define step_end
+ 	$(foreach hook,$(GLOBAL_INSTRUMENTATION_HOOKS),$(call $(hook),end,$(1),$($(PKG)_NAME))$(sep))
+ endef
  
--GNUTLS_VERSION = 3.2.5
-+GNUTLS_VERSION = 3.2.6
- GNUTLS_SOURCE = gnutls-$(GNUTLS_VERSION).tar.xz
- GNUTLS_SITE = ftp://ftp.gnutls.org/gcrypt/gnutls/v3.2
- GNUTLS_LICENSE = GPLv3+ LGPLv2.1+
++#######################################
++# Actual steps hooks
++
++# Time steps
++define step_time
++	printf "%s:%-5.5s:%-20.20s: %s\n"           \
++	       "$$(date +%s)" "$(1)" "$(2)" "$(3)"  \
++	       >>"$(BUILD_DIR)/build-time.log"
++endef
++GLOBAL_INSTRUMENTATION_HOOKS += step_time
++
+ ################################################################################
+ # Implicit targets -- produce a stamp file for each step of a package build
+ ################################################################################
