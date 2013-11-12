@@ -1,9 +1,9 @@
 From: Mischa Jonker <Mischa.Jonker@synopsys.com>
-Date: Tue, 12 Nov 2013 14:26:17 +0100
-Subject: [Buildroot] [PATCH 4/7] uclibc: arc: Use git instead of website
+Date: Tue, 12 Nov 2013 14:26:18 +0100
+Subject: [Buildroot] [PATCH 5/7] gcc: remove ARC-specific patches
 In-Reply-To: <1384262780-12743-1-git-send-email-mjonker@synopsys.com>
 References: <1384262780-12743-1-git-send-email-mjonker@synopsys.com>
-Message-ID: <1384262780-12743-5-git-send-email-mjonker@synopsys.com>
+Message-ID: <1384262780-12743-6-git-send-email-mjonker@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,61 +12,320 @@ To: buildroot@busybox.net
 
 Signed-off-by: Mischa Jonker <mjonker@synopsys.com>
 ---
- package/uclibc/Config.in |    9 +++------
- package/uclibc/uclibc.mk |    5 +++--
- 2 files changed, 6 insertions(+), 8 deletions(-)
+ package/gcc/4.8-arc/100-uclibc-conf.patch          |   15 --
+ package/gcc/4.8-arc/301-missing-execinfo_h.patch   |   13 --
+ package/gcc/4.8-arc/302-c99-snprintf.patch         |   13 --
+ .../gcc/4.8-arc/305-libmudflap-susv3-legacy.patch  |   49 -------
+ package/gcc/4.8-arc/disable_gc_sections.patch      |  145 --------------------
+ package/gcc/4.8-arc/fix_branch_out_of_range.patch  |   30 ----
+ 6 files changed, 265 deletions(-)
+ delete mode 100644 package/gcc/4.8-arc/100-uclibc-conf.patch
+ delete mode 100644 package/gcc/4.8-arc/301-missing-execinfo_h.patch
+ delete mode 100644 package/gcc/4.8-arc/302-c99-snprintf.patch
+ delete mode 100644 package/gcc/4.8-arc/305-libmudflap-susv3-legacy.patch
+ delete mode 100644 package/gcc/4.8-arc/disable_gc_sections.patch
+ delete mode 100644 package/gcc/4.8-arc/fix_branch_out_of_range.patch
 
-diff --git a/package/uclibc/Config.in b/package/uclibc/Config.in
-index 82dd3aa..251927f 100644
---- a/package/uclibc/Config.in
-+++ b/package/uclibc/Config.in
-@@ -20,12 +20,9 @@ choice
- 		bool "uClibc 0.9.33.x"
- 		depends on !(BR2_arc || BR2_avr32 || BR2_xtensa)
- 
--	config BR2_UCLIBC_VERSION_0_9_33_ARC
--		bool "uClibc 0.9.33.x-arc"
--		depends on BR2_arc
+diff --git a/package/gcc/4.8-arc/100-uclibc-conf.patch b/package/gcc/4.8-arc/100-uclibc-conf.patch
+deleted file mode 100644
+index d56bf0a..0000000
+--- a/package/gcc/4.8-arc/100-uclibc-conf.patch
++++ /dev/null
+@@ -1,15 +0,0 @@
+-Index: gcc-4.8.0/contrib/regression/objs-gcc.sh
+-===================================================================
+---- gcc-4.8.0.orig/contrib/regression/objs-gcc.sh	2009-04-09 17:00:19.000000000 +0200
+-+++ gcc-4.8.0/contrib/regression/objs-gcc.sh	2013-03-23 17:39:04.000000000 +0100
+-@@ -106,6 +106,10 @@
+-  then
+-   make all-gdb all-dejagnu all-ld || exit 1
+-   make install-gdb install-dejagnu install-ld || exit 1
+-+elif [ $H_REAL_TARGET = $H_REAL_HOST -a $H_REAL_TARGET = i686-pc-linux-uclibc ]
+-+ then
+-+  make all-gdb all-dejagnu all-ld || exit 1
+-+  make install-gdb install-dejagnu install-ld || exit 1
+- elif [ $H_REAL_TARGET = $H_REAL_HOST ] ; then
+-   make bootstrap || exit 1
+-   make install || exit 1
+diff --git a/package/gcc/4.8-arc/301-missing-execinfo_h.patch b/package/gcc/4.8-arc/301-missing-execinfo_h.patch
+deleted file mode 100644
+index 00efda2..0000000
+--- a/package/gcc/4.8-arc/301-missing-execinfo_h.patch
++++ /dev/null
+@@ -1,13 +0,0 @@
+-Index: gcc-4.8.0/boehm-gc/include/gc.h
+-===================================================================
+---- gcc-4.8.0.orig/boehm-gc/include/gc.h	2007-04-23 23:10:09.000000000 +0200
+-+++ gcc-4.8.0/boehm-gc/include/gc.h	2013-03-23 17:39:20.000000000 +0100
+-@@ -503,7 +503,7 @@
+- #if defined(__linux__) || defined(__GLIBC__)
+- # include <features.h>
+- # if (__GLIBC__ == 2 && __GLIBC_MINOR__ >= 1 || __GLIBC__ > 2) \
+--     && !defined(__ia64__)
+-+     && !defined(__ia64__) && !defined(__UCLIBC__)
+- #   ifndef GC_HAVE_BUILTIN_BACKTRACE
+- #     define GC_HAVE_BUILTIN_BACKTRACE
+- #   endif
+diff --git a/package/gcc/4.8-arc/302-c99-snprintf.patch b/package/gcc/4.8-arc/302-c99-snprintf.patch
+deleted file mode 100644
+index cd4d2cc..0000000
+--- a/package/gcc/4.8-arc/302-c99-snprintf.patch
++++ /dev/null
+@@ -1,13 +0,0 @@
+-Index: gcc-4.8.0/libstdc++-v3/include/c_global/cstdio
+-===================================================================
+---- gcc-4.8.0.orig/libstdc++-v3/include/c_global/cstdio	2013-02-03 18:54:05.000000000 +0100
+-+++ gcc-4.8.0/libstdc++-v3/include/c_global/cstdio	2013-03-23 17:39:32.000000000 +0100
+-@@ -138,7 +138,7 @@
+-   using ::vsprintf;
+- } // namespace
+- 
+--#if _GLIBCXX_USE_C99
+-+#if _GLIBCXX_USE_C99 || defined __UCLIBC__
+- 
+- #undef snprintf
+- #undef vfscanf
+diff --git a/package/gcc/4.8-arc/305-libmudflap-susv3-legacy.patch b/package/gcc/4.8-arc/305-libmudflap-susv3-legacy.patch
+deleted file mode 100644
+index 35d5f50..0000000
+--- a/package/gcc/4.8-arc/305-libmudflap-susv3-legacy.patch
++++ /dev/null
+@@ -1,49 +0,0 @@
+-Index: gcc-4.8.0/libmudflap/mf-hooks2.c
+-===================================================================
+---- gcc-4.8.0.orig/libmudflap/mf-hooks2.c	2013-02-03 18:48:05.000000000 +0100
+-+++ gcc-4.8.0/libmudflap/mf-hooks2.c	2013-03-23 17:39:43.000000000 +0100
+-@@ -424,7 +424,7 @@
+- {
+-   TRACE ("%s\n", __PRETTY_FUNCTION__);
+-   MF_VALIDATE_EXTENT(s, n, __MF_CHECK_WRITE, "bzero region");
+--  bzero (s, n);
+-+  memset (s, 0, n);
+- }
+- 
+- 
+-@@ -434,7 +434,7 @@
+-   TRACE ("%s\n", __PRETTY_FUNCTION__);
+-   MF_VALIDATE_EXTENT(src, n, __MF_CHECK_READ, "bcopy src");
+-   MF_VALIDATE_EXTENT(dest, n, __MF_CHECK_WRITE, "bcopy dest");
+--  bcopy (src, dest, n);
+-+  memmove (dest, src, n);
+- }
+- 
+- 
+-@@ -444,7 +444,7 @@
+-   TRACE ("%s\n", __PRETTY_FUNCTION__);
+-   MF_VALIDATE_EXTENT(s1, n, __MF_CHECK_READ, "bcmp 1st arg");
+-   MF_VALIDATE_EXTENT(s2, n, __MF_CHECK_READ, "bcmp 2nd arg");
+--  return bcmp (s1, s2, n);
+-+  return n == 0 ? 0 : memcmp (s1, s2, n);
+- }
+- 
+- 
+-@@ -453,7 +453,7 @@
+-   size_t n = strlen (s);
+-   TRACE ("%s\n", __PRETTY_FUNCTION__);
+-   MF_VALIDATE_EXTENT(s, CLAMPADD(n, 1), __MF_CHECK_READ, "index region");
+--  return index (s, c);
+-+  return strchr (s, c);
+- }
+- 
+- 
+-@@ -462,7 +462,7 @@
+-   size_t n = strlen (s);
+-   TRACE ("%s\n", __PRETTY_FUNCTION__);
+-   MF_VALIDATE_EXTENT(s, CLAMPADD(n, 1), __MF_CHECK_READ, "rindex region");
+--  return rindex (s, c);
+-+  return strrchr (s, c);
+- }
+- 
+- /* XXX:  stpcpy, memccpy */
+diff --git a/package/gcc/4.8-arc/disable_gc_sections.patch b/package/gcc/4.8-arc/disable_gc_sections.patch
+deleted file mode 100644
+index 46a3a26..0000000
+--- a/package/gcc/4.8-arc/disable_gc_sections.patch
++++ /dev/null
+@@ -1,145 +0,0 @@
+-From be904b178fc0858ad41a3c2fbc13b388bd1ff465 Mon Sep 17 00:00:00 2001
+-From: Mischa Jonker <mjonker@synopsys.com>
+-Date: Mon, 15 Jul 2013 11:50:20 +0200
+-Subject: [PATCH] libstdc++: Disable gc-sections to work around binutils bug
 -
- 	config BR2_UCLIBC_VERSION_SNAPSHOT
- 		bool "daily snapshot"
-+		depends on !(BR2_arc)
- 
- endchoice
- 
-@@ -41,7 +38,7 @@ config BR2_UCLIBC_VERSION_STRING
- 	default 0.9.31.1	if BR2_UCLIBC_VERSION_0_9_31
- 	default 0.9.32.1	if BR2_UCLIBC_VERSION_0_9_32
- 	default 0.9.33.2	if BR2_UCLIBC_VERSION_0_9_33
--	default 0.9.33-arc	if BR2_UCLIBC_VERSION_0_9_33_ARC
-+	default "56eaa0"	if BR2_arc
- 	default BR2_USE_UCLIBC_SNAPSHOT	if BR2_UCLIBC_VERSION_SNAPSHOT
- 
- config BR2_UCLIBC_CONFIG
-@@ -49,7 +46,7 @@ config BR2_UCLIBC_CONFIG
- 	default "package/uclibc/uClibc-0.9.31.config" if BR2_UCLIBC_VERSION_0_9_31
- 	default "package/uclibc/uClibc-0.9.32.config" if BR2_UCLIBC_VERSION_0_9_32
- 	default "package/uclibc/uClibc-0.9.33.config" if BR2_UCLIBC_VERSION_0_9_33
--	default "package/uclibc/uClibc-snapshot.config" if BR2_UCLIBC_VERSION_0_9_33_ARC
-+	default "package/uclibc/uClibc-snapshot.config" if BR2_arc
- 	default "package/uclibc/uClibc-snapshot.config" if BR2_UCLIBC_VERSION_SNAPSHOT
- 	help
- 	  Some people may wish to use their own modified uClibc configuration
-diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
-index 20d3bb6..29933cc 100644
---- a/package/uclibc/uclibc.mk
-+++ b/package/uclibc/uclibc.mk
-@@ -9,8 +9,9 @@ UCLIBC_SOURCE = uClibc-$(UCLIBC_VERSION).tar.bz2
- 
- ifeq ($(BR2_UCLIBC_VERSION_SNAPSHOT),y)
- UCLIBC_SITE = http://www.uclibc.org/downloads/snapshots
--else ifeq ($(findstring arc,$(UCLIBC_VERSION)),arc)
--UCLIBC_SITE = $(BR2_ARC_SITE)
-+else ifeq ($(BR2_arc),y)
-+UCLIBC_SITE = git://github.com/foss-for-synopsys-dwc-arc-processors/uClibc.git
-+UCLIBC_SOURCE = uClibc-$(UCLIBC_VERSION).tar.gz
- else
- UCLIBC_SITE = http://www.uclibc.org/downloads
- UCLIBC_SOURCE = uClibc-$(UCLIBC_VERSION).tar.xz
+-This is to work around the following error message:
+-BFD (GNU Binutils) 2.23.2 assertion fail elf32-arc.c:2140
+-
+-Signed-off-by: Mischa Jonker <mjonker@synopsys.com>
+----
+- libstdc++-v3/acinclude.m4 |    3 ---
+- libstdc++-v3/configure    |   33 ---------------------------------
+- 2 files changed, 36 deletions(-)
+-
+-diff --git a/libstdc++-v3/acinclude.m4 b/libstdc++-v3/acinclude.m4
+-index e131214..aa2e375 100644
+---- a/libstdc++-v3/acinclude.m4
+-+++ b/libstdc++-v3/acinclude.m4
+-@@ -296,9 +296,6 @@ AC_DEFUN([GLIBCXX_CHECK_LINKER_FEATURES], [
+-       fi
+-       rm -f conftest.c conftest.o conftest
+-     fi
+--    if test "$ac_gcsections" = "yes"; then
+--      SECTION_LDFLAGS="-Wl,--gc-sections $SECTION_LDFLAGS"
+--    fi
+-     AC_MSG_RESULT($ac_gcsections)
+- 
+-     if test "$ac_test_CFLAGS" = set; then
+-diff --git a/libstdc++-v3/configure b/libstdc++-v3/configure
+-index ed049cf..d325e3e 100755
+---- a/libstdc++-v3/configure
+-+++ b/libstdc++-v3/configure
+-@@ -20653,9 +20653,6 @@ rm -f core conftest.err conftest.$ac_objext \
+-       fi
+-       rm -f conftest.c conftest.o conftest
+-     fi
+--    if test "$ac_gcsections" = "yes"; then
+--      SECTION_LDFLAGS="-Wl,--gc-sections $SECTION_LDFLAGS"
+--    fi
+-     { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_gcsections" >&5
+- $as_echo "$ac_gcsections" >&6; }
+- 
+-@@ -27688,9 +27685,6 @@ rm -f core conftest.err conftest.$ac_objext \
+-       fi
+-       rm -f conftest.c conftest.o conftest
+-     fi
+--    if test "$ac_gcsections" = "yes"; then
+--      SECTION_LDFLAGS="-Wl,--gc-sections $SECTION_LDFLAGS"
+--    fi
+-     { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_gcsections" >&5
+- $as_echo "$ac_gcsections" >&6; }
+- 
+-@@ -33619,9 +33613,6 @@ rm -f core conftest.err conftest.$ac_objext \
+-       fi
+-       rm -f conftest.c conftest.o conftest
+-     fi
+--    if test "$ac_gcsections" = "yes"; then
+--      SECTION_LDFLAGS="-Wl,--gc-sections $SECTION_LDFLAGS"
+--    fi
+-     { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_gcsections" >&5
+- $as_echo "$ac_gcsections" >&6; }
+- 
+-@@ -45496,9 +45487,6 @@ rm -f core conftest.err conftest.$ac_objext \
+-       fi
+-       rm -f conftest.c conftest.o conftest
+-     fi
+--    if test "$ac_gcsections" = "yes"; then
+--      SECTION_LDFLAGS="-Wl,--gc-sections $SECTION_LDFLAGS"
+--    fi
+-     { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_gcsections" >&5
+- $as_echo "$ac_gcsections" >&6; }
+- 
+-@@ -45710,9 +45698,6 @@ rm -f core conftest.err conftest.$ac_objext \
+-       fi
+-       rm -f conftest.c conftest.o conftest
+-     fi
+--    if test "$ac_gcsections" = "yes"; then
+--      SECTION_LDFLAGS="-Wl,--gc-sections $SECTION_LDFLAGS"
+--    fi
+-     { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_gcsections" >&5
+- $as_echo "$ac_gcsections" >&6; }
+- 
+-@@ -46185,9 +46170,6 @@ rm -f core conftest.err conftest.$ac_objext \
+-       fi
+-       rm -f conftest.c conftest.o conftest
+-     fi
+--    if test "$ac_gcsections" = "yes"; then
+--      SECTION_LDFLAGS="-Wl,--gc-sections $SECTION_LDFLAGS"
+--    fi
+-     { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_gcsections" >&5
+- $as_echo "$ac_gcsections" >&6; }
+- 
+-@@ -52470,9 +52452,6 @@ rm -f core conftest.err conftest.$ac_objext \
+-       fi
+-       rm -f conftest.c conftest.o conftest
+-     fi
+--    if test "$ac_gcsections" = "yes"; then
+--      SECTION_LDFLAGS="-Wl,--gc-sections $SECTION_LDFLAGS"
+--    fi
+-     { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_gcsections" >&5
+- $as_echo "$ac_gcsections" >&6; }
+- 
+-@@ -58386,9 +58365,6 @@ rm -f core conftest.err conftest.$ac_objext \
+-       fi
+-       rm -f conftest.c conftest.o conftest
+-     fi
+--    if test "$ac_gcsections" = "yes"; then
+--      SECTION_LDFLAGS="-Wl,--gc-sections $SECTION_LDFLAGS"
+--    fi
+-     { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_gcsections" >&5
+- $as_echo "$ac_gcsections" >&6; }
+- 
+-@@ -58553,9 +58529,6 @@ rm -f core conftest.err conftest.$ac_objext \
+-       fi
+-       rm -f conftest.c conftest.o conftest
+-     fi
+--    if test "$ac_gcsections" = "yes"; then
+--      SECTION_LDFLAGS="-Wl,--gc-sections $SECTION_LDFLAGS"
+--    fi
+-     { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_gcsections" >&5
+- $as_echo "$ac_gcsections" >&6; }
+- 
+-@@ -58781,9 +58754,6 @@ rm -f core conftest.err conftest.$ac_objext \
+-       fi
+-       rm -f conftest.c conftest.o conftest
+-     fi
+--    if test "$ac_gcsections" = "yes"; then
+--      SECTION_LDFLAGS="-Wl,--gc-sections $SECTION_LDFLAGS"
+--    fi
+-     { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_gcsections" >&5
+- $as_echo "$ac_gcsections" >&6; }
+- 
+-@@ -64697,9 +64667,6 @@ rm -f core conftest.err conftest.$ac_objext \
+-       fi
+-       rm -f conftest.c conftest.o conftest
+-     fi
+--    if test "$ac_gcsections" = "yes"; then
+--      SECTION_LDFLAGS="-Wl,--gc-sections $SECTION_LDFLAGS"
+--    fi
+-     { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_gcsections" >&5
+- $as_echo "$ac_gcsections" >&6; }
+- 
+--- 
+-1.7.9.5
+-
+diff --git a/package/gcc/4.8-arc/fix_branch_out_of_range.patch b/package/gcc/4.8-arc/fix_branch_out_of_range.patch
+deleted file mode 100644
+index 5340a3b..0000000
+--- a/package/gcc/4.8-arc/fix_branch_out_of_range.patch
++++ /dev/null
+@@ -1,30 +0,0 @@
+-arc: Fix operand-out-of-range errors
+-
+-brcc_s instructions can generate operand-out-of-range errors. While a
+-better solution is being discussed by the compiler team, this workaround
+-ensures that the chances of running into this issue are low.
+-
+-Signed-off-by: Mischa Jonker <mjonker@synopsys.com>
+-
+-diff --git a/gcc/config/arc/arc.c b/gcc/config/arc/arc.c
+-index ff602c0..b3ca4c4 100644
+---- a/gcc/config/arc/arc.c
+-+++ b/gcc/config/arc/arc.c
+-@@ -6565,7 +6565,7 @@ estimate required size increase).
+- 	      rtx *ccp = &XEXP (XVECEXP (pat, 0, 1), 0);
+- 
+- 	      offset = branch_dest (insn) - INSN_ADDRESSES (INSN_UID (insn));
+--	      if ((offset >= -140 && offset < 140)
+-+	      if ((offset >= -120 && offset < 120)
+- 		  && rtx_equal_p (XEXP (op, 1), const0_rtx)
+-  		  && compact_register_operand (XEXP (op, 0), VOIDmode)
+- 		  && equality_comparison_operator (op, VOIDmode))
+-@@ -6687,7 +6687,7 @@ estimate required size increase).
+- 
+- 		  if (op0 != cmp0)
+-  		    cc_clob_rtx = gen_rtx_REG (CC_ZNmode, CC_REG);
+-- 		  else if ((offset >= -140 && offset < 140)
+-+		  else if ((offset >= -120 && offset < 120)
+- 			   && rtx_equal_p (op1, const0_rtx)
+- 			   && compact_register_operand (op0, VOIDmode)
+- 			   && (GET_CODE (op) == EQ
 -- 
 1.7.9.5
