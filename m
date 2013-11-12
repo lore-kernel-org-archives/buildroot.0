@@ -1,23 +1,35 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 12 Nov 2013 11:49:31 +0100
-Subject: [Buildroot] [PATCH] qt5base: detect posix_fallocate() at
-	configure time
-In-Reply-To: <1384239722-31660-1-git-send-email-fatih.asici@gmail.com> ("Fatih
- =?utf-8?B?QcWfxLFjxLEiJ3M=?= message of "Tue, 12 Nov 2013 09:02:02 +0200")
-References: <1384239722-31660-1-git-send-email-fatih.asici@gmail.com>
-Message-ID: <87siv151z8.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 12 Nov 2013 11:58:54 +0100
+Subject: [Buildroot] Xineramaproto
+In-Reply-To: <3F863D59E1624E3FA3BE86B5BE40EA59@tux.local>
+References: <233A67DA67A045DF84F76ABF9CA04635@tux.local>
+ <BAF922FAE74849899122A8651F8AFD3C@tux.local>
+ <3F863D59E1624E3FA3BE86B5BE40EA59@tux.local>
+Message-ID: <20131112115854.244577e6@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fatih" == Fatih A??c? <fatih.asici@gmail.com> writes:
+Dear Gwyll Gwyllin,
 
-> Fixes http://autobuild.buildroot.net/results/555278227680e90737e6dbe0a6dcc035507150aa/
-> Signed-off-by: Fatih A??c? <fatih.asici@gmail.com>
+On Tue, 12 Nov 2013 11:15:39 +0100, Gwyll Gwyllin wrote:
 
-Committed, thanks.
+> Anyone?
 
+Well, you have been asked (by me) a number of questions on October,
+11th, and you never replied to these questions. So how do you expect
+"Anyone" to help you solve your problem ? :-)
+
+Please see
+http://lists.busybox.net/pipermail/buildroot/2013-October/080374.html
+for the list of questions you did not answer.
+
+Best regards,
+
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
