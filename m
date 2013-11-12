@@ -1,47 +1,56 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 12 Nov 2013 08:15:14 +0100
-Subject: [Buildroot] [PATCH 2/7] eigen: add C++ toolchain dependency
-In-Reply-To: <1384203613-17871-3-git-send-email-s.martin49@gmail.com>
+Date: Tue, 12 Nov 2013 08:24:49 +0100
+Subject: [Buildroot] [PATCH 3/7] eigen: fix install rules
+In-Reply-To: <20131111233358.58088a11@skate>
 References: <1384203613-17871-1-git-send-email-s.martin49@gmail.com>
- <1384203613-17871-3-git-send-email-s.martin49@gmail.com>
-Message-ID: <5281D582.7000809@mind.be>
+ <1384203613-17871-4-git-send-email-s.martin49@gmail.com>
+ <20131111233358.58088a11@skate>
+Message-ID: <5281D7C1.8080900@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 11/11/13 22:00, Samuel Martin wrote:
-> As said in its help text, eigen heavily uses C++ features.
-> So, explicit this dependency in the Config.in.
+On 11/11/13 23:33, Thomas Petazzoni wrote:
+> Dear Samuel Martin,
 >
-> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+> On Mon, 11 Nov 2013 22:00:09 +0100, Samuel Martin wrote:
+>
+>> diff --git a/package/eigen/eigen.mk b/package/eigen/eigen.mk
+>> index 5abd464..63e21e9 100644
+>> --- a/package/eigen/eigen.mk
+>> +++ b/package/eigen/eigen.mk
+>> @@ -16,8 +16,14 @@ EIGEN_INSTALL_TARGET = NO
+>>   # This package only consists of headers that need to be
+>>   # copied over to the sysroot for compile time use
+>>   define EIGEN_INSTALL_STAGING_CMDS
+>> -	$(RM) -r $(STAGING_DIR)/usr/include/Eigen
+>> -	cp -a $(@D)/Eigen $(STAGING_DIR)/usr/include/
+>> +	for d in Eigen unsupported ; do \
+>> +		$(RM) -r $(STAGING_DIR)/usr/include/$${d} ; \
+>
+> Isn't it a bit "rude" to remove
+> $(STAGING_DIR)/usr/include/unsupported ? I mean, this directory name
+> doesn't seem very Eigen specific. Even though it's unlikely, there
+> might be other things installed in there.
+>
+>> +		rsync -ar --exclude=CMakeLists.txt \
+>> +			--exclude=test \
+>> +			--exclude=bench \
+>> +			--exclude=doc \
+>> +			$(@D)/$${d} $(STAGING_DIR)/usr/include/ ; \
+>> +	done
+>
+> I must say I'm not overly enthusiastic about this solution. No way to
+> have a proper make install, or cmake stuff working for this package?
 
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+  I had a quick look, and it looks like the cmake infra should work for 
+this package. I guess Matt Weber originally didn't use it because nothing 
+needs to be compiled anyway, and you don't want to compile the tests.
 
-> ---
->   package/eigen/Config.in | 4 ++++
->   1 file changed, 4 insertions(+)
->
-> diff --git a/package/eigen/Config.in b/package/eigen/Config.in
-> index c7fcde2..e94f9a3 100644
-> --- a/package/eigen/Config.in
-> +++ b/package/eigen/Config.in
-> @@ -1,5 +1,6 @@
->   config BR2_PACKAGE_EIGEN
->   	bool "eigen"
-> +	depends on BR2_INSTALL_LIBSTDCPP
->   	help
->   	  Eigen is a C++ template library for linear algebra: vectors,
->   	  matrices, and related algorithms. It is versatile, fast, elegant
-> @@ -11,3 +12,6 @@ config BR2_PACKAGE_EIGEN
->   	  template library defined in the headers.
->
->   	  http://eigen.tuxfamily.org/
-> +
-> +comment "eigen needs a toolchain w/ C++"
-> +	depends on !BR2_INSTALL_LIBSTDCPP
->
+  Regards,
+  Arnout
 
 
 -- 
