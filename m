@@ -1,9 +1,9 @@
 From: Spenser Gilliland <spenser@gillilanding.com>
-Date: Tue, 12 Nov 2013 11:31:43 -0600
-Subject: [Buildroot] [PATCH v2 3/5] glibc: add microblaze internal toolchain
+Date: Tue, 12 Nov 2013 11:31:45 -0600
+Subject: [Buildroot] [PATCH v2 5/5] toolchain: enable microblaze toolchain
 In-Reply-To: <1384277505-11503-1-git-send-email-spenser@gillilanding.com>
 References: <1384277505-11503-1-git-send-email-spenser@gillilanding.com>
-Message-ID: <1384277505-11503-4-git-send-email-spenser@gillilanding.com>
+Message-ID: <1384277505-11503-6-git-send-email-spenser@gillilanding.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,38 +13,44 @@ To: buildroot@busybox.net
 
 Signed-off-by: Spenser Gilliland <spenser@gillilanding.com>
 ---
- package/glibc/glibc.mk |   12 ++++++++++++
- 1 files changed, 12 insertions(+), 0 deletions(-)
+ toolchain/Config.in                     |    2 +-
+ toolchain/toolchain-buildroot/Config.in |    4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
-index 2e7fe82..91ad29e 100644
---- a/package/glibc/glibc.mk
-+++ b/package/glibc/glibc.mk
-@@ -4,6 +4,17 @@
- #
- ################################################################################
+diff --git a/toolchain/Config.in b/toolchain/Config.in
+index 3980d79..bbfd367 100644
+--- a/toolchain/Config.in
++++ b/toolchain/Config.in
+@@ -35,7 +35,7 @@ choice
  
-+ifeq ($(BR2_microblaze),y)
-+ifeq ($(BR2_TOOLCHAIN_BUILDROOT_EGLIBC),y)
-+GLIBC_VERSION = 7f0bcce417c47aefad06ddfec7cd4ced3a4e10ff
-+GLIBC_SITE = http://github.com/Xilinx/eglibc/tarball/$(GLIBC_VERSION)
-+GLIBC_SRC_SUBDIR = .
-+else
-+GLIBC_VERSION = b86835ca92a1942ed08d8b5ee47498e711feaddb
-+GLIBC_SITE = http://github.com/Xilinx/glibc/tarball/$(GLIBC_VERSION)
-+GLIBC_SRC_SUBDIR = .
-+endif
-+else
- ifeq ($(BR2_TOOLCHAIN_BUILDROOT_EGLIBC),y)
- GLIBC_VERSION = 2.17-svnr22064
- GLIBC_SITE = http://downloads.yoctoproject.org/releases/eglibc/
-@@ -15,6 +26,7 @@ GLIBC_SITE = $(BR2_GNU_MIRROR)/libc
- GLIBC_SOURCE = glibc-$(GLIBC_VERSION).tar.xz
- GLIBC_SRC_SUBDIR = .
- endif
-+endif
+ config BR2_TOOLCHAIN_BUILDROOT
+ 	bool "Buildroot toolchain"
+-	depends on !BR2_microblaze && !BR2_aarch64 && !BR2_nios2
++	depends on !BR2_aarch64 && !BR2_nios2
+ 	select BR2_TOOLCHAIN_HAS_SHADOW_PASSWORDS
  
- GLIBC_LICENSE = GPLv2+ (programs), LGPLv2.1+, BSD-3c, MIT (library)
- GLIBC_LICENSE_FILES = $(addprefix $(GLIBC_SRC_SUBDIR)/,COPYING COPYING.LIB LICENSES)
+ config BR2_TOOLCHAIN_EXTERNAL
+diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
+index 8b37127..1529004 100644
+--- a/toolchain/toolchain-buildroot/Config.in
++++ b/toolchain/toolchain-buildroot/Config.in
+@@ -21,7 +21,7 @@ config BR2_TOOLCHAIN_BUILDROOT_EGLIBC
+ 		   BR2_i386   || BR2_mips     || BR2_mipsel  || \
+ 		   BR2_mips64 || BR2_mips64el || BR2_powerpc || \
+ 		   BR2_sh     || BR2_sh64     || BR2_sparc   || \
+-		   BR2_x86_64
++		   BR2_x86_64 || BR2_microblaze
+ 	depends on BR2_USE_MMU
+ 	depends on !BR2_PREFER_STATIC_LIB
+ 	select BR2_TOOLCHAIN_USES_GLIBC
+@@ -42,7 +42,7 @@ config BR2_TOOLCHAIN_BUILDROOT_GLIBC
+ 		   BR2_i386   || BR2_mips     || BR2_mipsel  || \
+ 		   BR2_mips64 || BR2_mips64el || BR2_powerpc || \
+ 		   BR2_sh     || BR2_sh64     || BR2_sparc   || \
+-		   BR2_x86_64
++		   BR2_x86_64 || BR2_microblaze
+ 	select BR2_TOOLCHAIN_USES_GLIBC
+ 	depends on !BR2_PREFER_STATIC_LIB
+ 	# our glibc.mk enables RPC support
 -- 
 1.7.1
