@@ -1,79 +1,43 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 12 Nov 2013 22:07:52 +0100
-Subject: [Buildroot] [PATCH v2 2/5] gcc: add microblaze internal
- toolchain
-In-Reply-To: <1384277505-11503-3-git-send-email-spenser@gillilanding.com>
-References: <1384277505-11503-1-git-send-email-spenser@gillilanding.com>
- <1384277505-11503-3-git-send-email-spenser@gillilanding.com>
-Message-ID: <20131112220752.6fea927d@skate>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 12 Nov 2013 18:03:30 +0100
+Subject: [Buildroot] [PATCH 5/7] gcc: remove ARC-specific patches
+In-Reply-To: <1384262780-12743-6-git-send-email-mjonker@synopsys.com>
+References: <1384262780-12743-1-git-send-email-mjonker@synopsys.com>
+ <1384262780-12743-6-git-send-email-mjonker@synopsys.com>
+Message-ID: <52825F62.3080507@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Spenser Gilliland,
+On 12/11/13 14:26, Mischa Jonker wrote:
+> Signed-off-by: Mischa Jonker<mjonker@synopsys.com>
+> ---
+>   package/gcc/4.8-arc/100-uclibc-conf.patch          |   15 --
+>   package/gcc/4.8-arc/301-missing-execinfo_h.patch   |   13 --
+>   package/gcc/4.8-arc/302-c99-snprintf.patch         |   13 --
+>   .../gcc/4.8-arc/305-libmudflap-susv3-legacy.patch  |   49 -------
+>   package/gcc/4.8-arc/disable_gc_sections.patch      |  145 --------------------
+>   package/gcc/4.8-arc/fix_branch_out_of_range.patch  |   30 ----
+>   6 files changed, 265 deletions(-)
+>   delete mode 100644 package/gcc/4.8-arc/100-uclibc-conf.patch
+>   delete mode 100644 package/gcc/4.8-arc/301-missing-execinfo_h.patch
+>   delete mode 100644 package/gcc/4.8-arc/302-c99-snprintf.patch
+>   delete mode 100644 package/gcc/4.8-arc/305-libmudflap-susv3-legacy.patch
+>   delete mode 100644 package/gcc/4.8-arc/disable_gc_sections.patch
+>   delete mode 100644 package/gcc/4.8-arc/fix_branch_out_of_range.patch
 
-On Tue, 12 Nov 2013 11:31:42 -0600, Spenser Gilliland wrote:
+  This one should probably be squashed with 3/7, because that is the 
+reason that these patches are no longer used.
 
-> +# Until gcc 4.7, a three stage build process was needed when using
-> +# NPTL. This hidden option tells whether gcc is a version that
-> +# requires this three stage build process.
-> +config BR2_GCC_VERSION_NEEDS_THREE_STAGE_BUILD
-> +	bool
+  Regards,
+  Arnout
 
-Hum, is this really meant to be part of your patch? :-)
-
-
-> @@ -16,39 +23,44 @@ choice
->  	config BR2_GCC_VERSION_4_2_2_AVR32_2_1_5
->  		depends on BR2_avr32
->  		bool "gcc 4.2.2-avr32-2.1.5"
-> +		select BR2_GCC_VERSION_NEEDS_THREE_STAGE_BUILD
-
-and this (and all the other occurrences).
-
-> +GCC_SOURCE = gcc-$(GCC_VERSION).tar.bz2
-> +else ifeq ($(findstring microblaze,$(GCC_VERSION)),microblaze)
-> +MBGCC_VERSION = b93bb009e021aba64dd4b8cdb0bbc5a176c55543
-
-MBGCC_VERSION ?
-
-> +GCC_SITE = http://github.com/Xilinx/gcc/tarball/$(MBGCC_VERSION)
-> +GCC_SOURCE = gcc-$(GCC_VERSION).tar.gz
->  else
->  GCC_SITE = $(BR2_GNU_MIRROR:/=)/gcc/gcc-$(GCC_VERSION)
-> -endif
-> -
->  GCC_SOURCE = gcc-$(GCC_VERSION).tar.bz2
-> +endif
->  
->  #
->  # Xtensa special hook
-> @@ -60,7 +66,7 @@ endef
->  #
->  
->  define HOST_GCC_EXTRACT_CMDS
-> -	$(BZCAT) $(DL_DIR)/$(GCC_SOURCE) | \
-> +	$(call suitable-extractor,$(GCC_SOURCE),$(BZCAT)) $(DL_DIR)/$(GCC_SOURCE) | \
-
-The suitable-extractor macro doesn't take a second argument, so
-the ,$(BZCAT) here is useless.
-
->  		$(TAR) $(TAR_STRIP_COMPONENTS)=1 -C $(@D) \
->  		--exclude='libjava/*' \
->  		--exclude='libgo/*' \
-
-Another issue is that this series is going to conflict quite badly with
-the series posted by Mischa to add specific binutils/gcc/gdb/uClibc
-versions for ARC.
-
-It would probably be good if you could sync up on these two series.
-
-Thanks!
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
