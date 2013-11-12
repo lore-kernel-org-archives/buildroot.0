@@ -1,69 +1,47 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 12 Nov 2013 22:54:56 +0100
-Subject: [Buildroot] [PATCH 1/1] omniorb: add COS Naming Service
-In-Reply-To: <1384288305-4945-1-git-send-email-mlweber1@rockwellcollins.com>
-References: <1384288305-4945-1-git-send-email-mlweber1@rockwellcollins.com>
-Message-ID: <20131112225456.6012af43@skate>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 12 Nov 2013 23:05:59 +0100
+Subject: [Buildroot] [PATCH 2 of 2] infra: remove usage of pkgparentdir
+	in favor of pkgdir
+In-Reply-To: <5282302C.7000005@mind.be> (Arnout Vandecappelle's message of
+ "Tue, 12 Nov 2013 14:42:04 +0100")
+References: <patchbomb.1384170790@argentina>
+ <8953db252a5816d2e988.1384170792@argentina> <52816529.9010704@mind.be>
+ <CAAXf6LVMJ-EQemvYkvujm+zypQO_cufQq5=z7zz_tto2hug=Aw@mail.gmail.com>
+ <20131112120904.4e65d13f@skate>
+ <CAAXf6LX+_CGzfYwsAsLMQbUCYoO6Khvh7dcxkDRRt1BespkPGw@mail.gmail.com>
+ <5282302C.7000005@mind.be>
+Message-ID: <87bo1p46ns.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Matt Weber,
+>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
 
-On Tue, 12 Nov 2013 14:31:45 -0600, Matt Weber wrote:
-> 
-> Signed-off-by: Matt Weber <mlweber1@rockwellcollins.com>
-> ---
->  package/omniorb/Config.in  |    9 +++++++++
->  package/omniorb/omniorb.mk |    8 ++++++++
->  2 files changed, 17 insertions(+), 0 deletions(-)
-> 
-> diff --git a/package/omniorb/Config.in b/package/omniorb/Config.in
-> index 6326688..22527fc 100644
-> --- a/package/omniorb/Config.in
-> +++ b/package/omniorb/Config.in
-> @@ -10,5 +10,14 @@ config BR2_PACKAGE_OMNIORB
->  
->  	  http://omniorb.sourceforge.net/
->  
-> +if BR2_PACKAGE_OMNIORB
-> +
-> +config BR2_PACKAGE_OMNIORB_WITH_SERVICES
-> +        bool "COS Naming Service"
-> +        default y
-> +        help
-> +          omniORB COS Naming Service
+Hi,
 
-Use tab for indentation (and one tab + two spaces for the help text).
+>  How is that hard?
 
-> +define OMNIORB_ENABLE_SERVICES
-> +	$(SED) 's:SUBDIRS += lib:SUBDIRS += lib services:g' $(@D)/src/dir.mk
-> +endef
-> +
-> +ifeq ($(BR2_PACKAGE_OMNIORB_WITH_SERVICES),y)
-> +	OMNIORB_POST_CONFIGURE_HOOKS += OMNIORB_ENABLE_SERVICES
-> +endif
+>  I would do what we usually do for new policy: enforce it for new
+> packages, but leave it alone for existing packages until someone grows
+> tired of the inconsistency and sends a global fixup patch. That also
+> has the advantage that we can still change our mind on the short term
+> without needing to change things all over the place again.
 
-This is kind of weird, because the "services" directory is built in
-some condition:
+>  That said, I think that using package/foo in the .mk file is a lot
+> clearer than $(FOO_XXXDIR).
 
-ifndef EmbeddedSystem
-SUBDIRS += appl services
-endif
+Agreed. We already have a bunch of magic variable names in BR, so lets
+not enforce more than needed.
 
-but you define EmbeddedSystem=1 in Buildroot:
+>>> <foo>_DL_DIR => same as before.
+>> 
+>> In general, I think the new variable names make sense.
 
-echo "EmbeddedSystem=1" >> $(@D)/mk/beforeauto.mk
+>  +1.
 
-Is there a reason for defining EmbeddedSystem=1 ? The only difference
-will be that it's going to build the stuff in src/appl/, but looking at
-this directory, it doesn't seem like a huge amount of code compared to
-the overall size of omniORB.
++1
 
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
