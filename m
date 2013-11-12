@@ -1,70 +1,114 @@
-From: Matt Weber <mlweber1@rockwellcollins.com>
-Date: Tue, 12 Nov 2013 16:51:47 -0600
-Subject: [Buildroot] [PATCH v2] omniorb: add COS Naming Service
-Message-ID: <1384296707-24772-1-git-send-email-mlweber1@rockwellcollins.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 12 Nov 2013 23:49:47 +0100
+Subject: [Buildroot] [git commit] Update for 2013.11-rc1
+Message-ID: <20131112231429.89E849BBB5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Matt Weber <mlweber1@rockwellcollins.com>
+commit: http://git.buildroot.net/buildroot/commit/?id=abce7ca6f2672ed5988596310e1165f04d2e5ad6
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
-Changes v1 -> v2
- - Moved comment to top package/omniorb/Config.in (suggested by Thomas S)
- - Removed indents of variable assigments and changed hook
-   to be a post patch hook package/omniorb/Config.in (suggested by Arnout V)
- - Cleaned up tab/spaces package/omniorb/Config.in (suggested by Thomas P)
+ CHANGES            |   16 ++++++++--------
+ Makefile           |    2 +-
+ docs/download.html |   10 +++++-----
+ docs/news.html     |   13 +++++++++++++
+ 4 files changed, 27 insertions(+), 14 deletions(-)
 
- package/omniorb/Config.in  |   15 +++++++++++++--
- package/omniorb/omniorb.mk |    8 ++++++++
- 2 files changed, 21 insertions(+), 2 deletions(-)
-
-diff --git a/package/omniorb/Config.in b/package/omniorb/Config.in
-index 6326688..95f90dc 100644
---- a/package/omniorb/Config.in
-+++ b/package/omniorb/Config.in
-@@ -1,3 +1,7 @@
-+
-+comment "omniORB needs a toolchain w/ C++"
-+	depends on !BR2_INSTALL_LIBSTDCPP
-+
- config BR2_PACKAGE_OMNIORB
- 	bool "omniorb"
- 	depends on BR2_INSTALL_LIBSTDCPP
-@@ -10,5 +14,12 @@ config BR2_PACKAGE_OMNIORB
+diff --git a/CHANGES b/CHANGES
+index 12c6b2b..b1edb5c 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -1,4 +1,4 @@
+-2013.11, Not yet released:
++2013.11-rc1, Released November 12th, 2013
  
- 	  http://omniorb.sourceforge.net/
+ 	Architectures: Nios-II support, MIPS arch handling fixes
  
--comment "omniORB needs a toolchain w/ C++"
--	depends on !BR2_INSTALL_LIBSTDCPP
-+if BR2_PACKAGE_OMNIORB
-+
-+config BR2_PACKAGE_OMNIORB_WITH_SERVICES
-+	bool "COS Naming Service"
-+	default y
-+	help
-+	  omniORB COS Naming Service
-+
-+endif
-diff --git a/package/omniorb/omniorb.mk b/package/omniorb/omniorb.mk
-index 490ff93..b0d3183 100644
---- a/package/omniorb/omniorb.mk
-+++ b/package/omniorb/omniorb.mk
-@@ -24,6 +24,14 @@ OMNIORB_INSTALL_TARGET = YES
- OMNIORB_CONF_OPT += --disable-longdouble
- HOST_OMNIORB_CONF_OPT += --disable-longdouble
+@@ -60,13 +60,13 @@
+ 	smartmontools, socat, socketcand, sqlcipher, sqlite, squid,
+ 	stress, strongswan, stunnel, sudo, syslinux, systemd,
+ 	sysvinit, tcl, ti-gfx, time, transmission, tremor, tslib,
+-	tvheadend, tzdata, uboot-tools, uclibc, udpcast, uemacs,
+-	ulogd, usb_modeswitch{,_data}, util-linux, vala, valgrind,
+-	vde2, vorbus-tools, vpnc, vsftpd, vtun, wayland, webkit, webp,
+-	webrtc-audio-processing, weston, wget, wireshark, wsapi,
+-	xavante, xdriver_xf86-video-geode, xenomai, xinetd,
+-	xlib_libpthread-stubs, xl2tp, xmlstarlet, xserver_xorg-server,
+-	xz, zeromq, zic, zmqpp
++	tstools, tvheadend, tzdata, uboot-tools, uclibc, udpcast,
++	uemacs, ulogd, usb_modeswitch{,_data}, util-linux, vala,
++	valgrind, vde2, vorbus-tools, vpnc, vsftpd, vtun, wayland,
++	webkit, webp, webrtc-audio-processing, weston, wget,
++	wireshark, wsapi, xavante, xdriver_xf86-video-geode, xenomai,
++	xinetd, xlib_libpthread-stubs, xl2tp, xmlstarlet,
++	xserver_xorg-server, xz, zeromq, zic, zmqpp
  
-+define OMNIORB_ENABLE_SERVICES
-+$(SED) 's:SUBDIRS += lib:SUBDIRS += lib services:g' $(@D)/src/dir.mk
-+endef
+ 	New packages: aiccu, autossh, bc, civetweb, cppdb, cryptsetup,
+ 	duma, eigen, harfbuzz, igmpproxy, iputils, jq, knock, kobs-ng,
+diff --git a/Makefile b/Makefile
+index 2f7db59..c7a0a6d 100644
+--- a/Makefile
++++ b/Makefile
+@@ -24,7 +24,7 @@
+ #--------------------------------------------------------------
+ 
+ # Set and export the version string
+-export BR2_VERSION:=2013.11-git
++export BR2_VERSION:=2013.11-rc1
+ 
+ # Check for minimal make version (note: this check will break at make 10.x)
+ MIN_MAKE_VERSION=3.81
+diff --git a/docs/download.html b/docs/download.html
+index 49c768d..dfba889 100644
+--- a/docs/download.html
++++ b/docs/download.html
+@@ -14,15 +14,15 @@ or
+ <a href="/downloads/buildroot-2013.08.1.tar.bz2">buildroot-2013.08.1.tar.bz2</a>.
+ 
+ <p>
+-<!--
+-The latest release candidate is <b>2013.08-rc3</b>, which can be
 +
-+ifeq ($(BR2_PACKAGE_OMNIORB_WITH_SERVICES),y)
-+OMNIORB_POST_PATCH_HOOKS += OMNIORB_ENABLE_SERVICES
-+endif
++The latest release candidate is <b>2013.11-rc1</b>, which can be
+ downloaded here:<p>
+ 
+-<a href="/downloads/buildroot-2013.08-rc3.tar.gz">buildroot-2013.08-rc3.tar.gz</a>
++<a href="/downloads/buildroot-2013.11-rc1tar.gz">buildroot-2013.11-rc1.tar.gz</a>
+ or
+-<a href="/downloads/buildroot-2013.08-rc3.tar.bz2">buildroot-2013.08-rc3.tar.bz2</a>.
++<a href="/downloads/buildroot-2013.11-rc3.tar.bz2">buildroot-2013.11-rc1.tar.bz2</a>.
+ <p>
+--->
 +
- # omniORB is not completely cross-compile friendly and has some
- # assumptions where a couple host tools must be built and then
- # used by the target build.  The host tools generate code from
--- 
-1.7.1
+ This and earlier releases can always be downloaded from
+ <a href="/downloads/">http://buildroot.net/downloads/</a>.
+ 
+diff --git a/docs/news.html b/docs/news.html
+index 2560227..91ed85d 100644
+--- a/docs/news.html
++++ b/docs/news.html
+@@ -5,6 +5,19 @@
+ <p>
+ 
+ <ul>
++  <li><b>12 November 2013 -- 2013.11-rc1 released</b>
++
++    <p>We have a new release candidate! Lots of changes all over the
++    tree, see the <a
++    href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2013.11_rc1">CHANGES</a>
++    file for details.</p>
++
++    <p>Head to the <a href="/downloads/">downloads page</a> to pick up the
++    <a href="/downloads/buildroot-2013.11-rc1.tar.bz2">2013.11-rc1
++    release candidate</a>, and report any problems found to the <a
++    href="lists.html">mailing list</a> or <a
++    href="https://bugs.uclibc.org">bug tracker</a>.</p>
++
+   <li><b>11 November 2013 -- Report from Buildroot Developers Meeting</b>
+ 
+     <p>A report from the recent
