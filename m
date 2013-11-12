@@ -1,82 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 12 Nov 2013 22:43:28 +0100
-Subject: [Buildroot] menuconfig / legacy bug
-Message-ID: <20131112224328.4edae7b0@skate>
+Date: Tue, 12 Nov 2013 22:52:50 +0100
+Subject: [Buildroot] [PATCH 1/7] gdb: arc: Use git instead of website
+In-Reply-To: <E6BF041E97966E4DB955F0DF883AD2D685F1749A@de02wembxa.internal.synopsys.com>
+References: <1384262780-12743-1-git-send-email-mjonker@synopsys.com>
+ <1384262780-12743-2-git-send-email-mjonker@synopsys.com>
+ <20131112223739.45f76af9@skate>
+ <E6BF041E97966E4DB955F0DF883AD2D685F1749A@de02wembxa.internal.synopsys.com>
+Message-ID: <20131112225250.51c7459b@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Dear Mischa Jonker,
 
-Samuel noticed this today: it seems like we have a bug in menuconfig
-that is annoying for the legacy thing.
+On Tue, 12 Nov 2013 21:40:12 +0000, Mischa Jonker wrote:
 
-Scenario to reproduce the bug:
+> > Is there any reason why for gdb and binutils we don't have a "choice"
+> > option for the ARC version? I know it's a bit silly because for ARC that
+> > would be the only choice, but that would make things more similar to what we
+> > do for gcc, no?
+> 
+> I think that was decided as part of the review process back then. To be honest, I forgot to remove the choice in gcc now, so I didn't use this opportunity to make it consistent. Now that I'll make a v2 anyway, please let me know what your preference is: to choose or not to choose.
 
- * Checkout commit 38dbd33b91adb4543e922e644b09430fa3836068 (which is
-   right before the removal of the BR2_PACKAGE_QT_JAVASCRIPTCORE)
-   option.
+The problem is that the gcc choice is helpful to be able to do the
+"select BR2_GCC_NEEDS_MPC". If you remove the gcc version choice, you
+would have to add a "select BR2_GCC_NEEDS_MPC if BR2_arc" under the
+main gcc option. Not a big deal, but I'm wondering if I don't prefer
+having a single choice option.
 
- * Create a configuration that has BR2_PACKAGE_QT_JAVASCRIPTCORE set.
+Let's hear what others have to say, I don't have a really strong
+opinion on the matter, except that I'd like to have consistency between
+gcc/binutils/uClibc on the matter, and also across architectures: ARC,
+AVR32 and Microblaze (all needing special versions) should use the same
+strategy. Of course, I'm not asking you to fix all of them, just want
+to figure out a strategy that we will apply to all of these cases.
 
- * Checkout the latest master (or any other commit that has the
-   BR2_PACKAGE_QT_JAVASCRIPTCORE removal commit)
-
- * Run make menuconfig, it shows that Legacy is detected, which is OK.
-
- * Now, go in the Legacy menu, and try to disable the Qt Javascript
-   Core option. It doesn't disable it and instead menuconfig "jumps" at
-   the beginning of the long comment that explains the legacy thing.
-
-The following patch workarounds the problem by removing the problematic
-lines of the comment. Basically, all lines that contains only "signs"
-and not actual text seem to confuse menuconfig for some reason.
-
-Ideas?
+Best regards,
 
 Thomas
-
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 587afe1..d4bf7a0 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -68,20 +68,17 @@ comment "Legacy detected: check the content of the menu below"
- menu "Legacy config options"
- 
- if BR2_LEGACY
--comment "----------------------------------------------------"
- comment "Your old configuration uses legacy options that no  "
- comment "longer exist in buildroot, as indicated in the menu "
- comment "below. As long as these options stay selected, or in"
- comment "case of string options are non-empty, the build     "
- comment "will fail.                                          "
--comment "*                                                   "
- comment "Where possible, an automatic conversion from old to "
- comment "new symbols has been performed. Before making any   "
- comment "change in this legacy menu, make sure to exit the   "
- comment "configuration editor a first time and save the      "
- comment "configuration. Otherwise, the automatic conversion  "
- comment "of symbols will be lost.                            "
--comment "*                                                   "
- comment "After this initial save, reopen the configuration   "
- comment "editor, inspect the options selected below, read    "
- comment "their help texts, and verify/update the new         "
-@@ -90,12 +87,10 @@ comment "menus. When everything is ok, you can disable the   "
- comment "legacy options in the menu below. Once you have     "
- comment "disabled all legacy options, this text will         "
- comment "disappear and you will be able to start the build.  "
--comment "*                                                   "
- comment "Note: at some point in the future, the oldest legacy"
- comment "options will be removed, and configuration files    "
- comment "that still have those options set, will fail to     "
- comment "build, or run, in unpredictable ways.               "
--comment "----------------------------------------------------"
- endif
- 
- ###############################################################################
-
 -- 
 Thomas Petazzoni, CTO, Free Electrons
 Embedded Linux, Kernel and Android engineering
