@@ -1,98 +1,77 @@
-From: Spenser Gilliland <spenser@gillilanding.com>
-Date: Tue, 12 Nov 2013 15:22:44 -0600
-Subject: [Buildroot] [PATCH v2 2/5] gcc: add microblaze internal
- toolchain
-In-Reply-To: <20131112220752.6fea927d@skate>
-References: <1384277505-11503-1-git-send-email-spenser@gillilanding.com>
- <1384277505-11503-3-git-send-email-spenser@gillilanding.com>
- <20131112220752.6fea927d@skate>
-Message-ID: <1384291364.30195.7.camel@scotch.dyn.gillilanding.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 12 Nov 2013 22:25:40 +0100
+Subject: [Buildroot] [PATCH 1/1] omniorb: add COS Naming Service
+In-Reply-To: <1384288305-4945-1-git-send-email-mlweber1@rockwellcollins.com>
+References: <1384288305-4945-1-git-send-email-mlweber1@rockwellcollins.com>
+Message-ID: <52829CD4.3080200@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 2013-11-12 at 22:07 +0100, Thomas Petazzoni wrote:
-> Dear Spenser Gilliland,
-> 
-> On Tue, 12 Nov 2013 11:31:42 -0600, Spenser Gilliland wrote:
-> 
-> > +# Until gcc 4.7, a three stage build process was needed when using
-> > +# NPTL. This hidden option tells whether gcc is a version that
-> > +# requires this three stage build process.
-> > +config BR2_GCC_VERSION_NEEDS_THREE_STAGE_BUILD
-> > +	bool
-> 
-> Hum, is this really meant to be part of your patch? :-)
-> 
-> 
-> > @@ -16,39 +23,44 @@ choice
-> >  	config BR2_GCC_VERSION_4_2_2_AVR32_2_1_5
-> >  		depends on BR2_avr32
-> >  		bool "gcc 4.2.2-avr32-2.1.5"
-> > +		select BR2_GCC_VERSION_NEEDS_THREE_STAGE_BUILD
-> 
-> and this (and all the other occurrences).
-> 
-> > +GCC_SOURCE = gcc-$(GCC_VERSION).tar.bz2
-> > +else ifeq ($(findstring microblaze,$(GCC_VERSION)),microblaze)
-> > +MBGCC_VERSION = b93bb009e021aba64dd4b8cdb0bbc5a176c55543
-> 
-> MBGCC_VERSION ?
-> 
-> > +GCC_SITE = http://github.com/Xilinx/gcc/tarball/$(MBGCC_VERSION)
-> > +GCC_SOURCE = gcc-$(GCC_VERSION).tar.gz
-> >  else
-> >  GCC_SITE = $(BR2_GNU_MIRROR:/=)/gcc/gcc-$(GCC_VERSION)
-> > -endif
-> > -
-> >  GCC_SOURCE = gcc-$(GCC_VERSION).tar.bz2
-> > +endif
-> >  
-> >  #
-> >  # Xtensa special hook
-> > @@ -60,7 +66,7 @@ endef
-> >  #
-> >  
-> >  define HOST_GCC_EXTRACT_CMDS
-> > -	$(BZCAT) $(DL_DIR)/$(GCC_SOURCE) | \
-> > +	$(call suitable-extractor,$(GCC_SOURCE),$(BZCAT)) $(DL_DIR)/$(GCC_SOURCE) | \
-> 
-> The suitable-extractor macro doesn't take a second argument, so
-> the ,$(BZCAT) here is useless.
-> 
-> >  		$(TAR) $(TAR_STRIP_COMPONENTS)=1 -C $(@D) \
-> >  		--exclude='libjava/*' \
-> >  		--exclude='libgo/*' \
-> 
-> Another issue is that this series is going to conflict quite badly with
-> the series posted by Mischa to add specific binutils/gcc/gdb/uClibc
-> versions for ARC.
-> 
-> It would probably be good if you could sync up on these two series.
-> 
-> Thanks!
-> 
-> Thomas
+On 12/11/13 21:31, Matt Weber wrote:
+>
+> Signed-off-by: Matt Weber <mlweber1@rockwellcollins.com>
+> ---
+>   package/omniorb/Config.in  |    9 +++++++++
+>   package/omniorb/omniorb.mk |    8 ++++++++
+>   2 files changed, 17 insertions(+), 0 deletions(-)
+>
+> diff --git a/package/omniorb/Config.in b/package/omniorb/Config.in
+> index 6326688..22527fc 100644
+> --- a/package/omniorb/Config.in
+> +++ b/package/omniorb/Config.in
+> @@ -10,5 +10,14 @@ config BR2_PACKAGE_OMNIORB
+>
+>   	  http://omniorb.sourceforge.net/
+>
+> +if BR2_PACKAGE_OMNIORB
+> +
+> +config BR2_PACKAGE_OMNIORB_WITH_SERVICES
+> +        bool "COS Naming Service"
+> +        default y
+> +        help
+> +          omniORB COS Naming Service
+> +endif
+> +
+>   comment "omniORB needs a toolchain w/ C++"
+>   	depends on !BR2_INSTALL_LIBSTDCPP
+> diff --git a/package/omniorb/omniorb.mk b/package/omniorb/omniorb.mk
+> index 490ff93..cad50f8 100644
+> --- a/package/omniorb/omniorb.mk
+> +++ b/package/omniorb/omniorb.mk
+> @@ -24,6 +24,14 @@ OMNIORB_INSTALL_TARGET = YES
+>   OMNIORB_CONF_OPT += --disable-longdouble
+>   HOST_OMNIORB_CONF_OPT += --disable-longdouble
+>
+> +define OMNIORB_ENABLE_SERVICES
+> +	$(SED) 's:SUBDIRS += lib:SUBDIRS += lib services:g' $(@D)/src/dir.mk
+> +endef
+> +
+> +ifeq ($(BR2_PACKAGE_OMNIORB_WITH_SERVICES),y)
+> +	OMNIORB_POST_CONFIGURE_HOOKS += OMNIORB_ENABLE_SERVICES
 
-Thomas,
+  We normally don't indent variable assignments within conditions (the 
+indentation of the sed statement is OK, because that's a shell command).
 
-Thanks for the review.  I must have miss merged when rebasing onto
-master.  I'll fix it up and resubmit.
+  Also, wouldn't it be better to do this as post-patch hook?
 
-I'll look into how to better sync my code into Mischa's.
+  Regards,
+  Arnout
 
-Thanks,
-Spenser
+> +endif
+> +
+>   # omniORB is not completely cross-compile friendly and has some
+>   # assumptions where a couple host tools must be built and then
+>   # used by the target build.  The host tools generate code from
+>
+
+
 -- 
-Spenser Gilliland
-Computer Engineer
-IIT ECASP Lab
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: signature.asc
-Type: application/pgp-signature
-Size: 836 bytes
-Desc: This is a digitally signed message part
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20131112/90743992/attachment.asc>
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
