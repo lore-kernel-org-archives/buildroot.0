@@ -1,9 +1,9 @@
 From: Mischa Jonker <Mischa.Jonker@synopsys.com>
-Date: Tue, 12 Nov 2013 14:26:18 +0100
-Subject: [Buildroot] [PATCH 5/7] gcc: remove ARC-specific patches
+Date: Tue, 12 Nov 2013 14:26:19 +0100
+Subject: [Buildroot] [PATCH 6/7] uclibc: remove ARC-specific patches
 In-Reply-To: <1384262780-12743-1-git-send-email-mjonker@synopsys.com>
 References: <1384262780-12743-1-git-send-email-mjonker@synopsys.com>
-Message-ID: <1384262780-12743-6-git-send-email-mjonker@synopsys.com>
+Message-ID: <1384262780-12743-7-git-send-email-mjonker@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,320 +12,173 @@ To: buildroot@busybox.net
 
 Signed-off-by: Mischa Jonker <mjonker@synopsys.com>
 ---
- package/gcc/4.8-arc/100-uclibc-conf.patch          |   15 --
- package/gcc/4.8-arc/301-missing-execinfo_h.patch   |   13 --
- package/gcc/4.8-arc/302-c99-snprintf.patch         |   13 --
- .../gcc/4.8-arc/305-libmudflap-susv3-legacy.patch  |   49 -------
- package/gcc/4.8-arc/disable_gc_sections.patch      |  145 --------------------
- package/gcc/4.8-arc/fix_branch_out_of_range.patch  |   30 ----
- 6 files changed, 265 deletions(-)
- delete mode 100644 package/gcc/4.8-arc/100-uclibc-conf.patch
- delete mode 100644 package/gcc/4.8-arc/301-missing-execinfo_h.patch
- delete mode 100644 package/gcc/4.8-arc/302-c99-snprintf.patch
- delete mode 100644 package/gcc/4.8-arc/305-libmudflap-susv3-legacy.patch
- delete mode 100644 package/gcc/4.8-arc/disable_gc_sections.patch
- delete mode 100644 package/gcc/4.8-arc/fix_branch_out_of_range.patch
+ package/uclibc/0.9.33-arc/fix-fstat-for-be.patch   |   32 -----------------
+ .../uclibc/0.9.33-arc/fix-susv3-legacy-bcmp.patch  |   37 --------------------
+ package/uclibc/0.9.33-arc/fix-susv3-legacy.patch   |   36 -------------------
+ .../0.9.33-arc/uclibc-arc-add-__kernel_long.patch  |   29 ---------------
+ 4 files changed, 134 deletions(-)
+ delete mode 100644 package/uclibc/0.9.33-arc/fix-fstat-for-be.patch
+ delete mode 100644 package/uclibc/0.9.33-arc/fix-susv3-legacy-bcmp.patch
+ delete mode 100644 package/uclibc/0.9.33-arc/fix-susv3-legacy.patch
+ delete mode 100644 package/uclibc/0.9.33-arc/uclibc-arc-add-__kernel_long.patch
 
-diff --git a/package/gcc/4.8-arc/100-uclibc-conf.patch b/package/gcc/4.8-arc/100-uclibc-conf.patch
+diff --git a/package/uclibc/0.9.33-arc/fix-fstat-for-be.patch b/package/uclibc/0.9.33-arc/fix-fstat-for-be.patch
 deleted file mode 100644
-index d56bf0a..0000000
---- a/package/gcc/4.8-arc/100-uclibc-conf.patch
+index 2cdb517..0000000
+--- a/package/uclibc/0.9.33-arc/fix-fstat-for-be.patch
 +++ /dev/null
-@@ -1,15 +0,0 @@
--Index: gcc-4.8.0/contrib/regression/objs-gcc.sh
--===================================================================
----- gcc-4.8.0.orig/contrib/regression/objs-gcc.sh	2009-04-09 17:00:19.000000000 +0200
--+++ gcc-4.8.0/contrib/regression/objs-gcc.sh	2013-03-23 17:39:04.000000000 +0100
--@@ -106,6 +106,10 @@
--  then
--   make all-gdb all-dejagnu all-ld || exit 1
--   make install-gdb install-dejagnu install-ld || exit 1
--+elif [ $H_REAL_TARGET = $H_REAL_HOST -a $H_REAL_TARGET = i686-pc-linux-uclibc ]
--+ then
--+  make all-gdb all-dejagnu all-ld || exit 1
--+  make install-gdb install-dejagnu install-ld || exit 1
-- elif [ $H_REAL_TARGET = $H_REAL_HOST ] ; then
--   make bootstrap || exit 1
--   make install || exit 1
-diff --git a/package/gcc/4.8-arc/301-missing-execinfo_h.patch b/package/gcc/4.8-arc/301-missing-execinfo_h.patch
-deleted file mode 100644
-index 00efda2..0000000
---- a/package/gcc/4.8-arc/301-missing-execinfo_h.patch
-+++ /dev/null
-@@ -1,13 +0,0 @@
--Index: gcc-4.8.0/boehm-gc/include/gc.h
--===================================================================
----- gcc-4.8.0.orig/boehm-gc/include/gc.h	2007-04-23 23:10:09.000000000 +0200
--+++ gcc-4.8.0/boehm-gc/include/gc.h	2013-03-23 17:39:20.000000000 +0100
--@@ -503,7 +503,7 @@
-- #if defined(__linux__) || defined(__GLIBC__)
-- # include <features.h>
-- # if (__GLIBC__ == 2 && __GLIBC_MINOR__ >= 1 || __GLIBC__ > 2) \
---     && !defined(__ia64__)
--+     && !defined(__ia64__) && !defined(__UCLIBC__)
-- #   ifndef GC_HAVE_BUILTIN_BACKTRACE
-- #     define GC_HAVE_BUILTIN_BACKTRACE
-- #   endif
-diff --git a/package/gcc/4.8-arc/302-c99-snprintf.patch b/package/gcc/4.8-arc/302-c99-snprintf.patch
-deleted file mode 100644
-index cd4d2cc..0000000
---- a/package/gcc/4.8-arc/302-c99-snprintf.patch
-+++ /dev/null
-@@ -1,13 +0,0 @@
--Index: gcc-4.8.0/libstdc++-v3/include/c_global/cstdio
--===================================================================
----- gcc-4.8.0.orig/libstdc++-v3/include/c_global/cstdio	2013-02-03 18:54:05.000000000 +0100
--+++ gcc-4.8.0/libstdc++-v3/include/c_global/cstdio	2013-03-23 17:39:32.000000000 +0100
--@@ -138,7 +138,7 @@
--   using ::vsprintf;
-- } // namespace
-- 
---#if _GLIBCXX_USE_C99
--+#if _GLIBCXX_USE_C99 || defined __UCLIBC__
-- 
-- #undef snprintf
-- #undef vfscanf
-diff --git a/package/gcc/4.8-arc/305-libmudflap-susv3-legacy.patch b/package/gcc/4.8-arc/305-libmudflap-susv3-legacy.patch
-deleted file mode 100644
-index 35d5f50..0000000
---- a/package/gcc/4.8-arc/305-libmudflap-susv3-legacy.patch
-+++ /dev/null
-@@ -1,49 +0,0 @@
--Index: gcc-4.8.0/libmudflap/mf-hooks2.c
--===================================================================
----- gcc-4.8.0.orig/libmudflap/mf-hooks2.c	2013-02-03 18:48:05.000000000 +0100
--+++ gcc-4.8.0/libmudflap/mf-hooks2.c	2013-03-23 17:39:43.000000000 +0100
--@@ -424,7 +424,7 @@
-- {
--   TRACE ("%s\n", __PRETTY_FUNCTION__);
--   MF_VALIDATE_EXTENT(s, n, __MF_CHECK_WRITE, "bzero region");
---  bzero (s, n);
--+  memset (s, 0, n);
-- }
-- 
-- 
--@@ -434,7 +434,7 @@
--   TRACE ("%s\n", __PRETTY_FUNCTION__);
--   MF_VALIDATE_EXTENT(src, n, __MF_CHECK_READ, "bcopy src");
--   MF_VALIDATE_EXTENT(dest, n, __MF_CHECK_WRITE, "bcopy dest");
---  bcopy (src, dest, n);
--+  memmove (dest, src, n);
-- }
-- 
-- 
--@@ -444,7 +444,7 @@
--   TRACE ("%s\n", __PRETTY_FUNCTION__);
--   MF_VALIDATE_EXTENT(s1, n, __MF_CHECK_READ, "bcmp 1st arg");
--   MF_VALIDATE_EXTENT(s2, n, __MF_CHECK_READ, "bcmp 2nd arg");
---  return bcmp (s1, s2, n);
--+  return n == 0 ? 0 : memcmp (s1, s2, n);
-- }
-- 
-- 
--@@ -453,7 +453,7 @@
--   size_t n = strlen (s);
--   TRACE ("%s\n", __PRETTY_FUNCTION__);
--   MF_VALIDATE_EXTENT(s, CLAMPADD(n, 1), __MF_CHECK_READ, "index region");
---  return index (s, c);
--+  return strchr (s, c);
-- }
-- 
-- 
--@@ -462,7 +462,7 @@
--   size_t n = strlen (s);
--   TRACE ("%s\n", __PRETTY_FUNCTION__);
--   MF_VALIDATE_EXTENT(s, CLAMPADD(n, 1), __MF_CHECK_READ, "rindex region");
---  return rindex (s, c);
--+  return strrchr (s, c);
-- }
-- 
-- /* XXX:  stpcpy, memccpy */
-diff --git a/package/gcc/4.8-arc/disable_gc_sections.patch b/package/gcc/4.8-arc/disable_gc_sections.patch
-deleted file mode 100644
-index 46a3a26..0000000
---- a/package/gcc/4.8-arc/disable_gc_sections.patch
-+++ /dev/null
-@@ -1,145 +0,0 @@
--From be904b178fc0858ad41a3c2fbc13b388bd1ff465 Mon Sep 17 00:00:00 2001
+@@ -1,32 +0,0 @@
+-From f394d65c74631a0e715bac582b09c302ee84114f Mon Sep 17 00:00:00 2001
 -From: Mischa Jonker <mjonker@synopsys.com>
--Date: Mon, 15 Jul 2013 11:50:20 +0200
--Subject: [PATCH] libstdc++: Disable gc-sections to work around binutils bug
+-Date: Tue, 23 Jul 2013 17:59:04 +0200
+-Subject: [PATCH] libc/sysdeps: Fix common-generic stat.h for BE part 2
 -
--This is to work around the following error message:
--BFD (GNU Binutils) 2.23.2 assertion fail elf32-arc.c:2140
+-Previous patch only fixed the build. This patch fixes the behavior at
+-run-time as well.
+-
+-It fixes "Value too large for defined data type" messages caused by
+-fstat syscall wrapper returning -EOVERFLOW.
 -
 -Signed-off-by: Mischa Jonker <mjonker@synopsys.com>
 ----
-- libstdc++-v3/acinclude.m4 |    3 ---
-- libstdc++-v3/configure    |   33 ---------------------------------
-- 2 files changed, 36 deletions(-)
+- libc/sysdeps/linux/common-generic/bits/stat.h |    2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
 -
--diff --git a/libstdc++-v3/acinclude.m4 b/libstdc++-v3/acinclude.m4
--index e131214..aa2e375 100644
----- a/libstdc++-v3/acinclude.m4
--+++ b/libstdc++-v3/acinclude.m4
--@@ -296,9 +296,6 @@ AC_DEFUN([GLIBCXX_CHECK_LINKER_FEATURES], [
--       fi
--       rm -f conftest.c conftest.o conftest
--     fi
---    if test "$ac_gcsections" = "yes"; then
---      SECTION_LDFLAGS="-Wl,--gc-sections $SECTION_LDFLAGS"
---    fi
--     AC_MSG_RESULT($ac_gcsections)
+-diff --git a/libc/sysdeps/linux/common-generic/bits/stat.h b/libc/sysdeps/linux/common-generic/bits/stat.h
+-index 07716ab..945c408 100644
+---- a/libc/sysdeps/linux/common-generic/bits/stat.h
+-+++ b/libc/sysdeps/linux/common-generic/bits/stat.h
+-@@ -63,8 +63,8 @@ struct stat
+-     unsigned long long __pad4;
+-     long __pad5;
+-     long st_size;				/* Size of file, in bytes. */
+--    int __pad6;
+-     int st_blksize;				/* Optimal block size for I/O. */
+-+    int __pad6;
+-     long __pad7;
+-     long st_blocks;				/* Number 512-byte blocks allocated */
+- # endif /* __LITTLE_ENDIAN */
+---
+-1.7.9.5
+diff --git a/package/uclibc/0.9.33-arc/fix-susv3-legacy-bcmp.patch b/package/uclibc/0.9.33-arc/fix-susv3-legacy-bcmp.patch
+deleted file mode 100644
+index e0884ea..0000000
+--- a/package/uclibc/0.9.33-arc/fix-susv3-legacy-bcmp.patch
++++ /dev/null
+@@ -1,37 +0,0 @@
+-From 0594ba53b9b8d9a1ac409fd187e4d1ba8f2e7f2a Mon Sep 17 00:00:00 2001
+-From: Vineet Gupta <vgupta@synopsys.com>
+-Date: Thu, 8 Aug 2013 15:41:51 +0530
+-Subject: [PATCH] ARC: SuSv3 legacy support: Add "bcmp" alias for memcmp
+-
+-Although uClibc provides this already as UCLIBC_SUSV3_LEGACY_MACROS,
+-that however requires UCLIBC_SUSV3_LEGACY to be switched off, causing a
+-bunch of other things to be not available (usleep)
+-
+-Signed-off-by: Vineet Gupta <vgupta@synopsys.com>
+----
+- libc/string/arc/memcmp.S | 5 +++++
+- 1 file changed, 5 insertions(+)
+-
+-diff --git a/libc/string/arc/memcmp.S b/libc/string/arc/memcmp.S
+-index 0c7c345..cb25990 100644
+---- a/libc/string/arc/memcmp.S
+-+++ b/libc/string/arc/memcmp.S
+-@@ -1,6 +1,7 @@
+- /* Copyright (C) 2007 ARC International (UK) LTD */
 - 
--     if test "$ac_test_CFLAGS" = set; then
--diff --git a/libstdc++-v3/configure b/libstdc++-v3/configure
--index ed049cf..d325e3e 100755
----- a/libstdc++-v3/configure
--+++ b/libstdc++-v3/configure
--@@ -20653,9 +20653,6 @@ rm -f core conftest.err conftest.$ac_objext \
--       fi
--       rm -f conftest.c conftest.o conftest
--     fi
---    if test "$ac_gcsections" = "yes"; then
---      SECTION_LDFLAGS="-Wl,--gc-sections $SECTION_LDFLAGS"
---    fi
--     { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_gcsections" >&5
-- $as_echo "$ac_gcsections" >&6; }
+- #include <bits/asm.h>
+-+#include <features.h>
 - 
--@@ -27688,9 +27685,6 @@ rm -f core conftest.err conftest.$ac_objext \
--       fi
--       rm -f conftest.c conftest.o conftest
--     fi
---    if test "$ac_gcsections" = "yes"; then
---      SECTION_LDFLAGS="-Wl,--gc-sections $SECTION_LDFLAGS"
---    fi
--     { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_gcsections" >&5
-- $as_echo "$ac_gcsections" >&6; }
+- #ifdef __LITTLE_ENDIAN__
+- #define WORD2 r2
+-@@ -115,3 +116,7 @@ ENTRY(memcmp)
+- 	j_s.d	[blink]
+- 	mov	r0,0
+- ENDFUNC(memcmp)
+-+
+-+#ifdef __UCLIBC_SUSV3_LEGACY__
+-+strong_alias(memcmp,bcmp)
+-+#endif
+--- 
+-1.8.1.2
+-
+diff --git a/package/uclibc/0.9.33-arc/fix-susv3-legacy.patch b/package/uclibc/0.9.33-arc/fix-susv3-legacy.patch
+deleted file mode 100644
+index a768024..0000000
+--- a/package/uclibc/0.9.33-arc/fix-susv3-legacy.patch
++++ /dev/null
+@@ -1,36 +0,0 @@
+-From 3124ace804337d32974392e0a73a09cdc0d60fc8 Mon Sep 17 00:00:00 2001
+-From: Mischa Jonker <mjonker@synopsys.com>
+-Date: Mon, 15 Jul 2013 13:06:11 +0200
+-Subject: [PATCH] ARC: Add alias 'index' to strcmp for susv3 legacy
+- compatibility
+-
+-This fixes build errors for 'keyutils'
+-
+-Signed-off-by: Mischa Jonker <mjonker@synopsys.com>
+----
+- libc/string/arc/strchr.S |    5 +++++
+- 1 file changed, 5 insertions(+)
+-
+-diff --git a/libc/string/arc/strchr.S b/libc/string/arc/strchr.S
+-index b9f28c0..8d51aa4 100644
+---- a/libc/string/arc/strchr.S
+-+++ b/libc/string/arc/strchr.S
+-@@ -1,6 +1,7 @@
+- /* Copyright (C) 2007 ARC International (UK) LTD */
 - 
--@@ -33619,9 +33613,6 @@ rm -f core conftest.err conftest.$ac_objext \
--       fi
--       rm -f conftest.c conftest.o conftest
--     fi
---    if test "$ac_gcsections" = "yes"; then
---      SECTION_LDFLAGS="-Wl,--gc-sections $SECTION_LDFLAGS"
---    fi
--     { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_gcsections" >&5
-- $as_echo "$ac_gcsections" >&6; }
+- #include <bits/asm.h>
+-+#include <features.h>
 - 
--@@ -45496,9 +45487,6 @@ rm -f core conftest.err conftest.$ac_objext \
--       fi
--       rm -f conftest.c conftest.o conftest
--     fi
---    if test "$ac_gcsections" = "yes"; then
---      SECTION_LDFLAGS="-Wl,--gc-sections $SECTION_LDFLAGS"
---    fi
--     { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_gcsections" >&5
-- $as_echo "$ac_gcsections" >&6; }
-- 
--@@ -45710,9 +45698,6 @@ rm -f core conftest.err conftest.$ac_objext \
--       fi
--       rm -f conftest.c conftest.o conftest
--     fi
---    if test "$ac_gcsections" = "yes"; then
---      SECTION_LDFLAGS="-Wl,--gc-sections $SECTION_LDFLAGS"
---    fi
--     { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_gcsections" >&5
-- $as_echo "$ac_gcsections" >&6; }
-- 
--@@ -46185,9 +46170,6 @@ rm -f core conftest.err conftest.$ac_objext \
--       fi
--       rm -f conftest.c conftest.o conftest
--     fi
---    if test "$ac_gcsections" = "yes"; then
---      SECTION_LDFLAGS="-Wl,--gc-sections $SECTION_LDFLAGS"
---    fi
--     { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_gcsections" >&5
-- $as_echo "$ac_gcsections" >&6; }
-- 
--@@ -52470,9 +52452,6 @@ rm -f core conftest.err conftest.$ac_objext \
--       fi
--       rm -f conftest.c conftest.o conftest
--     fi
---    if test "$ac_gcsections" = "yes"; then
---      SECTION_LDFLAGS="-Wl,--gc-sections $SECTION_LDFLAGS"
---    fi
--     { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_gcsections" >&5
-- $as_echo "$ac_gcsections" >&6; }
-- 
--@@ -58386,9 +58365,6 @@ rm -f core conftest.err conftest.$ac_objext \
--       fi
--       rm -f conftest.c conftest.o conftest
--     fi
---    if test "$ac_gcsections" = "yes"; then
---      SECTION_LDFLAGS="-Wl,--gc-sections $SECTION_LDFLAGS"
---    fi
--     { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_gcsections" >&5
-- $as_echo "$ac_gcsections" >&6; }
-- 
--@@ -58553,9 +58529,6 @@ rm -f core conftest.err conftest.$ac_objext \
--       fi
--       rm -f conftest.c conftest.o conftest
--     fi
---    if test "$ac_gcsections" = "yes"; then
---      SECTION_LDFLAGS="-Wl,--gc-sections $SECTION_LDFLAGS"
---    fi
--     { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_gcsections" >&5
-- $as_echo "$ac_gcsections" >&6; }
-- 
--@@ -58781,9 +58754,6 @@ rm -f core conftest.err conftest.$ac_objext \
--       fi
--       rm -f conftest.c conftest.o conftest
--     fi
---    if test "$ac_gcsections" = "yes"; then
---      SECTION_LDFLAGS="-Wl,--gc-sections $SECTION_LDFLAGS"
---    fi
--     { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_gcsections" >&5
-- $as_echo "$ac_gcsections" >&6; }
-- 
--@@ -64697,9 +64667,6 @@ rm -f core conftest.err conftest.$ac_objext \
--       fi
--       rm -f conftest.c conftest.o conftest
--     fi
---    if test "$ac_gcsections" = "yes"; then
---      SECTION_LDFLAGS="-Wl,--gc-sections $SECTION_LDFLAGS"
---    fi
--     { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_gcsections" >&5
-- $as_echo "$ac_gcsections" >&6; }
-- 
+- /* ARC700 has a relatively long pipeline and branch prediction, so we want
+-    to avoid branches that are hard to predict.  On the other hand, the
+-@@ -115,3 +116,7 @@ ENTRY(strchr)
+- 	mov.mi	r0,0
+- #endif /* ENDIAN */
+- ENDFUNC(strchr)
+-+
+-+#ifdef __UCLIBC_SUSV3_LEGACY__
+-+strong_alias(strchr,index)
+-+#endif
 --- 
 -1.7.9.5
 -
-diff --git a/package/gcc/4.8-arc/fix_branch_out_of_range.patch b/package/gcc/4.8-arc/fix_branch_out_of_range.patch
+diff --git a/package/uclibc/0.9.33-arc/uclibc-arc-add-__kernel_long.patch b/package/uclibc/0.9.33-arc/uclibc-arc-add-__kernel_long.patch
 deleted file mode 100644
-index 5340a3b..0000000
---- a/package/gcc/4.8-arc/fix_branch_out_of_range.patch
+index caebac1..0000000
+--- a/package/uclibc/0.9.33-arc/uclibc-arc-add-__kernel_long.patch
 +++ /dev/null
-@@ -1,30 +0,0 @@
--arc: Fix operand-out-of-range errors
+@@ -1,29 +0,0 @@
+-From 5164fb28e9205626211d0436933e6eb4960be582 Mon Sep 17 00:00:00 2001
+-From: Mischa Jonker <mjonker@synopsys.com>
+-Date: Wed, 10 Jul 2013 09:05:25 +0200
+-Subject: [PATCH] ARC: libc/sysdeps: add __kernel_long and __kernel_ulong
 -
--brcc_s instructions can generate operand-out-of-range errors. While a
--better solution is being discussed by the compiler team, this workaround
--ensures that the chances of running into this issue are low.
+-Linux 3.4 added these two types and updated various exported header
+-files to use them. While other architectures were updated before,
+-this was not the case for ARC.
+-
+-This fixes the build failure with Linux 3.10 headers.
 -
 -Signed-off-by: Mischa Jonker <mjonker@synopsys.com>
+----
+- libc/sysdeps/linux/arc/bits/kernel_types.h |    2 ++
+- 1 file changed, 2 insertions(+)
 -
--diff --git a/gcc/config/arc/arc.c b/gcc/config/arc/arc.c
--index ff602c0..b3ca4c4 100644
----- a/gcc/config/arc/arc.c
--+++ b/gcc/config/arc/arc.c
--@@ -6565,7 +6565,7 @@ estimate required size increase).
-- 	      rtx *ccp = &XEXP (XVECEXP (pat, 0, 1), 0);
-- 
-- 	      offset = branch_dest (insn) - INSN_ADDRESSES (INSN_UID (insn));
---	      if ((offset >= -140 && offset < 140)
--+	      if ((offset >= -120 && offset < 120)
-- 		  && rtx_equal_p (XEXP (op, 1), const0_rtx)
--  		  && compact_register_operand (XEXP (op, 0), VOIDmode)
-- 		  && equality_comparison_operator (op, VOIDmode))
--@@ -6687,7 +6687,7 @@ estimate required size increase).
-- 
-- 		  if (op0 != cmp0)
--  		    cc_clob_rtx = gen_rtx_REG (CC_ZNmode, CC_REG);
--- 		  else if ((offset >= -140 && offset < 140)
--+		  else if ((offset >= -120 && offset < 120)
-- 			   && rtx_equal_p (op1, const0_rtx)
-- 			   && compact_register_operand (op0, VOIDmode)
-- 			   && (GET_CODE (op) == EQ
+-diff --git a/libc/sysdeps/linux/arc/bits/kernel_types.h b/libc/sysdeps/linux/arc/bits/kernel_types.h
+-index fd52e1c..fc28fa1 100755
+---- a/libc/sysdeps/linux/arc/bits/kernel_types.h
+-+++ b/libc/sysdeps/linux/arc/bits/kernel_types.h
+-@@ -39,6 +39,8 @@ typedef	__kernel_uid_t		__kernel_old_uid_t;
+- typedef __kernel_gid_t		__kernel_old_gid_t;
+- typedef long long		__kernel_loff_t;
+- typedef unsigned int		__kernel_old_dev_t;
+-+typedef long			__kernel_long_t;
+-+typedef unsigned long		__kernel_ulong_t;
+-
+- typedef struct {
+- #ifdef __USE_ALL
 -- 
 1.7.9.5
