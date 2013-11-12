@@ -1,32 +1,25 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 13 Nov 2013 00:35:31 +0100
-Subject: [Buildroot] [git commit] news.html: add 2013.11-rc1 annoucement link
-Message-ID: <20131112233548.3BF649BC19@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 13 Nov 2013 00:48:17 +0100
+Subject: [Buildroot] [PATCH] qt5base: fix posix_fallocate patch
+In-Reply-To: <1384299123-6822-1-git-send-email-s.martin49@gmail.com> (Samuel
+ Martin's message of "Wed, 13 Nov 2013 00:32:03 +0100")
+References: <1384299123-6822-1-git-send-email-s.martin49@gmail.com>
+Message-ID: <87d2m52ncu.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=980220c645895e2f36d9da1f0f85a43ff706efad
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Samuel" == Samuel Martin <s.martin49@gmail.com> writes:
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- docs/news.html |    3 ++-
- 1 files changed, 2 insertions(+), 1 deletions(-)
+> Fixes:
+> 	http://autobuild.buildroot.net/results/a07/a07c1825a5295a8343cd89f0901d9a74a764d804/build-end.log
 
-diff --git a/docs/news.html b/docs/news.html
-index 91ed85d..eff98c2 100644
---- a/docs/news.html
-+++ b/docs/news.html
-@@ -10,7 +10,8 @@
-     <p>We have a new release candidate! Lots of changes all over the
-     tree, see the <a
-     href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2013.11_rc1">CHANGES</a>
--    file for details.</p>
-+    file for details, and read the
-+    <a href="http://lists.busybox.net/pipermail/buildroot/2013-November/082514.html">announcement</a>.</p>
- 
-     <p>Head to the <a href="/downloads/">downloads page</a> to pick up the
-     <a href="/downloads/buildroot-2013.11-rc1.tar.bz2">2013.11-rc1
+Argh - Committed, thanks.
+
+I did build test the first version of the patch, but not the followup
+fix.
+
+-- 
+Bye, Peter Korsgaard
