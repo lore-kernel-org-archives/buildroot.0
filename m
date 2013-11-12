@@ -1,43 +1,66 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 12 Nov 2013 22:52:50 +0100
-Subject: [Buildroot] [PATCH 1/7] gdb: arc: Use git instead of website
-In-Reply-To: <E6BF041E97966E4DB955F0DF883AD2D685F1749A@de02wembxa.internal.synopsys.com>
-References: <1384262780-12743-1-git-send-email-mjonker@synopsys.com>
- <1384262780-12743-2-git-send-email-mjonker@synopsys.com>
- <20131112223739.45f76af9@skate>
- <E6BF041E97966E4DB955F0DF883AD2D685F1749A@de02wembxa.internal.synopsys.com>
-Message-ID: <20131112225250.51c7459b@skate>
+Date: Tue, 12 Nov 2013 22:54:56 +0100
+Subject: [Buildroot] [PATCH 1/1] omniorb: add COS Naming Service
+In-Reply-To: <1384288305-4945-1-git-send-email-mlweber1@rockwellcollins.com>
+References: <1384288305-4945-1-git-send-email-mlweber1@rockwellcollins.com>
+Message-ID: <20131112225456.6012af43@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Mischa Jonker,
+Dear Matt Weber,
 
-On Tue, 12 Nov 2013 21:40:12 +0000, Mischa Jonker wrote:
-
-> > Is there any reason why for gdb and binutils we don't have a "choice"
-> > option for the ARC version? I know it's a bit silly because for ARC that
-> > would be the only choice, but that would make things more similar to what we
-> > do for gcc, no?
+On Tue, 12 Nov 2013 14:31:45 -0600, Matt Weber wrote:
 > 
-> I think that was decided as part of the review process back then. To be honest, I forgot to remove the choice in gcc now, so I didn't use this opportunity to make it consistent. Now that I'll make a v2 anyway, please let me know what your preference is: to choose or not to choose.
+> Signed-off-by: Matt Weber <mlweber1@rockwellcollins.com>
+> ---
+>  package/omniorb/Config.in  |    9 +++++++++
+>  package/omniorb/omniorb.mk |    8 ++++++++
+>  2 files changed, 17 insertions(+), 0 deletions(-)
+> 
+> diff --git a/package/omniorb/Config.in b/package/omniorb/Config.in
+> index 6326688..22527fc 100644
+> --- a/package/omniorb/Config.in
+> +++ b/package/omniorb/Config.in
+> @@ -10,5 +10,14 @@ config BR2_PACKAGE_OMNIORB
+>  
+>  	  http://omniorb.sourceforge.net/
+>  
+> +if BR2_PACKAGE_OMNIORB
+> +
+> +config BR2_PACKAGE_OMNIORB_WITH_SERVICES
+> +        bool "COS Naming Service"
+> +        default y
+> +        help
+> +          omniORB COS Naming Service
 
-The problem is that the gcc choice is helpful to be able to do the
-"select BR2_GCC_NEEDS_MPC". If you remove the gcc version choice, you
-would have to add a "select BR2_GCC_NEEDS_MPC if BR2_arc" under the
-main gcc option. Not a big deal, but I'm wondering if I don't prefer
-having a single choice option.
+Use tab for indentation (and one tab + two spaces for the help text).
 
-Let's hear what others have to say, I don't have a really strong
-opinion on the matter, except that I'd like to have consistency between
-gcc/binutils/uClibc on the matter, and also across architectures: ARC,
-AVR32 and Microblaze (all needing special versions) should use the same
-strategy. Of course, I'm not asking you to fix all of them, just want
-to figure out a strategy that we will apply to all of these cases.
+> +define OMNIORB_ENABLE_SERVICES
+> +	$(SED) 's:SUBDIRS += lib:SUBDIRS += lib services:g' $(@D)/src/dir.mk
+> +endef
+> +
+> +ifeq ($(BR2_PACKAGE_OMNIORB_WITH_SERVICES),y)
+> +	OMNIORB_POST_CONFIGURE_HOOKS += OMNIORB_ENABLE_SERVICES
+> +endif
 
-Best regards,
+This is kind of weird, because the "services" directory is built in
+some condition:
+
+ifndef EmbeddedSystem
+SUBDIRS += appl services
+endif
+
+but you define EmbeddedSystem=1 in Buildroot:
+
+echo "EmbeddedSystem=1" >> $(@D)/mk/beforeauto.mk
+
+Is there a reason for defining EmbeddedSystem=1 ? The only difference
+will be that it's going to build the stuff in src/appl/, but looking at
+this directory, it doesn't seem like a huge amount of code compared to
+the overall size of omniORB.
 
 Thomas
 -- 
