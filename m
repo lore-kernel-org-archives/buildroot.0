@@ -1,32 +1,32 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 13 Nov 2013 00:23:51 +0100
-Subject: [Buildroot] [git commit branch/next] grep: bump to version 2.15
-Message-ID: <20131112233229.BA0AE9BC1B@busybox.osuosl.org>
+Date: Wed, 13 Nov 2013 00:23:46 +0100
+Subject: [Buildroot] [git commit branch/next] gnutls: bump to version 3.2.6
+Message-ID: <20131112233229.B452C9B9BF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=2299e2f2d73ba6dc56ebf5bc53e6e2aa599a5faf
+commit: http://git.buildroot.net/buildroot/commit/?id=56034b1c9fbfeb7d39a7f83e2d064a159c96d116
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/grep/grep.mk |    2 +-
+ package/gnutls/gnutls.mk |    2 +-
  1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/grep/grep.mk b/package/grep/grep.mk
-index 2d815fe..91ef7de 100644
---- a/package/grep/grep.mk
-+++ b/package/grep/grep.mk
+diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
+index 1e3e267..8ab0665 100644
+--- a/package/gnutls/gnutls.mk
++++ b/package/gnutls/gnutls.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GREP_VERSION = 2.14
-+GREP_VERSION = 2.15
- GREP_SITE = $(BR2_GNU_MIRROR)/grep
- GREP_SOURCE = grep-$(GREP_VERSION).tar.xz
- GREP_LICENSE = GPLv3+
+-GNUTLS_VERSION = 3.2.5
++GNUTLS_VERSION = 3.2.6
+ GNUTLS_SOURCE = gnutls-$(GNUTLS_VERSION).tar.xz
+ GNUTLS_SITE = ftp://ftp.gnutls.org/gcrypt/gnutls/v3.2
+ GNUTLS_LICENSE = GPLv3+ LGPLv2.1+
