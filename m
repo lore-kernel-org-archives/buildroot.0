@@ -1,61 +1,181 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 12 Nov 2013 07:58:31 +0100
-Subject: [Buildroot] Make Acked/Reviewd/Tested-by tags visible
-In-Reply-To: <52817846.2080301@ozlabs.org>
-References: <20131111215435.GC3510@free.fr>
-	<52817846.2080301@ozlabs.org>
-Message-ID: <20131112075831.5d00efd8@skate>
+From: =?UTF-8?q?Fatih=20A=C5=9F=C4=B1c=C4=B1?= <fatih.asici@gmail.com>
+Date: Tue, 12 Nov 2013 09:02:02 +0200
+Subject: [Buildroot] [PATCH] qt5base: detect posix_fallocate() at configure
+	time
+Message-ID: <1384239722-31660-1-git-send-email-fatih.asici@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Jeremy Kerr,
+Fixes http://autobuild.buildroot.net/results/555278227680e90737e6dbe0a6dcc035507150aa/
 
-On Tue, 12 Nov 2013 08:37:26 +0800, Jeremy Kerr wrote:
+Signed-off-by: Fatih A??c? <fatih.asici@gmail.com>
+---
+ ...-detect-posix_fallocate-at-configure-time.patch | 154 +++++++++++++++++++++
+ 1 file changed, 154 insertions(+)
+ create mode 100644 package/qt5/qt5base/qt5base-0007-detect-posix_fallocate-at-configure-time.patch
 
-> > We would like to suggest that the web GUI and the pwclient CLI both
-> > display such tags besides each patch, a bit like (hypotetical output of
-> > pwclient):
-> > 
-> >     ID     Tags State       Subject
-> >     123456 ART  New         Wonderfull patch to apply quickly
-> 
-> I've been looking to implement this for a while, but didn't have any
-> good ideas about how to present this in the UI. I love your proposal
-> here with the flags, it's simple and I think would work well for the
-> majority of cases.
-> 
-> > Since patchwork already inserts those tags to the commit log (eg.
-> > pwclient view PATCH-ID), I hope it would be easy enough to also display
-> > it in the patch list.
-> 
-> It's easy enough to pull these out of the comment at patch-display time,
-> but a little more tricky with list views (without some horrible SQL
-> joining). I'll work out a nice way to to this; I think it'll involve
-> applying these flags when the follow-up comment is parsed.
-> 
-> Other projects have different policies for their tagging (some require 3
-> acks, for example), which will introduce a little complexity there too,
-> but that's not insurmountable either.
-
-Another thing that comes to mind is that not all Acked-by or Tested-by
-are equal, I believe. An Acked-by from a well-known long-time
-contributor will not be seen with the same level of trust that an
-Acked-by from an unknown newcomer. Do we want to add a mechanism of
-"rating"? But that would mean the project maintainer would have to
-"rate" developers, which is not nice. Or maybe just a list of e-mails
-that the project's maintainer considers as trustworthy, and only those
-ones would be taken into account when displaying the ART flags?
-
-Or maybe it doesn't matter too much, since in the vast majority of
-cases, only well-known long-time contributors are doing reviews/acks.
-
-Best regards,
-
-Thomas
+diff --git a/package/qt5/qt5base/qt5base-0007-detect-posix_fallocate-at-configure-time.patch b/package/qt5/qt5base/qt5base-0007-detect-posix_fallocate-at-configure-time.patch
+new file mode 100644
+index 0000000..7c45696
+--- /dev/null
++++ b/package/qt5/qt5base/qt5base-0007-detect-posix_fallocate-at-configure-time.patch
+@@ -0,0 +1,154 @@
++From 6fe9c6b8a2815dc5d412c1714be0adaa9681a129 Mon Sep 17 00:00:00 2001
++From: =?UTF-8?q?Fatih=20A=C5=9F=C4=B1c=C4=B1?= <fatih.asici@gmail.com>
++Date: Mon, 11 Nov 2013 17:04:46 +0200
++Subject: [PATCH] Detect posix_fallocate at configure time
++
++Testing feature macros is not enough for uclibc. Fixes build of the built-in
++sqlite3 with uclibc <= 0.9.33.2. Later versions will have posix_fallocate().
++
++Change-Id: I918a52777ac63624635802221effc6b86fa2269c
++Signed-off-by: Fatih A??c? <fatih.asici@gmail.com>
++Reported-Upstream: https://codereview.qt-project.org/70935
++---
++ .../unix/posix_fallocate/posix_fallocate.cpp       | 53 ++++++++++++++++++++++
++ .../unix/posix_fallocate/posix_fallocate.pro       |  2 +
++ configure                                          | 14 ++++++
++ src/3rdparty/sqlite/sqlite3.c                      |  7 ---
++ 4 files changed, 69 insertions(+), 7 deletions(-)
++ create mode 100644 config.tests/unix/posix_fallocate/posix_fallocate.cpp
++ create mode 100644 config.tests/unix/posix_fallocate/posix_fallocate.pro
++
++diff --git a/config.tests/unix/posix_fallocate/posix_fallocate.cpp b/config.tests/unix/posix_fallocate/posix_fallocate.cpp
++new file mode 100644
++index 0000000..5acd45a
++--- /dev/null
+++++ b/config.tests/unix/posix_fallocate/posix_fallocate.cpp
++@@ -0,0 +1,53 @@
+++/****************************************************************************
+++**
+++** Copyright (C) 2013 Digia Plc and/or its subsidiary(-ies).
+++** Contact: http://www.qt-project.org/legal
+++**
+++** This file is part of the config.tests of the Qt Toolkit.
+++**
+++** $QT_BEGIN_LICENSE:LGPL$
+++** Commercial License Usage
+++** Licensees holding valid commercial Qt licenses may use this file in
+++** accordance with the commercial license agreement provided with the
+++** Software or, alternatively, in accordance with the terms contained in
+++** a written agreement between you and Digia.  For licensing terms and
+++** conditions see http://qt.digia.com/licensing.  For further information
+++** use the contact form at http://qt.digia.com/contact-us.
+++**
+++** GNU Lesser General Public License Usage
+++** Alternatively, this file may be used under the terms of the GNU Lesser
+++** General Public License version 2.1 as published by the Free Software
+++** Foundation and appearing in the file LICENSE.LGPL included in the
+++** packaging of this file.  Please review the following information to
+++** ensure the GNU Lesser General Public License version 2.1 requirements
+++** will be met: http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html.
+++**
+++** In addition, as a special exception, Digia gives you certain additional
+++** rights.  These rights are described in the Digia Qt LGPL Exception
+++** version 1.1, included in the file LGPL_EXCEPTION.txt in this package.
+++**
+++** GNU General Public License Usage
+++** Alternatively, this file may be used under the terms of the GNU
+++** General Public License version 3.0 as published by the Free Software
+++** Foundation and appearing in the file LICENSE.GPL included in the
+++** packaging of this file.  Please review the following information to
+++** ensure the GNU General Public License version 3.0 requirements will be
+++** met: http://www.gnu.org/copyleft/gpl.html.
+++**
+++**
+++** $QT_END_LICENSE$
+++**
+++****************************************************************************/
+++
+++#include <fcntl.h>
+++
+++int main(int, char **)
+++{
+++#if _XOPEN_SOURCE >= 600 || _POSIX_C_SOURCE >= 200112L
+++    return ::posix_fallocate(0, 0, 0);
+++#else
+++#  error posix_fallocate not available
+++    // MIPSpro doesn't understand #error, so force a compiler error
+++    force_compiler_error = true;
+++#endif
+++}
++diff --git a/config.tests/unix/posix_fallocate/posix_fallocate.pro b/config.tests/unix/posix_fallocate/posix_fallocate.pro
++new file mode 100644
++index 0000000..f01b15f
++--- /dev/null
+++++ b/config.tests/unix/posix_fallocate/posix_fallocate.pro
++@@ -0,0 +1,2 @@
+++SOURCES = posix_fallocate.cpp
+++CONFIG -= qt dylib
++diff --git a/configure b/configure
++index 81e2a93..b67ed89 100755
++--- a/configure
+++++ b/configure
++@@ -968,6 +968,7 @@ CFG_MIPS_DSP=auto
++ CFG_MIPS_DSPR2=auto
++ CFG_CLOCK_GETTIME=auto
++ CFG_CLOCK_MONOTONIC=auto
+++CFG_POSIX_FALLOCATE=auto
++ CFG_MREMAP=auto
++ CFG_GETADDRINFO=auto
++ CFG_IPV6IFNAME=auto
++@@ -5653,6 +5654,15 @@ elif [ "$CFG_CLOCK_GETTIME" = "no" ]; then
++     CFG_CLOCK_MONOTONIC=no
++ fi
++ 
+++# detect posix_fallocate
+++if [ "$CFG_POSIX_FALLOCATE" = "auto" ]; then
+++    if compileTest unix/posix_fallocate "posix_fallocate"; then
+++        CFG_POSIX_FALLOCATE=yes
+++    else
+++        CFG_POSIX_FALLOCATE=no
+++    fi
+++fi
+++
++ # detect mremap
++ if [ "$CFG_MREMAP" = "auto" ]; then
++     if compileTest unix/mremap "mremap"; then
++@@ -5970,6 +5980,9 @@ fi
++ if [ "$CFG_CLOCK_MONOTONIC" = "yes" ]; then
++     QT_CONFIG="$QT_CONFIG clock-monotonic"
++ fi
+++if [ "$CFG_POSIX_FALLOCATE" = "yes" ]; then
+++    QT_CONFIG="$QT_CONFIG posix_fallocate"
+++fi
++ if [ "$CFG_MREMAP" = "yes" ]; then
++     QT_CONFIG="$QT_CONFIG mremap"
++ fi
++@@ -6449,6 +6462,7 @@ QMakeVar set sql-plugins "$SQL_PLUGINS"
++ [ "$CFG_GLIB" != "yes" ]     && QCONFIG_FLAGS="$QCONFIG_FLAGS QT_NO_GLIB"
++ [ "$CFG_QGTKSTYLE" != "yes" ] && QCONFIG_FLAGS="$QCONFIG_FLAGS QT_NO_STYLE_GTK"
++ [ "$CFG_CLOCK_MONOTONIC" = "no" ] && QCONFIG_FLAGS="$QCONFIG_FLAGS QT_NO_CLOCK_MONOTONIC"
+++[ "$CFG_POSIX_FALLOCATE" = "no" ] && QCONFIG_FLAGS="$QCONFIG_FLAGS QT_NO_POSIX_FALLOCATE"
++ [ "$CFG_MREMAP" = "no" ]     && QCONFIG_FLAGS="$QCONFIG_FLAGS QT_NO_MREMAP"
++ [ "$CFG_GETADDRINFO" = "no" ]&& QCONFIG_FLAGS="$QCONFIG_FLAGS QT_NO_GETADDRINFO"
++ [ "$CFG_IPV6IFNAME" = "no" ] && QCONFIG_FLAGS="$QCONFIG_FLAGS QT_NO_IPV6IFNAME"
++diff --git a/src/3rdparty/sqlite/sqlite3.c b/src/3rdparty/sqlite/sqlite3.c
++index 03fa649..1ae9be2 100644
++--- a/src/3rdparty/sqlite/sqlite3.c
+++++ b/src/3rdparty/sqlite/sqlite3.c
++@@ -22935,13 +22935,6 @@ SQLITE_PRIVATE const char *sqlite3OpcodeName(int i){
++ */
++ #if SQLITE_OS_UNIX              /* This file is used on unix only */
++ 
++-/* Use posix_fallocate() if it is available
++-*/
++-#if !defined(HAVE_POSIX_FALLOCATE) \
++-      && (_XOPEN_SOURCE >= 600 || _POSIX_C_SOURCE >= 200112L)
++-# define HAVE_POSIX_FALLOCATE 1
++-#endif
++-
++ /*
++ ** There are various methods for file locking used for concurrency
++ ** control:
++-- 
++1.8.4.rc3
++
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.8.4.rc3
