@@ -1,87 +1,50 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 12 Nov 2013 23:20:37 +0100
-Subject: [Buildroot] [git commit] legal info: fix saving of host package
-	licenses
-Message-ID: <20131112222456.9EC029BB31@busybox.osuosl.org>
+From: Matthew Weber <mlweber1@rockwellcollins.com>
+Date: Tue, 12 Nov 2013 16:27:19 -0600
+Subject: [Buildroot] [PATCH 1/1] omniorb: add COS Naming Service
+In-Reply-To: <52829CD4.3080200@mind.be>
+References: <1384288305-4945-1-git-send-email-mlweber1@rockwellcollins.com>
+ <52829CD4.3080200@mind.be>
+Message-ID: <OF3FB215A2.518C604E-ON86257C21.007AC979-86257C21.007B59E4@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=003d38da3a716b0a19e980fb69a6cd55b353f4f3
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Arnout Vandecappelle <arnout@mind.be> wrote on 11/12/2013 03:25:40 PM:
 
-Due to some tricky make behavior, the license texts of host packages that
-did not provide an explicit HOST_FOO_LICENSE_FILES definition was not saved.
-The problem is that it is not straightforward to use a variable
-defined/updated inside an evaluated block as input to a foreach statement.
-If you try to use $(FOO) then only the original value of FOO is used for
-foreach, any update inside the block is ignored. However, if you use
-$$(FOO), the entire contents of FOO (typically a list of items) is passed
-as one item to foreach, thus causing just one iteration instead of several.
+> From: Arnout Vandecappelle <arnout@mind.be>
+> To: Matt Weber <mlweber1@rockwellcollins.com>
+> Cc: buildroot at busybox.net
+> Date: 11/12/2013 03:25 PM
+> Subject: Re: [Buildroot] [PATCH 1/1] omniorb: add COS Naming Service
+> 
+> On 12/11/13 21:31, Matt Weber wrote:
+> >
+<snip>
+> >
+> > +define OMNIORB_ENABLE_SERVICES
+> > +   $(SED) 's:SUBDIRS += lib:SUBDIRS += lib services:g' 
+$(@D)/src/dir.mk
+> > +endef
+> > +
+> > +ifeq ($(BR2_PACKAGE_OMNIORB_WITH_SERVICES),y)
+> > +   OMNIORB_POST_CONFIGURE_HOOKS += OMNIORB_ENABLE_SERVICES
+> 
+>   We normally don't indent variable assignments within conditions (the 
+> indentation of the sed statement is OK, because that's a shell command).
+> 
 
-From Arnout Vandecapelle's explanation:
-Any variable referenced with a single $ inside the inner-generic-package
-macro is expanded before the resulting contents are eval'ed. Therefore, it
-is not possible to refer to variables defined by the inner-generic-package
-macro from within a single-$ function call.
+Sure, I'll clean those up.
 
-To fix the problem, one should defer the evaluation of the entire block
-using double dollar signs.
+>   Also, wouldn't it be better to do this as post-patch hook?
 
-Additionally, a few empty lines have been added to the legal-info-foo block
-for clarity.
+In this case, yes.  The file is not modified during configure.  I'll 
+update.
 
-Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-Acked-by: Luca Ceresoli <luca@lucaceresoli.net>
-Tested-by: Luca Ceresoli <luca@lucaceresoli.net>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/pkg-generic.mk |   17 +++++++++++++----
- 1 files changed, 13 insertions(+), 4 deletions(-)
-
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 75fda02..5111f31 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -502,26 +502,35 @@ $(2)_MANIFEST_TARBALL ?= not saved
- $(1)-legal-info:
- # Packages without a source are assumed to be part of Buildroot, skip them.
- ifneq ($(call qstrip,$$($(2)_SOURCE)),)
-+
- ifeq ($$($(2)_SITE_METHOD),local)
- # Packages without a tarball: don't save and warn
- 	@$(call legal-warning-pkg-savednothing,$$($(2)_RAWNAME),local)
-+
- else ifneq ($$($(2)_OVERRIDE_SRCDIR),)
- 	@$(call legal-warning-pkg-savednothing,$$($(2)_RAWNAME),override)
-+
- else
- # Other packages
-+
- # Save license files if defined
- ifeq ($(call qstrip,$$($(2)_LICENSE_FILES)),)
- 	@$(call legal-license-nofiles,$$($(2)_RAWNAME))
- 	@$(call legal-warning-pkg,$$($(2)_RAWNAME),cannot save license ($(2)_LICENSE_FILES not defined))
- else
--	@$(foreach F,$($(2)_LICENSE_FILES),$(call legal-license-file,$$($(2)_RAWNAME),$(F),$$($(2)_DIR)/$(F))$$(sep))
--endif
-+# Double dollar signs are really needed here, to catch host packages
-+# without explicit HOST_FOO_LICENSE_FILES assignment, also in case they
-+# have multiple license files.
-+	@$$(foreach F,$$($(2)_LICENSE_FILES),$$(call legal-license-file,$$($(2)_RAWNAME),$$(F),$$($(2)_DIR)/$$(F))$$(sep))
-+endif # license files
-+
- ifeq ($$($(2)_REDISTRIBUTE),YES)
- # Copy the source tarball (just hardlink if possible)
- 	@cp -l $(DL_DIR)/$$($(2)_SOURCE) $(REDIST_SOURCES_DIR) 2>/dev/null || \
- 	   cp $(DL_DIR)/$$($(2)_SOURCE) $(REDIST_SOURCES_DIR)
--endif
--endif
-+endif # redistribute
-+
-+endif # other packages
- 	@$(call legal-manifest,$$($(2)_RAWNAME),$$($(2)_VERSION),$$($(2)_LICENSE),$$($(2)_MANIFEST_LICENSE_FILES),$$($(2)_MANIFEST_TARBALL))
- endif # ifneq ($(call qstrip,$$($(2)_SOURCE)),)
- 	$(foreach hook,$($(2)_POST_LEGAL_INFO_HOOKS),$(call $(hook))$(sep))
+Thanks!
+Matt Weber
+mlweber1 at rockwellcollins.com
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20131112/6e73bca7/attachment.html>
