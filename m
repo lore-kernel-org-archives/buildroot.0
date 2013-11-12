@@ -1,39 +1,64 @@
-From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Tue, 12 Nov 2013 10:51:26 +0100
-Subject: [Buildroot] [PATCH] barebox: bump to version 2013.11.0
-Message-ID: <1384249886-12313-1-git-send-email-fabio.porcedda@gmail.com>
+From: Gwyll Gwyllin <gwyll@gwyll.eu>
+Date: Tue, 12 Nov 2013 11:15:39 +0100
+Subject: [Buildroot] Xineramaproto
+In-Reply-To: <BAF922FAE74849899122A8651F8AFD3C@tux.local>
+References: <233A67DA67A045DF84F76ABF9CA04635@tux.local>
+ <BAF922FAE74849899122A8651F8AFD3C@tux.local>
+Message-ID: <3F863D59E1624E3FA3BE86B5BE40EA59@tux.local>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
----
- boot/barebox/Config.in | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/boot/barebox/Config.in b/boot/barebox/Config.in
-index a409aca..2debfb9 100644
---- a/boot/barebox/Config.in
-+++ b/boot/barebox/Config.in
-@@ -12,7 +12,7 @@ choice
- 	  Select the specific Barebox version you want to use
- 
- config BR2_TARGET_BAREBOX_LATEST_VERSION
--	bool "2013.10.0"
-+	bool "2013.11.0"
- 
- config BR2_TARGET_BAREBOX_CUSTOM_VERSION
- 	bool "Custom version"
-@@ -40,7 +40,7 @@ endif
- 
- config BR2_TARGET_BAREBOX_VERSION
- 	string
--	default "2013.10.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
-+	default "2013.11.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
- 	default BR2_TARGET_BAREBOX_CUSTOM_VERSION_VALUE if BR2_TARGET_BAREBOX_CUSTOM_VERSION
- 	default "custom"	if BR2_TARGET_BAREBOX_CUSTOM_TARBALL
- 	default BR2_TARGET_BAREBOX_CUSTOM_GIT_VERSION if BR2_TARGET_BAREBOX_CUSTOM_GIT
--- 
-1.8.4.2
+
+Anyone?
+
+From: Gwyll Gwyllin 
+Sent: Thursday, October 10, 2013 2:16 PM
+To: buildroot at busybox.net 
+Subject: [Buildroot] Xineramaproto
+
+Hello List,
+
+i?m trying to cross compile (for MIPS) but i?m stucked at xserver_xorg-xserver-1.5.2
+
+
+The compiler error says:
+
+checking for a useful monotonic clock ...... cross compiling
+checking for strcasecmp... yes
+checking for strncasecmp... yes
+checking for strcasestr... (cached) yes
+checking for XDMCP... yes
+checking for XdmcpWrap in -lXdmcp... yes
+checking for XSERVERCFLAGS... configure: error: Package requirements (randrproto >= 1.2 renderproto fixesproto >= 4.0 damageproto >= 1.1 xcmiscproto xextproto xproto >= 7.0.9 xtrans scrnsaverproto >= 1.1 bigreqsproto resourceproto fontsproto inputproto >= 1.4.4 kbproto >= 1.0.3 videoproto compositeproto >= 0.4 resourceproto xineramaproto evieproto xkbfile xfont xau fontenc pixman-1 >= 0.9.5 dbus-1 xdmcp) were not met:
+
+No package 'xineramaproto' found
+
+Consider adjusting the PKG_CONFIG_PATH environment variable if you
+installed software in a non-standard prefix.
+
+Alternatively, you may set the environment variables XSERVERCFLAGS_CFLAGS
+and XSERVERCFLAGS_LIBS to avoid the need to call pkg-config.
+See the pkg-config man page for more details.
+
+pkg-config ?modversion xineramaproto says 1.1.2
+
+I tried to set PKG_CONFIG_PATH to /usr/lib/pkg-config, the result was the same.
+
+What should i set or try?
+
+Thanks in advance,
+Gwyll
+
+
+--------------------------------------------------------------------------------
+_______________________________________________
+buildroot mailing list
+buildroot at busybox.net
+http://lists.busybox.net/mailman/listinfo/buildroot
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20131112/ced5f5e4/attachment.html>
