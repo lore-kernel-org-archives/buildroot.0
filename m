@@ -1,151 +1,131 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 12 Nov 2013 00:15:53 +0100
-Subject: [Buildroot] [PATCH 2 of 2] infra: remove usage of pkgparentdir
- in favor of pkgdir
-In-Reply-To: <8953db252a5816d2e988.1384170792@argentina>
-References: <patchbomb.1384170790@argentina>
- <8953db252a5816d2e988.1384170792@argentina>
-Message-ID: <52816529.9010704@mind.be>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 12 Nov 2013 01:04:15 +0100
+Subject: [Buildroot] [git commit] CHANGES: update with recent changes
+Message-ID: <20131112000451.22E259BBF5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 11/11/13 12:53, Thomas De Schampheleire wrote:
-> As Arnout suggested, pkgparentdir is no longer really needed. Its usage can
-> be replaced with pkgdir. This patch makes that change, and removes the
-> definition of pkgparentdir.
->
-> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
->
-> ---
-> Note: as a consequence of this change, the definition of FOO_DIR_PREFIX
-> slightly changed. I could have renamed the variable, but FOO_DIR was already
-> taken, and it's still more or less a prefix.
+commit: http://git.buildroot.net/buildroot/commit/?id=b9a16cb4fc796cde72c16c757fcd80c6f0716268
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-  I think it's a better idea to choose a new name - if only to help 
-people who are using this variable in custom packages. Or better yet, 
-remove it completely - it's anyway not used anymore.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ CHANGES |  105 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ 1 files changed, 105 insertions(+), 0 deletions(-)
 
-
->
->   package/pkg-autotools.mk |   6 +++---
->   package/pkg-cmake.mk     |   6 +++---
->   package/pkg-generic.mk   |  10 +++++-----
->   package/pkg-utils.mk     |   1 -
->   4 files changed, 11 insertions(+), 12 deletions(-)
->
-> diff --git a/package/pkg-autotools.mk b/package/pkg-autotools.mk
-> --- a/package/pkg-autotools.mk
-> +++ b/package/pkg-autotools.mk
-> @@ -48,7 +48,7 @@ endef
->   #             for host packages
->   #  argument 3 is the uppercase package name, without the HOST_ prefix
->   #             for host packages
-> -#  argument 4 is the package directory prefix
-> +#  argument 4 is the package directory
->   #  argument 5 is the type (target or host)
->   ################################################################################
->
-> @@ -311,5 +311,5 @@ endef
->   # autotools-package -- the target generator macro for autotools packages
->   ################################################################################
->
-> -autotools-package = $(call inner-autotools-package,$(call pkgname),$(call UPPERCASE,$(call pkgname)),$(call UPPERCASE,$(call pkgname)),$(call pkgparentdir),target)
-> -host-autotools-package = $(call inner-autotools-package,host-$(call pkgname),$(call UPPERCASE,host-$(call pkgname)),$(call UPPERCASE,$(call pkgname)),$(call pkgparentdir),host)
-> +autotools-package = $(call inner-autotools-package,$(call pkgname),$(call UPPERCASE,$(call pkgname)),$(call UPPERCASE,$(call pkgname)),$(call pkgdir),target)
-> +host-autotools-package = $(call inner-autotools-package,host-$(call pkgname),$(call UPPERCASE,host-$(call pkgname)),$(call UPPERCASE,$(call pkgname)),$(call pkgdir),host)
-> diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
-> --- a/package/pkg-cmake.mk
-> +++ b/package/pkg-cmake.mk
-> @@ -31,7 +31,7 @@
->   #             for host packages
->   #  argument 3 is the uppercase package name, without the HOST_ prefix
->   #             for host packages
-> -#  argument 4 is the package directory prefix
-> +#  argument 4 is the package directory
->   #  argument 5 is the type (target or host)
->   ################################################################################
->
-> @@ -179,8 +179,8 @@ endef
->   # cmake-package -- the target generator macro for CMake packages
->   ################################################################################
->
-> -cmake-package = $(call inner-cmake-package,$(call pkgname),$(call UPPERCASE,$(call pkgname)),$(call UPPERCASE,$(call pkgname)),$(call pkgparentdir),target)
-> -host-cmake-package = $(call inner-cmake-package,host-$(call pkgname),$(call UPPERCASE,host-$(call pkgname)),$(call UPPERCASE,$(call pkgname)),$(call pkgparentdir),host)
-> +cmake-package = $(call inner-cmake-package,$(call pkgname),$(call UPPERCASE,$(call pkgname)),$(call UPPERCASE,$(call pkgname)),$(call pkgdir),target)
-> +host-cmake-package = $(call inner-cmake-package,host-$(call pkgname),$(call UPPERCASE,host-$(call pkgname)),$(call UPPERCASE,$(call pkgname)),$(call pkgdir),host)
->
->   ################################################################################
->   # Generation of the CMake toolchain file
-> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-> --- a/package/pkg-generic.mk
-> +++ b/package/pkg-generic.mk
-> @@ -89,7 +89,7 @@ endif
->   # find the package directory (typically package/<pkgname>) and the
->   # prefix of the patches
->   $(BUILD_DIR)/%/.stamp_patched: NAMEVER = $(RAWNAME)-$($(PKG)_VERSION)
-> -$(BUILD_DIR)/%/.stamp_patched: PATCH_BASE_DIRS = $($(PKG)_DIR_PREFIX)/$(RAWNAME) $(call qstrip,$(BR2_GLOBAL_PATCH_DIR))/$(RAWNAME)
-> +$(BUILD_DIR)/%/.stamp_patched: PATCH_BASE_DIRS = $($(PKG)_DIR_PREFIX) $(call qstrip,$(BR2_GLOBAL_PATCH_DIR))/$(RAWNAME)
->   $(BUILD_DIR)/%/.stamp_patched:
->   	@$(call MESSAGE,"Patching")
->   	$(foreach hook,$($(PKG)_PRE_PATCH_HOOKS),$(call $(hook))$(sep))
-> @@ -197,7 +197,7 @@ endif
->   #             for host packages
->   #  argument 3 is the uppercase package name, without the HOST_ prefix
->   #             for host packages
-> -#  argument 4 is the package directory prefix
-> +#  argument 4 is the package directory
->   #  argument 5 is the type (target or host)
->   ################################################################################
->
-> @@ -475,7 +475,7 @@ endif
->   # kernel case, the bootloaders case, and the normal packages case.
->   ifeq ($(1),linux)
->   $(2)_KCONFIG_VAR = BR2_LINUX_KERNEL
-> -else ifeq ($(4),boot/)
-> +else ifneq ($(filter boot/%,$(4)),)
-
-  Since this is the only place where $(4) is used, we could use $(pkgdir) 
-directly and drop the 4th parameter. (I just tested and it seems to work.)
-
-
-  Regards,
-  Arnout
-
->   $(2)_KCONFIG_VAR = BR2_TARGET_$(2)
->   else
->   $(2)_KCONFIG_VAR = BR2_PACKAGE_$(2)
-> @@ -565,8 +565,8 @@ endef # inner-generic-package
->   ################################################################################
->
->   # In the case of target packages, keep the package name "pkg"
-> -generic-package = $(call inner-generic-package,$(call pkgname),$(call UPPERCASE,$(call pkgname)),$(call UPPERCASE,$(call pkgname)),$(call pkgparentdir),target)
-> +generic-package = $(call inner-generic-package,$(call pkgname),$(call UPPERCASE,$(call pkgname)),$(call UPPERCASE,$(call pkgname)),$(call pkgdir),target)
->   # In the case of host packages, turn the package name "pkg" into "host-pkg"
-> -host-generic-package = $(call inner-generic-package,host-$(call pkgname),$(call UPPERCASE,host-$(call pkgname)),$(call UPPERCASE,$(call pkgname)),$(call pkgparentdir),host)
-> +host-generic-package = $(call inner-generic-package,host-$(call pkgname),$(call UPPERCASE,host-$(call pkgname)),$(call UPPERCASE,$(call pkgname)),$(call pkgdir),host)
->
->   # :mode=makefile:
-> diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
-> --- a/package/pkg-utils.mk
-> +++ b/package/pkg-utils.mk
-> @@ -60,7 +60,6 @@ endef
->   # package, for which the package directory is an empty string.
->   pkgdir       = $(dir $(lastword $(MAKEFILE_LIST)))
->   pkgname      = $(lastword $(subst /, ,$(call pkgdir)))
-> -pkgparentdir = $(patsubst %$(call pkgname)/,%,$(call pkgdir))
->
->   # Define extractors for different archive suffixes
->   INFLATE.bz2  = $(BZCAT)
->
-
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+diff --git a/CHANGES b/CHANGES
+index f1b01a3..12c6b2b 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -1,3 +1,108 @@
++2013.11, Not yet released:
++
++	Architectures: Nios-II support, MIPS arch handling fixes
++
++	Defconfigs: cubieboard2, freescale i.MX 6sololite evk,
++	sabre-sd, wandboard added, rpi renamed to raspberrypi_defconfig
++
++	Toolchain: glibc support, upstream uClibc fixes, uClibc 0.9.31
++	for avr32, crosstool-ng backend removed, external musl
++	toolchain support, gcc 4.8.2, updated Linaro external
++	toolchains. Fortran and objective-C support deprecated,
++	mudflap support
++
++	Bootloaders: U-Boot: u-boot.imx support, version bumps
++
++	Linux: use kmod instead of module-init-tools
++
++	System: default to devtmpfs for /dev
++
++	Infrastructure: Make 3.82 fixes, locales generation fixes, CVS
++	download support, post-rsync hooks
++
++	Fs: u-boot image support for cpio
++
++	Updated/fixed packages: aircrack-ng, alsamixergui, apr,
++	apr-util, atk, automake, bellagio, berkeleydb, bind, binutils,
++	bison, boost, busybox, can-utils, ccache, ccid, cgilua,
++	chrony, cifs-utils, cjson, collectd, connman, conntrack-tools,
++	copas, cppcms, cppzmq, czmq, dash, dbus, dhcpcd, diffutils,
++	directfb, dmidecode, dnsmaqs, docker, dosfstools, dropbear,
++	dropwatch, ebtables, eglibc, elf2flt, empty, enchant, erlang,
++	ethtool, fbgrab, fbv, fdk-aac, feh, ffmpeg, file, findutils,
++	fltk, fmtools, freetype, gdk-pixbuf, gettext, git,
++	glib-networking, gmp, gnupg, gnutls, gpu-viv-bin-mx6q, gsl,
++	gstreamer, gstreamer1, gst1-plugins-{bad,base,good,ugly},
++	gtest, gutenprint, hplip, i2c-tools, icu, ifplugd,
++	imagemagick, iozone, iproute2, ipset, iptables, iw, jamvm,
++	jansson, jpeg-turbo, kismet, kmod, lcms2, libassuan, libcap,
++	libcap-ng, libcdaudio, libcec, libcue, libcurl, libdrm,
++	libedit, libevas, libevent, libfreefare, libfuse,
++	libgpg-error, libiconv, liblog4c-localtime, libmicrohttpd,
++	libmnl, libmodbus,
++	libnetfilter_{acct,conntrack,cthelper,cttimeout,log,queue},
++	libnfnetlink, libnl, libpng, libqmi, libqrencode, libroxml,
++	libsecret, libsigsegv, libsoup, libtirpc, libunwind, libusb,
++	libvpx, lighttpd, linphone, linux-pam, lmbench,
++	lockfile-progs, log4cxx, logrotate, logsurfer, ltp-testsuite,
++	ltrace, luacrypto, luaposix, lvm2, m4, matchbox-lib,
++	media-ctl, mediastreamer, minicom, minidlna, mongoose, monit,
++	mpc, mpd, mpg123, mplayer, mrouted, mtdev, mutt, mysql_client,
++	nano, ncftp, ndisc6, neard, neardal, neon, net-snmp, netatalk,
++	netcat, netkitbase, netperf, netplug, nettle, nfacct,
++	nfs-utils, ngircd, ngrep, noip, nuttcp, olsr, openssh, opkg,
++	oprofile, opus-tools, orc, ortp, pciutils, pcre, pcsc-lite,
++	perf, perl, perl-cross, php, picocom, pkgconf, polarssl,
++	poppler, pppd, proftpd, protobuf, proxychains-ng, pulseaudio,
++	pv, qemu, qt, qt5base, qt5webkit, quagga, radvd, redis,
++	rpi-{firmware,userland}, rrdtool, rsync, rtorrent, ruby,
++	samba, scons, screen, sdl_sound, ser2net, setserial,
++	smartmontools, socat, socketcand, sqlcipher, sqlite, squid,
++	stress, strongswan, stunnel, sudo, syslinux, systemd,
++	sysvinit, tcl, ti-gfx, time, transmission, tremor, tslib,
++	tvheadend, tzdata, uboot-tools, uclibc, udpcast, uemacs,
++	ulogd, usb_modeswitch{,_data}, util-linux, vala, valgrind,
++	vde2, vorbus-tools, vpnc, vsftpd, vtun, wayland, webkit, webp,
++	webrtc-audio-processing, weston, wget, wireshark, wsapi,
++	xavante, xdriver_xf86-video-geode, xenomai, xinetd,
++	xlib_libpthread-stubs, xl2tp, xmlstarlet, xserver_xorg-server,
++	xz, zeromq, zic, zmqpp
++
++	New packages: aiccu, autossh, bc, civetweb, cppdb, cryptsetup,
++	duma, eigen, harfbuzz, igmpproxy, iputils, jq, knock, kobs-ng,
++	lesstif, libcgroup, libsepol, libsoc, libssh2, luasec, luasql,
++	lxc, nut, ola, omniorb, openpowerlink, orbit, p910nd, psplash,
++	python-crc16, python-ipy, python-pyzmq, qt5sensors,
++	qt5serialport, qt5x11extras, snmppp, subversion, tcping,
++	trace-cmd, xscreensaver, zsh
++
++	Removed packages: module-init-tools
++
++	Issues resolved (http://bugs.uclibc.org):
++
++	#1138: Buildroot fails to build packages if BR2_GCC_SHARED_LIBGCC=y
++	#5408: qt build failure with Sourcery CodeBench ARM 2010.09
++	#5630: makefile error with toolchain helpers.mk
++	#5672: htop: remove X11 stuff
++	#5678: linux.mk: linux-menuconfig fails
++	#5696: python3 installation is too large, patches from python2 needed
++	#5978: Erlang does not build for arm in 2013.02-rc3
++	#6392: Extended ARM uImage kernel options
++	#6404: Buildroot's coreutils 'uname -p' reports 'Unknown' on recent..
++	#6428: util-linux libmount segfaults with patch from buildroot
++	#6452: eglibc from Linaro 2013.07 not copied to target correctly
++	#6566: PHP segfault when crosscompiled to mips64 - patch included
++	#6572: [PowerPC] Buildroot uses wrong external toolchain libraries..
++	#6578: udisks package broken
++	#6602: ebtables 64 bit kernel + 32 bit userland alignment error..
++	#6608: ebtables missing ethertypes - fix included
++	#6620: Sysvinit package missing killall5 and symlinks - patch included
++	#6632: CMake use host pkg-config
++	#6638: pkgconf doesn't download
++	#6644: "all" target doesn't work in out-of-tree builds
++	#6650: Segmentation fault when trying to build latest buildroot
++	#6668: iptables limit module alignment problem on mips64
++
+ 2013.08, Released August 31th, 2013:
+ 
+ 	Minor fixes.
