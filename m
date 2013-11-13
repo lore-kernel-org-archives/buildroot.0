@@ -1,36 +1,43 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 13 Nov 2013 21:07:36 +0100
-Subject: [Buildroot] Buildroot Developer Day at FOSDEM, 3-4 Feb 2014
-In-Reply-To: <20131113184420.GC24238@free.fr> (Yann E. MORIN's message of
- "Wed, 13 Nov 2013 19:44:20 +0100")
-References: <1384366360-1463-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <20131113184420.GC24238@free.fr>
-Message-ID: <87d2m412wn.fsf@dell.be.48ers.dk>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Wed, 13 Nov 2013 21:18:51 +0100
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+	2013-11-12
+In-Reply-To: <CAAXf6LWgt30AW1tNK=uNgvY=7gJqgT3QVxkPtuP4YDSmiSDKZA@mail.gmail.com>
+References: <20131113073025.D898952C60E@lolut.humanoidz.org>
+ <CAAXf6LWgt30AW1tNK=uNgvY=7gJqgT3QVxkPtuP4YDSmiSDKZA@mail.gmail.com>
+Message-ID: <CAAXf6LWVm8bYNzScEA=iqE42QzbeSGP1-LTShCmAW4bNZJqFWg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+On Wed, Nov 13, 2013 at 5:22 PM, Thomas De Schampheleire
+<patrickdepinguin@gmail.com> wrote:
+> Hi,
+>
+> On Wed, Nov 13, 2013 at 8:30 AM, Thomas Petazzoni
+> <thomas.petazzoni@free-electrons.com> wrote:
+>> Build statistics for 2013-11-12
+>> ===============================
+> [..]
+>>        sh4 |               vim-699f8d8f096d | NOK | http://autobuild.buildroot.net/results/21b5a910e6a27fa1cb12d0002ffed7e6ed9d6c83/
+>
+> The problem here is:
+> edit.c:(.text+0x1614): undefined reference to `libintl_gettext'
+>
+> So seems gettext related.
+> I cannot yet reproduce this bug. I tried a limited build 'make
+> toolchain vim' and also 'make toolchain gettext vim', but both work
+> fine with that same defonfig.
+>
+> Interestingly, the autobuild configure output says:
+> checking for NLS... gettext() works
+> while in my reproduction it says:
+> checking for NLS... gettext() works with -lintl
+>
+> This is a difference I cannot explain. I'm currently trying a full
+> rebuild, but any input in the mean time is welcome...
 
-Hi,
-
->> This meeting is open to Buildroot contributors and developers. With 70
->> different contributors to the 2013.11-rc release, I'd really like to
->> see this meeting having more participants than the usual core
->> members. So if you're contributing or using Buildroot, do not hesitate
->> to contact me to participate.
-
-> Yes, it would be nice if users could make it, at least for the first day
-> on Monday, so we can exchange experience and expectations, and have a
-> good time together!
-
-Exactly!
-
-> Thank you Thomas for perfectly handling this DevDay, as usual! :-)
-
-Couldn't agree more, thanks!
-
--- 
-Bye, Peter Korsgaard
+FYI, I have seen the problem on a full rebuild, will analyze the
+difference and get back...
