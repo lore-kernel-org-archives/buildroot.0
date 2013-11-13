@@ -1,78 +1,48 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 13 Nov 2013 21:05:14 +0100
-Subject: [Buildroot] [PATCH v8 RESEND 0/8] Add support for top-level
- parallel make
-In-Reply-To: <CAHkwnC8UTtDi-ZhSCBWAgviRz-5FOEx2e+GYxKtHzBY6W8pJCw@mail.gmail.com>
-References: <1382088860-30524-1-git-send-email-fabio.porcedda@gmail.com>
- <20131111144953.43bd80b0@skate>
- <CAHkwnC8UTtDi-ZhSCBWAgviRz-5FOEx2e+GYxKtHzBY6W8pJCw@mail.gmail.com>
-Message-ID: <5283DB7A.6060901@mind.be>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 13 Nov 2013 21:40:57 +0100
+Subject: [Buildroot] [git commit] Update for 2013.11-rc1
+In-Reply-To: <5283BB51.5060101@mind.be> (Arnout Vandecappelle's message of
+ "Wed, 13 Nov 2013 18:48:01 +0100")
+References: <20131112231429.89E849BBB5@busybox.osuosl.org>
+ <5283BB51.5060101@mind.be>
+Message-ID: <87wqkc11d2.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 12/11/13 09:39, Fabio Porcedda wrote:
-> On Mon, Nov 11, 2013 at 2:49 PM, Thomas Petazzoni
-> <thomas.petazzoni@free-electrons.com> wrote:
->> Fabio, Arnout,
->>
->> On Fri, 18 Oct 2013 11:34:12 +0200, Fabio Porcedda wrote:
->>
->>> this is a patch set for adding support for top-level parallel make in
->>> buildroot, the common problem scattered in buildroot's top-level
->>> makefiles is that in the rules it relies on the order of evaluation of
->>> the prerequisites, to be able to use top-level parallel make instead
->>> of reling on the left to right ordering of evaluation of the
->>> prerequisites we must add an explicit rule to describe the
->>> dependencies.
->>
->> I'd like to agree on a plan with this patch series. At the latest
->> Buildroot Developer Day in Edinburgh, I think we agreed that:
->>
->>   (1) Enabling top-level parallel without having per-package sysroot was
->>       not desirable, as it would make the builds non-reproducible.
->
-> What do you think if we provide an easy way to use top-level parallel make
-> that warns about the problems:
->
-> ifeq ($(P),1)
-> $(warning Not reproducible builds use at your own risk!)
+>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
 
-  Such a warning will not really be visible, because it appears at the 
-very beginning of the build and is immediately followed by all of the 
-build output...
+ >> -<a href="/downloads/buildroot-2013.08-rc3.tar.gz">buildroot-2013.08-rc3.tar.gz</a>
+ >> +<a href="/downloads/buildroot-2013.11-rc1tar.gz">buildroot-2013.11-rc1.tar.gz</a>
 
-> BR2_JLEVEL=
-> else
-> # This top-level Makefile can *not* be executed in parallel
-> .NOTPARALLEL:
-> endif
+ >  Missing .
 
-  Since you only need to make this simple change in the Makefile (remove 
-.NOTPARALLEL), I think it's a lot more effective for people who want 
-top-level parallel builds to remove this line in their copy of buildroot. 
-We also agreed at the BR developer meeting that we would add an 
-explanatory comment at that location to make it clear why we disable 
-parallel builds. That way, someone who wants to enable it will be aware 
-of the risks.
+Ups.
+
+ >> or
+ >> -<a href="/downloads/buildroot-2013.08-rc3.tar.bz2">buildroot-2013.08-rc3.tar.bz2</a>.
+ >> +<a href="/downloads/buildroot-2013.11-rc3.tar.bz2">buildroot-2013.11-rc1.tar.bz2</a>.
+ >> <p>
+
+And it is not rc3 :/ I must have been tired yesterday.
 
 
-  Regards,
-  Arnout
+ >> +    tree, see the <a
+ >> +    href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2013.11_rc1">CHANGES</a>
 
+ >  I never noticed before, but why do you tag with _rc1 instead of -rc1
+ > so it corresponds to the tarball?
 
->
->
->    make P=1 -j5
-[snip]
+It's purely historical. I've done it since the very first 2009.02_rc1
+tag. I don't recall the details any more, but I think I did so to match
+the convention from uClibc or busybox. The convention of those dates
+back to when CVS was used, which had quite some restrictions on what
+characters could be used in tags.
 
+With that said, I don't have any problems with changing the underscores
+(_) to hyphens (-) going forward.
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+Bye, Peter Korsgaard
