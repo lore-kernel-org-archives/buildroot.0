@@ -1,76 +1,54 @@
 From: Mischa Jonker <Mischa.Jonker@synopsys.com>
-Date: Wed, 13 Nov 2013 17:13:12 +0100
-Subject: [Buildroot] [PATCH v2 0/5] Move to github as source for
-	ARC-specific packages
-Message-ID: <1384359197-22168-1-git-send-email-mjonker@synopsys.com>
+Date: Wed, 13 Nov 2013 17:13:13 +0100
+Subject: [Buildroot] [PATCH v2 1/5] gdb: arc: Use git instead of website
+In-Reply-To: <1384359197-22168-1-git-send-email-mjonker@synopsys.com>
+References: <1384359197-22168-1-git-send-email-mjonker@synopsys.com>
+Message-ID: <1384359197-22168-2-git-send-email-mjonker@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Signed-off-by: Mischa Jonker <mjonker@synopsys.com>
+---
+ package/gdb/Config.in.host |    2 +-
+ package/gdb/gdb.mk         |    5 +++--
+ 2 files changed, 4 insertions(+), 3 deletions(-)
 
-This set of patches gets rid of the Synopsys website for downloading
-ARC-specific versions of binutils, gdb, gcc, uClibc. Instead, our github
-site is used, and the git-protocol where possible (all packages except gcc).
-
-Although our toolchain release is not completely finished, and a couple
-of issues are still being worked on, I would like to get some feedback already
-on this patch set: after all, it's easy to update the git ID's associated
-with the final release when that is ready (hopefully within a week or two).
-
-The new toolchain release fixes a number of auto-builder issues.
-
-Thanks,
-
-Mischa
-
-v2:
-  * use full commit ID's
-  * use new github helper function
-  * squash patches that remove patches with patches that switch to github
-  * no update on 'to choose/not to choose'
-  * use suitable-extractor helper in gcc
+diff --git a/package/gdb/Config.in.host b/package/gdb/Config.in.host
+index 128aed9..074aa57 100644
+--- a/package/gdb/Config.in.host
++++ b/package/gdb/Config.in.host
+@@ -58,6 +58,6 @@ config BR2_GDB_VERSION
+ 	default "7.3.1"    if BR2_GDB_VERSION_7_3
+ 	default "7.4.1"    if BR2_GDB_VERSION_7_4
+ 	default "7.5.1"    if BR2_GDB_VERSION_7_5
+-	default "7.5.1-arc" if BR2_arc
++	default "f25a1952afd054205f9471e449c1f7ca5b271b7c" if BR2_arc
  
-
-Mischa Jonker (5):
-  gdb: arc: Use git instead of website
-  binutils: arc: Use git instead of website
-  gcc: arc: Download from github instead of Synopsys website
-  uclibc: arc: Use git instead of website
-  Revert "arc: Add option for ARC-specific download site"
-
- arch/Config.in.arc                                 |    4 -
- package/binutils/Config.in.host                    |    2 +-
- package/binutils/binutils.mk                       |    8 +-
- package/gcc/4.8-arc/100-uclibc-conf.patch          |   15 --
- package/gcc/4.8-arc/301-missing-execinfo_h.patch   |   13 --
- package/gcc/4.8-arc/302-c99-snprintf.patch         |   13 --
- .../gcc/4.8-arc/305-libmudflap-susv3-legacy.patch  |   49 -------
- package/gcc/4.8-arc/disable_gc_sections.patch      |  145 --------------------
- package/gcc/4.8-arc/fix_branch_out_of_range.patch  |   30 ----
- package/gcc/Config.in.host                         |    2 +-
- package/gcc/gcc.mk                                 |    9 +-
- package/gdb/Config.in.host                         |    2 +-
- package/gdb/gdb.mk                                 |    5 +-
- package/uclibc/0.9.33-arc/fix-fstat-for-be.patch   |   32 -----
- .../uclibc/0.9.33-arc/fix-susv3-legacy-bcmp.patch  |   37 -----
- package/uclibc/0.9.33-arc/fix-susv3-legacy.patch   |   36 -----
- .../0.9.33-arc/uclibc-arc-add-__kernel_long.patch  |   29 ----
- package/uclibc/Config.in                           |    9 +-
- package/uclibc/uclibc.mk                           |    7 +-
- 19 files changed, 22 insertions(+), 425 deletions(-)
- delete mode 100644 package/gcc/4.8-arc/100-uclibc-conf.patch
- delete mode 100644 package/gcc/4.8-arc/301-missing-execinfo_h.patch
- delete mode 100644 package/gcc/4.8-arc/302-c99-snprintf.patch
- delete mode 100644 package/gcc/4.8-arc/305-libmudflap-susv3-legacy.patch
- delete mode 100644 package/gcc/4.8-arc/disable_gc_sections.patch
- delete mode 100644 package/gcc/4.8-arc/fix_branch_out_of_range.patch
- delete mode 100644 package/uclibc/0.9.33-arc/fix-fstat-for-be.patch
- delete mode 100644 package/uclibc/0.9.33-arc/fix-susv3-legacy-bcmp.patch
- delete mode 100644 package/uclibc/0.9.33-arc/fix-susv3-legacy.patch
- delete mode 100644 package/uclibc/0.9.33-arc/uclibc-arc-add-__kernel_long.patch
-
+ endif
+diff --git a/package/gdb/gdb.mk b/package/gdb/gdb.mk
+index 9cf90e3..53e6048 100644
+--- a/package/gdb/gdb.mk
++++ b/package/gdb/gdb.mk
+@@ -22,14 +22,15 @@ endif
+ endif
+ 
+ ifeq ($(BR2_arc),y)
+-GDB_SITE = $(BR2_ARC_SITE)
++GDB_SITE = $(call github,foss-for-synopsys-dwc-arc-processors,gdb,$(GDB_VERSION))
++GDB_SOURCE = gdb-$(GDB_VERSION).tar.gz
+ endif
+ 
+ ifeq ($(GDB_VERSION),6.7.1-avr32-2.1.5)
+ GDB_SITE = ftp://www.at91.com/pub/buildroot/
+ endif
+ 
+-GDB_SOURCE = gdb-$(GDB_VERSION).tar.bz2
++GDB_SOURCE ?= gdb-$(GDB_VERSION).tar.bz2
+ GDB_LICENSE = GPLv2+ LGPLv2+ GPLv3+ LGPLv3+
+ GDB_LICENSE_FILES = COPYING COPYING.LIB COPYING3 COPYING3.LIB
+ 
 -- 
 1.7.9.5
