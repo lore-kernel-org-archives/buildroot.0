@@ -1,37 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 14 Nov 2013 00:20:35 +0100
-Subject: [Buildroot] [PATCH v3 6/7] toolchain: uclibc does not support
- microblze
-In-Reply-To: <1384382133.11719.5.camel@scotch.dyn.gillilanding.com>
-References: <1384378130-8599-1-git-send-email-spenser@gillilanding.com>
- <1384378130-8599-7-git-send-email-spenser@gillilanding.com>
- <20131113225819.56b10ada@skate>
- <1384382133.11719.5.camel@scotch.dyn.gillilanding.com>
-Message-ID: <20131114002035.68f41c38@skate>
+Date: Thu, 14 Nov 2013 00:23:14 +0100
+Subject: [Buildroot] [PATCH 1/2] util-linux: nommu: Add patch to use
+ vfork in nommu arch.
+In-Reply-To: <52840758.10104@mind.be>
+References: <1384165765-23210-1-git-send-email-Sonic.adi@gmail.com>
+ <52840758.10104@mind.be>
+Message-ID: <20131114002314.72c4b4a1@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Spenser Gilliland,
+Arnout, Sonic,
 
-On Wed, 13 Nov 2013 16:35:33 -0600, Spenser Gilliland wrote:
+On Thu, 14 Nov 2013 00:12:24 +0100, Arnout Vandecappelle wrote:
 
-> > >  	select BR2_TOOLCHAIN_USES_UCLIBC
-> > > +	depends on !BR2_microblaze
-> > 
-> > Hum, I see a libc/sysdeps/linux/microblaze in my uClibc tree. And also,
-> > since there are some no-MMU variant of Microblaze processors, which C
-> > library other than uClibc could they use?
+> > +diff -urN util-linux-2.23.2.old/fdisks/fdiskbsdlabel.h util-linux-2.23.2/fdisks/fdiskbsdlabel.h
+> > +--- util-linux-2.23.2.old/fdisks/fdiskbsdlabel.h	2013-07-30 16:54:15.362994206 +0800
+> > ++++ util-linux-2.23.2/fdisks/fdiskbsdlabel.h	2013-11-11 14:52:18.285623027 +0800
+> > +@@ -50,7 +50,7 @@
+> > +     defined (__mips__) || defined (__s390__) || defined (__sh__) || \
+> > +     defined (__aarch64__) || defined(__xtensa__) || \
+> > +     defined (__x86_64__) || defined (__avr32__) || defined(__cris__) || \
+> > +-    defined (__microblaze__)
+> > ++    defined(__bfin__) || defined (__microblaze__)
 > 
-> In the distant past there may have been a version of uclibc that worked
-> with microblaze.  However from my limited testing, the current toolchain
-> does not work with uclibc. 
+>   This is actually a blackfin change, not a nommu change, so it should be 
+> a separate patch.
 
-Ok. But then which C library are Microblaze non-MMU users using?
+Just a quick note to mention that util-linux 2.24 has removed this
+header, and we have a patch pending to bump util-linux to 2.24. See
+http://patchwork.ozlabs.org/patch/290366/.
 
-Thanks!
+Best regards,
 
 Thomas
 -- 
