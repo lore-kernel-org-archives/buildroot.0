@@ -1,52 +1,56 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Wed, 13 Nov 2013 10:07:25 +0100
-Subject: [Buildroot] [PATCH 1/1] omniorb: add COS Naming Service
-In-Reply-To: <87txfh2r91.fsf@dell.be.48ers.dk>
-References: <1384288305-4945-1-git-send-email-mlweber1@rockwellcollins.com>
- <9e8746c1-8e33-4c55-b4e2-b2b1e6181f86@email.android.com>
- <87txfh2r91.fsf@dell.be.48ers.dk>
-Message-ID: <CAAXf6LWs9vXKEOQ7Pt2yteLnGHVsuNEJczVaR2AnwnCRwfbjyw@mail.gmail.com>
+Date: Wed, 13 Nov 2013 10:16:49 +0100
+Subject: [Buildroot] [git commit] legal info: fix saving of host package
+	licenses
+In-Reply-To: <20131113084543.2f21dc42@skate>
+References: <20131112222456.9EC029BB31@busybox.osuosl.org>
+ <CAAXf6LUxdhxXxJXFbn6d7pV6TrxtoiW6-dwAv_JBPxcEdoqoHQ@mail.gmail.com>
+ <20131113084543.2f21dc42@skate>
+Message-ID: <CAAXf6LW+_yxwbhZ1M9JdzL+L=wh5koGm7uCk6Q4FkMDkmaArRA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Nov 12, 2013 at 11:24 PM, Peter Korsgaard <jacmet@uclibc.org> wrote:
->>>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin@gmail.com> writes:
->
-> Hi,
->
->>> +if BR2_PACKAGE_OMNIORB
->>> +
->>> +config BR2_PACKAGE_OMNIORB_WITH_SERVICES
->>> +        bool "COS Naming Service"
->>> +        default y
->>> +        help
->>> +          omniORB COS Naming Service
->>> +endif
->>> +
->>> comment "omniORB needs a toolchain w/ C++"
->>> depends on !BR2_INSTALL_LIBSTDCPP
->
->> I think it makes more sense to keep this comment close to the config
->> option it applies to, thus moving the new cos option below it.  I know
->> that many packages do not follow this, but I'm planning on fixing
->> that...
->
-> Careful, kconfig needs sub options to be directly under the main option,
-> otherwise they don't get indented correctly in menuconfig, so your
-> options are either:
->
-> - Comment before main option
-> - Comment after all the sub options
->
+Hi Thomas, Peter,
 
-Yuk, that's a pity...
-In this case my preference is to have the comment before the main
-option (so as close as possible), rather than after all sub options.
+On Wed, Nov 13, 2013 at 8:45 AM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Dear Thomas De Schampheleire,
+>
+> On Wed, 13 Nov 2013 08:34:22 +0100, Thomas De Schampheleire wrote:
+>
+>> Is there a particular reason why the 5 other patches in this series
+>> (splitting the legal info output between host/target) have not been
+>> applied? I think they still fit in 2013.11...
+>
+> I believe PATCH 1 was considered as being a fix, while the other
+> patches are adding a new feature, and it was too late in the cycle to
+> add them.
 
-What is your opinion?
+Well, these patches have been around for much longer than this month,
+even long before the buildroot developer days (during which I
+highlighted the series on framapad). The core patches had been acked
+and tested by Luca. The only changed patch was the first one after
+Arnout's helpful comments after my ping this week.
 
-Thanks,
+>
+> We were already November, 13th, that is 13th days late than the normal
+> -rc1 date, so I definitely support Peter in not having merged all the
+> possible pending features in 2013.11.
+>
+> That's all what time-based releases are for: stopping merging new
+> features at some point, knowing that they will anyway be merged in
+> -next pretty soon and be part of the following release 3 months later.
+
+While I understand and agree with this principle for new patches, I
+think that patches that have just been waiting to be merged are a
+little different, unless there is an expected risk. Version bumps
+clearly add risk, but in my opinion the proposed patches do not.
+
+Anyway, it's not that big of a deal. Let's focus now on stabilization
+and autobuild fixes.
+
+Best regards,
 Thomas
