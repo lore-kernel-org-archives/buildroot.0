@@ -1,42 +1,26 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 13 Nov 2013 00:57:16 +0100
-Subject: [Buildroot] [git commit branch/next] barebox: bump to version
-	2013.11.0
-Message-ID: <20131112235747.1D2879BC19@busybox.osuosl.org>
+From: Fatih =?utf-8?q?A=C5=9F=C4=B1c=C4=B1?= <fatih.asici@gmail.com>
+Date: Wed, 13 Nov 2013 08:38:42 +0200
+Subject: [Buildroot] [PATCH] qt5base: fix posix_fallocate patch
+In-Reply-To: <87d2m52ncu.fsf@dell.be.48ers.dk>
+References: <1384299123-6822-1-git-send-email-s.martin49@gmail.com>
+ <87d2m52ncu.fsf@dell.be.48ers.dk>
+Message-ID: <201311130838.42177.fatih.asici@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c50080ab40896cb227f25b376910d304fa31f000
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+On Wednesday 13 November 2013 01:48:17 Peter Korsgaard wrote:
+> >>>>> "Samuel" == Samuel Martin <s.martin49@gmail.com> writes:
+> > Fixes:
+> > 	http://autobuild.buildroot.net/results/a07/a07c1825a5295a8343cd89f0901d9
+> > 	a74a764d804/build-end.log
+> 
+> Argh - Committed, thanks.
+> 
+> I did build test the first version of the patch, but not the followup
+> fix.
 
-Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- boot/barebox/Config.in |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/boot/barebox/Config.in b/boot/barebox/Config.in
-index a409aca..2debfb9 100644
---- a/boot/barebox/Config.in
-+++ b/boot/barebox/Config.in
-@@ -12,7 +12,7 @@ choice
- 	  Select the specific Barebox version you want to use
- 
- config BR2_TARGET_BAREBOX_LATEST_VERSION
--	bool "2013.10.0"
-+	bool "2013.11.0"
- 
- config BR2_TARGET_BAREBOX_CUSTOM_VERSION
- 	bool "Custom version"
-@@ -40,7 +40,7 @@ endif
- 
- config BR2_TARGET_BAREBOX_VERSION
- 	string
--	default "2013.10.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
-+	default "2013.11.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
- 	default BR2_TARGET_BAREBOX_CUSTOM_VERSION_VALUE if BR2_TARGET_BAREBOX_CUSTOM_VERSION
- 	default "custom"	if BR2_TARGET_BAREBOX_CUSTOM_TARBALL
- 	default BR2_TARGET_BAREBOX_CUSTOM_GIT_VERSION if BR2_TARGET_BAREBOX_CUSTOM_GIT
+Sorry, I forgot to test it with buildroot after exporting from qtbase 
+repository.
