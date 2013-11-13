@@ -1,29 +1,40 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 13 Nov 2013 23:19:21 +0000 (UTC)
-Subject: [Buildroot] [Bug 6662] internal compiler error: Segmentation fault
- during making buidRoot-AT91
-In-Reply-To: <bug-6662-163@https.bugs.busybox.net/>
-References: <bug-6662-163@https.bugs.busybox.net/>
-Message-ID: <20131113231921.6F3A99BC01@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 14 Nov 2013 00:20:35 +0100
+Subject: [Buildroot] [PATCH v3 6/7] toolchain: uclibc does not support
+ microblze
+In-Reply-To: <1384382133.11719.5.camel@scotch.dyn.gillilanding.com>
+References: <1384378130-8599-1-git-send-email-spenser@gillilanding.com>
+ <1384378130-8599-7-git-send-email-spenser@gillilanding.com>
+ <20131113225819.56b10ada@skate>
+ <1384382133.11719.5.camel@scotch.dyn.gillilanding.com>
+Message-ID: <20131114002035.68f41c38@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=6662
+Dear Spenser Gilliland,
 
---- Comment #1 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> 2013-11-13 23:19:20 UTC ---
-Which Buildroot version are you using? If you're using the Buildroot from
-https://github.com/linux4sam/buildroot-at91, then this Buildroot is a fork from
-Atmel, and the Buildroot community cannot provide support for this fork.
+On Wed, 13 Nov 2013 16:35:33 -0600, Spenser Gilliland wrote:
 
-This bug tracker is for bugs on the official Buildroot version, available from
-http://buildroot.org.
+> > >  	select BR2_TOOLCHAIN_USES_UCLIBC
+> > > +	depends on !BR2_microblaze
+> > 
+> > Hum, I see a libc/sysdeps/linux/microblaze in my uClibc tree. And also,
+> > since there are some no-MMU variant of Microblaze processors, which C
+> > library other than uClibc could they use?
+> 
+> In the distant past there may have been a version of uclibc that worked
+> with microblaze.  However from my limited testing, the current toolchain
+> does not work with uclibc. 
 
-Can you confirm which Buildroot version you're using?
+Ok. But then which C library are Microblaze non-MMU users using?
 
+Thanks!
+
+Thomas
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
