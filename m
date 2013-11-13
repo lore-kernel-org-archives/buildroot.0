@@ -1,48 +1,35 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 13 Nov 2013 21:40:57 +0100
-Subject: [Buildroot] [git commit] Update for 2013.11-rc1
-In-Reply-To: <5283BB51.5060101@mind.be> (Arnout Vandecappelle's message of
- "Wed, 13 Nov 2013 18:48:01 +0100")
-References: <20131112231429.89E849BBB5@busybox.osuosl.org>
- <5283BB51.5060101@mind.be>
-Message-ID: <87wqkc11d2.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 13 Nov 2013 21:41:04 +0100
+Subject: [Buildroot] [git commit] docs/download.html: Fix tarball typos
+Message-ID: <20131113204140.27D429BC85@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=c09f5aaa0f342d0fbfc12a6d8f4b704fab55f400
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- >> -<a href="/downloads/buildroot-2013.08-rc3.tar.gz">buildroot-2013.08-rc3.tar.gz</a>
- >> +<a href="/downloads/buildroot-2013.11-rc1tar.gz">buildroot-2013.11-rc1.tar.gz</a>
+Reported-by: Arnout Vandecappelle <arnout@mind.be>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ docs/download.html |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
- >  Missing .
-
-Ups.
-
- >> or
- >> -<a href="/downloads/buildroot-2013.08-rc3.tar.bz2">buildroot-2013.08-rc3.tar.bz2</a>.
- >> +<a href="/downloads/buildroot-2013.11-rc3.tar.bz2">buildroot-2013.11-rc1.tar.bz2</a>.
- >> <p>
-
-And it is not rc3 :/ I must have been tired yesterday.
-
-
- >> +    tree, see the <a
- >> +    href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2013.11_rc1">CHANGES</a>
-
- >  I never noticed before, but why do you tag with _rc1 instead of -rc1
- > so it corresponds to the tarball?
-
-It's purely historical. I've done it since the very first 2009.02_rc1
-tag. I don't recall the details any more, but I think I did so to match
-the convention from uClibc or busybox. The convention of those dates
-back to when CVS was used, which had quite some restrictions on what
-characters could be used in tags.
-
-With that said, I don't have any problems with changing the underscores
-(_) to hyphens (-) going forward.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/docs/download.html b/docs/download.html
+index dfba889..64d774d 100644
+--- a/docs/download.html
++++ b/docs/download.html
+@@ -18,9 +18,9 @@ or
+ The latest release candidate is <b>2013.11-rc1</b>, which can be
+ downloaded here:<p>
+ 
+-<a href="/downloads/buildroot-2013.11-rc1tar.gz">buildroot-2013.11-rc1.tar.gz</a>
++<a href="/downloads/buildroot-2013.11-rc1.tar.gz">buildroot-2013.11-rc1.tar.gz</a>
+ or
+-<a href="/downloads/buildroot-2013.11-rc3.tar.bz2">buildroot-2013.11-rc1.tar.bz2</a>.
++<a href="/downloads/buildroot-2013.11-rc1.tar.bz2">buildroot-2013.11-rc1.tar.bz2</a>.
+ <p>
+ 
+ This and earlier releases can always be downloaded from
