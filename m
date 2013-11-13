@@ -1,26 +1,41 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Wed, 13 Nov 2013 22:00:19 +0100
-Subject: [Buildroot] [PATCH v5 4/4] ModemManager: add new package
-In-Reply-To: <1384376261-29291-4-git-send-email-yegorslists@googlemail.com>
-References: <1384376261-29291-1-git-send-email-yegorslists@googlemail.com>
- <1384376261-29291-4-git-send-email-yegorslists@googlemail.com>
-Message-ID: <CAGm1_ktOHomeHoV+LyQS7K2y0GRSKTEOf9VxR_ctL6QR9B07SQ@mail.gmail.com>
+From: Spenser Gilliland <spenser@gillilanding.com>
+Date: Wed, 13 Nov 2013 15:28:43 -0600
+Subject: [Buildroot] [PATCH v3 0/7] Add Microblaze internal toolchain
+Message-ID: <1384378130-8599-1-git-send-email-spenser@gillilanding.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Nov 13, 2013 at 9:57 PM, Yegor Yefremov
-<yegorslists@googlemail.com> wrote:
-> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-> ---
-> Changes:
+This patch series adds a Microblaze internal toolchain from the sources at
+http://github.com/Xilinx .
 
-v5: add libmbim support
+This series requires that the arc toolchain patches and github helper
+patches are applied.
 
->         v4: change dependency comment to the standard one (Arnout Vandecappelle)
->         v3: depend on pcre, fix comments and indentation etc. (comments from Thomas Petazzoni)
->         v2: typos, add select QMI to the config option, don't install to staging
+v2->v3:
+  - Incorporated all review suggestions.
+  - Rebased on arc v2 patches and github helper.
 
-Yegor
+Spenser Gilliland (7):
+  binutils: add microblaze internal toolchain
+  gcc: add microblaze internal toolchain
+  glibc: add microblaze internal toolchain
+  gdb: add microblaze internal toolchain
+  toolchain: enable microblaze toolchain
+  toolchain: uclibc does not support microblze
+  defconfigs: update microblaze defconfigs to use new toolchain
+
+ configs/qemu_microblazebe_mmu_defconfig |    7 -------
+ configs/qemu_microblazeel_mmu_defconfig |    7 -------
+ package/binutils/Config.in.host         |    2 ++
+ package/binutils/binutils.mk            |    4 ++++
+ package/gcc/Config.in.host              |   23 +++++++++++++++--------
+ package/gcc/gcc.mk                      |    3 +++
+ package/gdb/Config.in.host              |    2 ++
+ package/gdb/gdb.mk                      |    5 +++++
+ package/glibc/glibc.mk                  |   12 ++++++++++++
+ toolchain/Config.in                     |    2 +-
+ toolchain/toolchain-buildroot/Config.in |    5 +++--
+ 11 files changed, 47 insertions(+), 25 deletions(-)
