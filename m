@@ -1,214 +1,281 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 13 Nov 2013 23:41:33 +0100
-Subject: [Buildroot] [PATCH v3 3/5] eudev: new package.
-In-Reply-To: <1383752078-25315-4-git-send-email-eric.le.bihan.dev@free.fr>
-References: <1383752078-25315-1-git-send-email-eric.le.bihan.dev@free.fr>
- <1383752078-25315-4-git-send-email-eric.le.bihan.dev@free.fr>
-Message-ID: <20131113234133.2b964da0@skate>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 14 Nov 2013 00:12:24 +0100
+Subject: [Buildroot] [PATCH 1/2] util-linux: nommu: Add patch to use
+ vfork in nommu arch.
+In-Reply-To: <1384165765-23210-1-git-send-email-Sonic.adi@gmail.com>
+References: <1384165765-23210-1-git-send-email-Sonic.adi@gmail.com>
+Message-ID: <52840758.10104@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Eric Le Bihan,
+  Hi Sonic,
 
-On Wed,  6 Nov 2013 16:34:36 +0100, Eric Le Bihan wrote:
-> eudev is a userspace device management daemon. It is a standalone
-> version, independent from systemd. It is a fork maintained by Gentoo.
-> 
-> Features:
-> 
->  - No extra configuration options are available: Gudev is build if
->    libglib2 is selected.
->  - No dependency on hwdata as the package uses its own hardware
->    database (as does systemd).
-> 
-> eudev 1.3 is in sync with systemd v207.
-> 
-> Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+  Some of my comments to Aaron apply to this patch as well.
+
+  Also, please remember to send your patch upstream, to 
+util-linux at vger.kernel.org
+
+On 11/11/13 11:29, sonic.adi at gmail.com wrote:
+> From: Sonic Zhang <sonic.zhang@analog.com>
+>
+> Signed-off-by: Sonic Zhang <sonic.zhang@analog.com>
 > ---
->  package/Config.in       |    1 +
->  package/eudev/Config.in |   26 ++++++++++++++++++++++++
->  package/eudev/S10udev   |   48 +++++++++++++++++++++++++++++++++++++++++++++
->  package/eudev/eudev.mk  |   50 +++++++++++++++++++++++++++++++++++++++++++++++
->  system/Config.in        |   13 ++++++++++++
->  5 files changed, 138 insertions(+)
->  create mode 100644 package/eudev/Config.in
->  create mode 100755 package/eudev/S10udev
->  create mode 100644 package/eudev/eudev.mk
-> 
-> diff --git a/package/Config.in b/package/Config.in
-> index 4c4da51..4c349da 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -274,6 +274,7 @@ source "package/dmraid/Config.in"
->  source "package/dvb-apps/Config.in"
->  source "package/dvbsnoop/Config.in"
->  source "package/eeprog/Config.in"
-> +source "package/eudev/Config.in"
->  source "package/evtest/Config.in"
->  source "package/fan-ctrl/Config.in"
->  source "package/fconfig/Config.in"
-> diff --git a/package/eudev/Config.in b/package/eudev/Config.in
+>   package/util-linux/util-linux-nommu.patch | 591 ++++++++++++++++++++++++++++++
+>   1 file changed, 591 insertions(+)
+>   create mode 100644 package/util-linux/util-linux-nommu.patch
+>
+> diff --git a/package/util-linux/util-linux-nommu.patch b/package/util-linux/util-linux-nommu.patch
 > new file mode 100644
-> index 0000000..5a89325
+> index 0000000..b09783c
 > --- /dev/null
-> +++ b/package/eudev/Config.in
-> @@ -0,0 +1,26 @@
-> +config BR2_PACKAGE_EUDEV
-> +	bool "eudev"
-> +	depends on BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV
-> +	depends on BR2_LARGEFILE # util-linux
-> +	depends on BR2_USE_WCHAR # util-linux
-> +	depends on !BR2_PACKAGE_SYSTEMD
-> +	select BR2_PACKAGE_HAS_UDEV
-> +	select BR2_PACKAGE_UTIL_LINUX
-> +	select BR2_PACKAGE_UTIL_LINUX_LIBBLKID
-> +	select BR2_PACKAGE_KMOD
-> +	help
-> +          Userspace device daemon. This is a standalone version,
-> +          independent of systemd. It is a fork maintained by Gentoo.
+> +++ b/package/util-linux/util-linux-nommu.patch
+> @@ -0,0 +1,591 @@
 
-The indentation of this part of the help text is wrong. It should be
-one tab + two spaces. Also, this package has dependencies on toolchain
-options, so we usually have corresponding comments... but it's true
-that the package will anyway only be visible when
-BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV, and you have added the
-comments where BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV is defined.
+  Patch should have a comment + signed-off-by, like a commit message.
 
-There is also a decision to be taken here: do we duplicate the
-dependencies here? If we don't duplicate the comments, then maybe we
-shouldn't duplicate the dependencies?
+  Also, the patch description should be a lot more verbose, and explain 
+why each of the fork calls can be replaced in the way it is replaced.
 
-It is also worth noting that you forgot the !BR2_PREFER_STATIC_LIB
-dependency, which you have added on
-BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV.
+> +diff -urN util-linux-2.23.2.old/configure.ac util-linux-2.23.2/configure.ac
+> +--- util-linux-2.23.2.old/configure.ac	2013-11-11 14:34:33.550893863 +0800
+> ++++ util-linux-2.23.2/configure.ac	2013-11-11 14:44:23.762438640 +0800
+> +@@ -311,6 +311,7 @@
+> + 	err \
+> + 	errx \
+> + 	fsync \
+> ++	fork \
+> + 	futimens \
+> + 	getdomainname \
+> + 	getdtablesize \
+> +diff -urN util-linux-2.23.2.old/disk-utils/fsck.c util-linux-2.23.2/disk-utils/fsck.c
+> +--- util-linux-2.23.2.old/disk-utils/fsck.c	2013-06-13 15:46:10.377650254 +0800
+> ++++ util-linux-2.23.2/disk-utils/fsck.c	2013-11-11 14:48:48.383360534 +0800
+> +@@ -606,7 +606,11 @@
+> + 	/* Fork and execute the correct program. */
+> + 	if (noexecute)
+> + 		pid = -1;
+> ++#ifndef HAVE_FORK
+> ++	else if ((pid = vfork()) < 0) {
+> ++#else
+> + 	else if ((pid = fork()) < 0) {
+> ++#endif
+> + 		warn(_("fork failed"));
+> + 		free(inst);
+> + 		return errno;
+> +@@ -755,10 +759,18 @@
+> + 			 * time to set up the signal handler
+> + 			 */
+> + 			if (inst2->start_time.tv_sec < time(0) + 2) {
+> ++#ifndef HAVE_FORK
+> ++				if (vfork() == 0) {
+> ++#else
+> + 				if (fork() == 0) {
+> ++#endif
+> + 					sleep(1);
+> + 					kill(inst2->pid, SIGUSR1);
+> ++#ifndef HAVE_FORK
+> ++					_exit(EXIT_OK);
+> ++#else
+> + 					exit(FSCK_EX_OK);
+> ++#endif
 
-> +	  eudev requires a Linux kernel >= 2.6.34: it relies on devtmpfs.
+  This is completely pointless - the parent will anyway be blocked until 
+the child exits, so forking makes no sense. How about:
 
-I thought devtmpfs was added in 2.6.32. Are there other kernel features
-that are needed to make eudev work?
+#ifdef HAVE_FORK
+			if (inst2->start_time.tv_sec < time(0) + 2) {
+				if (fork() == 0) {
+					sleep(1);
+					kill(inst2->pid, SIGUSR1);
+					exit(FSCK_EX_OK);
+				}
+			} else
+				kill(inst2->pid, SIGUSR1);
+#else
+			if (inst2->start_time.tv_sec < time(0) + 2)
+				sleep(1);
+			kill(inst2->pid, SIGUSR1);
+#endif
 
-> +	  http://github.com/gentoo/eudev/
+> + 				}
+> + 			} else
+> + 				kill(inst2->pid, SIGUSR1);
+> +diff -urN util-linux-2.23.2.old/fdisks/fdiskbsdlabel.h util-linux-2.23.2/fdisks/fdiskbsdlabel.h
+> +--- util-linux-2.23.2.old/fdisks/fdiskbsdlabel.h	2013-07-30 16:54:15.362994206 +0800
+> ++++ util-linux-2.23.2/fdisks/fdiskbsdlabel.h	2013-11-11 14:52:18.285623027 +0800
+> +@@ -50,7 +50,7 @@
+> +     defined (__mips__) || defined (__s390__) || defined (__sh__) || \
+> +     defined (__aarch64__) || defined(__xtensa__) || \
+> +     defined (__x86_64__) || defined (__avr32__) || defined(__cris__) || \
+> +-    defined (__microblaze__)
+> ++    defined(__bfin__) || defined (__microblaze__)
+
+  This is actually a blackfin change, not a nommu change, so it should be 
+a separate patch.
+
+> + #define BSD_LABELSECTOR   1
+> + #define BSD_LABELOFFSET   0
+> + #elif defined (__alpha__) || defined (__powerpc__) || defined (__ia64__) || defined (__hppa__)
+> +diff -urN util-linux-2.23.2.old/libblkid/src/topology/dm.c util-linux-2.23.2/libblkid/src/topology/dm.c
+> +--- util-linux-2.23.2.old/libblkid/src/topology/dm.c	2013-06-13 15:46:10.428650690 +0800
+> ++++ util-linux-2.23.2/libblkid/src/topology/dm.c	2013-11-11 15:13:11.316088170 +0800
+> +@@ -61,7 +61,11 @@
+> + 		goto nothing;
+> + 	}
 > +
-> +if BR2_PACKAGE_EUDEV
+> ++#ifndef HAVE_FORK
+> ++	switch (vfork()) {
+> ++#else
+> + 	switch (fork()) {
+> ++#endif
+> + 	case 0:
+> + 	{
+> + 		char *dmargv[7], maj[16], min[16];
+> +@@ -74,9 +78,9 @@
 > +
-> +config BR2_PACKAGE_EUDEV_RULES_GEN
-> +	bool "enable rules generator"
-> +	help
-> +	  Enable persistant rules generator
+> + 		/* The libblkid library could linked with setuid programs */
+> + 		if (setgid(getgid()) < 0)
+> +-			 exit(1);
+> ++			 _exit(1);
+
+  I would wrap this in #ifdef HAVE_FORK.
+
+> + 		if (setuid(getuid()) < 0)
+> +-			 exit(1);
+> ++			 _exit(1);
 > +
-> +endif
-> diff --git a/package/eudev/S10udev b/package/eudev/S10udev
-> new file mode 100755
-> index 0000000..e4d28a2
-> --- /dev/null
-> +++ b/package/eudev/S10udev
-
-Are you using "git format-patch -M" to create your patches? It detects
-renames/copies, and this file appears to be a copy of the one in
-package/udev/, no?
-
-> diff --git a/package/eudev/eudev.mk b/package/eudev/eudev.mk
-> new file mode 100644
-> index 0000000..8603c42
-> --- /dev/null
-> +++ b/package/eudev/eudev.mk
-> @@ -0,0 +1,50 @@
-> +################################################################################
-> +#
-> +# eudev
-> +#
-> +################################################################################
+> + 		snprintf(maj, sizeof(maj), "%d", major(devno));
+> + 		snprintf(min, sizeof(min), "%d", minor(devno));
+> +@@ -92,7 +96,7 @@
+> + 		execv(dmargv[0], dmargv);
 > +
-> +EUDEV_VERSION         = 1.3
-> +EUDEV_SITE            = https://github.com/gentoo/eudev/archive/
-> +EUDEV_SOURCE          = v$(EUDEV_VERSION).tar.gz
-> +EUDEV_LICENSE         = GPLv2+
-> +EUDEV_LICENSE_FILES   = COPYING
-> +EUDEV_INSTALL_STAGING = YES
-> +EUDEV_AUTORECONF      = YES
+> + 		DBG(LOWPROBE, blkid_debug("Failed to execute %s: errno=%d", cmd, errno));
+> +-		exit(1);
+> ++		_exit(1);
+
+  Same here.
+
+> + 	}
+> + 	case -1:
+> + 		DBG(LOWPROBE, blkid_debug("Failed to forking: errno=%d", errno));
+> +diff -urN util-linux-2.23.2.old/libblkid/src/topology/lvm.c util-linux-2.23.2/libblkid/src/topology/lvm.c
+> +--- util-linux-2.23.2.old/libblkid/src/topology/lvm.c	2013-06-13 15:46:10.429650699 +0800
+> ++++ util-linux-2.23.2/libblkid/src/topology/lvm.c	2013-11-11 15:14:07.483452404 +0800
+> +@@ -71,7 +71,11 @@
+> + 		goto nothing;
+> + 	}
 > +
-> +# mq_getattr is in librt
-> +EUDEV_CONF_ENV += LIBS=-lrt
+> ++#ifndef HAVE_FORK
+> ++	switch (vfork()) {
+> ++#else
+> + 	switch (fork()) {
+> ++#endif
+> + 	case 0:
+> + 	{
+> + 		char *lvargv[3];
+> +@@ -84,9 +88,9 @@
 > +
-> +EUDEV_CONF_OPT =		\
-> +	--sbindir=/sbin		\
-> +	--with-rootlibdir=/lib	\
-> +	--libexecdir=/lib	\
-> +	--with-firmware-path=/lib/firmware	\
-> +	--disable-introspection			\
-> +	--enable-split-usr			\
-> +	--enable-libkmod
+> + 		/* The libblkid library could linked with setuid programs */
+> + 		if (setgid(getgid()) < 0)
+> +-			 exit(1);
+> ++			 _exit(1);
+
+  Same here.
+
+> + 		if (setuid(getuid()) < 0)
+> +-			 exit(1);
+> ++			 _exit(1);
 > +
-> +EUDEV_DEPENDENCIES = host-gperf host-pkgconf util-linux kmod
+> + 		lvargv[0] = cmd;
+> + 		lvargv[1] = devname;
+> +@@ -95,7 +99,7 @@
+> + 		execv(lvargv[0], lvargv);
 > +
-> +ifeq ($(BR2_PACKAGE_EUDEV_RULES_GEN),y)
-> +	EUDEV_CONF_OPT += --enable-rule_generator
-> +endif
+> + 		DBG(LOWPROBE, blkid_debug("Failed to execute %s: errno=%d", cmd, errno));
+> +-		exit(1);
+> ++		_exit(1);
 
-We usually don't indent the body of conditionals.
+  Same here.
 
+> + 	}
+> + 	case -1:
+> + 		DBG(LOWPROBE, blkid_debug("Failed to forking: errno=%d", errno));
+> +diff -urN util-linux-2.23.2.old/libmount/src/context_mount.c util-linux-2.23.2/libmount/src/context_mount.c
+> +--- util-linux-2.23.2.old/libmount/src/context_mount.c	2013-06-13 15:46:10.432650724 +0800
+> ++++ util-linux-2.23.2/libmount/src/context_mount.c	2013-11-11 14:44:33.215049590 +0800
+> +@@ -499,17 +499,29 @@
 > +
-> +ifneq ($(BR2_LARGEFILE),y)
-
-ifeq ($(BR2_LARGEFILE),)
-
-to use positive logic.
-
-> +	EUDEV_CONF_OPT += --disable-largefile
-> +endif
+> + 	DBG_FLUSH;
 > +
-> +ifeq ($(BR2_PACKAGE_LIBGLIB2),y)
-> +	EUDEV_CONF_OPT += --enable-gudev
-> +	EUDEV_DEPENDENCIES += libglib2
-> +else
-> +	EUDEV_CONF_OPT += --disable-gudev
-> +endif
+> ++#ifndef HAVE_FORK
+> ++	switch (vfork()) {
+> ++#else
+> + 	switch (fork()) {
+> ++#endif
+> + 	case 0:
+> + 	{
+> + 		const char *args[12], *type;
+> + 		int i = 0;
 > +
-> +define EUDEV_INSTALL_INIT_SYSV
-> +	$(INSTALL) -m 0755 package/eudev/S10udev $(TARGET_DIR)/etc/init.d/S10udev
-> +endef
+> + 		if (setgid(getgid()) < 0)
+> ++#ifndef HAVE_FORK
+> ++			_exit(EXIT_FAILURE);
+> ++#else
+> + 			exit(EXIT_FAILURE);
+> ++#endif
 > +
-> +EUDEV_POST_INSTALL_TARGET_HOOKS += EUDEV_INSTALL_INIT_SYSV
-
-This last line is not needed. <pkg>_INIT_SYSV is automatically used.
-
-> diff --git a/system/Config.in b/system/Config.in
-> index 1fe4127..1867b25 100644
-> --- a/system/Config.in
-> +++ b/system/Config.in
-> @@ -126,6 +126,19 @@ comment "udev requires a toolchain with LARGEFILE + WCHAR support"
->  comment "udev doesn't work with 'prefer static libraries'"
->  	depends on BR2_PREFER_STATIC_LIB
->  
-> +config BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV
-> +	bool "Dynamic using eudev"
-> +	depends on BR2_LARGEFILE
-> +	depends on BR2_USE_WCHAR
-> +	depends on !BR2_PREFER_STATIC_LIB
-> +	select BR2_PACKAGE_EUDEV
+> + 		if (setuid(getuid()) < 0)
+> ++#ifndef HAVE_FORK
+> ++			_exit(EXIT_FAILURE);
+> ++#else
+> + 			exit(EXIT_FAILURE);
+> ++#endif
 > +
-> +comment "eudev requires a toolchain w/ largefile, wchar"
-> +	depends on !(BR2_LARGEFILE && BR2_USE_WCHAR)
+> + 		type = mnt_fs_get_fstype(cxt->fs);
 > +
-> +comment "eudev requires a toolchain w/ dynamic library"
-> +	depends on BR2_PREFER_STATIC_LIB
+> +@@ -546,7 +558,11 @@
+> + #endif
+> + 		DBG_FLUSH;
+> + 		execv(cxt->helper, (char * const *) args);
+> ++#ifndef HAVE_FORK
+> ++		_exit(EXIT_FAILURE);
+> ++#else
+> + 		exit(EXIT_FAILURE);
+> ++#endif
+> + 	}
+> + 	default:
+> + 	{
+> +@@ -1123,7 +1123,7 @@
+> + 	if (mnt_context_is_child(cxt)) {
+> + 		DBG(CXT, mnt_debug_h(cxt, "next-mount: child exit [rc=%d]", rc));
+> + 		DBG_FLUSH;
+> +-		exit(rc);
+> ++		_exit(rc);
 
-Can't you group those two comments?
+  I haven't studied it in detail, but I don't see how mnt_fork_context 
+can work... So this change is probably also not needed.
 
-> +
->  endchoice
->  
->  config BR2_ROOTFS_DEVICE_TABLE
+  BTW I don't see a change to mnt_fork_context - so does is this patch 
+incomplete?
 
-Other than these fairly minor comments, this patch looks ready to me.
 
-Thanks!
+  I don't have time to review the rest of the patch, but you get the 
+spirit :-)
 
-Thomas
+  Regards,
+  Arnout
+
+
+[snip]
+
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
