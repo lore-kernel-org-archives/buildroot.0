@@ -1,41 +1,57 @@
 From: Spenser Gilliland <spenser@gillilanding.com>
-Date: Wed, 13 Nov 2013 15:28:43 -0600
-Subject: [Buildroot] [PATCH v3 0/7] Add Microblaze internal toolchain
-Message-ID: <1384378130-8599-1-git-send-email-spenser@gillilanding.com>
+Date: Wed, 13 Nov 2013 15:28:44 -0600
+Subject: [Buildroot] [PATCH v3 1/7] binutils: add microblaze internal
+	toolchain
+In-Reply-To: <1384378130-8599-1-git-send-email-spenser@gillilanding.com>
+References: <1384378130-8599-1-git-send-email-spenser@gillilanding.com>
+Message-ID: <1384378130-8599-2-git-send-email-spenser@gillilanding.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch series adds a Microblaze internal toolchain from the sources at
-http://github.com/Xilinx .
 
-This series requires that the arc toolchain patches and github helper
-patches are applied.
+Signed-off-by: Spenser Gilliland <spenser@gillilanding.com>
+---
+ package/binutils/Config.in.host |    2 ++
+ package/binutils/binutils.mk    |    4 ++++
+ 2 files changed, 6 insertions(+), 0 deletions(-)
 
-v2->v3:
-  - Incorporated all review suggestions.
-  - Rebased on arc v2 patches and github helper.
-
-Spenser Gilliland (7):
-  binutils: add microblaze internal toolchain
-  gcc: add microblaze internal toolchain
-  glibc: add microblaze internal toolchain
-  gdb: add microblaze internal toolchain
-  toolchain: enable microblaze toolchain
-  toolchain: uclibc does not support microblze
-  defconfigs: update microblaze defconfigs to use new toolchain
-
- configs/qemu_microblazebe_mmu_defconfig |    7 -------
- configs/qemu_microblazeel_mmu_defconfig |    7 -------
- package/binutils/Config.in.host         |    2 ++
- package/binutils/binutils.mk            |    4 ++++
- package/gcc/Config.in.host              |   23 +++++++++++++++--------
- package/gcc/gcc.mk                      |    3 +++
- package/gdb/Config.in.host              |    2 ++
- package/gdb/gdb.mk                      |    5 +++++
- package/glibc/glibc.mk                  |   12 ++++++++++++
- toolchain/Config.in                     |    2 +-
- toolchain/toolchain-buildroot/Config.in |    5 +++--
- 11 files changed, 47 insertions(+), 25 deletions(-)
+diff --git a/package/binutils/Config.in.host b/package/binutils/Config.in.host
+index 2989e6e..c125c25 100644
+--- a/package/binutils/Config.in.host
++++ b/package/binutils/Config.in.host
+@@ -3,6 +3,7 @@ comment "Binutils Options"
+ choice
+ 	prompt "Binutils Version"
+ 	depends on !BR2_arc
++	depends on !BR2_microblaze
+ 	default BR2_BINUTILS_VERSION_2_21 if (BR2_mips || BR2_mipsel || BR2_sh)
+ 	default BR2_BINUTILS_VERSION_2_22
+ 	help
+@@ -45,6 +46,7 @@ config BR2_BINUTILS_VERSION
+ 	string
+ 	default "2.18-avr32-1.0.1" if BR2_BINUTILS_VERSION_2_18_AVR32_1_0_1
+ 	default "0c824ba511fa9b028220eb3c39b566af89ac9dda" if BR2_arc
++	default "8351467c933d277ebea0c8d99ad2b65b5f7b6bc2" if BR2_microblaze
+ 	default "2.20.1"	if BR2_BINUTILS_VERSION_2_20_1
+ 	default "2.21"		if BR2_BINUTILS_VERSION_2_21
+ 	default "2.21.1"	if BR2_BINUTILS_VERSION_2_21_1
+diff --git a/package/binutils/binutils.mk b/package/binutils/binutils.mk
+index b8d7c69..4464b7f 100644
+--- a/package/binutils/binutils.mk
++++ b/package/binutils/binutils.mk
+@@ -27,6 +27,10 @@ ifeq ($(BR2_arc),y)
+ BINUTILS_SITE = $(call github,foss-for-synopsys-dwc-arc-processors,binutils,$(BINUTILS_VERSION))
+ BINUTILS_SOURCE = binutils-$(BINUTILS_VERSION).tar.gz
+ endif
++ifeq ($(BR2_microblaze),y)
++BINUTILS_SITE = $(call github,Xilinx,binutils,$(BINUTILS_VERSION))
++BINUTILS_SOURCE = binutils-$(BINUTILS_VERSION).tar.gz
++endif
+ BINUTILS_SITE ?= $(BR2_GNU_MIRROR)/binutils
+ BINUTILS_SOURCE ?= binutils-$(BINUTILS_VERSION).tar.bz2
+ BINUTILS_EXTRA_CONFIG_OPTIONS = $(call qstrip,$(BR2_BINUTILS_EXTRA_CONFIG_OPTIONS))
+-- 
+1.7.1
