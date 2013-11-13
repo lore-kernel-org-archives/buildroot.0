@@ -1,42 +1,97 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 14 Nov 2013 00:23:14 +0100
-Subject: [Buildroot] [PATCH 1/2] util-linux: nommu: Add patch to use
- vfork in nommu arch.
-In-Reply-To: <52840758.10104@mind.be>
-References: <1384165765-23210-1-git-send-email-Sonic.adi@gmail.com>
- <52840758.10104@mind.be>
-Message-ID: <20131114002314.72c4b4a1@skate>
+From: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+Date: Wed, 13 Nov 2013 19:58:16 -0300
+Subject: [Buildroot] [PATCH] libnspr: Add patch to support nios2 arch
+Message-ID: <1384383496-22396-1-git-send-email-ezequiel@vanguardiasur.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout, Sonic,
+Signed-off-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+---
+Fixes nios2 build breakage.
 
-On Thu, 14 Nov 2013 00:12:24 +0100, Arnout Vandecappelle wrote:
+ package/libnspr/libnspr-nios2.patch | 71 +++++++++++++++++++++++++++++++++++++
+ 1 file changed, 71 insertions(+)
+ create mode 100644 package/libnspr/libnspr-nios2.patch
 
-> > +diff -urN util-linux-2.23.2.old/fdisks/fdiskbsdlabel.h util-linux-2.23.2/fdisks/fdiskbsdlabel.h
-> > +--- util-linux-2.23.2.old/fdisks/fdiskbsdlabel.h	2013-07-30 16:54:15.362994206 +0800
-> > ++++ util-linux-2.23.2/fdisks/fdiskbsdlabel.h	2013-11-11 14:52:18.285623027 +0800
-> > +@@ -50,7 +50,7 @@
-> > +     defined (__mips__) || defined (__s390__) || defined (__sh__) || \
-> > +     defined (__aarch64__) || defined(__xtensa__) || \
-> > +     defined (__x86_64__) || defined (__avr32__) || defined(__cris__) || \
-> > +-    defined (__microblaze__)
-> > ++    defined(__bfin__) || defined (__microblaze__)
-> 
->   This is actually a blackfin change, not a nommu change, so it should be 
-> a separate patch.
-
-Just a quick note to mention that util-linux 2.24 has removed this
-header, and we have a patch pending to bump util-linux to 2.24. See
-http://patchwork.ozlabs.org/patch/290366/.
-
-Best regards,
-
-Thomas
+diff --git a/package/libnspr/libnspr-nios2.patch b/package/libnspr/libnspr-nios2.patch
+new file mode 100644
+index 0000000..cffb2ef
+--- /dev/null
++++ b/package/libnspr/libnspr-nios2.patch
+@@ -0,0 +1,71 @@
++Add Nios-II support
++
++Signed-off-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
++
++diff -Naur libnspr-4.9.6-ori/mozilla/nsprpub/pr/include/md/_linux.cfg libnspr-4.9.6/mozilla/nsprpub/pr/include/md/_linux.cfg
++--- libnspr-4.9.6-ori/mozilla/nsprpub/pr/include/md/_linux.cfg	2013-11-10 21:15:04.556139100 -0300
+++++ libnspr-4.9.6/mozilla/nsprpub/pr/include/md/_linux.cfg	2013-11-10 21:15:29.332138283 -0300
++@@ -914,6 +914,51 @@
++ #define PR_BYTES_PER_WORD_LOG2   2
++ #define PR_BYTES_PER_DWORD_LOG2  3
++ 
+++#elif defined(nios2)
+++
+++#define IS_LITTLE_ENDIAN 1
+++#undef  IS_BIG_ENDIAN
+++
+++#define PR_BYTES_PER_BYTE   1
+++#define PR_BYTES_PER_SHORT  2
+++#define PR_BYTES_PER_INT    4
+++#define PR_BYTES_PER_INT64  8
+++#define PR_BYTES_PER_LONG   4
+++#define PR_BYTES_PER_FLOAT  4
+++#define PR_BYTES_PER_DOUBLE 8
+++#define PR_BYTES_PER_WORD   4
+++#define PR_BYTES_PER_DWORD  8
+++
+++#define PR_BITS_PER_BYTE    8
+++#define PR_BITS_PER_SHORT   16
+++#define PR_BITS_PER_INT     32
+++#define PR_BITS_PER_INT64   64
+++#define PR_BITS_PER_LONG    32
+++#define PR_BITS_PER_FLOAT   32
+++#define PR_BITS_PER_DOUBLE  64
+++#define PR_BITS_PER_WORD    32
+++
+++#define PR_BITS_PER_BYTE_LOG2   3
+++#define PR_BITS_PER_SHORT_LOG2  4
+++#define PR_BITS_PER_INT_LOG2    5
+++#define PR_BITS_PER_INT64_LOG2  6
+++#define PR_BITS_PER_LONG_LOG2   5
+++#define PR_BITS_PER_FLOAT_LOG2  5
+++#define PR_BITS_PER_DOUBLE_LOG2 6
+++#define PR_BITS_PER_WORD_LOG2   5
+++
+++#define PR_ALIGN_OF_SHORT   2
+++#define PR_ALIGN_OF_INT     4
+++#define PR_ALIGN_OF_LONG    4
+++#define PR_ALIGN_OF_INT64   4
+++#define PR_ALIGN_OF_FLOAT   4
+++#define PR_ALIGN_OF_DOUBLE  4
+++#define PR_ALIGN_OF_POINTER 4
+++#define PR_ALIGN_OF_WORD    4
+++
+++#define PR_BYTES_PER_WORD_LOG2   2
+++#define PR_BYTES_PER_DWORD_LOG2  3
+++
++ #else
++ 
++ #error "Unknown CPU architecture"
++diff -Naur libnspr-4.9.6-ori/mozilla/nsprpub/pr/include/md/_linux.h libnspr-4.9.6/mozilla/nsprpub/pr/include/md/_linux.h
++--- libnspr-4.9.6-ori/mozilla/nsprpub/pr/include/md/_linux.h	2013-11-10 21:15:04.556139100 -0300
+++++ libnspr-4.9.6/mozilla/nsprpub/pr/include/md/_linux.h	2013-11-10 21:15:33.245138154 -0300
++@@ -55,6 +55,8 @@
++ #define _PR_SI_ARCHITECTURE "avr32"
++ #elif defined(__m32r__)
++ #define _PR_SI_ARCHITECTURE "m32r"
+++#elif defined(nios2)
+++#define _PR_SI_ARCHITECTURE "nios2"
++ #else
++ #error "Unknown CPU architecture"
++ #endif
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.8.1.5
