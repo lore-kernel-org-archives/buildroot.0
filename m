@@ -1,28 +1,115 @@
-From: Mischa Jonker <Mischa.Jonker@synopsys.com>
-Date: Wed, 13 Nov 2013 22:11:34 +0000
-Subject: [Buildroot] [PATCH v3 0/7] Add Microblaze internal toolchain
-In-Reply-To: <1384378130-8599-1-git-send-email-spenser@gillilanding.com>
-References: <1384378130-8599-1-git-send-email-spenser@gillilanding.com>
-Message-ID: <E6BF041E97966E4DB955F0DF883AD2D685F178EF@de02wembxa.internal.synopsys.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 13 Nov 2013 23:18:03 +0100
+Subject: [Buildroot] [PATCH v2] support/kconfig: fix 'space' to (de)select
+	options
+Message-ID: <1384381083-29698-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> Subject: [PATCH v3 0/7] Add Microblaze internal toolchain
-> 
-> This patch series adds a Microblaze internal toolchain from the sources at
-> http://github.com/Xilinx .
-> 
-> This series requires that the arc toolchain patches and github helper patches
-> are applied.
-> 
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Tried it here, and everything builds fine. I even enabled a couple of random packages, and no problems seen. Note that I don't have a platform to actually run the binaries on, so this is a build-only test.
+In case a menu has comment without letters/numbers (eg. characters
+matching the regexp '^[^[:alpha:][:digit:]]+$', for example - or *),
+hitting space will cycle through those comments, rather than
+selecting/deselecting the currently-highlighted option.
 
-Tested-by: Mischa Jonker <mjonker@synopsys.com>
+This is the behaviour of hitting any letter/digit: jump to the next
+option which prompt starts with that letter. The only letters that
+do not behave as such are 'y' 'm' and 'n'. Prompts that start with
+one of those three letters are instead matched on the first letter
+that is not 'y', 'm' or 'n'.
 
-Thanks,
+Fix that by treating 'space' as we treat y/m/n, ie. as an action key,
+not as shortcut to jump to  prompt.
 
-Mischa
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Peter Korsgaard <jacmet@uclibc.org>
+Cc: Samuel Martin <s.martin49@gmail.com>
+Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+---
+Note: I'll be running this upstream soonish.
+
+Changes v1 -> v2:
+  - add this to our patch series  (Thomas)
+---
+ support/kconfig/lxdialog/menubox.c                 |  2 +-
+ .../16-fix-space-to-de-select-options.patch        | 41 ++++++++++++++++++++++
+ support/kconfig/patches/series                     |  1 +
+ 3 files changed, 43 insertions(+), 1 deletion(-)
+ create mode 100644 support/kconfig/patches/16-fix-space-to-de-select-options.patch
+
+diff --git a/support/kconfig/lxdialog/menubox.c b/support/kconfig/lxdialog/menubox.c
+index 48d382e..6fc7e78 100644
+--- a/support/kconfig/lxdialog/menubox.c
++++ b/support/kconfig/lxdialog/menubox.c
+@@ -285,7 +285,7 @@ do_resize:
+ 		if (key < 256 && isalpha(key))
+ 			key = tolower(key);
+ 
+-		if (strchr("ynmh", key))
++		if (strchr("ynmh ", key))
+ 			i = max_choice;
+ 		else {
+ 			for (i = choice + 1; i < max_choice; i++) {
+diff --git a/support/kconfig/patches/16-fix-space-to-de-select-options.patch b/support/kconfig/patches/16-fix-space-to-de-select-options.patch
+new file mode 100644
+index 0000000..972d2de
+--- /dev/null
++++ b/support/kconfig/patches/16-fix-space-to-de-select-options.patch
+@@ -0,0 +1,41 @@
++commit 6faa447282fe90d42e0513af46c13f20b4b327d4
++Author: Yann E. MORIN <yann.morin.1998@free.fr>
++Date:   Wed Nov 13 22:45:02 2013 +0100
++
++    support/kconfig: fix 'space' to (de)select options
++    
++    In case a menu has comment without letters/numbers (eg. characters
++    matching the regexp '^[^[:alpha:][:digit:]]+$', for example - or *),
++    hitting space will cycle through those comments, rather than
++    selecting/deselecting the currently-highlighted option.
++    
++    This is the behaviour of hitting any letter/digit: jump to the next
++    option which prompt starts with that letter. The only letters that
++    do not behave as such are 'y' 'm' and 'n'. Prompts that start with
++    one of those three letters are instead matched on the first letter
++    that is not 'y', 'm' or 'n'.
++    
++    Fix that by treating 'space' as we treat y/m/n, ie. as an action key,
++    not as shortcut to jump to  prompt.
++    
++    Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
++    Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++    Cc: Peter Korsgaard <jacmet@uclibc.org>
++    Cc: Samuel Martin <s.martin49@gmail.com>
++    Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
++    ---
++    Note: I'll be running this upstream soonish.
++
++diff --git a/support/kconfig/lxdialog/menubox.c b/support/kconfig/lxdialog/menubox.c
++index 48d382e..6fc7e78 100644
++--- a/lxdialog/menubox.c
+++++ b/lxdialog/menubox.c
++@@ -285,7 +285,7 @@ do_resize:
++ 		if (key < 256 && isalpha(key))
++ 			key = tolower(key);
++ 
++-		if (strchr("ynmh", key))
+++		if (strchr("ynmh ", key))
++ 			i = max_choice;
++ 		else {
++ 			for (i = choice + 1; i < max_choice; i++) {
+diff --git a/support/kconfig/patches/series b/support/kconfig/patches/series
+index 523e652..6e3319e 100644
+--- a/support/kconfig/patches/series
++++ b/support/kconfig/patches/series
+@@ -7,3 +7,4 @@
+ 12-fix-glade-file-path.patch
+ 14-support-out-of-tree-config.patch
+ 15-fix-qconf-moc-rule.patch
++16-fix-space-to-de-select-options.patch
+-- 
+1.8.1.2
