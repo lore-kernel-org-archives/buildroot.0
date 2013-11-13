@@ -1,84 +1,51 @@
 From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Wed, 13 Nov 2013 21:57:39 +0100
-Subject: [Buildroot] [PATCH v5 2/4] libmbim: add new package
+Date: Wed, 13 Nov 2013 21:57:40 +0100
+Subject: [Buildroot] [PATCH v5 3/4] pcre: add UTF-8/16/32 support option
 In-Reply-To: <1384376261-29291-1-git-send-email-yegorslists@googlemail.com>
 References: <1384376261-29291-1-git-send-email-yegorslists@googlemail.com>
-Message-ID: <1384376261-29291-2-git-send-email-yegorslists@googlemail.com>
+Message-ID: <1384376261-29291-3-git-send-email-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Add BR2_PACKAGE_PCRE_UTF option, that activates
+--enable-unicode-properties for UTF-8/16/32.
+
 Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 ---
- package/Config.in          |  1 +
- package/libmbim/Config.in  | 17 +++++++++++++++++
- package/libmbim/libmbim.mk | 20 ++++++++++++++++++++
- 3 files changed, 38 insertions(+)
- create mode 100644 package/libmbim/Config.in
- create mode 100644 package/libmbim/libmbim.mk
+Changes:
+        v3: change option to "UTF-8/16/32 support"
 
-diff --git a/package/Config.in b/package/Config.in
-index 311cc6c..86498bd 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -546,6 +546,7 @@ source "package/libfreefare/Config.in"
- source "package/libftdi/Config.in"
- source "package/libhid/Config.in"
- source "package/libiqrf/Config.in"
-+source "package/libmbim/Config.in"
- source "package/libnfc/Config.in"
- source "package/libnfc-llcp/Config.in"
- source "package/libqmi/Config.in"
-diff --git a/package/libmbim/Config.in b/package/libmbim/Config.in
-new file mode 100644
-index 0000000..ccc0f25
---- /dev/null
-+++ b/package/libmbim/Config.in
-@@ -0,0 +1,17 @@
-+config BR2_PACKAGE_LIBMBIM
-+	bool "libmbim"
-+	depends on BR2_USE_WCHAR # libglib2
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
-+	depends on BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_UDEV
-+	select BR2_PACKAGE_LIBGLIB2
-+	select BR2_PACKAGE_UDEV_ALL_EXTRAS
+ package/pcre/Config.in | 5 +++++
+ package/pcre/pcre.mk   | 1 +
+ 2 files changed, 6 insertions(+)
+
+diff --git a/package/pcre/Config.in b/package/pcre/Config.in
+index dc92274..e49d693 100644
+--- a/package/pcre/Config.in
++++ b/package/pcre/Config.in
+@@ -19,4 +19,9 @@ config BR2_PACKAGE_PCRE_32
+ 	help
+ 	  This option builds the 32-bits pcre library, i.e 'libpcre32'
+
++config BR2_PACKAGE_PCRE_UTF
++	bool "UTF-8/16/32 support"
 +	help
-+	  libmbim is a glib-based library for talking to WWAN modems and
-+	  devices which speak the Mobile Interface Broadband Model (MBIM)
-+	  protocol.
++	  This option enables UTF support
 +
-+	  http://www.freedesktop.org/wiki/Software/libmbim/
-+
-+comment "libmbim needs udev and a toolchain w/ wchar, threads"
-+	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
-+		!BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_UDEV
-diff --git a/package/libmbim/libmbim.mk b/package/libmbim/libmbim.mk
-new file mode 100644
-index 0000000..acf9f79
---- /dev/null
-+++ b/package/libmbim/libmbim.mk
-@@ -0,0 +1,20 @@
-+################################################################################
-+#
-+# libmbim
-+#
-+################################################################################
-+
-+LIBMBIM_VERSION = 1.4.0
-+LIBMBIM_SITE    = http://www.freedesktop.org/software/libmbim/
-+LIBMBIM_SOURCE  = libmbim-$(LIBMBIM_VERSION).tar.xz
-+LIBMBIM_LICENSE = GPLv2
-+LIBMBIM_LICENSE_FILES = COPYING
-+LIBMBIM_INSTALL_STAGING = YES
-+
-+LIBMBIM_DEPENDENCIES = libglib2 udev
-+
-+# we don't want -Werror
-+LIBMBIM_CONF_OPT = --enable-more-warnings=no
-+
-+$(eval $(autotools-package))
-+
--- 
+ endif
+diff --git a/package/pcre/pcre.mk b/package/pcre/pcre.mk
+index bf86a3d..0d1d66b 100644
+--- a/package/pcre/pcre.mk
++++ b/package/pcre/pcre.mk
+@@ -19,5 +19,6 @@ endif
+ PCRE_CONF_OPT += --enable-pcre8
+ PCRE_CONF_OPT += $(if $(BR2_PACKAGE_PCRE_16),--enable-pcre16,--disable-pcre16)
+ PCRE_CONF_OPT += $(if $(BR2_PACKAGE_PCRE_32),--enable-pcre32,--disable-pcre32)
++PCRE_CONF_OPT += $(if $(BR2_PACKAGE_PCRE_UTF),--enable-unicode-properties,--disable-unicode-properties)
+
+ $(eval $(autotools-package))
+--
 1.8.1.2
