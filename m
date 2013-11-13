@@ -1,8 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 Date: Thu, 14 Nov 2013 00:53:32 +0100
-Subject: [Buildroot] [pull request for next] Pull request for branch
-	yem/kconfig
-Message-ID: <cover.1384386575.git.yann.morin.1998@free.fr>
+Subject: [Buildroot] [PATCH 1/4] support/kconfig: fix 'space' to (de)select
+	options
+In-Reply-To: <cover.1384386575.git.yann.morin.1998@free.fr>
+References: <cover.1384386575.git.yann.morin.1998@free.fr>
+Message-ID: <eeeb36d92f9b261b65f91e8edfdcb105947d6b35.1384386575.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,84 +13,105 @@ To: buildroot@busybox.net
 
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Hello All!
+In case a menu has comment without letters/numbers (eg. characters
+matching the regexp '^[^[:alpha:][:digit:]]+$', for example - or *),
+hitting space will cycle through those comments, rather than
+selecting/deselecting the currently-highlighted option.
 
-While I was at it to fix the kconfig space-can't-deselect issue, I
-decided to go a bit further, and update and clean up our kconfig.
+This is the behaviour of hitting any letter/digit: jump to the next
+option which prompt starts with that letter. The only letters that
+do not behave as such are 'y' 'm' and 'n'. Prompts that start with
+one of those three letters are instead matched on the first letter
+that is not 'y', 'm' or 'n'.
 
-So here is this series for 'next'.
+Fix that by treating 'space' as we treat y/m/n, ie. as an action key,
+not as shortcut to jump to  prompt.
 
-Note that we ditch two of our patches: one because it is useless
-(C++-style comments), one because it's been upstreamed (probability).
-Also, the README was updated to also include copying of .gitignore,
-which was missing so far.
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Peter Korsgaard <jacmet@uclibc.org>
+Cc: Samuel Martin <s.martin49@gmail.com>
+Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+---
+Note: I'll be running this upstream soonish.
 
-Regards,
-Yann E. MORIN.
-
-
-The following changes since commit c09f5aaa0f342d0fbfc12a6d8f4b704fab55f400:
-
-  docs/download.html: Fix tarball typos (2013-11-13 21:41:04 +0100)
-
-are available in the git repository at:
-
-  git://gitorious.org/buildroot/buildroot.git yem/kconfig
-
-for you to fetch changes up to eabc0ac6fc62b091a78c1f78a987fbe3962e0c95:
-
-  support/kconfig: bump to kconfig from linux-3.12 (2013-11-14 00:49:01 +0100)
-
-----------------------------------------------------------------
-Yann E. MORIN (4):
-      support/kconfig: fix 'space' to (de)select options
-      support/kconfig: update our README
-      support/kconfig: remove useless patch
-      support/kconfig: bump to kconfig from linux-3.12
-
- support/kconfig/Makefile                           |   4 +-
- support/kconfig/README.buildroot                   |   2 +-
- support/kconfig/conf.c                             |  16 +-
- support/kconfig/confdata.c                         | 111 +++-
- support/kconfig/expr.c                             |  42 +-
- support/kconfig/expr.h                             |   3 +
- support/kconfig/list.h                             |  40 ++
- support/kconfig/lkc.h                              |   3 +-
- support/kconfig/lkc_proto.h                        |   1 +
- support/kconfig/lxdialog/check-lxdialog.sh         |   6 +-
- support/kconfig/lxdialog/checklist.c               |   8 +-
- support/kconfig/lxdialog/dialog.h                  |  21 +
- support/kconfig/lxdialog/inputbox.c                |   8 +-
- support/kconfig/lxdialog/menubox.c                 |  17 +-
- support/kconfig/lxdialog/textbox.c                 |   6 +-
- support/kconfig/lxdialog/util.c                    |  85 +++-
- support/kconfig/lxdialog/yesno.c                   |   8 +-
- support/kconfig/mconf.c                            | 108 +++-
- support/kconfig/menu.c                             |  73 ++-
- support/kconfig/merge_config.sh                    |  10 +-
- support/kconfig/nconf.c                            |  41 +-
- support/kconfig/nconf.gui.c                        |  20 +-
- .../patches/01-kconfig-kernel-to-buildroot.patch   |  22 +-
- .../patches/02-cpp-comments-to-c-comments.patch    | 178 -------
- .../patches/09-implement-kconfig-probability.patch |  44 --
- .../patches/11-use-mktemp-for-lxdialog.patch       |   2 +-
- .../patches/14-support-out-of-tree-config.patch    |  14 +-
- .../kconfig/patches/15-fix-qconf-moc-rule.patch    |   2 +-
- .../16-fix-space-to-de-select-options.patch        |  41 ++
- support/kconfig/patches/series                     |   3 +-
- support/kconfig/streamline_config.pl               |  26 +-
- support/kconfig/symbol.c                           | 103 +++-
- support/kconfig/zconf.tab.c_shipped                | 562 +++++++++++----------
- support/kconfig/zconf.y                            |  11 +-
- 34 files changed, 944 insertions(+), 697 deletions(-)
- delete mode 100644 support/kconfig/patches/02-cpp-comments-to-c-comments.patch
- delete mode 100644 support/kconfig/patches/09-implement-kconfig-probability.patch
+Changes v1 -> v2:
+  - add this to our patch series  (Thomas)
+---
+ support/kconfig/lxdialog/menubox.c                 |  2 +-
+ .../16-fix-space-to-de-select-options.patch        | 41 ++++++++++++++++++++++
+ support/kconfig/patches/series                     |  1 +
+ 3 files changed, 43 insertions(+), 1 deletion(-)
  create mode 100644 support/kconfig/patches/16-fix-space-to-de-select-options.patch
 
+diff --git a/support/kconfig/lxdialog/menubox.c b/support/kconfig/lxdialog/menubox.c
+index 48d382e..6fc7e78 100644
+--- a/support/kconfig/lxdialog/menubox.c
++++ b/support/kconfig/lxdialog/menubox.c
+@@ -285,7 +285,7 @@ do_resize:
+ 		if (key < 256 && isalpha(key))
+ 			key = tolower(key);
+ 
+-		if (strchr("ynmh", key))
++		if (strchr("ynmh ", key))
+ 			i = max_choice;
+ 		else {
+ 			for (i = choice + 1; i < max_choice; i++) {
+diff --git a/support/kconfig/patches/16-fix-space-to-de-select-options.patch b/support/kconfig/patches/16-fix-space-to-de-select-options.patch
+new file mode 100644
+index 0000000..972d2de
+--- /dev/null
++++ b/support/kconfig/patches/16-fix-space-to-de-select-options.patch
+@@ -0,0 +1,41 @@
++commit 6faa447282fe90d42e0513af46c13f20b4b327d4
++Author: Yann E. MORIN <yann.morin.1998@free.fr>
++Date:   Wed Nov 13 22:45:02 2013 +0100
++
++    support/kconfig: fix 'space' to (de)select options
++    
++    In case a menu has comment without letters/numbers (eg. characters
++    matching the regexp '^[^[:alpha:][:digit:]]+$', for example - or *),
++    hitting space will cycle through those comments, rather than
++    selecting/deselecting the currently-highlighted option.
++    
++    This is the behaviour of hitting any letter/digit: jump to the next
++    option which prompt starts with that letter. The only letters that
++    do not behave as such are 'y' 'm' and 'n'. Prompts that start with
++    one of those three letters are instead matched on the first letter
++    that is not 'y', 'm' or 'n'.
++    
++    Fix that by treating 'space' as we treat y/m/n, ie. as an action key,
++    not as shortcut to jump to  prompt.
++    
++    Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
++    Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++    Cc: Peter Korsgaard <jacmet@uclibc.org>
++    Cc: Samuel Martin <s.martin49@gmail.com>
++    Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
++    ---
++    Note: I'll be running this upstream soonish.
++
++diff --git a/support/kconfig/lxdialog/menubox.c b/support/kconfig/lxdialog/menubox.c
++index 48d382e..6fc7e78 100644
++--- a/lxdialog/menubox.c
+++++ b/lxdialog/menubox.c
++@@ -285,7 +285,7 @@ do_resize:
++ 		if (key < 256 && isalpha(key))
++ 			key = tolower(key);
++ 
++-		if (strchr("ynmh", key))
+++		if (strchr("ynmh ", key))
++ 			i = max_choice;
++ 		else {
++ 			for (i = choice + 1; i < max_choice; i++) {
+diff --git a/support/kconfig/patches/series b/support/kconfig/patches/series
+index 523e652..6e3319e 100644
+--- a/support/kconfig/patches/series
++++ b/support/kconfig/patches/series
+@@ -7,3 +7,4 @@
+ 12-fix-glade-file-path.patch
+ 14-support-out-of-tree-config.patch
+ 15-fix-qconf-moc-rule.patch
++16-fix-space-to-de-select-options.patch
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.8.1.2
