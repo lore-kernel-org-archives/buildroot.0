@@ -1,58 +1,50 @@
-From: Spenser Gilliland <spenser@gillilanding.com>
-Date: Wed, 13 Nov 2013 15:28:50 -0600
-Subject: [Buildroot] [PATCH v3 7/7] defconfigs: update microblaze defconfigs
-	to use new toolchain
-In-Reply-To: <1384378130-8599-1-git-send-email-spenser@gillilanding.com>
-References: <1384378130-8599-1-git-send-email-spenser@gillilanding.com>
-Message-ID: <1384378130-8599-8-git-send-email-spenser@gillilanding.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 13 Nov 2013 22:36:46 +0100
+Subject: [Buildroot] AVR32 toolchain build failure
+Message-ID: <20131113223646.66a7a61b@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hello Simon,
 
-Signed-off-by: Spenser Gilliland <spenser@gillilanding.com>
----
- configs/qemu_microblazebe_mmu_defconfig |    7 -------
- configs/qemu_microblazeel_mmu_defconfig |    7 -------
- 2 files changed, 0 insertions(+), 14 deletions(-)
+I've tried to build an AVR32 toolchain with 2013.11-rc1, with the
+following defconfig:
 
-diff --git a/configs/qemu_microblazebe_mmu_defconfig b/configs/qemu_microblazebe_mmu_defconfig
-index 0a621b1..8527ca8 100644
---- a/configs/qemu_microblazebe_mmu_defconfig
-+++ b/configs/qemu_microblazebe_mmu_defconfig
-@@ -2,13 +2,6 @@
- BR2_microblaze=y
- BR2_microblazebe=y
- 
--# Special toolchain
--BR2_TOOLCHAIN_EXTERNAL=y
--BR2_TOOLCHAIN_EXTERNAL_XILINX_MICROBLAZEBE_V2=y
--BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
--BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
--BR2_TOOLCHAIN_EXTERNAL_CXX=y
--
- # System
- BR2_TARGET_GENERIC_GETTY_PORT="ttyUL0"
- 
-diff --git a/configs/qemu_microblazeel_mmu_defconfig b/configs/qemu_microblazeel_mmu_defconfig
-index 51d58c6..e407e1b 100644
---- a/configs/qemu_microblazeel_mmu_defconfig
-+++ b/configs/qemu_microblazeel_mmu_defconfig
-@@ -2,13 +2,6 @@
- BR2_microblaze=y
- BR2_microblazeel=y
- 
--# Toolchain
--BR2_TOOLCHAIN_EXTERNAL=y
--BR2_TOOLCHAIN_EXTERNAL_XILINX_MICROBLAZEEL_V2=y
--BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
--BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
--BR2_TOOLCHAIN_EXTERNAL_CXX=y
--
- # System
- BR2_TARGET_GENERIC_GETTY_PORT="ttyUL0"
- 
+BR2_avr32=y
+BR2_TOOLCHAIN_BUILDROOT_LARGEFILE=y
+BR2_TOOLCHAIN_BUILDROOT_INET_IPV6=y
+BR2_TOOLCHAIN_BUILDROOT_INET_RPC=y
+BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
+BR2_TOOLCHAIN_BUILDROOT_CXX=y
+BR2_INIT_NONE=y
+# BR2_PACKAGE_BUSYBOX is not set
+# BR2_TARGET_ROOTFS_TAR is not set
+
+and the build failed with:
+
+In file included from /opt/br-avr32-full-2013.11-rc1/usr/avr32-buildroot-linux-uclibc/sysroot/usr/include/linux/kernel.h:4,
+                 from /opt/br-avr32-full-2013.11-rc1/usr/avr32-buildroot-linux-uclibc/sysroot/usr/include/linux/netlink.h:4,
+                 from /opt/br-avr32-full-2013.11-rc1/usr/avr32-buildroot-linux-uclibc/sysroot/usr/include/linux/rtnetlink.h:5,
+                 from libc/inet/netlinkaccess.h:27,
+                 from libc/inet/if_index.c:36:
+/opt/br-avr32-full-2013.11-rc1/usr/avr32-buildroot-linux-uclibc/sysroot/usr/include/linux/sysinfo.h:8: error: expected specifier-qualifier-list before '__kernel_long_t'
+make[1]: *** [libc/inet/if_index.os] Error 1
+make[1]: Leaving directory `/opt/toolchain-build/build/uclibc-0.9.31.1'
+
+It is apparently reported at:
+
+  https://lkml.org/lkml/2013/5/18/1
+
+However, I've also built several other toolchains with the same
+Buildroot version and haven't had any problem.
+
+Best regards,
+
+Thomas
 -- 
-1.7.1
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
