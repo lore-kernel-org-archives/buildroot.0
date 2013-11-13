@@ -1,43 +1,37 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Wed, 13 Nov 2013 21:18:51 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
-	2013-11-12
-In-Reply-To: <CAAXf6LWgt30AW1tNK=uNgvY=7gJqgT3QVxkPtuP4YDSmiSDKZA@mail.gmail.com>
-References: <20131113073025.D898952C60E@lolut.humanoidz.org>
- <CAAXf6LWgt30AW1tNK=uNgvY=7gJqgT3QVxkPtuP4YDSmiSDKZA@mail.gmail.com>
-Message-ID: <CAAXf6LWVm8bYNzScEA=iqE42QzbeSGP1-LTShCmAW4bNZJqFWg@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 13 Nov 2013 21:31:16 +0100
+Subject: [Buildroot] [PATCH 1/2] docs: announce the upcoming Buildroot
+	Developer Day
+In-Reply-To: <87li0s130x.fsf@dell.be.48ers.dk>
+References: <1384366360-1463-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1384366360-1463-2-git-send-email-thomas.petazzoni@free-electrons.com>
+ <87li0s130x.fsf@dell.be.48ers.dk>
+Message-ID: <20131113213116.5b89eab2@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Nov 13, 2013 at 5:22 PM, Thomas De Schampheleire
-<patrickdepinguin@gmail.com> wrote:
-> Hi,
->
-> On Wed, Nov 13, 2013 at 8:30 AM, Thomas Petazzoni
-> <thomas.petazzoni@free-electrons.com> wrote:
->> Build statistics for 2013-11-12
->> ===============================
-> [..]
->>        sh4 |               vim-699f8d8f096d | NOK | http://autobuild.buildroot.net/results/21b5a910e6a27fa1cb12d0002ffed7e6ed9d6c83/
->
-> The problem here is:
-> edit.c:(.text+0x1614): undefined reference to `libintl_gettext'
->
-> So seems gettext related.
-> I cannot yet reproduce this bug. I tried a limited build 'make
-> toolchain vim' and also 'make toolchain gettext vim', but both work
-> fine with that same defonfig.
->
-> Interestingly, the autobuild configure output says:
-> checking for NLS... gettext() works
-> while in my reproduction it says:
-> checking for NLS... gettext() works with -lintl
->
-> This is a difference I cannot explain. I'm currently trying a full
-> rebuild, but any input in the mean time is welcome...
+Dear Peter Korsgaard,
 
-FYI, I have seen the problem on a full rebuild, will analyze the
-difference and get back...
+On Wed, 13 Nov 2013 21:05:02 +0100, Peter Korsgaard wrote:
+
+> >  <ul>
+> > +  <li><b>13 November 2013 -- Announcement of the next Buildroot Developer Days</b>
+> > +
+> > +    <p>The next <i>Buildroot Developer Days</i> meeting will take
+> > +    place on Monday 3rd and Tuesday 4th February 2014 in Brussels,
+> > +    Belgium - Just after
+> > +    the <a href="http://www.fosdem.org">FOSDEM</a> (February
+> 
+> I know what FOSDEM stands for, but to me the 'the' in front of it sounds
+> odd, so I've dropped that and committed, thanks.
+
+You're right, thanks for fixing it!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
