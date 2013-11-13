@@ -1,37 +1,88 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 13 Nov 2013 21:31:16 +0100
-Subject: [Buildroot] [PATCH 1/2] docs: announce the upcoming Buildroot
-	Developer Day
-In-Reply-To: <87li0s130x.fsf@dell.be.48ers.dk>
-References: <1384366360-1463-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1384366360-1463-2-git-send-email-thomas.petazzoni@free-electrons.com>
- <87li0s130x.fsf@dell.be.48ers.dk>
-Message-ID: <20131113213116.5b89eab2@skate>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 13 Nov 2013 18:48:01 +0100
+Subject: [Buildroot] [git commit] Update for 2013.11-rc1
+In-Reply-To: <20131112231429.89E849BBB5@busybox.osuosl.org>
+References: <20131112231429.89E849BBB5@busybox.osuosl.org>
+Message-ID: <5283BB51.5060101@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Peter Korsgaard,
+On 12/11/13 23:49, Peter Korsgaard wrote:
+[snip]
+> diff --git a/docs/download.html b/docs/download.html
+> index 49c768d..dfba889 100644
+> --- a/docs/download.html
+> +++ b/docs/download.html
+> @@ -14,15 +14,15 @@ or
+>   <a href="/downloads/buildroot-2013.08.1.tar.bz2">buildroot-2013.08.1.tar.bz2</a>.
+>
+>   <p>
+> -<!--
+> -The latest release candidate is <b>2013.08-rc3</b>, which can be
+> +
+> +The latest release candidate is <b>2013.11-rc1</b>, which can be
+>   downloaded here:<p>
+>
+> -<a href="/downloads/buildroot-2013.08-rc3.tar.gz">buildroot-2013.08-rc3.tar.gz</a>
+> +<a href="/downloads/buildroot-2013.11-rc1tar.gz">buildroot-2013.11-rc1.tar.gz</a>
 
-On Wed, 13 Nov 2013 21:05:02 +0100, Peter Korsgaard wrote:
+  Missing .
 
-> >  <ul>
-> > +  <li><b>13 November 2013 -- Announcement of the next Buildroot Developer Days</b>
-> > +
-> > +    <p>The next <i>Buildroot Developer Days</i> meeting will take
-> > +    place on Monday 3rd and Tuesday 4th February 2014 in Brussels,
-> > +    Belgium - Just after
-> > +    the <a href="http://www.fosdem.org">FOSDEM</a> (February
-> 
-> I know what FOSDEM stands for, but to me the 'the' in front of it sounds
-> odd, so I've dropped that and committed, thanks.
+>   or
+> -<a href="/downloads/buildroot-2013.08-rc3.tar.bz2">buildroot-2013.08-rc3.tar.bz2</a>.
+> +<a href="/downloads/buildroot-2013.11-rc3.tar.bz2">buildroot-2013.11-rc1.tar.bz2</a>.
+>   <p>
+> --->
+> +
+>   This and earlier releases can always be downloaded from
+>   <a href="/downloads/">http://buildroot.net/downloads/</a>.
+>
+> diff --git a/docs/news.html b/docs/news.html
+> index 2560227..91ed85d 100644
+> --- a/docs/news.html
+> +++ b/docs/news.html
+> @@ -5,6 +5,19 @@
+>   <p>
+>
+>   <ul>
+> +  <li><b>12 November 2013 -- 2013.11-rc1 released</b>
+> +
+> +    <p>We have a new release candidate! Lots of changes all over the
+> +    tree, see the <a
+> +    href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2013.11_rc1">CHANGES</a>
 
-You're right, thanks for fixing it!
+  I never noticed before, but why do you tag with _rc1 instead of -rc1 so 
+it corresponds to the tarball?
 
-Thomas
+  Regards,
+  Arnout
+
+> +    file for details.</p>
+> +
+> +    <p>Head to the <a href="/downloads/">downloads page</a> to pick up the
+> +    <a href="/downloads/buildroot-2013.11-rc1.tar.bz2">2013.11-rc1
+> +    release candidate</a>, and report any problems found to the <a
+> +    href="lists.html">mailing list</a> or <a
+> +    href="https://bugs.uclibc.org">bug tracker</a>.</p>
+> +
+>     <li><b>11 November 2013 -- Report from Buildroot Developers Meeting</b>
+>
+>       <p>A report from the recent
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+>
+>
+
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
