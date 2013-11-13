@@ -1,36 +1,28 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 13 Nov 2013 22:59:01 +0100
-Subject: [Buildroot] [PATCH] support/kconfig: fix 'space' to (de)select
-	options
-In-Reply-To: <20131113225523.30f7eb69@skate>
-References: <1384379593-32281-1-git-send-email-yann.morin.1998@free.fr>
- <20131113225523.30f7eb69@skate>
-Message-ID: <20131113215901.GE24238@free.fr>
+From: Mischa Jonker <Mischa.Jonker@synopsys.com>
+Date: Wed, 13 Nov 2013 22:11:34 +0000
+Subject: [Buildroot] [PATCH v3 0/7] Add Microblaze internal toolchain
+In-Reply-To: <1384378130-8599-1-git-send-email-spenser@gillilanding.com>
+References: <1384378130-8599-1-git-send-email-spenser@gillilanding.com>
+Message-ID: <E6BF041E97966E4DB955F0DF883AD2D685F178EF@de02wembxa.internal.synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
-
-On 2013-11-13 22:55 +0100, Thomas Petazzoni spake thusly:
-> On Wed, 13 Nov 2013 22:53:13 +0100, Yann E. MORIN wrote:
-> >  support/kconfig/lxdialog/menubox.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> Subject: [PATCH v3 0/7] Add Microblaze internal toolchain
 > 
-> Shouldn't we also update the patches in support/kconfig/patches/ ?
+> This patch series adds a Microblaze internal toolchain from the sources at
+> http://github.com/Xilinx .
+> 
+> This series requires that the arc toolchain patches and github helper patches
+> are applied.
+> 
 
-Doh... :-(
-Sure, will do.
+Tried it here, and everything builds fine. I even enabled a couple of random packages, and no problems seen. Note that I don't have a platform to actually run the binaries on, so this is a build-only test.
 
-Regards,
-Yann E. MORIN.
+Tested-by: Mischa Jonker <mjonker@synopsys.com>
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thanks,
+
+Mischa
