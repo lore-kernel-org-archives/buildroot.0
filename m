@@ -1,36 +1,55 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 13 Nov 2013 22:54:45 +0100
-Subject: [Buildroot] menuconfig / legacy bug
-In-Reply-To: <CAAXf6LW96vUik2RKMCs3aHwNvcBygkL1TP27Y-TkkwdGV0YkQQ@mail.gmail.com>
-References: <20131112224328.4edae7b0@skate>
- <CAAXf6LUhpgN16gBY_WFnq=kSepT-LHt-Q3Js-cAHwSUGd2CL6w@mail.gmail.com>
- <201311130943.34449.yann.morin.1998@free.fr>
- <CAAXf6LW96vUik2RKMCs3aHwNvcBygkL1TP27Y-TkkwdGV0YkQQ@mail.gmail.com>
-Message-ID: <20131113215445.GD24238@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 13 Nov 2013 22:55:23 +0100
+Subject: [Buildroot] [PATCH] support/kconfig: fix 'space' to (de)select
+	options
+In-Reply-To: <1384379593-32281-1-git-send-email-yann.morin.1998@free.fr>
+References: <1384379593-32281-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <20131113225523.30f7eb69@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Dear Yann E. MORIN,
 
-On 2013-11-13 10:05 +0100, Thomas De Schampheleire spake thusly:
-> On Wed, Nov 13, 2013 at 9:43 AM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> > I have a (quick) fix I need to further test tonight, since it may have some
-> > weird side-effects...
+On Wed, 13 Nov 2013 22:53:13 +0100, Yann E. MORIN wrote:
+> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 > 
-> Could you elaborate a bit, or maybe show the patch?
+> In case a menu has comment without letters/numbers (eg. characters
+> matching the regexp '^[^[:alpha:][:digit:]]+$', for example - or *),
+> hitting space will cycle through those comments, rather than
+> selecting/deselecting the currently-highlighted option.
+> 
+> This is the behaviour of hitting any letter/digit: jump to the next
+> option which prompt starts with that letter. The only letters that
+> do not behave as such are 'y' 'm' and 'n'. Prompts that start with
+> one of those three letters are instead matched on the first letter
+> that is not 'y', 'm' or 'n'.
+> 
+> Fix that by treating 'space' as we treat y/m/n, ie. as an action key,
+> not as shortcut to jump to  prompt.
+> 
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Cc: Peter Korsgaard <jacmet@uclibc.org>
+> Cc: Samuel Martin <s.martin49@gmail.com>
+> Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+> ---
+> Note: I'll be running this upstream soonish.
 
-Now posted to the list. ;-)
+Thanks?
 
-Regards,
-Yann E. MORIN.
+> ---
+>  support/kconfig/lxdialog/menubox.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
+Shouldn't we also update the patches in support/kconfig/patches/ ?
+
+Thanks,
+
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
