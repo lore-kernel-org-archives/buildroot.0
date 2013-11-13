@@ -1,31 +1,42 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 13 Nov 2013 20:09:06 +0100
-Subject: [Buildroot] Buildroot Developer Day at FOSDEM, 3-4 Feb 2014
-In-Reply-To: <1384366360-1463-1-git-send-email-thomas.petazzoni@free-electrons.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 13 Nov 2013 21:05:02 +0100
+Subject: [Buildroot] [PATCH 1/2] docs: announce the upcoming Buildroot
+	Developer Day
+In-Reply-To: <1384366360-1463-2-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Wed, 13 Nov 2013 19:12:39 +0100")
 References: <1384366360-1463-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20131113200906.59918981@skate>
+ <1384366360-1463-2-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <87li0s130x.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-On Wed, 13 Nov 2013 19:12:38 +0100, Thomas Petazzoni wrote:
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> ---
+>  docs/news.html | 25 +++++++++++++++++++++++++
+>  1 file changed, 25 insertions(+)
 
-> I'm proud to announce that the next Buildroot Developer Day will take
-> place on Monday 3rd and Tuesday 4th February 2014 in Brussels,
-> Belgium, right after the FOSDEM conference.
+> diff --git a/docs/news.html b/docs/news.html
+> index eff98c2..d9c0e22 100644
+> --- a/docs/news.html
+> +++ b/docs/news.html
+> @@ -5,6 +5,31 @@
+>  <p>
+ 
+>  <ul>
+> +  <li><b>13 November 2013 -- Announcement of the next Buildroot Developer Days</b>
+> +
+> +    <p>The next <i>Buildroot Developer Days</i> meeting will take
+> +    place on Monday 3rd and Tuesday 4th February 2014 in Brussels,
+> +    Belgium - Just after
+> +    the <a href="http://www.fosdem.org">FOSDEM</a> (February
 
-And of course, I forgot the URL of the event page:
+I know what FOSDEM stands for, but to me the 'the' in front of it sounds
+odd, so I've dropped that and committed, thanks.
 
-   http://elinux.org/Buildroot:DeveloperDaysFOSDEM2014
-
-Best regards,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
