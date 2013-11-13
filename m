@@ -1,7 +1,9 @@
 From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Wed, 13 Nov 2013 21:57:38 +0100
-Subject: [Buildroot] [PATCH v5 1/4] libqmi: bump to 1.6.0
-Message-ID: <1384376261-29291-1-git-send-email-yegorslists@googlemail.com>
+Date: Wed, 13 Nov 2013 21:57:39 +0100
+Subject: [Buildroot] [PATCH v5 2/4] libmbim: add new package
+In-Reply-To: <1384376261-29291-1-git-send-email-yegorslists@googlemail.com>
+References: <1384376261-29291-1-git-send-email-yegorslists@googlemail.com>
+Message-ID: <1384376261-29291-2-git-send-email-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,21 +12,73 @@ To: buildroot@busybox.net
 
 Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 ---
- package/libqmi/libqmi.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/Config.in          |  1 +
+ package/libmbim/Config.in  | 17 +++++++++++++++++
+ package/libmbim/libmbim.mk | 20 ++++++++++++++++++++
+ 3 files changed, 38 insertions(+)
+ create mode 100644 package/libmbim/Config.in
+ create mode 100644 package/libmbim/libmbim.mk
 
-diff --git a/package/libqmi/libqmi.mk b/package/libqmi/libqmi.mk
-index 4f3f9a9..edd11f7 100644
---- a/package/libqmi/libqmi.mk
-+++ b/package/libqmi/libqmi.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBQMI_VERSION = 1.4.0
-+LIBQMI_VERSION = 1.6.0
- LIBQMI_SITE    = http://www.freedesktop.org/software/libqmi/
- LIBQMI_SOURCE  = libqmi-$(LIBQMI_VERSION).tar.xz
- LIBQMI_LICENSE = LGPLv2+ (library), GPLv2+ (programs)
+diff --git a/package/Config.in b/package/Config.in
+index 311cc6c..86498bd 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -546,6 +546,7 @@ source "package/libfreefare/Config.in"
+ source "package/libftdi/Config.in"
+ source "package/libhid/Config.in"
+ source "package/libiqrf/Config.in"
++source "package/libmbim/Config.in"
+ source "package/libnfc/Config.in"
+ source "package/libnfc-llcp/Config.in"
+ source "package/libqmi/Config.in"
+diff --git a/package/libmbim/Config.in b/package/libmbim/Config.in
+new file mode 100644
+index 0000000..ccc0f25
+--- /dev/null
++++ b/package/libmbim/Config.in
+@@ -0,0 +1,17 @@
++config BR2_PACKAGE_LIBMBIM
++	bool "libmbim"
++	depends on BR2_USE_WCHAR # libglib2
++	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
++	depends on BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_UDEV
++	select BR2_PACKAGE_LIBGLIB2
++	select BR2_PACKAGE_UDEV_ALL_EXTRAS
++	help
++	  libmbim is a glib-based library for talking to WWAN modems and
++	  devices which speak the Mobile Interface Broadband Model (MBIM)
++	  protocol.
++
++	  http://www.freedesktop.org/wiki/Software/libmbim/
++
++comment "libmbim needs udev and a toolchain w/ wchar, threads"
++	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
++		!BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_UDEV
+diff --git a/package/libmbim/libmbim.mk b/package/libmbim/libmbim.mk
+new file mode 100644
+index 0000000..acf9f79
+--- /dev/null
++++ b/package/libmbim/libmbim.mk
+@@ -0,0 +1,20 @@
++################################################################################
++#
++# libmbim
++#
++################################################################################
++
++LIBMBIM_VERSION = 1.4.0
++LIBMBIM_SITE    = http://www.freedesktop.org/software/libmbim/
++LIBMBIM_SOURCE  = libmbim-$(LIBMBIM_VERSION).tar.xz
++LIBMBIM_LICENSE = GPLv2
++LIBMBIM_LICENSE_FILES = COPYING
++LIBMBIM_INSTALL_STAGING = YES
++
++LIBMBIM_DEPENDENCIES = libglib2 udev
++
++# we don't want -Werror
++LIBMBIM_CONF_OPT = --enable-more-warnings=no
++
++$(eval $(autotools-package))
++
 -- 
 1.8.1.2
