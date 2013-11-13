@@ -1,48 +1,47 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Wed, 13 Nov 2013 17:22:24 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
-	2013-11-12
-In-Reply-To: <20131113073025.D898952C60E@lolut.humanoidz.org>
-References: <20131113073025.D898952C60E@lolut.humanoidz.org>
-Message-ID: <CAAXf6LWgt30AW1tNK=uNgvY=7gJqgT3QVxkPtuP4YDSmiSDKZA@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 13 Nov 2013 19:12:38 +0100
+Subject: [Buildroot] Buildroot Developer Day at FOSDEM, 3-4 Feb 2014
+Message-ID: <1384366360-1463-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Hello,
 
-On Wed, Nov 13, 2013 at 8:30 AM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Build statistics for 2013-11-12
-> ===============================
-[..]
->        sh4 |               vim-699f8d8f096d | NOK | http://autobuild.buildroot.net/results/21b5a910e6a27fa1cb12d0002ffed7e6ed9d6c83/
+I'm proud to announce that the next Buildroot Developer Day will take
+place on Monday 3rd and Tuesday 4th February 2014 in Brussels,
+Belgium, right after the FOSDEM conference.
 
-The problem here is:
-edit.c:(.text+0x1614): undefined reference to `libintl_gettext'
+Like last year, Google is sponsoring the event by providing the
+meeting room and lunch for the participants. Last year participants
+can testify of the excellent conditions that we had! So thanks a lot
+to Google!
 
-So seems gettext related.
-I cannot yet reproduce this bug. I tried a limited build 'make
-toolchain vim' and also 'make toolchain gettext vim', but both work
-fine with that same defonfig.
+This meeting is open to Buildroot contributors and developers. With 70
+different contributors to the 2013.11-rc release, I'd really like to
+see this meeting having more participants than the usual core
+members. So if you're contributing or using Buildroot, do not hesitate
+to contact me to participate.
 
-Interestingly, the autobuild configure output says:
-checking for NLS... gettext() works
-while in my reproduction it says:
-checking for NLS... gettext() works with -lintl
-
-This is a difference I cannot explain. I'm currently trying a full
-rebuild, but any input in the mean time is welcome...
-
-
->    powerpc |                  webkit-1.11.5 | NOK | http://autobuild.buildroot.net/results/789c9d424ec8cf57e7a96aa567ffad0c089ffb8f/
-
-This is the same problem as reported here:
-https://bugs.webkit.org/show_bug.cgi?id=113638
-but for now there is no full solution yet. It seems powerpc is not
-properly supported in webkit at the moment.
+Two patches are following this e-mail: one announcing the event, and
+another one adding a page to thank our sponsors on the Buildroot web
+site.
 
 Best regards,
+
 Thomas
+
+Thomas Petazzoni (2):
+  docs: announce the upcoming Buildroot Developer Day
+  docs: add a page to thank our sponsors
+
+ docs/header.html   |  1 +
+ docs/news.html     | 25 +++++++++++++++++++++++++
+ docs/sponsors.html | 41 +++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 67 insertions(+)
+ create mode 100644 docs/sponsors.html
+
+-- 
+1.8.1.2
