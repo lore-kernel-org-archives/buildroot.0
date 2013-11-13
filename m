@@ -1,40 +1,85 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 13 Nov 2013 14:33:47 +0100
-Subject: [Buildroot] [PATCH v2] infra: introduce github helper function
-In-Reply-To: <CAAXf6LXddF50q9C=PyTVoOSY1x0wC2=RXxd+n6E5MpakxHonYQ@mail.gmail.com>
-References: <1384345469-8967-1-git-send-email-mjonker@synopsys.com>
- <CAAXf6LXddF50q9C=PyTVoOSY1x0wC2=RXxd+n6E5MpakxHonYQ@mail.gmail.com>
-Message-ID: <52837FBB.3010200@mind.be>
+From: Fabio Porcedda <fabio.porcedda@gmail.com>
+Date: Wed, 13 Nov 2013 14:40:53 +0100
+Subject: [Buildroot] [PATCH v8 RESEND 0/8] Add support for top-level
+ parallel make
+In-Reply-To: <CAHkwnC8UTtDi-ZhSCBWAgviRz-5FOEx2e+GYxKtHzBY6W8pJCw@mail.gmail.com>
+References: <1382088860-30524-1-git-send-email-fabio.porcedda@gmail.com>
+ <20131111144953.43bd80b0@skate>
+ <CAHkwnC8UTtDi-ZhSCBWAgviRz-5FOEx2e+GYxKtHzBY6W8pJCw@mail.gmail.com>
+Message-ID: <CAHkwnC8on+TGbLnx6pyWBUkY785Na03HGof-tv=ZdT=_gM9iag@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 13/11/13 14:15, Thomas De Schampheleire wrote:
-> Regarding the defconfigs: Arnout suggested adding the $(call github)
-> there as well. However, I'm not very fond of that: if you run 'make
-> savedefconfig' later it will not be preserved.
+On Tue, Nov 12, 2013 at 9:39 AM, Fabio Porcedda
+<fabio.porcedda@gmail.com> wrote:
+> On Mon, Nov 11, 2013 at 2:49 PM, Thomas Petazzoni
+> <thomas.petazzoni@free-electrons.com> wrote:
+>> Fabio, Arnout,
+>>
+>> On Fri, 18 Oct 2013 11:34:12 +0200, Fabio Porcedda wrote:
+>>
+>>> this is a patch set for adding support for top-level parallel make in
+>>> buildroot, the common problem scattered in buildroot's top-level
+>>> makefiles is that in the rules it relies on the order of evaluation of
+>>> the prerequisites, to be able to use top-level parallel make instead
+>>> of reling on the left to right ordering of evaluation of the
+>>> prerequisites we must add an explicit rule to describe the
+>>> dependencies.
+>>
+>> I'd like to agree on a plan with this patch series. At the latest
+>> Buildroot Developer Day in Edinburgh, I think we agreed that:
+>>
+>>  (1) Enabling top-level parallel without having per-package sysroot was
+>>      not desirable, as it would make the builds non-reproducible.
+>
+> What do you think if we provide an easy way to use top-level parallel make
+> that warns about the problems:
+>
+> ifeq ($(P),1)
+> $(warning Not reproducible builds use at your own risk!)
+> BR2_JLEVEL=
+> else
+> # This top-level Makefile can *not* be executed in parallel
+> .NOTPARALLEL:
+> endif
+>
+>
+>   make P=1 -j5
+>
+>
+>>  (2) That being said, Fabio's patches have anyway a merit on their own
+>>      since they make things cleaner, and that therefore, patches 1 to 6
+>>      can be merged. Maybe patch 7 even if I'm not sure it makes sense
+>>      to have it without the top-level parallel build.
 
- Why would it not be preserved?
+The patch 7 make sense only for top-level parallel build but i suggest
+to accept it because does not harm the serial building and is needed
+for someone that want to try to use top-level parallel make.
 
- The only real disadvantage is that it looks very ugly:
+>> What do you think?
 
-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,linux-sunxi,linux-sunxi,274a66a7bfcbaabb88d63e4eba161965383cc416)/linux-sunxi-274a66a7bfcbaabb88d63e4eba161965383cc416.tar.gz"
+Is great to have most of the patch accepted, i think it's a step in
+the right direction.
+I will send the patch set v9 soon.
+
+>>
+>> Best regards,
+>>
+>> Thomas
+>> --
+>> Thomas Petazzoni, CTO, Free Electrons
+>> Embedded Linux, Kernel and Android engineering
+>> http://free-electrons.com
+>
+>
+> Best regards
+> --
+> Fabio Porcedda
 
 
- Regards,
- Arnout
-
-> 
-> Best regards,
-> Thomas
-
-
+Thanks and best regards
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+Fabio Porcedda
