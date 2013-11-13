@@ -1,69 +1,76 @@
-From: Matthew Weber <mlweber1@rockwellcollins.com>
-Date: Wed, 13 Nov 2013 08:11:52 -0600
-Subject: [Buildroot] [PATCH 1/1] omniorb: add COS Naming Service
-In-Reply-To: <CAAXf6LXBq95Fnek3MgjK0D2GBSUKjJkwZ8pwObRuMfQNKsoAaQ@mail.gmail.com>
-References: <1384288305-4945-1-git-send-email-mlweber1@rockwellcollins.com>	<9e8746c1-8e33-4c55-b4e2-b2b1e6181f86@email.android.com>
- <87txfh2r91.fsf@dell.be.48ers.dk>	<CAAXf6LWs9vXKEOQ7Pt2yteLnGHVsuNEJczVaR2AnwnCRwfbjyw@mail.gmail.com>
- <87txfg1vhu.fsf@dell.be.48ers.dk>
- <CAAXf6LXBq95Fnek3MgjK0D2GBSUKjJkwZ8pwObRuMfQNKsoAaQ@mail.gmail.com>
-Message-ID: <OFE25F15E6.05DABC37-ON86257C22.004DC720-86257C22.004DFDBA@rockwellcollins.com>
+From: Mischa Jonker <Mischa.Jonker@synopsys.com>
+Date: Wed, 13 Nov 2013 17:13:12 +0100
+Subject: [Buildroot] [PATCH v2 0/5] Move to github as source for
+	ARC-specific packages
+Message-ID: <1384359197-22168-1-git-send-email-mjonker@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas De Schampheleire <patrickdepinguin@gmail.com> wrote on 11/13/2013 
-03:59:43 AM:
+Hi,
 
-> From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-> To: Peter Korsgaard <jacmet@uclibc.org>
-> Cc: Matt Weber <mlweber1@rockwellcollins.com>, buildroot 
-> <buildroot@busybox.net>
-> Date: 11/13/2013 03:59 AM
-> Subject: Re: [PATCH 1/1] omniorb: add COS Naming Service
-> 
-> On Wed, Nov 13, 2013 at 10:50 AM, Peter Korsgaard <jacmet@uclibc.org> 
-wrote:
-> >>>>>> "Thomas" == Thomas De Schampheleire 
-> <patrickdepinguin@gmail.com> writes:
-> >
-> > Hi,
-> >
-> >> Yuk, that's a pity...
-> >> In this case my preference is to have the comment before the main
-> >> option (so as close as possible), rather than after all sub options.
-> >
-> >> What is your opinion?
-> >
-> > I don't have a stong opion about it, but that's fine by me as well. 
-For
-> > simple packages (most), it imho is a bit more logical to have it after
-> > the option though (and it's what we are currently doing most places).
-> >
-> 
-> As long as there are no suboptions that is indeed more logical.
-> However, when suboptions are added the comment moves down, and
-> depending on where new suboptions are added this may not be apparent
-> from the diff output alone. So one way is to use one 'rule' which
-> would be the comment above, or we keep simple packages without
-> suboptions with the comment below, and make sure the comment is moved
-> to the top when suboptions are added. The first alternative is easier
-> to maintain, but less beautiful for the simple packages without
-> suboptions.
-> 
-> If I had to pick, I'd pick the first alternative, for easier
-> maintainability and uniformity.
-I agree, I would have liked to keep it right below the main option,
-but above is a reasonable location, since if it was placed below all 
-suboptions I could see it get confusing.
+This set of patches gets rid of the Synopsys website for downloading
+ARC-specific versions of binutils, gdb, gcc, uClibc. Instead, our github
+site is used, and the git-protocol where possible (all packages except gcc).
+
+Although our toolchain release is not completely finished, and a couple
+of issues are still being worked on, I would like to get some feedback already
+on this patch set: after all, it's easy to update the git ID's associated
+with the final release when that is ready (hopefully within a week or two).
+
+The new toolchain release fixes a number of auto-builder issues.
 
 Thanks,
-Matt
 
-> 
-> Best regards,
-> Thomas
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20131113/fa8f7234/attachment.html>
+Mischa
+
+v2:
+  * use full commit ID's
+  * use new github helper function
+  * squash patches that remove patches with patches that switch to github
+  * no update on 'to choose/not to choose'
+  * use suitable-extractor helper in gcc
+ 
+
+Mischa Jonker (5):
+  gdb: arc: Use git instead of website
+  binutils: arc: Use git instead of website
+  gcc: arc: Download from github instead of Synopsys website
+  uclibc: arc: Use git instead of website
+  Revert "arc: Add option for ARC-specific download site"
+
+ arch/Config.in.arc                                 |    4 -
+ package/binutils/Config.in.host                    |    2 +-
+ package/binutils/binutils.mk                       |    8 +-
+ package/gcc/4.8-arc/100-uclibc-conf.patch          |   15 --
+ package/gcc/4.8-arc/301-missing-execinfo_h.patch   |   13 --
+ package/gcc/4.8-arc/302-c99-snprintf.patch         |   13 --
+ .../gcc/4.8-arc/305-libmudflap-susv3-legacy.patch  |   49 -------
+ package/gcc/4.8-arc/disable_gc_sections.patch      |  145 --------------------
+ package/gcc/4.8-arc/fix_branch_out_of_range.patch  |   30 ----
+ package/gcc/Config.in.host                         |    2 +-
+ package/gcc/gcc.mk                                 |    9 +-
+ package/gdb/Config.in.host                         |    2 +-
+ package/gdb/gdb.mk                                 |    5 +-
+ package/uclibc/0.9.33-arc/fix-fstat-for-be.patch   |   32 -----
+ .../uclibc/0.9.33-arc/fix-susv3-legacy-bcmp.patch  |   37 -----
+ package/uclibc/0.9.33-arc/fix-susv3-legacy.patch   |   36 -----
+ .../0.9.33-arc/uclibc-arc-add-__kernel_long.patch  |   29 ----
+ package/uclibc/Config.in                           |    9 +-
+ package/uclibc/uclibc.mk                           |    7 +-
+ 19 files changed, 22 insertions(+), 425 deletions(-)
+ delete mode 100644 package/gcc/4.8-arc/100-uclibc-conf.patch
+ delete mode 100644 package/gcc/4.8-arc/301-missing-execinfo_h.patch
+ delete mode 100644 package/gcc/4.8-arc/302-c99-snprintf.patch
+ delete mode 100644 package/gcc/4.8-arc/305-libmudflap-susv3-legacy.patch
+ delete mode 100644 package/gcc/4.8-arc/disable_gc_sections.patch
+ delete mode 100644 package/gcc/4.8-arc/fix_branch_out_of_range.patch
+ delete mode 100644 package/uclibc/0.9.33-arc/fix-fstat-for-be.patch
+ delete mode 100644 package/uclibc/0.9.33-arc/fix-susv3-legacy-bcmp.patch
+ delete mode 100644 package/uclibc/0.9.33-arc/fix-susv3-legacy.patch
+ delete mode 100644 package/uclibc/0.9.33-arc/uclibc-arc-add-__kernel_long.patch
+
+-- 
+1.7.9.5
