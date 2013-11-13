@@ -1,81 +1,113 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 13 Nov 2013 18:48:01 +0100
-Subject: [Buildroot] [git commit] Update for 2013.11-rc1
-In-Reply-To: <20131112231429.89E849BBB5@busybox.osuosl.org>
-References: <20131112231429.89E849BBB5@busybox.osuosl.org>
-Message-ID: <5283BB51.5060101@mind.be>
+Date: Wed, 13 Nov 2013 21:32:18 +0100
+Subject: [Buildroot] Init not handling signals
+In-Reply-To: <000301cedfc4$0dfbe880$29f3b980$@osullivan@cloudiumsystems.com>
+References: <000301cedfc4$0dfbe880$29f3b980$@osullivan@cloudiumsystems.com>
+Message-ID: <5283E1D2.1090007@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 12/11/13 23:49, Peter Korsgaard wrote:
-[snip]
-> diff --git a/docs/download.html b/docs/download.html
-> index 49c768d..dfba889 100644
-> --- a/docs/download.html
-> +++ b/docs/download.html
-> @@ -14,15 +14,15 @@ or
->   <a href="/downloads/buildroot-2013.08.1.tar.bz2">buildroot-2013.08.1.tar.bz2</a>.
+On 12/11/13 17:27, John OSullivan wrote:
+> Hi,
 >
->   <p>
-> -<!--
-> -The latest release candidate is <b>2013.08-rc3</b>, which can be
-> +
-> +The latest release candidate is <b>2013.11-rc1</b>, which can be
->   downloaded here:<p>
->
-> -<a href="/downloads/buildroot-2013.08-rc3.tar.gz">buildroot-2013.08-rc3.tar.gz</a>
-> +<a href="/downloads/buildroot-2013.11-rc1tar.gz">buildroot-2013.11-rc1.tar.gz</a>
+> I?m not sure if this is the correct forum to ask this question but I have
+> seen a few buildroot/busybox references to this problem but none with a
+> clear solution.
 
-  Missing .
+  The busybox mailing list would probably be more appropriate...
 
->   or
-> -<a href="/downloads/buildroot-2013.08-rc3.tar.bz2">buildroot-2013.08-rc3.tar.bz2</a>.
-> +<a href="/downloads/buildroot-2013.11-rc3.tar.bz2">buildroot-2013.11-rc1.tar.bz2</a>.
->   <p>
-> --->
-> +
->   This and earlier releases can always be downloaded from
->   <a href="/downloads/">http://buildroot.net/downloads/</a>.
 >
-> diff --git a/docs/news.html b/docs/news.html
-> index 2560227..91ed85d 100644
-> --- a/docs/news.html
-> +++ b/docs/news.html
-> @@ -5,6 +5,19 @@
->   <p>
+> I am running buildroot-2012-05 with busybox 1.19, using the busybox init
+> with an inittab based on the default one provided.
 >
->   <ul>
-> +  <li><b>12 November 2013 -- 2013.11-rc1 released</b>
-> +
-> +    <p>We have a new release candidate! Lots of changes all over the
-> +    tree, see the <a
-> +    href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2013.11_rc1">CHANGES</a>
+> In the init tab there is a trap for ctrlaltdel
+>
+> ::ctrlaltdel:/sbin/reboot
+>
+> This line is never called after hitting ctrl alt del on a keyboard
+>
+> Instead we get a signal pending on the init task
+>
+> Cat /proc/1/status
+>
+> ---------------------------
+>
+> Name:   swapper
+>
+> State:    R (running)
+>
+> Tgid:      1
+>
+> Pid:        1
+>
+> PPid:      0
+>
+> TracerPid:            0
+>
+> Uid:        0             0             0             0
+>
+> Gid:        0             0             0             0
+>
+> FDSize:  32
+>
+> Groups:
+>
+> Threads:              1
+>
+> SigQ:      1/938
+>
+> SigPnd:  0000000000000100
+>
+> ShdPnd: 0000000000000002
 
-  I never noticed before, but why do you tag with _rc1 instead of -rc1 so 
-it corresponds to the tarball?
+  If I understand correctly, this is a SIGCHLD and a SIGINT. The SIGINT 
+is sent to init by the kernel when you press ctrlaltdel - so I guess you 
+pressed it twice.
+
+>
+> SigBlk:   0000000000000000
+>
+> SigIgn:   0000000000000000
+>
+> SigCgt:  0000000000000000
+>
+> CapInh: 0000000000000000
+>
+> After the init process is signalled the Swapper task assumes 100%
+> processor occupancy and system performance degenerates. (as evidenced by top)
+
+  That seems to indicate it's getting fork-bombed. You can check that by 
+running ps; ps from the shell - if the two instances have very different 
+PIDs, then you have a fork bomb :-)
+
 
   Regards,
   Arnout
 
-> +    file for details.</p>
-> +
-> +    <p>Head to the <a href="/downloads/">downloads page</a> to pick up the
-> +    <a href="/downloads/buildroot-2013.11-rc1.tar.bz2">2013.11-rc1
-> +    release candidate</a>, and report any problems found to the <a
-> +    href="lists.html">mailing list</a> or <a
-> +    href="https://bugs.uclibc.org">bug tracker</a>.</p>
-> +
->     <li><b>11 November 2013 -- Report from Buildroot Developers Meeting</b>
 >
->       <p>A report from the recent
+> The kernel version is 2.6.33.3 (I also tried 2.6.39.4). This happens on a
+> minimal system built from buildroot without any other processes running,
+> the only way to recover the situation is with a reboot.
+>
+> Any ideas or suggestions on what the issue might be?
+>
+> I was going to try a non-busybox init but before I do that I want to make
+> sure that there is not an available explanation for the behaviour I am
+> observing.
+>
+> Regards
+>
+> johnos
+>
+>
+>
 > _______________________________________________
 > buildroot mailing list
 > buildroot at busybox.net
 > http://lists.busybox.net/mailman/listinfo/buildroot
->
 >
 
 
