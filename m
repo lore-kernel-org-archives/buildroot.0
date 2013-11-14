@@ -1,54 +1,44 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 14 Nov 2013 19:46:55 +0100
-Subject: [Buildroot] [PATCH 1/5] target: ensure target/ dir is writable
+Date: Thu, 14 Nov 2013 19:46:57 +0100
+Subject: [Buildroot] [PATCH 3/5] linux: ensure buildroot_defconfig is
+	writable
 In-Reply-To: <cover.1384454667.git.yann.morin.1998@free.fr>
 References: <cover.1384454667.git.yann.morin.1998@free.fr>
-Message-ID: <09e0a585c589ccd09d3f85436af4193fb3e1a177.1384454667.git.yann.morin.1998@free.fr>
+Message-ID: <ba483991a0f3ff8d099f66bd9310a7f4357418b6.1384454667.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Nathan Lynch <ntl@pobox.com>
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-If the source target skeleton is read-only (eg. because Buildroot's
-source dir is), modifications to the output target (such as creating
-/etc/hostname and /etc/issue) fail.
+If $(KERNEL_SOURCE_CONFIG) is read-only (eg. becasue Buildroot's source
+dir is), the rm of $(KERNEL_ARCH_PATH)/configs/buildroot_defconfig will
+either fail, or prompt the user, both of which we want to avoid.
 
-(This can happen if the Buildroot source dir is NFS-mounted read-only
-to be shared between different machines, for example).
+Make it writable by using $(INSTALL).
 
+Fixes: #4363
 Signed-off-by: Nathan Lynch <ntl@pobox.com>
-[yann.morin.1998 at free.fr: we use rsync now, not cp; --chmod=Du+w
- suggested by Arnout; clarify commit log]
+[yann.morin.1998 at free.fr: use $(INSTALL) instead of cp, don't 'rm -f']
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Arnout Vandecappelle <arnout@mind.be>
 ---
- Makefile | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ linux/linux.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/Makefile b/Makefile
-index c7a0a6d..b2b962c 100644
---- a/Makefile
-+++ b/Makefile
-@@ -433,7 +433,7 @@ RSYNC_VCS_EXCLUSIONS = \
- $(BUILD_DIR)/.root:
- 	mkdir -p $(TARGET_DIR)
- 	rsync -a $(RSYNC_VCS_EXCLUSIONS) \
--		--exclude .empty --exclude '*~' \
-+		--chmod=Du+w --exclude .empty --exclude '*~' \
- 		$(TARGET_SKELETON)/ $(TARGET_DIR)/
- 	cp support/misc/target-dir-warning.txt $(TARGET_DIR_WARNING_FILE)
- 	@ln -snf lib $(TARGET_DIR)/$(LIB_SYMLINK)
-@@ -508,7 +508,7 @@ endif
- 	@$(foreach d, $(call qstrip,$(BR2_ROOTFS_OVERLAY)), \
- 		$(call MESSAGE,"Copying overlay $(d)"); \
- 		rsync -a $(RSYNC_VCS_EXCLUSIONS) \
--			--exclude .empty --exclude '*~' \
-+			--chmod=Du+w --exclude .empty --exclude '*~' \
- 			$(d)/ $(TARGET_DIR)$(sep))
+diff --git a/linux/linux.mk b/linux/linux.mk
+index 33931e5..fcaf7a9 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -164,7 +164,7 @@ KERNEL_SOURCE_CONFIG = $(BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE)
+ endif
  
- 	@$(foreach s, $(call qstrip,$(BR2_ROOTFS_POST_BUILD_SCRIPT)), \
+ define LINUX_CONFIGURE_CMDS
+-	cp $(KERNEL_SOURCE_CONFIG) $(KERNEL_ARCH_PATH)/configs/buildroot_defconfig
++	$(INSTALL) -m 0644 $(KERNEL_SOURCE_CONFIG) $(KERNEL_ARCH_PATH)/configs/buildroot_defconfig
+ 	$(TARGET_MAKE_ENV) $(MAKE1) $(LINUX_MAKE_FLAGS) -C $(@D) buildroot_defconfig
+ 	rm $(KERNEL_ARCH_PATH)/configs/buildroot_defconfig
+ 	$(if $(BR2_arm)$(BR2_armeb),
 -- 
 1.8.1.2
