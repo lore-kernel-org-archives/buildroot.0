@@ -1,27 +1,22 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 14 Nov 2013 00:21:54 +0000 (UTC)
-Subject: [Buildroot] [Bug 4790] Running udhcpc on a system with NFS root
-	kills NFS
-In-Reply-To: <bug-4790-163@https.bugs.busybox.net/>
-References: <bug-4790-163@https.bugs.busybox.net/>
-Message-ID: <20131114002154.4DE929BC9A@busybox.osuosl.org>
+Date: Thu, 14 Nov 2013 00:22:14 +0000 (UTC)
+Subject: [Buildroot] [Bug 5024] grub fails to build for x86_64 target
+	architecture
+In-Reply-To: <bug-5024-163@https.bugs.busybox.net/>
+References: <bug-5024-163@https.bugs.busybox.net/>
+Message-ID: <20131114002214.AF1889BC9A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=4790
+https://bugs.busybox.net/show_bug.cgi?id=5024
 
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
-
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-         AssignedTo|unassigned at buildroot.uclibc |jacmet at uclibc.org
-                   |.org                        |
-
---- Comment #4 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> 2013-11-14 00:21:54 UTC ---
-Peter, what should we do about this one?
+--- Comment #1 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> 2013-11-14 00:22:14 UTC ---
+I've posted a series of patches at
+http://lists.busybox.net/pipermail/buildroot/2013-November/082351.html that fix
+this problem.
 
 -- 
 Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
