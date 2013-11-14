@@ -1,41 +1,33 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 14 Nov 2013 20:46:26 +0100
-Subject: [Buildroot] [git commit] nano: fix build breakage with libmagic
-Message-ID: <20131114194655.4D1CE9BCC0@busybox.osuosl.org>
+From: Ezequiel Garcia <ezequiel.garcia@free-electrons.com>
+Date: Thu, 14 Nov 2013 17:05:15 -0300
+Subject: [Buildroot] qt5base: Regression with 2013.11_rc1 or HEAD
+In-Reply-To: <87d2m22a9l.fsf@dell.be.48ers.dk>
+References: <CAAEAJfA07aJ29cyQfXGb-rCjD7HfBPbwbpodb9iHSk+U5MG+aQ@mail.gmail.com>
+ <87d2m22a9l.fsf@dell.be.48ers.dk>
+Message-ID: <20131114200514.GE9912@localhost>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=893108810b952777feca054a90c7ecfe7cad06e1
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Thu, Nov 14, 2013 at 05:55:34PM +0100, Peter Korsgaard wrote:
+> >>>>> "Ezequiel" == Ezequiel Garc?a <ezequiel@vanguardiasur.com.ar> writes:
+> 
+>  > Hi Peter, Fatih,
+>  > One of the Qt5 patches no longer applies. Mind taking a look?
+> 
+> Yeah, that unfortunately got broken by one of the last patches before
+> -rc1. It is fixed in git by be930801a26193024.
+> 
+> I will put out -rc2 this weekend.
+> 
 
-As reported by Cassiano Martin in bug #6692 if host == target the nano
-package can pick up the host libmagic and break.
-So add a check to see if the file package is enabled and use it,
-otherwise just disable libmagic support.
+Sure, no problem. I can confirmed it's fixed in current HEAD.
+(it seems I missed to test the latter properly).
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/nano/nano.mk |    6 ++++++
- 1 files changed, 6 insertions(+), 0 deletions(-)
-
-diff --git a/package/nano/nano.mk b/package/nano/nano.mk
-index 3707e77..4609f72 100644
---- a/package/nano/nano.mk
-+++ b/package/nano/nano.mk
-@@ -13,6 +13,12 @@ NANO_CONF_OPT = --without-slang
- NANO_CONF_ENV = ac_cv_prog_NCURSESW_CONFIG=false
- NANO_DEPENDENCIES = ncurses
- 
-+ifeq ($(BR2_PACKAGE_FILE),y)
-+	NANO_DEPENDENCIES += file
-+else
-+	NANO_CONF_ENV += ac_cv_lib_magic_magic_open=no
-+endif
-+
- ifeq ($(BR2_PACKAGE_NANO_TINY),y)
- 	NANO_CONF_OPT += --enable-tiny
- endif
+Thanks and sorry for the noise,
+-- 
+Ezequiel Garc?a, Free Electrons
+Embedded Linux, Kernel and Android Engineering
+http://free-electrons.com
