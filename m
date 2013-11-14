@@ -1,42 +1,38 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 14 Nov 2013 12:24:42 +0100
-Subject: [Buildroot] [git commit] linux-headers: bump 3. {4, 10,
-	11}.x stable versions
-Message-ID: <20131114112825.568749BC8F@busybox.osuosl.org>
+Date: Thu, 14 Nov 2013 12:25:04 +0100
+Subject: [Buildroot] [git commit] qemu/arm-nuri: bump to latest 3.10.x
+	kernel version
+Message-ID: <20131114112825.736C09BC8F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=da558954b62ffcead52a102c1de26a6ca14a88aa
+commit: http://git.buildroot.net/buildroot/commit/?id=2b9bdcafa3d69bcc3d63d5d1d3d2ab692413b39d
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/linux-headers/Config.in.host |    6 +++---
- 1 files changed, 3 insertions(+), 3 deletions(-)
+ configs/qemu_arm_nuri_defconfig |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 2bd8b02..997dce4 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -83,14 +83,14 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "3.1.10"	if BR2_KERNEL_HEADERS_3_1
- 	default "3.2.52"	if BR2_KERNEL_HEADERS_3_2
- 	default "3.3.8"		if BR2_KERNEL_HEADERS_3_3
--	default "3.4.68"	if BR2_KERNEL_HEADERS_3_4
-+	default "3.4.69"	if BR2_KERNEL_HEADERS_3_4
- 	default "3.5.7"		if BR2_KERNEL_HEADERS_3_5
- 	default "3.6.11"	if BR2_KERNEL_HEADERS_3_6
- 	default "3.7.10"	if BR2_KERNEL_HEADERS_3_7
- 	default "3.8.13"	if BR2_KERNEL_HEADERS_3_8
- 	default "3.9.11"	if BR2_KERNEL_HEADERS_3_9
--	default "3.10.18"	if BR2_KERNEL_HEADERS_3_10
--	default "3.11.7"	if BR2_KERNEL_HEADERS_3_11
-+	default "3.10.19"	if BR2_KERNEL_HEADERS_3_10
-+	default "3.11.8"	if BR2_KERNEL_HEADERS_3_11
- 	default "3.12"		if BR2_KERNEL_HEADERS_3_12
- 	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+diff --git a/configs/qemu_arm_nuri_defconfig b/configs/qemu_arm_nuri_defconfig
+index 965f55d..af3e79a 100644
+--- a/configs/qemu_arm_nuri_defconfig
++++ b/configs/qemu_arm_nuri_defconfig
+@@ -15,11 +15,11 @@ BR2_TARGET_ROOTFS_INITRAMFS=y
+ 
+ # Lock to 3.10 headers to avoid breaking with newer kernels
+ BR2_KERNEL_HEADERS_VERSION=y
+-BR2_DEFAULT_KERNEL_VERSION="3.10.18"
++BR2_DEFAULT_KERNEL_VERSION="3.10.19"
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.10.18"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.10.19"
+ BR2_LINUX_KERNEL_DEFCONFIG="exynos4"
+ BR2_LINUX_KERNEL_ZIMAGE=y
