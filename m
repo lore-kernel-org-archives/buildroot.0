@@ -1,55 +1,44 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 14 Nov 2013 12:41:59 +0100
-Subject: [Buildroot] [PATCH 4/4] support/kconfig: bump to kconfig from
-	linux-3.12
-In-Reply-To: <eabc0ac6fc62b091a78c1f78a987fbe3962e0c95.1384386575.git.yann.morin.1998@free.fr>
- (Yann E. MORIN's message of "Thu, 14 Nov 2013 00:53:35 +0100")
-References: <cover.1384386575.git.yann.morin.1998@free.fr>
- <eabc0ac6fc62b091a78c1f78a987fbe3962e0c95.1384386575.git.yann.morin.1998@free.fr>
-Message-ID: <87li0r1a7s.fsf@dell.be.48ers.dk>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu, 14 Nov 2013 11:43:31 +0000 (UTC)
+Subject: [Buildroot] [Bug 6692] New: GNU nano fails to compile for x86_64
+Message-ID: <bug-6692-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+https://bugs.busybox.net/show_bug.cgi?id=6692
 
- > From: "Yann E. MORIN" <yann.morin.1998@free.fr>
- > With this, we can trash our probability patch, it's now upstream.
- > Refresh a few other patches.
+           Summary: GNU nano fails to compile for x86_64
+           Product: buildroot
+           Version: 2013.08
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: cassiano at idbinfo.com.br
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
- > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
- > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-Thanks. Strangely enough pwclient doesn't like the patch:
+GNU nano configure misdetect libmagic from somewhere. I'm not really sure what
+is going on, as I digged config.log it tries to link nano agains libmagic.so
+which is not provided byt buildroot. Most interesting is that is does no happen
+when compiling to x86 or mips64. Only x86_64 is affected. Same build host, same
+configuration.
 
-pwclient get 291086
-Traceback (most recent call last):
-  File "/home/peko/bin/pwclient", line 500, in <module>
-    main()
-  File "/home/peko/bin/pwclient", line 465, in main
-    action_get(rpc, patch_id)
-  File "/home/peko/bin/pwclient", line 238, in action_get
-    s = rpc.patch_get_mbox(patch_id)
-  File "/usr/lib/python2.7/xmlrpclib.py", line 1224, in __call__
-    return self.__send(self.__name, args)
-  File "/usr/lib/python2.7/xmlrpclib.py", line 1578, in __request
-    verbose=self.__verbose
-  File "/usr/lib/python2.7/xmlrpclib.py", line 1264, in request
-    return self.single_request(host, handler, request_body, verbose)
-  File "/usr/lib/python2.7/xmlrpclib.py", line 1297, in single_request
-    return self.parse_response(response)
-  File "/usr/lib/python2.7/xmlrpclib.py", line 1467, in parse_response
-    p.feed(data)
-  File "/usr/lib/python2.7/xmlrpclib.py", line 557, in feed
-    self._parser.Parse(data, 0)
-xml.parsers.expat.ExpatError: not well-formed (invalid token): line 2069, column 1
+I've fixed it by forcing autoconf env: NANO_CONF_ENV =
+ac_cv_lib_magic_magic_open=no
 
-But it seems to work OK if I use the mbox link on the patchwork
-website.
+Then it builds fine.
 
-Jeremy, any ideas?
+Thanks
 
 -- 
-Bye, Peter Korsgaard
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
