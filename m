@@ -1,64 +1,69 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 14 Nov 2013 18:36:08 +0100
-Subject: [Buildroot] [PATCH 4/4] support/kconfig: bump to kconfig from
-	linux-3.12
-In-Reply-To: <87li0r1a7s.fsf@dell.be.48ers.dk>
-References: <cover.1384386575.git.yann.morin.1998@free.fr>
- <eabc0ac6fc62b091a78c1f78a987fbe3962e0c95.1384386575.git.yann.morin.1998@free.fr>
- <87li0r1a7s.fsf@dell.be.48ers.dk>
-Message-ID: <20131114173608.GA4307@free.fr>
+Date: Thu, 14 Nov 2013 19:46:55 +0100
+Subject: [Buildroot] [pull request v2] Pull request for branch yem/patchwork
+Message-ID: <cover.1384454667.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Jeremy, Peter, All,
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-On 2013-11-14 12:41 +0100, Peter Korsgaard spake thusly:
-> >>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
-> 
->  > From: "Yann E. MORIN" <yann.morin.1998@free.fr>
->  > With this, we can trash our probability patch, it's now upstream.
->  > Refresh a few other patches.
-> 
->  > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
->  > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> 
-> Thanks. Strangely enough pwclient doesn't like the patch:
-> 
-> pwclient get 291086
-> Traceback (most recent call last):
->   File "/home/peko/bin/pwclient", line 500, in <module>
->     main()
->   File "/home/peko/bin/pwclient", line 465, in main
->     action_get(rpc, patch_id)
->   File "/home/peko/bin/pwclient", line 238, in action_get
->     s = rpc.patch_get_mbox(patch_id)
->   File "/usr/lib/python2.7/xmlrpclib.py", line 1224, in __call__
->     return self.__send(self.__name, args)
->   File "/usr/lib/python2.7/xmlrpclib.py", line 1578, in __request
->     verbose=self.__verbose
->   File "/usr/lib/python2.7/xmlrpclib.py", line 1264, in request
->     return self.single_request(host, handler, request_body, verbose)
->   File "/usr/lib/python2.7/xmlrpclib.py", line 1297, in single_request
->     return self.parse_response(response)
->   File "/usr/lib/python2.7/xmlrpclib.py", line 1467, in parse_response
->     p.feed(data)
->   File "/usr/lib/python2.7/xmlrpclib.py", line 557, in feed
->     self._parser.Parse(data, 0)
-> xml.parsers.expat.ExpatError: not well-formed (invalid token): line 2069, column 1
-> 
-> But it seems to work OK if I use the mbox link on the patchwork
-> website.
-> 
-> Jeremy, any ideas?
+Hello All!
 
-It seems the ^L character in that hunk is what causes the issue.
-And there is another hunk with another ^L in it.
+This series ensures that taregt/ and our copy of busybox .config are
+writeable.
+
+In case the Buildroot tree is RO (eg. shared via a read-only NFS mount),
+target/ would end-up read-only, which is a bit awkward, since we won't be
+able to add files in there. Ditto for the busybox' .config file, since we
+need to tweak it with sed.
+
+I've had this locally for some time now, grabbed from some patches in
+patchwork. A previous submission of this series has been marked as
+"Changes Requested", but there's no trace of it in the ML, so I'm just
+re-spinning them as-is for further comments.
+
+Changes v1 -> v2:
+  - add three other files to the list  (Danomi)
 
 Regards,
 Yann E. MORIN.
+
+
+Regards,
+Yann E. MORIN.
+
+
+The following changes since commit 2b9bdcafa3d69bcc3d63d5d1d3d2ab692413b39d:
+
+  qemu/arm-nuri: bump to latest 3.10.x kernel version (2013-11-14 12:25:04 +0100)
+
+are available in the git repository at:
+
+  git://gitorious.org/buildroot/buildroot.git yem/patchwork
+
+for you to fetch changes up to 9bc9c11ace25603f32efc9248e9a513581192f59:
+
+  fs: ensure $(TARGET_DIR_WARNING_FILE) is writable (2013-11-14 19:41:09 +0100)
+
+----------------------------------------------------------------
+Nathan Lynch (2):
+      target: ensure target/ dir is writable
+      busybox: ensure $(BUSYBOX_BUILD_CONFIG) is writable
+
+Yann E. MORIN (3):
+      linux: ensure buildroot_defconfig is writable
+      package/uClibc: ensure .oldconfig is writable
+      fs: ensure $(TARGET_DIR_WARNING_FILE) is writable
+
+ Makefile                   | 6 +++---
+ fs/common.mk               | 2 +-
+ linux/linux.mk             | 2 +-
+ package/busybox/busybox.mk | 2 +-
+ package/uclibc/uclibc.mk   | 2 +-
+ 5 files changed, 7 insertions(+), 7 deletions(-)
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
