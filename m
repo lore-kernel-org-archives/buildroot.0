@@ -1,52 +1,22 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Thu, 14 Nov 2013 12:24:17 +0100
-Subject: [Buildroot] Call for autobuild fixing for 2013.11
-Message-ID: <CAAXf6LXwy3HGGX1W9FCcdVCRJSHMT2B=w--xvcsBxqwUXxDjqg@mail.gmail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 14 Nov 2013 12:25:58 +0100
+Subject: [Buildroot] [PATCH 1/3] linux-headers: bump 3. {4, 10,
+	11}.x stable versions
+In-Reply-To: <1384424065-22595-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Thu, 14 Nov 2013 07:14:23 -0300")
+References: <1384424065-22595-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87ppq31ayh.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-All,
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-Now that 2013.11-rc1 is out, we have until the end of the month to fix
-remaining problems until 2013.11 is released.
+ > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
-The autobuilders are still finding a lot of problems.
-Several developers are already looking at and fixing these problems,
-which is great. However, we can do much better.
+Committed series, thanks.
 
-Therefore, I would like to request all developers to temporarily stop
-creating new features, adding new packages, etc. during the rest of
-this month, and focus on fixing autobuild problems (or other fixes)
-instead. With a joint effort I am sure we can fix many problems.
-
-The autobuild website is at http://autobuild.buildroot.org/, the
-statistics are at http://autobuild.buildroot.org/stats.php
-[currently this site seems to be down]
-There is also a daily mail sent to the list with the overview of the
-succeeding/failing builds.
-
-To fix a problem, you would start by downloading the defconfig from
-the autobuild site, apply it in a fresh repository, probably set a
-good value for BR2_DL_DIR, and run 'make' to see if you can reproduce
-the problem. Once you can reproduce it, you can analyze in more detail
-and create a fix.
-
-Depending on the problem, you can attempt some shortcuts. For example
-instead of building everything, you can request to build one
-particular package (foo) by running 'make toolchain foo'. If the
-problem is caused only by the overall configuration and foo itself
-(not by a missing dependency) this faster build would also show the
-problem. Remember: it's crucial that you can first reproduce the
-problem (with or without shortcut). Otherwise you may 'fix' something
-that is not broken.
-
-If you want to fix a particular problem but get stuck, don't hesitate
-in sending your findings to the list. Other developers can try to help
-you.
-
-Thanks a lot,
-
-Thomas
+-- 
+Bye, Peter Korsgaard
