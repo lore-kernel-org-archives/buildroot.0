@@ -1,39 +1,26 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 14 Nov 2013 13:54:42 -0300
-Subject: [Buildroot] [PATCHv2] nano: fix build breakage with libmagic
-Message-ID: <1384448082-2678-1-git-send-email-gustavo@zacarias.com.ar>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 14 Nov 2013 17:55:34 +0100
+Subject: [Buildroot] qt5base: Regression with 2013.11_rc1 or HEAD
+In-Reply-To: <CAAEAJfA07aJ29cyQfXGb-rCjD7HfBPbwbpodb9iHSk+U5MG+aQ@mail.gmail.com>
+ ("Ezequiel =?utf-8?Q?Garc=C3=ADa=22's?= message of "Thu, 14 Nov 2013
+ 14:42:54 -0200")
+References: <CAAEAJfA07aJ29cyQfXGb-rCjD7HfBPbwbpodb9iHSk+U5MG+aQ@mail.gmail.com>
+Message-ID: <87d2m22a9l.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-As reported by Cassiano Martin in bug #6692 if host == target the nano
-package can pick up the host libmagic and break.
-So add a check to see if the file package is enabled and use it,
-otherwise just disable libmagic support.
+>>>>> "Ezequiel" == Ezequiel Garc?a <ezequiel@vanguardiasur.com.ar> writes:
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/nano/nano.mk | 6 ++++++
- 1 file changed, 6 insertions(+)
+ > Hi Peter, Fatih,
+ > One of the Qt5 patches no longer applies. Mind taking a look?
 
-diff --git a/package/nano/nano.mk b/package/nano/nano.mk
-index 3707e77..8a40f71 100644
---- a/package/nano/nano.mk
-+++ b/package/nano/nano.mk
-@@ -13,6 +13,12 @@ NANO_CONF_OPT = --without-slang
- NANO_CONF_ENV = ac_cv_prog_NCURSESW_CONFIG=false
- NANO_DEPENDENCIES = ncurses
- 
-+ifeq ($(BR2_PACKAGE_FILE),y)
-+	NANO_DEPENDENCIES += file
-+else
-+	NANO_CONF_ENV += ac_cv_lib_magic_magic_open=no
-+endif
-+
- ifeq ($(BR2_PACKAGE_NANO_TINY),y)
- 	NANO_CONF_OPT += --enable-tiny
- endif
+Yeah, that unfortunately got broken by one of the last patches before
+-rc1. It is fixed in git by be930801a26193024.
+
+I will put out -rc2 this weekend.
+
 -- 
-1.8.3.2
+Bye, Peter Korsgaard
