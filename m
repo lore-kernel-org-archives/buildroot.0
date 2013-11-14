@@ -1,23 +1,27 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 14 Nov 2013 00:20:16 +0000 (UTC)
-Subject: [Buildroot] [Bug 4327] I use the i686-linux-gcc-4.6.1 compiled
- grub-0.97 does not work
-In-Reply-To: <bug-4327-163@https.bugs.busybox.net/>
-References: <bug-4327-163@https.bugs.busybox.net/>
-Message-ID: <20131114002016.3D5599BC98@busybox.osuosl.org>
+Date: Thu, 14 Nov 2013 00:20:35 +0000 (UTC)
+Subject: [Buildroot] [Bug 4363] Make sure that copied linux and busybox
+ defconfig are writable before modifying
+In-Reply-To: <bug-4363-163@https.bugs.busybox.net/>
+References: <bug-4363-163@https.bugs.busybox.net/>
+Message-ID: <20131114002035.B6AD59BC98@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=4327
+https://bugs.busybox.net/show_bug.cgi?id=4363
 
---- Comment #7 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> 2013-11-14 00:20:15 UTC ---
-I've recently posted a set of patches against grub, and it was working for me
-on x86. Can you test the patches at
-http://lists.busybox.net/pipermail/buildroot/2013-November/082351.html and
-report if they fix the problem for you?
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
+
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+         AssignedTo|unassigned at buildroot.uclibc |yann.morin.1998 at free.fr
+                   |.org                        |
+
+--- Comment #6 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> 2013-11-14 00:20:35 UTC ---
+Yann has started working on this.
 
 -- 
 Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
