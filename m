@@ -1,42 +1,40 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 14 Nov 2013 19:46:56 +0100
-Subject: [Buildroot] [PATCH 2/5] busybox: ensure $(BUSYBOX_BUILD_CONFIG) is
+Date: Thu, 14 Nov 2013 19:46:58 +0100
+Subject: [Buildroot] [PATCH 4/5] package/uClibc: ensure .oldconfig is
 	writable
 In-Reply-To: <cover.1384454667.git.yann.morin.1998@free.fr>
 References: <cover.1384454667.git.yann.morin.1998@free.fr>
-Message-ID: <e75161178f0148d509030b98cf0e66690ff8a405.1384454667.git.yann.morin.1998@free.fr>
+Message-ID: <9f08675878a925c9850b26ced36ed5e1edf53c9b.1384454667.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Nathan Lynch <ntl@pobox.com>
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-If $(BUSYBOX_CONFIG_FILE) is read-only (eg. because Buildroot's
-source dir is), the sed fixups to $(BUSYBOX_BUILD_CONFIG) fail.
+If $(UCLIBC_CONFIG_FILE) is read-only (eg. because Buildroot's
+source dir is), the sed fixups to .oldconfig fail.
 
-Fixes: #4363
 Signed-off-by: Nathan Lynch <ntl@pobox.com>
 [yann.morin.1998 at free.fr: use $(INSTALL) instead of cp]
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Arnout Vandecappelle <arnout@mind.be>
 ---
- package/busybox/busybox.mk | 2 +-
+ package/uclibc/uclibc.mk | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-index ad8bdaf..8d40bca 100644
---- a/package/busybox/busybox.mk
-+++ b/package/busybox/busybox.mk
-@@ -135,7 +135,7 @@ endef
- endif
+diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
+index 20d3bb6..fca83fc 100644
+--- a/package/uclibc/uclibc.mk
++++ b/package/uclibc/uclibc.mk
+@@ -416,7 +416,7 @@ UCLIBC_MAKE_FLAGS = \
+ 	HOSTCC="$(HOSTCC)"
  
- define BUSYBOX_COPY_CONFIG
--	cp -f $(BUSYBOX_CONFIG_FILE) $(BUSYBOX_BUILD_CONFIG)
-+	$(INSTALL) -D -m 0644 $(BUSYBOX_CONFIG_FILE) $(BUSYBOX_BUILD_CONFIG)
- endef
- 
- # Disable shadow passwords support if unsupported by the C library
+ define UCLIBC_SETUP_DOT_CONFIG
+-	cp -f $(UCLIBC_CONFIG_FILE) $(@D)/.config
++	$(INSTALL) -m 0644 $(UCLIBC_CONFIG_FILE) $(@D)/.config
+ 	$(call UCLIBC_OPT_SET,CROSS_COMPILER_PREFIX,"$(TARGET_CROSS)",$(@D))
+ 	$(call UCLIBC_OPT_SET,TARGET_$(UCLIBC_TARGET_ARCH),y,$(@D))
+ 	$(call UCLIBC_OPT_SET,TARGET_ARCH,"$(UCLIBC_TARGET_ARCH)",$(@D))
 -- 
 1.8.1.2
