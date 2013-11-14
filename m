@@ -1,23 +1,29 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 14 Nov 2013 16:50:31 +0000 (UTC)
-Subject: [Buildroot] [Bug 6692] GNU nano fails to compile for x86_64
-In-Reply-To: <bug-6692-163@https.bugs.busybox.net/>
-References: <bug-6692-163@https.bugs.busybox.net/>
-Message-ID: <20131114165031.4AF3D9BCCC@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 14 Nov 2013 17:52:19 +0100
+Subject: [Buildroot] [PATCH] nano: fix build breakage with libmagic
+In-Reply-To: <1384447812-2546-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1384447812-2546-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20131114175219.467162c4@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=6692
+Dear Gustavo Zacarias,
 
---- Comment #3 from Gustavo Zacarias <gustavo@zacarias.com.ar> 2013-11-14 16:50:31 UTC ---
-The libncursesw failure was detected and fixed in
-http://git.buildroot.net/buildroot/commit/package/nano/nano.mk?id=f0801fa2f3e1cbd617bacef3b442da6914caae0a
-Patch sent to the list about this issue, thanks.
+On Thu, 14 Nov 2013 13:50:12 -0300, Gustavo Zacarias wrote:
 
+> +ifeq ($(BR2_PACKAGE_FILE),y)
+> +	NANO_DEPENDENCIES += file
+> +else
+> +	NANO_CONF_OPT += ac_cv_lib_magic_magic_open=no
+
+We usually pass these variables in <pkg>_CONF_ENV, no? Though I know
+it's legit to pass them as options to configure.
+
+Thomas
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
