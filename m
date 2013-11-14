@@ -1,141 +1,169 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Thu, 14 Nov 2013 14:49:52 +0100
-Subject: [Buildroot] [pkg-luarocks infra V2 06/10] luarocks: new
-	infrastructure
+Date: Thu, 14 Nov 2013 14:49:53 +0100
+Subject: [Buildroot] [pkg-luarocks infra V2 07/10] lua-cjson: restore
+	official name
 In-Reply-To: <1384436996-25525-1-git-send-email-francois.perrad@gadz.org>
 References: <1384436996-25525-1-git-send-email-francois.perrad@gadz.org>
-Message-ID: <1384436996-25525-7-git-send-email-francois.perrad@gadz.org>
+Message-ID: <1384436996-25525-8-git-send-email-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+before infrastructure conversion
 ---
- Config.in               |    8 ++++++
- Makefile                |    1 +
- package/Makefile.in     |    1 +
- package/pkg-luarocks.mk |   71 +++++++++++++++++++++++++++++++++++++++++++++++
- 4 files changed, 81 insertions(+)
- create mode 100644 package/pkg-luarocks.mk
+ package/Config.in              |    2 +-
+ package/lua-cjson/Config.in    |   14 ++++++++++++++
+ package/lua-cjson/lua-cjson.mk |   34 ++++++++++++++++++++++++++++++++++
+ package/luacjson/Config.in     |   14 --------------
+ package/luacjson/luacjson.mk   |   35 -----------------------------------
+ 5 files changed, 49 insertions(+), 50 deletions(-)
+ create mode 100644 package/lua-cjson/Config.in
+ create mode 100644 package/lua-cjson/lua-cjson.mk
+ delete mode 100644 package/luacjson/Config.in
+ delete mode 100644 package/luacjson/luacjson.mk
 
-diff --git a/Config.in b/Config.in
-index d87e0f0..bc5819c 100644
---- a/Config.in
-+++ b/Config.in
-@@ -207,6 +207,14 @@ config BR2_DEBIAN_MIRROR
- 
- endif
- 
-+config BR2_LUAROCKS_MIRROR
-+	string "LuaRocks mirror"
-+	default "http://luarocks.org/repositories/rocks"
-+	help
-+	  LuaRocks repository.
-+
-+	  See, http://luarocks.org
-+
- endmenu
- 
- config BR2_JLEVEL
-diff --git a/Makefile b/Makefile
-index c7a0a6d..0dde760 100644
---- a/Makefile
-+++ b/Makefile
-@@ -473,6 +473,7 @@ endif
- ifeq ($(BR2_PACKAGE_PYTHON_PYC_ONLY),y)
- 	find $(TARGET_DIR)/usr/lib/ -name '*.py' -print0 | xargs -0 rm -f
- endif
-+	rm -rf $(TARGET_DIR)/usr/lib/luarocks
- 	$(STRIP_FIND_CMD) | xargs $(STRIPCMD) 2>/dev/null || true
- 	if test -d $(TARGET_DIR)/lib/modules; then \
- 		find $(TARGET_DIR)/lib/modules -type f -name '*.ko' | \
-diff --git a/package/Makefile.in b/package/Makefile.in
-index 612f3c7..f7fd8f9 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -363,4 +363,5 @@ include package/pkg-utils.mk
- include package/pkg-download.mk
- include package/pkg-autotools.mk
- include package/pkg-cmake.mk
-+include package/pkg-luarocks.mk
- include package/pkg-generic.mk
-diff --git a/package/pkg-luarocks.mk b/package/pkg-luarocks.mk
+diff --git a/package/Config.in b/package/Config.in
+index c45f7f6..59ddd19 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -361,7 +361,6 @@ source "package/copas/Config.in"
+ source "package/coxpcall/Config.in"
+ source "package/lbase64/Config.in"
+ source "package/luabitop/Config.in"
+-source "package/luacjson/Config.in"
+ source "package/luacrypto/Config.in"
+ source "package/luaexpat/Config.in"
+ source "package/luaexpatutils/Config.in"
+@@ -370,6 +369,7 @@ source "package/luaposix/Config.in"
+ source "package/luasec/Config.in"
+ source "package/luasocket/Config.in"
+ source "package/luasql/Config.in"
++source "package/lua-cjson/Config.in"
+ source "package/lua-ev/Config.in"
+ source "package/lua-msgpack-native/Config.in"
+ source "package/orbit/Config.in"
+diff --git a/package/lua-cjson/Config.in b/package/lua-cjson/Config.in
 new file mode 100644
-index 0000000..2a20413
+index 0000000..8129fab
 --- /dev/null
-+++ b/package/pkg-luarocks.mk
-@@ -0,0 +1,71 @@
-+################################################################################
-+# LuaRocks package infrastructure
-+# see http://luarocks.org/
-+#
-+# This file implements an infrastructure that eases development of
-+# package .mk files for LuaRocks packages.
-+# LuaRocks supports various build.type : builtin, make, cmake.
-+# This luarocks infrastructure supports only the builtin mode,
-+# the make & cmake modes could be directly handled by generic & cmake infrastructure.
-+#
-+# See the Buildroot documentation for details on the usage of this
-+# infrastructure
-+#
-+# In terms of implementation, this LuaRocks infrastructure requires
-+# the .mk file to only specify metadata informations about the
-+# package: name, version, etc.
-+#
-+################################################################################
++++ b/package/lua-cjson/Config.in
+@@ -0,0 +1,14 @@
++config BR2_PACKAGE_LUA_CJSON
++	bool "lua-cjson"
++	depends on BR2_PACKAGE_HAS_LUA_INTERPRETER
++	help
++	  The Lua CJSON module provides JSON support for Lua. It features:
++	  - Fast, standards compliant encoding/parsing routines
++	  - Full support for JSON with UTF-8, including decoding surrogate pairs
++	  - Optional run-time support for common exceptions to the JSON
++	    specification (infinity, NaN, ...)
++	  - No dependencies on other libraries
 +
-+LUAROCKS_RUN = $(HOST_DIR)/usr/bin/luarocks
++	  (C-module)
 +
++	  http://www.kyne.com.au/~mark/software/lua-cjson.php
+diff --git a/package/lua-cjson/lua-cjson.mk b/package/lua-cjson/lua-cjson.mk
+new file mode 100644
+index 0000000..0969547
+--- /dev/null
++++ b/package/lua-cjson/lua-cjson.mk
+@@ -0,0 +1,34 @@
 +################################################################################
-+# inner-luarocks-package -- defines how the configuration, compilation and
-+# installation of a LuaRocks package should be done, implements a few hooks to
-+# tune the build process and calls the generic package infrastructure to
-+# generate the necessary make targets
 +#
-+#  argument 1 is the lowercase package name
-+#  argument 2 is the uppercase package name, including an HOST_ prefix
-+#             for host packages
-+#  argument 3 is the uppercase package name, without the HOST_ prefix
-+#             for host packages
-+#  argument 4 is the package directory prefix
-+#  argument 5 is the type (target or host)
++# lua-cjson
++#
 +################################################################################
 +
-+define inner-luarocks-package
++LUA_CJSON_VERSION       = 2.1.0
++LUA_CJSON_SITE          = http://www.kyne.com.au/~mark/software/download
++LUA_CJSON_DEPENDENCIES  = luainterpreter
++LUA_CJSON_LICENSE       = MIT
++LUA_CJSON_LICENSE_FILES = LICENSE
 +
-+$(2)_BUILD_OPT				?=
-+$(2)_SUBDIR				?= $(1)-$(shell echo "$($(3)_VERSION)" | sed -e "s/-[0-9]$$//")
-+$(2)_ROCKSPEC				?= $(1)-$($(3)_VERSION).rockspec
-+$(2)_SOURCE				?= $(1)-$($(3)_VERSION).src.rock
-+$(2)_SITE				?= $(call qstrip,$(BR2_LUAROCKS_MIRROR))
-+
-+#
-+# Extract step
-+#
-+$(2)_EXTRACT_CMDS ?= \
-+	cd $$($(2)_DIR)/.. && $(LUAROCKS_RUN) unpack $(DL_DIR)/$$($(2)_SOURCE)
-+
-+# $(2)_DEPENDENCIES are handled for configure step (too late)
-+$(1)-extract: host-luarocks
-+
-+#
-+# Build/install step.
-+#
-+$(2)_INSTALL_TARGET_CMDS ?= \
-+	cd $$($(2)_SRCDIR) && $(LUAROCKS_RUN) build --minimal $$($(2)_ROCKSPEC) $$($(2)_BUILD_OPT)
-+
-+# Call the generic package infrastructure to generate the necessary
-+# make targets
-+$(call inner-generic-package,$(1),$(2),$(3),$(4),$(5))
-+
++define LUA_CJSON_BUILD_CMDS
++	$(MAKE) -C $(@D) \
++		CFLAGS="$(TARGET_CFLAGS)"   \
++		LDFLAGS="$(TARGET_LDFLAGS)" \
++		CC="$(TARGET_CC)"           \
++		LD="$(TARGET_LD)"           \
++		PREFIX=$(STAGING_DIR)/usr
 +endef
 +
-+################################################################################
-+# luarocks-package -- the target generator macro for LuaRocks packages
-+################################################################################
++define LUA_CJSON_INSTALL_TARGET_CMDS
++	$(MAKE) DESTDIR="$(TARGET_DIR)" PREFIX="/usr" -C $(@D) install
++endef
 +
-+luarocks-package = $(call inner-luarocks-package,$(call pkgname),$(call UPPERCASE,$(call pkgname)),$(call UPPERCASE,$(call pkgname)),$(call pkgparentdir),target)
-+# host-luarocks-package not supported
++define LUA_CJSON_CLEAN_CMDS
++	$(MAKE) -C $(@D) clean
++endef
++
++define LUA_CJSON_UNINSTALL_TARGET_CMDS
++	rm -f $(TARGET_DIR)/usr/lib/lua/5.1/cjson.so
++endef
++
++$(eval $(generic-package))
+diff --git a/package/luacjson/Config.in b/package/luacjson/Config.in
+deleted file mode 100644
+index d3665c0..0000000
+--- a/package/luacjson/Config.in
++++ /dev/null
+@@ -1,14 +0,0 @@
+-config BR2_PACKAGE_LUACJSON
+-	bool "luacjson"
+-	depends on BR2_PACKAGE_HAS_LUA_INTERPRETER
+-	help
+-	  The Lua CJSON module provides JSON support for Lua. It features:
+-	  - Fast, standards compliant encoding/parsing routines
+-	  - Full support for JSON with UTF-8, including decoding surrogate pairs
+-	  - Optional run-time support for common exceptions to the JSON
+-	    specification (infinity, NaN, ...)
+-	  - No dependencies on other libraries
+-
+-	  (C-module)
+-
+-	  http://www.kyne.com.au/~mark/software/lua-cjson.php
+diff --git a/package/luacjson/luacjson.mk b/package/luacjson/luacjson.mk
+deleted file mode 100644
+index f973278..0000000
+--- a/package/luacjson/luacjson.mk
++++ /dev/null
+@@ -1,35 +0,0 @@
+-################################################################################
+-#
+-# luacjson
+-#
+-################################################################################
+-
+-LUACJSON_VERSION       = 2.1.0
+-LUACJSON_SOURCE        = lua-cjson-$(LUACJSON_VERSION).tar.gz
+-LUACJSON_SITE          = http://www.kyne.com.au/~mark/software/download
+-LUACJSON_DEPENDENCIES  = luainterpreter
+-LUACJSON_LICENSE       = MIT
+-LUACJSON_LICENSE_FILES = LICENSE
+-
+-define LUACJSON_BUILD_CMDS
+-	$(MAKE) -C $(@D) \
+-		CFLAGS="$(TARGET_CFLAGS)"   \
+-		LDFLAGS="$(TARGET_LDFLAGS)" \
+-		CC="$(TARGET_CC)"           \
+-		LD="$(TARGET_LD)"           \
+-		PREFIX=$(STAGING_DIR)/usr
+-endef
+-
+-define LUACJSON_INSTALL_TARGET_CMDS
+-	$(MAKE) DESTDIR="$(TARGET_DIR)" PREFIX="/usr" -C $(@D) install
+-endef
+-
+-define LUACJSON_CLEAN_CMDS
+-	$(MAKE) -C $(@D) clean
+-endef
+-
+-define LUACJSON_UNINSTALL_TARGET_CMDS
+-	rm -f $(TARGET_DIR)/usr/lib/lua/5.1/cjson.so
+-endef
+-
+-$(eval $(generic-package))
 -- 
 1.7.9.5
