@@ -1,8 +1,11 @@
 From: sonic.adi at gmail.com <sonic.adi@gmail.com>
-Date: Fri, 15 Nov 2013 17:06:17 +0800
-Subject: [Buildroot] [PATCH v2 1/3] e2fsprogs: nommu: Add patch to use vfork
-	in nommu arch.
-Message-ID: <1384506378-2818-1-git-send-email-Sonic.adi@gmail.com>
+Date: Fri, 15 Nov 2013 17:06:18 +0800
+Subject: [Buildroot] [PATCH v2 2/3] e2fsprogs: flat: Add patch to append
+	uuid link flag after the blkid link flags when checking the
+	blkid library in the FLAT binary mode.
+In-Reply-To: <1384506378-2818-1-git-send-email-Sonic.adi@gmail.com>
+References: <1384506378-2818-1-git-send-email-Sonic.adi@gmail.com>
+Message-ID: <1384506378-2818-2-git-send-email-Sonic.adi@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,250 +16,32 @@ From: Sonic Zhang <sonic.zhang@analog.com>
 
 Signed-off-by: Sonic Zhang <sonic.zhang@analog.com>
 ---
- .../e2fsprogs-0002-add-nommu-support.patch         | 235 +++++++++++++++++++++
- 1 file changed, 235 insertions(+)
- create mode 100644 package/e2fsprogs/e2fsprogs-0002-add-nommu-support.patch
+ ...ogs-0003-append-uuid-link-flag-for-flat-linker.patch | 17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
+ create mode 100644 package/e2fsprogs/e2fsprogs-0003-append-uuid-link-flag-for-flat-linker.patch
 
-diff --git a/package/e2fsprogs/e2fsprogs-0002-add-nommu-support.patch b/package/e2fsprogs/e2fsprogs-0002-add-nommu-support.patch
+diff --git a/package/e2fsprogs/e2fsprogs-0003-append-uuid-link-flag-for-flat-linker.patch b/package/e2fsprogs/e2fsprogs-0003-append-uuid-link-flag-for-flat-linker.patch
 new file mode 100644
-index 0000000..77d4603
+index 0000000..d37e465
 --- /dev/null
-+++ b/package/e2fsprogs/e2fsprogs-0002-add-nommu-support.patch
-@@ -0,0 +1,235 @@
-+Patch to use vfork other than fork in nommu arch.
-+    
++++ b/package/e2fsprogs/e2fsprogs-0003-append-uuid-link-flag-for-flat-linker.patch
+@@ -0,0 +1,17 @@
++Append uuid link flag after the blkid link flags when checking the blkid
++library in the FLAT binary mode.
++
 +Signed-off-by: Sonic Zhang <sonic.zhang@analog.com>
 +
-+--- e2fsprogs-1.42.4/e2fsck/logfile.c	2012-05-29 09:29:48.000000000 +0800
-++++ e2fsprogs-1.42.4.nommu/e2fsck/logfile.c	2012-09-24 17:49:18.878104451 +0800
-+@@ -220,7 +220,11 @@
-+ 		exit(1);
-+ 	}
++--- e2fsprogs-1.42.4/configure	2012-05-29 09:29:48.000000000 +0800
+++++ e2fsprogs-1.42.4.nommu/configure	2012-09-25 11:28:39.822106303 +0800
++@@ -5039,6 +5039,9 @@
++ else
++   ac_check_lib_save_LIBS=$LIBS
++ LIBS="-lblkid $LIBBLKID $LIBS"
+++if test "x$ac_cv_lib_uuid_uuid_generate" = x""yes; then
+++	LIBS="$LIBS -luuid"
+++fi
++ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
++ /* end confdefs.h.  */
 + 
-++#ifndef HAVE_FORK
-++	pid = vfork();
-++#else
-+ 	pid = fork();
-++#endif
-+ 	if (pid < 0) {
-+ 		perror("fork");
-+ 		exit(1);
-+@@ -264,7 +268,11 @@
-+ 			outbufsize -= c;
-+ 			cp += c;
-+ 		}
-++#ifndef HAVE_FORK
-++		_exit(0);
-++#else
-+ 		exit(0);
-++#endif
-+ 	}
-+ 
-+ 	close(fds[0]);
-+--- e2fsprogs-1.42.4/lib/ss/pager.c	2012-03-19 02:18:33.000000000 +0800
-++++ e2fsprogs-1.42.4.nommu/lib/ss/pager.c	2012-09-24 17:54:33.862356418 +0800
-+@@ -79,7 +79,11 @@
-+ 	if (pipe(filedes) != 0)
-+ 		return(-1);
-+ 
-++#ifndef HAVE_FORK
-++	switch(vfork()) {
-++#else
-+ 	switch(fork()) {
-++#endif
-+ 	case -1:
-+ 		return(-1);
-+ 	case 0:
-+--- e2fsprogs-1.42.4/lib/ss/help.c	2012-03-19 02:18:33.000000000 +0800
-++++ e2fsprogs-1.42.4.nommu/lib/ss/help.c	2012-09-24 17:55:00.326105930 +0800
-+@@ -107,7 +107,11 @@
-+ 	free(buf);
-+ 	return;
-+     }
-++#ifndef HAVE_FORK
-++    switch (child = vfork()) {
-++#else
-+     switch (child = fork()) {
-++#endif
-+     case -1:
-+ 	ss_perror(sci_idx, errno, "Can't fork for pager");
-+ 	return;
-+--- e2fsprogs-1.42.4/lib/fpopen.c	2012-03-19 02:18:33.000000000 +0800
-++++ e2fsprogs-1.42.4.nommu/lib/fpopen.c	2012-09-24 17:55:54.050106645 +0800
-+@@ -94,7 +94,11 @@
-+ 		return NULL;
-+ 
-+ 	/* Fork and execute the correct program. */
-++#ifndef HAVE_FORK
-++	if ((pid = vfork()) < 0) {
-++#else
-+ 	if ((pid = fork()) < 0) {
-++#endif
-+ 		perror("fork");
-+ 		return NULL;
-+ 	} else if (pid == 0) {
-+@@ -109,7 +113,11 @@
-+ 		}
-+ 		(void) execvp(prog, argv);
-+ 		perror(prog);
-++#ifndef HAVE_FORK
-++		_exit(1);
-++#else
-+ 		exit(1);
-++#endif
-+ 	}
-+ 	return fdopen(do_stdin ? fds[1] : fds[0], mode);
-+ }
-+--- e2fsprogs-1.42.4/lib/uuid/gen_uuid.c	2012-03-19 02:18:33.000000000 +0800
-++++ e2fsprogs-1.42.4.nommu/lib/uuid/gen_uuid.c	2012-09-24 17:56:41.186106057 +0800
-+@@ -504,11 +504,19 @@
-+ 		if (access_ret == 0 && (st.st_mode & (S_ISUID | S_ISGID)) == 0)
-+ 			access_ret = access(UUIDD_DIR, W_OK);
-+ 		if (access_ret == 0 && start_attempts++ < 5) {
-++#ifndef HAVE_FORK
-++			if ((pid = vfork()) == 0) {
-++#else
-+ 			if ((pid = fork()) == 0) {
-++#endif
-+ 				close_all_fds();
-+ 				execl(uuidd_path, "uuidd", "-qT", "300",
-+ 				      (char *) NULL);
-++#ifndef HAVE_FORK
-++				_exit(1);
-++#else
-+ 				exit(1);
-++#endif
-+ 			}
-+ 			(void) waitpid(pid, 0, 0);
-+ 			if (connect(s, (const struct sockaddr *) &srv_addr,
-+--- e2fsprogs-1.42.4/misc/uuidd.c	2012-03-19 02:18:33.000000000 +0800
-++++ e2fsprogs-1.42.4.nommu/misc/uuidd.c	2012-09-24 17:57:49.630106531 +0800
-+@@ -56,7 +56,11 @@
-+ static void die(const char *msg)
-+ {
-+ 	perror(msg);
-++#ifndef HAVE_FORK
-++	_exit(1);
-++#else
-+ 	exit(1);
-++#endif
-+ }
-+ 
-+ static void create_daemon(void)
-+@@ -64,7 +68,11 @@
-+ 	pid_t pid;
-+ 	uid_t euid;
-+ 
-++#ifndef HAVE_FORK
-++	pid = vfork();
-++#else
-+ 	pid = fork();
-++#endif
-+ 	if (pid == -1) {
-+ 		perror("fork");
-+ 		exit(1);
-+--- e2fsprogs-1.42.4/misc/fsck.c	2012-04-27 06:44:12.000000000 +0800
-++++ e2fsprogs-1.42.4.nommu/misc/fsck.c	2012-09-24 17:52:49.297070304 +0800
-+@@ -491,7 +491,11 @@
-+ 	/* Fork and execute the correct program. */
-+ 	if (noexecute)
-+ 		pid = -1;
-++#ifndef HAVE_FORK
-++	else if ((pid = vfork()) < 0) {
-++#else
-+ 	else if ((pid = fork()) < 0) {
-++#endif
-+ 		perror("fork");
-+ 		free(inst);
-+ 		return errno;
-+@@ -501,7 +505,11 @@
-+ 		(void) execv(s, argv);
-+ 		perror(argv[0]);
-+ 		free(inst);
-++#ifndef HAVE_FORK
-++		_exit(EXIT_ERROR);
-++#else
-+ 		exit(EXIT_ERROR);
-++#endif
-+ 	}
-+ 
-+ 	for (i=0; i < argc; i++)
-+@@ -641,10 +649,18 @@
-+ 			 * time to set up the signal handler
-+ 			 */
-+ 			if (inst2->start_time < time(0)+2) {
-++#ifndef HAVE_FORK
-++				if (vfork() == 0) {
-++#else
-+ 				if (fork() == 0) {
-++#endif
-+ 					sleep(1);
-+ 					kill(inst2->pid, SIGUSR1);
-++#ifndef HAVE_FORK
-++					_exit(0);
-++#else
-+ 					exit(0);
-++#endif
-+ 				}
-+ 			} else
-+ 				kill(inst2->pid, SIGUSR1);
-+--- e2fsprogs-1.42.4/misc/logsave.c	2012-03-19 02:18:33.000000000 +0800
-++++ e2fsprogs-1.42.4.nommu/misc/logsave.c	2012-09-24 17:51:18.062105881 +0800
-+@@ -181,7 +181,11 @@
-+ #endif
-+ #endif
-+ 
-++#ifndef HAVE_FORK
-++	pid = vfork();
-++#else
-+ 	pid = fork();
-++#endif
-+ 	if (pid < 0) {
-+ 		perror("vfork");
-+ 		exit(1);
-+@@ -193,7 +197,11 @@
-+ 
-+ 		execvp(argv[0], argv);
-+ 		perror(argv[0]);
-++#ifndef HAVE_FORK
-++		_exit(1);
-++#else
-+ 		exit(1);
-++#endif
-+ 	}
-+ 	child_pid = pid;
-+ 	close(fds[1]);
-+@@ -307,7 +315,11 @@
-+ 	send_output("----------------\n", 0, send_flag);
-+ 
-+ 	if (outbuf) {
-++#ifndef HAVE_FORK
-++		pid = vfork();
-++#else
-+ 		pid = fork();
-++#endif
-+ 		if (pid < 0) {
-+ 			perror("fork");
-+ 			exit(1);
-+@@ -329,5 +341,9 @@
-+ 	if (outfd >= 0)
-+ 		close(outfd);
-+ 
-++#ifndef HAVE_FORK
-++	_exit(rc);
-++#else
-+ 	exit(rc);
-++#endif
-+ }
-+--- e2fsprogs-1.42.8/configure.in.old	2013-11-11 15:31:35.626098053 +0800
-++++ e2fsprogs-1.42.8/configure.in	2013-11-11 15:31:08.652956982 +0800
-+@@ -1020,6 +1020,7 @@
-+ 	fallocate64
-+ 	fchown
-+ 	fdatasync
-++	fork
-+ 	fstat64
-+ 	ftruncate64
-+ 	getdtablesize
 -- 
 1.8.2.3
