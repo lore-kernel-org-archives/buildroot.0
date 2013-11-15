@@ -1,57 +1,22 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Fri, 15 Nov 2013 10:03:44 +0100
-Subject: [Buildroot] [PATCH] uclibc: patch 0.9.31 for avr32,
- to add __kernel_long_t and __kernel_ulong_t data types
-In-Reply-To: <1384505965-19957-1-git-send-email-spdawson@gmail.com>
-References: <1384505965-19957-1-git-send-email-spdawson@gmail.com>
-Message-ID: <CAAXf6LUGq3dj4G_wK5udynxcCakN3JJX2o-Dxef-EzJYnvpoqw@mail.gmail.com>
+From: Altunbas Sabri (DC-IA/EAH2) <sabri.altunbas@boschrexroth.de>
+Date: Fri, 15 Nov 2013 10:03:51 +0100
+Subject: [Buildroot] buildroot: gcc options
+Message-ID: <EADA2943BAC14C4AB625A3550A3BE980096DF2C30B@SI-MBX04.de.bosch.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Simon,
 
-On Fri, Nov 15, 2013 at 9:59 AM,  <spdawson@gmail.com> wrote:
-> From: Simon Dawson <spdawson@gmail.com>
->
-> As reported by Thomas Petazzoni, the uclibc 0.9.31 build fails for avr32:
->
-> In file included from /opt/br-avr32-full-2013.11-rc1/usr/avr32-buildroot-linux-uclibc/sysroot/usr/include/linux/kernel.h:4,
->                  from /opt/br-avr32-full-2013.11-rc1/usr/avr32-buildroot-linux-uclibc/sysroot/usr/include/linux/netlink.h:4,
->                  from /opt/br-avr32-full-2013.11-rc1/usr/avr32-buildroot-linux-uclibc/sysroot/usr/include/linux/rtnetlink.h:5,
->                  from libc/inet/netlinkaccess.h:27,
->                  from libc/inet/if_index.c:36:
-> /opt/br-avr32-full-2013.11-rc1/usr/avr32-buildroot-linux-uclibc/sysroot/usr/include/linux/sysinfo.h:8: error: expected specifier-qualifier-list before '__kernel_long_t'
-> make[1]: *** [libc/inet/if_index.os] Error 1
-> make[1]: Leaving directory `/opt/toolchain-build/build/uclibc-0.9.31.1'
->
-> The problem is reported at:
->
->   https://lkml.org/lkml/2013/5/18/1
->
-> The offending kernel commit is:
->
->   http://git.kernel.org/cgit/linux/kernel/git/stable/linux-stable.git/commit/?id=ccdfcc398594
->
-> The fix is to patch uclibc 0.9.31 to add the missing kernel data types. The patch
-> will only be generated for avr32, since uclibc 0.9.31 is not available in Buildroot
-> for any other architecture.
->
-> Signed-off-by: Simon Dawson <spdawson@gmail.com>
-> ---
->  ...add-__kernel_long-and-__kernel_ulong.patch.avr32 | 21 +++++++++++++++++++++
->  1 file changed, 21 insertions(+)
->  create mode 100644 package/uclibc/0.9.31.1/uclibc-0013-libc-sysdeps-add-__kernel_long-and-__kernel_ulong.patch.avr32
 
-A few buildroot developer days ago, we said we'd like to get rid of
-architecture-specific patching. IIRC avr32 was the only architecture
-having such patches. Is it possible to make such patches 'common' in
-the sense that they are always named .patch and thus applied for all
-architectures?
-If the contents should really only be applied to avr32, is it a
-possibility to use some #ifdef inside the patch?
+Hi together,
 
-Thanks,
-Thomas
+how can i pass gcc-options "-mfmovd -mdalign" to buildroot which I configured with "external toolchain"
+
+Regards
+
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20131115/f5197361/attachment.html>
