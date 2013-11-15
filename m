@@ -1,61 +1,380 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 15 Nov 2013 13:56:55 +0100
-Subject: [Buildroot] [pkg-luarocks infra V3 01/10] luainterpreter:
- create virtual package
-In-Reply-To: <CAAXf6LXiHD+LHvA4n5vnEsUUgwsfvODC5ERcohz_HWtQU_5JoA@mail.gmail.com>
-References: <1384460249-32410-1-git-send-email-francois.perrad@gadz.org>
- <CAAXf6LXVQ8uFccP2+-TwQOC0iAH=ochrtzUQH-sFN7sZetrpUQ@mail.gmail.com>
- <20131115094423.024e1af8@skate>
- <CAAXf6LUixt-3engtthxiHc3iqZo=nd07NPBhZrG5yoNYvrGH_w@mail.gmail.com>
- <20131115101817.2c63a9ef@skate>
- <CAAXf6LXiHD+LHvA4n5vnEsUUgwsfvODC5ERcohz_HWtQU_5JoA@mail.gmail.com>
-Message-ID: <20131115135655.044495e5@skate>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Fri, 15 Nov 2013 14:07:30 +0100
+Subject: [Buildroot] [pkg-luarocks infra V4 01/10] luainterpreter: create
+	virtual package
+Message-ID: <1384520859-3189-1-git-send-email-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas De Schampheleire,
+luainterpreter is lua or luajit
 
-On Fri, 15 Nov 2013 10:49:15 +0100, Thomas De Schampheleire wrote:
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+---
+ package/Config.in                                |    1 +
+ package/lbase64/Config.in                        |    1 +
+ package/lbase64/lbase64.mk                       |    2 +-
+ package/lua-ev/Config.in                         |    1 +
+ package/lua-ev/lua-ev.mk                         |    2 +-
+ package/lua-msgpack-native/Config.in             |    1 +
+ package/lua-msgpack-native/lua-msgpack-native.mk |    2 +-
+ package/lua/Config.in                            |    1 +
+ package/luacjson/Config.in                       |    1 +
+ package/luacjson/luacjson.mk                     |    2 +-
+ package/luaexpat/Config.in                       |    1 +
+ package/luaexpat/luaexpat.mk                     |    2 +-
+ package/luafilesystem/Config.in                  |    1 +
+ package/luafilesystem/luafilesystem.mk           |    2 +-
+ package/luainterpreter/Config.in                 |    2 ++
+ package/luainterpreter/luainterpreter.mk         |   18 ++++++++++++++++++
+ package/luajit/Config.in                         |    1 +
+ package/luaposix/Config.in                       |    1 +
+ package/luaposix/luaposix.mk                     |    2 +-
+ package/luasec/Config.in                         |    1 +
+ package/luasec/luasec.mk                         |    2 +-
+ package/luasocket/Config.in                      |    1 +
+ package/luasocket/luasocket.mk                   |    2 +-
+ package/luasql/Config.in                         |    1 +
+ package/luasql/luasql.mk                         |    2 +-
+ package/rings/Config.in                          |    1 +
+ package/rings/rings.mk                           |    2 +-
+ 27 files changed, 45 insertions(+), 11 deletions(-)
+ create mode 100644 package/luainterpreter/Config.in
+ create mode 100644 package/luainterpreter/luainterpreter.mk
 
-> > I don't think so, because those options are hidden options, they are
-> > merely here to create a "disconnection" between providers of a feature
-> > (i.e an OpenGL implementation) and consumers of a feature (i.e
-> > applications or libraries using the OpenGL API). So I believe we can
-> > rename them as much as we want.
-> 
-> Ah, great!
-> 
-> But you haven't yet said whether you agree with my reasoning that the
-> PACKAGE in these names is not nice... What do you think about that?
-
-I don't really have a strong feeling on this. I believe we started
-using BR2_PACKAGE_HAS_<foo>, just because we are inside package/ so it
-kind of makes sense to also use the BR2_PACKAGE_<something> namespace.
-
-That being said, it is true that the wording BR2_PACKAGE_HAS_<foo>
-seems to indicate that it is a specific package that has something, not
-that the system has a whole has some given feature.
-
-As I said, I don't feel really strongly about this. I don't think the
-current BR2_PACKAGE_HAS_<something> is too bad either.
-
-> >> > for virtual packages. This way instead of showing "unknown" in the ">>>
-> >> > blabla unknown extracting" messages, we would have ">>> blabla virtual
-> >> > extracting".
-> >>
-> >> Sounds good to me. This could also be used for the external toolchain then...
-> >
-> > Of course, all virtual packages would have to be changed.
-> 
-> Great again, we have a plan!
-
- :-)
-
-Thomas
+diff --git a/package/Config.in b/package/Config.in
+index 311cc6c..a8ebb27 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -352,6 +352,7 @@ source "package/haserl/Config.in"
+ source "package/jamvm/Config.in"
+ source "package/jimtcl/Config.in"
+ source "package/lua/Config.in"
++source "package/luainterpreter/Config.in"
+ source "package/luajit/Config.in"
+ if BR2_PACKAGE_LUA || BR2_PACKAGE_LUAJIT
+ menu "Lua libraries/modules"
+diff --git a/package/lbase64/Config.in b/package/lbase64/Config.in
+index bd8503a..ca9dd5d 100644
+--- a/package/lbase64/Config.in
++++ b/package/lbase64/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_LBASE64
+ 	bool "lbase64"
++	depends on BR2_PACKAGE_HAS_LUA_INTERPRETER
+ 	help
+ 	  A base64 library for Lua
+ 
+diff --git a/package/lbase64/lbase64.mk b/package/lbase64/lbase64.mk
+index 87dda40..ab726ef 100644
+--- a/package/lbase64/lbase64.mk
++++ b/package/lbase64/lbase64.mk
+@@ -9,7 +9,7 @@ LBASE64_SITE = http://www.tecgraf.puc-rio.br/~lhf/ftp/lua/5.1
+ LBASE64_SOURCE = lbase64.tar.gz
+ LBASE64_LICENSE = Public domain
+ LBASE64_LICENSE_FILES = README
+-LBASE64_DEPENDENCIES = lua
++LBASE64_DEPENDENCIES = luainterpreter
+ 
+ define LBASE64_BUILD_CMDS
+        $(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS) \
+diff --git a/package/lua-ev/Config.in b/package/lua-ev/Config.in
+index 1e89c27..2f9c486 100644
+--- a/package/lua-ev/Config.in
++++ b/package/lua-ev/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_LUA_EV
+ 	bool "lua-ev"
++	depends on BR2_PACKAGE_HAS_LUA_INTERPRETER
+ 	select BR2_PACKAGE_LIBEV
+ 	help
+ 	  Get access to the libev library from Lua.
+diff --git a/package/lua-ev/lua-ev.mk b/package/lua-ev/lua-ev.mk
+index 0beece4..e6a12c8 100644
+--- a/package/lua-ev/lua-ev.mk
++++ b/package/lua-ev/lua-ev.mk
+@@ -6,7 +6,7 @@
+ 
+ LUA_EV_VERSION = 458165bdfe0c6eadc788813925f11a0e6a823845
+ LUA_EV_SITE = http://github.com/brimworks/lua-ev/tarball/$(LUA_EV_VERSION)
+-LUA_EV_DEPENDENCIES = lua libev
++LUA_EV_DEPENDENCIES = luainterpreter libev
+ LUA_EV_LICENSE = MIT
+ LUA_EV_LICENSE_FILES = README
+ LUA_EV_CONF_OPT = -DINSTALL_CMOD="/usr/lib/lua"
+diff --git a/package/lua-msgpack-native/Config.in b/package/lua-msgpack-native/Config.in
+index 8894ee5..1014298 100644
+--- a/package/lua-msgpack-native/Config.in
++++ b/package/lua-msgpack-native/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_LUA_MSGPACK_NATIVE
+ 	bool "lua-msgpack-native"
++	depends on BR2_PACKAGE_HAS_LUA_INTERPRETER
+ 	help
+ 	  This is a native, C language implementation of msgpack
+ 	  (http://msgpack.org) library/protocol for Lua language
+diff --git a/package/lua-msgpack-native/lua-msgpack-native.mk b/package/lua-msgpack-native/lua-msgpack-native.mk
+index 9065916..6f85f89 100644
+--- a/package/lua-msgpack-native/lua-msgpack-native.mk
++++ b/package/lua-msgpack-native/lua-msgpack-native.mk
+@@ -6,7 +6,7 @@
+ 
+ LUA_MSGPACK_NATIVE_VERSION = 41cce91ab6b54e4426c6d626a0ac41a02ec2096d
+ LUA_MSGPACK_NATIVE_SITE = http://github.com/kengonakajima/lua-msgpack-native/tarball/$(LUA_MSGPACK_NATIVE_VERSION)
+-LUA_MSGPACK_NATIVE_DEPENDENCIES = lua
++LUA_MSGPACK_NATIVE_DEPENDENCIES = luainterpreter
+ LUA_MSGPACK_NATIVE_LICENSE = Apache-2.0
+ LUA_MSGPACK_NATIVE_LICENSE_FILES = LICENSE.txt
+ 
+diff --git a/package/lua/Config.in b/package/lua/Config.in
+index 8c05d08..3c1b2f2 100644
+--- a/package/lua/Config.in
++++ b/package/lua/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_LUA
+ 	bool "lua"
++	select BR2_PACKAGE_HAS_LUA_INTERPRETER
+ 	help
+ 	  Lua is a powerful, fast, light-weight, embeddable scripting language.
+ 
+diff --git a/package/luacjson/Config.in b/package/luacjson/Config.in
+index 8a5624f..d3665c0 100644
+--- a/package/luacjson/Config.in
++++ b/package/luacjson/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_LUACJSON
+ 	bool "luacjson"
++	depends on BR2_PACKAGE_HAS_LUA_INTERPRETER
+ 	help
+ 	  The Lua CJSON module provides JSON support for Lua. It features:
+ 	  - Fast, standards compliant encoding/parsing routines
+diff --git a/package/luacjson/luacjson.mk b/package/luacjson/luacjson.mk
+index f976ec6..d1f1ebb 100644
+--- a/package/luacjson/luacjson.mk
++++ b/package/luacjson/luacjson.mk
+@@ -7,7 +7,7 @@
+ LUACJSON_VERSION       = 2.1.0
+ LUACJSON_SOURCE        = lua-cjson-$(LUACJSON_VERSION).tar.gz
+ LUACJSON_SITE          = http://www.kyne.com.au/~mark/software/download
+-LUACJSON_DEPENDENCIES  = lua
++LUACJSON_DEPENDENCIES  = luainterpreter
+ LUACJSON_LICENSE       = MIT
+ LUACJSON_LICENSE_FILES = LICENSE
+ 
+diff --git a/package/luaexpat/Config.in b/package/luaexpat/Config.in
+index 186c5c9..f8db318 100644
+--- a/package/luaexpat/Config.in
++++ b/package/luaexpat/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_LUAEXPAT
+ 	bool "luaexpat"
+ 	select BR2_PACKAGE_EXPAT
++	depends on BR2_PACKAGE_HAS_LUA_INTERPRETER
+ 	help
+ 	  LuaExpat is a SAX XML parser based on the Expat library.
+ 
+diff --git a/package/luaexpat/luaexpat.mk b/package/luaexpat/luaexpat.mk
+index 5c45f34..e0fa043 100644
+--- a/package/luaexpat/luaexpat.mk
++++ b/package/luaexpat/luaexpat.mk
+@@ -6,7 +6,7 @@
+ 
+ LUAEXPAT_VERSION      = 1.2.0
+ LUAEXPAT_SITE         = http://matthewwild.co.uk/projects/luaexpat
+-LUAEXPAT_DEPENDENCIES = lua expat
++LUAEXPAT_DEPENDENCIES = luainterpreter expat
+ LUAEXPAT_LICENSE      = MIT
+ 
+ 
+diff --git a/package/luafilesystem/Config.in b/package/luafilesystem/Config.in
+index 7c130f8..489ebf3 100644
+--- a/package/luafilesystem/Config.in
++++ b/package/luafilesystem/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_LUAFILESYSTEM
+ 	bool "luafilesystem"
++	depends on BR2_PACKAGE_HAS_LUA_INTERPRETER
+ 	help
+ 	  LuaFileSystem offers a portable way to access
+ 	  the underlying directory structure and file attributes.
+diff --git a/package/luafilesystem/luafilesystem.mk b/package/luafilesystem/luafilesystem.mk
+index 2f7b4d8..edd7203 100644
+--- a/package/luafilesystem/luafilesystem.mk
++++ b/package/luafilesystem/luafilesystem.mk
+@@ -6,7 +6,7 @@
+ 
+ LUAFILESYSTEM_VERSION = 1.6.2
+ LUAFILESYSTEM_SITE = http://github.com/downloads/keplerproject/luafilesystem
+-LUAFILESYSTEM_DEPENDENCIES = lua
++LUAFILESYSTEM_DEPENDENCIES = luainterpreter
+ LUAFILESYSTEM_LICENSE = MIT
+ 
+ ifeq ($(BR2_LARGEFILE),y)
+diff --git a/package/luainterpreter/Config.in b/package/luainterpreter/Config.in
+new file mode 100644
+index 0000000..d85d7e8
+--- /dev/null
++++ b/package/luainterpreter/Config.in
+@@ -0,0 +1,2 @@
++config BR2_PACKAGE_HAS_LUA_INTERPRETER
++	bool
+diff --git a/package/luainterpreter/luainterpreter.mk b/package/luainterpreter/luainterpreter.mk
+new file mode 100644
+index 0000000..6e2ccfe
+--- /dev/null
++++ b/package/luainterpreter/luainterpreter.mk
+@@ -0,0 +1,18 @@
++#############################################################
++#
++# Virtual package for luainterpreter
++#
++#############################################################
++
++LUAINTERPRETER_VERSION = virtual
++LUAINTERPRETER_SOURCE =
++
++ifeq ($(BR2_PACKAGE_LUA),y)
++LUAINTERPRETER_DEPENDENCIES = lua
++endif
++
++ifeq ($(BR2_PACKAGE_LUAJIT),y)
++LUAINTERPRETER_DEPENDENCIES = luajit
++endif
++
++$(eval $(generic-package))
+diff --git a/package/luajit/Config.in b/package/luajit/Config.in
+index 23b2650..97013e4 100644
+--- a/package/luajit/Config.in
++++ b/package/luajit/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_LUAJIT
+ 	bool "luajit"
++	select BR2_PACKAGE_HAS_LUA_INTERPRETER
+ 	# Luajit is only available for some target architectures, and
+ 	# has some complexity wrt 32/64. See luajit.mk for details.
+ 	depends on BR2_i386 || (BR2_x86_64 && BR2_HOSTARCH='x86_64') || BR2_powerpc || BR2_arm || BR2_armeb
+diff --git a/package/luaposix/Config.in b/package/luaposix/Config.in
+index 922fd9e..74eedb6 100644
+--- a/package/luaposix/Config.in
++++ b/package/luaposix/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_LUAPOSIX
+ 	bool "luaposix"
++	depends on BR2_PACKAGE_HAS_LUA_INTERPRETER
+ 	select BR2_PACKAGE_LUABITOP if BR2_PACKAGE_LUA
+ 	# LuaBitOp is already included in LuaJIT
+ 	help
+diff --git a/package/luaposix/luaposix.mk b/package/luaposix/luaposix.mk
+index cbcdf32..b398c8c 100644
+--- a/package/luaposix/luaposix.mk
++++ b/package/luaposix/luaposix.mk
+@@ -9,7 +9,7 @@ LUAPOSIX_SITE = https://github.com/luaposix/luaposix/archive
+ LUAPOSIX_SOURCE = release-v$(LUAPOSIX_VERSION).tar.gz
+ LUAPOSIX_LICENSE = MIT
+ LUAPOSIX_LICENSE_FILES = COPYING
+-LUAPOSIX_DEPENDENCIES = lua host-lua
++LUAPOSIX_DEPENDENCIES = luainterpreter host-lua
+ LUAPOSIX_CONF_OPT = --libdir="/usr/lib/lua" --datarootdir="/usr/share/lua"
+ 
+ ifeq ($(BR2_PACKAGE_NCURSES),y)
+diff --git a/package/luasec/Config.in b/package/luasec/Config.in
+index 2d303c1..ed55df7 100644
+--- a/package/luasec/Config.in
++++ b/package/luasec/Config.in
+@@ -2,6 +2,7 @@ config BR2_PACKAGE_LUASEC
+ 	bool "luasec"
+ 	select BR2_PACKAGE_OPENSSL
+ 	select BR2_PACKAGE_LUASOCKET
++	depends on BR2_PACKAGE_HAS_LUA_INTERPRETER
+ 	help
+ 	  LuaSec is a binding for OpenSSL library to provide TLS/SSL
+ 	  communication.
+diff --git a/package/luasec/luasec.mk b/package/luasec/luasec.mk
+index 053309f..3fb7060 100644
+--- a/package/luasec/luasec.mk
++++ b/package/luasec/luasec.mk
+@@ -8,7 +8,7 @@ LUASEC_VERSION = 0.4.1
+ LUASEC_SITE = http://www.inf.puc-rio.br/~brunoos/luasec/download/
+ LUASEC_LICENSE = MIT
+ LUASEC_LICENSE_FILES = LICENSE
+-LUASEC_DEPENDENCIES = lua openssl
++LUASEC_DEPENDENCIES = luainterpreter openssl
+ 
+ define LUASEC_BUILD_CMDS
+ 	$(MAKE) -C $(@D) CC="$(TARGET_CC)" LD="$(TARGET_CC)" \
+diff --git a/package/luasocket/Config.in b/package/luasocket/Config.in
+index 4526303..619d649 100644
+--- a/package/luasocket/Config.in
++++ b/package/luasocket/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_LUASOCKET
+ 	bool "luasocket"
++	depends on BR2_PACKAGE_HAS_LUA_INTERPRETER
+ 	help
+ 	  LuaSocket is the most comprehensive networking support library
+ 	  for the Lua language.
+diff --git a/package/luasocket/luasocket.mk b/package/luasocket/luasocket.mk
+index b0c0be5..20ad8bf 100644
+--- a/package/luasocket/luasocket.mk
++++ b/package/luasocket/luasocket.mk
+@@ -6,7 +6,7 @@
+ 
+ LUASOCKET_VERSION = 2.0.2
+ LUASOCKET_SITE = http://luaforge.net/frs/download.php/2664
+-LUASOCKET_DEPENDENCIES = lua
++LUASOCKET_DEPENDENCIES = luainterpreter
+ LUASOCKET_LICENSE = MIT
+ LUASOCKET_LICENSE_FILES = LICENSE
+ 
+diff --git a/package/luasql/Config.in b/package/luasql/Config.in
+index 4dd011a..96e04fb 100644
+--- a/package/luasql/Config.in
++++ b/package/luasql/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_LUASQL
+ 	bool "luasql"
++	depends on BR2_PACKAGE_HAS_LUA_INTERPRETER
+ 	help
+ 	  LuaSQL is a simple interface from Lua to a DBMS.
+ 
+diff --git a/package/luasql/luasql.mk b/package/luasql/luasql.mk
+index 6fbdccc..12fd02c 100644
+--- a/package/luasql/luasql.mk
++++ b/package/luasql/luasql.mk
+@@ -8,7 +8,7 @@ LUASQL_VERSION = v2.3.0
+ LUASQL_SITE = https://github.com/keplerproject/luasql/tarball/$(LUASQL_VERSION)
+ LUASQL_LICENSE = MIT
+ LUASQL_LICENSE_FILES = README
+-LUASQL_DEPENDENCIES = lua
++LUASQL_DEPENDENCIES = luainterpreter
+ 
+ LUASQL_MAKE_FLAGS = \
+ 	CC="$(TARGET_CC)" \
+diff --git a/package/rings/Config.in b/package/rings/Config.in
+index d1f1efe..b1d41f3 100644
+--- a/package/rings/Config.in
++++ b/package/rings/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_RINGS
+ 	bool "rings"
++	depends on BR2_PACKAGE_HAS_LUA_INTERPRETER
+ 	help
+ 	  Provides a way to create new Lua states from within Lua.
+ 
+diff --git a/package/rings/rings.mk b/package/rings/rings.mk
+index 610ded0..67a4916 100644
+--- a/package/rings/rings.mk
++++ b/package/rings/rings.mk
+@@ -6,7 +6,7 @@
+ 
+ RINGS_VERSION = 1.2.3
+ RINGS_SITE = http://github.com/downloads/keplerproject/rings
+-RINGS_DEPENDENCIES = lua
++RINGS_DEPENDENCIES = luainterpreter
+ RINGS_LICENSE = MIT
+ 
+ define RINGS_BUILD_CMDS
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.7.9.5
