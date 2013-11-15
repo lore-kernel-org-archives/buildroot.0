@@ -1,36 +1,39 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 15 Nov 2013 13:12:29 +0100
-Subject: [Buildroot] [PATCH v2] uclibc: patch 0.9.31 for avr32,
-	to add __kernel_long_t and __kernel_ulong_t data types
-In-Reply-To: <1384508285-24489-1-git-send-email-spdawson@gmail.com>
- (spdawson@gmail.com's message of "Fri, 15 Nov 2013 09:38:05 +0000")
-References: <1384508285-24489-1-git-send-email-spdawson@gmail.com>
-Message-ID: <874n7d279u.fsf@dell.be.48ers.dk>
+From: Sagaert Johan <sagaert.johan@skynet.be>
+Date: Fri, 15 Nov 2013 13:38:23 +0100
+Subject: [Buildroot] skeleton   hosts file content for ipv6 ?
+In-Reply-To: <52860529.6060207@zacarias.com.ar>
+References: <79606BB255D84F1DA71D659AD8F8AE6A@JohanW7>
+ <52860529.6060207@zacarias.com.ar>
+Message-ID: <F7A50608C6F94A908AA45301657E62DE@JohanW7>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "spdawson" == spdawson  <spdawson@gmail.com> writes:
+Hi Gustavo ;
 
- > From: Simon Dawson <spdawson@gmail.com>
- > As reported by Thomas Petazzoni, the uclibc 0.9.31 build fails for avr32:
+Thanks ,for the info, maybe this line should be appended to the hosts file by buildroot when ipv6 is enabled in the configuration. 
 
- > In file included from /opt/br-avr32-full-2013.11-rc1/usr/avr32-buildroot-linux-uclibc/sysroot/usr/include/linux/kernel.h:4,
- >                  from /opt/br-avr32-full-2013.11-rc1/usr/avr32-buildroot-linux-uclibc/sysroot/usr/include/linux/netlink.h:4,
- >                  from /opt/br-avr32-full-2013.11-rc1/usr/avr32-buildroot-linux-uclibc/sysroot/usr/include/linux/rtnetlink.h:5,
- >                  from libc/inet/netlinkaccess.h:27,
- >                  from libc/inet/if_index.c:36:
- > /opt/br-avr32-full-2013.11-rc1/usr/avr32-buildroot-linux-uclibc/sysroot/usr/include/linux/sysinfo.h:8: error: expected specifier-qualifier-list before '__kernel_long_t'
- > make[1]: *** [libc/inet/if_index.os] Error 1
- > make[1]: Leaving directory `/opt/toolchain-build/build/uclibc-0.9.31.1'
+Regards ,Johan
 
- > The problem is reported at:
 
- >   https://lkml.org/lkml/2013/5/18/1
+-----Oorspronkelijk bericht-----
+Van: Gustavo Zacarias [mailto:gustavo at zacarias.com.ar] 
+Verzonden: vrijdag 15 november 2013 12:28
+Aan: Sagaert Johan; buildroot at busybox.net
+Onderwerp: Re: [Buildroot] skeleton hosts file content for ipv6 ?
 
-Committed, thanks.
+On 11/15/2013 08:16 AM, Sagaert Johan wrote:
 
--- 
-Bye, Peter Korsgaard
+> Hi All;
+>  
+> When enabling ipv6 , what should be in the /etc/hosts file ?
+>  
+> For ipv4 it is mostly just 127.0.0.1 localhost What should be added 
+> when ipv6 has been enabled ?
+
+For the basic barebones the same counterpart
+::1 localhost
+
+Regards.
