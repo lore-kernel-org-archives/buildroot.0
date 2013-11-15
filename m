@@ -1,10 +1,10 @@
 From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Fri, 15 Nov 2013 15:40:18 +0100
-Subject: [Buildroot] [PATCH v9 4/8] uclibc: add support for top-level
+Date: Fri, 15 Nov 2013 15:40:19 +0100
+Subject: [Buildroot] [PATCH v9 5/8] glibc: add support for top-level
 	parallel make
 In-Reply-To: <1384526422-30142-1-git-send-email-fabio.porcedda@gmail.com>
 References: <1384526422-30142-1-git-send-email-fabio.porcedda@gmail.com>
-Message-ID: <1384526422-30142-5-git-send-email-fabio.porcedda@gmail.com>
+Message-ID: <1384526422-30142-6-git-send-email-fabio.porcedda@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,25 +16,25 @@ on the order of evaluation of the prerequisites, so instead of relyng
 on the left to right ordering of evaluation of the prerequisites add
 an explicit rule to describe the dependencies.
 
-The uclibc-install-target depends on uclibc-install-staging so add a
+The glibc-install-target depends on glibc-install-staging so add a
 rule for it.
 
 Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
 Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/uclibc/uclibc.mk | 3 +++
+ package/glibc/glibc.mk | 3 +++
  1 file changed, 3 insertions(+)
 
-diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
-index 5bac643..57e6738 100644
---- a/package/uclibc/uclibc.mk
-+++ b/package/uclibc/uclibc.mk
-@@ -559,3 +559,6 @@ $(eval $(generic-package))
+diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
+index 460d2c1..0226d05 100644
+--- a/package/glibc/glibc.mk
++++ b/package/glibc/glibc.mk
+@@ -130,3 +130,6 @@ $(eval $(autotools-package))
  
- # Before uClibc is built, we must have the second stage cross-compiler
- $(UCLIBC_TARGET_BUILD): | host-gcc-intermediate
+ # Before (e)glibc is built, we must have the second stage cross-compiler
+ $(GLIBC_TARGET_BUILD): | host-gcc-intermediate
 +
-+# The uclibc-install-target use files from uclibc-install-staging
-+$(UCLIBC_TARGET_INSTALL_TARGET): $(UCLIBC_TARGET_INSTALL_STAGING)
++# The glic-install-target use files from glibc-install-staging
++$(GLIBC_TARGET_INSTALL_TARGET): $(GLIBC_TARGET_INSTALL_STAGING)
 -- 
 1.8.4.2
