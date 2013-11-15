@@ -1,57 +1,108 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 15 Nov 2013 15:15:14 +0100
-Subject: [Buildroot] Xineramaproto
-In-Reply-To: <FC11F8FF209D4453815AD3F26757E19D@tux.local>
-References: <233A67DA67A045DF84F76ABF9CA04635@tux.local>
- <BAF922FAE74849899122A8651F8AFD3C@tux.local>
- <3F863D59E1624E3FA3BE86B5BE40EA59@tux.local>
- <20131112115854.244577e6@skate>
- <FC11F8FF209D4453815AD3F26757E19D@tux.local>
-Message-ID: <20131115151514.702c2cc4@skate>
+From: Fabio Porcedda <fabio.porcedda@gmail.com>
+Date: Fri, 15 Nov 2013 15:40:14 +0100
+Subject: [Buildroot] [PATCH v9 0/8] Add support for top-level parallel make
+Message-ID: <1384526422-30142-1-git-send-email-fabio.porcedda@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gwyll Gwyllin,
+Hi all,
+this is a patch set for adding support for top-level parallel make in
+buildroot, the common problem scattered in buildroot's top-level
+makefiles is that in the rules it relies on the order of evaluation of
+the prerequisites, to be able to use top-level parallel make instead
+of reling on the left to right ordering of evaluation of the
+prerequisites we must add an explicit rule to describe the
+dependencies.
 
-On Fri, 15 Nov 2013 15:00:15 +0100, Gwyll Gwyllin wrote:
+With this patch set the top-level parallel make seems to works fine,
+example:
+	make clean
+	make BR2_JLEVEL= -j$((`getconf _NPROCESSORS_ONLN` + 1))
 
-> thank you for the link. I've checked my inbox and spam folder, and i could 
-> not find your previous letter. Anyway ... sorry for the missing answer.
+Before to try it remeber to remove the ".NOTPARALLEL" line.
 
-Hum, strange. Since the mail appeared on the mailing list, I don't
-think the problem was on my side. But anyway, doesn't matter much.
+On my quad core system the building time for qemu_x86_defconfig
+is 14m versus 11m and with ccache enabled 7m vs 5m.
 
-> You are right, i'm trying to compile an older version. I have a bluechip 
-> device and the manufacturer gave me that version. I've tried to compile a 
-> recent version too, but it's compile have also failed.
+I've tested the qemu_x86_defconfig, uclibc/eglibc/glibc,
+ccache off/on, sstrip off/on.
 
-Just curious, what kind of device is this "bluechip device"? I've
-googled a bit, and didn't find anything relevant.
+Best regards
+Fabio Porcedda
 
-Regarding Buildroot, I believe you have two options:
+v9:
+ - Added Acked-by: Arnout Vandecappelle on some patches.
+ - Changed the patches contents and descriptions following advices of Arnout
+   - 1th patch: fixed to support ccache & sstrip
+   - 2th patch: added pkg-cmake.mk
+   - 2th patch: splitted ifeq
+   - 3th patch: improved description
+   - 3th patch: does not use %_BUILD_DEPENDENCIES anymore
+   - 3th patch: added a comment about "|"
+   - 4th patch: added a comment
+   - 5th patch: added a comment
+   - 6th patch: 
+ - 2th patch: fixed a comment
+ - 8th patch: now it change only the comment
+v8:
+ - rebased over master
+ - added patche for for base dependency
+ - added patche for for glibc package
+ - added patche for for uclibc package
+ - removed patch already merged
+ - changed some descriptions
+ - modified the patch for toolchain dependency to prevent circular dependency
+v7:
+ - add the latest patch
+ - add to the first patch the <pkgname>_TOOLCHAIN variable
+ - improve the fifth patch
+v6:
+ - added the fifth patch
+ - updated the fourth patch adding the install targets
+ - updated the second patch to remove TARGETS_ALL
+v5:
+ - added the fourth patch
+ - fixed some typos
+ - rewrited the second patch to use only $$($(2)_TARGET_*) in the rules
+ - add support for top-level parallel make for the glibc package
+v4:
+ - rebased over master
+ - add Acked-by: Thomas Petazzoni on the third patch
+ - changed the orderd of the patches
+v3:
+ - add back the patch "package: add toolchain dependency to
+    inner-generic-package" because now is working fine.
+ - add Acked-by: Arnout Vandecappelle to the third patch.
+ - reworked the second patch following Arnout suggestions.
+v2:
+ - remove patch "package: add toolchain dependency to inner-generic-package"
+   because was not working fine against recent toolchain changes.
 
- (1) Use the vendor-provided Buildroot version, but then you should ask
-     the vendor who provided this Buildroot for support (or another
-     third party willing to offer support).
+Fabio Porcedda (8):
+  package: add base dependency to every package
+  package: add toolchain dependency to every target package
+  package: add support for top-level parallel make
+  uclibc: add support for top-level parallel make
+  glibc: add support for top-level parallel make
+  Makefile: add support for top-level parallel make
+  package: enable jobserver for recursive make
+  Makefile: update comment about top-level parallel Makefile
 
- (2) Use the mainline Buildroot, and enjoy community support. In many
-     cases, the modifications made by vendors on Buildroot are not very
-     complicated, so it can be quite easy to adapt them to the mainline
-     Buildroot (and maybe contribute them to reduce the maintenance
-     effort).
+ Makefile                                           | 32 ++++++-----
+ fs/common.mk                                       |  4 +-
+ package/glibc/glibc.mk                             | 12 +++-
+ package/linux-headers/linux-headers.mk             |  3 +
+ package/pkg-autotools.mk                           |  3 +-
+ package/pkg-cmake.mk                               |  2 +-
+ package/pkg-generic.mk                             | 67 ++++++++++++++--------
+ package/uclibc/uclibc.mk                           | 12 +++-
+ .../toolchain-buildroot/toolchain-buildroot.mk     |  2 +
+ toolchain/toolchain-external/toolchain-external.mk |  2 +
+ toolchain/toolchain/toolchain.mk                   |  5 +-
+ 11 files changed, 95 insertions(+), 49 deletions(-)
 
-If you have a build failure, or another problem, with a recent version
-of the mainline Buildroot, then please let us know. We definitely want
-to fix problems. Just tell us the Buildroot version being used,
-the .config file, and the last 200-300 lines of the build output.
-
-Thanks!
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.8.4.2
