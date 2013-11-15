@@ -1,74 +1,37 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Fri, 15 Nov 2013 10:41:51 +0100
-Subject: [Buildroot] buildroot: gcc options
-In-Reply-To: <EADA2943BAC14C4AB625A3550A3BE980096DF2C345@SI-MBX04.de.bosch.com>
-References: <EADA2943BAC14C4AB625A3550A3BE980096DF2C30B@SI-MBX04.de.bosch.com>
- <CAAXf6LU1bamXyxhjhB5rTTHM-iHRbKrsTF5m1MUJLZjOaNXmuQ@mail.gmail.com>
- <EADA2943BAC14C4AB625A3550A3BE980096DF2C345@SI-MBX04.de.bosch.com>
-Message-ID: <CAAXf6LU3kQE2J+3zS-XCBYZ9SkxOSNyEAkV-E0_LQbhq3TP8Rw@mail.gmail.com>
+Date: Fri, 15 Nov 2013 10:42:32 +0100
+Subject: [Buildroot] [PATCH] uclibc: patch 0.9.31 for avr32,
+ to add __kernel_long_t and __kernel_ulong_t data types
+In-Reply-To: <CAHt8ZCMoXQ9xmrDrzL5r-5ag3MjQhx=Pb8jbkWi-L676pc67zA@mail.gmail.com>
+References: <1384505965-19957-1-git-send-email-spdawson@gmail.com>
+ <CAAXf6LUGq3dj4G_wK5udynxcCakN3JJX2o-Dxef-EzJYnvpoqw@mail.gmail.com>
+ <20131115102338.47ffb0d4@skate>
+ <CAHt8ZCMoXQ9xmrDrzL5r-5ag3MjQhx=Pb8jbkWi-L676pc67zA@mail.gmail.com>
+Message-ID: <CAAXf6LW4H1HONMqQy9T4RMuwFHvTHPZNb3VFAyjOLYH46rL9Lw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Sabri,
+Hi Simon,
 
-On Fri, Nov 15, 2013 at 10:38 AM, Altunbas Sabri (DC-IA/EAH2)
-<sabri.altunbas@boschrexroth.de> wrote:
-> Hi Thomas,
+On Fri, Nov 15, 2013 at 10:34 AM, Simon Dawson <spdawson@gmail.com> wrote:
+> Hi Thomases.
 >
-> I defined
+> On 15 November 2013 09:23, Thomas Petazzoni
+> <thomas.petazzoni@free-electrons.com> wrote:
+>> In the specific case of this patch, it modifies only avr32-specific
+>> header files, so I don't quite see why it needs to be
+>> named .patch.avr32 instead of just .patch.
+>>
+>> Especially since anyway 0.9.31 can only be enabled for the AVR32
+>> architecture.
 >
-> ....
-> BR2_TARGET_OPTIMIZATION="-pipe -mfmovd -mdalign"
-> .....
->
-> But I get following errors
->
-> ....
-> ....
-> editors/awk.c: In function 'my_strtod':
-> editors/awk.c:746:1: internal compiler error: Segmentation fault
-> Please submit a full bug report,
-> with preprocessed source if appropriate.
-> See <https://support.codesourcery.com/GNUToolchain/> for instructions.
-> make[2]: *** [editors/awk.o] Error 1
-> make[1]: *** [editors] Error 2
-> make[1]: *** Waiting for unfinished jobs....
->   CC      coreutils/hostid.o
->   CC      coreutils/id.o
->   CC      coreutils/install.o
->   CC      coreutils/ln.o
->   CC      coreutils/logname.o
->   CC      coreutils/ls.o
->   CC      coreutils/md5_sha1_sum.o
->   CC      coreutils/mkdir.o
->   CC      coreutils/mkfifo.o
->   CC      coreutils/mknod.o
->   CC      coreutils/mv.o
->   CC      coreutils/nice.o
->   CC      coreutils/nohup.o
->   CC      coreutils/od.o
->   CC      coreutils/printenv.o
->   CC      coreutils/printf.o
-> coreutils/printf.c: In function 'print_direc':
-> coreutils/printf.c:248:1: internal compiler error: Segmentation fault
-> Please submit a full bug report,
-> with preprocessed source if appropriate.
-> See <https://support.codesourcery.com/GNUToolchain/> for instructions.
-> make[2]: *** [coreutils/printf.o] Error 1
-> make[2]: *** Waiting for unfinished jobs....
-> make[1]: *** [coreutils] Error 2
-> make[1]: Leaving directory `/home/tux/aaa/buildroot/sh/output/build/busybox-1.21.1'
-> make: *** [/home/tux/aaa/buildroot/sh/output/build/busybox-1.21.1/.stamp_built] Error 2
-> tux at lmde ~/aaa/buildroot/sh $
->
+> I'll rename the patch, and resubmit. As for the other *.patch.avr32
+> files, I'll have a look at them as soon as I can.
 
+That would be great, thanks!
 
-Could you provide more details?
-Which buildroot version are you using, which toolchain, etc.?
-Maybe a .config could be useful too.
-
-Thanks,
+Best regards,
 Thomas
