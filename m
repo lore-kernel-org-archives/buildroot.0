@@ -1,55 +1,62 @@
-From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Date: Fri, 15 Nov 2013 20:54:34 +0100
-Subject: [Buildroot] [PATCH v3 0/5] udev is now provided by systemd or
- eudev
-In-Reply-To: <20131114005329.3eb8ab04@skate>
-References: <1383752078-25315-1-git-send-email-eric.le.bihan.dev@free.fr>
- <20131114005329.3eb8ab04@skate>
-Message-ID: <52867BFA.3080808@free.fr>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Fri, 15 Nov 2013 21:22:27 +0100
+Subject: [Buildroot] [PATCH 4/7] opencv: add eigen dependency
+In-Reply-To: <20131111233641.2a5564c5@skate>
+References: <1384203613-17871-1-git-send-email-s.martin49@gmail.com>
+ <1384203613-17871-5-git-send-email-s.martin49@gmail.com>
+ <20131111233641.2a5564c5@skate>
+Message-ID: <CAHXCMM+yDMJsBssLz40EpryqG0V2mYUTOANLkMGwWRoESu0TRg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi!
+2013/11/11 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-Le 14/11/2013 00:53, Thomas Petazzoni a ?crit :
+> Dear Samuel Martin,
+>
+> On Mon, 11 Nov 2013 22:00:10 +0100, Samuel Martin wrote:
+> >  menuconfig BR2_PACKAGE_OPENCV
+> >       bool "opencv"
+> >       select BR2_PACKAGE_ZLIB
+> > +     select BR2_PACKAGE_EIGEN
+>
+> Any reason to make it mandatory?
+>
 
-> However, while your demo defconfig work fine, I was not able to get
-> a working configuration started from scratch. I.e, I have the following
-> Buildroot configuration:
-> 
-> BR2_arm=y
-> BR2_TOOLCHAIN_EXTERNAL=y
-> BR2_INIT_SYSTEMD=y
-> BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
-> 
-> and I boot it with the same kernel image that I used to boot the eudev
-> example (under the ARM Versatile Qemu emulation). The kernel has
-> cgroup support. But the boot hangs at:
-> 
-> Freeing unused kernel memory: 120K (c0399000 - c03b7000)
-> systemd[1]: Failed to mount /dev/shm: Invalid argument
+After checking with some opencv developers, eigen support does not bring
+that much
+(neither in term of features, nor perfs).
 
-This problem occurs because tmpfs support is not enabled in your kernel
-configuration. Setting CONFIG_TMPFS and CONFIG_TMPFS_POSIX_ACL will
-solve this issue. I will add these kernel requirements in the help menu
-of Systemd.
+So I've rejected it.
 
-> Also, I've noted that kconfig complains about a dependency problem
-> after applying your patch set:
-> 
-> warning: (BR2_PACKAGE_SYSTEMD && BR2_PACKAGE_MODULE_INIT_TOOLS) selects
-> BR2_PACKAGE_KMOD_TOOLS which has unmet direct dependencies
-> (BR2_PACKAGE_KMOD && BR2_PACKAGE_BUSYBOX_SHOW_OTHERS)
 
-Thanks for noticing! As module-init-tools has been deprecated in favor
-of kmod, the tools lsmod, modprobe and friends are now symlinks to kmod.
-Systemd directly invokes kmod, so it can not be used with the ones
-provided by Busybox.
-I will had a 'select BR2_PACKAGE_BUSYBOX_SHOW_OTHER' in the Config.in of
-Systemd.
+>
+> I'm sorry but I'm going to be a bit angry again. I've asked you many,
+> many, many times to write more descriptive commit logs. And once again,
+> several of your patches have just a one line title, with no explanation
+> whatsoever about *why* you're doing the change.
+>
+> It would be really nice if you could review all your patches before you
+> post them, and ask yourself the question: is the reason why I'm doing
+> this going to be obvious for the reviewer? If the answer is even on the
+> slightly unsure side, then it means you need to expand with a more
+> detailed commit log, or more comments in the code.
+>
+> Thanks,
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
+>
 
-Best regards,
-ELB
+
+
+-- 
+Samuel
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20131115/2401e6ab/attachment.html>
