@@ -1,38 +1,151 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Fri, 15 Nov 2013 08:49:50 +0100
-Subject: [Buildroot] [pkg-luarocks infra V3 08/10] luasql-sqlite3:
- renamed like with LuaRocks
-In-Reply-To: <1384460249-32410-8-git-send-email-francois.perrad@gadz.org>
-References: <1384460249-32410-1-git-send-email-francois.perrad@gadz.org>
- <1384460249-32410-8-git-send-email-francois.perrad@gadz.org>
-Message-ID: <CAAXf6LUwdsoRLR4_MV6mRQY3pf2xXvrAktkckak32D5o0KvFuw@mail.gmail.com>
+Date: Fri, 15 Nov 2013 09:07:52 +0100
+Subject: [Buildroot] [pkg-luarocks infra V2 10/10] manual: adding
+	packages luarocks
+In-Reply-To: <1384436996-25525-11-git-send-email-francois.perrad@gadz.org>
+References: <1384436996-25525-1-git-send-email-francois.perrad@gadz.org>
+ <1384436996-25525-11-git-send-email-francois.perrad@gadz.org>
+Message-ID: <CAAXf6LWFZUmZkwD7JapHZ4aAqF11b8uoU-MvhjTPa-iNS406vA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Francois,
-
-On Thu, Nov 14, 2013 at 9:17 PM, Francois Perrad <fperrad@gmail.com> wrote:
->
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+On Thu, Nov 14, 2013 at 2:49 PM, Francois Perrad <fperrad@gmail.com> wrote:
 > ---
->  Config.in.legacy                         |    7 ++++++
->  package/Config.in                        |    2 +-
->  package/luasql-sqlite3/Config.in         |    8 +++++++
->  package/luasql-sqlite3/luasql-sqlite3.mk |   33 ++++++++++++++++++++++++++
->  package/luasql/Config.in                 |   22 -----------------
->  package/luasql/luasql.mk                 |   38 ------------------------------
->  6 files changed, 49 insertions(+), 61 deletions(-)
->  create mode 100644 package/luasql-sqlite3/Config.in
->  create mode 100644 package/luasql-sqlite3/luasql-sqlite3.mk
->  delete mode 100644 package/luasql/Config.in
->  delete mode 100644 package/luasql/luasql.mk
+>  docs/manual/adding-packages-luarocks.txt |   91 ++++++++++++++++++++++++++++++
+>  docs/manual/adding-packages.txt          |    2 +
+>  2 files changed, 93 insertions(+)
+>  create mode 100644 docs/manual/adding-packages-luarocks.txt
 >
+> diff --git a/docs/manual/adding-packages-luarocks.txt b/docs/manual/adding-packages-luarocks.txt
+> new file mode 100644
+> index 0000000..d3a883b
+> --- /dev/null
+> +++ b/docs/manual/adding-packages-luarocks.txt
+> @@ -0,0 +1,91 @@
+> +// -*- mode:doc; -*-
+> +// vim: set syntax=asciidoc:
+> +
+> +Infrastructure for LuaRocks-based packages
+> +~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> +
+> +[[luarocks-package-tutorial]]
+> +
+> ++luarocks-package+ tutorial
+> +^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> +
+> +First, let's see how to write a +.mk+ file for a LuaRocks-based package,
+> +with an example :
+> +
+> +------------------------
+> +01: ################################################################################
+> +02: #
+> +03: # luafoo
+> +04: #
+> +05: ################################################################################
+> +06:
+> +07: LUAFOO_VERSION = 1.0.2-1
+> +08: LUAFOO_DEPENDENCIES = foo
+> +09:
+> +10: LUAFOO_BUILD_OPT += FOO_INCDIR=$(STAGING_DIR)/usr/include
+> +11: LUAFOO_BUILD_OPT += FOO_LIBDIR=$(STAGING_DIR)/usr/lib
+> +12:
+> +13: $(eval $(luarocks-package))
+> +------------------------
+> +
+> +On line 7, we declare the version of the package (the same as in the rockspec,
+> +which is the concatenation of the upstream version and the rockspec revision).
+> +
+> +On line 8, we declare our dependencies, so that they are built
+> +before the build process of our package starts.
+> +
+> +On line 10-11, we tell Buildroot to pass custom options to LuaRocks when it is
+> +building the package.
+> +
+> +Finally, on line 13, we invoke the +luarocks-package+
+> +macro that generates all the Makefile rules that actually allows the
+> +package to be built.
+> +
+> +[[luarocks-package-reference]]
+> +
+> ++luarocks-package+ reference
+> +^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> +
+> +LuaRocks is a deployment and management system for Lua modules.
+> +
+> +LuaRocks supports various +build.type+ : +builtin+, +make+, +cmake+.
+> +This infrastructure supports only the +builtin+ mode,
+> +the +make+ & +cmake+ modes could be directly handled by generic & cmake infrastructure.
+> +
+> +The main macro of the LuaRocks package infrastructure is
+> ++luarocks-package+. It is similar to the +generic-package+ macro.
+> +The +host-luarocks-package+ macro is not available,
+> +only the +luarocks-package+ macro is available.
+> +
+> +Just like the generic infrastructure, the LuaRocks infrastructure works
+> +by defining a number of variables before calling the +luarocks-package+
+> +macro.
+> +
+> +First, all the package metadata information variables that exist in
+> +the generic infrastructure also exist in the LuaRocks infrastructure:
+> ++LUAFOO_VERSION+, +LUAFOO_SOURCE+, +LUAFOO_SITE+,
+> ++LUAFOO_DEPENDENCIES+.
+> +
+> +Two of them are populate by the LuaRocks infrastructure (for the
 
-How have you moved this file? I don't see any indication of a
-git-aware move, it seems to be an independent delete+add...
+populated
 
-Best regards,
-Thomas
+> ++download+ step) :
+> +
+> +* +LUAFOO_SITE+ with the +BR2_LUAROCKS_MIRROR+ value
+> +
+> +* +LUAFOO_SOURCE+ with +foo-$(FOO_VERSION).src.rock+
+> +
+> +A few additional variables, specific to the LuaRocks infrastructure, are
+> +also defined. They could be overrided in specific cases.
+
+overridden
+
+> +
+> +* +LUAFOO_ROCKSPEC+ with +foo-$(FOO_VERSION).rockspec+
+> +
+> +* +LUAFOO_SUBDIR+ with +foo-$(FOO_VERSION_WITHOUT_ROCKSPEC_REVISION)+
+> +
+> +* +LUAFOO_BUILD_OPT+ contains the build option for +luarocks build+ call.
+
+options
+for the
+
+> +  The default is empty.
+> +
+> +With the LuaRocks infrastructure, only 2 steps use +luarocks+ :
+> +extract and install target. +luarocks+ handles building and install
+
+maybe this should be: 'install-target' to make it more clear?
+
+> +in the same step.
+> +
+> +The step +patch+ is handled by the generic infrastructure.
+> +The step +configure+ and +build+ stay empty.
+> diff --git a/docs/manual/adding-packages.txt b/docs/manual/adding-packages.txt
+> index ae76e74..b9ac058 100644
+> --- a/docs/manual/adding-packages.txt
+> +++ b/docs/manual/adding-packages.txt
+> @@ -18,6 +18,8 @@ include::adding-packages-autotools.txt[]
+>
+>  include::adding-packages-cmake.txt[]
+>
+> +include::adding-packages-luarocks.txt[]
+> +
+>  include::adding-packages-hooks.txt[]
+>
+>  include::adding-packages-gettext.txt[]
+> --
+> 1.7.9.5
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
