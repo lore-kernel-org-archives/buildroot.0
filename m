@@ -1,30 +1,74 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Fri, 15 Nov 2013 10:39:52 +0100
-Subject: [Buildroot] [PATCH] e2fsprogs: Rename the first patch to match
- the naming policy.
-In-Reply-To: <1384507838-4675-1-git-send-email-Sonic.adi@gmail.com>
-References: <1384507838-4675-1-git-send-email-Sonic.adi@gmail.com>
-Message-ID: <CAAXf6LW2zFZ2OCh4G7SrPAc52hpAb0KC=HuOj=gFaA2fsTu_cg@mail.gmail.com>
+Date: Fri, 15 Nov 2013 10:41:51 +0100
+Subject: [Buildroot] buildroot: gcc options
+In-Reply-To: <EADA2943BAC14C4AB625A3550A3BE980096DF2C345@SI-MBX04.de.bosch.com>
+References: <EADA2943BAC14C4AB625A3550A3BE980096DF2C30B@SI-MBX04.de.bosch.com>
+ <CAAXf6LU1bamXyxhjhB5rTTHM-iHRbKrsTF5m1MUJLZjOaNXmuQ@mail.gmail.com>
+ <EADA2943BAC14C4AB625A3550A3BE980096DF2C345@SI-MBX04.de.bosch.com>
+Message-ID: <CAAXf6LU3kQE2J+3zS-XCBYZ9SkxOSNyEAkV-E0_LQbhq3TP8Rw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Sonic, Thomas,
+Hi Sabri,
 
-On Fri, Nov 15, 2013 at 10:30 AM,  <sonic.adi@gmail.com> wrote:
-> From: Sonic Zhang <sonic.zhang@analog.com>
+On Fri, Nov 15, 2013 at 10:38 AM, Altunbas Sabri (DC-IA/EAH2)
+<sabri.altunbas@boschrexroth.de> wrote:
+> Hi Thomas,
 >
-> Signed-off-by: Sonic Zhang <sonic.zhang@analog.com>
-> ---
->  package/e2fsprogs/e2fsprogs-0001-sem-init-libs.patch | 11 +++++++++++
->  package/e2fsprogs/e2fsprogs-sem-init-libs.patch      | 11 -----------
->  2 files changed, 11 insertions(+), 11 deletions(-)
->  create mode 100644 package/e2fsprogs/e2fsprogs-0001-sem-init-libs.patch
->  delete mode 100644 package/e2fsprogs/e2fsprogs-sem-init-libs.patch
+> I defined
+>
+> ....
+> BR2_TARGET_OPTIMIZATION="-pipe -mfmovd -mdalign"
+> .....
+>
+> But I get following errors
+>
+> ....
+> ....
+> editors/awk.c: In function 'my_strtod':
+> editors/awk.c:746:1: internal compiler error: Segmentation fault
+> Please submit a full bug report,
+> with preprocessed source if appropriate.
+> See <https://support.codesourcery.com/GNUToolchain/> for instructions.
+> make[2]: *** [editors/awk.o] Error 1
+> make[1]: *** [editors] Error 2
+> make[1]: *** Waiting for unfinished jobs....
+>   CC      coreutils/hostid.o
+>   CC      coreutils/id.o
+>   CC      coreutils/install.o
+>   CC      coreutils/ln.o
+>   CC      coreutils/logname.o
+>   CC      coreutils/ls.o
+>   CC      coreutils/md5_sha1_sum.o
+>   CC      coreutils/mkdir.o
+>   CC      coreutils/mkfifo.o
+>   CC      coreutils/mknod.o
+>   CC      coreutils/mv.o
+>   CC      coreutils/nice.o
+>   CC      coreutils/nohup.o
+>   CC      coreutils/od.o
+>   CC      coreutils/printenv.o
+>   CC      coreutils/printf.o
+> coreutils/printf.c: In function 'print_direc':
+> coreutils/printf.c:248:1: internal compiler error: Segmentation fault
+> Please submit a full bug report,
+> with preprocessed source if appropriate.
+> See <https://support.codesourcery.com/GNUToolchain/> for instructions.
+> make[2]: *** [coreutils/printf.o] Error 1
+> make[2]: *** Waiting for unfinished jobs....
+> make[1]: *** [coreutils] Error 2
+> make[1]: Leaving directory `/home/tux/aaa/buildroot/sh/output/build/busybox-1.21.1'
+> make: *** [/home/tux/aaa/buildroot/sh/output/build/busybox-1.21.1/.stamp_built] Error 2
+> tux at lmde ~/aaa/buildroot/sh $
+>
 
-Also here I wonder why git/git-format-patch did not recognize the move?
 
-Best regards,
+Could you provide more details?
+Which buildroot version are you using, which toolchain, etc.?
+Maybe a .config could be useful too.
+
+Thanks,
 Thomas
