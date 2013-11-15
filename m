@@ -1,34 +1,60 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 15 Nov 2013 21:56:54 +0100
-Subject: [Buildroot] problem with building kernel modules.
-In-Reply-To: <3FF194268D984DEF96AF81E6681E03E9@JohanW7>
-References: <3FF194268D984DEF96AF81E6681E03E9@JohanW7>
-Message-ID: <20131115205654.GH3337@free.fr>
+Date: Fri, 15 Nov 2013 21:58:27 +0100
+Subject: [Buildroot] [PATCH] pv: support ccache builds
+In-Reply-To: <20131115202856.GA13944@gmail.com>
+References: <20131115202856.GA13944@gmail.com>
+Message-ID: <20131115205827.GI3337@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Sagaert, All,
+Andrew, All,
 
-On 2013-11-15 21:24 +0100, Sagaert Johan spake thusly:
-> I have a kernel module that I build and install trough the build system.
-> This works fine, the module gets build, installed and depmod is run for it.
+On 2013-11-15 14:28 -0600, Andrew Ruder spake thusly:
+> When using ccache TARGET_CC is something like
+>     ccache gcc
 > 
-> The problem occurs if I change the kernel config, the kernel build system
-> removes all target/lib/modules/2.6.36.../kernel/* files , including my built modules.
+> This causes problems in the pv build which attempts to
+> override LD because the command ends up being
+>     make [...] LD=/tools/ccache /tools/gcc LDFLAGS="[...]
 > 
-> As a result, my modules are missing.
+> As a result, during the build phase it attempts to build
+> /tools/gcc which succeeds by doing nothing:
+>     make[1]: Nothing to be done for `/tools/gcc'.
 > 
-> How can this be solved ? 
+> and during the install phase you get the real build which
+> errors out on the LD error this snippet was attempting to
+> fix:
+>     ld -r -o src/library.o src/library/getopt.o \
+>         src/library/gettext.o
+>     ld: src/library/gettext.o: Relocations in generic ELF \
+>         (EM: 40)
+>     src/library/gettext.o: error adding symbols: File in \
+>         wrong format
+> 
+> Signed-off-by: Andrew Ruder <andrew.ruder@elecsyscorp.com>
 
-There's no guarantee built into Buildroot that rebuilding a package will
-rebuild other packages that depend on it.
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-The only option for you is to explicitly tell Buildroot to rebuild your
-module:
-    make fm25clxx-clean-for-reconfigure fm25clxx all
+> ---
+>  package/pv/pv.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/package/pv/pv.mk b/package/pv/pv.mk
+> index 00502d3..5f1a54b 100644
+> --- a/package/pv/pv.mk
+> +++ b/package/pv/pv.mk
+> @@ -17,7 +17,7 @@ PV_LICENSE_FILES = doc/COPYING
+>  # the correct one. By passing the below values for LD and LDFLAGS, we
+>  # ensure that 'gcc' is used to do these partial linking steps.
+>  PV_MAKE_OPT = \
+> -	LD=$(TARGET_CC) \
+> +	LD="$(TARGET_CC)" \
+>  	LDFLAGS="-Wl,-r -nostdlib"
+>  
+>  $(eval $(autotools-package))
 
 Regards,
 Yann E. MORIN.
