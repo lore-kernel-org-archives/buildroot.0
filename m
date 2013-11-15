@@ -1,60 +1,41 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Fri, 15 Nov 2013 10:49:15 +0100
-Subject: [Buildroot] [pkg-luarocks infra V3 01/10] luainterpreter:
- create virtual package
-In-Reply-To: <20131115101817.2c63a9ef@skate>
-References: <1384460249-32410-1-git-send-email-francois.perrad@gadz.org>
- <CAAXf6LXVQ8uFccP2+-TwQOC0iAH=ochrtzUQH-sFN7sZetrpUQ@mail.gmail.com>
- <20131115094423.024e1af8@skate>
- <CAAXf6LUixt-3engtthxiHc3iqZo=nd07NPBhZrG5yoNYvrGH_w@mail.gmail.com>
- <20131115101817.2c63a9ef@skate>
-Message-ID: <CAAXf6LXiHD+LHvA4n5vnEsUUgwsfvODC5ERcohz_HWtQU_5JoA@mail.gmail.com>
+From: Altunbas Sabri (DC-IA/EAH2) <sabri.altunbas@boschrexroth.de>
+Date: Fri, 15 Nov 2013 10:57:44 +0100
+Subject: [Buildroot] buildroot: gcc options
+In-Reply-To: <CAAXf6LU3kQE2J+3zS-XCBYZ9SkxOSNyEAkV-E0_LQbhq3TP8Rw@mail.gmail.com>
+References: <EADA2943BAC14C4AB625A3550A3BE980096DF2C30B@SI-MBX04.de.bosch.com>
+ <CAAXf6LU1bamXyxhjhB5rTTHM-iHRbKrsTF5m1MUJLZjOaNXmuQ@mail.gmail.com>
+ <EADA2943BAC14C4AB625A3550A3BE980096DF2C345@SI-MBX04.de.bosch.com>
+ <CAAXf6LU3kQE2J+3zS-XCBYZ9SkxOSNyEAkV-E0_LQbhq3TP8Rw@mail.gmail.com>
+Message-ID: <EADA2943BAC14C4AB625A3550A3BE980096DF2C375@SI-MBX04.de.bosch.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Nov 15, 2013 at 10:18 AM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Dear Thomas De Schampheleire,
->
-> On Fri, 15 Nov 2013 10:11:12 +0100, Thomas De Schampheleire wrote:
->
->> > On the other hand, we have:
->> >
->> >  BR2_PACKAGE_HAS_OPENGL_EGL
->> >  BR2_PACKAGE_HAS_OPENGL_ES
->> >  BR2_PACKAGE_HAS_OPENVG
->> >  BR2_PACKAGE_HAS_OPENMAX
->> >  BR2_PACKAGE_HAS_POWERVR
->>
->> Hm, I wasn't aware of that.
->> These also sound awkward to me, BR2_HAS_OPENGL_EGL etc. seems more logical...
->> Changing this would of course mean new legacy options...
->
-> I don't think so, because those options are hidden options, they are
-> merely here to create a "disconnection" between providers of a feature
-> (i.e an OpenGL implementation) and consumers of a feature (i.e
-> applications or libraries using the OpenGL API). So I believe we can
-> rename them as much as we want.
+Hallo Thomas,
+> Could you provide more details?
+> Which buildroot version are you using, which toolchain, etc.?
 
-Ah, great!
+Following information stand in .config
 
-But you haven't yet said whether you agree with my reasoning that the
-PACKAGE in these names is not nice... What do you think about that?
+# Buildroot 2013.08.1 Configuration
+BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH201209=y
 
->
->
->> > for virtual packages. This way instead of showing "unknown" in the ">>>
->> > blabla unknown extracting" messages, we would have ">>> blabla virtual
->> > extracting".
->>
->> Sounds good to me. This could also be used for the external toolchain then...
->
-> Of course, all virtual packages would have to be changed.
+> Maybe a .config could be useful too.
 
-Great again, we have a plan!
+Attented
+
+My attention is to compile rootfs with gcc switches -mfmovd -mdalign enabling double floating point operation
 
 Best regards,
-Thomas
+Sabri
+
+
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: ATT12405.config
+Type: application/octet-stream
+Size: 27937 bytes
+Desc: ATT12405.config
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20131115/8d618bd2/attachment-0001.obj>
