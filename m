@@ -1,79 +1,211 @@
-From: Andrew Ruder <andrew.ruder@elecsyscorp.com>
-Date: Fri, 15 Nov 2013 08:45:28 -0600
-Subject: [Buildroot] [PATCH] wvstreams: remove tcl dependency support
-In-Reply-To: <20131114225758.GA13765@gmail.com>
-References: <20131114225758.GA13765@gmail.com>
-Message-ID: <20131115144528.GA1086@gmail.com>
+From: Fabio Porcedda <fabio.porcedda@gmail.com>
+Date: Fri, 15 Nov 2013 15:40:16 +0100
+Subject: [Buildroot] [PATCH v9 2/8] package: add toolchain dependency to
+	every target package
+In-Reply-To: <1384526422-30142-1-git-send-email-fabio.porcedda@gmail.com>
+References: <1384526422-30142-1-git-send-email-fabio.porcedda@gmail.com>
+Message-ID: <1384526422-30142-3-git-send-email-fabio.porcedda@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Simon,
+This commit makes the dependency from the target toolchain explicit.
+This way we can buid from command line a package that use
+innger-generic-package right after the configuration phase, example:
 
-I mistakingly left you off the original e-mail.  Any chance you could
-review the sanity of this patch?  As best as I can tell, the TCL support
-is some holdover from an earlier version of wvstreams (I can't find any
-references to the HAVE_TCL_H and friends in the source code) and never
-linked properly anyway as wvstreams only looks for tcl 8.3.  I only came
-across it as I am trying to bump tcl and started looking at packages
-with tcl dependencies and found this one.
+	make clean <package-name>
 
-I actually have a similar patch that fixes it to find/link against tcl
-8.4 or tcl 8.6 but that's when I started digging around to see what it
-actually changed in the source code and never could find anything and
-went with this patch instead.
+Also remove TARGETS_ALL because the only purpose was to add toolchain
+dependency so it's superseded by this commit.
 
-Thanks,
-Andy
+To prevent circular dependency add the new variable
+<pkgname>_ADD_TOOLCHAIN_DEPENDENCY to avoid adding the toolchain
+dependency for toolchain packages.
 
+This is also a step forward supporting top-level parallel make.
 
-----------
-
-As far as I can tell enabling tcl support has no affect on the actual
-library.  Furthermore, wvstreams has been checking for/linking against
-tcl 8.3 which has never been supported in buildroot as far as I can tell
-(8.4 added in 2005).  That being said there is clearly no reason to keep
-this around.
-
-Signed-off-by: Andrew Ruder <andrew.ruder@elecsyscorp.com>
+Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
 ---
+ Makefile                                             |  8 ++------
+ package/glibc/glibc.mk                               |  3 +++
+ package/linux-headers/linux-headers.mk               |  3 +++
+ package/pkg-autotools.mk                             |  3 ++-
+ package/pkg-cmake.mk                                 |  2 +-
+ package/pkg-generic.mk                               | 14 ++++++++++++--
+ package/uclibc/uclibc.mk                             |  3 +++
+ toolchain/toolchain-buildroot/toolchain-buildroot.mk |  2 ++
+ toolchain/toolchain-external/toolchain-external.mk   |  2 ++
+ toolchain/toolchain/toolchain.mk                     |  2 ++
+ 10 files changed, 32 insertions(+), 10 deletions(-)
 
- On a side-note, I am testing a few bigger patches to get expect 5.45
- and tcl 8.6.1 added/bumped.  I haven't done a decent amount of testing,
- but figured I'd get some of the smaller patches out of the way as I go.
-
- package/wvstreams/wvstreams.mk | 10 ++--------
- 1 file changed, 2 insertions(+), 8 deletions(-)
-
-diff --git a/package/wvstreams/wvstreams.mk b/package/wvstreams/wvstreams.mk
-index b4f7d89..41155a7 100644
---- a/package/wvstreams/wvstreams.mk
-+++ b/package/wvstreams/wvstreams.mk
-@@ -22,7 +22,8 @@ WVSTREAMS_CONF_OPT += \
- 	--with-openssl \
- 	--with-zlib \
- 	--without-pam \
--	--disable-warnings
-+	--disable-warnings \
-+	--without-tcl
+diff --git a/Makefile b/Makefile
+index a425875..efd5ac6 100644
+--- a/Makefile
++++ b/Makefile
+@@ -352,7 +352,6 @@ TARGETS+=target-post-image
+ TARGETS_CLEAN:=$(patsubst %,%-clean,$(TARGETS))
+ TARGETS_SOURCE:=$(patsubst %,%-source,$(TARGETS) $(BASE_TARGETS))
+ TARGETS_DIRCLEAN:=$(patsubst %,%-dirclean,$(TARGETS))
+-TARGETS_ALL:=$(patsubst %,__real_tgt_%,$(TARGETS))
  
- # needed for openssl detection when statically linking (as ssl needs lz)
- WVSTREAMS_CONF_ENV += LIBS=-lz
-@@ -38,13 +39,6 @@ else
- 	WVSTREAMS_CONF_OPT += --without-dbus
+ # host-* dependencies have to be handled specially, as those aren't
+ # visible in Kconfig and hence not added to a variable like TARGETS.
+@@ -375,9 +374,6 @@ HOST_SOURCE += $(addsuffix -source,$(sort $(TARGETS_HOST_DEPS) $(HOST_DEPS)))
+ TARGETS_LEGAL_INFO:=$(patsubst %,%-legal-info,\
+ 		$(TARGETS) $(BASE_TARGETS) $(TARGETS_HOST_DEPS) $(HOST_DEPS))))
+ 
+-# all targets depend on the crosscompiler and it's prerequisites
+-$(TARGETS_ALL): __real_tgt_%: $(BASE_TARGETS) %
+-
+ dirs: $(BUILD_DIR) $(STAGING_DIR) $(TARGET_DIR) \
+ 	$(HOST_DIR) $(BINARIES_DIR) $(STAMP_DIR)
+ 
+@@ -386,11 +382,11 @@ $(BUILD_DIR)/buildroot-config/auto.conf: $(BUILDROOT_CONFIG)
+ 
+ prepare: $(BUILD_DIR)/buildroot-config/auto.conf
+ 
+-world: $(BASE_TARGETS) $(TARGETS_ALL)
++world: $(TARGETS)
+ 
+ .PHONY: all world toolchain dirs clean distclean source outputmakefile \
+ 	legal-info legal-info-prepare legal-info-clean printvars \
+-	$(BASE_TARGETS) $(TARGETS) $(TARGETS_ALL) \
++	$(BASE_TARGETS) $(TARGETS) \
+ 	$(TARGETS_CLEAN) $(TARGETS_DIRCLEAN) $(TARGETS_SOURCE) $(TARGETS_LEGAL_INFO) \
+ 	$(BUILD_DIR) $(STAGING_DIR) $(TARGET_DIR) \
+ 	$(HOST_DIR) $(BINARIES_DIR) $(STAMP_DIR)
+diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
+index 2e7fe82..170fa93 100644
+--- a/package/glibc/glibc.mk
++++ b/package/glibc/glibc.mk
+@@ -19,6 +19,9 @@ endif
+ GLIBC_LICENSE = GPLv2+ (programs), LGPLv2.1+, BSD-3c, MIT (library)
+ GLIBC_LICENSE_FILES = $(addprefix $(GLIBC_SRC_SUBDIR)/,COPYING COPYING.LIB LICENSES)
+ 
++# glibc is part of the toolchain so disable the toolchain dependency
++GLIBC_ADD_TOOLCHAIN_DEPENDENCY = NO
++
+ # Before (e)glibc is configured, we must have the first stage
+ # cross-compiler and the kernel headers
+ GLIBC_DEPENDENCIES = host-gcc-initial linux-headers host-gawk
+diff --git a/package/linux-headers/linux-headers.mk b/package/linux-headers/linux-headers.mk
+index 30d3076..6dac9e3 100644
+--- a/package/linux-headers/linux-headers.mk
++++ b/package/linux-headers/linux-headers.mk
+@@ -17,6 +17,9 @@ LINUX_HEADERS_SOURCE = linux-$(LINUX_HEADERS_VERSION).tar.xz
+ 
+ LINUX_HEADERS_INSTALL_STAGING = YES
+ 
++# linux-headers is part of the toolchain so disable the toolchain dependency
++LINUX_HEADERS_ADD_TOOLCHAIN_DEPENDENCY = NO
++
+ define LINUX_HEADERS_INSTALL_STAGING_CMDS
+ 	(cd $(@D); \
+ 		$(TARGET_MAKE_ENV) $(MAKE) \
+diff --git a/package/pkg-autotools.mk b/package/pkg-autotools.mk
+index 9523529..f58570d 100644
+--- a/package/pkg-autotools.mk
++++ b/package/pkg-autotools.mk
+@@ -209,7 +209,8 @@ endef
+ # This must be repeated from inner-generic-package, otherwise we get an empty
+ # _DEPENDENCIES if _AUTORECONF is YES.  Also filter the result of _AUTORECONF
+ # away from the non-host rule
+-$(2)_DEPENDENCIES ?= $(filter-out host-automake host-autoconf host-libtool $(1),\
++$(2)_DEPENDENCIES ?= $(filter-out host-automake host-autoconf host-libtool \
++				host-toolchain $(1),\
+     $(patsubst host-host-%,host-%,$(addprefix host-,$($(3)_DEPENDENCIES))))
+ 
+ 
+diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
+index 0e08722..01ff5b5 100644
+--- a/package/pkg-cmake.mk
++++ b/package/pkg-cmake.mk
+@@ -89,7 +89,7 @@ endif
+ 
+ # This must be repeated from inner-generic-package, otherwise we only get
+ # host-cmake in _DEPENDENCIES because of the following line
+-$(2)_DEPENDENCIES ?= $(filter-out $(1),$(patsubst host-host-%,host-%,$(addprefix host-,$($(3)_DEPENDENCIES))))
++$(2)_DEPENDENCIES ?= $(filter-out host-toolchain $(1),$(patsubst host-host-%,host-%,$(addprefix host-,$($(3)_DEPENDENCIES))))
+ 
+ $(2)_DEPENDENCIES += host-cmake
+ 
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index f8a9320..0acd1e0 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -368,8 +368,18 @@ endif
+ 
+ $(2)_REDISTRIBUTE		?= YES
+ 
+-
+-$(2)_DEPENDENCIES ?= $(filter-out $(1),$(patsubst host-host-%,host-%,$(addprefix host-,$($(3)_DEPENDENCIES))))
++# When a target package is a toolchain dependency set this variable to
++# 'NO' so the 'toolchain' dependency is not added to prevent a circular
++# dependency
++$(2)_ADD_TOOLCHAIN_DEPENDENCY	?= YES
++
++$(2)_DEPENDENCIES ?= $(filter-out  host-toolchain $(1),\
++	$(patsubst host-host-%,host-%,$(addprefix host-,$($(3)_DEPENDENCIES))))
++ifeq ($(5),target)
++ifeq ($$($(2)_ADD_TOOLCHAIN_DEPENDENCY),YES)
++$(2)_DEPENDENCIES += toolchain
++endif
++endif
+ 
+ $(2)_INSTALL_STAGING		?= NO
+ $(2)_INSTALL_IMAGES		?= NO
+diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
+index 20d3bb6..0d12afd 100644
+--- a/package/uclibc/uclibc.mk
++++ b/package/uclibc/uclibc.mk
+@@ -18,6 +18,9 @@ endif
+ 
+ UCLIBC_INSTALL_STAGING = YES
+ 
++# uclibc is part of the toolchain so disable the toolchain dependency
++UCLIBC_ADD_TOOLCHAIN_DEPENDENCY = NO
++
+ # Before uClibc is configured, we must have the first stage
+ # cross-compiler and the kernel headers
+ UCLIBC_DEPENDENCIES = host-gcc-initial linux-headers
+diff --git a/toolchain/toolchain-buildroot/toolchain-buildroot.mk b/toolchain/toolchain-buildroot/toolchain-buildroot.mk
+index f1f07a9..d941854 100644
+--- a/toolchain/toolchain-buildroot/toolchain-buildroot.mk
++++ b/toolchain/toolchain-buildroot/toolchain-buildroot.mk
+@@ -14,4 +14,6 @@ BUILDROOT_LIBC = $(call qstrip,$(BR2_TOOLCHAIN_BUILDROOT_LIBC))
+ 
+ TOOLCHAIN_BUILDROOT_DEPENDENCIES = host-gcc-final
+ 
++TOOLCHAIN_BUILDROOT_ADD_TOOLCHAIN_DEPENDENCY = NO
++
+ $(eval $(generic-package))
+diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
+index bd4f375..b85a45c 100644
+--- a/toolchain/toolchain-external/toolchain-external.mk
++++ b/toolchain/toolchain-external/toolchain-external.mk
+@@ -362,6 +362,8 @@ TOOLCHAIN_EXTERNAL_SITE =
+ TOOLCHAIN_EXTERNAL_SOURCE =
  endif
  
--ifeq ($(BR2_PACKAGE_TCL),y)
--	WVSTREAMS_DEPENDENCIES += tcl
--	WVSTREAMS_CONF_OPT += --with-tcl
--else
--	WVSTREAMS_CONF_OPT += --without-tcl
--endif
--
- ifeq ($(BR2_PACKAGE_QT),y)
- 	WVSTREAMS_DEPENDENCIES += qt
- 	WVSTREAMS_CONF_OPT += --with-qt
++TOOLCHAIN_EXTERNAL_ADD_TOOLCHAIN_DEPENDENCY = NO
++
+ TOOLCHAIN_EXTERNAL_INSTALL_STAGING = YES
+ 
+ ifeq ($(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R1)$(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2),y)
+diff --git a/toolchain/toolchain/toolchain.mk b/toolchain/toolchain/toolchain.mk
+index 8559ac9..7241fe7 100644
+--- a/toolchain/toolchain/toolchain.mk
++++ b/toolchain/toolchain/toolchain.mk
+@@ -12,6 +12,8 @@ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL),y)
+ TOOLCHAIN_DEPENDENCIES += toolchain-external
+ endif
+ 
++TOOLCHAIN_ADD_TOOLCHAIN_DEPENDENCY = NO
++
+ $(eval $(generic-package))
+ 
+ toolchain: $(HOST_DIR)/usr/share/buildroot/toolchainfile.cmake
 -- 
-1.8.4.rc3
+1.8.4.2
