@@ -1,51 +1,50 @@
-From: Andrew Ruder <andrew.ruder@elecsyscorp.com>
-Date: Fri, 15 Nov 2013 14:28:56 -0600
-Subject: [Buildroot] [PATCH] pv: support ccache builds
-Message-ID: <20131115202856.GA13944@gmail.com>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Fri, 15 Nov 2013 21:37:19 +0100
+Subject: [Buildroot] [PATCH 6/6] Makefile: export PATH
+In-Reply-To: <20131111233113.2e11fd88@skate>
+References: <1384203586-17790-1-git-send-email-s.martin49@gmail.com>
+ <1384203586-17790-7-git-send-email-s.martin49@gmail.com>
+ <20131111233113.2e11fd88@skate>
+Message-ID: <CAHXCMMJnox5o3hfiVgj2vzK=1=pbm85cF+9Jutth-4LRvLB5CA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When using ccache TARGET_CC is something like
-    ccache gcc
+Thomas,
 
-This causes problems in the pv build which attempts to
-override LD because the command ends up being
-    make [...] LD=/tools/ccache /tools/gcc LDFLAGS="[...]
 
-As a result, during the build phase it attempts to build
-/tools/gcc which succeeds by doing nothing:
-    make[1]: Nothing to be done for `/tools/gcc'.
+2013/11/11 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-and during the install phase you get the real build which
-errors out on the LD error this snippet was attempting to
-fix:
-    ld -r -o src/library.o src/library/getopt.o \
-        src/library/gettext.o
-    ld: src/library/gettext.o: Relocations in generic ELF \
-        (EM: 40)
-    src/library/gettext.o: error adding symbols: File in \
-        wrong format
+> Dear Samuel Martin,
+>
+> On Mon, 11 Nov 2013 21:59:46 +0100, Samuel Martin wrote:
+> > Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+> > ---
+> >  Makefile | 1 +
+> >  1 file changed, 1 insertion(+)
+> >
+> > diff --git a/Makefile b/Makefile
+> > index 4010c65..d587b4f 100644
+> > --- a/Makefile
+> > +++ b/Makefile
+> > @@ -294,6 +294,7 @@ export STAGING_DIR
+> >  export HOST_DIR
+> >  export BINARIES_DIR
+> >  export BASE_DIR
+> > +export PATH:=$(BR2_PATH)
+>
+> Why?
+>
 
-Signed-off-by: Andrew Ruder <andrew.ruder@elecsyscorp.com>
----
- package/pv/pv.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+To me, this could make easier writing post-{build,image} scripts.
+But, as I said in the cover letter, I'm dubious about this patch.
 
-diff --git a/package/pv/pv.mk b/package/pv/pv.mk
-index 00502d3..5f1a54b 100644
---- a/package/pv/pv.mk
-+++ b/package/pv/pv.mk
-@@ -17,7 +17,7 @@ PV_LICENSE_FILES = doc/COPYING
- # the correct one. By passing the below values for LD and LDFLAGS, we
- # ensure that 'gcc' is used to do these partial linking steps.
- PV_MAKE_OPT = \
--	LD=$(TARGET_CC) \
-+	LD="$(TARGET_CC)" \
- 	LDFLAGS="-Wl,-r -nostdlib"
- 
- $(eval $(autotools-package))
+Regards,
+
 -- 
-1.8.4.rc3
+Samuel
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20131115/350b7808/attachment.html>
