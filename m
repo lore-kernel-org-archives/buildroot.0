@@ -1,116 +1,20 @@
-From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Fri, 15 Nov 2013 15:40:20 +0100
-Subject: [Buildroot] [PATCH v9 6/8] Makefile: add support for top-level
-	parallel make
-In-Reply-To: <1384526422-30142-1-git-send-email-fabio.porcedda@gmail.com>
-References: <1384526422-30142-1-git-send-email-fabio.porcedda@gmail.com>
-Message-ID: <1384526422-30142-7-git-send-email-fabio.porcedda@gmail.com>
+From: Sagaert Johan <sagaert.johan@skynet.be>
+Date: Fri, 15 Nov 2013 20:38:13 +0100
+Subject: [Buildroot] UpnpInit2 failure with IPv6 enabled  : SOLVED
+Message-ID: <62953FA3A00B43BCB4131464F6FCA806@JohanW7>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-To be able to use top-level parallel make we must not depend in a rule
-on the order of evaluation of the prerequisites, so instead of relyng on
-the left to right ordering of evaluation of the prerequisites add an
-explicit rule to describe the dependencies.
+ 
+Hi ;
 
-Add explicit rules to describe the following dependency chain:
-$(TARGETS) -> target-finalize -> rootfs-* -> target-post-image
+Problem solved, trivial : IPv6 was just not enabled in the kernel configuration.
+Maybe a warning comment sould be shown in the menu when enabling IPv6,
+that the kernel support for IPv6 chould be checked...
 
-Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- Makefile     | 15 ++++++---------
- fs/common.mk |  4 ++--
- 2 files changed, 8 insertions(+), 11 deletions(-)
 
-diff --git a/Makefile b/Makefile
-index efd5ac6..ae8b087 100644
---- a/Makefile
-+++ b/Makefile
-@@ -329,8 +329,6 @@ include boot/common.mk
- include linux/linux.mk
- include system/system.mk
- 
--TARGETS+=target-finalize
--
- ifeq ($(BR2_ENABLE_LOCALE_PURGE),y)
- TARGETS+=target-purgelocales
- endif
-@@ -347,8 +345,6 @@ endif
- 
- include fs/common.mk
- 
--TARGETS+=target-post-image
--
- TARGETS_CLEAN:=$(patsubst %,%-clean,$(TARGETS))
- TARGETS_SOURCE:=$(patsubst %,%-source,$(TARGETS) $(BASE_TARGETS))
- TARGETS_DIRCLEAN:=$(patsubst %,%-dirclean,$(TARGETS))
-@@ -382,11 +378,12 @@ $(BUILD_DIR)/buildroot-config/auto.conf: $(BUILDROOT_CONFIG)
- 
- prepare: $(BUILD_DIR)/buildroot-config/auto.conf
- 
--world: $(TARGETS)
-+world: target-post-image
- 
- .PHONY: all world toolchain dirs clean distclean source outputmakefile \
- 	legal-info legal-info-prepare legal-info-clean printvars \
--	$(BASE_TARGETS) $(TARGETS) \
-+	target-finalize target-post-image \
-+	$(BASE_TARGETS) $(TARGETS) $(TARGETS_ROOTFS) \
- 	$(TARGETS_CLEAN) $(TARGETS_DIRCLEAN) $(TARGETS_SOURCE) $(TARGETS_LEGAL_INFO) \
- 	$(BUILD_DIR) $(STAGING_DIR) $(TARGET_DIR) \
- 	$(HOST_DIR) $(BINARIES_DIR) $(STAMP_DIR)
-@@ -446,7 +443,7 @@ endif
- STRIP_FIND_CMD += -type f -perm /111
- STRIP_FIND_CMD += -not \( $(call findfileclauses,libpthread*.so* $(call qstrip,$(BR2_STRIP_EXCLUDE_FILES))) \) -print
- 
--target-finalize:
-+target-finalize: $(TARGETS)
- 	rm -rf $(TARGET_DIR)/usr/include $(TARGET_DIR)/usr/share/aclocal \
- 		$(TARGET_DIR)/usr/lib/pkgconfig $(TARGET_DIR)/usr/share/pkgconfig \
- 		$(TARGET_DIR)/usr/lib/cmake $(TARGET_DIR)/usr/share/cmake
-@@ -552,7 +549,7 @@ target-generatelocales: host-localedef
- 	done
- endif
- 
--target-post-image:
-+target-post-image: target-finalize $(TARGETS_ROOTFS)
- 	@$(foreach s, $(call qstrip,$(BR2_ROOTFS_POST_IMAGE_SCRIPT)), \
- 		$(call MESSAGE,"Executing post-image script $(s)"); \
- 		$(USER_HOOKS_EXTRA_ENV) $(s) $(BINARIES_DIR) $(call qstrip,$(BR2_ROOTFS_POST_SCRIPT_ARGS))$(sep))
-@@ -588,7 +585,7 @@ legal-info: dirs legal-info-clean legal-info-prepare $(REDIST_SOURCES_DIR) \
- 	@rm -f $(LEGAL_WARNINGS)
- 
- show-targets:
--	@echo $(TARGETS)
-+	@echo $(TARGETS) $(TARGETS_ROOTFS)
- 
- else # ifeq ($(BR2_HAVE_DOT_CONFIG),y)
- 
-diff --git a/fs/common.mk b/fs/common.mk
-index aa9d961..0d054b5 100644
---- a/fs/common.mk
-+++ b/fs/common.mk
-@@ -63,7 +63,7 @@ ROOTFS_$(2)_COMPRESS_EXT = .xz
- ROOTFS_$(2)_COMPRESS_CMD = $$(XZ) -9 -C crc32 -c
- endif
- 
--$$(BINARIES_DIR)/rootfs.$(1): $$(ROOTFS_$(2)_DEPENDENCIES)
-+$$(BINARIES_DIR)/rootfs.$(1): target-finalize $$(ROOTFS_$(2)_DEPENDENCIES)
- 	@$$(call MESSAGE,"Generating root filesystem image rootfs.$(1)")
- 	$$(foreach hook,$$(ROOTFS_$(2)_PRE_GEN_HOOKS),$$(call $$(hook))$$(sep))
- 	rm -f $$(FAKEROOT_SCRIPT)
-@@ -94,7 +94,7 @@ rootfs-$(1)-show-depends:
- rootfs-$(1): $$(BINARIES_DIR)/rootfs.$(1) $$(ROOTFS_$(2)_POST_TARGETS)
- 
- ifeq ($$(BR2_TARGET_ROOTFS_$(2)),y)
--TARGETS += rootfs-$(1)
-+TARGETS_ROOTFS += rootfs-$(1)
- endif
- endef
- 
--- 
-1.8.4.2
+Regards
+Sagaert Johan
