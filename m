@@ -1,48 +1,79 @@
-From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Fri, 15 Nov 2013 15:40:22 +0100
-Subject: [Buildroot] [PATCH v9 8/8] Makefile: update comment about top-level
-	parallel Makefile
-In-Reply-To: <1384526422-30142-1-git-send-email-fabio.porcedda@gmail.com>
-References: <1384526422-30142-1-git-send-email-fabio.porcedda@gmail.com>
-Message-ID: <1384526422-30142-9-git-send-email-fabio.porcedda@gmail.com>
+From: Andrew Ruder <andrew.ruder@elecsyscorp.com>
+Date: Fri, 15 Nov 2013 08:45:28 -0600
+Subject: [Buildroot] [PATCH] wvstreams: remove tcl dependency support
+In-Reply-To: <20131114225758.GA13765@gmail.com>
+References: <20131114225758.GA13765@gmail.com>
+Message-ID: <20131115144528.GA1086@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-After the latest patches top-level parallel Makefile is working but
-there are still issues when the building order is changed so change
-the comment to explain that.
+Simon,
 
-Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+I mistakingly left you off the original e-mail.  Any chance you could
+review the sanity of this patch?  As best as I can tell, the TCL support
+is some holdover from an earlier version of wvstreams (I can't find any
+references to the HAVE_TCL_H and friends in the source code) and never
+linked properly anyway as wvstreams only looks for tcl 8.3.  I only came
+across it as I am trying to bump tcl and started looking at packages
+with tcl dependencies and found this one.
+
+I actually have a similar patch that fixes it to find/link against tcl
+8.4 or tcl 8.6 but that's when I started digging around to see what it
+actually changed in the source code and never could find anything and
+went with this patch instead.
+
+Thanks,
+Andy
+
+
+----------
+
+As far as I can tell enabling tcl support has no affect on the actual
+library.  Furthermore, wvstreams has been checking for/linking against
+tcl 8.3 which has never been supported in buildroot as far as I can tell
+(8.4 added in 2005).  That being said there is clearly no reason to keep
+this around.
+
+Signed-off-by: Andrew Ruder <andrew.ruder@elecsyscorp.com>
 ---
- Makefile | 13 ++++++++++++-
- 1 file changed, 12 insertions(+), 1 deletion(-)
 
-diff --git a/Makefile b/Makefile
-index ae8b087..17a6ef2 100644
---- a/Makefile
-+++ b/Makefile
-@@ -42,7 +42,18 @@ export HOSTARCH := $(shell uname -m | \
- 	    -e s/macppc/powerpc/\
- 	    -e s/sh.*/sh/)
+ On a side-note, I am testing a few bigger patches to get expect 5.45
+ and tcl 8.6.1 added/bumped.  I haven't done a decent amount of testing,
+ but figured I'd get some of the smaller patches out of the way as I go.
+
+ package/wvstreams/wvstreams.mk | 10 ++--------
+ 1 file changed, 2 insertions(+), 8 deletions(-)
+
+diff --git a/package/wvstreams/wvstreams.mk b/package/wvstreams/wvstreams.mk
+index b4f7d89..41155a7 100644
+--- a/package/wvstreams/wvstreams.mk
++++ b/package/wvstreams/wvstreams.mk
+@@ -22,7 +22,8 @@ WVSTREAMS_CONF_OPT += \
+ 	--with-openssl \
+ 	--with-zlib \
+ 	--without-pam \
+-	--disable-warnings
++	--disable-warnings \
++	--without-tcl
  
--# This top-level Makefile can *not* be executed in parallel
-+# The parallel execution of this top-level Makefile is disabled
-+# because it would change the package building order, that can be a
-+# problem because some packages can have unspecified optional
-+# dependencies so if those dependencies are present when the package
-+# is built, they are used, otherwise they aren't (but compilation
-+# happily proceeds). This means that the package order is relevant in
-+# that case, and the end result will differ if the order is swapped
-+# due to parallel building.
-+# Taking in account the above warnings, if you still want to execute
-+# this top-level Makefile in parrallel comment the following
-+# line and execute:
-+#	make BR2_JLEVEL= -j$((`getconf _NPROCESSORS_ONLN`+1))
- .NOTPARALLEL:
+ # needed for openssl detection when statically linking (as ssl needs lz)
+ WVSTREAMS_CONF_ENV += LIBS=-lz
+@@ -38,13 +39,6 @@ else
+ 	WVSTREAMS_CONF_OPT += --without-dbus
+ endif
  
- # absolute path
+-ifeq ($(BR2_PACKAGE_TCL),y)
+-	WVSTREAMS_DEPENDENCIES += tcl
+-	WVSTREAMS_CONF_OPT += --with-tcl
+-else
+-	WVSTREAMS_CONF_OPT += --without-tcl
+-endif
+-
+ ifeq ($(BR2_PACKAGE_QT),y)
+ 	WVSTREAMS_DEPENDENCIES += qt
+ 	WVSTREAMS_CONF_OPT += --with-qt
 -- 
-1.8.4.2
+1.8.4.rc3
