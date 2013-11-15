@@ -1,37 +1,34 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Fri, 15 Nov 2013 10:42:32 +0100
-Subject: [Buildroot] [PATCH] uclibc: patch 0.9.31 for avr32,
- to add __kernel_long_t and __kernel_ulong_t data types
-In-Reply-To: <CAHt8ZCMoXQ9xmrDrzL5r-5ag3MjQhx=Pb8jbkWi-L676pc67zA@mail.gmail.com>
-References: <1384505965-19957-1-git-send-email-spdawson@gmail.com>
- <CAAXf6LUGq3dj4G_wK5udynxcCakN3JJX2o-Dxef-EzJYnvpoqw@mail.gmail.com>
- <20131115102338.47ffb0d4@skate>
- <CAHt8ZCMoXQ9xmrDrzL5r-5ag3MjQhx=Pb8jbkWi-L676pc67zA@mail.gmail.com>
-Message-ID: <CAAXf6LW4H1HONMqQy9T4RMuwFHvTHPZNb3VFAyjOLYH46rL9Lw@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 15 Nov 2013 10:45:11 +0100
+Subject: [Buildroot] [PATCH] e2fsprogs: Rename the first patch to match
+ the naming policy.
+In-Reply-To: <CAAXf6LW2zFZ2OCh4G7SrPAc52hpAb0KC=HuOj=gFaA2fsTu_cg@mail.gmail.com>
+References: <1384507838-4675-1-git-send-email-Sonic.adi@gmail.com>
+ <CAAXf6LW2zFZ2OCh4G7SrPAc52hpAb0KC=HuOj=gFaA2fsTu_cg@mail.gmail.com>
+Message-ID: <20131115104511.56ab9a97@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Simon,
+Dear Thomas De Schampheleire,
 
-On Fri, Nov 15, 2013 at 10:34 AM, Simon Dawson <spdawson@gmail.com> wrote:
-> Hi Thomases.
->
-> On 15 November 2013 09:23, Thomas Petazzoni
-> <thomas.petazzoni@free-electrons.com> wrote:
->> In the specific case of this patch, it modifies only avr32-specific
->> header files, so I don't quite see why it needs to be
->> named .patch.avr32 instead of just .patch.
->>
->> Especially since anyway 0.9.31 can only be enabled for the AVR32
->> architecture.
->
-> I'll rename the patch, and resubmit. As for the other *.patch.avr32
-> files, I'll have a look at them as soon as I can.
+On Fri, 15 Nov 2013 10:39:52 +0100, Thomas De Schampheleire wrote:
 
-That would be great, thanks!
+> >  package/e2fsprogs/e2fsprogs-0001-sem-init-libs.patch | 11 +++++++++++
+> >  package/e2fsprogs/e2fsprogs-sem-init-libs.patch      | 11 -----------
+> >  2 files changed, 11 insertions(+), 11 deletions(-)
+> >  create mode 100644 package/e2fsprogs/e2fsprogs-0001-sem-init-libs.patch
+> >  delete mode 100644 package/e2fsprogs/e2fsprogs-sem-init-libs.patch
+> 
+> Also here I wonder why git/git-format-patch did not recognize the move?
 
-Best regards,
+Because you need to explicitly do a 'git format-patch -M', or configure
+Git in your ~/.gitconfig to enable rename detection permanently.
+
 Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
