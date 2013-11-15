@@ -1,66 +1,39 @@
-From: sonic.adi at gmail.com <sonic.adi@gmail.com>
-Date: Fri, 15 Nov 2013 16:33:36 +0800
-Subject: [Buildroot] [PATCH] util-linux: flat: Add patch to avoid creating
-	dynamic libraries.
-Message-ID: <1384504416-2139-1-git-send-email-Sonic.adi@gmail.com>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Fri, 15 Nov 2013 09:40:23 +0100
+Subject: [Buildroot] [PATCH 1/3] e2fsprogs: nommu: Add patch to use
+ vfork in nommu arch.
+In-Reply-To: <1384504293-2067-2-git-send-email-Sonic.adi@gmail.com>
+References: <1384504293-2067-1-git-send-email-Sonic.adi@gmail.com>
+ <1384504293-2067-2-git-send-email-Sonic.adi@gmail.com>
+Message-ID: <CAAXf6LXRCsw+Lk5PDgtdbyFRvvoRUVz78vtG-re-f_wpfPfZZQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Sonic Zhang <sonic.zhang@analog.com>
+Hi Sonic,
 
-Signed-off-by: Sonic Zhang <sonic.zhang@analog.com>
----
- package/util-linux/util-linux-flat.patch | 39 ++++++++++++++++++++++++++++++++
- 1 file changed, 39 insertions(+)
- create mode 100644 package/util-linux/util-linux-flat.patch
+On Fri, Nov 15, 2013 at 9:31 AM,  <sonic.adi@gmail.com> wrote:
+> From: Sonic Zhang <sonic.zhang@analog.com>
+>
+> Signed-off-by: Sonic Zhang <sonic.zhang@analog.com>
+> ---
+>  package/e2fsprogs/e2fsprogs-nommu.patch | 231 ++++++++++++++++++++++++++++++++
+>  1 file changed, 231 insertions(+)
+>  create mode 100644 package/e2fsprogs/e2fsprogs-nommu.patch
+>
+> diff --git a/package/e2fsprogs/e2fsprogs-nommu.patch b/package/e2fsprogs/e2fsprogs-nommu.patch
+> new file mode 100644
+> index 0000000..6aef365
+> --- /dev/null
+> +++ b/package/e2fsprogs/e2fsprogs-nommu.patch
 
-diff --git a/package/util-linux/util-linux-flat.patch b/package/util-linux/util-linux-flat.patch
-new file mode 100644
-index 0000000..2cfae0f
---- /dev/null
-+++ b/package/util-linux/util-linux-flat.patch
-@@ -0,0 +1,39 @@
-+diff -urN util-linux-2.23.2.old/libblkid/src/Makemodule.am util-linux-2.23.2/libblkid/src/Makemodule.am
-+--- util-linux-2.23.2.old/libblkid/src/Makemodule.am	2013-07-15 16:25:46.281049040 +0800
-++++ util-linux-2.23.2/libblkid/src/Makemodule.am	2013-11-11 16:28:19.956656546 +0800
-+@@ -220,7 +220,8 @@
-+ 
-+ # move lib from $(usrlib_execdir) to $(libdir) if needed
-+ install-exec-hook-libblkid:
-+-	if test "$(usrlib_execdir)" != "$(libdir)"; then \
-++	ls $(DESTDIR)$(usrlib_execdir)/libblkid.so.*; \
-++	if $? == 0 && test "$(usrlib_execdir)" != "$(libdir)"; then \
-+ 		mkdir -p $(DESTDIR)$(libdir); \
-+ 		mv $(DESTDIR)$(usrlib_execdir)/libblkid.so.* $(DESTDIR)$(libdir); \
-+ 		so_img_name=$$(readlink $(DESTDIR)$(usrlib_execdir)/libblkid.so); \
-+diff -urN util-linux-2.23.2.old/libmount/src/Makemodule.am util-linux-2.23.2/libmount/src/Makemodule.am
-+--- util-linux-2.23.2.old/libmount/src/Makemodule.am	2013-02-28 00:46:29.874020654 +0800
-++++ util-linux-2.23.2/libmount/src/Makemodule.am	2013-11-11 16:29:37.366370584 +0800
-+@@ -120,7 +120,8 @@
-+ 
-+ # move lib from $(usrlib_execdir) to $(libdir) if needed
-+ install-exec-hook-libmount:
-+-	if test "$(usrlib_execdir)" != "$(libdir)"; then \
-++	ls $(DESTDIR)$(usrlib_execdir)/libmount.so.*; \
-++	if $? == 0 && test "$(usrlib_execdir)" != "$(libdir)"; then \
-+ 		mkdir -p $(DESTDIR)$(libdir); \
-+ 		mv $(DESTDIR)$(usrlib_execdir)/libmount.so.* $(DESTDIR)$(libdir); \
-+ 		so_img_name=$$(readlink $(DESTDIR)$(usrlib_execdir)/libmount.so); \
-+diff -urN util-linux-2.23.2.old/libuuid/src/Makemodule.am util-linux-2.23.2/libuuid/src/Makemodule.am
-+--- util-linux-2.23.2.old/libuuid/src/Makemodule.am	2013-02-28 00:46:29.882020725 +0800
-++++ util-linux-2.23.2/libuuid/src/Makemodule.am	2013-11-11 16:29:00.700507322 +0800
-+@@ -39,7 +39,8 @@
-+ 
-+ # move lib from $(usrlib_execdir) to $(libdir) if needed
-+ install-exec-hook-libuuid:
-+-	if test "$(usrlib_execdir)" != "$(libdir)"; then \
-++	ls $(DESTDIR)$(usrlib_execdir)/libuuid.so.*; \
-++	if $? == 0 && test "$(usrlib_execdir)" != "$(libdir)"; then \
-+ 		mkdir -p $(DESTDIR)$(libdir); \
-+ 		mv $(DESTDIR)$(usrlib_execdir)/libuuid.so.* $(DESTDIR)$(libdir); \
-+ 		so_img_name=$$(readlink $(DESTDIR)$(usrlib_execdir)/libuuid.so); \
--- 
-1.8.2.3
+The patch itself should also contain a description and a signed-off-by line...
+
+Additionally, patches should be named
+<pkg>-<number>-<description>.patch, so for example:
+e2fsprogs-0001-add-nommu-support.patch
+
+Best regards,
+Thomas
