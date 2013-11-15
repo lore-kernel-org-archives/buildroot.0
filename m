@@ -1,65 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 15 Nov 2013 09:44:23 +0100
-Subject: [Buildroot] [pkg-luarocks infra V3 01/10] luainterpreter:
- create virtual package
-In-Reply-To: <CAAXf6LXVQ8uFccP2+-TwQOC0iAH=ochrtzUQH-sFN7sZetrpUQ@mail.gmail.com>
-References: <1384460249-32410-1-git-send-email-francois.perrad@gadz.org>
- <CAAXf6LXVQ8uFccP2+-TwQOC0iAH=ochrtzUQH-sFN7sZetrpUQ@mail.gmail.com>
-Message-ID: <20131115094423.024e1af8@skate>
+Date: Fri, 15 Nov 2013 09:47:33 +0100
+Subject: [Buildroot] [PATCH] wvstreams: remove tcl dependency support
+In-Reply-To: <20131114225758.GA13765@gmail.com>
+References: <20131114225758.GA13765@gmail.com>
+Message-ID: <20131115094733.52d95cbb@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas De Schampheleire,
+Dear Andrew Ruder,
 
-On Fri, 15 Nov 2013 08:24:59 +0100, Thomas De Schampheleire wrote:
+On Thu, 14 Nov 2013 16:57:58 -0600, Andrew Ruder wrote:
+> As far as I can tell enabling tcl support has no affect on the actual
+> library.  Furthermore, wvstreams has been checking for/linking against
+> tcl 8.3 which has never been supported in buildroot as far as I can tell
+> (8.4 added in 2005).  That being said there is clearly no reason to keep
+> this around.
 
-> >  config BR2_PACKAGE_LBASE64
-> >         bool "lbase64"
-> > +       depends on BR2_PACKAGE_HAS_LUA_INTERPRETER
-> >         help
-> >           A base64 library for Lua
-> 
-> The meaning of BR2_PACKAGE_HAS_LUA_INTERPRETER is that the user has
-> selected one of lua or luajit, right?
-> Is the PACKAGE in there really needed? What about
-> BR2_HAS_LUA_INTERPRETER instead? This says that 'buildroot has a lua
-> interpreter' and not that 'a package has a lua interpreter'.
+Let's Cc Simon Dawson on this one, he is the one who added wvstreams in
+the first place, earlier this year. Maybe he can comment on the TCL
+side of it.
 
-On the other hand, we have:
+>  On a side-note, I am testing a few bigger patches to get expect 5.45
+>  and tcl 8.6.1 added/bumped.  I haven't done a decent amount of testing,
+>  but figured I'd get some of the smaller patches out of the way as I go.
 
- BR2_PACKAGE_HAS_OPENGL_EGL
- BR2_PACKAGE_HAS_OPENGL_ES
- BR2_PACKAGE_HAS_OPENVG
- BR2_PACKAGE_HAS_OPENMAX
- BR2_PACKAGE_HAS_POWERVR
-
-
-> > +++ b/package/luainterpreter/luainterpreter.mk
-> > @@ -0,0 +1,18 @@
-> > +#############################################################
-> > +#
-> > +# Virtual package for luainterpreter
-> > +#
-> > +#############################################################
-> > +
-> > +LUAINTERPRETER_VERSION = 5.1
-> 
-> What is the meaning of this version? It seems to be the lua version,
-> but is this relevant for a virtual package?
-
-No, it is not relevant. Maybe we could have the policy of doing:
-
-<foo>_VERSION = virtual
-<foo>_SOURCE =
-
-for virtual packages. This way instead of showing "unknown" in the ">>>
-blabla unknown extracting" messages, we would have ">>> blabla virtual
-extracting".
-
-Best regards,
+Great!
 
 Thomas
 -- 
