@@ -1,10 +1,10 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Fri, 15 Nov 2013 14:07:35 +0100
-Subject: [Buildroot] [pkg-luarocks infra V4 06/10] luarocks: new
-	infrastructure
+Date: Fri, 15 Nov 2013 14:07:37 +0100
+Subject: [Buildroot] [pkg-luarocks infra V4 08/10] luasql-sqlite3: renamed
+	like with LuaRocks
 In-Reply-To: <1384520859-3189-1-git-send-email-francois.perrad@gadz.org>
 References: <1384520859-3189-1-git-send-email-francois.perrad@gadz.org>
-Message-ID: <1384520859-3189-6-git-send-email-francois.perrad@gadz.org>
+Message-ID: <1384520859-3189-8-git-send-email-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,130 +14,173 @@ To: buildroot@busybox.net
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- Config.in               |    8 ++++++
- Makefile                |    1 +
- package/Makefile.in     |    1 +
- package/pkg-luarocks.mk |   71 +++++++++++++++++++++++++++++++++++++++++++++++
- 4 files changed, 81 insertions(+)
- create mode 100644 package/pkg-luarocks.mk
+ Config.in.legacy                         |    7 ++++++
+ package/Config.in                        |    2 +-
+ package/luasql-sqlite3/Config.in         |    8 +++++++
+ package/luasql-sqlite3/luasql-sqlite3.mk |   33 ++++++++++++++++++++++++++
+ package/luasql/Config.in                 |   22 -----------------
+ package/luasql/luasql.mk                 |   38 ------------------------------
+ 6 files changed, 49 insertions(+), 61 deletions(-)
+ create mode 100644 package/luasql-sqlite3/Config.in
+ create mode 100644 package/luasql-sqlite3/luasql-sqlite3.mk
+ delete mode 100644 package/luasql/Config.in
+ delete mode 100644 package/luasql/luasql.mk
 
-diff --git a/Config.in b/Config.in
-index d87e0f0..cb41c36 100644
---- a/Config.in
-+++ b/Config.in
-@@ -207,6 +207,14 @@ config BR2_DEBIAN_MIRROR
+diff --git a/Config.in.legacy b/Config.in.legacy
+index a7fa821..8d9073e 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -101,6 +101,13 @@ endif
+ ###############################################################################
+ comment "Legacy options removed in 2014.02"
  
- endif
- 
-+config BR2_LUAROCKS_MIRROR
-+	string "LuaRocks mirror"
-+	default "http://luarocks.org/repositories/rocks"
++config BR2_PACKAGE_LUASQL
++	bool "luasql has been replaced by luasql-sqlite3"
++	select BR2_PACKAGE_LUASQL_SQLITE3
++	select BR2_LEGACY
 +	help
-+	  LuaRocks repository.
++	  The option has been renamed BR2_PACKAGE_LUASQL_SQLITE3.
 +
-+	  See http://luarocks.org
-+
- endmenu
- 
- config BR2_JLEVEL
-diff --git a/Makefile b/Makefile
-index c7a0a6d..0dde760 100644
---- a/Makefile
-+++ b/Makefile
-@@ -473,6 +473,7 @@ endif
- ifeq ($(BR2_PACKAGE_PYTHON_PYC_ONLY),y)
- 	find $(TARGET_DIR)/usr/lib/ -name '*.py' -print0 | xargs -0 rm -f
- endif
-+	rm -rf $(TARGET_DIR)/usr/lib/luarocks
- 	$(STRIP_FIND_CMD) | xargs $(STRIPCMD) 2>/dev/null || true
- 	if test -d $(TARGET_DIR)/lib/modules; then \
- 		find $(TARGET_DIR)/lib/modules -type f -name '*.ko' | \
-diff --git a/package/Makefile.in b/package/Makefile.in
-index 612f3c7..f7fd8f9 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -363,4 +363,5 @@ include package/pkg-utils.mk
- include package/pkg-download.mk
- include package/pkg-autotools.mk
- include package/pkg-cmake.mk
-+include package/pkg-luarocks.mk
- include package/pkg-generic.mk
-diff --git a/package/pkg-luarocks.mk b/package/pkg-luarocks.mk
+ config BR2_PACKAGE_LUACJSON
+ 	bool "luacjson has been replaced by lua-cjson"
+ 	select BR2_PACKAGE_LUA_CJSON
+diff --git a/package/Config.in b/package/Config.in
+index ea8d524..0ca8ac1 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -368,7 +368,7 @@ source "package/luafilesystem/Config.in"
+ source "package/luaposix/Config.in"
+ source "package/luasec/Config.in"
+ source "package/luasocket/Config.in"
+-source "package/luasql/Config.in"
++source "package/luasql-sqlite3/Config.in"
+ source "package/lua-cjson/Config.in"
+ source "package/lua-ev/Config.in"
+ source "package/lua-msgpack-native/Config.in"
+diff --git a/package/luasql-sqlite3/Config.in b/package/luasql-sqlite3/Config.in
 new file mode 100644
-index 0000000..2a20413
+index 0000000..3876f3d
 --- /dev/null
-+++ b/package/pkg-luarocks.mk
-@@ -0,0 +1,71 @@
-+################################################################################
-+# LuaRocks package infrastructure
-+# see http://luarocks.org/
-+#
-+# This file implements an infrastructure that eases development of
-+# package .mk files for LuaRocks packages.
-+# LuaRocks supports various build.type : builtin, make, cmake.
-+# This luarocks infrastructure supports only the builtin mode,
-+# the make & cmake modes could be directly handled by generic & cmake infrastructure.
-+#
-+# See the Buildroot documentation for details on the usage of this
-+# infrastructure
-+#
-+# In terms of implementation, this LuaRocks infrastructure requires
-+# the .mk file to only specify metadata informations about the
-+# package: name, version, etc.
-+#
-+################################################################################
++++ b/package/luasql-sqlite3/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_LUASQL_SQLITE3
++	bool "luasql-sqlite3"
++	depends on BR2_PACKAGE_HAS_LUA_INTERPRETER
++	help
++	  LuaSQL is a simple interface from Lua to a DBMS.
 +
-+LUAROCKS_RUN = $(HOST_DIR)/usr/bin/luarocks
++	  http://www.keplerproject.org/luasql
 +
+diff --git a/package/luasql-sqlite3/luasql-sqlite3.mk b/package/luasql-sqlite3/luasql-sqlite3.mk
+new file mode 100644
+index 0000000..b114f02
+--- /dev/null
++++ b/package/luasql-sqlite3/luasql-sqlite3.mk
+@@ -0,0 +1,33 @@
 +################################################################################
-+# inner-luarocks-package -- defines how the configuration, compilation and
-+# installation of a LuaRocks package should be done, implements a few hooks to
-+# tune the build process and calls the generic package infrastructure to
-+# generate the necessary make targets
 +#
-+#  argument 1 is the lowercase package name
-+#  argument 2 is the uppercase package name, including an HOST_ prefix
-+#             for host packages
-+#  argument 3 is the uppercase package name, without the HOST_ prefix
-+#             for host packages
-+#  argument 4 is the package directory prefix
-+#  argument 5 is the type (target or host)
++# luasql-sqlite3
++#
 +################################################################################
 +
-+define inner-luarocks-package
++LUASQL_SQLITE3_VERSION = v2.3.0
++LUASQL_SQLITE3_SITE = https://github.com/keplerproject/luasql/tarball/$(LUASQL_SQLITE3_VERSION)
++LUASQL_SQLITE3_LICENSE = MIT
++LUASQL_SQLITE3_LICENSE_FILES = README
++LUASQL_SQLITE3_DEPENDENCIES = luainterpreter sqlite
 +
-+$(2)_BUILD_OPT				?=
-+$(2)_SUBDIR				?= $(1)-$(shell echo "$($(3)_VERSION)" | sed -e "s/-[0-9]$$//")
-+$(2)_ROCKSPEC				?= $(1)-$($(3)_VERSION).rockspec
-+$(2)_SOURCE				?= $(1)-$($(3)_VERSION).src.rock
-+$(2)_SITE				?= $(call qstrip,$(BR2_LUAROCKS_MIRROR))
++LUASQL_SQLITE3_MAKE_FLAGS = \
++	CC="$(TARGET_CC)" \
++	LD="$(TARGET_CC)" \
++	CFLAGS="$(TARGET_CFLAGS) -fPIC" \
++	T="sqlite3" \
++	DRIVER_LIBS="-L$(STAGING_DIR)/usr/lib -lsqlite3"
 +
-+#
-+# Extract step
-+#
-+$(2)_EXTRACT_CMDS ?= \
-+	cd $$($(2)_DIR)/.. && $(LUAROCKS_RUN) unpack $(DL_DIR)/$$($(2)_SOURCE)
-+
-+# $(2)_DEPENDENCIES are handled for configure step (too late)
-+$(1)-extract: host-luarocks
-+
-+#
-+# Build/install step.
-+#
-+$(2)_INSTALL_TARGET_CMDS ?= \
-+	cd $$($(2)_SRCDIR) && $(LUAROCKS_RUN) build --minimal $$($(2)_ROCKSPEC) $$($(2)_BUILD_OPT)
-+
-+# Call the generic package infrastructure to generate the necessary
-+# make targets
-+$(call inner-generic-package,$(1),$(2),$(3),$(4),$(5))
-+
++define LUASQL_SQLITE3_BUILD_CMDS
++	$(MAKE) -C $(@D) $(LUASQL_SQLITE3_MAKE_FLAGS)
 +endef
 +
-+################################################################################
-+# luarocks-package -- the target generator macro for LuaRocks packages
-+################################################################################
++define LUASQL_SQLITE3_INSTALL_TARGET_CMDS
++	$(MAKE) -C $(@D) $(LUASQL_SQLITE3_MAKE_FLAGS) \
++		PREFIX="$(TARGET_DIR)/usr" install
++endef
 +
-+luarocks-package = $(call inner-luarocks-package,$(call pkgname),$(call UPPERCASE,$(call pkgname)),$(call UPPERCASE,$(call pkgname)),$(call pkgparentdir),target)
-+# host-luarocks-package not supported
++define LUASQL_SQLITE3_UNINSTALL_TARGET_CMDS
++	rm -rf $(TARGET_DIR)/usr/lib/lua/5.1/luasql
++endef
++
++$(eval $(generic-package))
+diff --git a/package/luasql/Config.in b/package/luasql/Config.in
+deleted file mode 100644
+index 96e04fb..0000000
+--- a/package/luasql/Config.in
++++ /dev/null
+@@ -1,22 +0,0 @@
+-config BR2_PACKAGE_LUASQL
+-	bool "luasql"
+-	depends on BR2_PACKAGE_HAS_LUA_INTERPRETER
+-	help
+-	  LuaSQL is a simple interface from Lua to a DBMS.
+-
+-	  http://www.keplerproject.org/luasql
+-
+-if BR2_PACKAGE_LUASQL
+-choice
+-	prompt "LuaSQL Driver"
+-	help
+-	  Select backend driver for LuaSQL.
+-
+-config BR2_PACKAGE_LUASQL_DRIVER_SQLITE3
+-	bool "SQLite3"
+-	select BR2_PACKAGE_SQLITE
+-	help
+-	  Select if you wish to use the SQLite3 LuaSQL driver.
+-
+-endchoice
+-endif
+diff --git a/package/luasql/luasql.mk b/package/luasql/luasql.mk
+deleted file mode 100644
+index 7352e03..0000000
+--- a/package/luasql/luasql.mk
++++ /dev/null
+@@ -1,38 +0,0 @@
+-################################################################################
+-#
+-# luasql
+-#
+-################################################################################
+-
+-LUASQL_VERSION = v2.3.0
+-LUASQL_SITE = https://github.com/keplerproject/luasql/tarball/$(LUASQL_VERSION)
+-LUASQL_LICENSE = MIT
+-LUASQL_LICENSE_FILES = README
+-LUASQL_DEPENDENCIES = luainterpreter
+-
+-LUASQL_MAKE_FLAGS = \
+-	CC="$(TARGET_CC)" \
+-	LD="$(TARGET_CC)" \
+-	CFLAGS="$(TARGET_CFLAGS) -fPIC"
+-
+-ifeq ($(BR2_PACKAGE_LUASQL_DRIVER_SQLITE3),y)
+-LUASQL_DEPENDENCIES += sqlite
+-LUASQL_MAKE_FLAGS += \
+-	T="sqlite3" \
+-	DRIVER_LIBS="-L$(STAGING_DIR)/usr/lib -lsqlite3"
+-endif
+-
+-define LUASQL_BUILD_CMDS
+-	$(MAKE) -C $(@D) $(LUASQL_MAKE_FLAGS)
+-endef
+-
+-define LUASQL_INSTALL_TARGET_CMDS
+-	$(MAKE) -C $(@D) $(LUASQL_MAKE_FLAGS) \
+-		PREFIX="$(TARGET_DIR)/usr" install
+-endef
+-
+-define LUASQL_UNINSTALL_TARGET_CMDS
+-	rm -rf $(TARGET_DIR)/usr/lib/lua/5.1/luasql
+-endef
+-
+-$(eval $(generic-package))
 -- 
 1.7.9.5
