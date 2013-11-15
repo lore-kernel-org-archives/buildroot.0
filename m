@@ -1,8 +1,10 @@
 From: sonic.adi at gmail.com <sonic.adi@gmail.com>
-Date: Fri, 15 Nov 2013 16:31:30 +0800
-Subject: [Buildroot] [PATCH] e2fsprogs: Disable elf shared library when
-	BR2_PREFER_STATIC_LIB is selected.
-Message-ID: <1384504293-2067-1-git-send-email-Sonic.adi@gmail.com>
+Date: Fri, 15 Nov 2013 16:31:31 +0800
+Subject: [Buildroot] [PATCH 1/3] e2fsprogs: nommu: Add patch to use vfork in
+	nommu arch.
+In-Reply-To: <1384504293-2067-1-git-send-email-Sonic.adi@gmail.com>
+References: <1384504293-2067-1-git-send-email-Sonic.adi@gmail.com>
+Message-ID: <1384504293-2067-2-git-send-email-Sonic.adi@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,21 +15,246 @@ From: Sonic Zhang <sonic.zhang@analog.com>
 
 Signed-off-by: Sonic Zhang <sonic.zhang@analog.com>
 ---
- package/e2fsprogs/e2fsprogs.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/e2fsprogs/e2fsprogs-nommu.patch | 231 ++++++++++++++++++++++++++++++++
+ 1 file changed, 231 insertions(+)
+ create mode 100644 package/e2fsprogs/e2fsprogs-nommu.patch
 
-diff --git a/package/e2fsprogs/e2fsprogs.mk b/package/e2fsprogs/e2fsprogs.mk
-index 0670c74..cdca906 100644
---- a/package/e2fsprogs/e2fsprogs.mk
-+++ b/package/e2fsprogs/e2fsprogs.mk
-@@ -11,7 +11,7 @@ E2FSPROGS_LICENSE_FILES = COPYING lib/uuid/COPYING lib/ss/mit-sipb-copyright.h l
- 
- E2FSPROGS_CONF_OPT = \
- 	--disable-tls \
--	--enable-elf-shlibs \
-+	$(if $(BR2_PREFER_STATIC_LIB),,--enable-elf-shlibs) \
- 	$(if $(BR2_PACKAGE_E2FSPROGS_DEBUGFS),,--disable-debugfs) \
- 	$(if $(BR2_PACKAGE_E2FSPROGS_E2IMAGE),,--disable-imager) \
- 	$(if $(BR2_PACKAGE_E2FSPROGS_E4DEFRAG),,--disable-defrag) \
+diff --git a/package/e2fsprogs/e2fsprogs-nommu.patch b/package/e2fsprogs/e2fsprogs-nommu.patch
+new file mode 100644
+index 0000000..6aef365
+--- /dev/null
++++ b/package/e2fsprogs/e2fsprogs-nommu.patch
+@@ -0,0 +1,231 @@
++--- e2fsprogs-1.42.4/e2fsck/logfile.c	2012-05-29 09:29:48.000000000 +0800
+++++ e2fsprogs-1.42.4.nommu/e2fsck/logfile.c	2012-09-24 17:49:18.878104451 +0800
++@@ -220,7 +220,11 @@
++ 		exit(1);
++ 	}
++ 
+++#ifndef HAVE_FORK
+++	pid = vfork();
+++#else
++ 	pid = fork();
+++#endif
++ 	if (pid < 0) {
++ 		perror("fork");
++ 		exit(1);
++@@ -264,7 +268,11 @@
++ 			outbufsize -= c;
++ 			cp += c;
++ 		}
+++#ifndef HAVE_FORK
+++		_exit(0);
+++#else
++ 		exit(0);
+++#endif
++ 	}
++ 
++ 	close(fds[0]);
++--- e2fsprogs-1.42.4/lib/ss/pager.c	2012-03-19 02:18:33.000000000 +0800
+++++ e2fsprogs-1.42.4.nommu/lib/ss/pager.c	2012-09-24 17:54:33.862356418 +0800
++@@ -79,7 +79,11 @@
++ 	if (pipe(filedes) != 0)
++ 		return(-1);
++ 
+++#ifndef HAVE_FORK
+++	switch(vfork()) {
+++#else
++ 	switch(fork()) {
+++#endif
++ 	case -1:
++ 		return(-1);
++ 	case 0:
++--- e2fsprogs-1.42.4/lib/ss/help.c	2012-03-19 02:18:33.000000000 +0800
+++++ e2fsprogs-1.42.4.nommu/lib/ss/help.c	2012-09-24 17:55:00.326105930 +0800
++@@ -107,7 +107,11 @@
++ 	free(buf);
++ 	return;
++     }
+++#ifndef HAVE_FORK
+++    switch (child = vfork()) {
+++#else
++     switch (child = fork()) {
+++#endif
++     case -1:
++ 	ss_perror(sci_idx, errno, "Can't fork for pager");
++ 	return;
++--- e2fsprogs-1.42.4/lib/fpopen.c	2012-03-19 02:18:33.000000000 +0800
+++++ e2fsprogs-1.42.4.nommu/lib/fpopen.c	2012-09-24 17:55:54.050106645 +0800
++@@ -94,7 +94,11 @@
++ 		return NULL;
++ 
++ 	/* Fork and execute the correct program. */
+++#ifndef HAVE_FORK
+++	if ((pid = vfork()) < 0) {
+++#else
++ 	if ((pid = fork()) < 0) {
+++#endif
++ 		perror("fork");
++ 		return NULL;
++ 	} else if (pid == 0) {
++@@ -109,7 +113,11 @@
++ 		}
++ 		(void) execvp(prog, argv);
++ 		perror(prog);
+++#ifndef HAVE_FORK
+++		_exit(1);
+++#else
++ 		exit(1);
+++#endif
++ 	}
++ 	return fdopen(do_stdin ? fds[1] : fds[0], mode);
++ }
++--- e2fsprogs-1.42.4/lib/uuid/gen_uuid.c	2012-03-19 02:18:33.000000000 +0800
+++++ e2fsprogs-1.42.4.nommu/lib/uuid/gen_uuid.c	2012-09-24 17:56:41.186106057 +0800
++@@ -504,11 +504,19 @@
++ 		if (access_ret == 0 && (st.st_mode & (S_ISUID | S_ISGID)) == 0)
++ 			access_ret = access(UUIDD_DIR, W_OK);
++ 		if (access_ret == 0 && start_attempts++ < 5) {
+++#ifndef HAVE_FORK
+++			if ((pid = vfork()) == 0) {
+++#else
++ 			if ((pid = fork()) == 0) {
+++#endif
++ 				close_all_fds();
++ 				execl(uuidd_path, "uuidd", "-qT", "300",
++ 				      (char *) NULL);
+++#ifndef HAVE_FORK
+++				_exit(1);
+++#else
++ 				exit(1);
+++#endif
++ 			}
++ 			(void) waitpid(pid, 0, 0);
++ 			if (connect(s, (const struct sockaddr *) &srv_addr,
++--- e2fsprogs-1.42.4/misc/uuidd.c	2012-03-19 02:18:33.000000000 +0800
+++++ e2fsprogs-1.42.4.nommu/misc/uuidd.c	2012-09-24 17:57:49.630106531 +0800
++@@ -56,7 +56,11 @@
++ static void die(const char *msg)
++ {
++ 	perror(msg);
+++#ifndef HAVE_FORK
+++	_exit(1);
+++#else
++ 	exit(1);
+++#endif
++ }
++ 
++ static void create_daemon(void)
++@@ -64,7 +68,11 @@
++ 	pid_t pid;
++ 	uid_t euid;
++ 
+++#ifndef HAVE_FORK
+++	pid = vfork();
+++#else
++ 	pid = fork();
+++#endif
++ 	if (pid == -1) {
++ 		perror("fork");
++ 		exit(1);
++--- e2fsprogs-1.42.4/misc/fsck.c	2012-04-27 06:44:12.000000000 +0800
+++++ e2fsprogs-1.42.4.nommu/misc/fsck.c	2012-09-24 17:52:49.297070304 +0800
++@@ -491,7 +491,11 @@
++ 	/* Fork and execute the correct program. */
++ 	if (noexecute)
++ 		pid = -1;
+++#ifndef HAVE_FORK
+++	else if ((pid = vfork()) < 0) {
+++#else
++ 	else if ((pid = fork()) < 0) {
+++#endif
++ 		perror("fork");
++ 		free(inst);
++ 		return errno;
++@@ -501,7 +505,11 @@
++ 		(void) execv(s, argv);
++ 		perror(argv[0]);
++ 		free(inst);
+++#ifndef HAVE_FORK
+++		_exit(EXIT_ERROR);
+++#else
++ 		exit(EXIT_ERROR);
+++#endif
++ 	}
++ 
++ 	for (i=0; i < argc; i++)
++@@ -641,10 +649,18 @@
++ 			 * time to set up the signal handler
++ 			 */
++ 			if (inst2->start_time < time(0)+2) {
+++#ifndef HAVE_FORK
+++				if (vfork() == 0) {
+++#else
++ 				if (fork() == 0) {
+++#endif
++ 					sleep(1);
++ 					kill(inst2->pid, SIGUSR1);
+++#ifndef HAVE_FORK
+++					_exit(0);
+++#else
++ 					exit(0);
+++#endif
++ 				}
++ 			} else
++ 				kill(inst2->pid, SIGUSR1);
++--- e2fsprogs-1.42.4/misc/logsave.c	2012-03-19 02:18:33.000000000 +0800
+++++ e2fsprogs-1.42.4.nommu/misc/logsave.c	2012-09-24 17:51:18.062105881 +0800
++@@ -181,7 +181,11 @@
++ #endif
++ #endif
++ 
+++#ifndef HAVE_FORK
+++	pid = vfork();
+++#else
++ 	pid = fork();
+++#endif
++ 	if (pid < 0) {
++ 		perror("vfork");
++ 		exit(1);
++@@ -193,7 +197,11 @@
++ 
++ 		execvp(argv[0], argv);
++ 		perror(argv[0]);
+++#ifndef HAVE_FORK
+++		_exit(1);
+++#else
++ 		exit(1);
+++#endif
++ 	}
++ 	child_pid = pid;
++ 	close(fds[1]);
++@@ -307,7 +315,11 @@
++ 	send_output("----------------\n", 0, send_flag);
++ 
++ 	if (outbuf) {
+++#ifndef HAVE_FORK
+++		pid = vfork();
+++#else
++ 		pid = fork();
+++#endif
++ 		if (pid < 0) {
++ 			perror("fork");
++ 			exit(1);
++@@ -329,5 +341,9 @@
++ 	if (outfd >= 0)
++ 		close(outfd);
++ 
+++#ifndef HAVE_FORK
+++	_exit(rc);
+++#else
++ 	exit(rc);
+++#endif
++ }
++--- e2fsprogs-1.42.8/configure.in.old	2013-11-11 15:31:35.626098053 +0800
+++++ e2fsprogs-1.42.8/configure.in	2013-11-11 15:31:08.652956982 +0800
++@@ -1020,6 +1020,7 @@
++ 	fallocate64
++ 	fchown
++ 	fdatasync
+++	fork
++ 	fstat64
++ 	ftruncate64
++ 	getdtablesize
 -- 
 1.8.2.3
