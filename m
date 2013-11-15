@@ -1,38 +1,57 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 15 Nov 2013 10:23:38 +0100
-Subject: [Buildroot] [PATCH] uclibc: patch 0.9.31 for avr32,
- to add __kernel_long_t and __kernel_ulong_t data types
-In-Reply-To: <CAAXf6LUGq3dj4G_wK5udynxcCakN3JJX2o-Dxef-EzJYnvpoqw@mail.gmail.com>
-References: <1384505965-19957-1-git-send-email-spdawson@gmail.com>
- <CAAXf6LUGq3dj4G_wK5udynxcCakN3JJX2o-Dxef-EzJYnvpoqw@mail.gmail.com>
-Message-ID: <20131115102338.47ffb0d4@skate>
+From: sonic.adi at gmail.com <sonic.adi@gmail.com>
+Date: Fri, 15 Nov 2013 17:30:38 +0800
+Subject: [Buildroot] [PATCH] e2fsprogs: Rename the first patch to match the
+	naming policy.
+Message-ID: <1384507838-4675-1-git-send-email-Sonic.adi@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas De Schampheleire,
+From: Sonic Zhang <sonic.zhang@analog.com>
 
-On Fri, 15 Nov 2013 10:03:44 +0100, Thomas De Schampheleire wrote:
+Signed-off-by: Sonic Zhang <sonic.zhang@analog.com>
+---
+ package/e2fsprogs/e2fsprogs-0001-sem-init-libs.patch | 11 +++++++++++
+ package/e2fsprogs/e2fsprogs-sem-init-libs.patch      | 11 -----------
+ 2 files changed, 11 insertions(+), 11 deletions(-)
+ create mode 100644 package/e2fsprogs/e2fsprogs-0001-sem-init-libs.patch
+ delete mode 100644 package/e2fsprogs/e2fsprogs-sem-init-libs.patch
 
-> A few buildroot developer days ago, we said we'd like to get rid of
-> architecture-specific patching. IIRC avr32 was the only architecture
-> having such patches. Is it possible to make such patches 'common' in
-> the sense that they are always named .patch and thus applied for all
-> architectures?
-> If the contents should really only be applied to avr32, is it a
-> possibility to use some #ifdef inside the patch?
-
-In the specific case of this patch, it modifies only avr32-specific
-header files, so I don't quite see why it needs to be
-named .patch.avr32 instead of just .patch.
-
-Especially since anyway 0.9.31 can only be enabled for the AVR32
-architecture.
-
-Thomas
+diff --git a/package/e2fsprogs/e2fsprogs-0001-sem-init-libs.patch b/package/e2fsprogs/e2fsprogs-0001-sem-init-libs.patch
+new file mode 100644
+index 0000000..56f1cc2
+--- /dev/null
++++ b/package/e2fsprogs/e2fsprogs-0001-sem-init-libs.patch
+@@ -0,0 +1,11 @@
++--- e2fsprogs-1.41.9/MCONFIG.in.orig	2009-10-07 20:25:07.000000000 +0800
+++++ e2fsprogs-1.41.9/MCONFIG.in	2009-10-07 20:21:41.000000000 +0800
++@@ -85,7 +85,7 @@
++ #
++ LIB = $(top_builddir)/lib
++ LIBSS = $(LIB)/libss at LIB_EXT@ @PRIVATE_LIBS_CMT@ @DLOPEN_LIB@
++-LIBCOM_ERR = $(LIB)/libcom_err at LIB_EXT@ @PRIVATE_LIBS_CMT@ @SEM_INIT_LIB@
+++LIBCOM_ERR = $(LIB)/libcom_err at LIB_EXT@ @SEM_INIT_LIB@
++ LIBE2P = $(LIB)/libe2p at LIB_EXT@
++ LIBEXT2FS = $(LIB)/libext2fs at LIB_EXT@
++ LIBUUID = @LIBUUID@ @SOCKET_LIB@
+diff --git a/package/e2fsprogs/e2fsprogs-sem-init-libs.patch b/package/e2fsprogs/e2fsprogs-sem-init-libs.patch
+deleted file mode 100644
+index 56f1cc2..0000000
+--- a/package/e2fsprogs/e2fsprogs-sem-init-libs.patch
++++ /dev/null
+@@ -1,11 +0,0 @@
+---- e2fsprogs-1.41.9/MCONFIG.in.orig	2009-10-07 20:25:07.000000000 +0800
+-+++ e2fsprogs-1.41.9/MCONFIG.in	2009-10-07 20:21:41.000000000 +0800
+-@@ -85,7 +85,7 @@
+- #
+- LIB = $(top_builddir)/lib
+- LIBSS = $(LIB)/libss at LIB_EXT@ @PRIVATE_LIBS_CMT@ @DLOPEN_LIB@
+--LIBCOM_ERR = $(LIB)/libcom_err at LIB_EXT@ @PRIVATE_LIBS_CMT@ @SEM_INIT_LIB@
+-+LIBCOM_ERR = $(LIB)/libcom_err at LIB_EXT@ @SEM_INIT_LIB@
+- LIBE2P = $(LIB)/libe2p at LIB_EXT@
+- LIBEXT2FS = $(LIB)/libext2fs at LIB_EXT@
+- LIBUUID = @LIBUUID@ @SOCKET_LIB@
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.8.2.3
