@@ -1,298 +1,32 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 16 Nov 2013 01:59:52 +0100
-Subject: [Buildroot] [PATCH 1/3] e2fsprogs: nommu: Add patch to use
- vfork in nommu arch.
-In-Reply-To: <1384504293-2067-2-git-send-email-Sonic.adi@gmail.com>
-References: <1384504293-2067-1-git-send-email-Sonic.adi@gmail.com>
- <1384504293-2067-2-git-send-email-Sonic.adi@gmail.com>
-Message-ID: <5286C388.2000004@mind.be>
+From: Rick Robino <rick.robino@ipfabrics.com>
+Date: Fri, 15 Nov 2013 23:53:40 -0800
+Subject: [Buildroot] longterm kernel releases: version-URI different for
+	v2.x kernels
+Message-ID: <76128FA7-9969-4BC7-B8F8-07F5BEDDD177@ipfabrics.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-  Hi Sonic,
+Greetings,
 
-  Again, it doesn't look like these fork replacements will work...
+I encountered problems automatically downloading kernel version 2.6.32.61, one of the current longterm releases.  It looks like the URL might have changed, so I thought that I would mention it here in case this fact might be news to anyone.
 
-On 15/11/13 09:31, sonic.adi at gmail.com wrote:
-> From: Sonic Zhang <sonic.zhang@analog.com>
->
-> Signed-off-by: Sonic Zhang <sonic.zhang@analog.com>
-> ---
->   package/e2fsprogs/e2fsprogs-nommu.patch | 231 ++++++++++++++++++++++++++++++++
->   1 file changed, 231 insertions(+)
->   create mode 100644 package/e2fsprogs/e2fsprogs-nommu.patch
->
-> diff --git a/package/e2fsprogs/e2fsprogs-nommu.patch b/package/e2fsprogs/e2fsprogs-nommu.patch
-> new file mode 100644
-> index 0000000..6aef365
-> --- /dev/null
-> +++ b/package/e2fsprogs/e2fsprogs-nommu.patch
-> @@ -0,0 +1,231 @@
-> +--- e2fsprogs-1.42.4/e2fsck/logfile.c	2012-05-29 09:29:48.000000000 +0800
-> ++++ e2fsprogs-1.42.4.nommu/e2fsck/logfile.c	2012-09-24 17:49:18.878104451 +0800
-> +@@ -220,7 +220,11 @@
-> + 		exit(1);
-> + 	}
-> +
-> ++#ifndef HAVE_FORK
-> ++	pid = vfork();
-> ++#else
-> + 	pid = fork();
-> ++#endif
+The longterm kernels are in a subdirectory called ?v2/.6/longterm/vA.B.C?.  Buildroot only looks in ?v2.6?, which works fine for standard kernels but not the longterm ones for 2.6.
 
-  This one creates a child process that will read from an fd that is 
-written by its parent, so I don't think this will work (parent is 
-suspended until child exec's or exits). However, because of the call to 
-daemon() in-between, it might work. Have you tested it?
+Adjusting LINUX_SITE in linux/linux.mk solved the problem for me.
 
-> + 	if (pid < 0) {
-> + 		perror("fork");
-> + 		exit(1);
-> +@@ -264,7 +268,11 @@
-> + 			outbufsize -= c;
-> + 			cp += c;
-> + 		}
-> ++#ifndef HAVE_FORK
-> ++		_exit(0);
-> ++#else
-> + 		exit(0);
-> ++#endif
-> + 	}
-> +
-> + 	close(fds[0]);
-> +--- e2fsprogs-1.42.4/lib/ss/pager.c	2012-03-19 02:18:33.000000000 +0800
-> ++++ e2fsprogs-1.42.4.nommu/lib/ss/pager.c	2012-09-24 17:54:33.862356418 +0800
-> +@@ -79,7 +79,11 @@
-> + 	if (pipe(filedes) != 0)
-> + 		return(-1);
-> +
-> ++#ifndef HAVE_FORK
-> ++	switch(vfork()) {
-> ++#else
-> + 	switch(fork()) {
-> ++#endif
-> + 	case -1:
-> + 		return(-1);
-> + 	case 0:
-> +--- e2fsprogs-1.42.4/lib/ss/help.c	2012-03-19 02:18:33.000000000 +0800
-> ++++ e2fsprogs-1.42.4.nommu/lib/ss/help.c	2012-09-24 17:55:00.326105930 +0800
-> +@@ -107,7 +107,11 @@
-> + 	free(buf);
-> + 	return;
-> +     }
-> ++#ifndef HAVE_FORK
-> ++    switch (child = vfork()) {
-> ++#else
-> +     switch (child = fork()) {
-> ++#endif
-> +     case -1:
-> + 	ss_perror(sci_idx, errno, "Can't fork for pager");
-> + 	return;
-> +--- e2fsprogs-1.42.4/lib/fpopen.c	2012-03-19 02:18:33.000000000 +0800
-> ++++ e2fsprogs-1.42.4.nommu/lib/fpopen.c	2012-09-24 17:55:54.050106645 +0800
-> +@@ -94,7 +94,11 @@
-> + 		return NULL;
-> +
-> + 	/* Fork and execute the correct program. */
-> ++#ifndef HAVE_FORK
-> ++	if ((pid = vfork()) < 0) {
-> ++#else
-> + 	if ((pid = fork()) < 0) {
-> ++#endif
-> + 		perror("fork");
-> + 		return NULL;
-> + 	} else if (pid == 0) {
-> +@@ -109,7 +113,11 @@
-> + 		}
-> + 		(void) execvp(prog, argv);
-> + 		perror(prog);
-> ++#ifndef HAVE_FORK
-> ++		_exit(1);
-> ++#else
-> + 		exit(1);
-> ++#endif
-> + 	}
-> + 	return fdopen(do_stdin ? fds[1] : fds[0], mode);
-> + }
-> +--- e2fsprogs-1.42.4/lib/uuid/gen_uuid.c	2012-03-19 02:18:33.000000000 +0800
-> ++++ e2fsprogs-1.42.4.nommu/lib/uuid/gen_uuid.c	2012-09-24 17:56:41.186106057 +0800
-> +@@ -504,11 +504,19 @@
-> + 		if (access_ret == 0 && (st.st_mode & (S_ISUID | S_ISGID)) == 0)
-> + 			access_ret = access(UUIDD_DIR, W_OK);
-> + 		if (access_ret == 0 && start_attempts++ < 5) {
-> ++#ifndef HAVE_FORK
-> ++			if ((pid = vfork()) == 0) {
-> ++#else
-> + 			if ((pid = fork()) == 0) {
-> ++#endif
-> + 				close_all_fds();
-> + 				execl(uuidd_path, "uuidd", "-qT", "300",
-> + 				      (char *) NULL);
-> ++#ifndef HAVE_FORK
-> ++				_exit(1);
-> ++#else
-> + 				exit(1);
-> ++#endif
-> + 			}
-> + 			(void) waitpid(pid, 0, 0);
-> + 			if (connect(s, (const struct sockaddr *) &srv_addr,
-> +--- e2fsprogs-1.42.4/misc/uuidd.c	2012-03-19 02:18:33.000000000 +0800
-> ++++ e2fsprogs-1.42.4.nommu/misc/uuidd.c	2012-09-24 17:57:49.630106531 +0800
-> +@@ -56,7 +56,11 @@
-> + static void die(const char *msg)
-> + {
-> + 	perror(msg);
-> ++#ifndef HAVE_FORK
-> ++	_exit(1);
-> ++#else
-> + 	exit(1);
-> ++#endif
-> + }
-> +
-> + static void create_daemon(void)
-> +@@ -64,7 +68,11 @@
-> + 	pid_t pid;
-> + 	uid_t euid;
-> +
-> ++#ifndef HAVE_FORK
-> ++	pid = vfork();
-> ++#else
-> + 	pid = fork();
-> ++#endif
-
-  This looks like a home-grown implementation of daemon() - why didn't 
-T.T'so just you daemon()? Anyway, it probably won't work because the 
-child returns from the function, thereby corrupting the parent's stack 
-frame. It may work accidentally, though.
-
-> + 	if (pid == -1) {
-> + 		perror("fork");
-> + 		exit(1);
-> +--- e2fsprogs-1.42.4/misc/fsck.c	2012-04-27 06:44:12.000000000 +0800
-> ++++ e2fsprogs-1.42.4.nommu/misc/fsck.c	2012-09-24 17:52:49.297070304 +0800
-> +@@ -491,7 +491,11 @@
-> + 	/* Fork and execute the correct program. */
-> + 	if (noexecute)
-> + 		pid = -1;
-> ++#ifndef HAVE_FORK
-> ++	else if ((pid = vfork()) < 0) {
-> ++#else
-> + 	else if ((pid = fork()) < 0) {
-> ++#endif
-> + 		perror("fork");
-> + 		free(inst);
-> + 		return errno;
-> +@@ -501,7 +505,11 @@
-> + 		(void) execv(s, argv);
-> + 		perror(argv[0]);
-> + 		free(inst);
-> ++#ifndef HAVE_FORK
-> ++		_exit(EXIT_ERROR);
-> ++#else
-> + 		exit(EXIT_ERROR);
-> ++#endif
-> + 	}
-> +
-> + 	for (i=0; i < argc; i++)
-> +@@ -641,10 +649,18 @@
-> + 			 * time to set up the signal handler
-> + 			 */
-> + 			if (inst2->start_time < time(0)+2) {
-> ++#ifndef HAVE_FORK
-> ++				if (vfork() == 0) {
-> ++#else
-> + 				if (fork() == 0) {
-> ++#endif
-> + 					sleep(1);
-> + 					kill(inst2->pid, SIGUSR1);
-> ++#ifndef HAVE_FORK
-> ++					_exit(0);
-> ++#else
-> + 					exit(0);
-> ++#endif
-
-  Hm, this looks like cut and paste code from util-linux, where I 
-commented on a better way to implement this.
-
-> + 				}
-> + 			} else
-> + 				kill(inst2->pid, SIGUSR1);
-> +--- e2fsprogs-1.42.4/misc/logsave.c	2012-03-19 02:18:33.000000000 +0800
-> ++++ e2fsprogs-1.42.4.nommu/misc/logsave.c	2012-09-24 17:51:18.062105881 +0800
-> +@@ -181,7 +181,11 @@
-> + #endif
-> + #endif
-> +
-> ++#ifndef HAVE_FORK
-> ++	pid = vfork();
-> ++#else
-> + 	pid = fork();
-> ++#endif
-> + 	if (pid < 0) {
-> + 		perror("vfork");
-> + 		exit(1);
-> +@@ -193,7 +197,11 @@
-> +
-> + 		execvp(argv[0], argv);
-> + 		perror(argv[0]);
-> ++#ifndef HAVE_FORK
-> ++		_exit(1);
-> ++#else
-> + 		exit(1);
-> ++#endif
-> + 	}
-> + 	child_pid = pid;
-> + 	close(fds[1]);
-> +@@ -307,7 +315,11 @@
-> + 	send_output("----------------\n", 0, send_flag);
-> +
-> + 	if (outbuf) {
-> ++#ifndef HAVE_FORK
-> ++		pid = vfork();
-> ++#else
-> + 		pid = fork();
-> ++#endif
-
-  The idea here is to background the process, but vfork doesn't actually 
-background so you could just as well skip it completely. Or use daemon(1,1).
+$ diff linux/linux.mk linux/linux.mk.orig
+28c28
+< LINUX_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/v2.6/longterm/v2.6.32/
+---
+> LINUX_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/v2.6/
 
 
-  Regards,
-  Arnout
+I hesitated to submit this as a bug or a patch because the longterm naming scheme doesn?t seem consistent at kernel.org between 2.x and 3.x kernels.  But, I thought it might help others like myself who are just getting started with buildroot.
 
-> + 		if (pid < 0) {
-> + 			perror("fork");
-> + 			exit(1);
-> +@@ -329,5 +341,9 @@
-> + 	if (outfd >= 0)
-> + 		close(outfd);
-> +
-> ++#ifndef HAVE_FORK
-> ++	_exit(rc);
-> ++#else
-> + 	exit(rc);
-> ++#endif
-> + }
-> +--- e2fsprogs-1.42.8/configure.in.old	2013-11-11 15:31:35.626098053 +0800
-> ++++ e2fsprogs-1.42.8/configure.in	2013-11-11 15:31:08.652956982 +0800
-> +@@ -1020,6 +1020,7 @@
-> + 	fallocate64
-> + 	fchown
-> + 	fdatasync
-> ++	fork
-> + 	fstat64
-> + 	ftruncate64
-> + 	getdtablesize
->
+Apologies in advance if I?ve simply missed something in the configuration documentation.
 
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+? 
+Rick
