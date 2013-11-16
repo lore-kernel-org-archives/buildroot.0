@@ -1,73 +1,70 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 17 Nov 2013 00:54:44 +0100
-Subject: [Buildroot] [git commit] wayland: disable on avr32
-Message-ID: <20131116235541.6B1219BCF2@busybox.osuosl.org>
+Date: Sun, 17 Nov 2013 00:53:35 +0100
+Subject: [Buildroot] [git commit] uclibc: patch 0.9.31 for avr32,
+	to add __kernel_long_t and __kernel_ulong_t data types
+Message-ID: <20131116235541.448909967B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1b5bd7a29694881cf85c653e2307d7b8464a15c9
+commit: http://git.buildroot.net/buildroot/commit/?id=0294aced5ebe9b1af7aca73ef8a9e3c5242d788a
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The epoll_create1, timerfd_create and timerfd_settime syscalls are not available
-on avr32. Fixes build failures such as the following.
+As reported by Thomas Petazzoni, the uclibc 0.9.31 build fails for avr32:
 
-  http://autobuild.buildroot.net/results/43b/43b3df5978782034279604abde8fe5d46c441344/
+In file included from /opt/br-avr32-full-2013.11-rc1/usr/avr32-buildroot-linux-uclibc/sysroot/usr/include/linux/kernel.h:4,
+                 from /opt/br-avr32-full-2013.11-rc1/usr/avr32-buildroot-linux-uclibc/sysroot/usr/include/linux/netlink.h:4,
+                 from /opt/br-avr32-full-2013.11-rc1/usr/avr32-buildroot-linux-uclibc/sysroot/usr/include/linux/rtnetlink.h:5,
+                 from libc/inet/netlinkaccess.h:27,
+                 from libc/inet/if_index.c:36:
+/opt/br-avr32-full-2013.11-rc1/usr/avr32-buildroot-linux-uclibc/sysroot/usr/include/linux/sysinfo.h:8: error: expected specifier-qualifier-list before '__kernel_long_t'
+make[1]: *** [libc/inet/if_index.os] Error 1
+make[1]: Leaving directory `/opt/toolchain-build/build/uclibc-0.9.31.1'
+
+The problem is reported at:
+
+  https://lkml.org/lkml/2013/5/18/1
+
+The offending kernel commit is:
+
+  http://git.kernel.org/cgit/linux/kernel/git/stable/linux-stable.git/commit/?id=ccdfcc398594
+
+The fix is to patch uclibc 0.9.31 to add the missing kernel data types. The patch
+will only be generated for avr32, since uclibc 0.9.31 is not available in Buildroot
+for any other architecture.
 
 Signed-off-by: Simon Dawson <spdawson@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gstreamer1/gst1-plugins-bad/Config.in |    1 +
- package/wayland/Config.in                     |    2 ++
- package/weston/Config.in                      |    2 ++
- 3 files changed, 5 insertions(+), 0 deletions(-)
+ ...deps-add-__kernel_long-and-__kernel_ulong.patch |   21 ++++++++++++++++++++
+ 1 files changed, 21 insertions(+), 0 deletions(-)
 
-diff --git a/package/gstreamer1/gst1-plugins-bad/Config.in b/package/gstreamer1/gst1-plugins-bad/Config.in
-index d6f087d..d028245 100644
---- a/package/gstreamer1/gst1-plugins-bad/Config.in
-+++ b/package/gstreamer1/gst1-plugins-bad/Config.in
-@@ -358,6 +358,7 @@ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_DIRECTFB
- 
- config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_WAYLAND
- 	bool "wayland"
-+	depends on !BR2_avr32 # wayland
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # wayland
- 	select BR2_PACKAGE_WAYLAND
- 	help
-diff --git a/package/wayland/Config.in b/package/wayland/Config.in
-index 260832f..c92f9ea 100644
---- a/package/wayland/Config.in
-+++ b/package/wayland/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_WAYLAND
- 	bool "wayland"
-+	depends on !BR2_avr32 # no epoll_create1, timerfd_create or timerfd_settime
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	select BR2_PACKAGE_LIBFFI
- 	select BR2_PACKAGE_EXPAT
-@@ -11,4 +12,5 @@ config BR2_PACKAGE_WAYLAND
- 	  http://wayland.freedesktop.org/
- 
- comment "wayland needs a toolchain w/ threads"
-+	depends on !BR2_avr32
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/weston/Config.in b/package/weston/Config.in
-index b7f8468..247efc8 100644
---- a/package/weston/Config.in
-+++ b/package/weston/Config.in
-@@ -1,4 +1,5 @@
- comment "weston needs udev and a toolchain w/ threads"
-+	depends on !BR2_avr32
- 	depends on !BR2_PACKAGE_UDEV || !BR2_TOOLCHAIN_HAS_THREADS
- 
- config BR2_PACKAGE_WESTON
-@@ -11,6 +12,7 @@ config BR2_PACKAGE_WESTON
- 	select BR2_PACKAGE_JPEG
- 	select BR2_PACKAGE_MTDEV
- 	depends on BR2_PACKAGE_UDEV
-+	depends on !BR2_avr32 # wayland
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # wayland
- 	# Runtime dependency
- 	select BR2_PACKAGE_XKEYBOARD_CONFIG
+diff --git a/package/uclibc/0.9.31.1/uclibc-0013-libc-sysdeps-add-__kernel_long-and-__kernel_ulong.patch b/package/uclibc/0.9.31.1/uclibc-0013-libc-sysdeps-add-__kernel_long-and-__kernel_ulong.patch
+new file mode 100644
+index 0000000..55cb0c5
+--- /dev/null
++++ b/package/uclibc/0.9.31.1/uclibc-0013-libc-sysdeps-add-__kernel_long-and-__kernel_ulong.patch
+@@ -0,0 +1,21 @@
++libc/sysdeps: add __kernel_long and __kernel_ulong
++
++Linux 3.4 added __kernel_long_t and __kernel_ulong_t and various
++exported header files were updated to use these new types. Add the
++definitions for __kernel_long_t and __kernel_ulong_t to the relevant
++kernel_types.h headers.
++
++Signed-off-by: Simon Dawson <spdawson@gmail.com>
++
++diff -Nurp a/libc/sysdeps/linux/avr32/bits/kernel_types.h b/libc/sysdeps/linux/avr32/bits/kernel_types.h
++--- a/libc/sysdeps/linux/avr32/bits/kernel_types.h	2011-06-08 19:58:40.000000000 +0100
+++++ b/libc/sysdeps/linux/avr32/bits/kernel_types.h	2013-11-15 08:01:09.209037851 +0000
++@@ -39,6 +39,8 @@ typedef unsigned int		__kernel_gid32_t;
++ typedef unsigned short		__kernel_old_uid_t;
++ typedef unsigned short		__kernel_old_gid_t;
++ typedef unsigned short		__kernel_old_dev_t;
+++typedef long			__kernel_long_t;
+++typedef unsigned long		__kernel_ulong_t;
++ 
++ #ifdef __GNUC__
++ typedef long long		__kernel_loff_t;
