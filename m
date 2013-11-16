@@ -1,32 +1,25 @@
-From: Rick Robino <rick.robino@ipfabrics.com>
-Date: Fri, 15 Nov 2013 23:53:40 -0800
-Subject: [Buildroot] longterm kernel releases: version-URI different for
-	v2.x kernels
-Message-ID: <76128FA7-9969-4BC7-B8F8-07F5BEDDD177@ipfabrics.com>
+From: Simon Dawson <spdawson@gmail.com>
+Date: Sat, 16 Nov 2013 09:36:24 +0000
+Subject: [Buildroot] [PATCH] wvstreams: remove tcl dependency support
+In-Reply-To: <20131115144528.GA1086@gmail.com>
+References: <20131114225758.GA13765@gmail.com>
+ <20131115144528.GA1086@gmail.com>
+Message-ID: <CAHt8ZCMPgq=zitN3BfK9xDSC_5SmvBXeC1LNbggSuonFYdKEqg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Greetings,
+Hi Andrew,
 
-I encountered problems automatically downloading kernel version 2.6.32.61, one of the current longterm releases.  It looks like the URL might have changed, so I thought that I would mention it here in case this fact might be news to anyone.
+On 15 November 2013 14:45, Andrew Ruder <andrew.ruder@elecsyscorp.com> wrote:
+> Simon,
+>
+> I mistakingly left you off the original e-mail.  Any chance you could
+> review the sanity of this patch?
 
-The longterm kernels are in a subdirectory called ?v2/.6/longterm/vA.B.C?.  Buildroot only looks in ?v2.6?, which works fine for standard kernels but not the longterm ones for 2.6.
+I'm not actually using wvstreams, so don't have a strong opinion on
+the change, but your patch looks correct to me.
 
-Adjusting LINUX_SITE in linux/linux.mk solved the problem for me.
-
-$ diff linux/linux.mk linux/linux.mk.orig
-28c28
-< LINUX_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/v2.6/longterm/v2.6.32/
----
-> LINUX_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/v2.6/
-
-
-I hesitated to submit this as a bug or a patch because the longterm naming scheme doesn?t seem consistent at kernel.org between 2.x and 3.x kernels.  But, I thought it might help others like myself who are just getting started with buildroot.
-
-Apologies in advance if I?ve simply missed something in the configuration documentation.
-
-? 
-Rick
+Simon.
