@@ -1,44 +1,62 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Sat, 16 Nov 2013 16:07:43 +0100
-Subject: [Buildroot] longterm kernel releases: version-URI different for
- v2.x kernels
-In-Reply-To: <20131116113842.1c01a56d@skate>
-References: <76128FA7-9969-4BC7-B8F8-07F5BEDDD177@ipfabrics.com>
- <20131116113842.1c01a56d@skate>
-Message-ID: <CAAXf6LXEcnwF0N2Fq-tOD+_JY23LNWWZAygkB-ywf4_GiUOi6Q@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 16 Nov 2013 22:36:32 +0100
+Subject: [Buildroot] Autobuilder site back online
+Message-ID: <20131116223632.462c6e60@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas, Rick,
+Hello,
 
-On Sat, Nov 16, 2013 at 11:38 AM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Dear Rick Robino,
->
-> On Fri, 15 Nov 2013 23:53:40 -0800, Rick Robino wrote:
->
->> I encountered problems automatically downloading kernel version
->> 2.6.32.61, one of the current longterm releases.  It looks like the
->> URL might have changed, so I thought that I would mention it here in
->> case this fact might be news to anyone.
->>
->> The longterm kernels are in a subdirectory called
->> ?v2/.6/longterm/vA.B.C?.  Buildroot only looks in ?v2.6?, which works
->> fine for standard kernels but not the longterm ones for 2.6.
->
-> Yes. Buildroot cannot guess if the kernel version you're using is a
-> "normal" version or a "longterm" version. Therefore, when you choose to
-> only give the kernel version in the configuration, it only looks in
-> 2.6/ or 3.x/. If you need a kernel version that is available in some
-> other location, then you should use the "Custom tarball" configuration
-> choice, which allows you to pass an arbitrary URL to a tarball,
-> either located on kernel.org or on some other place.
+As many of you have noticed, the autobuild.buildroot.org web site has
+been down for a number of days. It was hosted on a Virtual Private
+Server that I have been using since 10+ years, but it was getting short
+on disk space, was not very powerful, and more importantly, I did not
+have access to the host machine, which means that whenever something
+bad/wrong was happening, there was nothing I could do, except rely on
+people who didn't always had enough time to take care of the issue in a
+timely fashion.
 
-This same question popped up a while back as well, maybe we should add
-this catch in the help text of one of the linux options...
+Therefore, I have migrated the service to a dedicated server that I
+own. I have direct access to the support team, I can reboot the server,
+access the logs. And this server has more disk space (1 TB) and is much
+more powerful than the previous one.
+
+This new service is temporarily available at:
+
+	http://autobuild.humanoidz.org
+
+The build results from the Free Electrons build server have already
+started to flow into this new infrastructure.
+
+There are a few things that remain to be done:
+
+ * Changing the autobuild.buildroot.org to point to this new server.
+   I've already asked Peter to do so.
+
+ * Changing the configuration of the build servers maintained by Peter
+   so that they send their results to the new infrastructure. I've also
+   asked Peter to do so.
+
+ * Re-add the daily e-mails to the new infrastructure. However, since I
+   couldn't access the old server to turn them off, the old server will
+   start sending them (empty probably when it goes up). So as soon as
+   I'll have access to the old server to turn it off, I will migrate
+   the daily e-mails to the new infrastructure.
+
+ * Import the history of build results. This also requires me to have
+   access to the old server and transfer all the results to the new
+   server. It might take a bit of time.
+
+Sorry again for the noise. At least, the build results are back up,
+which is the most important during this -rc cycle.
 
 Best regards,
+
 Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
