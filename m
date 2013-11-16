@@ -1,62 +1,32 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 16 Nov 2013 22:36:32 +0100
-Subject: [Buildroot] Autobuilder site back online
-Message-ID: <20131116223632.462c6e60@skate>
+From: Arnaud Aujon <arnaud.aujon@gmail.com>
+Date: Sat, 16 Nov 2013 23:07:54 +0100
+Subject: [Buildroot] [squashfs] Fix typo in url
+Message-ID: <1384639674-15170-1-git-send-email-arnaud.aujon@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Fix a typo in squashfs site url
 
-As many of you have noticed, the autobuild.buildroot.org web site has
-been down for a number of days. It was hosted on a Virtual Private
-Server that I have been using since 10+ years, but it was getting short
-on disk space, was not very powerful, and more importantly, I did not
-have access to the host machine, which means that whenever something
-bad/wrong was happening, there was nothing I could do, except rely on
-people who didn't always had enough time to take care of the issue in a
-timely fashion.
+Signed-off-by: Arnaud Aujon <arnaud.aujon@gmail.com>
+---
+ package/squashfs/squashfs.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Therefore, I have migrated the service to a dedicated server that I
-own. I have direct access to the support team, I can reboot the server,
-access the logs. And this server has more disk space (1 TB) and is much
-more powerful than the previous one.
-
-This new service is temporarily available at:
-
-	http://autobuild.humanoidz.org
-
-The build results from the Free Electrons build server have already
-started to flow into this new infrastructure.
-
-There are a few things that remain to be done:
-
- * Changing the autobuild.buildroot.org to point to this new server.
-   I've already asked Peter to do so.
-
- * Changing the configuration of the build servers maintained by Peter
-   so that they send their results to the new infrastructure. I've also
-   asked Peter to do so.
-
- * Re-add the daily e-mails to the new infrastructure. However, since I
-   couldn't access the old server to turn them off, the old server will
-   start sending them (empty probably when it goes up). So as soon as
-   I'll have access to the old server to turn it off, I will migrate
-   the daily e-mails to the new infrastructure.
-
- * Import the history of build results. This also requires me to have
-   access to the old server and transfer all the results to the new
-   server. It might take a bit of time.
-
-Sorry again for the noise. At least, the build results are back up,
-which is the most important during this -rc cycle.
-
-Best regards,
-
-Thomas
+diff --git a/package/squashfs/squashfs.mk b/package/squashfs/squashfs.mk
+index 04a26c6..bff308c 100644
+--- a/package/squashfs/squashfs.mk
++++ b/package/squashfs/squashfs.mk
+@@ -6,7 +6,7 @@
+ 
+ SQUASHFS_VERSION = 4.2
+ SQUASHFS_SOURCE = squashfs$(SQUASHFS_VERSION).tar.gz
+-SQUASHFS_SITE = http://downloads.sourceforge.net/projct/squashfs/squashfs/squashfs$(SQUASHFS_VERSION)
++SQUASHFS_SITE = http://downloads.sourceforge.net/project/squashfs/squashfs/squashfs$(SQUASHFS_VERSION)
+ 
+ # no libattr in BR
+ SQUASHFS_MAKE_ARGS = XATTR_SUPPORT=0
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.8.3.1
