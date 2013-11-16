@@ -1,58 +1,22 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sat, 16 Nov 2013 23:35:34 +0000 (UTC)
-Subject: [Buildroot] [Bug 6704] New: wpa_supplicant: fix wrong path to
- executable file in D-Bus
-Message-ID: <bug-6704-163@https.bugs.busybox.net/>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 17 Nov 2013 00:54:04 +0100
+Subject: [Buildroot] [squashfs] Fix typo in url
+In-Reply-To: <1384639674-15170-1-git-send-email-arnaud.aujon@gmail.com>
+ (Arnaud Aujon's message of "Sat, 16 Nov 2013 23:07:54 +0100")
+References: <1384639674-15170-1-git-send-email-arnaud.aujon@gmail.com>
+Message-ID: <87vbzrzyw3.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=6704
+>>>>> "Arnaud" == Arnaud Aujon <arnaud.aujon@gmail.com> writes:
 
-           Summary: wpa_supplicant: fix wrong path to executable file in
-                    D-Bus
-           Product: buildroot
-           Version: unspecified
-          Platform: All
-        OS/Version: Linux
-            Status: NEW
-          Severity: minor
-          Priority: P5
-         Component: Other
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: sasamy at yandex.ru
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
+ > Fix a typo in squashfs site url
+ > Signed-off-by: Arnaud Aujon <arnaud.aujon@gmail.com>
 
-
-By default prefix is set to /usr/local
-
-wpa_supplicant-2.0/wpa_supplicant/Makefile
-
-export LIBDIR ?= /usr/local/lib/
-export BINDIR ?= /usr/local/sbin/
-
-but should be /usr/lib and /usr/sbin, can be corrected by specifying
-environment variables
-
-define WPA_SUPPLICANT_BUILD_CMDS
-        $(TARGET_MAKE_ENV) CFLAGS="$(WPA_SUPPLICANT_CFLAGS)" \
-                LDFLAGS="$(TARGET_LDFLAGS)" LIBDIR=/usr/lib/ BINDIR=/usr/sbin/
-\
-                $(MAKE) CC="$(TARGET_CC)" -C $(@D)/$(WPA_SUPPLICANT_SUBDIR)
-endef
-
-These variables are used for generating service files for ?-Bus and Systemd
-
-[D-BUS Service]
-Name=fi.w1.wpa_supplicant1
-Exec=@BINDIR@/wpa_supplicant -u
-User=root
-SystemdService=wpa_supplicant.service
+Committed, thanks.
 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Bye, Peter Korsgaard
