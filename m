@@ -1,25 +1,34 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 17 Nov 2013 00:54:54 +0100
-Subject: [Buildroot] [PATCH] wayland: disable on avr32
-In-Reply-To: <1384595893-15468-1-git-send-email-spdawson@gmail.com>
- (spdawson@gmail.com's message of "Sat, 16 Nov 2013 09:58:13 +0000")
-References: <1384595893-15468-1-git-send-email-spdawson@gmail.com>
-Message-ID: <87r4afzyup.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 17 Nov 2013 00:53:56 +0100
+Subject: [Buildroot] [git commit] Fix typo in url
+Message-ID: <20131116235541.5E4A39967B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "spdawson" == spdawson  <spdawson@gmail.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=93adbf9c00671cb5983cfa7b11b04d2d72ab344b
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > From: Simon Dawson <spdawson@gmail.com>
- > The epoll_create1, timerfd_create and timerfd_settime syscalls are not available
- > on avr32. Fixes build failures such as the following.
+Fix a typo in squashfs site url
 
- >   http://autobuild.buildroot.net/results/43b/43b3df5978782034279604abde8fe5d46c441344/
+Signed-off-by: Arnaud Aujon <arnaud.aujon@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/squashfs/squashfs.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/squashfs/squashfs.mk b/package/squashfs/squashfs.mk
+index 04a26c6..bff308c 100644
+--- a/package/squashfs/squashfs.mk
++++ b/package/squashfs/squashfs.mk
+@@ -6,7 +6,7 @@
+ 
+ SQUASHFS_VERSION = 4.2
+ SQUASHFS_SOURCE = squashfs$(SQUASHFS_VERSION).tar.gz
+-SQUASHFS_SITE = http://downloads.sourceforge.net/projct/squashfs/squashfs/squashfs$(SQUASHFS_VERSION)
++SQUASHFS_SITE = http://downloads.sourceforge.net/project/squashfs/squashfs/squashfs$(SQUASHFS_VERSION)
+ 
+ # no libattr in BR
+ SQUASHFS_MAKE_ARGS = XATTR_SUPPORT=0
