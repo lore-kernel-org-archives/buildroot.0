@@ -1,42 +1,31 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 17 Nov 2013 08:37:24 +0100
-Subject: [Buildroot] [PATCH] pv: support ccache builds
-In-Reply-To: <20131115202856.GA13944@gmail.com> (Andrew Ruder's message of
- "Fri, 15 Nov 2013 14:28:56 -0600")
-References: <20131115202856.GA13944@gmail.com>
-Message-ID: <87iovrzdfv.fsf@dell.be.48ers.dk>
+Date: Sun, 17 Nov 2013 08:38:24 +0100
+Subject: [Buildroot] [PATCH] e2fsprogs: Rename the first patch to match
+	the naming policy.
+In-Reply-To: <5286C42F.3060802@mind.be> (Arnout Vandecappelle's message of
+ "Sat, 16 Nov 2013 02:02:39 +0100")
+References: <1384507838-4675-1-git-send-email-Sonic.adi@gmail.com>
+ <CAAXf6LW2zFZ2OCh4G7SrPAc52hpAb0KC=HuOj=gFaA2fsTu_cg@mail.gmail.com>
+ <20131115104511.56ab9a97@skate> <5286C42F.3060802@mind.be>
+Message-ID: <87eh6fzde7.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Andrew" == Andrew Ruder <andrew.ruder@elecsyscorp.com> writes:
+>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
 
- > When using ccache TARGET_CC is something like
- >     ccache gcc
+ >>> Also here I wonder why git/git-format-patch did not recognize the move?
+ >> 
+ >> Because you need to explicitly do a 'git format-patch -M', or configure
+ >> Git in your ~/.gitconfig to enable rename detection permanently.
 
- > This causes problems in the pv build which attempts to
- > override LD because the command ends up being
- >     make [...] LD=/tools/ccache /tools/gcc LDFLAGS="[...]
+ >  But anyway it doesn't really matter, since git-repack will convert it
+ > into a proper rename. It just makes the patch on the list shorter and
+ > easier to review.
 
- > As a result, during the build phase it attempts to build
- > /tools/gcc which succeeds by doing nothing:
- >     make[1]: Nothing to be done for `/tools/gcc'.
-
- > and during the install phase you get the real build which
- > errors out on the LD error this snippet was attempting to
- > fix:
- >     ld -r -o src/library.o src/library/getopt.o \
- >         src/library/gettext.o
- >     ld: src/library/gettext.o: Relocations in generic ELF \
- >         (EM: 40)
- >     src/library/gettext.o: error adding symbols: File in \
- >         wrong format
-
- > Signed-off-by: Andrew Ruder <andrew.ruder@elecsyscorp.com>
-
-Committed, thanks.
+.. which is also very important!
 
 -- 
 Bye, Peter Korsgaard
