@@ -1,11 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 17 Nov 2013 14:18:21 +0100
-Subject: [Buildroot] [PATCH v9 1/8] package: add base dependency to
-	every package
-In-Reply-To: <1384526422-30142-2-git-send-email-fabio.porcedda@gmail.com>
+Date: Sun, 17 Nov 2013 14:52:14 +0100
+Subject: [Buildroot] [PATCH v9 2/8] package: add toolchain dependency to
+ every target package
+In-Reply-To: <1384526422-30142-3-git-send-email-fabio.porcedda@gmail.com>
 References: <1384526422-30142-1-git-send-email-fabio.porcedda@gmail.com>
- <1384526422-30142-2-git-send-email-fabio.porcedda@gmail.com>
-Message-ID: <5288C21D.3050809@mind.be>
+ <1384526422-30142-3-git-send-email-fabio.porcedda@gmail.com>
+Message-ID: <5288CA0E.6010505@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,13 +13,18 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 On 15/11/13 15:40, Fabio Porcedda wrote:
-> Move "dependencies" "dirs" "prepare" dependencies from "toolchain" to
-> every package.
-> This way we can build correctly every package right after the clean
-> stage.
-> As example with this commit we can build successfully the glibc right
-> after the clean stage:
-> 	make clean glibc
+> This commit makes the dependency from the target toolchain explicit.
+> This way we can buid from command line a package that use
+> innger-generic-package right after the configuration phase, example:
+>
+> 	make clean <package-name>
+>
+> Also remove TARGETS_ALL because the only purpose was to add toolchain
+> dependency so it's superseded by this commit.
+>
+> To prevent circular dependency add the new variable
+> <pkgname>_ADD_TOOLCHAIN_DEPENDENCY to avoid adding the toolchain
+> dependency for toolchain packages.
 >
 > This is also a step forward supporting top-level parallel make.
 >
@@ -27,7 +32,12 @@ On 15/11/13 15:40, Fabio Porcedda wrote:
 
 Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
+  I think the _ADD_TOOLCHAIN_DEPENDENCY workaround is far from ideal, but 
+I can't think of anything better. And for sure, this patch is an 
+improvement over the current situation.
 
+  Regards,
+  Arnout
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
