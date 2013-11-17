@@ -1,64 +1,143 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Sun, 17 Nov 2013 09:32:16 +0100
-Subject: [Buildroot] Call for autobuild fixing for 2013.11
-In-Reply-To: <CAAXf6LXwy3HGGX1W9FCcdVCRJSHMT2B=w--xvcsBxqwUXxDjqg@mail.gmail.com>
-References: <CAAXf6LXwy3HGGX1W9FCcdVCRJSHMT2B=w--xvcsBxqwUXxDjqg@mail.gmail.com>
-Message-ID: <CAAXf6LU8UuZELJKDjbKsK8cjGiVABpn3NP6LpEr=FqnxCkpHaw@mail.gmail.com>
+Date: Sun, 17 Nov 2013 10:06:02 +0100
+Subject: [Buildroot] [PATCH] vim: fix gettext check
+Message-ID: <0d216d9aa9ecfc7dbb82.1384679162@argentina>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-All,
+Fixes http://autobuild.buildroot.net/results/21b5a910e6a27fa1cb12d0002ffed7e6ed9d6c83/
 
-On Thu, Nov 14, 2013 at 12:24 PM, Thomas De Schampheleire
-<patrickdepinguin@gmail.com> wrote:
-> All,
->
-> Now that 2013.11-rc1 is out, we have until the end of the month to fix
-> remaining problems until 2013.11 is released.
->
-> The autobuilders are still finding a lot of problems.
-> Several developers are already looking at and fixing these problems,
-> which is great. However, we can do much better.
->
-> Therefore, I would like to request all developers to temporarily stop
-> creating new features, adding new packages, etc. during the rest of
-> this month, and focus on fixing autobuild problems (or other fixes)
-> instead. With a joint effort I am sure we can fix many problems.
->
-> The autobuild website is at http://autobuild.buildroot.org/, the
-> statistics are at http://autobuild.buildroot.org/stats.php
-> [currently this site seems to be down]
-> There is also a daily mail sent to the list with the overview of the
-> succeeding/failing builds.
->
-> To fix a problem, you would start by downloading the defconfig from
-> the autobuild site, apply it in a fresh repository, probably set a
-> good value for BR2_DL_DIR, and run 'make' to see if you can reproduce
-> the problem. Once you can reproduce it, you can analyze in more detail
-> and create a fix.
->
-> Depending on the problem, you can attempt some shortcuts. For example
-> instead of building everything, you can request to build one
-> particular package (foo) by running 'make toolchain foo'. If the
-> problem is caused only by the overall configuration and foo itself
-> (not by a missing dependency) this faster build would also show the
-> problem. Remember: it's crucial that you can first reproduce the
-> problem (with or without shortcut). Otherwise you may 'fix' something
-> that is not broken.
->
-> If you want to fix a particular problem but get stuck, don't hesitate
-> in sending your findings to the list. Other developers can try to help
-> you.
+Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
-The autobuilders site is back online, for the time being at the
-following location:
-http://autobuild.humanoidz.org
+---
+ package/vim/vim-0001-fix-nls-check.patch |  120 +++++++++++++++++++++++++++
+ 1 files changed, 120 insertions(+), 0 deletions(-)
 
-Therefore, I would like to reiterate my request for looking at and
-fixing these failures, to make 2013.11 more stable.
-
-Thanks a lot for your contribution,
-Thomas
+diff --git a/package/vim/vim-0001-fix-nls-check.patch b/package/vim/vim-0001-fix-nls-check.patch
+new file mode 100644
+--- /dev/null
++++ b/package/vim/vim-0001-fix-nls-check.patch
+@@ -0,0 +1,120 @@
++configure: use minimal LIBS during gettext check
++
++In some configurations, vim fails to link correctly with messages such as:
++edit.c:(.text+0x1614): undefined reference to `libintl_gettext'
++
++In particular, this has been seen by the buildroot autobuilds (see [1]) but
++has also been reported at [2] and [3].
++
++In the bad case, the configure script says:
++checking for NLS... gettext() works
++In the good case, it says:
++checking for NLS... gettext() works with -lintl
++
++In the bad case, the system has libelf, vim detects that and takes it along
++in $LIBS. Libelf needs libintl on this system, and so linking the test
++program with -lelf will automatically take -lintl too. This causes configure
++to think gettext() does not need libintl, while in reality it does.
++
++In the good case, libelf is not present and thus not used. The first
++configure test for gettext fails, and then configure retries with -lintl
++(which succeeds).
++
++Until now, there isn't really a problem. In both cases, you could link
++correctly. In the 'bad' case, libintl is implicitly taken through libelf, in
++the second case it is explicitly taken.
++
++The real problem occurs because configure also tests whether the linker
++supports --as-needed and uses it when possible, instead of the link.sh
++script. However, --as-needed seems to cause libintl NOT to be taken in the
++bad case, causing the undefined references to libintl_gettext.
++
++This patch changes the configure script so that the gettext check does not
++use additional libraries such as libelf. The test program is linked either
++with nothing, or with libintl alone. This will cause libintl to
++be added explicitly to LIBS, when needed.
++
++[1] http://autobuild.buildroot.net/results/21b5a910e6a27fa1cb12d0002ffed7e6ed9d6c83/
++[2] http://lists.freebsd.org/pipermail/freebsd-ports-bugs/2012-November/243930.html
++[3] http://lists.freebsd.org/pipermail/freebsd-ports-bugs/2012-May/234184.html
++
++
++Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
++Upstream-status: submitted
++
++---
++ src/auto/configure |  11 ++++++-----
++ src/configure.in   |  13 +++++++++----
++ 2 files changed, 15 insertions(+), 9 deletions(-)
++
++diff --git a/src/auto/configure b/src/auto/configure
++--- a/src/auto/configure
+++++ b/src/auto/configure
++@@ -12271,6 +12271,8 @@ fi
++   if test -f po/Makefile; then
++     have_gettext="no"
++     if test -n "$MSGFMT"; then
+++      olibs=$LIBS
+++      LIBS=""
++       cat confdefs.h - <<_ACEOF >conftest.$ac_ext
++ /* end confdefs.h.  */
++ #include <libintl.h>
++@@ -12284,10 +12286,9 @@ gettext("Test");
++ _ACEOF
++ if ac_fn_c_try_link "$LINENO"; then :
++   { $as_echo "$as_me:${as_lineno-$LINENO}: result: gettext() works" >&5
++-$as_echo "gettext() works" >&6; }; have_gettext="yes"
++-else
++-  olibs=$LIBS
++-	  LIBS="$LIBS -lintl"
+++$as_echo "gettext() works" >&6; }; have_gettext="yes"; LIBS=$olibs;
+++else
+++	  LIBS="-lintl"
++ 	  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
++ /* end confdefs.h.  */
++ #include <libintl.h>
++@@ -12301,7 +12302,7 @@ gettext("Test");
++ _ACEOF
++ if ac_fn_c_try_link "$LINENO"; then :
++   { $as_echo "$as_me:${as_lineno-$LINENO}: result: gettext() works with -lintl" >&5
++-$as_echo "gettext() works with -lintl" >&6; }; have_gettext="yes"
+++$as_echo "gettext() works with -lintl" >&6; }; have_gettext="yes"; LIBS="$olibs -lintl";
++ else
++   { $as_echo "$as_me:${as_lineno-$LINENO}: result: gettext() doesn't work" >&5
++ $as_echo "gettext() doesn't work" >&6; };
++diff --git a/src/configure.in b/src/configure.in
++--- a/src/configure.in
+++++ b/src/configure.in
++@@ -3484,6 +3484,9 @@ if test "$MANDEF" = "man -s"; then
++ fi
++ 
++ dnl Check if gettext() is working and if it needs -lintl
+++dnl We take care to base this on an empty LIBS: on some systems libelf would be
+++dnl in LIBS and implicitly take along libintl. The final LIBS would then not
+++dnl contain libintl, and the link step would fail due to -Wl,--as-needed.
++ AC_MSG_CHECKING(--disable-nls argument)
++ AC_ARG_ENABLE(nls,
++ 	[  --disable-nls           Don't support NLS (gettext()).], ,
++@@ -3502,16 +3505,18 @@ if test "$enable_nls" = "yes"; then
++   if test -f po/Makefile; then
++     have_gettext="no"
++     if test -n "$MSGFMT"; then
+++      olibs=$LIBS
+++      LIBS=""
++       AC_TRY_LINK(
++ 	[#include <libintl.h>],
++ 	[gettext("Test");],
++-	AC_MSG_RESULT([gettext() works]); have_gettext="yes",
++-	  olibs=$LIBS
++-	  LIBS="$LIBS -lintl"
+++	AC_MSG_RESULT([gettext() works]); have_gettext="yes"; LIBS=$olibs,
+++	  LIBS="-lintl"
++ 	  AC_TRY_LINK(
++ 	      [#include <libintl.h>],
++ 	      [gettext("Test");],
++-	      AC_MSG_RESULT([gettext() works with -lintl]); have_gettext="yes",
+++	      AC_MSG_RESULT([gettext() works with -lintl]); have_gettext="yes";
+++	      LIBS="$olibs -lintl",
++ 	      AC_MSG_RESULT([gettext() doesn't work]);
++ 	      LIBS=$olibs))
++     else
