@@ -1,58 +1,80 @@
-From: Arnaud Aujon <arnaud.aujon@gmail.com>
-Date: Sun, 17 Nov 2013 16:34:00 +0100
-Subject: [Buildroot]  [PATCH]ttcp: fix url, rename patch
-Message-ID: <1384702440-23840-1-git-send-email-arnaud.aujon@gmail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 17 Nov 2013 18:27:17 +0100
+Subject: [Buildroot] [PATCH] vim: fix gettext check
+In-Reply-To: <0d216d9aa9ecfc7dbb82.1384679162@argentina> (Thomas De
+ Schampheleire's message of "Sun, 17 Nov 2013 10:06:02 +0100")
+References: <0d216d9aa9ecfc7dbb82.1384679162@argentina>
+Message-ID: <87ob5jx7ka.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- - fix download url : isn't available on previous ftp, use an other one instead
- - Add version according to source code version
- - rename and clean patch according to patch policy
+>>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin@gmail.com> writes:
 
-Signed-off-by: Arnaud Aujon <arnaud.aujon@gmail.com>
----
- ...ttcp-bcopy.patch => ttcp-0001-replace-deprecated-bcopy.patch} | 9 ++++++---
- package/ttcp/ttcp.mk                                             | 4 ++--
- 2 files changed, 8 insertions(+), 5 deletions(-)
- rename package/ttcp/{ttcp-bcopy.patch => ttcp-0001-replace-deprecated-bcopy.patch} (64%)
+ > Fixes http://autobuild.buildroot.net/results/21b5a910e6a27fa1cb12d0002ffed7e6ed9d6c83/
 
-diff --git a/package/ttcp/ttcp-bcopy.patch b/package/ttcp/ttcp-0001-replace-deprecated-bcopy.patch
-similarity index 64%
-rename from package/ttcp/ttcp-bcopy.patch
-rename to package/ttcp/ttcp-0001-replace-deprecated-bcopy.patch
-index c98c88f..fb8ef7f 100644
---- a/package/ttcp/ttcp-bcopy.patch
-+++ b/package/ttcp/ttcp-0001-replace-deprecated-bcopy.patch
-@@ -1,6 +1,9 @@
--diff -urN ttcp-0rig/ttcp.c ttcp/ttcp.c
----- ttcp-0rig/ttcp.c	1993-05-17 00:00:00.000000000 +0200
--+++ ttcp/ttcp.c	2009-01-14 23:46:19.000000000 +0100
-+Replace deprecated bcopy call by using memmove instead.
-+
-+Index: b/ttcp.c
-+===================================================================
-+--- a/ttcp.c
-++++ b/ttcp.c
- @@ -241,7 +241,7 @@
-  			if ((addr=gethostbyname(host)) == NULL)
-  				err("bad hostname");
-diff --git a/package/ttcp/ttcp.mk b/package/ttcp/ttcp.mk
-index b65949d..a30e2ac 100644
---- a/package/ttcp/ttcp.mk
-+++ b/package/ttcp/ttcp.mk
-@@ -5,8 +5,8 @@
- ################################################################################
- 
- #
--TTCP_VERSION =
--TTCP_SITE    = http://ftp.sunet.se/pub/network/monitoring/ttcp
-+TTCP_VERSION = 1.12
-+TTCP_SITE    = ftp://ftp.sgi.com/sgi/src/ttcp/
- TTCP_SOURCE  = ttcp.c
- TTCP_LICENSE = public domain
- 
+As that URL doesn't currently work, could you explain a bit what the
+problem is?
+
+I've tried building it with a number of different toolchain
+configurations, and don't seem to be able to trigger the issue.
+
+I see that vim.mk doesn't do anything with gettext. Shouldn't it atleast
+make sure it gets built after gettext if enabled and/or select gettext
+if BR2_NEEDS_GETTEXT_IF_LOCALE?
+
+ > Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+
+ > ---
+ >  package/vim/vim-0001-fix-nls-check.patch |  120 +++++++++++++++++++++++++++
+ >  1 files changed, 120 insertions(+), 0 deletions(-)
+
+ > diff --git a/package/vim/vim-0001-fix-nls-check.patch b/package/vim/vim-0001-fix-nls-check.patch
+ > new file mode 100644
+ > --- /dev/null
+ > +++ b/package/vim/vim-0001-fix-nls-check.patch
+ > @@ -0,0 +1,120 @@
+ > +configure: use minimal LIBS during gettext check
+ > +
+ > +In some configurations, vim fails to link correctly with messages such as:
+ > +edit.c:(.text+0x1614): undefined reference to `libintl_gettext'
+ > +
+ > +In particular, this has been seen by the buildroot autobuilds (see [1]) but
+ > +has also been reported at [2] and [3].
+ > +
+ > +In the bad case, the configure script says:
+ > +checking for NLS... gettext() works
+ > +In the good case, it says:
+ > +checking for NLS... gettext() works with -lintl
+ > +
+ > +In the bad case, the system has libelf, vim detects that and takes it along
+ > +in $LIBS. Libelf needs libintl on this system, and so linking the test
+ > +program with -lelf will automatically take -lintl too. This causes configure
+ > +to think gettext() does not need libintl, while in reality it does.
+ > +
+ > +In the good case, libelf is not present and thus not used. The first
+ > +configure test for gettext fails, and then configure retries with -lintl
+ > +(which succeeds).
+ > +
+ > +Until now, there isn't really a problem. In both cases, you could link
+ > +correctly. In the 'bad' case, libintl is implicitly taken through libelf, in
+ > +the second case it is explicitly taken.
+ > +
+ > +The real problem occurs because configure also tests whether the linker
+ > +supports --as-needed and uses it when possible, instead of the link.sh
+ > +script. However, --as-needed seems to cause libintl NOT to be taken in the
+ > +bad case, causing the undefined references to libintl_gettext.
+ > +
+ > +This patch changes the configure script so that the gettext check does not
+ > +use additional libraries such as libelf. The test program is linked either
+ > +with nothing, or with libintl alone. This will cause libintl to
+ > +be added explicitly to LIBS, when needed.
+ > +
+ > +[1] http://autobuild.buildroot.net/results/21b5a910e6a27fa1cb12d0002ffed7e6ed9d6c83/
+ > +[2] http://lists.freebsd.org/pipermail/freebsd-ports-bugs/2012-November/243930.html
+ > +[3] http://lists.freebsd.org/pipermail/freebsd-ports-bugs/2012-May/234184.html
+
 -- 
-1.8.3.1
+Bye, Peter Korsgaard
