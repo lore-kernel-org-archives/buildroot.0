@@ -1,39 +1,42 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 17 Nov 2013 08:33:40 +0100
-Subject: [Buildroot] [PATCH 6/6] Makefile: export PATH
-In-Reply-To: <20131115205317.GG3337@free.fr> (Yann E. MORIN's message of "Fri, 
- 15 Nov 2013 21:53:17 +0100")
-References: <1384203586-17790-1-git-send-email-s.martin49@gmail.com>
- <1384203586-17790-7-git-send-email-s.martin49@gmail.com>
- <20131111233113.2e11fd88@skate>
- <CAHXCMMJnox5o3hfiVgj2vzK=1=pbm85cF+9Jutth-4LRvLB5CA@mail.gmail.com>
- <20131115205317.GG3337@free.fr>
-Message-ID: <87mwl3zdm3.fsf@dell.be.48ers.dk>
+Date: Sun, 17 Nov 2013 08:37:24 +0100
+Subject: [Buildroot] [PATCH] pv: support ccache builds
+In-Reply-To: <20131115202856.GA13944@gmail.com> (Andrew Ruder's message of
+ "Fri, 15 Nov 2013 14:28:56 -0600")
+References: <20131115202856.GA13944@gmail.com>
+Message-ID: <87iovrzdfv.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+>>>>> "Andrew" == Andrew Ruder <andrew.ruder@elecsyscorp.com> writes:
 
-Hi,
+ > When using ccache TARGET_CC is something like
+ >     ccache gcc
 
- >> To me, this could make easier writing post-{build,image} scripts.
+ > This causes problems in the pv build which attempts to
+ > override LD because the command ends up being
+ >     make [...] LD=/tools/ccache /tools/gcc LDFLAGS="[...]
 
- > Indeed, it *is* usefull for those scripts.
+ > As a result, during the build phase it attempts to build
+ > /tools/gcc which succeeds by doing nothing:
+ >     make[1]: Nothing to be done for `/tools/gcc'.
 
- > The first thing I do in br.config is to exactly set PATH to include the
- > host/usr/bin and host/usr/sbin directories in front of the user's PATH.
+ > and during the install phase you get the real build which
+ > errors out on the LD error this snippet was attempting to
+ > fix:
+ >     ld -r -o src/library.o src/library/getopt.o \
+ >         src/library/gettext.o
+ >     ld: src/library/gettext.o: Relocations in generic ELF \
+ >         (EM: 40)
+ >     src/library/gettext.o: error adding symbols: File in \
+ >         wrong format
 
- > But maybe we should just set PATH at the time we call them?
+ > Signed-off-by: Andrew Ruder <andrew.ruder@elecsyscorp.com>
 
-I *THINK* always adding those host directories to the path would be
-safe, as long as it happens after 'which' calls in the toplevel
-makefile. This would also allow us to get rid of HOST_PATH / TARGET_PATH
-(which are currently not identical, but should be).
-
-But it will need some testing.
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
