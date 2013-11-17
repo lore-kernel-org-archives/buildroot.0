@@ -1,48 +1,64 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 17 Nov 2013 09:19:48 +0100
-Subject: [Buildroot] [PATCH v3 3/5] eudev: new package.
-In-Reply-To: <CAAXf6LWoRXOwzG2RaNSZc+EN4Ev7bJx_hrsgXFuD1Fa5hs8OjA@mail.gmail.com>
- (Thomas De Schampheleire's message of "Sun, 17 Nov 2013 09:16:26
- +0100")
-References: <1383752078-25315-1-git-send-email-eric.le.bihan.dev@free.fr>
- <1383752078-25315-4-git-send-email-eric.le.bihan.dev@free.fr>
- <20131113234133.2b964da0@skate>
- <CAAXf6LWoRXOwzG2RaNSZc+EN4Ev7bJx_hrsgXFuD1Fa5hs8OjA@mail.gmail.com>
-Message-ID: <87wqk7xwwr.fsf@dell.be.48ers.dk>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Sun, 17 Nov 2013 09:32:16 +0100
+Subject: [Buildroot] Call for autobuild fixing for 2013.11
+In-Reply-To: <CAAXf6LXwy3HGGX1W9FCcdVCRJSHMT2B=w--xvcsBxqwUXxDjqg@mail.gmail.com>
+References: <CAAXf6LXwy3HGGX1W9FCcdVCRJSHMT2B=w--xvcsBxqwUXxDjqg@mail.gmail.com>
+Message-ID: <CAAXf6LU8UuZELJKDjbKsK8cjGiVABpn3NP6LpEr=FqnxCkpHaw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin@gmail.com> writes:
+All,
 
-Hi,
+On Thu, Nov 14, 2013 at 12:24 PM, Thomas De Schampheleire
+<patrickdepinguin@gmail.com> wrote:
+> All,
+>
+> Now that 2013.11-rc1 is out, we have until the end of the month to fix
+> remaining problems until 2013.11 is released.
+>
+> The autobuilders are still finding a lot of problems.
+> Several developers are already looking at and fixing these problems,
+> which is great. However, we can do much better.
+>
+> Therefore, I would like to request all developers to temporarily stop
+> creating new features, adding new packages, etc. during the rest of
+> this month, and focus on fixing autobuild problems (or other fixes)
+> instead. With a joint effort I am sure we can fix many problems.
+>
+> The autobuild website is at http://autobuild.buildroot.org/, the
+> statistics are at http://autobuild.buildroot.org/stats.php
+> [currently this site seems to be down]
+> There is also a daily mail sent to the list with the overview of the
+> succeeding/failing builds.
+>
+> To fix a problem, you would start by downloading the defconfig from
+> the autobuild site, apply it in a fresh repository, probably set a
+> good value for BR2_DL_DIR, and run 'make' to see if you can reproduce
+> the problem. Once you can reproduce it, you can analyze in more detail
+> and create a fix.
+>
+> Depending on the problem, you can attempt some shortcuts. For example
+> instead of building everything, you can request to build one
+> particular package (foo) by running 'make toolchain foo'. If the
+> problem is caused only by the overall configuration and foo itself
+> (not by a missing dependency) this faster build would also show the
+> problem. Remember: it's crucial that you can first reproduce the
+> problem (with or without shortcut). Otherwise you may 'fix' something
+> that is not broken.
+>
+> If you want to fix a particular problem but get stuck, don't hesitate
+> in sending your findings to the list. Other developers can try to help
+> you.
 
- >> There is also a decision to be taken here: do we duplicate the
- >> dependencies here? If we don't duplicate the comments, then maybe we
- >> shouldn't duplicate the dependencies?
- >> 
+The autobuilders site is back online, for the time being at the
+following location:
+http://autobuild.humanoidz.org
 
- > The advantage of duplicating the dependencies is that there is no room
- > for mistakes. The policy is clear.
- > Take the example where package A depends on B and B needs threads.
- > Strictly speaking, A does not need to repeat the dependency.
- > However, what if A also needs threads. This may or may not be known to
- > the author of that package (or anyone who touches its Config.in
- > files). If a new version of B appears that no longer depends on
- > threads and this dependency is removed from B/Config.in, the
- > dependency of A on threads will no longer be expressed. This is a
- > problem.
+Therefore, I would like to reiterate my request for looking at and
+fixing these failures, to make 2013.11 more stable.
 
- > As making the difference between 'does the package itself also needs
- > this dependency' or 'only the package dependencies have this
- > dependency' is not obvious, having different rules in this matter
- > creates a difficult to maintain situation IMO. Therefore, I am more in
- > favor of duplicating the dependencies consistently, along with the
- > comments.
-
-That's fine by me. It is certainly the simplest solution.
-
--- 
-Bye, Peter Korsgaard
+Thanks a lot for your contribution,
+Thomas
