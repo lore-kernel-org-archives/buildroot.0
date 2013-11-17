@@ -1,26 +1,80 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 17 Nov 2013 09:17:53 +0100
-Subject: [Buildroot] [PATCH 2 of 6 v3] legal info: split manifest for
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 17 Nov 2013 09:15:09 +0100
+Subject: [Buildroot] [git commit branch/next] legal info: split sources for
 	host and target
-In-Reply-To: <8956d614f4a63d18f5be.1384246077@argentina> (Thomas De
- Schampheleire's message of "Tue, 12 Nov 2013 09:47:57 +0100")
-References: <patchbomb.1384246075@argentina>
- <8956d614f4a63d18f5be.1384246077@argentina>
-Message-ID: <871u2fzbke.fsf@dell.be.48ers.dk>
+Message-ID: <20131117081822.72CB09BCCB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin@gmail.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=858334c202c83d79622784d40dc8bf51e5ea3d46
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
- > Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
- > Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
- > Acked-by: Luca Ceresoli <luca@lucaceresoli.net>
- > Tested-by: Luca Ceresoli <luca@lucaceresoli.net>
+Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+Acked-by: Luca Ceresoli <luca@lucaceresoli.net>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ Makefile               |    9 +++++----
+ package/pkg-generic.mk |    6 +++---
+ 2 files changed, 8 insertions(+), 7 deletions(-)
 
-Committed the rest of the series to next, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/Makefile b/Makefile
+index da2a646..8c2429a 100644
+--- a/Makefile
++++ b/Makefile
+@@ -108,7 +108,8 @@ TARGET_DIR:=$(BASE_DIR)/target
+ HOST_DIR:=$(BASE_DIR)/host
+ 
+ LEGAL_INFO_DIR=$(BASE_DIR)/legal-info
+-REDIST_SOURCES_DIR=$(LEGAL_INFO_DIR)/sources
++REDIST_SOURCES_DIR_TARGET=$(LEGAL_INFO_DIR)/sources
++REDIST_SOURCES_DIR_HOST=$(LEGAL_INFO_DIR)/host-sources
+ LICENSE_FILES_DIR_TARGET=$(LEGAL_INFO_DIR)/licenses
+ LICENSE_FILES_DIR_HOST=$(LEGAL_INFO_DIR)/host-licenses
+ LEGAL_MANIFEST_CSV_TARGET=$(LEGAL_INFO_DIR)/manifest.csv
+@@ -404,7 +405,7 @@ world: $(BASE_TARGETS) $(TARGETS_ALL)
+ # dependencies anywhere else
+ #
+ ################################################################################
+-$(BUILD_DIR) $(HOST_DIR) $(BINARIES_DIR) $(STAMP_DIR) $(LEGAL_INFO_DIR) $(REDIST_SOURCES_DIR):
++$(BUILD_DIR) $(HOST_DIR) $(BINARIES_DIR) $(STAMP_DIR) $(LEGAL_INFO_DIR) $(REDIST_SOURCES_DIR_TARGET) $(REDIST_SOURCES_DIR_HOST):
+ 	@mkdir -p $@
+ 
+ # We make a symlink lib32->lib or lib64->lib as appropriate
+@@ -585,8 +586,8 @@ legal-info-prepare: $(LEGAL_INFO_DIR)
+ 	@$(call legal-warning,the toolchain has not been saved)
+ 	@cp $(BUILDROOT_CONFIG) $(LEGAL_INFO_DIR)/buildroot.config
+ 
+-legal-info: dirs legal-info-clean legal-info-prepare $(REDIST_SOURCES_DIR) \
+-		$(TARGETS_LEGAL_INFO)
++legal-info: dirs legal-info-clean legal-info-prepare $(TARGETS_LEGAL_INFO) \
++		$(REDIST_SOURCES_DIR_TARGET) $(REDIST_SOURCES_DIR_HOST)
+ 	@cat support/legal-info/README.header >>$(LEGAL_REPORT)
+ 	@if [ -r $(LEGAL_WARNINGS) ]; then \
+ 		cat support/legal-info/README.warnings-header \
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 5e3fd39..03eb537 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -551,7 +551,7 @@ ifeq ($$($(2)_REDISTRIBUTE),YES)
+ ifneq ($$($(2)_SITE_METHOD),local)
+ ifneq ($$($(2)_SITE_METHOD),override)
+ # Packages that have a tarball need it downloaded and extracted beforehand
+-$(1)-legal-info: $(1)-extract $(REDIST_SOURCES_DIR)
++$(1)-legal-info: $(1)-extract $(REDIST_SOURCES_DIR_$(call UPPERCASE,$(5)))
+ $(2)_MANIFEST_TARBALL = $$($(2)_SOURCE)
+ endif
+ endif
+@@ -586,8 +586,8 @@ endif # license files
+ 
+ ifeq ($$($(2)_REDISTRIBUTE),YES)
+ # Copy the source tarball (just hardlink if possible)
+-	@cp -l $(DL_DIR)/$$($(2)_SOURCE) $(REDIST_SOURCES_DIR) 2>/dev/null || \
+-	   cp $(DL_DIR)/$$($(2)_SOURCE) $(REDIST_SOURCES_DIR)
++	@cp -l $(DL_DIR)/$$($(2)_SOURCE) $(REDIST_SOURCES_DIR_$(call UPPERCASE,$(5))) 2>/dev/null || \
++	   cp $(DL_DIR)/$$($(2)_SOURCE) $(REDIST_SOURCES_DIR_$(call UPPERCASE,$(5)))
+ endif # redistribute
+ 
+ endif # other packages
