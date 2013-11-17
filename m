@@ -1,59 +1,74 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 22 Nov 2013 23:32:11 +0100
-Subject: [Buildroot] [git commit] pcre: add options to enable UTF and UCP
-	support
-Message-ID: <20131201201519.B8F1A9BE44@busybox.osuosl.org>
+Date: Sun, 17 Nov 2013 09:15:12 +0100
+Subject: [Buildroot] [git commit] legal info: cleanup utility functions
+Message-ID: <20131201201519.985F59BE44@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=49fef2fc44358df6cd5cc1c8416222ff26f00af2
+commit: http://git.buildroot.net/buildroot/commit/?id=7f809ca1d227c3a5a6c472bea6fc219dbc7e306b
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Allow to compile PCRE with UTF-8/16/32 support and with
-support for Unicode properties.
+The legal-info utility functions where defined using two ways
+util-foo = command-foo
+and
+define util-bar # parameter description
+	command-bar
+endef
 
-[Peter: whitespace fix]
-Signed-off-by: Sven Neumann <neumann@teufel.de>
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+This commit changes these functions to use the second form for clarity and
+additionally adds parameter descriptions on all functions.
+
+Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+Acked-by: Luca Ceresoli <luca@lucaceresoli.net>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/pcre/Config.in |   12 ++++++++++++
- package/pcre/pcre.mk   |    2 ++
- 2 files changed, 14 insertions(+), 0 deletions(-)
+ package/pkg-utils.mk |   25 +++++++++++++++++++------
+ 1 files changed, 19 insertions(+), 6 deletions(-)
 
-diff --git a/package/pcre/Config.in b/package/pcre/Config.in
-index dc92274..9d3a143 100644
---- a/package/pcre/Config.in
-+++ b/package/pcre/Config.in
-@@ -19,4 +19,16 @@ config BR2_PACKAGE_PCRE_32
- 	help
- 	  This option builds the 32-bits pcre library, i.e 'libpcre32'
- 
-+config BR2_PACKAGE_PCRE_UTF
-+	bool "UTF-8/16/32 support in pcre"
-+	help
-+	  This option builds the pcre library with UTF-8/16/32 support
+diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
+index 86fa5da..851575c 100644
+--- a/package/pkg-utils.mk
++++ b/package/pkg-utils.mk
+@@ -99,20 +99,33 @@ endef
+ # legal-info helper functions
+ #
+ LEGAL_INFO_SEPARATOR="::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::"
+-legal-warning=echo "WARNING: $(1)" >>$(LEGAL_WARNINGS)
+-legal-warning-pkg=echo "WARNING: $(1): $(2)" >>$(LEGAL_WARNINGS)
 +
-+config BR2_PACKAGE_PCRE_UCP
-+	bool "Unicode properties support in pcre"
-+	select BR2_PACKAGE_PCRE_UTF
-+	help
-+	  This option builds the pcre library with Unicode properties
-+	  support (implies UTF-8/16/32 support)'
++define legal-warning # text
++	echo "WARNING: $(1)" >>$(LEGAL_WARNINGS)
++endef
 +
- endif
-diff --git a/package/pcre/pcre.mk b/package/pcre/pcre.mk
-index bf86a3d..2637354 100644
---- a/package/pcre/pcre.mk
-+++ b/package/pcre/pcre.mk
-@@ -19,5 +19,7 @@ endif
- PCRE_CONF_OPT += --enable-pcre8
- PCRE_CONF_OPT += $(if $(BR2_PACKAGE_PCRE_16),--enable-pcre16,--disable-pcre16)
- PCRE_CONF_OPT += $(if $(BR2_PACKAGE_PCRE_32),--enable-pcre32,--disable-pcre32)
-+PCRE_CONF_OPT += $(if $(BR2_PACKAGE_PCRE_UTF),--enable-utf,--disable-utf)
-+PCRE_CONF_OPT += $(if $(BR2_PACKAGE_PCRE_UCP),--enable-unicode-properties,--disable-unicode-properties)
- 
- $(eval $(autotools-package))
++define legal-warning-pkg # pkg, text
++	echo "WARNING: $(1): $(2)" >>$(LEGAL_WARNINGS)
++endef
++
+ define legal-warning-pkg-savednothing # pkg, {local|override}
+ 	$(call legal-warning-pkg,$(1),sources and license files not saved ($(2) packages not handled))
+ endef
+-legal-manifest=echo '"$(1)","$(2)","$(3)","$(4)","$(5)"' >>$(LEGAL_MANIFEST_CSV_$(6))
+-define legal-license-header
++
++define legal-manifest # pkg, version, license, license-files, source, {HOST|TARGET}
++	echo '"$(1)","$(2)","$(3)","$(4)","$(5)"' >>$(LEGAL_MANIFEST_CSV_$(6))
++endef
++
++define legal-license-header # pkg, license-file, {HOST|TARGET}
+ 	echo -e "$(LEGAL_INFO_SEPARATOR)\n\t$(1):" \
+ 		"$(2)\n$(LEGAL_INFO_SEPARATOR)\n\n" >>$(LEGAL_LICENSES_TXT_$(3))
+ endef
+-define legal-license-nofiles
++
++define legal-license-nofiles # pkg, {HOST|TARGET}
+ 	$(call legal-license-header,$(1),unknown license file(s),$(2))
+ endef
+-define legal-license-file # pkg, filename, file-fullpath, type
++
++define legal-license-file # pkg, filename, file-fullpath, {HOST|TARGET}
+ 	$(call legal-license-header,$(1),$(2) file,$(4)) && \
+ 	cat $(3) >>$(LEGAL_LICENSES_TXT_$(4)) && \
+ 	echo >>$(LEGAL_LICENSES_TXT_$(4)) && \
