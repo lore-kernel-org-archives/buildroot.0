@@ -1,143 +1,90 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Sun, 17 Nov 2013 10:06:02 +0100
-Subject: [Buildroot] [PATCH] vim: fix gettext check
-Message-ID: <0d216d9aa9ecfc7dbb82.1384679162@argentina>
+Date: Sun, 17 Nov 2013 10:12:16 +0100
+Subject: [Buildroot] Patchwork oldest patches cleanup #2 (deadline
+	November 17)
+In-Reply-To: <CAAXf6LV_kM18mt8h5yQScnhOPfJZ2PMNg3tvF=mBLCi8bFem2A@mail.gmail.com>
+References: <CAAXf6LV_kM18mt8h5yQScnhOPfJZ2PMNg3tvF=mBLCi8bFem2A@mail.gmail.com>
+Message-ID: <CAAXf6LVpEs7QJmfa6o1cXq73mQkw15PnMHSU6_WuVVvzQ33CYQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes http://autobuild.buildroot.net/results/21b5a910e6a27fa1cb12d0002ffed7e6ed9d6c83/
+All,
 
-Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+On Fri, Nov 1, 2013 at 4:09 PM, Thomas De Schampheleire
+<patrickdepinguin@gmail.com> wrote:
+> All,
+>
+> For those who haven't seen the first patchwork cleanup session, here is
+> a quick recap: every session we'll be posting the list of the 10 oldest
+> patches, with the original patch contributors in copy. During two weeks,
+> we have the opportunity to discuss the patch, whether it is still
+> necessary or not, how it should be changed to be merged.
+>
+> In particular, I'm interested in knowing if the original contributor is
+> still interested by the patch, or if someone else is interested in
+> adopting the patch and sending an updated version, or if the patch no
+> longer makes sense due to other changes made in Buildroot.
+>
+> All patches that have not received any comment or attention before the
+> deadline will be removed from patchwork. This is aggressive, but we have
+> many 'dead' patches sitting in patchwork, and this cannot work.
+>
+> For this second session, I set the deadline to November 17. Below are the
+> 10 oldest patches (obtained with a slightly modified version of pwclient):
+> [ pwclient list -s New -n 10 ]
+>
+>
+> Add support for the HABA-KNX-LITE
+> Gregory Hermant <gregory.hermant@calao-systems.com>
+> http://patchwork.ozlabs.org/patch/180241
+>
+> upx: high-performance executable packer with in-place decompression support
+> Stefan Fr?berg <stefan.froberg@petroprogram.com>
+> http://patchwork.ozlabs.org/patch/180285
+>
+> Add custom boards support for Atmel SAM-BA software
+> Gregory Hermant <gregory.hermant@calao-systems.com>
+> http://patchwork.ozlabs.org/patch/180668
+>
+> linux: add default defconfig
+> Arnout Vandecappelle <arnout@mind.be>
+> http://patchwork.ozlabs.org/patch/181185
+>
+> [1/4] If linux-pam is built, enable dbm functionality in Berkeley DB
+> Dimitry Golubovsky <golubovsky@gmail.com>
+> http://patchwork.ozlabs.org/patch/182497
+>
+> [2/4] Make Berkeley DB a dependency of linux-pam and make sure it is selected
+> Dimitry Golubovsky <golubovsky@gmail.com>
+> http://patchwork.ozlabs.org/patch/182498
+>
+> [3/4] Provide PAM default configuration files when building linux-pam package
+> Dimitry Golubovsky <golubovsky@gmail.com>
+> http://patchwork.ozlabs.org/patch/182499
+>
+> [4/4] PAM support in Busybox if linux-pam is built
+> Dimitry Golubovsky <golubovsky@gmail.com>
+> http://patchwork.ozlabs.org/patch/182500
+>
+> Fixing linux-pam build failures
+> Stefan Fr?berg <stefan.froberg@petroprogram.com>
+> http://patchwork.ozlabs.org/patch/182537
+>
+> [RFC] patches-from-git.sh: new support script
+> Arnout Vandecappelle <arnout@mind.be>
+> http://patchwork.ozlabs.org/patch/182856
+>
 
----
- package/vim/vim-0001-fix-nls-check.patch |  120 +++++++++++++++++++++++++++
- 1 files changed, 120 insertions(+), 0 deletions(-)
+At the end of this session, all patches have been rejected. Feel free
+to revive any of the patches later when you have time.
 
-diff --git a/package/vim/vim-0001-fix-nls-check.patch b/package/vim/vim-0001-fix-nls-check.patch
-new file mode 100644
---- /dev/null
-+++ b/package/vim/vim-0001-fix-nls-check.patch
-@@ -0,0 +1,120 @@
-+configure: use minimal LIBS during gettext check
-+
-+In some configurations, vim fails to link correctly with messages such as:
-+edit.c:(.text+0x1614): undefined reference to `libintl_gettext'
-+
-+In particular, this has been seen by the buildroot autobuilds (see [1]) but
-+has also been reported at [2] and [3].
-+
-+In the bad case, the configure script says:
-+checking for NLS... gettext() works
-+In the good case, it says:
-+checking for NLS... gettext() works with -lintl
-+
-+In the bad case, the system has libelf, vim detects that and takes it along
-+in $LIBS. Libelf needs libintl on this system, and so linking the test
-+program with -lelf will automatically take -lintl too. This causes configure
-+to think gettext() does not need libintl, while in reality it does.
-+
-+In the good case, libelf is not present and thus not used. The first
-+configure test for gettext fails, and then configure retries with -lintl
-+(which succeeds).
-+
-+Until now, there isn't really a problem. In both cases, you could link
-+correctly. In the 'bad' case, libintl is implicitly taken through libelf, in
-+the second case it is explicitly taken.
-+
-+The real problem occurs because configure also tests whether the linker
-+supports --as-needed and uses it when possible, instead of the link.sh
-+script. However, --as-needed seems to cause libintl NOT to be taken in the
-+bad case, causing the undefined references to libintl_gettext.
-+
-+This patch changes the configure script so that the gettext check does not
-+use additional libraries such as libelf. The test program is linked either
-+with nothing, or with libintl alone. This will cause libintl to
-+be added explicitly to LIBS, when needed.
-+
-+[1] http://autobuild.buildroot.net/results/21b5a910e6a27fa1cb12d0002ffed7e6ed9d6c83/
-+[2] http://lists.freebsd.org/pipermail/freebsd-ports-bugs/2012-November/243930.html
-+[3] http://lists.freebsd.org/pipermail/freebsd-ports-bugs/2012-May/234184.html
-+
-+
-+Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-+Upstream-status: submitted
-+
-+---
-+ src/auto/configure |  11 ++++++-----
-+ src/configure.in   |  13 +++++++++----
-+ 2 files changed, 15 insertions(+), 9 deletions(-)
-+
-+diff --git a/src/auto/configure b/src/auto/configure
-+--- a/src/auto/configure
-++++ b/src/auto/configure
-+@@ -12271,6 +12271,8 @@ fi
-+   if test -f po/Makefile; then
-+     have_gettext="no"
-+     if test -n "$MSGFMT"; then
-++      olibs=$LIBS
-++      LIBS=""
-+       cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-+ /* end confdefs.h.  */
-+ #include <libintl.h>
-+@@ -12284,10 +12286,9 @@ gettext("Test");
-+ _ACEOF
-+ if ac_fn_c_try_link "$LINENO"; then :
-+   { $as_echo "$as_me:${as_lineno-$LINENO}: result: gettext() works" >&5
-+-$as_echo "gettext() works" >&6; }; have_gettext="yes"
-+-else
-+-  olibs=$LIBS
-+-	  LIBS="$LIBS -lintl"
-++$as_echo "gettext() works" >&6; }; have_gettext="yes"; LIBS=$olibs;
-++else
-++	  LIBS="-lintl"
-+ 	  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-+ /* end confdefs.h.  */
-+ #include <libintl.h>
-+@@ -12301,7 +12302,7 @@ gettext("Test");
-+ _ACEOF
-+ if ac_fn_c_try_link "$LINENO"; then :
-+   { $as_echo "$as_me:${as_lineno-$LINENO}: result: gettext() works with -lintl" >&5
-+-$as_echo "gettext() works with -lintl" >&6; }; have_gettext="yes"
-++$as_echo "gettext() works with -lintl" >&6; }; have_gettext="yes"; LIBS="$olibs -lintl";
-+ else
-+   { $as_echo "$as_me:${as_lineno-$LINENO}: result: gettext() doesn't work" >&5
-+ $as_echo "gettext() doesn't work" >&6; };
-+diff --git a/src/configure.in b/src/configure.in
-+--- a/src/configure.in
-++++ b/src/configure.in
-+@@ -3484,6 +3484,9 @@ if test "$MANDEF" = "man -s"; then
-+ fi
-+ 
-+ dnl Check if gettext() is working and if it needs -lintl
-++dnl We take care to base this on an empty LIBS: on some systems libelf would be
-++dnl in LIBS and implicitly take along libintl. The final LIBS would then not
-++dnl contain libintl, and the link step would fail due to -Wl,--as-needed.
-+ AC_MSG_CHECKING(--disable-nls argument)
-+ AC_ARG_ENABLE(nls,
-+ 	[  --disable-nls           Don't support NLS (gettext()).], ,
-+@@ -3502,16 +3505,18 @@ if test "$enable_nls" = "yes"; then
-+   if test -f po/Makefile; then
-+     have_gettext="no"
-+     if test -n "$MSGFMT"; then
-++      olibs=$LIBS
-++      LIBS=""
-+       AC_TRY_LINK(
-+ 	[#include <libintl.h>],
-+ 	[gettext("Test");],
-+-	AC_MSG_RESULT([gettext() works]); have_gettext="yes",
-+-	  olibs=$LIBS
-+-	  LIBS="$LIBS -lintl"
-++	AC_MSG_RESULT([gettext() works]); have_gettext="yes"; LIBS=$olibs,
-++	  LIBS="-lintl"
-+ 	  AC_TRY_LINK(
-+ 	      [#include <libintl.h>],
-+ 	      [gettext("Test");],
-+-	      AC_MSG_RESULT([gettext() works with -lintl]); have_gettext="yes",
-++	      AC_MSG_RESULT([gettext() works with -lintl]); have_gettext="yes";
-++	      LIBS="$olibs -lintl",
-+ 	      AC_MSG_RESULT([gettext() doesn't work]);
-+ 	      LIBS=$olibs))
-+     else
+I will postpone the next patchwork cleanup session until after
+buildroot-2013.11 is released, to make sure everyone is focused on
+stabilization now. Please have a look at autobuild failures in the
+mean time!
+
+Thanks,
+Thomas
