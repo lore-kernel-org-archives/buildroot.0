@@ -1,90 +1,95 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Sun, 17 Nov 2013 10:12:16 +0100
-Subject: [Buildroot] Patchwork oldest patches cleanup #2 (deadline
-	November 17)
-In-Reply-To: <CAAXf6LV_kM18mt8h5yQScnhOPfJZ2PMNg3tvF=mBLCi8bFem2A@mail.gmail.com>
-References: <CAAXf6LV_kM18mt8h5yQScnhOPfJZ2PMNg3tvF=mBLCi8bFem2A@mail.gmail.com>
-Message-ID: <CAAXf6LVpEs7QJmfa6o1cXq73mQkw15PnMHSU6_WuVVvzQ33CYQ@mail.gmail.com>
+From: spdawson at gmail.com <spdawson@gmail.com>
+Date: Sun, 17 Nov 2013 11:47:42 +0000
+Subject: [Buildroot] [PATCH] uclibc: rename patches for version 0.9.31
+Message-ID: <1384688862-4248-1-git-send-email-spdawson@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-All,
+From: Simon Dawson <spdawson@gmail.com>
 
-On Fri, Nov 1, 2013 at 4:09 PM, Thomas De Schampheleire
-<patrickdepinguin@gmail.com> wrote:
-> All,
->
-> For those who haven't seen the first patchwork cleanup session, here is
-> a quick recap: every session we'll be posting the list of the 10 oldest
-> patches, with the original patch contributors in copy. During two weeks,
-> we have the opportunity to discuss the patch, whether it is still
-> necessary or not, how it should be changed to be merged.
->
-> In particular, I'm interested in knowing if the original contributor is
-> still interested by the patch, or if someone else is interested in
-> adopting the patch and sending an updated version, or if the patch no
-> longer makes sense due to other changes made in Buildroot.
->
-> All patches that have not received any comment or attention before the
-> deadline will be removed from patchwork. This is aggressive, but we have
-> many 'dead' patches sitting in patchwork, and this cannot work.
->
-> For this second session, I set the deadline to November 17. Below are the
-> 10 oldest patches (obtained with a slightly modified version of pwclient):
-> [ pwclient list -s New -n 10 ]
->
->
-> Add support for the HABA-KNX-LITE
-> Gregory Hermant <gregory.hermant@calao-systems.com>
-> http://patchwork.ozlabs.org/patch/180241
->
-> upx: high-performance executable packer with in-place decompression support
-> Stefan Fr?berg <stefan.froberg@petroprogram.com>
-> http://patchwork.ozlabs.org/patch/180285
->
-> Add custom boards support for Atmel SAM-BA software
-> Gregory Hermant <gregory.hermant@calao-systems.com>
-> http://patchwork.ozlabs.org/patch/180668
->
-> linux: add default defconfig
-> Arnout Vandecappelle <arnout@mind.be>
-> http://patchwork.ozlabs.org/patch/181185
->
-> [1/4] If linux-pam is built, enable dbm functionality in Berkeley DB
-> Dimitry Golubovsky <golubovsky@gmail.com>
-> http://patchwork.ozlabs.org/patch/182497
->
-> [2/4] Make Berkeley DB a dependency of linux-pam and make sure it is selected
-> Dimitry Golubovsky <golubovsky@gmail.com>
-> http://patchwork.ozlabs.org/patch/182498
->
-> [3/4] Provide PAM default configuration files when building linux-pam package
-> Dimitry Golubovsky <golubovsky@gmail.com>
-> http://patchwork.ozlabs.org/patch/182499
->
-> [4/4] PAM support in Busybox if linux-pam is built
-> Dimitry Golubovsky <golubovsky@gmail.com>
-> http://patchwork.ozlabs.org/patch/182500
->
-> Fixing linux-pam build failures
-> Stefan Fr?berg <stefan.froberg@petroprogram.com>
-> http://patchwork.ozlabs.org/patch/182537
->
-> [RFC] patches-from-git.sh: new support script
-> Arnout Vandecappelle <arnout@mind.be>
-> http://patchwork.ozlabs.org/patch/182856
->
+Rename patches for uClibc version 0.9.31, for consistency with the general
+patch naming scheme in Buildroot. Also remove a .avr32 extension from a patch;
+this is not necessary, since uclibc 0.9.31 is unavailable on architectures
+other than avr32.
 
-At the end of this session, all patches have been rejected. Feel free
-to revive any of the patches later when you have time.
+Signed-off-by: Simon Dawson <spdawson@gmail.com>
+---
+ ...ian-conversions.patch => uclibc-0001-add-bsd-endian-conversions.patch} | 0
+ ...c-0002-add-inotify-init1.patch => uclibc-0002-add-inotify-init1.patch} | 0
+ ...ibc-0003-add-sock-cloexec.patch => uclibc-0003-add-sock-cloexec.patch} | 0
+ ...c-0004-export-strverscmp.patch => uclibc-0004-export-strverscmp.patch} | 0
+ ...handling.patch => uclibc-0005-fix-daylight-saving-time-handling.patch} | 0
+ ...-error-locale-utf-8.patch => uclibc-0006-fix-error-locale-utf-8.patch} | 0
+ ...uxthreads-errno-fix.patch => uclibc-0007-linuxthreads-errno-fix.patch} | 0
+ ...s-GCC-PR32219.patch => uclibc-0008-more-workarounds-GCC-PR32219.patch} | 0
+ .../0.9.31.1/{uClibc-0009-unshare.patch => uclibc-0009-unshare.patch}     | 0
+ ...karound-GCC-PR32219.patch => uclibc-0010-workaround-GCC-PR32219.patch} | 0
+ ...files-Make-targets.patch => uclibc-0011-startfiles-Make-targets.patch} | 0
+ ...der-types.patch.avr32 => uclibc-0012-netlinkaccess-header-types.patch} | 0
+ 12 files changed, 0 insertions(+), 0 deletions(-)
+ rename package/uclibc/0.9.31.1/{uClibc-0001-add-bsd-endian-conversions.patch => uclibc-0001-add-bsd-endian-conversions.patch} (100%)
+ rename package/uclibc/0.9.31.1/{uClibc-0002-add-inotify-init1.patch => uclibc-0002-add-inotify-init1.patch} (100%)
+ rename package/uclibc/0.9.31.1/{uClibc-0003-add-sock-cloexec.patch => uclibc-0003-add-sock-cloexec.patch} (100%)
+ rename package/uclibc/0.9.31.1/{uClibc-0004-export-strverscmp.patch => uclibc-0004-export-strverscmp.patch} (100%)
+ rename package/uclibc/0.9.31.1/{uClibc-0005-fix-daylight-saving-time-handling.patch => uclibc-0005-fix-daylight-saving-time-handling.patch} (100%)
+ rename package/uclibc/0.9.31.1/{uClibc-0006-fix-error-locale-utf-8.patch => uclibc-0006-fix-error-locale-utf-8.patch} (100%)
+ rename package/uclibc/0.9.31.1/{uClibc-0007-linuxthreads-errno-fix.patch => uclibc-0007-linuxthreads-errno-fix.patch} (100%)
+ rename package/uclibc/0.9.31.1/{uClibc-0008-more-workarounds-GCC-PR32219.patch => uclibc-0008-more-workarounds-GCC-PR32219.patch} (100%)
+ rename package/uclibc/0.9.31.1/{uClibc-0009-unshare.patch => uclibc-0009-unshare.patch} (100%)
+ rename package/uclibc/0.9.31.1/{uClibc-0010-workaround-GCC-PR32219.patch => uclibc-0010-workaround-GCC-PR32219.patch} (100%)
+ rename package/uclibc/0.9.31.1/{uClibc-0011-startfiles-Make-targets.patch => uclibc-0011-startfiles-Make-targets.patch} (100%)
+ rename package/uclibc/0.9.31.1/{uClibc-0012-netlinkaccess-header-types.patch.avr32 => uclibc-0012-netlinkaccess-header-types.patch} (100%)
 
-I will postpone the next patchwork cleanup session until after
-buildroot-2013.11 is released, to make sure everyone is focused on
-stabilization now. Please have a look at autobuild failures in the
-mean time!
-
-Thanks,
-Thomas
+diff --git a/package/uclibc/0.9.31.1/uClibc-0001-add-bsd-endian-conversions.patch b/package/uclibc/0.9.31.1/uclibc-0001-add-bsd-endian-conversions.patch
+similarity index 100%
+rename from package/uclibc/0.9.31.1/uClibc-0001-add-bsd-endian-conversions.patch
+rename to package/uclibc/0.9.31.1/uclibc-0001-add-bsd-endian-conversions.patch
+diff --git a/package/uclibc/0.9.31.1/uClibc-0002-add-inotify-init1.patch b/package/uclibc/0.9.31.1/uclibc-0002-add-inotify-init1.patch
+similarity index 100%
+rename from package/uclibc/0.9.31.1/uClibc-0002-add-inotify-init1.patch
+rename to package/uclibc/0.9.31.1/uclibc-0002-add-inotify-init1.patch
+diff --git a/package/uclibc/0.9.31.1/uClibc-0003-add-sock-cloexec.patch b/package/uclibc/0.9.31.1/uclibc-0003-add-sock-cloexec.patch
+similarity index 100%
+rename from package/uclibc/0.9.31.1/uClibc-0003-add-sock-cloexec.patch
+rename to package/uclibc/0.9.31.1/uclibc-0003-add-sock-cloexec.patch
+diff --git a/package/uclibc/0.9.31.1/uClibc-0004-export-strverscmp.patch b/package/uclibc/0.9.31.1/uclibc-0004-export-strverscmp.patch
+similarity index 100%
+rename from package/uclibc/0.9.31.1/uClibc-0004-export-strverscmp.patch
+rename to package/uclibc/0.9.31.1/uclibc-0004-export-strverscmp.patch
+diff --git a/package/uclibc/0.9.31.1/uClibc-0005-fix-daylight-saving-time-handling.patch b/package/uclibc/0.9.31.1/uclibc-0005-fix-daylight-saving-time-handling.patch
+similarity index 100%
+rename from package/uclibc/0.9.31.1/uClibc-0005-fix-daylight-saving-time-handling.patch
+rename to package/uclibc/0.9.31.1/uclibc-0005-fix-daylight-saving-time-handling.patch
+diff --git a/package/uclibc/0.9.31.1/uClibc-0006-fix-error-locale-utf-8.patch b/package/uclibc/0.9.31.1/uclibc-0006-fix-error-locale-utf-8.patch
+similarity index 100%
+rename from package/uclibc/0.9.31.1/uClibc-0006-fix-error-locale-utf-8.patch
+rename to package/uclibc/0.9.31.1/uclibc-0006-fix-error-locale-utf-8.patch
+diff --git a/package/uclibc/0.9.31.1/uClibc-0007-linuxthreads-errno-fix.patch b/package/uclibc/0.9.31.1/uclibc-0007-linuxthreads-errno-fix.patch
+similarity index 100%
+rename from package/uclibc/0.9.31.1/uClibc-0007-linuxthreads-errno-fix.patch
+rename to package/uclibc/0.9.31.1/uclibc-0007-linuxthreads-errno-fix.patch
+diff --git a/package/uclibc/0.9.31.1/uClibc-0008-more-workarounds-GCC-PR32219.patch b/package/uclibc/0.9.31.1/uclibc-0008-more-workarounds-GCC-PR32219.patch
+similarity index 100%
+rename from package/uclibc/0.9.31.1/uClibc-0008-more-workarounds-GCC-PR32219.patch
+rename to package/uclibc/0.9.31.1/uclibc-0008-more-workarounds-GCC-PR32219.patch
+diff --git a/package/uclibc/0.9.31.1/uClibc-0009-unshare.patch b/package/uclibc/0.9.31.1/uclibc-0009-unshare.patch
+similarity index 100%
+rename from package/uclibc/0.9.31.1/uClibc-0009-unshare.patch
+rename to package/uclibc/0.9.31.1/uclibc-0009-unshare.patch
+diff --git a/package/uclibc/0.9.31.1/uClibc-0010-workaround-GCC-PR32219.patch b/package/uclibc/0.9.31.1/uclibc-0010-workaround-GCC-PR32219.patch
+similarity index 100%
+rename from package/uclibc/0.9.31.1/uClibc-0010-workaround-GCC-PR32219.patch
+rename to package/uclibc/0.9.31.1/uclibc-0010-workaround-GCC-PR32219.patch
+diff --git a/package/uclibc/0.9.31.1/uClibc-0011-startfiles-Make-targets.patch b/package/uclibc/0.9.31.1/uclibc-0011-startfiles-Make-targets.patch
+similarity index 100%
+rename from package/uclibc/0.9.31.1/uClibc-0011-startfiles-Make-targets.patch
+rename to package/uclibc/0.9.31.1/uclibc-0011-startfiles-Make-targets.patch
+diff --git a/package/uclibc/0.9.31.1/uClibc-0012-netlinkaccess-header-types.patch.avr32 b/package/uclibc/0.9.31.1/uclibc-0012-netlinkaccess-header-types.patch
+similarity index 100%
+rename from package/uclibc/0.9.31.1/uClibc-0012-netlinkaccess-header-types.patch.avr32
+rename to package/uclibc/0.9.31.1/uclibc-0012-netlinkaccess-header-types.patch
+-- 
+1.8.3.2
