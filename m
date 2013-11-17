@@ -1,37 +1,39 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 17 Nov 2013 18:58:45 +0100
-Subject: [Buildroot] Autobuilder site back online
-In-Reply-To: <20131117172917.GB4425@free.fr> (Yann E. MORIN's message of "Sun, 
- 17 Nov 2013 18:29:17 +0100")
-References: <20131116223632.462c6e60@skate> <20131117172917.GB4425@free.fr>
-Message-ID: <87k3g6ykoa.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 17 Nov 2013 22:51:26 +0100
+Subject: [Buildroot] [squashfs] Fix typo in url
+In-Reply-To: <1384639674-15170-1-git-send-email-arnaud.aujon@gmail.com>
+References: <1384639674-15170-1-git-send-email-arnaud.aujon@gmail.com>
+Message-ID: <20131117225126.66d916c0@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+Dear Arnaud Aujon,
 
-Hi,
+On Sat, 16 Nov 2013 23:07:54 +0100, Arnaud Aujon wrote:
+> Fix a typo in squashfs site url
+> 
+> Signed-off-by: Arnaud Aujon <arnaud.aujon@gmail.com>
 
- > Here are a few analysis of some of the build failures:
+Just a quick comment: the title of the patch should have been:
 
- > http://autobuild.humanoidz.org/results/a60/a60a63163288af14f701adfdfa9f62229c983984/
- -> unable to download the toolchain from mentor.com
- -> I was able to download the toolchain OK from here
- -> temporary glitch in network or on the server?
+squashfs: fix typo in url
 
-It also works here, so I guess so.
+or
 
- > http://autobuild.humanoidz.org/results/6aa/6aa47858a511e89b0bd6a3a472276baab65afb1c/
- -> Cannot execute cross-compiler '/path/to/toolchain/usr/bin/nios2-linux-gcc'
+package/squashfs: fix typo in url
 
- > For the last three failures above, can it be that the .config file is
- > improperly tweaked by the test framework?
+You've used "[squashfs] fix typo in url" as the title, but this doesn't
+work really nicely, because the part between [ and ] gets removed by
+Git when applying the patch. Therefore, the title of your patch has
+became only "fix typo in url", which isn't very descriptive.
 
-It seems like it. This /path/to/toolchain/usr is the default path when a
-custom external toolchain is used.
+Best regards,
 
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
