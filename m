@@ -1,34 +1,65 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 17 Nov 2013 09:03:02 +0100
-Subject: [Buildroot] [PATCH] wayland: disable on avr32
-In-Reply-To: <CAAXf6LVJmTG0j1UqkeBbu0dY2j-1HFk+PZRuLkn7tNPd-Sic6Q@mail.gmail.com>
- (Thomas De Schampheleire's message of "Sun, 17 Nov 2013 09:01:25
- +0100")
-References: <1384595893-15468-1-git-send-email-spdawson@gmail.com>
- <CAAXf6LVJmTG0j1UqkeBbu0dY2j-1HFk+PZRuLkn7tNPd-Sic6Q@mail.gmail.com>
-Message-ID: <8761rrzc95.fsf@dell.be.48ers.dk>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Sun, 17 Nov 2013 09:03:32 +0100
+Subject: [Buildroot] Autobuilder site back online
+In-Reply-To: <20131116223632.462c6e60@skate>
+References: <20131116223632.462c6e60@skate>
+Message-ID: <CAAXf6LVPdzV0JZk4nN=dFfpTUbXekQNDsoP5Cng4wFJYC1zUjg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin@gmail.com> writes:
+Hi Thomas,
 
-Hi,
+On Sat, Nov 16, 2013 at 10:36 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Hello,
+>
+> As many of you have noticed, the autobuild.buildroot.org web site has
+> been down for a number of days. It was hosted on a Virtual Private
+> Server that I have been using since 10+ years, but it was getting short
+> on disk space, was not very powerful, and more importantly, I did not
+> have access to the host machine, which means that whenever something
+> bad/wrong was happening, there was nothing I could do, except rely on
+> people who didn't always had enough time to take care of the issue in a
+> timely fashion.
+>
+> Therefore, I have migrated the service to a dedicated server that I
+> own. I have direct access to the support team, I can reboot the server,
+> access the logs. And this server has more disk space (1 TB) and is much
+> more powerful than the previous one.
+>
+> This new service is temporarily available at:
+>
+>         http://autobuild.humanoidz.org
+>
+> The build results from the Free Electrons build server have already
+> started to flow into this new infrastructure.
+>
+> There are a few things that remain to be done:
+>
+>  * Changing the autobuild.buildroot.org to point to this new server.
+>    I've already asked Peter to do so.
+>
+>  * Changing the configuration of the build servers maintained by Peter
+>    so that they send their results to the new infrastructure. I've also
+>    asked Peter to do so.
+>
+>  * Re-add the daily e-mails to the new infrastructure. However, since I
+>    couldn't access the old server to turn them off, the old server will
+>    start sending them (empty probably when it goes up). So as soon as
+>    I'll have access to the old server to turn it off, I will migrate
+>    the daily e-mails to the new infrastructure.
+>
+>  * Import the history of build results. This also requires me to have
+>    access to the old server and transfer all the results to the new
+>    server. It might take a bit of time.
+>
+> Sorry again for the noise. At least, the build results are back up,
+> which is the most important during this -rc cycle.
 
- >> config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_WAYLAND
- >> bool "wayland"
- >> +       depends on !BR2_avr32 # wayland
- >> depends on BR2_TOOLCHAIN_HAS_THREADS # wayland
- >> select BR2_PACKAGE_WAYLAND
- >> help
+That is all great to hear, thanks a lot for taking these actions!
 
- > It seems that several gstreamer plugins lack the necessary comments,
- > e.g. for thread support.
-
-Yes. Do notice that gstreamer itself needs threads, so it doesn't really
-matter much.
-
--- 
-Bye, Peter Korsgaard
+Best regards,
+Thomas
