@@ -1,80 +1,54 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 17 Nov 2013 18:27:17 +0100
-Subject: [Buildroot] [PATCH] vim: fix gettext check
-In-Reply-To: <0d216d9aa9ecfc7dbb82.1384679162@argentina> (Thomas De
- Schampheleire's message of "Sun, 17 Nov 2013 10:06:02 +0100")
-References: <0d216d9aa9ecfc7dbb82.1384679162@argentina>
-Message-ID: <87ob5jx7ka.fsf@dell.be.48ers.dk>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 17 Nov 2013 18:29:17 +0100
+Subject: [Buildroot] Autobuilder site back online
+In-Reply-To: <20131116223632.462c6e60@skate>
+References: <20131116223632.462c6e60@skate>
+Message-ID: <20131117172917.GB4425@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin@gmail.com> writes:
+Thomas, All,
 
- > Fixes http://autobuild.buildroot.net/results/21b5a910e6a27fa1cb12d0002ffed7e6ed9d6c83/
+On 2013-11-16 22:36 +0100, Thomas Petazzoni spake thusly:
+[--SNIP--]
+> Therefore, I have migrated the service to a dedicated server that I
+> own. I have direct access to the support team, I can reboot the server,
+> access the logs. And this server has more disk space (1 TB) and is much
+> more powerful than the previous one.
+> 
+> This new service is temporarily available at:
+> 
+> 	http://autobuild.humanoidz.org
 
-As that URL doesn't currently work, could you explain a bit what the
-problem is?
+Here are a few analysis of some of the build failures:
 
-I've tried building it with a number of different toolchain
-configurations, and don't seem to be able to trigger the issue.
+http://autobuild.humanoidz.org/results/a60/a60a63163288af14f701adfdfa9f62229c983984/
+  -> unable to download the toolchain from mentor.com
+  -> I was able to download the toolchain OK from here
+  -> temporary glitch in network or on the server?
 
-I see that vim.mk doesn't do anything with gettext. Shouldn't it atleast
-make sure it gets built after gettext if enabled and/or select gettext
-if BR2_NEEDS_GETTEXT_IF_LOCALE?
+http://autobuild.humanoidz.org/results/889/889b3870c30d027af1aedb843648c4ddb7ed79f0/
+  -> Cannot execute cross-compiler '/path/to/toolchain/usr/bin/microblaze-linux-gcc'
 
- > Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+http://autobuild.humanoidz.org/results/33f/33ff18fef818bba47eedaff2662142c25b53b4da/
+  -> Cannot execute cross-compiler '/path/to/toolchain/usr/bin/aarch64-linux-gcc'
 
- > ---
- >  package/vim/vim-0001-fix-nls-check.patch |  120 +++++++++++++++++++++++++++
- >  1 files changed, 120 insertions(+), 0 deletions(-)
+http://autobuild.humanoidz.org/results/6aa/6aa47858a511e89b0bd6a3a472276baab65afb1c/
+  -> Cannot execute cross-compiler '/path/to/toolchain/usr/bin/nios2-linux-gcc'
 
- > diff --git a/package/vim/vim-0001-fix-nls-check.patch b/package/vim/vim-0001-fix-nls-check.patch
- > new file mode 100644
- > --- /dev/null
- > +++ b/package/vim/vim-0001-fix-nls-check.patch
- > @@ -0,0 +1,120 @@
- > +configure: use minimal LIBS during gettext check
- > +
- > +In some configurations, vim fails to link correctly with messages such as:
- > +edit.c:(.text+0x1614): undefined reference to `libintl_gettext'
- > +
- > +In particular, this has been seen by the buildroot autobuilds (see [1]) but
- > +has also been reported at [2] and [3].
- > +
- > +In the bad case, the configure script says:
- > +checking for NLS... gettext() works
- > +In the good case, it says:
- > +checking for NLS... gettext() works with -lintl
- > +
- > +In the bad case, the system has libelf, vim detects that and takes it along
- > +in $LIBS. Libelf needs libintl on this system, and so linking the test
- > +program with -lelf will automatically take -lintl too. This causes configure
- > +to think gettext() does not need libintl, while in reality it does.
- > +
- > +In the good case, libelf is not present and thus not used. The first
- > +configure test for gettext fails, and then configure retries with -lintl
- > +(which succeeds).
- > +
- > +Until now, there isn't really a problem. In both cases, you could link
- > +correctly. In the 'bad' case, libintl is implicitly taken through libelf, in
- > +the second case it is explicitly taken.
- > +
- > +The real problem occurs because configure also tests whether the linker
- > +supports --as-needed and uses it when possible, instead of the link.sh
- > +script. However, --as-needed seems to cause libintl NOT to be taken in the
- > +bad case, causing the undefined references to libintl_gettext.
- > +
- > +This patch changes the configure script so that the gettext check does not
- > +use additional libraries such as libelf. The test program is linked either
- > +with nothing, or with libintl alone. This will cause libintl to
- > +be added explicitly to LIBS, when needed.
- > +
- > +[1] http://autobuild.buildroot.net/results/21b5a910e6a27fa1cb12d0002ffed7e6ed9d6c83/
- > +[2] http://lists.freebsd.org/pipermail/freebsd-ports-bugs/2012-November/243930.html
- > +[3] http://lists.freebsd.org/pipermail/freebsd-ports-bugs/2012-May/234184.html
+For the last three failures above, can it be that the .config file is
+improperly tweaked by the test framework?
+
+Regards,
+Yann E. MORIN.
 
 -- 
-Bye, Peter Korsgaard
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
