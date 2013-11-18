@@ -1,56 +1,79 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 18 Nov 2013 09:16:25 -0300
-Subject: [Buildroot] [PATCH] libcurl: add security patch for CVE-2013-4545
-Message-ID: <1384776985-3050-1-git-send-email-gustavo@zacarias.com.ar>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Mon, 18 Nov 2013 12:25:32 +0000
+Subject: [Buildroot] [PATCH v2] libtool: Apply upstream patch to set correct
+	linkage on
+Message-ID: <1384777532-58950-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/libcurl/libcurl-0001-CVE-2013-4545.patch | 32 ++++++++++++++++++++++++
- 1 file changed, 32 insertions(+)
- create mode 100644 package/libcurl/libcurl-0001-CVE-2013-4545.patch
+This libtool change ensures that ld uses the right machine emulation file, which
+will allow to fix several MIPS64 n64 link failures, such as the one currently
+visible on the libiscsi package. Packages affected by this problem will have to
+use <pkg>_AUTORECONF = YES to benefit from this libtool fix, until they are
+fixed upstream.
 
-diff --git a/package/libcurl/libcurl-0001-CVE-2013-4545.patch b/package/libcurl/libcurl-0001-CVE-2013-4545.patch
+Acked-by: Markos Chandras <markos.chandras@imgtec.com>
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+ .../libtool/libtool-0001-mips64-n64-linking.patch  |   47 ++++++++++++++++++++
+ 1 files changed, 47 insertions(+), 0 deletions(-)
+ create mode 100644 package/libtool/libtool-0001-mips64-n64-linking.patch
+
+diff --git a/package/libtool/libtool-0001-mips64-n64-linking.patch b/package/libtool/libtool-0001-mips64-n64-linking.patch
 new file mode 100644
-index 0000000..39545fe
+index 0000000..ef9084d
 --- /dev/null
-+++ b/package/libcurl/libcurl-0001-CVE-2013-4545.patch
-@@ -0,0 +1,32 @@
-+From 3c3622b66221d89509cffaa693fc7dcd5c5b96cf Mon Sep 17 00:00:00 2001
-+From: Daniel Stenberg <daniel@haxx.se>
-+Date: Wed, 2 Oct 2013 15:31:10 +0200
-+Subject: [PATCH] OpenSSL: acknowledge CURLOPT_SSL_VERIFYHOST without
-+ VERIFYPEER
++++ b/package/libtool/libtool-0001-mips64-n64-linking.patch
+@@ -0,0 +1,47 @@
++sets correct linker ABI flags on MIPS64
++http://git.savannah.gnu.org/cgit/libtool.git/commit/?id=5f7f7d9615bf650cf99d581a33b3e18357f79951
 +
-+Setting only CURLOPT_SSL_VERIFYHOST without CURLOPT_SSL_VERIFYPEER set
-+should still verify that the host name fields in the server certificate
-+is fine or return failure.
++Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 +
-+Bug: http://curl.haxx.se/mail/lib-2013-10/0002.html
-+Reported-by: Ishan SinghLevett
-+---
-+ lib/ssluse.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/lib/ssluse.c b/lib/ssluse.c
-+index 4f3c1e1..9974ac8 100644
-+--- a/lib/ssluse.c
-++++ b/lib/ssluse.c
-+@@ -2351,7 +2351,7 @@ ossl_connect_step3(struct connectdata *conn,
-+    * operations.
-+    */
++diff -ru libtool-2.4.2.orig/libltdl/m4/libtool.m4 libtool-2.4.2/libltdl/m4/libtool.m4
++--- libtool-2.4.2.orig/libltdl/m4/libtool.m4	2013-11-11 11:44:30.419396295 +0000
+++++ libtool-2.4.2/libltdl/m4/libtool.m4	2013-11-11 11:44:07.055032308 +0000
++@@ -1312,6 +1312,38 @@
++   rm -rf conftest*
++   ;;
 + 
-+-  if(!data->set.ssl.verifypeer)
-++  if(!data->set.ssl.verifypeer && !data->set.ssl.verifyhost)
-+     (void)servercert(conn, connssl, FALSE);
-+   else
-+     retcode = servercert(conn, connssl, TRUE);
-+-- 
-+1.8.3.2
-+
+++mips64*-*linux*)
+++  # Find out what ABI is being produced by ac_compile, and set linker
+++  # options accordingly.
+++  echo '[#]line '$LINENO' "configure"' > conftest.$ac_ext
+++  if AC_TRY_EVAL(ac_compile); then
+++    emul=elf
+++    case `/usr/bin/file conftest.$ac_objext` in
+++      *32-bit*)
+++      emul="${emul}32"
+++      ;;
+++      *64-bit*)
+++      emul="${emul}64"
+++      ;;
+++    esac
+++    case `/usr/bin/file conftest.$ac_objext` in
+++      *MSB*)
+++      emul="${emul}btsmip"
+++      ;;
+++      *LSB*)
+++      emul="${emul}ltsmip"
+++      ;;
+++    esac
+++    case `/usr/bin/file conftest.$ac_objext` in
+++      *N32*)
+++      emul="${emul}n32"
+++      ;;
+++    esac
+++    LD="${LD-ld} -m $emul"
+++    fi
+++  rm -rf conftest*
+++  ;;
+++
++ x86_64-*kfreebsd*-gnu|x86_64-*linux*|ppc*-*linux*|powerpc*-*linux*| \
++ s390*-*linux*|s390*-*tpf*|sparc*-*linux*)
++   # Find out which ABI we are using.
 -- 
-1.8.3.2
+1.7.1
