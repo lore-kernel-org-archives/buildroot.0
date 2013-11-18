@@ -1,48 +1,40 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 19 Nov 2013 00:19:36 +0100
-Subject: [Buildroot] [PATCH v3 3/5] eudev: new package.
-In-Reply-To: <20131118150247.GB13924@pc-eric>
-References: <1383752078-25315-1-git-send-email-eric.le.bihan.dev@free.fr>
- <1383752078-25315-4-git-send-email-eric.le.bihan.dev@free.fr>
- <20131113234133.2b964da0@skate> <20131118150247.GB13924@pc-eric>
-Message-ID: <528AA088.4030305@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 19 Nov 2013 00:30:49 +0100
+Subject: [Buildroot] Autobuilder site back online
+In-Reply-To: <528A9F9C.6040401@mind.be>
+References: <20131116223632.462c6e60@skate> <20131117172917.GB4425@free.fr>
+ <20131117175034.GC4425@free.fr> <528A9F9C.6040401@mind.be>
+Message-ID: <20131119003049.313dbb8d@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 18/11/13 16:02, Eric Le Bihan wrote:
-> Hi!
->
-> On Wed, Nov 13, 2013 at 11:41:33PM +0100, Thomas Petazzoni wrote:
->
->>> > >+	  eudev requires a Linux kernel >= 2.6.34: it relies on devtmpfs.
->> >
->> >I thought devtmpfs was added in 2.6.32. Are there other kernel features
->> >that are needed to make eudev work?
-> That's a typo. There are no exotic dependencies (unlike systemd which requires
-> cgroup and tmpfs).
->
->> >Are you using "git format-patch -M" to create your patches? It detects
->> >renames/copies, and this file appears to be a copy of the one in
->> >package/udev/, no?
-> Surprisingly, '-M' is not enough. I must use the '--find-copies-harder' option
-> to detect the file copy.
+Dear Arnout Vandecappelle,
 
-  Since it's a copy, not a rename, you'd have to use -C.
+On Tue, 19 Nov 2013 00:15:40 +0100, Arnout Vandecappelle wrote:
 
-  Regards,
-  Arnout
+>  One more:
+> 
+> http://autobuild.humanoidz.org/results/05f/05ff0f5ea99df806589c9d2c0aa5d991ae299f5c/
+>  -> passing 'const QAtomicPointer<pcre16_extra>' as 'this' argument of 'T* QBasicAtomicPointer<T>::loadAcquire() [with T = pcre16_extra]' discards qualifiers
+>  -> upstream bug, fixed in Fedora https://bugzilla.redhat.com/attachment.cgi?id=812643
+> 
+>  Unfortunately, seems Fedora didn't upstream it.
+> 
+>  I don't have time to test the patch, so perhaps someone else can take
+> it over?
 
+Since this is a Qt5 issue, let's Cc Fatih. He has been very efficient
+on fixing Qt5 problems, and on upstreaming the relevant patches.
 
-[snip]
+Fatih, do you think you could have a look at the above problem?
 
+Thanks a lot!
 
+Thomas
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
