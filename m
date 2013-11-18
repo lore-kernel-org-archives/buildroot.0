@@ -1,54 +1,38 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 18 Nov 2013 08:37:52 +0100
-Subject: [Buildroot] [PATCH] alsa-lib: Disable mixer in alsa-lib when
-	BR2_PREFER_STATIC_LIB is selected.
-In-Reply-To: <1384746819-16110-1-git-send-email-Sonic.adi@gmail.com> (sonic
- adi's message of "Mon, 18 Nov 2013 11:53:39 +0800")
-References: <1384746819-16110-1-git-send-email-Sonic.adi@gmail.com>
-Message-ID: <8761rqxir3.fsf@dell.be.48ers.dk>
+From: spdawson at gmail.com <spdawson@gmail.com>
+Date: Mon, 18 Nov 2013 08:30:18 +0000
+Subject: [Buildroot] [PATCH] e2fsprogs: disable e4defrag on avr32
+Message-ID: <1384763418-2695-1-git-send-email-spdawson@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "sonic" == sonic adi <sonic.adi@gmail.com> writes:
+From: Simon Dawson <spdawson@gmail.com>
 
- > From: Sonic Zhang <sonic.zhang@analog.com>
- > The mixer in ALSA library depends on runtime library loader which
- > doesn't available if building for static library.
+The fallocate syscall is not available on avr32. This is needed by the e4defrag
+utility, so we disable this on avr32.
 
- > Signed-off-by: Sonic Zhang <sonic.zhang@analog.com>
- > ---
- >  package/alsa-lib/alsa-lib.mk | 2 +-
- >  1 file changed, 1 insertion(+), 1 deletion(-)
+Fixes build failures such as the following.
 
- > diff --git a/package/alsa-lib/alsa-lib.mk b/package/alsa-lib/alsa-lib.mk
- > index a7ffd77..145bcf8 100644
- > --- a/package/alsa-lib/alsa-lib.mk
- > +++ b/package/alsa-lib/alsa-lib.mk
- > @@ -19,7 +19,7 @@ ALSA_LIB_CONF_OPT = --with-alsa-devdir=$(call qstrip,$(BR2_PACKAGE_ALSA_LIB_DEVD
+  http://autobuild.buildroot.net/results/dcb/dcb4e5c6981a9299a2eb18e325d4de621846afdb/
+
+Signed-off-by: Simon Dawson <spdawson@gmail.com>
+---
+ package/e2fsprogs/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/package/e2fsprogs/Config.in b/package/e2fsprogs/Config.in
+index 16d3671..1d1e174 100644
+--- a/package/e2fsprogs/Config.in
++++ b/package/e2fsprogs/Config.in
+@@ -49,6 +49,7 @@ config BR2_PACKAGE_E2FSPROGS_E2UNDO
  
- >  # Can't build with static & shared at the same time (1.0.25+)
- >  ifeq ($(BR2_PREFER_STATIC_LIB),y)
- > -ALSA_LIB_CONF_OPT += --enable-shared=no
- > +ALSA_LIB_CONF_OPT += --enable-shared=no --disable-mixer
-
-We already have BR2_PACkAGE_ALSA_LIB_MIXER to control if the mixer
-support should be enabled or not, so you should instead make that option
-depend on !BR2_PREFER_STATIC_LIB.
-
-You also need to propagate this dependency to the reverse deps of the
-option:
-
-git grep -l 'select BR2_PACKAGE_ALSA_LIB_MIXER'
-package/alsa-utils/Config.in
-package/alsamixergui/Config.in
-package/gstreamer/gst-plugins-base/Config.in
-package/gstreamer1/gst1-plugins-base/Config.in
-package/mpd/Config.in
-
-Care to fix this and resend? Thanks.
-
+ config BR2_PACKAGE_E2FSPROGS_E4DEFRAG
+ 	bool "e4defrag"
++	depends on !BR2_avr32 # fallocate not implemented
+ 
+ config BR2_PACKAGE_E2FSPROGS_FILEFRAG
+ 	bool "filefrag"
 -- 
-Bye, Peter Korsgaard
+1.8.3.2
