@@ -1,48 +1,67 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 18 Nov 2013 12:17:16 +0100
-Subject: [Buildroot] [PATCH] Apply upstream patch to set correct linkage
- on MIPS64
-In-Reply-To: <5289F60D.7000805@imgtec.com>
-References: <1384772206-57234-1-git-send-email-Vincent.Riera@imgtec.com>
- <20131118120635.52bba816@skate> <5289F60D.7000805@imgtec.com>
-Message-ID: <20131118121716.2d42d217@skate>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Mon, 18 Nov 2013 12:37:21 +0100
+Subject: [Buildroot] [PATCH] vim: fix gettext check
+In-Reply-To: <87ob5jx7ka.fsf@dell.be.48ers.dk>
+References: <0d216d9aa9ecfc7dbb82.1384679162@argentina>
+ <87ob5jx7ka.fsf@dell.be.48ers.dk>
+Message-ID: <CAAXf6LWP1DLr+p3y=SwFGtbh0hSbtMs8YUABYsmi62doAV34vA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Markos Chandras,
+Hi Peter,
 
-On Mon, 18 Nov 2013 11:12:13 +0000, Markos Chandras wrote:
+On Sun, Nov 17, 2013 at 6:27 PM, Peter Korsgaard <jacmet@uclibc.org> wrote:
+>>>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin@gmail.com> writes:
+>
+>  > Fixes http://autobuild.buildroot.net/results/21b5a910e6a27fa1cb12d0002ffed7e6ed9d6c83/
+>
+> As that URL doesn't currently work, could you explain a bit what the
+> problem is?
+>
+> I've tried building it with a number of different toolchain
+> configurations, and don't seem to be able to trigger the issue.
 
-> Thanks for the comments. It does not fix anything yet (affected packages 
-> need to start using AUTORECONF), and the libiscsi is just one of the 
-> problems so we thought it shouldn't be part of the commit message.
+I attached the defconfig file.
+This situation was seen on the SH architecture. This seems to contain
+libelf, which also depends on libintl. If you can create a similar
+configuration, you should see the problem too (it's not SH specific).
 
-I do understand that the patch itself is not fixing the problems, but
-if you don't explain *why* you're backporting something, then it isn't
-going to be obvious for the maintainer why this libtool change is
-needed.
+The following does it on the supplied config:
+make clean toolchain elfutils vim
 
-Something like: "This libtool change ensures that ld uses the right
-machine emulation file, which will allow to fix several MIPS64 n32 link
-failures, such as the one currently visible on the libiscsi package.
-Packages affected by this problem will have to use <pkg>_AUTORECONF =
-YES to benefit from this libtool fix, until they are fixed upstream."
+The bottom line is that vim tries to detect how to link with gettext,
+but while doing so takes along other libraries as well. It then thinks
+that gettext is available directly, without libintl (because it is
+implicitly taken by libelf). Later, it uses as-needed in the link
+step, which strips the implicit libintl dependency. The explanation in
+the patch itself is probably much clearer about this.
 
-> I incorrectly thought that we do not use numbers for patches anymore.
+By the way, in the mean time the patch has been accepted upstream:
+http://article.gmane.org/gmane.editors.vim.devel/43528
 
-We did not use numbers in the past, and the new (1 year old or so)
-policy is to use numbers, to guarantee a correct ordering between
-patches.
+>
+> I see that vim.mk doesn't do anything with gettext. Shouldn't it atleast
+> make sure it gets built after gettext if enabled and/or select gettext
+> if BR2_NEEDS_GETTEXT_IF_LOCALE?
 
-> v2 to follow soon!
+I think you're right that there should be a gettext dependency to vim.
+Currently, even if you have locale support, you may or may not get it
+in vim, depending on the order of packages.
+However, that is another improvement, it has no direct relation to the
+autobuild fix.
 
-Thanks! :-)
+I will submit a new patch (along with the updated 'upstream-status' in
+the first patch).
 
+Thanks for your feedback,
 Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: defconfig
+Type: application/octet-stream
+Size: 7144 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20131118/4794f173/attachment.obj>
