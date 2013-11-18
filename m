@@ -1,52 +1,48 @@
-From: Markos Chandras <Markos.Chandras@imgtec.com>
-Date: Mon, 18 Nov 2013 11:12:13 +0000
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 18 Nov 2013 12:17:16 +0100
 Subject: [Buildroot] [PATCH] Apply upstream patch to set correct linkage
  on MIPS64
-In-Reply-To: <20131118120635.52bba816@skate>
+In-Reply-To: <5289F60D.7000805@imgtec.com>
 References: <1384772206-57234-1-git-send-email-Vincent.Riera@imgtec.com>
- <20131118120635.52bba816@skate>
-Message-ID: <5289F60D.7000805@imgtec.com>
+ <20131118120635.52bba816@skate> <5289F60D.7000805@imgtec.com>
+Message-ID: <20131118121716.2d42d217@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 11/18/2013 11:06 AM, Thomas Petazzoni wrote:
-> Dear Vicente Olivert Riera,
->
-> On Mon, 18 Nov 2013 10:56:46 +0000, Vicente Olivert Riera wrote:
->> Acked-by: Markos Chandras <markos.chandras@imgtec.com>
->> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
->> ---
->>   package/libtool/libtool-mips64-n64-linking.patch |   47 ++++++++++++++++++++++
->>   1 files changed, 47 insertions(+), 0 deletions(-)
->>   create mode 100644 package/libtool/libtool-mips64-n64-linking.patch
->
-> This looks good, but:
->
->   * The title of your patch should start with "libtool: "
->
->   * You want to name the patch file libtool-0001-<something>.patch, as
->     per http://buildroot.org/downloads/manual/manual.html#patch-policy.
->
-> Also, I believe your commit log should mention more precisely which
-> problem it is fixing (I guess the most visible one is a build failure
-> of libiscsi on MIPS64 n32, I'm sure Markos remembers the details).
->
-> Thanks!
->
-> Thomas
->
-Hi Thomas,
+Dear Markos Chandras,
 
-Thanks for the comments. It does not fix anything yet (affected packages 
-need to start using AUTORECONF), and the libiscsi is just one of the 
-problems so we thought it shouldn't be part of the commit message.
+On Mon, 18 Nov 2013 11:12:13 +0000, Markos Chandras wrote:
 
-I incorrectly thought that we do not use numbers for patches anymore.
+> Thanks for the comments. It does not fix anything yet (affected packages 
+> need to start using AUTORECONF), and the libiscsi is just one of the 
+> problems so we thought it shouldn't be part of the commit message.
 
-v2 to follow soon!
+I do understand that the patch itself is not fixing the problems, but
+if you don't explain *why* you're backporting something, then it isn't
+going to be obvious for the maintainer why this libtool change is
+needed.
 
+Something like: "This libtool change ensures that ld uses the right
+machine emulation file, which will allow to fix several MIPS64 n32 link
+failures, such as the one currently visible on the libiscsi package.
+Packages affected by this problem will have to use <pkg>_AUTORECONF =
+YES to benefit from this libtool fix, until they are fixed upstream."
+
+> I incorrectly thought that we do not use numbers for patches anymore.
+
+We did not use numbers in the past, and the new (1 year old or so)
+policy is to use numbers, to guarantee a correct ordering between
+patches.
+
+> v2 to follow soon!
+
+Thanks! :-)
+
+Thomas
 -- 
-markos
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
