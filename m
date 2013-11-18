@@ -1,28 +1,73 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 18 Nov 2013 22:01:29 +0100
-Subject: [Buildroot] [PATCH]ttcp: fix url, rename patch
-In-Reply-To: <1384702440-23840-1-git-send-email-arnaud.aujon@gmail.com>
- (Arnaud Aujon's message of "Sun, 17 Nov 2013 16:34:00 +0100")
-References: <1384702440-23840-1-git-send-email-arnaud.aujon@gmail.com>
-Message-ID: <87fvqtwhjq.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 18 Nov 2013 21:59:12 +0100
+Subject: [Buildroot] [git commit] ttcp: fix url, rename patch
+Message-ID: <20131118210156.EEBE19BD39@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnaud" == Arnaud Aujon <arnaud.aujon@gmail.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=f078a8bc9502b9a6bb1ed81ad15f4b6b0ba156db
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- >  - fix download url : isn't available on previous ftp, use an other one instead
- >  - Add version according to source code version
- >  - rename and clean patch according to patch policy
+ - fix download url : isn't available on previous ftp, use an other one
+   instead
+ - add version according to source code version
+ - rename and clean patch according to patch policy
 
-You forgot to adjust the upstream URL in Config.in to match. Committed
-with that fixed, thanks.
+[Peter: adjust upstream URL in Config.in]
+Signed-off-by: Arnaud Aujon <arnaud.aujon@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/ttcp/Config.in                             |    2 +-
+ ...ch => ttcp-0001-replace-deprecated-bcopy.patch} |    9 ++++++---
+ package/ttcp/ttcp.mk                               |    5 ++---
+ 3 files changed, 9 insertions(+), 7 deletions(-)
 
-Are you using ttcp? We deprecated it some time ago, and I was thinking
-about removing it - But if people are actually using it, then I will
-certainly keep it.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/ttcp/Config.in b/package/ttcp/Config.in
+index 0262fc9..cf68eff 100644
+--- a/package/ttcp/Config.in
++++ b/package/ttcp/Config.in
+@@ -4,4 +4,4 @@ config BR2_PACKAGE_TTCP
+ 	help
+ 	  Benchmarking tool for determining TCP and UDP performance.
+ 
+-	  ftp://ftp.sunet.se/pub/network/monitoring/ttcp/
++	  ftp://ftp.sgi.com/sgi/src/ttcp/README
+diff --git a/package/ttcp/ttcp-bcopy.patch b/package/ttcp/ttcp-0001-replace-deprecated-bcopy.patch
+similarity index 64%
+rename from package/ttcp/ttcp-bcopy.patch
+rename to package/ttcp/ttcp-0001-replace-deprecated-bcopy.patch
+index c98c88f..fb8ef7f 100644
+--- a/package/ttcp/ttcp-bcopy.patch
++++ b/package/ttcp/ttcp-0001-replace-deprecated-bcopy.patch
+@@ -1,6 +1,9 @@
+-diff -urN ttcp-0rig/ttcp.c ttcp/ttcp.c
+---- ttcp-0rig/ttcp.c	1993-05-17 00:00:00.000000000 +0200
+-+++ ttcp/ttcp.c	2009-01-14 23:46:19.000000000 +0100
++Replace deprecated bcopy call by using memmove instead.
++
++Index: b/ttcp.c
++===================================================================
++--- a/ttcp.c
+++++ b/ttcp.c
+ @@ -241,7 +241,7 @@
+  			if ((addr=gethostbyname(host)) == NULL)
+  				err("bad hostname");
+diff --git a/package/ttcp/ttcp.mk b/package/ttcp/ttcp.mk
+index b65949d..7667b20 100644
+--- a/package/ttcp/ttcp.mk
++++ b/package/ttcp/ttcp.mk
+@@ -4,9 +4,8 @@
+ #
+ ################################################################################
+ 
+-#
+-TTCP_VERSION =
+-TTCP_SITE    = http://ftp.sunet.se/pub/network/monitoring/ttcp
++TTCP_VERSION = 1.12
++TTCP_SITE    = ftp://ftp.sgi.com/sgi/src/ttcp/
+ TTCP_SOURCE  = ttcp.c
+ TTCP_LICENSE = public domain
+ 
