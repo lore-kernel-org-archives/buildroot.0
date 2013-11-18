@@ -1,89 +1,69 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Mon, 18 Nov 2013 12:31:44 +0000
-Subject: [Buildroot] [PATCH v2] libtool: Apply upstream patch to set
- correct linkage on
-In-Reply-To: <1384777532-58950-1-git-send-email-Vincent.Riera@imgtec.com>
-References: <1384777532-58950-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <528A08B0.10402@imgtec.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 18 Nov 2013 13:55:20 +0100
+Subject: [Buildroot] Autobuilder site back online
+In-Reply-To: <20131117233812.4ac14561@skate>
+References: <20131116223632.462c6e60@skate> <20131117172917.GB4425@free.fr>
+ <20131117233812.4ac14561@skate>
+Message-ID: <528A0E38.9040905@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 11/18/2013 12:25 PM, Vicente Olivert Riera wrote:
-> This libtool change ensures that ld uses the right machine emulation file, which
-> will allow to fix several MIPS64 n64 link failures, such as the one currently
-> visible on the libiscsi package. Packages affected by this problem will have to
-> use <pkg>_AUTORECONF = YES to benefit from this libtool fix, until they are
-> fixed upstream.
+On 17/11/13 23:38, Thomas Petazzoni wrote:
+> Dear Yann E. MORIN,
 >
-> Acked-by: Markos Chandras <markos.chandras@imgtec.com>
-> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-> ---
->   .../libtool/libtool-0001-mips64-n64-linking.patch  |   47 ++++++++++++++++++++
->   1 files changed, 47 insertions(+), 0 deletions(-)
->   create mode 100644 package/libtool/libtool-0001-mips64-n64-linking.patch
+> On Sun, 17 Nov 2013 18:29:17 +0100, Yann E. MORIN wrote:
 >
-> diff --git a/package/libtool/libtool-0001-mips64-n64-linking.patch b/package/libtool/libtool-0001-mips64-n64-linking.patch
-> new file mode 100644
-> index 0000000..ef9084d
-> --- /dev/null
-> +++ b/package/libtool/libtool-0001-mips64-n64-linking.patch
-> @@ -0,0 +1,47 @@
-> +sets correct linker ABI flags on MIPS64
-> +http://git.savannah.gnu.org/cgit/libtool.git/commit/?id=5f7f7d9615bf650cf99d581a33b3e18357f79951
-> +
-> +Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-> +
-> +diff -ru libtool-2.4.2.orig/libltdl/m4/libtool.m4 libtool-2.4.2/libltdl/m4/libtool.m4
-> +--- libtool-2.4.2.orig/libltdl/m4/libtool.m4	2013-11-11 11:44:30.419396295 +0000
-> ++++ libtool-2.4.2/libltdl/m4/libtool.m4	2013-11-11 11:44:07.055032308 +0000
-> +@@ -1312,6 +1312,38 @@
-> +   rm -rf conftest*
-> +   ;;
-> +
-> ++mips64*-*linux*)
-> ++  # Find out what ABI is being produced by ac_compile, and set linker
-> ++  # options accordingly.
-> ++  echo '[#]line '$LINENO' "configure"' > conftest.$ac_ext
-> ++  if AC_TRY_EVAL(ac_compile); then
-> ++    emul=elf
-> ++    case `/usr/bin/file conftest.$ac_objext` in
-> ++      *32-bit*)
-> ++      emul="${emul}32"
-> ++      ;;
-> ++      *64-bit*)
-> ++      emul="${emul}64"
-> ++      ;;
-> ++    esac
-> ++    case `/usr/bin/file conftest.$ac_objext` in
-> ++      *MSB*)
-> ++      emul="${emul}btsmip"
-> ++      ;;
-> ++      *LSB*)
-> ++      emul="${emul}ltsmip"
-> ++      ;;
-> ++    esac
-> ++    case `/usr/bin/file conftest.$ac_objext` in
-> ++      *N32*)
-> ++      emul="${emul}n32"
-> ++      ;;
-> ++    esac
-> ++    LD="${LD-ld} -m $emul"
-> ++    fi
-> ++  rm -rf conftest*
-> ++  ;;
-> ++
-> + x86_64-*kfreebsd*-gnu|x86_64-*linux*|ppc*-*linux*|powerpc*-*linux*| \
-> + s390*-*linux*|s390*-*tpf*|sparc*-*linux*)
-> +   # Find out which ABI we are using.
+[snip]
+>> http://autobuild.humanoidz.org/results/889/889b3870c30d027af1aedb843648c4ddb7ed79f0/
+>>    -> Cannot execute cross-compiler '/path/to/toolchain/usr/bin/microblaze-linux-gcc'
+>>
+>> http://autobuild.humanoidz.org/results/33f/33ff18fef818bba47eedaff2662142c25b53b4da/
+>>    -> Cannot execute cross-compiler '/path/to/toolchain/usr/bin/aarch64-linux-gcc'
+>>
+>> http://autobuild.humanoidz.org/results/6aa/6aa47858a511e89b0bd6a3a472276baab65afb1c/
+>>    -> Cannot execute cross-compiler '/path/to/toolchain/usr/bin/nios2-linux-gcc'
+>>
+>> For the last three failures above, can it be that the .config file is
+>> improperly tweaked by the test framework?
 >
+> That's really weird. If you look at the config files of all of those
+> builds, they have BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y, and
+> BR2_TOOLCHAIN_EXTERNAL_PREINSTALLED=y. Which doesn't make any sense
+> when you look at the defconfig used as the base for those
+> configurations:
+>
+>    http://autobuild.buildroot.org/toolchains/configs/free-electrons/microblazeel-unknown-linux-gnu.config
+>    http://autobuild.buildroot.org/toolchains/configs/free-electrons/linaro-aarch64.config
+>    http://autobuild.buildroot.org/toolchains/configs/free-electrons/sourcery-nios2.config
+>
+> Take any of these base configuration, run 'make menuconfig' on them,
+> and you will definitely not have BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
+> defined, but instead the proper usage of an existing toolchain profile.
 
-The email subject should be changed to "libtool: Apply upstream patch to 
-set correct linkage on MIPS64"
+  I read:
 
-Could you do that before committing the patch, please? Thanks.
+config BR2_TOOLCHAIN_EXTERNAL_XILINX_MICROBLAZEEL_14_3
+         bool "Xilinx Little Endian Microblaze GNU Tools 14.3"
+         depends on BR2_microblazeel
+         depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
+         depends on !BR2_PREFER_STATIC_LIB
 
----
-Vincent
+  Is it possible that the autobuilder scripts randomly set 
+BR2_PREFER_STATIC_LIB?  If that is set, then none of the official 
+external toolchain profiles work and the default will be a custom 
+preinstalled one...
+
+  Regards,
+  Arnout
+
+[snip]
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
