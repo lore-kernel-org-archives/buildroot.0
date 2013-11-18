@@ -1,37 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 19 Nov 2013 00:30:49 +0100
-Subject: [Buildroot] Autobuilder site back online
-In-Reply-To: <528A9F9C.6040401@mind.be>
-References: <20131116223632.462c6e60@skate> <20131117172917.GB4425@free.fr>
- <20131117175034.GC4425@free.fr> <528A9F9C.6040401@mind.be>
-Message-ID: <20131119003049.313dbb8d@skate>
+Date: Tue, 19 Nov 2013 00:32:45 +0100
+Subject: [Buildroot] [PATCH 1/1] dbus-python: select pyexpat dependency
+In-Reply-To: <CAPyrzo1JdOBrWPbDR3-B5CJXQi0O5nGoK_HQOQv6rWNYAMhJqg@mail.gmail.com>
+References: <1384814104-11809-1-git-send-email-vsergeev@kumunetworks.com>
+ <CAPyrzo1JdOBrWPbDR3-B5CJXQi0O5nGoK_HQOQv6rWNYAMhJqg@mail.gmail.com>
+Message-ID: <20131119003245.29a4eb69@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Arnout Vandecappelle,
+Dear Ivan Sergeev,
 
-On Tue, 19 Nov 2013 00:15:40 +0100, Arnout Vandecappelle wrote:
+On Mon, 18 Nov 2013 14:37:59 -0800, Ivan Sergeev wrote:
 
->  One more:
-> 
-> http://autobuild.humanoidz.org/results/05f/05ff0f5ea99df806589c9d2c0aa5d991ae299f5c/
->  -> passing 'const QAtomicPointer<pcre16_extra>' as 'this' argument of 'T* QBasicAtomicPointer<T>::loadAcquire() [with T = pcre16_extra]' discards qualifiers
->  -> upstream bug, fixed in Fedora https://bugzilla.redhat.com/attachment.cgi?id=812643
-> 
->  Unfortunately, seems Fedora didn't upstream it.
-> 
->  I don't have time to test the patch, so perhaps someone else can take
-> it over?
+> For some reason git send-email didn't attach the patch. I've attached it
+> here.
 
-Since this is a Qt5 issue, let's Cc Fatih. He has been very efficient
-on fixing Qt5 problems, and on upstreaming the relevant patches.
+git send-email never "attaches" the patch. It sends the patch inline,
+so that reviewers can hit "reply" and review your patch directly by
+replying to the e-mail.
 
-Fatih, do you think you could have a look at the above problem?
+I think your patch is good, but you should add a comment above the new
+select line to indicate that it is a runtime dependency only (which
+explains why you're changing the Config.in only, and not the .mk file).
+Something like:
 
-Thanks a lot!
+	# Runtime dependency only
+	select BR2_PACKAGE...
+
+Thanks!
 
 Thomas
 -- 
