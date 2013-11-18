@@ -1,43 +1,25 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 18 Nov 2013 10:58:53 +0100
-Subject: [Buildroot] [git commit] barebox: bump to version 2013.10.1
-Message-ID: <20131118100153.9F5729B9BB@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 18 Nov 2013 11:21:48 +0100
+Subject: [Buildroot] [PATCH] uclibc: rename patches for version 0.9.31
+In-Reply-To: <1384688862-4248-1-git-send-email-spdawson@gmail.com>
+ (spdawson@gmail.com's message of "Sun, 17 Nov 2013 11:47:42 +0000")
+References: <1384688862-4248-1-git-send-email-spdawson@gmail.com>
+Message-ID: <87siuuvwlf.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=db4f6e237f1d560c94a23d40c99c5f084102e31b
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "spdawson" == spdawson  <spdawson@gmail.com> writes:
 
-This is a bug fix release.
+ > From: Simon Dawson <spdawson@gmail.com>
+ > Rename patches for uClibc version 0.9.31, for consistency with the general
+ > patch naming scheme in Buildroot. Also remove a .avr32 extension from a patch;
+ > this is not necessary, since uclibc 0.9.31 is unavailable on architectures
+ > other than avr32.
 
-Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- boot/barebox/Config.in |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+Committed, thanks.
 
-diff --git a/boot/barebox/Config.in b/boot/barebox/Config.in
-index a409aca..84db6ae 100644
---- a/boot/barebox/Config.in
-+++ b/boot/barebox/Config.in
-@@ -12,7 +12,7 @@ choice
- 	  Select the specific Barebox version you want to use
- 
- config BR2_TARGET_BAREBOX_LATEST_VERSION
--	bool "2013.10.0"
-+	bool "2013.10.1"
- 
- config BR2_TARGET_BAREBOX_CUSTOM_VERSION
- 	bool "Custom version"
-@@ -40,7 +40,7 @@ endif
- 
- config BR2_TARGET_BAREBOX_VERSION
- 	string
--	default "2013.10.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
-+	default "2013.10.1"	if BR2_TARGET_BAREBOX_LATEST_VERSION
- 	default BR2_TARGET_BAREBOX_CUSTOM_VERSION_VALUE if BR2_TARGET_BAREBOX_CUSTOM_VERSION
- 	default "custom"	if BR2_TARGET_BAREBOX_CUSTOM_TARBALL
- 	default BR2_TARGET_BAREBOX_CUSTOM_GIT_VERSION if BR2_TARGET_BAREBOX_CUSTOM_GIT
+-- 
+Bye, Peter Korsgaard
