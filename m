@@ -1,38 +1,28 @@
-From: spdawson at gmail.com <spdawson@gmail.com>
-Date: Mon, 18 Nov 2013 08:30:18 +0000
-Subject: [Buildroot] [PATCH] e2fsprogs: disable e4defrag on avr32
-Message-ID: <1384763418-2695-1-git-send-email-spdawson@gmail.com>
+From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Date: Mon, 18 Nov 2013 09:46:14 +0100
+Subject: [Buildroot] [PATCH v3 3/5] eudev: new package.
+In-Reply-To: <CAAXf6LWoRXOwzG2RaNSZc+EN4Ev7bJx_hrsgXFuD1Fa5hs8OjA@mail.gmail.com>
+References: <1383752078-25315-1-git-send-email-eric.le.bihan.dev@free.fr>
+ <1383752078-25315-4-git-send-email-eric.le.bihan.dev@free.fr>
+ <20131113234133.2b964da0@skate>
+ <CAAXf6LWoRXOwzG2RaNSZc+EN4Ev7bJx_hrsgXFuD1Fa5hs8OjA@mail.gmail.com>
+Message-ID: <20131118084612.GA13924@pc-eric>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Simon Dawson <spdawson@gmail.com>
+Hi!
 
-The fallocate syscall is not available on avr32. This is needed by the e4defrag
-utility, so we disable this on avr32.
+On Sun, Nov 17, 2013 at 09:16:26AM +0100, Thomas De Schampheleire wrote:
 
-Fixes build failures such as the following.
+> As making the difference between 'does the package itself also needs
+> this dependency' or 'only the package dependencies have this
+> dependency' is not obvious, having different rules in this matter
+> creates a difficult to maintain situation IMO. Therefore, I am more in
+> favor of duplicating the dependencies consistently, along with the
+> comments.
 
-  http://autobuild.buildroot.net/results/dcb/dcb4e5c6981a9299a2eb18e325d4de621846afdb/
-
-Signed-off-by: Simon Dawson <spdawson@gmail.com>
----
- package/e2fsprogs/Config.in | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/package/e2fsprogs/Config.in b/package/e2fsprogs/Config.in
-index 16d3671..1d1e174 100644
---- a/package/e2fsprogs/Config.in
-+++ b/package/e2fsprogs/Config.in
-@@ -49,6 +49,7 @@ config BR2_PACKAGE_E2FSPROGS_E2UNDO
- 
- config BR2_PACKAGE_E2FSPROGS_E4DEFRAG
- 	bool "e4defrag"
-+	depends on !BR2_avr32 # fallocate not implemented
- 
- config BR2_PACKAGE_E2FSPROGS_FILEFRAG
- 	bool "filefrag"
--- 
-1.8.3.2
+Thanks for clarifying. I'll duplicate the dependencies and the comments
+in the next series.
