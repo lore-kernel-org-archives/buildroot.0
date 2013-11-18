@@ -1,73 +1,41 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Mon, 18 Nov 2013 10:56:46 +0000
-Subject: [Buildroot] [PATCH] Apply upstream patch to set correct linkage on
-	MIPS64
-Message-ID: <1384772206-57234-1-git-send-email-Vincent.Riera@imgtec.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 18 Nov 2013 12:06:35 +0100
+Subject: [Buildroot] [PATCH] Apply upstream patch to set correct linkage
+ on MIPS64
+In-Reply-To: <1384772206-57234-1-git-send-email-Vincent.Riera@imgtec.com>
+References: <1384772206-57234-1-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <20131118120635.52bba816@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Acked-by: Markos Chandras <markos.chandras@imgtec.com>
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
----
- package/libtool/libtool-mips64-n64-linking.patch |   47 ++++++++++++++++++++++
- 1 files changed, 47 insertions(+), 0 deletions(-)
- create mode 100644 package/libtool/libtool-mips64-n64-linking.patch
+Dear Vicente Olivert Riera,
 
-diff --git a/package/libtool/libtool-mips64-n64-linking.patch b/package/libtool/libtool-mips64-n64-linking.patch
-new file mode 100644
-index 0000000..1de8ab6
---- /dev/null
-+++ b/package/libtool/libtool-mips64-n64-linking.patch
-@@ -0,0 +1,47 @@
-+This patch sets the correct linker ABI flags on MIPS64
-+http://git.savannah.gnu.org/cgit/libtool.git/commit/?id=5f7f7d9615bf650cf99d581a33b3e18357f79951
-+
-+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-+
-+diff -ru libtool-2.4.2.orig/libltdl/m4/libtool.m4 libtool-2.4.2/libltdl/m4/libtool.m4
-+--- libtool-2.4.2.orig/libltdl/m4/libtool.m4	2013-11-11 11:44:30.419396295 +0000
-++++ libtool-2.4.2/libltdl/m4/libtool.m4	2013-11-11 11:44:07.055032308 +0000
-+@@ -1312,6 +1312,38 @@
-+   rm -rf conftest*
-+   ;;
-+ 
-++mips64*-*linux*)
-++  # Find out what ABI is being produced by ac_compile, and set linker
-++  # options accordingly.
-++  echo '[#]line '$LINENO' "configure"' > conftest.$ac_ext
-++  if AC_TRY_EVAL(ac_compile); then
-++    emul=elf
-++    case `/usr/bin/file conftest.$ac_objext` in
-++      *32-bit*)
-++      emul="${emul}32"
-++      ;;
-++      *64-bit*)
-++      emul="${emul}64"
-++      ;;
-++    esac
-++    case `/usr/bin/file conftest.$ac_objext` in
-++      *MSB*)
-++      emul="${emul}btsmip"
-++      ;;
-++      *LSB*)
-++      emul="${emul}ltsmip"
-++      ;;
-++    esac
-++    case `/usr/bin/file conftest.$ac_objext` in
-++      *N32*)
-++      emul="${emul}n32"
-++      ;;
-++    esac
-++    LD="${LD-ld} -m $emul"
-++    fi
-++  rm -rf conftest*
-++  ;;
-++
-+ x86_64-*kfreebsd*-gnu|x86_64-*linux*|ppc*-*linux*|powerpc*-*linux*| \
-+ s390*-*linux*|s390*-*tpf*|sparc*-*linux*)
-+   # Find out which ABI we are using.
+On Mon, 18 Nov 2013 10:56:46 +0000, Vicente Olivert Riera wrote:
+> Acked-by: Markos Chandras <markos.chandras@imgtec.com>
+> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+> ---
+>  package/libtool/libtool-mips64-n64-linking.patch |   47 ++++++++++++++++++++++
+>  1 files changed, 47 insertions(+), 0 deletions(-)
+>  create mode 100644 package/libtool/libtool-mips64-n64-linking.patch
+
+This looks good, but:
+
+ * The title of your patch should start with "libtool: "
+
+ * You want to name the patch file libtool-0001-<something>.patch, as
+   per http://buildroot.org/downloads/manual/manual.html#patch-policy.
+
+Also, I believe your commit log should mention more precisely which
+problem it is fixing (I guess the most visible one is a build failure
+of libiscsi on MIPS64 n32, I'm sure Markos remembers the details).
+
+Thanks!
+
+Thomas
 -- 
-1.7.1
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
