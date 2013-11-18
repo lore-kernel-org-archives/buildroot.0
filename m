@@ -1,33 +1,66 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Mon, 18 Nov 2013 14:23:42 +0000
-Subject: [Buildroot] [PATCH] libiscsi: Call autoreconf to use buildroot's
-	libtool
-Message-ID: <1384784622-45380-1-git-send-email-Vincent.Riera@imgtec.com>
+From: universe II <universeii@gmx.de>
+Date: Mon, 18 Nov 2013 15:34:45 +0100
+Subject: [Buildroot] [PATCH] Fixing rshd/rlogind configuration and make
+	target
+Message-ID: <528A2585.5040402@gmx.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Use updated libtool from buildroot to fix MIPS64/n64 build problems
-http://autobuild.humanoidz.org/results/a9a/a9aa506a591581e413dc38c53d0e56bec5970634/build-end.log
+All,
+I found out that build of rshd and rlogind is commented out in Config.in 
+of package rsh-redone. Re-activating them lead to compile errors of the 
+rsh-redone package (when linking with pam). After a while I found the 
+root cause. The make targets are wrong: rshd and rlogind must be 
+replaces by in.rshd and in.rlogind. With these changes rshd and rlogind 
+are compiled and are running fine on my target. Just activate them in 
+inetd.conf and adjust some PAM settings. That's all.
 
-Acked-by: Markos Chandras <markos.chandras@imgtec.com>
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
----
- package/libiscsi/libiscsi.mk |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+Regards,
+Andreas
 
-diff --git a/package/libiscsi/libiscsi.mk b/package/libiscsi/libiscsi.mk
-index 5a29923..7277bd9 100644
---- a/package/libiscsi/libiscsi.mk
-+++ b/package/libiscsi/libiscsi.mk
-@@ -10,5 +10,6 @@ LIBISCSI_LICENSE         = GPLv2+ LGPLv2.1+
- LIBISCSI_LICENSE_FILES   = COPYING LICENCE-GPL-2.txt LICENCE-LGPL-2.1.txt
- LIBISCSI_INSTALL_STAGING = YES
- LIBISCSI_DEPENDENCIES    = popt
-+LIBISCSI_AUTORECONF      = YES
- 
- $(eval $(autotools-package))
--- 
-1.7.1
+Signed-off-by Andreas Ehmanns <universeii@gmx.de>
+
+
+diff -Naur rsh-redone_org/Config.in rsh-redone/Config.in
+--- rsh-redone_org/Config.in    2013-09-17 13:42:07.000000000 +0200
++++ rsh-redone/Config.in        2013-10-24 08:22:47.324184620 +0200
+@@ -17,15 +17,15 @@
+         depends on BR2_PACKAGE_RSH_REDONE
+
+  # requires PAM
+-#config BR2_PACKAGE_RSH_REDONE_RLOGIND
+-#      bool "rlogind"
+-#      depends on BR2_PACKAGE_RSH_REDONE
++config BR2_PACKAGE_RSH_REDONE_RLOGIND
++       bool "rlogind"
++       depends on BR2_PACKAGE_RSH_REDONE
+
+  config BR2_PACKAGE_RSH_REDONE_RSH
+         bool "rsh"
+         depends on BR2_PACKAGE_RSH_REDONE
+
+  # requires PAM
+-#config BR2_PACKAGE_RSH_REDONE_RSHD
+-#      bool "rshd"
+-#      depends on BR2_PACKAGE_RSH_REDONE
++config BR2_PACKAGE_RSH_REDONE_RSHD
++       bool "rshd"
++       depends on BR2_PACKAGE_RSH_REDONE
+diff -Naur rsh-redone_org/rsh-redone.mk rsh-redone/rsh-redone.mk
+--- rsh-redone_org/rsh-redone.mk        2013-09-17 13:42:07.000000000 +0200
++++ rsh-redone/rsh-redone.mk    2013-10-24 08:23:00.643065545 +0200
+@@ -13,8 +13,8 @@
+  rsh-redone-bin-$(BR2_PACKAGE_RSH_REDONE_RLOGIN) += rlogin
+  rsh-redone-bin-$(BR2_PACKAGE_RSH_REDONE_RSH) += rsh
+  rsh-redone-sbin-y =
+-rsh-redone-sbin-$(BR2_PACKAGE_RSH_REDONE_RLOGIND) += rlogind
+-rsh-redone-sbin-$(BR2_PACKAGE_RSH_REDONE_RSHD) += rshd
++rsh-redone-sbin-$(BR2_PACKAGE_RSH_REDONE_RLOGIND) += in.rlogind
++rsh-redone-sbin-$(BR2_PACKAGE_RSH_REDONE_RSHD) += in.rshd
+
+  define RSH_REDONE_BUILD_CMDS
+         $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) 
+BIN="$(rsh-redone-bin-y)" SBIN="$(rsh-redone-sbin-y)"
