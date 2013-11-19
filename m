@@ -1,184 +1,404 @@
 From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Date: Tue, 19 Nov 2013 16:18:38 +0100
-Subject: [Buildroot] [PATCH v4 2/5] eudev: new package.
+Date: Tue, 19 Nov 2013 16:18:39 +0100
+Subject: [Buildroot] [PATCH v4 3/5] udev: convert to virtual package.
 In-Reply-To: <1384874321-12397-1-git-send-email-eric.le.bihan.dev@free.fr>
 References: <1384874321-12397-1-git-send-email-eric.le.bihan.dev@free.fr>
-Message-ID: <1384874321-12397-3-git-send-email-eric.le.bihan.dev@free.fr>
+Message-ID: <1384874321-12397-4-git-send-email-eric.le.bihan.dev@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-eudev is a userspace device management daemon. It is a standalone
-version, independent from systemd. It is a fork maintained by Gentoo.
+This patch converts udev to a virtual package. For the moment, there is only
+one provider for the udev features: eudev.
 
-Features:
+Packages meant to provide udev-like features must select the symbol
+BR2_PACKAGE_HAS_UDEV.
 
- - No extra configuration options are available: Gudev is build if
-   libglib2 is selected.
- - No dependency on hwdata as the package uses its own hardware
-   database (as does systemd).
-
-eudev 1.3 is in sync with systemd v207.
+Packages depending on BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_UDEV or
+BR2_PACKAGE_UDEV have been converted to use the new symbol.
 
 Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
 ---
- package/Config.in               |    1 +
- package/eudev/Config.in         |   34 +++++++++++++++++++++++++++
- package/{udev => eudev}/S10udev |    2 +-
- package/eudev/eudev.mk          |   48 +++++++++++++++++++++++++++++++++++++++
- system/Config.in                |   13 +++++++++++
- 5 files changed, 97 insertions(+), 1 deletion(-)
- create mode 100644 package/eudev/Config.in
- copy package/{udev => eudev}/S10udev (98%)
- create mode 100644 package/eudev/eudev.mk
+ Config.in.legacy                                 |    8 ++++
+ package/ccid/ccid.mk                             |    2 +-
+ package/eudev/Config.in                          |    1 +
+ package/gpsd/gpsd.mk                             |    2 +-
+ package/libatasmart/Config.in                    |    4 +-
+ package/network-manager/Config.in                |    6 +--
+ package/pcsc-lite/Config.in                      |    2 +-
+ package/systemd/Config.in                        |    6 +--
+ package/udev/Config.in                           |   43 +------------------
+ package/udev/udev.mk                             |   49 ++++------------------
+ package/udisks/Config.in                         |    8 ++--
+ package/usbmount/Config.in                       |    4 +-
+ package/x11r7/xdriver_xf86-input-evdev/Config.in |    4 +-
+ package/xenomai/xenomai.mk                       |    2 +-
+ system/Config.in                                 |   19 ++-------
+ 15 files changed, 41 insertions(+), 119 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 311cc6c..206771d 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -274,6 +274,7 @@ source "package/dmraid/Config.in"
- source "package/dvb-apps/Config.in"
- source "package/dvbsnoop/Config.in"
- source "package/eeprog/Config.in"
-+source "package/eudev/Config.in"
- source "package/evtest/Config.in"
- source "package/fan-ctrl/Config.in"
- source "package/fconfig/Config.in"
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 587afe1..469653f 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -186,6 +186,14 @@ config BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION_WRAP
+ # Note: BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION is still referenced from
+ # linux/Config.in
+ 
++config BR2_PACKAGE_UDEV
++	bool "udev is now a virtual package"
++	select BR2_PACKAGE_HAS_UDEV
++	help
++	  The 'udev' package is now a virtual package. It is
++	  currently only provided by 'eudev'.
++
++
+ ###############################################################################
+ comment "Legacy options removed in 2013.08"
+ 
+diff --git a/package/ccid/ccid.mk b/package/ccid/ccid.mk
+index aabc0c0..cc5174f 100644
+--- a/package/ccid/ccid.mk
++++ b/package/ccid/ccid.mk
+@@ -12,7 +12,7 @@ CCID_LICENSE_FILES = COPYING
+ CCID_INSTALL_STAGING = YES
+ CCID_DEPENDENCIES = pcsc-lite host-pkgconf libusb
+ 
+-ifeq ($(BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_UDEV),y)
++ifeq ($(BR2_PACKAGE_HAS_UDEV),y)
+ define CCID_INSTALL_UDEV_RULES
+ 	if test -d $(TARGET_DIR)/etc/udev/rules.d ; then \
+ 		cp $(@D)/src/92_pcscd_ccid.rules $(TARGET_DIR)/etc/udev/rules.d/ ; \
 diff --git a/package/eudev/Config.in b/package/eudev/Config.in
-new file mode 100644
-index 0000000..0846d01
---- /dev/null
+index 0846d01..bb319fd 100644
+--- a/package/eudev/Config.in
 +++ b/package/eudev/Config.in
-@@ -0,0 +1,34 @@
-+config BR2_PACKAGE_EUDEV
-+	bool "eudev"
+@@ -4,6 +4,7 @@ config BR2_PACKAGE_EUDEV
+ 	depends on BR2_LARGEFILE # util-linux
+ 	depends on BR2_USE_WCHAR # util-linux
+ 	depends on !BR2_PREFER_STATIC_LIB # kmod
++	select BR2_PACKAGE_HAS_UDEV
+ 	select BR2_PACKAGE_UTIL_LINUX
+ 	select BR2_PACKAGE_UTIL_LINUX_LIBBLKID
+ 	select BR2_PACKAGE_KMOD
+diff --git a/package/gpsd/gpsd.mk b/package/gpsd/gpsd.mk
+index be2e681..4a5a0cb 100644
+--- a/package/gpsd/gpsd.mk
++++ b/package/gpsd/gpsd.mk
+@@ -222,7 +222,7 @@ define GPSD_INSTALL_STAGING_CMDS
+ 		install)
+ endef
+ 
+-ifeq ($(BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_UDEV),y)
++ifeq ($(BR2_PACKAGE_HAS_UDEV),y)
+ define GPSD_INSTALL_UDEV_RULES
+ 	(cd $(@D); \
+ 		$(GPSD_SCONS_ENV) \
+diff --git a/package/libatasmart/Config.in b/package/libatasmart/Config.in
+index a3e44f8..534e7c1 100644
+--- a/package/libatasmart/Config.in
++++ b/package/libatasmart/Config.in
+@@ -1,6 +1,6 @@
+ config BR2_PACKAGE_LIBATASMART
+ 	bool "libatasmart"
+-	depends on BR2_PACKAGE_UDEV # libudev is configure dependency
++	depends on BR2_PACKAGE_HAS_UDEV # libudev is configure dependency
+ 	help
+ 	  The libatasmart package is a disk reporting library.
+ 	  It only supports a subset of the ATA S.M.A.R.T. functionality.
+@@ -8,4 +8,4 @@ config BR2_PACKAGE_LIBATASMART
+ 	  http://www.linuxfromscratch.org/blfs/view/svn/general/libatasmart.html
+ 
+ comment "libatasmart requires udev to be enabled"
+-	depends on !BR2_PACKAGE_UDEV
++	depends on !BR2_PACKAGE_HAS_UDEV
+diff --git a/package/network-manager/Config.in b/package/network-manager/Config.in
+index 1e2a876..7728ddb 100644
+--- a/package/network-manager/Config.in
++++ b/package/network-manager/Config.in
+@@ -1,15 +1,13 @@
+ config BR2_PACKAGE_NETWORK_MANAGER
+ 	bool "NetworkManager"
+-	depends on BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_UDEV
+-	select BR2_PACKAGE_DBUS
+ 	depends on BR2_INET_IPV6
+ 	depends on BR2_LARGEFILE # acl
+ 	depends on BR2_USE_WCHAR # libglib2 and gnutls
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus, libglib2
+ 	depends on BR2_USE_MMU # dbus
++	depends on BR2_PACKAGE_HAS_UDEV
++	select BR2_PACKAGE_DBUS
+ 	select BR2_PACKAGE_DBUS_GLIB
+-	select BR2_PACKAGE_UDEV
+-	select BR2_PACKAGE_UDEV_ALL_EXTRAS
+ 	select BR2_PACKAGE_GNUTLS
+ 	select BR2_PACKAGE_LIBGCRYPT
+ 	select BR2_PACKAGE_LIBNL
+diff --git a/package/pcsc-lite/Config.in b/package/pcsc-lite/Config.in
+index 4cd89e9..aab42e8 100644
+--- a/package/pcsc-lite/Config.in
++++ b/package/pcsc-lite/Config.in
+@@ -11,7 +11,7 @@ if BR2_PACKAGE_PCSC_LITE
+ 
+ config BR2_PACKAGE_PCSC_LITE_FORCE_LIBUSB
+ 	bool "use libusb"
+-	depends on !BR2_PACKAGE_UDEV
++	depends on !BR2_PACKAGE_HAS_UDEV
+ 	select BR2_PACKAGE_LIBUSB
+ 	help
+ 	  Select Y if you want to support usb smart card readers.
+diff --git a/package/systemd/Config.in b/package/systemd/Config.in
+index f6a15e3..500e623 100644
+--- a/package/systemd/Config.in
++++ b/package/systemd/Config.in
+@@ -1,6 +1,6 @@
+ config BR2_PACKAGE_SYSTEMD
+ 	bool "systemd"
+-	depends on BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_UDEV
 +	depends on BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV
-+	depends on BR2_LARGEFILE # util-linux
-+	depends on BR2_USE_WCHAR # util-linux
-+	depends on !BR2_PREFER_STATIC_LIB # kmod
-+	select BR2_PACKAGE_UTIL_LINUX
-+	select BR2_PACKAGE_UTIL_LINUX_LIBBLKID
-+	select BR2_PACKAGE_KMOD
-+	help
-+	  Userspace device daemon. This is a standalone version,
-+	  independent of systemd. It is a fork maintained by Gentoo.
-+
-+	  eudev requires a Linux kernel >= 2.6.32: it relies on devtmpfs.
-+
-+	  http://github.com/gentoo/eudev/
-+
-+if BR2_PACKAGE_EUDEV
-+
-+config BR2_PACKAGE_EUDEV_RULES_GEN
-+	bool "enable rules generator"
-+	help
-+	  Enable persistant rules generator
-+
-+endif
-+
-+comment "eudev needs /dev management set to eudev"
-+	depends on !BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV
-+
-+comment "eudev needs a toolchain w/ largefile, wchar"
-+	depends on !(BR2_LARGEFILE && BR2_USE_WCHAR)
-+
-+comment "eudev needs a toolchain w/ dynamic library"
-+	depends on BR2_PREFER_STATIC_LIB
-diff --git a/package/udev/S10udev b/package/eudev/S10udev
-similarity index 98%
-copy from package/udev/S10udev
-copy to package/eudev/S10udev
-index 2c7b7e9..e4d28a2 100755
---- a/package/udev/S10udev
-+++ b/package/eudev/S10udev
-@@ -17,7 +17,7 @@
+ 	depends on BR2_INET_IPV6
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus
+ 	depends on BR2_USE_MMU # dbus
+@@ -18,7 +18,7 @@ config BR2_PACKAGE_SYSTEMD
+ 
+ 	  http://freedesktop.org/wiki/Software/systemd
+ 
+-comment "systemd needs udev /dev management and a toolchain w/ IPv6, threads"
++comment "systemd needs eudev /dev management and a toolchain w/ IPv6, threads"
+ 	depends on BR2_USE_MMU
+-	depends on !BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_UDEV || !BR2_INET_IPV6 || \\
++	depends on !BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV || !BR2_INET_IPV6 || \\
+ 		!BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/udev/Config.in b/package/udev/Config.in
+index 2bcd685..1c9251b 100644
+--- a/package/udev/Config.in
++++ b/package/udev/Config.in
+@@ -1,41 +1,2 @@
+-config BR2_PACKAGE_UDEV
+-	bool "udev"
+-	depends on BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_UDEV
+-	depends on BR2_LARGEFILE # util-linux
+-	depends on BR2_USE_WCHAR # util-linux
+-	depends on !BR2_PREFER_STATIC_LIB # kmod
+-	select BR2_PACKAGE_UTIL_LINUX
+-	select BR2_PACKAGE_UTIL_LINUX_LIBBLKID
+-	select BR2_PACKAGE_KMOD
+-	help
+-	  Userspace device daemon.
+-
+-	  udev requires a Linux kernel >= 2.6.34: it relies on devtmpfs.
+-
+-	  ftp://ftp.kernel.org/pub/linux/utils/kernel/hotplug/
+-
+-if BR2_PACKAGE_UDEV
+-
+-config BR2_PACKAGE_UDEV_RULES_GEN
+-	bool "enable rules generator"
+-	help
+-	  Enable persistant rules generator
+-
+-config BR2_PACKAGE_UDEV_ALL_EXTRAS
+-	bool "enable all extras"
+-	select BR2_PACKAGE_ACL
+-	select BR2_PACKAGE_HWDATA
+-	select BR2_PACKAGE_LIBGLIB2
+-	depends on BR2_USE_WCHAR # libglib2
+-	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
+-	help
+-	  Enable all extras with external dependencies like
+-	  libacl, hwdata and libglib2
+-
+-comment "enabling all extras needs a toolchain w/ wchar, threads"
+-	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
+-
+-endif
+-
+-comment "udev requires /dev mgmnt set to udev under System configuration"
+-	depends on !BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_UDEV
++config BR2_PACKAGE_HAS_UDEV
++	bool
+diff --git a/package/udev/udev.mk b/package/udev/udev.mk
+index db86850..d274246 100644
+--- a/package/udev/udev.mk
++++ b/package/udev/udev.mk
+@@ -4,48 +4,17 @@
  #
+ ################################################################################
  
- # Check for missing binaries
--UDEV_BIN=/lib/udev/udevd
-+UDEV_BIN=/sbin/udevd
- test -x $UDEV_BIN || exit 5
+-UDEV_VERSION = 182
+-UDEV_SOURCE = udev-$(UDEV_VERSION).tar.xz
+-UDEV_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/kernel/hotplug/
+-UDEV_LICENSE = GPLv2+
+-UDEV_LICENSE_FILES = COPYING
+-UDEV_INSTALL_STAGING = YES
++UDEV_SOURCE =
  
- # Check for config file and read it
-diff --git a/package/eudev/eudev.mk b/package/eudev/eudev.mk
-new file mode 100644
-index 0000000..aac37e7
---- /dev/null
-+++ b/package/eudev/eudev.mk
-@@ -0,0 +1,48 @@
-+################################################################################
-+#
-+# eudev
-+#
-+################################################################################
-+
-+EUDEV_VERSION         = 1.3
-+EUDEV_SITE            = https://github.com/gentoo/eudev/archive/
-+EUDEV_SOURCE          = v$(EUDEV_VERSION).tar.gz
-+EUDEV_LICENSE         = GPLv2+
-+EUDEV_LICENSE_FILES   = COPYING
-+EUDEV_INSTALL_STAGING = YES
-+EUDEV_AUTORECONF      = YES
-+
-+# mq_getattr is in librt
-+EUDEV_CONF_ENV += LIBS=-lrt
-+
-+EUDEV_CONF_OPT =		\
-+	--sbindir=/sbin		\
-+	--with-rootlibdir=/lib	\
-+	--libexecdir=/lib	\
-+	--with-firmware-path=/lib/firmware	\
-+	--disable-introspection			\
-+	--enable-split-usr			\
-+	--enable-libkmod
-+
-+EUDEV_DEPENDENCIES = host-gperf host-pkgconf util-linux kmod
-+
-+ifeq ($(BR2_PACKAGE_EUDEV_RULES_GEN),y)
-+EUDEV_CONF_OPT += --enable-rule_generator
+-# mq_getattr is in librt
+-UDEV_CONF_ENV += LIBS=-lrt
+-
+-UDEV_CONF_OPT =			\
+-	--sbindir=/sbin		\
+-	--with-rootlibdir=/lib	\
+-	--libexecdir=/lib	\
+-	--with-usb-ids-path=/usr/share/hwdata/usb.ids	\
+-	--with-pci-ids-path=/usr/share/hwdata/pci.ids	\
+-	--with-firmware-path=/lib/firmware		\
+-	--disable-introspection
+-
+-UDEV_DEPENDENCIES = host-gperf host-pkgconf util-linux kmod
+-
+-ifeq ($(BR2_PACKAGE_UDEV_RULES_GEN),y)
+-UDEV_CONF_OPT += --enable-rule_generator
+-endif
+-
+-ifeq ($(BR2_PACKAGE_UDEV_ALL_EXTRAS),y)
+-UDEV_DEPENDENCIES += acl hwdata libglib2
+-UDEV_CONF_OPT +=		\
+-	--enable-udev_acl
+-else
+-UDEV_CONF_OPT +=		\
+-	--disable-gudev
++ifeq ($(BR2_PACKAGE_EUDEV),y)
++UDEV_DEPENDENCIES += eudev
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_SYSTEMD),y)
+-	UDEV_CONF_OPT += --with-systemdsystemunitdir=/lib/systemd/system/
+-endif
+-
+-define UDEV_INSTALL_INITSCRIPT
+-	$(INSTALL) -m 0755 package/udev/S10udev $(TARGET_DIR)/etc/init.d/S10udev
++ifeq ($(UDEV_DEPENDENCIES),)
++define UDEV_CONFIGURE_CMDS
++	echo "No Udev implementation selected. Configuration error."
++	exit 1
+ endef
 +endif
-+
-+ifeq ($(BR2_LARGEFILE),)
-+EUDEV_CONF_OPT += --disable-largefile
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBGLIB2),y)
-+EUDEV_CONF_OPT += --enable-gudev
-+EUDEV_DEPENDENCIES += libglib2
-+else
-+EUDEV_CONF_OPT += --disable-gudev
-+endif
-+
-+define EUDEV_INSTALL_INIT_SYSV
-+	$(INSTALL) -m 0755 package/eudev/S10udev $(TARGET_DIR)/etc/init.d/S10udev
-+endef
-+
-+$(eval $(autotools-package))
+ 
+-UDEV_POST_INSTALL_TARGET_HOOKS += UDEV_INSTALL_INITSCRIPT
+-
+-$(eval $(autotools-package))
++$(eval $(generic-package))
+diff --git a/package/udisks/Config.in b/package/udisks/Config.in
+index 09070b4..35b09ea 100644
+--- a/package/udisks/Config.in
++++ b/package/udisks/Config.in
+@@ -1,10 +1,8 @@
+ config BR2_PACKAGE_UDISKS
+ 	bool "udisks"
+-	depends on BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_UDEV
++	depends on BR2_PACKAGE_HAS_UDEV
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus-glib -> glib2
+ 	depends on BR2_USE_MMU # lvm2
+-	select BR2_PACKAGE_UDEV
+-	select BR2_PACKAGE_UDEV_ALL_EXTRAS
+ 	select BR2_PACKAGE_DBUS
+ 	select BR2_PACKAGE_DBUS_GLIB
+ 	depends on BR2_USE_WCHAR # dbus-glib -> glib2
+@@ -35,7 +33,7 @@ config BR2_PACKAGE_UDISKS_LVM2
+ 
+ endif
+ 
+-comment "udisks needs udev /dev management and a toolchain w/ wchar, threads"
++comment "udisks needs udev /dev mgmnt, toolchain w/ wchar, threads"
+ 	depends on BR2_USE_MMU
+-	depends on !BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_UDEV || \
++	depends on !BR2_PACKAGE_HAS_UDEV || \
+ 		!BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/usbmount/Config.in b/package/usbmount/Config.in
+index 2583e7c..0bb8883 100644
+--- a/package/usbmount/Config.in
++++ b/package/usbmount/Config.in
+@@ -1,6 +1,6 @@
+ config BR2_PACKAGE_USBMOUNT
+ 	bool "usbmount"
+-	depends on BR2_PACKAGE_UDEV
++	depends on BR2_PACKAGE_HAS_UDEV
+ 	select BR2_PACKAGE_LOCKFILE_PROGS
+ 	help
+ 	  The usbmount package automatically mounts USB mass storage devices
+@@ -9,4 +9,4 @@ config BR2_PACKAGE_USBMOUNT
+ 	  http://usbmount.alioth.debian.org/
+ 
+ comment "usbmount requires udev to be enabled"
+-	depends on !BR2_PACKAGE_UDEV
++	depends on !BR2_PACKAGE_HAS_UDEV
+diff --git a/package/x11r7/xdriver_xf86-input-evdev/Config.in b/package/x11r7/xdriver_xf86-input-evdev/Config.in
+index 88d3e6e..6ec14bf 100644
+--- a/package/x11r7/xdriver_xf86-input-evdev/Config.in
++++ b/package/x11r7/xdriver_xf86-input-evdev/Config.in
+@@ -1,6 +1,6 @@
+ config BR2_PACKAGE_XDRIVER_XF86_INPUT_EVDEV
+ 	bool "xf86-input-evdev"
+-	depends on BR2_PACKAGE_UDEV # libudev is configure dependency
++	depends on BR2_PACKAGE_HAS_UDEV # libudev is configure dependency
+ 	select BR2_PACKAGE_XPROTO_INPUTPROTO
+ 	select BR2_PACKAGE_XPROTO_RANDRPROTO
+ 	select BR2_PACKAGE_XPROTO_XPROTO
+@@ -8,4 +8,4 @@ config BR2_PACKAGE_XDRIVER_XF86_INPUT_EVDEV
+ 	  Generic Linux input driver
+ 
+ comment "xf86-input-evdev requires udev to be enabled"
+-	depends on !BR2_PACKAGE_UDEV
++	depends on !BR2_PACKAGE_HAS_UDEV
+diff --git a/package/xenomai/xenomai.mk b/package/xenomai/xenomai.mk
+index 786bdfd..b0b9eba 100644
+--- a/package/xenomai/xenomai.mk
++++ b/package/xenomai/xenomai.mk
+@@ -93,7 +93,7 @@ define XENOMAI_DEVICES
+ /dev/rtp     c  666  0  0  150 0    0  1  32
+ endef
+ 
+-ifeq ($(BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_UDEV),y)
++ifeq ($(BR2_PACKAGE_HAS_UDEV),y)
+ XENOMAI_DEPENDENCIES += udev
+ 
+ define XENOMAI_INSTALL_UDEV_RULES
 diff --git a/system/Config.in b/system/Config.in
-index c8f2758..f9b5b0a 100644
+index f9b5b0a..1a920cf 100644
 --- a/system/Config.in
 +++ b/system/Config.in
-@@ -127,6 +127,19 @@ comment "udev needs a toolchain w/ largefile, wchar"
- comment "udev doesn't work with 'prefer static libraries'"
- 	depends on BR2_PREFER_STATIC_LIB
+@@ -83,17 +83,17 @@ config BR2_INIT_SYSTEMD
+ 	depends on BR2_LARGEFILE
+ 	depends on BR2_USE_WCHAR
+ 	depends on BR2_INET_IPV6
+-	depends on BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_UDEV
++	depends on BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_USE_MMU
+ 	select BR2_PACKAGE_DBUS
+ 	select BR2_PACKAGE_SYSTEMD
  
-+config BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV
-+	bool "Dynamic using eudev"
-+	depends on BR2_LARGEFILE
-+	depends on BR2_USE_WCHAR
-+	depends on !BR2_PREFER_STATIC_LIB
-+	select BR2_PACKAGE_EUDEV
-+
-+comment "eudev needs a toolchain w/ largefile, wchar"
-+	depends on !(BR2_LARGEFILE && BR2_USE_WCHAR)
-+
-+comment "eudev needs a toolchain w/ dynamic library"
-+	depends on BR2_PREFER_STATIC_LIB
-+
- endchoice
+-comment 'systemd needs udev /dev management and a toolchain w/ largefile, wchar, IPv6, threads'
++comment 'systemd needs eudev /dev management and a toolchain w/ largefile, wchar, IPv6, threads'
+ 	depends on BR2_USE_MMU
+ 	depends on !(BR2_LARGEFILE && BR2_USE_WCHAR && \
+ 		     BR2_INET_IPV6 && BR2_TOOLCHAIN_HAS_THREADS && \
+-		     BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_UDEV)
++		     BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV)
  
- config BR2_ROOTFS_DEVICE_TABLE
+ config BR2_INIT_NONE
+ 	bool "None"
+@@ -114,19 +114,6 @@ config BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV
+ 	bool "Dynamic using mdev"
+ 	select BR2_PACKAGE_BUSYBOX
+ 
+-config BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_UDEV
+-	bool "Dynamic using udev"
+-	depends on BR2_LARGEFILE # udev
+-	depends on BR2_USE_WCHAR # udev
+-	depends on !BR2_PREFER_STATIC_LIB # udev -> kmod
+-	select BR2_PACKAGE_UDEV
+-
+-comment "udev needs a toolchain w/ largefile, wchar"
+-	depends on !(BR2_LARGEFILE && BR2_USE_WCHAR)
+-
+-comment "udev doesn't work with 'prefer static libraries'"
+-	depends on BR2_PREFER_STATIC_LIB
+-
+ config BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV
+ 	bool "Dynamic using eudev"
+ 	depends on BR2_LARGEFILE
 -- 
 1.7.9.5
