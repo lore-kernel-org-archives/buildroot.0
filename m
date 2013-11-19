@@ -1,112 +1,184 @@
 From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Date: Tue, 19 Nov 2013 16:18:36 +0100
-Subject: [Buildroot] [PATCH v4 0/5] udev is now provided by systemd or eudev
-Message-ID: <1384874321-12397-1-git-send-email-eric.le.bihan.dev@free.fr>
+Date: Tue, 19 Nov 2013 16:18:38 +0100
+Subject: [Buildroot] [PATCH v4 2/5] eudev: new package.
+In-Reply-To: <1384874321-12397-1-git-send-email-eric.le.bihan.dev@free.fr>
+References: <1384874321-12397-1-git-send-email-eric.le.bihan.dev@free.fr>
+Message-ID: <1384874321-12397-3-git-send-email-eric.le.bihan.dev@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This series converts udev to a virtual package, either provided by systemd or
-eudev.
+eudev is a userspace device management daemon. It is a standalone
+version, independent from systemd. It is a fork maintained by Gentoo.
 
-Starting with version 183, udev has been merged into systemd. This forces the
-use of systemd as the init system if /dev is to be dynamically managed by
-udev. eudev is a fork of udev, maintained by Gentoo, but isolated from
-systemd, so it can be used with any init system.
+Features:
 
-Systemd has been bumped to v207 and a new eudev package has been added.
-Version 1.3 of eudev is in sync with systemd v207.
+ - No extra configuration options are available: Gudev is build if
+   libglib2 is selected.
+ - No dependency on hwdata as the package uses its own hardware
+   database (as does systemd).
 
-The bump of systemd to v207 also introduces new options, like the activation
-of the journal gateway.
+eudev 1.3 is in sync with systemd v207.
 
-In the end:
-
-  - if systemd is selected as init system, the /dev management will handled by
-    udev. No other choice possible.
-  - if busybox or SysV is chosen, the user can choose to manage /dev
-    statically, or dynamically using mdev or eudev.
-
-Changes v3 -> v4:
-  - updated /dev management section in user manual.
-  - fixed indentation of conditionals in Makefiles (suggested by Thomas P).
-  - added missing comments on dependencies (suggested by Thomas P, Thomas DS).
-  - fixed some packages not being converted to BR2_PACKAGE_HAS_UDEV.
-
-Changes v2 -> v3:
-  - reordered patches for better bisectability (suggested by Thomas).
-  - removed uClibc support for Systemd (suggested by Arnout).
-  - bumped systemd to v207 (no more backport patches).
-  - bumped eudev to 1.3.
-
-Changes v1 -> v2:
-  - split patch for better readability.
-  - promoted init system selection above /dev management in "System
-    Configuration" menu.
-  - /dev management selection is not displayed if systemd is chosen as init
-    system, as udev is the only possible choice (suggested by Arnout).
-  - added "Dynamic with eudev" choice in /dev management selection.
-  - less patches for systemd/uclibc compatibility, thanks to recent update of
-    uclibc 0.9.33.2.
-  - autoreconf not needed anymore for systemd (thanks to removal of
-    configure.ac patch).
-  - ACL/Gudev support in systemd activated only if acl/libglib2 are
-    selected (suggested by Arnout).
-  - udev package provides BR2_PACKAGE_HAS_UDEV (suggested by Thomas).
-  - converted packages depending on
-    BR2_PACKAGE_UDEV/BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_UDEV to
-    BR2_PACKAGE_HAS_UDEV.
-  - eudev source code fetched as a tarball, not from Git tree (suggested by
-    Arnout).
-  - removed "enable all extras" option from eudev configuration: Gudev support
-    is activated if libglib2 is selected (suggested by Arnout).
-  - added option to build udev rule generator in eudev, as it was in previous
-    version of udev.
-  - removed dependency on hwdata for systemd and eudev, as both embed their
-    own hardware database.
-
-Best regards,
-ELB
-
-Eric Le Bihan (5):
-  sysvinit: depend on SysV selected as init system.
-  eudev: new package.
-  udev: convert to virtual package.
-  systemd: bump to v207.
-  manual: update /dev management section.
-
- Config.in.legacy                                 |    8 ++
- docs/manual/configure.txt                        |   16 ++--
- package/Config.in                                |    1 +
- package/ccid/ccid.mk                             |    2 +-
- package/eudev/Config.in                          |   35 ++++++++
- package/{udev => eudev}/S10udev                  |    2 +-
- package/eudev/eudev.mk                           |   48 +++++++++++
- package/gpsd/gpsd.mk                             |    2 +-
- package/libatasmart/Config.in                    |    4 +-
- package/network-manager/Config.in                |    6 +-
- package/pcsc-lite/Config.in                      |    2 +-
- package/systemd/Config.in                        |   55 ++++++++++++-
- package/systemd/systemd-fix-getty-unit.patch     |   36 ++++-----
- package/systemd/systemd-fix-page-size.patch      |   43 ----------
- package/systemd/systemd-uclibc-fix.patch         |   59 --------------
- package/systemd/systemd.mk                       |   93 ++++++++++++++++------
- package/sysvinit/Config.in                       |    1 +
- package/udev/Config.in                           |   43 +---------
- package/udev/udev.mk                             |   47 +++--------
- package/udisks/Config.in                         |    8 +-
- package/usbmount/Config.in                       |    4 +-
- package/x11r7/xdriver_xf86-input-evdev/Config.in |    4 +-
- package/xenomai/xenomai.mk                       |    2 +-
- system/Config.in                                 |   40 ++++++----
- 24 files changed, 293 insertions(+), 268 deletions(-)
+Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+---
+ package/Config.in               |    1 +
+ package/eudev/Config.in         |   34 +++++++++++++++++++++++++++
+ package/{udev => eudev}/S10udev |    2 +-
+ package/eudev/eudev.mk          |   48 +++++++++++++++++++++++++++++++++++++++
+ system/Config.in                |   13 +++++++++++
+ 5 files changed, 97 insertions(+), 1 deletion(-)
  create mode 100644 package/eudev/Config.in
  copy package/{udev => eudev}/S10udev (98%)
  create mode 100644 package/eudev/eudev.mk
- delete mode 100644 package/systemd/systemd-fix-page-size.patch
- delete mode 100644 package/systemd/systemd-uclibc-fix.patch
 
---
+diff --git a/package/Config.in b/package/Config.in
+index 311cc6c..206771d 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -274,6 +274,7 @@ source "package/dmraid/Config.in"
+ source "package/dvb-apps/Config.in"
+ source "package/dvbsnoop/Config.in"
+ source "package/eeprog/Config.in"
++source "package/eudev/Config.in"
+ source "package/evtest/Config.in"
+ source "package/fan-ctrl/Config.in"
+ source "package/fconfig/Config.in"
+diff --git a/package/eudev/Config.in b/package/eudev/Config.in
+new file mode 100644
+index 0000000..0846d01
+--- /dev/null
++++ b/package/eudev/Config.in
+@@ -0,0 +1,34 @@
++config BR2_PACKAGE_EUDEV
++	bool "eudev"
++	depends on BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV
++	depends on BR2_LARGEFILE # util-linux
++	depends on BR2_USE_WCHAR # util-linux
++	depends on !BR2_PREFER_STATIC_LIB # kmod
++	select BR2_PACKAGE_UTIL_LINUX
++	select BR2_PACKAGE_UTIL_LINUX_LIBBLKID
++	select BR2_PACKAGE_KMOD
++	help
++	  Userspace device daemon. This is a standalone version,
++	  independent of systemd. It is a fork maintained by Gentoo.
++
++	  eudev requires a Linux kernel >= 2.6.32: it relies on devtmpfs.
++
++	  http://github.com/gentoo/eudev/
++
++if BR2_PACKAGE_EUDEV
++
++config BR2_PACKAGE_EUDEV_RULES_GEN
++	bool "enable rules generator"
++	help
++	  Enable persistant rules generator
++
++endif
++
++comment "eudev needs /dev management set to eudev"
++	depends on !BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV
++
++comment "eudev needs a toolchain w/ largefile, wchar"
++	depends on !(BR2_LARGEFILE && BR2_USE_WCHAR)
++
++comment "eudev needs a toolchain w/ dynamic library"
++	depends on BR2_PREFER_STATIC_LIB
+diff --git a/package/udev/S10udev b/package/eudev/S10udev
+similarity index 98%
+copy from package/udev/S10udev
+copy to package/eudev/S10udev
+index 2c7b7e9..e4d28a2 100755
+--- a/package/udev/S10udev
++++ b/package/eudev/S10udev
+@@ -17,7 +17,7 @@
+ #
+ 
+ # Check for missing binaries
+-UDEV_BIN=/lib/udev/udevd
++UDEV_BIN=/sbin/udevd
+ test -x $UDEV_BIN || exit 5
+ 
+ # Check for config file and read it
+diff --git a/package/eudev/eudev.mk b/package/eudev/eudev.mk
+new file mode 100644
+index 0000000..aac37e7
+--- /dev/null
++++ b/package/eudev/eudev.mk
+@@ -0,0 +1,48 @@
++################################################################################
++#
++# eudev
++#
++################################################################################
++
++EUDEV_VERSION         = 1.3
++EUDEV_SITE            = https://github.com/gentoo/eudev/archive/
++EUDEV_SOURCE          = v$(EUDEV_VERSION).tar.gz
++EUDEV_LICENSE         = GPLv2+
++EUDEV_LICENSE_FILES   = COPYING
++EUDEV_INSTALL_STAGING = YES
++EUDEV_AUTORECONF      = YES
++
++# mq_getattr is in librt
++EUDEV_CONF_ENV += LIBS=-lrt
++
++EUDEV_CONF_OPT =		\
++	--sbindir=/sbin		\
++	--with-rootlibdir=/lib	\
++	--libexecdir=/lib	\
++	--with-firmware-path=/lib/firmware	\
++	--disable-introspection			\
++	--enable-split-usr			\
++	--enable-libkmod
++
++EUDEV_DEPENDENCIES = host-gperf host-pkgconf util-linux kmod
++
++ifeq ($(BR2_PACKAGE_EUDEV_RULES_GEN),y)
++EUDEV_CONF_OPT += --enable-rule_generator
++endif
++
++ifeq ($(BR2_LARGEFILE),)
++EUDEV_CONF_OPT += --disable-largefile
++endif
++
++ifeq ($(BR2_PACKAGE_LIBGLIB2),y)
++EUDEV_CONF_OPT += --enable-gudev
++EUDEV_DEPENDENCIES += libglib2
++else
++EUDEV_CONF_OPT += --disable-gudev
++endif
++
++define EUDEV_INSTALL_INIT_SYSV
++	$(INSTALL) -m 0755 package/eudev/S10udev $(TARGET_DIR)/etc/init.d/S10udev
++endef
++
++$(eval $(autotools-package))
+diff --git a/system/Config.in b/system/Config.in
+index c8f2758..f9b5b0a 100644
+--- a/system/Config.in
++++ b/system/Config.in
+@@ -127,6 +127,19 @@ comment "udev needs a toolchain w/ largefile, wchar"
+ comment "udev doesn't work with 'prefer static libraries'"
+ 	depends on BR2_PREFER_STATIC_LIB
+ 
++config BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV
++	bool "Dynamic using eudev"
++	depends on BR2_LARGEFILE
++	depends on BR2_USE_WCHAR
++	depends on !BR2_PREFER_STATIC_LIB
++	select BR2_PACKAGE_EUDEV
++
++comment "eudev needs a toolchain w/ largefile, wchar"
++	depends on !(BR2_LARGEFILE && BR2_USE_WCHAR)
++
++comment "eudev needs a toolchain w/ dynamic library"
++	depends on BR2_PREFER_STATIC_LIB
++
+ endchoice
+ 
+ config BR2_ROOTFS_DEVICE_TABLE
+-- 
 1.7.9.5
