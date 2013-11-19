@@ -1,65 +1,64 @@
-From: Maxime Ripard <maxime.ripard@free-electrons.com>
-Date: Tue, 19 Nov 2013 14:45:23 +0100
-Subject: [Buildroot] [PATCHv3] openssh: add systemd unit file
-In-Reply-To: <1384867590-2815-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1384867590-2815-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20131119134523.GA5234@lukather>
+From: Nils Koehler <nils.koehler@ibt-interfaces.de>
+Date: Tue, 19 Nov 2013 15:01:30 +0100
+Subject: [Buildroot] problem to configure to make helloworld program and
+	helloworld module be compiled and added to the tartget with a
+	local external source
+In-Reply-To: <528B20C1.9000606@mind.be>
+Message-ID: <3258CDB0922447C482F9DCD445EEFB36@NKDELL>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Gustavo,
 
-On Tue, Nov 19, 2013 at 10:26:30AM -0300, Gustavo Zacarias wrote:
-> And only install sysV-style script when appropiate.
+> > Hi,
+> >
+> > I have goggled a lot the last three days to find out how to implement a
+> > own program and device driver, which is compiled and added to the target
+> > due buildroot make command, but I did not had success to solve it.
+> >
+> > Actually my problems is that:
+> >
+> > HELLOWORLD_SOURCE_DIR = /home/koehler/Desktop/Kernel/ldt/
 > 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  package/openssh/openssh.mk   | 13 +++++++++++--
->  package/openssh/sshd.service | 11 +++++++++++
->  2 files changed, 22 insertions(+), 2 deletions(-)
->  create mode 100644 package/openssh/sshd.service
-> 
-> diff --git a/package/openssh/openssh.mk b/package/openssh/openssh.mk
-> index 8ab2b47..8de288a 100644
-> --- a/package/openssh/openssh.mk
-> +++ b/package/openssh/openssh.mk
-> @@ -17,8 +17,17 @@ OPENSSH_DEPENDENCIES += linux-pam
->  OPENSSH_CONF_OPT += --with-pam
->  endif
->  
-> -define OPENSSH_INSTALL_INITSCRIPT
-> -	$(INSTALL) -D -m 755 package/openssh/S50sshd $(TARGET_DIR)/etc/init.d/S50sshd
-> +define OPENSSH_INSTALL_INIT_SYSTEMD
-> +	$(INSTALL) -D -m 755 package/openssh/sshd.service \
-> +		$(TARGET_DIR)/etc/systemd/system/sshd.service
-> +	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
-> +	ln -fs ../sshd.service \
-> +		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/sshd.service
-> +endef
-> +
-> +define OPENSSH_INSTALL_INIT_SYSV
-> +	$(INSTALL) -D -m 755 package/openssh/S50sshd \
-> +		$(TARGET_DIR)/etc/init.d/S50sshd
->  endef
->  
->  OPENSSH_POST_INSTALL_TARGET_HOOKS += OPENSSH_INSTALL_INITSCRIPT
+>   Where did you get this variable from? We don't use SOURCE_DIR.
 
-I don't think this is needed anymore.
+mhh... I think, I mixed up some things, I have no idea where I did found it.
+I have changed now to the right keywords thank you...
 
-Thanks,
-Maxime
+But after...
+make helloworld-rebuild all
 
--- 
-Maxime Ripard, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: signature.asc
-Type: application/pgp-signature
-Size: 836 bytes
-Desc: Digital signature
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20131119/e6647be3/attachment.asc>
+It is compiling and I can see that the compiled code is updated and present
+in the directory /buildroot-2013.08/Build/helloworld-1.0/ 
+So far so fine, but it is missing in the /buildroot-2013.08/target/bin/
+directory. 
+
+What may be the problem right now?
+This is my actual .mk file: 
+
+HELLOWORLD_VERSION = 1.0
+HELLOWORLD_SITE = /home/koehler/Desktop/Kernel/helloworld-1.0/
+HELLOWORLD_SITE_METHOD = local
+HELLOWORLD_LICENSE = GPLv3+
+HELLOWORLD_INSTALL_TARGET = YES
+
+define HELLOWORLD_BUILD_CMDS
+    $(MAKE) CC="$(TARGET_CC)" LD="$(TARGET_LD)" -C $(@D) all
+endef
+
+define HELLOWORLD_INSTALL_TARGET_CMDS
+    $(INSTALL) -D -m 0755 $(@D)/helloworld $(TARGET_DIR)/bin
+endef
+
+define HELLOWORLD_DEVICES
+    /dev/ldt  c  666  0  0  42  0  -  -  -
+endef
+
+define HELLOWORLD_PERMISSIONS
+    /bin/helloworld  f  4755  0  0  -  -  -  -  -
+endef
+
+
+#$(eval $(generic-package))
