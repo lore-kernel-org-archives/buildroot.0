@@ -1,34 +1,51 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 19 Nov 2013 07:43:53 -0300
-Subject: [Buildroot] [PATCH v2] alsa-lib: Make alsa mixer lib depend on
- BR2_PREFER_STATIC_LIB.
-In-Reply-To: <1384767673-8834-1-git-send-email-Sonic.adi@gmail.com>
-References: <1384767673-8834-1-git-send-email-Sonic.adi@gmail.com>
-Message-ID: <528B40E9.1010605@zacarias.com.ar>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Tue, 19 Nov 2013 11:45:07 +0100
+Subject: [Buildroot] Makeinfo
+Message-ID: <CAAXf6LWWWG4DABPQzNezk+Tnr1tbDx9mc6+zXZ457vskm1VFBA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 11/18/2013 06:41 AM, sonic.adi at gmail.com wrote:
+Hi,
 
-> From: Sonic Zhang <sonic.zhang@analog.com>
-> 
-> The mixer in ALSA library depends on runtime library loader which
-> doesn't available if building for static library.
-> 
-> Propagate this dependency to package alsa-utils, alsamixergui,
-> gstreamer, gstreamer1 and mpd as well.
+I'm having an issue in building a package (libuio, which I did not yet
+submit) on machines that do not have makeinfo (part of texinfo).
 
-I'm not convinced this can't be worked around, and also think that
-depending on tiny bits for usual options isn't all that friendly
-(example: alsamixer depending on the mixer component of alsa-lib rather
-than selecting it becomes almost a hidden option).
+Recently, Arnout changed package/stress as follows:
 
-From a quick look at the source of alsa-lib lack of dl functions is kind
-of expected/handled (see src/dlmisc.c), it probably just broke in recent
-releases or just wasn't completely finished.
-Did you try fixing it up with some additional #ifdef guards in the
-offending places?
-Regards.
+--------------
+stress: disable documentation
+
+It fails to build with my makeinfo version. Note that the autobuilders don't
+see this, probably because they don't have makeinfo installed.
+
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+
+diff --git a/package/stress/stress.mk b/package/stress/stress.mk
+--- a/package/stress/stress.mk
++++ b/package/stress/stress.mk
+@@ -17,7 +17,10 @@ STRESS_AUTORECONF = YES
+ #
+ # If the BR2_PREFER_STATIC_LIB is not defined, we have to specify
+ # --disable-static explicitly to get stress linked dynamically.
++#
++# Also, disable documentation by undefining makeinfo
+ STRESS_CONF_OPT = \
+-       $(if $(BR2_PREFER_STATIC_LIB),,--disable-static)
++       $(if $(BR2_PREFER_STATIC_LIB),,--disable-static) \
++       MAKEINFO=:
+
+ $(eval $(autotools-package))
+-------------
+
+I'm now wondering if this is an approach we could add globally: set
+MAKEINFO to : to effectively disable the generation of
+documentation...
+
+What do you think?
+
+Thanks,
+Thomas
