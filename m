@@ -1,36 +1,45 @@
-From: Ivan Sergeev <vsergeev@kumunetworks.com>
-Date: Mon, 18 Nov 2013 18:10:46 -0800
-Subject: [Buildroot] [PATCH 1/1] dbus-python: select pyexpat dependency
-In-Reply-To: <CAPyrzo3OyL8+macM-9nwjvo=6YpC=3WMggkWAWZFPPnj+VkD=A@mail.gmail.com>
-References: <CAPyrzo3OyL8+macM-9nwjvo=6YpC=3WMggkWAWZFPPnj+VkD=A@mail.gmail.com>
-Message-ID: <1384827046-28484-1-git-send-email-vsergeev@kumunetworks.com>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Tue, 19 Nov 2013 09:00:07 +0100
+Subject: [Buildroot] [PATCH for-2013.11] glibc/eglibc: remove reference to
+	experimental from help text
+Message-ID: <1384848007-8853-1-git-send-email-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-dbus-python requires xml.parsers.expat, which is provided by the pyexpat
-module. This patch enables the pyexpat module as a dependency when dbus-python
-is selected.
+Since 924b8739da we no longer declare glibc and eglibc support as
+experimental, so it shouldn't be mentioned in the help text anymore.
 
-Signed-off-by: Ivan Sergeev <vsergeev@kumunetworks.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/dbus-python/Config.in | 2 ++
- 1 file changed, 2 insertions(+)
+ toolchain/toolchain-buildroot/Config.in | 6 ------
+ 1 file changed, 6 deletions(-)
 
-diff --git a/package/dbus-python/Config.in b/package/dbus-python/Config.in
-index f7b6d94..88a6128 100644
---- a/package/dbus-python/Config.in
-+++ b/package/dbus-python/Config.in
-@@ -5,6 +5,8 @@ config BR2_PACKAGE_DBUS_PYTHON
- 	depends on BR2_PACKAGE_DBUS
- 	depends on BR2_PACKAGE_PYTHON
- 	select BR2_PACKAGE_DBUS_GLIB
-+    # pyexpat: runtime dependency only
-+	select BR2_PACKAGE_PYTHON_PYEXPAT
- 	help
- 	  Python bindings for D-Bus
+diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
+index 8b37127..81593f1 100644
+--- a/toolchain/toolchain-buildroot/Config.in
++++ b/toolchain/toolchain-buildroot/Config.in
+@@ -31,9 +31,6 @@ config BR2_TOOLCHAIN_BUILDROOT_EGLIBC
+ 	  This option selects eglibc as the C library for the
+ 	  cross-compilation toolchain.
  
+-	  The eglibc support in the Buildroot toolchain backend is
+-	  very recent, and therefore marked experimental.
+-
+ 	  http://eglibc.org
+ 
+ config BR2_TOOLCHAIN_BUILDROOT_GLIBC
+@@ -51,9 +48,6 @@ config BR2_TOOLCHAIN_BUILDROOT_GLIBC
+ 	  This option selects glibc as the C library for the
+ 	  cross-compilation toolchain.
+ 
+-	  The glibc support in the Buildroot toolchain backend is
+-	  very recent, and therefore marked experimental.
+-
+ 	  http://www.gnu.org/software/libc/
+ 
+ comment "(e)glibc only available with shared lib support"
 -- 
 1.8.4.2
