@@ -1,50 +1,51 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 19 Nov 2013 13:27:34 +0100
-Subject: [Buildroot] [git commit] vim: add dependency to gettext if locale
-	support is requested
-Message-ID: <20131119123018.E7D5599B2C@busybox.osuosl.org>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue, 19 Nov 2013 09:30:54 -0300
+Subject: [Buildroot] buildroot: gcc options
+In-Reply-To: <EADA2943BAC14C4AB625A3550A3BE980096DFE7183@SI-MBX04.de.bosch.com>
+References: <EADA2943BAC14C4AB625A3550A3BE980096DF2C30B@SI-MBX04.de.bosch.com>
+ <CAAXf6LU1bamXyxhjhB5rTTHM-iHRbKrsTF5m1MUJLZjOaNXmuQ@mail.gmail.com>
+ <EADA2943BAC14C4AB625A3550A3BE980096DF2C345@SI-MBX04.de.bosch.com>
+ <CAAXf6LU3kQE2J+3zS-XCBYZ9SkxOSNyEAkV-E0_LQbhq3TP8Rw@mail.gmail.com>
+ <EADA2943BAC14C4AB625A3550A3BE980096DF2C375@SI-MBX04.de.bosch.com>
+ <CAAXf6LX6fVb+bm6UTzEpjDhitAYx3svJx1eTyoHYD85xEFXY7g@mail.gmail.com>
+ <EADA2943BAC14C4AB625A3550A3BE980096DF2C37F@SI-MBX04.de.bosch.com>
+ <CAAXf6LV9Wzjr1P+n-Mxw8FqnqsAdOMr3Wfaam48uHQPcVxu73A@mail.gmail.com>
+ <EADA2943BAC14C4AB625A3550A3BE980096DF2C3BA@SI-MBX04.de.bosch.com>
+ <CAAXf6LUiwy9Fmm5sNBTc3H4XvpsDhmRNeYj6in=HiZsepQ8xRQ@mail.gmail.com>
+ <EADA2943BAC14C4AB625A3550A3BE980096DFE7183@SI-MBX04.de.bosch.com>
+Message-ID: <528B59FE.6070205@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=5a3c69afbd7fb3358a538508ad2e27f58f0769ba
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 11/19/2013 09:17 AM, Altunbas Sabri (DC-IA/EAH2) wrote:
 
-Until now, if locale support was requested, vim would be built with NLS or
-not depending on the build order. This patch now makes the dependency
-explicit.
+> Hi Thomas,
+> 
+> my problem is still not solved.
+> 
+> I picked "Buildroot toolchain" and "eglibc" as C-library and get the following error
+> ..
+> configure: error: unrecognized option: `-mfmovd'
+> ..
+> With "uclibs" the same behave.
+> 
+> My config is attented
+> 
+> Can you give some hints ?
 
-Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/vim/Config.in |    1 +
- package/vim/vim.mk    |    2 +-
- 2 files changed, 2 insertions(+), 1 deletions(-)
+Hi.
+Actually BR2_EXTRA_GCC_CONFIG_OPTIONS isn't for that.
+You need to set BR2_TARGET_OPTIMIZATIONS for all the packages to be
+built with those CFLAGS, and you need to add them to
+GLIBC_EXTRA_CFLAGS/UCLIBC_EXTRA_CFLAGS (depending on which libc you want
+to use) - problem is that isn't supported in an easy way at the moment.
+The quick way to test it would be to call make with those arguments in
+every invocation (actually until your libc is built, for packages
+BR2_TARGET_OPTIMIZATIONS does the trick), something like:
 
-diff --git a/package/vim/Config.in b/package/vim/Config.in
-index 891715e..0b2f4b5 100644
---- a/package/vim/Config.in
-+++ b/package/vim/Config.in
-@@ -2,6 +2,7 @@ config BR2_PACKAGE_VIM
- 	bool "vim"
- 	depends on BR2_USE_MMU # uses fork()
- 	select BR2_PACKAGE_NCURSES
-+	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
- 	help
- 	  VIM Text editor
- 
-diff --git a/package/vim/vim.mk b/package/vim/vim.mk
-index ca8131c..bd909cd 100644
---- a/package/vim/vim.mk
-+++ b/package/vim/vim.mk
-@@ -8,7 +8,7 @@ VIM_SITE = https://vim.googlecode.com/hg
- VIM_SITE_METHOD = hg
- # 7.3 release patchlevel 762
- VIM_VERSION = 699f8d8f096d
--VIM_DEPENDENCIES = ncurses
-+VIM_DEPENDENCIES = ncurses $(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext)
- VIM_SUBDIR = src
- VIM_CONF_ENV = vim_cv_toupper_broken=no \
- 		vim_cv_terminfo=yes \
+make GLIBC_EXTRA_CFLAGS="-madlign -mfmovd"
+
+Regards.
