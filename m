@@ -1,51 +1,48 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Tue, 19 Nov 2013 11:45:07 +0100
-Subject: [Buildroot] Makeinfo
-Message-ID: <CAAXf6LWWWG4DABPQzNezk+Tnr1tbDx9mc6+zXZ457vskm1VFBA@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 19 Nov 2013 09:13:11 +0100
+Subject: [Buildroot] [git commit] glibc/eglibc: remove reference to
+	experimental from help text
+Message-ID: <20131119110247.D2DAD9BD4E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+commit: http://git.buildroot.net/buildroot/commit/?id=b478d30a6d4eed00439cba627d7f45fe3e4025d4
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-I'm having an issue in building a package (libuio, which I did not yet
-submit) on machines that do not have makeinfo (part of texinfo).
-
-Recently, Arnout changed package/stress as follows:
-
---------------
-stress: disable documentation
-
-It fails to build with my makeinfo version. Note that the autobuilders don't
-see this, probably because they don't have makeinfo installed.
+Since 924b8739da we no longer declare glibc and eglibc support as
+experimental, so it shouldn't be mentioned in the help text anymore.
 
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ toolchain/toolchain-buildroot/Config.in |    6 ------
+ 1 files changed, 0 insertions(+), 6 deletions(-)
 
-diff --git a/package/stress/stress.mk b/package/stress/stress.mk
---- a/package/stress/stress.mk
-+++ b/package/stress/stress.mk
-@@ -17,7 +17,10 @@ STRESS_AUTORECONF = YES
- #
- # If the BR2_PREFER_STATIC_LIB is not defined, we have to specify
- # --disable-static explicitly to get stress linked dynamically.
-+#
-+# Also, disable documentation by undefining makeinfo
- STRESS_CONF_OPT = \
--       $(if $(BR2_PREFER_STATIC_LIB),,--disable-static)
-+       $(if $(BR2_PREFER_STATIC_LIB),,--disable-static) \
-+       MAKEINFO=:
-
- $(eval $(autotools-package))
--------------
-
-I'm now wondering if this is an approach we could add globally: set
-MAKEINFO to : to effectively disable the generation of
-documentation...
-
-What do you think?
-
-Thanks,
-Thomas
+diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
+index 8b37127..81593f1 100644
+--- a/toolchain/toolchain-buildroot/Config.in
++++ b/toolchain/toolchain-buildroot/Config.in
+@@ -31,9 +31,6 @@ config BR2_TOOLCHAIN_BUILDROOT_EGLIBC
+ 	  This option selects eglibc as the C library for the
+ 	  cross-compilation toolchain.
+ 
+-	  The eglibc support in the Buildroot toolchain backend is
+-	  very recent, and therefore marked experimental.
+-
+ 	  http://eglibc.org
+ 
+ config BR2_TOOLCHAIN_BUILDROOT_GLIBC
+@@ -51,9 +48,6 @@ config BR2_TOOLCHAIN_BUILDROOT_GLIBC
+ 	  This option selects glibc as the C library for the
+ 	  cross-compilation toolchain.
+ 
+-	  The glibc support in the Buildroot toolchain backend is
+-	  very recent, and therefore marked experimental.
+-
+ 	  http://www.gnu.org/software/libc/
+ 
+ comment "(e)glibc only available with shared lib support"
