@@ -1,80 +1,103 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 17 Nov 2013 09:15:09 +0100
-Subject: [Buildroot] [git commit] legal info: split sources for host and
-	target
-Message-ID: <20131201201519.905209BE44@busybox.osuosl.org>
+Date: Tue, 19 Nov 2013 13:21:32 +0100
+Subject: [Buildroot] [git commit] haveged: new package
+Message-ID: <20131201201519.A85289BE44@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=858334c202c83d79622784d40dc8bf51e5ea3d46
+commit: http://git.buildroot.net/buildroot/commit/?id=9f07355f3dae75d557db2c2fe32929154ef8a812
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-Acked-by: Luca Ceresoli <luca@lucaceresoli.net>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- Makefile               |    9 +++++----
- package/pkg-generic.mk |    6 +++---
- 2 files changed, 8 insertions(+), 7 deletions(-)
+ package/Config.in          |    1 +
+ package/haveged/Config.in  |    9 +++++++++
+ package/haveged/S21haveged |   25 +++++++++++++++++++++++++
+ package/haveged/haveged.mk |   17 +++++++++++++++++
+ 4 files changed, 52 insertions(+), 0 deletions(-)
 
-diff --git a/Makefile b/Makefile
-index da2a646..8c2429a 100644
---- a/Makefile
-+++ b/Makefile
-@@ -108,7 +108,8 @@ TARGET_DIR:=$(BASE_DIR)/target
- HOST_DIR:=$(BASE_DIR)/host
- 
- LEGAL_INFO_DIR=$(BASE_DIR)/legal-info
--REDIST_SOURCES_DIR=$(LEGAL_INFO_DIR)/sources
-+REDIST_SOURCES_DIR_TARGET=$(LEGAL_INFO_DIR)/sources
-+REDIST_SOURCES_DIR_HOST=$(LEGAL_INFO_DIR)/host-sources
- LICENSE_FILES_DIR_TARGET=$(LEGAL_INFO_DIR)/licenses
- LICENSE_FILES_DIR_HOST=$(LEGAL_INFO_DIR)/host-licenses
- LEGAL_MANIFEST_CSV_TARGET=$(LEGAL_INFO_DIR)/manifest.csv
-@@ -404,7 +405,7 @@ world: $(BASE_TARGETS) $(TARGETS_ALL)
- # dependencies anywhere else
- #
- ################################################################################
--$(BUILD_DIR) $(HOST_DIR) $(BINARIES_DIR) $(STAMP_DIR) $(LEGAL_INFO_DIR) $(REDIST_SOURCES_DIR):
-+$(BUILD_DIR) $(HOST_DIR) $(BINARIES_DIR) $(STAMP_DIR) $(LEGAL_INFO_DIR) $(REDIST_SOURCES_DIR_TARGET) $(REDIST_SOURCES_DIR_HOST):
- 	@mkdir -p $@
- 
- # We make a symlink lib32->lib or lib64->lib as appropriate
-@@ -585,8 +586,8 @@ legal-info-prepare: $(LEGAL_INFO_DIR)
- 	@$(call legal-warning,the toolchain has not been saved)
- 	@cp $(BUILDROOT_CONFIG) $(LEGAL_INFO_DIR)/buildroot.config
- 
--legal-info: dirs legal-info-clean legal-info-prepare $(REDIST_SOURCES_DIR) \
--		$(TARGETS_LEGAL_INFO)
-+legal-info: dirs legal-info-clean legal-info-prepare $(TARGETS_LEGAL_INFO) \
-+		$(REDIST_SOURCES_DIR_TARGET) $(REDIST_SOURCES_DIR_HOST)
- 	@cat support/legal-info/README.header >>$(LEGAL_REPORT)
- 	@if [ -r $(LEGAL_WARNINGS) ]; then \
- 		cat support/legal-info/README.warnings-header \
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 5e3fd39..03eb537 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -551,7 +551,7 @@ ifeq ($$($(2)_REDISTRIBUTE),YES)
- ifneq ($$($(2)_SITE_METHOD),local)
- ifneq ($$($(2)_SITE_METHOD),override)
- # Packages that have a tarball need it downloaded and extracted beforehand
--$(1)-legal-info: $(1)-extract $(REDIST_SOURCES_DIR)
-+$(1)-legal-info: $(1)-extract $(REDIST_SOURCES_DIR_$(call UPPERCASE,$(5)))
- $(2)_MANIFEST_TARBALL = $$($(2)_SOURCE)
- endif
- endif
-@@ -586,8 +586,8 @@ endif # license files
- 
- ifeq ($$($(2)_REDISTRIBUTE),YES)
- # Copy the source tarball (just hardlink if possible)
--	@cp -l $(DL_DIR)/$$($(2)_SOURCE) $(REDIST_SOURCES_DIR) 2>/dev/null || \
--	   cp $(DL_DIR)/$$($(2)_SOURCE) $(REDIST_SOURCES_DIR)
-+	@cp -l $(DL_DIR)/$$($(2)_SOURCE) $(REDIST_SOURCES_DIR_$(call UPPERCASE,$(5))) 2>/dev/null || \
-+	   cp $(DL_DIR)/$$($(2)_SOURCE) $(REDIST_SOURCES_DIR_$(call UPPERCASE,$(5)))
- endif # redistribute
- 
- endif # other packages
+diff --git a/package/Config.in b/package/Config.in
+index 311cc6c..1a95b10 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -750,6 +750,7 @@ source "package/bc/Config.in"
+ source "package/collectd/Config.in"
+ source "package/empty/Config.in"
+ source "package/googlefontdirectory/Config.in"
++source "package/haveged/Config.in"
+ source "package/mcrypt/Config.in"
+ source "package/mobile-broadband-provider-info/Config.in"
+ source "package/shared-mime-info/Config.in"
+diff --git a/package/haveged/Config.in b/package/haveged/Config.in
+new file mode 100644
+index 0000000..0e49a2d
+--- /dev/null
++++ b/package/haveged/Config.in
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_HAVEGED
++	bool "haveged"
++	depends on BR2_USE_MMU # fork()
++	help
++	  The haveged project is an attempt to provide an easy-to-use,
++	  unpredictable random number generator based upon an adaptation
++	  of the HAVEGE algorithm.
++
++	  http://www.issihosts.com/haveged/
+diff --git a/package/haveged/S21haveged b/package/haveged/S21haveged
+new file mode 100755
+index 0000000..f17cd29
+--- /dev/null
++++ b/package/haveged/S21haveged
+@@ -0,0 +1,25 @@
++#!/bin/sh
++
++[ -x /usr/sbin/haveged ] || exit 0
++
++case "$1" in
++	start)
++		echo -n "Starting haveged: "
++		start-stop-daemon -S -x /usr/sbin/haveged -- -w 1024 -r 0
++		[ $? == 0 ] && echo "OK" || echo "FAIL"
++		;;
++	stop)
++		echo -n "Stopping haveged: "
++		start-stop-daemon -K -x /usr/sbin/haveged
++		[ $? == 0 ] && echo "OK" || echo "FAIL"
++		;;
++	restart|reload)
++		$0 stop
++		$0 start
++		;;
++	*)
++		echo "Usage: $0 {start|stop|restart}"
++		exit 1
++esac
++
++exit 0
+diff --git a/package/haveged/haveged.mk b/package/haveged/haveged.mk
+new file mode 100644
+index 0000000..99dbe41
+--- /dev/null
++++ b/package/haveged/haveged.mk
+@@ -0,0 +1,17 @@
++################################################################################
++#
++# haveged
++#
++################################################################################
++
++HAVEGED_VERSION = 1.7c
++HAVEGED_SITE = http://www.issihosts.com/haveged
++HAVEGED_LICENSE = GPLv3+
++HAVEGED_LICENSE_FILES = COPYING
++
++define HAVEGED_INSTALL_INIT_SYSV
++	$(INSTALL) -m 755 -D package/haveged/S21haveged \
++		$(TARGET_DIR)/etc/init.d/S21haveged
++endef
++
++$(eval $(autotools-package))
