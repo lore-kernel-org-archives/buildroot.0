@@ -1,41 +1,56 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 20 Nov 2013 17:23:08 +0100
-Subject: [Buildroot] [git commit] ruby: needs thread support
-Message-ID: <20131120162328.D4E609BD3E@busybox.osuosl.org>
+From: Freedreamer <freedreamer@email.it>
+Date: Wed, 20 Nov 2013 17:47:56 +0100
+Subject: [Buildroot] Buildroot and Git repository (u-boot + kernel)
+In-Reply-To: <20131120135421.0602e149@skate>
+References: <CAAs3wMgyCOV_oeTjL0GFTAux9tPsZXeEifTgACSqKcPQSN=ABg@mail.gmail.com>
+ <20131120135421.0602e149@skate>
+Message-ID: <CAAs3wMiTfo8tiLmgCGH9G_fz+zvmAO6YdhvgVpVm28gaOHtBjg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ca5a1e1a47998d514d99a3c08678dd55784d069c
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Thomas,
 
-Fixes:
+thanks for reply. here in the attachement the config file.Buildroot is the
+last one on git (pulled yesterday)
 
-   http://autobuild.buildroot.org/results/7c6/7c6cc07e360aa998957a48e834b8cc086282d716/build-end.log
+Regards
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/ruby/Config.in |    5 +++--
- 1 files changed, 3 insertions(+), 2 deletions(-)
+Marco
 
-diff --git a/package/ruby/Config.in b/package/ruby/Config.in
-index 9b50501..0de756b 100644
---- a/package/ruby/Config.in
-+++ b/package/ruby/Config.in
-@@ -1,10 +1,11 @@
- config BR2_PACKAGE_RUBY
- 	bool "ruby"
- 	depends on BR2_USE_WCHAR
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	help
- 	  Object Oriented Scripting Language.
- 
- 	  http://www.ruby-lang.org/
- 
--comment "ruby needs a toolchain w/ wchar"
--	depends on !BR2_USE_WCHAR
-+comment "ruby needs a toolchain w/ wchar, threads"
-+	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
+
+2013/11/20 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+
+> Dear Freedreamer,
+>
+> On Wed, 20 Nov 2013 13:49:03 +0100, Freedreamer wrote:
+>
+> > I'm Marco from Italy and that's the first Time I write here . I've
+> > been trying to integrate in buildroot my custom u-boot and kernel I
+> > have on my gitlab. In u-boot repository version I set up  my branch
+> > name but br seems downloading always the master version from git.
+> > Anyone can help me ? Same situation with the kernel.
+>
+> Can you post your .config and tell us which Buildroot version you're
+> using?
+>
+> Thanks,
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20131120/42ea33bb/attachment-0001.html>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: .config
+Type: application/xml
+Size: 40770 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20131120/42ea33bb/attachment-0001.wsdl>
