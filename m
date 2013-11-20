@@ -1,55 +1,38 @@
-From: Alvaro Gamez <alvaro.gamez@hazent.com>
-Date: Wed, 20 Nov 2013 11:36:00 +0100
-Subject: [Buildroot] Help to fix Microblaze issues in Buildroot
-In-Reply-To: <20131120111027.472fe84b@skate>
-References: <20131006185441.0d5c2397@skate>
- <CAM+bi4vGmKHRA3j0ua-dsOBzTuj-BPrM2+z3papeyfDjjazhgw@mail.gmail.com>
- <CAM+bi4t7Z4RWQ=6r=qOUOXKpqV76hRSogU0iBp12FKvN+fGviA@mail.gmail.com>
- <20131120111027.472fe84b@skate>
-Message-ID: <CAM+bi4sKAyBrLjAKfBBkDMVDLReBHffqUCfdDvU61X1wErLfNA@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 20 Nov 2013 11:46:35 +0100
+Subject: [Buildroot] [git commit] lxc: needs timerfd, disable on avr32
+Message-ID: <20131120104709.C362790BDC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+commit: http://git.buildroot.net/buildroot/commit/?id=c4b78bda4b48db846b708657c8ee8310a4960a2c
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-2013/11/20 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Fixes http://autobuild.buildroot.net/results/79a/79ad9d7f5a9fb48e7d3210f0aee14638fde8f3e7/
 
-> Therefore, the plan is, I believe:
->
->  (1) Merge Spenser's patches to add Microblaze internal toolchain
->  support.
->
->  (2) Remove the broken Microblaze external toolchains
->
->  (3) Hopefully, convince Xilinx to also provide pre-built external
->  toolchains that are up-to-date. This will have to be done by people
->  having contacts within Xilinx.
->
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/lxc/Config.in |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-Now that I take the time to revisit Xilinx' website, I think maybe we're
-doing something wrong...
-
-Old Xilinx git repository,
-http://git.xilinx.com/?p=microblaze-gnu.git;a=tree;f=binaries now redirect
-to github: https://github.com/xilinx and seems to be quite up to date with
-upstream gcc.
-
-There seems to be also a later version of GNU Tools available at
-http://www.xilinx.com/guest_resources/gnu/
-
-   - GNU Tools for MicroBlaze (gcc 4.6.4, gdb 7.6.0, binutils 2.23.2,
-   newlib 1.19, eglibc-2.18) -
-mb_gnu_20131023.tar.gz<http://www.xilinx.com/guest_resources/member/mb_gnu/mb_gnu_20131023.tar.gz>
-
-I don't know how up to date are these downloads, but it may be worth a try?
-Although if we're going ahead with Spenser's patches maybe we can/(want
-to?) avoid Xilinx altogether?
-
--- 
-?lvaro G?mez Machado
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20131120/21064ffe/attachment.html>
+diff --git a/package/lxc/Config.in b/package/lxc/Config.in
+index d082f7f..39cd577 100644
+--- a/package/lxc/Config.in
++++ b/package/lxc/Config.in
+@@ -5,6 +5,7 @@ config BR2_PACKAGE_LXC
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_LARGEFILE
+ 	depends on BR2_USE_MMU # fork()
++	depends on !BR2_avr32 # no timerfd
+ 	help
+ 	  Linux Containers (LXC), provides the ability to group and isolate
+ 	  of a set of processes in a jail by virtualizing and accounting the
+@@ -14,4 +15,5 @@ config BR2_PACKAGE_LXC
+ 
+ comment "lxc needs a toolchain w/ IPv6, threads, largefile"
+ 	depends on BR2_USE_MMU
++	depends on !BR2_avr32 # no timerfd
+ 	depends on !BR2_INET_IPV6 || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_LARGEFILE
