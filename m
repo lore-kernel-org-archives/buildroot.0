@@ -1,11 +1,11 @@
 From: =?ISO-8859-1?Q?Fran=E7ois_Perrad?= <francois.perrad@gadz.org>
-Date: Wed, 20 Nov 2013 22:03:23 +0100
-Subject: [Buildroot] [pkg-perl infra 02/12] cpan: a home for Perl modules
-In-Reply-To: <20131120182303.3736b65d@skate>
+Date: Wed, 20 Nov 2013 22:09:45 +0100
+Subject: [Buildroot] [pkg-perl infra 05/12] qemu: add a Config.in.host
+In-Reply-To: <20131120182525.02fdd612@skate>
 References: <1384966920-9454-1-git-send-email-francois.perrad@gadz.org>
- <1384966920-9454-3-git-send-email-francois.perrad@gadz.org>
- <20131120182303.3736b65d@skate>
-Message-ID: <CAB0FRsueUNbeVC6=fEM5dDcvRs-NkrtvbDkjRA2TqBoP_W33Kw@mail.gmail.com>
+ <1384966920-9454-6-git-send-email-francois.perrad@gadz.org>
+ <20131120182525.02fdd612@skate>
+Message-ID: <CAB0FRstmMWWZXLkN4Hj0XvzneBrK8tbV6pNXcoa0bNuGy-E9kg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,26 +15,25 @@ To: buildroot@busybox.net
 2013/11/20 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>:
 > Dear Francois Perrad,
 >
-> On Wed, 20 Nov 2013 18:01:50 +0100, Francois Perrad wrote:
+> On Wed, 20 Nov 2013 18:01:53 +0100, Francois Perrad wrote:
+>> after the removal of cpanminus
 >>
 >> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 >> ---
->>  Config.in            |    7 +
->>  package/Config.in    |    1 +
->>  package/cpan/cpan.mk |    1 +
->>  scancpan             |  629 ++++++++++++++++++++++++++++++++++++++++++++++++++
+>>  package/Config.in.host      |    1 +
+>>  package/qemu/Config.in.host |   10 ++++++++++
+>>  2 files changed, 11 insertions(+)
+>>  create mode 100644 package/qemu/Config.in.host
 >
-> We quite certainly want this script somewhere under support/scripts/,
-> in a separate patch from the one adding the BR2_CPAN_MIRROR option and
-> the package/cpan/ directory. And also, the script needs a comment at
-> the beginning that explains what it is, what it does, how to use it,
-> and what is the license of the script (because I see it reuses some
-> existing code, so we have to figure out if the license of this code is
-> compatible with the Buildroot license).
+> Adding Yann in Cc on this one. Until now, host-qemu was only used by
+> cpanminus, so if cpanminus is removed, I don't see the point of keeping
+> host-qemu. But I know Yann was interested in it, so it would be good to
+> understand what's the plan and needs around host-qemu after cpanminus
+> removal.
 >
 
-This script was "fatpacked", so the beginning is a bundle of dependencies.
-The initial part that I wrote, is at the end and contains an Usage description.
+Now, host-qemu-user is required by no package.
+But it remains a useful tool for a developer which could run it manually.
 
 Fran?ois
 
