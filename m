@@ -1,45 +1,39 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 20 Nov 2013 10:15:18 +0100
-Subject: [Buildroot] [git commit] pv: needs gettext if locale is enabled
-Message-ID: <20131120091611.A40379BD5F@busybox.osuosl.org>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Wed, 20 Nov 2013 10:57:11 +0100
+Subject: [Buildroot] autobuild annotations
+Message-ID: <CAAXf6LUcR-P7rrpiBOELDV=3GZNHn3kU9hu8bg63+xOZWs0u0Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=8b24c37e3a332509d91ac2a4edc983a5e0b57ab0
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi,
 
-Fixes http://autobuild.buildroot.net/results/c4f/c4f5ed916d85740ec00f5f34ded5de0195e5cd45/
+What I am missing in the current autobuild website/flow is a way to
+indicate that a certain problem is already analyzed by someone, and
+what the problem is. Maybe a patch has been submitted already and
+waiting to be merged. Maybe the solution is clear but someone still
+needs to make a patch. Maybe it's more complex and we have to wait for
+feedback from upstream.
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/pv/Config.in |    1 +
- package/pv/pv.mk     |    1 +
- 2 files changed, 2 insertions(+), 0 deletions(-)
+If we could have such a 'comment' or 'annotations' field, we could
+avoid duplicating the analyis / resolution effort.
 
-diff --git a/package/pv/Config.in b/package/pv/Config.in
-index 671f78e..d732296 100644
---- a/package/pv/Config.in
-+++ b/package/pv/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_PV
- 	bool "pv"
-+	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
- 	help
- 	  Pipe Viewer - is a terminal-based tool for
- 	  monitoring the progress of data through a
-diff --git a/package/pv/pv.mk b/package/pv/pv.mk
-index 5f1a54b..ab5190a 100644
---- a/package/pv/pv.mk
-+++ b/package/pv/pv.mk
-@@ -9,6 +9,7 @@ PV_SOURCE = pv-$(PV_VERSION).tar.bz2
- PV_SITE = http://www.ivarch.com/programs/sources
- PV_LICENSE = Artistic-2.0
- PV_LICENSE_FILES = doc/COPYING
-+PV_DEPENDENCIES = $(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext)
- 
- # While 'pv' uses autoconf, it does not use automake for its
- # makefiles. It uses $(LD) $(LDFLAGS) to achieve partial linking, but
+One way to proceed is to simply keep a comment for each package. When
+there is a failure, we show (or link to) the comment for that package,
+even though at that time we are not yet sure that the problem is
+exactly the same (one package could fail in multiple ways). The
+comment should have a link to the problem on which it was added
+originally, so that the developer looking at the new problem can
+analyze if it is the same problem or not.
+
+To implement this, we'd need an extra table in the database to map a
+package to a comment, and we need a query to extract the comments for
+a given package from that table when displaying the results.
+
+What do you think?
+Do you have alternative proposals?
+
+Thanks,
+Thomas
