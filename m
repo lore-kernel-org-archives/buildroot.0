@@ -1,308 +1,79 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 20 Nov 2013 23:18:18 +0100
-Subject: [Buildroot] [PATCH v2] qt5base: use -device-option to set
- mkspec variables
-In-Reply-To: <1384949861-24956-1-git-send-email-fatih.asici@gmail.com>
-References: <1384436438-2119-1-git-send-email-fatih.asici@gmail.com>
- <1384949861-24956-1-git-send-email-fatih.asici@gmail.com>
-Message-ID: <528D352A.5030508@mind.be>
+Date: Wed, 20 Nov 2013 23:28:37 +0100
+Subject: [Buildroot] Buildroot and Git repository (u-boot + kernel)
+In-Reply-To: <CAAs3wMiTfo8tiLmgCGH9G_fz+zvmAO6YdhvgVpVm28gaOHtBjg@mail.gmail.com>
+References: <CAAs3wMgyCOV_oeTjL0GFTAux9tPsZXeEifTgACSqKcPQSN=ABg@mail.gmail.com>
+ <20131120135421.0602e149@skate>
+ <CAAs3wMiTfo8tiLmgCGH9G_fz+zvmAO6YdhvgVpVm28gaOHtBjg@mail.gmail.com>
+Message-ID: <528D3795.1050601@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 20/11/13 13:17, Fatih A??c? wrote:
-> Simplify our custom qmake.conf:
->    - Include linux_device_{pre,post}.conf to inherit common device
->      configuration.
->    - Do not add $(STAGING_DIR)/usr/include to include path. It is
->      redundant.
+On 20/11/13 17:47, Freedreamer wrote:
 >
-> In additon to the simplification of code, this change is a preparation
-> to solve problems occurring when QMAKE_CXX is prepended with ccache path.
+> Hi Thomas,
 >
-> Upstream patch is needed by configure to parse device options correctly.
-> Another upstream patch is needed to remove ARM specific parts from
-> linux_device_post.conf.
+> thanks for reply. here in the attachement the config file.Buildroot is
+> the last one on git (pulled yesterday)
 >
-> Signed-off-by: Fatih A??c? <fatih.asici@gmail.com>
+> Regards
+>
+> Marco
+>
+>
+> 2013/11/20 Thomas Petazzoni <thomas.petazzoni@free-electrons.com
+> <mailto:thomas.petazzoni@free-electrons.com>>
+>
+>     Dear Freedreamer,
+>
+>     On Wed, 20 Nov 2013 13:49:03 +0100, Freedreamer wrote:
+>
+>      > I'm Marco from Italy and that's the first Time I write here . I've
+>      > been trying to integrate in buildroot my custom u-boot and kernel I
+>      > have on my gitlab. In u-boot repository version I set up  my branch
+>      > name but br seems downloading always the master version from git.
+>      > Anyone can help me ? Same situation with the kernel.
 
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+  What you have configured _should_ work. What buildroot does is:
 
-  Build-tested on x86_64.
+- clone the repository (shallow clone if possible);
 
+- export a tarball of the requested tag/branch;
+
+- delete the repository again.
+
+  Please note that once the tarball exists in the download directory 
+(./dl by default) it will not be downloaded again - you have to do a 
+'make linux-dirclean' *and* remove the tarball in order to re-download it.
+
+  Can you remove the tarball from the download directory, run 'make 
+linux-source' and post the output?
 
   Regards,
   Arnout
 
-> ---
-> Changes v1 -> v2:
->    - mentioned the modified parts of qmake.conf in commit message (suggested by
->      Arnout Vandecappelle)
->    - added an upstream patch to remove ARM specific configuration from
->      linux_device_post.conf (issue noticed by Arnout Vandecappelle)
->    - Add "Signed-off-by" lines to new patches (suggested by Arnout Vandecappelle)
-> ---
->   .../qt5/qt5base/qt5base-0002-mkspecs-files.patch   |  39 +-------
->   ...igure-Parse-device-option-value-correctly.patch |  37 +++++++
->   ...cs-devices-linux_device_post.conf-for-non.patch | 107 +++++++++++++++++++++
->   package/qt5/qt5base/qt5base.mk                     |  18 +---
->   4 files changed, 151 insertions(+), 50 deletions(-)
->   create mode 100644 package/qt5/qt5base/qt5base-0008-configure-Parse-device-option-value-correctly.patch
->   create mode 100644 package/qt5/qt5base/qt5base-0009-Fixed-mkspecs-devices-linux_device_post.conf-for-non.patch
 >
-> diff --git a/package/qt5/qt5base/qt5base-0002-mkspecs-files.patch b/package/qt5/qt5base/qt5base-0002-mkspecs-files.patch
-> index e406cfc..3fddeac 100644
-> --- a/package/qt5/qt5base/qt5base-0002-mkspecs-files.patch
-> +++ b/package/qt5/qt5base/qt5base-0002-mkspecs-files.patch
-> @@ -14,50 +14,17 @@ Index: b/mkspecs/devices/linux-buildroot-g++/qmake.conf
->   ===================================================================
->   --- /dev/null
->   +++ b/mkspecs/devices/linux-buildroot-g++/qmake.conf
-> -@@ -0,0 +1,44 @@
-> -+MAKEFILE_GENERATOR      = UNIX
-> -+CONFIG                 += incremental gdb_dwarf_index
-> -+QMAKE_INCREMENTAL_STYLE = sublib
-> -+
-> -+include(../../common/linux.conf)
-> -+include(../../common/gcc-base-unix.conf)
-> -+include(../../common/g++-unix.conf)
-> -+
-> -+load(device_config)
-> -+
-> -+QT_QPA_DEFAULT_PLATFORM = eglfs
-> -+
-> -+BUILDROOT_CROSS_COMPILE =
-> -+BUILDROOT_COMPILER_CFLAGS =
-> -+BUILDROOT_COMPILER_CXXFLAGS =
-> -+BUILDROOT_INCLUDE_PATH =
-> -+
-> -+# modifications to g++.conf
-> -+QMAKE_CC                = $${BUILDROOT_CROSS_COMPILE}gcc
-> -+QMAKE_CXX               = $${BUILDROOT_CROSS_COMPILE}g++
-> -+QMAKE_LINK              = $${QMAKE_CXX}
-> -+QMAKE_LINK_SHLIB        = $${QMAKE_CXX}
-> -+
-> -+# modifications to linux.conf
-> -+QMAKE_AR                = $${BUILDROOT_CROSS_COMPILE}ar cqs
-> -+QMAKE_OBJCOPY           = $${BUILDROOT_CROSS_COMPILE}objcopy
-> -+QMAKE_NM                = $${BUILDROOT_CROSS_COMPILE}nm -P
-> -+QMAKE_STRIP             = $${BUILDROOT_CROSS_COMPILE}strip
-> +@@ -0,0 +1,11 @@
-> ++include(../common/linux_device_pre.conf)
->   +
->   +#modifications to gcc-base.conf
->   +QMAKE_CFLAGS           += $${BUILDROOT_COMPILER_CFLAGS}
->   +QMAKE_CXXFLAGS         += $${BUILDROOT_COMPILER_CXXFLAGS}
->   +QMAKE_CXXFLAGS_RELEASE += -O3
-> -+INCLUDEPATH            += $${BUILDROOT_INCLUDE_PATH}
->   +
->   +QMAKE_LIBS             += -lrt -lpthread -ldl
->   +
-> -+# device specific glue code
-> -+EGLFS_PLATFORM_HOOKS_SOURCES =
-> -+
-> -+# Sanity check
-> -+deviceSanityCheckCompiler()
-> -+
-> ++include(../common/linux_device_post.conf)
->   +load(qt_config)
->   Index: b/mkspecs/devices/linux-buildroot-g++/qplatformdefs.h
->   ===================================================================
-> diff --git a/package/qt5/qt5base/qt5base-0008-configure-Parse-device-option-value-correctly.patch b/package/qt5/qt5base/qt5base-0008-configure-Parse-device-option-value-correctly.patch
-> new file mode 100644
-> index 0000000..aaf1d35
-> --- /dev/null
-> +++ b/package/qt5/qt5base/qt5base-0008-configure-Parse-device-option-value-correctly.patch
-> @@ -0,0 +1,37 @@
-> +From 4723f3fd04edf1aad6750ca91fd4648216d8b408 Mon Sep 17 00:00:00 2001
-> +From: =?UTF-8?q?Fatih=20A=C5=9F=C4=B1c=C4=B1?= <fatih.asici@gmail.com>
-> +Date: Sat, 21 Sep 2013 00:14:39 +0300
-> +Subject: [PATCH] configure: Parse -device-option value correctly
-> +
-> +The regular expression does not parse correctly when a device option value
-> +contains the character '=' (e.g. QMAKE_CFLAGS="-D_FILE_OFFSET_BITS=64").
-> +
-> +In order to break string at the first equal sign and to simplify code,
-> +use "cut" command as in other places in configure script.
-> +
-> +Task-number: QTBUG-33584
-> +Change-Id: I05b474d2ba6bff84c1e40d00475963bab36d94b6
-> +Reviewed-by: Oswald Buddenhagen <oswald.buddenhagen@digia.com>
-> +Signed-off-by: Fatih A??c? <fatih.asici@gmail.com>
-> +---
-> + configure | 4 ++--
-> + 1 file changed, 2 insertions(+), 2 deletions(-)
-> +
-> +diff --git a/configure b/configure
-> +index 64568dd..388899e 100755
-> +--- a/configure
-> ++++ b/configure
-> +@@ -1609,8 +1609,8 @@ while [ "$#" -gt 0 ]; do
-> +         [ "$XPLATFORM" = "undefined" ] && exit 101
-> +         ;;
-> +     device-option)
-> +-        DEV_VAR=`echo $VAL | sed "s,^\(.*\)=.*,\1,"`
-> +-        DEV_VAL=`echo $VAL | sed "s,^.*=\(.*\),\1,"`
-> ++        DEV_VAR=`echo $VAL | cut -d '=' -f 1`
-> ++        DEV_VAL=`echo $VAL | cut -d '=' -f 2-`
-> +         DeviceVar set $DEV_VAR "$DEV_VAL"
-> +         ;;
-> +     qpa)
-> +--
-> +1.8.4.rc3
-> +
-> diff --git a/package/qt5/qt5base/qt5base-0009-Fixed-mkspecs-devices-linux_device_post.conf-for-non.patch b/package/qt5/qt5base/qt5base-0009-Fixed-mkspecs-devices-linux_device_post.conf-for-non.patch
-> new file mode 100644
-> index 0000000..7eeea38
-> --- /dev/null
-> +++ b/package/qt5/qt5base/qt5base-0009-Fixed-mkspecs-devices-linux_device_post.conf-for-non.patch
-> @@ -0,0 +1,107 @@
-> +From f2a611ce6cb0f86d9331641a804de6a507900db7 Mon Sep 17 00:00:00 2001
-> +From: Tomasz Olszak <olszak.tomasz@gmail.com>
-> +Date: Thu, 18 Jul 2013 20:45:47 +0000
-> +Subject: [PATCH] Fixed mkspecs/devices/linux_device_post.conf for non-arm
-> + platforms.
-> +MIME-Version: 1.0
-> +Content-Type: text/plain; charset=UTF-8
-> +Content-Transfer-Encoding: 8bit
-> +
-> +Now arm specific -mfloat-abi flag is added to compiler flags
-> +only for arm architecture in linux_arm_device_post.conf.
-> +
-> +Change-Id: Ie77ac6e0717d9d1fd9c14e1d6a26e86f08ab418c
-> +Reviewed-by: Jaros?aw Staniek <staniek@kde.org>
-> +Reviewed-by: Oswald Buddenhagen <oswald.buddenhagen@digia.com>
-> +Signed-off-by: Fatih A??c? <fatih.asici@gmail.com>
-> +---
-> + mkspecs/devices/common/linux_arm_device_post.conf | 7 +++++++
-> + mkspecs/devices/common/linux_device_post.conf     | 6 ------
-> + mkspecs/devices/linux-imx53qsb-g++/qmake.conf     | 2 +-
-> + mkspecs/devices/linux-imx6-g++/qmake.conf         | 2 +-
-> + mkspecs/devices/linux-rasp-pi-g++/qmake.conf      | 2 +-
-> + mkspecs/devices/linux-tegra2-g++/qmake.conf       | 2 +-
-> + 6 files changed, 11 insertions(+), 10 deletions(-)
-> + create mode 100644 mkspecs/devices/common/linux_arm_device_post.conf
-> +
-> +diff --git a/mkspecs/devices/common/linux_arm_device_post.conf b/mkspecs/devices/common/linux_arm_device_post.conf
-> +new file mode 100644
-> +index 0000000..7ce4759
-> +--- /dev/null
-> ++++ b/mkspecs/devices/common/linux_arm_device_post.conf
-> +@@ -0,0 +1,7 @@
-> ++contains(DISTRO_OPTS, hard-float) {
-> ++    COMPILER_FLAGS += -mfloat-abi=hard
-> ++} else {
-> ++    COMPILER_FLAGS += -mfloat-abi=softfp
-> ++}
-> ++
-> ++include(linux_device_post.conf)
-> +diff --git a/mkspecs/devices/common/linux_device_post.conf b/mkspecs/devices/common/linux_device_post.conf
-> +index f8dbf76..548e75a 100644
-> +--- a/mkspecs/devices/common/linux_device_post.conf
-> ++++ b/mkspecs/devices/common/linux_device_post.conf
-> +@@ -3,12 +3,6 @@ contains(DISTRO_OPTS, deb-multi-arch) {
-> +                       -Wl,-rpath-link,$$[QT_SYSROOT]/lib/$${GCC_MACHINE_DUMP}
-> + }
-> +
-> +-contains(DISTRO_OPTS, hard-float) {
-> +-    COMPILER_FLAGS += -mfloat-abi=hard
-> +-} else {
-> +-    COMPILER_FLAGS += -mfloat-abi=softfp
-> +-}
-> +-
-> + QMAKE_CFLAGS       += $$COMPILER_FLAGS
-> + QMAKE_CXXFLAGS     += $$COMPILER_FLAGS
-> +
-> +diff --git a/mkspecs/devices/linux-imx53qsb-g++/qmake.conf b/mkspecs/devices/linux-imx53qsb-g++/qmake.conf
-> +index 0a5ed89..3a9766c 100644
-> +--- a/mkspecs/devices/linux-imx53qsb-g++/qmake.conf
-> ++++ b/mkspecs/devices/linux-imx53qsb-g++/qmake.conf
-> +@@ -32,6 +32,6 @@ QMAKE_CXXFLAGS_RELEASE += $$IMX5_CFLAGS_RELEASE
-> + QMAKE_CFLAGS_DEBUG     += $$IMX5_CFLAGS
-> + QMAKE_CXXFLAGS_DEBUG   += $$IMX5_CFLAGS
-> +
-> +-include(../common/linux_device_post.conf)
-> ++include(../common/linux_arm_device_post.conf)
-> +
-> + load(qt_config)
-> +diff --git a/mkspecs/devices/linux-imx6-g++/qmake.conf b/mkspecs/devices/linux-imx6-g++/qmake.conf
-> +index 20f6d11..2b8dbf6 100644
-> +--- a/mkspecs/devices/linux-imx6-g++/qmake.conf
-> ++++ b/mkspecs/devices/linux-imx6-g++/qmake.conf
-> +@@ -34,6 +34,6 @@ QMAKE_CXXFLAGS_RELEASE += $$IMX6_CFLAGS_RELEASE
-> + QMAKE_CFLAGS_DEBUG     += $$IMX6_CFLAGS
-> + QMAKE_CXXFLAGS_DEBUG   += $$IMX6_CFLAGS
-> +
-> +-include(../common/linux_device_post.conf)
-> ++include(../common/linux_arm_device_post.conf)
-> +
-> + load(qt_config)
-> +diff --git a/mkspecs/devices/linux-rasp-pi-g++/qmake.conf b/mkspecs/devices/linux-rasp-pi-g++/qmake.conf
-> +index d6fea47..5f923ad 100644
-> +--- a/mkspecs/devices/linux-rasp-pi-g++/qmake.conf
-> ++++ b/mkspecs/devices/linux-rasp-pi-g++/qmake.conf
-> +@@ -42,6 +42,6 @@ QMAKE_CXXFLAGS          = $$QMAKE_CFLAGS
-> + EGLFS_PLATFORM_HOOKS_SOURCES = $$PWD/qeglfshooks_pi.cpp
-> + EGLFS_PLATFORM_HOOKS_LIBS = -lbcm_host
-> +
-> +-include(../common/linux_device_post.conf)
-> ++include(../common/linux_arm_device_post.conf)
-> +
-> + load(qt_config)
-> +diff --git a/mkspecs/devices/linux-tegra2-g++/qmake.conf b/mkspecs/devices/linux-tegra2-g++/qmake.conf
-> +index 1c7a8cc..320e1b8 100644
-> +--- a/mkspecs/devices/linux-tegra2-g++/qmake.conf
-> ++++ b/mkspecs/devices/linux-tegra2-g++/qmake.conf
-> +@@ -26,6 +26,6 @@ TEGRA2_CFLAGS           = -mtune=cortex-a9 -march=armv7-a -mhard-float -mfloat-a
-> + QMAKE_CFLAGS           += $$TEGRA2_CFLAGS
-> + QMAKE_CXXFLAGS         += $$TEGRA2_CFLAGS
-> +
-> +-include(../common/linux_device_post.conf)
-> ++include(../common/linux_arm_device_post.conf)
-> +
-> + load(qt_config)
-> +--
-> +1.8.4.rc3
-> +
-> diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
-> index ce78d31..febdc9b 100644
-> --- a/package/qt5/qt5base/qt5base.mk
-> +++ b/package/qt5/qt5base/qt5base.mk
-> @@ -152,21 +152,7 @@ QT5BASE_INSTALL_LIBS_$(BR2_PACKAGE_QT5BASE_PRINTSUPPORT) += Qt5PrintSupport
+>     Can you post your .config and tell us which Buildroot version you're
+>     using?
 >
->   QT5BASE_INSTALL_LIBS_$(BR2_PACKAGE_QT5BASE_DBUS) += Qt5DBus
+>     Thanks,
 >
-> -# Ideally, we could use -device-option to substitute variable values
-> -# in our linux-buildroot-g++/qmake.config, but this mechanism doesn't
-> -# nicely support variable values that contain spaces. So we use the
-> -# good old sed solution here.
-> -define QT5BASE_CONFIG_SET
-> -	$(SED) 's%^$(1).*%$(1) = $(2)%g' $(@D)/mkspecs/devices/linux-buildroot-g++/qmake.conf
-> -endef
-> -
->   define QT5BASE_CONFIGURE_CMDS
-> -	$(call QT5BASE_CONFIG_SET,BUILDROOT_CROSS_COMPILE,$(TARGET_CROSS))
-> -	$(call QT5BASE_CONFIG_SET,BUILDROOT_COMPILER_CFLAGS,$(TARGET_CFLAGS))
-> -	$(call QT5BASE_CONFIG_SET,BUILDROOT_COMPILER_CXXFLAGS,$(TARGET_CXXFLAGS))
-> -	$(call QT5BASE_CONFIG_SET,BUILDROOT_INCLUDE_PATH,$(STAGING_DIR)/usr/include)
-> -	$(call QT5BASE_CONFIG_SET,EGLFS_PLATFORM_HOOKS_SOURCES, \
-> -		$(QT5BASE_EGLFS_PLATFORM_HOOKS_SOURCES))
->   	(cd $(@D); \
->   		PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY)" \
->   		PKG_CONFIG_LIBDIR="$(STAGING_DIR)/usr/lib/pkgconfig" \
-> @@ -181,6 +167,10 @@ define QT5BASE_CONFIGURE_CMDS
->   		-no-rpath \
->   		-nomake examples -nomake tests \
->   		-device buildroot \
-> +		-device-option CROSS_COMPILE="$(TARGET_CROSS)" \
-> +		-device-option BUILDROOT_COMPILER_CFLAGS="$(TARGET_CFLAGS)" \
-> +		-device-option BUILDROOT_COMPILER_CXXFLAGS="$(TARGET_CXXFLAGS)" \
-> +		-device-option EGLFS_PLATFORM_HOOKS_SOURCES="$(QT5BASE_EGLFS_PLATFORM_HOOKS_SOURCES)" \
->   		-no-c++11 \
->   		$(QT5BASE_CONFIGURE_OPTS) \
->   	)
+>     Thomas
+>     --
+>     Thomas Petazzoni, CTO, Free Electrons
+>     Embedded Linux, Kernel and Android engineering
+>     http://free-electrons.com
+>
+>
+>
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 >
 
 
