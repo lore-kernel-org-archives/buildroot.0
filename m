@@ -1,245 +1,744 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 20 Nov 2013 18:28:41 +0100
-Subject: [Buildroot] [pkg-perl infra 06/12] libxml-parser-perl: move and
- refactor with perl infrastructure
-In-Reply-To: <1384966920-9454-7-git-send-email-francois.perrad@gadz.org>
-References: <1384966920-9454-1-git-send-email-francois.perrad@gadz.org>
- <1384966920-9454-7-git-send-email-francois.perrad@gadz.org>
-Message-ID: <20131120182841.74f7aebd@skate>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Wed, 20 Nov 2013 18:29:45 +0100
+Subject: [Buildroot] [PATCH] libglib2: needs MMU support
+Message-ID: <8a49d754da4819064a09.1384968585@argentina>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Francois Perrad,
+Fixes http://autobuild.buildroot.net/results/2e0/2e032c6e44e10f2912935715741c3680a19b9b51/
 
-On Wed, 20 Nov 2013 18:01:54 +0100, Francois Perrad wrote:
-> (used by host-intltool and metacity)
-> 
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-> ---
->  package/Config.in                                  |    1 -
->  package/Makefile.in                                |    8 ++---
->  package/cpan/Config.in                             |    1 +
->  package/cpan/libxml-parser-perl/Config.in          |    9 +++++
->  .../cpan/libxml-parser-perl/libxml-parser-perl.mk  |   19 +++++++++++
->  package/intltool/intltool.mk                       |    4 +--
->  package/libxml-parser-perl/Config.in               |   11 ------
->  package/libxml-parser-perl/libxml-parser-perl.mk   |   35 --------------------
->  package/metacity/metacity.mk                       |    3 ++
->  9 files changed, 36 insertions(+), 55 deletions(-)
->  create mode 100644 package/cpan/libxml-parser-perl/Config.in
->  create mode 100644 package/cpan/libxml-parser-perl/libxml-parser-perl.mk
->  delete mode 100644 package/libxml-parser-perl/Config.in
->  delete mode 100644 package/libxml-parser-perl/libxml-parser-perl.mk
-> 
-> diff --git a/package/Config.in b/package/Config.in
-> index 8ae83f9..3af2783 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -586,7 +586,6 @@ source "package/json-c/Config.in"
->  source "package/json-glib/Config.in"
->  source "package/libjson/Config.in"
->  source "package/libroxml/Config.in"
-> -source "package/libxml-parser-perl/Config.in"
->  source "package/libxml2/Config.in"
->  source "package/libxmlpp/Config.in"
->  source "package/libxslt/Config.in"
-> diff --git a/package/Makefile.in b/package/Makefile.in
-> index cd0437c..3a3d9f7 100644
-> --- a/package/Makefile.in
-> +++ b/package/Makefile.in
-> @@ -241,11 +241,9 @@ TARGET_CONFIGURE_OPTS=PATH=$(TARGET_PATH) \
->  		LDFLAGS="$(TARGET_LDFLAGS)" \
->  		FCFLAGS="$(TARGET_FCFLAGS)" \
->  		PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY)" \
-> -		PERLLIB="$(HOST_DIR)/usr/lib/perl" \
->  		STAGING_DIR="$(STAGING_DIR)"
->  
-> -TARGET_MAKE_ENV=PATH=$(TARGET_PATH) \
-> -		PERLLIB="$(HOST_DIR)/usr/lib/perl"
-> +TARGET_MAKE_ENV=PATH=$(TARGET_PATH)
->  
->  HOST_CONFIGURE_OPTS=PATH=$(HOST_PATH) \
->  		AR="$(HOSTAR)" \
-> @@ -265,15 +263,13 @@ HOST_CONFIGURE_OPTS=PATH=$(HOST_PATH) \
->  		PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY)" \
->  		PKG_CONFIG_SYSROOT_DIR="/" \
->  		PKG_CONFIG_LIBDIR="$(HOST_DIR)/usr/lib/pkgconfig:$(HOST_DIR)/usr/share/pkgconfig" \
-> -		PERLLIB="$(HOST_DIR)/usr/lib/perl" \
->  		LD_LIBRARY_PATH="$(HOST_DIR)/usr/lib:$(LD_LIBRARY_PATH)"
->  
->  HOST_MAKE_ENV=PATH=$(HOST_PATH) \
->  		LD_LIBRARY_PATH="$(HOST_DIR)/usr/lib:$(LD_LIBRARY_PATH)" \
->  		PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY)" \
->  		PKG_CONFIG_SYSROOT_DIR="/" \
-> -		PKG_CONFIG_LIBDIR="$(HOST_DIR)/usr/lib/pkgconfig" \
-> -		PERLLIB="$(HOST_DIR)/usr/lib/perl"
-> +		PKG_CONFIG_LIBDIR="$(HOST_DIR)/usr/lib/pkgconfig"
+Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
-These changes to package/Makefile.in have absolutely nothing to do with
-the libxml-parser-perl package. They should be part of a different
-commit, and come with a proper justification.
+---
+ package/atk/Config.in                   |   2 ++
+ package/bluez_utils/Config.in           |   2 +-
+ package/bustle/Config.in                |   2 ++
+ package/connman/Config.in               |   2 +-
+ package/curlftpfs/Config.in             |   2 +-
+ package/dbus-glib/Config.in             |   2 ++
+ package/docker/Config.in                |   2 ++
+ package/enchant/Config.in               |   2 ++
+ package/gamin/Config.in                 |   2 ++
+ package/gdk-pixbuf/Config.in            |   2 ++
+ package/glib-networking/Config.in       |   2 ++
+ package/glibmm/Config.in                |   2 ++
+ package/gmpc/Config.in                  |   2 ++
+ package/gob2/Config.in                  |   3 +--
+ package/gstreamer/gstreamer/Config.in   |   2 ++
+ package/gstreamer1/gstreamer1/Config.in |   2 ++
+ package/gvfs/Config.in                  |   2 +-
+ package/json-glib/Config.in             |   2 ++
+ package/latencytop/Config.in            |   2 ++
+ package/libglade/Config.in              |   2 ++
+ package/libglib2/Config.in              |   2 ++
+ package/libgtk2/Config.in               |   2 ++
+ package/libmms/Config.in                |   2 ++
+ package/libmpd/Config.in                |   2 ++
+ package/libqmi/Config.in                |   2 ++
+ package/librsvg/Config.in               |   2 ++
+ package/libsecret/Config.in             |   2 ++
+ package/libsoup/Config.in               |   2 ++
+ package/lttng-babeltrace/Config.in      |  11 +++++------
+ package/mpd/Config.in                   |   2 ++
+ package/nbd/Config.in                   |   2 ++
+ package/neard/Config.in                 |   2 +-
+ package/ofono/Config.in                 |   2 +-
+ package/pango/Config.in                 |   2 ++
+ package/pkg-config/Config.in            |   2 ++
+ package/polkit/Config.in                |   2 ++
+ package/shared-mime-info/Config.in      |   2 ++
+ package/sshfs/Config.in                 |   2 +-
+ package/sysprof/Config.in               |   2 ++
+ package/udev/Config.in                  |   2 ++
+ package/vala/Config.in                  |   2 ++
+ package/wireshark/Config.in             |   2 +-
+ 42 files changed, 78 insertions(+), 16 deletions(-)
 
->  
->  
->  ################################################################################
-> diff --git a/package/cpan/Config.in b/package/cpan/Config.in
-> index e69de29..bb98dc3 100644
-> --- a/package/cpan/Config.in
-> +++ b/package/cpan/Config.in
-> @@ -0,0 +1 @@
-> +source "package/cpan/libxml-parser-perl/Config.in"
-> diff --git a/package/cpan/libxml-parser-perl/Config.in b/package/cpan/libxml-parser-perl/Config.in
-> new file mode 100644
-> index 0000000..a09861a
-> --- /dev/null
-> +++ b/package/cpan/libxml-parser-perl/Config.in
-> @@ -0,0 +1,9 @@
-> +config BR2_PACKAGE_LIBXML_PARSER_PERL
-> +	bool "libxml-parser-perl"
-> +	select BR2_PACKAGE_EXPAT
-> +	# Hide from configuration as we only support the host package
-> +	# for the moment
-> +	depends on BR2_HOST_ONLY
-
-As I said in the comment to PATCH 07/12, we probably just want to get
-rid of the Config.in.
-
-Also, can you enable rename detection when generating your patches (git
-format-patch -M), so that we can more easily review patches that are
-moving code around?
-
-> +	help
-> +	  A perl module for parsing XML documents
-> +
-> diff --git a/package/cpan/libxml-parser-perl/libxml-parser-perl.mk b/package/cpan/libxml-parser-perl/libxml-parser-perl.mk
-> new file mode 100644
-> index 0000000..4d378ec
-> --- /dev/null
-> +++ b/package/cpan/libxml-parser-perl/libxml-parser-perl.mk
-> @@ -0,0 +1,19 @@
-> +################################################################################
-> +#
-> +# libxml-parser-perl
-> +#
-> +################################################################################
-> +
-> +LIBXML_PARSER_PERL_VERSION = 2.41
-> +LIBXML_PARSER_PERL_AUTHOR = TODDR
-> +LIBXML_PARSER_PERL_SOURCE = XML-Parser-$(LIBXML_PARSER_PERL_VERSION).tar.gz
-> +LIBXML_PARSER_PERL_SITE = $(BR2_CPAN_MIRROR)/authors/id/T/TO/TODDR/
-> +#LIBXML_PARSER_PERL_DEPENDENCIES = perl libwww-perl expat
-
-We don't need commented code.
-
-> +HOST_LIBXML_PARSER_PERL_DEPENDENCIES = host-expat
-> +LIBXML_PARSER_PERL_LICENSE = perl_5
-> +
-> +HOST_LIBXML_PARSER_PERL_CONF_OPT += EXPATLIBPATH=$(HOST_DIR)/usr/lib
-> +HOST_LIBXML_PARSER_PERL_CONF_OPT += EXPATINCPATH=$(HOST_DIR)/usr/include
-> +
-> +#$(eval $(perl-package))
-
-Ditto.
-
-> +$(eval $(host-perl-package))
-> diff --git a/package/intltool/intltool.mk b/package/intltool/intltool.mk
-> index b2418fe..42e638e 100644
-> --- a/package/intltool/intltool.mk
-> +++ b/package/intltool/intltool.mk
-> @@ -10,8 +10,8 @@ INTLTOOL_LICENSE = GPLv2+
->  INTLTOOL_LICENSE_FILES = COPYING
->  
->  HOST_INTLTOOL_DEPENDENCIES = host-gettext host-libxml-parser-perl
-> -HOST_INTLTOOL_CONF_OPT = \
-> -  PERLLIB=$(HOST_DIR)/usr/lib/perl
-> +HOST_INTLTOOL_CONF_ENV = \
-> +  PERL5LIB=$(HOST_DIR)/usr/lib/perl5/$(shell perl -MConfig -e "print Config->{archname}")
-
-Also not really related to libxml-parser-perl directly.
-
->  
->  $(eval $(autotools-package))
->  $(eval $(host-autotools-package))
-> diff --git a/package/libxml-parser-perl/Config.in b/package/libxml-parser-perl/Config.in
-> deleted file mode 100644
-> index 2a81086..0000000
-> --- a/package/libxml-parser-perl/Config.in
-> +++ /dev/null
-> @@ -1,11 +0,0 @@
-> -config BR2_PACKAGE_LIBXML_PARSER_PERL
-> -	bool "libxml-parser-perl"
-> -	select BR2_PACKAGE_EXPAT
-> -	# Hide from configuration as we only support the host package
-> -	# for the moment
-> -	depends on BR2_HOST_ONLY
-> -	help
-> -	  The Perl XML::Parser module.
-> -
-> -	  http://www.cpan.org/modules/by-module/XML/
-> -
-> diff --git a/package/libxml-parser-perl/libxml-parser-perl.mk b/package/libxml-parser-perl/libxml-parser-perl.mk
-> deleted file mode 100644
-> index 53f3bcf..0000000
-> --- a/package/libxml-parser-perl/libxml-parser-perl.mk
-> +++ /dev/null
-> @@ -1,35 +0,0 @@
-> -################################################################################
-> -#
-> -# libxml-parser-perl
-> -#
-> -################################################################################
-> -
-> -LIBXML_PARSER_PERL_VERSION = 2.36
-> -LIBXML_PARSER_PERL_SOURCE = XML-Parser-$(LIBXML_PARSER_PERL_VERSION).tar.gz
-> -LIBXML_PARSER_PERL_SITE = http://www.cpan.org/modules/by-module/XML/
-> -
-> -LIBXML_PARSER_PERL_DEPENDENCIES = expat
-> -
-> -define HOST_LIBXML_PARSER_PERL_CONFIGURE_CMDS
-> - (cd $(@D) ; \
-> -   $(HOST_CONFIGURE_OPTS) perl Makefile.PL \
-> -        PREFIX=$(HOST_DIR)/usr \
-> -        EXPATLIBPATH=$(HOST_DIR)/usr/lib \
-> -        EXPATINCPATH=$(HOST_DIR)/usr/include \
-> -        INSTALLDIRS=site \
-> -        INSTALLSITELIB=$(HOST_DIR)/usr/lib/perl \
-> -        INSTALLSITEARCH=$(HOST_DIR)/usr/lib/perl \
-> -        USE_MM_LD_RUN_PATH=1 \
-> - )
-> -endef
-> -
-> -define HOST_LIBXML_PARSER_PERL_BUILD_CMDS
-> - $(HOST_MAKE_ENV) $(MAKE) -C $(@D)
-> -endef
-> -
-> -define HOST_LIBXML_PARSER_PERL_INSTALL_CMDS
-> - $(HOST_MAKE_ENV) $(MAKE) -C $(@D) install
-> -endef
-> -
-> -$(eval $(generic-package))
-> -$(eval $(host-generic-package))
-> diff --git a/package/metacity/metacity.mk b/package/metacity/metacity.mk
-> index 9306b00..5680a4a 100644
-> --- a/package/metacity/metacity.mk
-> +++ b/package/metacity/metacity.mk
-> @@ -11,6 +11,9 @@ METACITY_VERSION = $(METACITY_VERSION_MAJOR).$(METACITY_VERSION_MINOR)
->  METACITY_SOURCE = metacity-$(METACITY_VERSION).tar.bz2
->  METACITY_SITE = http://ftp.gnome.org/pub/gnome/sources/metacity/$(METACITY_VERSION_MAJOR)
->  
-> +METACITY_CONF_ENV = \
-> +  PERL5LIB=$(HOST_DIR)/usr/lib/perl5/$(shell perl -MConfig -e "print Config->{archname}")
-
-Hum, the same thing here. Maybe we need to factorize this in
-package/Makefile.in, instead of removing all PERLLIB definitions from
-package/Makefile.in ?
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/atk/Config.in b/package/atk/Config.in
+--- a/package/atk/Config.in
++++ b/package/atk/Config.in
+@@ -3,8 +3,10 @@ config BR2_PACKAGE_ATK
+ 	select BR2_PACKAGE_LIBGLIB2
+ 	depends on BR2_USE_WCHAR # glib2
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # glib2
++	depends on BR2_USE_MMU # glib2
+ 	help
+ 	  The ATK accessibility toolkit, needed to build GTK+-2.x.
+ 
+ comment "atk needs a toolchain w/ wchar, threads"
++	depends on BR2_USE_MMU
+ 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/bluez_utils/Config.in b/package/bluez_utils/Config.in
+--- a/package/bluez_utils/Config.in
++++ b/package/bluez_utils/Config.in
+@@ -3,7 +3,7 @@ config BR2_PACKAGE_BLUEZ_UTILS
+ 	depends on !BR2_avr32
+ 	depends on BR2_USE_WCHAR # libglib2
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus, alsa-lib, libglib2
+-	depends on BR2_USE_MMU # dbus
++	depends on BR2_USE_MMU # dbus, libglib2
+ 	select BR2_PACKAGE_DBUS
+ 	select BR2_PACKAGE_LIBGLIB2
+ 	help
+diff --git a/package/bustle/Config.in b/package/bustle/Config.in
+--- a/package/bustle/Config.in
++++ b/package/bustle/Config.in
+@@ -4,6 +4,7 @@ config BR2_PACKAGE_BUSTLE
+ 	select BR2_PACKAGE_LIBGLIB2
+ 	depends on BR2_USE_WCHAR # libglib2
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
++	depends on BR2_USE_MMU # libglib2
+ 	depends on BR2_PACKAGE_DBUS # runtime
+ 	help
+ 	  Bustle is a better dbus-monitor! It records and draws
+@@ -20,5 +21,6 @@ config BR2_PACKAGE_BUSTLE
+ 	  http://www.willthompson.co.uk/bustle/
+ 
+ comment "bustle needs a toolchain w/ wchar, threads"
++	depends on BR2_USE_MMU
+ 	depends on BR2_PACKAGE_DBUS
+ 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/connman/Config.in b/package/connman/Config.in
+--- a/package/connman/Config.in
++++ b/package/connman/Config.in
+@@ -9,7 +9,7 @@ config BR2_PACKAGE_CONNMAN
+ 	depends on BR2_USE_WCHAR # libglib2 and gnutls
+ 	depends on BR2_INET_IPV6
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus, libglib2
+-	depends on BR2_USE_MMU # dbus
++	depends on BR2_USE_MMU # dbus, libglib2
+ 	help
+ 	  The Connection Manager (ConnMan) project provides a daemon for
+ 	  managing internet connections within embedded devices running
+diff --git a/package/curlftpfs/Config.in b/package/curlftpfs/Config.in
+--- a/package/curlftpfs/Config.in
++++ b/package/curlftpfs/Config.in
+@@ -9,7 +9,7 @@ config BR2_PACKAGE_CURLFTPFS
+ 	depends on BR2_LARGEFILE
+ 	depends on BR2_USE_WCHAR # glib2
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libfuse, glib2
+-	depends on BR2_USE_MMU # libfuse
++	depends on BR2_USE_MMU # libfuse, glib2
+ 	depends on !BR2_PREFER_STATIC_LIB # libfuse
+ 	help
+ 	  CurlFtpFS is a filesystem for accessing FTP hosts based on FUSE
+diff --git a/package/dbus-glib/Config.in b/package/dbus-glib/Config.in
+--- a/package/dbus-glib/Config.in
++++ b/package/dbus-glib/Config.in
+@@ -3,6 +3,7 @@ config BR2_PACKAGE_DBUS_GLIB
+ 	depends on BR2_PACKAGE_DBUS
+ 	depends on BR2_USE_WCHAR # glib2
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # glib2
++	depends on BR2_USE_MMU # glib2
+ 	select BR2_PACKAGE_LIBGLIB2
+ 	help
+ 	  GLib bindings for D-Bus.
+@@ -10,5 +11,6 @@ config BR2_PACKAGE_DBUS_GLIB
+ 	  http://www.freedesktop.org/software/dbus
+ 
+ comment "dbus-glib needs a toolchain w/ wchar, threads"
++	depends on BR2_USE_MMU
+ 	depends on BR2_PACKAGE_DBUS
+ 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/docker/Config.in b/package/docker/Config.in
+--- a/package/docker/Config.in
++++ b/package/docker/Config.in
+@@ -3,6 +3,7 @@ config BR2_PACKAGE_DOCKER
+ 	depends on BR2_PACKAGE_XORG7
+ 	depends on BR2_USE_WCHAR # glib2
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # glib2
++	depends on BR2_USE_MMU # glib2
+ 	select BR2_PACKAGE_LIBGLIB2
+ 	select BR2_PACKAGE_XLIB_LIBX11
+ 	help
+@@ -11,5 +12,6 @@ config BR2_PACKAGE_DOCKER
+ 	  http://icculus.org/openbox/2/docker
+ 
+ comment "docker needs a toolchain w/ wchar, threads"
++	depends on BR2_USE_MMU
+ 	depends on BR2_PACKAGE_XORG7
+ 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/enchant/Config.in b/package/enchant/Config.in
+--- a/package/enchant/Config.in
++++ b/package/enchant/Config.in
+@@ -3,6 +3,7 @@ config BR2_PACKAGE_ENCHANT
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_USE_WCHAR # glib2
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # glib2
++	depends on BR2_USE_MMU # glib2
+ 	select BR2_PACKAGE_LIBGLIB2
+ 	help
+ 	  Enchant is a spell-checking library that provides a consistent
+@@ -11,5 +12,6 @@ config BR2_PACKAGE_ENCHANT
+ 	  http://www.abisource.com/projects/enchant/
+ 
+ comment "enchant needs a toolchain w/ C++, threads, wchar"
++	depends on BR2_USE_MMU
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
+ 		!BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/gamin/Config.in b/package/gamin/Config.in
+--- a/package/gamin/Config.in
++++ b/package/gamin/Config.in
+@@ -2,6 +2,7 @@ config BR2_PACKAGE_GAMIN
+ 	bool "gamin"
+ 	depends on BR2_USE_WCHAR # glib2
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # glib2
++	depends on BR2_USE_MMU # glib2
+ 	select BR2_PACKAGE_LIBGLIB2
+ 	help
+ 	  the File Alteration Monitor
+@@ -9,4 +10,5 @@ config BR2_PACKAGE_GAMIN
+ 	  http://www.gnome.org/~veillard/gamin/sources
+ 
+ comment "gamin needs a toolchain w/ wchar, threads"
++	depends on BR2_USE_MMU
+ 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/gdk-pixbuf/Config.in b/package/gdk-pixbuf/Config.in
+--- a/package/gdk-pixbuf/Config.in
++++ b/package/gdk-pixbuf/Config.in
+@@ -2,6 +2,7 @@ config BR2_PACKAGE_GDK_PIXBUF
+ 	bool "gdk-pixbuf"
+ 	depends on BR2_USE_WCHAR # glib2
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # glib2
++	depends on BR2_USE_MMU # glib2
+ 	select BR2_PACKAGE_LIBGLIB2
+ 	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
+ 	help
+@@ -11,4 +12,5 @@ config BR2_PACKAGE_GDK_PIXBUF
+ 	  http://www.gtk.org/
+ 
+ comment "gdk-pixbuf needs a toolchain w/ wchar, threads"
++	depends on BR2_USE_MMU
+ 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/glib-networking/Config.in b/package/glib-networking/Config.in
+--- a/package/glib-networking/Config.in
++++ b/package/glib-networking/Config.in
+@@ -2,10 +2,12 @@ config BR2_PACKAGE_GLIB_NETWORKING
+ 	bool "glib-networking"
+ 	depends on BR2_USE_WCHAR # glib2
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # glib2
++	depends on BR2_USE_MMU # glib2
+ 	select BR2_PACKAGE_LIBGLIB2
+ 	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT
+ 	help
+ 	  Network-related GIO modules for glib.
+ 
+ comment "glib-networking needs a toolchain w/ wchar, threads"
++	depends on BR2_USE_MMU
+ 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/glibmm/Config.in b/package/glibmm/Config.in
+--- a/package/glibmm/Config.in
++++ b/package/glibmm/Config.in
+@@ -5,11 +5,13 @@ config BR2_PACKAGE_GLIBMM
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_USE_WCHAR # libglib2
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
++	depends on BR2_USE_MMU # libglib2
+ 	help
+ 	  The GLibmm package is a set of C++ bindings for GLib.
+ 
+ 	  http://www.gtkmm.org/
+ 
+ comment "glibmm needs a toolchain w/ C++, wchar, threads"
++	depends on BR2_USE_MMU
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
+ 		!BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/gmpc/Config.in b/package/gmpc/Config.in
+--- a/package/gmpc/Config.in
++++ b/package/gmpc/Config.in
+@@ -3,6 +3,7 @@ config BR2_PACKAGE_GMPC
+ 	depends on BR2_PACKAGE_LIBGTK2
+ 	depends on BR2_USE_WCHAR # glib2
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # glib2
++	depends on BR2_USE_MMU # glib2
+ 	depends on BR2_PACKAGE_XORG7
+ 	select BR2_PACKAGE_LIBGLIB2
+ 	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
+@@ -21,5 +22,6 @@ config BR2_PACKAGE_GMPC
+ 	  http://gmpcwiki.sarine.nl/index.php?title=GMPC
+ 
+ comment "gmpc needs a toolchain w/ wchar, threads"
++	depends on BR2_USE_MMU
+ 	depends on BR2_PACKAGE_XORG7 && BR2_PACKAGE_LIBGTK2
+ 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/gob2/Config.in b/package/gob2/Config.in
+--- a/package/gob2/Config.in
++++ b/package/gob2/Config.in
+@@ -2,8 +2,7 @@ config BR2_PACKAGE_GOB2
+ 	bool "gob2"
+ 	depends on BR2_USE_WCHAR # glib2
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # glib2
+-	# m4 uses fork(), so does bison then
+-	depends on BR2_USE_MMU
++	depends on BR2_USE_MMU # bison, glib2
+ 	select BR2_PACKAGE_LIBGLIB2
+ 	select BR2_PACKAGE_FLEX
+ 	select BR2_PACKAGE_BISON
+diff --git a/package/gstreamer/gstreamer/Config.in b/package/gstreamer/gstreamer/Config.in
+--- a/package/gstreamer/gstreamer/Config.in
++++ b/package/gstreamer/gstreamer/Config.in
+@@ -2,6 +2,7 @@ config BR2_PACKAGE_GSTREAMER
+ 	bool "gstreamer"
+ 	depends on BR2_USE_WCHAR # glib2
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # glib2
++	depends on BR2_USE_MMU # glib2
+ 	select BR2_PACKAGE_LIBGLIB2
+ 	help
+ 	  GStreamer is an open source multimedia framework.
+@@ -29,4 +30,5 @@ config BR2_PACKAGE_GSTREAMER_PLUGIN_REGI
+ 	  the launch-time for a GStreamer application.
+ 
+ comment "gstreamer needs a toolchain w/ wchar, threads"
++	depends on BR2_USE_MMU
+ 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/gstreamer1/gstreamer1/Config.in b/package/gstreamer1/gstreamer1/Config.in
+--- a/package/gstreamer1/gstreamer1/Config.in
++++ b/package/gstreamer1/gstreamer1/Config.in
+@@ -2,6 +2,7 @@ config BR2_PACKAGE_GSTREAMER1
+ 	bool "gstreamer1"
+ 	depends on BR2_USE_WCHAR # glib2
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # glib2
++	depends on BR2_USE_MMU # glib2
+ 	select BR2_PACKAGE_LIBGLIB2
+ 	help
+ 	  GStreamer is an open source multimedia framework. This 1.x version of
+@@ -50,4 +51,5 @@ config BR2_PACKAGE_GSTREAMER1_INSTALL_TO
+ endif
+ 
+ comment "gstreamer1 needs a toolchain w/ wchar, threads"
++	depends on BR2_USE_MMU
+ 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/gvfs/Config.in b/package/gvfs/Config.in
+--- a/package/gvfs/Config.in
++++ b/package/gvfs/Config.in
+@@ -2,7 +2,7 @@ config BR2_PACKAGE_GVFS
+ 	bool "gvfs"
+ 	depends on BR2_LARGEFILE
+ 	depends on BR2_USE_WCHAR # glib2
+-	depends on BR2_USE_MMU # dbus
++	depends on BR2_USE_MMU # dbus, glib2
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus, glib2
+ 	select BR2_PACKAGE_LIBGLIB2
+ 	select BR2_PACKAGE_DBUS
+diff --git a/package/json-glib/Config.in b/package/json-glib/Config.in
+--- a/package/json-glib/Config.in
++++ b/package/json-glib/Config.in
+@@ -2,6 +2,7 @@ config BR2_PACKAGE_JSON_GLIB
+ 	bool "json-glib"
+ 	depends on BR2_USE_WCHAR # glib2
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # glib2
++	depends on BR2_USE_MMU # glib2
+ 	select BR2_PACKAGE_LIBGLIB2
+ 	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT
+ 	help
+@@ -12,4 +13,5 @@ config BR2_PACKAGE_JSON_GLIB
+ 	  https://live.gnome.org/JsonGlib/
+ 
+ comment "json-glib needs a toolchain w/ wchar, threads"
++	depends on BR2_USE_MMU
+ 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/latencytop/Config.in b/package/latencytop/Config.in
+--- a/package/latencytop/Config.in
++++ b/package/latencytop/Config.in
+@@ -2,6 +2,7 @@ config BR2_PACKAGE_LATENCYTOP
+ 	bool "latencytop"
+ 	depends on BR2_USE_WCHAR # libglib2
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
++	depends on BR2_USE_MMU # libglib2
+ 	select BR2_PACKAGE_NCURSES
+ 	select BR2_PACKAGE_LIBGLIB2
+ 	help
+@@ -21,4 +22,5 @@ config BR2_PACKAGE_LATENCYTOP
+ 	  http://www.latencytop.org
+ 
+ comment "latencytop needs a toolchain w/ wchar, threads"
++	depends on BR2_USE_MMU
+ 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/libglade/Config.in b/package/libglade/Config.in
+--- a/package/libglade/Config.in
++++ b/package/libglade/Config.in
+@@ -3,6 +3,7 @@ config BR2_PACKAGE_LIBGLADE
+ 	depends on BR2_PACKAGE_LIBGTK2
+ 	depends on BR2_USE_WCHAR # glib2
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # glib2
++	depends on BR2_USE_MMU # glib2
+ 	select BR2_PACKAGE_LIBGLIB2
+ 	select BR2_PACKAGE_ATK
+ 	select BR2_PACKAGE_LIBXML2
+@@ -14,5 +15,6 @@ config BR2_PACKAGE_LIBGLADE
+ 	  http://ftp.gnome.org/pub/GNOME/sources/libglade/
+ 
+ comment "libglade needs a toolchain w/ wchar, threads"
++	depends on BR2_USE_MMU
+ 	depends on BR2_PACKAGE_LIBGTK2
+ 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/libglib2/Config.in b/package/libglib2/Config.in
+--- a/package/libglib2/Config.in
++++ b/package/libglib2/Config.in
+@@ -6,10 +6,12 @@ config BR2_PACKAGE_LIBGLIB2
+ 	select BR2_PACKAGE_ZLIB
+ 	depends on BR2_USE_WCHAR # gettext
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_USE_MMU # fork()
+ 	help
+ 	  Low-level core library that forms the basis of GTK+ and GNOME.
+ 
+ 	  http://www.gtk.org/
+ 
+ comment "libglib2 needs a toolchain w/ wchar, threads"
++	depends on BR2_USE_MMU
+ 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/libgtk2/Config.in b/package/libgtk2/Config.in
+--- a/package/libgtk2/Config.in
++++ b/package/libgtk2/Config.in
+@@ -15,6 +15,7 @@ config BR2_PACKAGE_LIBGTK2
+ 	depends on BR2_PACKAGE_XORG7
+ 	depends on BR2_USE_WCHAR # glib2
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # glib2
++	depends on BR2_USE_MMU # glib2
+ 	depends on BR2_INSTALL_LIBSTDCPP # pango
+ 	help
+ 	  The GTK+ version 2 graphical user interface library
+@@ -32,6 +33,7 @@ config BR2_PACKAGE_LIBGTK2_DEMO
+ endif
+ 
+ comment "libgtk2 needs a toolchain w/ wchar, threads, C++"
++	depends on BR2_USE_MMU
+ 	depends on BR2_PACKAGE_XORG7
+ 	depends on !BR2_USE_WCHAR || !BR2_INSTALL_LIBSTDCPP || \
+ 		!BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/libmms/Config.in b/package/libmms/Config.in
+--- a/package/libmms/Config.in
++++ b/package/libmms/Config.in
+@@ -2,6 +2,7 @@ config BR2_PACKAGE_LIBMMS
+ 	bool "libmms"
+ 	depends on BR2_USE_WCHAR # glib2
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # glib2
++	depends on BR2_USE_MMU # glib2
+ 	select BR2_PACKAGE_LIBGLIB2
+ 	help
+ 	  LibMMS is a common library for parsing mms:// and mmsh://
+@@ -13,4 +14,5 @@ config BR2_PACKAGE_LIBMMS
+ 	  http://launchpad.net/libmms
+ 
+ comment "libmms needs a toolchain w/ wchar, threads"
++	depends on BR2_USE_MMU
+ 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/libmpd/Config.in b/package/libmpd/Config.in
+--- a/package/libmpd/Config.in
++++ b/package/libmpd/Config.in
+@@ -2,6 +2,7 @@ config BR2_PACKAGE_LIBMPD
+ 	bool "libmpd"
+ 	depends on BR2_USE_WCHAR # glib2
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # glib2
++	depends on BR2_USE_MMU # glib2
+ 	select BR2_PACKAGE_LIBGLIB2
+ 	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
+ 	help
+@@ -12,4 +13,5 @@ config BR2_PACKAGE_LIBMPD
+ 	  http://gmpcwiki.sarine.nl/index.php?title=Libmpd
+ 
+ comment "libmpd needs a toolchain w/ wchar, threads"
++	depends on BR2_USE_MMU
+ 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/libqmi/Config.in b/package/libqmi/Config.in
+--- a/package/libqmi/Config.in
++++ b/package/libqmi/Config.in
+@@ -3,6 +3,7 @@ config BR2_PACKAGE_LIBQMI
+ 	select BR2_PACKAGE_LIBGLIB2
+ 	depends on BR2_USE_WCHAR # libglib2
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
++	depends on BR2_USE_MMU # libglib2
+ 	help
+ 	  libqmi is a glib-based library for talking to WWAN modems and devices
+ 	  which speak the Qualcomm MSM Interface (QMI) protocol.
+@@ -10,4 +11,5 @@ config BR2_PACKAGE_LIBQMI
+ 	  http://www.freedesktop.org/wiki/Software/libqmi/
+ 
+ comment "libqmi needs a toolchain w/ wchar, threads"
++	depends on BR2_USE_MMU
+ 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/librsvg/Config.in b/package/librsvg/Config.in
+--- a/package/librsvg/Config.in
++++ b/package/librsvg/Config.in
+@@ -8,6 +8,7 @@ config BR2_PACKAGE_LIBRSVG
+ 	select BR2_PACKAGE_GDK_PIXBUF
+ 	depends on BR2_USE_WCHAR # glib2
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # glib2
++	depends on BR2_USE_MMU # glib2
+ 	depends on BR2_INSTALL_LIBSTDCPP # pango
+ 	help
+ 	  The rsvg library is an efficient renderer for Scalable
+@@ -16,4 +17,5 @@ config BR2_PACKAGE_LIBRSVG
+ 	  http://librsvg.sourceforge.net/
+ 
+ comment "librsvg needs a toolchain w/ wchar, threads, C++"
++	depends on BR2_USE_MMU
+ 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP
+diff --git a/package/libsecret/Config.in b/package/libsecret/Config.in
+--- a/package/libsecret/Config.in
++++ b/package/libsecret/Config.in
+@@ -3,6 +3,7 @@ config BR2_PACKAGE_LIBSECRET
+ 	select BR2_PACKAGE_LIBGLIB2
+ 	depends on BR2_USE_WCHAR # gettext dep in libglib2
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
++	depends on BR2_USE_MMU # libglib2
+ 	help
+ 	  libsecret is a library for storing and retrieving passwords and other
+ 	  secrets. It communicates with the "Secret Service" using DBus.
+@@ -12,4 +13,5 @@ config BR2_PACKAGE_LIBSECRET
+ 	  https://wiki.gnome.org/Libsecret
+ 
+ comment "libsecret needs a toolchain w/ wchar, threads"
++	depends on BR2_USE_MMU
+ 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/libsoup/Config.in b/package/libsoup/Config.in
+--- a/package/libsoup/Config.in
++++ b/package/libsoup/Config.in
+@@ -2,6 +2,7 @@ config BR2_PACKAGE_LIBSOUP
+ 	bool "libsoup"
+ 	depends on BR2_USE_WCHAR # glib2 and gnutls
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # glib2
++	depends on BR2_USE_MMU # glib2
+ 	select BR2_PACKAGE_LIBXML2
+ 	select BR2_PACKAGE_LIBGLIB2
+ 	select BR2_PACKAGE_SQLITE
+@@ -24,4 +25,5 @@ config BR2_PACKAGE_LIBSOUP_SSL
+ endif
+ 
+ comment "libsoup needs a toolchain w/ wchar, threads"
++	depends on BR2_USE_MMU
+ 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/lttng-babeltrace/Config.in b/package/lttng-babeltrace/Config.in
+--- a/package/lttng-babeltrace/Config.in
++++ b/package/lttng-babeltrace/Config.in
+@@ -4,12 +4,10 @@ config BR2_PACKAGE_LTTNG_BABELTRACE
+ 	select BR2_PACKAGE_UTIL_LINUX
+ 	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
+ 	select BR2_PACKAGE_LIBGLIB2
+-	# libglib2 needs thread support and gettext which needs wchar support, and
+-	# we also depends on util-linux which needs wchar
+-	depends on BR2_USE_WCHAR
+-	depends on BR2_TOOLCHAIN_HAS_THREADS
+-	# util-linux depends on largefile support
+-	depends on BR2_LARGEFILE
++	depends on BR2_USE_WCHAR # libglib2, util-linux
++	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
++	depends on BR2_USE_MMU # libglib2
++	depends on BR2_LARGEFILE # util-linux
+ 	help
+ 	  Babeltrace is part of the LTTng 2.x project.
+ 
+@@ -29,4 +27,5 @@ config BR2_PACKAGE_LTTNG_BABELTRACE
+ 
+ comment "lttng-babeltrace needs a toolchain w/ wchar, threads, largefile"
+ 	depends on BR2_PACKAGE_LTTNG_TOOLS
++	depends on BR2_USE_MMU
+ 	depends on !BR2_USE_WCHAR || !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/mpd/Config.in b/package/mpd/Config.in
+--- a/package/mpd/Config.in
++++ b/package/mpd/Config.in
+@@ -3,6 +3,7 @@ menuconfig BR2_PACKAGE_MPD
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_USE_WCHAR # libglib2
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
++	depends on BR2_USE_MMU # libglib2
+ 	select BR2_PACKAGE_LIBGLIB2
+ 	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
+ 	select BR2_PACKAGE_MPD_TREMOR if !(BR2_PACKAGE_MPD_MAD || BR2_PACKAGE_MPD_MPG123 || BR2_PACKAGE_MPD_VORBIS || BR2_PACKAGE_MPD_WAVPACK || BR2_PACKAGE_MPD_FLAC || BR2_PACKAGE_MPD_MUSEPACK || BR2_PACKAGE_MPD_FFMPEG)
+@@ -183,5 +184,6 @@ config BR2_PACKAGE_MPD_WAVPACK
+ endif
+ 
+ comment "mpd needs a toolchain w/ C++, threads, wchar"
++	depends on BR2_USE_MMU
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
+ 		!BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/nbd/Config.in b/package/nbd/Config.in
+--- a/package/nbd/Config.in
++++ b/package/nbd/Config.in
+@@ -2,6 +2,7 @@ config BR2_PACKAGE_NBD
+ 	bool "nbd"
+ 	depends on BR2_USE_WCHAR # glib2
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # glib2
++	depends on BR2_USE_MMU # glib2
+ 	select BR2_PACKAGE_LIBGLIB2
+ 	help
+ 	  NBD is a set of utilities to configure network block devices,
+@@ -25,4 +26,5 @@ config BR2_NBD_SERVER
+ endif
+ 
+ comment "nbd needs a toolchain w/ wchar, threads"
++	depends on BR2_USE_MMU
+ 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/neard/Config.in b/package/neard/Config.in
+--- a/package/neard/Config.in
++++ b/package/neard/Config.in
+@@ -2,7 +2,7 @@ config BR2_PACKAGE_NEARD
+ 	bool "neard"
+ 	depends on BR2_USE_WCHAR # libglib2
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libnl, dbus, libglib2
+-	depends on BR2_USE_MMU # dbus
++	depends on BR2_USE_MMU # dbus, libglib2
+ 	select BR2_PACKAGE_DBUS
+ 	select BR2_PACKAGE_LIBGLIB2
+ 	select BR2_PACKAGE_LIBNL
+diff --git a/package/ofono/Config.in b/package/ofono/Config.in
+--- a/package/ofono/Config.in
++++ b/package/ofono/Config.in
+@@ -2,7 +2,7 @@ config BR2_PACKAGE_OFONO
+ 	bool "ofono"
+ 	depends on BR2_USE_WCHAR # gettext, libglib2
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus, libglib2
+-	depends on BR2_USE_MMU # dbus
++	depends on BR2_USE_MMU # dbus, libglib2
+ 	select BR2_PACKAGE_LIBCAP_NG
+ 	select BR2_PACKAGE_DBUS
+ 	select BR2_PACKAGE_LIBGLIB2
+diff --git a/package/pango/Config.in b/package/pango/Config.in
+--- a/package/pango/Config.in
++++ b/package/pango/Config.in
+@@ -2,6 +2,7 @@ config BR2_PACKAGE_PANGO
+ 	bool "pango"
+ 	depends on BR2_USE_WCHAR # glib2
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # glib2
++	depends on BR2_USE_MMU # glib2
+ 	depends on BR2_INSTALL_LIBSTDCPP # freetype support
+ 	select BR2_PACKAGE_LIBGLIB2
+ 	select BR2_PACKAGE_EXPAT
+@@ -20,5 +21,6 @@ config BR2_PACKAGE_PANGO
+ 	  http://www.pango.org/
+ 
+ comment "pango needs a toolchain w/ wchar, threads, C++"
++	depends on BR2_USE_MMU
+ 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
+ 		!BR2_INSTALL_LIBSTDCPP
+diff --git a/package/pkg-config/Config.in b/package/pkg-config/Config.in
+--- a/package/pkg-config/Config.in
++++ b/package/pkg-config/Config.in
+@@ -2,6 +2,7 @@ config BR2_PACKAGE_PKG_CONFIG
+ 	bool "pkg-config"
+ 	depends on BR2_USE_WCHAR # glib2
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # glib2
++	depends on BR2_USE_MMU # glib2
+ 	depends on BR2_DEPRECATED
+ 	select BR2_PACKAGE_LIBGLIB2
+ 	help
+@@ -14,4 +15,5 @@ config BR2_PACKAGE_PKG_CONFIG
+ 
+ comment "pkg-config needs a toolchain w/ wchar, threads"
+ 	depends on BR2_DEPRECATED
++	depends on BR2_USE_MMU
+ 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/polkit/Config.in b/package/polkit/Config.in
+--- a/package/polkit/Config.in
++++ b/package/polkit/Config.in
+@@ -2,6 +2,7 @@ config BR2_PACKAGE_POLKIT
+ 	bool "polkit"
+ 	depends on BR2_USE_WCHAR # libglib2
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
++	depends on BR2_USE_MMU # libglib2
+ 	select BR2_PACKAGE_LIBGLIB2
+ 	select BR2_PACKAGE_EXPAT
+ 	help
+@@ -12,4 +13,5 @@ config BR2_PACKAGE_POLKIT
+ 	  http://www.freedesktop.org/wiki/Software/polkit
+ 
+ comment "polkit needs a toolchain w/ wchar, threads"
++	depends on BR2_USE_MMU
+ 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/shared-mime-info/Config.in b/package/shared-mime-info/Config.in
+--- a/package/shared-mime-info/Config.in
++++ b/package/shared-mime-info/Config.in
+@@ -2,6 +2,7 @@ config BR2_PACKAGE_SHARED_MIME_INFO
+ 	bool "shared-mime-info"
+ 	depends on BR2_USE_WCHAR # glib2
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # glib2
++	depends on BR2_USE_MMU # glib2
+ 	select BR2_PACKAGE_LIBGLIB2
+ 	select BR2_PACKAGE_LIBXML2
+ 	help
+@@ -12,4 +13,5 @@ config BR2_PACKAGE_SHARED_MIME_INFO
+ 	  http://freedesktop.org/wiki/Software/shared-mime-info
+ 
+ comment "shared-mime-info needs a toolchain w/ wchar, threads"
++	depends on BR2_USE_MMU
+ 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/sshfs/Config.in b/package/sshfs/Config.in
+--- a/package/sshfs/Config.in
++++ b/package/sshfs/Config.in
+@@ -8,7 +8,7 @@ config BR2_PACKAGE_SSHFS
+ 	depends on BR2_LARGEFILE
+ 	depends on BR2_USE_WCHAR # glib2
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libfuse, glib2
+-	depends on BR2_USE_MMU # libfuse
++	depends on BR2_USE_MMU # libfuse, glib2
+ 	depends on !BR2_PREFER_STATIC_LIB # libfuse
+ 	help
+ 	  FUSE filesystem client based on the SSH File Transfer Protocol.
+diff --git a/package/sysprof/Config.in b/package/sysprof/Config.in
+--- a/package/sysprof/Config.in
++++ b/package/sysprof/Config.in
+@@ -3,6 +3,7 @@ config BR2_PACKAGE_SYSPROF
+ 	select BR2_PACKAGE_LIBGLIB2
+ 	depends on BR2_USE_WCHAR # glib2
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # glib2
++	depends on BR2_USE_MMU # glib2
+ 	# In its util.h file, sysprof contains architecture-specific
+ 	# code
+ 	depends on BR2_i386 || BR2_x86_64 || BR2_powerpc || BR2_sh4a || BR2_sh4aeb
+@@ -25,5 +26,6 @@ config BR2_PACKAGE_SYSPROF_GUI
+ endif
+ 
+ comment "sysprof needs a toolchain w/ wchar, threads"
++	depends on BR2_USE_MMU
+ 	depends on BR2_i386 || BR2_x86_64 || BR2_powerpc || BR2_sh4a || BR2_sh4aeb
+ 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/udev/Config.in b/package/udev/Config.in
+--- a/package/udev/Config.in
++++ b/package/udev/Config.in
+@@ -28,11 +28,13 @@ config BR2_PACKAGE_UDEV_ALL_EXTRAS
+ 	select BR2_PACKAGE_LIBGLIB2
+ 	depends on BR2_USE_WCHAR # libglib2
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
++	depends on BR2_USE_MMU # libglib2
+ 	help
+ 	  Enable all extras with external dependencies like
+ 	  libacl, hwdata and libglib2
+ 
+ comment "enabling all extras needs a toolchain w/ wchar, threads"
++	depends on BR2_USE_MMU
+ 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
+ 
+ endif
+diff --git a/package/vala/Config.in b/package/vala/Config.in
+--- a/package/vala/Config.in
++++ b/package/vala/Config.in
+@@ -4,6 +4,7 @@ config BR2_PACKAGE_VALA
+ 	depends on BR2_DEPRECATED
+ 	depends on BR2_USE_WCHAR # glib2
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # glib2
++	depends on BR2_USE_MMU # glib2
+ 	select BR2_PACKAGE_LIBGLIB2
+ 	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
+ 	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
+@@ -14,4 +15,5 @@ config BR2_PACKAGE_VALA
+ 
+ comment "vala needs a toolchain w/ wchar, threads"
+ 	depends on BR2_DEPRECATED
++	depends on BR2_USE_MMU
+ 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/wireshark/Config.in b/package/wireshark/Config.in
+--- a/package/wireshark/Config.in
++++ b/package/wireshark/Config.in
+@@ -3,7 +3,7 @@ config BR2_PACKAGE_WIRESHARK
+ 	select BR2_PACKAGE_LIBPCAP
+ 	select BR2_PACKAGE_LIBGCRYPT
+ 	select BR2_PACKAGE_LIBGLIB2
+-	depends on BR2_USE_MMU # fork()
++	depends on BR2_USE_MMU # fork(), glib2
+ 	depends on BR2_USE_WCHAR # glib2
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # glib2
+ 	help
