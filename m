@@ -1,44 +1,199 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 20 Nov 2013 09:28:00 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2013-11-18
-In-Reply-To: <528BEEEB.8010902@mind.be>
-References: <20131119085606.5D65F100B2F@stock.ovh.net>
- <528BEEEB.8010902@mind.be>
-Message-ID: <20131120092800.03770c50@skate>
+From: Nils Koehler <nils.koehler@ibt-interfaces.de>
+Date: Wed, 20 Nov 2013 09:32:06 +0100
+Subject: [Buildroot] problem to configure to make helloworld program and
+	helloworld module be compiled and added to the tartget with a
+	local external source
+In-Reply-To: <528BE378.7030107@mind.be>
+Message-ID: <3E2513CC4AC7428DB61D0AD7DDE4D119@NKDELL>
 List-Id: <buildroot.busybox.net>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout, Markos,
 
-On Wed, 20 Nov 2013 00:06:19 +0100, Arnout Vandecappelle wrote:
+Thank you for the hints... 
 
-> >      mipsel |                  qt5base-5.1.1 | NOK |http://autobuild.buildroot.net/results/68d508f662a5f7a0d2bf57cbfd5d56ece0aab206/
+I am very surprised that comments are not allowed in the .mk file, as the
+Header itself start with # comment...
+
+In the past I gambled with the template .mk file from buildroot manual as
+starting point, and yes I uncommented the not needed sections, and modified
+the others, but indeed I have deleted the comments and fully removed the
+unused sections. 
+
+But after your hint that there must be a real and a wrong .mk file
+
+I tried to search for names I have used at my first approaches, because i
+started with the real production name but after I ran into problems I have
+switched over and renamed it to a helloworld version to keep it simple:
+
+find /home/koehler/Desktop/Kernel/buildroot-
+> 2013.08/ -name *rld.mk
+
+find /home/koehler/Desktop/Kernel/buildroot-
+> 2013.08/ -name ibt*.mk
+
+I found two .mk files depending on helloworld, the old one still with the
+comments inside the define section from my first approaches in: 
+/home/koehler/Desktop/Kernel/buildroot-2013.08/package/ibt-switch-it
+
+and the real one in:
+/home/koehler/Desktop/Kernel/buildroot-2013.08/package/helloworld-1.0
+
+Removing the old stuff solved the problem.
+
+This is my actual helloworld.mk file:
+http://pastxt.com/P/5VO3ES67TK
+
+
+And the depending build.log for it:
+http://pastxt.com/P/6K6WTP30NM
+
+
+Many thanks to all involved...
+
+
+> On 19/11/13 17:59, Nils Koehler wrote:
+> > rm -f /home/koehler/Desktop/Kernel/buildroot-
+> 2013.08/output/build/helloworld-1.0/.stamp_rsynced
+> > rm -f /home/koehler/Desktop/Kernel/buildroot-
+> 2013.08/output/build/helloworld-1.0/.stamp_built
+> > rm -f /home/koehler/Desktop/Kernel/buildroot-
+> 2013.08/output/build/helloworld-1.0/.stamp_staging_installed
+> > rm -f /home/koehler/Desktop/Kernel/buildroot-
+> 2013.08/output/build/helloworld-1.0/.stamp_target_installed
+> > rm -f /home/koehler/Desktop/Kernel/buildroot-
+> 2013.08/output/build/helloworld-1.0/.stamp_images_installed
+> > rm -f /home/koehler/Desktop/Kernel/buildroot-
+> 2013.08/output/build/helloworld-1.0/.stamp_host_installed
+> > [7m>>> helloworld 1.0 Syncing from source dir
+> /home/koehler/Desktop/Kernel/helloworld-1.0/[27m
+> > rsync -au --cvs-exclude --include core
+> /home/koehler/Desktop/Kernel/helloworld-1.0//
+> /home/koehler/Desktop/Kernel/buildroot-2013.08/output/build/helloworld-1.0
+> > [7m>>> helloworld 1.0 Building[27m
+> > /usr/bin/make -j2 CC="/home/koehler/Desktop/Kernel/buildroot-
+> 2013.08/output/host/usr/bin/i586-buildroot-linux-uclibc-gcc"
+> LD="/home/koehler/Desktop/Kernel/buildroot-
+> 2013.08/output/host/usr/bin/i586-buildroot-linux-uclibc-ld" -C
+> /home/koehler/Desktop/Kernel/buildroot-2013.08/output/build/helloworld-1.0
+> all
+> > make[1]: Betrete Verzeichnis '/home/koehler/Desktop/Kernel/buildroot-
+> 2013.08/output/build/helloworld-1.0'
 > 
->   MIPS1 isn't supported by qt5. Gustavoz proposed to remove support for 
-> MIPS1 completely, so this may be yet another reason to do that?
+>   Looks like your helloworld package is indeed built.
 > 
->   Perhaps we can start by deprecating it in 2013.11, so we get some 
-> feedback from potential users of that architecture?
-
-Good idea. Markos, can you provide a patch to deprecate the MIPS CPU
-variants that are no useful? I know we discussed this some time ago,
-and that you had a look at which MIPS variants actually make sense in
-the context of Buildroot. Having them deprecated in 2013.11 would be
-good.
-
-Also, Markos, if you have some suggestions about the MIPS
-arch/toolchain configurations to be tested in the autobuilders, I'm
-interested. The current list of configurations tested on my autobuilder
-is http://autobuild.buildroot.org/toolchains/configs/free-electrons/.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+> > /usr/bin/make -C /home/koehler/Desktop/Kernel/buildroot-
+> 2013.08/output/build/linux-3.10.17 M=$PWD modules
+> > make[2]: Betrete Verzeichnis '/home/koehler/Desktop/Kernel/buildroot-
+> 2013.08/output/build/linux-3.10.17'
+> >    Building modules, stage 2.
+> >    MODPOST 2 modules
+> > WARNING: "apic" [/home/koehler/Desktop/Kernel/buildroot-
+> 2013.08/output/build/helloworld-1.0/misc_loop_drv.ko] undefined!
+> > make[2]: Verlasse Verzeichnis '/home/koehler/Desktop/Kernel/buildroot-
+> 2013.08/output/build/linux-3.10.17'
+> > make[1]: Verlasse Verzeichnis '/home/koehler/Desktop/Kernel/buildroot-
+> 2013.08/output/build/helloworld-1.0'
+> > [7m>>> helloworld 1.0 Installing to target[27m
+> > #    /usr/bin/install -D -m 0755 /home/koehler/Desktop/Kernel/buildroot-
+> 2013.08/output/build/helloworld-1.0/helloworld.so*
+> /home/koehler/Desktop/Kernel/buildroot-2013.08/output/target/usr/lib
+> > #    /usr/bin/install -d -m 0755 /home/koehler/Desktop/Kernel/buildroot-
+> 2013.08/output/target/etc/foo.d
+> 
+>   This is not at all consistent with the helloworld.mk file you posted
+> earlier... It looks like somewhere, you have HELLOWORLD_TARGET_CMDS is
+> defined as two install commands that are commented out...
+> 
+>   Anyway, if you're building a module, you probably want the install
+> commands to be
+> 
+> $(MAKE) -C $(LINUX_DIR) $(LINUX_MAKE_FLAGS) M=$(@D) modules_install
+> 
+> 
+> [snip]
+> > [7m>>>   Generating root filesystem image rootfs.cpio[27m
+> > if [ ! -e /home/koehler/Desktop/Kernel/buildroot-
+> 2013.08/output/target/init ]; then ln -sf sbin/init
+> /home/koehler/Desktop/Kernel/buildroot-2013.08/output/target/init; fi
+> > rm -f/home/koehler/Desktop/Kernel/buildroot-
+> 2013.08/output/build/_fakeroot.fs
+> > rm -f /home/koehler/Desktop/Kernel/buildroot-
+> 2013.08/output/target/THIS_IS_NOT_YOUR_ROOT_FILESYSTEM
+> > echo "chown -R 0:0/home/koehler/Desktop/Kernel/buildroot-
+> 2013.08/output/target" >> /home/koehler/Desktop/Kernel/buildroot-
+> 2013.08/output/build/_fakeroot.fs
+> > cat system/device_table.txt system/device_table_dev.txt
+> >/home/koehler/Desktop/Kernel/buildroot-
+> 2013.08/output/build/_device_table.txt
+> > printf '\n \n \n \n #/dev/foo  c  666  0  0  42  0  -  -  -\n \n \n' >>
+> /home/koehler/Desktop/Kernel/buildroot-
+> 2013.08/output/build/_device_table.txt
+> > printf '/bin/busybox			 f 4755	0 0 - - - - -
+> \n/usr/share/udhcpc/default.script f 755  0 0 - - - - -\n \n \n \n #
+> /bin/foo  f  4755  0  0  -  -  -  -  -\n \n \n' >>
+> /home/koehler/Desktop/Kernel/buildroot-
+> 2013.08/output/build/_device_table.txt
+> 
+>   This is pretty fishy... the commented-out /dev/foo and /bin/foo
+> definitions are completely different from what you posted earlier. Maybe
+> another hint that you have another file that defines HELLOWORLD_DEVICES
+> and HELLOWORLD_PERMISSIONS?
+> 
+> > echo "/home/koehler/Desktop/Kernel/buildroot-
+> 2013.08/output/host/usr/bin/makedevs -
+> d/home/koehler/Desktop/Kernel/buildroot-
+> 2013.08/output/build/_device_table.txt
+> /home/koehler/Desktop/Kernel/buildroot-2013.08/output/target" >>
+> /home/koehler/Desktop/Kernel/buildroot-2013.08/output/build/_fakeroot.fs
+> > printf '\n \n \n \n #    foo -1 helloworld -1 * - - - LibFoo daemon\n \n
+> \n' >/home/koehler/Desktop/Kernel/buildroot-
+> 2013.08/output/build/_users_table.txt
+> 
+>   The <PKG>_USERS definition doesn't support comments, that's why you get
+> those errors below. Just remove the HELLOWORLD_USERS definition
+> completely if you don't need it.
+> 
+> 
+>   Regards,
+>   Arnout
+> 
+> > /home/koehler/Desktop/Kernel/buildroot-
+> 2013.08/support/scripts/mkusers/home/koehler/Desktop/Kernel/buildroot-
+> 2013.08/output/build/_users_table.txt
+> /home/koehler/Desktop/Kernel/buildroot-2013.08/output/target >>
+> /home/koehler/Desktop/Kernel/buildroot-2013.08/output/build/_fakeroot.fs
+> > /home/koehler/Desktop/Kernel/buildroot-2013.08/support/scripts/mkusers:
+> Zeile 363: [: helloworld: Ganzzahliger Ausdruck erwartet.
+> > /home/koehler/Desktop/Kernel/buildroot-2013.08/support/scripts/mkusers:
+> Zeile 370: [: helloworld: Ganzzahliger Ausdruck erwartet.
+> > /home/koehler/Desktop/Kernel/buildroot-2013.08/support/scripts/mkusers:
+> Zeile 394: [: foo: Ganzzahliger Ausdruck erwartet.
+> > /home/koehler/Desktop/Kernel/buildroot-2013.08/support/scripts/mkusers:
+> Zeile 402: [: foo: Ganzzahliger Ausdruck erwartet.
+> > echo "
+cd/home/koehler/Desktop/Kernel/buildroot-2013.08/output/target
+> && find . | cpio --quiet -o -H newc >
+> /home/koehler/Desktop/Kernel/buildroot-2013.08/output/images/rootfs.cpio"
+> >> /home/koehler/Desktop/Kernel/buildroot-
+> 2013.08/output/build/_fakeroot.fs
+> > chmod a+x/home/koehler/Desktop/Kernel/buildroot-
+> 2013.08/output/build/_fakeroot.fs
+> > /home/koehler/Desktop/Kernel/buildroot-
+> 2013.08/output/host/usr/bin/fakeroot --
+> /home/koehler/Desktop/Kernel/buildroot-2013.08/output/build/_fakeroot.fs
+> > rootdir=/home/koehler/Desktop/Kernel/buildroot-2013.08/output/target
+> > table='/home/koehler/Desktop/Kernel/buildroot-
+> 2013.08/output/build/_device_table.txt'
+> > cp support/misc/target-dir-warning.txt
+> /home/koehler/Desktop/Kernel/buildroot-
+> 2013.08/output/target/THIS_IS_NOT_YOUR_ROOT_FILESYSTEM
+> [snip]
+> 
+> 
+> --
+> Arnout Vandecappelle                          arnout at mind be
+> Senior Embedded Software Architect            +32-16-286500
+> Essensium/Mind                                http://www.mind.be
+> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+> GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
