@@ -1,37 +1,65 @@
-From: Jeremy Rosen <jeremy.rosen@openwide.fr>
-Date: Wed, 20 Nov 2013 12:03:30 +0100 (CET)
-Subject: [Buildroot] autobuild annotations
-In-Reply-To: <20131120115934.356d52c3@skate>
-Message-ID: <403618053.13241218.1384945410540.JavaMail.root@openwide.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 20 Nov 2013 12:09:00 +0100
+Subject: [Buildroot] [PATCH] Mark MIPS I, II, III and IV as deprecated
+In-Reply-To: <1384944173-15749-1-git-send-email-Vincent.Riera@imgtec.com>
+References: <1384944173-15749-1-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <20131120120900.6a66d750@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Dear Vicente Olivert Riera,
 
-
-
-
+On Wed, 20 Nov 2013 10:42:53 +0000, Vicente Olivert Riera wrote:
+> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+> ---
+>  arch/Config.in.mips |    6 ++++--
+>  1 files changed, 4 insertions(+), 2 deletions(-)
 > 
-> Jenkins just doesn't work for random builds.
-> 
-> Jenkins is designed to build the same configuration over and over
-> again, and make comparisons from one build to another: the build was
-> working yesterday, it's failing today, here is the set of commits
-> that
-> have been made between yesterday and today, and therefore the problem
-> is somewhere in these commits. Jenkins is really good for that, and
-> we
-> already use it to build all the Buildroot defconfigs every day.
-> 
-> However, what autobuild.buildroot.org is doing are *random*
-> configurations. I.e you cannot compare one build to another. This
-> really doesn't fit well in the model of Jenkins in my opinion, and is
-> the reason why a small specific tool was written.
-> 
+> diff --git a/arch/Config.in.mips b/arch/Config.in.mips
+> index d70fd63..43af33c 100644
+> --- a/arch/Config.in.mips
+> +++ b/arch/Config.in.mips
+> @@ -12,14 +12,16 @@ choice
+>  
+>  config BR2_mips_1
+>  	bool "mips I (generic)"
+> -	depends on !BR2_ARCH_IS_64
+> +	depends on !BR2_ARCH_IS_64 && BR2_DEPRECATED
+>  config BR2_mips_2
+>  	bool "mips II"
+> -	depends on !BR2_ARCH_IS_64
+> +	depends on !BR2_ARCH_IS_64 && BR2_DEPRECATED
+>  config BR2_mips_3
+>  	bool "mips III"
+> +	depends on BR2_DEPRECATED
+>  config BR2_mips_4
+>  	bool "mips IV"
+> +	depends on BR2_DEPRECATED
+>  config BR2_mips_32
+>  	bool "mips 32"
+>  	depends on !BR2_ARCH_IS_64
 
-couldn't failed build configurations be forwarded to jenkins for monitoring ?
+The commit log should explain *why* we're deprecating these CPU
+variants.
 
-Jenkins could drop those compilations once they work again, that would provide
-some form of followup...
+Moreover, if we deprecate mips_1 and mips_3, then there should be some
+change in:
+
+choice
+        prompt "Target Architecture Variant"
+        depends on BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el
+        default BR2_mips_3 if BR2_mips
+        default BR2_mips_1 if BR2_mipsel
+        default BR2_mips_64 if BR2_mips64 || BR2_mips64el
+        help
+
+at the beginning of Config.in.mips
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
