@@ -1,65 +1,40 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 20 Nov 2013 11:41:12 +0100
-Subject: [Buildroot] Help to fix Microblaze issues in Buildroot
-In-Reply-To: <CAM+bi4sKAyBrLjAKfBBkDMVDLReBHffqUCfdDvU61X1wErLfNA@mail.gmail.com>
-References: <20131006185441.0d5c2397@skate>
- <CAM+bi4vGmKHRA3j0ua-dsOBzTuj-BPrM2+z3papeyfDjjazhgw@mail.gmail.com>
- <CAM+bi4t7Z4RWQ=6r=qOUOXKpqV76hRSogU0iBp12FKvN+fGviA@mail.gmail.com>
- <20131120111027.472fe84b@skate>
- <CAM+bi4sKAyBrLjAKfBBkDMVDLReBHffqUCfdDvU61X1wErLfNA@mail.gmail.com>
-Message-ID: <20131120114112.03abac2f@skate>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Wed, 20 Nov 2013 10:42:53 +0000
+Subject: [Buildroot] [PATCH] Mark MIPS I, II, III and IV as deprecated
+Message-ID: <1384944173-15749-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Alvaro Gamez,
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+ arch/Config.in.mips |    6 ++++--
+ 1 files changed, 4 insertions(+), 2 deletions(-)
 
-On Wed, 20 Nov 2013 11:36:00 +0100, Alvaro Gamez wrote:
-
-> Now that I take the time to revisit Xilinx' website, I think maybe
-> we're doing something wrong...
-> 
-> Old Xilinx git repository,
-> http://git.xilinx.com/?p=microblaze-gnu.git;a=tree;f=binaries now
-> redirect to github: https://github.com/xilinx and seems to be quite
-> up to date with upstream gcc.
-
-These repositories are exactly the repositories that Spenser patches
-are using for the internal toolchain backend.
-
-See:
-
-  http://patchwork.ozlabs.org/patch/291045/ (binutils)
-  http://patchwork.ozlabs.org/patch/291046/ (gcc)
-  http://patchwork.ozlabs.org/patch/291047/ (glibc)
-  http://patchwork.ozlabs.org/patch/291048/ (gdb)
-
-> There seems to be also a later version of GNU Tools available at
-> http://www.xilinx.com/guest_resources/gnu/
-> 
->    - GNU Tools for MicroBlaze (gcc 4.6.4, gdb 7.6.0, binutils 2.23.2,
->    newlib 1.19, eglibc-2.18) -
-> mb_gnu_20131023.tar.gz<http://www.xilinx.com/guest_resources/member/mb_gnu/mb_gnu_20131023.tar.gz>
-> 
-> I don't know how up to date are these downloads, but it may be worth
-> a try? Although if we're going ahead with Spenser's patches maybe we
-> can/(want to?) avoid Xilinx altogether?
-
-We are not avoiding Xilinx altogether at all, please look at Spenser
-patches.
-
-*However* the tarballs you're pointing at at
-http://www.xilinx.com/guest_resources/gnu/ look interesting for
-pre-built external toolchains. I'm currently downloading "GNU Tools for
-MicroBlaze (gcc 4.6.4, gdb 7.6.0, binutils 2.23.2, newlib 1.19,
-eglibc-2.18)", and I'll have a look at what it is exactly.
-
-Thanks!
-
-Thomas
+diff --git a/arch/Config.in.mips b/arch/Config.in.mips
+index d70fd63..43af33c 100644
+--- a/arch/Config.in.mips
++++ b/arch/Config.in.mips
+@@ -12,14 +12,16 @@ choice
+ 
+ config BR2_mips_1
+ 	bool "mips I (generic)"
+-	depends on !BR2_ARCH_IS_64
++	depends on !BR2_ARCH_IS_64 && BR2_DEPRECATED
+ config BR2_mips_2
+ 	bool "mips II"
+-	depends on !BR2_ARCH_IS_64
++	depends on !BR2_ARCH_IS_64 && BR2_DEPRECATED
+ config BR2_mips_3
+ 	bool "mips III"
++	depends on BR2_DEPRECATED
+ config BR2_mips_4
+ 	bool "mips IV"
++	depends on BR2_DEPRECATED
+ config BR2_mips_32
+ 	bool "mips 32"
+ 	depends on !BR2_ARCH_IS_64
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.7.1
