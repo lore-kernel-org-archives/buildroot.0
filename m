@@ -1,49 +1,56 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 20 Nov 2013 08:54:30 +0100
-Subject: [Buildroot] Makeinfo
-In-Reply-To: <528B9B14.3080708@mind.be>
-References: <CAAXf6LWWWG4DABPQzNezk+Tnr1tbDx9mc6+zXZ457vskm1VFBA@mail.gmail.com>
- <528B9B14.3080708@mind.be>
-Message-ID: <528C6AB6.1080609@mind.be>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Wed, 20 Nov 2013 09:02:56 +0100
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+	2013-11-19
+In-Reply-To: <20131120073002.EB8E9101271@stock.ovh.net>
+References: <20131120073002.EB8E9101271@stock.ovh.net>
+Message-ID: <CAAXf6LUUzKXe9XiP8BdPvjBguGzAKnzkxDteggsqiFgZBvygvg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 19/11/13 18:08, Arnout Vandecappelle wrote:
-> On 19/11/13 11:45, Thomas De Schampheleire wrote:
-[snip]
->> +#
->> +# Also, disable documentation by undefining makeinfo
->>   STRESS_CONF_OPT = \
->> -       $(if $(BR2_PREFER_STATIC_LIB),,--disable-static)
->> +       $(if $(BR2_PREFER_STATIC_LIB),,--disable-static) \
->> +       MAKEINFO=:
->>
->>   $(eval $(autotools-package))
->> -------------
->>
->> I'm now wondering if this is an approach we could add globally: set
->> MAKEINFO to : to effectively disable the generation of
->> documentation...
->
->   I still have the feeling it is a bit of a hack. But it's true, it could
-> be part of DISABLE_DOCUMENTATION.
+Hi,
 
-  I found in gcc.mk how to make it less than a hack:
-$(2)_CONF_OPT += MAKEINFO=missing
+On Wed, Nov 20, 2013 at 8:30 AM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+[..]
+>      avr32 | sconeserver-d58f2de88c68193... | NOK | http://autobuild.buildroot.net/results/584d71f91c9a9bc115e49b77be8576cab76a8210/
 
-  That should work for all real autotools environments, and is the way 
-that autoconf handles missing makeinfo to start with.
+Error is:
 
-  Regards,
-  Arnout
+Thread.cpp: In member function 'void scx::Thread::set_priority(int)':
+Thread.cpp:117: error: 'pthread_setschedprio' was not declared in this scope
+make[3]: *** [Thread.lo] Error 1
 
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+However, sconeserver already depends on threads. It seems this
+function pthread_setchedprio has not always been available. The man
+page of my system says glibc >= 2.3.4. Could it be that the toolchain
+(uclibc-based) is too 'old'? How to handle this case: depending on the
+toolchain version the package may or may not build...
+
+
+>       i686 |                   udisks-1.0.4 | NOK | http://autobuild.buildroot.net/results/b234e63f92e6e5162dd5340624e32caa31b82a1a/
+
+Error happens when creating the man pages:
+
+/home/test/test/1/output/host/usr/bin/xsltproc -nonet
+http://docbook.sourceforge.net/release/xsl/current/manpages/docbook.xsl
+udisks7.xml
+I/O error : Attempt to load network entity
+http://docbook.sourceforge.net/release/xsl/current/manpages/docbook.xsl
+warning: failed to load external entity
+"http://docbook.sourceforge.net/release/xsl/current/manpages/docbook.xsl"
+cannot parse http://docbook.sourceforge.net/release/xsl/current/manpages/docbook.xsl
+make[4]: *** [udisks.1] Error 4
+make[4]: *** Waiting for unfinished jobs....
+
+
+Man pages in udisks are only built when 'BR2_HAVE_DOCUMENTATION' is
+set, but this is deprecated.
+Therefore I propose to always build without man pages for udisks. I
+will provide a patch...
+
+Best regards,
+Thomas
