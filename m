@@ -1,24 +1,32 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Wed, 20 Nov 2013 09:21:46 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
-	2013-11-19
-In-Reply-To: <CAAXf6LUUzKXe9XiP8BdPvjBguGzAKnzkxDteggsqiFgZBvygvg@mail.gmail.com>
-References: <20131120073002.EB8E9101271@stock.ovh.net>
- <CAAXf6LUUzKXe9XiP8BdPvjBguGzAKnzkxDteggsqiFgZBvygvg@mail.gmail.com>
-Message-ID: <CAAXf6LUidS98H4LKQ50uy0-Qt3YRs89r0yEqppNH6TooJnC0Ow@mail.gmail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 20 Nov 2013 09:25:45 +0100
+Subject: [Buildroot] [git commit] udisks: only build documentation if
+	requested
+In-Reply-To: <CAAXf6LU97aF9Fj2a=0XYcCZLnsXWnWJk29bXQRz-5CHEsUa5zQ@mail.gmail.com>
+ (Thomas De Schampheleire's message of "Wed, 20 Nov 2013 09:20:29
+ +0100")
+References: <20131119225051.6B8BB9BD38@busybox.osuosl.org>
+ <CAAXf6LU97aF9Fj2a=0XYcCZLnsXWnWJk29bXQRz-5CHEsUa5zQ@mail.gmail.com>
+Message-ID: <87hab7v5rq.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Nov 20, 2013 at 9:02 AM, Thomas De Schampheleire
-<patrickdepinguin@gmail.com> wrote:
-[..]
->
-> Man pages in udisks are only built when 'BR2_HAVE_DOCUMENTATION' is
-> set, but this is deprecated.
-> Therefore I propose to always build without man pages for udisks. I
-> will provide a patch...
+>>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin@gmail.com> writes:
 
-Seems Peter already handled this yesterday, I didn't realize that...
+ >> -UDISKS_CONF_OPT = --disable-remote-access
+ >> +UDISKS_CONF_OPT = --disable-remote-access \
+ >> +       $(if $(BR2_HAVE_DOCUMENTATION),,--disable-man-pages)
+
+ > Since BR2_HAVE_DOCUMENTATION is deprecated, shouldn't we disable the
+ > man pages unconditionally?
+
+We could, but so far we haven't removed BR2_HAVE_DOCUMENTATION, so I
+kept it for now.
+
+I'm planning on removing the option very soon in the 2014.02 cycle.
+
+-- 
+Bye, Peter Korsgaard
