@@ -1,12 +1,9 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Wed, 20 Nov 2013 11:28:24 +0100
-Subject: [Buildroot] Help to fix Microblaze issues in Buildroot
-In-Reply-To: <20131120111027.472fe84b@skate>
-References: <20131006185441.0d5c2397@skate>
- <CAM+bi4vGmKHRA3j0ua-dsOBzTuj-BPrM2+z3papeyfDjjazhgw@mail.gmail.com>
- <CAM+bi4t7Z4RWQ=6r=qOUOXKpqV76hRSogU0iBp12FKvN+fGviA@mail.gmail.com>
- <20131120111027.472fe84b@skate>
-Message-ID: <CAAXf6LXvuO_ki10RokO+9LkJtjx_SRUpML9pChxD9huvc7RkOw@mail.gmail.com>
+From: arnaud aujon <arnaud.aujon@gmail.com>
+Date: Wed, 20 Nov 2013 11:38:32 +0100
+Subject: [Buildroot] autobuild annotations
+In-Reply-To: <CAAXf6LUcR-P7rrpiBOELDV=3GZNHn3kU9hu8bg63+xOZWs0u0Q@mail.gmail.com>
+References: <CAAXf6LUcR-P7rrpiBOELDV=3GZNHn3kU9hu8bg63+xOZWs0u0Q@mail.gmail.com>
+Message-ID: <CACjG4BL-99HruiHb48fwSD2PV+uCyUkvOra8zsyyTt7dWhxrvw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,46 +12,61 @@ To: buildroot@busybox.net
 
 Hi,
 
-On Wed, Nov 20, 2013 at 11:10 AM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Dear Alvaro Gamez,
->
-> On Wed, 20 Nov 2013 11:03:59 +0100, Alvaro Gamez wrote:
->
->> Sorry for the big delay on this issue.
->>
->> Now that I've spent a few hours looking at the code, I can firmly say this
->> is a compiler bug.
->>
->> I've studied beecrypt's sha384.c code (openssl and others implement exactly
->> the same code from a common source) and I've managed to reduce the code to
->> what I think is a minimal example of bug triggering code.
->>
->> After requesting gcc to preprocess the source, the same error still
->> happens. Almost any minimal change I've tried to the preprocessed source
->> makes the error go away (indexes or values seem to be irrelevant, I've just
->> mantained the numbers the code came from). An optimization flag is required
->> to trigger the bug (-Os, -O1,2,3). I haven't been successful trying to find
->> which specific optimization flag is the one that causes the error.
->>
->> I've manually merged both (original and preprocessed files) to ease the
->> analysis of the original source code and the resulting code. I'm sorry I
->> can't provide any more information, I really don't have any grasp of gcc's
->> internals.
->
-> Thanks! In fact, Spenser submitted patches to add support for
-> Microblaze in the internal toolchain backend. This is useful because
-> the pre-built external toolchains that we have been using until now are
-> quite old, and not maintained by Xilinx.
->
-> Therefore, the plan is, I believe:
->
->  (1) Merge Spenser's patches to add Microblaze internal toolchain
->  support.
+You're right I think there is something missing in the current workflow.
+I was wondering if Jenkins can be used to solve this problem and bring some
+meatrics and code conventions checking.
 
-It would be nice if someone could verify that the compiler errors from
-these autobuilds are gone when using Spenser's toolchain.
-Alvaro, are you interested in trying this?
+I noticed that free-electrons has a Jenkins instance building buildroot :
+http://jenkins.free-electrons.com/job/buildroot/ is it used by the
+community too ?
+.
+I think the advantage of Jenkins against the current flow is that there is
+plenty of plugins that can be (easily?) used to fulfil the project needs
+(comment on failure, meatrics, code convention checking...)
+Did you ever talk about that ?
 
-Thanks,
-Thomas
+Regards,
+
+Arnaud
+
+
+
+2013/11/20 Thomas De Schampheleire <patrickdepinguin@gmail.com>
+
+> Hi,
+>
+> What I am missing in the current autobuild website/flow is a way to
+> indicate that a certain problem is already analyzed by someone, and
+> what the problem is. Maybe a patch has been submitted already and
+> waiting to be merged. Maybe the solution is clear but someone still
+> needs to make a patch. Maybe it's more complex and we have to wait for
+> feedback from upstream.
+>
+> If we could have such a 'comment' or 'annotations' field, we could
+> avoid duplicating the analyis / resolution effort.
+>
+> One way to proceed is to simply keep a comment for each package. When
+> there is a failure, we show (or link to) the comment for that package,
+> even though at that time we are not yet sure that the problem is
+> exactly the same (one package could fail in multiple ways). The
+> comment should have a link to the problem on which it was added
+> originally, so that the developer looking at the new problem can
+> analyze if it is the same problem or not.
+>
+> To implement this, we'd need an extra table in the database to map a
+> package to a comment, and we need a query to extract the comments for
+> a given package from that table when displaying the results.
+>
+> What do you think?
+> Do you have alternative proposals?
+>
+> Thanks,
+> Thomas
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20131120/ea16414b/attachment.html>
