@@ -1,42 +1,55 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 20 Nov 2013 12:11:48 +0100
-Subject: [Buildroot] autobuild annotations
-In-Reply-To: <403618053.13241218.1384945410540.JavaMail.root@openwide.fr>
-References: <20131120115934.356d52c3@skate>
- <403618053.13241218.1384945410540.JavaMail.root@openwide.fr>
-Message-ID: <20131120121148.79482e2b@skate>
+From: =?UTF-8?q?Fatih=20A=C5=9F=C4=B1c=C4=B1?= <fatih.asici@gmail.com>
+Date: Wed, 20 Nov 2013 13:20:17 +0200
+Subject: [Buildroot] [PATCH] qt5base: add Fedora patch to fix powerpc build
+Message-ID: <1384946417-19781-1-git-send-email-fatih.asici@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Jeremy Rosen,
+Fixes http://autobuild.buildroot.net/results/e57/e57dea01c3c1a4e3269580972890192c37d41697/
 
-On Wed, 20 Nov 2013 12:03:30 +0100 (CET), Jeremy Rosen wrote:
+Signed-off-by: Fatih A??c? <fatih.asici@gmail.com>
+---
+ package/qt5/qt5base/qt5base-0008-qatomic-ppc.patch | 29 ++++++++++++++++++++++
+ 1 file changed, 29 insertions(+)
+ create mode 100644 package/qt5/qt5base/qt5base-0008-qatomic-ppc.patch
 
-> > However, what autobuild.buildroot.org is doing are *random*
-> > configurations. I.e you cannot compare one build to another. This
-> > really doesn't fit well in the model of Jenkins in my opinion, and
-> > is the reason why a small specific tool was written.
-> 
-> couldn't failed build configurations be forwarded to jenkins for
-> monitoring ?
-> 
-> Jenkins could drop those compilations once they work again, that
-> would provide some form of followup...
-
-Is this really needed? I mean, the autobuilders are already showing us
-when a problem occurs, and then we fairly quickly see when it no longer
-occurs.
-
-Of course, if someone wants to set up a Jenkins that does this, I have
-no problem changing the autobuild.buildroot.org thing to forward broken
-configurations to some Jenkins instance. But I personally don't think
-it's really worth the effort.
-
-Thomas
+diff --git a/package/qt5/qt5base/qt5base-0008-qatomic-ppc.patch b/package/qt5/qt5base/qt5base-0008-qatomic-ppc.patch
+new file mode 100644
+index 0000000..906b56a
+--- /dev/null
++++ b/package/qt5/qt5base/qt5base-0008-qatomic-ppc.patch
+@@ -0,0 +1,29 @@
++Set loadAcquire() as const
++
++Fixes powerpc build.
++
++Fetched-from: https://bugzilla.redhat.com/attachment.cgi?id=812643
++Signed-off-by: Fatih A??c? <fatih.asici@gmail.com>
++
++Index: qtbase-opensource-src-5.1.1/src/corelib/thread/qoldbasicatomic.h
++===================================================================
++--- qtbase-opensource-src-5.1.1.orig/src/corelib/thread/qoldbasicatomic.h
+++++ qtbase-opensource-src-5.1.1/src/corelib/thread/qoldbasicatomic.h
++@@ -63,7 +63,7 @@ public:
++     // Atomic API, implemented in qatomic_XXX.h
++ 
++     int load() const { return _q_value; }
++-    int loadAcquire() { return _q_value; }
+++    int loadAcquire() const { return _q_value; }
++     void store(int newValue) { _q_value = newValue; }
++     void storeRelease(int newValue) { _q_value = newValue; }
++ 
++@@ -107,7 +107,7 @@ public:
++     // Atomic API, implemented in qatomic_XXX.h
++ 
++     T *load() const { return _q_value; }
++-    T *loadAcquire() { return _q_value; }
+++    T *loadAcquire() const { return _q_value; }
++     void store(T *newValue) { _q_value = newValue; }
++     void storeRelease(T *newValue) { _q_value = newValue; }
++ 
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.8.4.rc3
