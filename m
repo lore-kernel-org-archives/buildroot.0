@@ -1,55 +1,53 @@
-From: =?UTF-8?q?Fatih=20A=C5=9F=C4=B1c=C4=B1?= <fatih.asici@gmail.com>
-Date: Wed, 20 Nov 2013 13:20:17 +0200
-Subject: [Buildroot] [PATCH] qt5base: add Fedora patch to fix powerpc build
-Message-ID: <1384946417-19781-1-git-send-email-fatih.asici@gmail.com>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Wed, 20 Nov 2013 11:39:58 +0000
+Subject: [Buildroot] [PATCH v2] Mark MIPS I, II, III and IV as deprecated
+Message-ID: <1384947598-16486-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes http://autobuild.buildroot.net/results/e57/e57dea01c3c1a4e3269580972890192c37d41697/
+Deprecate old MIPS ISAs since they are rarely used anymore and they cause
+multiple build problems for new packages
 
-Signed-off-by: Fatih A??c? <fatih.asici@gmail.com>
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 ---
- package/qt5/qt5base/qt5base-0008-qatomic-ppc.patch | 29 ++++++++++++++++++++++
- 1 file changed, 29 insertions(+)
- create mode 100644 package/qt5/qt5base/qt5base-0008-qatomic-ppc.patch
+ arch/Config.in.mips |    9 +++++----
+ 1 files changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/package/qt5/qt5base/qt5base-0008-qatomic-ppc.patch b/package/qt5/qt5base/qt5base-0008-qatomic-ppc.patch
-new file mode 100644
-index 0000000..906b56a
---- /dev/null
-+++ b/package/qt5/qt5base/qt5base-0008-qatomic-ppc.patch
-@@ -0,0 +1,29 @@
-+Set loadAcquire() as const
-+
-+Fixes powerpc build.
-+
-+Fetched-from: https://bugzilla.redhat.com/attachment.cgi?id=812643
-+Signed-off-by: Fatih A??c? <fatih.asici@gmail.com>
-+
-+Index: qtbase-opensource-src-5.1.1/src/corelib/thread/qoldbasicatomic.h
-+===================================================================
-+--- qtbase-opensource-src-5.1.1.orig/src/corelib/thread/qoldbasicatomic.h
-++++ qtbase-opensource-src-5.1.1/src/corelib/thread/qoldbasicatomic.h
-+@@ -63,7 +63,7 @@ public:
-+     // Atomic API, implemented in qatomic_XXX.h
-+ 
-+     int load() const { return _q_value; }
-+-    int loadAcquire() { return _q_value; }
-++    int loadAcquire() const { return _q_value; }
-+     void store(int newValue) { _q_value = newValue; }
-+     void storeRelease(int newValue) { _q_value = newValue; }
-+ 
-+@@ -107,7 +107,7 @@ public:
-+     // Atomic API, implemented in qatomic_XXX.h
-+ 
-+     T *load() const { return _q_value; }
-+-    T *loadAcquire() { return _q_value; }
-++    T *loadAcquire() const { return _q_value; }
-+     void store(T *newValue) { _q_value = newValue; }
-+     void storeRelease(T *newValue) { _q_value = newValue; }
-+ 
+diff --git a/arch/Config.in.mips b/arch/Config.in.mips
+index d70fd63..4121200 100644
+--- a/arch/Config.in.mips
++++ b/arch/Config.in.mips
+@@ -1,8 +1,7 @@
+ choice
+ 	prompt "Target Architecture Variant"
+ 	depends on BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el
+-	default BR2_mips_3 if BR2_mips
+-	default BR2_mips_1 if BR2_mipsel
++	default BR2_mips_32 if BR2_mips || BR2_mipsel
+ 	default BR2_mips_64 if BR2_mips64 || BR2_mips64el
+ 	help
+ 	  Specific CPU variant to use
+@@ -12,14 +11,16 @@ choice
+ 
+ config BR2_mips_1
+ 	bool "mips I (generic)"
+-	depends on !BR2_ARCH_IS_64
++	depends on !BR2_ARCH_IS_64 && BR2_DEPRECATED
+ config BR2_mips_2
+ 	bool "mips II"
+-	depends on !BR2_ARCH_IS_64
++	depends on !BR2_ARCH_IS_64 && BR2_DEPRECATED
+ config BR2_mips_3
+ 	bool "mips III"
++	depends on BR2_DEPRECATED
+ config BR2_mips_4
+ 	bool "mips IV"
++	depends on BR2_DEPRECATED
+ config BR2_mips_32
+ 	bool "mips 32"
+ 	depends on !BR2_ARCH_IS_64
 -- 
-1.8.4.rc3
+1.7.1
