@@ -1,24 +1,32 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 20 Nov 2013 13:46:25 +0100
-Subject: [Buildroot] [PATCH] qt5base: add Fedora patch to fix powerpc
-	build
-In-Reply-To: <1384946417-19781-1-git-send-email-fatih.asici@gmail.com> ("Fatih
- =?utf-8?B?QcWfxLFjxLEiJ3M=?= message of "Wed, 20 Nov 2013 13:20:17 +0200")
-References: <1384946417-19781-1-git-send-email-fatih.asici@gmail.com>
-Message-ID: <871u2butpa.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 20 Nov 2013 13:54:21 +0100
+Subject: [Buildroot] Buildroot and Git repository (u-boot + kernel)
+In-Reply-To: <CAAs3wMgyCOV_oeTjL0GFTAux9tPsZXeEifTgACSqKcPQSN=ABg@mail.gmail.com>
+References: <CAAs3wMgyCOV_oeTjL0GFTAux9tPsZXeEifTgACSqKcPQSN=ABg@mail.gmail.com>
+Message-ID: <20131120135421.0602e149@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fatih" == Fatih A??c? <fatih.asici@gmail.com> writes:
+Dear Freedreamer,
 
- > Fixes http://autobuild.buildroot.net/results/e57/e57dea01c3c1a4e3269580972890192c37d41697/
- > Signed-off-by: Fatih A??c? <fatih.asici@gmail.com>
+On Wed, 20 Nov 2013 13:49:03 +0100, Freedreamer wrote:
 
-It would be nice to note the details about where/when it has been
-submitted upstream, so I've added that and committed, thanks.
+> I'm Marco from Italy and that's the first Time I write here . I've
+> been trying to integrate in buildroot my custom u-boot and kernel I
+> have on my gitlab. In u-boot repository version I set up  my branch
+> name but br seems downloading always the master version from git.
+> Anyone can help me ? Same situation with the kernel.
 
+Can you post your .config and tell us which Buildroot version you're
+using?
+
+Thanks,
+
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
