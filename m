@@ -1,87 +1,59 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 21 Nov 2013 23:18:09 +0100
-Subject: [Buildroot] [PATCH 1/2] pcre: add options to enable UTF and UCP
- support
-In-Reply-To: <1385069096.10963.2.camel@bender>
-References: <1385069096.10963.2.camel@bender>
-Message-ID: <528E86A1.60101@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 21 Nov 2013 23:18:24 +0100
+Subject: [Buildroot] [PATCH 1/2] ola: add upstream patch to fix build on
+	AArch64
+Message-ID: <1385072305-9127-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-  Hi Sven,
+Fixes:
 
-  Thanks for your patch.
+   http://autobuild.buildroot.org/results/596/5967dfd4bd7c2b68e2911a98b9b84c8fe7adf0aa/build-end.log
 
-On 21/11/13 22:24, Sven Neumann wrote:
->
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+A new version of Ola, 0.8.33 has been released, it would be good to
+bump the version in the future version of Buildroot.
+---
+ package/ola/ola-0001-fix-build-warning.patch | 27 +++++++++++++++++++++++++++
+ 1 file changed, 27 insertions(+)
+ create mode 100644 package/ola/ola-0001-fix-build-warning.patch
 
-  Spurious empty line.
-
-> Allow to compile PCRE with UTF-8/16/32 support and with
-> support for Unicode properties.
->
-> Signed-off-by: Sven Neumann <neumann@teufel.de>
-> ---
->   package/pcre/Config.in | 11 +++++++++++
->   package/pcre/pcre.mk   |  2 ++
->   2 files changed, 13 insertions(+)
->
-> diff --git a/package/pcre/Config.in b/package/pcre/Config.in
-> index dc92274..3b93092 100644
-> --- a/package/pcre/Config.in
-> +++ b/package/pcre/Config.in
-> @@ -19,4 +19,15 @@ config BR2_PACKAGE_PCRE_32
->   	help
->   	  This option builds the 32-bits pcre library, i.e 'libpcre32'
->
-> +config BR2_PACKAGE_PCRE_UTF
-> +	bool "UTF-8/16/32 support in pcre"
-> +	help
-> +	  This option builds the pcre library with UTF-8/16/32 support'
-> +
-> +config BR2_PACKAGE_PCRE_UCP
-> +	bool "Unicode properties support in pcre"
-> +        select BR2_PACKAGE_PCRE_UTF
-
-  Indent with tab, not spaces.
-
-> +	help
-> +	  This option builds the pcre library with Unicode properties support (implies UTF-8/16/32 support)'
-
-  Should be wrapped at 80 columns. [We should really document the 
-wrapping guidelines...]
-
-
-  With these changes, you can add my
-
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-
-  (build-tested on x86_64)
-
-> +
->   endif
-> diff --git a/package/pcre/pcre.mk b/package/pcre/pcre.mk
-> index bf86a3d..2637354 100644
-> --- a/package/pcre/pcre.mk
-> +++ b/package/pcre/pcre.mk
-> @@ -19,5 +19,7 @@ endif
->   PCRE_CONF_OPT += --enable-pcre8
->   PCRE_CONF_OPT += $(if $(BR2_PACKAGE_PCRE_16),--enable-pcre16,--disable-pcre16)
->   PCRE_CONF_OPT += $(if $(BR2_PACKAGE_PCRE_32),--enable-pcre32,--disable-pcre32)
-> +PCRE_CONF_OPT += $(if $(BR2_PACKAGE_PCRE_UTF),--enable-utf,--disable-utf)
-> +PCRE_CONF_OPT += $(if $(BR2_PACKAGE_PCRE_UCP),--enable-unicode-properties,--disable-unicode-properties)
->
->   $(eval $(autotools-package))
->
-
-
+diff --git a/package/ola/ola-0001-fix-build-warning.patch b/package/ola/ola-0001-fix-build-warning.patch
+new file mode 100644
+index 0000000..1fdb58f
+--- /dev/null
++++ b/package/ola/ola-0001-fix-build-warning.patch
+@@ -0,0 +1,27 @@
++Fix build on 64 bits architectures
++
++This upstream patch fixes a warning that, due to -Werror, is causing
++build failures on 64 bits architectures.
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++
++commit ea375582b0bfee93d66608ffc807078ffc48e961
++Author: Simon Newton <nomis52@gmail.com>
++Date:   Wed Oct 30 09:23:49 2013 -0700
++
++    * Avoid a compiler warning
++
++diff --git a/plugins/e131/e131/PreamblePacker.cpp b/plugins/e131/e131/PreamblePacker.cpp
++index ef29e18..8dfcc72 100644
++--- a/plugins/e131/e131/PreamblePacker.cpp
+++++ b/plugins/e131/e131/PreamblePacker.cpp
++@@ -77,7 +77,8 @@ const uint8_t *PreamblePacker::Pack(const PDUBlock<PDU> &pdu_block,
++   if (!m_send_buffer)
++     Init();
++ 
++-  unsigned int size = MAX_DATAGRAM_SIZE - sizeof(ACN_HEADER);
+++  unsigned int size = MAX_DATAGRAM_SIZE -
+++      static_cast<unsigned int>(sizeof(ACN_HEADER));
++   if (!pdu_block.Pack(m_send_buffer + sizeof(ACN_HEADER), &size)) {
++     OLA_WARN << "Failed to pack E1.31 PDU";
++     return NULL;
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+1.8.1.2
