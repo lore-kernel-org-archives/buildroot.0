@@ -1,56 +1,86 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 21 Nov 2013 23:19:10 +0100
-Subject: [Buildroot] [PATCH] lftp: new package.
-In-Reply-To: <20131121230011.040fe161@skate>
-References: <1385046971-7707-1-git-send-email-rebillout@syscom.ch>
- <1385046971-7707-2-git-send-email-rebillout@syscom.ch>
- <20131121164242.64981c00@skate> <528E3223.1000401@syscom.ch>
- <20131121181248.3c606028@skate> <528E8110.10406@mind.be>
- <20131121230011.040fe161@skate>
-Message-ID: <528E86DE.7020307@mind.be>
+Date: Thu, 21 Nov 2013 23:26:01 +0100
+Subject: [Buildroot] (no subject)
+In-Reply-To: <20131120220956.97BD8814BA@whitealder.osuosl.org>
+References: <20131120220956.97BD8814BA@whitealder.osuosl.org>
+Message-ID: <528E8879.5030800@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 21/11/13 23:00, Thomas Petazzoni wrote:
-> Dear Arnout Vandecappelle,
+On 20/11/13 23:09, chris at zankel.net wrote:
+>>From 2f2ca743fab0a0b2aaf5658a532e09b2d64248c3 Mon Sep 17 00:00:00 2001
+> Message-Id: <2f2ca743fab0a0b2aaf5658a532e09b2d64248c3.1384984956.git.chris@zankel.net>
+> In-Reply-To: <cover.1384984956.git.chris@zankel.net>
+> References: <cover.1384984956.git.chris@zankel.net>
+> From: Chris Zankel <chris@zankel.net>
+> Date: Wed, 20 Nov 2013 10:46:03 -0800
+> Subject: [PATCH 2/2] libnspr: Add dependency on !BR2_xtensa
+> To: buildroot at busybox.net
 >
-> On Thu, 21 Nov 2013 22:54:24 +0100, Arnout Vandecappelle wrote:
+> Xtensa is not yet supported in libnspr. Also add dependencies to libnss,
+> which requires libnspr, and ecryptfs-utils, which requires libnss.
 >
->>    You can give AC_TRY_RUN a fourth argument with actions to take when
->> cross-compiling. These actions are taken when compilation was successful.
->> Basically, the following patch should work:
->>
->> ----------------------------------
->> Fix support for cross-compilation.
->>
->> The check for posix_fallocate doesn't handle the cross-compilation case.
->> Assume that it works, because cross-compilation for AIX or old glibc is
->> unlikely.
->>
->> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
->> ---
->> diff -Nrup lftp-4.4.10.orig/m4/lftp.m4 lftp-4.4.10/m4/lftp.m4
->> --- lftp-4.4.10.orig/m4/lftp.m4 2013-03-19 13:25:50.000000000 +0100
->> +++ lftp-4.4.10/m4/lftp.m4      2013-11-21 22:46:27.776820935 +0100
->> @@ -271,6 +271,8 @@ AC_DEFUN([LFTP_POSIX_FALLOCATE_CHECK],[
->>           i_cv_posix_fallocate_works=yes
->>         ], [
->>           i_cv_posix_fallocate_works=no
->> +     ], [
->> +       i_cv_posix_fallocate_works=yes
->>         ])
->>       ])
->>       if test x$i_cv_posix_fallocate_works = xyes; then
->> ----------------------------------
+> Signed-off-by: Chris Zankel <chris@zankel.net>
+> ---
+>   package/ecryptfs-utils/Config.in | 1 +
+>   package/libnspr/Config.in        | 3 ++-
+>   package/libnss/Config.in         | 1 +
+>   3 files changed, 4 insertions(+), 1 deletion(-)
 >
-> Seeing this, I believe that passing i_cv_posix_fallocate_works=yes in
-> the ./configure environment is a better solution.
+> diff --git a/package/ecryptfs-utils/Config.in b/package/ecryptfs-utils/Config.in
+> index 480aedd..514578c 100644
+> --- a/package/ecryptfs-utils/Config.in
+> +++ b/package/ecryptfs-utils/Config.in
+> @@ -7,6 +7,7 @@ config BR2_PACKAGE_ECRYPTFS_UTILS
+>   	depends on BR2_LARGEFILE # libnss
+>   	depends on BR2_TOOLCHAIN_HAS_THREADS # libnss -> libnspr
+>   	depends on !BR2_arc # libnss -> libnspr
+> +	depends on !BR2_xtensa # libnss -> libnspr
+>   	help
+>   	  eCryptfs is a POSIX-compliant enterprise cryptographic
+>   	  filesystem for Linux. It is stacked on top of any other
 
-  But that wouldn't detect the uClibc case when posix_fallocate isn't 
-available...
+  The comment needs to be updated as well.
+
+  Oops, looks like the comment is missing for ecryptfs-utils...
+
+> diff --git a/package/libnspr/Config.in b/package/libnspr/Config.in
+> index 4ef3a51..0d5632f 100644
+> --- a/package/libnspr/Config.in
+> +++ b/package/libnspr/Config.in
+> @@ -3,6 +3,7 @@ config BR2_PACKAGE_LIBNSPR
+>   	depends on BR2_LARGEFILE
+>   	depends on BR2_TOOLCHAIN_HAS_THREADS
+>   	depends on !BR2_arc
+> +	depends on !BR2_xtensa
+>   	help
+>   	  NSPR is the Netscape Portable Runtime library which provides
+>   	  a platform-neutral API for system level and libc like
+> @@ -12,5 +13,5 @@ config BR2_PACKAGE_LIBNSPR
+>   	  http://www.mozilla.org/projects/nspr/
+>
+>   comment "libnspr needs a toolchain w/ largefile, threads"
+> -	depends on !BR2_arc
+> +	depends on !BR2_arc && !BR2_xtensa
+>   	depends on !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS
+> diff --git a/package/libnss/Config.in b/package/libnss/Config.in
+> index 88b1fde..2671998 100644
+> --- a/package/libnss/Config.in
+> +++ b/package/libnss/Config.in
+> @@ -6,6 +6,7 @@ config BR2_PACKAGE_LIBNSS
+>   	depends on BR2_LARGEFILE
+>   	depends on BR2_TOOLCHAIN_HAS_THREADS # libnspr
+>   	depends on !BR2_arc # libnspr
+> +	depends on !BR2_xtensa # libnspr
+>   	help
+>   	  Network Security Services (NSS) is a set of libraries designed
+>   	  to support development of security-enabled client and server
+>
+
+  Here the comment really needs to be updated as well :-)
 
   Regards,
   Arnout
