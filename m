@@ -1,34 +1,35 @@
-From: Romain Naour <romain.naour@openwide.fr>
-Date: Fri, 22 Nov 2013 00:01:54 +0100
-Subject: [Buildroot] [PATCH 1/1] schifra: fix install examples
-Message-ID: <1385074914-10633-1-git-send-email-romain.naour@openwide.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 22 Nov 2013 00:09:28 +0100
+Subject: [Buildroot] Version 3.1.0  of the Buildroot Eclipse plugin
+Message-ID: <20131122000928.38dbb377@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
+Hello,
 
-http://autobuild.buildroot.net/results/1ec/1ec3664f28492bf3da53dcbe8ceeb165bce8df6d/build-end.log
+M?lanie Bats has just released version 3.1.0 of the Buildroot Eclipse
+plugin. This version is compatible with the Eclipse Kepler SR1 version.
 
-Signed-off-by: Romain Naour <romain.naour@openwide.fr>
----
- package/schifra/schifra.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+See:
 
-diff --git a/package/schifra/schifra.mk b/package/schifra/schifra.mk
-index 4611e67..673c1a6 100644
---- a/package/schifra/schifra.mk
-+++ b/package/schifra/schifra.mk
-@@ -23,7 +23,7 @@ endef
- define SCHIFRA_INSTALL_EXAMPLES
- 	cd $(@D) && for i in `find -type f -name 'schifra_*' -executable` ; \
- 	do \
--		$(INSTALL) -m 0755 -D $$i (TARGET_DIR)/usr/bin/$$i; \
-+		$(INSTALL) -m 0755 -D $$i $(TARGET_DIR)/usr/bin/$$i; \
- 	done
- endef
- 
+  https://github.com/mbats/eclipse-buildroot-bundle/wiki
+
+for details about this plugin, its usage and installation process. The
+new update site for this plugin version is:
+
+  http://buildroot.org/downloads/eclipse/kepler-sr1/
+
+We remain highly interested in receiving feedback from the users of
+this plugin, in order to define what should be the next developments
+and improvements.
+
+Thanks,
+
+Thomas
 -- 
-1.8.1.4
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
