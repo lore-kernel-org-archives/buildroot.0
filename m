@@ -1,86 +1,63 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 21 Nov 2013 17:12:41 +0100
-Subject: [Buildroot] libgcc erroneously built as armv5 for
- arm920t(armv4t)
-In-Reply-To: <1385050037.24198.YahooMailNeo@web162203.mail.bf1.yahoo.com>
-References: <1380209693.38971.YahooMailNeo@web162205.mail.bf1.yahoo.com>
- <20131102163906.0b558177@skate> <20131107203113.4a86ad85@skate>
- <1385045770.26460.YahooMailNeo@web162202.mail.bf1.yahoo.com>
- <20131121162206.00dfb014@skate>
- <1385050037.24198.YahooMailNeo@web162203.mail.bf1.yahoo.com>
-Message-ID: <20131121171241.721ce935@skate>
+From: =?UTF-8?B?QXJuYXVkIFLDqWJpbGxvdXQ=?= <rebillout@syscom.ch>
+Date: Thu, 21 Nov 2013 17:17:39 +0100
+Subject: [Buildroot] [PATCH] lftp: new package.
+In-Reply-To: <20131121164242.64981c00@skate>
+References: <1385046971-7707-1-git-send-email-rebillout@syscom.ch>	<1385046971-7707-2-git-send-email-rebillout@syscom.ch>
+ <20131121164242.64981c00@skate>
+Message-ID: <528E3223.1000401@syscom.ch>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Adam,
+Hi Thomas,
 
-On Thu, 21 Nov 2013 08:07:17 -0800 (PST), adam hussein\(!\) wrote:
+thanks for your comments, I'll send a second revision with everything fixed.
 
-> >Ok, so that's with a Buildroot internal toolchain. Can you also try to
-> >build the kernel with this toolchain to see if it's affected or not by
-> >the below problem?
-> 
-> It was fine, just didn't think to mention it as was an exception of the Sourcery toolchain.
+> Can you detail the posix_fallocate() problem you've seen? Maybe we can
+> solve it in a different/nicer way.
 
-Ok, thanks for the confirmation!
+Here is a piece of the m4 file which describes the macro 
+(lftp-4.4.10/m4/lftp.m4, line 246):
 
-> >In order to ask the assembler to accept these instructions, the
-> >following commit was made back in 2008:
-> >
-> >? http://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git/commit/arch/arm/boot/compressed/Makefile?id=80cec14a83ad0ad109d822b3f3482a379bc481ba
-> >
-> >However, it was reverted recently:
-> >
-> >? http://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git/commit/arch/arm/boot/compressed/Makefile?id=da94a829305f1c217cfdf6771cb1faca0917e3b9
-> >
-> >I am not sure how this last commit doesn't break your situation.
-> 
-> Interesting stuff. It's building 2.6.38.6, which benefits only from the first commit.
+> AC_DEFINE(HAVE_POSIX_FALLOCATE, 1, [Define if you have a working 
+> posix_fallocate()])
+> AC_DEFUN([LFTP_POSIX_FALLOCATE_CHECK],[
+>    dnl * Old glibcs have broken posix_fallocate(). Make sure not to 
+> use it.
+>    dnl * It may also be broken in AIX.
 
-Ah, interesting.
+In order to test that, the configure script compiles and runs a piece of 
+C code.
 
-> >So in other words, you mean that this wouldn't work on the target
-> >platform. Hum, weird. Is this a part of U-Boot implemented in assembly,
-> >or something compiled from C ?
-> 
-> Yes indeed. My belief is that _udivsi3 was pulled in with CLZs intact from the libgcc built and distributed with the Sourcery toolchain, rather than rebuilding a 4T arch version for the occasion.
-> To be honest, I'm not sure if something like --sysroot can redirect this; I've never thought about it before.
+There's two problems with that.
 
-The Sourcery toolchain has 3 sysroot: ARMv4, ARMv5, and ARMv7 Thumb2.
-So if the proper -march=armv4t option is passed, it uses the ARMv4
-sysroot.
+First, the code won't compile because uClibc doesn't define 
+posix_fallocate. To solve that, we can fix the m4 macro with a #define.
+It's quite easy, though I don't know exactly how to do it properly.
 
-> Sure. Didn't get far off making for the dev board it was based on, aside from memory tweaks to u-boot.
-> I'm building the buildroot-2013.08.1 archive with 'make at91rm9200df_defconfig'.
-> The u-boot clone is at commit 46ef4faed18196472eb95216b2f74c1397ecf024 from http://git.denx.de/u-boot.git.
-> Then:
-> ??? export PATH=$PATH:/data/at91rm9200/buildroot-2013.08.1/output/host/usr/bin/
-> ??? export CROSS_COMPILE=arm-buildroot-linux-uclibcgnueabi-
-> ??? make at91rm9200dvc_ram_config
-> ??? make
-> or:
-> ??? export PATH=$PATH:/data/at91rm9200/buildroot-2013.08.1-thomas2/output/host/opt/ext-toolchain/bin/
-> accordingly.
+But after that comes the second problem: the test is supposed to run 
+this piece of code. How are we supposed to run cross-compiled code on 
+the host ?
+I can imagine it's a typical problem, but I don't know how it's supposed 
+to be handled.
 
-This is wrong. For external toolchains, you should *NOT* use the
-compiler in host/opt/ext-toolchain/bin, but instead the compiler in
-output/host/usr/bin. We create a toolchain wrapper which ensures that
-the proper compiler flags are used. If you don't use this toolchain
-wrapper, then it cannot work.
 
-Have you been building both the kernel and u-boot outside of Buildroot?
-Why not instruct Buildroot to build them instead?
+Regards,
+Arnaud.
 
-Can you retry the external toolchain case, by using the compiler in
-output/host/usr/bin instead?
 
-Thanks!
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Arnaud R?billout
+/D?veloppeur software/
+
+SYSCOM Instruments SA,
+Rue de l?Industrie 21,
+1450 Ste-Croix, SUISSE
+Tel : +41 (0) 24 455 44 11
+Fax : +41 (0) 24 454 45 60
+Visit us at www.syscom.ch <http://www.syscom.ch>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20131121/e39d8e1f/attachment.html>
