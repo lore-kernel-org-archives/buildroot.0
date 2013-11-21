@@ -1,36 +1,35 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Thu, 21 Nov 2013 18:25:10 +0100
-Subject: [Buildroot] [PATCH] mdadm: needs MMU
-In-Reply-To: <1385054592-2952-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1385054592-2952-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <4fc888b5-3976-42ce-bc8b-e152c610fe02@email.android.com>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Thu, 21 Nov 2013 17:37:33 +0000
+Subject: [Buildroot] [PATCH] tinymembench: prevent the selection of this
+	package on MIPS64 platforms
+Message-ID: <1385055453-45500-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
->Fixes:
->
->  http://autobuild.buildroot.org/results/52c/52cc56df2aa278d92141918de74833d7e4fd3d47/build-end.log
->
->Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
->---
-> package/mdadm/Config.in | 1 +
-> 1 file changed, 1 insertion(+)
->
->diff --git a/package/mdadm/Config.in b/package/mdadm/Config.in
->index c513348..e0d606b 100644
->--- a/package/mdadm/Config.in
->+++ b/package/mdadm/Config.in
->@@ -1,5 +1,6 @@
-> config BR2_PACKAGE_MDADM
-> 	bool "mdadm"
->+	depends on BR2_USE_MMU # fork()
-> 	help
-> 	  Utility for managing Linux Software RAID arrays.
-> 
+This package is only supported on MIPS32 platforms. The mips-32.S file included
+in the source code of this package only makes sense to be compiled for MIPS32,
+and also contains hardcoded MIPS32 instructions which are illegal on MIPS64.
+Trying to compile this package on a MIPS64 platform will end with a linkage
+failure due to undefined references.
 
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+ package/tinymembench/Config.in |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-Gustavo sent this same patch earlier today...
+diff --git a/package/tinymembench/Config.in b/package/tinymembench/Config.in
+index 0d45532..0555b19 100644
+--- a/package/tinymembench/Config.in
++++ b/package/tinymembench/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_TINYMEMBENCH
+ 	bool "tinymembench"
++	depends on !BR2_mips64 && !BR2_mips64el
+ 	help
+ 	  Tinymembench is a simple memory benchmark program, which
+ 	  tries to measure the peak bandwidth of sequential memory
+-- 
+1.7.1
