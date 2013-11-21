@@ -1,36 +1,29 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 21 Nov 2013 11:47:31 +0100
-Subject: [Buildroot] [PATCH 1/1] Added stage2 ldscripts
-In-Reply-To: <528DDAA9.20309@wanadoo.fr>
-References: <1384986808-24363-1-git-send-email-thierry.bultel@wanadoo.fr>
- <20131121091316.16816a89@skate> <528DDAA9.20309@wanadoo.fr>
-Message-ID: <20131121114731.3623f716@skate>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 21 Nov 2013 12:03:04 +0100
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+	2013-11-20
+In-Reply-To: <CAFbHwiTA228YrD+zfo8omQbn_74+kFg+8oS2PO-syx8N7dXFrw@mail.gmail.com>
+ (Will Newton's message of "Thu, 21 Nov 2013 09:00:15 +0000")
+References: <20131121073002.85918101270@stock.ovh.net>
+ <CAFbHwiTA228YrD+zfo8omQbn_74+kFg+8oS2PO-syx8N7dXFrw@mail.gmail.com>
+Message-ID: <87r4aaqaon.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thierry Bultel,
+>>>>> "Will" == Will Newton <will.newton@gmail.com> writes:
 
-On Thu, 21 Nov 2013 11:04:25 +0100, Thierry Bultel wrote:
+Hi,
 
-> I have taken your branch and compiled it. I am testing like this:
-> 
-> sudo kvm -cdrom rootfs.iso9660
-> 
-> which works with upstream + the lscript patch
-> 
-> However, on your branch, the grub menu does not show up, I am only 
-> getting the grub minimal prompt. For the moment I cannot figure out why.
-> 
-> So that would mean that stage2 is OK but there is another extra issue.
+ >> aarch64 |                libsigsegv-2.10 | NOK | http://autobuild.buildroot.net/results/9821f4d44e65db1ec503acc89685ccfa7664fc32/
 
-I *believe* this usually means that it can't find the grub
-configuration file.
+ > May be fixed by this patch:
 
-Thomas
+ > http://lists.gnu.org/archive/html/bug-libsigsegv/2013-05/msg00001.html
+
+Ahh yes, verified and committed - Thanks.
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
