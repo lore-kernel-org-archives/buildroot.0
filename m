@@ -1,79 +1,76 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 21 Nov 2013 18:12:48 +0100
-Subject: [Buildroot] [PATCH] lftp: new package.
-In-Reply-To: <528E3223.1000401@syscom.ch>
-References: <1385046971-7707-1-git-send-email-rebillout@syscom.ch>
- <1385046971-7707-2-git-send-email-rebillout@syscom.ch>
- <20131121164242.64981c00@skate> <528E3223.1000401@syscom.ch>
-Message-ID: <20131121181248.3c606028@skate>
+From: spdawson at gmail.com <spdawson@gmail.com>
+Date: Thu, 21 Nov 2013 17:19:40 +0000
+Subject: [Buildroot] [PATCH] libroxml: fix avr32 build failure
+Message-ID: <1385054380-20684-1-git-send-email-spdawson@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Arnaud R?billout,
+From: Simon Dawson <spdawson@gmail.com>
 
-On Thu, 21 Nov 2013 17:17:39 +0100, Arnaud R?billout wrote:
+The -Wno-unused-result option is not understood by the version of gcc used by the
+avr32 toolchain. Remove the option from the compilation flags.
 
-> thanks for your comments, I'll send a second revision with everything fixed.
+Fixes build failures such as the following.
 
-Thanks!
+  http://autobuild.buildroot.net/results/e22/e22d94fca3eabb4e54d82af04319f17ad8e10c20/
 
-> > Can you detail the posix_fallocate() problem you've seen? Maybe we can
-> > solve it in a different/nicer way.
-> 
-> Here is a piece of the m4 file which describes the macro 
-> (lftp-4.4.10/m4/lftp.m4, line 246):
-> 
-> > AC_DEFINE(HAVE_POSIX_FALLOCATE, 1, [Define if you have a working 
-> > posix_fallocate()])
-> > AC_DEFUN([LFTP_POSIX_FALLOCATE_CHECK],[
-> >    dnl * Old glibcs have broken posix_fallocate(). Make sure not to 
-> > use it.
-> >    dnl * It may also be broken in AIX.
-> 
-> In order to test that, the configure script compiles and runs a piece of 
-> C code.
-> 
-> There's two problems with that.
-> 
-> First, the code won't compile because uClibc doesn't define 
-> posix_fallocate. To solve that, we can fix the m4 macro with a #define.
-> It's quite easy, though I don't know exactly how to do it properly.
+The single existing patch for libroxml has been renamed to include a numerical
+component for application order sorting. The existing patch has also been updated
+to apply without fuzz.
 
-Depends on the uClibc version. The official 0.9.33.2 version indeed
-does not have posix_fallocate(), but we have a patch in Buildroot that
-adds it. However, it is not available for uClibc-based external
-toolchains, so we can't just assume posix_fallocate() is always here.
+Signed-off-by: Simon Dawson <spdawson@gmail.com>
+---
+ ...oxml-werror.patch => libroxml-0001-werror.patch} |  2 +-
+ .../libroxml/libroxml-0002-wno-unused-result.patch  | 21 +++++++++++++++++++++
+ 2 files changed, 22 insertions(+), 1 deletion(-)
+ rename package/libroxml/{libroxml-werror.patch => libroxml-0001-werror.patch} (97%)
+ create mode 100644 package/libroxml/libroxml-0002-wno-unused-result.patch
 
-> But after that comes the second problem: the test is supposed to run 
-> this piece of code. How are we supposed to run cross-compiled code on 
-> the host ?
-> I can imagine it's a typical problem, but I don't know how it's supposed 
-> to be handled.
-
-Yes, that's a typical problem, and of course, we cannot use configure
-scripts that try to run programs compiled for the target on the build
-machine.
-
-I believe we have two solutions here:
-
- (1) Find the configure variable that can be passed in the configure
-     environment to tell configure that posix_fallocate() is not
-     available. Set it to "available" when a glibc/eglibc toolchain is
-     used and "not available" when an uClibc toolchain is used.
-
- (2) Or, better, improve the configure test to be able to only do the
-     compile test and not the execution test, and assume that if a
-     posix_fallocate() program builds, then it means that it works. We
-     don't use those old glibcs or AIX that have broken
-     posix_fallocate().
-
-Best regards,
-
-Thomas
+diff --git a/package/libroxml/libroxml-werror.patch b/package/libroxml/libroxml-0001-werror.patch
+similarity index 97%
+rename from package/libroxml/libroxml-werror.patch
+rename to package/libroxml/libroxml-0001-werror.patch
+index 6435b01..91f322c 100644
+--- a/package/libroxml/libroxml-werror.patch
++++ b/package/libroxml/libroxml-0001-werror.patch
+@@ -11,7 +11,7 @@ Index: a/Makefile
+ ===================================================================
+ --- a/Makefile
+ +++ b/Makefile
+-@@ -41,7 +41,7 @@
++@@ -46,7 +46,7 @@
+  
+  # options
+  override CPPFLAGS += -Iinc/
+diff --git a/package/libroxml/libroxml-0002-wno-unused-result.patch b/package/libroxml/libroxml-0002-wno-unused-result.patch
+new file mode 100644
+index 0000000..406bf3c
+--- /dev/null
++++ b/package/libroxml/libroxml-0002-wno-unused-result.patch
+@@ -0,0 +1,21 @@
++The -Wno-unused-result option is not understood by the version of gcc used by the
++avr32 toolchain. Remove the option from the compilation flags.
++
++Fixes build failures such as the following.
++
++  http://autobuild.buildroot.net/results/e22/e22d94fca3eabb4e54d82af04319f17ad8e10c20/
++
++Signed-off-by: Simon Dawson <spdawson@gmail.com>
++
++diff -Nurp a/Makefile b/Makefile
++--- a/Makefile	2013-11-21 17:13:17.679388374 +0000
+++++ b/Makefile	2013-11-21 17:13:35.219299157 +0000
++@@ -46,7 +46,7 @@ DEFINES = -DIGNORE_EMPTY_TEXT_NODES
++ 
++ # options
++ override CPPFLAGS += -Iinc/
++-override CFLAGS += $(OPTIM) -fPIC -Wall -Wextra -Wno-unused-parameter -Wno-unused-result -Iinc/ $(DEFINES)
+++override CFLAGS += $(OPTIM) -fPIC -Wall -Wextra -Wno-unused-parameter -Iinc/ $(DEFINES)
++ override LDFLAGS += 
++ 
++ ifeq ("$(OS)", "Darwin")
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.8.3.2
