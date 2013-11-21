@@ -1,95 +1,51 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 21 Nov 2013 23:26:01 +0100
-Subject: [Buildroot] (no subject)
-In-Reply-To: <20131120220956.97BD8814BA@whitealder.osuosl.org>
-References: <20131120220956.97BD8814BA@whitealder.osuosl.org>
-Message-ID: <528E8879.5030800@mind.be>
+From: Matthew Weber <mlweber1@rockwellcollins.com>
+Date: Thu, 21 Nov 2013 16:39:01 -0600
+Subject: [Buildroot] [PATCH 1/1] xerces: add host
+In-Reply-To: <20131121225446.2ad2f3c2@skate>
+References: <1385063284-31586-1-git-send-email-mlweber1@rockwellcollins.com>
+ <20131121225446.2ad2f3c2@skate>
+Message-ID: <OFDA43EF93.FECF1729-ON86257C2A.007C345A-86257C2A.007C6C20@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 20/11/13 23:09, chris at zankel.net wrote:
->>From 2f2ca743fab0a0b2aaf5658a532e09b2d64248c3 Mon Sep 17 00:00:00 2001
-> Message-Id: <2f2ca743fab0a0b2aaf5658a532e09b2d64248c3.1384984956.git.chris@zankel.net>
-> In-Reply-To: <cover.1384984956.git.chris@zankel.net>
-> References: <cover.1384984956.git.chris@zankel.net>
-> From: Chris Zankel <chris@zankel.net>
-> Date: Wed, 20 Nov 2013 10:46:03 -0800
-> Subject: [PATCH 2/2] libnspr: Add dependency on !BR2_xtensa
-> To: buildroot at busybox.net
->
-> Xtensa is not yet supported in libnspr. Also add dependencies to libnss,
-> which requires libnspr, and ecryptfs-utils, which requires libnss.
->
-> Signed-off-by: Chris Zankel <chris@zankel.net>
-> ---
->   package/ecryptfs-utils/Config.in | 1 +
->   package/libnspr/Config.in        | 3 ++-
->   package/libnss/Config.in         | 1 +
->   3 files changed, 4 insertions(+), 1 deletion(-)
->
-> diff --git a/package/ecryptfs-utils/Config.in b/package/ecryptfs-utils/Config.in
-> index 480aedd..514578c 100644
-> --- a/package/ecryptfs-utils/Config.in
-> +++ b/package/ecryptfs-utils/Config.in
-> @@ -7,6 +7,7 @@ config BR2_PACKAGE_ECRYPTFS_UTILS
->   	depends on BR2_LARGEFILE # libnss
->   	depends on BR2_TOOLCHAIN_HAS_THREADS # libnss -> libnspr
->   	depends on !BR2_arc # libnss -> libnspr
-> +	depends on !BR2_xtensa # libnss -> libnspr
->   	help
->   	  eCryptfs is a POSIX-compliant enterprise cryptographic
->   	  filesystem for Linux. It is stacked on top of any other
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote on 11/21/2013 
+03:54:46 PM:
 
-  The comment needs to be updated as well.
+> From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> To: Matt Weber <mlweber1@rockwellcollins.com>
+> Cc: buildroot at busybox.net
+> Date: 11/21/2013 03:54 PM
+> Subject: Re: [Buildroot] [PATCH 1/1] xerces: add host
+> 
+> Dear Matt Weber,
+> 
+> On Thu, 21 Nov 2013 13:48:04 -0600, Matt Weber wrote:
+> > 
+> > Signed-off-by: Matt Weber <mlweber1@rockwellcollins.com>
+> > ---
+> >  package/xerces/xerces.mk |    1 +
+> >  1 files changed, 1 insertions(+), 0 deletions(-)
+> 
+> Yes, but why?
 
-  Oops, looks like the comment is missing for ecryptfs-utils...
+Opps, should have included that.
 
-> diff --git a/package/libnspr/Config.in b/package/libnspr/Config.in
-> index 4ef3a51..0d5632f 100644
-> --- a/package/libnspr/Config.in
-> +++ b/package/libnspr/Config.in
-> @@ -3,6 +3,7 @@ config BR2_PACKAGE_LIBNSPR
->   	depends on BR2_LARGEFILE
->   	depends on BR2_TOOLCHAIN_HAS_THREADS
->   	depends on !BR2_arc
-> +	depends on !BR2_xtensa
->   	help
->   	  NSPR is the Netscape Portable Runtime library which provides
->   	  a platform-neutral API for system level and libc like
-> @@ -12,5 +13,5 @@ config BR2_PACKAGE_LIBNSPR
->   	  http://www.mozilla.org/projects/nspr/
->
->   comment "libnspr needs a toolchain w/ largefile, threads"
-> -	depends on !BR2_arc
-> +	depends on !BR2_arc && !BR2_xtensa
->   	depends on !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS
-> diff --git a/package/libnss/Config.in b/package/libnss/Config.in
-> index 88b1fde..2671998 100644
-> --- a/package/libnss/Config.in
-> +++ b/package/libnss/Config.in
-> @@ -6,6 +6,7 @@ config BR2_PACKAGE_LIBNSS
->   	depends on BR2_LARGEFILE
->   	depends on BR2_TOOLCHAIN_HAS_THREADS # libnspr
->   	depends on !BR2_arc # libnspr
-> +	depends on !BR2_xtensa # libnspr
->   	help
->   	  Network Security Services (NSS) is a set of libraries designed
->   	  to support development of security-enabled client and server
->
+I'm working on adding support for an older package called xalan that 
+requires host-xerces.
+However the build infrastructure in the xalan package is pretty bad and 
+I'm not sure if I'll be 
+able to get it cleaned up to the point of posting a patch set.  So for 
+now, I've submitted 
+this patch to add host-xerces support to allow us to build the xalan 
+package using 
+BR2_EXTERNAL until I get it hopefully cleaned up and submitted.
 
-  Here the comment really needs to be updated as well :-)
-
-  Regards,
-  Arnout
-
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+> 
+> Thomas
+> -- 
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
