@@ -1,54 +1,87 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 21 Nov 2013 23:00:11 +0100
-Subject: [Buildroot] [PATCH] lftp: new package.
-In-Reply-To: <528E8110.10406@mind.be>
-References: <1385046971-7707-1-git-send-email-rebillout@syscom.ch>
- <1385046971-7707-2-git-send-email-rebillout@syscom.ch>
- <20131121164242.64981c00@skate> <528E3223.1000401@syscom.ch>
- <20131121181248.3c606028@skate> <528E8110.10406@mind.be>
-Message-ID: <20131121230011.040fe161@skate>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 21 Nov 2013 23:18:09 +0100
+Subject: [Buildroot] [PATCH 1/2] pcre: add options to enable UTF and UCP
+ support
+In-Reply-To: <1385069096.10963.2.camel@bender>
+References: <1385069096.10963.2.camel@bender>
+Message-ID: <528E86A1.60101@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Arnout Vandecappelle,
+  Hi Sven,
 
-On Thu, 21 Nov 2013 22:54:24 +0100, Arnout Vandecappelle wrote:
+  Thanks for your patch.
 
->   You can give AC_TRY_RUN a fourth argument with actions to take when 
-> cross-compiling. These actions are taken when compilation was successful. 
-> Basically, the following patch should work:
-> 
-> ----------------------------------
-> Fix support for cross-compilation.
-> 
-> The check for posix_fallocate doesn't handle the cross-compilation case. 
-> Assume that it works, because cross-compilation for AIX or old glibc is 
-> unlikely.
-> 
-> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+On 21/11/13 22:24, Sven Neumann wrote:
+>
+
+  Spurious empty line.
+
+> Allow to compile PCRE with UTF-8/16/32 support and with
+> support for Unicode properties.
+>
+> Signed-off-by: Sven Neumann <neumann@teufel.de>
 > ---
-> diff -Nrup lftp-4.4.10.orig/m4/lftp.m4 lftp-4.4.10/m4/lftp.m4
-> --- lftp-4.4.10.orig/m4/lftp.m4 2013-03-19 13:25:50.000000000 +0100
-> +++ lftp-4.4.10/m4/lftp.m4      2013-11-21 22:46:27.776820935 +0100
-> @@ -271,6 +271,8 @@ AC_DEFUN([LFTP_POSIX_FALLOCATE_CHECK],[
->          i_cv_posix_fallocate_works=yes
->        ], [
->          i_cv_posix_fallocate_works=no
-> +     ], [
-> +       i_cv_posix_fallocate_works=yes
->        ])
->      ])
->      if test x$i_cv_posix_fallocate_works = xyes; then
-> ----------------------------------
+>   package/pcre/Config.in | 11 +++++++++++
+>   package/pcre/pcre.mk   |  2 ++
+>   2 files changed, 13 insertions(+)
+>
+> diff --git a/package/pcre/Config.in b/package/pcre/Config.in
+> index dc92274..3b93092 100644
+> --- a/package/pcre/Config.in
+> +++ b/package/pcre/Config.in
+> @@ -19,4 +19,15 @@ config BR2_PACKAGE_PCRE_32
+>   	help
+>   	  This option builds the 32-bits pcre library, i.e 'libpcre32'
+>
+> +config BR2_PACKAGE_PCRE_UTF
+> +	bool "UTF-8/16/32 support in pcre"
+> +	help
+> +	  This option builds the pcre library with UTF-8/16/32 support'
+> +
+> +config BR2_PACKAGE_PCRE_UCP
+> +	bool "Unicode properties support in pcre"
+> +        select BR2_PACKAGE_PCRE_UTF
 
-Seeing this, I believe that passing i_cv_posix_fallocate_works=yes in
-the ./configure environment is a better solution.
+  Indent with tab, not spaces.
 
-Thomas
+> +	help
+> +	  This option builds the pcre library with Unicode properties support (implies UTF-8/16/32 support)'
+
+  Should be wrapped at 80 columns. [We should really document the 
+wrapping guidelines...]
+
+
+  With these changes, you can add my
+
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+
+  (build-tested on x86_64)
+
+> +
+>   endif
+> diff --git a/package/pcre/pcre.mk b/package/pcre/pcre.mk
+> index bf86a3d..2637354 100644
+> --- a/package/pcre/pcre.mk
+> +++ b/package/pcre/pcre.mk
+> @@ -19,5 +19,7 @@ endif
+>   PCRE_CONF_OPT += --enable-pcre8
+>   PCRE_CONF_OPT += $(if $(BR2_PACKAGE_PCRE_16),--enable-pcre16,--disable-pcre16)
+>   PCRE_CONF_OPT += $(if $(BR2_PACKAGE_PCRE_32),--enable-pcre32,--disable-pcre32)
+> +PCRE_CONF_OPT += $(if $(BR2_PACKAGE_PCRE_UTF),--enable-utf,--disable-utf)
+> +PCRE_CONF_OPT += $(if $(BR2_PACKAGE_PCRE_UCP),--enable-unicode-properties,--disable-unicode-properties)
+>
+>   $(eval $(autotools-package))
+>
+
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
