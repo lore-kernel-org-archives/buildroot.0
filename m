@@ -1,77 +1,52 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Thu, 21 Nov 2013 13:35:19 +0100
-Subject: [Buildroot] [pkg-perl infra V2 12/12] libxml-libxml-perl: new
-	package
-In-Reply-To: <1385037319-2456-1-git-send-email-francois.perrad@gadz.org>
-References: <1385037319-2456-1-git-send-email-francois.perrad@gadz.org>
-Message-ID: <1385037319-2456-12-git-send-email-francois.perrad@gadz.org>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Thu, 21 Nov 2013 13:39:25 +0100
+Subject: [Buildroot] [PATCH] squid: fix compilation due to missing include
+	of time.h
+Message-ID: <a1073b4cace055956ad3.1385037565@argentina>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-(depends on libxml2 & zlib)
+Fixes http://autobuild.buildroot.net/results/b33/b33e1f41e50b6e7ac3e30806b9a617d451bc27b4/
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+
 ---
- package/cpan/Config.in                             |    1 +
- package/cpan/libxml-libxml-perl/Config.in          |    9 ++++++++
- .../cpan/libxml-libxml-perl/libxml-libxml-perl.mk  |   22 ++++++++++++++++++++
- 3 files changed, 32 insertions(+)
- create mode 100644 package/cpan/libxml-libxml-perl/Config.in
- create mode 100644 package/cpan/libxml-libxml-perl/libxml-libxml-perl.mk
+ package/squid/squid-03-missing-include-time_h.patch |  28 +++++++++++++++++
+ 1 files changed, 28 insertions(+), 0 deletions(-)
 
-diff --git a/package/cpan/Config.in b/package/cpan/Config.in
-index 8574978..62f9fa4 100644
---- a/package/cpan/Config.in
-+++ b/package/cpan/Config.in
-@@ -1,2 +1,3 @@
- source "package/cpan/libcurses-perl/Config.in"
- source "package/cpan/libnet-ssleay-perl/Config.in"
-+source "package/cpan/libxml-libxml-perl/Config.in"
-diff --git a/package/cpan/libxml-libxml-perl/Config.in b/package/cpan/libxml-libxml-perl/Config.in
+diff --git a/package/squid/squid-03-missing-include-time_h.patch b/package/squid/squid-03-missing-include-time_h.patch
 new file mode 100644
-index 0000000..19aa55c
 --- /dev/null
-+++ b/package/cpan/libxml-libxml-perl/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_LIBXML_LIBXML_PERL
-+	bool "libxml-libxml-perl"
-+	select BR2_PACKAGE_LIBXML2
-+	select BR2_PACKAGE_ZLIB
-+	select BR2_PACKAGE_LIBXML_SAX_PERL
-+	select BR2_PACKAGE_LIBXML_NAMESPACESUPPORT_PERL
-+	help
-+	  Interface to Gnome libxml2 xml parsing and DOM library
++++ b/package/squid/squid-03-missing-include-time_h.patch
+@@ -0,0 +1,28 @@
++ipc/Kid.cc: add missing include of time.h
 +
-diff --git a/package/cpan/libxml-libxml-perl/libxml-libxml-perl.mk b/package/cpan/libxml-libxml-perl/libxml-libxml-perl.mk
-new file mode 100644
-index 0000000..5d7d0c2
---- /dev/null
-+++ b/package/cpan/libxml-libxml-perl/libxml-libxml-perl.mk
-@@ -0,0 +1,22 @@
-+################################################################################
-+#
-+# libxml-libxml-perl
-+#
-+################################################################################
++Function time() comes from <time.h>, so add the necessary include.
++This fixes compilation on some configurations, for example
++http://autobuild.buildroot.net/results/b33/b33e1f41e50b6e7ac3e30806b9a617d451bc27b4/
 +
-+LIBXML_LIBXML_PERL_VERSION = 2.0107
-+LIBXML_LIBXML_PERL_AUTHOR = SHLOMIF
-+LIBXML_LIBXML_PERL_SOURCE = XML-LibXML-$(LIBXML_LIBXML_PERL_VERSION).tar.gz
-+LIBXML_LIBXML_PERL_SITE = $(BR2_CPAN_MIRROR)/authors/id/S/SH/SHLOMIF/
-+LIBXML_LIBXML_PERL_DEPENDENCIES = perl zlib libxml2 libxml-sax-perl libxml-namespacesupport-perl
-+HOST_LIBXML_LIBXML_PERL_DEPENDENCIES = host-libxml2 host-zlib host-libxml-sax-perl host-libxml-namespacesupport-perl
-+LIBXML_LIBXML_PERL_LICENSE = perl_5
++Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
++Upstream-status: submitted (http://bugs.squid-cache.org/show_bug.cgi?id=3967)
 +
-+LIBXML_LIBXML_PERL_CONF_OPT += LIBS=-L$(STAGING_DIR)/usr/lib
-+LIBXML_LIBXML_PERL_CONF_OPT += INC=-I$(STAGING_DIR)/usr/include/libxml2
++---
++ src/ipc/Kid.cc |  4 ++++
++ 1 files changed, 4 insertions(+), 0 deletions(-)
 +
-+HOST_LIBXML_LIBXML_PERL_CONF_OPT += LIBS=-L$(HOST_DIR)/usr/lib
-+HOST_LIBXML_LIBXML_PERL_CONF_OPT += INC=-I$(HOST_DIR)/usr/include/libxml2
 +
-+$(eval $(perl-package))
-+$(eval $(host-perl-package))
--- 
-1.7.9.5
++diff --git a/src/ipc/Kid.cc b/src/ipc/Kid.cc
++--- a/src/ipc/Kid.cc
+++++ b/src/ipc/Kid.cc
++@@ -11,6 +11,10 @@
++ #include <sys/wait.h>
++ #endif
++ 
+++#if HAVE_TIME_H
+++#include <time.h>
+++#endif
+++
++ int TheProcessKind = pkOther;
++ 
++ Kid::Kid():
