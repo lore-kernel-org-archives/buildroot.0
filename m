@@ -1,35 +1,27 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Thu, 21 Nov 2013 17:37:33 +0000
-Subject: [Buildroot] [PATCH] tinymembench: prevent the selection of this
-	package on MIPS64 platforms
-Message-ID: <1385055453-45500-1-git-send-email-Vincent.Riera@imgtec.com>
+From: Matt Weber <mlweber1@rockwellcollins.com>
+Date: Thu, 21 Nov 2013 13:48:04 -0600
+Subject: [Buildroot] [PATCH 1/1] xerces: add host
+Message-ID: <1385063284-31586-1-git-send-email-mlweber1@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This package is only supported on MIPS32 platforms. The mips-32.S file included
-in the source code of this package only makes sense to be compiled for MIPS32,
-and also contains hardcoded MIPS32 instructions which are illegal on MIPS64.
-Trying to compile this package on a MIPS64 platform will end with a linkage
-failure due to undefined references.
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Matt Weber <mlweber1@rockwellcollins.com>
 ---
- package/tinymembench/Config.in |    1 +
+ package/xerces/xerces.mk |    1 +
  1 files changed, 1 insertions(+), 0 deletions(-)
 
-diff --git a/package/tinymembench/Config.in b/package/tinymembench/Config.in
-index 0d45532..0555b19 100644
---- a/package/tinymembench/Config.in
-+++ b/package/tinymembench/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_TINYMEMBENCH
- 	bool "tinymembench"
-+	depends on !BR2_mips64 && !BR2_mips64el
- 	help
- 	  Tinymembench is a simple memory benchmark program, which
- 	  tries to measure the peak bandwidth of sequential memory
+diff --git a/package/xerces/xerces.mk b/package/xerces/xerces.mk
+index 7bd7070..2e4c512 100644
+--- a/package/xerces/xerces.mk
++++ b/package/xerces/xerces.mk
+@@ -25,3 +25,4 @@ XERCES_CONF_OPT += --disable-network
+ endif
+ 
+ $(eval $(autotools-package))
++$(eval $(host-autotools-package))
 -- 
 1.7.1
