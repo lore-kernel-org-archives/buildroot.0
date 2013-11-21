@@ -1,105 +1,231 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 21 Nov 2013 16:22:06 +0100
-Subject: [Buildroot] libgcc erroneously built as armv5 for
- arm920t(armv4t)
-In-Reply-To: <1385045770.26460.YahooMailNeo@web162202.mail.bf1.yahoo.com>
-References: <1380209693.38971.YahooMailNeo@web162205.mail.bf1.yahoo.com>
- <20131102163906.0b558177@skate> <20131107203113.4a86ad85@skate>
- <1385045770.26460.YahooMailNeo@web162202.mail.bf1.yahoo.com>
-Message-ID: <20131121162206.00dfb014@skate>
+Date: Thu, 21 Nov 2013 16:42:42 +0100
+Subject: [Buildroot] [PATCH] lftp: new package.
+In-Reply-To: <1385046971-7707-2-git-send-email-rebillout@syscom.ch>
+References: <1385046971-7707-1-git-send-email-rebillout@syscom.ch>
+ <1385046971-7707-2-git-send-email-rebillout@syscom.ch>
+Message-ID: <20131121164242.64981c00@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Adam,
+Dear Arnaud R?billout,
 
-On Thu, 21 Nov 2013 06:56:10 -0800 (PST), adam hussein\(!\) wrote:
-
-> Sorry for going quiet for so long; a lot of change going on here.
-
-No problem.
-
-> I'm
->  not in a position to work on this board now, the project taking a 
-> different direction altogether; however, I have found time for a
-> sneaky test of the patch using the internal toolchain, and it seems
-> fine.
+On Thu, 21 Nov 2013 16:16:11 +0100, Arnaud R?billout wrote:
+> LFTP is a sophisticated ftp/http client, and a file transfer program
+> supporting a number of network protocols. Like BASH, it has job
+> control and uses the readline library for input. It has bookmarks,
+> a built-in mirror command, and can transfer several files in parallel.
+> It was designed with reliability in mind.
 > 
-> The objdump showing that udivsi3 no longer has CLZ instructions.
-> 
-> arm-buildroot-linux-uclibcgnueabi-objdump -d u-boot | grep
-> "20126c1c:" -A 10 20126c1c:??? e2512001 ??? subs??? r2, r1, #1
-> 20126c20:??? 012fff1e ??? bxeq??? lr
-> 20126c24:??? 3a000036 ??? bcc??? 20126d04 <__udivsi3+0xe8>
-> 20126c28:??? e1500001 ??? cmp??? r0, r1
-> 20126c2c:??? 9a000022 ??? bls??? 20126cbc <__udivsi3+0xa0>
-> 20126c30:??? e1110002 ??? tst??? r1, r2
-> 20126c34:??? 0a000023 ??? beq??? 20126cc8 <__udivsi3+0xac>
-> 20126c38:??? e311020e ??? tst??? r1, #-536870912??? ; 0xe0000000
-> 20126c3c:??? 01a01181 ??? lsleq??? r1, r1, #3
-> 20126c40:??? 03a03008 ??? moveq??? r3, #8
-> 20126c44:??? 13a03001 ??? movne??? r3, #1
+> Signed-off-by: Arnaud R?billout <rebillout@syscom.ch>
 
-Ok, so that's with a Buildroot internal toolchain. Can you also try to
-build the kernel with this toolchain to see if it's affected or not by
-the below problem?
+Thanks, looks pretty good! A few comments below.
 
-> Selecting Sourcery CodeBench 2013.05 external toolchain had the
-> buildroot make attempt end with:
-> 
-> ? LD????? vmlinux
-> ? SYSMAP? System.map
-> ? SYSMAP? .tmp_System.map
-> ? OBJCOPY arch/arm/boot/Image
-> ? Kernel: arch/arm/boot/Image is ready
-> ? AS????? arch/arm/boot/compressed/head.o
-> arch/arm/boot/compressed/head.S: Assembler messages:
-> arch/arm/boot/compressed/head.S:936: Error: selected processor does
-> not support ARM mode `clz r5,r4'
 
-Ok. I think this is a kernel bug actually. The head.S file is special
-in that it contains instructions for ARMv5+, which an ARMv4t assembler
-will not accept. But it should, because the code guarantees that the
-ARMv5+ instructions will not be executed on ARMv4.
+> +config BR2_PACKAGE_LFTP_CMD_TORRENT
+> +	bool "Torrent command"
+> +	help
+> +	  Enable torren command
 
-In order to ask the assembler to accept these instructions, the
-following commit was made back in 2008:
+Typo.
 
-  http://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git/commit/arch/arm/boot/compressed/Makefile?id=80cec14a83ad0ad109d822b3f3482a379bc481ba
+> +
+> +comment "Protocols"
+> +
+> +config BR2_PACKAGE_LFTP_PROTO_FISH
+> +	bool "FISH protocol"
+> +	default y
+> +	help
+> +	  Enable FILE protocol
 
-However, it was reverted recently:
+FILE ? or FISH ?
 
-  http://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git/commit/arch/arm/boot/compressed/Makefile?id=da94a829305f1c217cfdf6771cb1faca0917e3b9
+> +
+> +config BR2_PACKAGE_LFTP_PROTO_FTP
+> +	bool "FTP protocol"
+> +	default y
+> +	help
+> +	  Enable FTP protocol
+> +
+> +config BR2_PACKAGE_LFTP_PROTO_HTTP
+> +	bool "HTTP protocol"
+> +	default y
+> +	help
+> +	  Enable HTTP protocol
+> +
+> +config BR2_PACKAGE_LFTP_PROTO_SFTP
+> +	bool "SFTP protocol"
+> +	default y
+> +	help
+> +	  Enable SFTP protocol
 
-I am not sure how this last commit doesn't break your situation.
+Is the dependency on OpenSSL or GnuTLS always needed? Or is it only
+needed if you enable SFTP or some specific protocol?
 
-It would be interesting if you could confirm whether the kernel builds
-or not with the Buildroot internal toolchain.
+> diff --git a/package/lftp/lftp-disable-posix_fallocate.patch b/package/lftp/lftp-disable-posix_fallocate.patch
+> new file mode 100644
+> index 0000000..29bb780
+> --- /dev/null
+> +++ b/package/lftp/lftp-disable-posix_fallocate.patch
+> @@ -0,0 +1,21 @@
+> +diff -pruN lftp-4.4.10.orig/configure lftp-4.4.10/configure
+> +--- lftp-4.4.10.orig/configure	2013-10-31 15:40:04.716111900 +0100
+> ++++ lftp-4.4.10/configure	2013-10-31 15:41:37.431445424 +0100
 
-> And using it for u-boot gave me:
-> 
-> arm-none-linux-gnueabi-objdump -d u-boot | grep "20126bc0:" -A 10
-> 20126bc0:??? e2512001 ??? subs??? r2, r1, #1
-> 20126bc4:??? 012fff1e ??? bxeq??? lr
-> 20126bc8:??? 3a000074 ??? bcc??? 20126da0 <__udivsi3+0x1e0>
-> 20126bcc:??? e1500001 ??? cmp??? r0, r1
-> 20126bd0:??? 9a00006b ??? bls??? 20126d84 <__udivsi3+0x1c4>
-> 20126bd4:??? e1110002 ??? tst??? r1, r2
-> 20126bd8:??? 0a00006c ??? beq??? 20126d90 <__udivsi3+0x1d0>
-> 20126bdc:??? e16f3f10 ??? clz??? r3, r0
-> 20126be0:??? e16f2f11 ??? clz??? r2, r1
+All patches need a description + Signed-off-by.
 
-So in other words, you mean that this wouldn't work on the target
-platform. Hum, weird. Is this a part of U-Boot implemented in assembly,
-or something compiled from C ?
+Moreover, we typically don't patch the configure script, but the source
+of it, i.e configure.in or configure.ac, and we mark the package as
+<pkg>_AUTORECONF = YES.
 
-Can you give me the relevant informations to allow me to build the
-kernel image and U-Boot image myself? Kernel version and configuration
-file, U-Boot version and configuration, etc.
+> +@@ -48870,10 +48870,13 @@ if ${i_cv_posix_fallocate_works+:} false
+> + else
+> + 
+> +      if test "$cross_compiling" = yes; then :
+> +-  { { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
+> +-$as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
+> +-as_fn_error $? "cannot run test program while cross compiling
+> +-See \`config.log' for more details" "$LINENO" 5; }
+> ++#  { { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
+> ++#$as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
+> ++#as_fn_error $? "cannot run test program while cross compiling
+> ++#See \`config.log' for more details" "$LINENO" 5; }
+> ++
+> ++# Can't test, assume it doesn't work
+> ++i_cv_posix_fallocate_works=no
+> + else
+> +   cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+> + /* end confdefs.h.  */
 
-Thanks!
+Can you detail the posix_fallocate() problem you've seen? Maybe we can
+solve it in a different/nicer way.
+
+> diff --git a/package/lftp/lftp.mk b/package/lftp/lftp.mk
+> new file mode 100644
+> index 0000000..1ee8e89
+> --- /dev/null
+> +++ b/package/lftp/lftp.mk
+> @@ -0,0 +1,87 @@
+> +################################################################################
+> +#
+> +# lftp
+> +#
+> +################################################################################
+> +
+> +LFTP_VERSION = 4.4.10
+> +LFTP_SOURCE  = lftp-$(LFTP_VERSION).tar.gz
+
+This last line is not needed, as it is the default.
+
+> +LFTP_SITE    = http://lftp.yar.ru/ftp
+> +LFTP_LICENSE = GPLv3+
+> +LFTP_LICENSE_FILES = COPYING
+> +LFTP_DEPENDENCIES  = readline zlib
+> +
+> +LFTP_CONF_OPT += --with-modules
+> +
+> +ifeq ($(BR2_PACKAGE_GNUTLS),y)
+> +LFTP_DEPENDENCIES += gnutls
+> +LFTP_CONF_OPT += --with-gnutls
+> +else
+> +LFTP_CONF_OPT += --without-gnutls
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_OPENSSL),y)
+> +LFTP_DEPENDENCIES += openssl
+> +LFTP_CONF_OPT += --with-openssl
+> +else
+> +LFTP_CONF_OPT += --without-openssl
+> +endif
+> +
+> +# Remove /usr/share/lftp
+> +define LFTP_REMOVE_DATA
+> +        $(RM) -fr $(TARGET_DIR)/usr/share/lftp
+> +endef
+> +LFTP_POST_INSTALL_TARGET_HOOKS += LFTP_REMOVE_DATA
+> +
+> +# Optional commands
+> +ifneq ($(BR2_PACKAGE_LFTP_CMD_MIRROR),y)
+> +define LFTP_REMOVE_CMD_MIRROR
+> +	$(RM) -f $(TARGET_DIR)/usr/lib/lftp/$(LFTP_VERSION)/cmd-mirror.so
+> +endef
+> +LFTP_POST_INSTALL_TARGET_HOOKS += LFTP_REMOVE_CMD_MIRROR
+> +endif
+> +
+> +ifneq ($(BR2_PACKAGE_LFTP_CMD_SLEEP),y)
+> +define LFTP_REMOVE_CMD_SLEEP
+> +	$(RM) -f $(TARGET_DIR)/usr/lib/lftp/$(LFTP_VERSION)/cmd-sleep.so
+> +endef
+> +LFTP_POST_INSTALL_TARGET_HOOKS += LFTP_REMOVE_CMD_SLEEP
+> +endif
+> +
+> +ifneq ($(BR2_PACKAGE_LFTP_CMD_TORRENT),y)
+> +define LFTP_REMOVE_CMD_TORRENT
+> +	$(RM) -f $(TARGET_DIR)/usr/lib/lftp/$(LFTP_VERSION)/cmd-torrent.so
+> +endef
+> +LFTP_POST_INSTALL_TARGET_HOOKS += LFTP_REMOVE_CMD_TORRENT
+> +endif
+> +
+> +# Optional protocols
+> +ifneq ($(BR2_PACKAGE_LFTP_PROTO_FISH),y)
+> +define LFTP_REMOVE_PROTO_FISH
+> +	$(RM) -f $(TARGET_DIR)/usr/lib/lftp/$(LFTP_VERSION)/proto-fish.so
+> +endef
+> +LFTP_POST_INSTALL_TARGET_HOOKS += LFTP_REMOVE_PROTO_FISH
+> +endif
+> +
+> +ifneq ($(BR2_PACKAGE_LFTP_PROTO_FTP),y)
+> +define LFTP_REMOVE_PROTO_FTP
+> +	$(RM) -f $(TARGET_DIR)/usr/lib/lftp/$(LFTP_VERSION)/proto-ftp.so
+> +endef
+> +LFTP_POST_INSTALL_TARGET_HOOKS += LFTP_REMOVE_PROTO_FTP
+> +endif
+> +
+> +ifneq ($(BR2_PACKAGE_LFTP_PROTO_HTTP),y)
+> +define LFTP_REMOVE_PROTO_HTTP
+> +	$(RM) -f $(TARGET_DIR)/usr/lib/lftp/$(LFTP_VERSION)/proto-http.so
+> +endef
+> +LFTP_POST_INSTALL_TARGET_HOOKS += LFTP_REMOVE_PROTO_HTTP
+> +endif
+> +
+> +ifneq ($(BR2_PACKAGE_LFTP_PROTO_SFTP),y)
+> +define LFTP_REMOVE_PROTO_SFTP
+> +	$(RM) -f $(TARGET_DIR)/usr/lib/lftp/$(LFTP_VERSION)/proto-sftp.so
+> +endef
+> +LFTP_POST_INSTALL_TARGET_HOOKS += LFTP_REMOVE_PROTO_SFTP
+> +endif
+
+I think this can be factorized in a nicer way:
+
+LFTP_FILES_TO_REMOVE-$(BR2_PACKAGE_LFTP_CMD_MIRROR) += cmd-mirror
+LFTP_FILES_TO_REMOVE-$(BR2_PACKAGE_LFTP_CMD_SLEEP) += cmd-sleep
+LFTP_FILES_TO_REMOVE-$(BR2_PACKAGE_LFTP_CMD_TORRENT) += cmd-torrent
+LFTP_FILES_TO_REMOVE-$(BR2_PACKAGE_LFTP_PROTO_FISH) += proto-fish
+LFTP_FILES_TO_REMOVE-$(BR2_PACKAGE_LFTP_PROTO_FTP) += proto-ftp
+LFTP_FILES_TO_REMOVE-$(BR2_PACKAGE_LFTP_PROTO_HTTP) += proto-http
+LFTP_FILES_TO_REMOVE-$(BR2_PACKAGE_LFTP_PROTO_SFTP) += proto-sftp
+
+define LFTP_REMOVE_FILES
+	for f in $(LFTP_FILES_TO_REMOVE-y) ; do \
+		$(RM) -f $(TARGET_DIR)/usr/lib/lftp/$(LFTP_VERSION)/$$f ; \
+	done
+endef
+
+LFTP_POST_INSTALL_TARGET_HOOKS += LFTP_REMOVE_FILES
+
+or in a slightly more make-style way (but maybe not so readable) :
+
+define LFTP_REMOVE_FILES
+	$(if $(LFTP_FILES_TO_REMOVE-y), \
+		$(RM) -f $(addprefix $(TARGET_DIR)/usr/lib/lftp/$(LFTP_VERSION)/,$(LFTP_FILES_TO_REMOVE-y)))
+endef
+
+LFTP_POST_INSTALL_TARGET_HOOKS += LFTP_REMOVE_FILES
+
+Best regards,
 
 Thomas
 -- 
