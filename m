@@ -1,82 +1,44 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 22 Nov 2013 23:50:58 +0100
-Subject: [Buildroot] [PATCH 5/5] board/raspberrypi: provide partition
-	description for the new genimanges
-In-Reply-To: <cover.1385157864.git.yann.morin.1998@free.fr>
+Date: Fri, 22 Nov 2013 23:55:03 +0100
+Subject: [Buildroot] [PATCH 3/5] package/rpi-firmware: move to
+	bootloaders menu
+In-Reply-To: <869fff522738fdd927541a3e3a303f97143f8469.1385157864.git.yann.morin.1998@free.fr>
 References: <cover.1385157864.git.yann.morin.1998@free.fr>
-Message-ID: <932a7029e1685747fff04ec40650ffc69b76f53e.1385157864.git.yann.morin.1998@free.fr>
+ <869fff522738fdd927541a3e3a303f97143f8469.1385157864.git.yann.morin.1998@free.fr>
+Message-ID: <20131122225503.GC3371@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+On 2013-11-22 23:50 +0100, Yann E. MORIN spake thusly:
+> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+[--SNIP--]
+> Hence, move rpi-firmware from the target packages submenu, into the
+> bootloaders submenu.
+[--SNIP--]
+> diff --git a/package/rpi-firmware/Config.in b/boot/rpi-firmware/Config.in
+> similarity index 71%
+> rename from package/rpi-firmware/Config.in
+> rename to boot/rpi-firmware/Config.in
+> index ce5b974..fea292b 100644
+> --- a/package/rpi-firmware/Config.in
+> +++ b/boot/rpi-firmware/Config.in
+> @@ -1,4 +1,4 @@
+> -config BR2_PACKAGE_RPI_FIRMWARE
+> +config BR2_TARGET_RPI_FIRMWARE
 
-Now we can generate a complete target storage image with the genimages
-infra, add a partition table layout description for the Raspberry Pi
-as an example for how to use genimages.
+Doh, I forgot to add this to LEGACY... :-(
+I will do before the next round.
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
----
- board/raspberrypi/partitions  | 31 +++++++++++++++++++++++++++++++
- configs/raspberrypi_defconfig |  9 +++++++++
- 2 files changed, 40 insertions(+)
- create mode 100644 board/raspberrypi/partitions
+Regards,
+Yann E. MORIN.
 
-diff --git a/board/raspberrypi/partitions b/board/raspberrypi/partitions
-new file mode 100644
-index 0000000..e9084dd
---- /dev/null
-+++ b/board/raspberrypi/partitions
-@@ -0,0 +1,31 @@
-+[global]
-+extract=tar
-+devices=mmcblk0
-+
-+[mmcblk0]
-+type=boot
-+boot_type=mbr
-+mbr_bootcode=
-+partitions=boot,root
-+partalign=$((1048576))
-+
-+[root]
-+type=fs
-+size=$((128*1048576))
-+mbr_type=$((0x83))
-+fs_type=ext
-+fs_vfstype=ext4
-+fs_mntops=discard
-+fs_root=/
-+fs_label=ROOT
-+ext_gen=4
-+ext_rev=1
-+
-+[boot]
-+type=fs
-+size=$((9*1048576))
-+mbr_type=$((0xc))
-+fs_type=vfat
-+fs_root=/boot
-+fs_label=BOOT
-+vfat_size=16
-diff --git a/configs/raspberrypi_defconfig b/configs/raspberrypi_defconfig
-index db34717..118f9df 100644
---- a/configs/raspberrypi_defconfig
-+++ b/configs/raspberrypi_defconfig
-@@ -21,3 +21,12 @@ BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="1587f77"
- BR2_LINUX_KERNEL_USE_DEFCONFIG=y
- BR2_LINUX_KERNEL_DEFCONFIG="bcmrpi_quick"
- BR2_LINUX_KERNEL_ZIMAGE=y
-+BR2_LINUX_KERNEL_INSTALL_TARGET=y
-+
-+BR2_TARGET_ROOTFS_CUSTOM_PARTITION_TABLE="$(TOPDIR)/board/raspberrypi/partitions"
-+
-+BR2_PACKAGE_HOST_DOSFSTOOLS=y
-+BR2_PACKAGE_HOST_E2FSPROGS=y
-+BR2_PACKAGE_HOST_GENEXT2FS=y
-+BR2_PACKAGE_HOST_GENPART=y
-+BR2_PACKAGE_HOST_MTOOLS=y
 -- 
-1.8.1.2
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
