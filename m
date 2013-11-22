@@ -1,36 +1,32 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 22 Nov 2013 23:58:10 +0100
-Subject: [Buildroot] [PATCH 4/5] fs/custom: generate complete,
- partition-based device images
-In-Reply-To: <ddf2a31498f7f8e1ec0d40d73849bc254ec00b6d.1385157864.git.yann.morin.1998@free.fr>
-References: <cover.1385157864.git.yann.morin.1998@free.fr>
- <ddf2a31498f7f8e1ec0d40d73849bc254ec00b6d.1385157864.git.yann.morin.1998@free.fr>
-Message-ID: <20131122225810.GD3371@free.fr>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 22 Nov 2013 23:44:57 +0100
+Subject: [Buildroot] [git commit branch/next] bison: bump to version 3.0.1
+Message-ID: <20131122230539.4A4498A557@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-All,
+commit: http://git.buildroot.net/buildroot/commit/?id=0366aabc7f74398ee833e5145e6542e4847f86fe
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On 2013-11-22 23:50 +0100, Yann E. MORIN spake thusly:
-> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Contrary to the existing fs/ schemes, which each generate only a single
-> filesystem image for the root filesystem, this new scheme allows the
-> user to generate more complex images.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/bison/bison.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-I've put up a pre-prendered version of the manual on-line to make it
-easier to review:
-    http://ymorin.is-a-geek.org/download/tmp/buildroot/manual/manual.html
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/bison/bison.mk b/package/bison/bison.mk
+index 1bead39..c1de5dd 100644
+--- a/package/bison/bison.mk
++++ b/package/bison/bison.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-BISON_VERSION = 3.0
++BISON_VERSION = 3.0.1
+ BISON_SOURCE = bison-$(BISON_VERSION).tar.xz
+ BISON_SITE = $(BR2_GNU_MIRROR)/bison
+ BISON_LICENSE = GPLv3+
