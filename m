@@ -1,37 +1,57 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 22 Nov 2013 22:44:54 +0100
-Subject: [Buildroot] [git commit] openssl: only build threads configuration
-	if toolchain has pthread support
-Message-ID: <20131122215507.04AFD9BD97@busybox.osuosl.org>
+From: Sven Neumann <neumann@teufel.de>
+Date: Fri, 22 Nov 2013 22:58:15 +0100
+Subject: [Buildroot] [PATCH v2 1/2] pcre: add options to enable UTF and UCP
+	support
+Message-ID: <1385157495.14731.30.camel@bender>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=43becdba4c021b419914a859bcff463350aac426
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Gets rid of a large number of warnings (and suboptimal code?):
+Allow to compile PCRE with UTF-8/16/32 support and with
+support for Unicode properties.
 
-..sysroot/usr/include/features.h:209:5: warning: #warning requested
-reentrant code, but thread support was disabled [-Wcpp]
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Sven Neumann <neumann@teufel.de>
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/openssl/openssl.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/pcre/Config.in | 12 ++++++++++++
+ package/pcre/pcre.mk   |  2 ++
+ 2 files changed, 14 insertions(+)
 
-diff --git a/package/openssl/openssl.mk b/package/openssl/openssl.mk
-index 4b8b0a4..5416141 100644
---- a/package/openssl/openssl.mk
-+++ b/package/openssl/openssl.mk
-@@ -73,7 +73,7 @@ define OPENSSL_CONFIGURE_CMDS
- 			--prefix=/usr \
- 			--openssldir=/etc/ssl \
- 			--libdir=/lib \
--			threads \
-+			$(if $(BR2_TOOLCHAIN_HAS_THREADS),threads,no-threads) \
- 			$(if $(BR2_PREFER_STATIC_LIB),no-shared,shared) \
- 			no-idea \
- 			no-rc5 \
+diff --git a/package/pcre/Config.in b/package/pcre/Config.in
+index dc92274..725cc21 100644
+--- a/package/pcre/Config.in
++++ b/package/pcre/Config.in
+@@ -19,4 +19,16 @@ config BR2_PACKAGE_PCRE_32
+ 	help
+ 	  This option builds the 32-bits pcre library, i.e 'libpcre32'
+ 
++config BR2_PACKAGE_PCRE_UTF
++	bool "UTF-8/16/32 support in pcre"
++	help
++	  This option builds the pcre library with UTF-8/16/32 support
++
++config BR2_PACKAGE_PCRE_UCP
++	bool "Unicode properties support in pcre"
++        select BR2_PACKAGE_PCRE_UTF
++	help
++	  This option builds the pcre library with Unicode properties
++	  support (implies UTF-8/16/32 support)'
++
+ endif
+diff --git a/package/pcre/pcre.mk b/package/pcre/pcre.mk
+index bf86a3d..2637354 100644
+--- a/package/pcre/pcre.mk
++++ b/package/pcre/pcre.mk
+@@ -19,5 +19,7 @@ endif
+ PCRE_CONF_OPT += --enable-pcre8
+ PCRE_CONF_OPT += $(if $(BR2_PACKAGE_PCRE_16),--enable-pcre16,--disable-pcre16)
+ PCRE_CONF_OPT += $(if $(BR2_PACKAGE_PCRE_32),--enable-pcre32,--disable-pcre32)
++PCRE_CONF_OPT += $(if $(BR2_PACKAGE_PCRE_UTF),--enable-utf,--disable-utf)
++PCRE_CONF_OPT += $(if $(BR2_PACKAGE_PCRE_UCP),--enable-unicode-properties,--disable-unicode-properties)
+ 
+ $(eval $(autotools-package))
+-- 
+1.8.4.2
