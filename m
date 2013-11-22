@@ -1,22 +1,32 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 22 Nov 2013 15:57:04 +0100
-Subject: [Buildroot] [PATCH 1/3] linux-headers: bump 3. {4, 10, 11,
-	12}.x stable versions
-In-Reply-To: <1385065030-7961-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Thu, 21 Nov 2013 17:17:08 -0300")
-References: <1385065030-7961-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87bo1cpjr3.fsf@dell.be.48ers.dk>
+Date: Fri, 22 Nov 2013 15:58:34 +0100
+Subject: [Buildroot] [PATCH v3] tinymembench: package not supported on
+	MIPS64
+In-Reply-To: <1385117836-26855-1-git-send-email-Vincent.Riera@imgtec.com>
+ (Vicente Olivert Riera's message of "Fri, 22 Nov 2013 10:57:16 +0000")
+References: <1385117836-26855-1-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <877gc0pjol.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+>>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
 
- > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+ > Fixes:
+ >    http://autobuild.buildroot.net/results/bab/bab68bcf8714f215ac0b0c2546fa06608377fbb0/
 
-Committed series, thanks.
+ > This package is only supported on MIPS32 platforms. The mips-32.S
+ > file included in the source code of this package only makes sense to
+ > be compiled for MIPS32, and also contains hardcoded MIPS32
+ > instructions which are illegal on MIPS64.  Trying to compile this
+ > package on a MIPS64 platform will end with a linkage failure due to
+ > undefined references.
+
+ > Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
