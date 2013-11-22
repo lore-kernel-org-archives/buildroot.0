@@ -1,44 +1,22 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 22 Nov 2013 23:55:03 +0100
-Subject: [Buildroot] [PATCH 3/5] package/rpi-firmware: move to
-	bootloaders menu
-In-Reply-To: <869fff522738fdd927541a3e3a303f97143f8469.1385157864.git.yann.morin.1998@free.fr>
-References: <cover.1385157864.git.yann.morin.1998@free.fr>
- <869fff522738fdd927541a3e3a303f97143f8469.1385157864.git.yann.morin.1998@free.fr>
-Message-ID: <20131122225503.GC3371@free.fr>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 22 Nov 2013 23:55:25 +0100
+Subject: [Buildroot] [PATCH 1/3] automake: bump to version 1.14
+In-Reply-To: <1385138401-26445-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Fri, 22 Nov 2013 13:39:59 -0300")
+References: <1385138401-26445-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <871u28nj1e.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2013-11-22 23:50 +0100, Yann E. MORIN spake thusly:
-> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-[--SNIP--]
-> Hence, move rpi-firmware from the target packages submenu, into the
-> bootloaders submenu.
-[--SNIP--]
-> diff --git a/package/rpi-firmware/Config.in b/boot/rpi-firmware/Config.in
-> similarity index 71%
-> rename from package/rpi-firmware/Config.in
-> rename to boot/rpi-firmware/Config.in
-> index ce5b974..fea292b 100644
-> --- a/package/rpi-firmware/Config.in
-> +++ b/boot/rpi-firmware/Config.in
-> @@ -1,4 +1,4 @@
-> -config BR2_PACKAGE_RPI_FIRMWARE
-> +config BR2_TARGET_RPI_FIRMWARE
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-Doh, I forgot to add this to LEGACY... :-(
-I will do before the next round.
+ > Needed for the bison 3.0.1 bump.
+ > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
-Regards,
-Yann E. MORIN.
+Committed to next, thanks.
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Bye, Peter Korsgaard
