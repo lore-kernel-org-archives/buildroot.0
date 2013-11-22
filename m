@@ -1,35 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 22 Nov 2013 10:05:15 +0100
-Subject: [Buildroot] [PATCH] libcap-ng: disable on avr32 which lacks TLS
-In-Reply-To: <1385107694-2132-1-git-send-email-s.martin49@gmail.com>
-References: <1385107694-2132-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <20131122100515.3743af6c@skate>
+Date: Fri, 22 Nov 2013 10:06:56 +0100
+Subject: [Buildroot] New version of PowerVR TI drivers
+Message-ID: <20131122100656.02700755@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Samuel Martin,
+Hello,
 
-On Fri, 22 Nov 2013 09:08:14 +0100, Samuel Martin wrote:
-> libcap-ng needs TLS support, which is not available on avr32.
-> Also, disable reverse dependencies.
-> 
-> Fixes:
->   http://autobuild.buildroot.net/results/73c/73c7c211a51c312bbe4eb6a540f3ad9c92c79ebe/
-> 
-> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-> ---
->  package/libcap-ng/Config.in | 1 +
->  package/ofono/Config.in     | 1 +
->  2 files changed, 2 insertions(+)
+A new version of the PowerVR TI drivers has been released:
+http://tigraphics.blogspot.fr/2013/11/4q-2013-linux-graphics-sdk-release.html.
 
-See the discussion at http://patchwork.ozlabs.org/patch/288051/.
+"""
+New/Changes in this release
+NEW  - AM43x support 
+NEW - 3.12 kernel support. Please see release notes for the details on the kernel used for validation.
+NEW - Integration with reset driver framework on both AM335x & AM43x.
+NEW - PM_RUNTIME support enabled by default. (No need to pass this explicitly in build command line)
+NEW ? This is an alpha release package. Validated on AM335x PG2.0 GP-EVM & AM43x EVMs.
+"""
 
-However, this patch is better in that it takes into account reverse
-dependencies. But it still isn't perfect because it isn't updating
-ofono comment so that it doesn't get shown on AVR32.
+It would be good if someone having access to
+BeagleBoard/BeagleBoardXM/PandaBoard could have a look into this. It's
+still unclear to me whether the BeagleBoneBlack will work with this or
+not (I see the drivers have support for AM335x, but is that sufficient
+I don't know).
 
 Thomas
 -- 
