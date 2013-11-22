@@ -1,65 +1,59 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 22 Nov 2013 23:25:36 +0100
-Subject: [Buildroot] [git commit branch/next] fping: new package
-Message-ID: <20131122223850.210919BD9B@busybox.osuosl.org>
+Date: Fri, 22 Nov 2013 23:32:11 +0100
+Subject: [Buildroot] [git commit branch/next] pcre: add options to enable
+	UTF and UCP support
+Message-ID: <20131122223850.2FD219B6E8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=9c2b3e50811ff8f75cb1497b10456a8e6b7ae1f4
+commit: http://git.buildroot.net/buildroot/commit/?id=49fef2fc44358df6cd5cc1c8416222ff26f00af2
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Allow to compile PCRE with UTF-8/16/32 support and with
+support for Unicode properties.
+
+[Peter: whitespace fix]
+Signed-off-by: Sven Neumann <neumann@teufel.de>
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/Config.in       |    1 +
- package/fping/Config.in |    8 ++++++++
- package/fping/fping.mk  |   12 ++++++++++++
- 3 files changed, 21 insertions(+), 0 deletions(-)
+ package/pcre/Config.in |   12 ++++++++++++
+ package/pcre/pcre.mk   |    2 ++
+ 2 files changed, 14 insertions(+), 0 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 1a95b10..f9bd88c 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -792,6 +792,7 @@ source "package/dropbear/Config.in"
- source "package/ebtables/Config.in"
- source "package/ethtool/Config.in"
- source "package/foomatic-filters/Config.in"
-+source "package/fping/Config.in"
- source "package/gesftpserver/Config.in"
- source "package/gutenprint/Config.in"
- source "package/heirloom-mailx/Config.in"
-diff --git a/package/fping/Config.in b/package/fping/Config.in
-new file mode 100644
-index 0000000..686102a
---- /dev/null
-+++ b/package/fping/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_FPING
-+	bool "fping"
+diff --git a/package/pcre/Config.in b/package/pcre/Config.in
+index dc92274..9d3a143 100644
+--- a/package/pcre/Config.in
++++ b/package/pcre/Config.in
+@@ -19,4 +19,16 @@ config BR2_PACKAGE_PCRE_32
+ 	help
+ 	  This option builds the 32-bits pcre library, i.e 'libpcre32'
+ 
++config BR2_PACKAGE_PCRE_UTF
++	bool "UTF-8/16/32 support in pcre"
 +	help
-+	  fping is a program to send ICMP echo probes to network hosts,
-+	  similar to ping, but much better performing when pinging
-+	  multiple hosts.
++	  This option builds the pcre library with UTF-8/16/32 support
 +
-+	  http://fping.org/
-diff --git a/package/fping/fping.mk b/package/fping/fping.mk
-new file mode 100644
-index 0000000..580920e
---- /dev/null
-+++ b/package/fping/fping.mk
-@@ -0,0 +1,12 @@
-+################################################################################
-+#
-+# fping
-+#
-+################################################################################
++config BR2_PACKAGE_PCRE_UCP
++	bool "Unicode properties support in pcre"
++	select BR2_PACKAGE_PCRE_UTF
++	help
++	  This option builds the pcre library with Unicode properties
++	  support (implies UTF-8/16/32 support)'
 +
-+FPING_VERSION = 3.8
-+FPING_SITE = http://fping.org/dist
-+FPING_LICENSE = BSD-like
-+FPING_LICENSE_FILES = COPYING
-+
-+$(eval $(autotools-package))
+ endif
+diff --git a/package/pcre/pcre.mk b/package/pcre/pcre.mk
+index bf86a3d..2637354 100644
+--- a/package/pcre/pcre.mk
++++ b/package/pcre/pcre.mk
+@@ -19,5 +19,7 @@ endif
+ PCRE_CONF_OPT += --enable-pcre8
+ PCRE_CONF_OPT += $(if $(BR2_PACKAGE_PCRE_16),--enable-pcre16,--disable-pcre16)
+ PCRE_CONF_OPT += $(if $(BR2_PACKAGE_PCRE_32),--enable-pcre32,--disable-pcre32)
++PCRE_CONF_OPT += $(if $(BR2_PACKAGE_PCRE_UTF),--enable-utf,--disable-utf)
++PCRE_CONF_OPT += $(if $(BR2_PACKAGE_PCRE_UCP),--enable-unicode-properties,--disable-unicode-properties)
+ 
+ $(eval $(autotools-package))
