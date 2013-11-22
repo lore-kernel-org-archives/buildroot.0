@@ -1,33 +1,38 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Fri, 22 Nov 2013 11:42:43 +0100
-Subject: [Buildroot] Analysis of build failures
-In-Reply-To: <20131122091411.59d82eb5@skate>
-References: <20131122073003.1B835101305@stock.ovh.net>
- <20131122091411.59d82eb5@skate>
-Message-ID: <CAAXf6LVb6KPe3xPG-Oia6O8NtJ64uD7oNrP4VXS3SM7cpkWe5Q@mail.gmail.com>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Fri, 22 Nov 2013 10:57:16 +0000
+Subject: [Buildroot] [PATCH v3] tinymembench: package not supported on MIPS64
+Message-ID: <1385117836-26855-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Fixes:
 
-Thanks for the analysis!
+   http://autobuild.buildroot.net/results/bab/bab68bcf8714f215ac0b0c2546fa06608377fbb0/
 
-On Fri, Nov 22, 2013 at 9:14 AM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-[..]
->>   mips64el |                      rpm-5.2.0 | NOK | http://autobuild.buildroot.net/results/bcff4b81bfbb1191f97317b0945c74d948c9774b/
->
-> checking whether to build with BeeCrypt library... no
-> configure: error: mandatory BeeCrypt library not found
-> make: *** [/home/test/test/3/output/build/rpm-5.2.0/.stamp_configured] Error 1
->
-> rpm has a dependency on beecrypt, so normally it should have been built
-> before. Seems like rpm isn't "seeing" that beecrypt is around :-)
+This package is only supported on MIPS32 platforms. The mips-32.S file included
+in the source code of this package only makes sense to be compiled for MIPS32,
+and also contains hardcoded MIPS32 instructions which are illegal on MIPS64.
+Trying to compile this package on a MIPS64 platform will end with a linkage
+failure due to undefined references.
 
-I will look into this...
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+ package/tinymembench/Config.in |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-Best regards,
-Thomas
+diff --git a/package/tinymembench/Config.in b/package/tinymembench/Config.in
+index 0d45532..0555b19 100644
+--- a/package/tinymembench/Config.in
++++ b/package/tinymembench/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_TINYMEMBENCH
+ 	bool "tinymembench"
++	depends on !BR2_mips64 && !BR2_mips64el
+ 	help
+ 	  Tinymembench is a simple memory benchmark program, which
+ 	  tries to measure the peak bandwidth of sequential memory
+-- 
+1.7.1
