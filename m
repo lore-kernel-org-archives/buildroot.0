@@ -1,284 +1,74 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 22 Nov 2013 12:03:19 +0100
-Subject: [Buildroot] [git commit] configs/qemu: bump relevant config versions
-Message-ID: <20131122145920.CAC559B7A3@busybox.osuosl.org>
+Date: Fri, 22 Nov 2013 12:19:57 +0100
+Subject: [Buildroot] [git commit] libroxml: fix avr32 build failure
+Message-ID: <20131122145921.105249BD8F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c3ab5bfafe02397c6415623f2c42412b540fb371
+commit: http://git.buildroot.net/buildroot/commit/?id=2b2c6579575bc87bf3e6f0d9a5ba1f50561fa101
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+The -Wno-unused-result option is not understood by the version of gcc used by the
+avr32 toolchain. Remove the option from the compilation flags.
+
+Fixes build failures such as the following.
+
+  http://autobuild.buildroot.net/results/e22/e22d94fca3eabb4e54d82af04319f17ad8e10c20/
+
+The single existing patch for libroxml has been renamed to include a numerical
+component for application order sorting. The existing patch has also been updated
+to apply without fuzz.
+
+Signed-off-by: Simon Dawson <spdawson@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- configs/qemu_arm_nuri_defconfig         |    4 ++--
- configs/qemu_arm_versatile_defconfig    |    4 ++--
- configs/qemu_arm_vexpress_defconfig     |    4 ++--
- configs/qemu_microblazebe_mmu_defconfig |    2 +-
- configs/qemu_microblazeel_mmu_defconfig |    2 +-
- configs/qemu_mips64_malta_defconfig     |    4 ++--
- configs/qemu_mips_malta_defconfig       |    4 ++--
- configs/qemu_mipsel_malta_defconfig     |    4 ++--
- configs/qemu_ppc_g3beige_defconfig      |    4 ++--
- configs/qemu_ppc_mpc8544ds_defconfig    |    4 ++--
- configs/qemu_ppc_virtex_ml507_defconfig |    4 ++--
- configs/qemu_sparc_ss10_defconfig       |    4 ++--
- configs/qemu_x86_64_defconfig           |    4 ++--
- configs/qemu_x86_defconfig              |    4 ++--
- 14 files changed, 26 insertions(+), 26 deletions(-)
+ ...xml-werror.patch => libroxml-0001-werror.patch} |    2 +-
+ .../libroxml/libroxml-0002-wno-unused-result.patch |   21 ++++++++++++++++++++
+ 2 files changed, 22 insertions(+), 1 deletions(-)
 
-diff --git a/configs/qemu_arm_nuri_defconfig b/configs/qemu_arm_nuri_defconfig
-index af3e79a..f6fc12e 100644
---- a/configs/qemu_arm_nuri_defconfig
-+++ b/configs/qemu_arm_nuri_defconfig
-@@ -15,11 +15,11 @@ BR2_TARGET_ROOTFS_INITRAMFS=y
- 
- # Lock to 3.10 headers to avoid breaking with newer kernels
- BR2_KERNEL_HEADERS_VERSION=y
--BR2_DEFAULT_KERNEL_VERSION="3.10.19"
-+BR2_DEFAULT_KERNEL_VERSION="3.10.20"
- 
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.10.19"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.10.20"
- BR2_LINUX_KERNEL_DEFCONFIG="exynos4"
- BR2_LINUX_KERNEL_ZIMAGE=y
-diff --git a/configs/qemu_arm_versatile_defconfig b/configs/qemu_arm_versatile_defconfig
-index 1c66696..c65b9c1 100644
---- a/configs/qemu_arm_versatile_defconfig
-+++ b/configs/qemu_arm_versatile_defconfig
-@@ -12,12 +12,12 @@ BR2_TARGET_ROOTFS_EXT2=y
- 
- # Lock to 3.11 headers to avoid breaking with newer kernels
- BR2_KERNEL_HEADERS_VERSION=y
--BR2_DEFAULT_KERNEL_VERSION="3.11.8"
-+BR2_DEFAULT_KERNEL_VERSION="3.11.9"
- 
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.11.8"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.11.9"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/arm-versatile/linux-3.11.config"
- BR2_LINUX_KERNEL_ZIMAGE=y
-diff --git a/configs/qemu_arm_vexpress_defconfig b/configs/qemu_arm_vexpress_defconfig
-index 324a811..6b393ef 100644
---- a/configs/qemu_arm_vexpress_defconfig
-+++ b/configs/qemu_arm_vexpress_defconfig
-@@ -15,11 +15,11 @@ BR2_TARGET_ROOTFS_EXT2=y
- 
- # Lock to 3.12 headers to avoid breaking with newer kernels
- BR2_KERNEL_HEADERS_VERSION=y
--BR2_DEFAULT_KERNEL_VERSION="3.12"
-+BR2_DEFAULT_KERNEL_VERSION="3.12.1"
- 
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.12"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.12.1"
- BR2_LINUX_KERNEL_DEFCONFIG="vexpress"
- BR2_LINUX_KERNEL_ZIMAGE=y
-diff --git a/configs/qemu_microblazebe_mmu_defconfig b/configs/qemu_microblazebe_mmu_defconfig
-index 0a621b1..ea75624 100644
---- a/configs/qemu_microblazebe_mmu_defconfig
-+++ b/configs/qemu_microblazebe_mmu_defconfig
-@@ -19,7 +19,7 @@ BR2_TARGET_ROOTFS_INITRAMFS=y
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.12"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.12.1"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/microblazebe-mmu/linux-3.12.config"
- BR2_LINUX_KERNEL_LINUX_BIN=y
-diff --git a/configs/qemu_microblazeel_mmu_defconfig b/configs/qemu_microblazeel_mmu_defconfig
-index 51d58c6..82c56c0 100644
---- a/configs/qemu_microblazeel_mmu_defconfig
-+++ b/configs/qemu_microblazeel_mmu_defconfig
-@@ -19,7 +19,7 @@ BR2_TARGET_ROOTFS_INITRAMFS=y
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.12"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.12.1"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/microblazeel-mmu/linux-3.12.config"
- BR2_LINUX_KERNEL_LINUX_BIN=y
-diff --git a/configs/qemu_mips64_malta_defconfig b/configs/qemu_mips64_malta_defconfig
-index c0904b5..e1295dd 100644
---- a/configs/qemu_mips64_malta_defconfig
-+++ b/configs/qemu_mips64_malta_defconfig
-@@ -12,12 +12,12 @@ BR2_TARGET_ROOTFS_EXT2=y
- 
- # Lock to 3.12 headers to avoid breaking with newer kernels
- BR2_KERNEL_HEADERS_VERSION=y
--BR2_DEFAULT_KERNEL_VERSION="3.12"
-+BR2_DEFAULT_KERNEL_VERSION="3.12.1"
- 
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.12"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.12.1"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mips64-malta/linux-3.12.config"
- BR2_LINUX_KERNEL_VMLINUX=y
-diff --git a/configs/qemu_mips_malta_defconfig b/configs/qemu_mips_malta_defconfig
-index 6e2c601..8a6ed26 100644
---- a/configs/qemu_mips_malta_defconfig
-+++ b/configs/qemu_mips_malta_defconfig
-@@ -8,12 +8,12 @@ BR2_TARGET_ROOTFS_EXT2=y
- 
- # Lock to 3.12 headers to avoid breaking with newer kernels
- BR2_KERNEL_HEADERS_VERSION=y
--BR2_DEFAULT_KERNEL_VERSION="3.12"
-+BR2_DEFAULT_KERNEL_VERSION="3.12.1"
- 
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.12"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.12.1"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mips-malta/linux-3.12.config"
- BR2_LINUX_KERNEL_VMLINUX=y
-diff --git a/configs/qemu_mipsel_malta_defconfig b/configs/qemu_mipsel_malta_defconfig
-index ff640a1..9a4164d 100644
---- a/configs/qemu_mipsel_malta_defconfig
-+++ b/configs/qemu_mipsel_malta_defconfig
-@@ -8,12 +8,12 @@ BR2_TARGET_ROOTFS_EXT2=y
- 
- # Lock to 3.12 headers to avoid breaking with newer kernels
- BR2_KERNEL_HEADERS_VERSION=y
--BR2_DEFAULT_KERNEL_VERSION="3.12"
-+BR2_DEFAULT_KERNEL_VERSION="3.12.1"
- 
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.12"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.12.1"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mipsel-malta/linux-3.12.config"
- BR2_LINUX_KERNEL_VMLINUX=y
-diff --git a/configs/qemu_ppc_g3beige_defconfig b/configs/qemu_ppc_g3beige_defconfig
-index bd0bc03..f284b9b 100644
---- a/configs/qemu_ppc_g3beige_defconfig
-+++ b/configs/qemu_ppc_g3beige_defconfig
-@@ -8,12 +8,12 @@ BR2_TARGET_ROOTFS_EXT2=y
- 
- # Lock to 3.12 headers to avoid breaking with newer kernels
- BR2_KERNEL_HEADERS_VERSION=y
--BR2_DEFAULT_KERNEL_VERSION="3.12"
-+BR2_DEFAULT_KERNEL_VERSION="3.12.1"
- 
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.12"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.12.1"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/powerpc-g3beige/linux-3.12.config"
- BR2_LINUX_KERNEL_VMLINUX=y
-diff --git a/configs/qemu_ppc_mpc8544ds_defconfig b/configs/qemu_ppc_mpc8544ds_defconfig
-index 687b537..bf94c9f 100644
---- a/configs/qemu_ppc_mpc8544ds_defconfig
-+++ b/configs/qemu_ppc_mpc8544ds_defconfig
-@@ -8,12 +8,12 @@ BR2_TARGET_ROOTFS_INITRAMFS=y
- 
- # Lock to 3.12 headers to avoid breaking with newer kernels
- BR2_KERNEL_HEADERS_VERSION=y
--BR2_DEFAULT_KERNEL_VERSION="3.12"
-+BR2_DEFAULT_KERNEL_VERSION="3.12.1"
- 
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.12"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.12.1"
- BR2_LINUX_KERNEL_DEFCONFIG="mpc85xx"
- BR2_LINUX_KERNEL_VMLINUX=y
- 
-diff --git a/configs/qemu_ppc_virtex_ml507_defconfig b/configs/qemu_ppc_virtex_ml507_defconfig
-index a0dc674..2d57338 100644
---- a/configs/qemu_ppc_virtex_ml507_defconfig
-+++ b/configs/qemu_ppc_virtex_ml507_defconfig
-@@ -8,7 +8,7 @@ BR2_TARGET_ROOTFS_INITRAMFS=y
- 
- # Lock to 3.12 headers to avoid breaking with newer kernels
- BR2_KERNEL_HEADERS_VERSION=y
--BR2_DEFAULT_KERNEL_VERSION="3.12"
-+BR2_DEFAULT_KERNEL_VERSION="3.12.1"
- 
- # Use soft float
- BR2_SOFT_FLOAT=y
-@@ -16,7 +16,7 @@ BR2_SOFT_FLOAT=y
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.12"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.12.1"
- BR2_LINUX_KERNEL_DEFCONFIG="44x/virtex5"
- BR2_LINUX_KERNEL_VMLINUX=y
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
-diff --git a/configs/qemu_sparc_ss10_defconfig b/configs/qemu_sparc_ss10_defconfig
-index 67bffbd..0f11fa3 100644
---- a/configs/qemu_sparc_ss10_defconfig
-+++ b/configs/qemu_sparc_ss10_defconfig
-@@ -8,11 +8,11 @@ BR2_TARGET_ROOTFS_EXT2=y
- 
- # Lock to 3.12 headers to avoid breaking with newer kernels
- BR2_KERNEL_HEADERS_VERSION=y
--BR2_DEFAULT_KERNEL_VERSION="3.12"
-+BR2_DEFAULT_KERNEL_VERSION="3.12.1"
- 
- # Linux kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.12"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.12.1"
- BR2_LINUX_KERNEL_DEFCONFIG="sparc32"
- BR2_LINUX_KERNEL_ZIMAGE=y
-diff --git a/configs/qemu_x86_64_defconfig b/configs/qemu_x86_64_defconfig
-index 816cef1..0e33da3 100644
---- a/configs/qemu_x86_64_defconfig
-+++ b/configs/qemu_x86_64_defconfig
-@@ -11,11 +11,11 @@ BR2_TARGET_ROOTFS_EXT2=y
- 
- # Lock to 3.12 headers to avoid breaking with newer kernels
- BR2_KERNEL_HEADERS_VERSION=y
--BR2_DEFAULT_KERNEL_VERSION="3.12"
-+BR2_DEFAULT_KERNEL_VERSION="3.12.1"
- 
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.12"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.12.1"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/x86_64/linux-3.12.config"
-diff --git a/configs/qemu_x86_defconfig b/configs/qemu_x86_defconfig
-index ccccfa2..05404ba 100644
---- a/configs/qemu_x86_defconfig
-+++ b/configs/qemu_x86_defconfig
-@@ -12,11 +12,11 @@ BR2_TARGET_ROOTFS_EXT2=y
- 
- # Lock to 3.12 headers to avoid breaking with newer kernels
- BR2_KERNEL_HEADERS_VERSION=y
--BR2_DEFAULT_KERNEL_VERSION="3.12"
-+BR2_DEFAULT_KERNEL_VERSION="3.12.1"
- 
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.12"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.12.1"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/x86/linux-3.12.config"
+diff --git a/package/libroxml/libroxml-werror.patch b/package/libroxml/libroxml-0001-werror.patch
+similarity index 97%
+rename from package/libroxml/libroxml-werror.patch
+rename to package/libroxml/libroxml-0001-werror.patch
+index 6435b01..91f322c 100644
+--- a/package/libroxml/libroxml-werror.patch
++++ b/package/libroxml/libroxml-0001-werror.patch
+@@ -11,7 +11,7 @@ Index: a/Makefile
+ ===================================================================
+ --- a/Makefile
+ +++ b/Makefile
+-@@ -41,7 +41,7 @@
++@@ -46,7 +46,7 @@
+  
+  # options
+  override CPPFLAGS += -Iinc/
+diff --git a/package/libroxml/libroxml-0002-wno-unused-result.patch b/package/libroxml/libroxml-0002-wno-unused-result.patch
+new file mode 100644
+index 0000000..406bf3c
+--- /dev/null
++++ b/package/libroxml/libroxml-0002-wno-unused-result.patch
+@@ -0,0 +1,21 @@
++The -Wno-unused-result option is not understood by the version of gcc used by the
++avr32 toolchain. Remove the option from the compilation flags.
++
++Fixes build failures such as the following.
++
++  http://autobuild.buildroot.net/results/e22/e22d94fca3eabb4e54d82af04319f17ad8e10c20/
++
++Signed-off-by: Simon Dawson <spdawson@gmail.com>
++
++diff -Nurp a/Makefile b/Makefile
++--- a/Makefile	2013-11-21 17:13:17.679388374 +0000
+++++ b/Makefile	2013-11-21 17:13:35.219299157 +0000
++@@ -46,7 +46,7 @@ DEFINES = -DIGNORE_EMPTY_TEXT_NODES
++ 
++ # options
++ override CPPFLAGS += -Iinc/
++-override CFLAGS += $(OPTIM) -fPIC -Wall -Wextra -Wno-unused-parameter -Wno-unused-result -Iinc/ $(DEFINES)
+++override CFLAGS += $(OPTIM) -fPIC -Wall -Wextra -Wno-unused-parameter -Iinc/ $(DEFINES)
++ override LDFLAGS += 
++ 
++ ifeq ("$(OS)", "Darwin")
