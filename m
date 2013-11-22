@@ -1,103 +1,21 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 19 Nov 2013 13:21:32 +0100
-Subject: [Buildroot] [git commit branch/next] haveged: new package
-Message-ID: <20131122222526.F01CA9BD92@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 22 Nov 2013 23:26:42 +0100
+Subject: [Buildroot] [PATCH] fping: new package
+In-Reply-To: <1385048859-32594-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Thu, 21 Nov 2013 12:47:39 -0300")
+References: <1385048859-32594-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87mwkwnkd9.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=9f07355f3dae75d557db2c2fe32929154ef8a812
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/Config.in          |    1 +
- package/haveged/Config.in  |    9 +++++++++
- package/haveged/S21haveged |   25 +++++++++++++++++++++++++
- package/haveged/haveged.mk |   17 +++++++++++++++++
- 4 files changed, 52 insertions(+), 0 deletions(-)
+ > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
-diff --git a/package/Config.in b/package/Config.in
-index 311cc6c..1a95b10 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -750,6 +750,7 @@ source "package/bc/Config.in"
- source "package/collectd/Config.in"
- source "package/empty/Config.in"
- source "package/googlefontdirectory/Config.in"
-+source "package/haveged/Config.in"
- source "package/mcrypt/Config.in"
- source "package/mobile-broadband-provider-info/Config.in"
- source "package/shared-mime-info/Config.in"
-diff --git a/package/haveged/Config.in b/package/haveged/Config.in
-new file mode 100644
-index 0000000..0e49a2d
---- /dev/null
-+++ b/package/haveged/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_HAVEGED
-+	bool "haveged"
-+	depends on BR2_USE_MMU # fork()
-+	help
-+	  The haveged project is an attempt to provide an easy-to-use,
-+	  unpredictable random number generator based upon an adaptation
-+	  of the HAVEGE algorithm.
-+
-+	  http://www.issihosts.com/haveged/
-diff --git a/package/haveged/S21haveged b/package/haveged/S21haveged
-new file mode 100755
-index 0000000..f17cd29
---- /dev/null
-+++ b/package/haveged/S21haveged
-@@ -0,0 +1,25 @@
-+#!/bin/sh
-+
-+[ -x /usr/sbin/haveged ] || exit 0
-+
-+case "$1" in
-+	start)
-+		echo -n "Starting haveged: "
-+		start-stop-daemon -S -x /usr/sbin/haveged -- -w 1024 -r 0
-+		[ $? == 0 ] && echo "OK" || echo "FAIL"
-+		;;
-+	stop)
-+		echo -n "Stopping haveged: "
-+		start-stop-daemon -K -x /usr/sbin/haveged
-+		[ $? == 0 ] && echo "OK" || echo "FAIL"
-+		;;
-+	restart|reload)
-+		$0 stop
-+		$0 start
-+		;;
-+	*)
-+		echo "Usage: $0 {start|stop|restart}"
-+		exit 1
-+esac
-+
-+exit 0
-diff --git a/package/haveged/haveged.mk b/package/haveged/haveged.mk
-new file mode 100644
-index 0000000..99dbe41
---- /dev/null
-+++ b/package/haveged/haveged.mk
-@@ -0,0 +1,17 @@
-+################################################################################
-+#
-+# haveged
-+#
-+################################################################################
-+
-+HAVEGED_VERSION = 1.7c
-+HAVEGED_SITE = http://www.issihosts.com/haveged
-+HAVEGED_LICENSE = GPLv3+
-+HAVEGED_LICENSE_FILES = COPYING
-+
-+define HAVEGED_INSTALL_INIT_SYSV
-+	$(INSTALL) -m 755 -D package/haveged/S21haveged \
-+		$(TARGET_DIR)/etc/init.d/S21haveged
-+endef
-+
-+$(eval $(autotools-package))
+Committed to next, thanks.
+
+-- 
+Bye, Peter Korsgaard
