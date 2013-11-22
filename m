@@ -1,51 +1,42 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Fri, 22 Nov 2013 22:17:32 +0100
-Subject: [Buildroot] [PATCH 2 of 2] beecrypt: unconditionally disable openpm
-In-Reply-To: <patchbomb.1385155050@argentina>
-References: <patchbomb.1385155050@argentina>
-Message-ID: <aa0f108d67651a57a395.1385155052@argentina>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 22 Nov 2013 22:45:00 +0100
+Subject: [Buildroot] [git commit] libvncserver: openssl support needs
+	pthreads
+Message-ID: <20131122215507.122659BD50@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-beecrypt does not properly handle its dependency on openpm, so that
-applications using libbeecrypt are not aware that they also need openmp
-(libgomp). This causes error messages during linking, such as (rpm):
+commit: http://git.buildroot.net/buildroot/commit/?id=f8e4365e997abe583a496f852a804436d116da0d
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-..-gcc [..] -lbeecrypt  -lbz2 -lz -lpopt -lpthread
-libbecrypt.so: undefined reference to `GOMP_sections_end_nowait'
-libbecrypt.so: undefined reference to `GOMP_parallel_end'
-libbecrypt.so: undefined reference to `GOMP_sections_next'
-libbecrypt.so: undefined reference to `GOMP_parallel_sections_start'
+Fixes http://autobuild.buildroot.net/results/c30/c3082693fe0da0c54d4bbf950dd6d74e1395c1d9/
 
-Because the openpm dependency of beecrypt is only used by rsa.c, to
-parallelize the calculation of RSA cyphers, we can simply disable openmp in
-beecrypt instead of trying to fix the way -lgomp is passed.
+Also pass --without-ssl if that isn't the case, as the configure script
+otherwise ends up detecting openssl if built before libvncserver.
 
-Fixes http://autobuild.buildroot.net/results/bcf/bcff4b81bfbb1191f97317b0945c74d948c9774b/
-
-Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/beecrypt/beecrypt.mk |  3 ++-
- 1 files changed, 2 insertions(+), 1 deletions(-)
+ package/libvncserver/libvncserver.mk |    5 +++--
+ 1 files changed, 3 insertions(+), 2 deletions(-)
 
-
-Note: this is an alternative fix to the above autobuild than the one Vicente
-posted earlier today.
-
-diff --git a/package/beecrypt/beecrypt.mk b/package/beecrypt/beecrypt.mk
---- a/package/beecrypt/beecrypt.mk
-+++ b/package/beecrypt/beecrypt.mk
-@@ -19,7 +19,8 @@ BEECRYPT_CONF_ENV = \
+diff --git a/package/libvncserver/libvncserver.mk b/package/libvncserver/libvncserver.mk
+index a96b8c5..f5a0aef 100644
+--- a/package/libvncserver/libvncserver.mk
++++ b/package/libvncserver/libvncserver.mk
+@@ -23,10 +23,11 @@ ifneq ($(BR2_INET_IPV6),y)
+ LIBVNCSERVER_CONF_OPT += --without-ipv6
+ endif
  
- BEECRYPT_CONF_OPT = \
- 		--without-java \
--		--without-python
-+		--without-python \
-+		--disable-openmp
+-ifeq ($(BR2_PACKAGE_OPENSSL),y)
++# openssl supports needs pthread
++ifeq ($(BR2_PACKAGE_OPENSSL)$(BR2_TOOLCHAIN_HAS_THREADS),yy)
+ LIBVNCSERVER_DEPENDENCIES += openssl
+ else
+-LIBVNCSERVER_CONF_OPT += --without-crypto
++LIBVNCSERVER_CONF_OPT += --without-crypto --without-ssl
+ endif
  
- ifeq ($(BR2_PACKAGE_ICU),y)
- # C++ support needs icu
+ ifeq ($(BR2_PACKAGE_LIBGCRYPT),y)
