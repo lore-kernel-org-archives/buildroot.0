@@ -1,46 +1,36 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 22 Nov 2013 23:58:01 +0100
-Subject: [Buildroot] [PATCH 3/3] jq: switch to official tarball
-In-Reply-To: <1385138401-26445-3-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Fri, 22 Nov 2013 13:40:01 -0300")
-References: <1385138401-26445-1-git-send-email-gustavo@zacarias.com.ar>
- <1385138401-26445-3-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87siuom4cm.fsf@dell.be.48ers.dk>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 22 Nov 2013 23:58:10 +0100
+Subject: [Buildroot] [PATCH 4/5] fs/custom: generate complete,
+ partition-based device images
+In-Reply-To: <ddf2a31498f7f8e1ec0d40d73849bc254ec00b6d.1385157864.git.yann.morin.1998@free.fr>
+References: <cover.1385157864.git.yann.morin.1998@free.fr>
+ <ddf2a31498f7f8e1ec0d40d73849bc254ec00b6d.1385157864.git.yann.morin.1998@free.fr>
+Message-ID: <20131122225810.GD3371@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+All,
 
- > Ships configure thus fixing the breakage from the automake bump
- > to version 1.14 with AUTORECONF, with the added bonus of being faster.
+On 2013-11-22 23:50 +0100, Yann E. MORIN spake thusly:
+> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Contrary to the existing fs/ schemes, which each generate only a single
+> filesystem image for the root filesystem, this new scheme allows the
+> user to generate more complex images.
 
- > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
- > ---
- >  package/jq/jq.mk | 5 ++---
- >  1 file changed, 2 insertions(+), 3 deletions(-)
+I've put up a pre-prendered version of the manual on-line to make it
+easier to review:
+    http://ymorin.is-a-geek.org/download/tmp/buildroot/manual/manual.html
 
- > diff --git a/package/jq/jq.mk b/package/jq/jq.mk
- > index 8d4f24f..cc7c99e 100644
- > --- a/package/jq/jq.mk
- > +++ b/package/jq/jq.mk
- > @@ -4,9 +4,8 @@
- >  #
- >  ################################################################################
- 
- > -JQ_VERSION = jq-1.3
- > -JQ_SITE = http://github.com/stedolan/jq/tarball/$(JQ_VERSION)
- > -JQ_AUTORECONF = YES
- > +JQ_VERSION = 1.3
- > +JQ_SITE = http://stedolan.github.io/jq/download/source
-
-We have a problem here :/
-
-The git tree tarball we used to download was also called jq-1.3.tar.gz,
-so people who already downloaded it (and sources.buildroot.net) will NOT
-redownload it, so the build will fail as there's no configure.
+Regards,
+Yann E. MORIN.
 
 -- 
-Bye, Peter Korsgaard
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
