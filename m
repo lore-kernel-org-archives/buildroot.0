@@ -1,35 +1,36 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 22 Nov 2013 10:06:56 +0100
-Subject: [Buildroot] New version of PowerVR TI drivers
-Message-ID: <20131122100656.02700755@skate>
+From: Fabio Porcedda <fabio.porcedda@gmail.com>
+Date: Fri, 22 Nov 2013 10:15:20 +0100
+Subject: [Buildroot] Analysis of build failures
+In-Reply-To: <20131122091411.59d82eb5@skate>
+References: <20131122073003.1B835101305@stock.ovh.net>
+ <20131122091411.59d82eb5@skate>
+Message-ID: <CAHkwnC9LWo3r21coQzROnajC1AKK4rF_Ec-AaXwMPK5esW--_Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Thomas,
 
-A new version of the PowerVR TI drivers has been released:
-http://tigraphics.blogspot.fr/2013/11/4q-2013-linux-graphics-sdk-release.html.
+On Fri, Nov 22, 2013 at 9:14 AM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Hello,
+>
+> On Fri, 22 Nov 2013 08:30:02 +0100 (CET), Thomas Petazzoni wrote:
+> ...
+>>        arm |                  lvm2-2.02.103 | NOK | http://autobuild.buildroot.net/results/b0b386969459dda9c294f1ccb4927ca225fa6bdd/
+>
+> Missing dependency?
+>
+> /home/test/test/1/output/host/usr/bin/arm-linux-gcc -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -pipe -Os   -fPIC  -O2 --static -O2 -L../libdm -L../lib -L../libdaemon/client -L../libdm \
+>               -o dmsetup dmsetup.o -ldevmapper
+> /home/test/test/1/output/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabi/4.7.3/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld: cannot find -ldevmapper
+>
+> ...
 
-"""
-New/Changes in this release
-NEW  - AM43x support 
-NEW - 3.12 kernel support. Please see release notes for the details on the kernel used for validation.
-NEW - Integration with reset driver framework on both AM335x & AM43x.
-NEW - PM_RUNTIME support enabled by default. (No need to pass this explicitly in build command line)
-NEW ? This is an alpha release package. Validated on AM335x PG2.0 GP-EVM & AM43x EVMs.
-"""
+I will try to look into this.
 
-It would be good if someone having access to
-BeagleBoard/BeagleBoardXM/PandaBoard could have a look into this. It's
-still unclear to me whether the BeagleBoneBlack will work with this or
-not (I see the drivers have support for AM335x, but is that sufficient
-I don't know).
-
-Thomas
+Best regards
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Fabio Porcedda
