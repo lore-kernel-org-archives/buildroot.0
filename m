@@ -1,74 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 22 Nov 2013 12:19:57 +0100
-Subject: [Buildroot] [git commit] libroxml: fix avr32 build failure
-Message-ID: <20131122145921.105249BD8F@busybox.osuosl.org>
+Date: Fri, 22 Nov 2013 11:54:13 +0100
+Subject: [Buildroot] [git commit] linux: bump to version 3.12.1
+Message-ID: <20131122145920.BE5009BD92@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=2b2c6579575bc87bf3e6f0d9a5ba1f50561fa101
+commit: http://git.buildroot.net/buildroot/commit/?id=eaa8691798d0f9ddb14ed5877c08a8960760888b
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The -Wno-unused-result option is not understood by the version of gcc used by the
-avr32 toolchain. Remove the option from the compilation flags.
-
-Fixes build failures such as the following.
-
-  http://autobuild.buildroot.net/results/e22/e22d94fca3eabb4e54d82af04319f17ad8e10c20/
-
-The single existing patch for libroxml has been renamed to include a numerical
-component for application order sorting. The existing patch has also been updated
-to apply without fuzz.
-
-Signed-off-by: Simon Dawson <spdawson@gmail.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...xml-werror.patch => libroxml-0001-werror.patch} |    2 +-
- .../libroxml/libroxml-0002-wno-unused-result.patch |   21 ++++++++++++++++++++
- 2 files changed, 22 insertions(+), 1 deletions(-)
+ linux/Config.in |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libroxml/libroxml-werror.patch b/package/libroxml/libroxml-0001-werror.patch
-similarity index 97%
-rename from package/libroxml/libroxml-werror.patch
-rename to package/libroxml/libroxml-0001-werror.patch
-index 6435b01..91f322c 100644
---- a/package/libroxml/libroxml-werror.patch
-+++ b/package/libroxml/libroxml-0001-werror.patch
-@@ -11,7 +11,7 @@ Index: a/Makefile
- ===================================================================
- --- a/Makefile
- +++ b/Makefile
--@@ -41,7 +41,7 @@
-+@@ -46,7 +46,7 @@
-  
-  # options
-  override CPPFLAGS += -Iinc/
-diff --git a/package/libroxml/libroxml-0002-wno-unused-result.patch b/package/libroxml/libroxml-0002-wno-unused-result.patch
-new file mode 100644
-index 0000000..406bf3c
---- /dev/null
-+++ b/package/libroxml/libroxml-0002-wno-unused-result.patch
-@@ -0,0 +1,21 @@
-+The -Wno-unused-result option is not understood by the version of gcc used by the
-+avr32 toolchain. Remove the option from the compilation flags.
-+
-+Fixes build failures such as the following.
-+
-+  http://autobuild.buildroot.net/results/e22/e22d94fca3eabb4e54d82af04319f17ad8e10c20/
-+
-+Signed-off-by: Simon Dawson <spdawson@gmail.com>
-+
-+diff -Nurp a/Makefile b/Makefile
-+--- a/Makefile	2013-11-21 17:13:17.679388374 +0000
-++++ b/Makefile	2013-11-21 17:13:35.219299157 +0000
-+@@ -46,7 +46,7 @@ DEFINES = -DIGNORE_EMPTY_TEXT_NODES
-+ 
-+ # options
-+ override CPPFLAGS += -Iinc/
-+-override CFLAGS += $(OPTIM) -fPIC -Wall -Wextra -Wno-unused-parameter -Wno-unused-result -Iinc/ $(DEFINES)
-++override CFLAGS += $(OPTIM) -fPIC -Wall -Wextra -Wno-unused-parameter -Iinc/ $(DEFINES)
-+ override LDFLAGS += 
-+ 
-+ ifeq ("$(OS)", "Darwin")
+diff --git a/linux/Config.in b/linux/Config.in
+index 9b2025c..3061809 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -21,7 +21,7 @@ choice
+ 	prompt "Kernel version"
+ 
+ config BR2_LINUX_KERNEL_LATEST_VERSION
+-	bool "3.12"
++	bool "3.12.1"
+ 
+ config BR2_LINUX_KERNEL_SAME_AS_HEADERS
+ 	bool "Same as toolchain kernel headers"
+@@ -87,7 +87,7 @@ endif
+ 
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "3.12" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "3.12.1" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default BR2_DEFAULT_KERNEL_HEADERS if BR2_LINUX_KERNEL_SAME_AS_HEADERS
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+ 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
