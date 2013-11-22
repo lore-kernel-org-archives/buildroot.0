@@ -1,77 +1,82 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri, 22 Nov 2013 06:47:01 +0000 (UTC)
-Subject: [Buildroot] [Bug 6428] util-linux libmount segfaults with patch
-	from buildroot
-In-Reply-To: <bug-6428-163@https.bugs.busybox.net/>
-References: <bug-6428-163@https.bugs.busybox.net/>
-Message-ID: <20131122064701.D06D19BD8E@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 22 Nov 2013 08:30:02 +0100 (CET)
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2013-11-21
+Message-ID: <20131122073003.1B835101305@stock.ovh.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=6428
+Build statistics for 2013-11-21
+===============================
 
-Daniel Mentz <daniel@exxm.de> changed:
+        success : 77 
+       failures : 28 
+       timeouts : 0  
+          TOTAL : 105
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|RESOLVED                    |REOPENED
-         Resolution|FIXED                       |
+Classification of failures by reason
+====================================
 
---- Comment #2 from Daniel Mentz <daniel@exxm.de> 2013-11-22 06:47:01 UTC ---
-There's still a bug in util-linux-001-sscanf-no-ms-as.patch. He got the last
-"#ifdef" wrong. It should be "#ifdef HAVE_SCANF_MS_MODIFIER" instead of
-"#ifndef HAVE_SCANF_MS_MODIFIER".
+               libglib2-2.36.3 | 3 
+  toolchain-external-undefined | 2 
+                     rpm-5.2.0 | 1 
+                libroxml-2.2.3 | 1 
+                 omniorb-4.1.6 | 1 
+                  iozone-3_414 | 1 
+               w_scan-20130331 | 1 
+                   attr-2.4.47 | 1 
+             tinymembench-v0.2 | 1 
+                      qt-4.8.5 | 1 
+          qt5declarative-5.1.1 | 1 
+               libcap-ng-0.7.3 | 1 
+                sdl_ttf-2.0.11 | 1 
+            libvncserver-0.9.9 | 1 
+                      icu-51.2 | 1 
+               bootutils-1.0.0 | 1 
+                     apr-1.4.8 | 1 
+                 schifra-0.0.1 | 1 
+               alsa-lib-1.0.26 | 1 
+                       kmod-15 | 1 
+                 lvm2-2.02.103 | 1 
+                sqlite-3080002 | 1 
+                    ola-0.8.32 | 1 
+                   mdadm-3.2.6 | 1 
+                openssl-1.0.1e | 1 
 
-It crashes in mnt_parse_swaps_line() in tab_parse.c because it passes a pointer
-to src instead of src itself.
+Detail of failures
+===================
 
-Activate a swap device with swapon and then run lsblk. It crashed for me like
-this:
+    mipsel |                alsa-lib-1.0.26 | NOK | http://autobuild.buildroot.net/results/417dac44eb077079f16a039881a45fa1b1782497/
+    mipsel |                      apr-1.4.8 | NOK | http://autobuild.buildroot.net/results/20926ed11e7d86cd6c54700eb609b3fa1740b8a7/
+    mipsel |                    attr-2.4.47 | NOK | http://autobuild.buildroot.net/results/03e5b85c71e5b624e42245f04d305042ec9136fa/
+    mipsel |                bootutils-1.0.0 | NOK | http://autobuild.buildroot.net/results/a51b3723f176a98abff809313a5f863e2539e103/
+      bfin |                       icu-51.2 | NOK | http://autobuild.buildroot.net/results/fc643356587aaed0c3e7c2205dad0c40f02eede1/
+    xtensa |                   iozone-3_414 | NOK | http://autobuild.buildroot.net/results/04896be35649215d8141cb737185c0c10ad11d12/
+    xtensa |                        kmod-15 | NOK | http://autobuild.buildroot.net/results/622d25321d76f505de6aef4e33d0e421ba701de5/
+     avr32 |                libcap-ng-0.7.3 | NOK | http://autobuild.buildroot.net/results/73c7c211a51c312bbe4eb6a540f3ad9c92c79ebe/
+microblaze |                libglib2-2.36.3 | NOK | http://autobuild.buildroot.net/results/2cd1b11c43655cfd3bcbe8f6e127ea5e4a607e9d/
+microblaze |                libglib2-2.36.3 | NOK | http://autobuild.buildroot.net/results/bcbc99ec7987fe10d4e752eb96840a7ec1be2744/
+      bfin |                libglib2-2.36.3 | NOK | http://autobuild.buildroot.net/results/d5c743294314584473cdd6098ebcfae42971803c/
+     avr32 |                 libroxml-2.2.3 | NOK | http://autobuild.buildroot.net/results/e22d94fca3eabb4e54d82af04319f17ad8e10c20/
+       arm |             libvncserver-0.9.9 | NOK | http://autobuild.buildroot.net/results/c3082693fe0da0c54d4bbf950dd6d74e1395c1d9/
+       arm |                  lvm2-2.02.103 | NOK | http://autobuild.buildroot.net/results/b0b386969459dda9c294f1ccb4927ca225fa6bdd/
+      bfin |                    mdadm-3.2.6 | NOK | http://autobuild.buildroot.net/results/52cc56df2aa278d92141918de74833d7e4fd3d47/
+   aarch64 |                     ola-0.8.32 | NOK | http://autobuild.buildroot.net/results/5967dfd4bd7c2b68e2911a98b9b84c8fe7adf0aa/
+       arm |                  omniorb-4.1.6 | NOK | http://autobuild.buildroot.net/results/dfc083bff04eba68456edd359424293842b6f42d/
+microblaze |                 openssl-1.0.1e | NOK | http://autobuild.buildroot.net/results/2299063bb4e84833ee3edccec960d551b5fcdfe5/
+  mips64el |                       qt-4.8.5 | NOK | http://autobuild.buildroot.net/results/fd7e7e53290f235b540ed5f3c784e2584fdb41e0/
+       arm |           qt5declarative-5.1.1 | NOK | http://autobuild.buildroot.net/results/82bb89d5b29dc6bd40f840bc04845b6c87157985/
+  mips64el |                      rpm-5.2.0 | NOK | http://autobuild.buildroot.net/results/bcff4b81bfbb1191f97317b0945c74d948c9774b/
+       arm |                  schifra-0.0.1 | NOK | http://autobuild.buildroot.net/results/1ec3664f28492bf3da53dcbe8ceeb165bce8df6d/
+       arm |                 sdl_ttf-2.0.11 | NOK | http://autobuild.buildroot.net/results/f4ad0468f17520a645f029878876a972421a87b4/
+       arc |                 sqlite-3080002 | NOK | http://autobuild.buildroot.net/results/4f09bbb3cf646e7e45c86d43a50b440245e136e2/
+  mips64el |              tinymembench-v0.2 | NOK | http://autobuild.buildroot.net/results/bab68bcf8714f215ac0b0c2546fa06608377fbb0/
+   powerpc |   toolchain-external-undefined | NOK | http://autobuild.buildroot.net/results/8fb291915b3ce5dc955f5e7e60eea2a4a6202143/
+       arm |   toolchain-external-undefined | NOK | http://autobuild.buildroot.net/results/cc4c41b99005c82e546a9e2916df97180be32b2b/
+   powerpc |                w_scan-20130331 | NOK | http://autobuild.buildroot.net/results/7ac90c6087640585a9afb0e31ad9e690eded89f5/
 
-Starting program: /bin/lsblk 
-
-Program received signal SIGSEGV, Segmentation fault.
-0xb6f47494 in strlen () from /lib/libc.so.0
-(gdb) bt
-#0  0xb6f47494 in strlen () from /lib/libc.so.0
-#1  0xb6fa7b18 in unmangle_string (s=0x7665642f <Address 0x7665642f out of
-bounds>) at ./include/mangle.h:17
-#2  0xb6fa879c in mnt_parse_swaps_line (s=0xbeffe4d0 "/dev/mmcblk0p3", ' '
-<repeats 26 times>, "partition\t499996\t0\t-1", fs=0x21c80)
-    at libmount/src/tab_parse.c:352
-#3  mnt_table_parse_next (tb=tb at entry=0x21c00, f=f at entry=0x1c744 <ncolumns>,
-fs=fs at entry=0x21c80, 
-    filename=0x646f6d2c <Address 0x646f6d2c out of bounds>,
-filename at entry=0xb6fbb2ab "/proc/swaps", nlines=0xbefff520, 
-    nlines at entry=0xbefff518) at libmount/src/tab_parse.c:459
-#4  0xb6fa8db4 in mnt_table_parse_stream (tb=tb at entry=0x21c00, f=0x1c744
-<ncolumns>, f at entry=0x21c28, 
-    filename=filename at entry=0xb6fbb2ab "/proc/swaps") at
-libmount/src/tab_parse.c:581
-#5  0xb6fa922c in mnt_table_parse_file (tb=0x21c00, filename=0xb6fbb2ab
-"/proc/swaps") at libmount/src/tab_parse.c:636
-#6  0x0000b5cc in is_active_swap (filename=0x1f410 "/dev/mmcblk0p1") at
-misc-utils/lsblk.c:350
-#7  get_device_mountpoint (cxt=0xbefff6e0) at misc-utils/lsblk.c:382
-#8  set_tt_data (ln=0x20508, id=<optimized out>, col=6, cxt=0xbefff6e0) at
-misc-utils/lsblk.c:739
-#9  print_device (cxt=cxt at entry=0xbefff6e0, tt_parent=<optimized out>) at
-misc-utils/lsblk.c:963
-#10 0x0000c420 in process_blkdev (cxt=0xbefff6e0, parent=0xbefff7f8,
-do_partitions=<optimized out>, part_name=0x0)
-    at misc-utils/lsblk.c:1190
-#11 0x0000c3e4 in list_partitions (part_name=0x0, parent_cxt=0x0,
-wholedisk_cxt=0xbefff7f8) at misc-utils/lsblk.c:1103
-#12 process_blkdev (cxt=cxt at entry=0xbefff7f8, parent=0x0,
-do_partitions=do_partitions at entry=1, part_name=0x0) at misc-utils/lsblk.c:1188
-#13 0x0000c74c in iterate_block_devices () at misc-utils/lsblk.c:1215
-#14 0x0000a924 in main (argc=1, argv=0x0) at misc-utils/lsblk.c:1599
-(gdb)
 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+http://autobuild.buildroot.net
