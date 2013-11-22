@@ -1,22 +1,29 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 22 Nov 2013 12:12:57 +0100
-Subject: [Buildroot] [PATCH] mdadm: needs mmu
-In-Reply-To: <1385032673-301-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Thu, 21 Nov 2013 08:17:53 -0300")
-References: <1385032673-301-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87siuopu4m.fsf@dell.be.48ers.dk>
+Date: Fri, 22 Nov 2013 12:20:07 +0100
+Subject: [Buildroot] [PATCH] libroxml: fix avr32 build failure
+In-Reply-To: <1385054380-20684-1-git-send-email-spdawson@gmail.com>
+ (spdawson@gmail.com's message of "Thu, 21 Nov 2013 17:19:40 +0000")
+References: <1385054380-20684-1-git-send-email-spdawson@gmail.com>
+Message-ID: <87ob5cptso.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+>>>>> "spdawson" == spdawson  <spdawson@gmail.com> writes:
 
- > Fixes:
- > http://autobuild.buildroot.net/results/52c/52cc56df2aa278d92141918de74833d7e4fd3d47/
+ > From: Simon Dawson <spdawson@gmail.com>
+ > The -Wno-unused-result option is not understood by the version of gcc used by the
+ > avr32 toolchain. Remove the option from the compilation flags.
 
- > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+ > Fixes build failures such as the following.
+
+ >   http://autobuild.buildroot.net/results/e22/e22d94fca3eabb4e54d82af04319f17ad8e10c20/
+
+ > The single existing patch for libroxml has been renamed to include a
+ > numerical component for application order sorting. The existing patch
+ > has also been updated to apply without fuzz.
 
 Committed, thanks.
 
