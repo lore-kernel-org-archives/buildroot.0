@@ -1,39 +1,36 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Fri, 22 Nov 2013 09:43:16 +0000
-Subject: [Buildroot] [PATCH v2] tinymembench: prevent the selection of this
-	package on
-Message-ID: <1385113396-56559-1-git-send-email-Vincent.Riera@imgtec.com>
+From: Ryan Barnett <rjbarnet@rockwellcollins.com>
+Date: Fri, 22 Nov 2013 03:44:45 -0600
+Subject: [Buildroot] [PATCH v2] libcap-ng: disable on avr32 which lacks
+	TLS
+In-Reply-To: <CAHXCMMK1f9QKw2PKp6KOdqopSgCh4m9GwuW8W4nJg5cNgL=07g@mail.gmail.com>
+References: <1385112407-3569-1-git-send-email-s.martin49@gmail.com>
+ <OF66C8E7E4.7783087E-ON86257C2B.00344BCA-86257C2B.003487CA@rockwellcollins.com>
+ <CAHXCMMK1f9QKw2PKp6KOdqopSgCh4m9GwuW8W4nJg5cNgL=07g@mail.gmail.com>
+Message-ID: <OF48061E68.1DE1C05C-ON86257C2B.0035339A-86257C2B.003586E6@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
+Samuel Martin <s.martin49@gmail.com> wrote on 11/22/2013 03:39:17 AM:
 
-   http://autobuild.buildroot.net/results/bab/bab68bcf8714f215ac0b0c2546fa06608377fbb0/
+> 2013/11/22 Ryan Barnett <rjbarnet@rockwellcollins.com>
 
-This package is only supported on MIPS32 platforms. The mips-32.S file included
-in the source code of this package only makes sense to be compiled for MIPS32,
-and also contains hardcoded MIPS32 instructions which are illegal on MIPS64.
-Trying to compile this package on a MIPS64 platform will end with a linkage
-failure due to undefined references.
+[...]
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
----
- package/tinymembench/Config.in |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+> > Wouldn't you want comment above saying and !avr32 or something to that
+> > extent?
 
-diff --git a/package/tinymembench/Config.in b/package/tinymembench/Config.in
-index 0d45532..0555b19 100644
---- a/package/tinymembench/Config.in
-+++ b/package/tinymembench/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_TINYMEMBENCH
- 	bool "tinymembench"
-+	depends on !BR2_mips64 && !BR2_mips64el
- 	help
- 	  Tinymembench is a simple memory benchmark program, which
- 	  tries to measure the peak bandwidth of sequential memory
--- 
-1.7.1
+> According to the manual
+> (
+http://git.buildroot.net/buildroot/tree/docs/manual/adding-packages-directory.txt#n213
+),
+> this is not needed.
+> 
+
+Thanks for the information as I didn't remember off the top of my head! So 
+disregard my comment then :)
+
+Thanks,
+-Ryan
