@@ -1,70 +1,36 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Sat, 23 Nov 2013 22:17:45 +0200
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Sat, 23 Nov 2013 21:38:45 +0100
 Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2013-11-22
-In-Reply-To: <CAAXf6LWFAGDvHV42Mvc2_uhnFtthuCX-N5ZLogdW5u1k9XSkSQ@mail.gmail.com>
+	2013-11-22
+In-Reply-To: <20131123073002.EA89E101432@stock.ovh.net>
 References: <20131123073002.EA89E101432@stock.ovh.net>
- <CAAXf6LWFAGDvHV42Mvc2_uhnFtthuCX-N5ZLogdW5u1k9XSkSQ@mail.gmail.com>
-Message-ID: <20131123201745.GA3927@tarshish>
+Message-ID: <52911255.3030207@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Hi all,
 
-On Sat, Nov 23, 2013 at 02:11:43PM +0100, Thomas De Schampheleire wrote:
-> On Sat, Nov 23, 2013 at 8:30 AM, Thomas Petazzoni
-> <thomas.petazzoni@free-electrons.com> wrote:
-> > Build statistics for 2013-11-22
-> > ===============================
-> >
-> >         success : 68
-> >        failures : 34
-> >        timeouts : 0
-> >           TOTAL : 102
-> >
-> [..]
-> 
-> >       sh4a |                   poco-1.4.6p1 | NOK | http://autobuild.buildroot.net/results/8dc9bca5969d455cc30206fc1ae6e1d3ba6eb6ca/
-> 
-> Error is:
-> 
-> In file included from src/FPEnvironment_C99.cpp:37:0,
->                  from src/FPEnvironment.cpp:48:
-> include/Poco/FPEnvironment_C99.h:56:30: error: 'FE_DOWNWARD' was not
-> declared in this scope
-> include/Poco/FPEnvironment_C99.h:57:30: error: 'FE_UPWARD' was not
-> declared in this scope
-> make[2]: *** [/home/test/test/2/output/build/poco-1.4.6p1/Foundation/obj/Linux/sh4a/release_shared/FPEnvironment.o]
-> Error 1
-> make[2]: Leaving directory
-> `/home/test/test/2/output/build/poco-1.4.6p1/Foundation'
-> make[1]: *** [Foundation-libexec] Error 2
-> make[1]: Leaving directory `/home/test/test/2/output/build/poco-1.4.6p1'
-> make: *** [/home/test/test/2/output/build/poco-1.4.6p1/.stamp_built] Error 2
-> 
-> The same build failure has been discussed a long time ago here:
-> http://lists.busybox.net/pipermail/buildroot/2011-September/046013.html
-> when the poco package was introduced. Then, the fpenvironment was
-> disabled when the C library is uclibc.
-> In the current failure, the C library seems to be glibc.
-> I'm including Baruch on this one, who was involved in the above
-> thread. Baruch: any idea?
+I tried to reproduce the following build failures:
 
-I see the following comment in glibc sysdeps/sh/sh4/fpu/bits/fenv.h:
+powerpc |                      nut-2.6.5 | NOK | http://autobuild.buildroot.net/results/b6f619f9c249fc653dc65f0f516cb846683700bb/
+arm     |                      nut-2.6.5 | NOK | http://autobuild.buildroot.net/results/7e4/7e4e369dc5640619e95983ad0b4571f3a3f0d84b/
+(also on i686 last week...)
 
-/* The SH FPU supports two of the four defined rounding modes: round to nearest
-   and round to zero.  We use again the bit positions in the FPU control word
-   as the values for the appropriate macros.  */
+I have not been able to reproduce this error...
+I simply found a missing dependency on libltdl
 
-I don't know enough about fenv to know what the right solution here would be. 
-The easiest one is to add --no-fpenvironment for sh4a. Is this acceptable?
+Any Idea ?
 
-baruch
-
+Best regards,
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+Romain Naour
+
+OPEN WIDE Ing?nierie - Paris
+23/25, rue Daviel 75013 PARIS
+http://ingenierie.openwide.fr
+
+Le blog des technologies libres et embarqu?es :
+http://www.linuxembedded.fr
