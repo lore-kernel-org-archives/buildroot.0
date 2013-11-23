@@ -1,33 +1,29 @@
-From: Bernd Kuhls <berndkuhls@hotmail.com>
-Date: Sat, 23 Nov 2013 17:45:18 +0100
-Subject: [Buildroot] [git commit] lockdev: add lockdev
-References: <20130729192308.44C069AE88@busybox.osuosl.org>
-Message-ID: <ul27max08g.ln2@ID-313208.user.individual.net>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 23 Nov 2013 18:26:56 +0100
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2013-11-22
+In-Reply-To: <CAAXf6LWFAGDvHV42Mvc2_uhnFtthuCX-N5ZLogdW5u1k9XSkSQ@mail.gmail.com>
+References: <20131123073002.EA89E101432@stock.ovh.net>
+ <CAAXf6LWFAGDvHV42Mvc2_uhnFtthuCX-N5ZLogdW5u1k9XSkSQ@mail.gmail.com>
+Message-ID: <20131123182656.77936e93@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Dear Thomas De Schampheleire,
 
-Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote
-in news:20130729192308.44C069AE88 at busybox.osuosl.org: 
+On Sat, 23 Nov 2013 14:11:43 +0100, Thomas De Schampheleire wrote:
 
-> commit:
-> http://git.buildroot.net/buildroot/commit/?id=f2a007480cab92c359432b9fa30
-> 7eb48c5510086 branch:
-> http://git.buildroot.net/buildroot/commit/?id=refs/heads/master 
+> >        arm |                     systemd-44 | NOK | http://autobuild.buildroot.net/results/e5484bcdcca7f2cb48913d65271de4b957ea3450/
 
-[...]
+It's a fairly old toolchain that I've built with Crosstool-NG. It uses
+uClibc 0.9.33.2, but there might be some missing uClibc configuration
+options, or the kernel headers might be old.
 
-> +define LOCKDEV_INSTALL_TARGET_CMDS
-> +     $(MAKE1) basedir=$(TARGET_DIR)/usr -C $(@D) install_run
-> +     ln -sf liblockdev.$(LOCKDEV_VERSION).so
-> $(STAGING_DIR)/usr/lib/liblockdev.so.1 +endef
-> +endif # BR2_PREFER_STATIC_LIB
-
-I think STAGING_DIR should have been TARGET_DIR here.
-
-Regards, Bernd
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
