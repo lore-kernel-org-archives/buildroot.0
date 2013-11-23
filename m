@@ -1,59 +1,60 @@
-From: spdawson at gmail.com <spdawson@gmail.com>
-Date: Sat, 23 Nov 2013 11:35:25 +0000
-Subject: [Buildroot] [PATCH] gpsd: bump version to 3.10
-Message-ID: <1385206525-26557-1-git-send-email-spdawson@gmail.com>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Sat, 23 Nov 2013 13:56:28 +0100
+Subject: [Buildroot] Call for autobuild fixing for 2013.11
+In-Reply-To: <CAAXf6LXwy3HGGX1W9FCcdVCRJSHMT2B=w--xvcsBxqwUXxDjqg@mail.gmail.com>
+References: <CAAXf6LXwy3HGGX1W9FCcdVCRJSHMT2B=w--xvcsBxqwUXxDjqg@mail.gmail.com>
+Message-ID: <CAAXf6LU1_ybwfA9DGfkq7fGJ17LU5k4cQb=G14rg6oSdNY=WAg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Simon Dawson <spdawson@gmail.com>
+All,
 
-Signed-off-by: Simon Dawson <spdawson@gmail.com>
----
- package/gpsd/gpsd-02-sconstruct-disable-rpath.patch | 15 +++++++--------
- package/gpsd/gpsd.mk                                |  2 +-
- 2 files changed, 8 insertions(+), 9 deletions(-)
+On Thu, Nov 14, 2013 at 12:24 PM, Thomas De Schampheleire
+<patrickdepinguin@gmail.com> wrote:
+> All,
+>
+> Now that 2013.11-rc1 is out, we have until the end of the month to fix
+> remaining problems until 2013.11 is released.
+>
+> The autobuilders are still finding a lot of problems.
+> Several developers are already looking at and fixing these problems,
+> which is great. However, we can do much better.
+>
+> Therefore, I would like to request all developers to temporarily stop
+> creating new features, adding new packages, etc. during the rest of
+> this month, and focus on fixing autobuild problems (or other fixes)
+> instead. With a joint effort I am sure we can fix many problems.
+>
+> The autobuild website is at http://autobuild.buildroot.org/, the
+> statistics are at http://autobuild.buildroot.org/stats.php
+> [currently this site seems to be down]
+> There is also a daily mail sent to the list with the overview of the
+> succeeding/failing builds.
+>
+> To fix a problem, you would start by downloading the defconfig from
+> the autobuild site, apply it in a fresh repository, probably set a
+> good value for BR2_DL_DIR, and run 'make' to see if you can reproduce
+> the problem. Once you can reproduce it, you can analyze in more detail
+> and create a fix.
+>
+> Depending on the problem, you can attempt some shortcuts. For example
+> instead of building everything, you can request to build one
+> particular package (foo) by running 'make toolchain foo'. If the
+> problem is caused only by the overall configuration and foo itself
+> (not by a missing dependency) this faster build would also show the
+> problem. Remember: it's crucial that you can first reproduce the
+> problem (with or without shortcut). Otherwise you may 'fix' something
+> that is not broken.
+>
+> If you want to fix a particular problem but get stuck, don't hesitate
+> in sending your findings to the list. Other developers can try to help
+> you.
 
-diff --git a/package/gpsd/gpsd-02-sconstruct-disable-rpath.patch b/package/gpsd/gpsd-02-sconstruct-disable-rpath.patch
-index 5476450..eca3cbf 100644
---- a/package/gpsd/gpsd-02-sconstruct-disable-rpath.patch
-+++ b/package/gpsd/gpsd-02-sconstruct-disable-rpath.patch
-@@ -2,14 +2,13 @@ Disable addition of RPATH to the generated libraries
- 
- Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
- 
--Index: b/SConstruct
--===================================================================
----- a/SConstruct
--+++ b/SConstruct
--@@ -273,8 +273,6 @@
--     env.Prepend(LIBPATH=[installdir('libdir')])
-- else:
--     env.Prepend(LIBPATH=[env["sysroot"] + installdir('libdir')])
-+diff -Nurp a/SConstruct b/SConstruct
-+--- a/SConstruct	2013-11-22 13:10:01.000000000 +0000
-++++ b/SConstruct	2013-11-23 11:26:57.698486777 +0000
-+@@ -287,8 +287,6 @@ def installdir(dir, add_destdir=True):
-+ # Honor the specified installation prefix in link paths.
-+ if env["sysroot"]:
-+     env.Prepend(LIBPATH=[env["sysroot"] + installdir('libdir', add_destdir=False)])
- -if env["shared"]:
- -    env.Prepend(RPATH=[installdir('libdir')])
-  
-diff --git a/package/gpsd/gpsd.mk b/package/gpsd/gpsd.mk
-index be2e681..92db00e 100644
---- a/package/gpsd/gpsd.mk
-+++ b/package/gpsd/gpsd.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GPSD_VERSION = 3.9
-+GPSD_VERSION = 3.10
- GPSD_SITE = http://download-mirror.savannah.gnu.org/releases/gpsd/
- GPSD_LICENSE = BSD-3c
- GPSD_LICENSE_FILES = COPYING
--- 
-1.8.3.2
+It's great to see several people sending patches that fix autobuild failures!
+Let's keep up this work until the end of the month, when 2013.11 is released...
+
+Thanks,
+Thomas
