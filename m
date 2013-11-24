@@ -1,36 +1,59 @@
-From: Davide Viti <zinosat@tiscali.it>
-Date: Mon, 25 Nov 2013 10:03:23 +0100
-Subject: [Buildroot] [PATCH 1/1 v2] mongoose: startup script must use short
-	options
-Message-ID: <1385370203-7524-1-git-send-email-d.viti@infosolution.it>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 24 Nov 2013 20:05:07 +0100
+Subject: [Buildroot] [git commit branch/next] gpsd: bump version to 3.10
+Message-ID: <20131125090401.43EFF9BDDC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Davide Viti <zinosat@tiscali.it>
+commit: http://git.buildroot.net/buildroot/commit/?id=07e502689fb78e55732fe0ad9b725a9dd4363804
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-mongoose fails to start because long options are not supported (as
-shown by "mongoose -h")
-
-Signed-off-by: Davide Viti <d.viti@infosolution.it>
+Signed-off-by: Simon Dawson <spdawson@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/mongoose/S85mongoose | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ .../gpsd/gpsd-02-sconstruct-disable-rpath.patch    |   15 +++++++--------
+ package/gpsd/gpsd.mk                               |    2 +-
+ 2 files changed, 8 insertions(+), 9 deletions(-)
 
-diff --git a/package/mongoose/S85mongoose b/package/mongoose/S85mongoose
-index e9e8524..ecf896a 100755
---- a/package/mongoose/S85mongoose
-+++ b/package/mongoose/S85mongoose
-@@ -10,7 +10,7 @@ NAME=mongoose
- DESC="Mongoose HTTP server"
+diff --git a/package/gpsd/gpsd-02-sconstruct-disable-rpath.patch b/package/gpsd/gpsd-02-sconstruct-disable-rpath.patch
+index 5476450..eca3cbf 100644
+--- a/package/gpsd/gpsd-02-sconstruct-disable-rpath.patch
++++ b/package/gpsd/gpsd-02-sconstruct-disable-rpath.patch
+@@ -2,14 +2,13 @@ Disable addition of RPATH to the generated libraries
  
- DAEMON=`which mongoose`
--OPTIONS="-max_threads 3 -root /var/www  -ports 80"
-+OPTIONS="-t 3 -r /var/www -p 80"
+ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
  
- [ -e /etc/default/mongoose ] && . /etc/default/mongoose
+-Index: b/SConstruct
+-===================================================================
+---- a/SConstruct
+-+++ b/SConstruct
+-@@ -273,8 +273,6 @@
+-     env.Prepend(LIBPATH=[installdir('libdir')])
+- else:
+-     env.Prepend(LIBPATH=[env["sysroot"] + installdir('libdir')])
++diff -Nurp a/SConstruct b/SConstruct
++--- a/SConstruct	2013-11-22 13:10:01.000000000 +0000
+++++ b/SConstruct	2013-11-23 11:26:57.698486777 +0000
++@@ -287,8 +287,6 @@ def installdir(dir, add_destdir=True):
++ # Honor the specified installation prefix in link paths.
++ if env["sysroot"]:
++     env.Prepend(LIBPATH=[env["sysroot"] + installdir('libdir', add_destdir=False)])
+ -if env["shared"]:
+ -    env.Prepend(RPATH=[installdir('libdir')])
+  
+diff --git a/package/gpsd/gpsd.mk b/package/gpsd/gpsd.mk
+index be2e681..92db00e 100644
+--- a/package/gpsd/gpsd.mk
++++ b/package/gpsd/gpsd.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--- 
-1.8.1.2
+-GPSD_VERSION = 3.9
++GPSD_VERSION = 3.10
+ GPSD_SITE = http://download-mirror.savannah.gnu.org/releases/gpsd/
+ GPSD_LICENSE = BSD-3c
+ GPSD_LICENSE_FILES = COPYING
