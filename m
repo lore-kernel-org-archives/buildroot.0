@@ -1,40 +1,42 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 24 Nov 2013 11:31:12 +0100
-Subject: [Buildroot] [git commit] nut: add libltdl dependency
-Message-ID: <20131124113313.662919BB05@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 24 Nov 2013 13:05:12 +0100
+Subject: [Buildroot] [PATCH 1/1] nut: add libltdl dependency
+In-Reply-To: <87fvqmm3x2.fsf@dell.be.48ers.dk>
+References: <1385232385-8527-1-git-send-email-romain.naour@openwide.fr>
+ <87fvqmm3x2.fsf@dell.be.48ers.dk>
+Message-ID: <20131124120512.GA3575@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=46250ee126476821ef934a737f487ee49b33fd5a
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Peter, All,
 
-libltdl is needed for nut-scanner
+On 2013-11-24 12:31 +0100, Peter Korsgaard spake thusly:
+> >>>>> "Romain" == Romain Naour <romain.naour@openwide.fr> writes:
+> 
+>  > libltdl is needed for nut-scanner
+>  > Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+> 
+> Committed, thanks.
+> 
+> Do you think this fixes:
+> 
+> http://autobuild.buildroot.net/results/7e4/7e4e369dc5640619e95983ad0b4571f3a3f0d84b/build-end.log
+> 
+> Or is that another problem?
 
-Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/nut/nut.mk |    8 ++++++++
- 1 files changed, 8 insertions(+), 0 deletions(-)
+Neither Romain nor I were able to reproduce this build failure (without
+Romain's chage, that is).
 
-diff --git a/package/nut/nut.mk b/package/nut/nut.mk
-index 8cb8a01..25b88c4 100644
---- a/package/nut/nut.mk
-+++ b/package/nut/nut.mk
-@@ -48,6 +48,14 @@ else
- NUT_CONF_OPT += --without-cgi
- endif
- 
-+# libltdl (libtool) is needed for nut-scanner
-+ifeq ($(BR2_PACKAGE_LIBTOOL),y)
-+NUT_DEPENDENCIES += libtool
-+NUT_CONF_OPT += --with-libltdl
-+else
-+NUT_CONF_OPT += --without-libltdl
-+endif
-+
- ifeq ($(BR2_PACKAGE_LIBUSB_COMPAT),y)
- NUT_DEPENDENCIES += libusb-compat
- NUT_CONF_OPT += --with-usb
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
