@@ -1,22 +1,42 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 24 Nov 2013 20:05:51 +0100
-Subject: [Buildroot] [PATCH] gpsd: bump version to 3.10
-In-Reply-To: <1385206525-26557-1-git-send-email-spdawson@gmail.com>
- (spdawson@gmail.com's message of "Sat, 23 Nov 2013 11:35:25 +0000")
-References: <1385206525-26557-1-git-send-email-spdawson@gmail.com>
-Message-ID: <877gbxmxgw.fsf@dell.be.48ers.dk>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 24 Nov 2013 21:20:25 +0100
+Subject: [Buildroot] [PATCHv2 0/4] Add a BR2_EXTERNAL mechanism
+In-Reply-To: <1379185433-8770-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1379185433-8770-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20131124202025.GB3575@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "spdawson" == spdawson  <spdawson@gmail.com> writes:
+Hello All!
 
- > From: Simon Dawson <spdawson@gmail.com>
- > Signed-off-by: Simon Dawson <spdawson@gmail.com>
+On 2013-09-14 21:03 +0200, Thomas Petazzoni spake thusly:
+> Here is the second version of the BR2_EXTERNAL patch series.
 
-Committed to next, thanks.
+I was wondering what the plan with BR2_EXTERNAL was, in the end?
+
+From my recollection of the last DevDay, I understood we would go with
+it, with a few changes:
+  - add a generated, sub-makefile in $(O) with the definition of
+    BR2_EXTERNAL, so that it is not needed to repeat it on the command
+    line of future invocations of 'make'
+  - enforce the same directory layout, package/ board/ and configs/
+
+Right?
+
+If so, Thomas, since your the original submitter: do you have pending
+changes to that effect, or are you waiting for someone to kick in and
+continue the work on this patch series?
+
+Regards,
+Yann E. MORIN.
 
 -- 
-Bye, Peter Korsgaard
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
