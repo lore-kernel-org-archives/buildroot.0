@@ -1,28 +1,42 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 24 Nov 2013 12:31:53 +0100
-Subject: [Buildroot] [PATCH 1/1] nut: add libltdl dependency
-In-Reply-To: <1385232385-8527-1-git-send-email-romain.naour@openwide.fr>
- (Romain Naour's message of "Sat, 23 Nov 2013 19:46:25 +0100")
-References: <1385232385-8527-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <87fvqmm3x2.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 24 Nov 2013 10:51:08 +0100
+Subject: [Buildroot] [git commit] swig: unbreak host-swig build when host
+	has octave installed
+Message-ID: <20131124113313.54AB29BDAD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Romain" == Romain Naour <romain.naour@openwide.fr> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=f133e9b05fa2c511d476397cdcfd00c9ebe1ad60
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > libltdl is needed for nut-scanner
- > Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+But not the octave development package:
 
-Committed, thanks.
+checking for octave... octave
+checking for mkoctfile... configure: error: mkoctfile is not installed
 
-Do you think this fixes:
+We don't need octace support, so fix it by explictly disabling it.
 
-http://autobuild.buildroot.net/results/7e4/7e4e369dc5640619e95983ad0b4571f3a3f0d84b/build-end.log
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/swig/swig.mk |    5 ++++-
+ 1 files changed, 4 insertions(+), 1 deletions(-)
 
-Or is that another problem?
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/swig/swig.mk b/package/swig/swig.mk
+index 94395ee..79839ea 100644
+--- a/package/swig/swig.mk
++++ b/package/swig/swig.mk
+@@ -7,7 +7,10 @@
+ SWIG_VERSION = 2.0.10
+ SWIG_SITE = http://downloads.sourceforge.net/project/swig/swig/swig-$(SWIG_VERSION)
+ SWIG_DEPENDENCIES = host-bison
+-HOST_SWIG_CONF_OPT = --without-pcre --disable-ccache
++HOST_SWIG_CONF_OPT = \
++	--without-pcre \
++	--disable-ccache \
++	--without-octave
+ SWIG_LICENSE = GPLv3+ BSD-2c BSD-3c
+ SWIG_LICENSE_FILES = LICENSE LICENSE-GPL LICENSE-UNIVERSITIES
+ 
