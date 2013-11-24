@@ -1,65 +1,59 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 22 Nov 2013 23:25:36 +0100
-Subject: [Buildroot] [git commit] fping: new package
-Message-ID: <20131201201519.B0FCC9BE44@busybox.osuosl.org>
+Date: Sun, 24 Nov 2013 20:05:07 +0100
+Subject: [Buildroot] [git commit] gpsd: bump version to 3.10
+Message-ID: <20131201201520.071729BE44@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=9c2b3e50811ff8f75cb1497b10456a8e6b7ae1f4
+commit: http://git.buildroot.net/buildroot/commit/?id=07e502689fb78e55732fe0ad9b725a9dd4363804
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Simon Dawson <spdawson@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/Config.in       |    1 +
- package/fping/Config.in |    8 ++++++++
- package/fping/fping.mk  |   12 ++++++++++++
- 3 files changed, 21 insertions(+), 0 deletions(-)
+ .../gpsd/gpsd-02-sconstruct-disable-rpath.patch    |   15 +++++++--------
+ package/gpsd/gpsd.mk                               |    2 +-
+ 2 files changed, 8 insertions(+), 9 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 1a95b10..f9bd88c 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -792,6 +792,7 @@ source "package/dropbear/Config.in"
- source "package/ebtables/Config.in"
- source "package/ethtool/Config.in"
- source "package/foomatic-filters/Config.in"
-+source "package/fping/Config.in"
- source "package/gesftpserver/Config.in"
- source "package/gutenprint/Config.in"
- source "package/heirloom-mailx/Config.in"
-diff --git a/package/fping/Config.in b/package/fping/Config.in
-new file mode 100644
-index 0000000..686102a
---- /dev/null
-+++ b/package/fping/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_FPING
-+	bool "fping"
-+	help
-+	  fping is a program to send ICMP echo probes to network hosts,
-+	  similar to ping, but much better performing when pinging
-+	  multiple hosts.
-+
-+	  http://fping.org/
-diff --git a/package/fping/fping.mk b/package/fping/fping.mk
-new file mode 100644
-index 0000000..580920e
---- /dev/null
-+++ b/package/fping/fping.mk
-@@ -0,0 +1,12 @@
-+################################################################################
-+#
-+# fping
-+#
-+################################################################################
-+
-+FPING_VERSION = 3.8
-+FPING_SITE = http://fping.org/dist
-+FPING_LICENSE = BSD-like
-+FPING_LICENSE_FILES = COPYING
-+
-+$(eval $(autotools-package))
+diff --git a/package/gpsd/gpsd-02-sconstruct-disable-rpath.patch b/package/gpsd/gpsd-02-sconstruct-disable-rpath.patch
+index 5476450..eca3cbf 100644
+--- a/package/gpsd/gpsd-02-sconstruct-disable-rpath.patch
++++ b/package/gpsd/gpsd-02-sconstruct-disable-rpath.patch
+@@ -2,14 +2,13 @@ Disable addition of RPATH to the generated libraries
+ 
+ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ 
+-Index: b/SConstruct
+-===================================================================
+---- a/SConstruct
+-+++ b/SConstruct
+-@@ -273,8 +273,6 @@
+-     env.Prepend(LIBPATH=[installdir('libdir')])
+- else:
+-     env.Prepend(LIBPATH=[env["sysroot"] + installdir('libdir')])
++diff -Nurp a/SConstruct b/SConstruct
++--- a/SConstruct	2013-11-22 13:10:01.000000000 +0000
+++++ b/SConstruct	2013-11-23 11:26:57.698486777 +0000
++@@ -287,8 +287,6 @@ def installdir(dir, add_destdir=True):
++ # Honor the specified installation prefix in link paths.
++ if env["sysroot"]:
++     env.Prepend(LIBPATH=[env["sysroot"] + installdir('libdir', add_destdir=False)])
+ -if env["shared"]:
+ -    env.Prepend(RPATH=[installdir('libdir')])
+  
+diff --git a/package/gpsd/gpsd.mk b/package/gpsd/gpsd.mk
+index be2e681..92db00e 100644
+--- a/package/gpsd/gpsd.mk
++++ b/package/gpsd/gpsd.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GPSD_VERSION = 3.9
++GPSD_VERSION = 3.10
+ GPSD_SITE = http://download-mirror.savannah.gnu.org/releases/gpsd/
+ GPSD_LICENSE = BSD-3c
+ GPSD_LICENSE_FILES = COPYING
