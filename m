@@ -1,30 +1,38 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 24 Nov 2013 14:04:07 +0100
-Subject: [Buildroot] [PATCH 1/1] nut: add libltdl dependency
-In-Reply-To: <20131124120512.GA3575@free.fr> (Yann E. MORIN's message of "Sun, 
- 24 Nov 2013 13:05:12 +0100")
-References: <1385232385-8527-1-git-send-email-romain.naour@openwide.fr>
- <87fvqmm3x2.fsf@dell.be.48ers.dk> <20131124120512.GA3575@free.fr>
-Message-ID: <87bo1alznc.fsf@dell.be.48ers.dk>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sun, 24 Nov 2013 10:04:16 +0100
+Subject: [Buildroot] [PATCH 1/5] package/rpi-firmware: only install one
+ firmware file
+In-Reply-To: <0d74df03558aab514aaa7d9d04d2270eda15bd62.1385157864.git.yann.morin.1998@free.fr>
+References: <cover.1385157864.git.yann.morin.1998@free.fr>
+ <0d74df03558aab514aaa7d9d04d2270eda15bd62.1385157864.git.yann.morin.1998@free.fr>
+Message-ID: <5291C110.7070409@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+On 22/11/13 23:50, Yann E. MORIN wrote:
+> From: "Yann E. MORIN"<yann.morin.1998@free.fr>
+>
+> Since only one firmware is used to boot the Raspberry Pi, there is no
+> reason to install all of them.
+>
+> Add an option to select what firmware to install.
+>
+> Signed-off-by: "Yann E. MORIN"<yann.morin.1998@free.fr>
 
- >> Do you think this fixes:
- >> 
- >> http://autobuild.buildroot.net/results/7e4/7e4e369dc5640619e95983ad0b4571f3a3f0d84b/build-end.log
- >> 
- >> Or is that another problem?
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
- > Neither Romain nor I were able to reproduce this build failure
- > (without Romain's chage, that is).
 
-Thanks. I tried as well here, without any luck. Lets see if it occours
-again before spending any more time on it.
+  Regards,
+  Arnout
 
+[snip]
 -- 
-Bye, Peter Korsgaard
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
