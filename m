@@ -1,88 +1,83 @@
-From: sonic.adi at gmail.com <sonic.adi@gmail.com>
-Date: Mon, 25 Nov 2013 15:23:13 +0800
-Subject: [Buildroot] [PATCH] alsa-lib: dlmisc: Add a fake dl lib head file
-	when dl lib is not supported by the toolchain
-Message-ID: <1385364193-23750-1-git-send-email-Sonic.adi@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 25 Nov 2013 08:30:02 +0100 (CET)
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2013-11-24
+Message-ID: <20131125073002.2FB821014B4@stock.ovh.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Sonic Zhang <sonic.zhang@analog.com>
+Build statistics for 2013-11-24
+===============================
 
-The FLAT GNU toolchain doesn't include the dlfcn.h header file.
+        success : 84 
+       failures : 29 
+       timeouts : 0  
+          TOTAL : 113
 
-Signed-off-by: Sonic Zhang <sonic.zhang@analog.com>
----
- package/alsa-lib/alsa-lib-003-dlmisc.patch |   59 ++++++++++++++++++++++++++++
- 1 file changed, 59 insertions(+)
- create mode 100644 package/alsa-lib/alsa-lib-003-dlmisc.patch
+Classification of failures by reason
+====================================
 
-diff --git a/package/alsa-lib/alsa-lib-003-dlmisc.patch b/package/alsa-lib/alsa-lib-003-dlmisc.patch
-new file mode 100644
-index 0000000..612fa5a
---- /dev/null
-+++ b/package/alsa-lib/alsa-lib-003-dlmisc.patch
-@@ -0,0 +1,59 @@
-+alsa-lib: dlmisc: Add a fake dl lib head file when dl lib is not supported by the toolchain.
-+
-+The FLAT GNU toolchain doesn't include the dlfcn.h header file.
-+
-+--- alsa-lib-1.0.26/src/mixer/simple_abst.c	2012-09-06 16:55:14.000000000 +0800
-++++ alsa-lib-1.0.26.bak/src/mixer/simple_abst.c	2013-11-25 14:53:07.739275843 +0800
-+@@ -34,7 +34,11 @@
-+ #include <fcntl.h>
-+ #include <sys/ioctl.h>
-+ #include <math.h>
-++#ifdef HAVE_LIBDL
-+ #include <dlfcn.h>
-++#else
-++#include <dlmisc.h>
-++#endif
-+ #include "config.h"
-+ #include "asoundlib.h"
-+ #include "mixer_simple.h"
-+--- alsa-lib-1.0.26/modules/mixer/simple/sbasedl.c	2012-09-06 16:55:14.000000000 +0800
-++++ alsa-lib-1.0.26.bak/modules/mixer/simple/sbasedl.c	2013-11-25 14:53:40.871279553 +0800
-+@@ -27,7 +27,11 @@
-+ #include <fcntl.h>
-+ #include <sys/ioctl.h>
-+ #include <math.h>
-++#ifdef HAVE_LIBDL
-+ #include <dlfcn.h>
-++#else
-++#include <dlmisc.h>
-++#endif
-+ #include "config.h"
-+ #include "asoundlib.h"
-+ #include "mixer_abst.h"
-+--- /dev/null	2013-11-25 21:32:41.194714253 +0800
-++++ alsa-lib-1.0.26.bak/include/dlmisc.h	2013-11-25 15:03:11.031307047 +0800
-+@@ -0,0 +1,24 @@
-++/*
-++ *   This library is free software; you can redistribute it and/or modify
-++ *   it under the terms of the GNU Lesser General Public License as
-++ *   published by the Free Software Foundation; either version 2.1 of
-++ *   the License, or (at your option) any later version.
-++ *
-++ *   This program is distributed in the hope that it will be useful,
-++ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
-++ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-++ *   GNU Lesser General Public License for more details.
-++ *
-++ *   You should have received a copy of the GNU Lesser General Public
-++ *   License along with this library; if not, write to the Free Software
-++ *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
-++ *
-++ */
-++
-++#ifndef __ALSA_DLMISC_H
-++#define __ALSA_DLMISC_H
-++
-++#define RTLD_NOW	0x00002
-++#define RTLD_GLOBAL	0x00100
-++
-++#endif
+  toolchain-external-undefined | 3 
+               qt5webkit-5.1.1 | 2 
+                sdl_ttf-2.0.11 | 2 
+                  nettle-2.7.1 | 1 
+ne10-88c18f02199947b2c8b577... | 1 
+                  iozone-3_414 | 1 
+                     m4-1.4.17 | 1 
+                  gnupg-1.4.15 | 1 
+                 webkit-1.11.5 | 1 
+                 mplayer-1.1.1 | 1 
+                 qt5base-5.1.1 | 1 
+                  aespipe-2.4c | 1 
+                   duma-2_5_15 | 1 
+          host-protobuf-c-0.15 | 1 
+                elfutils-0.155 | 1 
+                 erlang-R16B01 | 1 
+                 cairo-1.12.10 | 1 
+                  python-2.7.3 | 1 
+                busybox-1.21.1 | 1 
+              gstreamer1-1.2.1 | 1 
+                     gmp-5.1.3 | 1 
+              fontconfig-2.6.0 | 1 
+          qt5declarative-5.1.1 | 1 
+                log4cxx-0.10.0 | 1 
+                    crda-1.1.3 | 1 
+
+Detail of failures
+===================
+
+    mipsel |                   aespipe-2.4c | NOK | http://autobuild.buildroot.net/results/c5513b3811ab55700e7eb1c772c94073d84371f1/
+    mipsel |                 busybox-1.21.1 | NOK | http://autobuild.buildroot.net/results/cab584fa4f4f932cc37d21e275c96823d67c5b60/
+      bfin |                  cairo-1.12.10 | NOK | http://autobuild.buildroot.net/results/fd37d7a4f2f86b85292b903ab58a0b6be55ff8d3/
+      bfin |                     crda-1.1.3 | NOK | http://autobuild.buildroot.net/results/51934d18c8ef49455418e81a87aa5fb82e8a06ee/
+      bfin |                    duma-2_5_15 | NOK | http://autobuild.buildroot.net/results/e9e970a6579ca1d1e98a2eef97fbdd4de0185092/
+      bfin |                 elfutils-0.155 | NOK | http://autobuild.buildroot.net/results/4c24917998f781ff69d949e61f7535a3ce8a91cf/
+       arc |                  erlang-R16B01 | NOK | http://autobuild.buildroot.net/results/5067dd07df0da1c91b1d288caf7b1210eb01eebe/
+      bfin |               fontconfig-2.6.0 | NOK | http://autobuild.buildroot.net/results/8d0f9d18eaf3c7cf048761650f7a9f1fac19b5af/
+    mipsel |                      gmp-5.1.3 | NOK | http://autobuild.buildroot.net/results/485d60cfac81c6ed41d22590165f8ac6b8ab6961/
+       arc |                   gnupg-1.4.15 | NOK | http://autobuild.buildroot.net/results/abcdc7a2371a7f8811d7648832c13e03a770f7ec/
+    xtensa |               gstreamer1-1.2.1 | NOK | http://autobuild.buildroot.net/results/68c48ff352ce4cf273b158540aed69fb55f9d033/
+   powerpc |           host-protobuf-c-0.15 | NOK | http://autobuild.buildroot.net/results/10db94f960db6cc8b2fbcafa66aa487fc66f99c6/
+     avr32 |                   iozone-3_414 | NOK | http://autobuild.buildroot.net/results/6a4783138fa1918c274a0c72b02a480c0baee494/
+     avr32 |                 log4cxx-0.10.0 | NOK | http://autobuild.buildroot.net/results/0e2769481aeaee7f61ce3d45bad161b47798530e/
+    xtensa |                      m4-1.4.17 | NOK | http://autobuild.buildroot.net/results/12d5db2338b0ee3a4b481a82ec4707eba2acaadd/
+     nios2 |                  mplayer-1.1.1 | NOK | http://autobuild.buildroot.net/results/efddd9d6fac491b9344dab06c6e5d863dcf5f57f/
+       arm | ne10-88c18f02199947b2c8b577... | NOK | http://autobuild.buildroot.net/results/a140a5ecd98805bb094d5ce37f68cb7beb42862c/
+microblaze |                   nettle-2.7.1 | NOK | http://autobuild.buildroot.net/results/d7f01390da67629e8494ed16e54d25a1909fabb6/
+       arm |                   python-2.7.3 | NOK | http://autobuild.buildroot.net/results/5e0223c5c532d079d4f987e68f0549f4d3278ab9/
+       arm |                  qt5base-5.1.1 | NOK | http://autobuild.buildroot.net/results/592acfc6508f01ab82b5692ad52e0fe6d16a3ea3/
+       arm |           qt5declarative-5.1.1 | NOK | http://autobuild.buildroot.net/results/452759ecaa0b44367ea9d504169ab31322f4e6f2/
+  mips64el |                qt5webkit-5.1.1 | NOK | http://autobuild.buildroot.net/results/6739a4c697d8f8442dc5edc16dfea835786960b4/
+   powerpc |                qt5webkit-5.1.1 | NOK | http://autobuild.buildroot.net/results/f8f2247378bca52dfb169bad90b01ec7e0b216a7/
+       arm |                 sdl_ttf-2.0.11 | NOK | http://autobuild.buildroot.net/results/02aae20abd9c32d173ed493db3d51fb35fcfd066/
+       arm |                 sdl_ttf-2.0.11 | NOK | http://autobuild.buildroot.net/results/0eaf43b65d14374c3fc1d022cf222fd040d3a6d8/
+      sh4a |   toolchain-external-undefined | NOK | http://autobuild.buildroot.net/results/5a45a24b3740cfaebcc668f2922a2f2226a0d4ac/
+       arm |   toolchain-external-undefined | NOK | http://autobuild.buildroot.net/results/24a4797fcac9b5e8abcd9839e0679954e61d6c2a/
+  mips64el |   toolchain-external-undefined | NOK | http://autobuild.buildroot.net/results/d28ac363a3fb5836bd89da71af0174a05b952cb5/
+   powerpc |                  webkit-1.11.5 | NOK | http://autobuild.buildroot.net/results/39e384298f791d95ec711dfffae514b4d5a5f70f/
+
+
 -- 
-1.7.9.5
+http://autobuild.buildroot.net
