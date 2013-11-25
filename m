@@ -1,48 +1,48 @@
-From: =?ISO-8859-1?Q?Arnaud_R=E9billout?= <rebillout@syscom.ch>
-Date: Mon, 25 Nov 2013 14:06:00 +0100
+From: =?UTF-8?B?QXJuYXVkIFLDqWJpbGxvdXQ=?= <rebillout@syscom.ch>
+Date: Mon, 25 Nov 2013 14:19:38 +0100
 Subject: [Buildroot] [PATCH] lftp: new package.
-In-Reply-To: <528F21F3.9010904@mind.be>
-References: <1385046971-7707-1-git-send-email-rebillout@syscom.ch>
- <1385046971-7707-2-git-send-email-rebillout@syscom.ch>
- <20131121164242.64981c00@skate> <528E3223.1000401@syscom.ch>
- <20131121181248.3c606028@skate> <528E8110.10406@mind.be>
- <20131121230011.040fe161@skate> <528E86DE.7020307@mind.be>
- <20131122091552.247012c6@skate> <528F21F3.9010904@mind.be>
-Message-ID: <52934B38.1010905@syscom.ch>
+In-Reply-To: <20131121164242.64981c00@skate>
+References: <1385046971-7707-1-git-send-email-rebillout@syscom.ch>	<1385046971-7707-2-git-send-email-rebillout@syscom.ch>
+ <20131121164242.64981c00@skate>
+Message-ID: <52934E6A.9040204@syscom.ch>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 11/22/2013 10:20 AM, Arnout Vandecappelle wrote:
->
->  Well, yes, there are two tests in configure, but only a single macro 
-> in lftp.m4. AC_TRY_RUN compiles the first argument and then tries to 
-> run it (if not cross-compiling). The second argument is executed if 
-> the run succeeds, the third argument if the compilation or the run 
-> fails, the fourth argument if compilation succeeds but it cannot be 
-> ran because you're cross-compiling.
->
->  There are a number of other instances of AC_TRY_RUN in the lftp 
-> configure scripts, but the others all have the fourth argument.
+Dear Thomas,
 
-I tried to add a 4th argument to the AC_TRY_RUN as you suggested in a 
-previous mail:
+On 11/21/2013 04:42 PM, Thomas Petazzoni wrote:
+> Is the dependency on OpenSSL or GnuTLS always needed? Or is it only
+> needed if you enable SFTP or some specific protocol?
 
-> +     ], [
-> +       i_cv_posix_fallocate_works=yes 
+It's a compile-time dependency, since lftp doesn't permit to select what 
+component should be built.
 
-But in case of cross-compiation, it always returns yes, even if 
-posix_fallocate is not defined by the libc: autotools don't even try to 
-compile in case of cross-compile.
-So it looks like a compile tested is needed in addition to the run test.
+About the run-time, I'm not sure, but I checked a little bit the lftp 
+modules.
+There are two libraries, liblftp-network.so and liblftp-pty.so, that are 
+needed for lftp. Both these libraries seems to need a crypto library.
 
-
-I just sent a second revision of the patch with the compile test added. 
-I tried it on two different buildroot repo, one with posix_fallocate, 
-and the other without posix_fallocate. It's working good.
+readelf -d liblftp-network.so | grep Shared
+  0x00000001 (NEEDED)                     Shared library: [libssl.so.1.0.0]
+  0x00000001 (NEEDED)                     Shared library: 
+[libcrypto.so.1.0.0]
+  0x00000001 (NEEDED)                     Shared library: [libutil.so.0]
+  0x00000001 (NEEDED)                     Shared library: [libncurses.so.5]
+  0x00000001 (NEEDED)                     Shared library: [libdl.so.0]
+  0x00000001 (NEEDED)                     Shared library: [libstdc++.so.6]
+  0x00000001 (NEEDED)                     Shared library: [libm.so.0]
+  0x00000001 (NEEDED)                     Shared library: [libc.so.0]
+  0x00000001 (NEEDED)                     Shared library: [libgcc_s.so.1]
+/
+/From my point of view, it means that we can't get rid of OpenSSL or GnuTLS.
 
 
 Best regards,
 Arnaud
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20131125/e9b7e2eb/attachment.html>
