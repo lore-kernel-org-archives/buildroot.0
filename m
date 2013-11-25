@@ -1,53 +1,71 @@
-From: Ryan Barnett <rjbarnet@rockwellcollins.com>
-Date: Mon, 25 Nov 2013 03:21:40 -0600
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Mon, 25 Nov 2013 10:25:13 +0100
 Subject: [Buildroot] [autobuild.buildroot.net] Build results for
-	2013-11-24
-In-Reply-To: <20131125073002.2FB821014B4@stock.ovh.net>
-References: <20131125073002.2FB821014B4@stock.ovh.net>
-Message-ID: <OF0E9DA113.910F94AB-ON86257C2E.00328BF4-86257C2E.003369F4@rockwellcollins.com>
+	2013-11-22
+In-Reply-To: <20131123201745.GA3927@tarshish>
+References: <20131123073002.EA89E101432@stock.ovh.net>
+ <CAAXf6LWFAGDvHV42Mvc2_uhnFtthuCX-N5ZLogdW5u1k9XSkSQ@mail.gmail.com>
+ <20131123201745.GA3927@tarshish>
+Message-ID: <CAAXf6LVd6RsHBkMdBkVFB-=gmrG7LdUTGOYGviwAW6r-hGFmFA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas P, All,
+On Sat, Nov 23, 2013 at 9:17 PM, Baruch Siach <baruch@tkos.co.il> wrote:
+> Hi Thomas,
+>
+> On Sat, Nov 23, 2013 at 02:11:43PM +0100, Thomas De Schampheleire wrote:
+>> On Sat, Nov 23, 2013 at 8:30 AM, Thomas Petazzoni
+>> <thomas.petazzoni@free-electrons.com> wrote:
+>> > Build statistics for 2013-11-22
+>> > ===============================
+>> >
+>> >         success : 68
+>> >        failures : 34
+>> >        timeouts : 0
+>> >           TOTAL : 102
+>> >
+>> [..]
+>>
+>> >       sh4a |                   poco-1.4.6p1 | NOK | http://autobuild.buildroot.net/results/8dc9bca5969d455cc30206fc1ae6e1d3ba6eb6ca/
+>>
+>> Error is:
+>>
+>> In file included from src/FPEnvironment_C99.cpp:37:0,
+>>                  from src/FPEnvironment.cpp:48:
+>> include/Poco/FPEnvironment_C99.h:56:30: error: 'FE_DOWNWARD' was not
+>> declared in this scope
+>> include/Poco/FPEnvironment_C99.h:57:30: error: 'FE_UPWARD' was not
+>> declared in this scope
+>> make[2]: *** [/home/test/test/2/output/build/poco-1.4.6p1/Foundation/obj/Linux/sh4a/release_shared/FPEnvironment.o]
+>> Error 1
+>> make[2]: Leaving directory
+>> `/home/test/test/2/output/build/poco-1.4.6p1/Foundation'
+>> make[1]: *** [Foundation-libexec] Error 2
+>> make[1]: Leaving directory `/home/test/test/2/output/build/poco-1.4.6p1'
+>> make: *** [/home/test/test/2/output/build/poco-1.4.6p1/.stamp_built] Error 2
+>>
+>> The same build failure has been discussed a long time ago here:
+>> http://lists.busybox.net/pipermail/buildroot/2011-September/046013.html
+>> when the poco package was introduced. Then, the fpenvironment was
+>> disabled when the C library is uclibc.
+>> In the current failure, the C library seems to be glibc.
+>> I'm including Baruch on this one, who was involved in the above
+>> thread. Baruch: any idea?
+>
+> I see the following comment in glibc sysdeps/sh/sh4/fpu/bits/fenv.h:
+>
+> /* The SH FPU supports two of the four defined rounding modes: round to nearest
+>    and round to zero.  We use again the bit positions in the FPU control word
+>    as the values for the appropriate macros.  */
+>
+> I don't know enough about fenv to know what the right solution here would be.
+> The easiest one is to add --no-fpenvironment for sh4a. Is this acceptable?
 
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote on 11/25/2013 
-01:30:02 AM:
+I couldn't tell you. We already pass this option in one situation, at
+first sight it would be acceptable to pass it in another.
 
->    powerpc |           host-protobuf-c-0.15 | NOK | 
-http://autobuild.buildroot.net/results/10db94f960db6cc8b2fbcafa66aa487fc66f99c6/
-
-
-I looked into this last night and I was unable to reproduce the issue 
-(from pulling the defconfig). From looking at the logs, it appears that 
-the issue is that a file wasn't generated before trying to compile the 
-code. In my experience, errors like below are due to the makefile not 
-having their dependencies correct. I tired rebuilding this package around 
-5-7 times and I never ran into this error with the defconfig provided. 
-
-cxx-generate-packed-data.cc:28: error: 'foo' is not a namespace-name
-cxx-generate-packed-data.cc:28: error: expected namespace-name before ';' 
-token
-In file included from cxx-generate-packed-data.cc:35:
-common-test-arrays.h:44: error: 'TestEnumSmall' does not name a type
-common-test-arrays.h:45: error: 'TestEnumSmall' does not name a type
-common-test-arrays.h:47: error: 'TestEnumSmall' does not name a type
-In file included from cxx-generate-packed-data.cc:35:
-common-test-arrays.h:51: error: 'TestEnum' does not name a type
-common-test-arrays.h:52: error: 'TestEnum' does not name a type
-common-test-arrays.h:53: error: 'TestEnum' does not name a type
-cxx-generate-packed-data.cc:39: error: variable or field 
-'dump_message_bytes' declared void
-cxx-generate-packed-data.cc:39: error: 'google' has not been declared
-cxx-generate-packed-data.cc:39: error: 'message' was not declared in this 
-scope
-cxx-generate-packed-data.cc:40: error: expected primary-expression before 
-'const'
-
-Thanks,
--Ryan
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20131125/f2c17f1e/attachment-0001.html>
+Best regards,
+Thomas
