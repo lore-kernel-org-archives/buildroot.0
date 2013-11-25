@@ -1,56 +1,60 @@
-From: Ryan Barnett <rjbarnet@rockwellcollins.com>
-Date: Mon, 25 Nov 2013 16:58:14 -0600
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
-	2013-11-24
-In-Reply-To: <5293D3E9.2090207@mind.be>
-References: <20131125073002.2FB821014B4@stock.ovh.net>
- <OF0E9DA113.910F94AB-ON86257C2E.00328BF4-86257C2E.003369F4@rockwellcollins.com>
- <5293D3E9.2090207@mind.be>
-Message-ID: <OFCD75EB86.5B7B148B-ON86257C2E.007DEA83-86257C2E.007E2C3E@rockwellcollins.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 26 Nov 2013 00:03:40 +0100
+Subject: [Buildroot] [PATCH 4/5] fs/custom: generate complete,
+ partition-based device images
+In-Reply-To: <5293D598.20408@mind.be>
+References: <cover.1385157864.git.yann.morin.1998@free.fr>
+ <ddf2a31498f7f8e1ec0d40d73849bc254ec00b6d.1385157864.git.yann.morin.1998@free.fr>
+ <52931907.2040207@mind.be> <20131125190551.GA3435@free.fr>
+ <5293CEC8.9010601@mind.be> <20131125224548.GB3435@free.fr>
+ <5293D598.20408@mind.be>
+Message-ID: <20131125230340.GC3435@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout,
+Arnout, All,
 
-Arnout Vandecappelle <arnout@mind.be> wrote on 11/25/2013 04:49:13 PM:
-
-> On 25/11/13 10:21, Ryan Barnett wrote:
-> > Thomas P, All,
+On 2013-11-25 23:56 +0100, Arnout Vandecappelle spake thusly:
+> On 25/11/13 23:45, Yann E. MORIN wrote:
+> >Arnout, All,
 > >
-> > Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote on
-> > 11/25/2013 01:30:02 AM:
+> >On 2013-11-25 23:27 +0100, Arnout Vandecappelle spake thusly:
+> >>On 25/11/13 20:05, Yann E. MORIN wrote:
+> >>>Arnout,
+> >>>
+> >>>On 2013-11-25 10:31 +0100, Arnout Vandecappelle spake thusly:
+> [snip]
+> >>  Anyway, I think it should be:
+> >>
+> >>BUILD_DIR=$(BUILD_DIR) fs/custom/genimages \
+> >>	'$(call qstrip,$(BR2_TARGET_ROOTFS_CUSTOM_PARTITION_TABLE))'
 > >
-> >  >    powerpc |           host-protobuf-c-0.15 | NOK |
-> > 
-http://autobuild.buildroot.net/results/10db94f960db6cc8b2fbcafa66aa487fc66f99c6/
-
-> >
-> > I looked into this last night and I was unable to reproduce the issue
-> > (from pulling the defconfig). From looking at the logs, it appears 
-that
-> > the issue is that a file wasn't generated before trying to compile the
-> > code. In my experience, errors like below are due to the makefile not
-> > having their dependencies correct. I tired rebuilding this package 
-around
-> > 5-7 times and I never ran into this error with the defconfig provided.
+> >I'm using double quotes here, now, instead of single quotes.
+> >Otherwise, consider it changed. Thanks!
 > 
->   I have seen exactly the same error before and sent a fix to the list, 
-> but I can't find it back... so I guess I must have imagined it.
-> 
->   Anyway, there are two solutions: either disable parallel build for 
-> protobuf-c, or fix the dependencies. IIRC the problem is actually that 
-> the static and shared library are built in parallel with the same object 
+>  With double quotes, it will not actually be quoted because the
+> ROOTFS_$(2)_CMD use adds another level of double quotes and they cancel out.
 
-> files.
+Yes, I was again too fast to reply: I'm using \"$(BLABLA)\"
 
-I was going to just make -j1 one this package since I don't have time 
-actually fix the problem. I will hopefully get around to submitting a 
-patch for this tomorrow.
+My reasoning is I want varuable to be expanded, like in:
+    BR2_TARGET_ROOTFS_CUSTOM_PARTITION_TABLE="$(TOPDIR)/board/raspberrypi/partitions"
 
-Thanks,
--Ryan 
+But since $(TOPDIR) is a Makefile constrcut, the shell won't expand it,
+so it must be make expanding it (since it is working).
 
-[...]
+I'll try single quotes, since they look better.
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
