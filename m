@@ -1,38 +1,67 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 25 Nov 2013 10:35:30 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2013-11-22
-In-Reply-To: <CAAXf6LVk0j9C0GS=qUeEdcyKvB64vc4AEPPHBptnSFtdVX5ukw@mail.gmail.com>
-References: <20131123073002.EA89E101432@stock.ovh.net>
- <CAAXf6LWFAGDvHV42Mvc2_uhnFtthuCX-N5ZLogdW5u1k9XSkSQ@mail.gmail.com>
- <20131123182656.77936e93@skate>
- <CAAXf6LVk0j9C0GS=qUeEdcyKvB64vc4AEPPHBptnSFtdVX5ukw@mail.gmail.com>
-Message-ID: <20131125103530.776caae4@skate>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 25 Nov 2013 10:43:44 +0100
+Subject: [Buildroot] [PATCH 1/1 v2] mongoose: startup script must use
+	short options
+In-Reply-To: <1385370203-7524-1-git-send-email-d.viti@infosolution.it> (Davide
+ Viti's message of "Mon, 25 Nov 2013 10:03:23 +0100")
+References: <1385370203-7524-1-git-send-email-d.viti@infosolution.it>
+Message-ID: <87txf0lstr.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas De Schampheleire,
+>>>>> "Davide" == Davide Viti <zinosat@tiscali.it> writes:
 
-On Mon, 25 Nov 2013 10:26:46 +0100, Thomas De Schampheleire wrote:
+ > From: Davide Viti <zinosat@tiscali.it>
+ > mongoose fails to start because long options are not supported (as
+ > shown by "mongoose -h")
 
-> > It's a fairly old toolchain that I've built with Crosstool-NG. It uses
-> > uClibc 0.9.33.2, but there might be some missing uClibc configuration
-> > options, or the kernel headers might be old.
-> 
-> Then what do we do? Does it make sense to use this old toolchain, or
-> should we update it?
+That's not really true:
 
-It's on my TODO-list to update all the toolchains used in the
-autobuilders. I've rebuilt all the Buildroot toolchains already, and
-prepared the configs for the Crosstool-NG toolchains as well. Just need
-a bit of time to finalize this (I have been working on SELinux patches
-yesterday evening with Ryan and Clayton).
+./mongoose -h
+Mongoose version 3.7 (c) Sergey Lyubka, built Nov 25 2013
+Usage:
+  mongoose -A <htpasswd_file> <realm> <user> <passwd>
+  mongoose <config_file>
+  mongoose [-option value ...]
 
-Thomas
+OPTIONS:
+  -C cgi_pattern (default: "**.cgi$|**.pl$|**.php$")
+  -E cgi_environment (default: "")
+  -G put_delete_auth_file (default: "")
+  -I cgi_interpreter (default: "")
+  -P protect_uri (default: "")
+  -R authentication_domain (default: "mydomain.com")
+  -S ssi_pattern (default: "**.shtml$|**.shtm$")
+  -T throttle (default: "")
+  -a access_log_file (default: "")
+  -d enable_directory_listing (default: "yes")
+  -e error_log_file (default: "")
+  -g global_auth_file (default: "")
+  -i index_files (default: "index.html,index.htm,index.cgi,index.shtml,index.php")
+  -k enable_keep_alive (default: "no")
+  -l access_control_list (default: "")
+  -m extra_mime_types (default: "")
+  -p listening_ports (default: "8080")
+  -r document_root (default: ".")
+  -s ssl_certificate (default: "")
+  -t num_threads (default: "20")
+  -u run_as_user (default: "")
+  -w url_rewrite_patterns (default: "")
+  -x hide_files_patterns (default: "")
+  -z request_timeout_ms (default: "30000")
+
+Both forms are supported (E.G. -t or -num_threads), but for some reason
+our init script used invalid arguments, that as far as I can see have
+never been supported by mongoose.
+
+I also prefer to use the (correct) long options, as that makes it more
+clear what they do.
+
+I've reworded the commit message to make this clear and committed,
+thanks.
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
