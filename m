@@ -1,42 +1,33 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 24 Nov 2013 21:20:25 +0100
-Subject: [Buildroot] [PATCHv2 0/4] Add a BR2_EXTERNAL mechanism
-In-Reply-To: <1379185433-8770-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1379185433-8770-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20131124202025.GB3575@free.fr>
+From: sonic.adi at gmail.com <sonic.adi@gmail.com>
+Date: Mon, 25 Nov 2013 14:29:45 +0800
+Subject: [Buildroot] [PATCH] e2fsprogs: Disable elf shared library when
+	BR2_PREFER_STATIC_LIB is selected.
+Message-ID: <1385360985-26978-1-git-send-email-Sonic.adi@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello All!
+From: Sonic Zhang <sonic.zhang@analog.com>
 
-On 2013-09-14 21:03 +0200, Thomas Petazzoni spake thusly:
-> Here is the second version of the BR2_EXTERNAL patch series.
+Signed-off-by: Sonic Zhang <sonic.zhang@analog.com>
+---
+ package/e2fsprogs/e2fsprogs.mk |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-I was wondering what the plan with BR2_EXTERNAL was, in the end?
-
-From my recollection of the last DevDay, I understood we would go with
-it, with a few changes:
-  - add a generated, sub-makefile in $(O) with the definition of
-    BR2_EXTERNAL, so that it is not needed to repeat it on the command
-    line of future invocations of 'make'
-  - enforce the same directory layout, package/ board/ and configs/
-
-Right?
-
-If so, Thomas, since your the original submitter: do you have pending
-changes to that effect, or are you waiting for someone to kick in and
-continue the work on this patch series?
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/e2fsprogs/e2fsprogs.mk b/package/e2fsprogs/e2fsprogs.mk
+index 0670c74..cdca906 100644
+--- a/package/e2fsprogs/e2fsprogs.mk
++++ b/package/e2fsprogs/e2fsprogs.mk
+@@ -11,7 +11,7 @@ E2FSPROGS_LICENSE_FILES = COPYING lib/uuid/COPYING lib/ss/mit-sipb-copyright.h l
+ 
+ E2FSPROGS_CONF_OPT = \
+ 	--disable-tls \
+-	--enable-elf-shlibs \
++	$(if $(BR2_PREFER_STATIC_LIB),,--enable-elf-shlibs) \
+ 	$(if $(BR2_PACKAGE_E2FSPROGS_DEBUGFS),,--disable-debugfs) \
+ 	$(if $(BR2_PACKAGE_E2FSPROGS_E2IMAGE),,--disable-imager) \
+ 	$(if $(BR2_PACKAGE_E2FSPROGS_E4DEFRAG),,--disable-defrag) \
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.7.9.5
