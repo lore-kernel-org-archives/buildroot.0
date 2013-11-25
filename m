@@ -1,47 +1,23 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 25 Nov 2013 18:11:21 +0100
-Subject: [Buildroot] [PATCH] poco: fix sh4a fenv build failure
-In-Reply-To: <5d2e8438f0988fd083d58c8ecebce26a47eb26e4.1385398048.git.baruch@tkos.co.il>
-References: <5d2e8438f0988fd083d58c8ecebce26a47eb26e4.1385398048.git.baruch@tkos.co.il>
-Message-ID: <20131125181121.06f6a801@skate>
+From: Naitik Amin <Naitik.Amin@ametek.com>
+Date: Mon, 25 Nov 2013 13:13:00 -0500
+Subject: [Buildroot] Kernel and Uboot
+Message-ID: <OF2C4FAABF.33F2B611-ON85257C2E.0063CAF1-85257C2E.00641111@LocalDomain>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Baruch Siach,
+Hi there,
 
-On Mon, 25 Nov 2013 18:47:28 +0200, Baruch Siach wrote:
-> Disable FP environment on sh4a. Fixes
-> http://autobuild.buildroot.net/results/8dc9bca5969d455cc30206fc1ae6e1d3ba6eb6ca/.
-> 
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> ---
->  package/poco/poco.mk | 5 +++++
->  1 file changed, 5 insertions(+)
-> 
-> diff --git a/package/poco/poco.mk b/package/poco/poco.mk
-> index a18f209..3516c04 100644
-> --- a/package/poco/poco.mk
-> +++ b/package/poco/poco.mk
-> @@ -34,6 +34,11 @@ ifeq ($(LIBC),uclibc)
->  POCO_CONF_OPT += --no-fpenvironment --no-wstring
->  endif
->  
-> +# sh4a is missing FE_DOWNWARD and FE_UPWARD in its fenv.h
-> +ifeq ($(BR2_sh4a),y)
-> +POCO_CONF_OPT += --no-fpenvironment
-> +endif
+I am looking to submit my extracted kernel and uboot into my source 
+control. Is there a config option in BR that I can use to point to a 
+folder that contains the kernel and uboot ? I am constantly changing 
+kernel and everytime, I do that I have to unzip, make changes and zip. 
+Also its hard to track the changes.
 
-Just curious, is this (the fact that SH4 fenv.h lacks some definitions)
-something specific to uClibc, or something that is also true for
-glibc/eglibc?
+Thanks,
 
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20131125/d5360557/attachment.html>
