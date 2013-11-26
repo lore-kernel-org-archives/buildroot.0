@@ -1,42 +1,41 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 26 Nov 2013 14:26:16 +0100
-Subject: [Buildroot] Call for autobuild fixing for 2013.11
-In-Reply-To: <CAAXf6LU1_ybwfA9DGfkq7fGJ17LU5k4cQb=G14rg6oSdNY=WAg@mail.gmail.com>
-References: <CAAXf6LXwy3HGGX1W9FCcdVCRJSHMT2B=w--xvcsBxqwUXxDjqg@mail.gmail.com>
- <CAAXf6LU1_ybwfA9DGfkq7fGJ17LU5k4cQb=G14rg6oSdNY=WAg@mail.gmail.com>
-Message-ID: <20131126142616.64719ad6@skate>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 26 Nov 2013 13:36:59 +0100
+Subject: [Buildroot] [git commit] uclibc-snapshot: enable option
+	UCLIBC_SUSV2_LEGACY
+Message-ID: <20131126150316.EC3DD9BDFA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas De Schampheleire,
+commit: http://git.buildroot.net/buildroot/commit/?id=d893bde74e75db4ddc78a719f72d0446a8cc9cd4
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, 23 Nov 2013 13:56:28 +0100, Thomas De Schampheleire wrote:
+With uClibc commit e8065705, valloc is now optional in SUSv2 and removed
+from SUSv3 and later. However, cdrkit currently requires valloc, so
+enable it in the uClibc snapshot configuration file.
 
-> > If you want to fix a particular problem but get stuck, don't
-> > hesitate in sending your findings to the list. Other developers can
-> > try to help you.
-> 
-> It's great to see several people sending patches that fix autobuild
-> failures! Let's keep up this work until the end of the month, when
-> 2013.11 is released...
+Fixes
+http://autobuild.buildroot.net/results/5a5/5a51f3f06e04eed39d59477ea1178aef7d397754/
 
-Yes, we've made really good progress here, and it's indeed great to see
-that more people have decided to the play the "let's fix autobuilder
-failures" game :-)
+Signed-off-by: Chris Zankel <chris@zankel.net>
+[baruch: fix summary line, add autobuild reference]
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/uclibc/uClibc-snapshot.config |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-However, I would not say that this effort should stop at the end of the
-month, when 2013.11 is released. When 2013.11 is released, next will be
-merged in master, and we'll have a nice set of new autobuilder failures
-to look at, not to mention the existing ones that haven't been fixed
-yet!
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/uclibc/uClibc-snapshot.config b/package/uclibc/uClibc-snapshot.config
+index 145f709..9ca3f9e 100644
+--- a/package/uclibc/uClibc-snapshot.config
++++ b/package/uclibc/uClibc-snapshot.config
+@@ -116,6 +116,7 @@ MALLOC_GLIBC_COMPAT=y
+ UCLIBC_HAS_OBSTACK=y
+ UCLIBC_DYNAMIC_ATEXIT=y
+ # COMPAT_ATEXIT is not set
++UCLIBC_SUSV2_LEGACY=y
+ UCLIBC_SUSV3_LEGACY=y
+ # UCLIBC_SUSV3_LEGACY_MACROS is not set
+ UCLIBC_SUSV4_LEGACY=y
