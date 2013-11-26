@@ -1,44 +1,42 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 26 Nov 2013 18:06:27 +0100
-Subject: [Buildroot] [PATCH 4/5] fs/custom: generate complete,
- partition-based device images
-In-Reply-To: <529457D6.8060700@mind.be>
-References: <cover.1385157864.git.yann.morin.1998@free.fr>
- <ddf2a31498f7f8e1ec0d40d73849bc254ec00b6d.1385157864.git.yann.morin.1998@free.fr>
- <52931907.2040207@mind.be> <20131125190551.GA3435@free.fr>
- <5293CEC8.9010601@mind.be> <20131125224548.GB3435@free.fr>
- <5293D598.20408@mind.be> <20131125230340.GC3435@free.fr>
- <529457D6.8060700@mind.be>
-Message-ID: <20131126170627.GA3948@free.fr>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 26 Nov 2013 22:45:00 +0100
+Subject: [Buildroot] Kernel and Uboot
+In-Reply-To: <OF2C4FAABF.33F2B611-ON85257C2E.0063CAF1-85257C2E.00641111@LocalDomain>
+References: <OF2C4FAABF.33F2B611-ON85257C2E.0063CAF1-85257C2E.00641111@LocalDomain>
+Message-ID: <5295165C.7020708@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout, All,
+On 25/11/13 19:13, Naitik Amin wrote:
+> Hi there,
+>
+> I am looking to submit my extracted kernel and uboot into my source
+> control. Is there a config option in BR that I can use to point to a
+> folder that contains the kernel and uboot ? I am constantly changing
+> kernel and everytime, I do that I have to unzip, make changes and zip.
+> Also its hard to track the changes.
 
-On 2013-11-26 09:12 +0100, Arnout Vandecappelle spake thusly:
-> >>On 25/11/13 23:45, Yann E. MORIN wrote:
-> >My reasoning is I want varuable to be expanded, like in:
-> >     BR2_TARGET_ROOTFS_CUSTOM_PARTITION_TABLE="$(TOPDIR)/board/raspberrypi/partitions"
-> 
->  You do know that make doesn't interpret quotes or backslashes? So the \"
-> construct is passed verbatim to the shell. The $(...) on the other hand is
-> always expanded, except when quoted by doubling the $$.
+  Take a look at LINUX_OVERRIDE_SRCDIR. It's not currently documented in 
+the buildroot manual, but you can read the help text of the "location of 
+a package override file" in the "Build options" menu.
 
-Yes, I know both. Fact is, given the constructit is not easy to know who
-would do the evaluation: make or the shell. But it has to be make, since
-$(FOO) is not a variable expansion in shell. So yes, single quotes will
-work, too.
+A package override file is a short makefile that contains variable 
+definitions of the form <pkg>_OVERRIDE_SRCDIR, which allows to tell 
+Buildroot to use an existing directory as the source directory for a 
+particular package. See the Buildroot documentation for more details on 
+this feature.
 
-Regards,
-Yann E. MORIN.
+
+  Regards,
+  Arnout
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
