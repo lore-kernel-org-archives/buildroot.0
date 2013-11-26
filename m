@@ -1,45 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 26 Nov 2013 14:20:06 +0100
-Subject: [Buildroot] [PATCHv2 0/4] Add a BR2_EXTERNAL mechanism
-In-Reply-To: <20131124202025.GB3575@free.fr>
-References: <1379185433-8770-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <20131124202025.GB3575@free.fr>
-Message-ID: <20131126142006.64b5528c@skate>
+Date: Tue, 26 Nov 2013 14:26:16 +0100
+Subject: [Buildroot] Call for autobuild fixing for 2013.11
+In-Reply-To: <CAAXf6LU1_ybwfA9DGfkq7fGJ17LU5k4cQb=G14rg6oSdNY=WAg@mail.gmail.com>
+References: <CAAXf6LXwy3HGGX1W9FCcdVCRJSHMT2B=w--xvcsBxqwUXxDjqg@mail.gmail.com>
+ <CAAXf6LU1_ybwfA9DGfkq7fGJ17LU5k4cQb=G14rg6oSdNY=WAg@mail.gmail.com>
+Message-ID: <20131126142616.64719ad6@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+Dear Thomas De Schampheleire,
 
-On Sun, 24 Nov 2013 21:20:25 +0100, Yann E. MORIN wrote:
+On Sat, 23 Nov 2013 13:56:28 +0100, Thomas De Schampheleire wrote:
 
-> On 2013-09-14 21:03 +0200, Thomas Petazzoni spake thusly:
-> > Here is the second version of the BR2_EXTERNAL patch series.
+> > If you want to fix a particular problem but get stuck, don't
+> > hesitate in sending your findings to the list. Other developers can
+> > try to help you.
 > 
-> I was wondering what the plan with BR2_EXTERNAL was, in the end?
-> 
-> From my recollection of the last DevDay, I understood we would go with
-> it, with a few changes:
->   - add a generated, sub-makefile in $(O) with the definition of
->     BR2_EXTERNAL, so that it is not needed to repeat it on the command
->     line of future invocations of 'make'
->   - enforce the same directory layout, package/ board/ and configs/
-> 
-> Right?
-> 
-> If so, Thomas, since your the original submitter: do you have pending
-> changes to that effect, or are you waiting for someone to kick in and
-> continue the work on this patch series?
+> It's great to see several people sending patches that fix autobuild
+> failures! Let's keep up this work until the end of the month, when
+> 2013.11 is released...
 
-I don't have pending changes right now. But since Ryan is in Toulouse
-this week (and we've been doing some Buildroot hacking together), I
-think we'll try to spend one evening on the BR2_EXTERNAL stuff and come
-up with an updated proposal that takes into account the ELCE
-discussions.
+Yes, we've made really good progress here, and it's indeed great to see
+that more people have decided to the play the "let's fix autobuilder
+failures" game :-)
 
-Thanks!
+However, I would not say that this effort should stop at the end of the
+month, when 2013.11 is released. When 2013.11 is released, next will be
+merged in master, and we'll have a nice set of new autobuilder failures
+to look at, not to mention the existing ones that haven't been fixed
+yet!
+
+Best regards,
 
 Thomas
 -- 
