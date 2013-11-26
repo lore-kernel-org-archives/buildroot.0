@@ -1,30 +1,33 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 26 Nov 2013 12:36:27 +0100
-Subject: [Buildroot] [PATCH] sunxi-mali,
-	ti-gfx: add missing dollar sign in egl.pc
-In-Reply-To: <1385457235-30264-1-git-send-email-fatih.asici@gmail.com> ("Fatih
- =?utf-8?B?QcWfxLFjxLEiJ3M=?= message of "Tue, 26 Nov 2013 11:13:55 +0200")
-References: <1385457235-30264-1-git-send-email-fatih.asici@gmail.com>
-Message-ID: <874n6zl7ic.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 26 Nov 2013 12:25:32 +0100
+Subject: [Buildroot] [git commit] protobuf-c: disable parallel build
+Message-ID: <20131126113735.30A4D9BDF6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fatih" == Fatih A??c? <fatih.asici@gmail.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=720008338acd7012b0a8c69525f2479f0794dffe
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Signed-off-by: Fatih A??c? <fatih.asici@gmail.com>
+Fixes http://autobuild.buildroot.net/results/f47c4f0883019ba3a8e61a9ae51b7bd7f347b38c/
 
-Good catch! Committed, thanks.
+Signed-off-by: Ryan Barnett <rjbarnet@rockwellcollins.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/protobuf-c/protobuf-c.mk |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-Probably that explains:
-
-http://autobuild.buildroot.net/results/592/592acfc6508f01ab82b5692ad52e0fe6d16a3ea3/build-end.log
-
-Notice that this isn't really a sane config, as it has two opengl
-providers enabled (rpi + sunxi). It would be good if we could homehow
-disallow that, but I think we end up with circular dependencies.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/protobuf-c/protobuf-c.mk b/package/protobuf-c/protobuf-c.mk
+index 31fb593..271f6d8 100644
+--- a/package/protobuf-c/protobuf-c.mk
++++ b/package/protobuf-c/protobuf-c.mk
+@@ -8,6 +8,7 @@ PROTOBUF_C_VERSION = 0.15
+ PROTOBUF_C_SITE = http://protobuf-c.googlecode.com/files
+ PROTOBUF_C_DEPENDENCIES = protobuf host-protobuf-c
+ HOST_PROTOBUF_C_DEPENDENCIES = host-protobuf
++PROTOBUF_C_MAKE = $(MAKE1)
+ PROTOBUF_C_CONF_OPT = --disable-protoc
+ PROTOBUF_C_INSTALL_STAGING = YES
+ PROTOBUF_C_LICENSE = BSD-3c
