@@ -1,10 +1,10 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 26 Nov 2013 16:07:06 +0100
-Subject: [Buildroot] [PATCH] dosfstools: bump to version 3.0.24
-In-Reply-To: <1385466535-18633-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Tue, 26 Nov 2013 08:48:55 -0300")
-References: <1385466535-18633-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <8761rfjj6t.fsf@dell.be.48ers.dk>
+Date: Tue, 26 Nov 2013 16:07:23 +0100
+Subject: [Buildroot] [PATCH 1/2] ulogd: bump to version 2.0.3
+In-Reply-To: <1385467088-18933-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Tue, 26 Nov 2013 08:58:07 -0300")
+References: <1385467088-18933-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <871u23jj6c.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,10 +13,9 @@ To: buildroot@busybox.net
 
 >>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
- > Fixes dosfsck on big endian targets.
  > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
-Committed to next, thanks.
+Committed both to next, thanks.
 
 -- 
 Bye, Peter Korsgaard
