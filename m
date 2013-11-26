@@ -1,90 +1,48 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 26 Nov 2013 09:51:04 -0300
-Subject: [Buildroot] [PATCH] php: fix iconv related build failure
-Message-ID: <1385470264-17180-1-git-send-email-gustavo@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 26 Nov 2013 14:20:06 +0100
+Subject: [Buildroot] [PATCHv2 0/4] Add a BR2_EXTERNAL mechanism
+In-Reply-To: <20131124202025.GB3575@free.fr>
+References: <1379185433-8770-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <20131124202025.GB3575@free.fr>
+Message-ID: <20131126142006.64b5528c@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fix a rare edge build failure when iconv is enabled, easily reproduced
-in a debian chroot with an aarch64 external toolchain with iconv +
-xmlrpc support enabled with a php cgi + cli target.
-Should solve bug #6500.
+Dear Yann E. MORIN,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/php/php-01-no-iconv-search.patch | 32 ++++++++++++++++++++++++++++++++
- package/php/php-no-iconv-search.patch    | 21 ---------------------
- 2 files changed, 32 insertions(+), 21 deletions(-)
- create mode 100644 package/php/php-01-no-iconv-search.patch
- delete mode 100644 package/php/php-no-iconv-search.patch
+On Sun, 24 Nov 2013 21:20:25 +0100, Yann E. MORIN wrote:
 
-diff --git a/package/php/php-01-no-iconv-search.patch b/package/php/php-01-no-iconv-search.patch
-new file mode 100644
-index 0000000..d2a7ae3
---- /dev/null
-+++ b/package/php/php-01-no-iconv-search.patch
-@@ -0,0 +1,32 @@
-+Just assume ICONV_DIR is fine since we pass the correct parameters
-+to configure.
-+Otherwise configure will try to guess on absolute directories and
-+sometimes messes up on some weird edge conditions.
-+
-+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+
-+diff -Nura php-5.3.27.orig/configure php-5.3.27/configure
-+--- php-5.3.27.orig/configure	2013-11-26 09:33:30.874253800 -0300
-++++ php-5.3.27/configure	2013-11-26 09:41:41.495363637 -0300
-+@@ -48212,20 +48212,7 @@
-+ 
-+ 
-+   if test "$iconv_avail" != "no"; then
-+-    if test -z "$ICONV_DIR"; then
-+-      for i in /usr/local /usr; do
-+-        if test -f "$i/include/iconv.h" || test -f "$i/include/giconv.h"; then
-+-          PHP_ICONV_PREFIX="$i"
-+-          break
-+-        fi
-+-      done
-+-      if test -z "$PHP_ICONV_PREFIX"; then
-+-        PHP_ICONV_PREFIX="/usr"
-+-      fi
-+-    else
-+-      PHP_ICONV_PREFIX="$ICONV_DIR"
-+-    fi
-+-
-++    PHP_ICONV_PREFIX="$ICONV_DIR"
-+     CFLAGS="-I$PHP_ICONV_PREFIX/include $CFLAGS"
-+     LDFLAGS="-L$PHP_ICONV_PREFIX/$PHP_LIBDIR $LDFLAGS"
-+ 
-diff --git a/package/php/php-no-iconv-search.patch b/package/php/php-no-iconv-search.patch
-deleted file mode 100644
-index d1e924b..0000000
---- a/package/php/php-no-iconv-search.patch
-+++ /dev/null
-@@ -1,21 +0,0 @@
--Don't push LDFLAGS/CFLAGS for iconv.
--Just assume they're covered somewhere else.
--Otherwise we get -L/usr/lib and -I/usr/include search paths with uClibc
--internal iconv support, which breaks things.
--
--Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
--
--diff -Nura php-5.3.13/configure php-5.3.13-iconv/configure
----- php-5.3.13/configure	2012-05-08 06:41:23.000000000 -0300
--+++ php-5.3.13-iconv/configure	2012-05-18 22:18:21.313975849 -0300
--@@ -47885,8 +47885,8 @@
--       PHP_ICONV_PREFIX="$ICONV_DIR"
--     fi
-- 
---    CFLAGS="-I$PHP_ICONV_PREFIX/include $CFLAGS"
---    LDFLAGS="-L$PHP_ICONV_PREFIX/$PHP_LIBDIR $LDFLAGS"
--+    #CFLAGS="-I$PHP_ICONV_PREFIX/include $CFLAGS"
--+    #LDFLAGS="-L$PHP_ICONV_PREFIX/$PHP_LIBDIR $LDFLAGS"
-- 
--     if test -r "$PHP_ICONV_PREFIX/include/giconv.h"; then
--       PHP_ICONV_H_PATH="$PHP_ICONV_PREFIX/include/giconv.h"
+> On 2013-09-14 21:03 +0200, Thomas Petazzoni spake thusly:
+> > Here is the second version of the BR2_EXTERNAL patch series.
+> 
+> I was wondering what the plan with BR2_EXTERNAL was, in the end?
+> 
+> From my recollection of the last DevDay, I understood we would go with
+> it, with a few changes:
+>   - add a generated, sub-makefile in $(O) with the definition of
+>     BR2_EXTERNAL, so that it is not needed to repeat it on the command
+>     line of future invocations of 'make'
+>   - enforce the same directory layout, package/ board/ and configs/
+> 
+> Right?
+> 
+> If so, Thomas, since your the original submitter: do you have pending
+> changes to that effect, or are you waiting for someone to kick in and
+> continue the work on this patch series?
+
+I don't have pending changes right now. But since Ryan is in Toulouse
+this week (and we've been doing some Buildroot hacking together), I
+think we'll try to spend one evening on the BR2_EXTERNAL stuff and come
+up with an updated proposal that takes into account the ELCE
+discussions.
+
+Thanks!
+
+Thomas
 -- 
-1.8.3.2
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
