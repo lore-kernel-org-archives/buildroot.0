@@ -1,60 +1,44 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 26 Nov 2013 16:57:30 +0100
-Subject: [Buildroot] Buildroot 2013.11-rc3 released
-Message-ID: <87siuji2ad.fsf@dell.be.48ers.dk>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 26 Nov 2013 18:06:27 +0100
+Subject: [Buildroot] [PATCH 4/5] fs/custom: generate complete,
+ partition-based device images
+In-Reply-To: <529457D6.8060700@mind.be>
+References: <cover.1385157864.git.yann.morin.1998@free.fr>
+ <ddf2a31498f7f8e1ec0d40d73849bc254ec00b6d.1385157864.git.yann.morin.1998@free.fr>
+ <52931907.2040207@mind.be> <20131125190551.GA3435@free.fr>
+ <5293CEC8.9010601@mind.be> <20131125224548.GB3435@free.fr>
+ <5293D598.20408@mind.be> <20131125230340.GC3435@free.fr>
+ <529457D6.8060700@mind.be>
+Message-ID: <20131126170627.GA3948@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Arnout, All,
 
-Buildroot 2013.11-rc3 is released - Go download it at:
+On 2013-11-26 09:12 +0100, Arnout Vandecappelle spake thusly:
+> >>On 25/11/13 23:45, Yann E. MORIN wrote:
+> >My reasoning is I want varuable to be expanded, like in:
+> >     BR2_TARGET_ROOTFS_CUSTOM_PARTITION_TABLE="$(TOPDIR)/board/raspberrypi/partitions"
+> 
+>  You do know that make doesn't interpret quotes or backslashes? So the \"
+> construct is passed verbatim to the shell. The $(...) on the other hand is
+> always expanded, except when quoted by doubling the $$.
 
-http://buildroot.net/downloads/buildroot-2013.11-rc3.tar.gz
+Yes, I know both. Fact is, given the constructit is not easy to know who
+would do the evaluation: make or the shell. But it has to be make, since
+$(FOO) is not a variable expansion in shell. So yes, single quotes will
+work, too.
 
-or
-
-http://buildroot.net/downloads/buildroot-2013.11-rc3.tar.bz2
-
-Or get it from Git:
-
-git://git.buildroot.net/buildroot
-
-Another week, another release candidate.
-
-Please give it a spin and report any problems to the mailing list or
-bug tracker. Many thanks to the people contributing to this release:
-
-git shortlog -sn 2013.11_rc2..
-
-     8  Peter Korsgaard
-     6  Gustavo Zacarias
-     6  Thomas De Schampheleire
-     4  Thomas Petazzoni
-     3  Vicente Olivert Riera
-     2  Arnout Vandecappelle
-     2  Davide Viti
-     2  Fatih A??c?
-     2  Romain Naour
-     2  Sven Neumann
-     1  Arnaud R?billout
-     1  Baruch Siach
-     1  Chris Zankel
-     1  Ryan Barnett
-     1  Samuel Martin
-     1  Simon Dawson
-     1  Sonic Zhang
-
-For more details, see the CHANGES file:
-
-http://git.buildroot.net/buildroot/plain/CHANGES?id=2013.11-rc3
-
-We had a build fixes for various "odd" configurations triggered by the
-autobuilders. It is great that so many people have helped fixing these!
-
-Enjoy - And expect the final 2013.11 release by the weekend.
+Regards,
+Yann E. MORIN.
 
 -- 
-Bye, Peter Korsgaard
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
