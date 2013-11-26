@@ -1,56 +1,41 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 26 Nov 2013 08:58:08 -0300
-Subject: [Buildroot] [PATCH 2/2] iptables: bump to version 1.4.21
-In-Reply-To: <1385467088-18933-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1385467088-18933-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1385467088-18933-2-git-send-email-gustavo@zacarias.com.ar>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Tue, 26 Nov 2013 14:01:07 +0200
+Subject: [Buildroot] [PATCH] uclibc-snapshot: enable option
+	UCLIBC_SUSV2_LEGACY
+Message-ID: <46fc98d21f475329842710a85d93130fd829a1f4.1385467267.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/iptables/iptables-01-fix-static-link.patch | 5 +++--
- package/iptables/iptables.mk                       | 2 +-
- 2 files changed, 4 insertions(+), 3 deletions(-)
+From: Chris Zankel <chris@zankel.net>
 
-diff --git a/package/iptables/iptables-01-fix-static-link.patch b/package/iptables/iptables-01-fix-static-link.patch
-index d4bcfa6..ce2ea48 100644
---- a/package/iptables/iptables-01-fix-static-link.patch
-+++ b/package/iptables/iptables-01-fix-static-link.patch
-@@ -14,6 +14,7 @@ If libnetfilter_conntrack is not found, @libnetfilter_conntrack_CFLAGS@
- and @libnetfilter_conntrack_LIBS@ (and their ${} ones) should be empty,
- therefore producing no harm to include unconditionally.
- 
-+[Gustavo: update for iptables 1.4.21]
- Reported-and-tested-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
- Signed-off-by: Florian Westphal <fw@strlen.de>
- ---
-@@ -25,8 +26,8 @@ index 14e7c57..780e715 100644
-  kinclude_CPPFLAGS  = @kinclude_CPPFLAGS@
-  
-  AM_CFLAGS       = ${regular_CFLAGS}
---AM_CPPFLAGS     = ${regular_CPPFLAGS} -I${top_builddir}/include -I${top_builddir} -I${top_srcdir}/include ${kinclude_CPPFLAGS}
--+AM_CPPFLAGS     = ${regular_CPPFLAGS} -I${top_builddir}/include -I${top_builddir} -I${top_srcdir}/include ${kinclude_CPPFLAGS} @libnetfilter_conntrack_CFLAGS@
-+-AM_CPPFLAGS     = ${regular_CPPFLAGS} -I${top_builddir}/include -I${top_builddir} -I${top_srcdir}/include ${kinclude_CPPFLAGS} ${CPPFLAGS}
-++AM_CPPFLAGS     = ${regular_CPPFLAGS} -I${top_builddir}/include -I${top_builddir} -I${top_srcdir}/include ${kinclude_CPPFLAGS} ${CPPFLAGS} @libnetfilter_conntrack_CFLAGS@
-  AM_DEPFLAGS     = -Wp,-MMD,$(@D)/.$(@F).d,-MT,$@
-  AM_LDFLAGS      = @noundef_LDFLAGS@
-  
-diff --git a/package/iptables/iptables.mk b/package/iptables/iptables.mk
-index 6547069..dbd2dc7 100644
---- a/package/iptables/iptables.mk
-+++ b/package/iptables/iptables.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--IPTABLES_VERSION = 1.4.20
-+IPTABLES_VERSION = 1.4.21
- IPTABLES_SOURCE = iptables-$(IPTABLES_VERSION).tar.bz2
- IPTABLES_SITE = http://ftp.netfilter.org/pub/iptables
- IPTABLES_INSTALL_STAGING = YES
+With uClibc commit e8065705, valloc is now optional in SUSv2 and removed
+from SUSv3 and later. However, cdrkit currently requires valloc, so
+enable it in the uClibc snapshot configuration file.
+
+Fixes
+http://autobuild.buildroot.net/results/5a5/5a51f3f06e04eed39d59477ea1178aef7d397754/
+
+Signed-off-by: Chris Zankel <chris@zankel.net>
+[baruch: fix summary line, add autobuild reference]
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ package/uclibc/uClibc-snapshot.config | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/package/uclibc/uClibc-snapshot.config b/package/uclibc/uClibc-snapshot.config
+index 145f709..9ca3f9e 100644
+--- a/package/uclibc/uClibc-snapshot.config
++++ b/package/uclibc/uClibc-snapshot.config
+@@ -116,6 +116,7 @@ MALLOC_GLIBC_COMPAT=y
+ UCLIBC_HAS_OBSTACK=y
+ UCLIBC_DYNAMIC_ATEXIT=y
+ # COMPAT_ATEXIT is not set
++UCLIBC_SUSV2_LEGACY=y
+ UCLIBC_SUSV3_LEGACY=y
+ # UCLIBC_SUSV3_LEGACY_MACROS is not set
+ UCLIBC_SUSV4_LEGACY=y
 -- 
-1.8.3.2
+1.8.4.3
