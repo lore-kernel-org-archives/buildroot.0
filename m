@@ -1,47 +1,84 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 26 Nov 2013 21:51:41 -0300
-Subject: [Buildroot] [PATCH 2/2] qemu/mips64-malta: switch to eglibc
-In-Reply-To: <1385513501-23157-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1385513501-23157-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1385513501-23157-2-git-send-email-gustavo@zacarias.com.ar>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Wed, 27 Nov 2013 07:29:24 +0200
+Subject: [Buildroot] [PATCH v2] libnspr: Add dependency on !BR2_xtensa
+Message-ID: <d1411c9410eaa1ebe9389cb5c20f4209b96a041f.1385530164.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-It's tested to be far more stable than uClibc.
+From: Chris Zankel <chris@zankel.net>
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Xtensa is not yet supported in libnspr. Also add dependencies to libnss,
+which requires libnspr, and ecryptfs-utils, which requires libnss.
+
+Fixes
+http://autobuild.buildroot.net/results/14b/14ba6426edbffa100de924aa69157b3f59368ff2/
+
+[baruch: fix summary, add autobuild referench, add comment dependency]
+
+Signed-off-by: Chris Zankel <chris@zankel.net>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
- board/qemu/mips64-malta/readme.txt  | 2 --
- configs/qemu_mips64_malta_defconfig | 3 +--
- 2 files changed, 1 insertion(+), 4 deletions(-)
+ package/ecryptfs-utils/Config.in | 2 +-
+ package/libnspr/Config.in        | 4 ++--
+ package/libnss/Config.in         | 4 ++--
+ 3 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/board/qemu/mips64-malta/readme.txt b/board/qemu/mips64-malta/readme.txt
-index 4fa8a19..b655922 100644
---- a/board/qemu/mips64-malta/readme.txt
-+++ b/board/qemu/mips64-malta/readme.txt
-@@ -6,6 +6,4 @@ The login prompt will appear in the terminal that started Qemu. The
- graphical window is the framebuffer. No keyboard support has been
- enabled.
+diff --git a/package/ecryptfs-utils/Config.in b/package/ecryptfs-utils/Config.in
+index 480aedd..4d00069 100644
+--- a/package/ecryptfs-utils/Config.in
++++ b/package/ecryptfs-utils/Config.in
+@@ -6,7 +6,7 @@ config BR2_PACKAGE_ECRYPTFS_UTILS
+ 	depends on !BR2_avr32 && !BR2_microblaze # keyutils
+ 	depends on BR2_LARGEFILE # libnss
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libnss -> libnspr
+-	depends on !BR2_arc # libnss -> libnspr
++	depends on !BR2_arc && !BR2_xtensa # libnss -> libnspr
+ 	help
+ 	  eCryptfs is a POSIX-compliant enterprise cryptographic
+ 	  filesystem for Linux. It is stacked on top of any other
+diff --git a/package/libnspr/Config.in b/package/libnspr/Config.in
+index 4ef3a51..a44bf8a 100644
+--- a/package/libnspr/Config.in
++++ b/package/libnspr/Config.in
+@@ -2,7 +2,7 @@ config BR2_PACKAGE_LIBNSPR
+ 	bool "libnspr"
+ 	depends on BR2_LARGEFILE
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+-	depends on !BR2_arc
++	depends on !BR2_arc && !BR2_xtensa
+ 	help
+ 	  NSPR is the Netscape Portable Runtime library which provides
+ 	  a platform-neutral API for system level and libc like
+@@ -12,5 +12,5 @@ config BR2_PACKAGE_LIBNSPR
+ 	  http://www.mozilla.org/projects/nspr/
  
--This configuration is known to be flaky.
--
- Tested with QEMU 1.6.1
-diff --git a/configs/qemu_mips64_malta_defconfig b/configs/qemu_mips64_malta_defconfig
-index e1295dd..011b9c6 100644
---- a/configs/qemu_mips64_malta_defconfig
-+++ b/configs/qemu_mips64_malta_defconfig
-@@ -3,8 +3,7 @@ BR2_mips64=y
- BR2_MIPS_NABI64=y
+ comment "libnspr needs a toolchain w/ largefile, threads"
+-	depends on !BR2_arc
++	depends on !BR2_arc && !BR2_xtensa
+ 	depends on !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/libnss/Config.in b/package/libnss/Config.in
+index 88b1fde..f0c90ed 100644
+--- a/package/libnss/Config.in
++++ b/package/libnss/Config.in
+@@ -5,7 +5,7 @@ config BR2_PACKAGE_LIBNSS
+ 	select BR2_PACKAGE_ZLIB
+ 	depends on BR2_LARGEFILE
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libnspr
+-	depends on !BR2_arc # libnspr
++	depends on !BR2_arc && !BR2_xtensa # libnspr
+ 	help
+ 	  Network Security Services (NSS) is a set of libraries designed
+ 	  to support development of security-enabled client and server
+@@ -16,6 +16,6 @@ config BR2_PACKAGE_LIBNSS
+ 	  http://www.mozilla.org/projects/security/pki/nss/
  
- # Toolchain
--# uClibc dynamic loader seems broken for mips64
--BR2_PREFER_STATIC_LIB=y
-+BR2_TOOLCHAIN_BUILDROOT_EGLIBC=y
+ comment "libnss needs a toolchain w/ largefile, threads"
+-	depends on !BR2_arc
++	depends on !BR2_arc && !BR2_xtensa
+ 	depends on !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS
  
- # Filesystem
- BR2_TARGET_ROOTFS_EXT2=y
 -- 
-1.8.3.2
+1.8.4.3
