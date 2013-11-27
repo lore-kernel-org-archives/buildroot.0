@@ -1,34 +1,40 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 27 Nov 2013 13:56:36 +0100
-Subject: [Buildroot] [git commit] ruby: security bump to 1.9.3-p484
-Message-ID: <20131127213147.885FC9BE18@busybox.osuosl.org>
+Date: Wed, 27 Nov 2013 17:47:43 +0100
+Subject: [Buildroot] [git commit] dropwatch: adjust LDFLAGS
+Message-ID: <20131127213147.B29B59BD91@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3783b84eef8a258583939d0ab3ce3fb5c5a68bb8
+commit: http://git.buildroot.net/buildroot/commit/?id=7ea26acd3d22a1614c2d3233746d792ccaee96f0
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes CVE-2013-4164.
+Add more library links into LDFLAGS.
+-lncurses because readline uses it (missing _tputs and others).
+-lpthread for missing _pthread_rwlock_unlock and others.
+-lm for missing _rint.
+Fixes:
+http://autobuild.buildroot.net/results/6b1/6b1f4f2167d8aca0d73dc0e66fd2e1704c821c61/
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/ruby/ruby.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/dropwatch/dropwatch.mk |    3 ++-
+ 1 files changed, 2 insertions(+), 1 deletions(-)
 
-diff --git a/package/ruby/ruby.mk b/package/ruby/ruby.mk
-index ea19008..a9c4e7d 100644
---- a/package/ruby/ruby.mk
-+++ b/package/ruby/ruby.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/dropwatch/dropwatch.mk b/package/dropwatch/dropwatch.mk
+index 6bbcb23..082b331 100644
+--- a/package/dropwatch/dropwatch.mk
++++ b/package/dropwatch/dropwatch.mk
+@@ -16,7 +16,8 @@ DROPWATCH_LICENSE_FILES = COPYING
  #
- ################################################################################
+ # Also: always need to add -liberty to hardcoded LDFLAGS for avr32
+ DROPWATCH_LDFLAGS = \
+-	$(TARGET_LDFLAGS) -lbfd -liberty -lreadline -lnl-3 -lnl-genl-3
++	$(TARGET_LDFLAGS) -lbfd -liberty -lreadline -lnl-3 -lnl-genl-3 \
++		-lpthread -lncurses -lm
  
--RUBY_VERSION = 1.9.3-p448
-+RUBY_VERSION = 1.9.3-p484
- RUBY_SITE = ftp://ftp.ruby-lang.org/pub/ruby/1.9
- RUBY_DEPENDENCIES = host-pkgconf host-ruby
- HOST_RUBY_DEPENDENCIES = host-pkgconf
+ ifeq ($(BR2_NEEDS_GETTEXT_IF_LOCALE),y)
+ DROPWATCH_LDFLAGS += -lintl
