@@ -1,37 +1,39 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 27 Nov 2013 13:58:16 +0100
-Subject: [Buildroot] [git commit] tinymembench: Fix typo error on dependence
-Message-ID: <20131127213147.A89D09BD91@busybox.osuosl.org>
+Date: Wed, 27 Nov 2013 22:29:05 +0100
+Subject: [Buildroot] [git commit] binutils: fix static linking
+Message-ID: <20131127213147.BBDEC9BD91@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=2d9ee197c24b3d28cb24a443ed7f645a01b2777f
+commit: http://git.buildroot.net/buildroot/commit/?id=a6fa695639b06b475565980e0c99f9f261786e81
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-It should be BR2_MIPS_NABI64 instead of BR_MIPS_NABI64
+pkg-autotools.mk already handles static/shared linking, so no need to
+explictly force it. Worse even, the build fails with BR2_PREFER_STATIC_LINK
+as we end up calling libtool with --static when it tries to link the .so,
+breaking the build:
 
-Fixes:
+../ld: attempted static link of dynamic object
+`../opcodes/.libs/libopcodes.so'
+collect2: error: ld returned 1 exit status
 
-   http://autobuild.buildroot.net/results/c5d/c5da2d99c09b1a2f7da23f1636f1ccc8978cc4a3/
-
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/tinymembench/Config.in |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/binutils/binutils.mk |    1 -
+ 1 files changed, 0 insertions(+), 1 deletions(-)
 
-diff --git a/package/tinymembench/Config.in b/package/tinymembench/Config.in
-index 7e8aaf5..8f6e1a2 100644
---- a/package/tinymembench/Config.in
-+++ b/package/tinymembench/Config.in
-@@ -1,6 +1,6 @@
- config BR2_PACKAGE_TINYMEMBENCH
- 	bool "tinymembench"
--	depends on !BR2_MIPS_NABI32 && !BR_MIPS_NABI64
-+	depends on !BR2_MIPS_NABI32 && !BR2_MIPS_NABI64
- 	help
- 	  Tinymembench is a simple memory benchmark program, which
- 	  tries to measure the peak bandwidth of sequential memory
+diff --git a/package/binutils/binutils.mk b/package/binutils/binutils.mk
+index f1723b2..b3ccee2 100644
+--- a/package/binutils/binutils.mk
++++ b/package/binutils/binutils.mk
+@@ -39,7 +39,6 @@ BINUTILS_LICENSE_FILES = COPYING3 COPYING.LIB
+ BINUTILS_CONF_OPT = --disable-multilib --disable-werror \
+ 		--host=$(GNU_TARGET_NAME) \
+ 		--target=$(GNU_TARGET_NAME) \
+-		--enable-shared \
+ 		$(BINUTILS_EXTRA_CONFIG_OPTIONS)
+ 
+ # Install binutils after busybox to prefer full-blown utilities
