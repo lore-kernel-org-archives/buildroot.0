@@ -1,40 +1,32 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 27 Nov 2013 17:47:43 +0100
-Subject: [Buildroot] [git commit] dropwatch: adjust LDFLAGS
-Message-ID: <20131127213147.B29B59BD91@busybox.osuosl.org>
+From: spdawson at gmail.com <spdawson@gmail.com>
+Date: Wed, 27 Nov 2013 22:18:00 +0000
+Subject: [Buildroot] [PATCH] ofono: bump version to 1.13
+Message-ID: <1385590680-2322-1-git-send-email-spdawson@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7ea26acd3d22a1614c2d3233746d792ccaee96f0
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+From: Simon Dawson <spdawson@gmail.com>
 
-Add more library links into LDFLAGS.
--lncurses because readline uses it (missing _tputs and others).
--lpthread for missing _pthread_rwlock_unlock and others.
--lm for missing _rint.
-Fixes:
-http://autobuild.buildroot.net/results/6b1/6b1f4f2167d8aca0d73dc0e66fd2e1704c821c61/
-
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Simon Dawson <spdawson@gmail.com>
 ---
- package/dropwatch/dropwatch.mk |    3 ++-
- 1 files changed, 2 insertions(+), 1 deletions(-)
+ package/ofono/ofono.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/dropwatch/dropwatch.mk b/package/dropwatch/dropwatch.mk
-index 6bbcb23..082b331 100644
---- a/package/dropwatch/dropwatch.mk
-+++ b/package/dropwatch/dropwatch.mk
-@@ -16,7 +16,8 @@ DROPWATCH_LICENSE_FILES = COPYING
+diff --git a/package/ofono/ofono.mk b/package/ofono/ofono.mk
+index 4b3b7a5..aaaa8fa 100644
+--- a/package/ofono/ofono.mk
++++ b/package/ofono/ofono.mk
+@@ -4,7 +4,7 @@
  #
- # Also: always need to add -liberty to hardcoded LDFLAGS for avr32
- DROPWATCH_LDFLAGS = \
--	$(TARGET_LDFLAGS) -lbfd -liberty -lreadline -lnl-3 -lnl-genl-3
-+	$(TARGET_LDFLAGS) -lbfd -liberty -lreadline -lnl-3 -lnl-genl-3 \
-+		-lpthread -lncurses -lm
+ ################################################################################
  
- ifeq ($(BR2_NEEDS_GETTEXT_IF_LOCALE),y)
- DROPWATCH_LDFLAGS += -lintl
+-OFONO_VERSION = 1.12
++OFONO_VERSION = 1.13
+ OFONO_SOURCE = ofono-$(OFONO_VERSION).tar.xz
+ OFONO_SITE = $(BR2_KERNEL_MIRROR)/linux/network/ofono
+ OFONO_LICENSE = GPLv2
+-- 
+1.8.3.2
