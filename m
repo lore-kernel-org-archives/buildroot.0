@@ -1,58 +1,88 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 27 Nov 2013 08:30:03 +0100 (CET)
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2013-11-26
-Message-ID: <20131127073003.45D031014F0@stock.ovh.net>
+From: Ryan Barnett <rjbarnet@rockwellcollins.com>
+Date: Wed, 27 Nov 2013 02:00:43 -0600
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+	2013-11-26
+In-Reply-To: <20131127073003.45D031014F0@stock.ovh.net>
+References: <20131127073003.45D031014F0@stock.ovh.net>
+Message-ID: <OFA084B538.6F584679-ON86257C30.002AF8B8-86257C30.002C00AC@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Build statistics for 2013-11-26
-===============================
+Thomas, All,
 
-        success : 71 
-       failures : 14 
-       timeouts : 1  
-          TOTAL : 86 
+A few comments below.
 
-Classification of failures by reason
-====================================
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote on 11/27/2013 
+01:30:03 AM:
+ 
+>        arm |           host-protobuf-c-0.15 | NOK | 
+http://autobuild.buildroot.net/results/506f8b778b62e1397b91592289c3dfb8195240dd/
 
-                 rt-tests-0.83 | 2 
-                sqlite-3080002 | 1 
-                    crda-1.1.3 | 1 
-                log4cxx-0.10.0 | 1 
-                openssl-1.0.1e | 1 
-             tinymembench-v0.2 | 1 
-                 libnspr-4.9.6 | 1 
-sconeserver-d58f2de88c68193... | 1 
-                host-gdb-7.5.1 | 1 
-          host-protobuf-c-0.15 | 1 
-               alsa-lib-1.0.26 | 1 
-top.c:523:7: warning: value... | 1 
-                     nut-2.6.5 | 1 
-                pulseaudio-4.0 | 1 
+Should go away with when autobuilder uses latest mainline since my patch 
+to disable parallel build was not part of the this build.
 
-Detail of failures
-===================
-
-      bfin |                alsa-lib-1.0.26 | NOK | http://autobuild.buildroot.net/results/be720d745cf1082dd653c3d76bad24ff4cf1f9c2/
-       arm |                     crda-1.1.3 | NOK | http://autobuild.buildroot.net/results/31c54e16b60f41e2aa9ea6cd43ced694d3ce3ce0/
-     nios2 |                 host-gdb-7.5.1 | NOK | http://autobuild.buildroot.net/results/a470f147166b6cc756ae32dea2a9e0a3ac58a027/
-       arm |           host-protobuf-c-0.15 | NOK | http://autobuild.buildroot.net/results/506f8b778b62e1397b91592289c3dfb8195240dd/
-      bfin |                  libnspr-4.9.6 | NOK | http://autobuild.buildroot.net/results/dd353703ed94cec48cd126d80cd2f1b039811be4/
-     avr32 |                 log4cxx-0.10.0 | NOK | http://autobuild.buildroot.net/results/035a00de0a56be00559767ba822a396ddc18a9fb/
-   powerpc |                      nut-2.6.5 | NOK | http://autobuild.buildroot.net/results/47d74ee1195aebcbcd3cb553305d07bee85fe433/
-microblaze |                 openssl-1.0.1e | NOK | http://autobuild.buildroot.net/results/32e9576dbbdf131dd8e8e6bd35755e4fade1b99f/
-       arc |                 pulseaudio-4.0 | NOK | http://autobuild.buildroot.net/results/b6f26faf7fb3d2465a6a2c9a762692fbafcf5ade/
-    mipsel |                  rt-tests-0.83 | NOK | http://autobuild.buildroot.net/results/bc84ae15772114abd4e8295a315c2e179fb570b5/
-    mipsel |                  rt-tests-0.83 | NOK | http://autobuild.buildroot.net/results/bbd7c70648b731932099dff52e32d43f025a630b/
-     avr32 | sconeserver-d58f2de88c68193... | NOK | http://autobuild.buildroot.net/results/1ea4863e3bc0398e51d54d6d108821e4338a60c3/
-       arc |                 sqlite-3080002 | NOK | http://autobuild.buildroot.net/results/bdd8372a375cca606b241c6943eeddbd717e8b83/
-  mips64el |              tinymembench-v0.2 | NOK | http://autobuild.buildroot.net/results/c5da2d99c09b1a2f7da23f1636f1ccc8978cc4a3/
-      mips | top.c:523:7: warning: value... | TIM | http://autobuild.buildroot.net/results/b251116bdd7321a970da153270166b2131db33b4/
+>      avr32 |                 log4cxx-0.10.0 | NOK | 
+http://autobuild.buildroot.net/results/035a00de0a56be00559767ba822a396ddc18a9fb/
 
 
--- 
-http://autobuild.buildroot.net
+From initially looking at the build-end.log it appears that that this 
+library needs threads. All the output indicates that it is unable to find 
+-pthread to link against.
+
+/home/test/test/3/output/host/usr/bin/avr32-linux-g++ -D_LARGEFILE_SOURCE 
+-D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -pipe -Os -o console 
+console.o 
+-L/home/test/test/3/output/host/usr/avr32-buildroot-linux-uclibc/sysroot/usr/lib 
+/home/test/test/3/output/host/usr/avr32-buildroot-linux-uclibc/sysroot/usr/lib/libapr-1.so 
+-lrt -lm -lcrypt -ldl 
+/home/test/test/3/output/host/usr/avr32-buildroot-linux-uclibc/sysroot/usr/lib/libaprutil-1.so 
+/home/test/test/3/output/host/usr/avr32-buildroot-linux-uclibc/sysroot/usr/lib/libexpat.so 
+/home/test/test/3/output/host/usr/avr32-buildroot-linux-uclibc/sysroot/usr/lib/libiconv.so 
+../../../src/main/cpp/.libs/liblog4cxx.so -Wl,--rpath 
+-Wl,/home/test/test/3/output/host/usr/avr32-buildroot-linux-uclibc/sysroot/usr/lib 
+-Wl,--rpath 
+-Wl,/home/test/test/3/output/build/log4cxx-0.10.0/src/main/cpp/.libs 
+-Wl,--rpath 
+-Wl,/home/test/test/3/output/host/usr/avr32-buildroot-linux-uclibc/sysroot/usr/lib
+/home/test/test/3/output/host/opt/ext-toolchain/bin/../lib/gcc/avr32-buildroot-linux-uclibc/4.2.2/../../../../avr32-buildroot-linux-uclibc/bin/ld: 
+warning: libexpat.so.0, needed by 
+/home/test/test/3/output/host/usr/avr32-buildroot-linux-uclibc/sysroot/usr/lib/libaprutil-1.so, 
+may conflict with libexpat.so.1
+/home/test/test/3/output/host/usr/avr32-buildroot-linux-uclibc/sysroot/usr/lib/libapr-1.so: 
+undefined reference to `pthread_mutexattr_settype'
+/home/test/test/3/output/host/usr/avr32-buildroot-linux-uclibc/sysroot/usr/lib/libapr-1.so: 
+undefined reference to `pthread_key_create'
+/home/test/test/3/output/host/usr/avr32-buildroot-linux-uclibc/sysroot/usr/lib/libapr-1.so: 
+undefined reference to `pthread_attr_setstacksize'
+/home/test/test/3/output/host/usr/avr32-buildroot-linux-uclibc/sysroot/usr/lib/libapr-1.so: 
+undefined reference to `pthread_sigmask'
+/home/test/test/3/output/host/usr/avr32-buildroot-linux-uclibc/sysroot/usr/lib/libapr-1.so: 
+undefined reference to `pthread_once'
+/home/test/test/3/output/host/usr/avr32-buildroot-linux-uclibc/sysroot/usr/lib/libapr-1.so: 
+undefined reference to `pthread_getspecific'
+/home/test/test/3/output/host/usr/avr32-buildroot-linux-uclibc/sysroot/usr/lib/libapr-1.so: 
+undefined reference to `pthread_mutexattr_destroy'
+/home/test/test/3/output/host/usr/avr32-buildroot-linux-uclibc/sysroot/usr/lib/libapr-1.so: 
+undefined reference to `pthread_create'
+/home/test/test/3/output/host/usr/avr32-buildroot-linux-uclibc/sysroot/usr/lib/libapr-1.so: 
+undefined reference to `pthread_mutexattr_init'
+/home/test/test/3/output/host/usr/avr32-buildroot-linux-uclibc/sysroot/usr/lib/libapr-1.so: 
+undefined reference to `pthread_detach'
+/home/test/test/3/output/host/usr/avr32-buildroot-linux-uclibc/sysroot/usr/lib/libapr-1.so: 
+undefined reference to `pthread_setspecific'
+/home/test/test/3/output/host/usr/avr32-buildroot-linux-uclibc/sysroot/usr/lib/libapr-1.so: 
+undefined reference to `pthread_join'
+
+I don't know if this is caused by '-lpthread' not being present or that 
+the toolchain has accidentally marked the external chain as having thread 
+support. I do not have time to investigate further so if somebody could 
+fix this I would appreciate it.
+
+Thanks,
+-Ryan
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20131127/8e652e4f/attachment-0001.html>
