@@ -1,23 +1,55 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 27 Nov 2013 07:06:41 -0300
+From: Markos Chandras <Markos.Chandras@imgtec.com>
+Date: Wed, 27 Nov 2013 10:15:46 +0000
 Subject: [Buildroot] [PATCH 2/2] qemu/mips64-malta: switch to eglibc
-In-Reply-To: <20131127092443.0c6ea9b9@skate>
-References: <1385513501-23157-1-git-send-email-gustavo@zacarias.com.ar>	<1385513501-23157-2-git-send-email-gustavo@zacarias.com.ar>
- <20131127092443.0c6ea9b9@skate>
-Message-ID: <5295C431.2010807@zacarias.com.ar>
+In-Reply-To: <1385513501-23157-2-git-send-email-gustavo@zacarias.com.ar>
+References: <1385513501-23157-1-git-send-email-gustavo@zacarias.com.ar>
+ <1385513501-23157-2-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <5295C652.3090206@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 11/27/2013 05:24 AM, Thomas Petazzoni wrote:
+On 11/27/2013 12:51 AM, Gustavo Zacarias wrote:
+> It's tested to be far more stable than uClibc.
+>
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> ---
+>   board/qemu/mips64-malta/readme.txt  | 2 --
+>   configs/qemu_mips64_malta_defconfig | 3 +--
+>   2 files changed, 1 insertion(+), 4 deletions(-)
+>
+> diff --git a/board/qemu/mips64-malta/readme.txt b/board/qemu/mips64-malta/readme.txt
+> index 4fa8a19..b655922 100644
+> --- a/board/qemu/mips64-malta/readme.txt
+> +++ b/board/qemu/mips64-malta/readme.txt
+> @@ -6,6 +6,4 @@ The login prompt will appear in the terminal that started Qemu. The
+>   graphical window is the framebuffer. No keyboard support has been
+>   enabled.
+>
+> -This configuration is known to be flaky.
+> -
+>   Tested with QEMU 1.6.1
+> diff --git a/configs/qemu_mips64_malta_defconfig b/configs/qemu_mips64_malta_defconfig
+> index e1295dd..011b9c6 100644
+> --- a/configs/qemu_mips64_malta_defconfig
+> +++ b/configs/qemu_mips64_malta_defconfig
+> @@ -3,8 +3,7 @@ BR2_mips64=y
+>   BR2_MIPS_NABI64=y
+>
+>   # Toolchain
+> -# uClibc dynamic loader seems broken for mips64
+> -BR2_PREFER_STATIC_LIB=y
+> +BR2_TOOLCHAIN_BUILDROOT_EGLIBC=y
+>
+>   # Filesystem
+>   BR2_TARGET_ROOTFS_EXT2=y
+>
 
-> I think the broken dynamic loader for mips64 in uClibc is now fixed by
-> package/uclibc/0.9.33.2/uclibc-0009-mips64-fix-n64-interp.patch.
+Looks good to me.
 
-Probably, but besides that it's generally unstable with uClibc (you
-almost certainly can't login properly) where with eglibc it just works(tm).
-Though maybe it just needs a little kick like the recent SIGBUS mips64
-patch from the uclibc mailing list.
-Regards.
+Reviewed-by: Markos Chandras <markos.chandras@imgtec.com>
+
+-- 
+markos
