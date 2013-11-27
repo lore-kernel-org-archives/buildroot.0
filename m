@@ -1,7 +1,7 @@
 From: spdawson at gmail.com <spdawson@gmail.com>
-Date: Wed, 27 Nov 2013 22:18:00 +0000
-Subject: [Buildroot] [PATCH] ofono: bump version to 1.13
-Message-ID: <1385590680-2322-1-git-send-email-spdawson@gmail.com>
+Date: Wed, 27 Nov 2013 22:23:57 +0000
+Subject: [Buildroot] [PATCH] sam-ba: patch to latest version
+Message-ID: <1385591037-3398-1-git-send-email-spdawson@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,23 +10,24 @@ To: buildroot@busybox.net
 
 From: Simon Dawson <spdawson@gmail.com>
 
+Apply the latest Atmel patch for sam-ba version 2.12
+
 Signed-off-by: Simon Dawson <spdawson@gmail.com>
 ---
- package/ofono/ofono.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/sam-ba/sam-ba.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/ofono/ofono.mk b/package/ofono/ofono.mk
-index 4b3b7a5..aaaa8fa 100644
---- a/package/ofono/ofono.mk
-+++ b/package/ofono/ofono.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/sam-ba/sam-ba.mk b/package/sam-ba/sam-ba.mk
+index 8e24fa6..4dc0568 100644
+--- a/package/sam-ba/sam-ba.mk
++++ b/package/sam-ba/sam-ba.mk
+@@ -7,6 +7,7 @@
+ SAM_BA_SITE    = http://www.atmel.com/dyn/resources/prod_documents/
+ SAM_BA_VERSION = 2.12
+ SAM_BA_SOURCE  = sam-ba_$(SAM_BA_VERSION).zip
++SAM_BA_PATCH = sam-ba_$(SAM_BA_VERSION)_patch5.gz
+ SAM_BA_LICENSE = BSD-like (partly binary-only)
+ SAM_BA_LICENSE_FILES = doc/readme.txt
  
--OFONO_VERSION = 1.12
-+OFONO_VERSION = 1.13
- OFONO_SOURCE = ofono-$(OFONO_VERSION).tar.xz
- OFONO_SITE = $(BR2_KERNEL_MIRROR)/linux/network/ofono
- OFONO_LICENSE = GPLv2
 -- 
 1.8.3.2
