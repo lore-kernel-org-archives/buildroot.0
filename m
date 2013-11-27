@@ -1,34 +1,37 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 27 Nov 2013 13:56:28 +0100
-Subject: [Buildroot] [git commit] libnss: security bump to version 3.14.5
-Message-ID: <20131127213147.758E09BD91@busybox.osuosl.org>
+Date: Wed, 27 Nov 2013 13:58:16 +0100
+Subject: [Buildroot] [git commit] tinymembench: Fix typo error on dependence
+Message-ID: <20131127213147.A89D09BD91@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=51b3db5eaa1aba458daa7de19b7bd2c42a9bafb4
+commit: http://git.buildroot.net/buildroot/commit/?id=2d9ee197c24b3d28cb24a443ed7f645a01b2777f
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes CVE-2013-5605.
+It should be BR2_MIPS_NABI64 instead of BR_MIPS_NABI64
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Fixes:
+
+   http://autobuild.buildroot.net/results/c5d/c5da2d99c09b1a2f7da23f1636f1ccc8978cc4a3/
+
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libnss/libnss.mk |    2 +-
+ package/tinymembench/Config.in |    2 +-
  1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
-index 9989b6d..002e083 100644
---- a/package/libnss/libnss.mk
-+++ b/package/libnss/libnss.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBNSS_VERSION = 3.14.3
-+LIBNSS_VERSION = 3.14.5
- LIBNSS_SOURCE = nss-$(LIBNSS_VERSION).tar.gz
- LIBNSS_SITE_VERSION = $(subst .,_,$(LIBNSS_VERSION))
- LIBNSS_SITE = https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_$(LIBNSS_SITE_VERSION)_RTM/src
+diff --git a/package/tinymembench/Config.in b/package/tinymembench/Config.in
+index 7e8aaf5..8f6e1a2 100644
+--- a/package/tinymembench/Config.in
++++ b/package/tinymembench/Config.in
+@@ -1,6 +1,6 @@
+ config BR2_PACKAGE_TINYMEMBENCH
+ 	bool "tinymembench"
+-	depends on !BR2_MIPS_NABI32 && !BR_MIPS_NABI64
++	depends on !BR2_MIPS_NABI32 && !BR2_MIPS_NABI64
+ 	help
+ 	  Tinymembench is a simple memory benchmark program, which
+ 	  tries to measure the peak bandwidth of sequential memory
