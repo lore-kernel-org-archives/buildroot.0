@@ -1,85 +1,71 @@
-From: Mark Jackson <mpfj-list@newflow.co.uk>
-Date: Wed, 27 Nov 2013 17:27:14 +0000
-Subject: [Buildroot] libglib2 (or maybe libffi) build failure
-In-Reply-To: <20131127181656.35b2521c@skate>
-References: <52960F8C.5040003@newflow.co.uk>	<20131127171511.2abd4873@skate>	<52961D17.6020904@newflow.co.uk>	<20131127173755.6019dd2f@skate>	<529621B0.60106@newflow.co.uk>	<20131127175114.619d17d5@skate>	<529625D8.4080507@newflow.co.uk>
- <20131127181656.35b2521c@skate>
-Message-ID: <52962B72.6030804@newflow.co.uk>
+From: Alexandre Schnegg <alexandre.schnegg@gmail.com>
+Date: Wed, 27 Nov 2013 18:55:28 +0100
+Subject: [Buildroot] Freescale specific kernel header to compile imx-lib
+In-Reply-To: <20131127173911.3f97da37@skate>
+References: <000b01ceeb8d$1d460fd0$57d22f70$@gmail.com>
+ <20131127173911.3f97da37@skate>
+Message-ID: <003f01ceeb99$dc7c9980$9575cc80$@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 27/11/13 17:16, Thomas Petazzoni wrote:
-> Dear Mark Jackson,
-> 
-> On Wed, 27 Nov 2013 17:03:20 +0000, Mark Jackson wrote:
-> 
->> Aha ... the previous "buildroot" entry in $PATH is the cuplrit.
-> 
-> Ok. It's true that having an already existing cross-compiler and
-> Buildroot installation in the PATH can possibly cause some issues,
-> though I'd like this to work properly.
+Thank you for your response.
 
-Hmmm .. thinking about it, I don't think I did a make clean when I switched
-to my new testing branch.
+I can give you some more details.
 
-What's the recommended method ?
+When I only select the package "imx-lib", compilation is ok. But when I also
+select the package "gst-fsl-plugins", I have this issue:
 
-I recall I did something like:-
+checking whether -lc should be explicitly linked in... no
+checking dynamic linker characteristics... GNU/Linux ld.so
+checking how to hardcode library paths into programs... immediate
+checking whether stripping libraries is possible... no
+checking if libtool supports shared libraries... yes
+checking whether to build shared libraries... yes
+checking whether to build static libraries... yes
+checking vpu_lib.h usability... no
+checking vpu_lib.h presence... no
+checking for vpu_lib.h... no
+configure: error: lib_vpu is required, consider installing imx-lib
+make[1]: ***
+[/home/schnegg/Documents/armadeus/buildroot/output/build/libfslvpuwrap-1.0.1
+7/.stamp_configured] Error 1
+make[1]: Leaving directory `/home/schnegg/Documents/armadeus/buildroot'
+make: *** [all] Error 2
+schnegg at ubuntu:~/Documents/armadeus$ make menuconfig
+make[1]: Entering directory `/home/schnegg/Documents/armadeus/buildroot
 
-[git clone to directory "buildroot"]
-$ git checkout 2013.02 -b good
-$ make menuconfig
-$ make
-... build okay ...
+It's seems the "imx-lib" isn't built. 
 
-Then when I started on the new "updated" branch:-
+Do you have an idea what's wrong ?
 
-$ cp -a buildroot buildroot-bt
-$ git checkout origin/master -b master
-$ git pull
-$ make menuconfig
-$ make
-... build fails ...
+Regards
+Alexandre Schnegg
 
-I can see now that this might cause all sorts of config issues !!
+-----Message d'origine-----
+De?: Thomas Petazzoni [mailto:thomas.petazzoni at free-electrons.com] 
+Envoy??: mercredi 27 novembre 2013 17:39
+??: Alexandre Schnegg
+Cc?: buildroot at busybox.net
+Objet?: Re: [Buildroot] Freescale specific kernel header to compile imx-lib
 
->> The foo.log file contains lines such as:-
->>
->> 15616 open("/home/mpfj/buildroot/output/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/pkgconfig/libcrypto.pc", O_RDONLY)
->>                        ^^^^^^^^^
->> I guess it's now in a confused state, so I should do a full clean ?
-> 
-> Can you give us the contents of host/usr/bin/pkg-config ? It is a
-> wrapper shell script that sets a bunch of variables and calls pkgconf.
+Dear Alexandre Schnegg,
 
-#!/bin/sh
-PKG_CONFIG_LIBDIR=${PKG_CONFIG_LIBDIR:-/home/mpfj/buildroot/output/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/pkgconfig:/home/mpfj/buildroot/output/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/share/pkgconfig} PKG_CONFIG_SYSROOT_DIR=${PKG_CONFIG_SYSROOT_DIR:-/home/mpfj/buildroot/output/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot} $(dirname $0)/pkgconf $@
+On Wed, 27 Nov 2013 17:24:12 +0100, Alexandre Schnegg wrote:
 
-> I would nonetheless like to have your full "foo.log", to see more
-> precisely what's going on with pkg-config.
+>  My question is : can I get this header on my cross-compile machine 
+> running Ubuntu 13.04 or am I forced to use a Freescale BSP and do a 
+> native compilation ?
 
-http://code.bulix.org/p5dd3s-85085
+You simply need to tell Buildroot to build a Linux kernel that is Freescale
+specific, and therefore contains these headers. The imx-lib package will
+look directly into the kernel sources for those i.MX specific headers.
 
->> If so, can you tell me if it's possible to keep 2 different toolchains in use ?
->>
->> The original "buildroot" path was to my "known-good" buildroot setup (based on
->> 2013.02), but I'm looking to update things to the latest.
->>
->> I'd rather not destroy my existing toolchain setup, so is it possible to set things
->> up to handle 2 buildroots at the same time ?
-> 
-> It is possible, just don't have one in the PATH in a permanent way. The
-> way I typically do things is by adjusting the PATH only in the
-> shell/terminal I'm going to use the toolchain, or even use the full
-> toolchain path.
-> 
-> Again, I believe we should continue to investigate this some more, I'd
-> like to understand the root of the problem and see if there's a
-> reasonable fix for it (even though I believe there might be several
-> other issues in trying to do a Buildroot build with an existing
-> Buildroot build in the PATH).
+Best regards,
 
-Your help is much appreciated.
+Thomas
+--
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering http://free-electrons.com
