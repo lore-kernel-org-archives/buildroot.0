@@ -1,101 +1,128 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Wed, 27 Nov 2013 17:48:39 +0200
-Subject: [Buildroot] [PATCH v3 1/2] libnspr: Add dependency on !BR2_xtensa
-	and !BR2_bfin
-Message-ID: <3b85e7b21185d25eb6f40c25ac1402aa08b1bfeb.1385567320.git.baruch@tkos.co.il>
+From: Mark Jackson <mpfj-list@newflow.co.uk>
+Date: Wed, 27 Nov 2013 15:28:12 +0000
+Subject: [Buildroot] libglib2 (or maybe libffi) build failure
+Message-ID: <52960F8C.5040003@newflow.co.uk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Chris Zankel <chris@zankel.net>
+Using the latest git top-of-tree, libglib2 fails to compile as follows:-
 
-Xtensa is not yet supported in libnspr. Also add dependencies to libnss,
-which requires libnspr, and ecryptfs-utils, which requires libnss.
+$ git pull
+Already up-to-date.
+$ make
+...
+>>> libffi 3.0.13 Extracting
+...
+>>> libffi 3.0.13 Patching
+...
+>>> libffi 3.0.13 Updating config.sub and config.guess
+...
+>>> libffi 3.0.13 Patching libtool
+>>> libffi 3.0.13 Autoreconfiguring
+...
+>>> libffi 3.0.13 Configuring
+...
+>>> libffi 3.0.13 Building
+...
+>>> libffi 3.0.13 Installing to staging directory
+...
+>>> libffi 3.0.13 Installing to target
+...
+>>> libglib2 2.36.3 Autoreconfiguring
+...
+>>> libglib2 2.36.3 Configuring
+...
+checking for memory.h... yes
+checking for strings.h... yes
+checking for inttypes.h... yes
+checking for stdint.h... yes
+checking for unistd.h... yes
+checking for LIBFFI... no
+configure: error: Package requirements (libffi >= 3.0.0) were not met:
 
-Fixes (xtensa)
-http://autobuild.buildroot.net/results/14b/14ba6426edbffa100de924aa69157b3f59368ff2/
+Package libffi was not found in the pkg-config search path.
+Perhaps you should add the directory containing `libffi.pc'
+to the PKG_CONFIG_PATH environment variable
+No package 'libffi' found
 
-Fixes (blackfin)
-http://autobuild.buildroot.net/results/dd3/dd353703ed94cec48cd126d80cd2f1b039811be4/
+Consider adjusting the PKG_CONFIG_PATH environment variable if you
+installed software in a non-standard prefix.
 
-[baruch: fix summary, add autobuild reference, add comment dependency,
- add blackfin]
+Alternatively, you may set the environment variables LIBFFI_CFLAGS
+and LIBFFI_LIBS to avoid the need to call pkg-config.
+See the pkg-config man page for more details.
+make: *** [/home/mpfj/buildroot-bt/output/build/libglib2-2.36.3/.stamp_configured] Error 1
+checking for memory.h... yes
+checking for strings.h... yes
+checking for inttypes.h... yes
+checking for stdint.h... yes
+checking for unistd.h... yes
+checking for LIBFFI... no
+configure: error: Package requirements (libffi >= 3.0.0) were not met:
 
-Signed-off-by: Chris Zankel <chris@zankel.net>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Package libffi was not found in the pkg-config search path.
+Perhaps you should add the directory containing `libffi.pc'
+to the PKG_CONFIG_PATH environment variable
+No package 'libffi' found
+
+Consider adjusting the PKG_CONFIG_PATH environment variable if you
+installed software in a non-standard prefix.
+
+Alternatively, you may set the environment variables LIBFFI_CFLAGS
+and LIBFFI_LIBS to avoid the need to call pkg-config.
+See the pkg-config man page for more details.
+make: *** [/home/mpfj/buildroot-bt/output/build/libglib2-2.36.3/.stamp_configured] Error 1
+
+Any clues ?
+
+Below is my "defconfig" as created by 'make savedefconfig'.
+
+Cheers
+Mark J.
 ---
-
-v3:
-	Move the list of arch dependencies to a separate config symbol to reduce
-	the churn when arch dependencies changes (Thomas Petazzoni)
-
-	Add blackfin to the not-supported list
----
- package/ecryptfs-utils/Config.in | 2 +-
- package/libnspr/Config.in        | 8 ++++++--
- package/libnss/Config.in         | 4 ++--
- 3 files changed, 9 insertions(+), 5 deletions(-)
-
-diff --git a/package/ecryptfs-utils/Config.in b/package/ecryptfs-utils/Config.in
-index 480aedd..4b34e0f 100644
---- a/package/ecryptfs-utils/Config.in
-+++ b/package/ecryptfs-utils/Config.in
-@@ -6,7 +6,7 @@ config BR2_PACKAGE_ECRYPTFS_UTILS
- 	depends on !BR2_avr32 && !BR2_microblaze # keyutils
- 	depends on BR2_LARGEFILE # libnss
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libnss -> libnspr
--	depends on !BR2_arc # libnss -> libnspr
-+	depends on BR2_PACKAGE_LIBNSPR_ARCH_SUPPORT # libnss -> libnspr
- 	help
- 	  eCryptfs is a POSIX-compliant enterprise cryptographic
- 	  filesystem for Linux. It is stacked on top of any other
-diff --git a/package/libnspr/Config.in b/package/libnspr/Config.in
-index 4ef3a51..1d73287 100644
---- a/package/libnspr/Config.in
-+++ b/package/libnspr/Config.in
-@@ -1,8 +1,12 @@
-+config BR2_PACKAGE_LIBNSPR_ARCH_SUPPORT
-+	def_bool y
-+	depends on !BR2_arc && !BR2_xtensa && !BR2_bfin
-+
- config BR2_PACKAGE_LIBNSPR
- 	bool "libnspr"
- 	depends on BR2_LARGEFILE
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
--	depends on !BR2_arc
-+	depends on BR2_PACKAGE_LIBNSPR_ARCH_SUPPORT
- 	help
- 	  NSPR is the Netscape Portable Runtime library which provides
- 	  a platform-neutral API for system level and libc like
-@@ -12,5 +16,5 @@ config BR2_PACKAGE_LIBNSPR
- 	  http://www.mozilla.org/projects/nspr/
- 
- comment "libnspr needs a toolchain w/ largefile, threads"
--	depends on !BR2_arc
-+	depends on BR2_PACKAGE_LIBNSPR_ARCH_SUPPORT
- 	depends on !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/libnss/Config.in b/package/libnss/Config.in
-index 88b1fde..77128f6 100644
---- a/package/libnss/Config.in
-+++ b/package/libnss/Config.in
-@@ -5,7 +5,7 @@ config BR2_PACKAGE_LIBNSS
- 	select BR2_PACKAGE_ZLIB
- 	depends on BR2_LARGEFILE
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libnspr
--	depends on !BR2_arc # libnspr
-+	depends on BR2_PACKAGE_LIBNSPR_ARCH_SUPPORT # libnspr
- 	help
- 	  Network Security Services (NSS) is a set of libraries designed
- 	  to support development of security-enabled client and server
-@@ -16,6 +16,6 @@ config BR2_PACKAGE_LIBNSS
- 	  http://www.mozilla.org/projects/security/pki/nss/
- 
- comment "libnss needs a toolchain w/ largefile, threads"
--	depends on !BR2_arc
-+	depends on BR2_PACKAGE_LIBNSPR_ARCH_SUPPORT
- 	depends on !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS
- 
--- 
-1.8.4.3
+BR2_arm=y
+BR2_cortex_a8=y
+BR2_JLEVEL=8
+BR2_TOOLCHAIN_BUILDROOT_INET_IPV6=y
+BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
+BR2_PTHREADS=y
+# BR2_UCLIBC_INSTALL_UTILS is not set
+BR2_BINUTILS_VERSION_2_23_2=y
+BR2_GCC_VERSION_4_8_X=y
+BR2_EXTRA_GCC_CONFIG_OPTIONS="--with-fpu=vfpv3 --with-float=hard"
+BR2_TOOLCHAIN_BUILDROOT_CXX=y
+BR2_TARGET_GENERIC_HOSTNAME="nanobone"
+BR2_TARGET_GENERIC_ROOT_PASSWD="rmfMPVaGP3nnjWUV"
+BR2_TARGET_GENERIC_GETTY_PORT="ttyO0"
+BR2_ROOTFS_OVERLAY="board/newflow/nanobone/skeleton"
+BR2_PACKAGE_BUSYBOX_CONFIG="board/newflow/nanobone/busybox-1.21.x.config"
+BR2_PACKAGE_BUSYBOX_SHOW_OTHERS=y
+BR2_PACKAGE_MTD=y
+BR2_PACKAGE_I2C_TOOLS=y
+BR2_PACKAGE_OPENSSL=y
+BR2_PACKAGE_OPENSSL_BIN=y
+BR2_PACKAGE_LIBESMTP=y
+BR2_PACKAGE_LIBFCGI=y
+BR2_PACKAGE_AVAHI=y
+BR2_PACKAGE_BLUEZ_UTILS=y
+BR2_PACKAGE_BLUEZ_UTILS_COMPAT=y
+BR2_PACKAGE_DROPBEAR=y
+BR2_PACKAGE_DROPBEAR_DISABLE_REVERSEDNS=y
+BR2_PACKAGE_IW=y
+BR2_PACKAGE_LIGHTTPD=y
+BR2_PACKAGE_NTP=y
+BR2_PACKAGE_NTP_SNTP=y
+# BR2_PACKAGE_NTP_NTPD is not set
+BR2_PACKAGE_WIRELESS_TOOLS=y
+BR2_PACKAGE_WPA_SUPPLICANT=y
+BR2_TARGET_ROOTFS_UBIFS=y
+BR2_TARGET_ROOTFS_UBIFS_LEBSIZE=0x1ff80
+BR2_TARGET_ROOTFS_UBIFS_MINIOSIZE=0x1
+BR2_TARGET_ROOTFS_UBIFS_MAXLEBCNT=464
+BR2_TARGET_ROOTFS_UBIFS_RT_NONE=y
+BR2_TARGET_ROOTFS_UBI=y
+BR2_TARGET_ROOTFS_UBI_SUBSIZE=1
+BR2_PACKAGE_HOST_UBOOT_TOOLS=y
