@@ -1,65 +1,63 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Wed, 27 Nov 2013 17:11:07 +0000
-Subject: [Buildroot] [PATCH v2 1/2] qt: Disable QtScript on MIPS64
-In-Reply-To: <20131127150313.64e3721a@skate>
-References: <1385559761-40501-1-git-send-email-Vincent.Riera@imgtec.com>
- <20131127150313.64e3721a@skate>
-Message-ID: <529627AB.6070501@imgtec.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 27 Nov 2013 18:16:56 +0100
+Subject: [Buildroot] libglib2 (or maybe libffi) build failure
+In-Reply-To: <529625D8.4080507@newflow.co.uk>
+References: <52960F8C.5040003@newflow.co.uk> <20131127171511.2abd4873@skate>
+ <52961D17.6020904@newflow.co.uk> <20131127173755.6019dd2f@skate>
+ <529621B0.60106@newflow.co.uk> <20131127175114.619d17d5@skate>
+ <529625D8.4080507@newflow.co.uk>
+Message-ID: <20131127181656.35b2521c@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 11/27/2013 02:03 PM, Thomas Petazzoni wrote:
-> Dear Vicente Olivert Riera,
->
-> On Wed, 27 Nov 2013 13:42:40 +0000, Vicente Olivert Riera wrote:
->> There is no support for MIPS64 in QtScript right now, so buildroot
->> upstream suggested to disable the possibility of enabling QtScript on
->> MIPS64 as a quick fix for the 2013.11 release:
->>
->>     http://lists.busybox.net/pipermail/buildroot/2013-November/083157.html
->>
->> A proposed fix to add support for MIPS64 has already been sent to Qt:
->>
->>     https://bugreports.qt-project.org/browse/QTBUG-35030
->>
->> Fixes:
->>
->>     http://autobuild.buildroot.net/results/fd7/fd7e7e53290f235b540ed5f3c784e2584fdb41e0/
->>
->> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
->> ---
->>   package/qt/Config.in |    1 +
->>   1 files changed, 1 insertions(+), 0 deletions(-)
->>
->> diff --git a/package/qt/Config.in b/package/qt/Config.in
->> index 2651d55..6fd1c94 100644
->> --- a/package/qt/Config.in
->> +++ b/package/qt/Config.in
->> @@ -385,6 +385,7 @@ config BR2_PACKAGE_QT_OPENSSL
->>
->>   config BR2_PACKAGE_QT_SCRIPT
->>   	bool "Script Module"
->> +	depends on !BR2_mips64el && !BR2_mips64
->>   	default y
->>   	help
->>   	  Build the Qt Script module.
->
-> QtScript doesn't build because it uses JavaScriptCore, right? So maybe
-> we can re-use the existing BR2_PACKAGE_QT_ARCH_SUPPORTS_WEBKIT option,
-> which already lists which platforms are supported by JavaScriptCore in
-> Qt4, no?
->
-> Best regards,
->
-> Thomas
->
+Dear Mark Jackson,
 
-Yes, we can do that. V2 patches sent.
+On Wed, 27 Nov 2013 17:03:20 +0000, Mark Jackson wrote:
 
-Thank you!
+> Aha ... the previous "buildroot" entry in $PATH is the cuplrit.
 
+Ok. It's true that having an already existing cross-compiler and
+Buildroot installation in the PATH can possibly cause some issues,
+though I'd like this to work properly.
+
+> The foo.log file contains lines such as:-
+> 
+> 15616 open("/home/mpfj/buildroot/output/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/pkgconfig/libcrypto.pc", O_RDONLY)
+>                        ^^^^^^^^^
+> I guess it's now in a confused state, so I should do a full clean ?
+
+Can you give us the contents of host/usr/bin/pkg-config ? It is a
+wrapper shell script that sets a bunch of variables and calls pkgconf.
+
+I would nonetheless like to have your full "foo.log", to see more
+precisely what's going on with pkg-config.
+
+> If so, can you tell me if it's possible to keep 2 different toolchains in use ?
+> 
+> The original "buildroot" path was to my "known-good" buildroot setup (based on
+> 2013.02), but I'm looking to update things to the latest.
+> 
+> I'd rather not destroy my existing toolchain setup, so is it possible to set things
+> up to handle 2 buildroots at the same time ?
+
+It is possible, just don't have one in the PATH in a permanent way. The
+way I typically do things is by adjusting the PATH only in the
+shell/terminal I'm going to use the toolchain, or even use the full
+toolchain path.
+
+Again, I believe we should continue to investigate this some more, I'd
+like to understand the root of the problem and see if there's a
+reasonable fix for it (even though I believe there might be several
+other issues in trying to do a Buildroot build with an existing
+Buildroot build in the PATH).
+
+Best regards,
+
+Thomas
 -- 
-Vincent
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
