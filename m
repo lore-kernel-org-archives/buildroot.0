@@ -1,39 +1,34 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 27 Nov 2013 22:29:05 +0100
-Subject: [Buildroot] [git commit] binutils: fix static linking
-Message-ID: <20131127213147.BBDEC9BD91@busybox.osuosl.org>
+Date: Wed, 27 Nov 2013 13:56:20 +0100
+Subject: [Buildroot] [git commit] quagga: security bump to version 0.99.22.4
+Message-ID: <20131127213147.6CC619BE1F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a6fa695639b06b475565980e0c99f9f261786e81
+commit: http://git.buildroot.net/buildroot/commit/?id=50b9552a44de76815c64d95af78974bad4b780b3
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-pkg-autotools.mk already handles static/shared linking, so no need to
-explictly force it. Worse even, the build fails with BR2_PREFER_STATIC_LINK
-as we end up calling libtool with --static when it tries to link the .so,
-breaking the build:
+Fixes CVE-2013-6051.
 
-../ld: attempted static link of dynamic object
-`../opcodes/.libs/libopcodes.so'
-collect2: error: ld returned 1 exit status
-
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/binutils/binutils.mk |    1 -
- 1 files changed, 0 insertions(+), 1 deletions(-)
+ package/quagga/quagga.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/binutils/binutils.mk b/package/binutils/binutils.mk
-index f1723b2..b3ccee2 100644
---- a/package/binutils/binutils.mk
-+++ b/package/binutils/binutils.mk
-@@ -39,7 +39,6 @@ BINUTILS_LICENSE_FILES = COPYING3 COPYING.LIB
- BINUTILS_CONF_OPT = --disable-multilib --disable-werror \
- 		--host=$(GNU_TARGET_NAME) \
- 		--target=$(GNU_TARGET_NAME) \
--		--enable-shared \
- 		$(BINUTILS_EXTRA_CONFIG_OPTIONS)
+diff --git a/package/quagga/quagga.mk b/package/quagga/quagga.mk
+index 995e42d..19a6488 100644
+--- a/package/quagga/quagga.mk
++++ b/package/quagga/quagga.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- # Install binutils after busybox to prefer full-blown utilities
+-QUAGGA_VERSION = 0.99.22.3
++QUAGGA_VERSION = 0.99.22.4
+ QUAGGA_SOURCE = quagga-$(QUAGGA_VERSION).tar.xz
+ QUAGGA_SITE = http://download.savannah.gnu.org/releases/quagga
+ QUAGGA_DEPENDENCIES = host-gawk
