@@ -1,28 +1,48 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 27 Nov 2013 18:06:26 +0100
-Subject: [Buildroot] [PATCH] dropwatch: adjust LDFLAGS
-In-Reply-To: <1385553979-25760-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Wed, 27 Nov 2013 09:06:19 -0300")
-References: <1385553979-25760-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <8761rd3hbh.fsf@dell.be.48ers.dk>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Wed, 27 Nov 2013 17:10:06 +0000
+Subject: [Buildroot] [PATCH v2 1/2] qt: Disable QtScript on MIPS64
+Message-ID: <1385572207-44666-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+There is no support for MIPS64 in QtScript right now, so buildroot
+upstream suggested to disable the possibility of enabling QtScript on
+MIPS64 as a quick fix for the 2013.11 release:
 
- > Add more library links into LDFLAGS.
- > -lncurses because readline uses it (missing _tputs and others).
- > -lpthread for missing _pthread_rwlock_unlock and others.
- > -lm for missing _rint.
- > Fixes:
- > http://autobuild.buildroot.net/results/6b1/6b1f4f2167d8aca0d73dc0e66fd2e1704c821c61/
+   http://lists.busybox.net/pipermail/buildroot/2013-November/083157.html
 
- > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+QtScript doesn't build because it uses JavaScriptCore, so we re-use the
+existing BR2_PACKAGE_QT_ARCH_SUPPORTS_WEBKIT option which already lists
+which platforms are supported by JavaScriptCore in Qt4.
 
-Committed, thanks.
+In addition, a proposed fix to add support for MIPS64 has already been
+sent to Qt:
 
+   https://bugreports.qt-project.org/browse/QTBUG-35030
+
+Fixes:
+
+   http://autobuild.buildroot.net/results/fd7/fd7e7e53290f235b540ed5f3c784e2584fdb41e0/
+
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+ package/qt/Config.in |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
+
+diff --git a/package/qt/Config.in b/package/qt/Config.in
+index 2651d55..dd2b6d9 100644
+--- a/package/qt/Config.in
++++ b/package/qt/Config.in
+@@ -385,6 +385,7 @@ config BR2_PACKAGE_QT_OPENSSL
+ 
+ config BR2_PACKAGE_QT_SCRIPT
+ 	bool "Script Module"
++	depends on BR2_PACKAGE_QT_ARCH_SUPPORTS_WEBKIT
+ 	default y
+ 	help
+ 	  Build the Qt Script module.
 -- 
-Bye, Peter Korsgaard
+1.7.1
