@@ -1,34 +1,33 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 26 Nov 2013 16:06:49 +0100
-Subject: [Buildroot] [git commit] dosfstools: bump to version 3.0.24
-Message-ID: <20131201201520.1DADB9BE44@busybox.osuosl.org>
+Date: Thu, 28 Nov 2013 15:13:07 +0100
+Subject: [Buildroot] [git commit] sam-ba: patch to latest version
+Message-ID: <20131201201520.6D05C9BE78@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=0ecc79a312309feebcf571c8b8a564514869c99c
+commit: http://git.buildroot.net/buildroot/commit/?id=874f5f92ea5b210ab54c624eb4e6fc076e67124a
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes dosfsck on big endian targets.
+Apply the latest Atmel patch for sam-ba version 2.12
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Simon Dawson <spdawson@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/dosfstools/dosfstools.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/sam-ba/sam-ba.mk |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-diff --git a/package/dosfstools/dosfstools.mk b/package/dosfstools/dosfstools.mk
-index 6b27e80..db23729 100644
---- a/package/dosfstools/dosfstools.mk
-+++ b/package/dosfstools/dosfstools.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/sam-ba/sam-ba.mk b/package/sam-ba/sam-ba.mk
+index 8e24fa6..4dc0568 100644
+--- a/package/sam-ba/sam-ba.mk
++++ b/package/sam-ba/sam-ba.mk
+@@ -7,6 +7,7 @@
+ SAM_BA_SITE    = http://www.atmel.com/dyn/resources/prod_documents/
+ SAM_BA_VERSION = 2.12
+ SAM_BA_SOURCE  = sam-ba_$(SAM_BA_VERSION).zip
++SAM_BA_PATCH = sam-ba_$(SAM_BA_VERSION)_patch5.gz
+ SAM_BA_LICENSE = BSD-like (partly binary-only)
+ SAM_BA_LICENSE_FILES = doc/readme.txt
  
--DOSFSTOOLS_VERSION = 3.0.23
-+DOSFSTOOLS_VERSION = 3.0.24
- DOSFSTOOLS_SOURCE = dosfstools-$(DOSFSTOOLS_VERSION).tar.xz
- DOSFSTOOLS_SITE = http://daniel-baumann.ch/files/software/dosfstools
- DOSFSTOOLS_LICENSE = GPLv3+
