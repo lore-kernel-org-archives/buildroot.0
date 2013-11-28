@@ -1,34 +1,23 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 28 Nov 2013 10:56:06 -0300
-Subject: [Buildroot] [PATCH] util-linux: tweak sscanf-no-ms-as patch
-Message-ID: <1385646966-1401-1-git-send-email-gustavo@zacarias.com.ar>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 28 Nov 2013 15:11:34 +0100
+Subject: [Buildroot] [PATCH] connman: bump version to 1.19
+In-Reply-To: <1385630263-14080-1-git-send-email-spdawson@gmail.com>
+ (spdawson@gmail.com's message of "Thu, 28 Nov 2013 09:17:43 +0000")
+References: <1385630263-14080-1-git-send-email-spdawson@gmail.com>
+Message-ID: <87ob541uqx.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The patch has a minor mistake so fix it.
-Credit go to Daniel Mentz <daniel@exxm.de> for the detailed bug report.
-Closes bug #6428
+>>>>> "spdawson" == spdawson  <spdawson@gmail.com> writes:
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/util-linux/util-linux-001-sscanf-no-ms-as.patch | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ > From: Simon Dawson <spdawson@gmail.com>
+ > Bump connman to version 1.19; remove a local patch that is no longer
+ > required, the code change having now been made upstream.
 
-diff --git a/package/util-linux/util-linux-001-sscanf-no-ms-as.patch b/package/util-linux/util-linux-001-sscanf-no-ms-as.patch
-index 72a060e..c95b755 100644
---- a/package/util-linux/util-linux-001-sscanf-no-ms-as.patch
-+++ b/package/util-linux/util-linux-001-sscanf-no-ms-as.patch
-@@ -124,7 +124,7 @@ ported to util-linux-2.23.2
-  			"%jd"		/* (4) used */
-  			"%d",		/* priority */
-  
--+#ifndef HAVE_SCANF_MS_MODIFIER
-++#ifdef HAVE_SCANF_MS_MODIFIER
-  			&src,
-  			&fs->swaptype,
- +#else
+Committed to next, thanks.
+
 -- 
-1.8.3.2
+Bye, Peter Korsgaard
