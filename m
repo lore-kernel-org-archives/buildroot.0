@@ -1,35 +1,32 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 29 Nov 2013 10:09:45 +0100
-Subject: [Buildroot] [git commit] qt5base: use ccache if enabled
-Message-ID: <20131201201520.B33A79BE78@busybox.osuosl.org>
+Date: Thu, 28 Nov 2013 15:17:10 +0100
+Subject: [Buildroot] [git commit] libpcap: bump to version 1.5.1
+Message-ID: <20131201201520.762569BE78@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=cb08d7b05db54eb7b2c52deabbd57c541777a422
+commit: http://git.buildroot.net/buildroot/commit/?id=c4bdfd73aaefe9d7b2ecac7c1453a18a5082b058
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-For now, it doesn't use ccache when compiling host tools (e.g. qmake).
-It seems the fix is not trivial.
-
-Signed-off-by: Fatih A????c?? <fatih.asici@gmail.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/qt5/qt5base/qt5base.mk |    2 +-
+ package/libpcap/libpcap.mk |    2 +-
  1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
-index febdc9b..d95b186 100644
---- a/package/qt5/qt5base/qt5base.mk
-+++ b/package/qt5/qt5base/qt5base.mk
-@@ -167,7 +167,7 @@ define QT5BASE_CONFIGURE_CMDS
- 		-no-rpath \
- 		-nomake examples -nomake tests \
- 		-device buildroot \
--		-device-option CROSS_COMPILE="$(TARGET_CROSS)" \
-+		-device-option CROSS_COMPILE="$(CCACHE) $(TARGET_CROSS)" \
- 		-device-option BUILDROOT_COMPILER_CFLAGS="$(TARGET_CFLAGS)" \
- 		-device-option BUILDROOT_COMPILER_CXXFLAGS="$(TARGET_CXXFLAGS)" \
- 		-device-option EGLFS_PLATFORM_HOOKS_SOURCES="$(QT5BASE_EGLFS_PLATFORM_HOOKS_SOURCES)" \
+diff --git a/package/libpcap/libpcap.mk b/package/libpcap/libpcap.mk
+index ec4d346..aba2510 100644
+--- a/package/libpcap/libpcap.mk
++++ b/package/libpcap/libpcap.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBPCAP_VERSION = 1.4.0
++LIBPCAP_VERSION = 1.5.1
+ LIBPCAP_SITE = http://www.tcpdump.org/release
+ LIBPCAP_LICENSE = BSD-3c
+ LIBPCAP_LICENSE_FILES = LICENSE
