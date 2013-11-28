@@ -1,72 +1,49 @@
-From: spdawson at gmail.com <spdawson@gmail.com>
-Date: Thu, 28 Nov 2013 14:24:55 +0000
-Subject: [Buildroot] [PATCH v2] connman: remove defunkt configuration options
-Message-ID: <1385648695-28899-1-git-send-email-spdawson@gmail.com>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Thu, 28 Nov 2013 15:57:14 +0000
+Subject: [Buildroot] [PATCH v3 1/2] qt: Disable QtScript on non-supported
+	platforms
+Message-ID: <1385654237-36389-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Simon Dawson <spdawson@gmail.com>
+There is no support for certain platforms in QtScript right now, so 
+buildroot upstream suggested to disable the possibility of enabling 
+QtScript on those platforms as a quick fix for the 2013.11 release:
 
-We are carrying support for a couple of configuration options which
-are no longer present in connman. Specifically:
-; threads: vestigial configuration option needed for defunkt WiMAX plugin
-; ntpd: plugin no longer present in connman
+   http://lists.busybox.net/pipermail/buildroot/2013-November/083157.html
 
-Signed-off-by: Simon Dawson <spdawson@gmail.com>
+QtScript doesn't build because it uses JavaScriptCore, so we re-use the
+existing BR2_PACKAGE_QT_ARCH_SUPPORTS_WEBKIT option which already lists
+which platforms are supported by JavaScriptCore in Qt4.
+
+In addition, a proposed fix to add support for MIPS64 has already been
+sent to Qt:
+
+   https://bugreports.qt-project.org/browse/QTBUG-35030
+
+Fixes:
+
+   http://autobuild.buildroot.net/results/fd7/fd7e7e53290f235b540ed5f3c784e2584fdb41e0/
+
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 ---
- v2: Rebase on top of next branch
+ package/qt/Config.in |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
- package/connman/Config.in  | 8 --------
- package/connman/connman.mk | 2 --
- 2 files changed, 10 deletions(-)
-
-diff --git a/package/connman/Config.in b/package/connman/Config.in
-index 1cf93e2..0c381af 100644
---- a/package/connman/Config.in
-+++ b/package/connman/Config.in
-@@ -19,11 +19,6 @@ config BR2_PACKAGE_CONNMAN
+diff --git a/package/qt/Config.in b/package/qt/Config.in
+index 2651d55..dd2b6d9 100644
+--- a/package/qt/Config.in
++++ b/package/qt/Config.in
+@@ -385,6 +385,7 @@ config BR2_PACKAGE_QT_OPENSSL
  
- if BR2_PACKAGE_CONNMAN
- 
--config BR2_PACKAGE_CONNMAN_THREADS
--	bool "enable threading support"
--	depends on BR2_TOOLCHAIN_HAS_THREADS
--	default y
--
- config BR2_PACKAGE_CONNMAN_ETHERNET
- 	bool "enable Ethernet support"
+ config BR2_PACKAGE_QT_SCRIPT
+ 	bool "Script Module"
++	depends on BR2_PACKAGE_QT_ARCH_SUPPORTS_WEBKIT
  	default y
-@@ -42,9 +37,6 @@ config BR2_PACKAGE_CONNMAN_NEARD
- 	bool "enable neard support"
- 	select BR2_PACKAGE_NEARD
- 
--config BR2_PACKAGE_CONNMAN_NTPD
--	bool "enable ntpd support"
--
- config BR2_PACKAGE_CONNMAN_OFONO
- 	bool "enable ofono support"
- 	select BR2_PACKAGE_OFONO
-diff --git a/package/connman/connman.mk b/package/connman/connman.mk
-index cf54abc..64c1f0e 100644
---- a/package/connman/connman.mk
-+++ b/package/connman/connman.mk
-@@ -12,14 +12,12 @@ CONNMAN_INSTALL_STAGING = YES
- CONNMAN_LICENSE = GPLv2
- CONNMAN_LICENSE_FILES = COPYING
- CONNMAN_CONF_OPT += --localstatedir=/var \
--	$(if $(BR2_PACKAGE_CONNMAN_THREADS),--enable-threads,--disable-threads)		\
- 	$(if $(BR2_PACKAGE_CONNMAN_DEBUG),--enable-debug,--disable-debug)		\
- 	$(if $(BR2_PACKAGE_CONNMAN_ETHERNET),--enable-ethernet,--disable-ethernet)	\
- 	$(if $(BR2_PACKAGE_CONNMAN_WIFI),--enable-wifi,--disable-wifi)			\
- 	$(if $(BR2_PACKAGE_CONNMAN_BLUETOOTH),--enable-bluetooth,--disable-bluetooth)	\
- 	$(if $(BR2_PACKAGE_CONNMAN_LOOPBACK),--enable-loopback,--disable-loopback)	\
- 	$(if $(BR2_PACKAGE_CONNMAN_NEARD),--enable-neard,--disable-neard) \
--	$(if $(BR2_PACKAGE_CONNMAN_NTPD),--enable-ntpd,--disable-ntpd) \
- 	$(if $(BR2_PACKAGE_CONNMAN_OFONO),--enable-ofono,--disable-ofono)
- 
- CONNMAN_DEPENDENCIES += \
+ 	help
+ 	  Build the Qt Script module.
 -- 
-1.8.3.2
+1.7.1
