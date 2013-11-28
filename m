@@ -1,110 +1,148 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Thu, 28 Nov 2013 08:51:48 +0100
-Subject: [Buildroot] [PATCH v2] lvm2: replace !BR2_PACKAGE_LVM2_DMSETUP_ONLY
-	by BR2_PACKAGE_LVM2_STANDARD_INSTALL
-Message-ID: <1385625108-31742-1-git-send-email-arnout@mind.be>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 28 Nov 2013 08:13:14 +0100
+Subject: [Buildroot] [PATCH] lvm2: replace
+	!BR2_PACKAGE_LVM2_DMSETUP_ONLY by BR2_PACKAGE_LVM2_FULL_SUITE
+In-Reply-To: <CAAXf6LVhLB1yqkhz0Fupd646ZQu9-4k0uw1LxkTbz-EWO_JOdw@mail.gmail.com>
+References: <20131123183721.071bcfa1@skate>
+ <1385250624-15984-1-git-send-email-arnout@mind.be>
+ <CAAXf6LXHZw6YRg1P+2=B1wca0CWHFhxocnYoQ4W7JmOb_v=Twg@mail.gmail.com>
+ <52932E3A.2080903@mind.be>
+ <CAAXf6LVhLB1yqkhz0Fupd646ZQu9-4k0uw1LxkTbz-EWO_JOdw@mail.gmail.com>
+Message-ID: <5296ED0A.8020200@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-BR2_PACKAGE_LVM2_DMSETUP_ONLY is a "negative" option that disables
-build and install of part of the suite. This option cannot be unselected
-by other config options, which gives a problem for BR2_PACKAGE_UDISKS_LVM2:
-it needs BR2_PACKAGE_LVM2_APP_LIBRARY, which requires the full suite.
+On 25/11/13 22:21, Thomas De Schampheleire wrote:
+> On Mon, Nov 25, 2013 at 12:02 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
+>> On 25/11/13 10:46, Thomas De Schampheleire wrote:
+> [..]
+>>>> diff --git a/package/lvm2/Config.in b/package/lvm2/Config.in
+>>>> index b3988ea..849aab3 100644
+>>>> --- a/package/lvm2/Config.in
+>>>> +++ b/package/lvm2/Config.in
+>>>> @@ -16,16 +16,18 @@ config BR2_PACKAGE_LVM2
+>>>>             user-space. This makes it useful for not only LVM, but EVMS,
+>>>>             software raid, and other drivers that create "virtual" block
+>>>> devices.
+>>>>
+>>>> -config BR2_PACKAGE_LVM2_DMSETUP_ONLY
+>>>> -       bool "install dmsetup only"
+>>>> +config BR2_PACKAGE_LVM2_FULL_SUITE
+>>>> +       bool "install the full LVM2 suite"
+>>>> +       default y if !BR2_PACKAGE_LVM2_DMSETUP_ONLY # legacy 2013.11
+>>>>           depends on BR2_PACKAGE_LVM2
+>>>>           help
+>>>> -         Install dmsetup only and skip the LVM2 suite.
+>>>> +         Install the full LVM2 suite. When this option is not set, only
+>>>> +         dmsetup is installed.
+>>>>
+>>>>    config BR2_PACKAGE_LVM2_APP_LIBRARY
+>>>>           bool "install application library"
+>>>>           depends on BR2_PACKAGE_LVM2
+>>>> -       depends on !BR2_PACKAGE_LVM2_DMSETUP_ONLY
+>>>> +       select BR2_PACKAGE_LVM2_FULL_SUITE
+>>>>           help
+>>>>             Install application library (liblvm2app).
+>>>
+>>>
+>>> It seems odd to me that the 'full suite' does not include the app
+>>> library: it is not 'full'.
+>>
+>>
+>>   Granted, but I can't think of a better name. Anyone?
+>
+> I was trying an alternative approach with 'choice', but failed.
+> Here is what I tried:
+>
+> $ hg diff package/
+> diff --git a/package/lvm2/Config.in b/package/lvm2/Config.in
+> --- a/package/lvm2/Config.in
+> +++ b/package/lvm2/Config.in
+> @@ -16,19 +16,29 @@ config BR2_PACKAGE_LVM2
+>            user-space. This makes it useful for not only LVM, but EVMS,
+>            software raid, and other drivers that create "virtual" block devices.
+>
+> +if BR2_PACKAGE_LVM2
+> +
+> +choice
+> +       prompt "Installation type"
+> +
+> +config BR2_PACKAGE_LVM2_STANDARD_INSTALL
+> +       bool "standard installation"
+> +
+>   config BR2_PACKAGE_LVM2_DMSETUP_ONLY
+>          bool "install dmsetup only"
+> -       depends on BR2_PACKAGE_LVM2
+>          help
+>            Install dmsetup only and skip the LVM2 suite.
+>
+> +endchoice
+> +
+>   config BR2_PACKAGE_LVM2_APP_LIBRARY
+>          bool "install application library"
+> -       depends on BR2_PACKAGE_LVM2
+> -       depends on !BR2_PACKAGE_LVM2_DMSETUP_ONLY
+> +       select BR2_PACKAGE_LVM2_STANDARD_INSTALL
+>          help
+>            Install application library (liblvm2app).
+>
+> +endif
+> +
 
-Therefore, replace the negative BR2_PACKAGE_LVM2_DMSETUP_ONLY by a positive
-BR2_PACKAGE_LVM2_STANDARD_INSTALL. To make sure that existing defconfigs
-keep working, the new option defaults to y unless the legacy
-BR2_PACKAGE_LVM2_DMSETUP_ONLY was selected.
+  So, what didn't work with this?
 
-Fixes http://autobuild.buildroot.net/results/ea4627cae45e972ebba5b33a2b2871ce7f46fedc/
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
-Note that in the legacy handling I've assumed that this will still
-be taken in 2013.11.
+>   comment "lvm2 needs a toolchain w/ largefile"
+>          depends on BR2_USE_MMU
+>          depends on !BR2_LARGEFILE
+> diff --git a/package/udisks/Config.in b/package/udisks/Config.in
+> --- a/package/udisks/Config.in
+> +++ b/package/udisks/Config.in
+> @@ -30,6 +30,7 @@ if BR2_PACKAGE_UDISKS
+>   config BR2_PACKAGE_UDISKS_LVM2
+>          bool "lvm2 support"
+>          select BR2_PACKAGE_LVM2_APP_LIBRARY
+> +       select BR2_PACKAGE_LVM2_STANDARD_INSTALL
+>          help
+>            Enable LVM2 support
+>
+>
+> If anyone can make this work, I'd prefer it over the 'magic'
+> if-not-full-suite-you-get-dmonly approach.
 
-v2:
- - Rename the new symbol to BR2_PACKAGE_LVM2_STANDARD_INSTALL
+  I don't.
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- Config.in.legacy       | 12 ++++++++++++
- package/lvm2/Config.in | 16 ++++++++++------
- package/lvm2/lvm2.mk   |  2 +-
- 3 files changed, 23 insertions(+), 7 deletions(-)
+* Choice is not covered by randconfig, so not tried by the autobuilders.
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 587afe1..c629256 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -101,6 +101,18 @@ endif
- ###############################################################################
- comment "Legacy options removed in 2013.11"
- 
-+config BR2_PACKAGE_LVM2_DMSETUP_ONLY
-+	bool "lvm2's 'dmsetup only' option removed"
-+	select BR2_LEGACY
-+	help
-+	  The BR2_PACKAGE_LVM2_DMSETUP_ONLY was a negative option, which
-+	  led to problems with other packages that need the full lvm2
-+	  suite. Therefore, the option has been replaced with the positive
-+	  BR2_PACKAGE_LVM2_FULL_SUITE option.
-+
-+# Note: BR2_PACKAGE_LVM2_DMSETUP_ONLY is still referenced in package/lvm2/Config.in
-+# in order to automatically propagate old configs
-+
- config BR2_PACKAGE_QT_JAVASCRIPTCORE
- 	bool "qt javascriptcore option removed"
- 	select BR2_LEGACY
-diff --git a/package/lvm2/Config.in b/package/lvm2/Config.in
-index b3988ea..b523dba 100644
---- a/package/lvm2/Config.in
-+++ b/package/lvm2/Config.in
-@@ -16,19 +16,23 @@ config BR2_PACKAGE_LVM2
- 	  user-space. This makes it useful for not only LVM, but EVMS,
- 	  software raid, and other drivers that create "virtual" block devices.
- 
--config BR2_PACKAGE_LVM2_DMSETUP_ONLY
--	bool "install dmsetup only"
--	depends on BR2_PACKAGE_LVM2
-+if BR2_PACKAGE_LVM2
-+
-+config BR2_PACKAGE_LVM2_STANDARD_INSTALL
-+	bool "standard install instead of only dmsetup"
-+	default y if !BR2_PACKAGE_LVM2_DMSETUP_ONLY # legacy 2013.11
- 	help
--	  Install dmsetup only and skip the LVM2 suite.
-+	  Install the standard suite of lvm2 programs. When this option is not
-+	  set, only dmsetup is installed.
- 
- config BR2_PACKAGE_LVM2_APP_LIBRARY
- 	bool "install application library"
--	depends on BR2_PACKAGE_LVM2
--	depends on !BR2_PACKAGE_LVM2_DMSETUP_ONLY
-+	select BR2_PACKAGE_LVM2_FULL_SUITE
- 	help
- 	  Install application library (liblvm2app).
- 
-+endif
-+
- comment "lvm2 needs a toolchain w/ largefile"
- 	depends on BR2_USE_MMU
- 	depends on !BR2_LARGEFILE
-diff --git a/package/lvm2/lvm2.mk b/package/lvm2/lvm2.mk
-index 79a0d05..4099c21 100644
---- a/package/lvm2/lvm2.mk
-+++ b/package/lvm2/lvm2.mk
-@@ -38,7 +38,7 @@ else
- LVM2_CONF_OPT += --disable-readline
- endif
- 
--ifeq ($(BR2_PACKAGE_LVM2_DMSETUP_ONLY),y)
-+ifeq ($(BR2_PACKAGE_LVM2_STANDARD_INSTALL),)
- LVM2_MAKE_OPT = device-mapper
- LVM2_INSTALL_STAGING_OPT = DESTDIR=$(STAGING_DIR) install_device-mapper
- LVM2_INSTALL_TARGET_OPT = DESTDIR=$(TARGET_DIR) install_device-mapper
+* Choice is more cumbersome for the user
+
+* I don't see what is wrong with a boolean option that installs more stuff.
+
+>
+> If not, what about the naming 'standard installation' to refer to what
+> is called 'full suite' in your patch. If it is not standard install,
+> it is dmonly.
+
+  I called it:
+
+config BR2_PACKAGE_LVM2_STANDARD_INSTALL
+	bool "standard install instead of only dmsetup"
+	default y if !BR2_PACKAGE_LVM2_DMSETUP_ONLY # legacy 2013.11
+	help
+	  Install the standard suite of lvm2 programs. When this option
+	  is not set, only dmsetup is installed.
+
+
+
+  Regards,
+  Arnout
 -- 
-1.8.4.3
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
