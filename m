@@ -1,71 +1,110 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 28 Nov 2013 08:30:02 +0100 (CET)
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2013-11-27
-Message-ID: <20131128073003.1BC191014F4@stock.ovh.net>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Thu, 28 Nov 2013 08:51:48 +0100
+Subject: [Buildroot] [PATCH v2] lvm2: replace !BR2_PACKAGE_LVM2_DMSETUP_ONLY
+	by BR2_PACKAGE_LVM2_STANDARD_INSTALL
+Message-ID: <1385625108-31742-1-git-send-email-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Build statistics for 2013-11-27
-===============================
+BR2_PACKAGE_LVM2_DMSETUP_ONLY is a "negative" option that disables
+build and install of part of the suite. This option cannot be unselected
+by other config options, which gives a problem for BR2_PACKAGE_UDISKS_LVM2:
+it needs BR2_PACKAGE_LVM2_APP_LIBRARY, which requires the full suite.
 
-        success : 88 
-       failures : 22 
-       timeouts : 0  
-          TOTAL : 110
+Therefore, replace the negative BR2_PACKAGE_LVM2_DMSETUP_ONLY by a positive
+BR2_PACKAGE_LVM2_STANDARD_INSTALL. To make sure that existing defconfigs
+keep working, the new option defaults to y unless the legacy
+BR2_PACKAGE_LVM2_DMSETUP_ONLY was selected.
 
-Classification of failures by reason
-====================================
+Fixes http://autobuild.buildroot.net/results/ea4627cae45e972ebba5b33a2b2871ce7f46fedc/
 
-                      icu-51.2 | 2 
-                 dropwatch-1.4 | 2 
-               qt5script-5.1.1 | 1 
-                  libv4l-0.8.9 | 1 
-                openssl-1.0.1e | 1 
-  toolchain-external-undefined | 1 
-                valgrind-3.8.1 | 1 
-                  imlib2-1.4.5 | 1 
-                 rt-tests-0.83 | 1 
-              fontconfig-2.6.0 | 1 
-                 libnspr-4.9.6 | 1 
-                 binutils-2.22 | 1 
-                  samba-3.6.20 | 1 
-               iptables-1.4.20 | 1 
-ne10-88c18f02199947b2c8b577... | 1 
-          enlightenment-0.17.3 | 1 
-tvheadend-2b649954346aa2e9c... | 1 
-                      qt-4.8.5 | 1 
-             alsa-utils-1.0.26 | 1 
-                      gpsd-3.9 | 1 
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+Note that in the legacy handling I've assumed that this will still
+be taken in 2013.11.
 
-Detail of failures
-===================
+v2:
+ - Rename the new symbol to BR2_PACKAGE_LVM2_STANDARD_INSTALL
 
-      bfin |              alsa-utils-1.0.26 | NOK | http://autobuild.buildroot.net/results/25cc92251e00ecc1d85837a39f3304a66403699d/
-    xtensa |                  binutils-2.22 | NOK | http://autobuild.buildroot.net/results/f7c98efb98f0c13a7998d0fa87ad5f5b5e6aadff/
-      bfin |                  dropwatch-1.4 | NOK | http://autobuild.buildroot.net/results/9214a6ae3c7873452d92d4004ce8a65a3b3f34fe/
-      bfin |                  dropwatch-1.4 | NOK | http://autobuild.buildroot.net/results/6b1f4f2167d8aca0d73dc0e66fd2e1704c821c61/
-   powerpc |           enlightenment-0.17.3 | NOK | http://autobuild.buildroot.net/results/5c2dbacb0e2963c655e5afde4d143a41cad27628/
-      bfin |               fontconfig-2.6.0 | NOK | http://autobuild.buildroot.net/results/0ff3ec81c80929278baf26cda3d8fbdf8184c0fd/
-   aarch64 |                       gpsd-3.9 | NOK | http://autobuild.buildroot.net/results/724f8646e1c2c28cf187f2313244d1e3e61b4c25/
-      bfin |                       icu-51.2 | NOK | http://autobuild.buildroot.net/results/d34a468aa1f9501e021e50eac535e3c144dfab68/
-      bfin |                       icu-51.2 | NOK | http://autobuild.buildroot.net/results/5b0980ad45d4122e5ae568fb3d5017782570808b/
-      bfin |                   imlib2-1.4.5 | NOK | http://autobuild.buildroot.net/results/01485d5d5200d3670462887bca3775042a248be1/
-      bfin |                iptables-1.4.20 | NOK | http://autobuild.buildroot.net/results/e4a0f93e2abdad0222063b3f71970ee1c5940f3a/
-     nios2 |                  libnspr-4.9.6 | NOK | http://autobuild.buildroot.net/results/810dc7d8740c06b7a827ce40d8dde36388d51644/
-   aarch64 |                   libv4l-0.8.9 | NOK | http://autobuild.buildroot.net/results/b8bed2621d1697329d4dfd52207691d489928446/
-       arm | ne10-88c18f02199947b2c8b577... | NOK | http://autobuild.buildroot.net/results/b4d1d90fc9183cc361df8aa16faa3261f2edf723/
-microblaze |                 openssl-1.0.1e | NOK | http://autobuild.buildroot.net/results/926d1a89a577d2e01aa457241a85d10b4ed64599/
-    xtensa |                       qt-4.8.5 | NOK | http://autobuild.buildroot.net/results/2e4bf13e298bb6ad7ae4c828bda9841933a29fae/
-  mips64el |                qt5script-5.1.1 | NOK | http://autobuild.buildroot.net/results/231c112a3fc18e6cd7d6d10873e22144525c7280/
-    mipsel |                  rt-tests-0.83 | NOK | http://autobuild.buildroot.net/results/b662de8fc3b7bcb9c0f5a7cb065ef17e22084c25/
-     avr32 |                   samba-3.6.20 | NOK | http://autobuild.buildroot.net/results/4d4a742c4e4471e577f85093c6195b99d6be41cc/
-   powerpc |   toolchain-external-undefined | NOK | http://autobuild.buildroot.net/results/11d65805b77f615ccd58ff889c949f86d6fd6918/
-  mips64el | tvheadend-2b649954346aa2e9c... | NOK | http://autobuild.buildroot.net/results/6be075726ac6db0a48dd6b535841ada932c9ffbb/
-       arm |                 valgrind-3.8.1 | NOK | http://autobuild.buildroot.net/results/5d341dfeea858409b525e26711eb3cfd6dd4a8a4/
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ Config.in.legacy       | 12 ++++++++++++
+ package/lvm2/Config.in | 16 ++++++++++------
+ package/lvm2/lvm2.mk   |  2 +-
+ 3 files changed, 23 insertions(+), 7 deletions(-)
 
-
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 587afe1..c629256 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -101,6 +101,18 @@ endif
+ ###############################################################################
+ comment "Legacy options removed in 2013.11"
+ 
++config BR2_PACKAGE_LVM2_DMSETUP_ONLY
++	bool "lvm2's 'dmsetup only' option removed"
++	select BR2_LEGACY
++	help
++	  The BR2_PACKAGE_LVM2_DMSETUP_ONLY was a negative option, which
++	  led to problems with other packages that need the full lvm2
++	  suite. Therefore, the option has been replaced with the positive
++	  BR2_PACKAGE_LVM2_FULL_SUITE option.
++
++# Note: BR2_PACKAGE_LVM2_DMSETUP_ONLY is still referenced in package/lvm2/Config.in
++# in order to automatically propagate old configs
++
+ config BR2_PACKAGE_QT_JAVASCRIPTCORE
+ 	bool "qt javascriptcore option removed"
+ 	select BR2_LEGACY
+diff --git a/package/lvm2/Config.in b/package/lvm2/Config.in
+index b3988ea..b523dba 100644
+--- a/package/lvm2/Config.in
++++ b/package/lvm2/Config.in
+@@ -16,19 +16,23 @@ config BR2_PACKAGE_LVM2
+ 	  user-space. This makes it useful for not only LVM, but EVMS,
+ 	  software raid, and other drivers that create "virtual" block devices.
+ 
+-config BR2_PACKAGE_LVM2_DMSETUP_ONLY
+-	bool "install dmsetup only"
+-	depends on BR2_PACKAGE_LVM2
++if BR2_PACKAGE_LVM2
++
++config BR2_PACKAGE_LVM2_STANDARD_INSTALL
++	bool "standard install instead of only dmsetup"
++	default y if !BR2_PACKAGE_LVM2_DMSETUP_ONLY # legacy 2013.11
+ 	help
+-	  Install dmsetup only and skip the LVM2 suite.
++	  Install the standard suite of lvm2 programs. When this option is not
++	  set, only dmsetup is installed.
+ 
+ config BR2_PACKAGE_LVM2_APP_LIBRARY
+ 	bool "install application library"
+-	depends on BR2_PACKAGE_LVM2
+-	depends on !BR2_PACKAGE_LVM2_DMSETUP_ONLY
++	select BR2_PACKAGE_LVM2_FULL_SUITE
+ 	help
+ 	  Install application library (liblvm2app).
+ 
++endif
++
+ comment "lvm2 needs a toolchain w/ largefile"
+ 	depends on BR2_USE_MMU
+ 	depends on !BR2_LARGEFILE
+diff --git a/package/lvm2/lvm2.mk b/package/lvm2/lvm2.mk
+index 79a0d05..4099c21 100644
+--- a/package/lvm2/lvm2.mk
++++ b/package/lvm2/lvm2.mk
+@@ -38,7 +38,7 @@ else
+ LVM2_CONF_OPT += --disable-readline
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_LVM2_DMSETUP_ONLY),y)
++ifeq ($(BR2_PACKAGE_LVM2_STANDARD_INSTALL),)
+ LVM2_MAKE_OPT = device-mapper
+ LVM2_INSTALL_STAGING_OPT = DESTDIR=$(STAGING_DIR) install_device-mapper
+ LVM2_INSTALL_TARGET_OPT = DESTDIR=$(TARGET_DIR) install_device-mapper
 -- 
-http://autobuild.buildroot.net
+1.8.4.3
