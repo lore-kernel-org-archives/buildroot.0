@@ -1,50 +1,29 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 28 Nov 2013 12:33:59 +0100
-Subject: [Buildroot] [PATCHv3 2/5] core: allow external
- Config.in/makefile	code to be integrated
-In-Reply-To: <1745239489.15294056.1385631446992.JavaMail.root@openwide.fr>
-References: <20131128094342.3f6c84e4@skate>
- <1745239489.15294056.1385631446992.JavaMail.root@openwide.fr>
-Message-ID: <20131128123359.6341f14e@skate>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu, 28 Nov 2013 11:52:59 +0000 (UTC)
+Subject: [Buildroot] [Bug 6500] php fails to build for armel.
+In-Reply-To: <bug-6500-163@https.bugs.busybox.net/>
+References: <bug-6500-163@https.bugs.busybox.net/>
+Message-ID: <20131128115259.B74849BE3A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Jeremy Rosen,
+https://bugs.busybox.net/show_bug.cgi?id=6500
 
-On Thu, 28 Nov 2013 10:37:27 +0100 (CET), Jeremy Rosen wrote:
+Gustavo Zacarias <gustavo@zacarias.com.ar> changed:
 
-> my idea was more along the line of "if we are setting BR2_EXTERNAL
-> and the file doesn't exist, then create an empty "Config.in" file
-> so the next call to make doesn't fail" 
-> 
-> this would be to avoid leaving the build system in a broken 
-> configuration after a call that sets up the build system for the
-> user.
-> 
-> I can see pro and cons on this idea, there is a risk in touching
-> a file the user is supposed to edit and the breakage itself could
-> be considered a good way to make sure the user go look into the 
-> file
-> 
-> but on the other hand, for simple use cases where the user doesn't
-> want to add new packages, but simply overlay a couple of config
-> files, creating a valid infrastructure from the start might be 
-> a good idea...
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|                            |FIXED
 
-Ok, I think I see what you mean: creating
-$(BR2_EXTERNAL)/package/Config.in automatically if it doesn't exist. I
-don't have a really strong feeling about this, but my initial reaction
-is that it's better to let the user do that by himself. BR2_EXTERNAL is
-part of the user source tree, and I hate when tools mess up with my
-source tree by creating files here and there automatically.
+--- Comment #6 from Gustavo Zacarias <gustavo@zacarias.com.ar> 2013-11-28 11:52:59 UTC ---
+Should be solved in commit f2a2c4cce60b6fda5541ac5cb945abe9958c93eb for the
+upcoming 2013.11 release.
 
-Best regards,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
