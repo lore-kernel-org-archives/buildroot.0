@@ -1,32 +1,35 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 26 Nov 2013 16:06:52 +0100
-Subject: [Buildroot] [git commit] ulogd: bump to version 2.0.3
-Message-ID: <20131201201520.2942F9BE44@busybox.osuosl.org>
+Date: Thu, 28 Nov 2013 22:55:57 +0100
+Subject: [Buildroot] [git commit] toolchain/buildroot: default to eglibc for
+	mips64
+Message-ID: <20131201201520.919719BE78@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=8984eeaf2cf2fae608c43e00417b24f7c6936f16
+commit: http://git.buildroot.net/buildroot/commit/?id=dc044cdfe27d743e235fa8bffcdbafaabb63e297
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+uClibc only works well for O32 ABI on mips64, so default to eglibc that
+works just fine with N32 & N64 ABIs as well.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/ulogd/ulogd.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ toolchain/toolchain-buildroot/Config.in |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-diff --git a/package/ulogd/ulogd.mk b/package/ulogd/ulogd.mk
-index 11780ac..24a5838 100644
---- a/package/ulogd/ulogd.mk
-+++ b/package/ulogd/ulogd.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
+index 8b37127..f8dd3de 100644
+--- a/toolchain/toolchain-buildroot/Config.in
++++ b/toolchain/toolchain-buildroot/Config.in
+@@ -5,6 +5,7 @@ source "package/linux-headers/Config.in.host"
  
--ULOGD_VERSION = 2.0.2
-+ULOGD_VERSION = 2.0.3
- ULOGD_SOURCE = ulogd-$(ULOGD_VERSION).tar.bz2
- ULOGD_SITE = http://www.netfilter.org/projects/ulogd/files
- ULOGD_CONF_OPT = --with-dbi=no --with-pgsql=no
+ choice
+ 	prompt "C library"
++	default BR2_TOOLCHAIN_BUILDROOT_EGLIBC if BR2_mips64 || BR2_mips64el
+ 
+ config BR2_TOOLCHAIN_BUILDROOT_UCLIBC
+ 	bool "uClibc"
