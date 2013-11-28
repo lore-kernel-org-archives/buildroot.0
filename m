@@ -1,31 +1,30 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 28 Nov 2013 16:02:15 -0300
-Subject: [Buildroot] [PATCH] gdb: disable texinfo/documentation
-Message-ID: <1385665335-19364-1-git-send-email-gustavo@zacarias.com.ar>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu, 28 Nov 2013 19:03:50 +0000 (UTC)
+Subject: [Buildroot] [Bug 6554] gdb needs to dependents on host texinfo
+In-Reply-To: <bug-6554-163@https.bugs.busybox.net/>
+References: <bug-6554-163@https.bugs.busybox.net/>
+Message-ID: <20131128190350.218F29BE4A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes bug #6554
+https://bugs.busybox.net/show_bug.cgi?id=6554
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/gdb/gdb.mk | 1 +
- 1 file changed, 1 insertion(+)
+Gustavo Zacarias <gustavo@zacarias.com.ar> changed:
 
-diff --git a/package/gdb/gdb.mk b/package/gdb/gdb.mk
-index 9cf90e3..700cf72 100644
---- a/package/gdb/gdb.mk
-+++ b/package/gdb/gdb.mk
-@@ -57,6 +57,7 @@ HOST_GDB_PRE_PATCH_HOOKS += GDB_XTENSA_PRE_PATCH
- endif
- 
- GDB_CONF_ENV = \
-+	ac_cv_prog_MAKEINFO=missing \
- 	ac_cv_type_uintptr_t=yes \
- 	gt_cv_func_gettext_libintl=yes \
- 	ac_cv_func_dcgettext=yes \
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |ASSIGNED
+         AssignedTo|unassigned at buildroot.uclibc |gustavo at zacarias.com.ar
+                   |.org                        |
+
+--- Comment #2 from Gustavo Zacarias <gustavo@zacarias.com.ar> 2013-11-28 19:03:49 UTC ---
+Please try the patch at http://patchwork.ozlabs.org/patch/295009/
+It should fix your problem.
+
 -- 
-1.8.3.2
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
