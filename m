@@ -1,117 +1,60 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Thu, 28 Nov 2013 09:21:44 +0100
-Subject: [Buildroot] [PATCH v2] lvm2: replace
-	!BR2_PACKAGE_LVM2_DMSETUP_ONLY	by BR2_PACKAGE_LVM2_STANDARD_INSTALL
-In-Reply-To: <1385625108-31742-1-git-send-email-arnout@mind.be>
-References: <1385625108-31742-1-git-send-email-arnout@mind.be>
-Message-ID: <a977521a-adfb-498f-9760-63634f54a4d1@email.android.com>
+From: Will Newton <will.newton@gmail.com>
+Date: Thu, 28 Nov 2013 08:26:04 +0000
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+	2013-11-27
+In-Reply-To: <20131128073003.1BC191014F4@stock.ovh.net>
+References: <20131128073003.1BC191014F4@stock.ovh.net>
+Message-ID: <CAFbHwiTteMEBdZ5LtjGVhy4v5WsEBn7fAOXopuheOxAmiO9XkQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-"Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be> wrote:
->BR2_PACKAGE_LVM2_DMSETUP_ONLY is a "negative" option that disables
->build and install of part of the suite. This option cannot be unselected
->by other config options, which gives a problem for BR2_PACKAGE_UDISKS_LVM2:
->it needs BR2_PACKAGE_LVM2_APP_LIBRARY, which requires the full suite.
+On Thu, Nov 28, 2013 at 7:30 AM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Build statistics for 2013-11-27
+> ===============================
 >
->Therefore, replace the negative BR2_PACKAGE_LVM2_DMSETUP_ONLY by a positive
->BR2_PACKAGE_LVM2_STANDARD_INSTALL. To make sure that existing defconfigs
->keep working, the new option defaults to y unless the legacy
->BR2_PACKAGE_LVM2_DMSETUP_ONLY was selected.
+>         success : 88
+>        failures : 22
+>        timeouts : 0
+>           TOTAL : 110
 >
->Fixes http://autobuild.buildroot.net/results/ea4627cae45e972ebba5b33a2b2871ce7f46fedc/
+> Classification of failures by reason
+> ====================================
 >
->Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
->---
->Note that in the legacy handling I've assumed that this will still
->be taken in 2013.11.
+>                       icu-51.2 | 2
+>                  dropwatch-1.4 | 2
+>                qt5script-5.1.1 | 1
+>                   libv4l-0.8.9 | 1
+>                 openssl-1.0.1e | 1
+>   toolchain-external-undefined | 1
+>                 valgrind-3.8.1 | 1
+>                   imlib2-1.4.5 | 1
+>                  rt-tests-0.83 | 1
+>               fontconfig-2.6.0 | 1
+>                  libnspr-4.9.6 | 1
+>                  binutils-2.22 | 1
+>                   samba-3.6.20 | 1
+>                iptables-1.4.20 | 1
+> ne10-88c18f02199947b2c8b577... | 1
+>           enlightenment-0.17.3 | 1
+> tvheadend-2b649954346aa2e9c... | 1
+>                       qt-4.8.5 | 1
+>              alsa-utils-1.0.26 | 1
+>                       gpsd-3.9 | 1
 >
->v2:
-> - Rename the new symbol to BR2_PACKAGE_LVM2_STANDARD_INSTALL
+> Detail of failures
+> ===================
 >
->Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
->---
-> Config.in.legacy       | 12 ++++++++++++
-> package/lvm2/Config.in | 16 ++++++++++------
-> package/lvm2/lvm2.mk   |  2 +-
-> 3 files changed, 23 insertions(+), 7 deletions(-)
->
->diff --git a/Config.in.legacy b/Config.in.legacy
->index 587afe1..c629256 100644
->--- a/Config.in.legacy
->+++ b/Config.in.legacy
->@@ -101,6 +101,18 @@ endif
-> ###############################################################################
-> comment "Legacy options removed in 2013.11"
-> 
->+config BR2_PACKAGE_LVM2_DMSETUP_ONLY
->+	bool "lvm2's 'dmsetup only' option removed"
->+	select BR2_LEGACY
->+	help
->+	  The BR2_PACKAGE_LVM2_DMSETUP_ONLY was a negative option, which
->+	  led to problems with other packages that need the full lvm2
->+	  suite. Therefore, the option has been replaced with the positive
->+	  BR2_PACKAGE_LVM2_FULL_SUITE option.
+>       bfin |              alsa-utils-1.0.26 | NOK | http://autobuild.buildroot.net/results/25cc92251e00ecc1d85837a39f3304a66403699d/
+>     xtensa |                  binutils-2.22 | NOK | http://autobuild.buildroot.net/results/f7c98efb98f0c13a7998d0fa87ad5f5b5e6aadff/
+>       bfin |                  dropwatch-1.4 | NOK | http://autobuild.buildroot.net/results/9214a6ae3c7873452d92d4004ce8a65a3b3f34fe/
+>       bfin |                  dropwatch-1.4 | NOK | http://autobuild.buildroot.net/results/6b1f4f2167d8aca0d73dc0e66fd2e1704c821c61/
+>    powerpc |           enlightenment-0.17.3 | NOK | http://autobuild.buildroot.net/results/5c2dbacb0e2963c655e5afde4d143a41cad27628/
+>       bfin |               fontconfig-2.6.0 | NOK | http://autobuild.buildroot.net/results/0ff3ec81c80929278baf26cda3d8fbdf8184c0fd/
+>    aarch64 |                       gpsd-3.9 | NOK | http://autobuild.buildroot.net/results/724f8646e1c2c28cf187f2313244d1e3e61b4c25/
 
-Name needs to be changed here too.
-
->+
->+# Note: BR2_PACKAGE_LVM2_DMSETUP_ONLY is still referenced in package/lvm2/Config.in
->+# in order to automatically propagate old configs
->+
-> config BR2_PACKAGE_QT_JAVASCRIPTCORE
-> 	bool "qt javascriptcore option removed"
-> 	select BR2_LEGACY
->diff --git a/package/lvm2/Config.in b/package/lvm2/Config.in
->index b3988ea..b523dba 100644
->--- a/package/lvm2/Config.in
->+++ b/package/lvm2/Config.in
->@@ -16,19 +16,23 @@ config BR2_PACKAGE_LVM2
-> 	  user-space. This makes it useful for not only LVM, but EVMS,
-> 	  software raid, and other drivers that create "virtual" block devices.
-> 
->-config BR2_PACKAGE_LVM2_DMSETUP_ONLY
->-	bool "install dmsetup only"
->-	depends on BR2_PACKAGE_LVM2
->+if BR2_PACKAGE_LVM2
->+
->+config BR2_PACKAGE_LVM2_STANDARD_INSTALL
->+	bool "standard install instead of only dmsetup"
->+	default y if !BR2_PACKAGE_LVM2_DMSETUP_ONLY # legacy 2013.11
-> 	help
->-	  Install dmsetup only and skip the LVM2 suite.
->+	  Install the standard suite of lvm2 programs. When this option is not
->+	  set, only dmsetup is installed.
-> 
-> config BR2_PACKAGE_LVM2_APP_LIBRARY
-> 	bool "install application library"
->-	depends on BR2_PACKAGE_LVM2
->-	depends on !BR2_PACKAGE_LVM2_DMSETUP_ONLY
->+	select BR2_PACKAGE_LVM2_FULL_SUITE
-
-And here.
-
-> 	help
-> 	  Install application library (liblvm2app).
-> 
->+endif
->+
-> comment "lvm2 needs a toolchain w/ largefile"
-> 	depends on BR2_USE_MMU
-> 	depends on !BR2_LARGEFILE
->diff --git a/package/lvm2/lvm2.mk b/package/lvm2/lvm2.mk
->index 79a0d05..4099c21 100644
->--- a/package/lvm2/lvm2.mk
->+++ b/package/lvm2/lvm2.mk
->@@ -38,7 +38,7 @@ else
-> LVM2_CONF_OPT += --disable-readline
-> endif
-> 
->-ifeq ($(BR2_PACKAGE_LVM2_DMSETUP_ONLY),y)
->+ifeq ($(BR2_PACKAGE_LVM2_STANDARD_INSTALL),)
-> LVM2_MAKE_OPT = device-mapper
-> LVM2_INSTALL_STAGING_OPT = DESTDIR=$(STAGING_DIR) install_device-mapper
-> LVM2_INSTALL_TARGET_OPT = DESTDIR=$(TARGET_DIR) install_device-mapper
+Function profiling should be enabled for aarch64 in the Linaro gcc 4.8
+2013.10 release.
