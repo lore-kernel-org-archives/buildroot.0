@@ -1,61 +1,44 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 28 Nov 2013 15:09:47 +0100
-Subject: [Buildroot] [git commit branch/next] connman: bump version to 1.19
-Message-ID: <20131128141416.004849BE12@busybox.osuosl.org>
+Date: Thu, 28 Nov 2013 15:14:58 +0100
+Subject: [Buildroot] [git commit] gpsd: do not allow profiling support on
+	AArch64
+Message-ID: <20131128141546.783679BE3A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ed69ce1daf9cce524ec604b1ab46dcb5f119d5c0
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+commit: http://git.buildroot.net/buildroot/commit/?id=b0a72f02adbf50f306d57045300d245fe5a1a800
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Bump connman to version 1.19; remove a local patch that is no longer
-required, the code change having now been made upstream.
+The profiling support is not available on AArch64, causing build
+failures such as:
 
-Signed-off-by: Simon Dawson <spdawson@gmail.com>
+  http://autobuild.buildroot.net/results/724f8646e1c2c28cf187f2313244d1e3e61b4c25/
+
+According to Will Newton, function profiling will only be added in the
+next version of the AArch64 Linaro toolchain. This indicates it is a
+rather new feature in AArch64, so for the moment, just disallow
+profiling on AArch64. We can revise this later, when this feature has
+been made available in Linaro toolchains, and official gcc releases
+(for internal toolchain support).
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../connman-001-fix-for-latest-headers-3.8+.patch  |   19 -------------------
- package/connman/connman.mk                         |    2 +-
- 2 files changed, 1 insertions(+), 20 deletions(-)
+ package/gpsd/Config.in |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-diff --git a/package/connman/connman-001-fix-for-latest-headers-3.8+.patch b/package/connman/connman-001-fix-for-latest-headers-3.8+.patch
-deleted file mode 100644
-index ef1fabc..0000000
---- a/package/connman/connman-001-fix-for-latest-headers-3.8+.patch
-+++ /dev/null
-@@ -1,19 +0,0 @@
--tethering: fix build with kernel headers 3.8+
--
--Highly inspired by:
--    package/bridge-utils/bridge-utils-001-fix-for-kernel-headers-3.8+.patch
--    http://www.redhat.com/archives/libvir-list/2013-January/msg01253.html
--
--Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
--
--diff -durN connman-1.11.orig/src/tethering.c connman-1.11/src/tethering.c
----- connman-1.11.orig/src/tethering.c	2012-12-22 22:52:47.000000000 +0100
--+++ connman-1.11/src/tethering.c	2013-03-21 19:39:17.036029270 +0100
--@@ -35,6 +35,7 @@
-- #include <string.h>
-- #include <fcntl.h>
-- #include <linux/if_tun.h>
--+#include <netinet/in.h>
-- #include <linux/if_bridge.h>
-- 
-- #include "connman.h"
-diff --git a/package/connman/connman.mk b/package/connman/connman.mk
-index 4a6bb78..db74c03 100644
---- a/package/connman/connman.mk
-+++ b/package/connman/connman.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/gpsd/Config.in b/package/gpsd/Config.in
+index 5b007d7..2fd97d0 100644
+--- a/package/gpsd/Config.in
++++ b/package/gpsd/Config.in
+@@ -34,6 +34,7 @@ config BR2_PACKAGE_GPSD_OLDSTYLE
+ config BR2_PACKAGE_GPSD_PROFILING
+ 	bool "profiling support"
+ 	depends on BR2_TOOLCHAIN_USES_GLIBC
++	depends on !BR2_aarch64
  
--CONNMAN_VERSION = 1.12
-+CONNMAN_VERSION = 1.19
- CONNMAN_SOURCE = connman-$(CONNMAN_VERSION).tar.xz
- CONNMAN_SITE = $(BR2_KERNEL_MIRROR)/linux/network/connman/
- CONNMAN_DEPENDENCIES = libglib2 dbus iptables gnutls
+ comment "profiling support not available with uClibc-based toolchain"
+ 	depends on !BR2_TOOLCHAIN_USES_GLIBC
