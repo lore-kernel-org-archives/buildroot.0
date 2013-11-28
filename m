@@ -1,33 +1,61 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 28 Nov 2013 15:13:07 +0100
-Subject: [Buildroot] [git commit branch/next] sam-ba: patch to latest version
-Message-ID: <20131128141416.1C82C9BE12@busybox.osuosl.org>
+Date: Thu, 28 Nov 2013 15:09:47 +0100
+Subject: [Buildroot] [git commit branch/next] connman: bump version to 1.19
+Message-ID: <20131128141416.004849BE12@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=874f5f92ea5b210ab54c624eb4e6fc076e67124a
+commit: http://git.buildroot.net/buildroot/commit/?id=ed69ce1daf9cce524ec604b1ab46dcb5f119d5c0
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Apply the latest Atmel patch for sam-ba version 2.12
+Bump connman to version 1.19; remove a local patch that is no longer
+required, the code change having now been made upstream.
 
 Signed-off-by: Simon Dawson <spdawson@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/sam-ba/sam-ba.mk |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+ .../connman-001-fix-for-latest-headers-3.8+.patch  |   19 -------------------
+ package/connman/connman.mk                         |    2 +-
+ 2 files changed, 1 insertions(+), 20 deletions(-)
 
-diff --git a/package/sam-ba/sam-ba.mk b/package/sam-ba/sam-ba.mk
-index 8e24fa6..4dc0568 100644
---- a/package/sam-ba/sam-ba.mk
-+++ b/package/sam-ba/sam-ba.mk
-@@ -7,6 +7,7 @@
- SAM_BA_SITE    = http://www.atmel.com/dyn/resources/prod_documents/
- SAM_BA_VERSION = 2.12
- SAM_BA_SOURCE  = sam-ba_$(SAM_BA_VERSION).zip
-+SAM_BA_PATCH = sam-ba_$(SAM_BA_VERSION)_patch5.gz
- SAM_BA_LICENSE = BSD-like (partly binary-only)
- SAM_BA_LICENSE_FILES = doc/readme.txt
+diff --git a/package/connman/connman-001-fix-for-latest-headers-3.8+.patch b/package/connman/connman-001-fix-for-latest-headers-3.8+.patch
+deleted file mode 100644
+index ef1fabc..0000000
+--- a/package/connman/connman-001-fix-for-latest-headers-3.8+.patch
++++ /dev/null
+@@ -1,19 +0,0 @@
+-tethering: fix build with kernel headers 3.8+
+-
+-Highly inspired by:
+-    package/bridge-utils/bridge-utils-001-fix-for-kernel-headers-3.8+.patch
+-    http://www.redhat.com/archives/libvir-list/2013-January/msg01253.html
+-
+-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+-
+-diff -durN connman-1.11.orig/src/tethering.c connman-1.11/src/tethering.c
+---- connman-1.11.orig/src/tethering.c	2012-12-22 22:52:47.000000000 +0100
+-+++ connman-1.11/src/tethering.c	2013-03-21 19:39:17.036029270 +0100
+-@@ -35,6 +35,7 @@
+- #include <string.h>
+- #include <fcntl.h>
+- #include <linux/if_tun.h>
+-+#include <netinet/in.h>
+- #include <linux/if_bridge.h>
+- 
+- #include "connman.h"
+diff --git a/package/connman/connman.mk b/package/connman/connman.mk
+index 4a6bb78..db74c03 100644
+--- a/package/connman/connman.mk
++++ b/package/connman/connman.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
+-CONNMAN_VERSION = 1.12
++CONNMAN_VERSION = 1.19
+ CONNMAN_SOURCE = connman-$(CONNMAN_VERSION).tar.xz
+ CONNMAN_SITE = $(BR2_KERNEL_MIRROR)/linux/network/connman/
+ CONNMAN_DEPENDENCIES = libglib2 dbus iptables gnutls
