@@ -1,30 +1,36 @@
-From: =?UTF-8?q?Daniel=20Nystr=C3=B6m?= <daniel.nystrom@timeterminal.se>
-Date: Thu, 28 Nov 2013 18:29:26 +0100
-Subject: [Buildroot] [PATCH] e2fsprogs: Install libraries to staging
-Message-ID: <1385659766-25990-1-git-send-email-daniel.nystrom@timeterminal.se>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu, 28 Nov 2013 14:39:00 -0300
+Subject: [Buildroot] [PATCH] wpa_supplicant: define BINDIR for systemd/dbus
+	service files
+Message-ID: <1385660340-2885-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Daniel Nystr?m <daniel.nystrom@timeterminal.se>
----
- package/e2fsprogs/e2fsprogs.mk | 2 ++
- 1 file changed, 2 insertions(+)
+BINDIR is used to point systemd/dbus service files to the correct binary
+path where wpa_supplicant resides.
+So define it to avoid the default /usr/local path that doesn't work.
+Solves bug #6704
 
-diff --git a/package/e2fsprogs/e2fsprogs.mk b/package/e2fsprogs/e2fsprogs.mk
-index 0670c74..bc07eb0 100644
---- a/package/e2fsprogs/e2fsprogs.mk
-+++ b/package/e2fsprogs/e2fsprogs.mk
-@@ -8,6 +8,8 @@ E2FSPROGS_VERSION = 1.42.8
- E2FSPROGS_SITE = http://downloads.sourceforge.net/project/e2fsprogs/e2fsprogs/v$(E2FSPROGS_VERSION)
- E2FSPROGS_LICENSE = GPLv2, libuuid BSD-3c, libss and libet MIT-like with advertising clause
- E2FSPROGS_LICENSE_FILES = COPYING lib/uuid/COPYING lib/ss/mit-sipb-copyright.h lib/et/internal.h
-+E2FSPROGS_INSTALL_STAGING = YES
-+E2FSPROGS_INSTALL_STAGING_OPT = DESTDIR=$(TARGET_DIR) install-libs
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/wpa_supplicant/wpa_supplicant.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/wpa_supplicant/wpa_supplicant.mk b/package/wpa_supplicant/wpa_supplicant.mk
+index 450e10f..4ae41c1 100644
+--- a/package/wpa_supplicant/wpa_supplicant.mk
++++ b/package/wpa_supplicant/wpa_supplicant.mk
+@@ -137,7 +137,7 @@ endef
  
- E2FSPROGS_CONF_OPT = \
- 	--disable-tls \
+ define WPA_SUPPLICANT_BUILD_CMDS
+ 	$(TARGET_MAKE_ENV) CFLAGS="$(WPA_SUPPLICANT_CFLAGS)" \
+-		LDFLAGS="$(TARGET_LDFLAGS)" \
++		LDFLAGS="$(TARGET_LDFLAGS)" BINDIR=/usr/sbin \
+ 		$(MAKE) CC="$(TARGET_CC)" -C $(@D)/$(WPA_SUPPLICANT_SUBDIR)
+ endef
+ 
 -- 
 1.8.3.2
