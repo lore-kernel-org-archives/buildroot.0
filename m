@@ -1,62 +1,149 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 28 Nov 2013 21:08:34 +0100
-Subject: [Buildroot] [PATCH 3/5] package/rpi-firmware: move to
- bootloaders menu
-In-Reply-To: <869fff522738fdd927541a3e3a303f97143f8469.1385157864.git.yann.morin.1998@free.fr>
-References: <cover.1385157864.git.yann.morin.1998@free.fr>
- <869fff522738fdd927541a3e3a303f97143f8469.1385157864.git.yann.morin.1998@free.fr>
-Message-ID: <20131128210834.3c78df23@skate>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Thu, 28 Nov 2013 21:04:04 +0100
+Subject: [Buildroot] [PATCHv3 2/5] core: allow external
+ Config.in/makefile code to be integrated
+In-Reply-To: <20131128192018.61cf8fdb@skate>
+References: <1385591508-4174-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1385591508-4174-3-git-send-email-thomas.petazzoni@free-electrons.com>
+ <CAHXCMMKgWKz_p3ckA1999zxava2TG=SF5qLjqNh7mmygv36Zfg@mail.gmail.com>
+ <20131128172357.1417a881@skate>
+ <CAHXCMMJ9M2m_EU0uweQjoEba1JObQWB43NYM31SXTvMxtWQmKQ@mail.gmail.com>
+ <20131128192018.61cf8fdb@skate>
+Message-ID: <CAHXCMM+wT7=ieH3P-xP8DdJzKBXsmADO5KC1EJrwJQK99AP8sg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+Thomas,
 
-On Fri, 22 Nov 2013 23:50:56 +0100, Yann E. MORIN wrote:
-> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> 
-> rpi-firmware, although it does contain the GPU firmware, also serves as
-> the bootloader. As a reminder, here is an overview of how the RPi boots:
->   - GPU exits reset
->   - GPU loads its firmware from the first, FAT32-formatted partition
->   - GPU reads its config file from the same partition
->   - GPU loads kernel from the same partition, into RAM
->   - GPU de-asserts the reset of the ARM core (CPU)
->   - CPU exits reset and starts executing kernel code
-> 
-> So, although the largest part of rpi-firmware is indeed the GPU firmware,
-> the first purpose it serves is as a bootloader for the ARM core.
-> 
-> People that do not want to use the GPU (eg. headless, no multimedia...)
-> will still want to select rpi-firmware.
-> 
-> Having rpi-firmware in target packages -> hardware-handling -> firmware
-> is a bit misleading in this case.
-> 
-> Hence, move rpi-firmware from the target packages submenu, into the
-> bootloaders submenu.
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+2013/11/28 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-I must say I am not entirely convinced this change is necessary.
-rpi-firmware is a much bootloader stuff than GPU/OpenGL stuff, so
-deciding whether it should be in Bootloaders or in Packages -> Hardware
-handling is difficult. And since it has now been in Packages ->
-Hardware Handling for a long time, and that moving it to the
-Bootloaders section involves renaming a number of Config.in options and
-therefore adding some Config.in.legacy blurb, I'm not sure it's worth
-the effort.
+> Dear Samuel Martin,
+>
+> On Thu, 28 Nov 2013 18:53:57 +0100, Samuel Martin wrote:
+>
+> > Well, right now, most of the packages I put in my BR2_EXTERNAL tree
+> > are host tools to generate images.
+> >
+> > With the previous version of this serie, the new menu entry was added
+> > at the top level
+> > of menuconfig, in which I added 2 submenus: "Target packages" and
+> > "Host packages".
+> > It was rather clear that all "company" stuff goes into this menu.
+> >
+> > With the v2, I was a bit lost at first, the "company" menu got moved
+>
+> I guess you meant "v3" here, because the "v2" included
+> $(BR2_EXTERNAL)/Config.in in the top-level menu of menuconfig.
+>
+Indeed. Sorry for the confusion.
 
-And in any case, if we decided to do this, it should be done *before*
-your PATCH 1/5 that adds 4 additional Config.in symbols, which we
-wouldn't have to carry in Config.in.legacy, because they are new.
 
-Best regards,
+>
+> > under "Target packages". So, now I have a menu tree like this:
+> >
+> > ---
+> > Main menu
+> >   ...
+> >   Target packages --->
+> >     ...
+> >     Company --->
+> >       Target packages --->
+> >       Host packages --->
+> >   ...
+> >   Host packages --->
+> > ---
+> >
+> > It does not hurt that much, but it's not really nice IMHO.
+>
+> Then please talk to the people who asked for enforcing
+> $(BR2_EXTERNAL)/package/Config.in usage during the Buildroot Developers
+> Days in Edinburgh.
 
-Thomas
+I thought the ml was the place for this...
+
+
+> This decision/choice is written very clearly in
+> http://elinux.org/Buildroot:DeveloperDaysELCE2013#BR2_EXTERNAL :
+>
+> """
+> Regarding the directory hierarchy in the external tree, it was agreed
+> that it is a good idea to force three subdirectories: package, board,
+> configs. Buildroot's package/Config.in will source
+> $BR2_EXTERNAL/package/Config.in.
+> """
+>
+Doh! I don't mean this at all! Looks like I was not clear enough.
+
+I'm not talking about the directory hierarchy, I do follow the Buildroot
+hierarchy.
+It does look like this:
+
+BR2_EXTERNAL/
+|`- board/
+|    `- someboard/
+|       |`- linux-myversion/
+|       |    `- linux-0001-fix-something.patch
+|       |`- busybox-1.21.1.config
+|        `- post-build-script.sh
+|`- configs/
+|    `- someboard_defconfig
+ `- package/
+    |`- Config.in
+    |`- Config.in.host
+    |`- foo/
+    |   |`- foo.mk
+    |   |`- Config.in
+    |    `- Config.in.host
+    |`- bar/
+    |   |`- bar.mk
+    |    `- Config.in.host
+     `- toto/
+        |`- toto.mk
+         `- Config.in
+
+With BR2_EXTERNAL/package/Config.in sourcing all Config.in files from
+BR2_EXTERNAL,
+and BR2_EXTERNAL/package/Config.in.host sourcing all Config.in.host files
+from BR2_EXTERNAL,
+
+My point was only about sourcing BR2_EXTERNAL/package/Config.in.host under
+the
+"Host utilities" menu.
+
+This is nothing more than consistency in the menuconfig rendering.
+If no one thinks it's relevant, fair enough, I can live without it.
+
+
+> (It's even in bold in the report).
+>
+
+> I believe the most vocal person in favor of this was Arnout, so I've
+> added him in Cc.
+>
+> > BTW, to generate this/these Config.in{,host} files in the
+> > BR2_EXTERNAL tree, I already have a script scanning the tree and
+> > updating these files, it could be included as a support script as
+> > well.
+>
+It only generate the BR2_EXTERNAL/package/Config.in{,.host} files because
+I'm lazy.
+
+
+> Why is this needed? Just write Config.in like we do in the main
+> Buildroot tree. For example, people may want to have menus and submenus
+> in their $(BR2_EXTERNAL)/package/Config.in. Therefore, I don't think
+> providing more and more and more scripts that match a very specific use
+> case is really going to help our users, probably going to confuse them.
+>
+Fair enough.
+
+Regards,
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Samuel
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20131128/deee8554/attachment-0001.html>
