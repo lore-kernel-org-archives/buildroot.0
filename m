@@ -1,36 +1,84 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 28 Nov 2013 19:27:54 +0100
-Subject: [Buildroot] ucilbc 0.9.33.2 fails to build on buildroot 2013.11
-	internal toolchain
-In-Reply-To: <5297837C.3@mail.ru> (Alexander Varnin's message of "Thu, 28 Nov
- 2013 21:55:08 +0400")
-References: <5297837C.3@mail.ru>
-Message-ID: <878uw8z8id.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 28 Nov 2013 19:28:53 +0100
+Subject: [Buildroot] [PATCH] e2tools: new package
+In-Reply-To: <1385661764-14355-1-git-send-email-daniel.nystrom@timeterminal.se>
+References: <1385661764-14355-1-git-send-email-daniel.nystrom@timeterminal.se>
+Message-ID: <20131128192853.0f712476@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Alexander" == Alexander Varnin <fenixk19@mail.ru> writes:
+Dear Daniel Nystr?m,
 
- > Building uclibc with default config now fails for me, after upgrading to
- > latest buildroot (now from 2013.11-rc3 branch).Attaching my config.
- > Build system is Debian Wheezy.
+Thanks for this contribution!
 
- > Here is short output of make command:
+On Thu, 28 Nov 2013 19:02:44 +0100, Daniel Nystr?m wrote:
+> diff --git a/package/e2tools/Config.in b/package/e2tools/Config.in
+> new file mode 100644
+> index 0000000..14f25ab
+> --- /dev/null
+> +++ b/package/e2tools/Config.in
+> @@ -0,0 +1,10 @@
+> +config BR2_PACKAGE_E2TOOLS
+> +	bool "e2tools"
+> +	select BR2_PACKAGE_E2FSPROGS
 
- > varnin at debian5 ~/minipos-OS-build-2013.11> make
- > make -C /home/varnin/buildroot O=/home/varnin/minipos-OS-build-2013.11/.
+You need to propagate the e2fsprogs dependency here.
 
-So an out-of-tree build.
+> +	help
+> +	  E2tools is a simple set of GPL'ed utilities to read, write,
+> +	  and manipulate files in an ext2/ext3 filesystem.  These
+> +	  utilities access a filesystem directly using the ext2fs
+> +	  library.
+> +
+> +	  https://github.com/ndim/e2tools
 
- >>>> uclibc 0.9.33.2 Building
+and add a comment here.
 
-That's not the first target to run with a clean build. Did you forget to
-clean your output directory?
+> diff --git a/package/e2tools/e2tools.mk b/package/e2tools/e2tools.mk
+> new file mode 100644
+> index 0000000..56797bb
+> --- /dev/null
+> +++ b/package/e2tools/e2tools.mk
+> @@ -0,0 +1,16 @@
+> +################################################################################
+> +#
+> +# e2tools
+> +#
+> +################################################################################
+> +
+> +E2TOOLS_VERSION = 3158ef18
+> +E2TOOLS_SITE = http://github.com/ndim/e2tools/tarball/$(E2TOOLS_VERSION)
+> +E2TOOLS_AUTORECONF = YES
+> +E2TOOLS_LICENSE = GPLv2
 
-What is your .config?
+The code isn't really clear as to whether it is GPLv2 or GPLv2+. The
+COPYING file is the text of GPLv2, but the comment headers in the code
+don't explicit whether it's GPLv2 only, or GPLv2+. I guess in a case
+like this, we should assume it's GPLv2, as you did.
 
+> +E2TOOLS_LICENSE_FILES = COPYING
+> +E2TOOLS_DEPENDENCIES = e2fsprogs
+> +E2TOOLS_CONF_ENV = LIBS="-lpthread"
+
+So you need a dependency on BR2_TOOLCHAIN_HAS_THREADS as well.
+
+> +E2TOOLS_INSTALL_TARGET_OPT = DESTDIR=$(TARGET_DIR) install-exec
+
+I know (from IRC discussion) you used this instead of the default "make
+install" to not install man pages. But that's not needed: provided
+BR2_HAVE_DOCUMENTATION is disabled (which is almost always the case
+since this option is deprecated), then Buildroot automatically removes
+man pages. So unless using "make install" causes a problem, we'd prefer
+to not use a specific <pkg>_INSTALL_TARGET_OPT, and let Buildroot
+remove the man pages.
+
+Best regards,
+
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
