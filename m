@@ -1,73 +1,152 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Thu, 28 Nov 2013 10:48:12 +0000
-Subject: [Buildroot] [PATCH v2 1/2] qt: Disable QtScript on MIPS64
-In-Reply-To: <52971AB5.3000600@imgtec.com>
-References: <1385572207-44666-1-git-send-email-Vincent.Riera@imgtec.com>
- <52971A5E.6070703@imgtec.com> <52971AB5.3000600@imgtec.com>
-Message-ID: <52971F6C.2040709@imgtec.com>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Thu, 28 Nov 2013 11:54:12 +0100
+Subject: [Buildroot] [PATCH] lvm2: replace
+	!BR2_PACKAGE_LVM2_DMSETUP_ONLY by BR2_PACKAGE_LVM2_FULL_SUITE
+In-Reply-To: <5296ED0A.8020200@mind.be>
+References: <20131123183721.071bcfa1@skate>
+ <1385250624-15984-1-git-send-email-arnout@mind.be>
+ <CAAXf6LXHZw6YRg1P+2=B1wca0CWHFhxocnYoQ4W7JmOb_v=Twg@mail.gmail.com>
+ <52932E3A.2080903@mind.be>
+ <CAAXf6LVhLB1yqkhz0Fupd646ZQu9-4k0uw1LxkTbz-EWO_JOdw@mail.gmail.com>
+ <5296ED0A.8020200@mind.be>
+Message-ID: <f64cb0e9-58eb-42d2-93cf-64f759b48bf0@email.android.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 11/28/2013 10:28 AM, Markos Chandras wrote:
-> On 11/28/2013 10:26 AM, Markos Chandras wrote:
->> On 11/27/2013 05:10 PM, Vicente Olivert Riera wrote:
->>> There is no support for MIPS64 in QtScript right now, so buildroot
->>> upstream suggested to disable the possibility of enabling QtScript on
->>> MIPS64 as a quick fix for the 2013.11 release:
+Arnout Vandecappelle <arnout@mind.be> wrote:
+>On 25/11/13 22:21, Thomas De Schampheleire wrote:
+>> On Mon, Nov 25, 2013 at 12:02 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
+>>> On 25/11/13 10:46, Thomas De Schampheleire wrote:
+>> [..]
+>>>>> diff --git a/package/lvm2/Config.in b/package/lvm2/Config.in
+>>>>> index b3988ea..849aab3 100644
+>>>>> --- a/package/lvm2/Config.in
+>>>>> +++ b/package/lvm2/Config.in
+>>>>> @@ -16,16 +16,18 @@ config BR2_PACKAGE_LVM2
+>>>>>             user-space. This makes it useful for not only LVM, but EVMS,
+>>>>>             software raid, and other drivers that create "virtual" block
+>>>>> devices.
+>>>>>
+>>>>> -config BR2_PACKAGE_LVM2_DMSETUP_ONLY
+>>>>> -       bool "install dmsetup only"
+>>>>> +config BR2_PACKAGE_LVM2_FULL_SUITE
+>>>>> +       bool "install the full LVM2 suite"
+>>>>> +       default y if !BR2_PACKAGE_LVM2_DMSETUP_ONLY # legacy 2013.11
+>>>>>           depends on BR2_PACKAGE_LVM2
+>>>>>           help
+>>>>> -         Install dmsetup only and skip the LVM2 suite.
+>>>>> +         Install the full LVM2 suite. When this option is not set, only
+>>>>> +         dmsetup is installed.
+>>>>>
+>>>>>    config BR2_PACKAGE_LVM2_APP_LIBRARY
+>>>>>           bool "install application library"
+>>>>>           depends on BR2_PACKAGE_LVM2
+>>>>> -       depends on !BR2_PACKAGE_LVM2_DMSETUP_ONLY
+>>>>> +       select BR2_PACKAGE_LVM2_FULL_SUITE
+>>>>>           help
+>>>>>             Install application library (liblvm2app).
+>>>>
+>>>>
+>>>> It seems odd to me that the 'full suite' does not include the app
+>>>> library: it is not 'full'.
 >>>
 >>>
->>> http://lists.busybox.net/pipermail/buildroot/2013-November/083157.html
->>>
->>> QtScript doesn't build because it uses JavaScriptCore, so we re-use the
->>> existing BR2_PACKAGE_QT_ARCH_SUPPORTS_WEBKIT option which already lists
->>> which platforms are supported by JavaScriptCore in Qt4.
->>>
->>> In addition, a proposed fix to add support for MIPS64 has already been
->>> sent to Qt:
->>>
->>>     https://bugreports.qt-project.org/browse/QTBUG-35030
->>>
->>> Fixes:
->>>
->>>
->>> http://autobuild.buildroot.net/results/fd7/fd7e7e53290f235b540ed5f3c784e2584fdb41e0/
->>>
->>>
->>>
->>> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
->>> ---
->>>   package/qt/Config.in |    1 +
->>>   1 files changed, 1 insertions(+), 0 deletions(-)
->>>
->>> diff --git a/package/qt/Config.in b/package/qt/Config.in
->>> index 2651d55..dd2b6d9 100644
->>> --- a/package/qt/Config.in
->>> +++ b/package/qt/Config.in
->>> @@ -385,6 +385,7 @@ config BR2_PACKAGE_QT_OPENSSL
->>>
->>>   config BR2_PACKAGE_QT_SCRIPT
->>>       bool "Script Module"
->>> +    depends on BR2_PACKAGE_QT_ARCH_SUPPORTS_WEBKIT
->>>       default y
->>>       help
->>>         Build the Qt Script module.
->>>
+>>>   Granted, but I can't think of a better name. Anyone?
 >>
->> Technically, this set of patches should have been "v3" because there is
->> a confusion now on which patch series is the good one.
+>> I was trying an alternative approach with 'choice', but failed.
+>> Here is what I tried:
 >>
->> Having said that, it looks good to me.
+>> $ hg diff package/
+>> diff --git a/package/lvm2/Config.in b/package/lvm2/Config.in
+>> --- a/package/lvm2/Config.in
+>> +++ b/package/lvm2/Config.in
+>> @@ -16,19 +16,29 @@ config BR2_PACKAGE_LVM2
+>>            user-space. This makes it useful for not only LVM, but EVMS,
+>>            software raid, and other drivers that create "virtual" block devices.
 >>
-> The Subject is no longer accurate. You are not disabling this package
-> just for MIPS64 but on other arches as well.
+>> +if BR2_PACKAGE_LVM2
+>> +
+>> +choice
+>> +       prompt "Installation type"
+>> +
+>> +config BR2_PACKAGE_LVM2_STANDARD_INSTALL
+>> +       bool "standard installation"
+>> +
+>>   config BR2_PACKAGE_LVM2_DMSETUP_ONLY
+>>          bool "install dmsetup only"
+>> -       depends on BR2_PACKAGE_LVM2
+>>          help
+>>            Install dmsetup only and skip the LVM2 suite.
+>>
+>> +endchoice
+>> +
+>>   config BR2_PACKAGE_LVM2_APP_LIBRARY
+>>          bool "install application library"
+>> -       depends on BR2_PACKAGE_LVM2
+>> -       depends on !BR2_PACKAGE_LVM2_DMSETUP_ONLY
+>> +       select BR2_PACKAGE_LVM2_STANDARD_INSTALL
+>>          help
+>>            Install application library (liblvm2app).
+>>
+>> +endif
+>> +
+>
+>  So, what didn't work with this?
+
+It behaved as before, udisks lvm support would not 
+enable the standard install and keep the dmonly option...
+
+>
+>
+>>   comment "lvm2 needs a toolchain w/ largefile"
+>>          depends on BR2_USE_MMU
+>>          depends on !BR2_LARGEFILE
+>> diff --git a/package/udisks/Config.in b/package/udisks/Config.in
+>> --- a/package/udisks/Config.in
+>> +++ b/package/udisks/Config.in
+>> @@ -30,6 +30,7 @@ if BR2_PACKAGE_UDISKS
+>>   config BR2_PACKAGE_UDISKS_LVM2
+>>          bool "lvm2 support"
+>>          select BR2_PACKAGE_LVM2_APP_LIBRARY
+>> +       select BR2_PACKAGE_LVM2_STANDARD_INSTALL
+>>          help
+>>            Enable LVM2 support
+>>
+>>
+>> If anyone can make this work, I'd prefer it over the 'magic'
+>> if-not-full-suite-you-get-dmonly approach.
+>
+>  I don't.
+>
+>* Choice is not covered by randconfig, so not tried by the autobuilders.
+
+Didn't know that.
+
+>
+>* Choice is more cumbersome for the user
+>
+>* I don't see what is wrong with a boolean option that installs more stuff.
+>
+>>
+>> If not, what about the naming 'standard installation' to refer to what
+>> is called 'full suite' in your patch. If it is not standard install,
+>> it is dmonly.
+>
+>  I called it:
+>
+>config BR2_PACKAGE_LVM2_STANDARD_INSTALL
+>	bool "standard install instead of only dmsetup"
+>	default y if !BR2_PACKAGE_LVM2_DMSETUP_ONLY # legacy 2013.11
+>	help
+>	  Install the standard suite of lvm2 programs. When this option
+>	  is not set, only dmsetup is installed.
+>
 >
 
-V3 sent with the subject amended. Please, take a look.
+Works for me!
 
-Thanks :-)
-
--- 
-Vincent
+Best regards,
+Thomas
