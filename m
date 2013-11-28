@@ -1,60 +1,62 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 28 Nov 2013 09:43:42 +0100
-Subject: [Buildroot] [PATCHv3 2/5] core: allow external
- Config.in/makefile	code to be integrated
-In-Reply-To: <1776793705.15288726.1385627630446.JavaMail.root@openwide.fr>
-References: <1385591508-4174-3-git-send-email-thomas.petazzoni@free-electrons.com>
- <1776793705.15288726.1385627630446.JavaMail.root@openwide.fr>
-Message-ID: <20131128094342.3f6c84e4@skate>
+From: spdawson at gmail.com <spdawson@gmail.com>
+Date: Thu, 28 Nov 2013 09:17:43 +0000
+Subject: [Buildroot] [PATCH] connman: bump version to 1.19
+Message-ID: <1385630263-14080-1-git-send-email-spdawson@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Jeremy Rosen,
+From: Simon Dawson <spdawson@gmail.com>
 
-Please do not top post. This is considered bad practice on mailing
-lists.
+Bump connman to version 1.19; remove a local patch that is no longer
+required, the code change having now been made upstream.
 
-On Thu, 28 Nov 2013 09:33:50 +0100 (CET), Jeremy Rosen wrote:
-> Just an overall comment, this patch serie is great, it will help us 
-> a lot
-> 
-> by allowing us to clearly show to our customers what is specific 
-> to their board and what is changes to the buildroot unfrastructure
-> it will make it much easier for us to upstream all the non-specific 
-> parts
+Signed-off-by: Simon Dawson <spdawson@gmail.com>
+---
+ .../connman-001-fix-for-latest-headers-3.8+.patch     | 19 -------------------
+ package/connman/connman.mk                            |  2 +-
+ 2 files changed, 1 insertion(+), 20 deletions(-)
+ delete mode 100644 package/connman/connman-001-fix-for-latest-headers-3.8+.patch
 
-Thanks for the feedback! Definitely great to see that this feature will
-help companies upstream more things in Buildroot.
-
-> on this particular one, if I remember correctly the kconfig infrastructure
-> will not work correctly if one of the include is missing... so shouldn't
-> your infrastructure check if $(BR2_EXTERNAL)/package/Config.in 
-> exists, and create one if it doesn't ? 
-
-The idea is that:
-
- * If the user is specifying a BR2_EXTERNAL location, then this
-   location *must* contain a package/Config.in file. Even if it's empty.
-
- * If the user is not specifying a BR2_EXTERNAL location, then we are
-   using support/dummy-external/ as a fake BR2_EXTERNAL, to ensure that
-   package/Config.in exists.
-
-There is no way to express in kconfig "include this file if it exists,
-or ignore it if it doesn't". Yann and myself had written a patch for
-kconfig that adds a new statement, similar to 'source' but that
-silently ignores the inclusion if the given file doesn't exist. But
-after implementing it, we found out that is was not necessary, as we
-could simply use a fake BR2_EXTERNAL, and avoid changing kconfig
-altogether.
-
-Best regards,
-
-Thomas
+diff --git a/package/connman/connman-001-fix-for-latest-headers-3.8+.patch b/package/connman/connman-001-fix-for-latest-headers-3.8+.patch
+deleted file mode 100644
+index ef1fabc..0000000
+--- a/package/connman/connman-001-fix-for-latest-headers-3.8+.patch
++++ /dev/null
+@@ -1,19 +0,0 @@
+-tethering: fix build with kernel headers 3.8+
+-
+-Highly inspired by:
+-    package/bridge-utils/bridge-utils-001-fix-for-kernel-headers-3.8+.patch
+-    http://www.redhat.com/archives/libvir-list/2013-January/msg01253.html
+-
+-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+-
+-diff -durN connman-1.11.orig/src/tethering.c connman-1.11/src/tethering.c
+---- connman-1.11.orig/src/tethering.c	2012-12-22 22:52:47.000000000 +0100
+-+++ connman-1.11/src/tethering.c	2013-03-21 19:39:17.036029270 +0100
+-@@ -35,6 +35,7 @@
+- #include <string.h>
+- #include <fcntl.h>
+- #include <linux/if_tun.h>
+-+#include <netinet/in.h>
+- #include <linux/if_bridge.h>
+- 
+- #include "connman.h"
+diff --git a/package/connman/connman.mk b/package/connman/connman.mk
+index 4a6bb78..db74c03 100644
+--- a/package/connman/connman.mk
++++ b/package/connman/connman.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-CONNMAN_VERSION = 1.12
++CONNMAN_VERSION = 1.19
+ CONNMAN_SOURCE = connman-$(CONNMAN_VERSION).tar.xz
+ CONNMAN_SITE = $(BR2_KERNEL_MIRROR)/linux/network/connman/
+ CONNMAN_DEPENDENCIES = libglib2 dbus iptables gnutls
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.8.3.2
