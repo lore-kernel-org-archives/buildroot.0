@@ -1,35 +1,79 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 28 Nov 2013 22:48:15 +0100
-Subject: [Buildroot] [git commit] grantlee: Disable on non-supported
-	platforms
-Message-ID: <20131128214913.9B77C9BAAF@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 28 Nov 2013 22:50:03 +0100
+Subject: [Buildroot] [PATCHv3 1/5] core: introduce the BR2_EXTERNAL
+ variable
+In-Reply-To: <1385591508-4174-2-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1385591508-4174-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1385591508-4174-2-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20131128215003.GD3337@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a88dceb951de977ad2d896d697f87d98e9705280
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Thomas, All,
 
-This package selects BR2_PACKAGE_QT_SCRIPT which is not supported on
-certain platforms. To prevent this behaviour we use the same solution as
-we applied for BR2_PACKAGE_QT_SCRIPT
+On 2013-11-27 23:31 +0100, Thomas Petazzoni spake thusly:
+> This commit introduces the BR2_EXTERNAL environment variable, which
+> will allow to keep Buildroot customization (board-specific
+> configuration files or root filesystem overlays, package Config.in and
+> makefiles, as well as defconfigs) outside of the Buildroot tree.
+> 
+> This commit only introduces the variable itself, and ensures that it
+> is available within Config.in options, so that string options used to
+> specify paths to directories or files can use $BR2_EXTERNAL as a
+> reference. For example, one can use
+> $BR2_EXTERNAL/board/<someboard>/kernel.config as the
+> BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE value.
+[--SNIP--]
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/grantlee/Config.in |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+With only this commit applied, and a clean tree, I get:
 
-diff --git a/package/grantlee/Config.in b/package/grantlee/Config.in
-index 84afad2..09ec70c 100644
---- a/package/grantlee/Config.in
-+++ b/package/grantlee/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_GRANTLEE
- 	bool "grantlee"
-+	depends on BR2_PACKAGE_QT_ARCH_SUPPORTS_WEBKIT
- 	select BR2_PACKAGE_QT_STL
- 	select BR2_PACKAGE_QT_SCRIPT
- 	select BR2_PACKAGE_QT_GUI_MODULE
+    $ make menuconfig
+    Makefile:136: *** "The specified BR2_EXTERNAL '' location doesn't
+    exist".  Stop.
+
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+[--SNIP--]
+> diff --git a/Makefile b/Makefile
+> index b5368a3..a46418e 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -99,6 +99,45 @@ export CDPATH:=
+[--SNIP--]
+> +BR2_EXTERNAL_FILE = $(BASE_DIR)/.br-external
+> +
+> +ifeq ($(origin BR2_EXTERNAL),command line)
+> +ifeq ($(BR2_EXTERNAL),) # Case 1
+> +override BR2_EXTERNAL := $(TOPDIR)/support/dummy-external/
+> +$(shell rm -f $(BR2_EXTERNAL_FILE))
+> +else # Case 2
+> +ifeq ($(wildcard $(BR2_EXTERNAL)),)
+> +$(error "The specified BR2_EXTERNAL '$(BR2_EXTERNAL)' location doesn't exist")
+> +endif
+> +override BR2_EXTERNAL := $(realpath $(BR2_EXTERNAL))
+> +BR2_EXTERNAL_USED = y
+> +$(shell echo $(BR2_EXTERNAL) > $(BR2_EXTERNAL_FILE))
+> +endif
+> +else # Case 3
+> +override BR2_EXTERNAL := $(shell test -f $(BR2_EXTERNAL_FILE) && cat $(BR2_EXTERNAL_FILE))
+> +ifeq ($(wildcard $(BR2_EXTERNAL)),)
+> +$(error "The specified BR2_EXTERNAL '$(BR2_EXTERNAL)' location doesn't exist")
+
+The error occurs here.
+
+That's becasue you test if BR2_EXTERNAL is comming from the command
+line, but that last case should also test if BR2_EXTERNAL_FILE exists
+before scanning it.
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
