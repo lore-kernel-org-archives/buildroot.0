@@ -1,33 +1,31 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 28 Nov 2013 18:30:42 +0000 (UTC)
-Subject: [Buildroot] [Bug 1279] Buildroot compiled Busybox and Coreutils LFS
-	issues
-In-Reply-To: <bug-1279-163@https.bugs.busybox.net/>
-References: <bug-1279-163@https.bugs.busybox.net/>
-Message-ID: <20131128183042.7754C9BE2F@busybox.osuosl.org>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu, 28 Nov 2013 16:02:15 -0300
+Subject: [Buildroot] [PATCH] gdb: disable texinfo/documentation
+Message-ID: <1385665335-19364-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=1279
+Fixes bug #6554
 
-Gustavo Zacarias <gustavo@zacarias.com.ar> changed:
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/gdb/gdb.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|                            |FIXED
-
---- Comment #7 from Gustavo Zacarias <gustavo@zacarias.com.ar> 2013-11-28 18:30:42 UTC ---
-Working just fine with qemu_x86_defconfig + LARGEFILE + cifs-utils + strace
-(and tweaked kernel with CONFIG_CIFS=m against a 2 TB share).
-Strace shows busybox ls using *stat64 all along.
-Didn't try coreutils ls but i guess this was fixed along some time ago because
-of the bug age.
-
+diff --git a/package/gdb/gdb.mk b/package/gdb/gdb.mk
+index 9cf90e3..700cf72 100644
+--- a/package/gdb/gdb.mk
++++ b/package/gdb/gdb.mk
+@@ -57,6 +57,7 @@ HOST_GDB_PRE_PATCH_HOOKS += GDB_XTENSA_PRE_PATCH
+ endif
+ 
+ GDB_CONF_ENV = \
++	ac_cv_prog_MAKEINFO=missing \
+ 	ac_cv_type_uintptr_t=yes \
+ 	gt_cv_func_gettext_libintl=yes \
+ 	ac_cv_func_dcgettext=yes \
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+1.8.3.2
