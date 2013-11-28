@@ -1,27 +1,51 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 28 Nov 2013 22:48:19 +0100
-Subject: [Buildroot] [PATCH v3 2/2] grantlee: Disable on non-supported
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 28 Nov 2013 22:47:36 +0100
+Subject: [Buildroot] [git commit] qt: Disable QtScript on non-supported
 	platforms
-In-Reply-To: <1385654237-36389-2-git-send-email-Vincent.Riera@imgtec.com>
- (Vicente Olivert Riera's message of "Thu, 28 Nov 2013 15:57:15 +0000")
-References: <1385654237-36389-1-git-send-email-Vincent.Riera@imgtec.com>
- <1385654237-36389-2-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <87mwkoxknw.fsf@dell.be.48ers.dk>
+Message-ID: <20131128214913.88D699BE37@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=1d57723541b339ad54c15fc1ec7e555e49ce3cbf
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > This package selects BR2_PACKAGE_QT_SCRIPT which is not supported on 
- > certain platforms. To prevent this behaviour we use the same solution as 
- > we applied for BR2_PACKAGE_QT_SCRIPT
+There is no support for certain platforms in QtScript right now, so
+buildroot upstream suggested to disable the possibility of enabling
+QtScript on those platforms as a quick fix for the 2013.11 release:
 
- > Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+   http://lists.busybox.net/pipermail/buildroot/2013-November/083157.html
 
-Committed, thanks.
+QtScript doesn't build because it uses JavaScriptCore, so we re-use the
+existing BR2_PACKAGE_QT_ARCH_SUPPORTS_WEBKIT option which already lists
+which platforms are supported by JavaScriptCore in Qt4.
 
--- 
-Bye, Peter Korsgaard
+In addition, a proposed fix to add support for MIPS64 has already been
+sent to Qt:
+
+   https://bugreports.qt-project.org/browse/QTBUG-35030
+
+Fixes:
+
+   http://autobuild.buildroot.net/results/fd7/fd7e7e53290f235b540ed5f3c784e2584fdb41e0/
+
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/qt/Config.in |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
+
+diff --git a/package/qt/Config.in b/package/qt/Config.in
+index 2651d55..dd2b6d9 100644
+--- a/package/qt/Config.in
++++ b/package/qt/Config.in
+@@ -385,6 +385,7 @@ config BR2_PACKAGE_QT_OPENSSL
+ 
+ config BR2_PACKAGE_QT_SCRIPT
+ 	bool "Script Module"
++	depends on BR2_PACKAGE_QT_ARCH_SUPPORTS_WEBKIT
+ 	default y
+ 	help
+ 	  Build the Qt Script module.
