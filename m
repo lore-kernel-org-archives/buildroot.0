@@ -1,134 +1,105 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 28 Nov 2013 22:56:52 +0100
-Subject: [Buildroot] [git commit branch/next] configs/qemu_mips64el_malta:
-	add new config
-Message-ID: <20131128215805.5DFD99BD91@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 28 Nov 2013 22:55:58 +0100
+Subject: [Buildroot] [PATCHv3 1/5] core: introduce the BR2_EXTERNAL
+ variable
+In-Reply-To: <20131128215003.GD3337@free.fr>
+References: <1385591508-4174-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1385591508-4174-2-git-send-email-thomas.petazzoni@free-electrons.com>
+ <20131128215003.GD3337@free.fr>
+Message-ID: <20131128215557.GE3337@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=571fd2ce74668b4feda2f669a4a406a86f210f1c
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Thomas, All,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- board/qemu/mips64el-malta/linux-3.12.config |   60 +++++++++++++++++++++++++++
- board/qemu/mips64el-malta/readme.txt        |    8 ++++
- configs/qemu_mips64el_malta_defconfig       |   26 ++++++++++++
- 3 files changed, 94 insertions(+), 0 deletions(-)
+On 2013-11-28 22:50 +0100, Yann E. MORIN spake thusly:
+> On 2013-11-27 23:31 +0100, Thomas Petazzoni spake thusly:
+> > This commit introduces the BR2_EXTERNAL environment variable, which
+> > will allow to keep Buildroot customization (board-specific
+> > configuration files or root filesystem overlays, package Config.in and
+> > makefiles, as well as defconfigs) outside of the Buildroot tree.
+> > 
+> > This commit only introduces the variable itself, and ensures that it
+> > is available within Config.in options, so that string options used to
+> > specify paths to directories or files can use $BR2_EXTERNAL as a
+> > reference. For example, one can use
+> > $BR2_EXTERNAL/board/<someboard>/kernel.config as the
+> > BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE value.
+> [--SNIP--]
+> 
+> With only this commit applied, and a clean tree, I get:
+> 
+>     $ make menuconfig
+>     Makefile:136: *** "The specified BR2_EXTERNAL '' location doesn't
+>     exist".  Stop.
+> 
+> > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> [--SNIP--]
+> > diff --git a/Makefile b/Makefile
+> > index b5368a3..a46418e 100644
+> > --- a/Makefile
+> > +++ b/Makefile
+> > @@ -99,6 +99,45 @@ export CDPATH:=
+> [--SNIP--]
+> > +BR2_EXTERNAL_FILE = $(BASE_DIR)/.br-external
+> > +
+> > +ifeq ($(origin BR2_EXTERNAL),command line)
+> > +ifeq ($(BR2_EXTERNAL),) # Case 1
+> > +override BR2_EXTERNAL := $(TOPDIR)/support/dummy-external/
+> > +$(shell rm -f $(BR2_EXTERNAL_FILE))
+> > +else # Case 2
+> > +ifeq ($(wildcard $(BR2_EXTERNAL)),)
+> > +$(error "The specified BR2_EXTERNAL '$(BR2_EXTERNAL)' location doesn't exist")
+> > +endif
+> > +override BR2_EXTERNAL := $(realpath $(BR2_EXTERNAL))
+> > +BR2_EXTERNAL_USED = y
+> > +$(shell echo $(BR2_EXTERNAL) > $(BR2_EXTERNAL_FILE))
+> > +endif
+> > +else # Case 3
+> > +override BR2_EXTERNAL := $(shell test -f $(BR2_EXTERNAL_FILE) && cat $(BR2_EXTERNAL_FILE))
+> > +ifeq ($(wildcard $(BR2_EXTERNAL)),)
+> > +$(error "The specified BR2_EXTERNAL '$(BR2_EXTERNAL)' location doesn't exist")
+> 
+> The error occurs here.
+> 
+> That's becasue you test if BR2_EXTERNAL is comming from the command
+> line, but that last case should also test if BR2_EXTERNAL_FILE exists
+> before scanning it.
 
-diff --git a/board/qemu/mips64el-malta/linux-3.12.config b/board/qemu/mips64el-malta/linux-3.12.config
-new file mode 100644
-index 0000000..e980476
---- /dev/null
-+++ b/board/qemu/mips64el-malta/linux-3.12.config
-@@ -0,0 +1,60 @@
-+CONFIG_MIPS_MALTA=y
-+CONFIG_CPU_LITTLE_ENDIAN=y
-+CONFIG_CPU_MIPS64_R1=y
-+CONFIG_64BIT=y
-+CONFIG_MIPS_MT_SMP=y
-+CONFIG_NR_CPUS=2
-+CONFIG_HZ_100=y
-+CONFIG_SYSVIPC=y
-+CONFIG_NO_HZ=y
-+CONFIG_HIGH_RES_TIMERS=y
-+CONFIG_LOG_BUF_SHIFT=15
-+CONFIG_NAMESPACES=y
-+CONFIG_RELAY=y
-+CONFIG_EMBEDDED=y
-+# CONFIG_COMPAT_BRK is not set
-+CONFIG_SLAB=y
-+CONFIG_MODULES=y
-+CONFIG_MODULE_UNLOAD=y
-+CONFIG_MODVERSIONS=y
-+CONFIG_MODULE_SRCVERSION_ALL=y
-+# CONFIG_BLK_DEV_BSG is not set
-+CONFIG_PCI=y
-+CONFIG_MIPS32_COMPAT=y
-+CONFIG_MIPS32_O32=y
-+CONFIG_MIPS32_N32=y
-+CONFIG_NET=y
-+CONFIG_PACKET=y
-+CONFIG_UNIX=y
-+CONFIG_INET=y
-+CONFIG_IP_PNP=y
-+# CONFIG_INET_XFRM_MODE_TRANSPORT is not set
-+# CONFIG_INET_XFRM_MODE_TUNNEL is not set
-+# CONFIG_INET_XFRM_MODE_BEET is not set
-+# CONFIG_INET_LRO is not set
-+# CONFIG_INET_DIAG is not set
-+# CONFIG_IPV6 is not set
-+# CONFIG_WIRELESS is not set
-+CONFIG_UEVENT_HELPER_PATH="/sbin/hotplug"
-+CONFIG_IDE=y
-+CONFIG_BLK_DEV_IDECD=y
-+CONFIG_IDE_GENERIC=y
-+CONFIG_BLK_DEV_GENERIC=y
-+CONFIG_BLK_DEV_PIIX=y
-+CONFIG_NETDEVICES=y
-+CONFIG_PCNET32=y
-+# CONFIG_WLAN is not set
-+CONFIG_VT_HW_CONSOLE_BINDING=y
-+CONFIG_SERIAL_8250=y
-+CONFIG_SERIAL_8250_CONSOLE=y
-+# CONFIG_HW_RANDOM is not set
-+# CONFIG_HWMON is not set
-+CONFIG_FB=y
-+CONFIG_FB_CIRRUS=y
-+# CONFIG_VGA_CONSOLE is not set
-+# CONFIG_USB_SUPPORT is not set
-+CONFIG_EXT4_FS=y
-+CONFIG_PROC_KCORE=y
-+CONFIG_TMPFS=y
-+CONFIG_NFS_FS=y
-+CONFIG_ROOT_NFS=y
-diff --git a/board/qemu/mips64el-malta/readme.txt b/board/qemu/mips64el-malta/readme.txt
-new file mode 100644
-index 0000000..dba33d3
---- /dev/null
-+++ b/board/qemu/mips64el-malta/readme.txt
-@@ -0,0 +1,8 @@
-+Run the emulation with:
-+
-+ qemu-system-mips64el -M malta -kernel output/images/vmlinux -serial stdio -hda output/images/rootfs.ext2 -append "root=/dev/hda"
-+
-+The login prompt will appear in the terminal that started Qemu. The
-+graphical window is the framebuffer.
-+
-+Tested with QEMU 1.6.1
-diff --git a/configs/qemu_mips64el_malta_defconfig b/configs/qemu_mips64el_malta_defconfig
-new file mode 100644
-index 0000000..73fb22f
---- /dev/null
-+++ b/configs/qemu_mips64el_malta_defconfig
-@@ -0,0 +1,26 @@
-+# Architecture
-+BR2_mips64el=y
-+BR2_MIPS_NABI64=y
-+
-+# Toolchain
-+BR2_TOOLCHAIN_BUILDROOT_EGLIBC=y
-+
-+# Filesystem
-+BR2_TARGET_ROOTFS_EXT2=y
-+# BR2_TARGET_ROOTFS_TAR is not set
-+
-+# Lock to 3.12 headers to avoid breaking with newer kernels
-+BR2_KERNEL_HEADERS_VERSION=y
-+BR2_DEFAULT_KERNEL_VERSION="3.12.1"
-+
-+# Kernel
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.12.1"
-+BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
-+BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mips64el-malta/linux-3.12.config"
-+BR2_LINUX_KERNEL_VMLINUX=y
-+
-+# Serial port config
-+BR2_TARGET_GENERIC_GETTY=y
-+BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
+Doh, I forgot to paste the patch:
+
+diff --git a/Makefile b/Makefile
+index 83a5c06..038294b 100644
+--- a/Makefile
++++ b/Makefile
+@@ -131,12 +131,14 @@ BR2_EXTERNAL_USED = y
+ $(shell echo $(BR2_EXTERNAL) > $(BR2_EXTERNAL_FILE))
+ endif
+ else # Case 3
++ifneq ($(wildcard $(BR2_EXTERNAL_FILE)),)
+ override BR2_EXTERNAL := $(shell test -f $(BR2_EXTERNAL_FILE) && cat
+$(BR2_EXTERNAL_FILE))
+ ifeq ($(wildcard $(BR2_EXTERNAL)),)
+ $(error "The specified BR2_EXTERNAL '$(BR2_EXTERNAL)' location doesn't
+exist")
+ endif
+ BR2_EXTERNAL_USED = y
+ endif
++endif
+ 
+ BUILD_DIR:=$(BASE_DIR)/build
+ STAMP_DIR:=$(BASE_DIR)/stamps
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
