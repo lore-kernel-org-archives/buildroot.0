@@ -1,40 +1,32 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Thu, 28 Nov 2013 13:49:06 +0000
-Subject: [Buildroot] [PATCH v2 1/2] qt: Disable QtScript on MIPS64
-In-Reply-To: <20131128130741.085cb04e@skate>
-References: <1385572207-44666-1-git-send-email-Vincent.Riera@imgtec.com>
- <20131128130741.085cb04e@skate>
-Message-ID: <529749D2.7010404@imgtec.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu, 28 Nov 2013 13:56:14 +0000 (UTC)
+Subject: [Buildroot] [Bug 6428] util-linux libmount segfaults with patch
+	from buildroot
+In-Reply-To: <bug-6428-163@https.bugs.busybox.net/>
+References: <bug-6428-163@https.bugs.busybox.net/>
+Message-ID: <20131128135614.45E899BE36@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 11/28/2013 12:07 PM, Thomas Petazzoni wrote:
-> Dear Vicente Olivert Riera,
->
-> On Wed, 27 Nov 2013 17:10:06 +0000, Vicente Olivert Riera wrote:
->
->> diff --git a/package/qt/Config.in b/package/qt/Config.in
->> index 2651d55..dd2b6d9 100644
->> --- a/package/qt/Config.in
->> +++ b/package/qt/Config.in
->> @@ -385,6 +385,7 @@ config BR2_PACKAGE_QT_OPENSSL
->>
->>   config BR2_PACKAGE_QT_SCRIPT
->>   	bool "Script Module"
->> +	depends on BR2_PACKAGE_QT_ARCH_SUPPORTS_WEBKIT
->
-> I'm wondering if we shouldn't rename this option to something more
-> exact: ARCH_SUPPORTS_JAVASCRIPTCORE. But I don't know, and we don't
-> have well established best practices for this kind of things.
->
-> Thomas
->
+https://bugs.busybox.net/show_bug.cgi?id=6428
 
-Maybe we could keep it as is by now, apply the quick fix for the next 
-release, and decide what to do in the future. What do you think?
+Gustavo Zacarias <gustavo@zacarias.com.ar> changed:
+
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|REOPENED                    |ASSIGNED
+         AssignedTo|unassigned at buildroot.uclibc |gustavo at zacarias.com.ar
+                   |.org                        |
+
+--- Comment #3 from Gustavo Zacarias <gustavo@zacarias.com.ar> 2013-11-28 13:56:14 UTC ---
+Thanks for the report, it's a pleasure to get this level of detail.
+Just sent a patch for inclusion, hopefully Peter will pick it up for the
+upcoming 2013.11 release.
 
 -- 
-Vincent
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
