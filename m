@@ -1,32 +1,85 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 28 Nov 2013 09:57:17 -0300
-Subject: [Buildroot] [PATCH 2/2] tcpdump: bump to version 4.5.1
-In-Reply-To: <1385643437-8189-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1385643437-8189-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1385643437-8189-2-git-send-email-gustavo@zacarias.com.ar>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Thu, 28 Nov 2013 14:24:35 +0100
+Subject: [Buildroot] [PATCHv3 2/5] core: allow external
+ Config.in/makefile code to be integrated
+In-Reply-To: <1385591508-4174-3-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1385591508-4174-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1385591508-4174-3-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <CAHXCMMKgWKz_p3ckA1999zxava2TG=SF5qLjqNh7mmygv36Zfg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/tcpdump/tcpdump.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Hi Thomas, all,
 
-diff --git a/package/tcpdump/tcpdump.mk b/package/tcpdump/tcpdump.mk
-index a865e81..0f4cebb 100644
---- a/package/tcpdump/tcpdump.mk
-+++ b/package/tcpdump/tcpdump.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--TCPDUMP_VERSION = 4.4.0
-+TCPDUMP_VERSION = 4.5.1
- TCPDUMP_SITE = http://www.tcpdump.org/release
- TCPDUMP_LICENSE = BSD-3c
- TCPDUMP_LICENSE_FILES = LICENSE
+
+2013/11/27 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+
+> This commit allows the BR2_EXTERNAL directory to contain additional
+> Buildroot packages:
+>
+>  - Buildroot automatically includes the
+>    $BR2_EXTERNAL/package/Config.in in the "Target packages"
+>    configuration sub-menu.
+>
+>  - Buildroot automatically includes the BR2_EXTERNAL/package/*/*.mk
+>    files in the build logic.
+>
+> We also add a dummy Config.in file in support/dummy-external/ to
+> ensure that the source "$BR2_EXTERNAL/Config.in" line will point to an
+> existing file even when BR2_EXTERNAL is not used by the user.
+>
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> ---
+>  Makefile                                 | 4 ++++
+>  package/Config.in                        | 2 ++
+>  support/dummy-external/package/Config.in | 0
+>  3 files changed, 6 insertions(+)
+>  create mode 100644 support/dummy-external/package/Config.in
+>
+> diff --git a/Makefile b/Makefile
+> index a46418e..013b646 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -368,6 +368,10 @@ include boot/common.mk
+>  include linux/linux.mk
+>  include system/system.mk
+>
+> +ifeq ($(BR2_EXTERNAL_USED),y)
+> +include $(sort $(wildcard $(BR2_EXTERNAL)/package/*/*.mk))
+> +endif
+> +
+>  TARGETS+=target-finalize
+>
+>  ifeq ($(BR2_ENABLE_LOCALE_PURGE),y)
+> diff --git a/package/Config.in b/package/Config.in
+> index 311cc6c..fafaa2b 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -997,4 +997,6 @@ source "package/vim/Config.in"
+>  endif
+>  endmenu
+>
+> +source "$BR2_EXTERNAL/package/Config.in"
+> +
+>
+In this new version of this patch set, the all target and host packages
+entries end up under the "Target packages" menu.
+In my use of this feature, I also have a couple of host tools to integrate.
+So, how about having adding the following source line in
+package/Config.in.host:
+---
+source "$BR2_EXTERNAL/package/Config.in.host"
+---
+Of course, this requires to add an
+empty support/dummy-external/package/Config.in.host file.
+
+Regards,
+
 -- 
-1.8.3.2
+Samuel
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20131128/e7213f9a/attachment-0001.html>
