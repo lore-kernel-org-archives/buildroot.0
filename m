@@ -1,81 +1,79 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 28 Nov 2013 19:20:18 +0100
-Subject: [Buildroot] [PATCHv3 2/5] core: allow external
- Config.in/makefile code to be integrated
-In-Reply-To: <CAHXCMMJ9M2m_EU0uweQjoEba1JObQWB43NYM31SXTvMxtWQmKQ@mail.gmail.com>
-References: <1385591508-4174-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1385591508-4174-3-git-send-email-thomas.petazzoni@free-electrons.com>
- <CAHXCMMKgWKz_p3ckA1999zxava2TG=SF5qLjqNh7mmygv36Zfg@mail.gmail.com>
- <20131128172357.1417a881@skate>
- <CAHXCMMJ9M2m_EU0uweQjoEba1JObQWB43NYM31SXTvMxtWQmKQ@mail.gmail.com>
-Message-ID: <20131128192018.61cf8fdb@skate>
+Date: Thu, 28 Nov 2013 19:25:08 +0100
+Subject: [Buildroot] ucilbc 0.9.33.2 fails to build on buildroot 2013.11
+ internal toolchain
+In-Reply-To: <5297837C.3@mail.ru>
+References: <5297837C.3@mail.ru>
+Message-ID: <20131128192508.4c4c0106@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Samuel Martin,
+Dear Alexander Varnin,
 
-On Thu, 28 Nov 2013 18:53:57 +0100, Samuel Martin wrote:
+On Thu, 28 Nov 2013 21:55:08 +0400, Alexander Varnin wrote:
 
-> Well, right now, most of the packages I put in my BR2_EXTERNAL tree
-> are host tools to generate images.
+> Building uclibc with default config now fails for me, after upgrading
+> to latest buildroot (now from 2013.11-rc3 branch).Attaching my config.
+> Build system is Debian Wheezy.
 > 
-> With the previous version of this serie, the new menu entry was added
-> at the top level
-> of menuconfig, in which I added 2 submenus: "Target packages" and
-> "Host packages".
-> It was rather clear that all "company" stuff goes into this menu.
+> Here is short output of make command:
 > 
-> With the v2, I was a bit lost at first, the "company" menu got moved
+> varnin at debian5 ~/minipos-OS-build-2013.11> make
+> make -C /home/varnin/buildroot
+> O=/home/varnin/minipos-OS-build-2013.11/.
+> >>> uclibc 0.9.33.2 Building
+> /usr/bin/make -j1 -C
+> /home/varnin/minipos-OS-build-2013.11/build/uclibc-0.9.33.2 ARCH="arm"
+> CROSS_COMPILE="/home/varnin/minipos-OS-build-2013.11/host/usr/bin/arm-buildroot-linux-uclibcgnueabi-"
+> UCLIBC_EXTRA_CFLAGS=" " HOSTCC="/usr/bin/gcc" PREFIX= DEVEL_PREFIX=/
+> RUNTIME_PREFIX=/ all
+> make[3]: Nothing to be done for `locale_headers'.
+>   LD libuClibc-0.9.33.2.so
+> libc/libc_so.a(lockf.os): In function `__GI_lockf':
+> /home/varnin/minipos-OS-build-2013.11/build/uclibc-0.9.33.2/libc/misc/file/lockf.c:73:
+> undefined reference to `_Unwind_Resume'
+> libc/libc_so.a(lockf.os):(.ARM.extab+0x0): undefined reference to
+> `__gcc_personality_v0'
+> collect2: error: ld returned 1 exit status
+> make[2]: *** [lib/libc.so] ?????? 1
+> make[1]: ***
+> [/home/varnin/minipos-OS-build-2013.11/build/uclibc-0.9.33.2/.stamp_built]
+> ?????? 2
+> make: *** [_all] ?????? 2
 
-I guess you meant "v3" here, because the "v2" included
-$(BR2_EXTERNAL)/Config.in in the top-level menu of menuconfig.
+My guess is that you have BR2_ENABLE_DEBUG=y in your Buildroot .config,
+right?
 
-> under "Target packages". So, now I have a menu tree like this:
-> 
-> ---
-> Main menu
->   ...
->   Target packages --->
->     ...
->     Company --->
->       Target packages --->
->       Host packages --->
->   ...
->   Host packages --->
-> ---
-> 
-> It does not hurt that much, but it's not really nice IMHO.
+If that's the case, then you've hit the problem that uClibc doesn't
+build properly when debugging support is enabled. That's unfortunately
+an upstream uClibc problem, I believe.
 
-Then please talk to the people who asked for enforcing
-$(BR2_EXTERNAL)/package/Config.in usage during the Buildroot Developers
-Days in Edinburgh. This decision/choice is written very clearly in
-http://elinux.org/Buildroot:DeveloperDaysELCE2013#BR2_EXTERNAL :
+Either disable BR2_ENABLE_DEBUG in Buildroot (which will disable
+debugging support for all packages), or if you want to keep debugging
+support enabled globally but don't care about debugging support in
+uClibc, apply a change like:
 
-"""
-Regarding the directory hierarchy in the external tree, it was agreed
-that it is a good idea to force three subdirectories: package, board,
-configs. Buildroot's package/Config.in will source
-$BR2_EXTERNAL/package/Config.in.
-"""
-
-(It's even in bold in the report).
-
-I believe the most vocal person in favor of this was Arnout, so I've
-added him in Cc.
-
-> BTW, to generate this/these Config.in{,host} files in the
-> BR2_EXTERNAL tree, I already have a script scanning the tree and
-> updating these files, it could be included as a support script as
-> well.
-
-Why is this needed? Just write Config.in like we do in the main
-Buildroot tree. For example, people may want to have menus and submenus
-in their $(BR2_EXTERNAL)/package/Config.in. Therefore, I don't think
-providing more and more and more scripts that match a very specific use
-case is really going to help our users, probably going to confuse them.
+diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
+index 20d3bb6..062ac0d 100644
+--- a/package/uclibc/uclibc.mk
++++ b/package/uclibc/uclibc.mk
+@@ -390,14 +390,6 @@ UCLIBC_WCHAR_CONFIG = $(call UCLIBC_OPT_UNSET,UCLIBC_HAS_WCHAR,$(@D))
+ endif
+ 
+ #
+-# debug
+-#
+-
+-ifeq ($(BR2_ENABLE_DEBUG),y)
+-UCLIBC_DEBUG_CONFIG = $(call UCLIBC_OPT_SET,DODEBUG,y,$(@D))
+-endif
+-
+-#
+ # strip
+ #
 
 Best regards,
 
