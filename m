@@ -1,7 +1,7 @@
 From: =?UTF-8?q?Daniel=20Nystr=C3=B6m?= <daniel.nystrom@timeterminal.se>
-Date: Thu, 28 Nov 2013 19:02:44 +0100
+Date: Thu, 28 Nov 2013 19:00:15 +0100
 Subject: [Buildroot] [PATCH] e2tools: new package
-Message-ID: <1385661764-14355-1-git-send-email-daniel.nystrom@timeterminal.se>
+Message-ID: <1385661615-14264-1-git-send-email-daniel.nystrom@timeterminal.se>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
