@@ -1,36 +1,30 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 28 Nov 2013 09:56:49 -0300
-Subject: [Buildroot] [PATCH] arch/sparc: drop unused variants
-Message-ID: <1385643409-5995-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Thu, 28 Nov 2013 09:57:16 -0300
+Subject: [Buildroot] [PATCH 1/2] libpcap: bump to version 1.5.1
+Message-ID: <1385643437-8189-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Drop stale v9/ultrasparc/niagara variants.
-
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- arch/Config.in.sparc | 6 ------
- 1 file changed, 6 deletions(-)
+ package/libpcap/libpcap.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/Config.in.sparc b/arch/Config.in.sparc
-index 33204a2..21e83f7 100644
---- a/arch/Config.in.sparc
-+++ b/arch/Config.in.sparc
-@@ -25,12 +25,6 @@ config BR2_ENDIAN
+diff --git a/package/libpcap/libpcap.mk b/package/libpcap/libpcap.mk
+index ec4d346..aba2510 100644
+--- a/package/libpcap/libpcap.mk
++++ b/package/libpcap/libpcap.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- config BR2_GCC_TARGET_TUNE
- 	default "v8"		if BR2_sparc_v8
--	default "v9"		if BR2_sparc_v9
--	default "v9"		if BR2_sparc_v9a
--	default "v9"		if BR2_sparc_v9b
--	default "ultrasparc"	if BR2_sparc_ultrasparc
--	default "ultrasparc3"	if BR2_sparc_ultrasparc3
--	default "niagara"	if BR2_sparc_niagara
- 
- config BR2_GCC_TARGET_CPU
- 	default "sparchfleon"	if BR2_sparc_sparchfleon
+-LIBPCAP_VERSION = 1.4.0
++LIBPCAP_VERSION = 1.5.1
+ LIBPCAP_SITE = http://www.tcpdump.org/release
+ LIBPCAP_LICENSE = BSD-3c
+ LIBPCAP_LICENSE_FILES = LICENSE
 -- 
 1.8.3.2
