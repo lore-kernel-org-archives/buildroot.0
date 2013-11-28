@@ -1,61 +1,67 @@
-From: spdawson at gmail.com <spdawson@gmail.com>
-Date: Thu, 28 Nov 2013 09:36:40 +0000
-Subject: [Buildroot] [PATCH] connman: add support for ofono and neard
-Message-ID: <1385631400-14668-1-git-send-email-spdawson@gmail.com>
+From: Jeremy Rosen <jeremy.rosen@openwide.fr>
+Date: Thu, 28 Nov 2013 10:37:27 +0100 (CET)
+Subject: [Buildroot] [PATCHv3 2/5] core: allow external
+ Config.in/makefile	code to be integrated
+In-Reply-To: <20131128094342.3f6c84e4@skate>
+Message-ID: <1745239489.15294056.1385631446992.JavaMail.root@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Simon Dawson <spdawson@gmail.com>
 
-Signed-off-by: Simon Dawson <spdawson@gmail.com>
----
- package/connman/Config.in  | 8 ++++++++
- package/connman/connman.mk | 8 +++++++-
- 2 files changed, 15 insertions(+), 1 deletion(-)
 
-diff --git a/package/connman/Config.in b/package/connman/Config.in
-index 021e211..639cd57 100644
---- a/package/connman/Config.in
-+++ b/package/connman/Config.in
-@@ -38,9 +38,17 @@ config BR2_PACKAGE_CONNMAN_BLUETOOTH
- config BR2_PACKAGE_CONNMAN_LOOPBACK
- 	bool "enable loopback support"
- 
-+config BR2_PACKAGE_CONNMAN_NEARD
-+	bool "enable neard support"
-+	select BR2_PACKAGE_NEARD
-+
- config BR2_PACKAGE_CONNMAN_NTPD
- 	bool "enable ntpd support"
- 
-+config BR2_PACKAGE_CONNMAN_OFONO
-+	bool "enable ofono support"
-+	select BR2_PACKAGE_OFONO
-+
- config BR2_PACKAGE_CONNMAN_DEBUG
- 	bool "enable compiling with debugging information"
- 
-diff --git a/package/connman/connman.mk b/package/connman/connman.mk
-index 4a6bb78..85e1be4 100644
---- a/package/connman/connman.mk
-+++ b/package/connman/connman.mk
-@@ -18,7 +18,13 @@ CONNMAN_CONF_OPT += --localstatedir=/var \
- 	$(if $(BR2_PACKAGE_CONNMAN_WIFI),--enable-wifi,--disable-wifi)			\
- 	$(if $(BR2_PACKAGE_CONNMAN_BLUETOOTH),--enable-bluetooth,--disable-bluetooth)	\
- 	$(if $(BR2_PACKAGE_CONNMAN_LOOPBACK),--enable-loopback,--disable-loopback)	\
--	$(if $(BR2_PACKAGE_CONNMAN_NTPD),--enable-ntpd,--disable-ntpd)
-+	$(if $(BR2_PACKAGE_CONNMAN_NEARD),--enable-neard,--disable-neard) \
-+	$(if $(BR2_PACKAGE_CONNMAN_NTPD),--enable-ntpd,--disable-ntpd) \
-+	$(if $(BR2_PACKAGE_CONNMAN_OFONO),--enable-ofono,--disable-ofono)
-+
-+CONNMAN_DEPENDENCIES += \
-+	$(if $(BR2_PACKAGE_CONNMAN_NEARD),neard) \
-+	$(if $(BR2_PACKAGE_CONNMAN_OFONO),ofono)
- 
- define CONNMAN_INSTALL_INITSCRIPT
- 	$(INSTALL) -m 0755 -D package/connman/S45connman $(TARGET_DIR)/etc/init.d/S45connman
--- 
-1.8.3.2
+----- Mail original -----
+> Dear Jeremy Rosen,
+> 
+> Please do not top post. This is considered bad practice on mailing
+> lists.
+> 
+sorry, trying to adapt to the different habits of the different ML
+
+usually it's ok to toppost when you don't comment the actual content...
+
+i'll try to get it right next time.
+
+> > on this particular one, if I remember correctly the kconfig
+> > infrastructure
+> > will not work correctly if one of the include is missing... so
+> > shouldn't
+> > your infrastructure check if $(BR2_EXTERNAL)/package/Config.in
+> > exists, and create one if it doesn't ?
+> 
+> The idea is that:
+> 
+>  * If the user is specifying a BR2_EXTERNAL location, then this
+>    location *must* contain a package/Config.in file. Even if it's
+>    empty.
+> 
+>  * If the user is not specifying a BR2_EXTERNAL location, then we are
+>    using support/dummy-external/ as a fake BR2_EXTERNAL, to ensure
+>    that
+>    package/Config.in exists.
+> 
+> There is no way to express in kconfig "include this file if it
+> exists,
+
+my idea was more along the line of "if we are setting BR2_EXTERNAL
+and the file doesn't exist, then create an empty "Config.in" file
+so the next call to make doesn't fail" 
+
+this would be to avoid leaving the build system in a broken 
+configuration after a call that sets up the build system for the
+user.
+
+I can see pro and cons on this idea, there is a risk in touching
+a file the user is supposed to edit and the breakage itself could
+be considered a good way to make sure the user go look into the 
+file
+
+but on the other hand, for simple use cases where the user doesn't
+want to add new packages, but simply overlay a couple of config
+files, creating a valid infrastructure from the start might be 
+a good idea...
+
+Cheers
+Boucman
