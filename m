@@ -1,62 +1,33 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 28 Nov 2013 15:10:33 +0100
-Subject: [Buildroot] [git commit branch/next] connman: add support for ofono
-	and neard
-Message-ID: <20131128141416.08C869BD88@busybox.osuosl.org>
+Date: Thu, 28 Nov 2013 15:13:07 +0100
+Subject: [Buildroot] [git commit branch/next] sam-ba: patch to latest version
+Message-ID: <20131128141416.1C82C9BE12@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f432b545badec4a45077aef3108c8b2c7d774516
+commit: http://git.buildroot.net/buildroot/commit/?id=874f5f92ea5b210ab54c624eb4e6fc076e67124a
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+
+Apply the latest Atmel patch for sam-ba version 2.12
 
 Signed-off-by: Simon Dawson <spdawson@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/connman/Config.in  |    8 ++++++++
- package/connman/connman.mk |    8 +++++++-
- 2 files changed, 15 insertions(+), 1 deletions(-)
+ package/sam-ba/sam-ba.mk |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-diff --git a/package/connman/Config.in b/package/connman/Config.in
-index 5345c80..1cf93e2 100644
---- a/package/connman/Config.in
-+++ b/package/connman/Config.in
-@@ -38,9 +38,17 @@ config BR2_PACKAGE_CONNMAN_BLUETOOTH
- config BR2_PACKAGE_CONNMAN_LOOPBACK
- 	bool "enable loopback support"
+diff --git a/package/sam-ba/sam-ba.mk b/package/sam-ba/sam-ba.mk
+index 8e24fa6..4dc0568 100644
+--- a/package/sam-ba/sam-ba.mk
++++ b/package/sam-ba/sam-ba.mk
+@@ -7,6 +7,7 @@
+ SAM_BA_SITE    = http://www.atmel.com/dyn/resources/prod_documents/
+ SAM_BA_VERSION = 2.12
+ SAM_BA_SOURCE  = sam-ba_$(SAM_BA_VERSION).zip
++SAM_BA_PATCH = sam-ba_$(SAM_BA_VERSION)_patch5.gz
+ SAM_BA_LICENSE = BSD-like (partly binary-only)
+ SAM_BA_LICENSE_FILES = doc/readme.txt
  
-+config BR2_PACKAGE_CONNMAN_NEARD
-+	bool "enable neard support"
-+	select BR2_PACKAGE_NEARD
-+
- config BR2_PACKAGE_CONNMAN_NTPD
- 	bool "enable ntpd support"
- 
-+config BR2_PACKAGE_CONNMAN_OFONO
-+	bool "enable ofono support"
-+	select BR2_PACKAGE_OFONO
-+
- config BR2_PACKAGE_CONNMAN_DEBUG
- 	bool "enable compiling with debugging information"
- 
-diff --git a/package/connman/connman.mk b/package/connman/connman.mk
-index db74c03..cf54abc 100644
---- a/package/connman/connman.mk
-+++ b/package/connman/connman.mk
-@@ -18,7 +18,13 @@ CONNMAN_CONF_OPT += --localstatedir=/var \
- 	$(if $(BR2_PACKAGE_CONNMAN_WIFI),--enable-wifi,--disable-wifi)			\
- 	$(if $(BR2_PACKAGE_CONNMAN_BLUETOOTH),--enable-bluetooth,--disable-bluetooth)	\
- 	$(if $(BR2_PACKAGE_CONNMAN_LOOPBACK),--enable-loopback,--disable-loopback)	\
--	$(if $(BR2_PACKAGE_CONNMAN_NTPD),--enable-ntpd,--disable-ntpd)
-+	$(if $(BR2_PACKAGE_CONNMAN_NEARD),--enable-neard,--disable-neard) \
-+	$(if $(BR2_PACKAGE_CONNMAN_NTPD),--enable-ntpd,--disable-ntpd) \
-+	$(if $(BR2_PACKAGE_CONNMAN_OFONO),--enable-ofono,--disable-ofono)
-+
-+CONNMAN_DEPENDENCIES += \
-+	$(if $(BR2_PACKAGE_CONNMAN_NEARD),neard) \
-+	$(if $(BR2_PACKAGE_CONNMAN_OFONO),ofono)
- 
- define CONNMAN_INSTALL_INITSCRIPT
- 	$(INSTALL) -m 0755 -D package/connman/S45connman $(TARGET_DIR)/etc/init.d/S45connman
