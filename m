@@ -1,28 +1,29 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 28 Nov 2013 16:52:21 +0000 (UTC)
-Subject: [Buildroot] [Bug 6428] util-linux libmount segfaults with patch
-	from buildroot
-In-Reply-To: <bug-6428-163@https.bugs.busybox.net/>
-References: <bug-6428-163@https.bugs.busybox.net/>
-Message-ID: <20131128165221.B5CF49BE49@busybox.osuosl.org>
+Date: Thu, 28 Nov 2013 17:15:20 +0000 (UTC)
+Subject: [Buildroot] [Bug 2995] -fstack-protector-all causes ssh to SIGSEGV
+In-Reply-To: <bug-2995-163@https.bugs.busybox.net/>
+References: <bug-2995-163@https.bugs.busybox.net/>
+Message-ID: <20131128171520.396B49BE2F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=6428
+https://bugs.busybox.net/show_bug.cgi?id=2995
 
 Gustavo Zacarias <gustavo@zacarias.com.ar> changed:
 
            What    |Removed                     |Added
 ----------------------------------------------------------------------------
              Status|ASSIGNED                    |RESOLVED
-         Resolution|                            |FIXED
+         Resolution|                            |WORKSFORME
 
---- Comment #4 from Gustavo Zacarias <gustavo@zacarias.com.ar> 2013-11-28 16:52:21 UTC ---
-Solved in commit 62d15df19a0d181a266a88b46525d0d4959c8739 for the upcoming
-2013.11 release.
+--- Comment #8 from Gustavo Zacarias <gustavo@zacarias.com.ar> 2013-11-28 17:15:19 UTC ---
+I think it's safe to close this bug, i've done testing with stack protection
+and openssh and couldn't hit this issue.
+Besides it seems to be solved by uclibc 0.9.32+ according to comment #5 and we
+don't do 0.9.31 for anything other than avr32 now.
 
 -- 
 Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
