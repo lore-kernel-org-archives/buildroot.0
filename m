@@ -1,30 +1,30 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 28 Nov 2013 17:25:07 +0000 (UTC)
-Subject: [Buildroot] [Bug 5570] Cannot compile software on the target machine
-In-Reply-To: <bug-5570-163@https.bugs.busybox.net/>
-References: <bug-5570-163@https.bugs.busybox.net/>
-Message-ID: <20131128172507.1E5F69BE2F@busybox.osuosl.org>
+From: =?UTF-8?q?Daniel=20Nystr=C3=B6m?= <daniel.nystrom@timeterminal.se>
+Date: Thu, 28 Nov 2013 18:29:26 +0100
+Subject: [Buildroot] [PATCH] e2fsprogs: Install libraries to staging
+Message-ID: <1385659766-25990-1-git-send-email-daniel.nystrom@timeterminal.se>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=5570
+Signed-off-by: Daniel Nystr?m <daniel.nystrom@timeterminal.se>
+---
+ package/e2fsprogs/e2fsprogs.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Gustavo Zacarias <gustavo@zacarias.com.ar> changed:
-
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|                            |WONTFIX
-
---- Comment #5 from Gustavo Zacarias <gustavo@zacarias.com.ar> 2013-11-28 17:25:06 UTC ---
-This is deprecated functionality, hence marking as WONTFIX.
-Support for building in the target was always flaky/broken and nobody cared to
-fix it properly so it was decided to drop that option some time ago.
-
+diff --git a/package/e2fsprogs/e2fsprogs.mk b/package/e2fsprogs/e2fsprogs.mk
+index 0670c74..bc07eb0 100644
+--- a/package/e2fsprogs/e2fsprogs.mk
++++ b/package/e2fsprogs/e2fsprogs.mk
+@@ -8,6 +8,8 @@ E2FSPROGS_VERSION = 1.42.8
+ E2FSPROGS_SITE = http://downloads.sourceforge.net/project/e2fsprogs/e2fsprogs/v$(E2FSPROGS_VERSION)
+ E2FSPROGS_LICENSE = GPLv2, libuuid BSD-3c, libss and libet MIT-like with advertising clause
+ E2FSPROGS_LICENSE_FILES = COPYING lib/uuid/COPYING lib/ss/mit-sipb-copyright.h lib/et/internal.h
++E2FSPROGS_INSTALL_STAGING = YES
++E2FSPROGS_INSTALL_STAGING_OPT = DESTDIR=$(TARGET_DIR) install-libs
+ 
+ E2FSPROGS_CONF_OPT = \
+ 	--disable-tls \
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+1.8.3.2
