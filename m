@@ -1,36 +1,30 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Thu, 28 Nov 2013 15:57:17 +0000
-Subject: [Buildroot] [PATCH 2/2] qt5quick1: Disable on non-supported
-	platforms
-In-Reply-To: <1385654237-36389-1-git-send-email-Vincent.Riera@imgtec.com>
-References: <1385654237-36389-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <1385654237-36389-4-git-send-email-Vincent.Riera@imgtec.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 28 Nov 2013 17:16:00 +0100
+Subject: [Buildroot] [PATCH v2] connman: remove defunkt configuration
+	options
+In-Reply-To: <1385648695-28899-1-git-send-email-spdawson@gmail.com>
+ (spdawson@gmail.com's message of "Thu, 28 Nov 2013 14:24:55 +0000")
+References: <1385648695-28899-1-git-send-email-spdawson@gmail.com>
+Message-ID: <87pppkzem7.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This package selects BR2_PACKAGE_QT5SCRIPT which is not supported on
-certain platforms. To prevent this behaviour we use the same solution as
-we applied for BR2_PACKAGE_QT5SCRIPT
+>>>>> "spdawson" == spdawson  <spdawson@gmail.com> writes:
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
----
- package/qt5/qt5quick1/Config.in |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+ > From: Simon Dawson <spdawson@gmail.com>
+ > We are carrying support for a couple of configuration options which
+ > are no longer present in connman. Specifically:
+ > ; threads: vestigial configuration option needed for defunkt WiMAX plugin
+ > ; ntpd: plugin no longer present in connman
 
-diff --git a/package/qt5/qt5quick1/Config.in b/package/qt5/qt5quick1/Config.in
-index 9cb97a6..735f552 100644
---- a/package/qt5/qt5quick1/Config.in
-+++ b/package/qt5/qt5quick1/Config.in
-@@ -12,6 +12,7 @@ config BR2_PACKAGE_QT5QUICK1
- 	depends on BR2_PACKAGE_HAS_OPENGL_EGL
- 	depends on BR2_PACKAGE_HAS_OPENGL_ES
- 	depends on BR2_PACKAGE_QT5JSBACKEND_AVAILABLE
-+	depends on BR2_PACKAGE_QT_ARCH_SUPPORTS_WEBKIT
- 	help
- 	  Qt is a cross-platform application and UI framework for
- 	  developers using C++.
+ > Signed-off-by: Simon Dawson <spdawson@gmail.com>
+ > ---
+ >  v2: Rebase on top of next branch
+
+Committed to next, thanks.
+
 -- 
-1.7.1
+Bye, Peter Korsgaard
