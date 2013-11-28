@@ -1,35 +1,36 @@
-From: Ryan Barnett <rjbarnet@rockwellcollins.com>
-Date: Thu, 28 Nov 2013 06:33:52 -0600
-Subject: [Buildroot] [PATCHv3 2/5] core: allow external
- Config.in/makefile	code to be integrated
-In-Reply-To: <20131128132914.1e0a6ae2@skate>
-References: <20131128094342.3f6c84e4@skate>	<1745239489.15294056.1385631446992.JavaMail.root@openwide.fr>
- <20131128123359.6341f14e@skate>	<OF48FFD9A9.EDDCA00F-ON86257C31.0040FD2E-86257C31.0042CA75@rockwellcollins.com>
- <20131128132914.1e0a6ae2@skate>
-Message-ID: <OF175E2603.3360BA51-ON86257C31.0044CA92-86257C31.0045046E@rockwellcollins.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu, 28 Nov 2013 09:56:49 -0300
+Subject: [Buildroot] [PATCH] arch/sparc: drop unused variants
+Message-ID: <1385643409-5995-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas,
+Drop stale v9/ultrasparc/niagara variants.
 
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote on 11/28/2013 
-06:29:14 AM:
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ arch/Config.in.sparc | 6 ------
+ 1 file changed, 6 deletions(-)
 
-> I don't think anything special is needed. With the current patch set
-> (v3), if the package/Config.in file is missing in the BR2_EXTERNAL
-> directory, the error is quite obvious:
-> 
-> $ make BR2_EXTERNAL=/tmp/koin menuconfig
-> package/Config.in:1000: can't open file "/tmp/koin/package/Config.in"
-> make: *** [menuconfig] Error 1
-> $
-> 
-> (The /tmp/koin directory is empty)
-
-Ah - then I agree that the current form is sufficient enough.
-
-Thanks,
--Ryan
+diff --git a/arch/Config.in.sparc b/arch/Config.in.sparc
+index 33204a2..21e83f7 100644
+--- a/arch/Config.in.sparc
++++ b/arch/Config.in.sparc
+@@ -25,12 +25,6 @@ config BR2_ENDIAN
+ 
+ config BR2_GCC_TARGET_TUNE
+ 	default "v8"		if BR2_sparc_v8
+-	default "v9"		if BR2_sparc_v9
+-	default "v9"		if BR2_sparc_v9a
+-	default "v9"		if BR2_sparc_v9b
+-	default "ultrasparc"	if BR2_sparc_ultrasparc
+-	default "ultrasparc3"	if BR2_sparc_ultrasparc3
+-	default "niagara"	if BR2_sparc_niagara
+ 
+ config BR2_GCC_TARGET_CPU
+ 	default "sparchfleon"	if BR2_sparc_sparchfleon
+-- 
+1.8.3.2
