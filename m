@@ -1,43 +1,58 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 28 Nov 2013 23:25:54 +0100
-Subject: [Buildroot] [PATCH v3 1/2] libnspr: Add dependency on
-	!BR2_xtensa and !BR2_bfin
-In-Reply-To: <3b85e7b21185d25eb6f40c25ac1402aa08b1bfeb.1385567320.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Wed, 27 Nov 2013 17:48:39 +0200")
-References: <3b85e7b21185d25eb6f40c25ac1402aa08b1bfeb.1385567320.git.baruch@tkos.co.il>
-Message-ID: <8761rcxix9.fsf@dell.be.48ers.dk>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 28 Nov 2013 23:29:11 +0100
+Subject: [Buildroot] [PATCHv3 1/5] core: introduce the BR2_EXTERNAL
+ variable
+In-Reply-To: <1385591508-4174-2-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1385591508-4174-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1385591508-4174-2-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20131128222911.GA18409@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+Thomas, All,
 
- > From: Chris Zankel <chris@zankel.net>
- > Xtensa is not yet supported in libnspr. Also add dependencies to libnss,
- > which requires libnspr, and ecryptfs-utils, which requires libnss.
+On 2013-11-27 23:31 +0100, Thomas Petazzoni spake thusly:
+[--SNIP--]
+> +# Handling of BR2_EXTERNAL. We are handling three cases here:
+> +#
+> +#  (Case 1) BR2_EXTERNAL is defined in the command line, but has an
+> +#           empty value. That's an indication that the user wants to
+> +#           remove the BR2_EXTERNAL value. So we use the
+> +#           dummy-external directory as BR2_EXTERNAL and remove the
+> +#           .br-external file.
 
- > Fixes (xtensa)
- > http://autobuild.buildroot.net/results/14b/14ba6426edbffa100de924aa69157b3f59368ff2/
+Should be:
+    [...] we use the dummy-external directory as BR2_EXTERNAL and store
+    it in the .br-external file.
 
- > Fixes (blackfin)
- > http://autobuild.buildroot.net/results/dd3/dd353703ed94cec48cd126d80cd2f1b039811be4/
+> +#  (Case 2) BR2_EXTERNAL is defined in the command line, and has a
+> +#           non-empty value. That's an indication that the user wants
+> +#           to use the provided location as the BR2_EXTERNAL. We
+> +#           verify that the location exists, and if it's the case,
+> +#           store it in .br-external.
+> +#  (Case 3) BR2_EXTERNAL isn't defined in the command line. We load
+> +#           the value from .br-external, verify that it exists and
+> +#           then use it.
 
- > [baruch: fix summary, add autobuild reference, add comment dependency,
- >  add blackfin]
+You're missing one case:
 
- > Signed-off-by: Chris Zankel <chris@zankel.net>
- > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
- > ---
+(Case 4) BR2_EXTERNAL is not defined on the command line, and
+         BR2_EXTERNAL_FILE does not exist (first run). We set
+         BR2_EXTERNAL to point to our dummy-external directory,
+         and store it in the .br-external file.
 
- > v3:
- > 	Move the list of arch dependencies to a separate config symbol to reduce
- > 	the churn when arch dependencies changes (Thomas Petazzoni)
+This missing case is breaking the standard (no-BR2_EXTERNAL) build.
 
- > 	Add blackfin to the not-supported list
-
-Committed both, thanks.
+Regards,
+Yann E. MORIN.
 
 -- 
-Bye, Peter Korsgaard
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
