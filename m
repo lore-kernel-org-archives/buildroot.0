@@ -1,75 +1,27 @@
-From: arnaud aujon <arnaud.aujon@gmail.com>
-Date: Thu, 28 Nov 2013 20:35:00 +0100
-Subject: [Buildroot] [buildroot] libevas build failure analysis
-In-Reply-To: <CAKAx1cgki9JiRqU=zJJ0P8g5XpG7NEZN9WcBuYMa4mNyv2C-RA@mail.gmail.com>
-References: <CACjG4B+qJvuzX=dZz5F7jNyc_m796_j2m9NZ91fpsoy52SX8VQ@mail.gmail.com>
- <CAKAx1cgki9JiRqU=zJJ0P8g5XpG7NEZN9WcBuYMa4mNyv2C-RA@mail.gmail.com>
-Message-ID: <CACjG4B+AJ0F4BmrSVrfzMidVgUFGwWt7sBoxUD3QZyp0x6+EAw@mail.gmail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 28 Nov 2013 20:41:50 +0100
+Subject: [Buildroot] [PATCH] wpa_supplicant: define BINDIR for
+	systemd/dbus service files
+In-Reply-To: <1385660340-2885-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Thu, 28 Nov 2013 14:39:00 -0300")
+References: <1385660340-2885-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <874n6wz535.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Ok, the problem has been reported to the dev ML, I will follow this.
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-Regards,
+ > BINDIR is used to point systemd/dbus service files to the correct binary
+ > path where wpa_supplicant resides.
+ > So define it to avoid the default /usr/local path that doesn't work.
+ > Solves bug #6704
 
-Arnaud
+ > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
+Committed, thanks.
 
-2013/11/28 Lionel Orry <lionel.orry@gmail.com>
-
-> Can you send an email on e-devel maiiling list? They are about to put
-> EFL 1.7 in maintenance as soon as 1.8 is released, so I guess it's
-> time to tell them, I'm sure they will correct it quickly
->
->
-> On Thu, Nov 28, 2013 at 8:04 PM, arnaud aujon <arnaud.aujon@gmail.com>
-> wrote:
-> > Hi there,
-> >
-> > A quick analysis of libevas build failure
-> > (
-> http://autobuild.buildroot.org/results/15c/15cfb974e428b20ba230321cd8b59a82308785af/
-> )
-> >
-> > The build fails because the member 'delete_me' of the Image_Entry_Flags
-> > structure is undefined. This is because there is a ifdef
-> BUILD_ASYNC_PRELOAD
-> > surrounding this member which is not defined during the build because the
-> > toolchain doesn't have thread support.
-> >
-> > From libevas.mk :
-> > # async image preload support needs threads support in toolchain
-> > ifneq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
-> > LIBEVAS_CONF_OPT += --disable-async-preload
-> > endif
-> >
-> > But it seems like the file evas_cache2.c is using 'delete_me' regardless
-> of
-> > the 'async image preload support'
-> >
-> > I don't have the time to investigate more, but it looks like without
-> threads
-> > we should use 'lib/cache' and not 'lib/cache2'  which are defining the
-> same
-> > symboles but 'cache2' absolutely need threads support, 'cache' doesn't .
-> > So I guess we have to fix the makefile to use this the 'cache'
-> > implementation.
-> >
-> > Does someone  know what we should do here ?
-> >
-> > Regards,
-> >
-> > Arnaud
-> >
-> >
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot at busybox.net
-> > http://lists.busybox.net/mailman/listinfo/buildroot
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20131128/6ef393f2/attachment.html>
+-- 
+Bye, Peter Korsgaard
