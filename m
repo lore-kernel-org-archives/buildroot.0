@@ -1,84 +1,110 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 28 Nov 2013 19:25:08 +0100
-Subject: [Buildroot] ucilbc 0.9.33.2 fails to build on buildroot 2013.11
- internal toolchain
-In-Reply-To: <5297837C.3@mail.ru>
-References: <5297837C.3@mail.ru>
-Message-ID: <20131128192508.4c4c0106@skate>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 28 Nov 2013 19:25:19 +0100
+Subject: [Buildroot] [PATCH] e2tools: new package
+In-Reply-To: <1385661764-14355-1-git-send-email-daniel.nystrom@timeterminal.se>
+References: <1385661764-14355-1-git-send-email-daniel.nystrom@timeterminal.se>
+Message-ID: <20131128182519.GA3337@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Alexander Varnin,
+Daniel, All,
 
-On Thu, 28 Nov 2013 21:55:08 +0400, Alexander Varnin wrote:
-
-> Building uclibc with default config now fails for me, after upgrading
-> to latest buildroot (now from 2013.11-rc3 branch).Attaching my config.
-> Build system is Debian Wheezy.
+On 2013-11-28 19:02 +0100, Daniel Nystr?m spake thusly:
+> E2tools is a simple set of GPL'ed utilities to read, write, and
+> manipulate files in an ext2/ext3 filesystem.  These utilities access a
+> filesystem directly using the ext2fs library.
 > 
-> Here is short output of make command:
+> Signed-off-by: Daniel Nystr?m <daniel.nystrom@timeterminal.se>
+> ---
+>  package/Config.in          |  1 +
+>  package/e2tools/Config.in  | 10 ++++++++++
+>  package/e2tools/e2tools.mk | 16 ++++++++++++++++
+>  3 files changed, 27 insertions(+)
+>  create mode 100644 package/e2tools/Config.in
+>  create mode 100644 package/e2tools/e2tools.mk
 > 
-> varnin at debian5 ~/minipos-OS-build-2013.11> make
-> make -C /home/varnin/buildroot
-> O=/home/varnin/minipos-OS-build-2013.11/.
-> >>> uclibc 0.9.33.2 Building
-> /usr/bin/make -j1 -C
-> /home/varnin/minipos-OS-build-2013.11/build/uclibc-0.9.33.2 ARCH="arm"
-> CROSS_COMPILE="/home/varnin/minipos-OS-build-2013.11/host/usr/bin/arm-buildroot-linux-uclibcgnueabi-"
-> UCLIBC_EXTRA_CFLAGS=" " HOSTCC="/usr/bin/gcc" PREFIX= DEVEL_PREFIX=/
-> RUNTIME_PREFIX=/ all
-> make[3]: Nothing to be done for `locale_headers'.
->   LD libuClibc-0.9.33.2.so
-> libc/libc_so.a(lockf.os): In function `__GI_lockf':
-> /home/varnin/minipos-OS-build-2013.11/build/uclibc-0.9.33.2/libc/misc/file/lockf.c:73:
-> undefined reference to `_Unwind_Resume'
-> libc/libc_so.a(lockf.os):(.ARM.extab+0x0): undefined reference to
-> `__gcc_personality_v0'
-> collect2: error: ld returned 1 exit status
-> make[2]: *** [lib/libc.so] ?????? 1
-> make[1]: ***
-> [/home/varnin/minipos-OS-build-2013.11/build/uclibc-0.9.33.2/.stamp_built]
-> ?????? 2
-> make: *** [_all] ?????? 2
+> diff --git a/package/Config.in b/package/Config.in
+> index f9e72ad..96e729a 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -227,6 +227,7 @@ source "package/cramfs/Config.in"
+>  source "package/curlftpfs/Config.in"
+>  source "package/dosfstools/Config.in"
+>  source "package/e2fsprogs/Config.in"
+> +source "package/e2tools/Config.in"
+>  source "package/ecryptfs-utils/Config.in"
+>  source "package/exfat/Config.in"
+>  source "package/exfat-utils/Config.in"
+> diff --git a/package/e2tools/Config.in b/package/e2tools/Config.in
+> new file mode 100644
+> index 0000000..14f25ab
+> --- /dev/null
+> +++ b/package/e2tools/Config.in
+> @@ -0,0 +1,10 @@
+> +config BR2_PACKAGE_E2TOOLS
+> +	bool "e2tools"
 
-My guess is that you have BR2_ENABLE_DEBUG=y in your Buildroot .config,
-right?
+Since it needs threads, you should add:
+    depends on BR2_TOOLCHAIN_HAS_THREADS
 
-If that's the case, then you've hit the problem that uClibc doesn't
-build properly when debugging support is enabled. That's unfortunately
-an upstream uClibc problem, I believe.
+> +	select BR2_PACKAGE_E2FSPROGS
+> +	help
+> +	  E2tools is a simple set of GPL'ed utilities to read, write,
+> +	  and manipulate files in an ext2/ext3 filesystem.  These
+> +	  utilities access a filesystem directly using the ext2fs
+> +	  library.
+> +
+> +	  https://github.com/ndim/e2tools
 
-Either disable BR2_ENABLE_DEBUG in Buildroot (which will disable
-debugging support for all packages), or if you want to keep debugging
-support enabled globally but don't care about debugging support in
-uClibc, apply a change like:
+[...] and here add a comment:
+    comment "e2tools needs a toolchain w/ threads"
+        depends on !BR2_TOOLCHAIN_HAS_THREADS
 
-diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
-index 20d3bb6..062ac0d 100644
---- a/package/uclibc/uclibc.mk
-+++ b/package/uclibc/uclibc.mk
-@@ -390,14 +390,6 @@ UCLIBC_WCHAR_CONFIG = $(call UCLIBC_OPT_UNSET,UCLIBC_HAS_WCHAR,$(@D))
- endif
- 
- #
--# debug
--#
--
--ifeq ($(BR2_ENABLE_DEBUG),y)
--UCLIBC_DEBUG_CONFIG = $(call UCLIBC_OPT_SET,DODEBUG,y,$(@D))
--endif
--
--#
- # strip
- #
+> diff --git a/package/e2tools/e2tools.mk b/package/e2tools/e2tools.mk
+> new file mode 100644
+> index 0000000..56797bb
+> --- /dev/null
+> +++ b/package/e2tools/e2tools.mk
+> @@ -0,0 +1,16 @@
+> +################################################################################
+> +#
+> +# e2tools
+> +#
+> +################################################################################
+> +
+> +E2TOOLS_VERSION = 3158ef18
 
-Best regards,
+Please use the full commit hash, not just the shortened hash.
 
-Thomas
+> +E2TOOLS_SITE = http://github.com/ndim/e2tools/tarball/$(E2TOOLS_VERSION)
+> +E2TOOLS_AUTORECONF = YES
+
+Explain why it needs to be autoreconfed (eg. ./configure is not provided).
+
+> +E2TOOLS_LICENSE = GPLv2
+> +E2TOOLS_LICENSE_FILES = COPYING
+> +E2TOOLS_DEPENDENCIES = e2fsprogs
+> +E2TOOLS_CONF_ENV = LIBS="-lpthread"
+> +E2TOOLS_INSTALL_TARGET_OPT = DESTDIR=$(TARGET_DIR) install-exec
+> +
+> +$(eval $(autotools-package))
+
+As discussed on IRC, please also make it a host package:
+    $(eval $(host-autotools-package))
+
+And add it to package/Config.in.host  (look at package/dosfstools for
+how it is done there).
+
+Regards,
+Yann E. MORIN.
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
