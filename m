@@ -1,70 +1,58 @@
-From: spdawson at gmail.com <spdawson@gmail.com>
-Date: Thu, 28 Nov 2013 10:24:25 +0000
-Subject: [Buildroot] [PATCH] connman: remove defunkt configuration options
-Message-ID: <1385634265-16305-1-git-send-email-spdawson@gmail.com>
+From: Markos Chandras <Markos.Chandras@imgtec.com>
+Date: Thu, 28 Nov 2013 10:26:38 +0000
+Subject: [Buildroot] [PATCH v2 1/2] qt: Disable QtScript on MIPS64
+In-Reply-To: <1385572207-44666-1-git-send-email-Vincent.Riera@imgtec.com>
+References: <1385572207-44666-1-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <52971A5E.6070703@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Simon Dawson <spdawson@gmail.com>
+On 11/27/2013 05:10 PM, Vicente Olivert Riera wrote:
+> There is no support for MIPS64 in QtScript right now, so buildroot
+> upstream suggested to disable the possibility of enabling QtScript on
+> MIPS64 as a quick fix for the 2013.11 release:
+>
+>     http://lists.busybox.net/pipermail/buildroot/2013-November/083157.html
+>
+> QtScript doesn't build because it uses JavaScriptCore, so we re-use the
+> existing BR2_PACKAGE_QT_ARCH_SUPPORTS_WEBKIT option which already lists
+> which platforms are supported by JavaScriptCore in Qt4.
+>
+> In addition, a proposed fix to add support for MIPS64 has already been
+> sent to Qt:
+>
+>     https://bugreports.qt-project.org/browse/QTBUG-35030
+>
+> Fixes:
+>
+>     http://autobuild.buildroot.net/results/fd7/fd7e7e53290f235b540ed5f3c784e2584fdb41e0/
+>
+> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+> ---
+>   package/qt/Config.in |    1 +
+>   1 files changed, 1 insertions(+), 0 deletions(-)
+>
+> diff --git a/package/qt/Config.in b/package/qt/Config.in
+> index 2651d55..dd2b6d9 100644
+> --- a/package/qt/Config.in
+> +++ b/package/qt/Config.in
+> @@ -385,6 +385,7 @@ config BR2_PACKAGE_QT_OPENSSL
+>
+>   config BR2_PACKAGE_QT_SCRIPT
+>   	bool "Script Module"
+> +	depends on BR2_PACKAGE_QT_ARCH_SUPPORTS_WEBKIT
+>   	default y
+>   	help
+>   	  Build the Qt Script module.
+>
 
-We are carrying support for a couple of configuration options which
-are no longer present in connman. Specifically:
-; threads: vestigial configuration option needed for defunkt WiMAX plugin
-; ntpd: plugin no longer present in connman
+Technically, this set of patches should have been "v3" because there is 
+a confusion now on which patch series is the good one.
 
-Signed-off-by: Simon Dawson <spdawson@gmail.com>
----
- package/connman/Config.in  | 8 --------
- package/connman/connman.mk | 4 +---
- 2 files changed, 1 insertion(+), 11 deletions(-)
+Having said that, it looks good to me.
 
-diff --git a/package/connman/Config.in b/package/connman/Config.in
-index 021e211..a6aa597 100644
---- a/package/connman/Config.in
-+++ b/package/connman/Config.in
-@@ -19,11 +19,6 @@ config BR2_PACKAGE_CONNMAN
- 
- if BR2_PACKAGE_CONNMAN
- 
--config BR2_PACKAGE_CONNMAN_THREADS
--	bool "enable threading support"
--	depends on BR2_TOOLCHAIN_HAS_THREADS
--	default y
--
- config BR2_PACKAGE_CONNMAN_ETHERNET
- 	bool "enable Ethernet support"
- 	default y
-@@ -38,9 +33,6 @@ config BR2_PACKAGE_CONNMAN_BLUETOOTH
- config BR2_PACKAGE_CONNMAN_LOOPBACK
- 	bool "enable loopback support"
- 
--config BR2_PACKAGE_CONNMAN_NTPD
--	bool "enable ntpd support"
--
- config BR2_PACKAGE_CONNMAN_DEBUG
- 	bool "enable compiling with debugging information"
- 
-diff --git a/package/connman/connman.mk b/package/connman/connman.mk
-index 4a6bb78..7ee1417 100644
---- a/package/connman/connman.mk
-+++ b/package/connman/connman.mk
-@@ -12,13 +12,11 @@ CONNMAN_INSTALL_STAGING = YES
- CONNMAN_LICENSE = GPLv2
- CONNMAN_LICENSE_FILES = COPYING
- CONNMAN_CONF_OPT += --localstatedir=/var \
--	$(if $(BR2_PACKAGE_CONNMAN_THREADS),--enable-threads,--disable-threads)		\
- 	$(if $(BR2_PACKAGE_CONNMAN_DEBUG),--enable-debug,--disable-debug)		\
- 	$(if $(BR2_PACKAGE_CONNMAN_ETHERNET),--enable-ethernet,--disable-ethernet)	\
- 	$(if $(BR2_PACKAGE_CONNMAN_WIFI),--enable-wifi,--disable-wifi)			\
- 	$(if $(BR2_PACKAGE_CONNMAN_BLUETOOTH),--enable-bluetooth,--disable-bluetooth)	\
--	$(if $(BR2_PACKAGE_CONNMAN_LOOPBACK),--enable-loopback,--disable-loopback)	\
--	$(if $(BR2_PACKAGE_CONNMAN_NTPD),--enable-ntpd,--disable-ntpd)
-+	$(if $(BR2_PACKAGE_CONNMAN_LOOPBACK),--enable-loopback,--disable-loopback)
- 
- define CONNMAN_INSTALL_INITSCRIPT
- 	$(INSTALL) -m 0755 -D package/connman/S45connman $(TARGET_DIR)/etc/init.d/S45connman
 -- 
-1.8.3.2
+markos
