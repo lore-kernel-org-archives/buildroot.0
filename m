@@ -1,99 +1,288 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 17 Nov 2013 09:15:04 +0100
-Subject: [Buildroot] [git commit] legal info: split license texts for host
-	and target
-Message-ID: <20131201201519.84C589BE44@busybox.osuosl.org>
+Date: Thu, 28 Nov 2013 23:05:29 +0100
+Subject: [Buildroot] [git commit] qt5base: use -device-option to set mkspec
+	variables
+Message-ID: <20131201201520.ABA229BE78@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=366f17f747197c449970480ff628b8fc5d87a71e
+commit: http://git.buildroot.net/buildroot/commit/?id=86db2a76e2f07d003464d5e0383d3ea437dc47d9
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-Acked-by: Luca Ceresoli <luca@lucaceresoli.net>
+Simplify our custom qmake.conf:
+  - Include linux_device_{pre,post}.conf to inherit common device
+    configuration.
+  - Do not add $(STAGING_DIR)/usr/include to include path. It is
+    redundant.
+
+In additon to the simplification of code, this change is a preparation
+to solve problems occurring when QMAKE_CXX is prepended with ccache path.
+
+Upstream patch is needed by configure to parse device options correctly.
+Another upstream patch is needed to remove ARM specific parts from
+linux_device_post.conf.
+
+Signed-off-by: Fatih A????c?? <fatih.asici@gmail.com>
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- Makefile               |    8 +++++---
- package/pkg-generic.mk |    4 ++--
- package/pkg-utils.mk   |   16 ++++++++--------
- 3 files changed, 15 insertions(+), 13 deletions(-)
+ .../qt5/qt5base/qt5base-0002-mkspecs-files.patch   |   39 +-------
+ ...igure-Parse-device-option-value-correctly.patch |   37 +++++++
+ ...cs-devices-linux_device_post.conf-for-non.patch |  107 ++++++++++++++++++++
+ package/qt5/qt5base/qt5base.mk                     |   18 +---
+ 4 files changed, 151 insertions(+), 50 deletions(-)
 
-diff --git a/Makefile b/Makefile
-index d5b3473..da2a646 100644
---- a/Makefile
-+++ b/Makefile
-@@ -109,10 +109,12 @@ HOST_DIR:=$(BASE_DIR)/host
+diff --git a/package/qt5/qt5base/qt5base-0002-mkspecs-files.patch b/package/qt5/qt5base/qt5base-0002-mkspecs-files.patch
+index e406cfc..3fddeac 100644
+--- a/package/qt5/qt5base/qt5base-0002-mkspecs-files.patch
++++ b/package/qt5/qt5base/qt5base-0002-mkspecs-files.patch
+@@ -14,50 +14,17 @@ Index: b/mkspecs/devices/linux-buildroot-g++/qmake.conf
+ ===================================================================
+ --- /dev/null
+ +++ b/mkspecs/devices/linux-buildroot-g++/qmake.conf
+-@@ -0,0 +1,44 @@
+-+MAKEFILE_GENERATOR      = UNIX
+-+CONFIG                 += incremental gdb_dwarf_index
+-+QMAKE_INCREMENTAL_STYLE = sublib
+-+
+-+include(../../common/linux.conf)
+-+include(../../common/gcc-base-unix.conf)
+-+include(../../common/g++-unix.conf)
+-+
+-+load(device_config)
+-+
+-+QT_QPA_DEFAULT_PLATFORM = eglfs
+-+
+-+BUILDROOT_CROSS_COMPILE =
+-+BUILDROOT_COMPILER_CFLAGS =
+-+BUILDROOT_COMPILER_CXXFLAGS =
+-+BUILDROOT_INCLUDE_PATH =
+-+
+-+# modifications to g++.conf
+-+QMAKE_CC                = $${BUILDROOT_CROSS_COMPILE}gcc
+-+QMAKE_CXX               = $${BUILDROOT_CROSS_COMPILE}g++
+-+QMAKE_LINK              = $${QMAKE_CXX}
+-+QMAKE_LINK_SHLIB        = $${QMAKE_CXX}
+-+
+-+# modifications to linux.conf
+-+QMAKE_AR                = $${BUILDROOT_CROSS_COMPILE}ar cqs
+-+QMAKE_OBJCOPY           = $${BUILDROOT_CROSS_COMPILE}objcopy
+-+QMAKE_NM                = $${BUILDROOT_CROSS_COMPILE}nm -P
+-+QMAKE_STRIP             = $${BUILDROOT_CROSS_COMPILE}strip
++@@ -0,0 +1,11 @@
+++include(../common/linux_device_pre.conf)
+ +
+ +#modifications to gcc-base.conf
+ +QMAKE_CFLAGS           += $${BUILDROOT_COMPILER_CFLAGS}
+ +QMAKE_CXXFLAGS         += $${BUILDROOT_COMPILER_CXXFLAGS}
+ +QMAKE_CXXFLAGS_RELEASE += -O3
+-+INCLUDEPATH            += $${BUILDROOT_INCLUDE_PATH}
+ +
+ +QMAKE_LIBS             += -lrt -lpthread -ldl
+ +
+-+# device specific glue code
+-+EGLFS_PLATFORM_HOOKS_SOURCES =
+-+
+-+# Sanity check
+-+deviceSanityCheckCompiler()
+-+
+++include(../common/linux_device_post.conf)
+ +load(qt_config)
+ Index: b/mkspecs/devices/linux-buildroot-g++/qplatformdefs.h
+ ===================================================================
+diff --git a/package/qt5/qt5base/qt5base-0008-configure-Parse-device-option-value-correctly.patch b/package/qt5/qt5base/qt5base-0008-configure-Parse-device-option-value-correctly.patch
+new file mode 100644
+index 0000000..aaf1d35
+--- /dev/null
++++ b/package/qt5/qt5base/qt5base-0008-configure-Parse-device-option-value-correctly.patch
+@@ -0,0 +1,37 @@
++From 4723f3fd04edf1aad6750ca91fd4648216d8b408 Mon Sep 17 00:00:00 2001
++From: =?UTF-8?q?Fatih=20A=C5=9F=C4=B1c=C4=B1?= <fatih.asici@gmail.com>
++Date: Sat, 21 Sep 2013 00:14:39 +0300
++Subject: [PATCH] configure: Parse -device-option value correctly
++
++The regular expression does not parse correctly when a device option value
++contains the character '=' (e.g. QMAKE_CFLAGS="-D_FILE_OFFSET_BITS=64").
++
++In order to break string at the first equal sign and to simplify code,
++use "cut" command as in other places in configure script.
++
++Task-number: QTBUG-33584
++Change-Id: I05b474d2ba6bff84c1e40d00475963bab36d94b6
++Reviewed-by: Oswald Buddenhagen <oswald.buddenhagen@digia.com>
++Signed-off-by: Fatih A????c?? <fatih.asici@gmail.com>
++---
++ configure | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/configure b/configure
++index 64568dd..388899e 100755
++--- a/configure
+++++ b/configure
++@@ -1609,8 +1609,8 @@ while [ "$#" -gt 0 ]; do
++         [ "$XPLATFORM" = "undefined" ] && exit 101
++         ;;
++     device-option)
++-        DEV_VAR=`echo $VAL | sed "s,^\(.*\)=.*,\1,"`
++-        DEV_VAL=`echo $VAL | sed "s,^.*=\(.*\),\1,"`
+++        DEV_VAR=`echo $VAL | cut -d '=' -f 1`
+++        DEV_VAL=`echo $VAL | cut -d '=' -f 2-`
++         DeviceVar set $DEV_VAR "$DEV_VAL"
++         ;;
++     qpa)
++-- 
++1.8.4.rc3
++
+diff --git a/package/qt5/qt5base/qt5base-0009-Fixed-mkspecs-devices-linux_device_post.conf-for-non.patch b/package/qt5/qt5base/qt5base-0009-Fixed-mkspecs-devices-linux_device_post.conf-for-non.patch
+new file mode 100644
+index 0000000..7eeea38
+--- /dev/null
++++ b/package/qt5/qt5base/qt5base-0009-Fixed-mkspecs-devices-linux_device_post.conf-for-non.patch
+@@ -0,0 +1,107 @@
++From f2a611ce6cb0f86d9331641a804de6a507900db7 Mon Sep 17 00:00:00 2001
++From: Tomasz Olszak <olszak.tomasz@gmail.com>
++Date: Thu, 18 Jul 2013 20:45:47 +0000
++Subject: [PATCH] Fixed mkspecs/devices/linux_device_post.conf for non-arm
++ platforms.
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++Now arm specific -mfloat-abi flag is added to compiler flags
++only for arm architecture in linux_arm_device_post.conf.
++
++Change-Id: Ie77ac6e0717d9d1fd9c14e1d6a26e86f08ab418c
++Reviewed-by: Jaros??aw Staniek <staniek@kde.org>
++Reviewed-by: Oswald Buddenhagen <oswald.buddenhagen@digia.com>
++Signed-off-by: Fatih A????c?? <fatih.asici@gmail.com>
++---
++ mkspecs/devices/common/linux_arm_device_post.conf | 7 +++++++
++ mkspecs/devices/common/linux_device_post.conf     | 6 ------
++ mkspecs/devices/linux-imx53qsb-g++/qmake.conf     | 2 +-
++ mkspecs/devices/linux-imx6-g++/qmake.conf         | 2 +-
++ mkspecs/devices/linux-rasp-pi-g++/qmake.conf      | 2 +-
++ mkspecs/devices/linux-tegra2-g++/qmake.conf       | 2 +-
++ 6 files changed, 11 insertions(+), 10 deletions(-)
++ create mode 100644 mkspecs/devices/common/linux_arm_device_post.conf
++
++diff --git a/mkspecs/devices/common/linux_arm_device_post.conf b/mkspecs/devices/common/linux_arm_device_post.conf
++new file mode 100644
++index 0000000..7ce4759
++--- /dev/null
+++++ b/mkspecs/devices/common/linux_arm_device_post.conf
++@@ -0,0 +1,7 @@
+++contains(DISTRO_OPTS, hard-float) {
+++    COMPILER_FLAGS += -mfloat-abi=hard
+++} else {
+++    COMPILER_FLAGS += -mfloat-abi=softfp
+++}
+++
+++include(linux_device_post.conf)
++diff --git a/mkspecs/devices/common/linux_device_post.conf b/mkspecs/devices/common/linux_device_post.conf
++index f8dbf76..548e75a 100644
++--- a/mkspecs/devices/common/linux_device_post.conf
+++++ b/mkspecs/devices/common/linux_device_post.conf
++@@ -3,12 +3,6 @@ contains(DISTRO_OPTS, deb-multi-arch) {
++                       -Wl,-rpath-link,$$[QT_SYSROOT]/lib/$${GCC_MACHINE_DUMP}
++ }
++ 
++-contains(DISTRO_OPTS, hard-float) {
++-    COMPILER_FLAGS += -mfloat-abi=hard
++-} else {
++-    COMPILER_FLAGS += -mfloat-abi=softfp
++-}
++-
++ QMAKE_CFLAGS       += $$COMPILER_FLAGS
++ QMAKE_CXXFLAGS     += $$COMPILER_FLAGS
++ 
++diff --git a/mkspecs/devices/linux-imx53qsb-g++/qmake.conf b/mkspecs/devices/linux-imx53qsb-g++/qmake.conf
++index 0a5ed89..3a9766c 100644
++--- a/mkspecs/devices/linux-imx53qsb-g++/qmake.conf
+++++ b/mkspecs/devices/linux-imx53qsb-g++/qmake.conf
++@@ -32,6 +32,6 @@ QMAKE_CXXFLAGS_RELEASE += $$IMX5_CFLAGS_RELEASE
++ QMAKE_CFLAGS_DEBUG     += $$IMX5_CFLAGS
++ QMAKE_CXXFLAGS_DEBUG   += $$IMX5_CFLAGS
++ 
++-include(../common/linux_device_post.conf)
+++include(../common/linux_arm_device_post.conf)
++ 
++ load(qt_config)
++diff --git a/mkspecs/devices/linux-imx6-g++/qmake.conf b/mkspecs/devices/linux-imx6-g++/qmake.conf
++index 20f6d11..2b8dbf6 100644
++--- a/mkspecs/devices/linux-imx6-g++/qmake.conf
+++++ b/mkspecs/devices/linux-imx6-g++/qmake.conf
++@@ -34,6 +34,6 @@ QMAKE_CXXFLAGS_RELEASE += $$IMX6_CFLAGS_RELEASE
++ QMAKE_CFLAGS_DEBUG     += $$IMX6_CFLAGS
++ QMAKE_CXXFLAGS_DEBUG   += $$IMX6_CFLAGS
++ 
++-include(../common/linux_device_post.conf)
+++include(../common/linux_arm_device_post.conf)
++ 
++ load(qt_config)
++diff --git a/mkspecs/devices/linux-rasp-pi-g++/qmake.conf b/mkspecs/devices/linux-rasp-pi-g++/qmake.conf
++index d6fea47..5f923ad 100644
++--- a/mkspecs/devices/linux-rasp-pi-g++/qmake.conf
+++++ b/mkspecs/devices/linux-rasp-pi-g++/qmake.conf
++@@ -42,6 +42,6 @@ QMAKE_CXXFLAGS          = $$QMAKE_CFLAGS
++ EGLFS_PLATFORM_HOOKS_SOURCES = $$PWD/qeglfshooks_pi.cpp
++ EGLFS_PLATFORM_HOOKS_LIBS = -lbcm_host
++ 
++-include(../common/linux_device_post.conf)
+++include(../common/linux_arm_device_post.conf)
++ 
++ load(qt_config)
++diff --git a/mkspecs/devices/linux-tegra2-g++/qmake.conf b/mkspecs/devices/linux-tegra2-g++/qmake.conf
++index 1c7a8cc..320e1b8 100644
++--- a/mkspecs/devices/linux-tegra2-g++/qmake.conf
+++++ b/mkspecs/devices/linux-tegra2-g++/qmake.conf
++@@ -26,6 +26,6 @@ TEGRA2_CFLAGS           = -mtune=cortex-a9 -march=armv7-a -mhard-float -mfloat-a
++ QMAKE_CFLAGS           += $$TEGRA2_CFLAGS
++ QMAKE_CXXFLAGS         += $$TEGRA2_CFLAGS
++ 
++-include(../common/linux_device_post.conf)
+++include(../common/linux_arm_device_post.conf)
++ 
++ load(qt_config)
++-- 
++1.8.4.rc3
++
+diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
+index ce78d31..febdc9b 100644
+--- a/package/qt5/qt5base/qt5base.mk
++++ b/package/qt5/qt5base/qt5base.mk
+@@ -152,21 +152,7 @@ QT5BASE_INSTALL_LIBS_$(BR2_PACKAGE_QT5BASE_PRINTSUPPORT) += Qt5PrintSupport
  
- LEGAL_INFO_DIR=$(BASE_DIR)/legal-info
- REDIST_SOURCES_DIR=$(LEGAL_INFO_DIR)/sources
--LICENSE_FILES_DIR=$(LEGAL_INFO_DIR)/licenses
-+LICENSE_FILES_DIR_TARGET=$(LEGAL_INFO_DIR)/licenses
-+LICENSE_FILES_DIR_HOST=$(LEGAL_INFO_DIR)/host-licenses
- LEGAL_MANIFEST_CSV_TARGET=$(LEGAL_INFO_DIR)/manifest.csv
- LEGAL_MANIFEST_CSV_HOST=$(LEGAL_INFO_DIR)/host-manifest.csv
--LEGAL_LICENSES_TXT=$(LEGAL_INFO_DIR)/licenses.txt
-+LEGAL_LICENSES_TXT_TARGET=$(LEGAL_INFO_DIR)/licenses.txt
-+LEGAL_LICENSES_TXT_HOST=$(LEGAL_INFO_DIR)/host-licenses.txt
- LEGAL_WARNINGS=$(LEGAL_INFO_DIR)/.warnings
- LEGAL_REPORT=$(LEGAL_INFO_DIR)/README
+ QT5BASE_INSTALL_LIBS_$(BR2_PACKAGE_QT5BASE_DBUS) += Qt5DBus
  
-@@ -575,7 +577,7 @@ legal-info-clean:
- 
- legal-info-prepare: $(LEGAL_INFO_DIR)
- 	@$(call MESSAGE,"Collecting legal info")
--	@$(call legal-license-file,buildroot,COPYING,COPYING)
-+	@$(call legal-license-file,buildroot,COPYING,COPYING,HOST)
- 	@$(call legal-manifest,PACKAGE,VERSION,LICENSE,LICENSE FILES,SOURCE ARCHIVE,TARGET)
- 	@$(call legal-manifest,PACKAGE,VERSION,LICENSE,LICENSE FILES,SOURCE ARCHIVE,HOST)
- 	@$(call legal-manifest,buildroot,$(BR2_VERSION_FULL),GPLv2+,COPYING,not saved,HOST)
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index a11b21d..5e3fd39 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -575,13 +575,13 @@ else
- 
- # Save license files if defined
- ifeq ($(call qstrip,$$($(2)_LICENSE_FILES)),)
--	@$(call legal-license-nofiles,$$($(2)_RAWNAME))
-+	@$(call legal-license-nofiles,$$($(2)_RAWNAME),$(call UPPERCASE,$(5)))
- 	@$(call legal-warning-pkg,$$($(2)_RAWNAME),cannot save license ($(2)_LICENSE_FILES not defined))
- else
- # Double dollar signs are really needed here, to catch host packages
- # without explicit HOST_FOO_LICENSE_FILES assignment, also in case they
- # have multiple license files.
--	@$$(foreach F,$$($(2)_LICENSE_FILES),$$(call legal-license-file,$$($(2)_RAWNAME),$$(F),$$($(2)_DIR)/$$(F))$$(sep))
-+	@$$(foreach F,$$($(2)_LICENSE_FILES),$$(call legal-license-file,$$($(2)_RAWNAME),$$(F),$$($(2)_DIR)/$$(F),$(call UPPERCASE,$(5)))$$(sep))
- endif # license files
- 
- ifeq ($$($(2)_REDISTRIBUTE),YES)
-diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
-index f740061..86fa5da 100644
---- a/package/pkg-utils.mk
-+++ b/package/pkg-utils.mk
-@@ -107,15 +107,15 @@ endef
- legal-manifest=echo '"$(1)","$(2)","$(3)","$(4)","$(5)"' >>$(LEGAL_MANIFEST_CSV_$(6))
- define legal-license-header
- 	echo -e "$(LEGAL_INFO_SEPARATOR)\n\t$(1):" \
--		"$(2)\n$(LEGAL_INFO_SEPARATOR)\n\n" >>$(LEGAL_LICENSES_TXT)
-+		"$(2)\n$(LEGAL_INFO_SEPARATOR)\n\n" >>$(LEGAL_LICENSES_TXT_$(3))
- endef
- define legal-license-nofiles
--	$(call legal-license-header,$(1),unknown license file(s))
-+	$(call legal-license-header,$(1),unknown license file(s),$(2))
- endef
--define legal-license-file # pkg, filename, file-fullpath
--	$(call legal-license-header,$(1),$(2) file) && \
--	cat $(3) >>$(LEGAL_LICENSES_TXT) && \
--	echo >>$(LEGAL_LICENSES_TXT) && \
--	mkdir -p $(LICENSE_FILES_DIR)/$(1)/$(dir $(2)) && \
--	cp $(3) $(LICENSE_FILES_DIR)/$(1)/$(2)
-+define legal-license-file # pkg, filename, file-fullpath, type
-+	$(call legal-license-header,$(1),$(2) file,$(4)) && \
-+	cat $(3) >>$(LEGAL_LICENSES_TXT_$(4)) && \
-+	echo >>$(LEGAL_LICENSES_TXT_$(4)) && \
-+	mkdir -p $(LICENSE_FILES_DIR_$(4))/$(1)/$(dir $(2)) && \
-+	cp $(3) $(LICENSE_FILES_DIR_$(4))/$(1)/$(2)
- endef
+-# Ideally, we could use -device-option to substitute variable values
+-# in our linux-buildroot-g++/qmake.config, but this mechanism doesn't
+-# nicely support variable values that contain spaces. So we use the
+-# good old sed solution here.
+-define QT5BASE_CONFIG_SET
+-	$(SED) 's%^$(1).*%$(1) = $(2)%g' $(@D)/mkspecs/devices/linux-buildroot-g++/qmake.conf
+-endef
+-
+ define QT5BASE_CONFIGURE_CMDS
+-	$(call QT5BASE_CONFIG_SET,BUILDROOT_CROSS_COMPILE,$(TARGET_CROSS))
+-	$(call QT5BASE_CONFIG_SET,BUILDROOT_COMPILER_CFLAGS,$(TARGET_CFLAGS))
+-	$(call QT5BASE_CONFIG_SET,BUILDROOT_COMPILER_CXXFLAGS,$(TARGET_CXXFLAGS))
+-	$(call QT5BASE_CONFIG_SET,BUILDROOT_INCLUDE_PATH,$(STAGING_DIR)/usr/include)
+-	$(call QT5BASE_CONFIG_SET,EGLFS_PLATFORM_HOOKS_SOURCES, \
+-		$(QT5BASE_EGLFS_PLATFORM_HOOKS_SOURCES))
+ 	(cd $(@D); \
+ 		PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY)" \
+ 		PKG_CONFIG_LIBDIR="$(STAGING_DIR)/usr/lib/pkgconfig" \
+@@ -181,6 +167,10 @@ define QT5BASE_CONFIGURE_CMDS
+ 		-no-rpath \
+ 		-nomake examples -nomake tests \
+ 		-device buildroot \
++		-device-option CROSS_COMPILE="$(TARGET_CROSS)" \
++		-device-option BUILDROOT_COMPILER_CFLAGS="$(TARGET_CFLAGS)" \
++		-device-option BUILDROOT_COMPILER_CXXFLAGS="$(TARGET_CXXFLAGS)" \
++		-device-option EGLFS_PLATFORM_HOOKS_SOURCES="$(QT5BASE_EGLFS_PLATFORM_HOOKS_SOURCES)" \
+ 		-no-c++11 \
+ 		$(QT5BASE_CONFIGURE_OPTS) \
+ 	)
