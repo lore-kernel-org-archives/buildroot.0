@@ -1,39 +1,34 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 28 Nov 2013 15:18:29 +0100
-Subject: [Buildroot] [git commit branch/next] arch/sparc: drop unused
-	variants
-Message-ID: <20131128141906.A87F59BE3A@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 28 Nov 2013 15:15:25 +0100
+Subject: [Buildroot] [PATCH] gpsd: do not allow profiling support on
+	AArch64
+In-Reply-To: <1385630287-14110-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Thu, 28 Nov 2013 10:18:07 +0100")
+References: <1385630287-14110-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <8738mg1uki.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=8aaede24c42f577987a3094d415cfdcfc54c9dc2
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-Drop stale v9/ultrasparc/niagara variants.
+ > The profiling support is not available on AArch64, causing build
+ > failures such as:
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- arch/Config.in.sparc |    6 ------
- 1 files changed, 0 insertions(+), 6 deletions(-)
+ >   http://autobuild.buildroot.net/results/724f8646e1c2c28cf187f2313244d1e3e61b4c25/
 
-diff --git a/arch/Config.in.sparc b/arch/Config.in.sparc
-index 33204a2..21e83f7 100644
---- a/arch/Config.in.sparc
-+++ b/arch/Config.in.sparc
-@@ -25,12 +25,6 @@ config BR2_ENDIAN
- 
- config BR2_GCC_TARGET_TUNE
- 	default "v8"		if BR2_sparc_v8
--	default "v9"		if BR2_sparc_v9
--	default "v9"		if BR2_sparc_v9a
--	default "v9"		if BR2_sparc_v9b
--	default "ultrasparc"	if BR2_sparc_ultrasparc
--	default "ultrasparc3"	if BR2_sparc_ultrasparc3
--	default "niagara"	if BR2_sparc_niagara
- 
- config BR2_GCC_TARGET_CPU
- 	default "sparchfleon"	if BR2_sparc_sparchfleon
+ > According to Will Newton, function profiling will only be added in the
+ > next version of the AArch64 Linaro toolchain. This indicates it is a
+ > rather new feature in AArch64, so for the moment, just disallow
+ > profiling on AArch64. We can revise this later, when this feature has
+ > been made available in Linaro toolchains, and official gcc releases
+ > (for internal toolchain support).
+
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
