@@ -1,28 +1,26 @@
-From: Simon Dawson <spdawson@gmail.com>
-Date: Thu, 28 Nov 2013 13:37:23 +0000
-Subject: [Buildroot] [PATCHv3 2/5] core: allow external
- Config.in/makefile code to be integrated
-In-Reply-To: <CAHXCMMKgWKz_p3ckA1999zxava2TG=SF5qLjqNh7mmygv36Zfg@mail.gmail.com>
-References: <1385591508-4174-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1385591508-4174-3-git-send-email-thomas.petazzoni@free-electrons.com>
- <CAHXCMMKgWKz_p3ckA1999zxava2TG=SF5qLjqNh7mmygv36Zfg@mail.gmail.com>
-Message-ID: <CAHt8ZCNM0rXaa=V+hST4pUcjiE4hdirpBbrC5wZUJT5MFpnR8g@mail.gmail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 28 Nov 2013 14:41:26 +0100
+Subject: [Buildroot] [PATCH] apr: fix threading lib detection
+In-Reply-To: <1385556784-25477-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Wed, 27 Nov 2013 09:53:04 -0300")
+References: <1385556784-25477-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <871u203apl.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 28 November 2013 13:24, Samuel Martin <s.martin49@gmail.com> wrote:
-> In this new version of this patch set, the all target and host packages
-> entries end up under the "Target packages" menu.
-> In my use of this feature, I also have a couple of host tools to integrate.
-> So, how about having adding the following source line in
-> package/Config.in.host:
-> ---
-> source "$BR2_EXTERNAL/package/Config.in.host"
-> ---
-> Of course, this requires to add an empty
-> support/dummy-external/package/Config.in.host file.
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-That would also apply for my expected use of the feature.
+ > apr's configure doesn't try to guess which library is needed for
+ > threading when cross-compiling hence this is never reflected in
+ > apr-1-config, leading to a build failure such as:
+ > http://autobuild.buildroot.net/results/035/035a00de0a56be00559767ba822a396ddc18a9fb/
+
+ > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
