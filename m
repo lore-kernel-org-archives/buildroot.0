@@ -1,25 +1,36 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 28 Nov 2013 17:25:20 +0100
-Subject: [Buildroot] [PATCHv2] iptables: patch another static linking
-	issue
-In-Reply-To: <1385558657-17556-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Wed, 27 Nov 2013 10:24:17 -0300")
-References: <1385558657-17556-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87haawze6n.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 28 Nov 2013 17:25:47 +0100
+Subject: [Buildroot] [git commit] util-linux: tweak sscanf-no-ms-as patch
+Message-ID: <20131128162659.415EE9BE35@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=62d15df19a0d181a266a88b46525d0d4959c8739
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Fixes:
- > http://autobuild.buildroot.net/results/e4a/e4a0f93e2abdad0222063b3f71970ee1c5940f3a/
+The patch has a minor mistake so fix it.
+Credit go to Daniel Mentz <daniel@exxm.de> for the detailed bug report.
+Closes bug #6428
 
- > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ .../util-linux-001-sscanf-no-ms-as.patch           |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/util-linux/util-linux-001-sscanf-no-ms-as.patch b/package/util-linux/util-linux-001-sscanf-no-ms-as.patch
+index 72a060e..c95b755 100644
+--- a/package/util-linux/util-linux-001-sscanf-no-ms-as.patch
++++ b/package/util-linux/util-linux-001-sscanf-no-ms-as.patch
+@@ -124,7 +124,7 @@ ported to util-linux-2.23.2
+  			"%jd"		/* (4) used */
+  			"%d",		/* priority */
+  
+-+#ifndef HAVE_SCANF_MS_MODIFIER
+++#ifdef HAVE_SCANF_MS_MODIFIER
+  			&src,
+  			&fs->swaptype,
+ +#else
