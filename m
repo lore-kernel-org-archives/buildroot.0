@@ -1,29 +1,35 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 28 Nov 2013 11:56:17 +0000 (UTC)
-Subject: [Buildroot] [Bug 6692] GNU nano fails to compile for x86_64
-In-Reply-To: <bug-6692-163@https.bugs.busybox.net/>
-References: <bug-6692-163@https.bugs.busybox.net/>
-Message-ID: <20131128115617.D842B9BE3A@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 28 Nov 2013 13:07:41 +0100
+Subject: [Buildroot] [PATCH v2 1/2] qt: Disable QtScript on MIPS64
+In-Reply-To: <1385572207-44666-1-git-send-email-Vincent.Riera@imgtec.com>
+References: <1385572207-44666-1-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <20131128130741.085cb04e@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=6692
+Dear Vicente Olivert Riera,
 
-Gustavo Zacarias <gustavo@zacarias.com.ar> changed:
+On Wed, 27 Nov 2013 17:10:06 +0000, Vicente Olivert Riera wrote:
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|ASSIGNED                    |RESOLVED
-         Resolution|                            |FIXED
+> diff --git a/package/qt/Config.in b/package/qt/Config.in
+> index 2651d55..dd2b6d9 100644
+> --- a/package/qt/Config.in
+> +++ b/package/qt/Config.in
+> @@ -385,6 +385,7 @@ config BR2_PACKAGE_QT_OPENSSL
+>  
+>  config BR2_PACKAGE_QT_SCRIPT
+>  	bool "Script Module"
+> +	depends on BR2_PACKAGE_QT_ARCH_SUPPORTS_WEBKIT
 
---- Comment #4 from Gustavo Zacarias <gustavo@zacarias.com.ar> 2013-11-28 11:56:17 UTC ---
-Solved in commit 893108810b952777feca054a90c7ecfe7cad06e1 for the upcoming
-2013.11 release.
+I'm wondering if we shouldn't rename this option to something more
+exact: ARCH_SUPPORTS_JAVASCRIPTCORE. But I don't know, and we don't
+have well established best practices for this kind of things.
 
+Thomas
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
