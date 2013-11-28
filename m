@@ -1,114 +1,106 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Thu, 28 Nov 2013 09:29:28 +0100
-Subject: [Buildroot] [PATCH v3] lvm2: replace !BR2_PACKAGE_LVM2_DMSETUP_ONLY
-	by BR2_PACKAGE_LVM2_STANDARD_INSTALL
-Message-ID: <1385627368-10835-1-git-send-email-arnout@mind.be>
+From: Jeremy Rosen <jeremy.rosen@openwide.fr>
+Date: Thu, 28 Nov 2013 09:33:50 +0100 (CET)
+Subject: [Buildroot] [PATCHv3 2/5] core: allow external
+ Config.in/makefile	code to be integrated
+In-Reply-To: <1385591508-4174-3-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1776793705.15288726.1385627630446.JavaMail.root@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-BR2_PACKAGE_LVM2_DMSETUP_ONLY is a "negative" option that disables
-build and install of part of the suite. This option cannot be unselected
-by other config options, which gives a problem for BR2_PACKAGE_UDISKS_LVM2:
-it needs BR2_PACKAGE_LVM2_APP_LIBRARY, which requires the full suite.
+Just an overall comment, this patch serie is great, it will help us 
+a lot
 
-Therefore, replace the negative BR2_PACKAGE_LVM2_DMSETUP_ONLY by a positive
-BR2_PACKAGE_LVM2_STANDARD_INSTALL. To make sure that existing defconfigs
-keep working, the new option defaults to y unless the legacy
-BR2_PACKAGE_LVM2_DMSETUP_ONLY was selected.
+by allowing us to clearly show to our customers what is specific 
+to their board and what is changes to the buildroot unfrastructure
+it will make it much easier for us to upstream all the non-specific 
+parts
 
-Fixes http://autobuild.buildroot.net/results/ea4627cae45e972ebba5b33a2b2871ce7f46fedc/
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
-Note that in the legacy handling I've assumed that this will still
-be taken in 2013.11.
+on this particular one, if I remember correctly the kconfig infrastructure
+will not work correctly if one of the include is missing... so shouldn't
+your infrastructure check if $(BR2_EXTERNAL)/package/Config.in 
+exists, and create one if it doesn't ? 
 
-v3:
- - Removed the last vestiges of BR2_PACKAGE_LVM2_FULL_SUITE
-   [Thomas De Schampheleire]
+Cordialement 
 
-v2:
- - Rename the new symbol to BR2_PACKAGE_LVM2_STANDARD_INSTALL
+J?r?my Rosen 
++33 (0)1 42 68 28 04
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- Config.in.legacy       | 12 ++++++++++++
- package/lvm2/Config.in | 16 ++++++++++------
- package/lvm2/lvm2.mk   |  2 +-
- 3 files changed, 23 insertions(+), 7 deletions(-)
+fight key loggers : write some perl using vim 
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 587afe1..09935f1 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -101,6 +101,18 @@ endif
- ###############################################################################
- comment "Legacy options removed in 2013.11"
- 
-+config BR2_PACKAGE_LVM2_DMSETUP_ONLY
-+	bool "lvm2's 'dmsetup only' option removed"
-+	select BR2_LEGACY
-+	help
-+	  The BR2_PACKAGE_LVM2_DMSETUP_ONLY was a negative option, which
-+	  led to problems with other packages that need the full lvm2
-+	  suite. Therefore, the option has been replaced with the positive
-+	  BR2_PACKAGE_LVM2_STANDARD_INSTALL option.
-+
-+# Note: BR2_PACKAGE_LVM2_DMSETUP_ONLY is still referenced in package/lvm2/Config.in
-+# in order to automatically propagate old configs
-+
- config BR2_PACKAGE_QT_JAVASCRIPTCORE
- 	bool "qt javascriptcore option removed"
- 	select BR2_LEGACY
-diff --git a/package/lvm2/Config.in b/package/lvm2/Config.in
-index b3988ea..5d6209fc1 100644
---- a/package/lvm2/Config.in
-+++ b/package/lvm2/Config.in
-@@ -16,19 +16,23 @@ config BR2_PACKAGE_LVM2
- 	  user-space. This makes it useful for not only LVM, but EVMS,
- 	  software raid, and other drivers that create "virtual" block devices.
- 
--config BR2_PACKAGE_LVM2_DMSETUP_ONLY
--	bool "install dmsetup only"
--	depends on BR2_PACKAGE_LVM2
-+if BR2_PACKAGE_LVM2
-+
-+config BR2_PACKAGE_LVM2_STANDARD_INSTALL
-+	bool "standard install instead of only dmsetup"
-+	default y if !BR2_PACKAGE_LVM2_DMSETUP_ONLY # legacy 2013.11
- 	help
--	  Install dmsetup only and skip the LVM2 suite.
-+	  Install the standard suite of lvm2 programs. When this option is not
-+	  set, only dmsetup is installed.
- 
- config BR2_PACKAGE_LVM2_APP_LIBRARY
- 	bool "install application library"
--	depends on BR2_PACKAGE_LVM2
--	depends on !BR2_PACKAGE_LVM2_DMSETUP_ONLY
-+	select BR2_PACKAGE_LVM2_STANDARD_INSTALL
- 	help
- 	  Install application library (liblvm2app).
- 
-+endif
-+
- comment "lvm2 needs a toolchain w/ largefile"
- 	depends on BR2_USE_MMU
- 	depends on !BR2_LARGEFILE
-diff --git a/package/lvm2/lvm2.mk b/package/lvm2/lvm2.mk
-index 79a0d05..4099c21 100644
---- a/package/lvm2/lvm2.mk
-+++ b/package/lvm2/lvm2.mk
-@@ -38,7 +38,7 @@ else
- LVM2_CONF_OPT += --disable-readline
- endif
- 
--ifeq ($(BR2_PACKAGE_LVM2_DMSETUP_ONLY),y)
-+ifeq ($(BR2_PACKAGE_LVM2_STANDARD_INSTALL),)
- LVM2_MAKE_OPT = device-mapper
- LVM2_INSTALL_STAGING_OPT = DESTDIR=$(STAGING_DIR) install_device-mapper
- LVM2_INSTALL_TARGET_OPT = DESTDIR=$(TARGET_DIR) install_device-mapper
--- 
-1.8.4.3
+
+Open Wide Ingenierie
+
+23, rue Daviel
+75012 Paris - France
+www.openwide.fr
+
+
+
+
+
+----- Mail original -----
+> This commit allows the BR2_EXTERNAL directory to contain additional
+> Buildroot packages:
+> 
+>  - Buildroot automatically includes the
+>    $BR2_EXTERNAL/package/Config.in in the "Target packages"
+>    configuration sub-menu.
+> 
+>  - Buildroot automatically includes the BR2_EXTERNAL/package/*/*.mk
+>    files in the build logic.
+> 
+> We also add a dummy Config.in file in support/dummy-external/ to
+> ensure that the source "$BR2_EXTERNAL/Config.in" line will point to
+> an
+> existing file even when BR2_EXTERNAL is not used by the user.
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> ---
+>  Makefile                                 | 4 ++++
+>  package/Config.in                        | 2 ++
+>  support/dummy-external/package/Config.in | 0
+>  3 files changed, 6 insertions(+)
+>  create mode 100644 support/dummy-external/package/Config.in
+> 
+> diff --git a/Makefile b/Makefile
+> index a46418e..013b646 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -368,6 +368,10 @@ include boot/common.mk
+>  include linux/linux.mk
+>  include system/system.mk
+>  
+> +ifeq ($(BR2_EXTERNAL_USED),y)
+> +include $(sort $(wildcard $(BR2_EXTERNAL)/package/*/*.mk))
+> +endif
+> +
+>  TARGETS+=target-finalize
+>  
+>  ifeq ($(BR2_ENABLE_LOCALE_PURGE),y)
+> diff --git a/package/Config.in b/package/Config.in
+> index 311cc6c..fafaa2b 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -997,4 +997,6 @@ source "package/vim/Config.in"
+>  endif
+>  endmenu
+>  
+> +source "$BR2_EXTERNAL/package/Config.in"
+> +
+>  endmenu
+> diff --git a/support/dummy-external/package/Config.in
+> b/support/dummy-external/package/Config.in
+> new file mode 100644
+> index 0000000..e69de29
+> --
+> 1.8.1.2
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
