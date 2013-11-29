@@ -1,35 +1,29 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 29 Nov 2013 10:09:45 +0100
-Subject: [Buildroot] [git commit branch/next] qt5base: use ccache if enabled
-Message-ID: <20131129090955.0A74A9BE62@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 29 Nov 2013 10:10:08 +0100
+Subject: [Buildroot] [PATCH v2] qt5base: use ccache if enabled
+In-Reply-To: <1385714869-10115-1-git-send-email-fatih.asici@gmail.com> ("Fatih
+ =?utf-8?B?QcWfxLFjxLEiJ3M=?= message of "Fri, 29 Nov 2013 10:47:49 +0200")
+References: <1385714869-10115-1-git-send-email-fatih.asici@gmail.com>
+Message-ID: <87ob53wp3j.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=cb08d7b05db54eb7b2c52deabbd57c541777a422
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+>>>>> "Fatih" == Fatih A??c? <fatih.asici@gmail.com> writes:
 
-For now, it doesn't use ccache when compiling host tools (e.g. qmake).
-It seems the fix is not trivial.
+ > For now, it doesn't use ccache when compiling host tools (e.g. qmake).
+ > It seems the fix is not trivial.
 
-Signed-off-by: Fatih A????c?? <fatih.asici@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/qt5/qt5base/qt5base.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ > Signed-off-by: Fatih A??c? <fatih.asici@gmail.com>
 
-diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
-index febdc9b..d95b186 100644
---- a/package/qt5/qt5base/qt5base.mk
-+++ b/package/qt5/qt5base/qt5base.mk
-@@ -167,7 +167,7 @@ define QT5BASE_CONFIGURE_CMDS
- 		-no-rpath \
- 		-nomake examples -nomake tests \
- 		-device buildroot \
--		-device-option CROSS_COMPILE="$(TARGET_CROSS)" \
-+		-device-option CROSS_COMPILE="$(CCACHE) $(TARGET_CROSS)" \
- 		-device-option BUILDROOT_COMPILER_CFLAGS="$(TARGET_CFLAGS)" \
- 		-device-option BUILDROOT_COMPILER_CXXFLAGS="$(TARGET_CXXFLAGS)" \
- 		-device-option EGLFS_PLATFORM_HOOKS_SOURCES="$(QT5BASE_EGLFS_PLATFORM_HOOKS_SOURCES)" \
+ > ---
+ > Changes v1 -> v2:
+ >   - pass ccache path to CROSS_COMPILE instead of setting another device
+ >     variable (suggested by Peter Korsgaard)
+
+Committed to next, thanks.
+
+-- 
+Bye, Peter Korsgaard
