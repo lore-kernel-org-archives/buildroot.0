@@ -1,35 +1,25 @@
-From: spdawson at gmail.com <spdawson@gmail.com>
-Date: Fri, 29 Nov 2013 09:23:49 +0000
-Subject: [Buildroot] [PATCH] libpfm4: disable on avr32
-Message-ID: <1385717029-6381-1-git-send-email-spdawson@gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Fri, 29 Nov 2013 07:04:26 -0300
+Subject: [Buildroot] Analysis of build failures
+In-Reply-To: <20131129095110.3c7fc674@skate>
+References: <20131129073003.AF5B01014F0@stock.ovh.net>
+ <20131129095110.3c7fc674@skate>
+Message-ID: <529866AA.7090206@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Simon Dawson <spdawson@gmail.com>
+On 11/29/2013 05:51 AM, Thomas Petazzoni wrote:
+>>       bfin |                    hostapd-2.0 | NOK | http://autobuild.buildroot.net/results/d4a9f44effeb08eda6c4b32764274ae81d185d5e/
+> 
+> Missing pthread in the link command line?
+> 
+> /home/test/test/1/output/host/usr/bfin-buildroot-uclinux-uclibc/sysroot/usr/lib/libnl-3.a(cache_mngt.o): In function `_nl_cache_mngt_unprovide':
+> cache_mngt.c:(.text+0x6e): undefined reference to `_pthread_rwlock_wrlock'
+> cache_mngt.c:(.text+0x10a): undefined reference to `_pthread_rwlock_unlock'
 
-The perf_event_open syscall is not available on avr32. Fixes build failures
-such as the following.
-
-  http://autobuild.buildroot.net/results/38f/38fa81315be448c409b9af29f92621fcf5676f71/
-
-Signed-off-by: Simon Dawson <spdawson@gmail.com>
----
- package/libpfm4/Config.in | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/package/libpfm4/Config.in b/package/libpfm4/Config.in
-index 6b491a4..3908e78 100644
---- a/package/libpfm4/Config.in
-+++ b/package/libpfm4/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_LIBPFM4
- 	bool "libpfm4"
-+	depends on !BR2_avr32 # no perf_event_open
- 	help
- 	  A helper library to help encode Performance Events to use with
- 	  Operating system kernels performance monitoring interfaces.
--- 
-1.8.3.2
+libnl doesn't account for pthread usage in its PC files.
+I'll take a look.
+Regards.
