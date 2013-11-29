@@ -1,31 +1,37 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri, 29 Nov 2013 11:43:18 -0300
-Subject: [Buildroot] [PATCH] hostapd: fix static build failure
-In-Reply-To: <20131129153900.1084221a@skate>
-References: <1385735143-8323-1-git-send-email-gustavo@zacarias.com.ar>
- <20131129153900.1084221a@skate>
-Message-ID: <5298A806.4030602@zacarias.com.ar>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Fri, 29 Nov 2013 15:23:20 +0000
+Subject: [Buildroot] [PATCH] qt5: Disable on MIPS64 BigEndian n64 platforms
+Message-ID: <1385738600-13376-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 11/29/2013 11:39 AM, Thomas Petazzoni wrote:
-> So before this commit we were defining HOSTAPD_LDFLAGS...
-> 
->> +HOSTAPD_LIBS += -lnl-3 -lm -lpthread
->>  endif
->>  
->>  define HOSTAPD_LIBNL_CONFIG
->> @@ -93,7 +94,7 @@ endef
->>  
->>  define HOSTAPD_BUILD_CMDS
->>  	$(TARGET_MAKE_ENV) CFLAGS="$(HOSTAPD_CFLAGS)" \
->> -		LDFLAGS="$(TARGET_LDFLAGS)" \
-> 
-> but not using it? :-)
+qt5base fails to compile on MIPS64 BigEndian n64 platforms because there
+are multiple calls to some functions that are disabled. Since every Qt5
+package depends on qt5base we can disable Qt5 entirely. This is a quick
+fix for the next release. In the meantime, a proposed patch to fix this
+problem has already been sent to Qt:
 
-Yes, there was brokeness!
-Probably from the migration to hostapd-2.
-Regards.
+https://bugreports.qt-project.org/browse/QTBUG-35228
+
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+ package/qt5/Config.in |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
+
+diff --git a/package/qt5/Config.in b/package/qt5/Config.in
+index 42724dc..b92d329 100644
+--- a/package/qt5/Config.in
++++ b/package/qt5/Config.in
+@@ -9,6 +9,7 @@ menuconfig BR2_PACKAGE_QT5
+ 	depends on BR2_INET_IPV6
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on !BR2_PACKAGE_QT
++	depends on !BR2_mips64 || !BR2_MIPS_NABI64
+ 	help
+ 	  This option enables the Qt5 framework. Sub-options allow to
+ 	  select which modules should be built.
+-- 
+1.7.1
