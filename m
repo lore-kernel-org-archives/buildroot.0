@@ -1,25 +1,51 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri, 29 Nov 2013 07:04:26 -0300
+From: Fabio Porcedda <fabio.porcedda@gmail.com>
+Date: Fri, 29 Nov 2013 11:25:30 +0100
 Subject: [Buildroot] Analysis of build failures
-In-Reply-To: <20131129095110.3c7fc674@skate>
-References: <20131129073003.AF5B01014F0@stock.ovh.net>
- <20131129095110.3c7fc674@skate>
-Message-ID: <529866AA.7090206@zacarias.com.ar>
+In-Reply-To: <CAHkwnC9LWo3r21coQzROnajC1AKK4rF_Ec-AaXwMPK5esW--_Q@mail.gmail.com>
+References: <20131122073003.1B835101305@stock.ovh.net>
+ <20131122091411.59d82eb5@skate>
+ <CAHkwnC9LWo3r21coQzROnajC1AKK4rF_Ec-AaXwMPK5esW--_Q@mail.gmail.com>
+Message-ID: <CAHkwnC-BR1LSoNhMWuk_kMtYkL3KidpwZS3sizd1TNiWoiY=ng@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 11/29/2013 05:51 AM, Thomas Petazzoni wrote:
->>       bfin |                    hostapd-2.0 | NOK | http://autobuild.buildroot.net/results/d4a9f44effeb08eda6c4b32764274ae81d185d5e/
-> 
-> Missing pthread in the link command line?
-> 
-> /home/test/test/1/output/host/usr/bfin-buildroot-uclinux-uclibc/sysroot/usr/lib/libnl-3.a(cache_mngt.o): In function `_nl_cache_mngt_unprovide':
-> cache_mngt.c:(.text+0x6e): undefined reference to `_pthread_rwlock_wrlock'
-> cache_mngt.c:(.text+0x10a): undefined reference to `_pthread_rwlock_unlock'
+On Fri, Nov 22, 2013 at 10:15 AM, Fabio Porcedda
+<fabio.porcedda@gmail.com> wrote:
+> Hi Thomas,
+>
+> On Fri, Nov 22, 2013 at 9:14 AM, Thomas Petazzoni
+> <thomas.petazzoni@free-electrons.com> wrote:
+>> Hello,
+>>
+>> On Fri, 22 Nov 2013 08:30:02 +0100 (CET), Thomas Petazzoni wrote:
+>> ...
+>>>        arm |                  lvm2-2.02.103 | NOK | http://autobuild.buildroot.net/results/b0b386969459dda9c294f1ccb4927ca225fa6bdd/
+>>
+>> Missing dependency?
+>>
+>> /home/test/test/1/output/host/usr/bin/arm-linux-gcc -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -pipe -Os   -fPIC  -O2 --static -O2 -L../libdm -L../lib -L../libdaemon/client -L../libdm \
+>>               -o dmsetup dmsetup.o -ldevmapper
+>> /home/test/test/1/output/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabi/4.7.3/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld: cannot find -ldevmapper
+>>
+>> ...
+>
+> I will try to look into this.
 
-libnl doesn't account for pthread usage in its PC files.
-I'll take a look.
-Regards.
+The problem is still present on the master branch.
+
+The minimal defconfig to reproduce the problem is:
+BR2_PREFER_STATIC_LIB=y
+BR2_TOOLCHAIN_BUILDROOT_LARGEFILE=y
+BR2_PACKAGE_LVM2=y
+
+The problem is related to "BR2_PREFER_STATIC_LIB=y" without that
+option it builds fine.
+Updating it to the latest available git version does not fix the issue.
+I will try to investigate further.
+
+Regards
+-- 
+Fabio Porcedda
