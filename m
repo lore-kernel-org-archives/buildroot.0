@@ -1,52 +1,35 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 29 Nov 2013 10:00:52 +0100
-Subject: [Buildroot] Analysis of build failures
-In-Reply-To: <20131129095110.3c7fc674@skate> (Thomas Petazzoni's message of
- "Fri, 29 Nov 2013 09:51:10 +0100")
-References: <20131129073003.AF5B01014F0@stock.ovh.net>
- <20131129095110.3c7fc674@skate>
-Message-ID: <87wqjrwpiz.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 29 Nov 2013 10:09:45 +0100
+Subject: [Buildroot] [git commit branch/next] qt5base: use ccache if enabled
+Message-ID: <20131129090955.0A74A9BE62@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=cb08d7b05db54eb7b2c52deabbd57c541777a422
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
- > Hello,
- > This is probably the last day (or last two days) to fix more
- > autobuilder failures.
+For now, it doesn't use ccache when compiling host tools (e.g. qmake).
+It seems the fix is not trivial.
 
-Thanks for the overview.
+Signed-off-by: Fatih A????c?? <fatih.asici@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/qt5/qt5base/qt5base.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-
- >> arm |                       qt-4.8.5 | NOK | http://autobuild.buildroot.net/results/efe26c54361094fb1e201da6915900cd9b24d596/
-
- > The EGL functionality test failed!
- >  EGL is required for OpenGL ES to manage contexts & surfaces.
- >  You might need to modify the include and library search paths by editing
- >  QMAKE_INCDIR_EGL, QMAKE_LIBDIR_EGL and QMAKE_LIBS_EGL in
- >  /scratch/peko/build/qt-4.8.5/mkspecs/qws/linux-arm-g++.
- > make: *** [/scratch/peko/build/qt-4.8.5/.stamp_configured] Error 1
-
- > OpenGL implementation is the RPi one.
-
-I'm taking a look.
-
-
- >> arm |                   zeromq-3.2.4 | NOK | http://autobuild.buildroot.net/results/7cf107566da47670bc8ef6d16c5e1bb7bcccef3e/
-
- > Build machine issue?
-
-I think so too.
-
- >   CXX    libzmq_la-encoder.lo
- > /scratch/peko/host/usr/libexec/gcc/arm-buildroot-linux-uclibcgnueabi/4.7.3/cc1plus: error while loading shared libraries: libc.so.6: failed to map segment from shared object: Cannot allocate memory
- > make[3]: *** [libzmq_la-decoder.lo] Error 1
- > make[3]: *** Waiting for unfinished jobs....
-
-I don't recall it triggering before atleast.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
+index febdc9b..d95b186 100644
+--- a/package/qt5/qt5base/qt5base.mk
++++ b/package/qt5/qt5base/qt5base.mk
+@@ -167,7 +167,7 @@ define QT5BASE_CONFIGURE_CMDS
+ 		-no-rpath \
+ 		-nomake examples -nomake tests \
+ 		-device buildroot \
+-		-device-option CROSS_COMPILE="$(TARGET_CROSS)" \
++		-device-option CROSS_COMPILE="$(CCACHE) $(TARGET_CROSS)" \
+ 		-device-option BUILDROOT_COMPILER_CFLAGS="$(TARGET_CFLAGS)" \
+ 		-device-option BUILDROOT_COMPILER_CXXFLAGS="$(TARGET_CXXFLAGS)" \
+ 		-device-option EGLFS_PLATFORM_HOOKS_SOURCES="$(QT5BASE_EGLFS_PLATFORM_HOOKS_SOURCES)" \
