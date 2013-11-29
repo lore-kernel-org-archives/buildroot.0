@@ -1,54 +1,46 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 29 Nov 2013 11:25:25 +0100
-Subject: [Buildroot] [git commit] qt: fix build with opengl es
-Message-ID: <20131129102845.B66D89BE64@busybox.osuosl.org>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Fri, 29 Nov 2013 10:37:49 +0000
+Subject: [Buildroot] [PATCH] tvheadend: remove -Werror from CFLAGS
+Message-ID: <1385721469-18112-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=fe8d728db5fd386696d43f43a52effad25c09387
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Remove -Werror from CFLAGS to avoid build failures caused by warnings.
 
-Fixes http://autobuild.buildroot.net/results/efe/efe26c54361094fb1e201da6915900cd9b24d596/
+Fixes the following autobuild failure on MIPS64 n32/64:
 
-qt doesn't use pkg-config to figure out the needed compiler/linker flags
-for egl, so pass them explicitly instead.
+   http://autobuild.buildroot.net/results/6be/6be075726ac6db0a48dd6b535841ada932c9ffbb/
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Reviewed-by: Markos Chandras <markos.chandras@imgtec.com>
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 ---
- package/qt/qt.mk |    6 +++++-
- 1 files changed, 5 insertions(+), 1 deletions(-)
+ .../tvheadend/tvheadend-003-remove-werror.patch    |   15 +++++++++++++++
+ 1 files changed, 15 insertions(+), 0 deletions(-)
+ create mode 100644 package/tvheadend/tvheadend-003-remove-werror.patch
 
-diff --git a/package/qt/qt.mk b/package/qt/qt.mk
-index 82ce51d..7f799fd 100644
---- a/package/qt/qt.mk
-+++ b/package/qt/qt.mk
-@@ -35,6 +35,7 @@ endif
- 
- QT_CFLAGS = $(TARGET_CFLAGS)
- QT_CXXFLAGS = $(TARGET_CXXFLAGS)
-+QT_LDFLAGS = $(TARGET_LDFLAGS)
- 
- ifeq ($(BR2_LARGEFILE),y)
- QT_CONFIGURE_OPTS += -largefile
-@@ -320,6 +321,9 @@ endif
- ifeq ($(BR2_PACKAGE_QT_OPENGL_ES),y)
- QT_CONFIGURE_OPTS += -opengl es2 -egl
- QT_DEPENDENCIES   += libgles libegl
-+QT_CFLAGS   += $(shell $(PKG_CONFIG_HOST_BINARY) --cflags egl)
-+QT_CXXFLAGS += $(shell $(PKG_CONFIG_HOST_BINARY) --cflags egl)
-+QT_LDFLAGS  += $(shell $(PKG_CONFIG_HOST_BINARY) --libs egl)
- else
- QT_CONFIGURE_OPTS += -no-opengl
- endif
-@@ -490,7 +494,7 @@ define QT_CONFIGURE_CMDS
- 	$(call QT_QMAKE_SET,QMAKE_STRIP,$(TARGET_STRIP),$(@D))
- 	$(call QT_QMAKE_SET,QMAKE_CFLAGS,$(QT_CFLAGS),$(@D))
- 	$(call QT_QMAKE_SET,QMAKE_CXXFLAGS,$(QT_CXXFLAGS),$(@D))
--	$(call QT_QMAKE_SET,QMAKE_LFLAGS,$(TARGET_LDFLAGS),$(@D))
-+	$(call QT_QMAKE_SET,QMAKE_LFLAGS,$(QT_LDFLAGS),$(@D))
- 	$(call QT_QMAKE_SET,PKG_CONFIG,$(HOST_DIR)/usr/bin/pkg-config,$(@D))
- # Don't use TARGET_CONFIGURE_OPTS here, qmake would be compiled for the target
- # instead of the host then. So set PKG_CONFIG* manually.
+diff --git a/package/tvheadend/tvheadend-003-remove-werror.patch b/package/tvheadend/tvheadend-003-remove-werror.patch
+new file mode 100644
+index 0000000..1b0e687
+--- /dev/null
++++ b/package/tvheadend/tvheadend-003-remove-werror.patch
+@@ -0,0 +1,15 @@
++tvheadend: remove -Werror from CFLAGS
++
++Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
++
++--- tvheadend-2b649954346aa2e9c81834d500a25c528f31f829/Makefile.orig	2013-11-28 15:52:52.284041848 +0000
+++++ tvheadend-2b649954346aa2e9c81834d500a25c528f31f829/Makefile	2013-11-28 15:53:03.715220194 +0000
++@@ -27,7 +27,7 @@ PROG    := $(BUILDDIR)/tvheadend
++ # Common compiler flags
++ #
++ 
++-CFLAGS  += -Wall -Werror -Wwrite-strings -Wno-deprecated-declarations
+++CFLAGS  += -Wall -Wwrite-strings -Wno-deprecated-declarations
++ CFLAGS  += -Wmissing-prototypes -fms-extensions
++ CFLAGS  += -g -funsigned-char -O2 
++ CFLAGS  += -D_FILE_OFFSET_BITS=64
+-- 
+1.7.1
