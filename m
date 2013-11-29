@@ -1,29 +1,35 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 29 Nov 2013 10:10:08 +0100
-Subject: [Buildroot] [PATCH v2] qt5base: use ccache if enabled
-In-Reply-To: <1385714869-10115-1-git-send-email-fatih.asici@gmail.com> ("Fatih
- =?utf-8?B?QcWfxLFjxLEiJ3M=?= message of "Fri, 29 Nov 2013 10:47:49 +0200")
-References: <1385714869-10115-1-git-send-email-fatih.asici@gmail.com>
-Message-ID: <87ob53wp3j.fsf@dell.be.48ers.dk>
+From: spdawson at gmail.com <spdawson@gmail.com>
+Date: Fri, 29 Nov 2013 09:23:49 +0000
+Subject: [Buildroot] [PATCH] libpfm4: disable on avr32
+Message-ID: <1385717029-6381-1-git-send-email-spdawson@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fatih" == Fatih A??c? <fatih.asici@gmail.com> writes:
+From: Simon Dawson <spdawson@gmail.com>
 
- > For now, it doesn't use ccache when compiling host tools (e.g. qmake).
- > It seems the fix is not trivial.
+The perf_event_open syscall is not available on avr32. Fixes build failures
+such as the following.
 
- > Signed-off-by: Fatih A??c? <fatih.asici@gmail.com>
+  http://autobuild.buildroot.net/results/38f/38fa81315be448c409b9af29f92621fcf5676f71/
 
- > ---
- > Changes v1 -> v2:
- >   - pass ccache path to CROSS_COMPILE instead of setting another device
- >     variable (suggested by Peter Korsgaard)
+Signed-off-by: Simon Dawson <spdawson@gmail.com>
+---
+ package/libpfm4/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-Committed to next, thanks.
-
+diff --git a/package/libpfm4/Config.in b/package/libpfm4/Config.in
+index 6b491a4..3908e78 100644
+--- a/package/libpfm4/Config.in
++++ b/package/libpfm4/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_LIBPFM4
+ 	bool "libpfm4"
++	depends on !BR2_avr32 # no perf_event_open
+ 	help
+ 	  A helper library to help encode Performance Events to use with
+ 	  Operating system kernels performance monitoring interfaces.
 -- 
-Bye, Peter Korsgaard
+1.8.3.2
