@@ -1,60 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 29 Nov 2013 19:41:58 +0100
-Subject: [Buildroot] [git commit] hostapd: fix static build failure
-Message-ID: <20131129184634.BA0FE9BE68@busybox.osuosl.org>
+Date: Fri, 29 Nov 2013 19:42:50 +0100
+Subject: [Buildroot] [git commit] qt5: Disable on MIPS64 BigEndian n64
+	platforms
+Message-ID: <20131129184634.C63C19BDF6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f62a1d887aee642593b3f9507d6f3ebcd82219d0
+commit: http://git.buildroot.net/buildroot/commit/?id=931b73e5eae4a3ba6b2e37db526fd7243a139e64
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-libnl-3 uses threads and this isn't accounted for in hostapd (or
-libnl-3*.pc files for that matter - hostapd doesn't use pkg-config
-anyway).
-Since linking order matters for static scenarios also throw in -lnl-3
-into LIBS first since it gets appended to in hostapd makefiles to add
-libnl-3.
+qt5base fails to compile on MIPS64 BigEndian n64 platforms because there
+are multiple calls to some functions that are disabled. Since every Qt5
+package depends on qt5base we can disable Qt5 entirely. This is a quick
+fix for the next release. In the meantime, a proposed patch to fix this
+problem has already been sent to Qt:
 
-Fixes:
-http://autobuild.buildroot.net/results/d4a/d4a9f44effeb08eda6c4b32764274ae81d185d5e/
+https://bugreports.qt-project.org/browse/QTBUG-35228
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Acked-by: Markos Chandras <markos.chandras@imgtec.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/hostapd/hostapd.mk |    9 +++++----
- 1 files changed, 5 insertions(+), 4 deletions(-)
+ package/qt5/Config.in |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-diff --git a/package/hostapd/hostapd.mk b/package/hostapd/hostapd.mk
-index 4d31df5..0fbd8bc 100644
---- a/package/hostapd/hostapd.mk
-+++ b/package/hostapd/hostapd.mk
-@@ -10,13 +10,14 @@ HOSTAPD_SUBDIR = hostapd
- HOSTAPD_CONFIG = $(HOSTAPD_DIR)/$(HOSTAPD_SUBDIR)/.config
- HOSTAPD_DEPENDENCIES = libnl
- HOSTAPD_CFLAGS = $(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include/libnl3/
--HOSTAPD_LDFLAGS = $(TARGET_LDFLAGS)
- HOSTAPD_LICENSE = GPLv2/BSD-3c
- HOSTAPD_LICENSE_FILES = README
- 
--# libnl needs -lm (for rint) if linking statically
-+# libnl-3 needs -lm (for rint) and -lpthread if linking statically
-+# And library order matters hence stick -lnl-3 first since it's appended
-+# in the hostapd Makefiles as in LIBS+=-lnl-3 ... thus failing
- ifeq ($(BR2_PREFER_STATIC_LIB),y)
--HOSTAPD_LDFLAGS += -lm
-+HOSTAPD_LIBS += -lnl-3 -lm -lpthread
- endif
- 
- define HOSTAPD_LIBNL_CONFIG
-@@ -93,7 +94,7 @@ endef
- 
- define HOSTAPD_BUILD_CMDS
- 	$(TARGET_MAKE_ENV) CFLAGS="$(HOSTAPD_CFLAGS)" \
--		LDFLAGS="$(TARGET_LDFLAGS)" \
-+		LDFLAGS="$(TARGET_LDFLAGS)" LIBS="$(HOSTAPD_LIBS)" \
- 		$(MAKE) CC="$(TARGET_CC)" -C $(@D)/$(HOSTAPD_SUBDIR)
- endef
- 
+diff --git a/package/qt5/Config.in b/package/qt5/Config.in
+index 42724dc..b92d329 100644
+--- a/package/qt5/Config.in
++++ b/package/qt5/Config.in
+@@ -9,6 +9,7 @@ menuconfig BR2_PACKAGE_QT5
+ 	depends on BR2_INET_IPV6
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on !BR2_PACKAGE_QT
++	depends on !BR2_mips64 || !BR2_MIPS_NABI64
+ 	help
+ 	  This option enables the Qt5 framework. Sub-options allow to
+ 	  select which modules should be built.
