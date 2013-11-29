@@ -1,38 +1,27 @@
-From: =?UTF-8?q?Fatih=20A=C5=9F=C4=B1c=C4=B1?= <fatih.asici@gmail.com>
-Date: Fri, 29 Nov 2013 10:47:49 +0200
-Subject: [Buildroot] [PATCH v2] qt5base: use ccache if enabled
-Message-ID: <1385714869-10115-1-git-send-email-fatih.asici@gmail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 29 Nov 2013 10:01:53 +0100
+Subject: [Buildroot] [PATCH] lua-ev: disable on avr32 and blackfin
+In-Reply-To: <1385713114-3847-1-git-send-email-spdawson@gmail.com>
+ (spdawson@gmail.com's message of "Fri, 29 Nov 2013 08:18:34 +0000")
+References: <1385713114-3847-1-git-send-email-spdawson@gmail.com>
+Message-ID: <87siufwpha.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-For now, it doesn't use ccache when compiling host tools (e.g. qmake).
-It seems the fix is not trivial.
+>>>>> "spdawson" == spdawson  <spdawson@gmail.com> writes:
 
-Signed-off-by: Fatih A??c? <fatih.asici@gmail.com>
+ > From: Simon Dawson <spdawson@gmail.com>
+ > lua-ev is a reverse dependency of libev, but the architecture filtering is
+ > not propagated. Fixes autobuild failure such as the following.
 
----
-Changes v1 -> v2:
-  - pass ccache path to CROSS_COMPILE instead of setting another device
-    variable (suggested by Peter Korsgaard)
----
- package/qt5/qt5base/qt5base.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ >   http://autobuild.buildroot.net/results/387/38704a4362ab6c3458c45603975b274937059fa9/
 
-diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
-index febdc9b..d95b186 100644
---- a/package/qt5/qt5base/qt5base.mk
-+++ b/package/qt5/qt5base/qt5base.mk
-@@ -167,7 +167,7 @@ define QT5BASE_CONFIGURE_CMDS
- 		-no-rpath \
- 		-nomake examples -nomake tests \
- 		-device buildroot \
--		-device-option CROSS_COMPILE="$(TARGET_CROSS)" \
-+		-device-option CROSS_COMPILE="$(CCACHE) $(TARGET_CROSS)" \
- 		-device-option BUILDROOT_COMPILER_CFLAGS="$(TARGET_CFLAGS)" \
- 		-device-option BUILDROOT_COMPILER_CXXFLAGS="$(TARGET_CXXFLAGS)" \
- 		-device-option EGLFS_PLATFORM_HOOKS_SOURCES="$(QT5BASE_EGLFS_PLATFORM_HOOKS_SOURCES)" \
+ > Signed-off-by: Simon Dawson <spdawson@gmail.com>
+
+Committed, thanks.
+
 -- 
-1.8.4.rc3
+Bye, Peter Korsgaard
