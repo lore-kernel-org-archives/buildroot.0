@@ -1,130 +1,173 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 29 Nov 2013 20:01:53 +0100
-Subject: [Buildroot] [PATCH 2/5] package/rpi-firmware: add option to
- install firmware files in target/boot/
-In-Reply-To: <20131129092715.24d2b199@skate>
-References: <20131128205515.GB3337@free.fr>
- <1108197933.15379580.1385712019266.JavaMail.root@openwide.fr>
- <20131129092715.24d2b199@skate>
-Message-ID: <20131129190153.GA4639@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 29 Nov 2013 20:00:25 +0100
+Subject: [Buildroot] [PATCHv4 4/5] docs/manual: add explanations about
+	BR2_EXTERNAL
+In-Reply-To: <1385751626-28967-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1385751626-28967-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1385751626-28967-5-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+This commit updates the manual to add details on how to use the
+BR2_EXTERNAL feature.
 
-On 2013-11-29 09:27 +0100, Thomas Petazzoni spake thusly:
-> Dear Jeremy Rosen,
-> 
-> On Fri, 29 Nov 2013 09:00:19 +0100 (CET), Jeremy Rosen wrote:
-> 
-> > Basically, you build the root filesystem the way it will look when all
-> > sub-filesystems are mounted, you describe how they are mounted and 
-> > the system builds the partitions accordingly.
-> 
-> I don't necessarily agree here, because this strategy makes the
-> confusion between two things:
-> 
->  * The contents of the /boot directory in the root filesystem.
-> 
->  * The contents of the boot partition needed for some platforms (OMAP,
->    RPi, UEFI-based x86 platforms, etc.)
-> 
-> Those are two different things, and Yann's proposal merges them. As an
-> example, provided your bootloader has ext3 support and you're on an
-> OMAP platform, you may want to have something like:
-> 
->  * The /boot directory in the root filesystem contains the kernel image
->    (uImage, zImage)
-> 
->  * The boot partition contains just the bootloader images (MLO,
->    u-boot.img).
-> 
-> There is no point to have the kernel image in the boot partition, and
-> there is no point in having the bootloader images in the /boot
-> directory of the root filesystem.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ docs/manual/customize-outside-br.txt | 132 +++++++++++++++++++++++++++++++++++
+ docs/manual/customize.txt            |   2 +
+ 2 files changed, 134 insertions(+)
+ create mode 100644 docs/manual/customize-outside-br.txt
 
-OK, now I can follow what you mean (although one may argue whether the
-kernel is part of those 'boot' files, since it does not make sense to
-have it in the root file system).
-
-However, this means that each 'platform' (eg. the RPi, your special
-OMAP board...) will each have to provide a manifest of things to install
-in the boot partition, and 'genimages' will have to interpret this
-manifest to populate the boot partition.
-
-I won't say I like this, even if I see your point. And from a more
-global perspective, the boot partition might also be something else than
-a filesystem.
-
-So OK, I'll see how to manage this. Here is a quick proposal:
-
-1) genimages should be able to create board-specific partitions, eg.:
-   (a) a filesystem mounted on, and filled from /boot
-   (b) an unmounted filesystem filled with an arbitrary set of files
-   (c) a binary blob
-
-  - For (a), we can already do that, it's like any other filesystem.
-  - For (b), the submitted genimages can't do that, but the one in
-    buildroot.config can, so I just have to reinstate my 'fs_filler'
-    hook.
-  - For (c), this has to be implemented. I suggest we postpone this
-    until the basic genimages is upstream, and we have an actual
-    use-case for it (no need to over-engineer the sutff, YAGNI...)
-
-Of course, there are the cases where we may need any conbinations of one
-or more of:
-  - a boot blob (eg. MBR, UEFI; obviously only one!)
-  - a binary blob partition (eg. a U-Boot image)
-  - a mounted /boot filesystem
-  - a unmounted filesystem
-
-2) bootloaders for case (a) will have to:
-   (a) install their files in $(TARGET_DIR)/boot
-
-genimages should be prepared to generate a partition with a filesystem
-filed from the content of /boot, and add an entry for it in fstab.
-(Done! :-) )
-
-We currently (as far as I know) have no such bootloader; not even
-rpi-firmware fits in this category.
-
-3) bootloaders for case (b) will have to:
-   (a) install their files, and a manifest of those files, in a known
-       location
-   (b) that location should be platform-agnostic, so that genimages will
-       find it; $(BINARIES_DIR)/boot-files/ looks like a good candidate.
-
-genimages should be prepared to generate a partition with a filesystem
-filled by copying files listed in a manifest file.
-(Relatively easy, I think.)
-
-The kind of bootloaders I know that fit in this category are
-rpi-firmware and grub. There may have others.
-
-4) bootloaders for case (c) will have to:
-   (a) install the binary blob in a known location;
-       $(BINARIES_DIR)/boot-files/ looks like a good candidate.
-
-genimages should be prepared to generate a partition by simply dumping
-the content of a file.
-
-The bootloaders that fit in this category are U-Boot, RedBoot... Note
-that this does not imply an MBR-type of partitioning.
-
-Any comment on the above?
-
-And thanks for the guidance and enlightment! :-)
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/docs/manual/customize-outside-br.txt b/docs/manual/customize-outside-br.txt
+new file mode 100644
+index 0000000..623a421
+--- /dev/null
++++ b/docs/manual/customize-outside-br.txt
+@@ -0,0 +1,132 @@
++// -*- mode:doc -*- ;
++
++[[outside-br-custom]]
++Keeping customization outside Buildroot
++~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++
++While the Buildroot community recommends and encourages upstreaming to
++the official Buildroot version the packages and boards support that
++are written by developers, it is sometimes not possible or desirable,
++due to these packages or boards being highly specific or proprietary.
++
++In this case, Buildroot users are offered two choices:
++
++ * They can add their packages, board support and configuration files
++   directly within the Buildroot tree, and maintain them by using
++   branches in a version control system.
++
++ * They can use the +BR2_EXTERNAL+ mechanism, which allows to keep
++   package recipes, board support and configuration files outside of
++   the Buildroot tree, while still having them nicely integrated in
++   the build logic. The following paragraphs give details on how to
++   use +BR2_EXTERNAL+.
++
+++BR2_EXTERNAL+ is an environment variable that one can use to point to
++a directory that contains Buildroot customizations. It can be passed
++to any Buildroot +make+ invocation, and when it is passed. It is
++automatically saved in the hidden +.br-external+ file in the output
++directory, so that it is not needed to pass +BR2_EXTERNAL+ at every
+++make+ invocation. It can however be changed at any time by specifying
++a new value, and can be removed by passing an empty value. The
+++BR2_EXTERNAL+ path can be either an absolute or a relative path, but
++if it's passed as a relative path, it is important to note that it is
++interpreted relatively to the main Buildroot source directory, not the
++Buildroot output directory.
++
++Some examples:
++
++-----
++ buildroot/ $ make BR2_EXTERNAL=../foobar menuconfig
++-----
++
++Starting from now on, external definitions fromt he +../company+
++directory will be used:
++
++-----
++ buildroot/ $ make
++ buildroot/ $ make legal-info
++-----
++
++We can switch to another external definitions directory at any time:
++
++-----
++ buildroot/ $ make BR2_EXTERNAL=../barfoo xconfig
++-----
++
++Or disable the usage of external definitions:
++
++-----
++ buildroot/ $ make BR2_EXTERNAL= xconfig
++-----
++
++This +BR2_EXTERNAL+ then allows three different things:
++
++ * One can store all the board-specific configuration files here, such
++   as the kernel configuration, the root filesystem overlay, or any
++   other configuration file for which Buildroot allows to set its
++   location. The +BR2_EXTERNAL+ value is available within the
++   Buildroot configuration using +$(BR2_EXTERNAL)+. As an example, one
++   could set the +BR2_ROOTFS_OVERLAY+ Buildroot option to
++   +$(BR2_EXTERNAL)/board/<boardname>/overlay/+ (to specify a root
++   filesystem overlay), or the +BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE+
++   Buildroot option to +$(BR2_EXTERNAL)/board/<boardname>/kernel.config+
++   (to specify the location of the kernel configuration file).  + To
++   achieve this, it is recommended but not mandatory, to store those
++   details in directories called +board/<boardname>/+ under
++   +BR2_EXTERNAL+.
++
++ * One can store package recipes (i.e +Config.in+ and
++   +<packagename>.mk+), or even custom configuration options and make
++   logic. Buildroot automatically includes +BR2_EXTERNAL/Config.in+ to
++   make it appear in the top-level configuration menu, and includes
++   +BR2_EXTERNAL/external.mk+ with the rest of the makefile logic.
+++
++The main usage of this is to store package recipes. The recommended
++   way to do this is to write a +BR2_EXTERNAL/Config.in+ that looks
++   like:
+++
++------
++menu "<somecompany> packages"
++
++source "$BR2_EXTERNAL/package/package1/Config.in"
++source "$BR2_EXTERNAL/package/package2/Config.in"
++
++endmenu
++------
+++
++Then, have a +BR2_EXTERNAL/external.mk' file that looks like:
+++
++------
++include $(sort $(wildcard $(BR2_EXTERNAL)/package/*/*.mk))
++------
+++
++And then in +BR2_EXTERNAL/package/package1+ and
++   +BR2_EXTERNAL/package/package2+ create normal Buildroot package
++   recipes, as explained in xref:adding-packages[].
++
++ * One can store Buildroot defconfigs in the +configs+ subdirectory of
++   +BR2_EXTERNAL+. Buildroot will automatically show them in the
++   output of +make help+ and allow them to be loaded with the normal
++   +make <name>_defconfig+ command.
++
++In the end, a typical +BR2_EXTERNAL+ directory organization would
++generally be:
++
++-----
++??? Config.in
++??? external.mk
++??? board/
++?   ??? <boardname>/
++?       ??? overlay/
++?           ??? etc/
++?               ??? <some file>
++??? configs/
++?   ??? <boardname>_defconfig
++??? package/
++    ??? package1/
++        ??? Config.in
++        ??? package1.mk
++    ??? package2/
++        ??? Config.in
++        ??? package2.mk
++------
+diff --git a/docs/manual/customize.txt b/docs/manual/customize.txt
+index 0456ef1..7e46fd8 100644
+--- a/docs/manual/customize.txt
++++ b/docs/manual/customize.txt
+@@ -17,3 +17,5 @@ include::customize-toolchain.txt[]
+ include::customize-store.txt[]
+ 
+ include::customize-packages.txt[]
++
++include::customize-outside-br.txt[]
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.8.1.2
