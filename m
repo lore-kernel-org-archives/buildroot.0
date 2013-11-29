@@ -1,51 +1,27 @@
-From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Fri, 29 Nov 2013 11:25:30 +0100
-Subject: [Buildroot] Analysis of build failures
-In-Reply-To: <CAHkwnC9LWo3r21coQzROnajC1AKK4rF_Ec-AaXwMPK5esW--_Q@mail.gmail.com>
-References: <20131122073003.1B835101305@stock.ovh.net>
- <20131122091411.59d82eb5@skate>
- <CAHkwnC9LWo3r21coQzROnajC1AKK4rF_Ec-AaXwMPK5esW--_Q@mail.gmail.com>
-Message-ID: <CAHkwnC-BR1LSoNhMWuk_kMtYkL3KidpwZS3sizd1TNiWoiY=ng@mail.gmail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 29 Nov 2013 11:28:01 +0100
+Subject: [Buildroot] [PATCH] libpfm4: disable on avr32
+In-Reply-To: <1385717029-6381-1-git-send-email-spdawson@gmail.com>
+ (spdawson@gmail.com's message of "Fri, 29 Nov 2013 09:23:49 +0000")
+References: <1385717029-6381-1-git-send-email-spdawson@gmail.com>
+Message-ID: <87k3frwlhq.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Nov 22, 2013 at 10:15 AM, Fabio Porcedda
-<fabio.porcedda@gmail.com> wrote:
-> Hi Thomas,
->
-> On Fri, Nov 22, 2013 at 9:14 AM, Thomas Petazzoni
-> <thomas.petazzoni@free-electrons.com> wrote:
->> Hello,
->>
->> On Fri, 22 Nov 2013 08:30:02 +0100 (CET), Thomas Petazzoni wrote:
->> ...
->>>        arm |                  lvm2-2.02.103 | NOK | http://autobuild.buildroot.net/results/b0b386969459dda9c294f1ccb4927ca225fa6bdd/
->>
->> Missing dependency?
->>
->> /home/test/test/1/output/host/usr/bin/arm-linux-gcc -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -pipe -Os   -fPIC  -O2 --static -O2 -L../libdm -L../lib -L../libdaemon/client -L../libdm \
->>               -o dmsetup dmsetup.o -ldevmapper
->> /home/test/test/1/output/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabi/4.7.3/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld: cannot find -ldevmapper
->>
->> ...
->
-> I will try to look into this.
+>>>>> "spdawson" == spdawson  <spdawson@gmail.com> writes:
 
-The problem is still present on the master branch.
+ > From: Simon Dawson <spdawson@gmail.com>
+ > The perf_event_open syscall is not available on avr32. Fixes build failures
+ > such as the following.
 
-The minimal defconfig to reproduce the problem is:
-BR2_PREFER_STATIC_LIB=y
-BR2_TOOLCHAIN_BUILDROOT_LARGEFILE=y
-BR2_PACKAGE_LVM2=y
+ >   http://autobuild.buildroot.net/results/38f/38fa81315be448c409b9af29f92621fcf5676f71/
 
-The problem is related to "BR2_PREFER_STATIC_LIB=y" without that
-option it builds fine.
-Updating it to the latest available git version does not fix the issue.
-I will try to investigate further.
+ > Signed-off-by: Simon Dawson <spdawson@gmail.com>
 
-Regards
+Committed, thanks.
+
 -- 
-Fabio Porcedda
+Bye, Peter Korsgaard
