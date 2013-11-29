@@ -1,43 +1,50 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 29 Nov 2013 09:09:24 +0100
-Subject: [Buildroot] [PATCH 2/5] package/rpi-firmware: add option to
-	install firmware files in target/boot/
-In-Reply-To: <1108197933.15379580.1385712019266.JavaMail.root@openwide.fr>
-References: <1108197933.15379580.1385712019266.JavaMail.root@openwide.fr>
-Message-ID: <201311290909.24184.yann.morin.1998@free.fr>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 29 Nov 2013 09:14:34 +0100
+Subject: [Buildroot] [PATCH 2/2] qt5base: use ccache if enabled
+In-Reply-To: <201311290910.54807.fatih.asici@gmail.com> ("Fatih
+ =?utf-8?B?QcWfxLFjxLEiJ3M=?=
+ message of "Fri, 29 Nov 2013 09:10:54 +0200")
+References: <1384436438-2119-1-git-send-email-fatih.asici@gmail.com>
+ <1384436438-2119-2-git-send-email-fatih.asici@gmail.com>
+ <87eh60xjl4.fsf@dell.be.48ers.dk>
+ <201311290910.54807.fatih.asici@gmail.com>
+Message-ID: <871u1zy68l.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Jeremy, All,
+>>>>> "Fatih" == Fatih A??c? <fatih.asici@gmail.com> writes:
 
-On Friday 29 November 2013 09:00:19 Jeremy Rosen wrote:
-> If I may chip-in, I really like the logic of the proposed image builder...
-> 
-> Basically, you build the root filesystem the way it will look when all
-> sub-filesystems are mounted, you describe how they are mounted and 
-> the system builds the partitions accordingly.
+Hi,
 
-Yes, that's exactly what I feel, too. When the image creation kicks in, the
-filesystem(s) content is complete. I see 'genimages' like I look at genext2fs:
-simply an image generator.
+ >> > + -device-option BUILDROOT_CCACHE="$(CCACHE)" \
 
-> I know that what I described is not exactly the logic behind the proposed
-> patch, but it is a logic I like a lot because it is very easy to understand
-> and explain. it could also allow us to automatically generate some fstab
-> lines at some point, which could be nice.
+ >> Can't we just pass it in CROSS_COMPILE?
 
-And 'genimages' already does add the filesystems to the fstab. ;-)
+>> No. linux_device_pre.conf uses CROSS_COMPILE for other tools, too (ar, objcopy,
 
-Regards,
-Yann E. MORIN.
+Yes, but ccache then just becomes a NOOP - E.G:
+
+./output/host/usr/bin/ccache ./output/host/usr/bin/arm-linux-objdump -v
+GNU objdump (GNU Binutils) 2.21.1
+Copyright 2011 Free Software Foundation, Inc.
+This program is free software; you may redistribute it under the terms of
+the GNU General Public License version 3 or (at your option) any later version.
+This program has absolutely no warranty.
+
+We do the same for E.G. the Linux kernel and other packages using
+CROSS_COMPILE:
+
+git grep 'CCACHE.*TARGET_CROSS'
+boot/barebox/barebox.mk:BAREBOX_MAKE_FLAGS = ARCH=$(BAREBOX_ARCH) CROSS_COMPILE="$(CCACHE) $(TARGET_CROSS)"
+boot/boot-wrapper-aarch64/boot-wrapper-aarch64.mk:              CROSS_COMPILE="$(CCACHE) $(TARGET_CROSS)" \
+boot/uboot/uboot.mk:    CROSS_COMPILE="$(CCACHE) $(TARGET_CROSS)" \
+linux/linux.mk: CROSS_COMPILE="$(CCACHE) $(TARGET_CROSS)" \
+package/freescale-imx/imx-lib/imx-lib.mk:       CROSS_COMPILE="$(CCACHE) $(TARGET_CROSS)" \
+package/libebml/libebml.mk:     $(MAKE) -C $(@D)/make/linux CROSS="$(CCACHE) $(TARGET_CROSS)"
+package/libmatroska/libmatroska.mk:     $(MAKE) -C $(@D)/make/linux CROSS="$(CCACHE) $(TARGET_CROSS)"
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +0/33 662376056 | Software  Designer | \ / CAMPAIGN     |   ^                |
-| --==< O_o >==-- '------------.-------:  X  AGAINST      |  /e\  There is no  |
-| http://ymorin.is-a-geek.org/ | (*_*) | / \ HTML MAIL    |  """  conspiracy.  |
-'------------------------------'-------'------------------'--------------------'
+Bye, Peter Korsgaard
