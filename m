@@ -1,50 +1,36 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 29 Nov 2013 09:14:34 +0100
-Subject: [Buildroot] [PATCH 2/2] qt5base: use ccache if enabled
-In-Reply-To: <201311290910.54807.fatih.asici@gmail.com> ("Fatih
- =?utf-8?B?QcWfxLFjxLEiJ3M=?=
- message of "Fri, 29 Nov 2013 09:10:54 +0200")
-References: <1384436438-2119-1-git-send-email-fatih.asici@gmail.com>
- <1384436438-2119-2-git-send-email-fatih.asici@gmail.com>
- <87eh60xjl4.fsf@dell.be.48ers.dk>
- <201311290910.54807.fatih.asici@gmail.com>
-Message-ID: <871u1zy68l.fsf@dell.be.48ers.dk>
+From: spdawson at gmail.com <spdawson@gmail.com>
+Date: Fri, 29 Nov 2013 08:18:34 +0000
+Subject: [Buildroot] [PATCH] lua-ev: disable on avr32 and blackfin
+Message-ID: <1385713114-3847-1-git-send-email-spdawson@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fatih" == Fatih A??c? <fatih.asici@gmail.com> writes:
+From: Simon Dawson <spdawson@gmail.com>
 
-Hi,
+lua-ev is a reverse dependency of libev, but the architecture filtering is
+not propagated. Fixes autobuild failure such as the following.
 
- >> > + -device-option BUILDROOT_CCACHE="$(CCACHE)" \
+  http://autobuild.buildroot.net/results/387/38704a4362ab6c3458c45603975b274937059fa9/
 
- >> Can't we just pass it in CROSS_COMPILE?
+Signed-off-by: Simon Dawson <spdawson@gmail.com>
+---
+ package/lua-ev/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
->> No. linux_device_pre.conf uses CROSS_COMPILE for other tools, too (ar, objcopy,
-
-Yes, but ccache then just becomes a NOOP - E.G:
-
-./output/host/usr/bin/ccache ./output/host/usr/bin/arm-linux-objdump -v
-GNU objdump (GNU Binutils) 2.21.1
-Copyright 2011 Free Software Foundation, Inc.
-This program is free software; you may redistribute it under the terms of
-the GNU General Public License version 3 or (at your option) any later version.
-This program has absolutely no warranty.
-
-We do the same for E.G. the Linux kernel and other packages using
-CROSS_COMPILE:
-
-git grep 'CCACHE.*TARGET_CROSS'
-boot/barebox/barebox.mk:BAREBOX_MAKE_FLAGS = ARCH=$(BAREBOX_ARCH) CROSS_COMPILE="$(CCACHE) $(TARGET_CROSS)"
-boot/boot-wrapper-aarch64/boot-wrapper-aarch64.mk:              CROSS_COMPILE="$(CCACHE) $(TARGET_CROSS)" \
-boot/uboot/uboot.mk:    CROSS_COMPILE="$(CCACHE) $(TARGET_CROSS)" \
-linux/linux.mk: CROSS_COMPILE="$(CCACHE) $(TARGET_CROSS)" \
-package/freescale-imx/imx-lib/imx-lib.mk:       CROSS_COMPILE="$(CCACHE) $(TARGET_CROSS)" \
-package/libebml/libebml.mk:     $(MAKE) -C $(@D)/make/linux CROSS="$(CCACHE) $(TARGET_CROSS)"
-package/libmatroska/libmatroska.mk:     $(MAKE) -C $(@D)/make/linux CROSS="$(CCACHE) $(TARGET_CROSS)"
-
+diff --git a/package/lua-ev/Config.in b/package/lua-ev/Config.in
+index 1e89c27..4f704ad 100644
+--- a/package/lua-ev/Config.in
++++ b/package/lua-ev/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_LUA_EV
+ 	bool "lua-ev"
+ 	select BR2_PACKAGE_LIBEV
++	depends on !(BR2_avr32 || BR2_bfin) # libev
+ 	help
+ 	  Get access to the libev library from Lua.
+ 
 -- 
-Bye, Peter Korsgaard
+1.8.3.2
