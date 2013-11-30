@@ -1,97 +1,37 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 30 Nov 2013 22:46:52 +0100
-Subject: [Buildroot] ucilbc 0.9.33.2 fails to build on buildroot 2013.11
- internal toolchain
-In-Reply-To: <20131128192508.4c4c0106@skate>
-References: <5297837C.3@mail.ru> <20131128192508.4c4c0106@skate>
-Message-ID: <529A5CCC.3000803@mind.be>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 30 Nov 2013 23:38:28 +0100
+Subject: [Buildroot] [PATCHv4 1/5] core: introduce the BR2_EXTERNAL
+ variable
+In-Reply-To: <1385751626-28967-2-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1385751626-28967-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1385751626-28967-2-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20131130223828.GA3500@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 28/11/13 19:25, Thomas Petazzoni wrote:
-> Dear Alexander Varnin,
->
-> On Thu, 28 Nov 2013 21:55:08 +0400, Alexander Varnin wrote:
->
->> Building uclibc with default config now fails for me, after upgrading
->> to latest buildroot (now from 2013.11-rc3 branch).Attaching my config.
->> Build system is Debian Wheezy.
->>
->> Here is short output of make command:
->>
->> varnin at debian5 ~/minipos-OS-build-2013.11> make
->> make -C /home/varnin/buildroot
->> O=/home/varnin/minipos-OS-build-2013.11/.
->>>>> uclibc 0.9.33.2 Building
->> /usr/bin/make -j1 -C
->> /home/varnin/minipos-OS-build-2013.11/build/uclibc-0.9.33.2 ARCH="arm"
->> CROSS_COMPILE="/home/varnin/minipos-OS-build-2013.11/host/usr/bin/arm-buildroot-linux-uclibcgnueabi-"
->> UCLIBC_EXTRA_CFLAGS=" " HOSTCC="/usr/bin/gcc" PREFIX= DEVEL_PREFIX=/
->> RUNTIME_PREFIX=/ all
->> make[3]: Nothing to be done for `locale_headers'.
->>    LD libuClibc-0.9.33.2.so
->> libc/libc_so.a(lockf.os): In function `__GI_lockf':
->> /home/varnin/minipos-OS-build-2013.11/build/uclibc-0.9.33.2/libc/misc/file/lockf.c:73:
->> undefined reference to `_Unwind_Resume'
->> libc/libc_so.a(lockf.os):(.ARM.extab+0x0): undefined reference to
->> `__gcc_personality_v0'
->> collect2: error: ld returned 1 exit status
->> make[2]: *** [lib/libc.so] ?????? 1
->> make[1]: ***
->> [/home/varnin/minipos-OS-build-2013.11/build/uclibc-0.9.33.2/.stamp_built]
->> ?????? 2
->> make: *** [_all] ?????? 2
->
-> My guess is that you have BR2_ENABLE_DEBUG=y in your Buildroot .config,
-> right?
->
-> If that's the case, then you've hit the problem that uClibc doesn't
-> build properly when debugging support is enabled. That's unfortunately
-> an upstream uClibc problem, I believe.
->
-> Either disable BR2_ENABLE_DEBUG in Buildroot (which will disable
-> debugging support for all packages), or if you want to keep debugging
-> support enabled globally but don't care about debugging support in
-> uClibc, apply a change like:
->
-> diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
-> index 20d3bb6..062ac0d 100644
-> --- a/package/uclibc/uclibc.mk
-> +++ b/package/uclibc/uclibc.mk
-> @@ -390,14 +390,6 @@ UCLIBC_WCHAR_CONFIG = $(call UCLIBC_OPT_UNSET,UCLIBC_HAS_WCHAR,$(@D))
->   endif
->
->   #
-> -# debug
-> -#
-> -
-> -ifeq ($(BR2_ENABLE_DEBUG),y)
-> -UCLIBC_DEBUG_CONFIG = $(call UCLIBC_OPT_SET,DODEBUG,y,$(@D))
-> -endif
-> -
-> -#
+Thomas, All,
 
-  So why not apply this patch in buildroot?
+On 2013-11-29 20:00 +0100, Thomas Petazzoni spake thusly:
+> This commit introduces the BR2_EXTERNAL environment variable, which
+> will allow to keep Buildroot customization (board-specific
+> configuration files or root filesystem overlays, package Config.in and
+> makefiles, as well as defconfigs) outside of the Buildroot tree.
+[--SNIP--]
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-  Regards,
-  Arnout
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
->   # strip
->   #
->
-> Best regards,
->
-> Thomas
->
-
+Regards,
+Yann E. MORIN.
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
