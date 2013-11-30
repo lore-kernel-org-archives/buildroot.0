@@ -1,192 +1,61 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 30 Nov 2013 00:40:49 +0100
-Subject: [Buildroot] Microblaze and ARC toolchains
-Message-ID: <20131130004049.0c5835d0@skate>
+Date: Sat, 30 Nov 2013 08:30:02 +0100 (CET)
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2013-11-29
+Message-ID: <20131130073002.B58A41014F6@stock.ovh.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Spenser and Mischa,
+Build statistics for 2013-11-29
+===============================
 
-I finally took some time to test your toolchain patches, for the
-Microblaze and ARC architectures. I've had a number of issues, some of
-which I've been able to solve (see the attached patches), but I still
-have remaining issues on Microblaze:
+        success : 65 
+       failures : 18 
+       timeouts : 0  
+          TOTAL : 83 
 
- * Building a Microblaze toolchain with eglibc fails during the eglibc
-   configure step:
+Classification of failures by reason
+====================================
 
-*** WARNING: You should not compile GNU libc without versioning. Not using
-*** versioning will introduce incompatibilities so that old binaries
-*** will not run anymore.
-*** For versioning you need recent binutils (binutils-2.8.1.0.23 or newer).
-checking for .previous assembler directive... yes
-checking for .protected and .hidden assembler directive... yes
-checking whether __attribute__((visibility())) is supported... no
-configure: error: compiler support for visibility attribute is required
-make[1]: *** [/home/test/outputs/microblaze/build/glibc-7f0bcce417c47aefad06ddfec7cd4ced3a4e10ff/.stamp_configured] Error 1
-make: *** [_all] Error 2
+                      icu-51.2 | 2 
+                 webkit-1.11.5 | 2 
+                openssl-1.0.1e | 2 
+  toolchain-external-undefined | 2 
+              gstreamer1-1.2.1 | 1 
+ne10-88c18f02199947b2c8b577... | 1 
+              fontconfig-2.6.0 | 1 
+               qt5webkit-5.1.1 | 1 
+                     m4-1.4.17 | 1 
+                elfutils-0.155 | 1 
+                  libv4l-0.8.9 | 1 
+             dosfstools-3.0.23 | 1 
+                 libpfm4-4.3.0 | 1 
+               alsa-lib-1.0.26 | 1 
 
-   What I can see in the build.log file is:
+Detail of failures
+===================
 
-configure:5795: /home/test/outputs/microblaze/host/usr/bin/microblaze-buildroot-linux-gnu-gcc -Werror -S conftest.c -o conftest.s 1>&5
-conftest.c:2:5: error: visibility attribute not supported in this configuration; ignored [-Werror=attributes]
-     int bar __attribute__ ((visibility ("protected"))) = 1;
-     ^
-conftest.c:2:5: error: visibility attribute not supported in this configuration; ignored [-Werror=attributes]
-cc1: all warnings being treated as errors
-configure:5798: $? = 1
-configure:5809: result: no
-configure:5812: error: compiler support for visibility attribute is required
+      bfin |                alsa-lib-1.0.26 | NOK | http://autobuild.buildroot.net/results/fc86beee26a861d92f28fd1f50088a906b4f4ce1/
+      bfin |              dosfstools-3.0.23 | NOK | http://autobuild.buildroot.net/results/dd578c6a4507b576634f6fe5d12977bca1b9b51f/
+     avr32 |                 elfutils-0.155 | NOK | http://autobuild.buildroot.net/results/bfdda11429a7a7da01457d4f304e144b5ef0c55a/
+      bfin |               fontconfig-2.6.0 | NOK | http://autobuild.buildroot.net/results/ab0135fb09c113772909083298aabab28039f280/
+    xtensa |               gstreamer1-1.2.1 | NOK | http://autobuild.buildroot.net/results/26977fe664b517a60ab573856535344034288c35/
+      bfin |                       icu-51.2 | NOK | http://autobuild.buildroot.net/results/9d75d814ddec2140455b0e9b62f83ae426ecad10/
+      bfin |                       icu-51.2 | NOK | http://autobuild.buildroot.net/results/caf2862a414a3aa9bd0dcd755bb9178c7f356e8f/
+       arm |                  libpfm4-4.3.0 | NOK | http://autobuild.buildroot.net/results/ef6635864e7c32e7031bb3eeb076d4832dd1e919/
+   aarch64 |                   libv4l-0.8.9 | NOK | http://autobuild.buildroot.net/results/81819ff48b7de3d54ea81ccfe2ba6b62691a95f3/
+    xtensa |                      m4-1.4.17 | NOK | http://autobuild.buildroot.net/results/6934e7eddf9af583b8d4afcd28652854f97f9bbe/
+       arm | ne10-88c18f02199947b2c8b577... | NOK | http://autobuild.buildroot.net/results/459a2873c83da2b9b69c03a4423426857ebcd3ba/
+microblaze |                 openssl-1.0.1e | NOK | http://autobuild.buildroot.net/results/cd7cde25ad51086a16aa2c0bf53d5d51b248d152/
+microblaze |                 openssl-1.0.1e | NOK | http://autobuild.buildroot.net/results/13801d956a68cf095371eee11a8e9206aad89a63/
+      sh4a |                qt5webkit-5.1.1 | NOK | http://autobuild.buildroot.net/results/9b5e7eae6977b17be99d700c97489b3064db5fee/
+   powerpc |   toolchain-external-undefined | NOK | http://autobuild.buildroot.net/results/240359c67d283336ef64293d7c60e54c78aabc9c/
+   powerpc |   toolchain-external-undefined | NOK | http://autobuild.buildroot.net/results/2861326300746491bb2ccece8f3df594f3494250/
+       arm |                  webkit-1.11.5 | NOK | http://autobuild.buildroot.net/results/dc6c8b923d489f552d8fbf61a2c2f94d7a6c657a/
+      sh4a |                  webkit-1.11.5 | NOK | http://autobuild.buildroot.net/results/30f0bd276dcbd2f073eade0a0638d71d14d09529/
 
-   The defconfig for this build is:
 
-BR2_microblazeel=y
-BR2_TOOLCHAIN_BUILDROOT_EGLIBC=y
-BR2_TOOLCHAIN_BUILDROOT_CXX=y
-BR2_PACKAGE_HOST_GDB=y
-
- * Building a Microblaze toolchain with glibc fails during the glibc
-   configure step, with:
-
-checking for suffix of object files... configure: error: in `/home/test/outputs/microblaze-glibc/build/glibc-b86835ca92a1942ed08d8b5ee47498e711feaddb/build':
-configure: error: cannot compute suffix of object files: cannot compile
-See `config.log' for more details
-make[1]: *** [/home/test/outputs/microblaze-glibc/build/glibc-b86835ca92a1942ed08d8b5ee47498e711feaddb/.stamp_configured] Error 1
-make: *** [_all] Error 2
-
-   The config.log contains:
-
-configure:2759: /home/test/outputs/microblaze-glibc/host/usr/bin/microblaze-buildroot-linux-gnu-gcc -c -O2   conftest.c >&5
-/tmp/cc0r8j50.s: Assembler messages:
-/tmp/cc0r8j50.s:4: Error: unknown pseudo-op: `.ent'
-/tmp/cc0r8j50.s:7: Error: unknown pseudo-op: `.frame'
-/tmp/cc0r8j50.s:8: Error: unknown pseudo-op: `.mask'
-/tmp/cc0r8j50.s:9: Error: no such instruction: `rtsd r15,8'
-/tmp/cc0r8j50.s:11: Error: no such instruction: `addk r3,r0,r0'
-configure:2763: $? = 1
-configure: failed program was:
-| /* confdefs.h */
-| #define PACKAGE_NAME "GNU C Library"
-| #define PACKAGE_TARNAME "glibc"
-| #define PACKAGE_VERSION "(see version.h)"
-| #define PACKAGE_STRING "GNU C Library (see version.h)"
-| #define PACKAGE_BUGREPORT "http://sourceware.org/bugzilla/"
-| #define PACKAGE_URL "http://www.gnu.org/software/glibc/"
-| #define PKGVERSION "(Buildroot) "
-| #define REPORT_BUGS_TO "<http://www.gnu.org/software/libc/bugs.html>"
-| /* end confdefs.h.  */
-| 
-| int
-| main ()
-| {
-| 
-|   ;
-|   return 0;
-| }
-configure:2777: error: in `/home/test/outputs/microblaze-glibc/build/glibc-b86835ca92a1942ed08d8b5ee47498e711feaddb/build':
-configure:2779: error: cannot compute suffix of object files: cannot compile
-See `config.log' for more details
-
-    The defconfig is:
-
-BR2_microblazeel=y
-BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
-BR2_TOOLCHAIN_BUILDROOT_CXX=y
-BR2_PACKAGE_HOST_GDB=y
-
-    Is is expected that the toolchain is named microblaze-<something>
-    instead of microblazeel-<something> ?
-
- * The Microblaze build against uClibc failed as well, with:
-
-  AS lib/crt1.o
-libc/sysdeps/linux/alpha/crt1.S: Assembler messages:
-libc/sysdeps/linux/alpha/crt1.S:43: Error: alignment not a power of 2
-libc/sysdeps/linux/alpha/crt1.S:45: Error: unknown pseudo-op: `.ent'
-libc/sysdeps/linux/alpha/crt1.S:57: Error: unknown pseudo-op: `.frame'
-libc/sysdeps/linux/alpha/crt1.S:58: Error: no such instruction: `br $29,1f'
-libc/sysdeps/linux/alpha/crt1.S:59: Error: no such instruction: `ldgp $29,0($29)'
-libc/sysdeps/linux/alpha/crt1.S:60: Error: suffix or operands invalid for `sub'
-libc/sysdeps/linux/alpha/crt1.S:61: Error: suffix or operands invalid for `mov'
-libc/sysdeps/linux/alpha/crt1.S:62: Error: unknown pseudo-op: `.prologue'
-libc/sysdeps/linux/alpha/crt1.S:65: Error: no such instruction: `lda $16,main'
-libc/sysdeps/linux/alpha/crt1.S:67: Error: no such instruction: `ldl $17,16($30)'
-libc/sysdeps/linux/alpha/crt1.S:68: Error: no such instruction: `lda $18,24($30)'
-libc/sysdeps/linux/alpha/crt1.S:71: Error: no such instruction: `lda $19,_init'
-libc/sysdeps/linux/alpha/crt1.S:72: Error: no such instruction: `lda $20,_fini'
-libc/sysdeps/linux/alpha/crt1.S:75: Error: suffix or operands invalid for `mov'
-libc/sysdeps/linux/alpha/crt1.S:78: Error: no such instruction: `stq $30,0($30)'
-libc/sysdeps/linux/alpha/crt1.S:82: Error: no such instruction: `jsr $26,__uClibc_main'
-libc/sysdeps/linux/alpha/crt1.S:86: Error: no such instruction: `call_pal 0'
-make[2]: *** [lib/crt1.o] Error 1
-make[1]: *** [/home/test/outputs/microblaze-uclibc/build/uclibc-0.9.33.2/.stamp_configured] Error 2
-make: *** [_all] Error 2
-
-    The defconfig is:
-
-BR2_microblazeel=y
-BR2_TOOLCHAIN_BUILDROOT_LARGEFILE=y
-BR2_TOOLCHAIN_BUILDROOT_INET_IPV6=y
-BR2_TOOLCHAIN_BUILDROOT_INET_RPC=y
-BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
-BR2_TOOLCHAIN_BUILDROOT_CXX=y
-BR2_PACKAGE_HOST_GDB=y
-
- * On the ARC side of things, what I get is a failure at the uClibc
-   build step. However, what's weird is that I did get one successful
-   build, but now that I've restarted everything from scratch, it fails
-   (and did so two times in a row) :
-
-  AS lib/crt1.o
-as: unrecognized option '-mARC700'
-make[2]: *** [lib/crt1.o] Error 1
-make[1]: *** [/home/test/outputs/arc/build/uclibc-9f0f466d3b17181ce88be36ce24a775774fe686c/.stamp_configured] Error 2
-make: *** [_all] Error 2
-
-   The defconfig is:
-
-BR2_arcle=y
-BR2_TOOLCHAIN_BUILDROOT_LARGEFILE=y
-BR2_TOOLCHAIN_BUILDROOT_INET_IPV6=y
-BR2_TOOLCHAIN_BUILDROOT_INET_RPC=y
-BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
-BR2_PTHREAD_DEBUG=y
-BR2_TOOLCHAIN_BUILDROOT_CXX=y
-BR2_PACKAGE_HOST_GDB=y
-BR2_PACKAGE_GDB=y
-
-Mischa and Spenser, do you have some time to look into these issues?
-Since you're probably not seeing them, I can do some more testing, or
-provide additional logs or details if you ask for specific things.
-
-Thanks a lot!
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: 0001-binutils-pass-MAKEINFO-at-configure-build-and-instal.patch
-Type: text/x-patch
-Size: 1336 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20131130/def96b9e/attachment.bin>
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: 0002-binutils-missing-host-flex-and-host-bison-dependenci.patch
-Type: text/x-patch
-Size: 1087 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20131130/def96b9e/attachment-0001.bin>
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: 0003-gdb-pass-MAKEINFO-at-configure-and-install-time.patch
-Type: text/x-patch
-Size: 954 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20131130/def96b9e/attachment-0002.bin>
+http://autobuild.buildroot.net
