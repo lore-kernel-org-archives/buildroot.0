@@ -1,94 +1,68 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Sun,  1 Dec 2013 11:50:35 +0100
-Subject: [Buildroot] [PATCH v5] manual: fix manual generation with
-	BR2_EXTERNAL support
-Message-ID: <1385895035-3380-1-git-send-email-s.martin49@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 1 Dec 2013 15:10:56 +0100
+Subject: [Buildroot] [PATCH 2/5] package/rpi-firmware: add option to
+ install firmware files in target/boot/
+In-Reply-To: <529A8A0F.7010905@mind.be>
+References: <20131128205515.GB3337@free.fr>
+ <1108197933.15379580.1385712019266.JavaMail.root@openwide.fr>
+ <20131129092715.24d2b199@skate> <20131129190153.GA4639@free.fr>
+ <529A8A0F.7010905@mind.be>
+Message-ID: <20131201141056.GA3490@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch fixes 2 issues that occur during the manual build process:
+Arnout, All,
 
-* In manual.mk, it forces BR2_EXTERNAL to the default dummy tree coming
-  within Buildroot tree.
-  This is needed to not include the packages from BR2_EXTERNAL because
-  they are not part of Buildroot.
+On 2013-12-01 01:59 +0100, Arnout Vandecappelle spake thusly:
+> On 29/11/13 20:01, Yann E. MORIN wrote:
+> >3) bootloaders for case (b) will have to:
+> >    (a) install their files, and a manifest of those files, in a known
+> >        location
+> >    (b) that location should be platform-agnostic, so that genimages will
+> >        find it; $(BINARIES_DIR)/boot-files/  looks like a good candidate.
+> >
+> >genimages should be prepared to generate a partition with a filesystem
+> >filled by copying files listed in a manifest file.
+> >(Relatively easy, I think.)
+> 
+>  Yeah, it's just adding a flag that tells genimages that fs_root is relative
+> to the images directory instead of the target directory.
 
-* During the package list generation, the python script using
-  kconfiglib module reads and parses the Config.in files. So, symbols,
-  including environment variables, got expanded and/or resolved.
-  In kconfiglib.py, this patch fixes the regex that did not allow to use
-  numbers in the environment variable names, so '$BR2_EXTERNAL' got
-  wrongly expanded like it was '${BR}2_EXTERNAL':
+Then, what about those targets that require the kernel to be there, too?
 
-<snip>
->>>   Updating the manual lists...
-Traceback (most recent call last):
-  File "/opt/buildroot/master/support/scripts/gen-manual-lists.py", line 375, in <module>
-    buildroot = Buildroot()
-  File "/opt/buildroot/master/support/scripts/gen-manual-lists.py", line 216, in __init__
-    self.root_config))
-  File "/opt/buildroot/master/support/scripts/kconfiglib.py", line 214, in __init__
-    self.top_block = self._parse_file(filename, None, None, None)
-  File "/opt/src/buildroot/master/support/scripts/kconfiglib.py", line 919, in _parse_file
-    return self._parse_block(line_feeder, None, parent, deps, visible_if_deps, res)
-  File "/opt/buildroot/master/support/scripts/kconfiglib.py", line 1114, in _parse_block
-    self.base_dir))
-IOError: /opt/buildroot/master/Config.in:490: sourced file "$BR2_EXTERNAL/Config.in" (expands to
-"2_EXTERNAL/Config.in") not found. Perhaps base_dir
-(argument to Config.__init__(), currently
-"/opt/buildroot/master") is set to the wrong value.
-docs/manual/manual.mk:2: recipe for target 'manual-update-lists' failed
-make: *** [manual-update-lists] Error 1
-</snip>
+For the Raspberry Pi, we must have those files in the boot partition:
+  - the boot loader files: bootcode.bin, start.elf, fixup.dat
+  - the bootloader config files: config.txt, cmdline.txt
+  - the kernel file: zImage
 
-Reported-by: Ryan Barnett <rjbarnet@rockwellcollins.com>
-Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Tested-by: Ryan Barnett <rjbarnet@rockwellcollins.com>
+For Thomas' board, we would not need the kernel file in there.
 
----
+So, genimages need to be able to generate the partition cntent not only
+from files in $(BINARIES_DIR)/boot-files, but also from $(BIANRIES_DIR)
+itself.
 
-@Thomas P.: Please pull this new version of this patch in the series. TIA
+>  I think it is safe to assume that the bootloaders of this type will put
+> their output files in a directory, rather than flat in the images directory.
+> So a manifest is not really needed. Although... If you want to create a
+> partition with SPL + U-Boot + uImage, you 'll have to specify these three
+> explicitly.
 
----
-changes v4 -> v5:
-- extend commit log (Yann)
-- add comment why BR2_EXTERNAL is forced to the default dummy tree in
-  manual.mk (Arnout)
----
- docs/manual/manual.mk         | 3 +++
- support/scripts/kconfiglib.py | 2 +-
- 2 files changed, 4 insertions(+), 1 deletion(-)
+Indeed. But we do not want to hard-code anything in genimages, and we
+want to keep the partition table layout description as simple as
+possible.
 
-diff --git a/docs/manual/manual.mk b/docs/manual/manual.mk
-index aeafd10..e46f5a4 100644
---- a/docs/manual/manual.mk
-+++ b/docs/manual/manual.mk
-@@ -1,6 +1,9 @@
-+# Packages included in BR2_EXTERNAL are not part of buildroot, so they
-+# should not be included in the manual.
- manual-update-lists: manual-check-dependencies-lists
- 	$(Q)$(call MESSAGE,"Updating the manual lists...")
- 	$(Q)BR2_DEFCONFIG="" TOPDIR=$(TOPDIR) O=$(O)/docs/manual/.build \
-+		BR2_EXTERNAL=$(TOPDIR)/support/dummy-external \
- 		$(TOPDIR)/support/scripts/gen-manual-lists.py
- 
- # we can't use suitable-host-package here because that's not available in
-diff --git a/support/scripts/kconfiglib.py b/support/scripts/kconfiglib.py
-index 0704cc0..e40947c 100644
---- a/support/scripts/kconfiglib.py
-+++ b/support/scripts/kconfiglib.py
-@@ -2074,7 +2074,7 @@ set_re   = re.compile(r"CONFIG_(\w+)=(.*)")
- unset_re = re.compile(r"# CONFIG_(\w+) is not set")
- 
- # Regular expression for finding $-references to symbols in strings
--sym_ref_re = re.compile(r"\$[A-Za-z_]+")
-+sym_ref_re = re.compile(r"\$[A-Za-z_][0-9A-Za-z_]*")
- 
- # Integers representing symbol types
- UNKNOWN, BOOL, TRISTATE, STRING, HEX, INT = range(0, 6)
+I'll see what I can come up with.
+
+Regards,
+Yann E. MORIN.
+
 -- 
-1.8.4.2
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
