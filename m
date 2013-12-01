@@ -1,66 +1,44 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 01 Dec 2013 01:46:52 +0100
-Subject: [Buildroot] [PATCHv4 5/5] manual: fix manual generation with
- BR2_EXTERNAL support
-In-Reply-To: <1385751626-28967-6-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1385751626-28967-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1385751626-28967-6-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <529A86FC.7090204@mind.be>
+Date: Sun, 01 Dec 2013 01:59:59 +0100
+Subject: [Buildroot] [PATCH 2/5] package/rpi-firmware: add option to
+ install firmware files in target/boot/
+In-Reply-To: <20131129190153.GA4639@free.fr>
+References: <20131128205515.GB3337@free.fr>
+ <1108197933.15379580.1385712019266.JavaMail.root@openwide.fr>
+ <20131129092715.24d2b199@skate> <20131129190153.GA4639@free.fr>
+Message-ID: <529A8A0F.7010905@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 29/11/13 20:00, Thomas Petazzoni wrote:
-> From: Samuel Martin <s.martin49@gmail.com>
+On 29/11/13 20:01, Yann E. MORIN wrote:
+> 3) bootloaders for case (b) will have to:
+>     (a) install their files, and a manifest of those files, in a known
+>         location
+>     (b) that location should be platform-agnostic, so that genimages will
+>         find it; $(BINARIES_DIR)/boot-files/  looks like a good candidate.
 >
-> Reported-by: Ryan Barnett <rjbarnet@rockwellcollins.com>
-> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Signed-off-by: Ryan Barnett <rjbarnet@rockwellcollins.com>
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
->   docs/manual/manual.mk         | 1 +
->   support/scripts/kconfiglib.py | 2 +-
->   2 files changed, 2 insertions(+), 1 deletion(-)
->
-> diff --git a/docs/manual/manual.mk b/docs/manual/manual.mk
-> index aeafd10..570318f 100644
-> --- a/docs/manual/manual.mk
-> +++ b/docs/manual/manual.mk
-> @@ -1,6 +1,7 @@
->   manual-update-lists: manual-check-dependencies-lists
->   	$(Q)$(call MESSAGE,"Updating the manual lists...")
->   	$(Q)BR2_DEFCONFIG="" TOPDIR=$(TOPDIR) O=$(O)/docs/manual/.build \
-> +		BR2_EXTERNAL=$(TOPDIR)/support/dummy-external \
+> genimages should be prepared to generate a partition with a filesystem
+> filled by copying files listed in a manifest file.
+> (Relatively easy, I think.)
 
-  Maybe a comment should be added here, like:
+  Yeah, it's just adding a flag that tells genimages that fs_root is 
+relative to the images directory instead of the target directory.
 
-# Packages included in BR2_EXTERNAL are not part of buildroot, so they
-# should not be included in the manual.
-
+  I think it is safe to assume that the bootloaders of this type will put 
+their output files in a directory, rather than flat in the images 
+directory. So a manifest is not really needed. Although... If you want to 
+create a partition with SPL + U-Boot + uImage, you 'll have to specify 
+these three explicitly.
 
   Regards,
   Arnout
 
->   		$(TOPDIR)/support/scripts/gen-manual-lists.py
 >
->   # we can't use suitable-host-package here because that's not available in
-> diff --git a/support/scripts/kconfiglib.py b/support/scripts/kconfiglib.py
-> index 0704cc0..e40947c 100644
-> --- a/support/scripts/kconfiglib.py
-> +++ b/support/scripts/kconfiglib.py
-> @@ -2074,7 +2074,7 @@ set_re   = re.compile(r"CONFIG_(\w+)=(.*)")
->   unset_re = re.compile(r"# CONFIG_(\w+) is not set")
->
->   # Regular expression for finding $-references to symbols in strings
-> -sym_ref_re = re.compile(r"\$[A-Za-z_]+")
-> +sym_ref_re = re.compile(r"\$[A-Za-z_][0-9A-Za-z_]*")
->
->   # Integers representing symbol types
->   UNKNOWN, BOOL, TRISTATE, STRING, HEX, INT = range(0, 6)
->
+> The kind of bootloaders I know that fit in this category are
+> rpi-firmware and grub. There may have others.
 
 
 -- 
