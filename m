@@ -1,41 +1,32 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Sun, 01 Dec 2013 20:15:19 -0000
-Subject: [Buildroot] [git commit] barebox: bump to version 2013.11.0
-Message-ID: <20131201201519.156299BE44@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] squid: bump to version 3.3.10
+Message-ID: <20131201201518.91F589BE44@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c50080ab40896cb227f25b376910d304fa31f000
+commit: http://git.buildroot.net/buildroot/commit/?id=d8b30a3ae0383d5a79924066840654a805fc58e2
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- boot/barebox/Config.in |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ package/squid/squid.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/boot/barebox/Config.in b/boot/barebox/Config.in
-index a409aca..2debfb9 100644
---- a/boot/barebox/Config.in
-+++ b/boot/barebox/Config.in
-@@ -12,7 +12,7 @@ choice
- 	  Select the specific Barebox version you want to use
+diff --git a/package/squid/squid.mk b/package/squid/squid.mk
+index 8324ba8..c0678ce 100644
+--- a/package/squid/squid.mk
++++ b/package/squid/squid.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- config BR2_TARGET_BAREBOX_LATEST_VERSION
--	bool "2013.10.0"
-+	bool "2013.11.0"
- 
- config BR2_TARGET_BAREBOX_CUSTOM_VERSION
- 	bool "Custom version"
-@@ -40,7 +40,7 @@ endif
- 
- config BR2_TARGET_BAREBOX_VERSION
- 	string
--	default "2013.10.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
-+	default "2013.11.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
- 	default BR2_TARGET_BAREBOX_CUSTOM_VERSION_VALUE if BR2_TARGET_BAREBOX_CUSTOM_VERSION
- 	default "custom"	if BR2_TARGET_BAREBOX_CUSTOM_TARBALL
- 	default BR2_TARGET_BAREBOX_CUSTOM_GIT_VERSION if BR2_TARGET_BAREBOX_CUSTOM_GIT
+-SQUID_VERSION = 3.3.9
++SQUID_VERSION = 3.3.10
+ SQUID_SOURCE = squid-$(SQUID_VERSION).tar.xz
+ SQUID_SITE = http://www.squid-cache.org/Versions/v3/3.3
+ SQUID_LICENSE = GPLv2+
