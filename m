@@ -1,70 +1,46 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 01 Dec 2013 02:04:48 +0100
-Subject: [Buildroot] [PATCH 3/5] package/rpi-firmware: move to
- bootloaders menu
-In-Reply-To: <20131128211605.GC3337@free.fr>
-References: <cover.1385157864.git.yann.morin.1998@free.fr>
- <869fff522738fdd927541a3e3a303f97143f8469.1385157864.git.yann.morin.1998@free.fr>
- <20131128210834.3c78df23@skate> <20131128211605.GC3337@free.fr>
-Message-ID: <529A8B30.4080008@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun,  1 Dec 2013 08:30:02 +0100 (CET)
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2013-11-30
+Message-ID: <20131201073002.4C48C101500@stock.ovh.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 28/11/13 22:16, Yann E. MORIN wrote:
-> Thomas, All,
->
-> On 2013-11-28 21:08 +0100, Thomas Petazzoni spake thusly:
->> >On Fri, 22 Nov 2013 23:50:56 +0100, Yann E. MORIN wrote:
->>> > >From: "Yann E. MORIN"<yann.morin.1998@free.fr>
->>> > >
->>> > >rpi-firmware, although it does contain the GPU firmware, also serves as
->>> > >the bootloader. As a reminder, here is an overview of how the RPi boots:
->>> > >   - GPU exits reset
->>> > >   - GPU loads its firmware from the first, FAT32-formatted partition
->>> > >   - GPU reads its config file from the same partition
->>> > >   - GPU loads kernel from the same partition, into RAM
->>> > >   - GPU de-asserts the reset of the ARM core (CPU)
->>> > >   - CPU exits reset and starts executing kernel code
->>> > >
->>> > >So, although the largest part of rpi-firmware is indeed the GPU firmware,
->>> > >the first purpose it serves is as a bootloader for the ARM core.
->>> > >
->>> > >People that do not want to use the GPU (eg. headless, no multimedia...)
->>> > >will still want to select rpi-firmware.
->>> > >
->>> > >Having rpi-firmware in target packages -> hardware-handling -> firmware
->>> > >is a bit misleading in this case.
->>> > >
->>> > >Hence, move rpi-firmware from the target packages submenu, into the
->>> > >bootloaders submenu.
->>> > >
->>> > >Signed-off-by: "Yann E. MORIN"<yann.morin.1998@free.fr>
->> >
->> >I must say I am not entirely convinced this change is necessary.
-> It is not_necessary_. I find it more coherent with the upstream docs
-[snip]
+Build statistics for 2013-11-30
+===============================
 
-  We can have the best of both worlds: just move the source line from 
-package/Config.in to boot/Config.in, and no dicking about with changing 
-config names...
+        success : 70 
+       failures : 9  
+       timeouts : 0  
+          TOTAL : 79 
 
-  Calling the stuff in boot/ BR2_TARGET instead of BR2_PACKAGE is IMHO 
-just creating confusion. Even having the boot/ directory at all is 
-pointless (i.e. historical accident) if you ask me.
+Classification of failures by reason
+====================================
 
-  So I would be more convinced to move everything from boot/ to packages/ 
-than the other way round :-)
+                    php-5.3.27 | 2 
+                  sysklogd-1.5 | 1 
+                      icu-51.2 | 1 
+                  libv4l-0.8.9 | 1 
+                   iperf-2.0.5 | 1 
+                    strace-4.8 | 1 
+                    crda-1.1.3 | 1 
+           imagemagick-6.8.7-5 | 1 
 
-  Regards,
-  Arnout
+Detail of failures
+===================
+
+      bfin |                     crda-1.1.3 | NOK | http://autobuild.buildroot.net/results/a4548583aa63fbf6db9dbdf7e1556b0d23800de5/
+      bfin |                       icu-51.2 | NOK | http://autobuild.buildroot.net/results/96b1254f6807fe009bf929e09a14dbef89e5df5c/
+   powerpc |            imagemagick-6.8.7-5 | NOK | http://autobuild.buildroot.net/results/e84e78da4c20b23b3922eeb3dcc913d2492cf681/
+   powerpc |                    iperf-2.0.5 | NOK | http://autobuild.buildroot.net/results/4b04bc2dc08fc2e256cfd90ed31b83eb9a28f220/
+   aarch64 |                   libv4l-0.8.9 | NOK | http://autobuild.buildroot.net/results/0a324a0db7df7edbe46865128eb10acd08047bec/
+       sh4 |                     php-5.3.27 | NOK | http://autobuild.buildroot.net/results/0471b5a2e4842f20e61d118cca3102751a40e760/
+       arm |                     php-5.3.27 | NOK | http://autobuild.buildroot.net/results/007846e7c3d994f185ed1665b549033402e68d23/
+     nios2 |                     strace-4.8 | NOK | http://autobuild.buildroot.net/results/88f330254a83fbc105a74e76df586672d2c369c4/
+   powerpc |                   sysklogd-1.5 | NOK | http://autobuild.buildroot.net/results/5614f6a7ced88c817126fccba48d5dd2361210f6/
+
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+http://autobuild.buildroot.net
