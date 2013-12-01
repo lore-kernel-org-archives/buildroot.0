@@ -1,9 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun,  1 Dec 2013 23:36:05 +0100
-Subject: [Buildroot] [PATCH 2/4] package/rpi-userland: bump for misc fixes
+Date: Sun,  1 Dec 2013 23:36:07 +0100
+Subject: [Buildroot] [PATCH 4/4] package/tvheadend: bump version
 In-Reply-To: <cover.1385937338.git.yann.morin.1998@free.fr>
 References: <cover.1385937338.git.yann.morin.1998@free.fr>
-Message-ID: <7491e6ed595795f821f91cdbe975ad6c2a67b581.1385937338.git.yann.morin.1998@free.fr>
+Message-ID: <be562b7c43e4f2b1665baf2168b31a6a2379e20d.1385937338.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,29 +12,25 @@ To: buildroot@busybox.net
 
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Fixes for:
-  - video encoder I-Frames compliance )PPS and SPS headers)
-  - bitrate (quantisation?)
-  - unnecessary build of mmal components
-  - segfault in multiple-files stream generation
+Misc fixes and improvements all over the place, mostly fixes.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/rpi-userland/rpi-userland.mk | 2 +-
+ package/tvheadend/tvheadend.mk | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/rpi-userland/rpi-userland.mk b/package/rpi-userland/rpi-userland.mk
-index 1741153..b17a5f4 100644
---- a/package/rpi-userland/rpi-userland.mk
-+++ b/package/rpi-userland/rpi-userland.mk
+diff --git a/package/tvheadend/tvheadend.mk b/package/tvheadend/tvheadend.mk
+index 7578dab..1713d58 100644
+--- a/package/tvheadend/tvheadend.mk
++++ b/package/tvheadend/tvheadend.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--RPI_USERLAND_VERSION = 0d486513f56453f8203c270fcad0b04f8e4f1fee
-+RPI_USERLAND_VERSION = d2c9f912da389c23ed27e81e940be3540f64fc59
- RPI_USERLAND_SITE = http://github.com/raspberrypi/userland/tarball/$(RPI_USERLAND_VERSION)
- RPI_USERLAND_LICENSE = BSD-3c
- RPI_USERLAND_LICENSE_FILES = LICENCE
+-TVHEADEND_VERSION           = 2b649954346aa2e9c81834d500a25c528f31f829
++TVHEADEND_VERSION           = c7d0335eb10d02b780423bef8e7c740e422fff13
+ TVHEADEND_SITE              = git://github.com/tvheadend/tvheadend.git
+ TVHEADEND_LICENSE           = GPLv3+
+ TVHEADEND_LICENSE_FILES     = LICENSE
 -- 
 1.8.1.2
