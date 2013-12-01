@@ -1,65 +1,64 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 1 Dec 2013 23:45:07 +0100
-Subject: [Buildroot] [git commit] grub: improve help text with detailed
-	instructions to install grub
-Message-ID: <20131201225017.4BE7C9BE69@busybox.osuosl.org>
+Date: Sun, 1 Dec 2013 23:32:33 +0100
+Subject: [Buildroot] [git commit] package: add objcopy and ranlib to
+	HOST_CONFIGURE_OPTS
+Message-ID: <20131201225016.E7AB59BE94@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=62a84ded2fd779b1be0e917aa6845114b4272b11
+commit: http://git.buildroot.net/buildroot/commit/?id=f1f4451aa78b724edb8a75bc9b03b00958ded94f
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-These instructions should probaby go in the Buildroot manual, but at
-this point, it's not clear in which section they should go. So in
-order to not loose those notes, add them to the Grub help text.
+This commit adds the OBJCOPY and RANLIB variables to
+HOST_CONFIGURE_OPTS, since grub legacy will need these defined in
+order to build properly.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- boot/grub/Config.in |   30 ++++++++++++++++++++++++++++++
- 1 files changed, 30 insertions(+), 0 deletions(-)
+ Makefile            |    8 ++++++++
+ package/Makefile.in |    2 ++
+ 2 files changed, 10 insertions(+), 0 deletions(-)
 
-diff --git a/boot/grub/Config.in b/boot/grub/Config.in
-index 65b95e1..c90770f 100644
---- a/boot/grub/Config.in
-+++ b/boot/grub/Config.in
-@@ -5,6 +5,36 @@ config BR2_TARGET_GRUB
- 	help
- 	  The GRand Unified Bootloader for x86 systems.
+diff --git a/Makefile b/Makefile
+index 8c2429a..6c28a86 100644
+--- a/Makefile
++++ b/Makefile
+@@ -189,6 +189,12 @@ endif
+ ifndef HOSTNM
+ HOSTNM:=nm
+ endif
++ifndef HOSTOBJCOPY
++HOSTOBJCOPY:=objcopy
++endif
++ifndef HOSTRANLIB
++HOSTRANLIB:=ranlib
++endif
+ HOSTAR:=$(shell which $(HOSTAR) || type -p $(HOSTAR) || echo ar)
+ HOSTAS:=$(shell which $(HOSTAS) || type -p $(HOSTAS) || echo as)
+ HOSTFC:=$(shell which $(HOSTLD) || type -p $(HOSTLD) || echo || which g77 || type -p g77 || echo gfortran)
+@@ -196,6 +202,8 @@ HOSTCPP:=$(shell which $(HOSTCPP) || type -p $(HOSTCPP) || echo cpp)
+ HOSTLD:=$(shell which $(HOSTLD) || type -p $(HOSTLD) || echo ld)
+ HOSTLN:=$(shell which $(HOSTLN) || type -p $(HOSTLN) || echo ln)
+ HOSTNM:=$(shell which $(HOSTNM) || type -p $(HOSTNM) || echo nm)
++HOSTOBJCOPY:=$(shell which $(HOSTOBJCOPY) || type -p $(HOSTOBJCOPY) || echo objcopy)
++HOSTRANLIB:=$(shell which $(HOSTRANLIB) || type -p $(HOSTRANLIB) || echo ranlib)
  
-+	  Some notes on creating a disk image with Grub installed:
-+	    1. Create an empty disk image
-+	       dd if=/dev/zero of=disk.img bs=1M count=32
-+	    2. Create one primary partition
-+	       cfdisk -h 16 -s 63 disk.img
-+	    3. Set up a loop device
-+	       sudo losetup -f disk.img
-+	    4. Set up loop devices per partitions
-+	       sudo partx -a /dev/loop0
-+	    5. Create the ext2 filesystem
-+	       sudo mkfs.ext2 -L root /dev/loop0p1
-+	    6. Mount the filesystem
-+	       mount /dev/loop0p1 /mnt
-+	    7. Extract the root filesystem
-+	       sudo tar -C /mnt -xf output/images/rootfs.tar
-+	    8. Unmount the filesystem, clean up loop device
-+	       sudo umount /mnt
-+	       sudo partx -d /dev/loop0
-+	       sudo losetup -d /dev/loop0
-+	    9. Install grub
-+	       output/host/sbin/grub --device-map=/dev/null
-+	       and in the grub shell, enter:
-+		device (hd0) disk.img
-+		geometry (hd0) <cylinders> 16 63
-+		root (hd0,0)
-+		setup (hd0)
-+	    10. Image is ready
-+		Can be tested in Qemu, with:
-+		  qemu-system-{i386,x86-64} -hda disk.img
-+
- if BR2_TARGET_GRUB
- 
- config BR2_TARGET_GRUB_SPLASH
+ export HOSTAR HOSTAS HOSTCC HOSTCXX HOSTFC HOSTLD
+ export HOSTCC_NOCCACHE HOSTCXX_NOCCACHE
+diff --git a/package/Makefile.in b/package/Makefile.in
+index 5d52fbd..7bc0606 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -256,6 +256,8 @@ HOST_CONFIGURE_OPTS=PATH=$(HOST_PATH) \
+ 		GCC="$(HOSTCC)" \
+ 		CXX="$(HOSTCXX)" \
+ 		CPP="$(HOSTCPP)" \
++		OBJCOPY="$(HOSTOBJCOPY)" \
++		RANLIB="$(HOSTRANLIB)" \
+ 		CPPFLAGS="$(HOST_CPPFLAGS)" \
+ 		CFLAGS="$(HOST_CFLAGS)" \
+ 		CXXFLAGS="$(HOST_CXXFLAGS)" \
