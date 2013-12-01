@@ -1,104 +1,62 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 01 Dec 2013 20:15:22 -0000
-Subject: [Buildroot] [git commit] pkg-infra: add user-supplied step-hooks
-Message-ID: <20131201201519.03C3A9BE44@busybox.osuosl.org>
+Date: Sun, 1 Dec 2013 21:04:47 +0100
+Subject: [Buildroot] [git commit] crda: fix static build failure
+Message-ID: <20131201201520.D7EEE9BE78@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=2522fa8ed7e5e4dcec6a39ef8b6de75585dd721a
+commit: http://git.buildroot.net/buildroot/commit/?id=d54418f2bcd9267fd049511d6236fb91c83b94ea
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Allow user to supply their own step-hooks by passing a variable
-on the make command-line:
-    make BR2_INSTRUMENTATION_SCRIPTS=/path/to/my/script
+libnl-3 uses threads and this isn't accounted for in crda or
+libnl-3*.pc files since crda doesn't use pkg-config.
 
-This can be useful to run site-specific actions at each step of the
-build process, such as logging installed, removed or modified files,
-do sanity checks on installed files...
+Since linking order matters for static scenarios also throw in -lnl-3
+into NLLIBS first since it gets appended to in crda makefiles to add
+libnl-3.
 
-It is possible to call more than one script, by passing a space-separated
-lists of scripts to call.
+libgcrypt depends on libgpg-error and this isn't accounted for in
+crda makefile, but it is in libgcrypt-config script (in the correct
+order for static linking), so set LDLIBS calling this script.
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Reviewed-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-Reviewed-by: Samuel Martin <s.martin49@gmail.com>
+Fixes:
+  http://autobuild.humanoidz.org/results/31c/31c54e16b60f41e2aa9ea6cd43ced694d3ce3ce0/
+  http://autobuild.humanoidz.org/results/a45/a4548583aa63fbf6db9dbdf7e1556b0d23800de5/
+
+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- docs/manual/debugging-buildroot.txt |   33 +++++++++++++++++++++++++++++++++
- docs/manual/developer-guide.txt     |    2 ++
- package/pkg-generic.mk              |    9 +++++++++
- 3 files changed, 44 insertions(+), 0 deletions(-)
+ package/crda/crda.mk |   16 +++++++++++++++-
+ 1 files changed, 15 insertions(+), 1 deletions(-)
 
-diff --git a/docs/manual/debugging-buildroot.txt b/docs/manual/debugging-buildroot.txt
-new file mode 100644
-index 0000000..5fa05b0
---- /dev/null
-+++ b/docs/manual/debugging-buildroot.txt
-@@ -0,0 +1,33 @@
-+// -*- mode:doc; -*-
-+// vim: set syntax=asciidoc:
-+
-+[[debugging-buildroot]]
-+
-+Debugging Buildroot
-+-------------------
-+
-+It is possible to instrument the steps +Buildroot+ does when building
-+packages. Define the variable +BR2_INSTRUMENTATION_SCRIPTS+ to contain
-+the path of one or more scripts (or other executables), in a
-+space-separated list, you want called before and after each step. The
-+scripts are called in sequence, with three parameters:
-+
-+  - +start+ or +end+ to denote the start (resp. the end) of a step;
-+  - the name of the step about to be started, or which just ended.
-+  - the name of the package
-+
-+For example :
-+
-+----
-+make BR2_INSTRUMENTATION_SCRIPTS="/path/to/my/script1 /path/to/my/script2"
-+----
-+
-+That script has access to the following variables:
-+
-+  - +BUILDROOT_CONFIG+: the path to the Buildroot .config file
-+  - +HOST_DIR+, +STAGING_DIR+, +TARGET_DIR+: see
-+    xref:generic-package-reference[]
-+  - +BUILD_DIR+: the directory where packages are extracted and built
-+  - +BINARIES_DIR+: the place where all binary files (aka images) are
-+    stored
-+  - +BASE_DIR+: the base output directory
-diff --git a/docs/manual/developer-guide.txt b/docs/manual/developer-guide.txt
-index 8125ad5..9054dee 100644
---- a/docs/manual/developer-guide.txt
-+++ b/docs/manual/developer-guide.txt
-@@ -11,3 +11,5 @@ include::adding-packages.txt[]
- include::patch-policy.txt[]
+diff --git a/package/crda/crda.mk b/package/crda/crda.mk
+index 44fd0f2..ce87d44 100644
+--- a/package/crda/crda.mk
++++ b/package/crda/crda.mk
+@@ -12,8 +12,22 @@ CRDA_DEPENDENCIES = host-pkgconf host-python-m2crypto \
+ CRDA_LICENSE = ISC
+ CRDA_LICENSE_FILES = LICENSE
  
- include::download-infra.txt[]
-+
-+include::debugging-buildroot.txt[]
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 619974e..fc6e8c6 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -55,6 +55,15 @@ define step_time
- endef
- GLOBAL_INSTRUMENTATION_HOOKS += step_time
- 
-+# User-supplied script
-+define step_user
-+	@$(foreach user_hook, $(BR2_INSTRUMENTATION_SCRIPTS), \
-+		$(USER_HOOKS_EXTRA_ENV) $(user_hook) "$(1)" "$(2)" "$(3)"$(sep))
-+endef
-+ifneq ($(BR2_INSTRUMENTATION_SCRIPTS),)
-+GLOBAL_INSTRUMENTATION_HOOKS += step_user
++# libnl-3 needs -lm (for rint) and -lpthread if linking statically.
++# And library order matters hence stick -lnl-3 first since it's appended
++# in the crda Makefiles as in NLLIBS+=-lnl-3 ... thus failing.
++#
++# libgcrypt needs -lgpg-error if linking statically, which is correctly
++# set by the libgcrypt-config script (and in the right order).
++ifeq ($(BR2_PREFER_STATIC_LIB),y)
++CRDA_NLLIBS += -lnl-3 -lm -lpthread
++CRDA_LDLIBS += `$(STAGING_DIR)/usr/bin/libgcrypt-config --libs`
 +endif
 +
- ################################################################################
- # Implicit targets -- produce a stamp file for each step of a package build
- ################################################################################
+ define CRDA_BUILD_CMDS
+-	$(TARGET_CONFIGURE_OPTS) $(MAKE) all_noverify -C $(@D)
++	$(TARGET_CONFIGURE_OPTS) \
++		LDLIBS="$(CRDA_LDLIBS)" \
++		NLLIBS="$(CRDA_NLLIBS)" \
++		$(MAKE) all_noverify -C $(@D)
+ endef
+ 
+ define CRDA_INSTALL_TARGET_CMDS
