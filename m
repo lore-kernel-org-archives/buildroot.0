@@ -1,32 +1,171 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 1 Dec 2013 23:44:04 +0100
-Subject: [Buildroot] [git commit] grub: install the sample menu.lst into
-	$(TARGET_DIR)/boot/grub
-Message-ID: <20131201225017.2D2179BE94@busybox.osuosl.org>
+Date: Sun, 1 Dec 2013 23:33:24 +0100
+Subject: [Buildroot] [git commit] grub: factorize BR2_TARGET_GRUB dependency
+	in Config.in
+Message-ID: <20131201225017.04D109BE94@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=bba9eb1ea4739c9b3db3a4ee24fe1e754ddcc70c
+commit: http://git.buildroot.net/buildroot/commit/?id=76422721f76136b36be6662f0de7a02fe0d2733c
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- boot/grub/grub.mk |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+ boot/grub/Config.in |   27 ++++-----------------------
+ 1 files changed, 4 insertions(+), 23 deletions(-)
 
-diff --git a/boot/grub/grub.mk b/boot/grub/grub.mk
-index 229b1a4..0c2c035 100644
---- a/boot/grub/grub.mk
-+++ b/boot/grub/grub.mk
-@@ -80,6 +80,7 @@ define GRUB_INSTALL_TARGET_CMDS
- 	cp $(@D)/stage1/stage1 $(TARGET_DIR)/boot/grub
- 	cp $(@D)/stage2/*1_5   $(TARGET_DIR)/boot/grub
- 	cp $(@D)/stage2/stage2 $(TARGET_DIR)/boot/grub
-+	cp boot/grub/menu.lst $(TARGET_DIR)/boot/grub
- 	$(GRUB_INSTALL_SPLASH)
- endef
+diff --git a/boot/grub/Config.in b/boot/grub/Config.in
+index ec48d17..fab3323 100644
+--- a/boot/grub/Config.in
++++ b/boot/grub/Config.in
+@@ -4,9 +4,10 @@ config BR2_TARGET_GRUB
+ 	help
+ 	  The GRand Unified Bootloader for x86 systems.
  
++if BR2_TARGET_GRUB
++
+ config BR2_TARGET_GRUB_SPLASH
+ 	bool "Splashimage support"
+-	depends on BR2_TARGET_GRUB
+ 	help
+ 	  Add support for splashimage.
+ 
+@@ -15,132 +16,112 @@ config BR2_TARGET_GRUB_SPLASH
+ 
+ config BR2_TARGET_GRUB_DISKLESS
+ 	bool "diskless support"
+-	depends on BR2_TARGET_GRUB
+ 	help
+ 	  enable diskless support
+ 
+ config BR2_TARGET_GRUB_3c595
+ 	bool "3Com595 driver"
+-	depends on BR2_TARGET_GRUB
+ 	help
+ 	  enable 3Com595 driver
+ 
+ config BR2_TARGET_GRUB_3c90x
+ 	bool "3Com90x driver"
+-	depends on BR2_TARGET_GRUB
+ 	help
+ 	  enable 3Com90x driver
+ 
+ config BR2_TARGET_GRUB_davicom
+ 	bool "Davicom driver"
+-	depends on BR2_TARGET_GRUB
+ 	help
+ 	  enable Davicom driver
+ 
+ config BR2_TARGET_GRUB_e1000
+ 	bool "Etherexpress Pro/1000 driver"
+-	depends on BR2_TARGET_GRUB
+ 	help
+ 	  enable Etherexpress Pro/1000 driver
+ 
+ config BR2_TARGET_GRUB_eepro100
+ 	bool "Etherexpress Pro/100 driver"
+-	depends on BR2_TARGET_GRUB
+ 	help
+ 	  enable Etherexpress Pro/100 driver
+ 
+ config BR2_TARGET_GRUB_epic100
+ 	bool "SMC 83c170 EPIC/100 driver"
+-	depends on BR2_TARGET_GRUB
+ 	help
+ 	  enable SMC 83c170 EPIC/100 driver
+ 
+ config BR2_TARGET_GRUB_forcedeth
+ 	bool "Nvidia Geforce driver"
+-	depends on BR2_TARGET_GRUB
+ 	help
+ 	  enable Nvidia Geforce driver
+ 
+ config BR2_TARGET_GRUB_natsemi
+ 	bool "NatSemi DP8381x driver"
+-	depends on BR2_TARGET_GRUB
+ 	help
+ 	  enable NatSemi DP8381x driver
+ 
+ config BR2_TARGET_GRUB_ns83820
+ 	bool "NS83820 driver"
+-	depends on BR2_TARGET_GRUB
+ 	help
+ 	  enable NS83820 driver
+ 
+ config BR2_TARGET_GRUB_ns8390
+ 	bool "NE2000 PCI driver"
+-	depends on BR2_TARGET_GRUB
+ 	help
+ 	  enable NE2000 PCI driver
+ 
+ config BR2_TARGET_GRUB_pcnet32
+ 	bool "AMD Lance/PCI PCNet/32 driver"
+-	depends on BR2_TARGET_GRUB
+ 	help
+ 	  enable AMD Lance/PCI PCNet/32 driver
+ 
+ config BR2_TARGET_GRUB_pnic
+ 	bool "Bochs Pseudo Nic driver"
+-	depends on BR2_TARGET_GRUB
+ 	help
+ 	  enable Bochs Pseudo Nic driver
+ 
+ config BR2_TARGET_GRUB_rtl8139
+ 	bool "Realtek 8139 driver"
+-	depends on BR2_TARGET_GRUB
+ 	help
+ 	  enable Realtek 8139 driver
+ 
+ config BR2_TARGET_GRUB_r8169
+ 	bool "Realtek 8169 driver"
+-	depends on BR2_TARGET_GRUB
+ 	help
+ 	  enable Realtek 8169 driver
+ 
+ config BR2_TARGET_GRUB_sis900
+ 	bool "SIS 900 and SIS 7016 driver"
+-	depends on BR2_TARGET_GRUB
+ 	help
+ 	  enable SIS 900 and SIS 7016 driver
+ 
+ config BR2_TARGET_GRUB_tg3
+ 	bool "Broadcom Tigon3 driver"
+-	depends on BR2_TARGET_GRUB
+ 	help
+ 	  enable Broadcom Tigon3 driver
+ 
+ config BR2_TARGET_GRUB_tulip
+ 	bool "Tulip driver"
+-	depends on BR2_TARGET_GRUB
+ 	help
+ 	  enable Tulip driver
+ 
+ config BR2_TARGET_GRUB_tlan
+ 	bool "TI ThunderLAN driver"
+-	depends on BR2_TARGET_GRUB
+ 	help
+ 	  enable TI ThunderLAN driver
+ 
+ config BR2_TARGET_GRUB_undi
+ 	bool "PXE UNDI driver"
+-	depends on BR2_TARGET_GRUB
+ 	help
+ 	  enable PXE UNDI driver
+ 
+ config BR2_TARGET_GRUB_via_rhine
+ 	bool "Rhine-I/II driver"
+-	depends on BR2_TARGET_GRUB
+ 	help
+ 	  enable Rhine-I/II driver
+ 
+ config BR2_TARGET_GRUB_w89c840
+ 	bool "Winbond W89c840 driver"
+-	depends on BR2_TARGET_GRUB
+ 	help
+ 	  enable Winbond W89c840 driver
++
++endif # BR2_TARGET_GRUB
