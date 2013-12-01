@@ -1,118 +1,108 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sun,  1 Dec 2013 01:20:27 +0100
-Subject: [Buildroot] [PATCH v5] core: introduce the BR2_EXTERNAL variable
-In-Reply-To: <529A8032.10606@mind.be>
-References: <529A8032.10606@mind.be>
-Message-ID: <1385857227-677-1-git-send-email-arnout@mind.be>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sun, 01 Dec 2013 01:29:37 +0100
+Subject: [Buildroot] [PATCHv4 2/5] core: allow external
+ Config.in/makefile code to be integrated
+In-Reply-To: <1385751626-28967-3-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1385751626-28967-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1385751626-28967-3-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <529A82F1.6030007@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+On 29/11/13 20:00, Thomas Petazzoni wrote:
+> This commit allows the BR2_EXTERNAL directory to contain Config.in and
+> Makefile code, which gets integrated into the Buildroot build logic:
+>
+>   - Buildroot automatically includes the $BR2_EXTERNAL/Config.in in the
+>     top-level configuration menu.
+>
+>   - Buildroot automatically includes the BR2_EXTERNAL/external.mk in
+>     the build logic, so it can for example be used to include other .mk
+>     files that define package recipes.
 
-This commit introduces the BR2_EXTERNAL environment variable, which
-will allow to keep Buildroot customization (board-specific
-configuration files or root filesystem overlays, package Config.in and
-makefiles, as well as defconfigs) outside of the Buildroot tree.
+  The advantage of enforcing the package dir would have been that we 
+could directly include $(BR2_EXTERNAL)/package/*/*.mk, instead of forcing 
+the user to create an external.mk that contains either
 
-This commit only introduces the variable itself, and ensures that it
-is available within Config.in options. This allows us to use
-$BR2_EXTERNAL in a 'source' statement in Config.in.
+include $(BR2_EXTERNAL)/package/*/*.mk
 
-Following patches extend the usage of BR2_EXTERNAL to other areas
-(packages and defconfigs).
+or
 
-In details, this commit:
+include $(BR2_EXTERNAL)/*/*.mk
 
- * Introduces the BR2_EXTERNAL Kconfig option. This option has no
-   prompt, and is therefore not visible to the user and also not
-   stored in the .config file. It is automatically set to the value of
-   the BR2_EXTERNAL environment variable. The only purpose of this
-   BR2_EXTERNAL Kconfig option is to allow $BR2_EXTERNAL to be
-   properly expanded when used inside Kconfig source statements.
+depending on how he structures things.
 
- * Calculates the BR2_EXTERNAL value to use. If passed on the command
-   line, then this value is taken in priority, and saved to a
-   .br-external hidden file in the output directory. If not passed on
-   the command line, then we read the .br-external file from the
-   output directory. This allows the user to not pass the BR2_EXTERNAL
-   value at each make invocation. If no BR2_EXTERNAL value is passed,
-   we define it to support/dummy-external, so that the kconfig code
-   finds an existing $(BR2_EXTERNAL)/package/Config.in file to
-   include.
 
- * Passes the BR2_EXTERNAL into the *config environment, so that its
-   value is found when parsing/evaluating Config.in files and .config
-   values.
+  Maybe a compromise is that we source $BR2_EXTERNAL/package/Config.in 
+but include it at the end of the top-level Config.in instead of at the 
+beginning of the package/Config.in. I guess that's what Samuel meant 
+before...
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- Config.in |  4 ++++
- Makefile  | 27 ++++++++++++++++++++++++++-
- 2 files changed, 30 insertions(+), 1 deletion(-)
+>
+> This is typically intended to be used to create target packages in the
+> BR2_EXTERNAL directory, but can also be used for bootloaders, host
+> packages, or other custom make logic.
+>
+> We also add a dummy Config.in file in support/dummy-external/ to
+> ensure that the source "$BR2_EXTERNAL/Config.in" line will point to an
+> existing file even when BR2_EXTERNAL is not used by the user.
+>
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> ---
+>   Config.in                        | 2 ++
+>   Makefile                         | 4 ++++
+>   support/dummy-external/Config.in | 0
+>   3 files changed, 6 insertions(+)
+>   create mode 100644 support/dummy-external/Config.in
+>
+> diff --git a/Config.in b/Config.in
+> index 98726ab..9b10693 100644
+> --- a/Config.in
+> +++ b/Config.in
+> @@ -486,3 +486,5 @@ source "boot/Config.in"
+>   source "package/Config.in.host"
+>
+>   source "Config.in.legacy"
+> +
+> +source "$BR2_EXTERNAL/Config.in"
+> diff --git a/Makefile b/Makefile
+> index 5878d44..b5a9828 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -375,6 +375,10 @@ include boot/common.mk
+>   include linux/linux.mk
+>   include system/system.mk
+>
+> +ifeq ($(BR2_EXTERNAL_USED),y)
+> +include $(BR2_EXTERNAL)/external.mk
+> +endif
 
-diff --git a/Config.in b/Config.in
-index d87e0f0..98726ab 100644
---- a/Config.in
-+++ b/Config.in
-@@ -14,6 +14,10 @@ config BR2_HOSTARCH
- 	string
- 	option env="HOSTARCH"
- 
-+config BR2_EXTERNAL
-+	string
-+	option env="BR2_EXTERNAL"
-+
- # Hidden boolean selected by pre-built packages for x86, when they
- # need to run on x86-64 machines (example: pre-built external
- # toolchains, binary tools like SAM-BA, etc.).
-diff --git a/Makefile b/Makefile
-index 0480a42..ae0bc10 100644
---- a/Makefile
-+++ b/Makefile
-@@ -99,6 +99,30 @@ export CDPATH:=
- BASE_DIR := $(shell mkdir -p $(O) && cd $(O) >/dev/null && pwd)
- $(if $(BASE_DIR),, $(error output directory "$(O)" does not exist))
- 
-+
-+# Handling of BR2_EXTERNAL.
-+#
-+# The value of BR2_EXTERNAL is stored in .br-external in the output directory.
-+# On subsequent invocations of make, it is read in. It can still be overridden
-+# on the command line, therefore the file is re-created every time make is run.
-+#
-+# When BR2_EXTERNAL is not set, the .br-external file is removed and we point 
-+# to support/dummy-external. This makes sure we can unconditionally include the
-+# Config.in and external.mk from the BR2_EXTERNAL directory. In this case,
-+# override is necessary so the user can clear BR2_EXTERNAL from the command 
-+# line, but the dummy path is still used internally.
-+
-+BR2_EXTERNAL_FILE = $(BASE_DIR)/.br-external
-+-include $(BR2_EXTERNAL_FILE)
-+ifeq ($(BR2_EXTERNAL),)
-+  override BR2_EXTERNAL = support/dummy-external
-+  $(shell rm -f $(BR2_EXTERNAL_FILE))
-+else
-+  BR2_EXTERNAL_USED = y
-+  $(shell echo BR2_EXTERNAL ?= $(BR2_EXTERNAL) > $(BR2_EXTERNAL_FILE))
-+endif
-+
-+
- BUILD_DIR:=$(BASE_DIR)/build
- STAMP_DIR:=$(BASE_DIR)/stamps
- BINARIES_DIR:=$(BASE_DIR)/images
-@@ -619,7 +643,8 @@ COMMON_CONFIG_ENV = \
- 	KCONFIG_AUTOCONFIG=$(BUILD_DIR)/buildroot-config/auto.conf \
- 	KCONFIG_AUTOHEADER=$(BUILD_DIR)/buildroot-config/autoconf.h \
- 	KCONFIG_TRISTATE=$(BUILD_DIR)/buildroot-config/tristate.config \
--	BUILDROOT_CONFIG=$(BUILDROOT_CONFIG)
-+	BUILDROOT_CONFIG=$(BUILDROOT_CONFIG) \
-+	BR2_EXTERNAL=$(BR2_EXTERNAL)
- 
- xconfig: $(BUILD_DIR)/buildroot-config/qconf outputmakefile
- 	@mkdir -p $(BUILD_DIR)/buildroot-config
+  Wouldn't it be simpler to put a dummy external.mk file in
+dummy-external as well? Then BR2_EXTERNAL_USED can be removed (the
+following patch doesn't need it: the pattern rule will just never match
+because support/dummy-external/configs doesn't exist).
+
+
+  Regards,
+  Arnout
+
+> +
+>   TARGETS+=target-finalize
+>
+>   ifeq ($(BR2_ENABLE_LOCALE_PURGE),y)
+> diff --git a/support/dummy-external/Config.in b/support/dummy-external/Config.in
+> new file mode 100644
+> index 0000000..e69de29
+>
+
+
 -- 
-1.8.4.4
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
