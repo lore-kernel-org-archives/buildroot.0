@@ -1,45 +1,65 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 01 Dec 2013 01:59:59 +0100
-Subject: [Buildroot] [PATCH 2/5] package/rpi-firmware: add option to
- install firmware files in target/boot/
-In-Reply-To: <20131129190153.GA4639@free.fr>
-References: <20131128205515.GB3337@free.fr>
- <1108197933.15379580.1385712019266.JavaMail.root@openwide.fr>
- <20131129092715.24d2b199@skate> <20131129190153.GA4639@free.fr>
-Message-ID: <529A8A0F.7010905@mind.be>
+Date: Sun, 01 Dec 2013 02:04:48 +0100
+Subject: [Buildroot] [PATCH 3/5] package/rpi-firmware: move to
+ bootloaders menu
+In-Reply-To: <20131128211605.GC3337@free.fr>
+References: <cover.1385157864.git.yann.morin.1998@free.fr>
+ <869fff522738fdd927541a3e3a303f97143f8469.1385157864.git.yann.morin.1998@free.fr>
+ <20131128210834.3c78df23@skate> <20131128211605.GC3337@free.fr>
+Message-ID: <529A8B30.4080008@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 29/11/13 20:01, Yann E. MORIN wrote:
-> 3) bootloaders for case (b) will have to:
->     (a) install their files, and a manifest of those files, in a known
->         location
->     (b) that location should be platform-agnostic, so that genimages will
->         find it; $(BINARIES_DIR)/boot-files/  looks like a good candidate.
+On 28/11/13 22:16, Yann E. MORIN wrote:
+> Thomas, All,
 >
-> genimages should be prepared to generate a partition with a filesystem
-> filled by copying files listed in a manifest file.
-> (Relatively easy, I think.)
+> On 2013-11-28 21:08 +0100, Thomas Petazzoni spake thusly:
+>> >On Fri, 22 Nov 2013 23:50:56 +0100, Yann E. MORIN wrote:
+>>> > >From: "Yann E. MORIN"<yann.morin.1998@free.fr>
+>>> > >
+>>> > >rpi-firmware, although it does contain the GPU firmware, also serves as
+>>> > >the bootloader. As a reminder, here is an overview of how the RPi boots:
+>>> > >   - GPU exits reset
+>>> > >   - GPU loads its firmware from the first, FAT32-formatted partition
+>>> > >   - GPU reads its config file from the same partition
+>>> > >   - GPU loads kernel from the same partition, into RAM
+>>> > >   - GPU de-asserts the reset of the ARM core (CPU)
+>>> > >   - CPU exits reset and starts executing kernel code
+>>> > >
+>>> > >So, although the largest part of rpi-firmware is indeed the GPU firmware,
+>>> > >the first purpose it serves is as a bootloader for the ARM core.
+>>> > >
+>>> > >People that do not want to use the GPU (eg. headless, no multimedia...)
+>>> > >will still want to select rpi-firmware.
+>>> > >
+>>> > >Having rpi-firmware in target packages -> hardware-handling -> firmware
+>>> > >is a bit misleading in this case.
+>>> > >
+>>> > >Hence, move rpi-firmware from the target packages submenu, into the
+>>> > >bootloaders submenu.
+>>> > >
+>>> > >Signed-off-by: "Yann E. MORIN"<yann.morin.1998@free.fr>
+>> >
+>> >I must say I am not entirely convinced this change is necessary.
+> It is not_necessary_. I find it more coherent with the upstream docs
+[snip]
 
-  Yeah, it's just adding a flag that tells genimages that fs_root is 
-relative to the images directory instead of the target directory.
+  We can have the best of both worlds: just move the source line from 
+package/Config.in to boot/Config.in, and no dicking about with changing 
+config names...
 
-  I think it is safe to assume that the bootloaders of this type will put 
-their output files in a directory, rather than flat in the images 
-directory. So a manifest is not really needed. Although... If you want to 
-create a partition with SPL + U-Boot + uImage, you 'll have to specify 
-these three explicitly.
+  Calling the stuff in boot/ BR2_TARGET instead of BR2_PACKAGE is IMHO 
+just creating confusion. Even having the boot/ directory at all is 
+pointless (i.e. historical accident) if you ask me.
+
+  So I would be more convinced to move everything from boot/ to packages/ 
+than the other way round :-)
 
   Regards,
   Arnout
-
->
-> The kind of bootloaders I know that fit in this category are
-> rpi-firmware and grub. There may have others.
-
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
