@@ -1,92 +1,48 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 1 Dec 2013 23:44:13 +0100
-Subject: [Buildroot] [git commit] grub: add option to configure the list of
-	supported filesystems
-Message-ID: <20131201225017.424019BE69@busybox.osuosl.org>
+Date: Sun, 1 Dec 2013 23:44:07 +0100
+Subject: [Buildroot] [git commit] grub: adjust splashimage in menu.lst
+	depending on configuration
+Message-ID: <20131201225017.36E709BE69@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1cece2813bf635ae29e9a8287322439b9c5992f7
+commit: http://git.buildroot.net/buildroot/commit/?id=741740cee6e88eb14600a95b8fdd06f32a9fb271
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Grub can be configured to enable or disable the filesystems supported
-in the stage 2. In addition, there are filesystem specific stage
-1.5. In order to save space and build time, we provide a new option
-that allows to give a space-separated list of filesystems that Grub
-should support.
-
-We default to support FAT and ext2, since most of the other
-filesystems are fairly unlikely to be used.
-
-We use this option to:
-
- 1) Pass --enable-<fs> or --disable-<fs>, which enables/disables the
-    support of <fs> in Grub stage 2.
-
- 2) Install only the stage 1.5 that correspond to the selected
-    filesystems.
+Make the splashimage line in menu.lst only active when splashimage
+support has really been enabled in the Grub configuration.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- boot/grub/Config.in |    8 ++++++++
- boot/grub/grub.mk   |   17 ++++++++++++++++-
- 2 files changed, 24 insertions(+), 1 deletions(-)
+ boot/grub/grub.mk  |    1 +
+ boot/grub/menu.lst |    2 +-
+ 2 files changed, 2 insertions(+), 1 deletions(-)
 
-diff --git a/boot/grub/Config.in b/boot/grub/Config.in
-index ee92250b..65b95e1 100644
---- a/boot/grub/Config.in
-+++ b/boot/grub/Config.in
-@@ -15,6 +15,14 @@ config BR2_TARGET_GRUB_SPLASH
- 	  A splashimage is a 14-color indexed .xpm picture which
- 	  is displayed as background for the grub menu.
- 
-+config BR2_TARGET_GRUB_FS_SUPPORT
-+	string "Filesystem to support"
-+	default "ext2fs fat"
-+	help
-+	  Space separated list of filesystems to support. Possible
-+	  values are ext2fs, fat, ffs, ufs2, minix, reiserfs, vstafs,
-+	  jfs, xfs and iso9660.
-+
- config BR2_TARGET_GRUB_DISKLESS
- 	bool "diskless support"
- 	help
 diff --git a/boot/grub/grub.mk b/boot/grub/grub.mk
-index f15d915..6ba02cd 100644
+index 0c2c035..f15d915 100644
 --- a/boot/grub/grub.mk
 +++ b/boot/grub/grub.mk
-@@ -46,6 +46,19 @@ GRUB_CONFIG-$(BR2_TARGET_GRUB_undi) += --enable-undi
- GRUB_CONFIG-$(BR2_TARGET_GRUB_via_rhine) += --enable-via-rhine
- GRUB_CONFIG-$(BR2_TARGET_GRUB_w89c840) += --enable-w89c840
+@@ -66,6 +66,7 @@ GRUB_CONF_OPT = \
+ ifeq ($(BR2_TARGET_GRUB_SPLASH),y)
+ define GRUB_INSTALL_SPLASH
+ 	cp boot/grub/splash.xpm.gz $(TARGET_DIR)/boot/grub/
++	$(SED) 's/^#splashimage/splashimage/' $(TARGET_DIR)/boot/grub/menu.lst
+ endef
+ endif
  
-+GRUB_POSSIBLE_FILESYSTEMS = ext2fs fat ffs ufs2 minix \
-+	reiserfs vstafs jfs xfs iso9660
-+GRUB_SELECTED_FILESYSTEMS = $(call qstrip,$(BR2_TARGET_GRUB_FS_SUPPORT))
-+
-+# Calculate the list of stage 1.5 files to install. They are prefixed
-+# by the filesystem name, except for ext2fs, where the stage 1.5 is
-+# prefixed by e2fs.
-+GRUB_STAGE_1_5_TO_INSTALL = $(subst ext2fs,e2fs,$(GRUB_SELECTED_FILESYSTEMS))
-+
-+GRUB_CONFIG-y = \
-+	$(foreach fs,$(GRUB_POSSIBLE_FILESYSTEMS),\
-+		$(if $(filter $(fs),$(GRUB_SELECTED_FILESYSTEMS)),--enable-$(fs),--disable-$(fs)))
-+
- define GRUB_DEBIAN_PATCHES
- 	# Apply the patches from the Debian patch
- 	(cd $(@D) ; for f in `cat debian/patches/00list | grep -v ^#` ; do \
-@@ -79,7 +92,9 @@ define GRUB_INSTALL_TARGET_CMDS
- 	install -m 0755 -D $(@D)/grub/grub $(HOST_DIR)/sbin/grub
- 	mkdir -p $(TARGET_DIR)/boot/grub
- 	cp $(@D)/stage1/stage1 $(TARGET_DIR)/boot/grub
--	cp $(@D)/stage2/*1_5   $(TARGET_DIR)/boot/grub
-+	for f in $(GRUB_STAGE_1_5_TO_INSTALL) ; do \
-+		cp $(@D)/stage2/$${f}_stage1_5 $(TARGET_DIR)/boot/grub ; \
-+	done
- 	cp $(@D)/stage2/stage2 $(TARGET_DIR)/boot/grub
- 	cp boot/grub/menu.lst $(TARGET_DIR)/boot/grub
- 	$(GRUB_INSTALL_SPLASH)
+diff --git a/boot/grub/menu.lst b/boot/grub/menu.lst
+index 41e9b62..7845fee 100644
+--- a/boot/grub/menu.lst
++++ b/boot/grub/menu.lst
+@@ -1,6 +1,6 @@
+ default=0
+ timeout=5
+-splashimage=(hd0,0)/boot/grub/splash.xpm.gz
++#splashimage=(hd0,0)/boot/grub/splash.xpm.gz
+ hiddenmenu
+ title Buildroot
+ 	root (hd0,0)
