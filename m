@@ -1,34 +1,33 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 1 Dec 2013 23:51:07 +0100
-Subject: [Buildroot] [git commit] package/dvb-apps: bump version
-Message-ID: <20131201225157.B5D789BBE6@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 01 Dec 2013 23:47:48 +0100
+Subject: [Buildroot] [PATCH 00/15] Improvements to x86 bootloaders,
+	and x86 boards support
+In-Reply-To: <1384188459-1332-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Mon, 11 Nov 2013 17:47:24 +0100")
+References: <1384188459-1332-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <87vbz8tch7.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=9053a3455104a23dd618dd203bbb270a03f7d038
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-Fixes for scanning DVBS, misc compiler warnings suppressed.
+ > Hello,
+ > This commit brings a number of improvements into the world of x86
+ > bootloaders, and adds support for two x86 boards.
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/dvb-apps/dvb-apps.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ > In details:
 
-diff --git a/package/dvb-apps/dvb-apps.mk b/package/dvb-apps/dvb-apps.mk
-index 8cf6a79..e351258 100644
---- a/package/dvb-apps/dvb-apps.mk
-+++ b/package/dvb-apps/dvb-apps.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--DVB_APPS_VERSION        = 83c746462ccb
-+DVB_APPS_VERSION        = be76da69f250
- DVB_APPS_SITE           = http://linuxtv.org/hg/dvb-apps
- DVB_APPS_SITE_METHOD    = hg
- 
+ >  * It improves the existing 'grub' package by making sure that we can
+ >    build a 32 bits Grub even if the selected target architecture is
+ >    x86-64. This is done by using the host compiler. It also makes
+ >    various other improvements to the 'grub', and especially adds a
+ >    HOWTO in the Config.in help text to explain how to install Grub
+ >    into a disk image, and test it under Qemu.
+
+Committed part 1..10, thanks!
+
+-- 
+Bye, Peter Korsgaard
