@@ -1,39 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 2 Dec 2013 09:51:14 +0100
-Subject: [Buildroot] [PATCH 11/15] grub2: add new package
-In-Reply-To: <87ob4zskmb.fsf@dell.be.48ers.dk>
-References: <1384188459-1332-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1384188459-1332-12-git-send-email-thomas.petazzoni@free-electrons.com>
- <87r49wtcei.fsf@dell.be.48ers.dk> <20131202093525.65fe5a84@skate>
- <87ob4zskmb.fsf@dell.be.48ers.dk>
-Message-ID: <20131202095114.0ec77332@skate>
+Date: Mon, 2 Dec 2013 09:52:37 +0100
+Subject: [Buildroot] [PATCH 1/2] package: unification of name
+ <pkg>_VERSION_MAJOR variable
+In-Reply-To: <1385971203-11645-1-git-send-email-jerzy.grzegorek@trzebnica.net>
+References: <1385971203-11645-1-git-send-email-jerzy.grzegorek@trzebnica.net>
+Message-ID: <20131202095237.0241c919@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Peter Korsgaard,
+Dear Jerzy Grzegorek,
 
-On Mon, 02 Dec 2013 09:49:32 +0100, Peter Korsgaard wrote:
+On Mon,  2 Dec 2013 09:00:02 +0100, Jerzy Grzegorek wrote:
 
->  > From what I've tested, no it doesn't. I believe this is because grub
->  > legacy needed libgcc, while grub2 doesn't need libgcc, so you don't
->  > need a multilib compiler: a non-multilib x86-64 gcc can generate 32 bits
->  > code, but doesn't provide a 32 bits libgcc.
-> 
->  > I can do another testing if needed, just to validate this once more
->  > (it's been a while since I did this, and I may have overlooked
->  > something).
-> 
-> Don't worry, I just wondered. If you already tested then that's
-> fine. I'll review and apply the rest of the series tonight.
+> -JSON_GLIB_VERSION = $(JSON_GLIB_MAJOR_VERSION).$(JSON_GLIB_MINOR_VERSION)
+> -JSON_GLIB_SITE = http://ftp.gnome.org/pub/GNOME/sources/json-glib/$(JSON_GLIB_MAJOR_VERSION)
+> +JSON_GLIB_VERSION = $(JSON_GLIB_VERSION_MAJOR).$(JSON_GLIB_MINOR_VERSION)
 
-I'd prefer to do another test. Since I had installed all the multilib
-stuff to test grub legacy, maybe I've overlooked since for grub2. Let
-me make another test, and I'll report back.
+So we have VERSION_MAJOR and then MINOR_VERSION ? Doesn't seem really
+consistent.
 
-Thanks,
+> -LIBSOUP_VERSION = $(LIBSOUP_MAJOR_VERSION).$(LIBSOUP_MINOR_VERSION)
+> +LIBSOUP_VERSION = $(LIBSOUP_VERSION_MAJOR).$(LIBSOUP_MINOR_VERSION)
+
+Same here.
 
 Thomas
 -- 
