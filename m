@@ -1,31 +1,40 @@
 From: Anton Blanchard <anton@samba.org>
-Date: Mon, 2 Dec 2013 17:23:11 +1100
-Subject: [Buildroot] [PATCH] toolchain: Allow ld64.so linker
-Message-ID: <20131202172311.2641462e@kryten>
+Date: Mon, 2 Dec 2013 17:17:27 +1100
+Subject: [Buildroot] [PATCH] Add hypervisor consoles (hvc)
+Message-ID: <20131202171727.7812d5c1@kryten>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Jeremy Kerr <jk@ozlabs.org>
-    
-Expand the glibc dynamic linker check to allow ld64.so.
-    
-Signed-off-by: Jeremy Kerr <jk@ozlabs.org>
+
+Add /dev/hvc* devices, and add them to securetty.
+
 Signed-off-by: Anton Blanchard <anton@samba.org>
 ---
 
-diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
-index a8944ce..faa9d90 100644
---- a/toolchain/helpers.mk
-+++ b/toolchain/helpers.mk
-@@ -204,7 +204,7 @@ check_glibc_rpc_feature = \
- #
- check_glibc = \
- 	SYSROOT_DIR="$(strip $1)"; \
--	if test `find $${SYSROOT_DIR}/ -maxdepth 2 -name 'ld-linux*.so.*' -o -name 'ld.so.*' | wc -l` -eq 0 ; then \
-+	if test `find $${SYSROOT_DIR}/ -maxdepth 2 -name 'ld-linux*.so.*' -o -name 'ld.so.*' -o -name 'ld64.so.*' | wc -l` -eq 0 ; then \
- 		echo "Incorrect selection of the C library"; \
- 		exit -1; \
- 	fi; \
+diff --git a/system/device_table_dev.txt b/system/device_table_dev.txt
+index 9507939..91ed769 100644
+--- a/system/device_table_dev.txt
++++ b/system/device_table_dev.txt
+@@ -36,6 +36,7 @@
+ /dev/ttyPSC	c	666	0	0	204	148	0	1	4
+ /dev/ttyUL	c	666	0	0	204	187	0	1	4
+ /dev/ttymxc	c	666	0	0	207	16	0	1	4
++/dev/hvc	c	640	0	0	229	0	0	1	4
+ 
+ # Input stuff
+ /dev/input		d	755	0	0	-	-	-	-	-
+diff --git a/system/skeleton/etc/securetty b/system/skeleton/etc/securetty
+index 5a3d0c6..0722677 100644
+--- a/system/skeleton/etc/securetty
++++ b/system/skeleton/etc/securetty
+@@ -51,3 +51,7 @@ ttySC5
+ ttySC6
+ ttySC7
+ ttyGS0
++hvc0
++hvc1
++hvc2
++hvc3
