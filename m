@@ -1,36 +1,71 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 2 Dec 2013 13:33:02 +0100
-Subject: [Buildroot] [git commit] libtasn1: fix botched makeinfo/missing
-	logic
-Message-ID: <20131202123344.8C4449BEAC@busybox.osuosl.org>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Mon, 2 Dec 2013 13:53:53 +0100
+Subject: [Buildroot] Call for autobuild fixing for 2013.11
+In-Reply-To: <20131202133242.26ec8cbd@skate>
+References: <CAAXf6LXwy3HGGX1W9FCcdVCRJSHMT2B=w--xvcsBxqwUXxDjqg@mail.gmail.com>
+ <CAAXf6LU1_ybwfA9DGfkq7fGJ17LU5k4cQb=G14rg6oSdNY=WAg@mail.gmail.com>
+ <20131126142616.64719ad6@skate>
+ <CAAXf6LViMHHbhYP2joLTDYg7=KDJ8jHyMYm81COZkNdhH8AG2Q@mail.gmail.com>
+ <20131202133242.26ec8cbd@skate>
+Message-ID: <CAAXf6LU0Tg+pcbRrXpz2ApxkTLpkPDL+wpscGRZf6Ty7Wpg4iA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=edce303b8da95a9b19939ab7a4199a39c0483c6f
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Thomas,
 
-The makeinfo/missing logic is botched leading to failures such as:
-http://autobuild.buildroot.net/results/5f0/5f0e8f62be86b56813f5fc0510e83289ed2b0410/
-Just disable documentation build the hard way.
+On Mon, Dec 2, 2013 at 1:32 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Dear Thomas De Schampheleire,
+>
+> On Mon, 2 Dec 2013 12:11:02 +0100, Thomas De Schampheleire wrote:
+>
+>> Yes, obviously I did not mean to stop fixing autobuild issues when
+>> 2013.11 is released.
+>> In fact, the amount of remaining autobuild issues at the release of
+>> 2013.11 was relatively small that it is imaginable that we could close
+>> them all... It would be great if we could reach 0 failures at some
+>> point for a few days. Then any new failure could be attributed to a
+>> recent commit, and should be fixed at once (or the commit reverted).
+>
+> Yes, I must say I was impressed by how much we managed to reduce the
+> number of build failures.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/libtasn1/libtasn1.mk |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+A wild idea I have is to keep count of how many autobuild problems
+were fixed by each contributor, and add this ranking to the buildroot
+release e-mail, similar to how commits are counted. This would give
+some extra incentive to developers in fixing such problems.
 
-diff --git a/package/libtasn1/libtasn1.mk b/package/libtasn1/libtasn1.mk
-index e58bcbc..122f775 100644
---- a/package/libtasn1/libtasn1.mk
-+++ b/package/libtasn1/libtasn1.mk
-@@ -10,5 +10,7 @@ LIBTASN1_DEPENDENCIES = host-bison
- LIBTASN1_LICENSE = GPLv3+ LGPLv2.1+
- LIBTASN1_LICENSE_FILES = COPYING COPYING.LIB
- LIBTASN1_INSTALL_STAGING = YES
-+# 'missing' fallback logic botched so disable it completely
-+LIBTASN1_CONF_ENV = MAKEINFO="true"
- 
- $(eval $(autotools-package))
+>
+> However, it's hard to be 100% sure a failure showing is a new failure,
+> even if we had several days in a row with 0 failures. The number of
+> possible combinations is so huge that I don't think it's possible to
+> test all of them within a reasonable amount of time. So a "new failure"
+> may just be something that did exist since quite some time was that we
+> couldn't trigger (like was indeed by another failure, for example).
+
+True. But, imagine we had zero failures for a few days, and then there
+is a new failure. The logical thing to do is check which package
+fails, in which way, and have a look at the recent commits. In many
+cases, it would be obvious whether the new failure is or could be
+caused by such a recent commit, or if it is an 'old' issue that wasn't
+seen for a while.
+So, while we cannot automatically blame the last set of commits,
+having close-to-zero failures would certainly help a lot in the
+analysis.
+
+>
+> Also, another effect of having more success in the builds is that we do
+> less builds (statistically, successful builds take more time than
+> failed builds, since all successful builds run completely to the end).
+> Therefore, the number of builds we do each day is now below 100, which
+> is not enough. I think we should look at adding more autobuilders in
+> the future. I'll try to clean up my script so that other people can set
+> up autobuilders.
+
+That would be very useful, indeed. Thanks in advance...
+
+Best regards,
+Thomas
