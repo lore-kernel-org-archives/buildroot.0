@@ -1,49 +1,47 @@
-From: Ryan Barnett <rjbarnet@rockwellcollins.com>
-Date: Mon, 2 Dec 2013 08:39:45 -0600
-Subject: [Buildroot] Call for autobuild fixing for 2013.11
-In-Reply-To: <CAAXf6LWTdf2gTB6TCSV=1m-rh-F1OwdzuRh=F-D1WrBERdVYsA@mail.gmail.com>
-References: <CAAXf6LXwy3HGGX1W9FCcdVCRJSHMT2B=w--xvcsBxqwUXxDjqg@mail.gmail.com>
- <CAAXf6LU1_ybwfA9DGfkq7fGJ17LU5k4cQb=G14rg6oSdNY=WAg@mail.gmail.com>
- <20131126142616.64719ad6@skate>
- <CAAXf6LViMHHbhYP2joLTDYg7=KDJ8jHyMYm81COZkNdhH8AG2Q@mail.gmail.com>
- <20131202133242.26ec8cbd@skate>
- <CAAXf6LU0Tg+pcbRrXpz2ApxkTLpkPDL+wpscGRZf6Ty7Wpg4iA@mail.gmail.com>
- <20131202141008.758581a4@skate>
- <CAAXf6LWTdf2gTB6TCSV=1m-rh-F1OwdzuRh=F-D1WrBERdVYsA@mail.gmail.com>
-Message-ID: <OF59D6478F.63D5CA16-ON86257C35.004E9353-86257C35.00508AC1@rockwellcollins.com>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Mon, 2 Dec 2013 15:03:29 +0000
+Subject: [Buildroot] [PATCH v2] qt5script: Disable on MIPS64 n64 ABI
+In-Reply-To: <20131202132629.4f65c28a@skate>
+References: <1385984739-731-1-git-send-email-Vincent.Riera@imgtec.com>
+ <20131202132629.4f65c28a@skate>
+Message-ID: <529CA141.9050801@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas(es), All,
+On 12/02/2013 12:26 PM, Thomas Petazzoni wrote:
+> Dear Vicente Olivert Riera,
+>
+> On Mon, 2 Dec 2013 11:45:39 +0000, Vicente Olivert Riera wrote:
+>> There is no support for JavaScritCore on MIPS64 n64 ABI so as a quick
+>> fix we can disable the posibility of selecting this package. Meanwhile a
+>> proposed patch has already been sent to Qt:
+>>
+>>     https://bugreports.qt-project.org/browse/QTBUG-35191
+>>
+>> Fixes:
+>>
+>>     http://autobuild.buildroot.net/results/231/231c112a3fc18e6cd7d6d10873e22144525c7280/
+>>
+>> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+>> ---
+>>   package/qt5/qt5script/Config.in |    1 +
+>>   1 files changed, 1 insertions(+), 0 deletions(-)
+>
+> Now that 2013.11 has been released, we don't need "quick fixes"
+> anymore. What about integrating the upstream Qt5 fix instead?
+>
+> Thanks!
+>
+> Thomas
+>
 
-Thomas De Schampheleire <patrickdepinguin@gmail.com> wrote on 12/02/2013 
-08:15:17 AM:
+Ok, the problem with qt5script on MIPS64 n64 is already fixed on Qt 5.2, 
+and the Release Candidate 1 is already available so we will have Qt 5.2 
+final release in few weeks. This problem will be fixed with the next 
+version bump.
 
-> On Mon, Dec 2, 2013 at 2:10 PM, Thomas Petazzoni
-> <thomas.petazzoni@free-electrons.com> wrote:
-
-[...]
-
-> Nice!
-> The results for previous releases do indeed show an increased interest
-> in fixing autobuild failures this release (results below). While the
-> number of contributors fixing autobuild problems (and marking it as
-> such) ranged between 9 and 15 since 2012.08, this release there were
-> no less than 21 unique contributors!
-> I assume this 'call for autobuild fixing' has had some part in it, and
-> therefore I certainly think we should repeat this 'extra attention
-> mail' next release (February).
-
-I also believe it analyzes provided by Thomas P, Thomas D and others 
-helped contribute to fixing the problems. By providing the relevant logs 
-and point people in the right direction of where the problem may lie 
-allowed other, less experience developers like myself try to help quickly 
-fix autobuilder errors.
-
-[...]
-
-Thanks,
--Ryan
+-- 
+Vincent
