@@ -1,37 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 2 Dec 2013 13:26:29 +0100
-Subject: [Buildroot] [PATCH v2] qt5script: Disable on MIPS64 n64 ABI
-In-Reply-To: <1385984739-731-1-git-send-email-Vincent.Riera@imgtec.com>
-References: <1385984739-731-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <20131202132629.4f65c28a@skate>
+Date: Mon, 2 Dec 2013 13:32:42 +0100
+Subject: [Buildroot] Call for autobuild fixing for 2013.11
+In-Reply-To: <CAAXf6LViMHHbhYP2joLTDYg7=KDJ8jHyMYm81COZkNdhH8AG2Q@mail.gmail.com>
+References: <CAAXf6LXwy3HGGX1W9FCcdVCRJSHMT2B=w--xvcsBxqwUXxDjqg@mail.gmail.com>
+ <CAAXf6LU1_ybwfA9DGfkq7fGJ17LU5k4cQb=G14rg6oSdNY=WAg@mail.gmail.com>
+ <20131126142616.64719ad6@skate>
+ <CAAXf6LViMHHbhYP2joLTDYg7=KDJ8jHyMYm81COZkNdhH8AG2Q@mail.gmail.com>
+Message-ID: <20131202133242.26ec8cbd@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Vicente Olivert Riera,
+Dear Thomas De Schampheleire,
 
-On Mon, 2 Dec 2013 11:45:39 +0000, Vicente Olivert Riera wrote:
-> There is no support for JavaScritCore on MIPS64 n64 ABI so as a quick
-> fix we can disable the posibility of selecting this package. Meanwhile a
-> proposed patch has already been sent to Qt:
-> 
->    https://bugreports.qt-project.org/browse/QTBUG-35191
-> 
-> Fixes:
-> 
->    http://autobuild.buildroot.net/results/231/231c112a3fc18e6cd7d6d10873e22144525c7280/
-> 
-> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-> ---
->  package/qt5/qt5script/Config.in |    1 +
->  1 files changed, 1 insertions(+), 0 deletions(-)
+On Mon, 2 Dec 2013 12:11:02 +0100, Thomas De Schampheleire wrote:
 
-Now that 2013.11 has been released, we don't need "quick fixes"
-anymore. What about integrating the upstream Qt5 fix instead?
+> Yes, obviously I did not mean to stop fixing autobuild issues when
+> 2013.11 is released.
+> In fact, the amount of remaining autobuild issues at the release of
+> 2013.11 was relatively small that it is imaginable that we could close
+> them all... It would be great if we could reach 0 failures at some
+> point for a few days. Then any new failure could be attributed to a
+> recent commit, and should be fixed at once (or the commit reverted).
 
-Thanks!
+Yes, I must say I was impressed by how much we managed to reduce the
+number of build failures.
+
+However, it's hard to be 100% sure a failure showing is a new failure,
+even if we had several days in a row with 0 failures. The number of
+possible combinations is so huge that I don't think it's possible to
+test all of them within a reasonable amount of time. So a "new failure"
+may just be something that did exist since quite some time was that we
+couldn't trigger (like was indeed by another failure, for example).
+
+Also, another effect of having more success in the builds is that we do
+less builds (statistically, successful builds take more time than
+failed builds, since all successful builds run completely to the end).
+Therefore, the number of builds we do each day is now below 100, which
+is not enough. I think we should look at adding more autobuilders in
+the future. I'll try to clean up my script so that other people can set
+up autobuilders.
+
+Best regards,
 
 Thomas
 -- 
