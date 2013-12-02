@@ -1,46 +1,51 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 2 Dec 2013 20:51:42 +0100
-Subject: [Buildroot] Microblaze and ARC toolchains
-In-Reply-To: <E6BF041E97966E4DB955F0DF883AD2D685F1B041@de02wembxa.internal.synopsys.com>
-References: <20131130004049.0c5835d0@skate>
- <E6BF041E97966E4DB955F0DF883AD2D685F1B041@de02wembxa.internal.synopsys.com>
-Message-ID: <20131202205142.5b4cfd3c@skate>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon,  2 Dec 2013 21:49:25 +0100
+Subject: [Buildroot] [pull request] Pull request for branch yem/misc
+Message-ID: <cover.1386017298.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Mischa, Spenser,
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-On Mon, 2 Dec 2013 13:20:41 +0000, Mischa Jonker wrote:
+Hello All!
 
-> >  * On the ARC side of things, what I get is a failure at the uClibc
-> >    build step. However, what's weird is that I did get one
-> > successful build, but now that I've restarted everything from
-> > scratch, it fails (and did so two times in a row) :
-> 
-> Unfortunately I am unable to reproduce: I have rebased the patches to
-> the latest status of today and used your defconfig below. I even
-> cleared the "dl" folder. 
+Here are two unrelated changesets:
+  - the first reduces the depth of the TOC in the manual
+  - the second allows one to only install the required RPi bootloader
 
-Ignore my previous e-mail. It was my fault. My patches to try to avoid
-MAKEINFO were changing "make install" to just "make" due to me
-overriding MAKE_OPT. So obviously, binutils were no longer being
-installed, causing all sort of weird problems.
+Regards,
+Yann E. MORIN.
 
-> I will retest it on our compute farm that has very old Linux
-> distributions running on it with almost no development tools at all.
-> Maybe the issue shows itself there.
 
-Don't spend time doing that. The ARC and Microblaze builds are now OK.
-I'm just fixing a few things, and I will send a complete batch of
-patches for Peter to pull as soon as things are ready for me.
+The following changes since commit edce303b8da95a9b19939ab7a4199a39c0483c6f:
 
-Thanks, and sorry for the noise,
+  libtasn1: fix botched makeinfo/missing logic (2013-12-02 13:33:02 +0100)
 
-Thomas
+are available in the git repository at:
+
+  git://gitorious.org/buildroot/buildroot.git yem/misc
+
+for you to fetch changes up to 631bcb8e1ae930cb7502e1f2840f045bfea776da:
+
+  package/rpi-firmware: only install one firmware file (2013-12-02 21:47:04 +0100)
+
+----------------------------------------------------------------
+Yann E. MORIN (2):
+      docs/manual: limit the depth of the TOC in the HTML output
+      package/rpi-firmware: only install one firmware file
+
+ docs/manual/manual.mk                |  4 ++--
+ package/rpi-firmware/Config.in       | 39 ++++++++++++++++++++++++++++++++++++
+ package/rpi-firmware/rpi-firmware.mk |  8 ++------
+ 3 files changed, 43 insertions(+), 8 deletions(-)
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
