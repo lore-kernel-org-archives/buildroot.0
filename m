@@ -1,11 +1,10 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 02 Dec 2013 11:42:14 +0100
-Subject: [Buildroot] [PATCH 1/2] wireless-regdb: bump to version
-	2013.10.11
-In-Reply-To: <1385980736-1736-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Mon, 2 Dec 2013 07:38:55 -0300")
-References: <1385980736-1736-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87wqjnr0u1.fsf@dell.be.48ers.dk>
+Date: Mon, 02 Dec 2013 11:42:23 +0100
+Subject: [Buildroot] [PATCH 1/2] gnutls: bump to version 3.2.7
+In-Reply-To: <1385980781-1781-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Mon, 2 Dec 2013 07:39:40 -0300")
+References: <1385980781-1781-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87siubr0ts.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
