@@ -1,7 +1,7 @@
 From: Andrew Ruder <andrew.ruder@elecsyscorp.com>
-Date: Mon, 2 Dec 2013 17:09:03 -0600
-Subject: [Buildroot] [PATCH] smbnetfs: new package 0.5.3a
-Message-ID: <20131202230903.GA3906@gmail.com>
+Date: Mon, 2 Dec 2013 17:09:45 -0600
+Subject: [Buildroot] [PATCH] tmux: new package 1.8
+Message-ID: <20131202230945.GA6948@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,84 +10,61 @@ To: buildroot@busybox.net
 
 Signed-off-by: Andrew Ruder <andrew.ruder@elecsyscorp.com>
 ---
- package/Config.in                                   |  1 +
- package/smbnetfs/Config.in                          | 16 ++++++++++++++++
- package/smbnetfs/smbnetfs-compile-with-uclibc.patch | 14 ++++++++++++++
- package/smbnetfs/smbnetfs.mk                        | 11 +++++++++++
- 4 files changed, 42 insertions(+)
- create mode 100644 package/smbnetfs/Config.in
- create mode 100644 package/smbnetfs/smbnetfs-compile-with-uclibc.patch
- create mode 100644 package/smbnetfs/smbnetfs.mk
+ package/Config.in      |  3 +++
+ package/tmux/Config.in | 13 +++++++++++++
+ package/tmux/tmux.mk   | 11 +++++++++++
+ 3 files changed, 27 insertions(+)
+ create mode 100644 package/tmux/Config.in
+ create mode 100644 package/tmux/tmux.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 6fb063d..4854383 100644
+index 40f964b..6fb063d 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -148,6 +148,7 @@ source "package/makedevs/Config.in"
- source "package/mtd/Config.in"
- source "package/nfs-utils/Config.in"
- source "package/ntfs-3g/Config.in"
-+source "package/smbnetfs/Config.in"
- source "package/squashfs/Config.in"
- source "package/squashfs3/Config.in"
- source "package/sshfs/Config.in"
-diff --git a/package/smbnetfs/Config.in b/package/smbnetfs/Config.in
+@@ -948,6 +948,9 @@ source "package/screen/Config.in"
+ source "package/sudo/Config.in"
+ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ source "package/time/Config.in"
++endif
++source "package/tmux/Config.in"
++if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ source "package/which/Config.in"
+ endif
+ source "package/xmlstarlet/Config.in"
+diff --git a/package/tmux/Config.in b/package/tmux/Config.in
 new file mode 100644
-index 0000000..fdc8167
+index 0000000..39f83b0
 --- /dev/null
-+++ b/package/smbnetfs/Config.in
-@@ -0,0 +1,16 @@
-+config BR2_PACKAGE_SMBNETFS
-+	bool "smbnetfs"
-+	depends on BR2_PACKAGE_SAMBA
-+	select BR2_PACKAGE_SAMBA_LIBSMBCLIENT
-+	select BR2_PACKAGE_LIBFUSE
-+	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
++++ b/package/tmux/Config.in
+@@ -0,0 +1,13 @@
++config BR2_PACKAGE_TMUX
++	bool "tmux"
++	select BR2_PACKAGE_LIBEVENT
++	select BR2_PACKAGE_NCURSES
++	depends on BR2_USE_MMU # fork()
 +	help
-+        A user-space filesystem that contains an entire
-+        SMB/NMB network under a single mount point.
-+        Workgroups, servers, and shares can be browsed much
-+        like the Network Neighborhood in Microsoft Window.
++	  tmux is a "terminal multiplexer", it enables
++	  a number of terminals (or windows) to be accessed
++	  and controlled from a single terminal.  tmux is
++	  intended to be a simple, modern, BSD-licensed
++	  alternative to programs such as GNU screen.
 +
-+        http://smbnetfs.sourceforge.net/
-+
-+comment "smbnetfs needs samba"
-+	depends on !BR2_PACKAGE_SAMBA
-diff --git a/package/smbnetfs/smbnetfs-compile-with-uclibc.patch b/package/smbnetfs/smbnetfs-compile-with-uclibc.patch
++	  http://tmux.sourceforge.net/
+diff --git a/package/tmux/tmux.mk b/package/tmux/tmux.mk
 new file mode 100644
-index 0000000..e5e9065
+index 0000000..2ff5e46
 --- /dev/null
-+++ b/package/smbnetfs/smbnetfs-compile-with-uclibc.patch
-@@ -0,0 +1,14 @@
-+Index: smbnetfs-0.5.3a/src/common.c
-+===================================================================
-+--- smbnetfs-0.5.3a.orig/src/common.c	2013-11-15 11:22:27.520088835 -0600
-++++ smbnetfs-0.5.3a/src/common.c	2013-11-15 11:22:37.384088834 -0600
-+@@ -4,7 +4,9 @@
-+ #include <stdarg.h>
-+ #include <string.h>
-+ #include <pthread.h>
-++#ifdef HAVE_BACKTRACE
-+ #include <execinfo.h>
-++#endif
-+ 
-+ #include "common.h"
-+ 
-diff --git a/package/smbnetfs/smbnetfs.mk b/package/smbnetfs/smbnetfs.mk
-new file mode 100644
-index 0000000..1e01bd8
---- /dev/null
-+++ b/package/smbnetfs/smbnetfs.mk
++++ b/package/tmux/tmux.mk
 @@ -0,0 +1,11 @@
 +################################################################################
 +#
-+# smbnetfs
++# tmux
 +#
 +################################################################################
 +
-+SMBNETFS_VERSION = 0.5.3a
-+SMBNETFS_SOURCE = smbnetfs-$(SMBNETFS_VERSION).tar.bz2
-+SMBNETFS_SITE = http://downloads.sourceforge.net/smbnetfs
++TMUX_VERSION = 1.8
++TMUX_SITE = http://downloads.sourceforge.net/project/tmux/tmux/tmux-$(TMUX_VERSION)
++TMUX_DEPENDENCIES = ncurses libevent
 +
 +$(eval $(autotools-package))
 -- 
