@@ -1,71 +1,94 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon,  2 Dec 2013 23:29:57 +0100
-Subject: [Buildroot] [PATCH 3/3] package/parted: add a host variant
-In-Reply-To: <cover.1386023329.git.yann.morin.1998@free.fr>
-References: <cover.1386023329.git.yann.morin.1998@free.fr>
-Message-ID: <1891fdbc7ad11ce084f2be315871eb10573953b7.1386023329.git.yann.morin.1998@free.fr>
+From: Andrew Ruder <andrew.ruder@elecsyscorp.com>
+Date: Mon, 2 Dec 2013 17:09:03 -0600
+Subject: [Buildroot] [PATCH] smbnetfs: new package 0.5.3a
+Message-ID: <20131202230903.GA3906@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
-Usefull for for-build scripts to call parted, eg. to generate
-partition tables and such automatically.
-
-Since the primary gaool is to use parted within scripts, we
-do not need readline, so it is forcibly disabled.
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Andrew Ruder <andrew.ruder@elecsyscorp.com>
 ---
- package/Config.in.host        | 1 +
- package/parted/Config.in.host | 6 ++++++
- package/parted/parted.mk      | 4 ++++
- 3 files changed, 11 insertions(+)
- create mode 100644 package/parted/Config.in.host
+ package/Config.in                                   |  1 +
+ package/smbnetfs/Config.in                          | 16 ++++++++++++++++
+ package/smbnetfs/smbnetfs-compile-with-uclibc.patch | 14 ++++++++++++++
+ package/smbnetfs/smbnetfs.mk                        | 11 +++++++++++
+ 4 files changed, 42 insertions(+)
+ create mode 100644 package/smbnetfs/Config.in
+ create mode 100644 package/smbnetfs/smbnetfs-compile-with-uclibc.patch
+ create mode 100644 package/smbnetfs/smbnetfs.mk
 
-diff --git a/package/Config.in.host b/package/Config.in.host
-index 5fd2570..34e84bf 100644
---- a/package/Config.in.host
-+++ b/package/Config.in.host
-@@ -10,6 +10,7 @@ source "package/lpc3250loader/Config.in.host"
- source "package/mtools/Config.in.host"
- source "package/omap-u-boot-utils/Config.in.host"
- source "package/openocd/Config.in.host"
-+source "package/parted/Config.in.host"
- source "package/sam-ba/Config.in.host"
- source "package/sunxi-tools/Config.in.host"
- source "package/uboot-tools/Config.in.host"
-diff --git a/package/parted/Config.in.host b/package/parted/Config.in.host
+diff --git a/package/Config.in b/package/Config.in
+index 6fb063d..4854383 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -148,6 +148,7 @@ source "package/makedevs/Config.in"
+ source "package/mtd/Config.in"
+ source "package/nfs-utils/Config.in"
+ source "package/ntfs-3g/Config.in"
++source "package/smbnetfs/Config.in"
+ source "package/squashfs/Config.in"
+ source "package/squashfs3/Config.in"
+ source "package/sshfs/Config.in"
+diff --git a/package/smbnetfs/Config.in b/package/smbnetfs/Config.in
 new file mode 100644
-index 0000000..f5d7acc
+index 0000000..fdc8167
 --- /dev/null
-+++ b/package/parted/Config.in.host
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_HOST_PARTED
-+	bool "host parted"
++++ b/package/smbnetfs/Config.in
+@@ -0,0 +1,16 @@
++config BR2_PACKAGE_SMBNETFS
++	bool "smbnetfs"
++	depends on BR2_PACKAGE_SAMBA
++	select BR2_PACKAGE_SAMBA_LIBSMBCLIENT
++	select BR2_PACKAGE_LIBFUSE
++	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
 +	help
-+	  parted, the GNU partition resizing program
++        A user-space filesystem that contains an entire
++        SMB/NMB network under a single mount point.
++        Workgroups, servers, and shares can be browsed much
++        like the Network Neighborhood in Microsoft Window.
 +
-+	  http://www.gnu.org/software/parted/
-diff --git a/package/parted/parted.mk b/package/parted/parted.mk
-index 773e332..a1c0e9e 100644
---- a/package/parted/parted.mk
-+++ b/package/parted/parted.mk
-@@ -8,8 +8,12 @@ PARTED_VERSION = 3.1
- PARTED_SOURCE = parted-$(PARTED_VERSION).tar.xz
- PARTED_SITE = $(BR2_GNU_MIRROR)/parted
- PARTED_DEPENDENCIES = readline util-linux lvm2
-+HOST_PARTED_DEPENDENCIES = host-util-linux host-lvm2
- PARTED_INSTALL_STAGING = YES
- PARTED_LICENSE = GPLv3+
- PARTED_LICENSE_FILES = COPYING
- 
-+HOST_PARTED_CONF_OPT += --without-readline
++        http://smbnetfs.sourceforge.net/
 +
- $(eval $(autotools-package))
-+$(eval $(host-autotools-package))
++comment "smbnetfs needs samba"
++	depends on !BR2_PACKAGE_SAMBA
+diff --git a/package/smbnetfs/smbnetfs-compile-with-uclibc.patch b/package/smbnetfs/smbnetfs-compile-with-uclibc.patch
+new file mode 100644
+index 0000000..e5e9065
+--- /dev/null
++++ b/package/smbnetfs/smbnetfs-compile-with-uclibc.patch
+@@ -0,0 +1,14 @@
++Index: smbnetfs-0.5.3a/src/common.c
++===================================================================
++--- smbnetfs-0.5.3a.orig/src/common.c	2013-11-15 11:22:27.520088835 -0600
+++++ smbnetfs-0.5.3a/src/common.c	2013-11-15 11:22:37.384088834 -0600
++@@ -4,7 +4,9 @@
++ #include <stdarg.h>
++ #include <string.h>
++ #include <pthread.h>
+++#ifdef HAVE_BACKTRACE
++ #include <execinfo.h>
+++#endif
++ 
++ #include "common.h"
++ 
+diff --git a/package/smbnetfs/smbnetfs.mk b/package/smbnetfs/smbnetfs.mk
+new file mode 100644
+index 0000000..1e01bd8
+--- /dev/null
++++ b/package/smbnetfs/smbnetfs.mk
+@@ -0,0 +1,11 @@
++################################################################################
++#
++# smbnetfs
++#
++################################################################################
++
++SMBNETFS_VERSION = 0.5.3a
++SMBNETFS_SOURCE = smbnetfs-$(SMBNETFS_VERSION).tar.bz2
++SMBNETFS_SITE = http://downloads.sourceforge.net/smbnetfs
++
++$(eval $(autotools-package))
 -- 
-1.8.1.2
+1.8.4.rc3
