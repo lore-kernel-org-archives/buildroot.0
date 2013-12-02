@@ -1,24 +1,38 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 02 Dec 2013 08:44:56 -0300
-Subject: [Buildroot] [PATCH] tar: bump to version 1.27.1
-In-Reply-To: <87ob4zr0a2.fsf@dell.be.48ers.dk>
-References: <1385980868-2000-1-git-send-email-gustavo@zacarias.com.ar>
- <87ob4zr0a2.fsf@dell.be.48ers.dk>
-Message-ID: <529C72B8.1080602@zacarias.com.ar>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Mon, 2 Dec 2013 11:45:39 +0000
+Subject: [Buildroot] [PATCH v2] qt5script: Disable on MIPS64 n64 ABI
+Message-ID: <1385984739-731-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 12/02/2013 07:54 AM, Peter Korsgaard wrote:
+There is no support for JavaScritCore on MIPS64 n64 ABI so as a quick
+fix we can disable the posibility of selecting this package. Meanwhile a
+proposed patch has already been sent to Qt:
 
-> I'm not sure why it thinks it needs automake as we don't patch anything.
-> 
-> Any ideas?
+   https://bugreports.qt-project.org/browse/QTBUG-35191
 
-Because host-tar is a different archive (cpio) and the extraction
-command isn't respecting modification times.
-Can be fixed by cpio -i --preserve-modification-time though.
-I'll send a V2.
-Regards.
+Fixes:
+
+   http://autobuild.buildroot.net/results/231/231c112a3fc18e6cd7d6d10873e22144525c7280/
+
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+ package/qt5/qt5script/Config.in |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
+
+diff --git a/package/qt5/qt5script/Config.in b/package/qt5/qt5script/Config.in
+index 3c5d60c..4358f95 100644
+--- a/package/qt5/qt5script/Config.in
++++ b/package/qt5/qt5script/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_QT5SCRIPT
+ 	bool "qt5script"
++	depends on !BR2_MIPS_NABI64
+ 	select BR2_PACKAGE_QT5BASE
+ 	help
+ 	  Qt is a cross-platform application and UI framework for
+-- 
+1.7.1
