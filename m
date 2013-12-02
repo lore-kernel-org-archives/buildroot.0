@@ -1,95 +1,122 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 2 Dec 2013 13:15:40 +0100
-Subject: [Buildroot] [git commit] tar: bump to version 1.27.1
-Message-ID: <20131202122005.C9CEB9BBC4@busybox.osuosl.org>
+Date: Mon, 2 Dec 2013 13:11:31 +0100
+Subject: [Buildroot] [git commit] package: add rtptools
+Message-ID: <20131202122005.C17899BED0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=90b9b2c06973056f4b49c85ad70158fac1afc879
+commit: http://git.buildroot.net/buildroot/commit/?id=735b59b0e09fafe43d8286f037c623a7b156f8bb
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Notice that the license is quite special. It is basically MIT with the
+difference that it only allows use for:
+
+'research and educational purpose and without fee ... Use of this software
+ in whole or in parts for direct commercial advantage requires explicit
+ prior permission'
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/tar/tar-1.26-no-gets.patch |   47 ------------------------------------
- package/tar/tar.mk                 |    4 +-
- 2 files changed, 2 insertions(+), 49 deletions(-)
+ package/Config.in                                  |    1 +
+ package/rtptools/Config.in                         |    7 +++
+ .../rtptools-01-host2ip-no-nis-on-uClibc.patch     |   45 ++++++++++++++++++++
+ package/rtptools/rtptools.mk                       |   12 +++++
+ 4 files changed, 65 insertions(+), 0 deletions(-)
 
-diff --git a/package/tar/tar-1.26-no-gets.patch b/package/tar/tar-1.26-no-gets.patch
-deleted file mode 100644
-index fb9d188..0000000
---- a/package/tar/tar-1.26-no-gets.patch
-+++ /dev/null
-@@ -1,47 +0,0 @@
--Since the 2.16 release of the glibc, 'gets' is not any more defined in the gnulib.
--No tar version synchronized with gnulib since [1] has been released yet.
--
--This patch avoids the following error occurs when building tar <=1.4.16 on host using
--a glibc >=2.16:
--
--make[5]: Entering directory `/home/samuel/data/workspace/src/buildroot/master/output/build/host-tar-1.26/gnu'
--  CC     areadlink.o
--  CC     areadlinkat.o
--  CC     argp-ba.o
--  CC     argp-eexst.o
--  CC     argp-fmtstream.o
--  CC     argp-fs-xinl.o
--In file included from argp.h:24:0,
--                 from argp-eexst.c:27:
--./stdio.h:479:1: error ???gets??? undeclared here (not in a function)
--make[5]: *** [argp-eexst.o] Error 1
--make[5]: *** Waiting for unfinished jobs....
--In file included from argp-fmtstream.h:29:0,
--                 from argp-fs-xinl.c:28:
--./stdio.h:479:1: error ???gets??? undeclared here (not in a function)
--make[5]: *** [argp-fs-xinl.o] Error 1
--In file included from argp-fmtstream.h:29:0,
--                 from argp-fmtstream.c:35:
--./stdio.h:479:1: error ???gets??? undeclared here (not in a function)
--make[5]: *** [argp-fmtstream.o] Error 1
--
--References:
--[1] http://git.savannah.gnu.org/gitweb/?p=gnulib.git;a=commitdiff;h=66712c23388e93e5c518ebc8515140fa0c807348
--[2] http://sources.gentoo.org/cgi-bin/viewvc.cgi/gentoo-x86/sys-devel/m4/files/m4-1.4.16-no-gets.patch?diff_format=h&revision=1.1&view=markup
--
--Signed-off-by: Samuel Martin <s.martin49@gmail.com>
--
-----
--diff -purN host-tar-1.26.orig/gnu/stdio.in.h host-tar-1.26/gnu/stdio.in.h
----- host-tar-1.26.orig/gnu/stdio.in.h	2012-07-21 21:17:12.392403084 +0200
--+++ host-tar-1.26/gnu/stdio.in.h	2012-07-21 21:18:27.991993525 +0200
--@@ -164,7 +164,9 @@ _GL_WARN_ON_USE (fflush, "fflush is not
--    so any use of gets warrants an unconditional warning.  Assume it is
--    always declared, since it is required by C89.  */
-- #undef gets
--+#if defined(__GLIBC__) && !defined(__UCLIBC__) && !__GLIBC_PREREQ(2, 16)
-- _GL_WARN_ON_USE (gets, "gets is a security hole - use fgets instead");
--+#endif
-- 
-- #if @GNULIB_FOPEN@
-- # if @REPLACE_FOPEN@
-diff --git a/package/tar/tar.mk b/package/tar/tar.mk
-index 6198ffd..f748724 100644
---- a/package/tar/tar.mk
-+++ b/package/tar/tar.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--TAR_VERSION = 1.26
-+TAR_VERSION = 1.27.1
- TAR_SITE = $(BR2_GNU_MIRROR)/tar
- TAR_LICENSE = GPLv3+
- TAR_LICENSE_FILES = COPYING
-@@ -23,7 +23,7 @@ HOST_TAR_SOURCE = tar-$(TAR_VERSION).cpio.gz
- define HOST_TAR_EXTRACT_CMDS
- 	mkdir -p $(@D)
- 	cd $(@D) && \
--		$(call suitable-extractor,$(HOST_TAR_SOURCE)) $(DL_DIR)/$(HOST_TAR_SOURCE) | cpio -i
-+		$(call suitable-extractor,$(HOST_TAR_SOURCE)) $(DL_DIR)/$(HOST_TAR_SOURCE) | cpio -i --preserve-modification-time
- 	mv $(@D)/tar-$(TAR_VERSION)/* $(@D)
- 	rmdir $(@D)/tar-$(TAR_VERSION)
- endef
+diff --git a/package/Config.in b/package/Config.in
+index f9bd88c..5b9d775 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -870,6 +870,7 @@ source "package/rpcbind/Config.in"
+ source "package/rsh-redone/Config.in"
+ source "package/rsync/Config.in"
+ source "package/rtorrent/Config.in"
++source "package/rtptools/Config.in"
+ source "package/samba/Config.in"
+ source "package/sconeserver/Config.in"
+ source "package/ser2net/Config.in"
+diff --git a/package/rtptools/Config.in b/package/rtptools/Config.in
+new file mode 100644
+index 0000000..80bbb7a
+--- /dev/null
++++ b/package/rtptools/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_RTPTOOLS
++	bool "rtptools"
++	help
++	  The rtptools distribution consists of a number of small
++	  applications that can be used for processing RTP data.
++
++	  http://www.cs.columbia.edu/irt/software/rtptools/
+diff --git a/package/rtptools/rtptools-01-host2ip-no-nis-on-uClibc.patch b/package/rtptools/rtptools-01-host2ip-no-nis-on-uClibc.patch
+new file mode 100644
+index 0000000..f1a72f9
+--- /dev/null
++++ b/package/rtptools/rtptools-01-host2ip-no-nis-on-uClibc.patch
+@@ -0,0 +1,45 @@
++host2ip.c: disable NIS support when building with uClibc
++
++uClibc doesn't have NIS support, so simply disable the fallback.
++
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ host2ip.c |   11 +++++++++++
++ 1 file changed, 11 insertions(+)
++
++Index: rtptools-1.20/host2ip.c
++===================================================================
++--- rtptools-1.20.orig/host2ip.c
+++++ rtptools-1.20/host2ip.c
++@@ -3,7 +3,16 @@
++ #include <netdb.h>           /* gethostbyname() */
++ #include <netinet/in.h>      /* sockaddr_in */
++ #include <arpa/inet.h>       /* inet_addr() */
+++
+++#include <features.h>
+++#ifndef __UCLIBC__
+++#define HAVE_YP
+++#endif
+++
+++#ifdef HAVE_YP
++ #include <rpcsvc/ypclnt.h>   /* YP */
+++#endif
+++
++ #include <string.h>          /* strlen() added by Akira 12/27/01 */ 
++ #include "sysdep.h"
++ 
++@@ -28,6 +37,7 @@
++   else if ((hep = gethostbyname(host))) {
++     in = *(struct in_addr *)(hep->h_addr_list[0]);
++   }
+++#ifdef HAVE_YP
++   /* As a last resort, try YP. */
++   else {
++     static char *domain = 0;  /* YP domain */
++@@ -39,5 +49,6 @@
++       in.s_addr = inet_addr(value);
++     }
++   }
+++#endif
++   return in;
++ } /* host2ip */
+diff --git a/package/rtptools/rtptools.mk b/package/rtptools/rtptools.mk
+new file mode 100644
+index 0000000..2f67bf3
+--- /dev/null
++++ b/package/rtptools/rtptools.mk
+@@ -0,0 +1,12 @@
++################################################################################
++#
++# rtptools
++#
++################################################################################
++
++RTPTOOLS_VERSION = 1.20
++RTPTOOLS_SITE = http://www.cs.columbia.edu/irt/software/rtptools/download/
++RTPTOOLS_LICENSE = MIT-like (research and education only)
++RTPTOOLS_LICENSE_FILES = COPYRIGHT
++
++$(eval $(autotools-package))
