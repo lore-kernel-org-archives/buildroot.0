@@ -1,24 +1,22 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 02 Dec 2013 08:46:29 +0100
-Subject: [Buildroot] [PATCH] iproute2: bump to version 3.12.0
-In-Reply-To: <1385944113-16766-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Sun, 1 Dec 2013 21:28:33 -0300")
-References: <1385944113-16766-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87wqjnsnje.fsf@dell.be.48ers.dk>
+Date: Mon, 02 Dec 2013 08:46:43 +0100
+Subject: [Buildroot] [PATCH] berkeleydb: bump to version 5.3.28
+In-Reply-To: <1385953862.11887.1.camel@phoenix> (Axel Lin's message of "Mon,
+ 02 Dec 2013 11:11:02 +0800")
+References: <1385953862.11887.1.camel@phoenix>
+Message-ID: <87siubsnj0.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+>>>>> "Axel" == Axel Lin <axel.lin@ingics.com> writes:
 
- > * Add arpd support via the new berkeleydb compat option.
- > * Remove uninstall define.
- > * Install ifcfg if bash on the target is enabled.
- > * Misc cleanups.
+ > According to the information from oracle website, version 5.3.21 is no longer
+ > available for download. Let's upgrade to version 5.3.28.
 
- > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+ > Signed-off-by: Axel Lin <axel.lin@ingics.com>
 
 Committed, thanks.
 
