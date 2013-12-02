@@ -1,71 +1,46 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 2 Dec 2013 08:42:38 +0100
-Subject: [Buildroot] [git commit] libcurl: bump to version 7.33.0
-Message-ID: <20131202102417.114569BEBF@busybox.osuosl.org>
+Date: Mon, 2 Dec 2013 08:42:04 +0100
+Subject: [Buildroot] [git commit] linux-headers: bump 3. {2, 4, 10, 11,
+	12}.x stable versions
+Message-ID: <20131202102416.DB0649BEBF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=fba3da563867139b7ef7c24fbf7b426bd8f52a74
+commit: http://git.buildroot.net/buildroot/commit/?id=a4549221a887623f0971ea87578f217c7a4170c4
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libcurl/libcurl-0001-CVE-2013-4545.patch |   32 ----------------------
- package/libcurl/libcurl.mk                       |    2 +-
- 2 files changed, 1 insertions(+), 33 deletions(-)
+ package/linux-headers/Config.in.host |   10 +++++-----
+ 1 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/libcurl/libcurl-0001-CVE-2013-4545.patch b/package/libcurl/libcurl-0001-CVE-2013-4545.patch
-deleted file mode 100644
-index 39545fe..0000000
---- a/package/libcurl/libcurl-0001-CVE-2013-4545.patch
-+++ /dev/null
-@@ -1,32 +0,0 @@
--From 3c3622b66221d89509cffaa693fc7dcd5c5b96cf Mon Sep 17 00:00:00 2001
--From: Daniel Stenberg <daniel@haxx.se>
--Date: Wed, 2 Oct 2013 15:31:10 +0200
--Subject: [PATCH] OpenSSL: acknowledge CURLOPT_SSL_VERIFYHOST without
-- VERIFYPEER
--
--Setting only CURLOPT_SSL_VERIFYHOST without CURLOPT_SSL_VERIFYPEER set
--should still verify that the host name fields in the server certificate
--is fine or return failure.
--
--Bug: http://curl.haxx.se/mail/lib-2013-10/0002.html
--Reported-by: Ishan SinghLevett
-----
-- lib/ssluse.c | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/lib/ssluse.c b/lib/ssluse.c
--index 4f3c1e1..9974ac8 100644
----- a/lib/ssluse.c
--+++ b/lib/ssluse.c
--@@ -2351,7 +2351,7 @@ ossl_connect_step3(struct connectdata *conn,
--    * operations.
--    */
-- 
---  if(!data->set.ssl.verifypeer)
--+  if(!data->set.ssl.verifypeer && !data->set.ssl.verifyhost)
--     (void)servercert(conn, connssl, FALSE);
--   else
--     retcode = servercert(conn, connssl, TRUE);
---- 
--1.8.3.2
--
-diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
-index 059f08a..afe39d5 100644
---- a/package/libcurl/libcurl.mk
-+++ b/package/libcurl/libcurl.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBCURL_VERSION = 7.32.0
-+LIBCURL_VERSION = 7.33.0
- LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.bz2
- LIBCURL_SITE = http://curl.haxx.se/download
- LIBCURL_DEPENDENCIES = host-pkgconf \
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 7ed476b..034e1e8 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -81,16 +81,16 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+ 	default "3.0.101"	if BR2_KERNEL_HEADERS_3_0
+ 	default "3.1.10"	if BR2_KERNEL_HEADERS_3_1
+-	default "3.2.52"	if BR2_KERNEL_HEADERS_3_2
++	default "3.2.53"	if BR2_KERNEL_HEADERS_3_2
+ 	default "3.3.8"		if BR2_KERNEL_HEADERS_3_3
+-	default "3.4.70"	if BR2_KERNEL_HEADERS_3_4
++	default "3.4.71"	if BR2_KERNEL_HEADERS_3_4
+ 	default "3.5.7"		if BR2_KERNEL_HEADERS_3_5
+ 	default "3.6.11"	if BR2_KERNEL_HEADERS_3_6
+ 	default "3.7.10"	if BR2_KERNEL_HEADERS_3_7
+ 	default "3.8.13"	if BR2_KERNEL_HEADERS_3_8
+ 	default "3.9.11"	if BR2_KERNEL_HEADERS_3_9
+-	default "3.10.20"	if BR2_KERNEL_HEADERS_3_10
+-	default "3.11.9"	if BR2_KERNEL_HEADERS_3_11
+-	default "3.12.1"	if BR2_KERNEL_HEADERS_3_12
++	default "3.10.21"	if BR2_KERNEL_HEADERS_3_10
++	default "3.11.10"	if BR2_KERNEL_HEADERS_3_11
++	default "3.12.2"	if BR2_KERNEL_HEADERS_3_12
+ 	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
