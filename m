@@ -1,71 +1,58 @@
-From: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
-Date: Mon,  2 Dec 2013 09:00:03 +0100
-Subject: [Buildroot] [PATCH 2/2] package: unification of name
-	<pkg>_VERSION_MINOR variable
-In-Reply-To: <1385971203-11645-1-git-send-email-jerzy.grzegorek@trzebnica.net>
-References: <1385971203-11645-1-git-send-email-jerzy.grzegorek@trzebnica.net>
-Message-ID: <1385971203-11645-2-git-send-email-jerzy.grzegorek@trzebnica.net>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 2 Dec 2013 09:35:25 +0100
+Subject: [Buildroot] [PATCH 11/15] grub2: add new package
+In-Reply-To: <87r49wtcei.fsf@dell.be.48ers.dk>
+References: <1384188459-1332-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1384188459-1332-12-git-send-email-thomas.petazzoni@free-electrons.com>
+ <87r49wtcei.fsf@dell.be.48ers.dk>
+Message-ID: <20131202093525.65fe5a84@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Currently there are two different names of the minor version variable:
-<PKG>_MINOR_VERSION and <PKG>_VERSION_MINOR
-This patch unifies them to <PKG>_VERSION_MINOR
+Dear Peter Korsgaard,
 
-Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
----
- package/glib-networking/glib-networking.mk |    4 ++--
- package/json-glib/json-glib.mk             |    4 ++--
- package/libsoup/libsoup.mk                 |    4 ++--
- 3 files changed, 6 insertions(+), 6 deletions(-)
+On Sun, 01 Dec 2013 23:49:25 +0100, Peter Korsgaard wrote:
 
-diff --git a/package/glib-networking/glib-networking.mk b/package/glib-networking/glib-networking.mk
-index aa84d79..405fbc2 100644
---- a/package/glib-networking/glib-networking.mk
-+++ b/package/glib-networking/glib-networking.mk
-@@ -5,8 +5,8 @@
- ################################################################################
- 
- GLIB_NETWORKING_VERSION_MAJOR = 2.36
--GLIB_NETWORKING_MINOR_VERSION = 2
--GLIB_NETWORKING_VERSION = $(GLIB_NETWORKING_VERSION_MAJOR).$(GLIB_NETWORKING_MINOR_VERSION)
-+GLIB_NETWORKING_VERSION_MINOR = 2
-+GLIB_NETWORKING_VERSION = $(GLIB_NETWORKING_VERSION_MAJOR).$(GLIB_NETWORKING_VERSION_MINOR)
- GLIB_NETWORKING_SITE = http://ftp.gnome.org/pub/gnome/sources/glib-networking/$(GLIB_NETWORKING_VERSION_MAJOR)
- GLIB_NETWORKING_SOURCE = glib-networking-$(GLIB_NETWORKING_VERSION).tar.xz
- 
-diff --git a/package/json-glib/json-glib.mk b/package/json-glib/json-glib.mk
-index 65425bd..f0f4397 100644
---- a/package/json-glib/json-glib.mk
-+++ b/package/json-glib/json-glib.mk
-@@ -5,8 +5,8 @@
- ################################################################################
- 
- JSON_GLIB_VERSION_MAJOR = 0.14
--JSON_GLIB_MINOR_VERSION = 2
--JSON_GLIB_VERSION = $(JSON_GLIB_VERSION_MAJOR).$(JSON_GLIB_MINOR_VERSION)
-+JSON_GLIB_VERSION_MINOR = 2
-+JSON_GLIB_VERSION = $(JSON_GLIB_VERSION_MAJOR).$(JSON_GLIB_VERSION_MINOR)
- JSON_GLIB_SITE = http://ftp.gnome.org/pub/GNOME/sources/json-glib/$(JSON_GLIB_VERSION_MAJOR)
- JSON_GLIB_SOURCE = json-glib-$(JSON_GLIB_VERSION).tar.xz
- JSON_GLIB_LICENSE = LGPLv2.1+
-diff --git a/package/libsoup/libsoup.mk b/package/libsoup/libsoup.mk
-index c94eb06..e618ffe 100644
---- a/package/libsoup/libsoup.mk
-+++ b/package/libsoup/libsoup.mk
-@@ -5,8 +5,8 @@
- ################################################################################
- 
- LIBSOUP_VERSION_MAJOR = 2.43
--LIBSOUP_MINOR_VERSION = 1
--LIBSOUP_VERSION = $(LIBSOUP_VERSION_MAJOR).$(LIBSOUP_MINOR_VERSION)
-+LIBSOUP_VERSION_MINOR = 1
-+LIBSOUP_VERSION = $(LIBSOUP_VERSION_MAJOR).$(LIBSOUP_VERSION_MINOR)
- LIBSOUP_SOURCE = libsoup-$(LIBSOUP_VERSION).tar.xz
- LIBSOUP_SITE = http://ftp.gnome.org/pub/gnome/sources/libsoup/$(LIBSOUP_VERSION_MAJOR)
- LIBSOUP_LICENSE = LGPLv2+
+>  > diff --git a/boot/Config.in b/boot/Config.in
+>  > index eb5f7cd..71d2fbd 100644
+>  > --- a/boot/Config.in
+>  > +++ b/boot/Config.in
+>  > @@ -6,6 +6,7 @@ source "boot/at91dataflashboot/Config.in"
+>  >  source "boot/barebox/Config.in"
+>  >  source "boot/boot-wrapper-aarch64/Config.in"
+>  >  source "boot/grub/Config.in"
+>  > +source "boot/grub2/Config.in"
+>  >  source "boot/lpc32xxcdl/Config.in"
+>  >  source "boot/mxs-bootlets/Config.in"
+>  >  source "boot/syslinux/Config.in"
+>  > diff --git a/boot/grub2/Config.in b/boot/grub2/Config.in
+>  > new file mode 100644
+>  > index 0000000..e59626a
+>  > --- /dev/null
+>  > +++ b/boot/grub2/Config.in
+>  > @@ -0,0 +1,120 @@
+>  > +config BR2_TARGET_GRUB2
+>  > +	bool "grub2"
+>  > +	depends on BR2_i386 || BR2_x86_64
+> 
+> Doesn't grub2 also need BR2_HOSTARCH_NEEDS_IA32_COMPILER?
+
+From what I've tested, no it doesn't. I believe this is because grub
+legacy needed libgcc, while grub2 doesn't need libgcc, so you don't
+need a multilib compiler: a non-multilib x86-64 gcc can generate 32 bits
+code, but doesn't provide a 32 bits libgcc.
+
+I can do another testing if needed, just to validate this once more
+(it's been a while since I did this, and I may have overlooked
+something).
+
+Best regards,
+
+Thomas
 -- 
-1.7.9.5
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
