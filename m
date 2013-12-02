@@ -1,212 +1,98 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon,  2 Dec 2013 10:00:14 -0300
-Subject: [Buildroot] [PATCHv3 5/5] thirft: new package
-In-Reply-To: <1385989214-16956-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1385989214-16956-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1385989214-16956-6-git-send-email-gustavo@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 2 Dec 2013 14:10:08 +0100
+Subject: [Buildroot] Call for autobuild fixing for 2013.11
+In-Reply-To: <CAAXf6LU0Tg+pcbRrXpz2ApxkTLpkPDL+wpscGRZf6Ty7Wpg4iA@mail.gmail.com>
+References: <CAAXf6LXwy3HGGX1W9FCcdVCRJSHMT2B=w--xvcsBxqwUXxDjqg@mail.gmail.com>
+ <CAAXf6LU1_ybwfA9DGfkq7fGJ17LU5k4cQb=G14rg6oSdNY=WAg@mail.gmail.com>
+ <20131126142616.64719ad6@skate>
+ <CAAXf6LViMHHbhYP2joLTDYg7=KDJ8jHyMYm81COZkNdhH8AG2Q@mail.gmail.com>
+ <20131202133242.26ec8cbd@skate>
+ <CAAXf6LU0Tg+pcbRrXpz2ApxkTLpkPDL+wpscGRZf6Ty7Wpg4iA@mail.gmail.com>
+Message-ID: <20131202141008.758581a4@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/Config.in                             |  1 +
- package/thrift/Config.in                      | 23 ++++++++++
- package/thrift/thrift-01-libevent-cross.patch | 16 +++++++
- package/thrift/thrift-02-autoreconf.patch     | 22 +++++++++
- package/thrift/thrift-03-zlib-cross.patch     | 16 +++++++
- package/thrift/thrift.mk                      | 64 +++++++++++++++++++++++++++
- 6 files changed, 142 insertions(+)
- create mode 100644 package/thrift/Config.in
- create mode 100644 package/thrift/thrift-01-libevent-cross.patch
- create mode 100644 package/thrift/thrift-02-autoreconf.patch
- create mode 100644 package/thrift/thrift-03-zlib-cross.patch
- create mode 100644 package/thrift/thrift.mk
+Dear Thomas De Schampheleire,
 
-diff --git a/package/Config.in b/package/Config.in
-index d0be2a7..43468ba 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -660,6 +660,7 @@ source "package/openpgm/Config.in"
- source "package/ortp/Config.in"
- source "package/slirp/Config.in"
- source "package/snmppp/Config.in"
-+source "package/thrift/Config.in"
- source "package/usbredir/Config.in"
- source "package/wvstreams/Config.in"
- source "package/zeromq/Config.in"
-diff --git a/package/thrift/Config.in b/package/thrift/Config.in
-new file mode 100644
-index 0000000..a7f3479
---- /dev/null
-+++ b/package/thrift/Config.in
-@@ -0,0 +1,23 @@
-+config BR2_PACKAGE_THRIFT
-+	bool "thrift"
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_USE_WCHAR
-+	depends on BR2_LARGEFILE
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	select BR2_PACKAGE_BOOST
-+	select BR2_PACKAGE_LIBEVENT
-+	select BR2_PACKAGE_OPENSSL
-+	select BR2_PACKAGE_ZLIB
-+	help
-+	  The Apache Thrift software framework, for scalable cross-language
-+	  services development, combines a software stack with a
-+	  code generation engine to build services that work
-+	  efficiently and seamlessly between C++, Java, Python, PHP, Ruby,
-+	  Erlang, Perl, Haskell, C#, Cocoa, JavaScript, Node.js, Smalltalk,
-+	  OCaml and Delphi and other languages.
-+
-+	  http://thrift.apache.org/
-+
-+comment "thrift needs a toolchain w/ C++, largefile, wchar, threads"
-+	depends on !BR2_LARGEFILE || !BR2_USE_WCHAR || \
-+		!BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP
-diff --git a/package/thrift/thrift-01-libevent-cross.patch b/package/thrift/thrift-01-libevent-cross.patch
-new file mode 100644
-index 0000000..f07caa7
---- /dev/null
-+++ b/package/thrift/thrift-01-libevent-cross.patch
-@@ -0,0 +1,16 @@
-+Make it cross-compile happy the hard way, there's no clean way.
-+
-+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+
-+diff -Nura thrift-0.9.1.orig/aclocal/ax_lib_event.m4 thrift-0.9.1/aclocal/ax_lib_event.m4
-+--- thrift-0.9.1.orig/aclocal/ax_lib_event.m4	2013-08-15 11:04:29.000000000 -0300
-++++ thrift-0.9.1/aclocal/ax_lib_event.m4	2013-10-07 20:40:44.076435613 -0300
-+@@ -75,7 +75,7 @@
-+           AC_LANG_PUSH([C])
-+           dnl This can be changed to AC_LINK_IFELSE if you are cross-compiling,
-+           dnl but then the version cannot be checked.
-+-          AC_RUN_IFELSE([AC_LANG_PROGRAM([[
-++          AC_LINK_IFELSE([AC_LANG_PROGRAM([[
-+           #include <sys/types.h>
-+           #include <event.h>
-+           ]], [[
-diff --git a/package/thrift/thrift-02-autoreconf.patch b/package/thrift/thrift-02-autoreconf.patch
-new file mode 100644
-index 0000000..d56212a
---- /dev/null
-+++ b/package/thrift/thrift-02-autoreconf.patch
-@@ -0,0 +1,22 @@
-+Fillers to make autoreconf (automake) happy.
-+
-+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+
-+diff -Nura thrift-0.9.1.orig/AUTHORS thrift-0.9.1/AUTHORS
-+--- thrift-0.9.1.orig/AUTHORS	1969-12-31 21:00:00.000000000 -0300
-++++ thrift-0.9.1/AUTHORS	2013-10-07 20:45:15.745315148 -0300
-+@@ -0,0 +1,2 @@
-++
-++
-+diff -Nura thrift-0.9.1.orig/ChangeLog thrift-0.9.1/ChangeLog
-+--- thrift-0.9.1.orig/ChangeLog	1969-12-31 21:00:00.000000000 -0300
-++++ thrift-0.9.1/ChangeLog	2013-10-07 20:45:23.078554836 -0300
-+@@ -0,0 +1,2 @@
-++
-++
-+diff -Nura thrift-0.9.1.orig/NEWS thrift-0.9.1/NEWS
-+--- thrift-0.9.1.orig/NEWS	1969-12-31 21:00:00.000000000 -0300
-++++ thrift-0.9.1/NEWS	2013-10-07 20:45:20.351465699 -0300
-+@@ -0,0 +1,2 @@
-++
-++
-diff --git a/package/thrift/thrift-03-zlib-cross.patch b/package/thrift/thrift-03-zlib-cross.patch
-new file mode 100644
-index 0000000..3af39c4
---- /dev/null
-+++ b/package/thrift/thrift-03-zlib-cross.patch
-@@ -0,0 +1,16 @@
-+Make zlib version detection cross-compile happy.
-+
-+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+
-+diff -Nura thrift-0.9.1.orig/aclocal/ax_lib_zlib.m4 thrift-0.9.1/aclocal/ax_lib_zlib.m4
-+--- thrift-0.9.1.orig/aclocal/ax_lib_zlib.m4	2013-08-15 11:04:29.000000000 -0300
-++++ thrift-0.9.1/aclocal/ax_lib_zlib.m4	2013-10-07 20:47:44.523177973 -0300
-+@@ -73,7 +73,7 @@
-+           #   (defined in the library).
-+           AC_LANG_PUSH([C])
-+           dnl This can be changed to AC_LINK_IFELSE if you are cross-compiling.
-+-          AC_RUN_IFELSE([AC_LANG_PROGRAM([[
-++          AC_LINK_IFELSE([AC_LANG_PROGRAM([[
-+           #include <zlib.h>
-+           #if ZLIB_VERNUM >= 0x$WANT_ZLIB_VERSION
-+           #else
-diff --git a/package/thrift/thrift.mk b/package/thrift/thrift.mk
-new file mode 100644
-index 0000000..7ee90ac
---- /dev/null
-+++ b/package/thrift/thrift.mk
-@@ -0,0 +1,64 @@
-+################################################################################
-+#
-+# thrift
-+#
-+################################################################################
-+
-+THRIFT_VERSION = 0.9.1
-+THRIFT_SITE = http://www.us.apache.org/dist/thrift/$(THRIFT_VERSION)
-+THRIFT_DEPENDENCIES = host-pkgconf host-thrift boost libevent openssl zlib
-+THRIFT_INSTALL_STAGING = YES
-+HOST_THRIFT_DEPENDENCIES = host-boost host-libevent host-openssl host-pkgconf \
-+	host-zlib
-+THRIFT_CONF_OPT = --with-sysroot=$(STAGING_DIR) --with-tests=no \
-+	--with-boost=$(STAGING_DIR)
-+HOST_THRIFT_CONF_OPT = --with-sysroot=$(HOST_DIR) --with-tests=no
-+THRIFT_AUTORECONF = YES
-+THRIFT_LICENSE = Apache 2.0
-+THRIFT_LICENSE_FILES = LICENSE
-+
-+ifeq ($(BR2_PREFER_STATIC_LIB),y)
-+# openssl uses zlib, so we need to explicitly link with it when static
-+THRIFT_CONF_ENV += LIBS=-lz
-+endif
-+
-+# Language selection
-+# The generator (host tool) works with all of them regardless
-+# This is just for the libraries / bindings
-+THRIFT_LANG_CONF_OPT += --without-csharp --without-java --without-erlang \
-+	--without-python --without-perl --without-php --without-php_extension \
-+	--without-ruby --without-haskell --without-go --without-d
-+HOST_THRIFT_CONF_OPT += $(THRIFT_LANG_CONF_OPT) --without-c_glib
-+THRIFT_CONF_OPT += $(THRIFT_LANG_CONF_OPT)
-+
-+# C bindings
-+ifeq ($(BR2_PACKAGE_LIBGLIB2),y)
-+THRIFT_DEPENDENCIES += libglib2
-+else
-+THRIFT_CONF_OPT += --without-c_glib
-+endif
-+
-+# De-hardcode THRIFT for cross compiling
-+define THRIFT_TOOL_NO_HARDCODE
-+	for f in `find $(@D) -name Makefile.am -type f`; do \
-+		$(SED) "/^THRIFT =/d" $$f; \
-+	done
-+	$(SED) "s:top_builddir)/compiler/cpp/thrift:THRIFT):" $(@D)/tutorial/Makefile.am
-+endef
-+
-+THRIFT_POST_PATCH_HOOKS += THRIFT_TOOL_NO_HARDCODE
-+
-+define THRIFT_BUILD_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) THRIFT=$(HOST_DIR)/usr/bin/thrift -C $(@D)
-+endef
-+
-+# Install runtime only
-+define THRIFT_INSTALL_TARGET_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/lib DESTDIR=$(TARGET_DIR) install
-+endef
-+
-+$(eval $(autotools-package))
-+$(eval $(host-autotools-package))
-+
-+# to be used by other packages
-+THRIFT = $(HOST_DIR)/usr/bin/thrift
+On Mon, 2 Dec 2013 13:53:53 +0100, Thomas De Schampheleire wrote:
+
+> > Yes, I must say I was impressed by how much we managed to reduce the
+> > number of build failures.
+> 
+> A wild idea I have is to keep count of how many autobuild problems
+> were fixed by each contributor, and add this ranking to the buildroot
+> release e-mail, similar to how commits are counted. This would give
+> some extra incentive to developers in fixing such problems.
+
+In practice, there is usually one commit to fix each autobuilder issue,
+so people already get credited by the number of commits.
+
+However, if you want, we can run some statistics based on which commit
+logs contained a reference to an autobuild URL, and extract these.
+Should not be too complicated to achieve.
+
+... a little bit of scripting later ...
+
+for i in $(git log --format=%H 2013.08..2013.11); do git show --quiet $i | grep -q http://autobuild && git show --quiet --format="%an" $i ; done | sort | uniq -c | sort -rn -k1
+
+gives the following scores for the last release:
+
+     39 Gustavo Zacarias
+     21 Peter Korsgaard
+     17 Thomas Petazzoni
+     14 Simon Dawson
+      6 Thomas De Schampheleire
+      6 Romain Naour
+      5 Vicente Olivert Riera
+      5 Samuel Martin
+      4 Fatih A??c?
+      4 Arnout Vandecappelle
+      3 Ryan Barnett
+      3 Axel Lin
+      2 Phil Eichinger
+      2 Matt Weber
+      2 Chris Zankel
+      1 Michael Rommel
+      1 Luca Ceresoli
+      1 Jerzy Grzegorek
+      1 Clayton Shotwell
+      1 Baruch Siach
+      1 Alexander Lukichev
+
+Of course, this assumes that any commit that contains a reference to a
+http://autobuild<something> URL is fixing an autobuilder failure. Which
+I guess is good enough indicator (even though possibly not perfect).
+
+> > However, it's hard to be 100% sure a failure showing is a new failure,
+> > even if we had several days in a row with 0 failures. The number of
+> > possible combinations is so huge that I don't think it's possible to
+> > test all of them within a reasonable amount of time. So a "new failure"
+> > may just be something that did exist since quite some time was that we
+> > couldn't trigger (like was indeed by another failure, for example).
+> 
+> True. But, imagine we had zero failures for a few days, and then there
+> is a new failure. The logical thing to do is check which package
+> fails, in which way, and have a look at the recent commits. In many
+> cases, it would be obvious whether the new failure is or could be
+> caused by such a recent commit, or if it is an 'old' issue that wasn't
+> seen for a while.
+> So, while we cannot automatically blame the last set of commits,
+> having close-to-zero failures would certainly help a lot in the
+> analysis.
+
+True. But in practice, that's something we're already able to do. As I
+follow autobuilder failures quite regularly, I'm quite easily able to
+determine whether a build failure is something new that is possibly
+related to a recent commit, or something that has been around for quite
+some time.
+
+Best regards,
+
+Thomas
 -- 
-1.8.3.2
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
