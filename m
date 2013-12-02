@@ -1,38 +1,69 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 2 Dec 2013 09:53:32 +0100
-Subject: [Buildroot] [PATCH 1/2] package: unification of name
- <pkg>_VERSION_MAJOR variable
-In-Reply-To: <20131202095237.0241c919@skate>
-References: <1385971203-11645-1-git-send-email-jerzy.grzegorek@trzebnica.net>
- <20131202095237.0241c919@skate>
-Message-ID: <20131202095332.47b85913@skate>
+From: spdawson at gmail.com <spdawson@gmail.com>
+Date: Mon,  2 Dec 2013 09:23:47 +0000
+Subject: [Buildroot] [PATCH] gpsd: fix udev install
+Message-ID: <1385976227-10878-1-git-send-email-spdawson@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Jerzy,
+From: Simon Dawson <spdawson@gmail.com>
 
-On Mon, 2 Dec 2013 09:52:37 +0100, Thomas Petazzoni wrote:
-> Dear Jerzy Grzegorek,
-> 
-> On Mon,  2 Dec 2013 09:00:02 +0100, Jerzy Grzegorek wrote:
-> 
-> > -JSON_GLIB_VERSION = $(JSON_GLIB_MAJOR_VERSION).$(JSON_GLIB_MINOR_VERSION)
-> > -JSON_GLIB_SITE = http://ftp.gnome.org/pub/GNOME/sources/json-glib/$(JSON_GLIB_MAJOR_VERSION)
-> > +JSON_GLIB_VERSION = $(JSON_GLIB_VERSION_MAJOR).$(JSON_GLIB_MINOR_VERSION)
-> 
-> So we have VERSION_MAJOR and then MINOR_VERSION ? Doesn't seem really
-> consistent.
+The installation of udev rules for gpsd fails, for two reasons:
+* The default udev install path is /lib/udev, and needs the target directory
+  prepending
+* If the rules.d subdirectory of the udev install path does not exist, then
+  gpsd fails to create it
 
-Ok, ignore that comment, sorry. I did review PATCH 1/2, and only after
-that I saw PATCH 2/2. So just ignore my stupidity :)
+The first problem is fixed by specifying the udev install path in the call
+to scons; the second problem is fixed by a patch to gpsd. The gpsd patch
+has been sent (but not yet accepted) upstream.
 
-Thanks!
+Signed-off-by: Simon Dawson <spdawson@gmail.com>
+---
+ ...gpsd-03-udevdir-create-rules.d-subdirectory.patch | 20 ++++++++++++++++++++
+ package/gpsd/gpsd.mk                                 |  1 +
+ 2 files changed, 21 insertions(+)
+ create mode 100644 package/gpsd/gpsd-03-udevdir-create-rules.d-subdirectory.patch
 
-Thomas
+diff --git a/package/gpsd/gpsd-03-udevdir-create-rules.d-subdirectory.patch b/package/gpsd/gpsd-03-udevdir-create-rules.d-subdirectory.patch
+new file mode 100644
+index 0000000..6f0d26b
+--- /dev/null
++++ b/package/gpsd/gpsd-03-udevdir-create-rules.d-subdirectory.patch
+@@ -0,0 +1,20 @@
++If the rules.d subdirectory of the main udev directory does not exist, then
++the udev-install scons target will fail.
++
++We need to create the rules.d subdirectory when we create the main udev
++directory.
++
++Signed-off-by: Simon Dawson <spdawson@gmail.com>
++
++diff -Nurp a/SConstruct b/SConstruct
++--- a/SConstruct	2013-12-02 08:15:34.830379444 +0000
+++++ b/SConstruct	2013-12-02 08:16:43.833525441 +0000
++@@ -1788,7 +1788,7 @@ if env['python']:
++ # is plugged in.
++ 
++ Utility('udev-install', 'install', [
++-    'mkdir -p ' + env['udevdir'],
+++    'mkdir -p ' + env['udevdir'] + '/rules.d',
++     'cp $SRCDIR/gpsd.rules ' + env['udevdir'] + '/rules.d/25-gpsd.rules',
++     'cp $SRCDIR/gpsd.hotplug ' + env['udevdir'],
++     'chmod a+x ' + env['udevdir'] + '/gpsd.hotplug',
+diff --git a/package/gpsd/gpsd.mk b/package/gpsd/gpsd.mk
+index 92db00e..fae357d 100644
+--- a/package/gpsd/gpsd.mk
++++ b/package/gpsd/gpsd.mk
+@@ -229,6 +229,7 @@ define GPSD_INSTALL_UDEV_RULES
+ 		DESTDIR=$(TARGET_DIR) \
+ 		$(SCONS) \
+ 		$(GPSD_SCONS_OPTS) \
++		udevdir=$(TARGET_DIR)/lib/udev \
+ 		udev-install)
+ endef
+ 
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.8.3.2
