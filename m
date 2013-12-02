@@ -1,50 +1,183 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Mon, 2 Dec 2013 12:11:02 +0100
-Subject: [Buildroot] Call for autobuild fixing for 2013.11
-In-Reply-To: <20131126142616.64719ad6@skate>
-References: <CAAXf6LXwy3HGGX1W9FCcdVCRJSHMT2B=w--xvcsBxqwUXxDjqg@mail.gmail.com>
- <CAAXf6LU1_ybwfA9DGfkq7fGJ17LU5k4cQb=G14rg6oSdNY=WAg@mail.gmail.com>
- <20131126142616.64719ad6@skate>
-Message-ID: <CAAXf6LViMHHbhYP2joLTDYg7=KDJ8jHyMYm81COZkNdhH8AG2Q@mail.gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon,  2 Dec 2013 08:40:36 -0300
+Subject: [Buildroot] [PATCH] binutils: add version 2.24
+Message-ID: <1385984436-13616-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas, all,
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/binutils/2.24/120-sh-conf.patch            | 29 +++++++++++++++++
+ .../binutils/2.24/300-001_ld_makefile_patch.patch  | 24 ++++++++++++++
+ .../2.24/300-012_check_ldrunpath_length.patch      | 21 ++++++++++++
+ package/binutils/2.24/500-sysroot.patch            | 37 ++++++++++++++++++++++
+ package/binutils/Config.in.host                    |  5 +++
+ 5 files changed, 116 insertions(+)
+ create mode 100644 package/binutils/2.24/120-sh-conf.patch
+ create mode 100644 package/binutils/2.24/300-001_ld_makefile_patch.patch
+ create mode 100644 package/binutils/2.24/300-012_check_ldrunpath_length.patch
+ create mode 100644 package/binutils/2.24/500-sysroot.patch
 
-On Tue, Nov 26, 2013 at 2:26 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Dear Thomas De Schampheleire,
->
-> On Sat, 23 Nov 2013 13:56:28 +0100, Thomas De Schampheleire wrote:
->
->> > If you want to fix a particular problem but get stuck, don't
->> > hesitate in sending your findings to the list. Other developers can
->> > try to help you.
->>
->> It's great to see several people sending patches that fix autobuild
->> failures! Let's keep up this work until the end of the month, when
->> 2013.11 is released...
->
-> Yes, we've made really good progress here, and it's indeed great to see
-> that more people have decided to the play the "let's fix autobuilder
-> failures" game :-)
->
-> However, I would not say that this effort should stop at the end of the
-> month, when 2013.11 is released. When 2013.11 is released, next will be
-> merged in master, and we'll have a nice set of new autobuilder failures
-> to look at, not to mention the existing ones that haven't been fixed
-> yet!
-
-Yes, obviously I did not mean to stop fixing autobuild issues when
-2013.11 is released.
-In fact, the amount of remaining autobuild issues at the release of
-2013.11 was relatively small that it is imaginable that we could close
-them all... It would be great if we could reach 0 failures at some
-point for a few days. Then any new failure could be attributed to a
-recent commit, and should be fixed at once (or the commit reverted).
-
-Best regards,
-Thomas
+diff --git a/package/binutils/2.24/120-sh-conf.patch b/package/binutils/2.24/120-sh-conf.patch
+new file mode 100644
+index 0000000..ea3d1b6
+--- /dev/null
++++ b/package/binutils/2.24/120-sh-conf.patch
+@@ -0,0 +1,29 @@
++r10231 | lethal | 2005-05-02 09:58:00 -0400 (Mon, 02 May 2005) | 13 lines
++
++Likewise, binutils has no idea about any of these new targets either, so we 
++fix that up too.. now we're able to actually build a real toolchain for 
++sh2a_nofpu- and other more ineptly named toolchains (and yes, there are more 
++inept targets than that one, really. Go look, I promise).
++
++--- a/configure
+++++ b/configure
++@@ -1495,7 +1495,7 @@
++   mips*-*-*)
++     noconfigdirs="$noconfigdirs gprof"
++     ;;
++-  sh-*-* | sh64-*-*)
+++  sh*-*-* | sh64-*-*)
++     case "${target}" in
++       sh*-*-elf)
++          ;;
++--- a/configure.ac
+++++ b/configure.ac
++@@ -712,7 +712,7 @@
++   mips*-*-*)
++     noconfigdirs="$noconfigdirs gprof"
++     ;;
++-  sh-*-* | sh64-*-*)
+++  sh*-*-* | sh64-*-*)
++     case "${target}" in
++       sh*-*-elf)
++          ;;
+diff --git a/package/binutils/2.24/300-001_ld_makefile_patch.patch b/package/binutils/2.24/300-001_ld_makefile_patch.patch
+new file mode 100644
+index 0000000..5cb0f61
+--- /dev/null
++++ b/package/binutils/2.24/300-001_ld_makefile_patch.patch
+@@ -0,0 +1,24 @@
++diff -u binutils-2.17.50.0.17.oorig/ld/Makefile.am binutils-2.17.50.0.17/ld/Makefile.am
++--- binutils-2.17.50.0.17.oorig/ld/Makefile.am	2007-06-18 19:29:29.000000000 +0200
+++++ binutils-2.17.50.0.17/ld/Makefile.am	2007-06-25 10:00:36.000000000 +0200
++@@ -18,7 +18,7 @@
++ # We put the scripts in the directory $(scriptdir)/ldscripts.
++ # We can't put the scripts in $(datadir) because the SEARCH_DIR
++ # directives need to be different for native and cross linkers.
++-scriptdir = $(tooldir)/lib
+++scriptdir = $(libdir)
++ 
++ EMUL = @EMUL@
++ EMULATION_OFILES = @EMULATION_OFILES@
++diff -u binutils-2.17.50.0.17.oorig/ld/Makefile.in binutils-2.17.50.0.17/ld/Makefile.in
++--- binutils-2.17.50.0.17.oorig/ld/Makefile.in	2007-06-18 19:29:29.000000000 +0200
+++++ binutils-2.17.50.0.17/ld/Makefile.in	2007-06-25 10:00:36.000000000 +0200
++@@ -287,7 +287,7 @@
++ # We put the scripts in the directory $(scriptdir)/ldscripts.
++ # We can't put the scripts in $(datadir) because the SEARCH_DIR
++ # directives need to be different for native and cross linkers.
++-scriptdir = $(tooldir)/lib
+++scriptdir = $(libdir)
++ BASEDIR = $(srcdir)/..
++ BFDDIR = $(BASEDIR)/bfd
++ INCDIR = $(BASEDIR)/include
+diff --git a/package/binutils/2.24/300-012_check_ldrunpath_length.patch b/package/binutils/2.24/300-012_check_ldrunpath_length.patch
+new file mode 100644
+index 0000000..df78310
+--- /dev/null
++++ b/package/binutils/2.24/300-012_check_ldrunpath_length.patch
+@@ -0,0 +1,21 @@
++diff -Nura binutils-2.21.orig/ld/emultempl/elf32.em binutils-2.21/ld/emultempl/elf32.em
++--- binutils-2.21.orig/ld/emultempl/elf32.em	2010-10-29 09:10:36.000000000 -0300
+++++ binutils-2.21/ld/emultempl/elf32.em	2010-12-10 09:26:56.746102724 -0300
++@@ -1270,6 +1270,8 @@
++ 	      && command_line.rpath == NULL)
++ 	    {
++ 	      lib_path = (const char *) getenv ("LD_RUN_PATH");
+++	      if ((lib_path) && (strlen (lib_path) == 0))
+++	      	lib_path = NULL;
++ 	      if (gld${EMULATION_NAME}_search_needed (lib_path, &n,
++ 						      force))
++ 		break;
++@@ -1497,6 +1499,8 @@
++   rpath = command_line.rpath;
++   if (rpath == NULL)
++     rpath = (const char *) getenv ("LD_RUN_PATH");
+++  if ((rpath) && (strlen (rpath) == 0))
+++  	rpath = NULL;
++ 
++   for (abfd = link_info.input_bfds; abfd; abfd = abfd->link_next)
++     if (bfd_get_flavour (abfd) == bfd_target_elf_flavour)
+diff --git a/package/binutils/2.24/500-sysroot.patch b/package/binutils/2.24/500-sysroot.patch
+new file mode 100644
+index 0000000..e49c795
+--- /dev/null
++++ b/package/binutils/2.24/500-sysroot.patch
+@@ -0,0 +1,37 @@
++Signed-off-by: Sven Rebhan <odinshorse@googlemail.com>
++
++Always try to prepend the sysroot prefix to absolute filenames first.
++
++http://bugs.gentoo.org/275666
++http://sourceware.org/bugzilla/show_bug.cgi?id=10340
++
++--- a/ld/ldfile.c
+++++ b/ld/ldfile.c
++@@ -308,18 +308,25 @@
++      directory first.  */
++   if (! entry->flags.maybe_archive)
++     {
++-      if (entry->flags.sysrooted && IS_ABSOLUTE_PATH (entry->filename))
+++      /* For absolute pathnames, try to always open the file in the
+++	 sysroot first. If this fails, try to open the file at the
+++	 given location.  */
+++      entry->flags.sysrooted = is_sysrooted_pathname (entry->filename);
+++      if (!entry->flags.sysrooted && IS_ABSOLUTE_PATH (entry->filename)
+++	  && ld_sysroot)
++ 	{
++ 	  char *name = concat (ld_sysroot, entry->filename,
++ 			       (const char *) NULL);
++ 	  if (ldfile_try_open_bfd (name, entry))
++ 	    {
++ 	      entry->filename = name;
+++	      entry->flags.sysrooted = TRUE;
++ 	      return TRUE;
++ 	    }
++ 	  free (name);
++ 	}
++-      else if (ldfile_try_open_bfd (entry->filename, entry))
+++
+++      if (ldfile_try_open_bfd (entry->filename, entry))
++ 	return TRUE;
++ 
++       if (IS_ABSOLUTE_PATH (entry->filename))
+diff --git a/package/binutils/Config.in.host b/package/binutils/Config.in.host
+index 8f19597..63830fb 100644
+--- a/package/binutils/Config.in.host
++++ b/package/binutils/Config.in.host
+@@ -39,6 +39,10 @@ choice
+ 		depends on !BR2_avr32
+ 		bool "binutils 2.23.2"
+ 
++	config BR2_BINUTILS_VERSION_2_24
++		depends on !BR2_avr32
++		bool "binutils 2.24"
++
+ endchoice
+ 
+ config BR2_BINUTILS_VERSION
+@@ -51,6 +55,7 @@ config BR2_BINUTILS_VERSION
+ 	default "2.22"		if BR2_BINUTILS_VERSION_2_22
+ 	default "2.23.1"	if BR2_BINUTILS_VERSION_2_23_1
+ 	default "2.23.2"	if BR2_BINUTILS_VERSION_2_23_2
++	default "2.24"		if BR2_BINUTILS_VERSION_2_24
+ 
+ config BR2_BINUTILS_EXTRA_CONFIG_OPTIONS
+ 	string "Additional binutils options"
+-- 
+1.8.3.2
