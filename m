@@ -1,7 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon,  2 Dec 2013 21:49:25 +0100
-Subject: [Buildroot] [pull request] Pull request for branch yem/misc
-Message-ID: <cover.1386017298.git.yann.morin.1998@free.fr>
+Date: Mon,  2 Dec 2013 21:49:27 +0100
+Subject: [Buildroot] [PATCH 1/2] docs/manual: limit the depth of the TOC in
+	the HTML output
+In-Reply-To: <cover.1386017298.git.yann.morin.1998@free.fr>
+References: <cover.1386017298.git.yann.morin.1998@free.fr>
+Message-ID: <e2932a94718affcd5ec7dd1c4cbb4cb8c140340c.1386017298.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,42 +13,42 @@ To: buildroot@busybox.net
 
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Hello All!
+The current TOC level is set to 4, which does not mean 'a 4-level deep TOC',
+but really means 'a TOC deep to the 4th level', with the first level being
+level 0, which means we have:
 
-Here are two unrelated changesets:
-  - the first reduces the depth of the TOC in the manual
-  - the second allows one to only install the required RPi bootloader
+    12. Appendix
+        12.1. Makedev syntax documentation
+        12.2. Makeuser syntax documentation
+        12.3. Partition table layout description syntax
+            12.3.1. The global section
+                Properties for the global section
 
-Regards,
-Yann E. MORIN.
+Which a bit too much. And yet, the fifth level is not shown, since we
+don't have any! :-/
 
+Limit the depth of the TOC to three levels, which is just enough to be
+usefull, yet not cluttered by low-level titles.
 
-The following changes since commit edce303b8da95a9b19939ab7a4199a39c0483c6f:
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+---
+ docs/manual/manual.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-  libtasn1: fix botched makeinfo/missing logic (2013-12-02 13:33:02 +0100)
-
-are available in the git repository at:
-
-  git://gitorious.org/buildroot/buildroot.git yem/misc
-
-for you to fetch changes up to 631bcb8e1ae930cb7502e1f2840f045bfea776da:
-
-  package/rpi-firmware: only install one firmware file (2013-12-02 21:47:04 +0100)
-
-----------------------------------------------------------------
-Yann E. MORIN (2):
-      docs/manual: limit the depth of the TOC in the HTML output
-      package/rpi-firmware: only install one firmware file
-
- docs/manual/manual.mk                |  4 ++--
- package/rpi-firmware/Config.in       | 39 ++++++++++++++++++++++++++++++++++++
- package/rpi-firmware/rpi-firmware.mk |  8 ++------
- 3 files changed, 43 insertions(+), 8 deletions(-)
-
+diff --git a/docs/manual/manual.mk b/docs/manual/manual.mk
+index aeafd10..0926566 100644
+--- a/docs/manual/manual.mk
++++ b/docs/manual/manual.mk
+@@ -72,8 +72,8 @@ endef
+ # The variable <DOCUMENT_NAME>_SOURCES defines the dependencies.
+ ################################################################################
+ define GENDOC
+-$(call GENDOC_INNER,$(1),xhtml,html,html,HTML,--xsltproc-opts "--stringparam toc.section.depth 4")
+-$(call GENDOC_INNER,$(1),chunked,split-html,chunked,split HTML,--xsltproc-opts "--stringparam toc.section.depth 4")
++$(call GENDOC_INNER,$(1),xhtml,html,html,HTML,--xsltproc-opts "--stringparam toc.section.depth 2")
++$(call GENDOC_INNER,$(1),chunked,split-html,chunked,split HTML,--xsltproc-opts "--stringparam toc.section.depth 2")
+ $(call GENDOC_INNER,$(1),pdf,pdf,pdf,PDF,--dblatex-opts "-P latex.output.revhistory=0")
+ $(call GENDOC_INNER,$(1),text,text,text,text)
+ $(call GENDOC_INNER,$(1),epub,epub,epub,ePUB)
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.8.1.2
