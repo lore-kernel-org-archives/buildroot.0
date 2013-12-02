@@ -1,33 +1,31 @@
-From: Axel Lin <axel.lin@ingics.com>
-Date: Mon, 02 Dec 2013 11:11:02 +0800
-Subject: [Buildroot] [PATCH] berkeleydb: bump to version 5.3.28
-Message-ID: <1385953862.11887.1.camel@phoenix>
+From: Anton Blanchard <anton@samba.org>
+Date: Mon, 2 Dec 2013 17:23:11 +1100
+Subject: [Buildroot] [PATCH] toolchain: Allow ld64.so linker
+Message-ID: <20131202172311.2641462e@kryten>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-According to the information from oracle website, version 5.3.21 is no longer
-available for download. Let's upgrade to version 5.3.28.
-
-Signed-off-by: Axel Lin <axel.lin@ingics.com>
+From: Jeremy Kerr <jk@ozlabs.org>
+    
+Expand the glibc dynamic linker check to allow ld64.so.
+    
+Signed-off-by: Jeremy Kerr <jk@ozlabs.org>
+Signed-off-by: Anton Blanchard <anton@samba.org>
 ---
- package/berkeleydb/berkeleydb.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/berkeleydb/berkeleydb.mk b/package/berkeleydb/berkeleydb.mk
-index 0e3e830..1be4c70 100644
---- a/package/berkeleydb/berkeleydb.mk
-+++ b/package/berkeleydb/berkeleydb.mk
-@@ -9,7 +9,7 @@
- # avoid licensing issues.
- # BerkeleyDB version 6 or above should be provided by a dedicated
- # package instead.
--BERKELEYDB_VERSION = 5.3.21
-+BERKELEYDB_VERSION = 5.3.28
- BERKELEYDB_SITE = http://download.oracle.com/berkeley-db
- BERKELEYDB_SOURCE = db-$(BERKELEYDB_VERSION).NC.tar.gz
- BERKELEYDB_SUBDIR = build_unix
--- 
-1.8.1.2
+diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
+index a8944ce..faa9d90 100644
+--- a/toolchain/helpers.mk
++++ b/toolchain/helpers.mk
+@@ -204,7 +204,7 @@ check_glibc_rpc_feature = \
+ #
+ check_glibc = \
+ 	SYSROOT_DIR="$(strip $1)"; \
+-	if test `find $${SYSROOT_DIR}/ -maxdepth 2 -name 'ld-linux*.so.*' -o -name 'ld.so.*' | wc -l` -eq 0 ; then \
++	if test `find $${SYSROOT_DIR}/ -maxdepth 2 -name 'ld-linux*.so.*' -o -name 'ld.so.*' -o -name 'ld64.so.*' | wc -l` -eq 0 ; then \
+ 		echo "Incorrect selection of the C library"; \
+ 		exit -1; \
+ 	fi; \
