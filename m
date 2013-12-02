@@ -1,33 +1,40 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon,  2 Dec 2013 09:22:57 -0300
-Subject: [Buildroot] [PATCH] libtasn1: fix botched makeinfo/missing logic
-Message-ID: <1385986977-12085-1-git-send-email-gustavo@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 2 Dec 2013 13:26:29 +0100
+Subject: [Buildroot] [PATCH v2] qt5script: Disable on MIPS64 n64 ABI
+In-Reply-To: <1385984739-731-1-git-send-email-Vincent.Riera@imgtec.com>
+References: <1385984739-731-1-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <20131202132629.4f65c28a@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The makeinfo/missing logic is botched leading to failures such as:
-http://autobuild.buildroot.net/results/5f0/5f0e8f62be86b56813f5fc0510e83289ed2b0410/
-Just disable documentation build the hard way.
+Dear Vicente Olivert Riera,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/libtasn1/libtasn1.mk | 2 ++
- 1 file changed, 2 insertions(+)
+On Mon, 2 Dec 2013 11:45:39 +0000, Vicente Olivert Riera wrote:
+> There is no support for JavaScritCore on MIPS64 n64 ABI so as a quick
+> fix we can disable the posibility of selecting this package. Meanwhile a
+> proposed patch has already been sent to Qt:
+> 
+>    https://bugreports.qt-project.org/browse/QTBUG-35191
+> 
+> Fixes:
+> 
+>    http://autobuild.buildroot.net/results/231/231c112a3fc18e6cd7d6d10873e22144525c7280/
+> 
+> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+> ---
+>  package/qt5/qt5script/Config.in |    1 +
+>  1 files changed, 1 insertions(+), 0 deletions(-)
 
-diff --git a/package/libtasn1/libtasn1.mk b/package/libtasn1/libtasn1.mk
-index e58bcbc..122f775 100644
---- a/package/libtasn1/libtasn1.mk
-+++ b/package/libtasn1/libtasn1.mk
-@@ -10,5 +10,7 @@ LIBTASN1_DEPENDENCIES = host-bison
- LIBTASN1_LICENSE = GPLv3+ LGPLv2.1+
- LIBTASN1_LICENSE_FILES = COPYING COPYING.LIB
- LIBTASN1_INSTALL_STAGING = YES
-+# 'missing' fallback logic botched so disable it completely
-+LIBTASN1_CONF_ENV = MAKEINFO="true"
- 
- $(eval $(autotools-package))
+Now that 2013.11 has been released, we don't need "quick fixes"
+anymore. What about integrating the upstream Qt5 fix instead?
+
+Thanks!
+
+Thomas
 -- 
-1.8.3.2
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
