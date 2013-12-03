@@ -1,28 +1,26 @@
-From: Anton Blanchard <anton@samba.org>
-Date: Tue, 3 Dec 2013 22:28:46 +1100
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 03 Dec 2013 13:11:46 +0100
 Subject: [Buildroot] [PATCH] toolchain: Allow ld64.so linker
-In-Reply-To: <20131203122107.66e5ba4e@skate>
-References: <20131202172311.2641462e@kryten> <20131202110923.2ac86fb5@skate>
- <20131203221437.106b6bf5@kryten> <20131203122107.66e5ba4e@skate>
-Message-ID: <20131203222846.35d6d9df@kryten>
+In-Reply-To: <20131203222613.27002db9@kryten> (Anton Blanchard's message of
+ "Tue, 3 Dec 2013 22:26:13 +1100")
+References: <20131203222613.27002db9@kryten>
+Message-ID: <87zjoim8vx.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Anton" == Anton Blanchard <anton@samba.org> writes:
 
-Hi Thomas,
+ > From: Jeremy Kerr <jk@ozlabs.org>
+ > The glibc dynamic linkers for ppc64 and s390x are named ld64.so.*
+ > so modify the check_glibc test to match them.
 
-> Perfect. Can you just resubmit just the patch (without this discussion
-> above it), so that our patchwork picks up a good version of it, that
-> the BR maintainer can apply?
+ > Signed-off-by: Jeremy Kerr <jk@ozlabs.org>
+ > Signed-off-by: Anton Blanchard <anton@samba.org>
 
-Sure, I just resubmitted and it looks to have hit patchwork already.
+Committed, thanks.
 
-> Also, just curious, are you actually using Buildroot for ppc64 or
-> s390x machines?
-
-Yes, we used buildroot to bootstrap ppc64le.
-
-Anton
+-- 
+Bye, Peter Korsgaard
