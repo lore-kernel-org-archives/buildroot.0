@@ -1,35 +1,34 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 3 Dec 2013 23:01:09 +0100
-Subject: [Buildroot] Video and slides of Buildroot talk at ELCE available
-Message-ID: <20131203230109.3a4f1146@skate>
+From: Sven Neumann <neumann@teufel.de>
+Date: Tue, 03 Dec 2013 23:10:07 +0100
+Subject: [Buildroot] [PATCH] alsa-utils: add dependency on host-pkgconf
+Message-ID: <1386108607.6732.1.camel@bender.Speedport_W_724V_Typ_A_05011601_00_065>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
 
-As some of you probably know, Peter Korsgaard gave a talk Buildroot,
-titled "Buildroot: What's New" at the latest Embedded Linux Conference
-Europe in Edinburgh.
+The alsa-utils configure script will use pkg-config if available,
+so make sure that it is available.
 
-The video of this talk is now available at:
+Signed-off-by: Sven Neumann <neumann@teufel.de>
+---
+ package/alsa-utils/alsa-utils.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-  http://www.youtube.com/watch?v=0G_yJ50RA3I
-
-The slides of the talk are available at:
-
-  http://elinux.org/images/2/23/Buildroot-whats-new-elce2013.pdf
-
-Do not hesitate to share the video and slides with your colleagues, or
-through your favorite social networks, to have more people learn about
-Buildroot.
-
-Best regards,
-
-Thomas
+diff --git a/package/alsa-utils/alsa-utils.mk b/package/alsa-utils/alsa-utils.mk
+index b951112..e755adf 100644
+--- a/package/alsa-utils/alsa-utils.mk
++++ b/package/alsa-utils/alsa-utils.mk
+@@ -10,7 +10,7 @@ ALSA_UTILS_SITE = http://alsa.cybermirror.org/utils
+ ALSA_UTILS_LICENSE = GPLv2
+ ALSA_UTILS_LICENSE_FILES = COPYING
+ ALSA_UTILS_INSTALL_STAGING = YES
+-ALSA_UTILS_DEPENDENCIES = host-gettext alsa-lib \
++ALSA_UTILS_DEPENDENCIES = host-gettext host-pkgconf alsa-lib \
+ 	$(if $(BR2_PACKAGE_NCURSES),ncurses)
+ 
+ ALSA_UTILS_CONF_ENV = \
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.8.4.2
