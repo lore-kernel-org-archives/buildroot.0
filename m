@@ -1,40 +1,66 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 3 Dec 2013 20:05:22 +0100
-Subject: [Buildroot] [PATCH] bluez_utils: broken for static builds
-In-Reply-To: <1386093039-56954-1-git-send-email-Vincent.Riera@imgtec.com>
-References: <1386093039-56954-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <20131203200522.589c0e30@skate>
+Date: Tue,  3 Dec 2013 20:27:18 +0100
+Subject: [Buildroot] [PATCH] libpfm4: needs thread support
+Message-ID: <1386098838-26777-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Vicente Olivert Riera,
+Fixes:
 
-On Tue, 3 Dec 2013 17:50:39 +0000, Vicente Olivert Riera wrote:
-> The bluez_utils package requires shared library support
-> unconditionally. We can't fix it to make it build on static because,
-> for instance, "plugin.c" file uses dlfcn and it's a basic prereq for
-> bluetoothd, so add "depend on !BR2_PREFER_STATIC_LIB" to it and
-> recursively to all packages that selects BR2_PACKAGE_BLUEZ_UTILS.
-> 
-> Fixes:
-> 
->    http://autobuild.buildroot.net/results/d81/d81970024649c1e89c01da491c63760afdad6cb6/
-> 
-> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+  http://autobuild.buildroot.net/results/73d736dd3c8a70358ef4b19a63dda46178cf8bf1/
 
-Looks good, but please read
-http://buildroot.org/downloads/manual/manual.html#dependencies-target-toolchain-options,
-which tells you that when a package depends on dynamic library support,
-a corresponding comment should be added to inform the user of why the
-package is not available.
+Note that the propagation of the thread dependency to the oprofile
+package is a little bit non standard, because oprofile selects libpfm4
+only on the PowerPC architecture. So we ensure the thread dependency
+is only enforced on PowerPC, and a separate comment is displayed when
+thread support is not available, but the PowerPC architecture is used.
 
-Best regards,
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/libpfm4/Config.in  | 4 ++++
+ package/oprofile/Config.in | 6 ++++++
+ 2 files changed, 10 insertions(+)
 
-Thomas
+diff --git a/package/libpfm4/Config.in b/package/libpfm4/Config.in
+index 3908e78..1c2fbdc 100644
+--- a/package/libpfm4/Config.in
++++ b/package/libpfm4/Config.in
+@@ -1,8 +1,12 @@
+ config BR2_PACKAGE_LIBPFM4
+ 	bool "libpfm4"
+ 	depends on !BR2_avr32 # no perf_event_open
++	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	help
+ 	  A helper library to help encode Performance Events to use with
+ 	  Operating system kernels performance monitoring interfaces.
+ 
+ 	  http://perfmon2.sourceforge.net/
++
++comment "libpfm4 needs a toolchain w/ threads"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/oprofile/Config.in b/package/oprofile/Config.in
+index 2847a91..dff2a8c 100644
+--- a/package/oprofile/Config.in
++++ b/package/oprofile/Config.in
+@@ -6,6 +6,8 @@ config BR2_PACKAGE_OPROFILE
+ 	select BR2_PACKAGE_LIBPFM4 if BR2_powerpc
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on !BR2_aarch64 # binutils
++	# libpfm4 is needed on PowerPC, and requires thread support
++	depends on BR2_TOOLCHAIN_HAS_THREADS || !BR2_powerpc
+ 	help
+ 	  OProfile is a system-wide profiler for Linux systems,
+ 	  capable of profiling all running code at low overhead.
+@@ -25,3 +27,7 @@ config BR2_PACKAGE_OPROFILE
+ comment "oprofile needs a toolchain w/ C++"
+ 	depends on BR2_USE_MMU && !BR2_aarch64
+ 	depends on !BR2_INSTALL_LIBSTDCPP
++
++comment "oprofile needs a toolchain w/ threads on PPC"
++	depends on BR2_USE_MMU && BR2_powerpc
++	depends on !BR2_TOOLCHAIN_HAS_THREADS
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.8.1.2
