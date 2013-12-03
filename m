@@ -1,50 +1,32 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 3 Dec 2013 23:47:41 +0100
-Subject: [Buildroot] [PATCH] gnutls: revert bump
-In-Reply-To: <1386088080-4286-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1386088080-4286-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20131203224741.GC3633@free.fr>
+Date: Tue, 3 Dec 2013 23:49:27 +0100
+Subject: [Buildroot] Make Acked/Reviewd/Tested-by tags visible
+In-Reply-To: <52817846.2080301@ozlabs.org>
+References: <20131111215435.GC3510@free.fr>
+ <52817846.2080301@ozlabs.org>
+Message-ID: <20131203224927.GD3633@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Gustavo, All,
+Jeremy, All,
 
-On 2013-12-03 13:28 -0300, Gustavo Zacarias spake thusly:
-> Revert bump to 3.2.7 from commit 8238e744b813e9922c0a81f21b271263ef0e216a
-> It causes build issues because of an internal gnulib bump:
-> http://autobuild.buildroot.net/results/48d/48d5c6364fec55e84309b2fb6986f206699f1800/
+On 2013-11-12 08:37 +0800, Jeremy Kerr spake thusly:
+> > We would like to suggest that the web GUI and the pwclient CLI both
+> > display such tags besides each patch, a bit like (hypotetical output of
+> > pwclient):
+> > 
+> >     ID     Tags State       Subject
+> >     123456 ART  New         Wonderfull patch to apply quickly
 > 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> I've been looking to implement this for a while, but didn't have any
+> good ideas about how to present this in the UI. I love your proposal
+> here with the flags, it's simple and I think would work well for the
+> majority of cases.
 
-Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
-> ---
->  package/gnutls/gnutls.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
-> index 8a7f3f7..8ab0665 100644
-> --- a/package/gnutls/gnutls.mk
-> +++ b/package/gnutls/gnutls.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -GNUTLS_VERSION = 3.2.7
-> +GNUTLS_VERSION = 3.2.6
->  GNUTLS_SOURCE = gnutls-$(GNUTLS_VERSION).tar.xz
->  GNUTLS_SITE = ftp://ftp.gnutls.org/gcrypt/gnutls/v3.2
->  GNUTLS_LICENSE = GPLv3+ LGPLv2.1+
-> -- 
-> 1.8.3.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Just checking: any progress on this? ;-)
 
 Regards,
 Yann E. MORIN.
