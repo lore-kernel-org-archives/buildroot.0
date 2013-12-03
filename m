@@ -1,41 +1,93 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 3 Dec 2013 12:17:20 +0100
-Subject: [Buildroot] [git commit] cubieboard: mkcubiecard: use the right
-	command for checking user privilege
-Message-ID: <20131203112057.1F41D9BEF3@busybox.osuosl.org>
+Date: Tue, 3 Dec 2013 12:20:17 +0100
+Subject: [Buildroot] [git commit] package/rpi-firmware: only install one
+	firmware file
+Message-ID: <20131203112057.2E6E49BEB7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=2257e36a57c15ef31a013dac56ff7c551fec70c5
+commit: http://git.buildroot.net/buildroot/commit/?id=c37dd482c84d59ac574053efdead4e2ccc5d221e
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On some shell environments the EUID variable, which checks the
-user id, is not defined. Use `id -u` instead.
+Since only one firmware is used to boot the Raspberry Pi, there is no
+reason to install all of them.
 
-This patch mutes the following error:
+Add an option to select what firmware to install.
 
-./board/cubietech/cubieboard/mkcubiecard.sh: 31: [: -ne: unexpected operator
-
-Signed-off-by: Andi Shyti <andi@etezian.org>
-Reviewed-by: Arvid Picciani <aep@exys.org>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- board/cubietech/cubieboard/mkcubiecard.sh |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/rpi-firmware/Config.in       |   39 ++++++++++++++++++++++++++++++++++
+ package/rpi-firmware/rpi-firmware.mk |    8 +-----
+ 2 files changed, 41 insertions(+), 6 deletions(-)
 
-diff --git a/board/cubietech/cubieboard/mkcubiecard.sh b/board/cubietech/cubieboard/mkcubiecard.sh
-index 34afc87..f1d5a9f 100755
---- a/board/cubietech/cubieboard/mkcubiecard.sh
-+++ b/board/cubietech/cubieboard/mkcubiecard.sh
-@@ -28,7 +28,7 @@ if [ $# -ne 2 ]; then
- 	exit 1;
- fi
+diff --git a/package/rpi-firmware/Config.in b/package/rpi-firmware/Config.in
+index eb10a8a..cd45be4 100644
+--- a/package/rpi-firmware/Config.in
++++ b/package/rpi-firmware/Config.in
+@@ -7,3 +7,42 @@ config BR2_PACKAGE_RPI_FIRMWARE
  
--if [ $EUID -ne 0 ]; then
-+if [ `id -u` -ne 0 ]; then
- 	echo "This script must be run as root" 1>&2
- 	exit 1
- fi
+ 	  https://github.com/raspberrypi/firmware
+ 
++if BR2_PACKAGE_RPI_FIRMWARE
++
++choice
++	bool "Firmware to boot"
++	default BR2_PACKAGE_RPI_FIRMWARE_DEFAULT
++	help
++	  There are three different firmware files:
++	    - the default firmware, that enables standard GPU features;
++	    - the extended firmware, that enables additional GPU features
++	      (eg. more audio/video codecs);
++	    - the cut-down firmware, for emergency situations, with only
++	      features required to boot a Linux kernel.
++
++config BR2_PACKAGE_RPI_FIRMWARE_DEFAULT
++	bool "default"
++	help
++	  The default firmware, that enables standard GPU features.
++
++config BR2_PACKAGE_RPI_FIRMWARE_X
++	bool "extended ('x', more codecs)"
++	help
++	  The extended firmware, that enables additional GPU features
++	  (eg. more audio/video codecs).
++
++config BR2_PACKAGE_RPI_FIRMWARE_CD
++	bool "cut-down ('cd', emergency)"
++	help
++	  The cut-down firmware, for emergency situations, with only
++	  features required to boot a Linux kernel.
++
++endchoice
++
++config BR2_PACKAGE_RPI_FIRMWARE_BOOT
++	string
++	default ""      if BR2_PACKAGE_RPI_FIRMWARE_DEFAULT
++	default "_x"    if BR2_PACKAGE_RPI_FIRMWARE_X
++	default "_cd"   if BR2_PACKAGE_RPI_FIRMWARE_CD
++
++endif # BR2_PACKAGE_RPI_FIRMWARE
+diff --git a/package/rpi-firmware/rpi-firmware.mk b/package/rpi-firmware/rpi-firmware.mk
+index f0882d4..25eab69 100644
+--- a/package/rpi-firmware/rpi-firmware.mk
++++ b/package/rpi-firmware/rpi-firmware.mk
+@@ -11,12 +11,8 @@ RPI_FIRMWARE_LICENSE_FILES = boot/LICENCE.broadcom
+ 
+ define RPI_FIRMWARE_INSTALL_TARGET_CMDS
+ 	$(INSTALL) -D -m 0644 $(@D)/boot/bootcode.bin $(BINARIES_DIR)/rpi-firmware/bootcode.bin
+-	$(INSTALL) -D -m 0644 $(@D)/boot/start.elf $(BINARIES_DIR)/rpi-firmware/start.elf
+-	$(INSTALL) -D -m 0644 $(@D)/boot/start_cd.elf $(BINARIES_DIR)/rpi-firmware/start_cd.elf
+-	$(INSTALL) -D -m 0644 $(@D)/boot/start_x.elf $(BINARIES_DIR)/rpi-firmware/start_x.elf
+-	$(INSTALL) -D -m 0644 $(@D)/boot/fixup.dat $(BINARIES_DIR)/rpi-firmware/fixup.dat
+-	$(INSTALL) -D -m 0644 $(@D)/boot/fixup_cd.dat $(BINARIES_DIR)/rpi-firmware/fixup_cd.dat
+-	$(INSTALL) -D -m 0644 $(@D)/boot/fixup_x.dat $(BINARIES_DIR)/rpi-firmware/fixup_x.dat
++	$(INSTALL) -D -m 0644 $(@D)/boot/start$(BR2_PACKAGE_RPI_FIRMWARE_BOOT).elf $(BINARIES_DIR)/rpi-firmware/start.elf
++	$(INSTALL) -D -m 0644 $(@D)/boot/fixup$(BR2_PACKAGE_RPI_FIRMWARE_BOOT).dat $(BINARIES_DIR)/rpi-firmware/fixup.dat
+ 	$(INSTALL) -D -m 0644 package/rpi-firmware/config.txt $(BINARIES_DIR)/rpi-firmware/config.txt
+ 	$(INSTALL) -D -m 0644 package/rpi-firmware/cmdline.txt $(BINARIES_DIR)/rpi-firmware/cmdline.txt
+ endef
