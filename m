@@ -1,89 +1,58 @@
-From: Matthew Weber <mlweber1@rockwellcollins.com>
-Date: Tue, 3 Dec 2013 16:41:22 -0600
-Subject: [Buildroot] Bug in the grub patches
-In-Reply-To: <1386108927-12612-1-git-send-email-yann.morin.1998@free.fr>
-References: <1386108927-12612-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <OFA9DEB6A7.487A9EC5-ON86257C36.007BBF5E-86257C36.007CA347@rockwellcollins.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 3 Dec 2013 23:47:41 +0100
+Subject: [Buildroot] [PATCH] gnutls: revert bump
+In-Reply-To: <1386088080-4286-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1386088080-4286-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20131203224741.GC3633@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-It looks like since (nov30) 9b3904543ca04c5d5fe5f6974539eed376de2290 the 
-grub pkg now fails when build on a x86_64 for a x86 target.  While using 
-an external glibc codesourcery_x86 201209 toolchain.
+Gustavo, All,
 
-stage2.c:941:7: warning: value computed is not used [-Wunused-value]
-stage2.c:942:7: warning: passing argument 1 of 'grub_strcpy' from 
-incompatible pointer type [enabled by default]
-In file included from stage2.c:20:0:
-./shared.h:891:7: note: expected 'char *' but argument is of type 'char 
-**'
-stage2.c:942:7: warning: passing argument 2 of 'grub_strcpy' from 
-incompatible pointer type [enabled by default]
-In file included from stage2.c:20:0:
-./shared.h:891:7: note: expected 'const char *' but argument is of type 
-'char **'
-stage2.c:944:7: warning: passing argument 1 of 'grub_strcpy' from 
-incompatible pointer type [enabled by default]
-In file included from stage2.c:20:0:
-./shared.h:891:7: note: expected 'char *' but argument is of type 'char 
-**'
-stage2.c:944:7: warning: passing argument 2 of 'grub_strcpy' from 
-incompatible pointer type [enabled by default]
-In file included from stage2.c:20:0:
-./shared.h:891:7: note: expected 'const char *' but argument is of type 
-'char **'
-tparm.c: In function 'tparam_internal':
-tparm.c:464:16: warning: cast to pointer from integer of different size 
-[-Wint-to-pointer-cast]
-smp-imps.c:273:36: warning: cast from pointer to integer of different size 
-[-Wpointer-to-int-cast]
-smp-imps.c:273:1: error: initializer element is not constant
-smp-imps.c: In function 'get_checksum':
-smp-imps.c:294:16: warning: cast to pointer from integer of different size 
-[-Wint-to-pointer-cast]
-smp-imps.c: In function 'boot_cpu':
+On 2013-12-03 13:28 -0300, Gustavo Zacarias spake thusly:
+> Revert bump to 3.2.7 from commit 8238e744b813e9922c0a81f21b271263ef0e216a
+> It causes build issues because of an internal gnulib bump:
+> http://autobuild.buildroot.net/results/48d/48d5c6364fec55e84309b2fb6986f206699f1800/
+> 
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
-<snip>
+Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-disk_io.c: In function 'set_bootdev':
-disk_io.c:1149:11: warning: cast to pointer from integer of different size 
-[-Wint-to-pointer-cast]
-disk_io.c: In function 'grub_open':
-disk_io.c:1587:7: warning: cast to pointer from integer of different size 
-[-Wint-to-pointer-cast]
-disk_io.c:1598:7: warning: cast to pointer from integer of different size 
-[-Wint-to-pointer-cast]
-disk_io.c: In function 'grub_read':
-disk_io.c:1697:40: warning: cast to pointer from integer of different size 
-[-Wint-to-pointer-cast]
-disk_io.c:1708:16: warning: cast to pointer from integer of different size 
-[-Wint-to-pointer-cast]
-disk_io.c:1716:16: warning: cast to pointer from integer of different size 
-[-Wint-to-pointer-cast]
-disk_io.c: Assembler messages:
-disk_io.c:134: Error: incorrect register `%rax' used with `l' suffix
-make[3]: *** [pre_stage2_exec-disk_io.o] Error 1
-make[3]: Leaving directory 
-`/accts/mlweber1/proj/br-continuous/cfgs/30-fis-x86-glibc-ext/build/grub-0.97/stage2'
-make[2]: *** [all-recursive] Error 1
-make[2]: Leaving directory 
-`/accts/mlweber1/proj/br-continuous/cfgs/30-fis-x86-glibc-ext/build/grub-0.97'
-make[1]: *** [all] Error 2
-make[1]: Leaving directory 
-`/accts/mlweber1/proj/br-continuous/cfgs/30-fis-x86-glibc-ext/build/grub-0.97'
-make: *** 
-[/accts/mlweber1/proj/br-continuous/cfgs/30-fis-x86-glibc-ext/build/grub-0.97/.stamp_built] 
-Error 2
-make: Leaving directory `/accts/mlweber1/proj/br-continuous/buildroot'
+> ---
+>  package/gnutls/gnutls.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
+> index 8a7f3f7..8ab0665 100644
+> --- a/package/gnutls/gnutls.mk
+> +++ b/package/gnutls/gnutls.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>  
+> -GNUTLS_VERSION = 3.2.7
+> +GNUTLS_VERSION = 3.2.6
+>  GNUTLS_SOURCE = gnutls-$(GNUTLS_VERSION).tar.xz
+>  GNUTLS_SITE = ftp://ftp.gnutls.org/gcrypt/gnutls/v3.2
+>  GNUTLS_LICENSE = GPLv3+ LGPLv2.1+
+> -- 
+> 1.8.3.2
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-This last error looks like a 32 vs 64bit issue.
+Regards,
+Yann E. MORIN.
 
-I'm guessing the build for x86 on a x86_64 patches introduced this, but I 
-haven't made it through all recent grub updates yet.
-
-Thanks,
-Matt Weber
-mlweber1 at rockwellcollins.com
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
