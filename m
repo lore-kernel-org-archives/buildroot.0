@@ -1,42 +1,62 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 3 Dec 2013 08:59:37 +0100
-Subject: [Buildroot] [git commit] coreutils: belongs to system tools,
-	not development
-Message-ID: <20131203081319.9B2049BEEE@busybox.osuosl.org>
+Date: Tue, 3 Dec 2013 09:04:23 +0100
+Subject: [Buildroot] [git commit] linux-pam: install default config
+Message-ID: <20131203081319.ADE999BEED@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e89e2154c82dfb320721b8ddd2f3f87543e85e30
+commit: http://git.buildroot.net/buildroot/commit/?id=72b3c1db513a6235fd5e5f00fb6c15071ffc6015
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Install default "other" configuration file that denies everything not
+handled by other specific configurations.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/Config.in |    4 +---
- 1 files changed, 1 insertions(+), 3 deletions(-)
+ package/linux-pam/linux-pam.mk |   10 +++++++++-
+ package/linux-pam/other.pam    |    7 +++++++
+ 2 files changed, 16 insertions(+), 1 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 5b9d775..101c088 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -86,9 +86,6 @@ source "package/bison/Config.in"
- source "package/bsdiff/Config.in"
- source "package/bustle/Config.in"
- source "package/ccache/Config.in"
--if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
--source "package/coreutils/Config.in"
--endif
- source "package/cvs/Config.in"
- if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- source "package/diffutils/Config.in"
-@@ -957,6 +954,7 @@ source "package/acl/Config.in"
- source "package/attr/Config.in"
- if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- source "package/bootutils/Config.in"
-+source "package/coreutils/Config.in"
+diff --git a/package/linux-pam/linux-pam.mk b/package/linux-pam/linux-pam.mk
+index 7d2cbd3..6aa83e1 100644
+--- a/package/linux-pam/linux-pam.mk
++++ b/package/linux-pam/linux-pam.mk
+@@ -1,7 +1,7 @@
+ ################################################################################
+ #
+ # linux-pam
+-# 
++#
+ ################################################################################
+ 
+ LINUX_PAM_VERSION = 1.1.8
+@@ -26,4 +26,12 @@ ifeq ($(BR2_NEEDS_GETTEXT_IF_LOCALE),y)
+ 	LINUX_PAM_MAKE_OPT += LIBS=-lintl
  endif
- source "package/cpuload/Config.in"
- source "package/dsp-tools/Config.in"
+ 
++# Install default pam config (deny everything)
++define LINUX_PAM_INSTALL_CONFIG
++	$(INSTALL) -m 0644 -D package/linux-pam/other.pam \
++		$(TARGET_DIR)/etc/pam.d/other
++endef
++
++LINUX_PAM_POST_INSTALL_TARGET_HOOKS += LINUX_PAM_INSTALL_CONFIG
++
+ $(eval $(autotools-package))
+diff --git a/package/linux-pam/other.pam b/package/linux-pam/other.pam
+new file mode 100644
+index 0000000..a198aa2
+--- /dev/null
++++ b/package/linux-pam/other.pam
+@@ -0,0 +1,7 @@
++auth		required	pam_deny.so
++
++account		required	pam_deny.so
++
++password	required	pam_deny.so
++
++session		required	pam_deny.so
