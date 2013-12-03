@@ -1,30 +1,60 @@
-From: arnaud aujon <arnaud.aujon@gmail.com>
-Date: Tue, 3 Dec 2013 09:47:08 +0100
-Subject: [Buildroot] [PATCH] Rename netkitbase and netkittelnet
-In-Reply-To: <CACjG4BKEx1pGoWhDhYhV3ib+gz27rUZpMUwO8VhkOYh0+weROw@mail.gmail.com>
-References: <1382604917-7742-1-git-send-email-arnaud.aujon@gmail.com>
- <20131024153442.56a9157d@skate>
- <CACjG4BKEx1pGoWhDhYhV3ib+gz27rUZpMUwO8VhkOYh0+weROw@mail.gmail.com>
-Message-ID: <CACjG4BK7us2HXea_yR4wHy=CHTB8uaUro9MKjXY_0dw7DkfMUQ@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 3 Dec 2013 09:50:20 +0100
+Subject: [Buildroot] [PATCH 4/5] zsh: alpha sort menu option
+In-Reply-To: <87iov6pd8f.fsf@dell.be.48ers.dk>
+References: <1385981368-2235-1-git-send-email-gustavo@zacarias.com.ar>
+ <1385981368-2235-4-git-send-email-gustavo@zacarias.com.ar>
+ <87iov6pd8f.fsf@dell.be.48ers.dk>
+Message-ID: <20131203095020.2a02cf8f@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Dear Peter Korsgaard,
 
-2013/10/24 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
->
->> Both of these packages have been marked deprecated since almost a year
->> (November 2013). See 442765fe3d8767956eb26d4bcbaa62ce1e1782ca and
->> 5a457ff6cc3129af97f2fdcaa5f88bd5ff02b500.
->>
->> So many it's simpler better to remove them completely?
->
->
-Now that 2013.11 is out, what about removing these packages ?
-Peter, what do you think ?
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20131203/37d23fe0/attachment.html>
+On Tue, 03 Dec 2013 09:09:36 +0100, Peter Korsgaard wrote:
+> >>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+> 
+>  > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+>  > ---
+>  >  package/Config.in | 4 +++-
+>  >  1 file changed, 3 insertions(+), 1 deletion(-)
+> 
+>  > diff --git a/package/Config.in b/package/Config.in
+>  > index a65ceac..e70a58c 100644
+>  > --- a/package/Config.in
+>  > +++ b/package/Config.in
+>  > @@ -932,7 +932,6 @@ source "package/at/Config.in"
+>  >  if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+>  >  source "package/bash/Config.in"
+>  >  source "package/dash/Config.in"
+>  > -source "package/zsh/Config.in"
+> 
+> You are right, certainly - But I think it is more userfriendly to make
+> an exception and keep all the shells together.
+> 
+> What do others think?
+
+Ideas:
+
+ * Instead of "Shell and utilities", have two menus: "Shell" and
+   "Utilities".
+
+ * In the "Shell and utilities" menu, create two sub-sections,
+   separated by comments:
+
+comment "Shells"
+... some packages ...
+
+comment "Utilities"
+... some packages ...
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
