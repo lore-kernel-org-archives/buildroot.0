@@ -1,108 +1,142 @@
-From: Lionel Orry <lionel.orry@gmail.com>
-Date: Tue, 3 Dec 2013 09:45:15 +0100
-Subject: [Buildroot] [buildroot] libevas build failure analysis
-In-Reply-To: <CACjG4BLqXqufuzSHYWghXcZuWMpBPjbFUU7xGzLhSjQQrghK8A@mail.gmail.com>
-References: <CACjG4B+qJvuzX=dZz5F7jNyc_m796_j2m9NZ91fpsoy52SX8VQ@mail.gmail.com>
- <CAKAx1cgki9JiRqU=zJJ0P8g5XpG7NEZN9WcBuYMa4mNyv2C-RA@mail.gmail.com>
- <CACjG4B+AJ0F4BmrSVrfzMidVgUFGwWt7sBoxUD3QZyp0x6+EAw@mail.gmail.com>
- <CACjG4BLqXqufuzSHYWghXcZuWMpBPjbFUU7xGzLhSjQQrghK8A@mail.gmail.com>
-Message-ID: <CAKAx1ciXsAPtG-uegQC5CPO8yJFPG4gn7CvuzVZ2JQh_T0FrAA@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 3 Dec 2013 09:47:01 +0100
+Subject: [Buildroot] [PATCH] smbnetfs: new package 0.5.3a
+In-Reply-To: <20131202230903.GA3906@gmail.com>
+References: <20131202230903.GA3906@gmail.com>
+Message-ID: <20131203094701.08480f23@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Dear Andrew Ruder,
 
-On Tue, Dec 3, 2013 at 9:32 AM, arnaud aujon <arnaud.aujon@gmail.com> wrote:
-> Hi,
->
-> I got an answer from upstream, they said threads are mandatory in 1.8
-> release, don't know yet about our current 1.7.7, do we have any plan bumping
-> to 1.8 ?
->
+Thanks for this contribution as well!
 
-They just released the 1.8 version, I think it's time to think about
-the bump, but there are some quite fundamental changes between 1.7 and
-1.8 (most noticeable one is the merged tree instead of separate source
-code for core libraries), and the bump is probably not that easy at
-first, and then, I also suppose there are some applications that may
-still need 1.7 among buildroot users.
+On Mon, 2 Dec 2013 17:09:03 -0600, Andrew Ruder wrote:
+> Signed-off-by: Andrew Ruder <andrew.ruder@elecsyscorp.com>
+> ---
+>  package/Config.in                                   |  1 +
+>  package/smbnetfs/Config.in                          | 16 ++++++++++++++++
+>  package/smbnetfs/smbnetfs-compile-with-uclibc.patch | 14 ++++++++++++++
 
-I would then suggest to have EFL 1.7 and EFL 1.8 in parallel for some
-time. Maybe we should create efl18 package.
+We now normally wants patches to carry a sequence number, even if there
+is only one patch. So something like:
 
-As for EFL 1.7, maybe the easiest to do is require a toolchain with
-threads support.
+	smbnetfs-01-compile-with-uclibc.patch
 
-What do you think ?
+for example. See
+http://buildroot.org/downloads/manual/manual.html#patch-policy for
+details.
 
->
-> 2013/11/28 arnaud aujon <arnaud.aujon@gmail.com>
->>
->> Ok, the problem has been reported to the dev ML, I will follow this.
->>
->> Regards,
->>
->> Arnaud
->>
->>
->> 2013/11/28 Lionel Orry <lionel.orry@gmail.com>
->>>
->>> Can you send an email on e-devel maiiling list? They are about to put
->>> EFL 1.7 in maintenance as soon as 1.8 is released, so I guess it's
->>> time to tell them, I'm sure they will correct it quickly
->>>
->>>
->>> On Thu, Nov 28, 2013 at 8:04 PM, arnaud aujon <arnaud.aujon@gmail.com>
->>> wrote:
->>> > Hi there,
->>> >
->>> > A quick analysis of libevas build failure
->>> >
->>> > (http://autobuild.buildroot.org/results/15c/15cfb974e428b20ba230321cd8b59a82308785af/)
->>> >
->>> > The build fails because the member 'delete_me' of the Image_Entry_Flags
->>> > structure is undefined. This is because there is a ifdef
->>> > BUILD_ASYNC_PRELOAD
->>> > surrounding this member which is not defined during the build because
->>> > the
->>> > toolchain doesn't have thread support.
->>> >
->>> > From libevas.mk :
->>> > # async image preload support needs threads support in toolchain
->>> > ifneq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
->>> > LIBEVAS_CONF_OPT += --disable-async-preload
->>> > endif
->>> >
->>> > But it seems like the file evas_cache2.c is using 'delete_me'
->>> > regardless of
->>> > the 'async image preload support'
->>> >
->>> > I don't have the time to investigate more, but it looks like without
->>> > threads
->>> > we should use 'lib/cache' and not 'lib/cache2'  which are defining the
->>> > same
->>> > symboles but 'cache2' absolutely need threads support, 'cache' doesn't
->>> > .
->>> > So I guess we have to fix the makefile to use this the 'cache'
->>> > implementation.
->>> >
->>> > Does someone  know what we should do here ?
->>> >
->>> > Regards,
->>> >
->>> > Arnaud
->>> >
->>> >
->>> > _______________________________________________
->>> > buildroot mailing list
->>> > buildroot at busybox.net
->>> > http://lists.busybox.net/mailman/listinfo/buildroot
->>
->>
->
+>  package/smbnetfs/smbnetfs.mk                        | 11 +++++++++++
+>  4 files changed, 42 insertions(+)
+>  create mode 100644 package/smbnetfs/Config.in
+>  create mode 100644 package/smbnetfs/smbnetfs-compile-with-uclibc.patch
+>  create mode 100644 package/smbnetfs/smbnetfs.mk
+> 
+> diff --git a/package/Config.in b/package/Config.in
+> index 6fb063d..4854383 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -148,6 +148,7 @@ source "package/makedevs/Config.in"
+>  source "package/mtd/Config.in"
+>  source "package/nfs-utils/Config.in"
+>  source "package/ntfs-3g/Config.in"
+> +source "package/smbnetfs/Config.in"
+>  source "package/squashfs/Config.in"
+>  source "package/squashfs3/Config.in"
+>  source "package/sshfs/Config.in"
+> diff --git a/package/smbnetfs/Config.in b/package/smbnetfs/Config.in
+> new file mode 100644
+> index 0000000..fdc8167
+> --- /dev/null
+> +++ b/package/smbnetfs/Config.in
+> @@ -0,0 +1,16 @@
+> +config BR2_PACKAGE_SMBNETFS
+> +	bool "smbnetfs"
+> +	depends on BR2_PACKAGE_SAMBA
+> +	select BR2_PACKAGE_SAMBA_LIBSMBCLIENT
+> +	select BR2_PACKAGE_LIBFUSE
+> +	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
+> +	help
+> +        A user-space filesystem that contains an entire
+> +        SMB/NMB network under a single mount point.
+> +        Workgroups, servers, and shares can be browsed much
+> +        like the Network Neighborhood in Microsoft Window.
+> +
+> +        http://smbnetfs.sourceforge.net/
 
-Cheers
-Lionel
+Indentation of the help text is wrong. It should be one tab + two
+spaces.
+
+> +comment "smbnetfs needs samba"
+> +	depends on !BR2_PACKAGE_SAMBA
+
+I'm not sure here if we want to depend on Samba, or select Samba.
+Usually, we prefer "select" so that things are transparent for the
+user. However, when the thing being selected is "big", and fairly
+obvious for the user (like the Python interpreter being needed to build
+a Python module), we use depends on. I'm not sure which choice to make
+here.
+
+However, what is sure is that you forgot to inherit the toolchain
+dependencies of libfuse: they should be added.
+
+> diff --git a/package/smbnetfs/smbnetfs-compile-with-uclibc.patch b/package/smbnetfs/smbnetfs-compile-with-uclibc.patch
+> new file mode 100644
+> index 0000000..e5e9065
+> --- /dev/null
+> +++ b/package/smbnetfs/smbnetfs-compile-with-uclibc.patch
+> @@ -0,0 +1,14 @@
+
+All patches should have a description + Signed-off-by. Also, it would
+be good if you could submit that patch upstream, so that it gets
+integrated in a future release.
+
+> +Index: smbnetfs-0.5.3a/src/common.c
+> +===================================================================
+> +--- smbnetfs-0.5.3a.orig/src/common.c	2013-11-15 11:22:27.520088835 -0600
+> ++++ smbnetfs-0.5.3a/src/common.c	2013-11-15 11:22:37.384088834 -0600
+> +@@ -4,7 +4,9 @@
+> + #include <stdarg.h>
+> + #include <string.h>
+> + #include <pthread.h>
+> ++#ifdef HAVE_BACKTRACE
+> + #include <execinfo.h>
+> ++#endif
+> + 
+> + #include "common.h"
+> + 
+> diff --git a/package/smbnetfs/smbnetfs.mk b/package/smbnetfs/smbnetfs.mk
+> new file mode 100644
+> index 0000000..1e01bd8
+> --- /dev/null
+> +++ b/package/smbnetfs/smbnetfs.mk
+> @@ -0,0 +1,11 @@
+> +################################################################################
+> +#
+> +# smbnetfs
+> +#
+> +################################################################################
+> +
+> +SMBNETFS_VERSION = 0.5.3a
+> +SMBNETFS_SOURCE = smbnetfs-$(SMBNETFS_VERSION).tar.bz2
+> +SMBNETFS_SITE = http://downloads.sourceforge.net/smbnetfs
+> +
+> +$(eval $(autotools-package))
+
+No SMBNETFS_DEPENDENCIES to ensure libfuse, libiconv and samba are
+built before smbnetfs?
+
+Also, we now request all new packages to have SMBNETFS_LICENSE and
+SMBNETFS_LICENSE_FILES.
+
+Thanks a lot!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
