@@ -1,102 +1,73 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue,  3 Dec 2013 23:10:47 +0100
-Subject: [Buildroot] [PATCH] package/tvheadend: unbreak
-Message-ID: <1386108647-8520-1-git-send-email-yann.morin.1998@free.fr>
+From: Sven Neumann <neumann@teufel.de>
+Date: Tue, 03 Dec 2013 23:11:02 +0100
+Subject: [Buildroot] [PATCH] flac: update to version 1.3.0
+Message-ID: <1386108662.6732.3.camel@bender.Speedport_W_724V_Typ_A_05011601_00_065>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-tvheadend tries to impersonate an autotools package, when it is not.
-This breaks the build.
+Remove flac-no-altivec.patch as it appears to have been
+merged upstream.
 
-tvheadend's ./configure tries to run compiled code.
-This breaks the build.
-
-Switch tvheadend over to using the generic-package infrastructure,
-and provide carefully-crafted _CMDS for each steps.
-
-We still keep a post-install hook to install our "DB" since it is not
-part of tvheadend, but an addition of our own packaging of tvheadend.
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Sven Neumann <neumann@teufel.de>
 ---
- .../tvheadend-004-dont-run-compiled-code.patch     | 21 +++++++++++++++++
- package/tvheadend/tvheadend.mk                     | 27 ++++++++++++++++++----
- 2 files changed, 44 insertions(+), 4 deletions(-)
- create mode 100644 package/tvheadend/tvheadend-004-dont-run-compiled-code.patch
+ package/flac/flac-no-altivec.patch | 28 ----------------------------
+ package/flac/flac.mk               |  5 +++--
+ 2 files changed, 3 insertions(+), 30 deletions(-)
+ delete mode 100644 package/flac/flac-no-altivec.patch
 
-diff --git a/package/tvheadend/tvheadend-004-dont-run-compiled-code.patch b/package/tvheadend/tvheadend-004-dont-run-compiled-code.patch
-new file mode 100644
-index 0000000..caa6e2a
---- /dev/null
-+++ b/package/tvheadend/tvheadend-004-dont-run-compiled-code.patch
-@@ -0,0 +1,21 @@
-+support: don't try to run compiled code
-+
-+When cross-compiling, we can't run the compiled code.
-+
-+Consider the compiler besing successfull as an indication
-+it is working.
-+
-+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-+
-+diff -durN tvheadend.orig/support/configure.inc tvheadend-c7d0335eb10d02b780423bef8e7c740e422fff13/support/configure.inc
-+--- tvheadend.orig/support/configure.inc	2013-12-01 01:24:26.000000000 +0100
-++++ tvheadend-c7d0335eb10d02b780423bef8e7c740e422fff13/support/configure.inc	2013-12-03 22:34:57.547762178 +0100
-+@@ -265,8 +265,6 @@
-+ EOF
-+   $CC $CFLAGS $LDFLAGS $TMPDIR/$$.c -o $TMPDIR/$$.bin $opt #&> /dev/null
-+   RET=$?
-+-  [ $RET -eq 0 ] && $TMPDIR/$$.bin
-+-  RET=$?
-+   rm -f $TMPDIR/$$.{c,bin}
-+   return $RET
-+ }
-diff --git a/package/tvheadend/tvheadend.mk b/package/tvheadend/tvheadend.mk
-index 1713d58..18da51d 100644
---- a/package/tvheadend/tvheadend.mk
-+++ b/package/tvheadend/tvheadend.mk
-@@ -22,6 +22,28 @@ endif
- # scan files installed by the dvb-apps package
- TVHEADEND_DEPENDENCIES     += dvb-apps
+diff --git a/package/flac/flac-no-altivec.patch b/package/flac/flac-no-altivec.patch
+deleted file mode 100644
+index c6a535b..0000000
+--- a/package/flac/flac-no-altivec.patch
++++ /dev/null
+@@ -1,28 +0,0 @@
+-FLAC assumes every powerpc around has altivec ABI which is wrong.
+-
+-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+-
+-diff -Nura flac-1.2.1/src/libFLAC/Makefile.am flac-1.2.1-noaltivec/src/libFLAC/Makefile.am
+---- flac-1.2.1/src/libFLAC/Makefile.am	2007-09-14 18:06:17.000000000 -0300
+-+++ flac-1.2.1-noaltivec/src/libFLAC/Makefile.am	2011-01-06 15:14:36.384242614 -0300
+-@@ -41,7 +41,7 @@
+- else
+- # Linux-gcc for PPC does not have -force_cpusubtype_ALL, it is Darwin-specific
+- #@@@ PPC optimizations temporarily disabled
+--CPUCFLAGS = -maltivec -mabi=altivec -DFLAC__NO_ASM
+-+CPUCFLAGS = -DFLAC__NO_ASM
+- endif
+- endif
+- 
+-diff -Nura flac-1.2.1/src/libFLAC/Makefile.in flac-1.2.1-noaltivec/src/libFLAC/Makefile.in
+---- flac-1.2.1/src/libFLAC/Makefile.in	2007-09-16 17:05:12.000000000 -0300
+-+++ flac-1.2.1-noaltivec/src/libFLAC/Makefile.in	2011-01-06 15:14:50.997545602 -0300
+-@@ -240,7 +240,7 @@
+- @FLaC__CPU_PPC_TRUE@@FLaC__SYS_DARWIN_TRUE at CPUCFLAGS = -faltivec -force_cpusubtype_ALL -DFLAC__NO_ASM
+- # Linux-gcc for PPC does not have -force_cpusubtype_ALL, it is Darwin-specific
+- #@@@ PPC optimizations temporarily disabled
+-- at FLaC__CPU_PPC_TRUE@@FLaC__SYS_DARWIN_FALSE at CPUCFLAGS = -maltivec -mabi=altivec -DFLAC__NO_ASM
+-+ at FLaC__CPU_PPC_TRUE@@FLaC__SYS_DARWIN_FALSE at CPUCFLAGS = -DFLAC__NO_ASM
+- 
+- AM_CFLAGS = $(DEBUGCFLAGS) $(CPUCFLAGS) @OGG_CFLAGS@
+- @FLaC__CPU_PPC_TRUE@@FLaC__NO_ASM_FALSE at ARCH_SUBDIRS = ppc
+diff --git a/package/flac/flac.mk b/package/flac/flac.mk
+index 95cd5a1..177e1ce 100644
+--- a/package/flac/flac.mk
++++ b/package/flac/flac.mk
+@@ -4,8 +4,9 @@
+ #
+ ################################################################################
  
-+define TVHEADEND_CONFIGURE_CMDS
-+	(cd $(@D);				\
-+	 $(TARGET_CONFIGURE_OPTS)		\
-+	 $(TARGET_CONFIGURE_ARGS)		\
-+	 ./configure				\
-+	 --prefix=/usr				\
-+	 --cc="$(TARGET_CC)"			\
-+	 --cflags="$(TARGET_CFLAGS)"		\
-+	 --arch="$(ARCH)"			\
-+	 --cpu="$(BR2_GCC_TARGET_CPU)"		\
-+	 --python="$(HOST_DIR)/usr/bin/python"	\
-+	)
-+endef
-+
-+define TVHEADEND_BUILD_CMDS
-+	make -C $(@D)
-+endef
-+
-+define TVHEADEND_INSTALL_TARGET_CMDS
-+	make -C $(@D) DESTDIR="$(TARGET_DIR)" install
-+endef
-+
- #----------------------------------------------------------------------------
- # To run tvheadend, we need:
- #  - a startup script, and its config file
-@@ -43,7 +65,4 @@ define TVHEADEND_USERS
- tvheadend -1 tvheadend -1 * /home/tvheadend - video TVHeadend daemon
- endef
+-FLAC_VERSION = 1.2.1
+-FLAC_SITE = http://downloads.sourceforge.net/project/flac/flac-src/flac-$(FLAC_VERSION)-src
++FLAC_VERSION = 1.3.0
++FLAC_SITE = http://downloads.xiph.org/releases/flac/
++FLAC_SOURCE = flac-$(FLAC_VERSION).tar.xz
+ FLAC_INSTALL_STAGING = YES
  
--#----------------------------------------------------------------------------
--# tvheadend is not an autotools-based package, but it is possible to
--# call its ./configure script as if it were an autotools one.
--$(eval $(autotools-package))
-+$(eval $(generic-package))
+ FLAC_CONF_OPT = \
 -- 
-1.8.1.2
+1.8.4.2
