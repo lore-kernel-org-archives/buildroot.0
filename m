@@ -1,33 +1,46 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 03 Dec 2013 11:34:31 +0100
-Subject: [Buildroot] [PATCH 1/5] coreutils: belongs to system tools,
-	not development
-In-Reply-To: <20131203111216.5452f30d@skate> (Thomas Petazzoni's message of
- "Tue, 3 Dec 2013 11:12:16 +0100")
-References: <1385981368-2235-1-git-send-email-gustavo@zacarias.com.ar>
- <87zjoipdlk.fsf@dell.be.48ers.dk> <20131203095920.1e46375f@skate>
- <8761r6p7vk.fsf@dell.be.48ers.dk> <20131203111216.5452f30d@skate>
-Message-ID: <87li02nryg.fsf@dell.be.48ers.dk>
+From: Anton Blanchard <anton@samba.org>
+Date: Tue, 3 Dec 2013 22:14:37 +1100
+Subject: [Buildroot] [PATCH] toolchain: Allow ld64.so linker
+In-Reply-To: <20131202110923.2ac86fb5@skate>
+References: <20131202172311.2641462e@kryten>
+	<20131202110923.2ac86fb5@skate>
+Message-ID: <20131203221437.106b6bf5@kryten>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-Hi,
+Hi Thomas,
 
- >> E.G. if we support bash/coreutils/.., then we should really support
- >> them.
+> Can you add to the commit log the specific toolchain/situation for
+> which this is needed? The external toolchain logic is full of special
+> cases, and I very often read the commit logs to find out why such or
+> such special case was added.
 
- > I definitely agree with this last part, but I don't see how "really
- > supporting them" conflicts with the idea of hiding them by default to
- > avoid having newcomers confused by these.
+Definitely. How does this look?
 
-It's mainly about when the featureset significantly differs between
-busybox and the "full" variant. The question if the busybox version is
-"good enough" unfortunately is quite system/use case dependent.
+--
+From: Jeremy Kerr <jk@ozlabs.org>
 
--- 
-Bye, Peter Korsgaard
+The glibc dynamic linkers for ppc64 and s390x are named ld64.so.*
+so modify the check_glibc check to match them.
+
+Signed-off-by: Jeremy Kerr <jk@ozlabs.org>
+Signed-off-by: Anton Blanchard <anton@samba.org>
+---
+
+diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
+index a8944ce..faa9d90 100644
+--- a/toolchain/helpers.mk
++++ b/toolchain/helpers.mk
+@@ -204,7 +204,7 @@ check_glibc_rpc_feature = \
+ #
+ check_glibc = \
+ 	SYSROOT_DIR="$(strip $1)"; \
+-	if test `find $${SYSROOT_DIR}/ -maxdepth 2 -name 'ld-linux*.so.*' -o -name 'ld.so.*' | wc -l` -eq 0 ; then \
++	if test `find $${SYSROOT_DIR}/ -maxdepth 2 -name 'ld-linux*.so.*' -o -name 'ld.so.*' -o -name 'ld64.so.*' | wc -l` -eq 0 ; then \
+ 		echo "Incorrect selection of the C library"; \
+ 		exit -1; \
+ 	fi; \
