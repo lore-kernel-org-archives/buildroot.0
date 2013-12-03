@@ -1,33 +1,23 @@
-From: Jeremy Rosen <jeremy.rosen@openwide.fr>
-Date: Tue, 3 Dec 2013 09:08:18 +0100 (CET)
-Subject: [Buildroot] [PATCH 1/5] coreutils: belongs to system tools,
- not development
-In-Reply-To: <87zjoipdlk.fsf@dell.be.48ers.dk>
-Message-ID: <1707580650.15811727.1386058098089.JavaMail.root@openwide.fr>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 03 Dec 2013 09:08:33 +0100
+Subject: [Buildroot] [PATCH 3/5] util-linux: add agetty->getty symlink
+In-Reply-To: <1385981368-2235-3-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Mon, 2 Dec 2013 07:49:26 -0300")
+References: <1385981368-2235-1-git-send-email-gustavo@zacarias.com.ar>
+ <1385981368-2235-3-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87mwkipda6.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> Committed, thanks.
-> 
-> I'm really starting to think we should get rid of
-> BR2_PACKAGE_BUSYBOX_SHOW_OTHERS, or atleast make it default y.
-> 
-> Comments, anybody?
-> 
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
+ > When busybox isn't installed symlink agetty->getty to make the default
+ > inittab work.
 
-I personally don't know exactly what busybox provides, this option is
-a simple way to make sure I don't compile any useless stuff...
+Committed, thanks.
 
-I'm in favor of keeping it or provide another way to find duplicates
-
-> --
-> Bye, Peter Korsgaard
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
+-- 
+Bye, Peter Korsgaard
