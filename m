@@ -1,24 +1,42 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 03 Dec 2013 09:12:51 +0100
-Subject: [Buildroot] [PATCH 5/5] sysklogd: install to /sbin
-In-Reply-To: <1385981368-2235-5-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Mon, 2 Dec 2013 07:49:28 -0300")
-References: <1385981368-2235-1-git-send-email-gustavo@zacarias.com.ar>
- <1385981368-2235-5-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87eh5upd30.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 3 Dec 2013 08:59:37 +0100
+Subject: [Buildroot] [git commit] coreutils: belongs to system tools,
+	not development
+Message-ID: <20131203081319.9B2049BEEE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=e89e2154c82dfb320721b8ddd2f3f87543e85e30
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Install syslogd/klogd to /sbin instead of /usr/sbin to really win over
- > busybox and avoid the ugly noise when booting without busybox installed.
- > Also drop uninstall hook and manpage installation.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/Config.in |    4 +---
+ 1 files changed, 1 insertions(+), 3 deletions(-)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/Config.in b/package/Config.in
+index 5b9d775..101c088 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -86,9 +86,6 @@ source "package/bison/Config.in"
+ source "package/bsdiff/Config.in"
+ source "package/bustle/Config.in"
+ source "package/ccache/Config.in"
+-if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+-source "package/coreutils/Config.in"
+-endif
+ source "package/cvs/Config.in"
+ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ source "package/diffutils/Config.in"
+@@ -957,6 +954,7 @@ source "package/acl/Config.in"
+ source "package/attr/Config.in"
+ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ source "package/bootutils/Config.in"
++source "package/coreutils/Config.in"
+ endif
+ source "package/cpuload/Config.in"
+ source "package/dsp-tools/Config.in"
