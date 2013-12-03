@@ -1,238 +1,87 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 3 Dec 2013 09:02:00 +0100
-Subject: [Buildroot] [git commit] coreutils: bump to version 8.21
-Message-ID: <20131203081319.CB9989BEEF@busybox.osuosl.org>
+Date: Tue, 3 Dec 2013 09:05:10 +0100
+Subject: [Buildroot] [git commit] util-linux: install PAM configuration files
+Message-ID: <20131203081319.B187E9BEEB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=30c51053af382892338b0922c610cc838b735469
+commit: http://git.buildroot.net/buildroot/commit/?id=33e3245e047858cd89223cf5b4afbf4cb32318b0
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Set PERL=missing so as to avoid generating manpages with help2man that breaks
-on many occasions (and it's pointless).
+Install PAM configuration files for su (with "su -" variant) and login
+when the tools are enabled.
+This finally fixes bug #5366 and now we can login with an util-linux
+/bin/login.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/coreutils/coreutils-uname.patch |  173 -------------------------------
- package/coreutils/coreutils.mk          |   13 +--
- 2 files changed, 3 insertions(+), 183 deletions(-)
+ package/util-linux/login.pam     |   11 +++++++++++
+ package/util-linux/su.pam        |   13 +++++++++++++
+ package/util-linux/util-linux.mk |   14 ++++++++++++++
+ 3 files changed, 38 insertions(+), 0 deletions(-)
 
-diff --git a/package/coreutils/coreutils-uname.patch b/package/coreutils/coreutils-uname.patch
-deleted file mode 100644
-index faa8908..0000000
---- a/package/coreutils/coreutils-uname.patch
-+++ /dev/null
-@@ -1,173 +0,0 @@
--On linux platforms, grok /proc/cpuinfo for the CPU/vendor info.
--
--Prob not suitable for upstream seeing as how it's 100% linux-specific
--http://lists.gnu.org/archive/html/bug-coreutils/2005-09/msg00063.html
--
--Patch originally by Carlos E. Gorges <carlos@techlinux.com.br>, but
--heavily reworked to suck less.
--
--To add support for additional platforms, check out the show_cpuinfo()
--func in the linux/arch/<ARCH>/ source tree of the kernel.
--
----- coreutils/src/uname.c
--+++ coreutils/src/uname.c
--@@ -50,6 +50,11 @@
-- # include <mach-o/arch.h>
-- #endif
-- 
--+#if defined(__linux__)
--+# define USE_PROCINFO
--+# define UNAME_HARDWARE_PLATFORM
--+#endif
--+
-- #include "system.h"
-- #include "error.h"
-- #include "quote.h"
--@@ -138,6 +143,117 @@
--   exit (status);
-- }
-- 
--+#if defined(USE_PROCINFO)
--+
--+# if defined(__s390__) || defined(__s390x__)
--+#  define CPUINFO_FILE    "/proc/sysinfo"
--+#  define CPUINFO_FORMAT  "%64[^\t :]%*[ :]%256[^\n]%c"
--+# else
--+#  define CPUINFO_FILE    "/proc/cpuinfo"
--+#  define CPUINFO_FORMAT  "%64[^\t:]\t:%256[^\n]%c"
--+# endif
--+
--+# define PROCINFO_PROCESSOR      0
--+# define PROCINFO_HARDWARE_PLATFORM 1
--+
--+static void __eat_cpuinfo_space(char *buf)
--+{
--+	/* first eat trailing space */
--+	char *tmp = buf + strlen(buf) - 1;
--+	while (tmp > buf && isspace(*tmp))
--+		*tmp-- = '\0';
--+	/* then eat leading space */
--+	tmp = buf;
--+	while (*tmp && isspace(*tmp))
--+		tmp++;
--+	if (tmp != buf)
--+		memmove(buf, tmp, strlen(tmp)+1);
--+	/* finally collapse whitespace */
--+	tmp = buf;
--+	while (tmp[0] && tmp[1]) {
--+		if (isspace(tmp[0]) && isspace(tmp[1])) {
--+			memmove(tmp, tmp+1, strlen(tmp));
--+			continue;
--+		}
--+		++tmp;
--+	}
--+}
--+
--+static int __linux_procinfo(int x, char *fstr, size_t s)
--+{
--+	FILE *fp;
--+
--+	char *procinfo_keys[] = {
--+		/* --processor --hardware-platform */
--+		#if defined(__alpha__)
--+			"cpu model", "system type"
--+		#elif defined(__arm__)
--+			"Processor", "Hardware"
--+		#elif defined(__avr32__)
--+			"processor", "cpu family"
--+		#elif defined(__bfin__)
--+			"CPU", "BOARD Name"
--+		#elif defined(__cris__)
--+			"cpu", "cpu model"
--+		#elif defined(__frv__)
--+			"CPU-Core", "System"
--+		#elif defined(__i386__) || defined(__x86_64__)
--+			"model name", "vendor_id"
--+		#elif defined(__ia64__)
--+			"family", "vendor"
--+		#elif defined(__hppa__)
--+			"cpu", "model"
--+		#elif defined(__m68k__)
--+			"CPU", "MMU"
--+		#elif defined(__mips__)
--+			"cpu model", "system type"
--+		#elif defined(__powerpc__) || defined(__powerpc64__)
--+			"cpu", "machine"
--+		#elif defined(__s390__) || defined(__s390x__)
--+			"Type", "Manufacturer"
--+		#elif defined(__sh__)
--+			"cpu type", "machine"
--+		#elif defined(sparc) || defined(__sparc__)
--+			"type", "cpu"
--+		#elif defined(__vax__)
--+			"cpu type", "cpu"
--+		#else
--+			"unknown", "unknown"
--+		#endif
--+	};
--+
--+	if ((fp = fopen(CPUINFO_FILE, "r")) != NULL) {
--+		char key[65], value[257], eol, *ret = NULL;
--+
--+		while (fscanf(fp, CPUINFO_FORMAT, key, value, &eol) != EOF) {
--+			__eat_cpuinfo_space(key);
--+			if (!strcmp(key, procinfo_keys[x])) {
--+				__eat_cpuinfo_space(value);
--+				ret = value;
--+				break;
--+			}
--+			if (eol != '\n') {
--+				/* we need two fscanf's here in case the previous
--+				 * length limit caused us to read right up to the
--+				 * newline ... doing "%*[^\n]\n" wont eat the newline
--+				 */
--+				fscanf(fp, "%*[^\n]");
--+				fscanf(fp, "\n");
--+			}
--+		}
--+		fclose(fp);
--+
--+		if (ret) {
--+			strncpy(fstr, ret, s);
--+			return 0;
--+		}
--+	}
--+
--+	return -1;
--+}
--+
--+#endif
--+
-- /* Print ELEMENT, preceded by a space if something has already been
--    printed.  */
-- 
--@@ -250,10 +344,14 @@ main (int argc, char **argv)
--   if (toprint & PRINT_PROCESSOR)
--     {
--       char const *element = unknown;
---#if HAVE_SYSINFO && defined SI_ARCHITECTURE
--+#if ( HAVE_SYSINFO && defined SI_ARCHITECTURE ) || defined(USE_PROCINFO)
--       {
--         static char processor[257];
--+#if defined(USE_PROCINFO)
--+        if (0 <= __linux_procinfo (PROCINFO_PROCESSOR, processor, sizeof processor))
--+#else
--         if (0 <= sysinfo (SI_ARCHITECTURE, processor, sizeof processor))
--+#endif
--           element = processor;
--       }
-- #endif
--@@ -306,9 +404,13 @@ main (int argc, char **argv)
--       if (element == unknown)
--         {
--           static char hardware_platform[257];
--+#if defined(USE_PROCINFO)
--+          if (0 <= __linux_procinfo (PROCINFO_HARDWARE_PLATFORM, hardware_platform, sizeof hardware_platform))
--+#else
--           size_t s = sizeof hardware_platform;
--           static int mib[] = { CTL_HW, UNAME_HARDWARE_PLATFORM };
--           if (sysctl (mib, 2, hardware_platform, &s, 0, 0) >= 0)
--+#endif
--             element = hardware_platform;
--         }
-- #endif
-diff --git a/package/coreutils/coreutils.mk b/package/coreutils/coreutils.mk
-index 17c81f7..e0e9d80 100644
---- a/package/coreutils/coreutils.mk
-+++ b/package/coreutils/coreutils.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/util-linux/login.pam b/package/util-linux/login.pam
+new file mode 100644
+index 0000000..1d9cd70
+--- /dev/null
++++ b/package/util-linux/login.pam
+@@ -0,0 +1,11 @@
++auth		required	pam_securetty.so
++auth		required	pam_unix.so nullok
++
++account		required	pam_unix.so
++
++password	required	pam_unix.so nullok
++
++session		required	pam_limits.so
++session		required	pam_env.so
++session		required	pam_unix.so
++session		optional	pam_lastlog.so
+diff --git a/package/util-linux/su.pam b/package/util-linux/su.pam
+new file mode 100644
+index 0000000..f000c39
+--- /dev/null
++++ b/package/util-linux/su.pam
+@@ -0,0 +1,13 @@
++auth		sufficient	pam_rootok.so
++auth		required	pam_wheel.so use_uid
++auth		required	pam_env.so
++auth		required	pam_unix.so nullok
++
++account		required	pam_unix.so
++
++password	required	pam_unix.so nullok
++
++session		required	pam_limits.so
++session		required	pam_env.so
++session		required	pam_unix.so
++session		optional	pam_lastlog.so
+diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
+index a694f3d..0925ab3 100644
+--- a/package/util-linux/util-linux.mk
++++ b/package/util-linux/util-linux.mk
+@@ -98,6 +98,20 @@ endef
+ UTIL_LINUX_PRE_PATCH_HOOKS += UTIL_LINUX_DISABLE_TOOLS
+ endif
  
--COREUTILS_VERSION = 8.18
-+COREUTILS_VERSION = 8.21
- COREUTILS_SITE = $(BR2_GNU_MIRROR)/coreutils
- COREUTILS_SOURCE = coreutils-$(COREUTILS_VERSION).tar.xz
- COREUTILS_LICENSE = GPLv3+
-@@ -53,20 +53,13 @@ COREUTILS_CONF_ENV = ac_cv_c_restrict=no \
- 		gl_cv_func_working_mkstemp=yes \
- 		gl_cv_func_working_utimes=yes \
- 		gl_getline_needs_run_time_check=no \
--		utils_cv_localtime_cache=no
-+		utils_cv_localtime_cache=no \
-+		PERL=missing
++# Install PAM configuration files
++ifeq ($(BR2_PACKAGE_UTIL_LINUX_LOGIN_UTILS),y)
++define UTIL_LINUX_INSTALL_PAMFILES
++	$(INSTALL) -m 0644 package/util-linux/login.pam \
++		$(TARGET_DIR)/etc/pam.d/login
++	$(INSTALL) -m 0644 package/util-linux/su.pam \
++		$(TARGET_DIR)/etc/pam.d/su
++	$(INSTALL) -m 0644 package/util-linux/su.pam \
++		$(TARGET_DIR)/etc/pam.d/su-l
++endef
++endif
++
++UTIL_LINUX_POST_INSTALL_TARGET_HOOKS += UTIL_LINUX_INSTALL_PAMFILES
++
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
  
- COREUTILS_CONF_OPT = --disable-rpath \
- 		--disable-dependency-tracking \
- 		--enable-install-program=hostname
- 
--define COREUTILS_TOUCH_UNAME_C
--	# ensure uname.c file's timestamp does not change,
--	# so help2man does not run
--	touch -d '2010-01-01' $(@D)/src/uname.c
--endef
--
--COREUTILS_POST_PATCH_HOOKS += COREUTILS_TOUCH_UNAME_C
--
- define COREUTILS_POST_INSTALL
- 	# some things go in root rather than usr
- 	for f in $(COREUTILS_BIN_PROGS); do \
