@@ -1,88 +1,89 @@
-From: arnaud aujon <arnaud.aujon@gmail.com>
-Date: Tue, 3 Dec 2013 09:32:51 +0100
-Subject: [Buildroot] [buildroot] libevas build failure analysis
-In-Reply-To: <CACjG4B+AJ0F4BmrSVrfzMidVgUFGwWt7sBoxUD3QZyp0x6+EAw@mail.gmail.com>
-References: <CACjG4B+qJvuzX=dZz5F7jNyc_m796_j2m9NZ91fpsoy52SX8VQ@mail.gmail.com>
- <CAKAx1cgki9JiRqU=zJJ0P8g5XpG7NEZN9WcBuYMa4mNyv2C-RA@mail.gmail.com>
- <CACjG4B+AJ0F4BmrSVrfzMidVgUFGwWt7sBoxUD3QZyp0x6+EAw@mail.gmail.com>
-Message-ID: <CACjG4BLqXqufuzSHYWghXcZuWMpBPjbFUU7xGzLhSjQQrghK8A@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 3 Dec 2013 09:41:05 +0100
+Subject: [Buildroot] [PATCH] tmux: new package 1.8
+In-Reply-To: <20131202230945.GA6948@gmail.com>
+References: <20131202230945.GA6948@gmail.com>
+Message-ID: <20131203094105.5b299bdb@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Dear Andrew Ruder,
 
-I got an answer from upstream, they said threads are mandatory in 1.8
-release, don't know yet about our current 1.7.7, do we have any plan
-bumping to 1.8 ?
+Thanks for this contribution. On a first look, it seems good. I have
+one comment below, though.
 
+On Mon, 2 Dec 2013 17:09:45 -0600, Andrew Ruder wrote:
+> Signed-off-by: Andrew Ruder <andrew.ruder@elecsyscorp.com>
+> ---
+>  package/Config.in      |  3 +++
+>  package/tmux/Config.in | 13 +++++++++++++
+>  package/tmux/tmux.mk   | 11 +++++++++++
+>  3 files changed, 27 insertions(+)
+>  create mode 100644 package/tmux/Config.in
+>  create mode 100644 package/tmux/tmux.mk
+> 
+> diff --git a/package/Config.in b/package/Config.in
+> index 40f964b..6fb063d 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -948,6 +948,9 @@ source "package/screen/Config.in"
+>  source "package/sudo/Config.in"
+>  if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+>  source "package/time/Config.in"
+> +endif
+> +source "package/tmux/Config.in"
+> +if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+>  source "package/which/Config.in"
+>  endif
+>  source "package/xmlstarlet/Config.in"
+> diff --git a/package/tmux/Config.in b/package/tmux/Config.in
+> new file mode 100644
+> index 0000000..39f83b0
+> --- /dev/null
+> +++ b/package/tmux/Config.in
+> @@ -0,0 +1,13 @@
+> +config BR2_PACKAGE_TMUX
+> +	bool "tmux"
+> +	select BR2_PACKAGE_LIBEVENT
+> +	select BR2_PACKAGE_NCURSES
+> +	depends on BR2_USE_MMU # fork()
+> +	help
+> +	  tmux is a "terminal multiplexer", it enables
+> +	  a number of terminals (or windows) to be accessed
+> +	  and controlled from a single terminal.  tmux is
+> +	  intended to be a simple, modern, BSD-licensed
+> +	  alternative to programs such as GNU screen.
+> +
+> +	  http://tmux.sourceforge.net/
+> diff --git a/package/tmux/tmux.mk b/package/tmux/tmux.mk
+> new file mode 100644
+> index 0000000..2ff5e46
+> --- /dev/null
+> +++ b/package/tmux/tmux.mk
+> @@ -0,0 +1,11 @@
+> +################################################################################
+> +#
+> +# tmux
+> +#
+> +################################################################################
+> +
+> +TMUX_VERSION = 1.8
+> +TMUX_SITE = http://downloads.sourceforge.net/project/tmux/tmux/tmux-$(TMUX_VERSION)
+> +TMUX_DEPENDENCIES = ncurses libevent
+> +
+> +$(eval $(autotools-package))
 
-2013/11/28 arnaud aujon <arnaud.aujon@gmail.com>
+It would be good to add TMUX_LICENSE and TMUX_LICENSE_FILES.
 
-> Ok, the problem has been reported to the dev ML, I will follow this.
->
-> Regards,
->
-> Arnaud
->
->
-> 2013/11/28 Lionel Orry <lionel.orry@gmail.com>
->
->> Can you send an email on e-devel maiiling list? They are about to put
->> EFL 1.7 in maintenance as soon as 1.8 is released, so I guess it's
->> time to tell them, I'm sure they will correct it quickly
->>
->>
->> On Thu, Nov 28, 2013 at 8:04 PM, arnaud aujon <arnaud.aujon@gmail.com>
->> wrote:
->> > Hi there,
->> >
->> > A quick analysis of libevas build failure
->> > (
->> http://autobuild.buildroot.org/results/15c/15cfb974e428b20ba230321cd8b59a82308785af/
->> )
->> >
->> > The build fails because the member 'delete_me' of the Image_Entry_Flags
->> > structure is undefined. This is because there is a ifdef
->> BUILD_ASYNC_PRELOAD
->> > surrounding this member which is not defined during the build because
->> the
->> > toolchain doesn't have thread support.
->> >
->> > From libevas.mk :
->> > # async image preload support needs threads support in toolchain
->> > ifneq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
->> > LIBEVAS_CONF_OPT += --disable-async-preload
->> > endif
->> >
->> > But it seems like the file evas_cache2.c is using 'delete_me'
->> regardless of
->> > the 'async image preload support'
->> >
->> > I don't have the time to investigate more, but it looks like without
->> threads
->> > we should use 'lib/cache' and not 'lib/cache2'  which are defining the
->> same
->> > symboles but 'cache2' absolutely need threads support, 'cache' doesn't .
->> > So I guess we have to fix the makefile to use this the 'cache'
->> > implementation.
->> >
->> > Does someone  know what we should do here ?
->> >
->> > Regards,
->> >
->> > Arnaud
->> >
->> >
->> > _______________________________________________
->> > buildroot mailing list
->> > buildroot at busybox.net
->> > http://lists.busybox.net/mailman/listinfo/buildroot
->>
->
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20131203/70f46be7/attachment-0001.html>
+Other than that, it looks good to me.
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
