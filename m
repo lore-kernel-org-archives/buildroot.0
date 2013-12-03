@@ -1,41 +1,39 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 3 Dec 2013 10:14:08 +0100
-Subject: [Buildroot] [PATCH 3/4] package/dvb-apps: bump version
-In-Reply-To: <20131202212158.GA7738@free.fr>
-References: <cover.1385937338.git.yann.morin.1998@free.fr>
- <8ff24edea518d291706dddec42aa360cef4176ed.1385937338.git.yann.morin.1998@free.fr>
- <529CF850.9020907@mind.be> <20131202212158.GA7738@free.fr>
-Message-ID: <20131203101408.2744f381@skate>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 03 Dec 2013 11:05:19 +0100
+Subject: [Buildroot] [PATCH 1/5] coreutils: belongs to system tools,
+	not development
+In-Reply-To: <20131203095920.1e46375f@skate> (Thomas Petazzoni's message of
+ "Tue, 3 Dec 2013 09:59:20 +0100")
+References: <1385981368-2235-1-git-send-email-gustavo@zacarias.com.ar>
+ <87zjoipdlk.fsf@dell.be.48ers.dk> <20131203095920.1e46375f@skate>
+Message-ID: <8761r6p7vk.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-On Mon, 2 Dec 2013 22:21:58 +0100, Yann E. MORIN wrote:
+Hi,
 
-> Yes, but that's all what Hg is giving me:
->     $ hg id -i
->     be76da69f250
-> 
-> OK, I got the full node, now:
->     $ hg log -r tip --template '{node}\n'
->     be76da69f250c4b96c4bc10cabafb061d299572e
-> 
-> Doh... :-(
-> 
-> OK, next time I bump it, I'll (try to remember to) use the full node.
+ >> Comments, anybody?
 
-An addition to the manual would be good, because if I had to find by
-myself the hg command line to get the full node, it would take me quite
-some time.
+ > We've always said that it was important to keep this option so that
+ > newcomers don't enable things like coreutils, bash and so on, and use
+ > what I'd consider the default "Buildroot experience", i.e Busybox.
 
-Thanks!
+True.
 
-Thomas
+ > What made you change your mind about this?
+
+It mainly dates back from when those busybox alternatives didn't get
+much testing, so were likely to fail. We default to having busybox
+enabled, but I don't think we really need to make it more difficult to
+use the alternatives.
+
+E.G. if we support bash/coreutils/.., then we should really support
+them.
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
