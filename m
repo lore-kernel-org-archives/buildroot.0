@@ -1,104 +1,120 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Tue, 3 Dec 2013 17:50:39 +0000
-Subject: [Buildroot] [PATCH] bluez_utils: broken for static builds
-Message-ID: <1386093039-56954-1-git-send-email-Vincent.Riera@imgtec.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue,  3 Dec 2013 15:03:20 -0300
+Subject: [Buildroot] [PATCH] ncurses: add target progs option
+Message-ID: <1386093800-22296-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The bluez_utils package requires shared library support unconditionally.
-We can't fix it to make it build on static because, for instance,
-"plugin.c" file uses dlfcn and it's a basic prereq for bluetoothd, so
-add "depend on !BR2_PREFER_STATIC_LIB" to it and recursively to all
-packages that selects BR2_PACKAGE_BLUEZ_UTILS.
+Closes bug #5072
+Based on work from Stefan Mei?ner, thanks!
 
-Fixes:
-
-   http://autobuild.buildroot.net/results/d81/d81970024649c1e89c01da491c63760afdad6cb6/
-
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/bluez_utils/Config.in   |    1 +
- package/efl/libedbus/Config.in  |    1 +
- package/openobex/Config.in      |    1 +
- package/sconeserver/Config.in   |    1 +
- package/snowball-init/Config.in |    1 +
- package/ussp-push/Config.in     |    1 +
- 6 files changed, 6 insertions(+), 0 deletions(-)
+ package/ncurses/Config.in  | 12 +++++++++---
+ package/ncurses/ncurses.mk | 21 +++++++++++++++++++--
+ 2 files changed, 28 insertions(+), 5 deletions(-)
 
-diff --git a/package/bluez_utils/Config.in b/package/bluez_utils/Config.in
-index e08e9be..f9d35d5 100644
---- a/package/bluez_utils/Config.in
-+++ b/package/bluez_utils/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_BLUEZ_UTILS
- 	bool "bluez-utils"
- 	depends on !BR2_avr32
-+	depends on !BR2_PREFER_STATIC_LIB
- 	depends on BR2_USE_WCHAR # libglib2
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus, alsa-lib, libglib2
- 	depends on BR2_USE_MMU # dbus, libglib2
-diff --git a/package/efl/libedbus/Config.in b/package/efl/libedbus/Config.in
-index 783a54e..6a16d5d 100644
---- a/package/efl/libedbus/Config.in
-+++ b/package/efl/libedbus/Config.in
-@@ -17,6 +17,7 @@ if BR2_PACKAGE_LIBEDBUS
- config BR2_PACKAGE_LIBEDBUS_BLUEZ
- 	bool "bluez support"
- 	depends on !BR2_avr32 # bluez_utils
-+	depends on !BR2_PREFER_STATIC_LIB # bluez_utils
- 	depends on BR2_USE_WCHAR # bluez_utils -> glib2
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # bluez_utils -> glib2
- 	select BR2_PACKAGE_BLUEZ_UTILS
-diff --git a/package/openobex/Config.in b/package/openobex/Config.in
-index 9b9d2f9..6bb1973 100644
---- a/package/openobex/Config.in
-+++ b/package/openobex/Config.in
-@@ -12,6 +12,7 @@ if BR2_PACKAGE_OPENOBEX
- config BR2_PACKAGE_OPENOBEX_BLUEZ
- 	bool "enable bluez support"
- 	depends on !BR2_avr32
-+	depends on !BR2_PREFER_STATIC_LIB # bluez_utils
- 	depends on BR2_USE_WCHAR # libglib2
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus, alsa-lib, libglib2
- 	depends on BR2_USE_MMU # dbus
-diff --git a/package/sconeserver/Config.in b/package/sconeserver/Config.in
-index 58c1e03..d80fd6a 100644
---- a/package/sconeserver/Config.in
-+++ b/package/sconeserver/Config.in
-@@ -44,6 +44,7 @@ config BR2_PACKAGE_SCONESERVER_BLUETOOTH
- 	depends on BR2_USE_MMU # bluez->dbus
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # bluez->dbus, bluez->libglib2
- 	depends on !BR2_avr32 # bluez_utils
-+	depends on !BR2_PREFER_STATIC_LIB # bluez_utils
- 	select BR2_PACKAGE_BLUEZ_UTILS
+diff --git a/package/ncurses/Config.in b/package/ncurses/Config.in
+index 613b5b5..e8ab710 100644
+--- a/package/ncurses/Config.in
++++ b/package/ncurses/Config.in
+@@ -8,20 +8,26 @@ config BR2_PACKAGE_NCURSES
+ 
+ 	  http://www.gnu.org/software/ncurses/
+ 
++if BR2_PACKAGE_NCURSES
++
+ config BR2_PACKAGE_NCURSES_TARGET_PANEL
+ 	bool "ncurses libpanel in target"
+-	depends on BR2_PACKAGE_NCURSES
  	help
- 	  Bluetooth module for Sconeserver
-diff --git a/package/snowball-init/Config.in b/package/snowball-init/Config.in
-index e6e3272..b46ebb6 100644
---- a/package/snowball-init/Config.in
-+++ b/package/snowball-init/Config.in
-@@ -3,6 +3,7 @@ config BR2_PACKAGE_SNOWBALL_INIT
- 	# Runtime dependency, needed by snowball startup script
- 	select BR2_PACKAGE_BLUEZ_UTILS
- 	depends on !BR2_avr32
-+	depends on !BR2_PREFER_STATIC_LIB # bluez_utils
- 	depends on BR2_USE_WCHAR # libglib2
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus, alsa-lib, libglib2
- 	depends on BR2_USE_MMU # dbus
-diff --git a/package/ussp-push/Config.in b/package/ussp-push/Config.in
-index 4a79779..35ee661 100644
---- a/package/ussp-push/Config.in
-+++ b/package/ussp-push/Config.in
-@@ -2,6 +2,7 @@ config BR2_PACKAGE_USSP_PUSH
- 	bool "ussp-push"
- 	depends on BR2_INET_IPV6
- 	depends on !BR2_avr32
-+	depends on !BR2_PREFER_STATIC_LIB # bluez_utils
- 	depends on BR2_USE_WCHAR # libglib2
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus, alsa-lib, libglib2
- 	depends on BR2_USE_MMU # dbus
+ 	  Includes ncurses dynamic libpanel in target
+ 
+ config BR2_PACKAGE_NCURSES_TARGET_FORM
+ 	bool "ncurses libform in target"
+-	depends on BR2_PACKAGE_NCURSES
+ 	help
+ 	  Includes ncurses dynamic libform in target
+ 
+ config BR2_PACKAGE_NCURSES_TARGET_MENU
+ 	bool "ncurses libmenu in target"
+-	depends on BR2_PACKAGE_NCURSES
+ 	help
+ 	  Includes ncurses dynamic libmenu in target
++
++config BR2_PACKAGE_NCURSES_TARGET_PROGS
++	bool "ncurses programs"
++	help
++	  Include ncurses programs in traget (clear, reset, tput, ...)
++
++endif
+diff --git a/package/ncurses/ncurses.mk b/package/ncurses/ncurses.mk
+index dbb514e..f331976 100644
+--- a/package/ncurses/ncurses.mk
++++ b/package/ncurses/ncurses.mk
+@@ -8,6 +8,8 @@ NCURSES_VERSION = 5.9
+ NCURSES_SITE = $(BR2_GNU_MIRROR)/ncurses
+ NCURSES_INSTALL_STAGING = YES
+ NCURSES_DEPENDENCIES = host-ncurses
++HOST_NCURSES_DEPENDENCIES =
++NCURSES_PROGS = clear infocmp tabs tic toe tput tset
+ NCURSES_LICENSE = MIT with advertising clause
+ NCURSES_LICENSE_FILES = README
+ NCURSES_CONFIG_SCRIPTS = ncurses5-config
+@@ -17,7 +19,6 @@ NCURSES_CONF_OPT = \
+ 	--without-cxx \
+ 	--without-cxx-binding \
+ 	--without-ada \
+-	--without-progs \
+ 	--without-tests \
+ 	--disable-big-core \
+ 	--without-profile \
+@@ -27,13 +28,18 @@ NCURSES_CONF_OPT = \
+ 	--enable-const \
+ 	--enable-overwrite \
+ 	--enable-pc-files \
++	$(if $(BR2_PACKAGE_NCURSES_TARGET_PROGS),,--without-progs) \
+ 	$(if $(BR2_HAVE_DOCUMENTATION),,--without-manpages)
+ 
++# Install after busybox for the full-blown versions
++ifeq ($(BR2_PACKAGE_BUSYBOX),y)
++	NCURSES_DEPENDENCIES += busybox
++endif
++
+ ifneq ($(BR2_ENABLE_DEBUG),y)
+ NCURSES_CONF_OPT += --without-debug
+ endif
+ 
+-
+ define NCURSES_BUILD_CMDS
+ 	$(MAKE1) -C $(@D) DESTDIR=$(STAGING_DIR)
+ endef
+@@ -60,12 +66,23 @@ endif
+ 
+ endif
+ 
++ifeq ($(BR2_PACKAGE_NCURSES_TARGET_PROGS),y)
++define NCURSES_INSTALL_TARGET_PROGS
++	for x in $(NCURSES_PROGS); do \
++		$(INSTALL) -m 0755 $(NCURSES_DIR)/progs/$$x \
++			$(TARGET_DIR)/usr/bin/$$x; \
++	done
++	ln -sf tset $(TARGET_DIR)/usr/bin/reset
++endef
++endif
++
+ define NCURSES_INSTALL_TARGET_CMDS
+ 	mkdir -p $(TARGET_DIR)/usr/lib
+ 	$(if $(BR2_PREFER_STATIC_LIB),,cp -dpf $(NCURSES_DIR)/lib/libncurses.so* $(TARGET_DIR)/usr/lib/)
+ 	$(NCURSES_INSTALL_TARGET_PANEL)
+ 	$(NCURSES_INSTALL_TARGET_FORM)
+ 	$(NCURSES_INSTALL_TARGET_MENU)
++	$(NCURSES_INSTALL_TARGET_PROGS)
+ 	ln -snf /usr/share/terminfo $(TARGET_DIR)/usr/lib/terminfo
+ 	mkdir -p $(TARGET_DIR)/usr/share/terminfo/x
+ 	cp -dpf $(STAGING_DIR)/usr/share/terminfo/x/xterm $(TARGET_DIR)/usr/share/terminfo/x
 -- 
-1.7.1
+1.8.3.2
