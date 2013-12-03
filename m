@@ -1,117 +1,104 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue,  3 Dec 2013 13:51:52 -0300
-Subject: [Buildroot] [PATCH] net-tools: new package
-Message-ID: <1386089512-5956-1-git-send-email-gustavo@zacarias.com.ar>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Tue, 3 Dec 2013 17:50:39 +0000
+Subject: [Buildroot] [PATCH] bluez_utils: broken for static builds
+Message-ID: <1386093039-56954-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Loosely based on the patch from bug #5066.
+The bluez_utils package requires shared library support unconditionally.
+We can't fix it to make it build on static because, for instance,
+"plugin.c" file uses dlfcn and it's a basic prereq for bluetoothd, so
+add "depend on !BR2_PREFER_STATIC_LIB" to it and recursively to all
+packages that selects BR2_PACKAGE_BLUEZ_UTILS.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Fixes:
+
+   http://autobuild.buildroot.net/results/d81/d81970024649c1e89c01da491c63760afdad6cb6/
+
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 ---
- package/Config.in              |  3 +++
- package/net-tools/Config.in    | 10 ++++++++
- package/net-tools/net-tools.mk | 58 ++++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 71 insertions(+)
- create mode 100644 package/net-tools/Config.in
- create mode 100644 package/net-tools/net-tools.mk
+ package/bluez_utils/Config.in   |    1 +
+ package/efl/libedbus/Config.in  |    1 +
+ package/openobex/Config.in      |    1 +
+ package/sconeserver/Config.in   |    1 +
+ package/snowball-init/Config.in |    1 +
+ package/ussp-push/Config.in     |    1 +
+ 6 files changed, 6 insertions(+), 0 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 7b19221..d28d054 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -840,6 +840,9 @@ endif
- source "package/netplug/Config.in"
- source "package/netsnmp/Config.in"
- source "package/netstat-nat/Config.in"
-+if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
-+source "package/net-tools/Config.in"
-+endif
- source "package/network-manager/Config.in"
- source "package/nfacct/Config.in"
- source "package/ngircd/Config.in"
-diff --git a/package/net-tools/Config.in b/package/net-tools/Config.in
-new file mode 100644
-index 0000000..f98dca0
---- /dev/null
-+++ b/package/net-tools/Config.in
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_NET_TOOLS
-+	bool "net-tools"
-+	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
-+	help
-+	  A collection of programs that form the base set of the NET-3
-+	  networking distribution for the Linux operating system.
-+	  Includes: arp, hostname, ifconfig, netstat, rarp, route,
-+	  plipconfig, slattach, mii-tool, iptunnel and ipmaddr.
-+
-+	  http://sourceforge.net/projects/net-tools/
-diff --git a/package/net-tools/net-tools.mk b/package/net-tools/net-tools.mk
-new file mode 100644
-index 0000000..3538655
---- /dev/null
-+++ b/package/net-tools/net-tools.mk
-@@ -0,0 +1,58 @@
-+################################################################################
-+#
-+# net-tools
-+#
-+################################################################################
-+
-+NET_TOOLS_VERSION = 3eb367aedf1280f35105ede465c350a39b55fa91
-+NET_TOOLS_SITE = git://git.code.sf.net/p/net-tools/code
-+NET_TOOLS_DEPENDENCIES = $(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext)
-+NET_TOOLS_LDFLAGS = $(TARGET_LDFLAGS) \
-+	$(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),-lintl)
-+NET_TOOLS_LICENSE = GPLv2+
-+NET_TOOLS_LICENSE_FILES = COPYING
-+
-+# Install after busybox for the full-blown versions
-+ifeq ($(BR2_PACKAGE_BUSYBOX),y)
-+	NET_TOOLS_DEPENDENCIES += busybox
-+endif
-+
-+# Install after util-linux since net-tools hostname is better
-+ifeq ($(BR2_PACKAGE_UTIL_LINUX_BINARIES),y)
-+	NET_TOOLS_DEPENDENCIES += util-linux
-+endif
-+
-+define NET_TOOLS_CONFIGURE_CMDS
-+	(cd $(@D); yes "" | ./configure.sh config.in )
-+endef
-+
-+# Enable I18N when appropiate
-+ifeq ($(BR2_ENABLE_LOCALE),y)
-+define NET_TOOLS_ENABLE_I18N
-+	$(SED) 's:I18N 0:I18N 1:' $(@D)/config.h
-+endef
-+endif
-+
-+# Enable IPv6 when appropiate
-+ifeq ($(BR2_INET_IPV6),y)
-+define NET_TOOLS_ENABLE_IPV6
-+	$(SED) 's:_AFINET6 0:_AFINET6 1:' $(@D)/config.h
-+endef
-+endif
-+
-+NET_TOOLS_POST_CONFIGURE_HOOKS += NET_TOOLS_ENABLE_I18N NET_TOOLS_ENABLE_IPV6
-+
-+define NET_TOOLS_BUILD_CMDS
-+	$(TARGET_MAKE_ENV) AR="$(TARGET_AR)" CC="$(TARGET_CC)" \
-+		LDFLAGS="$(NET_TOOLS_LDFLAGS)" $(MAKE) -C $(@D)
-+endef
-+
-+# install renames conflicting binaries, update does not
-+# ifconfig & route reside in /sbin for busybox
-+define NET_TOOLS_INSTALL_TARGET_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) update
-+	mv -f $(TARGET_DIR)/bin/ifconfig $(TARGET_DIR)/sbin/ifconfig
-+	mv -f $(TARGET_DIR)/bin/route $(TARGET_DIR)/sbin/route
-+endef
-+
-+$(eval $(generic-package))
+diff --git a/package/bluez_utils/Config.in b/package/bluez_utils/Config.in
+index e08e9be..f9d35d5 100644
+--- a/package/bluez_utils/Config.in
++++ b/package/bluez_utils/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_BLUEZ_UTILS
+ 	bool "bluez-utils"
+ 	depends on !BR2_avr32
++	depends on !BR2_PREFER_STATIC_LIB
+ 	depends on BR2_USE_WCHAR # libglib2
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus, alsa-lib, libglib2
+ 	depends on BR2_USE_MMU # dbus, libglib2
+diff --git a/package/efl/libedbus/Config.in b/package/efl/libedbus/Config.in
+index 783a54e..6a16d5d 100644
+--- a/package/efl/libedbus/Config.in
++++ b/package/efl/libedbus/Config.in
+@@ -17,6 +17,7 @@ if BR2_PACKAGE_LIBEDBUS
+ config BR2_PACKAGE_LIBEDBUS_BLUEZ
+ 	bool "bluez support"
+ 	depends on !BR2_avr32 # bluez_utils
++	depends on !BR2_PREFER_STATIC_LIB # bluez_utils
+ 	depends on BR2_USE_WCHAR # bluez_utils -> glib2
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # bluez_utils -> glib2
+ 	select BR2_PACKAGE_BLUEZ_UTILS
+diff --git a/package/openobex/Config.in b/package/openobex/Config.in
+index 9b9d2f9..6bb1973 100644
+--- a/package/openobex/Config.in
++++ b/package/openobex/Config.in
+@@ -12,6 +12,7 @@ if BR2_PACKAGE_OPENOBEX
+ config BR2_PACKAGE_OPENOBEX_BLUEZ
+ 	bool "enable bluez support"
+ 	depends on !BR2_avr32
++	depends on !BR2_PREFER_STATIC_LIB # bluez_utils
+ 	depends on BR2_USE_WCHAR # libglib2
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus, alsa-lib, libglib2
+ 	depends on BR2_USE_MMU # dbus
+diff --git a/package/sconeserver/Config.in b/package/sconeserver/Config.in
+index 58c1e03..d80fd6a 100644
+--- a/package/sconeserver/Config.in
++++ b/package/sconeserver/Config.in
+@@ -44,6 +44,7 @@ config BR2_PACKAGE_SCONESERVER_BLUETOOTH
+ 	depends on BR2_USE_MMU # bluez->dbus
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # bluez->dbus, bluez->libglib2
+ 	depends on !BR2_avr32 # bluez_utils
++	depends on !BR2_PREFER_STATIC_LIB # bluez_utils
+ 	select BR2_PACKAGE_BLUEZ_UTILS
+ 	help
+ 	  Bluetooth module for Sconeserver
+diff --git a/package/snowball-init/Config.in b/package/snowball-init/Config.in
+index e6e3272..b46ebb6 100644
+--- a/package/snowball-init/Config.in
++++ b/package/snowball-init/Config.in
+@@ -3,6 +3,7 @@ config BR2_PACKAGE_SNOWBALL_INIT
+ 	# Runtime dependency, needed by snowball startup script
+ 	select BR2_PACKAGE_BLUEZ_UTILS
+ 	depends on !BR2_avr32
++	depends on !BR2_PREFER_STATIC_LIB # bluez_utils
+ 	depends on BR2_USE_WCHAR # libglib2
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus, alsa-lib, libglib2
+ 	depends on BR2_USE_MMU # dbus
+diff --git a/package/ussp-push/Config.in b/package/ussp-push/Config.in
+index 4a79779..35ee661 100644
+--- a/package/ussp-push/Config.in
++++ b/package/ussp-push/Config.in
+@@ -2,6 +2,7 @@ config BR2_PACKAGE_USSP_PUSH
+ 	bool "ussp-push"
+ 	depends on BR2_INET_IPV6
+ 	depends on !BR2_avr32
++	depends on !BR2_PREFER_STATIC_LIB # bluez_utils
+ 	depends on BR2_USE_WCHAR # libglib2
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus, alsa-lib, libglib2
+ 	depends on BR2_USE_MMU # dbus
 -- 
-1.8.3.2
+1.7.1
