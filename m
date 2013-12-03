@@ -1,52 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 3 Dec 2013 12:19:53 +0100
-Subject: [Buildroot] [git commit] docs/manual: limit the depth of the TOC in
-	the HTML output
-Message-ID: <20131203112057.27B999B8F7@busybox.osuosl.org>
+Date: Tue, 3 Dec 2013 12:17:20 +0100
+Subject: [Buildroot] [git commit] cubieboard: mkcubiecard: use the right
+	command for checking user privilege
+Message-ID: <20131203112057.1F41D9BEF3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=09dea8e8fb92c3b65d303cca14966e24e022e62b
+commit: http://git.buildroot.net/buildroot/commit/?id=2257e36a57c15ef31a013dac56ff7c551fec70c5
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The current TOC level is set to 4, which does not mean 'a 4-level deep TOC',
-but really means 'a TOC deep to the 4th level', with the first level being
-level 0, which means we have:
+On some shell environments the EUID variable, which checks the
+user id, is not defined. Use `id -u` instead.
 
-    12. Appendix
-        12.1. Makedev syntax documentation
-        12.2. Makeuser syntax documentation
-        12.3. Partition table layout description syntax
-            12.3.1. The global section
-                Properties for the global section
+This patch mutes the following error:
 
-Which a bit too much. And yet, the fifth level is not shown, since we
-don't have any! :-/
+./board/cubietech/cubieboard/mkcubiecard.sh: 31: [: -ne: unexpected operator
 
-Limit the depth of the TOC to three levels, which is just enough to be
-usefull, yet not cluttered by low-level titles.
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Andi Shyti <andi@etezian.org>
+Reviewed-by: Arvid Picciani <aep@exys.org>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- docs/manual/manual.mk |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ board/cubietech/cubieboard/mkcubiecard.sh |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/docs/manual/manual.mk b/docs/manual/manual.mk
-index aeafd10..0926566 100644
---- a/docs/manual/manual.mk
-+++ b/docs/manual/manual.mk
-@@ -72,8 +72,8 @@ endef
- # The variable <DOCUMENT_NAME>_SOURCES defines the dependencies.
- ################################################################################
- define GENDOC
--$(call GENDOC_INNER,$(1),xhtml,html,html,HTML,--xsltproc-opts "--stringparam toc.section.depth 4")
--$(call GENDOC_INNER,$(1),chunked,split-html,chunked,split HTML,--xsltproc-opts "--stringparam toc.section.depth 4")
-+$(call GENDOC_INNER,$(1),xhtml,html,html,HTML,--xsltproc-opts "--stringparam toc.section.depth 2")
-+$(call GENDOC_INNER,$(1),chunked,split-html,chunked,split HTML,--xsltproc-opts "--stringparam toc.section.depth 2")
- $(call GENDOC_INNER,$(1),pdf,pdf,pdf,PDF,--dblatex-opts "-P latex.output.revhistory=0")
- $(call GENDOC_INNER,$(1),text,text,text,text)
- $(call GENDOC_INNER,$(1),epub,epub,epub,ePUB)
+diff --git a/board/cubietech/cubieboard/mkcubiecard.sh b/board/cubietech/cubieboard/mkcubiecard.sh
+index 34afc87..f1d5a9f 100755
+--- a/board/cubietech/cubieboard/mkcubiecard.sh
++++ b/board/cubietech/cubieboard/mkcubiecard.sh
+@@ -28,7 +28,7 @@ if [ $# -ne 2 ]; then
+ 	exit 1;
+ fi
+ 
+-if [ $EUID -ne 0 ]; then
++if [ `id -u` -ne 0 ]; then
+ 	echo "This script must be run as root" 1>&2
+ 	exit 1
+ fi
