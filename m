@@ -1,11 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 3 Dec 2013 09:50:20 +0100
-Subject: [Buildroot] [PATCH 4/5] zsh: alpha sort menu option
-In-Reply-To: <87iov6pd8f.fsf@dell.be.48ers.dk>
+Date: Tue, 3 Dec 2013 09:59:20 +0100
+Subject: [Buildroot] [PATCH 1/5] coreutils: belongs to system tools,
+ not development
+In-Reply-To: <87zjoipdlk.fsf@dell.be.48ers.dk>
 References: <1385981368-2235-1-git-send-email-gustavo@zacarias.com.ar>
- <1385981368-2235-4-git-send-email-gustavo@zacarias.com.ar>
- <87iov6pd8f.fsf@dell.be.48ers.dk>
-Message-ID: <20131203095020.2a02cf8f@skate>
+ <87zjoipdlk.fsf@dell.be.48ers.dk>
+Message-ID: <20131203095920.1e46375f@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,42 +14,38 @@ To: buildroot@busybox.net
 
 Dear Peter Korsgaard,
 
-On Tue, 03 Dec 2013 09:09:36 +0100, Peter Korsgaard wrote:
+On Tue, 03 Dec 2013 09:01:43 +0100, Peter Korsgaard wrote:
 > >>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 > 
 >  > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 >  > ---
->  >  package/Config.in | 4 +++-
->  >  1 file changed, 3 insertions(+), 1 deletion(-)
+>  >  package/Config.in | 4 +---
+>  >  1 file changed, 1 insertion(+), 3 deletions(-)
 > 
 >  > diff --git a/package/Config.in b/package/Config.in
->  > index a65ceac..e70a58c 100644
+>  > index e2ca8ee..a65ceac 100644
 >  > --- a/package/Config.in
 >  > +++ b/package/Config.in
->  > @@ -932,7 +932,6 @@ source "package/at/Config.in"
->  >  if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
->  >  source "package/bash/Config.in"
->  >  source "package/dash/Config.in"
->  > -source "package/zsh/Config.in"
+>  > @@ -86,9 +86,6 @@ source "package/bison/Config.in"
+>  >  source "package/bsdiff/Config.in"
+>  >  source "package/bustle/Config.in"
+>  >  source "package/ccache/Config.in"
+>  > -if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+>  > -source "package/coreutils/Config.in"
+>  > -endif
 > 
-> You are right, certainly - But I think it is more userfriendly to make
-> an exception and keep all the shells together.
+> Committed, thanks.
 > 
-> What do others think?
+> I'm really starting to think we should get rid of
+> BR2_PACKAGE_BUSYBOX_SHOW_OTHERS, or atleast make it default y.
+> 
+> Comments, anybody?
 
-Ideas:
+We've always said that it was important to keep this option so that
+newcomers don't enable things like coreutils, bash and so on, and use
+what I'd consider the default "Buildroot experience", i.e Busybox.
 
- * Instead of "Shell and utilities", have two menus: "Shell" and
-   "Utilities".
-
- * In the "Shell and utilities" menu, create two sub-sections,
-   separated by comments:
-
-comment "Shells"
-... some packages ...
-
-comment "Utilities"
-... some packages ...
+What made you change your mind about this?
 
 Best regards,
 
