@@ -1,32 +1,32 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 4 Dec 2013 22:06:20 +0100
-Subject: [Buildroot] [git commit] python-pygame: rename package's Config.in
-	bool
-Message-ID: <20131204210742.BA9649BF16@busybox.osuosl.org>
+Date: Wed, 4 Dec 2013 22:03:51 +0100
+Subject: [Buildroot] [git commit] squid: bump to version 3.3.11
+Message-ID: <20131204210741.F30739BF16@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f17020eb8579cdc5da269c17aeacef42479f2a53
+commit: http://git.buildroot.net/buildroot/commit/?id=48c167fa03c2ba757a3cb7637322cf724e362467
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Ryan Barnett <rjbarnet@rockwellcollins.com>
-Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-pygame/Config.in |    2 +-
+ package/squid/squid.mk |    2 +-
  1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/python-pygame/Config.in b/package/python-pygame/Config.in
-index 1b0a8b9..b9a367d 100644
---- a/package/python-pygame/Config.in
-+++ b/package/python-pygame/Config.in
-@@ -1,5 +1,5 @@
- config BR2_PACKAGE_PYTHON_PYGAME
--	bool "pygame"
-+	bool "python-pygame"
- 	depends on BR2_PACKAGE_PYTHON
- 	select BR2_PACKAGE_SDL
- 	help
+diff --git a/package/squid/squid.mk b/package/squid/squid.mk
+index c0678ce..7c55557 100644
+--- a/package/squid/squid.mk
++++ b/package/squid/squid.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SQUID_VERSION = 3.3.10
++SQUID_VERSION = 3.3.11
+ SQUID_SOURCE = squid-$(SQUID_VERSION).tar.xz
+ SQUID_SITE = http://www.squid-cache.org/Versions/v3/3.3
+ SQUID_LICENSE = GPLv2+
