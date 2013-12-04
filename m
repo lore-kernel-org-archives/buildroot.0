@@ -1,11 +1,12 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 04 Dec 2013 22:04:44 +0100
-Subject: [Buildroot] [PATCH] grub: force -m32 so we build grub 32 bits
-	on 64 bits architecture
-In-Reply-To: <1386185630-23338-1-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Wed, 4 Dec 2013 20:33:50 +0100")
-References: <1386185630-23338-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <87k3fkjpjn.fsf@dell.be.48ers.dk>
+Date: Wed, 04 Dec 2013 22:07:13 +0100
+Subject: [Buildroot] [PATCH 1/2] python-pygame: rename package's
+	Config.in bool
+In-Reply-To: <20131204214504.72430e0b@skate> (Thomas Petazzoni's message of
+ "Wed, 4 Dec 2013 21:45:04 +0100")
+References: <1381165041-9024-1-git-send-email-rjbarnet@rockwellcollins.com>
+ <20131204214504.72430e0b@skate>
+Message-ID: <87fvq8jpfi.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,17 +15,21 @@ To: buildroot@busybox.net
 
 >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- > As reported by Matthew Weber, Grub doesn't build on 64 bits build
- > machines, because the host compiler produces 64 bits binaries by
- > default, while Grub should be built 32 bits. Therefore, this commit
- > passes -m32 to the Grub CFLAGS, so that 32 bits binaries are always
- > produced.
+ > Dear Ryan Barnett,
+ > On Mon, 7 Oct 2013 11:57:20 -0500, Ryan Barnett wrote:
+ >> Signed-off-by: Ryan Barnett <rjbarnet@rockwellcollins.com>
+ >> 
+ >> ---
+ >> Trivial Fix:
+ >> This makes the naming of the package in the menuconfig consistent with
+ >> the naming of the package's directory and make rules.
+ >> ---
+ >> package/python-pygame/Config.in |    2 +-
+ >> 1 files changed, 1 insertions(+), 1 deletions(-)
 
- > Reported-by: Matthew Weber <mlweber1@rockwellcollins.com>
- > Cc: Matthew Weber <mlweber1@rockwellcollins.com>
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ > Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-Committed, thanks.
+Committed both, thanks.
 
 -- 
 Bye, Peter Korsgaard
