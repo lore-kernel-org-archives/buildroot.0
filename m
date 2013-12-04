@@ -1,28 +1,32 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 04 Dec 2013 09:53:01 +0100
-Subject: [Buildroot] [PATCH] libpfm4: needs thread support
-In-Reply-To: <1386098838-26777-1-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Tue, 3 Dec 2013 20:27:18 +0100")
-References: <1386098838-26777-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <87iov5m1zm.fsf@dell.be.48ers.dk>
+Date: Wed, 04 Dec 2013 10:09:45 +0100
+Subject: [Buildroot] [PATCH] package/tvheadend: unbreak
+In-Reply-To: <1386108647-8520-1-git-send-email-yann.morin.1998@free.fr> (Yann
+ E. MORIN's message of "Tue, 3 Dec 2013 23:10:47 +0100")
+References: <1386108647-8520-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <87bo0xm17q.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
- > Fixes:
- >   http://autobuild.buildroot.net/results/73d736dd3c8a70358ef4b19a63dda46178cf8bf1/
+ > From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ > tvheadend tries to impersonate an autotools package, when it is not.
+ > This breaks the build.
 
- > Note that the propagation of the thread dependency to the oprofile
- > package is a little bit non standard, because oprofile selects libpfm4
- > only on the PowerPC architecture. So we ensure the thread dependency
- > is only enforced on PowerPC, and a separate comment is displayed when
- > thread support is not available, but the PowerPC architecture is used.
+ > tvheadend's ./configure tries to run compiled code.
+ > This breaks the build.
 
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ > Switch tvheadend over to using the generic-package infrastructure,
+ > and provide carefully-crafted _CMDS for each steps.
+
+ > We still keep a post-install hook to install our "DB" since it is not
+ > part of tvheadend, but an addition of our own packaging of tvheadend.
+
+ > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 Committed, thanks.
 
