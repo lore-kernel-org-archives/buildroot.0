@@ -1,22 +1,28 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 04 Dec 2013 09:52:16 +0100
-Subject: [Buildroot] [PATCH] alsa-utils: add dependency on host-pkgconf
-In-Reply-To: <1386108607.6732.1.camel@bender.Speedport_W_724V_Typ_A_05011601_00_065>
- (Sven Neumann's message of "Tue, 03 Dec 2013 23:10:07 +0100")
-References: <1386108607.6732.1.camel@bender.Speedport_W_724V_Typ_A_05011601_00_065>
-Message-ID: <87mwkhm20v.fsf@dell.be.48ers.dk>
+Date: Wed, 04 Dec 2013 09:53:01 +0100
+Subject: [Buildroot] [PATCH] libpfm4: needs thread support
+In-Reply-To: <1386098838-26777-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Tue, 3 Dec 2013 20:27:18 +0100")
+References: <1386098838-26777-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <87iov5m1zm.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Sven" == Sven Neumann <neumann@teufel.de> writes:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- > The alsa-utils configure script will use pkg-config if available,
- > so make sure that it is available.
+ > Fixes:
+ >   http://autobuild.buildroot.net/results/73d736dd3c8a70358ef4b19a63dda46178cf8bf1/
 
- > Signed-off-by: Sven Neumann <neumann@teufel.de>
+ > Note that the propagation of the thread dependency to the oprofile
+ > package is a little bit non standard, because oprofile selects libpfm4
+ > only on the PowerPC architecture. So we ensure the thread dependency
+ > is only enforced on PowerPC, and a separate comment is displayed when
+ > thread support is not available, but the PowerPC architecture is used.
+
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
 Committed, thanks.
 
