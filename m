@@ -1,38 +1,24 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 4 Dec 2013 10:28:47 +0100
-Subject: [Buildroot] [buildroot] libevas build failure analysis
-In-Reply-To: <CACjG4BJvjp0HpOn+FvKYQt6WYNZG-uYaVth16oCfPL_ynk9k9g@mail.gmail.com>
-References: <CACjG4B+qJvuzX=dZz5F7jNyc_m796_j2m9NZ91fpsoy52SX8VQ@mail.gmail.com>
- <CAKAx1cgki9JiRqU=zJJ0P8g5XpG7NEZN9WcBuYMa4mNyv2C-RA@mail.gmail.com>
- <CACjG4B+AJ0F4BmrSVrfzMidVgUFGwWt7sBoxUD3QZyp0x6+EAw@mail.gmail.com>
- <CACjG4BLqXqufuzSHYWghXcZuWMpBPjbFUU7xGzLhSjQQrghK8A@mail.gmail.com>
- <CAKAx1ciXsAPtG-uegQC5CPO8yJFPG4gn7CvuzVZ2JQh_T0FrAA@mail.gmail.com>
- <CACjG4BJvjp0HpOn+FvKYQt6WYNZG-uYaVth16oCfPL_ynk9k9g@mail.gmail.com>
-Message-ID: <20131204102847.5b91870e@skate>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 04 Dec 2013 10:35:19 +0100
+Subject: [Buildroot] [PATCH] wireshark: bump to version 1.10.3
+In-Reply-To: <1386127723.8545.1.camel@phoenix> (Axel Lin's message of "Wed, 04
+ Dec 2013 11:28:43 +0800")
+References: <1386127723.8545.1.camel@phoenix>
+Message-ID: <8738m9m014.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnaud,
+>>>>> "Axel" == Axel Lin <axel.lin@ingics.com> writes:
 
-On Tue, 3 Dec 2013 10:13:52 +0100, arnaud aujon wrote:
+ > The current stable release of Wireshark is 1.10.3. It supersedes all previous
+ > releases. So let's upgrade to 1.10.3.
 
-> About adding a requirement to have a toolchain with thread support,is there
-> any chips/boards that can't have thread support in their toolchain ?
+ > Signed-off-by: Axel Lin <axel.lin@ingics.com>
 
-Huh? Having thread support or not is not related to the underlying
-hardware (i.e SoC or board). It's a software choice, at the C library
-configuration level. So there is absolutely no problem in requiring
-thread support for something relatively large such as EFL.
+Committed, thanks.
 
-> And as you said, I guess have EFL 1.7 and 1.8 for some time is a good idea.
-
-Why?
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
