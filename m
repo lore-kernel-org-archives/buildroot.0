@@ -1,38 +1,49 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 4 Dec 2013 23:52:27 +0100
-Subject: [Buildroot] genmanual: generates kconfiglib.pyc in Buildroot source
-	tree
-Message-ID: <20131204225227.GH3332@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 5 Dec 2013 00:05:40 +0100
+Subject: [Buildroot] [RFC] pkg-python infrastructure
+In-Reply-To: <OFCFB88498.0047424B-ON86257C0F.0057371F-86257C0F.0057386F@rockwellcollins.com>
+References: <OFCFB88498.0047424B-ON86257C0F.0057371F-86257C0F.0057386F@rockwellcollins.com>
+Message-ID: <20131205000540.5291300a@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Samuel, All,
+Hello all,
 
-When one runs 'make manual', python will create:
-    support/scripts/kconfiglib.pyc
-in the Buildroot source tree.
+On Fri, 25 Oct 2013 10:52:54 -0500, Ryan Barnett wrote:
 
-Python will happily run, even if it is not able to generate that file
-(eg. because the source tree is read-only).
+> A while back (about a week ago) - Gustavoz Zacarias, Thomas Petazzoni, and 
+> myself - were having a conversation on the IRC about creating a new 
+> package type for handling the builds of python packages. If I recall 
+> correctly, this is what we discussed. I would like to just have some 
+> record on how we want to handle building python packages.
+> 
+> Thomas P and Gustavoz - please correct/expand on any points that I may be 
+> missing.
 
-However, the file is not cleaned on 'make clean'. I'm a bit reluctant at
-adding it since it would try to remove a file outside of $(O), which
-could break parallel builds in multiple $(O) at the same time... Not
-sure what to do here.
+Following this discussion, I've started working on this. The current
+status of the work is available at:
 
-Since we do not really care about speed, would it be possible to tell
-python not to generate it at all?
+ http://git.free-electrons.com/users/thomas-petazzoni/buildroot/log/?h=python-pkg
 
-Regards,
-Yann E. MORIN.
+The most important commit is:
 
+ http://git.free-electrons.com/users/thomas-petazzoni/buildroot/commit/?h=python-pkg&id=5880956ce258b15887049ca5850007395cfd1857
+
+It works quite well with distutils, there are a some issues with
+setuptools packages: I'll probably need to distinguish them. There are
+also a few more Python packages that have not been converted.
+
+I've limited myself to support Python 2.x for the moment: the idea is
+that once all Python packages have been converted to the
+infrastructure, it will be easier to extend it to also cover Python 3.x.
+
+Best regards,
+
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
