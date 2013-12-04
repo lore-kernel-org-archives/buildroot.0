@@ -1,25 +1,32 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 04 Dec 2013 14:46:44 +0100
-Subject: [Buildroot] [PATCH] dropbear: bump to version 2013.62
-In-Reply-To: <1386163440-31382-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Wed, 4 Dec 2013 10:24:00 -0300")
-References: <1386163440-31382-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <8761r4loe3.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 4 Dec 2013 14:28:30 +0100
+Subject: [Buildroot] [git commit] iw: bump to version 3.13
+Message-ID: <20131204134701.F3B499BF13@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=3568f78f7e349a992db5fadc7284b8d9b46c1142
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Bump to version 2013.62 with ECC support.
- > Switch the initscript to on-demand key generation and add systemd unit
- > file.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/iw/iw.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
- > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/iw/iw.mk b/package/iw/iw.mk
+index c82e398..d392a77 100644
+--- a/package/iw/iw.mk
++++ b/package/iw/iw.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-IW_VERSION = 3.11
++IW_VERSION = 3.13
+ IW_SOURCE = iw-$(IW_VERSION).tar.xz
+ IW_SITE = $(BR2_KERNEL_MIRROR)/software/network/iw
+ IW_LICENSE = iw license
