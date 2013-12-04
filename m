@@ -1,70 +1,141 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue,  3 Dec 2013 21:40:47 -0300
-Subject: [Buildroot] [RFC PATCH 0/2] host-qemu-system
-Message-ID: <1386117649-7119-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Tue,  3 Dec 2013 21:40:48 -0300
+Subject: [Buildroot] [PATCH 1/2] qemu-system: new host package
+In-Reply-To: <1386117649-7119-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1386117649-7119-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1386117649-7119-2-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patchset provides a new host-qemu-system package intended to
-solve the problematic "which qemu version works with this config?" dilemma.
-
-Quick test would be a simple "make qemu_xxx_defconfig" with a "make
-qemu-system-run" - everything should be silk smooth for the user.
-
-TODO:
-* Update documentation/readme.txt files to reflect varying alternatives.
-  host-qemu-system is built with the basics provided by buildroot, hence only
-  the basic text & curses interfaces are guaranteed to work.
-  But if the host provides headers for SDL or other graphic toolkits these
-  can be detected and picked up by the build thus giving alternative rendering
-  methods for the user to use (to emulate a framebuffer for example).
-* Cleanup my hacky qemu autotesting script and submit it if there's interest.
-
-Gustavo Zacarias (2):
-  qemu-system: new host package
-  configs/qemu: update for host-qemu-system goodness
-
- board/qemu/arm-nuri/readme.txt             |  2 +-
- board/qemu/arm-versatile/readme.txt        |  2 +-
- board/qemu/arm-vexpress/readme.txt         |  2 +-
- board/qemu/microblazebe-mmu/readme.txt     |  2 +-
- board/qemu/microblazeel-mmu/readme.txt     |  2 +-
- board/qemu/mips-malta/readme.txt           |  2 +-
- board/qemu/mips64-malta/readme.txt         |  2 +-
- board/qemu/mips64el-malta/readme.txt       |  2 +-
- board/qemu/mipsel-malta/readme.txt         |  2 +-
- board/qemu/powerpc-g3beige/readme.txt      |  2 +-
- board/qemu/powerpc-mpc8544ds/readme.txt    |  2 +-
- board/qemu/powerpc-virtex-ml507/readme.txt |  2 +-
- board/qemu/sh4-r2d/readme.txt              |  2 +-
- board/qemu/sparc-ss10/readme.txt           |  2 +-
- board/qemu/x86/readme.txt                  |  2 +-
- board/qemu/x86_64/readme.txt               |  2 +-
- configs/qemu_arm_nuri_defconfig            |  4 ++
- configs/qemu_arm_versatile_defconfig       |  4 ++
- configs/qemu_arm_vexpress_defconfig        |  4 ++
- configs/qemu_microblazebe_mmu_defconfig    |  4 ++
- configs/qemu_microblazeel_mmu_defconfig    |  4 ++
- configs/qemu_mips64_malta_defconfig        |  4 ++
- configs/qemu_mips64el_malta_defconfig      |  4 ++
- configs/qemu_mips_malta_defconfig          |  4 ++
- configs/qemu_mipsel_malta_defconfig        |  4 ++
- configs/qemu_ppc_g3beige_defconfig         |  4 ++
- configs/qemu_ppc_mpc8544ds_defconfig       |  4 ++
- configs/qemu_ppc_virtex_ml507_defconfig    |  4 ++
- configs/qemu_sh4_r2d_defconfig             |  4 ++
- configs/qemu_sparc_ss10_defconfig          |  5 +++
- configs/qemu_x86_64_defconfig              |  4 ++
- configs/qemu_x86_defconfig                 |  4 ++
- package/Config.in.host                     |  1 +
- package/qemu-system/Config.in.host         | 30 ++++++++++++++
- package/qemu-system/qemu-system.mk         | 64 ++++++++++++++++++++++++++++++
- 35 files changed, 176 insertions(+), 16 deletions(-)
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/Config.in.host             |  1 +
+ package/qemu-system/Config.in.host | 30 ++++++++++++++++++
+ package/qemu-system/qemu-system.mk | 64 ++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 95 insertions(+)
  create mode 100644 package/qemu-system/Config.in.host
  create mode 100644 package/qemu-system/qemu-system.mk
 
+diff --git a/package/Config.in.host b/package/Config.in.host
+index 5fd2570..0f69402 100644
+--- a/package/Config.in.host
++++ b/package/Config.in.host
+@@ -10,6 +10,7 @@ source "package/lpc3250loader/Config.in.host"
+ source "package/mtools/Config.in.host"
+ source "package/omap-u-boot-utils/Config.in.host"
+ source "package/openocd/Config.in.host"
++source "package/qemu-system/Config.in.host"
+ source "package/sam-ba/Config.in.host"
+ source "package/sunxi-tools/Config.in.host"
+ source "package/uboot-tools/Config.in.host"
+diff --git a/package/qemu-system/Config.in.host b/package/qemu-system/Config.in.host
+new file mode 100644
+index 0000000..16d1a11
+--- /dev/null
++++ b/package/qemu-system/Config.in.host
+@@ -0,0 +1,30 @@
++config BR2_PACKAGE_HOST_QEMU_SYSTEM
++	bool "host qemu-system"
++	# Supported system target architectures
++	depends on BR2_arm || BR2_i386 || BR2_microblaze || BR2_mips \
++		|| BR2_mips64 || BR2_mips64el || BR2_mipsel || BR2_powerpc \
++		|| BR2_sh4 || BR2_sh4eb || BR2_sparc || BR2_x86_64
++	help
++	  QEMU is a generic and open source machine emulator and virtualizer.
++
++	  This option builds a system emulator for your selected architecture.
++
++	  http://www.qemu.org
++
++if BR2_PACKAGE_HOST_QEMU_SYSTEM
++
++config BR2_PACKAGE_HOST_QEMU_SYSTEM_VERSION
++	string "qemu version"
++	default "1.7.0"
++	help
++	  QEMU version to use.
++	  Sometimes the latest version is broken for some specific
++	  architecture or target machine.
++
++config BR2_PACKAGE_HOST_QEMU_SYSTEM_ARGS
++	string "qemu-system command arguments"
++	help
++	  Arguments to be used for your target host-qemu-system to run
++	  via "make qemu-system-run".
++
++endif
+diff --git a/package/qemu-system/qemu-system.mk b/package/qemu-system/qemu-system.mk
+new file mode 100644
+index 0000000..21f4213
+--- /dev/null
++++ b/package/qemu-system/qemu-system.mk
+@@ -0,0 +1,64 @@
++################################################################################
++#
++# qemu-system
++#
++################################################################################
++
++HOST_QEMU_SYSTEM_VERSION = $(call qstrip,$(BR2_PACKAGE_HOST_QEMU_SYSTEM_VERSION))
++HOST_QEMU_SYSTEM_SOURCE = qemu-$(HOST_QEMU_SYSTEM_VERSION).tar.bz2
++QEMU_SYSTEM_SITE = http://wiki.qemu-project.org/download
++QEMU_SYSTEM_LICENSE = GPLv2 LGPLv2.1 MIT BSD-3c BSD-2c Others/BSD-1c
++QEMU_SYSTEM_LICENSE_FILES = COPYING COPYING.LIB
++#?NOTE: there is no top-level license file for non-(L)GPL licenses;
++#       the non-(L)GPL license texts are specified in the affected
++#       individual source files.
++
++HOST_QEMU_SYSTEM_DEPENDENCIES = host-flex host-bison host-libglib2 \
++	host-pixman host-pkgconf host-zlib
++
++HOST_QEMU_SYSTEM_ARCH = $(ARCH)
++ifeq ($(HOST_QEMU_SYSTEM_ARCH),i486)
++	HOST_QEMU_SYSTEM_ARCH = i386
++endif
++ifeq ($(HOST_QEMU_SYSTEM_ARCH),i586)
++	HOST_QEMU_SYSTEM_ARCH = i386
++endif
++ifeq ($(HOST_QEMU_SYSTEM_ARCH),i686)
++	HOST_QEMU_SYSTEM_ARCH = i386
++endif
++ifeq ($(BR2_microblazeel),y)
++	HOST_QEMU_SYSTEM_ARCH = microblazeel
++endif
++ifeq ($(HOST_QEMU_SYSTEM_ARCH),powerpc)
++	HOST_QEMU_SYSTEM_ARCH = ppc
++endif
++HOST_QEMU_SYSTEM_TARGETS=$(HOST_QEMU_SYSTEM_ARCH)-softmmu
++
++define HOST_QEMU_SYSTEM_CONFIGURE_CMDS
++	(cd $(@D); $(HOST_CONFIGURE_OPTS) ./configure \
++		--target-list="$(HOST_QEMU_SYSTEM_TARGETS)" \
++		--prefix="$(HOST_DIR)/usr" \
++		--interp-prefix=$(STAGING_DIR) \
++		--cc="$(HOSTCC)" \
++		--host-cc="$(HOSTCC)" \
++		--extra-cflags="$(HOST_CFLAGS)" \
++		--extra-ldflags="$(HOST_LDFLAGS)" \
++		--with-system-pixman \
++	)
++endef
++
++define HOST_QEMU_SYSTEM_BUILD_CMDS
++	$(HOST_MAKE_ENV) $(MAKE) -C $(@D)
++endef
++
++define HOST_QEMU_SYSTEM_INSTALL_CMDS
++	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) install
++endef
++
++$(eval $(host-generic-package))
++
++# System emulation binary used here or somewhere else
++QEMU_SYSTEM = $(HOST_DIR)/usr/bin/qemu-system-$(HOST_QEMU_SYSTEM_ARCH)
++
++qemu-system-run: all
++	$(QEMU_SYSTEM) $(call qstrip,$(BR2_PACKAGE_HOST_QEMU_SYSTEM_ARGS))
 -- 
 1.8.3.2
