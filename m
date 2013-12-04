@@ -1,92 +1,54 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 5 Dec 2013 00:19:52 +0100
-Subject: [Buildroot] [PATCHv6 1/5] manual: fix manual generation in
- preparation for BR2_EXTERNAL support
-In-Reply-To: <1386198891-17968-2-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1386198891-17968-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1386198891-17968-2-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20131204231952.GI3332@free.fr>
+From: Thomas Pedersen <thomas@cozybit.com>
+Date: Wed,  4 Dec 2013 15:57:44 -0800
+Subject: [Buildroot] [PATCH] pandaboard: fix defonf build with recent kernels
+Message-ID: <1386201464-19380-1-git-send-email-thomas@cozybit.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, Samuel, All,
+The patch "pandaboard: Fix defconfig build" locked the
+default pandaboard kernel to 3.8.11. This is inconvenient,
+however, and we can make the default pandaboard kernel
+build and boot with a few changes:
 
-On 2013-12-05 00:14 +0100, Thomas Petazzoni spake thusly:
-> From: Samuel Martin <s.martin49@gmail.com>
-> 
-> This patch fixes an issue that occurs during the manual build process
-> which will occur when BR2_EXTERNAL is introduced.
-> 
-> During the package list generation, the python script using kconfiglib
-> module reads and parses the Config.in files. So, symbols, including
-> environment variables, got expanded and/or resolved.  In
-> kconfiglib.py, this patch fixes the regex that did not allow to use
-> numbers in the environment variable names, so '$BR2_EXTERNAL' got
-> wrongly expanded like it was '${BR}2_EXTERNAL':
-> 
-> <snip>
-> >>>   Updating the manual lists...
-> Traceback (most recent call last):
->   File "/opt/buildroot/master/support/scripts/gen-manual-lists.py", line 375, in <module>
->     buildroot = Buildroot()
->   File "/opt/buildroot/master/support/scripts/gen-manual-lists.py", line 216, in __init__
->     self.root_config))
->   File "/opt/buildroot/master/support/scripts/kconfiglib.py", line 214, in __init__
->     self.top_block = self._parse_file(filename, None, None, None)
->   File "/opt/src/buildroot/master/support/scripts/kconfiglib.py", line 919, in _parse_file
->     return self._parse_block(line_feeder, None, parent, deps, visible_if_deps, res)
->   File "/opt/buildroot/master/support/scripts/kconfiglib.py", line 1114, in _parse_block
->     self.base_dir))
-> IOError: /opt/buildroot/master/Config.in:490: sourced file "$BR2_EXTERNAL/Config.in" (expands to
-> "2_EXTERNAL/Config.in") not found. Perhaps base_dir
-> (argument to Config.__init__(), currently
-> "/opt/buildroot/master") is set to the wrong value.
-> docs/manual/manual.mk:2: recipe for target 'manual-update-lists' failed
-> make: *** [manual-update-lists] Error 1
-> </snip>
-> 
-> Reported-by: Ryan Barnett <rjbarnet@rockwellcollins.com>
-> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+1. specify the correct load address
+2. append the flattened device tree to the uImage
 
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Note the default device tree is now for the pandaboard-ES,
+so users of other board revisions will need to set the
+correct DTS_NAME.
 
-Regards,
-Yann E. MORIN.
+Signed-off-by: Thomas Pedersen <thomas@cozybit.com>
+---
+ configs/pandaboard_defconfig | 11 ++++++-----
+ 1 file changed, 6 insertions(+), 5 deletions(-)
 
-> ---
->  support/scripts/kconfiglib.py | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/support/scripts/kconfiglib.py b/support/scripts/kconfiglib.py
-> index 0704cc0..e40947c 100644
-> --- a/support/scripts/kconfiglib.py
-> +++ b/support/scripts/kconfiglib.py
-> @@ -2074,7 +2074,7 @@ set_re   = re.compile(r"CONFIG_(\w+)=(.*)")
->  unset_re = re.compile(r"# CONFIG_(\w+) is not set")
->  
->  # Regular expression for finding $-references to symbols in strings
-> -sym_ref_re = re.compile(r"\$[A-Za-z_]+")
-> +sym_ref_re = re.compile(r"\$[A-Za-z_][0-9A-Za-z_]*")
->  
->  # Integers representing symbol types
->  UNKNOWN, BOOL, TRISTATE, STRING, HEX, INT = range(0, 6)
-> -- 
-> 1.8.1.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/configs/pandaboard_defconfig b/configs/pandaboard_defconfig
+index 95cfdd6..341ce22 100644
+--- a/configs/pandaboard_defconfig
++++ b/configs/pandaboard_defconfig
+@@ -11,14 +11,15 @@ BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_DEVTMPFS=y
+ BR2_TARGET_ROOTFS_EXT2=y
+ # BR2_TARGET_ROOTFS_TAR is not set
+ 
+-# Lock to 3.8 headers to avoid breaking with newer kernels
+-BR2_KERNEL_HEADERS_3_8=y
+-
+ # Kernel
+ BR2_LINUX_KERNEL=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.8.11"
+ BR2_LINUX_KERNEL_DEFCONFIG="omap2plus"
++BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x80008000"
++BR2_LINUX_KERNEL_APPENDED_UIMAGE=y
++BR2_LINUX_KERNEL_APPENDED_DTB=y
++BR2_LINUX_KERNEL_USE_INTREE_DTS=y
++# might need omap4-panda or omap4-panda-a4 instead
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="omap4-panda-es"
+ 
+ # GCC
+ BR2_GCC_VERSION_4_6_X=y
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.8.4.3
