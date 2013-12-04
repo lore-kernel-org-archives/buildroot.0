@@ -1,49 +1,32 @@
-From: Sven Neumann <neumann@teufel.de>
-Date: Wed, 04 Dec 2013 10:44:45 +0100
-Subject: [Buildroot] [PATCH] flac: update to version 1.3.0
-In-Reply-To: <529E5DCA.7080105@zacarias.com.ar>
-References: <1386108662.6732.3.camel@bender.Speedport_W_724V_Typ_A_05011601_00_065>
- <529E5DCA.7080105@zacarias.com.ar>
-Message-ID: <1386150285.4433.2.camel@sven>
+From: yegorslists at googlemail.com <yegorslists@googlemail.com>
+Date: Wed,  4 Dec 2013 10:55:02 +0100
+Subject: [Buildroot] [PATCH v6 1/3] libqmi: bump to 1.6.0
+Message-ID: <1386150904-16813-1-git-send-email-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+From: Yegor Yefremov <yegorslists@googlemail.com>
 
-On Di, 2013-12-03 at 19:40 -0300, Gustavo Zacarias wrote:
-> On 12/03/2013 07:11 PM, Sven Neumann wrote:
-> 
-> > Remove flac-no-altivec.patch as it appears to have been
-> > merged upstream.
-> > 
-> > Signed-off-by: Sven Neumann <neumann@teufel.de>
-> 
-> Hold off this one a bit, IIRC it failed miserably to run on MIPS and/or PPC.
-> Let me retry and see before comitting it.
-> Regards.
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+---
+ package/libqmi/libqmi.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-Fine with me. I have only tested builds on two ARM platforms (XScale and
-Cortex-A8).
-
-
-Regards,
-Sven
-
+diff --git a/package/libqmi/libqmi.mk b/package/libqmi/libqmi.mk
+index 4f3f9a9..edd11f7 100644
+--- a/package/libqmi/libqmi.mk
++++ b/package/libqmi/libqmi.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBQMI_VERSION = 1.4.0
++LIBQMI_VERSION = 1.6.0
+ LIBQMI_SITE    = http://www.freedesktop.org/software/libqmi/
+ LIBQMI_SOURCE  = libqmi-$(LIBQMI_VERSION).tar.xz
+ LIBQMI_LICENSE = LGPLv2+ (library), GPLv2+ (programs)
 -- 
-Sven Neumann
-Senior System Architect
-
-Lautsprecher Teufel GmbH
-Gewerbehof B?lowbogen - Aufgang D1
-B?lowstr. 66 - 10783 Berlin - Germany
-
-Registernummer HRB 20271 beim Amtsgericht Berlin-Charlottenburg
-Gesch?ftsf?hrer: Edgar van Velzen
-
-Tel. +49 (0)30 - 300 930 - 0, Direkt -153
-neumann at teufel.de  
-
-www.teufel.de  www.teufelaudio.com  http://blog.teufel.de
+1.7.7
