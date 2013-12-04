@@ -1,9 +1,10 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue,  3 Dec 2013 21:40:48 -0300
-Subject: [Buildroot] [PATCH 1/2] qemu-system: new host package
+Date: Tue,  3 Dec 2013 21:40:49 -0300
+Subject: [Buildroot] [PATCH 2/2] configs/qemu: update for host-qemu-system
+	goodness
 In-Reply-To: <1386117649-7119-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1386117649-7119-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1386117649-7119-2-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1386117649-7119-3-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,130 +13,394 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/Config.in.host             |  1 +
- package/qemu-system/Config.in.host | 30 ++++++++++++++++++
- package/qemu-system/qemu-system.mk | 64 ++++++++++++++++++++++++++++++++++++++
- 3 files changed, 95 insertions(+)
- create mode 100644 package/qemu-system/Config.in.host
- create mode 100644 package/qemu-system/qemu-system.mk
+ board/qemu/arm-nuri/readme.txt             | 2 +-
+ board/qemu/arm-versatile/readme.txt        | 2 +-
+ board/qemu/arm-vexpress/readme.txt         | 2 +-
+ board/qemu/microblazebe-mmu/readme.txt     | 2 +-
+ board/qemu/microblazeel-mmu/readme.txt     | 2 +-
+ board/qemu/mips-malta/readme.txt           | 2 +-
+ board/qemu/mips64-malta/readme.txt         | 2 +-
+ board/qemu/mips64el-malta/readme.txt       | 2 +-
+ board/qemu/mipsel-malta/readme.txt         | 2 +-
+ board/qemu/powerpc-g3beige/readme.txt      | 2 +-
+ board/qemu/powerpc-mpc8544ds/readme.txt    | 2 +-
+ board/qemu/powerpc-virtex-ml507/readme.txt | 2 +-
+ board/qemu/sh4-r2d/readme.txt              | 2 +-
+ board/qemu/sparc-ss10/readme.txt           | 2 +-
+ board/qemu/x86/readme.txt                  | 2 +-
+ board/qemu/x86_64/readme.txt               | 2 +-
+ configs/qemu_arm_nuri_defconfig            | 4 ++++
+ configs/qemu_arm_versatile_defconfig       | 4 ++++
+ configs/qemu_arm_vexpress_defconfig        | 4 ++++
+ configs/qemu_microblazebe_mmu_defconfig    | 4 ++++
+ configs/qemu_microblazeel_mmu_defconfig    | 4 ++++
+ configs/qemu_mips64_malta_defconfig        | 4 ++++
+ configs/qemu_mips64el_malta_defconfig      | 4 ++++
+ configs/qemu_mips_malta_defconfig          | 4 ++++
+ configs/qemu_mipsel_malta_defconfig        | 4 ++++
+ configs/qemu_ppc_g3beige_defconfig         | 4 ++++
+ configs/qemu_ppc_mpc8544ds_defconfig       | 4 ++++
+ configs/qemu_ppc_virtex_ml507_defconfig    | 4 ++++
+ configs/qemu_sh4_r2d_defconfig             | 4 ++++
+ configs/qemu_sparc_ss10_defconfig          | 5 +++++
+ configs/qemu_x86_64_defconfig              | 4 ++++
+ configs/qemu_x86_defconfig                 | 4 ++++
+ 32 files changed, 81 insertions(+), 16 deletions(-)
 
-diff --git a/package/Config.in.host b/package/Config.in.host
-index 5fd2570..0f69402 100644
---- a/package/Config.in.host
-+++ b/package/Config.in.host
-@@ -10,6 +10,7 @@ source "package/lpc3250loader/Config.in.host"
- source "package/mtools/Config.in.host"
- source "package/omap-u-boot-utils/Config.in.host"
- source "package/openocd/Config.in.host"
-+source "package/qemu-system/Config.in.host"
- source "package/sam-ba/Config.in.host"
- source "package/sunxi-tools/Config.in.host"
- source "package/uboot-tools/Config.in.host"
-diff --git a/package/qemu-system/Config.in.host b/package/qemu-system/Config.in.host
-new file mode 100644
-index 0000000..16d1a11
---- /dev/null
-+++ b/package/qemu-system/Config.in.host
-@@ -0,0 +1,30 @@
-+config BR2_PACKAGE_HOST_QEMU_SYSTEM
-+	bool "host qemu-system"
-+	# Supported system target architectures
-+	depends on BR2_arm || BR2_i386 || BR2_microblaze || BR2_mips \
-+		|| BR2_mips64 || BR2_mips64el || BR2_mipsel || BR2_powerpc \
-+		|| BR2_sh4 || BR2_sh4eb || BR2_sparc || BR2_x86_64
-+	help
-+	  QEMU is a generic and open source machine emulator and virtualizer.
+diff --git a/board/qemu/arm-nuri/readme.txt b/board/qemu/arm-nuri/readme.txt
+index 6fdba81..0cf8d0b 100644
+--- a/board/qemu/arm-nuri/readme.txt
++++ b/board/qemu/arm-nuri/readme.txt
+@@ -7,4 +7,4 @@ graphical window is the framebuffer.
+ 
+ Startup time is slow because of the SMP CPU emulation so be patient.
+ 
+-Tested with QEMU 1.6.1
++Tested with QEMU 1.7.0
+diff --git a/board/qemu/arm-versatile/readme.txt b/board/qemu/arm-versatile/readme.txt
+index 7d0745f..2c02e26 100644
+--- a/board/qemu/arm-versatile/readme.txt
++++ b/board/qemu/arm-versatile/readme.txt
+@@ -5,4 +5,4 @@ Run the emulation with:
+ The login prompt will appear in the terminal that started Qemu. The
+ graphical window is the framebuffer.
+ 
+-Tested with QEMU 1.6.1
++Tested with QEMU 1.7.0
+diff --git a/board/qemu/arm-vexpress/readme.txt b/board/qemu/arm-vexpress/readme.txt
+index 9a4694d..50dd563 100644
+--- a/board/qemu/arm-vexpress/readme.txt
++++ b/board/qemu/arm-vexpress/readme.txt
+@@ -5,4 +5,4 @@ Run the emulation with:
+ The login prompt will appear in the terminal that started Qemu. The
+ graphical window is the framebuffer.
+ 
+-Tested with QEMU 1.6.1
++Tested with QEMU 1.7.0
+diff --git a/board/qemu/microblazebe-mmu/readme.txt b/board/qemu/microblazebe-mmu/readme.txt
+index 8ade434..3c7e10c 100644
+--- a/board/qemu/microblazebe-mmu/readme.txt
++++ b/board/qemu/microblazebe-mmu/readme.txt
+@@ -4,4 +4,4 @@ Run the emulation with:
+ 
+ The login prompt will appear in the terminal that started Qemu.
+ 
+-Tested with QEMU 1.6.1
++Tested with QEMU 1.7.0
+diff --git a/board/qemu/microblazeel-mmu/readme.txt b/board/qemu/microblazeel-mmu/readme.txt
+index 9ac55db..d402d13 100644
+--- a/board/qemu/microblazeel-mmu/readme.txt
++++ b/board/qemu/microblazeel-mmu/readme.txt
+@@ -4,4 +4,4 @@ Run the emulation with:
+ 
+ The login prompt will appear in the terminal that started Qemu.
+ 
+-Tested with QEMU 1.6.1
++Tested with QEMU 1.7.0
+diff --git a/board/qemu/mips-malta/readme.txt b/board/qemu/mips-malta/readme.txt
+index b367927..719a624 100644
+--- a/board/qemu/mips-malta/readme.txt
++++ b/board/qemu/mips-malta/readme.txt
+@@ -6,4 +6,4 @@ The login prompt will appear in the terminal that started Qemu. The
+ graphical window is the framebuffer. No keyboard support has been
+ enabled.
+ 
+-Tested with QEMU 1.6.1
++Tested with QEMU 1.7.0
+diff --git a/board/qemu/mips64-malta/readme.txt b/board/qemu/mips64-malta/readme.txt
+index 7999b78..3ce3c62 100644
+--- a/board/qemu/mips64-malta/readme.txt
++++ b/board/qemu/mips64-malta/readme.txt
+@@ -5,4 +5,4 @@ Run the emulation with:
+ The login prompt will appear in the terminal that started Qemu. The
+ graphical window is the framebuffer.
+ 
+-Tested with QEMU 1.6.1
++Tested with QEMU 1.7.0
+diff --git a/board/qemu/mips64el-malta/readme.txt b/board/qemu/mips64el-malta/readme.txt
+index dba33d3..48bae37 100644
+--- a/board/qemu/mips64el-malta/readme.txt
++++ b/board/qemu/mips64el-malta/readme.txt
+@@ -5,4 +5,4 @@ Run the emulation with:
+ The login prompt will appear in the terminal that started Qemu. The
+ graphical window is the framebuffer.
+ 
+-Tested with QEMU 1.6.1
++Tested with QEMU 1.7.0
+diff --git a/board/qemu/mipsel-malta/readme.txt b/board/qemu/mipsel-malta/readme.txt
+index b77cc84..dd290c4 100644
+--- a/board/qemu/mipsel-malta/readme.txt
++++ b/board/qemu/mipsel-malta/readme.txt
+@@ -6,4 +6,4 @@ The login prompt will appear in the terminal that started Qemu. The
+ graphical window is the framebuffer. No keyboard support has been
+ enabled.
+ 
+-Tested with QEMU 1.6.1
++Tested with QEMU 1.7.0
+diff --git a/board/qemu/powerpc-g3beige/readme.txt b/board/qemu/powerpc-g3beige/readme.txt
+index 07cb660..2711350 100644
+--- a/board/qemu/powerpc-g3beige/readme.txt
++++ b/board/qemu/powerpc-g3beige/readme.txt
+@@ -5,4 +5,4 @@ Run the emulation with:
+ The login prompt will appear in the terminal that started Qemu. The
+ graphical window is the framebuffer.
+ 
+-Tested with QEMU 1.6.1
++Tested with QEMU 1.7.0
+diff --git a/board/qemu/powerpc-mpc8544ds/readme.txt b/board/qemu/powerpc-mpc8544ds/readme.txt
+index cd56ddd..27b3bee 100644
+--- a/board/qemu/powerpc-mpc8544ds/readme.txt
++++ b/board/qemu/powerpc-mpc8544ds/readme.txt
+@@ -4,4 +4,4 @@ Run the emulation with:
+ 
+ The login prompt will appear in the terminal that started Qemu.
+ 
+-Tested with QEMU 1.6.1
++Tested with QEMU 1.7.0
+diff --git a/board/qemu/powerpc-virtex-ml507/readme.txt b/board/qemu/powerpc-virtex-ml507/readme.txt
+index a9a6378..0547987 100644
+--- a/board/qemu/powerpc-virtex-ml507/readme.txt
++++ b/board/qemu/powerpc-virtex-ml507/readme.txt
+@@ -5,4 +5,4 @@ Run the emulation with:
+ 
+ The login prompt will appear in the terminal that started Qemu.
+ 
+-Tested with QEMU 1.6.1
++Tested with QEMU 1.7.0
+diff --git a/board/qemu/sh4-r2d/readme.txt b/board/qemu/sh4-r2d/readme.txt
+index 2a963eb..73dce14 100644
+--- a/board/qemu/sh4-r2d/readme.txt
++++ b/board/qemu/sh4-r2d/readme.txt
+@@ -5,4 +5,4 @@ Run the emulation with:
+ The login prompt will appear in the terminal that started Qemu.
+ The graphical window is the framebuffer.
+ 
+-Tested with QEMU 1.6.1
++Tested with QEMU 1.7.0
+diff --git a/board/qemu/sparc-ss10/readme.txt b/board/qemu/sparc-ss10/readme.txt
+index 725ab30..a126a55 100644
+--- a/board/qemu/sparc-ss10/readme.txt
++++ b/board/qemu/sparc-ss10/readme.txt
+@@ -1,6 +1,6 @@
+ Run the emulation with:
+ 
+-  qemu-system-sparc -M SS-10 -kernel output/images/zImage -drive file=output/images/rootfs.ext2 -append "root=/dev/sda console=ttyS0,115200" -serial stdio -net nic,model=lance -net user
++  qemu-system-sparc -M SS-10 -kernel output/images/zImage -drive file=output/images/rootfs.ext2 -append "root=/dev/sda console=ttyS0,115200" -serial stdio -net nic,model=lance -net user -display none
+ 
+ The login prompt will appear in the terminal that started Qemu.
+ The graphical window is the framebuffer.
+diff --git a/board/qemu/x86/readme.txt b/board/qemu/x86/readme.txt
+index c07000c..c821255 100644
+--- a/board/qemu/x86/readme.txt
++++ b/board/qemu/x86/readme.txt
+@@ -4,4 +4,4 @@ Run the emulation with:
+ 
+ The login prompt will appear in the graphical window.
+ 
+-Tested with QEMU 1.6.1
++Tested with QEMU 1.7.0
+diff --git a/board/qemu/x86_64/readme.txt b/board/qemu/x86_64/readme.txt
+index 3c344f9..f350d36 100644
+--- a/board/qemu/x86_64/readme.txt
++++ b/board/qemu/x86_64/readme.txt
+@@ -4,4 +4,4 @@ Run the emulation with:
+ 
+ The login prompt will appear in the graphical window.
+ 
+-Tested with QEMU 1.6.1
++Tested with QEMU 1.7.0
+diff --git a/configs/qemu_arm_nuri_defconfig b/configs/qemu_arm_nuri_defconfig
+index 8cb1153..a8bacde 100644
+--- a/configs/qemu_arm_nuri_defconfig
++++ b/configs/qemu_arm_nuri_defconfig
+@@ -23,3 +23,7 @@ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.10.21"
+ BR2_LINUX_KERNEL_DEFCONFIG="exynos4"
+ BR2_LINUX_KERNEL_ZIMAGE=y
 +
-+	  This option builds a system emulator for your selected architecture.
++# Qemu-system
++BR2_PACKAGE_HOST_QEMU_SYSTEM=y
++BR2_PACKAGE_HOST_QEMU_SYSTEM_ARGS="-M nuri -kernel output/images/zImage -append 'console=ttySAC1,115200' -smp 2 -serial null -serial stdio -display none"
+diff --git a/configs/qemu_arm_versatile_defconfig b/configs/qemu_arm_versatile_defconfig
+index a26054d..956ba6d 100644
+--- a/configs/qemu_arm_versatile_defconfig
++++ b/configs/qemu_arm_versatile_defconfig
+@@ -21,3 +21,7 @@ BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.11.10"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/arm-versatile/linux-3.11.config"
+ BR2_LINUX_KERNEL_ZIMAGE=y
 +
-+	  http://www.qemu.org
++# Qemu-system
++BR2_PACKAGE_HOST_QEMU_SYSTEM=y
++BR2_PACKAGE_HOST_QEMU_SYSTEM_ARGS="-M versatilepb -kernel output/images/zImage -drive file=output/images/rootfs.ext2,if=scsi -append 'root=/dev/sda console=ttyAMA0,115200' -serial stdio -net nic,model=smc91c111 -net user -display none"
+diff --git a/configs/qemu_arm_vexpress_defconfig b/configs/qemu_arm_vexpress_defconfig
+index 4a4db1b..fc0c012 100644
+--- a/configs/qemu_arm_vexpress_defconfig
++++ b/configs/qemu_arm_vexpress_defconfig
+@@ -23,3 +23,7 @@ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.12.2"
+ BR2_LINUX_KERNEL_DEFCONFIG="vexpress"
+ BR2_LINUX_KERNEL_ZIMAGE=y
 +
-+if BR2_PACKAGE_HOST_QEMU_SYSTEM
++# Qemu
++BR2_PACKAGE_HOST_QEMU_SYSTEM=y
++BR2_PACKAGE_HOST_QEMU_SYSTEM_ARGS="-M vexpress-a9 -kernel output/images/zImage -drive file=output/images/rootfs.ext2,if=sd -append 'console=ttyAMA0,115200 root=/dev/mmcblk0' -serial stdio -net nic,model=lan9118 -net user -display none"
+diff --git a/configs/qemu_microblazebe_mmu_defconfig b/configs/qemu_microblazebe_mmu_defconfig
+index c090143..8fb6f54 100644
+--- a/configs/qemu_microblazebe_mmu_defconfig
++++ b/configs/qemu_microblazebe_mmu_defconfig
+@@ -25,3 +25,7 @@ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/microblazebe-mmu/linux-3.12.conf
+ BR2_LINUX_KERNEL_LINUX_BIN=y
+ BR2_LINUX_KERNEL_USE_CUSTOM_DTS=y
+ BR2_LINUX_KERNEL_CUSTOM_DTS_PATH="board/qemu/microblazebe-mmu/system.dts"
 +
-+config BR2_PACKAGE_HOST_QEMU_SYSTEM_VERSION
-+	string "qemu version"
-+	default "1.7.0"
-+	help
-+	  QEMU version to use.
-+	  Sometimes the latest version is broken for some specific
-+	  architecture or target machine.
++# Qemu
++BR2_PACKAGE_HOST_QEMU_SYSTEM=y
++BR2_PACKAGE_HOST_QEMU_SYSTEM_ARGS="-M petalogix-s3adsp1800 -kernel output/images/linux.bin -serial stdio -display none"
+diff --git a/configs/qemu_microblazeel_mmu_defconfig b/configs/qemu_microblazeel_mmu_defconfig
+index 7538d3f..ccf776f 100644
+--- a/configs/qemu_microblazeel_mmu_defconfig
++++ b/configs/qemu_microblazeel_mmu_defconfig
+@@ -25,3 +25,7 @@ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/microblazeel-mmu/linux-3.12.conf
+ BR2_LINUX_KERNEL_LINUX_BIN=y
+ BR2_LINUX_KERNEL_USE_CUSTOM_DTS=y
+ BR2_LINUX_KERNEL_CUSTOM_DTS_PATH="board/qemu/microblazeel-mmu/system.dts"
 +
-+config BR2_PACKAGE_HOST_QEMU_SYSTEM_ARGS
-+	string "qemu-system command arguments"
-+	help
-+	  Arguments to be used for your target host-qemu-system to run
-+	  via "make qemu-system-run".
++# Qemu
++BR2_PACKAGE_HOST_QEMU_SYSTEM=y
++BR2_PACKAGE_HOST_QEMU_SYSTEM_ARGS="-M petalogix-s3adsp1800 -kernel output/images/linux.bin -serial stdio -display none"
+diff --git a/configs/qemu_mips64_malta_defconfig b/configs/qemu_mips64_malta_defconfig
+index 2461325..4e840ab 100644
+--- a/configs/qemu_mips64_malta_defconfig
++++ b/configs/qemu_mips64_malta_defconfig
+@@ -21,3 +21,7 @@ BR2_LINUX_KERNEL_VMLINUX=y
+ # Serial port config
+ BR2_TARGET_GENERIC_GETTY=y
+ BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
 +
-+endif
-diff --git a/package/qemu-system/qemu-system.mk b/package/qemu-system/qemu-system.mk
-new file mode 100644
-index 0000000..21f4213
---- /dev/null
-+++ b/package/qemu-system/qemu-system.mk
-@@ -0,0 +1,64 @@
-+################################################################################
-+#
-+# qemu-system
-+#
-+################################################################################
++# Qemu
++BR2_PACKAGE_HOST_QEMU_SYSTEM=y
++BR2_PACKAGE_HOST_QEMU_SYSTEM_ARGS="-M malta -kernel output/images/vmlinux -serial stdio -hda output/images/rootfs.ext2 -append 'root=/dev/hda' -display none"
+diff --git a/configs/qemu_mips64el_malta_defconfig b/configs/qemu_mips64el_malta_defconfig
+index 0d780f4..317aec7 100644
+--- a/configs/qemu_mips64el_malta_defconfig
++++ b/configs/qemu_mips64el_malta_defconfig
+@@ -24,3 +24,7 @@ BR2_LINUX_KERNEL_VMLINUX=y
+ # Serial port config
+ BR2_TARGET_GENERIC_GETTY=y
+ BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
 +
-+HOST_QEMU_SYSTEM_VERSION = $(call qstrip,$(BR2_PACKAGE_HOST_QEMU_SYSTEM_VERSION))
-+HOST_QEMU_SYSTEM_SOURCE = qemu-$(HOST_QEMU_SYSTEM_VERSION).tar.bz2
-+QEMU_SYSTEM_SITE = http://wiki.qemu-project.org/download
-+QEMU_SYSTEM_LICENSE = GPLv2 LGPLv2.1 MIT BSD-3c BSD-2c Others/BSD-1c
-+QEMU_SYSTEM_LICENSE_FILES = COPYING COPYING.LIB
-+#?NOTE: there is no top-level license file for non-(L)GPL licenses;
-+#       the non-(L)GPL license texts are specified in the affected
-+#       individual source files.
++# Qemu
++BR2_PACKAGE_HOST_QEMU_SYSTEM=y
++BR2_PACKAGE_HOST_QEMU_SYSTEM_ARGS="-M malta -kernel output/images/vmlinux -serial stdio -hda output/images/rootfs.ext2 -append 'root=/dev/hda' -display none"
+diff --git a/configs/qemu_mips_malta_defconfig b/configs/qemu_mips_malta_defconfig
+index bc1edd6..62160d4 100644
+--- a/configs/qemu_mips_malta_defconfig
++++ b/configs/qemu_mips_malta_defconfig
+@@ -21,3 +21,7 @@ BR2_LINUX_KERNEL_VMLINUX=y
+ # Serial port config
+ BR2_TARGET_GENERIC_GETTY=y
+ BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
 +
-+HOST_QEMU_SYSTEM_DEPENDENCIES = host-flex host-bison host-libglib2 \
-+	host-pixman host-pkgconf host-zlib
++# Qemu
++BR2_PACKAGE_HOST_QEMU_SYSTEM=y
++BR2_PACKAGE_HOST_QEMU_SYSTEM_ARGS="-M malta -kernel output/images/vmlinux -serial stdio -hda output/images/rootfs.ext2 -append 'root=/dev/hda' -net nic,model=pcnet -net user -display none"
+diff --git a/configs/qemu_mipsel_malta_defconfig b/configs/qemu_mipsel_malta_defconfig
+index c654351..5bb4d15 100644
+--- a/configs/qemu_mipsel_malta_defconfig
++++ b/configs/qemu_mipsel_malta_defconfig
+@@ -21,3 +21,7 @@ BR2_LINUX_KERNEL_VMLINUX=y
+ # Serial port config
+ BR2_TARGET_GENERIC_GETTY=y
+ BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
 +
-+HOST_QEMU_SYSTEM_ARCH = $(ARCH)
-+ifeq ($(HOST_QEMU_SYSTEM_ARCH),i486)
-+	HOST_QEMU_SYSTEM_ARCH = i386
-+endif
-+ifeq ($(HOST_QEMU_SYSTEM_ARCH),i586)
-+	HOST_QEMU_SYSTEM_ARCH = i386
-+endif
-+ifeq ($(HOST_QEMU_SYSTEM_ARCH),i686)
-+	HOST_QEMU_SYSTEM_ARCH = i386
-+endif
-+ifeq ($(BR2_microblazeel),y)
-+	HOST_QEMU_SYSTEM_ARCH = microblazeel
-+endif
-+ifeq ($(HOST_QEMU_SYSTEM_ARCH),powerpc)
-+	HOST_QEMU_SYSTEM_ARCH = ppc
-+endif
-+HOST_QEMU_SYSTEM_TARGETS=$(HOST_QEMU_SYSTEM_ARCH)-softmmu
++# Qemu
++BR2_PACKAGE_HOST_QEMU_SYSTEM=y
++BR2_PACKAGE_HOST_QEMU_SYSTEM_ARGS="-M malta -kernel output/images/vmlinux -serial stdio -hda output/images/rootfs.ext2 -append 'root=/dev/hda' -net nic,model=pcnet -net user -display none"
+diff --git a/configs/qemu_ppc_g3beige_defconfig b/configs/qemu_ppc_g3beige_defconfig
+index a6ced5e..15a624f 100644
+--- a/configs/qemu_ppc_g3beige_defconfig
++++ b/configs/qemu_ppc_g3beige_defconfig
+@@ -21,3 +21,7 @@ BR2_LINUX_KERNEL_VMLINUX=y
+ # Serial port config
+ BR2_TARGET_GENERIC_GETTY=y
+ BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
 +
-+define HOST_QEMU_SYSTEM_CONFIGURE_CMDS
-+	(cd $(@D); $(HOST_CONFIGURE_OPTS) ./configure \
-+		--target-list="$(HOST_QEMU_SYSTEM_TARGETS)" \
-+		--prefix="$(HOST_DIR)/usr" \
-+		--interp-prefix=$(STAGING_DIR) \
-+		--cc="$(HOSTCC)" \
-+		--host-cc="$(HOSTCC)" \
-+		--extra-cflags="$(HOST_CFLAGS)" \
-+		--extra-ldflags="$(HOST_LDFLAGS)" \
-+		--with-system-pixman \
-+	)
-+endef
++# Qemu
++BR2_PACKAGE_HOST_QEMU_SYSTEM=y
++BR2_PACKAGE_HOST_QEMU_SYSTEM_ARGS="-M g3beige -kernel output/images/vmlinux -hda output/images/rootfs.ext2 -append 'console=ttyS0 root=/dev/hda' -serial stdio -net nic,model=rtl8139 -net user -display none"
+diff --git a/configs/qemu_ppc_mpc8544ds_defconfig b/configs/qemu_ppc_mpc8544ds_defconfig
+index 745a3ca..812b589 100644
+--- a/configs/qemu_ppc_mpc8544ds_defconfig
++++ b/configs/qemu_ppc_mpc8544ds_defconfig
+@@ -20,3 +20,7 @@ BR2_LINUX_KERNEL_VMLINUX=y
+ # Serial port config
+ BR2_TARGET_GENERIC_GETTY=y
+ BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
 +
-+define HOST_QEMU_SYSTEM_BUILD_CMDS
-+	$(HOST_MAKE_ENV) $(MAKE) -C $(@D)
-+endef
++# Qemu
++BR2_PACKAGE_HOST_QEMU_SYSTEM=y
++BR2_PACKAGE_HOST_QEMU_SYSTEM_ARGS="-M mpc8544ds -kernel output/images/vmlinux -serial stdio -net nic,model=e1000 -net user -display none"
+diff --git a/configs/qemu_ppc_virtex_ml507_defconfig b/configs/qemu_ppc_virtex_ml507_defconfig
+index f79feb5..3787dd6 100644
+--- a/configs/qemu_ppc_virtex_ml507_defconfig
++++ b/configs/qemu_ppc_virtex_ml507_defconfig
+@@ -21,3 +21,7 @@ BR2_LINUX_KERNEL_DEFCONFIG="44x/virtex5"
+ BR2_LINUX_KERNEL_VMLINUX=y
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="virtex440-ml507"
 +
-+define HOST_QEMU_SYSTEM_INSTALL_CMDS
-+	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) install
-+endef
++# Qemu
++BR2_PACKAGE_HOST_QEMU_SYSTEM=y
++BR2_PACKAGE_HOST_QEMU_SYSTEM_ARGS="-M virtex-ml507 -kernel output/images/vmlinux -m 256 -append 'console=ttyS0' -display none"
+diff --git a/configs/qemu_sh4_r2d_defconfig b/configs/qemu_sh4_r2d_defconfig
+index bcd50dd..17f9b17 100644
+--- a/configs/qemu_sh4_r2d_defconfig
++++ b/configs/qemu_sh4_r2d_defconfig
+@@ -25,3 +25,7 @@ BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.2.53"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/sh4-r2d/linux-3.2.config"
+ BR2_LINUX_KERNEL_ZIMAGE=y
 +
-+$(eval $(host-generic-package))
++# Qemu
++BR2_PACKAGE_HOST_QEMU_SYSTEM=y
++BR2_PACKAGE_HOST_QEMU_SYSTEM_ARGS="-M r2d -kernel output/images/zImage -drive file=output/images/rootfs.ext2,if=ide -append 'root=/dev/sda console=ttySC1,115200 noiotrap' -serial null -serial stdio -net nic,model=rtl8139 -net user -display none"
+diff --git a/configs/qemu_sparc_ss10_defconfig b/configs/qemu_sparc_ss10_defconfig
+index 82f5485..3c6aab7 100644
+--- a/configs/qemu_sparc_ss10_defconfig
++++ b/configs/qemu_sparc_ss10_defconfig
+@@ -16,3 +16,8 @@ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.12.2"
+ BR2_LINUX_KERNEL_DEFCONFIG="sparc32"
+ BR2_LINUX_KERNEL_ZIMAGE=y
 +
-+# System emulation binary used here or somewhere else
-+QEMU_SYSTEM = $(HOST_DIR)/usr/bin/qemu-system-$(HOST_QEMU_SYSTEM_ARCH)
++# Qemu
++BR2_PACKAGE_HOST_QEMU_SYSTEM=y
++BR2_PACKAGE_HOST_QEMU_SYSTEM_VERSION="1.6.1"
++BR2_PACKAGE_HOST_QEMU_SYSTEM_ARGS="-M SS-10 -kernel output/images/zImage -drive file=output/images/rootfs.ext2 -append 'root=/dev/sda console=ttyS0,115200' -serial stdio -net nic,model=lance -net user -display none"
+diff --git a/configs/qemu_x86_64_defconfig b/configs/qemu_x86_64_defconfig
+index 811f968..96afc7d 100644
+--- a/configs/qemu_x86_64_defconfig
++++ b/configs/qemu_x86_64_defconfig
+@@ -19,3 +19,7 @@ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.12.2"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/x86_64/linux-3.12.config"
 +
-+qemu-system-run: all
-+	$(QEMU_SYSTEM) $(call qstrip,$(BR2_PACKAGE_HOST_QEMU_SYSTEM_ARGS))
++# Qemu
++BR2_PACKAGE_HOST_QEMU_SYSTEM=y
++BR2_PACKAGE_HOST_QEMU_SYSTEM_ARGS="-M pc -kernel output/images/bzImage -drive file=output/images/rootfs.ext2,if=ide -append 'root=/dev/sda' -net nic,model=rtl8139 -net user -display curses"
+diff --git a/configs/qemu_x86_defconfig b/configs/qemu_x86_defconfig
+index d642c45..7e5410d 100644
+--- a/configs/qemu_x86_defconfig
++++ b/configs/qemu_x86_defconfig
+@@ -20,3 +20,7 @@ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.12.2"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/x86/linux-3.12.config"
++
++# Qemu
++BR2_PACKAGE_HOST_QEMU_SYSTEM=y
++BR2_PACKAGE_HOST_QEMU_SYSTEM_ARGS="-M pc -kernel output/images/bzImage -drive file=output/images/rootfs.ext2,if=ide -append 'root=/dev/sda' -net nic,model=rtl8139 -net user -display curses"
 -- 
 1.8.3.2
