@@ -1,49 +1,41 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed,  4 Dec 2013 20:32:35 +0000 (UTC)
-Subject: [Buildroot] [Bug 6722] New: Usage of $($(PKG)_DIR_PREFIX) is an
- issue with linux package
-Message-ID: <bug-6722-163@https.bugs.busybox.net/>
+Date: Wed,  4 Dec 2013 20:40:06 +0000 (UTC)
+Subject: [Buildroot] [Bug 5390] System banner - change to empty doesn't
+	remove /etc/issue
+In-Reply-To: <bug-5390-163@https.bugs.busybox.net/>
+References: <bug-5390-163@https.bugs.busybox.net/>
+Message-ID: <20131204204006.269CA9BF0E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=6722
+https://bugs.busybox.net/show_bug.cgi?id=5390
 
-           Summary: Usage of $($(PKG)_DIR_PREFIX) is an issue with linux
-                    package
-           Product: buildroot
-           Version: unspecified
-          Platform: PC
-        OS/Version: Linux
-            Status: NEW
-          Severity: minor
-          Priority: P5
-         Component: Other
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: rjbarnet at rockwellcollins.com
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
 
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|                            |WONTFIX
 
-The usage of the following:
+--- Comment #1 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> 2013-12-04 20:40:05 UTC ---
+This is "expected": Buildroot doesn't track the configuration changes that are
+made to update the root filesystem after just a "make" invocation. For example,
+if you remove a package from your configuration, and then run "make", then the
+files installed by this package in the previous build are not going to be
+removed from the root filesystem.
 
-$($(PKG)_DIR_PREFIX)/$(RAWNAME)
+It's the same for this /etc/issue thing. If the BR2_TARGET_GENERIC_ISSUE option
+is empty at the first build, then no /etc/issue file gets created.
 
-in package/pkg-generic could cause a potential issue with the linux package if
-there were patches to ever be placed there. This is highly unlikely for the
-linux package itself but if there was to be another package added to the top
-level of BR and packages be applied, this could be an issue.
+Otherwise, if you change BR2_TARGET_GENERIC_ISSUE after the first build, then
+the file will remain as it was before, until you do a "make clean all" cycle.
 
-From build git source version 931b73e5eae4a3ba6b2e37db526fd7243a139e64, the
-following are where $($(PKG)_DIR_PREFIX) is used.
-
-$ grep -r \$\(\$\(PKG\)_DIR_PREFIX\) .
-./package/dhrystone/dhrystone.mk:13
-./package/pkg-generic.mk:92
-
-I don't really know how to best fix this issue so this is more of an FYI.
+Even though fixing this would not be very difficult, I don't think we really
+want to do it, since we anyway don't do it for the vast majority of other
+Buildroot configuration options.
 
 -- 
 Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
