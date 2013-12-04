@@ -1,29 +1,31 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed,  4 Dec 2013 20:40:44 +0000 (UTC)
-Subject: [Buildroot] [Bug 5024] grub fails to build for x86_64 target
-	architecture
-In-Reply-To: <bug-5024-163@https.bugs.busybox.net/>
-References: <bug-5024-163@https.bugs.busybox.net/>
-Message-ID: <20131204204045.16CDB9BF0E@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 4 Dec 2013 21:45:04 +0100
+Subject: [Buildroot] [PATCH 1/2] python-pygame: rename package's
+ Config.in bool
+In-Reply-To: <1381165041-9024-1-git-send-email-rjbarnet@rockwellcollins.com>
+References: <1381165041-9024-1-git-send-email-rjbarnet@rockwellcollins.com>
+Message-ID: <20131204214504.72430e0b@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=5024
+Dear Ryan Barnett,
 
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
+On Mon, 7 Oct 2013 11:57:20 -0500, Ryan Barnett wrote:
+> Signed-off-by: Ryan Barnett <rjbarnet@rockwellcollins.com>
+> 
+> ---
+> Trivial Fix:
+> This makes the naming of the package in the menuconfig consistent with
+> the naming of the package's directory and make rules.
+> ---
+>  package/python-pygame/Config.in |    2 +-
+>  1 files changed, 1 insertions(+), 1 deletions(-)
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|                            |FIXED
-
---- Comment #2 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> 2013-12-04 20:40:44 UTC ---
-The patch series has been committed now.
-
+Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
