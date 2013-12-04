@@ -1,34 +1,23 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 4 Dec 2013 21:45:29 +0100
-Subject: [Buildroot] [PATCH 2/2] python-pyparsing: rename package's
- Config.in bool
-In-Reply-To: <1381165041-9024-2-git-send-email-rjbarnet@rockwellcollins.com>
-References: <1381165041-9024-1-git-send-email-rjbarnet@rockwellcollins.com>
- <1381165041-9024-2-git-send-email-rjbarnet@rockwellcollins.com>
-Message-ID: <20131204214529.05b9a955@skate>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed,  4 Dec 2013 20:55:06 +0000 (UTC)
+Subject: [Buildroot] [Bug 6722] Usage of $($(PKG)_DIR_PREFIX) is an issue
+ with linux package
+In-Reply-To: <bug-6722-163@https.bugs.busybox.net/>
+References: <bug-6722-163@https.bugs.busybox.net/>
+Message-ID: <20131204205506.5C8759BF0E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Ryan Barnett,
+https://bugs.busybox.net/show_bug.cgi?id=6722
 
-On Mon, 7 Oct 2013 11:57:21 -0500, Ryan Barnett wrote:
-> Also remove unnecessary tab/spaces on blank line.
-> 
-> Signed-off-by: Ryan Barnett <rjbarnet@rockwellcollins.com>
-> 
-> --
-> Trivial Fix:
-> This makes the naming of the package in the menuconfig consistent with
-> the naming of the package's directory and make rules.
-> ---
->  package/python-pyparsing/Config.in |    4 ++--
->  1 files changed, 2 insertions(+), 2 deletions(-)
+--- Comment #1 from Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> 2013-12-04 20:55:06 UTC ---
+I  have a patch series in the queue (new version to be sent) that should
+address this issue...
 
-Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
