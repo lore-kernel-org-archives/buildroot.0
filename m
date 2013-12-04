@@ -1,23 +1,28 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed,  4 Dec 2013 20:55:06 +0000 (UTC)
-Subject: [Buildroot] [Bug 6722] Usage of $($(PKG)_DIR_PREFIX) is an issue
- with linux package
-In-Reply-To: <bug-6722-163@https.bugs.busybox.net/>
-References: <bug-6722-163@https.bugs.busybox.net/>
-Message-ID: <20131204205506.5C8759BF0E@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 04 Dec 2013 22:03:29 +0100
+Subject: [Buildroot] [PATCH] wireshark: fix wrong CFLAGS_FOR_BUILD
+	assumption
+In-Reply-To: <1386178647-26959-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Wed, 4 Dec 2013 14:37:27 -0300")
+References: <1386178647-26959-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87wqjkjplq.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=6722
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
---- Comment #1 from Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> 2013-12-04 20:55:06 UTC ---
-I  have a patch series in the queue (new version to be sent) that should
-address this issue...
+ > Tested valid CFLAGS can't be pushed into CFLAGS_FOR_BUILD, they're
+ > different compilers.
+
+ > Fixes:
+ > http://autobuild.buildroot.net/results/2b1/2b1a0654b649618422d65edf370b82476ba84491/
+
+ > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+
+Committed, thanks.
 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Bye, Peter Korsgaard
