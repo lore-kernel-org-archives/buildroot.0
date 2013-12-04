@@ -1,46 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 4 Dec 2013 10:27:53 +0100
+Date: Wed, 4 Dec 2013 10:28:47 +0100
 Subject: [Buildroot] [buildroot] libevas build failure analysis
-In-Reply-To: <CAKAx1ciXsAPtG-uegQC5CPO8yJFPG4gn7CvuzVZ2JQh_T0FrAA@mail.gmail.com>
+In-Reply-To: <CACjG4BJvjp0HpOn+FvKYQt6WYNZG-uYaVth16oCfPL_ynk9k9g@mail.gmail.com>
 References: <CACjG4B+qJvuzX=dZz5F7jNyc_m796_j2m9NZ91fpsoy52SX8VQ@mail.gmail.com>
  <CAKAx1cgki9JiRqU=zJJ0P8g5XpG7NEZN9WcBuYMa4mNyv2C-RA@mail.gmail.com>
  <CACjG4B+AJ0F4BmrSVrfzMidVgUFGwWt7sBoxUD3QZyp0x6+EAw@mail.gmail.com>
  <CACjG4BLqXqufuzSHYWghXcZuWMpBPjbFUU7xGzLhSjQQrghK8A@mail.gmail.com>
  <CAKAx1ciXsAPtG-uegQC5CPO8yJFPG4gn7CvuzVZ2JQh_T0FrAA@mail.gmail.com>
-Message-ID: <20131204102753.419a9057@skate>
+ <CACjG4BJvjp0HpOn+FvKYQt6WYNZG-uYaVth16oCfPL_ynk9k9g@mail.gmail.com>
+Message-ID: <20131204102847.5b91870e@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Lionel Orry,
+Arnaud,
 
-On Tue, 3 Dec 2013 09:45:15 +0100, Lionel Orry wrote:
+On Tue, 3 Dec 2013 10:13:52 +0100, arnaud aujon wrote:
 
-> They just released the 1.8 version, I think it's time to think about
-> the bump, but there are some quite fundamental changes between 1.7 and
-> 1.8 (most noticeable one is the merged tree instead of separate source
-> code for core libraries), and the bump is probably not that easy at
-> first, and then, I also suppose there are some applications that may
-> still need 1.7 among buildroot users.
+> About adding a requirement to have a toolchain with thread support,is there
+> any chips/boards that can't have thread support in their toolchain ?
 
-Are you sure 1.8 breaks the compatibility with 1.7 ? I don't think so.
-It's not because in terms of source code everything is now inside a
-single tarball that the compatibility for applications has been broken.
+Huh? Having thread support or not is not related to the underlying
+hardware (i.e SoC or board). It's a software choice, at the C library
+configuration level. So there is absolutely no problem in requiring
+thread support for something relatively large such as EFL.
 
-> I would then suggest to have EFL 1.7 and EFL 1.8 in parallel for some
-> time. Maybe we should create efl18 package.
+> And as you said, I guess have EFL 1.7 and 1.8 for some time is a good idea.
 
-Before doing that, I'd like to understand how/why EFL 1.8 is
-incompatible with EFL 1.7.
-
-> As for EFL 1.7, maybe the easiest to do is require a toolchain with
-> threads support.
-
-I agree.
-
-Best regards,
+Why?
 
 Thomas
 -- 
