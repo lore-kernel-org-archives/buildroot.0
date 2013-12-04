@@ -1,68 +1,108 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 4 Dec 2013 09:52:55 +0100
-Subject: [Buildroot] [git commit] libpfm4: needs thread support
-Message-ID: <20131204093549.892429BF07@busybox.osuosl.org>
+Date: Wed, 4 Dec 2013 10:13:28 +0100
+Subject: [Buildroot] [git commit] package/tvheadend: unbreak
+Message-ID: <20131204093549.90C749BF0A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=09100a37507d2534503c0a1ac3857fc4571304e5
+commit: http://git.buildroot.net/buildroot/commit/?id=50a8ff5c5bc3586b3ec23a070b036bbd00a7f54a
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+tvheadend tries to impersonate an autotools package, when it is not.
+This breaks the build.
+
+tvheadend's ./configure tries to run compiled code.
+This breaks the build.
+
+Switch tvheadend over to using the generic-package infrastructure,
+and provide carefully-crafted _CMDS for each steps.
+
+We still keep a post-install hook to install our "DB" since it is not
+part of tvheadend, but an addition of our own packaging of tvheadend.
+
 Fixes:
+    http://autobuild.buildroot.net/results/3ea/3eaa17b94975477263fe12e201eec9cbeeb2912c/
+    http://autobuild.buildroot.net/results/7c8/7c85db0dfab98808c97a5ef17dec9d1071dc0d49/
+and a few others as well.
 
-  http://autobuild.buildroot.net/results/73d736dd3c8a70358ef4b19a63dda46178cf8bf1/
-
-Note that the propagation of the thread dependency to the oprofile
-package is a little bit non standard, because oprofile selects libpfm4
-only on the PowerPC architecture. So we ensure the thread dependency
-is only enforced on PowerPC, and a separate comment is displayed when
-thread support is not available, but the PowerPC architecture is used.
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+[Peter: tweak 004-dont-run-compiled-code.patch description as pointed out by Thomas]
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libpfm4/Config.in  |    4 ++++
- package/oprofile/Config.in |    6 ++++++
- 2 files changed, 10 insertions(+), 0 deletions(-)
+ .../tvheadend-004-dont-run-compiled-code.patch     |   21 +++++++++++++++
+ package/tvheadend/tvheadend.mk                     |   27 +++++++++++++++++---
+ 2 files changed, 44 insertions(+), 4 deletions(-)
 
-diff --git a/package/libpfm4/Config.in b/package/libpfm4/Config.in
-index 3908e78..1c2fbdc 100644
---- a/package/libpfm4/Config.in
-+++ b/package/libpfm4/Config.in
-@@ -1,8 +1,12 @@
- config BR2_PACKAGE_LIBPFM4
- 	bool "libpfm4"
- 	depends on !BR2_avr32 # no perf_event_open
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	help
- 	  A helper library to help encode Performance Events to use with
- 	  Operating system kernels performance monitoring interfaces.
+diff --git a/package/tvheadend/tvheadend-004-dont-run-compiled-code.patch b/package/tvheadend/tvheadend-004-dont-run-compiled-code.patch
+new file mode 100644
+index 0000000..f559583
+--- /dev/null
++++ b/package/tvheadend/tvheadend-004-dont-run-compiled-code.patch
+@@ -0,0 +1,21 @@
++support: don't try to run compiled code
++
++When cross-compiling, we can't run the compiled code.
++
++Consider the compiler returning succes as an indication
++it is working.
++
++Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
++
++diff -durN tvheadend.orig/support/configure.inc tvheadend-c7d0335eb10d02b780423bef8e7c740e422fff13/support/configure.inc
++--- tvheadend.orig/support/configure.inc	2013-12-01 01:24:26.000000000 +0100
+++++ tvheadend-c7d0335eb10d02b780423bef8e7c740e422fff13/support/configure.inc	2013-12-03 22:34:57.547762178 +0100
++@@ -265,8 +265,6 @@
++ EOF
++   $CC $CFLAGS $LDFLAGS $TMPDIR/$$.c -o $TMPDIR/$$.bin $opt #&> /dev/null
++   RET=$?
++-  [ $RET -eq 0 ] && $TMPDIR/$$.bin
++-  RET=$?
++   rm -f $TMPDIR/$$.{c,bin}
++   return $RET
++ }
+diff --git a/package/tvheadend/tvheadend.mk b/package/tvheadend/tvheadend.mk
+index 1713d58..43bc382 100644
+--- a/package/tvheadend/tvheadend.mk
++++ b/package/tvheadend/tvheadend.mk
+@@ -22,6 +22,28 @@ endif
+ # scan files installed by the dvb-apps package
+ TVHEADEND_DEPENDENCIES     += dvb-apps
  
- 	  http://perfmon2.sourceforge.net/
++define TVHEADEND_CONFIGURE_CMDS
++	(cd $(@D);				\
++	 $(TARGET_CONFIGURE_OPTS)		\
++	 $(TARGET_CONFIGURE_ARGS)		\
++	 ./configure				\
++	 --prefix=/usr				\
++	 --cc="$(TARGET_CC)"			\
++	 --cflags="$(TARGET_CFLAGS)"		\
++	 --arch="$(ARCH)"			\
++	 --cpu="$(BR2_GCC_TARGET_CPU)"		\
++	 --python="$(HOST_DIR)/usr/bin/python"	\
++	)
++endef
 +
-+comment "libpfm4 needs a toolchain w/ threads"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/oprofile/Config.in b/package/oprofile/Config.in
-index 2847a91..dff2a8c 100644
---- a/package/oprofile/Config.in
-+++ b/package/oprofile/Config.in
-@@ -6,6 +6,8 @@ config BR2_PACKAGE_OPROFILE
- 	select BR2_PACKAGE_LIBPFM4 if BR2_powerpc
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on !BR2_aarch64 # binutils
-+	# libpfm4 is needed on PowerPC, and requires thread support
-+	depends on BR2_TOOLCHAIN_HAS_THREADS || !BR2_powerpc
- 	help
- 	  OProfile is a system-wide profiler for Linux systems,
- 	  capable of profiling all running code at low overhead.
-@@ -25,3 +27,7 @@ config BR2_PACKAGE_OPROFILE
- comment "oprofile needs a toolchain w/ C++"
- 	depends on BR2_USE_MMU && !BR2_aarch64
- 	depends on !BR2_INSTALL_LIBSTDCPP
++define TVHEADEND_BUILD_CMDS
++	$(MAKE) -C $(@D)
++endef
 +
-+comment "oprofile needs a toolchain w/ threads on PPC"
-+	depends on BR2_USE_MMU && BR2_powerpc
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS
++define TVHEADEND_INSTALL_TARGET_CMDS
++	$(MAKE) -C $(@D) DESTDIR="$(TARGET_DIR)" install
++endef
++
+ #----------------------------------------------------------------------------
+ # To run tvheadend, we need:
+ #  - a startup script, and its config file
+@@ -43,7 +65,4 @@ define TVHEADEND_USERS
+ tvheadend -1 tvheadend -1 * /home/tvheadend - video TVHeadend daemon
+ endef
+ 
+-#----------------------------------------------------------------------------
+-# tvheadend is not an autotools-based package, but it is possible to
+-# call its ./configure script as if it were an autotools one.
+-$(eval $(autotools-package))
++$(eval $(generic-package))
