@@ -1,32 +1,49 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 4 Dec 2013 10:39:36 +0100
-Subject: [Buildroot] [git commit] tvheadend: fix typo in patch description
-Message-ID: <20131204094013.455149BF07@busybox.osuosl.org>
+From: Sven Neumann <neumann@teufel.de>
+Date: Wed, 04 Dec 2013 10:44:45 +0100
+Subject: [Buildroot] [PATCH] flac: update to version 1.3.0
+In-Reply-To: <529E5DCA.7080105@zacarias.com.ar>
+References: <1386108662.6732.3.camel@bender.Speedport_W_724V_Typ_A_05011601_00_065>
+ <529E5DCA.7080105@zacarias.com.ar>
+Message-ID: <1386150285.4433.2.camel@sven>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ff51f3734b905a09d75960d8b67c233bede1af3a
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi,
 
-Reported-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- .../tvheadend-004-dont-run-compiled-code.patch     |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+On Di, 2013-12-03 at 19:40 -0300, Gustavo Zacarias wrote:
+> On 12/03/2013 07:11 PM, Sven Neumann wrote:
+> 
+> > Remove flac-no-altivec.patch as it appears to have been
+> > merged upstream.
+> > 
+> > Signed-off-by: Sven Neumann <neumann@teufel.de>
+> 
+> Hold off this one a bit, IIRC it failed miserably to run on MIPS and/or PPC.
+> Let me retry and see before comitting it.
+> Regards.
 
-diff --git a/package/tvheadend/tvheadend-004-dont-run-compiled-code.patch b/package/tvheadend/tvheadend-004-dont-run-compiled-code.patch
-index f559583..8125db1 100644
---- a/package/tvheadend/tvheadend-004-dont-run-compiled-code.patch
-+++ b/package/tvheadend/tvheadend-004-dont-run-compiled-code.patch
-@@ -2,7 +2,7 @@ support: don't try to run compiled code
- 
- When cross-compiling, we can't run the compiled code.
- 
--Consider the compiler returning succes as an indication
-+Consider the compiler returning success as an indication
- it is working.
- 
- Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Fine with me. I have only tested builds on two ARM platforms (XScale and
+Cortex-A8).
+
+
+Regards,
+Sven
+
+-- 
+Sven Neumann
+Senior System Architect
+
+Lautsprecher Teufel GmbH
+Gewerbehof B?lowbogen - Aufgang D1
+B?lowstr. 66 - 10783 Berlin - Germany
+
+Registernummer HRB 20271 beim Amtsgericht Berlin-Charlottenburg
+Gesch?ftsf?hrer: Edgar van Velzen
+
+Tel. +49 (0)30 - 300 930 - 0, Direkt -153
+neumann at teufel.de  
+
+www.teufel.de  www.teufelaudio.com  http://blog.teufel.de
