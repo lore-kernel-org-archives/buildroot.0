@@ -1,68 +1,74 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu,  5 Dec 2013 00:14:47 +0100
-Subject: [Buildroot] [PATCHv6 1/5] manual: fix manual generation in
-	preparation for BR2_EXTERNAL support
+Date: Thu,  5 Dec 2013 00:14:49 +0100
+Subject: [Buildroot] [PATCHv6 3/5] core: allow external Config.in/makefile
+	code to be integrated
 In-Reply-To: <1386198891-17968-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1386198891-17968-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1386198891-17968-2-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1386198891-17968-4-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Samuel Martin <s.martin49@gmail.com>
+This commit allows the BR2_EXTERNAL directory to contain Config.in and
+Makefile code, which gets integrated into the Buildroot build logic:
 
-This patch fixes an issue that occurs during the manual build process
-which will occur when BR2_EXTERNAL is introduced.
+ - Buildroot automatically includes the $BR2_EXTERNAL/Config.in in the
+   top-level configuration menu.
 
-During the package list generation, the python script using kconfiglib
-module reads and parses the Config.in files. So, symbols, including
-environment variables, got expanded and/or resolved.  In
-kconfiglib.py, this patch fixes the regex that did not allow to use
-numbers in the environment variable names, so '$BR2_EXTERNAL' got
-wrongly expanded like it was '${BR}2_EXTERNAL':
+ - Buildroot automatically includes the BR2_EXTERNAL/external.mk in
+   the build logic, so it can for example be used to include other .mk
+   files that define package recipes.
 
-<snip>
->>>   Updating the manual lists...
-Traceback (most recent call last):
-  File "/opt/buildroot/master/support/scripts/gen-manual-lists.py", line 375, in <module>
-    buildroot = Buildroot()
-  File "/opt/buildroot/master/support/scripts/gen-manual-lists.py", line 216, in __init__
-    self.root_config))
-  File "/opt/buildroot/master/support/scripts/kconfiglib.py", line 214, in __init__
-    self.top_block = self._parse_file(filename, None, None, None)
-  File "/opt/src/buildroot/master/support/scripts/kconfiglib.py", line 919, in _parse_file
-    return self._parse_block(line_feeder, None, parent, deps, visible_if_deps, res)
-  File "/opt/buildroot/master/support/scripts/kconfiglib.py", line 1114, in _parse_block
-    self.base_dir))
-IOError: /opt/buildroot/master/Config.in:490: sourced file "$BR2_EXTERNAL/Config.in" (expands to
-"2_EXTERNAL/Config.in") not found. Perhaps base_dir
-(argument to Config.__init__(), currently
-"/opt/buildroot/master") is set to the wrong value.
-docs/manual/manual.mk:2: recipe for target 'manual-update-lists' failed
-make: *** [manual-update-lists] Error 1
-</snip>
+This is typically intended to be used to create target packages in the
+BR2_EXTERNAL directory, but can also be used for bootloaders, host
+packages, or other custom make logic.
 
-Reported-by: Ryan Barnett <rjbarnet@rockwellcollins.com>
-Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+We also add a dummy Config.in file in support/dummy-external/ to
+ensure that the source "$BR2_EXTERNAL/Config.in" line will point to an
+existing file even when BR2_EXTERNAL is not used by the user.
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- support/scripts/kconfiglib.py | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ Config.in                          | 2 ++
+ Makefile                           | 2 ++
+ support/dummy-external/Config.in   | 0
+ support/dummy-external/external.mk | 0
+ 4 files changed, 4 insertions(+)
+ create mode 100644 support/dummy-external/Config.in
+ create mode 100644 support/dummy-external/external.mk
 
-diff --git a/support/scripts/kconfiglib.py b/support/scripts/kconfiglib.py
-index 0704cc0..e40947c 100644
---- a/support/scripts/kconfiglib.py
-+++ b/support/scripts/kconfiglib.py
-@@ -2074,7 +2074,7 @@ set_re   = re.compile(r"CONFIG_(\w+)=(.*)")
- unset_re = re.compile(r"# CONFIG_(\w+) is not set")
+diff --git a/Config.in b/Config.in
+index ea060bc..12d36b5 100644
+--- a/Config.in
++++ b/Config.in
+@@ -492,3 +492,5 @@ source "boot/Config.in"
+ source "package/Config.in.host"
  
- # Regular expression for finding $-references to symbols in strings
--sym_ref_re = re.compile(r"\$[A-Za-z_]+")
-+sym_ref_re = re.compile(r"\$[A-Za-z_][0-9A-Za-z_]*")
+ source "Config.in.legacy"
++
++source "$BR2_EXTERNAL/Config.in"
+diff --git a/Makefile b/Makefile
+index e94c0bd..4f20bd5 100644
+--- a/Makefile
++++ b/Makefile
+@@ -364,6 +364,8 @@ include boot/common.mk
+ include linux/linux.mk
+ include system/system.mk
  
- # Integers representing symbol types
- UNKNOWN, BOOL, TRISTATE, STRING, HEX, INT = range(0, 6)
++include $(BR2_EXTERNAL)/external.mk
++
+ TARGETS+=target-finalize
+ 
+ ifeq ($(BR2_ENABLE_LOCALE_PURGE),y)
+diff --git a/support/dummy-external/Config.in b/support/dummy-external/Config.in
+new file mode 100644
+index 0000000..e69de29
+diff --git a/support/dummy-external/external.mk b/support/dummy-external/external.mk
+new file mode 100644
+index 0000000..e69de29
 -- 
 1.8.1.2
