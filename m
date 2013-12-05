@@ -1,75 +1,35 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 6 Dec 2013 00:17:19 +0100
-Subject: [Buildroot] [git commit] log4cplus: new package
-Message-ID: <20131205231849.884039BF2B@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 6 Dec 2013 00:25:26 +0100
+Subject: [Buildroot] Availability of old build results
+Message-ID: <20131206002526.58d095e8@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f847734dfd2e34cc969ef144d5236ae378aa777a
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/Config.in              |    1 +
- package/log4cplus/Config.in    |   15 +++++++++++++++
- package/log4cplus/log4cplus.mk |   14 ++++++++++++++
- 3 files changed, 30 insertions(+), 0 deletions(-)
+Due to the autobuild.buildroot.org server crash, I had to quickly set
+up a new instance, which didn't include the build results available
+from the old server.
 
-diff --git a/package/Config.in b/package/Config.in
-index c3c3aeb..754e38f 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -703,6 +703,7 @@ source "package/libtpl/Config.in"
- source "package/libunwind/Config.in"
- source "package/liburcu/Config.in"
- source "package/linux-pam/Config.in"
-+source "package/log4cplus/Config.in"
- source "package/log4cxx/Config.in"
- source "package/lttng-libust/Config.in"
- source "package/mpc/Config.in"
-diff --git a/package/log4cplus/Config.in b/package/log4cplus/Config.in
-new file mode 100644
-index 0000000..8a112a4
---- /dev/null
-+++ b/package/log4cplus/Config.in
-@@ -0,0 +1,15 @@
-+config BR2_PACKAGE_LOG4CPLUS
-+	bool "log4cplus"
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_USE_WCHAR
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	help
-+	  log4cplus is a simple to use C++ logging API providing
-+	  thread-safe, flexible, and arbitrarily granular control
-+	  over log management and configuration. It is modelled
-+	  after the Java log4j API.
-+
-+	  http://sourceforge.net/projects/log4cplus
-+
-+comment "log4cplus needs a toolchain w/ C++, wchar, threads"
-+	depends on !(BR2_INSTALL_LIBSTDCPP && BR2_USE_WCHAR && BR2_TOOLCHAIN_HAS_THREADS)
-diff --git a/package/log4cplus/log4cplus.mk b/package/log4cplus/log4cplus.mk
-new file mode 100644
-index 0000000..292fa66
---- /dev/null
-+++ b/package/log4cplus/log4cplus.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# log4cplus
-+#
-+################################################################################
-+
-+LOG4CPLUS_VERSION = 1.1.2
-+LOG4CPLUS_SOURCE = log4cplus-$(LOG4CPLUS_VERSION).tar.xz
-+LOG4CPLUS_SITE = http://downloads.sourceforge.net/project/log4cplus/log4cplus-stable/$(LOG4CPLUS_VERSION)
-+LOG4CPLUS_LICENSE = Apache-2.0
-+LOG4CPLUS_LICENSE_FILES = LICENSE
-+LOG4CPLUS_INSTALL_STAGING = YES
-+
-+$(eval $(autotools-package))
+I'm happy to announce that I have now reimported the old build results
+in the new server. This means that:
+
+ 1/ All previous autobuild.buildroot.org URLs of build results should
+    now work again.
+
+ 2/ The graph of success vs. failure rate is a lot more useful, see
+    http://autobuild.buildroot.org/stats.php.
+
+ 3/ We can be proud of having made more than 79000 build tests since we
+    started this effort! :-)
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
