@@ -1,10 +1,10 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu,  5 Dec 2013 16:22:56 +0000 (UTC)
+Date: Thu,  5 Dec 2013 16:28:57 +0000 (UTC)
 Subject: [Buildroot] [Bug 6722] Usage of $($(PKG)_DIR_PREFIX) is an issue
  with linux package
 In-Reply-To: <bug-6722-163@https.bugs.busybox.net/>
 References: <bug-6722-163@https.bugs.busybox.net/>
-Message-ID: <20131205162256.5D08D9BED3@busybox.osuosl.org>
+Message-ID: <20131205162859.0642E9BEE5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,20 +13,15 @@ To: buildroot@busybox.net
 
 https://bugs.busybox.net/show_bug.cgi?id=6722
 
---- Comment #5 from Ryan Barnett <rjbarnet@rockwellcollins.com> 2013-12-05 16:22:55 UTC ---
-Are you saying that this could be causing the issue? I don't have time to
-figure out if it really does.
+--- Comment #6 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> 2013-12-05 16:28:57 UTC ---
+Ryan, can you confirm to Thomas DS which Buildroot version you were using? I
+believe you were using the latest master, i.e a Buildroot version that does
+include the
+http://git.buildroot.net/buildroot/commit/?id=9e7e9b215017ee91c9369f01476bb4b4fc5f2484
+commit that Thomas DS pointed out.
 
-All I was doing was playing around with trying to add the ability to specify
-multiple BR2_GLOBAL_PATCH_DIR for performing builds and I accidentally ran
-across when I was printing out PATCH_BASE_DIRS in the patching step and noticed
-that /linux was being printed out. 
-
-Thomas Petazzoni was next to me and told me to submit a bug for it since I
-wasn't really intending (more so don't have time) to fix this issue. 
-
-I hope I made it clear that this is in no way an issue for me but rather
-something I noticed when doing some development.
+So I believe the issue that Ryan is reporting still exists in the current
+Buildroot master.
 
 -- 
 Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
