@@ -1,48 +1,59 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Thu, 5 Dec 2013 17:43:43 +0000
-Subject: [Buildroot] [PATCH v2] bluez_utils: broken for static builds
-Message-ID: <1386265423-51985-1-git-send-email-Vincent.Riera@imgtec.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 5 Dec 2013 18:52:18 +0100
+Subject: [Buildroot] genmanual: generates kconfiglib.pyc in Buildroot
+ source tree
+In-Reply-To: <52A03286.3070808@mind.be>
+References: <20131204225227.GH3332@free.fr>
+ <52A03286.3070808@mind.be>
+Message-ID: <20131205175218.GA3405@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The bluez_utils package requires shared library support unconditionally.
-We can't fix it to make it build on static because, for instance,
-"plugin.c" file uses dlfcn and it's a basic prereq for bluetoothd, so
-add "depend on !BR2_PREFER_STATIC_LIB" to it and recursively to all
-packages that selects BR2_PACKAGE_BLUEZ_UTILS.
+Arnout, All,
 
-Fixes:
+On 2013-12-05 09:00 +0100, Arnout Vandecappelle spake thusly:
+> On 04/12/13 23:52, Yann E. MORIN wrote:
+> >Samuel, All,
+> >
+> >When one runs 'make manual', python will create:
+> >     support/scripts/kconfiglib.pyc
+> >in the Buildroot source tree.
+> >
+> >Python will happily run, even if it is not able to generate that file
+> >(eg. because the source tree is read-only).
+> >
+> >However, the file is not cleaned on 'make clean'. I'm a bit reluctant at
+> >adding it since it would try to remove a file outside of $(O), which
+> >could break parallel builds in multiple $(O) at the same time... Not
+> >sure what to do here.
+> >
+> >Since we do not really care about speed, would it be possible to tell
+> >python not to generate it at all?
+> 
+>  I do 'man python', and the first thing I see is
+> 
+> -B     Don't write .py[co] files on import. See also PYTHONDONTWRITEBYTECODE.
 
-   http://autobuild.buildroot.net/results/d81/d81970024649c1e89c01da491c63760afdad6cb6/
+Hey! I read the manpage, but only greped for '\.pyc' not for this.
+Thanks for pointing it to me.
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
----
- package/bluez_utils/Config.in |    5 +++--
- 1 files changed, 3 insertions(+), 2 deletions(-)
+>  I'd say, go for it! Unfortunately, you can't add it directly in the #! line
+> of the script because all the arguments are concatenated together. So I
+> guess the PYTHONDONTWRITEBYTECODE environment variable should be set when
+> calling the script.
 
-diff --git a/package/bluez_utils/Config.in b/package/bluez_utils/Config.in
-index e08e9be..4c93577 100644
---- a/package/bluez_utils/Config.in
-+++ b/package/bluez_utils/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_BLUEZ_UTILS
- 	bool "bluez-utils"
- 	depends on !BR2_avr32
-+	depends on !BR2_PREFER_STATIC_LIB
- 	depends on BR2_USE_WCHAR # libglib2
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus, alsa-lib, libglib2
- 	depends on BR2_USE_MMU # dbus, libglib2
-@@ -38,6 +39,6 @@ config BR2_PACKAGE_BLUEZ_UTILS_USB
- 
- endif
- 
--comment "bluez-utils needs a toolchain w/ wchar, threads"
-+comment "bluez-utils needs a toolchain w/ wchar, threads, dynamic library"
- 	depends on !BR2_avr32 && BR2_USE_MMU
--	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || BR2_PREFER_STATIC_LIB
+Patch on its way.
+
+Regards,
+Yann E. MORIN.
+
 -- 
-1.7.1
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
