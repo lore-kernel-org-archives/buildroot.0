@@ -1,35 +1,32 @@
-From: Ryan Barnett <rjbarnet@rockwellcollins.com>
-Date: Thu, 5 Dec 2013 06:41:51 -0600
-Subject: [Buildroot] [PATCHv6 4/5] core: allow external defconfigs to be
-	used
-In-Reply-To: <1386198891-17968-5-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1386198891-17968-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1386198891-17968-5-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <OFA79D3A34.9540CD01-ON86257C38.0045A8B8-86257C38.0045BF86@rockwellcollins.com>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Thu, 5 Dec 2013 13:46:27 +0100
+Subject: [Buildroot] [PATCH] pkg-config: remove deprecated
+In-Reply-To: <1386245156-21088-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1386245156-21088-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <CAAXf6LX5XR8fh7hWUfxO2GOLdyykhLM4Ym9tq2PgwRUEmRK3CQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas P,
+Hi Gustavo,
 
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote on 12/04/2013 
-05:14:50 PM:
-
-> This commit allows the user to store defconfigs in
-> $BR2_EXTERNAL/configs/. To achieve this:
-> 
->  * It adds a new %_defconfig that looks in $BR2_EXTERNAL/configs/ for
->    the corresponding defconfig file.
-> 
->  * Updates the help target to also list external defconfigs.
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+On Thu, Dec 5, 2013 at 1:05 PM, Gustavo Zacarias
+<gustavo@zacarias.com.ar> wrote:
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 > ---
->  Makefile | 11 +++++++++++
->  1 file changed, 11 insertions(+)
+>  package/Config.in                                  |  1 -
+>  package/pkg-config/Config.in                       | 19 --------------
+>  .../pkg-config/pkg-config-0.25-fix-variable.patch  | 30 ----------------------
+>  package/pkg-config/pkg-config.mk                   | 12 ---------
+>  4 files changed, 62 deletions(-)
+>  delete mode 100644 package/pkg-config/Config.in
+>  delete mode 100644 package/pkg-config/pkg-config-0.25-fix-variable.patch
+>  delete mode 100644 package/pkg-config/pkg-config.mk
 
-Acked-by: Ryan Barnett <rjbarnet@rockwellcollins.com>
+File package/pkgconf/pkgconf.mk still contains a reference to
+BR2_PACKAGE_PKG_CONFIG that should be removed now...
+
+Best regards,
+Thomas
