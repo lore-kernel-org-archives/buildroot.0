@@ -1,52 +1,34 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 5 Dec 2013 17:07:15 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2013-12-03
-In-Reply-To: <CAAXf6LXtNZD6gaLprTS5XbfZAd_10jcEeXL-yLik9ami0QRmmw@mail.gmail.com>
-References: <20131204073002.8453B101504@stock.ovh.net>
- <CAAXf6LXtNZD6gaLprTS5XbfZAd_10jcEeXL-yLik9ami0QRmmw@mail.gmail.com>
-Message-ID: <20131205170715.7214aff4@skate>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu,  5 Dec 2013 16:22:56 +0000 (UTC)
+Subject: [Buildroot] [Bug 6722] Usage of $($(PKG)_DIR_PREFIX) is an issue
+ with linux package
+In-Reply-To: <bug-6722-163@https.bugs.busybox.net/>
+References: <bug-6722-163@https.bugs.busybox.net/>
+Message-ID: <20131205162256.5D08D9BED3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas De Schampheleire,
+https://bugs.busybox.net/show_bug.cgi?id=6722
 
-On Thu, 5 Dec 2013 16:59:31 +0100, Thomas De Schampheleire wrote:
+--- Comment #5 from Ryan Barnett <rjbarnet@rockwellcollins.com> 2013-12-05 16:22:55 UTC ---
+Are you saying that this could be causing the issue? I don't have time to
+figure out if it really does.
 
-> >       bfin |              xlib_libX11-1.5.0 | NOK | http://autobuild.buildroot.net/results/a47c5d96f880af04b85bb6773e87d04f9d7c2864/
-> 
-> The problem here is that xlib_libX11 needs dlfcn.h and dlopen, thus
-> !BR2_PREFER_STATIC_LIB.
-> Adding this 'depends on !BR2_PREFER_STATIC_LIB' to
-> package/x11r7/xlib_libX11 is the solution here. However, this requires
-> propagating this dependency to all packages that 'select' the
-> xlib_libX11 package, which is a very large amount of packages (105),
-> most of which are other X packages.
-> 
-> Is this the way to go or is there a special handling of X packages
-> that I'm not aware of?
-> For example, should we simply add this dependency to the entire set of
-> X11 packages at package/x11r7/Config.in?
-> This would greatly reduce the amount of 'depends on
-> !BR2_PREFER_STATIC_LIB' additions, but may be too coarse-grained as
-> not every X11 library necessarily needs shared libraries (unless of
-> course xlib_libX11 is a dependency on all these libraries, I did not
-> check that).
+All I was doing was playing around with trying to add the ability to specify
+multiple BR2_GLOBAL_PATCH_DIR for performing builds and I accidentally ran
+across when I was printing out PATCH_BASE_DIRS in the patching step and noticed
+that /linux was being printed out. 
 
-If xlib_libX11 needs shared library, then I believe there is no point
-in trying to use X.org on systems that don't support shared libraries,
-since xlib_libX11 is the fundamental library for X clients.
+Thomas Petazzoni was next to me and told me to submit a bug for it since I
+wasn't really intending (more so don't have time) to fix this issue. 
 
-Therefore, I would also suggest to simply disable all x11r7 packages
-when BR2_PREFER_STATIC_LIB is set.
+I hope I made it clear that this is in no way an issue for me but rather
+something I noticed when doing some development.
 
-Best regards,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
