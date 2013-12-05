@@ -1,54 +1,73 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Thu, 05 Dec 2013 21:44:11 +0100
-Subject: [Buildroot] [PATCH 03/16] packages: convert Github http://
-	users to	the github helper
-In-Reply-To: <20131205201918.77052a05@skate>
-References: <1386264059-14057-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1386264059-14057-4-git-send-email-thomas.petazzoni@free-electrons.com>
- <768537dc-810e-4cbf-9385-69f4d9ea05b4@email.android.com>
- <20131205201918.77052a05@skate>
-Message-ID: <f6b5ce91-aa4f-4bb7-a9ee-32c94b755eee@email.android.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu,  5 Dec 2013 22:46:49 +0100
+Subject: [Buildroot] [PATCH] package/openssl: fix coding style
+Message-ID: <1386280009-27017-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
->Dear Thomas De Schampheleire,
->
->On Thu, 05 Dec 2013 20:14:56 +0100, Thomas De Schampheleire wrote:
->
->> Thomas, did you see my comments on Mischa's v3 earlier today?
->
->Hu, did you really read this new patch series? I've split the patch into
->3 patches as you requested, and I've moved the macro to
->pkg-download.mk, as you requested.
->
->>  Do you plan to make these changes, do you expect Mischa or someone else to do them? 
->
->See above.
->
->> Do you consider it more to be a follow-up patch?
->
->See the cover letter for the patch series:
->
->"""
->According to Thomas DS comment, I've split Mischa's patch adding the
->github helper into three patches: one adding the helper, one adding
->the documentation, one converting a bunch of packages to the new
->helper. Note that not all packages are converted, but this can be done
->through followup commits: we really want this ARC and Microblaze stuff
->to get merged now.
->"""
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Hmm, for some reason I did not have the cover letter in
-my k9 client, surely there's a glitch in it. 
-I did see the rest of the series though, and the fact that
-you split up the patch. I should have been more clear
-that I was mostly missing some patches to be converted. 
-But that is now clarified in the comment above.
-I'll provide acks tomorrow...
+Currently, openssl defines three conditional hooks, but two do not
+follow our coding rules:
+  - for PRE_CONFIGURE, the hook is defined in the if-block, but
+    the _HOOK variable is always set
+  - for POST_INSTALL_TARGET, the hook is always defined, but the
+    _HOOK variable is set in the if-block
 
-Best regards,
-Thomas
+Fix that:
+  - define the hook in the if-block
+  - assign the _HOOK variable in the if-block
+
+At the same time, get rid of extra empty lines that make it more
+difficult to read.
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+---
+ package/openssl/openssl.mk | 9 ++-------
+ 1 file changed, 2 insertions(+), 7 deletions(-)
+
+diff --git a/package/openssl/openssl.mk b/package/openssl/openssl.mk
+index 5416141..30f8057 100644
+--- a/package/openssl/openssl.mk
++++ b/package/openssl/openssl.mk
+@@ -19,9 +19,8 @@ define OPENSSL_DISABLE_APPS
+ 	$(SED) '/^build_apps/! s/build_apps//' $(@D)/Makefile.org
+ 	$(SED) '/^DIRS=/ s/apps//' $(@D)/Makefile.org
+ endef
+-endif
+-
+ OPENSSL_PRE_CONFIGURE_HOOKS += OPENSSL_DISABLE_APPS
++endif
+ 
+ ifeq ($(BR2_PACKAGE_CRYPTODEV_LINUX),y)
+ 	OPENSSL_CFLAGS += -DHAVE_CRYPTODEV -DUSE_CRYPTODEV_DIGESTS
+@@ -111,23 +110,19 @@ define OPENSSL_INSTALL_TARGET_CMDS
+ endef
+ 
+ ifneq ($(BR2_PREFER_STATIC_LIB),y)
+-
+ # libraries gets installed read only, so strip fails
+ define OPENSSL_INSTALL_FIXUPS_SHARED
+ 	chmod +w $(TARGET_DIR)/usr/lib/engines/lib*.so
+ 	for i in $(addprefix $(TARGET_DIR)/usr/lib/,libcrypto.so.* libssl.so.*); \
+ 	do chmod +w $$i; done
+ endef
+-
+ OPENSSL_POST_INSTALL_TARGET_HOOKS += OPENSSL_INSTALL_FIXUPS_SHARED
+-
+ endif
+ 
++ifneq ($(BR2_PACKAGE_OPENSSL_ENGINES),y)
+ define OPENSSL_REMOVE_OPENSSL_ENGINES
+ 	rm -rf $(TARGET_DIR)/usr/lib/engines
+ endef
+-
+-ifneq ($(BR2_PACKAGE_OPENSSL_ENGINES),y)
+ OPENSSL_POST_INSTALL_TARGET_HOOKS += OPENSSL_REMOVE_OPENSSL_ENGINES
+ endif
+ 
+-- 
+1.8.1.2
