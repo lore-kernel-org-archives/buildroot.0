@@ -1,30 +1,37 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 06 Dec 2013 00:13:06 +0100
-Subject: [Buildroot] [PATCH] gpsd: switch to Git snapshot
-In-Reply-To: <1386230902-10012-1-git-send-email-spdawson@gmail.com>
- (spdawson@gmail.com's message of "Thu, 5 Dec 2013 08:08:22 +0000")
-References: <1386230902-10012-1-git-send-email-spdawson@gmail.com>
-Message-ID: <87y53ygad9.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 5 Dec 2013 23:24:21 +0100
+Subject: [Buildroot] [git commit] freetype: bump to version 2.5.1
+Message-ID: <20131205231349.0962E9BF2B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "spdawson" == spdawson  <spdawson@gmail.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=32a5f50385d4b90ed14bf26e98c1672ce5fe0886
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > From: Simon Dawson <spdawson@gmail.com>
- > Since the gpsd version bump from 3.9 to 3.10, gpsd has been generating a lot
- > of autobuild failures. See, for example, the following.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/freetype/freetype.mk |    6 ++----
+ 1 files changed, 2 insertions(+), 4 deletions(-)
 
- >   http://autobuild.buildroot.net/results/c8f/c8f2eed70cfbdcb7e7af820977aa531b59f0575a/
-
- > A 3.11 release is expected shortly; in the interim, switch to a recent Git
- > snapshot in which the most serious build problems appear to have been fixed.
-
- > Signed-off-by: Simon Dawson <spdawson@gmail.com>
-
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/freetype/freetype.mk b/package/freetype/freetype.mk
+index 1e378d3..398bf61 100644
+--- a/package/freetype/freetype.mk
++++ b/package/freetype/freetype.mk
+@@ -4,11 +4,9 @@
+ #
+ ################################################################################
+ 
+-FREETYPE_VERSION_MAJOR = 2.5.0
+-FREETYPE_VERSION_MINOR = 1
+-FREETYPE_VERSION = $(FREETYPE_VERSION_MAJOR).$(FREETYPE_VERSION_MINOR)
++FREETYPE_VERSION = 2.5.1
+ FREETYPE_SOURCE = freetype-$(FREETYPE_VERSION).tar.bz2
+-FREETYPE_SITE = http://downloads.sourceforge.net/project/freetype/freetype2/$(FREETYPE_VERSION_MAJOR)
++FREETYPE_SITE = http://downloads.sourceforge.net/project/freetype/freetype2/$(FREETYPE_VERSION)
+ FREETYPE_INSTALL_STAGING = YES
+ FREETYPE_MAKE_OPT = CCexe="$(HOSTCC)"
+ FREETYPE_LICENSE = Dual FTL/GPLv2+
