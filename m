@@ -1,73 +1,44 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu,  5 Dec 2013 22:46:49 +0100
-Subject: [Buildroot] [PATCH] package/openssl: fix coding style
-Message-ID: <1386280009-27017-1-git-send-email-yann.morin.1998@free.fr>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 05 Dec 2013 23:08:11 +0100
+Subject: [Buildroot] [PATCH 1 of 3] manual: remove references to
+ uninstall commands
+In-Reply-To: <f2f1b59c4cfbf80a1592.1386240846@argentina>
+References: <patchbomb.1386240845@argentina>
+ <f2f1b59c4cfbf80a1592.1386240846@argentina>
+Message-ID: <52A0F94B.1030600@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+On 05/12/13 11:54, Thomas De Schampheleire wrote:
+> diff --git a/docs/manual/package-make-target.txt b/docs/manual/package-make-target.txt
+> --- a/docs/manual/package-make-target.txt
+> +++ b/docs/manual/package-make-target.txt
+> @@ -63,9 +63,7 @@ Additionally, there are some other usefu
+>   | +show-depends+    | Displays the dependencies required to build the
+>   package
+>
+> -| +clean+           | Run the clean command of the package, also
+> -uninstall the package from both the target and the staging directory; _note
+> -that this is not implemented for all packages_
+> +| +clean+           | Run the clean command of the package
 
-Currently, openssl defines three conditional hooks, but two do not
-follow our coding rules:
-  - for PRE_CONFIGURE, the hook is defined in the if-block, but
-    the _HOOK variable is always set
-  - for POST_INSTALL_TARGET, the hook is always defined, but the
-    _HOOK variable is set in the if-block
+  The note should stay, I think. Clean is still not implemented for all 
+packages. By the way, weren't we going to remove clean as well?
 
-Fix that:
-  - define the hook in the if-block
-  - assign the _HOOK variable in the if-block
+  Regards,
+  Arnout
 
-At the same time, get rid of extra empty lines that make it more
-difficult to read.
+>
+>   | +dirclean+        | Remove the whole package build directory
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
----
- package/openssl/openssl.mk | 9 ++-------
- 1 file changed, 2 insertions(+), 7 deletions(-)
 
-diff --git a/package/openssl/openssl.mk b/package/openssl/openssl.mk
-index 5416141..30f8057 100644
---- a/package/openssl/openssl.mk
-+++ b/package/openssl/openssl.mk
-@@ -19,9 +19,8 @@ define OPENSSL_DISABLE_APPS
- 	$(SED) '/^build_apps/! s/build_apps//' $(@D)/Makefile.org
- 	$(SED) '/^DIRS=/ s/apps//' $(@D)/Makefile.org
- endef
--endif
--
- OPENSSL_PRE_CONFIGURE_HOOKS += OPENSSL_DISABLE_APPS
-+endif
- 
- ifeq ($(BR2_PACKAGE_CRYPTODEV_LINUX),y)
- 	OPENSSL_CFLAGS += -DHAVE_CRYPTODEV -DUSE_CRYPTODEV_DIGESTS
-@@ -111,23 +110,19 @@ define OPENSSL_INSTALL_TARGET_CMDS
- endef
- 
- ifneq ($(BR2_PREFER_STATIC_LIB),y)
--
- # libraries gets installed read only, so strip fails
- define OPENSSL_INSTALL_FIXUPS_SHARED
- 	chmod +w $(TARGET_DIR)/usr/lib/engines/lib*.so
- 	for i in $(addprefix $(TARGET_DIR)/usr/lib/,libcrypto.so.* libssl.so.*); \
- 	do chmod +w $$i; done
- endef
--
- OPENSSL_POST_INSTALL_TARGET_HOOKS += OPENSSL_INSTALL_FIXUPS_SHARED
--
- endif
- 
-+ifneq ($(BR2_PACKAGE_OPENSSL_ENGINES),y)
- define OPENSSL_REMOVE_OPENSSL_ENGINES
- 	rm -rf $(TARGET_DIR)/usr/lib/engines
- endef
--
--ifneq ($(BR2_PACKAGE_OPENSSL_ENGINES),y)
- OPENSSL_POST_INSTALL_TARGET_HOOKS += OPENSSL_REMOVE_OPENSSL_ENGINES
- endif
- 
 -- 
-1.8.1.2
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
