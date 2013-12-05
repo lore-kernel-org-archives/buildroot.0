@@ -1,86 +1,40 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 5 Dec 2013 19:11:31 +0100
-Subject: [Buildroot] genmanual: generates kconfiglib.pyc in Buildroot
- source tree
-In-Reply-To: <CAHXCMMKE4oP=rbrCryLSA7bn3upRzuXKMdNT15Zv2zfehieAgw@mail.gmail.com>
-References: <20131204225227.GH3332@free.fr> <52A03286.3070808@mind.be>
- <20131205175218.GA3405@free.fr>
- <CAHXCMMKE4oP=rbrCryLSA7bn3upRzuXKMdNT15Zv2zfehieAgw@mail.gmail.com>
-Message-ID: <20131205181131.GC3405@free.fr>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Thu, 5 Dec 2013 18:17:14 +0000
+Subject: [Buildroot] [PATCH] libfreefare: Fix build on static
+Message-ID: <1386267434-7144-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Samuel, All,
+This patch makes this package building correctly on static.
 
-On 2013-12-05 19:04 +0100, Samuel Martin spake thusly:
-> 2013/12/5 Yann E. MORIN <yann.morin.1998@free.fr>
-> 
-> > Arnout, All,
-> >
-> > On 2013-12-05 09:00 +0100, Arnout Vandecappelle spake thusly:
-> > > On 04/12/13 23:52, Yann E. MORIN wrote:
-> > > >Samuel, All,
-> > > >
-> > > >When one runs 'make manual', python will create:
-> > > >     support/scripts/kconfiglib.pyc
-> > > >in the Buildroot source tree.
-> > > >
-> > > >Python will happily run, even if it is not able to generate that file
-> > > >(eg. because the source tree is read-only).
-> > > >
-> > > >However, the file is not cleaned on 'make clean'. I'm a bit reluctant at
-> > > >adding it since it would try to remove a file outside of $(O), which
-> > > >could break parallel builds in multiple $(O) at the same time... Not
-> > > >sure what to do here.
-> > > >
-> > > >Since we do not really care about speed, would it be possible to tell
-> > > >python not to generate it at all?
-> > >
-> > >  I do 'man python', and the first thing I see is
-> > >
-> > > -B     Don't write .py[co] files on import. See also
-> > PYTHONDONTWRITEBYTECODE.
-> >
-> > Hey! I read the manpage, but only greped for '\.pyc' not for this.
-> > Thanks for pointing it to me.
-> >
-> > >  I'd say, go for it! Unfortunately, you can't add it directly in the #!
-> > line
-> > > of the script because all the arguments are concatenated together. So I
-> > > guess the PYTHONDONTWRITEBYTECODE environment variable should be set when
-> > > calling the script.
-> >
-> But, in manual.mk, you can explicitly call:
-> python -B $(TOPDIR)/support/scripts/gen-manual-lists.py
+Fixes:
 
-But currently, gen-manual-lists.py is using this sha-bang:
-    #!/usr/bin/env python
+   http://autobuild.buildroot.net/results/f09/f09d515f0e7b6d78010f1ce624336ceaef624989/
 
-And the way the sha-bang is interpreted is that:
-  - #!    <- the sha-bang
-  - an optional space
-  - the path to the interpreter
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+ .../libfreefare-001-fix-static-build.patch         |   10 ++++++++++
+ 1 files changed, 10 insertions(+), 0 deletions(-)
+ create mode 100644 package/libfreefare/libfreefare-001-fix-static-build.patch
 
-If there is a space after the interpreter, then whatever follows that
-space until the end of the line is passed as argv[1] to the interpreter.
-So, we can pass only one argument to the interpreter.
-
-'python' is the first arg to 'env', and we can't pass any arg to python.
-
-We could use "#!/usr/bin/python" but I don't want to change that.
-And passing PYTHONDONTWRITEBYTECODE is easy enough, and works (just
-tested it).
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/libfreefare/libfreefare-001-fix-static-build.patch b/package/libfreefare/libfreefare-001-fix-static-build.patch
+new file mode 100644
+index 0000000..31dfa30
+--- /dev/null
++++ b/package/libfreefare/libfreefare-001-fix-static-build.patch
+@@ -0,0 +1,10 @@
++--- libfreefare-0.3.4/examples/Makefile.am.orig	2013-12-05 17:08:16.058185440 +0000
+++++ libfreefare-0.3.4/examples/Makefile.am	2013-12-05 17:14:02.270548090 +0000
++@@ -2,6 +2,7 @@
++ 
++ AM_CFLAGS = -I. -I$(top_srcdir)/libfreefare @LIBNFC_CFLAGS@
++ AM_LDFLAGS = @LIBNFC_LIBS@
+++LIBS = -lcrypto -lz
++ 
++ bin_PROGRAMS = mifare-classic-format \
++ 	       mifare-classic-write-ndef \
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.7.1
