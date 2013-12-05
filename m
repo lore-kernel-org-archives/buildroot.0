@@ -1,9 +1,7 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu,  5 Dec 2013 11:04:18 -0300
-Subject: [Buildroot] [PATCH 2/2] olsr: bump to version 0.6.6.1
-In-Reply-To: <1386252258-7793-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1386252258-7793-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1386252258-7793-2-git-send-email-gustavo@zacarias.com.ar>
+Date: Thu,  5 Dec 2013 11:04:47 -0300
+Subject: [Buildroot] [PATCH 1/2] freetype: bump to version 2.5.1
+Message-ID: <1386252288-7835-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,21 +10,26 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/olsr/olsr.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/freetype/freetype.mk | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/package/olsr/olsr.mk b/package/olsr/olsr.mk
-index f96e570..7cdc0e0 100644
---- a/package/olsr/olsr.mk
-+++ b/package/olsr/olsr.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/freetype/freetype.mk b/package/freetype/freetype.mk
+index 1e378d3..398bf61 100644
+--- a/package/freetype/freetype.mk
++++ b/package/freetype/freetype.mk
+@@ -4,11 +4,9 @@
+ #
  ################################################################################
  
- OLSR_VERSION_MAJOR = 0.6
--OLSR_VERSION_MINOR = 6
-+OLSR_VERSION_MINOR = 6.1
- OLSR_VERSION = $(OLSR_VERSION_MAJOR).$(OLSR_VERSION_MINOR)
- OLSR_SOURCE = olsrd-$(OLSR_VERSION).tar.bz2
- OLSR_SITE = http://www.olsr.org/releases/$(OLSR_VERSION_MAJOR)
+-FREETYPE_VERSION_MAJOR = 2.5.0
+-FREETYPE_VERSION_MINOR = 1
+-FREETYPE_VERSION = $(FREETYPE_VERSION_MAJOR).$(FREETYPE_VERSION_MINOR)
++FREETYPE_VERSION = 2.5.1
+ FREETYPE_SOURCE = freetype-$(FREETYPE_VERSION).tar.bz2
+-FREETYPE_SITE = http://downloads.sourceforge.net/project/freetype/freetype2/$(FREETYPE_VERSION_MAJOR)
++FREETYPE_SITE = http://downloads.sourceforge.net/project/freetype/freetype2/$(FREETYPE_VERSION)
+ FREETYPE_INSTALL_STAGING = YES
+ FREETYPE_MAKE_OPT = CCexe="$(HOSTCC)"
+ FREETYPE_LICENSE = Dual FTL/GPLv2+
 -- 
 1.8.3.2
