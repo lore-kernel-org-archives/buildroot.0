@@ -1,40 +1,37 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 5 Dec 2013 23:31:31 +0100
-Subject: [Buildroot] [PATCH 1/2] qemu-system: new host package
-In-Reply-To: <52A0BCBC.5000008@mind.be>
-References: <1386117649-7119-1-git-send-email-gustavo@zacarias.com.ar>
- <1386117649-7119-2-git-send-email-gustavo@zacarias.com.ar>
- <20131204094419.6d4d4279@skate> <529EFEBA.8040103@zacarias.com.ar>
- <20131204133306.7e7e8e07@skate> <529F24A4.6030005@zacarias.com.ar>
- <52A0BCBC.5000008@mind.be>
-Message-ID: <20131205233131.0cad979d@skate>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 05 Dec 2013 23:43:40 +0100
+Subject: [Buildroot] [PATCHv7 2/5] core: introduce the BR2_EXTERNAL
+	variable
+In-Reply-To: <1386270673-16051-3-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1386270673-16051-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1386270673-16051-3-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <52A1019C.9090605@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Arnout Vandecappelle,
+On 05/12/13 20:11, Thomas Petazzoni wrote:
+> +BR2_EXTERNAL_FILE = $(BASE_DIR)/.br-external
+> +-include $(BR2_EXTERNAL_FILE)
+> +ifeq ($(BR2_EXTERNAL),)
+> +  override BR2_EXTERNAL = support/dummy-external
+> +  $(shell rm -f $(BR2_EXTERNAL_FILE))
+> +else
+> +  $(shell echo BR2_EXTERNAL ?= $(BR2_EXTERNAL) > $(BR2_EXTERNAL_FILE))
+> +endif
 
-On Thu, 05 Dec 2013 18:49:48 +0100, Arnout Vandecappelle wrote:
+  Huh, did I write this? AFAIK we don't normally indent inside make 
+conditionals... And if we did, it would be with tabs.
 
-> >> Yes, I agree, the user mode emulation should probably be removed. It
-> >> simply cannot work properly, because we have no way of guaranteeing
-> >> that the kernel headers used for the target toolchain are older than
-> >> the kernel running on the system.
-> 
->   It's not possible to do it in Config.in, but it's easy to do during the 
-> build: compare /usr/include/linux/version.h with 
-> $(STAGING_DIR)/usr/include/linux/version.h
+  Regards,
+  Arnout
 
-And then you fail the build if
-$(STAGING_DIR)/usr/include/linux/version.h gives a newer version
-of /usr/include/linux/version.h ? Could be possible, even if not really
-nice. But Fran?ois is proposing to remove cpanminus, which was the only
-reason to have qemu-user support. So do we care?
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
