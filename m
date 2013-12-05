@@ -1,42 +1,35 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 6 Dec 2013 00:03:40 +0100
-Subject: [Buildroot] [git commit] linux-headers: bump 3. {4, 10,
-	12}.x stable versions
-Message-ID: <20131205231349.423C59B92F@busybox.osuosl.org>
+Date: Fri, 6 Dec 2013 00:12:28 +0100
+Subject: [Buildroot] [git commit] gpsd: update ubx option for version 3.10
+Message-ID: <20131205231349.89EA59B92F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d8798b09d82aa73d79070363dc4af3a9692a10a6
+commit: http://git.buildroot.net/buildroot/commit/?id=24b7f4c81a8876d72bdc86ebb714b4c44d6ea8a8
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+For gpsd 3.10, the ubx scons option has been renamed to ublox. Update our
+makefile accordingly.
+
+Signed-off-by: Simon Dawson <spdawson@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/linux-headers/Config.in.host |    6 +++---
- 1 files changed, 3 insertions(+), 3 deletions(-)
+ package/gpsd/gpsd.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 034e1e8..33c1024 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -83,14 +83,14 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "3.1.10"	if BR2_KERNEL_HEADERS_3_1
- 	default "3.2.53"	if BR2_KERNEL_HEADERS_3_2
- 	default "3.3.8"		if BR2_KERNEL_HEADERS_3_3
--	default "3.4.71"	if BR2_KERNEL_HEADERS_3_4
-+	default "3.4.72"	if BR2_KERNEL_HEADERS_3_4
- 	default "3.5.7"		if BR2_KERNEL_HEADERS_3_5
- 	default "3.6.11"	if BR2_KERNEL_HEADERS_3_6
- 	default "3.7.10"	if BR2_KERNEL_HEADERS_3_7
- 	default "3.8.13"	if BR2_KERNEL_HEADERS_3_8
- 	default "3.9.11"	if BR2_KERNEL_HEADERS_3_9
--	default "3.10.21"	if BR2_KERNEL_HEADERS_3_10
-+	default "3.10.22"	if BR2_KERNEL_HEADERS_3_10
- 	default "3.11.10"	if BR2_KERNEL_HEADERS_3_11
--	default "3.12.2"	if BR2_KERNEL_HEADERS_3_12
-+	default "3.12.3"	if BR2_KERNEL_HEADERS_3_12
- 	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+diff --git a/package/gpsd/gpsd.mk b/package/gpsd/gpsd.mk
+index 43c945a..261afde 100644
+--- a/package/gpsd/gpsd.mk
++++ b/package/gpsd/gpsd.mk
+@@ -147,7 +147,7 @@ ifneq ($(BR2_PACKAGE_GPSD_TRUE_NORTH),y)
+ 	GPSD_SCONS_OPTS += tnt=no
+ endif
+ ifneq ($(BR2_PACKAGE_GPSD_UBX),y)
+-	GPSD_SCONS_OPTS += ubx=no
++	GPSD_SCONS_OPTS += ublox=no
+ endif
+ 
+ # Features
