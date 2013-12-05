@@ -1,75 +1,69 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu,  5 Dec 2013 20:11:11 +0100
-Subject: [Buildroot] [PATCHv7 3/5] core: allow external Config.in/makefile
-	code to be integrated
-In-Reply-To: <1386270673-16051-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1386270673-16051-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1386270673-16051-4-git-send-email-thomas.petazzoni@free-electrons.com>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Thu, 05 Dec 2013 20:14:56 +0100
+Subject: [Buildroot] [PATCH 03/16] packages: convert Github http://
+	users to	the github helper
+In-Reply-To: <1386264059-14057-4-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1386264059-14057-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1386264059-14057-4-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <768537dc-810e-4cbf-9385-69f4d9ea05b4@email.android.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This commit allows the BR2_EXTERNAL directory to contain Config.in and
-Makefile code, which gets integrated into the Buildroot build logic:
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
+>From: Mischa Jonker <Mischa.Jonker@synopsys.com>
+>
+>[Thomas: taken from Mischa original github patch.]
+>
+>Signed-off-by: Mischa Jonker <mjonker@synopsys.com>
+>Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+>---
+> package/a10disp/a10disp.mk                       | 2 +-
+> package/civetweb/civetweb.mk                     | 2 +-
+> package/cpuload/cpuload.mk                       | 2 +-
+> package/fb-test-app/fb-test-app.mk               | 2 +-
+> package/input-event-daemon/input-event-daemon.mk | 2 +-
+> package/jsmin/jsmin.mk                           | 2 +-
+> package/knock/knock.mk                           | 2 +-
+> package/libcec/libcec.mk                         | 2 +-
+> package/libcofi/libcofi.mk                       | 2 +-
+> package/libiqrf/libiqrf.mk                       | 2 +-
+> package/liblog4c-localtime/liblog4c-localtime.mk | 2 +-
+> package/libsha1/libsha1.mk                       | 2 +-
+> package/libsoc/libsoc.mk                         | 2 +-
+> package/libtpl/libtpl.mk                         | 2 +-
+> package/linenoise/linenoise.mk                   | 2 +-
+> package/lua-ev/lua-ev.mk                         | 2 +-
+> package/luacrypto/luacrypto.mk                   | 2 +-
+> package/luaexpatutils/luaexpatutils.mk           | 2 +-
+> package/luasql/luasql.mk                         | 2 +-
+> package/mongrel2/mongrel2.mk                     | 2 +-
+> package/mtdev2tuio/mtdev2tuio.mk                 | 2 +-
+> package/neardal/neardal.mk                       | 2 +-
+> package/omap-u-boot-utils/omap-u-boot-utils.mk   | 2 +-
+> package/on2-8170-modules/on2-8170-modules.mk     | 2 +-
+> package/python-ipy/python-ipy.mk                 | 2 +-
+> package/qjson/qjson.mk                           | 2 +-
+> package/rpi-firmware/rpi-firmware.mk             | 2 +-
+> package/rpi-userland/rpi-userland.mk             | 2 +-
+> package/socketcand/socketcand.mk                 | 2 +-
+> package/sqlcipher/sqlcipher.mk                   | 2 +-
+> package/sunxi-boards/sunxi-boards.mk             | 2 +-
+> package/sunxi-cedarx/sunxi-cedarx.mk             | 2 +-
+> package/sunxi-mali-prop/sunxi-mali-prop.mk       | 2 +-
+> package/sunxi-mali/sunxi-mali.mk                 | 2 +-
+> package/sunxi-tools/sunxi-tools.mk               | 2 +-
+> package/tinymembench/tinymembench.mk             | 2 +-
+> package/tslib/tslib.mk                           | 2 +-
+> package/xl2tp/xl2tp.mk                           | 2 +-
+> package/yajl/yajl.mk                             | 2 +-
+> 39 files changed, 39 insertions(+), 39 deletions(-)
 
- - Buildroot automatically includes the $BR2_EXTERNAL/Config.in in the
-   top-level configuration menu.
+Thomas, did you see my comments on Mischa's v3 earlier today?
+ Do you plan to make these changes, do you expect Mischa or someone else to do them? 
+Do you consider it more to be a follow-up patch?
 
- - Buildroot automatically includes the BR2_EXTERNAL/external.mk in
-   the build logic, so it can for example be used to include other .mk
-   files that define package recipes.
-
-This is typically intended to be used to create target packages in the
-BR2_EXTERNAL directory, but can also be used for bootloaders, host
-packages, or other custom make logic.
-
-We also add a dummy Config.in file in support/dummy-external/ to
-ensure that the source "$BR2_EXTERNAL/Config.in" line will point to an
-existing file even when BR2_EXTERNAL is not used by the user.
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Acked-by: Ryan Barnett <rjbarnet@rockwellcollins.com>
----
- Config.in                          | 2 ++
- Makefile                           | 2 ++
- support/dummy-external/Config.in   | 0
- support/dummy-external/external.mk | 0
- 4 files changed, 4 insertions(+)
- create mode 100644 support/dummy-external/Config.in
- create mode 100644 support/dummy-external/external.mk
-
-diff --git a/Config.in b/Config.in
-index ea060bc..12d36b5 100644
---- a/Config.in
-+++ b/Config.in
-@@ -492,3 +492,5 @@ source "boot/Config.in"
- source "package/Config.in.host"
- 
- source "Config.in.legacy"
-+
-+source "$BR2_EXTERNAL/Config.in"
-diff --git a/Makefile b/Makefile
-index e94c0bd..4f20bd5 100644
---- a/Makefile
-+++ b/Makefile
-@@ -364,6 +364,8 @@ include boot/common.mk
- include linux/linux.mk
- include system/system.mk
- 
-+include $(BR2_EXTERNAL)/external.mk
-+
- TARGETS+=target-finalize
- 
- ifeq ($(BR2_ENABLE_LOCALE_PURGE),y)
-diff --git a/support/dummy-external/Config.in b/support/dummy-external/Config.in
-new file mode 100644
-index 0000000..e69de29
-diff --git a/support/dummy-external/external.mk b/support/dummy-external/external.mk
-new file mode 100644
-index 0000000..e69de29
--- 
-1.8.1.2
+Best regards,
+Thomas
