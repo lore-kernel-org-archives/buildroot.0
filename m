@@ -1,102 +1,138 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 5 Dec 2013 11:17:29 +0100
-Subject: [Buildroot] [git commit] udev: disable on avr32
-Message-ID: <20131205101805.68A4F9BF2A@busybox.osuosl.org>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Thu, 5 Dec 2013 11:47:06 +0100
+Subject: [Buildroot] [RFC] pkg-python infrastructure
+In-Reply-To: <20131205000540.5291300a@skate>
+References: <OFCFB88498.0047424B-ON86257C0F.0057371F-86257C0F.0057386F@rockwellcollins.com>
+ <20131205000540.5291300a@skate>
+Message-ID: <CAHXCMMKLpUw5C5z14tcvmH4VNtXOPgp6dghpVnr6F6Mg7+QA8Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3fe55b1a2bde0015345778d319d49abce6c37eb5
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Thomas, all,
 
-udev requires the epoll_create1 system call, which is not available on avr32.
 
-Signed-off-by: Simon Dawson <spdawson@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/network-manager/Config.in |    2 ++
- package/udev/Config.in            |    2 ++
- package/udisks/Config.in          |    2 ++
- system/Config.in                  |    3 +++
- 4 files changed, 9 insertions(+), 0 deletions(-)
+2013/12/5 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-diff --git a/package/network-manager/Config.in b/package/network-manager/Config.in
-index 1e2a876..5513c01 100644
---- a/package/network-manager/Config.in
-+++ b/package/network-manager/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_NETWORK_MANAGER
- 	bool "NetworkManager"
-+	depends on !BR2_avr32 # udev
- 	depends on BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_UDEV
- 	select BR2_PACKAGE_DBUS
- 	depends on BR2_INET_IPV6
-@@ -28,6 +29,7 @@ config BR2_PACKAGE_NETWORK_MANAGER
- 	  http://projects.gnome.org/NetworkManager/
- 
- comment "NetworkManager needs a toolchain w/ IPv6, largefile, wchar, threads"
-+	depends on !BR2_avr32
- 	depends on BR2_USE_MMU
- 	depends on !BR2_INET_IPV6 || !BR2_LARGEFILE || !BR2_USE_WCHAR || \
- 		!BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/udev/Config.in b/package/udev/Config.in
-index c8aedd0..374a7bf 100644
---- a/package/udev/Config.in
-+++ b/package/udev/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_UDEV
- 	bool "udev"
-+	depends on !BR2_avr32 # no epoll_create1
- 	depends on BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_UDEV
- 	depends on BR2_LARGEFILE # util-linux
- 	depends on BR2_USE_WCHAR # util-linux
-@@ -40,4 +41,5 @@ comment "enabling all extras needs a toolchain w/ wchar, threads"
- endif
- 
- comment "udev requires /dev mgmnt set to udev under System configuration"
-+	depends on !BR2_avr32
- 	depends on !BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_UDEV
-diff --git a/package/udisks/Config.in b/package/udisks/Config.in
-index 09070b4..e9539a3 100644
---- a/package/udisks/Config.in
-+++ b/package/udisks/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_UDISKS
- 	bool "udisks"
-+	depends on !BR2_avr32 # udev
- 	depends on BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_UDEV
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus-glib -> glib2
- 	depends on BR2_USE_MMU # lvm2
-@@ -36,6 +37,7 @@ config BR2_PACKAGE_UDISKS_LVM2
- endif
- 
- comment "udisks needs udev /dev management and a toolchain w/ wchar, threads"
-+	depends on !BR2_avr32
- 	depends on BR2_USE_MMU
- 	depends on !BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_UDEV || \
- 		!BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/system/Config.in b/system/Config.in
-index c8f2758..54c196c 100644
---- a/system/Config.in
-+++ b/system/Config.in
-@@ -116,15 +116,18 @@ config BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV
- 
- config BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_UDEV
- 	bool "Dynamic using udev"
-+	depends on !BR2_avr32 # udev
- 	depends on BR2_LARGEFILE # udev
- 	depends on BR2_USE_WCHAR # udev
- 	depends on !BR2_PREFER_STATIC_LIB # udev -> kmod
- 	select BR2_PACKAGE_UDEV
- 
- comment "udev needs a toolchain w/ largefile, wchar"
-+	depends on !BR2_avr32 # udev
- 	depends on !(BR2_LARGEFILE && BR2_USE_WCHAR)
- 
- comment "udev doesn't work with 'prefer static libraries'"
-+	depends on !BR2_avr32 # udev
- 	depends on BR2_PREFER_STATIC_LIB
- 
- endchoice
+> Hello all,
+>
+> On Fri, 25 Oct 2013 10:52:54 -0500, Ryan Barnett wrote:
+>
+> > A while back (about a week ago) - Gustavoz Zacarias, Thomas Petazzoni,
+> and
+> > myself - were having a conversation on the IRC about creating a new
+> > package type for handling the builds of python packages. If I recall
+> > correctly, this is what we discussed. I would like to just have some
+> > record on how we want to handle building python packages.
+> >
+> > Thomas P and Gustavoz - please correct/expand on any points that I may be
+> > missing.
+>
+> Following this discussion, I've started working on this. The current
+> status of the work is available at:
+>
+>
+> http://git.free-electrons.com/users/thomas-petazzoni/buildroot/log/?h=python-pkg
+>
+> The most important commit is:
+>
+>
+> http://git.free-electrons.com/users/thomas-petazzoni/buildroot/commit/?h=python-pkg&id=5880956ce258b15887049ca5850007395cfd1857
+>
+> It works quite well with distutils, there are a some issues with
+> setuptools packages: I'll probably need to distinguish them. There are
+> also a few more Python packages that have not been converted.
+>
+> I've limited myself to support Python 2.x for the moment: the idea is
+> that once all Python packages have been converted to the
+> infrastructure, it will be easier to extend it to also cover Python 3.x.
+>
+
+Nice to see this topic moving! :)
+
+I've quickly reviewed the branch:
+* Commit: 5880956ce258b15887049ca5850007395cfd1857 [1,2]
+  docs/manual/adding-packages-python.txt:29-30: s/LIBFOO/PYTHON_FOO/
+
+
+I've given a run:
+* python-bottle: install fails because its setup.py does not support
+'--executable' option
+* python-crc16: install fails because its setup.py does not support
+'--executable' option
+* python-dpkt: install fails because its setup.py does not support
+'--executable' option
+
+After these, I removed "--executable=/usr/bin/python"
+from PKG_PYTHON_INSTALL_OPT
+* python-protobuf: install fails because it seems checking if the
+destination belongs to PYTHONPATH because PYTHONPATH is not correctly set:
+<snip>
+running install
+Checking .pth file support in
+/opt/buildroot/output/target/usr/lib/python2.7/site-packages/
+/opt/buildroot/output/host/usr/bin/python -E -c pass
+TEST FAILED: /opt/buildroot/output/target/usr/lib/python2.7/site-packages/
+does NOT support .pth files
+error: bad install directory or PYTHONPATH
+
+You are attempting to install a package to a directory that is not
+on PYTHONPATH and which Python does not read ".pth" files from.  The
+installation directory you specified (via --install-dir, --prefix, or
+the distutils default setting) was:
+
+    /opt/buildroot/output/target/usr/lib/python2.7/site-packages/
+
+and your PYTHONPATH environment variable currently contains:
+
+    '/opt/buildroot/output/target/usr/lib/python/site-packages'
+
+Here are some of your options for correcting the problem:
+</snip>
+The problem seems to be that PYTHON_VERSION_MAJOR is defined afterward
+PKG_PYTHON_BUILD_ENV is set...
+I've been able to overcome this issue by including
+package/python/python.mkat the beginning of package/
+pyg-python.mk,
+but I'm not sure how clean this is, and how to properly fix it...
+
+
+So far, I've just tested package builds (no runtim tests yet) and with this
+patch [3], I've successfully built all these Python packages:
+output/build/host-python-2.7.3/
+output/build/host-python-distutilscross-0.1/
+output/build/host-python-setuptools-0.6.36/
+output/build/python-2.7.3/
+output/build/python-bottle-0.11.6/
+output/build/python-crc16-0.1.1/
+output/build/python-dpkt-1.7/
+output/build/python-id3-1.2/
+output/build/python-ipy-IPy-0.75/
+output/build/python-mad-0.6/
+output/build/python-meld3-0.6.8/
+output/build/python-netifaces-0.7/
+output/build/python-nfc-142/
+output/build/python-protobuf-2.4.1/
+output/build/python-pygame-f0bb4a4b365d/
+output/build/python-pyparsing-1.5.6/
+output/build/python-pyro-3.14/
+output/build/python-pyzmq-13.1.0/
+output/build/python-serial-2.6/
+output/build/python-setuptools-0.6.36/
+output/build/python-thrift-0.9.0/
+
+[1]
+http://git.free-electrons.com/users/thomas-petazzoni/buildroot/commit/?h=python-pkg&id=5880956ce258b15887049ca5850007395cfd1857
+[2]
+http://git.free-electrons.com/users/thomas-petazzoni/buildroot/tree/docs/manual/adding-packages-python.txt?h=python-pkg&id=5880956ce258b15887049ca5850007395cfd1857#n29
+[3] http://code.bulix.org/19qo6e-85143
+
+Regards,
+
+-- 
+Samuel
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20131205/22e98833/attachment-0001.html>
