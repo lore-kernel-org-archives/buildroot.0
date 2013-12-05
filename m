@@ -1,45 +1,34 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 5 Dec 2013 13:59:35 +0100
-Subject: [Buildroot] [PATCH 0 of 3] Remove uninstall commands
-In-Reply-To: <CAAXf6LWYnO1xwnK6R=0kRr_oVqc7EgOw-z1Lm3tU5ERs+5=jhQ@mail.gmail.com>
-References: <patchbomb.1386240845@argentina> <20131205121818.37d82459@skate>
- <CAAXf6LWYnO1xwnK6R=0kRr_oVqc7EgOw-z1Lm3tU5ERs+5=jhQ@mail.gmail.com>
-Message-ID: <20131205135935.2d2d1c6d@skate>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Thu, 5 Dec 2013 14:06:09 +0100
+Subject: [Buildroot] [PATCHv2] pkg-config: remove deprecated
+In-Reply-To: <1386247960-10328-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1386247960-10328-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <CAAXf6LWCbDGc9Wo6QTMpjHAbgSNTYRxxLT+d1w1Bb4ku-HJ2ew@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas De Schampheleire,
+Hi Gustavo,
 
-On Thu, 5 Dec 2013 13:47:37 +0100, Thomas De Schampheleire wrote:
-> On Thu, Dec 5, 2013 at 12:18 PM, Thomas Petazzoni
-> <thomas.petazzoni@free-electrons.com> wrote:
-> > Dear Thomas De Schampheleire,
-> >
-> > On Thu, 05 Dec 2013 11:54:05 +0100, Thomas De Schampheleire wrote:
-> >>
-> >> This patch series removes support for the 'uninstall' commands completely.
-> >> It does not work for all packages, for some packages it is actually broken,
-> >> and we already discussed this removal a long time ago.
-> >>
-> >> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-> >
-> > For the whole series:
-> >
-> > Definitely-acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> 
-> Does patchwork recognize such emphasized tags?  ;-)
+On Thu, Dec 5, 2013 at 1:52 PM, Gustavo Zacarias
+<gustavo@zacarias.com.ar> wrote:
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> ---
+>  package/Config.in                                  |  1 -
+>  package/pkg-config/Config.in                       | 19 --------------
+>  .../pkg-config/pkg-config-0.25-fix-variable.patch  | 30 ----------------------
+>  package/pkg-config/pkg-config.mk                   | 12 ---------
+>  package/pkgconf/pkgconf.mk                         |  2 --
+>  5 files changed, 64 deletions(-)
+>  delete mode 100644 package/pkg-config/Config.in
+>  delete mode 100644 package/pkg-config/pkg-config-0.25-fix-variable.patch
+>  delete mode 100644 package/pkg-config/pkg-config.mk
 
-I don't know, but I've anyway given this tag on the cover letter, which
-patchwork doesn't register. I just have the feeling that a global Ack
-like this one should be enough for Peter.
+Sorry that I didn't notice this the first time, but Makefile.legacy
+also still has a reference to host-pkg-config that needs to be
+removed.
 
 Best regards,
-
 Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
