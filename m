@@ -1,59 +1,52 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 5 Dec 2013 08:59:35 +0100
-Subject: [Buildroot] [PATCH] pandaboard: fix defonf build with recent
- kernels
-In-Reply-To: <1386201464-19380-1-git-send-email-thomas@cozybit.com>
-References: <1386201464-19380-1-git-send-email-thomas@cozybit.com>
-Message-ID: <20131205085935.75f129c7@skate>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 05 Dec 2013 09:00:06 +0100
+Subject: [Buildroot] genmanual: generates kconfiglib.pyc in Buildroot
+ source tree
+In-Reply-To: <20131204225227.GH3332@free.fr>
+References: <20131204225227.GH3332@free.fr>
+Message-ID: <52A03286.3070808@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas Pedersen,
+On 04/12/13 23:52, Yann E. MORIN wrote:
+> Samuel, All,
+>
+> When one runs 'make manual', python will create:
+>      support/scripts/kconfiglib.pyc
+> in the Buildroot source tree.
+>
+> Python will happily run, even if it is not able to generate that file
+> (eg. because the source tree is read-only).
+>
+> However, the file is not cleaned on 'make clean'. I'm a bit reluctant at
+> adding it since it would try to remove a file outside of $(O), which
+> could break parallel builds in multiple $(O) at the same time... Not
+> sure what to do here.
+>
+> Since we do not really care about speed, would it be possible to tell
+> python not to generate it at all?
 
-On Wed,  4 Dec 2013 15:57:44 -0800, Thomas Pedersen wrote:
-> The patch "pandaboard: Fix defconfig build" locked the
-> default pandaboard kernel to 3.8.11. This is inconvenient,
-> however, and we can make the default pandaboard kernel
-> build and boot with a few changes:
+  I do 'man python', and the first thing I see is
 
-The lock down to a specific version of the kernel and a specific version
-of the kernel headers is intentional. These are here to guarantee that
-the defconfig will always produce the same result, regardless of
-whether Buildroot updates the default kernel / kernel headers version.
+-B     Don't write .py[co] files on import. See also PYTHONDONTWRITEBYTECODE.
 
-> -# Lock to 3.8 headers to avoid breaking with newer kernels
-> -BR2_KERNEL_HEADERS_3_8=y
 
-So this should be kept (possibly updating to a new kernel headers
-version of course, but we should keep a kernel headers version here).
+  I'd say, go for it! Unfortunately, you can't add it directly in the #! 
+line of the script because all the arguments are concatenated together. 
+So I guess the PYTHONDONTWRITEBYTECODE environment variable should be set 
+when calling the script.
 
->  # Kernel
->  BR2_LINUX_KERNEL=y
-> -BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-> -BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.8.11"
+  Regards,
+  Arnout
 
-Same thing here. No problem with bumping from 3.8.x to 3.12.x or
-something like that, if you've tested 3.12.x, but an explicit version
-selection must be kept.
 
->  BR2_LINUX_KERNEL_DEFCONFIG="omap2plus"
-> +BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x80008000"
-> +BR2_LINUX_KERNEL_APPENDED_UIMAGE=y
-> +BR2_LINUX_KERNEL_APPENDED_DTB=y
-> +BR2_LINUX_KERNEL_USE_INTREE_DTS=y
-> +# might need omap4-panda or omap4-panda-a4 instead
-> +BR2_LINUX_KERNEL_INTREE_DTS_NAME="omap4-panda-es"
->  
->  # GCC
->  BR2_GCC_VERSION_4_6_X=y
-
-Thanks!
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
