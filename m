@@ -1,37 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 5 Dec 2013 23:24:21 +0100
-Subject: [Buildroot] [git commit] freetype: bump to version 2.5.1
-Message-ID: <20131205231349.0962E9BF2B@busybox.osuosl.org>
+Date: Fri, 6 Dec 2013 00:03:42 +0100
+Subject: [Buildroot] [git commit] linux: bump to version 3.12.3
+Message-ID: <20131205231349.54B7E9B92F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=32a5f50385d4b90ed14bf26e98c1672ce5fe0886
+commit: http://git.buildroot.net/buildroot/commit/?id=e070034d2e7246426616395b8363a439f60a2b38
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/freetype/freetype.mk |    6 ++----
- 1 files changed, 2 insertions(+), 4 deletions(-)
+ linux/Config.in |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/freetype/freetype.mk b/package/freetype/freetype.mk
-index 1e378d3..398bf61 100644
---- a/package/freetype/freetype.mk
-+++ b/package/freetype/freetype.mk
-@@ -4,11 +4,9 @@
- #
- ################################################################################
+diff --git a/linux/Config.in b/linux/Config.in
+index 9479b7a..c7ec06e 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -21,7 +21,7 @@ choice
+ 	prompt "Kernel version"
  
--FREETYPE_VERSION_MAJOR = 2.5.0
--FREETYPE_VERSION_MINOR = 1
--FREETYPE_VERSION = $(FREETYPE_VERSION_MAJOR).$(FREETYPE_VERSION_MINOR)
-+FREETYPE_VERSION = 2.5.1
- FREETYPE_SOURCE = freetype-$(FREETYPE_VERSION).tar.bz2
--FREETYPE_SITE = http://downloads.sourceforge.net/project/freetype/freetype2/$(FREETYPE_VERSION_MAJOR)
-+FREETYPE_SITE = http://downloads.sourceforge.net/project/freetype/freetype2/$(FREETYPE_VERSION)
- FREETYPE_INSTALL_STAGING = YES
- FREETYPE_MAKE_OPT = CCexe="$(HOSTCC)"
- FREETYPE_LICENSE = Dual FTL/GPLv2+
+ config BR2_LINUX_KERNEL_LATEST_VERSION
+-	bool "3.12.2"
++	bool "3.12.3"
+ 
+ config BR2_LINUX_KERNEL_SAME_AS_HEADERS
+ 	bool "Same as toolchain kernel headers"
+@@ -87,7 +87,7 @@ endif
+ 
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "3.12.2" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "3.12.3" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default BR2_DEFAULT_KERNEL_HEADERS if BR2_LINUX_KERNEL_SAME_AS_HEADERS
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+ 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
