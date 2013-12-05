@@ -1,54 +1,77 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 5 Dec 2013 21:13:33 +0100
-Subject: [Buildroot] What is an Acked-by?
-In-Reply-To: <20131205201203.GF3405@free.fr>
-References: <1386198891-17968-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1386198891-17968-2-git-send-email-thomas.petazzoni@free-electrons.com>
- <20131204231952.GI3332@free.fr> <52A0C223.5040306@mind.be>
- <20131205201203.GF3405@free.fr>
-Message-ID: <20131205201333.GG3405@free.fr>
+From: Thomas Pedersen <thomas@cozybit.com>
+Date: Thu, 5 Dec 2013 12:26:27 -0800
+Subject: [Buildroot] [PATCH] pandaboard: fix defonf build with recent
+	kernels
+In-Reply-To: <OF53549EA3.A59A17D4-ON86257C38.00296CA0-86257C38.002E9B5D@rockwellcollins.com>
+References: <1386201464-19380-1-git-send-email-thomas@cozybit.com>
+ <OF53549EA3.A59A17D4-ON86257C38.00296CA0-86257C38.002E9B5D@rockwellcollins.com>
+Message-ID: <CAG6hwVNgRFMd6QHKEXtPSg3ay6vEdhsVJrNpHoiJx0dR6LQ52Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout, All,
+HI Ryan,
 
-On 2013-12-05 21:12 +0100, Yann E. MORIN spake thusly:
-> On 2013-12-05 19:12 +0100, Arnout Vandecappelle spake thusly:
-> > On 05/12/13 00:19, Yann E. MORIN wrote:
-> > >Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> > >Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> > 
-> >  If you've reviewed it and tested it, you would commit it if you had commit
-> > access, right? So this could actually be an Acked-by, right? Or is my
-> > understanding of these tags incorrect?
-> 
-> I'm following the definitions of Documentation/SubmittingPatches in my
-> Linux kernel tree.
-> 
-> For example, I refer to:
->     Acked-by: does not necessarily indicate acknowledgement of the entire
->     patch.
-> 
->     Reviewed-by:, instead, indicates that the patch has been reviewed
->     and found acceptable according to the Reviewer's Statement
->     [--SNIP statement--]
-> 
-> So, by providing both Reviewed-by and Tested by, I am explicitly stating
-> that I did a review of the patch, and I tested it. Which, from my
-> understanding, Acked-by does.
+On Thu, Dec 5, 2013 at 12:29 AM,  <rjbarnet@rockwellcollins.com> wrote:
+> Thomas Pedersen <thomas@cozybit.com> wrote on 12/04/2013 05:57:44 PM:
+>
+> [...]
+>
+>>  # Kernel
+>>  BR2_LINUX_KERNEL=y
+>> -BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+>> -BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.8.11"
+>>  BR2_LINUX_KERNEL_DEFCONFIG="omap2plus"
+>
+> Would it be possible to lock the kernel version down by using the custom
+> version? This way that when we provide a defconfig with a known working
+> kernel. If it were to be left to not use this, the kernel version will
+> change with all the bumps.
 
-... Acked-by does *not*.
+Yes, I'll lock it to 3.12.2 or so.
 
-Regards,
-Yann E. MORIN.
+>> +BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x80008000"
+>> +BR2_LINUX_KERNEL_APPENDED_UIMAGE=y
+>
+> What is the need for uImage? zImage is what is supported by default in
+> U-Boot for pandaboard -
+> http://git.denx.de/cgi-bin/gitweb.cgi?p=u-boot.git;a=blob;f=include/configs/omap4_common.h
+>
+> This configuration is not going to work out of the box for a user since
+> U-Boot searches for a zImage and a omap4-panda-es.dtb. So we would want to
+> generate a stand-alone dtb.
+
+zImage and dtb is still intact. The appended uImage is simply
+generated as an extra step after appending the DTB to the zImage.
+
+>> +BR2_LINUX_KERNEL_APPENDED_DTB=y
+>> +BR2_LINUX_KERNEL_USE_INTREE_DTS=y
+>> +# might need omap4-panda or omap4-panda-a4 instead
+>> +BR2_LINUX_KERNEL_INTREE_DTS_NAME="omap4-panda-es"
+>
+> Also could we lock down the version of u-boot too?
+>
+> Currently it looks like this -
+>
+> # Bootloaders
+> BR2_TARGET_UBOOT=y
+> BR2_TARGET_UBOOT_FORMAT_IMG=y
+> BR2_TARGET_UBOOT_BOARDNAME="omap4_panda"
+> BR2_TARGET_UBOOT_SPL=y
+> BR2_TARGET_UBOOT_SPL_NAME="MLO"
+>
+> Which means we will be pulling the latest version of U-Boot which is also
+> not preferable since U-Boot also has a tendency to break. Would you be
+> willing to specify a custom version of u-boot too in your update to the
+> defconfig?
+
+I'm actually using the linaro-boot-utils u-boot (SPL 2012.07) to
+enable booting over USB. I'll see if the vanilla version boots the
+generated uImage off an SD card.
+
+Thanks,
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas
