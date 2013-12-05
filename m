@@ -1,70 +1,37 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 05 Dec 2013 16:14:46 +0100
-Subject: [Buildroot] [PATCH v3] package/tvheadend: unbreak
-In-Reply-To: <1386115721-24113-1-git-send-email-yann.morin.1998@free.fr>
-References: <1386115721-24113-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <52A09866.9080800@mind.be>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Thu, 5 Dec 2013 16:59:31 +0100
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+	2013-12-03
+In-Reply-To: <20131204073002.8453B101504@stock.ovh.net>
+References: <20131204073002.8453B101504@stock.ovh.net>
+Message-ID: <CAAXf6LXtNZD6gaLprTS5XbfZAd_10jcEeXL-yLik9ami0QRmmw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 04/12/13 01:08, Yann E. MORIN wrote:
-> +	 --cc="$(TARGET_CC)"			\
-> +	 --cflags="$(TARGET_CFLAGS)"		\
+Hi,
 
-  It looks like the configure script is broken and fails if these 
-variables contain spaces (like e.g. when ccache is used).
+>       bfin |              xlib_libX11-1.5.0 | NOK | http://autobuild.buildroot.net/results/a47c5d96f880af04b85bb6773e87d04f9d7c2864/
 
- From support/configure.inc:
+The problem here is that xlib_libX11 needs dlfcn.h and dlopen, thus
+!BR2_PREFER_STATIC_LIB.
+Adding this 'depends on !BR2_PREFER_STATIC_LIB' to
+package/x11r7/xlib_libX11 is the solution here. However, this requires
+propagating this dependency to all packages that 'select' the
+xlib_libX11 package, which is a very large amount of packages (105),
+most of which are other X packages.
 
-function parse_args
-{
-   local opt= val=
-   for opt do
-     val=${opt#*=}
-     opt=${opt%=*}
-     opt=${opt#*--}
-     case "$opt" in
-       cc|cflags|arch|cpu|platform|python)
-         eval "`toupper $opt`=$val"
-         ;;
+Is this the way to go or is there a special handling of X packages
+that I'm not aware of?
+For example, should we simply add this dependency to the entire set of
+X11 packages at package/x11r7/Config.in?
+This would greatly reduce the amount of 'depends on
+!BR2_PREFER_STATIC_LIB' additions, but may be too coarse-grained as
+not every X11 library necessarily needs shared libraries (unless of
+course xlib_libX11 is a dependency on all these libraries, I did not
+check that).
 
-  Since the $val isn't quoted, a value with spaces will expand to e.g.:
-
-eval "CC=ccache gcc"
-
-which will execute
-
-CC=ccache gcc
-
-so it will try to run gcc...
-
-  In addition, parse_args is called from configure as:
-
-parse_args $*
-
-which will expand to:
-
-parse_args --cc=ccache gcc --cflags=-DFOO -DBAR
-
-so we only get the ccache and -DFOO in CC and CFLAGS. The unknown 
-arguments gcc and -DBAR are ignored.
-
-  Two options:
-
-- fix the scripts;
-
-- don't use --cc and --cflags but just pass them in the environment 
-(assuming that this works).
-
-  Regards,
-  Arnout
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+Thanks for your input,
+Thomas
