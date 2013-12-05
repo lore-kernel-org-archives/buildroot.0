@@ -1,46 +1,27 @@
-From: Thomas Pedersen <thomas@cozybit.com>
-Date: Thu, 5 Dec 2013 00:29:24 -0800
-Subject: [Buildroot] [PATCH] pandaboard: fix defonf build with recent
-	kernels
-In-Reply-To: <87haaniuhv.fsf@dell.be.48ers.dk>
-References: <1386201464-19380-1-git-send-email-thomas@cozybit.com>
- <87haaniuhv.fsf@dell.be.48ers.dk>
-Message-ID: <CAG6hwVMtSbWiZ_c-3Y-S+diHojV4kMsF_aj+xP2VEG4vhMjivQ@mail.gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu,  5 Dec 2013 08:46:09 +0000 (UTC)
+Subject: [Buildroot] [Bug 6722] Usage of $($(PKG)_DIR_PREFIX) is an issue
+ with linux package
+In-Reply-To: <bug-6722-163@https.bugs.busybox.net/>
+References: <bug-6722-163@https.bugs.busybox.net/>
+Message-ID: <20131205084609.74F349BF2B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Dec 5, 2013 12:15 AM, "Peter Korsgaard" <jacmet@uclibc.org> wrote:
->
-> >>>>> "Thomas" == Thomas Pedersen <thomas@cozybit.com> writes:
->
->  > The patch "pandaboard: Fix defconfig build" locked the
->  > default pandaboard kernel to 3.8.11. This is inconvenient,
->  > however, and we can make the default pandaboard kernel
->  > build and boot with a few changes:
->
->  > 1. specify the correct load address
->  > 2. append the flattened device tree to the uImage
->
->  > Note the default device tree is now for the pandaboard-ES,
->  > so users of other board revisions will need to set the
->  > correct DTS_NAME.
->
-> Thanks. There afaik has been quite some breakage in the kernel related
-> to pandaboard, what version have you tested with?
+https://bugs.busybox.net/show_bug.cgi?id=6722
 
-This was tested with 3.12.2, and AFAICT should continue to work moving
-forward. The recent pandaboard breakage seems to have been shook out since
-the 3.8+ transition.
+--- Comment #3 from Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> 2013-12-05 08:46:09 UTC ---
+See 
+http://patchwork.ozlabs.org/patch/290253/
+http://patchwork.ozlabs.org/patch/290254/
 
-> In general we try to stick to known (fixed) kernel version in the
-> defconfigs, to not get the users into that kind of trouble by default.
+As said, there needs to be some changes on the second patch (see the discussion
+there, I thought it was mainly the naming of the DIR_PREFIX variable).
 
-Makes sense. I'll submit a v2 which does this in the morning.
-
-Thomas
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20131205/204751c8/attachment.html>
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
