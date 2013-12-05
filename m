@@ -1,160 +1,67 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Thu, 5 Dec 2013 17:56:48 +0000
-Subject: [Buildroot] [PATCH v3] bluez_utils: broken for static builds
-Message-ID: <1386266208-52779-1-git-send-email-Vincent.Riera@imgtec.com>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Thu, 5 Dec 2013 19:04:05 +0100
+Subject: [Buildroot] genmanual: generates kconfiglib.pyc in Buildroot
+ source tree
+In-Reply-To: <20131205175218.GA3405@free.fr>
+References: <20131204225227.GH3332@free.fr> <52A03286.3070808@mind.be>
+ <20131205175218.GA3405@free.fr>
+Message-ID: <CAHXCMMKE4oP=rbrCryLSA7bn3upRzuXKMdNT15Zv2zfehieAgw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The bluez_utils package requires shared library support unconditionally.
-We can't fix it to make it build on static because, for instance,
-"plugin.c" file uses dlfcn and it's a basic prereq for bluetoothd, so
-add "depend on !BR2_PREFER_STATIC_LIB" to it and recursively to all
-packages that selects BR2_PACKAGE_BLUEZ_UTILS.
+Yann, Arnout, all,
 
-Fixes:
+2013/12/5 Yann E. MORIN <yann.morin.1998@free.fr>
 
-   http://autobuild.buildroot.net/results/d81/d81970024649c1e89c01da491c63760afdad6cb6/
+> Arnout, All,
+>
+> On 2013-12-05 09:00 +0100, Arnout Vandecappelle spake thusly:
+> > On 04/12/13 23:52, Yann E. MORIN wrote:
+> > >Samuel, All,
+> > >
+> > >When one runs 'make manual', python will create:
+> > >     support/scripts/kconfiglib.pyc
+> > >in the Buildroot source tree.
+> > >
+> > >Python will happily run, even if it is not able to generate that file
+> > >(eg. because the source tree is read-only).
+> > >
+> > >However, the file is not cleaned on 'make clean'. I'm a bit reluctant at
+> > >adding it since it would try to remove a file outside of $(O), which
+> > >could break parallel builds in multiple $(O) at the same time... Not
+> > >sure what to do here.
+> > >
+> > >Since we do not really care about speed, would it be possible to tell
+> > >python not to generate it at all?
+> >
+> >  I do 'man python', and the first thing I see is
+> >
+> > -B     Don't write .py[co] files on import. See also
+> PYTHONDONTWRITEBYTECODE.
+>
+> Hey! I read the manpage, but only greped for '\.pyc' not for this.
+> Thanks for pointing it to me.
+>
+> >  I'd say, go for it! Unfortunately, you can't add it directly in the #!
+> line
+> > of the script because all the arguments are concatenated together. So I
+> > guess the PYTHONDONTWRITEBYTECODE environment variable should be set when
+> > calling the script.
+>
+But, in manual.mk, you can explicitly call:
+python -B $(TOPDIR)/support/scripts/gen-manual-lists.py
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
----
- package/bluez_utils/Config.in   |    5 +++--
- package/efl/libedbus/Config.in  |    5 +++--
- package/openobex/Config.in      |    5 +++--
- package/sconeserver/Config.in   |    5 +++++
- package/snowball-init/Config.in |    5 +++--
- package/ussp-push/Config.in     |    5 +++--
- 6 files changed, 20 insertions(+), 10 deletions(-)
 
-diff --git a/package/bluez_utils/Config.in b/package/bluez_utils/Config.in
-index e08e9be..4c93577 100644
---- a/package/bluez_utils/Config.in
-+++ b/package/bluez_utils/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_BLUEZ_UTILS
- 	bool "bluez-utils"
- 	depends on !BR2_avr32
-+	depends on !BR2_PREFER_STATIC_LIB
- 	depends on BR2_USE_WCHAR # libglib2
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus, alsa-lib, libglib2
- 	depends on BR2_USE_MMU # dbus, libglib2
-@@ -38,6 +39,6 @@ config BR2_PACKAGE_BLUEZ_UTILS_USB
- 
- endif
- 
--comment "bluez-utils needs a toolchain w/ wchar, threads"
-+comment "bluez-utils needs a toolchain w/ wchar, threads, dynamic library"
- 	depends on !BR2_avr32 && BR2_USE_MMU
--	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || BR2_PREFER_STATIC_LIB
-diff --git a/package/efl/libedbus/Config.in b/package/efl/libedbus/Config.in
-index 783a54e..907c7fe 100644
---- a/package/efl/libedbus/Config.in
-+++ b/package/efl/libedbus/Config.in
-@@ -17,15 +17,16 @@ if BR2_PACKAGE_LIBEDBUS
- config BR2_PACKAGE_LIBEDBUS_BLUEZ
- 	bool "bluez support"
- 	depends on !BR2_avr32 # bluez_utils
-+	depends on !BR2_PREFER_STATIC_LIB # bluez_utils
- 	depends on BR2_USE_WCHAR # bluez_utils -> glib2
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # bluez_utils -> glib2
- 	select BR2_PACKAGE_BLUEZ_UTILS
- 	help
- 	  Bluetooth support.
- 
--comment "bluez support needs a toolchain w/ wchar, threads"
-+comment "bluez support needs a toolchain w/ wchar, threads, dynamic library"
- 	depends on !BR2_avr32
--	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || BR2_PREFER_STATIC_LIB
- 
- config BR2_PACKAGE_LIBEDBUS_CONNMAN
- 	bool "connman support"
-diff --git a/package/openobex/Config.in b/package/openobex/Config.in
-index 9b9d2f9..b52f757 100644
---- a/package/openobex/Config.in
-+++ b/package/openobex/Config.in
-@@ -12,14 +12,15 @@ if BR2_PACKAGE_OPENOBEX
- config BR2_PACKAGE_OPENOBEX_BLUEZ
- 	bool "enable bluez support"
- 	depends on !BR2_avr32
-+	depends on !BR2_PREFER_STATIC_LIB # bluez_utils
- 	depends on BR2_USE_WCHAR # libglib2
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus, alsa-lib, libglib2
- 	depends on BR2_USE_MMU # dbus
- 	select BR2_PACKAGE_BLUEZ_UTILS
- 
--comment "bluez support needs a toolchain w/ wchar, threads"
-+comment "bluez support needs a toolchain w/ wchar, threads, dynamic library"
- 	depends on !BR2_avr32 && BR2_USE_MMU
--	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || BR2_PREFER_STATIC_LIB
- 
- config BR2_PACKAGE_OPENOBEX_LIBUSB
- 	bool "enable libusb support"
-diff --git a/package/sconeserver/Config.in b/package/sconeserver/Config.in
-index 58c1e03..b8755c6 100644
---- a/package/sconeserver/Config.in
-+++ b/package/sconeserver/Config.in
-@@ -44,10 +44,15 @@ config BR2_PACKAGE_SCONESERVER_BLUETOOTH
- 	depends on BR2_USE_MMU # bluez->dbus
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # bluez->dbus, bluez->libglib2
- 	depends on !BR2_avr32 # bluez_utils
-+	depends on !BR2_PREFER_STATIC_LIB # bluez_utils
- 	select BR2_PACKAGE_BLUEZ_UTILS
- 	help
- 	  Bluetooth module for Sconeserver
- 
-+comment "bluetooth support needs a toolchain w/ wchar, threads, dynamic library"
-+	depends on !BR2_avr32 && BR2_USE_MMU
-+	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || BR2_PREFER_STATIC_LIB
-+
- config BR2_PACKAGE_SCONESERVER_RSS
- 	bool "rss"
- 	select BR2_PACKAGE_LIBXML2
-diff --git a/package/snowball-init/Config.in b/package/snowball-init/Config.in
-index e6e3272..d633d89 100644
---- a/package/snowball-init/Config.in
-+++ b/package/snowball-init/Config.in
-@@ -3,6 +3,7 @@ config BR2_PACKAGE_SNOWBALL_INIT
- 	# Runtime dependency, needed by snowball startup script
- 	select BR2_PACKAGE_BLUEZ_UTILS
- 	depends on !BR2_avr32
-+	depends on !BR2_PREFER_STATIC_LIB # bluez_utils
- 	depends on BR2_USE_WCHAR # libglib2
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus, alsa-lib, libglib2
- 	depends on BR2_USE_MMU # dbus
-@@ -12,6 +13,6 @@ config BR2_PACKAGE_SNOWBALL_INIT
- 
- 	  http://www.igloocommunity.org
- 
--comment "snowball-init needs a toolchain w/ wchar, threads"
-+comment "snowball-init needs a toolchain w/ wchar, threads, dynamic library"
- 	depends on !BR2_avr32 && BR2_USE_MMU
--	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || BR2_PREFER_STATIC_LIB
-diff --git a/package/ussp-push/Config.in b/package/ussp-push/Config.in
-index 4a79779..c8facef 100644
---- a/package/ussp-push/Config.in
-+++ b/package/ussp-push/Config.in
-@@ -2,6 +2,7 @@ config BR2_PACKAGE_USSP_PUSH
- 	bool "ussp-push"
- 	depends on BR2_INET_IPV6
- 	depends on !BR2_avr32
-+	depends on !BR2_PREFER_STATIC_LIB # bluez_utils
- 	depends on BR2_USE_WCHAR # libglib2
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus, alsa-lib, libglib2
- 	depends on BR2_USE_MMU # dbus
-@@ -14,6 +15,6 @@ config BR2_PACKAGE_USSP_PUSH
- 
- 	  http://www.xmailserver.org/ussp-push.html
- 
--comment "ussp-push needs a toolchain w/ wchar, IPv6, threads"
-+comment "ussp-push needs a toolchain w/ wchar, IPv6, threads, dynamic library"
- 	depends on !BR2_avr32 && BR2_USE_MMU
--	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INET_IPV6
-+	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INET_IPV6 || BR2_PREFER_STATIC_LIB
+> Patch on its way.
+
+
+Regards,
+
 -- 
-1.7.1
+Samuel
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20131205/4590a129/attachment.html>
