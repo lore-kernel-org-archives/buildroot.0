@@ -1,181 +1,59 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 4 Dec 2013 22:16:36 +0100
-Subject: [Buildroot] [git commit] binutils: add version 2.24
-Message-ID: <20131205074100.D96FF9BF28@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 5 Dec 2013 08:59:35 +0100
+Subject: [Buildroot] [PATCH] pandaboard: fix defonf build with recent
+ kernels
+In-Reply-To: <1386201464-19380-1-git-send-email-thomas@cozybit.com>
+References: <1386201464-19380-1-git-send-email-thomas@cozybit.com>
+Message-ID: <20131205085935.75f129c7@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f16bf2159e5e950663bf01aea490a5d43676ace6
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Thomas Pedersen,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/binutils/2.24/120-sh-conf.patch            |   29 +++++++++++++++
- .../binutils/2.24/300-001_ld_makefile_patch.patch  |   24 +++++++++++++
- .../2.24/300-012_check_ldrunpath_length.patch      |   21 +++++++++++
- package/binutils/2.24/500-sysroot.patch            |   37 ++++++++++++++++++++
- package/binutils/Config.in.host                    |    5 +++
- 5 files changed, 116 insertions(+), 0 deletions(-)
+On Wed,  4 Dec 2013 15:57:44 -0800, Thomas Pedersen wrote:
+> The patch "pandaboard: Fix defconfig build" locked the
+> default pandaboard kernel to 3.8.11. This is inconvenient,
+> however, and we can make the default pandaboard kernel
+> build and boot with a few changes:
 
-diff --git a/package/binutils/2.24/120-sh-conf.patch b/package/binutils/2.24/120-sh-conf.patch
-new file mode 100644
-index 0000000..ea3d1b6
---- /dev/null
-+++ b/package/binutils/2.24/120-sh-conf.patch
-@@ -0,0 +1,29 @@
-+r10231 | lethal | 2005-05-02 09:58:00 -0400 (Mon, 02 May 2005) | 13 lines
-+
-+Likewise, binutils has no idea about any of these new targets either, so we 
-+fix that up too.. now we're able to actually build a real toolchain for 
-+sh2a_nofpu- and other more ineptly named toolchains (and yes, there are more 
-+inept targets than that one, really. Go look, I promise).
-+
-+--- a/configure
-++++ b/configure
-+@@ -1495,7 +1495,7 @@
-+   mips*-*-*)
-+     noconfigdirs="$noconfigdirs gprof"
-+     ;;
-+-  sh-*-* | sh64-*-*)
-++  sh*-*-* | sh64-*-*)
-+     case "${target}" in
-+       sh*-*-elf)
-+          ;;
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -712,7 +712,7 @@
-+   mips*-*-*)
-+     noconfigdirs="$noconfigdirs gprof"
-+     ;;
-+-  sh-*-* | sh64-*-*)
-++  sh*-*-* | sh64-*-*)
-+     case "${target}" in
-+       sh*-*-elf)
-+          ;;
-diff --git a/package/binutils/2.24/300-001_ld_makefile_patch.patch b/package/binutils/2.24/300-001_ld_makefile_patch.patch
-new file mode 100644
-index 0000000..5cb0f61
---- /dev/null
-+++ b/package/binutils/2.24/300-001_ld_makefile_patch.patch
-@@ -0,0 +1,24 @@
-+diff -u binutils-2.17.50.0.17.oorig/ld/Makefile.am binutils-2.17.50.0.17/ld/Makefile.am
-+--- binutils-2.17.50.0.17.oorig/ld/Makefile.am	2007-06-18 19:29:29.000000000 +0200
-++++ binutils-2.17.50.0.17/ld/Makefile.am	2007-06-25 10:00:36.000000000 +0200
-+@@ -18,7 +18,7 @@
-+ # We put the scripts in the directory $(scriptdir)/ldscripts.
-+ # We can't put the scripts in $(datadir) because the SEARCH_DIR
-+ # directives need to be different for native and cross linkers.
-+-scriptdir = $(tooldir)/lib
-++scriptdir = $(libdir)
-+ 
-+ EMUL = @EMUL@
-+ EMULATION_OFILES = @EMULATION_OFILES@
-+diff -u binutils-2.17.50.0.17.oorig/ld/Makefile.in binutils-2.17.50.0.17/ld/Makefile.in
-+--- binutils-2.17.50.0.17.oorig/ld/Makefile.in	2007-06-18 19:29:29.000000000 +0200
-++++ binutils-2.17.50.0.17/ld/Makefile.in	2007-06-25 10:00:36.000000000 +0200
-+@@ -287,7 +287,7 @@
-+ # We put the scripts in the directory $(scriptdir)/ldscripts.
-+ # We can't put the scripts in $(datadir) because the SEARCH_DIR
-+ # directives need to be different for native and cross linkers.
-+-scriptdir = $(tooldir)/lib
-++scriptdir = $(libdir)
-+ BASEDIR = $(srcdir)/..
-+ BFDDIR = $(BASEDIR)/bfd
-+ INCDIR = $(BASEDIR)/include
-diff --git a/package/binutils/2.24/300-012_check_ldrunpath_length.patch b/package/binutils/2.24/300-012_check_ldrunpath_length.patch
-new file mode 100644
-index 0000000..df78310
---- /dev/null
-+++ b/package/binutils/2.24/300-012_check_ldrunpath_length.patch
-@@ -0,0 +1,21 @@
-+diff -Nura binutils-2.21.orig/ld/emultempl/elf32.em binutils-2.21/ld/emultempl/elf32.em
-+--- binutils-2.21.orig/ld/emultempl/elf32.em	2010-10-29 09:10:36.000000000 -0300
-++++ binutils-2.21/ld/emultempl/elf32.em	2010-12-10 09:26:56.746102724 -0300
-+@@ -1270,6 +1270,8 @@
-+ 	      && command_line.rpath == NULL)
-+ 	    {
-+ 	      lib_path = (const char *) getenv ("LD_RUN_PATH");
-++	      if ((lib_path) && (strlen (lib_path) == 0))
-++	      	lib_path = NULL;
-+ 	      if (gld${EMULATION_NAME}_search_needed (lib_path, &n,
-+ 						      force))
-+ 		break;
-+@@ -1497,6 +1499,8 @@
-+   rpath = command_line.rpath;
-+   if (rpath == NULL)
-+     rpath = (const char *) getenv ("LD_RUN_PATH");
-++  if ((rpath) && (strlen (rpath) == 0))
-++  	rpath = NULL;
-+ 
-+   for (abfd = link_info.input_bfds; abfd; abfd = abfd->link_next)
-+     if (bfd_get_flavour (abfd) == bfd_target_elf_flavour)
-diff --git a/package/binutils/2.24/500-sysroot.patch b/package/binutils/2.24/500-sysroot.patch
-new file mode 100644
-index 0000000..e49c795
---- /dev/null
-+++ b/package/binutils/2.24/500-sysroot.patch
-@@ -0,0 +1,37 @@
-+Signed-off-by: Sven Rebhan <odinshorse@googlemail.com>
-+
-+Always try to prepend the sysroot prefix to absolute filenames first.
-+
-+http://bugs.gentoo.org/275666
-+http://sourceware.org/bugzilla/show_bug.cgi?id=10340
-+
-+--- a/ld/ldfile.c
-++++ b/ld/ldfile.c
-+@@ -308,18 +308,25 @@
-+      directory first.  */
-+   if (! entry->flags.maybe_archive)
-+     {
-+-      if (entry->flags.sysrooted && IS_ABSOLUTE_PATH (entry->filename))
-++      /* For absolute pathnames, try to always open the file in the
-++	 sysroot first. If this fails, try to open the file at the
-++	 given location.  */
-++      entry->flags.sysrooted = is_sysrooted_pathname (entry->filename);
-++      if (!entry->flags.sysrooted && IS_ABSOLUTE_PATH (entry->filename)
-++	  && ld_sysroot)
-+ 	{
-+ 	  char *name = concat (ld_sysroot, entry->filename,
-+ 			       (const char *) NULL);
-+ 	  if (ldfile_try_open_bfd (name, entry))
-+ 	    {
-+ 	      entry->filename = name;
-++	      entry->flags.sysrooted = TRUE;
-+ 	      return TRUE;
-+ 	    }
-+ 	  free (name);
-+ 	}
-+-      else if (ldfile_try_open_bfd (entry->filename, entry))
-++
-++      if (ldfile_try_open_bfd (entry->filename, entry))
-+ 	return TRUE;
-+ 
-+       if (IS_ABSOLUTE_PATH (entry->filename))
-diff --git a/package/binutils/Config.in.host b/package/binutils/Config.in.host
-index 8f19597..63830fb 100644
---- a/package/binutils/Config.in.host
-+++ b/package/binutils/Config.in.host
-@@ -39,6 +39,10 @@ choice
- 		depends on !BR2_avr32
- 		bool "binutils 2.23.2"
- 
-+	config BR2_BINUTILS_VERSION_2_24
-+		depends on !BR2_avr32
-+		bool "binutils 2.24"
-+
- endchoice
- 
- config BR2_BINUTILS_VERSION
-@@ -51,6 +55,7 @@ config BR2_BINUTILS_VERSION
- 	default "2.22"		if BR2_BINUTILS_VERSION_2_22
- 	default "2.23.1"	if BR2_BINUTILS_VERSION_2_23_1
- 	default "2.23.2"	if BR2_BINUTILS_VERSION_2_23_2
-+	default "2.24"		if BR2_BINUTILS_VERSION_2_24
- 
- config BR2_BINUTILS_EXTRA_CONFIG_OPTIONS
- 	string "Additional binutils options"
+The lock down to a specific version of the kernel and a specific version
+of the kernel headers is intentional. These are here to guarantee that
+the defconfig will always produce the same result, regardless of
+whether Buildroot updates the default kernel / kernel headers version.
+
+> -# Lock to 3.8 headers to avoid breaking with newer kernels
+> -BR2_KERNEL_HEADERS_3_8=y
+
+So this should be kept (possibly updating to a new kernel headers
+version of course, but we should keep a kernel headers version here).
+
+>  # Kernel
+>  BR2_LINUX_KERNEL=y
+> -BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+> -BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.8.11"
+
+Same thing here. No problem with bumping from 3.8.x to 3.12.x or
+something like that, if you've tested 3.12.x, but an explicit version
+selection must be kept.
+
+>  BR2_LINUX_KERNEL_DEFCONFIG="omap2plus"
+> +BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x80008000"
+> +BR2_LINUX_KERNEL_APPENDED_UIMAGE=y
+> +BR2_LINUX_KERNEL_APPENDED_DTB=y
+> +BR2_LINUX_KERNEL_USE_INTREE_DTS=y
+> +# might need omap4-panda or omap4-panda-a4 instead
+> +BR2_LINUX_KERNEL_INTREE_DTS_NAME="omap4-panda-es"
+>  
+>  # GCC
+>  BR2_GCC_VERSION_4_6_X=y
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
