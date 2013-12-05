@@ -1,203 +1,68 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Thu, 5 Dec 2013 20:41:04 +0100
-Subject: [Buildroot] [PATCHv7 5/5] docs/manual: add explanations about
-	BR2_EXTERNAL
-In-Reply-To: <1386270673-16051-6-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Thu, 5 Dec 2013 20:42:54 +0100
+Subject: [Buildroot] [PATCHv7 2/5] core: introduce the BR2_EXTERNAL
+	variable
+In-Reply-To: <1386270673-16051-3-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1386270673-16051-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1386270673-16051-6-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <CAHXCMMLqiDnkXfzQt+TB=iJZtqFQLu1pQworXU3UJ26LvWaU+w@mail.gmail.com>
+ <1386270673-16051-3-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <CAHXCMMJyGG-zU-ki9WRw=keQNoPzLWsYAumtJsZK6Hu8e6=V3w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, all,
-
-
 2013/12/5 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-> This commit updates the manual to add details on how to use the
-> BR2_EXTERNAL feature.
+> This commit introduces the BR2_EXTERNAL environment variable, which
+> will allow to keep Buildroot customization (board-specific
+> configuration files or root filesystem overlays, package Config.in and
+> makefiles, as well as defconfigs) outside of the Buildroot tree.
 >
+> This commit only introduces the variable itself, and ensures that it
+> is available within Config.in options. This allows us to use
+> $BR2_EXTERNAL in a 'source' statement in Config.in.
+>
+> Following patches extend the usage of BR2_EXTERNAL to other areas
+> (packages and defconfigs).
+>
+> In details, this commit:
+>
+>  * Introduces the BR2_EXTERNAL Kconfig option. This option has no
+>    prompt, and is therefore not visible to the user and also not
+>    stored in the .config file. It is automatically set to the value of
+>    the BR2_EXTERNAL environment variable. The only purpose of this
+>    BR2_EXTERNAL Kconfig option is to allow $BR2_EXTERNAL to be
+>    properly expanded when used inside Kconfig source statements.
+>
+>  * Calculates the BR2_EXTERNAL value to use. If passed on the command
+>    line, then this value is taken in priority, and saved to a
+>    .br-external hidden file in the output directory. If not passed on
+>    the command line, then we read the .br-external file from the
+>    output directory. This allows the user to not pass the BR2_EXTERNAL
+>    value at each make invocation. If no BR2_EXTERNAL value is passed,
+>    we define it to support/dummy-external, so that the kconfig code
+>    finds an existing $(BR2_EXTERNAL)/package/Config.in file to
+>    include.
+>
+>  * Passes the BR2_EXTERNAL into the *config environment, so that its
+>    value is found when parsing/evaluating Config.in files and .config
+>    values.
+>
+> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 > Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> ---
->  docs/manual/customize-outside-br.txt | 138
-> +++++++++++++++++++++++++++++++++++
->  docs/manual/customize.txt            |   2 +
->  2 files changed, 140 insertions(+)
->  create mode 100644 docs/manual/customize-outside-br.txt
+> Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Acked-by: Ryan Barnett <rjbarnet@rockwellcollins.com>
 >
-> diff --git a/docs/manual/customize-outside-br.txt
-> b/docs/manual/customize-outside-br.txt
-> new file mode 100644
-> index 0000000..b2be419
-> --- /dev/null
-> +++ b/docs/manual/customize-outside-br.txt
-> @@ -0,0 +1,138 @@
-> +// -*- mode:doc -*- ;
-> +
-> +[[outside-br-custom]]
-> +Keeping customization outside Buildroot
-> +~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> +
-> +The Buildroot community recommends and encourages upstreaming to the
-> +official Buildroot version the packages and board supports that are
-> +written by developers. However, it is sometimes not possible or
-> +desirable because some of these packages or board supports are highly
-> +specific or proprietary.
-> +
-> +In this case, Buildroot users are offered two choices:
-> +
-> + * They can add their packages, board support and configuration files
-> +   directly within the Buildroot tree, and maintain them by using
-> +   branches in a version control system.
-> +
-> + * They can use the +BR2_EXTERNAL+ mechanism, which allows to keep
-> +   package recipes, board support and configuration files outside of
-> +   the Buildroot tree, while still having them nicely integrated in
-> +   the build logic. The following paragraphs give details on how to
-> +   use +BR2_EXTERNAL+.
-> +
-> ++BR2_EXTERNAL+ is an environment variable that can be used to point to
-> +a directory that contains Buildroot customizations. It can be passed
-> +to any Buildroot +make+ invocation. It is automatically saved in the
-> +hidden +.br-external+ file in the output directory. By doing this,
-> +there is no need to pass +BR2_EXTERNAL+ at every +make+ invocation. It
-> +can however be changed at any time by passing a new value, and can be
-> +removed by passing an empty value.
-> +
-> +The +BR2_EXTERNAL+ path can be either an absolute or a relative path,
-> +but if it's passed as a relative path, it is important to note that it
-> +is interpreted relatively to the main Buildroot source directory, not
-> +the Buildroot output directory.
-> +
-> +Some examples:
-> +
-> +-----
-> + buildroot/ $ make BR2_EXTERNAL=../foobar menuconfig
-> +-----
-> +
-> +Starting from now on, external definitions from the +../foobar+
-> +directory will be used:
-> +
-> +-----
-> + buildroot/ $ make
-> + buildroot/ $ make legal-info
-> +-----
-> +
-> +We can switch to another external definitions directory at any time:
-> +
-> +-----
-> + buildroot/ $ make BR2_EXTERNAL=../barfoo xconfig
-> +-----
-> +
-> +Or disable the usage of external definitions:
-> +
-> +-----
-> + buildroot/ $ make BR2_EXTERNAL= xconfig
-> +-----
-> +
-> ++BR2_EXTERNAL+ then allows three different things:
-> +
-> + * One can store all the board-specific configuration files there,
-> +   such as the kernel configuration, the root filesystem overlay, or
-> +   any other configuration file for which Buildroot allows to set its
-> +   location. The +BR2_EXTERNAL+ value is available within the
-> +   Buildroot configuration using +$(BR2_EXTERNAL)+. As an example, one
-> +   could set the +BR2_ROOTFS_OVERLAY+ Buildroot option to
-> +   +$(BR2_EXTERNAL)/board/<boardname>/overlay/+ (to specify a root
-> +   filesystem overlay), or the +BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE+
-> +   Buildroot option to
-> +   +$(BR2_EXTERNAL)/board/<boardname>/kernel.config+ (to specify the
-> +   location of the kernel configuration file). To achieve this, it is
-> +   recommended but not mandatory, to store those details in
-> +   directories called +board/<boardname>/+ under +BR2_EXTERNAL+. This
-> +   matches the directory structure used within Buildroot.
-> +
-> + * One can store package recipes (i.e +Config.in+ and
-> +   +<packagename>.mk+), or even custom configuration options and make
-> +   logic. Buildroot automatically includes +BR2_EXTERNAL/Config.in+ to
-> +   make it appear in the top-level configuration menu, and includes
-> +   +BR2_EXTERNAL/external.mk+ with the rest of the makefile logic.
-> ++
-> +The main usage of this is to store package recipes. The recommended
-> +   way to do this is to write a +BR2_EXTERNAL/Config.in+ that looks
-> +   like:
-> ++
-> +------
-> +menu "<somecompany> packages"
-> +
-> +source "$BR2_EXTERNAL/package/package1/Config.in"
-> +source "$BR2_EXTERNAL/package/package2/Config.in"
-> +
-> +endmenu
-> +------
-> ++
-> +Then, have a +BR2_EXTERNAL/external.mk+ file that looks like:
-> ++
-> +------
-> +include $(sort $(wildcard $(BR2_EXTERNAL)/package/*/*.mk))
-> +------
-> ++
-> +And then in +BR2_EXTERNAL/package/package1+ and
-> +   +BR2_EXTERNAL/package/package2+ create normal Buildroot package
-> +   recipes, as explained in xref:adding-packages[].
-> +
-> + * One can store Buildroot defconfigs in the +configs+ subdirectory of
-> +   +BR2_EXTERNAL+. Buildroot will automatically show them in the
-> +   output of +make help+ and allow them to be loaded with the normal
-> +   +make <name>_defconfig+ command. They will be visible under the
-> +   +User-provided configs:' label in the 'make help' output.
->
-For "User-provided configs:", what style do you choose? ;)
-
-+
-> +In the end, a typical +BR2_EXTERNAL+ directory organization would
-> +generally be:
-> +
-> +-----
-> +$(BR2_EXTERNAL)/
-> ++-- Config.in
-> ++-- external.mk
-> ++-- board/
-> +|   +-- <boardname>/
-> +|       +-- linux.config
-> +|       +-- overlay/
-> +|           +-- etc/
-> +|               +-- <some file>
-> ++-- configs/
-> +|   +-- <boardname>_defconfig
-> ++-- package/
-> +    +-- package1/
-> +    |    +-- Config.in
-> +    |    +-- package1.mk
-> +    +-- package2/
-> +        +-- Config.in
-> +        +-- package2.mk
-> +------
-> diff --git a/docs/manual/customize.txt b/docs/manual/customize.txt
-> index 0456ef1..7e46fd8 100644
-> --- a/docs/manual/customize.txt
-> +++ b/docs/manual/customize.txt
-> @@ -17,3 +17,5 @@ include::customize-toolchain.txt[]
->  include::customize-store.txt[]
->
->  include::customize-packages.txt[]
-> +
-> +include::customize-outside-br.txt[]
-> --
-> 1.8.1.2
->
->
-With the above thing fixed:
+Tested-by: "Samuel Martin" <s.martin49@gmail.com>
 Acked-by: "Samuel Martin" <s.martin49@gmail.com>
 
-Regrads,
+
+Regards,
 
 -- 
 Samuel
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20131205/1cba404d/attachment.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20131205/15901f05/attachment-0001.html>
