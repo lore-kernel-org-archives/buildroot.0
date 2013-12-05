@@ -1,64 +1,131 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 6 Dec 2013 00:12:07 +0100
-Subject: [Buildroot] [git commit] gpsd: switch to Git snapshot
-Message-ID: <20131205231349.81C6A9B92F@busybox.osuosl.org>
+Date: Fri, 6 Dec 2013 00:04:56 +0100
+Subject: [Buildroot] [git commit] pkg-config: remove deprecated
+Message-ID: <20131205231349.64F729BF2B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b4e40d9492c997e48d4e028a4075dd42b1360540
+commit: http://git.buildroot.net/buildroot/commit/?id=1f95d1a975bb185f5fb174ea4524795f70f8cae5
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Since the gpsd version bump from 3.9 to 3.10, gpsd has been generating a lot
-of autobuild failures. See, for example, the following.
-
-  http://autobuild.buildroot.net/results/c8f/c8f2eed70cfbdcb7e7af820977aa531b59f0575a/
-
-A 3.11 release is expected shortly; in the interim, switch to a recent Git
-snapshot in which the most serious build problems appear to have been fixed.
-
-Signed-off-by: Simon Dawson <spdawson@gmail.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Reviewed-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../gpsd/gpsd-02-sconstruct-disable-rpath.patch    |   10 +++++-----
- package/gpsd/gpsd.mk                               |    4 ++--
- 2 files changed, 7 insertions(+), 7 deletions(-)
+ package/Config.in                                  |    1 -
+ package/pkg-config/Config.in                       |   19 ------------
+ .../pkg-config/pkg-config-0.25-fix-variable.patch  |   30 --------------------
+ package/pkg-config/pkg-config.mk                   |   12 --------
+ package/pkgconf/pkgconf.mk                         |    2 -
+ 5 files changed, 0 insertions(+), 64 deletions(-)
 
-diff --git a/package/gpsd/gpsd-02-sconstruct-disable-rpath.patch b/package/gpsd/gpsd-02-sconstruct-disable-rpath.patch
-index eca3cbf..8d2d31e 100644
---- a/package/gpsd/gpsd-02-sconstruct-disable-rpath.patch
-+++ b/package/gpsd/gpsd-02-sconstruct-disable-rpath.patch
-@@ -5,11 +5,11 @@ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
- diff -Nurp a/SConstruct b/SConstruct
- --- a/SConstruct	2013-11-22 13:10:01.000000000 +0000
- +++ b/SConstruct	2013-11-23 11:26:57.698486777 +0000
--@@ -287,8 +287,6 @@ def installdir(dir, add_destdir=True):
-- # Honor the specified installation prefix in link paths.
-- if env["sysroot"]:
--     env.Prepend(LIBPATH=[env["sysroot"] + installdir('libdir', add_destdir=False)])
---if env["shared"]:
-+@@ -299,8 +299,6 @@ if env["sysroot"]:
-+ # prefix=/usr/local build want to put our libraries there. Ideally
-+ # we'd query the default load path here and test against wharever it
-+ # is, but we haven't found a way to do that.
-+-if env["shared"] and env["libdir"] not in {"/lib","/usr/lib","/usr/local/lib"}:
- -    env.Prepend(RPATH=[installdir('libdir')])
-  
-  # Give deheader a way to set compiler flags
-diff --git a/package/gpsd/gpsd.mk b/package/gpsd/gpsd.mk
-index 92db00e..43c945a 100644
---- a/package/gpsd/gpsd.mk
-+++ b/package/gpsd/gpsd.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
+diff --git a/package/Config.in b/package/Config.in
+index 912fa58..c3c3aeb 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -112,7 +112,6 @@ source "package/make/Config.in"
+ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ source "package/patch/Config.in"
+ endif
+-source "package/pkg-config/Config.in"
+ source "package/pkgconf/Config.in"
+ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ source "package/sed/Config.in"
+diff --git a/package/pkg-config/Config.in b/package/pkg-config/Config.in
+deleted file mode 100644
+index 52c0c32..0000000
+--- a/package/pkg-config/Config.in
++++ /dev/null
+@@ -1,19 +0,0 @@
+-config BR2_PACKAGE_PKG_CONFIG
+-	bool "pkg-config"
+-	depends on BR2_USE_WCHAR # glib2
+-	depends on BR2_TOOLCHAIN_HAS_THREADS # glib2
+-	depends on BR2_USE_MMU # glib2
+-	depends on BR2_DEPRECATED
+-	select BR2_PACKAGE_LIBGLIB2
+-	help
+-	  pkg-config is a system for managing library compile/link
+-	  flags that works with automake and autoconf. It replaces
+-	  the ubiquitous *-config scripts you may have seen with a
+-	  single tool.
+-
+-	  http://www.freedesktop.org/software/pkgconfig/
+-
+-comment "pkg-config needs a toolchain w/ wchar, threads"
+-	depends on BR2_DEPRECATED
+-	depends on BR2_USE_MMU
+-	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/pkg-config/pkg-config-0.25-fix-variable.patch b/package/pkg-config/pkg-config-0.25-fix-variable.patch
+deleted file mode 100644
+index 13a2b91..0000000
+--- a/package/pkg-config/pkg-config-0.25-fix-variable.patch
++++ /dev/null
+@@ -1,30 +0,0 @@
+-[PATCH] prefix sysroot to include/libdir path variables
+-
+-Prefix includedir / libdir variable values with sysroot if a variable is
+-requested (--variable=<name>), similar to how it's done for -I / -L flags.
+-
+-This is sometimes used to find header files (E.G. in gst-plugins configure),
+-so ensure the sysroot'ed files are used.
+-
+-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+----
+- main.c |    6 +++++
+- 1 file changed, 6 insertions(+)
+-
+-Index: pkg-config-0.25/main.c
+-===================================================================
+---- pkg-config-0.25.orig/main.c
+-+++ pkg-config-0.25/main.c
+-@@ -700,6 +700,12 @@
+-   if (variable_name)
+-     {
+-       char *str = packages_get_var (packages, variable_name);
+-+      /* include/lib variable? */
+-+      if (pcsysrootdir &&
+-+          (!strcmp(variable_name, "includedir") ||
+-+           !strcmp(variable_name, "mapdir") ||
+-+           !strcmp(variable_name, "libdir")))
+-+          printf ("%s/", pcsysrootdir);
+-       printf ("%s", str);
+-       g_free (str);
+-       need_newline = TRUE;
+diff --git a/package/pkg-config/pkg-config.mk b/package/pkg-config/pkg-config.mk
+deleted file mode 100644
+index a80d7cb..0000000
+--- a/package/pkg-config/pkg-config.mk
++++ /dev/null
+@@ -1,12 +0,0 @@
+-################################################################################
+-#
+-# pkg-config
+-#
+-################################################################################
+-
+-PKG_CONFIG_VERSION = 0.25
+-PKG_CONFIG_SITE = http://pkgconfig.freedesktop.org/releases/
+-PKG_CONFIG_DEPENDENCIES = libglib2
+-PKG_CONFIG_CONF_OPT = --with-installed-glib
+-
+-$(eval $(autotools-package))
+diff --git a/package/pkgconf/pkgconf.mk b/package/pkgconf/pkgconf.mk
+index 3ff093f..f3f6526 100644
+--- a/package/pkgconf/pkgconf.mk
++++ b/package/pkgconf/pkgconf.mk
+@@ -12,11 +12,9 @@ PKGCONF_LICENSE_FILES = COPYING
  
--GPSD_VERSION = 3.10
--GPSD_SITE = http://download-mirror.savannah.gnu.org/releases/gpsd/
-+GPSD_VERSION = 327a3ef7c83c1b3b2cf7cdfcddf0c6fd7aaa8963
-+GPSD_SITE = git://git.savannah.nongnu.org/gpsd.git
- GPSD_LICENSE = BSD-3c
- GPSD_LICENSE_FILES = COPYING
- GPSD_INSTALL_STAGING = YES
+ PKG_CONFIG_HOST_BINARY = $(HOST_DIR)/usr/bin/pkg-config
+ 
+-ifeq ($(BR2_PACKAGE_PKG_CONFIG),)
+ define PKGCONF_LINK_PKGCONFIG
+ 	ln -sf pkgconf $(TARGET_DIR)/usr/bin/pkg-config
+ endef
+-endif
+ 
+ define HOST_PKGCONF_INSTALL_WRAPPER
+ 	$(INSTALL) -m 0755 -D package/pkgconf/pkg-config.in \
