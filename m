@@ -1,32 +1,77 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 5 Dec 2013 23:24:08 +0100
-Subject: [Buildroot] [git commit] radvd: bump to version 1.9.7
-Message-ID: <20131205231348.C84CD9BF2C@busybox.osuosl.org>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Fri,  6 Dec 2013 00:15:18 +0100
+Subject: [Buildroot] [PATCH resend] log4cplus: new package
+Message-ID: <1386285318-9065-1-git-send-email-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=273a0aa068281fb7fab4398490d6db6ca7b86fb5
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/radvd/radvd.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+Resend with Reviewed-by (see http://lists.busybox.net/pipermail/buildroot/2013-November/082058.html)
+---
+ package/Config.in              |  1 +
+ package/log4cplus/Config.in    | 15 +++++++++++++++
+ package/log4cplus/log4cplus.mk | 14 ++++++++++++++
+ 3 files changed, 30 insertions(+)
+ create mode 100644 package/log4cplus/Config.in
+ create mode 100644 package/log4cplus/log4cplus.mk
 
-diff --git a/package/radvd/radvd.mk b/package/radvd/radvd.mk
-index c1c4e41..27ce7e7 100644
---- a/package/radvd/radvd.mk
-+++ b/package/radvd/radvd.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--RADVD_VERSION = 1.9.5
-+RADVD_VERSION = 1.9.7
- RADVD_SITE = http://www.litech.org/radvd/dist
- RADVD_DEPENDENCIES = host-bison flex libdaemon host-flex host-pkgconf
- 
+diff --git a/package/Config.in b/package/Config.in
+index 311cc6c..1edc906 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -707,6 +707,7 @@ source "package/libtpl/Config.in"
+ source "package/libunwind/Config.in"
+ source "package/liburcu/Config.in"
+ source "package/linux-pam/Config.in"
++source "package/log4cplus/Config.in"
+ source "package/log4cxx/Config.in"
+ source "package/lttng-libust/Config.in"
+ source "package/mpc/Config.in"
+diff --git a/package/log4cplus/Config.in b/package/log4cplus/Config.in
+new file mode 100644
+index 0000000..8a112a4
+--- /dev/null
++++ b/package/log4cplus/Config.in
+@@ -0,0 +1,15 @@
++config BR2_PACKAGE_LOG4CPLUS
++	bool "log4cplus"
++	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_USE_WCHAR
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	help
++	  log4cplus is a simple to use C++ logging API providing
++	  thread-safe, flexible, and arbitrarily granular control
++	  over log management and configuration. It is modelled
++	  after the Java log4j API.
++
++	  http://sourceforge.net/projects/log4cplus
++
++comment "log4cplus needs a toolchain w/ C++, wchar, threads"
++	depends on !(BR2_INSTALL_LIBSTDCPP && BR2_USE_WCHAR && BR2_TOOLCHAIN_HAS_THREADS)
+diff --git a/package/log4cplus/log4cplus.mk b/package/log4cplus/log4cplus.mk
+new file mode 100644
+index 0000000..292fa66
+--- /dev/null
++++ b/package/log4cplus/log4cplus.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# log4cplus
++#
++################################################################################
++
++LOG4CPLUS_VERSION = 1.1.2
++LOG4CPLUS_SOURCE = log4cplus-$(LOG4CPLUS_VERSION).tar.xz
++LOG4CPLUS_SITE = http://downloads.sourceforge.net/project/log4cplus/log4cplus-stable/$(LOG4CPLUS_VERSION)
++LOG4CPLUS_LICENSE = Apache-2.0
++LOG4CPLUS_LICENSE_FILES = LICENSE
++LOG4CPLUS_INSTALL_STAGING = YES
++
++$(eval $(autotools-package))
+-- 
+1.8.1.4
