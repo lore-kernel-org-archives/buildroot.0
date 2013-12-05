@@ -1,32 +1,64 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 05 Dec 2013 09:25:17 +0100
-Subject: [Buildroot] [PATCH] gpsd: switch to Git snapshot
-In-Reply-To: <1386230902-10012-1-git-send-email-spdawson@gmail.com>
- (spdawson@gmail.com's message of "Thu, 5 Dec 2013 08:08:22 +0000")
-References: <1386230902-10012-1-git-send-email-spdawson@gmail.com>
-Message-ID: <87d2lbiu1e.fsf@dell.be.48ers.dk>
+From: rjbarnet at rockwellcollins.com <rjbarnet@rockwellcollins.com>
+Date: Thu, 5 Dec 2013 02:29:05 -0600
+Subject: [Buildroot] [PATCH] pandaboard: fix defonf build with recent
+	kernels
+In-Reply-To: <1386201464-19380-1-git-send-email-thomas@cozybit.com>
+References: <1386201464-19380-1-git-send-email-thomas@cozybit.com>
+Message-ID: <OF53549EA3.A59A17D4-ON86257C38.00296CA0-86257C38.002E9B5D@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "spdawson" == spdawson  <spdawson@gmail.com> writes:
+Thomas Pedersen,
 
- > From: Simon Dawson <spdawson@gmail.com>
- > Since the gpsd version bump from 3.9 to 3.10, gpsd has been generating a lot
- > of autobuild failures. See, for example, the following.
+Thomas Pedersen <thomas@cozybit.com> wrote on 12/04/2013 05:57:44 PM:
 
- >   http://autobuild.buildroot.net/results/c8f/c8f2eed70cfbdcb7e7af820977aa531b59f0575a/
+[...]
 
- > A 3.11 release is expected shortly; in the interim, switch to a recent Git
- > snapshot in which the most serious build problems appear to have been fixed.
+>  # Kernel
+>  BR2_LINUX_KERNEL=y
+> -BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+> -BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.8.11"
+>  BR2_LINUX_KERNEL_DEFCONFIG="omap2plus"
 
-Does this supersede your other gpsd patches?
+Would it be possible to lock the kernel version down by using the custom 
+version? This way that when we provide a defconfig with a known working 
+kernel. If it were to be left to not use this, the kernel version will 
+change with all the bumps.
 
-295839  New          gpsd: fix udev install
-295856  New          gpsd: fix build error when reconfigure disabled
-295860  New          gpsd: update ubx option for version 3.10
+> +BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x80008000"
+> +BR2_LINUX_KERNEL_APPENDED_UIMAGE=y
 
--- 
-Bye, Peter Korsgaard
+What is the need for uImage? zImage is what is supported by default in 
+U-Boot for pandaboard - 
+http://git.denx.de/cgi-bin/gitweb.cgi?p=u-boot.git;a=blob;f=include/configs/omap4_common.h
+
+This configuration is not going to work out of the box for a user since 
+U-Boot searches for a zImage and a omap4-panda-es.dtb. So we would want to 
+generate a stand-alone dtb.
+
+> +BR2_LINUX_KERNEL_APPENDED_DTB=y
+> +BR2_LINUX_KERNEL_USE_INTREE_DTS=y
+> +# might need omap4-panda or omap4-panda-a4 instead
+> +BR2_LINUX_KERNEL_INTREE_DTS_NAME="omap4-panda-es"
+
+Also could we lock down the version of u-boot too?
+
+Currently it looks like this -
+
+# Bootloaders
+BR2_TARGET_UBOOT=y
+BR2_TARGET_UBOOT_FORMAT_IMG=y
+BR2_TARGET_UBOOT_BOARDNAME="omap4_panda"
+BR2_TARGET_UBOOT_SPL=y
+BR2_TARGET_UBOOT_SPL_NAME="MLO"
+
+Which means we will be pulling the latest version of U-Boot which is also 
+not preferable since U-Boot also has a tendency to break. Would you be 
+willing to specify a custom version of u-boot too in your update to the 
+defconfig?
+
+Thanks,
+-Ryan
