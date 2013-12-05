@@ -1,50 +1,55 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Thu, 5 Dec 2013 20:43:53 +0100
-Subject: [Buildroot] [PATCHv7 3/5] core: allow external
- Config.in/makefile code to be integrated
-In-Reply-To: <1386270673-16051-4-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1386270673-16051-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1386270673-16051-4-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <CAHXCMMJUKWyLJecm9H8VioZFxK=r+pD+m5RFp+5QZS0H8UXpJA@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 5 Dec 2013 21:12:03 +0100
+Subject: [Buildroot] What is an Acked-by?
+In-Reply-To: <52A0C223.5040306@mind.be>
+References: <1386198891-17968-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1386198891-17968-2-git-send-email-thomas.petazzoni@free-electrons.com>
+ <20131204231952.GI3332@free.fr> <52A0C223.5040306@mind.be>
+Message-ID: <20131205201203.GF3405@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2013/12/5 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Arnout, All,
 
-> This commit allows the BR2_EXTERNAL directory to contain Config.in and
-> Makefile code, which gets integrated into the Buildroot build logic:
->
->  - Buildroot automatically includes the $BR2_EXTERNAL/Config.in in the
->    top-level configuration menu.
->
->  - Buildroot automatically includes the BR2_EXTERNAL/external.mk in
->    the build logic, so it can for example be used to include other .mk
->    files that define package recipes.
->
-> This is typically intended to be used to create target packages in the
-> BR2_EXTERNAL directory, but can also be used for bootloaders, host
-> packages, or other custom make logic.
->
-> We also add a dummy Config.in file in support/dummy-external/ to
-> ensure that the source "$BR2_EXTERNAL/Config.in" line will point to an
-> existing file even when BR2_EXTERNAL is not used by the user.
->
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Acked-by: Ryan Barnett <rjbarnet@rockwellcollins.com>
->
-Tested-by: "Samuel Martin" <s.martin49@gmail.com>
-Acked-by: "Samuel Martin" <s.martin49@gmail.com>
+On 2013-12-05 19:12 +0100, Arnout Vandecappelle spake thusly:
+> On 05/12/13 00:19, Yann E. MORIN wrote:
+> >Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> >Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> 
+>  If you've reviewed it and tested it, you would commit it if you had commit
+> access, right? So this could actually be an Acked-by, right? Or is my
+> understanding of these tags incorrect?
 
+I'm following the definitions of Documentation/SubmittingPatches in my
+Linux kernel tree.
+
+For example, I refer to:
+    Acked-by: does not necessarily indicate acknowledgement of the entire
+    patch.
+
+    Reviewed-by:, instead, indicates that the patch has been reviewed
+    and found acceptable according to the Reviewer's Statement
+    [--SNIP statement--]
+
+So, by providing both Reviewed-by and Tested by, I am explicitly stating
+that I did a review of the patch, and I tested it. Which, from my
+understanding, Acked-by does.
+
+Also, I do not believe to be in a position to provide my Acked-by on the
+core infrastructure, which is rather Thomas' domain. So, Thomas would be
+right to provide his Acked-by on such patches (but obviously he can't on
+those, since he's the author).
 
 Regards,
+Yann E. MORIN.
 
 -- 
-Samuel
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20131205/192d0d97/attachment-0001.html>
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
