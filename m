@@ -1,183 +1,40 @@
-From: Ryan Barnett <rjbarnet@rockwellcollins.com>
-Date: Thu, 5 Dec 2013 06:00:40 -0600
-Subject: [Buildroot] [PATCHv6 5/5] docs/manual: add explanations
-	about	BR2_EXTERNAL
-In-Reply-To: <1386198891-17968-6-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1386198891-17968-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1386198891-17968-6-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <OF072A76EE.00FA43BC-ON86257C38.00377724-86257C38.0041FA33@rockwellcollins.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu,  5 Dec 2013 09:02:12 -0300
+Subject: [Buildroot] [PATCH 1/2] linux-headers: bump 3. {4, 10,
+	12}.x stable versions
+Message-ID: <1386244933-17583-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas,
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/linux-headers/Config.in.host | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote on 12/04/2013 
-05:14:51 PM:
-
-> This commit updates the manual to add details on how to use the
-> BR2_EXTERNAL feature.
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> ---
->  docs/manual/customize-outside-br.txt | 137 
-+++++++++++++++++++++++++++++++++++
->  docs/manual/customize.txt            |   2 +
->  2 files changed, 139 insertions(+)
->  create mode 100644 docs/manual/customize-outside-br.txt
-> 
-> diff --git a/docs/manual/customize-outside-br.txt 
-b/docs/manual/customize-outside-br.txt
-> new file mode 100644
-> index 0000000..4069834
-> --- /dev/null
-> +++ b/docs/manual/customize-outside-br.txt
-> @@ -0,0 +1,137 @@
-> +// -*- mode:doc -*- ;
-> +
-> +[[outside-br-custom]]
-> +Keeping customization outside Buildroot
-> +~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> +
-> +The Buildroot community recommends and encourages upstreaming to the
-> +official Buildroot version the packages and board supports that are
-> +written by developers. However, it is sometimes not possible or
-> +desirable because some of these packages or board supports are highly
-> +specific or proprietary.
-> +
-> +In this case, Buildroot users are offered two choices:
-> +
-> + * They can add their packages, board support and configuration files
-> +   directly within the Buildroot tree, and maintain them by using
-> +   branches in a version control system.
-> +
-> + * They can use the +BR2_EXTERNAL+ mechanism, which allows to keep
-> +   package recipes, board support and configuration files outside of
-> +   the Buildroot tree, while still having them nicely integrated in
-> +   the build logic. The following paragraphs give details on how to
-> +   use +BR2_EXTERNAL+.
-> +
-> ++BR2_EXTERNAL+ is an environment variable that one can use to point to
-
-I would remove the 'one' from the above line. So it would read:
-
-+BR2_EXTERNAL+ is an environment variable that can be used to point to
-
-> +a directory that contains Buildroot customizations. It can be passed
-> +to any Buildroot +make+ invocation. It is automatically saved in the
-> +hidden +.br-external+ file in the output directory, so that it is not
-> +needed to pass +BR2_EXTERNAL+ at every +make+ invocation. It can
-
-I would consider rewording the below sentence:
-
-It is automatically saved in the hidden +.br-external+ file in the output 
-directory, so that it is not needed to pass +BR2_EXTERNAL+ at every +make+ 
-invocation.
-
-to be:
-
-It is automatically saved in the hidden +.br-external+ file in the output 
-directory. By doing this, there is no need to pass +BR2_EXTERNAL+ at every 
-+make+ invocation.
-
-
-> +however be changed at any time by passing a new value, and can be
-> +removed by passing an empty value.
-> +
-> +The +BR2_EXTERNAL+ path can be either an absolute or a relative path,
-> +but if it's passed as a relative path, it is important to note that it
-> +is interpreted relatively to the main Buildroot source directory, not
-> +the Buildroot output directory.
-> +
-> +Some examples:
-> +
-> +-----
-> + buildroot/ $ make BR2_EXTERNAL=../foobar menuconfig
-> +-----
-> +
-> +Starting from now on, external definitions from the +../foobar+
-> +directory will be used:
-> +
-> +-----
-> + buildroot/ $ make
-> + buildroot/ $ make legal-info
-> +-----
-> +
-> +We can switch to another external definitions directory at any time:
-> +
-> +-----
-> + buildroot/ $ make BR2_EXTERNAL=../barfoo xconfig
-> +-----
-> +
-> +Or disable the usage of external definitions:
-> +
-> +-----
-> + buildroot/ $ make BR2_EXTERNAL= xconfig
-> +-----
-> +
-> +This +BR2_EXTERNAL+ then allows three different things:
-
-Remove 'This' from the previous line.
-
-> +
-> + * One can store all the board-specific configuration files there,
-> +   such as the kernel configuration, the root filesystem overlay, or
-> +   any other configuration file for which Buildroot allows to set its
-> +   location. The +BR2_EXTERNAL+ value is available within the
-> +   Buildroot configuration using +$(BR2_EXTERNAL)+. As an example, one
-> +   could set the +BR2_ROOTFS_OVERLAY+ Buildroot option to
-> +   +$(BR2_EXTERNAL)/board/<boardname>/overlay/+ (to specify a root
-> +   filesystem overlay), or the +BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE+
-> +   Buildroot option to
-> +   +$(BR2_EXTERNAL)/board/<boardname>/kernel.config+ (to specify the
-> +   location of the kernel configuration file). To achieve this, it is
-> +   recommended but not mandatory, to store those details in
-> +   directories called +board/<boardname>/+ under +BR2_EXTERNAL+. This
-> +   matches the directory structure used within Buildroot.
-> +
-> + * One can store package recipes (i.e +Config.in+ and
-> +   +<packagename>.mk+), or even custom configuration options and make
-> +   logic. Buildroot automatically includes +BR2_EXTERNAL/Config.in+ to
-> +   make it appear in the top-level configuration menu, and includes
-> +   +BR2_EXTERNAL/external.mk+ with the rest of the makefile logic.
-> ++
-> +The main usage of this is to store package recipes. The recommended
-> +   way to do this is to write a +BR2_EXTERNAL/Config.in+ that looks
-> +   like:
-> ++
-> +------
-> +menu "<somecompany> packages"
-> +
-> +source "$BR2_EXTERNAL/package/package1/Config.in"
-> +source "$BR2_EXTERNAL/package/package2/Config.in"
-> +
-> +endmenu
-> +------
-> ++
-> +Then, have a +BR2_EXTERNAL/external.mk+ file that looks like:
-> ++
-> +------
-> +include $(sort $(wildcard $(BR2_EXTERNAL)/package/*/*.mk))
-> +------
-> ++
-> +And then in +BR2_EXTERNAL/package/package1+ and
-> +   +BR2_EXTERNAL/package/package2+ create normal Buildroot package
-> +   recipes, as explained in xref:adding-packages[].
-> +
-> + * One can store Buildroot defconfigs in the +configs+ subdirectory of
-> +   +BR2_EXTERNAL+. Buildroot will automatically show them in the
-> +   output of +make help+ and allow them to be loaded with the normal
-> +   +make <name>_defconfig+ command.
-
-Maybe add a comment that they are shown under 'User-provided configs:'
-
-Thanks,
--Ryan
-
-[...]
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20131205/8acf2d7b/attachment.html>
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 034e1e8..33c1024 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -83,14 +83,14 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "3.1.10"	if BR2_KERNEL_HEADERS_3_1
+ 	default "3.2.53"	if BR2_KERNEL_HEADERS_3_2
+ 	default "3.3.8"		if BR2_KERNEL_HEADERS_3_3
+-	default "3.4.71"	if BR2_KERNEL_HEADERS_3_4
++	default "3.4.72"	if BR2_KERNEL_HEADERS_3_4
+ 	default "3.5.7"		if BR2_KERNEL_HEADERS_3_5
+ 	default "3.6.11"	if BR2_KERNEL_HEADERS_3_6
+ 	default "3.7.10"	if BR2_KERNEL_HEADERS_3_7
+ 	default "3.8.13"	if BR2_KERNEL_HEADERS_3_8
+ 	default "3.9.11"	if BR2_KERNEL_HEADERS_3_9
+-	default "3.10.21"	if BR2_KERNEL_HEADERS_3_10
++	default "3.10.22"	if BR2_KERNEL_HEADERS_3_10
+ 	default "3.11.10"	if BR2_KERNEL_HEADERS_3_11
+-	default "3.12.2"	if BR2_KERNEL_HEADERS_3_12
++	default "3.12.3"	if BR2_KERNEL_HEADERS_3_12
+ 	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+-- 
+1.8.3.2
