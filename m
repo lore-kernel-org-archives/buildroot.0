@@ -1,31 +1,23 @@
-From: Atilla Filiz <atilla.filiz@gmail.com>
-Date: Thu, 5 Dec 2013 15:23:46 +0100
-Subject: [Buildroot] Is there any effort for Quilt integration?
-Message-ID: <CACTZKX4jtApXWz+EJB=yDubbS9ESSpS9p0WXw9wGV7KL-n+ZJw@mail.gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu,  5 Dec 2013 14:43:46 +0000 (UTC)
+Subject: [Buildroot] [Bug 6722] Usage of $($(PKG)_DIR_PREFIX) is an issue
+ with linux package
+In-Reply-To: <bug-6722-163@https.bugs.busybox.net/>
+References: <bug-6722-163@https.bugs.busybox.net/>
+Message-ID: <20131205144346.2790C9BF2C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I have just started working with quilt and loved how it can be used for
-patch management and a mini version control scheme.
+https://bugs.busybox.net/show_bug.cgi?id=6722
 
-Is there anyone working on Quilt support for Buildroot?
-
-Whit Quilt
-1- The patching step will use 'quilt import' instead of 'patch' if quilt
-exists
-2- In the output/build/package-ver directory, there will be a patches subdir
- 2.1 This way the user will be able to un-apply, re-apply and modify
-existing patches
- 2.2 The user will be able to create patches in-place, without needing to
-copy, clean and diff manually
-
-
+--- Comment #4 from Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> 2013-12-05 14:43:44 UTC ---
+You did also see this committed patch, right?
+http://git.buildroot.net/buildroot/commit/?id=9e7e9b215017ee91c9369f01476bb4b4fc5f2484
 
 -- 
-Atilla Filiz
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20131205/1ce5cf71/attachment.html>
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
