@@ -1,55 +1,56 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 6 Dec 2013 22:39:31 +0100
-Subject: [Buildroot] [git commit] gdb: arc: Use git instead of website
-Message-ID: <20131206215055.D5CF19BF55@busybox.osuosl.org>
+Date: Fri, 6 Dec 2013 22:46:30 +0100
+Subject: [Buildroot] [git commit] gdb: add microblaze internal toolchain
+Message-ID: <20131206215056.684669BF34@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=44eca6a7c86f71f5f05e2b28f7a4b68203d351d3
+commit: http://git.buildroot.net/buildroot/commit/?id=5ac778f758a2683b46c74e44cc81acf40a44dd81
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Mischa Jonker <mjonker@synopsys.com>
+Signed-off-by: Spenser Gilliland <spenser@gillilanding.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gdb/Config.in.host |    2 +-
- package/gdb/gdb.mk         |    5 +++--
- 2 files changed, 4 insertions(+), 3 deletions(-)
+ package/gdb/Config.in.host |    2 ++
+ package/gdb/gdb.mk         |    5 +++++
+ 2 files changed, 7 insertions(+), 0 deletions(-)
 
 diff --git a/package/gdb/Config.in.host b/package/gdb/Config.in.host
-index 128aed9..074aa57 100644
+index 074aa57..de0e0be 100644
 --- a/package/gdb/Config.in.host
 +++ b/package/gdb/Config.in.host
-@@ -58,6 +58,6 @@ config BR2_GDB_VERSION
- 	default "7.3.1"    if BR2_GDB_VERSION_7_3
+@@ -16,6 +16,7 @@ if BR2_PACKAGE_HOST_GDB
+ choice
+ 	prompt "GDB debugger Version"
+ 	depends on !BR2_arc
++	depends on !BR2_microblaze
+ 	default BR2_GDB_VERSION_6_6 if BR2_bfin
+ 	default BR2_GDB_VERSION_6_7_1_AVR32_2_1_5 if BR2_avr32
+ 	default BR2_GDB_VERSION_7_5
+@@ -59,5 +60,6 @@ config BR2_GDB_VERSION
  	default "7.4.1"    if BR2_GDB_VERSION_7_4
  	default "7.5.1"    if BR2_GDB_VERSION_7_5
--	default "7.5.1-arc" if BR2_arc
-+	default "f25a1952afd054205f9471e449c1f7ca5b271b7c" if BR2_arc
+ 	default "f25a1952afd054205f9471e449c1f7ca5b271b7c" if BR2_arc
++	default "6be65fb56ea6694a9260733a536a023a1e2d4d57" if BR2_microblaze
  
  endif
 diff --git a/package/gdb/gdb.mk b/package/gdb/gdb.mk
-index 700cf72..e6b1115 100644
+index e6b1115..fbe1641 100644
 --- a/package/gdb/gdb.mk
 +++ b/package/gdb/gdb.mk
-@@ -22,14 +22,15 @@ endif
+@@ -26,6 +26,11 @@ GDB_SITE = $(call github,foss-for-synopsys-dwc-arc-processors,gdb,$(GDB_VERSION)
+ GDB_SOURCE = gdb-$(GDB_VERSION).tar.gz
  endif
  
- ifeq ($(BR2_arc),y)
--GDB_SITE = $(BR2_ARC_SITE)
-+GDB_SITE = $(call github,foss-for-synopsys-dwc-arc-processors,gdb,$(GDB_VERSION))
++ifeq ($(BR2_microblaze),y)
++GDB_SITE = $(call github,Xilinx,gdb,$(GDB_VERSION))
 +GDB_SOURCE = gdb-$(GDB_VERSION).tar.gz
- endif
- 
++endif
++
  ifeq ($(GDB_VERSION),6.7.1-avr32-2.1.5)
  GDB_SITE = ftp://www.at91.com/pub/buildroot/
  endif
- 
--GDB_SOURCE = gdb-$(GDB_VERSION).tar.bz2
-+GDB_SOURCE ?= gdb-$(GDB_VERSION).tar.bz2
- GDB_LICENSE = GPLv2+ LGPLv2+ GPLv3+ LGPLv3+
- GDB_LICENSE_FILES = COPYING COPYING.LIB COPYING3 COPYING3.LIB
- 
