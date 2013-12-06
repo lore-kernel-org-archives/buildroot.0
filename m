@@ -1,32 +1,46 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 6 Dec 2013 12:35:25 +0100
-Subject: [Buildroot] [git commit] git: bump to version 1.8.5.1
-Message-ID: <20131206114504.77B8D9BF4A@busybox.osuosl.org>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri,  6 Dec 2013 11:58:49 +0000 (UTC)
+Subject: [Buildroot] [Bug 6722] Usage of $($(PKG)_DIR_PREFIX) is an issue
+ with linux package
+In-Reply-To: <bug-6722-163@https.bugs.busybox.net/>
+References: <bug-6722-163@https.bugs.busybox.net/>
+Message-ID: <20131206115849.41F269BF4A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f0da97758dd438379ff7ba1d5b6404ebac459fec
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+https://bugs.busybox.net/show_bug.cgi?id=6722
 
-Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/git/git.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+--- Comment #8 from Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> 2013-12-06 11:58:49 UTC ---
+Thanks Ryan.
 
-diff --git a/package/git/git.mk b/package/git/git.mk
-index 58455b1..cf16250 100644
---- a/package/git/git.mk
-+++ b/package/git/git.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GIT_VERSION         = 1.8.4.1
-+GIT_VERSION         = 1.8.5.1
- GIT_SITE            = http://git-core.googlecode.com/files/
- GIT_LICENSE         = GPLv2 LGPLv2.1+
- GIT_LICENSE_FILES   = COPYING LGPL-2.1
+If I understand the problem correctly, then it will be fixed with my additional
+patches. In the current code, if you print out PATCH_BASE_DIRS for busybox and
+linux, you get:
+
+>>> busybox 1.21.1 Patching PATCH_BASE_DIRS='package//busybox /busybox'
+>>> linux 3.10.2 Patching PATCH_BASE_DIRS='/linux /linux'
+
+with PATCH_BASE_DIRS calculated as:
+PATCH_BASE_DIRS = $($(PKG)_DIR_PREFIX)/$(RAWNAME) $(call
+qstrip,$(BR2_GLOBAL_PATCH_DIR))/$(RAWNAME)
+
+
+and with my modified code, it becomes:
+>>> busybox 1.21.1 Patching PATCH_BASE_DIRS='package/busybox/ /busybox'
+>>> linux 3.10.4 Patching PATCH_BASE_DIRS='linux/ /linux'
+
+with PATCH_BASE_DIRS calculated as:
+PATCH_BASE_DIRS = $($(PKG)_DIR_PREFIX) $(call
+qstrip,$(BR2_GLOBAL_PATCH_DIR))/$(RAWNAME)
+
+
+Ryan, can you confirm that what I describe above is the problem you have seen,
+and that the 'fixed' output is indeed what you expect?
+
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
