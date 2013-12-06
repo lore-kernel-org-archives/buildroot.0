@@ -1,68 +1,46 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri,  6 Dec 2013 00:41:57 +0100
-Subject: [Buildroot] [PATCH v2] manual: do not generate .pyc files
-Message-ID: <1386286917-5277-1-git-send-email-yann.morin.1998@free.fr>
+From: Frank Hunleth <fhunleth@troodon-software.com>
+Date: Thu, 5 Dec 2013 20:14:13 -0500
+Subject: [Buildroot] [PATCH 1/2] qemu-system: new host package
+In-Reply-To: <20131205233131.0cad979d@skate>
+References: <1386117649-7119-1-git-send-email-gustavo@zacarias.com.ar>
+ <1386117649-7119-2-git-send-email-gustavo@zacarias.com.ar>
+ <20131204094419.6d4d4279@skate> <529EFEBA.8040103@zacarias.com.ar>
+ <20131204133306.7e7e8e07@skate> <529F24A4.6030005@zacarias.com.ar>
+ <52A0BCBC.5000008@mind.be> <20131205233131.0cad979d@skate>
+Message-ID: <CA+-urNQEcvSey5BhuK0dJhGe07YWk65pmq2Ar4212UMq=ockdQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+On Thu, Dec 5, 2013 at 5:31 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Dear Arnout Vandecappelle,
+>
+> On Thu, 05 Dec 2013 18:49:48 +0100, Arnout Vandecappelle wrote:
+>
+>> >> Yes, I agree, the user mode emulation should probably be removed. It
+>> >> simply cannot work properly, because we have no way of guaranteeing
+>> >> that the kernel headers used for the target toolchain are older than
+>> >> the kernel running on the system.
+>>
+>>   It's not possible to do it in Config.in, but it's easy to do during the
+>> build: compare /usr/include/linux/version.h with
+>> $(STAGING_DIR)/usr/include/linux/version.h
+>
+> And then you fail the build if
+> $(STAGING_DIR)/usr/include/linux/version.h gives a newer version
+> of /usr/include/linux/version.h ? Could be possible, even if not really
+> nice. But Fran?ois is proposing to remove cpanminus, which was the only
+> reason to have qemu-user support. So do we care?
 
-Python saves a pre-compiled support/scripts/kconfiglib.pyc file
-side-to-side with the corresponding .py file.
+I care a little (for as much as that counts), but not enough to argue
+for keeping it if it is becoming a pain. We use qemu-user in a
+post-build step to run a battery of regression tests on algorithmic
+code. It has been convenient since the regression test data is too
+large to run in one pass on the target hardware. It's also faster to
+run on our PCs. I don't think that the regression tests exercise any
+of the issues above.
 
-This does not work if the Buildroot source tree is read-only (but
-this is not an error for Python, which keep going OK).
-
-But this may cause  issues for out-of-tree builds in case the same
-Buildroot source tree is shared by many builds.
-
-Also, 'make clean' currently does not clean this file, and out-of-tree
-builds can remove it either, at the risk of causing issues for other
-out-of-tree builds running at the same time.
-
-Just tell Python not to generate .pyc files:
-  - call the script via python, don't use the sha-bang
-  - thus, make the script non-executable, and remove the sha-bang
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Arnout Vandecappelle <arnout@mind.be>
-Cc: Samuel Martin <s.martin49@gmail.com>
----
-Changes v1->v2:
-  - fix typo in commit log  (Samuel)
----
- docs/manual/manual.mk               | 2 +-
- support/scripts/gen-manual-lists.py | 2 --
- 2 files changed, 1 insertion(+), 3 deletions(-)
- mode change 100755 => 100644 support/scripts/gen-manual-lists.py
-
-diff --git a/docs/manual/manual.mk b/docs/manual/manual.mk
-index 0926566..f0bbff8 100644
---- a/docs/manual/manual.mk
-+++ b/docs/manual/manual.mk
-@@ -1,7 +1,7 @@
- manual-update-lists: manual-check-dependencies-lists
- 	$(Q)$(call MESSAGE,"Updating the manual lists...")
- 	$(Q)BR2_DEFCONFIG="" TOPDIR=$(TOPDIR) O=$(O)/docs/manual/.build \
--		$(TOPDIR)/support/scripts/gen-manual-lists.py
-+		python -B $(TOPDIR)/support/scripts/gen-manual-lists.py
- 
- # we can't use suitable-host-package here because that's not available in
- # the context of 'make release'
-diff --git a/support/scripts/gen-manual-lists.py b/support/scripts/gen-manual-lists.py
-old mode 100755
-new mode 100644
-index 4546e07..4562d7e
---- a/support/scripts/gen-manual-lists.py
-+++ b/support/scripts/gen-manual-lists.py
-@@ -1,5 +1,3 @@
--#!/usr/bin/env python
--##
- ## gen-manual-lists.py
- ##
- ## This script generates the following Buildroot manual appendices:
--- 
-1.8.1.2
+Frank
