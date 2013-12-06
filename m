@@ -1,41 +1,71 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 6 Dec 2013 09:06:29 +0100
-Subject: [Buildroot] [PATCH 1 of 3] manual: remove references to
- uninstall commands
-In-Reply-To: <CAAXf6LVVfX4KDPcT=jz-z1v2SF-9JO0zJsJiNgjWWpLjnXMFvg@mail.gmail.com>
-References: <patchbomb.1386240845@argentina>
- <f2f1b59c4cfbf80a1592.1386240846@argentina>
- <52A0F94B.1030600@mind.be> <20131205233008.06272dd1@skate>
- <CAAXf6LVVfX4KDPcT=jz-z1v2SF-9JO0zJsJiNgjWWpLjnXMFvg@mail.gmail.com>
-Message-ID: <20131206090629.01bdc423@skate>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Fri, 6 Dec 2013 09:07:31 +0100
+Subject: [Buildroot] [PATCH 02/16] docs: document the new github helper
+	function
+In-Reply-To: <1386264059-14057-3-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1386264059-14057-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1386264059-14057-3-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <CAAXf6LW50zmZe=wY0f2gtzerPSGHwtxUe-8i1cEr2AuPHCAsKQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas De Schampheleire,
+On Thu, Dec 5, 2013 at 6:20 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> From: Mischa Jonker <Mischa.Jonker@synopsys.com>
+>
+> [Thomas: splitted from Mischa original commit]
+>
+> Signed-off-by: Mischa Jonker <mjonker@synopsys.com>
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> ---
+>  docs/manual/adding-packages-generic.txt | 5 +++--
+>  docs/manual/adding-packages-tips.txt    | 5 +++--
+>  2 files changed, 6 insertions(+), 4 deletions(-)
+>
+> diff --git a/docs/manual/adding-packages-generic.txt b/docs/manual/adding-packages-generic.txt
+> index fb7a9e5..d82ab61 100644
+> --- a/docs/manual/adding-packages-generic.txt
+> +++ b/docs/manual/adding-packages-generic.txt
+> @@ -230,7 +230,9 @@ information is (assuming the package name is +libfoo+) :
+>    URL or a local filesystem path. HTTP, FTP and SCP are supported URL
+>    types for retrieving package tarballs. Git, Subversion, Mercurial,
+>    and Bazaar are supported URL types for retrieving packages directly
+> -  from source code management systems. A filesystem path may be used
+> +  from source code management systems. There is a helper function to make
+> +  it easier to download source tarballs from github (refer to
+> +  xref:github-download-url[] for details). A filesystem path may be used
+>    to specify either a tarball or a directory containing the package
+>    source code. See +LIBFOO_SITE_METHOD+ below for more details on how
+>    retrieval works. +
+> @@ -244,7 +246,6 @@ information is (assuming the package name is +libfoo+) :
+>    Examples: +
+>      +LIBFOO_SITE=http://www.libfoosoftware.org/libfoo+ +
+>      +LIBFOO_SITE=http://svn.xiph.org/trunk/Tremor/+ +
+> -    +LIBFOO_SITE=git://github.com/kergoth/tslib.git+ +
+>      +LIBFOO_SITE=/opt/software/libfoo.tar.gz+ +
+>      +LIBFOO_SITE=$(TOPDIR)/../src/libfoo/+
+>
+> diff --git a/docs/manual/adding-packages-tips.txt b/docs/manual/adding-packages-tips.txt
+> index 00244fe..73c25be 100644
+> --- a/docs/manual/adding-packages-tips.txt
+> +++ b/docs/manual/adding-packages-tips.txt
+> @@ -41,11 +41,12 @@ How to add a package from github
+>
+>  Packages on github often don't have a download area with release tarballs.
+>  However, it is possible to download tarballs directly from the repository
+> -on github.
+> +on github. As github is known to have changed download mechanisms in the
+> +past, the 'github' helper function should be used as shown below.
+>
+>  ------------------------
+>  FOO_VERSION = v1.0 # tag or full commit ID
+> -FOO_SITE = http://github.com/<user>/<package>/tarball/$(FOO_VERSION)
+> +FOO_SITE = $(call github,<user>,<package>,$(FOO_VERSION))
+>  ------------------------
+>
+>  .Notes
 
-On Fri, 6 Dec 2013 08:38:28 +0100, Thomas De Schampheleire wrote:
-
-> Thanks for mentioning, I wasn't aware that -clean was also deprecated.
-> To be sure, foo-dirclean will still be supported, right?
-
-foo-dirclean is implemented in a generic way in the package
-infrastructure, so there is no problem with foo-dirclean and it should
-be kept, IMO.
-
-The main problem with foo-uninstall and foo-clean is that it had to be
-implemented by each package, but it was barely tested, especially
-during package bumps.
-
-> I will create another patch series to remove -clean, but as ThomasP
-> said this should not block integration of this series already.
-
-Indeed.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Acked-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
