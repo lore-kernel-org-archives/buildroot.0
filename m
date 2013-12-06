@@ -1,63 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 6 Dec 2013 18:07:51 +0100
-Subject: [Buildroot] [PATCH 3/3] package/parted: add a host variant
-In-Reply-To: <20131206165614.GB3364@free.fr>
-References: <cover.1386023329.git.yann.morin.1998@free.fr>
- <1891fdbc7ad11ce084f2be315871eb10573953b7.1386023329.git.yann.morin.1998@free.fr>
- <20131206104811.49d81180@skate> <20131206165614.GB3364@free.fr>
-Message-ID: <20131206180751.03555e6e@skate>
+Date: Fri, 6 Dec 2013 19:08:36 +0100
+Subject: [Buildroot] [PATCH] sawman: Link using gcc instead of ld
+In-Reply-To: <1386347428-4142-1-git-send-email-Vincent.Riera@imgtec.com>
+References: <1386347428-4142-1-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <20131206190836.637fc9f7@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+Dear Vicente Olivert Riera,
 
-On Fri, 6 Dec 2013 17:56:14 +0100, Yann E. MORIN wrote:
+On Fri, 6 Dec 2013 16:30:28 +0000, Vicente Olivert Riera wrote:
 
-> I think we want the same dependency the target parted has. If the target
-> parted can handle lvm2 volumes, then we may have to generate them in the
-> first place.
+> +--- SaWMan-1.6.3/wm/sawman/Makefile.in.orig	2013-12-06 14:22:22.675409826 +0000
+> ++++ SaWMan-1.6.3/wm/sawman/Makefile.in	2013-12-06 16:04:03.383752843 +0000
 
-Yes, we may. But that seems unlikely. I believe the most common usage
-of LVM on embedded platforms is for NAS/storage type devices, and for
-those systems, the root filesystem image is generally not on the
-LVM/RAID storage I believe, no?
+Makefile.in is generated from Makefile.am. So we shouldn't be fixing
+Makefile.in, but instead Makefile.am or the process that generates
+Makefile.in from Makefile.am.
 
-> So, what about:
-> 
-> # If target-parted can handle lvm volumes, then host-parted
-> # should be, too, so as to be able to generate them.
-> # If target-parted can't handle lvm volumes, there is no reason
-> # for host-aprted to handle them.
-> ifeq ($(BR2_PACKAGE_LVM2),y)
-> PARTED_DEPENDENCIES += lvm2
-> HOST_PARTED_DEPENDENCIES += lvm2
-> PARTED_CONF_OPT += --enable-device-mapper
-> HOST_PARTED_CONF_OPT += --enable-device-mapper
-> else
-> PARTED_CONF_OPT += --disable-device-mapper
-> HOST_PARTED_CONF_OPT += --disable-device-mapper
-> endif
+What happens if you simply add:
 
-While I do understand the logic behind what you're proposing, I'm not
-really comfortable with having the configuration of tools built for the
-host changed depending on the target configuration. It seems to be
-creating a bad precedent.
+SAWMAN_AUTORECONF = YES
 
-> > In the host variant of parted, lvm2 support is never enabled, as I
-> > believe it's pretty unlikely that lvm2 support will be needed to
-> > generate disk images. This would make PATCH 2/3 of your series
-> > unnecessary, of course.
-> 
-> I don't think we should not be able to generate lvm volumes. I can see
-> at least a few cases where it would be needed.
-> 
-> Of course, we may just add host-parted without lvm support right now,
-> and add it later when the need really arises.
-
-Yes, that would be my proposal.
+ ?
 
 Best regards,
 
