@@ -1,37 +1,65 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 06 Dec 2013 17:10:35 +0100
-Subject: [Buildroot] Availability of old build results
-In-Reply-To: <CAAXf6LWmaYb0cohOcbt5CdkXjMmeOFOLgbWN5eKQBqd66MCX5w@mail.gmail.com>
-References: <20131206002526.58d095e8@skate> <20131205234122.GH3405@free.fr>
- <CAAXf6LVnoGgnwYNS+iqGdqpwdB+XoDC2Z0iCTKz2wxuKZbSYWA@mail.gmail.com>
- <874n6mfjsp.fsf@dell.be.48ers.dk> <20131206095043.361b3fc4@skate>
- <CAAXf6LWmaYb0cohOcbt5CdkXjMmeOFOLgbWN5eKQBqd66MCX5w@mail.gmail.com>
-Message-ID: <52A1F6FB.1070101@mind.be>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Fri, 6 Dec 2013 16:30:28 +0000
+Subject: [Buildroot] [PATCH] sawman: Link using gcc instead of ld
+Message-ID: <1386347428-4142-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 06/12/13 10:57, Thomas De Schampheleire wrote:
-> If the patch is fixing an autobuild problem, we really should be
-> repeating that autobuild configuration instead (but that could be done
-> manually by someone).
+Using ld may cause a link failure due to using the default emulation
+linker which is configured when building the linker in binutils.  Using
+gcc instead will pass the appropriate -m value because the compiler
+knows the ABI you are using.
 
-  I think it would be nice if a failing autobuild configuration would 
-automatically be added to jenkins, and that it would be automatically 
-removed from there once it succeeds. Of course, that is only feasible if 
-the number of failures is low (maximum 1 or 2 per day) and they get fixed 
-quickly, otherwise jenkins will blow up. So it's not something we can 
-consider right away.
+Here is an example of the failure:
 
-  Regards,
-  Arnout
+ld: .libs/libdirectfbwm_sawman.a.tmp/sawman_wm.o: ABI is incompatible
+with that of the selected emulation
+ld: failed to merge target specific data of file
+.libs/libdirectfbwm_sawman.a.tmp/sawman_wm.o
+ld: Attempt to do relocatable link with elf64-tradbigmips input and
+elf32-tradbigmips output
+ld: .libs/libdirectfbwm_sawman.a.tmp/sawman_wm.o: file class ELFCLASS64
+incompatible with ELFCLASS32
+ld: final link failed: File in wrong format
 
+Fixes:
+
+   http://autobuild.buildroot.net/results/e4b/e4b77681a44626efa2a44627604630697e785086/
+
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+ .../sawman-001-link-using-gcc-instead-of-ld.patch  |   20 ++++++++++++++++++++
+ 1 files changed, 20 insertions(+), 0 deletions(-)
+ create mode 100644 package/sawman/sawman-001-link-using-gcc-instead-of-ld.patch
+
+diff --git a/package/sawman/sawman-001-link-using-gcc-instead-of-ld.patch b/package/sawman/sawman-001-link-using-gcc-instead-of-ld.patch
+new file mode 100644
+index 0000000..5472651
+--- /dev/null
++++ b/package/sawman/sawman-001-link-using-gcc-instead-of-ld.patch
+@@ -0,0 +1,20 @@
++sawman: Link using gcc instead of ld
++
++Using ld may cause a link failure due to using the default emulation
++linker which is configured when building the linker in binutils.  Using
++gcc instead will pass the appropriate -m value because the compiler 
++knows the ABI you are using.
++
++Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
++
++--- SaWMan-1.6.3/wm/sawman/Makefile.in.orig	2013-12-06 14:22:22.675409826 +0000
+++++ SaWMan-1.6.3/wm/sawman/Makefile.in	2013-12-06 16:04:03.383752843 +0000
++@@ -622,7 +622,7 @@ uninstall-am: uninstall-wmDATA uninstall
++ 	if test -d $<.tmp; then rmdir $<.tmp; fi
++ 	mkdir $<.tmp
++ 	(cd $<.tmp && $(AR) x ../../$<)
++-	$(LD) -o $@ -r $<.tmp/*.o
+++	$(CC) $(LDFLAGS) -nostdlib -o $@ -r $<.tmp/*.o
++ 	rm -f $<.tmp/*.o && rmdir $<.tmp
++ 
++ .PHONY: $(LTLIBRARIES:%.la=.libs/%.a)
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+1.7.1
