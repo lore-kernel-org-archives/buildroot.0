@@ -1,48 +1,61 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Fri, 6 Dec 2013 13:39:28 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
-	2013-12-04
-In-Reply-To: <20131205073003.4AE1F101506@stock.ovh.net>
-References: <20131205073003.4AE1F101506@stock.ovh.net>
-Message-ID: <CAAXf6LWxqfJF7+ugT+k=Fa8ZxbRCuiVL9W_HWZZHPeoTquSGRw@mail.gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri,  6 Dec 2013 12:40:06 +0000 (UTC)
+Subject: [Buildroot] [Bug 6722] Usage of $($(PKG)_DIR_PREFIX) is an issue
+ with linux package
+In-Reply-To: <bug-6722-163@https.bugs.busybox.net/>
+References: <bug-6722-163@https.bugs.busybox.net/>
+Message-ID: <20131206124006.BAC739BF4C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+https://bugs.busybox.net/show_bug.cgi?id=6722
 
-On Thu, Dec 5, 2013 at 8:30 AM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Build statistics for 2013-12-04
-> ===============================
->
->         success : 71
->        failures : 100
->        timeouts : 2
->           TOTAL : 173
->
+--- Comment #9 from Ryan Barnett <rjbarnet@rockwellcollins.com> 2013-12-06 12:40:06 UTC ---
+(In reply to comment #8)
+> Thanks Ryan.
+> 
+> If I understand the problem correctly, then it will be fixed with my additional
+> patches. In the current code, if you print out PATCH_BASE_DIRS for busybox and
+> linux, you get:
+> 
+> >>> busybox 1.21.1 Patching PATCH_BASE_DIRS='package//busybox /busybox'
+> >>> linux 3.10.2 Patching PATCH_BASE_DIRS='/linux /linux'
+                                             ^^^^^^
+Yes this is the problem I'm was trying to communicate. The first instance of
+/linux is incorrect. Sorry for the confusion.
 
->     mipsel |                  rt-tests-0.83 | NOK | http://autobuild.buildroot.net/results/798bffbb87a079ec2a1b846d53108ece46793c25/
+> with PATCH_BASE_DIRS calculated as:
+> PATCH_BASE_DIRS = $($(PKG)_DIR_PREFIX)/$(RAWNAME) $(call
+> qstrip,$(BR2_GLOBAL_PATCH_DIR))/$(RAWNAME)
+> 
+> 
+> and with my modified code, it becomes:
+> >>> busybox 1.21.1 Patching PATCH_BASE_DIRS='package/busybox/ /busybox'
+> >>> linux 3.10.4 Patching PATCH_BASE_DIRS='linux/ /linux'
+> 
+> with PATCH_BASE_DIRS calculated as:
+> PATCH_BASE_DIRS = $($(PKG)_DIR_PREFIX) $(call
+> qstrip,$(BR2_GLOBAL_PATCH_DIR))/$(RAWNAME)
+> 
+> 
+> Ryan, can you confirm that what I describe above is the problem you have seen,
+> and that the 'fixed' output is indeed what you expect?
 
-src/cyclictest/cyclictest.c: In function 'timerthread':
-src/cyclictest/cyclictest.c:638:9: error: 'union <anonymous>' has no
-member named '_tid'
-src/cyclictest/cyclictest.c: In function 'main':
-src/cyclictest/cyclictest.c:1565:4: warning: format '%lu' expects
-argument of type 'long unsigned int', but argument 2 has type
-'uint64_t' [-Wformat]
-make[1]: *** [cyclictest.o] Error 1
+Yes this is my problem and your patchset fixes it! Too much email traffic to
+keep up on this stuff.
 
-The code is:
-sigev.sigev_notify_thread_id = stat->tid;
-where
-#define sigev_notify_thread_id _sigev_un._tid
+This brings up another interesting point. Should we make the $(call
+qstrip,$(BR2_GLOBAL_PATCH_DIR))/$(RAWNAME) conditional on BR2_GLOBAL_PATCH_DIR
+being defined?
 
-So this _sigev_un union is supposed to contain _tid but doesn't on
-this uClibc-based toolchain.
-Is this a common problem when using uClibc? Any hints?
+Are you going submit a new version of your patches soon? I'm working on trying
+to make BR2_GLOBAL_PATCH have the ability to have multiple directories
+specified.
 
-Thanks,
-Thomas
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
