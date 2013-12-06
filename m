@@ -1,24 +1,32 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 06 Dec 2013 12:35:33 +0100
-Subject: [Buildroot] [PATCH v2 1/1] git: bump to version 1.8.5.1
-In-Reply-To: <1386329133-9523-1-git-send-email-jerzy.grzegorek@trzebnica.net>
- (Jerzy Grzegorek's message of "Fri, 6 Dec 2013 12:25:32 +0100")
-References: <1386329133-9523-1-git-send-email-jerzy.grzegorek@trzebnica.net>
-Message-ID: <877gbidxfe.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 6 Dec 2013 12:35:25 +0100
+Subject: [Buildroot] [git commit] git: bump to version 1.8.5.1
+Message-ID: <20131206114504.77B8D9BF4A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Jerzy" == Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=f0da97758dd438379ff7ba1d5b6404ebac459fec
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
- > ---
- > version v2:
- > - change of bumped version
+Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/git/git.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/git/git.mk b/package/git/git.mk
+index 58455b1..cf16250 100644
+--- a/package/git/git.mk
++++ b/package/git/git.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GIT_VERSION         = 1.8.4.1
++GIT_VERSION         = 1.8.5.1
+ GIT_SITE            = http://git-core.googlecode.com/files/
+ GIT_LICENSE         = GPLv2 LGPLv2.1+
+ GIT_LICENSE_FILES   = COPYING LGPL-2.1
