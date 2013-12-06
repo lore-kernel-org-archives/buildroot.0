@@ -1,45 +1,43 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 6 Dec 2013 22:20:31 +0100
-Subject: [Buildroot] [git commit] board/raspberrypi: bump to use Linux 3.10
-Message-ID: <20131206212919.E74EB9BF53@busybox.osuosl.org>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Fri, 06 Dec 2013 22:33:50 +0100
+Subject: [Buildroot] [PATCH] X.org: needs dynamic library support
+Message-ID: <69e43f189c86e8be1570.1386365630@argentina>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a4870b9072dc74d830e5c2203defd5a968380417
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+xlib_libX11, one of the main libraries of X.org, uses dlfcn.h and dlopen.
+To avoid having to add a dependency on !BR2_PREFER_STATIC_LIB on tons of
+packages, we promote this dependency to X.org itself (similar to how thread
+support is handled in X.org).
 
-The new 'stable' branch of the Raspberry Pi kernel is now based
-on the Linux 3.10 branch (currently 3.10.22), so bump both the
-kernel version for the toolchain headers, and for the target.
+Fixes
+http://autobuild.buildroot.net/results/a47/a47c5d96f880af04b85bb6773e87d04f9d7c2864/
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+
 ---
- configs/raspberrypi_defconfig |    6 +++---
- 1 files changed, 3 insertions(+), 3 deletions(-)
+ package/x11r7/Config.in |  5 +++--
+ 1 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/configs/raspberrypi_defconfig b/configs/raspberrypi_defconfig
-index da877fb..4df0f4b 100644
---- a/configs/raspberrypi_defconfig
-+++ b/configs/raspberrypi_defconfig
-@@ -10,14 +10,14 @@ BR2_PACKAGE_RPI_FIRMWARE=y
- BR2_PACKAGE_RPI_USERLAND=y
- BR2_PACKAGE_LIBCOFI=y
+diff --git a/package/x11r7/Config.in b/package/x11r7/Config.in
+--- a/package/x11r7/Config.in
++++ b/package/x11r7/Config.in
+@@ -2,6 +2,7 @@ menuconfig BR2_PACKAGE_XORG7
+ 	bool "X.org X Window System"
+ 	depends on BR2_USE_WCHAR
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_PREFER_STATIC_LIB # dlopen in xlib_libX11
+ 	help
+ 	  Support for X11R7 libraries, servers, drivers, and/or
+ 	  applications in the target.
+@@ -262,5 +263,5 @@ if BR2_PACKAGE_XORG7
+ 	endmenu
+ endif
  
--# Lock to 3.6 headers as the RPi kernel is based off the 3.6 branch
-+# Lock to 3.10 headers as the RPi kernel is based off the 3.10 branch
- BR2_KERNEL_HEADERS_VERSION=y
--BR2_DEFAULT_KERNEL_VERSION="3.6.11"
-+BR2_DEFAULT_KERNEL_VERSION="3.10.22"
- 
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_GIT=y
- BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://github.com/raspberrypi/linux.git"
--BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="1587f77"
-+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="5ebf1db80e2c03e92d570605b53f91a06112574f"
- BR2_LINUX_KERNEL_USE_DEFCONFIG=y
- BR2_LINUX_KERNEL_DEFCONFIG="bcmrpi_quick"
- BR2_LINUX_KERNEL_ZIMAGE=y
+-comment "X.org needs a toolchain w/ wchar, threads"
+-	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
++comment "X.org needs a toolchain w/ wchar, threads, dynamic library"
++	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || BR2_PREFER_STATIC_LIB
