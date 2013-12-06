@@ -1,34 +1,34 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 6 Dec 2013 09:34:10 +0100
-Subject: [Buildroot] [git commit] opus-tools: bump version, add license info
-Message-ID: <20131206084201.44E989BF48@busybox.osuosl.org>
+Date: Fri, 6 Dec 2013 09:31:53 +0100
+Subject: [Buildroot] [git commit] opus: bump version, add license info
+Message-ID: <20131206084200.E36679BF47@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d04523f8fc818608468adad42163546fe309bcbc
+commit: http://git.buildroot.net/buildroot/commit/?id=75cc6b7b69678cfb333ed766905b3654253139f9
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/opus-tools/opus-tools.mk |    4 +++-
+ package/opus/opus.mk |    4 +++-
  1 files changed, 3 insertions(+), 1 deletions(-)
 
-diff --git a/package/opus-tools/opus-tools.mk b/package/opus-tools/opus-tools.mk
-index f4dee74..06dc5d4 100644
---- a/package/opus-tools/opus-tools.mk
-+++ b/package/opus-tools/opus-tools.mk
+diff --git a/package/opus/opus.mk b/package/opus/opus.mk
+index 9668854..00181de 100644
+--- a/package/opus/opus.mk
++++ b/package/opus/opus.mk
 @@ -4,8 +4,10 @@
  #
  ################################################################################
  
--OPUS_TOOLS_VERSION = 0.1.7
-+OPUS_TOOLS_VERSION = 0.1.8
- OPUS_TOOLS_SITE = http://downloads.xiph.org/releases/opus
-+OPUS_TOOLS_LICENSE = BSD-2c
-+OPUS_TOOLS_LICENSE_FILES = COPYING
- OPUS_TOOLS_CONF_OPT = --disable-oggtest --disable-opustest
- OPUS_TOOLS_DEPENDENCIES = opus libogg host-pkgconf
+-OPUS_VERSION = 1.0.3
++OPUS_VERSION = 1.1
+ OPUS_SITE = http://downloads.xiph.org/releases/opus
++OPUS_LICENSE = BSD-3c
++OPUS_LICENSE_FILES = COPYING
+ OPUS_INSTALL_STAGING = YES
+ OPUS_CONF_OPT = --disable-doc
  
