@@ -1,34 +1,23 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 06 Dec 2013 09:35:04 +0100
-Subject: [Buildroot] [PATCH] freetype: fix staging headers
-In-Reply-To: <1386296134-21775-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Thu, 5 Dec 2013 23:15:34 -0300")
-References: <1386296134-21775-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87lhzyfkcn.fsf@dell.be.48ers.dk>
+Date: Fri, 06 Dec 2013 09:40:09 +0100
+Subject: [Buildroot] [PATCH 1 of 3] manual: remove references to
+	uninstall commands
+In-Reply-To: <f2f1b59c4cfbf80a1592.1386240846@argentina> (Thomas De
+ Schampheleire's message of "Thu, 05 Dec 2013 11:54:06 +0100")
+References: <patchbomb.1386240845@argentina>
+ <f2f1b59c4cfbf80a1592.1386240846@argentina>
+Message-ID: <87haamfk46.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+>>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin@gmail.com> writes:
 
- > freetype 2.5.1 moved headers from /usr/include/freetype2/freetype to
- > /usr/include/freetype2.
- > Some packages use a non-recommended header inclusion of <freetype/x.h>
- > instead of using the recommended ft2build.h method, so until it's fixed
- > across the board upstream for packages that break do a symlink.
+ > Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
- > See:
- > http://git.savannah.gnu.org/cgit/freetype/freetype2.git/commit/?id=fae382076409db198dfbff36ac4cbb97b05b30a1
-
- > Fixes:
- > http://autobuild.buildroot.net/results/64c/64cc8467eeb44f741aeb42bf1a0c77edbfbd285f/
- > http://autobuild.buildroot.net/results/708/708fa7423c83e22a51854f1abca0f3358506a318/
-
- > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-
-Committed, thanks.
+Committed with the clean comment keep as pointed out by Arnout, thanks.
 
 -- 
 Bye, Peter Korsgaard
