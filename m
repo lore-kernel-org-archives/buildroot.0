@@ -1,23 +1,26 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 06 Dec 2013 10:33:20 +0100
-Subject: [Buildroot] [PATCH v6 1/3] libqmi: bump to 1.6.0
-In-Reply-To: <1386150904-16813-1-git-send-email-yegorslists@googlemail.com>
- (yegorslists@googlemail.com's message of "Wed, 4 Dec 2013 10:55:02
- +0100")
-References: <1386150904-16813-1-git-send-email-yegorslists@googlemail.com>
-Message-ID: <87txeme333.fsf@dell.be.48ers.dk>
+Date: Fri, 06 Dec 2013 10:34:25 +0100
+Subject: [Buildroot] [PATCH] glibc: Backport upstream patch to accept
+	make-4.0 or newer
+In-Reply-To: <1385981465-763-1-git-send-email-markos.chandras@imgtec.com>
+ (Markos Chandras's message of "Mon, 2 Dec 2013 10:51:05 +0000")
+References: <1385981465-763-1-git-send-email-markos.chandras@imgtec.com>
+Message-ID: <87ob4ue31a.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "yegorslists" == yegorslists  <yegorslists@googlemail.com> writes:
+>>>>> "Markos" == Markos Chandras <markos.chandras@imgtec.com> writes:
 
- > From: Yegor Yefremov <yegorslists@googlemail.com>
- > Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+ > Upstream patch (28d708c44bc47b56f6551ff285f78edcf61c208a) added support for
+ > make-4.0 or newer. We backport this patch to allow glibc to build on hosts
+ > running the latest version of 'make'.
 
-Committed series with the license fixups pointed out by Thomas, thanks.
+ > Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
+
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
