@@ -1,29 +1,33 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri,  6 Dec 2013 11:26:33 +0000 (UTC)
-Subject: [Buildroot] [Bug 6722] Usage of $($(PKG)_DIR_PREFIX) is an issue
- with linux package
-In-Reply-To: <bug-6722-163@https.bugs.busybox.net/>
-References: <bug-6722-163@https.bugs.busybox.net/>
-Message-ID: <20131206112633.A813E9BF46@busybox.osuosl.org>
+From: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+Date: Fri,  6 Dec 2013 12:25:32 +0100
+Subject: [Buildroot] [PATCH v2 1/1] git: bump to version 1.8.5.1
+Message-ID: <1386329133-9523-1-git-send-email-jerzy.grzegorek@trzebnica.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=6722
+Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+---
+version v2:
+- change of bumped version
 
---- Comment #7 from Ryan Barnett <rjbarnet@rockwellcollins.com> 2013-12-06 11:26:32 UTC ---
-As I stated in the original message of this bug report - I was using commit
-931b73e5eae4a3ba6b2e37db526fd7243a139e64 as my head which is from 29 Nov 2013.
-This means that the patch that Thomas D mention above was included in my
-testing. Thus I believe that this is still an issue even with the patch Thomas
-D mentioned.
+ package/git/git.mk |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-The tree that I was using was this -
-http://git.buildroot.net/buildroot/tree/?id=931b73e5eae4a3ba6b2e37db526fd7243a139e64.
-
+diff --git a/package/git/git.mk b/package/git/git.mk
+index 58455b1..cf16250 100644
+--- a/package/git/git.mk
++++ b/package/git/git.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GIT_VERSION         = 1.8.4.1
++GIT_VERSION         = 1.8.5.1
+ GIT_SITE            = http://git-core.googlecode.com/files/
+ GIT_LICENSE         = GPLv2 LGPLv2.1+
+ GIT_LICENSE_FILES   = COPYING LGPL-2.1
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+1.7.9.5
