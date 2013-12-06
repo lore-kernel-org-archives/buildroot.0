@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 6 Dec 2013 10:05:22 +0100
-Subject: [Buildroot] [PATCH v6 2/3] libmbim: add new package
-In-Reply-To: <1386150904-16813-2-git-send-email-yegorslists@googlemail.com>
+Date: Fri, 6 Dec 2013 10:10:27 +0100
+Subject: [Buildroot] [PATCH v6 3/3] ModemManager: add new package
+In-Reply-To: <1386150904-16813-3-git-send-email-yegorslists@googlemail.com>
 References: <1386150904-16813-1-git-send-email-yegorslists@googlemail.com>
- <1386150904-16813-2-git-send-email-yegorslists@googlemail.com>
-Message-ID: <20131206100522.0660b713@skate>
+ <1386150904-16813-3-git-send-email-yegorslists@googlemail.com>
+Message-ID: <20131206101027.52c490a8@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,25 +13,26 @@ To: buildroot@busybox.net
 
 Yegor,
 
-On Wed,  4 Dec 2013 10:55:03 +0100, yegorslists at googlemail.com wrote:
+On Wed,  4 Dec 2013 10:55:04 +0100, yegorslists at googlemail.com wrote:
 
-> +LIBMBIM_VERSION = 1.4.0
-> +LIBMBIM_SITE    = http://www.freedesktop.org/software/libmbim/
-> +LIBMBIM_SOURCE  = libmbim-$(LIBMBIM_VERSION).tar.xz
-> +LIBMBIM_LICENSE = GPLv2
+> +MODEM_MANAGER_VERSION = 1.0.0
+> +MODEM_MANAGER_SOURCE = ModemManager-$(MODEM_MANAGER_VERSION).tar.xz
+> +MODEM_MANAGER_SITE = http://www.freedesktop.org/software/ModemManager/
+> +MODEM_MANAGER_LICENSE = GPLv2
 
 This should be:
 
-LIBMBIM_LICENSE = LGPLv2+ (library), GPLv2+ (programs)
+MODEM_MANAGER_LICENSE = GPLv2+ (programs, plugins), LGPLv2+ (libmm-glib)
 
-Hopefully Peter can change this will committing, so you don't have to
-resubmit a new version.
+For those looking: there are two other libraries, libqcdm and libwmc,
+under GPLv2+, but those libraries are not installed: they are directly
+linked into the application, and just used as a way of splitting things
+in the source code.
 
-Other than that:
+With the license information fixed, which hopefully Peter can adjust,
+this patch has my:
 
 Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-
-Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
 Embedded Linux, Kernel and Android engineering
