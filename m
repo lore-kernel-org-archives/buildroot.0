@@ -1,45 +1,87 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri,  6 Dec 2013 21:04:37 +0100
-Subject: [Buildroot] [PATCH] board/raspberrypi: bump to use Linux 3.10
-Message-ID: <1386360277-29475-1-git-send-email-yann.morin.1998@free.fr>
+From: Thomas Pedersen <thomas@cozybit.com>
+Date: Fri, 6 Dec 2013 12:45:50 -0800
+Subject: [Buildroot] [PATCH] pandaboard: fix defonf build with recent
+	kernels
+In-Reply-To: <CAG6hwVNgRFMd6QHKEXtPSg3ay6vEdhsVJrNpHoiJx0dR6LQ52Q@mail.gmail.com>
+References: <1386201464-19380-1-git-send-email-thomas@cozybit.com>
+ <OF53549EA3.A59A17D4-ON86257C38.00296CA0-86257C38.002E9B5D@rockwellcollins.com>
+ <CAG6hwVNgRFMd6QHKEXtPSg3ay6vEdhsVJrNpHoiJx0dR6LQ52Q@mail.gmail.com>
+Message-ID: <CAG6hwVM78ZLPanzue8p+Wtz=OpUF-MK+UQpg598ukq2E8qKCbg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+On Thu, Dec 5, 2013 at 12:26 PM, Thomas Pedersen <thomas@cozybit.com> wrote:
+> HI Ryan,
+>
+> On Thu, Dec 5, 2013 at 12:29 AM,  <rjbarnet@rockwellcollins.com> wrote:
+>> Thomas Pedersen <thomas@cozybit.com> wrote on 12/04/2013 05:57:44 PM:
+>>
+>> [...]
+>>
+>>>  # Kernel
+>>>  BR2_LINUX_KERNEL=y
+>>> -BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+>>> -BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.8.11"
+>>>  BR2_LINUX_KERNEL_DEFCONFIG="omap2plus"
+>>
+>> Would it be possible to lock the kernel version down by using the custom
+>> version? This way that when we provide a defconfig with a known working
+>> kernel. If it were to be left to not use this, the kernel version will
+>> change with all the bumps.
+>
+> Yes, I'll lock it to 3.12.2 or so.
+>
+>>> +BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x80008000"
+>>> +BR2_LINUX_KERNEL_APPENDED_UIMAGE=y
+>>
+>> What is the need for uImage? zImage is what is supported by default in
+>> U-Boot for pandaboard -
+>> http://git.denx.de/cgi-bin/gitweb.cgi?p=u-boot.git;a=blob;f=include/configs/omap4_common.h
+>>
+>> This configuration is not going to work out of the box for a user since
+>> U-Boot searches for a zImage and a omap4-panda-es.dtb. So we would want to
+>> generate a stand-alone dtb.
+>
+> zImage and dtb is still intact. The appended uImage is simply
+> generated as an extra step after appending the DTB to the zImage.
 
-The new 'stable' branch of the Raspberry Pi kernel is now based
-on the Linux 3.10 branch (currently 3.10.22), so bump both the
-kernel bot for the toolchain headers, and for the target.
+Sorry Ryan, you were correct. The resulting uImage is then installed
+instead of the zImage, breaking boot with current u-boot.
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
----
- configs/raspberrypi_defconfig | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+>>> +BR2_LINUX_KERNEL_APPENDED_DTB=y
+>>> +BR2_LINUX_KERNEL_USE_INTREE_DTS=y
+>>> +# might need omap4-panda or omap4-panda-a4 instead
+>>> +BR2_LINUX_KERNEL_INTREE_DTS_NAME="omap4-panda-es"
+>>
+>> Also could we lock down the version of u-boot too?
+>>
+>> Currently it looks like this -
+>>
+>> # Bootloaders
+>> BR2_TARGET_UBOOT=y
+>> BR2_TARGET_UBOOT_FORMAT_IMG=y
+>> BR2_TARGET_UBOOT_BOARDNAME="omap4_panda"
+>> BR2_TARGET_UBOOT_SPL=y
+>> BR2_TARGET_UBOOT_SPL_NAME="MLO"
+>>
+>> Which means we will be pulling the latest version of U-Boot which is also
+>> not preferable since U-Boot also has a tendency to break. Would you be
+>> willing to specify a custom version of u-boot too in your update to the
+>> defconfig?
+>
+> I'm actually using the linaro-boot-utils u-boot (SPL 2012.07) to
+> enable booting over USB. I'll see if the vanilla version boots the
+> generated uImage off an SD card.
+>
+> Thanks,
+>
+> --
+> Thomas
 
-diff --git a/configs/raspberrypi_defconfig b/configs/raspberrypi_defconfig
-index da877fb..4df0f4b 100644
---- a/configs/raspberrypi_defconfig
-+++ b/configs/raspberrypi_defconfig
-@@ -10,14 +10,14 @@ BR2_PACKAGE_RPI_FIRMWARE=y
- BR2_PACKAGE_RPI_USERLAND=y
- BR2_PACKAGE_LIBCOFI=y
- 
--# Lock to 3.6 headers as the RPi kernel is based off the 3.6 branch
-+# Lock to 3.10 headers as the RPi kernel is based off the 3.10 branch
- BR2_KERNEL_HEADERS_VERSION=y
--BR2_DEFAULT_KERNEL_VERSION="3.6.11"
-+BR2_DEFAULT_KERNEL_VERSION="3.10.22"
- 
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_GIT=y
- BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://github.com/raspberrypi/linux.git"
--BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="1587f77"
-+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="5ebf1db80e2c03e92d570605b53f91a06112574f"
- BR2_LINUX_KERNEL_USE_DEFCONFIG=y
- BR2_LINUX_KERNEL_DEFCONFIG="bcmrpi_quick"
- BR2_LINUX_KERNEL_ZIMAGE=y
+
+
 -- 
-1.8.1.2
+Thomas
