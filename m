@@ -1,95 +1,47 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Fri, 6 Dec 2013 09:03:36 +0100
-Subject: [Buildroot] What is an Acked-by?
-In-Reply-To: <20131205201333.GG3405@free.fr>
-References: <1386198891-17968-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1386198891-17968-2-git-send-email-thomas.petazzoni@free-electrons.com>
- <20131204231952.GI3332@free.fr> <52A0C223.5040306@mind.be>
- <20131205201203.GF3405@free.fr> <20131205201333.GG3405@free.fr>
-Message-ID: <CAAXf6LUeDE8+t-zueRcPVuOWRvbUceKaRuSgPTYmpgoFORMcbg@mail.gmail.com>
+Date: Fri, 6 Dec 2013 09:05:38 +0100
+Subject: [Buildroot] [PATCH 01/16] infra: introduce github helper
+	function
+In-Reply-To: <1386264059-14057-2-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1386264059-14057-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1386264059-14057-2-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <CAAXf6LXAqPxmecPVN8n52iev4MTYvvOtFVq_s-y0X2LknOsDeg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Here we go again... ;-)
-
-On Thu, Dec 5, 2013 at 9:13 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> Arnout, All,
+On Thu, Dec 5, 2013 at 6:20 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> From: Mischa Jonker <Mischa.Jonker@synopsys.com>
 >
-> On 2013-12-05 21:12 +0100, Yann E. MORIN spake thusly:
->> On 2013-12-05 19:12 +0100, Arnout Vandecappelle spake thusly:
->> > On 05/12/13 00:19, Yann E. MORIN wrote:
->> > >Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
->> > >Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
->> >
->> >  If you've reviewed it and tested it, you would commit it if you had commit
->> > access, right? So this could actually be an Acked-by, right? Or is my
->> > understanding of these tags incorrect?
->>
->> I'm following the definitions of Documentation/SubmittingPatches in my
->> Linux kernel tree.
->>
->> For example, I refer to:
->>     Acked-by: does not necessarily indicate acknowledgement of the entire
->>     patch.
->>
->>     Reviewed-by:, instead, indicates that the patch has been reviewed
->>     and found acceptable according to the Reviewer's Statement
->>     [--SNIP statement--]
->>
->> So, by providing both Reviewed-by and Tested by, I am explicitly stating
->> that I did a review of the patch, and I tested it. Which, from my
->> understanding, Acked-by does.
+> In order to make it easier to cope with changes in github download-URL's,
+> this patch introduces the github helper function. It generates the site
+> URL of a github repository. It's usage is $(call github,user,pkg,version).
 >
-> ... Acked-by does *not*.
+> [Thomas: extracted from Mischa original commit, macro moved to
+> pkg-download.mk]
+>
+> Signed-off-by: Mischa Jonker <mjonker@synopsys.com>
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> ---
+>  package/pkg-download.mk | 3 +++
+>  1 file changed, 3 insertions(+)
+>
+> diff --git a/package/pkg-download.mk b/package/pkg-download.mk
+> index 8e4a1ec..758b211 100644
+> --- a/package/pkg-download.mk
+> +++ b/package/pkg-download.mk
+> @@ -55,6 +55,9 @@ notdomain=$(patsubst $(call domain,$(1),$(2))$(call domainseparator,$(2))%,%,$(c
+>  # default domainseparator is /, specify alternative value as first argument
+>  domainseparator=$(if $(1),$(1),/)
+>
+> +# github(user,package,version): returns site of github repository
+> +github = https://github.com/$(1)/$(2)/tarball/$(3)
+> +
+>  ################################################################################
+>  # The DOWNLOAD_* helpers are in charge of getting a working copy
+>  # of the source repository for their corresponding SCM,
 
-We discussed this on the Buildroot developer day at FOSDEM 2012, see
-the report [1] and addition in the buildroot manual [2]. The manual
-says:
-
-Acked-by: Indicates that the patch can be committed.
-Tested-by: Indicates that the patch has been tested. It is useful but
-not necessary to add a comment about what has been tested.
-
-I must admit that in the mean time it has become common practice to
-also use Reviewed-by, so we'll need to clarify that.
-
-By no means authoritative, but here is what I mean when I add the
-following tags on a patch:
-- Tested-by: as in the manual: I performed some kind of test
-(typically described below the tag) on the patch.
-
-- Reviewed-by: I code-reviewed the patch and did my best in spotting
-problems, but I am not sufficiently familiar with the area touched to
-provide an Acked-by. This means that, although I reviewed the patch,
-there may be remaining problems that would be spotted by someone with
-more experience in that area. The detection of such problems should
-not mean that my Reviewed-by: was too hasty.
-
-- Acked-by: I code-reviewed the patch (note: not necessarily tested)
-and am familiar enough with the area touched that I can indicate it is
-a good patch. If someone else detects a serious problem with this
-patch afterwards, then this Acked-by may have been too hasty.
-
-So for me, Acked-by is stronger than Reviewed-by, but orthogonal to Tested-by.
-
-Note that my definition of Acked-by does not really rely on 'module
-owners', contrary to how Yann interprets it. For example in the case
-of the core infrastructure I don't believe that only ThomasP can
-provide an Acked-by. Several developers other than ThomasP have made
-good changes there, and are thus sufficiently knowledgeable to
-indicate their Ack. In my opinion, it is up to the maintainer to
-assess the weight of an Ack. He is free to wait until an ack by
-ThomasP, or not.
-(for the record: with the above I do not want to minimize ThomasP's
-contribution in this area, not at all. His work has been and is of
-great importance for the buildroot project, and I deeply respect it
-(and him)
-
-Best regards,
-Thomas
-
-[1] http://lists.busybox.net/pipermail/buildroot/2012-February/050371.html
-[2] http://buildroot.uclibc.org/downloads/manual/manual.html#_reviewing_testing_patches
+Acked-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
