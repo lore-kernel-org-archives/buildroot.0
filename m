@@ -1,56 +1,54 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 6 Dec 2013 22:45:25 +0100
-Subject: [Buildroot] [git commit] binutils: add microblaze internal toolchain
-Message-ID: <20131206215056.43A199BF34@busybox.osuosl.org>
+Date: Fri, 6 Dec 2013 22:48:51 +0100
+Subject: [Buildroot] [git commit] gdb: add host-texinfo dependency for Git
+	versions
+Message-ID: <20131206215056.AF73B9BF34@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=cdcb9690eaf977dd020a36fcb33b9c8ff04e2435
+commit: http://git.buildroot.net/buildroot/commit/?id=d1ab8c5827545882c048331613ad108a3366bc0d
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Spenser Gilliland <spenser@gillilanding.com>
+Just like for binutils, gdb versions pulled from Git want to
+regenerate their documentation, and none of the MAKEINFO tricks we've
+tried worked properly, so we're simply adding host-texinfo as a
+dependency.
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/binutils/Config.in.host |    2 ++
- package/binutils/binutils.mk    |    4 ++++
- 2 files changed, 6 insertions(+), 0 deletions(-)
+ package/gdb/gdb.mk |    6 ++++++
+ 1 files changed, 6 insertions(+), 0 deletions(-)
 
-diff --git a/package/binutils/Config.in.host b/package/binutils/Config.in.host
-index ef833ec..a8e1e45 100644
---- a/package/binutils/Config.in.host
-+++ b/package/binutils/Config.in.host
-@@ -3,6 +3,7 @@ comment "Binutils Options"
- choice
- 	prompt "Binutils Version"
- 	depends on !BR2_arc
-+	depends on !BR2_microblaze
- 	default BR2_BINUTILS_VERSION_2_21 if (BR2_mips || BR2_mipsel || BR2_sh)
- 	default BR2_BINUTILS_VERSION_2_22
- 	help
-@@ -49,6 +50,7 @@ config BR2_BINUTILS_VERSION
- 	string
- 	default "2.18-avr32-1.0.1" if BR2_BINUTILS_VERSION_2_18_AVR32_1_0_1
- 	default "0c824ba511fa9b028220eb3c39b566af89ac9dda" if BR2_arc
-+	default "8351467c933d277ebea0c8d99ad2b65b5f7b6bc2" if BR2_microblaze
- 	default "2.20.1"	if BR2_BINUTILS_VERSION_2_20_1
- 	default "2.21"		if BR2_BINUTILS_VERSION_2_21
- 	default "2.21.1"	if BR2_BINUTILS_VERSION_2_21_1
-diff --git a/package/binutils/binutils.mk b/package/binutils/binutils.mk
-index 3c14849..13854b0 100644
---- a/package/binutils/binutils.mk
-+++ b/package/binutils/binutils.mk
-@@ -27,6 +27,10 @@ ifeq ($(BR2_arc),y)
- BINUTILS_SITE = $(call github,foss-for-synopsys-dwc-arc-processors,binutils,$(BINUTILS_VERSION))
- BINUTILS_SOURCE = binutils-$(BINUTILS_VERSION).tar.gz
+diff --git a/package/gdb/gdb.mk b/package/gdb/gdb.mk
+index fbe1641..d06b61b 100644
+--- a/package/gdb/gdb.mk
++++ b/package/gdb/gdb.mk
+@@ -24,11 +24,13 @@ endif
+ ifeq ($(BR2_arc),y)
+ GDB_SITE = $(call github,foss-for-synopsys-dwc-arc-processors,gdb,$(GDB_VERSION))
+ GDB_SOURCE = gdb-$(GDB_VERSION).tar.gz
++GDB_FROM_GIT = y
  endif
-+ifeq ($(BR2_microblaze),y)
-+BINUTILS_SITE = $(call github,Xilinx,binutils,$(BINUTILS_VERSION))
-+BINUTILS_SOURCE = binutils-$(BINUTILS_VERSION).tar.gz
+ 
+ ifeq ($(BR2_microblaze),y)
+ GDB_SITE = $(call github,Xilinx,gdb,$(GDB_VERSION))
+ GDB_SOURCE = gdb-$(GDB_VERSION).tar.gz
++GDB_FROM_GIT = y
+ endif
+ 
+ ifeq ($(GDB_VERSION),6.7.1-avr32-2.1.5)
+@@ -126,6 +128,10 @@ HOST_GDB_CONF_OPT = \
+ 	--without-included-gettext \
+ 	--disable-sim
+ 
++ifeq ($(GDB_FROM_GIT),y)
++HOST_GDB_DEPENDENCIES += host-texinfo
 +endif
- BINUTILS_SITE ?= $(BR2_GNU_MIRROR)/binutils
- BINUTILS_SOURCE ?= binutils-$(BINUTILS_VERSION).tar.bz2
- BINUTILS_EXTRA_CONFIG_OPTIONS = $(call qstrip,$(BR2_BINUTILS_EXTRA_CONFIG_OPTIONS))
++
+ # legacy $arch-linux-gdb symlink
+ define HOST_GDB_ADD_SYMLINK
+ 	cd $(HOST_DIR)/usr/bin && \
