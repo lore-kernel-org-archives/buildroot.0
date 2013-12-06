@@ -1,68 +1,78 @@
-From: Thomas Pedersen <thomas@cozybit.com>
-Date: Fri,  6 Dec 2013 12:46:46 -0800
-Subject: [Buildroot] [PATCH v2] pandaboard: fix defconf build with recent
-	kernels
-Message-ID: <1386362806-16798-1-git-send-email-thomas@cozybit.com>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Fri, 6 Dec 2013 22:02:04 +0100
+Subject: [Buildroot] Patchwork oldest patches cleanup #3 (deadline December
+	20)
+Message-ID: <CAAXf6LXUx3dERdYxq5d4mY8apxXk+Ltj_CNPm+RTM+52nKRUNA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The patch "pandaboard: Fix defconfig build" locked the
-default pandaboard kernel to 3.8.11. This is inconvenient,
-since the boot process has changed since kernel > 3.8.
+All,
 
-Update the default kernel to 3.12.2 and fix the boot image
-configuration, but remain compatible with legacy U-Boot
-versions by using appended flattened device tree uImage.
+Here is the session 3 of the patchwork cleanup. For those who haven't
+followed previous sessions, here is a quick recap: every session we'll
+be posting the list of the 10 oldest patches, with the original patch
+contributors in copy. During two weeks, we have the opportunity to
+discuss the patch, whether it is still necessary or not, how it should
+be changed to be merged.
 
-This change *should* keep future kernels compatible with a
-fixed U-Boot version.
+In particular, I'm interested in knowing if the original contributor is
+still interested by the patch, or if someone else is interested in
+adopting the patch and sending an updated version, or if the patch no
+longer makes sense due to other changes made in Buildroot.
 
-Note the default device tree is now for the pandaboard-ES,
-so users of other board revisions will need to set the
-correct DTS_NAME.
+All patches that have not received any comment or attention before the
+deadline will be removed from patchwork. This is aggressive, but we have
+many 'dead' patches sitting in patchwork, and this cannot work.
 
-Signed-off-by: Thomas Pedersen <thomas@cozybit.com>
----
- configs/pandaboard_defconfig | 15 ++++++++++++---
- 1 file changed, 12 insertions(+), 3 deletions(-)
+Deadline for this session is December 20.
 
-diff --git a/configs/pandaboard_defconfig b/configs/pandaboard_defconfig
-index 95cfdd6..47d01a2 100644
---- a/configs/pandaboard_defconfig
-+++ b/configs/pandaboard_defconfig
-@@ -11,14 +11,20 @@ BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_DEVTMPFS=y
- BR2_TARGET_ROOTFS_EXT2=y
- # BR2_TARGET_ROOTFS_TAR is not set
- 
--# Lock to 3.8 headers to avoid breaking with newer kernels
--BR2_KERNEL_HEADERS_3_8=y
-+# Lock to 3.12 headers to avoid breaking with newer kernels
-+BR2_KERNEL_HEADERS_3_12=y
- 
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.8.11"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.12.2"
- BR2_LINUX_KERNEL_DEFCONFIG="omap2plus"
-+BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x80008000"
-+BR2_LINUX_KERNEL_APPENDED_UIMAGE=y
-+BR2_LINUX_KERNEL_APPENDED_DTB=y
-+BR2_LINUX_KERNEL_USE_INTREE_DTS=y
-+# might need omap4-panda or omap4-panda-a4 instead
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="omap4-panda-es"
- 
- # GCC
- BR2_GCC_VERSION_4_6_X=y
-@@ -29,3 +35,6 @@ BR2_TARGET_UBOOT_FORMAT_IMG=y
- BR2_TARGET_UBOOT_BOARDNAME="omap4_panda"
- BR2_TARGET_UBOOT_SPL=y
- BR2_TARGET_UBOOT_SPL_NAME="MLO"
-+BR2_TARGET_UBOOT_LATEST_VERSION=n
-+BR2_TARGET_UBOOT_CUSTOM_VERSION=y
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2012.07"
--- 
-1.8.4.3
+Below are the 10 oldest patches (obtained with a slightly modified
+version of pwclient):
+[ pwclient list -s New -n 10 ]
+
+iucode-tool: new package
+Richard Braun <rbraun@sceen.net>
+http://patchwork.ozlabs.org/patch/185420
+
+[3/3] mplayer: Fix DVD support
+Valentine Barshak <gvaxon@gmail.com>
+http://patchwork.ozlabs.org/patch/187437
+
+pkg-infra: produce legal info for proprietary packages
+Richard Braun <rbraun@sceen.net>
+http://patchwork.ozlabs.org/patch/187775
+
+intel-microcode: new package
+Richard Braun <rbraun@sceen.net>
+http://patchwork.ozlabs.org/patch/187776
+
+[1/2] Makefile: Fix target-purgelocales
+Valentine Barshak <gvaxon@gmail.com>
+http://patchwork.ozlabs.org/patch/188623
+
+[2/2] Makefile: Add /usr/lib/locale to target-purgelocales
+Valentine Barshak <gvaxon@gmail.com>
+http://patchwork.ozlabs.org/patch/188624
+
+rpm5
+Alexander Khryukin <alexander@mezon.ru>
+http://patchwork.ozlabs.org/patch/190962
+
+putty: UNIX port of the famous Telnet and SSH GUI client
+Stefan Fr?berg <stefan.froberg@petroprogram.com>
+http://patchwork.ozlabs.org/patch/191204
+
+new pkg tor
+dev0 <matzeton@googlemail.com>
+http://patchwork.ozlabs.org/patch/193560
+
+[PATCHv3] QtSerialPort: new package
+Thiago Correa <thiago.correa@gmail.com>
+http://patchwork.ozlabs.org/patch/195057
+
+
+Best regards,
+Thomas
