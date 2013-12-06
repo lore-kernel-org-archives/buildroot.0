@@ -1,36 +1,60 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 6 Dec 2013 19:08:36 +0100
-Subject: [Buildroot] [PATCH] sawman: Link using gcc instead of ld
-In-Reply-To: <1386347428-4142-1-git-send-email-Vincent.Riera@imgtec.com>
-References: <1386347428-4142-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <20131206190836.637fc9f7@skate>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri,  6 Dec 2013 20:57:04 +0100
+Subject: [Buildroot] [pull request v2] Pull request for branch
+	yem/host-packages
+Message-ID: <cover.1386359706.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Vicente Olivert Riera,
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-On Fri, 6 Dec 2013 16:30:28 +0000, Vicente Olivert Riera wrote:
+Hello All!
 
-> +--- SaWMan-1.6.3/wm/sawman/Makefile.in.orig	2013-12-06 14:22:22.675409826 +0000
-> ++++ SaWMan-1.6.3/wm/sawman/Makefile.in	2013-12-06 16:04:03.383752843 +0000
+This series adds parted as a host package.
+This will allow (eg.) post-image scripts to use parted.
 
-Makefile.in is generated from Makefile.am. So we shouldn't be fixing
-Makefile.in, but instead Makefile.am or the process that generates
-Makefile.in from Makefile.am.
+Changes v1 -> v2:  (Thomas)
+  - don't depend on host-lvm2
+  - so don't add host-lvm2
+  - relax dependencies on lvm2/readline for target package
+  - fix typoes in commit log
 
-What happens if you simply add:
+Regards,
+Yann E. MORIN.
 
-SAWMAN_AUTORECONF = YES
 
- ?
+The following changes since commit b21e0881c46d78b75f77f63a62864c8e45978d55:
 
-Best regards,
+  package: change tarball compression to xz (2013-12-06 15:50:49 +0100)
 
-Thomas
+are available in the git repository at:
+
+  git://gitorious.org/buildroot/buildroot.git yem/host-packages
+
+for you to fetch changes up to ecd2588ebee666a65987ebe0aec6ab6e83108e68:
+
+  package/parted: add a host variant (2013-12-06 20:53:49 +0100)
+
+----------------------------------------------------------------
+Yann E. MORIN (3):
+      package/parted: relax dependency on lvm2
+      package/parted: relax dependency on readline
+      package/parted: add a host variant
+
+ package/Config.in.host        |  1 +
+ package/parted/Config.in      |  4 ----
+ package/parted/Config.in.host |  6 ++++++
+ package/parted/parted.mk      | 22 +++++++++++++++++++++-
+ 4 files changed, 28 insertions(+), 5 deletions(-)
+ create mode 100644 package/parted/Config.in.host
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
