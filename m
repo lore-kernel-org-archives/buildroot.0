@@ -1,47 +1,41 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 7 Dec 2013 11:00:13 +0100
-Subject: [Buildroot] [git commit] X.org: needs dynamic library support
-Message-ID: <20131207100108.12E109BF66@busybox.osuosl.org>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sat,  7 Dec 2013 11:19:50 +0000 (UTC)
+Subject: [Buildroot] [Bug 6722] Usage of $($(PKG)_DIR_PREFIX) is an issue
+ with linux package
+In-Reply-To: <bug-6722-163@https.bugs.busybox.net/>
+References: <bug-6722-163@https.bugs.busybox.net/>
+Message-ID: <20131207111950.51A8A9BF4F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=2a3089573439f77a4b752879cff925b4ff45938b
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+https://bugs.busybox.net/show_bug.cgi?id=6722
 
-xlib_libX11, one of the main libraries of X.org, uses dlfcn.h and dlopen.
-To avoid having to add a dependency on !BR2_PREFER_STATIC_LIB on tons of
-packages, we promote this dependency to X.org itself (similar to how thread
-support is handled in X.org).
+--- Comment #11 from Ryan Barnett <rjbarnet@rockwellcollins.com> 2013-12-07 11:19:49 UTC ---
+(In reply to comment #10)
+> (In reply to comment #9)
+> > Are you going submit a new version of your patches soon? I'm working on trying
+> > to make BR2_GLOBAL_PATCH have the ability to have multiple directories
+> > specified.
+> 
+> 'soon' is relative :-)
+> In the mail thread of this patch, Arnout mentioned that ThomasP had a patchset
+> introducing a split SRC / BUILDDIR definition, which is partially related to my
+> patch. Just this week I asked Thomas what the status of this patch was.
+> I'm willing to adopt that patchset (but I haven't found it yet).
 
-Fixes
-http://autobuild.buildroot.net/results/a47/a47c5d96f880af04b85bb6773e87d04f9d7c2864/
+As I mentioned, I'm working on BR2_GLOBAL_PATCH_DIR have the ability to have
+multiple directories which will conflict with the patches you mentioned
+earlier. I will see if I can poke Thomas P on your behalf so we can figure out
+a way to coordinate my changes with yours since they will be conflicting.
 
-Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/x11r7/Config.in |    5 +++--
- 1 files changed, 3 insertions(+), 2 deletions(-)
+Here is an early preview of what I've been working on.
 
-diff --git a/package/x11r7/Config.in b/package/x11r7/Config.in
-index a534df9..15e2f8b 100644
---- a/package/x11r7/Config.in
-+++ b/package/x11r7/Config.in
-@@ -2,6 +2,7 @@ menuconfig BR2_PACKAGE_XORG7
- 	bool "X.org X Window System"
- 	depends on BR2_USE_WCHAR
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_PREFER_STATIC_LIB # dlopen in xlib_libX11
- 	help
- 	  Support for X11R7 libraries, servers, drivers, and/or
- 	  applications in the target.
-@@ -262,5 +263,5 @@ if BR2_PACKAGE_XORG7
- 	endmenu
- endif
- 
--comment "X.org needs a toolchain w/ wchar, threads"
--	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
-+comment "X.org needs a toolchain w/ wchar, threads, dynamic library"
-+	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || BR2_PREFER_STATIC_LIB
+https://github.com/rjbarnet/buildroot/compare/master...multiple-patch-dir
+
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
