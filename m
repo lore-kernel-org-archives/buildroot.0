@@ -1,33 +1,63 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 08 Dec 2013 15:16:32 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
-	2013-12-07
-In-Reply-To: <20131208141551.38206698@skate> (Thomas Petazzoni's message of
- "Sun, 8 Dec 2013 14:15:51 +0100")
-References: <20131208073009.673C5101507@stock.ovh.net>
- <CAHt8ZCNu8Nwzh1LfD00CQ3CTMsS8NQ51GmdM+9QiRfzg-s_ShQ@mail.gmail.com>
- <87haajborq.fsf@dell.be.48ers.dk> <20131208120858.1d8636b4@skate>
- <CAHt8ZCO_+TUHTwU6x7jgOh-S91=w0gG9NsJgo80keR4Yb+kV8Q@mail.gmail.com>
- <20131208141551.38206698@skate>
-Message-ID: <87d2l7bf7j.fsf@dell.be.48ers.dk>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun,  8 Dec 2013 18:01:05 +0100
+Subject: [Buildroot] [pull request v3] Pull request for branch
+	yem/host-packages
+Message-ID: <cover.1386521954.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
- >> What's your preference?
+Hello All!
 
- > I'm personally fine with either, but I do understand that the second
- > option is better to prepare the future :)
+This series adds parted as a host package.
+This will allow (eg.) post-image scripts to use parted.
 
- > So if Peter doesn't mind, doing the second option would be good. But
- > maybe you should wait for Peter's opinion on this, before doing some
- > work that may not match Peter's choice.
+Changes v2 -> v3:  (Jerzy)
+  - Fix bad copy-paste in commit log
 
-I'm fine with it, it should anyway just be a temporary thing ..
+Changes v1 -> v2:  (Thomas)
+  - don't depend on host-lvm2
+  - so don't add host-lvm2
+  - relax dependencies on lvm2/readline for target package
+  - fix typoes in commit log
+
+Regards,
+Yann E. MORIN.
+
+
+The following changes since commit ea9e0fe309b55268c966424d5a686b07390d2e48:
+
+  opus: fix configure issue with ARM optimization when /bin/sh isn't bash (2013-12-08 11:08:12 +0100)
+
+are available in the git repository at:
+
+  git://gitorious.org/buildroot/buildroot.git yem/host-packages
+
+for you to fetch changes up to 6d03580b33ebf76667c4afe24ac1df563061f9f7:
+
+  package/parted: add a host variant (2013-12-08 12:42:12 +0100)
+
+----------------------------------------------------------------
+Yann E. MORIN (3):
+      package/parted: relax dependency on lvm2
+      package/parted: relax dependency on readline
+      package/parted: add a host variant
+
+ package/Config.in.host        |  1 +
+ package/parted/Config.in      |  4 ----
+ package/parted/Config.in.host |  6 ++++++
+ package/parted/parted.mk      | 22 +++++++++++++++++++++-
+ 4 files changed, 28 insertions(+), 5 deletions(-)
+ create mode 100644 package/parted/Config.in.host
 
 -- 
-Bye, Peter Korsgaard
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
