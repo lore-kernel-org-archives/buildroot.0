@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 8 Dec 2013 14:19:25 +0100
+Date: Sun, 8 Dec 2013 14:24:53 +0100
 Subject: [Buildroot] [PATCH 1/1] ktap: new package
 In-Reply-To: <1384172666-25736-1-git-send-email-anders@chargestorm.se>
 References: <1384172666-25736-1-git-send-email-anders@chargestorm.se>
-Message-ID: <20131208141925.67fa9aea@skate>
+Message-ID: <20131208142453.36743ee2@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,48 +14,26 @@ Dear Anders Darander,
 
 On Mon, 11 Nov 2013 13:24:26 +0100, Anders Darander wrote:
 
-> +KTAP_VERSION = 0.3
-> +KTAP_SITE    = https://github.com/ktap/ktap/archive
-> +KTAP_SOURCE  = v$(KTAP_VERSION).tar.gz
-> +KTAP_LICENSE = GPLv2
-> +KTAP_LICENSE_FILES = LICENSE-GPL
-> +
-> +KTAP_DEPENDENCIES = linux
-> +
-> +define KTAP_BUILD_CMDS
-> +	$(MAKE) -C $(@D) CC=${TARGET_CC} ktap
+> diff --git a/package/ktap/Config.in b/package/ktap/Config.in
+> new file mode 100644
+> index 0000000..97bcd9c
+> --- /dev/null
+> +++ b/package/ktap/Config.in
+> @@ -0,0 +1,21 @@
+> +config BR2_PACKAGE_KTAP
+> +	bool "ktap"
+> +	depends on BR2_LINUX_KERNEL
 
-Can you use:
+Are you sure it doesn't need any specific C library functionality?
 
-	$(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS) ktap
+For example, the Makefile seems to link the program against the pthread
+library, so ktap should probably "depends on BR2_TOOLCHAIN_HAS_THREADS".
 
-instead ?
+See
+http://buildroot.org/downloads/manual/manual.html#dependencies-target-toolchain-options
+for details about this topic.
 
-> +	$(MAKE) -C $(@D) $(LINUX_MAKE_FLAGS) KERNEL_SRC=$(LINUX_DIR) KVERSION=${LINUX_VERSION_PROBED} mod
-
-KVERSION=$(LINUX_VERSION_PROBED)
-
-i.e use $() instead of ${}, since LINUX_VERSION_PROBED is a make
-variable.
-
-> +endef
-> +
-> +define KTAP_INSTALL_TARGET_CMDS
-> +	$(INSTALL) -m755 $(@D)/ktap  $(TARGET_DIR)/usr/bin/
-
-	$(INSTALL) -D -m755 $(@D)/ktap $(TARGET_DIR/usr/bin/ktap
-
-> +	$(MAKE) -C $(@D) $(LINUX_MAKE_FLAGS) KERNEL_SRC=$(LINUX_DIR) KVERSION=${LINUX_VERSION_PROBED} modules_install
-
-Ditto for the ${} -> $().
-
-> +endef
-> +
-> +$(eval $(generic-package))
-
-Other than that, looks good to me!
-
-Thanks!
+Best regards,
 
 Thomas
 -- 
