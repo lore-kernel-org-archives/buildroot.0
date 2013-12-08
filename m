@@ -1,56 +1,42 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 8 Dec 2013 21:07:54 +0100
-Subject: [Buildroot] [git commit] python-thrift: bump to version 0.9.1 and
-	switch to apache
-Message-ID: <20131208203406.8E60D9BF6B@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 8 Dec 2013 21:52:05 +0100
+Subject: [Buildroot] [PATCH] php: bump to version 5.5.6
+In-Reply-To: <52A4C794.7070301@zacarias.com.ar>
+References: <1386528934-28676-1-git-send-email-gustavo@zacarias.com.ar>
+ <20131208201249.2f3e89a5@skate> <52A4C794.7070301@zacarias.com.ar>
+Message-ID: <20131208215205.19b1750c@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=cad53d816bdb4e54d9f58b5283544a2b77cd4968
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Gustavo Zacarias,
 
-Switch away from the PyPI subset version since it has a great filename
-clash with the full upstream apache version.
+On Sun, 08 Dec 2013 16:25:08 -0300, Gustavo Zacarias wrote:
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/python-thrift/python-thrift.mk |   10 +++++-----
- 1 files changed, 5 insertions(+), 5 deletions(-)
+> That's a language extension/construct that's been thrown out.
+> Unfortunately there are other builtins that aren't options that suffer
+> the same fate, so anyone migrating code from an older php series will
+> have to check/adapt their code as usual, i don't see much point in just
+> warning the user for a rarely used extension.
+> I think it'll just give the impression that everything else is the same
+> and it's not.
+> They'll have to read http://www.php.net/migration55 and
+> http://www.php.net/migration54 and check their code anyway (where it's
+> already mentioned).
 
-diff --git a/package/python-thrift/python-thrift.mk b/package/python-thrift/python-thrift.mk
-index 65733d4..91e14e5 100644
---- a/package/python-thrift/python-thrift.mk
-+++ b/package/python-thrift/python-thrift.mk
-@@ -4,15 +4,15 @@
- #
- ################################################################################
- 
--PYTHON_THRIFT_VERSION = 0.9.0
-+PYTHON_THRIFT_VERSION = 0.9.1
- PYTHON_THRIFT_SOURCE = thrift-$(PYTHON_THRIFT_VERSION).tar.gz
--PYTHON_THRIFT_SITE = http://pypi.python.org/packages/source/t/thrift
-+PYTHON_THRIFT_SITE = http://www.us.apache.org/dist/thrift/$(PYTHON_THRIFT_VERSION)
- PYTHON_THRIFT_LICENSE = Apache-2.0
--PYTHON_THRIFT_LICENSE_FILES = README
-+PYTHON_THRIFT_LICENSE_FILES = LICENSE
- PYTHON_THRIFT_DEPENDENCIES = python
- 
- define PYTHON_THRIFT_BUILD_CMDS
--	(cd $(@D); \
-+	(cd $(@D)/lib/py; \
- 		CC="$(TARGET_CC)" \
- 		CFLAGS="$(TARGET_CFLAGS)" \
- 		LDSHARED="$(TARGET_CROSS)gcc -shared" \
-@@ -28,7 +28,7 @@ endef
- # the installation directory is in python's load path. For host-python,
- # it is not, so add it explicitly while installing to target.
- define PYTHON_THRIFT_INSTALL_TARGET_CMDS
--	(cd $(@D); PYTHONPATH=$(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages \
-+	(cd $(@D)/lib/py; PYTHONPATH=$(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages \
- 		$(HOST_DIR)/usr/bin/python setup.py install --prefix=$(TARGET_DIR)/usr)
- endef
- 
+Ok, true, I understand the idea.
+
+
+> > New comment ?
+> 
+> True, i'll fix it in v2.
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
