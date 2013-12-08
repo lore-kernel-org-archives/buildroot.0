@@ -1,12 +1,11 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 08 Dec 2013 23:40:19 +0100
-Subject: [Buildroot] [PATCH 02/38] dialog: remove useless POST_CLEAN
-	command
-In-Reply-To: <1386540907-7242-3-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Sun, 8 Dec 2013 23:14:31 +0100")
-References: <1386540907-7242-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1386540907-7242-3-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <87txej7yr0.fsf@dell.be.48ers.dk>
+Date: Sun, 08 Dec 2013 23:02:49 +0100
+Subject: [Buildroot] [PATCHv7 0/5] Keeping customizations outside the
+	Buildroot tree with BR2_EXTERNAL
+In-Reply-To: <1386270673-16051-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Thu, 5 Dec 2013 20:11:08 +0100")
+References: <1386270673-16051-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <8738m39f1y.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,15 +14,15 @@ To: buildroot@busybox.net
 
 >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- > For some reason, the dialog package has a DIALOG_POST_CLEAN variable,
- > which doesn't match any of the variables understood by the
- > infrastructure. This commit gets rid of it.
+ > Hello,
+ > Here is the seventh version of the BR2_EXTERNAL patch series. Its main
+ > purpose is to take into account the feedback received recently on the
+ > list.
 
- > This was noticed while reviewing the packaging of python-dialog.
+ > People interested in testing this can find a branch at
+ > http://git.free-electrons.com/users/thomas-petazzoni/buildroot/log/?h=things-outside-br-v7.
 
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-
-Committed, thanks.
+Committed series, thanks everyone!
 
 -- 
 Bye, Peter Korsgaard
