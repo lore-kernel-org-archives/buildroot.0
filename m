@@ -1,28 +1,28 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 08 Dec 2013 21:31:40 +0100
-Subject: [Buildroot] [PATCHv3 0/5] Add apache thrift
-In-Reply-To: <1385989214-16956-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Mon, 2 Dec 2013 10:00:09 -0300")
-References: <1385989214-16956-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87zjob9j9v.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 8 Dec 2013 20:57:57 +0100
+Subject: [Buildroot] [git commit] libevent: add host variant
+Message-ID: <20131208203406.422EE9BF72@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=5325b6c1d855c7b6a4122071f0d9ca786269b6f5
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Add the apache thrift runtime and host tool.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/libevent/libevent.mk |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
- > Changes for v3:
- > * Install thrift to staging (d'oh!)
- > * Add a handy $(THRIFT) definition
-
-I guess you're planning on adding packages using this THRIFT variable in
-the future?
-
-Committed series, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/libevent/libevent.mk b/package/libevent/libevent.mk
+index a6def1a..14ebf72 100644
+--- a/package/libevent/libevent.mk
++++ b/package/libevent/libevent.mk
+@@ -20,3 +20,4 @@ LIBEVENT_POST_INSTALL_TARGET_HOOKS += LIBEVENT_REMOVE_PYSCRIPT
+ endif
+ 
+ $(eval $(autotools-package))
++$(eval $(host-autotools-package))
