@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun,  8 Dec 2013 23:15:07 +0100
-Subject: [Buildroot] [PATCH 38/38] python-pysnmp-mibs: new package
+Date: Sun,  8 Dec 2013 23:15:04 +0100
+Subject: [Buildroot] [PATCH 35/38] python-pycrypto: new package
 In-Reply-To: <1386540907-7242-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1386540907-7242-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1386540907-7242-39-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1386540907-7242-36-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,64 +15,79 @@ From: Ryan Barnett <ryanbarnett3@gmail.com>
 Signed-off-by: Ryan Barnett <rjbarnet@rockwellcollins.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Config.in                                |  1 +
- package/python-pysnmp-mibs/Config.in             | 13 +++++++++++++
- package/python-pysnmp-mibs/python-pysnmp-mibs.mk | 16 ++++++++++++++++
- 3 files changed, 30 insertions(+)
- create mode 100644 package/python-pysnmp-mibs/Config.in
- create mode 100644 package/python-pysnmp-mibs/python-pysnmp-mibs.mk
+ package/Config.in                          |  1 +
+ package/python-pycrypto/Config.in          |  9 ++++++++
+ package/python-pycrypto/python-pycrypto.mk | 35 ++++++++++++++++++++++++++++++
+ 3 files changed, 45 insertions(+)
+ create mode 100644 package/python-pycrypto/Config.in
+ create mode 100644 package/python-pycrypto/python-pycrypto.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 2e3b289..4dc417f 100644
+index 2081a8d..426f55e 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -406,6 +406,7 @@ source "package/python-pyparsing/Config.in"
+@@ -400,6 +400,7 @@ source "package/python-netifaces/Config.in"
+ source "package/python-nfc/Config.in"
+ source "package/python-protobuf/Config.in"
+ source "package/python-pyasn/Config.in"
++source "package/python-pycrypto/Config.in"
+ source "package/python-pygame/Config.in"
+ source "package/python-pyparsing/Config.in"
  source "package/python-pyro/Config.in"
- source "package/python-pysnmp/Config.in"
- source "package/python-pysnmp-apps/Config.in"
-+source "package/python-pysnmp-mibs/Config.in"
- source "package/python-pyusb/Config.in"
- source "package/python-pyzmq/Config.in"
- source "package/python-serial/Config.in"
-diff --git a/package/python-pysnmp-mibs/Config.in b/package/python-pysnmp-mibs/Config.in
+diff --git a/package/python-pycrypto/Config.in b/package/python-pycrypto/Config.in
 new file mode 100644
-index 0000000..0512502
+index 0000000..60a3446
 --- /dev/null
-+++ b/package/python-pysnmp-mibs/Config.in
-@@ -0,0 +1,13 @@
-+config BR2_PACKAGE_PYTHON_PYSNMP_MIBS
-+	bool "python-pysnmp-mibs"
++++ b/package/python-pycrypto/Config.in
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_PYTHON_PYCRYPTO
++	bool "python-pycrypto"
 +	depends on BR2_PACKAGE_PYTHON
-+	select BR2_PACKAGE_PYTHON_PYSNMP
-+	depends on BR2_INSTALL_LIBSTDCPP # pysnmp -> pyasn
++	select BR2_PACKAGE_GMP
 +	help
-+	  PySNMP MIBs is a set of IETF & IANA MIBs pre-compiled and
-+	  packaged to simplify their use with the PySNMP library.
++	  PyCrypto is a collection of cryptographic algorithms and
++	  protocols, implemented for use from Python.
 +
-+	  http://pysnmp.sf.net
-+
-+comment "python-pysnmp-libs needs toolchain w/ C++"
-+        depends on !BR2_INSTALL_LIBSTDCPP
-diff --git a/package/python-pysnmp-mibs/python-pysnmp-mibs.mk b/package/python-pysnmp-mibs/python-pysnmp-mibs.mk
++	  http://www.pycrypto.org/
+diff --git a/package/python-pycrypto/python-pycrypto.mk b/package/python-pycrypto/python-pycrypto.mk
 new file mode 100644
-index 0000000..faf1293
+index 0000000..b84099b
 --- /dev/null
-+++ b/package/python-pysnmp-mibs/python-pysnmp-mibs.mk
-@@ -0,0 +1,16 @@
++++ b/package/python-pycrypto/python-pycrypto.mk
+@@ -0,0 +1,35 @@
 +################################################################################
 +#
-+# python-pysnmp-mibs
++# python-pycrypto
 +#
 +################################################################################
 +
-+PYTHON_PYSNMP_MIBS_VERSION = 0.1.4
-+PYTHON_PYSNMP_MIBS_SOURCE  = pysnmp-mibs-$(PYTHON_PYSNMP_MIBS_VERSION).tar.gz
-+PYTHON_PYSNMP_MIBS_SITE    = https://pypi.python.org/packages/source/p/pysnmp-mibs
-+PYTHON_PYSNMP_MIBS_SETUP_TYPE = setuptools
-+PYTHON_PYSNMP_MIBS_LICENSE = BSD-3c
-+PYTHON_PYSNMP_MIBS_LICENSE_FILES = LICENSE
++PYTHON_PYCRYPTO_VERSION = 2.6
++PYTHON_PYCRYPTO_SOURCE  = pycrypto-$(PYTHON_PYCRYPTO_VERSION).tar.gz
++PYTHON_PYCRYPTO_SITE    = http://ftp.dlitz.net/pub/dlitz/crypto/pycrypto
++PYTHON_PYCRYPTO_SETUP_TYPE = distutils
 +
-+PYTHON_PYSNMP_MIBS_DEPENDENCIES = python-pysnmp
++PYTHON_PYCRYPTO_LICENSE = Public Domain, Python 2.2 License (HMAC.py, setup.py)
++PYTHON_PYCRYPTO_LICENSE_FILES = COPYRIGHT LEGAL/copy/LICENSE.libtom \
++		LEGAL/copy/LICENSE.orig LEGAL/copy/LICENSE.python-2.2
++
++PYTHON_PYCRYPTO_DEPENDENCIES =  gmp
++
++# The configure step needs to be run outside of the setup.py since it isn't
++# run correctly for cross-compiling
++define PYTHON_PYCRYPTO_CONFIGURE_CMDS
++	(cd $(@D) && \
++	$(TARGET_CONFIGURE_OPTS) \
++	$(TARGET_CONFIGURE_ARGS) \
++	./configure \
++		--target=$(GNU_TARGET_NAME) \
++		--host=$(GNU_TARGET_NAME) \
++		--build=$(GNU_HOST_NAME) \
++		--prefix=/usr \
++		--exec-prefix=/usr \
++		--sysconfdir=/etc \
++		--program-prefix="" \
++	)
++endef
 +
 +$(eval $(python-package))
 -- 
