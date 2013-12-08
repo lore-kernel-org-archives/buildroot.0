@@ -1,64 +1,77 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun,  8 Dec 2013 23:14:50 +0100
-Subject: [Buildroot] [PATCH 21/38] python-netifaces: convert to the Python
-	package infrastructure
+Date: Sun,  8 Dec 2013 23:14:51 +0100
+Subject: [Buildroot] [PATCH 22/38] supervisor: convert to the Python package
+	infrastructure
 In-Reply-To: <1386540907-7242-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1386540907-7242-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1386540907-7242-22-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1386540907-7242-23-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Also, remove the "select BR2_PACKAGE_PYTHON_SETUPTOOLS", since
-setuptools is a host dependency (needed to built the package), not a
-target dependency.
+Remove the select of BR2_PACKAGE_PYTHON_SETUPTOOLS, since what is
+really needed is host-setuptools (as can be seen from the original .mk
+file), and not setuptools for the target.
+
+Also, remove the manging of the Python shebang, since it's now done by
+passing the --executable= option at install time (done in the Python
+package infrastructure).
+
+Finally, convert the package to use <pkg>_INSTALL_INIT_SYSV.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/python-netifaces/Config.in           |  1 -
- package/python-netifaces/python-netifaces.mk | 19 ++-----------------
- 2 files changed, 2 insertions(+), 18 deletions(-)
+ package/supervisor/Config.in     |  1 -
+ package/supervisor/supervisor.mk | 22 +++++++++++-----------
+ 2 files changed, 11 insertions(+), 12 deletions(-)
 
-diff --git a/package/python-netifaces/Config.in b/package/python-netifaces/Config.in
-index b9d66d8..29f9fc3 100644
---- a/package/python-netifaces/Config.in
-+++ b/package/python-netifaces/Config.in
+diff --git a/package/supervisor/Config.in b/package/supervisor/Config.in
+index 5340181..c511dd8 100644
+--- a/package/supervisor/Config.in
++++ b/package/supervisor/Config.in
 @@ -1,7 +1,6 @@
- config BR2_PACKAGE_PYTHON_NETIFACES
- 	bool "python-netifaces"
+ config BR2_PACKAGE_SUPERVISOR
+ 	bool "supervisor"
  	depends on BR2_PACKAGE_PYTHON
 -	select BR2_PACKAGE_PYTHON_SETUPTOOLS
+ 	select BR2_PACKAGE_PYTHON_MELD3
  	help
- 	  Portable access to network interfaces from Python.
+ 	  A client/server system that allows its users to control a
+diff --git a/package/supervisor/supervisor.mk b/package/supervisor/supervisor.mk
+index 40ad8ce..d2d58e2 100644
+--- a/package/supervisor/supervisor.mk
++++ b/package/supervisor/supervisor.mk
+@@ -7,19 +7,19 @@
+ SUPERVISOR_VERSION = 3.0a12
+ SUPERVISOR_SITE = http://pypi.python.org/packages/source/s/supervisor/
+ SUPERVISOR_LICENSE_FILES = LICENSES.txt
++SUPERVISOR_SETUP_TYPE = setuptools
  
-diff --git a/package/python-netifaces/python-netifaces.mk b/package/python-netifaces/python-netifaces.mk
-index 1570fd1..faa39bd 100644
---- a/package/python-netifaces/python-netifaces.mk
-+++ b/package/python-netifaces/python-netifaces.mk
-@@ -7,21 +7,6 @@
- PYTHON_NETIFACES_VERSION = 0.7
- PYTHON_NETIFACES_SOURCE  = netifaces-$(PYTHON_NETIFACES_VERSION).tar.gz
- PYTHON_NETIFACES_SITE    = http://alastairs-place.net/projects/netifaces
-+PYTHON_NETIFACES_SETUP_TYPE = setuptools
+-SUPERVISOR_DEPENDENCIES = python host-python-setuptools
+-
+-define SUPERVISOR_BUILD_CMDS
+-	(cd $(@D); $(HOST_DIR)/usr/bin/python setup.py build)
++define SUPERVISOR_INSTALL_CONF_FILES
++	$(INSTALL) -d -m 755 $(TARGET_DIR)/etc/supervisor.d
++	$(INSTALL) -D -m 644 package/supervisor/supervisord.conf \
++		$(TARGET_DIR)/etc/supervisord.conf
+ endef
  
--PYTHON_NETIFACES_DEPENDENCIES = python host-python-setuptools host-python-distutilscross
--
--define PYTHON_NETIFACES_BUILD_CMDS
--	(cd $(@D); \
--		PYTHONXCPREFIX="$(STAGING_DIR)/usr/" \
--		LDFLAGS="-L$(STAGING_DIR)/lib -L$(STAGING_DIR)/usr/lib" \
--	$(HOST_DIR)/usr/bin/python setup.py build -x)
--endef
--
--define PYTHON_NETIFACES_INSTALL_TARGET_CMDS
--	(cd $(@D); \
--	PYTHONPATH=$(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages \
--	$(HOST_DIR)/usr/bin/python setup.py install \
--	--single-version-externally-managed --root=/ --prefix=$(TARGET_DIR)/usr)
--endef
--
+-define SUPERVISOR_INSTALL_TARGET_CMDS
+-	(cd $(@D); $(HOST_DIR)/usr/bin/python setup.py install --prefix=/usr --root=$(TARGET_DIR))
+-	sed -i '1s|#!.*python.*|#!/usr/bin/env python|' $(TARGET_DIR)/usr/bin/{echo_supervisord_conf,pidproxy,supervisorctl,supervisord}
+-	$(INSTALL) -d -m 755 $(TARGET_DIR)/etc/supervisor.d
+-	$(INSTALL) -D -m 644 package/supervisor/supervisord.conf $(TARGET_DIR)/etc/supervisord.conf
+-	$(INSTALL) -m 755 package/supervisor/S99supervisord $(TARGET_DIR)/etc/init.d/S99supervisord
++SUPERVISOR_POST_INSTALL_TARGET_HOOKS += SUPERVISOR_INSTALL_CONF_FILES
++
++define SUPERVISOR_INSTALL_INIT_SYSV
++	$(INSTALL) -D -m 755 package/supervisor/S99supervisord \
++		$(TARGET_DIR)/etc/init.d/S99supervisord
+ endef
+ 
 -$(eval $(generic-package))
 +$(eval $(python-package))
 -- 
