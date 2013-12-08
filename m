@@ -1,57 +1,48 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 8 Dec 2013 20:12:49 +0100
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Sun, 08 Dec 2013 16:25:08 -0300
 Subject: [Buildroot] [PATCH] php: bump to version 5.5.6
-In-Reply-To: <1386528934-28676-1-git-send-email-gustavo@zacarias.com.ar>
+In-Reply-To: <20131208201249.2f3e89a5@skate>
 References: <1386528934-28676-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20131208201249.2f3e89a5@skate>
+ <20131208201249.2f3e89a5@skate>
+Message-ID: <52A4C794.7070301@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+On 12/08/2013 04:12 PM, Thomas Petazzoni wrote:
+>> -config BR2_PACKAGE_PHP_EXT_SQLITE
+>> -	bool "SQLite"
+>> -	help
+>> -	  Legacy SQLite2 support
+>> -
+>> -config BR2_PACKAGE_PHP_EXT_SQLITE_UTF8
+>> -	bool "sqlite UTF8 support"
+>> -	depends on BR2_PACKAGE_PHP_EXT_SQLITE
+>> -	help
+>> -	  UTF8 support for sqlite
+> 
+> Config.in.legacy maybe?
 
-On Sun,  8 Dec 2013 15:55:34 -0300, Gustavo Zacarias wrote:
+That's a language extension/construct that's been thrown out.
+Unfortunately there are other builtins that aren't options that suffer
+the same fate, so anyone migrating code from an older php series will
+have to check/adapt their code as usual, i don't see much point in just
+warning the user for a rarely used extension.
+I think it'll just give the impression that everything else is the same
+and it's not.
+They'll have to read http://www.php.net/migration55 and
+http://www.php.net/migration54 and check their code anyway (where it's
+already mentioned).
 
-> -config BR2_PACKAGE_PHP_EXT_SQLITE
-> -	bool "SQLite"
-> -	help
-> -	  Legacy SQLite2 support
-> -
-> -config BR2_PACKAGE_PHP_EXT_SQLITE_UTF8
-> -	bool "sqlite UTF8 support"
-> -	depends on BR2_PACKAGE_PHP_EXT_SQLITE
-> -	help
-> -	  UTF8 support for sqlite
+>>  config BR2_PACKAGE_PHP_EXT_SOCKETS
+>>  	bool "sockets"
+>> +	depends on BR2_INET_IPV6
+>>  	help
+>>  	  Sockets support
+> 
+> New comment ?
 
-Config.in.legacy maybe?
-
->  config BR2_PACKAGE_PHP_EXT_MYSQL
->  	bool "Mysql"
->  	depends on BR2_INSTALL_LIBSTDCPP
-> @@ -227,6 +216,7 @@ config BR2_PACKAGE_PHP_EXT_FTP
->  
->  config BR2_PACKAGE_PHP_EXT_SNMP
->  	bool "SNMP"
-> +	depends on BR2_USE_MMU # netsnmp fork()
->  	select BR2_PACKAGE_NETSNMP
->  	select BR2_PACKAGE_NETSNMP_ENABLE_MIBS
->  	help
-> @@ -234,6 +224,7 @@ config BR2_PACKAGE_PHP_EXT_SNMP
->  
->  config BR2_PACKAGE_PHP_EXT_SOCKETS
->  	bool "sockets"
-> +	depends on BR2_INET_IPV6
->  	help
->  	  Sockets support
-
-New comment ?
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+True, i'll fix it in v2.
+Regards.
