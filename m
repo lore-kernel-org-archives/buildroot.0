@@ -1,81 +1,79 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun,  8 Dec 2013 23:14:55 +0100
-Subject: [Buildroot] [PATCH 26/38] python-pyusb: new package
+Date: Sun,  8 Dec 2013 23:14:59 +0100
+Subject: [Buildroot] [PATCH 30/38] python-keyring: new package
 In-Reply-To: <1386540907-7242-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1386540907-7242-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1386540907-7242-27-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1386540907-7242-31-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: "Wojciech M. Zabolotny" <wzab01@gmail.com>
+From: Ludovic Desroches <ludovic.desroches@atmel.com>
 
-[Thomas: converted to the Python package infrastructure, added missing
-libusb dependency in the .mk file, added missing newline in the
-Config.in file]
+[Thomas: convert to the Python package infrastructure, improved the
+.zip handling, added license informations.]
 
-Signed-off-by: Wojciech M. Zabolotny <wzab01@gmail.com>
+Signed-off-by: Ludovic Desroches <ludovic.desroches@atmel.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Config.in                    |  1 +
- package/python-pyusb/Config.in       | 14 ++++++++++++++
- package/python-pyusb/python-pyusb.mk | 14 ++++++++++++++
- 3 files changed, 29 insertions(+)
- create mode 100644 package/python-pyusb/Config.in
- create mode 100644 package/python-pyusb/python-pyusb.mk
+ package/Config.in                        |  1 +
+ package/python-keyring/Config.in         |  8 ++++++++
+ package/python-keyring/python-keyring.mk | 19 +++++++++++++++++++
+ 3 files changed, 28 insertions(+)
+ create mode 100644 package/python-keyring/Config.in
+ create mode 100644 package/python-keyring/python-keyring.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index aa928ec..d7dcbd0 100644
+index 5f29c54..4f7c9cd 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -398,6 +398,7 @@ source "package/python-protobuf/Config.in"
- source "package/python-pygame/Config.in"
- source "package/python-pyparsing/Config.in"
- source "package/python-pyro/Config.in"
-+source "package/python-pyusb/Config.in"
- source "package/python-pyzmq/Config.in"
- source "package/python-serial/Config.in"
- source "package/python-setuptools/Config.in"
-diff --git a/package/python-pyusb/Config.in b/package/python-pyusb/Config.in
+@@ -391,6 +391,7 @@ source "package/python-dialog/Config.in"
+ source "package/python-dpkt/Config.in"
+ source "package/python-id3/Config.in"
+ source "package/python-ipy/Config.in"
++source "package/python-keyring/Config.in"
+ source "package/python-mad/Config.in"
+ source "package/python-meld3/Config.in"
+ source "package/python-msgpack/Config.in"
+diff --git a/package/python-keyring/Config.in b/package/python-keyring/Config.in
 new file mode 100644
-index 0000000..8e17714
+index 0000000..6a5c4c5
 --- /dev/null
-+++ b/package/python-pyusb/Config.in
-@@ -0,0 +1,14 @@
-+config BR2_PACKAGE_PYTHON_PYUSB
-+	bool "python-pyusb"
++++ b/package/python-keyring/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_PYTHON_KEYRING
++	bool "python-keyring"
 +	depends on BR2_PACKAGE_PYTHON
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # libusb
-+	select BR2_PACKAGE_LIBUSB
 +	help
-+	  The PyUSB module provides for Python easy access to the host
-+	  machine's Universal Serial Bus (USB) system.
++	  The Python keyring lib provides a easy way to access the system
++	  keyring service from python.
 +
-+	  http://sourceforge.net/apps/trac/pyusb/
-+
-+comment "python-pyusb needs a toolchain w/ threads"
-+	depends on BR2_PACKAGE_PYTHON
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/python-pyusb/python-pyusb.mk b/package/python-pyusb/python-pyusb.mk
++	  https://pypi.python.org/pypi/keyring
+diff --git a/package/python-keyring/python-keyring.mk b/package/python-keyring/python-keyring.mk
 new file mode 100644
-index 0000000..3fcc864
+index 0000000..ead5184
 --- /dev/null
-+++ b/package/python-pyusb/python-pyusb.mk
-@@ -0,0 +1,14 @@
++++ b/package/python-keyring/python-keyring.mk
+@@ -0,0 +1,19 @@
 +################################################################################
 +#
-+# python-pyusb
++# python-keyring
 +#
 +################################################################################
 +
-+PYTHON_PYUSB_VERSION = 0546cad8980783c39f96db717005a550059b730f
-+PYTHON_PYUSB_SITE    = $(call github,walac,pyusb,$(PYTHON_PYUSB_VERSION))
-+PYTHON_PYUSB_LICENSE = BSD-3c
-+PYTHON_PYUSB_LICENSE_FILES = LICENSE
-+PYTHON_PYUSB_SETUP_TYPE = distutils
-+PYTHON_PYUSB_DEPENDENCIES = libusb
++PYTHON_KEYRING_VERSION = 3.0.5
++PYTHON_KEYRING_SOURCE  = keyring-$(PYTHON_KEYRING_VERSION).zip
++PYTHON_KEYRING_SITE    = http://pypi.python.org/packages/source/k/keyring/
++PYTHON_KEYRING_SETUP_TYPE = setuptools
++PYTHON_KEYRING_LICENSE    = python software foundation license
++
++define PYTHON_KEYRING_EXTRACT_CMDS
++	unzip -d $(@D) $(DL_DIR)/$(PYTHON_KEYRING_SOURCE)
++	mv $(@D)/keyring-$(PYTHON_KEYRING_VERSION)/* $(@D)
++	$(RM) -r $(@D)/keyring-$(PYTHON_KEYRING_VERSION)
++endef
 +
 +$(eval $(python-package))
 -- 
