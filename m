@@ -1,42 +1,42 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 8 Dec 2013 21:52:05 +0100
-Subject: [Buildroot] [PATCH] php: bump to version 5.5.6
-In-Reply-To: <52A4C794.7070301@zacarias.com.ar>
-References: <1386528934-28676-1-git-send-email-gustavo@zacarias.com.ar>
- <20131208201249.2f3e89a5@skate> <52A4C794.7070301@zacarias.com.ar>
-Message-ID: <20131208215205.19b1750c@skate>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 08 Dec 2013 22:10:39 +0100
+Subject: [Buildroot] [PATCH] libglib2: bump version to 2.37.7
+In-Reply-To: <1386252043-12389-1-git-send-email-spdawson@gmail.com>
+ (spdawson@gmail.com's message of "Thu, 5 Dec 2013 14:00:43 +0000")
+References: <1386252043-12389-1-git-send-email-spdawson@gmail.com>
+Message-ID: <87vbyz9hgw.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+>>>>> "spdawson" == spdawson  <spdawson@gmail.com> writes:
 
-On Sun, 08 Dec 2013 16:25:08 -0300, Gustavo Zacarias wrote:
+ > From: Simon Dawson <spdawson@gmail.com>
+ > libglib2 can fail to build for arm, with the following error.
 
-> That's a language extension/construct that's been thrown out.
-> Unfortunately there are other builtins that aren't options that suffer
-> the same fate, so anyone migrating code from an older php series will
-> have to check/adapt their code as usual, i don't see much point in just
-> warning the user for a rarely used extension.
-> I think it'll just give the impression that everything else is the same
-> and it's not.
-> They'll have to read http://www.php.net/migration55 and
-> http://www.php.net/migration54 and check their code anyway (where it's
-> already mentioned).
+ >   gatomic.c:668:2: error: #error G_ATOMIC_LOCK_FREE defined, but incapable of lock-free atomics.
 
-Ok, true, I understand the idea.
+ > The following upstream commit fixes the problem.
 
+ >   commit 996edb0c46356d8a326f886b91a77a6af9a2de3e
+ >   Author: Antoine Jacoutot <antoine@mtier.org>
+ >   Date:   Wed Aug 28 09:35:27 2013 +0200
 
-> > New comment ?
-> 
-> True, i'll fix it in v2.
+ >     fix atomic ops detection
 
-Thanks!
+ >     AC_TRY_LINK should be used instead of AC_TRY_COMPILE because the code
+ >     will compile everywhere, either producing ``atomic'' code, or an
+ >     external reference to __sync_bool_compare_and_swap.
 
-Thomas
+ >     https://bugzilla.gnome.org/show_bug.cgi?id=706958
+
+ > The upstream commit went into version 2.37.7, so this is the lowest version
+ > that we can bump to, in order to fix the atomic operations problem.
+
+But 2.<odd> are development versions, so we should move to the 2.8
+series instead, right?
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
