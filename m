@@ -1,21 +1,24 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 08 Dec 2013 19:41:09 +0100
-Subject: [Buildroot] [PATCH] libsoc: bump to 0.5
-In-Reply-To: <1386522281-18764-1-git-send-email-yegorslists@googlemail.com>
- (Yegor Yefremov's message of "Sun, 8 Dec 2013 18:04:41 +0100")
-References: <1386522281-18764-1-git-send-email-yegorslists@googlemail.com>
-Message-ID: <878uvvb2yi.fsf@dell.be.48ers.dk>
+Date: Sun, 08 Dec 2013 19:42:58 +0100
+Subject: [Buildroot] [PATCH 0 of 3] Remove package clean commands
+In-Reply-To: <patchbomb.1386407806@argentina> (Thomas De Schampheleire's
+ message of "Sat, 07 Dec 2013 10:16:46 +0100")
+References: <patchbomb.1386407806@argentina>
+Message-ID: <874n6jb2vh.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yegor" == Yegor Yefremov <yegorslists@googlemail.com> writes:
+>>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin@gmail.com> writes:
 
- > Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+ > As followup to the removal of package uninstall commands, this series
+ > removes the clean commands as well, as discussed previously.
 
-Committed, thanks.
+ > Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+
+Committed series, thanks.
 
 -- 
 Bye, Peter Korsgaard
