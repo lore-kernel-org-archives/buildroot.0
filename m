@@ -1,93 +1,81 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun,  8 Dec 2013 23:15:04 +0100
-Subject: [Buildroot] [PATCH 35/38] python-pycrypto: new package
+Date: Sun,  8 Dec 2013 23:14:55 +0100
+Subject: [Buildroot] [PATCH 26/38] python-pyusb: new package
 In-Reply-To: <1386540907-7242-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1386540907-7242-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1386540907-7242-36-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1386540907-7242-27-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Ryan Barnett <ryanbarnett3@gmail.com>
+From: "Wojciech M. Zabolotny" <wzab01@gmail.com>
 
-Signed-off-by: Ryan Barnett <rjbarnet@rockwellcollins.com>
+[Thomas: converted to the Python package infrastructure, added missing
+libusb dependency in the .mk file, added missing newline in the
+Config.in file]
+
+Signed-off-by: Wojciech M. Zabolotny <wzab01@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Config.in                          |  1 +
- package/python-pycrypto/Config.in          |  9 ++++++++
- package/python-pycrypto/python-pycrypto.mk | 35 ++++++++++++++++++++++++++++++
- 3 files changed, 45 insertions(+)
- create mode 100644 package/python-pycrypto/Config.in
- create mode 100644 package/python-pycrypto/python-pycrypto.mk
+ package/Config.in                    |  1 +
+ package/python-pyusb/Config.in       | 14 ++++++++++++++
+ package/python-pyusb/python-pyusb.mk | 14 ++++++++++++++
+ 3 files changed, 29 insertions(+)
+ create mode 100644 package/python-pyusb/Config.in
+ create mode 100644 package/python-pyusb/python-pyusb.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 2081a8d..426f55e 100644
+index aa928ec..d7dcbd0 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -400,6 +400,7 @@ source "package/python-netifaces/Config.in"
- source "package/python-nfc/Config.in"
- source "package/python-protobuf/Config.in"
- source "package/python-pyasn/Config.in"
-+source "package/python-pycrypto/Config.in"
+@@ -398,6 +398,7 @@ source "package/python-protobuf/Config.in"
  source "package/python-pygame/Config.in"
  source "package/python-pyparsing/Config.in"
  source "package/python-pyro/Config.in"
-diff --git a/package/python-pycrypto/Config.in b/package/python-pycrypto/Config.in
++source "package/python-pyusb/Config.in"
+ source "package/python-pyzmq/Config.in"
+ source "package/python-serial/Config.in"
+ source "package/python-setuptools/Config.in"
+diff --git a/package/python-pyusb/Config.in b/package/python-pyusb/Config.in
 new file mode 100644
-index 0000000..60a3446
+index 0000000..8e17714
 --- /dev/null
-+++ b/package/python-pycrypto/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_PYTHON_PYCRYPTO
-+	bool "python-pycrypto"
++++ b/package/python-pyusb/Config.in
+@@ -0,0 +1,14 @@
++config BR2_PACKAGE_PYTHON_PYUSB
++	bool "python-pyusb"
 +	depends on BR2_PACKAGE_PYTHON
-+	select BR2_PACKAGE_GMP
++	depends on BR2_TOOLCHAIN_HAS_THREADS # libusb
++	select BR2_PACKAGE_LIBUSB
 +	help
-+	  PyCrypto is a collection of cryptographic algorithms and
-+	  protocols, implemented for use from Python.
++	  The PyUSB module provides for Python easy access to the host
++	  machine's Universal Serial Bus (USB) system.
 +
-+	  http://www.pycrypto.org/
-diff --git a/package/python-pycrypto/python-pycrypto.mk b/package/python-pycrypto/python-pycrypto.mk
++	  http://sourceforge.net/apps/trac/pyusb/
++
++comment "python-pyusb needs a toolchain w/ threads"
++	depends on BR2_PACKAGE_PYTHON
++	depends on !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/python-pyusb/python-pyusb.mk b/package/python-pyusb/python-pyusb.mk
 new file mode 100644
-index 0000000..b84099b
+index 0000000..3fcc864
 --- /dev/null
-+++ b/package/python-pycrypto/python-pycrypto.mk
-@@ -0,0 +1,35 @@
++++ b/package/python-pyusb/python-pyusb.mk
+@@ -0,0 +1,14 @@
 +################################################################################
 +#
-+# python-pycrypto
++# python-pyusb
 +#
 +################################################################################
 +
-+PYTHON_PYCRYPTO_VERSION = 2.6
-+PYTHON_PYCRYPTO_SOURCE  = pycrypto-$(PYTHON_PYCRYPTO_VERSION).tar.gz
-+PYTHON_PYCRYPTO_SITE    = http://ftp.dlitz.net/pub/dlitz/crypto/pycrypto
-+PYTHON_PYCRYPTO_SETUP_TYPE = distutils
-+
-+PYTHON_PYCRYPTO_LICENSE = Public Domain, Python 2.2 License (HMAC.py, setup.py)
-+PYTHON_PYCRYPTO_LICENSE_FILES = COPYRIGHT LEGAL/copy/LICENSE.libtom \
-+		LEGAL/copy/LICENSE.orig LEGAL/copy/LICENSE.python-2.2
-+
-+PYTHON_PYCRYPTO_DEPENDENCIES =  gmp
-+
-+# The configure step needs to be run outside of the setup.py since it isn't
-+# run correctly for cross-compiling
-+define PYTHON_PYCRYPTO_CONFIGURE_CMDS
-+	(cd $(@D) && \
-+	$(TARGET_CONFIGURE_OPTS) \
-+	$(TARGET_CONFIGURE_ARGS) \
-+	./configure \
-+		--target=$(GNU_TARGET_NAME) \
-+		--host=$(GNU_TARGET_NAME) \
-+		--build=$(GNU_HOST_NAME) \
-+		--prefix=/usr \
-+		--exec-prefix=/usr \
-+		--sysconfdir=/etc \
-+		--program-prefix="" \
-+	)
-+endef
++PYTHON_PYUSB_VERSION = 0546cad8980783c39f96db717005a550059b730f
++PYTHON_PYUSB_SITE    = $(call github,walac,pyusb,$(PYTHON_PYUSB_VERSION))
++PYTHON_PYUSB_LICENSE = BSD-3c
++PYTHON_PYUSB_LICENSE_FILES = LICENSE
++PYTHON_PYUSB_SETUP_TYPE = distutils
++PYTHON_PYUSB_DEPENDENCIES = libusb
 +
 +$(eval $(python-package))
 -- 
