@@ -1,39 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun,  8 Dec 2013 23:14:31 +0100
-Subject: [Buildroot] [PATCH 02/38] dialog: remove useless POST_CLEAN command
+Date: Sun,  8 Dec 2013 23:14:33 +0100
+Subject: [Buildroot] [PATCH 04/38] python-bottle: convert to the Python
+	package infrastructure
 In-Reply-To: <1386540907-7242-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1386540907-7242-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1386540907-7242-3-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1386540907-7242-5-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-For some reason, the dialog package has a DIALOG_POST_CLEAN variable,
-which doesn't match any of the variables understood by the
-infrastructure. This commit gets rid of it.
-
-This was noticed while reviewing the packaging of python-dialog.
-
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/dialog/dialog.mk | 5 -----
- 1 file changed, 5 deletions(-)
+ package/python-bottle/python-bottle.mk | 12 ++----------
+ 1 file changed, 2 insertions(+), 10 deletions(-)
 
-diff --git a/package/dialog/dialog.mk b/package/dialog/dialog.mk
-index 06379f2..9846fd3 100644
---- a/package/dialog/dialog.mk
-+++ b/package/dialog/dialog.mk
-@@ -21,9 +21,4 @@ define DIALOG_INSTALL_TARGET_CMDS
- 	install -c $(@D)/dialog $(TARGET_DIR)/usr/bin/dialog
- endef
+diff --git a/package/python-bottle/python-bottle.mk b/package/python-bottle/python-bottle.mk
+index db71512..58c51f9 100644
+--- a/package/python-bottle/python-bottle.mk
++++ b/package/python-bottle/python-bottle.mk
+@@ -7,16 +7,8 @@
+ PYTHON_BOTTLE_VERSION = 0.11.6
+ PYTHON_BOTTLE_SOURCE = bottle-$(PYTHON_BOTTLE_VERSION).tar.gz
+ PYTHON_BOTTLE_SITE = http://pypi.python.org/packages/source/b/bottle
+-PYTHON_BOTTLE_DEPENDENCIES = python
+ PYTHON_BOTTLE_LICENSE = MIT
+ # README.rst refers to the file "LICENSE" but it's not included
++PYTHON_BOTTLE_SETUP_TYPE = distutils
  
--define DIALOG_POST_CLEAN
--	-$(MAKE) -C $(@D) clean
--	rm -f $(TARGET_DIR)/usr/bin/dialog
+-define PYTHON_BOTTLE_BUILD_CMDS
+-	(cd $(@D); $(HOST_DIR)/usr/bin/python setup.py build --executable=/usr/bin/python)
 -endef
 -
- $(eval $(autotools-package))
+-define PYTHON_BOTTLE_INSTALL_TARGET_CMDS
+-	(cd $(@D); $(HOST_DIR)/usr/bin/python setup.py install --prefix=$(TARGET_DIR)/usr)
+-endef
+-
+-$(eval $(generic-package))
++$(eval $(python-package))
 -- 
 1.8.1.2
