@@ -1,28 +1,93 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 8 Dec 2013 20:57:57 +0100
-Subject: [Buildroot] [git commit] libevent: add host variant
-Message-ID: <20131208203406.422EE9BF72@busybox.osuosl.org>
+Date: Sun, 8 Dec 2013 20:58:22 +0100
+Subject: [Buildroot] [git commit] boost: add host variant
+Message-ID: <20131208203406.5A1DD9BF6B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=5325b6c1d855c7b6a4122071f0d9ca786269b6f5
+commit: http://git.buildroot.net/buildroot/commit/?id=429ffbd22530318462ff6600adf0f20310681531
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libevent/libevent.mk |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+ package/boost/boost.mk |   33 +++++++++++++++++++++++++++++++++
+ 1 files changed, 33 insertions(+), 0 deletions(-)
 
-diff --git a/package/libevent/libevent.mk b/package/libevent/libevent.mk
-index a6def1a..14ebf72 100644
---- a/package/libevent/libevent.mk
-+++ b/package/libevent/libevent.mk
-@@ -20,3 +20,4 @@ LIBEVENT_POST_INSTALL_TARGET_HOOKS += LIBEVENT_REMOVE_PYSCRIPT
+diff --git a/package/boost/boost.mk b/package/boost/boost.mk
+index b0b3352..b97d12b 100644
+--- a/package/boost/boost.mk
++++ b/package/boost/boost.mk
+@@ -11,11 +11,19 @@ BOOST_SITE = http://downloads.sourceforge.net/project/boost/boost/$(BOOST_VERSIO
+ BOOST_INSTALL_STAGING = YES
+ 
+ TARGET_CC_VERSION = $(shell $(TARGET_CC) -dumpversion)
++HOST_CC_VERSION = $(shell $(HOSTCC) -dumpversion)
+ 
+ BOOST_DEPENDENCIES =
+ 
+ BOOST_FLAGS =
+ 
++# keep host variant as minimal as possible
++HOST_BOOST_FLAGS = --without-icu \
++	--without-libraries=$(subst $(space),$(comma),atomic chrono context \
++	coroutine date_time exception filesystem graph graph_parallel \
++	iostreams locale log math mpi program_options python random regex \
++	serialization signals system test thread timer wave)
++
+ # atomic library compile only with upstream version, wait for next release
+ # coroutine breaks on some weak toolchains and it's new for 1.54+
+ # log breaks with some toolchain combinations and it's new for 1.54+
+@@ -54,6 +62,9 @@ ifeq ($(BR2_PACKAGE_BOOST_IOSTREAMS),y)
+ BOOST_DEPENDENCIES += bzip2 zlib
  endif
  
- $(eval $(autotools-package))
-+$(eval $(host-autotools-package))
++HOST_BOOST_OPT += toolset=gcc threading=multi variant=release link=shared \
++	runtime-link=shared
++
+ BOOST_OPT += toolset=gcc \
+ 	     threading=multi \
+ 	     variant=$(if $(BR2_ENABLE_DEBUG),debug,release) \
+@@ -78,6 +89,12 @@ define BOOST_CONFIGURE_CMDS
+ 	echo "" >> $(@D)/user-config.jam
+ endef
+ 
++define HOST_BOOST_CONFIGURE_CMDS
++	(cd $(@D) && ./bootstrap.sh $(HOST_BOOST_FLAGS))
++	echo "using gcc : $(HOST_CC_VERSION) : $(HOSTCXX) : <cxxflags>\"$(HOST_CXXFLAGS)\" <linkflags>\"$(HOST_LDFLAGS)\" ;" > $(@D)/user-config.jam
++	echo "" >> $(@D)/user-config.jam
++endef
++
+ define BOOST_INSTALL_TARGET_CMDS
+ 	(cd $(@D) && ./b2 -j$(PARALLEL_JOBS) -q -d+1 \
+ 	--user-config=$(@D)/user-config.jam \
+@@ -86,6 +103,21 @@ define BOOST_INSTALL_TARGET_CMDS
+ 	--layout=system install )
+ endef
+ 
++define HOST_BOOST_BUILD_CMDS
++	(cd $(@D) && ./b2 -j$(PARALLEL_JOBS) -q -d+1 \
++	--user-config=$(@D)/user-config.jam \
++	$(HOST_BOOST_OPT) \
++	--prefix=$(HOST_DIR)/usr )
++endef
++
++define HOST_BOOST_INSTALL_CMDS
++	(cd $(@D) && ./b2 -j$(PARALLEL_JOBS) -q -d+1 \
++	--user-config=$(@D)/user-config.jam \
++	$(HOST_BOOST_OPT) \
++	--prefix=$(HOST_DIR)/usr \
++	--layout=system install )
++endef
++
+ define BOOST_INSTALL_STAGING_CMDS
+ 	(cd $(@D) && ./bjam -j$(PARALLEL_JOBS) -d+1 \
+ 	--user-config=$(@D)/user-config.jam \
+@@ -95,3 +127,4 @@ define BOOST_INSTALL_STAGING_CMDS
+ endef
+ 
+ $(eval $(generic-package))
++$(eval $(host-generic-package))
