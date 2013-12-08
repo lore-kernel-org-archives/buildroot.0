@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun,  8 Dec 2013 23:14:37 +0100
-Subject: [Buildroot] [PATCH 08/38] python-ipy: convert to the Python package
+Date: Sun,  8 Dec 2013 23:14:39 +0100
+Subject: [Buildroot] [PATCH 10/38] python-mad: convert to the Python package
 	infrastructure
 In-Reply-To: <1386540907-7242-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1386540907-7242-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1386540907-7242-9-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1386540907-7242-11-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,32 +13,40 @@ To: buildroot@busybox.net
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/python-ipy/python-ipy.mk | 17 ++---------------
- 1 file changed, 2 insertions(+), 15 deletions(-)
+ package/python-mad/python-mad.mk | 20 +++-----------------
+ 1 file changed, 3 insertions(+), 17 deletions(-)
 
-diff --git a/package/python-ipy/python-ipy.mk b/package/python-ipy/python-ipy.mk
-index c03f91f..6e05ee9 100644
---- a/package/python-ipy/python-ipy.mk
-+++ b/package/python-ipy/python-ipy.mk
-@@ -6,21 +6,8 @@
+diff --git a/package/python-mad/python-mad.mk b/package/python-mad/python-mad.mk
+index eaa1fae..1b3cb75 100644
+--- a/package/python-mad/python-mad.mk
++++ b/package/python-mad/python-mad.mk
+@@ -7,8 +7,9 @@
+ PYTHON_MAD_VERSION = 0.6
+ PYTHON_MAD_SOURCE  = pymad-$(PYTHON_MAD_VERSION).tar.gz
+ PYTHON_MAD_SITE    = http://spacepants.org/src/pymad/download/
++PYTHON_MAD_SETUP_TYPE = distutils
  
- PYTHON_IPY_VERSION = IPy-0.75
- PYTHON_IPY_SITE    = $(call github,haypo,python-ipy,$(PYTHON_IPY_VERSION))
--PYTHON_IPY_DEPENDENCIES = host-python python
- PYTHON_IPY_LICENSE = BSD-3c
- PYTHON_IPY_LICENSE_FILES = COPYING
-+PYTHON_IPY_SETUP_TYPE = distutils
+-PYTHON_MAD_DEPENDENCIES = python libmad
++PYTHON_MAD_DEPENDENCIES = libmad
  
--define PYTHON_IPY_BUILD_CMDS
+ ifeq ($(BR2_ENDIAN),"LITTLE")
+ PYTHON_MAD_ENDIAN=little
+@@ -23,19 +24,4 @@ define PYTHON_MAD_CONFIGURE_CMDS
+ 	echo "mad_include_dir = $(STAGING_DIR)/usr/include" >> $(@D)/Setup
+ endef
+ 
+-define PYTHON_MAD_BUILD_CMDS
 -	(cd $(@D); \
--		$(TARGET_CONFIGURE_OPTS) \
--		$(HOST_DIR)/usr/bin/python setup.py build_ext \
--		--include-dirs=$(STAGING_DIR)/usr/include/python$(PYTHON_VERSION_MAJOR) \
--	)
+-		CC="$(TARGET_CC)"		\
+-		CFLAGS="$(TARGET_CFLAGS)" 	\
+-		LDSHARED="$(TARGET_CC) -shared" \
+-		LDFLAGS="$(TARGET_LDFLAGS)" 	\
+-	$(HOST_DIR)/usr/bin/python setup.py build_ext \
+-	--include-dirs=$(STAGING_DIR)/usr/include/python$(PYTHON_VERSION_MAJOR))
 -	(cd $(@D); $(HOST_DIR)/usr/bin/python setup.py build)
 -endef
 -
--define PYTHON_IPY_INSTALL_TARGET_CMDS
+-define PYTHON_MAD_INSTALL_TARGET_CMDS
 -	(cd $(@D); $(HOST_DIR)/usr/bin/python setup.py install --prefix=$(TARGET_DIR)/usr)
 -endef
 -
