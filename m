@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun,  8 Dec 2013 23:15:00 +0100
-Subject: [Buildroot] [PATCH 31/38] python-simplejson: new package
+Date: Sun,  8 Dec 2013 23:15:01 +0100
+Subject: [Buildroot] [PATCH 32/38] python-json-schema-validator: new package
 In-Reply-To: <1386540907-7242-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1386540907-7242-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1386540907-7242-32-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1386540907-7242-33-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,62 +12,64 @@ To: buildroot@busybox.net
 
 From: Ludovic Desroches <ludovic.desroches@atmel.com>
 
-[Thomas: convert to the Python package infrastructure, drop the
-setuptools dependency since the package uses distutils.]
+[Thomas: convert to the Python package infrastructure, fix license
+informations.]
 
 Signed-off-by: Ludovic Desroches <ludovic.desroches@atmel.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Config.in                              |  1 +
- package/python-simplejson/Config.in            |  7 +++++++
- package/python-simplejson/python-simplejson.mk | 14 ++++++++++++++
- 3 files changed, 22 insertions(+)
- create mode 100644 package/python-simplejson/Config.in
- create mode 100644 package/python-simplejson/python-simplejson.mk
+ package/Config.in                                         |  1 +
+ package/python-json-schema-validator/Config.in            |  8 ++++++++
+ .../python-json-schema-validator.mk                       | 15 +++++++++++++++
+ 3 files changed, 24 insertions(+)
+ create mode 100644 package/python-json-schema-validator/Config.in
+ create mode 100644 package/python-json-schema-validator/python-json-schema-validator.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 4f7c9cd..d4819cf 100644
+index d4819cf..1f45ea0 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -405,6 +405,7 @@ source "package/python-pyusb/Config.in"
- source "package/python-pyzmq/Config.in"
- source "package/python-serial/Config.in"
- source "package/python-setuptools/Config.in"
-+source "package/python-simplejson/Config.in"
- source "package/python-thrift/Config.in"
- source "package/python-versiontools/Config.in"
- endmenu
-diff --git a/package/python-simplejson/Config.in b/package/python-simplejson/Config.in
+@@ -391,6 +391,7 @@ source "package/python-dialog/Config.in"
+ source "package/python-dpkt/Config.in"
+ source "package/python-id3/Config.in"
+ source "package/python-ipy/Config.in"
++source "package/python-json-schema-validator/Config.in"
+ source "package/python-keyring/Config.in"
+ source "package/python-mad/Config.in"
+ source "package/python-meld3/Config.in"
+diff --git a/package/python-json-schema-validator/Config.in b/package/python-json-schema-validator/Config.in
 new file mode 100644
-index 0000000..be0ee8f
+index 0000000..6ae1eb1
 --- /dev/null
-+++ b/package/python-simplejson/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_PYTHON_SIMPLEJSON
-+	bool "python-simplejson"
++++ b/package/python-json-schema-validator/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_PYTHON_JSON_SCHEMA_VALIDATOR
++	bool "python-json-schema-validator"
 +	depends on BR2_PACKAGE_PYTHON
++	select BR2_PACKAGE_PYTHON_VERSIONTOOLS
 +	help
-+	  Simple, fast, extensible JSON encoder/decoder for Python
++	  JSON Schema Validator
 +
-+	  https://pypi.python.org/pypi/simplejson/
-diff --git a/package/python-simplejson/python-simplejson.mk b/package/python-simplejson/python-simplejson.mk
++	  https://pypi.python.org/pypi/json-schema-validator
+diff --git a/package/python-json-schema-validator/python-json-schema-validator.mk b/package/python-json-schema-validator/python-json-schema-validator.mk
 new file mode 100644
-index 0000000..e222651
+index 0000000..55afcce
 --- /dev/null
-+++ b/package/python-simplejson/python-simplejson.mk
-@@ -0,0 +1,14 @@
++++ b/package/python-json-schema-validator/python-json-schema-validator.mk
+@@ -0,0 +1,15 @@
 +################################################################################
 +#
-+# python-simplejson
++# python-json-schema-validator
 +#
 +################################################################################
 +
-+PYTHON_SIMPLEJSON_VERSION = 3.3.1
-+PYTHON_SIMPLEJSON_SOURCE  = simplejson-$(PYTHON_SIMPLEJSON_VERSION).tar.gz
-+PYTHON_SIMPLEJSON_SITE = http://pypi.python.org/packages/source/s/simplejson/
-+PYTHON_SIMPLEJSON_LICENSE = MIT
-+PYTHON_SIMPLEJSON_LICENSE_FILES = LICENSE.txt
-+PYTHON_SIMPLEJSON_SETUP_TYPE    = distutils
++PYTHON_JSON_SCHEMA_VALIDATOR_VERSION = 2.3
++PYTHON_JSON_SCHEMA_VALIDATOR_SOURCE  = json-schema-validator-$(PYTHON_JSON_SCHEMA_VALIDATOR_VERSION).tar.gz
++PYTHON_JSON_SCHEMA_VALIDATOR_SITE = http://pypi.python.org/packages/source/j/json-schema-validator/
++PYTHON_JSON_SCHEMA_VALIDATOR_LICENSE = LGPLv3
++PYTHON_JSON_SCHEMA_VALIDATOR_LICENSE_FILES = LICENSE.txt
++PYTHON_JSON_SCHEMA_VALIDATOR_SETUP_TYPE = setuptools
++PYTHON_JSON_SCHEMA_VALIDATOR_DEPENDENCIES = python-versiontools
 +
 +$(eval $(python-package))
 -- 
