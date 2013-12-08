@@ -1,41 +1,21 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 8 Dec 2013 19:36:52 +0100
-Subject: [Buildroot] [git commit] linux-headers: bump 3.{4, 10,
-	12}.x stable versions
-Message-ID: <20131208183742.459A79BF60@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 08 Dec 2013 19:41:09 +0100
+Subject: [Buildroot] [PATCH] libsoc: bump to 0.5
+In-Reply-To: <1386522281-18764-1-git-send-email-yegorslists@googlemail.com>
+ (Yegor Yefremov's message of "Sun, 8 Dec 2013 18:04:41 +0100")
+References: <1386522281-18764-1-git-send-email-yegorslists@googlemail.com>
+Message-ID: <878uvvb2yi.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c80410a806e52e5fc5067f8e083d46ea341df31c
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Yegor" == Yegor Yefremov <yegorslists@googlemail.com> writes:
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/linux-headers/Config.in.host |    6 +++---
- 1 files changed, 3 insertions(+), 3 deletions(-)
+ > Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 33c1024..d928897 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -83,14 +83,14 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "3.1.10"	if BR2_KERNEL_HEADERS_3_1
- 	default "3.2.53"	if BR2_KERNEL_HEADERS_3_2
- 	default "3.3.8"		if BR2_KERNEL_HEADERS_3_3
--	default "3.4.72"	if BR2_KERNEL_HEADERS_3_4
-+	default "3.4.73"	if BR2_KERNEL_HEADERS_3_4
- 	default "3.5.7"		if BR2_KERNEL_HEADERS_3_5
- 	default "3.6.11"	if BR2_KERNEL_HEADERS_3_6
- 	default "3.7.10"	if BR2_KERNEL_HEADERS_3_7
- 	default "3.8.13"	if BR2_KERNEL_HEADERS_3_8
- 	default "3.9.11"	if BR2_KERNEL_HEADERS_3_9
--	default "3.10.22"	if BR2_KERNEL_HEADERS_3_10
-+	default "3.10.23"	if BR2_KERNEL_HEADERS_3_10
- 	default "3.11.10"	if BR2_KERNEL_HEADERS_3_11
--	default "3.12.3"	if BR2_KERNEL_HEADERS_3_12
-+	default "3.12.4"	if BR2_KERNEL_HEADERS_3_12
- 	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
