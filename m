@@ -1,135 +1,35 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 8 Dec 2013 22:38:13 +0100
-Subject: [Buildroot] [git commit] core: introduce the BR2_EXTERNAL variable
-Message-ID: <20131208220309.318939BE91@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun,  8 Dec 2013 23:14:30 +0100
+Subject: [Buildroot] [PATCH 01/38] dialog: add missing comment when thread
+	support is missing
+In-Reply-To: <1386540907-7242-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1386540907-7242-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1386540907-7242-2-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a4239f7fd1053c11bf4bb8bbc98cbe4b513f2d47
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+This was noticed when reviewing the packaging for the python-dialog
+package.
 
-This commit introduces the BR2_EXTERNAL environment variable, which
-will allow to keep Buildroot customization (board-specific
-configuration files or root filesystem overlays, package Config.in and
-makefiles, as well as defconfigs) outside of the Buildroot tree.
-
-This commit only introduces the variable itself, and ensures that it
-is available within Config.in options. This allows us to use
-$BR2_EXTERNAL in a 'source' statement in Config.in.
-
-Following patches extend the usage of BR2_EXTERNAL to other areas
-(packages and defconfigs).
-
-In details, this commit:
-
- * Introduces the BR2_EXTERNAL Kconfig option. This option has no
-   prompt, and is therefore not visible to the user and also not
-   stored in the .config file. It is automatically set to the value of
-   the BR2_EXTERNAL environment variable. The only purpose of this
-   BR2_EXTERNAL Kconfig option is to allow $BR2_EXTERNAL to be
-   properly expanded when used inside Kconfig source statements.
-
- * Calculates the BR2_EXTERNAL value to use. If passed on the command
-   line, then this value is taken in priority, and saved to a
-   .br-external hidden file in the output directory. If not passed on
-   the command line, then we read the .br-external file from the
-   output directory. This allows the user to not pass the BR2_EXTERNAL
-   value at each make invocation. If no BR2_EXTERNAL value is passed,
-   we define it to support/dummy-external, so that the kconfig code
-   finds an existing $(BR2_EXTERNAL)/package/Config.in file to
-   include.
-
- * Passes the BR2_EXTERNAL into the *config environment, so that its
-   value is found when parsing/evaluating Config.in files and .config
-   values.
-
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Acked-by: Ryan Barnett <rjbarnet@rockwellcollins.com>
-Tested-by: "Samuel Martin" <s.martin49@gmail.com>
-Acked-by: "Samuel Martin" <s.martin49@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- Config.in             |    4 ++++
- Makefile              |   26 +++++++++++++++++++++++++-
- docs/manual/manual.mk |    3 +++
- 3 files changed, 32 insertions(+), 1 deletions(-)
+ package/dialog/Config.in | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/Config.in b/Config.in
-index 677fff6..ea060bc 100644
---- a/Config.in
-+++ b/Config.in
-@@ -14,6 +14,10 @@ config BR2_HOSTARCH
- 	string
- 	option env="HOSTARCH"
- 
-+config BR2_EXTERNAL
-+	string
-+	option env="BR2_EXTERNAL"
+diff --git a/package/dialog/Config.in b/package/dialog/Config.in
+index b3efd8d..c7cd8a4 100644
+--- a/package/dialog/Config.in
++++ b/package/dialog/Config.in
+@@ -10,3 +10,7 @@ config BR2_PACKAGE_DIALOG
+ 	  This application provides a method of displaying several different
+ 	  types of dialog boxes from shell scripts.  This allows a developer
+ 	  of a script to interact with the user in a much friendlier manner.
 +
- # Hidden boolean selected by pre-built packages for x86, when they
- # need to run on x86-64 machines (example: pre-built external
- # toolchains, binary tools like SAM-BA, etc.).
-diff --git a/Makefile b/Makefile
-index 6adacd9..f92fd9b 100644
---- a/Makefile
-+++ b/Makefile
-@@ -99,6 +99,29 @@ export CDPATH:=
- BASE_DIR := $(shell mkdir -p $(O) && cd $(O) >/dev/null && pwd)
- $(if $(BASE_DIR),, $(error output directory "$(O)" does not exist))
- 
-+
-+# Handling of BR2_EXTERNAL.
-+#
-+# The value of BR2_EXTERNAL is stored in .br-external in the output directory.
-+# On subsequent invocations of make, it is read in. It can still be overridden
-+# on the command line, therefore the file is re-created every time make is run.
-+#
-+# When BR2_EXTERNAL is not set, the .br-external file is removed and we point
-+# to support/dummy-external. This makes sure we can unconditionally include the
-+# Config.in and external.mk from the BR2_EXTERNAL directory. In this case,
-+# override is necessary so the user can clear BR2_EXTERNAL from the command
-+# line, but the dummy path is still used internally.
-+
-+BR2_EXTERNAL_FILE = $(BASE_DIR)/.br-external
-+-include $(BR2_EXTERNAL_FILE)
-+ifeq ($(BR2_EXTERNAL),)
-+  override BR2_EXTERNAL = support/dummy-external
-+  $(shell rm -f $(BR2_EXTERNAL_FILE))
-+else
-+  $(shell echo BR2_EXTERNAL ?= $(BR2_EXTERNAL) > $(BR2_EXTERNAL_FILE))
-+endif
-+
-+
- BUILD_DIR:=$(BASE_DIR)/build
- STAMP_DIR:=$(BASE_DIR)/stamps
- BINARIES_DIR:=$(BASE_DIR)/images
-@@ -631,7 +654,8 @@ COMMON_CONFIG_ENV = \
- 	KCONFIG_AUTOCONFIG=$(BUILD_DIR)/buildroot-config/auto.conf \
- 	KCONFIG_AUTOHEADER=$(BUILD_DIR)/buildroot-config/autoconf.h \
- 	KCONFIG_TRISTATE=$(BUILD_DIR)/buildroot-config/tristate.config \
--	BUILDROOT_CONFIG=$(BUILDROOT_CONFIG)
-+	BUILDROOT_CONFIG=$(BUILDROOT_CONFIG) \
-+	BR2_EXTERNAL=$(BR2_EXTERNAL)
- 
- xconfig: $(BUILD_DIR)/buildroot-config/qconf outputmakefile
- 	@mkdir -p $(BUILD_DIR)/buildroot-config
-diff --git a/docs/manual/manual.mk b/docs/manual/manual.mk
-index f0bbff8..49421df 100644
---- a/docs/manual/manual.mk
-+++ b/docs/manual/manual.mk
-@@ -1,6 +1,9 @@
-+# Packages included in BR2_EXTERNAL are not part of buildroot, so they
-+# should not be included in the manual.
- manual-update-lists: manual-check-dependencies-lists
- 	$(Q)$(call MESSAGE,"Updating the manual lists...")
- 	$(Q)BR2_DEFCONFIG="" TOPDIR=$(TOPDIR) O=$(O)/docs/manual/.build \
-+		BR2_EXTERNAL=$(TOPDIR)/support/dummy-external \
- 		python -B $(TOPDIR)/support/scripts/gen-manual-lists.py
- 
- # we can't use suitable-host-package here because that's not available in
++comment "dialog needs a toolchain w/ threads"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_USE_MMU
+-- 
+1.8.1.2
