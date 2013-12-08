@@ -1,45 +1,69 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 08 Dec 2013 23:01:31 +0100
-Subject: [Buildroot] [PATCHv7 5/5] docs/manual: add explanations about
-	BR2_EXTERNAL
-In-Reply-To: <1386270673-16051-6-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Thu, 5 Dec 2013 20:11:13 +0100")
-References: <1386270673-16051-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1386270673-16051-6-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <877gbf9f44.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 8 Dec 2013 22:32:02 +0100
+Subject: [Buildroot] [git commit] manual: fix manual generation in
+	preparation for BR2_EXTERNAL support
+Message-ID: <20131208220309.232529BF87@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=edeb7d53978f20acc2306b71bc818e81298a68b3
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > This commit updates the manual to add details on how to use the
- > BR2_EXTERNAL feature.
+This patch fixes an issue that occurs during the manual build process
+which will occur when BR2_EXTERNAL is introduced.
 
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
- > Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+During the package list generation, the python script using kconfiglib
+module reads and parses the Config.in files. So, symbols, including
+environment variables, got expanded and/or resolved.  In
+kconfiglib.py, this patch fixes the regex that did not allow to use
+numbers in the environment variable names, so '$BR2_EXTERNAL' got
+wrongly expanded like it was '${BR}2_EXTERNAL':
 
-I'm no native speaker, but there's a few things I think sound odd:
+<snip>
+>>>   Updating the manual lists...
+Traceback (most recent call last):
+  File "/opt/buildroot/master/support/scripts/gen-manual-lists.py", line 375, in <module>
+    buildroot = Buildroot()
+  File "/opt/buildroot/master/support/scripts/gen-manual-lists.py", line 216, in __init__
+    self.root_config))
+  File "/opt/buildroot/master/support/scripts/kconfiglib.py", line 214, in __init__
+    self.top_block = self._parse_file(filename, None, None, None)
+  File "/opt/src/buildroot/master/support/scripts/kconfiglib.py", line 919, in _parse_file
+    return self._parse_block(line_feeder, None, parent, deps, visible_if_deps, res)
+  File "/opt/buildroot/master/support/scripts/kconfiglib.py", line 1114, in _parse_block
+    self.base_dir))
+IOError: /opt/buildroot/master/Config.in:490: sourced file "$BR2_EXTERNAL/Config.in" (expands to
+"2_EXTERNAL/Config.in") not found. Perhaps base_dir
+(argument to Config.__init__(), currently
+"/opt/buildroot/master") is set to the wrong value.
+docs/manual/manual.mk:2: recipe for target 'manual-update-lists' failed
+make: *** [manual-update-lists] Error 1
+</snip>
 
- > +[[outside-br-custom]]
- > +Keeping customization outside Buildroot
- > +~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Reported-by: Ryan Barnett <rjbarnet@rockwellcollins.com>
+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Acked-by: Ryan Barnett <rjbarnet@rockwellcollins.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ support/scripts/kconfiglib.py |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-I think it should be 'customizations'
-
- > +
- > +The Buildroot community recommends and encourages upstreaming to the
- > +official Buildroot version the packages and board supports that are
- > +written by developers. However, it is sometimes not possible or
- > +desirable because some of these packages or board supports are highly
- > +specific or proprietary.
-
-And 'board support', not supports.
-
-Committed with that fixed (and the missing + as pointed out by Samuel),
-thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/support/scripts/kconfiglib.py b/support/scripts/kconfiglib.py
+index 0704cc0..e40947c 100644
+--- a/support/scripts/kconfiglib.py
++++ b/support/scripts/kconfiglib.py
+@@ -2074,7 +2074,7 @@ set_re   = re.compile(r"CONFIG_(\w+)=(.*)")
+ unset_re = re.compile(r"# CONFIG_(\w+) is not set")
+ 
+ # Regular expression for finding $-references to symbols in strings
+-sym_ref_re = re.compile(r"\$[A-Za-z_]+")
++sym_ref_re = re.compile(r"\$[A-Za-z_][0-9A-Za-z_]*")
+ 
+ # Integers representing symbol types
+ UNKNOWN, BOOL, TRISTATE, STRING, HEX, INT = range(0, 6)
