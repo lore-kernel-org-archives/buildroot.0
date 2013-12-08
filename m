@@ -1,56 +1,62 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun,  8 Dec 2013 23:14:39 +0100
-Subject: [Buildroot] [PATCH 10/38] python-mad: convert to the Python package
-	infrastructure
-In-Reply-To: <1386540907-7242-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1386540907-7242-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1386540907-7242-11-git-send-email-thomas.petazzoni@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 8 Dec 2013 23:30:26 +0100
+Subject: [Buildroot] [git commit] Config.in: Add a menu around BR2_EXTERNAL
+	configuration options
+Message-ID: <20131208223124.702489BF89@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/python-mad/python-mad.mk | 20 +++-----------------
- 1 file changed, 3 insertions(+), 17 deletions(-)
+commit: http://git.buildroot.net/buildroot/commit/?id=f4ea4b9824138c7e24c9e4876ff09f14e5d48e87
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-diff --git a/package/python-mad/python-mad.mk b/package/python-mad/python-mad.mk
-index eaa1fae..1b3cb75 100644
---- a/package/python-mad/python-mad.mk
-+++ b/package/python-mad/python-mad.mk
-@@ -7,8 +7,9 @@
- PYTHON_MAD_VERSION = 0.6
- PYTHON_MAD_SOURCE  = pymad-$(PYTHON_MAD_VERSION).tar.gz
- PYTHON_MAD_SITE    = http://spacepants.org/src/pymad/download/
-+PYTHON_MAD_SETUP_TYPE = distutils
+To make it clear to the user that these options are external to Buildroot
+and no support is provided by the Buildroot community.
+
+With this, there's no need to recommend people to their options inside
+a menu, so remove that from the documentation.
+
+Kconfig nicely allows us to hide the menu completely if BR2_EXTERNAL isn't
+used, so make use of that to not confuse people. It would be nice if we
+could add some help text to explain the BR2_EXTERNAL stuff as well, but
+that isn't supported on menus :/
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ Config.in                            |    5 +++++
+ docs/manual/customize-outside-br.txt |    4 ----
+ 2 files changed, 5 insertions(+), 4 deletions(-)
+
+diff --git a/Config.in b/Config.in
+index 12d36b5..2b401cb 100644
+--- a/Config.in
++++ b/Config.in
+@@ -493,4 +493,9 @@ source "package/Config.in.host"
  
--PYTHON_MAD_DEPENDENCIES = python libmad
-+PYTHON_MAD_DEPENDENCIES = libmad
+ source "Config.in.legacy"
  
- ifeq ($(BR2_ENDIAN),"LITTLE")
- PYTHON_MAD_ENDIAN=little
-@@ -23,19 +24,4 @@ define PYTHON_MAD_CONFIGURE_CMDS
- 	echo "mad_include_dir = $(STAGING_DIR)/usr/include" >> $(@D)/Setup
- endef
- 
--define PYTHON_MAD_BUILD_CMDS
--	(cd $(@D); \
--		CC="$(TARGET_CC)"		\
--		CFLAGS="$(TARGET_CFLAGS)" 	\
--		LDSHARED="$(TARGET_CC) -shared" \
--		LDFLAGS="$(TARGET_LDFLAGS)" 	\
--	$(HOST_DIR)/usr/bin/python setup.py build_ext \
--	--include-dirs=$(STAGING_DIR)/usr/include/python$(PYTHON_VERSION_MAJOR))
--	(cd $(@D); $(HOST_DIR)/usr/bin/python setup.py build)
--endef
++menu "User-provided options"
++	depends on BR2_EXTERNAL != "support/dummy-external"
++
+ source "$BR2_EXTERNAL/Config.in"
++
++endmenu
+diff --git a/docs/manual/customize-outside-br.txt b/docs/manual/customize-outside-br.txt
+index 0aabf5a..19257e6 100644
+--- a/docs/manual/customize-outside-br.txt
++++ b/docs/manual/customize-outside-br.txt
+@@ -89,12 +89,8 @@ The main usage of this is to store package recipes. The recommended
+    like:
+ +
+ ------
+-menu "<somecompany> packages"
 -
--define PYTHON_MAD_INSTALL_TARGET_CMDS
--	(cd $(@D); $(HOST_DIR)/usr/bin/python setup.py install --prefix=$(TARGET_DIR)/usr)
--endef
+ source "$BR2_EXTERNAL/package/package1/Config.in"
+ source "$BR2_EXTERNAL/package/package2/Config.in"
 -
--$(eval $(generic-package))
-+$(eval $(python-package))
--- 
-1.8.1.2
+-endmenu
+ ------
+ +
+ Then, have a +BR2_EXTERNAL/external.mk+ file that looks like:
