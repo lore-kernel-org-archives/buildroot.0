@@ -1,8 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun,  8 Dec 2013 18:01:05 +0100
-Subject: [Buildroot] [pull request v3] Pull request for branch
-	yem/host-packages
-Message-ID: <cover.1386521954.git.yann.morin.1998@free.fr>
+Date: Sun,  8 Dec 2013 18:01:07 +0100
+Subject: [Buildroot] [PATCH 1/3] package/parted: relax dependency on lvm2
+In-Reply-To: <cover.1386521954.git.yann.morin.1998@free.fr>
+References: <cover.1386521954.git.yann.morin.1998@free.fr>
+Message-ID: <88c8465dd10c9fdca09de2eef7cb142e6583307c.1386521954.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,53 +12,61 @@ To: buildroot@busybox.net
 
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Hello All!
+parted can be configured without support for LVM volumes, so
+we can relax the dependency on lvm2, and make it an optional
+feature.
 
-This series adds parted as a host package.
-This will allow (eg.) post-image scripts to use parted.
+Remove now no-longer needed dependency on MMU because of lvm2.
 
-Changes v2 -> v3:  (Jerzy)
-  - Fix bad copy-paste in commit log
+(Based on a code-snippet from Thomas.)
 
-Changes v1 -> v2:  (Thomas)
-  - don't depend on host-lvm2
-  - so don't add host-lvm2
-  - relax dependencies on lvm2/readline for target package
-  - fix typoes in commit log
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+---
+ package/parted/Config.in | 3 ---
+ package/parted/parted.mk | 9 ++++++++-
+ 2 files changed, 8 insertions(+), 4 deletions(-)
 
-Regards,
-Yann E. MORIN.
-
-
-The following changes since commit ea9e0fe309b55268c966424d5a686b07390d2e48:
-
-  opus: fix configure issue with ARM optimization when /bin/sh isn't bash (2013-12-08 11:08:12 +0100)
-
-are available in the git repository at:
-
-  git://gitorious.org/buildroot/buildroot.git yem/host-packages
-
-for you to fetch changes up to 6d03580b33ebf76667c4afe24ac1df563061f9f7:
-
-  package/parted: add a host variant (2013-12-08 12:42:12 +0100)
-
-----------------------------------------------------------------
-Yann E. MORIN (3):
-      package/parted: relax dependency on lvm2
-      package/parted: relax dependency on readline
-      package/parted: add a host variant
-
- package/Config.in.host        |  1 +
- package/parted/Config.in      |  4 ----
- package/parted/Config.in.host |  6 ++++++
- package/parted/parted.mk      | 22 +++++++++++++++++++++-
- 4 files changed, 28 insertions(+), 5 deletions(-)
- create mode 100644 package/parted/Config.in.host
-
+diff --git a/package/parted/Config.in b/package/parted/Config.in
+index 8af2693..321fdf7 100644
+--- a/package/parted/Config.in
++++ b/package/parted/Config.in
+@@ -2,8 +2,6 @@ config BR2_PACKAGE_PARTED
+ 	bool "parted"
+ 	depends on BR2_LARGEFILE
+ 	depends on BR2_USE_WCHAR
+-	depends on BR2_USE_MMU # lvm2
+-	select BR2_PACKAGE_LVM2
+ 	select BR2_PACKAGE_READLINE
+ 	select BR2_PACKAGE_UTIL_LINUX
+ 	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
+@@ -13,5 +11,4 @@ config BR2_PACKAGE_PARTED
+ 	  http://www.gnu.org/software/parted/
+ 
+ comment "parted needs a toolchain w/ largefile, wchar"
+-	depends on BR2_USE_MMU
+ 	depends on !(BR2_LARGEFILE && BR2_USE_WCHAR)
+diff --git a/package/parted/parted.mk b/package/parted/parted.mk
+index 773e332..231ab35 100644
+--- a/package/parted/parted.mk
++++ b/package/parted/parted.mk
+@@ -7,9 +7,16 @@
+ PARTED_VERSION = 3.1
+ PARTED_SOURCE = parted-$(PARTED_VERSION).tar.xz
+ PARTED_SITE = $(BR2_GNU_MIRROR)/parted
+-PARTED_DEPENDENCIES = readline util-linux lvm2
++PARTED_DEPENDENCIES = readline util-linux
+ PARTED_INSTALL_STAGING = YES
+ PARTED_LICENSE = GPLv3+
+ PARTED_LICENSE_FILES = COPYING
+ 
++ifeq ($(BR2_PACKAGE_LVM2),y)
++PARTED_DEPENDENCIES += lvm2
++PARTED_CONF_OPT += --enable-device-mapper
++else
++PARTED_CONF_OPT += --disable-device-mapper
++endif
++
+ $(eval $(autotools-package))
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.8.1.2
