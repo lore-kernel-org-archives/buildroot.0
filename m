@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun,  8 Dec 2013 23:15:06 +0100
-Subject: [Buildroot] [PATCH 37/38] python-pysnmp-apps: new package
+Date: Sun,  8 Dec 2013 23:15:07 +0100
+Subject: [Buildroot] [PATCH 38/38] python-pysnmp-mibs: new package
 In-Reply-To: <1386540907-7242-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1386540907-7242-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1386540907-7242-38-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1386540907-7242-39-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,32 +16,32 @@ Signed-off-by: Ryan Barnett <rjbarnet@rockwellcollins.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
  package/Config.in                                |  1 +
- package/python-pysnmp-apps/Config.in             | 13 +++++++++++++
- package/python-pysnmp-apps/python-pysnmp-apps.mk | 16 ++++++++++++++++
+ package/python-pysnmp-mibs/Config.in             | 13 +++++++++++++
+ package/python-pysnmp-mibs/python-pysnmp-mibs.mk | 16 ++++++++++++++++
  3 files changed, 30 insertions(+)
- create mode 100644 package/python-pysnmp-apps/Config.in
- create mode 100644 package/python-pysnmp-apps/python-pysnmp-apps.mk
+ create mode 100644 package/python-pysnmp-mibs/Config.in
+ create mode 100644 package/python-pysnmp-mibs/python-pysnmp-mibs.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 601054f..2e3b289 100644
+index 2e3b289..4dc417f 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -405,6 +405,7 @@ source "package/python-pygame/Config.in"
- source "package/python-pyparsing/Config.in"
+@@ -406,6 +406,7 @@ source "package/python-pyparsing/Config.in"
  source "package/python-pyro/Config.in"
  source "package/python-pysnmp/Config.in"
-+source "package/python-pysnmp-apps/Config.in"
+ source "package/python-pysnmp-apps/Config.in"
++source "package/python-pysnmp-mibs/Config.in"
  source "package/python-pyusb/Config.in"
  source "package/python-pyzmq/Config.in"
  source "package/python-serial/Config.in"
-diff --git a/package/python-pysnmp-apps/Config.in b/package/python-pysnmp-apps/Config.in
+diff --git a/package/python-pysnmp-mibs/Config.in b/package/python-pysnmp-mibs/Config.in
 new file mode 100644
-index 0000000..0a1d98b
+index 0000000..0512502
 --- /dev/null
-+++ b/package/python-pysnmp-apps/Config.in
++++ b/package/python-pysnmp-mibs/Config.in
 @@ -0,0 +1,13 @@
-+config BR2_PACKAGE_PYTHON_PYSNMP_APPS
-+	bool "python-pysnmp-apps"
++config BR2_PACKAGE_PYTHON_PYSNMP_MIBS
++	bool "python-pysnmp-mibs"
 +	depends on BR2_PACKAGE_PYTHON
 +	select BR2_PACKAGE_PYTHON_PYSNMP
 +	depends on BR2_INSTALL_LIBSTDCPP # pysnmp -> pyasn
@@ -51,28 +51,28 @@ index 0000000..0a1d98b
 +
 +	  http://pysnmp.sf.net
 +
-+comment "python-pysnmp-apps needs toolchain w/ C++"
++comment "python-pysnmp-libs needs toolchain w/ C++"
 +        depends on !BR2_INSTALL_LIBSTDCPP
-diff --git a/package/python-pysnmp-apps/python-pysnmp-apps.mk b/package/python-pysnmp-apps/python-pysnmp-apps.mk
+diff --git a/package/python-pysnmp-mibs/python-pysnmp-mibs.mk b/package/python-pysnmp-mibs/python-pysnmp-mibs.mk
 new file mode 100644
-index 0000000..a88c7c8
+index 0000000..faf1293
 --- /dev/null
-+++ b/package/python-pysnmp-apps/python-pysnmp-apps.mk
++++ b/package/python-pysnmp-mibs/python-pysnmp-mibs.mk
 @@ -0,0 +1,16 @@
 +################################################################################
 +#
-+# python-pysnmp-apps
++# python-pysnmp-mibs
 +#
 +################################################################################
 +
-+PYTHON_PYSNMP_APPS_VERSION = 0.3.3
-+PYTHON_PYSNMP_APPS_SOURCE  = pysnmp-apps-$(PYTHON_PYSNMP_APPS_VERSION).tar.gz
-+PYTHON_PYSNMP_APPS_SITE    = https://pypi.python.org/packages/source/p/pysnmp-apps
-+PYTHON_PYSNMP_APPS_SETUP_TYPE = setuptools
-+PYTHON_PYSNMP_APPS_LICENSE = BSD-3c
-+PYTHON_PYSNMP_APPS_LICENSE_FILES = LICENSE
++PYTHON_PYSNMP_MIBS_VERSION = 0.1.4
++PYTHON_PYSNMP_MIBS_SOURCE  = pysnmp-mibs-$(PYTHON_PYSNMP_MIBS_VERSION).tar.gz
++PYTHON_PYSNMP_MIBS_SITE    = https://pypi.python.org/packages/source/p/pysnmp-mibs
++PYTHON_PYSNMP_MIBS_SETUP_TYPE = setuptools
++PYTHON_PYSNMP_MIBS_LICENSE = BSD-3c
++PYTHON_PYSNMP_MIBS_LICENSE_FILES = LICENSE
 +
-+PYTHON_PYSNMP_APPS_DEPENDENCIES = python-pysnmp
++PYTHON_PYSNMP_MIBS_DEPENDENCIES = python-pysnmp
 +
 +$(eval $(python-package))
 -- 
