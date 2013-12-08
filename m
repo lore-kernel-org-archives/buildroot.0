@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun,  8 Dec 2013 23:14:45 +0100
-Subject: [Buildroot] [PATCH 16/38] python-pyro: convert to the Python
+Date: Sun,  8 Dec 2013 23:14:47 +0100
+Subject: [Buildroot] [PATCH 18/38] python-serial: convert to the Python
 	package infrastructure
 In-Reply-To: <1386540907-7242-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1386540907-7242-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1386540907-7242-17-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1386540907-7242-19-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,21 +13,26 @@ To: buildroot@busybox.net
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/python-pyro/python-pyro.mk | 8 ++------
- 1 file changed, 2 insertions(+), 6 deletions(-)
+ package/python-serial/python-serial.mk | 13 ++-----------
+ 1 file changed, 2 insertions(+), 11 deletions(-)
 
-diff --git a/package/python-pyro/python-pyro.mk b/package/python-pyro/python-pyro.mk
-index 67aabc6..6f118ba 100644
---- a/package/python-pyro/python-pyro.mk
-+++ b/package/python-pyro/python-pyro.mk
-@@ -9,10 +9,6 @@ PYTHON_PYRO_SOURCE  = Pyro-$(PYTHON_PYRO_VERSION).tar.gz
- PYTHON_PYRO_SITE    = https://pypi.python.org/packages/source/P/Pyro/
- PYTHON_PYRO_LICENSE = MIT
- PYTHON_PYRO_LICENSE_FILES = LICENSE
--PYTHON_PYRO_DEPENDENCIES = python
-+PYTHON_PYRO_SETUP_TYPE = distutils
+diff --git a/package/python-serial/python-serial.mk b/package/python-serial/python-serial.mk
+index e00577b..a44d799 100644
+--- a/package/python-serial/python-serial.mk
++++ b/package/python-serial/python-serial.mk
+@@ -7,15 +7,6 @@
+ PYTHON_SERIAL_VERSION = 2.6
+ PYTHON_SERIAL_SOURCE  = pyserial-$(PYTHON_SERIAL_VERSION).tar.gz
+ PYTHON_SERIAL_SITE    = http://pypi.python.org/packages/source/p/pyserial
++PYTHON_SERIAL_SETUP_TYPE = distutils
  
--define PYTHON_PYRO_INSTALL_TARGET_CMDS
+-PYTHON_SERIAL_DEPENDENCIES = python
+-
+-define PYTHON_SERIAL_BUILD_CMDS
+-	(cd $(@D); $(HOST_DIR)/usr/bin/python setup.py build --executable=/usr/bin/python)
+-endef
+-
+-define PYTHON_SERIAL_INSTALL_TARGET_CMDS
 -	(cd $(@D); $(HOST_DIR)/usr/bin/python setup.py install --prefix=$(TARGET_DIR)/usr)
 -endef
 -
