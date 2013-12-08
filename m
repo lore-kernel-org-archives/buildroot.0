@@ -1,56 +1,84 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 9 Dec 2013 11:41:19 +0100
-Subject: [Buildroot] [git commit] libglib2: bump version to 2.38.2
-Message-ID: <20131209105306.109F89BFA2@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun,  8 Dec 2013 23:14:56 +0100
+Subject: [Buildroot] [PATCH 27/38] python-msgpack: new package
+In-Reply-To: <1386540907-7242-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1386540907-7242-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1386540907-7242-28-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=95282538fd18927fd8306ffd566d214de759296f
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+From: "Wojciech M. Zabolotny" <wzab01@gmail.com>
 
-libglib2 can fail to build for arm, with the following error.
+[Thomas: convert to the Python package infrastructure, added missing
+dependency on C++, inherited from msgpack.]
 
-  gatomic.c:668:2: error: #error G_ATOMIC_LOCK_FREE defined, but incapable of lock-free atomics.
-
-The following upstream commit fixes the problem.
-
-  commit 996edb0c46356d8a326f886b91a77a6af9a2de3e
-  Author: Antoine Jacoutot <antoine@mtier.org>
-  Date:   Wed Aug 28 09:35:27 2013 +0200
-
-    fix atomic ops detection
-
-    AC_TRY_LINK should be used instead of AC_TRY_COMPILE because the code
-    will compile everywhere, either producing ``atomic'' code, or an
-    external reference to __sync_bool_compare_and_swap.
-
-    https://bugzilla.gnome.org/show_bug.cgi?id=706958
-
-The upstream commit went into version 2.37.7, so this is the lowest version
-that we can bump to, in order to fix the atomic operations problem. However,
-2.37.x is a development version, so we bump to 2.38.2 instead.
-
-Signed-off-by: Simon Dawson <spdawson@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Wojciech M. Zabolotny <wzab01@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libglib2/libglib2.mk |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ package/Config.in                        |  1 +
+ package/python-msgpack/Config.in         | 16 ++++++++++++++++
+ package/python-msgpack/python-msgpack.mk | 15 +++++++++++++++
+ 3 files changed, 32 insertions(+)
+ create mode 100644 package/python-msgpack/Config.in
+ create mode 100644 package/python-msgpack/python-msgpack.mk
 
-diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
-index f770d3a..d29b938 100644
---- a/package/libglib2/libglib2.mk
-+++ b/package/libglib2/libglib2.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--LIBGLIB2_VERSION_MAJOR = 2.36
--LIBGLIB2_VERSION_MINOR = 3
-+LIBGLIB2_VERSION_MAJOR = 2.38
-+LIBGLIB2_VERSION_MINOR = 2
- LIBGLIB2_VERSION = $(LIBGLIB2_VERSION_MAJOR).$(LIBGLIB2_VERSION_MINOR)
- LIBGLIB2_SOURCE = glib-$(LIBGLIB2_VERSION).tar.xz
- LIBGLIB2_SITE = http://ftp.gnome.org/pub/gnome/sources/glib/$(LIBGLIB2_VERSION_MAJOR)
+diff --git a/package/Config.in b/package/Config.in
+index d7dcbd0..283b5f6 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -392,6 +392,7 @@ source "package/python-id3/Config.in"
+ source "package/python-ipy/Config.in"
+ source "package/python-mad/Config.in"
+ source "package/python-meld3/Config.in"
++source "package/python-msgpack/Config.in"
+ source "package/python-netifaces/Config.in"
+ source "package/python-nfc/Config.in"
+ source "package/python-protobuf/Config.in"
+diff --git a/package/python-msgpack/Config.in b/package/python-msgpack/Config.in
+new file mode 100644
+index 0000000..2075ee6
+--- /dev/null
++++ b/package/python-msgpack/Config.in
+@@ -0,0 +1,16 @@
++config BR2_PACKAGE_PYTHON_MSGPACK
++	bool "python-msgpack"
++	depends on BR2_PACKAGE_PYTHON
++	select BR2_PACKAGE_MSGPACK
++	depends on BR2_INSTALL_LIBSTDCPP # msgpack
++	help
++	  MessagePack (http://msgpack.org/) is a fast, compact binary
++	  serialization format, suitable for similar data to JSON.
++	  This package provides CPython bindings for reading and
++	  writing MessagePack data.
++
++	  https://pypi.python.org/pypi/msgpack-python/
++
++comment "python-msgpack needs a toolchain w/ C++"
++	depends on BR2_PACKAGE_PYTHON
++	depends on !BR2_INSTALL_LIBSTDCPP
+diff --git a/package/python-msgpack/python-msgpack.mk b/package/python-msgpack/python-msgpack.mk
+new file mode 100644
+index 0000000..2a7c384
+--- /dev/null
++++ b/package/python-msgpack/python-msgpack.mk
+@@ -0,0 +1,15 @@
++################################################################################
++#
++# python-msgpack
++#
++################################################################################
++
++PYTHON_MSGPACK_VERSION = 0.4.0
++PYTHON_MSGPACK_SOURCE = msgpack-python-$(PYTHON_MSGPACK_VERSION).tar.gz
++PYTHON_MSGPACK_SITE = https://pypi.python.org/packages/source/m/msgpack-python/
++PYTHON_MSGPACK_LICENSE = Apache License, Version 2.0
++PYTHON_MSGPACK_LICENSE_FILES = COPYING
++PYTHON_MSGPACK_SETUP_TYPE = setuptools
++PYTHON_MSGPACK_DEPENDENCIES = msgpack
++
++$(eval $(python-package))
+-- 
+1.8.1.2
