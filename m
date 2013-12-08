@@ -1,71 +1,61 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 8 Dec 2013 22:24:56 +0100
-Subject: [Buildroot] [git commit] package: unification of name
-	<pkg>_VERSION_MINOR variable
-Message-ID: <20131208212549.723739BE5C@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 08 Dec 2013 22:48:39 +0100
+Subject: [Buildroot] [PATCHv7 3/5] core: allow external
+	Config.in/makefile code to be integrated
+In-Reply-To: <1386270673-16051-4-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Thu, 5 Dec 2013 20:11:11 +0100")
+References: <1386270673-16051-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1386270673-16051-4-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <87bo0r9fpk.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=09b42fdb8599d09c9a8bb98475571fb884893ca6
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-Currently there are two different names of the minor version variable:
-<PKG>_MINOR_VERSION and <PKG>_VERSION_MINOR
-This patch unifies them to <PKG>_VERSION_MINOR
+ > This commit allows the BR2_EXTERNAL directory to contain Config.in and
+ > Makefile code, which gets integrated into the Buildroot build logic:
 
-Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/glib-networking/glib-networking.mk |    4 ++--
- package/json-glib/json-glib.mk             |    4 ++--
- package/libsoup/libsoup.mk                 |    4 ++--
- 3 files changed, 6 insertions(+), 6 deletions(-)
+ >  - Buildroot automatically includes the $BR2_EXTERNAL/Config.in in the
+ >    top-level configuration menu.
 
-diff --git a/package/glib-networking/glib-networking.mk b/package/glib-networking/glib-networking.mk
-index aa84d79..405fbc2 100644
---- a/package/glib-networking/glib-networking.mk
-+++ b/package/glib-networking/glib-networking.mk
-@@ -5,8 +5,8 @@
- ################################################################################
+ >  - Buildroot automatically includes the BR2_EXTERNAL/external.mk in
+ >    the build logic, so it can for example be used to include other .mk
+ >    files that define package recipes.
+
+ > This is typically intended to be used to create target packages in the
+ > BR2_EXTERNAL directory, but can also be used for bootloaders, host
+ > packages, or other custom make logic.
+
+ > We also add a dummy Config.in file in support/dummy-external/ to
+ > ensure that the source "$BR2_EXTERNAL/Config.in" line will point to an
+ > existing file even when BR2_EXTERNAL is not used by the user.
+
+[snip]
+
+ > diff --git a/Config.in b/Config.in
+ > index ea060bc..12d36b5 100644
+ > --- a/Config.in
+ > +++ b/Config.in
+ > @@ -492,3 +492,5 @@ source "boot/Config.in"
+ >  source "package/Config.in.host"
  
- GLIB_NETWORKING_VERSION_MAJOR = 2.36
--GLIB_NETWORKING_MINOR_VERSION = 2
--GLIB_NETWORKING_VERSION = $(GLIB_NETWORKING_VERSION_MAJOR).$(GLIB_NETWORKING_MINOR_VERSION)
-+GLIB_NETWORKING_VERSION_MINOR = 2
-+GLIB_NETWORKING_VERSION = $(GLIB_NETWORKING_VERSION_MAJOR).$(GLIB_NETWORKING_VERSION_MINOR)
- GLIB_NETWORKING_SITE = http://ftp.gnome.org/pub/gnome/sources/glib-networking/$(GLIB_NETWORKING_VERSION_MAJOR)
- GLIB_NETWORKING_SOURCE = glib-networking-$(GLIB_NETWORKING_VERSION).tar.xz
- 
-diff --git a/package/json-glib/json-glib.mk b/package/json-glib/json-glib.mk
-index 65425bd..f0f4397 100644
---- a/package/json-glib/json-glib.mk
-+++ b/package/json-glib/json-glib.mk
-@@ -5,8 +5,8 @@
- ################################################################################
- 
- JSON_GLIB_VERSION_MAJOR = 0.14
--JSON_GLIB_MINOR_VERSION = 2
--JSON_GLIB_VERSION = $(JSON_GLIB_VERSION_MAJOR).$(JSON_GLIB_MINOR_VERSION)
-+JSON_GLIB_VERSION_MINOR = 2
-+JSON_GLIB_VERSION = $(JSON_GLIB_VERSION_MAJOR).$(JSON_GLIB_VERSION_MINOR)
- JSON_GLIB_SITE = http://ftp.gnome.org/pub/GNOME/sources/json-glib/$(JSON_GLIB_VERSION_MAJOR)
- JSON_GLIB_SOURCE = json-glib-$(JSON_GLIB_VERSION).tar.xz
- JSON_GLIB_LICENSE = LGPLv2.1+
-diff --git a/package/libsoup/libsoup.mk b/package/libsoup/libsoup.mk
-index c94eb06..e618ffe 100644
---- a/package/libsoup/libsoup.mk
-+++ b/package/libsoup/libsoup.mk
-@@ -5,8 +5,8 @@
- ################################################################################
- 
- LIBSOUP_VERSION_MAJOR = 2.43
--LIBSOUP_MINOR_VERSION = 1
--LIBSOUP_VERSION = $(LIBSOUP_VERSION_MAJOR).$(LIBSOUP_MINOR_VERSION)
-+LIBSOUP_VERSION_MINOR = 1
-+LIBSOUP_VERSION = $(LIBSOUP_VERSION_MAJOR).$(LIBSOUP_VERSION_MINOR)
- LIBSOUP_SOURCE = libsoup-$(LIBSOUP_VERSION).tar.xz
- LIBSOUP_SITE = http://ftp.gnome.org/pub/gnome/sources/libsoup/$(LIBSOUP_VERSION_MAJOR)
- LIBSOUP_LICENSE = LGPLv2+
+ >  source "Config.in.legacy"
+ > +
+ > +source "$BR2_EXTERNAL/Config.in"
+
+Should we perhaps add a comment before or put this inside a 'menu' so it
+is clear that these things are NOT part of Buildroot and people
+shouldn't ask the buildroot list for support for them?
+
+Having a comment / empty menu when this isn't use is a bit annoying, but
+we could perhaps use:
+
+    depends on BR2_EXTERNAL != "support/dummy-external"
+
+I haven't tested if that works though.
+
+-- 
+Bye, Peter Korsgaard
