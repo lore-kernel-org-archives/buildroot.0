@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun,  8 Dec 2013 23:14:54 +0100
-Subject: [Buildroot] [PATCH 25/38] python-dialog: convert to the Python
-	package infrastructure
+Date: Sun,  8 Dec 2013 23:14:37 +0100
+Subject: [Buildroot] [PATCH 08/38] python-ipy: convert to the Python package
+	infrastructure
 In-Reply-To: <1386540907-7242-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1386540907-7242-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1386540907-7242-26-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1386540907-7242-9-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,27 +13,32 @@ To: buildroot@busybox.net
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/python-dialog/python-dialog.mk | 14 +++-----------
- 1 file changed, 3 insertions(+), 11 deletions(-)
+ package/python-ipy/python-ipy.mk | 17 ++---------------
+ 1 file changed, 2 insertions(+), 15 deletions(-)
 
-diff --git a/package/python-dialog/python-dialog.mk b/package/python-dialog/python-dialog.mk
-index fa496de..e6887c9 100644
---- a/package/python-dialog/python-dialog.mk
-+++ b/package/python-dialog/python-dialog.mk
-@@ -9,15 +9,7 @@ PYTHON_DIALOG_SOURCE  = python2-pythondialog-$(PYTHON_DIALOG_VERSION).tar.bz2
- PYTHON_DIALOG_SITE    = http://downloads.sourceforge.net/project/pythondialog/pythondialog/$(PYTHON_DIALOG_VERSION)
- PYTHON_DIALOG_LICENSE = LGPLv2.1+
- PYTHON_DIALOG_LICENSE_FILES = COPYING
-+PYTHON_DIALOG_SETUP_TYPE = distutils
-+PYTHON_DIALOG_DEPENDENCIES = dialog
+diff --git a/package/python-ipy/python-ipy.mk b/package/python-ipy/python-ipy.mk
+index c03f91f..6e05ee9 100644
+--- a/package/python-ipy/python-ipy.mk
++++ b/package/python-ipy/python-ipy.mk
+@@ -6,21 +6,8 @@
  
--PYTHON_DIALOG_DEPENDENCIES = python dialog
--
--define PYTHON_DIALOG_BUILD_CMDS
+ PYTHON_IPY_VERSION = IPy-0.75
+ PYTHON_IPY_SITE    = $(call github,haypo,python-ipy,$(PYTHON_IPY_VERSION))
+-PYTHON_IPY_DEPENDENCIES = host-python python
+ PYTHON_IPY_LICENSE = BSD-3c
+ PYTHON_IPY_LICENSE_FILES = COPYING
++PYTHON_IPY_SETUP_TYPE = distutils
+ 
+-define PYTHON_IPY_BUILD_CMDS
+-	(cd $(@D); \
+-		$(TARGET_CONFIGURE_OPTS) \
+-		$(HOST_DIR)/usr/bin/python setup.py build_ext \
+-		--include-dirs=$(STAGING_DIR)/usr/include/python$(PYTHON_VERSION_MAJOR) \
+-	)
 -	(cd $(@D); $(HOST_DIR)/usr/bin/python setup.py build)
 -endef
 -
--define PYTHON_DIALOG_INSTALL_TARGET_CMDS
+-define PYTHON_IPY_INSTALL_TARGET_CMDS
 -	(cd $(@D); $(HOST_DIR)/usr/bin/python setup.py install --prefix=$(TARGET_DIR)/usr)
 -endef
 -
