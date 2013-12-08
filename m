@@ -1,34 +1,23 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 8 Dec 2013 22:39:42 +0100
-Subject: [Buildroot] [git commit] core: allow external Config.in/makefile
-	code to be integrated
-Message-ID: <20131208220309.493B99BE91@busybox.osuosl.org>
+Date: Sun, 8 Dec 2013 22:49:00 +0100
+Subject: [Buildroot] [git commit] core: allow external defconfigs to be used
+Message-ID: <20131208220309.54EAA9BE91@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=8eb8aaf904170ed25778b72f2e05dd5b9be059a4
+commit: http://git.buildroot.net/buildroot/commit/?id=ff9d6e306032a680e9db43673d9ab57db7d1bf75
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This commit allows the BR2_EXTERNAL directory to contain Config.in and
-Makefile code, which gets integrated into the Buildroot build logic:
+This commit allows the user to store defconfigs in
+$BR2_EXTERNAL/configs/. To achieve this:
 
- - Buildroot automatically includes the $BR2_EXTERNAL/Config.in in the
-   top-level configuration menu.
+ * It adds a new %_defconfig that looks in $BR2_EXTERNAL/configs/ for
+   the corresponding defconfig file.
 
- - Buildroot automatically includes the BR2_EXTERNAL/external.mk in
-   the build logic, so it can for example be used to include other .mk
-   files that define package recipes.
-
-This is typically intended to be used to create target packages in the
-BR2_EXTERNAL directory, but can also be used for bootloaders, host
-packages, or other custom make logic.
-
-We also add a dummy Config.in file in support/dummy-external/ to
-ensure that the source "$BR2_EXTERNAL/Config.in" line will point to an
-existing file even when BR2_EXTERNAL is not used by the user.
+ * Updates the help target to also list external defconfigs.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
@@ -38,36 +27,37 @@ Tested-by: "Samuel Martin" <s.martin49@gmail.com>
 Acked-by: "Samuel Martin" <s.martin49@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- Config.in                          |    2 ++
- Makefile                           |    2 ++
- 2 files changed, 4 insertions(+), 0 deletions(-)
+ Makefile |   11 +++++++++++
+ 1 files changed, 11 insertions(+), 0 deletions(-)
 
-diff --git a/Config.in b/Config.in
-index ea060bc..12d36b5 100644
---- a/Config.in
-+++ b/Config.in
-@@ -492,3 +492,5 @@ source "boot/Config.in"
- source "package/Config.in.host"
- 
- source "Config.in.legacy"
-+
-+source "$BR2_EXTERNAL/Config.in"
 diff --git a/Makefile b/Makefile
-index f92fd9b..09bc83a 100644
+index 09bc83a..d52182e 100644
 --- a/Makefile
 +++ b/Makefile
-@@ -364,6 +364,8 @@ include boot/common.mk
- include linux/linux.mk
- include system/system.mk
+@@ -741,6 +741,10 @@ defconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
+ 	@mkdir -p $(BUILD_DIR)/buildroot-config
+ 	@$(COMMON_CONFIG_ENV) $< --defconfig=$(TOPDIR)/configs/$@ $(CONFIG_CONFIG_IN)
  
-+include $(BR2_EXTERNAL)/external.mk
++%_defconfig: $(BUILD_DIR)/buildroot-config/conf $(BR2_EXTERNAL)/configs/%_defconfig outputmakefile
++	@mkdir -p $(BUILD_DIR)/buildroot-config
++	@$(COMMON_CONFIG_ENV) $< --defconfig=$(BR2_EXTERNAL)/configs/$@ $(CONFIG_CONFIG_IN)
 +
- TARGETS+=target-finalize
- 
- ifeq ($(BR2_ENABLE_LOCALE_PURGE),y)
-diff --git a/support/dummy-external/Config.in b/support/dummy-external/Config.in
-new file mode 100644
-index 0000000..e69de29
-diff --git a/support/dummy-external/external.mk b/support/dummy-external/external.mk
-new file mode 100644
-index 0000000..e69de29
+ savedefconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
+ 	@mkdir -p $(BUILD_DIR)/buildroot-config
+ 	@$(COMMON_CONFIG_ENV) $< \
+@@ -849,8 +853,15 @@ endif
+ 	@echo '  make V=0|1             - 0 => quiet build (default), 1 => verbose build'
+ 	@echo '  make O=dir             - Locate all output files in "dir", including .config'
+ 	@echo
++	@echo 'Built-in configs:'
+ 	@$(foreach b, $(sort $(notdir $(wildcard $(TOPDIR)/configs/*_defconfig))), \
+ 	  printf "  %-35s - Build for %s\\n" $(b) $(b:_defconfig=);)
++ifneq ($(wildcard $(BR2_EXTERNAL)/configs/*_defconfig),)
++	@echo
++	@echo 'User-provided configs:'
++	@$(foreach b, $(sort $(notdir $(wildcard $(BR2_EXTERNAL)/configs/*_defconfig))), \
++	  printf "  %-35s - Build for %s\\n" $(b) $(b:_defconfig=);)
++endif
+ 	@echo
+ 	@echo 'See docs/README, or generate the Buildroot manual for further details'
+ 	@echo
