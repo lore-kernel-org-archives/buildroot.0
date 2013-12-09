@@ -1,24 +1,58 @@
-From: Simon Dawson <spdawson@gmail.com>
-Date: Mon, 9 Dec 2013 08:26:30 +0000
-Subject: [Buildroot] [PATCH] libglib2: bump version to 2.37.7
-In-Reply-To: <87ob4r9h5h.fsf@dell.be.48ers.dk>
-References: <1386252043-12389-1-git-send-email-spdawson@gmail.com>
- <87vbyz9hgw.fsf@dell.be.48ers.dk> <87ob4r9h5h.fsf@dell.be.48ers.dk>
-Message-ID: <CAHt8ZCNM-nsrVi0hc_tBPOjXyGm=ORxqRbD+prRTq_LcYFC=qg@mail.gmail.com>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Mon, 9 Dec 2013 09:27:48 +0100
+Subject: [Buildroot] [PATCH 4/4] systemd: uclibc now has
+	posix_fallocate()
+In-Reply-To: <1386547663-2678-4-git-send-email-shawn@churchofgit.com>
+References: <1386547663-2678-1-git-send-email-shawn@churchofgit.com>
+ <1386547663-2678-4-git-send-email-shawn@churchofgit.com>
+Message-ID: <CAAXf6LUe+MGnAGtO2yGJPQWb9HxjHwgeMEdFM9TR7f9LmaLN=g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter,
+Hi,
 
-On 8 December 2013 21:17, Peter Korsgaard <peter@korsgaard.com> wrote:
->  > But 2.<odd> are development versions, so we should move to the 2.8
->  > series instead, right?
+On Mon, Dec 9, 2013 at 1:07 AM, Shawn Landden <shawn@churchofgit.com> wrote:
+> uClibc commit 5643900913f64c00f1c29589145
 >
-> Ehh, 2.38.x not 2.8.
+> Signed-off-by: Shawn Landden <shawn@churchofgit.com>
+> ---
+>  package/systemd/systemd-uclibc-fix.patch | 18 ------------------
+>  1 file changed, 18 deletions(-)
+>
+> diff --git a/package/systemd/systemd-uclibc-fix.patch b/package/systemd/systemd-uclibc-fix.patch
+> index 9a20845..08a5d3d 100644
+> --- a/package/systemd/systemd-uclibc-fix.patch
+> +++ b/package/systemd/systemd-uclibc-fix.patch
+> @@ -39,21 +39,3 @@ Index: systemd-44/src/macro.h
+>   #define _printf_attr_(a,b) __attribute__ ((format (printf, a, b)))
+>   #define _sentinel_ __attribute__ ((sentinel))
+>   #define _noreturn_ __attribute__((noreturn))
+> -Index: systemd-44/src/journal/journal-file.c
+> -===================================================================
+> ---- systemd-44.orig/src/journal/journal-file.c
+> -+++ systemd-44/src/journal/journal-file.c
+> -@@ -229,11 +229,13 @@
+> -                 }
+> -         }
+> -
+> -+#ifndef __UCLIBC__
+> -         /* Note that the glibc fallocate() fallback is very
+> -            inefficient, hence we try to minimize the allocation area
+> -            as we can. */
+> -         if (posix_fallocate(f->fd, old_size, new_size - old_size) < 0)
+> -                 return -errno;
+> -+#endif
+> -
+> -         if (fstat(f->fd, &f->last_stat) < 0)
+> -                 return -errno;
+> --
 
-Oh, right. I didn't know that; sorry. Will fix and resubmit.
+This clearly requires a toolchain with a sufficiently recent uClibc.
+I'm not familiar with our strategy here, so I'm adding ThomasP to this
+thread...
 
-Simon.
+Best regards,
+Thomas
