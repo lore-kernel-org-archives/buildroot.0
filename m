@@ -1,58 +1,61 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Mon, 9 Dec 2013 09:27:48 +0100
-Subject: [Buildroot] [PATCH 4/4] systemd: uclibc now has
-	posix_fallocate()
-In-Reply-To: <1386547663-2678-4-git-send-email-shawn@churchofgit.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 09 Dec 2013 09:33:17 +0100
+Subject: [Buildroot] [PATCH 2/4] util-linux: nsenter
+In-Reply-To: <1386547663-2678-2-git-send-email-shawn@churchofgit.com> (Shawn
+ Landden's message of "Sun, 8 Dec 2013 16:07:41 -0800")
 References: <1386547663-2678-1-git-send-email-shawn@churchofgit.com>
- <1386547663-2678-4-git-send-email-shawn@churchofgit.com>
-Message-ID: <CAAXf6LUe+MGnAGtO2yGJPQWb9HxjHwgeMEdFM9TR7f9LmaLN=g@mail.gmail.com>
+ <1386547663-2678-2-git-send-email-shawn@churchofgit.com>
+Message-ID: <878uvu8lv6.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+>>>>> "Shawn" == Shawn Landden <shawn@churchofgit.com> writes:
 
-On Mon, Dec 9, 2013 at 1:07 AM, Shawn Landden <shawn@churchofgit.com> wrote:
-> uClibc commit 5643900913f64c00f1c29589145
->
-> Signed-off-by: Shawn Landden <shawn@churchofgit.com>
-> ---
->  package/systemd/systemd-uclibc-fix.patch | 18 ------------------
->  1 file changed, 18 deletions(-)
->
-> diff --git a/package/systemd/systemd-uclibc-fix.patch b/package/systemd/systemd-uclibc-fix.patch
-> index 9a20845..08a5d3d 100644
-> --- a/package/systemd/systemd-uclibc-fix.patch
-> +++ b/package/systemd/systemd-uclibc-fix.patch
-> @@ -39,21 +39,3 @@ Index: systemd-44/src/macro.h
->   #define _printf_attr_(a,b) __attribute__ ((format (printf, a, b)))
->   #define _sentinel_ __attribute__ ((sentinel))
->   #define _noreturn_ __attribute__((noreturn))
-> -Index: systemd-44/src/journal/journal-file.c
-> -===================================================================
-> ---- systemd-44.orig/src/journal/journal-file.c
-> -+++ systemd-44/src/journal/journal-file.c
-> -@@ -229,11 +229,13 @@
-> -                 }
-> -         }
-> -
-> -+#ifndef __UCLIBC__
-> -         /* Note that the glibc fallocate() fallback is very
-> -            inefficient, hence we try to minimize the allocation area
-> -            as we can. */
-> -         if (posix_fallocate(f->fd, old_size, new_size - old_size) < 0)
-> -                 return -errno;
-> -+#endif
-> -
-> -         if (fstat(f->fd, &f->last_stat) < 0)
-> -                 return -errno;
-> --
+The commit message could have been a bit longer, but OK.
 
-This clearly requires a toolchain with a sufficiently recent uClibc.
-I'm not familiar with our strategy here, so I'm adding ThomasP to this
-thread...
+ > Signed-off-by: Shawn Landden <shawn@churchofgit.com>
 
-Best regards,
-Thomas
+ > ---
+ >  package/util-linux/Config.in     | 5 +++++
+ >  package/util-linux/util-linux.mk | 1 +
+ >  2 files changed, 6 insertions(+)
+
+ > diff --git a/package/util-linux/Config.in b/package/util-linux/Config.in
+ > index 8c8fd7a..c8d31ac 100644
+ > --- a/package/util-linux/Config.in
+ > +++ b/package/util-linux/Config.in
+ > @@ -106,6 +106,11 @@ config BR2_PACKAGE_UTIL_LINUX_MOUNT
+ >  	help
+ >  	  Mount/unmount filesystems
+ 
+ > +config BR2_PACKAGE_UTIL_LINUX_NSENTER
+ > +        bool "nsenter"
+ > +        help
+ > +          Enter namespaces (setns(2) frontend)
+ > +
+
+Config.in indentation should be with <tab> (and the help lines
+<tab><space><space>)
+
+ >  config BR2_PACKAGE_UTIL_LINUX_PIVOT_ROOT
+ >  	bool "pivot_root"
+ >  	help
+ > diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
+ > index 20b3d35..af9d7c8 100644
+ > --- a/package/util-linux/util-linux.mk
+ > +++ b/package/util-linux/util-linux.mk
+ > @@ -62,6 +62,7 @@ UTIL_LINUX_CONF_OPT += \
+ >  	$(if $(BR2_PACKAGE_UTIL_LINUX_LOGIN_UTILS),--enable-last --enable-login --enable-su --enable-sulogin,--disable-last --disable-login --disable-su --disable-sulogin) \
+ >  	$(if $(BR2_PACKAGE_UTIL_LINUX_MESG),--enable-mesg,--disable-mesg) \
+ >  	$(if $(BR2_PACKAGE_UTIL_LINUX_MOUNT),--enable-mount,--disable-mount) \
+ > +        $(if $(BR2_PACKAGE_UTIL_LINUX_NSENTER),--enable-nsenter,--disable-nsenter) \
+
+Same here, the other lines around it use <tab>.
+
+Committed with those fixes, thanks.
+
+-- 
+Bye, Peter Korsgaard
