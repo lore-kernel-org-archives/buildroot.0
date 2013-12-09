@@ -1,31 +1,44 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 09 Dec 2013 11:40:16 +0100
-Subject: [Buildroot] wpa_supplicant doesn't compile
-In-Reply-To: <CALADVSOXZK_dqB_UGSWKVM8D=E4S8+KkG2Pu6h5EH3d93OOyug@mail.gmail.com>
- (Javier Alejandro Saenz Leguizamon's message of "Mon, 9 Dec 2013
- 05:34:17 -0500")
-References: <CALADVSNmgocixipUwij+HS-bari8Toi-q_micsA44YwwRr9mUQ@mail.gmail.com>
- <87ppp68mie.fsf@dell.be.48ers.dk>
- <CALADVSOXZK_dqB_UGSWKVM8D=E4S8+KkG2Pu6h5EH3d93OOyug@mail.gmail.com>
-Message-ID: <87zjoa71f3.fsf@dell.be.48ers.dk>
+Date: Mon, 09 Dec 2013 11:52:46 +0100
+Subject: [Buildroot] [PATCH] libglib2: bump version to 2.38.2
+In-Reply-To: <1386585472-2345-1-git-send-email-spdawson@gmail.com>
+ (spdawson@gmail.com's message of "Mon, 9 Dec 2013 10:37:52 +0000")
+References: <1386585472-2345-1-git-send-email-spdawson@gmail.com>
+Message-ID: <87vbyy70u9.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Javier" == Javier Alejandro Saenz Leguizamon <jasaenzl@unal.edu.co> writes:
+>>>>> "spdawson" == spdawson  <spdawson@gmail.com> writes:
 
- > Hi, and thx for the quick answer, its probably the toolchain, im
- > using codesourcery 2008q3, I'm going to try again with codesoucery
- > 2013.11 i also have another problem with openvpn and LZO compression
- > but I'm going to fix this
+ > From: Simon Dawson <spdawson@gmail.com>
+ > libglib2 can fail to build for arm, with the following error.
 
-Yes, a toolchain from 2008 can hardly contain uptodate Linux kernel
-headers (2.6.29 is from 2009).
+ >   gatomic.c:668:2: error: #error G_ATOMIC_LOCK_FREE defined, but incapable of lock-free atomics.
 
-In general, you are likely to end up with problems if you try to combine
-components of significant different age.
+ > The following upstream commit fixes the problem.
+
+ >   commit 996edb0c46356d8a326f886b91a77a6af9a2de3e
+ >   Author: Antoine Jacoutot <antoine@mtier.org>
+ >   Date:   Wed Aug 28 09:35:27 2013 +0200
+
+ >     fix atomic ops detection
+
+ >     AC_TRY_LINK should be used instead of AC_TRY_COMPILE because the code
+ >     will compile everywhere, either producing ``atomic'' code, or an
+ >     external reference to __sync_bool_compare_and_swap.
+
+ >     https://bugzilla.gnome.org/show_bug.cgi?id=706958
+
+ > The upstream commit went into version 2.37.7, so this is the lowest version
+ > that we can bump to, in order to fix the atomic operations problem. However,
+ > 2.37.x is a development version, so we bump to 2.38.2 instead.
+
+ > Signed-off-by: Simon Dawson <spdawson@gmail.com>
+
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
