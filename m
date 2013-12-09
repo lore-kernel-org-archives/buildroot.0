@@ -1,7 +1,9 @@
 From: Shawn Landden <shawn@churchofgit.com>
-Date: Sun,  8 Dec 2013 16:07:40 -0800
-Subject: [Buildroot] [PATCH 1/4] mention nconfig
-Message-ID: <1386547663-2678-1-git-send-email-shawn@churchofgit.com>
+Date: Sun,  8 Dec 2013 16:07:42 -0800
+Subject: [Buildroot] [PATCH 3/4] systemd does not require glib
+In-Reply-To: <1386547663-2678-1-git-send-email-shawn@churchofgit.com>
+References: <1386547663-2678-1-git-send-email-shawn@churchofgit.com>
+Message-ID: <1386547663-2678-3-git-send-email-shawn@churchofgit.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,50 +12,21 @@ To: buildroot@busybox.net
 
 Signed-off-by: Shawn Landden <shawn@churchofgit.com>
 ---
- docs/manual/common-usage.txt |  2 +-
- docs/manual/using.txt        | 10 ++++++++--
- 2 files changed, 9 insertions(+), 3 deletions(-)
+ docs/manual/configure.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/docs/manual/common-usage.txt b/docs/manual/common-usage.txt
-index c7f511a..1290dfc 100644
---- a/docs/manual/common-usage.txt
-+++ b/docs/manual/common-usage.txt
-@@ -11,7 +11,7 @@ Offline builds
- 
- If you intend to do an offline build and just want to download
- all sources that you previously selected in the configurator
--('menuconfig', 'xconfig' or 'gconfig'), then issue:
-+('menuconfig', 'nconfig', 'xconfig' or 'gconfig'), then issue:
- 
- --------------------
-  $ make source
-diff --git a/docs/manual/using.txt b/docs/manual/using.txt
-index de29ad6..9b0a81f 100644
---- a/docs/manual/using.txt
-+++ b/docs/manual/using.txt
-@@ -15,7 +15,13 @@ assistant:
-  $ make menuconfig
- --------------------
- 
--to run the curses-based configurator, or
-+or
-+
-+--------------------
-+ $ make nconfig
-+--------------------
-+
-+to run the old or new curses-based configurator, or
- 
- --------------------
-  $ make xconfig
-@@ -105,7 +111,7 @@ This directory contains several subdirectories:
- * +toolchain/+ contains the build directories for the various
-   components of the cross-compilation toolchain.
- 
--These commands, +make menuconfig|gconfig|xconfig+ and +make+, are the
-+These commands, +make menuconfig|nconfig|gconfig|xconfig+ and +make+, are the
- basic ones that allow to easily and quickly generate images fitting
- your needs, with all the supports and applications you enabled.
+diff --git a/docs/manual/configure.txt b/docs/manual/configure.txt
+index 8912a81..89df3d9 100644
+--- a/docs/manual/configure.txt
++++ b/docs/manual/configure.txt
+@@ -371,7 +371,7 @@ can be chosen from +System configuration+, +Init system+:
+    etc. +systemd+ will be useful on relatively complex embedded
+    systems, for example the ones requiring D-Bus and services
+    communicating between each other. It is worth noting that +systemd+
+-   brings a fairly big number of large dependencies: +dbus+, +glib+
++   brings a fairly big number of large dependencies: +dbus+, +udev+
+    and more. For more details about +systemd+, see
+    http://www.freedesktop.org/wiki/Software/systemd.
  
 -- 
 1.8.5.1
