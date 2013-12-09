@@ -1,79 +1,85 @@
-From: Wojciech Zabolotny <wzab01@gmail.com>
-Date: Mon, 9 Dec 2013 21:19:19 +0100
-Subject: [Buildroot] [PATCH 26/38] python-pyusb: new package
-In-Reply-To: <CAAXf6LWKPo24c3-mftJ4AugWJ1K7OWUt+xTCiFWdytgGNBtQmQ@mail.gmail.com>
-References: <1386540907-7242-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1386540907-7242-27-git-send-email-thomas.petazzoni@free-electrons.com>
- <CAAXf6LWKPo24c3-mftJ4AugWJ1K7OWUt+xTCiFWdytgGNBtQmQ@mail.gmail.com>
-Message-ID: <CAMduVEdTbrbDm9rFJEHKaV_GxEeGuTgffYKhTuC-ZapCx9Q=xA@mail.gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 09 Dec 2013 22:11:46 +0100
+Subject: [Buildroot] [PATCH 3/3] package/parted: add a host variant
+In-Reply-To: <20131206180751.03555e6e@skate>
+References: <cover.1386023329.git.yann.morin.1998@free.fr>
+ <1891fdbc7ad11ce084f2be315871eb10573953b7.1386023329.git.yann.morin.1998@free.fr>
+ <20131206104811.49d81180@skate> <20131206165614.GB3364@free.fr>
+ <20131206180751.03555e6e@skate>
+Message-ID: <52A63212.4030003@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Dec 9, 2013 at 3:40 PM, Thomas De Schampheleire
-<patrickdepinguin@gmail.com> wrote:
-> On Sun, Dec 8, 2013 at 11:14 PM, Thomas Petazzoni
-> <thomas.petazzoni@free-electrons.com> wrote:
->> From: "Wojciech M. Zabolotny" <wzab01@gmail.com>
->>
->> [Thomas: converted to the Python package infrastructure, added missing
->> libusb dependency in the .mk file, added missing newline in the
->> Config.in file]
->>
->> Signed-off-by: Wojciech M. Zabolotny <wzab01@gmail.com>
->> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
->> ---
->>  package/Config.in                    |  1 +
->>  package/python-pyusb/Config.in       | 14 ++++++++++++++
->>  package/python-pyusb/python-pyusb.mk | 14 ++++++++++++++
->>  3 files changed, 29 insertions(+)
->>  create mode 100644 package/python-pyusb/Config.in
->>  create mode 100644 package/python-pyusb/python-pyusb.mk
->>
->> diff --git a/package/Config.in b/package/Config.in
->> index aa928ec..d7dcbd0 100644
->> --- a/package/Config.in
->> +++ b/package/Config.in
->> @@ -398,6 +398,7 @@ source "package/python-protobuf/Config.in"
->>  source "package/python-pygame/Config.in"
->>  source "package/python-pyparsing/Config.in"
->>  source "package/python-pyro/Config.in"
->> +source "package/python-pyusb/Config.in"
->>  source "package/python-pyzmq/Config.in"
->>  source "package/python-serial/Config.in"
->>  source "package/python-setuptools/Config.in"
->> diff --git a/package/python-pyusb/Config.in b/package/python-pyusb/Config.in
->> new file mode 100644
->> index 0000000..8e17714
->> --- /dev/null
->> +++ b/package/python-pyusb/Config.in
->> @@ -0,0 +1,14 @@
->> +config BR2_PACKAGE_PYTHON_PYUSB
->> +       bool "python-pyusb"
->> +       depends on BR2_PACKAGE_PYTHON
->> +       depends on BR2_TOOLCHAIN_HAS_THREADS # libusb
->> +       select BR2_PACKAGE_LIBUSB
->> +       help
->> +         The PyUSB module provides for Python easy access to the host
->> +         machine's Universal Serial Bus (USB) system.
+On 06/12/13 18:07, Thomas Petazzoni wrote:
+> Dear Yann E. MORIN,
 >
-> The structure of this sentence is slightly odd.
-> The website says: "PyUSB aims to provide easy USB access to the Python
-> language." which we could use, or alternatively a rewritten version of
-> the original sentence:
+> On Fri, 6 Dec 2013 17:56:14 +0100, Yann E. MORIN wrote:
 >
-> The PyUSB module provides easy access to the Universal Serial Bus
-> (USB) from Python.
+>> I think we want the same dependency the target parted has. If the target
+>> parted can handle lvm2 volumes, then we may have to generate them in the
+>> first place.
+>
+> Yes, we may. But that seems unlikely. I believe the most common usage
+> of LVM on embedded platforms is for NAS/storage type devices, and for
+> those systems, the root filesystem image is generally not on the
+> LVM/RAID storage I believe, no?
 
-I agree with the last version. (Well, I'm not a native speaker).
+  It's also used for encrypted volumes, no?
 
-Regards,
-Wojtek
+>
+>> So, what about:
+>>
+>> # If target-parted can handle lvm volumes, then host-parted
+>> # should be, too, so as to be able to generate them.
+>> # If target-parted can't handle lvm volumes, there is no reason
+>> # for host-aprted to handle them.
+>> ifeq ($(BR2_PACKAGE_LVM2),y)
+>> PARTED_DEPENDENCIES += lvm2
+>> HOST_PARTED_DEPENDENCIES += lvm2
+>> PARTED_CONF_OPT += --enable-device-mapper
+>> HOST_PARTED_CONF_OPT += --enable-device-mapper
+>> else
+>> PARTED_CONF_OPT += --disable-device-mapper
+>> HOST_PARTED_CONF_OPT += --disable-device-mapper
+>> endif
+>
+> While I do understand the logic behind what you're proposing, I'm not
+> really comfortable with having the configuration of tools built for the
+> host changed depending on the target configuration. It seems to be
+> creating a bad precedent.
 
+  We already have a precedent: libxml2.
+
+  What is so bad about one package's configuration depending on another 
+package configuration?
+
+
+>
+>>> In the host variant of parted, lvm2 support is never enabled, as I
+>>> believe it's pretty unlikely that lvm2 support will be needed to
+>>> generate disk images. This would make PATCH 2/3 of your series
+>>> unnecessary, of course.
+>>
+>> I don't think we should not be able to generate lvm volumes. I can see
+>> at least a few cases where it would be needed.
+>>
+>> Of course, we may just add host-parted without lvm support right now,
+>> and add it later when the need really arises.
+>
+> Yes, that would be my proposal.
+
+  That's of course also fine - only implement it when it's actually used.
+
+
+  Regards,
+  Arnout
 -- 
-Wojciech M. Zabo?otny
-My GPG/PGP keys:
-standard: B191 ACF0 7909 83FA 3F9B  450C 407E 3C4B 4569 D119
-confidential: 2BF3 F90F 6EA8 7D35 59FD  5080 78ED 33DE 1312 D8F8
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
