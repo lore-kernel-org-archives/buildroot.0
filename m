@@ -1,78 +1,71 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Mon, 9 Dec 2013 15:29:15 +0100
-Subject: [Buildroot] [PATCH 31/38] python-simplejson: new package
-In-Reply-To: <1386540907-7242-32-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Mon, 9 Dec 2013 15:29:59 +0100
+Subject: [Buildroot] [PATCH 29/38] python-versiontools: new package
+In-Reply-To: <1386540907-7242-30-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1386540907-7242-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1386540907-7242-32-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <CAAXf6LWDENKnHt=U8EpRsqeC7zKSLKBHy0XfxZww68YSU1v3PA@mail.gmail.com>
+ <1386540907-7242-30-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <CAAXf6LWPD10K2ABF3tV5Z-Dkg9EiK06=g5x9en74-VOM1d9Cug@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, Dec 8, 2013 at 11:15 PM, Thomas Petazzoni
+On Sun, Dec 8, 2013 at 11:14 PM, Thomas Petazzoni
 <thomas.petazzoni@free-electrons.com> wrote:
 > From: Ludovic Desroches <ludovic.desroches@atmel.com>
 >
-> [Thomas: convert to the Python package infrastructure, drop the
-> setuptools dependency since the package uses distutils.]
+> [Thomas: convert to the Python package infrastructure, added license
+> informations.]
 >
-> Signed-off-by: Ludovic Desroches <ludovic.desroches@atmel.com>
 > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 > ---
->  package/Config.in                              |  1 +
->  package/python-simplejson/Config.in            |  7 +++++++
->  package/python-simplejson/python-simplejson.mk | 14 ++++++++++++++
->  3 files changed, 22 insertions(+)
->  create mode 100644 package/python-simplejson/Config.in
->  create mode 100644 package/python-simplejson/python-simplejson.mk
+>  package/Config.in                                  |  1 +
+>  package/python-versiontools/Config.in              |  7 +++++++
+>  package/python-versiontools/python-versiontools.mk | 13 +++++++++++++
+>  3 files changed, 21 insertions(+)
+>  create mode 100644 package/python-versiontools/Config.in
+>  create mode 100644 package/python-versiontools/python-versiontools.mk
 >
 > diff --git a/package/Config.in b/package/Config.in
-> index 4f7c9cd..d4819cf 100644
+> index 42c5fc8..5f29c54 100644
 > --- a/package/Config.in
 > +++ b/package/Config.in
-> @@ -405,6 +405,7 @@ source "package/python-pyusb/Config.in"
->  source "package/python-pyzmq/Config.in"
+> @@ -405,6 +405,7 @@ source "package/python-pyzmq/Config.in"
 >  source "package/python-serial/Config.in"
 >  source "package/python-setuptools/Config.in"
-> +source "package/python-simplejson/Config.in"
 >  source "package/python-thrift/Config.in"
->  source "package/python-versiontools/Config.in"
+> +source "package/python-versiontools/Config.in"
 >  endmenu
-> diff --git a/package/python-simplejson/Config.in b/package/python-simplejson/Config.in
+>  endif
+>  source "package/python3/Config.in"
+> diff --git a/package/python-versiontools/Config.in b/package/python-versiontools/Config.in
 > new file mode 100644
-> index 0000000..be0ee8f
+> index 0000000..cb260c1
 > --- /dev/null
-> +++ b/package/python-simplejson/Config.in
+> +++ b/package/python-versiontools/Config.in
 > @@ -0,0 +1,7 @@
-> +config BR2_PACKAGE_PYTHON_SIMPLEJSON
-> +       bool "python-simplejson"
+> +config BR2_PACKAGE_PYTHON_VERSIONTOOLS
+> +       bool "python-versiontools"
 > +       depends on BR2_PACKAGE_PYTHON
 > +       help
-> +         Simple, fast, extensible JSON encoder/decoder for Python
+> +         Smart replacement for plain tuple used in __version__.
 > +
-> +         https://pypi.python.org/pypi/simplejson/
-> diff --git a/package/python-simplejson/python-simplejson.mk b/package/python-simplejson/python-simplejson.mk
+> +         https://pypi.python.org/pypi/versiontools
+> diff --git a/package/python-versiontools/python-versiontools.mk b/package/python-versiontools/python-versiontools.mk
 > new file mode 100644
-> index 0000000..e222651
+> index 0000000..72a1d43
 > --- /dev/null
-> +++ b/package/python-simplejson/python-simplejson.mk
-> @@ -0,0 +1,14 @@
+> +++ b/package/python-versiontools/python-versiontools.mk
+> @@ -0,0 +1,13 @@
 > +################################################################################
 > +#
-> +# python-simplejson
+> +# python-versiontools
 > +#
 > +################################################################################
 > +
-> +PYTHON_SIMPLEJSON_VERSION = 3.3.1
-> +PYTHON_SIMPLEJSON_SOURCE  = simplejson-$(PYTHON_SIMPLEJSON_VERSION).tar.gz
+> +PYTHON_VERSIONTOOLS_VERSION = 1.9.1
+> +PYTHON_VERSIONTOOLS_SOURCE  = versiontools-$(PYTHON_VERSIONTOOLS_VERSION).tar.gz
+> +PYTHON_VERSIONTOOLS_SITE    = http://pypi.python.org/packages/source/v/versiontools/
 
-Extra whitespace before =
-
-> +PYTHON_SIMPLEJSON_SITE = http://pypi.python.org/packages/source/s/simplejson/
-> +PYTHON_SIMPLEJSON_LICENSE = MIT
-> +PYTHON_SIMPLEJSON_LICENSE_FILES = LICENSE.txt
-> +PYTHON_SIMPLEJSON_SETUP_TYPE    = distutils
-
-Same here, we typically don't do such alignments.
+Same comment about extra spaces for alignment.
