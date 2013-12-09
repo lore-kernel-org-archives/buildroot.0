@@ -1,80 +1,41 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun,  8 Dec 2013 23:14:59 +0100
-Subject: [Buildroot] [PATCH 30/38] python-keyring: new package
-In-Reply-To: <1386540907-7242-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1386540907-7242-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1386540907-7242-31-git-send-email-thomas.petazzoni@free-electrons.com>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Mon, 9 Dec 2013 11:47:25 +0000
+Subject: [Buildroot] [PATCH] sawman: Link using gcc instead of ld
+In-Reply-To: <20131206190836.637fc9f7@skate>
+References: <1386347428-4142-1-git-send-email-Vincent.Riera@imgtec.com>
+ <20131206190836.637fc9f7@skate>
+Message-ID: <52A5ADCD.5050307@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Ludovic Desroches <ludovic.desroches@atmel.com>
+On 12/06/2013 06:08 PM, Thomas Petazzoni wrote:
+> Dear Vicente Olivert Riera,
+>
+> On Fri, 6 Dec 2013 16:30:28 +0000, Vicente Olivert Riera wrote:
+>
+>> +--- SaWMan-1.6.3/wm/sawman/Makefile.in.orig	2013-12-06 14:22:22.675409826 +0000
+>> ++++ SaWMan-1.6.3/wm/sawman/Makefile.in	2013-12-06 16:04:03.383752843 +0000
+>
+> Makefile.in is generated from Makefile.am. So we shouldn't be fixing
+> Makefile.in, but instead Makefile.am or the process that generates
+> Makefile.in from Makefile.am.
+>
+> What happens if you simply add:
+>
+> SAWMAN_AUTORECONF = YES
+>
+>   ?
 
-[Thomas: convert to the Python package infrastructure, improved the
-.zip handling, added license informations.]
+You still have the same problem.
 
-Signed-off-by: Ludovic Desroches <ludovic.desroches@atmel.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/Config.in                        |  1 +
- package/python-keyring/Config.in         |  8 ++++++++
- package/python-keyring/python-keyring.mk | 19 +++++++++++++++++++
- 3 files changed, 28 insertions(+)
- create mode 100644 package/python-keyring/Config.in
- create mode 100644 package/python-keyring/python-keyring.mk
+> Best regards,
+>
+> Thomas
+>
 
-diff --git a/package/Config.in b/package/Config.in
-index 5f29c54..4f7c9cd 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -391,6 +391,7 @@ source "package/python-dialog/Config.in"
- source "package/python-dpkt/Config.in"
- source "package/python-id3/Config.in"
- source "package/python-ipy/Config.in"
-+source "package/python-keyring/Config.in"
- source "package/python-mad/Config.in"
- source "package/python-meld3/Config.in"
- source "package/python-msgpack/Config.in"
-diff --git a/package/python-keyring/Config.in b/package/python-keyring/Config.in
-new file mode 100644
-index 0000000..6a5c4c5
---- /dev/null
-+++ b/package/python-keyring/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_PYTHON_KEYRING
-+	bool "python-keyring"
-+	depends on BR2_PACKAGE_PYTHON
-+	help
-+	  The Python keyring lib provides a easy way to access the system
-+	  keyring service from python.
-+
-+	  https://pypi.python.org/pypi/keyring
-diff --git a/package/python-keyring/python-keyring.mk b/package/python-keyring/python-keyring.mk
-new file mode 100644
-index 0000000..ead5184
---- /dev/null
-+++ b/package/python-keyring/python-keyring.mk
-@@ -0,0 +1,19 @@
-+################################################################################
-+#
-+# python-keyring
-+#
-+################################################################################
-+
-+PYTHON_KEYRING_VERSION = 3.0.5
-+PYTHON_KEYRING_SOURCE  = keyring-$(PYTHON_KEYRING_VERSION).zip
-+PYTHON_KEYRING_SITE    = http://pypi.python.org/packages/source/k/keyring/
-+PYTHON_KEYRING_SETUP_TYPE = setuptools
-+PYTHON_KEYRING_LICENSE    = python software foundation license
-+
-+define PYTHON_KEYRING_EXTRACT_CMDS
-+	unzip -d $(@D) $(DL_DIR)/$(PYTHON_KEYRING_SOURCE)
-+	mv $(@D)/keyring-$(PYTHON_KEYRING_VERSION)/* $(@D)
-+	$(RM) -r $(@D)/keyring-$(PYTHON_KEYRING_VERSION)
-+endef
-+
-+$(eval $(python-package))
+
 -- 
-1.8.1.2
+Vincent
