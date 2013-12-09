@@ -1,10 +1,10 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Mon, 9 Dec 2013 15:41:50 +0100
-Subject: [Buildroot] [PATCH 34/38] python-pyasn: new package
-In-Reply-To: <1386540907-7242-35-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Mon, 9 Dec 2013 15:43:39 +0100
+Subject: [Buildroot] [PATCH 35/38] python-pycrypto: new package
+In-Reply-To: <1386540907-7242-36-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1386540907-7242-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1386540907-7242-35-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <CAAXf6LXQm6NRqofsB-C4KNjSVLK5YYD8LQfRDMCUAmepWqnrWg@mail.gmail.com>
+ <1386540907-7242-36-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <CAAXf6LVG70ombU2cXaP=M26zt8FiBOh-9+TN5+-fKg6Lfsx+QA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -18,42 +18,62 @@ On Sun, Dec 8, 2013 at 11:15 PM, Thomas Petazzoni
 > Signed-off-by: Ryan Barnett <rjbarnet@rockwellcollins.com>
 > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 > ---
->  package/Config.in                    |  1 +
->  package/python-pyasn/Config.in       | 13 +++++++++++++
->  package/python-pyasn/python-pyasn.mk | 19 +++++++++++++++++++
->  3 files changed, 33 insertions(+)
->  create mode 100644 package/python-pyasn/Config.in
->  create mode 100644 package/python-pyasn/python-pyasn.mk
+>  package/Config.in                          |  1 +
+>  package/python-pycrypto/Config.in          |  9 ++++++++
+>  package/python-pycrypto/python-pycrypto.mk | 35 ++++++++++++++++++++++++++++++
+>  3 files changed, 45 insertions(+)
+>  create mode 100644 package/python-pycrypto/Config.in
+>  create mode 100644 package/python-pycrypto/python-pycrypto.mk
 >
 > diff --git a/package/Config.in b/package/Config.in
-> index 269ac5a..2081a8d 100644
+> index 2081a8d..426f55e 100644
 > --- a/package/Config.in
 > +++ b/package/Config.in
-> @@ -399,6 +399,7 @@ source "package/python-msgpack/Config.in"
->  source "package/python-netifaces/Config.in"
+> @@ -400,6 +400,7 @@ source "package/python-netifaces/Config.in"
 >  source "package/python-nfc/Config.in"
 >  source "package/python-protobuf/Config.in"
-> +source "package/python-pyasn/Config.in"
+>  source "package/python-pyasn/Config.in"
+> +source "package/python-pycrypto/Config.in"
 >  source "package/python-pygame/Config.in"
 >  source "package/python-pyparsing/Config.in"
 >  source "package/python-pyro/Config.in"
-> diff --git a/package/python-pyasn/Config.in b/package/python-pyasn/Config.in
+> diff --git a/package/python-pycrypto/Config.in b/package/python-pycrypto/Config.in
 > new file mode 100644
-> index 0000000..828c699
+> index 0000000..60a3446
 > --- /dev/null
-> +++ b/package/python-pyasn/Config.in
-> @@ -0,0 +1,13 @@
-> +config BR2_PACKAGE_PYTHON_PYASN
-> +       bool "python-pyasn"
+> +++ b/package/python-pycrypto/Config.in
+> @@ -0,0 +1,9 @@
+> +config BR2_PACKAGE_PYTHON_PYCRYPTO
+> +       bool "python-pycrypto"
 > +       depends on BR2_PACKAGE_PYTHON
-> +       depends on BR2_INSTALL_LIBSTDCPP
+> +       select BR2_PACKAGE_GMP
 > +       help
-> +         PyASN is a Python extension module that enables you to
-> +         perform very fast IP address to Autonomous System Number
-> +         lookups.
+> +         PyCrypto is a collection of cryptographic algorithms and
+> +         protocols, implemented for use from Python.
 > +
-> +         https://code.google.com/p/pyasn/
+> +         http://www.pycrypto.org/
+> diff --git a/package/python-pycrypto/python-pycrypto.mk b/package/python-pycrypto/python-pycrypto.mk
+> new file mode 100644
+> index 0000000..b84099b
+> --- /dev/null
+> +++ b/package/python-pycrypto/python-pycrypto.mk
+> @@ -0,0 +1,35 @@
+> +################################################################################
+> +#
+> +# python-pycrypto
+> +#
+> +################################################################################
 > +
-> +comment "python-pyasn needs toolchain w/ C++"
+> +PYTHON_PYCRYPTO_VERSION = 2.6
+> +PYTHON_PYCRYPTO_SOURCE  = pycrypto-$(PYTHON_PYCRYPTO_VERSION).tar.gz
+> +PYTHON_PYCRYPTO_SITE    = http://ftp.dlitz.net/pub/dlitz/crypto/pycrypto
+> +PYTHON_PYCRYPTO_SETUP_TYPE = distutils
+> +
+> +PYTHON_PYCRYPTO_LICENSE = Public Domain, Python 2.2 License (HMAC.py, setup.py)
+> +PYTHON_PYCRYPTO_LICENSE_FILES = COPYRIGHT LEGAL/copy/LICENSE.libtom \
+> +               LEGAL/copy/LICENSE.orig LEGAL/copy/LICENSE.python-2.2
+> +
+> +PYTHON_PYCRYPTO_DEPENDENCIES =  gmp
 
-needs a toolchain
+I'll explicitly mention this double spacing because it could be easily
+overlooked...
