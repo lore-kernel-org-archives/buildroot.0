@@ -1,62 +1,79 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 9 Dec 2013 20:58:05 +0100
-Subject: [Buildroot] [PATCH 4/4] systemd: uclibc now has
- posix_fallocate()
-In-Reply-To: <CAAXf6LUe+MGnAGtO2yGJPQWb9HxjHwgeMEdFM9TR7f9LmaLN=g@mail.gmail.com>
-References: <1386547663-2678-1-git-send-email-shawn@churchofgit.com>
- <1386547663-2678-4-git-send-email-shawn@churchofgit.com>
- <CAAXf6LUe+MGnAGtO2yGJPQWb9HxjHwgeMEdFM9TR7f9LmaLN=g@mail.gmail.com>
-Message-ID: <20131209205805.0b034205@skate>
+From: Wojciech Zabolotny <wzab01@gmail.com>
+Date: Mon, 9 Dec 2013 21:19:19 +0100
+Subject: [Buildroot] [PATCH 26/38] python-pyusb: new package
+In-Reply-To: <CAAXf6LWKPo24c3-mftJ4AugWJ1K7OWUt+xTCiFWdytgGNBtQmQ@mail.gmail.com>
+References: <1386540907-7242-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1386540907-7242-27-git-send-email-thomas.petazzoni@free-electrons.com>
+ <CAAXf6LWKPo24c3-mftJ4AugWJ1K7OWUt+xTCiFWdytgGNBtQmQ@mail.gmail.com>
+Message-ID: <CAMduVEdTbrbDm9rFJEHKaV_GxEeGuTgffYKhTuC-ZapCx9Q=xA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, Shawn,
+On Mon, Dec 9, 2013 at 3:40 PM, Thomas De Schampheleire
+<patrickdepinguin@gmail.com> wrote:
+> On Sun, Dec 8, 2013 at 11:14 PM, Thomas Petazzoni
+> <thomas.petazzoni@free-electrons.com> wrote:
+>> From: "Wojciech M. Zabolotny" <wzab01@gmail.com>
+>>
+>> [Thomas: converted to the Python package infrastructure, added missing
+>> libusb dependency in the .mk file, added missing newline in the
+>> Config.in file]
+>>
+>> Signed-off-by: Wojciech M. Zabolotny <wzab01@gmail.com>
+>> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+>> ---
+>>  package/Config.in                    |  1 +
+>>  package/python-pyusb/Config.in       | 14 ++++++++++++++
+>>  package/python-pyusb/python-pyusb.mk | 14 ++++++++++++++
+>>  3 files changed, 29 insertions(+)
+>>  create mode 100644 package/python-pyusb/Config.in
+>>  create mode 100644 package/python-pyusb/python-pyusb.mk
+>>
+>> diff --git a/package/Config.in b/package/Config.in
+>> index aa928ec..d7dcbd0 100644
+>> --- a/package/Config.in
+>> +++ b/package/Config.in
+>> @@ -398,6 +398,7 @@ source "package/python-protobuf/Config.in"
+>>  source "package/python-pygame/Config.in"
+>>  source "package/python-pyparsing/Config.in"
+>>  source "package/python-pyro/Config.in"
+>> +source "package/python-pyusb/Config.in"
+>>  source "package/python-pyzmq/Config.in"
+>>  source "package/python-serial/Config.in"
+>>  source "package/python-setuptools/Config.in"
+>> diff --git a/package/python-pyusb/Config.in b/package/python-pyusb/Config.in
+>> new file mode 100644
+>> index 0000000..8e17714
+>> --- /dev/null
+>> +++ b/package/python-pyusb/Config.in
+>> @@ -0,0 +1,14 @@
+>> +config BR2_PACKAGE_PYTHON_PYUSB
+>> +       bool "python-pyusb"
+>> +       depends on BR2_PACKAGE_PYTHON
+>> +       depends on BR2_TOOLCHAIN_HAS_THREADS # libusb
+>> +       select BR2_PACKAGE_LIBUSB
+>> +       help
+>> +         The PyUSB module provides for Python easy access to the host
+>> +         machine's Universal Serial Bus (USB) system.
+>
+> The structure of this sentence is slightly odd.
+> The website says: "PyUSB aims to provide easy USB access to the Python
+> language." which we could use, or alternatively a rewritten version of
+> the original sentence:
+>
+> The PyUSB module provides easy access to the Universal Serial Bus
+> (USB) from Python.
 
-On Mon, 9 Dec 2013 09:27:48 +0100, Thomas De Schampheleire wrote:
+I agree with the last version. (Well, I'm not a native speaker).
 
-> This clearly requires a toolchain with a sufficiently recent uClibc.
-> I'm not familiar with our strategy here, so I'm adding ThomasP to this
-> thread...
+Regards,
+Wojtek
 
-My current strategy is to finish reviewing the eudev/systemd patches
-from Eric, and get them merged. They upgrade systemd, and make it
-depend on glibc, since it uses many glibc-isms.
-
-If people are unhappy with systemd being only available on uclibc
-systems, then they should either:
-
- 1/ Improve uClibc so that it provides the necessary glibc-isms, and
- make sure that the uClibc project is sufficiently alive to provide
- releases at a decent frequency (which it has failed to do for the last
- few years). I personally consider the uClibc project as mostly dead,
- and the best thing I'm wishing for this project is that a fork is
- made, with a more active and reactive community.
-
- 2/ Convince systemd upstream to not use the problematic glibc-isms,
- but I wish them good luck, knowing how upstream considers any system
- that isn't Linux/glibc.
-
- 3/ Realize that when you use systemd, you are already using heavy and
- fat dependencies (think D-Bus and Glib), and that therefore you can
- just as well afford the size of glibc.
-
-In the mean time, if people want to fix systemd 44, then uClibc
-compatibility patches should not be *removed* but instead *improved*.
-For example, this posix_fallocate() patch should be replaced by a test
-in configure.ac, that tests whether the C library does or does not
-provide posix_fallocate(), and acts accordingly. That's the good way of
-fixing the problem, because it would support both uClibc toolchains
-that use official uClibc releases (and therefore don't provide
-posix_fallocate()) and uClibc toolchains generated by Buildroot (that
-provide posix_fallocate()).
-
-Best regards,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Wojciech M. Zabo?otny
+My GPG/PGP keys:
+standard: B191 ACF0 7909 83FA 3F9B  450C 407E 3C4B 4569 D119
+confidential: 2BF3 F90F 6EA8 7D35 59FD  5080 78ED 33DE 1312 D8F8
