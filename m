@@ -1,32 +1,30 @@
-From: Shawn Landden <shawn@churchofgit.com>
-Date: Sun,  8 Dec 2013 16:07:42 -0800
-Subject: [Buildroot] [PATCH 3/4] systemd does not require glib
-In-Reply-To: <1386547663-2678-1-git-send-email-shawn@churchofgit.com>
-References: <1386547663-2678-1-git-send-email-shawn@churchofgit.com>
-Message-ID: <1386547663-2678-3-git-send-email-shawn@churchofgit.com>
+From: Axel Lin <axel.lin@ingics.com>
+Date: Mon, 09 Dec 2013 10:05:00 +0800
+Subject: [Buildroot] [PATCH] snappy: bump to version 1.1.1
+Message-ID: <1386554700.18790.0.camel@phoenix>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Shawn Landden <shawn@churchofgit.com>
+Signed-off-by: Axel Lin <axel.lin@ingics.com>
 ---
- docs/manual/configure.txt | 2 +-
+ package/snappy/snappy.mk | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/docs/manual/configure.txt b/docs/manual/configure.txt
-index 8912a81..89df3d9 100644
---- a/docs/manual/configure.txt
-+++ b/docs/manual/configure.txt
-@@ -371,7 +371,7 @@ can be chosen from +System configuration+, +Init system+:
-    etc. +systemd+ will be useful on relatively complex embedded
-    systems, for example the ones requiring D-Bus and services
-    communicating between each other. It is worth noting that +systemd+
--   brings a fairly big number of large dependencies: +dbus+, +glib+
-+   brings a fairly big number of large dependencies: +dbus+, +udev+
-    and more. For more details about +systemd+, see
-    http://www.freedesktop.org/wiki/Software/systemd.
+diff --git a/package/snappy/snappy.mk b/package/snappy/snappy.mk
+index d8ec239..b94f8cc 100644
+--- a/package/snappy/snappy.mk
++++ b/package/snappy/snappy.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
+-SNAPPY_VERSION		= 1.1.0
++SNAPPY_VERSION		= 1.1.1
+ SNAPPY_SITE		= http://snappy.googlecode.com/files/
+ SNAPPY_LICENSE		= BSD-3c
+ SNAPPY_LICENSE_FILES	= COPYING
 -- 
-1.8.5.1
+1.8.1.2
