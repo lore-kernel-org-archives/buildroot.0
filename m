@@ -1,10 +1,10 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Mon, 9 Dec 2013 15:29:59 +0100
-Subject: [Buildroot] [PATCH 29/38] python-versiontools: new package
-In-Reply-To: <1386540907-7242-30-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Mon, 9 Dec 2013 15:34:11 +0100
+Subject: [Buildroot] [PATCH 30/38] python-keyring: new package
+In-Reply-To: <1386540907-7242-31-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1386540907-7242-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1386540907-7242-30-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <CAAXf6LWPD10K2ABF3tV5Z-Dkg9EiK06=g5x9en74-VOM1d9Cug@mail.gmail.com>
+ <1386540907-7242-31-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <CAAXf6LUGtyqggNG9dekaD5OY9+4RbB5L6nWsDbMv84gi9UNtHg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,57 +15,71 @@ On Sun, Dec 8, 2013 at 11:14 PM, Thomas Petazzoni
 <thomas.petazzoni@free-electrons.com> wrote:
 > From: Ludovic Desroches <ludovic.desroches@atmel.com>
 >
-> [Thomas: convert to the Python package infrastructure, added license
-> informations.]
+> [Thomas: convert to the Python package infrastructure, improved the
+> .zip handling, added license informations.]
 >
+> Signed-off-by: Ludovic Desroches <ludovic.desroches@atmel.com>
 > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 > ---
->  package/Config.in                                  |  1 +
->  package/python-versiontools/Config.in              |  7 +++++++
->  package/python-versiontools/python-versiontools.mk | 13 +++++++++++++
->  3 files changed, 21 insertions(+)
->  create mode 100644 package/python-versiontools/Config.in
->  create mode 100644 package/python-versiontools/python-versiontools.mk
+>  package/Config.in                        |  1 +
+>  package/python-keyring/Config.in         |  8 ++++++++
+>  package/python-keyring/python-keyring.mk | 19 +++++++++++++++++++
+>  3 files changed, 28 insertions(+)
+>  create mode 100644 package/python-keyring/Config.in
+>  create mode 100644 package/python-keyring/python-keyring.mk
 >
 > diff --git a/package/Config.in b/package/Config.in
-> index 42c5fc8..5f29c54 100644
+> index 5f29c54..4f7c9cd 100644
 > --- a/package/Config.in
 > +++ b/package/Config.in
-> @@ -405,6 +405,7 @@ source "package/python-pyzmq/Config.in"
->  source "package/python-serial/Config.in"
->  source "package/python-setuptools/Config.in"
->  source "package/python-thrift/Config.in"
-> +source "package/python-versiontools/Config.in"
->  endmenu
->  endif
->  source "package/python3/Config.in"
-> diff --git a/package/python-versiontools/Config.in b/package/python-versiontools/Config.in
+> @@ -391,6 +391,7 @@ source "package/python-dialog/Config.in"
+>  source "package/python-dpkt/Config.in"
+>  source "package/python-id3/Config.in"
+>  source "package/python-ipy/Config.in"
+> +source "package/python-keyring/Config.in"
+>  source "package/python-mad/Config.in"
+>  source "package/python-meld3/Config.in"
+>  source "package/python-msgpack/Config.in"
+> diff --git a/package/python-keyring/Config.in b/package/python-keyring/Config.in
 > new file mode 100644
-> index 0000000..cb260c1
+> index 0000000..6a5c4c5
 > --- /dev/null
-> +++ b/package/python-versiontools/Config.in
-> @@ -0,0 +1,7 @@
-> +config BR2_PACKAGE_PYTHON_VERSIONTOOLS
-> +       bool "python-versiontools"
+> +++ b/package/python-keyring/Config.in
+> @@ -0,0 +1,8 @@
+> +config BR2_PACKAGE_PYTHON_KEYRING
+> +       bool "python-keyring"
 > +       depends on BR2_PACKAGE_PYTHON
 > +       help
-> +         Smart replacement for plain tuple used in __version__.
-> +
-> +         https://pypi.python.org/pypi/versiontools
-> diff --git a/package/python-versiontools/python-versiontools.mk b/package/python-versiontools/python-versiontools.mk
-> new file mode 100644
-> index 0000000..72a1d43
-> --- /dev/null
-> +++ b/package/python-versiontools/python-versiontools.mk
-> @@ -0,0 +1,13 @@
-> +################################################################################
-> +#
-> +# python-versiontools
-> +#
-> +################################################################################
-> +
-> +PYTHON_VERSIONTOOLS_VERSION = 1.9.1
-> +PYTHON_VERSIONTOOLS_SOURCE  = versiontools-$(PYTHON_VERSIONTOOLS_VERSION).tar.gz
-> +PYTHON_VERSIONTOOLS_SITE    = http://pypi.python.org/packages/source/v/versiontools/
+> +         The Python keyring lib provides a easy way to access the system
 
-Same comment about extra spaces for alignment.
+an easy way
+
+> +         keyring service from python.
+
+Inconsistent capitalization of python/Python in this same sentence.
+Not sure which strategy to follow. For Lua we used capital L because
+it is explicitly requested on the Lua website. We could follow this
+strategy for Python too in help texts, but I have no strong opinion
+here.
+
+> +
+> +         https://pypi.python.org/pypi/keyring
+> diff --git a/package/python-keyring/python-keyring.mk b/package/python-keyring/python-keyring.mk
+> new file mode 100644
+> index 0000000..ead5184
+> --- /dev/null
+> +++ b/package/python-keyring/python-keyring.mk
+> @@ -0,0 +1,19 @@
+> +################################################################################
+> +#
+> +# python-keyring
+> +#
+> +################################################################################
+> +
+> +PYTHON_KEYRING_VERSION = 3.0.5
+> +PYTHON_KEYRING_SOURCE  = keyring-$(PYTHON_KEYRING_VERSION).zip
+> +PYTHON_KEYRING_SITE    = http://pypi.python.org/packages/source/k/keyring/
+> +PYTHON_KEYRING_SETUP_TYPE = setuptools
+> +PYTHON_KEYRING_LICENSE    = python software foundation license
+
+Same comment about spaces.
