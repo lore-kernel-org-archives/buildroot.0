@@ -1,70 +1,56 @@
-From: Javier Alejandro Saenz Leguizamon <jasaenzl@unal.edu.co>
-Date: Mon, 9 Dec 2013 05:34:17 -0500
-Subject: [Buildroot] wpa_supplicant doesn't compile
-In-Reply-To: <87ppp68mie.fsf@dell.be.48ers.dk>
-References: <CALADVSNmgocixipUwij+HS-bari8Toi-q_micsA44YwwRr9mUQ@mail.gmail.com>
- <87ppp68mie.fsf@dell.be.48ers.dk>
-Message-ID: <CALADVSOXZK_dqB_UGSWKVM8D=E4S8+KkG2Pu6h5EH3d93OOyug@mail.gmail.com>
+From: spdawson at gmail.com <spdawson@gmail.com>
+Date: Mon,  9 Dec 2013 10:37:52 +0000
+Subject: [Buildroot] [PATCH] libglib2: bump version to 2.38.2
+Message-ID: <1386585472-2345-1-git-send-email-spdawson@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi, and thx for the quick answer, its probably the toolchain, im using
-codesourcery 2008q3, I'm going to try again with codesoucery 2013.11 i also
-have another problem with openvpn and LZO compression but I'm going to fix
-this first.
+From: Simon Dawson <spdawson@gmail.com>
 
-Javier Alejandro S?enz Leguizam?n
-Ingeniero Electr?nico
-Universidad Nacional de Colombia
+libglib2 can fail to build for arm, with the following error.
 
+  gatomic.c:668:2: error: #error G_ATOMIC_LOCK_FREE defined, but incapable of lock-free atomics.
 
-2013/12/9 Peter Korsgaard <jacmet@uclibc.org>
+The following upstream commit fixes the problem.
 
-> >>>>> "Javier" == Javier Alejandro Saenz Leguizamon <jasaenzl@unal.edu.co>
-> writes:
->
->  > Good day.
->
->  > I'm having trouble when try to compile the wpa_supplicant package, I
->  > always get this error, can anyone please help me with this. I will
->  > attach the .config I'm using.
->
->  > jasaenzl at Killer-Laptop:~/develop/test/thesis_dev_repo/buildroot-2013.08.1$
-> make
->
-> Notice that 2013.11 has been released, so consider moving to it.
->
->  > ../src/drivers/driver_wext.c: In function 'wpa_driver_wext_set_key_ext':
->  > ../src/drivers/driver_wext.c:1703: error: 'IW_ENCODE_ALG_AES_CMAC'
-> undeclared
->  > (first use in this function)
->  > ../src/drivers/driver_wext.c:1703: error: (Each undeclared identifier is
->  > reported only once
->  > ../src/drivers/driver_wext.c:1703: error: for each function it appears
-> in.)
->  > ../src/drivers/driver_wext.c: In function 'wpa_driver_wext_associate':
->  > ../src/drivers/driver_wext.c:2130: error: 'IW_AUTH_MFP_DISABLED'
-> undeclared
->  > (first use in this function)
->  > ../src/drivers/driver_wext.c:2133: error: 'IW_AUTH_MFP_OPTIONAL'
-> undeclared
->  > (first use in this function)
->  > ../src/drivers/driver_wext.c:2136: error: 'IW_AUTH_MFP_REQUIRED'
-> undeclared
->  > (first use in this function)
->  > ../src/drivers/driver_wext.c:2139: error: 'IW_AUTH_MFP' undeclared
-> (first use
->  > in this function)
->
-> Those defines come from the kernel headers, and have existed for quite
-> some time (2.6.29 or so). What kernel headers / toolchain are you using?
->
-> --
-> Bye, Peter Korsgaard
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20131209/c058b2af/attachment.html>
+  commit 996edb0c46356d8a326f886b91a77a6af9a2de3e
+  Author: Antoine Jacoutot <antoine@mtier.org>
+  Date:   Wed Aug 28 09:35:27 2013 +0200
+
+    fix atomic ops detection
+
+    AC_TRY_LINK should be used instead of AC_TRY_COMPILE because the code
+    will compile everywhere, either producing ``atomic'' code, or an
+    external reference to __sync_bool_compare_and_swap.
+
+    https://bugzilla.gnome.org/show_bug.cgi?id=706958
+
+The upstream commit went into version 2.37.7, so this is the lowest version
+that we can bump to, in order to fix the atomic operations problem. However,
+2.37.x is a development version, so we bump to 2.38.2 instead.
+
+Signed-off-by: Simon Dawson <spdawson@gmail.com>
+---
+ package/libglib2/libglib2.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
+index f770d3a..d29b938 100644
+--- a/package/libglib2/libglib2.mk
++++ b/package/libglib2/libglib2.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-LIBGLIB2_VERSION_MAJOR = 2.36
+-LIBGLIB2_VERSION_MINOR = 3
++LIBGLIB2_VERSION_MAJOR = 2.38
++LIBGLIB2_VERSION_MINOR = 2
+ LIBGLIB2_VERSION = $(LIBGLIB2_VERSION_MAJOR).$(LIBGLIB2_VERSION_MINOR)
+ LIBGLIB2_SOURCE = glib-$(LIBGLIB2_VERSION).tar.xz
+ LIBGLIB2_SITE = http://ftp.gnome.org/pub/gnome/sources/glib/$(LIBGLIB2_VERSION_MAJOR)
+-- 
+1.8.3.2
