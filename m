@@ -1,63 +1,148 @@
-From: Markos Chandras <Markos.Chandras@imgtec.com>
-Date: Mon, 9 Dec 2013 16:48:53 +0000
-Subject: [Buildroot] [PATCH] sawman: Link using gcc instead of ld
-In-Reply-To: <52A5B06E.60204@imgtec.com>
-References: <1386347428-4142-1-git-send-email-Vincent.Riera@imgtec.com>
- <20131206190836.637fc9f7@skate> <52A5ADCD.5050307@imgtec.com>
- <52A5B06E.60204@imgtec.com>
-Message-ID: <52A5F475.6030303@imgtec.com>
+From: James Hogan <james.hogan@imgtec.com>
+Date: Mon, 9 Dec 2013 17:05:04 +0000
+Subject: [Buildroot] [PATCH 2/2] uclibc: add patches to fix MIPS __SIGRTMAX
+	and SIG127
+In-Reply-To: <1386608704-3761-1-git-send-email-james.hogan@imgtec.com>
+References: <1386608704-3761-1-git-send-email-james.hogan@imgtec.com>
+Message-ID: <1386608704-3761-3-git-send-email-james.hogan@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 12/09/2013 11:58 AM, Vicente Olivert Riera wrote:
-> On 12/09/2013 11:47 AM, Vicente Olivert Riera wrote:
->> On 12/06/2013 06:08 PM, Thomas Petazzoni wrote:
->>> Dear Vicente Olivert Riera,
->>>
->>> On Fri, 6 Dec 2013 16:30:28 +0000, Vicente Olivert Riera wrote:
->>>
->>>> +--- SaWMan-1.6.3/wm/sawman/Makefile.in.orig    2013-12-06
->>>> 14:22:22.675409826 +0000
->>>> ++++ SaWMan-1.6.3/wm/sawman/Makefile.in    2013-12-06
->>>> 16:04:03.383752843 +0000
->>>
->>> Makefile.in is generated from Makefile.am. So we shouldn't be fixing
->>> Makefile.in, but instead Makefile.am or the process that generates
->>> Makefile.in from Makefile.am.
->>>
->>> What happens if you simply add:
->>>
->>> SAWMAN_AUTORECONF = YES
->>>
->>>   ?
->>
->> You still have the same problem.
->>
->>> Best regards,
->>>
->>> Thomas
->>>
->>
->>
->
-> Adding:
->
-> LD = $(CC) -nostdlib
->
-> to Makefile.am and also:
->
-> SAWMAN_AUTORECONF = YES
->
-> to sawman.mk fixes the problem.
->
-> What do you think about this solution?
->
+Add two uClibc 0.9.33.2 patches which fix issues relating to high signal
+number handling on MIPS.
 
-Yes this is preferred. You should patch configure.ac or Makefile.am (if 
-they are available) and run autoreconf as suggested.
+The first patch (0056) fixes _NSIG (and as a result __SIGRTMAX) to match
+glibc. This fixes GDB on MIPS with uClibc, which cannot handle
+__SIGRTMAX == 128 and emits the error:
+GDB bug: target.c (gdb_signal_from_host): unrecognized real-time signal
+This patch is from uClibc commit 2da958760f79 (MIPS: set _NSIG to
+128, not 129. This matches glibc.) and applies without conflicts.
 
+The second patch (0057) fixes the wait status macros to correctly
+interpret status 0x007f on MIPS (other arches don't have signal 127).
+This patch is from uClibc commit 4a96b9486871 (bits/waitstatus.h:
+correctly interpret status 0x007f on MIPS) and applies without
+conflicts.
+
+Signed-off-by: James Hogan <james.hogan@imgtec.com>
+---
+ ...-_NSIG-to-128-not-129.-This-matches-glibc.patch | 43 +++++++++++++++++
+ ...atus.h-correctly-interpret-status-0x007f-.patch | 54 ++++++++++++++++++++++
+ 2 files changed, 97 insertions(+)
+ create mode 100644 package/uclibc/0.9.33.2/uclibc-0056-MIPS-set-_NSIG-to-128-not-129.-This-matches-glibc.patch
+ create mode 100644 package/uclibc/0.9.33.2/uclibc-0057-bits-waitstatus.h-correctly-interpret-status-0x007f-.patch
+
+diff --git a/package/uclibc/0.9.33.2/uclibc-0056-MIPS-set-_NSIG-to-128-not-129.-This-matches-glibc.patch b/package/uclibc/0.9.33.2/uclibc-0056-MIPS-set-_NSIG-to-128-not-129.-This-matches-glibc.patch
+new file mode 100644
+index 0000000..c6bd051
+--- /dev/null
++++ b/package/uclibc/0.9.33.2/uclibc-0056-MIPS-set-_NSIG-to-128-not-129.-This-matches-glibc.patch
+@@ -0,0 +1,43 @@
++From 2da958760f798224065508431787e3a83b7fe2ae Mon Sep 17 00:00:00 2001
++From: Denys Vlasenko <vda.linux@googlemail.com>
++Date: Fri, 28 Jun 2013 21:59:54 +0200
++Subject: [PATCH-0.9.33] MIPS: set _NSIG to 128, not 129. This matches glibc.
++
++Prompted by lkml discussion of a MIPS bug where sending
++signal 128 was found to be able to crash the machine :/
++
++Signed-off-by: Denys Vlasenko <vda.linux@googlemail.com>
++---
++ libc/sysdeps/linux/mips/bits/signum.h | 17 +++++++++++++++--
++ 1 file changed, 15 insertions(+), 2 deletions(-)
++
++diff --git a/libc/sysdeps/linux/mips/bits/signum.h b/libc/sysdeps/linux/mips/bits/signum.h
++index cf9b834..e83250e 100644
++--- a/libc/sysdeps/linux/mips/bits/signum.h
+++++ b/libc/sysdeps/linux/mips/bits/signum.h
++@@ -53,7 +53,20 @@
++ #define SIGXCPU		30	/* CPU limit exceeded (4.2 BSD).  */
++ #define SIGXFSZ		31	/* File size limit exceeded (4.2 BSD).  */
++ 
++-/* Biggest signal number + 1 (including real-time signals).  */
++-#define _NSIG		129
+++/* MIPS is special by having 128 signals.
+++ * All (?) other architectures have at most 64 signals.
+++ * Having 128 signals is problematic because signal nos are 1-based
+++ * and last signal number is then 128.
+++ * This plays havoc with WIFSIGNALED and WCOREDUMP in waitpid status word,
+++ * when process dies from signal 128.
+++ * Linux kernel 3.9 accepts signal 128, with awful results :/
+++ * It is being fixed.
+++ *
+++ * glibc (accidentally?) papers over this issue by declaring _NSIG to be 128,
+++ * not 129 (despite claiming that _NSIG is "biggest signal number + 1"
+++ * in the comment above that definition). We follow suit.
+++ * Note that this results in __SIGRTMAX == 127. It is intended.
+++ */
+++#define _NSIG		128
++ 
++ #endif	/* <signal.h> included.  */
++-- 
++1.8.1.2
++
+diff --git a/package/uclibc/0.9.33.2/uclibc-0057-bits-waitstatus.h-correctly-interpret-status-0x007f-.patch b/package/uclibc/0.9.33.2/uclibc-0057-bits-waitstatus.h-correctly-interpret-status-0x007f-.patch
+new file mode 100644
+index 0000000..d5922f6
+--- /dev/null
++++ b/package/uclibc/0.9.33.2/uclibc-0057-bits-waitstatus.h-correctly-interpret-status-0x007f-.patch
+@@ -0,0 +1,54 @@
++From 4a96b948687166da26a6c327e6c6733ad2336c5c Mon Sep 17 00:00:00 2001
++From: Denys Vlasenko <vda.linux@googlemail.com>
++Date: Thu, 18 Jul 2013 21:57:06 +0200
++Subject: [PATCH-0.9.33] bits/waitstatus.h: correctly interpret status 0x007f on
++ MIPS
++
++On other architectures exit status of 0x007f is not possible,
++they don't have signal 127.
++
++Signed-off-by: Denys Vlasenko <vda.linux@googlemail.com>
++---
++ libc/sysdeps/linux/common/bits/waitstatus.h | 16 ++++++++++++----
++ 1 file changed, 12 insertions(+), 4 deletions(-)
++
++diff --git a/libc/sysdeps/linux/common/bits/waitstatus.h b/libc/sysdeps/linux/common/bits/waitstatus.h
++index 45d0fd3..33f39a8 100644
++--- a/libc/sysdeps/linux/common/bits/waitstatus.h
+++++ b/libc/sysdeps/linux/common/bits/waitstatus.h
++@@ -24,7 +24,7 @@
++ /* Everything extant so far uses these same bits.  */
++ 
++ 
++-/* If WIFEXITED(STATUS), the low-order 8 bits of the status.  */
+++/* If WIFEXITED(STATUS), the low-order 8 bits of exit(N).  */
++ #define	__WEXITSTATUS(status)	(((status) & 0xff00) >> 8)
++ 
++ /* If WIFSIGNALED(STATUS), the terminating signal.  */
++@@ -36,12 +36,20 @@
++ /* Nonzero if STATUS indicates normal termination.  */
++ #define	__WIFEXITED(status)	(__WTERMSIG(status) == 0)
++ 
++-/* Nonzero if STATUS indicates termination by a signal.  */
++-#define __WIFSIGNALED(status) \
++-  (((signed char) (((status) & 0x7f) + 1) >> 1) > 0)
+++/* Nonzero if STATUS indicates termination by a signal.
+++ * Note that status 0x007f is "died from signal 127", not "stopped by signal 0".
+++ * This does happen on MIPS.
+++ * The comparison is "< 0xff", not "< 0x7f", because WCOREDUMP bit (0x80)
+++ * can be set too.
+++ */
+++#define	__WIFSIGNALED(status)	(((unsigned)((status) & 0xffff) - 1U) < 0xffU)
++ 
++ /* Nonzero if STATUS indicates the child is stopped.  */
+++#if !defined(__mips__)
++ #define	__WIFSTOPPED(status)	(((status) & 0xff) == 0x7f)
+++#else
+++#define	__WIFSTOPPED(status)	(((status) & 0xff) == 0x7f && ((status) & 0xff00))
+++#endif
++ 
++ /* Nonzero if STATUS indicates the child continued after a stop.  We only
++    define this if <bits/waitflags.h> provides the WCONTINUED flag bit.  */
++-- 
++1.8.1.2
++
 -- 
-markos
+1.8.1.2
