@@ -1,9 +1,7 @@
 From: Shawn Landden <shawn@churchofgit.com>
-Date: Sun,  8 Dec 2013 16:07:41 -0800
-Subject: [Buildroot] [PATCH 2/4] util-linux: nsenter
-In-Reply-To: <1386547663-2678-1-git-send-email-shawn@churchofgit.com>
-References: <1386547663-2678-1-git-send-email-shawn@churchofgit.com>
-Message-ID: <1386547663-2678-2-git-send-email-shawn@churchofgit.com>
+Date: Sun,  8 Dec 2013 16:07:40 -0800
+Subject: [Buildroot] [PATCH 1/4] mention nconfig
+Message-ID: <1386547663-2678-1-git-send-email-shawn@churchofgit.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,37 +10,50 @@ To: buildroot@busybox.net
 
 Signed-off-by: Shawn Landden <shawn@churchofgit.com>
 ---
- package/util-linux/Config.in     | 5 +++++
- package/util-linux/util-linux.mk | 1 +
- 2 files changed, 6 insertions(+)
+ docs/manual/common-usage.txt |  2 +-
+ docs/manual/using.txt        | 10 ++++++++--
+ 2 files changed, 9 insertions(+), 3 deletions(-)
 
-diff --git a/package/util-linux/Config.in b/package/util-linux/Config.in
-index 8c8fd7a..c8d31ac 100644
---- a/package/util-linux/Config.in
-+++ b/package/util-linux/Config.in
-@@ -106,6 +106,11 @@ config BR2_PACKAGE_UTIL_LINUX_MOUNT
- 	help
- 	  Mount/unmount filesystems
+diff --git a/docs/manual/common-usage.txt b/docs/manual/common-usage.txt
+index c7f511a..1290dfc 100644
+--- a/docs/manual/common-usage.txt
++++ b/docs/manual/common-usage.txt
+@@ -11,7 +11,7 @@ Offline builds
  
-+config BR2_PACKAGE_UTIL_LINUX_NSENTER
-+        bool "nsenter"
-+        help
-+          Enter namespaces (setns(2) frontend)
+ If you intend to do an offline build and just want to download
+ all sources that you previously selected in the configurator
+-('menuconfig', 'xconfig' or 'gconfig'), then issue:
++('menuconfig', 'nconfig', 'xconfig' or 'gconfig'), then issue:
+ 
+ --------------------
+  $ make source
+diff --git a/docs/manual/using.txt b/docs/manual/using.txt
+index de29ad6..9b0a81f 100644
+--- a/docs/manual/using.txt
++++ b/docs/manual/using.txt
+@@ -15,7 +15,13 @@ assistant:
+  $ make menuconfig
+ --------------------
+ 
+-to run the curses-based configurator, or
++or
 +
- config BR2_PACKAGE_UTIL_LINUX_PIVOT_ROOT
- 	bool "pivot_root"
- 	help
-diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
-index 20b3d35..af9d7c8 100644
---- a/package/util-linux/util-linux.mk
-+++ b/package/util-linux/util-linux.mk
-@@ -62,6 +62,7 @@ UTIL_LINUX_CONF_OPT += \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_LOGIN_UTILS),--enable-last --enable-login --enable-su --enable-sulogin,--disable-last --disable-login --disable-su --disable-sulogin) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_MESG),--enable-mesg,--disable-mesg) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_MOUNT),--enable-mount,--disable-mount) \
-+        $(if $(BR2_PACKAGE_UTIL_LINUX_NSENTER),--enable-nsenter,--disable-nsenter) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_PARTX),,--disable-partx) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_PIVOT_ROOT),--enable-pivot_root,--disable-pivot_root) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_RAW),--enable-raw,--disable-raw) \
++--------------------
++ $ make nconfig
++--------------------
++
++to run the old or new curses-based configurator, or
+ 
+ --------------------
+  $ make xconfig
+@@ -105,7 +111,7 @@ This directory contains several subdirectories:
+ * +toolchain/+ contains the build directories for the various
+   components of the cross-compilation toolchain.
+ 
+-These commands, +make menuconfig|gconfig|xconfig+ and +make+, are the
++These commands, +make menuconfig|nconfig|gconfig|xconfig+ and +make+, are the
+ basic ones that allow to easily and quickly generate images fitting
+ your needs, with all the supports and applications you enabled.
+ 
 -- 
 1.8.5.1
