@@ -1,33 +1,32 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 9 Dec 2013 09:34:54 +0100
-Subject: [Buildroot] [git commit] manual: systemd does not require glib
-Message-ID: <20131209083511.DF1299BF89@busybox.osuosl.org>
+From: Manish Jaggi <manish@freetechmind.com>
+Date: Mon, 09 Dec 2013 14:45:53 +0530
+Subject: [Buildroot] Newbie Question: How to use buildroot for a non linux
+	arm os
+Message-ID: <CECB8821.408%manish@freetechmind.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e0c4aa5ac50bd3c500e2224c7f6f7ca329c05c05
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi,
 
-Signed-off-by: Shawn Landden <shawn@churchofgit.com>
-Reviewed-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- docs/manual/configure.txt |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+I have a small OS which runs over CortexA7 processors. As of now the OS
+does not need a rootfs, it just needs a device tree. Currently I am using
+a nested make approach and would like to shelf it off and use a
+lightweight framework may be like buildroot.
 
-diff --git a/docs/manual/configure.txt b/docs/manual/configure.txt
-index 8912a81..89df3d9 100644
---- a/docs/manual/configure.txt
-+++ b/docs/manual/configure.txt
-@@ -371,7 +371,7 @@ can be chosen from +System configuration+, +Init system+:
-    etc. +systemd+ will be useful on relatively complex embedded
-    systems, for example the ones requiring D-Bus and services
-    communicating between each other. It is worth noting that +systemd+
--   brings a fairly big number of large dependencies: +dbus+, +glib+
-+   brings a fairly big number of large dependencies: +dbus+, +udev+
-    and more. For more details about +systemd+, see
-    http://www.freedesktop.org/wiki/Software/systemd.
- 
+There is a link http://buildroot.uclibc.org/downloads/manual/manual.pdf
+but I am not able to find a step by step guide.
+
+What I need help from the list is to find a guide or steps to easily
+migrate the nested makefiles to buildroot.
+Also is it possible to create an iso which contains the toolchain as well.
+
+Thanks and Regards,
+Manish
+
+
+
+------------------------
+Powered by BigRock.com
