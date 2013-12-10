@@ -1,23 +1,34 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Tue, 10 Dec 2013 14:03:03 +0100
-Subject: [Buildroot] buildroot mailing list @buildroot.org
-Message-ID: <CAAXf6LWdw8YROumrrbyMOhV=O+cy8u=qKGJK1PENBLRo3ZCgpQ@mail.gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue, 10 Dec 2013 10:22:28 -0300
+Subject: [Buildroot] git.buildroot.org
+In-Reply-To: <CAAXf6LWc-jxig-tt_Bqq884BPKZkanDTZ8ksvjxC5yWM+PLaxQ@mail.gmail.com>
+References: <CAAXf6LWc-jxig-tt_Bqq884BPKZkanDTZ8ksvjxC5yWM+PLaxQ@mail.gmail.com>
+Message-ID: <52A71594.3050007@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+On 12/10/2013 10:01 AM, Thomas De Schampheleire wrote:
 
-The mailing list is currently reachable with
-buildroot at busybox.net
-buildroot at uclibc.org
+> Hi,
+> 
+> The front page at:
+> http://git.buildroot.org/buildroot/
+> 
+> seems very out-of-date:
+> 
+> 30 hours  htop: needs MMU     gilles.talis at gmail.com
+> ...
+> 
+> 
+> Shouldn't this be automatically updated?
 
-However, strangely enough, buildroot at buildroot.org does not work.
+http://git.buildroot.org/buildroot
 
-From a technical point of view, I don't see any issue in making that
-address also available, so what else is blocking this?
-
-Thanks,
-Thomas
+There's probably some issue with the varnish instance in between doing
+funky things i guess...
+The link has been fixed a couple of times when things work one way or
+the other.
+Regards.
