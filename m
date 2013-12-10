@@ -1,35 +1,56 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 10 Dec 2013 10:08:26 +0100
-Subject: [Buildroot] [git commit] imagemagick: drop IMAGEMAGICK_MAJOR
-	variable
-Message-ID: <20131210091112.210E49BF98@busybox.osuosl.org>
+From: Markos Chandras <Markos.Chandras@imgtec.com>
+Date: Tue, 10 Dec 2013 09:36:57 +0000
+Subject: [Buildroot] [PATCH] sawman: Link using gcc instead of ld
+In-Reply-To: <20131209185731.6ba10101@skate>
+References: <1386347428-4142-1-git-send-email-Vincent.Riera@imgtec.com>	<20131206190836.637fc9f7@skate>	<52A5ADCD.5050307@imgtec.com>	<52A5B06E.60204@imgtec.com>	<52A5F475.6030303@imgtec.com>
+ <20131209185731.6ba10101@skate>
+Message-ID: <52A6E0B9.6040305@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=dd6a8c728e4161d245ba91196123a90de7461342
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 12/09/2013 05:57 PM, Thomas Petazzoni wrote:
+> Dear Markos Chandras,
+>
+> On Mon, 9 Dec 2013 16:48:53 +0000, Markos Chandras wrote:
+>
+>>> Adding:
+>>>
+>>> LD = $(CC) -nostdlib
+>>>
+>>> to Makefile.am and also:
+>>>
+>>> SAWMAN_AUTORECONF = YES
+>>>
+>>> to sawman.mk fixes the problem.
+>>>
+>>> What do you think about this solution?
+>>
+>> Yes this is preferred. You should patch configure.ac or Makefile.am (if
+>> they are available) and run autoreconf as suggested.
+>
+> I definitely agree that patching the Makefile.am and using
+> <pkg>_AUTORECONF is the preferred way.
+>
+> However, I find it weird that we need to add LD = $(CC) -nostdlib in
+> the Makefile.am. There are plenty of other autotools-based packages
+> that generate libraries, including private libraries, and they work
+> just fine. Isn't there a better fix that can hopefully be upstreamed?
+>
+> Best regards,
+>
+> Thomas
+>
+Hi Thomas,
 
-It is only expanded once just below, so we might as well drop it.
+I am not familiar with the code. I haven't examined the Makefiles to be 
+honest. A better fix would be to identify the direct use of $(LD) in the 
+Makefile for linking and replace it with $(CC). I did something similar 
+for directfb
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/imagemagick/imagemagick.mk |    3 +--
- 1 files changed, 1 insertions(+), 2 deletions(-)
+http://git.buildroot.net/buildroot/tree/package/directfb/directfb-use-gcc-link.patch
 
-diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
-index 0af5f0e..4cc0c10 100644
---- a/package/imagemagick/imagemagick.mk
-+++ b/package/imagemagick/imagemagick.mk
-@@ -4,8 +4,7 @@
- #
- ################################################################################
- 
--IMAGEMAGICK_MAJOR = 6.8.7
--IMAGEMAGICK_VERSION = $(IMAGEMAGICK_MAJOR)-9
-+IMAGEMAGICK_VERSION = 6.8.7-9
- IMAGEMAGICK_SOURCE = ImageMagick-$(IMAGEMAGICK_VERSION).tar.xz
- # The official ImageMagick site only keeps the latest versions
- # available, which is annoying. Use an alternate site that keeps all
+-- 
+markos
