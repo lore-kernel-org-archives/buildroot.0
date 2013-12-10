@@ -1,26 +1,64 @@
-From: Javier Alejandro Saenz Leguizamon <jasaenzl@unal.edu.co>
-Date: Tue, 10 Dec 2013 09:32:09 -0500
-Subject: [Buildroot] Fwd:  OpenVPN doesn't start
-In-Reply-To: <CALADVSP1_K34r_fL7mp3963v0NsPhuLL3WO-5C7bXgFOqHbZWA@mail.gmail.com>
-References: <CALADVSN=r5a_LrowrHVnrGNYt6APYUidHm7GRwQc3upCVYhxKQ@mail.gmail.com>
- <52A6FF8F.3060606@mind.be>
- <CALADVSP1_K34r_fL7mp3963v0NsPhuLL3WO-5C7bXgFOqHbZWA@mail.gmail.com>
-Message-ID: <CALADVSPoQraAMGDNghKK4tsMKKtr+=frucuBa7cXWBRLoOb1WQ@mail.gmail.com>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Tue, 10 Dec 2013 15:36:11 +0100
+Subject: [Buildroot] [PATCH v5 1/1] ktap: new package
+In-Reply-To: <874n6g6d0r.fsf@dell.be.48ers.dk>
+References: <1675197757.16219192.1386680505536.JavaMail.root@openwide.fr>
+ <874n6g6d0r.fsf@dell.be.48ers.dk>
+Message-ID: <CAAXf6LU_ia5PzN1MxVt9snUOcF5q983gR5VLy0ZDR8+qVPW9cA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello
+On Tue, Dec 10, 2013 at 2:39 PM, Peter Korsgaard <jacmet@uclibc.org> wrote:
+>>>>>> "Jeremy" == Jeremy Rosen <jeremy.rosen@openwide.fr> writes:
+>
+> Hi,
+>
+>  > two remarks
+>
+>  > 1) the usual problem with that idea is that if the kernel is externally
+>  > built, you can't do that (you don't even know if/where the config is)
+>
+> But that's not a problem for ktap, as it can only be used with an
+> internally built kernel as is.
+>
+>
+>  > 2) I'd rather have it works similar to other dependancies, i.e having
+>  > the option removed and a comment telling me what I need to enable to
+>  > have ktap available.
+>
+> That's not how we handle the other settings like devtmpfs, cgroups,
+> EABI, initramfs, .. The kernel has LOTS of options, I don't want to see
+> Buildroot configuration options for all of them.
+>
+>
+>  > I recently had a similar problem with udev needing inotify, so the
+>  > problem of the plumbing layer relying on some specific kernel feature
+>  > is probably a more generic problem... maybe a config option telling
+>  > kconfig where the kernel is ? That would be tricky with the way
+>  > kconfig works, but that would be nice...
+>
+> Basically the strategy is:
+>
+> Do the right thing automatically if BR builds the kernel, and otherwise
+> the user is on his own (we'll normally document the requirements in the
+> help text, but there's no logic to detect it)
+>
 
-thanks for your response, openvpn is enabled, I modified the config file in
-the server and client, to not use the LZO compression and it works so
-obviously is the LZO in the buildroot fs that doesn't work.
 
-Javier Alejandro S?enz Leguizam?n
-Ingeniero Electr?nico
-Universidad Nacional de Colombia
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20131210/ae30e698/attachment.html>
+Slightly related to this topic is the inconsistency in the Config.in
+comments about needing a kernel. Same say:
+'foo needs a Linux kernel to be built'
+while others say
+'foo needs a Linux kernel'
+
+The first seems to emphasize that we require a Linux kernel to be
+built in buildroot, while the second one leaves it in the middle. For
+packages that actually build kernel modules, like ktap, we really need
+the kernel inside buildroot, right? Are there any packages that depend
+on BR2_LINUX_KERNEL that do _not_ require an in-buildroot kernel?
+
+Thanks,
+Thomas
