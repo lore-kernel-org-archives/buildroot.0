@@ -1,38 +1,39 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Tue, 10 Dec 2013 15:49:08 +0100
-Subject: [Buildroot] [PATCH v5 1/1] ktap: new package
-In-Reply-To: <87zjo84vjm.fsf@dell.be.48ers.dk>
-References: <1675197757.16219192.1386680505536.JavaMail.root@openwide.fr>
- <874n6g6d0r.fsf@dell.be.48ers.dk>
- <CAAXf6LU_ia5PzN1MxVt9snUOcF5q983gR5VLy0ZDR8+qVPW9cA@mail.gmail.com>
- <87zjo84vjm.fsf@dell.be.48ers.dk>
-Message-ID: <CAAXf6LWTJ9SdNKmZ-ys1v+siYzj4eST2mhcCP0uFCszkb_TJSA@mail.gmail.com>
+From: David Corvoysier <david.corvoysier@orange.com>
+Date: Tue, 10 Dec 2013 16:18:08 +0100
+Subject: [Buildroot] [BR2_EXTERNAL] Ability to specify regular packages
+ behaviour from external.mk
+Message-ID: <52A730B0.3020104@orange.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Dec 10, 2013 at 3:42 PM, Peter Korsgaard <jacmet@uclibc.org> wrote:
->>>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin@gmail.com> writes:
->
-> Hi,
->
->  > The first seems to emphasize that we require a Linux kernel to be
->  > built in buildroot, while the second one leaves it in the middle. For
->  > packages that actually build kernel modules, like ktap, we really need
->  > the kernel inside buildroot, right? Are there any packages that depend
->  > on BR2_LINUX_KERNEL that do _not_ require an in-buildroot kernel?
->
-> I don't think so, as BR2_LINUX_KERNEL is the symbol to build a linux
-> kernel internally.
+Hi,
 
-Ok, sounds logical.
-So what is the best comment text? Simply:
-"foo needs a Linux kernel to be built"
-?
+I have been testing BR2_EXTERNAL to generate a firmware for a target 
+that provides proprietary egl and gles implementations.
 
-If we can agree on something I will submit a patch to make this consistent.
+I have created a custom userland package for my target that "provides" 
+egl and gles, but I still need to specify a dependency towards it in 
+libegl and libgles.
 
-Thanks,
-thomas
+Before BR2_EXTERNAL, I used to patch buildroot's 
+package/opengl/libgles.mk and package/opengl/libegl.mk directly:
+
+ifeq ($(BR2_PACKAGE_XX_USERLAND),y)
+LIBGLES_DEPENDENCIES += xx-userland
+endif
+
+Now, I would like to add these lines to my external.mk, but I fail on a 
+LIBXX_CONFIGURE_CMDS that exits on error if LIBGLES_DEPENDENCIES are empty.
+
+The thing is that since external.mk is included after all other 
+makefiles, my modifications to LIBXX_DEPENDENCIES are applied only after 
+the creation of the LIBXX_CONFIGURE_CMDS, thus causing the exit on error.
+
+I managed to overcome this issue by moving the inclusion of external.mk 
+before all other makefiles, but I have no idea if this is the right way 
+to go: what do you think ?
+
+David Corvoysier
