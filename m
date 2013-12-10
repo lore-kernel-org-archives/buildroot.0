@@ -1,31 +1,49 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 10 Dec 2013 14:34:42 +0100
-Subject: [Buildroot] git.buildroot.org
-In-Reply-To: <52A71754.4060302@zacarias.com.ar> (Gustavo Zacarias's message of
- "Tue, 10 Dec 2013 10:29:56 -0300")
-References: <CAAXf6LWc-jxig-tt_Bqq884BPKZkanDTZ8ksvjxC5yWM+PLaxQ@mail.gmail.com>
- <52A71594.3050007@zacarias.com.ar>
- <CAAXf6LUguZ5=-mpfevuH-rFRX8jRDZidDFrPMZRfo0edJk2mSQ@mail.gmail.com>
- <52A71754.4060302@zacarias.com.ar>
-Message-ID: <878uvs6d8t.fsf@dell.be.48ers.dk>
+Date: Tue, 10 Dec 2013 14:39:32 +0100
+Subject: [Buildroot] [PATCH v5 1/1] ktap: new package
+In-Reply-To: <1675197757.16219192.1386680505536.JavaMail.root@openwide.fr>
+ (Jeremy Rosen's message of "Tue, 10 Dec 2013 14:01:45 +0100 (CET)")
+References: <1675197757.16219192.1386680505536.JavaMail.root@openwide.fr>
+Message-ID: <874n6g6d0r.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+>>>>> "Jeremy" == Jeremy Rosen <jeremy.rosen@openwide.fr> writes:
 
- > On 12/10/2013 10:28 AM, Thomas De Schampheleire wrote:
- >> So with trailing slash you see the old page and without you see the new page?
- >> 
- >> /me bangs his head on the keyboard
+Hi,
 
- > Yes, but sometimes the situation gets reversed because of voodoo dolls,
- > just ask Peter ;)
+ > two remarks
 
-Yeah. I've brought it up with the osuosl.org guys a few times, so far
-without any luck.
+ > 1) the usual problem with that idea is that if the kernel is externally
+ > built, you can't do that (you don't even know if/where the config is)
+
+But that's not a problem for ktap, as it can only be used with an
+internally built kernel as is.
+
+
+ > 2) I'd rather have it works similar to other dependancies, i.e having
+ > the option removed and a comment telling me what I need to enable to 
+ > have ktap available.
+
+That's not how we handle the other settings like devtmpfs, cgroups,
+EABI, initramfs, .. The kernel has LOTS of options, I don't want to see
+Buildroot configuration options for all of them.
+
+
+ > I recently had a similar problem with udev needing inotify, so the 
+ > problem of the plumbing layer relying on some specific kernel feature
+ > is probably a more generic problem... maybe a config option telling
+ > kconfig where the kernel is ? That would be tricky with the way 
+ > kconfig works, but that would be nice...
+
+Basically the strategy is:
+
+Do the right thing automatically if BR builds the kernel, and otherwise
+the user is on his own (we'll normally document the requirements in the
+help text, but there's no logic to detect it)
 
 -- 
 Bye, Peter Korsgaard
