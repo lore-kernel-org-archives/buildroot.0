@@ -1,30 +1,62 @@
-From: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
-Date: Tue, 10 Dec 2013 08:18:34 +0100
-Subject: [Buildroot] [PATCH 1/2] imagemagick: bump to version 6.8.7-9
-Message-ID: <1386659915-3798-1-git-send-email-jerzy.grzegorek@trzebnica.net>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 10 Dec 2013 08:28:30 +0100
+Subject: [Buildroot] [PATCH 3/3] package/parted: add a host variant
+In-Reply-To: <52A63212.4030003@mind.be>
+References: <cover.1386023329.git.yann.morin.1998@free.fr>
+ <1891fdbc7ad11ce084f2be315871eb10573953b7.1386023329.git.yann.morin.1998@free.fr>
+ <20131206104811.49d81180@skate> <20131206165614.GB3364@free.fr>
+ <20131206180751.03555e6e@skate> <52A63212.4030003@mind.be>
+Message-ID: <20131210082830.57a7728c@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
----
- package/imagemagick/imagemagick.mk |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Dear Arnout Vandecappelle,
 
-diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
-index 0a72fd7..0af5f0e 100644
---- a/package/imagemagick/imagemagick.mk
-+++ b/package/imagemagick/imagemagick.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- IMAGEMAGICK_MAJOR = 6.8.7
--IMAGEMAGICK_VERSION = $(IMAGEMAGICK_MAJOR)-8
-+IMAGEMAGICK_VERSION = $(IMAGEMAGICK_MAJOR)-9
- IMAGEMAGICK_SOURCE = ImageMagick-$(IMAGEMAGICK_VERSION).tar.xz
- # The official ImageMagick site only keeps the latest versions
- # available, which is annoying. Use an alternate site that keeps all
+On Mon, 09 Dec 2013 22:11:46 +0100, Arnout Vandecappelle wrote:
+
+> >> # If target-parted can handle lvm volumes, then host-parted
+> >> # should be, too, so as to be able to generate them.
+> >> # If target-parted can't handle lvm volumes, there is no reason
+> >> # for host-aprted to handle them.
+> >> ifeq ($(BR2_PACKAGE_LVM2),y)
+> >> PARTED_DEPENDENCIES += lvm2
+> >> HOST_PARTED_DEPENDENCIES += lvm2
+> >> PARTED_CONF_OPT += --enable-device-mapper
+> >> HOST_PARTED_CONF_OPT += --enable-device-mapper
+> >> else
+> >> PARTED_CONF_OPT += --disable-device-mapper
+> >> HOST_PARTED_CONF_OPT += --disable-device-mapper
+> >> endif
+> >
+> > While I do understand the logic behind what you're proposing, I'm not
+> > really comfortable with having the configuration of tools built for the
+> > host changed depending on the target configuration. It seems to be
+> > creating a bad precedent.
+> 
+>   We already have a precedent: libxml2.
+
+No, libxml2 is not the same case. libxml2 host configuration is
+adjusted according to the hidden BR2_PACKAGE_HOST_LIBXML2_PYTHON
+configuration option, which can be selected by another package.
+
+Therefore, it is not directly the fact of changing the selection of
+target packages that modifies the configuration of host-libxml2.
+
+>   What is so bad about one package's configuration depending on another 
+> package configuration?
+
+What I found bad here is that we're trying the configuration of the
+host package to the configuration of the corresponding target package,
+even though there is no real connection between the two things. But
+maybe I'm over-zealous I don't know.
+
+Best regards,
+
+Thomas
 -- 
-1.7.9.5
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
