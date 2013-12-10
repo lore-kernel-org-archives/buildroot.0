@@ -1,61 +1,32 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 10 Dec 2013 17:54:47 +0100
-Subject: [Buildroot] [PATCH v5 1/1] ktap: new package
-In-Reply-To: <CAAXf6LWTJ9SdNKmZ-ys1v+siYzj4eST2mhcCP0uFCszkb_TJSA@mail.gmail.com>
-References: <1675197757.16219192.1386680505536.JavaMail.root@openwide.fr>
- <874n6g6d0r.fsf@dell.be.48ers.dk>
- <CAAXf6LU_ia5PzN1MxVt9snUOcF5q983gR5VLy0ZDR8+qVPW9cA@mail.gmail.com>
- <87zjo84vjm.fsf@dell.be.48ers.dk>
- <CAAXf6LWTJ9SdNKmZ-ys1v+siYzj4eST2mhcCP0uFCszkb_TJSA@mail.gmail.com>
-Message-ID: <52A74757.8030100@mind.be>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 10 Dec 2013 13:18:21 +0100
+Subject: [Buildroot] [git commit] dnsmasq: bump to version 2.68
+Message-ID: <20131210203309.93E5E9BFB1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 10/12/13 15:49, Thomas De Schampheleire wrote:
-> On Tue, Dec 10, 2013 at 3:42 PM, Peter Korsgaard <jacmet@uclibc.org> wrote:
->>>>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin@gmail.com> writes:
->>
->> Hi,
->>
->>   > The first seems to emphasize that we require a Linux kernel to be
->>   > built in buildroot, while the second one leaves it in the middle. For
->>   > packages that actually build kernel modules, like ktap, we really need
->>   > the kernel inside buildroot, right? Are there any packages that depend
->>   > on BR2_LINUX_KERNEL that do _not_ require an in-buildroot kernel?
->>
->> I don't think so, as BR2_LINUX_KERNEL is the symbol to build a linux
->> kernel internally.
->
-> Ok, sounds logical.
-> So what is the best comment text? Simply:
-> "foo needs a Linux kernel to be built"
+commit: http://git.buildroot.net/buildroot/commit/?id=31514cd0a86466499421b1161c907d9b8a717bee
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-  Sounds good to me. "to be built by buildroot" would be more accurate 
-but probably too verbose.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/dnsmasq/dnsmasq.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-  Regards,
-  Arnout
-
-> ?
->
-> If we can agree on something I will submit a patch to make this consistent.
->
-> Thanks,
-> thomas
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
->
-
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+diff --git a/package/dnsmasq/dnsmasq.mk b/package/dnsmasq/dnsmasq.mk
+index b7c76ce..9bf9b84 100644
+--- a/package/dnsmasq/dnsmasq.mk
++++ b/package/dnsmasq/dnsmasq.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-DNSMASQ_VERSION = 2.67
++DNSMASQ_VERSION = 2.68
+ DNSMASQ_SOURCE = dnsmasq-$(DNSMASQ_VERSION).tar.xz
+ DNSMASQ_SITE = http://thekelleys.org.uk/dnsmasq
+ DNSMASQ_MAKE_ENV = $(TARGET_MAKE_ENV) CC="$(TARGET_CC)"
