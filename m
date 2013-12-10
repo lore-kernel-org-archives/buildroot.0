@@ -1,38 +1,61 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Tue, 10 Dec 2013 21:10:47 +0100
-Subject: [Buildroot] [PATCH 1/1] package: make package download from
- Mercurial repositories more robust
-In-Reply-To: <1386700290-4813-1-git-send-email-mathias.demare@gmail.com>
-References: <1386700290-4813-1-git-send-email-mathias.demare@gmail.com>
-Message-ID: <CAAXf6LVU9OJtS2-Pbr0ect35RRvFd3fY4643ZhsDf-dSGj-RYg@mail.gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 10 Dec 2013 17:54:47 +0100
+Subject: [Buildroot] [PATCH v5 1/1] ktap: new package
+In-Reply-To: <CAAXf6LWTJ9SdNKmZ-ys1v+siYzj4eST2mhcCP0uFCszkb_TJSA@mail.gmail.com>
+References: <1675197757.16219192.1386680505536.JavaMail.root@openwide.fr>
+ <874n6g6d0r.fsf@dell.be.48ers.dk>
+ <CAAXf6LU_ia5PzN1MxVt9snUOcF5q983gR5VLy0ZDR8+qVPW9cA@mail.gmail.com>
+ <87zjo84vjm.fsf@dell.be.48ers.dk>
+ <CAAXf6LWTJ9SdNKmZ-ys1v+siYzj4eST2mhcCP0uFCszkb_TJSA@mail.gmail.com>
+Message-ID: <52A74757.8030100@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Dec 10, 2013 at 7:31 PM, Mathias De Mar?
-<mathias.demare@gmail.com> wrote:
-> Previously, when cloning a Mercurial repository,
-> aborting the clone could (in some cases) leave behind an empty directory.
-> As a result, a later clone would fail.
+On 10/12/13 15:49, Thomas De Schampheleire wrote:
+> On Tue, Dec 10, 2013 at 3:42 PM, Peter Korsgaard <jacmet@uclibc.org> wrote:
+>>>>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin@gmail.com> writes:
+>>
+>> Hi,
+>>
+>>   > The first seems to emphasize that we require a Linux kernel to be
+>>   > built in buildroot, while the second one leaves it in the middle. For
+>>   > packages that actually build kernel modules, like ktap, we really need
+>>   > the kernel inside buildroot, right? Are there any packages that depend
+>>   > on BR2_LINUX_KERNEL that do _not_ require an in-buildroot kernel?
+>>
+>> I don't think so, as BR2_LINUX_KERNEL is the symbol to build a linux
+>> kernel internally.
 >
-> Signed-off-by: Mathias De Mar? <mathias.demare@gmail.com>
-> ---
->  package/pkg-download.mk | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/package/pkg-download.mk b/package/pkg-download.mk
-> index 758b211..c00689b 100644
-> --- a/package/pkg-download.mk
-> +++ b/package/pkg-download.mk
-> @@ -178,6 +178,7 @@ endef
->  define DOWNLOAD_HG
->         test -e $(DL_DIR)/$($(PKG)_SOURCE) || \
->         (pushd $(DL_DIR) > /dev/null && \
-> +       rm -rf $($(PKG)_BASE_NAME) && \
->         $(HG) clone --noupdate --rev $($(PKG)_DL_VERSION) $($(PKG)_SITE) $($(PKG)_BASE_NAME) && \
->         $(HG) archive --repository $($(PKG)_BASE_NAME) --type tgz --prefix $($(PKG)_BASE_NAME)/ \
->                       --rev $($(PKG)_DL_VERSION) $(DL_DIR)/$($(PKG)_SOURCE) && \
+> Ok, sounds logical.
+> So what is the best comment text? Simply:
+> "foo needs a Linux kernel to be built"
 
-Acked-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+  Sounds good to me. "to be built by buildroot" would be more accurate 
+but probably too verbose.
+
+  Regards,
+  Arnout
+
+> ?
+>
+> If we can agree on something I will submit a patch to make this consistent.
+>
+> Thanks,
+> thomas
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+>
+
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
