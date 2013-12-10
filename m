@@ -1,41 +1,35 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 10 Dec 2013 10:02:56 +0100
-Subject: [Buildroot] [git commit] linux: bump to version_3.12.4
-Message-ID: <20131210091111.E02AC9BFB7@busybox.osuosl.org>
+Date: Tue, 10 Dec 2013 10:08:26 +0100
+Subject: [Buildroot] [git commit] imagemagick: drop IMAGEMAGICK_MAJOR
+	variable
+Message-ID: <20131210091112.210E49BF98@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=539d419418a9e4f875f6d98fff3edbaff8223a2a
+commit: http://git.buildroot.net/buildroot/commit/?id=dd6a8c728e4161d245ba91196123a90de7461342
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Simon Dawson <spdawson@gmail.com>
+It is only expanded once just below, so we might as well drop it.
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- linux/Config.in |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ package/imagemagick/imagemagick.mk |    3 +--
+ 1 files changed, 1 insertions(+), 2 deletions(-)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index c7ec06e..f1dff59 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -21,7 +21,7 @@ choice
- 	prompt "Kernel version"
+diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
+index 0af5f0e..4cc0c10 100644
+--- a/package/imagemagick/imagemagick.mk
++++ b/package/imagemagick/imagemagick.mk
+@@ -4,8 +4,7 @@
+ #
+ ################################################################################
  
- config BR2_LINUX_KERNEL_LATEST_VERSION
--	bool "3.12.3"
-+	bool "3.12.4"
- 
- config BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	bool "Same as toolchain kernel headers"
-@@ -87,7 +87,7 @@ endif
- 
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "3.12.3" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "3.12.4" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default BR2_DEFAULT_KERNEL_HEADERS if BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
- 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
+-IMAGEMAGICK_MAJOR = 6.8.7
+-IMAGEMAGICK_VERSION = $(IMAGEMAGICK_MAJOR)-9
++IMAGEMAGICK_VERSION = 6.8.7-9
+ IMAGEMAGICK_SOURCE = ImageMagick-$(IMAGEMAGICK_VERSION).tar.xz
+ # The official ImageMagick site only keeps the latest versions
+ # available, which is annoying. Use an alternate site that keeps all
