@@ -1,32 +1,38 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 11 Dec 2013 22:13:23 +0100
-Subject: [Buildroot] [git commit] libqmi: bump to 1.8.0
-Message-ID: <20131211213614.6FC6D9BFD3@busybox.osuosl.org>
+Date: Wed, 11 Dec 2013 22:26:03 +0100
+Subject: [Buildroot] [git commit] flashrom: add licensing info
+Message-ID: <20131211213615.9150A9A383@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=8db6b8173ba73668b53ea55599378a4b8b4fa56b
+commit: http://git.buildroot.net/buildroot/commit/?id=e809308c3562a53721d383da485785d3014d9717
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libqmi/libqmi.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/flashrom/flashrom.mk |    7 ++++---
+ 1 files changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/package/libqmi/libqmi.mk b/package/libqmi/libqmi.mk
-index edd11f7..f258af1 100644
---- a/package/libqmi/libqmi.mk
-+++ b/package/libqmi/libqmi.mk
-@@ -4,7 +4,7 @@
- #
+diff --git a/package/flashrom/flashrom.mk b/package/flashrom/flashrom.mk
+index bca800b..df648f8 100644
+--- a/package/flashrom/flashrom.mk
++++ b/package/flashrom/flashrom.mk
+@@ -5,10 +5,11 @@
  ################################################################################
  
--LIBQMI_VERSION = 1.6.0
-+LIBQMI_VERSION = 1.8.0
- LIBQMI_SITE    = http://www.freedesktop.org/software/libqmi/
- LIBQMI_SOURCE  = libqmi-$(LIBQMI_VERSION).tar.xz
- LIBQMI_LICENSE = LGPLv2+ (library), GPLv2+ (programs)
+ FLASHROM_VERSION = 0.9.6.1
+-FLASHROM_SOURCE  = flashrom-$(FLASHROM_VERSION).tar.bz2
+-FLASHROM_SITE    = http://download.flashrom.org/releases
+-
++FLASHROM_SOURCE = flashrom-$(FLASHROM_VERSION).tar.bz2
++FLASHROM_SITE = http://download.flashrom.org/releases
+ FLASHROM_DEPENDENCIES = pciutils
++FLASHROM_LICENSE = GPLv2+
++FLASHROM_LICENSE_FILES = COPYING
+ 
+ define FLASHROM_BUILD_CMDS
+ 	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
