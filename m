@@ -1,32 +1,73 @@
-From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Wed, 11 Dec 2013 12:58:50 +0100
-Subject: [Buildroot] [PATCH] libqmi: bump to 1.8.0
-Message-ID: <1386763130-16553-1-git-send-email-yegorslists@googlemail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 11 Dec 2013 13:25:49 +0100
+Subject: [Buildroot] [PATCH] package/libgles: postpone the check for a
+	missing GLES provider
+In-Reply-To: <52A842A3.3010302@mind.be>
+References: <52A730B0.3020104@orange.com>
+ <1386702439-10093-2-git-send-email-yann.morin.1998@free.fr>
+ <52A842A3.3010302@mind.be>
+Message-ID: <201312111325.49600.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Yegor Yefremov <yegorslists@googlemail.com>
+Arnout, All,
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
----
- package/libqmi/libqmi.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+On Wednesday 11 December 2013 11:46:59 Arnout Vandecappelle wrote:
+> On 10/12/13 20:07, Yann E. MORIN wrote:
+> > From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> >
+> > Because some GLES providers may be in BR2_EXTERNAL, $(LIBGLES_DEPENDENCIES)
+> > might be empty hwen we test it.
+> >
+> > So, we can't rely on it to define LIBGLES_CONFIGURE_CMDS, and we must
+> > postpone the check until later, ie. at runtime.
+> >
+> > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> > ---
+> >   package/opengl/libgles/libgles.mk | 13 +++++++++----
+> >   1 file changed, 9 insertions(+), 4 deletions(-)
+> >
+> > diff --git a/package/opengl/libgles/libgles.mk b/package/opengl/libgles/libgles.mk
+> > index ec157ac..c2e1acf 100644
+> > --- a/package/opengl/libgles/libgles.mk
+> > +++ b/package/opengl/libgles/libgles.mk
+> > @@ -22,11 +22,16 @@ ifeq ($(BR2_PACKAGE_GPU_VIV_BIN_MX6Q),y)
+> >   LIBGLES_DEPENDENCIES += gpu-viv-bin-mx6q
+> >   endif
+> >
+> > -ifeq ($(LIBGLES_DEPENDENCIES),)
+> > +# Because some GLES providers may be in BR2_EXTERNAL,
+> > +# $(LIBGLES_DEPENDENCIES) might be empty right here.
+> > +# So, we can't rely on it to define LIBGLES_CONFIGURE_CMDS
+> > +# right now, and we must postpone the check until later,
+> > +# ie. at runtime.
+> >   define LIBGLES_CONFIGURE_CMDS
+> > -	echo "No libGLES implementation selected. Configuration error."
+> > -	exit 1
+> > +	if [ -z "$${LIBGLES_DEPENDENCIES}" ]; then \
+> 
+>   This should be "$(LIBGLES_DEPENDENCIES)", but otherwise it looks like 
+> it would work.
 
-diff --git a/package/libqmi/libqmi.mk b/package/libqmi/libqmi.mk
-index edd11f7..f258af1 100644
---- a/package/libqmi/libqmi.mk
-+++ b/package/libqmi/libqmi.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBQMI_VERSION = 1.6.0
-+LIBQMI_VERSION = 1.8.0
- LIBQMI_SITE    = http://www.freedesktop.org/software/libqmi/
- LIBQMI_SOURCE  = libqmi-$(LIBQMI_VERSION).tar.xz
- LIBQMI_LICENSE = LGPLv2+ (library), GPLv2+ (programs)
+I was afraid using a make variable here would be expanded too early
+again, that's why I postponed its expansion into the shell command
+itself.
+
+But it does not work either, since the variable is not exported.
+
+I'm waiting for feedback from David to confirm either or both
+solutions work...
+
+Regards,
+Yann E. MORIN.
+
 -- 
-1.7.7
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +0/33 662376056 | Software  Designer | \ / CAMPAIGN     |   ^                |
+| --==< O_o >==-- '------------.-------:  X  AGAINST      |  /e\  There is no  |
+| http://ymorin.is-a-geek.org/ | (*_*) | / \ HTML MAIL    |  """  conspiracy.  |
+'------------------------------'-------'------------------'--------------------'
