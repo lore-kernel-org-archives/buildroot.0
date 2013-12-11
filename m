@@ -1,9 +1,9 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 11 Dec 2013 10:23:43 -0300
-Subject: [Buildroot] [PATCH 10/16] libcgi: add licensing info
+Date: Wed, 11 Dec 2013 10:23:44 -0300
+Subject: [Buildroot] [PATCH 11/16] libcdaudio: add licensing info
 In-Reply-To: <1386768229-29485-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1386768229-29485-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1386768229-29485-10-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1386768229-29485-11-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,18 +12,19 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/libcgi/libcgi.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/libcdaudio/libcdaudio.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/libcgi/libcgi.mk b/package/libcgi/libcgi.mk
-index f027d31..40a9f32 100644
---- a/package/libcgi/libcgi.mk
-+++ b/package/libcgi/libcgi.mk
-@@ -9,5 +9,6 @@ LIBCGI_SITE = http://downloads.sourceforge.net/project/libcgi/libcgi/$(LIBCGI_VE
- LIBCGI_INSTALL_STAGING = YES
- # use cross CC/AR rather than host
- LIBCGI_MAKE_ENV = CC="$(TARGET_CC) $(TARGET_CFLAGS)" AR="$(TARGET_AR)"
-+LIBCGI_LICENSE = LGPLv2.1+
+diff --git a/package/libcdaudio/libcdaudio.mk b/package/libcdaudio/libcdaudio.mk
+index 06f8926..814239b 100644
+--- a/package/libcdaudio/libcdaudio.mk
++++ b/package/libcdaudio/libcdaudio.mk
+@@ -8,5 +8,7 @@ LIBCDAUDIO_VERSION = 0.99.12p2
+ LIBCDAUDIO_SITE = http://downloads.sourceforge.net/project/libcdaudio/libcdaudio/$(LIBCDAUDIO_VERSION)/
+ LIBCDAUDIO_INSTALL_STAGING = YES
+ LIBCDAUDIO_CONFIG_SCRIPTS = libcdaudio-config
++LIBCDAUDIO_LICENSE = GPLv2+
++LIBCDAUDIO_LICENSE_FILES = COPYING
  
  $(eval $(autotools-package))
 -- 
