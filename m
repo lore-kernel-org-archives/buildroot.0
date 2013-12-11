@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 11 Dec 2013 21:26:45 +0100
-Subject: [Buildroot] [PATCHv2 10/36] python-nfc: convert to the Python
+Date: Wed, 11 Dec 2013 21:26:46 +0100
+Subject: [Buildroot] [PATCHv2 11/36] python-protobuf: convert to the Python
 	package infrastructure
 In-Reply-To: <1386793631-14026-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1386793631-14026-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1386793631-14026-11-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1386793631-14026-12-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,27 +13,34 @@ To: buildroot@busybox.net
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/python-nfc/python-nfc.mk | 13 +++----------
- 1 file changed, 3 insertions(+), 10 deletions(-)
+ package/python-protobuf/python-protobuf.mk | 20 ++++----------------
+ 1 file changed, 4 insertions(+), 16 deletions(-)
 
-diff --git a/package/python-nfc/python-nfc.mk b/package/python-nfc/python-nfc.mk
-index f406e2a..5f486d9 100644
---- a/package/python-nfc/python-nfc.mk
-+++ b/package/python-nfc/python-nfc.mk
-@@ -7,14 +7,7 @@
- PYTHON_NFC_VERSION = 142
- PYTHON_NFC_SITE = https://launchpad.net/nfcpy
- PYTHON_NFC_SITE_METHOD = bzr
--PYTHON_NFC_DEPENDENCIES = python libusb libusb-compat
-+PYTHON_NFC_DEPENDENCIES = libusb libusb-compat
-+PYTHON_NFC_SETUP_TYPE = distutils
+diff --git a/package/python-protobuf/python-protobuf.mk b/package/python-protobuf/python-protobuf.mk
+index dcf67c2..36ab644 100644
+--- a/package/python-protobuf/python-protobuf.mk
++++ b/package/python-protobuf/python-protobuf.mk
+@@ -9,20 +9,8 @@ PYTHON_PROTOBUF_SOURCE  = $(PROTOBUF_SOURCE)
+ PYTHON_PROTOBUF_SITE    = $(PROTOBUF_SITE)
+ PYTHON_PROTOBUF_LICENSE = BSD-3c
+ PYTHON_PROTOBUF_LICENSE_FILES = COPYING.txt
++PYTHON_PROTOBUF_DEPENDENCIES = host-protobuf
++PYTHON_PROTOBUF_SETUP_TYPE = setuptools
++PYTHON_PROTOBUF_SUBDIR = python
  
--define PYTHON_NFC_BUILD_CMDS
--	(cd $(@D); $(HOST_DIR)/usr/bin/python setup.py build)
+-PYTHON_PROTOBUF_DEPENDENCIES = python host-python-setuptools \
+-        host-python-distutilscross host-protobuf
+-
+-define PYTHON_PROTOBUF_BUILD_CMDS
+-	(cd $(@D)/python; \
+-		PYTHONXCPREFIX="$(STAGING_DIR)/usr/" \
+-		PATH=$(HOST_PATH) \
+-	$(HOST_DIR)/usr/bin/python setup.py build -x)
 -endef
 -
--define PYTHON_NFC_INSTALL_TARGET_CMDS
--	(cd $(@D); $(HOST_DIR)/usr/bin/python setup.py install --prefix=$(TARGET_DIR)/usr)
+-define PYTHON_PROTOBUF_INSTALL_TARGET_CMDS
+-	(cd $(@D)/python; PYTHONPATH=$(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages \
+-	$(HOST_DIR)/usr/bin/python setup.py install --prefix=$(TARGET_DIR)/usr)
 -endef
 -
 -$(eval $(generic-package))
