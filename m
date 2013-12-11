@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 11 Dec 2013 21:27:08 +0100
-Subject: [Buildroot] [PATCHv2 33/36] python-pycrypto: new package
+Date: Wed, 11 Dec 2013 21:27:10 +0100
+Subject: [Buildroot] [PATCHv2 35/36] python-pysnmp-apps: new package
 In-Reply-To: <1386793631-14026-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1386793631-14026-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1386793631-14026-34-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1386793631-14026-36-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,79 +15,65 @@ From: Ryan Barnett <ryanbarnett3@gmail.com>
 Signed-off-by: Ryan Barnett <rjbarnet@rockwellcollins.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Config.in                          |  1 +
- package/python-pycrypto/Config.in          |  9 ++++++++
- package/python-pycrypto/python-pycrypto.mk | 35 ++++++++++++++++++++++++++++++
- 3 files changed, 45 insertions(+)
- create mode 100644 package/python-pycrypto/Config.in
- create mode 100644 package/python-pycrypto/python-pycrypto.mk
+ package/Config.in                                |  1 +
+ package/python-pysnmp-apps/Config.in             | 14 ++++++++++++++
+ package/python-pysnmp-apps/python-pysnmp-apps.mk | 16 ++++++++++++++++
+ 3 files changed, 31 insertions(+)
+ create mode 100644 package/python-pysnmp-apps/Config.in
+ create mode 100644 package/python-pysnmp-apps/python-pysnmp-apps.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 8dc03d0..59b7d6c 100644
+index e4848ed..8d1d00b 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -401,6 +401,7 @@ source "package/python-netifaces/Config.in"
- source "package/python-nfc/Config.in"
- source "package/python-protobuf/Config.in"
- source "package/python-pyasn/Config.in"
-+source "package/python-pycrypto/Config.in"
- source "package/python-pygame/Config.in"
+@@ -406,6 +406,7 @@ source "package/python-pygame/Config.in"
  source "package/python-pyparsing/Config.in"
  source "package/python-pyro/Config.in"
-diff --git a/package/python-pycrypto/Config.in b/package/python-pycrypto/Config.in
+ source "package/python-pysnmp/Config.in"
++source "package/python-pysnmp-apps/Config.in"
+ source "package/python-pyusb/Config.in"
+ source "package/python-pyzmq/Config.in"
+ source "package/python-serial/Config.in"
+diff --git a/package/python-pysnmp-apps/Config.in b/package/python-pysnmp-apps/Config.in
 new file mode 100644
-index 0000000..60a3446
+index 0000000..06f0a2b
 --- /dev/null
-+++ b/package/python-pycrypto/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_PYTHON_PYCRYPTO
-+	bool "python-pycrypto"
++++ b/package/python-pysnmp-apps/Config.in
+@@ -0,0 +1,14 @@
++config BR2_PACKAGE_PYTHON_PYSNMP_APPS
++	bool "python-pysnmp-apps"
 +	depends on BR2_PACKAGE_PYTHON
-+	select BR2_PACKAGE_GMP
++	select BR2_PACKAGE_PYTHON_PYSNMP
++	depends on BR2_INSTALL_LIBSTDCPP # pysnmp -> pyasn
 +	help
-+	  PyCrypto is a collection of cryptographic algorithms and
-+	  protocols, implemented for use from Python.
 +
-+	  http://www.pycrypto.org/
-diff --git a/package/python-pycrypto/python-pycrypto.mk b/package/python-pycrypto/python-pycrypto.mk
++	  A collection of command-line tools for SNMP management
++	  purposes built on top of the PySNMP package.
++
++	  http://pysnmp.sf.net
++
++comment "python-pysnmp-apps needs a toolchain w/ C++"
++        depends on !BR2_INSTALL_LIBSTDCPP
+diff --git a/package/python-pysnmp-apps/python-pysnmp-apps.mk b/package/python-pysnmp-apps/python-pysnmp-apps.mk
 new file mode 100644
-index 0000000..eda48bd
+index 0000000..d6e9db2
 --- /dev/null
-+++ b/package/python-pycrypto/python-pycrypto.mk
-@@ -0,0 +1,35 @@
++++ b/package/python-pysnmp-apps/python-pysnmp-apps.mk
+@@ -0,0 +1,16 @@
 +################################################################################
 +#
-+# python-pycrypto
++# python-pysnmp-apps
 +#
 +################################################################################
 +
-+PYTHON_PYCRYPTO_VERSION = 2.6
-+PYTHON_PYCRYPTO_SOURCE = pycrypto-$(PYTHON_PYCRYPTO_VERSION).tar.gz
-+PYTHON_PYCRYPTO_SITE = http://ftp.dlitz.net/pub/dlitz/crypto/pycrypto
-+PYTHON_PYCRYPTO_SETUP_TYPE = distutils
++PYTHON_PYSNMP_APPS_VERSION = 0.3.3
++PYTHON_PYSNMP_APPS_SOURCE = pysnmp-apps-$(PYTHON_PYSNMP_APPS_VERSION).tar.gz
++PYTHON_PYSNMP_APPS_SITE = https://pypi.python.org/packages/source/p/pysnmp-apps
++PYTHON_PYSNMP_APPS_SETUP_TYPE = setuptools
++PYTHON_PYSNMP_APPS_LICENSE = BSD-3c
++PYTHON_PYSNMP_APPS_LICENSE_FILES = LICENSE
 +
-+PYTHON_PYCRYPTO_LICENSE = Public Domain, Python 2.2 License (HMAC.py, setup.py)
-+PYTHON_PYCRYPTO_LICENSE_FILES = COPYRIGHT LEGAL/copy/LICENSE.libtom \
-+		LEGAL/copy/LICENSE.orig LEGAL/copy/LICENSE.python-2.2
-+
-+PYTHON_PYCRYPTO_DEPENDENCIES = gmp
-+
-+# The configure step needs to be run outside of the setup.py since it isn't
-+# run correctly for cross-compiling
-+define PYTHON_PYCRYPTO_CONFIGURE_CMDS
-+	(cd $(@D) && \
-+	$(TARGET_CONFIGURE_OPTS) \
-+	$(TARGET_CONFIGURE_ARGS) \
-+	./configure \
-+		--target=$(GNU_TARGET_NAME) \
-+		--host=$(GNU_TARGET_NAME) \
-+		--build=$(GNU_HOST_NAME) \
-+		--prefix=/usr \
-+		--exec-prefix=/usr \
-+		--sysconfdir=/etc \
-+		--program-prefix="" \
-+	)
-+endef
++PYTHON_PYSNMP_APPS_DEPENDENCIES = python-pysnmp
 +
 +$(eval $(python-package))
 -- 
