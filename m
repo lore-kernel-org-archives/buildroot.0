@@ -1,74 +1,65 @@
-From: David Corvoysier <david.corvoysier@orange.com>
-Date: Wed, 11 Dec 2013 14:03:48 +0100
-Subject: [Buildroot] [PATCH] package/libgles: postpone the check for a
- missing GLES provider
-In-Reply-To: <201312111325.49600.yann.morin.1998@free.fr>
-References: <52A730B0.3020104@orange.com>
- <1386702439-10093-2-git-send-email-yann.morin.1998@free.fr>
- <52A842A3.3010302@mind.be> <201312111325.49600.yann.morin.1998@free.fr>
-Message-ID: <52A862B4.50103@orange.com>
+From: Sven Neumann <neumann@teufel.de>
+Date: Wed, 11 Dec 2013 14:17:23 +0100
+Subject: [Buildroot] [PATCH v2] wpa_supplicant: add option to enable syslog
+	support
+In-Reply-To: <1386766417.2783.12.camel@sven>
+References: <1386766417.2783.12.camel@sven>
+Message-ID: <1386767843-30271-1-git-send-email-neumann@teufel.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Guys,
+Add an option to enable support for sending debug messages
+to syslog instead of stdout.
 
-The first solution did not work (as yann pointed out, the variable is 
-not exported), but the second does.
-Who's in for a patch (me ?)
+Signed-off-by: Sven Neumann <neumann@teufel.de>
+---
+ package/wpa_supplicant/Config.in         | 5 +++++
+ package/wpa_supplicant/wpa_supplicant.mk | 7 +++++++
+ 2 files changed, 12 insertions(+)
 
-David
-
-
-Le 11/12/2013 13:25, Yann E. MORIN a ?crit :
-> Arnout, All,
->
-> On Wednesday 11 December 2013 11:46:59 Arnout Vandecappelle wrote:
->> On 10/12/13 20:07, Yann E. MORIN wrote:
->>> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
->>>
->>> Because some GLES providers may be in BR2_EXTERNAL, $(LIBGLES_DEPENDENCIES)
->>> might be empty hwen we test it.
->>>
->>> So, we can't rely on it to define LIBGLES_CONFIGURE_CMDS, and we must
->>> postpone the check until later, ie. at runtime.
->>>
->>> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
->>> ---
->>>    package/opengl/libgles/libgles.mk | 13 +++++++++----
->>>    1 file changed, 9 insertions(+), 4 deletions(-)
->>>
->>> diff --git a/package/opengl/libgles/libgles.mk b/package/opengl/libgles/libgles.mk
->>> index ec157ac..c2e1acf 100644
->>> --- a/package/opengl/libgles/libgles.mk
->>> +++ b/package/opengl/libgles/libgles.mk
->>> @@ -22,11 +22,16 @@ ifeq ($(BR2_PACKAGE_GPU_VIV_BIN_MX6Q),y)
->>>    LIBGLES_DEPENDENCIES += gpu-viv-bin-mx6q
->>>    endif
->>>
->>> -ifeq ($(LIBGLES_DEPENDENCIES),)
->>> +# Because some GLES providers may be in BR2_EXTERNAL,
->>> +# $(LIBGLES_DEPENDENCIES) might be empty right here.
->>> +# So, we can't rely on it to define LIBGLES_CONFIGURE_CMDS
->>> +# right now, and we must postpone the check until later,
->>> +# ie. at runtime.
->>>    define LIBGLES_CONFIGURE_CMDS
->>> -	echo "No libGLES implementation selected. Configuration error."
->>> -	exit 1
->>> +	if [ -z "$${LIBGLES_DEPENDENCIES}" ]; then \
->>    This should be "$(LIBGLES_DEPENDENCIES)", but otherwise it looks like
->> it would work.
-> I was afraid using a make variable here would be expanded too early
-> again, that's why I postponed its expansion into the shell command
-> itself.
->
-> But it does not work either, since the variable is not exported.
->
-> I'm waiting for feedback from David to confirm either or both
-> solutions work...
->
-> Regards,
-> Yann E. MORIN.
->
+diff --git a/package/wpa_supplicant/Config.in b/package/wpa_supplicant/Config.in
+index 8b0b366..74145f1 100644
+--- a/package/wpa_supplicant/Config.in
++++ b/package/wpa_supplicant/Config.in
+@@ -49,6 +49,11 @@ config BR2_PACKAGE_WPA_SUPPLICANT_DBUS_INTROSPECTION
+ 	help
+ 	  Add introspection support for new DBus control interface.
+ 
++config BR2_PACKAGE_WPA_SUPPLICANT_DEBUG_SYSLOG
++	bool "Enable syslog support"
++	help
++	  Enable support for sending debug messages to syslog
++
+ config BR2_PACKAGE_WPA_SUPPLICANT_WPS
+ 	bool "Enable support for WPS"
+ 	help
+diff --git a/package/wpa_supplicant/wpa_supplicant.mk b/package/wpa_supplicant/wpa_supplicant.mk
+index 4ae41c1..920f96a 100644
+--- a/package/wpa_supplicant/wpa_supplicant.mk
++++ b/package/wpa_supplicant/wpa_supplicant.mk
+@@ -116,6 +116,12 @@ endef
+ 
+ endif
+ 
++ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT_DEBUG_SYSLOG),y)
++define WPA_SUPPLICANT_DEBUG_CONFIG
++	$(SED) 's/\(#\)\(CONFIG_DEBUG_SYSLOG.*\)/\2/' $(WPA_SUPPLICANT_CONFIG)
++endef
++endif
++
+ define WPA_SUPPLICANT_CONFIGURE_CMDS
+ 	cp $(@D)/wpa_supplicant/defconfig $(WPA_SUPPLICANT_CONFIG)
+ 	$(SED) 's/\(#\)\(CONFIG_HS20.*\)/\2/' $(WPA_SUPPLICANT_CONFIG)
+@@ -133,6 +139,7 @@ define WPA_SUPPLICANT_CONFIGURE_CMDS
+ 	$(WPA_SUPPLICANT_LIBNL_CONFIG)
+ 	$(WPA_SUPPLICANT_DBUS_CONFIG)
+ 	$(WPA_SUPPLICANT_AP_CONFIG)
++	$(WPA_SUPPLICANT_DEBUG_CONFIG)
+ endef
+ 
+ define WPA_SUPPLICANT_BUILD_CMDS
+-- 
+1.8.3.2
