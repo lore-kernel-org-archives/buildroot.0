@@ -1,165 +1,80 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Wed, 11 Dec 2013 20:20:49 +0100
-Subject: [Buildroot] [PATCH 2/2] manual: update for multiple global
-	patch dirs
-In-Reply-To: <1386784684-6546-2-git-send-email-rjbarnet@rockwellcollins.com>
-References: <1386784684-6546-1-git-send-email-rjbarnet@rockwellcollins.com>
- <1386784684-6546-2-git-send-email-rjbarnet@rockwellcollins.com>
-Message-ID: <CAAXf6LV57o+o=TMJo8BY5F2SNV1GmVDj=7xX9shpjR0NC2UX-w@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 11 Dec 2013 21:08:43 +0100
+Subject: [Buildroot] [PATCH 03/38] package: introduce Python package
+ infrastructure
+In-Reply-To: <CAAXf6LWUByrN9ZHRu1MET+_aS44JquFaSXzxx6AWnL9WmC817w@mail.gmail.com>
+References: <1386540907-7242-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1386540907-7242-4-git-send-email-thomas.petazzoni@free-electrons.com>
+ <CAAXf6LWUByrN9ZHRu1MET+_aS44JquFaSXzxx6AWnL9WmC817w@mail.gmail.com>
+Message-ID: <20131211210843.103e43c4@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Dec 11, 2013 at 6:58 PM, Ryan Barnett
-<rjbarnet@rockwellcollins.com> wrote:
-> Updating the documentation to reflect that multiple directories can
-> now be specified for BR2_GLOBAL_PATCH_DIR. Along with giving an
-> example use case of how to use multiple global patch directories.
+Dear Thomas De Schampheleire,
 
-You forgot a signed-off-by line...
+Only replying to your comments that required a reply. I have
+already taken into account all the typos.
 
-> ---
->  docs/manual/customize-packages.txt |   69 +++++++++++++++++++++++++++++++-----
->  docs/manual/patch-policy.txt       |   13 ++++---
->  2 files changed, 69 insertions(+), 13 deletions(-)
->
-> diff --git a/docs/manual/customize-packages.txt b/docs/manual/customize-packages.txt
-> index 1820c54..d3fb052 100644
-> --- a/docs/manual/customize-packages.txt
-> +++ b/docs/manual/customize-packages.txt
-> @@ -8,16 +8,67 @@ It is sometimes useful to apply 'extra' patches to packages - over and
->  above those provided in Buildroot. This might be used to support custom
->  features in a project, for example, or when working on a new architecture.
->
-> -The +BR2_GLOBAL_PATCH_DIR+ configuration file option can be
-> -used to specify a directory containing global package patches.
-> +The +BR2_GLOBAL_PATCH_DIR+ configuration option can be used to specify
-> +a space separated list of one or more directories containing global
-> +package patches. By specifying multiple global patch directories, a
-> +user could implement a layered approach to patches. This could be
-> +useful when a user has multiple boards that share a common processor
-> +architecture. It is often the case that a subset of patches for a
-> +package that need to be shared between the different boards a user
+On Mon, 9 Dec 2013 11:02:25 +0100, Thomas De Schampheleire wrote:
 
-shouldn't this 'that' be removed?
+> > +On line 8 and 9, we declare the name of the tarball (xz-ed tarball
+> > +recommended) and the location of the tarball on the Web. Buildroot
+> > +will automatically download the tarball from this location.
+> 
+> Should we clarify here that if the tarball is .gz, it shouldn't be
+> specified because it's currently the default?
 
-> +has. However, each board may require specific patches for the package
-> +that build on top of the common subset of patches.
->
-> -For a specific version <packageversion> of a specific package <packagename>,
-> -patches are applied as follows.
-> +For a specific version +<packageversion>+ of a specific package
-> ++<packagename>+, patches are applied as follows:
->
-> -First, the default Buildroot patch set for the package is applied.
-> +. First, the default Buildroot patch set for the package is applied.
->
-> -If the directory +$(BR2_GLOBAL_PATCH_DIR)/<packagename>/<packageversion>+
-> -exists, then all +*.patch+ files in the directory will be applied.
-> +. Then for every directory - +<global-patch-dir>+ - that exists in
-> +  +BR2_GLOBAL_PATCH_DIR+, the following will be done:
-> ++
-> +* If the directory
-> +  +<global-patch-dir>/<packagename>/<packageversion>/+ exists, then
-> +  all *.patch files in this directory will be applied.
-> ++
-> +* Otherwise, if the directory +<global-patch-dir>/<packagename>+ exists,
-> +  then all *.patch files in the directory will be applied.
->
-> -Otherwise, if the directory +$(BR2_GLOBAL_PATCH_DIR)/<packagename>+
-> -exists, then all +*.patch+ files in the directory will be applied.
-> +The +BR2_GLOBAL_PATCH_DIR+ option is preferred method for specifying a
-
-the preferred
-
-> +custom patch directory for packages. It should be used when patching
-> +Linux, U-Boot, and other packages that already have custom patch
-> +directories options available to them as configuration options. By
-
-Shouldn't this be 'directory options' rather than 'directories options'?
-
-Also, I'm not sure I follow you here: even if there are no custom
-patch directory options, the global patch dir is useful, right?
-
-> +doing this, it will allow a user to manage their patches from one
-> +top-level directory.`
-
-What is the purpose of this backtick here? Is it a typo?
-
-> +
-> +An example directory structure for where a user has multiple
-> +directories specified for +BR2_GLOBAL_PATCH_DIR+ may look like this:
-> +
-> +-----
-> +board/
-> ++-- common-fooarch
-> +|   +-- patches
-> +|       +-- linux
-> +|       |   +-- linux-patch1.patch
-> +|       |   +-- linux-patch2.patch
-> +|       +-- u-boot
-> +|       +-- foopkg
-> ++-- fooarch-board
-> +    +-- patches
-> +        +-- linux
-> +        |   +-- linux-patch3.patch
-> +        +-- u-boot
-> +        +-- foopkg
-> +-----
-> +
-> +If the user to have +BR2_GLOBAL_PATCH_DIR+ configuration option set as
-
-to have --> has the
-
-> +follows:
-> +
-> +-----
-> +BR2_GLOBAL_PATCH_DIR="board/common-fooarch board/fooarch-board"
-> +-----
-> +
-> +Then the patches would applied as follows for the Linux kernel:
-> +
-> +. board/common-fooarch/patches/linux/linux-patch1.patch
-> +. board/common-fooarch/patches/linux/linux-patch2.patch
-> +. board/fooarch-board/patches/linux/linux-patch1.patch
-> diff --git a/docs/manual/patch-policy.txt b/docs/manual/patch-policy.txt
-> index d9bc8ca..26586ad 100644
-> --- a/docs/manual/patch-policy.txt
-> +++ b/docs/manual/patch-policy.txt
-> @@ -50,8 +50,9 @@ Global patch directory
->  ^^^^^^^^^^^^^^^^^^^^^^
->
->  The +BR2_GLOBAL_PATCH_DIR+ configuration file option can be
-> -used to specify a directory containing global package patches. See
-> -xref:packages-custom[] for details.
-> +used to specify a space separated list of one or more directories
-> +containing global package patches. See xref:packages-custom[] for
-> +details.
->
->
->  How patches are applied
-> @@ -72,11 +73,15 @@ How patches are applied
->  +
->  * Otherwise, patch files matching +<packagename>-*.patch+
->    are applied in alphabetical order.
-> -  So, to ensure they are applied in the right order, it is hightly
-> -  recommended to named the patch files like this:
-> +  So, to ensure they are applied in the right order, it is highly
-> +  recommended to name the patch files like this:
->    +<packagename>-<number>-<description>.patch+, where +<number>+
->    refers to the 'apply order'.
->
-> +. If +BR2_GLOABL_PATCH_DIR+ is defined, the directories will be
-> +  enumerated in the order they are specified for patches. The patches
-> +  are applied as described in the previous step.
-> +
->  . Run the +<packagename>_POST_PATCH_HOOKS+ commands if defined.
->
->  If something goes wrong in the steps _3_ or _4_, then the build fails.
-> --
+I decided not to do this, because in the case of the Python modules, it
+is very often not possible to rely on the default value of
+<pkg>_SOURCE, because the upstream tarball is named
+<foo>-<version>.tar.gz, but we call the package python-<foo> in
+Buildroot.
 
 
-Best regards,
+> What I have not yet seen in the documentation is a naming policy for
+> python packages. I understood that we expect them all to be named
+> python-foo, right, so maybe this could be added in the new python
+> section of the manual?
+
+I've added some details about this. However, note that not *all* Python
+packages should be named python-<foo>. Only Python modules should be
+named as such. Packages such as scons and supervisor, which use a
+Python-based setup.py, and therefore use the python-package
+infrastructure, are not Python modules, and therefore do not have to be
+named python-scons and python-supervisor.
+
+
+> > +# Passed as options of the build step of target distutils based
+> > +# packages.
+> 
+> This is probably personal, but I don't feel this comment explains more
+> than the variable name already does.
+> Moreover, to repeat the text 'of target distutils based packages' for
+> each of the ENV, BUILD_OPT, INSTALL_OPT variables seems redundant too.
+> What about a structure like:
+
+Ok, fixed.
+
+
+> > +# This must be repeated from inner-generic-package, and we need to
+> > +# exclude the packages added above in various situations, otherwise
+> 
+> Do you mean 'as we need to' ?
+> 
+> added below
+> 
+> and what do you mean with 'in various situations' here?
+
+I've added a much more detailed explanations about this, it will be in
+the v2.
+
+Thanks!
+
 Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
