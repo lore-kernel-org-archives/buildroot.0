@@ -1,9 +1,9 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 11 Dec 2013 10:23:45 -0300
-Subject: [Buildroot] [PATCH 12/16] freerdp: add licensing info
+Date: Wed, 11 Dec 2013 10:23:46 -0300
+Subject: [Buildroot] [PATCH 13/16] flashrom: add licensing info
 In-Reply-To: <1386768229-29485-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1386768229-29485-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1386768229-29485-12-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1386768229-29485-13-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,24 +12,27 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/freerdp/freerdp.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ package/flashrom/flashrom.mk | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/package/freerdp/freerdp.mk b/package/freerdp/freerdp.mk
-index c06aac9..3ac53aa 100644
---- a/package/freerdp/freerdp.mk
-+++ b/package/freerdp/freerdp.mk
-@@ -6,9 +6,10 @@
+diff --git a/package/flashrom/flashrom.mk b/package/flashrom/flashrom.mk
+index bca800b..df648f8 100644
+--- a/package/flashrom/flashrom.mk
++++ b/package/flashrom/flashrom.mk
+@@ -5,10 +5,11 @@
+ ################################################################################
  
- FREERDP_VERSION = 1.0.1
- FREERDP_SITE = https://github.com/downloads/FreeRDP/FreeRDP
+ FLASHROM_VERSION = 0.9.6.1
+-FLASHROM_SOURCE  = flashrom-$(FLASHROM_VERSION).tar.bz2
+-FLASHROM_SITE    = http://download.flashrom.org/releases
 -
- FREERDP_DEPENDENCIES = openssl zlib \
- 	xlib_libX11 xlib_libXt xlib_libXext xlib_libXcursor
-+FREERDP_LICENSE = Apache 2.0
-+FREEDRP_LICENSE_FILES = LICENSE
++FLASHROM_SOURCE = flashrom-$(FLASHROM_VERSION).tar.bz2
++FLASHROM_SITE = http://download.flashrom.org/releases
+ FLASHROM_DEPENDENCIES = pciutils
++FLASHROM_LICENSE = GPLv2+
++FLASHROM_LICENSE_FILES = COPYING
  
- ifeq ($(BR2_PACKAGE_CUPS),y)
- FREERDP_CONF_OPT += -DWITH_CUPS=ON
+ define FLASHROM_BUILD_CMDS
+ 	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
 -- 
 1.8.3.2
