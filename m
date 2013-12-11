@@ -1,65 +1,53 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 11 Dec 2013 22:53:36 +0100
-Subject: [Buildroot] [PATCH 0/2] update sunxi-boards and sunxi-tools for
- pcDuino board
-In-Reply-To: <1386721499.2817.17.camel@kokopelli>
-References: <1386721499.2817.17.camel@kokopelli>
-Message-ID: <20131211225336.489ff1cc@skate>
+Date: Wed, 11 Dec 2013 22:56:21 +0100
+Subject: [Buildroot] [PATCH] uclibc: do not enable DODEBUG
+Message-ID: <1386798981-17924-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Brian Beattie,
+The DODEBUG configuration option in uClibc is broken, even for widely
+used architectures like ARM. Therefore, any Buildroot configuration
+that has BR2_ENABLE_DEBUG enabled and uses uClibc with the internal
+toolchain backend will fail, with an error like:
 
-On Tue, 10 Dec 2013 16:24:59 -0800, Brian Beattie wrote:
-> In preparation for adding support for for the pcduino board, update the
-> sunxi-boards and sunxi-tools to the commit recommended for pcduino.
-> 
-> These packages are also used by the Cubieboard so if somebody with a
-> Cubieboard could test this that would be good.
-> 
-> Brian Beattie (2):
->   update sunxi-boards to newer commit as recomended for pcDuino board
->   update sunxi-boards to newer commit as recomended for pcDuino board
+  http://autobuild.buildroot.net/results/d34/d34238c209cf2ef63371a598ab9218165c90f864/build-end.log
 
-Thanks for your patches! They look good, except for a few minor things:
+This error was also reported recently by a Buildroot user.
 
- * Their title should be something like:
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/uclibc/uclibc.mk | 9 ---------
+ 1 file changed, 9 deletions(-)
 
-    <package name>: <what is happening to them>
-
-   so typically:
-
-    sunxi-boards: bump version, to support the pcDuino board
-    sunxi-tools: bump version, to support the pcDuino board
-
- * The title of your second patch was wrong: it bumps the version of
-   sunxi-tools, not sunxi-boards.
-
- * You should sent your patches with 'git send-email'. You've sent them
-   with Evolution, but Evolution has line-wrapped the patches, which
-   prevents them from being applied. Also, it will ensure that your
-   patches are sent as replies to your cover letter, all automatically.
-
- * Your patches should have a Signed-off-by line.
-
-See
-http://buildroot.org/downloads/manual/manual.html#_contributing_to_buildroot
-for more details.
-
-Could you resend a version 2 of your patch series with these minor
-issues fixed?
-
-Also, since you're using the pcDuino board, could you submit a simple
-defconfig that builds a minimal system for this platform (i.e toolchain
-+ bootloader + kernel + minimal rootfs) ?
-
-Thanks!
-
-Thomas
+diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
+index de9011f..9e04771 100644
+--- a/package/uclibc/uclibc.mk
++++ b/package/uclibc/uclibc.mk
+@@ -391,14 +391,6 @@ UCLIBC_WCHAR_CONFIG = $(call UCLIBC_OPT_UNSET,UCLIBC_HAS_WCHAR,$(@D))
+ endif
+ 
+ #
+-# debug
+-#
+-
+-ifeq ($(BR2_ENABLE_DEBUG),y)
+-UCLIBC_DEBUG_CONFIG = $(call UCLIBC_OPT_SET,DODEBUG,y,$(@D))
+-endif
+-
+-#
+ # strip
+ #
+ 
+@@ -448,7 +440,6 @@ define UCLIBC_SETUP_DOT_CONFIG
+ 	$(UCLIBC_LOCALE_CONFIG)
+ 	$(UCLIBC_WCHAR_CONFIG)
+ 	$(UCLIBC_STRIP_CONFIG)
+-	$(UCLIBC_DEBUG_CONFIG)
+ 	yes "" | $(MAKE1) -C $(@D) \
+ 		$(UCLIBC_MAKE_FLAGS) \
+ 		PREFIX=$(STAGING_DIR) \
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.8.1.2
