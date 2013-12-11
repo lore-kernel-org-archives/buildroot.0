@@ -1,35 +1,38 @@
 From: Baruch Siach <baruch@tkos.co.il>
-Date: Wed, 11 Dec 2013 07:35:20 +0200
-Subject: [Buildroot] Knowing whether the target is multicore
-In-Reply-To: <CA+-urNRh5WARfiTZXAiULdXmxTErbdJSGWTnRHjiTr_uEyEoeA@mail.gmail.com>
-References: <CA+-urNRh5WARfiTZXAiULdXmxTErbdJSGWTnRHjiTr_uEyEoeA@mail.gmail.com>
-Message-ID: <20131211053520.GD1217@tarshish>
+Date: Wed, 11 Dec 2013 09:16:44 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2013-12-09
+In-Reply-To: <ad79e2e1-bce2-4354-8b64-7b2bc5082d0e@email.android.com>
+References: <20131210073007.6A2C4100850@stock.ovh.net>
+ <20131211043812.GA1217@tarshish>
+ <ad79e2e1-bce2-4354-8b64-7b2bc5082d0e@email.android.com>
+Message-ID: <20131211071643.GF1217@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Frank,
+Hi Thomas,
 
-On Tue, Dec 10, 2013 at 04:55:37PM -0500, Frank Hunleth wrote:
-> From what I can tell, the answer is no, but I was wondering if there
-> was any way of knowing in a package's .mk file whether the target is
-> single or multicore.
+On Wed, Dec 11, 2013 at 07:28:35AM +0100, Thomas De Schampheleire wrote:
+> Baruch Siach <baruch@tkos.co.il> wrote:
+> >On Tue, Dec 10, 2013 at 08:30:07AM +0100, Thomas Petazzoni wrote:
+> >>     xtensa |                      m4-1.4.17 | NOK | http://autobuild.buildroot.net/results/0b9b3bb1791bbc9f902a23360c4540d90a0e05ca/
+> >>     xtensa |                      m4-1.4.17 | NOK | http://autobuild.buildroot.net/results/ffda6f3f64c612da999229226f699c01ccebe4c2/
+> >
+> >I'm struggling with this one. The configure script test for posix_spawn build 
+> >fails because it lacks '-lrt'. This causes m4 to use an internal 
+> >implementation that fails at build time for some other reason (haven't found 
+> >the reason for that yet).
+> >
+> >How can I add -lrt to the build test command line?
 > 
-> The reason that I'm asking is that I'm currently working with the
-> Erlang package. The Erlang configure script can be told whether to
-> build a VM that supports multi-core or not. By default, it builds VMs
-> for both cases. This works, but takes quite a bit longer to compile
-> and adds to the target image size. I'd like to be able to set this
-> appropriately, and it seems like this would be better accomplished
-> using an arch-specific BR2_ variable rather than something in the
-> Erlang package's Config.in.
+> Isn't this by adding/setting the LIBS variable before
+> calling the macro that executes the test? 
 
-Whether a target is SMP or not depends on architecture and kernel 
-configuration, and that might be outside of Buildroot control when not 
-building the kernel internally. In my opinion, there should be a config option 
-allowing the user to select the SMP version or the UP one (or both).
+Thanks, I'll try that. This macro seems to be called from m4/spawn_h.m4. This 
+failures seems to be xtensa specific. I wonder how other archs handle this.
 
 baruch
 
