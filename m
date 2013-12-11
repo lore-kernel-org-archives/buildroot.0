@@ -1,32 +1,73 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 11 Dec 2013 17:21:44 +0000 (UTC)
-Subject: [Buildroot] [Bug 5798] ncurses-5.9 fails to compile statically
-In-Reply-To: <bug-5798-163@https.bugs.busybox.net/>
-References: <bug-5798-163@https.bugs.busybox.net/>
-Message-ID: <20131211172144.9A1379BFCA@busybox.osuosl.org>
+From: Ryan Barnett <rjbarnet@rockwellcollins.com>
+Date: Wed, 11 Dec 2013 11:58:03 -0600
+Subject: [Buildroot] [PATCH 1/2] pkg-generick.mk: support for multiple patch
+	dirs
+Message-ID: <1386784684-6546-1-git-send-email-rjbarnet@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=5798
+Adding support for specifying multiple directories in
+BR2_GLOBAL_PATCH_DIR. This will allow for a layered approach for the
+patching of a package.
+---
+ Config.in              |   20 ++++++++++++--------
+ package/pkg-generic.mk |    5 ++++-
+ 2 files changed, 16 insertions(+), 9 deletions(-)
 
-Gustavo Zacarias <gustavo@zacarias.com.ar> changed:
-
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|                            |WONTFIX
-
---- Comment #1 from Gustavo Zacarias <gustavo@zacarias.com.ar> 2013-12-11 17:21:44 UTC ---
-Static builds should be enabled by BR2_PREFER_STATIC_LIB=y, not by passing
--static in BR2_TARGET_OPTIMIZATION, otherwise many workarounds/tricks to enable
-proper static building in packages aren't used.
-Just look at all the conditionals based on BR2_PREFER_STATIC_LIB in
-package/ncurses/ncurses.mk that you're missing.
-
+diff --git a/Config.in b/Config.in
+index 2b401cb..be9a352 100644
+--- a/Config.in
++++ b/Config.in
+@@ -461,18 +461,22 @@ config BR2_PACKAGE_OVERRIDE_FILE
+ 	  Buildroot documentation for more details on this feature.
+ 
+ config BR2_GLOBAL_PATCH_DIR
+-	string "global patch directory"
++	string "global patch directories"
+ 	help
+-	  You may specify a directory containing global package patches.
+-	  For a specific version <packageversion> of a specific package
+-	  <packagename>, patches are applied as follows.
++	  You may specify a space seperated list of one or more directories
++	  containing global package patches. For a specific version
++	  <packageversion> of a specific package <packagename>, patches are
++	  applied as follows:
+ 
+-	  First, the default Buildroot patch set for the package is applied.
++	  First, the default Buildroot patch set for the package is applied
++	  from 'package/<packagename>'.
+ 
+-	  If the directory $(BR2_GLOBAL_PATCH_DIR)/<packagename>/<packageversion>
+-	  exists, then all *.patch files in the directory will be applied.
++	  Then for every directory - <global-patch-dir> - that exists in
++	  BR2_GLOBAL_PATCH_DIR, if the directory
++	  <global-patch-dir>/<packagename>/<packageversion>/ exists, then all
++	  *.patch files in this directory will be applied.
+ 
+-	  Otherwise, if the directory $(BR2_GLOBAL_PATCH_DIR)/<packagename> exists,
++	  Otherwise, if the directory <global-patch-dir>/<packagename> exists,
+ 	  then all *.patch files in the directory will be applied.
+ 
+ endmenu
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 1fce71b..53d96c9 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -134,8 +134,11 @@ endif
+ # The RAWNAME variable is the lowercased package name, which allows to
+ # find the package directory (typically package/<pkgname>) and the
+ # prefix of the patches
++#
++# For BR2_GLOBAL_PATCH_DIR, only generate if it is defined
+ $(BUILD_DIR)/%/.stamp_patched: NAMEVER = $(RAWNAME)-$($(PKG)_VERSION)
+-$(BUILD_DIR)/%/.stamp_patched: PATCH_BASE_DIRS = $($(PKG)_DIR_PREFIX)/$(RAWNAME) $(call qstrip,$(BR2_GLOBAL_PATCH_DIR))/$(RAWNAME)
++$(BUILD_DIR)/%/.stamp_patched: PATCH_BASE_DIRS =  $($(PKG)_DIR_PREFIX)/$(RAWNAME)
++$(BUILD_DIR)/%/.stamp_patched: PATCH_BASE_DIRS += $(if $(BR2_GLOBAL_PATCH_DIR),$(foreach pdir,$(call qstrip,$(BR2_GLOBAL_PATCH_DIR)),$(pdir)/$(RAWNAME)))
+ $(BUILD_DIR)/%/.stamp_patched:
+ 	@$(call step_start,patch)
+ 	@$(call MESSAGE,"Patching")
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+1.7.9.5
