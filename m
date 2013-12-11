@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 11 Dec 2013 21:27:07 +0100
-Subject: [Buildroot] [PATCHv2 32/36] python-pyasn: new package
+Date: Wed, 11 Dec 2013 21:27:09 +0100
+Subject: [Buildroot] [PATCHv2 34/36] python-pysnmp: new package
 In-Reply-To: <1386793631-14026-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1386793631-14026-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1386793631-14026-33-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1386793631-14026-35-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,67 +15,66 @@ From: Ryan Barnett <ryanbarnett3@gmail.com>
 Signed-off-by: Ryan Barnett <rjbarnet@rockwellcollins.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Config.in                    |  1 +
- package/python-pyasn/Config.in       | 13 +++++++++++++
- package/python-pyasn/python-pyasn.mk | 19 +++++++++++++++++++
- 3 files changed, 33 insertions(+)
- create mode 100644 package/python-pyasn/Config.in
- create mode 100644 package/python-pyasn/python-pyasn.mk
+ package/Config.in                      |  1 +
+ package/python-pysnmp/Config.in        | 14 ++++++++++++++
+ package/python-pysnmp/python-pysnmp.mk | 17 +++++++++++++++++
+ 3 files changed, 32 insertions(+)
+ create mode 100644 package/python-pysnmp/Config.in
+ create mode 100644 package/python-pysnmp/python-pysnmp.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index acfd125..8dc03d0 100644
+index 59b7d6c..e4848ed 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -400,6 +400,7 @@ source "package/python-msgpack/Config.in"
- source "package/python-netifaces/Config.in"
- source "package/python-nfc/Config.in"
- source "package/python-protobuf/Config.in"
-+source "package/python-pyasn/Config.in"
+@@ -405,6 +405,7 @@ source "package/python-pycrypto/Config.in"
  source "package/python-pygame/Config.in"
  source "package/python-pyparsing/Config.in"
  source "package/python-pyro/Config.in"
-diff --git a/package/python-pyasn/Config.in b/package/python-pyasn/Config.in
++source "package/python-pysnmp/Config.in"
+ source "package/python-pyusb/Config.in"
+ source "package/python-pyzmq/Config.in"
+ source "package/python-serial/Config.in"
+diff --git a/package/python-pysnmp/Config.in b/package/python-pysnmp/Config.in
 new file mode 100644
-index 0000000..a9f0014
+index 0000000..a87a4d0
 --- /dev/null
-+++ b/package/python-pyasn/Config.in
-@@ -0,0 +1,13 @@
-+config BR2_PACKAGE_PYTHON_PYASN
-+	bool "python-pyasn"
++++ b/package/python-pysnmp/Config.in
+@@ -0,0 +1,14 @@
++config BR2_PACKAGE_PYTHON_PYSNMP
++	bool "python-pysnmp"
 +	depends on BR2_PACKAGE_PYTHON
-+	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_INSTALL_LIBSTDCPP # pyasn
++	select BR2_PACKAGE_PYTHON_PYASN
++	select BR2_PACKAGE_PYTHON_PYCRYPTO
 +	help
-+	  PyASN is a Python extension module that enables you to
-+	  perform very fast IP address to Autonomous System Number
-+	  lookups.
++	  PySNMP is a cross-platform, pure-Python SNMP engine
++	  implementation.
 +
-+	  https://code.google.com/p/pyasn/
++	  http://pysnmp.sf.net
 +
-+comment "python-pyasn needs a toolchain w/ C++"
++comment "python-pysnmp needs a toolchain w/ C++"
 +        depends on !BR2_INSTALL_LIBSTDCPP
-diff --git a/package/python-pyasn/python-pyasn.mk b/package/python-pyasn/python-pyasn.mk
+diff --git a/package/python-pysnmp/python-pysnmp.mk b/package/python-pysnmp/python-pysnmp.mk
 new file mode 100644
-index 0000000..e360464
+index 0000000..3d0f3b5
 --- /dev/null
-+++ b/package/python-pyasn/python-pyasn.mk
-@@ -0,0 +1,19 @@
++++ b/package/python-pysnmp/python-pysnmp.mk
+@@ -0,0 +1,17 @@
 +################################################################################
 +#
-+# python-pyasn
++# python-pysnmp
 +#
 +################################################################################
 +
-+PYTHON_PYASN_VERSION = 1.2
-+PYTHON_PYASN_SOURCE = PyASN-$(PYTHON_PYASN_VERSION).zip
-+PYTHON_PYASN_SITE = https://pyasn.googlecode.com/files
-+PYTHON_PYASN_LICENSE = LGPL
-+PYTHON_PYASN_SETUP_TYPE = distutils
++PYTHON_PYSNMP_VERSION = 4.2.4
++PYTHON_PYSNMP_SOURCE = pysnmp-$(PYTHON_PYSNMP_VERSION).tar.gz
++PYTHON_PYSNMP_SITE = https://pypi.python.org/packages/source/p/pysnmp
++PYTHON_PYSNMP_SETUP_TYPE = setuptools
 +
-+define PYTHON_PYASN_EXTRACT_CMDS
-+	unzip -d $(@D) $(DL_DIR)/$(PYTHON_PYASN_SOURCE)
-+	mv $(@D)/PyASN-$(PYTHON_PYASN_VERSION)/* $(@D)
-+	$(RM) -r $(@D)/PyASN-$(PYTHON_PYASN_VERSION)
-+endef
++PYTHON_PYSNMP_LICENSE = BSD-3c
++PYTHON_PYSNMP_LICENSE_FILES = LICENSE
++
++PYTHON_PYSNMP_DEPENDENCIES = python-pyasn python-pycrypto
 +
 +$(eval $(python-package))
 -- 
