@@ -1,7 +1,7 @@
 From: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
-Date: Wed, 11 Dec 2013 09:24:04 +0100
-Subject: [Buildroot] [PATCH 1/1] evtest: bump to version 1.31
-Message-ID: <1386750244-5169-1-git-send-email-jerzy.grzegorek@trzebnica.net>
+Date: Wed, 11 Dec 2013 09:25:08 +0100
+Subject: [Buildroot] [PATCH 1/1] package/Config.in: fix alphabetical order
+Message-ID: <1386750308-6918-1-git-send-email-jerzy.grzegorek@trzebnica.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,29 +10,77 @@ To: buildroot@busybox.net
 
 Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
 ---
- package/evtest/evtest.mk |    5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ package/Config.in |   14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/package/evtest/evtest.mk b/package/evtest/evtest.mk
-index 2a87553..447a69a 100644
---- a/package/evtest/evtest.mk
-+++ b/package/evtest/evtest.mk
-@@ -4,13 +4,14 @@
- #
- ################################################################################
+diff --git a/package/Config.in b/package/Config.in
+index 40c9e31..eb96aeb 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -177,9 +177,9 @@ source "package/fbgrab/Config.in"
+ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ source "package/fbset/Config.in"
+ endif
++source "package/fb-test-app/Config.in"
+ source "package/fbterm/Config.in"
+ source "package/fbv/Config.in"
+-source "package/fb-test-app/Config.in"
+ source "package/imagemagick/Config.in"
+ source "package/linux-fusion/Config.in"
+ source "package/lite/Config.in"
+@@ -208,8 +208,8 @@ source "package/qwt/Config.in"
+ endif
  
--EVTEST_VERSION = 1.30
-+EVTEST_VERSION = 1.31
- EVTEST_SOURCE = evtest-$(EVTEST_VERSION).tar.bz2
- # no official upstream tarball
--EVTEST_SITE = http://pkgs.fedoraproject.org/repo/pkgs/evtest/evtest-1.30.tar.bz2/27c0902839babfd07136f232c63c895c/
-+EVTEST_SITE = http://pkgs.fedoraproject.org/repo/pkgs/evtest/evtest-$(EVTEST_VERSION).tar.bz2/1d95cd9952d34dd15f93adb197323073/
- EVTEST_LICENSE = GPLv2
- EVTEST_LICENSE_FILES = COPYING
- EVTEST_DEPENDENCIES = host-pkgconf
-+EVTEST_AUTORECONF = YES
+ source "package/qt5/Config.in"
+-source "package/x11r7/Config.in"
+ source "package/weston/Config.in"
++source "package/x11r7/Config.in"
  
- ifeq ($(BR2_PACKAGE_EVTEST_CAPTURE),y)
- EVTEST_DEPENDENCIES += libxml2
+ comment "X applications"
+ source "package/alsamixergui/Config.in"
+@@ -338,13 +338,13 @@ source "package/usb_modeswitch/Config.in"
+ source "package/usb_modeswitch_data/Config.in"
+ source "package/usbmount/Config.in"
+ source "package/usbutils/Config.in"
+-source "package/wipe/Config.in"
+ source "package/w_scan/Config.in"
++source "package/wipe/Config.in"
+ endmenu
+ 
+ menu "Interpreter languages and scripting"
+-source "package/erlang/Config.in"
+ source "package/enscript/Config.in"
++source "package/erlang/Config.in"
+ source "package/haserl/Config.in"
+ source "package/jamvm/Config.in"
+ source "package/jimtcl/Config.in"
+@@ -356,6 +356,8 @@ source "package/cgilua/Config.in"
+ source "package/copas/Config.in"
+ source "package/coxpcall/Config.in"
+ source "package/lbase64/Config.in"
++source "package/lua-ev/Config.in"
++source "package/lua-msgpack-native/Config.in"
+ source "package/luabitop/Config.in"
+ source "package/luacjson/Config.in"
+ source "package/luacrypto/Config.in"
+@@ -366,8 +368,6 @@ source "package/luaposix/Config.in"
+ source "package/luasec/Config.in"
+ source "package/luasocket/Config.in"
+ source "package/luasql/Config.in"
+-source "package/lua-ev/Config.in"
+-source "package/lua-msgpack-native/Config.in"
+ source "package/orbit/Config.in"
+ source "package/rings/Config.in"
+ source "package/wsapi/Config.in"
+@@ -619,8 +619,8 @@ source "package/cppzmq/Config.in"
+ source "package/czmq/Config.in"
+ source "package/filemq/Config.in"
+ source "package/glib-networking/Config.in"
+-source "package/libcgicc/Config.in"
+ source "package/libcgi/Config.in"
++source "package/libcgicc/Config.in"
+ source "package/libcurl/Config.in"
+ source "package/libdnet/Config.in"
+ source "package/libesmtp/Config.in"
 -- 
 1.7.9.5
