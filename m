@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 11 Dec 2013 21:26:59 +0100
-Subject: [Buildroot] [PATCHv2 24/36] python-pyusb: new package
+Date: Wed, 11 Dec 2013 21:27:00 +0100
+Subject: [Buildroot] [PATCHv2 25/36] python-msgpack: new package
 In-Reply-To: <1386793631-14026-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1386793631-14026-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1386793631-14026-25-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1386793631-14026-26-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,70 +12,72 @@ To: buildroot@busybox.net
 
 From: "Wojciech M. Zabolotny" <wzab01@gmail.com>
 
-[Thomas: converted to the Python package infrastructure, added missing
-libusb dependency in the .mk file, added missing newline in the
-Config.in file, fix the package description]
+[Thomas: convert to the Python package infrastructure, added missing
+dependency on C++, inherited from msgpack.]
 
 Signed-off-by: Wojciech M. Zabolotny <wzab01@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Config.in                    |  1 +
- package/python-pyusb/Config.in       | 14 ++++++++++++++
- package/python-pyusb/python-pyusb.mk | 14 ++++++++++++++
- 3 files changed, 29 insertions(+)
- create mode 100644 package/python-pyusb/Config.in
- create mode 100644 package/python-pyusb/python-pyusb.mk
+ package/Config.in                        |  1 +
+ package/python-msgpack/Config.in         | 16 ++++++++++++++++
+ package/python-msgpack/python-msgpack.mk | 15 +++++++++++++++
+ 3 files changed, 32 insertions(+)
+ create mode 100644 package/python-msgpack/Config.in
+ create mode 100644 package/python-msgpack/python-msgpack.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 40c9e31..e888764 100644
+index e888764..6cd0153 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -399,6 +399,7 @@ source "package/python-protobuf/Config.in"
- source "package/python-pygame/Config.in"
- source "package/python-pyparsing/Config.in"
- source "package/python-pyro/Config.in"
-+source "package/python-pyusb/Config.in"
- source "package/python-pyzmq/Config.in"
- source "package/python-serial/Config.in"
- source "package/python-setuptools/Config.in"
-diff --git a/package/python-pyusb/Config.in b/package/python-pyusb/Config.in
+@@ -393,6 +393,7 @@ source "package/python-id3/Config.in"
+ source "package/python-ipy/Config.in"
+ source "package/python-mad/Config.in"
+ source "package/python-meld3/Config.in"
++source "package/python-msgpack/Config.in"
+ source "package/python-netifaces/Config.in"
+ source "package/python-nfc/Config.in"
+ source "package/python-protobuf/Config.in"
+diff --git a/package/python-msgpack/Config.in b/package/python-msgpack/Config.in
 new file mode 100644
-index 0000000..de5b487
+index 0000000..2075ee6
 --- /dev/null
-+++ b/package/python-pyusb/Config.in
-@@ -0,0 +1,14 @@
-+config BR2_PACKAGE_PYTHON_PYUSB
-+	bool "python-pyusb"
++++ b/package/python-msgpack/Config.in
+@@ -0,0 +1,16 @@
++config BR2_PACKAGE_PYTHON_MSGPACK
++	bool "python-msgpack"
 +	depends on BR2_PACKAGE_PYTHON
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # libusb
-+	select BR2_PACKAGE_LIBUSB
++	select BR2_PACKAGE_MSGPACK
++	depends on BR2_INSTALL_LIBSTDCPP # msgpack
 +	help
-+	  The PyUSB module provides easy access to the Universal
-+	  Serial Bus (USB) from Python.
++	  MessagePack (http://msgpack.org/) is a fast, compact binary
++	  serialization format, suitable for similar data to JSON.
++	  This package provides CPython bindings for reading and
++	  writing MessagePack data.
 +
-+	  http://sourceforge.net/apps/trac/pyusb/
++	  https://pypi.python.org/pypi/msgpack-python/
 +
-+comment "python-pyusb needs a toolchain w/ threads"
++comment "python-msgpack needs a toolchain w/ C++"
 +	depends on BR2_PACKAGE_PYTHON
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/python-pyusb/python-pyusb.mk b/package/python-pyusb/python-pyusb.mk
++	depends on !BR2_INSTALL_LIBSTDCPP
+diff --git a/package/python-msgpack/python-msgpack.mk b/package/python-msgpack/python-msgpack.mk
 new file mode 100644
-index 0000000..dee6561
+index 0000000..2a7c384
 --- /dev/null
-+++ b/package/python-pyusb/python-pyusb.mk
-@@ -0,0 +1,14 @@
++++ b/package/python-msgpack/python-msgpack.mk
+@@ -0,0 +1,15 @@
 +################################################################################
 +#
-+# python-pyusb
++# python-msgpack
 +#
 +################################################################################
 +
-+PYTHON_PYUSB_VERSION = 0546cad8980783c39f96db717005a550059b730f
-+PYTHON_PYUSB_SITE = $(call github,walac,pyusb,$(PYTHON_PYUSB_VERSION))
-+PYTHON_PYUSB_LICENSE = BSD-3c
-+PYTHON_PYUSB_LICENSE_FILES = LICENSE
-+PYTHON_PYUSB_SETUP_TYPE = distutils
-+PYTHON_PYUSB_DEPENDENCIES = libusb
++PYTHON_MSGPACK_VERSION = 0.4.0
++PYTHON_MSGPACK_SOURCE = msgpack-python-$(PYTHON_MSGPACK_VERSION).tar.gz
++PYTHON_MSGPACK_SITE = https://pypi.python.org/packages/source/m/msgpack-python/
++PYTHON_MSGPACK_LICENSE = Apache License, Version 2.0
++PYTHON_MSGPACK_LICENSE_FILES = COPYING
++PYTHON_MSGPACK_SETUP_TYPE = setuptools
++PYTHON_MSGPACK_DEPENDENCIES = msgpack
 +
 +$(eval $(python-package))
 -- 
