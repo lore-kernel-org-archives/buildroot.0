@@ -1,46 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 11 Dec 2013 21:16:28 +0100
-Subject: [Buildroot] [PATCH 00/38] Python infrastructure and package
- conversion
-In-Reply-To: <CAAXf6LWJroTt-Xu=AzKVidVZbyKUjVk-+a=+cGqCO890YQ4pvw@mail.gmail.com>
-References: <1386540907-7242-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <CAAXf6LWJroTt-Xu=AzKVidVZbyKUjVk-+a=+cGqCO890YQ4pvw@mail.gmail.com>
-Message-ID: <20131211211628.56c701fa@skate>
+Date: Wed, 11 Dec 2013 21:26:37 +0100
+Subject: [Buildroot] [PATCHv2 02/36] python-bottle: convert to the Python
+	package infrastructure
+In-Reply-To: <1386793631-14026-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1386793631-14026-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1386793631-14026-3-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas De Schampheleire,
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/python-bottle/python-bottle.mk | 12 ++----------
+ 1 file changed, 2 insertions(+), 10 deletions(-)
 
-On Mon, 9 Dec 2013 17:44:58 +0100, Thomas De Schampheleire wrote:
-
-> I must say I'm very happy with this Python infrastructure for
-> buildroot. It removes quite some code and creates better consistency.
-> It's also great that you incorporated the pending Python patches from patchwork!
-> I did a basic review of your patches and provided some minor comments,
-> but nothing big.
-
-Thanks for review, very useful, as usual!
-
-> What kind of testing did you already do? Did you compile-test all
-> touched packages?
-
-I did compile test all of them, yes. For all the existing packages, I
-also did a comparison between a build before the patch series, and
-after the patch series. The list of installed files are similar, except
-for python-thrift and python-protobuf (see
-http://code.bulix.org/panul0-85169?raw), but these differences are not
-important apparently, which Gustavo confirmed on IRC. Also, I verified
-that all the native libraries (.so files) are properly built for ARM,
-to at least verify that some native compilation hasn't sneaked into the
-build.
-
-Best regards,
-
-Thomas
+diff --git a/package/python-bottle/python-bottle.mk b/package/python-bottle/python-bottle.mk
+index db71512..58c51f9 100644
+--- a/package/python-bottle/python-bottle.mk
++++ b/package/python-bottle/python-bottle.mk
+@@ -7,16 +7,8 @@
+ PYTHON_BOTTLE_VERSION = 0.11.6
+ PYTHON_BOTTLE_SOURCE = bottle-$(PYTHON_BOTTLE_VERSION).tar.gz
+ PYTHON_BOTTLE_SITE = http://pypi.python.org/packages/source/b/bottle
+-PYTHON_BOTTLE_DEPENDENCIES = python
+ PYTHON_BOTTLE_LICENSE = MIT
+ # README.rst refers to the file "LICENSE" but it's not included
++PYTHON_BOTTLE_SETUP_TYPE = distutils
+ 
+-define PYTHON_BOTTLE_BUILD_CMDS
+-	(cd $(@D); $(HOST_DIR)/usr/bin/python setup.py build --executable=/usr/bin/python)
+-endef
+-
+-define PYTHON_BOTTLE_INSTALL_TARGET_CMDS
+-	(cd $(@D); $(HOST_DIR)/usr/bin/python setup.py install --prefix=$(TARGET_DIR)/usr)
+-endef
+-
+-$(eval $(generic-package))
++$(eval $(python-package))
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.8.1.2
