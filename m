@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 11 Dec 2013 21:27:03 +0100
-Subject: [Buildroot] [PATCHv2 28/36] python-keyring: new package
+Date: Wed, 11 Dec 2013 21:27:04 +0100
+Subject: [Buildroot] [PATCHv2 29/36] python-simplejson: new package
 In-Reply-To: <1386793631-14026-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1386793631-14026-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1386793631-14026-29-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1386793631-14026-30-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,68 +12,62 @@ To: buildroot@busybox.net
 
 From: Ludovic Desroches <ludovic.desroches@atmel.com>
 
-[Thomas: convert to the Python package infrastructure, improved the
-.zip handling, added license informations.]
+[Thomas: convert to the Python package infrastructure, drop the
+setuptools dependency since the package uses distutils.]
 
 Signed-off-by: Ludovic Desroches <ludovic.desroches@atmel.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Config.in                        |  1 +
- package/python-keyring/Config.in         |  8 ++++++++
- package/python-keyring/python-keyring.mk | 19 +++++++++++++++++++
- 3 files changed, 28 insertions(+)
- create mode 100644 package/python-keyring/Config.in
- create mode 100644 package/python-keyring/python-keyring.mk
+ package/Config.in                              |  1 +
+ package/python-simplejson/Config.in            |  7 +++++++
+ package/python-simplejson/python-simplejson.mk | 14 ++++++++++++++
+ 3 files changed, 22 insertions(+)
+ create mode 100644 package/python-simplejson/Config.in
+ create mode 100644 package/python-simplejson/python-simplejson.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 99bc898..5d7f9a2 100644
+index 5d7f9a2..0fbcbbf 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -392,6 +392,7 @@ source "package/python-dialog/Config.in"
- source "package/python-dpkt/Config.in"
- source "package/python-id3/Config.in"
- source "package/python-ipy/Config.in"
-+source "package/python-keyring/Config.in"
- source "package/python-mad/Config.in"
- source "package/python-meld3/Config.in"
- source "package/python-msgpack/Config.in"
-diff --git a/package/python-keyring/Config.in b/package/python-keyring/Config.in
+@@ -406,6 +406,7 @@ source "package/python-pyusb/Config.in"
+ source "package/python-pyzmq/Config.in"
+ source "package/python-serial/Config.in"
+ source "package/python-setuptools/Config.in"
++source "package/python-simplejson/Config.in"
+ source "package/python-thrift/Config.in"
+ source "package/python-versiontools/Config.in"
+ endmenu
+diff --git a/package/python-simplejson/Config.in b/package/python-simplejson/Config.in
 new file mode 100644
-index 0000000..a6eacf5
+index 0000000..be0ee8f
 --- /dev/null
-+++ b/package/python-keyring/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_PYTHON_KEYRING
-+	bool "python-keyring"
++++ b/package/python-simplejson/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_PYTHON_SIMPLEJSON
++	bool "python-simplejson"
 +	depends on BR2_PACKAGE_PYTHON
 +	help
-+	  The Python keyring lib provides a easy way to access the
-+	  system keyring service from Python.
++	  Simple, fast, extensible JSON encoder/decoder for Python
 +
-+	  https://pypi.python.org/pypi/keyring
-diff --git a/package/python-keyring/python-keyring.mk b/package/python-keyring/python-keyring.mk
++	  https://pypi.python.org/pypi/simplejson/
+diff --git a/package/python-simplejson/python-simplejson.mk b/package/python-simplejson/python-simplejson.mk
 new file mode 100644
-index 0000000..3f27f20
+index 0000000..eb6287a
 --- /dev/null
-+++ b/package/python-keyring/python-keyring.mk
-@@ -0,0 +1,19 @@
++++ b/package/python-simplejson/python-simplejson.mk
+@@ -0,0 +1,14 @@
 +################################################################################
 +#
-+# python-keyring
++# python-simplejson
 +#
 +################################################################################
 +
-+PYTHON_KEYRING_VERSION = 3.0.5
-+PYTHON_KEYRING_SOURCE = keyring-$(PYTHON_KEYRING_VERSION).zip
-+PYTHON_KEYRING_SITE = http://pypi.python.org/packages/source/k/keyring/
-+PYTHON_KEYRING_SETUP_TYPE = setuptools
-+PYTHON_KEYRING_LICENSE = python software foundation license
-+
-+define PYTHON_KEYRING_EXTRACT_CMDS
-+	unzip -d $(@D) $(DL_DIR)/$(PYTHON_KEYRING_SOURCE)
-+	mv $(@D)/keyring-$(PYTHON_KEYRING_VERSION)/* $(@D)
-+	$(RM) -r $(@D)/keyring-$(PYTHON_KEYRING_VERSION)
-+endef
++PYTHON_SIMPLEJSON_VERSION = 3.3.1
++PYTHON_SIMPLEJSON_SOURCE = simplejson-$(PYTHON_SIMPLEJSON_VERSION).tar.gz
++PYTHON_SIMPLEJSON_SITE = http://pypi.python.org/packages/source/s/simplejson/
++PYTHON_SIMPLEJSON_LICENSE = MIT
++PYTHON_SIMPLEJSON_LICENSE_FILES = LICENSE.txt
++PYTHON_SIMPLEJSON_SETUP_TYPE = distutils
 +
 +$(eval $(python-package))
 -- 
