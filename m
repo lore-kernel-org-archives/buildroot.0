@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 11 Dec 2013 21:26:50 +0100
-Subject: [Buildroot] [PATCHv2 15/36] python-pyzmq: convert to the Python
-	package infrastructure
+Date: Wed, 11 Dec 2013 21:26:52 +0100
+Subject: [Buildroot] [PATCHv2 17/36] python-setuptools: convert to the
+	Python package infrastructure
 In-Reply-To: <1386793631-14026-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1386793631-14026-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1386793631-14026-16-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1386793631-14026-18-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,49 +13,45 @@ To: buildroot@busybox.net
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/python-pyzmq/python-pyzmq.mk | 26 +++-----------------------
- 1 file changed, 3 insertions(+), 23 deletions(-)
+ package/python-setuptools/python-setuptools.mk | 28 +++-----------------------
+ 1 file changed, 3 insertions(+), 25 deletions(-)
 
-diff --git a/package/python-pyzmq/python-pyzmq.mk b/package/python-pyzmq/python-pyzmq.mk
-index e9702fc..b3a8f9d 100644
---- a/package/python-pyzmq/python-pyzmq.mk
-+++ b/package/python-pyzmq/python-pyzmq.mk
-@@ -10,7 +10,8 @@ PYTHON_PYZMQ_SITE = http://pypi.python.org/packages/source/p/pyzmq/
- PYTHON_PYZMQ_LICENSE = LGPLv3+ BSD-3c Apache License Version 2.0
- # Apache license only online: http://www.apache.org/licenses/LICENSE-2.0
- PYTHON_PYZMQ_LICENSE_FILES = COPYING.LESSER COPYING.BSD
--PYTHON_PYZMQ_DEPENDENCIES = zeromq python host-python
-+PYTHON_PYZMQ_DEPENDENCIES = zeromq
-+PYTHON_PYZMQ_SETUP_TYPE = distutils
+diff --git a/package/python-setuptools/python-setuptools.mk b/package/python-setuptools/python-setuptools.mk
+index 73c819f..13df448 100644
+--- a/package/python-setuptools/python-setuptools.mk
++++ b/package/python-setuptools/python-setuptools.mk
+@@ -12,29 +12,7 @@
+ PYTHON_SETUPTOOLS_VERSION = 0.6.36
+ PYTHON_SETUPTOOLS_SOURCE  = distribute-$(PYTHON_SETUPTOOLS_VERSION).tar.gz
+ PYTHON_SETUPTOOLS_SITE    = http://pypi.python.org/packages/source/d/distribute
+-PYTHON_SETUPTOOLS_DEPENDENCIES = python
++PYTHON_SETUPTOOLS_SETUP_TYPE = setuptools
  
- # Due to issues with cross-compiling, hardcode to the zeromq in BR
- define PYTHON_PYZMQ_PATCH_ZEROMQ_VERSION
-@@ -20,25 +21,4 @@ endef
- 
- PYTHON_PYZMQ_POST_PATCH_HOOKS += PYTHON_PYZMQ_PATCH_ZEROMQ_VERSION
- 
--PYTHON_PYZMQ_PARAMS = CC="$(TARGET_CC)" \
--		CFLAGS="$(TARGET_CFLAGS)" \
--		LDSHARED="$(TARGET_CC) -shared" \
--		CROSS_COMPILING=yes \
--		_python_sysroot=$(STAGING_DIR) \
--		_python_srcdir=$(PYTHON_DIR) \
--		_python_prefix=/usr \
--		_python_exec_prefix=/usr
--
--define PYTHON_PYZMQ_CONFIGURE_CMDS
--	(cd $(@D); $(PYTHON_PYZMQ_PARAMS) \
--		$(HOST_DIR)/usr/bin/python setup.py configure \
--		--zmq=$(STAGING_DIR)/usr)
+-define HOST_PYTHON_SETUPTOOLS_BUILD_CMDS
+-	(cd $(@D); $(HOST_DIR)/usr/bin/python setup.py build)
 -endef
 -
--define PYTHON_PYZMQ_INSTALL_TARGET_CMDS
--	(cd $(@D); $(PYTHON_PYZMQ_PARAMS) \
--		$(HOST_DIR)/usr/bin/python setup.py install \
--		--prefix=$(TARGET_DIR)/usr)
+-define PYTHON_SETUPTOOLS_BUILD_CMDS
+-	(cd $(@D); \
+-	PYTHONPATH="$(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages" \
+-	$(HOST_DIR)/usr/bin/python setup.py build)
+-endef
+-
+-define HOST_PYTHON_SETUPTOOLS_INSTALL_CMDS
+-	(cd $(@D); \
+-	$(HOST_DIR)/usr/bin/python setup.py install --prefix=$(HOST_DIR)/usr)
+-endef
+-
+-define PYTHON_SETUPTOOLS_INSTALL_TARGET_CMDS
+-	(cd $(@D); \
+-	PYTHONPATH="$(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages" \
+-	$(HOST_DIR)/usr/bin/python setup.py install --executable=/usr/bin/python \
+-	--single-version-externally-managed --root=/ --prefix=$(TARGET_DIR)/usr)
 -endef
 -
 -$(eval $(generic-package))
+-$(eval $(host-generic-package))
 +$(eval $(python-package))
++$(eval $(host-python-package))
 -- 
 1.8.1.2
