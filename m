@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 11 Dec 2013 21:26:56 +0100
-Subject: [Buildroot] [PATCHv2 21/36] python-distutilscross: convert to the
-	Python package infrastructure
+Date: Wed, 11 Dec 2013 21:26:57 +0100
+Subject: [Buildroot] [PATCHv2 22/36] python-thrift: convert to the Python
+	package infrastructure
 In-Reply-To: <1386793631-14026-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1386793631-14026-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1386793631-14026-22-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1386793631-14026-23-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,30 +13,43 @@ To: buildroot@busybox.net
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/python-distutilscross/python-distutilscross.mk | 13 ++-----------
- 1 file changed, 2 insertions(+), 11 deletions(-)
+ package/python-thrift/python-thrift.mk | 26 +++-----------------------
+ 1 file changed, 3 insertions(+), 23 deletions(-)
 
-diff --git a/package/python-distutilscross/python-distutilscross.mk b/package/python-distutilscross/python-distutilscross.mk
-index df12f97..cfe2811 100644
---- a/package/python-distutilscross/python-distutilscross.mk
-+++ b/package/python-distutilscross/python-distutilscross.mk
-@@ -7,15 +7,6 @@
- PYTHON_DISTUTILSCROSS_VERSION = 0.1
- PYTHON_DISTUTILSCROSS_SOURCE  = distutilscross-$(PYTHON_DISTUTILSCROSS_VERSION).tar.gz
- PYTHON_DISTUTILSCROSS_SITE    = http://pypi.python.org/packages/source/d/distutilscross
-+PYTHON_DISTUTILSCROSS_SETUP_TYPE = setuptools
+diff --git a/package/python-thrift/python-thrift.mk b/package/python-thrift/python-thrift.mk
+index 91e14e5..8abad48 100644
+--- a/package/python-thrift/python-thrift.mk
++++ b/package/python-thrift/python-thrift.mk
+@@ -9,27 +9,7 @@ PYTHON_THRIFT_SOURCE = thrift-$(PYTHON_THRIFT_VERSION).tar.gz
+ PYTHON_THRIFT_SITE = http://www.us.apache.org/dist/thrift/$(PYTHON_THRIFT_VERSION)
+ PYTHON_THRIFT_LICENSE = Apache-2.0
+ PYTHON_THRIFT_LICENSE_FILES = LICENSE
+-PYTHON_THRIFT_DEPENDENCIES = python
++PYTHON_THRIFT_SETUP_TYPE = setuptools
++PYTHON_THRIFT_SUBDIR = lib/py
  
--HOST_PYTHON_DISTUTILSCROSS_DEPENDENCIES = host-python host-python-setuptools
--
--define HOST_PYTHON_DISTUTILSCROSS_BUILD_CMDS
--	(cd $(@D); $(HOST_DIR)/usr/bin/python setup.py build)
+-define PYTHON_THRIFT_BUILD_CMDS
+-	(cd $(@D)/lib/py; \
+-		CC="$(TARGET_CC)" \
+-		CFLAGS="$(TARGET_CFLAGS)" \
+-		LDSHARED="$(TARGET_CROSS)gcc -shared" \
+-		CROSS_COMPILING=yes \
+-		_python_sysroot=$(STAGING_DIR) \
+-		_python_srcdir=$(BUILD_DIR)/python$(PYTHON_VERSION) \
+-		_python_prefix=/usr \
+-		_python_exec_prefix=/usr \
+-		$(HOST_DIR)/usr/bin/python setup.py build)
 -endef
 -
--define HOST_PYTHON_DISTUTILSCROSS_INSTALL_CMDS
--	(cd $(@D); $(HOST_DIR)/usr/bin/python setup.py install --prefix=$(HOST_DIR)/usr)
+-# host-distutilscross, if it has been installed before, will check that
+-# the installation directory is in python's load path. For host-python,
+-# it is not, so add it explicitly while installing to target.
+-define PYTHON_THRIFT_INSTALL_TARGET_CMDS
+-	(cd $(@D)/lib/py; PYTHONPATH=$(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages \
+-		$(HOST_DIR)/usr/bin/python setup.py install --prefix=$(TARGET_DIR)/usr)
 -endef
 -
--$(eval $(host-generic-package))
-+$(eval $(host-python-package))
+-$(eval $(generic-package))
++$(eval $(python-package))
 -- 
 1.8.1.2
