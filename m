@@ -1,32 +1,35 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 11 Dec 2013 22:25:08 +0100
-Subject: [Buildroot] [git commit] libcuefile: add licensing info
-Message-ID: <20131211213615.571E39BFD0@busybox.osuosl.org>
+Date: Wed, 11 Dec 2013 22:25:59 +0100
+Subject: [Buildroot] [git commit] freerdp: add licensing info
+Message-ID: <20131211213615.6BB149BFD0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=44de1624e4de46474e9b3ecb640e75af67e71ed3
+commit: http://git.buildroot.net/buildroot/commit/?id=632fd88385a0e43ce2f8b8985916fbaee8c6cfbe
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libcuefile/libcuefile.mk |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+ package/freerdp/freerdp.mk |    3 ++-
+ 1 files changed, 2 insertions(+), 1 deletions(-)
 
-diff --git a/package/libcuefile/libcuefile.mk b/package/libcuefile/libcuefile.mk
-index ceb1509..d1f2448 100644
---- a/package/libcuefile/libcuefile.mk
-+++ b/package/libcuefile/libcuefile.mk
-@@ -8,6 +8,8 @@ LIBCUEFILE_VERSION = r475
- LIBCUEFILE_SITE = http://files.musepack.net/source
- LIBCUEFILE_SOURCE = libcuefile_$(LIBCUEFILE_VERSION).tar.gz
- LIBCUEFILE_INSTALL_STAGING = YES
-+LIBCUEFILE_LICENSE = GPLv2+
-+LIBCUEFILE_LICENSE_FILES = COPYING
+diff --git a/package/freerdp/freerdp.mk b/package/freerdp/freerdp.mk
+index c06aac9..3ac53aa 100644
+--- a/package/freerdp/freerdp.mk
++++ b/package/freerdp/freerdp.mk
+@@ -6,9 +6,10 @@
  
- define LIBCUEFILE_INSTALL_STAGING_INCLUDES
- 	cp -r $(@D)/include $(STAGING_DIR)/usr
+ FREERDP_VERSION = 1.0.1
+ FREERDP_SITE = https://github.com/downloads/FreeRDP/FreeRDP
+-
+ FREERDP_DEPENDENCIES = openssl zlib \
+ 	xlib_libX11 xlib_libXt xlib_libXext xlib_libXcursor
++FREERDP_LICENSE = Apache 2.0
++FREEDRP_LICENSE_FILES = LICENSE
+ 
+ ifeq ($(BR2_PACKAGE_CUPS),y)
+ FREERDP_CONF_OPT += -DWITH_CUPS=ON
