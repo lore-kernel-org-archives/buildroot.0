@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 11 Dec 2013 21:27:06 +0100
-Subject: [Buildroot] [PATCHv2 31/36] python-tornado: new package
+Date: Wed, 11 Dec 2013 21:27:07 +0100
+Subject: [Buildroot] [PATCHv2 32/36] python-pyasn: new package
 In-Reply-To: <1386793631-14026-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1386793631-14026-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1386793631-14026-32-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1386793631-14026-33-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,56 +15,67 @@ From: Ryan Barnett <ryanbarnett3@gmail.com>
 Signed-off-by: Ryan Barnett <rjbarnet@rockwellcollins.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Config.in                        |  1 +
- package/python-tornado/Config.in         |  8 ++++++++
- package/python-tornado/python-tornado.mk | 13 +++++++++++++
- 3 files changed, 22 insertions(+)
- create mode 100644 package/python-tornado/Config.in
- create mode 100644 package/python-tornado/python-tornado.mk
+ package/Config.in                    |  1 +
+ package/python-pyasn/Config.in       | 13 +++++++++++++
+ package/python-pyasn/python-pyasn.mk | 19 +++++++++++++++++++
+ 3 files changed, 33 insertions(+)
+ create mode 100644 package/python-pyasn/Config.in
+ create mode 100644 package/python-pyasn/python-pyasn.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 3dd31e8..acfd125 100644
+index acfd125..8dc03d0 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -409,6 +409,7 @@ source "package/python-serial/Config.in"
- source "package/python-setuptools/Config.in"
- source "package/python-simplejson/Config.in"
- source "package/python-thrift/Config.in"
-+source "package/python-tornado/Config.in"
- source "package/python-versiontools/Config.in"
- endmenu
- endif
-diff --git a/package/python-tornado/Config.in b/package/python-tornado/Config.in
+@@ -400,6 +400,7 @@ source "package/python-msgpack/Config.in"
+ source "package/python-netifaces/Config.in"
+ source "package/python-nfc/Config.in"
+ source "package/python-protobuf/Config.in"
++source "package/python-pyasn/Config.in"
+ source "package/python-pygame/Config.in"
+ source "package/python-pyparsing/Config.in"
+ source "package/python-pyro/Config.in"
+diff --git a/package/python-pyasn/Config.in b/package/python-pyasn/Config.in
 new file mode 100644
-index 0000000..c127d0e
+index 0000000..a9f0014
 --- /dev/null
-+++ b/package/python-tornado/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_PYTHON_TORNADO
-+	bool "python-tornado"
-+	depends on BR2_PACKAGE_PYTHON
-+	help
-+	  Tornado is a Python web framework and asynchronous networking
-+	  library, originally developed at FriendFeed.
-+
-+	  http://www.tornadoweb.org
-diff --git a/package/python-tornado/python-tornado.mk b/package/python-tornado/python-tornado.mk
-new file mode 100644
-index 0000000..781ec03
---- /dev/null
-+++ b/package/python-tornado/python-tornado.mk
++++ b/package/python-pyasn/Config.in
 @@ -0,0 +1,13 @@
++config BR2_PACKAGE_PYTHON_PYASN
++	bool "python-pyasn"
++	depends on BR2_PACKAGE_PYTHON
++	depends on BR2_INSTALL_LIBSTDCPP
++	help
++	  PyASN is a Python extension module that enables you to
++	  perform very fast IP address to Autonomous System Number
++	  lookups.
++
++	  https://code.google.com/p/pyasn/
++
++comment "python-pyasn needs a toolchain w/ C++"
++        depends on !BR2_INSTALL_LIBSTDCPP
+diff --git a/package/python-pyasn/python-pyasn.mk b/package/python-pyasn/python-pyasn.mk
+new file mode 100644
+index 0000000..e360464
+--- /dev/null
++++ b/package/python-pyasn/python-pyasn.mk
+@@ -0,0 +1,19 @@
 +################################################################################
 +#
-+# python-tornado
++# python-pyasn
 +#
 +################################################################################
 +
-+PYTHON_TORNADO_VERSION = 3.1.1
-+PYTHON_TORNADO_SOURCE = tornado-$(PYTHON_TORNADO_VERSION).tar.gz
-+PYTHON_TORNADO_SITE = https://pypi.python.org/packages/source/t/tornado
-+PYTHON_TORNADO_LICENSE = Apache-v2
-+PYTHON_TORNADO_SETUP_TYPE = setuptools
++PYTHON_PYASN_VERSION = 1.2
++PYTHON_PYASN_SOURCE = PyASN-$(PYTHON_PYASN_VERSION).zip
++PYTHON_PYASN_SITE = https://pyasn.googlecode.com/files
++PYTHON_PYASN_LICENSE = LGPL
++PYTHON_PYASN_SETUP_TYPE = distutils
++
++define PYTHON_PYASN_EXTRACT_CMDS
++	unzip -d $(@D) $(DL_DIR)/$(PYTHON_PYASN_SOURCE)
++	mv $(@D)/PyASN-$(PYTHON_PYASN_VERSION)/* $(@D)
++	$(RM) -r $(@D)/PyASN-$(PYTHON_PYASN_VERSION)
++endef
 +
 +$(eval $(python-package))
 -- 
