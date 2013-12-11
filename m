@@ -1,92 +1,61 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Wed, 11 Dec 2013 10:04:47 +0100
-Subject: [Buildroot] [PATCH 1/1] package/Config.in: fix alphabetical
-	order
-In-Reply-To: <1386750308-6918-1-git-send-email-jerzy.grzegorek@trzebnica.net>
-References: <1386750308-6918-1-git-send-email-jerzy.grzegorek@trzebnica.net>
-Message-ID: <CAAXf6LWBa--08k2tha4tuwXkr44aECruioADYV8ioeQ2zPWzVQ@mail.gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Wed, 11 Dec 2013 11:05:18 +0200
+Subject: [Buildroot] [PATCH] wpa_supplicant: add option to enable syslog
+ support
+In-Reply-To: <1386751772-5704-1-git-send-email-neumann@teufel.de>
+References: <1386751772-5704-1-git-send-email-neumann@teufel.de>
+Message-ID: <20131211090518.GG1217@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Dec 11, 2013 at 9:25 AM, Jerzy Grzegorek
-<jerzy.grzegorek@trzebnica.net> wrote:
-> Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+Hi Sven,
+
+On Wed, Dec 11, 2013 at 09:49:32AM +0100, Sven Neumann wrote:
+> Add an option to enable support for sending debug messages
+> to syslog instead of stdout.
+> 
+> Signed-off-by: Sven Neumann <neumann@teufel.de>
 > ---
->  package/Config.in |   14 +++++++-------
->  1 file changed, 7 insertions(+), 7 deletions(-)
->
-> diff --git a/package/Config.in b/package/Config.in
-> index 40c9e31..eb96aeb 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -177,9 +177,9 @@ source "package/fbgrab/Config.in"
->  if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
->  source "package/fbset/Config.in"
+>  package/wpa_supplicant/wpa_supplicant.mk | 7 +++++++
+>  1 file changed, 7 insertions(+)
+> 
+> diff --git a/package/wpa_supplicant/wpa_supplicant.mk b/package/wpa_supplicant/wpa_supplicant.mk
+> index 4ae41c1..920f96a 100644
+> --- a/package/wpa_supplicant/wpa_supplicant.mk
+> +++ b/package/wpa_supplicant/wpa_supplicant.mk
+> @@ -116,6 +116,12 @@ endef
+>  
 >  endif
-> +source "package/fb-test-app/Config.in"
->  source "package/fbterm/Config.in"
->  source "package/fbv/Config.in"
-> -source "package/fb-test-app/Config.in"
->  source "package/imagemagick/Config.in"
->  source "package/linux-fusion/Config.in"
->  source "package/lite/Config.in"
-> @@ -208,8 +208,8 @@ source "package/qwt/Config.in"
->  endif
->
->  source "package/qt5/Config.in"
-> -source "package/x11r7/Config.in"
->  source "package/weston/Config.in"
-> +source "package/x11r7/Config.in"
->
->  comment "X applications"
->  source "package/alsamixergui/Config.in"
-> @@ -338,13 +338,13 @@ source "package/usb_modeswitch/Config.in"
->  source "package/usb_modeswitch_data/Config.in"
->  source "package/usbmount/Config.in"
->  source "package/usbutils/Config.in"
-> -source "package/wipe/Config.in"
->  source "package/w_scan/Config.in"
-> +source "package/wipe/Config.in"
->  endmenu
->
->  menu "Interpreter languages and scripting"
-> -source "package/erlang/Config.in"
->  source "package/enscript/Config.in"
-> +source "package/erlang/Config.in"
->  source "package/haserl/Config.in"
->  source "package/jamvm/Config.in"
->  source "package/jimtcl/Config.in"
-> @@ -356,6 +356,8 @@ source "package/cgilua/Config.in"
->  source "package/copas/Config.in"
->  source "package/coxpcall/Config.in"
->  source "package/lbase64/Config.in"
-> +source "package/lua-ev/Config.in"
-> +source "package/lua-msgpack-native/Config.in"
->  source "package/luabitop/Config.in"
->  source "package/luacjson/Config.in"
->  source "package/luacrypto/Config.in"
-> @@ -366,8 +368,6 @@ source "package/luaposix/Config.in"
->  source "package/luasec/Config.in"
->  source "package/luasocket/Config.in"
->  source "package/luasql/Config.in"
-> -source "package/lua-ev/Config.in"
-> -source "package/lua-msgpack-native/Config.in"
->  source "package/orbit/Config.in"
->  source "package/rings/Config.in"
->  source "package/wsapi/Config.in"
-> @@ -619,8 +619,8 @@ source "package/cppzmq/Config.in"
->  source "package/czmq/Config.in"
->  source "package/filemq/Config.in"
->  source "package/glib-networking/Config.in"
-> -source "package/libcgicc/Config.in"
->  source "package/libcgi/Config.in"
-> +source "package/libcgicc/Config.in"
->  source "package/libcurl/Config.in"
->  source "package/libdnet/Config.in"
->  source "package/libesmtp/Config.in"
+>  
+> +ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT_DEBUG_SYSLOG),y)
 
+Where is this defined?
 
-Acked-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+baruch
+
+> +define WPA_SUPPLICANT_DEBUG_CONFIG
+> +	$(SED) 's/\(#\)\(CONFIG_DEBUG_SYSLOG.*\)/\2/' $(WPA_SUPPLICANT_CONFIG)
+> +endef
+> +endif
+> +
+>  define WPA_SUPPLICANT_CONFIGURE_CMDS
+>  	cp $(@D)/wpa_supplicant/defconfig $(WPA_SUPPLICANT_CONFIG)
+>  	$(SED) 's/\(#\)\(CONFIG_HS20.*\)/\2/' $(WPA_SUPPLICANT_CONFIG)
+> @@ -133,6 +139,7 @@ define WPA_SUPPLICANT_CONFIGURE_CMDS
+>  	$(WPA_SUPPLICANT_LIBNL_CONFIG)
+>  	$(WPA_SUPPLICANT_DBUS_CONFIG)
+>  	$(WPA_SUPPLICANT_AP_CONFIG)
+> +	$(WPA_SUPPLICANT_DEBUG_CONFIG)
+>  endef
+>  
+>  define WPA_SUPPLICANT_BUILD_CMDS
+> -- 
+> 1.8.3.2
+
+-- 
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
