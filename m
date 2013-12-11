@@ -1,78 +1,75 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 11 Dec 2013 21:27:11 +0100
-Subject: [Buildroot] [PATCHv2 36/36] python-pysnmp-mibs: new package
+Date: Wed, 11 Dec 2013 21:26:47 +0100
+Subject: [Buildroot] [PATCHv2 12/36] python-pygame: convert to the Python
+	package infrastructure
 In-Reply-To: <1386793631-14026-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1386793631-14026-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1386793631-14026-37-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1386793631-14026-13-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Ryan Barnett <ryanbarnett3@gmail.com>
-
-Signed-off-by: Ryan Barnett <rjbarnet@rockwellcollins.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Config.in                                |  1 +
- package/python-pysnmp-mibs/Config.in             | 13 +++++++++++++
- package/python-pysnmp-mibs/python-pysnmp-mibs.mk | 16 ++++++++++++++++
- 3 files changed, 30 insertions(+)
- create mode 100644 package/python-pysnmp-mibs/Config.in
- create mode 100644 package/python-pysnmp-mibs/python-pysnmp-mibs.mk
+ package/python-pygame/python-pygame.mk | 25 ++++++++-----------------
+ 1 file changed, 8 insertions(+), 17 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 8d1d00b..86f8475 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -407,6 +407,7 @@ source "package/python-pyparsing/Config.in"
- source "package/python-pyro/Config.in"
- source "package/python-pysnmp/Config.in"
- source "package/python-pysnmp-apps/Config.in"
-+source "package/python-pysnmp-mibs/Config.in"
- source "package/python-pyusb/Config.in"
- source "package/python-pyzmq/Config.in"
- source "package/python-serial/Config.in"
-diff --git a/package/python-pysnmp-mibs/Config.in b/package/python-pysnmp-mibs/Config.in
-new file mode 100644
-index 0000000..76089b1
---- /dev/null
-+++ b/package/python-pysnmp-mibs/Config.in
-@@ -0,0 +1,13 @@
-+config BR2_PACKAGE_PYTHON_PYSNMP_MIBS
-+	bool "python-pysnmp-mibs"
-+	depends on BR2_PACKAGE_PYTHON
-+	select BR2_PACKAGE_PYTHON_PYSNMP
-+	depends on BR2_INSTALL_LIBSTDCPP # pysnmp -> pyasn
-+	help
-+	  PySNMP MIBs is a set of IETF & IANA MIBs pre-compiled and
-+	  packaged to simplify their use with the PySNMP library.
+diff --git a/package/python-pygame/python-pygame.mk b/package/python-pygame/python-pygame.mk
+index 9db5a3f..681b36c 100644
+--- a/package/python-pygame/python-pygame.mk
++++ b/package/python-pygame/python-pygame.mk
+@@ -10,6 +10,7 @@ PYTHON_PYGAME_VERSION = f0bb4a4b365d
+ PYTHON_PYGAME_SOURCE  = pygame-$(PYTHON_PYGAME_VERSION).tar.gz
+ PYTHON_PYGAME_SITE = https://bitbucket.org/pygame/pygame
+ PYTHON_PYGAME_SITE_METHOD = hg
++PYTHON_PYGAME_SETUP_TYPE = distutils
+ 
+ ifeq ($(BR2_PACKAGE_PYTHON_PYGAME_IMAGE),y)
+ PYTHON_PYGAME_OPT_DEPENDS += sdl_image
+@@ -23,7 +24,7 @@ ifeq ($(BR2_PACKAGE_PYTHON_PYGAME_MIXER),y)
+ PYTHON_PYGAME_OPT_DEPENDS += sdl_mixer
+ endif
+ 
+-PYTHON_PYGAME_DEPENDENCIES = python sdl $(PYTHON_PYGAME_OPT_DEPENDS)
++PYTHON_PYGAME_DEPENDENCIES = sdl $(PYTHON_PYGAME_OPT_DEPENDS)
+ 
+ ifneq ($(BR2_PACKAGE_PYTHON_PYGAME_IMAGE),y)
+ define PYTHON_PYGAME_UNCONFIGURE_IMAGE
+@@ -81,28 +82,18 @@ define PYTHON_PYGAME_CONFIGURE_CMDS
+ 	$(PYTHON_PYGAME_UNCONFIGURE_SCRAP)
+ endef
+ 
+-define PYTHON_PYGAME_BUILD_CMDS
+-	(cd $(@D); CC="$(TARGET_CC)" CFLAGS="$(TARGET_CFLAGS)" \
+-		LDSHARED="$(TARGET_CROSS)gcc -shared" \
+-		CROSS_COMPILING=yes \
+-		_python_sysroot=$(STAGING_DIR) \
+-		_python_srcdir=$(BUILD_DIR)/python$(PYTHON_VERSION) \
+-		_python_prefix=/usr \
+-		_python_exec_prefix=/usr \
+-		$(HOST_DIR)/usr/bin/python setup.py build)
+-endef
+-
+ ifneq ($(BR2_HAVE_DOCUMENTATION),y)
+ define PYTHON_PYGAME_REMOVE_DOC
+ 	rm -rf $(TARGET_DIR)/usr/lib/python*/site-packages/pygame/docs
+ endef
 +
-+	  http://pysnmp.sf.net
-+
-+comment "python-pysnmp-libs needs a toolchain w/ C++"
-+        depends on !BR2_INSTALL_LIBSTDCPP
-diff --git a/package/python-pysnmp-mibs/python-pysnmp-mibs.mk b/package/python-pysnmp-mibs/python-pysnmp-mibs.mk
-new file mode 100644
-index 0000000..21b9673
---- /dev/null
-+++ b/package/python-pysnmp-mibs/python-pysnmp-mibs.mk
-@@ -0,0 +1,16 @@
-+################################################################################
-+#
-+# python-pysnmp-mibs
-+#
-+################################################################################
-+
-+PYTHON_PYSNMP_MIBS_VERSION = 0.1.4
-+PYTHON_PYSNMP_MIBS_SOURCE = pysnmp-mibs-$(PYTHON_PYSNMP_MIBS_VERSION).tar.gz
-+PYTHON_PYSNMP_MIBS_SITE = https://pypi.python.org/packages/source/p/pysnmp-mibs
-+PYTHON_PYSNMP_MIBS_SETUP_TYPE = setuptools
-+PYTHON_PYSNMP_MIBS_LICENSE = BSD-3c
-+PYTHON_PYSNMP_MIBS_LICENSE_FILES = LICENSE
-+
-+PYTHON_PYSNMP_MIBS_DEPENDENCIES = python-pysnmp
++PYTHON_PYGAME_POST_INSTALL_TARGET_HOOKS += PYTHON_PYGAME_REMOVE_DOC
+ endif
+ 
+-define PYTHON_PYGAME_INSTALL_TARGET_CMDS
+-	(cd $(@D); $(HOST_DIR)/usr/bin/python setup.py install \
+-		--prefix=$(TARGET_DIR)/usr)
++define PYTHON_PYGAME_REMOVE_TESTS
+ 	rm -rf $(TARGET_DIR)/usr/lib/python*/site-packages/pygame/tests
+-	$(PYTHON_PYGAME_REMOVE_DOC)
+ endef
+ 
+-$(eval $(generic-package))
++PYTHON_PYGAME_POST_INSTALL_TARGET_HOOKS += PYTHON_PYGAME_REMOVE_TESTS
 +
 +$(eval $(python-package))
 -- 
