@@ -1,32 +1,37 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 11 Dec 2013 10:23:49 -0300
-Subject: [Buildroot] [PATCH 16/16] aumix: add licensing info
-In-Reply-To: <1386768229-29485-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1386768229-29485-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1386768229-29485-16-git-send-email-gustavo@zacarias.com.ar>
+From: David Corvoysier <david.corvoysier@orange.com>
+Date: Wed, 11 Dec 2013 15:05:03 +0100
+Subject: [Buildroot] [PATCH] package/libgles: postpone the check for a
+ missing GLES provider
+In-Reply-To: <52A862B4.50103@orange.com>
+References: <52A730B0.3020104@orange.com>
+ <1386702439-10093-2-git-send-email-yann.morin.1998@free.fr>
+ <52A842A3.3010302@mind.be> <201312111325.49600.yann.morin.1998@free.fr>
+ <52A862B4.50103@orange.com>
+Message-ID: <52A8710F.7040406@orange.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/aumix/aumix.mk | 2 ++
- 1 file changed, 2 insertions(+)
+Sorry, I did another try from a clean environment and the second 
+solution didn't work either: LIBGLES_DEPENDENCIES has the right 
+(modified) value when it the LIBGLES_CONFIGURE_CMDS is evaluated, but 
+not when the dependencies themselves are evaluated (I think it happens 
+in pkg-generic.mk).
 
-diff --git a/package/aumix/aumix.mk b/package/aumix/aumix.mk
-index de0902a..a55588f 100644
---- a/package/aumix/aumix.mk
-+++ b/package/aumix/aumix.mk
-@@ -8,6 +8,8 @@ AUMIX_VERSION = 2.8
- AUMIX_SOURCE = aumix-$(AUMIX_VERSION).tar.bz2
- AUMIX_SITE = http://jpj.net/~trevor/aumix/releases
- AUMIX_AUTORECONF = YES
-+AUMIX_LICENSE = GPLv2+
-+AUMIX_LICENSE_FILES = COPYING
- 
- AUMIX_CONF_OPT = \
- 	--without-gtk \
--- 
-1.8.3.2
+So, the build doesn't fail on the LIBGLES_CONFIGURE_CMDS test, but if 
+the xx_userland package has not been installed beforehand, it is not 
+installed automatically when libgles is built.
+
+David
+
+Le 11/12/2013 14:03, David Corvoysier a ?crit :
+> Guys,
+>
+> The first solution did not work (as yann pointed out, the variable is 
+> not exported), but the second does.
+> Who's in for a patch (me ?)
+>
+> David
+>
