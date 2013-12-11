@@ -1,41 +1,32 @@
-From: Brian Beattie <beattie@beattie-home.net>
-Date: Tue, 10 Dec 2013 16:25:10 -0800
-Subject: [Buildroot] [PATCH 2/2] update sunxi-boards to newer commit as
- recomended for pcDuino board
-Message-ID: <1386721510.2817.19.camel@kokopelli>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Wed, 11 Dec 2013 06:38:12 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2013-12-09
+In-Reply-To: <20131210073007.6A2C4100850@stock.ovh.net>
+References: <20131210073007.6A2C4100850@stock.ovh.net>
+Message-ID: <20131211043812.GA1217@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
----
- package/sunxi-tools/sunxi-tools.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Hi Thomas, all,
 
-diff --git a/package/sunxi-tools/sunxi-tools.mk
-b/package/sunxi-tools/sunxi-tools.mk
-index a6c38d9..f84b286 100644
---- a/package/sunxi-tools/sunxi-tools.mk
-+++ b/package/sunxi-tools/sunxi-tools.mk
-@@ -4,7 +4,7 @@
- #
+On Tue, Dec 10, 2013 at 08:30:07AM +0100, Thomas Petazzoni wrote:
+>     xtensa |                      m4-1.4.17 | NOK | http://autobuild.buildroot.net/results/0b9b3bb1791bbc9f902a23360c4540d90a0e05ca/
+>     xtensa |                      m4-1.4.17 | NOK | http://autobuild.buildroot.net/results/ffda6f3f64c612da999229226f699c01ccebe4c2/
 
-################################################################################
- 
--SUNXI_TOOLS_VERSION = 3a94e721dd8d1e13d0b25da0a83463891e8e9ee0
-+SUNXI_TOOLS_VERSION = ed6f7969d80b91048b0ed95ccb61cc98f46fead7
- SUNXI_TOOLS_SITE = $(call github,linux-sunxi,sunxi-tools,
-$(SUNXI_TOOLS_VERSION))
- SUNXI_TOOLS_LICENSE = GPLv2+
- SUNXI_TOOLS_LICENSE_FILES = COPYING
--- 
-1.8.1.2
+I'm struggling with this one. The configure script test for posix_spawn build 
+fails because it lacks '-lrt'. This causes m4 to use an internal 
+implementation that fails at build time for some other reason (haven't found 
+the reason for that yet).
 
+How can I add -lrt to the build test command line?
+
+baruch
 
 -- 
-"For every complex problem there is an answer that is clear, simple, and
-wrong." -- H. L. Mencken
-
-Brian Beattie<beattie@beattie-home.net> -- www.brian-beattie.com
-LFS12947
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
