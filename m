@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 11 Dec 2013 21:26:46 +0100
-Subject: [Buildroot] [PATCHv2 11/36] python-protobuf: convert to the Python
+Date: Wed, 11 Dec 2013 21:26:48 +0100
+Subject: [Buildroot] [PATCHv2 13/36] python-pyparsing: convert to the Python
 	package infrastructure
 In-Reply-To: <1386793631-14026-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1386793631-14026-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1386793631-14026-12-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1386793631-14026-14-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,34 +13,42 @@ To: buildroot@busybox.net
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/python-protobuf/python-protobuf.mk | 20 ++++----------------
- 1 file changed, 4 insertions(+), 16 deletions(-)
+ package/python-pyparsing/python-pyparsing.mk | 28 ++--------------------------
+ 1 file changed, 2 insertions(+), 26 deletions(-)
 
-diff --git a/package/python-protobuf/python-protobuf.mk b/package/python-protobuf/python-protobuf.mk
-index dcf67c2..36ab644 100644
---- a/package/python-protobuf/python-protobuf.mk
-+++ b/package/python-protobuf/python-protobuf.mk
-@@ -9,20 +9,8 @@ PYTHON_PROTOBUF_SOURCE  = $(PROTOBUF_SOURCE)
- PYTHON_PROTOBUF_SITE    = $(PROTOBUF_SITE)
- PYTHON_PROTOBUF_LICENSE = BSD-3c
- PYTHON_PROTOBUF_LICENSE_FILES = COPYING.txt
-+PYTHON_PROTOBUF_DEPENDENCIES = host-protobuf
-+PYTHON_PROTOBUF_SETUP_TYPE = setuptools
-+PYTHON_PROTOBUF_SUBDIR = python
+diff --git a/package/python-pyparsing/python-pyparsing.mk b/package/python-pyparsing/python-pyparsing.mk
+index 7814ce3..07dda58 100644
+--- a/package/python-pyparsing/python-pyparsing.mk
++++ b/package/python-pyparsing/python-pyparsing.mk
+@@ -9,30 +9,6 @@ PYTHON_PYPARSING_SOURCE          = pyparsing-$(PYTHON_PYPARSING_VERSION).tar.gz
+ PYTHON_PYPARSING_SITE            = http://downloads.sourceforge.net/project/pyparsing/pyparsing/pyparsing-$(PYTHON_PYPARSING_VERSION)
+ PYTHON_PYPARSING_LICENSE         = MIT
+ PYTHON_PYPARSING_LICENSE_FILES   = LICENSE
+-PYTHON_PYPARSING_INSTALL_STAGING = YES
+-PYTHON_PYPARSING_DEPENDENCIES    = python
++PYTHON_PYPARSING_SETUP_TYPE      = distutils
  
--PYTHON_PROTOBUF_DEPENDENCIES = python host-python-setuptools \
--        host-python-distutilscross host-protobuf
--
--define PYTHON_PROTOBUF_BUILD_CMDS
--	(cd $(@D)/python; \
--		PYTHONXCPREFIX="$(STAGING_DIR)/usr/" \
--		PATH=$(HOST_PATH) \
--	$(HOST_DIR)/usr/bin/python setup.py build -x)
+-# Shamelessly vampirised from python-pygame ;-)
+-define PYTHON_PYPARSING_BUILD_CMDS
+-	(cd $(@D);                                              \
+-	 CC="$(TARGET_CC)"                                      \
+-	 CFLAGS="$(TARGET_CFLAGS)"                              \
+-	 LDSHARED="$(TARGET_CROSS)gcc -shared"                  \
+-	 CROSS_COMPILING=yes                                    \
+-	 _python_sysroot=$(STAGING_DIR)                         \
+-	 _python_srcdir=$(BUILD_DIR)/python$(PYTHON_VERSION)    \
+-	 _python_prefix=/usr                                    \
+-	 _python_exec_prefix=/usr                               \
+-	 $(HOST_DIR)/usr/bin/python setup.py build              \
+-	)
 -endef
 -
--define PYTHON_PROTOBUF_INSTALL_TARGET_CMDS
--	(cd $(@D)/python; PYTHONPATH=$(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages \
--	$(HOST_DIR)/usr/bin/python setup.py install --prefix=$(TARGET_DIR)/usr)
+-# Shamelessly vampirised from python-pygame ;-)
+-define PYTHON_PYPARSING_INSTALL_TARGET_CMDS
+-	(cd $(@D);                                              \
+-	 $(HOST_DIR)/usr/bin/python setup.py install            \
+-	                            --prefix=$(TARGET_DIR)/usr  \
+-	)
 -endef
 -
 -$(eval $(generic-package))
