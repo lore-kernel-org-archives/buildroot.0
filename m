@@ -1,44 +1,91 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Wed, 11 Dec 2013 19:12:01 +0100
-Subject: [Buildroot] [PATCH 1/1] package: make package download from
- Mercurial repositories more robust
-In-Reply-To: <CAAXf6LVU9OJtS2-Pbr0ect35RRvFd3fY4643ZhsDf-dSGj-RYg@mail.gmail.com>
-References: <1386700290-4813-1-git-send-email-mathias.demare@gmail.com>
- <CAAXf6LVU9OJtS2-Pbr0ect35RRvFd3fY4643ZhsDf-dSGj-RYg@mail.gmail.com>
-Message-ID: <CAAXf6LVBGJj_=Tns7O-9XF05OJ8NU0DCAfpPtFRQdMV7NJMNeA@mail.gmail.com>
+Date: Wed, 11 Dec 2013 19:36:08 +0100
+Subject: [Buildroot] [PATCH 1/2] pkg-generick.mk: support for multiple
+ patch dirs
+In-Reply-To: <1386784684-6546-1-git-send-email-rjbarnet@rockwellcollins.com>
+References: <1386784684-6546-1-git-send-email-rjbarnet@rockwellcollins.com>
+Message-ID: <CAAXf6LWRgF5cQxrq-yGKPtNfBWOYpLPcy9KHx1HJoGsTRwi25w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Dec 10, 2013 at 9:10 PM, Thomas De Schampheleire
-<patrickdepinguin@gmail.com> wrote:
-> On Tue, Dec 10, 2013 at 7:31 PM, Mathias De Mar?
-> <mathias.demare@gmail.com> wrote:
->> Previously, when cloning a Mercurial repository,
->> aborting the clone could (in some cases) leave behind an empty directory.
->> As a result, a later clone would fail.
->>
->> Signed-off-by: Mathias De Mar? <mathias.demare@gmail.com>
->> ---
->>  package/pkg-download.mk | 1 +
->>  1 file changed, 1 insertion(+)
->>
->> diff --git a/package/pkg-download.mk b/package/pkg-download.mk
->> index 758b211..c00689b 100644
->> --- a/package/pkg-download.mk
->> +++ b/package/pkg-download.mk
->> @@ -178,6 +178,7 @@ endef
->>  define DOWNLOAD_HG
->>         test -e $(DL_DIR)/$($(PKG)_SOURCE) || \
->>         (pushd $(DL_DIR) > /dev/null && \
->> +       rm -rf $($(PKG)_BASE_NAME) && \
->>         $(HG) clone --noupdate --rev $($(PKG)_DL_VERSION) $($(PKG)_SITE) $($(PKG)_BASE_NAME) && \
->>         $(HG) archive --repository $($(PKG)_BASE_NAME) --type tgz --prefix $($(PKG)_BASE_NAME)/ \
->>                       --rev $($(PKG)_DL_VERSION) $(DL_DIR)/$($(PKG)_SOURCE) && \
->
-> Acked-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+Hi Ryan,
 
-It seems that patchwork did not pick up this ack, nor the reply
-itself... Is this a known issue?
+On Wed, Dec 11, 2013 at 6:58 PM, Ryan Barnett
+<rjbarnet@rockwellcollins.com> wrote:
+> Adding support for specifying multiple directories in
+> BR2_GLOBAL_PATCH_DIR. This will allow for a layered approach for the
+> patching of a package.
+> ---
+>  Config.in              |   20 ++++++++++++--------
+>  package/pkg-generic.mk |    5 ++++-
+>  2 files changed, 16 insertions(+), 9 deletions(-)
+>
+> diff --git a/Config.in b/Config.in
+> index 2b401cb..be9a352 100644
+> --- a/Config.in
+> +++ b/Config.in
+> @@ -461,18 +461,22 @@ config BR2_PACKAGE_OVERRIDE_FILE
+>           Buildroot documentation for more details on this feature.
+>
+>  config BR2_GLOBAL_PATCH_DIR
+> -       string "global patch directory"
+> +       string "global patch directories"
+>         help
+> -         You may specify a directory containing global package patches.
+> -         For a specific version <packageversion> of a specific package
+> -         <packagename>, patches are applied as follows.
+> +         You may specify a space seperated list of one or more directories
+
+separated
+
+> +         containing global package patches. For a specific version
+> +         <packageversion> of a specific package <packagename>, patches are
+> +         applied as follows:
+>
+> -         First, the default Buildroot patch set for the package is applied.
+> +         First, the default Buildroot patch set for the package is applied
+> +         from 'package/<packagename>'.
+
+This is not really correct (although the current code isn't correct
+either, as you noticed) for packages not residing in package/ (like
+linux or bootloaders). So I'd rather write something like:
+... from the package's directory in Buildroot.
+
+>
+> -         If the directory $(BR2_GLOBAL_PATCH_DIR)/<packagename>/<packageversion>
+> -         exists, then all *.patch files in the directory will be applied.
+> +         Then for every directory - <global-patch-dir> - that exists in
+> +         BR2_GLOBAL_PATCH_DIR, if the directory
+> +         <global-patch-dir>/<packagename>/<packageversion>/ exists, then all
+> +         *.patch files in this directory will be applied.
+>
+> -         Otherwise, if the directory $(BR2_GLOBAL_PATCH_DIR)/<packagename> exists,
+> +         Otherwise, if the directory <global-patch-dir>/<packagename> exists,
+>           then all *.patch files in the directory will be applied.
+>
+>  endmenu
+> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+> index 1fce71b..53d96c9 100644
+> --- a/package/pkg-generic.mk
+> +++ b/package/pkg-generic.mk
+> @@ -134,8 +134,11 @@ endif
+>  # The RAWNAME variable is the lowercased package name, which allows to
+>  # find the package directory (typically package/<pkgname>) and the
+>  # prefix of the patches
+> +#
+> +# For BR2_GLOBAL_PATCH_DIR, only generate if it is defined
+>  $(BUILD_DIR)/%/.stamp_patched: NAMEVER = $(RAWNAME)-$($(PKG)_VERSION)
+> -$(BUILD_DIR)/%/.stamp_patched: PATCH_BASE_DIRS = $($(PKG)_DIR_PREFIX)/$(RAWNAME) $(call qstrip,$(BR2_GLOBAL_PATCH_DIR))/$(RAWNAME)
+> +$(BUILD_DIR)/%/.stamp_patched: PATCH_BASE_DIRS =  $($(PKG)_DIR_PREFIX)/$(RAWNAME)
+> +$(BUILD_DIR)/%/.stamp_patched: PATCH_BASE_DIRS += $(if $(BR2_GLOBAL_PATCH_DIR),$(foreach pdir,$(call qstrip,$(BR2_GLOBAL_PATCH_DIR)),$(pdir)/$(RAWNAME)))
+>  $(BUILD_DIR)/%/.stamp_patched:
+>         @$(call step_start,patch)
+>         @$(call MESSAGE,"Patching")
+
+Otherwise, looks good.
+
+Best regards,
+Thomas
