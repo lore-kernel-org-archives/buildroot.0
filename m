@@ -1,73 +1,44 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 11 Dec 2013 13:25:49 +0100
-Subject: [Buildroot] [PATCH] package/libgles: postpone the check for a
-	missing GLES provider
-In-Reply-To: <52A842A3.3010302@mind.be>
-References: <52A730B0.3020104@orange.com>
- <1386702439-10093-2-git-send-email-yann.morin.1998@free.fr>
- <52A842A3.3010302@mind.be>
-Message-ID: <201312111325.49600.yann.morin.1998@free.fr>
+From: Sven Neumann <neumann@teufel.de>
+Date: Wed, 11 Dec 2013 13:53:37 +0100
+Subject: [Buildroot] [PATCH] wpa_supplicant: add option to enable syslog
+ support
+In-Reply-To: <20131211090518.GG1217@tarshish>
+References: <1386751772-5704-1-git-send-email-neumann@teufel.de>
+ <20131211090518.GG1217@tarshish>
+Message-ID: <1386766417.2783.12.camel@sven>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout, All,
-
-On Wednesday 11 December 2013 11:46:59 Arnout Vandecappelle wrote:
-> On 10/12/13 20:07, Yann E. MORIN wrote:
-> > From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> >
-> > Because some GLES providers may be in BR2_EXTERNAL, $(LIBGLES_DEPENDENCIES)
-> > might be empty hwen we test it.
-> >
-> > So, we can't rely on it to define LIBGLES_CONFIGURE_CMDS, and we must
-> > postpone the check until later, ie. at runtime.
-> >
-> > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> > ---
-> >   package/opengl/libgles/libgles.mk | 13 +++++++++----
-> >   1 file changed, 9 insertions(+), 4 deletions(-)
-> >
-> > diff --git a/package/opengl/libgles/libgles.mk b/package/opengl/libgles/libgles.mk
-> > index ec157ac..c2e1acf 100644
-> > --- a/package/opengl/libgles/libgles.mk
-> > +++ b/package/opengl/libgles/libgles.mk
-> > @@ -22,11 +22,16 @@ ifeq ($(BR2_PACKAGE_GPU_VIV_BIN_MX6Q),y)
-> >   LIBGLES_DEPENDENCIES += gpu-viv-bin-mx6q
-> >   endif
-> >
-> > -ifeq ($(LIBGLES_DEPENDENCIES),)
-> > +# Because some GLES providers may be in BR2_EXTERNAL,
-> > +# $(LIBGLES_DEPENDENCIES) might be empty right here.
-> > +# So, we can't rely on it to define LIBGLES_CONFIGURE_CMDS
-> > +# right now, and we must postpone the check until later,
-> > +# ie. at runtime.
-> >   define LIBGLES_CONFIGURE_CMDS
-> > -	echo "No libGLES implementation selected. Configuration error."
-> > -	exit 1
-> > +	if [ -z "$${LIBGLES_DEPENDENCIES}" ]; then \
+On Mi, 2013-12-11 at 11:05 +0200, Baruch Siach wrote:
+> Hi Sven,
 > 
->   This should be "$(LIBGLES_DEPENDENCIES)", but otherwise it looks like 
-> it would work.
+> On Wed, Dec 11, 2013 at 09:49:32AM +0100, Sven Neumann wrote:
+> > Add an option to enable support for sending debug messages
+> > to syslog instead of stdout.
+> > 
+> > Signed-off-by: Sven Neumann <neumann@teufel.de>
+> > ---
+> >  package/wpa_supplicant/wpa_supplicant.mk | 7 +++++++
+> >  1 file changed, 7 insertions(+)
+> > 
+> > diff --git a/package/wpa_supplicant/wpa_supplicant.mk b/package/wpa_supplicant/wpa_supplicant.mk
+> > index 4ae41c1..920f96a 100644
+> > --- a/package/wpa_supplicant/wpa_supplicant.mk
+> > +++ b/package/wpa_supplicant/wpa_supplicant.mk
+> > @@ -116,6 +116,12 @@ endef
+> >  
+> >  endif
+> >  
+> > +ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT_DEBUG_SYSLOG),y)
+> 
+> Where is this defined?
 
-I was afraid using a make variable here would be expanded too early
-again, that's why I postponed its expansion into the shell command
-itself.
+I am sorry, obviously the change to Config.in was not included in the
+patch. Will resend.
 
-But it does not work either, since the variable is not exported.
-
-I'm waiting for feedback from David to confirm either or both
-solutions work...
 
 Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +0/33 662376056 | Software  Designer | \ / CAMPAIGN     |   ^                |
-| --==< O_o >==-- '------------.-------:  X  AGAINST      |  /e\  There is no  |
-| http://ymorin.is-a-geek.org/ | (*_*) | / \ HTML MAIL    |  """  conspiracy.  |
-'------------------------------'-------'------------------'--------------------'
+Sven
