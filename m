@@ -1,19 +1,24 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 11 Dec 2013 22:11:46 +0100
-Subject: [Buildroot] [PATCH] libmbim: bump to 1.6.0
-In-Reply-To: <1386716968-4140-1-git-send-email-yegorslists@googlemail.com>
- (Yegor Yefremov's message of "Wed, 11 Dec 2013 00:09:28 +0100")
-References: <1386716968-4140-1-git-send-email-yegorslists@googlemail.com>
-Message-ID: <87iouv3xf1.fsf@dell.be.48ers.dk>
+Date: Wed, 11 Dec 2013 22:12:59 +0100
+Subject: [Buildroot] [PATCH v2] wpa_supplicant: add option to enable
+	syslog support
+In-Reply-To: <1386767843-30271-1-git-send-email-neumann@teufel.de> (Sven
+ Neumann's message of "Wed, 11 Dec 2013 14:17:23 +0100")
+References: <1386766417.2783.12.camel@sven>
+ <1386767843-30271-1-git-send-email-neumann@teufel.de>
+Message-ID: <87eh5j3xd0.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yegor" == Yegor Yefremov <yegorslists@googlemail.com> writes:
+>>>>> "Sven" == Sven Neumann <neumann@teufel.de> writes:
 
- > Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+ > Add an option to enable support for sending debug messages
+ > to syslog instead of stdout.
+
+ > Signed-off-by: Sven Neumann <neumann@teufel.de>
 
 Committed, thanks.
 
