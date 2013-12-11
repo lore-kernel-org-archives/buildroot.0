@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 11 Dec 2013 21:26:44 +0100
-Subject: [Buildroot] [PATCHv2 09/36] python-meld3: convert to the Python
+Date: Wed, 11 Dec 2013 21:26:45 +0100
+Subject: [Buildroot] [PATCHv2 10/36] python-nfc: convert to the Python
 	package infrastructure
 In-Reply-To: <1386793631-14026-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1386793631-14026-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1386793631-14026-10-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1386793631-14026-11-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,27 +13,26 @@ To: buildroot@busybox.net
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/python-meld3/python-meld3.mk | 12 ++----------
- 1 file changed, 2 insertions(+), 10 deletions(-)
+ package/python-nfc/python-nfc.mk | 13 +++----------
+ 1 file changed, 3 insertions(+), 10 deletions(-)
 
-diff --git a/package/python-meld3/python-meld3.mk b/package/python-meld3/python-meld3.mk
-index 27da9c8..cb8dec0 100644
---- a/package/python-meld3/python-meld3.mk
-+++ b/package/python-meld3/python-meld3.mk
-@@ -7,16 +7,8 @@
- PYTHON_MELD3_VERSION = 0.6.8
- PYTHON_MELD3_SOURCE = meld3-$(PYTHON_MELD3_VERSION).tar.gz
- PYTHON_MELD3_SITE = http://pypi.python.org/packages/source/m/meld3/
--PYTHON_MELD3_DEPENDENCIES = python
- PYTHON_MELD3_LICENSE = ZPLv2.1
- PYTHON_MELD3_LICENSE_FILES = COPYRIGHT.txt LICENSE.txt
-+PYTHON_MELD3_SETUP_TYPE = distutils
+diff --git a/package/python-nfc/python-nfc.mk b/package/python-nfc/python-nfc.mk
+index f406e2a..5f486d9 100644
+--- a/package/python-nfc/python-nfc.mk
++++ b/package/python-nfc/python-nfc.mk
+@@ -7,14 +7,7 @@
+ PYTHON_NFC_VERSION = 142
+ PYTHON_NFC_SITE = https://launchpad.net/nfcpy
+ PYTHON_NFC_SITE_METHOD = bzr
+-PYTHON_NFC_DEPENDENCIES = python libusb libusb-compat
++PYTHON_NFC_DEPENDENCIES = libusb libusb-compat
++PYTHON_NFC_SETUP_TYPE = distutils
  
--define PYTHON_MELD3_BUILD_CMDS
+-define PYTHON_NFC_BUILD_CMDS
 -	(cd $(@D); $(HOST_DIR)/usr/bin/python setup.py build)
 -endef
 -
--define PYTHON_MELD3_INSTALL_TARGET_CMDS
+-define PYTHON_NFC_INSTALL_TARGET_CMDS
 -	(cd $(@D); $(HOST_DIR)/usr/bin/python setup.py install --prefix=$(TARGET_DIR)/usr)
 -endef
 -
