@@ -1,8 +1,7 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 12 Dec 2013 18:52:07 +0100
-Subject: [Buildroot] [PATCH] Makefile: include BR2_EXTERNAL before other
-	packages
-Message-ID: <1386870727-25575-1-git-send-email-yann.morin.1998@free.fr>
+Date: Thu, 12 Dec 2013 19:08:36 +0100
+Subject: [Buildroot] [PATCH] package/rpi-firmware: bump
+Message-ID: <1386871716-13900-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,57 +10,28 @@ To: buildroot@busybox.net
 
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-BR2_EXTERNAL may contain packages that are "providers" of generic
-functionalities, such as EGL/GLES/...
+This bumps gets us:
+  - support for the v4l2 driver
+  - fix latencies in vdec3 (h264 decoder)
+  - fix incorrect frame presentation in de-interlacing filter
 
-So, BR2_EXTERNAL must be included before our built-in packages,
-otherwise the dependencies and rules for our built-in packages
-are evaluated too early.
-
-David has reported that doing so fixes his use-case, but we should
-still consider this as a stop-gap until we can come up with a proper
-fix.
-
-Remove a superfluous extra empty line at the same time.
-
-Reported-by: David Corvoysier <david.corvoysier@orange.com>
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: David Corvoysier <david.corvoysier@orange.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- Makefile | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+ package/rpi-firmware/rpi-firmware.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/Makefile b/Makefile
-index d52182e..22b7c99 100644
---- a/Makefile
-+++ b/Makefile
-@@ -121,7 +121,6 @@ else
-   $(shell echo BR2_EXTERNAL ?= $(BR2_EXTERNAL) > $(BR2_EXTERNAL_FILE))
- endif
+diff --git a/package/rpi-firmware/rpi-firmware.mk b/package/rpi-firmware/rpi-firmware.mk
+index 838952b..664f6ad 100644
+--- a/package/rpi-firmware/rpi-firmware.mk
++++ b/package/rpi-firmware/rpi-firmware.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--
- BUILD_DIR:=$(BASE_DIR)/build
- STAMP_DIR:=$(BASE_DIR)/stamps
- BINARIES_DIR:=$(BASE_DIR)/images
-@@ -358,14 +357,16 @@ ifneq ($(PACKAGE_OVERRIDE_FILE),)
- -include $(PACKAGE_OVERRIDE_FILE)
- endif
- 
-+# Include BR2_EXTERNAL before other packages, as BR2_EXTERNAL
-+# may contain packages that are "providers" for eg. EGL/GLES/...
-+include $(BR2_EXTERNAL)/external.mk
-+
- include $(sort $(wildcard package/*/*.mk))
- 
- include boot/common.mk
- include linux/linux.mk
- include system/system.mk
- 
--include $(BR2_EXTERNAL)/external.mk
--
- TARGETS+=target-finalize
- 
- ifeq ($(BR2_ENABLE_LOCALE_PURGE),y)
+-RPI_FIRMWARE_VERSION = f7e9bcd25c9b01521fdf88aac2740b6cfc887dfb
++RPI_FIRMWARE_VERSION = e618d4ff2dc20051bc726834b22487fe2e236fe5
+ RPI_FIRMWARE_SITE = $(call github,raspberrypi,firmware,$(RPI_FIRMWARE_VERSION))
+ RPI_FIRMWARE_LICENSE = BSD-3c
+ RPI_FIRMWARE_LICENSE_FILES = boot/LICENCE.broadcom
 -- 
 1.8.1.2
