@@ -1,34 +1,32 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 12 Dec 2013 15:27:16 +0100
-Subject: [Buildroot] [git commit] knock: fix _SITE so the correct git
-	version is used
-Message-ID: <20131212142809.2EBF99BFD1@busybox.osuosl.org>
+Date: Thu, 12 Dec 2013 15:06:27 +0100
+Subject: [Buildroot] [git commit] file: bump to version 5.16
+Message-ID: <20131212142809.264EC9BFE7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=9ef692972447e1d24aaa854440714eca16998cfe
+commit: http://git.buildroot.net/buildroot/commit/?id=127e86b6ef3dc084f3632566722f2623a25e7d72
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-And not just the latest commit from master.
-
+Signed-off-by: Axel Lin <axel.lin@ingics.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/knock/knock.mk |    2 +-
+ package/file/file.mk |    2 +-
  1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/knock/knock.mk b/package/knock/knock.mk
-index 41fc0fb..cad7516 100644
---- a/package/knock/knock.mk
-+++ b/package/knock/knock.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/file/file.mk b/package/file/file.mk
+index 6436802..dc7c206 100644
+--- a/package/file/file.mk
++++ b/package/file/file.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- KNOCK_VERSION = 7666f2e86e18d482eaad5fe1fea46d87d80b0555
--KNOCK_SITE = $(call github,jvinet,knock,master)
-+KNOCK_SITE = $(call github,jvinet,$(KNOCK_VERSION))
- KNOCK_LICENSE = GPLv2+
- KNOCK_LICENSE_FILES = COPYING
- KNOCK_AUTORECONF = YES
+-FILE_VERSION = 5.15
++FILE_VERSION = 5.16
+ FILE_SITE = ftp://ftp.astron.com/pub/file
+ FILE_DEPENDENCIES = host-file zlib
+ FILE_INSTALL_STAGING = YES
