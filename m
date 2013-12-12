@@ -1,34 +1,30 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Thu, 12 Dec 2013 14:08:24 +0100
-Subject: [Buildroot] Patchwork oldest patches cleanup #3 (deadline
-	December 20)
-In-Reply-To: <CAAXf6LXUx3dERdYxq5d4mY8apxXk+Ltj_CNPm+RTM+52nKRUNA@mail.gmail.com>
-References: <CAAXf6LXUx3dERdYxq5d4mY8apxXk+Ltj_CNPm+RTM+52nKRUNA@mail.gmail.com>
-Message-ID: <CAAXf6LXjTtbN96pWCvmXVEWHXM5Fcb53weJWXaqjZYx1Qb73mw@mail.gmail.com>
+From: Axel Lin <axel.lin@ingics.com>
+Date: Thu, 12 Dec 2013 21:18:04 +0800
+Subject: [Buildroot] [PATCH] file: bump to version 5.16
+Message-ID: <1386854284.14822.0.camel@phoenix>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Valentine,
+Signed-off-by: Axel Lin <axel.lin@ingics.com>
+---
+ package/file/file.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-On Fri, Dec 6, 2013 at 10:02 PM, Thomas De Schampheleire
-<patrickdepinguin@gmail.com> wrote:
-
-> [1/2] Makefile: Fix target-purgelocales
-> Valentine Barshak <gvaxon@gmail.com>
-> http://patchwork.ozlabs.org/patch/188623
->
-> [2/2] Makefile: Add /usr/lib/locale to target-purgelocales
-> Valentine Barshak <gvaxon@gmail.com>
-> http://patchwork.ozlabs.org/patch/188624
-
-At first sight these patches are still relevant. Could you confirm this?
-
-Regarding the second patch: could you give some examples of packages
-that install locale data in /usr/lib/locale? Are these packages that
-are in mainline buildroot?
-
-Thanks,
-Thomas
+diff --git a/package/file/file.mk b/package/file/file.mk
+index 6436802..dc7c206 100644
+--- a/package/file/file.mk
++++ b/package/file/file.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-FILE_VERSION = 5.15
++FILE_VERSION = 5.16
+ FILE_SITE = ftp://ftp.astron.com/pub/file
+ FILE_DEPENDENCIES = host-file zlib
+ FILE_INSTALL_STAGING = YES
+-- 
+1.8.1.2
